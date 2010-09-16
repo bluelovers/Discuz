@@ -1,0 +1,38 @@
+{template header}
+
+<script src="js/common.js" type="text/javascript"></script>
+
+<div class="container">
+	<!--{if $status}-->
+		<div class="correctmsg"><p>{if $status == 1}{lang announcepm_send_succeed}{/if}</p></div>
+	<!--{/if}-->
+	<h3 class="marginbot">
+		<a href="admin.php?m=pm&a=ls" class="sgbtn">{lang announcepm}</a>
+		{lang pm_send_announce}
+		<a href="admin.php?m=pm&a=clear" class="sgbtn">{lang clear_pm}</a>
+	</h3>
+	<div class="mainbox nomargin">
+			<form action="admin.php?m=pm&a=send" method="post">
+				<input type="hidden" name="formhash" value="{FORMHASH}">
+				<table class="opt">
+					<tr>
+						<th colspan="2">{lang pm_subject}:</th>
+					</tr>
+					<tr>
+						<td><input type="text" class="txt" style="width: 500px" name="subject" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">{lang pm_message}:</th>
+					</tr>
+					<tr>
+						<td><textarea class="area" style="width: 600px;height: 100px" name="message"></textarea></td>
+						<td valign="top"></td>
+					</tr>
+				</table>
+				<div class="opt"><input type="submit" name="submit" value=" {lang submit} " class="btn" tabindex="3" /></div>
+			</form>
+		</div>
+</div>
+
+{template footer}

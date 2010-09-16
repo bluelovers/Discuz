@@ -1,0 +1,46 @@
+{template header}
+
+<div class="container">
+	<!--{if $status}-->
+		<div class="correctmsg"><p>{lang clearpm_deleted}: $delnum</p></div>
+	<!--{/if}-->
+	<h3 class="marginbot">
+		<a href="admin.php?m=pm&a=ls" class="sgbtn">{lang announcepm}</a>
+		<a href="admin.php?m=pm&a=send" class="sgbtn">{lang pm_send_announce}</a>
+		{lang clear_pm}
+	</h3>
+	<div class="note fixwidthdec"><p class="i">{lang clearpm_totalnum}: $pmnum</p></div>
+	<div class="mainbox nomargin">
+		<form action="admin.php?m=pm&a=clear" method="post">
+			<input type="hidden" name="formhash" value="{FORMHASH}">
+			<table class="opt">
+				<tr>
+					<th colspan="2">{lang clearpm_delunread}:</th>
+				</tr>
+				<tr>
+					<td>
+						<input type="radio" id="yes" checked="checked" class="radio" name="unread" value="1" /><label for="yes">{lang yes}</label>
+						<input type="radio" id="no" class="radio" name="unread" value="0" /><label for="no">{lang no}</label>
+					</td>
+				</tr>
+				<tr>
+					<th colspan="2">{lang clearpm_cleardays}:</th>
+				</tr>
+				<tr>
+					<td><input type="text" class="txt" name="cleardays"></td>
+					<td valign="top">{lang clearpm_cleardays_comment}</td>
+				</tr>
+				<tr>
+					<th colspan="2">{lang clearpm_usernames}:</th>
+				</tr>
+				<tr>
+					<td><input type="text" class="txt" name="usernames"></td>
+					<td valign="top">{lang clearpm_usernames_comment}</td>
+				</tr>
+			</table>
+			<div class="opt"><input type="submit" name="submit" value=" {lang submit} " class="btn" tabindex="3" /></div>
+		</form>
+	</div>
+</div>
+
+{template footer}

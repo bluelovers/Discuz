@@ -1,0 +1,73 @@
+/* ----------------------------------
+(C) Comsenz Inc.
+http://www.comsenz.com
+/* ------------------------------------------------------------------------ 重定义浏览器默认样式 */
+.z { float: left; } .y { float: right; }
+/* 自动闭合浮动 .cl --> Clear */ .cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
+.wx { font-family: "Microsoft YaHei", "Hiragino Sans GB", STHeiti, Tahoma, SimHei, sans-serif; font-weight: 100; }
+
+.pg {	padding: 2px; margin: 7px; }
+	.pg a { padding: 0.5em 0.64em 0.43em 0.64em; margin: 2px; color: #fff; background: #819695;}
+		.pg a:hover { background: #D3DDDC; color: #333; text-decoration: none; }
+	.pg strong { padding: 0.5em 0.64em 0.43em 0.64em; margin: 2px; color: #333; background: #D3DDDC;}
+
+/* 显示原始图片弹出层 by lushnis */
+.zoominner { padding: 5px 10px 10px; background: #FFF; text-align: left;  }
+	.zoominner strong { font-size: 14px; margin-right: 10px; }
+	.zoominner p { padding: 8px 0; }
+		.zoominner p a { float: left; margin-left: 10px; width: 17px; height: 17px; background: url(images/imgzoom_tb.gif) no-repeat 0 0; line-height: 100px; overflow: hidden; }
+			.zoominner p a:hover { background-position: 0 -39px; }
+		.zoominner p a.imgadjust { background-position: -40px 0; }
+			.zoominner p a.imgadjust:hover { background-position: -40px -39px; }
+		.zoominner p a.imgclose { background-position: -80px 0; }
+			.zoominner p a.imgclose:hover { background-position: -80px -39px; }
+
+
+	.zoomtool { margin-left: -76px; padding-left: 8px; width: 152px; height: 40px; background: url(images/zoomtool.gif) no-repeat 0 -90px; filter: alpha(opacity=80); opacity:0.8; position:absolute; left: 50%; bottom: 25px; }
+		.zoomtool li { float: left; padding: 5px 0; display: inline; }
+		.zoomtool li a { float: left; width: 30px; height: 30px; background-image: url(images/zoomtool.gif) ; background-repeat: no-repeat; text-indent:-9999px; overflow: hidden; }
+		.zoomtool .prev a { background-position: -2px 0; }
+			.zoomtool .prev a:hover { background-position: -2px -30px; }
+				.zoomtool .prev a.disabled { background-position: -2px -60px; }
+		.zoomtool .poll { margin: 0 15px; }
+			.zoomtool .poll button { width: 50px; height: 30px; border: none; background: url(images/zoomtool.gif) no-repeat -62px 0; overflow: hidden; text-indent:-9999px; display: block; cursor: pointer; }
+				.zoomtool .poll button:hover { background: url(images/zoomtool.gif) no-repeat -62px -30px; }
+		.zoomtool .next a { background-position: -32px 0; }
+			.zoomtool .next a:hover { background-position: -32px -30px; }
+				.zoomtool .next a.disabled { background-position: -32px -60px; }
+
+/** end **/
+
+.login {  }
+	.login h1 {font-size: 26px;}
+	.login .c { margin-top: 16px; }
+	.login p { padding-top: 5px; font-size: 14px;}
+
+.px {padding:2px 4px; height: 20px;border:1px solid;border-color:#707070 #CECECE #CECECE #707070;background:#FFF;font-size:14px;color:#666;}
+	.px:focus{border-color:#6FB1DF;color:#333;-moz-box-shadow:0 0 5px #6FB1DF;}
+.pn {width: 70px; height: 28px; line-height: 28px; border: none; background:#FFF url(images/btn.gif) repeat-x 0 0; color: #FFF; text-align: center; cursor: pointer;}
+
+.message { padding: 20px 0 30px 0; font-size: 18px; text-align: center;  }
+	.message h2{ }
+	.message a { color: #369; font-size: 14px; text-decoration: underline; }
+	.message p { margin-top: 10px; }
+	.message .i { height: 40px; line-height: 40px; }
+		.message .i a { color: #900; }
+	
+
+.popupcredit {}
+	.pc_l, .pc_c, .pc_inner, .pc_r { width: 29px; height: 56px; line-height: 56px; background: url(images/popupcredit_bg.gif) no-repeat 0 0; }
+	.pc_c { width: 200px; background-position: 0 -56px; background-repeat: repeat-x; }
+		.pc_inner { white-space: nowrap; text-align: center; width: auto; background-position: 50% -112px; color: #FFF; font-size: 14px; }
+			.pc_inner i { margin-right: 10px; font-size: 12px; font-style: normal; color: #FFF; font-weight: 400; }
+			.pc_inner span { margin-right: 15px; color: #FFEA97; font-size: 14px; font-weight: 700; }
+			* html .pc_inner span { display: inline-block; }
+				.pc_inner span a { color: #FFEA97; text-decoration: underline; }
+				.pc_inner span em { color: #FFF; font-size: 18px; font-weight: 400; }
+				.pc_inner span u { font-size: 10px; text-decoration: none; }
+				.pc_inner span em.desc { color: #930; }
+			.pc_btn img { opacity: 0.5; }
+				.pc_btn:hover img { opacity: 1; }
+	.pc_r { background-position: -30px 0; }
+
+#ajaxwaitid{display:none;position:absolute;right:0;top:30;z-index:1;padding:2px 6px;background:#D00;color:#FFF;}

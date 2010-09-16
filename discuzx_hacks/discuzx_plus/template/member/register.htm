@@ -1,0 +1,145 @@
+<!--{template header}-->
+
+<!--{if !empty($message)}-->
+<script type="text/javascript" onload="1">
+{eval $_G['setting']['bbname'] = str_replace('\\\'', '\\\\\'', $_G['setting']['bbname']);}
+if(document.body.stat) document.body.stat('register_succeed', 'member.php?mod=register');
+display('main_regmessaqge');
+display('layer_reg');
+display('layer_regmessage');
+{if $_G['setting']['regverify'] == 1}
+	$('messageleft1').innerHTML = '<p>{lang register_succeed} {echo addslashes($_G['setting']['bbname'])}</p><p>{lang profile_email_verify}</p>';
+	$('messageright1').innerHTML = '<a href="home.php?mod=spacecp&ac=profile&op=password">{lang user_center}</a><br />{lang profile_email_verify_comment}';
+	setTimeout("window.location.href='home.php?mod=spacecp&ac=profile&op=password'", $mrefreshtime);
+{elseif $_G['setting']['regverify'] == 2}
+	$('messageleft1').innerHTML = '<p>{lang register_succeed} {echo addslashes($_G['setting']['bbname'])}</p><p>{lang register_manual_verify}</p>';
+	$('messageright1').innerHTML = '<a href="home.php?mod=spacecp&ac=profile&op=password">{lang user_center}</a>';
+	setTimeout("window.location.href='home.php?mod=spacecp&ac=profile&op=password'", $mrefreshtime);
+{else}
+	$('messageleft1').innerHTML = '<p>{lang register_succeed} {echo addslashes($_G['setting']['bbname'])}</p>';
+	{eval $dreferer = str_replace('&amp;', '&', dreferer());}
+	<!--{if $dreferer}-->
+		$('messageright1').innerHTML = '<a href="javascript:;" onclick="location.href=\'$dreferer\';">{lang login_refresh}</a>';
+		setTimeout('location.href=\'$dreferer\'', $mrefreshtime);
+	<!--{else}-->
+		$('messageright1').innerHTML = '<a href="javascript:;" onclick="location.reload()">{lang login_refresh}</a>';
+	<!--{/if}-->
+{/if}
+setMenuPosition('fwin_register', 'fwin_register', '00');
+</script>
+<!--{else}-->
+<!--{if empty($_G['gp_infloat'])}-->
+<div id="pt" class="wp"><a href="index.php" class="nvhm">$_G[setting][bbname]</a> &rsaquo; $navigation</div>
+<div  id="ct" class="wp w cl">
+	<div class="mn mw">
+		<div class="ch">
+			<label class="wx"><!--{if $_G[gp_action] != 'activation'}-->$_G['setting']['reglinkname']<!--{else}-->{lang index_activation}<!--{/if}--></label>
+		</div>
+<!--{/if}-->
+<div class="blr" id="main_regmessaqge">
+	<h3 id="layer_reginfo_t" class="flb">
+		<em id="returnmessage4"><!--{if !empty($_G['gp_infloat'])}--><!--{if $_G[gp_action] != 'activation'}-->$_G['setting']['reglinkname']<!--{else}-->{lang index_activation}<!--{/if}--><!--{/if}--></em>
+		<span>
+			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('register')" title="{lang close}">{lang close}</a><!--{/if}-->
+		</span>
+	</h3>
+	<form method="post" autocomplete="off" name="register" id="registerform" onsubmit="ajaxpost('registerform', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="member.php?mod=register">
+		<div id="layer_reg" class="c cl">
+			<input type="hidden" name="regsubmit" value="yes" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="referer" value="{if $_G['gp_referer']}$_G[gp_referer]{else}$_G['referer']{/if}" />
+			<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+			<input type="hidden" name="activationauth" value="{if $_G[gp_action] == 'activation'}$activationauth{/if}" />
+			<div class="lgfm bm">
+				<div id="reginfo_a">
+					<span id="activation_hidden"{if $_G[gp_action] == 'activation'} style="display:none"{/if}>
+					<label><em>{lang username}:</em><input type="text" id="username" name="username" autocomplete="off" size="25" maxlength="15" value="" tabindex="1" class="txt" /> *</label>
+					<label><em>{lang password}:</em><input type="password" name="password" size="25" id="password" tabindex="1" class="txt" /> *</label>
+					<label><em>{lang password_confirm}:</em><input type="password" name="password2" size="25" id="password2" tabindex="1" value="" class="txt" /> *</label>
+					<label><em>{lang email}:</em><input type="text" name="email" autocomplete="off" size="25" id="email" tabindex="1" class="txt" /> *</label>
+					</span>
+					<!--{if $_G[gp_action] == 'activation'}-->
+						<span id="activation_user">
+							<label><em>{lang username}:</em>$username</label>
+						</span>
+					<!--{/if}-->
+				</div>
+			</div>
+			<div class="lgf"{if $_G[gp_action] == 'activation'} style="margin-top: 10px;"{/if}>
+				<h4>{lang login_now}</h4>
+				<!--{if $_G[gp_action] == 'activation'}-->
+					<p>{lang login_inactive}</p>
+				<!--{/if}-->
+			</div>
+		</div>
+		<p id="layer_reginfo_b" class="fsb cl">
+			<!--{if $_G['setting']['sitemessage'][register]}--><a href="javascript:;" id="custominfo_register" class="y"><img src="{IMGDIR}/info_small.gif" alt="{lang faq}" /></a><!--{/if}-->
+			<span id="reginfo_a_btn">
+				<!--{if $_G[gp_action] != 'activation'}--><em>&nbsp;</em><!--{/if}-->
+			<!--{if ($field || $_G['setting']['regverify'] == 2) && !empty($_G['gp_infloat'])}-->
+				<button class="pn pnc" tabindex="1" onclick="regstep('reginfo_a','reginfo_b'); return false;"><span>{lang register_next}</span></button>
+			</span>
+			<span id="reginfo_b_btn" style="display:none">
+				<button class="pn pn" tabindex="1" onclick="regstep('reginfo_b','reginfo_a'); return false;"><span>{lang register_pre}</span></button>
+			<!--{/if}-->
+				<button class="pn pnc" id="registerformsubmit" type="submit" name="regsubmit" value="true" tabindex="1"><span>{if $_G[gp_action] == 'activation'}{lang activation}{else}{lang submit}{/if}</span></button>
+			</span>
+		</p>
+	</form>
+</div>
+<div id="layer_regmessage"{if empty($_G['gp_infloat'])} class="f_c blr nfl"{/if} style="display: none;">
+	<h3 class="flb">
+		<!--{if !empty($_G['gp_infloat'])}-->
+		<em>{lang login_member}</em>
+		<span><a href="javascript:;" class="flbc" onclick="hideWindow('login')" title="{lang close}">{lang close}</a></span>
+		<!--{/if}-->
+	</h3>
+	<div class="c"><div class="alert_right">
+		<div id="messageleft1"></div>
+		<p class="alert_btnleft" id="messageright1"></p>
+	</div>
+</div>
+
+<script type="text/javascript" reload="1">
+hideWindow('login');
+{if $_G[gp_action] != 'activation'}
+function initinput_register() {
+	$('registerform').username.focus();
+}
+if(BROWSER.ie && BROWSER.ie < 7) {
+	setTimeout('initinput_register()', 500);
+} else {
+	initinput_register();
+}
+{/if}
+
+var profile_username_toolong = '{lang register_profile_username_toolong}';
+var profile_username_tooshort = '{lang register_profile_profile_username_tooshort}';
+var doublee = parseInt('$_G['setting']['doublee']');
+var lastusername = lastpassword = lastemail = '';
+
+function errorhandle_register(msg, values) {
+	$('returnmessage4').className = !values['key'] ? '' : 'onerror';
+	$('returnmessage4').innerHTML = msg;
+}
+
+function trim(str) {
+	return str.replace(/^\s*(.*?)[\s\n]*$/g, '$1');
+}
+{if ($field && !empty($_G['gp_infloat'])) || $_G['setting']['regverify'] == 2}
+function regstep(obja,objb){
+	$(obja).style.display = $(obja+'_btn').style.display = 'none';
+	$(objb).style.display = $(objb+'_btn').style.display = '';
+}
+{/if}
+
+</script>
+
+<!--{/if}-->
+
+{eval updatesession();}
+<!--{if empty($_G['gp_infloat'])}-->
+	</div></div>
+</div>
+<!--{/if}-->
+<!--{template footer}-->

@@ -1,0 +1,65 @@
+<!--{template header}-->
+<!--{template common/nav_header}-->
+<div id="wp" class="wp">
+	<div class="mn">
+		<div class="info wx">
+			<h1>$poll_setting[title]</h1>
+			<p>$poll_setting[description]</p>
+		</div>
+		<form id="pollform" onsubmit="ajaxpost('pollform', 'return_pollresult');" action="poll.php?action=choose" method="post">
+			<input type="hidden" name="handlekey" value="pollresult" />
+			<input type="hidden" name="id" value="$itemid" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<!--{if $iframe}--><input type="hidden" name="iframe" value="$iframe" /><!--{/if}-->
+			<!--{if $bgcolor}--><input type="hidden" name="bgcolor" value="$bgcolor" /><!--{/if}-->
+			<div class="poll" id="pollcontent">
+				<table cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							<th class="o">&nbsp; </th>
+							<th>{lang option}</th>
+							<th><!--{if $see}-->{lang rate}<!--{/if}--></th>
+							<th></th>
+							<th><!--{if $see}-->{lang ticket}<!--{/if}--></th>
+						</tr>
+					</thead>
+					<!--{loop $choice $value}-->
+					<tbody>
+						<tr>
+							<td class="o">
+								<!--{if $poll_setting[type]}-->
+								<input type="checkbox" id="select_id_$value[choiceid]" name="choose_value[]" value="$value[choiceid]" {$disable}" onclick="checknum(this)">
+								<!--{else}-->
+								<input type="radio" id="select_id_$value[choiceid]" name="choose_value" value="$value[choiceid]" {$disable}>
+								<!--{/if}-->
+							</td>
+							 <td class="title">
+							 	<label for="select_id_$value[choiceid]">$value[caption]</label>
+							 </td>
+
+							 <td>
+								<!--{if $see}-->
+								<div class="pbg">
+									<div class="pbr" style="width: {$value[percent]}%;"></div>
+								</div>
+								<!--{/if}-->
+							</td>
+							<td class="num"><!--{if $see}-->{$value[percent]}%<!--{/if}--></td>
+							<td class="num"><!--{if $see}--><span id="pollnum_{$value['choiceid']}">$value['pollnum']</span><!--{/if}--></td>
+						</tr>
+					</tbody>
+					<!--{/loop}-->
+				</table>
+				<div id="multipage">
+					$multi
+				</div>
+			</div>
+			<div class="btn cl">
+				<button type="submit" name="choose" class="submit" value="1">{lang poll}</button>
+			</div>
+		</form>
+		<div id="return_pollresult" sytle="display:none;">&nbsp;</div>
+		<!--{template common/nav_footer}-->
+	</div>
+</div>
+<!--{template footer}-->

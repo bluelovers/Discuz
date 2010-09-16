@@ -1,0 +1,23 @@
+<!--{if empty($iframe) && empty($_G['inajax'])}-->
+<div class="topnav">
+	<p class="navinf">
+		<!--{if $_G['uid']}-->
+			$_G[member][username]<span class="pipe">|</span>
+			<!--{if $_G['adminid'] == 1}-->
+				<a href="admin.php" target="_blank">{lang admincp}</a><span class="pipe">|</span>
+			<!--{/if}-->
+			<a href="member.php?mod=logging&action=logout&amp;formhash={FORMHASH}&amp;module={$_G['showmessage']['module']}&amp;tpl={$_G['showmessage']['tpl']}">{lang logout}</a>
+		<!--{else}-->
+			<a href="member.php?mod=logging&amp;action=login&amp;module={$_G['showmessage']['module']}&amp;tpl={$_G['showmessage']['tpl']}">{lang login}</a><span class="pipe">|</span><a class="noborder" href="{$_G['setting']['regurl']}">{lang register}<!--{if empty($_G['setting']['regurl'])}-->{lang register_tip}<!--{/if}--></a>
+		<!--{/if}-->
+	</p>
+	<ul>
+		<li class="navlogo"><a href="$_G[setting][siteurl]" title="$_G[setting][bbname]">$_G[setting][bbname]</a></li>
+		<li>
+			<!--{loop $_G['cache']['navlist']['top'] $topnav}-->
+				<a href="$topnav['url']" {if $topnav['target']}target="_blank"{/if}>$topnav['title']</a>
+			<!--{/loop}-->
+		</li>
+	</ul>
+</div>
+<!--{/if}-->

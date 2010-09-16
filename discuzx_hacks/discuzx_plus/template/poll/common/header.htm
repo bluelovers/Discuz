@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+<title>$title - Powered by Discuz! XPlus</title>
+<meta name="keywords" content="{$metakeywords}" />
+<meta name="description" content="{$metadescription}" />
+<link rel="stylesheet" type="text/css" href="template/common/common.css" />
+<!--{if {$_G['showmessage']['cssurl']}}--><link rel="stylesheet" type="text/css" href="{$_G['showmessage']['cssurl']}" /><!--{/if}-->
+<script type="text/javascript" src="static/js/common.js" charset="{CHARSET}"></script>
+<script type="text/javascript" src="static/js/poll.js" charset="{CHARSET}"></script>
+<script type="text/javascript">
+if(isUndefined(IMGDIR)) var IMGDIR = 'static/image/common';
+var boxes = document.getElementsByName("choose_value[]");
+var with_img = {if !empty($with_img)} true {else} false {/if};
+var choice_num = {if $poll_setting['choicenum'] > 0} {$poll_setting['choicenum']} {else} 0 {/if};
+var choice_arr = new Array();
+var disallowfloat = isUndefined(disallowfloat) ? '' : disallowfloat;
+var iniframe = {if $iframe} true {else} false {/if};
+</script>
+<!--{if $iframe}-->
+<style>
+	{if $bgcolor}body{ background: #{$bgcolor}; }{/if}
+	.wp { width: auto; }
+	.mn { padding: 0; border: none; }
+</style>
+<!--{/if}-->
+</head>
+<body>
+<div id="append_parent"></div><div id="ajaxwaitid"></div>{$so}

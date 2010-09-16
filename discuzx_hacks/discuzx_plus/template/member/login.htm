@@ -1,0 +1,86 @@
+<!--{template header}-->
+<!--{template common/nav_header}-->
+
+<!--{if $_G['gp_action'] == 'wait'}-->
+<!--{eval $_G[setting][reglinkname] = 'reg';}-->
+$_G['username']
+<a href="member.php?mod=logging&action=login">{lang login_member}</a>, <a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>, {lang login_guest}
+<!--{elseif !empty($message)}-->
+$ucsynlogin
+<script type="text/javascript" reload="1">
+{if $message == 2}
+	hideWindow('login');
+	showWindow('register', '$location');
+{elseif $message == 1}
+	display('main_messaqge');
+	display('layer_login');
+	display('layer_message');
+	$('messageleft').innerHTML = '<p>{lang login_succeed} $usergroups {echo addslashes($_G[username])}</p>';
+	{if !empty($_G['gp_floatlogin'])}
+		$('messageright').innerHTML = '<a href="javascript:;" onclick="location.reload()">{lang login_refresh}</a>';
+		setTimeout('location.href = location.href', $mrefreshtime);
+	{else}
+		{eval $dreferer = str_replace('&amp;', '&', dreferer());}
+		$('messageright').innerHTML = '<a href="$dreferer">{lang login_location}</a>';
+		setTimeout("window.location.href='$dreferer'", $mrefreshtime);
+	{/if}
+{/if}
+setMenuPosition('fwin_login', 'fwin_login', '00');
+</script>
+<!--{else}-->
+<div id="wp" class="wp" style="width: 878px;">
+	<div class="mn">
+		<div class="login" id="main_messaqge">
+				<form method="post" autocomplete="off" name="login" id="loginform" class="cl" action="member.php?mod=logging&action=login&module={$_G['showmessage']['module']}&tpl={$_G['showmessage']['tpl']}&loginsubmit=yes">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="referer" value="$_G['referer']" />
+					<h1 class="wx">{lang member_login}</h1>
+					<div class="c">
+						<p>{lang username}</p>
+						<p><input type="text" name="username" id="username" autocomplete="off" size="36" class="px" tabindex="1" value="$username" /></p>
+					</div>
+					<div class="c">
+						<p>{lang login_password}</p>
+						<p><input type="password" id="password3" name="password" onfocus="clearpwd()" size="36" class="px" tabindex="1" /></p>
+						<p><input type="text" name="answer" id="answer" style="display:none" autocomplete="off" size="36" class="sipt" tabindex="1" /></p>
+					</div>
+					<div class="c">
+						<button class="pn pnc" type="submit" name="loginsubmit" value="true" tabindex="1"><span>{lang login}</span></button>
+						<label for="cookietime"><input type="checkbox" class="pc" name="cookietime" id="cookietime" tabindex="1" value="2592000" $cookietimecheck /> {lang login_permanent}</label>
+					</div>
+				</form>
+		</div>
+		<!--{template common/nav_footer}-->
+	</div>
+</div>
+<script type="text/javascript" reload="1">
+var pwdclear = 0;
+
+{if $_G['setting']['pwdsafety']}
+var pwmd5log = new Array();
+function pwmd5() {
+	numargs = pwmd5.arguments.length;
+	for(var i = 0; i < numargs; i++) {
+		if(!pwmd5log[pwmd5.arguments[i]] || $(pwmd5.arguments[i]).value.length != 32) {
+			pwmd5log[pwmd5.arguments[i]] = $(pwmd5.arguments[i]).value = hex_md5($(pwmd5.arguments[i]).value);
+		}
+	}
+}
+{/if}
+
+function clearpwd() {
+	if(pwdclear) {
+		$('password3').value = '';
+	}
+	pwdclear = 0;
+}
+
+function succeedhandle_lostpwform(url, msg) {
+	showDialog(msg, 'notice');
+	hideWindow('login');
+}
+</script>
+
+{eval updatesession();}
+<!--{/if}-->
+<!--{template footer}-->

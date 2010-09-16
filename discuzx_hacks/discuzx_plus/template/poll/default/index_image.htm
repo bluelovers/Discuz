@@ -1,0 +1,71 @@
+<!--{template header}-->
+<!--{template common/nav_header}-->
+<!--{if !$_G['inajax']}-->
+<!--{if !$iframe && $poll_setting['lazyload']}-->
+	<script type="text/javascript" src="static/js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="static/js/jquery.lazyload.mini.js"></script>
+	<script type="text/javascript">
+		var jq = jQuery.noConflict();
+		// Delay Image
+		jq(function() {
+			jq("#pollcontent img").lazyload({
+				placeholder : "static/image/common/loading.gif",
+				effect : "fadeIn"
+			});
+		});
+	</script>
+<!--{/if}-->
+<div id="wp" class="wp">
+	<div class="mn">
+		<div class="info wx">
+			<h1>{$poll_setting['title']}</h1>
+			<p>{$poll_setting['description']}</p>
+		</div>
+		<form id="pollform" onsubmit="ajaxpost('pollform', 'return_pollresult');" action="poll.php?action=choose" method="post">
+			<input type="hidden" name="handlekey" value="pollresult" />
+			<input type="hidden" name="id" value="$itemid" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<!--{if $iframe}--><input type="hidden" name="iframe" value="$iframe" /><!--{/if}-->
+			<!--{if $bgcolor}--><input type="hidden" name="bgcolor" value="$bgcolor" /><!--{/if}-->
+			<input type="hidden" id="choose_value" name="choose_value" value="" />
+<!--{/if}-->
+			<div class="poll" id="pollcontent">
+				<ul class="ppl cl">
+				<!--{loop $choice $key $value}-->
+				<li>
+					<div class="thumb">
+						<a title="{$value['caption']}" {if $value['detailurl']} href="{$value['detailurl']}" target="_blank" {else} onclick="pollzoom($('option_image_{$value['choiceid']}'))"{/if}><img id="option_image_{$value['choiceid']}" src="$value[imagethumb]" bigimg="{$value['image']}" choiceid="{$value['choiceid']}" prevchoiceid="{$value['prevchoiceid']}" nextchoiceid="{$value['nextchoiceid']}" alt="{$value['caption']}" /></a>
+					</div>
+					<div class="c">
+						<h3><a {if $value['detailurl']} href="{$value['detailurl']}" target="_blank" {else} onclick="pollzoom($('option_image_{$value['choiceid']}'))"{/if}>$value['caption']</a></h3>
+						<p>
+							<button type="submit" class="btn_poll" onclick="ajaxsmallsubmit($value['choiceid'])">{lang poll}</button>
+							<!--{if $see}--><span id="pollnum_{$value['choiceid']}">$value['pollnum']</span> {lang ticket}<!--{/if}-->
+						</p>
+					</div>
+				</li>
+				<!--{/loop}-->
+				</ul>
+				<div id="multipage" class="cl">
+					$multi
+				</div>
+			</div>
+			<script type="text/javascript">
+			<!--{if $poll_setting['lazyload']}-->
+				jq(function() {
+					jq("#pollcontent img").lazyload({
+						placeholder : "static/image/common/loading.gif",
+						effect : "fadeIn"
+					});
+				});
+			<!--{/if}-->
+				//setiframeheight('xplus_iframes');
+			</script>
+<!--{if !$_G['inajax']}-->
+		</form>
+		<div id="return_pollresult" sytle="display:none;">&nbsp;</div>
+	<!--{template common/nav_footer}-->
+	</div>
+</div>
+<!--{/if}-->
+<!--{template footer}-->

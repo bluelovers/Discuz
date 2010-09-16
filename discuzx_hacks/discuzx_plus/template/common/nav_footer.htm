@@ -1,0 +1,10 @@
+<!--{if empty($iframe) && empty($_G['inajax'])}-->
+<div class="cl" id="ft">
+	<p>
+		<!--{loop $_G['cache']['navlist']['bottom'] $bottomnav}-->
+			<a href="$bottomnav['url']" {if $bottomnav['target']}target="_blank"{/if}>$bottomnav['title']</a>&nbsp;
+		<!--{/loop}-->
+	</p>
+	<p>&copy; 2001-2010 <a target="_blank" href="{$_G[setting][siteurl]}" title="{$_G[setting][bbname]}">{$_G[setting][bbname]}</a></p>
+</div>
+<!--{/if}-->

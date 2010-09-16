@@ -1,0 +1,88 @@
+{template header_client}
+{template pm_nav}
+
+<div class="ucinfo">
+<form method="post" action="index.php?m=pm_client&a=delete&folder=$folder&filter=$filter&$extra">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="pmlist">
+{eval $pmrange = 0;}
+<!--{if $pmlist}-->
+	<!--{if $filter != 'announcepm'}-->
+		<tr class="ctrlbar">
+			<td class="sel"><input type="checkbox" name="chkall" onclick="checkall(this.form, 'delete')" /></td>
+			<td class="ava"><button name="pmsend" type="submit">{lang delete}</button></td>
+			<td class="pef"></td>
+			<td class="">
+				<!--{if $folder != 'newbox' && $multipage}-->$multipage<!--{/if}-->
+			</td>
+		</tr>
+	<!--{/if}-->
+	<!--{loop $pmlist $pm}-->
+		<tr<!--{if $folder != 'newbox' && $pm[newstatus] == 1}--> class="onset"<!--{/if}-->>
+			<td class="sel"><!--{if $filter != 'announcepm'}--><input type="checkbox" name="delete[]" value="{if $folder != 'savebox'}$pm[avataruid]{else}$pm[pmid]{/if}" /><!--{/if}--></td>
+			<!--{if $filter != 'announcepm' && $folder != 'savebox'}-->
+				<td class="ava">
+				<!--{if $pm[avataruid]}--><img src="avatar.php?uid=$pm[avataruid]&size=small" /><!--{/if}-->
+				</td>
+				<td class="per">
+				<!--{if $folder == 'inbox' || $folder == 'announcebox'}-->
+					<!--{if $pm[msgfromid]}-->$pm[msgfrom]<!--{else}--><b>{lang pm_system_pm}</b><!--{/if}-->
+				<!--{elseif $folder == 'newbox'}-->
+					<!--{if $pm[newstatus] == 1}--><!--{if $pm[msgfromid]}-->$pm[msgfrom]<!--{else}--><b>{lang pm_system_pm}</b><!--{/if}--><!--{else}-->$pm[msgto]<!--{/if}-->
+				<!--{else}-->
+					$pm[msgto]
+				<!--{/if}-->
+				<p>$pm['daterangetext'] <!--{if $pm['daterange'] <= 3}-->$pm[datelinetime]<!--{else}-->$pm[dateline]<!--{/if}--></p>
+				</td>
+				<td class="title"><h2>
+				<!--{if $pm[avataruid]}-->
+					<!--{if $folder == 'newbox'}-->
+						<!--{if $pm[newstatus] == 1}-->
+							<a class="boldtext" href="index.php?m=pm_client&a=view&touid=$pm[avataruid]&folder=inbox&filter=$filter&from=newbox&scroll=bottom&$extra" id="pm_view_$pm[pmid]">$pm[subject]</a>
+						<!--{else}-->
+							<a class="boldtext" href="index.php?m=pm_client&a=view&touid=$pm[avataruid]&folder=outbox&filter=$filter&from=newbox&scroll=bottom&$extra" id="pm_view_$pm[pmid]">$pm[subject]</a>
+						<!--{/if}-->
+					<!--{else}-->
+						<a <!--{if $pm[newstatus]}-->class="boldtext" <!--{/if}-->href="index.php?m=pm_client&a=view&touid=$pm[avataruid]&folder=$folder&filter=$filter&scroll=bottom&$extra" id="pm_view_$pm[pmid]">$pm[subject]</a>
+					<!--{/if}-->
+				<!--{else}-->
+					<a <!--{if $pm[newstatus]}-->class="boldtext" <!--{/if}-->href="index.php?m=pm_client&a=view&pmid=$pm[pmid]&folder=$folder&filter=$filter&scroll=bottom&$extra" id="pm_view_$pm[pmid]">$pm[subject]</a>
+				<!--{/if}-->
+				</h2><p>$pm[message]</p>
+			<!--{else}-->
+				<td colspan="3" class="savetitle"><h2>
+					<!--{if $folder == 'savebox'}-->
+						<a href="index.php?m=pm_client&a=send&pmid=$pm[pmid]&do=savebox&folder=savebox&$extra">$pm[subject]</a>
+					<!--{else}-->
+						<a href="index.php?m=pm_client&a=view&pmid=$pm[pmid]&folder=$folder&filter=$filter&scroll=bottom&$extra" id="pm_view_$pm[pmid]">$pm[subject]</a>
+					<!--{/if}-->
+					<em>[{$pm[dateline]}]</em></h2>
+					<p>$pm[message]</p>
+			<!--{/if}-->
+			</td>
+		</tr>
+	<!--{/loop}-->
+	</tbody>
+	<!--{if $filter != 'announcepm'}-->
+		<tfoot>
+			<tr class="ctrlbar">
+				<td class="sel"><input type="checkbox" onclick="this.form.chkall.click()" /></td>
+				<td class="ava"><button onclick="this.form.pmsend.click()" type="button">{lang delete}</button></td>
+				<td class="pef"></td>
+				<td class="">
+					<!--{if $folder != 'newbox' && $multipage}-->$multipage<!--{/if}-->
+				</td>
+			</tr>
+		</tfoot>
+	<!--{/if}-->
+	</table>
+<!--{else}-->
+	<tr>
+		<td colspan="4">{lang pm_none_record}</td>
+	</tr>
+	</table>
+<!--{/if}-->
+</form>
+</div>
+
+{template footer_client}

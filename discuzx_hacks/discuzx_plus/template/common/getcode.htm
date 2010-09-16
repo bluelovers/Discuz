@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+<title>{lang getcode_title}</title>
+<script type="text/javascript" charset="gbk" src="static/js/common.js"></script>
+<script type="text/javascript" charset="gbk" src="static/js/getcode.js"></script>
+<style>
+	body { font-family:"Microsoft Yahei",Hei,Tahoma,SimHei,sans-serif; }
+	* { margin: 0px; padding: 0px; }
+	img { border: none; }
+	.wp { margin: 0 auto; width: 970px; background:url( static/image/common/bg_ifm_y.jpg ) repeat-y 0 0 ; }
+	.main { width: 787px; padding-left: 183px; background:url( static/image/common/bg_ifm.jpg ) no-repeat 0 0 ;  }
+		.main h1 { height: 50px; line-height: 50px; margin-bottom: 40px; font-size:16px; }
+	.info { margin-top: 20px; padding: 20px; width: 720px; border: 1px dashed #CDCDCD; background: #FFF; font-size: 12px; }
+	.info p { margin-bottom: 5px; }
+		.info .btn { padding-left: 86px; }
+	.textarea, .txt { background:none repeat scroll 0 0 #F9F9F9; border-color:#666666 #CCCCCC #CCCCCC #666666; border-style:solid; border-width:1px; color:#333333; padding:2px; }
+		.textarea { width: 600px; }
+		.txt { width: 60px; }
+
+	.drsElement { position: relative;}
+	.dragresize, .dragresizepadding-br { position: absolute; width: 26px; height: 26px; font-size: 1px; background: #EEE; border: 1px solid #333;}
+	.dragresize-tl, .dragresize-tm, .dragresize-tr, .dragresize-ml, .dragresize-mr, .dragresize-bl, .dragresize-bm { display:none;}
+	.dragresize-br, .dragresizepadding-br { bottom: -14px; right: -14px; cursor: se-resize; background: url("static/image/common/zoom.png") no-repeat; border:none;}
+
+</style>
+<script type="text/javascript">
+//<![CDATA[
+
+var dragresize = new DragResize('dragresize', { minWidth: 50, minHeight: 50, minLeft: 20, minTop: 20, maxLeft: 2000, maxTop: 2000 });
+
+dragresize.isElement = function(elm) { if (elm.className && elm.className.indexOf('drsElement') > -1) return true;};
+dragresize.isHandle = function(elm) { if (elm.className && elm.className.indexOf('drsMoveHandle') > -1) return true;};
+
+dragresize.ondragfocus = function() { };
+dragresize.ondragstart = function(isResize) { };
+dragresize.ondragmove = function(isResize) {
+	if(isResize) {
+		$('iframe').style.width = $('iframediv').style.width;
+		$('iframe').style.height = $('iframediv').style.height;
+		var w = parseInt($('iframediv').style.width);
+		var h = parseInt($('iframediv').style.height);
+		$("width").value = w;
+		$("height").value = h;
+		$("htmlcode").value='<iframe style="xplus_iframes" src="$iframeurl&bgcolor={$bgcolor}" width="'+w+'" height="'+h+'" scrolling="no" frameborder="0" border="0"></iframe>';
+		$("bbcode").value='[iframe=' + w + ',' + h + ']$iframeurl&bgcolor={$bgcolor}"[/iframe]';
+	}
+};
+dragresize.ondragend = function(isResize) {
+
+};
+dragresize.ondragblur = function() { };
+
+dragresize.apply(document);
+
+//]]>
+</script>
+</head>
+
+<body>
+
+<div class="wp">
+	<div class="main">
+		<h1>{lang getcode_iframe}</h1>
+		<div>
+			<div id="iframediv" class="drsElement" style="top:0px; left:0px; width: {$width}px; height: {$height}px;">
+				<div class="dragresizepadding-br"></div>
+				<iframe id="iframe" class="xplus_iframe" style="width: {$width}px; height: {$height}px; " src="{$iframeurl}&bgcolor={$bgcolor}" scrolling="no" frameborder="0"></iframe>
+			</div>
+		</div>
+		<div class="info">
+			<form action="misc.php" method="get" style="clear:both;"></p>
+				<input type="hidden" name="mod" value="getcode" />
+				<input type="hidden" name="type" value="$type" />
+				<input type="hidden" name="itemid" value="$itemid" />
+
+				<p>{lang getcode_iframe_url}<input type="text" name="iframeurl" id="iframeurl" value="$iframeurl" class="txt" style="width:500px;"/></p>
+				<p>{lang getcode_iframe_size}<input type="text" name="width" id="width" value="$width" class="txt"/> * <input type="text" name="height" id="height" value="$height" class="txt"/></p>
+				<p>{lang getcode_iframe_bgcolor}<input type="text" name="bgcolor" id="bgcolor" value="$bgcolor" class="txt"/></p>
+				<p class="btn"><input type="submit" value="{lang getcode_iframe_create}" /></p>
+				<p>
+					{lang getcode_iframe_htmlcode}<br />
+					<textarea rows="3" id="htmlcode" class="textarea">&lt;iframe style="xplus_iframes" src="{$iframeurl}&amp;bgcolor={$bgcolor}" width="$width" height="$height" scrolling="no" frameborder="0" border="0"&gt;</iframe></textarea>
+				</p>
+				<p>
+					{lang getcode_iframe_bbcode}<br />
+					<textarea rows="3" id="bbcode" class="textarea">[iframe=$width,{$height}]{$iframeurl}&amp;bgcolor={$bgcolor}[/iframe]</textarea>
+				</p>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
