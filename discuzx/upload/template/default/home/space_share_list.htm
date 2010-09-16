@@ -1,0 +1,107 @@
+<!--{if empty($diymode)}-->
+<!--{template common/header}-->
+
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
+		<a href="home.php?mod=space&do=share">{lang share}</a>
+		<!--{if $_GET['view']=='me'}-->
+		 <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=share&view=me">{$space[username]}{lang somebody_share}</a>
+		<!--{/if}-->
+	</div>
+</div>
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+			<!--{hook/space_share_top}-->
+			<!--{if $space[self]}-->
+				<h1 class="mt"><img alt="share" src="{STATICURL}image/feed/share.gif" class="vm" /> {lang share}</h1>
+				<!--{template home/space_share_form}-->
+				<!--{hook/space_share_bottom}-->
+				<ul class="tb cl">
+					<li$actives[we]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=we">{lang friend_share}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=me">{lang my_share}</a></li>
+					<li$actives[all]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=all">{lang view_all}</a></li>
+				</ul>
+			<!--{else}-->
+				<!--{eval
+					$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=share&view=me\">{lang they_share}</a>";
+				}-->
+				<!--{template home/space_menu}-->
+			<!--{/if}-->
+<!--{else}-->
+<!--{template home/space_header}-->
+	<div id="ct" class="ct2 wp n cl">
+		<div class="mn">
+			<div class="bm">
+				<div class="bm_h">
+					<h1 class="mt">{lang share}</h1>
+				</div>
+				<div class="bm_c">
+				<!--{if $space[self]}--><!--{template home/space_share_form}--><!--{/if}-->
+<!--{/if}-->
+			<p class="tbmu">
+				{lang order_by_type}:
+				<a href="$navtheurl&type=all"$sub_actives[type_all]>{lang share_all}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=link"$sub_actives[type_link]>{lang share_link}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=video"$sub_actives[type_video]>{lang share_video}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=music"$sub_actives[type_music]>{lang share_music}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=flash"$sub_actives[type_flash]>{lang share_flash}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=blog"$sub_actives[type_blog]>{lang share_blog}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=album"$sub_actives[type_album]>{lang share_album}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=pic"$sub_actives[type_pic]>{lang share_pic}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=poll"$sub_actives[type_poll]>{lang share_poll}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=space"$sub_actives[type_space]>{lang share_space}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=thread"$sub_actives[type_thread]>{lang share_thread}</a><span class="pipe">|</span>
+				<a href="$navtheurl&type=article"$sub_actives[type_article]>{lang share_article}</a>
+			</p>
+			<!--{if $list}-->
+				<ul id="share_ul" class="el sl">
+					<!--{loop $list $k $value}-->
+						<!--{template home/space_share_li}-->
+					<!--{/loop}-->
+				</ul>
+				<!--{if $pricount}-->
+					<p class="mtm">{lang hide_share}</p>
+				<!--{/if}-->
+				<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
+			<!--{else}-->
+				<ul id="share_ul" class="el sl"></ul>
+				<p class="emp">{lang not_share_yet}</p>
+			<!--{/if}-->
+<!--{if empty($diymode)}-->
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+	<div class="appl">
+		<!--{subtemplate common/userabout}-->
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+	</div>
+</div>
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<!--{else}-->
+			</div>
+		</div>
+	</div>
+	<div class="sd">
+		<!--{subtemplate home/space_userabout}-->
+	</div>
+</div>
+<!--{/if}-->
+	<script type="text/javascript">
+		function succeedhandle_shareadd(url, msg, values) {
+			share_add(values['sid']);
+		}
+	</script>
+<!--{template common/footer}-->

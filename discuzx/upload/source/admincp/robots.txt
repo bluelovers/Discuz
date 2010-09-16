@@ -1,0 +1,49 @@
+#
+# robots.txt for Discuz! {ver}
+#
+
+User-agent: *
+Disallow: {path}api/
+Disallow: {path}data/
+Disallow: {path}source/
+Disallow: {path}install/
+Disallow: {path}template/
+Disallow: {path}config/
+Disallow: {path}uc_client/
+Disallow: {path}uc_server/
+Disallow: {path}static/
+Disallow: {path}admin.php
+Disallow: {path}search.php
+Disallow: {path}member.php
+Disallow: {path}api.php
+Disallow: {path}misc.php
+Disallow: {path}*?mod=redirect*
+Disallow: {path}forum.php?mod=forumdisplay&fid=*&filter=*
+Disallow: {path}forum.php?mod=forumdisplay&fid=*&orderby=*
+Disallow: {path}*?mod=viewthread&action=printable*
+Disallow: {path}*?mod=viewthread&*&authorid=*
+Disallow: {path}*?mod=viewthread&*&ordertype=*
+Disallow: {path}forum.php?mod=viewthread&tid=*filter*
+Disallow: {path}*?mod=post*
+Disallow: {path}*?mod=modcp*
+Disallow: {path}*?mod=misc*
+Disallow: {path}*?mod=spacecp*
+Disallow: {path}*?mod=attachment*
+Disallow: {path}*?mod=magic*
+Disallow: {path}userapp.php?mod=app&*
+{rewrite}
+Disallow: {path}*-redirect-*
+Disallow: {path}forum-forumdisplay-fid-*-filter-*
+Disallow: {path}forum-forumdisplay-fid-*-orderby-*
+Disallow: {path}*-viewthread-action-printable-*
+Disallow: {path}*-viewthread-tid-*-authorid-*
+Disallow: {path}*-viewthread-tid-*-ordertype-*
+Disallow: {path}forum-viewthread-tid-*-filter*
+Disallow: {path}*-post-*
+Disallow: {path}*-modcp-*
+Disallow: {path}*-misc-*
+Disallow: {path}member-*
+Disallow: {path}*-attachment-*
+Disallow: {path}*-magic-*
+Disallow: {path}userapp-app-*
+{/rewrite}

@@ -1,0 +1,20 @@
+<!--{template common/header}-->
+<!--{if $comments}-->
+	<h3 class="psth cm">{lang comments}</h3>
+	<!--{if $totalcomment}--><div class="pstl">$totalcomment</div><!--{/if}-->
+	<!--{loop $comments $comment}-->
+		<div class="pstl">
+			<div class="psta">$comment[avatar]</div>
+			<div class="psti">
+				<a href="home.php?mod=space&amp;uid=$comment[authorid]" class="xi2 xw1">$comment[author]</a>
+				&nbsp;$comment[comment]&nbsp;
+				<span class="xg1">
+					{lang poston} $comment[dateline]
+					<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])">{lang delete}</a><!--{/if}-->
+				</span>
+			</div>
+		</div>
+	<!--{/loop}-->
+<!--{/if}-->
+<div class="pgs cl">$multi</div>
+<!--{template common/footer}-->

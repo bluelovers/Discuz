@@ -1,0 +1,51 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="forum.php">$_G['setting']['bbname']</a> <em>&rsaquo;</em> {lang search_info}
+	</div>
+</div>
+
+<div id="ct" class="wp cl">
+	<div class="mn">
+		<div class="content">
+		<div class="searchlist threadlist datalist">
+			<div class="itemtitle s_clear">
+				<h1>{lang search_result}</h1>
+				<!--{if !empty($multipage)}-->$multipage<!--{/if}-->
+			</div>
+			<table summary="{lang search}" cellspacing="0" cellpadding="0" width="100%" class="datatable">
+				<thead>
+					<tr class="alt">
+						<td class="icon">&nbsp;</td>
+						<td>{lang subject}</td>
+						<!--{loop $_G['forum_optionlist'] $var}-->
+							<td style="width: 10%">$var</td>
+						<!--{/loop}-->
+						<td style="width: 15%">{lang dateline}</td>
+					</tr>
+				</thead>
+				<!--{if $resultlist}-->
+					<!--{loop $resultlist $tid $value}-->
+						<tbody>
+						<tr>
+							<td class="icon">$value['icon']</td>
+							<th><a href="forum.php?mod=viewthread&tid=$tid" target="_blank">$value['subject']</a></th>
+							<!--{loop $_G['forum_optionlist'] $identifier $var}-->
+								<td style="width: 10%"><!--{if $value['option'][$identifier]}-->$value[option][$identifier]<!--{else}-->&nbsp;<!--{/if}--></td>
+							<!--{/loop}-->
+							<td style="width: 15%">$value['dateline']</td>
+						</tr>
+						</tbody>
+					<!--{/loop}-->
+				<!--{else}-->
+					<tr><td colspan="$colspan">{lang search_nomatch}</td></tr>
+				<!--{/if}-->
+			</table>
+			<!--{if !empty($multipage)}--><div class="pages_btns s_clear">$multipage</div><!--{/if}-->
+		</div>
+		</div>
+	</div>
+</div>
+
+<!--{subtemplate common/footer}-->

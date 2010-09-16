@@ -1,0 +1,16 @@
+/*
+[name]天空[/name]
+Powered by Discuz! X
+*/
+
+body { background: #E6FDFE url(images/body_bg.png) repeat-x 0 30px; }
+
+#hd { background: url(images/header.jpg) no-repeat 50% 100%; }
+
+#ct, .n, .w { background: #FFF url(images/ct-top.png) no-repeat 0 0 !important; }
+
+.block .title { background: #E5FBFD; }
+
+#ft { padding-top: 20px; background: url(images/ct-bottom.png) no-repeat 0 0; }
+.tl .th { background: none; }
+.bm, .bm_h { border: none; }

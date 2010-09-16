@@ -1,0 +1,15 @@
+<!--{if $space[uid]}-->
+<div class="ih pbm cl">
+	<div class="icn avt"><a href="home.php?mod=space&uid=$space[uid]"><!--{avatar($space[uid],small)}--></a></div>
+	<dl>
+		<dt class="ptn">{$space[username]}</dt>
+		<dd>
+			<a href="home.php?mod=space&uid=$space[uid]">{$space[username]}{lang somebody_space}</a>
+			<!--{if $_G['home_tpl_spacemenus']}-->
+				<!--{loop $_G['home_tpl_spacemenus'] $value}--> <em>&rsaquo;</em> $value<!--{/loop}-->
+			<!--{/if}-->
+		</dd>
+	</dl>
+	<!--{hook/space_menu_extra}-->
+</div>
+<!--{/if}-->

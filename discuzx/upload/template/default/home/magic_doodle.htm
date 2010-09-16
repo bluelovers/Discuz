@@ -1,0 +1,14 @@
+<!--{template common/header}-->
+<script type="text/javascript">
+	$('hkey_$_G[gp_handlekey]').innerHTML = '<p>{lang done_doodle_notice}</p>' + AC_FL_RunContent(
+		'width', '438', 'height', '304',
+		'src', '{IMGDIR}/doodle.swf?fid={$_G[gp_handlekey]}&oid={$_G[gp_mtarget]}&from={$_G[gp_from]}&config=$config',
+		'quality', 'high',
+		'wmode', 'transparent',
+		'id', 'show_doodle_{$_G[gp_showid]}',
+		'allowScriptAccess', 'always'
+	);
+	$('hbtn_$_G[gp_handlekey]').style.display = 'none';
+	setMenuPosition('fwin_$_G[gp_handlekey]', 'fwin_$_G[gp_handlekey]', '00');
+</script>
+<!--{template common/footer}-->

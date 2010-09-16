@@ -1,0 +1,26 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $topic[title]
+	</div>
+</div>
+<link id="style_css" rel="stylesheet" type="text/css" href="{STATICURL}topic/t1/style.css?{VERHASH}">
+<style id="diy_style" type="text/css"></style>
+<div id="widgets">
+</div>
+<div class="wp">
+<!--{if empty($_GET['bid'])}-->
+<!--[diy=diypage]-->
+<div id="diypage" class="area">
+	<div id="frame1" class="frame move-span frame-1 cl">
+		<div class="frame-title title" id="frame1"><span class="titletext">{lang frame}</span></div>
+		<div id="frame1_left" class="column frame-1-c"></div>
+	</div>
+</div>
+<!--[/diy]-->
+<!--{else}-->
+<!--{eval block_display_content_archive($_GET['bid']);}-->
+<!--{/if}-->
+</div>
+<!--{subtemplate common/footer}-->

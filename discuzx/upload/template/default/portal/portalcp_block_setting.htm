@@ -1,0 +1,32 @@
+<!--{loop $settings $key $value}-->
+<tr class="vt">
+	<th>$value[title]<!--{if $value[comment]}--> <img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" style="margin: 0;" onmouseover="showTip(this)" tip="$value[comment]" /><!--{/if}--></th>
+	<td>$value[html]</td>
+</tr>
+<!--{/loop}-->
+<!--{if !$is_htmlblock}-->
+<tr>
+	<th>{lang block_item_display_num}</th>
+	<td><input type="text" name="shownum" value="$block[shownum]" class="px" /></td>
+</tr>
+<!--{/if}-->
+<!--{if !$nocachetime}-->
+<tr>
+	<th width="80">{lang block_data_update_cache}</th>
+	<td>
+		<input type="text" name="cachetime" id="txt_cachetime" class="px" size="4" maxlength="6" value="$block[cachetime_min]" /> {lang minute}
+		&nbsp;
+		<input type="checkbox" name="punctualupdate" id="ckpunctualupdate" class="pc" value="1"{if $block[punctualupdate]} checked="checked"{/if} />
+		<label for="ckpunctualupdate">{lang punctualupdate}</label>
+		<img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" style="margin: 0;" onmouseover="showTip(this)" tip="{lang punctualupdate_tips}" />
+		<p class="ptn xi2">
+			<a href="javascript:;" onclick="blockSetCacheTime(10);this.blur();">10{lang minute}</a>&nbsp;
+			<a href="javascript:;" onclick="blockSetCacheTime('60');this.blur();">1{lang hour}</a>&nbsp;
+			<a href="javascript:;" onclick="blockSetCacheTime('1440');this.blur();">1{lang day}</a>&nbsp;
+			<a href="javascript:;" onclick="blockSetCacheTime('10080');this.blur();">1{lang week}</a>&nbsp;
+			<a href="javascript:;" onclick="blockSetCacheTime('43200');this.blur();">1{lang month}</a>&nbsp;
+			<a href="javascript:;" onclick="blockSetCacheTime('0');this.blur();">{lang never_update}</a>
+		</p>
+	</td>
+</tr>
+<!--{/if}-->

@@ -1,0 +1,35 @@
+<!--{if $_G['setting']['search']}-->
+	<!--{eval $slist = array();}-->
+	<!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><label for="mod_article" title="{lang search}{lang article}"><input type="radio" id="mod_article" class="pr" name="mod" value="portal"{if CURSCRIPT == 'portal'} checked="checked"{/if} /> {lang article}</label><!--{/block}--><!--{/if}-->
+	<!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><label for="mod_thread" title="{lang search}$_G['setting']['navs'][2]['navname']"><input type="radio" id="mod_thread" class="pr" name="mod" value="forum"{if CURSCRIPT == 'forum'} checked="checked"{/if} /> $_G['setting']['navs'][2]['navname']</label><!--{/block}--><!--{/if}-->
+	<!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><label for="mod_blog" title="{lang search}{lang blog}"><input type="radio" id="mod_blog" class="pr" name="mod" value="blog"{if CURSCRIPT == 'home' && $do != 'album'} checked="checked"{/if} /> {lang blog}</label><!--{/block}--><!--{/if}-->
+	<!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><label for="mod_album" title="{lang search}{lang album}"><input type="radio" id="mod_album" class="pr" name="mod" value="album"{if CURSCRIPT == 'home' && $do == 'album'} checked="checked"{/if} /> {lang album}</label><!--{/block}--><!--{/if}-->
+	<!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><label for="mod_group" title="{lang search}$_G['setting']['navs'][3]['navname']"><input type="radio" id="mod_group" class="pr" name="mod" value="group"{if CURSCRIPT == 'group'} checked="checked"{/if} /> $_G['setting']['navs'][3]['navname']</label><!--{/block}--><!--{/if}-->
+	<!--{block slist[user]}--><label for="mod_user" title="{lang search_friends}"><input type="radio" id="mod_user" name="mod" value="user" class="pr" /> {lang users}</label><!--{/block}-->
+<!--{/if}-->
+<!--{if $_G['setting']['search'] && $slist}-->
+<div id="scbar" class="bm cl">
+	<form id="scform" class="z" method="post" autocomplete="off" onsubmit="searchFocus($('srchtxt'))" action="search.php?searchsubmit=yes" target="_blank">
+		<input type="hidden" name="mod" value="search" />
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="srchtype" value="title" />
+		<table cellspacing="0" cellpadding="0">
+			<tr>
+				<td><input type="text" name="srchtxt" id="srchtxt" value="{lang enter_content}" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" /></td>
+				<td>&nbsp;<!--{echo implode('', $slist);}--></td>
+				<td><button type="submit" id="search_submit" name="searchsubmit" class="xw1" value="true">{lang search}</button></td>
+				<td><a href="search.php?mod=forum&adv=yes" target="_blank" class="xi2">{lang advanced_search}</a></td>
+				<td>
+					<div class="hot">
+						<!--{if $_G['setting']['srchhotkeywords']}-->
+						<strong class="xw1 xi1">{lang hot_search}: </strong>
+						<!--{loop $_G['setting']['srchhotkeywords'] $val}--><!--{if $val = trim($val)}--><a href="search.php?mod=forum&srchtxt={echo rawurlencode($val)}&formhash=f1c7ceaa&searchsubmit=true" target="_blank" class="xi2">$val</a><span class="pipe">|</span><!--{/if}--><!--{/loop}-->
+						<!--{/if}-->
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<script type="text/javascript">initSearchmenu();</script>
+</div>
+<!--{/if}-->

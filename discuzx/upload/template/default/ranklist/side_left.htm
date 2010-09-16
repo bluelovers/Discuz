@@ -1,0 +1,31 @@
+<div class="tbn">
+	<h2 class="mt bbda">$_G[setting][navs][8][navname]</h2>
+	<ul>
+		<li class="cl{if $_G['gp_type'] == 'index' || !$_G['gp_type']} a{/if}"><a href="misc.php?mod=ranklist&type=index">{lang all}</a></li>
+		<!--{if $ranklist_setting['member']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'member'} a{/if}"><a href="misc.php?mod=ranklist&type=member">{lang user}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['thread']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'thread'} a{/if}"><a href="misc.php?mod=ranklist&type=thread&orderby=replies&before=thisweek">{lang posts}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['blog']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'blog'} a{/if}"><a href="misc.php?mod=ranklist&type=blog&orderby=heats&before=thisweek">{lang blogs}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['poll']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'poll'} a{/if}"><a href="misc.php?mod=ranklist&type=poll&orderby=heats&before=thisweek">{lang poll}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['activity']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'activity'} a{/if}"><a href="misc.php?mod=ranklist&type=activity&orderby=heats&before=thismonth">{lang activity}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['picture']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'picture'} a{/if}"><a href="misc.php?mod=ranklist&type=picture&orderby=heats&before=thismonth">{lang pics}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['forum']['available']}-->
+		<li class="cl{if $_G['gp_type'] == 'forum'} a{/if}"><a href="misc.php?mod=ranklist&type=forum&orderby=threads&before=all">{lang forum}</a></li>
+		<!--{/if}-->
+		<!--{if $ranklist_setting['group']['available']&&$_G[setting]['groupstatus']}-->
+		<li class="cl{if $_G['gp_type'] == 'group'} a{/if}"><a href="misc.php?mod=ranklist&type=group&orderby=credit&before=all">{lang group}</a></li>
+		<!--{/if}-->
+	</ul>
+	<!--{hook/ranklist_nav_extra}-->
+</div>

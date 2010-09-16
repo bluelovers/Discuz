@@ -1,0 +1,45 @@
+<table cellpadding="0" cellspacing="0" summary="post_attachbody" border="0" width="100%">
+<!--{loop $attachlist $attach}-->
+	<tbody id="attach_$attach[aid]">
+		<tr>
+			<td class="attswf">
+				<p id="attach$attach[aid]">
+					<span>$attach[filetype] <a href="javascript:;" class="xi2" id="attachname$attach[aid]" onclick="{if $attach['isimage']}insertAttachimgTag('$attach[aid]'){else}insertAttachTag('$attach[aid]'){/if}" title="{lang upload_msg}">{$attach[filename]}</a></span>
+					<!--{if $_G['setting']['allowattachurl']}-->
+						<a href="javascript:;" class="atturl" title="{lang e_attach_url}" onclick="insertText('attach://$attach[aid].{echo fileext($attach[filenametitle])}')"><img src="{IMGDIR}/attachurl.gif" /></a>
+						<!--{if ($attachmcode = parseattachmedia($attach))}--><a href="javascript:;" class="atturl" title="{lang e_attach_mediacode}" onclick="insertText('$attachmcode')"><img src="{IMGDIR}/attachmediacode.gif" /></a><!--{/if}-->
+					<!--{/if}-->
+					<!--{if $attach['pid']}-->
+						<input type="hidden" name="attachupdate[{$attach[aid]}]" id="attachupdate{$attach[aid]}" size="2" />&nbsp;
+						<!--{if !empty($allowuploadnum)}--><a href="javascript:;" onclick="uploadWindow(function (aid, url, name){$('attachupdate$attach[aid]').value = aid;$('attachname$attach[aid]').title = '';$('attachname$attach[aid]').innerHTML = name;}, 'file')">{lang update}</a></span><!--{/if}-->
+					<!--{/if}-->
+				</p>
+				<span id="attachupdate$attach[aid]"></span>
+				<!--{if $attach['isimage']}--><img src="{echo getforumimg($attach[aid], 1, 300, 300, 'fixnone')}" id="image_$attach[aid]" cwidth="{if $attach[width] < 300}$attach[width]{else}300{/if}" style="position:absolute;top:-10000px" /><!--{/if}-->
+			</td>
+			<td class="atds"><input name="attachnew[{$attach[aid]}][description]" value="$attach[description]" size="18" class="txt" /></td>
+			<!--{if $_G['group']['allowsetattachperm']}-->
+			<td class="attv">
+				<!--{if $_G['cache']['groupreadaccess']}-->
+				<select class="ps" name="attachnew[{$attach[aid]}][readperm]" id="readperm" tabindex="1">
+						<option value="">{lang unlimited}</option>
+					<!--{loop $_G['cache']['groupreadaccess'] $val}-->
+						<option value="$val[readaccess]" title="{lang readperm}: $val[readaccess]"{if $attach[readperm] == $val[readaccess]} selected{/if}>$val[grouptitle]</option>
+					<!--{/loop}-->
+						<option value="255">{lang highest_right}</option>
+				</select>
+				<!--{/if}-->
+			</td>
+			<!--{/if}-->
+			<!--{if $_G['group']['maxprice']}--><td class="attpr"><input type="text" name="attachnew[{$attach[aid]}][price]" value="$attach[price]" size="1" class="txt" /></td><!--{/if}-->
+			<td class="attc"><a href="javascript:;" class="d" onclick="delAttach($attach[aid],{if !$attach[pid]}1{else}0{/if})">{lang e_attach_del}</a></td>
+		</tr>
+	</tbody>
+<!--{/loop}-->
+</table>
+<!--{if $_G[inajax]}-->
+	<script type="text/javascript" reload="1">
+	ATTACHNUM['attachunused'] += <!--{echo count($attachlist)}-->;
+	updateattachnum('attach');
+	</script>
+<!--{/if}-->

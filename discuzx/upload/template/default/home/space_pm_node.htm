@@ -1,0 +1,13 @@
+<dl id="pmlist_$value[pmid]" class="ptm pbm cl bbda">
+	<dd class="m avt">
+		<!--{if $value[msgfromid]}-->
+		<a href="home.php?mod=space&uid=$value[msgfromid]"><!--{avatar($value[msgfromid],small)}--></a>
+		<!--{else}-->
+		<img src="{IMGDIR}/systempm.gif" alt="systempm" />
+		<!--{/if}-->
+	</dd>
+	<dt>
+		<!--{if $value[msgfromid]}--><a href="home.php?mod=space&uid=$value[msgfromid]" class="xi2">{$value[msgfrom]}</a> <!--{/if}--><span class="xg1 xw0"><!--{date($value[dateline], 'u')}--></span>
+	</dt>
+	<dd class="xs2">$value[message]</dd>
+</dl>

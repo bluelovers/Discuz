@@ -1,0 +1,77 @@
+中文版授權協議 適用於中文用戶
+
+版權所有 (c) 2001-2010，康盛創想(北京)科技有限公司
+保留所有權利。
+
+感謝您選擇 Discuz! 論壇產品。希望我們的努力能為您提供一個高效快速和強大的社區論壇解決方案。
+
+Discuz! 英文全稱為 Crossday Discuz! Board，中文全稱為 Crossday Discuz! Board 論壇系統軟件，以下簡稱 Discuz! 。
+
+康盛創想(北京)科技有限公司為 Discuz! 產品的開發商，依法獨立擁有 Discuz! 產品著作權（中國國家版權局著作權登記號 2008SR11708）。康盛創想(北京)科技有限公司網址為 http://www.comsenz.com，Discuz! 官方網站網址為 http://www.discuz.com， Discuz! 官方討論區網址為 http://www.discuz.net。
+
+Discuz! 著作權已在中華人民共和國國家版權局註冊，著作權受到法律和國際公約保護。使用者：無論個人或組織、盈利與否、用途如何（包括以學習和研究為目的），均需仔細閱讀本協議，在理解、同意、並遵守本協議的全部條款後，方可開始使用 Discuz! 軟件。
+
+本授權協議適用且僅適用於 Discuz! X1.5 版本，康盛創想(北京)科技有限公司擁有對本授權協議的最終解釋權。
+
+I 協議許可的權利
+    1. 您可以在完全遵守本最終用戶授權協議的基礎上，將本軟件應用於非商業用途，而不必支付軟件版權授權費用。
+    2. 您可以在協議規定的約束和限制範圍內修改 Discuz! 源代碼(如果被提供的話)或界面風格以適應您的網站要求。
+    3. 您擁有使用本軟件構建的論壇中全部會員資料、文章及相關信息的所有權，並獨立承擔與文章內容的相關法律義務。
+    4. 獲得商業授權之後，您可以將本軟件應用於商業用途，同時依據所購買的授權類型中確定的技術支持期限、技術支持方式和技術支持內容，自購買時刻起，在技術支持期限內擁有通過指定的方式獲得指定範圍內的技術支持服務。商業授權用戶享有反映和提出意見的權力，相關意見將被作為首要考慮，但沒有一定被採納的承諾或保證。
+
+II 協議規定的約束和限制
+    1. 未獲商業授權之前，不得將本軟件用於商業用途（包括但不限於企業網站、經營性網站、以營利為目或實現盈利的網站）。購買商業授權請登陸http://www.discuz.com 參考相關說明，也可以致電8610-51657885瞭解詳情。
+    2. 不得對本軟件或與之關聯的商業授權進行出租、出售、抵押或發放子許可證。
+    3. 無論如何，即無論用途如何、是否經過修改或美化、修改程度如何，只要使用 Discuz! 的整體或任何部分，未經書面許可，論壇頁面頁腳處的 Discuz! 名稱和康盛創想(北京)科技有限公司下屬網站（http://www.comsenz.com、http://www.discuz.com 或 http://www.discuz.net） 的鏈接都必須保留，而不能清除或修改。
+    4. 禁止在 Discuz! 的整體或任何部分基礎上以發展任何派生版本、修改版本或第三方版本用於重新分發。
+    5. 如果您未能遵守本協議的條款，您的授權將被終止，所被許可的權利將被收回，並承擔相應法律責任。
+
+III 有限擔保和免責聲明
+    1. 本軟件及所附帶的文件是作為不提供任何明確的或隱含的賠償或擔保的形式提供的。
+    2. 用戶出於自願而使用本軟件，您必須瞭解使用本軟件的風險，在尚未購買產品技術服務之前，我們不承諾提供任何形式的技術支持、使用擔保，也不承擔任何因使用本軟件而產生問題的相關責任。
+    3. 康盛創想(北京)科技有限公司不對使用本軟件構建的論壇中的文章或信息承擔責任。
+
+有關 Discuz! 最終用戶授權協議、商業授權與技術服務的詳細內容，均由 Discuz! 官方網站獨家提供。康盛創想(北京)科技有限公司擁有在不事先通知的情況下，修改授權協議和服務價目表的權力，修改後的協議或價目表對自改變之日起的新授權用戶生效。
+
+電子文本形式的授權協議如同雙方書面簽署的協議一樣，具有完全的和等同的法律效力。您一旦開始安裝 Discuz!，即被視為完全理解並接受本協議的各項條款，在享有上述條款授予的權力的同時，受到相關的約束和限制。協議許可範圍以外的行為，將直接違反本授權協議並構成侵權，我們有權隨時終止授權，責令停止損害，並保留追究相關責任的權力。
+
+-----------------------------------------------------------------------------
+
+English Version of EULA, for non-Chinese-Speaking Users Only
+
+Copyright (c) 2001-2009, Comsenz Inc.
+All Rights Reserved.
+
+IMPORTANT: THIS SOFTWARE END USER LICENSE AGREEMENT("EULA") IS A LEGAL AGREEMENT BETWEEN YOU AND Comsenz Inc.. READ IT CAREFULLY BEFORE COMPLETING THE INSTALLATION PROCESS AND USING THE SOFTWARE. IT PROVIDES A LICENSE TO USE THE SOFTWARE AND CONTAINS WARRANTY INFORMATION AND LIABILITY DISCLAIMERS. BY INSTALLING AND USING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, PLEASE DO NOT INSTALL OR USE THE SOFTWARE. YOU MUST ASSUME THE ENTIRE RISK OF USING THIS PROGRAM. ANY LIABILITY OF Comsenz Inc. WILL BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT OR REFUND OF PURCHASE PRICE BEFORE FIRST INSTALLATION.
+
+THIS EULA SHALL APPLY ONLY TO THE CROSSDAY DISCUZ! BOARD SOFTWARE VERSION 7.x.x HEREWITH REGARDLESS OF WHETHER OTHER SOFTWARE IS REFERRED TO OR DESCRIBED HEREIN. Comsenz Inc. RETAINS OWNERSHIP OF THE SOFTWARE AND ANY COPIES OF IT, REGARDLESS OF THE FORM IN WHICH THE COPIES MAY EXIST.
+
+1. Definitions
+    a. "Crossday Discuz! Board"("Discuz!" for short) is a bulletin board system which is developed by Comsenz Inc..
+    b. "the Software" means "Crossday Discuz! Board".
+    c. "Comsenz Inc." is the enterprise being responsible for Discuz! product.
+
+2. License Grants
+    a. You may use the Software for free for non-commercial use under the License Restrictions.
+    b. You may modify the source code(if being provieded) or interface of the Software to fit your website under the License Restrictions.
+    c. You have property of all members』 information and articles in the Bulletin Board powered by the Software; meanwhile , you need assume all relevant legal duty by yourself.
+    d. You may use the Software for commercial use after purchasing the commercial license. Moreover, according to the license you purchased you may get specified term, manner and content of technical support from Comsenz Inc. Commercial users are prior to submiting ideas and opinions to Comsenz Inc., but without any guarantee of acceptance.
+
+3. License Restrictions
+    a. You may not use the Software for commercial use or profit use, unless you have been licensed to. To purchase the license , please visit http://www.discuz.com or dial 8610-5165 7885 for more information.
+    b. You may not rent, lease, sublicense, sell, assign, pledge the Software and its services.
+    c. You may not remove or modify the copyright information and relevant links, such as http://www.comsenz.com, http://www.discuz.com and http://www.discuz.net, in the footer of board pages without the prior written consent of Comsenz Inc., no matter how heavily you modified the Software.
+    d. You may not modify the Software to create derivative works for redistribution based upon the Software.
+    e. In the event that you fail to comply with this EULA, your license will be terminated.
+
+4. LIMITED WARRANTY AND DISCLAIMER
+    a. THE SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD "AS IS" AND WITHOUT WARRANTIES AS TO PERFORMANCE OF MERCHANTABILITY OR ANY OTHER WARRANTIED WHETHER EXPRESSED OR IMPLIED.
+    b. Comsenz Inc. is not liable for the content of any message posted on the forums powered by the Software.
+    c. You must assume the entire risk of using the Software. ANY LIABILITY OF Comsenz Inc. WILL BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT, REFUND OF PURCHASE PRICE BEFORE YOUR FIRST INSTALLATION.
+
+5. Official Websites
+    a. URL of Comsenz Inc. is http://www.comsenz.com.
+    b. URL of Discuz! Home is http://www.discuz.com
+    c. URL of Discuz! Community is http://www.discuz.net.
+
+Comsenz Inc. reserves the right to modify this EULA. Discuz! Home provides offical information on license and price, Comsenz Inc. may modify them without notice. Modified license and price list will apply to new licensed users.

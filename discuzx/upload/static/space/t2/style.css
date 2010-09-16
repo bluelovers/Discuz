@@ -1,0 +1,20 @@
+/*
+[name]自然[/name]
+Powered by Discuz! X
+*/
+
+body { background: #899A33 url(images/body_bg.png) repeat 0 0; }
+
+#hd { background: url(images/header.png) no-repeat 50% 100%; }
+	#hd h2 { color: #FFF; }
+
+#ct, .n, t.w { background: #FFF url(images/ct-top.png) no-repeat 0 0 !important; }
+
+.block .title { border: none; background: url(images/title.png) no-repeat; 0 0; }
+
+body#space #ft { background: url(images/ct-bottom.png) no-repeat 0 0; }
+.tl .th { background: none; }
+.bm, .bm_h { border: none; }
+	.bm_h { background: #FFF url("images/title.png") no-repeat scroll 0 0; }
+
+

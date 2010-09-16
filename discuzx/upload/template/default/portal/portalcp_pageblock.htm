@@ -1,0 +1,18 @@
+<select onchange="listblock_bypage(this.value)" class="ps">
+	<option value="">{lang select_page}</option>
+	<!--{loop $diytemplate $targettplname $tplname}-->
+	<option value="$targettplname"{if $_GET[page]==$targettplname} selected{/if}>$tplname</option>
+	<!--{/loop}-->
+</select>
+<select name="bid" id="recommend_bid"{if $op=='recommend'} onchange="recommenditem_byblock(this.value, '$_GET[id]', '$_GET[idtype]')"{/if} class="ps">
+	<option value="">{lang select_mod}</option>
+</select>	
+<!--{loop $pageblocks $key $value}-->
+<select id="recommend_pageblock_$key" class="ps" style="display:none;">
+	<!--{loop $value $bid}-->
+	<!--{if $blocks[$bid]}-->
+	<option value="$bid">$blocks[$bid]</option>
+	<!--{/if}-->
+	<!--{/loop}-->
+</select>
+<!--{/loop}-->

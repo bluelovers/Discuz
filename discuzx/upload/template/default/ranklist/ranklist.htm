@@ -1,0 +1,178 @@
+<!--{template common/header}-->
+<style id="diy_style" type="text/css"></style>
+
+<!--[diy=diyranklisttop]--><div id="diyranklisttop" class="area"></div><!--[/diy]-->
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<!--{if $ranklist_setting['member']['available']}-->
+		<div class="bm">
+			<div class="bm_h cl">
+				<span class="y">
+					<a href="misc.php?mod=ranklist&type=member" class="xi1 xw1">{lang i_want_rank}</a>
+					<span class="pipe">|</span>
+					<a href="misc.php?mod=ranklist&type=member">{lang more}&rsaquo;</a>
+				</span>
+				<h2>{lang bidding_rank}</h2>
+			</div>
+			<div class="bm_c bid">
+				<ul class="biduser cl">
+					<li class="bidtop">
+						<!--{if $memberlist}-->
+						<a href="home.php?mod=space&uid=$memberlist[0][uid]&do=profile" target="_blank" id="bid_$memberlist[0][uid]" class="hm" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})"><!--{avatar($memberlist[0][uid],middle)}--></a>
+						<!--{if $memberlist[0][note]}-->
+						<div id="bid_$memberlist[0][uid]_menu" style="display:none;">
+							<p class="crly"><strong>$memberlist[0][username]</strong>: $memberlist[0][note]</p>
+							<p class="mncr"></p>
+						</div>
+						<!--{/if}-->
+						<!--{/if}-->
+					</li>
+				<!--{eval unset($memberlist[0]);}-->
+				<!--{loop $memberlist $member}-->
+					<li>
+						<a href="home.php?mod=space&uid=$member[uid]&do=profile" target="_blank" id="bid_$member[uid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})">$member[avatar]</a>
+						<!--{if $member[note]}-->
+						<div id="bid_$member[uid]_menu" style="display:none;">
+							<p class="crly"><strong>$member[username]</strong>: $member[note]</p>
+							<p class="mncr"></p>
+						</div>
+						<!--{/if}-->
+					</li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<!--[diy=diypictop]--><div id="diypictop" class="area"></div><!--[/diy]-->
+		<!--{if $ranklist_setting['picture']['available']}-->
+		<div class="rnk1">
+			<div class="bm">
+				<div class="bm_h cl">
+					<span class="y">
+						<a href="misc.php?mod=ranklist&type=picture&orderby=heats&before=all">{lang more}&rsaquo;</a>
+					</span>
+					<h2>{lang ranklist_picture}</h2>
+				</div>
+				<div class="bm_c">
+					<ul class="ml mlp cl">
+						<!--{if $pictures}-->
+						<li class="d bigpic">
+							<div class="c">
+								<a href="home.php?mod=space&uid=$pictures[0][uid]&do=album&picid=$pictures[0][picid]" target="_blank"><img src="$pictures[0][origurl]" alt="" /></a>
+							</div>
+							<p class="ptm"><a href="home.php?mod=space&uid=$pictures[0][uid]&do=album&picid=$pictures[0][picid]" target="_blank">$pictures[0][albumname]</a></p>
+						</li>
+						<!--{/if}-->
+						<!--{eval unset($pictures[0]);}-->
+						<!--{loop $pictures $pic}-->
+						<li class="d">
+							<div class="c">
+								<a href="home.php?mod=space&uid=$pic[uid]&do=album&picid=$pic[picid]" target="_blank"><img src="$pic[url]" alt="" /></a>
+							</div>
+							<p class="ptm"><a href="home.php?mod=space&uid=$pic[uid]&do=album&picid=$pic[picid]" target="_blank">$pic[albumname]</a></p>
+						</li>
+						<!--{/loop}-->
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<!--[diy=diycontentmiddle]--><div id="diycontentmiddle" class="area"></div><!--[/diy]-->
+		<div class="bm2 cl">
+
+			<!--{if $ranklist_setting['thread']['available']}-->
+			<div class="bm2_b {if $thread_pos % 2 == 0}bm2_b_y{/if}">
+				<div class="bm_h cl">
+					<span class="y xi2"><a href="misc.php?mod=ranklist&type=thread&orderby=replies&before=$before">{lang more}&rsaquo;</a></span>
+					<h2>{lang ranklist_thread}</h2>
+				</div>
+				<div class="bm_c">
+					<ol class="xl xl1">
+						<!--{loop $threads_hot $thread}-->
+							<li>
+								<em><a href="home.php?mod=space&uid=$thread[authorid]" target="_blank">$thread[author]</a></em>
+								<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank">$thread[subject]</a>
+							</li>
+						<!--{/loop}-->
+					</ol>
+				</div>
+			</div>
+			<!--{/if}-->
+
+			<!--{if $ranklist_setting['blog']['available']}-->
+			<div class="bm2_b {if $blog_pos % 2 == 0}bm2_b_y{/if}">
+				<div class="bm_h cl">
+					<span class="y xi2"><a href="misc.php?mod=ranklist&type=blog&orderby=heats&before=$before">{lang more}&rsaquo;</a></span>
+					<h2>{lang blog_ranklist}</h2>
+				</div>
+				<div class="bm_c">
+					<ol class="xl xl1">
+						<!--{loop $blogs_hot $blog}-->
+							<li>
+								<em><a href="home.php?mod=space&uid=$blog[uid]" target="_blank">$blog[username]</a></em>
+								<a href="home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]" target="_blank">$blog[subject]</a>
+							</li>
+						<!--{/loop}-->
+					</ol>
+				</div>
+			</div>
+			<!--{/if}-->
+
+			<!--{if $ranklist_setting['poll']['available']}-->
+			<div class="bm2_b {if $poll_pos % 2 == 0}bm2_b_y{/if}">
+				<div class="bm_h cl">
+					<span class="y xi2"><a href="misc.php?mod=ranklist&type=poll&orderby=heats&before=$before">{lang more}&rsaquo;</a></span>
+					<h2>{lang ranklist_poll}</h2>
+				</div>
+				<div class="bm_c">
+					<ol class="xl xl1">
+						<!--{loop $polls_hot $poll}-->
+							<li>
+								<em><a href="home.php?mod=space&uid=$poll[authorid]" target="_blank">$poll[author]</a></em>
+								<a href="forum.php?mod=viewthread&tid=$poll[tid]" target="_blank">$poll[subject]</a>
+							</li>
+						<!--{/loop}-->
+					</ol>
+				</div>
+			</div>
+			<!--{/if}-->
+
+			<!--{if $ranklist_setting['activity']['available']}-->
+			<div class="bm2_b {if $activity_pos % 2 == 0}bm2_b_y{/if}">
+				<div class="bm_h cl">
+					<span class="y xi2"><a href="misc.php?mod=ranklist&type=activity&orderby=heats&before=$before">{lang more}&rsaquo;</a></span>
+					<h2>{lang ranklist_activity}</h2>
+				</div>
+				<div class="bm_c">
+					<ol class="xl xl1">
+						<!--{loop $activities_hot $activity}-->
+							<li>
+								<em><a href="home.php?mod=space&uid=$activity[authorid]" target="_blank">$activity[author]</a></em>
+								<a href="forum.php?mod=viewthread&tid=$activity[tid]" target="_blank">$activity[subject]</a>
+							</li>
+						<!--{/loop}-->
+					</ol>
+				</div>
+			</div>
+			<!--{/if}-->
+
+		</div>
+
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+
+	<div class="appl">
+		<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
+		<!--{subtemplate ranklist/side_left}-->
+		<!--[diy=diysidebottom]--><div id="diysidebottom" class="area"></div><!--[/diy]-->
+	</div>
+</div>
+
+<!--[diy=diyranklistbottom]--><div id="diyranklistbottom" class="area"></div><!--[/diy]-->
+
+<!--{template common/footer}-->

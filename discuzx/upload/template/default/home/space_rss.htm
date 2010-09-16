@@ -1,0 +1,28 @@
+{$tag}xml version="1.0" encoding="{CHARSET}"?>
+<rss version="2.0">
+	<channel>
+		<!--{if $space[uid]}-->
+		<title>{$space[username]}</title>
+		<link>$space[space_url]</link>
+		<description>{$space[username]}</description>
+		<!--{else}-->
+		<title>$_G['setting'][sitename]</title>
+		<link>$siteurl</link>
+		<description>$_G['setting'][sitename]</description>
+		<!--{/if}-->
+		<copyright>$_G['setting'][sitename]</copyright>
+		<generator>UCenter Home {X_VER}</generator>
+		<lastBuildDate>$space[lastupdate]</lastBuildDate>
+		
+		<!--{loop $list $value}-->
+		<item>
+		<title>$value[subject]</title>
+		<link>{$siteurl}home.php?mod=space&uid=$value[uid]&amp;do=blog&amp;id=$value[blogid]</link>
+		<description><![CDATA[{$value[message]}]]></description>
+		<author>$value[username]</author>
+		<pubDate>$value[dateline]</pubDate>
+		</item>
+		<!--{/loop}-->
+		
+	</channel>
+</rss>

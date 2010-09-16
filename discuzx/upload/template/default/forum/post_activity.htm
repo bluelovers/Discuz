@@ -1,0 +1,135 @@
+<div class="exfm cl">
+	<div class="sinf sppoll z">
+		<dl>
+			<dt><strong class="rq">*</strong><label for="starttime">{lang post_event_time}:</label></dt>
+			<dd>
+				<div id="certainstarttime" {if $activity['starttimeto']}style="display: none"{/if}>
+					<input type="text" name="starttimefrom[0]" id="starttimefrom_0" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$activity[starttimefrom]" tabindex="1" />
+				</div>
+				<div id="uncertainstarttime" {if !$activity['starttimeto']}style="display: none"{/if}>
+					<input type="text" name="starttimefrom[1]" id="starttimefrom_1" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$activity[starttimefrom]" tabindex="1" /><span> ~ </span><input onclick="showcalendar(event, this, true)" type="text" autocomplete="off" id="starttimeto" name="starttimeto" class="px" value="{if $activity['starttimeto']}$activity[starttimeto]{/if}" tabindex="1" />
+				</div>
+				<div class="spmf cl">
+					<label for="activitytime"><input type="checkbox" id="activitytime" name="activitytime" class="pc" onclick="if(this.checked) {$('certainstarttime').style.display='none';$('uncertainstarttime').style.display='';} else {$('certainstarttime').style.display='';$('uncertainstarttime').style.display='none';}" value="1" {if $activity['starttimeto']}checked{/if} tabindex="1" /> {lang activity_starttime_endtime}</label>
+				</div>
+			</dd>
+			<dt><strong class="rq">*</strong><label for="activityplace">{lang activity_space}:</label></dt>
+			<dd>
+				<input type="text" name="activityplace" id="activityplace" class="px oinf" value="$activity[place]" tabindex="1" />
+			</dd>
+			<!--{if $_G[gp_action] == 'newthread'}-->
+			<dt><label for="activitycity">{lang activity_city}:</label></dt>
+			<dd><input name="activitycity" id="activitycity" class="px" type="text" tabindex="1" /></dd>
+			<!--{/if}-->
+			<dt><strong class="rq">*</strong>{lang activiy_sort}:</dt>
+			<dd class="hasd cl">
+				<!--{if $activitytypelist}-->
+					<ul id="activitytypelist" style="display: none">
+					<!--{loop $activitytypelist $type}-->
+						<li>$type</li>
+					<!--{/loop}-->
+					</ul>
+				<!--{/if}-->
+				<span><input type="text" id="activityclass" name="activityclass" class="px" value="$activity[class]" tabindex="1" /></span>
+				<!--{if $activitytypelist}-->
+					<a href="javascript:;" class="dpbtn" onclick="showselect(this, 'activityclass', 'activitytypelist')">^</a>
+				<!--{/if}-->
+			</dd>
+			<dt><label for="activitynumber">{lang activity_need_member}:</label></dt>
+			<dd>
+				<input type="text" name="activitynumber" id="activitynumber" class="px z" style="width:55px;" onkeyup="checkvalue(this.value, 'activitynumbermessage')" value="$activity[number]" tabindex="1" />
+				<span class="ftid">
+					<select name="gender" id="gender" width="38" class="ps">
+						<option value="0" {if !$activity['gender']}selected="selected"{/if}>{lang unlimited}</option>
+						<option value="1" {if $activity['gender'] == 1}selected="selected"{/if}>{lang male}</option>
+						<option value="2" {if $activity['gender'] == 2}selected="selected"{/if}>{lang female}</option>
+					</select>
+				</span>
+				<span id="activitynumbermessage"></span>
+			</dd>
+			<!--{if $_G['setting']['activityfield']}-->
+			<dt>{lang optional_data}:</dt>
+			<dd>
+				<ul class="xl2 cl">
+				<!--{loop $_G['setting']['activityfield'] $key $val}-->
+				<li><input type="checkbox" name="userfield[]" id="userfield_$key" class="pc" value="$key"{if $activity['ufield']['userfield'] && in_array($key, $activity['ufield']['userfield'])} checked="checked"{/if} /><label for="userfield_$key">$val</label></li>
+				<!--{/loop}-->
+				</ul>
+			</dd>
+			<!--{/if}-->
+			<!--{if $_G['setting']['activityextnum']}-->
+			<dt>{lang other_data}:</dt>
+			<dd>
+				<textarea name="extfield" class="pt" cols="50" style="width: 270px;"><!--{if $activity['ufield']['extfield']}-->$activity[ufield][extfield]<!--{/if}--></textarea><br />{lang post_activity_message} $_G['setting']['activityextnum'] {lang post_option}
+			</dd>
+			<!--{/if}-->
+		</dl>
+	</div>
+	<div class="sadd z">
+		<dl>
+			<!--{if $_G['setting']['activitycredit']}-->
+			<dt><label for="activitycredit">{lang consumption_credit}:</label></dt>
+			<dd>
+				<input type="text" name="activitycredit" id="activitycredit" class="px" value="$activity[credit]" />{$_G['setting']['extcredits'][$_G['setting']['activitycredit']][title]}
+				<p class="xg1">{lang user_consumption_money}</p>
+			</dd>
+			<!--{/if}-->
+			<dt><label for="cost">{lang activity_payment}:</label></dt>
+			<dd>
+				<input type="text" name="cost" id="cost" class="px" onkeyup="checkvalue(this.value, 'costmessage')" value="$activity[cost]" tabindex="1" />{lang payment_unit}
+				<span id="costmessage"></span>
+			</dd>
+			<dt><label for="activityexpiration">{lang post_closing}:</label></dt>
+			<dd class="hasd cl">
+				<span>
+					<input type="text" name="activityexpiration" id="activityexpiration" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$activity[expiration]" tabindex="1" />
+				</span>
+				<a href="javascript:;" class="dpbtn" onclick="showselect(this, 'activityexpiration')">^</a>
+			</dd>
+			<!--{if $allowpostimg}-->
+				<dt>{lang post_topic_image}:</dt>
+				<dd class="pns">
+					<p><button type="button" class="pn" onclick="uploadWindow(function (aid, url){updateactivityattach(aid, url, '{$_G['setting']['attachurl']}forum')})"><span><!--{if $activityattach[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button></p>
+					<input type="hidden" name="activityaid" id="activityaid" {if $activityattach[attachment]}value="$activityattach[aid]" {/if}tabindex="1" />
+					<span class="xg1">
+					<!--{if $activityattach[attachment]}-->
+						{lang post_click_message_1}
+					<!--{else}-->
+						{lang post_click_message_2}
+					<!--{/if}-->
+					</span>
+					<div id="activityattach_image">
+					<!--{if $activityattach[attachment]}-->
+						<a href="$activityattach[url]/$activityattach[attachment]" target="_blank"><img class="spimg" src="$activityattach[url]/$activityattach[attachment]{if $activityattach['thumb']}.thumb.jpg{/if}" alt="" /></a>
+					<!--{/if}-->
+					</div>
+				</dd>
+			<!--{/if}-->
+		</dl>
+	</div>
+</div>
+<script type="text/javascript" reload="1">
+simulateSelect('gender');
+function checkvalue(value, message){
+	if(!value.search(/^\d+$/)) {
+		$(message).innerHTML = '';
+	} else {
+		$(message).innerHTML = '<b>{lang input_invalid}</b>';
+	}
+}
+function validateextra() {
+	if($('postform').starttimefrom_0.value == '' && $('postform').starttimefrom_1.value == '') {
+		showDialog('{lang post_error_message_1}', 'alert', '', function () { if($('activitytime').checked) {$('postform').starttimefrom_1.focus();} else {$('postform').starttimefrom_0.focus();} });
+		return false;
+	}
+	if($('postform').activityplace.value == '') {
+		showDialog('{lang post_error_message_2}', 'alert', '', function () { $('postform').activityplace.focus() });
+		return false;
+	}
+	if($('postform').activityclass.value == '') {
+		showDialog('{lang post_error_message_3}', 'alert', '', function () { $('postform').activityclass.focus() });
+		return false;
+	}
+	return true;
+}
+</script>

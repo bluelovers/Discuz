@@ -1,0 +1,63 @@
+<div class="exfm cl">
+	<div class="sppoll z bw0">
+		<!--{if $_G[gp_action] == 'newthread'}-->
+			<label for="rewardprice">{lang reward_price}:</label>
+			<input type="text" name="rewardprice" id="rewardprice" class="px pxs" size="6" onkeyup="getrealprice(this.value)" value="{$_G['group']['minrewardprice']}" tabindex="1" />
+			{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}
+			({lang reward_tax_after} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} <span id="realprice">0</span> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]} , {lang reward_low} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} {$_G['group']['minrewardprice']} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}
+			<!--{if $_G['group']['maxrewardprice'] > 0}--> - {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} {$_G['group']['maxrewardprice']} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}<!--{/if}-->)
+			<span class="xg1">, {lang you_have}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} <!--{echo getuserprofile('extcredits'.$_G['setting']['creditstransextra'][2]);}--> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}</span>
+		<!--{elseif $_G[gp_action] == 'edit'}-->
+			<!--{if $isorigauthor}-->
+				<!--{if $thread['price'] > 0}-->
+					<label for="rewardprice">{lang reward_price}:</label>
+					<input type="text" name="rewardprice" id="rewardprice" class="px pxs" onkeyup="getrealprice(this.value)" size="6" value="$rewardprice" tabindex="1" />
+					{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}
+					({lang reward_tax_add} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} <span id="realprice">0</span> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]} , {lang reward_low} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} {$_G['group']['minrewardprice']} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}<!--{if $_G['group']['maxrewardprice'] > 0}--> - {$_G['group']['maxrewardprice']} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}<!--{/if}-->)
+					<span class="xg1">, {lang you_have}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} <!--{echo getuserprofile('extcredits'.$_G['setting']['creditstransextra'][2]);}--> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}</span>
+				<!--{else}-->
+					{lang post_reward_resolved}
+					<input type="hidden" name="rewardprice" value="$rewardprice" tabindex="1" />
+				<!--{/if}-->
+			<!--{else}-->
+				<!--{if $thread['price'] > 0}-->
+					{lang reward_price}: {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} $rewardprice {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}
+				<!--{else}-->
+					{lang post_reward_resolved}
+				<!--{/if}-->
+			<!--{/if}-->
+		<!--{/if}-->
+		<!--{if $_G['setting']['rewardexpiration'] > 0}-->
+			<br /><span class="xg1">$_G['setting']['rewardexpiration'] {lang post_reward_message}</span>
+		<!--{/if}-->
+	</div>
+</div>
+
+<script type="text/javascript" reload="1">
+function getrealprice(price){
+	if(!price.search(/^\d+$/) ) {
+		n = Math.ceil(parseInt(price) + price * $_G['setting']['creditstax']);
+		if(price > 32767) {
+			$('realprice').innerHTML = '<b>{lang reward_price_overflow}</b>';
+		}<!--{if $_G[gp_action] == 'edit'}-->	else if(price < $rewardprice) {
+			$('realprice').innerHTML = '<b>{lang reward_cant_fall}</b>';
+		}<!--{/if}--> else if(price < $_G['group']['minrewardprice'] || ($_G['group']['maxrewardprice'] > 0 && price > $_G['group']['maxrewardprice'])) {
+			$('realprice').innerHTML = '<b>{lang reward_price_bound}</b>';
+		} else {
+			$('realprice').innerHTML = n;
+		}
+	}else{
+		$('realprice').innerHTML = '<b>{lang input_invalid}</b>';
+	}
+}
+if($('rewardprice')) {
+	getrealprice($('rewardprice').value)
+}
+function validateextra() {
+	if($('postform').rewardprice.value == '') {
+		showDialog('{lang post_reward_error_message}', 'alert', '', function () { $('postform').rewardprice.focus() });
+		return false;
+	}
+	return true;
+}
+</script>

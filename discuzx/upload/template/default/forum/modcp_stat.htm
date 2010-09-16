@@ -1,0 +1,92 @@
+<div class="bm bw0 mdcp">
+	<!--{if $uid}-->
+
+		<h1 class="mt"><a href="forum.php?mod=modcp&action=stat">{lang stats_modworks}</a> - $member[username]</h1>
+		<ul class="ttp cl"><!--{loop $monthlinks $link}--> {$link} <!--{/loop}--></ul>
+		<div class="cl">
+			<div class="stl">
+				<table class="dt" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th>{lang time}</th>
+						</tr>
+					</thead>
+					<tbody>
+					<!--{loop $modactions $day $modaction}-->
+						<tr>
+							<td>$day</td>
+						</tr>
+					<!--{/loop}-->
+					</tbody>
+					<tr>
+						<td>{lang stats_modworks_thismonth}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="str">
+				<table class="dt" cellpadding="0" cellspacing="0" style="width:{echo count($modactioncode) * 100}px">
+					<thead>
+						<tr>
+							<!--{loop $modactioncode $key $val}--><th width="100"> $val</th><!--{/loop}-->
+						</tr>
+					</thead>
+					<tbody>
+					<!--{loop $modactions $day $modaction}-->
+						<tr>
+							<!--{loop $modactioncode $key $val}-->
+								<!--{if $modaction[$key]['posts']}--><td title="{lang posts}: $modaction[$key][posts]">$modaction[$key][count]<!--{else}--><td>&nbsp;<!--{/if}--></td>
+							<!--{/loop}-->
+						</tr>
+					<!--{/loop}-->
+					</tbody>
+					<tr>
+						<!--{loop $modactioncode $key $val}-->
+							<td class="$bgarray[$key]" {if $totalactions[$key]['posts']}title="{lang posts}: {$totalactions[$key][posts]}"{/if}>$totalactions[$key][count]&nbsp;</td>
+						<!--{/loop}-->
+					</tr>
+				</table>
+			</div>
+		</div>
+
+	<!--{else}-->
+
+		<h1 class="mt"><a href="forum.php?mod=modcp&action=stat">{lang stats_modworks}</a> - {lang stats_modworks_all}</h1>
+		<ul class="ttp cl"><!--{loop $monthlinks $link}--> {$link} <!--{/loop}--></ul>
+		<div class="cl">
+			<div class="stl">
+				<table class="dt" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th width="100">{lang username}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--{loop $members $uid $member}-->
+							<tr>
+								<td><a href="forum.php?mod=modcp&action=stat&before=$before&uid=$uid" title="{lang stats_modworks_details}">{$member[username]}</a></td>
+							</tr>
+						<!--{/loop}-->
+					</tbody>
+				</table>
+			</div>
+			<div class="str">
+				<table class="dt" cellpadding="0" cellspacing="0" style="width:{echo count($modactioncode) * 100}px">
+					<thead>
+						<tr>
+							<!--{loop $modactioncode $key $val}--><th width="100"> $val</th><!--{/loop}-->
+						</tr>
+					</thead>
+					<tbody>
+					<!--{loop $members $uid $member}-->
+						<tr>
+							<!--{loop $modactioncode $key $val}-->
+								<!--{if $member[$key]['posts']}--><td title="{lang posts}: {$member[$key]['posts']}">{$member[$key][count]}<!--{else}--><td>&nbsp;<!--{/if}--></td>
+							<!--{/loop}-->
+						</tr>
+					<!--{/loop}-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	<!--{/if}-->
+</div>

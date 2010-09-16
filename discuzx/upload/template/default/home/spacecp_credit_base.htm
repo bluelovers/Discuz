@@ -1,0 +1,254 @@
+<!--{subtemplate common/header}-->
+	<!--{subtemplate home/spacecp_header}-->
+		<!--{subtemplate home/spacecp_credit_header}-->
+
+		<!--{if $_G['gp_op'] == 'base'}-->
+			<table cellspacing="0" cellpadding="0" class="tfm bbda">
+				<!--{loop $_G['setting']['extcredits'] $id $credit}-->
+				<tr>
+					<th>{$credit[title]} {$credit[img]}</th>
+					<td><!--{echo getuserprofile('extcredits'.$id);}--> {$credit[unit]}</td>
+				</tr>
+				<!--{/loop}-->
+				<tr>
+					<th>{lang credits}</th>
+					<td>$_G['member']['credits'] ( $_G['setting']['creditsformulaexp'] )</td>
+				</tr>
+			</table>
+
+			<!--{if $_G[setting][exchangestatus] || $_G[setting][transferstatus] || $_G[setting][ec_ratio]}-->
+				<!--{if $_G[setting][exchangestatus] && ($_G[setting][extcredits] || $_CACHE['creditsettings'])}-->
+				<form id="exchangeform" name="exchangeform" method="post" class="bbda ptm pbm" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=base&exchangesubmit=yes&handlekey=credit" onsubmit="showWindow('credit', 'exchangeform', 'post');">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="operation" value="exchange" />
+					<input type="hidden" name="outi" value="" />
+					<table cellspacing="0" cellpadding="0" class="tfm">
+						<tr>
+							<th>{lang memcp_credits_exchange}</th>
+							<td class="pns">
+								<input type="text" size="5" name="exchangeamount" class="px" style="width: auto;" id="exchangeamount" value="0" onkeyup="exchangecalcredit()" />
+								<select name="tocredits" id="tocredits" class="ps" onChange="exchangecalcredit()">
+								<!--{loop $_G[setting][extcredits] $id $ecredits}-->
+									<!--{if $ecredits[allowexchangein] && $ecredits[ratio]}-->
+										<option value="$id" unit="$ecredits[unit]" title="$ecredits[title]" ratio="$ecredits[ratio]">$ecredits[title]</option>
+									<!--{/if}-->
+								<!--{/loop}-->
+								<!--{eval $i=0;}-->
+
+								<!--{loop $_CACHE['creditsettings'] $id $data}--><!--{eval $i++;}-->
+									<!--{if $data[title]}-->
+									<option value="$id" outi="$i">$data[title]</option>
+									<!--{/if}-->
+								<!--{/loop}-->
+								</select>
+								&nbsp;{lang credits_need}&nbsp;
+								<input type="text" size="5" id="exchangedesamount" class="px" style="width: auto;" value="0" disabled="disabled" />
+								<select name="fromcredits" id="fromcredits_0"class="ps"  style="display: none" onChange="exchangecalcredit();">
+								<!--{loop $_G[setting][extcredits] $id $credit}-->
+									<!--{if $credit[allowexchangeout] && $credit[ratio]}-->
+										<option value="$id" unit="$credit[unit]" title="$credit[title]" ratio="$credit[ratio]">$credit[title]</option>
+									<!--{/if}-->
+								<!--{/loop}-->
+								</select>
+								<!--{eval $i=0;}-->
+								<!--{loop $_CACHE['creditsettings'] $id $data}--><!--{eval $i++;}-->
+									<select name="fromcredits_$i" class="ps" id="fromcredits_$i" style="display: none" onChange="exchangecalcredit()">
+									<!--{loop $data[creditsrc] $id $ratio}-->
+										<option value="$id" unit="$_G['setting']['extcredits'][$id][unit]" title="$_G['setting']['extcredits'][$id][title]" ratiosrc="$data[ratiosrc][$id]" ratiodesc="$data[ratiodesc][$id]">$_G['setting']['extcredits'][$id][title]</option>
+									<!--{/loop}-->
+									</select>
+								<!--{/loop}-->
+								<script type="text/javascript">
+									var tocredits = $('tocredits');
+									var fromcredits = $('fromcredits_0');
+									if(fromcredits.length > 1 && tocredits.value == fromcredits.value) {
+										fromcredits.selectedIndex = tocredits.selectedIndex + 1;
+									}
+								</script>
+								<p class="mtm"><button type="submit" name="exchangesubmit" class="pn" id="exchangesubmit" value="true" tabindex="2"><em>{lang memcp_credits_exchange}</em></button></p>
+							</td>
+							<td width="200" class="d">
+								<!--{if $_G[setting][exchangemincredits]}-->
+									{lang memcp_credits_exchange_min_balance} $_G[setting][exchangemincredits]<br />
+								<!--{/if}-->
+								<span id="taxpercent">
+								<!--{if intval($taxpercent) > 0}-->
+									{lang credits_tax} $taxpercent
+								<!--{/if}-->
+								</span>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<script type="text/javascript">
+					function exchangecalcredit() {
+						with($('exchangeform')) {
+							tocredit = tocredits[tocredits.selectedIndex];
+							if(!tocredit) {
+								return;
+							}
+							<!--{eval $i=0;}-->
+							<!--{loop $_CACHE['creditsettings'] $id $data}--><!--{eval $i++;}-->
+								$('fromcredits_$i').style.display = 'none';
+							<!--{/loop}-->
+							if(tocredit.getAttribute('outi')) {
+								outi.value = tocredit.getAttribute('outi');
+								fromcredit = $('fromcredits_' + tocredit.getAttribute('outi'));
+								$('taxpercent').style.display = $('fromcredits_0').style.display = 'none';
+								fromcredit.style.display = '';
+								fromcredit = fromcredit[fromcredit.selectedIndex];
+								$('exchangeamount').value = $('exchangeamount').value.toInt();
+								if($('exchangeamount').value != 0) {
+									$('exchangedesamount').value = Math.floor( fromcredit.getAttribute('ratiosrc') / fromcredit.getAttribute('ratiodesc') * $('exchangeamount').value);
+								} else {
+									$('exchangedesamount').value = '';
+								}
+							} else {
+								outi.value = 0;
+								$('taxpercent').style.display = $('fromcredits_0').style.display = '';
+								fromcredit = fromcredits[fromcredits.selectedIndex];
+								$('exchangeamount').value = $('exchangeamount').value.toInt();
+								if(fromcredit.getAttribute('title') != tocredit.getAttribute('title') && $('exchangeamount').value != 0) {
+									if(tocredit.getAttribute('ratio') < fromcredit.getAttribute('ratio')) {
+										$('exchangedesamount').value = Math.ceil( tocredit.getAttribute('ratio') / fromcredit.getAttribute('ratio') * $('exchangeamount').value * (1 + $_G[setting][creditstax]));
+									} else {
+										$('exchangedesamount').value = Math.floor( tocredit.getAttribute('ratio') / fromcredit.getAttribute('ratio') * $('exchangeamount').value * (1 + $_G[setting][creditstax]));
+									}
+								} else {
+									$('exchangedesamount').value = '';
+								}
+							}
+						}
+					}
+					String.prototype.toInt = function() {
+						var s = parseInt(this);
+						return isNaN(s) ? 0 : s;
+					}
+					exchangecalcredit();
+				</script>
+				<!--{/if}-->
+
+				<!--{if $_G[setting][transferstatus] && $_G['group']['allowtransfer']}-->
+				<form id="transferform" name="transferform" method="post" class="bbda ptm pbm" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=base&transfersubmit=yes&handlekey=credit" onsubmit="showWindow('credit', 'transferform', 'post');">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="operation" value="transfer" />
+					<table cellspacing="0" cellpadding="0" class="tfm">
+						<tr>
+							<th>{lang memcp_credits_transfer}</th>
+							<td class="pns">
+								<input type="text" size="5" class="px" style="width: auto;" id="transferamount" name="transferamount" value="0" />
+								&nbsp;{$_G[setting][extcredits][$_G[setting][creditstransextra][9]][title]}&nbsp;
+								{lang credits_give}&nbsp;
+								<input type="text" size="15" class="px" style="width: auto;" name="to" id="to" />
+								<p class="mtm"><button type="submit" name="transfersubmit" class="pn" id="transfersubmit" value="true" tabindex="1"><em>{lang memcp_credits_transfer}</em></button></p>
+							</td>
+							<td width="200" class="d">
+								{lang memcp_credits_transfer_min_balance} $_G[setting][transfermincredits] {$_G[setting][extcredits][$_G[setting][creditstransextra][9]][unit]}<br />
+								{lang credits_tax} $taxpercent
+							</td>
+						</tr>
+					</table>
+				</form>
+				<!--{/if}-->
+
+				<!--{if $_G[setting][ec_ratio] && ($_G[setting][ec_account] || $_G[setting][ec_tenpay_opentrans_chnid] || $_G[setting][ec_tenpay_bargainor])}-->
+				<form id="addfundsform" name="addfundsform" method="post" class="ptm" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=base&addfundssubmit=yes&handlekey=credit" onsubmit="showWindow('credit', 'addfundsform', 'post');">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="operation" value="addfunds" />
+					<table cellspacing="0" cellpadding="0" class="tfm">
+						<tr>
+							<th>{lang memcp_credits_addfunds}</th>
+							<td class="pns">
+								<input type="text" size="5" class="px" style="width: auto;" id="addfundamount" name="addfundamount" value="0" onkeyup="addcalcredit()" />
+								&nbsp;{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}&nbsp;
+								{lang credits_need}&nbsp;
+								{lang memcp_credits_addfunds_caculate_radio}
+								<p class="mtm"><button type="submit" name="addfundssubmit" class="pn" id="addfundssubmit" value="true" tabindex="1"><em>{lang memcp_credits_addfunds}</em></button></p>
+							</td>
+							<td width="200" class="d">
+								{lang memcp_credits_addfunds_rules_ratio} = {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_ratio]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}
+								<!--{if $_G[setting][ec_mincredits]}--><br />{lang memcp_credits_addfunds_rules_min} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_mincredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
+								<!--{if $_G[setting][ec_maxcredits]}--><br />{lang memcp_credits_addfunds_rules_max} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_maxcredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
+								<!--{if $_G[setting][ec_maxcreditspermonth]}--><br />{lang memcp_credits_addfunds_rules_month} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_maxcreditspermonth]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
+							</td>
+						</tr>
+					</table>
+				</form>
+				<script type="text/javascript">
+					function addcalcredit() {
+						var addfundamount = $('addfundamount').value.replace(/^0/, '');
+						var addfundamount = parseInt(addfundamount);
+						$('desamount').innerHTML = !isNaN(addfundamount) ? Math.ceil(((addfundamount / $_G[setting][ec_ratio]) * 100)) / 100 : 0;
+					}
+				</script>
+				<!--{/if}-->
+			<!--{/if}-->
+
+			<!--{if $_G['setting']['creditspolicy']['promotion_visit'] || $_G['setting']['creditspolicy']['promotion_register']}-->
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<caption>
+						<h2>{lang post_my_advisit}</h2>
+						<!--{if $_G['setting']['creditspolicy']['promotion_visit']}--><p>{lang post_promotion_url}</p><!--{/if}-->
+						<!--{if $_G['setting']['creditspolicy']['promotion_register'] && $_G['setting']['creditspolicy']['promotion_visit']}--><p>{lang post_promotion_reg}</p><!--{/if}-->
+						<!--{if $_G['setting']['creditspolicy']['promotion_register'] && !$_G['setting']['creditspolicy']['promotion_visit']}--><p>{lang post_promotion}</p><!--{/if}-->
+					</caption>
+					<tr>
+						<th>{lang post_promotion_url1}</th>
+						<td class="pns">
+							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuid=$_G[uid]" size="50" /> 
+							<button type="submit" class="pn vm" onclick="setCopy('$_G[siteurl]?fromuid=$_G[uid]', '{lang promotion_url_copied}');" type="submit"><em>{lang copy}</em></button>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang post_promotion_url2}</th>
+						<td class="pns">
+							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuser={echo rawurlencode($_G[username])}" size="50" /> 
+							<button type="submit" class="pn vm" onclick="setCopy('$_G[siteurl]?fromuser={echo rawurlencode($_G[username])}', '{lang promotion_url_copied}');"><em>{lang copy}</em></button>
+						</td>
+					</tr>
+				</table>
+			<!--{/if}-->
+
+		<!--{else}-->
+			{eval
+				$_TPL['cycletype'] = array(
+					'0' => '{lang one_time}',
+					'1' => '{lang everyday}',
+					'2' => '{lang the_time}',
+					'3' => '{lang interval_minutes}',
+					'4' => '{lang open_cycle}'
+				);
+			}
+			<div class="tbmu bw0">
+				<p>{lang activity_award_message}</p>
+			</div>
+			<table cellspacing="0" cellpadding="0" class="dt valt">
+				<tr>
+					<th>{lang action_name}</th>
+					<th>{lang cycle_range}</th>
+					<th>{lang max_award_per_week}</th>
+					<!--{loop $_G['setting']['extcredits'] $key $value}-->
+					<th>$value[title]<!--{if $value[unit]}-->($value[unit])<!--{/if}--></th>
+					<!--{/loop}-->
+				</tr>
+				<!--{loop $list $key $value}-->
+				<tr>
+					<td class="alt">$value[rulename]</td>
+					<td>$_TPL[cycletype][$value[cycletype]]</td>
+					<td class="alt"><!--{if $value[rewardnum]}-->$value[rewardnum]<!--{else}-->{lang unlimited_time}<!--{/if}--></td>
+					<!--{loop $_G['setting']['extcredits'] $key $credit}-->
+					<!--{eval $creditkey = 'extcredits'.$key;}-->
+					<td class="{if $key % 2 == 0}alt{/if}"><!--{if $value[$creditkey] > 0}-->+$value[$creditkey]<!--{elseif $value[$creditkey] < 0}-->$value[$creditkey]<!--{else}-->&nbsp;<!--{/if}--></td>
+					<!--{/loop}-->
+				</tr>
+				<!--{/loop}-->
+			</table>
+		<!--{/if}-->
+
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate home/spacecp_footer}-->
+	</div>
+</div>
+<!--{subtemplate common/footer}-->

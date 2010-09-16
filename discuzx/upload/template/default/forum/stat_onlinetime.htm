@@ -1,0 +1,26 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&rsaquo;</em>
+		<a href="misc.php?mod=stat">{lang stats}</a><em>&rsaquo;</em>
+		{lang stats_onlinetime}
+	</div>
+</div>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<h1 class="mt">{lang stats_onlinetime}</h1>
+			<table summary="{lang stats_onlinetime}" class="dt bm">
+				<tr>
+					<th colspan="2" width="50%">{lang stats_onlinetime_total}</th>
+					<th colspan="2">{lang stats_onlinetime_thismonth}</th>
+				</tr>
+				$onlines
+			</table>
+			<div class="notice">{lang stats_update}</div>
+		</div>
+	</div>
+	<!--{subtemplate common/stat}-->
+</div>
+<!--{subtemplate common/footer}-->

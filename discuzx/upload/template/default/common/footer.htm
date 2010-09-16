@@ -1,0 +1,111 @@
+	</div>
+<!--{if empty($topic) || ($topic[usefooter])}-->
+	<!--{eval $focusid = getfocus_rand($_G[basescript]);}-->
+	<!--{if $focusid !== null}-->
+		<!--{eval $focus = $_G['cache']['focus']['data'][$focusid];}-->
+		<div class="focus" id="sitefocus">
+			<h3 class="flb">
+				<em><!--{if $_G['cache']['focus']['title']}-->{$_G['cache']['focus']['title']}<!--{else}-->{lang focus_hottopics}<!--{/if}--></em>
+				<span><a href="javascript:;" onclick="setcookie('nofocus_$focusid', 1, 86400);$('sitefocus').style.display='none'" class="flbc" title="{lang close}">{lang close}</a></span>
+			</h3>
+			<hr class="l" />
+			<div class="detail">
+				<h4><a href="{$focus['url']}" target="_blank">$focus['subject']</a></h4>
+				<p>
+					<!--{if $focus[image]}-->
+					<a href="{$focus['url']}" target="_blank"><img src="{$focus['image']}" onload="thumbImg(this, 1)" _width="58" _height="58" /></a>
+					<!--{/if}-->
+					$focus['summary']
+				</p>
+			</div>
+			<hr class="l" />
+			<a href="{$focus['url']}" class="moreinfo" target="_blank">{lang focus_show}</a>
+		</div>
+	<!--{/if}-->
+
+	<!--{ad/footerbanner/wp a_f/1}--><!--{ad/footerbanner/wp a_f/2}--><!--{ad/footerbanner/wp a_f/3}-->
+	<!--{ad/float/a_fl/1}--><!--{ad/float/a_fr/2}-->
+	<!--{ad/couplebanner/a_fl a_cb/1}--><!--{ad/couplebanner/a_fr a_cb/2}-->
+
+	<!--{hook/global_footer}-->
+	<div id="ft" class="wp cl">
+		<div id="flk" class="y">
+			<p>
+				<!--{eval $fnavcount=0;}-->
+				<!--{loop $_G['setting']['footernavs'] $nav}--><!--{if $nav['available'] && ($nav['type'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1)) ||
+						!$nav['type'] && ($nav['id'] == 'stat' && $_G['group']['allowstatdata'] || $nav['id'] == 'report' && $_G['uid'] || $nav['id'] == 'archiver'))}-->$nav[code]<span class="pipe">|</span><!--{/if}--><!--{/loop}-->
+				<strong><a href="$_G['setting']['siteurl']" target="_blank">$_G['setting']['sitename']</a></strong>
+				<!--{if $_G['setting']['icp']}-->( <a href="http://www.miitbeian.gov.cn/" target="_blank">$_G['setting']['icp']</a> )<!--{/if}-->
+				<!--{if $_G['setting']['statcode']}-->$_G['setting']['statcode']<!--{/if}-->				
+				<!--{hook/global_footerlink}-->
+			</p>
+			<p class="xs0">
+				{lang time_now}
+				<span id="debuginfo">
+				<!--{if debuginfo()}-->, Processed in $_G[debuginfo][time] second(s), $_G[debuginfo][queries] queries
+					<!--{if $_G['gzipcompress']}-->, Gzip On<!--{/if}--><!--{if $_G['memory']}-->, <!--{echo ucwords($_G['memory'])}--> On<!--{/if}-->.
+				<!--{/if}-->
+				</span>
+			</p>
+		</div>
+		<div id="frt">
+			<p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em>$_G['setting']['version']</em><!--{if !empty($_G['setting']['boardlicensed'])}--> <a href="http://license.comsenz.com/?pid=1&host=$_SERVER[HTTP_HOST]" target="_blank">Licensed</a><!--{/if}--></p>
+			<p class="xs0">&copy; 2001-2010 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
+		</div>
+		<!--{eval updatesession();}-->
+	</div>
+<!--{/if}-->
+
+<ul id="usersetup_menu" class="p_pop" style="display:none;">
+	<li><a href="home.php?mod=spacecp&ac=avatar">{lang modify_avatar}</a></li>
+	<li><a href="home.php?mod=spacecp&ac=profile">{lang personal_profile}</a></li>
+	<!--{if $_G['setting']['verify']['enabled'] || $_G['setting']['my_app_status'] && $_G['setting']['videophoto']}-->
+		<li><a href="{if $_G['setting']['verify']['enabled']}home.php?mod=spacecp&amp;ac=profile&amp;op=verify{else}home.php?mod=spacecp&amp;ac=videophoto{/if}">{lang certification}</a></li>
+	<!--{/if}-->
+	<li><a href="home.php?mod=spacecp&ac=credit">{lang credits}</a></li>
+	<li><a href="home.php?mod=spacecp&ac=usergroup">{lang usergroup}</a></li>
+	<li><a href="home.php?mod=spacecp&ac=privacy">{lang privacy_filter}</a></li>
+	<!--{if $_G['setting'][sendmailday]}-->
+	<li><a href="home.php?mod=spacecp&ac=sendmail">{lang mail_notifier}</a></li>
+	<!--{/if}-->
+	<li><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=password">{lang password_security}</a></li>
+	<!--{if !empty($_G['setting']['plugins']['spacecp'])}-->
+		<!--{loop $_G['setting']['plugins']['spacecp'] $id $module}-->
+			<!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}--><li{if $_G[gp_id] == $id} class="a"{/if}><a href="home.php?mod=spacecp&amp;ac=plugin&id=$id">$module[name]</a></li><!--{/if}-->
+		<!--{/loop}-->
+	<!--{/if}-->
+</ul>
+
+<!--{if $upgradecredit !== false}-->
+<div id="g_upmine_menu" class="g_up" style="display:none;">
+	<div class="crly">
+		{lang credits} $_G[member][credits], {lang thread_groupupgrade} $upgradecredit {lang credits}
+	</div>
+	<div class="mncr"></div>
+</div>
+<!--{/if}-->
+
+<!--{if !$_G['setting']['bbclosed']}-->
+	<!--{if $_G[uid] && !isset($_G['cookie']['checkpm'])}-->
+	<script type="text/javascript" src="home.php?mod=spacecp&ac=pm&op=checknewpm&rand=$_G[timestamp]"></script>
+	<!--{/if}-->
+
+	<!--{if !isset($_G['cookie']['sendmail'])}-->
+	<script type="text/javascript" src="home.php?mod=misc&ac=sendmail&rand=$_G[timestamp]"></script>
+	<!--{/if}-->
+<!--{/if}-->
+
+<!--{if $_GET['diy'] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && (empty($do) || $do != 'index') && !empty($_G['style']['tplfile'])}-->
+<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js?{VERHASH}"></script>
+<!--{/if}-->
+<!--{if $_GET['diy'] == 'yes' && $space['self'] && $_G[mod] == 'space' && $do == 'index'}-->
+<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js?{VERHASH}"></script>
+<!--{/if}-->
+<!--{if $_G['member']['newprompt'] && (empty($_G['cookie']['promptstate_'.$_G[uid]]) || $_G['cookie']['promptstate_'.$_G[uid]] != $_G['member']['newprompt']) && $_G['gp_do'] != 'notice'}-->
+<script type="text/javascript">noticeTitle();</script>
+<!--{/if}-->
+<!--{eval output();}-->
+</body>
+</html>

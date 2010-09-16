@@ -1,0 +1,198 @@
+<!--{subtemplate common/header}-->
+
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
+<script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']), imagemaxwidth = '{IMAGEMAXWIDTH}', aimgcount = new Array();</script>
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="$_G[setting][navs][1][filename]">{lang nav_index}</a> <em>&rsaquo;</em>
+		<!--{loop $cat[ups] $value}-->
+			<a href="{echo getportalcategoryurl($value[catid])}">$value[catname]</a><em>&rsaquo;</em>
+		<!--{/loop}-->
+		<a href="{echo getportalcategoryurl($cat[catid])}">$cat[catname]</a> <em>&rsaquo;</em>
+		{lang view_content}
+	</div>
+</div>
+
+<!--{ad/text/wp a_t}-->
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+<div id="ct" class="ct2 wp cl">
+	<div class="mn">
+		<div class="bm vw">
+			<div class="h">
+				<h1 class="ph hm">$article[title] <!--{if $article['status'] == 1}-->({lang moderate_need})<!--{elseif $article['status'] == 2}-->({lang ignored})<!--{/if}--></h1>
+				<p class="xg1">
+					<a href="home.php?mod=spacecp&ac=favorite&type=article&id=$article[aid]&handlekey=favoritearticlehk_{$article[aid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr ofav">{lang favorite}</a>
+					<a href="home.php?mod=spacecp&ac=share&type=article&id=$article[aid]&handlekey=sharearticlehk_{$article[aid]}" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr">{lang share}</a>
+					$article[dateline]<span class="pipe">|</span>
+					{lang view_publisher}: <a href="home.php?mod=space&uid=$article[uid]">$article[username]</a><span class="pipe">|</span>
+					{lang view_views}: <!--{if $article[viewnum] > 0}-->$article[viewnum]<!--{else}-->0<!--{/if}--><span class="pipe">|</span>
+					{lang view_comments}: <!--{if $article[commentnum] > 0}-->$article[commentnum]<!--{else}-->0<!--{/if}-->
+					<!--{if $article[author]}--><span class="pipe">|</span>{lang view_author_original}: $article[author]<!--{/if}-->
+					<!--{if $article[from]}--><span class="pipe">|</span>{lang from}: <!--{if $article[fromurl]}--><a href="$article[fromurl]" target="_blank">$article[from]</a><!--{else}-->$article[from]<!--{/if}--><!--{/if}-->
+					<!--{if $article[status]==0 && ($_G['group']['allowdiy'] || $_G['group']['allowauthorizedblock'])}-->
+					<span class="pipe">|</span>
+					<a href="portal.php?mod=portalcp&ac=portalblock&op=recommend&idtype=aid&id=$article[aid]" onclick="showWindow('recommend', this.href, 'get', 0)">{lang blockdata_recommend}</a>
+					<!--{/if}-->
+					<!--{if $_G['group']['allowmanagearticle'] || ($_G['group']['allowpostarticle'] && $article['uid'] == $_G['uid'] && (empty($_G['group']['allowpostarticlemod']) || $_G['group']['allowpostarticlemod'] && $article['status'] == 1)) || $categoryperm[$value['catid']]['allowmanage']}-->
+					<span class="pipe">|</span>
+					<a href="portal.php?mod=portalcp&ac=article&op=edit&aid=$article[aid]&page=$_GET[page]">{lang edit}</a>
+						<!--{if $article[status]>0 && ($_G['group']['allowmanagearticle'] || $categoryperm[$value['catid']]['allowmanage'])}-->
+							<span class="pipe">|</span>
+							<a href="portal.php?mod=portalcp&ac=article&op=verify&aid=$article[aid]" id="article_verify_$article[aid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang moderate}</a>
+						<!--{else}-->
+							<span class="pipe">|</span>
+							<a href="portal.php?mod=portalcp&ac=article&op=delete&aid=$article[aid]" id="article_delete_$article[aid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+						<!--{/if}-->
+					<!--{/if}-->
+				</p>
+			</div>
+
+			<!--[diy=diysummarytop]--><div id="diysummarytop" class="area"></div><!--[/diy]-->
+
+			<!--{if $article[summary]}--><div class="s"><div><strong>{lang article_description}</strong>: $article[summary]</div></div><!--{/if}-->
+
+			<!--[diy=diysummarybottom]--><div id="diysummarybottom" class="area"></div><!--[/diy]-->
+
+			<div class="d">
+
+				<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+
+				<table cellpadding="0" cellspacing="0" width="100%"><tr><td>
+					<!--{ad/article/a_af/1}-->
+					$content[content]
+				</td></tr></table>
+				<!--{if $multi}--><div class="cl">$multi</div><!--{/if}-->
+
+				<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+
+				<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+				<div id="click_div">
+					<!--{template home/space_click}-->
+				</div>
+
+				<!--[diy=diycontentclickbottom]--><div id="diycontentclickbottom" class="area"></div><!--[/diy]-->
+
+			</div>
+			<!--{if !empty($aimgs[$content[pid]])}-->
+				<script type="text/javascript" reload="1">aimgcount[{$content[pid]}] = [<!--{echo implode(',', $aimgs[$content[pid]]);}-->];attachimgshow($content[pid]);</script>
+			<!--{/if}-->
+
+		</div>
+		
+		<!--[diy=diycontentrelatetop]--><div id="diycontentrelatetop" class="area"></div><!--[/diy]-->
+
+		<!--{ad/article/mbm hm/2}--><!--{ad/article/mbm hm/3}-->
+
+		<!--{if $article['related']}-->
+		<div id="related_article" class="bm">
+			<div class="bm_h cl">
+				<h3>{lang view_related}</h3>
+			</div>
+			<div class="bm_c">
+				<ul class="xl xl2 cl">
+				<!--{loop $article['related'] $value}-->
+					<li>&bull; <a href="portal.php?mod=view&aid=$value[aid]">$value[title]</a></li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<!--[diy=diycontentrelate]--><div id="diycontentrelate" class="area"></div><!--[/diy]-->
+
+		<!--{if $article['allowcomment']==1}-->
+		<div id="comment" class="bm">
+			<div class="bm_h cl">
+				<!--{if $article[commentnum]}--><a href="#cform" class="y xi2">{lang post_comment}</a><!--{/if}-->
+				<h3>{lang latest_comment}</h3>
+			</div>
+			<div id="comment_ul" class="bm_c">
+				<!--{loop $commentlist $comment}-->
+				<!--{template portal/comment_li}-->
+				<!--{if !empty($aimgs[$comment[cid]])}-->
+					<script type="text/javascript" reload="1">aimgcount[{$comment[cid]}] = [<!--{echo implode(',', $aimgs[$comment[cid]]);}-->];attachimgshow($comment[cid]);</script>
+				<!--{/if}-->
+				<!--{/loop}-->
+				<!--{if $article[commentnum]}--><p class="ptm pbm"><a href="$common_url" class="xi2">{lang view_all_comments}($article[commentnum])</a></p><!--{/if}-->
+				<form id="cform" name="cform" action="$form_url" method="post" autocomplete="off">
+					<div class="tedt">
+						<div class="area">
+							<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+						</div>
+					</div>
+					
+					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+						<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+						<div class="mtm"><!--{template common/seccheck}--></div>
+					<!--{/if}-->
+					<input type="hidden" name="portal_referer" value="portal.php?mod=view&aid=$aid#comment">
+					<input type="hidden" name="aid" value="$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="replysubmit" value="true">
+					<input type="hidden" name="referer" value="portal.php?mod=view&aid=$aid#comment" />
+					<input type="hidden" name="id" value="$article[id]" />
+					<input type="hidden" name="idtype" value="$article[idtype]" />
+					<input type="hidden" name="commentsubmit" value="true" />
+					<p class="ptn"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>{lang comment}</strong></button></p>
+				</form>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<!--[diy=diycontentcomment]--><div id="diycontentcomment" class="area"></div><!--[/diy]-->
+
+
+	</div>
+	<div class="sd pph">
+		
+		<div class="drag">
+			<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
+		</div>
+
+		<!--{if $cat[others]}-->
+		<div class="bm">
+			<div class="bm_h cl">
+				<h2>{lang category_related}</h2>
+			</div>
+			<div class="bm_c">
+				<ul class="xl xl2 cl">
+					<!--{loop $cat[others] $value}-->
+					<li><a href="{echo getportalcategoryurl($value[catid])}">$value[catname]</a></li>
+					<!--{/loop}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<!--{if $cat[subs]}-->
+		<div class="bm">
+			<div class="bm_h cl">
+				<h2>{lang sub_category}</h2>
+			</div>
+			<div class="bm_c">
+				<ul class="xl xl2 cl">
+				<!--{loop $cat[subs] $value}-->
+					<li><a href="{echo getportalcategoryurl($value[catid])}">$value[catname]</a></li>
+				<!--{/loop}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+
+<!--{subtemplate common/footer}-->

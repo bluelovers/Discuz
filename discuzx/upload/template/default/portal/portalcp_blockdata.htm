@@ -1,0 +1,75 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
+		<a href="portal.php?mod=portalcp">{lang portal_manage}</a> <em>&rsaquo;</em>
+		{lang blockdata_verify}
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">	
+	
+	<div class="mn">
+		<h1 class="mt">{lang blockdata_verify}</h1>
+		<form action="portal.php?mod=portalcp&ac=blockdata" method="get" class="mbm">
+			<input type="hidden" name="mod" value="portalcp" />
+			<input type="hidden" name="ac" value="blockdata" />
+			{lang block_id}:
+			<input type="text" class="px vm" name="searchkey" id="searchkey" value="$_GET[searchkey]" />
+			<button type="submit" class="pn vm"><em>{lang find}</em></button>
+		</form>
+		<div class="bm bw0">
+			<div id="block_selection">
+				<!--{if $datalist}-->
+					<form method="post" action="portal.php?mod=portalcp&ac=blockdata&op=verify">
+						<table class="dt">
+							<tr>
+								<th width="24">&nbsp;</th>
+								<th>{lang block_data_source}</th>
+								<th>{lang push_page}</th>
+								<th>{lang block_id}</th>
+								<th>{lang push_people}</th>
+								<th width="120">{lang block_operation}</th>
+							</tr>
+							<!--{loop $datalist $value}-->
+							<tr>
+								<td><input type="checkbox" name="ids[]" value="$value[dataid]" /></td>
+								<td><a href="$value[url]" target="_blank">$value[title]</a></td>
+								<td><!--{if $blocks[$value[bid]][diyurl]}--><a href="$blocks[$value[bid]][diyurl]" target="_blank">$blocks[$value[bid]][tplname]</a><!--{else}-->$blocks[$value[bid]][tplname]<!--{/if}--></td>
+								<td>$blocks[$value[bid]][blockname]</td>
+								<td><a href="home.php?uid=$value[uid]" target="_blank">$value[username]</a></td>
+								<td>
+									<a href="portal.php?mod=portalcp&ac=block&op=verifydata&bid=$value[bid]&dataid=$value[dataid]" onclick="showWindow('verifydata', this.href, 'get', 0)">{lang moderate}</a>
+								</td>
+							</tr>
+							<!--{/loop}-->
+							<tr>
+								<td colspan="6">
+									<input type="checkbox" id="chkall" name="chkall" onclick="checkall(this.form, 'ids')" />
+									<label for="chkall">{lang select_all}</label>
+									<input id="op_delete" class="pr" value="delete" name="optype" type="radio"><label for="op_delete"> {lang delete}</label>&nbsp;&nbsp;
+									<input id="op_pass" class="pr" value="pass" name="optype" type="radio"><label for="op_pass"> {lang passed}</label>&nbsp;&nbsp;
+									<input type="hidden" name="batchsubmit" value="1" />
+									<input type="hidden" name="formhash" value="{FORMHASH}" />
+									<input type="hidden" name="referer" value="$_G[referer]" />
+									<button type="submit" value="true" name="trashsubmit" class="pn vm"><em>{lang submit}</em></button>
+								</td>
+							</tr>
+						</table>
+						<!--{if $multi}--><div class="pgs cl">$multi</div><!--{/if}-->
+					</form>
+				<!--{else}-->
+					<p class="emp">{lang no_moderate_push_data}</p>
+				<!--{/if}-->
+			</div>
+		</div>
+	</div>	
+
+	<div class="appl">
+		<!--{subtemplate portal/portalcp_nav}-->
+	</div>
+</div>
+
+<!--{template common/footer}-->

@@ -1,0 +1,314 @@
+<!--{template common/header}-->
+
+<!--{if $op == 'delete'}-->
+
+<h3 class="flb">
+	<em>{lang article_delete}</em>
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+</h3>
+
+<form method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=article&op=delete&aid=$_GET[aid]">
+	<div class="c">
+		<!--{if $_G['group']['allowpostarticlemod'] && $article['status'] == 1}-->
+		{lang article_delete_sure}
+		<input type="hidden" name="optype" value="0" class="pc" />
+		<!--{else}-->
+		<label><input type="radio" name="optype" value="0" class="pc" /> {lang article_delete_direct}</label>&nbsp;&nbsp;&nbsp;
+		<label><input type="radio" name="optype" value="1" class="pc" checked="checked" /> {lang article_delete_recyclebin}</label>
+		<!--{/if}-->
+	</div>
+	<p class="o pns">
+		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
+	</p>
+	<input type="hidden" name="aid" value="$_GET[aid]" />
+	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="deletesubmit" value="true" />
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+</form>
+<!--{elseif $op == 'verify'}-->
+<h3 class="flb">
+	<em id="return_$_G[gp_handlekey]">{lang moderate_article}</em>
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+</h3>
+
+<form method="post" autocomplete="off" id="aritcle_verify_$aid" action="portal.php?mod=portalcp&ac=article&op=verify&aid=$aid">
+	<div class="c">
+		<input type="radio" class="pr" name="status" value="0" id="status_0"{if $article[status]=='1'} checked{/if} /><label for="status_0">{lang passed}</label>&nbsp;
+		<input type="radio" class="pr" name="status" value="-1" id="status_x" /><label for="status_x">{lang delete}</label>&nbsp;
+		<input type="radio" class="pr" name="status" value="2" id="status_2"{if $article[status]=='2'} checked{/if} /><label for="status_2">{lang ignore}</label>
+	</div>
+	<p class="o pns">
+		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
+	</p>
+	<input type="hidden" name="aid" value="$aid" />
+	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+	<input type="hidden" name="verifysubmit" value="true" />
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+</form>
+<!--{elseif $op == 'related'}-->
+
+	<!--{if $ra}-->
+	<li id="raid_li_$ra[aid]"><input type="hidden" name="raids[]" value="$ra[aid]" size="5">[ $ra[aid] ] <a href="portal.php?mod=view&aid=$ra[aid]" target="_blank">$ra[title]</a> <a href="javascript:;" onclick="raid_delete($ra[aid]);">{lang delete}</a></li>
+	<!--{/if}-->
+
+<!--{elseif $op == 'pushplus'}-->
+<h3 class="flb">
+	<em>{lang article_pushplus}</em>
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+</h3>
+<form method="post" target="_blank" action="portal.php?mod=portalcp&ac=article&tid=$tid&aid=$aid">
+	<div class="c">
+		<b>$pushcount</b> {lang portalcp_article_message1}<a href="portal.php?mod=view&aid=$aid" target="_blank" class="xi2">({lang view_article})</a>
+		<!--{if $pushedcount}--><br />{lang portalcp_article_message2}<!--{/if}-->
+		<div id="pushplus_list">
+		<!--{loop $pids $pid}-->
+		<input type="hidden" name="pushpluspids[]" value="$pid" />
+		<!--{/loop}-->
+		</div>
+	</div>
+	<p class="o pns">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="pushplussubmit" value="1" />
+
+		<input type="hidden" name="toedit" value="1" />
+		<button type="submit" class="pn pnc vm"><span>{lang submit}</span></button>
+	</p>
+</form>
+<!--{else}-->
+
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="$_G[setting][navs][1][filename]">$_G[setting][navs][1][navname]</a> <em>&rsaquo;</em>
+		<a href="$cate[caturl]">$cate[catname]</a> <em>&rsaquo;</em>
+		<!--{if !empty($aid)}-->
+		<a href="portal.php?mod=portalcp&ac=article&aid=$article[aid]">{lang article_edit}</a>
+		<!--{else}-->
+		<a href="portal.php?mod=portalcp&ac=article&catid=$catid">{lang article_publish}</a>
+		<!--{/if}-->
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn" style="float: left;">
+		<div class="bm bw0">
+			<h1 class="mt"><!--{if !empty($aid)}-->{lang article_edit}<!--{else}-->{lang article_publish}<!--{/if}--></h1>
+			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+			<form method="post" autocomplete="off" id="articleform" action="portal.php?mod=portalcp&ac=article{if $_G[gp_modarticlekey]}&modarticlekey=$_G[gp_modarticlekey]{/if}" enctype="multipart/form-data">
+				<!--{hook/portalcp_top}-->
+				<div class="pbn">
+					<input type="text" class="px p_fre" id="title" name="title" value="$article[title]" size="80" />
+				</div>
+				<div class="exfm pns cl">
+					<div class="sinf sppoll z">
+						<!--{if empty($article['aid'])}-->
+						<dl>
+							<dt>{lang article_auto_grab}</dt>
+							<dd>
+								<span class="ftid">
+									<select name="from_idtype" id="from_idtype" class="ps">
+										<option value="tid"$idtypes[tid]>{lang thread} tid</option>
+										<option value="blogid"$idtypes[blogid]>{lang blog} id</option>
+									</select>
+								</span>
+								<script type="text/javascript">simulateSelect('from_idtype');</script>
+								<input type="text" name="from_id" id="from_id" value="$_GET[from_id]" size="8" class="px p_fre vm" />&nbsp;
+								<button type="button" name="from_button" class="pn vm" onclick="return from_get();"><em>{lang grab}</em></button>
+								<input type="hidden" name="id" value="$_GET[from_id]" />
+								<input type="hidden" name="idtype" value="$_GET[from_idtype]" />
+							</dd>
+						</dl>
+						<!--{/if}-->
+						<dl>
+							<dt>{lang article_url}</dt>
+							<dd><input type="text" class="px p_fre" name="url" value="$article[url]" size="30" /></dd>
+						</dl>
+						<dl>
+							<dt>{lang article_author}</dt>
+							<dd><input type="text" name="author" class="px p_fre" value="$article[author]" size="30" /></dd>
+						</dl>
+						
+						<!--{if $article['aid']}-->
+						<dl>
+							<dt>{lang article_page}</dt>
+							<dd>
+								<span class="z">{lang article_page_save}</span>
+								<a href="portal.php?mod=portalcp&ac=article&op=addpage&aid=$aid" class="y">{lang article_page_add}</a>
+								<!--{if $article_content}-->
+									<a href="portal.php?mod=portalcp&ac=article&op=delpage&aid=$aid&cid=$article_content[cid]" class="y" style="padding-right:10px;">{lang article_page_delete}</a>
+								<!--{else}-->
+									<a href="javascript:history.back();" class="y" style="padding-right:10px;">{lang article_page_delete}</a>
+								<!--{/if}-->
+								<a href=""></a>
+								<div class="pgm cl">$multi</div>
+							</dd>
+						</tr>
+						<!--{/if}-->
+					</div>
+					<div class="sadd z">
+						<dl>
+							<dt>{lang article_source}</dt>
+							<dd><input type="text" name="from" class="px p_fre" value="$article[from]" size="30" /></dd>
+						</dl>
+						<dl>
+							<dt>{lang article_source_url}</dt>
+							<dd><input type="text" name="fromurl" class="px p_fre" value="$article[fromurl]" size="30" /></dd>
+						</dl>
+                        <dl>
+							<dt>{lang article_dateline}</dt>
+							<dd><input type="text" name="dateline" class="px p_fre" value="$article[dateline]" size="30" onclick="showcalendar(event, this, true)" /></dd>
+						</dl>
+						<div><input type="hidden" id="conver" name="conver" value="" /></div>
+					</div>
+					<!--{hook/portalcp_extend}-->
+				</div>
+
+				<div class="pbw">
+					<script language="javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
+					<textarea class="userData" name="content" id="uchome-ttHtmlEditor" style="height: 100%; width: 100%; display: none; border: 0px">$article_content[content]</textarea>
+					<iframe src="home.php?mod=editor&charset={CHARSET}&allowhtml=1&isportal=1" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:808px;height:400px;border: 1px solid #C5C5C5;"></iframe>
+				</div>
+
+				<!--{hook/portalcp_middle}-->
+
+				<div class="bm bml">
+					<div class="bm_h cl">
+						<h2>{lang article_description}</h2>
+					</div>
+					<div class="bm_c"><textarea name="summary" cols="80" class="pt" style="width: 846px; w\idth: 744px;">$article[summary]</textarea></div>
+				</div>
+
+				<div class="bm bml">
+					<div class="bm_h cl">
+						<h2>{lang article_tag}</h2>
+					</div>
+					<div class="bm_c">
+						<!--{loop $article_tags $key $tag}-->
+						<input type="checkbox" name="tag[$key]" id="article_tag_$key" class="pc"{if $article_tags[$key]} checked="checked"{/if} />
+						<label for="article_tag_$key">$tag_names[$key]</label>
+						&nbsp;&nbsp;
+						<!--{/loop}-->
+					</div>
+				</div>
+
+				<!--{if $page<2 && $op != 'addpage'}-->
+				<div class="exfm">
+					<h2>{lang article_related} <a id="related_article" href="portal.php?mod=portalcp&ac=related&catid=$catid&aid=$aid" class="xi2" style="text-decoration: underline;" onclick="showWindow(this.id, this.href, 'get', 0)">{lang select}</a></h2>
+					<ul id="raid_div" class="xl">
+						<!--{if $article[related]}-->
+							<!--{loop $article[related] $ra}-->
+								<li id="raid_li_$ra[aid]"><input type="hidden" name="raids[]" value="$ra[aid]" size="5"><a href="portal.php?mod=view&aid=$ra[aid]" target="_blank">$ra[title]</a> ({lang article_id}: $ra[aid]) <a href="javascript:;" onclick="raid_delete($ra[aid]);" class="xg1">{lang delete}</a></li>
+							<!--{/loop}-->
+						<!--{/if}-->
+					</ul>
+				</div>
+				<!--{/if}-->
+
+				<!--{hook/portalcp_bottom}-->
+
+				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+					<div class="exfm pns"><!--{template common/seccheck}--></div>
+				<!--{/if}-->
+
+				<div class="ptm">
+					<button type="button" id="issuance" class="pn pnc" name="articlebutton" onclick="validate(this);"><strong>{lang submit}</strong></button>
+					<label><input type="checkbox" name="addpage" value="1" class="pc"> {lang article_page_save_after}</label>
+					<!--{if $cate[allowcomment]}--><span class="pipe">|</span><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} /> {lang article_forbidcomment_description}</label><!--{/if}-->
+				</div>
+
+				<input type="hidden" id="aid" name="aid" value="$article[aid]" />
+				<input type="hidden" name="catid" id="catid" value="$catid" />
+				<input type="hidden" name="cid" value="$article_content[cid]" />
+				<input type="hidden" id="attach_ids" name="attach_ids" value="0" />
+				<input type="hidden" name="articlesubmit" value="true" />
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+			</form>
+		</div>
+	</div>
+	<div class="appl" style="float: right; margin-top: 45px; border: none; background-color: transparent;">
+		<h3 class="mbm pbm bbs">{lang attachment_upload}</h3>
+		<div class="pbm xg1">{lang attachment_upload_comment}</div>
+		<div id="attachbodyhidden" style="display:none;">
+			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid" enctype="multipart/form-data" target="uploadframe" style="background: transparent;">
+				<input type="file" name="attach" class="pf" size="8" />
+				<span id="localfile"></span>
+				<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+			</form>
+		</div>
+		<div id="attachbody" class="bn"></div>
+
+		<script src="{$_G[setting][jspath]}portal_upload.js?{VERHASH}" type="text/javascript"></script>
+		<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
+
+		<div id="attach_image_body" class="bn">$article[attach_image]</div>
+		<div id="attach_file_body" class="bn">$article[attach_file]</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+function from_get() {
+	var el = $('catid');
+	var catid = el ? el.value : 0;
+	window.location.href='portal.php?mod=portalcp&ac=article&from_idtype='+$('from_idtype').value+'&catid='+catid+'&from_id='+$('from_id').value;
+	return true;
+}
+function validate(obj) {
+	var title = $('title');
+	if(title) {
+		var slen = strlen(title.value);
+		if (slen < 1 || slen > 80) {
+			alert("{lang article_validate_title}");
+			title.focus();
+			return false;
+		}
+	}
+	var catObj = $("catid");
+	if(catObj) {
+		if (catObj.value < 1) {
+			alert("{lang article_validate_category}");
+			catObj.focus();
+			return false;
+		}
+	}
+	edit_save();
+	obj.form.submit();
+	return false;
+}
+function raid_add() {
+	var raid = $('raid').value;
+	if($('raid_li_'+raid)) {
+		alert('{lang article_validate_has_added}');
+		return false;
+	}
+	var url = 'portal.php?mod=portalcp&ac=article&op=related&inajax=1&aid={$article[aid]}&raid='+raid;
+	var x = new Ajax();
+	x.get(url, function(s){
+		s = trim(s);
+		if(s) {
+			$('raid_div').innerHTML += s;
+		} else {
+			alert('{lang article_validate_noexist}');
+			return false;
+		}
+	});
+}
+function raid_delete(aid) {
+	var node = $('raid_li_'+aid);
+	var p;
+	if(p = node.parentNode) {
+		p.removeChild(node);
+	}   
+}
+if($('title')) {
+	$('title').focus();
+}
+</script>
+
+<!--{/if}-->
+
+<!--{template common/footer}-->

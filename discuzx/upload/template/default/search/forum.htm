@@ -1,0 +1,35 @@
+<!--{subtemplate search/header}-->
+<div id="ct" class="cl w">
+	<div class="mw">
+		<form class="searchform" method="post" autocomplete="off" action="search.php?mod=forum">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+
+			<!--{subtemplate search/pubsearch}-->
+			<!--{hook/forum_top}-->
+
+			<!--{eval $policymsgs = $p = '';}-->
+			<!--{loop $_G['setting']['creditspolicy']['search'] $id $policy}-->
+			<!--{block policymsg}--><!--{if $_G['setting']['extcredits'][$id][img]}-->$_G['setting']['extcredits'][$id][img] <!--{/if}-->$_G['setting']['extcredits'][$id][title] $policy $_G['setting']['extcredits'][$id][unit]<!--{/block}-->
+			<!--{eval $policymsgs .= $p.$policymsg;$p = ', ';}-->
+			<!--{/loop}-->
+			<!--{if $policymsgs}--><p>{lang search_credit_msg}</p><!--{/if}-->	
+		</form>
+	
+		<!--{if !empty($searchid) && submitcheck('searchsubmit', 1)}-->
+			<!--{if $checkarray['posts']}-->
+				<!--{subtemplate search/thread_list}-->
+			<!--{elseif $checkarray['threadsort']}-->
+				<!--{subtemplate search/sort_list}-->
+			<!--{/if}-->
+		<!--{/if}-->
+		
+	</div>
+</div>
+<!--{hook/forum_bottom}-->
+
+<script type="text/javascript">
+<!--{if $sortid}-->
+	ajaxget('forum.php?mod=post&action=threadsorts&sortid=$sortid&operate=1&inajax=1', 'threadsorts', 'threadsortswait');
+<!--{/if}-->
+</script>
+<!--{subtemplate search/footer}-->

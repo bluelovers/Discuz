@@ -1,0 +1,36 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="$_G[setting][navs][4][filename]">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
+		<a href="home.php?mod=magic">{lang magics_index}</a>
+	</div>
+</div>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<h1 class="mt"><img alt="magic" src="{STATICURL}image/feed/magic.gif" alt="task" class="vm" /> {lang magics_title}</h1>
+			<ul class="tb cl">
+				<!--{if $_G['group']['allowmagics']}--><li$actives[shop]><a href="home.php?mod=magic&action=shop">{lang magics_shop}</a></li><!--{/if}-->
+				<li$actives[mybox]><a href="home.php?mod=magic&action=mybox">{lang magics_user}</a></li>
+				<li$actives[log]><a href="home.php?mod=magic&action=log&operation=uselog">{lang magics_log}</a></li>
+			</ul>
+			<!--{if !$_G['setting']['magicstatus'] && $_G['adminid'] == 1}-->
+				<div class="emp">{lang magics_tips}</div>
+			<!--{/if}-->
+
+			<!--{if $action == 'shop'}-->
+				<!--{subtemplate home/space_magic_shop}-->
+			<!--{elseif $action == 'mybox'}-->
+				<!--{subtemplate home/space_magic_mybox}-->
+			<!--{elseif $action == 'log'}-->
+				<!--{subtemplate home/space_magic_log}-->
+			<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate common/userabout}-->
+	</div>
+</div>
+<!--{subtemplate common/footer}-->

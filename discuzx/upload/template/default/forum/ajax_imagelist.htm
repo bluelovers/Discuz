@@ -1,0 +1,31 @@
+<!--{if $imagelist}-->
+	<!--{eval $i = 0;}-->
+	<table cellspacing="2" cellpadding="2" class="imgl"><tr>
+	<!--{loop $imagelist $image}-->
+		<!--{eval $i++;}-->
+		<td valign="bottom" id="image_td_$image[aid]" width="25%">
+			<a href="javascript:;" title="$image[filename]"><img src="{echo getforumimg($image[aid], 1, 300, 300, 'fixnone')}" id="image_$image[aid]" onclick="insertAttachimgTag('$image[aid]')" width="{if $image[width] < 110}$image[width]{else}110{/if}" cwidth="{if $image[width] < 300}$image[width]{else}300{/if}" /></a>
+			<p class="imgf">
+				<a href="javascript:;" onclick="delImgAttach($image[aid],{if !$attach[pid]}1{else}0{/if})" class="d">{lang e_attach_del}</a>
+				<!--{if $image['description']}-->
+					<input type="text" name="attachnew[{$image[aid]}][description]" class="px xg2" value="$image[description]" id="image_desc_$image[aid]" />
+				<!--{else}-->
+					<input type="text" class="px xg2" value="{lang description}" onclick="this.style.display='none';$('image_desc_$image[aid]').style.display='';$('image_desc_$image[aid]').focus();" />
+					<input type="text" name="attachnew[{$image[aid]}][description]" class="px" style="display: none" id="image_desc_$image[aid]" />
+				<!--{/if}-->
+			</p>
+			<!--{if $_G['group']['allowupload']}-->
+				<p><!--{if !$attach[pid]}--><label for="albumaid_$image[aid]"><input type="checkbox" class="pc" id="albumaid_$image[aid]" name="albumaid[]" value="$image[aid]" /> {lang save_to_album}</label><!--{/if}--></p>
+			<!--{/if}-->
+		</td>
+		<!--{if $i % 4 == 0 && isset($imagelist[$i])}--></tr><tr><!--{/if}-->
+	<!--{/loop}-->
+	<!--{if ($imgpad = $i % 4) > 0}--><!--{echo str_repeat('<td width="25%"></td>', 4 - $imgpad);}--><!--{/if}-->
+	</tr></table>
+	<!--{if $_G[inajax]}-->
+		<script type="text/javascript" reload="1">
+		ATTACHNUM['imageunused'] += <!--{echo count($imagelist)}-->;
+		updateattachnum('image');
+		</script>
+	<!--{/if}-->
+<!--{/if}-->

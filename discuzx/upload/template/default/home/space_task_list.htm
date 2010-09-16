@@ -1,0 +1,61 @@
+<h1 class="mt"><img alt="trade" src="{STATICURL}image/feed/task.gif" alt="task" class="vm" /> {lang task}</h1>
+<ul class="tb cl">
+	<li$actives[new]><a href="home.php?mod=task&item=new">{lang task_new}</a></li>
+	<li$actives[doing]><a href="home.php?mod=task&item=doing">{lang task_doing}</a></li>
+	<li$actives[done]><a href="home.php?mod=task&item=done">{lang task_done}</a></li>
+	<li$actives[failed]><a href="home.php?mod=task&item=failed">{lang task_failed}</a></li>
+</ul>
+<div class="ptm tl">
+	<!--{if $tasklist}-->
+		<table cellspacing="0" cellpadding="0">
+			<!--{loop $tasklist $task}-->
+				<tr>
+					<td width="70"><img src="$task[icon]" width="64" height="64" alt="Icon" /></td>
+					<td>
+						<p><strong><a href="home.php?mod=task&do=view&id=$task[taskid]">$task[name]</a></strong>&nbsp;&nbsp;&nbsp;({lang task_applies}: <a href="home.php?mod=task&do=view&id=$task[taskid]#parter">$task[applicants]</a> )</p>
+						<!--{if $_G['gp_item'] == 'doing'}-->
+						<div class="pbg mtm mbm">
+							<div class="pbr" style="width: {if $task[csc]}$task[csc]%{else}8px{/if}; background-color: #5AAF4A;"></div>
+							<div class="xs0">{lang task_complete} <span id="csc_$task[taskid]">$task[csc]</span>%</div>
+						</div>
+						<!--{/if}-->
+					</td>
+					<td class="xi1" width="200">
+						<!--{if $task['reward'] == 'credit'}-->
+							{lang credits} $_G['setting']['extcredits'][$task[prize]][title] $task[bonus] $_G['setting']['extcredits'][$task[prize]][unit]
+						<!--{elseif $task['reward'] == 'magic'}-->
+							{lang magics_title} $listdata[$task[prize]] $task[bonus] {lang magics_unit}
+						<!--{elseif $task['reward'] == 'medal'}-->
+							{lang medals} $listdata[$task[prize]] <!--{if $task['bonus']}-->{lang expire} $task[bonus] {lang days} <!--{/if}-->
+						<!--{elseif $task['reward'] == 'invite'}-->
+							{lang invite_code} $task[prize] {lang expire} $task[bonus] {lang days}
+						<!--{elseif $task['reward'] == 'group'}-->
+							{lang usergroup} $listdata[$task[prize]] <!--{if $task['bonus']}--> $task[bonus] {lang days} <!--{/if}-->
+						<!--{/if}-->
+					</td>
+					<td width="200">
+						<!--{if $_G['gp_item'] == 'new'}-->
+							<!--{if $task['noperm']}-->
+								<a href="javascript:;" onclick="doane(event);showDialog('{lang task_group_nopermission}')"><img src="{STATICURL}image/task/disallow.gif" title="{lang task_group_nopermission}" alt="disallow" /></a>
+							<!--{elseif $task['appliesfull']}-->
+								<a href="javascript:;" onclick="doane(event);showDialog('{lang task_applies_full}')"><img src="{STATICURL}image/task/disallow.gif" title="{lang task_applies_full}" alt="disallow" /></a>
+							<!--{else}-->
+								<a href="home.php?mod=task&do=apply&id=$task[taskid]"><img src="{STATICURL}image/task/apply.gif" alt="apply" /></a>
+							<!--{/if}-->
+						<!--{elseif $_G['gp_item'] == 'doing'}-->
+							<p><a href="home.php?mod=task&do=draw&id=$task[taskid]"><img src="{STATICURL}image/task/{if $task[csc] >=100}reward.gif{else}rewardless.gif{/if}"  alt="" /></a></p>
+						<!--{elseif $_G['gp_item'] == 'done'}-->
+							<p style="white-space:nowrap">{lang task_complete_on} $task[dateline]
+							<!--{if $task['period'] && $task[t]}--><br /><!--{if $task[allowapply]}--><a href="home.php?mod=task&do=apply&id=$task[taskid]">{lang task_applyagain_now}</a><!--{else}-->{$task[t]}{lang task_applyagain}<!--{/if}--><!--{/if}--></p>
+						<!--{elseif $_G['gp_item'] == 'failed'}-->
+							<p style="white-space:nowrap">{lang task_lose_on} $task[dateline]
+							<!--{if $task['period'] && $task[t]}--><br /><!--{if $task[allowapply]}--><a href="home.php?mod=task&do=apply&id=$task[taskid]">{lang task_applyagain_now}</a><!--{else}-->{$task[t]}{lang task_reapply}<!--{/if}--><!--{/if}--></p>
+						<!--{/if}-->
+					</td>
+				</tr>
+			<!--{/loop}-->
+		</table>
+	<!--{else}-->
+		<p class="emp"><!--{if $_G['gp_item'] == 'new'}-->{lang task_nonew}<!--{elseif $_G['gp_item'] == 'doing'}-->{lang task_nodoing}<!--{else}-->{lang data_nonexistence}<!--{/if}--></p>
+	<!--{/if}-->
+</div>

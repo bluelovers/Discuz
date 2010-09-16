@@ -1,0 +1,100 @@
+<div id="button_more_menu" class="p_pop" style="display: none; margin-left: 17px;">
+	<ul>
+		<li><a href="javascript:;" onclick="spaceDiy.recover();return false;" title="{lang header_restore_backup_desc}">{lang header_restore_backup}</a></li>
+		<li><a href="javascript:;" onclick="drag.frameExport();return false;" title="{lang header_export_desc}">{lang header_export}</a></li>
+		<li><a href="javascript:;" onclick="drag.openFrameImport();$('button_more_menu').style.display='none';return false;" title="{lang header_import_desc}">{lang header_import}</a></li>
+		<li><a href="javascript:;" onclick="drag.blockForceUpdateBatch();$('button_more_menu').style.display='none';return false;" title="{lang header_update_desc}">{lang header_update}</a></li>
+		<li><a href="javascript:;" onclick="drag.clearAll();$('button_more_menu').style.display='none';return false;" title="{lang header_clearall_desc}">{lang header_clearall}</a></li>
+	</ul>
+</div>
+<div id="controlpanel" class="cl">
+	<div id="controlheader" class="cl">
+		<p class="y">
+			<span id="navcancel"><a href="javascript:;" id="diycancel" onclick="spaceDiy.cancel();return false;">{lang close}</a></span>
+			<a href="javascript:;" title="{lang header_more_actions}" id="button_more" onmouseover="showMenu(this.id);">More</a>
+			<span id="navsave"><a href="javascript:;" onclick="javascript:spaceDiy.save();return false;">{lang save}</a></span>
+			<span id="button_redo" class="unusable"><a href="javascript:;" onclick="spaceDiy.redo();return false;" title="{lang e_redo}" onfocus="this.blur();">{lang e_redo}</a></span>
+			<span id="button_undo" class="unusable"><a href="javascript:;" onclick="spaceDiy.undo();return false;" title="{lang e_undo}" onfocus="this.blur();">{lang e_undo}</a></span>
+			<span id="preview" class="unusable"><a href="javascript:;" onclick="spaceDiy.save('preview');return false;" onfocus="this.blur();" title="{lang header_perview_desc}" id="diy_preview">{lang header_perview}</a></span>
+			<span id="savecachemsg" class="xg1" style="display: none;"></span>
+		</p>
+		<ul id="controlnav">
+			<li id="navstart" class="current"><a href="javascript:" onclick="spaceDiy.getdiy('start');this.blur();return false;">{lang header_start}</a></li>
+			<li id="navframe"><a href="javascript:;" onclick="spaceDiy.getdiy('frame');this.blur();return false;">{lang header_frame}</a></li>
+			<li id="navblockclass"><a href="javascript:;" onclick="spaceDiy.getdiy('blockclass');this.blur();return false;" id="hd_mod">{lang header_module}</a></li>
+			<!--{if !empty($topic)}-->
+			<li id="navstyle"><a href="javascript:;" onclick="spaceDiy.getdiy('style');this.blur();return false;">{lang style}</a></li>
+			<li id="navdiy"><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');this.blur();return false;">{lang header_diy}</a></li>
+			<!--{/if}-->
+		</ul>
+	</div>
+	<div id="controlcontent" class="cl">
+		<ul id="contentstart" class="content">
+		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('frame');return false;"><img src="{STATICURL}image/diy/layout.png" />{lang header_add_frame}</a></li>
+		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('blockclass');return false;"><img src="{STATICURL}image/diy/module.png" />{lang header_add_module}</a></li>
+		  <!--{if !empty($topic)}-->
+		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('style');return false;"><img src="{STATICURL}image/diy/style.png" />{lang style}</a></li>
+		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang header_diy}</a></li>
+		  <!--{/if}-->
+		</ul>
+		<ul id="contentframe" class="content hide">
+			<li><a href="javascript:;" id="frame_1" onmousedown="drag.createObj(event,'frame','1');" onfocus="this.blur();" data="$widthstr"><img src="{STATICURL}image/diy/layout-1.png" />100%{lang header_frame}</a></li>
+			<li><a href="javascript:;" id="frame_1_1" onmousedown="drag.createObj(event,'frame','1-1');" onfocus="this.blur();"><img src="{STATICURL}image/diy/layout-1-1.png" />1:1</a></li>
+			<li><a href="javascript:;" id="frame_1_2" onmousedown="drag.createObj(event,'frame','1-2');" onfocus="this.blur();"><img src="{STATICURL}image/diy/layout-1-2.png" />1:2</a></li>
+			<li><a href="javascript:;" id="frame_2_1" onmousedown="drag.createObj(event,'frame','2-1');" onfocus="this.blur();"><img src="{STATICURL}image/diy/layout-2-1.png" />2:1</a></li>
+			<li><a href="javascript:;" id="frame_1_3" onmousedown="drag.createObj(event,'frame','1-3');" onfocus="this.blur();"><img src="{STATICURL}image/diy/layout-1-3.png" />1:3</a></li>
+			<li><a href="javascript:;" id="frame_3_1" onmousedown="drag.createObj(event,'frame','3-1');" onfocus="this.blur();"><img src="{STATICURL}image/diy/layout-3-1.png" />3:1</a></li>
+			<li><a href="javascript:;" id="frame_1_1_1" onmousedown="drag.createObj(event,'frame','1-1-1');" onfocus="this.blur();" data="$widthstr"><img src="{STATICURL}image/diy/layout-1-1-1.png" />1:1:1</a></li>
+			<li><a href="javascript:;" id="frame_tab" onmousedown="drag.createObj(event,'tab');" onfocus="this.blur();" data="$widthstr"><img src="{STATICURL}image/diy/layout-tab.png" />tab{lang header_frame}</a></li>
+		</ul>
+		<div id="contentblockclass" class="content hide">
+			<div class="tbmu mbm" id="contentblockclass_nav" style="margin-top: -15px">
+				<!--{eval $isfirst=1;}-->
+				<!--{loop $_G['cache']['blockclass'] $key $value}-->
+				<!--{if $isfirst}-->
+				<!--{eval $isfirst=0;}-->
+				<a href="javascript:;" id="bcnav_$key" class="a" onclick="spaceDiy.switchBlockclass('$key');return false;">$value[name]</a>
+				<!--{else}-->
+				<span class="pipe">|</span>
+				<a href="javascript:;" id="bcnav_$key" onclick="spaceDiy.switchBlockclass('$key');return false;">$value[name]</a>
+				<!--{/if}-->
+				<!--{/loop}-->
+			</div>
+			<!--{eval $isfirst=1;}-->
+			<!--{loop $_G['cache']['blockclass'] $key $value}-->
+			<!--{if $isfirst}-->
+			<!--{eval $isfirst=0;}-->
+			<ul class="blocks content" id="contentblockclass_$key">
+			<!--{else}-->
+			<ul class="blocks content" id="contentblockclass_$key" class="hide">
+			<!--{/if}-->
+				<li class="module-$key">
+					<ol>
+					<!--{loop $value[subs] $skey $svalue}-->
+						<li class="module-$skey"><label onmousedown="drag.createObj (event,'block','$skey');" onmouseover="className='hover';" onmouseout="this.className='';">$svalue[name]</label></li>
+					<!--{/loop}-->
+					</ol>
+				</li>
+			</ul>
+			<!--{/loop}-->
+		</div>
+	</div>
+	<div id="cpfooter"><table cellpadding="0" cellspacing="0" width="100%"><tr><td class="l">&nbsp;</td><td class="c">&nbsp;</td><td class="r">&nbsp;</td></tr></table></div>
+</div>
+
+<form method="post" autocomplete="off" name="diyform" id="diyform" action="$_G[siteurl]portal.php?mod=portalcp&ac=diy">
+<input type="hidden" name="template" value="$_G['style']['tplfile']" />
+<input type="hidden" name="prefile" id="prefile" value="$_G['style']['prefile']" />
+<input type="hidden" name="savemod" value="$_G['style']['tplsavemod']" />
+<input type="hidden" name="spacecss" value="" />
+<input type="hidden" name="style" value="" />
+<input type="hidden" name="rejs" value="" />
+<input type="hidden" name="handlekey" value="" />
+<input type="hidden" name="layoutdata" value="" />
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<input type="hidden" name="gobackurl" id="gobackurl" value=""/>
+<input type="hidden" name="recover" value=""/>
+<input type="hidden" name="optype" value=""/>
+
+<input type="hidden" name="diysubmit" value="true"/>
+</form>

@@ -1,0 +1,22 @@
+<!--{template common/header}-->
+<h3 class="flb">
+	<em>{lang group_push_to_forum}</em>
+	<span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
+</h3>
+<form method="post" autocomplete="off" id="form_$_G[gp_handlekey]" name="form_$_G[gp_handlekey]" action="forum.php?mod=group&action=recommend&fid=$_G[fid]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'form_$_G[gp_handlekey]');"{/if}>
+	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="grouprecommend" value="true" />
+	<input type="hidden" name="inajax" value="$_G[inajax]" />
+	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<div class="c" id="return_$_G[gp_handlekey]">
+		<select id="recommend" name="recommend" class="ps mtw mbw">
+			<option value="0">{lang group_do_not_push}</option>
+			$forumselect
+		</select>
+	</div>
+	<p class="o pns">
+		<button type="submit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
+	</p>
+</form>
+<!--{template common/footer}-->

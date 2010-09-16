@@ -1,0 +1,46 @@
+<?php
+
+/**
+ *      [Discuz!] (C)2001-2099 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: lang_blank.php 6757 2010-03-25 09:01:29Z cnteacher $
+ */
+
+$lang = array
+(
+	'stat_option' => '統計選項',
+	'stat_option_posts' => '發貼總數',
+	'stat_option_groups' => '群組總數',
+	'stat_option_members' => '會員總數',
+	'stat_option_groupmembers' => '群組成員數',
+	'stat_option_groupnewposts' => '群組今日發帖',
+	'stat_option_bbsnewposts' => '廣場今日發貼數',
+	'stat_option_bbslastposts' => '廣場昨日發貼數',
+	'stat_option_onlinemembers' => '當前在線會員數',
+	'stat_option_maxmembers' => '歷史最高在線會員數',
+	'stat_option_doings' => '動態數',
+	'stat_option_blogs' => '日誌數',
+	'stat_option_albums' => '相冊數',
+	'stat_option_pics' => '圖片數',
+	'stat_option_shares' => '分享數',
+
+	'stat_edit_showtitle' => '顯示名稱',
+	'stat_edit_showtitle_detail' => '你可以編輯以下對應項來自定義各統計項的顯示名稱',
+
+	'stat_posts' => '帖子',
+	'stat_groups' => '群組',
+	'stat_members' => '會員',
+	'stat_groupmembers' => '成員加入群組',
+	'stat_groupnewposts' => '今日發帖',
+	'stat_bbsnewposts' => '今日發帖',
+	'stat_bbslastposts' => '昨日發帖',
+	'stat_onlinemembers' => '當前在線會員',
+	'stat_maxmembers' => '歷史最高在線',
+	'stat_doings' => '動態',
+	'stat_blogs' => '日誌',
+	'stat_albums' => '相冊',
+	'stat_pics' => '圖片',
+	'stat_shares' => '分享',
+);
+?>

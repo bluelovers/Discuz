@@ -1,0 +1,25 @@
+<!--{template common/header}-->
+
+<div>
+	<h3 class="flb">
+		<em id="return_upload">{lang upload}</em>
+		<span><a href="javascript:;" class="flbc" onclick="hideWindow('upload')" title="{lang close}">{lang close}</a></span>
+	</h3>
+
+	<form id="uploadform" method="post" autocomplete="off" target="uploadattachframe" onsubmit="uploadWindowstart()" action="misc.php?mod=swfupload&operation=upload&type=$_G[gp_type]&inajax=yes&infloat=yes&simple=2" enctype="multipart/form-data">
+		<div class="c">
+			<input type="hidden" name="handlekey" value="upload" />
+			<input type="hidden" name="uid" value="$_G['uid']">
+			<input type="hidden" name="hash" value="{echo md5(substr(md5($_G['config']['security']['authkey']), 8).$_G['uid'])}">
+			<input type="file" name="Filedata" size="30" class="filedata" />
+			<p class="mtn" id="uploadwindowing" style="visibility:hidden"><img src="{IMGDIR}/uploading.gif" /></p>
+			<!--{if $type == 'image'}-->{lang attachment_allow_exts}: <strong>$imgexts</strong><!--{elseif $_G['group']['attachextensions']}-->{lang attachment_allow_exts}: <strong>{$_G['group']['attachextensions']}</strong><!--{/if}-->
+		</div>
+		<p class="o pns">
+			<button type="submit" name="uploadsubmit" id="uploadsubmit" class="pn pnc" tabindex="1" value="true"><span>{lang upload}</span></button>
+		</p>
+	</form>
+	<iframe name="uploadattachframe" id="uploadattachframe" style="display: none;" onload="uploadWindowload();"></iframe>
+</div>
+
+<!--{template common/footer}-->

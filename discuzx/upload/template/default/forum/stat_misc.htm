@@ -1,0 +1,289 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&rsaquo;</em>
+		<a href="misc.php?mod=stat">{lang stats}</a><em>&rsaquo;</em>
+	<!--{if $op == 'views'}-->
+		{lang stats_views}
+	<!--{elseif $op == 'agent'}-->
+		{lang stats_agent}
+	<!--{elseif $op == 'posts'}-->
+		{lang stats_posthist}
+	<!--{elseif $op == 'forumsrank'}-->
+		{lang stats_forums_rank}
+	<!--{elseif $op == 'threadsrank'}-->
+		{lang stats_threads_rank}
+	<!--{elseif $op == 'postsrank'}-->
+		{lang stats_posts_rank}
+	<!--{elseif $op == 'creditsrank'}-->
+		{lang stats_credits_rank}
+	<!--{elseif $op == 'modworks'}-->
+		{lang stats_modworks}
+	<!--{elseif $op == 'forumstat'}-->
+		{lang stats_forums_stat}
+	<!--{/if}-->
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--{if $op == 'views'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_views}</h1>
+				<table summary="{lang stats_week}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_week}</h2></caption>
+					$statsbar_week
+				</table>
+
+				<table summary="{lang stats_hour}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_hour}</h2></caption>
+					$statsbar_hour
+				</table>
+			</div>
+		<!--{elseif $op == 'agent'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_agent}</h1>
+				<table summary="{lang stats_agent}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_os}</h2></caption>
+					$statsbar_os
+				</table>
+
+				<table summary="{lang stats_browser}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_browser}</h2></caption>
+					$statsbar_browser
+				</table>
+			</div>
+		<!--{elseif $op == 'posts'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_posthist}</h1>
+				<table summary="{lang stats_month_posts}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_month_posts}</h2></caption>
+					$statsbar_monthposts
+				</table>
+
+				<table summary="{lang stats_day_posts}" class="dt bm">
+					<caption><h2 class="mbn">{lang stats_day_posts}</h2></caption>
+					$statsbar_dayposts
+				</table>
+		<!--{elseif $op == 'forumsrank'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_forums_rank}</h1>
+				<table summary="{lang stats_forums_rank}" class="dt bm mbw">
+					<tr>
+						<th colspan="2" class="xw1" width="50%">{lang stats_posts}{lang stats_rank}</th>
+						<th colspan="2" class="xw1">{lang reply}{lang stats_rank}</th>
+					</tr>
+					$forumsrank[0]
+				</table>
+
+				<table summary="{lang stats_forums_rank}" class="dt bm">
+					<tr>
+						<th colspan="2" class="xw1" width="50%">{lang stats_posts_thismonth}{lang stats_rank}</th>
+						<th colspan="2" class="xw1">{lang stats_posts_today}{lang stats_rank}</th>
+					</tr>
+					$forumsrank[1]
+				</table>
+
+				<div class="notice">{lang stats_update}</div>
+			</div>
+		<!--{elseif $op == 'forumstat' && !$_G['gp_fid']}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_forums_stat}</h1>
+				<table summary="{lang stats_forum_stat}" class="dt bm">
+					<tr>
+						<th class="xw1">{lang stats_forums_forumname}</td>
+						<th class="xw1">{lang stats_main_posts_count}</td>
+					</tr>
+					<!--{loop $forums $forum}-->
+						<tr class="{echo swapclass('alt')}">
+							<td><a href="misc.php?mod=stat&op=forumstat&fid={$forum['fid']}">$forum['name']</a></td>
+							<td>$forum['posts']</td>
+						</tr>
+					<!--{/loop}-->
+				</table>
+			</div>
+		<!--{elseif $op == 'forumstat' && $_G['gp_fid']}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_forum_stat_log} - $foruminfo[name] - $month</h1>
+				<script type="text/javascript">
+					document.write(AC_FL_RunContent(
+						'width', '100%', 'height', '300',
+						'src', '{STATICURL}image/common/stat.swf?$statuspara',
+						'quality', 'high'
+					));
+				</script>
+				<table summary="{lang stats_forum_stat_log}" class="dt bm mtw mbw">
+					<tr>
+						<th width="100">{lang stats_date}</th>
+						<th>{lang stats_main_total_posted}</th>
+					</tr>
+					<!--{loop $logs $log}-->
+					<tr>
+						<td>$log['logdate']</td>
+						<td>$log['value']</td>
+					</tr>
+					<!--{/loop}-->
+				</table>
+
+				<table class="dt bm">
+					<caption><h2 class="mbn">{lang stats_history} - $foruminfo[name]</h2></caption>
+					<tr>
+						<th width="100">{lang stats_forums_month}</th>
+						<th>{lang stats_main_total_posted}</th>
+					</tr>
+					<!--{loop $monthlist $month}-->
+						<tr>
+							<td><a href="misc.php?mod=stat&op=forumstat&fid={$_G['gp_fid']}&month=$month">$month</a></td>
+							<td>$monthposts[$month]</td>
+						</tr>
+					<!--{/loop}-->
+				</table>
+			</div>
+		<!--{elseif $op == 'threadsrank'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_threads_rank}</h1>
+				<table summary="{lang stats_threads_rank}" class="dt bm">
+					<tr>
+						<th colspan="2" class="xw1" width="50%">{lang stats_threads_most_views}</th>
+						<th colspan="2" class="xw1">{lang stats_threads_most_replies}</th>
+					</tr>
+					$threadsrank
+				</table>
+			</div>
+		<!--{elseif $op == 'postsrank'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_posts_rank}</h1>
+				<table summary="{lang stats_posts_rank}" class="dt bm">
+					<tr>
+						<th colspan="2" class="xw1" width="25%">{lang stats_posts} {lang stats_rank}</th>
+						<th colspan="2" class="xw1" width="25%">{lang stats_digest_posts} {lang stats_rank}</th>
+						<th colspan="2" class="xw1" width="25%">{lang stats_posts_thismonth} {lang stats_rank}</th>
+						<th colspan="2" class="xw1" width="25%">{lang stats_posts_today} {lang stats_rank}</th>
+					</tr>
+					$postsrank
+				</table>
+			</div>
+		<!--{elseif $op == 'creditsrank'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_credits_rank}</h1>
+				<ul class="tb cl">
+				<!--{loop $extendedcredits $key $extendedcredit}-->
+					<li{if $_G[gp_extcredit] == $key} class="a" id="extendedcredit_current"{/if}><a href="misc.php?mod=stat&op=creditsrank&extcredit=$key" onclick="swtichcurrent(this, $key);return false;">{$_G[setting][extcredits][$key][title]}</a></li>
+				<!--{/loop}-->
+				</ul>
+				<!--{loop $extendedcredits $key $extendedcredit}-->
+					<table id="extendedcredit_$key" summary="{lang stats_credits_rank}" class="dt bw0 mtw" style="display:{if $_G[gp_extcredit] != $key} none{/if}">
+						$creditsrank[$key]
+					</table>
+				<!--{/loop}-->
+				<script type="text/javascript">
+				var lastcurrent = $('extendedcredit_current');
+				var lastextcredit = $_G[gp_extcredit];
+				function swtichcurrent(obj, extcredit) {
+					if(lastcurrent) {
+						lastcurrent.className = '';
+					}
+					$('extendedcredit_' + lastextcredit).style.display = 'none';
+					$('extendedcredit_' + extcredit).style.display = '';
+					obj.parentNode.className = 'a';
+					lastcurrent = obj.parentNode;
+					lastextcredit = extcredit;
+				}
+				</script>
+			</div>
+		<!--{elseif $op == 'modworks' && $uid}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_modworks} - $_G[username]</h1>
+				<ul class="ttp cl">
+					<!--{loop $monthlinks $link}-->
+					$link
+					<!--{/loop}-->
+				</ul>
+				<div class="cl">
+					<div class="stl">
+						<table class="dt bm">
+							<tr>
+								<th>{lang time}</th>
+							</tr>
+							<!--{loop $modactions $day $modaction}-->
+								<tr class="{echo swapclass('alt')}">
+									<td>$day</td>
+								</tr>
+							<!--{/loop}-->
+							<tr class="alt"><td></td></tr>
+							<tr>
+								<td>{lang stats_modworks_thismonth}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="str">
+						<table class="dt" style="width: 3000px;">
+							<tr>
+								<!--{loop $modactioncode $key $val}--><th width="$tdwidth">$val</th><!--{/loop}-->
+							</tr>
+							<!--{eval unset($swapc);}-->
+							<!--{loop $modactions $day $modaction}-->
+								<tr class="{echo swapclass('alt')}">
+									<!--{loop $modactioncode $key $val}-->
+										<!--{if $modaction[$key]['posts']}--><td title="{lang posts}: $modaction[$key][posts]">$modaction[$key][count]<!--{else}--><td>&nbsp;<!--{/if}--></td>
+									<!--{/loop}-->
+								</tr>
+							<!--{/loop}-->
+							<tr class="alt"><td colspan="23"></td></tr>
+							<tr>
+								<!--{loop $modactioncode $key $val}-->
+									<td class="$bgarray[$key]" {if $totalactions[$key]['posts']}title="{lang posts}: {$totalactions[$key][posts]}"{/if}>$totalactions[$key][count]&nbsp;</td>
+								<!--{/loop}-->
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+		<!--{elseif $op == 'modworks'}-->
+			<div class="bm bw0">
+				<h1 class="mt">{lang stats_modworks} - {lang stats_modworks_all}</h1>
+				<ul class="ttp cl">
+					<!--{loop $monthlinks $link}-->
+					$link
+					<!--{/loop}-->
+				</ul>
+				<div class="cl">
+					<div class="stl">
+						<table class="dt bm">
+							<tr>
+								<th>{lang username}</th>
+							</tr>
+							<!--{loop $members $uid $member}-->
+								<tr class="{echo swapclass('alt')}">
+									<td><a href="misc.php?mod=stat&op=modworks&before=$_G[gp_before]&uid=$uid" title="{lang stats_modworks_details}">{$member[username]}</a></td>
+								</tr>
+							<!--{/loop}-->
+						</table>
+					</div>
+
+					<div class="str">
+						<table class="dt" style="width: 3000px;">
+							<tr>
+								<!--{loop $modactioncode $key $val}--><th width="$tdwidth">$val</th><!--{/loop}-->
+							</tr>
+							<!--{eval unset($swapc);}-->
+							<!--{loop $members $uid $member}-->
+								<tr class="{echo swapclass('alt')}">
+									<!--{loop $modactioncode $key $val}-->
+										<!--{if $member[$key]['posts']}--><td title="{lang posts}: {$member[$key]['posts']}">{$member[$key][count]}<!--{else}--><td>&nbsp;<!--{/if}--></td>
+									<!--{/loop}-->
+								</tr>
+							<!--{/loop}-->
+						</table>
+					</div>
+				</div>
+			</div>
+		<!--{/if}-->
+
+	</div>
+	<!--{subtemplate common/stat}-->
+</div>
+
+<!--{template common/footer}-->

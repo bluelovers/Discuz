@@ -1,0 +1,289 @@
+<!--{subtemplate common/header}-->
+	<!--{subtemplate home/spacecp_header}-->
+		<!--{subtemplate home/spacecp_credit_header}-->
+			<p class="tbmu bw0">
+				<a{if $_G[gp_suboperation] == 'paymentlog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=paymentlog" hidefocus="true">{lang memcp_credits_log_payment}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'incomelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=incomelog" hidefocus="true">{lang memcp_credits_log_income}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'attachpaymentlog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=attachpaymentlog" hidefocus="true">{lang memcp_credits_attach_log_payment}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'attachincomelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=attachincomelog" hidefocus="true">{lang memcp_credits_attach_log_income}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'rewardpaylog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=rewardpaylog" hidefocus="true">{lang memcp_reward_log_payment}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'rewardincomelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=rewardincomelog" hidefocus="true">{lang memcp_reward_log_income}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'creditslog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=creditslog" hidefocus="true">{lang memcp_credits_log_transaction}</a><span class="pipe">|</span>
+				<a{if $_G[gp_suboperation] == 'creditrulelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=creditrulelog" hidefocus="true">{lang memcp_credits_rule_income}</a>
+			</p>
+			<!--{if $_G[gp_suboperation] == 'paymentlog'}-->
+				<table summary="{lang memcp_credits_log_payment}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang subject}</th>
+						<th>{lang dateline}</th>
+						<th>{lang forum}</th>
+						<th>{lang memcp_credits_log_payment_dateline}</th>
+						<th width="60">{lang memcp_reward_fact}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td><a href="forum.php?mod=viewthread&tid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[tdateline]</td>
+								<td><a href="forum.php?mod=forumdisplay&fid=$log[fid]" target="_blank">$log[name]</a></td>
+								<td>$log[dateline]</td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+										<!--{if $log['extcredits'.$id]}-->
+											{$credit[title]}
+											{$log['extcredits'.$id]}
+											{$credit[unit]}
+										<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<tr><td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'incomelog'}-->
+				<table summary="{lang memcp_credits_log_income}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang subject}</th>
+						<th>{lang dateline}</th>
+						<th>{lang memcp_credits_log_payment_dateline}</th>
+						<th width="60">{lang pay_author_income}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td><a href="forum.php?mod=viewthread&tid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[tdateline]</td>
+								<td>$log[dateline]</td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log['extcredits'.$id]}
+										{$credit[unit]}
+									<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'attachpaymentlog'}-->
+				<table summary="{lang memcp_credits_log_income}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang attachments}</th>
+						<th>{lang author}</th>
+						<th>{lang dateline}</th>
+						<th>{lang memcp_credits_attach_log_post}</th>
+						<th>{lang memcp_credits_log_payment_dateline}</th>
+						<th width="60">{lang memcp_reward_fact}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td>$log[filename]</td>
+								<td>$log[author]</td>
+								<td>$log[adateline]</td>
+								<td><a href="forum.php?mod=redirect&goto=findpost&pid=$log[pid]&ptid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[dateline]</td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log['extcredits'.$id]}
+										{$credit[unit]}
+									<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'attachincomelog'}-->
+				<table summary="{lang memcp_credits_log_income}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang attachments}</th>
+						<th>{lang dateline}</th>
+						<th>{lang memcp_credits_attach_log_post}</th>
+						<th>{lang memcp_credits_log_payment_dateline}</th>
+						<th width="60">{lang pay_author_income}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td>$log[filename]</td>
+								<td>$log[adateline]</td>
+								<td><a href="forum.php?mod=redirect&goto=findpost&pid=$log[pid]&ptid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[dateline]</td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log['extcredits'.$id]}
+										{$credit[unit]}
+									<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'rewardpaylog'}-->
+				<table summary="{lang memcp_reward_log_payment}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang subject}</th>
+						<th>{lang dateline}</th>
+						<th>{lang forum}</th>
+						<th width="60">{lang memcp_reward_total}</th>
+						<th width="60">{lang memcp_reward_fact}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td><a href="forum.php?mod=viewthread&tid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[dateline]</td>
+								<td><a href="forum.php?mod=forumdisplay&fid=$log[fid]" target="_blank">$log[name]</a></td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log[price]}
+										{$credit[unit]}
+									<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+								<td><!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log['extcredits'.$id]}
+										{$credit[unit]}
+									<!--{/if}-->
+								<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<tr><td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'rewardincomelog'}-->
+				<table summary="{lang memcp_reward_log_income}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang subject}</th>
+						<th>{lang dateline}</th>
+						<th>{lang forum}</th>
+						<th width="60">{lang memcp_reward_total}</th>
+					</tr>
+					<!--{if $loglist}-->
+						<!--{loop $loglist $log}-->
+							<tr>
+								<td><a href="forum.php?mod=viewthread&tid=$log[tid]" target="_blank">$log[subject]</a></td>
+								<td>$log[dateline]</td>
+								<td><a href="forum.php?mod=forumdisplay&fid=$log[fid]" target="_blank">$log[name]</a></td>
+								<td>
+									<!--{loop $_G['setting']['extcredits'] $id $credit}-->
+										<!--{if $log['extcredits'.$id]}-->
+											{$credit[title]}
+											{$log[price]}
+											{$credit[unit]}
+										<!--{/if}-->
+									<!--{/loop}-->
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<tr><td colspan="7"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+					<!--{/if}-->
+				</table>
+			<!--{elseif $suboperation == 'creditslog'}-->
+				<table summary="{lang memcp_credits_log_transaction}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>&nbsp;</th>
+						<th>{lang time}</th>
+						<th>{lang memcp_credits_log_update}</th>
+						<th>{lang action}</th>
+					</tr>
+					<!--{if $loglist}-->
+					<!--{loop $loglist $log}-->
+						<tr>
+							<td>
+								<!--{if $log['operation'] == 'AFD'}-->{lang memcp_credits_transfer_bank}
+								<!--{elseif $log['operation'] == 'TRC'}-->{lang memcp_credits_transfer_task}
+								<!--{elseif $log['operation'] == 'BGC'}-->{lang memcp_credits_embed_gift}
+								<!--{elseif $log['operation'] == 'RGC'}-->{lang memcp_credits_recycling_gift}
+								<!--{elseif $log['operation'] == 'AGC'}-->{lang memcp_credits_achieve_gift}
+								<!--{elseif $log['operation'] == 'UGP'}--><a href="home.php?mod=spacecp&ac=credit&op=usergroup&searchgroupid={$log['relatedid']}">{$_G['cache']['usergroups'][$log['relatedid']]['grouptitle']}</a>
+								<!--{else}--><a href="home.php?mod=space&uid={$log['mid']}" target="_blank">$log[username]</a>
+								<!--{/if}-->
+							</td>
+							<td>$log[dateline]</td>
+							<td>
+								<!--{loop $_G['setting']['extcredits'] $id $credit}-->
+									<!--{if $log['extcredits'.$id]}-->
+										{$credit[title]}
+										{$log['extcredits'.$id]}
+										{$credit[unit]}&nbsp;
+									<!--{/if}-->
+								<!--{/loop}-->
+							</td>
+							<td>
+							<!--{if $log['operation'] == 'TFR'}-->
+								{lang memcp_credits_transfer_send}
+							<!--{elseif $log['operation'] == 'RCV'}-->
+								{lang memcp_credits_transfer_receive}
+							<!--{elseif $log['operation'] == 'ECU'}-->
+								{lang memcp_credits_exchange_ucenter}
+							<!--{elseif $log['operation'] == 'UGP'}-->
+								{lang memcp_usergroups_charged}
+							<!--{elseif $log['operation'] == 'TRC'}-->
+								{lang memcp_credits_transfer_task}
+							<!--{elseif $log['operation'] == 'AGC'}-->
+								{lang memcp_credits_achieve_gift_comments}
+							<!--{elseif $log['operation'] == 'CEC'}-->
+								{lang memcp_credits_exchange}
+							<!--{elseif $log['operation'] == 'AFD'}-->
+								{lang memcp_credits_transfer_bank}
+							<!--{/if}-->
+							</td>
+						</tr>
+					<!--{/loop}-->
+				<!--{else}-->
+					<tr><td colspan="5"><p class="emp">{lang memcp_credits_log_none}</p></td></tr>
+				<!--{/if}-->
+				</table>
+			<!--{elseif $_G[gp_suboperation] == 'creditrulelog'}-->
+				<table summary="{lang get_credit_histroy}" cellspacing="0" cellpadding="0" class="dt">
+					<tr>
+						<th>{lang action_name}</th>
+						<th>{lang total_time}</th>
+						<th>{lang cycles_num}</th>
+						<!--{loop $_G['setting']['extcredits'] $key $value}-->
+						<th>$value[title]<!--{if $value[unit]}-->($value[unit])<!--{/if}--></th>
+						<!--{/loop}-->
+						<th>{lang last_award_time}</th>
+					</tr>
+					<!--{loop $list $key $log}-->
+					<tr>
+						<td><a href="home.php?mod=spacecp&ac=credit&op=rule&rid=$log[rid]">$log[rulename]</a></td>
+						<td>$log[total]</td>
+						<td>$log[cyclenum]</td>
+						<!--{loop $_G['setting']['extcredits'] $key $value}-->
+						<!--{eval $creditkey = 'extcredits'.$key;}-->
+						<td>$log[$creditkey]</td>
+						<!--{/loop}-->
+						<td><!--{date($log[dateline], 'n-j H:i')}--></td>
+					</tr>
+					<!--{/loop}-->
+				</table>
+			<!--{/if}-->
+			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate home/spacecp_footer}-->
+	</div>
+</div>
+
+<!--{subtemplate common/footer}-->

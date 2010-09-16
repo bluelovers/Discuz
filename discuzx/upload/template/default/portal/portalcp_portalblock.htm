@@ -1,0 +1,139 @@
+<!--{template common/header}-->
+<!--{if !$_G[inajax]}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
+		<a href="portal.php?mod=portalcp">{lang portal_manage}</a> <em>&rsaquo;</em>
+		{lang block_management}
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<h1 class="mt">{lang block_management}</h1>
+		<div class="bm bw0">
+			<div id="block_selection">
+<!--{/if}-->
+
+<!--{if $op=='recommend'}-->
+	<h3 class="flb">
+		<em id="return_$_G[gp_handlekey]">{lang push}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	</h3>
+	<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+	<form id="recommendform" method="post" enctype="multipart/form-data" action="portal.php?mod=portalcp&ac=block&op=recommend&id=$_GET[id]&idtype=$_GET[idtype]" onsubmit="if(recommenditem_check()) { ajaxpost('recommendform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');} return false;">
+		<div class="c">
+			<table class="tfm"{if $_G[inajax]} width="400"{/if}>
+				<tr>
+					<th width="80">{lang select_mod}</th>
+					<td>
+						<!--{subtemplate portal/portalcp_pageblock}-->
+					</td>
+				</tr>
+				<tbody id="itemeditarea"></tbody>
+			</table>
+		</div>
+		<p class="o pns">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="recommendsubmit" value="1" />
+			<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+			<input type="hidden" name="referer" value="$_G[referer]">
+			<button type="submit" class="pn pnc" value="true"><strong>{lang submit}</strong></button>
+		</p>
+	</form>
+	<script type="text/javascript" reload="1">
+		function errorhandle_recommenditem(message) {
+			var editarea = $('itemeditarea');
+			ajaxinnerhtml(editarea, '<tr><td>&nbsp;</td><td>' + message + '</td></tr>');
+		}
+	</script>
+
+<!--{elseif $op=='search'}-->
+	<p>
+		{lang view_select_mod}<a href="portal.php?mod=portalcp&ac=portalblock" class="xi2">{lang click_return_list}</a>
+	</p>
+	<!--{if $blocks}-->
+		<table class="dt mtm">
+			<tr>
+				<th>{lang block_id}</th>
+				<th>{lang mod_category}</th>
+				<th>{lang block_data_source}</th>
+				<th>{lang block_page}</th>
+				<th width="120">{lang block_operation}</th>
+			</tr>
+			<!--{loop $blocks $block}-->
+			<tr>
+				<td><label for="push_bid_$block[bid]">$block[name]</label></td>
+				<td>$block[blockclassname]</td>
+				<td>$block[datasrc]</td>
+				<td><!--{if $block[diyurl]}--><a href="$block[diyurl]" target="_blank">$block[tplname]</a><!--{else}-->$block[tplname]<!--{/if}--></td>
+				<td>
+					<a href="portal.php?mod=portalcp&ac=block&op=block&bid=$block[bid]" target="_blank">{lang property}</a>
+					<a href="portal.php?mod=portalcp&ac=block&op=data&bid=$block[bid]" target="_blank">{lang data}</a>
+					<!--{if $block['isrecommendable']}-->
+					<a href="portal.php?mod=portalcp&ac=blockdata&op=manage&searchkey=%23$block[bid]" target="_blank">{lang moderate}</a>
+					<a href="portal.php?mod=portalcp&ac=block&op=itemdata&bid=$block[bid]" target="_blank">{lang block_itemdata}</a>
+					<!--{/if}-->
+				</td>
+			</tr>
+			<!--{/loop}-->
+		</table>
+		<!--{if $multi}--><div class="pgs cl">$multi</div><!--{/if}-->
+	<!--{else}-->
+		<p class="emp">{lang block_no_managable}</p>
+	<!--{/if}-->
+
+<!--{else}-->
+	<form action="portal.php?mod=portalcp&ac=portalblock&op=search" method="get" class="mbm">
+		<input type="hidden" name="mod" value="portalcp" />
+		<input type="hidden" name="ac" value="portalblock" />
+		<input type="hidden" name="op" value="search" />
+		{lang block_id}:
+		<input type="text" class="px vm" name="searchkey" id="searchkey" value="$_GET[searchkey]" />
+		<button type="submit" class="pn vm"><em>{lang find}</em></button>
+	</form>
+	<!--{if $pageblocks}-->
+		<!--{loop $pageblocks $key $value}-->
+		<div class="bm">
+			<div class="bm_h"><h3><!--{if $diyurls[$key]}--><a href="$diyurls[$key]" target="_blank">$diytemplate[$key]</a><!--{else}-->$diytemplate[$key]<!--{/if}--></h3></div>
+			<div class="bm_c">
+				<ul class="xl xl2 ptblk cl">
+					<!--{loop $value $bid}-->
+					<li>
+						<em>
+							<a href="portal.php?mod=portalcp&ac=block&op=block&bid=$bid" target="_blank">{lang property}</a>
+							<span class="pipe">|</span>
+							<a href="portal.php?mod=portalcp&ac=block&op=data&bid=$bid" target="_blank">{lang data}</a>
+							<!--{if $blocks[$bid][isrecommendable]}-->
+							<span class="pipe">|</span>
+							<a href="portal.php?mod=portalcp&ac=blockdata&op=manage&searchkey=%23$bid" target="_blank">{lang moderate}</a>
+							<span class="pipe">|</span>
+							<a href="portal.php?mod=portalcp&ac=block&op=itemdata&bid=$bid" target="_blank">{lang block_itemdata}</a>
+							<!--{/if}-->
+						</em>
+						$blocks[$bid][name]
+					</li>
+					<!--{/loop}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/loop}-->
+
+		<!--{if $multi}--><div class="pgs cl">$multi</div><!--{/if}-->
+	<!--{else}-->
+		<p>{lang block_no_managable}</p>
+	<!--{/if}-->
+<!--{/if}-->
+
+<!--{if !$_G[inajax]}-->
+			</div>
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate portal/portalcp_nav}-->
+	</div>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->

@@ -1,0 +1,50 @@
+<div class="bbs">
+	<form method="post" autocomplete="off" name="searhsort" id="searhsort" class="bm_c pns mfm bbda cl" action="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_G[gp_sortid]">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<!--{loop $quicksearchlist $optionid $option}-->
+		<span class="mtm z">
+			<!--{if !in_array($option['type'], array('select', 'radio', 'range'))}--><strong>$option[title]: </strong><!--{/if}-->
+			<!--{if in_array($option['type'], array('radio', 'checkbox', 'select', 'range'))}-->
+				<!--{if $option[type] != 'checkbox'}-->
+					<span class="ftid">
+						<select name="searchoption[$optionid][value]" id="$option[identifier]">
+							<option value="0">$option[title]{lang unlimited}</option>
+						<!--{loop $option['choices'] $id $value}-->
+							<option value="$id" {if $_G[gp_searchoption][$optionid][value] == $id}selected="selected"{/if}>$value</option>
+						<!--{/loop}-->
+						</select>
+					</span>
+					<input type="hidden" name="searchoption[$optionid][type]" value="$option[type]">
+					<script type="text/javascript" reload="1">simulateSelect('$option[identifier]'<!--{if $option[type] == 'range'}-->, 90<!--{/if}-->);</script>
+				<!--{else}-->
+					<!--{loop $option['choices'] $id $value}-->
+						<input type="checkbox" class="pc" name="searchoption[$optionid][value][$id]" value="$id" {if $_G[gp_searchoption][$optionid][value][$id]}checked="checked"{/if}> $value 
+					<!--{/loop}-->
+					<input type="hidden" name="searchoption[$optionid][type]" value="checkbox">
+				<!--{/if}-->
+			<!--{else}-->
+				<!--{if $option['type'] == 'calendar'}-->
+					<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+					<input type="text" name="searchoption[$optionid][value]" size="15" class="px vm" value="$_G[gp_searchoption][$optionid][value]" onclick="showcalendar(event, this, false)" />
+				<!--{else}-->
+					<input type="text" name="searchoption[$optionid][value]" size="15" class="px vm" value="$_G[gp_searchoption][$optionid][value]" />
+				<!--{/if}-->
+			<!--{/if}-->
+		</span>
+		<!--{/loop}-->
+		<span class="mtm z"><button type="submit" class="pn pnp vm" name="searchsortsubmit"><em>{lang search}</em></button></span>
+	</form>
+	<dl class="bm_c ptm tsm cl">
+		<!--{loop $quicksearchlist $option}-->
+		<dt>$option[title]:</dt>
+		<dd>
+			<ul>
+				<li{if $_G['gp_'.$option[identifier]] == 'all'} class="a"{/if}><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&amp;filter=sortid&amp;sortid=$_G['gp_sortid']&amp;searchsort=1$filterurladd&amp;$option[identifier]=all$sorturladdarray[$option[identifier]]" class="xi2">{lang unlimited}</a></li>
+				<!--{loop $option['choices'] $id $value}-->
+					<li{if $_G['gp_'.$option[identifier]] && $id == $_G['gp_'.$option[identifier]]} class="a"{/if}><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&amp;filter=sortid&amp;sortid=$_G[gp_sortid]&amp;searchsort=1&amp;$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value</a></li>
+				<!--{/loop}-->
+			</ul>
+		</dd>
+		<!--{/loop}-->
+	</dl>
+</div>
