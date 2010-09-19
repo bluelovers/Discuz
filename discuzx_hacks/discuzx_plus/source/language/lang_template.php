@@ -11,21 +11,21 @@ $lang = array
 (
 	'admincp' => '管理中心',
 	'logout' => '退出',
-	'login' => '登录',
-	'login_permanent' => '下次自动登录',
+	'login' => '登錄',
+	'login_permanent' => '下次自動登錄',
 	'tips' => '提示信息',
-	'register' => '注册',
-	'register_tip' => '(请在后台设置注册URL)',
- 	'message_forward' => '如果你的浏览器没有自动跳转，请点击此链接',
+	'register' => '註冊',
+	'register_tip' => '(請在後台設置註冊URL)',
+ 	'message_forward' => '如果你的瀏覽器沒有自動跳轉，請點擊此鏈接',
 
-	'getcode_title' => 'XPlus调用代码',
-	'getcode_iframe' => '获取 IFRAME 引用代码',
+	'getcode_title' => 'XPlus調用代碼',
+	'getcode_iframe' => '獲取 IFRAME 引用代碼',
 	'getcode_iframe_url' => 'IFRAME 地址: ',
 	'getcode_iframe_size' => 'IFRAME 尺寸: ',
-	'getcode_iframe_bgcolor' => 'IFRAME 背景颜色: ',
-	'getcode_iframe_bbcode' => 'Discuz!代码:',
-	'getcode_iframe_htmlcode' => 'HTML代码:',
-	'getcode_iframe_create' => '生成代码',
+	'getcode_iframe_bgcolor' => 'IFRAME 背景顏色: ',
+	'getcode_iframe_bbcode' => 'Discuz!代碼:',
+	'getcode_iframe_htmlcode' => 'HTML代碼:',
+	'getcode_iframe_create' => '生成代碼',
 );
 
 ?>

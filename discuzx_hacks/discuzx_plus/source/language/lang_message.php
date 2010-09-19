@@ -10,16 +10,16 @@
 $lang = array
 (
 
-	'module_unavailable' => '此模块已关闭',
+	'module_unavailable' => '此模塊已關閉',
 
-	'login_invalid' => '登录失败，您还可以尝试 {loginperm} 次',
-	'login_clearcookie' => '登录痕迹已经清除',
-	'login_strike' => '密码错误次数过多，请 15 分钟后重新登录',
-	'login_succeed' => '欢迎您回来，{username} (uid:{uid})。现在将转入登录前页面。{ucsynlogin}',
-	'login_succeed_inactive_member' => '欢迎您回来，{username}。您的帐号处于非激活状态，现在将转入控制面板。',
-	'logout_succeed' => '您已退出站点，现在将以游客身份转入退出前页面。{ucsynlogout} <a href="member.php?mod=clearcookies&module={module}&tpl={tpl}&formhash={formhash}">[ 清除痕迹 ]</a>',
-	'login_activation' => '您的帐号未在本站点激活，现在将转入帐号激活页面。',
-	'user_banned' => '对不起，您的 IP 地址不在被允许的范围内，或您的账号被禁用，无法访问本站点。',
+	'login_invalid' => '登錄失敗，您還可以嘗試 {loginperm} 次',
+	'login_clearcookie' => '登錄痕跡已經清除',
+	'login_strike' => '密碼錯誤次數過多，請 15 分鐘後重新登錄',
+	'login_succeed' => '歡迎您回來，{username} (uid:{uid})。現在將轉入登錄前頁面。{ucsynlogin}',
+	'login_succeed_inactive_member' => '歡迎您回來，{username}。您的帳號處於非激活狀態，現在將轉入控制面板。',
+	'logout_succeed' => '您已退出站點，現在將以遊客身份轉入退出前頁面。{ucsynlogout} <a href="member.php?mod=clearcookies&module={module}&tpl={tpl}&formhash={formhash}">[ 清除痕跡 ]</a>',
+	'login_activation' => '您的帳號未在本站點激活，現在將轉入帳號激活頁面。',
+	'user_banned' => '對不起，您的 IP 地址不在被允許的範圍內，或您的賬號被禁用，無法訪問本站點。',
 
 
 );

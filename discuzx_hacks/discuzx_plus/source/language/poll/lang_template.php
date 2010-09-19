@@ -11,7 +11,7 @@ $lang = array
 (
 	'poll' => '投票',
 	'ticket' => '票',
-	'option' => '选项',
+	'option' => '選項',
 	'rate' => '比例',
 
 );

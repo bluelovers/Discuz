@@ -9,30 +9,30 @@
 
 $lang = array
 (
-	'login_title' => '登录管理中心',
-	'login_username' => '用户名',
-	'login_password' => '密　码',
+	'login_title' => '登錄管理中心',
+	'login_username' => '用戶名',
+	'login_password' => '密　碼',
 
 	'submit' => '提交',
-	'security_question' => '提　问',
+	'security_question' => '提　問',
 	'security_answer' => '回　答',
-	'security_question_0' => '无安全提问',
-	'security_question_1' => '母亲的名字',
-	'security_question_2' => '爷爷的名字',
-	'security_question_3' => '父亲出生的城市',
-	'security_question_4' => '您其中一位老师的名字',
-	'security_question_5' => '您个人计算机的型号',
-	'security_question_6' => '您最喜欢的餐馆名称',
-	'security_question_7' => '驾驶执照最后四位数字',
+	'security_question_0' => '無安全提問',
+	'security_question_1' => '母親的名字',
+	'security_question_2' => '爺爺的名字',
+	'security_question_3' => '父親出生的城市',
+	'security_question_4' => '您其中一位老師的名字',
+	'security_question_5' => '您個人計算機的型號',
+	'security_question_6' => '您最喜歡的餐館名稱',
+	'security_question_7' => '駕駛執照最後四位數字',
 
-	//note 后台登录页相关	请以 login_ 开头
-	'login_tips' => 'Discuz! XPlus 是一款运营工具，包含多种协助站点内容运营工具，是广大站长运营网站的首选!',
-	'login_nosecques' => '您还没有使用安全登录，请在个人中心设置您的安全提问后，再访问管理中心。您可以 <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">点击这里</a> 进入安全提问的设置。',
+	//note 後台登錄頁相關	請以 login_ 開頭
+	'login_tips' => 'Discuz! XPlus 是一款運營工具，包含多種協助站點內容運營工具，是廣大站長運營網站的首選!',
+	'login_nosecques' => '您還沒有使用安全登錄，請在個人中心設置您的安全提問後，再訪問管理中心。您可以 <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">點擊這裡</a> 進入安全提問的設置。',
 
-	'login_cplock' => '您的管理面板已经锁定! <br>请在<b> {ltime} </b>秒以后重新访问管理中心',
-	'login_user_lock' => '由于您的登录密码错误次数过多,本次登录请求已经被拒绝. 请 15 分钟后重新尝试',
-	'login_cp_noaccess' => '<b>管理中心(或此项操作)尚未对您开放</b><br><br>您的此次操作已经记录, 请勿非法尝试',
-	'noaccess' => '后台管理权限(或此项操作)尚未对您开放, 请联系站点管理员',
+	'login_cplock' => '您的管理面板已經鎖定! <br>請在<b> {ltime} </b>秒以後重新訪問管理中心',
+	'login_user_lock' => '由於您的登錄密碼錯誤次數過多,本次登錄請求已經被拒絕. 請 15 分鐘後重新嘗試',
+	'login_cp_noaccess' => '<b>管理中心(或此項操作)尚未對您開放</b><br><br>您的此次操作已經記錄, 請勿非法嘗試',
+	'noaccess' => '後台管理權限(或此項操作)尚未對您開放, 請聯繫站點管理員',
 
 
 );

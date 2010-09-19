@@ -9,8 +9,8 @@
 
 $extend_lang = array
 (
-	'header_index' => '首页',
-	'menu_index_home' => '管理首页',
+	'header_index' => '首頁',
+	'menu_index_home' => '管理首頁',
 
 );
 
