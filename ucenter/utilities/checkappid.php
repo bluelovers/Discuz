@@ -3,7 +3,7 @@
 require dirname(__FILE__).'/data/config.inc.php';
 require dirname(__FILE__).'/lib/db.class.php';
 
-$db = new db();
+$db = new ucserver_db();
 $db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, UC_DBNAME, UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
 
 $nomatch = true;

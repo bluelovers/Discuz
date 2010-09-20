@@ -28,7 +28,7 @@
 		<item key="button_browse" value="\u9009\u62E9\u56FE\u7247" />
 		<item key="button_camera_screen" value="\u62CD\u6444\u7167\u7247" />
 		<item key="button_reset" value="\u91CD\u7F6E" />
-		<item key="button_return" value="\u8FD4\u56DE\u91CD\u65B0\u9009\u62E9" />
+		<item key="button_return" value="\u8FD4\u56DE\u91CD\u65B0\u7F16\u8F91" />
 		<item key="button_save" value="\u9884\u89C8\u5934\u50CF" />
 		<item key="button_submit" value="\u786E\20\u5B9A" />
 		<item key="tab_upload" value="\u4E0A\u4F20\u56FE\u7247" />
@@ -38,20 +38,6 @@
 		<item key="note_right_zoom" value="\u7F29\u653E" />
 		<item key="note_right_face" value="\u5934\u50CF\u9884\u89C8" />
 		<item key="note_main" value="\u8BF7\u4ECE\u8BA1\u7B97\u673A\u4E2D\u9009\u62E9\u4E00\u5F20\u56FE\u7247\u4F5C\u4E3A\u5934\u50CF" />
-		
-		<item key="note_success" value="\u4e0a\u4f20\u6210\u529f!" />
-		<item key="note_3size" value="\u4ee5\u4e0a\u662f\u60a8\u5934\u50cf\u7684\u4e09\u79cd\u5c3a\u5bf8" />
-		<item key="button_finish" value="\u5B8C\u3000\u3000\u6210" />
-		<item key="upload_downing" value="\u56fe\u7247\u8f7d\u5165\u4e2d, \u8bf7\u7a0d\u5019..." />
-		<item key="camera_no_device" value="\u65e0\u6cd5\u627e\u5230\u6444\u50cf\u5934\u8bbe\u5907" />
-		<item key="js_connect_error" value="javascript\u901a\u8baf\u9519\u8bef, \u8bf7\u624b\u52a8\u5237\u65b0\u9875\u9762\u4ee5\u66f4\u65b0\u5934\u50cf" />
-		<item key="player_ver_error">
-			<value>
-				<![CDATA[
-					<font size='14' color='#FF0000'>\u60a8\u6240\u4f7f\u7528\u7684flash player\u7248\u672c\u8fc7\u65e7, \u8bf7\u53ca\u65f6<font color='#0000FF'><u>\u66f4\u65b0</u></font></font>
-				]]>
-			</value>
-		</item>
 	</language>
 	
 	<language type="zh_HK" using="true">
@@ -81,7 +67,7 @@
 		<item key="button_browse" value="\u9078\u64C7\u5716\u7247" />
 		<item key="button_camera_screen" value="\u62CD\u651D\u7167\u7247" />
 		<item key="button_reset" value="\u91CD\u7F6E" />
-		<item key="button_return" value="\u8FD4\u56DE\u91CD\u65B0\u9078\u64C7" />
+		<item key="button_return" value="\u8FD4\u56DE\u91CD\u65B0\u7DE8\u8F2F" />
 		<item key="button_save" value="\u9810\u89BD\u982D\u50CF" />
 		<item key="button_submit" value="\u78BA\20\u5B9A" />
 		<item key="tab_upload" value="\u4E0A\u8F09\u5716\u7247" />
@@ -91,19 +77,5 @@
 		<item key="note_right_zoom" value="\u7E2E\u653E" />
 		<item key="note_right_face" value="\u982D\u50CF\u9810\u89BD" />
 		<item key="note_main" value="\u8ACB\u5F9E\u8A08\u7B97\u6A5F\u4E2D\u9078\u64C7\u4E00\u5F35\u5716\u7247\u4F5C\u70BA\u982D\u50CF" />
-		
-		<item key="note_success" value="\u4e0a\u8f09\u6210\u529f!" />
-		<item key="note_3size" value="\u4ee5\u4e0a\u662f\u60a8\u982d\u50cf\u7684\u4e09\u7a2e\u5c3a\u78bc" />
-		<item key="button_finish" value="\u5B8C\u3000\u3000\u6210" />
-		<item key="upload_downing" value="\u5716\u7247\u8f09\u5165\u4e2d, \u8acb\u7a0d\u5019..." />
-		<item key="camera_no_device" value="\u7121\u6cd5\u627e\u5230\u651d\u50cf\u982d\u8a2d\u5099" />
-		<item key="js_connect_error" value="javascript\u901a\u8a0a\u932f\u8aa4, \u8acb\u624b\u52d5\u5237\u65b0\u9801\u9762\u4ee5\u66f4\u65b0\u982d\u50cf" />
-		<item key="player_ver_error">
-			<value>
-				<![CDATA[
-					<font size='14' color='#FF0000'>\u60a8\u6240\u4f7f\u7528\u7684flash player\u7248\u672c\u904e\u820a, \u8acb\u53ca\u6642<font color='#0000FF'><u>\u66f4\u65b0</u></font></font>
-				]]>
-			</value>
-		</item>
 	</language>
 </strings>

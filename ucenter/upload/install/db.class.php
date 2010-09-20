@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 753 2008-11-14 06:48:25Z cnteacher $
+	$Id: db.class.php 976 2009-12-03 03:02:44Z zhaoxiongfei $
 */
 
 if(!defined('IN_COMSENZ')) {

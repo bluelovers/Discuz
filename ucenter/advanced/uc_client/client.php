@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: client.php 963 2009-09-21 02:40:04Z zhaoxiongfei $
+	$Id: client.php 1015 2010-09-18 05:26:20Z cnteacher $
 */
 
 if(!defined('UC_API')) {
@@ -14,8 +14,8 @@ if(!defined('UC_API')) {
 error_reporting(0);
 
 define('IN_UC', TRUE);
-define('UC_CLIENT_VERSION', '1.5.1');
-define('UC_CLIENT_RELEASE', '20100501');
+define('UC_CLIENT_VERSION', '1.5.2');
+define('UC_CLIENT_RELEASE', '20101001');
 define('UC_ROOT', substr(__FILE__, 0, -10));
 define('UC_DATADIR', UC_ROOT.'./data/');
 define('UC_DATAURL', UC_API.'/data');

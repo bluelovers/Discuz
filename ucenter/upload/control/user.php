@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 969 2009-10-29 02:07:08Z zhaoxiongfei $
+	$Id: user.php 1011 2010-07-15 08:10:33Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -36,8 +36,11 @@ class usercontrol extends base {
 			if($this->user = $_ENV['user']->get_user_by_uid($uid)) {
 				$synstr = '';
 				foreach($this->cache['apps'] as $appid => $app) {
-					if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
+					if($app['synlogin']) {
 						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+						if(is_array($app['extra']['extraurl'])) foreach($app['extra']['extraurl'] as $extraurl) {
+							$synstr .= '<script type="text/javascript" src="'.$extraurl.'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+						}
 					}
 				}
 				return $synstr;
@@ -51,8 +54,11 @@ class usercontrol extends base {
 		if($this->app['synlogin']) {
 			$synstr = '';
 			foreach($this->cache['apps'] as $appid => $app) {
-				if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
+				if($app['synlogin']) {
 					$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+					if(is_array($app['extra']['extraurl'])) foreach($app['extra']['extraurl'] as $extraurl) {
+						$synstr .= '<script type="text/javascript" src="'.$extraurl.'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+					}
 				}
 			}
 			return $synstr;
@@ -291,6 +297,7 @@ class usercontrol extends base {
 		list($width, $height, $type, $attr) = getimagesize($_FILES['Filedata']['tmp_name']);
 		$imgtype = array(1 => '.gif', 2 => '.jpg', 3 => '.png');
 		$filetype = $imgtype[$type];
+		if(!$filetype) $filetype = '.jpg';
 		$tmpavatar = UC_DATADIR.'./tmp/upload'.$uid.$filetype;
 		file_exists($tmpavatar) && @unlink($tmpavatar);
 		if(@copy($_FILES['Filedata']['tmp_name'], $tmpavatar) || @move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpavatar)) {

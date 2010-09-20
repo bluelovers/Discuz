@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 888 2008-12-16 02:07:15Z monkey $
+	$Id: user.php 1005 2010-06-03 07:26:54Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -45,7 +45,7 @@ class control extends adminbase {
 		$this->load('user');
 		$username = getgpc('username', 'P');
 		$password = getgpc('password', 'P');
-		$iframe	  = getgpc('iframe');
+		$iframe	  = getgpc('iframe') ? 1 : 0;
 
 		$isfounder = intval(getgpc('isfounder', 'P'));
 		/*

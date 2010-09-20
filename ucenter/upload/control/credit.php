@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: credit.php 917 2009-01-19 06:26:55Z monkey $
+	$Id: credit.php 1007 2010-07-01 03:11:22Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -29,6 +29,7 @@ class creditcontrol extends base {
 		$toappid = intval($this->input('toappid'));
 		$amount = intval($this->input('amount'));
 		$status = 0;
+		$this->settings['creditexchange'] = @unserialize($this->settings['creditexchange']);
 		if(isset($this->settings['creditexchange'][$this->app['appid'].'_'.$from.'_'.$toappid.'_'.$to])) {
 			$toapp = $app = $this->cache['apps'][$toappid];
 			$apifilename = isset($toapp['apifilename']) && $toapp['apifilename'] ? $toapp['apifilename'] : 'uc.php';
