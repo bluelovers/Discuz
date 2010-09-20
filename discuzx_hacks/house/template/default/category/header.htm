@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+		<title>{if !empty($navtitle)}$navtitle{/if} $_G['setting']['bbname'] {if $channel['seoinfo']['seotitle']}$channel['seoinfo']['seotitle']{/if} - Powered by Discuz!</title>
+		{if $channel['seoinfo']['seohead']}$channel['seoinfo']['seohead']{/if}
+		<meta name="keywords" content="{if !empty($metakeywords)}$metakeywords,{/if}{if $channel['seoinfo']['seokeywords']}$channel['seoinfo']['seokeywords']{/if}" />
+		<meta name="description" content="{if !empty($metadescription)}$metadescription{/if} $_G['setting']['bbname'] {if $channel['seoinfo']['seodescription']}$channel['seoinfo']['seodescription']{/if} - Discuz! Board" />
+		<meta name="generator" content="Discuz! $_G['setting']['version']" />
+		<meta name="author" content="Discuz! Team and Comsenz UI Team" />
+		<meta name="copyright" content="2001-2010 Comsenz Inc." />
+		<meta name="MSSmartTagsPreventParsing" content="True" />
+		<meta http-equiv="MSThemeCompatible" content="Yes" />
+		<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
+		<script type="text/javascript">var STYLEID = '{STYLEID}', STATICURL = '{STATICURL}', IMGDIR = '{IMGDIR}', VERHASH = '{VERHASH}', charset = '{CHARSET}', discuz_uid = '$_G[uid]', cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}', showusercard = '{$_G[setting][showusercard]}', attackevasive = '{$_G[config][security][attackevasive]}', disallowfloat = '{$_G[setting][disallowfloat]}', creditnotice = '<!--{if $_G['setting']['creditnotice']}-->$_G['setting']['creditnames']<!--{/if}-->', defaultstyle = '$_G[style][defaultextstyle]', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]';</script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}common.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js?{VERHASH}"></script>
+		<!--{if $_G['basescript'] == 'forum' || $_G['basescript'] == 'group'}-->
+			<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
+		<!--{elseif $_G['basescript'] == 'home'}-->
+			<script type="text/javascript" src="{$_G[setting][jspath]}home_cookie.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}home_common.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}home_face.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}home_manage.js?{VERHASH}"></script>
+		<!--{elseif $_G['basescript'] == 'portal'}-->
+			<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+		<!--{/if}-->
+		<!--{if $_G['basescript'] != 'portal' && $_GET['diy'] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+			<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+		<!--{/if}-->
+		<!--{if $_GET[diy] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+		<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_css_diy.css?{VERHASH}" />
+		<!--{/if}-->
+		<link rel="stylesheet" type="text/css" href="template/default/category/common.css" />
+		<link rel="stylesheet" type="text/css" href="template/default/category/house.css" />
+	</head>
+
+	<body class="pg_{CURMODULE}" onkeydown="if(event.keyCode==27) return false;">
+	<!--{if ($_G[mod]!='topic' && $_G[group][allowdiy] && !empty($_G['style']['tplfile'])) || (!empty($_G['style']['tplfile']) && $_G[mod]=='topic' && (($_G['group']['allowaddtopic'] && $topic[uid]==$_G[uid]) || $_G[group][allowmanagetopic]))}-->
+	<a id="diy-tg" href="javascript:openDiy();" title="{lang open_diy}"><img src="{STATICURL}image/diy/panel-toggle.png" alt="DIY" /></a>
+	<!--{/if}-->
+	<div id="append_parent"></div><div id="ajaxwaitid"></div>
+	<!--{if $_GET['diy'] == 'yes' && (CURMODULE == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+		<!--{template common/header_diy}-->
+	<!--{/if}-->
+	<div class="topnav cl">
+		<p class="y navinf">
+			<!--{if $_G['uid']}-->
+				<strong>{$_G[member][username]}</strong><span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
+				<!--{if $_G['uid']}--><span class="pipe">|</span><span id="myhouse" onmouseover="showMenu({'ctrlid':this.id})">{lang house_my}$channel[title]</span><!--{/if}-->
+				<!--{if $_G['group']['allowmanagearticle'] || $_G['group']['allowdiy'] || $_G['group']['allowauthorizedblock'] || $_G['group']['allowauthorizedarticle']}-->
+							<span class="pipe">|</span><a href="portal.php?mod=portalcp">{lang portal_manage}</a>
+						<!--{/if}-->
+				<!--{if $_G['uid'] && $_G['adminid'] > 1}--><span class="pipe">|</span><a href="forum.php?mod=modcp&fid=$_G[fid]" target="_blank">{lang forum_manager}</a><!--{/if}-->
+				<!--{if $_G['adminid'] == 1 || $_G['member']['allowadmincp']}--><span class="pipe">|</span><a href="admin.php" target="_blank">{lang admincp}</a><!--{/if}-->
+			<!--{elseif !empty($_G['cookie']['loginuser'])}-->
+				<strong><a id="loginuser">$_G['cookie']['loginuser']</a></strong><span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang activation}</a><span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
+			<!--{else}-->
+				<a href="member.php?mod=register" onclick="showWindow('register', this.href);hideWindow('login');">$_G['setting']['reglinkname']</a><span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang login}</a>
+			<!--{/if}-->
+		</p>
+		<ul class="cl">
+			<li class="navlogo"><a href="index.php" title="$_G['setting']['bbname']">$_G['setting']['bbname']</a></li>
+			<!--{loop $_G['setting']['navs'] $nav}-->
+				<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}--><li {if $mnid == $nav[navid]}class="a"{/if}$nav[nav]></li><!--{/if}-->
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{if !empty($_G['setting']['plugins']['jsmenu'])}-->
+		<ul class="p_pop h_pop" id="plugin_menu" style="display: none">
+		<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+		     <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+		     <li>$module[url]</li>
+		     <!--{/if}-->
+		<!--{/loop}-->
+		</ul>
+	<!--{/if}-->
+	<ul class="p_pop h_pop" id="myhouse_menu" style="display: none">
+		<!--{loop $sortlist $id $sort}-->					
+			<li><a href="$modurl?mod=my&amp;sortid=$id" hidefocus="true">$sort[name]{lang house_info}</a></li>
+		<!--{/if}-->
+	</ul>
+	<!--{loop $_G['setting']['subnavs'] $subnav}-->
+		$subnav
+	<!--{/loop}-->
+
+	<div class="wp cl" id="hd">
+	    <h2>
+	    	<a title="$channel[title]" href="$modurl"><img border="0" alt="$channel[title]" src="<!--{if !empty($channel[logo])}-->$channel[logo]<!--{else}-->static/image/common/logo.png<!--{/if}-->"></a>
+	    </h2>
+	    <div id="nv">
+			<ul>
+				<li {if $mod == 'index'}class="a"{/if}><a href="$modurl" title="{lang homepage}">{lang homepage}</a></li>
+				<!--{loop $sortlist $id $sort}-->
+					<!--{if !empty($sort[name])}-->
+						<li {if in_array($mod, array('post', 'list', 'view')) && $id == $sortid}class="a"{/if}><a href="$modurl?mod=list&amp;sortid=$id" title="$sort[name]">$sort[name]</a></li>
+					<!--{/if}-->
+				<!--{/loop}-->
+				<li {if $mod == 'usergroup'}class="a"{/if}><a href="$modurl?mod=usergroup" title="{lang house_broker}">{lang house_broker}</a></li>
+		    </ul>
+		 </div>
+	</div>
+	<div id="hds" class="wp">
+		<div class="post"><a href="$modurl?mod=post&amp;action=nav{if $sortid}&amp;sortid=$sortid{/if}">{lang nothing_post}</a></div>
+		<!--{if $mod == 'index'}--><p>{lang house_new_tip}</p><!--{/if}-->
+	</div>

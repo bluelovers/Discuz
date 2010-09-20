@@ -1,0 +1,104 @@
+{subtemplate category/header}
+
+<style id="diy_style" type="text/css"></style>
+<div id="pt" class="wp">
+	<a href="index.php">$_G[setting][bbname]</a> &rsaquo; <a href="$modurl">$channel[title]</a> $navigation
+</div>
+
+<div id="ct" class="wp cl">
+	<div class="mn">
+		<div class="bm cgv">
+			<div class="cgu">
+				<a href="house.php?mod=my&amp;uid=$thread[authorid]&amp;sortid=$sortid">$thread[avatar]</a>
+				<p class="ptn">$thread[author]</p>
+				<!--{if $usergrouptitle}--><p class="ptn">$usergrouptitle</p><!--{/if}-->
+				<!--{if $usergroupicon}--><p class="ptn">$usergroupicon</p><!--{/if}-->
+				<!--<p class="ptn pbn"><img src="template/default/category/img_ajk/myhouse.jpg" /></p>-->
+				<hr class="l mtm" />
+				<!--{if $_G['uid']}-->
+				<!--{if !empty($channel['managegid'][$_G['groupid']]) || $thread['authorid'] == $_G['uid']}-->
+				<div class="ptn pbn cl">
+					<a href="$modurl?mod=post&amp;action=edit&amp;tid=$tid" class="iedit mtn">{lang house_edit}</a>
+					 | <a href="javascript:;" onclick="return showDialog('{lang house_del_topic}', 'confirm', '{lang house_attention}', function(){location.href = '$modurl?mod=threadmod&action=delthread&moderate[]=$tid&sortid=$thread[sortid]';});return false;">{lang house_delete}</a>
+					 | <span id="admin" onmouseover="showMenu({'ctrlid':this.id})"><a href="###">{lang info_manage}</a></span>
+				</div>
+				<!--{/if}-->
+				<!--{if !empty($channel['managegid'][$_G['groupid']]) || $thread['authorid'] == $_G['uid']}-->
+				<p class="ptn">
+					<form method="post" autocomplete="off" name="modactions" id="modactions">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="optgroup" />
+					</form>
+					<script language="javascript">
+						function modcategorythread(optgroup, operation, tid) {
+							var operation = !operation ? '' : operation;
+							$('modactions').action = '$modurl?mod=threadmod&sortid='+ $sortid +'&moderate[]=' + tid + '&operation=' + operation + '&infloat=yes&nopost=yes';
+							$('modactions').optgroup.value = optgroup;
+							hideWindow('mods');
+							showWindow('mods', 'modactions', 'post', 0);
+							if(BROWSER.ie) {
+								doane(event);
+							}
+						}
+					</script>
+				</p>
+				<!--{/if}-->
+				<!--{/if}-->
+			</div>
+
+			<div class="cgi cl">
+				<h1 class="wx">$thread[subject]</h1>
+				$threadsortshow[typetemplate]
+			</div>
+
+			<div class="c pbm">
+				<p>$thread[message]</p>
+				<!--{loop $piclist $url}-->
+				<img src="{$_G[setting][attachurl]}$url" />
+				<!--{/loop}-->
+			</div>
+		</div>
+	</div>
+	<div class="sd sdview pph">
+		<div class="drag">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+		<!--{if $channel['mapkey'] && $mapposition}-->
+			<div class="bn cl">
+				<h2>{lang house_map}</h2>
+				<div id="container" style="width:244px;height:248px;margin:0 auto;"></div>
+			</div>
+		<!--{/if}-->
+		<div class="bn cl xld">
+			<h2>{lang house_nearby}</h2>
+			<!--{loop $neighborhoodlist $data}-->
+				$data
+			<!--{/loop}-->
+		</div>
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+	</div>
+</div>
+<!--{if !empty($channel['managegid'][$_G['groupid']]) || $thread['authorid'] == $_G['uid']}-->
+	<ul class="p_pop h_pop" id="admin_menu" style="display: none">
+		<li><a href="javascript:;" onclick="modcategorythread(1, 'push', $thread[tid])">{lang house_promote}</a></li>
+		<li><a href="javascript:;" onclick="modcategorythread(1, 'recommend', $thread[tid])">{lang house_stick}</a></li>
+		<li><a href="javascript:;" onclick="modcategorythread(1, 'highlight', $thread[tid])">{lang house_highlight}</a></li>
+		<!--{if !empty($channel['managegid'][$_G['groupid']])}-->
+			<li><a href="javascript:;" onclick="modcategorythread(1, 'stick', $thread[tid])">{lang totop}</a></li>
+		<!--{/if}-->
+	</ul>
+<!--{/if}-->
+
+<!--{if $channel['mapkey'] && $mapposition}-->
+	<script src="http://ditu.google.cn/maps?file=api&amp;v=2&amp;key=$channel['mapkey']&amp;sensor=true"  type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var map = new GMap2($("container"));
+		map.setCenter(new GLatLng($mapposition[0], $mapposition[1]), $mapposition[2]);
+		map.enableScrollWheelZoom();
+		map.addOverlay(new GMarker(new GLatLng($mapposition[0], $mapposition[1])));
+	</script>
+<!--{/if}-->
+
+{subtemplate category/footer}

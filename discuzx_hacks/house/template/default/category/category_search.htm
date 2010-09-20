@@ -1,0 +1,74 @@
+<dl class="cgsq pbm cl">
+	<dt>{lang house_area}</dt>
+	<dd>
+	<!--{if $citysearchlist}-->
+		<ul>
+			<li{if $_G['gp_city'] == 'all'} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;sortid=$_G[gp_sortid]&amp;city=all{$sorturladdarray[city]}">{lang unlimited}</a></li>
+			<!--{loop $citysearchlist $cid $city}-->
+				<li{if $_G['gp_city'] == $cid} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;city=$cid&amp;sortid=$_G[gp_sortid]{$sorturladdarray[city]}">$city</a></li>
+			<!--{/loop}-->
+		</ul>
+	<!--{/if}-->
+	</dd>
+	<!--{if $districtsearchlist}-->
+	<dd class="s2">
+		<ul>
+			<li{if $_G['gp_district'] == 'all'} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;sortid=$_G[gp_sortid]&amp;district=all{$sorturladdarray[district]}">{lang unlimited}</a></li>
+			<!--{loop $districtsearchlist $did $district}-->
+				<li{if $_G['gp_district'] == $did} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;district=$did&amp;sortid=$_G[gp_sortid]{$sorturladdarray[district]}">$district</a></li>
+			<!--{/loop}-->
+		</ul>
+	</dd>
+	<!--{/if}-->	
+	<!--{if $streetsearchlist}-->
+	<dd class="s2">
+		<ul>
+			<li{if $_G['gp_street'] == 'all'} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;sortid=$_G[gp_sortid]&amp;street=all{$sorturladdarray[street]}">{lang unlimited}</a></li>
+			<!--{loop $streetsearchlist $sid $street}-->
+				<li{if $_G['gp_street'] == $sid} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;street=$sid&amp;sortid=$_G[gp_sortid]{$sorturladdarray[street]}">$street</a></li>
+			<!--{/loop}-->
+		</ul>
+	</dd>
+	<!--{/if}-->
+	<!--{loop $quicksearchlist $option}-->
+		<!--{if $option['choices']}-->
+			<dt>$option[title]:</dt>
+			<dd>
+				<ul>
+					<li{if $_G['gp_'.$option[identifier]] == 'all'} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;sortid=$_G[gp_sortid]$filterurladd&amp;$option[identifier]=all$sorturladdarray[$option[identifier]]">{lang unlimited}</a></li>
+					<!--{loop $option['choices'] $id $value}-->
+						<li{if $_G['gp_'.$option[identifier]] && $id == $_G['gp_'.$option[identifier]]} class="a"{/if}><a href="$modurl?mod=list&amp;filter=$_G[gp_filter]&amp;sortid=$_G[gp_sortid]&amp;$option[identifier]=$id$sorturladdarray[$option[identifier]]">$value<!--{if $option['type'] != 'range'}-->$option[unit]<!--{/if}--></a></li>
+					<!--{/loop}-->
+				</ul>
+			</dd>
+		<!--{/if}-->
+	<!--{/loop}-->
+</dl>
+
+<!--{if $saveconditionlist || $savedistrictlist || $savestreetlist || $savecitylist}-->
+	<div class="cgp cl">
+		<strong>{lang search_conditions}</strong>
+		<ul>
+			<!--{if $savecitylist}-->
+				<li>
+					<a href="$savecitylist[url]" title="{lang delete_conditions}"><span>$savecitylist[title]</span></a>
+				</li>
+			<!--{/if}-->
+			<!--{if $savedistrictlist}-->
+				<li>
+					<a href="$savedistrictlist[url]" title="{lang delete_conditions}"><span>$savedistrictlist[title]</span></a>
+				</li>
+			<!--{/if}-->
+			<!--{if $savestreetlist}-->
+				<li>
+					<a href="$savestreetlist[url]" title="{lang delete_conditions}"><span>$savestreetlist[title]</span></a>
+				</li>
+			<!--{/if}-->
+			<!--{loop $saveconditionlist $identifier $option}-->
+			<li>
+				<a href="$option[url]" title="{lang delete_conditions}"><span>$option[title]</span></a>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+<!--{/if}-->

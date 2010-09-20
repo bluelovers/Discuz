@@ -1,0 +1,110 @@
+{subtemplate category/header}
+
+<style id="diy_style" type="text/css"></style>
+<!--{if $usergroup}-->
+<div id="ct" class="wp wpi cl">
+	<div class="mn">
+		<!--{if $action == 'list'}-->
+			<!--{if $recommendlist}-->
+			<div class="hs_box block">
+				<div class="blocktitle title"><span class="titletext">{lang house_new_src}</span></div>
+				<div class="content">
+					<div class="portal_block_summary">
+						<ul class="ml mlm cl">
+							<!--{loop $recommendlist $data}-->
+							$data
+							<!--{/loop}-->
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--{/if}-->
+
+			<div class="bm cl">
+				<div class="pgt">
+					<ul class="tb cl">
+				    	<!--{loop $sortlist $id $sort}-->
+				    		<li {if $action == 'list' && $sortid == $id} class="a"{/if}><a href="$modurl?mod=usergroup&action=list&amp;gid=$gid&amp;sortid=$id">$sort[name]</a></li>
+				    	<!--{/loop}-->
+				    </ul>
+				</div>
+				<div class="ptm pbm bbda cl">
+					{lang house_with_result}
+				</div>
+				<!--{if $_G['category_threadcount']}-->
+				<div id="threadlist">
+					<ul class="cgl cl">
+						<!--{loop $_G['category_threadlist'] $key $thread}-->
+							<li <!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp']}--> class="hscs"<!--{/if}-->>
+								<!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp']}--><div class="cs">- {lang house_overdue} -</div><!--{/if}-->
+								<!--{if $thread['displayorder']}--><div class="hot">hot</div><!--{/if}-->
+								$stemplate[$thread[tid]]
+							</li>
+						<!--{/loop}-->
+					</ul>
+				</div>
+				<!--{else}-->
+					<div class="ptm pbm xs2">{lang house_with_result_nothing}</div>
+				<!--{/if}-->
+			</div>
+			<div class="bm pgs mtm cl">
+				$multipage
+				<span class="pgb y"><a href="$modurl">{lang return_index}</a></span>
+			</div>
+	<!--{/if}-->
+	</div>
+	<div class="sd sdlist pph">
+		<div class="bn">
+			<h2>{lang broker_info}</h2>
+			<div class="b_userinfo">
+				<p><img src="$usergroup[banner]"/></p>
+				<p class="xw1 xi2 xs2 mtm">$usergroup[title]</p>
+				<p class="mtm" style="text-align:left;">$usergroup[description]</p>
+			</div>
+		</div>
+		<div class="bn xld">
+			<h2>{lang stick_member}</h2>
+			<!--{loop $memberlist $uid $member}-->
+			<dl class="cl">
+				<dd class="m">$member[avatar]</dd>
+				<dt><a href="house.php?mod=my&amp;uid=$uid&amp;sortid=$sortid">$member[username]</a></dt>
+				<dd>
+					<p>{lang post_count}</p>
+				</dd>
+			</dl>
+			<!--{/loop}-->
+		</div>
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+	</div>
+</div>
+<!--{else}-->
+<div id="ct" class="wp wpi cl">
+	<div class="mn">
+		<div class="hs_box block">
+			<div class="blocktitle title"><span class="titletext">{lang house_broker}</span></div>
+			<div class="content">
+				<div class="portal_block_summary">
+					<ul class="ml mlm cl">
+						<!--{loop $usergrouplist $gid $group}-->
+							<!--{if $group['type'] == 'intermediary'}-->
+								<li>
+									<a target="_blank" href="$modurl?mod=usergroup&gid=$gid&sortid=1"><img src="$group[banner]"></a>
+									<p class="mtn"><a href="$modurl?mod=usergroup&gid=$gid&sortid=1">$group[title]</a></p>
+								</li>
+							<!--{/if}-->
+						<!--{/loop}-->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sd sdlist">
+		<div class="drag">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+	</div>
+</div>
+<!--{/if}-->
+{subtemplate category/footer}

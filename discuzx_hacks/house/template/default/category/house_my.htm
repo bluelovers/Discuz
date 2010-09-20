@@ -1,0 +1,81 @@
+{subtemplate category/header}
+
+<style id="diy_style" type="text/css"></style>
+
+<div id="ct" class="wp wpi cl">
+	<div class="mn">
+		<div class="bm cl">
+			<div class="pgt">
+				<ul class="tb cl">
+				    	<!--{loop $sortlist $id $sort}-->
+				    		<li {if $sortid == $id} class="a"{/if}><a href="$modurl?mod=my&amp;sortid=$id&amp;uid=$uid">$sort[name]</a></li>
+				    	<!--{/loop}-->
+				</ul>
+			</div>
+			<div class="ptm pbm bbda cl">
+				{lang my_post_count}
+			</div>
+			<!--{if $_G['category_threadcount']}-->
+			<div id="threadlist">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="listextra" value="$extra" />
+					<ul class="cgl cl">
+						<!--{loop $_G['category_threadlist'] $key $thread}-->
+							<li <!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp']}--> class="hscs"<!--{/if}-->>
+								<!--{if $isgroupadmin}-->
+									<div class="opt">
+										<!--{if $usergroup['allowpush']}--><a href="javascript:;" onclick="modcategorythread(1, 'push', $thread[tid], $usergroupid)">[{lang house_promote}]</a> <!--{/if}-->
+										<!--{if $usergroup['allowrecommend']}--><a href="javascript:;" onclick="modcategorythread(1, 'recommend', $thread[tid], $usergroupid)">[{lang house_stick}]</a> <!--{/if}-->
+										<!--{if $usergroup['allowhighlight']}--><a href="javascript:;" onclick="modcategorythread(1, 'highlight', $thread[tid], $usergroupid)">[{lang house_highlight}]</a><!--{/if}-->
+									</div>
+								<!--{/if}-->
+								<!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp']}--><div class="cs">- {lang house_overdue} -</div><!--{/if}-->
+								<!--{if $thread['displayorder']}--><div class="hot">hot</div><!--{/if}-->
+								$stemplate[$thread[tid]]
+							</li>
+						<!--{/loop}-->
+					</ul>
+			</div>
+			<!--{else}-->
+				<div class="ptm pbm xs2">{lang house_no_post}</div>
+			<!--{/if}-->
+		</div>
+		<div class="bm pgs mtm cl">
+			$multipage
+			<span class="pgb y"><a href="$modurl">{lang return_index}</a></span>
+		</div>
+	</div>
+	<div class="sd sdlist pph">
+		<div class="bn">
+			<h2>{lang personal_information}</h2>
+			<div class="b_userinfo">
+				<a href="house.php?mod=my&amp;uid=$uid&amp;sortid=$sortid">$avatar</a>
+				<p class="ptn">$member[username]</p>
+				<!--{if $usergrouplist[$usergroupid]['title']}--><p class="ptn">$usergrouplist[$usergroupid][title]</p><!--{/if}-->
+				<!--{if $usergrouplist[$usergroupid]['icon']}--><p class="ptn"><img src="$usergrouplist[$usergroupid][icon]"></p><!--{/if}-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--{if $isgroupadmin}-->
+<p class="ptn">
+	<form method="post" autocomplete="off" name="modactions" id="modactions">
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<input type="hidden" name="optgroup" />
+	</form>
+	<script language="javascript">
+		function modcategorythread(optgroup, operation, tid, gid) {
+			var operation = !operation ? '' : operation;
+			$('modactions').action = '$modurl?mod=threadmod&sortid='+ $sortid +'&moderate[]=' + tid + '&operation=' + operation + '&gid=' + gid + '&infloat=yes&nopost=yes';
+			$('modactions').optgroup.value = optgroup;
+			hideWindow('mods');
+			showWindow('mods', 'modactions', 'post', 0);
+			if(BROWSER.ie) {
+				doane(event);
+			}
+		}
+	</script>
+</p>
+<!--{/if}-->
+{subtemplate category/footer}

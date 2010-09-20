@@ -1,0 +1,156 @@
+{template common/header}
+<!--{if empty($_G['gp_infloat'])}-->
+<div id="pt" class="wp"><a href="index.php">$_G[setting][bbname]</a> $navigation</div>
+<div id="ct" class="wp cl">
+	<div class="mn">
+<!--{/if}-->
+
+<div class="tm_c" id="floatlayout_topicadmin">
+	<h3 class="flb">
+		<em id="return_mods">{lang info_manage}</em>
+		<span>
+			<a href="javascript:;" class="flbc" onclick="hideWindow('mods')" title="{lang close}">{lang close}</a>
+		</span>
+	</h3>
+	<form id="moderateform" method="post" autocomplete="off" action="$modurl?mod=threadmod&modsubmit=yes&infloat=yes" onsubmit="ajaxpost('moderateform', 'return_mods', 'return_mods', 'onerror');return false;">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="sortid" value="$sortid" />
+		<input type="hidden" name="operation" value="$_G[gp_operation]" />
+		<input type="hidden" name="gid" value="$_G[gp_gid]" />
+		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+		<!--{loop $threadlist $thread}-->
+			<input type="hidden" name="moderate[]" value="$thread[tid]" />
+		<!--{/loop}-->
+		<div class="c">
+			<ul class="tpcl">
+				<!--{if $_G[gp_operation] == 'stick'}-->
+				<li id="itemcp_stick">
+					<table cellspacing="0" cellpadding="5" width="100%">
+						<tr>
+						<td>
+							<label onclick="switchitemcp('itemcp_stick')" class="labeltxt">{lang totop}</label>
+							<div class="dopt">
+								<label><input class="radio" type="radio" name="sticklevel" value="1" $checkstick[1] /> {lang house_yes}</label>
+								<label><input class="radio" type="radio" name="sticklevel" value="0" $checkstick[0] /> {lang house_no}</label>
+							</div>
+						</td>
+						</tr>
+					</table>
+				</li>
+				<!--{elseif $_G[gp_operation] == 'recommend'}-->
+				<li id="itemcp_recommend">
+					<table cellspacing="0" cellpadding="5">
+						<tr>
+							<td>
+								<div class="dopt">
+									<!--{if $usergroup['recommenddayper'] && $isgorupadmin}-->
+									<input type="hidden" name="isrecommend" value="1" />
+									{lang stick_tip1}
+									<!--{else}-->
+									<label>{lang house_stick}</label>
+									<div class="dopt">
+										<label><input class="radio" type="radio" name="isrecommend" value="1" $checkrecommend[1] /> {lang house_yes}</label>
+										<label><input class="radio" type="radio" name="isrecommend" value="0" $checkrecommend[0] /> {lang house_no}</label>
+									</div>
+									<!--{/if}-->
+								</div>
+							</td>
+						</tr>
+					</table>
+				</li>
+				<!--{elseif $_G[gp_operation] == 'push'}-->
+				<li id="itemcp_push">
+					<table cellspacing="0" cellpadding="5">
+						<tr>
+							<td>
+								<!--{if $usergroup['pushdayper'] && $isgorupadmin}-->
+									{lang stick_tip2}
+								<!--{else}-->
+									{lang stick_tip3}
+								<!--{/if}-->
+							</td>
+						</tr>
+					</table>
+				</li>
+				<!--{elseif $_G[gp_operation] == 'highlight'}-->
+				<li id="itemcp_highlight">
+					<!--{if $usergroup['highlightdayper'] && $isgorupadmin}-->
+						{lang stick_tip4}
+					<!--{/if}-->
+					<table cellspacing="0" cellpadding="5">
+						<tr>
+						<td>
+							{eval $_G['forum_colorarray'] = array(1=>'#EE1B2E', 2=>'#EE5023', 3=>'#996600', 4=>'#3C9D40', 5=>'#2897C5', 6=>'#2B65B7', 7=>'#8F2A90', 8=>'#EC1282');}
+							<label onclick="switchitemcp('itemcp_highlight')" class="labeltxt">{lang house_highlight}</label>
+							<div class="dopt">
+								<span class="hasd">
+									<input type="hidden" id="highlight_color" name="highlight_color" value="$colorcheck" />
+									<input type="hidden" id="highlight_style_1" name="highlight_style[1]" value="$stylecheck[1]" />
+									<input id="highlight_color_show" type="text" class="crl" readonly="readonly" {if $colorcheck}style="background: $_G[colorarray][$colorcheck]" {/if}/>
+									<a href="javascript:;" id="highlight_color_ctrl" onclick="showHighLightColor('highlight_color')" class="dpbtn">^</a>
+								</span>
+								<a href="javascript:;" id="highlight_op_1" onclick="switchhl(this, 1)" class="dopt_b{if $stylecheck[1]} cnt{/if}" style="text-indent:0;text-decoration:none;font-weight:700;" title="{lang e_bold}">B</a>
+							</div>
+						</td>
+						</tr>
+					</table>
+				</li>
+				<!--{/if}-->
+			</ul>
+		</div>
+		<p class="o pns"><button name="modsubmit" type="submit" class="pn pnc" value="{lang confirms}"><span>{lang confirms}</span></button></p>
+	</form>
+</div>
+
+<script type="text/javascript" reload="1">
+function succeedhandle_mods(locationhref) {
+	hideWindow('mods');
+	location.href = locationhref;
+}
+var lastsel = null;
+function switchitemcp(id) {
+	if(lastsel) {
+		lastsel.className = '';
+	}
+	$(id).className = 'copt';
+	lastsel = $(id);
+}
+
+{if !empty($operation)}
+	if($('itemcp_$operation')) {
+		switchitemcp('itemcp_$operation');
+	}
+{/if}
+function switchhl(obj, v) {
+	if(parseInt($('highlight_style_' + v).value)) {
+		$('highlight_style_' + v).value = 0;
+		obj.className = obj.className.replace(/ cnt/, '');
+	} else {
+		$('highlight_style_' + v).value = 1;
+		obj.className += ' cnt';
+	}
+}
+function showHighLightColor(hlid) {
+	var showid = hlid + '_show';
+	if(!$(showid + '_menu')) {
+		var str = '';
+		var coloroptions = {'0' : '#000', '1' : '#EE1B2E', '2' : '#EE5023', '3' : '#996600', '4' : '#3C9D40', '5' : '#2897C5', '6' : '#2B65B7', '7' : '#8F2A90', '8' : '#EC1282'};
+		var menu = document.createElement('div');
+		menu.id = showid + '_menu';
+		menu.className = 'cmen';
+		menu.style.display = 'none';
+		for(var i in coloroptions) {
+			str += '<a href="javascript:;" onclick="$(\'' + hlid + '\').value=' + i + ';$(\'' + showid + '\').style.backgroundColor=\'' + coloroptions[i] + '\';hideMenu(\'' + menu.id + '\')" style="background:' + coloroptions[i] + ';color:' + coloroptions[i] + ';">' + coloroptions[i] + '</a>';
+		}
+		menu.innerHTML = str;
+		$('append_parent').appendChild(menu);
+	}
+	showMenu({'ctrlid':hlid + '_ctrl','evt':'click','showid':showid});
+}
+</script>
+
+<!--{if empty($_G['gp_infloat'])}-->
+	</div>
+</div>
+<!--{/if}-->
+{template common/footer}

@@ -1,0 +1,107 @@
+{subtemplate category/header}
+<style id="diy_style" type="text/css"></style>
+<div class="wp mtm">
+	{subtemplate category/category_search}
+</div>
+<div id="ct" class="wp cl">
+	<div class="mn">
+		<div class="tl bm">
+			<div class="pgt">
+				$multipage
+			    <ul class="tb cl">
+			        <li {if $_G['gp_filter'] == 'all'}class="a"{/if}><a href="$modurl?mod=list&amp;sortid=$sortid&amp;filter=all{$catedisplayadd[sortid]}" class="brw">{lang all_house_src}</a></li>
+			        <li {if $_G['gp_filter'] == 'recommend' || $_G['gp_recommend']}class="a"{/if}><a href="$modurl?mod=list&amp;filter=recommend&amp;sortid=$sortid&amp;recommend=1{$catedisplayadd[recommend]}" class="brw">{lang new_house_src}</a></li>
+			        <li {if $_G['gp_filter'] == 'attachid' || $_G['gp_attachid']}class="a"{/if}><a href="$modurl?mod=list&amp;filter=attachid&amp;sortid=$sortid&amp;attachid=1{$catedisplayadd[attachid]}" class="brw">{lang imgs_house_src}</a></li>
+			        <li class="y"></li>
+			    </ul>
+			</div>
+			<div class="cgodb ptm pbm bbda cl">
+				<!--{if $orderbyurl }-->
+				<ul class="cgod y">
+					<!--{loop $orderbyurl $orderby $option}-->
+						<li {if $_G['gp_orderby'] == $orderby}class="$option[classascdesc]"{/if}><a href="$modurl?mod=list&amp;sortid=$sortid&amp;filter=$_G[gp_filter]&amp;orderby=$orderby&amp;ascdesc=$option[ascdesc]{$catedisplayadd[order]}">$option[title]</a></li>
+					<!--{/loop}-->
+				</ul>
+				<div class="y">
+					<strong class="z">{lang house_sort}</strong>
+					<span class="ftid">
+						<select change="orderbyselect()" id="orderby" width="110">
+						<option value="">{lang house_default_sort}</option>
+						<!--{loop $orderbyurl $orderby $option}-->
+			    	    	    <option value="orderby=$orderby&ascdesc=desc" {if $sortcondition['orderby'] == $orderby && $sortcondition['ascdesc'] == 'DESC'}selected="selected"{/if}>{lang orderby_desc}</option>
+			    	    	    <option value="orderby=$orderby&ascdesc=asc" {if $sortcondition['orderby'] == $orderby && $sortcondition['ascdesc'] == 'ASC'}selected="selected"{/if}>{lang orderby_asc}</option>
+			    	    	<!--{/loop}-->
+		    	    	</select>
+			    	</span>
+				</div>
+				<!--{/if}-->
+				<div class="z">
+				{lang search_result}
+				</div>
+				<a href="$modurl?mod=list&amp;sortid=$sortid&amp;listtype=pic" class="pbtn{if $_G[gp_listtype] == 'pic'} pbtna{/if}">{lang house_list_img}</a>
+				<a href="$modurl?mod=list&amp;sortid=$sortid&amp;listtype=text" class="tbtn{if $_G[gp_listtype] == 'text'} tbtna{/if}">{lang house_list_letter}</a>
+			</div>
+			<!--{if $_G['category_threadcount']}-->
+			<div id="threadlist">
+			<form method="post" autocomplete="off" name="moderate" id="moderate" action="">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="listextra" value="$extra" />
+					<ul class="cgl cl">
+						<!--{loop $_G['category_threadlist'] $key $thread}-->
+							<li id="$thread[id]"<!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp'] && $_G[gp_listtype] == 'pic'}--> class="hscs"<!--{/if}-->>
+								<!--{if $thread['expiration'] && $thread['expiration'] <= $_G['timestamp'] && $_G[gp_listtype] == 'pic'}--><div class="cs">- {lang house_overdue} -</div><!--{/if}-->
+								$stemplate[$thread[tid]]
+							</li>
+						<!--{/loop}-->
+					</ul>
+			</form>
+			</div>
+			<!--{else}-->
+			<div class="ptm pbm xs2">{lang search_result_nothing}</div>
+			<!--{/if}-->
+		</div>
+		<div class="bm pgs mtm cl">
+			$multipage
+			<span class="pgb y"><a href="$modurl">{lang return_index}</a></span>
+		</div>
+	</div>
+	<div class="sd sdlist pph">
+		<div class="drag">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+        <div class="bn">
+			<h2>{lang house_look}</h2>
+			<ul class="xl cl">
+				<!--{loop $visitedlist $data}-->
+				$data
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+		{hook/forumdisplay_side_bottom}
+	</div>
+
+<!--{if $_G['setting']['visitedforums']}-->
+	<ul class="p_pop" id="visitedforums_menu" style="display: none;">
+		$_G[setting][visitedforums]
+	</ul>
+<!--{/if}-->
+
+<!--{if $_G['setting']['forumjump']}-->
+	<div class="p_pop" id="fjump_menu" style="display: none">
+	$forummenu
+	</div>
+<!--{/if}-->
+
+</div>
+<script type="text/javascript">
+	simulateSelect('orderby', 90);
+	function orderbyselect() {
+		if($('orderby').value) {
+			location.href = '$modurl?mod=list&sortid=$sortid&filter=$_G[gp_filter]{$catedisplayadd[order]}&' + $('orderby').value;
+		}
+	}
+</script>
+{subtemplate category/footer}

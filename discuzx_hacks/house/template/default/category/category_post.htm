@@ -1,0 +1,279 @@
+{subtemplate category/header}
+
+<div id="ct" class="wp cl wpp">
+	<div class="mn">
+		<div class="bm">
+
+<h3 class="flb">
+	<em>{lang status_post} $sortlist[$sortid][name] $arealist[city][$cityid] $arealist[district][$cityid][$districtid] $arealist[street][$districtid][$streetid]</em>
+</h3>
+<!--{if $action == 'nav'}-->
+	<div class="c">
+		<ul class="pbl cl">
+			<li>
+			<p>{lang select_type}</p>
+			<!--{loop $sortarray $stid $sort}-->
+				<p {if $stid == $sortid}class="pbls"{/if}><a href="$modurl?mod=post&amp;action=nav&amp;sortid=$stid">$sort</a></p>
+			<!--{/loop}-->
+			</li>
+			<li>
+			<p>{lang select_one_type}</p>
+			<!--{loop $arealist['city'] $cid $city}-->
+				<p {if $cid == $_G['gp_cityid']}class="pbls"{/if}><a href="$modurl?mod=post&amp;action=nav&amp;sortid=$sortid&amp;cityid=$cid">$city</a></p>
+			<!--{/loop}-->
+			</li>
+			<li>
+			<p>{lang select_two_type}</p>
+			<!--{loop $districtarray $did $district}-->
+				<p {if $did == $_G['gp_districtid']}class="pbls"{/if}><a href="$modurl?mod=post&amp;action=nav&amp;sortid=$sortid&amp;cityid=$cityid&amp;districtid=$did">$district[title]</a></p>
+			<!--{/loop}-->
+			</li>
+			<li>
+			<p>{lang select_three_type}</p>
+			<!--{loop $streetarray $sid $street}-->
+				<p {if $sid == $_G['gp_streetid']}class="pbls"{/if}><a href="$modurl?mod=post&amp;action=nav&amp;sortid=$sortid&amp;cityid=$cityid&amp;districtid=$districtid&amp;streetid=$sid">$street[title]</a></p>
+			<!--{/loop}-->
+			</li>
+		</ul>
+		<div class="cl"><button type="button" class="pn pnc y" onclick="window.location.href='$modurl?mod=post&amp;action=newthread&amp;sortid=$sortid&amp;cityid=$cityid&amp;districtid=$districtid&amp;streetid=$streetid';"><strong>{lang house_post}</strong></button></div>
+	</div>
+<!--{else}-->
+	<!--{if $usergrouplist[$usergroupid]['postdayper']}-->
+		<div class="ppm">{lang house_suggestion}</div>
+	<!--{/if}-->
+	<form method="post" autocomplete="off" enctype="multipart/form-data" id="postform" action="$modurl?mod=post&action=$action{if $action == 'newthread'}&topicsubmit=yes{elseif $action == 'edit'}&editsubmit=yes{/if}" onsubmit="return checkpostsubmit(this)">
+	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+	<input type="hidden" name="cid" id="cid" value="$cid" />
+	<input type="hidden" name="sortid" id="sortid" value="$sortid" />
+	<input type="hidden" name="cityid" id="cityid" value="$cityid" />
+	<input type="hidden" name="districtid" id="districtid" value="$districtid" />
+	<input type="hidden" name="streetid" id="streetid" value="$streetid" />
+	<input type="hidden" name="tid" id="tid" value="$tid" />
+	<div class="exfm cl">
+		<div class="sinf">
+			<dl>
+				<dt><strong class="rq">*</strong>{lang house_subject}</dt>
+				<dd><input type="text" name="subject" id="subject" class="px" value="$thread[subject]" tabindex="1" style="width: 260px" /></dd>
+			</dl>
+		</div>
+		<div class="sadd">
+			<dl>
+				<dt><strong class="rq">*</strong><!--{if $action == 'newthread'}-->{lang house_expiration}<!--{elseif $action == 'edit'}-->{lang house_max_expiration}<!--{/if}--></dt>
+				<dd>
+					<span class="ftid">
+					<select name="expiration" tabindex="1" id="expiration">
+						<option value="0">{lang house_time_0}</option>
+						<option value="259200">{lang house_time_259200}</option>
+						<option value="432000">{lang house_time_432000}</option>
+						<option value="604800">{lang house_time_604800}</option>
+						<option value="2592000">{lang house_time_2592000}</option>
+						<option value="7776000">{lang house_time_7776000}</option>
+						<option value="15552000">{lang house_time_15552000}</option>
+						<option value="31536000">{lang house_time_31536000}</option>
+					</select>
+					</span>
+					<!--{if $expiration}--><span class="fb">{lang house_expiration_to} $expiration</span><!--{/if}-->
+				</dd>
+			</dl>
+		</div>
+		$_G[category_sorttemplate]
+	</div>
+	<!--{if $sortlist[$sortid]['imgnum']}-->
+	<script>
+		function delimg(aid) {
+			$('cimg_'+aid).src = './static/image/common/noupload.gif';
+			$('coverpic_'+aid).checked = false;
+			$('newimg_'+aid).disabled = false;
+			$('divimg_'+aid).style.display = '';
+			$('divimg_t_'+aid).style.display = '';
+			$('delete_'+aid).style.display = 'none';
+
+			if($('deleteaids').value) {
+				$('deleteaids').value = $('deleteaids').value+','+aid;
+			} else {
+				$('deleteaids').value = aid;
+			}
+		}
+
+		function addnewimg(obj, newattach, newimg) {
+			$(newimg).style.display = 'none';
+			$(newattach).innerHTML = '<img src="static/image/filetype/common_new.gif">{lang upload_over}</span>';
+		}
+	</script>
+	<dl class="cgum mbw">
+		<dt class="pst">{lang upload_pic}</dt>
+		<dd>
+			<ul class="cl">
+			<input type="hidden" name="deleteaids" id="deleteaids" value="" />
+			<!--{if $attachs}-->
+				<!--{loop $attachs $attach}-->
+				<li id="imgli_$attach[aid]">
+					<div class="atc">
+						<span id="newattach_$attach[aid]"></span>
+						<img id="cimg_$attach[aid]" src="$_G[setting][attachurl]/category/$attach[url]">
+					</div>
+					<label for="coverpic_$attach[aid]"><input type="radio" id="coverpic_$attach[aid]" name="coverpic" value="old_$attach[aid]" class="pr"{if $sortdata['attachid'] == $attach['aid']} checked{/if}>{lang house_cover}</label>
+					<a id="delete_$attach['aid']" href="#" onclick="delimg($attach[aid]); return false;" class="xi1">{lang house_delete}</a>
+					<a href="###" id="divimg_t_$attach[aid]" style="display:none;">{lang house_upload}</a>
+					<div class="fb" id="divimg_$attach[aid]" style="display:none"><input type="file" name="categoryimg[]" id="newimg_$attach[aid]" class="pf" size="4" disabled  onchange="addnewimg(this, 'newattach_$attach[aid]', 'cimg_$attach[aid]')" /></div>
+				</li>
+				<!--{/loop}-->
+			<!--{/if}-->
+			<!--{if $imgnum}-->
+				<!--{loop $imgnum $key $val}-->
+				<li>
+					<div class="atc">
+						<img id="newimg_$key" src="./static/image/common/noupload.gif" />
+						<span id="newfile_$key"></span>
+					</div>
+					<label><input type="radio" name="coverpic" value="$key" class="pr">{lang house_cover}</label>
+					<a href="###">{lang house_upload}</a>
+					<div class="fb"><input type="file" name="categoryimg[]" id="categoryimg_$key" class="pf" size="4" onchange="addnewimg(this, 'newfile_$key', 'newimg_$key')"/></div>
+				</li>
+				<!--{/loop}-->
+			<!--{/if}-->
+			</ul>
+			<p class="ptn">{lang upload_topic}</p>
+		</dd>
+	</dl>
+	<!--{/if}-->
+	<!--{if $channel['mapkey']}-->
+	<dl>
+		<dt class="pst mbn">{lang house_map_mark}</dt>
+		<dd>
+			<div id="map_canvas" style="width:100%;height:300px;"></div>
+			<input type="hidden" id="map_position" name="mapposition" value="$sortdata[mapposition]" />
+		</dd>
+	</dl>
+	<br />
+	<script src="http://ditu.google.cn/maps?file=api&amp;v=2&amp;key=$channel['mapkey']&amp;sensor=true"  type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		 if (GBrowserIsCompatible()) {
+			var map = new GMap2($("map_canvas"));
+			var geocoder = new GClientGeocoder();
+			map.addControl(new GLargeMapControl(),new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10,10)));
+			map.addControl(new GHierarchicalMapTypeControl());
+			map.enableScrollWheelZoom();
+			map.enableGoogleBar();
+			var gmarker= null;
+			GEvent.addListener(map, "click", function(marker,point){
+				if(gmarker != null) {
+					map.removeOverlay(gmarker);
+				}
+				gmarker=new GMarker(point);
+				map.addOverlay(gmarker);
+				$("map_position").value = point.y + "," + point.x + "," +map.getZoom();
+			});
+			<!--{if $mapposition}-->
+				map.setCenter(new GLatLng($mapposition[0], $mapposition[1]), $mapposition[2]);
+				gmarker = new GMarker(new GLatLng($mapposition[0], $mapposition[1]))
+				map.addOverlay(gmarker);
+			<!--{else}-->
+				geocoder.getLatLng("$mapcenter", function(point) {
+					if(point) {
+							map.setCenter(point, 14);
+						} else {
+							map.setCenter(new GLatLng(39.90, 116.30), 6);
+						}
+					});
+			<!--{/if}-->
+		 }
+	</script>
+
+	<!--{/if}-->
+	<dl>
+		<dt class="pst mbn">{lang message_note}</dt>
+		<dd>
+			<textarea rows="5" cols="80" name="message" id="fastpostmessage" tabindex="4" class="pt">$thread[message]</textarea>
+		</dd>
+	</dl>
+	<div class="mtm">
+		<button type="submit" id="postsubmit" class="pn pnc" value="true" name="{if $action == 'newthread'}topicsubmit{elseif $action == 'edit'}editsubmit{/if}" tabindex="1"><strong><!--{if $action == 'newthread'}-->{lang post_message}<!--{elseif $action == 'edit'}-->{lang save_message}<!--{/if}--></strong></button>
+	</div>
+	</form>
+<!--{/if}-->
+	</div></div>
+	<div id="psd" class="sd ptw">
+		$avatar
+		<!--{if $usergrouplist[$usergroupid]['title']}--><p class="ptn">$usergrouplist[$usergroupid][title]</p><!--{/if}-->
+		<!--{if $usergrouplist[$usergroupid]['icon']}--><p class="ptn"><img src="$usergrouplist[$usergroupid][icon]"></p><!--{/if}-->
+	</div>
+</div>
+
+<script type="text/javascript">
+	var CHECKALLSORT = false;
+	function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, checkmaxlength) {
+		if(!$('typeoption_' + identifier) || !$('check' + identifier)) {
+			return true;
+		}
+		var ce = $('check' + identifier);
+		ce.innerHTML = '';
+		var checkvalue = $('typeoption_' + identifier).value;
+		if(required != '0') {
+			if(checkvalue == '') {
+				warning(ce, '{lang threadtype_required_invalid}');
+				return false;
+			} else {
+				ce.innerHTML = '<img src="{IMGDIR}/check_right.gif" width="17" height="17" style="vertical-align:middle" />';
+			}
+		}
+
+		if(checkvalue) {
+			if((checktype == 'number' || checktype == 'range') && isNaN(checkvalue)) {
+				warning(ce, '{lang threadtype_format_num_invalid}');
+				return false;
+			} else if(checktype == 'email' && !(/^[\-\.\w]+@[\.\-\w]+(\.\w+)+$/.test(checkvalue))) {
+				warning(ce, '{lang threadtype_format_email_invalid}');
+				return false;
+			} else if((checktype == 'text' || checktype == 'textarea') && checkmaxlength != '0' && mb_strlen(checkvalue) > checkmaxlength) {
+				warning(ce, '{lang threadtype_toolong_invalid}');
+				return false;
+			} else if((checktype == 'number' || checktype == 'range')) {
+				if(checkmaxnum != '0' && parseInt(checkvalue) > parseInt(checkmaxnum)) {
+					warning(ce, '{lang threadtype_maxnum_invalid}');
+					return false;
+				} else if(checkminnum != '0' && parseInt(checkvalue) < parseInt(checkminnum)) {
+					warning(ce, '{lang threadtype_minnum_invalid}');
+					return false;
+				}
+			} else {
+				ce.innerHTML = '<img src="{IMGDIR}/check_right.gif" width="17" height="17" style="vertical-align:middle" />';
+			}
+		}
+		return true;
+	}
+
+	function warning(obj, msg) {
+		obj.style.display = '';
+		obj.innerHTML = '<img src="{IMGDIR}/check_error.gif" width="17" height="17" style="vertical-align:middle" />' + msg;
+		obj.className = "warning";
+		if(CHECKALLSORT) {
+			showDialog(msg);
+		}
+	}
+	function validateextra() {
+		CHECKALLSORT = true;
+		<!--{loop $_G['forum_optionlist'] $optionid $option}-->
+			if(!checkoption('$option[identifier]', '$option[required]', '$option[type]')) {
+				return false;
+			}
+		<!--{/loop}-->
+		return true;
+	}
+
+	function checkpostsubmit(theform) {
+		theform.topicsubmit ? theform.topicsubmit.disabled = true : theform.editsubmit.disabled = true;
+		theform.submit();
+	}
+
+	simulateSelect('expiration');
+
+	<!--{loop $_G['category_optionlist'] $optionid $option}-->
+		if('$option[type]' == 'select' || '$option[type]' == 'intermediary') {
+			simulateSelect('typeoption_$option[identifier]', '$option[inputsize]');
+		}
+	<!--{/loop}-->
+
+</script>
+
+{template common/footer}

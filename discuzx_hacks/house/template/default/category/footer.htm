@@ -1,0 +1,46 @@
+	<div id="ft" class="wp cl">
+		<div id="flk" class="y">
+			<p>
+				<strong><a href="$_G['setting']['siteurl']" target="_blank">$_G['setting']['sitename']</a></strong>
+				<!--{if $_G['setting']['icp']}-->( <a href="http://www.miibeian.gov.cn/" target="_blank">$_G['setting']['icp']</a>)<!--{/if}-->
+				<!--{if $_G['setting']['adminemail']}--><span class="pipe">|</span><a href="mailto:$_G['setting']['adminemail']">{lang contactus}</a><!--{/if}-->
+				<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('miscreport', 'misc.php?mod=report&url=$_G[currenturl_encode]');return false;">{lang report}</a>
+				<!--{if $_G['setting']['statcode']}-->$_G['setting']['statcode']<!--{/if}-->
+				{hook/global_footerlink}
+			</p>
+			<p class="xs0">
+				{lang time_now}
+				<!--{if debuginfo()}-->, <span id="debuginfo">Processed in $_G[debuginfo][time] second(s), $_G[debuginfo][queries] queries<!--{if $_G['gzipcompress']}-->, Gzip On<!--{/if}-->{if $_G['memory']}, {echo ucwords($_G['memory'])} On{/if}</span><!--{/if}-->.
+			</p>
+		</div>
+		<div id="frt">
+			<p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em>$_G['setting']['version']</em><!--{if !empty($_G['setting']['boardlicensed'])}--> <a href="http://license.comsenz.com/?pid=1&host=$_SERVER[HTTP_HOST]" target="_blank">Licensed</a><!--{/if}--></p>
+			<p class="xs0">&copy; 2001-2010 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
+		</div>
+		{eval updatesession();}
+	</div>
+
+<!--{if !$_G['setting']['bbclosed']}-->
+	<!--{if $_G[uid] && !isset($_G['cookie']['checkpm'])}-->
+	<script type="text/javascript" src="home.php?mod=spacecp&ac=pm&op=checknewpm&rand=$_G[timestamp]"></script>
+	<!--{/if}-->
+
+	<!--{if !isset($_G['cookie']['sendmail'])}-->
+	<script type="text/javascript" src="home.php?mod=misc&ac=sendmail&rand=$_G[timestamp]"></script>
+	<!--{/if}-->
+<!--{/if}-->
+
+<!--{if $_GET['diy'] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && (empty($do) || $do != 'index') && !empty($_G['style']['tplfile'])}-->
+<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js?{VERHASH}"></script>
+<!--{/if}-->
+<!--{if $_GET['diy'] == 'yes' && $space['self'] && $_G[mod] == 'space' && $do == 'index'}-->
+<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js?{VERHASH}"></script>
+<!--{/if}-->
+<!--{if $_G['member']['newprompt'] && (empty($_G['cookie']['promptstate_'.$_G[uid]]) || $_G['cookie']['promptstate_'.$_G[uid]] != $_G['member']['newprompt']) && $_G['gp_do'] != 'notice'}-->
+<script type="text/javascript">noticeTitle();</script>
+<!--{/if}-->
+<!--{eval output();}-->
+</body>
+</html>
