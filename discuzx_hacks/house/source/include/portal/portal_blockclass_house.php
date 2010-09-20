@@ -1,6 +1,6 @@
 <?
 
-$blockclass['html']['subs']['html_html']['script']['house'] = '·¿²úÐÅÏ¢';
-$blockclass['html']['subs']['html_html']['script']['categorysearch'] = '·ÖÀàÐÅÏ¢ËÑË÷¿ò';
+$blockclass['html']['subs']['html_html']['script']['house'] = 'æˆ¿ç”¢ä¿¡æ¯';
+$blockclass['html']['subs']['html_html']['script']['categorysearch'] = 'åˆ†é¡žä¿¡æ¯æœç´¢æ¡†';
 
 ?>

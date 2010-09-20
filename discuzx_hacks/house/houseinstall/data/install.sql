@@ -324,6 +324,6 @@ DROP TABLE IF EXISTS pre_category_threadmod;
 CREATE TABLE IF NOT EXISTS pre_category_threadmod (
   tid mediumint(8) unsigned NOT NULL,
   expiration int(10) unsigned NOT NULL,
-  `action` varchar(255) CHARACTER SET gbk NOT NULL,
+  `action` varchar(255) CHARACTER SET utf8 NOT NULL,
   KEY tid (tid,`action`)
 ) ENGINE=MyISAM;

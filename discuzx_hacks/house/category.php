@@ -7,14 +7,14 @@
  *      $Id: category.php 7024 2010-03-28 06:39:41Z cnteacher $
  */
 
-// ¶¨ÒåÓ¦ÓÃ ID
+// å®šç¾©æ‡‰ç”¨ ID
 define('APPTYPEID', 99);
 define('CURSCRIPT', 'category');
 
 //====================================
-// »ù´¡ÎÄ¼şÒıÈë£¬ ÆäËû³ÌĞòÒıµ¼ÎÄ¼ş¿ÉÄÜ²»ĞèÒª
-// class_forum.php ºÍ function_forum.php
-// Çë¸ù¾İÊµ¼ÊĞèÒªÈ·¶¨ÊÇ·ñÒıÈë
+// åŸºç¤æ–‡ä»¶å¼•å…¥ï¼Œ å…¶ä»–ç¨‹åºå¼•å°æ–‡ä»¶å¯èƒ½ä¸éœ€è¦
+// class_forum.php å’Œ function_forum.php
+// è«‹æ ¹æ“šå¯¦éš›éœ€è¦ç¢ºå®šæ˜¯å¦å¼•å…¥
 //====================================
 
 require './source/class/class_core.php';
@@ -22,15 +22,15 @@ require './source/class/class_core.php';
 $discuz = & discuz_core::instance();
 
 //====================================
-// ¼ÓÔØºËĞÄ´¦Àí,¸÷³ÌĞòÈë¿ÚÎÄ¼ş´úÂëÏàÍ¬
+// åŠ è¼‰æ ¸å¿ƒè™•ç†,å„ç¨‹åºå…¥å£æ–‡ä»¶ä»£ç¢¼ç›¸åŒ
 //====================================
 $discuz->init();
 
 //=======================
-//¼ÓÔØ mod
+//åŠ è¼‰ mod
 //===================================
 $modarray = array('index', 'list', 'view', 'post', 'misc', 'my', 'threadmod', 'usergroup');
-// ÅĞ¶Ï $mod µÄºÏ·¨ĞÔ
+// åˆ¤æ–· $mod çš„åˆæ³•æ€§
 $mod = !in_array($_G['mod'], $modarray) ? 'index' : $_G['mod'];
 
 require DISCUZ_ROOT.'./source/module/category/category_'.$mod.'.php';
