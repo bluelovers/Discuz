@@ -74,7 +74,7 @@ CREATE TABLE `brand_albumitems` (
   KEY `grade_s` (`grade_s`, `grade`, `displayorder`),
   KEY `grade` (`grade`, `displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -105,7 +105,7 @@ CREATE TABLE `brand_attachments` (
   KEY `itemid` (`itemid`),
   KEY `uid` (`uid`,`type`,`dateline`),
   KEY `type` (`type`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,7 @@ CREATE TABLE `brand_attribute` (
   `displayorder` mediumint(6) unsigned NOT NULL DEFAULT '100' COMMENT '显示顺序',
   PRIMARY KEY (`attr_id`),
   UNIQUE KEY `attr_cat` (`cat_id`, `attr_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 COMMENT='属性列表';
+) ENGINE=MyISAM  AUTO_INCREMENT=1 COMMENT='属性列表';
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE `brand_attrvalue` (
   `displayorder` mediumint(6) unsigned NOT NULL DEFAULT '100' COMMENT '显示顺序',
   PRIMARY KEY (`attr_valueid`),
   UNIQUE KEY `attr_id` (`attr_id`, `attr_text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 COMMENT='属性可选值列表';
+) ENGINE=MyISAM  AUTO_INCREMENT=1 COMMENT='属性可选值列表';
 
 -- --------------------------------------------------------
 
@@ -153,7 +153,7 @@ CREATE TABLE `brand_attrvalue_text` (
   `item_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '信息id',
   `attr_text` varchar(255) DEFAULT NULL COMMENT '文本属性值',
   UNIQUE KEY `item_id` (`item_id`, `attr_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 COMMENT='文本类型属性值列表';
+) ENGINE=MyISAM  AUTO_INCREMENT=1 COMMENT='文本类型属性值列表';
 
 -- --------------------------------------------------------
 
@@ -172,7 +172,7 @@ CREATE TABLE `brand_blocks` (
   `blockcode` text NOT NULL,
   `tplname` varchar(50) NULL DEFAULT '',
   PRIMARY KEY (`blockid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM ;
 
 -- --------------------------------------------------------
 
@@ -189,7 +189,7 @@ CREATE TABLE `brand_brandlinks` (
   `shopid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`linkid`),
   KEY `shopid` (`shopid`, `displayorder`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -205,7 +205,7 @@ CREATE TABLE `brand_cache` (
   `value` mediumtext NOT NULL,
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`cachekey`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 --
@@ -224,7 +224,7 @@ CREATE TABLE `brand_cachenotes` (
   KEY `shopid` (`shopid`),
   KEY `subid` (`infoid`),
   KEY `usetype` (`usetype`)
-) ENGINE=MEMORY DEFAULT CHARSET=gbk COMMENT='缓存类型关系对应表';
+) ENGINE=MEMORY COMMENT='缓存类型关系对应表';
 
 --
 -- 转存表中的数据 `brand_cachenotes`
@@ -249,7 +249,7 @@ CREATE TABLE `brand_categories` (
   PRIMARY KEY (`catid`),
   KEY `type` (`type`, `displayorder`),
   KEY `upid` (`upid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=6 ;
 
 --
 -- 转存表中的数据 `brand_categories`
@@ -401,7 +401,7 @@ CREATE TABLE `brand_commentmodels` (
   `scorename` varchar(255) NOT NULL,
   `dateline` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`cmid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 INSERT INTO `brand_commentmodels` (`cmid`, `modelname`, `modeltype`, `scorenum`, `scorename`, `dateline`) VALUES
 (1, '美食街', '', 3, 'a:3:{i:1;s:4:"口味";i:2;s:4:"环境";i:3;s:4:"服务";}', 1281096294),
@@ -426,7 +426,7 @@ CREATE TABLE `brand_commentscores` (
   `score7` tinyint(1) NOT NULL DEFAULT '0',
   `score8` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`cid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -470,7 +470,7 @@ CREATE TABLE `brand_consumeitems` (
   KEY `grade_s` (`grade_s`, `grade`, `displayorder`),
   KEY `grade` (`grade`, `displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -490,7 +490,7 @@ CREATE TABLE `brand_consumemessage` (
   `relativeitemids` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`nid`),
   KEY `itemid` (`itemid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -513,7 +513,7 @@ CREATE TABLE `brand_crons` (
   `minute` char(36) NOT NULL DEFAULT '',
   PRIMARY KEY (`cronid`),
   KEY `nextrun` (`available`,`nextrun`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `brand_crons`
@@ -537,7 +537,7 @@ CREATE TABLE `brand_data` (
   `variable` varchar(32) NOT NULL DEFAULT '',
   `value` text NOT NULL,
   PRIMARY KEY (`variable`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 --
 -- 转存表中的数据 `brand_data`
@@ -590,7 +590,7 @@ CREATE TABLE `brand_gooditems` (
   KEY `grade_s` (`grade_s`, `grade`, `displayorder`),
   KEY `grade` (`grade`, `displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -607,7 +607,7 @@ CREATE TABLE `brand_goodmessage` (
   `relativeitemids` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`nid`),
   KEY `itemid` (`itemid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -673,7 +673,7 @@ CREATE TABLE `brand_groupbuyitems` (
   KEY `grade_s` (`grade_s`, `grade`, `displayorder`),
   KEY `grade` (`grade`, `displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------
@@ -691,7 +691,7 @@ CREATE TABLE `brand_groupbuymessage` (
   `relativeitemids` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`nid`),
   KEY `itemid` (`itemid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------
@@ -806,7 +806,7 @@ CREATE TABLE `brand_itemattribute` (
   KEY `attr_id_47` (`attr_id_47`),
   KEY `attr_id_48` (`attr_id_48`),
   KEY `attr_id_49` (`attr_id_49`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk ROW_FORMAT=FIXED COMMENT='内容属性关系表';
+) ENGINE=MyISAM ROW_FORMAT=FIXED COMMENT='内容属性关系表';
 
 
 -- --------------------------------------------------------
@@ -822,7 +822,7 @@ CREATE TABLE `brand_itemupdates` (
   `updatestatus` tinyint(1) DEFAULT '1',
   `update` text,
   UNIQUE KEY `itemid` (`itemid`,`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 --
 -- 转存表中的数据 `brand_itemupdates`
@@ -844,7 +844,7 @@ CREATE TABLE `brand_groupbuyjoin` (
   `dateline` int(10) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   UNIQUE KEY `itemid` (`itemid`,`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -866,7 +866,7 @@ CREATE TABLE `brand_managelog` (
   PRIMARY KEY (`mlogid`),
   KEY `dateline` (`dateline`),
   KEY `type` (`type`,`itemid`,`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `brand_managelog`
@@ -932,7 +932,7 @@ CREATE TABLE `brand_modelcolumns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `fieldname` (`mid`,`fieldname`),
   KEY `mid` (`mid`,`displayorder`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=43 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=43 ;
 
 --
 -- 转存表中的数据 `brand_modelcolumns`
@@ -1013,7 +1013,7 @@ CREATE TABLE `brand_models` (
   `fielddefault` char(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`mid`),
   UNIQUE KEY `modelname` (`modelname`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=6 ;
 
 --
 -- 转存表中的数据 `brand_models`
@@ -1046,7 +1046,7 @@ CREATE TABLE `brand_nav` (
   `highlight` char(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`navid`),
   KEY `navindex` (`type`,`shopid`,`available`,`displayorder`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=8 ;
 
 INSERT INTO `brand_nav` (`navid`, `type`, `shopid`, `available`, `displayorder`, `flag`, `name`, `url`, `target`, `highlight`) VALUES
 (1, 'sys', 0, 1, 1, 'index', '首页', 'index.php', 0, ''),
@@ -1097,7 +1097,7 @@ CREATE TABLE `brand_noticeitems` (
   KEY `grade_s` (`grade_s`, `grade`, `displayorder`),
   KEY `grade` (`grade`, `displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 
 --
@@ -1114,7 +1114,7 @@ CREATE TABLE `brand_noticemessage` (
   `jumpurl` varchar(255) NOT NULL,
   PRIMARY KEY (`nid`),
   KEY `itemid` (`itemid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `brand_noticemessage`
@@ -1154,7 +1154,7 @@ CREATE TABLE `brand_photoitems` (
   KEY `bbsaid` (`bbsaid`),
   KEY `grade` (`grade_s`, `grade`, `displayorder`),
   KEY `grade_s` (`grade_s`, `grade`, `displayorder_s`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 
 -- --------------------------------------------------------
@@ -1171,7 +1171,7 @@ CREATE TABLE `brand_relatedinfo` (
   `relatedtype` char(10) NOT NULL,
   `shopid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   KEY `itemid` (`itemid`,`type`, `shopid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1194,7 +1194,7 @@ CREATE TABLE `brand_reportlog` (
   PRIMARY KEY (`rid`),
   KEY `dateline` (`dateline`),
   KEY `type` (`type`,`itemid`,`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1239,7 +1239,7 @@ CREATE TABLE `brand_scorestats` (
   `score7` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `score8` mediumint(8) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `itemid` (`itemid`,`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1252,7 +1252,7 @@ CREATE TABLE `brand_settings` (
   `variable` varchar(32) NOT NULL DEFAULT '',
   `value` text NOT NULL,
   PRIMARY KEY (`variable`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 --
 -- 转存表中的数据 `brand_settings`
@@ -1373,7 +1373,7 @@ CREATE TABLE `brand_shopgroup` (
   `maxnumbrandlinks` mediumint(8) UNSIGNED NULL DEFAULT '0',
   `maxnumgroupbuy` mediumint(8) UNSIGNED NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=2 ;
 
 --
 -- 转存表中的数据 `brand_shopgroup`
@@ -1444,7 +1444,7 @@ CREATE TABLE `brand_shopitems` (
   KEY `letter` (`letter`),
   KEY `grade` (`grade`,`displayorder`),
   KEY `updateverify` (`updateverify`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1473,7 +1473,7 @@ CREATE TABLE `brand_shopmessage` (
   `forum` varchar(150) NOT NULL,
   PRIMARY KEY (`nid`),
   KEY `itemid` (`itemid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1487,7 +1487,7 @@ CREATE TABLE `brand_shopupdate` (
   `updatestatus` tinyint(1) DEFAULT '1',
   `update` text,
   PRIMARY KEY (`shopid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 --
 -- 转存表中的数据 `brand_shopupdate`
@@ -1529,7 +1529,7 @@ CREATE TABLE `brand_spacecomments` (
   PRIMARY KEY (`cid`),
   KEY `itemid` (`itemid`,`dateline`),
   KEY `uid` (`uid`,`dateline`)
-) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1541,7 +1541,7 @@ CREATE TABLE `brand_admincp_group` (
   `cpgroupname` varchar(255) NOT NULL,
   `cpgroupshopcats` text,
   PRIMARY KEY (`cpgroupid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1554,7 +1554,7 @@ CREATE TABLE `brand_admincp_member` (
   `customperm` text NOT NULL,
   PRIMARY KEY (`uid`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1565,4 +1565,4 @@ CREATE TABLE `brand_admincp_perm` (
   `cpgroupid` smallint(6) unsigned NOT NULL,
   `perm` varchar(255) NOT NULL,
   PRIMARY KEY (`cpgroupid`,`perm`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM;
