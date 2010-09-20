@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UCenter 接口開發手冊 - 用戶接口</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="images/style.css" type="text/css" media="all" />
+<meta content="Comsenz Inc." name="Copyright" />
+<script type="text/javascript" src="javascript/common.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="javascript/header.js"></script>
+
+<a name="register"></a>
+<h3>添加事件</h3>
+
+<div class="submsg">
+<h4><i>integer</i> uc_feed_add(<i>string</i> icon , <i>integer</i> uid , <i>string</i> username , <i>string</i> title_template , <i>string</i> title_data
+ , <i>string</i> body_template , <i>string</i> body_data , <i>string</i> body_general , <i>string</i> target_ids , <i>array</i> images)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>string</i> icon</th>
+	<td>圖標類型，如：thread、post、video、goods、reward、debate、blog、album、comment、wall、friend</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>string</i> username</th>
+	<td>用戶名</td>
+	</tr>
+	<tr>
+	<th><i>string</i> title_template</th>
+	<td>標題模板</td>
+	</tr>
+	<tr>
+	<th><i>string</i> title_data</th>
+	<td>標題數據數組</td>
+	</tr>
+	<tr>
+	<th><i>string</i> body_template</th>
+	<td>內容模板</td>
+	</tr>
+	<tr>
+	<th><i>string</i> body_data</th>
+	<td>模板數據</td>
+	</tr>
+	<tr>
+	<th><i>string</i> body_general</th>
+	<td>相同事件合併時用到的數據：特定的數組，只有兩項：name、link，保留</td>
+	</tr>
+	<tr>
+	<th><i>string</i> target_ids</th>
+	<td>保留</td>
+	</tr>
+	<tr>
+	<th><i>array</i> images</th>
+	<td>相關圖片的 URL 和鏈接地址，格式請參考實例</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i></th>
+	<td>事件的 ID</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+本接口函數用於向 UCenter Home 添加事件。如果正確則返回事件的 ID。
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's1')">添加事件示例 (PHP)</a></h6>
+<div class="code" ID="s1" style="display: none"><pre>
+$feed = array();
+$feed['icon'] = 'thread';
+$feed['title_template'] = '&lt;b&gt;{username} 在論壇發起了新話題&lt;/b&gt;';
+$feed['title_data'] = array('username'=>$discuz_user);
+$feed['body_template'] = '&lt;b&gt;{subject}&lt;/b&gt;&lt;br&gt;{message}';
+$feed['body_data'] = array(
+	'subject' => "&lt;a href=\&quot;viewthread.php?tid=$tid\&quot;&gt;$subject&lt;/a&gt;",
+	'message' => cutstr(strip_tags(preg_replace("/\[.+?\]/is", '', $message)), 150)
+);
+$feed['images'][] = array(
+	'url'=>'http://www.discuz.net/logo.gif',
+	'link'=> 'http://www.discuz.net/'
+);
+$feed['images'][] = array(
+	'url'=>'http://www.comenz.com/logo.gif',
+	'link'=> 'http://www.comenz.com/'
+);
+
+include_once(DISCUZ_ROOT.'./uc_client/client.php');
+uc_feed_add($feed['icon'], $discuz_uid, $discuz_user, $feed['title_template'], $feed['title_data'], $feed['body_template'], $feed['body_data'], '', '', $feed['images']);
+</pre></div>
+</div>
+
+
+<a name="register"></a>
+<h3>獲取事件</h3>
+
+<div class="submsg">
+<h4><i>array</i> uc_feed_get(<i>integer</i> limit)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> limit</th>
+	<td>取事件的條數，默認為 100 條</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>array</i></th>
+	<td>事件列表數據，數組結構請參看<a href="feed.htm#table1">附表</a>
+	</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+本接口函數用於提取事件。如果正確則返回事件列表數組。
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's2')">獲取事件示例 (PHP)</a></h6>
+<div class="code" ID="s2" style="display: none"><pre>
+include_once(DISCUZ_ROOT.'./uc_client/client.php');
+$arr = uc_feed_get(100);
+
+/**
+返回的格式	如下:
+Array (
+[1] => Array (
+	[feedid] => 2
+	[appid] => 0
+	[icon] => thread
+	[uid] => 1
+	[username] => admin
+	[dateline] => 1203661177
+	[hash_template] => c95dbd9aa75862c841b627e1e9598fd5
+	[hash_data] => 7f30f7b371cccdcd9901527ac32368ee
+	[title_template] => &lt;b&gt;{username} 在論壇發起了新話題&lt;/b&gt;
+	[title_data] => usernameadmin
+	[body_template] => &lt;b&gt;{subject}&lt;/b&gt;&lt;br /&gt;{message}
+	[body_data] => subject&lt;a href="viewthread.php?tid=12"&gt;主題&lt;/a&gt;內容
+	[body_general] =>
+	[image_1] =>
+	[image_1_link] =>
+	[image_2] =>
+	[image_2_link] =>
+	[image_3] =>
+	[image_3_link] =>
+	[image_4] =>
+	[image_4_link] =>
+	[target_ids] =>
+	)
+);
+*/
+</pre>
+</div>
+</div>
+
+<div class="line"></div>
+
+<a name="table1"></a>
+<h3>附表：事件列表數組結構</h3>
+
+<div class="submsg">
+
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>key</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> ['feedid']</th>
+	<td>事件的 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> ['appid']</th>
+	<td>所在應用的 ID</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['icon']</th>
+	<td>事件的圖標 thread、poll、reward 等</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> ['uid']</th>
+	<td>事件的發起人的用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['username']</th>
+	<td>發起人的用戶名</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> ['dateline']</th>
+	<td>時間，UNIX 時間戳格式</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['hash_template']</th>
+	<td>模板的 Hash 值，用來相同類型事件的合併，32位字符串，如:c95dbd9aa75862c841b627e1e9598fd5</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['hash_data']</th>
+	<td>數據的 Hash 值，用來相同類型事件的合併，32位字符串，如:c95dbd9aa75862c841b627e1e9598fd5</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['title_template']</th>
+	<td>標題模板</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['title_data']</th>
+	<td>標題數據</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['body_template']</th>
+	<td>內容模板</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['body_data']</th>
+	<td>事件內容 HTML 格式，用 {xxx} 格式字符表示變量，如 {username}</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['body_general']</th>
+	<td>保留</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_1']</th>
+	<td>第一張圖片的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_1_link']</th>
+	<td>第一張圖片鏈接的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_2']</th>
+	<td>第二張圖片的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_2_link</th>
+	<td>第二張圖片鏈接的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_3']</th>
+	<td>第三張圖片的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_3_link']</th>
+	<td>第三張圖片鏈接的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_4']</th>
+	<td>第四張圖片的 URL</td>
+	</tr>
+	<tr>
+	<th><i>string</i> ['image_4_link']</th>
+	<td>第四張圖片鏈接的 URL</td>
+	</tr>
+</tbody>
+</table>
+</div>
+
+<h3>接口流程</h3>
+<div class="submsg">
+	
+<div class="pic">
+<h5>提交、獲取事件</h5>
+<table>
+<tr>
+	<th class="box">接口函數 uc_feed_add() 提交事件</th>
+	<td class="rr"></td>
+	<th class="box">通知到 UCenter</th>
+	<td class="rr"></td>
+	<th class="box">UCenter Home 使用接口函數 uc_feed_get() 獲取提交的事件</th>
+</tr>
+</table>
+</div>
+
+</div>
+
+<script type="text/javascript" src="javascript/footer.js"></script>
+</body>
+</html>

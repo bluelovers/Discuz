@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UCenter 接口開發手冊 - 標籤接口</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="images/style.css" type="text/css" media="all" />
+<meta content="Comsenz Inc." name="Copyright" />
+<script type="text/javascript" src="javascript/common.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="javascript/header.js"></script>
+
+<h3>獲取應用列表</h3>
+
+<div class="submsg">
+<h4><i>array</i> uc_app_ls()</h4>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>array</i></th>
+	<td>應用列表數據，其中單條應用數組結構請參看<a href="app.htm#table1">附表</a></td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+本接口獲取 UCenter 中所有應用的列表數據。
+
+</div>
+
+<div class="line"></div>
+
+<a name="table1"></a>
+<h3>附表：單條應用數組結構</h3>
+
+<div class="submsg">
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+	<tr><th style="width:150px"><i>string</i> ['appid']</th><td>應用 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['type']</th><td>應用類型</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['name']</th><td>應用名稱</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['url']</th><td>接口 URL</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['tagtemplates']</th><td>標籤單條顯示模板</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['viewprourl']</th><td>應用單看個人資料 URL</td></tr>
+</tbody>
+</table>
+</div>
+
+<script type="text/javascript" src="javascript/footer.js"></script>
+</body>
+</html>

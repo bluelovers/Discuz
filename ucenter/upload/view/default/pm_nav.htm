@@ -1,0 +1,47 @@
+<script type="text/javascript">
+function checkall(form, prefix, checkall) {
+	var checkall = checkall ? checkall : 'chkall';
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(e.name && e.name != checkall && (!prefix || (prefix && e.name.match(prefix)))) {
+			e.checked = form.elements[checkall].checked;
+		}
+	}
+}
+
+function toggle_collapse(objname, ctrlobj) {
+	var obj = document.getElementById(objname);
+	if(obj.style.display == '') {
+		obj.style.display = 'none';
+		ctrlobj.innerHTML = '<img src="images/default/spread.gif" />';
+	} else {
+		obj.style.display = '';
+		ctrlobj.innerHTML = '<img src="images/default/shrink.gif" />';
+	}
+}
+
+function ctlent(event) {
+	if((event.ctrlKey && event.keyCode == 13) || (event.altKey && event.keyCode == 83)) {
+		document.getElementById('postpmform').saveoutbox.value = 0;
+		document.getElementById('postpmform').submit();
+	}
+}
+</script>
+
+<div class="ucnav">
+<a <!--{if $folder == 'inbox' && !$filter}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox">{lang pm_inbox}<!--{if $pmnum[1]}--><strong>[{$pmnum[1]}]</strong><!--{/if}--></a>
+<!--{if $pmnum[4] || $filter == 'announcepm'}-->
+<a <!--{if $filter == 'announcepm'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox&filter=announcepm">{lang pm_annbox}[{$pmnum[4]}]</a>
+<!--{/if}-->
+<a <!--{if $folder == 'savebox' || $folder == 'send' && $a == 'savebox'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=savebox">{lang pm_savebox}</a>
+<a <!--{if $folder == 'blackls'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=blackls">{lang pm_ignorelist}</a>
+<a <!--{if $type == '' && $folder == 'send' && $a != 'savebox'}-->class="ucontype sendpmontype" <!--{else}--> class="sendpm" <!--{/if}-->href="index.php?m=pm_client&a=send">{lang pm_send}</a>
+
+<!--{if $unreadpmnum || $pmnum[3] || $folder == 'newbox' || $filter == 'systempm'}-->
+	<span class="navinfo">
+		<img src="images/default/newpm.gif" />
+		<!--{if $unreadpmnum || $folder == 'newbox'}--><strong>$unreadpmnum</strong> <a <!--{if $folder == 'newbox'}-->class="ontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=newbox">{lang pm_unread}</a><!--{/if}-->
+		<!--{if $pmnum[3] || $filter == 'systempm'}--><strong>$pmnum[3]</strong> <a <!--{if $filter == 'systempm'}-->class="ontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox&filter=systempm">{lang pm_sysbox}</a><!--{/if}-->
+	</span>
+<!--{/if}-->
+</div>

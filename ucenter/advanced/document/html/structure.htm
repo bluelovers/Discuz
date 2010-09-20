@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UCenter 接口開發手冊 - 瞭解 UCenter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="images/style.css" type="text/css" media="all" />
+<meta content="Comsenz Inc." name="Copyright" />
+<script type="text/javascript" src="javascript/common.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="javascript/header.js"></script>
+
+<div class="mainmsg">以下關於文件的闡述以及代碼的樣例，均以 PHP 程序為例。<br /><br /></div>
+
+<h3>UCenter 的目錄結構</h3>
+
+<div class="mainmsg">
+UCenter 分為服務端和客戶端 2 個部分。服務端目錄為「upload/」，客戶端目錄為「client/」。無論你的網站有多少個應用程序，服務端在一個網站中只需安裝一次。而客戶端則必須存在於每一個應用的根目錄中。具體目錄結構請見下表：
+</div>
+<h4>服務端：upload/</h4>
+<div class="mainmsg">
+UCenter 安裝時上傳此文件夾中的文件到您的服務器，在瀏覽器輸入「http://網站地址/install/」安裝 UCenter。安裝後刪除 install/ 目錄。
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<tbody>
+	<tr>
+		<th>control/</th>
+		<td>應用程序 control 部分目錄</td>
+	</tr>
+	<tr>
+		<th>data/</th>
+		<td>緩存數據目錄，此目錄及其子目錄需要有可寫權限</td>
+	</tr>
+	<tr>
+		<th>images/</th>
+		<td>圖片目錄</td>
+	</tr>
+	<tr>
+		<th>install/</th>
+		<td>安裝目錄，安裝後必須刪除</td>
+	</tr>
+	<tr>
+		<th>js/</th>
+		<td>javascript 腳本目錄</td>
+	</tr>
+	<tr>
+		<th>lib/</th>
+		<td>應用程序函數庫目錄</td>
+	</tr>
+	<tr>
+		<th>module/</th>
+		<td>應用程序 module 部分目錄</td>
+	</tr>
+	<tr>
+		<th>view/</th>
+		<td>模板目錄</td>
+	</tr>
+	<tr>
+		<th>index.php</th>
+		<td>服務端接口函數庫接口文件</td>
+	</tr>
+	<tr>
+		<th>admin.php</th>
+		<td>用戶管理中心主文件</td>
+	</tr>
+	<tr>
+		<th>avatar.php</th>
+		<td>頭像顯示</td>
+	</tr>
+</tbody>
+</table>
+</div>
+
+<h4>客戶端：client/</h4>
+<div class="mainmsg">
+UCenter 應用程序必備的目錄，如果您的應用程序基於 UCenter，那麼您的應用程序目錄中必須包含此目錄，目錄名可自定義（所有 Comsenz 的產品對應的目錄名為「uc_client/」）。
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<tbody>
+	<tr>
+		<th>control/</th>
+		<td>應用程序 control 部分目錄</td>
+	</tr>
+	<tr>
+		<th>data/</th>
+		<td>緩存數據目錄，此目錄及其子目錄需要有可寫權限</td>
+	</tr>
+	<tr>
+		<th>lib/</th>
+		<td>應用程序函數庫目錄</td>
+	</tr>
+	<tr>
+		<th>module/</th>
+		<td>應用程序 module 部分目錄</td>
+	</tr>
+	<tr>
+		<th>client.php</th>
+		<td>接口函數庫</td>
+	</tr>
+</tbody>
+</table>
+</div>
+
+<h3>UCenter 的接口函數</h3>
+
+<div class="mainmsg">
+UCenter 分為 MySQL 和遠程兩種接口連接方式，MySQL 方式是直接連接數據庫因此速度較快，但當 UCenter 的服務端和客戶端不在同一主機中且沒有遠程 MySQL 帳號的情況下，則只能使用遠程連接方式。使用 UCenter 接口函數前請根據應用程序的需求定義以下相關常量：
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<tbody>
+<tr>
+<th>UC_CONNECT</th>
+<td>
+連接 UCenter 的方式<br />
+<em>mysql:</em>MySQL 方式<br />
+<em>空:</em>遠程方式<br />
+</td>
+</tr>
+<tr>
+<th>UC_DBHOST</th>
+<td>UCenter 數據庫主機</td>
+</tr>
+<tr>
+<th>UC_DBUSER</th>
+<td>UCenter 數據庫用戶名</td>
+</tr>
+<tr>
+<th>UC_DBPW</th>
+<td>UCenter 數據庫密碼</td>
+</tr>
+<tr>
+<th>UC_DBNAME</th>
+<td>UCenter 數據庫名稱</td>
+</tr>
+<tr>
+<th>UC_DBCHARSET</th>
+<td>UCenter 數據庫字符集</td>
+</tr>
+<tr>
+<th>UC_DBTABLEPRE</th>
+<td>UCenter 數據庫表前綴</td>
+</tr>
+<tr>
+<th>UC_DBCONNECT</th>
+<td>UCenter 數據庫持久連接 0=關閉, 1=打開</td>
+</tr>
+<tr>
+<th>UC_KEY</th>
+<td>與 UCenter 的通信密鑰, 要與 UCenter 保持一致</td>
+</tr>
+<tr>
+<th>UC_API</th>
+<td>UCenter 服務端的 URL 地址</td>
+</tr>
+<tr>
+<th>UC_IP</th>
+<td>UCenter 的 IP, 當 UC_CONNECT 為非 mysql 方式時, 並且當前應用服務器解析域名有問題時, 請設置此值</td>
+</tr>
+<tr>
+<th>UC_CHARSET</th>
+<td>UCenter 的字符集</td>
+</tr>
+<tr>
+<th>UC_APPID</th>
+<td>當前應用的 ID</td>
+</tr>
+</tbody>
+</table>
+使用 UCenter 接口函數庫必須包含 uc_client/client.php 接口函數庫文件，例如下面檢查新短消息的代碼：
+<div class="code"><pre>
+include './uc_client/client.php';
+$newpm = uc_pm_checknew($Example_uid);
+</pre></div>
+詳細的接口函數說明，請看「接口函數」章節。
+</div>
+
+<script type="text/javascript" src="javascript/footer.js"></script>
+</body>
+</html>

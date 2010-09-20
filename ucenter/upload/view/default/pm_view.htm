@@ -1,0 +1,84 @@
+{template header_client}
+{template pm_nav}
+
+<div class="ucinfo">
+	<h1>
+	<!--{if $filter == 'announcepm'}-->
+		<img src="avatar.php?uid=0&size=small" /> {lang pm_annbox}
+	<!--{elseif !$msgto}-->
+		<img src="avatar.php?uid=0&size=small" /> {lang pm_system}
+	<!--{else}-->
+		<img src="avatar.php?uid=$touid&size=small" /> $msgto
+	<!--{/if}-->
+	</h1>
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="newpm">
+	<!--{loop $pms $pm}-->
+		<tbody>
+			<tr class="{if $pm[msgfromid] != $user[uid]}ontouser {/if}">
+				<td class="sel"><!--{if $pm[new]}--><em class="new"></em><!--{/if}--></td>
+				<td class="ava">
+				<!--{if $pm[msgfromid] != $user[uid] && $filter != 'announcepm' && $pm[msgfromid] > 0}--><img src="avatar.php?uid=$pm[msgfromid]&size=small" /><!--{/if}-->
+				</td>
+				<td class="title">
+				<p>$pm[dateline]</p>
+				$pm[message]</td>
+				<td class="ava">
+					<!--{if $pm[msgfromid] == $user[uid]}-->
+						<img src="avatar.php?uid=$pm[msgfromid]&size=small" />
+					<!--{else}-->
+						<a href="index.php?m=pm_client&a=send&pmid=$pm[pmid]&do=forward&$extra">{lang pm_transmit}</a>
+					<!--{/if}-->
+				</td>
+			</tr>
+		</tbody>
+	<!--{/loop}-->
+	</table>
+	<div style="float:right">
+	<!--{if $from == 'newbox'}-->
+		<button onclick="location.href='index.php?m=pm_client&a=ls&folder=newbox&$extraret'">{lang return}</button>
+	<!--{else}-->
+		<button onclick="location.href='index.php?m=pm_client&a=ls&folder=$folder&filter=$filter&$extraret'">{lang return}</button>
+	<!--{/if}-->
+	</div>
+	{lang pm_history}:
+	<a href="index.php?m=pm_client&a=view&touid=$touid&folder=$folder&filter=$filter&$extra"{if $daterange == 1} class="bold"{/if}>{lang pm_daterange_1}</a>&nbsp;
+	<a href="index.php?m=pm_client&a=view&touid=$touid&folder=$folder&filter=$filter&daterange=2&$extra"{if $daterange == 2} class="bold"{/if}>{lang pm_daterange_2}</a>&nbsp;
+	<a href="index.php?m=pm_client&a=view&touid=$touid&folder=$folder&filter=$filter&daterange=3&$extra"{if $daterange == 3} class="bold"{/if}>{lang pm_daterange_3}</a>&nbsp;
+	<a href="index.php?m=pm_client&a=view&touid=$touid&folder=$folder&filter=$filter&daterange=4&$extra"{if $daterange == 4} class="bold"{/if}>{lang pm_daterange_4}</a>&nbsp;
+	<a href="index.php?m=pm_client&a=view&touid=$touid&folder=$folder&filter=$filter&daterange=5&$extra"{if $daterange == 5} class="bold"{/if}>{lang pm_daterange_5}</a>&nbsp;
+	<!--{if $pms[0][msgfromid] && $pms[0][msgtoid]}-->
+		<button onclick="if(confirm('{lang pm_confirm_delete}')) location.href='index.php?m=pm_client&a=delete&delete=$touid&folder=$folder&$extra'">{lang delete}</button>
+	<!--{/if}-->
+	<br style="clear: both" />
+	<!--{if $daterange == 1 && $msgto && $filter != 'announcepm'}-->
+		<form method="post" id="postpmform" name="postpmform" action="index.php?m=pm_client&a=send&touid=$touid&$extra">
+		<!--{if $sendpmseccode}--><input type="hidden" name="seccodehidden" value="$seccodeinit" /><!--{/if}-->
+		<input type="hidden" name="formhash" value="{FORMHASH}">
+		<input type="hidden" name="saveoutbox" value="0" />
+		<input type="hidden" name="folder" value="<!--{if $from}-->$from<!--{else}-->$folder<!--{/if}-->" />
+		<input type="hidden" name="related" value="$pmid" />
+		<input type="hidden" name="msgto" value="$msgto" />
+		{template pm_editorbar}
+		<textarea class="listarea" id="pm_textarea" rows="6" cols="10" name="message" onKeyDown="ctlent(event)"></textarea>
+		<!--{if $sendpmseccode}-->
+			<p><label><input type="text" name="seccode" value="" size="5" /> <img width="70" height="21" src="admin.php?m=seccode&seccodeauth=$seccodeinit&{eval echo rand();}" /></label></p>
+		<!--{/if}-->
+		<p class="pages_btns"><button name="pmsubmit" class="pmsubmit" type="submit">{lang pm_sendpm}</button></p>
+		</form>
+	<!--{/if}-->
+</div>
+
+<!--{if $scroll == 'bottom'}-->
+	<script type="text/javascript">
+	window.onload = function() {
+		if(!document.postpmform) {
+			return;
+		}
+		window.scroll(0, document.body.scrollHeight);
+		document.postpmform.message.focus();
+	}
+	</script>
+<!--{/if}-->
+
+{template footer_client}

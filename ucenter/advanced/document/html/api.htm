@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>UCenter 接口開發手冊 - API 接口</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="images/style.css" type="text/css" media="all" />
+<meta content="Comsenz Inc." name="Copyright" />
+<script type="text/javascript" src="javascript/common.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="javascript/header.js"></script>
+
+<div class="mainmsg">
+以下關於文件的闡述以及代碼的樣例，均以 PHP 程序為例。<br /><br />
+UCenter 的 API 接口文件必須存放於應用程序根目錄的「api/」目錄中，且文件名可以自定義，默認為 uc.php，即「api/uc.php」。文件結構可分為 4 部分，包含 12 個接口項目。第 1 部分為常量定義、第 2 部分為通知方式判斷以及初始化輸入參數、第 3 部分為接口類代碼段、第 4 部分為函數定義。
+</div>
+
+<h3>1、常量定義</h3>
+
+<div class="submsg">
+
+<div class="code"><pre>
+
+define('UC_CLIENT_VERSION', '1.5.0');	//note UCenter 版本標識
+define('UC_CLIENT_RELEASE', '20081031');
+
+define('API_DELETEUSER', 1);		//note 用戶刪除 API 接口開關
+define('API_RENAMEUSER', 1);		//note 用戶改名 API 接口開關
+define('API_GETTAG', 1);		//note 獲取標籤 API 接口開關
+define('API_SYNLOGIN', 1);		//note 同步登錄 API 接口開關
+define('API_SYNLOGOUT', 1);		//note 同步登出 API 接口開關
+define('API_UPDATEPW', 1);		//note 更改用戶密碼 開關
+define('API_UPDATEBADWORDS', 1);	//note 更新關鍵字列表 開關
+define('API_UPDATEHOSTS', 1);		//note 更新域名解析緩存 開關
+define('API_UPDATEAPPS', 1);		//note 更新應用列表 開關
+define('API_UPDATECLIENT', 1);		//note 更新客戶端緩存 開關
+define('API_UPDATECREDIT', 1);		//note 更新用戶積分 開關
+define('API_GETCREDITSETTINGS', 1);	//note 向 UCenter 提供積分設置 開關
+define('API_GETCREDIT', 1);		//note 獲取用戶的某項積分 開關
+define('API_UPDATECREDITSETTINGS', 1);	//note 更新應用積分設置 開關
+
+define('API_RETURN_SUCCEED', '1');
+define('API_RETURN_FAILED', '-1');
+define('API_RETURN_FORBIDDEN', '-2');
+
+</pre></div>
+
+常量定義部分定義了接口所用到的 14 個接口項目的開關設置，「1」為開啟「0」為關閉。如果開啟，則代碼段運行後返回 API_RETURN_SUCCEED，否則返回 API_RETURN_FORBIDDEN。接口運行失敗則返回 API_RETURN_FAILED。<br />
+</div>
+
+<h3>2、通知方式判斷以及初始化輸入參數</h3>
+
+<div class="submsg">
+
+<div class="code"><pre>
+
+if(!defined('IN_UC')) {
+
+	error_reporting(0);
+	set_magic_quotes_runtime(0);
+
+	define('DISCUZ_ROOT', substr(dirname(__FILE__), 0, -3));
+	defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
+	require_once DISCUZ_ROOT.'./config.inc.php';
+
+	$_DCACHE = $get = $post = array();
+
+	$code = @$_GET['code'];
+	parse_str(_authcode($code, 'DECODE', UC_KEY), $get);
+	if(MAGIC_QUOTES_GPC) {
+		$get = _stripslashes($get);
+	}
+
+	$timestamp = time();
+	if($timestamp - $get['time'] > 3600) {
+		exit('Authracation has expiried');
+	}
+	if(empty($get)) {
+		exit('Invalid Request');
+	}
+	$action = $get['action'];
+
+	require_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
+	$post = xml_unserialize(file_get_contents('php://input'));
+
+	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcreditsettings', 'updatecreditsettings'))) {
+		require_once DISCUZ_ROOT.'./include/db_'.$database.'.class.php';
+		$GLOBALS['db'] = new dbstuff;
+		$GLOBALS['db']->connect($dbhost, $dbuser, $dbpw, $dbname, $pconnect, true, $dbcharset);
+		$GLOBALS['tablepre'] = $tablepre;
+		unset($dbhost, $dbuser, $dbpw, $dbname, $pconnect);
+		$uc_note = new uc_note();
+		exit($uc_note->$get['action']($get, $post));
+	} else {
+		exit(API_RETURN_FAILED);
+	}
+
+} else {
+
+	define('DISCUZ_ROOT', $app['extra']['apppath']);
+	require_once DISCUZ_ROOT.'./config.inc.php';
+	require_once DISCUZ_ROOT.'./include/db_'.$database.'.class.php';
+	$GLOBALS['db'] = new dbstuff;
+	$GLOBALS['db']->connect($dbhost, $dbuser, $dbpw, $dbname, $pconnect, true, $dbcharset);
+	$GLOBALS['tablepre'] = $tablepre;
+	unset($dbhost, $dbuser, $dbpw, $dbname, $pconnect);
+}
+
+</pre></div>
+通過常量 IN_UC 來判斷接口文件是通過遠程 HTTP 方式訪問還是直接包含方式調用
+</div>
+
+<h3>2、接口代碼段</h3>
+
+<div class="submsg">
+接口類名稱為 uc_note ，接口名稱作為此類的一個方法，uc_note 代碼結構大體如下：
+<div class="code"><pre>
+class uc_note {
+
+	var $dbconfig = '';
+	//var $db = '';
+	var $appdir = '';
+
+	function _serialize($arr, $htmlon = 0) {
+		if(!function_exists('xml_serialize')) {
+			include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
+		}
+		return xml_serialize($arr, $htmlon);
+	}
+
+	function uc_note() {
+		$this->appdir = substr(dirname(__FILE__), 0, -3);
+		$this->dbconfig = $this->appdir.'./config.inc.php';
+	}
+
+	function test($get, $post) {
+		return API_RETURN_SUCCEED;
+	}
+
+	function deleteuser($get, $post) {
+		/*代碼省略*/
+		return API_RETURN_SUCCEED;
+	}
+	
+	/* 更多接口項目 */
+
+}
+</pre></div>
+具體可以參考Discuz7.0.0代碼中的/api/uc.php
+</div>
+
+<h4>test</h4>
+<div class="submsg">
+	此接口供僅測試連接。當 UCenter 發起 test 的接口請求時，如果成功獲取到接口返回的 API_RETURN_SUCCEED 值，表示 UCenter 和應用通訊正常。
+</div>
+
+<h4>deleteuser</h4>
+<div class="submsg">
+當 UCenter 刪除一個用戶時，會發起 deleteuser 的接口請求，通知所有應用程序刪除相應的用戶。<br />
+輸入的參數放在 $get['ids'] 中，值為用逗號分隔的用戶 ID。如果刪除成功則輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's1')">deleteuser 接口示例 (PHP)</a></h6>
+<div class="code" id="s1" style="display: none"><pre>
+$query = $db->query("DELETE FROM {$tablepre}members WHERE uid IN ($get[ids])");
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>renameuser</h4>
+<div class="submsg">
+當 UCenter 更改一個用戶的用戶名時，會發起 renameuser 的接口請求，通知所有應用程序改名。<br />
+輸入的參數 $get['uid'] 表示用戶 ID，$get['oldusername'] 表示舊用戶名，$get['newusername'] 表示新用戶名。如果修改成功則輸出 API_RETURN_SUCCEED。<br />
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's13')">renameuser 接口示例 (PHP)</a></h6>
+<div class="code" id="s13" style="display: none"><pre>
+$uid = $get['uid'];
+$usernamenew = $get['newusername'];
+
+$db->query("UPDATE {$tablepre}members SET username='$usernamenew' WHERE uid='$uid'");
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>updatepw</h4>
+<div class="submsg">
+當用戶更改用戶密碼時，此接口負責接受 UCenter 發來的新密碼。<br />
+輸入的參數 $get['username'] 表示用戶名，$get['password'] 表示新密碼。如果修改成功則輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's5')">updatepw 接口示例 (PHP)</a></h6>
+<div class="code" id="s5" style="display: none"><pre>
+$username = $get['username'];
+$password = md5($get['password']);
+$db->query("UPDATE members SET password='$password' WHERE username='$username'");
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>gettag</h4>
+<div class="submsg">
+如果應用程序存在標籤功能，可以通過此接口把應用程序的標籤數據傳遞給 UCenter。<br />
+輸入的參數放在 $get['id'] 中，值為標籤名稱。輸出的數組需經過 uc_serialize 處理。<br />
+
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+	<tr><th style="width:150px"><i>integer</i> [0]</th><td>標籤名稱</td></tr>
+	<tr><th style="width:150px"><i>array</i> [1]</th><td>
+		標籤數據
+		<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+			<tbody>
+				<tr><th style="width:150px"><i>mixed</i> ['<u>xxx</u>']</th><td>自定義</th></tr>
+			</tbody>
+		</table>
+		自定義多個數組項，索引名任意，一同返回給 UCenter。為了保證應用間數據的共享，您需要在「應用管理管理」的「標籤單條顯示模板」和「標籤模板標記說明」設置模板和說明。模板中「{xxx}」表示標籤數據的索引，代表相應的數據。如擴展數據模板中的「{image}」將顯示「['image']」數組項的內容。
+	</td></tr>
+</table>
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's2')">gettag 接口示例 (PHP)</a></h6>
+<div class="code" id="s2" style="display: none"><pre>
+$query = $db->query("SELECT * FROM threadtags WHERE tagname='$get[id]' ORDER BY dateline DESC LIMIT 10");
+$threadlist = array();
+while($data = $db->fetch_array($query)) {
+	$threadlist[] = array(
+		'name' => $data['subject'],
+		'uid' => $data['authorid'],
+		'username' => $data['author'],
+		'dateline' => $data['dateline'],
+		'url' => 'http://www.yourwebsite.com/thread.php?id='.$data['id'],
+		'image' => ''http://www.yourwebsite.com/threadimage.php?id='.$data['id'],
+		);
+	}
+}
+
+$return = array($name, $threadlist);
+echo uc_serialize($return, 1);
+</pre></div>
+</div>
+
+<h4>synlogin</h4>
+<div class="submsg">
+如果應用程序需要和其他應用程序進行同步登錄，此部分代碼負責標記指定用戶的登錄狀態。<br />
+輸入的參數放在 $get['uid'] 中，值為用戶 ID。此接口為通知接口，無輸出內容。同步登錄需使用 <a href="http://www.w3.org/P3P/" target="_blank">P3P 標準</a>。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's3')">synlogin 接口示例 (PHP)</a></h6>
+<div class="code" id="s3" style="display: none"><pre>
+$query = $db->query("SELECT uid, username FROM members WHERE uid='$get[uid]'");
+if($member = $db->fetch_array($query)) {
+	header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
+	dsetcookie('Example_auth', authcode($member['uid']."\t".$member['username'], 'ENCODE'), 86400 * 365);
+}
+</pre></div>
+</div>
+
+<h4>synlogout</h4>
+<div class="submsg">
+如果應用程序需要和其他應用程序進行同步退出登錄，此部分代碼負責撤銷用戶的登錄的狀態。<br />
+此接口為通知接口，無輸入參數和輸出內容。同步退出需使用 <a href="http://www.w3.org/P3P/" target="_blank">P3P 標準</a>。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's4')">synlogout 接口示例 (PHP)</a></h6>
+<div class="code" id="s4" style="display: none"><pre>
+header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
+dsetcookie('Example_auth', '', -86400 * 365);
+</pre></div>
+</div>
+
+<h4>updatebadwords</h4>
+<div class="submsg">
+當 UCenter 的詞語過濾設置變更時，此接口負責通知所有應用程序更新後的詞語過濾設置內容。<br />
+設置內容用 POST 方式提交到接口。接口運行完畢輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's6')">updatebadwords 接口示例 (PHP)</a></h6>
+<div class="code" id="s6" style="display: none"><pre>
+$post = uc_unserialize(file_get_contents('php://input'));
+$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/badwords.php';
+$fp = fopen($cachefile, 'w');
+$s = "&lt;?php\r\n";
+$s .= '$_CACHE[\'badwords\'] = '.var_export($post, TRUE).";\r\n";
+fwrite($fp, $s);
+fclose($fp);
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>updatehosts</h4>
+<div class="submsg">
+當 UCenter 的域名解析設置變更時，此接口負責通知所有應用程序更新後的域名解析設置內容。<br />
+設置內容用 POST 方式提交到接口。接口運行完畢輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's7')">updatehosts 接口示例 (PHP)</a></h6>
+<div class="code" id="s7" style="display: none"><pre>
+$post = uc_unserialize(file_get_contents('php://input'));
+$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/hosts.php';
+$fp = fopen($cachefile, 'w');
+$s = "&lt;?php\r\n";
+$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
+fwrite($fp, $s);
+fclose($fp);
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>updateapps</h4>
+<div class="submsg">
+當 UCenter 的應用程序列表變更時，此接口負責通知所有應用程序更新後的應用程序列表。<br />
+設置內容用 POST 方式提交到接口。接口運行完畢輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's8')">updateapps 接口示例 (PHP)</a></h6>
+<div class="code" id="s8" style="display: none"><pre>
+$post = uc_unserialize(file_get_contents('php://input'));
+$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/apps.php';
+$fp = fopen($cachefile, 'w');
+$s = "&lt;?php\r\n";
+$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
+fwrite($fp, $s);
+fclose($fp);
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>updateclient</h4>
+<div class="submsg">
+當 UCenter 的基本設置信息變更時，此接口負責通知所有應用程序更新後的基本設置內容。<br />
+設置內容用 POST 方式提交到接口。接口運行完畢輸出 API_RETURN_SUCCEED。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's9')">updateclient 接口示例 (PHP)</a></h6>
+<div class="code" id="s9" style="display: none"><pre>
+$post = uc_unserialize(file_get_contents('php://input'));
+$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/setting.php';
+$fp = fopen($cachefile, 'w');
+$s = "&lt;?php\r\n";
+$s .= '$_CACHE[\'setting\'] = '.var_export($post, TRUE).";\r\n";
+fwrite($fp, $s);
+fclose($fp);
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>updatecredit</h4>
+<div class="submsg">
+當某應用執行了積分兌換請求的接口函數 uc_credit_exchange_request() 後，此接口負責通知被兌換的目的應用程序所需修改的用戶積分值。<br />
+輸入的參數 $get['credit'] 表示積分編號，$get['amount'] 表示積分的增減值，$get['uid'] 表示用戶 ID。<br />
+<h6><a href="###" class="spread" onclick="collapse(this, 's10')">updatecredit 接口示例 (PHP)</a></h6>
+<div class="code" id="s10" style="display: none"><pre>
+$credit = intval($get['credit']);
+$amount = intval($get['amount']);
+$uid = intval($get['uid']);
+
+$db->query("UPDATE members SET extcredits$credit=extcredits$credit+'$amount' WHERE uid='$uid'");
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>getcreditsettings</h4>
+<div class="submsg">
+此接口負責把應用程序的積分設置傳遞給 UCenter，以供 UCenter 在積分兌換設置中使用。<br />
+此接口無輸入參數。輸出的數組需經過 uc_serialize 處理。<br />
+輸出的數組單條結構：
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+	<tr>
+		<th colspan="2">1 維 KEY</th>
+		<th colspan="2">2 維 KEY</th>
+	</tr>
+	<tr>
+		<th style="width:100px" rowspan="2"><i>array</i> [n]</th>
+		<td style="width:100px" rowspan="2">積分編號</td>
+		<th style="width:100px"><i>string</i> [0]</th><td>積分名稱</th>
+	</tr>
+	<tr>
+		<th style="width:100px"><i>string</i> [1]</th><td>積分單位</th>
+	</tr>
+	</tbody>
+</table>
+如：
+<div class="blockcode">
+	array(<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1' => array('威望', ''),<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'2' => array('金錢', '枚'),<br />
+	)<br />
+</div>
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's11')">getcreditsettings 接口示例 (PHP)</a></h6>
+<div class="code" id="s11" style="display: none"><pre>
+$credits = array();
+foreach($_DCACHE['settings']['extcredits'] as $id => $extcredits) {
+	$credits[$id] = array($extcredits['title'], $extcredits['unit']);
+}
+echo uc_serialize($credits);
+</pre></div>
+</div>
+
+<h4>updatecreditsettings</h4>
+<div class="submsg">
+此接口負責接收 UCenter 積分兌換設置的參數。<br />
+輸入的參數放在 $get['credit'] 中，值為設置的參數數組。接口運行完畢輸出 API_RETURN_SUCCEED。<br />
+輸入的數組單條結構：
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+	<tr>
+		<th colspan="2">1 維 KEY</th>
+		<th colspan="2">2 維 KEY</th>
+	</tr>
+	<tr>
+		<th style="width:100px" rowspan="6"><i>array</i> [appid]</th>
+		<td style="width:150px" rowspan="6">應用程序 ID</td>
+		<th style="width:150px"><i>integer</i> ['appiddesc']</th><td>積分兌換的目標應用程序 ID</th>
+	</tr>
+	<tr>
+		<th style="width:150px"><i>integer</i> ['creditdesc']</th><td>積分兌換的目標積分編號</th>
+	</tr>
+	<tr>
+		<th style="width:150px"><i>integer</i> ['creditsrc']</th><td>積分兌換的源積分編號</th>
+	</tr>
+	<tr>
+		<th style="width:150px"><i>string</i> ['title']</th><td>積分名稱</th>
+	</tr>
+	<tr>
+		<th style="width:150px"><i>string</i> ['unit']</th><td>積分單位</th>
+	</tr>
+	<tr>
+		<th style="width:150px"><i>integer</i> ['ratio']</th><td>積分兌換比率</th>
+	</tr>
+	</tbody>
+</table>
+如：
+<div class="blockcode">
+	array(<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1' => array(<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'appiddesc' => 2,<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'creditdesc' => 1,<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'creditsrc' => 1,<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'title' => '金錢',<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'unit' => '枚',<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ratio' => 2,<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />
+	)<br />
+</div>
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's12')">updatecreditsettings 接口示例 (PHP)</a></h6>
+<div class="code" id="s12" style="display: none"><pre>
+$outextcredits = array();
+foreach($get['credit'] as $appid => $credititems) {
+	if($appid == UC_APPID) {
+		foreach($credititems as $value) {
+			$outextcredits[$value['appiddesc'].'|'.$value['creditdesc']] = array(
+				'creditsrc' => $value['creditsrc'],
+				'title' => $value['title'],
+				'unit' => $value['unit'],
+				'ratio' => $value['ratio']
+			);
+		}
+	}
+}
+
+$db->query("REPLACE INTO cdb_settings (variable, value) VALUES ('outextcredits', '".addslashes(serialize($outextcredits))."');", 'UNBUFFERED');
+exit(API_RETURN_SUCCEED);
+</pre></div>
+</div>
+
+<h4>getcredit</h4>
+<div class="submsg">
+此接口用於把應用程序中指定用戶的積分傳遞給 UCenter。<br />
+輸入的參數 $get['uid'] 為用戶 ID，$get['credit'] 為積分編號。接口運行完畢輸出積分值。<br />
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's14')">getcredit 接口示例 (PHP)</a></h6>
+<div class="code" id="s14" style="display: none"><pre>
+$uid = intval($get['uid']);
+$credit = intval($get['credit']);
+echo $db->result_first("SELECT extcredits$credit FROM members WHERE uid='$uid'");
+</pre></div>
+</div>
+
+<h3>4、函數定義</h3>
+
+<div class="submsg">
+
+接口函數中必須包含以下函數，否則無法正確對 UCenter 傳遞過來的數據進行解碼。
+<div class="code"><pre>
+function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+
+	$ckey_length = 4;
+
+	$key = md5($key ? $key : UC_KEY);
+	$keya = md5(substr($key, 0, 16));
+	$keyb = md5(substr($key, 16, 16));
+	$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
+
+	$cryptkey = $keya.md5($keya.$keyc);
+	$key_length = strlen($cryptkey);
+
+	$string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
+	$string_length = strlen($string);
+
+	$result = '';
+	$box = range(0, 255);
+
+	$rndkey = array();
+	for($i = 0; $i <= 255; $i++) {
+		$rndkey[$i] = ord($cryptkey[$i % $key_length]);
+	}
+
+	for($j = $i = 0; $i < 256; $i++) {
+		$j = ($j + $box[$i] + $rndkey[$i]) % 256;
+		$tmp = $box[$i];
+		$box[$i] = $box[$j];
+		$box[$j] = $tmp;
+	}
+
+	for($a = $j = $i = 0; $i < $string_length; $i++) {
+		$a = ($a + 1) % 256;
+		$j = ($j + $box[$a]) % 256;
+		$tmp = $box[$a];
+		$box[$a] = $box[$j];
+		$box[$j] = $tmp;
+		$result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
+	}
+
+	if($operation == 'DECODE') {
+		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
+			return substr($result, 26);
+		} else {
+			return '';
+		}
+	} else {
+		return $keyc.str_replace('=', '', base64_encode($result));
+	}
+
+}
+
+function uc_serialize($arr, $htmlon = 0) {
+	include_once UC_CLIENT_ROOT.'./lib/xml.class.php';
+	return xml_serialize($arr, $htmlon);
+}
+
+function uc_unserialize($s) {
+	include_once UC_CLIENT_ROOT.'./lib/xml.class.php';
+	return xml_unserialize($s);
+}
+</pre></div>
+
+</div>
+
+<script type="text/javascript" src="javascript/footer.js"></script>
+</body>
+</html>

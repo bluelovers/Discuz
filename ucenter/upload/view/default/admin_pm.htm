@@ -1,0 +1,66 @@
+{template header}
+
+<script src="js/common.js" type="text/javascript"></script>
+<!--{if $a == 'ls'}-->
+<div class="container">
+	<!--{if $status}-->
+		<div class="correctmsg"><p>{if $status == 1}{lang announcepm_deleted}{/if}</p></div>
+	<!--{/if}-->
+	<h3 class="marginbot">
+		{lang announcepm}
+		<a href="admin.php?m=pm&a=send" class="sgbtn">{lang pm_send_announce}</a>
+		<a href="admin.php?m=pm&a=clear" class="sgbtn">{lang clear_pm}</a>
+	</h3>
+	<div class="mainbox">
+	<!--{if $pmlist}-->
+		<form action="admin.php?m=pm&a=ls" method="post">
+			<input type="hidden" name="formhash" value="{FORMHASH}">
+			<table class="datalist fixwidth" onmouseover="addMouseEvent(this);">
+				<tr>
+					<th><input type="checkbox" name="chkall" id="chkall" onclick="checkall('delete[]')" class="checkbox" /><label for="chkall">{lang badword_delete}</label></th>
+					<th>{lang title}</th>
+					<th>{lang pm_from}</th>
+					<th>{lang dateline}</th>
+				</tr>
+				<!--{loop $pmlist $pm}-->
+					<tr>
+						<td class="option"><input type="checkbox" name="delete[]" value="$pm[pmid]" class="checkbox" /></td>
+						<td><a href="admin.php?m=pm&a=view&pmid=$pm[pmid]&$extra">{if $pm['subject']}$pm[subject]{else}{lang pm_notitle}{/if}</a></td>
+						<td>$pm[msgfrom]</td>
+						<td>$pm[dateline]</td>
+					</tr>
+				<!--{/loop}-->
+				<tr class="nobg">
+					<td><input type="submit" value="{lang submit}" class="btn" /></td>
+					<td class="tdpage" colspan="4">$multipage</td>
+				</tr>
+			</table>
+		</form>
+	<!--{else}-->
+		<div class="note">
+			<p class="i">{lang list_empty}</p>
+		</div>
+	<!--{/if}-->
+	</div>
+</div>
+<!--{elseif $a == 'view'}-->
+<div class="container">
+	<h3 class="marginbot">{lang announcepm}<a href="admin.php?m=pm&a=ls&$extra" class="sgbtn">{lang return}</a></h3>
+	<div class="mainbox">
+	<!--{if $pms}-->
+		<table class="datalist fixwidth">
+			<tr><th>{lang pm_from}</th><td>$pms[msgfrom]</td></tr>
+			<tr><th>{lang dateline}</th><td>$pms[dateline]</td></tr>
+			<tr><th>{lang title}</th><td>{if $pms['subject']}$pms[subject]{else}{lang pm_notitle}{/if}</td></tr>
+		<tr class="nobg"><td colspan="2">$pms[message]</td></tr>
+		</table>
+	<!--{else}-->
+		<div class="note">
+			<p class="i">{lang list_empty}</p>
+		</div>
+	<!--{/if}-->
+	</div>
+</div>
+<!--{/if}-->
+
+{template footer}
