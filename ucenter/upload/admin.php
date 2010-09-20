@@ -7,8 +7,8 @@
 	$Id: admin.php 1001 2010-05-27 00:51:55Z zhaoxiongfei $
 */
 
-define('UC_SERVER_VERSION', '1.5.1');
-define('UC_SERVER_RELEASE', '20100519');
+define('UC_SERVER_VERSION', '1.5.2');
+define('UC_SERVER_RELEASE', '20101001');
 
 error_reporting(0);
 set_magic_quotes_runtime(0);

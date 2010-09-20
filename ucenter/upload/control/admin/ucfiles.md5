@@ -1,4 +1,4 @@
-691aaf7dc59427b4d2ac540a1f3253eb *./admin.php
+33f2539abfdf9789828d8d99d5a1c252 *./admin.php
 ced07283b3737e81a828defe4cfcaa7b *./avatar.php
 348bf0424ff525db033b14e73b92d0d6 *./index.php
 8492a81727ddf807e49bf68fe79f7d32 *control/admin/admin.php
@@ -54,7 +54,7 @@ fda86ae58339345f2ad78b8d7d583f41 *lib/template.class.php
 2a2bd9b76981042cdddeead780597282 *lib/uccode.class.php
 c81f103af10b8d25d09b35fc708fa2d9 *lib/upload.class.php
 cb27582478ff33afa042ec3d7aba1ad3 *lib/xml.class.php
-47ea818cf7f2ce3f839c84f4c20aba24 *view/default/admin.lang.php
+3523157a4334bd2fd301ac43798afd7a *view/default/admin.lang.php
 5441b3b6c1f46e2f1abee6a0095fffcd *view/default/admin_admin.htm
 8e4fe99cd19b268ba428a7dac862ce0b *view/default/admin_app.htm
 8c2c7c164be3d2e880fc34ae29de11fe *view/default/admin_badword.htm
@@ -84,9 +84,9 @@ cb9dab25bc7d9482efe4dafdea127849 *view/default/footer_ajax.htm
 b5a4f84b23fdefbc19ec2b02169ad626 *view/default/header_ajax.htm
 d76bda70ef15b7bfc3956868c87be639 *view/default/header_client.htm
 7215ee9c7d9dc229d2921a40e899ec5f *view/default/index.htm
-8370be4cf81e2f792743d4c9473fc1d9 *view/default/main.lang.php
+945475d9ab3489eb576ca16482d110f1 *view/default/main.lang.php
 998b620c83be4e7caff9311f767327ae *view/default/message.htm
-100958f16c5fc4673f2c8e0fb17054a0 *view/default/messages.lang.php
+f6d0c04345cd10aa922b03660a8356b3 *view/default/messages.lang.php
 7819252a557b50879b0e80396013683d *view/default/message_client.htm
 21d15220756918b854defbd846c8aaa9 *view/default/plugin_footer.htm
 095dca5a72759647bedd89afde4ac738 *view/default/plugin_header.htm
@@ -96,10 +96,10 @@ cfcf3bb6aeff9a878f5bf8061f19a707 *view/default/pm_blackls.htm
 1993b98b81bb87e7d08d421a8ffc69fb *view/default/pm_nav.htm
 199a033bfa28ba5f574f30ee7f40838a *view/default/pm_send.htm
 2d9947b6f12f72c597eff9185916a9fd *view/default/pm_view.htm
-f54bcb82063f4aa4e3e01cdfadac7143 *view/default/templates.lang.php
+166a3701376fd6cf55c4123ff0086ae4 *view/default/templates.lang.php
 42fa0f40e601b24e3dbdd91ac05ce696 *view/default/user_avatar.htm
 7215ee9c7d9dc229d2921a40e899ec5f *view/index.htm
-63e306d7ba43f424fae2f66a7b097ed1 *js/ajax.js
-ea7dca65eb1f4b86230ff6759b756d65 *js/calendar.js
+a1f370a99d55aa1fdb506dbe0bb53dd2 *js/ajax.js
+4ff5596c8636275fb7bd76b47b9e07d9 *js/calendar.js
 f50f54b5ac34b9708425d02c91863dab *js/common.js
 cca7e1ae3e066aec5f6d8bc1096d08fd *js/pm_editor.js

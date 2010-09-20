@@ -13,8 +13,9 @@
 !defined('UC_SERVER_VERSION') && define('UC_SERVER_VERSION', '1.5.2');
 !defined('UC_SERVER_RELEASE') && define('UC_SERVER_RELEASE', '20101001');
 
+$___ucenter_server___ = array();
 $___ucenter_server___['PHP_SELF'] = htmlspecialchars($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['PHP_SELF']);
-$___ucenter_server___['basefilename'] = basename($___ucenter___['PHP_SELF']);
+$___ucenter_server___['basefilename'] = basename($___ucenter_server___['PHP_SELF'], '.php');
 
 if ($___ucenter_server___['basefilename'] == 'avatar') {
 	define('IN_UC', TRUE);
