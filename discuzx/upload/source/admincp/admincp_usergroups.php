@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 17033 2010-09-19 07:04:33Z zhengqingpeng $
+ *      $Id: admincp_usergroups.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -514,7 +514,6 @@ EOT;
 		showsetting('usergroups_edit_basic_allowtransfer', 'allowtransfernew', $group['allowtransfer'], 'radio');
 		showsetting('usergroups_edit_basic_allowsendpm', 'allowsendpmnew', $group['allowsendpm'], 'radio');
 		showsetting('usergroups_edit_post_html', 'allowhtmlnew', $group['allowhtml'], 'radio');
-		showsetting('usergroups_edit_basic_allow_stat', 'allowstatnew', $group['allowstat'], 'radio');
 		showsetting('usergroups_edit_basic_allow_statdata', 'allowstatdatanew', $group['allowstatdata'], 'radio');
 		showsetting('usergroups_edit_basic_search_post', 'allowfulltextnew', $group['allowsearch'] & 32, 'radio');
 		showsetting('usergroups_edit_basic_search', array('allowsearchnew', array(
@@ -1008,7 +1007,6 @@ EOT;
 			'allowspacediyhtml' => $_G['gp_allowspacediyhtmlnew'],
 			'allowspacediybbcode' => $_G['gp_allowspacediybbcodenew'],
 			'allowspacediyimgcode' => $_G['gp_allowspacediyimgcodenew'],
-			'allowstat' => $_G['gp_allowstatnew'],
 			'allowstatdata' => $_G['gp_allowstatdatanew'],
 			'allowpostarticle' => $_G['gp_allowpostarticlenew'],
 			'allowpostarticlemod' => $_G['gp_allowpostarticlemodnew'],

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_stat.php 17020 2010-09-19 05:21:09Z zhengqingpeng $
+ *      $Id: misc_stat.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ if($_GET['hash']) {
 }
 
 $stat_hash = md5($_G['setting']['sitekey']."\t".substr($_G['timestamp'], 0, 6));
-if(!checkperm('allowstat') && $_G['cookie']['stat_hash'] != $stat_hash) {
+if(!checkperm('allowstatdata') && $_G['cookie']['stat_hash'] != $stat_hash) {
 	showmessage('no_privilege');
 }
 

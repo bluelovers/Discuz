@@ -1,5 +1,5 @@
 #
-# robots.txt for Discuz! X1.5RC
+# robots.txt for Discuz! X1.5
 #
 
 User-agent: *

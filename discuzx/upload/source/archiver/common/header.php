@@ -2,18 +2,24 @@
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+$nobbname = false;
+$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
+if(!$navtitle) {
+	$navtitle = $_G['setting']['navs'][2]['navname'];
+} else {
+	$nobbname = true;
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <base href="<?php echo $_G['siteurl']; ?>" />
 <title><?php
-	if(!empty($topic['title'])) {
-		echo $topic['title'].' ';
-	}
 	if(!empty($navtitle)) {
 		echo $navtitle.' - ';
 	}
-	if($_G['setting']['bbname']) {
+	if(!$nobbname) {
 		echo $_G['setting']['bbname'].' - ';
 	}
 ?>Powered by Discuz! Archiver</title>

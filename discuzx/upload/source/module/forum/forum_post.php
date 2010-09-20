@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 16571 2010-09-09 04:23:34Z liulanbo $
+ *      $Id: forum_post.php 17074 2010-09-20 07:44:23Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -298,7 +298,7 @@ if($_G['gp_action'] == 'newthread' && $_G['forum']['allowspecialonly'] && !$spec
 	} elseif($_G['group']['allowpostdebate']) {
 		$special = 5;
 	} elseif($_G['group']['allowpost'] && $_G['setting']['threadplugins'] && $_G['group']['allowthreadplugin'] && ($_G['forum']['threadplugin'] = unserialize($_G['forum']['threadplugin']))) {
-		$threadpluginary = array_intersect($_G['group']['allowthreadplugin'], $_G['forum']['threadplugin']);
+		$threadpluginary = array_intersect($_G['forum']['threadplugin'], $_G['group']['allowthreadplugin']);
 		$specialextra = $threadpluginary[0] ? $threadpluginary[0] : '';
 	}
 

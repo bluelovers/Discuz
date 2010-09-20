@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 16814 2010-09-15 05:52:20Z zhangguosheng $
+ *      $Id: spacecp_usergroup.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -314,7 +314,7 @@ if(in_array($do, array('buy', 'exit'))) {
 	$bperms = array('allowvisit','readaccess','allowinvisible','allowsearch','allowcstatus','disablepostctrl');
 	$pperms = array('allowpost','allowreply','allowpostpoll','allowvote','allowpostreward','allowpostactivity','allowpostdebate','allowposttrade','maxsigsize','allowsigbbcode','allowsigimgcode','allowrecommend');
 	$aperms = array('allowgetattach', 'allowpostattach', 'allowsetattachperm', 'maxattachsize', 'maxsizeperday', 'maxattachnum', 'attachextensions');
-	$sperms = array('maxspacesize', 'allowblog', 'allowdoing', 'allowupload', 'allowshare', 'allowpoke', 'allowfriend', 'allowclick', 'allowmyop', 'allowcomment', 'allowstat', 'allowpostarticle');
+	$sperms = array('maxspacesize', 'allowblog', 'allowdoing', 'allowupload', 'allowshare', 'allowpoke', 'allowfriend', 'allowclick', 'allowmyop', 'allowcomment', 'allowstatdata', 'allowpostarticle');
 
 	$allperms = array();
 	$allkey = array_merge($bperms, $pperms, $aperms, $sperms);

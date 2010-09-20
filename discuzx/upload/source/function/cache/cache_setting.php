@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 16907 2010-09-16 10:13:26Z zhengqingpeng $
+ *      $Id: cache_setting.php 17075 2010-09-20 08:31:30Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -606,8 +606,8 @@ function get_cachedata_mainnav() {
 				$data['menunavs'][] = '<ul class="p_pop h_pop" id="'.$navid.'_menu" style="display: none">'.$subnavs.'</ul>';
 			}
 		}
-		if($nav['identifier'] == '6') {
-			if(!empty($data['plugins']['jsmenu'])) {
+		if($nav['identifier'] == 6) {
+			if(!empty($_G['setting']['plugins']['jsmenu'])) {
 				$onmouseover .= "showMenu({'ctrlid':this.id,'menuid':'plugin_menu'})";
 			} else {
 				$data['navs'][$id]['available'] = 0;

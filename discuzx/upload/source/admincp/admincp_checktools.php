@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 17010 2010-09-19 02:48:45Z monkey $
+ *      $Id: admincp_checktools.php 17078 2010-09-20 08:52:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -318,7 +318,7 @@ if($operation == 'filecheck') {
 		$rule['{apache1}'] .= "\t".'RewriteCond %{QUERY_STRING} ^(.*)$'."\n\t".'RewriteRule ^(.*)/'.$v.'$ $1/'.pvadd($rewritedata['rulereplace'][$k])."&%1\n";
 		$rule['{apache2}'] .= 'RewriteCond %{QUERY_STRING} ^(.*)$'."\n".'RewriteRule ^'.$v.'$ '.$rewritedata['rulereplace'][$k]."&%1\n";
 		$rule['{iis}'] .= 'RewriteRule ^(.*)/'.$v.'\?*(.*)$ $1/'.addcslashes(pvadd($rewritedata['rulereplace'][$k]).'&$'.$pvmaxv, '.?')."\n";
-		$rule['{iis7}'] .= "\t\t".'&lt;rule name="'.$k.'"&gt;'."\n\t\t\t".'&lt;match url="^(.*)/'.str_replace('\.', '.', $v).'\?*(.*)$" /&gt;'."\n\t\t\t".'&lt;action type="Rewrite" url="{R:1}/'.str_replace(array('&', 'page\%3D'), array('&amp;amp;', 'page%3D'), addcslashes(pvadd($rewritedata['rulereplace'][$k], 1).'&{R:'.$pvmaxv.'}', '?')).'" /&gt;'."\n\t\t".'&lt;/rule&gt;'."\n";
+		$rule['{iis7}'] .= "\t\t".'&lt;rule name="'.$k.'"&gt;'."\n\t\t\t".'&lt;match url="^(.*/)*'.str_replace('\.', '.', $v).'\?*(.*)$" /&gt;'."\n\t\t\t".'&lt;action type="Rewrite" url="{R:1}/'.str_replace(array('&', 'page\%3D'), array('&amp;amp;', 'page%3D'), addcslashes(pvadd($rewritedata['rulereplace'][$k], 1).'&{R:'.$pvmaxv.'}', '?')).'" /&gt;'."\n\t\t".'&lt;/rule&gt;'."\n";
 		$rule['{zeus}'] .= 'match URL into $ with ^(.*)/'.$v.'\?*(.*)$'."\n".'if matched then'."\n\t".'set URL = $1/'.pvadd($rewritedata['rulereplace'][$k]).'&$'.$pvmaxv."\nendif\n";
 		$rule['{nginx}'] .= 'rewrite ^([^\.]*)/'.$v.'$ $1/'.stripslashes(pvadd($rewritedata['rulereplace'][$k]))." last;\n";
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_redirect.php 16214 2010-09-02 02:31:08Z monkey $
+ *      $Id: forum_redirect.php 17070 2010-09-20 04:39:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,16 +31,20 @@ if(!empty($ptid)) {
 
 if(empty($_G['gp_goto']) && !empty($ptid)) {
 	$postno = intval($_G['gp_postno']);
-
-	if($_G['gp_ordertype'] != 1) {
-		$postno = $postno > 0 ? $postno - 1 : 0;
-		$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$ptid' AND invisible='0' ORDER BY dateline LIMIT $postno, 1");
+	$status = DB::result_first("SELECT status FROM ".DB::table('forum_thread')." WHERE tid='$ptid'");
+	if(getstatus($post['status'], 3)) {
+		$pid = DB::result_first("SELECT pid FROM ".DB::table('forum_postposition')." WHERE tid='$ptid' AND position='$postno'");
 	} else {
-		$postno = $postno > 1 ? $postno - 1 : 0;
-		if($postno) {
+		if($_G['gp_ordertype'] != 1) {
+			$postno = $postno > 0 ? $postno - 1 : 0;
 			$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$ptid' AND invisible='0' ORDER BY dateline LIMIT $postno, 1");
 		} else {
-			$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$ptid' AND first='1' LIMIT 1");
+			$postno = $postno > 1 ? $postno - 1 : 0;
+			if($postno) {
+				$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$ptid' AND invisible='0' ORDER BY dateline LIMIT $postno, 1");
+			} else {
+				$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$ptid' AND first='1' LIMIT 1");
+			}
 		}
 	}
 	$_G['gp_goto'] = 'findpost';

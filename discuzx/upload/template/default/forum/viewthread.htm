@@ -134,7 +134,7 @@
 		<!--{if $allowpusharticle && $allowpostarticle}--><!--{eval $modopt++}--><a href="javascript:;" onclick="modaction('push', '$_G[forum_firstpid]', 'op=push&idtype=tid&id=$_G[tid]', 'portal.php?mod=portalcp&ac=index')">{lang modmenu_pusharticle}</a><span class="pipe">|</span><!--{/if}-->
 		<!--{hook/viewthread_modoption}-->
 	</div>
-	<!--{/if}-->
+<!--{/if}-->
 
 <div id="postlist" class="pl bm bmw">
 	<table cellspacing="0" cellpadding="0" class="plh">
@@ -188,7 +188,7 @@
 						&nbsp;<img src="{IMGDIR}/hot_$_G['forum_thread'][heatlevel].gif" alt="" title="$_G['forum_thread'][heatlevel] {lang heats}" />
 					<!--{/if}-->
 					<!--{if !IS_ROBOT}-->
-						<a href="{$_G[siteurl]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid" class="xg1 xs0 xw0" title="{lang share_url_copy}" onclick="setCopy($('thread_subject').innerHTML + '\\r\\n' + this.href + '\\r\\n', '{lang post_copied}');return false;">[{lang copy_link}]</a>
+						<a href="{$_G[siteurl]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid" class="xg1 xs0 xw0" title="{lang share_url_copy}" onclick="setCopy($('thread_subject').innerHTML + '\n' + this.href + '\n', '{lang post_copied}');return false;">[{lang copy_link}]</a>
 					<!--{/if}-->
 				</h1>
 			</td>

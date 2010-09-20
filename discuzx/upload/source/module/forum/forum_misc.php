@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 17063 2010-09-20 02:57:03Z zhengqingpeng $
+ *      $Id: forum_misc.php 17068 2010-09-20 04:02:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -290,7 +290,7 @@ if($_G['gp_action'] == 'paysucceed') {
 		while($post = DB::fetch($query)) {
 			$dateline++;
 			DB::query("UPDATE ".DB::table($posttable)." SET dateline='$dateline' WHERE pid='$post[pid]'");
-			my_post_log('update', array('pid' => $post[pid]));
+			my_post_log('update', array('pid' => $post['pid']));
 		}
 	}
 	my_thread_log('update', array('tid' => $thread['tid']));

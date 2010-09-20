@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17054 2010-09-20 02:08:51Z monkey $
+	$Id: common.js 17077 2010-09-20 08:48:40Z monkey $
 */
 
 var BROWSER = {};
@@ -603,7 +603,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	$(formid).target = ajaxframeid;
 	var action = $(formid).getAttribute('action');
 	action = hostconvert(action);
-	$(formid).action = action+'&inajax=1';
+	$(formid).action = action.replace(/\&inajax\=1/g, '')+'&inajax=1';
 	$(formid).submit();
 	if(submitbtn) {
 		submitbtn.disabled = true;
@@ -1300,7 +1300,7 @@ function showWindow(k, url, mode, cache, menuv) {
 	var drag = null;
 	var loadingst = null;
 
-	if(disallowfloat && disallowfloat.indexOf(k) != -1 || BROWSER.ie && BROWSER.ie < 7) {
+	if(disallowfloat && disallowfloat.indexOf(k) != -1) {
 		if(BROWSER.ie) url += (url.indexOf('?') != -1 ?  '&' : '?') + 'referer=' + escape(location.href);
 		location.href = url;
 		doane();
