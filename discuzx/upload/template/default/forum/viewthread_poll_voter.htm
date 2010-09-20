@@ -13,7 +13,7 @@
 	<em id="return_$_G['gp_handlekey']">{lang poll_voters}</em>
 	<!--{if !empty($_G['gp_infloat'])}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
-<div class="c" style="width:450px;height:200px;overflow:auto">
+<div class="c"{if !empty($_G['gp_infloat'])} style="width:450px;height:200px;overflow:auto"{/if}>
 	<p>
 		<select class="ps" onchange="{if !empty($_G['gp_infloat'])}showWindow('viewvote', 'forum.php?mod=misc&action=viewvote&tid=$_G[tid]&polloptionid=' + this.value){else}location.href = 'forum.php?mod=misc&action=viewvote&tid=$_G[tid]&polloptionid=' + this.value;{/if}">
 		<!--{loop $polloptions $options}-->
@@ -21,12 +21,12 @@
 		<!--{/loop}-->
 		</select>
 	</p>
-	<ul class="ml mls mtm">
+	<ul class="ml mls mtm cl">
 	<!--{if !$voterlist}-->
 		<li style="text-align:left">{lang none}</li>
 	<!--{else}-->
 		<!--{loop $voterlist $voter}-->
-			<li style="text-align:left"><a href="home.php?mod=space&uid=$voter[uid]" target="_blank">$voter[username]</a></li>							
+			<li style="text-align:left"><a href="home.php?mod=space&uid=$voter[uid]" target="_blank">$voter[username]</a></li>
 		<!--{/loop}-->
 	<!--{/if}-->
 	</ul>

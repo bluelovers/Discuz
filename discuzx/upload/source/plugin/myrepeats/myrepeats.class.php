@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: myrepeats.class.php 13767 2010-07-30 06:53:29Z monkey $
+ *      $Id: myrepeats.class.php 16840 2010-09-15 08:19:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,6 +31,7 @@ class plugin_myrepeats {
 				dsetcookie('mrn', $count, 3600);
 			}
 			if(!$count) {
+				unset($_G['setting']['plugins']['spacecp']['myrepeats:memcp']);
 				return;
 			}
 		}

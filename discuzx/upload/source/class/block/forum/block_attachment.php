@@ -141,6 +141,23 @@ class block_attachment {
 				);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'group_attachment' => array(
+					'name' => lang('blockclass', 'blockclass_group_attachment'),
+					'script' => 'groupattachment',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+				'space_pic' => array(
+					'name' => lang('blockclass', 'blockclass_space_pic'),
+					'script' => 'pic',
+					'searchkeys' => array('author', 'authorid', 'downloads'),
+					'replacekeys' => array('username', 'uid', 'viewnum'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->settings;
@@ -183,20 +200,11 @@ class block_attachment {
 			}
 			$fids = $parameter['fids'];
 		}
-		if(empty($fids)) {
-			if(!empty($_G['setting']['allowviewuserthread'])) {
-				$fids = $_G['setting']['allowviewuserthread'];
-			} else {
-				return $returndata;
-			}
-		} else {
-			$fids = dimplode($fids);
-		}
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		$datalist = $list = array();
-		$sql = ($fids ? ' AND t.fid IN ('.$fids.')' : '')
+		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($special ? ' AND t.special IN ('.dimplode($special).')' : '')

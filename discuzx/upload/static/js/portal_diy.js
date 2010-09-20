@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 16274 2010-09-02 09:01:31Z zhangguosheng $
+	$Id: portal_diy.js 16807 2010-09-15 05:00:57Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -609,10 +609,11 @@ drag.extend({
 	},
 	stopSlide : function (id) {
 		if (typeof slideshow.entities == 'undefined') return false;
-		var slidebox = $C('slidebox');
-		if(slidebox.length > 0) {
+		var slidebox = $C('slidebox',$(id));
+		if(slidebox && slidebox.length > 0) {
 			if(slidebox[0].id) {
-				clearTimeout(slideshow.entities[slidebox[0].id].timer);
+				var timer = slideshow.entities[slidebox[0].id].timer;
+				if(timer) clearTimeout(timer);
 				slideshow.entities[slidebox[0].id] = '';
 			}
 		}
@@ -653,23 +654,25 @@ drag.extend({
 		if (drag.isChange) {
 			flag = confirm('您已經做過修改，請保存後再做導出，否則導出的數據將不包括您這次所做的修改。');
 		}
-		if (!flag) return false;
-		if ( typeof e == 'object') {
-			e = Util.event(e);
-			var frame = e.aim.id.replace('cmd_','');
-		} else {
-			frame = e == undefined ? '' : e;
+		if (flag) {
+			if ( typeof e == 'object') {
+				e = Util.event(e);
+				var frame = e.aim.id.replace('cmd_','');
+			} else {
+				frame = e == undefined ? '' : e;
+			}
+			if (!$('frameexport')){
+				var dom  = document.createElement('div');
+				dom.innerHTML = '<form id="frameexport" method="post" action="" target="_blank"><input type="hidden" name="frame" value="" />\n\
+					<input type="hidden" name="tpl" value="'+document.diyform.template.value+'" />\n\
+					<input type="hidden" name="formhash" value="'+document.diyform.formhash.value+'" /><input type="hidden" name="exportsubmit" value="true"/></form>';
+				$('append_parent').appendChild(dom.childNodes[0]);
+			}
+			$('frameexport').action = 'portal.php?mod=portalcp&ac=diy&op=export';
+			document.forms.frameexport.frame.value = frame;
+			document.forms.frameexport.submit();
 		}
-		if (!$('frameexport')){
-			var dom  = document.createElement('div');
-			dom.innerHTML = '<form id="frameexport" method="post" action="" target="_blank"><input type="hidden" name="frame" value="" />\n\
-				<input type="hidden" name="tpl" value="'+document.diyform.template.value+'" />\n\
-				<input type="hidden" name="formhash" value="'+document.diyform.formhash.value+'" /><input type="hidden" name="exportsubmit" value="true"/></form>';
-			$('append_parent').appendChild(dom.childNodes[0]);
-		}
-		$('frameexport').action = 'portal.php?mod=portalcp&ac=diy&op=export';
-		document.forms.frameexport.frame.value = frame;
-		document.forms.frameexport.submit();
+		doane();
 	},
 	openFrameImport : function () {
 		showWindow('showimport','portal.php?mod=portalcp&ac=diy&op=import&tpl='+document.diyform.template.value, 'get');
@@ -705,19 +708,22 @@ drag.extend({
 		showDialog('<div id="allupdate" style="width:350px;line-height:28px;">開始更新...</div>','confirm','更新模塊數據', '', true, 'drag.endBlockForceUpdateBatch()');
 		$('fwin_dialog_submit').style.display = 'none';
 		setTimeout(function(){drag.getBlocks()},500);
+		doane();
 	},
 	clearAll : function () {
-		if (!confirm('您確實要清空頁面上所在DIY數據嗎,清空以後將不可恢復')) return false;
-		for (var i in this.data) {
-			for (var j in this.data[i]) {
-				if (typeof(this.data[i][j]) == 'object' && this.data[i][j].name.indexOf('_temp')<0) {
-					this.delFrame(this.data[i][j]);
-					$(this.data[i][j].name).parentNode.removeChild($(this.data[i][j].name));
+		if (confirm('您確實要清空頁面上所在DIY數據嗎,清空以後將不可恢復')) {
+			for (var i in this.data) {
+				for (var j in this.data[i]) {
+					if (typeof(this.data[i][j]) == 'object' && this.data[i][j].name.indexOf('_temp')<0) {
+						this.delFrame(this.data[i][j]);
+						$(this.data[i][j].name).parentNode.removeChild($(this.data[i][j].name));
+					}
 				}
 			}
+			this.initPosition();
+			this.setClose();
 		}
-		this.initPosition();
-		this.setClose();
+		doane();
 	},
 	createObj : function (e,objType,contentType) {
 		if (objType == 'block' && !this.checkHasFrame()) {alert("提示：未找到框架，請先添加框架。");spaceDiy.getdiy('frame');return false;}
@@ -904,12 +910,13 @@ spaceDiy.extend({
 
 	},
 	recover : function() {
-		drag.clearClose();
 		if (confirm('您確定要恢復到上一版本保存的結果嗎？')) {
+			drag.clearClose();
 			document.diyform.recover.value = '1';
 			document.diyform.gobackurl.value = location.href.replace(/(\?diy=yes)|(\&diy=yes)/,'').replace(/[\?|\&]preview=yes/,'');
 			document.diyform.submit();
 		}
+		doane();
 	},
 	goonDIY : function () {
 		if ($('prefile').value == '1') {
@@ -973,7 +980,11 @@ spaceDiy.extend({
 				}
 			}
 			$('nav'+type).className = 'current';
-			if (type == 'start' || type == 'frame' || type == 'blockclass') {
+			if (type == 'start' || type == 'frame') {
+				$('content'+type).style.display = 'block';
+				return true;
+			}
+			if(type == 'blockclass' && $('content'+type).innerHTML !='') {
 				$('content'+type).style.display = 'block';
 				return true;
 			}

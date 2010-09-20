@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 16455 2010-09-07 03:51:33Z zhangguosheng $
+ *      $Id: function_block.php 16908 2010-09-16 10:40:05Z zhangguosheng $
  */
 
 function block_script($blockclass, $script) {
@@ -732,7 +732,7 @@ function block_getstyle($styleid) {
 
 function blockclass_cache() {
 	global $_G;
-	$data = $dirs = $styles = array();
+	$data = $dirs = $styles = $dataconvert = array();
 	$dir = DISCUZ_ROOT.'/source/class/block/';
 	$dh = opendir($dir);
 	while(($filename=readdir($dh))) {
@@ -741,7 +741,7 @@ function blockclass_cache() {
 		}
 	}
 	foreach($dirs as $name=>$dir) {
-		$blockclass = array();
+		$blockclass = $blockconvert = array();
 		if(file_exists($dir.'blockclass.php')) {
 			include_once($dir.'blockclass.php');
 		}
@@ -754,7 +754,7 @@ function blockclass_cache() {
 
 		$dh = opendir($dir);
 		while(($filename=readdir($dh))) {
-			$match = $info = array();
+			$match = $info = $fieldsconvert = array();
 			$scriptname = $scriptclass = '';
 			if(preg_match('/^(block_[\w]+)\.php$/i', $filename, $match)) {
 				$scriptclass = $match[1];
@@ -767,6 +767,9 @@ function blockclass_cache() {
 						$info['name'] = $obj->name();
 						$info['blockclass'] = $obj->blockclass();
 						$info['fields'] = $obj->fields();
+					}
+					if(method_exists($obj, 'fieldsconvert')) {
+						$fieldsconvert = $obj->fieldsconvert();
 					}
 				}
 			}
@@ -781,6 +784,9 @@ function blockclass_cache() {
 					);
 				}
 				$blockclass['subs'][$key]['script'][$scriptname] = $info['name'];
+				if(!isset($blockconvert[$key]) && !empty($fieldsconvert)) {
+					$blockconvert[$key] = $fieldsconvert;
+				}
 			}
 		}
 
@@ -802,6 +808,11 @@ function blockclass_cache() {
 				}
 			}
 		}
+
+		if(!empty($blockconvert)) {
+			$dataconvert[$name] = $blockconvert;
+		}
+
 	}
 
 	if($styles) {
@@ -820,6 +831,7 @@ function blockclass_cache() {
 		}
 	}
 	save_syscache('blockclass', $data);
+	save_syscache('blockconvert', $dataconvert);
 }
 
 function block_parse_template($str_template, &$arr) {

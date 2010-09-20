@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 16572 2010-09-09 04:29:20Z monkey $
+ *      $Id: post_newthread.php 17059 2010-09-20 02:35:09Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -95,11 +95,11 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	if($subject == '') {
+	if(trim($subject) == '') {
 		showmessage('post_sm_isnull');
 	}
 
-	if(!$sortid && !$special && $message == '') {
+	if(!$sortid && !$special && trim($message) == '') {
 		showmessage('post_sm_isnull');
 	}
 
@@ -404,7 +404,6 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	if($pid && getstatus($thread['status'], 1)) {
 		savepostposition($tid, $pid);
 	}
-
 	if($special == 4 && $_G['gp_activityaid']) {
 		DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$tid', pid='$pid' WHERE aid='$_G[gp_activityaid]' AND uid='$_G[uid]'");
 	}
@@ -538,7 +537,9 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 
 		if($_G['forum']['status'] == 3) {
+			require_once libfile('function/group');
 			updateactivity($_G['fid'], 0);
+			require_once libfile('function/grouplog');
 			updategroupcreditlog($_G['fid'], $_G['uid']);
 		}
 		$statarr = array(0 => 'thread', 1 => 'poll', 2 => 'trade', 3 => 'reward', 4 => 'activity', 5 => 'debate', 127 => 'thread');

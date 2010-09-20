@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 16515 2010-09-08 01:52:08Z wangjinbo $
+ *      $Id: admincp_moderate.php 17046 2010-09-19 11:31:52Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -903,15 +903,7 @@ if($operation == 'threads') {
 		));
 		$multipage = multi($modcount, $ppp, $page, ADMINSCRIPT."?action=moderate&operation=replies&filter=$filter&modfid=$modfid&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&ppp=$ppp");
 
-
-
-
-
 		echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> <a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a><p>';
-
-
-
-
 
 		require_once libfile('class/censor');
 		$censor = & discuz_censor::instance();
@@ -1070,6 +1062,7 @@ if($operation == 'threads') {
 			));
 			foreach($postarray as $post) {
 				$pidarray[] = $post['pid'];
+				my_post_log('validate', array('pid' => $post['pid']));
 				if(getstatus($post['status'], 3) == 0) {
 					updatepostcredits('+', $post['authorid'], 'reply', $post['fid']);
 				}
@@ -1269,9 +1262,10 @@ if($operation == 'threads') {
 			}
 		}
 
-		if($delete_blogids = dimplode($moderate['delete'])) {
-			DB::delete('home_blog', "blogid IN ($delete_blogids)");
-			$deletes = DB::affected_rows();
+		if($moderate['delete']) {
+			require_once libfile('function/delete');
+			$delete_blogs = deleteblogs($moderate['delete']);
+			$deletes = count($delete_blogs);
 		}
 
 		if($ignore_blogids = dimplode($moderate['ignore'])) {

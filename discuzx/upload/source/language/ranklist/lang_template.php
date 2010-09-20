@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16422 2010-09-06 08:38:04Z monkey $
+ *      $Id: lang_template.php 16968 2010-09-17 08:50:35Z monkey $
  *
  *      This file is automatically generate
  */
@@ -79,6 +79,7 @@ $lang = array (
   'my_ranking_declaration' => '我的上榜宣言',
   'not_exceed' => '不要超過自己的',
   'please_input_friend_name' => '請輸入好友的用戶名',
+  'price_can_not_be_higher_than_the_total' => '您所填寫的單價不能高於競價總額',
   'ranking_message_0' => '你現在還沒有上榜。讓自己上榜吧，這會大大提升你的主頁曝光率。',
   'ranking_message_1' => '競價單價越多，競價排名越靠前，你的主頁曝光率也會越高；',
   'ranking_message_2' => '上榜用戶的主頁被別人有效瀏覽一次，將從競價{$extcredits[$creditid][title]}中扣除您設定的競價值(惡意刷新訪問不扣減)。',
@@ -92,8 +93,8 @@ $lang = array (
   'self_current_friend_num' => '你當前的好友數',
   'show_unitprice' => '競價單價',
   'top_100_update' => '下面列出的為排行前100名，數據每 $cache_time 分鐘更新一次。',
-  'unitprice_is_not_number' => '你所填寫的單價不是一個合法數值',
-  'unitprice_title_error' => '你所填寫的單價不能小於1',
+  'unitprice_is_not_number' => '您所填寫的單價不是一個合法數值',
+  'unitprice_title_error' => '您所填寫的單價不能小於1',
   'your_current_bid' => '自己當前的競價單價',
 
   'add_friend' => '加為好友',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16463 2010-09-07 04:36:26Z zhangguosheng $
+ *      $Id: lang_template.php 16968 2010-09-17 08:50:35Z monkey $
  *
  *      This file is automatically generate
  */
@@ -90,6 +90,8 @@ $lang = array (
   'block_start_time_comment' => '留空表示立即開始',
   'block_stop' => '屏蔽',
   'block_template' => '模塊模板',
+  'block_type' => '模塊分類',
+  'block_type_convert_tips' => '此模塊分類支持轉換模塊的類型，但<font color=\'red\'>可能會存在部分特殊字段的丟失且模塊的顯示樣式將會變為自定義模板</font>，請根據需要使用。<br/><font color=\'red\'>注意：</font>選擇下拉列表中的模塊類型以後模塊分類就發生改變。',
   'block_view_banned_data' => '查看屏蔽數據',
   'current_data_odd' => '當前數據是否在奇數行',
   'current_data_order' => '當前數據順序',

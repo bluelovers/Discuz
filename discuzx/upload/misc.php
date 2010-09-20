@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc.php 16454 2010-09-07 03:48:02Z zhangguosheng $
+ *      $Id: misc.php 16805 2010-09-15 03:56:11Z zhangguosheng $
  */
 
 define('APPTYPEID', 100);
@@ -18,7 +18,7 @@ $discuz = & discuz_core::instance();
 $modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist');
 
 $modcachelist = array(
-	'ranklist' => array('forums', 'blockclass'),
+	'ranklist' => array('forums'),
 );
 
 $mod = getgpc('mod');

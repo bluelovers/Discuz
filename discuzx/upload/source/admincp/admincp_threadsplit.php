@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadsplit.php 16412 2010-09-06 07:25:46Z wangjinbo $
+ *      $Id: admincp_threadsplit.php 16983 2010-09-18 05:00:13Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -455,6 +455,32 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 		$sql .= " AND t.fid='{$conditions['inforum']}'";
 		$searchurladd[] = "inforum={$conditions['inforum']}";
 	}
+
+	if($conditions['tidmin'] != '') {
+		$sql .= " AND t.tid>='{$conditions['tidmin']}'";
+		$searchurladd[] = "tidmin={$conditions['tidmin']}";
+	}
+
+	if($conditions['tidmax'] != '') {
+		$sql .= " AND t.tid<='{$conditions['tidmax']}'";
+		$searchurladd[] = "tidmax={$conditions['tidmax']}";
+	}
+
+	if($conditions['sticky'] == 1) {
+		$sql .= " AND t.displayorder>'0'";
+		$searchurladd[] = "sticky=1";
+	} else {
+		$sql .= " AND t.displayorder='0'";
+		$searchurladd[] = "sticky=2";
+	}
+
+	if($conditions['noreplydays'] != '') {
+		$conditions['noreplydays'] = intval($conditions['noreplydays']);
+		$lastpost = $_G['timestamp'] - $conditions['noreplydays'] * 86400;
+		$sql .= " AND t.lastpost<$lastpost";
+		$searchurladd[] = "noreplydays={$conditions['noreplydays']}";
+	}
+
 	if($conditions['intype'] != '' && $conditions['intype'] != 'all') {
 		$sql .= " AND t.typeid='{$conditions['intype']}'";
 		$searchurladd[] = "intype={$conditions['intype']}";
@@ -463,14 +489,7 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 		$sql .= " AND t.sortid='{$conditions['insort']}'";
 		$searchurladd[] = "insort={$conditions['insort']}";
 	}
-	if($conditions['tidmin'] != '') {
-		$sql .= " AND t.tid>='{$conditions['tidmin']}'";
-		$searchurladd[] = "tidmin={$conditions['tidmin']}";
-	}
-	if($conditions['gp_tidmax'] != '') {
-		$sql .= " AND t.tid<='{$conditions['tidmax']}'";
-		$searchurladd[] = "tidmax={$conditions['tidmax']}";
-	}
+
 	if($conditions['viewsless'] != '') {
 		$sql .= " AND t.views<'{$_G['viewsless']}'";
 		$searchurladd[] = "viewsless={$conditions['viewsless']}";
@@ -499,10 +518,7 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 		$sql .= " AND t.dateline<'{$_G['timestamp']}'-'{$conditions['beforedays']}'*86400";
 		$searchurladd[] = "beforedays={$conditions['beforedays']}";
 	}
-	if($conditions['noreplydays'] != '') {
-		$sql .= " AND t.lastpost<'{$_G['timestamp']}'-'{$conditions['noreplydays']}'*86400";
-		$searchurladd[] = "noreplydays={$conditions['noreplydays']}";
-	}
+
 	if($conditions['starttime'] != '') {
 		$sql .= " AND t.dateline>'".strtotime($conditions['starttime'])."'";
 		$searchurladd[] = "starttime={$conditions['starttime']}";
@@ -512,30 +528,11 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 		$searchurladd[] = "endtime={$conditions['endtime']}";
 	}
 
-	if(trim($conditions['keywords'])) {
-		$sqlkeywords = '';
-		$or = '';
-		$keywords = explode(',', str_replace(' ', '', $conditions['keywords']));
-		for($i = 0; $i < count($keywords); $i++) {
-			$sqlkeywords .= " $or t.subject LIKE '%".$keywords[$i]."%'";
-			$or = 'OR';
-		}
-		$sql .= " AND ($sqlkeywords)";
-		$searchurladd[] = "keywords={$conditions['keywords']}";
-	}
-
 	if($conditions['users'] != '') {
 		$sql .= trim($conditions['users']) ? " AND t.author IN ('".str_replace(',', '\',\'', str_replace(' ', '', trim($conditions['users'])))."')" : '';
 		$searchurladd[] = "users={$conditions['users']}";
 	}
 
-	if($conditions['sticky'] == 1) {
-		$sql .= " AND t.displayorder>'0'";
-		$searchurladd[] = "sticky=1";
-	} elseif($conditions['sticky'] == 2) {
-		$sql .= " AND t.displayorder='0'";
-		$searchurladd[] = "sticky=2";
-	}
 	if($conditions['digest'] == 1) {
 		$sql .= " AND t.digest>'0'";
 		$searchurladd[] = "digest=1";
@@ -579,10 +576,22 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 			$searchurladd[] = "specialthread=2";
 		}
 	}
+
+	if(trim($conditions['keywords'])) {
+		$sqlkeywords = '';
+		$or = '';
+		$keywords = explode(',', str_replace(' ', '', $conditions['keywords']));
+		for($i = 0; $i < count($keywords); $i++) {
+			$sqlkeywords .= " $or t.subject LIKE '%".$keywords[$i]."%'";
+			$or = 'OR';
+		}
+		$sql .= " AND ($sqlkeywords)";
+		$searchurladd[] = "keywords={$conditions['keywords']}";
+	}
 	$threadlist = array();
 	$threadtable = $conditions['sourcetableid'] ? "forum_thread_{$conditions['sourcetableid']}" : 'forum_thread';
 	if($sql || $conditions['sourcetableid']) {
-		$sql = "t.isgroup='0' AND t.digest>='0' AND t.displayorder>='0' $sql";
+		$sql = "t.isgroup='0' AND t.displayorder>='0' $sql";
 		$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table($threadtable)." t WHERE $sql");
 		if(isset($offset) && isset($length)) {
 			$sql .= " LIMIT $offset, $length";

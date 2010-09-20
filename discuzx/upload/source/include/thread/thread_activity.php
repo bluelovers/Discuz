@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_activity.php 15024 2010-08-18 06:20:32Z liulanbo $
+ *      $Id: thread_activity.php 16882 2010-09-16 06:26:59Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,7 +65,7 @@ if($activity['aid']) {
 
 $applylistverified = array();
 $noverifiednum = 0;
-$query = DB::query("SELECT aa.username, aa.uid, aa.verified, aa.dateline, aa.message, aa.payment, aa.contact, aa.ufielddata, m.groupid FROM ".DB::table('forum_activityapply')." aa
+$query = DB::query("SELECT aa.username, aa.uid, aa.verified, aa.dateline, aa.message, aa.payment, aa.ufielddata, m.groupid FROM ".DB::table('forum_activityapply')." aa
 	LEFT JOIN ".DB::table('common_member')." m USING(uid)
 	LEFT JOIN ".DB::table('common_member_field_forum')." mf USING(uid)
 	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline");

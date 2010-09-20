@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: settings.php 16424 2010-09-06 09:07:32Z wangjinbo $
+ * $Id: settings.php 16723 2010-09-13 09:40:04Z wangjinbo $
  */
 
 $curprg = basename(__FILE__);
@@ -48,6 +48,10 @@ while ($row = $db_source->fetch_array($query)) {
 				$rownew['svalue']['forum'] = $dataold;
 			}
 			$rownew['svalue'] = serialize($rownew['svalue']);
+		} elseif(in_array($row['variable'], array('seotitle', 'seodescription', 'seokeywords'))) {
+			$rownew['skey'] = $row['variable'];
+			$rownew['svalue'] = array();
+			$rownew['svalue']['forum'] = $row['value'];
 		} else {
 			$rownew['skey'] = $row['variable'];
 

@@ -4,7 +4,6 @@
 	$_G[home_tpl_titles][] = $navsubject;
 	$_G[home_tpl_titles][] = $specialtype[1];
 	$_G[home_tpl_titles][] = '{lang portal}';
-	$navtitle = '';
 }
 
 <!--{subtemplate common/header}-->
@@ -46,10 +45,10 @@
 					{lang home_view_num}: $_G[forum_thread][views]<span class="pipe">|</span>
 					{lang comment_num}: $_G[forum_thread][replies]
 					<!--{if $_G['group']['raterange'] && $post['authorid']}-->
-					<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&amp;tid=$_G[tid]&amp;pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}');return false;">{lang rate}</a>
+					<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}');return false;">{lang rate}</a>
 					<!--{/if}-->
 					<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid']))}-->
-					<span class="pipe">|</span><a href="forum.php?mod=post&action=edit&amp;fid=$_G[fid]&amp;tid=$_G[tid]&amp;pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&amp;modthreadkey=$_G[gp_modthreadkey]{/if}&amp;page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}"><!--{if $_G['forum_thread']['special'] == 2 && !$post['message']}-->{lang post_add_aboutcounter}<!--{else}-->{lang edit}</a><!--{/if}-->
+					<span class="pipe">|</span><a href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}"><!--{if $_G['forum_thread']['special'] == 2 && !$post['message']}-->{lang post_add_aboutcounter}<!--{else}-->{lang edit}</a><!--{/if}-->
 					<!--{/if}-->
 					<!--{if $_G[uid] && $_G[uid] == $_G[forum_thread][authorid]}-->
 					<span class="pipe">|</span><a href="misc.php?mod=invite&action=thread&id=$_G[tid]" class="xg1" onclick="showWindow('invite', this.href, 'get', 0);">{lang invite}</a>
@@ -65,17 +64,17 @@
 							<!--{subtemplate forum/viewthread_node_body}-->
 
 							<!--{if $post['first'] && !$_G['forum_thread']['archiveid']}-->
-								<!--{if !empty($lastmod['modaction'])}--><div class="modact xs1"><a href="forum.php?mod=misc&action=viewthreadmod&amp;tid=$_G[tid]" title="{lang thread_mod}" onclick="showWindow('viewthreadmod', this.href)">{lang thread_mod_by}</a></div><!--{/if}-->
+								<!--{if !empty($lastmod['modaction'])}--><div class="modact xs1"><a href="forum.php?mod=misc&action=viewthreadmod&tid=$_G[tid]" title="{lang thread_mod}" onclick="showWindow('viewthreadmod', this.href)">{lang thread_mod_by}</a></div><!--{/if}-->
 								<div class="xs1 uo{if $_G['group']['allowrecommend'] && $_G['setting']['recommendthread'][status]} nrate{/if}">
 									<!--{if $post['invisible'] == 0}-->
 										<!--{if $_G['group']['raterange'] && $post['authorid']}-->
-											<a id="k_rate" href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&amp;tid=$_G[tid]&amp;pid=$post[pid]', 'get', -1);return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}">{lang rate}</a>
+											<a id="k_rate" href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}">{lang rate}</a>
 										<!--{/if}-->
 										<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'">{lang thread_favorite}<span id="favoritenumber">{$_G['forum_thread']['favtimes']}</span></a>
 										<a href="home.php?mod=spacecp&ac=share&type=thread&id=$_G[tid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' {lang activity_member_unit}{lang thread_share}'">{lang thread_share}<span id="sharenumber">{$_G['forum_thread']['sharetimes']}</span></a>
 										<!--{if $_G['perm']['allowrecommend'] && $_G['setting']['recommendthread']['status']}-->
-											<a id="recommend_add" href="forum.php?mod=misc&action=recommend&amp;do=add&amp;tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate({$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_add').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][addtext]'">$_G['setting']['recommendthread'][addtext]<span id="recommendv_add">$_G[forum_thread][recommend_add]</span></a>
-											<a id="recommend_subtract" href="forum.php?mod=misc&action=recommend&amp;do=subtract&amp;tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate(-{$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_subtract').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][subtracttext]'">$_G['setting']['recommendthread'][subtracttext]<span id="recommendv_subtract">$_G[forum_thread][recommend_sub]</span></a>
+											<a id="recommend_add" href="forum.php?mod=misc&action=recommend&do=add&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate({$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_add').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][addtext]'">$_G['setting']['recommendthread'][addtext]<span id="recommendv_add">$_G[forum_thread][recommend_add]</span></a>
+											<a id="recommend_subtract" href="forum.php?mod=misc&action=recommend&do=subtract&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate(-{$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_subtract').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][subtracttext]'">$_G['setting']['recommendthread'][subtracttext]<span id="recommendv_subtract">$_G[forum_thread][recommend_sub]</span></a>
 										<!--{/if}-->
 									<!--{/if}-->
 									<!--{hook/viewthread_useraction}-->
@@ -138,7 +137,7 @@
 				<div class="bm_c xl xl1">
 					<ul>
 					<!--{loop $oldthreads $oldtid $oldsubject}-->
-						<li><a href="forum.php?mod=viewthread&amp;tid=$oldtid&amp;from=portal">$oldsubject</a></li>
+						<li><a href="forum.php?mod=viewthread&tid=$oldtid&from=portal">$oldsubject</a></li>
 					<!--{/loop}-->
 					</ul>
 				</div>

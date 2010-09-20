@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_space.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: lang_space.php 17060 2010-09-20 02:41:46Z cnteacher $
  */
 
 $lang = array(
@@ -183,15 +183,16 @@ $lang = array(
 	'manage_share' => '管理分享',
 	'manage_pic' => '管理圖片',
 
-	'sb_blog' => '{who} 的日誌',
-	'sb_album' => '{who} 的相冊',
-	'sb_space' => '{who} 的空間',
-	'sb_feed' => '{who} 的動態',
-	'sb_doing' => '{who} 的記錄',
-	'sb_sharing' => '{who} 的分享',
-	'sb_friend' => '{who} 的好友',
-	'sb_wall' => '{who} 的留言板',
-	'sb_profile' => '{who} 的個人資料',
+	'sb_blog' => '{who}的日誌',
+	'sb_album' => '{who}的相冊',
+	'sb_space' => '{who}的空間',
+	'sb_feed' => '{who}的動態',
+	'sb_doing' => '{who}的記錄',
+	'sb_sharing' => '{who}的分享',
+	'sb_friend' => '{who}的好友',
+	'sb_wall' => '{who}的留言板',
+	'sb_profile' => '{who}的個人資料',
+	'sb_thread' => '{who}的帖子',
 );
 
 ?>

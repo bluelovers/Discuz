@@ -90,6 +90,8 @@ class block_blog {
 				'dateline' => array('name' => lang('blockclass', 'blockclass_blog_field_dateline'), 'formtype' => 'date', 'datatype' => 'date'),
 				'uid' => array('name' => lang('blockclass', 'blockclass_blog_field_uid'), 'formtype' => 'text', 'datatype' => 'int'),
 				'username' => array('name' => lang('blockclass', 'blockclass_blog_field_username'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar' => array('name' => lang('blockclass', 'blockclass_blog_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar_big' => array('name' => lang('blockclass', 'blockclass_blog_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'replynum' => array('name' => lang('blockclass', 'blockclass_blog_field_replynum'), 'formtype' => 'text', 'datatype' => 'int'),
 				'viewnum' => array('name' => lang('blockclass', 'blockclass_blog_field_viewnum'), 'formtype' => 'text', 'datatype' => 'int'),
 				'click1' => array('name' => lang('blockclass', 'blockclass_blog_field_click1'), 'formtype' => 'text', 'datatype' => 'int'),
@@ -100,6 +102,29 @@ class block_blog {
 				'click6' => array('name' => lang('blockclass', 'blockclass_blog_field_click6'), 'formtype' => 'text', 'datatype' => 'int'),
 				'click7' => array('name' => lang('blockclass', 'blockclass_blog_field_click7'), 'formtype' => 'text', 'datatype' => 'int'),
 				'click8' => array('name' => lang('blockclass', 'blockclass_blog_field_click8'), 'formtype' => 'text', 'datatype' => 'int'),
+			);
+	}
+
+	function fieldsconvert() {
+		return array(
+				'forum_thread' => array(
+					'name' => lang('blockclass', 'blockclass_forum_thread'),
+					'script' => 'thread',
+					'searchkeys' => array('username', 'uid', 'viewnum', 'replynum'),
+					'replacekeys' => array('author', 'authorid', 'views', 'replies'),
+				),
+				'group_thread' => array(
+					'name' => lang('blockclass', 'blockclass_group_thread'),
+					'script' => 'groupthread',
+					'searchkeys' => array('username', 'uid', 'viewnum', 'replynum'),
+					'replacekeys' => array('author', 'authorid', 'views', 'replies'),
+				),
+				'portal_article' => array(
+					'name' => lang('blockclass', 'blockclass_portal_article'),
+					'script' => 'article',
+					'searchkeys' => array('replynum'),
+					'replacekeys' => array('commentnum'),
+				),
 			);
 	}
 
@@ -204,6 +229,8 @@ class block_blog {
 					'dateline'=>$data['dateline'],
 					'uid'=>$data['uid'],
 					'username'=>$data['username'],
+					'avatar' => avatar($data['uid'], 'small', true),
+					'avatar_big' => avatar($data['uid'], 'middle', true),
 					'replynum'=>$data['replynum'],
 					'viewnum'=>$data['viewnum'],
 					'click1'=>$data['click1'],

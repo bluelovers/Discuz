@@ -52,6 +52,23 @@ class block_portalcategory {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_forum' => array(
+					'name' => lang('blockclass', 'blockclass_forum_forum'),
+					'script' => 'forum',
+					'searchkeys' => array('articles'),
+					'replacekeys' => array('threads'),
+				),
+				'group_group' => array(
+					'name' => lang('blockclass', 'blockclass_group_group'),
+					'script' => 'group',
+					'searchkeys' => array('articles'),
+					'replacekeys' => array('threads'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;

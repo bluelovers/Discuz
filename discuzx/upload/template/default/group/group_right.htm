@@ -19,7 +19,7 @@
 				<ul class="ml mls cl" id="newuserlist" style="display:block;">
 					<!--{loop $newuserlist $user}-->
 						<li>
-							<a href="home.php?mod=space&amp;uid=$user[uid]" title="{if $user['level'] == 1}{lang group_moderator_title}{elseif $user['level'] == 2}{lang group_moderator_vice_title}{elseif $user['level'] == 3}{lang group_star_member_title}{/if}{if $user['online']} {lang login_normal_mode}{/if}" class="avt" c="1">
+							<a href="home.php?mod=space&uid=$user[uid]" title="{if $user['level'] == 1}{lang group_moderator_title}{elseif $user['level'] == 2}{lang group_moderator_vice_title}{elseif $user['level'] == 3}{lang group_star_member_title}{/if}{if $user['online']} {lang login_normal_mode}{/if}" class="avt" c="1">
 								<!--{if $user['level'] == 1}-->
 									<em class="gm"></em>
 								<!--{elseif $user['level'] == 2}-->
@@ -30,10 +30,10 @@
 								<!--{if $user['online']}-->
 									<em class="gol"{if $user['level'] <= 3} style="margin-top: 15px;"{/if}></em>
 								<!--{/if}-->
-								<!--{echo discuz_uc_avatar($user[uid], 'small')}-->
+								<!--{echo avatar($user[uid], 'small')}-->
 							</a>
 							<p>
-								<a href="home.php?mod=space&amp;uid=$user[uid]">$user[username]</a>
+								<a href="home.php?mod=space&uid=$user[uid]">$user[username]</a>
 							</p>
 						</li>
 					<!--{/loop}-->
@@ -41,7 +41,7 @@
 				<ul class="ml mls cl" id="topuserlist" style="display:none;">
 					<!--{loop $activityuserlist $user}-->
 						<li>
-							<a href="home.php?mod=space&amp;uid=$user[uid]" title="{if $user['level'] == 1}{lang group_moderator_title}{elseif $user['level'] == 2}{lang group_moderator_vice_title}{elseif $user['level'] == 3}{lang group_star_member_title}{/if}{if $user['online']} {lang login_normal_mode}{/if}" class="avt" c="1">
+							<a href="home.php?mod=space&uid=$user[uid]" title="{if $user['level'] == 1}{lang group_moderator_title}{elseif $user['level'] == 2}{lang group_moderator_vice_title}{elseif $user['level'] == 3}{lang group_star_member_title}{/if}{if $user['online']} {lang login_normal_mode}{/if}" class="avt" c="1">
 								<!--{if $user['level'] == 1}-->
 									<em class="gm"></em>
 								<!--{elseif $user['level'] == 2}-->
@@ -52,10 +52,10 @@
 								<!--{if $user['online']}-->
 									<em class="gol"{if $user['level'] <= 3} style="margin-top: 15px;"{/if}></em>
 								<!--{/if}-->
-								<!--{echo discuz_uc_avatar($user[uid], 'small')}-->
+								<!--{echo avatar($user[uid], 'small')}-->
 							</a>
 							<p>
-								<a href="home.php?mod=space&amp;uid=$user[uid]">$user[username]</a>
+								<a href="home.php?mod=space&uid=$user[uid]">$user[username]</a>
 							</p>
 						</li>
 					<!--{/loop}-->
@@ -147,7 +147,7 @@
 			</p>
 			<script type="text/javascript">$('group_link').innerHTML = $('group_link').href</script>
 			<p class="ptn xg1">$_G[forum][foundername] {lang create_on} $_G[forum][dateline]</p>
-			<!--{if $status == 'isgroupuser'}--><p class="ptn"><a onclick="showDialog('{lang group_exit_confirm}', 'confirm', '', function(){location.href='forum.php?mod=group&amp;action=out&amp;fid=$_G[fid]'})" href="javascript:;" class="xi2">{lang group_exit}</a><p><!--{/if}-->
+			<!--{if $status == 'isgroupuser'}--><p class="ptn"><a onclick="showDialog('{lang group_exit_confirm}', 'confirm', '', function(){location.href='forum.php?mod=group&action=out&fid=$_G[fid]'})" href="javascript:;" class="xi2">{lang group_exit}</a><p><!--{/if}-->
 		</div>
 	</div>
 <!--{/if}-->

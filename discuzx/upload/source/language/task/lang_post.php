@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_post.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_post.php 16635 2010-09-10 09:40:57Z monkey $
  */
 
 $lang = array
@@ -29,7 +29,7 @@ $lang = array
 	'task_complete_forumid' => '在版塊 {value} ',
 	'task_complete_act_newthread' => '發新主題 {num} 次。',
 	'task_complete_act_newpost' => '發新主題/回復 {num} 次。',
-	'task_complete_act_newreply_thread' => '回復主題「{value}」 {num} 次。',
+	'task_complete_act_newreply_thread' => '在「{value}」回復主題 {num} 次。',
 	'task_complete_act_newreply_author' => '回復作者「{value}」的主題 {num} 次。',
 );
 

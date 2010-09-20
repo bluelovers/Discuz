@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 16591 2010-09-10 01:12:36Z monkey $
+ *      $Id: function_admincp.php 16710 2010-09-13 07:21:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -272,7 +272,10 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 		$message = "<form method=\"post\" action=\"$url\"><input type=\"hidden\" name=\"formhash\" value=\"".FORMHASH."\">".
 			"<br />$message$extra<br />".
 			"<p class=\"margintop\"><input type=\"submit\" class=\"btn\" name=\"confirmed\" value=\"".cplang('ok')."\"> &nbsp; \n".
-			"<input type=\"button\" class=\"btn\" value=\"".cplang('cancel')."\" onClick=\"history.go(-1);\"></p></form><br />";
+			"<script type=\"text/javascript\">".
+			"if(history.length > (BROWSER.ie ? 0 : 1)) document.write('<input type=\"button\" class=\"btn\" value=\"".cplang('cancel')."\" onClick=\"history.go(-1);\">');".
+			"</script>".
+			"</p></form><br />";
 	} elseif($type == 'loadingform') {
 		$message = "<form method=\"post\" action=\"$url\" id=\"loadingform\"><input type=\"hidden\" name=\"formhash\" value=\"".FORMHASH."\"><br />$message$extra<img src=\"static/image/admincp/ajax_loader.gif\" class=\"marginbot\" /><br />".
 			'<p class="marginbot"><a href="###" onclick="$(\'loadingform\').submit();" class="lightlink">'.cplang('message_redirect').'</a></p></form><br /><script type="text/JavaScript">setTimeout("$(\'loadingform\').submit();", 2000);</script>';
@@ -287,7 +290,11 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", 2000);</script>";
 			}
 		} elseif(strpos($message, $return)) {
-			$message .= '<p class="marginbot"><a href="javascript:history.go(-1);" class="lightlink">'.cplang('message_return').'</a></p>';
+			$message .= '<p class="marginbot">'.
+			"<script type=\"text/javascript\">".
+			"if(history.length > (BROWSER.ie ? 0 : 1)) document.write('<a href=\"javascript:history.go(-1);\" class=\"lightlink\">".cplang('message_return')."</a>');".
+			"</script>".
+			'</p>';
 		}
 	}
 
@@ -1148,6 +1155,15 @@ function set_pluginsetting($pluginvars) {
 		DB::update('common_pluginvar', array('value' => addslashes(serialize($valuenew))), "pluginvarid='$varid'");
 	}
 	updatecache('plugin');
+}
+
+function checkformulaperm($formula) {
+	$formula = preg_replace('/(\{([\d\.\-]+?)\})/', "'\\1'", $formula);
+	return checkformulasyntax(
+		$formula,
+		array('+', '-', '*', '/', '(', ')', '<', '=', '>', '!', 'and', 'or', ' ', '{', '}', "'"),
+		array('regdate', 'regday', 'regip', 'lastip', 'buyercredit', 'sellercredit', 'digestposts', 'posts', 'threads', 'oltime', 'extcredits[1-8]', 'field[\d]+')
+	);
 }
 
 ?>

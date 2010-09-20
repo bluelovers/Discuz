@@ -1,6 +1,6 @@
 <div class="pcb">
 	<!--{if $post['warned']}-->
-		<span class="y"><a href="forum.php?mod=misc&action=viewwarning&amp;tid=$_G[tid]&amp;uid=$post[authorid]" title="{lang warn_get}" onclick="showWindow('viewwarning', this.href)"><img src="{IMGDIR}/warning.gif" alt="{lang warn_get}" /></a></span>
+		<span class="y"><a href="forum.php?mod=misc&action=viewwarning&tid=$_G[tid]&uid=$post[authorid]" title="{lang warn_get}" onclick="showWindow('viewwarning', this.href)"><img src="{IMGDIR}/warning.gif" alt="{lang warn_get}" /></a></span>
 	<!--{/if}-->
 	<!--{if !$post['first'] && !empty($post[subject])}-->
 		<h2>$post[subject]</h2>
@@ -84,48 +84,48 @@
 				<!--{/if}-->
 			</div>
 		<!--{/if}-->
-		<!--{if $post['first'] && $sticklist}-->
-		<div class="cl">
-			<h3 class="psth xs1">{lang replies_recommended}</h3>
-			<!--{loop $sticklist $rpost}-->
-				<div class="pstl xs1">
-					<div class="psta"><a href="home.php?mod=space&amp;uid=$rpost[authorid]" c="1">$rpost[avatar]</a></div>
-					<div class="psti">
-						<p>
-							<a href="home.php?mod=space&amp;uid=$rpost[authorid]" class="xi2 xw1">$rpost[author]</a> {lang published_in_floor}
-							<span class="xi2">
-								&nbsp;<a href="javascript:;" onclick="window.open('forum.php?mod=redirect&amp;goto=findpost&amp;ptid=$rpost[tid]&amp;pid=$rpost[pid]')" class="xi2">{lang view_full_content}</a>
-								<!--{if $_G['group']['allowstickreply']}-->&nbsp;<a href="javascript:;" onclick="modaction('stickreply', $rpost[pid], '&undo=yes')" class="xi2">{lang admin_unstickreply}</a><!--{/if}-->
-							</span>
-						</p>
-						<div class="mtn">$rpost[message]</div>
-					</div>
-				</div>
-			<!--{/loop}-->
-		</div>
-		<!--{/if}-->
-		<div id="comment_$post[pid]" class="cl cm">
-		<!--{if $_G['setting']['commentnumber'] && !empty($comments[$post[pid]])}-->
-			<h3 class="psth xs1">{lang comments}</h3>
-			<!--{if $totalcomment[$post[pid]]}--><div class="pstl">$totalcomment[$post[pid]]</div><!--{/if}-->
-			<!--{loop $comments[$post[pid]] $comment}-->
-				<div class="pstl xs1">
-					<div class="psta"><a href="home.php?mod=space&amp;uid=$comment[authorid]" c="1">$comment[avatar]</a></div>
-					<div class="psti">
-						<a href="home.php?mod=space&amp;uid=$comment[authorid]" class="xi2 xw1">$comment[author]</a>
-						&nbsp;$comment[comment]&nbsp;
-						<span class="xg1">
-							{lang poston} $comment[dateline]
-							<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])">{lang delete}</a><!--{/if}-->
-						</span>
-					</div>
-				</div>
-			<!--{/loop}-->
-			<!--{if $commentcount[$post[pid]] > $_G['setting']['commentnumber']}--><div class="pgs cl"><div class="pg"><a href="javascript:;" class="nxt" onclick="ajaxget('forum.php?mod=misc&action=commentmore&tid=$post[tid]&pid=$post[pid]&page=2', 'comment_$post[pid]')">{lang next_page}</a></div></div><!--{/if}-->
-		<!--{/if}-->
-		</div>
-		<!--{hook/viewthread_postbottom $postcount}-->
 	</div>
+	<!--{if $post['first'] && $sticklist}-->
+	<div>
+		<h3 class="psth xs1">{lang replies_recommended}</h3>
+		<!--{loop $sticklist $rpost}-->
+			<div class="pstl xs1">
+				<div class="psta"><a href="home.php?mod=space&uid=$rpost[authorid]" c="1">$rpost[avatar]</a></div>
+				<div class="psti">
+					<p>
+						<a href="home.php?mod=space&uid=$rpost[authorid]" class="xi2 xw1">$rpost[author]</a> {lang published_in_floor}
+						<span class="xi2">
+							&nbsp;<a href="javascript:;" onclick="window.open('forum.php?mod=redirect&goto=findpost&ptid=$rpost[tid]&pid=$rpost[pid]')" class="xi2">{lang view_full_content}</a>
+							<!--{if $_G['group']['allowstickreply']}-->&nbsp;<a href="javascript:;" onclick="modaction('stickreply', $rpost[pid], '&undo=yes')" class="xi2">{lang admin_unstickreply}</a><!--{/if}-->
+						</span>
+					</p>
+					<div class="mtn">$rpost[message]</div>
+				</div>
+			</div>
+		<!--{/loop}-->
+	</div>
+	<!--{/if}-->
+	<div id="comment_$post[pid]" class="cm">
+	<!--{if $_G['setting']['commentnumber'] && !empty($comments[$post[pid]])}-->
+		<h3 class="psth xs1">{lang comments}</h3>
+		<!--{if $totalcomment[$post[pid]]}--><div class="pstl">$totalcomment[$post[pid]]</div><!--{/if}-->
+		<!--{loop $comments[$post[pid]] $comment}-->
+			<div class="pstl xs1">
+				<div class="psta"><a href="home.php?mod=space&uid=$comment[authorid]" c="1">$comment[avatar]</a></div>
+				<div class="psti">
+					<a href="home.php?mod=space&uid=$comment[authorid]" class="xi2 xw1">$comment[author]</a>
+					&nbsp;$comment[comment]&nbsp;
+					<span class="xg1">
+						{lang poston} $comment[dateline]
+						<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])">{lang delete}</a><!--{/if}-->
+					</span>
+				</div>
+			</div>
+		<!--{/loop}-->
+		<!--{if $commentcount[$post[pid]] > $_G['setting']['commentnumber']}--><div class="pgs mbm cl"><div class="pg"><a href="javascript:;" class="nxt" onclick="ajaxget('forum.php?mod=misc&action=commentmore&tid=$post[tid]&pid=$post[pid]&page=2', 'comment_$post[pid]')">{lang next_page}</a></div></div><!--{/if}-->
+	<!--{/if}-->
+	</div>
+	<!--{hook/viewthread_postbottom $postcount}-->
 	<!--{if !empty($post['ratelog'])}-->
 		<dl id="ratelog_$post[pid]" class="rate{if !empty($_G['cookie']['ratecollapse'])} rate_collapse{/if}">
 			<!--{if $_G['setting']['ratelogon']}-->
@@ -133,8 +133,8 @@
 			<!--{else}-->
 				<dt>
 					<!--{if !empty($postlist[$post[pid]]['totalrate'])}-->
-						<strong><a href="forum.php?mod=misc&action=viewratings&amp;tid=$_G[tid]&amp;pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang have}{echo count($postlist[$post[pid]][totalrate]);}{lang people_score}, {lang rate_view}"><!--{echo count($postlist[$post[pid]][totalrate]);}--></a></strong>
-						<p><a href="forum.php?mod=misc&action=viewratings&amp;tid=$_G[tid]&amp;pid=$post[pid]" onclick="showWindow('viewratings', this.href)">{lang rate_view}</a></p>
+						<strong><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang have}{echo count($postlist[$post[pid]][totalrate]);}{lang people_score}, {lang rate_view}"><!--{echo count($postlist[$post[pid]][totalrate]);}--></a></strong>
+						<p><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)">{lang rate_view}</a></p>
 					<!--{/if}-->
 				</dt>
 				<dd>
@@ -143,7 +143,7 @@
 				<!--{if $_G['setting']['ratelogon']}-->
 					<table class="ratl">
 						<tr>
-							<th class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&amp;tid=$_G[tid]&amp;pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></th>
+							<th class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></th>
 							<!--{loop $post['ratelogextcredits'] $id $score}-->
 							<th width="50"><i>{$_G['setting']['extcredits'][$id][title]}</i></th>
 							<!--{/loop}-->
@@ -156,7 +156,7 @@
 							<!--{loop $post['ratelog'] $uid $ratelog}-->
 							<tr id="rate_{$post[pid]}_{$uid}">
 								<td>
-									<a href="home.php?mod=space&uid=$uid" target="_blank" c="1"><!--{echo discuz_uc_avatar($uid, 'small');}--></a> <a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a>
+									<a href="home.php?mod=space&uid=$uid" target="_blank" c="1"><!--{echo avatar($uid, 'small');}--></a> <a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a>
 								</td>
 								<!--{loop $post['ratelogextcredits'] $id $score}-->
 									<!--{if $ratelog['score'][$id] > 0}-->
@@ -179,7 +179,7 @@
 								<span class="xg1">{$_G['setting']['extcredits'][$id][title]} $score</span>&nbsp;
 							<!--{/if}-->
 						<!--{/loop}-->
-						&nbsp;<a href="forum.php?mod=misc&action=viewratings&amp;tid=$_G[tid]&amp;pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}" class="xi2">{lang rate_view}</a>
+						&nbsp;<a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}" class="xi2">{lang rate_view}</a>
 					</p>
 				<!--{else}-->
 					<ul class="cl">
@@ -197,7 +197,7 @@
 									</p>
 									<p class="mncr"></p>
 								</div>
-								<p id="rate_{$post[pid]}_{$uid}" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" class="mtn mbn"><a href="home.php?mod=space&uid=$uid" target="_blank" class="avt" c="1"><!--{echo discuz_uc_avatar($uid, 'small');}--></a></p>
+								<p id="rate_{$post[pid]}_{$uid}" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" class="mtn mbn"><a href="home.php?mod=space&uid=$uid" target="_blank" class="avt" c="1"><!--{echo avatar($uid, 'small');}--></a></p>
 								<p><a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a></p>
 							</li>
 						<!--{/loop}-->

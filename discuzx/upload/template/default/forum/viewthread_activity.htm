@@ -1,14 +1,6 @@
 <script type="text/javascript">
 	function checkform(theform) {
-		if (theform.contact.value == '') {
-			alert('{lang activiy_linkman_input}');
-			theform.contact.focus();
-			return false;
-		} else if (theform.contact.value.length > 200) {
-			alert('{lang activiy_linkman_more}');
-			theform.contact.focus();
-			return false;
-		} else if (theform.message.value.length > 200) {
+		if (theform.message.value.length > 200) {
 			alert('{lang activiy_guest_more}');
 			theform.message.focus();
 			return false;
@@ -106,8 +98,9 @@
 			<p><a href="forum.php?mod=group&action=join&fid=$_G[fid]" class="xi2">{lang activity_join_group}</a></p>
 		</div>
 	<!--{else}-->
-		<form name="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}">
+		<form name="activity" id="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}" onsubmit="ajaxpost('activity', 'return_activityapplies', 'return_activityapplies', 'onerror');return false;">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="handlekey" value="activityapplies" />
 			<div class="c">
 				<!--{if $_G['setting']['activitycredit'] && $activity['credit'] && !$applied}--><p class="xi1">{lang activity_need_credit} $activity[credit] {$_G['setting']['extcredits'][$_G['setting']['activitycredit']][title]}</p><!--{/if}-->
 				<div class="actfm">
@@ -123,7 +116,7 @@
 						<!--{loop $activity['ufield']['userfield'] $fieldid}-->
 						<!--{if $settings[$fieldid][available]}-->
 							<tr>
-								<th id="th_$fieldid">$settings[$fieldid][title]</th>
+								<th id="th_$fieldid"><strong class="rq y">*</strong>$settings[$fieldid][title]</th>
 								<td id="td_$fieldid">
 									$htmls[$fieldid]
 								</td>
@@ -150,10 +143,18 @@
 				<!--{if $_G['setting']['activitycredit'] && $activity['credit'] && checklowerlimit(array('extcredits'.$_G['setting']['activitycredit'] => '-'.$activity['credit']), $_G['uid'], 1, 0, 1) !== true}-->
 					<p class="xi1">{$_G['setting']['extcredits'][$_G['setting']['activitycredit']][title]} {lang not_enough}$activity['credit']</p>
 				<!--{else}-->
-					<button type="submit" name="activitysubmit" class="pn pnc" value="true"><span>{lang submit}</span></button>
+					<input type="hidden" name="activitysubmit" value="true">
+					<em class="xi1" id="return_activityapplies"></em>
+					<button type="submit" class="pn pnc"><span>{lang submit}</span></button>
 				<!--{/if}-->
 			</div>
 		</form>
+		
+		<script type="text/javascript">
+			function succeedhandle_activityapplies(locationhref, message) {
+				showDialog(message, 'notice', '', 'location.href="' + locationhref + '"');
+			}
+		</script>
 	<!--{/if}-->
 	</div>
 <!--{elseif $_G['uid'] && !$activityclose && $applied}-->
@@ -187,7 +188,7 @@
 			<!--{loop $applylistverified $apply}-->
 				<tr>
 					<td>
-						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo discuz_uc_avatar($apply[uid], 'small')}--></a> 
+						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a> 
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $_G['forum_thread']['authorid'] == $_G['uid'] && $apply[message]}-->$apply[message]<!--{/if}--></td>
@@ -212,7 +213,7 @@
 			<!--{loop $applylist $apply}-->
 				<tr>
 					<td>
-						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo discuz_uc_avatar($apply[uid], 'small')}--></a> 
+						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a> 
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $apply[message]}--><p>$apply[message]</p><!--{/if}--></td>

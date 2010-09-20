@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 16172 2010-09-01 06:07:20Z monkey $
+ *      $Id: admincp_db.php 16790 2010-09-15 01:43:36Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -139,6 +139,12 @@ if($operation == 'export') {
 			}
 		}
 
+		$memberexist = array_search(DB::table('common_member'), $tables);
+		if($memberexist !== FALSE) {
+			unset($tables[$memberexist]);
+			array_unshift($tables, DB::table('common_member'));
+		}
+
 		$volume = intval($_G['gp_volume']) + 1;
 		$idstring = '# Identify: '.base64_encode("$_G[timestamp],".$_G['setting']['version'].",{$_G['gp_type']},{$_G['gp_method']},{$volume}")."\n";
 
@@ -168,6 +174,11 @@ if($operation == 'export') {
 			$tableid = intval($_G['gp_tableid']);
 			$startfrom = intval($_G['gp_startfrom']);
 
+			if(!$tableid) {
+				foreach($tables as $table) {
+					$sqldump .= sqldumptablestruct($table);
+				}
+			}
 			$complete = TRUE;
 			for(; $complete && $tableid < count($tables) && strlen($sqldump) + 500 < $_G['gp_sizelimit'] * 1000; $tableid++) {
 				$sqldump .= sqldumptable($tables[$tableid], $startfrom, strlen($sqldump));
@@ -1145,6 +1156,46 @@ function syntablestruct($sql, $version, $dbcharset) {
 	}
 }
 
+function sqldumptablestruct($table) {
+	global $_G, $db;
+
+	$createtable = DB::query("SHOW CREATE TABLE $table", 'SILENT');
+
+	if(!DB::error()) {
+		$tabledump = "DROP TABLE IF EXISTS $table;\n";
+	} else {
+		return '';
+	}
+
+	$create = $db->fetch_row($createtable);
+
+	if(strpos($table, '.') !== FALSE) {
+		$tablename = substr($table, strpos($table, '.') + 1);
+		$create[1] = str_replace("CREATE TABLE $tablename", 'CREATE TABLE '.$table, $create[1]);
+	}
+	$tabledump .= $create[1];
+
+	if($_G['gp_sqlcompat'] == 'MYSQL41' && $db->version() < '4.1') {
+		$tabledump = preg_replace("/TYPE\=(.+)/", "ENGINE=\\1 DEFAULT CHARSET=".$dumpcharset, $tabledump);
+	}
+	if($db->version() > '4.1' && $_G['gp_sqlcharset']) {
+		$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=.+/", "DEFAULT CHARSET=".$_G['gp_sqlcharset'], $tabledump);
+	}
+
+	$tablestatus = DB::fetch_first("SHOW TABLE STATUS LIKE '$table'");
+	$tabledump .= ($tablestatus['Auto_increment'] ? " AUTO_INCREMENT=$tablestatus[Auto_increment]" : '').";\n\n";
+	if($_G['gp_sqlcompat'] == 'MYSQL40' && $db->version() >= '4.1' && $db->version() < '5.1') {
+		if($tablestatus['Auto_increment'] <> '') {
+			$temppos = strpos($tabledump, ',');
+			$tabledump = substr($tabledump, 0, $temppos).' auto_increment'.substr($tabledump, $temppos);
+		}
+		if($tablestatus['Engine'] == 'MEMORY') {
+			$tabledump = str_replace('TYPE=MEMORY', 'TYPE=HEAP', $tabledump);
+		}
+	}
+	return $tabledump;
+}
+
 function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 	global $_G, $db, $startrow, $dumpcharset, $complete, $excepttables;
 
@@ -1162,43 +1213,6 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 	} else {
 		while($fieldrow = DB::fetch($query)) {
 			$tablefields[] = $fieldrow;
-		}
-	}
-	if(!$startfrom) {
-
-		$createtable = DB::query("SHOW CREATE TABLE $table", 'SILENT');
-
-		if(!DB::error()) {
-			$tabledump = "DROP TABLE IF EXISTS $table;\n";
-		} else {
-			return '';
-		}
-
-		$create = $db->fetch_row($createtable);
-
-		if(strpos($table, '.') !== FALSE) {
-			$tablename = substr($table, strpos($table, '.') + 1);
-			$create[1] = str_replace("CREATE TABLE $tablename", 'CREATE TABLE '.$table, $create[1]);
-		}
-		$tabledump .= $create[1];
-
-		if($_G['gp_sqlcompat'] == 'MYSQL41' && $db->version() < '4.1') {
-			$tabledump = preg_replace("/TYPE\=(.+)/", "ENGINE=\\1 DEFAULT CHARSET=".$dumpcharset, $tabledump);
-		}
-		if($db->version() > '4.1' && $_G['gp_sqlcharset']) {
-			$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=.+/", "DEFAULT CHARSET=".$_G['gp_sqlcharset'], $tabledump);
-		}
-
-		$tablestatus = DB::fetch_first("SHOW TABLE STATUS LIKE '$table'");
-		$tabledump .= ($tablestatus['Auto_increment'] ? " AUTO_INCREMENT=$tablestatus[Auto_increment]" : '').";\n\n";
-		if($_G['gp_sqlcompat'] == 'MYSQL40' && $db->version() >= '4.1' && $db->version() < '5.1') {
-			if($tablestatus['Auto_increment'] <> '') {
-				$temppos = strpos($tabledump, ',');
-				$tabledump = substr($tabledump, 0, $temppos).' auto_increment'.substr($tabledump, $temppos);
-			}
-			if($tablestatus['Engine'] == 'MEMORY') {
-				$tabledump = str_replace('TYPE=MEMORY', 'TYPE=HEAP', $tabledump);
-			}
 		}
 	}
 

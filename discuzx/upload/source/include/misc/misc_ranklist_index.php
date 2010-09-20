@@ -113,5 +113,9 @@ if($_G['ranklist_cacheupdated']) {
 unset($pictures['lastupdated'], $threads_hot['lastupdated'], $blogs_hot['lastupdated']);
 unset($polls_hot['lastupdated'], $activities_hot['lastupdated'], $memberlist['lastupdated']);
 
+$navtitle = $_G['setting']['navs'][8]['navname'];
+$metakeywords = $navtitle;
+$metadescription = $navtitle;
+
 include template('diy:ranklist/ranklist');
 ?>

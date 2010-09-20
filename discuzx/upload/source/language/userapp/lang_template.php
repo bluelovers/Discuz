@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16158 2010-09-01 03:55:57Z monkey $
+ *      $Id: lang_template.php 17047 2010-09-19 23:44:22Z monkey $
  *
  *      This file is automatically generate
  */
@@ -17,7 +17,6 @@ $lang = array (
   'add_app' => '添加新$_G[setting][navs][5][navname]',
   'app_index' => '應用首頁',
   'boy_like' => '男孩喜歡',
-  'friends_playing' => '好友正在玩',
   'girl_like' => '女孩喜歡',
   'just_look_dynamic' => '只看此類動態',
   'latest_release' => '最新發佈',
@@ -27,7 +26,6 @@ $lang = array (
   'today_active_app' => '今日活躍$_G[setting][navs][5][navname]',
   'what_everybody_playing' => '大家在玩什麼',
   'what_friend_playing' => '好友在玩什麼',
-  'you_may_interested' => '你可能感興趣的',
 
   'all' => '全部',
   'app_add' => '添加$_G[setting][navs][5][navname]',

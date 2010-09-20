@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_admingroup.php 14492 2010-08-12 04:39:48Z monkey $
+ *      $Id: admincp_admingroup.php 16799 2010-09-15 03:00:48Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -139,6 +139,8 @@ if(!$operation) {
 				DB::insert('common_usergroup_field', $fielddata);
 			}
 		}
+
+		updatecache(array('usergroups', 'groupreadaccess', 'admingroups'));
 
 		cpmsg('admingroups_edit_succeed', 'action=admingroup', 'succeed');
 
@@ -423,9 +425,8 @@ if(!$operation) {
 		), "admingid='$_G[gp_id]'");
 		}
 
-		updatecache('usergroups');
-		updatecache('groupreadaccess');
-		updatecache('admingroups');
+		updatecache(array('usergroups', 'groupreadaccess', 'admingroups'));
+
 		cpmsg('admingroups_edit_succeed', 'action=admingroup&operation=edit&'.($multiset ? 'multi='.implode(',', $_G['gp_multi']) : 'id='.$_G['gp_id']).'&anchor='.$_G['gp_anchor'], 'succeed');
 	}
 }

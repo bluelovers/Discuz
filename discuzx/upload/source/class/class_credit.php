@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 16039 2010-08-31 03:47:45Z zhengqingpeng $
+ *      $Id: class_credit.php 16961 2010-09-17 07:54:14Z zhengqingpeng $
  */
 
 class credit {
@@ -280,8 +280,14 @@ class credit {
 		if($uid && !empty($_G['setting']['creditsformula'])) {
 			$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_count')." WHERE uid='$uid'");
 			eval("\$credits = round(".$_G['setting']['creditsformula'].");");
-			if($uid == $_G['uid']) $_G['member']['credits'] = $credits;
-			if($update) DB::update('common_member', array('credits'=>intval($credits)), array('uid' => $uid));
+			if($uid == $_G['uid']) {
+				if($update && $_G['member']['credits'] != $credits) {
+					DB::update('common_member', array('credits'=>intval($credits)), array('uid' => $uid));
+					$_G['member']['credits'] = $credits;
+				}
+			} elseif($update) {
+				DB::update('common_member', array('credits'=>intval($credits)), array('uid' => $uid));
+			}
 		}
 		return $credits;
 	}
@@ -452,19 +458,19 @@ class credit {
 				break;
 			case 1:
 				$infoarr = explode(',', $rulelog['info']);
-				if(in_array($needle, $infoarr)) {
+				if(!empty($rulelog['info']) && in_array($needle, $infoarr)) {
 					$repeat = true;
 				}
 				break;
 			case 2:
 				$userarr = explode(',', $rulelog['user']);
-				if(in_array($needle, $userarr)) {
+				if(!empty($rulelog['user']) && in_array($needle, $userarr)) {
 					$repeat = true;
 				}
 				break;
 			case 3:
 				$apparr = explode(',', $rulelog['app']);
-				if(in_array($needle, $apparr)) {
+				if(!empty($rulelog['app']) && in_array($needle, $apparr)) {
 					$repeat = true;
 				}
 				break;

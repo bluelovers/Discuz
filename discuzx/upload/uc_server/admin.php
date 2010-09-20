@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admin.php 962 2009-09-21 02:37:04Z zhaoxiongfei $
+	$Id: admin.php 1001 2010-05-27 00:51:55Z zhaoxiongfei $
 */
 
 define('UC_SERVER_VERSION', '1.5.1');
@@ -66,7 +66,7 @@ function daddslashes($string, $force = 0, $strip = FALSE) {
 	if(!MAGIC_QUOTES_GPC || $force) {
 		if(is_array($string)) {
 			foreach($string as $key => $val) {
-				$string[$key] = daddslashes($val, $force);
+				$string[$key] = daddslashes($val, $force, $strip);
 			}
 		} else {
 			$string = addslashes($strip ? stripslashes($string) : $string);

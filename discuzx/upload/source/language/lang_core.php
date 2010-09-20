@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_core.php 16614 2010-09-10 06:26:06Z monkey $
+ *      $Id: lang_core.php 16913 2010-09-17 01:10:24Z monkey $
  */
 
 $lang = array
@@ -152,6 +152,7 @@ $lang = array
 	'title_memcp_profile' => '個人資料',
 	'title_memcp_sendmail' => '郵件提醒',
 	'title_memcp_credit' => '積分',
+	'title_memcp_friend' => '好友',
 	'title_memcp_usergroup' => '用戶組',
 	'title_memcp_album' => '編輯相冊',
 	'title_memcp_poke' => '打招呼',

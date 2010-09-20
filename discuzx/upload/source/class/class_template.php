@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_template.php 15748 2010-08-26 01:44:31Z monkey $
+ *      $Id: class_template.php 16868 2010-09-16 05:06:28Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,7 +28,7 @@ class template {
 		if(!@$fp = fopen(DISCUZ_ROOT.$tplfile, 'r')) {
 			$tpl = $tpldir.'/'.$file.'.htm';
 			$tplfile = $tplfile != $tpl ? $tpl.'", "'.$tplfile : $tplfile;
-			error('template_notfound', array('$tplfile' => $tplfile));
+			$this->error('template_notfound', $tplfile);
 		}
 
 		$template = @fread($fp, filesize(DISCUZ_ROOT.$tplfile));
@@ -98,7 +98,7 @@ class template {
 		$template = preg_replace("/ \?\>[\n\r]*\<\? /s", " ", $template);
 
 		if(!@$fp = fopen(DISCUZ_ROOT.$cachefile, 'w')) {
-			error('directory_notfound', array('$dir' => dirname(DISCUZ_ROOT.$cachefile)));
+			$this->error('directory_notfound', dirname(DISCUZ_ROOT.$cachefile));
 		}
 
 		$template = preg_replace("/\"(http)?[\w\.\/:]+\?[^\"]+?&[^\"]+?\"/e", "\$this->transamp('\\0')", $template);
@@ -287,6 +287,11 @@ class template {
 		$s = str_replace('?>', "\n\$$var .= <<<EOF\n", $s);
 		$s = str_replace('<?', "\nEOF;\n", $s);
 		return "<?\n$constadd\$$var = <<<EOF\n".$s."\nEOF;\n?>";
+	}
+
+	function error($message, $tplname) {
+		require_once libfile('class/error');
+		discuz_error::template_error($message, $tplname);
 	}
 
 }

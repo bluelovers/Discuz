@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group.php 16429 2010-09-06 09:51:21Z monkey $
+ *      $Id: group.php 16832 2010-09-15 07:38:31Z wangjinbo $
  */
 
 define('APPTYPEID', 3);
@@ -15,7 +15,7 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('grouptype', 'groupindex', 'blockclass');
+$cachelist = array('grouptype', 'groupindex');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 
@@ -29,7 +29,7 @@ define('CURMODULE', $mod);
 
 runhooks();
 
-$navtitle = $_G['setting']['seotitle']['group'];
+$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['group']);
 
 require DISCUZ_ROOT.'./source/module/group/group_'.$mod.'.php';
 ?>

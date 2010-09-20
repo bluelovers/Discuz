@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderation.php 16303 2010-09-03 03:53:52Z monkey $
+ *      $Id: topicadmin_moderate.php 16938 2010-09-17 04:37:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,10 +13,6 @@ if(!defined('IN_DISCUZ')) {
 
 if(!empty($_G['tid'])) {
 	$_G['gp_moderate'] = array($_G['tid']);
-}
-
-if(!defined('IN_DISCUZ') || CURMODULE != 'topicadmin') {
-	exit('Access Denied');
 }
 
 $allow_operation = array('delete', 'highlight', 'open', 'close', 'stick', 'digest', 'bump', 'down', 'recommend', 'type', 'move', 'recommend_group');
@@ -36,7 +32,7 @@ if(!in_array(0, $threadtableids)) {
 if($tids = dimplode($_G['gp_moderate'])) {
 	foreach($threadtableids as $tableid) {
 		$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
-		$query = DB::query("SELECT * FROM ".DB::table($threadtable)." WHERE tid IN ($tids) AND fid='$_G[fid]' AND digest>='0' LIMIT $_G[tpp]");
+		$query = DB::query("SELECT * FROM ".DB::table($threadtable)." WHERE tid IN ($tids) AND fid='$_G[fid]' LIMIT $_G[tpp]");
 		if(DB::num_rows($query)) {
 			break;
 		}
@@ -68,12 +64,11 @@ switch($frommodcp) {
 		$_G['referer'] = "forum.php?mod=modcp&action=forum&op=recommend".(getgpc('show') ? "&show=getgpc('show')" : '')."&fid=$_G[fid]";
 		break;
 	default:
-		$_G['referer'] = "forum.php?mod=forumdisplay&fid=$_G[fid]&".str_replace('amp;', '&', rawurldecode(getgpc('listextra')));
+		$_G['referer'] = $operation != 'delete' ? $_G['gp_redirect'] : 'forum.php?mod=forumdisplay&fid='.$_G['fid'];
 		break;
 }
 
 $optgroup = $_G['gp_optgroup'] = isset($_G['gp_optgroup']) ? intval($_G['gp_optgroup']) : 0;
-$listextra = $_G['gp_listextra'] = getgpc('listextra');
 $expirationstick = getgpc('expirationstick');
 
 $defaultcheck = array();
@@ -350,12 +345,12 @@ if(!submitcheck('modsubmit')) {
 					}
 				}
 
-				$_G['setting']['losslessdel'] = $_G['setting']['losslessdel'] > 0 ? TIMESTAMP - $_G['setting']['losslessdel'] * 86400 : 0;
+				$losslessdel = $_G['setting']['losslessdel'] > 0 ? TIMESTAMP - $_G['setting']['losslessdel'] * 86400 : 0;
 
 				$uidarray = $tuidarray = $ruidarray = array();
 				$postlist = getfieldsofposts('first, authorid, dateline', "tid IN ($moderatetids)");
 				foreach($postlist as $post) {
-					if($post['dateline'] < $_G['setting']['losslessdel']) {
+					if($post['dateline'] > $losslessdel) {
 						if($post['first']) {
 							updatemembercount($post['authorid'], array('threads' => -1, 'post' => -1), false);
 						} else {

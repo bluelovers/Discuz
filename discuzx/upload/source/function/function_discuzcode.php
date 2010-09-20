@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_discuzcode.php 16117 2010-08-31 09:38:23Z monkey $
+ *      $Id: function_discuzcode.php 16832 2010-09-15 07:38:31Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ $_G['forum_discuzcode'] = array(
 		0 => '',
 		1 => $_SERVER['HTTP_HOST'],
 		2 => $_G['setting']['bbname'],
-		3 => $_G['setting']['seotitle'],
+		3 => str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']),
 		4 => $_G['setting']['seokeywords'],
 		5 => $_G['setting']['seodescription']
 	)

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 16169 2010-09-01 05:38:40Z liulanbo $
+ *      $Id: admincp_threads.php 16957 2010-09-17 07:43:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -207,7 +207,7 @@ EOT;
 		$fids = array();
 		$tids = $threadcount = '0';
 		if($sql) {
-			$sql = (empty($_G['gp_savethread']) ? "digest>='0' AND displayorder>='0'" : '1').' '.$sql;
+			$sql = (empty($_G['gp_savethread']) ? "displayorder>='0'" : '1').' '.$sql;
 			if($_G['gp_detail']) {
 				$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
 				$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
@@ -366,10 +366,12 @@ EOT;
 			$tuidarray = $ruidarray = array();
 			$postarray = getfieldsofposts('first, authorid', $tidsadd);
 			foreach($postarray as $post) {
-				if($post['first']) {
-					$tuidarray[] = $post['authorid'];
-				} else {
-					$ruidarray[] = $post['authorid'];
+				if($post['authorid']) {
+					if($post['first']) {
+						$tuidarray[] = $post['authorid'];
+					} else {
+						$ruidarray[] = $post['authorid'];
+					}
 				}
 			}
 			if($tuidarray) {
@@ -519,12 +521,14 @@ EOT;
 			}
 			if($do == 'del') {
 				if(!empty($_G['gp_delete']) && is_array($_G['gp_delete'])) {
-					$del_tids = '0';
+					$del_tids = array();
 					foreach($_G['gp_delete'] as $del_tid){
 						unset($forumstickthreads[$del_tid]);
-						$del_tids .= ", $del_tid";
+						$del_tids[] = $del_tid;
 					}
-					DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0' WHERE tid IN ($del_tids)");
+					if($del_tids) {
+						DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0' WHERE tid IN (".dimplode($del_tids).")");
+					}
 				} else {
 					cpmsg('threads_forumstick_del_nochoice', '', 'error');
 				}

@@ -32,21 +32,21 @@
 							<!--{if $space[sightml]}--><li><em>{lang personal_signature}</em><table><tr><td>$space[sightml]</td></tr></table></li><!--{/if}-->
 							<li>
 								<em>{lang stat_info}</em>
-								<a href="home.php?mod=space&uid=$space[uid]&do=friend&view=me" target="_blank">{lang friends_num} $space[friends]</a>
+								<a href="home.php?mod=space&uid=$space[uid]&do=friend&view=me&from=space" target="_blank">{lang friends_num} $space[friends]</a>
 								<span class="pipe">|</span>
-								<a href="home.php?mod=space&uid=$space[uid]&do=doing&view=me" target="_blank">{lang doings_num} $space[doings]</a>
+								<a href="home.php?mod=space&uid=$space[uid]&do=doing&view=me&from=space" target="_blank">{lang doings_num} $space[doings]</a>
 								<span class="pipe">|</span>
-								<a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me" target="_blank">{lang blogs_num} $space[blogs]</a>
+								<a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me&from=space" target="_blank">{lang blogs_num} $space[blogs]</a>
 								<span class="pipe">|</span>
-								<a href="home.php?mod=space&uid=$space[uid]&do=album&view=me" target="_blank">{lang albums_num} $space[albums]</a>
+								<a href="home.php?mod=space&uid=$space[uid]&do=album&view=me&from=space" target="_blank">{lang albums_num} $space[albums]</a>
 								<span class="pipe">|</span>
 								<!--{if $_G['setting']['allowviewuserthread'] !== false}-->
-									<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&type=reply" target="_blank">{lang replay_num} $space[posts]</a>
+									<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&type=reply&from=space" target="_blank">{lang replay_num} $space[posts]</a>
 									<span class="pipe">|</span>
-									<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&type=thread" target="_blank">{lang threads_num} $space[threads]</a>
+									<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&type=thread&from=space" target="_blank">{lang threads_num} $space[threads]</a>
 									<span class="pipe">|</span>
 								<!--{/if}-->
-								<a href="home.php?mod=space&uid=$space[uid]&do=share&view=me" target="_blank">{lang shares_num} $space[sharings]</a>
+								<a href="home.php?mod=space&uid=$space[uid]&do=share&view=me&from=space" target="_blank">{lang shares_num} $space[sharings]</a>
 							</li>
 						</ul>
 						<!--{hook/space_profile_baseinfo_middle}-->

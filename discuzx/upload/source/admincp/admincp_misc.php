@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 16364 2010-09-06 01:54:28Z monkey $
+ *      $Id: admincp_misc.php 16651 2010-09-12 04:03:53Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1305,7 +1305,7 @@ EOT;
 
 		} else {
 
-			if($ids = implodeids($_G['gp_delete'])) {
+			if($ids = dimplode($_G['gp_delete'])) {
 				DB::query("DELETE FROM ".DB::table('common_admincp_cmenu')." WHERE id IN ($ids) AND uid='$_G[uid]'");
 			}
 

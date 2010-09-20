@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_threadexpiry_hourly.php 13164 2010-07-22 05:14:33Z monkey $
+ *      $Id: cron_threadexpiry_hourly.php 16910 2010-09-16 16:01:23Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,6 @@ if(!defined('IN_DISCUZ')) {
 $actionarray = array();
 $query = DB::query("SELECT * FROM ".DB::table('forum_threadmod')." WHERE expiration>'0' AND expiration<'$_G[timestamp]' AND status='1'");
 while($expiry = DB::fetch($query)) {
-	$threads[] = $expiry;
 	switch($expiry['action']) {
 		case 'EST':	$actionarray['UES'][] = $expiry['tid']; break;
 		case 'EHL':	$actionarray['UEH'][] = $expiry['tid'];	break;

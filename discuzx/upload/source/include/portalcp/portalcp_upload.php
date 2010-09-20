@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 16415 2010-09-06 07:32:56Z zhengqingpeng $
+ *      $Id: portalcp_upload.php 16638 2010-09-10 10:02:57Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -106,10 +106,12 @@ if($operation == 'downremotefile') {
 if($attachs) {
 
 	foreach($attachs as $attach) {
-		if($attach['isimage']) {
+		if($attach['isimage'] && empty($_G['setting']['portalarticleimgthumbclosed'])) {
 			require_once libfile('class/image');
 			$image = new image();
-			$attach['thumb'] = $image->Thumb($attach['target'], '', '300', '300', 2);
+			$thumbimgwidth = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
+			$thumbimgheight = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
+			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 2);
 			$image->Watermark($attach['target'], '', 'portal');
 		}
 

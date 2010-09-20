@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 15045 2010-08-18 07:35:11Z monkey $
+ *      $Id: admincp_menu.php 16693 2010-09-13 04:31:03Z monkey $
  */
 
 global $_G;
@@ -169,7 +169,7 @@ if(file_exists($menudir = DISCUZ_ROOT.'./source/admincp/menu')) {
 		@unlink($adminextendfile);
 		if($adminextendnew) {
 			require_once libfile('function/cache');
-			writetocache('adminextend', '', getcachevars(array('adminextend' => $adminextendnew)));
+			writetocache('adminextend', getcachevars(array('adminextend' => $adminextendnew)));
 		}
 		unset($_G['lang']['admincp']);
 	}

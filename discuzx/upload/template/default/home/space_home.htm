@@ -193,12 +193,12 @@
 							<input type="hidden" name="ac" value="search" />
 							<input type="hidden" name="type" value="all" />
 							<input type="hidden" name="searchsubmit" id="searchsubmit" value="true" />
-							<table cellspacing="0" cellpadding="0">
-							  <tr>
-								<td><a id="sctype" class="showmenu sc_display" onclick="showMenu(this.id);return false;" href="home.php?mod=spacecp&ac=search" title="{lang select_search_type}">{lang username}</a></td>
-								<td><input type="text" id="searchword" name="username" class="px xs1" style="width:90px;"value="{lang enter_content}" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" /></td>
-								<td><button id="search_submit" type="button" class="xw1" value="" onclick="sendSearchfriend();"><span>{lang seek}</span></button></td>
-							  </tr>
+							<table cellspacing="0" cellpadding="0" class="shortsc">
+								<tr>
+									<td><a id="sctype" class="showmenu sc_display" onclick="showMenu(this.id);return false;" href="home.php?mod=spacecp&ac=search" title="{lang select_search_type}">{lang username}</a></td>
+									<td><input type="text" id="searchword" name="username" class="px xs1" value="{lang enter_content}" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" /></td>
+									<td><button id="search_submit" type="button" class="xw1" value="" onclick="sendSearchfriend();"><span>{lang seek}</span></button></td>
+								</tr>
 							</table>
 						</form>
 					</div>
@@ -440,7 +440,7 @@
 			<!--{else}-->
 				<p class="emp">{lang no_feed}</p>
 			<!--{/if}-->
-			
+
 			<!--{if $filtercount}-->
 				<div class="i" id="feed_filter_notice_{$start}">
 					{lang depending_your}<a href="home.php?mod=spacecp&ac=privacy&op=filter" target="_blank" class="xi2 xw1">{lang filter_settings}</a>,{lang shield_feed_message} (<a href="javascript:;" onclick="filter_more($start);" id="a_feed_privacy_more" class="xi2">{lang click_view}</a>)
@@ -455,7 +455,7 @@
 					</ul>
 				</div>
 			<!--{/if}-->
-			
+
 			</div>
 			<!--/id=feed_div-->
 

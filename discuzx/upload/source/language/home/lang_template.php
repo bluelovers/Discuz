@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16612 2010-09-10 06:23:51Z zhengqingpeng $
+ *      $Id: lang_template.php 16999 2010-09-19 02:06:41Z monkey $
  *
  *      This file is automatically generate
  */
@@ -85,13 +85,16 @@ $lang = array (
   'comprehensive_overview' => '綜合概況',
   'comprehensive_overview_message' => '這裡看到的是站點的綜合概況發展統計(需要至少統計2天後才有效)。',
   'info_interactive' => '信息互動',
-  'info_publish' => '信息發佈',
   'interactive_help_message' => '<li>來訪用戶：指的是每天訪問本站的唯一用戶數。一個用戶訪問多次，也只算一次。</li>
-									<li>信息發佈：指的是每天發佈記錄、日誌、圖片、話題、投票、活動和分享的總數量。</li>
-									<li>信息互動：指的是每天進行以上信息互相評論和表態、參加投票、參與活動的互動總數量。</li>
-									<li>用戶互動：指的是每天用戶之間互相留言、打招呼的互動總數量。</li>',
-  'member_interactive' => '用戶互動',
+  									<li>{$_G[setting][navs][2][navname]}：指的是每天發佈主題、投票、活動、懸賞、辯論、商品和主題回帖的總數量。</li>
+									<li>{$_G[setting][navs][3][navname]}：指的是每天創建{$_G[setting][navs][3][navname]}、{$_G[setting][navs][3][navname]}主題、{$_G[setting][navs][3][navname]}回帖的總數量。</li>
+									<li>{$_G[setting][navs][4][navname]}：指的是每天發佈記錄、日誌、圖片、話題、投票、活動、分享和互相評論的總數量。</li>
+									<li>互動：指的是每天用戶之間互相留言、打招呼和的{$_G[setting][navs][4][navname]}相應的表態互動總數量。</li>',
+  'member_interactive' => '互動',
+  'show' => '查看',
   'stat_classification' => '統計分類',
+  'stat_date_range' => '統計日期',
+  'stat_merge_statistic' => '合併統計',
   'stat_message' => '站點趨勢統計系統，會記錄站點每日的發展概況。通過每日的趨勢變化，為站長運營站點提供科學的數據基礎。',
   'trends_and_statistics' => '趨勢統計',
 
@@ -139,7 +142,6 @@ $lang = array (
   'select_type' => '選擇分類',
   'series' => '連拍',
   'set_parameter' => '參數設置',
-  'show' => '查看',
   'site_error_message' => '參數錯誤,系統載入失敗',
   'tatal_of' => '總共有',
   'upload' => '上傳',
@@ -218,6 +220,7 @@ $lang = array (
   'look_exif' => '查看EXIF信息',
   'look_pic' => '查看原圖',
   'manage_pic' => '管理圖片',
+  'moderate_need' => '待審核',
   'next_pic' => '下一張',
   'no_exif' => '無EXIF信息',
   'previous_page' => '返回上一頁',
@@ -233,7 +236,6 @@ $lang = array (
 
   'album_pics' => '張圖片',
   'favorite' => '收藏',
-  'moderate_need' => '待審核',
   'next_album' => '下一組',
   'no_pics' => '該相冊下還沒有圖片。',
   'previous_album' => '上一組',
@@ -281,6 +283,7 @@ $lang = array (
   'online' => '在線',
   'send_pm' => '發送消息',
   'someone_space' => '的空間',
+  'update_doing' => '更新記錄',
   'update_profile' => '更新資料',
   'user_ban' => '禁止用戶',
   'user_edit' => '編輯用戶',
@@ -940,10 +943,10 @@ $lang = array (
   'feed_option' => '動態選項',
   'insert_pic' => '插入圖片',
   'label' => '標籤',
-  'make_feed' => '產生動態',
+  'make_feed' => '發送動態',
   'memcp_blog' => '發表日誌',
   'name' => '名稱',
-  'no_feed_notice' => '友情提醒：你確定此次發佈不產生動態嗎？\\n有了動態，好友才能及時看到你的更新。',
+  'no_feed_notice' => '友情提醒：你確定此次發佈不發送動態嗎？\\n有了動態，好友才能及時看到你的更新。',
   'pic' => '圖片',
   'save_publish' => '保存發佈',
   'select_album' => '選擇相冊',
@@ -1198,7 +1201,6 @@ $lang = array (
   'rolling' => '滾動',
   'save_js_code_view' => 'javascript腳本保存後顯示',
   'show_num_of' => '顯示條數',
-  'showcontent' => '顯示內容',
   'showcountcontent' => '顯示統計內容',
   'shuffle_list_1' => '隨機順序',
   'shuffle_list_2' => '列表順序',
@@ -1496,7 +1498,7 @@ $lang = array (
 
   'for_video_authentication' => '申請視頻認證',
   'my_video_photo' => '我的視頻認證照片',
-  'video_auth_message_1' => '以下是你認證的視頻照片。如果站長允許重複認證，你可以<a href="home.php?mod=userapp&id=1036584">重新進入視頻認證程序。',
+  'video_auth_message_1' => '以下是你認證的視頻照片。如果站長允許重複認證，你可以<a href="userapp.php?mod=app&id=1036584">重新進入視頻認證程序。',
   'video_auth_message_2' => '你需要準備好攝像頭，然後點擊下面的按鈕進行視頻認證，通常認證通過後，是不允許重複認證的。',
   'video_cer_audit_manage' => '視頻認證審核管理',
   'video_cer_audit_message' => '你可以進入視頻認證平台，自行進行設置認證審核管理',

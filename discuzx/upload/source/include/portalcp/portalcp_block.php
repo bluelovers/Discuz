@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 16227 2010-09-02 05:30:30Z chenchunshao $
+ *      $Id: portalcp_block.php 16908 2010-09-16 10:40:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,10 @@ if(!defined('IN_DISCUZ')) {
 }
 
 include_once libfile('function/block');
-$op = in_array($_GET['op'], array('block', 'data', 'style', 'itemdata', 'setting', 'remove', 'item', 'blockclass', 'getblock', 'thumbsetting', 'push', 'recommend', 'verifydata', 'managedata', 'saveblockclassname', 'saveblocktitle')) ? $_GET['op'] : 'block';
+$oparr = array('block', 'data', 'style', 'itemdata', 'setting', 'remove', 'item', 'blockclass',
+				'getblock', 'thumbsetting', 'push', 'recommend', 'verifydata', 'managedata',
+				'saveblockclassname', 'saveblocktitle', 'convert');
+$op = in_array($_GET['op'], $oparr) ? $_GET['op'] : 'block';
 $allowmanage = 0;
 
 $block = array();
@@ -123,6 +126,7 @@ if($op == 'block') {
 		showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=block&bid='.$bid, array('bid'=>$bid, 'eleid'=> $_GET['eleid']));
 	}
 
+	loadcache('blockconvert');
 	$block['script'] = isset($block['script']) ? $block['script'] : $_GET['script'];
 	$settings = block_setting($_GET['classname'], $block['script'], $block['param']);
 	$scriptarr = array($block['script'] => ' selected');
@@ -136,6 +140,7 @@ if($op == 'block') {
 	$dateformats = block_getdateformats($block['dateformat']);
 
 	$block['summary'] = htmlspecialchars($block['summary']);
+	$blockclassname = lang('blockclass', 'blockclass_'.($block['blockclass'] ? $block['blockclass'] : $_G['gp_classname']));
 
 } elseif($op == 'data') {
 	if(!$bid || !$allowmanage) {
@@ -582,6 +587,12 @@ if($op == 'block') {
 	block_memory_clear($bid);
 
 	showmessage('do_success');
+} elseif ($op == 'convert') {
+
+	if(!$bid || !$allowmanage) {
+		showmessage('block_edit_nopermission');
+	}
+	block_convert($bid, $_G['gp_toblockclass']);
 }
 
 include_once template("portal/portalcp_block");
@@ -655,4 +666,55 @@ function get_push_item($blockstyle, $id, $idtype) {
 	return $item;
 }
 
+function block_convert($bid, $toblockclass) {
+	global $_G;
+	$bid = intval($bid);
+	if(empty($bid) || empty($toblockclass)) return false;
+	$block = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE bid='".intval($bid)."'");
+	if($block) {
+		loadcache('blockconvert');
+		$fromblockclass = $block['blockclass'];
+		list($bigclass) = explode('_', $fromblockclass);
+		$convertrule = null;
+		if(!empty($_G['cache']['blockconvert']) && !empty($_G['cache']['blockconvert'][$bigclass][$fromblockclass][$toblockclass])) {
+			$convertrule = $_G['cache']['blockconvert'][$bigclass][$fromblockclass][$toblockclass];
+		}
+		if(!empty($convertrule)) {
+			$blockstyle = array();
+			if($block['styleid']) {
+				$blockstyle = DB::fetch_first('SELECT * FROM '.DB::table('common_block_style')." WHERE styleid='".intval($block['styleid'])."'");
+				if($blockstyle) {
+					unset($blockstyle['styleid']);
+					$blockstyle['fields'] = unserialize($blockstyle['fields']);
+					$blockstyle['template'] = unserialize($blockstyle['template']);
+				}
+			} elseif($block['blockstyle']) {
+				$blockstyle = unserialize($block['blockstyle']);
+			}
+
+			if($blockstyle) {
+				$blockstyle['name'] = '';
+				$blockstyle['blockclass'] = $toblockclass;
+				foreach($blockstyle['fields'] as &$value) {
+					$value = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
+				}
+
+				$fun = create_function('&$v','$v = "{".$v."}";');
+				array_walk($convertrule['searchkeys'], $fun);
+				array_walk($convertrule['replacekeys'], $fun);
+
+				foreach($blockstyle['template'] as &$value) {
+					$value = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
+				}
+				unset($block['bid']);
+				$block['styleid'] = '0';
+				$block['script'] = $convertrule['script'];
+				$block['blockclass'] = $toblockclass;
+				$block['blockstyle'] = serialize($blockstyle);
+				DB::update('common_block', $block, array('bid'=>$bid));
+			}
+		}
+
+	}
+}
 ?>

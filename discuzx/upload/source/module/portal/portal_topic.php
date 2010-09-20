@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_topic.php 12754 2010-07-14 05:08:14Z zhangguosheng $
+ *      $Id: portal_topic.php 16820 2010-09-15 06:29:30Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,6 +43,10 @@ if($_GET['diy'] == 'yes' && $topic['uid'] != $_G['uid'] && !$_G['group']['allowm
 $topicid = intval($topic['topicid']);
 
 DB::query("UPDATE ".DB::table('portal_topic')." SET viewnum=viewnum+1 WHERE topicid='$topicid'");
+
+$navtitle = $topic['title'];
+$metadescription = empty($topic['summary']) ? $topic['title'] : $topic['summary'];
+$metakeywords =  empty($topic['keyword']) ? $topic['title'] : $topic['keyword'];
 
 $file = 'portal/portal_topic_content:'.$topicid;
 include template('diy:'.$file, NULL, NULL, NULL, $topic['primaltplname']);

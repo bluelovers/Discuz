@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 16570 2010-09-09 03:05:10Z monkey $
+ *      $Id: admincp_checktools.php 17010 2010-09-19 02:48:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -318,6 +318,7 @@ if($operation == 'filecheck') {
 		$rule['{apache1}'] .= "\t".'RewriteCond %{QUERY_STRING} ^(.*)$'."\n\t".'RewriteRule ^(.*)/'.$v.'$ $1/'.pvadd($rewritedata['rulereplace'][$k])."&%1\n";
 		$rule['{apache2}'] .= 'RewriteCond %{QUERY_STRING} ^(.*)$'."\n".'RewriteRule ^'.$v.'$ '.$rewritedata['rulereplace'][$k]."&%1\n";
 		$rule['{iis}'] .= 'RewriteRule ^(.*)/'.$v.'\?*(.*)$ $1/'.addcslashes(pvadd($rewritedata['rulereplace'][$k]).'&$'.$pvmaxv, '.?')."\n";
+		$rule['{iis7}'] .= "\t\t".'&lt;rule name="'.$k.'"&gt;'."\n\t\t\t".'&lt;match url="^(.*)/'.str_replace('\.', '.', $v).'\?*(.*)$" /&gt;'."\n\t\t\t".'&lt;action type="Rewrite" url="{R:1}/'.str_replace(array('&', 'page\%3D'), array('&amp;amp;', 'page%3D'), addcslashes(pvadd($rewritedata['rulereplace'][$k], 1).'&{R:'.$pvmaxv.'}', '?')).'" /&gt;'."\n\t\t".'&lt;/rule&gt;'."\n";
 		$rule['{zeus}'] .= 'match URL into $ with ^(.*)/'.$v.'\?*(.*)$'."\n".'if matched then'."\n\t".'set URL = $1/'.pvadd($rewritedata['rulereplace'][$k]).'&$'.$pvmaxv."\nendif\n";
 		$rule['{nginx}'] .= 'rewrite ^([^\.]*)/'.$v.'$ $1/'.stripslashes(pvadd($rewritedata['rulereplace'][$k]))." last;\n";
 	}
@@ -370,9 +371,14 @@ function pvsort($key, $v, $s) {
 	return $s;
 }
 
-function pvadd($s) {
+function pvadd($s, $t = 0) {
 	$s = str_replace(array('$3', '$2', '$1'), array('~4', '~3', '~2'), $s);
-	return str_replace(array('~4', '~3', '~2'), array('$4', '$3', '$2'), $s);
+	if(!$t) {
+		return str_replace(array('~4', '~3', '~2'), array('$4', '$3', '$2'), $s);
+	} else {
+		return str_replace(array('~4', '~3', '~2'), array('{R:4}', '{R:3}', '{R:2}'), $s);
+	}
+
 }
 
 function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '') {
@@ -387,7 +393,11 @@ function checkfiles($currentdir, $ext = '', $sub = 1, $skip = '') {
 			if($sub && is_dir($file)) {
 				checkfiles($file.'/', $ext, $sub, $skip);
 			} else {
-				$md5data[$file] = md5_file($file);
+				if(is_dir($file)) {
+					$md5data[$file] = md5($file);
+				} else {
+					$md5data[$file] = md5_file($file);
+				}
 			}
 		}
 	}

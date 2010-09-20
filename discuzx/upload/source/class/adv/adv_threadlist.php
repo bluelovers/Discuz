@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_threadlist.php 14308 2010-08-10 07:32:52Z monkey $
+ *      $Id: adv_threadlist.php 16825 2010-09-15 07:08:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -94,24 +94,25 @@ class adv_threadlist {
 	function evalcode() {
 		return array(
 			'check' => '
-			if($GLOBALS[\'page\'] != 1
+			if($GLOBALS[\'page\'] != 1 || !empty($_GET[\'filter\']) || !empty($_GET[\'orderby\'])
 			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !in_array($_G[\'fid\'], $parameter[\'fids\'])
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !in_array($_G[\'grouptypeid\'], $parameter[\'groups\'])
 			) {
 				$checked = false;
-			}
-			if(empty($_G[\'adv_vtp_count\'])) {
-				for($i = 1;$i <= $_G[\'forum_threadnum\'];$i++) {
-					if(empty($parameter[\'pos\'])) {
-						$_G[\'adv_vtp\'][0][$i][] = $adid;
-					} elseif($parameter[\'pos\'] == $i) {
-						$_G[\'adv_vtp\'][1][$i][] = $adid;
+			} else {
+				if(empty($_G[\'adv_vtp_count\'])) {
+					for($i = 1;$i <= $_G[\'forum_threadnum\'];$i++) {
+						if(empty($parameter[\'pos\'])) {
+							$_G[\'adv_vtp\'][0][$i][] = $adid;
+						} elseif($parameter[\'pos\'] == $i) {
+							$_G[\'adv_vtp\'][1][$i][] = $adid;
+						}
 					}
+					$_G[\'adv_vtp_showed\'] = $_G[\'adv_vtp_thread\'] = array();
 				}
-				$_G[\'adv_vtp_showed\'] = $_G[\'adv_vtp_thread\'] = array();
-			}
-			if($parameter[\'mode\'] && $parameter[\'tid\']) {
-				$_G[\'adv_vtp_tids\'][] = $parameter[\'tid\'];
+				if($parameter[\'mode\'] && $parameter[\'tid\']) {
+					$_G[\'adv_vtp_tids\'][] = $parameter[\'tid\'];
+				}
 			}',
 			'create' => '
 			$_G[\'adv_vtp_count\']++;
@@ -128,7 +129,7 @@ class adv_threadlist {
 			$_G[\'adv_vtp_showed\'][] = $adid;
 			$vttid = $parameters[$adid][\'tid\'];
 			$notag = true;
-			$adcode = $adid ? (!$parameters[$adid][\'mode\'] ? \'<tbody><tr><td colspan=\'.($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? ($_G[\'forum\'][\'allowside\'] && $_G[\'basescript\'] != \'group\' ? 5 : 6) : ($_G[\'forum\'][\'allowside\'] && $_G[\'basescript\'] != \'group\' ? 4 : 5)).\'>\'.$codes[$adid].\'</td></tr></tbody>\'
+			$adcode = $adid ? (!$parameters[$adid][\'mode\'] ? \'<tbody><tr><td colspan=\'.($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? 6 : 5).\'>\'.$codes[$adid].\'</td></tr></tbody>\'
 			: \'<tr><td class="icn"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" target="_blank"><img src="\'.IMGDIR.\'/folder_new.gif" /></a></td>\'.
 				($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? \'<td class="o"></td>\' : \'\').
 				\'<td class="new"><a href="\'.($parameters[$adid][\'threadurl\'] ? $parameters[$adid][\'threadurl\'] : \'forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\']).\'" class="xst">\'.$codes[$adid].\'</a></td>\'.

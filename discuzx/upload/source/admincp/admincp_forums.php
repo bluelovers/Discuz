@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 16547 2010-09-08 08:55:56Z zhengqingpeng $
+ *      $Id: admincp_forums.php 17043 2010-09-19 09:51:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -471,6 +471,7 @@ var rowtypedata = [
 } elseif($operation == 'edit') {
 
 	require_once libfile('function/forumlist');
+	require_once libfile('function/domain');
 	$highlight = getgpc('highlight');
 	$anchor = getgpc('anchor');
 
@@ -542,9 +543,9 @@ var rowtypedata = [
 					'<span class="right"><input name="checkall_'.$forums['fid'].'" onclick="checkAll(\'value\', this.form, '.$forums['fid'].', \'checkall_'.$forums['fid'].'\')" type="checkbox" class="vmiddle checkbox" /></span>'.
 					'<span class="pointer" onclick="sdisplay(\'g_'.$forums['fid'].'\', this)"><img src="static/image/admincp/desc.gif" class="vmiddle" /></span> <span class="pointer" onclick="location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&switch=yes&fid='.$forums['fid'].'\'">'.$forums['name'].'</span></em><div id="g_'.$forums['fid'].'" style="display:">';
 			} elseif($forums['type'] == 'forum') {
-				$forumselect .= '<input class="left checkbox ck" chkvalue="'.$sgid.'" name="multi[]" value="'.$forums['fid'].'" type="checkbox" '.($checked ? 'checked="checked" ' : '').'/><a class="f'.($checked ? ' current"' : '').'" href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&switch=yes&fid='.$forums['fid'].($forum['type'] != 'group' ? '&anchor=\'+currentAnchor' : '\'').'+\'&scrolltop=\'+scrollTopBody()">'.$forums['name'].'</a>';
+				$forumselect .= '<input class="left checkbox ck" chkvalue="'.$sgid.'" name="multi[]" value="'.$forums['fid'].'" type="checkbox" '.($checked ? 'checked="checked" ' : '').'/><a class="f'.($checked ? ' current"' : '').'" href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&switch=yes&fid='.$forums['fid'].($mforum[0]['type'] != 'group' ? '&anchor=\'+currentAnchor' : '\'').'+\'&scrolltop=\'+scrollTopBody()">'.$forums['name'].'</a>';
 			} elseif($forums['type'] == 'sub') {
-				$forumselect .= '<input class="left checkbox ck" chkvalue="'.$sgid.'" name="multi[]" value="'.$forums['fid'].'" type="checkbox" '.($checked ? 'checked="checked" ' : '').'/><a class="s'.($checked ? ' current"' : '').'" href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&switch=yes&fid='.$forums['fid'].($forum['type'] != 'group' ? '&anchor=\'+currentAnchor' : '\'').'+\'&scrolltop=\'+scrollTopBody()">'.$forums['name'].'</a>';
+				$forumselect .= '<input class="left checkbox ck" chkvalue="'.$sgid.'" name="multi[]" value="'.$forums['fid'].'" type="checkbox" '.($checked ? 'checked="checked" ' : '').'/><a class="s'.($checked ? ' current"' : '').'" href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&switch=yes&fid='.$forums['fid'].($mforum[0]['type'] != 'group' ? '&anchor=\'+currentAnchor' : '\'').'+\'&scrolltop=\'+scrollTopBody()">'.$forums['name'].'</a>';
 			}
 		}
 		$forumselect = '<span id="fselect" class="right popupmenu_dropmenu" onmouseover="showMenu({\'ctrlid\':this.id,\'pos\':\'34\'});$(\'fselect_menu\').style.top=(parseInt($(\'fselect_menu\').style.top)-scrollTopBody())+\'px\';$(\'fselect_menu\').style.left=(parseInt($(\'fselect_menu\').style.left)-document.documentElement.scrollLeft-20)+\'px\'">'.cplang('forums_edit_switch').'<em>&nbsp;&nbsp;</em></span>'.
@@ -1359,7 +1360,7 @@ EOT;
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
 					$check = 0;
 					foreach($rule as $i => $v) {
-						if($v != $rules[$rid]['extcredits'.$i]) {
+						if($v != $rules[$rid]['extcredits'.$i] || $creditspolicy[$rules[$rid]['action']]['cycletype'] != $rules[$rid]['cycletype'] || $creditspolicy[$rules[$rid]['action']]['rewardnum'] != $rules[$rid]['rewardnum'] || $creditspolicy[$rules[$rid]['action']]['cycletime'] != $rules[$rid]['cycletime']) {
 							$check = 1;
 						}
 						$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = $v;
@@ -1417,7 +1418,7 @@ EOT;
 					if($threadtypesnew['status']) {
 						if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 							if(!empty($threadtypesnew['options']['enable'])) {
-								$typeids = implodeids(array_keys($threadtypesnew['options']['enable']));
+								$typeids = dimplode(array_keys($threadtypesnew['options']['enable']));
 							} else {
 								$typeids = '0';
 							}
@@ -1434,7 +1435,7 @@ EOT;
 								}
 							}
 							if(!empty($threadtypesnew['options']['delete'])) {
-								$threadtypes_deleteids = implodeids($threadtypesnew['options']['delete']);
+								$threadtypes_deleteids = dimplode($threadtypesnew['options']['delete']);
 								DB::query("DELETE FROM ".DB::table('forum_threadclass')." WHERE `typeid` IN ($threadtypes_deleteids)");
 							}
 						}
@@ -1464,7 +1465,7 @@ EOT;
 					if($threadsortsnew['status']) {
 						if(is_array($threadsortsnew['options']) && $threadsortsnew['options']) {
 							if(!empty($threadsortsnew['options']['enable'])) {
-								$sortids = implodeids(array_keys($threadsortsnew['options']['enable']));
+								$sortids = dimplode(array_keys($threadsortsnew['options']['enable']));
 							} else {
 								$sortids = '0';
 							}
@@ -1552,6 +1553,8 @@ EOT;
 						}
 					}
 					$forum['extra']['iconwidth'] = $extranew['iconwidth'];
+				} else {
+					$forum['extra']['iconwidth'] = '';
 				}
 				if($_G['gp_deleteicon']) {
 					$valueparse = parse_url($forum['icon']);
@@ -1559,6 +1562,7 @@ EOT;
 						@unlink($_G['setting']['attachurl'].'common/'.$forum['icon']);
 					}
 					$forumfielddata['icon'] = '';
+					$forum['extra']['iconwidth'] = '';
 				}
 			}
 

@@ -14,6 +14,7 @@
 	<div class="mn">
 		<div class="bm bw0">
 			<h1 class="mt">{lang trends_and_statistics}</h1>
+			<form method="get" action="misc.php?mod=stat&op=trend">
 			<table cellspacing="0" cellpadding="0" class="dt bm mbw">
 				<caption>
 					<h2 class="ptm">{lang stat_classification}</h2>
@@ -24,36 +25,65 @@
 					<td>
 						<a href="misc.php?mod=stat&op=trend"$actives[all]>{lang comprehensive_overview}</a> &nbsp;
 						<!--{loop $cols['login'] $value}-->
-						<a href="misc.php?mod=stat&op=trend&type=$value"$actives[$value]><!--{eval echo lang('spacecp', "do_stat_$value");}--></a> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
 				<tr class="tbmu">
-					<th>{lang info_publish}:</th>
+					<th>$_G[setting][navs][2][navname]:</th>
 					<td>
-						<!--{loop $cols['add'] $value}-->
-						<a href="misc.php?mod=stat&op=trend&type=$value"$actives[$value]><!--{eval echo lang('spacecp', "do_stat_$value");}--></a> &nbsp;
+						<!--{loop $cols['forum'] $value}-->
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
 				<tr class="tbmu">
+					<th>$_G[setting][navs][3][navname]:</th>
+					<td>
+						<!--{loop $cols['tgroup'] $value}-->
+						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<!--{/loop}-->
+					</td>
+				</tr>
+				<tr class="tbmu">
+					<th>$_G[setting][navs][4][navname]:</th>
+					<td>
+						<!--{loop $cols['home'] $value}-->
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<!--{/loop}-->
+					</td>
+				</tr>
+				
+				<!--tr class="tbmu">
 					<th>{lang info_interactive}:</th>
 					<td>
 						<!--{loop $cols['comment'] $value}-->
-						<a href="misc.php?mod=stat&op=trend&type=$value"$actives[$value]><!--{eval echo lang('spacecp', "do_stat_$value");}--></a> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
-				</tr>
+				</tr-->
 				<tr class="tbmu">
 					<th>{lang member_interactive}:</th>
 					<td>
 						<!--{loop $cols['space'] $value}-->
-						<a href="misc.php?mod=stat&op=trend&type=$value"$actives[$value]><!--{eval echo lang('spacecp', "do_stat_$value");}--></a> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
+				<tr class="tbmu">
+					<th>{lang stat_date_range}:</th>
+					<td>
+						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+						<input type="text" name="primarybegin" class="px" value="$primarybegin" onclick="showcalendar(event, this, false)"/> - <input type="text" name="primaryend" class="px" value="$primaryend" onclick="showcalendar(event, this, false)" />
+						<label><input type="checkbox" name="merge" value="1" class="pc" {if !empty($merge)} checked="checked"{/if} /> {lang stat_merge_statistic}</label>
+						<button type="submit" class="pn pnp"><strong>{lang show}</strong></button>
+					</td>
+				</tr>
 			</table>
-
+			<input type="hidden" name="type" value="$_G[gp_type]" />
+			<input type="hidden" name="mod" value="stat" />
+			<input type="hidden" name="op" value="trend" />
+			</form>
 			<table cellspacing="0" cellpadding="0" width="100%">
 				<!--{if $type=='all'}-->
 				<caption>
@@ -69,7 +99,13 @@
 				</tr>
 				<!--{else}-->
 				<caption>
-					<h2><!--{eval echo lang('spacecp', "do_stat_$type");}--></h2>
+					<h2>
+						<!--{loop $_GET[types] $key $type}-->
+						&nbsp;
+						<!--{eval echo lang('spacecp', "do_stat_$type");}-->
+						&nbsp;
+						<!--{/loop}-->
+					</h2>
 				</caption>
 				<!--{/if}-->
 				<tr><td>
@@ -77,7 +113,7 @@
 						document.write(AC_FL_RunContent(
 							'width', '100%', 'height', '300',
 							'src', '{STATICURL}image/common/stat.swf?$statuspara',
-							'quality', 'high'
+							'quality', 'high', 'wmode', 'transparent'
 						));
 					</script>
 				</td></tr>

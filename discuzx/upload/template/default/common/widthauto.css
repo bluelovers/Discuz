@@ -6,25 +6,28 @@ Created & Modified by Pony.
 ---------------------------------- */
 
 .wp { width: 98%; }
-	#hd .wp, #wp { min-width: 970px; }
+	#hd .wp, #wp { min-width: 960px; }
 
-.ct2 { margin-right: 255px; }
-	.ct2 .sd { margin-right: -255px; }
+.ct2 { margin-right: 235px; }
+	.ct2 .sd { margin-right: -235px; }
 		.ie7 .ct2 .sd { margin-left: 15px; }
 		.ie6 .ct2 .sd { padding-left: 15px; position: relative; }
 	.ct2 .mn { width: 100%; }
 
-.ct2 #chart, .ct2 #an { margin-right: -255px; }
+.ct2 #chart, .ct2 #an { margin-right: -235px; }
 	.ie6 .ct2 #chart, .ie6 .ct2 #an { position: relative; }
 
-.ct2_a { margin-left: 155px; }
-	.ct2_a .appl { margin-left: -155px; }
+.ct2_a { margin-left: 150px; }
+	.ct2_a .appl { margin-left: -150px; }
 		.ie6 .ct2_a .appl { position: relative; }
 	.ct2_a .mn { width: 100%; }
 
-#nv { background-image: none; }
+#hd .wp { width: 100%; }
+	.hdc { margin: 0 auto; width: 98%; }
+
+#nv { background-repeat: repeat-x; background-position: 0 -33px; }
 
 #mu ul { border-bottom: 1px solid {COMMONBORDER}; background-image: none; background-color: {COMMONBG}; }
 
-.pg_post .ct2_a { margin-left: 0; margin-right: 155px; }
-	.pg_post .ct2_a .appl { margin-left: 0; margin-right: -155px; }
+.pg_post .ct2_a { margin-left: 0; margin-right: 150px; }
+	.pg_post .ct2_a .appl { margin-left: 0; margin-right: -150px; }

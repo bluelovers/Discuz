@@ -47,9 +47,6 @@
 					<!--{if $_G['group']['allowpostannounce']}--><li{if $_G[gp_action] == 'announcement'} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=announcement$forcefid">{lang announcements}</a></li><!--{/if}-->
 					<!--{if $_G['group']['allowviewlog']}--><li{if $_G[gp_action] == 'log'} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=log$forcefid">{lang modcp_logs}</a></li><!--{/if}-->
 				<!--{/if}-->
-				<!--{if $_G['setting']['modworkstatus']}-->
-					<li{if $_G[gp_action] == 'stat'} class="a"{/if}><a href="forum.php?mod=modcp&action=stat">{lang stats_modworks}</a></li>
-				<!--{/if}-->
 				<!--{if !empty($_G['setting']['plugins']['modcp_tools'])}-->
 					<!--{loop $_G['setting']['plugins']['modcp_tools'] $id $module}-->
 						<li{if $_G[gp_id] == $id} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=plugin&op=tools&id=$id">$module[name]</a></li>

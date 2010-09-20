@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 16442 2010-09-07 01:59:54Z zhengqingpeng $
+ *      $Id: function_core.php 16965 2010-09-17 08:43:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,16 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 define('DISCUZ_CORE_FUNCTION', true);
 
-function error($message, $vars = array(), $return = false) {
-	$message = str_replace(array_keys($vars), $vars, lang('error', $message));
-	$return || discuz_core::error_log($message);
-	if(!$return) {
-		global $_G;
-		@header('Content-Type: text/html; charset='.$_G['config']['output']['charset']);
-		exit($message);
-	} else {
-		return $message;
-	}
+function system_error($message, $show = true, $save = true, $halt = true) {
+	require_once libfile('class/error');
+	discuz_error::system_error($message, $show, $save, $halt);
 }
 
 function updatesession($force = false) {
@@ -226,61 +219,8 @@ function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 }
 
 function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
-	$return = '';
-	$matches = parse_url($url);
-	$host = $matches['host'];
-	$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
-	$port = !empty($matches['port']) ? $matches['port'] : 80;
-
-	if($post) {
-		$out = "POST $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= 'Content-Length: '.strlen($post)."\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cache-Control: no-cache\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
-		$out .= $post;
-	} else {
-		$out = "GET $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
-	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
-	if(!$fp) {
-		return '';
-	} else {
-		stream_set_blocking($fp, $block);
-		stream_set_timeout($fp, $timeout);
-		@fwrite($fp, $out);
-		$status = stream_get_meta_data($fp);
-		if(!$status['timed_out']) {
-			while (!feof($fp)) {
-				if(($header = @fgets($fp)) && ($header == "\r\n" ||  $header == "\n")) {
-					break;
-				}
-			}
-
-			$stop = false;
-			while(!feof($fp) && !$stop) {
-				$data = fread($fp, ($limit == 0 || $limit > 8192 ? 8192 : $limit));
-				$return .= $data;
-				if($limit) {
-					$limit -= strlen($data);
-					$stop = $limit <= 0;
-				}
-			}
-		}
-		@fclose($fp);
-		return $return;
-	}
+	require_once libfile('function/filesock');
+	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
 function dhtmlspecialchars($string) {
@@ -626,6 +566,7 @@ function loadcache($cachenames, $force = false) {
 }
 
 function cachedata($cachenames) {
+	global $_G;
 	static $isfilecache, $allowmem;
 
 	if($isfilecache === null) {
@@ -671,13 +612,13 @@ function cachedata($cachenames) {
 		if($isfilecache) {
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
-				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata)."\n\n$cachedata?>");
+				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
 				fclose($fp);
 			}
 		}
 	}
 
-	foreach ($cachenames as $name) {
+	foreach($cachenames as $name) {
 		if($data[$name] === null) {
 			$data[$name] = null;
 			$allowmem && (memory('set', $name, array()));
@@ -1359,15 +1300,6 @@ function checkformulacredits($formula) {
 	);
 }
 
-function checkformulaperm($formula) {
-	$formula = preg_replace('/(\{([\d\.\-]+?)\})/', "'\\1'", $formula);
-	return checkformulasyntax(
-		$formula,
-		array('+', '-', '*', '/', '(', ')', '<', '=', '>', '!', 'and', 'or', ' ', '{', '}', "'"),
-		array('regdate', 'regday', 'regip', 'lastip', 'buyercredit', 'sellercredit', 'digestposts', 'posts', 'threads', 'oltime', 'extcredits[1-8]', 'field[\d]+')
-	);
-}
-
 function debug($var = null) {
 	echo '<pre>';
 	if($var === null) {
@@ -1441,6 +1373,9 @@ function check_secqaa($value, $idhash) {
 
 function adshow($parameter) {
 	global $_G;
+	if($_G['inajax']) {
+		return;
+	}
 	$params = explode('/', $parameter);
 	$customid = 0;
 	$customc = explode('_', $params[0]);
@@ -1744,7 +1679,7 @@ function simplepage($num, $perpage, $curpage, $mpurl) {
 	$return = '';
 	$lang['next'] = lang('core', 'nextpage');
 	$lang['prev'] = lang('core', 'prevpage');
-	$next = $num == $perpage ? '<a class="nxt" href="'.$mpurl.'&amp;page='.($curpage + 1).'">'.$lang['next'].'</a>' : '';
+	$next = $num == $perpage ? '<a href="'.$mpurl.'&amp;page='.($curpage + 1).'" class="nxt">'.$lang['next'].'</a>' : '';
 	$prev = $curpage > 1 ? '<span class="pgb"><a href="'.$mpurl.'&amp;page='.($curpage - 1).'">'.$lang['prev'].'</a></span>' : '';
 	if($next || $prev) {
 		$return = '<div class="pg">'.$prev.$next.'</div>';
@@ -1752,19 +1687,6 @@ function simplepage($num, $perpage, $curpage, $mpurl) {
 	return $return;
 }
 
-function arch_multi($total, $perpage, $page, $link) {
-	$pages = @ceil($total / $perpage) + 1;
-	$pagelink = '';
-	if($pages > 1) {
-		$pagelink .= lang('forum/archiver', 'page') . ": \n";
-		$pagestart = $page - 10 < 1 ? 1 : $page - 10;
-		$pageend = $page + 10 >= $pages ? $pages : $page + 10;
-		for($i = $pagestart; $i < $pageend; $i++) {
-			$pagelink .= ($i == $page ? "<strong>[$i]</strong>" : "<a href=\"$link&page=$i\">$i</a>")." \n";
-		}
-	}
-	return $pagelink;
-}
 function censor($message, $modword = NULL, $return = FALSE) {
 	require_once libfile('class/censor');
 	$censor = discuz_censor::instance();
@@ -1780,6 +1702,11 @@ function censor($message, $modword = NULL, $return = FALSE) {
 }
 
 function censormod($message) {
+	global $_G;
+	if($_G['group']['ignorecensor']) {
+		return false;
+	}
+
 	require_once libfile('class/censor');
 	$censor = discuz_censor::instance();
 	$censor->check($message);
@@ -1909,38 +1836,6 @@ function ftpcmd($cmd, $arg1 = '') {
 
 }
 
-function upload_icon_banner(&$data, $file, $type) {
-	global $_G;
-	$data['extid'] = empty($data['extid']) ? $data['fid'] : $data['extid'];
-	if(empty($data['extid'])) return '';
-
-	if($data['status'] == 3 && $_G['setting']['group_imgsizelimit']) {
-		$file['size'] > ($_G['setting']['group_imgsizelimit'] * 1024) && showmessage('file_size_overflow', '', array('size' => $_G['setting']['group_imgsizelimit'] * 1024));
-	}
-	require_once libfile('class/upload');
-	$upload = new discuz_upload();
-	$uploadtype = $data['status'] == 3 ? 'group' : 'common';
-
-	if(!$upload->init($file, $uploadtype, $data['extid'], $type)) {
-		return false;
-	}
-
-	if(!$upload->save()) {
-		if(!defined('IN_ADMINCP')) {
-			showmessage($upload->errormessage());
-		} else {
-			cpmsg($upload->errormessage(), '', 'error');
-		}
-	}
-	if($data['status'] == 3 || $type == 'banner') {
-		$imgwh = array('icon' => array('48', '48'), 'banner' => array('720', '168'));
-		require_once libfile('class/image');
-		$img = new image;
-		$img->Thumb($upload->attach['target'], './'.$uploadtype.'/'.$upload->attach['attachment'], $imgwh[$type][0], $imgwh[$type][1], 'fixwr');
-	}
-	return $upload->attach['attachment'];
-}
-
 function diconv($str, $in_charset, $out_charset = CHARSET, $ForceTable = FALSE) {
 	global $_G;
 
@@ -1949,7 +1844,12 @@ function diconv($str, $in_charset, $out_charset = CHARSET, $ForceTable = FALSE) 
 	if($in_charset != $out_charset) {
 		require_once libfile('class/chinese');
 		$chinese = new Chinese($in_charset, $out_charset, $ForceTable);
-		return $chinese->Convert($str);
+		$strnew = $chinese->Convert($str);
+		if(!$ForceTable && !$strnew && $str) {
+			$chinese = new Chinese($in_charset, $out_charset, 1);
+			$strnew = $chinese->Convert($str);
+		}
+		return $strnew;
 	} else {
 		return $str;
 	}
@@ -2305,67 +2205,6 @@ function updatepost($data, $condition, $unbuffered = false) {
 	return $affected_rows;
 }
 
-function loadcacheobject($type) {
-	static $object = null;
-
-	global $_G;
-	return $_G['ea'];
-	$cachetype = in_array($type, array('file', 'memcache', 'sql')) ? $type : $_G['config']['cache']['type'];
-	if($type && $type != $cachetype) {
-		return;
-	}
-	if($cachetype == 'memcache') {
-		$cachetype = $_G['config']['cache']['main']['type'];
-	}
-	if(!$cachetype) {
-		return;
-	}
-	if(!isset($object[$cachetype])) {
-		require_once libfile('cache/'.$cachetype, 'class');
-		$object[$cachetype] = new ultrax_cache($_G['config']['cache']['main'][$cachetype]);
-	}
-	return $object[$cachetype];
-}
-
-function updategroupcreditlog($fid, $uid) {
-	global $_G;
-	if(empty($fid) || empty($uid)) {
-		return false;
-	}
-	$today = date('Ymd', TIMESTAMP);
-	$updategroupcredit = getcookie('updategroupcredit_'.$fid);
-	if($updategroupcredit < $today) {
-		$status = DB::result_first("SELECT logdate FROM ".DB::table('forum_groupcreditslog')." WHERE fid='$fid' AND uid='$uid' AND logdate='$today'");
-		if(empty($status)) {
-			DB::query("UPDATE ".DB::table('forum_forum')." SET commoncredits=commoncredits+1 WHERE fid='$fid'");
-			DB::query("REPLACE INTO ".DB::table('forum_groupcreditslog')." (fid, uid, logdate) VALUES ('$fid', '$uid', '$today')");
-			if(empty($_G['forum']) || empty($_G['forum']['level'])) {
-				$forum = DB::fetch_first("SELECT name, level, commoncredits FROM ".DB::table('forum_forum')." WHERE fid='$fid'");
-			} else {
-				$_G['forum']['commoncredits'] ++;
-				$forum = &$_G['forum'];
-			}
-			if(empty($_G['grouplevels'])) {
-				loadcache('grouplevels');
-			}
-			$grouplevel = $_G['grouplevels'][$forum['level']];
-
-			if($grouplevel['type'] == 'default' && !($forum['commoncredits'] >= $grouplevel['creditshigher'] && $forum['commoncredits'] < $grouplevel['creditslower'])) {
-				$levelid = DB::result_first("SELECT levelid FROM ".DB::table('forum_grouplevel')." WHERE type='default' AND creditshigher<='$forum[commoncredits]' AND creditslower>'$forum[commoncredits]' LIMIT 1");
-				if(!empty($levelid)) {
-					DB::query("UPDATE ".DB::table('forum_forum')." SET level='$levelid' WHERE fid='$fid'");
-					$groupfounderuid = DB::result_first("SELECT founderuid FROM ".DB::table('forum_forumfield')." WHERE fid='$fid' LIMIT 1");
-					notification_add($groupfounderuid, 'system', 'grouplevel_update', array(
-						'groupname' => '<a href="forum.php?mod=group&fid='.$fid.'">'.$forum['name'].'</a>',
-						'newlevel' => $_G['grouplevels'][$levelid]['leveltitle']
-					));
-				}
-			}
-		}
-		dsetcookie('updategroupcredit_'.$fid, $today, 86400);
-	}
-}
-
 function memory($cmd, $key='', $value='', $ttl = 0) {
 	$discuz = & discuz_core::instance();
 	if($cmd == 'check') {
@@ -2534,76 +2373,9 @@ function manyoulog($logtype, $uids, $action, $fid = '') {
 }
 
 function getuserapp($panel = 0) {
-	global $_G;
-
-	$panelapp = $_G['my_menu'] = $userapplist = $_G['my_panelapp'] = array();
-	$showcount = $_G['my_menu_more'] = 0;
-
-	if($_G['uid'] && $_G['setting']['my_app_status']) {
-		space_merge($_G['member'], 'field_home');
-		if($_G['member']['menunum'] < 3) $_G['member']['menunum'] = 10;
-		$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' ORDER BY ua.menuorder DESC");
-		while($value = DB::fetch($query)) {
-			$value['icon'] = getmyappiconpath($value['appid'], $value['iconstatus']);
-			if($value['iconstatus']=='0' && empty($_G['myapp_icon_downloaded'])) {
-				$_G['myapp_icon_downloaded'] = '1';
-				downloadmyappicon($value['appid']);
-			}
-			if($value['allowsidenav'] && !empty($value['appname'])) {
-
-				$_G['my_userapp'][$value['appid']] = $value;
-				if($panel) {
-					$userapplist[$value['appid']] = $value;
-					if($value['userpanelarea'] && $value['userpanelarea'] < 3) {
-						$panelapp[$value['appid']] = $value;
-						$_G['my_panelapp'][$value['userpanelarea']][$value['appid']] = $value;
-					}
-				} else {
-					if(!isset($_G['cache']['userapp'][$value['appid']])) {
-						if($_G['member']['menunum'] > 100 || $showcount < $_G['member']['menunum']) {
-							$_G['my_menu'][] = $value;
-							$showcount++;
-						} else {
-							$_G['my_menu_more'] = 1;
-							break;
-						}
-					}
-				}
-			}
-
-		}
-		if(!empty($userapplist)) {
-			foreach($panelapp as $appid => $value) {
-				if(isset($_G['cache']['userapp'][$value['appid']])) {
-					unset($_G['cache']['userapp'][$appid]);
-				}
-			}
-			foreach($userapplist as $appid => $value) {
-				if(!isset($_G['cache']['userapp'][$value['appid']]) && !isset($panelapp[$value['appid']])) {
-					if($_G['member']['menunum'] > 100 || $showcount < $_G['member']['menunum']) {
-						$_G['my_menu'][] = $value;
-						$showcount++;
-					} else {
-						$_G['my_menu_more'] = 1;
-						break;
-					}
-				}
-			}
-		}
-	}
-}
-
-function downloadmyappicon($appid) {
-	$iconpath = getglobal('setting/attachdir').'./'.'myapp/icon/'.$appid.'.jpg';
-	if(!is_dir(dirname($iconpath))) {
-		dmkdir(dirname($iconpath));
-	}
-	DB::update('common_myapp', array('iconstatus'=>'-1'), array('appid'=>$appid));
-	$icondata = file_get_contents(getmyappiconpath($appid, 0));
-	if($icondata) {
-		file_put_contents($iconpath, $icondata);
-		DB::update('common_myapp', array('iconstatus'=>'1', 'icondowntime'=>TIMESTAMP), array('appid'=>$appid));
-	}
+	require_once libfile('function/manyou');
+	manyou_getuserapp($panel);
+	return true;
 }
 
 function getmyappiconpath($appid, $iconstatus=0) {
@@ -2613,108 +2385,21 @@ function getmyappiconpath($appid, $iconstatus=0) {
 	return 'http://appicon.manyou.com/icons/'.$appid;
 }
 
-function makedomaincache($type = '') {
-	$sql = '';
-	switch ($type) {
-		case 'topic':
-			$sql = 'SELECT topicid,domain FROM '.DB::table('portal_topic')." WHERE domain>''";
-			break;
-		case 'forum':
-			break;
-		case 'group':
-			break;
-		default :
-			makedomaincache('topic');makedomaincache('forum');makedomaincache('group');
-			break;
-	}
-
-	if($sql) {
-		$file = DISCUZ_ROOT.'./data/sysdata/subdomain.php';
-		@include $file;
-		if(empty($subdomain)) $subdomain = array();
-
-		$typedomain = array();
-		$query = DB::query($sql);
-		while (($value = DB::fetch($query))) {
-			$typedomain[$value['topicid']] = $value['domain'];
-		}
-		$subdomain[$type] = $typedomain;
-
-		$str = "<?php\n//Discuz! cache file, DO NOT modify me!\n\$subdomain = ".var_export($subdomain, true).';';
-		file_put_contents($file, $str);
-	}
-
-}
-function domaincheck($domain, $domainroot, $domainlength, $msgtype = 1) {
-
-	if(strlen($domain) < $domainlength) {
-		showmessage('domain_length_error', '', array('length' => $domainlength), array('return' => true));
-	}
-	if(strlen($domain) > 30) {
-		$msgtype ? showmessage('two_domain_length_not_more_than_30_characters', '', array(), array('return' => true)) : cpmsg('two_domain_length_not_more_than_30_characters', '', 'error');
-	}
-	if(!preg_match("/^[a-z][a-z0-9]*$/", $domain)) {
-		$msgtype ? showmessage('only_two_names_from_english_composition_and_figures', '', array(), array('return' => true)) : cpmsg('only_two_names_from_english_composition_and_figures', '', 'error');
-	}
-
-	if($msgtype && isholddomain($domain)) {
-		showmessage('domain_be_retained', '', array(), array('return' => true));
-	}
-
-	if(existdomain($domain, $domainroot)) {
-		$msgtype ? showmessage('two_domain_have_been_occupied', '', array(), array('return' => true)) : cpmsg('two_domain_have_been_occupied', '', 'error');
-	}
-
-	return true;
-}
-
-function isholddomain($domain) {
-	global $_G;
-
-	$domain = strtolower($domain);
-	if(preg_match("/^[^a-z]/i", $domain)) return true;
-	$holdmainarr = empty($_G['setting']['holddomain'])?array('www'):explode('|', $_G['setting']['holddomain']);
-	$ishold = false;
-	foreach ($holdmainarr as $value) {
-		if(strpos($value, '*') === false) {
-			if(strtolower($value) == $domain) {
-				$ishold = true;
-				break;
-			}
-		} else {
-			$value = str_replace('*', '.*?', $value);
-			if(@preg_match("/$value/i", $domain)) {
-				$ishold = true;
-				break;
-			}
-		}
-	}
-	return $ishold;
-}
-
-function existdomain($domain, $domainroot) {
-	global $_G;
-
-	$exist = false;
-	if(getcount('common_domain', array('domain' => $domain, 'domainroot' => $domainroot))) {
-		$exist = true;
-	}
-	return $exist;
-}
-
-function loadarchiver($path) {
-	global $_G;
-	if(!$_G['setting']['archiver']) {
-		showmessage('forum_archiver_disabled');
-	}
-	$filename = $path . '.php';
-	return DISCUZ_ROOT . "./source/archiver/$filename";
-}
-
 function getexpiration() {
 	global $_G;
-
 	$date = getdate($_G['timestamp']);
 	return mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']) + 86400;
 }
+
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val{strlen($val)-1});
+    switch($last) {
+        case 'g': $val *= 1024;
+        case 'm': $val *= 1024;
+        case 'k': $val *= 1024;
+    }
+    return $val;
+}
+
 ?>

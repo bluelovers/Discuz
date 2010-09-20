@@ -15,10 +15,6 @@ display('layer_regmessage');
 	$('messageleft1').innerHTML = '<p>{lang register_succeed} <!--{echo addslashes($_G['setting']['bbname'])}--></p><p>{lang register_manual_verify}</p>';
 	$('messageright1').innerHTML = '<a href="home.php?mod=spacecp&ac=profile&op=password">{lang user_center}</a>';
 	setTimeout("window.location.href='home.php?mod=spacecp&ac=profile&op=password'", $mrefreshtime);
-<!--{elseif $_G['setting']['regverify'] == 3}-->
-	$('messageleft1').innerHTML = '<p>{lang register_succeed} <!--{echo addslashes($_G['setting']['bbname'])}--></p><p>{lang register_manual_verify}</p>';
-	$('messageright1').innerHTML = '<a href="home.php?mod=spacecp&ac=profile&op=password">{lang user_center}</a>';
-	setTimeout("window.location.href='home.php?mod=spacecp&ac=profile&op=password'", $mrefreshtime);
 <!--{else}-->
 	$('messageleft1').innerHTML = '<p>{lang register_succeed} <!--{echo addslashes($_G['setting']['bbname'])}--></p>';
 	<!--{eval $dreferer = str_replace('&amp;', '&', dreferer());}-->
@@ -42,7 +38,6 @@ setMenuPosition('fwin_register', 'fwin_register', '00');
 		<span>
 			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('register')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
-		<!--{if $_G['setting']['regverify'] == 3}--><br /><div>{lang register_thank_focus}{$location} {lang register_ip_address}{$_G['clientip']}</div><!--{/if}-->
 	</h3>
 	<div id="layer_bbrule"{if !($bbrules && $bbrulesforce)} style="display: none"{/if}>
 		<h3 class="flb"><em>$_G['setting']['bbname'] {lang rulemessage}</em>
@@ -57,7 +52,7 @@ setMenuPosition('fwin_register', 'fwin_register', '00');
 		</p>
 	</div>
 	<!--{hook/register_top}-->
-	<form method="post" autocomplete="off" name="register" id="registerform" onsubmit="ajaxpost('registerform', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="member.php?mod={$_G[setting][regname]}">
+	<form method="post" autocomplete="off" name="register" id="registerform" enctype="multipart/form-data" onsubmit="ajaxpost('registerform', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="member.php?mod={$_G[setting][regname]}">
 		<div id="layer_reg" class="c cl"{if $bbrules && $bbrulesforce} style="display: none"{/if}>
 			<input type="hidden" name="regsubmit" value="yes" />
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -100,7 +95,7 @@ setMenuPosition('fwin_register', 'fwin_register', '00');
 					<!--{/if}-->
 					<!--{loop $_G['cache']['fields_register'] $field}-->
 					<!--{if $htmls[$field['fieldid']]}-->
-						<p class="reginfo"{if $field['description']} title="{echo htmlspecialchars($field[description])}"{/if}><em>$field[title]:</em><span id="td_{$field[fieldid]}" class="reg_c">$htmls[$field['fieldid']]</span><!--{if $field['required']}-->&nbsp;*<!--{/if}--></p>
+						<div class="reginfo"{if $field['description']} title="{echo htmlspecialchars($field[description])}"{/if}><em>$field[title]:</em><div id="td_{$field[fieldid]}" class="reg_c">$htmls[$field['fieldid']]</div><!--{if $field['required']}-->&nbsp;*<!--{/if}--></div>
 					<!--{/if}-->
 					<!--{/loop}-->
 				</div>
@@ -227,7 +222,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('日', ''));
+	el.options.add(new Option('{lang register_birthday_day}', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}

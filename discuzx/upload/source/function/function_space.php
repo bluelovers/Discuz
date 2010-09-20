@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 16599 2010-09-10 03:28:36Z zhengqingpeng $
+ *      $Id: function_space.php 17017 2010-09-19 04:24:08Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,7 +87,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			$do = $blockname;
 			$managehtml = '';
 			$avatar = empty($parameters['banavatar']) ? 'middle' : $parameters['banavatar'];
-			$html .= "<div class=\"avt avtm\"><a href=\"home.php?mod=space&uid={$space['uid']}\" target=\"__blank\">".avatar($space['uid'],$avatar).'</a>';
+			$html .= "<div class=\"hm\"><p><a href=\"home.php?mod=space&uid={$space['uid']}\" target=\"__blank\">".avatar($space['uid'],$avatar).'</a></p>';
 			$html .= "<h2><a href=\"home.php?mod=space&uid={$space['uid']}\" target=\"__blank\">".$space['username']."</a></h2>";
 			$html .= '</div><ul class="xl xl2 cl ul_list">';
 
@@ -291,7 +291,7 @@ function getblockhtml($blockname,$parameters = array()) {
 
 		case 'feed':
 			$do = $blockname;
-			if(ckprivacy('feed', 'view')) {
+			if(!IS_ROBOT && ckprivacy('feed', 'view')) {
 				require_once libfile('function/feed');
 				$query = DB::query("SELECT * FROM ".DB::table('home_feed')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum");
 				while ($value = DB::fetch($query)) {
@@ -364,7 +364,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			break;
 		case 'share':
 			$do = $blockname;
-			if(ckprivacy('share', 'view')) {
+			if(!IS_ROBOT && ckprivacy('share', 'view')) {
 				require_once libfile('function/share');
 
 				$query = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum");
@@ -453,10 +453,11 @@ function getblockhtml($blockname,$parameters = array()) {
 		case 'music':
 			if(!empty($parameters['mp3list'])) {
 				$authcode = substr(md5($_G['authkey'].$uid), 6, 16);
-				$querystring = urlencode("home.php?mod=space&do=index&op=getmusiclist&uid=$uid&hash=$authcode&t=".TIMESTAMP);
+				$view = ($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile']) ? '&view=admin' : '';
+				$querystring = urlencode("home.php?mod=space&do=index&op=getmusiclist&uid=$uid&hash=$authcode$view&t=".TIMESTAMP);
 				$swfurl = STATICURL.'image/common/mp3player.swf?config='.$querystring;
-				if(empty($parameters['config']['height'])) {
-					$parameters['config']['height'] = '100%';
+				if(empty($parameters['config']['height']) && $parameters['config']['height'] !== 0) {
+					$parameters['config']['height'] = '200px';
 				} else {
 					$parameters['config']['height'] .= 'px';
 				}
@@ -522,7 +523,7 @@ function getonlinemember($uids) {
 		$_G['ols'] = array();
 		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($uids).")");
 		while ($value = DB::fetch($query)) {
-			if(!$value['magichidden']) {
+			if(!$value['magichidden'] && !$value['invisible']) {
 				$_G['ols'][$value['uid']] = $value['lastactivity'];
 			}
 		}

@@ -10,9 +10,9 @@
 			<span class="y xw0">
 				<!--{if !$post[first] && $_G['forum_thread']['special'] == 5}-->
 					<label class="pdbts pdbts_{echo intval($post[stand])}">
-						<!--{if $post[stand] == 1}--><a class="v" href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&amp;filter=debate&amp;stand=1{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_square}">{lang debate_square}</a>
-							<!--{elseif $post[stand] == 2}--><a class="v" href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&amp;filter=debate&amp;stand=2{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_opponent}">{lang debate_opponent}</a>
-							<!--{else}--><a href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&amp;filter=debate&amp;stand=0{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_neutral}">{lang debate_neutral}</a><!--{/if}-->
+						<!--{if $post[stand] == 1}--><a class="v" href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&filter=debate&stand=1{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_square}">{lang debate_square}</a>
+							<!--{elseif $post[stand] == 2}--><a class="v" href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&filter=debate&stand=2{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_opponent}">{lang debate_opponent}</a>
+							<!--{else}--><a href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]&filter=debate&stand=0{if $_G[gp_from]}&from=$_G[gp_from]{/if}" title="{lang debate_view_neutral}">{lang debate_neutral}</a><!--{/if}-->
 						<!--{if $post[stand]}-->
 							<a class="b" href="forum.php?mod=misc&action=debatevote&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}" id="voterdebate_$post[pid]" onclick="ajaxmenu(this);doane(event);">{lang debate_support} $post[voters]</a>
 						<!--{/if}-->
@@ -23,19 +23,19 @@
 				<!--{/if}-->
 				
 				<!--{if $_G['group']['raterange'] && $post['authorid']}-->
-					<a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&amp;tid=$_G[tid]&amp;pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}', 'get', -1);return false;">{lang rate}</a>
+					<a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}', 'get', -1);return false;">{lang rate}</a>
 				<!--{/if}-->
 				<!--{if $allowpostreply && $post['invisible'] == 0}-->
 					<!--{if $post['allowcomment']}-->
-						<a href="javascript:;" onclick="showWindow('comment', 'forum.php?mod=misc&action=comment&amp;tid=$post[tid]&amp;pid=$post[pid]&amp;extra=$_G[gp_extra]&amp;page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}{if $_G['forum_thread']['special'] == 127}&special=$specialextra{/if}', 'get', 0)">{lang comments}</a>
+						<a href="javascript:;" onclick="showWindow('comment', 'forum.php?mod=misc&action=comment&tid=$post[tid]&pid=$post[pid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}{if $_G['forum_thread']['special'] == 127}&special=$specialextra{/if}', 'get', 0)">{lang comments}</a>
 					<!--{/if}-->
-					<a href="forum.php?mod=post&action=reply&amp;fid=$_G[fid]&amp;tid=$_G[tid]&amp;reppost=$post[pid]&amp;extra=$_G[gp_extra]&amp;page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="showWindow('reply', this.href)">{lang reply}</a>
+					<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&reppost=$post[pid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{if !$needhiddenreply}-->
-					<a href="forum.php?mod=post&action=reply&amp;fid=$_G[fid]&amp;tid=$_G[tid]&amp;repquote=$post[pid]&amp;extra=$_G[gp_extra]&amp;page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="showWindow('reply', this.href)">{lang reply_quote}</a>
+					<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$post[pid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="showWindow('reply', this.href)">{lang reply_quote}</a>
 					<!--{/if}-->
 				<!--{/if}-->
 				<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] <= $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid']))}-->
-					<a href="forum.php?mod=post&action=edit&amp;fid=$_G[fid]&amp;tid=$_G[tid]&amp;pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&amp;modthreadkey=$_G[gp_modthreadkey]{/if}&amp;page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}"><!--{if $_G['forum_thread']['special'] == 2 && !$post['message']}-->{lang post_add_aboutcounter}<!--{else}-->{lang edit}</a><!--{/if}-->
+					<a href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}"><!--{if $_G['forum_thread']['special'] == 2 && !$post['message']}-->{lang post_add_aboutcounter}<!--{else}-->{lang edit}</a><!--{/if}-->
 				<!--{/if}-->
 				
 			</span>

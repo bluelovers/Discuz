@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dbbak.php 14731 2010-08-13 09:28:03Z zhaoxiongfei $
+ *      $Id: dbbak.php 16790 2010-09-15 01:43:36Z monkey $
  */
 
 error_reporting(0);
@@ -301,6 +301,12 @@ if($get['method'] == 'export') {
 		}
 	}
 
+	$memberexist = array_search("{$tablepre}common_member", $tables);
+	if($memberexist !== FALSE) {
+		unset($tables[$memberexist]);
+		array_unshift($tables, "{$tablepre}common_member");
+	}
+
 	$get['volume'] = isset($get['volume']) ? intval($get['volume']) : 0;
 	$get['volume'] = $get['volume'] + 1;
 	$version = $version ? $version : $apptype;
@@ -325,6 +331,11 @@ if($get['method'] == 'export') {
 	$get['tableid'] = isset($get['tableid']) ? intval($get['tableid']) : 0;
 	$get['startfrom'] = isset($get['startfrom']) ? intval($get['startfrom']) : 0;
 
+	if(!$get['tableid']) {
+		foreach($tables as $table) {
+			$sqldump .= sqldumptablestruct($table);
+		}
+	}
 	$complete = TRUE;
 	for(; $complete && $get['tableid'] < count($tables) && strlen($sqldump) + 500 < $sizelimit * 1000; $get['tableid']++) {
 		$sqldump .= sqldumptable($tables[$get['tableid']], strlen($sqldump));
@@ -578,6 +589,30 @@ function encode_arr($get) {
 	return _authcode($tmp, 'ENCODE', UC_KEY);
 }
 
+function sqldumptablestruct($table) {
+	global $db;
+
+	$createtable = $db->query("SHOW CREATE TABLE $table", 'SILENT');
+
+	if(!$db->error()) {
+		$tabledump = "DROP TABLE IF EXISTS $table;\n";
+	} else {
+		return '';
+	}
+
+	$create = $db->fetch_row($createtable);
+
+	if(strpos($table, '.') !== FALSE) {
+		$tablename = substr($table, strpos($table, '.') + 1);
+		$create[1] = str_replace("CREATE TABLE $tablename", 'CREATE TABLE '.$table, $create[1]);
+	}
+	$tabledump .= $create[1];
+
+	$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$table'");
+	$tabledump .= ($tablestatus['Auto_increment'] ? " AUTO_INCREMENT=$tablestatus[Auto_increment]" : '').";\n\n";
+	return $tabledump;
+}
+
 function sqldumptable($table, $currsize = 0) {
 	global $get, $db, $sizelimit, $startrow, $extendins, $sqlcompat, $sqlcharset, $dumpcharset, $usehex, $complete, $excepttables;
 
@@ -597,30 +632,6 @@ function sqldumptable($table, $currsize = 0) {
 			$tablefields[] = $fieldrow;
 		}
 	}
-	if(!$get['startfrom']) {
-
-		$createtable = $db->query("SHOW CREATE TABLE $table", 'SILENT');
-
-		if(!$db->error()) {
-			$tabledump = "DROP TABLE IF EXISTS $table;\n";
-		} else {
-			return '';
-		}
-
-		$create = $db->fetch_row($createtable);
-
-		if(strpos($table, '.') !== FALSE) {
-			$tablename = substr($table, strpos($table, '.') + 1);
-			$create[1] = str_replace("CREATE TABLE $tablename", 'CREATE TABLE '.$table, $create[1]);
-		}
-		$tabledump .= $create[1];
-
-
-		$tablestatus = $db->fetch_first("SHOW TABLE STATUS LIKE '$table'");
-		$tabledump .= ($tablestatus['Auto_increment'] ? " AUTO_INCREMENT=$tablestatus[Auto_increment]" : '').";\n\n";
-
-	}
-
 
 	$tabledumped = 0;
 	$numrows = $offset;
@@ -756,3 +767,5 @@ function _authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 function strexists($haystack, $needle) {
 	return !(strpos($haystack, $needle) === FALSE);
 }
+
+?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_spacecp.php 16371 2010-09-06 02:26:47Z wangjinbo $
+ *      $Id: lang_spacecp.php 17025 2010-09-19 05:47:47Z zhangguosheng $
  */
 
 $lang = array(
@@ -151,7 +151,7 @@ $lang = array(
 	'do_stat_appinvite' => '應用邀請',
 	'do_stat_add' => '信息發佈',
 	'do_stat_comment' => '信息互動',
-	'do_stat_space' => '用戶互動',
+	'do_stat_space' => '互動',
 	'do_stat_login' => '來訪用戶',
 	'do_stat_doing' => '記錄',
 	'do_stat_blog' => '日誌',
@@ -159,7 +159,10 @@ $lang = array(
 	'do_stat_reward' => '懸賞',
 	'do_stat_debate' => '辯論',
 	'do_stat_trade' => '商品',
-	'do_stat_group' => '群組',
+	'do_stat_group' => "創建{$_G[setting][navs][3][navname]}",
+	'do_stat_tgroup' => "{$_G[setting][navs][3][navname]}",
+	'do_stat_home' => "{$_G[setting][navs][4][navname]}",
+	'do_stat_forum' => "{$_G[setting][navs][2][navname]}",
 	'do_stat_groupthread' => '群組主題',
 	'do_stat_post' => '主題回復',
 	'do_stat_grouppost' => '群組回復',
@@ -181,6 +184,7 @@ $lang = array(
 	'do_stat_wall' => '留言',
 	'do_stat_poke' => '打招呼',
 	'do_stat_post_number' => '發帖量',
+	'do_stat_statistic' => '合併統計',
 
 	'profile_unchangeable' => '此項資料提交後不可修改',
 	'profile_is_verifying' => '此項資料正在審核中',
@@ -196,6 +200,7 @@ $lang = array(
 	'district_level_4' => '-鄉鎮-',
 
 	'spacecp_message_prompt' => '(支持 {msg} 代碼,最大 1000 字)',
+	'card_update_doing' => ' <a class="xi2" href="###">[更新記錄]</a>',
 
 );
 

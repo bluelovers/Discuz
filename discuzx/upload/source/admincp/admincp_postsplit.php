@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_postsplit.php 16412 2010-09-06 07:25:46Z wangjinbo $
+ *      $Id: admincp_postsplit.php 16845 2010-09-15 09:41:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -759,7 +759,7 @@ function postsplit_search_threads($conditions, $offset = null, $length = null, $
 		$fields = 'fid, tid, posttableid, subject, authorid, author, views, replies, lastpost';
 	}
 	if($sql || $conditions['threadtableid']) {
-		$sql = "digest>='0' AND displayorder>='0' $sql";
+		$sql = "displayorder>='0' $sql";
 		$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table($threadtable)." WHERE $sql");
 		if(isset($offset) && isset($length)) {
 			$sql .= " LIMIT $offset, $length";

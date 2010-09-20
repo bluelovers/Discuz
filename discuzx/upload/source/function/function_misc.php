@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 16293 2010-09-02 10:34:18Z liulanbo $
+ *      $Id: function_misc.php 17048 2010-09-20 00:45:16Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -258,13 +258,21 @@ function procthread($thread, $timeformat = 'd') {
 		$posts = $postsnum;
 		$topicpages = ceil($posts / $_G['ppp']);
 		for($i = 1; $i <= $topicpages; $i++) {
-			$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'" target="_blank">'.$i.'</a> ';
+			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+				$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'" target="_blank">'.$i.'</a> ';
+			} else {
+				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';
+			}
 			if($i == 6) {
 				$i = $topicpages + 1;
 			}
 		}
 		if($topicpages > 6) {
-			$pagelinks .= ' .. <a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$topicpages.'" target="_blank">'.$topicpages.'</a> ';
+			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+				$pagelinks .= ' .. <a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$topicpages.'" target="_blank">'.$topicpages.'</a> ';
+			} else {
+				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
+			}
 		}
 		$thread['multipage'] = '... '.$pagelinks;
 	} else {
@@ -290,20 +298,18 @@ function procthread($thread, $timeformat = 'd') {
 
 function updateviews($table, $idcol, $viewscol, $logfile) {
 	$viewlog = $viewarray = array();
-	if(@$viewlog = file($logfile = DISCUZ_ROOT.$logfile)) {
-		if(!@unlink($logfile)) {
-			if($fp = @fopen($logfile, 'w')) {
-				fwrite($fp, '');
-				fclose($fp);
+	$newlog = DISCUZ_ROOT.$logfile.random(6);
+	if(@rename(DISCUZ_ROOT.$logfile, $newlog)) {
+		unlink($newlog);
+		$viewlog = file($newlog);
+		if(is_array($viewlog) && !empty($viewlog)) {
+			$viewlog = array_count_values($viewlog);
+			foreach($viewlog as $id => $views) {
+				$viewarray[$views] .= ($id > 0) ? ','.intval($id) : '';
 			}
-		}
-
-		$viewlog = array_count_values($viewlog);
-		foreach($viewlog as $id => $views) {
-			$viewarray[$views] .= ($id > 0) ? ','.intval($id) : '';
-		}
-		foreach($viewarray as $views => $ids) {
-			DB::query("UPDATE LOW_PRIORITY ".DB::table($table)." SET $viewscol=$viewscol+'$views' WHERE $idcol IN (0$ids)", 'UNBUFFERED');
+			foreach($viewarray as $views => $ids) {
+				DB::query("UPDATE LOW_PRIORITY ".DB::table($table)." SET $viewscol=$viewscol+'$views' WHERE $idcol IN (0$ids)", 'UNBUFFERED');
+			}
 		}
 	}
 }

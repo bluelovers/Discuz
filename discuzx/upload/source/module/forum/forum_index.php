@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_index.php 16579 2010-09-09 06:52:58Z wangjinbo $
+ *      $Id: forum_index.php 16973 2010-09-17 09:28:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,9 +29,11 @@ $postdata = $_G['cache']['historyposts'] ? explode("\t", $_G['cache']['historypo
 $postdata[0] = intval($postdata[0]);
 $postdata[1] = intval($postdata[1]);
 
-$navtitle = $_G['setting']['seotitle']['forum'];
+$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
 if(!$navtitle) {
 	$navtitle = $_G['setting']['navs'][2]['navname'];
+} else {
+	$nobbname = true;
 }
 $metadescription = $_G['setting']['seodescription']['forum'];
 if(!$metadescription) {
@@ -120,7 +122,8 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 		}
 	}
 
-	foreach($catlist as  $catid => $category) {
+	foreach($catlist as $catid => $category) {
+		$catlist[$catid]['collapseimg'] = 'collapsed_no.gif';
 		if($catlist[$catid]['forumscount'] && $category['forumcolumns']) {
 			$catlist[$catid]['forumcolwidth'] = (floor(100 / $category['forumcolumns']) - 0.1).'%';
 			$catlist[$catid]['endrows'] = '';
@@ -131,7 +134,6 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 				}
 				$catlist[$catid]['endrows'] .= '</tr>';
 			}
-
 		} elseif(empty($category['forumscount'])) {
 			unset($catlist[$catid]);
 		}
@@ -147,7 +149,7 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 		unset($catlist[0]);
 	}
 
-	if($_G['setting']['whosonlinestatus'] == 1 || $_G['setting']['whosonlinestatus'] == 3) {
+	if(!IS_ROBOT && ($_G['setting']['whosonlinestatus'] == 1 || $_G['setting']['whosonlinestatus'] == 3)) {
 		$_G['setting']['whosonlinestatus'] = 1;
 
 		$onlineinfo = explode("\t", $_G['cache']['onlinerecord']);
@@ -322,6 +324,9 @@ function do_forum_bind_domains() {
 
 function categorycollapse() {
 	global $_G, $collapse, $catlist;
+	if(!$_G['uid']) {
+		return;
+	}
 	foreach($catlist as $fid => $forum) {
 		if(!isset($_G['cookie']['collapse']) || strpos($_G['cookie']['collapse'], '_category_'.$fid.'_') === FALSE) {
 			$catlist[$fid]['collapseimg'] = 'collapsed_no.gif';

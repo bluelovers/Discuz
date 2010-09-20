@@ -20,7 +20,7 @@
 		<input type="hidden" name="frommodcp" value="$frommodcp" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="fid" value="$_G[fid]" />
-		<input type="hidden" name="listextra" value="$listextra" />
+		<input type="hidden" name="redirect" value="{echo dreferer()}" />
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 		<!--{loop $threadlist $thread}-->
 			<input type="hidden" name="moderate[]" value="$thread[tid]" />

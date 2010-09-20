@@ -74,16 +74,14 @@
 			<dt><label for="paymethod">{lang post_trade_paymethod}:</label></dt>
 			<dd>
 				<span class="ftid">
-					<select name="paymethod" id="paymethod" width="108" change="display('alipayseller')" class="ps" tabindex="1">
-						<option value="0" {if $trade[account] || $trade[tenpayaccount]}selected{/if}>{lang post_trade_paymethod_online}</option>
-						<option value="1" {if !$trade[account] && !$trade[tenpayaccount]}selected{/if}>{lang post_trade_paymethod_offline}</option>
+					<select name="paymethod" id="paymethod" width="108" change="display('tenpayseller')" class="ps" tabindex="1">
+						<!--{if $_G[setting][ec_tenpay_opentrans_chnid]}--><option value="0" {if $trade[tenpayaccount]}selected{/if}>{lang post_trade_paymethod_online}</option><!--{/if}-->
+						<option value="1" {if !$trade[tenpayaccount]}selected{/if}>{lang post_trade_paymethod_offline}</option>
 					</select>
 				</span>
 			</dd>
 		</dl>
-		<dl id="alipayseller" style="{if !$trade[account] && !$trade[tenpayaccount]}display:none{/if}">
-			<dt><label for="seller">{lang post_trade_seller}:</label></dt>
-			<dd><input type="text" name="seller" id="seller" class="px" value="$trade[account]" tabindex="1" /></dd>
+		<dl id="tenpayseller" style="{if !$trade[tenpayaccount]}display:none{/if}">
 			<dt><label for="tenpay_seller">{lang post_trade_tenpay_seller}:</label></dt>
 			<dd><input type="text" name="tenpay_account" id="tenpay_account" class="px" value="$trade[tenpayaccount]" tabindex="2" /></dd>
 		</dl>

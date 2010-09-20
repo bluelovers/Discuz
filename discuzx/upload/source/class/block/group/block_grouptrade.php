@@ -111,6 +111,17 @@ class block_grouptrade {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_trade' => array(
+					'name' => lang('blockclass', 'blockclass_forum_trade'),
+					'script' => 'trade',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;

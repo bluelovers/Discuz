@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_email.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_email.php 16661 2010-09-13 01:14:11Z zhengqingpeng $
  */
 
 
@@ -126,7 +126,7 @@ $lang = array
 
 你收到這封郵件，是因為在我們的論壇上這個郵箱地址被登記為用戶郵箱，
 並且按照你填寫的信息，今天是你的生日，很高興能在此時為你獻上一份
-生日祝福，我謹代表論壇管理團隊，衷心祝福你生日快樂。
+生日祝福，我謹代表{bbname}管理團隊，衷心祝福你生日快樂。
 
 如果你並非我們的會員，或今天並非你的生日，可能是有人誤用了你的郵
 件地址，或錯誤的填寫了生日信息，本郵件不會多次重複發送，請忽略這

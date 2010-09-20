@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_notification.php 16515 2010-09-08 01:52:08Z wangjinbo $
+ *      $Id: lang_notification.php 17019 2010-09-19 04:36:09Z liulanbo $
  */
 
 $lang = array
@@ -52,9 +52,10 @@ $lang = array
 	'puse_article' => '恭喜你，你的<a href="{url}" target="_blank">{subject}</a>已被添加到文章列表， <a href="{newurl}" target="_blank">點擊查看</a>',
 
 
-	'group_member_join' => '{actor} 加入你的群組需要審核，請到群組<a href="{url}" target="_blank">管理後台</a> 進行審核',
+	'group_member_join' => '{actor} 加入你的 <a href="forum.php?mod=group&fid={fid}" target="_blank">{groupname}</a> 群組需要審核，請到群組<a href="{url}" target="_blank">管理後台</a> 進行審核',
 	'group_member_invite' => '{actor} 邀請你加入 <a href="forum.php?mod=group&fid={fid}" target="_blank">{groupname}</a> 群組，<a href="{url}" target="_blank">點此馬上加入</a>',
 	'group_member_check' => '你已經通過了 <a href="{url}" target="_blank">{groupname}</a> 群組的審核，請 <a href="{url}" target="_blank">點擊訪問</a>',
+	'group_member_check_failed' => '你沒有通過 <a href="{url}" target="_blank">{groupname}</a> 群組的審核。',
 
 	'reason_moderate' => '你的主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 被 {actor} {modaction} <div class="quote"><blockquote>{reason}</blockquote></div>',
 
@@ -134,7 +135,7 @@ $lang = array
 
 	'reward_question' => '你的懸賞主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 被 {actor} 設置了最佳答案 &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
-	'reward_bestanswer' => '你的回復被的懸賞主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 的作者 {actor} 選為懸賞最佳答案 &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
+	'reward_bestanswer' => '你的回復被懸賞主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 的作者 {actor} 選為懸賞最佳答案 &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
 	'comment_add' => '{actor} 點評了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 發表的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
@@ -167,7 +168,7 @@ $lang = array
 	'member_moderate_invalidate' => '你的賬號未能通過管理員的審核，請<a href="home.php?mod=spacecp&ac=profile">重新提交註冊信息</a>。<br />管理員留言: <b>{remark}</b>',
 	'member_moderate_validate' => '你的賬號已經通過審核。<br />管理員留言: <b>{remark}</b>',
 	'member_moderate_invalidate_no_remark' => '你的賬號未能通過管理員的審核，請<a href="home.php?mod=spacecp&ac=profile">重新提交註冊信息</a>。',
-	'member_moderate_valid_no_remark' => '你的賬號已經通過審核。',
+	'member_moderate_validate_no_remark' => '你的賬號已經通過審核。',
 
 	'system_notice' => '{subject}<p class="summary">{message}</p>',
 	'report_change_credits' => '{actor} 處理了你的舉報，你的 {creditchange}',

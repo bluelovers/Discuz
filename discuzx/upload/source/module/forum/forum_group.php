@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 16581 2010-09-09 07:06:50Z wangjinbo $
+ *      $Id: forum_group.php 17019 2010-09-19 04:36:09Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -129,12 +129,14 @@ if($action == 'index') {
 		}
 
 		$groupfeedlist = array();
-		$activityuser = array_keys($groupcache['activityuser']['data']);
-		if($activityuser) {
-			$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(dateline) WHERE uid IN (".dimplode($activityuser).") ORDER BY dateline desc LIMIT 0, 5");
-			while($feed = DB::fetch($query)) {
-				if($feed['friend'] == 0) {
-					$groupfeedlist[] = mkfeed($feed);
+		if(!IS_ROBOT) {
+			$activityuser = array_keys($groupcache['activityuser']['data']);
+			if($activityuser) {
+				$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(dateline) WHERE uid IN (".dimplode($activityuser).") ORDER BY dateline desc LIMIT 0, 5");
+				while($feed = DB::fetch($query)) {
+					if($feed['friend'] == 0) {
+						$groupfeedlist[] = mkfeed($feed);
+					}
 				}
 			}
 		}
@@ -206,7 +208,7 @@ if($action == 'index') {
 			DB::query("INSERT INTO ".DB::table('forum_groupuser')." (fid, uid, username, level, joindateline, lastupdate) VALUES ('$_G[fid]', '$_G[uid]', '$_G[username]', '$modmember', '".TIMESTAMP."', '".TIMESTAMP."')", 'UNBUFFERED');
 			if($_G['forum']['jointype'] == 2 && (empty($inviteuid) || empty($groupmanagers[$inviteuid]))) {
 				foreach($groupmanagers as $manage) {
-					notification_add($manage['uid'], 'group', 'group_member_join', array('url' => $_G['siteurl'].'forum.php?mod=group&action=manage&op=checkuser&fid='.$_G['fid']), 1);
+					notification_add($manage['uid'], 'group', 'group_member_join', array('fid' => $_G['fid'], 'groupname' => $_G['forum']['name'], 'url' => $_G['siteurl'].'forum.php?mod=group&action=manage&op=checkuser&fid='.$_G['fid']), 1);
 				}
 			} else {
 				update_usergroups($_G['uid']);
@@ -314,6 +316,7 @@ if($action == 'index') {
 				if(empty($domainlength) || empty($domain)) {
 					$domain = '';
 				} else {
+					require_once libfile('function/domain');
 					if(domaincheck($domain, $_G['setting']['domain']['root']['group'], $domainlength)) {
 						require_once libfile('function/delete');
 						deletedomain($_G['fid'], 'group');
@@ -416,7 +419,8 @@ if($action == 'index') {
 		}
 		if($checkusers) {
 			foreach($checkusers as $uid) {
-				notification_add($uid, 'group', 'group_member_check', array('groupname' => $_G['forum']['name'], 'url' => $_G['siteurl'].'forum.php?mod=group&fid='.$_G['fid']), 1);
+				$notification = $checktype == 1 ? 'group_member_check' : 'group_member_check_failed';
+				notification_add($uid, 'group', $notification, array('fid' => $_G['fid'], 'groupname' => $_G['forum']['name'], 'url' => $_G['siteurl'].'forum.php?mod=group&fid='.$_G['fid']), 1);
 			}
 			if($checktype == 1) {
 				DB::query("UPDATE ".DB::table('forum_groupuser')." SET level='4' WHERE uid IN(".dimplode($checkusers).") AND fid='$_G[fid]'");
@@ -539,19 +543,16 @@ if($action == 'index') {
 				if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 
 					if(!empty($threadtypesnew['options']['enable'])) {
-						$typeids = implodeids(array_keys($threadtypesnew['options']['enable']));
+						$typeids = dimplode(array_keys($threadtypesnew['options']['enable']));
 					} else {
 						$typeids = '0';
 					}
 					if(!empty($threadtypesnew['options']['delete'])) {
-						$threadtypes_deleteids = implodeids($threadtypesnew['options']['delete']);
+						$threadtypes_deleteids = dimplode($threadtypesnew['options']['delete']);
 						DB::query("DELETE FROM ".DB::table('forum_threadclass')." WHERE `typeid` IN ($threadtypes_deleteids) AND fid='{$_G['fid']}'");
 					}
 					$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) AND fid='{$_G['fid']}' ORDER BY displayorder");
 					while($type = DB::fetch($query)) {
-						if($threadtypesnew['options']['enable'][$type['typeid']]) {
-							$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
-						}
 						if($threadtypesnew['options']['name'][$type['typeid']] != $type['name'] || $threadtypesnew['options']['displayorder'][$type['typeid']] != $type['displayorder']) {
 							$threadtypesnew['options']['name'][$type['typeid']] = dhtmlspecialchars(censor(addslashes(cutstr(stripslashes(trim($threadtypesnew['options']['name'][$type['typeid']])), 16, ''))));
 							$threadtypesnew['options']['displayorder'][$type['typeid']] = intval($threadtypesnew['options']['displayorder'][$type['typeid']]);
@@ -560,16 +561,24 @@ if($action == 'index') {
 								'displayorder' => $threadtypesnew['options']['displayorder'][$type['typeid']],
 							), array('typeid' => "{$type['typeid']}", 'fid' => "{$_G['fid']}"));
 						}
-						$threadtypesnew['icons'][$type['typeid']] = trim($threadtypesnew['options']['icon'][$type['typeid']]);
 					}
 				}
-				$threadtypesnew = $threadtypesnew['types'] ? addslashes(serialize(array
-					(
-					'required' => (bool)$threadtypesnew['required'],
-					'listable' => (bool)$threadtypesnew['listable'],
-					'prefix' => $threadtypesnew['prefix'],
-					'types' => $threadtypesnew['types']
-					))) : '';
+
+				if($threadtypesnew && $typeids) {
+					$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder ASC");
+					while($type = DB::fetch($query)) {
+						if($threadtypesnew['options']['enable'][$type['typeid']]) {
+							$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
+						}
+					}
+					$threadtypesnew = $threadtypesnew['types'] ? addslashes(serialize(array
+						(
+						'required' => (bool)$threadtypesnew['required'],
+						'listable' => (bool)$threadtypesnew['listable'],
+						'prefix' => $threadtypesnew['prefix'],
+						'types' => $threadtypesnew['types'],
+						))) : '';
+				}
 			} else {
 				$threadtypesnew = '';
 			}

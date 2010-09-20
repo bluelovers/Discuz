@@ -87,7 +87,14 @@
 		<div class="mn">
 			<div class="bm">
 				<div class="bm_h cl">
-					<h1 class="mt">{lang topic}<!--{if $space[self]}--><span class="xs1 xw0">( <a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)">{lang posted}</a> )</span><!--{/if}--></h1>
+					<h1 class="mt">
+						<!--{if $_G[gp_type] == 'reply'}-->
+						<span class="xs1 xw0"><a href="home.php?mod=space&do=thread&view=me&type=thread&uid=$space[uid]&from=space">{lang topic}</a><span class="pipe">|</span></span>{lang reply}
+						<!--{else}-->
+						{lang topic}<span class="xs1 xw0"><span class="pipe">|</span><a href="home.php?mod=space&do=thread&view=me&type=reply&uid=$space[uid]&from=space">{lang reply}</a></span>
+						<!--{/if}-->
+						<!--{if $space[self]}--><span class="xs1 xw0">( <a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)">{lang posted}</a> )</span><!--{/if}-->
+					</h1>
 				</div>
 				<div class="bm_c">
 <!--{/if}-->
@@ -160,12 +167,12 @@
 									<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" {if $thread['displayorder'] == -1}class="recy"{/if}>$thread[subject]</a>
 								<!--{/if}-->
 								<!--{if $thread['digest'] > 0}-->
-									<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" class="vm" />
+									<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" align="absmiddle" />
 								<!--{/if}-->
 								<!--{if $thread['attachment'] == 2}-->
-									<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" class="vm" />
+									<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" align="absmiddle" />
 								<!--{elseif $thread['attachment'] == 1}-->
-									<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" class="vm" />
+									<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" align="absmiddle" />
 								<!--{/if}-->
 								<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
 								<!--{if !$_G['gp_filter']}-->
@@ -196,7 +203,7 @@
 								<!--{if $actives[me]}-->
 								<td class="by">
 									<cite><a href="home.php?mod=space&username=$thread[lastposterenc]">$thread[lastposter]</a></cite>
-									<em><a href="forum.php?mod=redirect&tid=$thread[tid]&amp;goto=lastpost#lastpost">$thread[lastpost]</a></em>
+									<em><a href="forum.php?mod=redirect&tid=$thread[tid]&goto=lastpost#lastpost">$thread[lastpost]</a></em>
 								</td>
 								<!--{/if}-->
 							<!--{/if}-->

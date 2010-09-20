@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 16196 2010-09-01 10:29:10Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 16892 2010-09-16 07:50:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -267,23 +267,26 @@ if(submitcheck('profilesubmit')) {
 	}
 
 	$authstr = false;
-	if($_G['setting']['regverify'] == 1 && $_G['adminid'] == 0 && $emailnew != $_G['member']['email'] && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8)) {
-		$idstring = random(6);
-		$setarr['groupid'] = $groupid = 8;
-		loadcache('usergroup_8');
-		$authstr = true;
-		DB::update('common_member_field_forum', array('authstr' => TIMESTAMP."\t2\t".$idstring), array('uid' => $_G['uid']));
-		$verifyurl = "{$_G[siteurl]}member.php?mod=activate&amp;uid={$_G[uid]}&amp;id=$idstring";
-		$email_verify_message = lang('email', 'email_verify_message', array(
-			'username' => $_G['member']['username'],
-			'bbname' => $_G['setting']['bbname'],
-			'siteurl' => $_G['siteurl'],
-			'url' => $verifyurl
-		));
-		include_once libfile('function/mail');
-		sendmail("{$_G[member][username]} <$emailnew>", lang('email', 'email_verify_subject'), $email_verify_message);
+	if($_G['adminid'] == 0 && $emailnew != $_G['member']['email']) {
+		if($_G['setting']['regverify'] == 1 && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8)) {
+			$idstring = random(6);
+			$setarr['groupid'] = $groupid = 8;
+			loadcache('usergroup_8');
+			$authstr = true;
+			DB::update('common_member_field_forum', array('authstr' => TIMESTAMP."\t2\t".$idstring), array('uid' => $_G['uid']));
+			$verifyurl = "{$_G[siteurl]}member.php?mod=activate&amp;uid={$_G[uid]}&amp;id=$idstring";
+			$email_verify_message = lang('email', 'email_verify_message', array(
+				'username' => $_G['member']['username'],
+				'bbname' => $_G['setting']['bbname'],
+				'siteurl' => $_G['siteurl'],
+				'url' => $verifyurl
+			));
+			include_once libfile('function/mail');
+			sendmail("{$_G[member][username]} <$emailnew>", lang('email', 'email_verify_subject'), $email_verify_message);
+		} else {
+			emailcheck_send($space['uid'], $emailnew);
+		}
 	}
-
 	if($setarr) {
 		DB::update('common_member', $setarr, array('uid' => $_G['uid']));
 	}

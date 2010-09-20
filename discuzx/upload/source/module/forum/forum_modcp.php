@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_modcp.php 13891 2010-08-03 01:33:35Z monkey $
+ *      $Id: forum_modcp.php 16956 2010-09-17 07:36:01Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -125,10 +125,6 @@ switch ($_G['gp_action']) {
 
 	case 'recyclebin':
 		$script = 'recyclebin';
-		break;
-
-	case 'stat':
-		$script = 'stat';
 		break;
 
 	case 'plugin':

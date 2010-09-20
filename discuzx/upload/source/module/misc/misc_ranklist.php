@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ranklist.php 16454 2010-09-07 03:48:02Z zhangguosheng $
+ *      $Id: misc_ranklist.php 16970 2010-09-17 09:02:02Z monkey $
  */
 
 function getranklist_threads($num = 20, $dateline = 0, $orderby = 'replies DESC') {
@@ -13,7 +13,7 @@ function getranklist_threads($num = 20, $dateline = 0, $orderby = 'replies DESC'
 	$query = DB::query("SELECT t.tid, t.fid, t.author, t.authorid, t.subject, t.dateline, t.views, t.replies, t.favtimes, t.sharetimes, f.name AS forum
 		FROM ".DB::table('forum_thread')." t
 		LEFT JOIN ".DB::table('forum_forum')." f USING(fid)
-		WHERE t.dateline>='$dateline' AND t.special='0' AND t.displayorder>='0'
+		WHERE t.dateline>='$dateline' AND t.displayorder>='0'
 		ORDER BY t.$orderby
 		LIMIT 0, $num");
 	$rank = 0;
@@ -40,7 +40,7 @@ function getranklist_polls($num = 20, $dateline = 0, $orderby = 'heats DESC') {
 	while($poll = DB::fetch($query)) {
 		++$rank;
 		$poll['rank'] = $rank;
-		$poll['avatar'] = discuz_uc_avatar($poll['authorid'], 'small');
+		$poll['avatar'] = avatar($poll['authorid'], 'small');
 		$poll['dateline'] = dgmdate($poll['dateline']);
 		$poll['pollpreview'] = explode("\t", trim($poll['pollpreview']));
 		$polllist[] = $poll;
@@ -67,7 +67,7 @@ function getranklist_activities($num = 20, $dateline = 0, $orderby = 't.heats DE
 		if($thread['starttimeto']) {
 			$thread['starttimeto'] = dgmdate($thread['starttimeto']);
 		} else {
-			$thread['starttimeto'] = lang('ranklist/template', 'to_today');
+			$thread['starttimeto'] = '';
 		}
 		if($thread['expiration'] && TIMESTAMP > $thread['expiration']) {
 			$thread['has_expiration'] = true;
@@ -131,7 +131,7 @@ function getranklist_members($offset = 0, $limit = 20) {
 		ORDER BY unitprice DESC, credit DESC
 		LIMIT $offset, $limit");
 	while($member = DB::fetch($query)) {
-		$member['avatar'] = discuz_uc_avatar($member['uid'], 'small');
+		$member['avatar'] = avatar($member['uid'], 'small');
 		$members[] = $member;
 	}
 	return $members;
@@ -148,7 +148,7 @@ function getranklist_girls($offset = 0, $limit = 20, $orderby = 'ORDER BY s.unit
 		ORDER BY $orderby
 		LIMIT $offset, $limit");
 	while($member = DB::fetch($query)) {
-		$member['avatar'] = discuz_uc_avatar($member['uid'], 'small');
+		$member['avatar'] = avatar($member['uid'], 'small');
 		$members[] = $member;
 	}
 	return $members;
@@ -170,7 +170,7 @@ function getranklist_blogs($num = 20, $dateline = 0, $orderby = 'hot DESC') {
 		++$rank;
 		$blog['rank'] = $rank;
 		$blog['dateline'] = dgmdate($blog['dateline']);
-		$blog['avatar'] = discuz_uc_avatar($blog['uid'], 'small');
+		$blog['avatar'] = avatar($blog['uid'], 'small');
 		$blog['message'] = preg_replace('/<([^>]*?)>/', '', $blog['message']);
 		$blog['message'] = messagecutstr($blog['message'], 140);
 		$blogs[] = $blog;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blockclass.php 16463 2010-09-07 04:36:26Z zhangguosheng $
+ *      $Id: lang_blockclass.php 16908 2010-09-16 10:40:05Z zhangguosheng $
  */
 
 $lang = array(
@@ -64,7 +64,7 @@ $lang = array(
 	'blockclass_thread_field_replies' => '回複數',
 	'blockclass_thread_field_views' => '總瀏覽數',
 	'blockclass_thread_field_heats' => '熱度值',
-	'blockclass_thread_field_recomments' => '推薦數',
+	'blockclass_thread_field_recommends' => '推薦數',
 	'blockclass_thread_field_hourviews' => '小時瀏覽數',
 	'blockclass_thread_field_todayviews' => '今日瀏覽數',
 	'blockclass_thread_field_weekviews' => '本周瀏覽數',
@@ -115,6 +115,7 @@ $lang = array(
 	'blockclass_sort_field_summary' => '帖子介紹',
 	'blockclass_sort_script_sort' => '高級自定義',
 
+	'blockclass_forum_trade' => '商品模塊',
 	'blockclass_trade_trade' => '商品模塊',
 	'blockclass_trade_field_title' => '商品名稱',
 	'blockclass_trade_field_url' => '商品鏈接',
@@ -129,6 +130,7 @@ $lang = array(
 	'blockclass_trade_script_tradespecified' => '指定商品',
 	'blockclass_trade_script_trade' => '高級自定義',
 
+	'blockclass_forum_activity' => '活動模塊',
 	'blockclass_activity_activity' => '活動模塊',
 	'blockclass_activity_field_url' => '活動貼URL',
 	'blockclass_activity_field_title' => '活動標題',
@@ -156,9 +158,14 @@ $lang = array(
 	'blockclass_article_field_pic' => '文章封面',
 	'blockclass_article_field_summary' => '文章簡介',
 	'blockclass_article_field_dateline' => '發佈時間',
+	'blockclass_article_field_uid' => '作者UID',
+	'blockclass_article_field_username' => '作者名',
+	'blockclass_article_field_avatar' => '用戶頭像',
+	'blockclass_article_field_avatar_big' => '用戶頭像(大)',
 	'blockclass_article_field_caturl' => '欄目鏈接',
 	'blockclass_article_field_catname' => '欄目名稱',
 	'blockclass_article_field_viewnum' => '查看數',
+	'blockclass_article_field_articles' => '文章數',
 	'blockclass_article_field_commentnum' => '評論數',
 	'blockclass_article_script_articlenew' => '最新文章',
 	'blockclass_article_script_articlehot' => '熱門文章',
@@ -280,6 +287,8 @@ $lang = array(
 	'blockclass_blog_field_dateline' => '發佈時間',
 	'blockclass_blog_field_uid' => '作者UID',
 	'blockclass_blog_field_username' => '作者名',
+	'blockclass_blog_field_avatar' => '用戶頭像',
+	'blockclass_blog_field_avatar_big' => '用戶頭像(大)',
 	'blockclass_blog_field_replynum' => '評論數',
 	'blockclass_blog_field_viewnum' => '瀏覽數',
 	'blockclass_blog_field_click1' => '表態項1',
@@ -414,6 +423,7 @@ $lang = array(
 	'blockclass_grouptrade_script_grouptradespecified' => '指定商品',
 	'blockclass_grouptrade_script_grouptrade' => '高級自定義',
 
+	'blockclass_group_groupactivity' => '群組活動',
 	'blockclass_group_activity' => '群組活動',
 	'blockclass_groupactivity_field_url' => '活動貼URL',
 	'blockclass_groupactivity_field_title' => '活動標題',

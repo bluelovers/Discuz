@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_stat.php 14560 2010-08-12 07:55:16Z wangjinbo $
+ *      $Id: misc_stat.php 17020 2010-09-19 05:21:09Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,17 +27,35 @@ if(!checkperm('allowstat') && $_G['cookie']['stat_hash'] != $stat_hash) {
 
 $cols = array();
 $cols['login'] = array('login','register','invite','appinvite');
-$cols['add'] = array('doing','blog','pic','poll','activity','share','thread', 'reward', 'debate', 'trade', 'group', 'groupthread');
-$cols['comment'] = array('docomment','blogcomment','piccomment','grouppost','sharecomment','post','click');
-$cols['space'] = array('wall','poke');
+$cols['forum'] = array('thread', 'poll', 'activity', 'reward', 'debate', 'trade', 'post');
+$cols['tgroup'] = array('group', 'groupthread', 'grouppost');
+$cols['home'] = array('doing', 'docomment', 'blog', 'blogcomment', 'pic', 'piccomment', 'share', 'sharecomment');
+$cols['space'] = array('wall','poke', 'click');
 
-$type = empty($_GET['type'])?'all':$_GET['type'];
+$type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
 
+$primarybegin = !empty($_G['gp_primarybegin']) ? $_G['gp_primarybegin'] : dgmdate($_G['timestamp']-2592000, 'Y-m-d');
+$primaryend = !empty($_G['gp_primaryend']) ? $_G['gp_primaryend'] : dgmdate($_G['timestamp'], 'Y-m-d');
+
+$beginunixstr = strtotime($primarybegin);
+$endunixstr = strtotime($primaryend);
+if($beginunixstr > $endunixstr) {
+	showmessage('start_time_is_greater_than_end_time', NULL, array(), array('return'=>true));
+} else if($beginunixstr == $endunixstr) {
+	showmessage('start_time_end_time_is_equal_to', NULL, array(), array('return'=>true));
+}
 if(!empty($_GET['xml'])) {
 	$xaxis = '';
 	$graph = array();
 	$count = 1;
-	$query = DB::query("SELECT * FROM ".DB::table('common_stat')." ORDER BY daytime");
+	$begin = str_replace('-', '', $primarybegin);
+	$end = str_replace('-', '', $primaryend);
+	$field = '*';
+	if(!empty($_GET['merge'])) {
+		$field = 'daytime,'.implode('+', $_GET['types']).' AS statistic';
+		$type = 'statistic';
+	}
+	$query = DB::query("SELECT $field FROM ".DB::table('common_stat')." WHERE daytime>='$begin' AND daytime<='$end' ORDER BY daytime");
 	while ($value = DB::fetch($query)) {
 		$xaxis .= "<value xid='$count'>".substr($value['daytime'], 4, 4)."</value>";
 		if($type == 'all') {
@@ -54,7 +72,13 @@ if(!empty($_GET['xml'])) {
 				}
 			}
 		} else {
-			$graph[$type] .= "<value xid='$count'>".$value[$type]."</value>";
+			if(empty($_GET['types']) || !empty($_GET['merge'])) {
+				$graph[$type] .= "<value xid='$count'>".$value[$type]."</value>";
+			} else {
+				foreach($_GET['types'] as $t) {
+					$graph[$t] .= "<value xid='$count'>".$value[$t]."</value>";
+				}
+			}
 		}
 		$count++;
 	}
@@ -80,12 +104,17 @@ if(!empty($_GET['xml'])) {
 	exit();
 }
 
-require_once libfile('function/home');
-$siteurl = getsiteurl();
-$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type");
-
 $actives = array($type => ' class="a"');
 
-include template('home/misc_stat');
+require_once libfile('function/home');
+$siteurl = getsiteurl();
+$types = '';
+$merge = !empty($_GET['merge']) ? '&merge=1' : '';
+foreach($_GET['types'] as $value) {
+	$types .= '&types[]='.$value;
+	$actives[$value] = ' class="a"';
+}
+$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type&primarybegin=$primarybegin&primaryend=$primaryend{$types}{$merge}");
 
+include template('home/misc_stat');
 ?>

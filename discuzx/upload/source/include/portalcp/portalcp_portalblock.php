@@ -54,7 +54,7 @@ foreach($pageblocks as $key=>$value) {
 	if(isset($_G['cache']['diytemplatename'][$key])) {
 		$diytemplate[$key] = $_G['cache']['diytemplatename'][$key];
 	} elseif($key == 'others') {
-		$diytemplate[$key] = lang('portal/template', 'other_page');
+		$diytemplate[$key] = lang('portalcp', 'other_page');
 	} else {
 		$diytemplate[$key] = $key;
 	}

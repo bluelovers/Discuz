@@ -186,7 +186,7 @@
 								<p class="mtn">
 									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=validate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang pass}</a><span class="pipe">|</span>
 									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=delete&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang delete}</a><span class="pipe">|</span>
-									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=invalidate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang invalidate}</a>
+									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=ignore&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang invalidate}</a>
 								</p>
 							</td>
 							<td valign="top">$member['message']</td>
@@ -204,7 +204,7 @@
 					<input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()"/> <label for="chkall">{lang checkall}</label>
 					<button onclick="modthreads('validate'); return false;" class="pn"><strong>{lang validate}</strong></button>
 					<button onclick="modthreads('delete'); return false;" class="pn"><strong>{lang delete}</strong></button>
-					<button onclick="modthreads('invalidate'); return false;" class="pn"><strong>{lang invalidate}</strong></button>
+					<button onclick="modthreads('ignore'); return false;" class="pn"><strong>{lang invalidate}</strong></button>
 					{lang mod_moderate_select}
 				</div>
 			</form>

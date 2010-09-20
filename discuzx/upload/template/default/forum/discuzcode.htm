@@ -69,7 +69,7 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 				<dt></dt>
 				<dd>
 					<p class="mbn">
-						<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;nothumb=yes" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" id="aid$attach[aid]" class="bold" target="_blank">$attach[filename]</a>
+						<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode&nothumb=yes" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" id="aid$attach[aid]" class="bold" target="_blank">$attach[filename]</a>
 						<em class="xg1">($attach[attachsize], {lang downloads}: $attach[downloads])</em>
 					</p>
 					<div class="attp" id="aid$attach[aid]_menu" style="display: none">
@@ -85,9 +85,9 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 					</div>
 					<p class="mbn">
 						<!--{if $attach['readperm']}-->{lang readperm}: <strong>$attach[readperm]</strong><!--{/if}-->
-						<!--{if $attach['price']}-->{lang price}: <strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</strong> &nbsp;[<a href="forum.php?mod=misc&action=viewattachpayments&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang pay_view}</a>]
+						<!--{if $attach['price']}-->{lang price}: <strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</strong> &nbsp;[<a href="forum.php?mod=misc&action=viewattachpayments&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang pay_view}</a>]
 							<!--{if !$attach['payed']}-->
-								&nbsp;[<a href="forum.php?mod=misc&action=attachpay&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang attachment_buy}</a>]
+								&nbsp;[<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang attachment_buy}</a>]
 							<!--{/if}-->
 						<!--{/if}-->
 					</p>
@@ -95,9 +95,9 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 					<!--{if !$attach['price'] || $attach['payed']}-->
 						<p class="mbn">
 						<!--{if $_G['setting']['thumbstatus'] && $attach['thumb']}-->
-							<a href="javascript:;"><img id="aimg_$attach[aid]" onclick="zoom(this, '{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes&amp;nothumb=yes{else}{$attach[url]}$attach[attachment]{/if}')" src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode{else}{$attach[url]}$attach[attachment].thumb.jpg{/if}" alt="$attach[filename]" /></a>
+							<a href="javascript:;"><img id="aimg_$attach[aid]" onclick="zoom(this, '{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes&nothumb=yes{else}{$attach[url]}$attach[attachment]{/if}')" src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode{else}{$attach[url]}$attach[attachment].thumb.jpg{/if}" alt="$attach[imgalt]" title="$attach[imgalt]" /></a>
 						<!--{else}-->
-							<img id="aimg_$attach[aid]" src="{STATICURL}image/common/none.gif" file="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" $widthcode id="aimg_$attach[aid]" alt="$attach[filename]" />
+							<img id="aimg_$attach[aid]" src="{STATICURL}image/common/none.gif" file="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" $widthcode id="aimg_$attach[aid]" alt="$attach[imgalt]" title="$attach[imgalt]" />
 						<!--{/if}-->
 						</p>
 					<!--{/if}-->
@@ -107,7 +107,7 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 			<!--{if !$attach['price'] || $attach['payed']}-->
 				<dd>
 					<!--{if $attach['description']}--><p>{$attach[description]}</p><!--{/if}-->
-					<img src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" alt="$attach[filename]" />
+					<img src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" alt="$attach[imgalt]" title="$attach[imgalt]" />
 				</dd>
 			<!--{/if}-->
 		<!--{/if}-->
@@ -121,7 +121,7 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 					<!--{if !$attach['price'] || $attach['payed']}-->
 						<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" id="aid$attach[aid]" target="_blank"{if !$attach['attachimg'] && $_G[getattachcredits]} onclick="return creditconfirm('{$_G[getattachcredits]}');"{/if}>$attach[filename]</a>
 					<!--{else}-->
-						<a href="forum.php?mod=misc&action=attachpay&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">$attach[filename]</a>
+						<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">$attach[filename]</a>
 					<!--{/if}-->
 					<div class="attp" id="aid$attach[aid]_menu" style="display: none">
 						<div class="crly">
@@ -135,9 +135,9 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 				<p>$attach[attachsize]<!--{if $attach['readperm']}-->, {lang readperm}: <strong>$attach[readperm]</strong><!--{/if}-->, {lang downloads}: $attach[downloads]</p>
 				<p>
 					<!--{if $attach['price']}-->
-						{lang price}: <strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</strong> &nbsp;[<a href="forum.php?mod=misc&action=viewattachpayments&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang pay_view}</a>]
+						{lang price}: <strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</strong> &nbsp;[<a href="forum.php?mod=misc&action=viewattachpayments&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang pay_view}</a>]
 						<!--{if !$attach['payed']}-->
-							&nbsp;[<a href="forum.php?mod=misc&action=attachpay&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">{lang attachment_buy}</a>]					
+							&nbsp;[<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">{lang attachment_buy}</a>]					
 						<!--{/if}-->
 					<!--{/if}-->
 				</p>
@@ -160,21 +160,20 @@ $is_archive = $_G['forum_thread']['is_archived'] ? '&fid='.$_G['fid'].'&archivei
 }
 <!--{block return}-->
 	<!--{if $attach['attachimg'] && $_G['setting']['showimages'] && (!$attach['price'] || $attach['payed'])}-->
-		<!--{if !IS_ROBOT}-->			
-			<span style="position: absolute; display: none" id="attach_$attach[aid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'13'})"><img src="{IMGDIR}/attachimg.gif" border="0"></span>
+		<!--{if !IS_ROBOT}-->
 			<!--{if $_G['setting']['thumbstatus'] && $attach['thumb']}-->
-				<a href="javascript:;"><img{if $attach['price'] && $_G['forum_attachmentdown'] && $_G['uid'] != $attach['uid']} class="attprice"{/if} onclick="zoom(this, '{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes&amp;nothumb=yes{else}{$attach[url]}$attach[attachment]{/if}')" src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode{else}{$attach[url]}$attach[attachment].thumb.jpg{/if}" border="0" id="aimg_$attach[aid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" /></a>
+				<img{if $attach['price'] && $_G['forum_attachmentdown'] && $_G['uid'] != $attach['uid']} class="attprice"{/if} style="cursor:pointer" onclick="zoom(this, '{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes&nothumb=yes{else}{$attach[url]}$attach[attachment]{/if}')" src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode{else}{$attach[url]}$attach[attachment].thumb.jpg{/if}" border="0" id="aimg_$attach[aid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" alt="$attach[imgalt]" title="$attach[imgalt]" />
 			<!--{else}-->
-				<img{if $attach['price'] && $_G['forum_attachmentdown'] && $_G['uid'] != $attach['uid']} class="attprice"{/if} src="{STATICURL}image/common/none.gif" file="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" {if $_G['gp_action'] != 'printable'}$widthcode{/if} id="aimg_$attach[aid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" alt="$attach[filename]" />
+				<img{if $attach['price'] && $_G['forum_attachmentdown'] && $_G['uid'] != $attach['uid']} class="attprice"{/if} src="{STATICURL}image/common/none.gif" file="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" {if $_G['gp_action'] != 'printable'}$widthcode{/if} id="aimg_$attach[aid]" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" alt="$attach[imgalt]" title="$attach[imgalt]" />
 			<!--{/if}-->
 			<div class="tatt" id="aimg_$attach[aid]_menu" style="position: absolute; display: none">
 				<div class="crly">
 					<div class="y">$attach[dateline] {lang upload}</div>
-					<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;nothumb=yes" title="$attach[filename] {lang downloads}:$attach[downloads]" target="_blank"><strong>{lang download}</strong> <span class="xs0">($attach[attachsize])</span></a>
+					<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode&nothumb=yes" title="$attach[filename] {lang downloads}:$attach[downloads]" target="_blank"><strong>{lang download}</strong> <span class="xs0">($attach[attachsize])</span></a>
 					<!--{if $attach[description]}--><br />$attach[description]<!--{/if}-->
 		<!--{else}-->
 			<!--{if $attach['description']}--><p>{$attach[description]}</p><!--{/if}-->
-			<img src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&amp;noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" alt="$attach[filename]" />
+			<img src="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" alt="$attach[imgalt]" title="$attach[imgalt]" />
 			<div style="display: none">
 		<!--{/if}-->
 	<!--{else}-->
@@ -183,7 +182,7 @@ $is_archive = $_G['forum_thread']['is_archived'] ? '&fid='.$_G['fid'].'&archivei
 			<!--{if !$attach['price'] || $attach['payed']}-->
 				<a href="forum.php?mod=attachment{$is_archive}&aid=$aidencode" target="_blank"{if !$attach['attachimg'] && $_G[getattachcredits]} onclick="return creditconfirm('{$_G[getattachcredits]}');"{/if}>$attach[filename]</a>
 			<!--{else}-->
-				<a href="forum.php?mod=misc&action=attachpay&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">$attach[filename]</a>
+				<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)">$attach[filename]</a>
 			<!--{/if}-->
 			<em class="xg1">($attach[attachsize], {lang downloads}: $attach[downloads]<!--{if $attach['price']}-->, {lang price}: {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}<!--{/if}-->)
 			</em>
@@ -196,9 +195,9 @@ $is_archive = $_G['forum_thread']['is_archived'] ? '&fid='.$_G['fid'].'&archivei
 				<!--{if $attach['readperm']}--><br />{lang readperm}: $attach[readperm]<!--{/if}-->
 	<!--{/if}-->
 	<!--{if $attach['price']}-->
-		<br />{lang price}: {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}	&nbsp;<a href="forum.php?mod=misc&action=viewattachpayments&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">[{lang pay_view}]</a>
+		<br />{lang price}: {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}	&nbsp;<a href="forum.php?mod=misc&action=viewattachpayments&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">[{lang pay_view}]</a>
 		<!--{if !$attach['payed']}-->
-			&nbsp;[<a href="forum.php?mod=misc&action=attachpay&amp;aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang attachment_buy}</a>]
+			&nbsp;[<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]" onclick="showWindow('attachpay', this.href)" target="_blank">{lang attachment_buy}</a>]
 		<!--{/if}-->
 	<!--{/if}-->
 	<!--{if !$attach['attachimg'] && $_G['getattachcredits']}--><br />{lang attachcredits}: $_G[getattachcredits]<!--{/if}-->

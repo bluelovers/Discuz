@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_album.php 16619 2010-09-10 06:51:58Z zhengqingpeng $
+ *      $Id: space_album.php 16856 2010-09-16 02:53:58Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -83,7 +83,7 @@ if($id) {
 	if($count) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE $wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
 		while ($value = DB::fetch($query)) {
-			if($value['status'] == 0 || $value['uid'] == $_G['uid']) {
+			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 				$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
 				$list[] = $value;
 			} else {
@@ -99,7 +99,7 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username'])) . ' - ' . $_G['setting']['bbname'];
+	$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username']));
 	$metakeywords = $album['albumname'];
 	$metadescription = $album['albumname'];
 
@@ -272,7 +272,7 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $album['albumname']. ' - ' . $_G['setting']['bbname'];
+	$navtitle = $album['albumname'];
 	if($pic['title']) {
 		$navtitle = $pic['title'].' - '.$navtitle;
 	}
@@ -435,9 +435,12 @@ if($id) {
 			$navtitle = lang('core', 'title_newest_update_album');
 		}
 	}
-	$navtitle = lang('space', 'sb_album', array('who' => $space['username'])) . ' - '.$_G['setting']['bbname'];
-	$metakeywords = lang('space', 'sb_album', array('who' => $space['username']));
-	$metadescription = lang('space', 'sb_album', array('who' => $space['username']));
+	if($space['username']) {
+		$navtitle = lang('space', 'sb_album', array('who' => $space['username']));
+	}
+
+	$metakeywords = $navtitle;
+	$metadescription = $navtitle;
 	include_once template("diy:home/space_album_list");
 }
 

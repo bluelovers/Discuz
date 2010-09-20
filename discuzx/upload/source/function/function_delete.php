@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 16533 2010-09-08 07:07:03Z liulanbo $
+ *      $Id: function_delete.php 16722 2010-09-13 09:38:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -345,7 +345,7 @@ function deletespace($uid) {
 function deletepics($picids) {
 	global $_G;
 
-	$sizes = $pics = $newids = $counts = array();
+	$sizes = $pics = $newids = array();
 	$allowmanage = checkperm('managealbum');
 
 	$albumids = array();
@@ -355,9 +355,6 @@ function deletepics($picids) {
 			$pics[] = $value;
 			$newids[] = $value['picid'];
 
-			if($value['uid'] != $_G['uid']) {
-				$counts[$value['uid']]['coef'] -= 1;
-			}
 			$sizes[$value['uid']] = $sizes[$value['uid']] + $value['size'];
 			$albumids[$value['albumid']] = $value['albumid'];
 		}
@@ -370,13 +367,6 @@ function deletepics($picids) {
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN (".dimplode($newids).") AND idtype='picid'");
 	DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE id IN (".dimplode($newids).") AND idtype='picid'");
 
-	if($counts) {
-		foreach ($counts as $uid => $setarr) {
-			$attachsize = intval($sizes[$uid]);
-			batchupdatecredit('uploadimage', $uid, array('attachsize' => -$attachsize), $setarr['coef']);
-			unset($sizes[$uid]);
-		}
-	}
 	if($sizes) {
 		foreach ($sizes as $uid => $setarr) {
 			$attachsize = intval($sizes[$uid]);
@@ -427,9 +417,6 @@ function deletealbums($albumids) {
 		$pics[] = $value;
 		$picids[] = $value['picid'];
 		$sizes[$value['uid']] = $sizes[$value['uid']] + $value['size'];
-		if($value['uid'] != $_G['uid']) {
-			$counts[$value['uid']]['coef'] -= 1;
-		}
 	}
 
 	DB::query("DELETE FROM ".DB::table('home_pic')." WHERE albumid IN (".dimplode($newids).")");
@@ -437,16 +424,11 @@ function deletealbums($albumids) {
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN (".dimplode($newids).") AND idtype='albumid'");
 	if($picids) DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE id IN (".dimplode($picids).") AND idtype='picid'");
 
-	if($counts) {
-		foreach ($counts as $uid => $setarr) {
-			$attachsize = intval($sizes[$uid]);
-			batchupdatecredit('uploadimage', $uid, array('albums' => $setarr['albums'], 'attachsize' => -$attachsize), $setarr['coef']);
-		}
-	}
 	if($sizes) {
 		foreach ($sizes as $uid => $value) {
 			$attachsize = intval($sizes[$uid]);
-			updatemembercount($uid, array('attachsize' => -$attachsize), false);
+			$albumnum = $counts[$uid]['albums'] ? $counts[$uid]['albums'] : 0;
+			updatemembercount($uid, array('albums' => $albumnum, 'attachsize' => -$attachsize), false);
 		}
 	}
 

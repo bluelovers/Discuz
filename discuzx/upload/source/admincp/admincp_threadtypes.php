@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 16524 2010-09-08 03:13:39Z liulanbo $
+ *      $Id: admincp_threadtypes.php 16666 2010-09-13 01:41:51Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -430,8 +430,7 @@ EOT;
 		if(in_array(strtoupper($_G['gp_identifiernew']), $mysql_keywords)) {
 			cpmsg('threadtype_infotypes_optionvariable_iskeyword', '', 'error');
 		}
-		echo $_G['gp_identifiernew'];
-exit();
+
 		$query = DB::query("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE identifier='{$_G['gp_identifiernew']}' AND optionid<>'{$_G['gp_optionid']}' LIMIT 1");
 		if(DB::num_rows($query) || strlen($_G['gp_identifiernew']) > 40  || !ispluginkey($_G['gp_identifiernew'])) {
 			cpmsg('threadtype_infotypes_optionvariable_invalid', '', 'error');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 16504 2010-09-07 09:32:50Z liulanbo $
+ *      $Id: lang_misc.php 16787 2010-09-14 09:49:47Z monkey $
  */
 
 $lang = array
@@ -196,11 +196,11 @@ $lang = array
 	'perms_allowpostdebate' => '發表辯論',
 	'perms_allowposttrade' => '發表交易',
 	'perms_maxsigsize' => '最大簽名長度',
-	'perms_allowsigbbcode' => '簽名中使用 Discuz! 代碼',
+	'perms_allowsigbbcode' => '簽名中使用編輯器代碼',
 	'perms_allowsigimgcode' => '簽名中使用 [img] 代碼',
 	'perms_maxbiosize' => '自我介紹最大長度',
 	'perms_allowrecommend' => '主題評價影響值',
-	'perms_allowbiobbcode' => '自我介紹中使用 Discuz! 代碼',
+	'perms_allowbiobbcode' => '自我介紹中使用編輯器代碼',
 	'perms_allowbioimgcode' => '自我介紹中使用 [img] 代碼',
 	'perms_allowgetattach' => '下載附件',
 	'perms_allowpostattach' => '發佈附件',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 16612 2010-09-10 06:23:51Z zhengqingpeng $
+ *      $Id: space_home.php 17031 2010-09-19 06:17:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['uid'] && $_G['setting']['privacy']['view']['home']) {
-	showmessage('no_privilege', '', array(), array('return' => true));
+	showmessage('home_no_privilege', '', array(), array('login' => true));
 }
 require_once libfile('function/feed');
 
@@ -63,159 +63,192 @@ $gets = array(
 	'icon' => $_GET['icon']
 );
 $theurl = 'home.php?'.url_implode($gets);
+$hotlist = array();
+if(!IS_ROBOT) {
 
-$need_count = true;
-$wheresql = array('1');
-
-if($_GET['view'] == 'all') {
-
-	if($_GET['order'] == 'dateline') {
-		$ordersql = "dateline DESC";
-		$f_index = '';
-		$orderactives = array('dateline' => ' class="a"');
-	} else {
-		$wheresql['hot'] = "hot>='$minhot'";
-		$ordersql = "dateline DESC";
-		$f_index = '';
-		$orderactives = array('hot' => ' class="a"');
-	}
-
-} elseif($_GET['view'] == 'me') {
-
-	$wheresql['uid'] = "uid='$space[uid]'";
-	$ordersql = "dateline DESC";
-	$f_index = '';
-
-	$diymode = 1;
-	if($space['self'] && $_GET['from'] != 'space') $diymode = 0;
-
-} else {
-
-	space_merge($space, 'field_home');
-
-	if(empty($space['feedfriend'])) {
-		$need_count = false;
-	} else {
-		$wheresql['uid'] = "uid IN ('0',$space[feedfriend])";
-		$ordersql = "dateline DESC";
-		$f_index = 'USE INDEX(dateline)';
-	}
-}
-
-$appid = empty($_GET['appid'])?0:intval($_GET['appid']);
-if($appid) {
-	$wheresql['appid'] = "appid='$appid'";
-}
-$icon = empty($_GET['icon'])?'':trim($_GET['icon']);
-if($icon) {
-	$wheresql['icon'] = "icon='$icon'";
-}
-$gid = !isset($_GET['gid'])?'-1':intval($_GET['gid']);
-if($gid>=0) {
-	$fuids = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND gid='$gid' ORDER BY num DESC LIMIT 0,100");
-	while ($value = DB::fetch($query)) {
-		$fuids[] = $value['fuid'];
-	}
-	if(empty($fuids)) {
-		$need_count = false;
-	} else {
-		$wheresql['uid'] = "uid IN (".dimplode($fuids).")";
-	}
-}
-$gidactives[$gid] = ' class="a"';
-
-$feed_users = $feed_list = $user_list = $filter_list  = $list = $mlist = $magic = array();
-$count = $filtercount = 0;
-$multi = '';
-
-if($need_count) {
-	$query = DB::query("SELECT * FROM ".DB::table('home_feed')." $f_index
-		WHERE ".implode(' AND ', $wheresql)."
-		ORDER BY $ordersql
-		LIMIT $start,$perpage");
-
-	if($_GET['view'] == 'me') {
+	if($space['self'] && empty($start) && $_G['setting']['feedhotnum'] > 0 && ($_GET['view'] == 'we' || $_GET['view'] == 'all')) {
+		$hotlist_all = array();
+		$hotstarttime = $_G['timestamp'] - $_G['setting']['feedhotday']*3600*24;
+		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(hot) WHERE dateline>='$hotstarttime' ORDER BY hot DESC LIMIT 0,10");
 		while ($value = DB::fetch($query)) {
-			if(ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
-				$value = mkfeed($value);
-
-				if($value['dateline']>=$_G['home_today']) {
-					$list['today'][] = $value;
-				} elseif ($value['dateline']>=$_G['home_today']-3600*24) {
-					$list['yesterday'][] = $value;
+			if($value['hot']>0 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+				if(empty($hotlist)) {
+					$hotlist[$value['feedid']] = $value;
 				} else {
-					$theday = dgmdate($value['dateline'], 'Y-m-d');
-					$list[$theday][] = $value;
+					$hotlist_all[$value['feedid']] = $value;
 				}
 			}
-			$count++;
 		}
-	} else {
-		$hash_datas = array();
-		$more_list = array();
-		$uid_feedcount = array();
+		$nexthotnum = $_G['setting']['feedhotnum'] - 1;
+		if($nexthotnum > 0) {
+			if(count($hotlist_all)> $nexthotnum) {
+				$hotlist_key = array_rand($hotlist_all, $nexthotnum);
+				if($nexthotnum == 1) {
+					$hotlist[$hotlist_key] = $hotlist_all[$hotlist_key];
+				} else {
+					foreach ($hotlist_key as $key) {
+						$hotlist[$key] = $hotlist_all[$key];
+					}
+				}
+			} else {
+				$hotlist = array_merge($hotlist, $hotlist_all);
+			}
+		}
+	}
 
+	$need_count = true;
+	$wheresql = array('1');
+
+	if($_GET['view'] == 'all') {
+
+		if($_GET['order'] == 'dateline') {
+			$ordersql = "dateline DESC";
+			$f_index = '';
+			$orderactives = array('dateline' => ' class="a"');
+		} else {
+			$wheresql['hot'] = "hot>='$minhot'";
+			$ordersql = "dateline DESC";
+			$f_index = '';
+			$orderactives = array('hot' => ' class="a"');
+		}
+
+	} elseif($_GET['view'] == 'me') {
+
+		$wheresql['uid'] = "uid='$space[uid]'";
+		$ordersql = "dateline DESC";
+		$f_index = '';
+
+		$diymode = 1;
+		if($space['self'] && $_GET['from'] != 'space') $diymode = 0;
+
+	} else {
+
+		space_merge($space, 'field_home');
+
+		if(empty($space['feedfriend'])) {
+			$need_count = false;
+		} else {
+			$wheresql['uid'] = "uid IN ('0',$space[feedfriend])";
+			$ordersql = "dateline DESC";
+			$f_index = 'USE INDEX(dateline)';
+		}
+	}
+
+	$appid = empty($_GET['appid'])?0:intval($_GET['appid']);
+	if($appid) {
+		$wheresql['appid'] = "appid='$appid'";
+	}
+	$icon = empty($_GET['icon'])?'':trim($_GET['icon']);
+	if($icon) {
+		$wheresql['icon'] = "icon='$icon'";
+	}
+	$gid = !isset($_GET['gid'])?'-1':intval($_GET['gid']);
+	if($gid>=0) {
+		$fuids = array();
+		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND gid='$gid' ORDER BY num DESC LIMIT 0,100");
 		while ($value = DB::fetch($query)) {
-			if(ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
-				$value = mkfeed($value);
-				if(ckicon_uid($value)) {
+			$fuids[] = $value['fuid'];
+		}
+		if(empty($fuids)) {
+			$need_count = false;
+		} else {
+			$wheresql['uid'] = "uid IN (".dimplode($fuids).")";
+		}
+	}
+	$gidactives[$gid] = ' class="a"';
+
+	$feed_users = $feed_list = $user_list = $filter_list  = $list = $mlist = $magic = array();
+	$count = $filtercount = 0;
+	$multi = '';
+
+	if($need_count) {
+		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." $f_index
+			WHERE ".implode(' AND ', $wheresql)."
+			ORDER BY $ordersql
+			LIMIT $start,$perpage");
+
+		if($_GET['view'] == 'me') {
+			while ($value = DB::fetch($query)) {
+				if(!isset($hotlist[$value['friend']]) && !isset($hotlist_all[$value['friend']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+					$value = mkfeed($value);
 
 					if($value['dateline']>=$_G['home_today']) {
-						$dkey = 'today';
+						$list['today'][] = $value;
 					} elseif ($value['dateline']>=$_G['home_today']-3600*24) {
-						$dkey = 'yesterday';
+						$list['yesterday'][] = $value;
 					} else {
-						$dkey = dgmdate($value['dateline'], 'Y-m-d');
+						$theday = dgmdate($value['dateline'], 'Y-m-d');
+						$list[$theday][] = $value;
 					}
-
-					$maxshownum = 3;
-					if(empty($value['uid'])) $maxshownum = 10;
-
-					if(empty($value['hash_data'])) {
-						if(empty($feed_users[$dkey][$value['uid']])) $feed_users[$dkey][$value['uid']] = $value;
-						if(empty($uid_feedcount[$dkey][$value['uid']])) $uid_feedcount[$dkey][$value['uid']] = 0;
-
-						$uid_feedcount[$dkey][$value['uid']]++;
-
-						if($uid_feedcount[$dkey][$value['uid']]>$maxshownum) {
-							$more_list[$dkey][$value['uid']][] = $value;
-						} else {
-							$feed_list[$dkey][$value['uid']][] = $value;
-						}
-
-					} elseif(empty($hash_datas[$value['hash_data']])) {
-						$hash_datas[$value['hash_data']] = 1;
-						if(empty($feed_users[$dkey][$value['uid']])) $feed_users[$dkey][$value['uid']] = $value;
-						if(empty($uid_feedcount[$dkey][$value['uid']])) $uid_feedcount[$dkey][$value['uid']] = 0;
-
-
-						$uid_feedcount[$dkey][$value['uid']] ++;
-
-						if($uid_feedcount[$dkey][$value['uid']]>$maxshownum) {
-							$more_list[$dkey][$value['uid']][] = $value;
-						} else {
-							$feed_list[$dkey][$value['uid']][$value['hash_data']] = $value;
-						}
-
-					} else {
-						$user_list[$value['hash_data']][] = "<a href=\"home.php?mod=space&uid=$value[uid]\">$value[username]</a>";
-					}
-
-
-				} else {
-					$filtercount++;
-					$filter_list[] = $value;
 				}
+				$count++;
 			}
-			$count++;
-		}
-	}
+		} else {
+			$hash_datas = array();
+			$more_list = array();
+			$uid_feedcount = array();
 
-	$multi = simplepage($count, $perpage, $page, $theurl);
+			while ($value = DB::fetch($query)) {
+				if(!isset($hotlist[$value['friend']]) && !isset($hotlist_all[$value['friend']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+					$value = mkfeed($value);
+					if(ckicon_uid($value)) {
+
+						if($value['dateline']>=$_G['home_today']) {
+							$dkey = 'today';
+						} elseif ($value['dateline']>=$_G['home_today']-3600*24) {
+							$dkey = 'yesterday';
+						} else {
+							$dkey = dgmdate($value['dateline'], 'Y-m-d');
+						}
+
+						$maxshownum = 3;
+						if(empty($value['uid'])) $maxshownum = 10;
+
+						if(empty($value['hash_data'])) {
+							if(empty($feed_users[$dkey][$value['uid']])) $feed_users[$dkey][$value['uid']] = $value;
+							if(empty($uid_feedcount[$dkey][$value['uid']])) $uid_feedcount[$dkey][$value['uid']] = 0;
+
+							$uid_feedcount[$dkey][$value['uid']]++;
+
+							if($uid_feedcount[$dkey][$value['uid']]>$maxshownum) {
+								$more_list[$dkey][$value['uid']][] = $value;
+							} else {
+								$feed_list[$dkey][$value['uid']][] = $value;
+							}
+
+						} elseif(empty($hash_datas[$value['hash_data']])) {
+							$hash_datas[$value['hash_data']] = 1;
+							if(empty($feed_users[$dkey][$value['uid']])) $feed_users[$dkey][$value['uid']] = $value;
+							if(empty($uid_feedcount[$dkey][$value['uid']])) $uid_feedcount[$dkey][$value['uid']] = 0;
+
+
+							$uid_feedcount[$dkey][$value['uid']] ++;
+
+							if($uid_feedcount[$dkey][$value['uid']]>$maxshownum) {
+								$more_list[$dkey][$value['uid']][] = $value;
+							} else {
+								$feed_list[$dkey][$value['uid']][$value['hash_data']] = $value;
+							}
+
+						} else {
+							$user_list[$value['hash_data']][] = "<a href=\"home.php?mod=space&uid=$value[uid]\">$value[username]</a>";
+						}
+
+
+					} else {
+						$filtercount++;
+						$filter_list[] = $value;
+					}
+				}
+				$count++;
+			}
+		}
+
+		$multi = simplepage($count, $perpage, $page, $theurl);
+	}
 }
 
-$olfriendlist = $visitorlist = $task = $ols = $birthlist = $hotlist = $guidelist = array();
+$olfriendlist = $visitorlist = $task = $ols = $birthlist = $guidelist = array();
 $oluids = array();
 $groups = array();
 $defaultusers = $newusers = $showusers = array();
@@ -324,35 +357,6 @@ if($space['self'] && empty($start)) {
 		}
 	}
 
-	if($_G['setting']['feedhotnum'] > 0 && ($_GET['view'] == 'we' || $_GET['view'] == 'all')) {
-		$hotlist_all = array();
-		$hotstarttime = $_G['timestamp'] - $_G['setting']['feedhotday']*3600*24;
-		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(hot) WHERE dateline>='$hotstarttime' ORDER BY hot DESC LIMIT 0,10");
-		while ($value = DB::fetch($query)) {
-			if($value['hot']>0 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
-				if(empty($hotlist)) {
-					$hotlist[$value['feedid']] = $value;
-				} else {
-					$hotlist_all[$value['feedid']] = $value;
-				}
-			}
-		}
-		$nexthotnum = $_G['setting']['feedhotnum'] - 1;
-		if($nexthotnum > 0) {
-			if(count($hotlist_all)> $nexthotnum) {
-				$hotlist_key = array_rand($hotlist_all, $nexthotnum);
-				if($nexthotnum == 1) {
-					$hotlist[$hotlist_key] = $hotlist_all[$hotlist_key];
-				} else {
-					foreach ($hotlist_key as $key) {
-						$hotlist[$key] = $hotlist_all[$key];
-					}
-				}
-			} else {
-				$hotlist = array_merge($hotlist, $hotlist_all);
-			}
-		}
-	}
 	if($_G['setting']['taskon']) {
 		require_once libfile('class/task');
 		$tasklib = & task::instance();
@@ -363,7 +367,7 @@ if($space['self'] && empty($start)) {
 		loadcache('magics');
 		if(!empty($_G['cache']['magics'])) {
 			$magic = $_G['cache']['magics'][array_rand($_G['cache']['magics'])];
-			$magic['description'] = cutstr($magic['description'], 42, '');
+			$magic['description'] = cutstr($magic['description'], 34, '');
 			$magic['pic'] = strtolower($magic['identifier']).'.gif';
 		}
 	}
@@ -391,14 +395,16 @@ dsetcookie('home_readfeed', $_G['timestamp'], 365*24*3600);
 $actives = array($_GET['view'] => ' class="a"');
 if($_G['gp_from'] == 'space') {
 	if($_G['gp_do'] == 'home') {
-		$navtitle = lang('space', 'sb_feed', array('who' => $space['username'])) . ' - ' . $_G['setting']['bbname'];
+		$navtitle = lang('space', 'sb_feed', array('who' => $space['username']));
 		$metakeywords = lang('space', 'sb_feed', array('who' => $space['username']));
 		$metadescription = lang('space', 'sb_feed', array('who' => $space['username']));
 	}
 } else {
-	$navtitle = $_G['setting']['seotitle']['home'];
+	$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['home']);
 	if(!$navtitle) {
 		$navtitle = $_G['setting']['navs'][4]['navname'];
+	} else {
+		$nobbname = true;
 	}
 
 	$metakeywords = $_G['setting']['seokeywords']['home'];

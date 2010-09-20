@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 16573 2010-09-09 05:40:43Z wangjinbo $
+ *      $Id: portal_view.php 17045 2010-09-19 09:59:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,39 +65,44 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 	require_once libfile('function/discuzcode');
 	$posttable = getposttablebytid($article['id']);
 	if($content['idtype']=='pid') {
-		$firstpost = DB::fetch_first("SELECT first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, pid
-			FROM ".DB::table($posttable)." WHERE pid='$content[id]' AND tid='$article[id]'");
+		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid, t.displayorder
+			FROM ".DB::table($posttable)." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.pid='$content[id]' AND p.tid='$article[id]'");
 	} else {
-		$firstpost = DB::fetch_first("SELECT first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, pid
-			FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND first='1'");
+		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid, t.displayorder
+			FROM ".DB::table($posttable)." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.tid='$article[id]' AND p.first='1'");
 	}
-	$attachpids = -1;
-	$attachtags = $aimgs = array();
-	$firstpost['message'] = $content['content'];
-	if($firstpost['attachment']) {
-		if($_G['group']['allowgetattach']) {
-			$attachpids .= ",$firstpost[pid]";
-			if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
-				$attachtags[$firstpost['pid']] = $matchaids[1];
+	if(!empty($firstpost) && $firstpost['displayorder'] != -1) {
+		$attachpids = -1;
+		$attachtags = $aimgs = array();
+		$firstpost['message'] = $content['content'];
+		if($firstpost['attachment']) {
+			if($_G['group']['allowgetattach']) {
+				$attachpids .= ",$firstpost[pid]";
+				if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
+					$attachtags[$firstpost['pid']] = $matchaids[1];
+				}
+			} else {
+				$firstpost['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $firstpost['message']);
 			}
-		} else {
-			$firstpost['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $firstpost['message']);
 		}
+
+		$post = array();
+		$post[$firstpost['pid']] = $firstpost;
+		if($attachpids != '-1') {
+			require_once libfile('function/attachment');
+			parseattach($attachpids, $attachtags, $post);
+		}
+
+		$content['content'] = $post[$firstpost['pid']]['message'];
+		$content['pid'] = $firstpost['pid'];
+		unset($post);
+
+		$org = $firstpost;
+		$org_url = "forum.php?mod=viewthread&tid=$article[id]";
+	} else {
+		DB::update('portal_article_title', array('id' => 0, 'idtype' => ''), array('aid' => $aid));
+		DB::update('portal_article_content', array('id' => 0, 'idtype' => ''), array('aid' => $aid));
 	}
-
-	$post = array();
-	$post[$firstpost['pid']] = $firstpost;
-	if($attachpids != '-1') {
-		require_once libfile('function/attachment');
-		parseattach($attachpids, $attachtags, $post);
-	}
-
-	$content['content'] = $post[$firstpost['pid']]['message'];
-	$content['pid'] = $firstpost['pid'];
-	unset($post);
-
-	$org = $firstpost;
-	$org_url = "forum.php?mod=viewthread&tid=$article[id]";
 } elseif($article['idtype']=='blogid') {
 	$org = DB::fetch_first("SELECT * FROM ".DB::table('home_blog')." WHERE blogid='$article[id]'");
 	if(empty($org)) {
@@ -154,13 +159,15 @@ if($article['allowcomment']) {
 				$attachtags = array();
 				$_G['group']['allowgetattach'] = 1;
 				while ($value = DB::fetch($query)) {
-					$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
-					$value['cid'] = $value['pid'];
-					$commentlist[$value['pid']] = $value;
-					if($value['attachment']) {
-						$attachpids .= ",$value[pid]";
-						if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $value['message'], $matchaids)) {
-							$attachtags[$value['pid']] = $matchaids[1];
+					if($value['status'] == '0') {
+						$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
+						$value['cid'] = $value['pid'];
+						$commentlist[$value['pid']] = $value;
+						if($value['attachment']) {
+							$attachpids .= ",$value[pid]";
+							if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $value['message'], $matchaids)) {
+								$attachtags[$value['pid']] = $matchaids[1];
+							}
 						}
 					}
 				}

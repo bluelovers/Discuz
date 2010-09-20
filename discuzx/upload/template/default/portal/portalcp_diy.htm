@@ -1,6 +1,35 @@
 <!--{template common/header}-->
-
-<!--{if $op == 'style'}-->
+<!--{if $op=='blockclass'}-->
+	<div class="tbmu mbm" id="contentblockclass_nav" style="margin-top: -15px">
+		<!--{eval $isfirst=1;}-->
+		<!--{loop $_G['cache']['blockclass'] $key $value}-->
+		<!--{if $isfirst}-->
+		<!--{eval $isfirst=0;}-->
+		<a href="javascript:;" id="bcnav_$key" class="a" onclick="spaceDiy.switchBlockclass('$key');return false;">$value[name]</a>
+		<!--{else}-->
+		<span class="pipe">|</span>
+		<a href="javascript:;" id="bcnav_$key" onclick="spaceDiy.switchBlockclass('$key');return false;">$value[name]</a>
+		<!--{/if}-->
+		<!--{/loop}-->
+	</div>
+	<!--{eval $isfirst=1;}-->
+	<!--{loop $_G['cache']['blockclass'] $key $value}-->
+	<!--{if $isfirst}-->
+	<!--{eval $isfirst=0;}-->
+	<ul class="blocks content" id="contentblockclass_$key">
+	<!--{else}-->
+	<ul class="blocks content" id="contentblockclass_$key" class="hide">
+	<!--{/if}-->
+		<li class="module-$key">
+			<ol>
+			<!--{loop $value[subs] $skey $svalue}-->
+				<li class="module-$skey"><label onmousedown="drag.createObj (event,'block','$skey');" onmouseover="className='hover';" onmouseout="this.className='';">$svalue[name]</label></li>
+			<!--{/loop}-->
+			</ol>
+		</li>
+	</ul>
+	<!--{/loop}-->
+<!--{elseif $op == 'style'}-->
 <ul class="content" style="overflow-y: auto; height: 90px;">
 <!--{loop $themes $value}-->
   <li><a href="javascript:;" onclick="spaceDiy.changeStyle('$value[dir]');return false;"><img src="{STATICURL}$value['dir']/preview.jpg" />$value['name']</a></li>

@@ -1,9 +1,9 @@
 <!--{if $status != 2}-->
 	<div id="pgt" class="bm bw0 pgs cl">
 		<div class="pg">
-			<a href="forum.php?mod=forumdisplay&amp;action=list&amp;fid=$_G[fid]" class="nxt">{lang view_all_threads}</a>
+			<a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]" class="nxt">{lang view_all_threads}</a>
 		</div>
-		<a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a>
+		<a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')" title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a>
 	</div>
 	<div class="tl bm bml">
 		<div class="th">
@@ -26,7 +26,7 @@
 				<!--{loop $newthreadlist['dateline']['data'] $tid $thread}-->
 						<tr>
 							<td class="icn">
-								<a href="forum.php?mod=viewthread&tid=$tid&amp;extra=$extra" title="{lang target_blank}" target="_blank">
+								<a href="forum.php?mod=viewthread&tid=$tid&extra=$extra" title="{lang target_blank}" target="_blank">
 								<!--{if $thread[folder] == 'lock'}-->
 									<img src="{IMGDIR}/folder_lock.gif" />
 								<!--{elseif $thread['special'] == 1}-->
@@ -67,12 +67,12 @@
 							<td class="by">
 								<cite>
 									<!--{if $thread['lastposterenc']}-->
-										<a href="{if $thread[digest] != -2}home.php?mod=space&username=$thread[lastposterenc]{else}forum.php?mod=viewthread&tid=$tid&amp;page={echo max(1, $thread[pages]);}{/if}">$thread[lastposter]</a>
+										<a href="{if $thread[digest] != -2}home.php?mod=space&username=$thread[lastposterenc]{else}forum.php?mod=viewthread&tid=$tid&page={echo max(1, $thread[pages]);}{/if}">$thread[lastposter]</a>
 									<!--{else}-->
 										{lang anonymous}
 									<!--{/if}-->
 								</cite>
-								<em><a href="{if $thread[digest] != -2}forum.php?mod=redirect&tid=$tid&amp;goto=lastpost#lastpost{else}forum.php?mod=viewthread&tid=$thread[tid]&amp;page={echo max(1, $thread[pages]);}{/if}">$thread[lastpost]</a></em>
+								<em><a href="{if $thread[digest] != -2}forum.php?mod=redirect&tid=$tid&goto=lastpost#lastpost{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}">$thread[lastpost]</a></em>
 							</td>
 						</tr>
 				<!--{/loop}-->
@@ -80,7 +80,7 @@
 				<!--{if $_G['forum']['threads'] > 10}-->
 					<tbody>
 						<tr class="bw0_all">
-							<td colspan="5" class="ptm"><a href="forum.php?mod=forumdisplay&amp;action=list&amp;fid=$_G[fid]#groupnav" class="y xi2">{lang click_to_readmore}</a></td>
+							<td colspan="5" class="ptm"><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]#groupnav" class="y xi2">{lang click_to_readmore}</a></td>
 						</tr>
 					</tbody>
 				<!--{/if}-->
@@ -127,7 +127,7 @@
 			<!--{if $_G['forum']['threadsorts'] && !$_G['forum']['allowspecialonly']}-->
 				<!--{loop $_G['forum']['threadsorts']['types'] $id $threadsorts}-->
 					<!--{if $_G['forum']['threadsorts']['show'][$id]}-->
-						<li class="popupmenu_option"><a href="forum.php?mod=post&action=newthread&amp;fid=$_G[fid]&amp;extra=$extra&amp;sortid=$id">$threadsorts</a></li>
+						<li class="popupmenu_option"><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&extra=$extra&sortid=$id">$threadsorts</a></li>
 					<!--{/if}-->
 				<!--{/loop}-->
 			<!--{/if}-->

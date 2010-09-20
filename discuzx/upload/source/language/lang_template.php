@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16593 2010-09-10 01:26:32Z monkey $
+ *      $Id: lang_template.php 16865 2010-09-16 04:51:31Z monkey $
  *
  *      This file is automatically generate
  */
@@ -64,6 +64,7 @@ $lang = array (
   'open_diy' => '打開 DIY 面板',
   'pm_center' => '短消息',
   'portal_manage' => '門戶管理',
+  'qmenu_register' => '註冊新用戶，開通自己的個人中心',
   'remind' => '提醒',
   'setup' => '設置',
   'switch_narrow' => '切換到窄版',
@@ -149,9 +150,8 @@ $lang = array (
   'message_forward' => '如果你的瀏覽器沒有自動跳轉，請點擊此鏈接',
   'message_go_back' => '[ 點擊這裡返回上一頁 ]',
 
-  'search_this_forum' => '本版塊',
+  'search_this_forum' => '搜索本版',
   'search_user' => '搜索用戶',
-  'this_forum' => '本版',
 
   'basic_situation' => '基本概況',
   'forum_stat' => '版塊統計',

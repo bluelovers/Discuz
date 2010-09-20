@@ -113,7 +113,7 @@
 						<!--{if $isfirstpost && !empty($_G['forum'][threadtypes][types])}-->
 						<div class="ftid">
 							<select name="typeid" id="typeid" width="80">
-							<!--{if !$_G['forum']['threadtypes']['required']}--><option value="0">{lang select_thread_catgory}</option><!--{/if}-->
+							<option value="0">{lang select_thread_catgory}</option>
 							<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
 								<option value="$typeid"{if $thread['typeid'] == $typeid || $_G['gp_typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
 							<!--{/loop}-->
@@ -237,7 +237,7 @@
 							<!--{/if}-->
 							<!--{hook/post_editorctrl_left}-->
 						</div>
-						<div class="b2r nbr" id="{$editorid}_adv_6">
+						<div class="b2r{if $_G['cache']['bbcodes_display'][$_G['groupid']]} nbr{/if}" id="{$editorid}_adv_6">
 							<p>
 								<a id="{$editorid}_code" title="{lang e_code_title}">{lang e_code}</a>
 								<!--{if $isfirstpost && $_G['group']['allowhidecode']}--><a id="{$editorid}_hide" title="{lang e_hide}">Hide</a><!--{/if}-->
@@ -356,77 +356,79 @@
 		<h3 class="mbm pbm bbs">{lang post_additional_options}</h3>
 		<div class="bn">
 			<!--{hook/post_side_top}-->
-		<!--{if $_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost}-->
-			<!--{if $_G['group']['allowsetreadperm']}-->
-				<p class="mbn">{lang readperm}:</p>
-				<p class="mbn">
-					<em class="ftid">
-						<select class="ps" name="readperm" id="readperm" width="73">
-							<option value="">{lang unlimited}</option>
-						<!--{loop $_G['cache']['groupreadaccess'] $val}-->
-							<option value="$val[readaccess]" title="{lang readperm}: $val[readaccess]"{if $thread['readperm'] == $val[readaccess]} selected="selected"{/if}>$val[grouptitle]</option>
-						<!--{/loop}-->
-							<option value="255">{lang highest_right}</option>
-						</select>
-					</em>
-					<img src="{IMGDIR}/faq.gif" alt="Tip" class="mtn vm" style="margin: 0;" onmouseover="showTip(this)" tip="{lang post_select_usergroup_readacces}" /></a>
-				</p>
-				<script type="text/javascript">simulateSelect('readperm');</script>
+			<!--{if $_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost}-->
+				<!--{if $_G['group']['allowsetreadperm']}-->
+					<p class="mbn">{lang readperm}:</p>
+					<p class="mbn">
+						<em class="ftid">
+							<select name="readperm" id="readperm" class="ps" style="width:90px">
+								<option value="">{lang unlimited}</option>
+								<!--{loop $_G['cache']['groupreadaccess'] $val}-->
+									<option value="$val[readaccess]" title="{lang readperm}: $val[readaccess]"{if $thread['readperm'] == $val[readaccess]} selected="selected"{/if}>$val[grouptitle]</option>
+								<!--{/loop}-->
+								<option value="255">{lang highest_right}</option>
+							</select>
+						</em>
+						<img src="{IMGDIR}/faq.gif" alt="Tip" class="mtn vm" style="margin: 0;" onmouseover="showTip(this)" tip="{lang post_select_usergroup_readacces}" /></a>
+					</p>
+				<!--{/if}-->
+				<!--{if $_G['group']['maxprice'] && !$special}-->
+					<p class="mbn">{lang price}({$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}):</p>
+					<p><input type="text" name="price" class="px pxs" value="$thread[pricedisplay]" /> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</p>
+					<p class="mbn xg1">({lang post_price_comment})</p>
+				<!--{/if}-->
 			<!--{/if}-->
-			<!--{if $_G['group']['maxprice'] && !$special}-->
-				<p class="mbn">{lang price}({$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}):</p>
-				<p><input type="text" name="price" class="px pxs" value="$thread[pricedisplay]" /> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}</p>
-				<p class="mbn xg1">({lang post_price_comment})</p>
+
+			<!--{if ($_G['forum']['allowhtml'] || ($_G[gp_action] == 'edit' && ($orig['htmlon'] & 1))) && $_G['group']['allowhtml']}-->
+				<p class="mbn"><input type="checkbox" name="htmlon" id="htmlon" class="pc" value="1" $htmloncheck /><label for="htmlon">{lang post_html}</label></p>
+			<!--{else}-->
+				<p class="mbn"><input type="checkbox" name="htmlon" id="htmlon" class="pc" value="0" $htmloncheck disabled="disabled" /><label for="htmlon">{lang post_html}</label></p>
 			<!--{/if}-->
-		<!--{/if}-->
+			<p class="mbn"><input type="checkbox" id="allowimgcode" class="pc" disabled="disabled"{if $_G['forum']['allowimgcode']} checked="checked"{/if} /><label for="allowimgcode">{lang post_imgcode}</label></p>
+			<p class="mbn"><input type="checkbox" name="parseurloff" id="parseurloff" class="pc" value="1" $urloffcheck /><label for="parseurloff">{lang disable} {lang post_parseurl}</label></p>
+			<p class="mbn"><input type="checkbox" name="smileyoff" id="smileyoff" class="pc" value="1" $smileyoffcheck /><label for="smileyoff">{lang disable} {lang smilies}</label></p>
+			<p class="mbn"><input type="checkbox" name="bbcodeoff" id="bbcodeoff" class="pc" value="1" $codeoffcheck /><label for="bbcodeoff">{lang disable} {lang discuzcode}</label></p>
 
-		<!--{if ($_G['forum']['allowhtml'] || ($_G[gp_action] == 'edit' && ($orig['htmlon'] & 1))) && $_G['group']['allowhtml']}-->
-			<p class="mbn"><input type="checkbox" name="htmlon" id="htmlon" class="pc" value="1" $htmloncheck /><label for="htmlon">{lang post_html}</label></p>
-		<!--{else}-->
-			<p class="mbn"><input type="checkbox" name="htmlon" id="htmlon" class="pc" value="0" $htmloncheck disabled="disabled" /><label for="htmlon">{lang post_html}</label></p>
-		<!--{/if}-->
-		<p class="mbn"><input type="checkbox" id="allowimgcode" class="pc" disabled="disabled"{if $_G['forum']['allowimgcode']} checked="checked"{/if} /><label for="allowimgcode">{lang post_imgcode}</label></p>
-		<p class="mbn"><input type="checkbox" name="parseurloff" id="parseurloff" class="pc" value="1" $urloffcheck /><label for="parseurloff">{lang disable} {lang post_parseurl}</label></p>
-		<p class="mbn"><input type="checkbox" name="smileyoff" id="smileyoff" class="pc" value="1" $smileyoffcheck /><label for="smileyoff">{lang disable} {lang smilies}</label></p>
-		<p class="mbn"><input type="checkbox" name="bbcodeoff" id="bbcodeoff" class="pc" value="1" $codeoffcheck /><label for="bbcodeoff">{lang disable} {lang discuzcode}</label></p>
+			<hr class="bk" />
 
-		<hr class="bk" />
+			<p class="mbn"><input type="checkbox" name="usesig" id="usesig" class="pc" value="1" {if !$_G['group']['maxsigsize']}disabled {else}$usesigcheck {/if}/><label for="usesig">{lang post_show_sig}</label></p>
+			<!--{if $_G[gp_action] != 'edit'}-->
+				<!--{if $_G['group']['allowanonymous']}--><p class="mbn"><input type="checkbox" name="isanonymous" id="isanonymous" class="pc" value="1" /><label for="isanonymous">{lang post_anonymous}</label></p><!--{/if}-->
+			<!--{else}-->
+				<!--{if $_G['group']['allowanonymous'] || (!$_G['group']['allowanonymous'] && $orig['anonymous'])}--><p class="mbn"><input type="checkbox" name="isanonymous" id="isanonymous" class="pc" value="1" {if $orig['anonymous']}checked="checked"{/if} /><label for="isanonymous">{lang post_anonymous}</label></p><!--{/if}-->
+			<!--{/if}-->
+			<!--{if $_G[gp_action] == 'newthread' && $_G['group']['allowpostrushreply'] && $special != 2}-->
+				<p class="mbn"><input type="checkbox" name="rushreply" id="rushreply" class="pc" value="1"><label for="rushreply">{lang rushreply}</label></p>
+			<!--{/if}-->
+			<!--{if $_G[gp_action] == 'edit' && getstatus($thread['status'], 3)}-->
+				<p class="mbn"><input type="checkbox" disabled="disabled" class="pc" checked="checked"><label for="rushreply">{lang rushreply}</label></p>
+			<!--{/if}-->
 
-		<!--{if $_G['uid'] && ($_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost) && $special != 3}-->
-			<p class="mbn"><input type="checkbox" name="ordertype" id="ordertype" class="pc" value="1" $ordertypecheck /><label for="ordertype">{lang post_descview}</label></p>
-		<!--{/if}-->
-		<p class="mbn"><input type="checkbox" name="usesig" id="usesig" class="pc" value="1" {if !$_G['group']['maxsigsize']}disabled {else}$usesigcheck {/if}/><label for="usesig">{lang post_show_sig}</label></p>
-		<!--{if $_G[gp_action] != 'edit'}-->
-			<!--{if $_G['group']['allowanonymous']}--><p class="mbn"><input type="checkbox" name="isanonymous" id="isanonymous" class="pc" value="1" /><label for="isanonymous">{lang post_anonymous}</label></p><!--{/if}-->
-		<!--{else}-->
-			<!--{if $_G['group']['allowanonymous'] || (!$_G['group']['allowanonymous'] && $orig['anonymous'])}--><p class="mbn"><input type="checkbox" name="isanonymous" id="isanonymous" class="pc" value="1" {if $orig['anonymous']}checked="checked"{/if} /><label for="isanonymous">{lang post_anonymous}</label></p><!--{/if}-->
-		<!--{/if}-->
+			<!--{if $_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost}-->
+				<p class="mbn"><input type="checkbox" name="hiddenreplies" id="hiddenreplies" class="pc"{if $thread['hiddenreplies']} checked="checked"{/if} value="1"><label for="hiddenreplies">{lang hiddenreplies}</label></p>
+			<!--{/if}-->
+			<!--{if $_G['uid'] && ($_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost) && $special != 3}-->
+				<p class="mbn"><input type="checkbox" name="ordertype" id="ordertype" class="pc" value="1" $ordertypecheck /><label for="ordertype">{lang post_descviewdefault}</label></p>
+			<!--{/if}-->
+			<!--{if ($_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost)}-->
+				<p class="mbn"><input type="checkbox" name="allownoticeauthor" id="allownoticeauthor" class="pc" value="1"{if $allownoticeauthor} checked="checked"{/if} /><label for="allownoticeauthor">{lang post_noticeauthor}</label></p>
+			<!--{/if}-->
+			<!--{if $_G[gp_action] != 'edit' && $_G['forum']['allowfeed']}-->
+				<p class="mbn"><input type="checkbox" name="addfeed" id="addfeed" class="pc" value="1" $addfeedcheck><label for="addfeed">{lang addfeed}</label></p>
+			<!--{/if}-->
 
-		<hr class="bk" />
-
-		<!--{if $_G[gp_action] == 'newthread' && $_G['forum']['ismoderator'] && ($_G['group']['allowdirectpost'] || !$_G['forum']['modnewposts'])}-->
 			<!--{if $_G[gp_action] == 'newthread' && $_G['forum']['ismoderator'] && ($_G['group']['allowdirectpost'] || !$_G['forum']['modnewposts'])}-->
-				<p class="mbn"><input type="checkbox" name="sticktopic" id="sticktopic" class="pc" value="1" $stickcheck /><label for="sticktopic">{lang post_stick_thread}</label></p>
-				<p class="mbn"><input type="checkbox" name="addtodigest" id="addtodigest" class="pc" value="1" $digestcheck /><label for="addtodigest">{lang post_digest_thread}</label></p>
+				<hr class="bk" />
+
+				<!--{if $_G[gp_action] == 'newthread' && $_G['forum']['ismoderator'] && ($_G['group']['allowdirectpost'] || !$_G['forum']['modnewposts'])}-->
+					<p class="mbn"><input type="checkbox" name="sticktopic" id="sticktopic" class="pc" value="1" $stickcheck /><label for="sticktopic">{lang post_stick_thread}</label></p>
+					<p class="mbn"><input type="checkbox" name="addtodigest" id="addtodigest" class="pc" value="1" $digestcheck /><label for="addtodigest">{lang post_digest_thread}</label></p>
+				<!--{/if}-->
+			<!--{elseif $_G[gp_action] == 'edit' && $_G['forum_auditstatuson']}-->
+				<hr class="bk" />
+
+				<p class="mbn"><input type="checkbox" name="audit" id="audit" class="pc" value="1"><label for="audit">{lang auditstatuson}</label></p>
 			<!--{/if}-->
-		<!--{elseif $_G[gp_action] == 'edit' && $_G['forum_auditstatuson']}-->
-			<p class="mbn"><input type="checkbox" name="audit" id="audit" class="pc" value="1"><label for="audit">{lang auditstatuson}</label></p>
-		<!--{/if}-->
-		<!--{if $_G[gp_action] != 'edit' && $_G['forum']['allowfeed']}-->
-			<p class="mbn"><input type="checkbox" name="addfeed" id="addfeed" class="pc" value="1" $addfeedcheck><label for="addfeed">{lang addfeed}</label></p>
-		<!--{/if}-->
-		<!--{if $_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost}-->
-			<p class="mbn"><input type="checkbox" name="hiddenreplies" id="hiddenreplies" class="pc"{if $thread['hiddenreplies']} checked="checked"{/if} value="1"><label for="hiddenreplies">{lang hiddenreplies}</label></p>
-		<!--{/if}-->
-		<!--{if $_G[gp_action] == 'newthread' && $_G['group']['allowpostrushreply'] && $special != 2}-->
-			<p class="mbn"><input type="checkbox" name="rushreply" id="rushreply" class="pc" value="1"><label for="rushreply">{lang rushreply}</label></p>
-		<!--{/if}-->
-		<!--{if $_G[gp_action] == 'edit' && getstatus($thread['status'], 3)}-->
-			<p class="mbn"><input type="checkbox" disabled="disabled" class="pc" checked="checked"><label for="rushreply">{lang rushreply}</label></p>
-		<!--{/if}-->
-		<!--{if ($_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost)}-->
-			<p class="mbn"><input type="checkbox" name="allownoticeauthor" id="allownoticeauthor" class="pc" value="1"{if $allownoticeauthor} checked="checked"{/if} /><label for="allownoticeauthor">{lang post_noticeauthor}</label></p>
-		<!--{/if}-->
 		</div>
 		<!--{hook/post_side_bottom}-->
 		</div>

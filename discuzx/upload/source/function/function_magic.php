@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_magic.php 15593 2010-08-25 02:21:22Z xupeng $
+ *      $Id: function_magic.php 16845 2010-09-15 09:41:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -55,11 +55,11 @@ function getpostinfo($id, $type, $colsarray = '') {
 
 	switch($type) {
 		case 'tid':
-			$sql = "SELECT $cols FROM ".DB::table('forum_thread')." WHERE tid='$id' AND digest>='0' AND displayorder>='0'";
+			$sql = "SELECT $cols FROM ".DB::table('forum_thread')." WHERE tid='$id' AND displayorder>='0'";
 			break;
 		case 'pid':
 			$posttable = getposttablebytid($_G['tid']);
-			$sql = "SELECT $cols FROM ".DB::table($posttable)." p, ".DB::table('forum_thread')." t WHERE p.pid='$id' AND p.invisible='0' AND t.tid=p.tid AND t.digest>=0";
+			$sql = "SELECT $cols FROM ".DB::table($posttable)." p, ".DB::table('forum_thread')." t WHERE p.pid='$id' AND p.invisible='0' AND t.tid=p.tid";
 			break;
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 16600 2010-09-10 03:44:46Z monkey $
+ *      $Id: lang_admincp_msg.php 16709 2010-09-13 07:15:41Z monkey $
  */
 
 $lang = array
@@ -113,7 +113,7 @@ $lang = array
 	'members_delete_confirm' => '本操作不可恢復，你確定要刪除符合條件的 {membernum} 個用戶嗎？',
 	'members_delete_succeed' => '符合條件的 {numdeleted} 個用戶被成功刪除。',
 	'members_edit_nonexistence' => '指定用戶不存在，請返回。',
-	'members_edit_illegal' => '該用戶為「{grouptitle}」成員，你不能直接禁止該用戶，請返回<a href="'.ADMINSCRIPT.'?action=members&operation=search&uid={uid}&submit=yes&frames=yes" target="_blank">編輯</a>去掉其特殊用戶組身份。',
+	'members_edit_illegal' => '你不能直接禁止該用戶，請返回<a href="'.ADMINSCRIPT.'?action=members&operation=search&uid={uid}&submit=yes&frames=yes" target="_blank">編輯</a>去掉其「{grouptitle}」身份。',
 	'members_edit_reason_invalid' => '你沒有輸入執行此變更的理由，請返回修改。',
 	'members_edit_duplicate' => '新用戶名與現有用戶重複，請返回修改。',
 	'members_edit_succeed' => '用戶資料成功更新。',

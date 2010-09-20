@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 16271 2010-09-02 08:59:17Z liulanbo $
+ *      $Id: admincp_blog.php 16948 2010-09-17 06:39:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -99,7 +99,6 @@ EOT;
 		}
 		if($blogs) {
 			$selectblogids = array_keys($blogs);
-			$selectblogids = implode("','", $selectblogids);
 			if($_POST['optype'] == 'delete') {
 				include_once libfile('function/delete');
 				$deletecount = count(deleteblogs($selectblogids));
@@ -108,7 +107,8 @@ EOT;
 				$tocatid = intval($_POST['tocatid']);
 				$catids[] = $tocatid;
 				$catids = array_merge($catids);
-				DB::update('home_blog', array('catid'=>$tocatid), 'blogid IN ('.$selectblogids.')');
+
+				DB::update('home_blog', array('catid'=>$tocatid), 'blogid IN ('.dimplode($selectblogids).')');
 				foreach($catids as $catid) {
 					$catid = intval($catid);
 					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_blog')." WHERE catid = '$catid'");

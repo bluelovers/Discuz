@@ -49,7 +49,7 @@
 			<!--{eval space_merge($space, 'field_home'); $space[domainurl] = space_domain($space);}-->
 			<strong id="spacename" class="mbn">
 				<!--{if $space[spacename]}-->$space[spacename]<!--{else}-->$space[username]{lang somebody_space}<!--{/if}-->
-				<!--{if !$space['self']}--><a class="oshr xs1 xw0" onclick="showWindow(this.id, this.href, 'get', 0);" id="share_space" href="home.php?mod=spacecp&amp;ac=share&amp;type=space&amp;id=$space[uid]">{lang share}</a><!--{/if}-->
+				<!--{if !$space['self']}--><a class="oshr xs1 xw0" onclick="showWindow(this.id, this.href, 'get', 0);" id="share_space" href="home.php?mod=spacecp&ac=share&type=space&id=$space[uid]">{lang share}</a><!--{/if}-->
 			</strong>
 			<a id="domainurl" href="$space[domainurl]" onclick="javascript:setCopy('$space[domainurl]', '{lang copy_space_address}');return false;" class="xs0 xw0">$space[domainurl]</a> <!--{if $space['self']}-->&nbsp;&nbsp;<a id="domainurl" href="$space[domainurl]" onclick="javascript:setCopy('$space[domainurl]', '{lang copy_space_address}');return false;" class="xs0 xw0">[{lang copy}]</a><!--{/if}-->
 			<span id="spacedescription" class="xs1 xw0 mtn">$space[spacedescription]</span>

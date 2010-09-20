@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: space_profile.php 16680 2010-09-13 03:01:08Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -132,7 +132,7 @@ if($_G['setting']['verify']['enabled']) {
 }
 dsetcookie('home_diymode', 1);
 
-$navtitle = lang('space', 'sb_profile', array('who' => $space['username'])).' - '.$_G['setting']['bbname'];
+$navtitle = lang('space', 'sb_profile', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_profile', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_profile', array('who' => $space['username']));
 

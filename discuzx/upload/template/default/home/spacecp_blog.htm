@@ -53,14 +53,14 @@
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		<!--{if $space[self]}-->
-			<a href="home.php?mod=space&amp;do=blog">{lang blog}</a>
+			<a href="home.php?mod=space&do=blog">{lang blog}</a>
 		<!--{else}-->
-			<a href="home.php?mod=space&amp;uid=$space[uid]">$space[username] {lang somebody_space}</a> <em>&rsaquo;</em>
-			<a href="home.php?mod=space&uid=$space[uid]&amp;do=blog&amp;view=we">{lang blog}</a>
+			<a href="home.php?mod=space&uid=$space[uid]">$space[username] {lang somebody_space}</a> <em>&rsaquo;</em>
+			<a href="home.php?mod=space&uid=$space[uid]&do=blog&view=we">{lang blog}</a>
 		<!--{/if}-->
 		<em>&rsaquo;</em>
 		<!--{if $blog[blogid]}-->
-			<a href="home.php?mod=space&amp;do=blog&amp;id=$blog[blogid]">$blog[subject]</a> <em>&rsaquo;</em> {lang edit_blog}
+			<a href="home.php?mod=space&do=blog&id=$blog[blogid]">$blog[subject]</a> <em>&rsaquo;</em> {lang edit_blog}
 		<!--{else}-->
 			{lang memcp_blog}
 		<!--{/if}-->

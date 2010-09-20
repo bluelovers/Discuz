@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_index.php 16122 2010-08-31 09:53:57Z zhengqingpeng $
+ *      $Id: spacecp_index.php 16763 2010-09-14 07:12:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -132,7 +132,6 @@ if (submitcheck('blocksubmit')) {
 		$blockdata['parameters'][$blockname]['content'] = stripslashes($content);
 	} elseif($blockname == 'profile') {
 		$blockdata['parameters'][$blockname]['banavatar'] = in_array($_G['gp_avatar'], array('big', 'middle', 'small')) ? $_G['gp_avatar'] : 'middle';
-		$blockdata['parameters'][$blockname]['banusergroup'] = $_G['gp_usergroup'] ? 0 : 1;
 	} elseif($blockname == 'statistic') {
 		$blockdata['parameters'][$blockname]['bancredits'] = $_G['gp_credits'] ? 0 : 1;
 		$blockdata['parameters'][$blockname]['banfriends'] = $_G['gp_friends'] ? 0 : 1;

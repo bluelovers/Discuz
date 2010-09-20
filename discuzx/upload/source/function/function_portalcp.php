@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 16115 2010-08-31 09:32:46Z zhengqingpeng $
+ *      $Id: function_portalcp.php 16830 2010-09-15 07:27:59Z zhangguosheng $
  */
 
 function get_uploadcontent($attach) {
@@ -12,15 +12,15 @@ function get_uploadcontent($attach) {
 	$return = '';
 	if($attach['isimage']) {
 		$pic = pic_get($attach['attachment'], 'portal', $attach['thumb'], $attach['remote'], 0);
-		$small_pic = $attach['thumb'] ? ($pic.'.thumb.jpg') : $pic;
+		$small_pic = $attach['thumb'] ? ($pic.'.thumb.jpg') : '';
 		$check = $attach['pic'] == $attach['attachment'] ? checked : '';
 		$aid = $check ? $attach['aid'] : '';
 
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
-		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.$small_pic.'" width="40" height="40"></a></td>';
+		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
 		$return .= '<td class="bbs">';
 		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'> '.lang('portalcp', 'set_to_conver').'</label><br>';
-		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
+		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
 		$return .= '</td>';
@@ -685,6 +685,7 @@ function updatetopic($topic = ''){
 		deletedomain($topicid, 'topic');
 	}
 	if(!empty($_POST['domain'])) {
+		require_once libfile('function/domain');
 		domaincheck($_POST['domain'], $_G['setting']['domain']['root']['topic'], 1);
 	}
 
@@ -770,8 +771,6 @@ function updatetopic($topic = ''){
 
 	include_once libfile('function/cache');
 	updatecache(array('diytemplatename', 'setting'));
-
-	makedomaincache('topic');
 
 	return $topicid;
 }

@@ -1,10 +1,10 @@
 /*
-[name]配色-2[/name]
+[name]青[/name]
 [iconbgcolor]#429296[/iconbgcolor]
 Powered by Discuz! X
 */
 
-body { background-image: url(background.png); }
+body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 #nv { background-color: #429296; background-image: url(nv.png); }
 	#nv li { background-image: url(nv_a.png) !important; }
 	#nv li.a { background: #005D5D url(nv_a.png) no-repeat 50% 100%; }
@@ -13,7 +13,7 @@ body { background-image: url(background.png); }
 .fl .bm_h { border-color: #C5E6DF; background: #EBF5F6 url(titlebg.png) repeat-x 0 0; }
 
 /* 重定義 {SPECIALBG} */
-.appl, .bmn, .bmw .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #EBF5F6; }
+.appl, .bmn, .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #EBF5F6; }
 
 /* 重定義 {SPECIALBORDER} */
 .bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #C5E6DF; }
@@ -24,7 +24,7 @@ body { background-image: url(background.png); }
 .ad td.pls { background-color: #C5E6DF; }
 
 /* 重定義字體 */
-.xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #BA350F; }
+.fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #429296; }
 .pll .s a.go { color: #FFF; }
 .xi2, .xi2 a { color: #000; }
 

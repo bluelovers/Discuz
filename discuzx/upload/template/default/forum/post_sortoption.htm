@@ -53,7 +53,7 @@
 
 	<!--{loop $_G['forum_optionlist'] $optionid $option}-->
 		<tr>
-			<th>$option[title]<!--{if $option['required']}--><span class="rq">*</span><!--{/if}--></th>
+			<th><!--{if $option['required']}--><span class="rq">*</span><!--{/if}-->$option[title]</th>
 			<td>
 				<!--{if in_array($option['type'], array('number', 'text', 'email', 'calendar', 'image', 'url', 'range', 'upload', 'range'))}-->
 					<!--{if $option['type'] == 'calendar'}-->
@@ -61,18 +61,18 @@
 						<input type="text" name="typeoption[{$option[identifier]}]" id="typeoption_$option[identifier]" tabindex="1" size="$option[inputsize]" onBlur="checkoption('$option[identifier]', '$option[required]', '$option[type]')" value="$option[value]" onclick="showcalendar(event, this, false)" $option[unchangeable] class="px"/>
 					<!--{elseif $option['type'] == 'image'}-->
 						<dd class="pns">
-							<button type="button" class="pn" onclick="uploadWindow(function (aid, url){updatesortattach(aid, url, '{$_G['setting']['attachurl']}forum')})"><span><!--{if $option['value']}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button>
-							<input type="hidden" name="typeoption[{$option[identifier]}][aid]" value="$option[value][aid]" id="sortaid" tabindex="1" />
-							<!--{if $option[value]}--><input type="hidden" name="oldsortaid" value="$option[value][aid]" tabindex="1" /><!--{/if}-->
-							<input type="hidden" name="typeoption[{$option[identifier]}][url]" id="sortattachurl" {if $option[value][url]}value="$option[value][url]"{/if} tabindex="1" />
-							<div id="sortattach_image" class="ptn">
+							<button type="button" class="pn" onclick="uploadWindow(function (aid, url){updatesortattach(aid, url, '{$_G['setting']['attachurl']}forum', '{$option[identifier]}')})"><span><!--{if $option['value']}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button>
+							<input type="hidden" name="typeoption[{$option[identifier]}][aid]" value="$option[value][aid]" id="sortaid_{$option[identifier]}" tabindex="1" />
+							<!--{if $option[value]}--><input type="hidden" name="oldsortaid[{$option[identifier]}]" value="$option[value][aid]" tabindex="1" /><!--{/if}-->
+							<input type="hidden" name="typeoption[{$option[identifier]}][url]" id="sortattachurl_{$option[identifier]}" {if $option[value][url]}value="$option[value][url]"{/if} tabindex="1" />
+							<div id="sortattach_image_{$option[identifier]}" class="ptn">
 							<!--{if $option['value']['url']}-->
 								<a href="$option[value][url]" target="_blank"><img class="spimg" src="$option[value][url]" alt="" /></a>
 							<!--{/if}-->
 							</div>
 						</dd>
 					<!--{else}-->
-						<input type="text" name="typeoption[{$option[identifier]}]" id="typeoption_$option[identifier]" class="px" tabindex="1" size="$option[inputsize]" onBlur="checkoption('$option[identifier]', '$option[required]', '$option[type]'{if $option[maxnum]}, '$option[maxnum]'{/if}{if $option[minnum]}, '$option[minnum]'{/if}{if $option[maxlength]}, '$option[maxlength]'{/if})" value="$option[value]" $option[unchangeable] />
+						<input type="text" name="typeoption[{$option[identifier]}]" id="typeoption_$option[identifier]" class="px" tabindex="1" size="$option[inputsize]" onBlur="checkoption('$option[identifier]', '$option[required]', '$option[type]'{if $option[maxnum]}, '$option[maxnum]'{else}, '0'{/if}{if $option[minnum]}, '$option[minnum]'{else}, '0'{/if}{if $option[maxlength]}, '$option[maxlength]'{/if})" value="$option[value]" $option[unchangeable] />
 					<!--{/if}-->
 				<!--{elseif in_array($option['type'], array('radio', 'checkbox', 'select'))}-->
 					<!--{if $option[type] == 'select'}-->
@@ -129,12 +129,16 @@
 <script type="text/javascript">
 	var CHECKALLSORT = false;
 	function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, checkmaxlength) {
-		if(!$('typeoption_' + identifier) || !$('check' + identifier)) {
+		if(checktype != 'image' && !$('typeoption_' + identifier) || !$('check' + identifier)) {
 			return true;
 		}
 		var ce = $('check' + identifier);
 		ce.innerHTML = '';
-		var checkvalue = $('typeoption_' + identifier).value;
+		if(checktype == 'image') {
+			var checkvalue = $('sortaid_' + identifier).value;
+		} else {
+			var checkvalue = $('typeoption_' + identifier).value;
+		}
 		if(required != '0') {
 			if(checkvalue == '') {
 				warning(ce, '{lang threadtype_required_invalid}');
@@ -171,7 +175,7 @@
 
 	function warning(obj, msg) {
 		obj.style.display = '';
-		obj.innerHTML = '<img src="{IMGDIR}/check_error.gif" width="16" height="16" class="vm" />' + msg;
+		obj.innerHTML = '<img src="{IMGDIR}/check_error.gif" width="16" height="16" class="vm" /> ' + msg;
 		obj.className = "warning";
 		if(CHECKALLSORT) {
 			showDialog(msg);

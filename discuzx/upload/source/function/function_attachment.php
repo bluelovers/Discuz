@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_attachment.php 15107 2010-08-19 03:43:52Z monkey $
+ *      $Id: function_attachment.php 16751 2010-09-14 05:16:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,6 +89,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		$attached = 0;
 		$extension = strtolower(fileext($attach['filename']));
 		$attach['ext'] = $extension;
+		$attach['imgalt'] = $attach['isimage'] ? strip_tags(str_replace('"', '\"', $attach['description'] ? $attach['description'] : $attach['filename'])) : '';
 		$attach['attachicon'] = attachtype($extension."\t".$attach['filetype']);
 		$attach['attachsize'] = sizecount($attach['filesize']);
 		$attach['attachimg'] = $_G['setting']['attachimgpost'] && $attach['isimage'] && (!$attach['readperm'] || $_G['group']['readaccess'] >= $attach['readperm']) ? 1 : 0;

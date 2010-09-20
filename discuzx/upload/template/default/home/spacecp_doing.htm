@@ -35,9 +35,9 @@
 	<div id="{$_G[gp_key]}_form_{$doid}_{$id}">
 		<form id="{$_G[gp_key]}_docommform_{$doid}_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=doing&op=comment&doid=$doid&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if} class="pns" style="margin: 5px 0 0;">
 			<span id="{$_G[gp_key]}_form_{$doid}_{$id}_face" onclick="showFace(this.id, '{$_G[gp_key]}_form_{$doid}_{$id}_t');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
-			<textarea name="message" id="{$_G[gp_key]}_form_{$doid}_{$id}_t" cols="40" class="px pts" oninput="resizeTx(this);" onpropertychange="resizeTx(this);" onkeyup="strLenCalc(this, '{$_G[gp_key]}_form_{$doid}_{$id}_limit')" onkeydown="ctrlEnter(event, 'add');"></textarea>&nbsp;
+			<textarea name="message" id="{$_G[gp_key]}_form_{$doid}_{$id}_t" cols="40" class="px pts" oninput="resizeTx(this);" onpropertychange="resizeTx(this);" onkeyup="strLenCalc(this, '{$_G[gp_key]}_form_{$doid}_{$id}_limit')" onkeydown="ctrlEnter(event, '{$_G[gp_key]}_replybtn_{$doid}_{$id}');"></textarea>&nbsp;
 			<input type="hidden" name="commentsubmit" value="true" />
-			<button type="submit" name="do_button" class="pn" value="true"><em>{lang reply}</em></button>
+			<button type="submit" name="do_button" id="{$_G[gp_key]}_replybtn_{$doid}_{$id}" class="pn" value="true"><em>{lang reply}</em></button>
 			<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 			<a name="btncancel" href="javascript:;" onclick="docomment_form_close($doid, $id, '$_G[gp_key]');">{lang cancel}</a>
 			<input type="hidden" name="formhash" value="{FORMHASH}" />

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 16569 2010-09-09 02:58:43Z monkey $
+ *      $Id: admincp_setting.php 16968 2010-09-17 08:50:35Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -107,12 +107,13 @@ if(!submitcheck('settingsubmit')) {
 			array('setting_sec_reginput', 'reginput', $_G['gp_anchor'] == 'reginput')
 		));
 	} elseif($operation == 'attach') {
-		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('basic', 'forumattach', 'remote', 'albumattach')) ? $_G['gp_anchor'] : 'basic';
+		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('basic', 'forumattach', 'remote', 'albumattach', 'portalarticle')) ? $_G['gp_anchor'] : 'basic';
 		showsubmenuanchors('setting_attach', array(
 			array('setting_attach_basic', 'basic', $_G['gp_anchor'] == 'basic'),
 			$isfounder ? array('setting_attach_remote', 'remote', $_G['gp_anchor'] == 'remote') : '',
 			array('setting_attach_forumattach', 'forumattach', $_G['gp_anchor'] == 'forumattach'),
 			array('setting_attach_album', 'albumattach', $_G['gp_anchor'] == 'albumattach'),
+			array('setting_portal_article_attach', 'portalarticle', $_G['gp_anchor'] == 'portalarticle'),
 		));
 	} elseif($operation == 'styles') {
 		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('global', 'index', 'forumdisplay', 'viewthread', 'refresh', 'sitemessage')) ? $_G['gp_anchor'] : 'global';
@@ -365,13 +366,7 @@ if(!submitcheck('settingsubmit')) {
 			array(1, $lang['setting_access_register_verify_email']),
 			array(2, $lang['setting_access_register_verify_manual'])
 		)), $setting['regverify'], 'select');
-		showsetting('setting_access_register_outland_verify_ctrl', array('settingnew[outlandverify]', array(
-			array(1, $lang['yes'], array('localarea' => '')),
-			array(0, $lang['no'], array('localarea' => 'none'))
-		)), $setting['outlandverify'], 'mradio');
-		showtagheader('tbody', 'localarea', $setting['outlandverify'] == 1, 'sub');
-		showsetting('setting_access_register_localarea', 'settingnew[localarea]', $setting['localarea'], 'textarea');
-		showtagfooter('tbody');
+		showsetting('setting_access_register_verify_areawhite', 'settingnew[areaverifywhite]', $setting['areaverifywhite'], 'textarea');
 		showsetting('setting_access_register_verify_ipwhite', 'settingnew[ipverifywhite]', $setting['ipverifywhite'], 'textarea');
 		showsetting('setting_access_register_ctrl', 'settingnew[regctrl]', $setting['regctrl'], 'text');
 		showsetting('setting_access_register_floodctrl', 'settingnew[regfloodctrl]', $setting['regfloodctrl'], 'text');
@@ -455,7 +450,6 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_styles_index_subforumsindex', 'settingnew[subforumsindex]', $setting['subforumsindex'], 'radio');
 		showsetting('setting_styles_index_forumlinkstatus', 'settingnew[forumlinkstatus]', $setting['forumlinkstatus'], 'radio');
 		showsetting('setting_styles_index_forumallowside', 'settingnew[forumallowside]', $setting['forumallowside'], 'radio');
-		showsetting('setting_styles_index_members', 'settingnew[maxbdays]', $setting['maxbdays'], 'text');
 		showsetting('setting_styles_index_whosonline', array('settingnew[whosonlinestatus]', array(
 			array(0, $lang['setting_styles_index_display_none']),
 			array(1, $lang['setting_styles_index_whosonline_index']),
@@ -1265,6 +1259,13 @@ EOT;
 		showsetting('setting_attach_album_maxtimage', array('settingnew[maxthumbwidth]', 'settingnew[maxthumbheight]'), array(intval($setting['maxthumbwidth']), intval($setting['maxthumbheight'])), 'multiply');
 		showsubmit('settingsubmit');
 		showtablefooter();
+
+		showtableheader('', '', 'id="portalarticle"'.($_G['gp_anchor'] != 'portalarticle' ? ' style="display: none"' : ''));
+		showsetting('setting_portal_article_img_thumb_closed', 'settingnew[portalarticleimgthumbclosed]', !$setting['portalarticleimgthumbclosed'], 'radio');
+		showsetting('setting_portal_article_imgsize', array('settingnew[portalarticleimgthumbwidth]', 'settingnew[portalarticleimgthumbheight]'), array(intval($setting['portalarticleimgthumbwidth']), intval($setting['portalarticleimgthumbheight'])), 'multiply');
+		showsubmit('settingsubmit');
+		showtablefooter();
+
 		showformfooter();
 		exit;
 
@@ -1739,8 +1740,8 @@ EOT;
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('my_search_closetime', '".time()."')");
 	}
 
-	empty($settingnew['regname']) && $settingnew['regname'] = 'register';
-	empty($settingnew['reglinkname']) && $settingnew['reglinkname'] = cplang('reglinkname_default');
+	isset($settingnew['regname']) && empty($settingnew['regname']) && $settingnew['regname'] = 'register';
+	isset($settingnew['reglinkname']) && empty($settingnew['reglinkname']) && $settingnew['reglinkname'] = cplang('reglinkname_default');
 	$nohtmlarray = array('bbname', 'regname', 'reglinkname', 'icp', 'sitemessage');
 	foreach($nohtmlarray as $k) {
 		if(isset($settingnew[$k])) {
@@ -2155,6 +2156,9 @@ EOT;
 			$settingnew['maxthumbwidth'] = 0;
 			$settingnew['maxthumbheight'] = 0;
 		}
+		$settingnew['portalarticleimgthumbclosed'] = intval($settingnew['portalarticleimgthumbclosed']) ? '0' : 1;
+		$settingnew['portalarticleimgthumbwidth'] = intval($settingnew['portalarticleimgthumbwidth']);
+		$settingnew['portalarticleimgthumbheight'] = intval($settingnew['portalarticleimgthumbheight']);
 	}
 
 	if($operation == 'imgwater') {

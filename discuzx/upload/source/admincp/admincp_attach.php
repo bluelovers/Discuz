@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_attach.php 14597 2010-08-12 09:52:03Z wangjinbo $
+ *      $Id: admincp_attach.php 16715 2010-09-13 07:46:30Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -78,7 +78,7 @@ if(!submitcheck('deletesubmit')) {
 		$attachmentarray = getallwithposts(array(
 			'select' => 'a.*, af.description, p.fid, p.author, t.tid, t.subject, f.name AS fname',
 			'from' => DB::table('forum_attachment')." a LEFT JOIN ".DB::table('forum_attachmentfield')." af ON a.aid=af.aid, ".DB::table('forum_post')." p, ".DB::table('forum_thread')." t, ".DB::table('forum_forum')." f",
-			'where' => "t.tid=a.tid AND f.fid=p.fid AND t.displayorder>='0' AND p.invisible='0' AND $sql",
+			'where' => "t.tid=a.tid AND f.fid=p.fid AND t.displayorder>='0' AND p.invisible='0' AND $sql ORDER BY a.aid DESC ",
 			'limit' => (($page - 1) * $perpage).','.$perpage
 		));
 

@@ -135,6 +135,29 @@ class block_groupthread {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'portal_article' => array(
+					'name' => lang('blockclass', 'blockclass_portal_article'),
+					'script' => 'article',
+					'searchkeys' => array('author', 'authorid', 'groupurl', 'groupname', 'posts', 'views', 'replies'),
+					'replacekeys' => array('username', 'uid', 'caturl', 'catname', 'articles', 'viewnum', 'commentnum'),
+				),
+				'space_blog' => array(
+					'name' => lang('blockclass', 'blockclass_space_blog'),
+					'script' => 'blog',
+					'searchkeys' => array('author', 'authorid', 'views', 'replies'),
+					'replacekeys' => array('username', 'uid', 'viewnum', 'replynum'),
+				),
+				'forum_thread' => array(
+					'name' => lang('blockclass', 'blockclass_forum_thread'),
+					'script' => 'thread',
+					'replacekeys' => array('forumname', 'forumurl'),
+					'searchkeys' => array('groupname', 'groupurl'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;

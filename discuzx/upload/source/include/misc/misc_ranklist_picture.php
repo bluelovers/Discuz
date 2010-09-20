@@ -34,16 +34,26 @@ switch($_G['gp_before']) {
 }
 
 $orderby = 'hot DESC';
+$navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_orderby']) {
 	case 'heats':
 		$orderby = 'hot DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_heat').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_picture_heat');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_heat');
 		break;
 	case 'sharetimes':
 		$orderby = 'sharetimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_share'). ' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_picture_share');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_share');
 		break;
 	default:
 		if($clicks[$_G['gp_orderby']]) {
 			$orderby = 'click'.$_G['gp_orderby'].' DESC';
+			$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_orderby']).' - '.$navname;
+			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_orderby']);
+			$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_orderby']);
 		} else {
 			$_G['gp_orderby'] = 'heats';
 		}

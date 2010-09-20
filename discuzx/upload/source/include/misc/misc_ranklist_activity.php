@@ -30,15 +30,25 @@ switch($_G['gp_before']) {
 	default: $_G['gp_before'] = 'thismonth';
 }
 $orderby = 't.heats DESC';
+$navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_orderby']) {
 	case 'heats':
 		$orderby = 't.heats DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_activity_heat').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_activity_heat');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_activity_heat');
 		break;
 	case 'sharetimes':
 		$orderby = 't.sharetimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_activity_share').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_activity_share');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_activity_share');
 		break;
 	case 'favtimes':
 		$orderby = 't.favtimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_activity_favorite').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_activity_favorite');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_activity_favorite');
 		break;
 	default: $_G['gp_orderby'] = 'heats';
 }

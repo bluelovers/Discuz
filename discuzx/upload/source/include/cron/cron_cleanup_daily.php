@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 15286 2010-08-23 02:24:18Z zhengqingpeng $
+ *      $Id: cron_cleanup_daily.php 16833 2010-09-15 07:39:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,6 @@ DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid>0 AND dateline
 DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_tradelog')." WHERE buyerid>0 AND status=0 AND lastupdate<'$_G[timestamp]'-432000", 'UNBUFFERED');
 DB::query("UPDATE ".DB::table('forum_trade')." SET closed='1' WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
-DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE uid>0 AND dateline<'$_G[timestamp]'-7776000", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('home_visitor')." WHERE uid>0 AND dateline<'$_G[timestamp]'-7776000", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('home_notification')." WHERE uid>0 AND new=0 AND dateline<'$_G[timestamp]'-172800", 'UNBUFFERED');
 
@@ -29,6 +28,7 @@ if($_G['setting']['cachethreadon']) {
 	removedir($_G['setting']['cachethreaddir'], TRUE);
 }
 
+require_once libfile('function/forum');
 $delaids = array();
 $query = DB::query("SELECT aid, attachment, thumb FROM ".DB::table('forum_attachment')." WHERE tid='0' AND dateline<'$_G[timestamp]'-86400");
 while($attach = DB::fetch($query)) {
@@ -75,7 +75,7 @@ include_once libfile('function/block');
 block_clear();
 
 function removedir($dirname, $keepdir = FALSE) {
-	$dirname = wipespecial($dirname);
+	$dirname = str_replace(array( "\n", "\r", '..'), array('', '', ''), $dirname);
 
 	if(!is_dir($dirname)) {
 		return FALSE;

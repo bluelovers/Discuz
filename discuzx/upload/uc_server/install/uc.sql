@@ -32,7 +32,8 @@ CREATE TABLE uc_members (
   salt char(6) NOT NULL,
   secques char(8) NOT NULL default '',
   PRIMARY KEY(uid),
-  UNIQUE KEY username(username)
+  UNIQUE KEY username(username),
+  KEY email(email)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS uc_memberfields;
@@ -115,6 +116,7 @@ REPLACE INTO uc_settings(k, v) VALUES ('doublee','1');
 REPLACE INTO uc_settings(k, v) VALUES ('nextnotetime','0');
 REPLACE INTO uc_settings(k, v) VALUES ('timeoffset','28800');
 REPLACE INTO uc_settings(k, v) VALUES ('pmlimit1day','100');
+REPLACE INTO uc_settings(k, v) VALUES ('pmuserlimit1day','30');
 REPLACE INTO uc_settings(k, v) VALUES ('pmfloodctrl','15');
 REPLACE INTO uc_settings(k, v) VALUES ('pmcenter','1');
 REPLACE INTO uc_settings(k, v) VALUES ('sendpmseccode','1');
@@ -265,4 +267,4 @@ CREATE TABLE uc_mailqueue (
   PRIMARY KEY  (mailid),
   KEY appid (appid),
   KEY level (level,failures)
-) TYPE=MyISAM  AUTO_INCREMENT=1 ;
+) TYPE=MyISAM;

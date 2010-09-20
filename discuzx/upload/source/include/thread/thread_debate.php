@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_debate.php 14009 2010-08-04 07:42:16Z cnteacher $
+ *      $Id: thread_debate.php 16706 2010-09-13 06:37:44Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ $query = DB::query("SELECT author, authorid FROM ".DB::table($posttable)." p, ".
 	WHERE p.tid='$_G[tid]' AND p.anonymous='0' AND p.invisible='0' AND dp.stand='1' AND p.pid=dp.pid ORDER BY p.dateline DESC LIMIT 16");
 while($affirmavatar = DB::fetch($query)) {
 	if(!isset($debate['affirmavatars'][$affirmavatar['authorid']])) {
-		$affirmavatar['avatar'] = discuz_uc_avatar($affirmavatar['authorid'], 'small');
+		$affirmavatar['avatar'] = avatar($affirmavatar['authorid'], 'small');
 		$debate['affirmavatars'][$affirmavatar['authorid']] = $affirmavatar;
 	}
 }
@@ -58,7 +58,7 @@ $query = DB::query("SELECT author, authorid FROM ".DB::table($posttable)." p, ".
 	WHERE p.tid='$_G[tid]' AND p.anonymous='0' AND p.invisible='0' AND dp.stand='2' AND p.pid=dp.pid ORDER BY p.dateline DESC LIMIT 16");
 while($negaavatar = DB::fetch($query)) {
 	if(!isset($debate['negaavatars'][$negaavatar['authorid']])) {
-		$negaavatar['avatar'] = discuz_uc_avatar($negaavatar['authorid'], 'small');
+		$negaavatar['avatar'] = avatar($negaavatar['authorid'], 'small');
 		$debate['negaavatars'][$negaavatar['authorid']] = $negaavatar;
 	}
 }

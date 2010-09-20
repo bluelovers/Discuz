@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_doing.php 15773 2010-08-26 03:01:31Z congyushuai $
+ *      $Id: spacecp_doing.php 17024 2010-09-19 05:47:42Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -95,7 +95,7 @@ if(submitcheck('addsubmit')) {
 	updatestat('doing');
 	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
 	if(!empty($_G['gp_fromcard'])) {
-		showmessage($message);
+		showmessage($message.lang('spacecp','card_update_doing'));
 	} else {
 		showmessage('do_success', dreferer(), array('doid' => $newdoid), $_G['gp_spacenote'] ? array('showmsg' => false):array('header' => true));
 	}

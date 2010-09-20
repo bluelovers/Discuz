@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_forum.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: modcp_forum.php 16752 2010-09-14 05:19:51Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -33,10 +33,7 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 		$alloweditrules = $_G['adminid'] == 1 || $_G['forum']['alloweditrules'] ? true : false;
 
 		if(!submitcheck('editsubmit')) {
-
-			$_G['forum']['description'] = html2bbcode($_G['forum']['description']);
 			$_G['forum']['rules'] = html2bbcode($_G['forum']['rules']);
-
 		} else {
 
 			require_once libfile('function/discuzcode');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 16601 2010-09-10 03:46:36Z zhengqingpeng $
+ *      $Id: update.php 16861 2010-09-16 03:46:42Z liulanbo $
  */
 
 include_once('../source/class/class_core.php');
@@ -77,6 +77,10 @@ if($_GET['step'] == 'start') {
 } elseif ($_GET['step'] == 'prepare') {
 	if(!DB::result_first('SELECT skey FROM '.DB::table('common_setting')." WHERE skey='group_recommend' LIMIT 1")) {
 		DB::query("TRUNCATE ".DB::table('forum_groupinvite'));
+	}
+	if(DB::fetch_first("SHOW COLUMNS FROM ".DB::table('forum_activityapply')." LIKE 'contact'")) {
+		$query = DB::query("UPDATE ".DB::table('forum_activityapply')." SET message=CONCAT_WS(' 聯繫方式:', message, contact) WHERE contact<>''");
+		DB::query("ALTER TABLE ".DB::table('forum_activityapply')." DROP contact");
 	}
 	show_msg('準備完畢，進入下一步數據庫結構升級', $theurl.'?step=sql');
 } elseif ($_GET['step'] == 'sql') {
@@ -240,6 +244,27 @@ if($_GET['step'] == 'start') {
 		while($value=DB::fetch($query)) {
 			$settings[$value[skey]] = $value['svalue'];
 		}
+		if($settings['seotitle'] && !unserialize($settings['seotitle'])) {
+			$rownew = array('forum' => $settings['seotitle']);
+			DB::insert('common_setting', array(
+				'skey' => 'seotitle',
+				'svalue' => serialize($rownew),
+			), false, true);
+		}
+		if($settings['seodescription'] && unserialize($settings['seodescription'])) {
+			$rownew = array('forum' => $settings['seodescription']);
+			DB::insert('common_setting', array(
+				'skey' => 'seodescription',
+				'svalue' => serialize($rownew),
+			), false, true);
+		}
+		if($serialize['seokeywords'] && unserialize($settings['seokeywords'])) {
+			$rownew = array('forum' => $settings['seokeywords']);
+			DB::insert('common_setting', array(
+				'skey' => 'seokeywords',
+				'svalue' => serialize($rownew),
+			), false, true);
+		}
 
 		if($settings['watermarkminheight'] && !unserialize($settings['watermarkminheight'])) {
 			$rownew = array('forum' => $settings['watermarkminheight']);
@@ -299,6 +324,7 @@ if($_GET['step'] == 'start') {
 				'svalue' => serialize($rownew),
 			), false, true);
 		}
+		DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('group_allowfeed', '1')");
 
 		if(!isset($settings['ranklist'])) {
 			DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('ranklist', '".'a:11:{s:6:"status";s:1:"1";s:10:"cache_time";s:1:"1";s:12:"index_select";s:8:"thisweek";s:6:"member";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:6:"thread";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:4:"blog";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:4:"poll";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:8:"activity";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:7:"picture";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:5:"forum";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}s:5:"group";a:3:{s:9:"available";s:1:"1";s:10:"cache_time";s:1:"5";s:8:"show_num";s:2:"20";}}'."')");
@@ -369,18 +395,16 @@ if($_GET['step'] == 'start') {
 		}
 		show_msg("管理組設置升級完成", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatecron') {
-		$nextop = 'domain';
+		$nextop = 'updatereport';
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_cleanfeed.php'")) {
 			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','清理過期動態','cron_cleanfeed.php','1269746634','1269792000','-1','-1','0','0')");
 		}
-		show_msg("計劃任務升級完成", "$theurl?step=data&op=$nextop");
-	} elseif($_GET['op'] == 'domain') {
-		$nextop = 'updatereport';
-		if(!DB::result_first("SELECT domain FROM ".DB::table('common_domain')." WHERE idtype='home'")) {
-			$domainroot = $_G['config']['home']['domainroot'] ? $_G['config']['home']['domainroot'] : '';
-			DB::query("INSERT INTO ".DB::table('common_domain')." (domain, domainroot, id, idtype) SELECT domain, '$domainroot', uid, 'home' FROM ".DB::table('common_member_field_home')." WHERE domain<>''");
+
+		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_cron')." WHERE filename IN('cron_birthday_daily.php')")) {
+			DB::query("DELETE FROM ".DB::table('common_cron')." WHERE filename IN('cron_birthday_daily.php')");
 		}
-		show_msg("空間二級域名升級完成", "$theurl?step=data&op=$nextop");
+
+		show_msg("計劃任務升級完成", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatereport') {
 		$nextop = 'myappcount';
 		$report_uids = array();
@@ -410,7 +434,7 @@ if($_GET['step'] == 'start') {
 			$report_uids = implode(',', $report_uids);
 			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('report_receive', '$report_uids')");
 		}
-		show_msg("計劃任務升級完成", "$theurl?step=data&op=$nextop");
+		show_msg("舉報升級完成", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'myappcount') {
 
 		$nextop = 'nav';
@@ -466,9 +490,10 @@ if($_GET['step'] == 'start') {
 		show_msg("用戶升級完畢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'creditrule') {
 		$nextop = 'bbcode';
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_rule')." WHERE action IN('invitefriend', 'report')"),0);
+		$delrule = array('register', 'realname', 'invitefriend', 'report', 'uploadimage', 'editrealname', 'editrealemail', 'delavatar');
+		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_rule')." WHERE action IN(".dimplode($delrule).")"),0);
 		if($count) {
-			DB::query("DELETE FROM ".DB::table('common_credit_rule')." WHERE action IN('invitefriend', 'report')");
+			DB::query("DELETE FROM ".DB::table('common_credit_rule')." WHERE action IN(".dimplode($delrule).")");
 		}
 		show_msg("積分規則升級完畢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'bbcode') {
@@ -549,6 +574,11 @@ if($_GET['step'] == 'start') {
 		}
 		if(!empty($_G['config']['home']['allowdomain']) && !$_G['setting']['allowspacedomain']) {
 			DB::insert('common_setting', array('skey' => 'allowspacedomain', 'svalue' => 1), 0, 1);
+		}
+
+		if(!DB::result_first("SELECT domain FROM ".DB::table('common_domain')." WHERE idtype='home'")) {
+			$domainroot = $_G['config']['home']['domainroot'] ? $_G['config']['home']['domainroot'] : '';
+			DB::query("INSERT INTO ".DB::table('common_domain')." (domain, domainroot, id, idtype) SELECT domain, '$domainroot', uid, 'home' FROM ".DB::table('common_member_field_home')." WHERE domain<>''");
 		}
 		show_msg("域名設置升級完畢", "$theurl?step=data&op=$nextop");
 

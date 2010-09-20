@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp.php 16429 2010-09-06 09:51:21Z monkey $
+ *      $Id: userapp.php 16700 2010-09-13 05:46:20Z wangjinbo $
  */
 
 define('APPTYPEID', 5);
@@ -50,7 +50,7 @@ runhooks();
 
 getuserapp();
 
-$navtitle = $_G['setting']['seotitle']['userapp'];
+$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['userapp']);
 
 require_once libfile('userapp/'.$mod, 'module');
 

@@ -100,6 +100,23 @@ class block_group {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_forum' => array(
+					'name' => lang('blockclass', 'blockclass_forum_forum'),
+					'script' => 'forum',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+				'portal_category' => array(
+					'name' => lang('blockclass', 'blockclass_portal_category'),
+					'script' => 'portalcategory',
+					'searchkeys' => array('threads'),
+					'replacekeys' => array('articles'),
+				),
+			);
+	}
+
 	function cookparameter($parameter) {
 		return $parameter;
 	}

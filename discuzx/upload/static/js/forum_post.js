@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 16360 2010-09-06 01:37:02Z monkey $
+	$Id: forum_post.js 16857 2010-09-16 02:57:07Z monkey $
 */
 
 var postSubmited = false;
@@ -12,7 +12,20 @@ var UPLOADFAILED = UPLOADCOMPLETE = AUTOPOST =  0;
 var CURRENTATTACH = '0';
 var FAILEDATTACHS = '';
 var UPLOADWINRECALL = null;
-var STATUSMSG = {'-1' : '內部服務器錯誤', '0' : '上傳成功', '1' : '不支持此類擴展名', '2' : '附件大小為 0', '3' : '附件大小超限', '4' : '不支持此類擴展名', '5' : '附件大小超限', '6' : '附件總大小超限', '7' : '圖片附件不合法', '8' : '附件文件無法保存', '9' : '沒有合法的文件被上傳', '10' : '非法操作'};
+var STATUSMSG = {
+	'-1' : '內部服務器錯誤',
+	'0' : '上傳成功',
+	'1' : '不支持此類擴展名',
+	'2' : '服務器限制無法上傳那麼大的附件',
+	'3' : '用戶組限制無法上傳那麼大的附件',
+	'4' : '不支持此類擴展名',
+	'5' : '文件類型限制無法上傳那麼大的附件',
+	'6' : '本日已無法上傳更多的附件',
+	'7' : '圖片附件不合法',
+	'8' : '附件文件無法保存',
+	'9' : '沒有合法的文件被上傳',
+	'10' : '非法操作'
+};
 
 function checkFocus() {
 	var obj = wysiwyg ? editwin : textobj;
@@ -549,10 +562,10 @@ function updateactivityattach(aid, url, attachurl) {
 	$('activityattach_image').innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
 }
 
-function updatesortattach(aid, url, attachurl) {
-	$('sortaid').value = aid;
-	$('sortattachurl').value = attachurl + '/' + url;
-	$('sortattach_image').innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
+function updatesortattach(aid, url, attachurl, identifier) {
+	$('sortaid_' + identifier).value = aid;
+	$('sortattachurl_' + identifier).value = attachurl + '/' + url;
+	$('sortattach_image_' + identifier).innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
 }
 
 function switchpollm(swt) {

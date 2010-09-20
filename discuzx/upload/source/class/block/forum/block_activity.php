@@ -140,6 +140,17 @@ class block_activity {
 				);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'group_activity' => array(
+					'name' => lang('blockclass', 'blockclass_group_activity'),
+					'script' => 'groupactivity',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;
@@ -192,15 +203,6 @@ class block_activity {
 			}
 			$fids = $parameter['fids'];
 		}
-		if(empty($fids)) {
-			if(!empty($_G['setting']['allowviewuserthread'])) {
-				$fids = $_G['setting']['allowviewuserthread'];
-			} else {
-				return $returndata;
-			}
-		} else {
-			$fids = dimplode($fids);
-		}
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
@@ -229,7 +231,7 @@ class block_activity {
 		} else {
 			$keyword = '';
 		}
-		$sql = ($fids ? ' AND t.fid IN ('.$fids.')' : '')
+		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.$keyword
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($bannedids ? ' AND t.tid NOT IN ('.dimplode($bannedids).')' : '')
@@ -305,6 +307,7 @@ class block_activity {
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(
+					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
 					'time' => $data['time'],
 					'expiration' => $data['expiration'] ? dgmdate($data['expiration']) : 'N/A',
 					'author' => $data['author'] ? $data['author'] : 'Anonymous',

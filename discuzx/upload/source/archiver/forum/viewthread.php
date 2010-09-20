@@ -10,12 +10,15 @@ include loadarchiver('common/header');
 
 <div id="content">
 	<?php foreach($postlist as $post): ?>
+	<?php if($hiddenreplies && !$post['first']) break; ?>
 	<p class="author">
 		<strong><?php echo $post['author']; ?></strong>
 		<?php echo lang('forum/archiver', 'post_time') . ' ' . $post['dateline']; ?>
 	</p>
 	<h3><?php echo $post['subject']; ?></h3>
-	<?php echo nl2br(dhtmlspecialchars($post['message'])); ?>
+	<?php if($_G['forum_threadpay']): include template('forum/viewthread_pay'); else: ?>
+		<?php echo nl2br(dhtmlspecialchars($post['message'])); ?>
+	<?php endif; ?>
 	<?php endforeach; ?>
 	<div class="page">
 		<?php echo arch_multi($_G['forum_thread']['replies'] + 1, $_G['ppp'], $page, "forum.php?mod=viewthread&tid={$_G['tid']}&archiver=1"); ?>

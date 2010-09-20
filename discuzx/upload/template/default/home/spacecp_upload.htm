@@ -2,7 +2,7 @@
 
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
-	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&amp;do=album">{lang album}</a> <em>&rsaquo;</em> {lang upload_pic}</div>
+	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&do=album">{lang album}</a> <em>&rsaquo;</em> {lang upload_pic}</div>
 </div>
 
 <div id="ct" class="ct2_a wp cl">
@@ -211,7 +211,7 @@
 				document.write(AC_FL_RunContent(
 					'width', '100%', 'height', '415',
 					'src', '{IMGDIR}/cam.swf?config=$config&albumid=$_GET[albumid]',
-					'quality', 'high'
+					'quality', 'high', 'wmode', 'transparent'
 				));
 			</script>
 		<!--{else}-->
@@ -222,7 +222,7 @@
 				document.write(AC_FL_RunContent(
 					'width', '100%', 'height', '400',
 					'src', '{IMGDIR}/album_upload.swf?config=$config&albumid=$_GET[albumid]',
-					'quality', 'high'
+					'quality', 'high', 'wmode', 'transparent'
 				));
 			</script>
 

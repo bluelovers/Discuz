@@ -39,9 +39,9 @@
 		<dt>$option[title]:</dt>
 		<dd>
 			<ul>
-				<li{if $_G['gp_'.$option[identifier]] == 'all'} class="a"{/if}><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&amp;filter=sortid&amp;sortid=$_G['gp_sortid']&amp;searchsort=1$filterurladd&amp;$option[identifier]=all$sorturladdarray[$option[identifier]]" class="xi2">{lang unlimited}</a></li>
+				<li{if $_G['gp_'.$option[identifier]] == 'all'} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_G['gp_sortid']&searchsort=1$filterurladd&$option[identifier]=all$sorturladdarray[$option[identifier]]" class="xi2">{lang unlimited}</a></li>
 				<!--{loop $option['choices'] $id $value}-->
-					<li{if $_G['gp_'.$option[identifier]] && $id == $_G['gp_'.$option[identifier]]} class="a"{/if}><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&amp;filter=sortid&amp;sortid=$_G[gp_sortid]&amp;searchsort=1&amp;$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value</a></li>
+					<li{if $_G['gp_'.$option[identifier]] && $id == $_G['gp_'.$option[identifier]]} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_G[gp_sortid]&searchsort=1&$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value</a></li>
 				<!--{/loop}-->
 			</ul>
 		</dd>

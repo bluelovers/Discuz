@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 16505 2010-09-07 10:04:20Z monkey $
+	$Id: bbcode.js 16630 2010-09-10 08:33:25Z monkey $
 */
 
 var re;
@@ -204,7 +204,7 @@ function ptag(options, text, tagname) {
 	align = in_array(align, ['left', 'center', 'right']) ? align : 'left';
 
 	if(lineHeight === null && textIndent === null) {
-		return '[align=' + align + ']' + text + '[/align]\n';
+		return '[align=' + align + ']' + text + '[/align]';
 	} else {
 		return '[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + text + '[/p]';
 	}

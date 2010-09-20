@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_domain.php 13758 2010-07-30 06:27:14Z zhengqingpeng $
+ *      $Id: spacecp_domain.php 16639 2010-09-11 02:50:00Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,6 +28,7 @@ if(submitcheck('domainsubmit')) {
 		if(empty($domainlength) || empty($_POST['domain'])) {
 			$setarr['domain'] = '';
 		} else {
+			require_once libfile('function/domain');
 			if(domaincheck($_POST['domain'], $_G['setting']['domain']['root']['home'], $domainlength)) {
 				$setarr['domain'] = $_POST['domain'];
 			}

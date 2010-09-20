@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 16122 2010-08-31 09:53:57Z zhengqingpeng $
+ *      $Id: portalcp_diy.php 17030 2010-09-19 06:12:42Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$op = in_array($_GET['op'], array('style', 'diy', 'image', 'export', 'import')) ? $_GET['op'] : '';
+$op = in_array($_GET['op'], array('style', 'diy', 'image', 'export', 'import', 'blockclass')) ? $_GET['op'] : '';
 
 
 if (submitcheck('uploadsubmit')) {
@@ -138,7 +138,7 @@ if (submitcheck('uploadsubmit')) {
 		$r = save_diy_data($template, $targettplname, $templatedata, true, $optype);
 
 		if ($r && $optype != 'savecache') {
-			if (!iscategory && !$istopic && empty($savemod) && !empty($clonefile)) {
+			if (!$iscategory && !$istopic && empty($savemod) && !empty($clonefile)) {
 				$delfile = DISCUZ_ROOT.'./data/diy/'.$template.'_'.$clonefile.'.htm';
 				if (file_exists($delfile)) {
 					unlink($delfile);
@@ -158,8 +158,10 @@ if (submitcheck('uploadsubmit')) {
 
 	showmessage('do_success', $tourl,array('rejs'=>$_POST['rejs']));
 }
+if($op == 'blockclass') {
 
-if($op == 'style') {
+	loadcache('blockclass');
+} elseif($op == 'style') {
 
 	if(!$_G['group']['allowmanagetopic'] && !$_G['group']['allowdiy'] && !$_G['group']['allowaddtopic']) {
 		showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));

@@ -308,7 +308,6 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /** forum::forumdisplay,forum::viewthread,forum::modcp,group::index,group::group,group::my,group::forumdisplay,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat **/
 /* fct --> froumatction 板塊功能按鈕 */
 	.fct a { float: left; margin-left: 8px; }
-	.tch { vertical-align: middle; margin-left: 4px; } /*attachment*/
 	.fa_fav, .fa_rss, .fa_achv, .fa_bin, .fa_ivt { padding-left: 20px; background: no-repeat 0 50%; }
 		.fa_fav { background-image: url({IMGDIR}/fav.gif); }
 		.fa_rss { background-image: url({IMGDIR}/feed.gif); }
@@ -329,13 +328,13 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			#fh .h .y { float: right; }
 			#fh .o a { float: left; margin-right: 10px; }
 	#fh.m { padding-top: 0; background-color: {COMMONBG}; }
-	.xst { font-family: {THREADTITLEFONT}; font-size: {THREADTITLEFONTSIZE}; zoom: 1; }
+	.xst { font-family: {THREADTITLEFONT}; font-size: {THREADTITLEFONTSIZE}; }
 
 	/* threadtype 帖子類型 */
-	.ttp { margin-bottom: 5px; padding-top: 10px; border-width: 2px 0 0; }
+	.ttp { margin-bottom: 5px; padding-top: 10px; border-width: 2px 0 0; background: transparent; }
 		.ttp li { float: left; padding-bottom: 5px; }
 		.ttp a, .ttp strong { float: left; margin-right: 5px; padding: 4px 8px 3px; height: 18px; border: 1px solid {COMMONBORDER}; white-space: nowrap; }
-			.ttp a:hover { border-color: {HIGHLIGHTLINK}; color: {HIGHLIGHTLINK}; }
+			.ttp a:hover { border-color: {HIGHLIGHTLINK}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 		.ttp .a a { border-color: {HIGHLIGHTLINK}; background: {SPECIALBG}; color: {HIGHLIGHTLINK}; }
 		.ttp .pipe { float: left; margin-right: 10px; padding: 0; width: 2px; height: 27px; background: {SPECIALBORDER}; text-indent: -9999px; }
 	/* 版塊有大量主題分類時的展開收起樣式 by Pony */
@@ -354,7 +353,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.tl .frm { width: 150px; }
 			.tl .o { width: 20px; }
 			.tl .num { width: 60px; }
-			.tl .by { width: 100px; }
+			.tl .by { width: 105px; }
 				.tl cite, .tl .num em { display: block; }
 				.tl th em { margin-right: 4px; zoom: 1; }
 					.tl th em, .tl th em a { color: #007CD5; }
@@ -371,7 +370,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 	.tl tr:hover th, .tl tr:hover td { background-color: {COMMONBG}; }
 
 	/* recy --> recyclebin 主題列表的回收站主題樣式 by shuaishuai*/
-	.recy { text-decoration:line-through;}
+	.recy { text-decoration: line-through; }
 
 	/* 主題分頁 */
 	.tps { white-space: nowrap; }
@@ -392,15 +391,16 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 .plh { line-height: 46px; }
 	.plh .plc { padding-bottom: 0; }
 	.ts { padding: 12px 0 10px; font: bold 16px "Microsoft Yahei", Hei, Tahoma, SimHei, sans-serif; }
+	#modmenu { padding: 10px 0; border-top: 1px solid {COMMONBORDER}; }
+		#modmenu .pipe, .modmenu .pipe { margin: 0 3px; }
 
 #nv_forum #ct { border-color: {SPECIALBORDER}; }
 
 /* 默認分類信息 by michael */
-.cgtl { width: 100%; }
+.ie6 .cgtl { width: auto; }
 	.cgtl td, .cgtl th, .cgtl caption { padding: 5px; border-bottom: 1px solid {SPECIALBORDER}; }
 	.cgtl caption { background: {SPECIALBG}; border-top: 1px solid {SPECIALBORDER}; font-size: 14px; font-weight: 700; }
 	.cgtl th { width: 16%; }
-	.cgtl td { width: 84%; }
 /** end **/
 
 
@@ -496,8 +496,8 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.psave { background: url({IMGDIR}/pubsave.gif) no-repeat 4px 50%; }
 		.modact { display: block; height: 32px; text-align: center; }
 			.modact, .modact a { line-height: 32px !important; }
-		.uo { clear: both; overflow: hidden; margin: 10px 0 20px; text-align: center; }
-			.uo a { margin: 0 2px; padding: 5px 8px 5px 25px; border: 1px solid {SPECIALBORDER}; background-color: {SPECIALBG}; background-repeat: no-repeat; background-position: 5px 50%; line-height: 30px; }
+		.uo { clear: both; margin: 10px 0 20px; text-align: center; }
+			.uo a { margin: 0 2px; padding: 5px 8px 5px 25px; border: 1px solid {SPECIALBORDER}; background-color: {SPECIALBG}; background-repeat: no-repeat; background-position: 5px 50%; }
 				.uo span { margin-left: 3px; font-weight: 700; color: {NOTICETEXT}; }
 				.uo a:hover { text-decoration: none; color: {HIGHLIGHTLINK}; }
 			#k_favorite { background-image: url({IMGDIR}/fav.gif); }
@@ -529,18 +529,18 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.rate i { font-style: normal; }
 
 /* 回帖推薦 post sticklist by dfox */
-	.psth { float: left; margin: 2em 0 2em -20px; padding: 5px 0 5px 20px; width: 240px; background: #0063C4 url({IMGDIR}/arw.gif) no-repeat 100% 50%; color: {LIGHTLINK}; font-size: 14px; }
-		* html .psth { position: relative; }
+	.psth { margin: 2em 0 2em -20px; padding: 5px 0 5px 20px; width: 240px; background: #0063C4 url({IMGDIR}/arw.gif) no-repeat 100% 50%; color: {LIGHTLINK}; font-size: 14px; }
 	.tpst .psth { margin-left: -15px; }
-	.pstl { clear:left; margin-bottom: 2em; }
+	.pstl { clear: left; margin-bottom: 2em; }
 		.psta { float: left; width: 30px; }
 			.psta img { width: 24px; height: 24px; }
 		.psti { margin-left: 30px; }
 
 /* 點評 by monkeye */
 	.f_c .cm { overflow: hidden; }
-	.cm .psth {  background-color: #FFF4DD; color: {NOTICETEXT}; background-position: 100% 50%; font-size: 12px; }
-		.cm .pg { float: left !important; }
+	.cm .psth { background-color: #FFF4DD; color: {NOTICETEXT}; background-position: 100% 50%; font-size: 12px; }
+		.cm .pg { float: none; }
+			.cm .pg a, .cm .pg strong { margin: 0 4px 0 0; }
 		.cm i { color: #F30; font-style: normal; }
 		.cmstar { display: block; margin-top: 5px; width: 100px; height: 16px; background: url({IMGDIR}/starlevel.gif) no-repeat 10px 0; cursor: pointer; }
 			.cmstarv { padding-right: 100px; width: 100px; height: 16px; background: url({IMGDIR}/starlevel.gif) no-repeat 12px 0; }
@@ -570,7 +570,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.bui .i { width: 290px; }
 			.imicn img { vertical-align: middle; margin-right: 8px; }
 
-	.locked { margin: 10px 0; width: 600px; w\idth: 560px; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; }
+	.locked { margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; }
 		.locked:hover { background: #F7F7F7 url({IMGDIR}/locked.gif) no-repeat 6px 50%; }
 		.locked strong { color: {NOTICETEXT}; }
 		.locked a { color: {HIGHLIGHTLINK}; }
@@ -583,7 +583,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.pl .quote { padding-bottom: 5px; background: #F9F9F9 url({IMGDIR}/icon_quote_s.gif) no-repeat 20px 6px; }
 		.pl .quote blockquote { margin: 0; padding: 0 65px 5px 0; background: url({IMGDIR}/icon_quote_e.gif) no-repeat 100% 100%; line-height: 1.6; zoom: 1; }
 
-	.pl .blockcode { padding: 10px 0 5px 10px; width: 550px; border: 1px solid {WRAPBORDERCOLOR}; background: #F7F7F7 url({IMGDIR}/codebg.gif) repeat-y 0 0; overflow: hidden; }
+	.pl .blockcode { padding: 10px 0 5px 10px; border: 1px solid {WRAPBORDERCOLOR}; background: #F7F7F7 url({IMGDIR}/codebg.gif) repeat-y 0 0; overflow: hidden; }
 		.pl .blockcode ol { margin: 0 0 0 10px !important; padding: 0 !important; }
 			.pl .blockcode ol li { padding-left: 10px; list-style-type: decimal-leading-zero; font-family: Monaco,Consolas,"Lucida Console","Courier New",serif; font-size: 12px; line-height: 1.8em; }
 				.pl .blockcode ol li:hover { background: {WRAPBG}; color: {HIGHLIGHTLINK}; }
@@ -635,7 +635,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.rwdbst {}
 
 /* 辯論觀點樣式 by michael */
-	.pdbt { float: right; margin-top: 5px; }
+	.pdbt { float: right; margin: -5px 10px 0 0; }
 
 	.pdbts { float: left; overflow: hidden; height: 25px; line-height: 25px; background: url({IMGDIR}/pdbt.gif) no-repeat 0 0; }
 		.pdbts a { float: left; margin: 0; height: 25px; line-height: 25px; }
@@ -672,13 +672,11 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 /* 門戶 viewthread 顯示 */
 .vw .pcb { margin-right: 0; }
-	.vw dd .pcb { width: 630px; }
+	.vw dd .pcb { width: 640px; }
 	.vw dd .rate { padding-left: 0; }
 	.vw .pcb table { table-layout: fixed; width: 100%; overflow: hidden; }
 		.vw .t_fsz { min-height: 30px; }
 			.ie6 .vw .t_fsz { height: 30px; }
-	.vw .pcb .locked { width: 550px; }
-	.vw .pcb .blockcode { width: 550px; }
 	.vw .pstl { margin-bottom: 1.4em; }
 		.vw .psth { margin-left: 0; }
 	.vw .pdbts { margin-right: 10px; height: 20px; line-height: 20px; background: url({IMGDIR}/pdbtm.gif) no-repeat 0 0; }
@@ -809,7 +807,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** forum::misc **/
-/* 在JS出問題時顯示出來的頁面的樣式重定義 */
+/* 非彈窗時顯示出來的頁面的樣式重定義 */
 	.mn .flb { padding-left: 0; }
 	.f_c .list { margin-left: 0; }
 /** end **/
@@ -880,9 +878,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.vw .hot { margin-right: 5px; color: {NOTICETEXT}; }
 		.vw .s { margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid {COMMONBORDER}; line-height: 2; color: {HIGHLIGHTLINK}; }
 			.vw .s strong { font-weight: 400; color: #F00; }
-		.vw .d { margin: 15px 0; min-height: 100px; font-size: 14px; line-height: 2; color: #000; }
-			.vw .d img { max-width: 610px; }
-			* html .vw .d img { width: expression(this.width > 610 ? 610:true); }
+		.vw .d { margin: 15px 0; min-height: 100px; font-size: 14px; line-height: 1.8; color: #000; }
+			.vw .d img { max-width: 620px; }
+			* html .vw .d img { width: expression(this.width > 620 ? 620:true); }
 		.vw .d ol, .vw .d ul { margin: 1em 2em; }
 			.vw .d ul li { list-style-type: disc; }
 			.vw .d .ml { margin: 0; }
@@ -942,9 +940,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.mi a.o { margin-right: 5px; padding-left: 18px; text-decoration: underline; background: url({IMGDIR}/mine_icn.png) no-repeat 0 50%; }
 	#moodfm {}
 		#moodfm textarea { width: 600px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
-		.mi .moodfm_input { width: 340px; height: 58px; background: {COMMONBORDER} url({IMGDIR}/mood_input.png) no-repeat 0 0; }
+		.mi .moodfm_input { width: 350px; height: 58px; background: {COMMONBORDER} url({IMGDIR}/mood_input.png) no-repeat 0 0; }
 			.mi .hover .moodfm_input { background-color: {SPECIALBORDER}; }
-			.mi #moodfm textarea { margin: 3px 0 0 6px; width: 331px; height: 52px; outline: none; border: none; }
+			.mi #moodfm textarea { margin: 3px 0 0 6px; width: 341px; height: 52px; outline: none; border: none; }
 		.moodfm_btn { padding-left: 5px; background: url({IMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
 			.moodfm_btn input { width: 58px; height: 58px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
 		.moodfm_f { padding: 5px 0 0 3px; }
@@ -1068,17 +1066,21 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::space **/
-	/* 快速好友查找鏈接按鈕樣式 by ShuaiShuai */
+/* 家園首頁右側的搜索框 */
+	#sc .shortsc td { padding: 0 1px 0 0; }
+	.shortsc .px { width: 82px; }
+
+/* 快速好友查找鏈接按鈕樣式 by ShuaiShuai */
 	.sc_display{ display:inline-block; width:36px; text-align:right;}
 	#mood_mystatus { width: 410px; word-break: break-all; overflow: hidden; }
 		#mood_mystatus a:hover{ text-decoration:none; }
 	#newprompt { background: url({IMGDIR}/info.gif) no-repeat 12px 50%; }
-	
+
 	/* .dtls -> doing_treeline_short 記錄回復樹狀背景 by shuaishuai */
 		.dtls { background:url({IMGDIR}/treeline_short.gif) no-repeat 0 2px; }
 	/* .dtll -> doing_treeline_long 記錄回復樹狀背景 by shuaishuai */
 		.dtll { background:url({IMGDIR}/treeline_long.gif) no-repeat 2em 2px; }
-		
+
 	.nts { padding-left: 20px; }
 		.nts dl { border-top: 1px dashed {COMMONBORDER}; }
 		.nts .more { border-top: 1px dashed {COMMONBORDER}; padding:10px 0 0 64px; }
@@ -1086,9 +1088,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::spacecp **/
-	/* 空間圖片列表 */
+/* 空間圖片列表 */
 	.mls li { width: 90px; }
-	/* 上傳圖片 by lushnis */
+/* 上傳圖片 by lushnis */
 	.up_row { width: 100%; }
 		.up_row td { vertical-align: middle; padding: 5px 0; border-bottom: 1px solid {SPECIALBORDER}; }
 		.up_row .d { width: 400px; }
@@ -1177,7 +1179,8 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /* .mdl -> medal list by Pony */
 	.mdl li { width: 200px; height: 140px; }
 	.mdlow li { height: 70px; }
-		.mdl img { width: auto; max-height: 35px; height: expression(this.offsetHeight > 35 ? 35 : 'auto');  }
+		.mdl img { width: auto; height: auto; max-height: 35px; }
+		.ie6 .mdl img { height: expression(this.height > 35 ? 35 : true); }
 /* 勳章記錄重定義 by Pony */
 	.el li { padding-left: 40px; }
 	.el .t { margin: -2px 0 0 -30px; }

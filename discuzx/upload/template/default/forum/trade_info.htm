@@ -31,7 +31,7 @@
 		<dt class="ptn">
 			<span class="y">
 				<a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2" onclick="showWindow('sendpm', this.href)" style="font-weight: 200"><img src="{IMGDIR}/pmto.gif" style="vertical-align:middle" />{lang send_pm}</a>&nbsp;
-				<!--{if $post['qq']}-->&nbsp;<a href="http://wpa.qq.com/msgrd?V=1&amp;Uin=$post[qq]&amp;Site=$_G['setting']['bbname']&amp;Menu=yes" target="_blank" title="QQ"><img src="{IMGDIR}/qq.gif" alt="QQ" style="vertical-align:middle" /></a><!--{/if}-->
+				<!--{if $post['qq']}-->&nbsp;<a href="http://wpa.qq.com/msgrd?V=1&Uin=$post[qq]&Site=$_G['setting']['bbname']&Menu=yes" target="_blank" title="QQ"><img src="{IMGDIR}/qq.gif" alt="QQ" style="vertical-align:middle" /></a><!--{/if}-->
 				<!--{if $post['icq']}-->&nbsp;<a href="http://wwp.icq.com/scripts/search.dll?to=$post[icq]" target="_blank" title="ICQ"><img src="{IMGDIR}/icq.gif" alt="ICQ" style="vertical-align:middle" /></a><!--{/if}-->
 				<!--{if $post['yahoo']}-->&nbsp;<a href="http://edit.yahoo.com/config/send_webmesg?.target=$post[yahoo]&.src=pg" target="_blank" title="Yahoo"><img src="{IMGDIR}/yahoo.gif" alt="Yahoo!" style="vertical-align:middle" /></a><!--{/if}-->
 				<!--{if $post['taobao']}-->&nbsp;<a href="javascript:;" onclick="window.open('http://amos.im.alisoft.com/msg.aw?v=2&uid='+encodeURIComponent('$post[taobaoas]')+'&site=cntaobao&s=2&charset=utf-8')" title="{lang taobao}"><img src="{IMGDIR}/taobao.gif" alt="{lang taobao}" style="vertical-align:middle" /></a><!--{/if}-->
@@ -64,10 +64,10 @@
 			<img src="{IMGDIR}/nophoto.gif" alt="$trade[subject]" />
 		<!--{/if}-->
 		<!--{if !$_G['forum_thread']['is_archived']}-->
-			<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid'])) && ($_G['forum_thread']['digest'] >= 0 || !$post['first']) || $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->
+			<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid'])) && !$post['first'] || $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->
 				<p class="ptm pbm">
 					<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}--><span class="y"><a href="javascript:;" onclick="modaction('delpost', $_G[gp_pid])">{lang delete}</a>&nbsp;&nbsp;</span><!--{/if}-->
-					<a class="editp" style="padding-left: 20px; " href="forum.php?mod=post&action=edit&amp;fid=$_G[fid]&amp;tid=$_G[tid]&amp;pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&amp;modthreadkey=$_G[gp_modthreadkey]{/if}&amp;page=$page">{lang edit_trade}</a>
+					<a class="editp" style="padding-left: 20px; " href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page">{lang edit_trade}</a>
 				</p>
 			<!--{/if}-->
 		<!--{/if}-->
@@ -150,8 +150,8 @@
 			<!--{if $_G['uid']}--><button onclick="showWindow('sendpm', 'home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&tradeid=$post[pid]')" class="pn"><span><!--{if $online}-->{lang on_line}<!--{/if}-->{lang trade_bargain}</span></button><!--{/if}-->
 			</p>
 		<!--{/if}-->
-		<!--{if $trade['account']}-->
-			<p><em>({lang post_trade_supportalipay})</em></p>
+		<!--{if $trade['tenpayaccount']}-->
+			<p><em>({lang post_trade_support_tenpay})</em></p>
 		<!--{/if}-->
 		</div>
 	</div>
@@ -174,7 +174,7 @@
 
 		<!--{if !$_G[inajax]}--><div id="comment_$post[pid]" class="cl tpst cm"></div><!--{/if}-->
 	</div>
-	<!--{if !$_G[inajax] && $allowpostreply && $post['allowcomment'] && $_G['setting']['commentnumber']}--><div class="pob"><em><a class="fastre" href="javascript:;" onclick="showWindow('comment', 'forum.php?mod=misc&action=comment&amp;pid=$post[pid]', 'get', 0)">{lang comments}</a></em></div><!--{/if}-->
+	<!--{if !$_G[inajax] && $allowpostreply && $post['allowcomment'] && $_G['setting']['commentnumber']}--><div class="pob"><em><a class="fastre" href="javascript:;" onclick="showWindow('comment', 'forum.php?mod=misc&action=comment&pid=$post[pid]', 'get', 0)">{lang comments}</a></em></div><!--{/if}-->
 </td></tr>
 </td></tr></table></div>
 

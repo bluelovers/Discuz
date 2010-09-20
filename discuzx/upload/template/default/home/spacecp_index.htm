@@ -183,12 +183,7 @@
 								<label><input type="radio" name="avatar" value="small"{if $para[banavatar] == 'small'} checked="checked"{/if}>{lang small}</label>
 							</td>
 						</tr>
-						<tr>
-							<th>{lang showcontent}</th>
-							<td>
-								<label><input type="checkbox" name="usergroup" value="1" class="px"{if empty($para[banusergroup])} checked="checked"{/if} />{lang usergroup}</label>
-							</td>
-						</tr>
+						
 						<!--{elseif ($blockname == 'statistic')}-->
 						<tr>
 							<th>{lang showcountcontent}</th>
@@ -314,6 +309,7 @@
 					</tr>
 					<tr>
 						<th>{lang musicbox_height}</th>
+						<!--{eval $config['height'] = empty($config['height']) && $config['height'] !== 0 ? 200 : $config['height'];}-->
 						<td><input type="text" name="height" value="$config['height']" size="10" maxlength="10" class="px p_fre" />px
 							<br />{lang musicbox_height_message}</td>
 					</tr>

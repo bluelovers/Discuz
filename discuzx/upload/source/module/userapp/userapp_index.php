@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_index.php 16476 2010-09-07 06:23:03Z zhengqingpeng $
+ *      $Id: userapp_index.php 17007 2010-09-19 02:33:22Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,17 +69,6 @@ if($_G['gp_view'] == 'top') {
 		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$boyuseapp[$value['appid']] = $value;
-		}
-	}
-
-	$appuids = explode(',', $space['feedfriend']);
-	if($appuids) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_userapp_stat')." WHERE uid IN(".dimplode($appuids).") GROUP BY appid LIMIT 0,10");
-		while ($value = DB::fetch($query)) {
-			$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
-			if(!empty($value['appname'])) {
-				$frienduseapp[$value['appid']] = $value;
-			}
 		}
 	}
 
@@ -164,6 +153,16 @@ if($_G['uid']) {
 $actives = array((in_array($_G['gp_view'], array('we', 'me', 'all', 'hot', 'top')) ? $_G['gp_view'] : 'top') => ' class="a"');
 if($_G['gp_view'] != 'top') {
 	$navtitle = lang('core', 'title_userapp_index_'.$_G['gp_view']).' - '.$navtitle;
+}
+
+$metakeywords = $_G['setting']['seokeywords']['userapp'];
+if(!$metakeywords) {
+	$metakeywords = $_G['setting']['navs'][5]['navname'];
+}
+
+$metadescription = $_G['setting']['seodescription']['userapp'];
+if(!$metadescription) {
+	$metadescription = $_G['setting']['navs'][5]['navname'];
 }
 
 include_once template("userapp/userapp_index");

@@ -1,6 +1,6 @@
 <!--{subtemplate common/header_common}-->
 	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
-	<!--{if $_G['basescript'] == 'forum'}-->
+	<!--{if $_G['basescript'] == 'forum' || $_G['forum']['status'] == 3}-->
 		<!--{if !empty($_G['cookie']['widthauto']) && empty($_G['disabledwidthauto'])}-->
 			<link rel="stylesheet" id="css_widthauto" type="text/css" href="data/cache/style_{STYLEID}_widthauto.css?{VERHASH}" />
 			<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>
@@ -87,42 +87,48 @@
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang activation}</a>
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
 				</p>
-				<!--{else}-->
+				<!--{elseif !IS_ROBOT}-->
 					<!--{template member/login_simple}-->
 				<!--{/if}-->
 			</div>
-			<!--{if $_G['uid']}-->
-			<div id="qmenu_menu" class="p_pop" style="display: none; zoom: 1;">
-				<ul>
-					<!--{loop $_G['setting']['mynavs'] $nav}-->
-						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}-->
-							<li>$nav[code]</li>
+			
+			<!--{if !IS_ROBOT}-->
+				<div id="qmenu_menu" class="p_pop" style="display: none; zoom: 1;">
+					<!--{if $_G['uid']}-->
+						<ul>
+							<!--{loop $_G['setting']['mynavs'] $nav}-->
+								<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}-->
+									<li>$nav[code]</li>
+								<!--{/if}-->
+							<!--{/loop}-->
+						</ul>
+						<!--{if !empty($_G['style']['extstyle'])}-->
+							<div class="sslct cl">
+								<!--{if !$_G[style][defaultextstyle]}--><span class="sslct_btn" onclick="extstyle('')" title="{lang default}"><i>&nbsp;</i></span><!--{/if}-->
+								<!--{loop $_G['style']['extstyle'] $extstyle}-->
+									<span class="sslct_btn" onclick="extstyle('$extstyle[0]')" title="$extstyle[1]"><i style='background:$extstyle[2]'>&nbsp;</i></span>
+								<!--{/loop}-->
+							</div>
 						<!--{/if}-->
-					<!--{/loop}-->
-				</ul>
-				<!--{if $_G['uid'] && !empty($_G['style']['extstyle'])}-->
-					<div class="sslct cl">
-						<span class="sslct_btn" onclick="extstyle('')" title="{lang default}"><i>&nbsp;</i></span>
-						<!--{loop $_G['style']['extstyle'] $extstyle}-->
-							<span class="sslct_btn" onclick="extstyle('$extstyle[0]')" title="$extstyle[1]"><i style='background:$extstyle[2]'>&nbsp;</i></span>
-						<!--{/loop}-->
-					</div>
-				<!--{/if}-->
-				<!--{if $_G['basescript'] == 'forum' && empty($_G['disabledwidthauto'])}-->
-				<ul class="wslct">
-					<li><a href="javascript:;" onclick="widthauto(this)"><!--{if empty($_G['cookie']['widthauto'])}-->{lang switch_wide}<!--{else}-->{lang switch_narrow}<!--{/if}--></a></li>
-				</ul>
-				<!--{/if}-->
-			</div>
+					<!--{else}-->
+						<p class="reg_tip">
+							<a href="member.php?mod={$_G[setting][regname]}" onclick="showWindow('register', this.href)" class="xi2">{lang qmenu_register}</a>
+						</p>
+					<!--{/if}-->
+					<!--{if $_G['basescript'] == 'forum' && empty($_G['disabledwidthauto'])}-->
+					<ul class="wslct">
+						<li><a href="javascript:;" onclick="widthauto(this)"><!--{if empty($_G['cookie']['widthauto'])}-->{lang switch_wide}<!--{else}-->{lang switch_narrow}<!--{/if}--></a></li>
+					</ul>
+					<!--{/if}-->
+				</div>
 			<!--{/if}-->
+
 			<div id="nv">
-				<!--{if $_G['uid']}-->
-					<a href="home.php" id="qmenu" onmouseover="showMenu(this.id)">{lang my_center}</a>
-				<!--{/if}-->
+				<a href="{if $_G['uid']}home.php{else}javascript:;{/if}" id="qmenu" onmouseover="showMenu(this.id)">{lang my_center}</a>
 				<ul>
 					<!--{eval $mnid = getcurrentnav();}-->
 					<!--{loop $_G['setting']['navs'] $nav}-->
-						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}--><li {if $mnid == $nav[navid]}class="a"{/if}$nav[nav]></li><!--{/if}-->
+						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}--><li {if $mnid == $nav[navid]}class="a" {/if}$nav[nav]></li><!--{/if}-->
 					<!--{/loop}-->
 				</ul>
 			</div>

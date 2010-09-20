@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_friend.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: space_friend.php 16927 2010-09-17 02:44:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,8 +34,9 @@ if($_GET['view'] == 'online') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=near";
 		$ip = explode('.', $_G['clientip']);
 		$wheresql = " WHERE ip1='$ip[0]' AND ip2='$ip[1]' AND ip3='$ip[2]'";
-	} elseif($_GET['type']=='friend' && $space['feedfriend']) {
+	} elseif($_GET['type']=='friend') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=friend";
+		$space['feedfriend'] = !empty($space['feedfriend']) ? $space['feedfriend'] : -1;
 		$wheresql = " WHERE uid IN ($space[feedfriend])";
 	} elseif($_GET['type']=='member') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=member";
@@ -62,7 +63,7 @@ if($_GET['view'] == 'online') {
 				}
 			}
 
-			$ols[$value['uid']] = $value['lastactivity'];
+			if(!$value['invisible']) $ols[$value['uid']] = $value['lastactivity'];
 			$list[$value['uid']] = $value;
 			$fuids[$value['uid']] = $value['uid'];
 		}
@@ -189,7 +190,7 @@ if($_GET['view'] == 'online') {
 if($fuids) {
 	$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($fuids).")");
 	while ($value = DB::fetch($query)) {
-		if(!$value['magichidden']) {
+		if(!$value['magichidden'] && !$value['invisible']) {
 			$ols[$value['uid']] = $value['lastactivity'];
 		} elseif($list[$value['uid']] && !in_array($_GET['view'], array('me', 'trace', 'blacklist'))) {
 			unset($list[$value['uid']]);
@@ -210,7 +211,7 @@ if($fuids) {
 
 $navtitle = lang('core', 'title_friend_list');
 
-$navtitle = lang('space', 'sb_friend', array('who' => $space['username'])) . ' - ' . $_G['setting']['bbname'];
+$navtitle = lang('space', 'sb_friend', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_friend', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_share', array('who' => $space['username']));
 

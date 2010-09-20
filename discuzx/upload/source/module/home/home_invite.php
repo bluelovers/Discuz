@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_invite.php 16096 2010-08-31 08:11:12Z zhengqingpeng $
+ *      $Id: home_invite.php 17065 2010-09-20 03:04:57Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -92,7 +92,7 @@ $space = getspace($uid);
 if(empty($space)) {
 	showmessage('space_does_not_exist', '', array(), array('return' => true));
 }
-$jumpurl = $appid ? "userapp.php?mod=app&id=$appid&my_extra=invitedby_bi_$_GET[u]_$_GET[c]&my_suffix=Lw%3D%3D" : 'home.php?mod=space&uid='.$uid;
+$jumpurl = $appid ? "userapp.php?mod=app&id=$appid&my_extra=invitedby_bi_{$uid}_$_GET[c]&my_suffix=Lw%3D%3D" : 'home.php?mod=space&uid='.$uid;
 if($acceptconfirm) {
 
 	dsetcookie('invite_auth', '');
@@ -103,7 +103,7 @@ if($acceptconfirm) {
 
 	require_once libfile('function/friend');
 	if(friend_check($uid)) {
-		showmessage('you_have_friends', 'home.php?mod=space&uid='.$uid);
+		showmessage('you_have_friends', $jumpurl);
 	}
 
 	friend_make($space['uid'], addslashes($space['username']));

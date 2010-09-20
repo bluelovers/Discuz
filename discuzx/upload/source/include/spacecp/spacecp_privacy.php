@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_privacy.php 9904 2010-05-05 07:54:40Z zhengqingpeng $
+ *      $Id: spacecp_privacy.php 16792 2010-09-15 01:57:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,8 +17,12 @@ $operation = in_array($_GET['op'], array('base', 'feed', 'filter', 'getgroup')) 
 if(submitcheck('privacysubmit')) {
 
 	if($operation == 'base') {
+		$space['privacy']['view'] = array();
+		$viewtype = array('index', 'friend', 'wall', 'doing', 'blog', 'album', 'share', 'home');
 		foreach ($_POST['privacy']['view'] as $key => $value) {
-			$space['privacy']['view'][$key] = intval($value);
+			if(in_array($key, $viewtype)) {
+				$space['privacy']['view'][$key] = intval($value);
+			}
 		}
 	}
 

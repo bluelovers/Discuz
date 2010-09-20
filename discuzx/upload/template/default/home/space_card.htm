@@ -20,7 +20,7 @@
 				<!--{/if}-->
 			</p>
 			<!--{hook/space_card_baseinfo_middle}-->
-			<!--{if $space[spacenote]}--><div{if $allowupdatedoing}{eval $scdoingid='scdoing'.random(4);} id="return_$scdoingid" onclick="cardUpdatedoing('$scdoingid')"{/if}>$space[spacenote]<!--{if $allowupdatedoing}--> <a href="javascript:;" class="xi2">[{lang update}]</a><!--{/if}--></div><!--{/if}-->
+			<!--{if $space[spacenote]}--><div{if $allowupdatedoing}{eval $scdoingid='scdoing'.random(4);} id="return_$scdoingid" onclick="cardUpdatedoing('$scdoingid')"{/if}>$space[spacenote]<!--{if $allowupdatedoing}--> <a href="javascript:;" class="xi2">[{lang update_doing}]</a><!--{/if}--></div><!--{/if}-->
 			<!--{if $allowupdatedoing}-->
 				<form id="$scdoingid" method="post" action="home.php?mod=spacecp&ac=doing&inajax=1" onsubmit="return false;" style="display:none">
 					<input type="hidden" name="addsubmit" value="true" />

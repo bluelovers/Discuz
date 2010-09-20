@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_post.php 16538 2010-09-08 07:50:13Z zhengqingpeng $
+ *      $Id: task_post.php 17028 2010-09-19 06:00:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -86,7 +86,7 @@ class task_post {
 		}
 
 		$tbladd = $sqladd = '';
-		if($taskvars['threadid']) {
+		if($taskvars['act'] == 'newreply' && $taskvars['threadid']) {
 			$sqladd .= " AND p.tid='$taskvars[threadid]'";
 		} else {
 			if($taskvars['forumid']) {

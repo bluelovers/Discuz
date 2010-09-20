@@ -1,0 +1,10 @@
+/*
+[name]藍[/name]
+[iconbgcolor]#0053B9[/iconbgcolor]
+Powered by Discuz! X
+*/
+
+body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
+#nv { background-color: #0053B9; background-image: url(nv.png); }
+	#nv li { background-image: url(nv_a.png) !important; }
+	#nv li.a { background: #0075DB url(nv_a.png) no-repeat 0 100%; }

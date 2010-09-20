@@ -238,7 +238,7 @@ class block_member {
 			case 'show':
 				$tables[] = DB::table('home_show')." s";
 				$wheres[] = 's.uid=m.uid';
-				$sqlorderby = ' ORDER BY s.credit DESC';
+				$sqlorderby = ' ORDER BY s.unitprice DESC';
 				break;
 		}
 

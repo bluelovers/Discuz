@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_doing.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: space_doing.php 16856 2010-09-16 02:53:58Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -164,9 +164,11 @@ if($_G['uid']) {
 	$navtitle = lang('core', 'title_newest_doing');
 }
 
-$navtitle = lang('space', 'sb_doing', array('who' => $space['username'])) . ' - ' . $_G['setting']['bbname'];
-$metakeywords = lang('space', 'sb_doing', array('who' => $space['username']));
-$metadescription = lang('space', 'sb_doing', array('who' => $space['username']));
+if($space['username']) {
+	$navtitle = lang('space', 'sb_doing', array('who' => $space['username']));
+}
+$metakeywords = $navtitle;
+$metadescription = $navtitle;
 include_once template('diy:home/space_doing');
 
 ?>

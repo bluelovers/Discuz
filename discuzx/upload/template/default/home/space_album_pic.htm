@@ -154,7 +154,7 @@
 					</div>
 
 					<div class="d">
-						<!--{if $pic[title]}--><p id="a_set_title">$pic[title]</p><!--{/if}-->
+						<!--{if $pic[title]||$pic[status]}--><p id="a_set_title">$pic[title]<!--{if $pic[status] == 1}--><b>({lang moderate_need})</b><!--{/if}--></p><!--{/if}-->
 						<p class="xg1">
 							<!--{if $pic[hot]}--><span class="hot">{lang hot} <em>$pic[hot]</em></span><!--{/if}-->
 							<!--{if $do=='event'}--><a href="home.php?mod=space&uid=$pic[uid]" target="_blank">$pic[username]</a><!--{/if}-->

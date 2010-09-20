@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_medal.php 15047 2010-08-18 07:52:23Z monkey $
+ *      $Id: home_medal.php 16665 2010-09-13 01:39:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ if(empty($_G['gp_action'])) {
 	include libfile('function/forum');
 	$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." WHERE available='1' ORDER BY displayorder LIMIT 0,100");
 	while($medal = DB::fetch($query)) {
-		$medal['permission'] = formulaperm($medal['permission'], 2);
+		$medal['permission'] = medalformulaperm($medal['permission'], 2);
 		$medallist[$medal['medalid']] = $medal;
 	}
 
@@ -56,7 +56,7 @@ if(empty($_G['gp_action'])) {
 	$medalpermission = $medal['permission'] ? unserialize($medal['permission']) : '';
 	if($medalpermission[0]) {
 		include libfile('function/forum');
-		formulaperm(serialize(array('medal' => $medalpermission)), 1);
+		medalformulaperm(serialize(array('medal' => $medalpermission)), 1);
 
 		if($_G['forum_formulamessage']) {
 			showmessage('medal_permforum_nopermission', 'home.php?mod=medal', array('formulamessage' => $_G['forum_formulamessage'], 'usermsg' => $_G['forum_usermsg']));

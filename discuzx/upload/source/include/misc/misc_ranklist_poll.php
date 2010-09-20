@@ -30,17 +30,28 @@ switch($_G['gp_before']) {
 	default: $_G['gp_before'] = 'thisweek';
 }
 $orderby = 'heats DESC';
+$navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_orderby']) {
 	case 'heats':
 		$orderby = 'heats DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_poll_heat').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_poll_heat');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_poll_heat');
 		break;
 	case 'sharetimes':
 		$orderby = 'sharetimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_poll_share').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_poll_share');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_poll_share');
 		break;
 	case 'favtimes':
 		$orderby = 'favtimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_poll_favorite').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_poll_favorite');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_poll_favorite');
 		break;
-	default: $_G['gp_orderby'] = 'heats';
+	default:
+		$_G['gp_orderby'] = 'heats';
 }
 
 $dateline = !empty($before) ? TIMESTAMP - $before : 0;

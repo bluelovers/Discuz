@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16555 2010-09-08 10:05:12Z monkey $
+ *      $Id: lang_template.php 17057 2010-09-20 02:20:08Z monkey $
  *
  *      This file is automatically generate
  */
@@ -59,7 +59,7 @@ $lang = array (
   'password_confirm' => '確認密碼',
   'profile_email_verify' => '你的帳號處於非激活狀態，請收取郵件激活你的帳號',
   'profile_email_verify_comment' => '如果你沒有收到我們發送的系統郵件，請進入個人中心點擊「重新驗證 Email」或在「密碼和安全問題」中更換另外一個 Email 地址。注意：在完成激活之前，根據管理員設置，你將只能以待驗證會員的身份訪問論壇，你可能不能進行發帖等操作。激活成功後，上述限制將自動取消。',
-  'register_ip_address' => 'IP地址：',
+  'register_birthday_day' => '日',
   'register_manual_verify' => '請等待管理員審核你的帳號',
   'register_message' => '註冊原因',
   'register_message1' => '您填寫的註冊原因會被當作申請註冊的重要參考依據，請務必認真填寫，我們會認真審核。',
@@ -68,7 +68,6 @@ $lang = array (
   'register_profile_profile_username_tooshort' => '用戶名小於3個字符',
   'register_profile_username_toolong' => '用戶名超過 15 個字符',
   'register_succeed' => '感謝你註冊',
-  'register_thank_focus' => '感謝你的關注，你來自',
   'rulemessage' => '網站服務條款',
   'user_center' => '個人中心',
 );

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_logging.php 16384 2010-09-06 03:53:08Z zhengqingpeng $
+ *      $Id: member_logging.php 16806 2010-09-15 04:34:00Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -100,7 +100,7 @@ class logging_ctl {
 					$message = 1;
 					include template('member/login');
 				} else {
-					$param = array('username' => $_G['member']['username'], 'uid' => $_G['member']['uid']);
+					$param = array('username' => $_G['member']['username'], 'uid' => $_G['member']['uid'], 'syn' => $ucsynlogin ? 1 : 0);
 					if($_G['groupid'] == 8) {
 						showmessage('login_succeed_inactive_member', 'home.php?mod=space&do=home', $param, array('extrajs' => $ucsynlogin));
 					} else {

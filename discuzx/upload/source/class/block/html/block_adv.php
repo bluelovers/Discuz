@@ -48,6 +48,8 @@ class block_adv extends commonblock_html {
 			$adv = DB::fetch_first('SELECT * FROM '.DB::table('common_advertisement_custom')." WHERE name='$parameter[title]'");
 			if(empty($adv)) {
 				$advid = DB::insert('common_advertisement_custom', array('name'=>$parameter['title']), 1);
+			} else {
+				$advid = $adv['id'];
 			}
 		} elseif(!empty($parameter['adv'])) {
 		   $parameter['adv'] = addslashes($parameter['adv']);
@@ -57,7 +59,13 @@ class block_adv extends commonblock_html {
 			$return = 'Empty Ads';
 		}
 		if($advid) {
+			$flag = false;
+			if(getglobal('inajax')) {
+				$flag = true;
+				setglobal('inajax', 0);
+			}
 			$return = adshow('custom_'.$advid);
+			if($flag) setglobal('inajax', 1);
 		}
 		return array('html' => $return, 'data' => null);
 	}

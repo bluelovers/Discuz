@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 16591 2010-09-10 01:12:36Z monkey $
+ *      $Id: admincp_usergroups.php 17033 2010-09-19 07:04:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -234,7 +234,7 @@ EOT;
 						$projectid = substr($group['projectid'], 1);
 						$group_fields = DB::fetch_first("SELECT * FROM ".DB::table('common_usergroup_field')." WHERE groupid='$projectid'");
 						unset($group_fields['groupid']);
-						DB::update('common_usergroup_field', $group_fields);
+						DB::update('common_usergroup_field', $group_fields, "groupid='$projectid'");
 						$query = DB::query("SELECT fid, viewperm, postperm, replyperm, getattachperm, postattachperm, postimageperm FROM ".DB::table('forum_forumfield')."");
 						while($row = DB::fetch($query)) {
 							$upforumperm = array();
@@ -535,6 +535,7 @@ EOT;
 		showsetting('usergroups_edit_basic_hour_posts', 'maxpostsperhournew', $group['maxpostsperhour'], 'text');
 		showsetting('usergroups_edit_basic_seccode', 'seccodenew', $group['seccode'], 'radio');
 		showsetting('usergroups_edit_basic_disable_postctrl', 'disablepostctrlnew', $group['disablepostctrl'], 'radio');
+		showsetting('usergroups_edit_basic_ignore_censor', 'ignorecensornew', $group['ignorecensor'], 'radio');
 		showtablefooter();
 		showtagfooter('div');
 
@@ -722,14 +723,18 @@ EOT;
 		showtableheader();
 		showtitle('usergroups_edit_home');
 		showsetting('usergroups_edit_attach_max_space_size', 'maxspacesizenew', $group['maxspacesize'], 'text');
-		showsetting('usergroups_edit_home_allow_blog', 'allowblognew', $group['allowblog'], 'radio');
+		showsetting('usergroups_edit_home_allow_blog', 'allowblognew', $group['allowblog'], 'radio', '', 1);
 		showsetting('usergroups_edit_home_allow_blog_mod', 'allowblogmodnew', $group['allowblogmod'], 'radio');
-		showsetting('usergroups_edit_home_allow_doing', 'allowdoingnew', $group['allowdoing'], 'radio');
+		showtagfooter('tbody');
+		showsetting('usergroups_edit_home_allow_doing', 'allowdoingnew', $group['allowdoing'], 'radio', '', 1);
 		showsetting('usergroups_edit_home_allow_doing_mod', 'allowdoingmodnew', $group['allowdoingmod'], 'radio');
-		showsetting('usergroups_edit_home_allow_upload', 'allowuploadnew', $group['allowupload'], 'radio');
+		showtagfooter('tbody');
+		showsetting('usergroups_edit_home_allow_upload', 'allowuploadnew', $group['allowupload'], 'radio', '', 1);
 		showsetting('usergroups_edit_home_allow_upload_mod', 'allowuploadmodnew', $group['allowuploadmod'], 'radio');
-		showsetting('usergroups_edit_home_allow_share', 'allowsharenew', $group['allowshare'], 'radio');
+		showtagfooter('tbody');
+		showsetting('usergroups_edit_home_allow_share', 'allowsharenew', $group['allowshare'], 'radio', '', 1);
 		showsetting('usergroups_edit_home_allow_share_mod', 'allowsharemodnew', $group['allowsharemod'], 'radio');
+		showtagfooter('tbody');
 		showsetting('usergroups_edit_home_allow_poke', 'allowpokenew', $group['allowpoke'], 'radio');
 		showsetting('usergroups_edit_home_allow_friend', 'allowfriendnew', $group['allowfriend'], 'radio');
 		showsetting('usergroups_edit_home_allow_click', 'allowclicknew', $group['allowclick'], 'radio');
@@ -1016,6 +1021,7 @@ EOT;
 			'allowcommentitem' => intval($_G['gp_allowcommentitemnew']),
 			'exempt' => $exemptnew,
 			'raterange' => $raterangenew,
+			'ignorecensor' => intval($_G['gp_ignorecensornew']),
 		);
 		DB::update('common_usergroup_field', $dataarr, array('groupid' => $_G['gp_id']));
 

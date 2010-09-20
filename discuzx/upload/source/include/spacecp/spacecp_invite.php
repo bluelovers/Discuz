@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_invite.php 16425 2010-09-06 09:28:37Z zhengqingpeng $
+ *      $Id: spacecp_invite.php 16883 2010-09-16 06:28:39Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,12 +63,11 @@ if($appid) {
 if(!$creditnum) {
 	$inviteurl = getinviteurl(0, 0, $appid);
 }
+if(!$allowinvite) {
+	showmessage('close_invite', $baseurl, array(), $_G['inajax'] ? array('showdialog'=>1, 'showmsg' => true, 'closetime' => true) : array());
+}
 
 if(submitcheck('emailinvite')) {
-
-	if(!$allowinvite) {
-		showmessage('close_invite', $baseurl);
-	}
 
 	if(!$_G['group']['allowmailinvite']) {
 		showmessage('mail_invite_not_allow', $baseurl);
@@ -128,6 +127,39 @@ if(submitcheck('emailinvite')) {
 	}
 
 	showmessage('send_result_succeed',$baseurl);
+
+} else if(submitcheck('invitesubmit')) {
+
+	$invitenum = intval($_POST['invitenum']);
+	if($invitenum < 1) $invitenum = 1;
+
+	if($_G['group']['maxinvitenum']) {
+		$daytime = $_G['timestamp'] - 24*3600;
+		$invitecount = getcount('common_invite', "uid='$_G[uid]' AND dateline>'$daytime'");
+		if($invitecount + $invitenum > $_G['group']['maxinvitenum']) {
+			showmessage('max_invitenum_error', NULL, array('maxnum'=>$_G['group']['maxinvitenum']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+		}
+	}
+
+	$allcredit = $invitenum * $creditnum;
+	if($space[$creditkey] < $allcredit) {
+		showmessage('mail_credit_inadequate', $baseurl, array(), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+	}
+
+	$codes = array();
+	$dateline = $_G['timestamp'];
+	for($i=0; $i<$invitenum; $i++) {
+		$code = strtolower(random(6));
+		$codes[] = "('$_G[uid]', '$code', '$dateline', '".($_G['group']['maxinviteday']?($_G['timestamp']+$_G['group']['maxinviteday']*24*3600):0)."', '$_G[clientip]')";
+	}
+
+	if($codes) {
+		DB::query("INSERT INTO ".DB::table('common_invite')." (uid, code, dateline, endtime, inviteip) VALUES ".implode(',', $codes));
+		require_once libfile('class/credit');
+		$creditobj = new credit();
+		$creditobj->updatemembercount(array($creditkey=>0-$allcredit), $_G['uid']);
+	}
+	showmessage('do_success', $baseurl, array('deduction' => $allcredit, 'dateline' => $dateline), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true, 'return' => false));
 }
 
 if($_GET['op'] == 'resend') {
@@ -171,6 +203,14 @@ if($_GET['op'] == 'resend') {
 		showmessage('there_is_no_record_of_invitation_specified', $baseurl, array(), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 
+} elseif ($_GET['op'] == 'showinvite') {
+	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE uid='$_G[uid]' ORDER BY dateline DESC");
+	while ($value = DB::fetch($query)) {
+		if(!$value['fuid'] && !$value['type']) {
+			$inviteurl = getinviteurl($value['id'], $value['code'], $value['appid']);
+			$list[$value[code]] = $inviteurl;
+		}
+	}
 } else {
 
 	$list = $flist = $dels = array();
@@ -189,9 +229,7 @@ if($_GET['op'] == 'resend') {
 				continue;
 			}
 
-			if($creditnum) {
-				$inviteurl = getinviteurl($value['id'], $value['code'], $value['appid']);
-			}
+			$inviteurl = getinviteurl($value['id'], $value['code'], $value['appid']);
 
 			if($value['type']) {
 				$maillist[] = array(
@@ -210,45 +248,6 @@ if($_GET['op'] == 'resend') {
 		DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id IN (".dimplode($dels).")");
 	}
 
-	if($creditnum) {
-		$list_str = empty($list)?'':implode("\n", $list);
-		if(submitcheck('invitesubmit')) {
-
-			if(!$allowinvite) {
-				showmessage('close_invite', $baseurl);
-			}
-
-			$invitenum = intval($_POST['invitenum']);
-			if($invitenum < 1) $invitenum = 1;
-
-			if($_G['group']['maxinvitenum']) {
-				$daytime = $_G['timestamp'] - 24*3600;
-				$invitecount = getcount('common_invite', "uid='$_G[uid]' AND dateline>'$daytime'");
-				if($invitecount + $invitenum > $_G['group']['maxinvitenum']) {
-					showmessage('max_invitenum_error', NULL, array('maxnum'=>$_G['group']['maxinvitenum']));
-				}
-			}
-
-			$allcredit = $invitenum * $creditnum;
-			if($space[$creditkey] < $allcredit) {
-				showmessage('mail_credit_inadequate', $baseurl);
-			}
-
-			$codes = array();
-			for ($i=0; $i<$invitenum; $i++) {
-				$code = strtolower(random(6));
-				$codes[] = "('$_G[uid]', '$code', '$_G[timestamp]', '".($_G['group']['maxinviteday']?($_G['timestamp']+$_G['group']['maxinviteday']*24*3600):0)."', '$_G[clientip]')";
-			}
-
-			if($codes) {
-				DB::query("INSERT INTO ".DB::table('common_invite')." (uid, code, dateline, endtime, inviteip) VALUES ".implode(',', $codes));
-				require_once libfile('class/credit');
-				$creditobj = new credit();
-				$creditobj->updatemembercount(array($creditkey=>0-$allcredit), $_G['uid']);
-			}
-			showmessage('do_success', 'home.php?mod=spacecp&ac=invite&quickforward=1');
-		}
-	}
 	$uri = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
 	$uri = substr($uri, 0, strrpos($uri, '/')+1);
 

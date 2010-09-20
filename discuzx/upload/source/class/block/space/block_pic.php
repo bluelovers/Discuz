@@ -93,6 +93,23 @@ class block_pic {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_attachment' => array(
+					'name' => lang('blockclass', 'blockclass_forum_attachment'),
+					'script' => 'attachment',
+					'searchkeys' => array('username', 'uid', 'viewnum'),
+					'replacekeys' => array('author', 'authorid', 'downloads'),
+				),
+				'group_attachment' => array(
+					'name' => lang('blockclass', 'blockclass_group_attachment'),
+					'script' => 'groupattachment',
+					'searchkeys' => array('username', 'uid', 'viewnum'),
+					'replacekeys' => array('author', 'authorid', 'downloads'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;
@@ -148,7 +165,7 @@ class block_pic {
 				'url' => "home.php?mod=space&do=album&uid=$data[uid]&picid=$data[picid]",
 				'pic' => $data['remote'] >= 2 ? 'forum/'.$data['filepath'] : 'album/'.$data['filepath'],
 				'picflag' => ($data['remote'] == 1 || $data['remote'] == 3) ? '2' : '1',
-				'summary' => '',
+				'summary' => $data['title'],
 				'fields' => array(
 					'fulltitle' => $data['title'],
 					'uid'=>$data['uid'],

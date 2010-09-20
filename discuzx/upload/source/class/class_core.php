@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 16587 2010-09-09 10:03:13Z monkey $
+ *      $Id: class_core.php 17051 2010-09-20 00:51:50Z cnteacher $
  */
 
 define('IN_DISCUZ', true);
@@ -87,11 +87,17 @@ class discuz_core {
 		define('EXT_OBGZIP', function_exists('ob_gzhandler'));
 
 		define('TIMESTAMP', time());
-
 		$this->timezone_set();
 
 		if(!defined('DISCUZ_CORE_FUNCTION') && !@include(DISCUZ_ROOT.'./source/function/function_core.php')) {
-			$this->error('function_core.php is missing');
+			exit('function_core.php is missing');
+		}
+
+		if(function_exists('ini_get')) {
+			$memorylimit = @ini_get('memory_limit');
+			if($memorylimit && return_bytes($memorylimit) < 33554432 && function_exists('ini_set')) {
+				ini_set('memory_limit', '128m');
+			}
 		}
 
 		define('IS_ROBOT', checkrobot());
@@ -166,9 +172,8 @@ class discuz_core {
 	}
 
 	function _init_input() {
-
 		if (isset($_GET['GLOBALS']) ||isset($_POST['GLOBALS']) ||  isset($_COOKIE['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-			error('request_tainting');
+			system_error('request_tainting');
 		}
 
 		if(!empty($_GET['rewrite'])) {
@@ -220,7 +225,7 @@ class discuz_core {
 				header('location: install');
 				exit;
 			} else {
-				error('config_notfound');
+				system_error('config_notfound');
 			}
 		}
 
@@ -258,7 +263,7 @@ class discuz_core {
 		if($this->config['security']['urlxssdefend'] && $_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_SERVER['REQUEST_URI'])) {
 			$temp = urldecode($_SERVER['REQUEST_URI']);
 			if(strpos($temp, '<') !== false || strpos($temp, '"') !== false) {
-				error('request_tainting');
+				system_error('request_tainting');
 			}
 		}
 
@@ -281,20 +286,18 @@ class discuz_core {
 	}
 
 	function _get_client_ip() {
-		$clientip = '';
-		if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
-			$clientip = getenv('HTTP_CLIENT_IP');
-		} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-			$clientip = getenv('HTTP_X_FORWARDED_FOR');
-		} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
-			$clientip = getenv('REMOTE_ADDR');
-		} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
-			$clientip = $_SERVER['REMOTE_ADDR'];
+		$ip = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
+			foreach ($matches[0] AS $xip) {
+				if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
+					$ip = $xip;
+					break;
+				}
+			}
 		}
-
-		preg_match("/[\d\.]{7,15}/", $clientip, $clientipmatches);
-		$clientip = $clientipmatches[0] ? $clientipmatches[0] : 'unknown';
-		return $clientip;
+		return $ip;
 	}
 
 	function _init_db() {
@@ -553,38 +556,6 @@ class discuz_core {
 		}
 	}
 
-	function error($msg, $halt = true) {
-		$this->error_log($msg);
-		echo $msg;
-		$halt && exit();
-	}
-
-	function error_log($message) {
-		$time = TIMESTAMP;
-		$file =  DISCUZ_ROOT.'./data/log/'.date("Ym").'_errorlog.php';
-		$hash = md5($message);
-		$message = "<?PHP exit;?>\t{$time}\t".str_replace(array("\t", "\r", "\n"), " ", $message)."\t$hash\n";
-		if($fp = @fopen($file, 'rb')) {
-			$lastlen = 10000;
-			$maxtime = 100;
-			$offset = filesize($file) - $lastlen;
-			if($offset > 0) {
-				fseek($fp, $offset);
-			}
-			if($data = fread($fp, $lastlen)) {
-				$array = explode("\n", $data);
-				if(is_array($array)) foreach($array as $key => $val) {
-					$row = explode("\t", $val);
-					if($row[0] != '<?PHP exit;?>') continue;
-					if($row[3] == $hash && ($row[1] > $time - $maxtime)) {
-						return;
-					}
-				}
-			}
-		}
-		error_log($message, 3, $file);
-	}
-
 }
 
 class db_mysql
@@ -627,6 +598,7 @@ class db_mysql
 			$this->config[$serverid]['pconnect']
 			);
 		$this->curlink = $this->link[$serverid];
+
 	}
 
 	function _dbconnect($dbhost, $dbuser, $dbpw, $dbcharset, $dbname, $pconnect) {
@@ -756,47 +728,8 @@ class db_mysql
 	}
 
 	function halt($message = '', $sql = '') {
-		global $_G;
-		$dberror = $this->error();
-		$dberrno = $this->errno();
-		$phperror = '<table style="font-size:11px" cellpadding="0"><tr><td width="50"></td><td width="270">File</td><td width="80">Line</td><td>Function</td></tr>';
-		$backtrace = array();
-		$debug_backtrace = debug_backtrace();
-		krsort($debug_backtrace);
-		foreach ($debug_backtrace as $k => $error) {
-			$error['file'] = str_replace(DISCUZ_ROOT, '', $error['file']);
-			$error['class'] = isset($error['class']) ? $error['class'] : '';
-			$error['type'] = isset($error['type']) ? $error['type'] : '';
-			$error['function'] = isset($error['function']) ? $error['function'] : '';
-			$phperror .= "<tr><td>".(count($debug_backtrace) - $k).":</td><td>$error[file]</td><td>$error[line]</td><td>$error[class]$error[type]$error[function]()</td></tr>";
-			$backtrace[] = $error['file'].':'.$error['line'];
-		}
-
-		$phperror .= '</table>';
-		$helplink = "http://faq.comsenz.com/?type=mysql&dberrno=".rawurlencode($dberrno)."&dberror=".rawurlencode($dberror);
-		@header('Content-Type: text/html; charset='.$_G['config']['output']['charset']);
-		echo '<div style="position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;line-height:1.5em">'.
-
-		error('db_error', array(
-			'$message' => error('db_'.$message, array(), true),
-			'$info' => $dberror ? error('db_error_message', array('$dberror' => $dberror), true) : '',
-			'$sql' => $sql ? error('db_error_sql', array('$sql' => str_replace($this->tablepre, '{tablepre}', $sql)), true) : '',
-			'$errorno' => $dberrno ? error('db_error_no', array('$dberrno' => $dberrno), true) : '',
-			'$helplink' => $helplink,
-			'$backtrace' => error('db_error_backtrace', array('$backtrace' => implode(' -> ', $backtrace)), true),
-			), true);
-		echo "<b>Backtrace</b><br />$phperror<br /></div>";
-		array_pop($backtrace);
-		array_pop($backtrace);
-		$errormsg = error('db_'.$message, array(), true)."<br />";
-		$errormsg .= "<b>Errno:</b>$dberrno<br /><b>Error:</b>$dberror<br />";
-		if($sql) {
-			$errormsg .= '<b>SQL:</b>'.str_replace($this->tablepre, '{tablepre}', $sql);
-		}
-		$errormsg .= "<br />";
-		$errormsg .= '<b>Backtrace:</b>'.implode(' -> ', $backtrace);
-		discuz_core::error_log($errormsg);
-		exit();
+		require_once libfile('class/error');
+		discuz_error::db_error($message, $sql);
 	}
 
 }
@@ -896,7 +829,7 @@ class DB
 	}
 
 	function free_result($query) {
-		return DB::_execute('free_result');
+		return DB::_execute('free_result', $query);
 	}
 
 	function error() {
@@ -921,7 +854,7 @@ class DB
 	}
 
 	function checkquery($sql) {
-		static $status = null, $checkcmd = array('SELECT', 'UPDATE', 'INSERT', 'REPLACE');
+		static $status = null, $checkcmd = array('SELECT', 'UPDATE', 'INSERT', 'REPLACE', 'DELETE');
 		if($status === null) $status = getglobal('config/security/querysafe/status');
 		if($status) {
 			$cmd = trim(strtoupper(substr($sql, 0, strpos($sql, ' '))));

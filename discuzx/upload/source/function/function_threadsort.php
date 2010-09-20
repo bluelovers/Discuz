@@ -295,7 +295,7 @@ function threadsortshow($sortid, $tid) {
 						if(empty($templatearray['viewthread'])) {
 							$maxwidth = $option['maxwidth'] ? 'width="'.$option['maxwidth'].'"' : '';
 							$maxheight = $option['maxheight'] ? 'height="'.$option['maxheight'].'"' : '';
-							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<a href=\"".$imgoptiondata['url']."\" target=\"_blank\"><img src=\"".$imgoptiondata['url']."\" onload=\"thumbImg(this)\" $maxwidth $maxheight border=\"0\"></a>" : '';
+							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<img src=\"".$imgoptiondata['url']."\" onload=\"thumbImg(this)\" $maxwidth $maxheight border=\"0\">" : '';
 						} else {
 							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? $imgoptiondata['url'] : './static/image/common/nophoto.gif';
 						}

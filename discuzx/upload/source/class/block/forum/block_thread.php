@@ -173,8 +173,31 @@ class block_thread {
 					'replies' => array('name' => lang('blockclass', 'blockclass_thread_field_replies'), 'formtype' => 'text', 'datatype' => 'int'),
 					'views' => array('name' => lang('blockclass', 'blockclass_thread_field_views'), 'formtype' => 'text', 'datatype' => 'int'),
 					'heats' => array('name' => lang('blockclass', 'blockclass_thread_field_heats'), 'formtype' => 'text', 'datatype' => 'int'),
-					'recomments' => array('name' => lang('blockclass', 'blockclass_thread_field_recomments'), 'formtype' => 'text', 'datatype' => 'int'),
+					'recommends' => array('name' => lang('blockclass', 'blockclass_thread_field_recommends'), 'formtype' => 'text', 'datatype' => 'int'),
 				);
+	}
+
+	function fieldsconvert() {
+		return array(
+				'portal_article' => array(
+					'name' => lang('blockclass', 'blockclass_portal_article'),
+					'script' => 'article',
+					'searchkeys' => array('author', 'authorid', 'forumurl', 'forumname', 'posts', 'views', 'replies'),
+					'replacekeys' => array('username', 'uid', 'caturl', 'catname', 'articles', 'viewnum', 'commentnum'),
+				),
+				'space_blog' => array(
+					'name' => lang('blockclass', 'blockclass_space_blog'),
+					'script' => 'blog',
+					'searchkeys' => array('author', 'authorid', 'views', 'replies'),
+					'replacekeys' => array('username', 'uid', 'viewnum', 'replynum'),
+				),
+				'group_thread' => array(
+					'name' => lang('blockclass', 'blockclass_group_thread'),
+					'script' => 'groupthread',
+					'searchkeys' => array('forumname', 'forumurl'),
+					'replacekeys' => array('groupname', 'groupurl'),
+				),
+			);
 	}
 
 	function getsetting() {
@@ -208,7 +231,7 @@ class block_thread {
 		$returndata = array('html' => '', 'data' => '');
 		$parameter = $this->cookparameter($parameter);
 
-		loadcache('forums');
+		loadcache('forums', 'stamps');
 		$tids		= !empty($parameter['tids']) ? explode(',', $parameter['tids']) : array();
 		$uids		= !empty($parameter['uids']) ? explode(',', $parameter['uids']) : array();
 		$startrow	= isset($parameter['startrow']) ? intval($parameter['startrow']) : 0;
@@ -234,15 +257,6 @@ class block_thread {
 				unset($parameter['fids'][0]);
 			}
 			$fids = $parameter['fids'];
-		}
-		if(empty($fids)) {
-			if(!empty($_G['setting']['allowviewuserthread'])) {
-				$fids = $_G['setting']['allowviewuserthread'];
-			} else {
-				return $returndata;
-			}
-		} else {
-			$fids = dimplode($fids);
 		}
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
@@ -273,7 +287,7 @@ class block_thread {
 		} else {
 			$keyword = '';
 		}
-		$sql = ($fids ? ' AND t.fid IN ('.$fids.')' : '')
+		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($uids ? ' AND t.authorid IN ('.dimplode($uids).')' : '')
 			.($typeids ? ' AND t.typeid IN ('.dimplode($typeids).')' : '')
@@ -349,6 +363,7 @@ class block_thread {
 					'lastpost' => $data['lastpost'],
 					'dateline' => $data['dateline'],
 					'replies' => $data['replies'],
+					'icon' => $data['icon'] > 0 ? STATICURL.'image/stamp/'.$_G['cache']['stamps'][$data['icon']]['url'] : '',
 					'forumurl' => 'forum.php?mod=forumdisplay&fid='.$data['fid'],
 					'forumname' => $_G['cache']['forums'][$data['fid']]['name'],
 					'typename' => $threadtypes[$data['typeid']]['name'],

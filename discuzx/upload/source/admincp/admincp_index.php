@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_index.php 16511 2010-09-08 01:26:26Z liulanbo $
+ *      $Id: admincp_index.php 16997 2010-09-19 02:05:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -131,7 +131,7 @@ if($isfounder) {
 		if(empty($_G['gp_new_mastermobile'])) {
 			$save_mastermobile = $_G['gp_new_mastermobile'];
 			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('mastermobile', '{$_G['gp_new_mastermobile']}')");
-		} elseif($save_mastermobile != $_G['gp_new_mastermobile'] && strlen($_G['gp_new_mastermobile']) == 11 && is_numeric($_G['gp_new_mastermobile']) && (substr($_G['gp_new_mastermobile'], 0, 2) == '13' || substr($_G['gp_new_mastermobile'], 0, 2) == '15')) {
+		} elseif($save_mastermobile != $_G['gp_new_mastermobile'] && strlen($_G['gp_new_mastermobile']) == 11 && is_numeric($_G['gp_new_mastermobile']) && in_array(substr($_G['gp_new_mastermobile'], 0, 2), array('13', '15', '18'))) {
 			$save_mastermobile = $_G['gp_new_mastermobile'];
 			$_G['gp_new_mastermobile'] = authcode($_G['gp_new_mastermobile'], 'ENCODE', $_G['config']['security']['authkey']);
 			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('mastermobile', '{$_G['gp_new_mastermobile']}')");
@@ -280,7 +280,7 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight team"'
 	cplang('home_dev_skins'),
 	'<a href="http://www.discuz.net/home.php?mod=space&uid=294092" class="lightlink2 smallfont" target="_blank">Fangming \'Lushnis\' Li</a>
 	<a href="http://www.discuz.net/home.php?mod=space&uid=674006" class="lightlink2 smallfont" target="_blank">Jizhou \'Iavav\' Yuan</a>
-	<a href="http://www.discuz.net/home.php?mod=space&uid=362790" class="lightlink2 smallfont" target="_blank">Defeng \'Dfox\' Xu</a>
+	<a href="http://www.discuz.net/home.php?mod=space&uid=371830" class="lightlink2 smallfont" target="_blank">Yulong \'Dragonlicn\' Li</a>
 	<a href="http://www.discuz.net/home.php?mod=space&uid=717854" class="lightlink2 smallfont" target="_blank">Ruitao \'Pony.M\' Ma</a>'
 ));
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight team"'), array(

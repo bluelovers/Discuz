@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_ec.php 16491 2010-09-07 07:57:01Z wangjinbo $
+ *      $Id: admincp_ec.php 16917 2010-09-17 01:49:50Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -91,9 +91,7 @@ if($operation == 'alipay') {
 		showtitle('ec_alipay');
 		showsetting('ec_alipay_account', 'settingsnew[ec_account]', $settings['ec_account'], 'text');
 		showsetting('ec_alipay_check', '', '',
-			'<a href="'.ADMINSCRIPT.'?action=ec&operation=alipay&checktype=credit" target="_blank">'.$lang['ec_alipay_checklink_credit'].'</a><br />'.
-			'<a href="'.ADMINSCRIPT.'?action=ec&operation=alipay&checktype=virtualgoods" target="_blank">'.$lang['ec_alipay_checklink_virtualgoods'].'</a><br />'.
-			'<a href="'.ADMINSCRIPT.'?action=ec&operation=alipay&checktype=goods" target="_blank">'.$lang['ec_alipay_checklink_goods'].'</a><br />'
+			'<a href="'.ADMINSCRIPT.'?action=ec&operation=alipay&checktype=credit" target="_blank">'.$lang['ec_alipay_checklink_credit'].'</a><br />'
 		);
 		showtitle('ec_contract');
 		showsetting('ec_alipay_partner', 'settingsnew[ec_partner]', $ec_partner, 'text');
@@ -147,7 +145,7 @@ if($operation == 'alipay') {
 			$trade = array(
 				'subject' => $lang['ec_tenpay_check_virtualgoodssubject'],
 				'itemtype' => 1,
-				'tenpayaccount' => $settings['ec_account'],
+				'tenpayaccount' => $settings['ec_tenpay_opentrans_chnid'],
 			);
 			$tradelog = array(
 				'orderid' => 'TEST'.dgmdate(TIMESTAMP, 'YmdHis').random(18),
@@ -164,7 +162,7 @@ if($operation == 'alipay') {
 			$trade = array(
 				'subject' => $lang['ec_tenpay_check_goodssubject'],
 				'itemtype' => 1,
-				'tenpayaccount' => $settings['ec_account'],
+				'tenpayaccount' => $settings['ec_tenpay_opentrans_chnid'],
 			);
 			$tradelog = array(
 				'orderid' => 'TEST'.dgmdate(TIMESTAMP, 'YmdHis').random(18),
@@ -210,7 +208,10 @@ if($operation == 'alipay') {
 		$tenpay_securitycodemask = $settings['ec_tenpay_key'] ? $settings['ec_tenpay_key']{0}.'********'.substr($settings['ec_tenpay_key'], -4) : '';
 		showsetting('ec_tenpay_key', 'settingsnew[ec_tenpay_key]', $tenpay_securitycodemask, 'text');
 		showsetting('ec_tenpay_check', '', '',
-			'<a href="'.ADMINSCRIPT.'?action=ec&operation=tenpay&checktype=credit" target="_blank">'.$lang['ec_alipay_checklink_credit'].'</a><br />');
+			'<a href="'.ADMINSCRIPT.'?action=ec&operation=tenpay&checktype=credit" target="_blank">'.$lang['ec_alipay_checklink_credit'].'</a><br />'.
+			'<a href="'.ADMINSCRIPT.'?action=ec&operation=tenpay&checktype=virtualgoods" target="_blank">'.$lang['ec_alipay_checklink_virtualgoods'].'</a><br />'.
+			'<a href="'.ADMINSCRIPT.'?action=ec&operation=tenpay&checktype=goods" target="_blank">'.$lang['ec_alipay_checklink_goods'].'</a><br />'
+		);
 		showtablefooter();
 
 		showtableheader('', 'notop');
@@ -228,7 +229,7 @@ if($operation == 'alipay') {
 		$settingsnew['ec_tenpay_opentrans_key'] = trim($settingsnew['ec_tenpay_opentrans_key']);
 		$tenpay_securitycodemask = $settings['ec_tenpay_opentrans_key'] ? $settings['ec_tenpay_opentrans_key']{0}.'********'.substr($settings['ec_tenpay_opentrans_key'], -4) : '';
 		$settingsnew['ec_tenpay_opentrans_key'] = $tenpay_securitycodemask == $settingsnew['ec_tenpay_opentrans_key'] ? $settings['ec_tenpay_opentrans_key'] : $settingsnew['ec_tenpay_opentrans_key'];
-		if($settingsnew['ec_tenpay_direct'] && (empty($settingsnew['ec_tenpay_bargainor']) || !preg_match('/^\d{10}$/', $settingsnew['ec_tenpay_bargainor']))) {
+		if($settingsnew['ec_tenpay_direct'] && (!empty($settingsnew['ec_tenpay_bargainor']) && !preg_match('/^\d{10}$/', $settingsnew['ec_tenpay_bargainor']))) {
 			cpmsg('tenpay_bargainor_invalid', 'action=ec&operation=tenpay', 'error');
 		}
 		if($settingsnew['ec_tenpay_direct'] && (empty($settingsnew['ec_tenpay_key']) || !preg_match('/^[a-zA-Z0-9]{32}$/', $settingsnew['ec_tenpay_key']))) {

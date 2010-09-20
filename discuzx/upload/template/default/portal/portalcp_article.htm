@@ -129,7 +129,7 @@
 							<dt>{lang article_author}</dt>
 							<dd><input type="text" name="author" class="px p_fre" value="$article[author]" size="30" /></dd>
 						</dl>
-						
+
 						<!--{if $article['aid']}-->
 						<dl>
 							<dt>{lang article_page}</dt>
@@ -213,7 +213,7 @@
 					<div class="exfm pns"><!--{template common/seccheck}--></div>
 				<!--{/if}-->
 
-				<div class="ptm">
+				<div class="ptm pbm">
 					<button type="button" id="issuance" class="pn pnc" name="articlebutton" onclick="validate(this);"><strong>{lang submit}</strong></button>
 					<label><input type="checkbox" name="addpage" value="1" class="pc"> {lang article_page_save_after}</label>
 					<!--{if $cate[allowcomment]}--><span class="pipe">|</span><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} /> {lang article_forbidcomment_description}</label><!--{/if}-->

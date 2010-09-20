@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_nav.php 15872 2010-08-27 08:44:35Z zhengqingpeng $
+ *      $Id: admincp_nav.php 16727 2010-09-14 00:21:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -635,7 +635,7 @@ EOT;
 			}
 			if($_G['gp_deleteicon'] && $nav['icon']) {
 				$valueparse = parse_url($nav['icon']);
-				if(!isset($valueparse['host'])) {
+				if(!isset($valueparse['host']) && !strexists($nav['icon'], '{STATICURL}')) {
 					@unlink($_G['setting']['attachurl'].'common/'.$nav['icon']);
 				}
 				$iconnew = '';
@@ -809,7 +809,7 @@ EOT;
 			}
 			if($_G['gp_deleteicon'] && $nav['icon']) {
 				$valueparse = parse_url($nav['icon']);
-				if(!isset($valueparse['host'])) {
+				if(!isset($valueparse['host']) && !strexists($nav['icon'], '{STATICURL}')) {
 					@unlink($_G['setting']['attachurl'].'common/'.$nav['icon']);
 				}
 				$iconnew = '';

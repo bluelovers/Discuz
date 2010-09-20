@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home.php 12262 2010-07-02 04:28:06Z monkey $
+ *      $Id: home.php 16805 2010-09-15 03:56:11Z zhangguosheng $
  */
 
 define('APPTYPEID', 1);
@@ -19,7 +19,7 @@ require_once './source/function/function_home.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('magic','userapp','usergroups', 'blockclass');
+$cachelist = array('magic','userapp','usergroups');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 

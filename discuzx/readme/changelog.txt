@@ -1,5 +1,5 @@
 +======================================+
-   Discuz! X1.5RC Release 20100901 
+   Discuz! X1.5 Release 20100920 
 +======================================+
 
 [風格模板]
@@ -103,8 +103,9 @@
 +--------------------------------------+
 往日版本( Old Vision )
 +--------------------------------------+
-Discuz! X1 Release 20100723
-Discuz! X1 Release 20100613
-Discuz! X1 Release 20100601
+Discuz! X1 Beta Release 20100501
 Discuz! X1 Release 20100518
-Discuz! X1Beta Release 20100501
+Discuz! X1 Release 20100601
+Discuz! X1 Release 20100613
+Discuz! X1 Release 20100723
+Discuz! X1.5RC Release 20100901

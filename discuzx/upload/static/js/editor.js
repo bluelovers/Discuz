@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 16574 2010-09-09 06:10:19Z monkey $
+	$Id: editor.js 16869 2010-09-16 05:21:15Z monkey $
 */
 
 var DISCUZCODE = [];
@@ -96,7 +96,9 @@ function initEditor() {
 		_attachEvent(window, 'scroll', function () { editorcontrolpos(); }, document);
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
-		$(editorid + '_fullswitcher').style.display = 'none';
+		$(editorid + '_fullswitcher').onclick = null;
+		$(editorid + '_fullswitcher').className = 'xg1';
+		$(editorid + '_fullswitcher').title = '你的瀏覽器不支持此功能';
 	}
 	if($(editorid + '_svdsecond') && savedatat === null) {
 		savedatac = savedataInterval;
@@ -117,6 +119,8 @@ function savedataTime() {
 		d = new Date();
 		var h = d.getHours();
 		var m = d.getMinutes();
+		h = h < 10 ? '0' + h : h;
+		m = m < 10 ? '0' + m : m;
 		setEditorTip('數據已於 ' + h + ':' + m + ' 保存');
 	}
 	$(editorid + '_svdsecond').innerHTML = '<a title="點擊關閉自動保存" href="javascript:;" onclick="setAutosave()">' + savedatac + ' 秒後保存</a> ';
@@ -328,8 +332,8 @@ function ctlent(event) {
 	if(event.keyCode == 8) {
 		var sel = getSel();
 		if(sel) {
-			insertText('', sel.length - 1, 0);
 			doane(event);
+			insertText('', sel.length - 1, 0);
 		}
 	}
 }
@@ -953,7 +957,7 @@ function showEditorMenu(tag, params) {
 					}
 					str += '[/table]\n';
 				}
-				insertText(str, str.length - pos[1], 0, false, sel);
+				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'aud':
 				var auto = $(ctrlid + '_param_2').checked ? '=1' : '';
@@ -980,7 +984,7 @@ function showEditorMenu(tag, params) {
 				}
 				var auto = $(ctrlid + '_param_4').checked ? ',1' : '';
 				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + auto +']' + mediaUrl + '[/media]';
-				insertText(str, str.length - pos[1], 0, false, sel);
+				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'image':
 				var width = parseInt($(ctrlid + '_param_2').value);
@@ -991,7 +995,7 @@ function showEditorMenu(tag, params) {
 					style += width ? ' width=' + width : '';
 					style += height ? ' height=' + height : '';
 					var str = '<img src=' + src + style + ' border=0 />';
-					insertText(str, str.length - pos[1], 0, false, sel);
+					insertText(str, str.length, 0, false, sel);
 				} else {
 					style += width || height ? '=' + width + ',' + height : '';
 					insertText('[img' + style + ']' + src + '[/img]', 0, 0, false, sel);

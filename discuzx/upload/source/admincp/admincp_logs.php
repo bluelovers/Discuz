@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 16220 2010-09-02 03:08:42Z chenchunshao $
+ *      $Id: admincp_logs.php 16982 2010-09-18 01:43:29Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -102,7 +102,7 @@ if($operation == 'illegal') {
 	showtips('logs_tips_ban');
 }
 showformheader("logs&operation=$operation");
-showtableheader('', 'fixpadding');
+showtableheader('', 'fixpadding" style="table-layout: fixed');
 $filters = '';
 if($operation == 'illegal') {
 
@@ -428,7 +428,7 @@ EOD;
 
 } elseif($operation == 'error') {
 
-	showtablerow('class="header"', array('class="td23"', 'class="td24"', 'class="td24"'), array(
+	showtablerow('class="header"', array('class="td23"', 'class=""'), array(
 		cplang('time'),
 		cplang('message'),
 	));
@@ -440,7 +440,7 @@ EOD;
 
 		showtablerow('', array('class="bold"'), array(
 			dgmdate($log[1], 'Y-m-d H:i:s'),
-			$log[2],
+			$log[2].'<br>'.$log[4].'<br>'.$log[5]
 		));
 
 	}
@@ -728,6 +728,8 @@ function get_log_files($logdir = '', $action = 'action') {
 if($_G['gp_keyword']) {
 	$filters = '';
 }
+showtablefooter();
+showtableheader('', 'fixpadding');
 if($operation != 'credit') {
 	showsubmit($operation == 'invite' ? 'invitesubmit' : '', 'submit', 'del', $filters, $multipage.(empty($_G['gp_keyword']) ? cplang('logs_lpp').':<select onchange="if(this.options[this.selectedIndex].value != \'\') {window.location=\''.ADMINSCRIPT.'?action=logs&operation='.$operation.'&lpp=\'+this.options[this.selectedIndex].value }"><option value="20" '.$checklpp[20].'> 20 </option><option value="40" '.$checklpp[40].'> 40 </option><option value="80" '.$checklpp[80].'> 80 </option></select>' : ''). '&nbsp;<input type="text" class="txt" name="keyword" value="'.$_G['gp_keyword'].'" />'.($_G['gp_day'] ? '<input type="hidden" class="btn" value="'.$_G['gp_day'].'" />' : '').'<input type="submit" class="btn" value="'.$lang['search'].'" />');
 }

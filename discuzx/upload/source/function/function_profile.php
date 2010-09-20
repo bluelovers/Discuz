@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 16542 2010-09-08 08:12:13Z congyushuai $
+ *      $Id: function_profile.php 16778 2010-09-14 08:43:20Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -95,15 +95,19 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 				.'</select>';
 
 	} elseif($fieldid=='gender') {
-		if($field['unchangeable'] && strlen($space[$fieldid]) > 0) {
+		if($field['unchangeable'] && $space[$fieldid] > 0) {
 			return '<span>'.lang('space', 'gender_'.intval($space[$fieldid])).'</span>';
 		}
 		$selected = array($space[$fieldid]=>' selected="selected"');
-		$html = '<select name="gender" id="gender" tabindex="1">'
-				.'<option value="0"'.($space[$fieldid]=='0' ? ' selected="selected"' : '').'>'.lang('space', 'gender_0').'</option>'
-				.'<option value="1"'.($space[$fieldid]=='1' ? ' selected="selected"' : '').'>'.lang('space', 'gender_1').'</option>'
-				.'<option value="2"'.($space[$fieldid]=='2' ? ' selected="selected"' : '').'>'.lang('space', 'gender_2').'</option>'
-				.'</select>';
+		$html = '<select name="gender" id="gender" tabindex="1">';
+		if($field['unchangeable']) {
+			$html .= '<option value="">'.lang('space', 'gender').'</option>';
+		} else {
+			$html .= '<option value="0"'.($space[$fieldid]=='0' ? ' selected="selected"' : '').'>'.lang('space', 'gender_0').'</option>';
+		}
+		$html .= '<option value="1"'.($space[$fieldid]=='1' ? ' selected="selected"' : '').'>'.lang('space', 'gender_1').'</option>'
+			.'<option value="2"'.($space[$fieldid]=='2' ? ' selected="selected"' : '').'>'.lang('space', 'gender_2').'</option>'
+			.'</select>';
 
 	} elseif($fieldid=='birthcity') {
 		if($field['unchangeable'] && !empty($space[$fieldid])) {
@@ -189,7 +193,11 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			$html .= '<em>'.lang('spacecp', 'profile_unchangeable').'</em>';
 		}
 		if($verifyvalue !== null) {
-			$html .= "<strong>".lang('spacecp', 'profile_is_verifying')." (<a href=\"#\" onclick=\"$('newvalue_$fieldid').style.display='block';return false;\">".lang('spacecp', 'profile_mypost')."</a>)</strong>"
+			if($field['formtype'] == 'file') {
+				$imgurl = getglobal('setting/attachurl').'./profile/'.$verifyvalue;
+				$verifyvalue = "<img src='$imgurl' alt='$imgurl' style='max-width: 500px;'/>";
+			}
+			$html .= "<strong>".lang('spacecp', 'profile_is_verifying')." (<a href=\"#\" onclick=\"display('newvalue_$fieldid');return false;\">".lang('spacecp', 'profile_mypost')."</a>)</strong>"
 				."<p id=\"newvalue_$fieldid\" style=\"display:none\">".$verifyvalue."</p>";
 		} elseif($field['needverify']) {
 			$html .= '<em>'.lang('spacecp', 'profile_need_verifying').'</em>';

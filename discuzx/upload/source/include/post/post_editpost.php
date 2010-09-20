@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 16417 2010-09-06 08:02:15Z liulanbo $
+ *      $Id: post_editpost.php 17067 2010-09-20 03:14:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -225,11 +225,11 @@ if(!submitcheck('editsubmit')) {
 
 		if($isfirstpost) {
 
-			if($subject == '' && $thread['special'] != 2) {
+			if(trim($subject) == '' && $thread['special'] != 2) {
 				showmessage('post_sm_isnull');
 			}
 
-			if(!$sortid && !$thread['special'] && $message == '') {
+			if(!$sortid && !$thread['special'] && trim($message) == '') {
 				showmessage('post_sm_isnull');
 			}
 
@@ -429,7 +429,7 @@ if(!submitcheck('editsubmit')) {
 				}
 				$affirmpoint = censor(dhtmlspecialchars($_G['gp_affirmpoint']));
 				$negapoint = censor(dhtmlspecialchars($_G['gp_negapoint']));
-				DB::query("UPDATE ".DB::table('forum_debate')." SET affirmpoint='$affirmpoint', negapoint='$negapoint', endtime='$endtime', umpire='$_G[gp_umpire]' WHERE tid='$_G[tid]' AND uid='$_G[uid]'");
+				DB::query("UPDATE ".DB::table('forum_debate')." SET affirmpoint='$affirmpoint', negapoint='$negapoint', endtime='$endtime', umpire='$_G[gp_umpire]' WHERE tid='$_G[tid]'");
 
 			} elseif($specialextra) {
 
@@ -452,9 +452,9 @@ if(!submitcheck('editsubmit')) {
 					if($_G['forum_optionlist'][$optionid]['type'] == 'image') {
 						$identifier = $_G['forum_optionlist'][$optionid]['identifier'];
 						$newsortaid = intval($_G['gp_typeoption'][$identifier]['aid']);
-						if($newsortaid && $newsortaid != $_G['gp_oldsortaid']) {
-							$attach = DB::fetch_first("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE aid='$_G[gp_oldsortaid]'");
-							DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid='$_G[gp_oldsortaid]'");
+						if($newsortaid && $newsortaid != $_G['gp_oldsortaid'][$identifier]) {
+							$attach = DB::fetch_first("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE aid='{$_G['gp_oldsortaid'][$identifier]}'");
+							DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid='{$_G['gp_oldsortaid'][$identifier]}'");
 							dunlink($attach);
 							DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$_G[tid]', pid='$pid' WHERE aid='$newsortaid'");
 						}
@@ -621,8 +621,10 @@ if(!submitcheck('editsubmit')) {
 					while($post = DB::fetch($query)) {
 						$dateline++;
 						DB::query("UPDATE ".DB::table($posttable)." SET dateline='$dateline' WHERE pid='$post[pid]'");
+						my_post_log('update', array('pid' => $post['pid']));
 					}
 				}
+				my_thread_log('update', array('tid' => $thread['tid']));
 				DB::query("UPDATE ".DB::table('forum_forum')." SET threads=threads+1, posts=posts+'".$posts."', todayposts=todayposts+'".$posts."' WHERE fid='$_G[fid]'", 'UNBUFFERED');
 			}
 		} else {
@@ -777,13 +779,13 @@ if(!submitcheck('editsubmit')) {
 			showmessage('post_edit_delete_succeed', "forum.php?mod=viewthread&tid=$_G[tid]&page=$_G[gp_page]&extra=$extra".($vid && $isfirstpost ? "&vid=$vid" : ''), $param);
 		} else {
 			if($isfirstpost && $modnewthreads) {
-				my_thread_log('delete', array('tid' => $_G['tid']));
 				showmessage('edit_newthread_mod_succeed', $redirecturl, $param);
 			} elseif(!$isfirstpost && $modnewreplies) {
-				my_post_log('delete', array('pid' => $pid));
 				showmessage('edit_reply_mod_succeed', "forum.php?mod=forumdisplay&fid=$_G[fid]", $param);
 			} else {
-				my_post_log('update', array('pid' => $pid));
+				if($pinvisible != -3) {
+					my_post_log('update', array('pid' => $pid));
+				}
 				showmessage('post_edit_succeed', $redirecturl, $param);
 			}
 		}

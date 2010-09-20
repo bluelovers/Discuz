@@ -94,7 +94,7 @@
 				<!--{/loop}-->
 			</div>
 			<div class="tbms mtm mbm">
-				<a href="home.php?mod=spacecp&amp;ac=privacy&amp;op=filter" target="_blank" class="y xi2">{lang feed_filter}</a>
+				<a href="home.php?mod=spacecp&ac=privacy&op=filter" target="_blank" class="y xi2">{lang feed_filter}</a>
 				{lang notice_warning_message}
 			</div>
 
@@ -159,8 +159,8 @@
 										&nbsp; <span class="xg1"><!--{date($value[dateline], 'n-j H:i')}--></span>
 									</span>
 								</p>
-								<div class="pbn ptm xg1 xw0 cl">
-									<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[fuid]&from=notice" id="afr_$value[fuid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang confirm_applications}</a><span class="pipe">|</span>
+								<div class="pbn ptm xi2 xw0 cl">
+									<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[fuid]&from=notice" id="afr_$value[fuid]" class="xw1" onclick="showWindow(this.id, this.href, 'get', 0);">{lang confirm_applications}</a><span class="pipe">|</span>
 									<a href="home.php?mod=spacecp&ac=friend&op=ignore&uid=$value[fuid]&confirm=1&from=notice" id="afi_$value[fuid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang ignore}</a>
 								</div>
 							</dt>
@@ -191,8 +191,8 @@
 										&nbsp; <span class="xg1"><!--{date($value[dateline], 'n-j H:i')}--></span>
 									</span>
 								</p>
-								<div class="pbn ptm xg1 xw0 cl">
-									<a href="home.php?mod=spacecp&ac=poke&op=reply&uid=$value[fromuid]&from=notice" id="a_p_r_$value[fromuid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang back_to_say_hello}</a><span class="pipe">|</span>
+								<div class="pbn ptm xi2 xw0 cl">
+									<a href="home.php?mod=spacecp&ac=poke&op=reply&uid=$value[fromuid]&from=notice" id="a_p_r_$value[fromuid]" class="xw1" onclick="showWindow(this.id, this.href, 'get', 0);">{lang back_to_say_hello}</a><span class="pipe">|</span>
 									<a href="home.php?mod=spacecp&ac=poke&op=ignore&uid=$value[fromuid]&from=notice" id="a_p_i_$value[fromuid]" onclick="showWindow('pokeignore', this.href, 'get', 0);">{lang ignore}</a>
 								</div>
 							</dt>
@@ -213,7 +213,7 @@
 							<dd class="m avt mbn"><img src="{IMGDIR}/systempm.gif" alt="systempm" /></dd>
 							<dt class="ntc_body" id="myInviteBody">
 								<p class="mbm"><a href="home.php?mod=space&do=notice&view=userapp" target="_blank" class="xi2">{lang enter_app_notice_operation}</a></p>
-								<div class="pbn ptm xg1 xw0 cl">&nbsp;</div>
+								<div class="pbn ptm xi2 xw0 cl">&nbsp;</div>
 							</dt>
 						</dl>
 					</div>
@@ -251,7 +251,7 @@
 								<!--{/if}-->
 
 								<!--{if $value[authorid] && !$value[isfriend]}-->
-								<dd class="mtw">
+								<dd class="mtw xi2">
 									<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[authorid]&handlekey=addfriendhk_{$value[authorid]}" id="add_note_friend_$value[authorid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang add_friend}</a>
 									<span class="pipe">|</span>
 									<a href="home.php?mod=spacecp&ac=poke&op=send&uid=$value[authorid]" id="a_poke_$value[authorid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang say_hi}</a>

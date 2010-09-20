@@ -22,18 +22,31 @@ if($cache_num <= 0 ) $cache_num = 20;
 
 $forumsrank = '';
 $orderby = 'threads';
+$navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_orderby']) {
 	case 'posts':
 		$orderby = 'posts';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_forum_post').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_forum_post');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_forum_post');
 		break;
 	case 'thismonth':
 		$orderby = 'thismonth';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_forum_post_30').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_forum_post_30');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_forum_post_30');
 		break;
 	case 'today':
 		$orderby = 'today';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_forum_post_24').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_forum_post_24');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_forum_post_24');
 		break;
 	case 'threads':
 		$orderby = 'threads';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_forum_thread').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_forum_thread');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_forum_thread');
 		break;
 	default: $_G['gp_orderby'] = 'threads';
 }

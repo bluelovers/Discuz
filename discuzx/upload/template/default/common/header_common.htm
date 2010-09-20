@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
-	<title><!--{if !empty($topic['title'])}-->$topic['title'] <!--{/if}--><!--{if !empty($navtitle)}-->$navtitle - <!--{/if}-->Powered by Discuz!</title>
+	<title><!--{if !empty($navtitle)}-->$navtitle - <!--{/if}--><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> Powered by Discuz!</title>
 	$_G['setting']['seohead']
 
 	<meta name="keywords" content="{if !empty($metakeywords)}{echo htmlspecialchars($metakeywords)}{/if}" />
-	<meta name="description" content="{if !empty($metadescription)}{echo htmlspecialchars($metadescription)} {/if}" />
+	<meta name="description" content="{if !empty($metadescription)}{echo htmlspecialchars($metadescription)} {/if},$_G['setting']['bbname']" />
 	<meta name="generator" content="Discuz! $_G['setting']['version']" />
 	<meta name="author" content="Discuz! Team and Comsenz UI Team" />
 	<meta name="copyright" content="2001-2010 Comsenz Inc." />

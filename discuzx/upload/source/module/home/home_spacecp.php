@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_spacecp.php 15198 2010-08-20 02:03:51Z liulanbo $
+ *      $Id: home_spacecp.php 16838 2010-09-15 08:07:12Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,7 +37,7 @@ if(empty($space)) {
 }
 space_merge($space, 'field_home');
 
-if($space['status'] == -1 || in_array($space['groupid'], array(4, 5, 6))) {
+if(($space['status'] == -1 || in_array($space['groupid'], array(4, 5, 6))) && $ac != 'usergroup') {
 	showmessage('space_has_been_locked');
 }
 

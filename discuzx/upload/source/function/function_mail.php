@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_mail.php 15494 2010-08-24 08:16:39Z liulanbo $
+ *      $Id: function_mail.php 16711 2010-09-13 07:24:17Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -187,7 +187,7 @@ function sendmail_cron($toemail, $subject, $message) {
 	if($value = DB::fetch($query)) {
 		$cid = $value['cid'];
 	} else {
-		$cid = DB::insert('mailcron', array('email'=>$toemail), 1);
+		$cid = DB::insert('common_mailcron', array('email'=>$toemail), 1);
 	}
 	$message = preg_replace("/href\=\"(?!http\:\/\/)(.+?)\"/i", 'href="'.$_G['siteurl'].'\\1"', $message);
 	$setarr = array(

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_manage.php 16007 2010-08-30 15:16:55Z zhengqingpeng $
+ *      $Id: userapp_manage.php 16967 2010-09-17 08:50:32Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -92,6 +92,16 @@ $actives = array('view'=> ' class="active"');
 $menunum[$_G['member']['menunum']] = ' selected ';
 
 $navtitle = lang('core', 'title_userapp_manage', array('userapp' => $_G['setting']['navs'][5]['navname'])).' - '.$navtitle;
+
+$metakeywords = $_G['setting']['seokeywords']['userapp'];
+if(!$metakeywords) {
+	$metakeywords = $_G['setting']['navs'][5]['navname'];
+}
+
+$metadescription = $_G['setting']['seodescription']['userapp'];
+if(!$metadescription) {
+	$metadescription = $_G['setting']['navs'][5]['navname'];
+}
 
 include_once template("userapp/userapp_manage");
 

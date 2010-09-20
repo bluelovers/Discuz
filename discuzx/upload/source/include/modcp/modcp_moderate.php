@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 14540 2010-08-12 07:14:02Z wangjinbo $
+ *      $Id: modcp_moderate.php 16941 2010-09-17 05:12:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -22,7 +22,7 @@ if($op == 'members') {
 
 	if(submitcheck('dosubmit', 1) || submitcheck('modsubmit')) {
 
-		if(empty($modact) || !in_array($modact, array('invalidate', 'validate', 'delete'))) {
+		if(empty($modact) || !in_array($modact, array('ignore', 'validate', 'delete'))) {
 			showmessage('modcp_noaction');
 		}
 
@@ -68,7 +68,7 @@ if($op == 'members') {
 					DB::query("DELETE FROM ".DB::table('common_member_validate')." WHERE uid IN ($uids)");
 				}
 
-				if($_G['gp_modact'] == 'invalidate') {
+				if($_G['gp_modact'] == 'ignore') {
 					DB::query("UPDATE ".DB::table('common_member_validate')." SET moddate='$_G[timestamp]', admin='$_G[username]', status='1', remark='$reason' WHERE uid IN ($uids)");
 				}
 

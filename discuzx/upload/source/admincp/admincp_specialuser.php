@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_specialuser.php 9307 2010-04-28 02:39:45Z chenchunshao $
+ *      $Id: admincp_specialuser.php 17040 2010-09-19 09:12:55Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,14 +23,12 @@ if($suboperation !== 'adduser') {
 	if($_G['gp_do'] == 'edit') {
 		$_G['gp_id'] = intval($_G['gp_id']);
 		if(!submitcheck('editsubmit')) {
-
 			$info = DB::fetch_first("SELECT * FROM ".DB::table('home_specialuser'). " WHERE uid='$_G[gp_uid]' AND status='$status'");
 			shownav('user', 'nav_defaultuser');
 			showsubmenu('edit');
 			showformheader('specialuser&operation='.$op.'&do=edit&uid='.$info[uid], '', 'userforum');
 			showtableheader();
 			showsetting('reason', 'reason', $info['reason'], 'text');
-			$status ? showsetting('defaultpoke', 'defaultpoke', $info['defaultpoke'], 'textarea') : '';
 			showsubmit('editsubmit');
 			showtablefooter();
 			showformfooter();
@@ -40,7 +38,7 @@ if($suboperation !== 'adduser') {
 			if(!$_G['gp_reason']) {
 				cpmsg('specialuser_'.$op.'_noreason_invalid', 'action=specialuser&operation='.$op, 'error');
 			}
-			$updatearr = array('reason' => $_G['gp_reason'], 'defaultpoke' => $_G['gp_defaultpoke']);
+			$updatearr = array('reason' => $_G['gp_reason']);
 			DB::update('home_specialuser', $updatearr,array('uid' => $_G['gp_uid'], 'status' => $status));
 			cpmsg('specialuser_defaultuser_edit_succeed', 'action=specialuser&operation='.$op, 'succeed');
 		}
@@ -54,7 +52,7 @@ if($suboperation !== 'adduser') {
 		showtips('specialuser_'.$op.'_tips');
 		showformheader($url, '', 'userforum');
 		showtableheader();
-		$status ? showsubtitle(array('', 'display_order', 'uid', 'username', 'reason', 'defaultpoke', 'operator', 'time', ''))
+		$status ? showsubtitle(array('', 'display_order', 'uid', 'username', 'reason', 'operator', 'time', ''))
 				 : showsubtitle(array('', 'display_order', 'uid', 'username', 'reason', 'operator', 'time'));
 		$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status='$status' ORDER BY displayorder LIMIT ".(($page - 1) * $_G['ppp']).",{$_G['ppp']} ");
 		while($specialuser = DB::fetch($query)) {
@@ -66,7 +64,6 @@ if($suboperation !== 'adduser') {
 				$specialuser['uid'],
 				"<a href=\"home.php?mod=space&uid=$specialuser[uid]\" target=\"_blank\">$specialuser[username]</a>",
 				$specialuser['reason'],
-				$specialuser['defaultpoke'],
 				"<a href=\"home.php?mod=space&uid=$specialuser[opuid]\" target=\"_blank\">$specialuser[opusername]</a>",
 				$specialuser['dateline'],
 				"<a href=\"".ADMINSCRIPT."?action=specialuser&operation=$op&do=edit&uid=$specialuser[uid]\" class=\"act\">".$lang['edit']."</a>"
@@ -117,7 +114,6 @@ if($suboperation !== 'adduser') {
 			showtableheader();
 			showsetting('username', 'username', '', 'text');
 			showsetting('reason', 'reason', '', 'text');
-			$status ? showsetting('defaultpoke', 'defaultpoke', '', 'textarea') : '';
 			showsubmit('addsubmit');
 			showtablefooter();
 			showformfooter();
@@ -126,7 +122,6 @@ if($suboperation !== 'adduser') {
 
 			$username = trim($_G['gp_username']);
 			$reason = trim($_G['gp_reason']);
-			$defaultpoke = trim($_G['gp_defaultpoke']);
 
 			if(!$username || !$reason) {
 				cpmsg('specialuser_'.$op.'_add_invaild', '', 'error');
@@ -149,7 +144,6 @@ if($suboperation !== 'adduser') {
 				'uid' => $newuid,
 				'username' => $newusername,
 				'reason' => $reason,
-				'defaultpoke' =>$defaultpoke,
 				'dateline' => $_G['timestamp'],
 				'opuid' => $_G['member']['uid'],
 				'opusername' => $_G['member']['username']

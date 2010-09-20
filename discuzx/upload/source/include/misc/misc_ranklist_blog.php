@@ -33,25 +33,44 @@ switch($_G['gp_before']) {
 	default: $_G['gp_before'] = 'thisweek';
 }
 $orderby = 'hot DESC';
+$navname = $_G['setting']['navs'][8]['navname'] . ' - ' . $_G['setting']['bbname'];
 switch($_G['gp_orderby']) {
 	case 'heats':
 		$orderby = 'hot DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_heat').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_heat');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_heat');
 		break;
 	case 'replies':
 		$orderby = 'replynum DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_reply').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_reply');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_reply');
 		break;
 	case 'views':
 		$orderby = 'viewnum DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_view').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_view');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_view');
 		break;
 	case 'sharetimes':
 		$orderby = 'sharetimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_share').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_share');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_share');
 		break;
 	case 'favtimes':
 		$orderby = 'favtimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_favorite').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_favorite');
+		$metadescription = lang('rankilist/template', 'ranklist_title_blog_favorite');
 		break;
 	default:
 		if($clicks[$_G['gp_orderby']]) {
 			$orderby = 'click'.$_G['gp_orderby'].' DESC';
+			$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_orderby']).' - '.$navname;
+			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_orderby']);
+			$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_orderby']);
 		} else {
 			$_G['gp_orderby'] = 'heats';
 		}

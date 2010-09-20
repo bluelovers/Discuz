@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_albumcategory.php 16525 2010-09-08 03:37:52Z zhangguosheng $
+ *      $Id: admincp_albumcategory.php 16782 2010-09-14 09:11:35Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -111,6 +111,8 @@ SCRIPT;
 		$a_count = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_album')." WHERE catid = '$_GET[catid]'");
 		if(!$a_count && empty($category[$_GET[catid]]['children'])) {
 			DB::query('DELETE FROM '.DB::table('home_album_category')." WHERE catid = '$_GET[catid]'");
+			include_once libfile('function/cache');
+			updatecache('albumcategory');
 			cpmsg('albumcategory_delete_succeed', 'action=albumcategory', 'succeed');
 		}
 

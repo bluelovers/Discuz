@@ -220,7 +220,9 @@ function format(type, para){
 				obj.select();
 			}
 		} else {
-			f.document.execCommand(type,false,para);
+			try{
+				f.document.execCommand(type,false,para);
+			}catch(exp){}
 		}
 	}
 	f.focus();
@@ -701,4 +703,16 @@ function fPreventDefault(ev) {
 
 function getExt(path) {
 	return path.lastIndexOf('.') == -1 ? '' : path.substr(path.lastIndexOf('.') + 1, path.length).toLowerCase();
+}
+
+function checkURL(obj, mod) {
+	if(mod) {
+		if(obj.value == 'http://') {
+			obj.value = '';
+		}
+	} else {
+		if(obj.value == '') {
+			obj.value = 'http://';
+		}
+	}
 }

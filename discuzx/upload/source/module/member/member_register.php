@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_register.php 16532 2010-09-08 06:51:34Z liulanbo $
+ *      $Id: member_register.php 16800 2010-09-15 03:22:31Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,19 +62,17 @@ while($setting = DB::fetch($query)) {
 	$$setting['skey'] = $setting['svalue'];
 }
 
-if($_G['setting']['regverify'] == 0) {
-	if($_G['setting']['outlandverify']) {
-		$location = $localareaexp = '';
-		require_once libfile('function/misc');
-		$location = trim(convertip($_G['clientip'], "./"));
-		if($location && $location != '- Unknown' && $location != '- LAN') {
-			$localareaexp = preg_quote(($_G['setting']['localarea'] = trim($_G['setting']['localarea'])), '/');
-			$localareaexp = str_replace(array("\\*"), array('.*'), $localareaexp);
-			$localareaexp = '.*'.$localareaexp.'.*';
-			$localareaexp = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $localareaexp).')$/i';
-			if(!@preg_match($localareaexp, $location)) {
-				$_G['setting']['regverify'] = 3;
-			}
+if($_G['setting']['areaverifywhite']) {
+	$location = $whitearea = '';
+	require_once libfile('function/misc');
+	$location = trim(convertip($_G['clientip'], "./"));
+	if($location) {
+		$whitearea = preg_quote(trim($_G['setting']['areaverifywhite']), '/');
+		$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
+		$whitearea = '.*'.$whitearea.'.*';
+		$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+		if(@preg_match($whitearea, $location)) {
+			$_G['setting']['regverify'] = 0;
 		}
 	}
 }
@@ -214,6 +212,10 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 	foreach($_G['cache']['fields_register'] as $field) {
 		$field_key = $field['fieldid'];
 		$field_val = $_G['gp_'.$field_key];
+		if($field['formtype'] == 'file' && !empty($_FILES[$field_key]) && $_FILES[$field_key]['error'] == 0) {
+			$field_val = true;
+		}
+
 		if(!profile_check($field_key, $field_val)) {
 			showmessage('profile_required_info_invalid');
 		}
@@ -223,7 +225,35 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 			$profile[$field_key] = $field_val;
 		}
 	}
+	if($_FILES) {
+		require_once libfile('class/upload');
+		$upload = new discuz_upload();
 
+		foreach($_FILES as $key => $file) {
+			$field_key = 'field_'.$key;
+			if(!empty($_G['cache']['fields_register'][$field_key]) && $_G['cache']['fields_register'][$field_key]['formtype'] == 'file') {
+
+				$upload->init($file, 'profile');
+				$attach = $upload->attach;
+
+				if(!$upload->error()) {
+					$upload->save();
+
+					if(!$upload->get_image_info($attach['target'])) {
+						@unlink($attach['target']);
+						continue;
+					}
+
+					$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
+					if($_G['cache']['fields_register'][$field_key]['needverify']) {
+						$verifyarr[$key] = $attach['attachment'];
+					} else {
+						$profile[$key] = $attach['attachment'];
+					}
+				}
+			}
+		}
+	}
 	if($_G['setting']['regverify'] == 2 && !trim($_G['gp_regmessage'])) {
 		showmessage('profile_required_info_invalid');
 	}
@@ -371,10 +401,6 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 	if($_G['setting']['regverify'] == 2) {
 		DB::query("REPLACE INTO ".DB::table('common_member_validate')." (uid, submitdate, moddate, admin, submittimes, status, message, remark)
 			VALUES ('$uid', '$_G[timestamp]', '0', '', '1', '0', '$regmessage', '')");
-	} elseif($_G['setting']['regverify'] == 3) {
-		$regmessage = dhtmlspecialchars(lang('message', 'register_ip_outlandverify'));
-		DB::query("REPLACE INTO ".DB::table('common_member_validate')." (uid, submitdate, moddate, admin, submittimes, status, message, remark)
-			VALUES ('$uid', '$_G[timestamp]', '0', '', '1', '0', '$regmessage', '')");
 	}
 
 	$_G['uid'] = $uid;
@@ -426,7 +452,7 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 		if($welcomemsg == 1) {
 			sendpm($uid, $welcomtitle, $welcomemsgtxt, 0);
 		} elseif($welcomemsg == 2) {
-			sendmail("$username <$email>", $welcomtitle, $welcomemsgtxt);
+			sendmail_cron($email, $welcomtitle, $welcomemsgtxt);
 		}
 	}
 
@@ -439,9 +465,9 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 	dsetcookie('activationauth', '');
 	dsetcookie('invite_auth', '');
 
-
-	include_once libfile('function/cache');
-	updatesettings();
+	loadcache('setting', true);
+	$_G['setting']['lastmember'] = $username;
+	save_syscache('setting', $_G['setting']);
 
 	if(!empty($_G['inajax'])) {
 		$_G['setting']['msgforward'] = unserialize($_G['setting']['msgforward']);
@@ -474,7 +500,6 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 			break;
 		case 2:
-		case 3:
 			showmessage('register_manual_verify', 'home.php?mod=space&do=home', $param);
 			break;
 		default:

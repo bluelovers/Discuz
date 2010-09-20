@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 16619 2010-09-10 06:51:58Z zhengqingpeng $
+ *      $Id: lang_admincp.php 16986 2010-09-19 01:17:14Z zhangguosheng $
  */
 
 
@@ -526,7 +526,7 @@ $lang = array
 	'setting_basic_siteurl' => '網站 URL',
 	'setting_basic_siteurl_comment' => '網站 URL，將作為鏈接顯示在頁面底部',
 	'setting_basic_adminemail' => '管理員郵箱',
-	'setting_basic_adminemail_comment' => '管理員 E-mail，出現在頁面底部的「聯繫我們」，另外將作為系統發郵件的時候的發件人地址',
+	'setting_basic_adminemail_comment' => '管理員 E-mail，將作為系統發郵件的時候的發件人地址',
 	'setting_basic_index_name' => '首頁文件名',
 	'setting_basic_index_name_comment' => '設置站點首頁的文件名，默認為「forum.php?mod=index」，如果你更改了此設置，那麼你需要使用「FTP工具」手動重命名文件名稱',
 	'setting_basic_icp' => '網站備案信息代碼',
@@ -553,12 +553,10 @@ $lang = array
 	'setting_access_register_verify_comment' => '選擇「無」用戶可直接註冊成功；選擇「Email 驗證」將向用戶註冊 Email 發送一封驗證郵件以確認郵箱的有效性；選擇「人工審核」將由管理員人工逐個確定是否允許新用戶註冊',
 	'setting_access_register_verify_email' => 'Email 驗證',
 	'setting_access_register_verify_manual' => '人工審核',
+	'setting_access_register_verify_areawhite' => '不受審核限制的地區列表',
+	'setting_access_register_verify_areawhite_comment' => '當用戶處於本列表中的地址時，註冊後無需審核。每個地區一行，例如 "北京"(不含引號)，留空為不設置',
 	'setting_access_register_verify_ipwhite' => '不受審核限制的 IP 列表',
 	'setting_access_register_verify_ipwhite_comment' => '當用戶處於本列表中的 IP 地址時，註冊後無需審核。每個 IP 一行，既可輸入完整地址，也可只輸入 IP 開頭，例如 "192.168."(不含引號) 可匹配 192.168.0.0～192.168.255.255 範圍內的所有地址，留空為不設置',
-	'setting_access_register_outland_verify_ctrl' => '是否開啟外地IP審核',
-	'setting_access_register_outland_verify_ctrl_comment' => '開啟後，當新用戶註冊驗證設置為「無」時，外地IP註冊後需要人工審核，本地IP註冊則直接通過；當新用戶註冊驗證設置為其他時，該設置無效',
-	'setting_access_register_localarea' => '本地關鍵字',
-	'setting_access_register_localarea_comment' => '地域含有這些關鍵字將當做本地用戶，不填或為空所有地域當做本地；每個關鍵字一行，例如 "北京"(不含引號)',
 	'setting_access_register_ctrl' => '同一 IP 註冊間隔限制(小時)',
 	'setting_access_register_ctrl_comment' => '同一 IP 在本時間間隔內將只能註冊一個帳號，0 為不限制',
 	'setting_access_register_floodctrl' => '同一 IP 在 24 小時允許註冊的最大次數',
@@ -905,7 +903,7 @@ $lang = array
 
 	'setting_home_privacy' => '隱私設置',
 	'setting_home_privacy_new_user' => '新用戶默認隱私設置',
-	'setting_home_privacy_view_index' => '空間首頁',
+	'setting_home_privacy_view_index' => '個人空間首頁',
 	'setting_home_privacy_alluser' => '全站用戶可見',
 	'setting_home_privacy_friend' => '僅好友可見',
 	'setting_home_privacy_self' => '僅自己可見',
@@ -913,6 +911,7 @@ $lang = array
 	'setting_home_privacy_view_friend' => '好友列表',
 	'setting_home_privacy_view_wall' => '留言板',
 	'setting_home_privacy_view_feed' => '動態',
+	'setting_home_privacy_view_feed_comment' => '非「全站用戶可見」同時限制了動態首頁的遊客訪問',
 	'setting_home_privacy_view_doing' => '記錄',
 	'setting_home_privacy_view_doing_comment' => '在全站的記錄列表中可能會出現記錄信息。 ',
 	'setting_home_privacy_view_blog' => '日誌',
@@ -1033,7 +1032,7 @@ $lang = array
 
 	'setting_seo' => '搜索引擎優化',
 	'setting_seo_seotitle' => '標題',
-	'setting_seo_seotitle_comment' => '設置這裡的標題會替換以下模塊頁面的模塊標題',
+	'setting_seo_seotitle_comment' => '設置這裡的標題會替換以下模塊頁面的模塊標題，可以使用 {bbname} 表示當前的站點名稱',
 	'setting_seo_seokeywords' => 'SEO 關鍵字',
 	'setting_seo_seokeywords_comment' => 'SEO關鍵字 項出現在頁面頭部的 Meta 標籤中，用於記錄本頁面的關鍵字，多個關鍵字間請用半角逗號 "," 隔開',
 	'setting_seo_seodescription' => 'SEO 描述',
@@ -1049,8 +1048,8 @@ $lang = array
 	'setting_seo_rewritestatus_forum_viewthread' => '論壇主題內容頁',
 	'setting_seo_rewritestatus_home_space' => '用戶個人主頁',
 	'setting_seo_rewritestatus_group_group' => '群組主題列表頁',
-	'setting_seo_rewritestatus_portal_topic' => '首頁專題頁',
-	'setting_seo_rewritestatus_portal_article' => '首頁文章頁',
+	'setting_seo_rewritestatus_portal_topic' => '門戶專題頁',
+	'setting_seo_rewritestatus_portal_article' => '門戶文章頁',
 	'setting_seo_rewritestatus_all_script' => '全站動態頁面',
 	'setting_seo_rewritestatus_archiver' => 'Discuz! Archiver 靜態化',
 	'setting_seo_rewritestatus_comment' => 'URL 靜態化可以提高搜索引擎抓取，開啟本功能需要對 Web 服務器增加相應的 Rewrite 支持，且會輕微增加服務器負擔。同時你還可以調整每個頁面的靜態格式，但不得刪除其中的標記，重置靜態格式請留空。注意，修改靜態格式後你需要修改服務器的 Rewrite 規則設置',
@@ -1198,14 +1197,13 @@ $lang = array
 	'setting_functions_other_pwdsafety' => '啟用登錄密碼加密',
 	'setting_functions_other_pwdsafety_comment' => '選擇「是」，站點登錄時的密碼將進行加密後再傳輸',
 	'setting_functions_other_autoidselect' => '啟用登錄自動選擇帳號',
-	'setting_functions_other_autoidselect_comment' => '選擇「是」，站點登錄時的將自動按用戶名、UID、E-mail逐一去匹配',
+	'setting_functions_other_autoidselect_comment' => '選擇「是」，站點登錄時的將自動按 UID、E-mail、用戶名的順序逐一去匹配',
 	'setting_functions_other_rssstatus' => '<span class="spectitle">啟用 RSS</span>',
 	'setting_functions_other_rssstatus_comment' => '選擇「是」，論壇將允許用戶使用 RSS 客戶端軟件接收最新的論壇帖子更新。注意: 在分論壇很多的情況下，本功能可能會加重服務器負擔',
 	'setting_functions_other_rssttl' => '<span class="spectitle">RSS TTL(分鐘)</span>',
 	'setting_functions_other_rssttl_comment' => 'TTL(Time to Live) 是 RSS 2.0 的一項屬性，用於控制訂閱內容的自動刷新時間，時間越短則資料實時性就越高，但會加重服務器負擔，通常可設置為 30～180 範圍內的數值',
 	'setting_functions_other_oltimespan' => '<span class="spectitle">用戶在線時間更新時長(分鐘)</span>',
 	'setting_functions_other_oltimespan_comment' => 'Discuz! 可統計每個用戶總共和當月的在線時間，本設置用以設定更新用戶在線時間的時間頻率。例如設置為 10，則用戶每在線 10 分鐘更新一次記錄。本設置值越小，則統計越精確，但消耗資源越大。建議設置為 5～30 範圍內，0 為不記錄用戶在線時間',
-	'setting_functions_other_send_birthday_comment' => '批量發送生日祝福郵件給會員。注意: 此功能嚴重消耗服務器資源，不建議使用',
 	'setting_functions_other_debug' => '顯示程序運行信息',
 	'setting_functions_other_debug_comment' => '選擇「是」將在頁腳處顯示程序運行時間和數據庫查詢次數',
 
@@ -1653,6 +1651,12 @@ $lang = array
 	'setting_attach_album_maxtimage' => '圖片最大尺寸',
 	'setting_attach_album_maxtimage_comment' => '本功能需要PHP環境支持GD才生效，如果用戶上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行縮小該圖片並顯示，比如可以設置為 寬：1024px，高：768px，但都不能小於300px。設置為0，則不做任何處理。',
 
+	'setting_portal_article_attach' => '門戶附件',
+	'setting_portal_article_img_thumb_closed' => '開啟文章圖片縮略圖',
+	'setting_portal_article_img_thumb_closed_comment' => '是否開啟文章上傳圖片的縮略圖',
+	'setting_portal_article_imgsize' => '文章圖片縮略圖尺寸',
+	'setting_portal_article_imgsize_comment' => '如果上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行生成相應的小圖片，默認大小為300*300',
+
 	'setting_attach_antileech' => '防盜鏈設置',
 	'setting_attach_antileech_expire' => '附件鏈接有效期',
 	'setting_attach_antileech_expire_comment' => '單位：小時，0 或留空表示附件鏈接永久有效，過期後鏈接自動更新。本功能可有效防止附件被盜鏈或附件被軟件批量下載，但是會給會員的正常下載帶來不便',
@@ -1861,7 +1865,7 @@ $lang = array
 	'forums_edit_extend_order_desc' => '按降序排列',
 	'forums_edit_extend_order_asc' => '按升序排列',
 	'forums_edit_extend_threadcache' => '頁面緩存係數',
-	'forums_edit_extend_threadcache_comment' => '此功能可以將遊客經常訪問的主題臨時緩存起來，緩解大型服務器壓力。係數範圍 0～100，建議數值 20 ～ 40，0 為關閉緩存。在磁盤空間允許的情況下，適當調高緩存係數，可以提高緩存效果<br />註：版塊設置完畢後請到 基本設置 -> 站點頁面緩存設置，調整其緩存時間。',
+	'forums_edit_extend_threadcache_comment' => '此功能可以將遊客經常訪問的主題臨時緩存起來，緩解大型服務器壓力。係數範圍 0～100，建議數值 20 ～ 40，0 為關閉緩存。在磁盤空間允許的情況下，適當調高緩存係數，可以提高緩存效果<br />註：版塊設置完畢後請到 全局 -> 優化設置 -> 站點頁面緩存設置，調整其緩存時間。',
 	'forums_edit_extend_edit_rules' => '允許版主修改本版塊規則',
 	'forums_edit_extend_edit_rules_comment' => '設置是否允許超級版主和版主修改本版規則',
 	'forums_edit_extend_recommend' => '是否開啟推薦主題功能',
@@ -2960,6 +2964,8 @@ $lang = array
 	'usergroups_edit_basic_seccode_comment' => '開啟防灌水驗證機制可以防止灌水機等，但會增加用戶操作易用度。修改密碼不受此限制，開啟防灌水驗證碼或驗證問答後，該設置有效',
 	'usergroups_edit_basic_disable_postctrl' => '發表不受限制',
 	'usergroups_edit_basic_disable_postctrl_comment' => '設置發表是否不受灌水預防和最大字數等',
+	'usergroups_edit_basic_ignore_censor' => '忽略需要審核的關鍵字',
+	'usergroups_edit_basic_ignore_censor_comment' => '選擇「是」則此用戶組的用戶在發表時不會觸發需要審核的關鍵字',
 	'usergroups_edit_basic_allow_stat' => '允許查看趨勢統計',
 	'usergroups_edit_basic_allow_statdata' => '允許查看站點統計',
 	'usergroups_edit_basic_domain_length' => '二級域名最短長度',
@@ -5060,7 +5066,8 @@ $lang = array
 	'portalcategory_username' => '創建者',
 	'portalcategory_filewrite_error' => '寫文件錯誤,請確定程序有網站根目錄的寫權限',
 	'portalcategory_foldername_is_empty' => '目錄名不能為空',
-	'portalcategory_foldername_rename_error' => '目錄重命名失敗，請確認目錄名的合法性',
+	'portalcategory_foldername_rename_error' => '目錄重命名失敗，目錄名只能包含字母、數字和下劃線(_)，請確認目錄名的合法性',
+	'portalcategory_foldername_invalid' => '目錄名只能包含字母、數字和下劃線(_)，請確認目錄名的合法性',
 	'portalcategory_foldername' => '目錄名稱',
 	'portalcategory_foldername_comment' => '此頻道要生成的文件夾名稱，直接在網站根目錄下生成，要求網站根目錄有寫的權限<br />設置為空將刪除所建立的目錄',
 	'portalcategory_summary' => 'SEO 描述',
@@ -5070,7 +5077,7 @@ $lang = array
 	'portalcategory_url' => '自定義鏈接地址',
 	'portalcategory_url_comment' => '定義要跳轉的鏈接地址',
 	'portalcategory_primaltplname' => '模板名',
-	'portalcategory_primaltplname_comment' => '將模板文件上傳到 template/default/portal目錄下，文件名必須為list_*.htm，*為自定義文件名<br />如果要重新選擇模板，請確保新模板與原模板中可拖拽區域具有相同的ID，否則將會丟失分部或全部原DIY數據',
+	'portalcategory_primaltplname_comment' => '將模板文件上傳到 template/default/portal目錄下，文件名必須為list_*.htm，*為自定義文件名<br />如果要重新選擇模板，請確保新模板與原模板中可拖拽區域具有相同的ID，否則將會丟失部分或全部原DIY數據',
 	'portalcategory_domain_duplicate' => '頻道二級域名不能重複',
 	'portalcategory_foldername_exists' => '請定的目錄已經存在，請更換其它的目錄名',
 	'portalcategory_parentfoldername_empty' => '父級頻道的目錄名不能為空，請先設置父級頻道的目錄',
@@ -5374,6 +5381,14 @@ RepeatLimit 32
 # Protect httpd.ini and httpd.parse.errors files
 # from accessing through HTTP
 {iis}
+</pre>
+
+<h1>IIS7 Web Server(獨立主機用戶)</h1>
+<pre class="colorbox">
+&lt;rewrite&gt;
+	&lt;rules&gt;
+{iis7}	&lt;/rules&gt;
+&lt;/rewrite&gt;
 </pre>
 
 <h1>Zeus Web Server</h1>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 14719 2010-08-13 08:23:39Z xupeng $
+ *      $Id: misc_initsys.php 16881 2010-09-16 06:25:47Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,5 +30,3 @@ if($_G['config']['output']['tplrefresh']) {
 	}
 	$tpl->close();
 }
-
-error('system_init_ok');

@@ -137,6 +137,17 @@ class block_groupactivity {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_activity' => array(
+					'name' => lang('blockclass', 'blockclass_forum_activity'),
+					'script' => 'activity',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;

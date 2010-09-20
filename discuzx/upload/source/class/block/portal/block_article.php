@@ -94,6 +94,10 @@ class block_article {
 
 	function fields() {
 		return array(
+				'uid' => array('name' => lang('blockclass', 'blockclass_article_field_uid'), 'formtype' => 'text', 'datatype' => 'int'),
+				'username' => array('name' => lang('blockclass', 'blockclass_article_field_username'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar' => array('name' => lang('blockclass', 'blockclass_article_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar_big' => array('name' => lang('blockclass', 'blockclass_article_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'url' => array('name' => lang('blockclass', 'blockclass_article_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_article_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'pic' => array('name' => lang('blockclass', 'blockclass_article_field_pic'), 'formtype' => 'pic', 'datatype' => 'pic'),
@@ -101,8 +105,32 @@ class block_article {
 				'dateline' => array('name' => lang('blockclass', 'blockclass_article_field_dateline'), 'formtype' => 'date', 'datatype' => 'date'),
 				'caturl' => array('name' => lang('blockclass', 'blockclass_article_field_caturl'), 'formtype' => 'text', 'datatype' => 'string'),
 				'catname' => array('name' => lang('blockclass', 'blockclass_article_field_catname'), 'formtype' => 'text', 'datatype' => 'string'),
+				'articles' => array('name' => lang('blockclass', 'blockclass_article_field_articles'), 'formtype' => 'text', 'datatype' => 'int'),
 				'viewnum' => array('name' => lang('blockclass', 'blockclass_article_field_viewnum'), 'formtype' => 'text', 'datatype' => 'int'),
 				'commentnum' => array('name' => lang('blockclass', 'blockclass_article_field_commentnum'), 'formtype' => 'text', 'datatype' => 'int'),
+			);
+	}
+
+	function fieldsconvert() {
+		return array(
+				'forum_thread' => array(
+					'name' => lang('blockclass', 'blockclass_forum_thread'),
+					'script' => 'thread',
+					'searchkeys' => array('username', 'uid', 'caturl', 'catname', 'articles', 'viewnum', 'commentnum'),
+					'replacekeys' => array('author', 'authorid', 'forumurl', 'forumname', 'posts', 'views', 'replies'),
+				),
+				'group_thread' => array(
+					'name' => lang('blockclass', 'blockclass_group_thread'),
+					'script' => 'groupthread',
+					'searchkeys' => array('username', 'uid', 'caturl', 'catname', 'articles', 'viewnum', 'commentnum'),
+					'replacekeys' => array('author', 'authorid', 'groupurl', 'groupname', 'posts', 'views', 'replies'),
+				),
+				'space_blog' => array(
+					'name' => lang('blockclass', 'blockclass_space_blog'),
+					'script' => 'blog',
+					'searchkeys' => array('commentnum'),
+					'replacekeys' => array('replynum'),
+				),
 			);
 	}
 
@@ -181,6 +209,15 @@ class block_article {
 			$wheres[] = 'at.uid IN ('.dimplode($uids).')';
 		}
 		if($catid) {
+			include_once libfile('function/portalcp');
+			$childids = array();
+			foreach($catid as $id) {
+				if($_G['cache']['portalcategory'][$id]['disallowpublish']) {
+					$childids = array_merge($childids, category_get_childids('portal', $id));
+				}
+			}
+			$catid = array_merge($catid, $childids);
+			$catid = array_unique($catid);
 			$wheres[] = 'at.catid IN ('.dimplode($catid).')';
 		}
 		if($style['getpic'] && $picrequired) {
@@ -209,7 +246,7 @@ class block_article {
 		}
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 		$orderby = ($orderby == 'dateline') ? 'at.dateline DESC ' : "ac.$orderby DESC";
-		$query = DB::query("SELECT at.*, ac.viewnum, ac.commentnum FROM ".DB::table('portal_article_title')." at ,".DB::table('portal_article_count')." ac WHERE $wheresql AND at.aid=ac.aid ORDER BY $orderby LIMIT $startrow, $items");
+		$query = DB::query("SELECT at.*, ac.viewnum, ac.commentnum FROM ".DB::table('portal_article_title')." at LEFT JOIN ".DB::table('portal_article_count')." ac ON at.aid=ac.aid WHERE $wheresql ORDER BY $orderby LIMIT $startrow, $items");
 		while($data = DB::fetch($query)) {
 			if(empty($data['pic'])) {
 				$data['pic'] = STATICURL.'image/common/nophoto.gif';
@@ -227,10 +264,15 @@ class block_article {
 				'picflag' => $data['picflag'],
 				'summary' => cutstr(strip_tags($data['summary']), $summarylength, ''),
 				'fields' => array(
+					'uid'=>$data['uid'],
+					'username'=>$data['username'],
+					'avatar' => avatar($data['uid'], 'small', true),
+					'avatar_big' => avatar($data['uid'], 'middle', true),
 					'fulltitle' => $data['title'],
 					'dateline'=>$data['dateline'],
 					'caturl'=> $_G['cache']['portalcategory'][$data['catid']]['caturl'],
 					'catname' => $_G['cache']['portalcategory'][$data['catid']]['catname'],
+					'articles' => $_G['cache']['portalcategory'][$data['catid']]['articles'],
 					'viewnum' => intval($data['viewnum']),
 					'commentnum' => intval($data['commentnum'])
 				)

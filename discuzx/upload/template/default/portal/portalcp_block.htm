@@ -41,7 +41,7 @@
 		<!--{/if}-->
 		</ul>
 	<!--{/if}-->
-	<form id="blockformsetting" name="blockformsetting" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=block&op=block&classname=$_GET[classname]&bid=$block[bid]&blocktype=$blocktype&eleid=$_GET['eleid']&tpl=$_GET[tpl]"{if $_G[inajax]} onsubmit="ajaxpost('blockformsetting','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');"{/if} class="fdiy">
+	<form id="blockformsetting" name="blockformsetting" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=block&op=block&classname=$_GET[classname]&bid=$block[bid]&blocktype=$blocktype&eleid=$_GET['eleid']&tpl=$_GET[tpl]"{if $_G[inajax]} onsubmit="if(checkblockname(this)){ajaxpost('blockformsetting','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');} else {return false;}"{else} onsubmit="return checkblockname(this);"{/if} class="fdiy">
 		<div class="c diywin"{if $_G[inajax]} style="width: 420px; {if $_GET[from]=='cp'}max-height:260px;{else}max-height:380px;{/if}height:auto !important; height:320px; _padding-right: 0; _margin-right: 17px; overflow-y: auto;"{/if}>
 			<div id="block_setting">
 				<table class="tfm mbm">
@@ -51,18 +51,27 @@
 						{lang block_properties_comment}</td>
 					</tr>
 					<!--{/if}-->
-					<!--{if !$is_htmlblock}-->
 					<tr>
-						<th width="80">{lang block_data_custom}</th>
+						<th width="80">{lang block_id}</th>
+						<td><input type="text" name="name" value="$block[name]" class="px" /></td>
+					</tr>
+					<tr>
+						<th width="80">{lang block_type}</th>
 						<td>
-							<textarea name="summary" id="block_sumamry_$block[bid]" cols="40" rows="3" class="pt" style="display:none">$block[summary]</textarea>
-							<p class="pns">
-							<button type="button" id="a_summary_show" onclick="javascript:$('block_sumamry_$block[bid]').style.display='';$('a_summary_show').style.display='none';$('a_summary_hide').style.display='';return false;" class="pn"><em>{lang edit_diy_content}</em></button>
-							<a id="a_summary_hide" href="javascript:;" onclick="javascript:$('block_sumamry_$block[bid]').style.display='none';$('a_summary_hide').style.display='none';$('a_summary_show').style.display='';return false;" style="display:none;">{lang hide}</a>
-							</p>
+							<!--{eval list($bigclass) = explode('_',$block['blockclass']);}-->
+							<!--{if !empty($_G['cache']['blockconvert']) && !empty($_G['cache']['blockconvert'][$bigclass][$block['blockclass']])}-->
+								<select name="toblockclass" onchange="blockconver(this, '$block[bid]');" class="ps">
+									<option value="$block[blockclass]">$blockclassname</option>
+								<!--{loop $_G['cache']['blockconvert'][$bigclass][$block['blockclass']] $bblockclass $convertarr}-->
+									<option value="$bblockclass">$convertarr[name]</option>
+								<!--{/loop}-->
+							</select>
+							<img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" style="margin: 0;" onmouseover="showTip(this)" tip="{lang block_type_convert_tips}" />
+							<!--{else}-->
+							$blockclassname
+							<!--{/if}-->
 						</td>
 					</tr>
-					<!--{/if}-->
 					<tr>
 						<th width="80">{lang block_data_source}</th>
 						<td>
@@ -106,10 +115,18 @@
 					<tbody id="tbody_thumbsetting">
 						<!--{subtemplate portal/portalcp_block_thumbsetting}-->
 					</tbody>
+					<!--{if !$is_htmlblock}-->
 					<tr>
-						<th width="80">{lang block_id}</th>
-						<td><input type="text" name="name" value="$block[name]" class="px" /></td>
+						<th width="80">{lang block_data_custom}</th>
+						<td>
+							<textarea name="summary" id="block_sumamry_$block[bid]" cols="40" rows="3" class="pt" style="display:none">$block[summary]</textarea>
+							<p class="pns">
+							<button type="button" id="a_summary_show" onclick="javascript:$('block_sumamry_$block[bid]').style.display='';$('a_summary_show').style.display='none';$('a_summary_hide').style.display='';return false;" class="pn"><em>{lang edit_diy_content}</em></button>
+							<a id="a_summary_hide" href="javascript:;" onclick="javascript:$('block_sumamry_$block[bid]').style.display='none';$('a_summary_hide').style.display='none';$('a_summary_show').style.display='';return false;" style="display:none;">{lang hide}</a>
+							</p>
+						</td>
 					</tr>
+					<!--{/if}-->
 				</table>
 			</div>
 		</div>
@@ -614,6 +631,11 @@
 	<!--{if !$_G[inajax]}-->
 	</div></div></div>
 	<!--{/if}-->
+<!--{elseif $op == 'convert'}-->
+	<script type="text/javascript" reload="1">
+		showWindow('showblock', 'portal.php?mod=portalcp&ac=block&op=block&bid='+$bid+'&tpl='+document.diyform.template.value, 'get', -1);
+		drag.blockForceUpdate('portal_block_$bid');
+	</script>
 <!--{/if}-->
 
 <!--{if !$_G['inajax'] && in_array($op, array('block', 'data', 'itemdata'))}-->

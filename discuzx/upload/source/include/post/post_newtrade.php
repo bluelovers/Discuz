@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newtrade.php 16035 2010-08-31 03:16:52Z wangjinbo $
+ *      $Id: post_newtrade.php 17059 2010-09-20 02:35:09Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

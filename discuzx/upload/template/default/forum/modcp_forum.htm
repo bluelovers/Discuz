@@ -39,28 +39,6 @@
 					<input type="hidden" name="fid" value="$_G[fid]">
 					<table cellspacing="0" cellpadding="0">
 						<tr>
-							<th width="15%" valign="top">{lang forum_description}:</th>
-							<td width="60%">
-								<div id="descpreview"></div>
-								<div class="tedt">
-									<div class="bar">
-										<div class="y"><a href="javascript:;" onclick="$('descpreview').innerHTML = bbcode2html($('descmessage').value)">{lang memcp_profile_preview}</a></div>
-										<!--{eval $seditor = array('desc', array('bold', 'color', 'img', 'link'));}-->
-										<!--{subtemplate common/seditor}-->
-									</div>
-									<div class="area">
-										<textarea id="descmessage" name="descnew" rows="8" class="pt">$_G['forum']['description']</textarea>
-									</div>
-								</div>
-							</td>
-							<td width="3%">&nbsp;</td>
-							<td width="22%">
-								{lang discuzcode} {lang enabled}<br />
-								{lang post_imgcode} {lang enabled}<br />
-								{lang post_html} {lang disabled}<br />
-							</td>
-						</tr>
-						<tr>
 							<th valign="top">{lang forum_rules}:</th>
 							<td>
 								<div id="rulespreview"></div>

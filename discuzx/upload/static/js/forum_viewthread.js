@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 15320 2010-08-23 06:12:41Z maruitao $
+	$Id: forum_viewthread.js 17054 2010-09-20 02:08:51Z monkey $
 */
 
 var replyreload = '';
@@ -239,7 +239,9 @@ function appendreply() {
 	div.style.display = 'none';
 	div.className = '';
 	$('postlistreply').appendChild(div);
-	$('postform').replysubmit.disabled = false;
+	if($('postform')) {
+		$('postform').replysubmit.disabled = false;
+	}
 	showCreditPrompt();
 }
 
@@ -310,5 +312,13 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
 		ctrlObj.innerHTML = '收起';
+	}
+}
+
+function showPostWin(action, href) {
+	if(BROWSER.ie && BROWSER.ie < 7) {
+		window.open(href);
+	} else {
+		showWindow(action, href, 'get', 0);
 	}
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 16557 2010-09-09 01:17:52Z monkey $
+ *      $Id: spacecp_usergroup.php 16814 2010-09-15 05:52:20Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,7 +62,7 @@ if(in_array($do, array('buy', 'exit'))) {
 				}
 
 				if($space['extcredits'.$creditstrans] - ($amount = $days * $group['dailyprice']) < ($minbalance = 0)) {
-					showmessage('credits_balance_insufficient', '', array('minbalance' => $minbalance));
+					showmessage('credits_balance_insufficient', '', array('title'=> $_G['setting']['extcredits'][$creditstrans]['title'],'minbalance' => $minbalance));
 				}
 
 				$groupexpirynew = TIMESTAMP + $days * 86400;

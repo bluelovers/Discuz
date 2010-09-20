@@ -63,6 +63,23 @@ class block_forum {
 				);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'group_group' => array(
+					'name' => lang('blockclass', 'blockclass_group_group'),
+					'script' => 'group',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+				'portal_category' => array(
+					'name' => lang('blockclass', 'blockclass_portal_category'),
+					'script' => 'portalcategory',
+					'searchkeys' => array('threads'),
+					'replacekeys' => array('articles'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 

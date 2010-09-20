@@ -2,7 +2,7 @@
 -- DiscuzX INSTALL MAKE SQL DUMP V1.0
 -- DO NOT modify this file
 --
--- Create: 2010-08-30 14:12:16
+-- Create: 2010-09-19 10:01:54
 --
 DROP TABLE IF EXISTS pre_common_addon;
 CREATE TABLE pre_common_addon (
@@ -1308,6 +1308,7 @@ CREATE TABLE pre_common_usergroup_field (
   allowspacediyimgcode tinyint(1) NOT NULL DEFAULT '0',
   allowcommentpost tinyint(1) NOT NULL DEFAULT '2',
   allowcommentitem tinyint(1) NOT NULL DEFAULT '0',
+  ignorecensor tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (groupid)
 ) TYPE=MyISAM;
 
@@ -1345,8 +1346,8 @@ CREATE TABLE pre_forum_activity (
   cost mediumint(8) unsigned NOT NULL DEFAULT '0',
   starttimefrom int(10) unsigned NOT NULL DEFAULT '0',
   starttimeto int(10) unsigned NOT NULL DEFAULT '0',
-  place char(40) NOT NULL DEFAULT '',
-  class char(20) NOT NULL DEFAULT '',
+  place varchar(255) NOT NULL DEFAULT '',
+  class varchar(255) NOT NULL DEFAULT '',
   gender tinyint(1) NOT NULL DEFAULT '0',
   number smallint(5) unsigned NOT NULL DEFAULT '0',
   applynumber smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1364,13 +1365,12 @@ DROP TABLE IF EXISTS pre_forum_activityapply;
 CREATE TABLE pre_forum_activityapply (
   applyid int(10) unsigned NOT NULL AUTO_INCREMENT,
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  username char(15) NOT NULL DEFAULT '',
+  username varchar(255) NOT NULL DEFAULT '',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  message char(200) NOT NULL DEFAULT '',
+  message varchar(255) NOT NULL DEFAULT '',
   verified tinyint(1) NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   payment mediumint(8) NOT NULL DEFAULT '0',
-  contact char(200) NOT NULL,
   ufielddata text NOT NULL,
   PRIMARY KEY (applyid),
   KEY uid (uid),
@@ -2777,7 +2777,8 @@ CREATE TABLE pre_home_visitor (
   vusername char(15) NOT NULL DEFAULT '',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid,vuid),
-  KEY dateline (uid,dateline)
+  KEY vuid (vuid),
+  KEY dateline (dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_portal_article_content;

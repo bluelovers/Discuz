@@ -134,12 +134,12 @@
 						<th height="45">
 							<a href="forum.php?mod=viewthread&tid=$thread[tid]" class="xi2">$thread[subject]</a>
 							<!--{if $thread['digest'] > 0}-->
-								<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" class="vm" />
+								<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" align="absmiddle" />
 							<!--{/if}-->
 							<!--{if $thread['attachment'] == 2}-->
-								<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" class="vm" />
+								<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" align="absmiddle" />
 							<!--{elseif $thread['attachment'] == 1}-->
-								<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" class="vm" />
+								<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" align="absmiddle" />
 							<!--{/if}-->
 							<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
 						</th>

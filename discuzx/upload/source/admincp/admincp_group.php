@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 16523 2010-09-08 02:59:34Z monkey $
+ *      $Id: admincp_group.php 16686 2010-09-13 03:12:35Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -42,6 +42,7 @@ if($operation == 'setting') {
 			$varname[1][] = array($ugroup['groupid'], $ugroup['grouptitle'], '1');
 		}
 		showsetting('', $varname, $group_admingroupids, 'omcheckbox');
+		showsetting('forums_edit_posts_allowfeed', 'settingnew[group_allowfeed]', $setting['group_allowfeed'], 'radio');
 
 		showsubmit('updategroupsetting');
 		showtablefooter();
@@ -77,7 +78,7 @@ if($operation == 'setting') {
 		}
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('group_recommend', '".daddslashes(serialize($group_recommend))."')");
 		require_once libfile('function/discuzcode');
-		$skey_array = array('groupstatus','group_imgsizelimit');
+		$skey_array = array('groupstatus','group_imgsizelimit','group_allowfeed');
 		foreach($_G['gp_settingnew'] as $skey => $svalue) {
 			if(in_array($skey, $skey_array)){
 				DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('$skey', '".intval($svalue)."')");

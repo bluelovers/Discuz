@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_index.php 16581 2010-09-09 07:06:50Z wangjinbo $
+ *      $Id: group_index.php 17004 2010-09-19 02:22:16Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,11 +119,13 @@ if(empty($sgid) && empty($gid)) {
 			$first[$key]['secondlist'] = array_slice($val['secondlist'], 0, 8);
 		}
 	}
-	$navtitle = $_G['setting']['seotitle']['group'];
+	$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['group']);
+	$nobbname = true;
 }
 
 if(!$navtitle || !empty($sgid) || !empty($gid)) {
 	$navtitle .= $_G['setting']['navs'][3]['navname'];
+	$nobbname = false;
 }
 
 $metakeywords = $_G['setting']['seokeywords']['group'];
@@ -137,7 +139,11 @@ if(!$metadescription) {
 if(empty($curtype)) {
 	include template('diy:group/index');
 } else {
-	include template('diy:group/type');
+	if(empty($sgid)) {
+		include template('diy:group/type:'.$gid);
+	} else {
+		include template('diy:group/type:'.$fup);
+	}
 }
 
 

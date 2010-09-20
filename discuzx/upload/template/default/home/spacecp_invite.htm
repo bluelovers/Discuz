@@ -44,6 +44,13 @@
 		}
 	}
 </script>
+<!--{elseif $_GET['op'] == 'showinvite'}-->
+	<!--{loop $list $key $url}-->
+	<tr>
+		<td class="bbda"><a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
+		<td class="bbda"><a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
+	</tr>
+	<!--{/loop}-->
 <!--{else}-->
 
 
@@ -66,7 +73,7 @@
 
 
 <!--{if $allowinvite}-->
-			<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=invite&appid=$appid&ref">
+			<form method="post" id="newinvite" autocomplete="off" action="home.php?mod=spacecp&ac=invite&appid=$appid&ref" onsubmit="ajaxpost(this.id, 'return_newinvite');doane(event);">
 				<!--{if $config[inviteaddcredit] || $config[invitedaddcredit]}-->
 				<p class="tbmu">
 					{lang friend_invite_success}
@@ -128,30 +135,47 @@
 						<!--{if $creditnum && $list}--><p>{lang click_link_copy}</p><!--{/if}-->
 					</caption>
 					<!--{if $creditnum}-->
-						<!--{if $list}-->
 							<tr>
 								<td class="bbda"><strong>{lang invite_link}</strong></td>
 								<td class="bbda"><strong>{lang invite_code}</strong></td>
 							</tr>
-							<!--{loop $list $key $url}-->
-							<tr>
-								<td class="bbda"><a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
-								<td class="bbda"><a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
-							</tr>
-							<!--{/loop}-->
-						<!--{else}-->
-							<tr>
-								<td colspan="2" class="emp">{lang no_invitation_code}</td>
-							</tr>
-						<!--{/if}-->
+							<tbody id="invitelist">
+								<!--{if $list}-->
+									<!--{loop $list $key $url}-->
+									<tr>
+										<td class="bbda"><a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
+										<td class="bbda"><a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
+									</tr>
+									<!--{/loop}-->
+								<!--{else}-->
+									<tr>
+										<td colspan="2" class="emp">{lang no_invitation_code}</td>
+									</tr>
+								<!--{/if}-->
+							</tbody>
+					
 						<tr>
 							<td colspan="2">
-								<p class="mtm">{lang invitation_code_spend}{$extcredits[title]} <strong class="xi1">$creditnum</strong> $extcredits[unit] ( {lang you_have}$extcredits[title] <strong>{$space[$creditkey]}</strong> $extcredits[unit] )</p>
+								<p class="mtm">{lang invitation_code_spend}{$extcredits[title]} <strong class="xi1">$creditnum</strong> $extcredits[unit] ( {lang you_have}$extcredits[title] <strong id="haveallcredit">{$space[$creditkey]}</strong> $extcredits[unit] )</p>
 								<!--{if $_G['group']['maxinviteday']}-->
 								<p class="d">{lang max_invite_day_message}</p>
 								<!--{/if}-->
 								<input type="text" name="invitenum" value="1" size="10" class="px vm" style="width: auto;" />
-								<button type="submit" name="invitesubmit" value="true" class="pn vm"><em>{lang get_invitation_code}</em></button>
+								<button type="submit" name="invitesubmit_btn" value="true" class="pn vm"><em>{lang get_invitation_code}</em></button>
+								<span id="return_newinvite" style="display:none;"></span>
+								<script type="text/javascript">
+									function succeedhandle_newinvite(url, message, values) {
+										if(values['deduction']) {
+											var allCreditObj = $('haveallcredit');
+											allCreditObj.innerHTML = parseInt(allCreditObj.innerHTML) - parseInt(values['deduction']);
+											var x = new Ajax();
+											x.get('home.php?mod=spacecp&ac=invite&op=showinvite&inajax=1', function(s){
+												$('invitelist').innerHTML = s;
+					   						});
+											showCreditPrompt();
+										}
+									}
+								</script>
 							</td>
 						</tr>
 					<!--{else}-->
@@ -162,6 +186,8 @@
 						</tr>
 					<!--{/if}-->
 				</table>
+				<input type="hidden" name="handlekey" value="newinvite" />
+				<input type="hidden" name="invitesubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 			</form>
 			<!--{if $_G['group']['allowmailinvite']}-->

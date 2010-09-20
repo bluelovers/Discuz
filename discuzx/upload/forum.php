@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum.php 16429 2010-09-06 09:51:21Z monkey $
+ *      $Id: forum.php 16805 2010-09-15 03:56:11Z zhangguosheng $
  */
 
 define('APPTYPEID', 2);
@@ -23,13 +23,12 @@ $modarray = array('ajax','announcement','attachment','forumdisplay',
 
 $modcachelist = array(
 	'index'		=> array('announcements', 'onlinelist', 'forumlinks', 'advs_index',
-			'heats', 'historyposts', 'onlinerecord', 'blockclass', 'userstats'),
+			'heats', 'historyposts', 'onlinerecord', 'userstats'),
 	'forumdisplay'	=> array('smilies', 'announcements_forum', 'globalstick', 'forums',
-			'icons', 'onlinelist', 'forumstick', 'blockclass',
-			'threadtable_info', 'threadtableids', 'stamps'),
+			'icons', 'onlinelist', 'forumstick','threadtable_info', 'threadtableids', 'stamps'),
 	'viewthread'	=> array('smilies', 'smileytypes', 'forums', 'usergroups', 'ranks',
 			'stamps', 'bbcodes', 'smilies',	'custominfo', 'groupicon', 'stamps',
-			'threadtableids', 'threadtable_info', 'blockclass'),
+			'threadtableids', 'threadtable_info'),
 	'post'		=> array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes',
 			'icons', 'domainwhitelist'),
 	'space'		=> array('fields_required', 'fields_optional', 'custominfo'),
@@ -55,7 +54,7 @@ set_rssauth();
 runhooks();
 
 
-$navtitle = $_G['setting']['seotitle']['forum'];
+$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
 
 require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php';
 

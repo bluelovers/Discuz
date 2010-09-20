@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_thread.php 16366 2010-09-06 02:05:09Z zhangguosheng $
+ *      $Id: space_thread.php 16856 2010-09-16 02:53:58Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -143,7 +143,7 @@ if($_G['gp_view'] == 'all') {
 			if(!$allowviewuserthread && $_G['adminid'] != 1) {
 				showmessage('allow_view_other_thead_but_no_detail');
 			}
-			$fidsql = " AND t.fid IN($allowviewuserthread) ";
+			$fidsql = empty($allowviewuserthread) ? '' : " AND t.fid IN($allowviewuserthread) ";
 			$wheresql .= "$fidsql AND t.displayorder>='0'";
 		}
 		$ordersql = 't.lastpost DESC';
@@ -314,6 +314,12 @@ if($_G['uid']) {
 } else {
 	$navtitle = lang('core', 'title_thread');
 }
+
+if($space['username']) {
+	$navtitle = lang('space', 'sb_thread', array('who' => $space['username']));
+}
+$metakeywords = $navtitle;
+$metadescription = $navtitle;
 
 include_once template("diy:home/space_thread");
 

@@ -31,38 +31,40 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 
 			<div class="cl">
 				<!--{if $_G[setting][fastsmilies]}--><div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><!--{/if}-->
-				<div class="tedt{if $_G[setting][fastsmilies]} hasfsl{/if}">
-					<div class="bar">
-						<span class="y">
-							<!--{hook/forumdisplay_fastpost_func_extra}-->
-							<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
-								<a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target=fastpostmessage&from=fastpost" onclick="showWindow(this.id, this.href, 'get', 0)">$_G['setting']['magics']['doodle']</a>
-								<span class="pipe">|</span>
+				<div{if $_G[setting][fastsmilies]} class="hasfsl"{/if}>
+					<div class="tedt">
+						<div class="bar">
+							<span class="y">
+								<!--{hook/forumdisplay_fastpost_func_extra}-->
+								<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
+									<a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target=fastpostmessage&from=fastpost" onclick="showWindow(this.id, this.href, 'get', 0)">$_G['setting']['magics']['doodle']</a>
+									<span class="pipe">|</span>
+								<!--{/if}-->
+								<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" onclick="switchAdvanceMode(this.href);doane(event);">{lang post_advancemode}</a>
+							</span>
+							<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), $guestpost ? 1 : 0);}-->
+							<!--{hook/forumdisplay_fastpost_ctrl_extra}-->
+							<!--{subtemplate common/seditor}-->
+						</div>
+						<div class="area">
+							<!--{if !$guestpost}-->
+								<textarea rows="5" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostform\').submit()');" tabindex="12" class="pt"></textarea>
+							<!--{else}-->
+								<div class="pt hm">{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" onclick="showWindow('register', this.href)" class="xi2">$_G['setting']['reglinkname']</a></div>
 							<!--{/if}-->
-							<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" onclick="switchAdvanceMode(this.href);doane(event);">{lang post_advancemode}</a>
-						</span>
-						<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), $guestpost ? 1 : 0);}-->
-						<!--{hook/forumdisplay_fastpost_ctrl_extra}-->
-						<!--{subtemplate common/seditor}-->
+						</div>
 					</div>
-					<div class="area">
-						<!--{if !$guestpost}-->
-							<textarea rows="5" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostform\').submit()');" tabindex="12" class="pt"></textarea>
-						<!--{else}-->
-							<div class="pt hm">{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" onclick="showWindow('register', this.href)" class="xi2">$_G['setting']['reglinkname']</a></div>
-						<!--{/if}-->
-					</div>
+					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+						<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+						<div class="mtm"><!--{template common/seccheck}--></div>
+					<!--{/if}-->
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<input type="hidden" name="usesig" value="$usesigcheck" />
+					<p class="ptm">
+						<button {if !$guestpost}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn"><strong>{lang post_newthread}</strong></button>
+					</p>
 				</div>
 			</div>
-			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-				<div class="mtm"><!--{template common/seccheck}--></div>
-			<!--{/if}-->
-			<input type="hidden" name="formhash" value="{FORMHASH}" />
-			<input type="hidden" name="usesig" value="$usesigcheck" />
-			<p class="ptm">
-				<button {if !$guestpost}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn"><strong>{lang post_newthread}</strong></button>
-			</p>
 		</form>
 	</div>
 </div>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 16191 2010-09-01 09:52:57Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 16859 2010-09-16 03:32:09Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -438,6 +438,7 @@ SCRIPT;
 			deletedomain($_G['gp_catid'], 'channel');
 		}
 		if(!empty($domain)) {
+			require_once libfile('function/domain');
 			domaincheck($domain, $_G['setting']['domain']['root']['channel'], 1);
 		}
 
@@ -459,6 +460,10 @@ SCRIPT;
 
 		$dir = '';
 		if(!empty($foldername)) {
+			preg_match_all('/[^\w\d\_]/',$foldername,$re);
+			if(!empty($re[0])) {
+				cpmsg(cplang('portalcategory_foldername_rename_error').','.cplang('return'), NULL, 'error');
+			}
 			$parentdir = getportalcategoryfulldir($cate['upid']);
 			if($parentdir === false) cpmsg(cplang('portalcategory_parentfoldername_empty').','.cplang('return'), NULL, 'error');
 			$isexists = DB::fetch_first("SELECT catid FROM ".DB::table('portal_category')." WHERE foldername='$foldername'");
@@ -652,7 +657,7 @@ SCRIPT;
 
 		updatecache($cachearr);
 
-		cpmsg('portalcategory_edit_succeed', 'action=portalcategory', 'succeed');
+		cpmsg('portalcategory_edit_succeed', 'action=portalcategory#cat'.$_G['gp_catid'], 'succeed');
 	}
 }
 
@@ -671,7 +676,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 	}
 	if($level == 2) {
 		$class = $last ? 'lastchildboard' : 'childboard';
-		$return = '<tr class="hover"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="'.$class.'">'.
+		$return = '<tr class="hover" id="cat'.$value['catid'].'"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="'.$class.'">'.
 		'<input type="text" class="txt" name="name['.$value['catid'].']" value="'.$value['catname'].'" />'.
 		'</div>'.
 		'</td><td>'.$value['articles'].'</td>'.
@@ -687,7 +692,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr>';
 	} elseif($level == 1) {
-		$return = '<tr class="hover"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="board">'.
+		$return = '<tr class="hover" id="cat'.$value['catid'].'"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="board">'.
 		'<input type="text" class="txt" name="name['.$value['catid'].']" value="'.$value['catname'].'" />'.
 		'<a class="addchildboard" href="'.ADMINSCRIPT.'?action=portalcategory&operation=add&upid='.$value['catid'].'">'.cplang('portalcategory_addthirdcategory').'</a></div>'.
 		'</td><td>'.$value['articles'].'</td>'.
@@ -708,7 +713,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 	} else {
 		$childrennum = count($_G['cache']['portalcategory'][$key]['children']);
 		$toggle = $childrennum > 25 ? ' style="display:none"' : '';
-		$return = '<tbody><tr class="hover"><td onclick="toggle_group(\'group_'.$value['catid'].'\')"><a id="a_group_'.$value['catid'].'" href="javascript:;">'.($toggle ? '[+]' : '[-]').'</a></td>'
+		$return = '<tbody><tr class="hover" id="cat'.$value['catid'].'"><td onclick="toggle_group(\'group_'.$value['catid'].'\')"><a id="a_group_'.$value['catid'].'" href="javascript:;">'.($toggle ? '[+]' : '[-]').'</a></td>'
 		.'<td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="parentboard">'.
 		'<input type="text" class="txt" name="name['.$value['catid'].']" value="'.$value['catname'].'" />'.
 		'</div>'.

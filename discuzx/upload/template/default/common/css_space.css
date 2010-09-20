@@ -1,4 +1,5 @@
 body { background-color: transparent; }
+	.wp { width: 970px; }
 	#hd { margin-bottom: 0px; position: relative; height: 140px; }
 		#hd h2 { padding: 25px 0 0 15px; font-size: 14px; }
 			#hd h2 strong { display: block; }
@@ -11,12 +12,11 @@ body { background-color: transparent; }
 		.block { padding: 0; }
 			.block .content { padding: 5px 10px 10px; }
 		.block .title { padding: 0 10px; font-size: 12px; color: #333; }
-	#pcd .avt { text-align: center; }
-		#pcd .avt img { width: auto; }
+	#pcd .hm img { padding: 2px; background: {WRAPBG}; border: 1px solid; border-color: {COMMONBG} {COMMONBORDER} {COMMONBORDER} {COMMONBG}; }
 	#pcd h2 { margin: 10px auto 0; }
 	.mls li { width: 69px; }
-.move-span{margin:1px;}
-.column { overflow: hidden; }
+.move-span{ margin: 1px; }
+.column, #share { overflow: hidden; }
 .musicbj { width: 60px; height: 60px;}
 #spaceinfoshow { position: relative;}
 	#spaceinfoshow .oshr { float: none; margin-left: 10px; padding: 1px 5px 1px 22px; color: {HIGHLIGHTLINK}; }

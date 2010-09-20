@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Style]]></item>
-	<item id="Version"><![CDATA[X1.5RC]]></item>
+	<item id="Version"><![CDATA[X1.5]]></item>
 	<item id="Time"><![CDATA[]]></item>
 	<item id="From"><![CDATA[]]></item>
 	<item id="Data">
@@ -13,7 +13,7 @@
 		<item id="style">
 			<item id="smfont"><![CDATA[Tahoma,Helvetica,sans-serif]]></item>
 			<item id="threadtitlefontsize"><![CDATA[14px]]></item>
-			<item id="threadtitlefont"><![CDATA[Tahoma,Helvetica,Hei,mingliu,sans-serif]]></item>
+			<item id="threadtitlefont"><![CDATA[Tahoma,Helvetica,mingliu,sans-serif]]></item>
 			<item id="smfontsize"><![CDATA[0.83em]]></item>
 			<item id="tabletext"><![CDATA[#444]]></item>
 			<item id="midtext"><![CDATA[#666]]></item>
@@ -41,7 +41,7 @@
 			<item id="menuhoverbgcolor"><![CDATA[#005AB4 nv_a.png no-repeat 50% -33px]]></item>
 			<item id="titlebgcolor"><![CDATA[#E5EDF2 titlebg.png repeat-x 0 0]]></item>
 			<item id="fontsize"><![CDATA[12px/1.5]]></item>
-			<item id="font"><![CDATA[Tahoma,Helvetica,Hei,mingliu,sans-serif]]></item>
+			<item id="font"><![CDATA[Tahoma,Helvetica,mingliu,sans-serif]]></item>
 			<item id="styleimgdir"><![CDATA[]]></item>
 			<item id="imgdir"><![CDATA[]]></item>
 			<item id="boardimg"><![CDATA[logo.png]]></item>
@@ -57,6 +57,6 @@
 			<item id="contentseparate"><![CDATA[#C2D5E3]]></item>
 			<item id="inputborder"><![CDATA[#CECECE]]></item>
 		</item>
-		<item id="version"><![CDATA[X1.5RC]]></item>
+		<item id="version"><![CDATA[X1.5]]></item>
 	</item>
 </root>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 15943 2010-08-30 05:49:42Z cnteacher $
+ *      $Id: config_global_default.php 17034 2010-09-19 07:38:41Z cnteacher $
  */
 
 $_config = array();
@@ -20,7 +20,6 @@ $_config['db'][1]['dbname']  		= 'ultrax';		// 數據庫
 $_config['db'][1]['tablepre'] 		= 'pre_';		// 表名前綴
 
 // 內存服務器優化設置（以下設置需要PHP擴展組件支持，其中 memcache 優先於其他設置，當 memcache 無法啟用時，會自動開啟另外的兩種優化模式）
-//  -----------------  CONFIG MEMORY  ----------------- //
 $_config['memory']['prefix'] = 'discuz_';
 $_config['memory']['eaccelerator'] = 1;				// 啟動對 eaccelerator 的支持
 $_config['memory']['xcache'] = 1;				// 啟動對 xcache 的支持
@@ -29,11 +28,16 @@ $_config['memory']['memcache']['port'] = 11211;			// memcache 服務器端口
 $_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否長久連接
 $_config['memory']['memcache']['timeout'] = 1;			// memcache 服務器連接超時
 
-//  -----------------  CONFIG CACHE  ----------------- //
-$_config['cache']['main']['type'] = '';
+// 服務器相關設置
+$_config['server']['id']		= 1;			// 服務器編號，多webserver的時候，用於標識當前服務器的ID
 
-//  -----------------  CONFIG default CACHE  ----------------- //
-$_config['cache']['main']['file']['path'] = 'data/ultraxcache';
+// 附件下載相關
+$_config['download']['readmod'] = 2;				// 本地文件讀取模式; 模式2為最節省內存方式，但不支持多線程下載
+								// 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
+$_config['download']['xsendfile']['type'] = 0;			// 是否啟用 X-Sendfile 功能（需要服務器支持）0=close 1=nginx 2=lighttpd 3=apache
+$_config['download']['xsendfile']['dir'] = '/down/';		// 啟用 nginx X-sendfile 時，論壇附件目錄的虛擬映射路徑，請使用 / 結尾
+
+//  CONFIG CACHE
 $_config['cache']['type'] 			= 'sql';	// 緩存類型 file=文件緩存, sql=數據庫緩存
 
 // 頁面輸出設置

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_activity.php 13502 2010-07-28 02:12:01Z zhaoxiongfei $
+ *      $Id: space_activity.php 16887 2010-09-16 06:50:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,7 +50,7 @@ require_once libfile('function/misc');
 if($_GET['view'] == 'all') {
 	if($_GET['order'] == 'hot') {
 		$threadsql .= " t.special='4' AND t.replies>='$minhot'";
-		$apply_sql = "INNER JOIN ".DB::table('forum_thread')." t ON t.special='4' AND t.tid = a.tid AND t.replies>='$minhot'";
+		$apply_sql = "INNER JOIN ".DB::table('forum_thread')." t ON t.special='4' AND t.tid = a.tid AND t.replies>='$minhot' AND t.displayorder>'-1'";
 	}
 	$orderactives = array($_GET['order'] => ' class="a"');
 } elseif($_GET['view'] == 'me') {
@@ -112,7 +112,7 @@ if($need_count) {
 		$threadsql = empty($threadsql) ? '' : $threadsql.' AND ';
 		$query = DB::query("SELECT a.*, t.* FROM ".DB::table('forum_activity')." a $apply_sql
 			INNER JOIN ".DB::table('forum_thread')." t ON $threadsql t.tid=a.tid
-			WHERE $wheresql
+			WHERE t.displayorder>'-1' AND $wheresql
 			ORDER BY a.starttimefrom $order LIMIT $start, $perpage");
 	}
 }

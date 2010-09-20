@@ -44,6 +44,11 @@ if ($_GET['view'] == 'credit') {
 	$now_choose = $_G['gp_orderby'] && $extcredits[$_G['gp_orderby']] ? $_G['gp_orderby'] : 'all';
 	$list = getranklistcache_credits();
 
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_credit').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_credit');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_credit');
+
 	if($_G['uid']) {
 		$mycredits = $now_choose == 'all' ? $_G['member']['credits'] : $_G['member']['extcredits'.$now_choose];
 
@@ -67,6 +72,10 @@ if ($_GET['view'] == 'credit') {
 } elseif ($_GET['view'] == 'friendnum') {
 
 	$list = getranklistcache_friendnum();
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_friend').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_friend');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_friend');
 
 	if($_G['uid']) {
 		$space = $_G['member'];
@@ -86,21 +95,38 @@ if ($_GET['view'] == 'credit') {
 	}
 
 } elseif($_GET['view'] == 'blog') {
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_blog').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_blog');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_blog');
 
 	$list = getranklistcache_blogs();
 	$now_pos = -1;
 
 } elseif($_GET['view'] == 'beauty') {
 
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_girl').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_girl');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_girl');
 	$list = getranklistcache_beauty();
 	$now_pos = -1;
 
 } elseif($_GET['view'] == 'handsome') {
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_boy').' - '. $navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_boy');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_boy');
 
 	$list = getranklistcache_handsome();
 	$now_pos = -1;
 
 } elseif($_GET['view'] == 'post') {
+
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_post').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_post');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_post');
 
 	$postsrank_change = 1;
 	$now_pos = -1;
@@ -119,6 +145,10 @@ if ($_GET['view'] == 'credit') {
 	$list = getranklistcache_posts();
 
 } else {
+	$navname = $_G['setting']['navs'][8]['navname'];
+	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_bid').' - '.$navname;
+	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_bid');
+	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_bid');
 	$cachetip = FALSE;
 	$_GET['view'] = 'show';
 	$creditid = 0;
@@ -137,9 +167,10 @@ if ($_GET['view'] == 'credit') {
 		space_merge($space, 'count');
 		$space['credit'] = empty($creditkey) ? 0 : $space[$creditkey];
 
-		$space['unitprice'] = DB::result(DB::query("SELECT unitprice FROM ".DB::table('home_show')." WHERE uid='$space[uid]' AND credit>0"));
-		$space['unitprice'] = intval($space['unitprice']);
-		$now_pos = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_show')." WHERE unitprice>='$space[unitprice]' AND credit>0"), 0);
+		$myshowinfo = DB::fetch_first("SELECT unitprice, credit FROM ".DB::table('home_show')." WHERE uid='$space[uid]' AND credit>0");
+		$myallcredit = intval($myshowinfo['credit']);
+		$space['unitprice'] = intval($myshowinfo['unitprice']);
+		$now_pos = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_show')." WHERE unitprice>='$space[unitprice]' AND credit>0");
 
 		$deluser = false;
 		$query = DB::query("SELECT uid, username, unitprice, credit AS show_credit, note AS show_note FROM ".DB::table('home_show')." ORDER BY unitprice DESC, credit DESC LIMIT $start,$perpage");

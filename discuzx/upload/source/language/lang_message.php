@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 16578 2010-09-09 06:43:39Z zhengqingpeng $
+ *      $Id: lang_message.php 17014 2010-09-19 04:04:45Z zhangguosheng $
  */
 
 $lang = array
@@ -201,7 +201,7 @@ $lang = array
 	'profile_avatar_size_invalid' => '讀取遠程頭像尺寸失敗，如確認頭像地址無誤，請返回輸入頭像的寬、高代替原有的「*」。',
 	'profile_avatardir_nonexistence' => '頭像目錄 static/image/avatar 不存在，請聯繫管理員。',
 	'profile_avatar_succeed' => '你頭像設置已成功更新，現在將轉入個人資料頁。',
-	'profile_email_verify' => '確認 Email 已經發送，請用郵件中提供的方法激活你的帳號。如果你沒有收到我們發送的系統郵件，請點擊控制面板首頁中的「重新驗證 Email 有效性」，或嘗試更換另外一個地址。注意：在完成激活之前，根據管理員設置，你將只能以待驗證會員的身份訪問站點，你可能不能進行發帖等操作。激活成功後，上述限制將自動取消。',
+	'profile_email_verify' => '確認 Email 已經發送，請用郵件中提供的方法激活你的帳號。如果你沒有收到我們發送的系統郵件，請點擊密碼安全中的「重新接收驗證郵件」，或嘗試更換另外一個地址。注意：在完成激活之前，根據管理員設置，你將只能以待驗證會員的身份訪問站點，你可能不能進行相關操作。激活成功後，上述限制將自動取消。',
 	'profile_succeed' => '個人資料已成功保存。',
 	'credits_disabled' => '對不起，管理員沒有啟用站點積分。',
 	'credits_transaction_disabled' => '對不起，交易積分沒有被啟用，無法使用此功能，請返回或與管理員聯繫。',
@@ -306,7 +306,7 @@ $lang = array
 	'reward_remove_succeed' => '懸賞已取消。',
 	'activity_stop' => '對不起，活動已停止申請，請返回。',
 	'activity_repeat_apply' => '對不起，活動不能重複申請。',
-	'activity_completion' => '活動申請成功，請等待發起人審核。',
+	'activity_completion' => '活動申請成功。',
 	'activity_choice_applicant' => '請選擇活動的申請者。',
 	'activity_auditing_completion' => '活動人員審核完畢。',
 	'activity_delete_completion' => '活動列表清理完畢。',
@@ -320,6 +320,7 @@ $lang = array
 	'activity_cancel_success' => '成功取消活動報名。',
 	'activity_notification_user' => '請選擇要發送的用戶。',
 	'activity_notification_reason' => '請在附言框中填寫通知內容。',
+	'activity_exile_field' => '帶\'*\'號為必填項，請填寫完整。',
 	'post_poll_inputmore' => '對不起，你至少應當填寫 2 個投票選項，請返回修改。',
 	'getpasswd_account_notmatch' => '用戶名，Email 地址或安全提問不匹配，請返回修改。',
 	'getpasswd_account_invalid' => '管理員和超級版主不能使用取回密碼功能，請返回。',
@@ -604,7 +605,7 @@ $lang = array
 	'send_result_succeed' => '郵件已經送出，你的好友可能需要幾分鐘後才能收到郵件',
 	'send_result_resend_error' => '未找到相應的邀請記錄, 郵件重發失敗.',
 	'there_is_no_record_of_invitation_specified' => '你指定的邀請記錄不存在',
-	'max_invitenum_error' => '對不起，24小時內你只能獲得 {maxnum} 個邀請碼，請返回',
+	'max_invitenum_error' => '對不起，24小時內你只能獲得 {maxnum} 個邀請碼',
 	'mail_invite_not_allow' => '你現在沒有權限來進行郵件邀請',
 
 	'blog_import_no_result' => '"無法獲取原數據，請確認已正確輸入的站點URL和帳號信息，服務器返回:<br /><textarea name=\"tmp[]\" style=\"width:98%;\" rows=\"4\">\\1</textarea>"',
@@ -1038,7 +1039,8 @@ $lang = array
 
 	'article_choose_system_category' => '請選擇一個合適的系統分類',
 	'article_delete_invalid_lastpage' => '當前為最後一頁，不能被刪除，請返回',
-	'article_push_invalid_repeat' => '已經由該日誌生成過文章，不能重複生成',
+	'article_push_tid_invalid_repeat' => '已經由該帖子生成過文章，不能重複生成',
+	'article_push_blogid_invalid_repeat' => '已經由該日誌生成過文章，不能重複生成',
 	'article_push_invalid_object' => '指定的信息不能生成文章',
 	'article_push_invalid_private' => '當前日誌因隱私設置不能進行生成文章操作',
 	'article_category_empty' => '欄目不能為空',
@@ -1102,6 +1104,9 @@ $lang = array
 
 	'ranklist_status_off' => '排行榜功能關閉',
 	'ranklist_this_status_off' => '此排行功能已關閉',
+	'start_time_is_greater_than_end_time' => '統計開始日期不能小於結束日期',
+	'start_time_end_time_is_equal_to' => '統計開始日期不能等於結束日期',
+	'home_no_privilege' => '該頁面需要登陸後才能查看',
 
 );
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 16572 2010-09-09 04:29:20Z monkey $
+ *      $Id: post_newreply.php 17063 2010-09-20 02:57:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -266,7 +266,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	if($subject == '' && $message == '' && $thread['special'] != 2) {
+	if(trim($subject) == '' && trim($message) == '' && $thread['special'] != 2) {
 		showmessage('post_sm_isnull');
 	} elseif($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
 		showmessage('post_thread_closed');
@@ -473,6 +473,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 			DB::query("UPDATE ".DB::table('forum_groupuser')." SET replies=replies+1, lastupdate='".TIMESTAMP."' WHERE uid='$_G[uid]' AND fid='$_G[fid]'");
 			updateactivity($_G['fid'], 0);
+			require_once libfile('function/grouplog');
 			updategroupcreditlog($_G['fid'], $_G['uid']);
 		}
 		if($thread['displayorder'] != -4) {
@@ -481,6 +482,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			if($_G['forum']['type'] == 'sub') {
 				DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='".$_G['forum']['fup']."'", 'UNBUFFERED');
 			}
+			my_post_log('update', array('pid' => $pid));
 		}
 
 		$feed = array();

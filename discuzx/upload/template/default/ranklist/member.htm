@@ -31,7 +31,7 @@
 			<script type="text/javascript">
 				function checkCredit(id) {
 					var maxCredit = parseInt($space[credit]);
-					var idval = $(id).value;
+					var idval = parseInt($(id).value);
 					if(/^(\d+)$/.test(idval) == false) {
 						showDialog('{lang credit_is_not_number}', 'notice', '{lang reminder}', null, 0);
 						return false;
@@ -43,12 +43,15 @@
 						return false;
 					}
 					if(id == 'showcredit') {
-						var price = $('unitprice').value;
+						var price = parseInt($('unitprice').value);
 						if(/^(\d+)$/.test(price) == false) {
 							showDialog('{lang unitprice_is_not_number}', 'notice', '{lang reminder}', null, 0);
 							return false;
 						} else if(price < 1) {
 							showDialog('{lang unitprice_title_error}', 'notice', '{lang reminder}', null, 0);
+							return false;
+						} else if(price > idval+parseInt($myallcredit)) {
+							showDialog('{lang price_can_not_be_higher_than_the_total}', 'notice', '{lang reminder}', null, 0);
 							return false;
 						}
 					}

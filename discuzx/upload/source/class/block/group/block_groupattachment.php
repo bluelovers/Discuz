@@ -142,6 +142,23 @@ class block_groupattachment {
 			);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'forum_attachment' => array(
+					'name' => lang('blockclass', 'blockclass_forum_attachment'),
+					'script' => 'attachment',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+				'space_pic' => array(
+					'name' => lang('blockclass', 'blockclass_space_pic'),
+					'script' => 'pic',
+					'searchkeys' => array('author', 'authorid', 'downloads'),
+					'replacekeys' => array('username', 'uid', 'viewnum'),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->settings;

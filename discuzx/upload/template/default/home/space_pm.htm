@@ -64,7 +64,6 @@
 
 				<!--{if $touid && $list}-->
 					<div id="pm_ul_post" class="xld xlda">
-						<a name="bottom"></a>
 						<dl class="cl">
 							<span id="pmforum_return"></span>
 							<dd class="m avt">
@@ -149,17 +148,17 @@
 								<!--{/if}-->
 								<!--{if $value[touid]}-->
 								<span class="xw1 {if !$value[new]}xg1{/if}">
-									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]#bottom{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}">{$value[msgfrom]}</a>
+									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}">{$value[msgfrom]}</a>
 								</span>
 								<!--{/if}-->
 								<span class="xg1 xw0">
-									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]#bottom{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}"><!--{date($value[dateline], 'u')}--></a>
+									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}"><!--{date($value[dateline], 'u')}--></a>
 								</span>
 							</dt>
 							<dd>
 								<p class="pm_smry {if $value[new]}xw1{else}xg1{/if}">$value[message]</p>
 								<p class="ptn xi2">
-									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]#bottom{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}">{lang see_details}&raquo;</a>
+									<a href="{if $value[touid]}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]&touid=$value[touid]&daterange=$value[daterange]{else}home.php?mod=space&do=pm&subop=view&pmid=$value[pmid]{/if}">{lang see_details}&raquo;</a>
 								</p>
 							</dd>
 						</dl>

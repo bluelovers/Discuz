@@ -1,11 +1,11 @@
 <ul class="tb cl">
 	<!--{if $operation != 'verify'}-->
-		<li $opactives[base]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=base">{lang basic_information}</a></li>
-		<li $opactives[contact]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=contact">{lang connect_mode}</a></li>
-		<li $opactives[edu]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=edu">{lang education_situation}</a></li>
-		<li $opactives[work]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=work">{lang work_situation}</a></li>
-		<li $opactives[info]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=info">{lang personal_information}</a></li>
-		<li $opactives[bbs]><a href="home.php?mod=spacecp&amp;ac=profile&amp;op=bbs">{$_G[setting][navs][2][navname]}{lang information}</a></li>
+		<li $opactives[base]><a href="home.php?mod=spacecp&ac=profile&op=base">{lang basic_information}</a></li>
+		<li $opactives[contact]><a href="home.php?mod=spacecp&ac=profile&op=contact">{lang connect_mode}</a></li>
+		<li $opactives[edu]><a href="home.php?mod=spacecp&ac=profile&op=edu">{lang education_situation}</a></li>
+		<li $opactives[work]><a href="home.php?mod=spacecp&ac=profile&op=work">{lang work_situation}</a></li>
+		<li $opactives[info]><a href="home.php?mod=spacecp&ac=profile&op=info">{lang personal_information}</a></li>
+		<li $opactives[bbs]><a href="home.php?mod=spacecp&ac=profile&op=bbs">{$_G[setting][navs][2][navname]}{lang information}</a></li>
 		<!--{if $_G['setting']['allowspacedomain'] && $_G['setting']['domain']['root']['home'] && checkperm('domainlength')}-->
 		<li $opactives[domain]><a href="home.php?mod=spacecp&ac=domain">{lang space_domain}</a></li>
 		<!--{/if}-->
@@ -23,7 +23,7 @@
 	<!--{/if}-->
 	<!--{if !empty($_G['setting']['plugins']['spacecp_profile'])}-->
 		<!--{loop $_G['setting']['plugins']['spacecp_profile'] $id $module}-->
-			<!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}--><li{if $_G[gp_id] == $id} class="a"{/if}><a href="home.php?mod=spacecp&amp;ac=plugin&amp;op=profile&amp;id=$id">$module[name]</a></li><!--{/if}-->
+			<!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}--><li{if $_G[gp_id] == $id} class="a"{/if}><a href="home.php?mod=spacecp&ac=plugin&op=profile&id=$id">$module[name]</a></li><!--{/if}-->
 		<!--{/loop}-->
 	<!--{/if}-->
 </ul>

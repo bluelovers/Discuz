@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 16479 2010-09-07 06:32:49Z liulanbo $
+ *      $Id: forum_misc.php 17063 2010-09-20 02:57:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -194,7 +194,7 @@ if($_G['gp_action'] == 'paysucceed') {
 
 } elseif($_G['gp_action'] == 'comment') {
 
-	if(!$_G['setting']['commentnumber'] || !$_G['inajax']) {
+	if(!$_G['setting']['commentnumber']) {
 		showmessage('undefined_action', NULL);
 	}
 	$posttable = getposttablebytid($_G['tid']);
@@ -242,7 +242,7 @@ if($_G['gp_action'] == 'paysucceed') {
 	$comments = array();
 	$query = DB::query('SELECT * FROM '.DB::table('forum_postcomment')." WHERE pid='$_G[gp_pid]' AND authorid>'0' ORDER BY dateline DESC LIMIT $start_limit, $commentlimit");
 	while($comment = DB::fetch($query)) {
-		$comment['avatar'] = discuz_uc_avatar($comment['authorid'], 'small');
+		$comment['avatar'] = avatar($comment['authorid'], 'small');
 		$comment['dateline'] = dgmdate($comment['dateline'], 'u');
 		$comments[] = str_replace(array('[b]', '[/b]', '[/color]'), array('<b>', '</b>', '</font>'), preg_replace("/\[color=([#\w]+?)\]/i", "<font color=\"\\1\">", $comment));
 	}
@@ -290,8 +290,10 @@ if($_G['gp_action'] == 'paysucceed') {
 		while($post = DB::fetch($query)) {
 			$dateline++;
 			DB::query("UPDATE ".DB::table($posttable)." SET dateline='$dateline' WHERE pid='$post[pid]'");
+			my_post_log('update', array('pid' => $post[pid]));
 		}
 	}
+	my_thread_log('update', array('tid' => $thread['tid']));
 	DB::query("UPDATE ".DB::table('forum_forum')." SET threads=threads+1, posts=posts+'".$posts."', todayposts=todayposts+'".$posts."' WHERE fid='$thread[fid]'", 'UNBUFFERED');
 	dheader('location: '.dreferer());
 
@@ -552,7 +554,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		require_once libfile('function/discuzcode');
 		$sqlvalues = $comma = '';
 		$sqlreason = censor(trim($_G['gp_reason']));
-		$sqlreason = cutstr(dhtmlspecialchars($sqlreason), 40, '');
+		$sqlreason = cutstr(dhtmlspecialchars($sqlreason), 40, '.');
 		foreach($creditsarray as $id => $addcredits) {
 			$sqlvalues .= "$comma('$_G[gp_pid]', '$_G[uid]', '$_G[username]', '$id', '$_G[timestamp]', '$addcredits', '$sqlreason')";
 			$comma = ', ';
@@ -870,12 +872,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$payvalue = intval($_G['gp_payvalue']);
 		$payment = $_G['gp_payment'] ? $payvalue : -1;
 		$message = cutstr(dhtmlspecialchars($_G['gp_message']), 200);
-		$contact = cutstr(dhtmlspecialchars($_G['gp_contact']), 200);
 		$verified = $thread['authorid'] == $_G['uid'] ? 1 : 0;
-		if($_G['setting']['activitycredit'] && $activity['credit'] && empty($applyinfo['verified'])) {
-			checklowerlimit(array('extcredits'.$_G['setting']['activitycredit'] => '-'.$activity['credit']));
-			updatemembercount($_G['uid'], array($_G['setting']['activitycredit'] => '-'.$activity['credit']), true, 'ACC', $_G['tid']);
-		}
 		if($activity['ufield']) {
 			$ufielddata = array();
 			$activity['ufield'] = unserialize($activity['ufield']);
@@ -888,17 +885,24 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 				foreach($_POST as $key => $value) {
 					if(empty($_G['cache']['profilesetting'][$key])) continue;
-					$value = cutstr(dhtmlspecialchars(trim($value)), 100, '');
+					$value = cutstr(dhtmlspecialchars(trim($value)), 100, '.');
+					if(empty($value)) {
+						showmessage('activity_exile_field');
+					}
 					$ufielddata['userfield'][$key] = $value;
 				}
 			}
 			if(!empty($activity['ufield']['extfield'])) {
 				foreach($activity['ufield']['extfield'] as $fieldid) {
-					$value = cutstr(dhtmlspecialchars(trim($_G['gp_'.$fieldid])), 50, '');
+					$value = cutstr(dhtmlspecialchars(trim($_G['gp_'.$fieldid])), 50, '.');
 					$ufielddata['extfield'][$fieldid] = $value;
 				}
 			}
 			$ufielddata = !empty($ufielddata) ? serialize($ufielddata) : '';
+		}
+		if($_G['setting']['activitycredit'] && $activity['credit'] && empty($applyinfo['verified'])) {
+			checklowerlimit(array('extcredits'.$_G['setting']['activitycredit'] => '-'.$activity['credit']));
+			updatemembercount($_G['uid'], array($_G['setting']['activitycredit'] => '-'.$activity['credit']), true, 'ACC', $_G['tid']);
 		}
 		if($applyinfo && $applyinfo['verified'] == 2) {
 			$newinfo = array(
@@ -909,13 +913,11 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				'verified' => $verified,
 				'dateline' => $_G['timestamp'],
 				'payment' => $payment,
-				'contact' => $contact,
 				'ufielddata' => $ufielddata
 			);
 			DB::update('forum_activityapply', $newinfo, "applyid='$applyinfo[applyid]'");
 		} else {
-			DB::query("INSERT INTO ".DB::table('forum_activityapply')." (tid, username, uid, message, verified, dateline, payment, contact, ufielddata)
-			VALUES ('$_G[tid]', '$_G[username]', '$_G[uid]', '$message', '$verified', '$_G[timestamp]', '$payment', '$contact', '$ufielddata')");
+			DB::query("INSERT INTO ".DB::table('forum_activityapply')." (tid, username, uid, message, verified, dateline, payment, ufielddata) VALUES ('$_G[tid]', '$_G[username]', '$_G[uid]', '$message', '$verified', '$_G[timestamp]', '$payment', '$ufielddata')");
 		}
 
 		$applynumber = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND verified='1'");
@@ -941,12 +943,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				postfeed($feed);
 			}
 		}
-
-		if($verified) {
-			dheader("location: forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''));
-		} else {
-			showmessage('activity_completion', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''));
-		}
+		showmessage('activity_completion', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''), array(), array('showdialog' => 1, 'showmsg' => true, 'locationtime' => true));
 
 	} elseif(submitcheck('activitycancel')) {
 		DB::query("DELETE FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND uid='$_G[uid]'", 'UNBUFFERED');
@@ -980,7 +977,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 		$applylist = array();
 		$activity['ufield'] = $activity['ufield'] ? unserialize($activity['ufield']) : array();
-		$query = DB::query("SELECT applyid, username, uid, message, verified, dateline, payment, contact, ufielddata FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' $sqlverified ORDER BY dateline DESC");
+		$query = DB::query("SELECT applyid, username, uid, message, verified, dateline, payment, ufielddata FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' $sqlverified ORDER BY dateline DESC");
 		while($activityapplies = DB::fetch($query)) {
 			$ufielddata = '';
 			$activityapplies['dateline'] = dgmdate($activityapplies['dateline'], 'u');
@@ -1105,7 +1102,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$applynumbers = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND verified='1'");
 
 	$applylist = array();
-	$query = DB::query("SELECT applyid, username, uid, message, verified, dateline, payment, contact, ufielddata FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' ORDER BY dateline DESC");
+	$query = DB::query("SELECT applyid, username, uid, message, verified, dateline, payment, ufielddata FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' ORDER BY dateline DESC");
 	while($apply = DB::fetch($query)) {
 		$apply['dateline'] = dgmdate($apply['dateline'], 'dt');
 		$apply['ufielddata'] = !empty($apply['ufielddata']) ? unserialize($apply['ufielddata']) : '';

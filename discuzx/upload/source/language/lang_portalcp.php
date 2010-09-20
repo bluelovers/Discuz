@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_portalcp.php 16454 2010-09-07 03:48:02Z zhangguosheng $
+ *      $Id: lang_portalcp.php 16674 2010-09-13 02:41:44Z zhangguosheng $
  */
 
 $lang = array(
@@ -75,5 +75,6 @@ $lang = array(
 	'ranklist/group' => '群組排行榜頁',
 	'ranklist/thread' => '帖子排行榜頁',
 	'ranklist/member' => '用戶排行榜頁',
+	'other_page' => '非DIY模塊',
 
 );

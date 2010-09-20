@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_prune.php 15275 2010-08-23 01:21:52Z wangjinbo $
+ *      $Id: admincp_prune.php 16845 2010-09-15 09:41:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -251,7 +251,7 @@ if(submitcheck('searchsubmit', 1)) {
 			$postarray = getallwithposts(array(
 				'select' => 'p.fid, p.tid, p.pid, p.author, p.authorid, p.dateline, t.subject, p.message, t.isgroup',
 				'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				'where' => "t.digest>=0 $sql",
+				'where' => "1 $sql",
 				'limit' => ($page - 1) * $perpage.", {$perpage}"));
 			$posts = '';
 			$groupsname = $groupsfid = $postlist = array();
@@ -284,7 +284,7 @@ if(submitcheck('searchsubmit', 1)) {
 			}
 			$postcount = getcountofposts(
 				DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				"t.digest>=0 $sql"
+				"1 $sql"
 			);
 			$multi = multi($postcount, $perpage, $page, ADMINSCRIPT."?action=prune");
 			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=prune&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
@@ -294,7 +294,7 @@ if(submitcheck('searchsubmit', 1)) {
 			$postarray = getallwithposts(array(
 				'select' => 'pid',
 				'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				'where' => "t.digest>=0 $sql",
+				'where' => "1 $sql",
 			));
 			foreach($postarray as $post) {
 				$pids .= ','.$post['pid'];

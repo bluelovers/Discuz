@@ -53,8 +53,8 @@
 					if(values['from'] == 'notice') {
 						getNewPokeQuery(values['uid']);
 					}
+					showCreditPrompt();
 				}
-			//hideMenu();
 			</script>
 <!--{elseif $op == 'getpoke'}-->
 			<dd class="m avt"><a href="home.php?mod=space&uid=$pokequery[fromuid]" c="1"><!--{avatar($pokequery[fromuid],small)}--></a></dd>

@@ -57,8 +57,8 @@ class block_announcement {
 				'url' => array('name' => lang('blockclass', 'blockclass_announcement_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_announcement_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'summary' => array('name' => lang('blockclass', 'blockclass_announcement_field_summary'), 'formtype' => 'summary', 'datatype' => 'summary'),
-				'starttime' => array('name' => lang('blockclass', 'blockclass_announcement_field_starttime'), 'formtype' => 'text', 'datatype' => 'string'),
-				'endtime' => array('name' => lang('blockclass', 'blockclass_announcement_field_endtime'), 'formtype' => 'text', 'datatype' => 'string'),
+				'starttime' => array('name' => lang('blockclass', 'blockclass_announcement_field_starttime'), 'formtype' => 'text', 'datatype' => 'date'),
+				'endtime' => array('name' => lang('blockclass', 'blockclass_announcement_field_endtime'), 'formtype' => 'text', 'datatype' => 'date'),
 			);
 	}
 
@@ -101,8 +101,8 @@ class block_announcement {
 				'picflag' => '',
 				'summary' => cutstr(str_replace('\\\'', '&#39;', $data['message']), $summarylength, ''),
 				'fields' => array(
-					'starttime' => $data['starttime'] ? dgmdate($data['starttime']) : 'N/A',
-					'endtime' => $data['endtime'] ? dgmdate($data['endtime']) : 'N/A',
+					'starttime' => $data['starttime'],
+					'endtime' => $data['endtime'],
 				)
 			);
 		}

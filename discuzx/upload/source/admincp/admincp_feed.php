@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_feed.php 15149 2010-08-19 08:02:46Z monkey $
+ *      $Id: admincp_feed.php 16756 2010-09-14 06:26:39Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -49,7 +49,7 @@ if($operation == 'global') {
 		showtableheader();
 		if(empty($feed['uid'])) {
 			showsetting('feed_global_title', 'feednew[title_template]', $feed['title_template'], 'text');
-			$src = 'home.php?mod=editor&charset='.CHARSET.'&allowhtml=1&doodle='.(!empty($_G['setting']['magics']['doodle']) ? 1 : 0);
+			$src = 'home.php?mod=editor&charset='.CHARSET.'&allowhtml=1&doodle=0';
 			print <<<EOF
 			<tr><td>{$lang['message']}</td><td></td></tr>
 			<tr>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_editor.php 16372 2010-09-06 02:28:28Z maruitao $
+ *      $Id: home_editor.php 16863 2010-09-16 04:47:45Z maruitao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -258,11 +258,11 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 <div id="createUrl" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
 	<?=lang('home/editor', 'editor_prompt_textlink')?>:<br/>
-	<input type="text" id="insertUrl" name="url" value="http://" class="t_input" style="width: 190px;"> <input type="button" onclick="createLink();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createUrl'));"><?=lang('home/editor', 'editor_cancel')?></a>
+	<input type="text" id="insertUrl" name="url" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;"> <input type="button" onclick="createLink();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createUrl'));"><?=lang('home/editor', 'editor_cancel')?></a>
 </div>
 <div id="createImg" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
 	<?=lang('home/editor', 'editor_prompt_imagelink')?>:<br/>
-	<input type="text" id="imgUrl" name="imgUrl" value="http://" class="t_input" style="width: 190px;" /> <input type="button" onclick="createImg();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createImg'));"><?=lang('home/editor', 'editor_cancel')?></a>
+	<input type="text" id="imgUrl" name="imgUrl" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;" /> <input type="button" onclick="createImg();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createImg'));"><?=lang('home/editor', 'editor_cancel')?></a>
 </div>
 <div id="createSwf" class="eMenu" style="display:none;top:35px;left:26px;width:400px;font-size:12px">
 	<?=lang('home/editor', 'editor_prompt_videolink')?>:<br/>
@@ -271,7 +271,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 		<option value="1"><?=lang('home/editor', 'editor_prompt_video_media')?></option>
 		<option value="2"><?=lang('home/editor', 'editor_prompt_video_real')?></option>
 	</select>
-	<input type="text" id="videoUrl" name="videoUrl" value="http://"  class="t_input" style="width: 200px;" />
+	<input type="text" id="videoUrl" name="videoUrl" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 200px;" />
 	<input type="button" onclick="createFlash();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" />
 	<a href="javascript:;" onclick="fHide($('createSwf'));"><?=lang('home/editor', 'editor_cancel')?></a>
 </div>

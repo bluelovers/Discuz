@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 16532 2010-09-08 06:51:34Z liulanbo $
+ *      $Id: admincp_members.php 16709 2010-09-13 07:15:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1155,7 +1155,7 @@ EOT;
 		if(!$member) {
 			cpmsg('members_edit_nonexistence', '', 'error');
 		} elseif(($member['grouptype'] == 'system' && in_array($member['groupid'], array(1, 2, 3, 6, 7, 8))) || $member['grouptype'] == 'special') {
-			cpmsg('members_edit_illegal', '', 'error', array('grouptitle' => $member['grouptitle'], 'uid' => $_G['gp_uid']));
+			cpmsg('members_edit_illegal', '', 'error', array('grouptitle' => $member['grouptitle'], 'uid' => $member['uid']));
 		}
 
 		$member['groupterms'] = unserialize($member['groupterms']);
@@ -1501,7 +1501,7 @@ EOT;
 		showtableheader();
 		$status = array($member['status'] => ' checked');
 		showsetting('members_edit_username', '', '', ' '.$member['username']);
-		showsetting('members_edit_avatar', '', '', ' '.discuz_uc_avatar($uid).'<br /><br /><input name="clearavatar" class="checkbox" type="checkbox" value="1" /> '.$lang['members_edit_avatar_clear']);
+		showsetting('members_edit_avatar', '', '', ' '.avatar($uid).'<br /><br /><input name="clearavatar" class="checkbox" type="checkbox" value="1" /> '.$lang['members_edit_avatar_clear']);
 		showsetting('members_edit_statistics', '', '', "<a href=\"".ADMINSCRIPT."?action=prune&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[posts]($member[posts])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=doing&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[doings]($member[doings])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=blog&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[blogs]($member[blogs])</a>".

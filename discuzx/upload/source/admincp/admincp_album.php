@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_album.php 16271 2010-09-02 08:59:17Z liulanbo $
+ *      $Id: admincp_album.php 16634 2010-09-10 09:33:09Z liyulong $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -193,7 +193,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 				$album['updatetime'] = dgmdate($album['updatetime']);
 				$albums .= showtablerow('', '', array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"ids[]\" value=\"$album[albumid]\" />",
-					"<img src='$album[pic]' />",
+					"<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\" target=\"_blank\"><img src='$album[pic]' /></a>",
 					"<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\" target=\"_blank\">$album[albumname]</a>",
 					"<a href=\"home.php?mod=space&uid=$album[uid]\" target=\"_blank\">".$album['username']."</a>",
 					$album['updatetime']

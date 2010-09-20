@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: pm.php 908 2008-12-26 07:27:51Z monkey $
+	$Id: pm.php 1010 2010-07-13 09:31:22Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -333,16 +333,28 @@ class pmmodel {
 	}
 
 	function removecode($str, $length) {
-		return trim($this->base->cutstr(preg_replace(array(
-				"/\[(email|code|quote|img)=?.*\].*?\[\/(email|code|quote|img)\]/siU",
-				"/\[\/?(b|i|url|u|color|size|font|align|list|indent|float)=?.*\]/siU",
-				"/\r\n/",
-			), '', $str), $length));
+		static $uccode = null;
+		if($uccode === null) {
+			require_once UC_ROOT.'lib/uccode.class.php';
+			$uccode = new uccode();
+		}
+		$str = $uccode->complie($str);
+		return trim($this->base->cutstr(strip_tags($str), $length));
 	}
 
 	function count_pm_by_fromuid($uid, $timeoffset = 86400) {
 		$dateline = $this->base->time - intval($timeoffset);
 		return $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND dateline>'$dateline'");
+	}
+
+	function check_pm_user_period($uid, $toid, $timeoffset = 86400) {
+		$dateline = time() - intval($timeoffset);
+		return $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND msgtoid='$toid' AND dateline>'$dateline'");
+	}
+
+	function countuser_by_fromuid($uid, $timeoffset = 86400) {
+		$dateline = time() - intval($timeoffset);
+		return $this->db->result_first("SELECT COUNT(DISTINCT msgtoid) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND dateline>'$dateline'");
 	}
 
 	function is_reply_pm($uid, $touids) {

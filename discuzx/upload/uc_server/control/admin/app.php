@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: app.php 894 2008-12-23 02:40:17Z monkey $
+	$Id: app.php 1003 2010-06-02 02:21:31Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -148,6 +148,7 @@ class control extends adminbase {
 			$authkey = $this->authcode($authkey, 'ENCODE', UC_MYKEY);
 			$synlogin = getgpc('synlogin', 'P');
 			$recvnote = getgpc('recvnote', 'P');
+			$extraurl = getgpc('extraurl', 'P');
 			if(getgpc('apppath', 'P')) {
 				$app['extra']['apppath'] = $this->_realpath(getgpc('apppath', 'P'));
 				if($app['extra']['apppath']) {
@@ -169,7 +170,13 @@ class control extends adminbase {
 			} else {
 				$app['extra']['apppath'] = '';
 			}
-
+			$app['extra']['extraurl'] = array();
+			if($extraurl) {
+				foreach(explode("\n", $extraurl) as $val) {
+					if(!$val = trim($val)) continue;
+					$app['extra']['extraurl'][] = $val;
+				}
+			}
 			$tagtemplates = array();
 			$tagtemplates['template'] = MAGIC_QUOTES_GPC ? stripslashes(getgpc('tagtemplates', 'P')) : getgpc('tagtemplates', 'P');
 			$tagfields = explode("\n", getgpc('tagfields', 'P'));
@@ -225,6 +232,7 @@ class control extends adminbase {
 		$this->view->assign('updated', $updated);
 		$addapp = getgpc('addapp');
 		$this->view->assign('addapp', $addapp);
+		$this->view->assign('extraurl', implode("\n", $app['extra']['extraurl']));
 		$this->view->assign('apppath', $app['extra']['apppath']);
 		$this->view->assign('tagtemplates', $tagtemplates);
 		$this->view->display('admin_app');

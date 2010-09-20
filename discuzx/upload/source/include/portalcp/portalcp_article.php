@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 16113 2010-08-31 09:29:40Z chenchunshao $
+ *      $Id: portalcp_article.php 17013 2010-09-19 04:04:41Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ $portalcategory = $_G['cache']['portalcategory'];
 if($catid && empty($portalcategory[$catid])) {
 	showmessage('portal_category_not_find', dreferer());
 }
-if($catid && $portalcategory[$catid]['disallowpublish']) {
+if(empty($article) && $catid && $portalcategory[$catid]['disallowpublish']) {
 	showmessage('portal_category_disallowpublish', dreferer());
 }
 
@@ -55,9 +55,9 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	$prename = censor($prename);
 
 	$_G['gp_author'] = dhtmlspecialchars($_G['gp_author']);
-	$_G['gp_url'] = dhtmlspecialchars($_G['gp_url']);
+	$_G['gp_url'] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_url']));
 	$_G['gp_from'] = dhtmlspecialchars($_G['gp_from']);
-	$_G['gp_fromurl'] = dhtmlspecialchars($_G['gp_fromurl']);
+	$_G['gp_fromurl'] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_fromurl']));
 	$_G['gp_dateline'] = !empty($_G['gp_dateline']) ? strtotime($_G['gp_dateline']) : TIMESTAMP;
 	$_G['gp_shorttitle'] = getstr(trim(dhtmlspecialchars($_G['gp_shorttitle'])), 80, 1, 1);
 	$_G['gp_shorttitle'] = censor($_G['gp_shorttitle']);
@@ -88,7 +88,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	}
 
 	if($_G['gp_conver']) {
-	        $converfiles = unserialize(stripcslashes($_G['gp_conver']));
+		$converfiles = unserialize(stripcslashes($_G['gp_conver']));
 		$setarr['pic'] = $converfiles['pic'];
 		$setarr['thumb'] = $converfiles['thumb'];
 		$setarr['remote'] = $converfiles['remote'];
@@ -139,6 +139,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		}
 		DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
 		DB::query('UPDATE '.DB::table('portal_category')." SET articles=articles+1 WHERE catid = '$setarr[catid]'");
+		DB::insert('portal_article_count', array('aid'=>$aid, 'catid'=>$setarr['catid'], 'dateline'=>$setarr['dateline'],'viewnum'=>1));
 	} else {
 		DB::update('portal_article_title', $setarr, array('aid' => $aid));
 	}
@@ -518,7 +519,7 @@ if ($op == 'delpage') {
 
 		$havepush = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')." WHERE id='$_GET[from_id]' AND idtype='$_GET[from_idtype]'"), 0);
 		if($havepush) {
-			showmessage('article_push_invalid_repeat', '', array(), array('return'=>true));
+			showmessage('article_push_'.$_GET['from_idtype'].'_invalid_repeat', '', array(), array('return'=>true));
 		}
 
 		switch ($_GET['from_idtype']) {
@@ -532,7 +533,7 @@ if ($op == 'delpage') {
 				}
 				$article['title'] = getstr($blog['subject'], 0);
 				$article['summary'] = portalcp_get_summary($blog['message']);
-				$blog['message'] .= lang('portalcp', 'article_pushplus_info', array('author'=>$blog['username'], 'url'=>'home.php?mod=space&do=blog&uid='.$blog['uid'].'&id='.$blog['blogid']));
+				$blog['message'] .= lang('portalcp', 'article_pushplus_info', array('author'=>$blog['username'], 'url'=>'home.php?mod=space&uid='.$blog['uid'].'&do=blog&id='.$blog['blogid']));
 				$article_content['content'] = dhtmlspecialchars($blog['message']);
 			}
 			break;
@@ -571,7 +572,7 @@ if ($op == 'delpage') {
 include_once template("portal/portalcp_article");
 
 function portalcp_get_summary($message) {
-	$message = preg_replace(array("/\[attach\].*?\[\/attach\]/", "/\&[a-z]+\;/i"), '', $message);
+	$message = preg_replace(array("/\[attach\].*?\[\/attach\]/", "/\&[a-z]+\;/i", "/\<script.*?\<\/script\>/"), '', $message);
 	$message = preg_replace("/\[.*?\]/", '', $message);
 	$message = getstr(strip_tags($message), 200);
 	return $message;

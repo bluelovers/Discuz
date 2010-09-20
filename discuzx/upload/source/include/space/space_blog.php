@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_blog.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: space_blog.php 16856 2010-09-16 02:53:58Z wangjinbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,7 +136,7 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $blog['subject'].' - '.lang('space', 'sb_blog', array('who' => $blog['username'])) . ' - ' . $_G['setting']['bbname'];
+	$navtitle = $blog['subject'].' - '.lang('space', 'sb_blog', array('who' => $blog['username']));
 	$metakeywords = $blog['tag'] ? $blog['tag'] : $blog['subject'];
 	$metadescription = cutstr(strip_tags($blog['message']), 140);
 
@@ -300,9 +300,11 @@ if($id) {
 			$navtitle = lang('core', 'title_newest_blog');
 		}
 	}
-	$navtitle = lang('space', 'sb_blog', array('who' => $space['username'])).' - '.$_G['setting']['bbname'];
-	$metakeywords = lang('space', 'sb_blog', array('who' => $space['username']));
-	$metadescription = lang('space', 'sb_blog', array('who' => $space['username']));
+	if($space['username']) {
+		$navtitle = lang('space', 'sb_blog', array('who' => $space['username']));
+	}
+	$metakeywords = $navtitle;
+	$metadescription = $navtitle;
 
 	space_merge($space, 'field_home');
 	include_once template("diy:home/space_blog_list");

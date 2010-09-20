@@ -233,7 +233,7 @@ class block_sort extends commonblock_html {
 				} elseif(in_array($sortoption[$optionid]['type'], array('radio', 'select'))) {
 					$optionvaluelist[] = $sortoption[$optionid]['choices'][$optiondata[$optionid]];
 				} elseif($sortoption[$optionid]['type'] == 'image') {
-					$optionvaluelist[] = $optiondata[$optionid] ? $optiondata[$optionid] : STATICURL.'image/common/nophoto.gif';
+					$optionvaluelist[] = $optiondata[$optionid] ? unserialize($optiondata[$optionid]) : STATICURL.'image/common/nophoto.gif';
 				} elseif($sortoption[$optionid]['type'] == 'url') {
 					$optiondata[$optionid] = preg_match('/^(ftp|http|)[s]?:\/\//', $optiondata[$optionid]) ? $optiondata[$optionid] : $optiondata[$optionid];
 					$optionvaluelist[] = $optiondata[$optionid] ? "<a href=\"".$optiondata[$optionid]."\" target=\"_blank\">".$optiondata[$optionid]."</a>" : '';

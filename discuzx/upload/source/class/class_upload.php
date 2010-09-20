@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_upload.php 12525 2010-07-09 01:35:25Z zhengqingpeng $
+ *      $Id: class_upload.php 16662 2010-09-13 01:15:36Z monkey $
  */
 
 
@@ -22,15 +22,11 @@ Class discuz_upload{
 
 	function init($attach, $type = 'temp', $extid = 0, $forcename = '') {
 
-		if(!is_array($attach) || empty($attach) || !$this->is_upload_file($attach['tmp_name']) || trim($attach['name']) == '' || $attach['size'] == 0)
-		{
+		if(!is_array($attach) || empty($attach) || !$this->is_upload_file($attach['tmp_name']) || trim($attach['name']) == '' || $attach['size'] == 0) {
 			$this->attach = array();
 			$this->errorcode = -1;
 			return false;
-		}
-
-		else
-		{
+		} else {
 			$this->type = $this->check_dir_type($type);
 			$this->extid = intval($extid);
 			$this->forcename = $forcename;

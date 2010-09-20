@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 16603 2010-09-10 04:19:01Z monkey $
+ *      $Id: forum_attachment.php 17050 2010-09-20 00:48:44Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,7 +51,8 @@ if($_G['setting']['attachexpire']) {
 	}
 }
 
-$readmod = 2;//read local file's function: 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
+$readmod = getglobal('config/download/readmod');
+$readmod = $readmod > 0 && $readmod < 5 ? $readmod : 2;
 
 $refererhost = parse_url($_SERVER['HTTP_REFERER']);
 $serverhost = $_SERVER['HTTP_HOST'];
@@ -175,7 +176,7 @@ if(!$requestmode) {
 
 	if(empty($_G['gp_noupdate'])) {
 		if($_G['setting']['delayviewcount'] == 2 || $_G['setting']['delayviewcount'] == 3) {
-			$_G['forum_logfile'] = './data/cache/forum_cache_attachviews.log';
+			$_G['forum_logfile'] = './data/cache/forum_attachviews_'.intval(getglobal('config/server/id')).'.log';
 			if(substr(TIMESTAMP, -1) == '0') {
 				require_once libfile('function/misc');
 				updateviews('forum_attachment', 'aid', 'downloads', $_G['forum_logfile']);
@@ -220,8 +221,22 @@ if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
 	dheader('Content-Disposition: attachment; filename='.$attach['filename']);
 }
 
-dheader('Content-Type: '.$attach['filetype']);
 dheader('Content-Length: '.$filesize);
+
+$xsendfile = getglobal('config/download/xsendfile');
+if(!empty($xsendfile)) {
+	$type = intval($xsendfile['type']);
+	$cmd = '';
+	switch ($type) {
+		case 1: $cmd = 'X-Accel-Redirect'; $url = $xsendfile['dir'].$attach['attachment']; break;
+		case 2: $cmd = $_SERVER['SERVER_SOFTWARE'] <'lighttpd/1.5' ? 'X-LIGHTTPD-send-file' : 'X-Sendfile'; $url = $filename; break;
+		case 3: $cmd = 'X-Sendfile'; $url = $filename; break;
+	}
+	if($cmd) {
+		dheader("$cmd: $url");
+		exit();
+	}
+}
 
 if($readmod == 4) {
 	dheader('Accept-Ranges: bytes');

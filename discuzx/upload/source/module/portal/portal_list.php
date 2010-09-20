@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_list.php 16616 2010-09-10 06:30:07Z zhangguosheng $
+ *      $Id: portal_list.php 16705 2010-09-13 06:34:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,17 +28,14 @@ if($cat['closed'] && !$_G['group']['allowdiy'] && !$categoryperm[$catid]['allowm
 }
 
 if(!empty($cat['url']))	dheader('location:'.$cat['url']);
-if(isset($_GET['page'])) {
-	$_SERVER['REQUEST_URI'] = str_replace(array('&page='.$_GET['page'], '?page='.$_GET['page']), '', $_SERVER['REQUEST_URI']);
-}
-if(defined('SUB_DIR') && $_G['siteurl']. substr(SUB_DIR, 1) != $cat['caturl'] || !defined('SUB_DIR') && $_G['siteurl'].substr($_SERVER['REQUEST_URI'], 1) != $cat['caturl']) {
+if(defined('SUB_DIR') && $_G['siteurl']. substr(SUB_DIR, 1) != $cat['caturl'] || !defined('SUB_DIR') && $_G['siteurl'] != substr($cat['caturl'], 0, strrpos($cat['caturl'], '/')+1)) {
 	dheader('location:'.$cat['caturl'], '301');
 }
 
 $cat = category_remake($catid);
 $_G['mnid'] = 'mn_P'.$cat['topid'];
 $page = max(1, intval($_GET['page']));
-$navtitle = $cat['catname'].($page>1?" ( $page ":'') . ' - ' . $_G['setting']['bbname'];
+$navtitle = $cat['catname'].($page>1?" ($page)":'');
 $metadescription = empty($cat['description']) ? $cat['catname'] : $cat['description'];
 $metakeywords =  empty($cat['keyword']) ? $cat['catname'] : $cat['keyword'];
 

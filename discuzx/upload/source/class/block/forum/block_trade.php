@@ -110,6 +110,17 @@ class block_trade {
 				);
 	}
 
+	function fieldsconvert() {
+		return array(
+				'group_trade' => array(
+					'name' => lang('blockclass', 'blockclass_group_trade'),
+					'script' => 'grouptrade',
+					'searchkeys' => array(),
+					'replacekeys' => array(),
+				),
+			);
+	}
+
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;
@@ -154,15 +165,6 @@ class block_trade {
 			}
 			$fids = $parameter['fids'];
 		}
-		if(empty($fids)) {
-			if(!empty($_G['setting']['allowviewuserthread'])) {
-				$fids = $_G['setting']['allowviewuserthread'];
-			} else {
-				return $returndata;
-			}
-		} else {
-			$fids = dimplode($fids);
-		}
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
@@ -191,7 +193,7 @@ class block_trade {
 		} else {
 			$keyword = '';
 		}
-		$sql = ($fids ? ' AND t.fid IN ('.$fids.')' : '')
+		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')

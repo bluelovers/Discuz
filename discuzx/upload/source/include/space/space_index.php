@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_index.php 16588 2010-09-09 10:03:36Z wangjinbo $
+ *      $Id: space_index.php 17029 2010-09-19 06:08:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,7 +111,7 @@ if ($_GET['op'] == 'getmusiclist') {
 	dsetcookie('home_diymode', 1);
 }
 
-$navtitle = lang('space', 'sb_space', array('who' => $space['username'])).' - '.$_G['setting']['bbname'];
+$navtitle = !empty($space['spacename']) ? $space['spacename'] : lang('space', 'sb_space', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_space', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_space', array('who' => $space['username']));
 include_once(template('home/space_index'));

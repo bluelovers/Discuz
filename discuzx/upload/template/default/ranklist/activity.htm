@@ -36,7 +36,7 @@
 						<td class="type"><!--{if $activity['aid']}--><img src="$activity['attachurl']" width="80" alt="" /><!--{else}--><img src="{IMGDIR}/nophotosmall.gif" alt="nophoto" width="80" height="80" /><!--{/if}--></td>
 						<td>
 							<h4><a href="forum.php?mod=viewthread&tid=$activity['tid']" target="_blank">$activity['subject']</a></h4>
-							<p class="mbn">{lang ranklist_activity_start} $activity['starttimefrom'] - $activity['starttimeto'] <!--{if $activity['has_expiration']}--><span class="xg1">{lang ranklist_activity_end}</span><!--{/if}--></p>
+							<p class="mbn">{lang ranklist_activity_start} $activity['starttimefrom']<!--{if $activity['starttimeto']}--> - $activity['starttimeto']<!--{/if}--> <!--{if $activity['has_expiration']}--><span class="xg1">{lang ranklist_activity_end}</span><!--{/if}--></p>
 							<p>$activity['message']</p>
 							<p class="xg1">
 								<!--{if $_G[gp_orderby] == 'favtimes'}-->{lang ranklist_thread_favorite} $activity['favtimes']

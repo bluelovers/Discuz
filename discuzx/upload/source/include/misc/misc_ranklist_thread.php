@@ -30,18 +30,31 @@ switch($_G['gp_before']) {
 	default: $_G['gp_before'] = 'thisweek';
 }
 $orderby = 'replies DESC';
+$navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_orderby']) {
 	case 'replies':
 		$orderby = 'replies DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_thread_reply').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_thread_reply');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_thread_reply');
 		break;
 	case 'views':
 		$orderby = 'views DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_thread_view').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_thread_view');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_thread_view');
 		break;
 	case 'sharetimes':
 		$orderby = 'sharetimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_thread_share').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_thread_share');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_thread_share');
 		break;
 	case 'favtimes':
 		$orderby = 'favtimes DESC';
+		$navtitle = lang('ranklist/navtitle', 'ranklist_title_thread_favorite').' - '.$navname;
+		$metakeywords = lang('ranklist/navtitle', 'ranklist_title_thread_favorite');
+		$metadescription = lang('ranklist/navtitle', 'ranklist_title_thread_favorite');
 		break;
 	default: $_G['gp_orderby'] = 'replies';
 }

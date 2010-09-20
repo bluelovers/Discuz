@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_userapp.php 6741 2010-03-25 07:36:01Z cnteacher $
+ *      $Id: function_userapp.php 16978 2010-09-17 09:46:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -93,7 +93,7 @@ function _my_get_app_url($appid, $suffix) {
 	if(!isset($_G['prefix_url'])) {
 		$_G['prefix_url'] = getsiteurl();
 	}
-	return $_G['prefix_url']."home.php?mod=userapp&appid=$appid";
+	return $_G['prefix_url']."userapp.php?mod=app&id=$appid";
 }
 
 function _my_get_app_position($appid) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_app.php 16448 2010-09-07 02:45:57Z zhengqingpeng $
+ *      $Id: userapp_app.php 16967 2010-09-17 08:50:32Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -114,5 +114,7 @@ if ($app['displayuserpanel']) {
 
 $navtitle = $app['appname'].' - '.$navtitle;
 
+$metakeywords = $app['appname'].' '.$_G['setting']['seokeywords']['userapp'];
+$metadescription = $app['appname'].' '.$_G['setting']['seodescription']['userapp'];
 include_once template("userapp/userapp_app");
 ?>

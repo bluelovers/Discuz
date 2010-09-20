@@ -130,7 +130,6 @@ a { color: {LINK}; text-decoration: none; }
 	.pbm { padding-bottom: 10px !important; }
 	.ptw { padding-top: 20px !important; }
 	.pbw { padding-bottom: 20px !important; }
-	/* 請不要用這個選擇符，待刪 by lushnis */.sbp { padding-right: 20px; padding-left: 15px; }
 
 /* 頭像 .avt --> Avatar */
 	.avt img { padding: 2px; width: 48px; height: 48px; background: {WRAPBG}; border: 1px solid; border-color: {COMMONBG} {COMMONBORDER} {COMMONBORDER} {COMMONBG}; }
@@ -184,11 +183,12 @@ a { color: {LINK}; text-decoration: none; }
 			.fdiy .tfm .px { width: auto; }
 			.p_fre { width: auto !important; }
 		.er { border-color: #F00; color: #F00; outline: 1px solid #F00; }
+
+		.pt { overflow-y: auto; }
+		div.pt { height: 100px; line-height: 100px; }
 		/* 自動調整高度的 textarea by Pony */
 		.pts { vertical-align: top; overflow: hidden; }
 		.cmt .pts { width: 60%; }
-		
-		div.pt { height: 100px; line-height: 100px; }
 
 /* 按鈕 */
 	button::-moz-focus-inner { border: 0; padding: 0; }
@@ -203,6 +203,7 @@ a { color: {LINK}; text-decoration: none; }
 		.pns .pn { height: 24px; line-height: 24px; font-size: 12px; }
 			.ie6 .pns .pn { line-height: 18px; }
 			.ie7 .pns .pn { line-height: 20px; }
+		.pnn .pn * { padding: 0 10px; }
 		a.pn { height: 29px; }
 			.ie_all a.pn { height: 31px; }
 			.pns a.pn { height: 24px; }
@@ -263,7 +264,7 @@ a { color: {LINK}; text-decoration: none; }
 		.alert_btn { margin-top: 20px; text-align: center; }
 		.alert_act { margin-top: 20px; padding-left: 58px; }
 
-/* 發帖導航 此塊內容或可刪除 待定 by lushnis */
+/* 發帖導航 by lushnis */
 .pbnv { float: left; white-space: nowrap; overflow: hidden; width: 400px; padding: 7px 0; }
 .pbl { overflow: hidden; margin: 9px 0; width: 621px; border-width: 1px 0 1px 1px; border-style: solid; border-color: #CCC; background: {WRAPBG}; }
 	.pbl li { float: left; overflow-x: hidden; overflow-y: auto; padding: 5px; width: 196px; height: 300px; border-right: 1px solid #CCC; }
@@ -294,7 +295,7 @@ a { color: {LINK}; text-decoration: none; }
 		.pmfl			PM friend list (Window)
 		*/
 
-/* 通用容器，定義頁面寬度 */ .wp { margin: 0 auto; width: 970px; } #wp .wp { width: auto; }
+/* 通用容器，定義頁面寬度 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
 
 /* 頁頭 */
 	#hd { margin-bottom: 10px; border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
@@ -349,24 +350,27 @@ a { color: {LINK}; text-decoration: none; }
 					#pm_ntc.new { background-image: url({IMGDIR}/new_pm.gif); }
 					#task_ntc { background-image: url({IMGDIR}/new_task.gif); }
 				#um .pipe { margin: 0 5px 0 0; }
-			
+
 			#qmenu { float: right !important; margin: 3px 10px 0 0; display: inline; padding: 0 0 0 10px !important; width: 85px; height: 26px; background: url({IMGDIR}/qmenu.png) no-repeat 0 0; line-height: 26px; }
 				#qmenu_menu { margin: -8px 0 0 1px; width: 92px; }
-				#qmenu_menu a { padding-left: 26px; background-position: 6px 50%; background-repeat: no-repeat; }
-					#qmenu_menu a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
+				#qmenu_menu ul a { padding-left: 26px; background: url({IMGDIR}/noicon.gif) no-repeat 6px 50%; }
+					#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
+				.reg_tip { padding: 10px; }
+					.p_pop .reg_tip a { padding: 0; background: none; white-space: normal; }
+						.p_pop .reg_tip a:hover { background: transparent none; text-shadow: none; color: {HIGHLIGHTLINK}; }
 
 /* 頁面主區域 */
 	#ct {  }
 		.mn { overflow: hidden; }
-		.ct2 .mn { float: left; width: 720px; margin-bottom: 1em; }
-		.ct2 .sd { float: right; width: 240px; overflow: hidden; _overflow-y: visible; }
+		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
+		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
 
-		.appl { float: left; overflow: hidden; margin-bottom: 10px; padding: 6px 10px; width: 119px; border: 1px solid {COMMONBORDER}; {SIDEBGCODE}; }
+		.appl { float: left; overflow: hidden; margin-bottom: 10px; padding: 6px 10px; width: 115px; border: 1px solid {COMMONBORDER}; {SIDEBGCODE}; }
 
 		.ct2_a .mn { float: right; width: 810px; }
-		
-		.ct3_a .mn { float: right; width: 555px; }
-		.ct3_a .sd { float: right; margin-left: 15px; width: 240px; }
+
+		.ct3_a .mn { float: right; width: 565px; }
+		.ct3_a .sd { float: right; margin-left: 15px; width: 220px; }
 
 		.mw { width: 100%; float: none; }
 		.mnw { clear: both; border-top: 1px solid #CCC; }
@@ -387,9 +391,9 @@ a { color: {LINK}; text-decoration: none; }
 		.bmn	Notice		整體帶有彩色背景，常用於提示信息
 	*/
 	.bm, .bn { margin-bottom: 10px; }
-		.bm { border: 1px solid {COMMONBORDER}; }
+		.bm { border: 1px solid {COMMONBORDER}; background: {WRAPBG}; }
 			.bm_c { padding: 10px; }
-		.drag {  }
+		.drag {}
 		.bm_h .o { float: right; width: 30px; }
 			.bm_h .o img { float: right; margin-top: 11px; cursor: pointer; }
 		.bm_h .i { padding-left: 10px; }
@@ -400,13 +404,14 @@ a { color: {LINK}; text-decoration: none; }
 		.bml .bm_h { padding-top: 5px; border: none; background: transparent; }
 		.bml .bm_c { padding-top: 0; }
 		.bmn { padding: 7px 10px; border-color: {SPECIALBORDER}; background: {SPECIALBG}; }
-		
+
 		.fl { border: 1px solid {COMMONBORDER}; border-top: none; background: {WRAPBG}; }
 			.fl .bm { margin-bottom: 0; border: none; }
 				.fl .bm_h { border-width: 1px 0; border-color: {SPECIALBORDER}; {TITLEBGCODE}; }
 		.fl .bm_c, #online .bm_c, .lk .bm_c { padding-top: 0; padding-bottom: 0; }
 	.bm2 .bm2_b { float: left; width: 49%; border: 1px solid {COMMONBORDER}; }
 		.bm2 .bm2_b_y { float: right; }
+	.bw0 { background: transparent; }
 
 	/* 寬佈局下的通用塊 */.bw { padding: 0 15px; }
 
@@ -499,6 +504,8 @@ a { color: {LINK}; text-decoration: none; }
 		* html .a_cb { top: expression(offsetParent.scrollTop+20); }
 	/* 文章漂浮廣告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
 
+	.a_h, .a_mu, .a_c, .a_p, .a_f { text-align: center; }
+
 /* ------------------------------------------------------------------------ 列表樣式 */
 		/*
 		.xl				Text list
@@ -549,7 +556,7 @@ a { color: {LINK}; text-decoration: none; }
 		.ml img { display: block; margin: 0 auto; }
 		.ml p, .ml span { display: block; width: 100%; height: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 		.ml span, .ml span a { color: {LIGHTTEXT}; }
-	.mls li { padding: 0 0 5px; width: 71px; }
+	.mls li { padding: 0 0 5px; width: 66px; }
 		.mls img { width: 48px; height: 48px; }
 		.mls p { margin-top: 5px; }
 	.mlm li { padding: 0 0 5px; width: 150px; }
@@ -594,25 +601,14 @@ a { color: {LINK}; text-decoration: none; }
 .mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; } 
 
 /* 友情鏈接 */
-	.lk img { float: left; margin-right: 6px; margin-bottom: 5px; width: 88px; height: 31px; }
-		/* *+html .lk .forumlogo { margin-bottom: -15px; } * html .lk .forumlogo { margin-bottom: -16px; }*/
+	.lk img { float: left; margin-right: 5px; margin-bottom: 5px; width: 88px; height: 31px; }
 	.lk p { color: {MIDTEXT}; }
 	.lk .m li { clear: left; padding: 0 0 10px 98px; }
 		.lk .m img { display: inline; margin-top: 4px; margin-top/*\**/: 1px\9; margin-left: -98px; }
-	.lk .x li { float: left; margin-right: 6px; width: 88px; height: 1.5em; overflow: hidden; }
+	.lk .x li { float: left; margin-right: 5px; width: 88px; height: 1.5em; overflow: hidden; }
 	.lk_logo .lk_content { float: left; }
 
 /* ------------------------------------------------------------------------ 其他特定功能塊 */
-
-/* 個人中心快捷面板 */
-	#pp { position: relative; z-index: 1; }
-		#pp .ch { border-bottom: none; background: url({IMGDIR}/pp.png) no-repeat 50% 100%; }
-		#pp .ch, #pp label { height: 52px; }
-		#pp label a { padding-left: 15px; height: 52px; background: url({IMGDIR}/collapsed_yes.gif) no-repeat -5px 55%; color: #F60; font-size: 14px; font-weight: 700; }
-	#ppc_menu { padding: 10px 15px 10px 10px; width: 298px; border-top: none; }
-		#ppc_menu.p_pop { margin-left: -2px; _margin-left: -1px; box-shadow: 0 2px 2px {COMMONBORDER}; -webkit-box-shadow: 0 2px 2px {COMMONBORDER}; -moz-box-shadow: -0 2px 2px {COMMONBORDER}; }
-		#ppc_menu hr { margin-left: 0; margin-right: 0; }
-
 /* 簡易編輯器 Tiny Editor */
 	.tedt { width: 98%; border: 1px solid; border-color: #999 #CCC #CCC #999; }
 		.tedt .bar { padding: 0 10px 0 0; height: 25px; border-bottom: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 28px; }
@@ -651,7 +647,7 @@ a { color: {LINK}; text-decoration: none; }
 
 /* 寬版切換 by Pony */
 .wslct { border-top: 1px dashed {COMMONBORDER}; }
-	.wslct a { padding-left: 10px !important; }
+	.wslct a { padding-left: 10px !important; background-image: none !important; }
 		.wslct a:hover { background-image: none !important; }
 
 /* 彈出菜單、彈出層及彈出窗口 */
@@ -753,8 +749,8 @@ a { color: {LINK}; text-decoration: none; }
 	#postbox dd.hasd input { width: 99px; margin-right: 0; }
 
 /*彈窗 編輯器 顏色框 colorbox*/
-.colorbox{width:130px;}
-.colorbox input { margin: 2px; padding: 0px; float:left; cursor: pointer; width: 12px; height: 12px; border: 0; }
+.colorbox{ width: 130px; }
+.colorbox input { float: left; margin: 2px; padding: 0; width: 12px; height: 12px; border: 0; cursor: pointer; }
 
 /* 短消息對話框 .pm -> personal_message (window) by Pony */
 	.pm { overflow: hidden; width: 400px; }
@@ -816,7 +812,7 @@ a { color: {LINK}; text-decoration: none; }
 	.m_c .blr { margin: 0 auto; }
 .lgfm { font: {FONTSIZE} {FONT}; float: left; margin-bottom: 10px; *margin-bottom: -10px; padding: 20px 0; width: 280px; border-right: 1px solid #CCC; }
 	.rgs { margin-bottom: 10px; }
-	.lgfm label, .lgfm p { clear: both; overflow: hidden; display: block; margin: 0 0 10px; line-height: 22px; }
+	.lgfm label, .lgfm p, .reginfo { clear: both; overflow: hidden; display: block; margin: 0 0 10px; line-height: 22px; }
 		/* 自定義的註冊信息 */
 		.reginfo label { display: inline; }
 		.reg_c { float: left; width: 200px; }
@@ -852,6 +848,8 @@ a { color: {LINK}; text-decoration: none; }
 	.fastlg_fm { margin-right: 5px; padding-right: 5px; border-right: 1px solid {COMMONBORDER}; }
 	.fastlg .px, #ls_more .px { height: 16px; line-height: 16px; font-size: 12px; }
 	.fastlg .pn { height: 22px; line-height: 22px; *line-height: 18px; }
+	.reglk { margin-top: 4px; display: block; width: 4em; height: 20px; border: 1px solid; border-color: {SPECIALBORDER} {HIGHLIGHTLINK} {HIGHLIGHTLINK} {SPECIALBORDER}; background: {SPECIALBG}; text-align: center; line-height: 20px; text-decoration: none !important; }
+		.ie_all.reglk { margin-top: 3px; }
 	.fastlg .ftid { vertical-align: middle; }
 	#ls_fastloginfield_ctrl { vertical-align: middle; border: none; background-color: transparent; }
 	.psw_w { padding-left: 5px; width: 67px; }
@@ -867,7 +865,6 @@ a { color: {LINK}; text-decoration: none; }
 		.poke img { vertical-align: middle; }
 
 /* 普通數據列表 datatable by michael */
-
 .dt { border-top: 1px solid {COMMONBORDER}; width: 100%; }
 	.dt th { background: {COMMONBG}; }
 	.dt td, .dt th { padding: 7px 4px; border-bottom: 1px solid {COMMONBORDER}; }
@@ -899,7 +896,7 @@ a { color: {LINK}; text-decoration: none; }
 		.lum ul li { padding: 0.2em 0; }
 
 /* pgs --> pages & postbutton 分頁、發帖按鈕, pgb -->返回首頁, nxt -->下一頁 */
-.pgs { }
+.pgs {}
 	.pgs #newspecial, .pgs #newspecialtmp, .pgs #post_reply, .pgs #post_replytmp { float: left; margin-right: 5px; }
 	.pg { float: right; }
 	.pg, .pgb { line-height: 26px; }
@@ -1012,8 +1009,8 @@ a { color: {LINK}; text-decoration: none; }
 	.frame-tab .tab-title .titletext { float: left; margin: 0 10px; }
 		.tab-title { padding: 0; width: 100% !important; border: none; }
 		.frame-tab .tb { margin-top: 0; padding-left: 15px; line-height: 32px; border: none; }
-			.frame-tab .tb li { margin: 0; font-weight: 400; }
-			.frame-tab .tb li, .frame-tab .tb li a { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; border: none; background: transparent none; }
+			.frame-tab .tb li { margin: 0; margin-left: -1px; font-weight: 400; }
+			.frame-tab .tb li, .frame-tab .tb li a { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; border-top: none; background: transparent none; }
 				* html .frame-tab .tb li a { float: left; }
 				.frame-tab .tb .a a { background: #FFF; font-weight: 700; }
 		.frame-tab .tb-c { padding: 10px 16px; }
@@ -1135,7 +1132,6 @@ a { color: {LINK}; text-decoration: none; }
 	.b_hstab td { padding: 5px 0; border-bottom: 1px solid {COMMONBORDER}; }
 
 /* 主題分類 菜單 */
-
 .tsm { overflow: hidden; }
 	.tsm dt { float: left; padding: 2px 0; width: 64px; clear: left; }
 	.tsm dd { padding: 2px 0; overflow: hidden; }
@@ -1146,12 +1142,12 @@ a { color: {LINK}; text-decoration: none; }
 .prmm { margin-left: -27px; padding-top: 10px; width: 250px; background: transparent url({IMGDIR}/pm_ntc.gif) no-repeat 0 0; text-align: left; opacity: 0.98; }
 	.prmc { padding-bottom: 10px; background: transparent url({IMGDIR}/pm_ntc.gif) no-repeat -250px 100%; }
 		.prmm ul { padding: 0 10px; border: solid #91C8E2; border-width: 0 2px; background: {DROPMENUBGCOLOR}; }
-			.prmm li { border-bottom: 1px solid #F4F4F4; line-height: 29px; display: block; width: 100%; color: {LIGHTTEXT}; overflow: hidden; text-overflow: ellipsis; -webkit-text-overflow: ellipsis; -moz-text-overflow: ellipsis; -o-text-overflow: ellipsis; }
+			.prmm li { border-bottom: 1px solid #F4F4F4; line-height: 29px; display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; -webkit-text-overflow: ellipsis; -moz-text-overflow: ellipsis; -o-text-overflow: ellipsis; }
 				.prmm a:hover { text-decoration: none; color: {HIGHLIGHTLINK}; }
 .up { padding-top: 0; padding-bottom: 10px; width: 150px; background-position: -500px 100%; }
 	.up .prmc { padding-top: 5px; padding-bottom: 0; background-position: -650px 0; }
 		.up li { border-bottom: none; line-height: 160%; }
-/*推薦商品、樓盤 by dfox*/
+/*推薦商品 by dfox*/
 em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overflow: hidden; background: url({IMGDIR}/hot.png) no-repeat 0 0; }
 
 /*板塊、群組、空間主區域/側邊搜索 by dfox */

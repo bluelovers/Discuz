@@ -66,9 +66,6 @@
 								<th>{lang trade_online_tradeurl}</th>
 								<td class="pns">
 									<!--{if $tradelog[status] == 0 && $tradelog[buyerid] == $_G['uid']}-->
-										<!--{if $tradelog[selleraccount]}-->
-											<button class="pn" type="button" name="" onclick="window.open('forum.php?mod=trade&orderid=$orderid&pay=yes&apitype=alipay','','')"><span>{lang trade_online_pay}</span></button>
-										<!--{/if}-->
 										<!--{if $tradelog[tenpayaccount]}-->
 											<button class="pn" type="button" name="" onclick="window.open('forum.php?mod=trade&orderid=$orderid&pay=yes&apitype=tenpay','','')"><span>{lang trade_online_tenpay}</span></button>
 										<!--{/if}-->

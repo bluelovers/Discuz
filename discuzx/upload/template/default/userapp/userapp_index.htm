@@ -106,41 +106,14 @@
 						</ul>
 					</div>
 				</div>
-				<div class="bm2_b bm2_b_y">
-					<div class="bm_h cl"><h2>{lang friends_playing}</h2></div>
-					<div class="bm_c">
-						<ul class="xl xl2 apl cl">
-							<!--{loop $frienduseapp $value}-->
-							<li><img width="16" height="16" {if $value[icon]}src="$value[icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[appid]'"{else} src="http://appicon.manyou.com/icons/$value[appid]"{/if} alt="$value[appname]" class="vm" /> <a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
-							<!--{/loop}-->
-						</ul>
-					</div>
-				</div>
-			</div>
 
-			<div class="bm bm2 bw0 appmaxh cl">
-				<div class="bm2_b">
+				<div class="bm2_b bm2_b_y">
 					<div class="bm_h cl"><h2>{lang popular_app}</h2></div>
 					<div class="bm_c">
 						<ul class="xl xl2 apl cl">
 							<!--{loop $hotapp $value}-->
 							<li><img width="16" height="16" {if $value[icon]}src="$value[icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[appid]'"{else} src="http://appicon.manyou.com/icons/$value[appid]"{/if} alt="$value[appname]" class="vm" /> <a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
 							<!--{/loop}-->
-						</ul>
-					</div>
-				</div>
-				<div class="bm2_b bm2_b_y">
-					<div class="bm_h cl"><h2>{lang you_may_interested}</h2></div>
-					<div class="bm_c">
-						<ul class="xl xl2 apl cl">
-						<!--{eval $i=0;}-->
-						<!--{loop $_G['cache']['userapp'] $value}-->
-							<li><img width="16" height="16" {if $value[icon]}src="$value[icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[appid]'"{else} src="http://appicon.manyou.com/icons/$value[appid]"{/if} alt="$value[appname]" class="vm"> <a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
-							<!--{eval $i++;}-->
-							<!--{if $i==10}-->
-							<!--{eval break;}-->
-							<!--{/if}-->
-						<!--{/loop}-->
 						</ul>
 					</div>
 				</div>

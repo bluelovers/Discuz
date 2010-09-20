@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 16274 2010-09-02 09:01:31Z zhangguosheng $
+	$Id: portal.js 16908 2010-09-16 10:40:05Z zhangguosheng $
 */
 
 function block_get_setting(classname, script, bid) {
@@ -197,4 +197,23 @@ function toggleSettingShow() {
 		$('a_setting_show').innerHTML = '收起設置項';
 	}
 	doane();
+}
+
+function checkblockname(form) {
+	if(!(trim(form.name.value) > '')) {
+		alert('模塊標識不能為空');
+		form.name.focus();
+		return false;
+	}
+	return true;
+}
+
+function blockconver(ele,bid) {
+	if(ele && bid) {
+		if(confirm('你確定要轉換模塊的類型從 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
+			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
+		} else {
+			ele.selectedIndex = 0;
+		}
+	}
 }
