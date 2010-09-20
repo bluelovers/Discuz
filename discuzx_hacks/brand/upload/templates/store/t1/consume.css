@@ -1,0 +1,16 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+#consumer .content {
+	border-top:1px solid #CCCCCC;
+	background:url("../../../static/image/sellerbox_bg.png") repeat-x;
+}
+#consumer .content h3 {
+	background-image:url(image/icon_s.gif);
+	background-position:6px -15px;
+	text-indent:21px;
+}

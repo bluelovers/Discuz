@@ -1,0 +1,25 @@
+###独立主机用户
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^(.*)/store-([0-9]+)\.html$ $1/store.php?id=$2 [L,NC]
+	RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)\.html$ $1/store.php?id=$2&action=$3 [L,NC]
+	RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)-([0-9]+)\.html$ $1/store.php?id=$2&action=$3&xid=$4 [L,NC]
+	RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)-catid-([0-9]+)\.html$ $1/store.php?id=$2&action=$3&catid=$4 [L,NC]
+	RewriteRule ^(.*)/street-([0-9]+)\.html$ $1/street.php?catid=$2 [L,NC]
+	RewriteRule ^(.*)/street-([0-9]+)-([0-9]+)\.html$ $1/street.php?catid=$2&tagid=$3 [L,NC]
+</IfModule>
+
+
+###虚拟主机用户
+
+# 将 RewriteEngine 模式打开
+RewriteEngine On
+# 修改以下语句中的 /brand 为你的品牌空间目录相对地址，如果程序放在根目录中，请将 /brand 修改为 /
+RewriteBase /brand
+# Rewrite 系统规则请勿修改
+RewriteRule ^store-([0-9]+)\.html$ store.php?id=$1 [L,NC]
+RewriteRule ^store-([0-9]+)-([a-z]+)\.html$ store.php?id=$1&action=$2 [L,NC]
+RewriteRule ^store-([0-9]+)-([a-z]+)-([0-9]+)\.html$ store.php?id=$1&action=$2&xid=$3 [L,NC]
+RewriteRule ^store-([0-9]+)-([a-z]+)-catid-([0-9]+)\.html$ store.php?id=$1&action=$2&catid=$3 [L,NC]
+RewriteRule ^street-([0-9]+)\.html$ street.php?catid=$1 [L,NC]
+RewriteRule ^street-([0-9]+)-([0-9]+)\.html$ street.php?catid=$1&tagid=$2 [L,NC]

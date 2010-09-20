@@ -1,0 +1,165 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common.css 4374 2010-09-08 08:58:55Z fanshengshuai $
+ */ /* 全局CSS定义 */
+#street,#brand_navgation,#allgoodslist {
+	margin: 0 auto 15px auto;
+	overflow: hidden;
+}  /*publish*/
+#street,#brand_navgation,#allalbumslist {
+	margin: 0 auto 15px auto;
+	overflow: hidden;
+}  /*publish*/
+#street .content,#allgoodslist .content {
+	padding: 0;
+	width: 740px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+#street .content,#allalbumslist .content {
+	padding: 0;
+	width: 740px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.content .list {
+	padding: 4px;
+	width: 730px;
+	background: #f7edeb;
+	overflow: hidden;
+}
+
+.content .list .cont {
+	padding: 3px 8px;
+	border: 1px solid #e3cba9;
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+.content .list .cont h3 {
+	height: 27px;
+	line-height: 27px;
+	font-size: 14px;
+}
+
+.content .list .name {
+	width: 470px;
+}
+
+.content .list .foodlabels {
+	width: 127px;
+}
+
+.content .list .rebate {
+	font-family: Arial;
+	width: 115px;
+	text-align: center;
+}
+
+.content .list .title {
+	height: 26px;
+	line-height: 26px;
+	border: 1px solid #E4CF8C;
+	border-left: none;
+	border-right: none;
+	background: url(../../../static/image/bg_streettitle.png) repeat-x
+		bottom left;
+}
+
+.content .list .title div,.content .list .everylist div {
+	float: left;
+}
+
+.content .list .title .name {
+	text-align: left;
+	text-indent: 10px;
+}
+
+.content .everylist {
+	margin: 0 auto;
+	padding-bottom: 1px;
+	width: 714px;
+	background: url(../../../static/image/bg_street.png) repeat-x 0 20px;
+	overflow: hidden;
+}
+
+.content .everylist div {
+	height: 96px;
+}
+
+.content .everylist dl {
+	margin: 0;
+	border: none;
+	padding-left: 15px;
+}
+
+.content .everylist dl dt,.content .everylist dl dd {
+	float: left;
+}
+
+.content .everylist dl dt,.content .everylist dl dd {
+	padding-top: 6px;
+	width: 220px;
+	overflow: hidden;
+}
+
+.content .everylist dl dt img {
+	padding: 1px;
+	border: 1px solid #DDDDDD;
+}
+
+.content .name {
+	width: 387px;
+}
+
+.content .name dd {
+	margin-left: 8px;
+	width: 305px;
+	overflow: hidden;
+}
+
+.content .name h5 {
+	height: 31px;
+	line-height: 31px;
+	font-size: 14px;
+	overflow: hidden;
+}
+
+.content .name h5 a:link,.content .name h5 a:visited {
+	color: #94591F;
+}
+
+.content .name h5 a:hover {
+	color: #d0511c;
+}
+
+.content .name span {
+	color: #999;
+}
+
+.content .name li {
+	line-height: 16px;
+	height: auto;
+}
+
+.content .everylist .foodlabels {
+	padding: 8px 0 20px 0;
+	height: 67px;
+	overflow: hidden;
+	margin-bottom: 5px;
+	line-height: 17px;
+}
+
+.content .everylist .rebate {
+	padding-top: 10px;
+	height: 85px;
+	width: 115px;
+	text-align: center;
+	font-size: 12px;
+}

@@ -1,0 +1,8 @@
+url.rewrite-once = (
+                "^(.*)/store-([0-9]+)\.html$" => "$1/store.php?id=$2",
+                "^(.*)/store-([0-9]+)-([a-z]+)\.html$" => "$1/store.php?id=$2&action=$3",
+                "^(.*)/store-([0-9]+)-([a-z]+)-([0-9]+)\.html$" => "$1/store.php?id=$2&action=$3&xid=$4",
+		"^(.*)/store-([0-9]+)-([a-z]+)-catid-([0-9]+)\.html$" => "$1/store.php?id=$2&action=$3&catid=$4",
+                "^(.*)/street-([0-9]+)\.html$" => "$1/street.php?catid=$2",
+                "^(.*)/street-([0-9]+)-([0-9]+)\.html$" => "$1/street.php?catid=$2&tagid=$3"
+)

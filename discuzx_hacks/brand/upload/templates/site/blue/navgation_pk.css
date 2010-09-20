@@ -1,0 +1,19 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: navgation_pk.css 3991 2010-07-28 04:14:41Z fanshengshuai $
+ */
+
+.navgation_pk, .navgation_pk .nav_header, .navgation_pk .nav_item, .navgation_pk .nav_item li, .navgation_pk .nav_item .active a, .navgation_pk .nav_item .active a:visited, .navgation_pk .nav_item a:hover, .navgation_pk .search_box, .navgation_pk .search_key, .navgation_pk .search_box label, .navgation_pk .menu, .navgation_pk .menu div {background-image:url(image/bg_nav_pk_1.gif);background-repeat:no-repeat;}
+.navgation_pk {margin-bottom:0; background:#FFF;}
+	.navgation_pk .nav_header {background:url(image/bg_nav_1.jpg) repeat-x 0 0;}
+			.navgation_pk .nav_item a, .navgation_pk .nav_item a:visited {color:#2F6D78;}
+				.navgation_pk .menu ul {display:none;position:absolute;top:0px;width:72px;left:-6px;border:1px solid #d2dcfe;background:#FFF;}
+						.navgation_pk .menu ul a:hover {background:#e2e9ff url(../../../static/image/bg_nav_pk.gif) no-repeat 54px -230px;color:#333;}
+	#showmessage .mtitle { height:45px; background:url('image/showmessage-top_1.gif') no-repeat; text-indent:-1000px; overflow:hidden;}
+	#showmessage .mcont { border-left:1px solid #EBE6C9; border-right:1px solid #EBE6C9; background-color:#e3e9ff; }
+		#showmessage .mcont a { display:block; width:66px; font-size:16px; color:#FFF; font-weight:bold; text-align:center; height:27px; line-height:27px; margin:0 auto; background:url('image/showmessage-button_1.gif') no-repeat; overflow:hidden;}
+	#showmessage .mbot { height:10px; background:url('image/showmessage-bottom_1.gif') no-repeat;}
+	#position .attend{background:transparent url(image/supnav_bg_1.png) no-repeat scroll 8px -70px;float:right;line-height:9999px;overflow:hidden;display:block;}

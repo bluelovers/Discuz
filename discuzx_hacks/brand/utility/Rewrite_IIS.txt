@@ -1,0 +1,12 @@
+[ISAPI_Rewrite]
+
+CacheClockRate 3600
+
+RepeatLimit 32
+
+RewriteRule ^(.*)/store-([0-9]+)\.html\?*(.*)$ $1/store\.php\?id=$2 
+RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)\.html\?*(.*)$ $1/store\.php\?id=$2&action=$3 
+RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)-([0-9]+)\.html\?*(.*)$ $1/store\.php\?id=$2&action=$3&xid=$4 
+RewriteRule ^(.*)/store-([0-9]+)-([a-z]+)-catid-([0-9]+)\.html\?*(.*)$ $1/store\.php\?id=$2&action=$3&catid=$4 
+RewriteRule ^(.*)/street-([0-9]+)\.html\?*(.*)$ $1/street\.php\?catid=$2 
+RewriteRule ^(.*)/street-([0-9]+)-([0-9]+)\.html\?*(.*)$ $1/street\.php\?catid=$2&tagid=$3

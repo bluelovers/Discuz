@@ -1,0 +1,81 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common_store.css 4479 2010-09-15 06:23:44Z fanshengshuai $
+ */ /* 商铺的 album 页面 */
+.aboutbrand .tips {
+	background: #FFFFFF none repeat scroll 0 0;
+	border: 1px solid #E2C9A8;
+	margin: auto;
+	overflow: hidden;
+	padding: 2px 0;
+}
+
+.aboutbrand .tips .tit {
+	background: transparent url(image/index_icon_index.gif) no-repeat scroll
+		7px -17px;
+	height: 18px;
+	line-height: 18px;
+	text-indent: 20px;
+}
+
+.aboutbrand .tips .info {
+	background: transparent none repeat scroll 0 0;
+	height: 18px;
+	line-height: 18px;
+	text-indent: 35px;
+}
+
+/* 留言 */
+.message #ajax_status_display {
+	color: #925A21;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.message #ico_opt {
+	cursor: pointer;
+	vertical-align: middle;
+	margin-left: 5px;
+}
+
+.message #com_authcode_img {
+	width: 150px;
+	height: 25px;
+	overflow: hidden;
+	float: left;
+	margin: 0 0 0 140px;
+	padding: 0;
+}
+
+.message #seccode_area {
+	margin: 10px 0 10px 0;
+}
+
+.message #com_authcode_img .chang_seccode {
+	float: left;
+	line-height: 25px;
+}
+.sellerbox #menulist dl dt span {
+	background-image:url("../image/btn_consumer.gif");
+	display:block;
+	height:0;
+	left:0;
+	overflow:hidden;
+	padding-top:35px;
+	position:absolute;
+	top:0;
+	width:35px;
+	border:none;
+}
+
+.ineffect {
+	background-position:-130px 0;
+}
+
+.expire {
+	background-position:-90px 0;
+}

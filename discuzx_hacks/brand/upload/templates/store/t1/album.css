@@ -1,0 +1,172 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+ #newslist .content h3, .store_list .content h3, #store_album_list .content h3 {
+background-position:10px -15px;
+font-size:14px;
+height:25px;
+line-height:27px;
+margin-bottom:10px;
+text-indent:25px;
+width:100%;
+}
+#newslist .content, #seller .content .sellerbox, #map .content, #goodslist .content, #groupbuyslist .content, #consumerlist .content, #store_album_list .content {
+background:url(image/sellerbox_bg.png) repeat-x scroll 0 0 transparent;
+}
+#albumlist {
+margin:10px;
+overflow:hidden;
+}
+#albumlist li {
+background:url(../../../static/image/img_li_bg.gif) no-repeat scroll 0 0 transparent;
+display:inline-block;
+float:left;
+vertical-align:bottom;
+width:183px;
+}
+#albumlist li img {
+height:120px;
+margin:13px 0 0 8px;
+overflow:hidden;
+width:150px;
+}
+#albumlist li .album_desc {
+color:#925A21;
+height:24px;
+line-height:24px;
+margin:8px 0 5px 5px;
+overflow:hidden;
+text-align:center;
+width:160px;
+}
+.main .content h3 {
+clear:both;
+display:block;
+font-size:14px;
+height:30px;
+line-height:30px;
+text-indent:10px;
+}
+.targetpic {
+clear:both;
+float:left;
+margin-bottom:20px;
+margin-top:20px;
+text-align:center;
+width:100%;
+}
+#album_show_thumb_panel .prev {
+clear:left;
+float:left;
+margin-top:30px;
+padding-right:3px;
+}
+#album_show_thumb_panel .thumb_pic_list {
+float:left;
+height:150px;
+margin-left:5px;
+overflow:hidden;
+width:685px;
+}
+#album_show_thumb_panel .prev a {
+background-position:-95px -48px;
+cursor:default;
+opacity:0.25;
+}
+#album_show_thumb_panel .goodlist {
+float:left;
+height:120px;
+margin-top:20px;
+overflow:hidden;
+position:relative;
+width:685px;
+}
+#album_show_thumb_panel .goodlist .curr_pic {
+background:url(image/bg_targetpic_curr.gif) no-repeat scroll 0 0 transparent;
+}
+#album_show_thumb_panel .goodlist li a {
+background:none repeat scroll 0 0 #FFFFFF;
+display:table-cell;
+height:80px;
+overflow:hidden;
+text-align:center;
+vertical-align:middle;
+width:102px;
+}
+#album_show_thumb_panel .goodlist p {
+color:#333333;
+height:23px;
+line-height:23px;
+overflow:hidden;
+text-align:center;
+width:102px;
+}
+#album_show_thumb_panel .goodlist li a {
+background:none repeat scroll 0 0 #FFFFFF;
+display:table-cell;
+height:80px;
+overflow:hidden;
+text-align:center;
+vertical-align:middle;
+width:102px;
+}
+#album_show_thumb_panel .goodlist li img {
+display:inline;
+vertical-align:middle;
+}
+.targetpic_main {
+width:328px;
+}
+#album_show_thumb_panel .prev a , #album_show_thumb_panel .next a {
+width:16px;height:36px;overflow:hidden;
+	  margin-top:20px;text-indent:-116px;
+display:block;background:url(image/bg_navbtn.gif) no-repeat;
+}
+#album_show_thumb_panel .prev {padding-right:3px;clear:left;float:left;margin-top:30px;}
+#album_show_thumb_panel .prev a {
+	background-position:-95px -48px;opacity:0.25;filter:opacity(alpha:0.25);cursor:default;
+}
+#album_show_thumb_panel .thumb_pic_list {float: left; width: 685px;height:150px;margin-left: 5px;overflow:hidden;}
+#album_show_thumb_panel .next {float:left;padding-left:3px;margin-top:30px; width:16px; overflow:hidden;}
+#album_show_thumb_panel .next a {background-position:-125px -48px;}
+#album_show_thumb_panel .goodlist {float:left;position:relative;margin-top:20px;width:685px;height:120px;overflow:hidden;}
+#album_show_thumb_panel .goodlist li {float:left;padding:10px 6px 0 6px;width:102px;height:110px;cursor:pointer;overflow:hidden;}
+#album_show_thumb_panel .goodlist .curr_pic {background:url(image/bg_targetpic_curr.gif) no-repeat 0 0;}
+#album_show_thumb_panel .goodlist li a {display:table-cell;*display:block;*font-size:70px;width:102px;height:80px;text-align:center;vertical-align:middle;overflow:hidden;background:#FFF; }
+#album_show_thumb_panel .goodlist p {width:102px;height:23px;line-height:23px;text-align:center;color:#333;overflow:hidden;}
+#album_show_thumb_panel .goodlist li img {display:inline;vertical-align:middle;}
+
+/* photo ablum */
+.targetpic {clear:both;margin-bottom:20px;float:left;margin-top:20px;width:100%;text-align:center; }
+.targetpic_prev, .targetpic_next, .targetpic_main {float:left;height:330px;}
+.targetpic_prev, .targetpic_next {width:45px;}
+.targetpic_prev a, .targetpic_next a {display:block;margin-top:98px;padding-left:23px;width:0;height:46px;overflow:hidden;background-image:url(image/bg_targetpic_curr.gif);}
+.targetpic_prev {margin-left:161px;_display:inline;}
+.targetpic_prev a {float:left;background-position:-36px -37px}
+.targetpic_next a {float:right;background-position:-59px -37px}
+.targetpic_main {width:328px;}
+.targetpic_main a {display:table-cell;*display:block;padding:3px;border:1px solid #AEAEAE;*font-size:210px;width:320px;height:240px;text-align:center;vertical-align:middle;overflow:hidden; overflow:hidden;}
+.targetpic_main p {margin:10px 0;height:25px;line-height:25px;font-size:14px;color:#3971AA;}
+.targetpic_main div a {display:inline;width:auto;height:auto;font-size:12px;padding:0;border:none;}
+.targetpic_main div img {padding:0;border:none;}
+.targetpic_main #tarpic { max-width:320px; max-height:240px; overflow:hidden; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

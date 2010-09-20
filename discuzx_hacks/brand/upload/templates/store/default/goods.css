@@ -1,0 +1,264 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+
+#newslist .content,#seller .content .sellerbox,#map .content,#goodslist .content,#groupbuyslist .content,#consumerlist .content,#store_album_list .content
+	{
+	background: url(../../../static/image/sellerbox_bg.png) repeat-x 0 0;
+}
+
+/*---商品列表---*/
+#goodslist .content {
+	float: left;
+	padding: 0 4px;
+	width: 730px;
+	overflow: hidden;
+}
+
+#goodslist .content h3 {
+	height: 35px;
+	line-height: 27px;
+	text-indent: 21px;
+	font-size: 14px;
+	background-position: 6px -15px
+}
+
+#goodslist dl.tags {
+	margin: 0 auto 5px;
+	width: 730px;
+	overflow: hidden;
+}
+#goodslist .content .name {
+	width: 720px;
+	overflow: hidden;
+}
+
+#goodslist .content .name1 {
+	width: 158px;
+	overflow: hidden;
+	padding-left: 20px;
+}
+
+#goodslist .content .foodlabels {
+	margin: 0 10px;
+	width: 390px;
+}
+
+#goodslist .content .rebate {
+	font-family: Arial;
+	width: 140px;
+}
+
+#goodslist .content .title {
+	height: 19px;
+	line-height: 19px;
+	border: 1px solid #E4CF8C;
+	border-left: none;
+	border-right: none;
+	background: url(../../../static/image/bg_streettitle.png) repeat-x 0 0;
+}
+
+#goodslist .content .title .name {
+	text-indent: 10px;
+}
+
+#goodslist .everylist div {
+	/*height: 96px;*/
+}
+
+#goodslist .everylist dl {
+	margin: 0;
+	border: none;
+	padding-left: 15px;
+	overflow: hidden;
+}
+#goodslist .everylist dl dt,#goodslist .everylist dl dd {
+	float: left;
+}
+
+#goodslist .everylist dl dt,#goodslist .everylist dl dd {
+	padding-top: 6px;
+}
+
+#goodslist .everylist dl dt span {
+	display: block;
+	width: 100px;
+	height: 80px;
+	border: 1px solid #DDD;
+	overflow: hidden;
+	margin-right: 15px;
+}
+
+#goodslist .everylist dl dt a {
+	display: table-cell;
+	*display: block;
+	*font-size: 70px;
+	width: 100px;
+	height: 80px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#goodslist .everylist dl dt img {
+	vertical-align: middle;
+}
+
+#goodslist .name dd {
+	margin-left: 8px;
+	width: 560px;
+	overflow: hidden;
+}
+
+#goodslist .name h5 {
+	height: 20px;
+	line-height: 20px;
+	font-size: 14px;
+	overflow: hidden;
+	width: 380px;
+	display: block;
+}
+
+#goodslist .name h5 a:link,#goodslist .name h5 a:visited {
+	color: #94591F;
+}
+
+#goodslist .name h5 a:hover {
+	color: #d0511c;
+}
+
+#goodslist .name span {
+	color: #999;
+}
+
+#goodslist .name em {
+	font-style: normal;
+	color: #FF6600;
+	font-weight: bold;
+}
+
+#goodslist .name li {
+	line-height: 19px;
+	display: inline;
+	height: auto;
+}
+
+#goodslist .everylist .foodlabels {
+	padding: 12px 20px 23px 0;
+	width: 230px;
+	height: 46px;
+	line-height: 17px;
+	text-align: left;
+	overflow: hidden;
+}
+
+#goodslist .everylist .rebate {
+	padding-top: 12px;
+	height: 71px;
+	text-align: left;
+	line-height: 17px;
+	font-size: 12px;
+}
+
+#goodslist .content .pages {
+	margin: 25px 0 15px 0;
+}
+
+#zoomimglayer {
+	background: #FFF;
+	padding: 5px;
+}
+ #goodslist .content {
+float:left;
+overflow:hidden;
+padding:0 4px;
+width:730px;
+}
+#goodslist .everylist dl dt, #goodslist .everylist dl dd {
+padding-top:6px;
+}
+#goodslist .everylist dl dt, #goodslist .everylist dl dd {
+float:left;
+}
+#goodslist .everylist dl dt span {
+border:1px solid #DDDDDD;
+display:block;
+height:80px;
+margin-right:15px;
+overflow:hidden;
+width:100px;
+}
+#goodslist .everylist dl dt a {
+display:table-cell;
+height:80px;
+text-align:center;
+vertical-align:middle;
+width:100px;
+}
+.content .everylist dl dt, .content .everylist dl dd {
+width:auto;
+}
+#goods .content .intro2 div, #groupbuy .intro #groupbuysDescription {
+background:none repeat scroll 0 0 #FFFCE9;
+border-color:-moz-use-text-color #EDDDAB #EDDDAB;
+border-right:1px solid #EDDDAB;
+border-style:none solid solid;
+border-width:medium 1px 1px;
+line-height:150%;
+overflow:hidden;
+padding:10px;
+width:700px;
+}
+#goods .goodsinfo1 {
+float:right;
+margin:10px 10px 0 7px;
+position:relative;
+width:380px;
+}
+#goods .goodsinfo1 li {
+float:left;
+font-size:14px;
+line-height:20px;
+margin-bottom:8px;
+width:100%;
+}
+#goods .goodsinfo1 li span {
+background:url(../../../static/image/goods_bg.gif) no-repeat scroll 1px -235px transparent;
+color:#FFFFFF;
+float:left;
+font-size:12px;
+height:20px;
+line-height:17px;
+margin-right:5px;
+text-indent:5px;
+width:80px;
+}
+.price1 {
+color:#FD9445;
+font-family:Arial,Helvetica,sans-serif;
+font-size:16px;
+font-weight:bold;
+}
+.price2 {
+font-family:Arial,Helvetica,sans-serif;
+font-weight:normal;
+text-decoration:line-through;
+}
+#goods .goodsinfo1 li {
+font-size:14px;
+line-height:20px;
+}
+#goodslist .content .title div, #goodslist .content .everylist div {
+float:left;
+}
+#goodslist .everylist {
+background:url(../../../static/image/bg_goodssearch.png)  repeat-x scroll 0pt bottom transparent;
+height:96px;
+margin:0 auto;
+overflow:hidden;
+padding-bottom:1px;
+width:730px;
+}

@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common.css 4130 2010-08-06 02:18:22Z fanshengshuai $
+ */ /* 全局CSS定义 */
+#allgoodslist .content .name em{font-style:normal;color:#2782DF;}
+#allgoodslist .content .everylist{ background:url(../../../static/image/bg_goodssearch.png) repeat-x  0  bottom;}
+#allgoodslist .searchcat, #allgoodslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #A9C9E2; background:#E8F5FE;margin:0 auto 10px; width:692px; }
+#allgroupbuyslist .searchcat, #allgroupbuyslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #a9c9e2; background:#e8f5fe;margin:0 auto 10px; width:692px; }
+#allalbumslist .content .everylist{ background:url(../../../static/image/bg_goodssearch.png) repeat-x  0  bottom;}
+#allalbumslist .searchcat, #allalbumslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #A9C9E2; background:#E8F5FE; margin:0 auto 10px; width:692px; }
+#goodslist .name h5 a:link,#goodslist .name h5 a:visited {color:##215992;}
+
+/*产品*/
+#product{margin:0 auto;width:790px;overflow:hidden; _height:1%;background:url(../../../static/image/bg_products.gif) #FFF no-repeat;}
+
+#goodslist .name span {
+color:#999999;
+}
+#goodslist .name li {
+display:inline;
+height:auto;
+line-height:19px;
+}
+#goodslist .everylist dd {
+width:550px;
+}
+#allgoodslist .content .everylist .name dl dt {
+padding-top:12px;
+width:110px;
+}
+#goodslist .everylist dl dt, #goodslist .everylist dl dd {
+float:left;
+}
+#allgoodslist .content .everylist .name {
+overflow:hidden;
+width:700px;
+}
+#allgoodslist .title .name1 {
+overflow:hidden;
+padding-left:20px;
+width:118px;
+}
+#allgoodslist .title .foodlabels {
+margin:0 10px;
+width:380px;
+}
+#allgoodslist .searchcat a, #allgoodslist .searchattr a {
+line-height:24px;
+margin-left:10px;
+}

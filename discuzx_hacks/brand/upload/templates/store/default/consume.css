@@ -1,0 +1,120 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+#newslist .content, #seller .content .sellerbox, #map .content, #goodslist .content, #groupbuyslist .content, #consumerlist .content, #store_album_list .content {
+background:url("../image/sellerbox_bg.png") repeat-x scroll 0 0 transparent;
+}
+#consumerlist .content h3 {
+background-position:6px -15px;
+text-indent:21px;
+}
+.all_consumer {
+overflow:hidden;
+padding:0 10px;
+}
+#consumerlist .content dl {
+	float: left;
+	margin: 5px 10px 10px;
+	padding: 10px;
+	width: 200px;
+	height: 180px;
+	background: url(../../../static/image//bg_consumer.png) no-repeat -230px 0;
+	_display: inline;
+}
+
+#consumerlist .content dl.thison {
+	position: relative;
+	background-position: 0 0;
+}
+
+#consumerlist .content dt {
+	position: relative;
+	height: 120px;
+	overflow: hidden;
+}
+
+#consumerlist .content dt span,#groupbuyslist .content dt .ineffect {
+	position: absolute;
+	display: block;
+	text-indent: -105px;
+	width: 35px;
+	height: 35px;
+	background-image: url(../../../static/image//btn_consumer.gif);
+	overflow: hidden;
+}
+
+#consumerlist .ineffect {
+	background-position: -130px 0;
+}
+
+#consumerlist .expire {
+	background-position: -90px 0;
+}
+
+#consumerlist .content dt a {
+	display: table-cell;
+	*display: block;
+	*font-size: 105px;
+	width: 200px;
+	height: 120px;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden
+}
+
+#consumerlist .content dt a img {
+	vertical-align: middle
+}
+
+#consumerlist .content dd {
+	height: 57px;
+	overflow: hidden;
+}
+
+#consumerlist .content dl.thison dd {
+	position: absolute;
+	z-index: 2;
+	left: 0;
+	top: 130px;
+	padding: 0 10px;
+	height: 78px;
+	width: 200px;
+	background: url(../../../static/image//bg_consumer.png) no-repeat 0 bottom;
+}
+
+#consumerlist .content dd h4 {
+	height: 24px;
+	line-height: 24px;
+	font-size: 14px;
+	font-weight: 800;
+	overflow: hidden;
+}
+
+#consumerlist .content dd h4 a {
+	color: #925A21;
+}
+
+#consumerlist .content dd p {
+	height: 16px;
+	line-height: 16px;
+	overflow: hidden;
+	color: #333;
+}
+
+#consumerlist	.pages {
+	clear: both;
+	padding-top: 25px;
+}
+#consumerlist .content h3 {
+	background-position: 6px -15px;
+	text-indent: 21px;
+}
+
+#consumer .content h3 {
+	background-image:url(../../../static/image/icon_s.gif);
+	background-position:6px -15px;
+	text-indent:21px;

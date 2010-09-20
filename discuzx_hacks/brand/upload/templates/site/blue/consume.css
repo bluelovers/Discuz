@@ -1,0 +1,61 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common.css 4130 2010-08-06 02:18:22Z fanshengshuai $
+ */
+#consumer .content dl {float:left;margin:5px 10px 10px;padding:10px;width:200px;height:180px;background:url(image/bg_consumer.png) no-repeat -230px 0;_display:inline;}
+#consumer .content dt span {position:absolute;top:0;left:0;display:block;padding-top:35px;width:35px;height:0;background-image:url(image/btn_consumer.gif);overflow:hidden;}
+#movement .msearch, #consumer .msearch {
+margin:0 auto 10px;
+width:714px;
+}
+#consumer .content dl.thison {
+background-position:0 0;
+position:relative;
+}
+#consumer .content dl.thison dd {position:absolute;z-index:2;left:0;top:130px;padding:0 10px;height:78px;width:200px;background:url(image/bg_consumer.png) no-repeat 0 bottom;}
+#consumer .content dd h4 a {color:#3971aa;}
+#consumer .ineffect {
+background-position:-130px 0;
+}
+#consumer .content dt {
+height:120px;
+overflow:hidden;
+position:relative;
+}
+#consumer .content dd {
+height:58px;
+overflow:hidden;
+}
+#consumer .content dd h4 {
+font-size:14px;
+font-weight:800;
+height:24px;
+line-height:24px;
+overflow:hidden;
+}
+#consumer .content dd p {
+color:#333333;
+height:17px;
+line-height:17px;
+overflow:hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common.css 4130 2010-08-06 02:18:22Z fanshengshuai $
+ */ /* 全局CSS定义 */
+
+#allgoodslist .content .name em{font-style:normal;color:#2782DF;}
+#allgoodslist .content .everylist{ background:url(../../../static/image/bg_goodssearch.png) repeat-x  0  bottom;}
+#allgoodslist .searchcat, #allgoodslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #A9C9E2; background:#E8F5FE;margin:0 auto 10px; width:692px; }
+#allgroupbuyslist .searchcat, #allgroupbuyslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #a9c9e2; background:#e8f5fe;margin:0 auto 10px; width:692px; }
+#allalbumslist .content .everylist{ background:url(../../../static/image/bg_goodssearch.png) repeat-x  0  bottom;}
+#allalbumslist .searchcat, #allalbumslist .searchattr { padding:5px 10px 5px 10px; border:1px solid #A9C9E2; background:#E8F5FE; margin:0 auto 10px; width:692px; }
+#goodslist .name h5 a:link,#goodslist .name h5 a:visited {color:##215992;}
+
+.shop_album_title {border-bottom:1px solid #215992;line-height:30px; color:#215992;}
+.xingji{border-bottom:1px dashed #215992;}
+
+#allalbumslist .content {
+float:right;
+}
+#street .content, #allalbumslist .content {
+margin-bottom:10px;
+overflow:hidden;
+padding:0;
+width:740px;
+}
+/*前台相册列表*/
+#shop_album_list li { display:inline-block;vertical-align:bottom; text-align:center;width:170px;background:url(../../../static/image/img_li_bg.gif) no-repeat 0 0;margin-right:5px;*margin-right:8px;float:left;}
+#allalbumslist .title .name1 {
+overflow:hidden;
+padding-left:20px;
+width:118px;
+}
+#allalbumslist .title .foodlabels {
+margin:0 10px;
+width:380px;
+}
+#allalbumslist .title .rebate {
+font-family:Arial;
+text-align:left;
+width:140px;
+}
+#allalbumslist .searchcat a, #allalbumslist .searchattr a {
+line-height:24px;
+margin-left:10px;
+}
+#allalbumslist .content .everylist .name {
+overflow:hidden;
+width:535px;
+}
+#allalbumslist .content .everylist .rebate {
+font-family:Arial;
+overflow:hidden;
+padding-bottom:14px;
+text-align:left;
+width:107px;
+}
+#allalbumslist .content .everylist .name dl dt {
+padding-top:12px;
+width:110px;
+}
+#allalbumslist .hot ol {
+clear:both;
+overflow:hidden;
+padding-top:5px;
+width:100%;
+}
+#allalbumslist .hot li {
+border-bottom:1px dashed #CAD9EA;
+margin:0 10px;
+}
+.sidebar .hot li, #allnewslist .hot li, #allalbumslist .hot li {
+height:24px;
+line-height:24px;
+overflow:hidden;
+text-indent:24px;
+}
+
+
+
+
+
+
+
+

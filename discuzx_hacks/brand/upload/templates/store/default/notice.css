@@ -1,0 +1,85 @@
+@charset "utf-8";
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+/*--资讯--*/
+#news {
+	position: relative;
+}
+
+#news .content {
+	background: url(../image/br_bg.png) repeat-x scroll 0 -104px;
+}
+
+#news .content {
+	padding: 0 15px;
+	width: 708px;
+	border: 1px solid #DEBC97;
+}
+#news .content h1 {
+	margin-top: 15px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	font-size: 18px;
+}
+
+#news .content .tips {
+	height: 23px;
+	line-height: 23px;
+	text-align: center;
+	border-bottom: 1px dashed #CECECE;
+	color: #676566
+}
+
+#news .content .tips span {
+	padding-left: 15px;
+}
+
+#news .content div {
+	margin: 15px 0 50px 0;
+}
+
+#news .content div p {
+	font-size: 14px;
+	line-height: 150%;
+	text-indent: 28px;
+}
+
+#news .sidebar {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+#newslist .content .listcontent {
+clear:both;
+margin-top:10px;
+}
+#newslist .content li {
+background-position:5px -192px;
+border-bottom:1px dotted #E5CDAD;
+font-size:14px;
+height:28px;
+line-height:28px;
+margin:7px 10px 0;
+overflow:hidden;
+text-indent:18px;
+width:710px;
+}
+#newslist .content li {
+font-size:14px;
+line-height:28px;
+text-indent:18px;
+}
+#newslist .content span {
+color:#999999;
+font-size:12px;
+padding-left:8px;
+}
+
+
+
+

@@ -1,0 +1,516 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: common.css 4374 2010-09-08 08:58:55Z fanshengshuai $
+ */
+#movement,#consumer {
+	margin: 15px auto;
+	overflow: hidden;
+}
+
+#movement .content,#consumer .content {
+	border: 1px solid #C2A1A8;
+	background: url(../../../static/image/sellerbox_bg.png) repeat-x 0 0;
+}
+
+#movement .content h3,#consumer .content h3 {
+	margin-bottom: 15px;
+	margin-left: 5px;
+	text-indent: 17px;
+	height: 25px;
+	width: 100%;
+	line-height: 27px;
+	font-size: 14px;
+	background: url(../../../static/image/icon_s.gif) no-repeat 2px -15px
+}
+
+#movement .msearch,#consumer .msearch {
+	margin: 0 auto 10px;
+	width: 714px;
+}
+
+#movement .msearch *,#consumer .msearch * {
+	vertical-align: middle;
+}
+
+#movement .msearch input,#consumer input {
+	width: 100px;
+}
+
+#movement .msearch .btn,#consumer .btn {
+	width: 50px;
+	vertical-align: middle;
+	background: url(../../../static/image/bt_streetsearch.gif) no-repeat 0 0;
+	height: 22px;
+	cursor: pointer;
+	border: none;
+}
+
+#movement .msearch span,#consumer .msearch span {
+	padding-left: 8px;
+	font-size: 14px;
+	font-weight: 800;
+	color: #925A21;
+}
+
+#movement .content dl {
+	float: left;
+	margin: 0 13px 20px 13px;
+	padding: 13px 10px;
+	width: 315px;
+	height: 101px;
+	background: url(../../../static/image/bg_guess.gif) no-repeat 50% 0;
+	overflow: hidden;
+	_display: inline;
+}
+
+#movement .content dt {
+	position: relative;
+	z-index: 0;
+	float: left;
+	width: 144px;
+}
+
+#movement .content dt img {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+}
+
+#movement .content dt a {
+	display: table-cell;
+	*display: block;
+	*font-size: 92px;
+	width: 140px;
+	height: 105px;
+	padding: 1px;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid #DDDDDD;
+	overflow: hidden;
+}
+
+#movement .content dt a img {
+	position: static;
+	vertical-align: middle;
+}
+
+#movement .content dd {
+	margin: 0;
+	padding-left: 10px;
+	float: left;
+	width: 160px;
+	height: 110px;
+	color: #343434;
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+#movement .contentdd h4 {
+	width: 100%;
+	height: 22px;
+	line-height: 22px;
+	font-family: "宋体";
+	font-size: 14px;
+	overflow: hidden;
+}
+
+#movement .content dd h4 a:link,#movement dl dd h4 a:visited {
+	color: #94591F;
+}
+
+#movement .content dd h4 a:hover {
+	color: #d0511c;
+}
+
+#movement .content dd li {
+	height: 25px;
+	height: 15px;
+	line-height: 15px;
+	text-indent: 2px;
+	white-space: nowrap
+}
+
+#movement .content dd li a {
+	display: block;
+	margin: 2px 0 0 0px;
+	width: 69px;
+	height: 19px;
+	line-height: 19px;
+	text-indent: 0;
+	text-align: center;
+	color: #905A1E;
+	background: url(../../../static/image/bg_navbtn.gif) no-repeat 0 -70px;
+}
+
+#movement .content dd li .enable {
+	margin-top: 5px;
+	height: 19px;
+	line-height: 19px;
+}
+
+#consumer #catId,#consumer #range {
+	width: 80px;
+}
+
+#consumer #orderBy {
+	width: 90px;
+}
+
+#consumer .content dl {
+	float: left;
+	margin: 5px 10px 10px;
+	padding: 10px;
+	width: 200px;
+	height: 180px;
+	background: url(../../../static/image/bg_consumer.png) no-repeat -230px
+		0;
+	_display: inline;
+}
+
+#consumer .content dl.thison {
+	position: relative;
+	background-position: 0 0;
+}
+
+#consumer .content dt {
+	position: relative;
+	height: 120px;
+	overflow: hidden;
+}
+
+#consumer .content dt span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	padding-top: 35px;
+	width: 35px;
+	height: 0;
+	background-image: url(../../../static/image/btn_consumer.gif);
+	overflow: hidden;
+}
+
+#consumer .ineffect {
+	background-position: -130px 0;
+}
+
+#consumer .expire {
+	background-position: -90px 0;
+}
+
+#consumer .content dt a {
+	display: table-cell;
+	*display: block;
+	*font-size: 105px;
+	width: 200px;
+	height: 120px;
+	text-align: center;
+	vertical-align: middle;
+	overflow: hidden
+}
+
+#consumer .content dt a img {
+	vertical-align: middle
+}
+
+#consumer .content dd {
+	height: 58px;
+	overflow: hidden;
+}
+
+#consumer .content dl.thison dd {
+	position: absolute;
+	z-index: 2;
+	left: 0;
+	top: 130px;
+	padding: 0 10px;
+	height: 78px;
+	width: 200px;
+	background: url(../../../static/image/bg_consumer.png) no-repeat 0
+		bottom;
+}
+
+#consumer .content dd h4 {
+	height: 24px;
+	line-height: 24px;
+	font-size: 14px;
+	font-weight: 800;
+	overflow: hidden;
+}
+
+#consumer .content dd h4 a {
+	color: #925A21;
+}
+
+#consumer .content dd p {
+	height: 17px;
+	line-height: 17px;
+	overflow: hidden;
+	color: #333;
+}
+
+/*--街道--*/
+#street,#brand_navgation,#allgoodslist {
+	margin: 0 auto 15px auto;
+	overflow: hidden;
+}  /*publish*/
+#street,#brand_navgation,#allalbumslist {
+	margin: 0 auto 15px auto;
+	overflow: hidden;
+}  /*publish*/
+#street .content,#allgoodslist .content {
+	padding: 0;
+	width: 740px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+#street .content,#allalbumslist .content {
+	padding: 0;
+	width: 740px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.streetsearch {
+	padding: 10px 0 5px;
+	width: 738px;
+	border: 1px solid #E7D9BE;
+	background: url(../../../static/image/bg_street.png) repeat-x 0 -77px;
+	overflow: hidden;
+}
+
+.streetsearch dl {
+	clear: left;
+	padding: 0 15px;
+	width: 708px;
+}
+
+.streetsearch dl dt,.streetsearch dl dd {
+	float: left;
+}
+
+.streetsearch dl dt {
+	height: 27px;
+	line-height: 20px;
+	width: 78px;
+	font-size: 14px;
+	font-weight: 800;
+	text-indent: 3px;
+	color: #925A21;
+}
+
+.streetsearch dl dd {
+	margin-left: 5px;
+	width: 622px;
+	color: #666664;
+}
+
+.streetsearch dl dd label {
+	display: block;
+	position: relative;
+	float: left;
+	margin-right: 5px;
+	height: 27px;
+	line-height: 27px;
+	ckground: red;
+}
+
+.streetsearch dl dd select {
+	position: absolute;
+	left: 30px;
+	top: 4px;
+}
+
+.streetsearch dl dd input {
+	vertical-align: middle;
+}
+
+.streetsearch dl dd .labels select {
+	left: 30px;
+}
+
+.streetsearch dl dd .consume {
+	width: 147px;
+}
+
+.streetsearch dl dd .consume select {
+	left: 54px;
+}
+
+.streetsearch dl dd .btn {
+	width: 50px;
+	vertical-align: middle;
+}
+
+.streetsearch dl dd .btn input {
+	position: absolute;
+	top: 4px;
+}
+
+.streetsearch .foodlist dt {
+	line-height: 20px;
+}
+
+.streetsearch .foodlist dd {
+	line-height: 21px;
+}
+
+.streetsearch .foodlist a {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	font-size: 12px;
+	margin-right: 5px;
+	font-family: "宋体"
+}
+
+.streetsearch_top {
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+.streetsearch_current {
+	color: #925A21;
+}
+
+.content .list {
+	padding: 4px;
+	width: 730px;
+	background: #f7edeb;
+	overflow: hidden;
+}
+
+.content .list .cont {
+	padding: 3px 8px;
+	border: 1px solid #e3cba9;
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+.content .list .cont h3 {
+	height: 27px;
+	line-height: 27px;
+	font-size: 14px;
+}
+
+.content .list .name {
+	width: 470px;
+}
+
+.content .list .foodlabels {
+	width: 127px;
+}
+
+.content .list .rebate {
+	font-family: Arial;
+	width: 115px;
+	text-align: center;
+}
+
+.content .list .title {
+	height: 26px;
+	line-height: 26px;
+	border: 1px solid #E4CF8C;
+	border-left: none;
+	border-right: none;
+	background: url(../../../static/image/bg_streettitle.png) repeat-x
+		bottom left;
+}
+
+.content .list .title div,.content .list .everylist div {
+	float: left;
+}
+
+.content .list .title .name {
+	text-align: left;
+	text-indent: 10px;
+}
+
+.content .everylist {
+	margin: 0 auto;
+	padding-bottom: 1px;
+	width: 714px;
+	background: url(../../../static/image/bg_street.png) repeat-x 0 20px;
+	overflow: hidden;
+}
+
+.content .everylist div {
+	height: 96px;
+}
+
+.content .everylist dl {
+	margin: 0;
+	border: none;
+	padding-left: 15px;
+}
+
+.content .everylist dl dt,.content .everylist dl dd {
+	float: left;
+}
+
+.content .everylist dl dt,.content .everylist dl dd {
+	padding-top: 6px;
+	width: 220px;
+	overflow: hidden;
+}
+
+.content .everylist dl dt img {
+	padding: 1px;
+	border: 1px solid #DDDDDD;
+}
+
+.content .name {
+	width: 387px;
+}
+
+.content .name dd {
+	margin-left: 8px;
+	width: 305px;
+	overflow: hidden;
+}
+
+.content .name h5 {
+	height: 31px;
+	line-height: 31px;
+	font-size: 14px;
+	overflow: hidden;
+}
+
+.content .name h5 a:link,.content .name h5 a:visited {
+	color: #94591F;
+}
+
+.content .name h5 a:hover {
+	color: #d0511c;
+}
+
+.content .name span {
+	color: #999;
+}
+
+.content .name li {
+	line-height: 16px;
+	height: auto;
+}
+
+.content .everylist .foodlabels {
+	padding: 8px 0 20px 0;
+	height: 67px;
+	overflow: hidden;
+	margin-bottom: 5px;
+	line-height: 17px;
+}
+
+.content .everylist .rebate {
+	padding-top: 10px;
+	height: 85px;
+	width: 115px;
+	text-align: center;
+	font-size: 12px;
+}

@@ -1,0 +1,7 @@
+	rewrite	^/store-([0-9]+)\.html$ /store.php?id=$1 last;
+	rewrite	^/store-([0-9]+)-([a-z]+)\.html$ /store.php?id=$1&action=$2 last;	
+	rewrite	^/store-([0-9]+)-([a-z]+)-([0-9]+)\.html$ /store.php?id=$1&action=$2&xid=$3 last;
+	rewrite	^/store-([0-9]+)-([a-z]+)-catid-([0-9]+)\.html$ /store.php?id=$1&action=$2&catid=$3 last;
+	rewrite	^/street-([0-9]+)\.html$ /street.php?catid=$1 last;
+	rewrite	^/street-([0-9]+)-([0-9]+)\.html$ /street.php?catid=$1&tagid=$2 last;
+

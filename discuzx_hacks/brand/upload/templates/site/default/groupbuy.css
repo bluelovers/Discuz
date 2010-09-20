@@ -1,0 +1,432 @@
+@charset "utf-8";
+
+/**
+ *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: groupbuy.css 4333 2010-09-06 02:51:12Z yanghuan $
+ */
+.layout .content {
+	width: 740px;
+	overflow: hidden;
+}
+
+.content .list {
+	width: 740px;
+	overflow: hidden;
+}
+
+.content .list .cont {
+	width: 712px;
+	overflow: hidden;
+}
+
+/*---团购列表---*/
+.streetsearch_new {
+	width: 712px;
+}
+
+#groupbuyslist .content {
+	float: left;
+	padding: 0 4px;
+	width: 730px;
+	overflow: hidden;
+}
+
+/*#groupbuyslist h3 {height:35px;line-height:27px;text-indent:21px;font-size:14px;background-position:6px -15px}
+*/
+#groupbuy .title {
+	font-size: 14px;
+	border-top: #925A21 1px solid;
+	color: #925A21;
+	background: url("../image/br_bg.png") repeat-x 0 -103px;
+}
+
+#groupbuy .info {
+	margin-top: 10px;
+}
+
+#groupbuy .info span {
+	float: left;
+}
+
+#groupbuy .info .pic {
+	padding: 2px;
+	height: 260px;
+	width: 420px;
+	border: #cacaca 1px solid;
+}
+
+#groupbuy .prices {
+	height: 110px;
+	padding-top: 10px;
+}
+
+#groupbuy .prices .nowprice {
+	height: 50px;
+	color: #fff;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#groupbuy .prices .nowprice .nowpriceDiv {
+	margin: auto;
+	background: url(../../../static/image/groupbuy-title-bg.gif) no-repeat;
+	width: 235px;
+	height: 35px;
+	padding-top: 5px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#groupbuy .groupbuy_status {
+	background: url(../../../static/image/u39.gif) no-repeat;
+	padding-left: 35px;
+	height: 28px;
+	line-height: 28px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#groupbuy .groupbuy_status_end {
+	height: 28px;
+	line-height: 28px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#groupbuy .submitgroupbuyjoin {
+	border: 1px double #E7BD4B;
+	font-weight: bold;
+	background: url("../image/bg_message.gif") repeat-x scroll transparent;
+}
+
+#groupbuy .groupbuysinfo {
+	clear: both;
+}
+
+#groupbuy .groupbuysinfo li {
+	clear: both;
+	padding-left: 10px;
+	height: 30px;
+}
+
+#groupbuy .groupbuysinfo label {
+	float: left;
+	display: block;
+	width: 70px;
+	height: 20px;
+	line-height: 17px;
+	background: url(../../../static/image/goods_bg.gif) 1px -235px no-repeat;
+	color: #fff;
+	font-size: 12px;
+	padding-left: 10px;
+	text-align: left;
+}
+
+#groupbuy .groupbuysinfo span {
+	float: left;
+	font-size: 14px;
+	display: block;
+	padding-left: 10px;
+}
+
+#groupbuy .prices .oldprice,#groupbuy .prices .zhekou,#groupbuy .prices .jiesheng
+	{
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100px;
+	height: 50px;
+	font-size: 14px;
+	text-align: center;
+}
+
+#groupbuy .prices .oldprice span,#groupbuy .prices .zhekou span,#groupbuy .prices .jiesheng span
+	{
+	display: block;
+	text-align: center;
+	margin: auto;
+	width: 100px;
+	line-height: 20px;
+}
+
+#groupbuy .prices .oldprice em,#groupbuy .prices .zhekou em,#groupbuy .prices .jiesheng em
+	{
+	clear: both;
+	display: block;
+	margin-top: 5px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#groupbuy .prices .zhekou em {
+	color: #ff0000;
+}
+
+#groupbuy .info .shopinfo {
+	background: #f2f2f2;
+	padding: 10px;
+}
+
+#groupbuy .info .shopinfo li {
+	clear: both;
+	line-height: 20px;
+}
+
+#groupbuy .info .shopinfo li label {
+	width: 70px;
+	display: block;
+	float: left;
+}
+
+#groupbuy .info .shopinfo li span {
+	width: 650px;
+	display: block;
+	float: left;
+}
+
+/**/
+.content .list_item {
+	border-bottom: #ccc 1px dashed;
+	background: none;
+	overflow: hidden;
+	width: 355px;
+	height: 235px;
+	float: left;
+}
+
+#groupbuyslist dt,#groupbuyslist dd {
+	float: left;
+	margin-left: 10px;
+	width: auto;
+}
+
+#groupbuyslist dt {
+	padding: 0;
+	margin-left: 5px;
+}
+
+#groupbuyslist dd {
+	width: 80px;
+}
+
+#groupbuyslist dl {
+	padding: 0;
+}
+
+#groupbuyslist dt .ineffect {
+	width: 55px;
+	height: 55px;
+	background-image: url(../../../static/image/btn_consumer.gif);
+	background-position: -230px 0;
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -105px;
+}
+
+#groupbuyslist dt .expire {
+	width: 55px;
+	height: 55px;
+	background-image: url(../../../static/image/btn_consumer.gif);
+	background-position: -170px 0;
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	text-indent: -105px;
+}
+
+#groupbuyslist dt img {
+	height: 160px;
+	width: 240px;
+	border: #cacaca 1px solid;
+	padding: 2px;
+}
+
+#groupbuyslist dd li {
+	line-height: 25px;
+	clear: both;
+}
+
+#groupbuyslist dd li label {
+	float: left;
+	width: 30px;
+}
+
+#groupbuyslist dd li .b {
+	float: left;
+	color: #FF6600;
+}
+
+#groupbuyslist dd li span {
+	float: left;
+	color: #000;
+}
+
+#groupbuyslist dd li #iwantjoin {
+	background: url(../../../static/image/u36.png) no-repeat;
+	display: block;
+	width: 76px;
+	height: 26px;
+	padding-left: 10px;
+	line-height: 26px;
+}
+
+#groupbuyslist .groupbytitle {
+	padding-left: 10px;
+	height: 50px;
+}
+
+#groupbuyslist .groupbytitle h5 {
+	margin: 10px 0 5px 0;
+	height: 18px;
+	overflow: hidden;
+}
+
+#groupbuyslist .groupbytitle h5 a {
+	color: #94591F;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.form_groupby_attent li {
+	border-bottom: #ddd 1px solid;
+	height: 50px;
+	line-height: 50px;
+	overflow: hidden;
+}
+
+.form_groupby_attent li label {
+	float: left;
+	text-align: right;
+	display: block;
+	width: 80px;
+	padding-right: 10px;
+}
+
+.form_groupby_attent li span {
+	float: left;
+	display: block;
+	padding-top: 12px;
+}
+
+.form_groupby_attent li span input {
+	border: none;
+	height: 20px;
+}
+
+.form_groupby_attent_info li {
+	border-bottom: #ddd 1px solid;
+	height: 50px;
+	line-height: 50px;
+	overflow: hidden;
+}
+
+.form_groupby_attent_info li label {
+	float: left;
+	text-align: right;
+	display: block;
+	width: 80px;
+	padding-right: 10px;
+}
+
+.form_groupby_attent_info li span {
+	float: left;
+	display: block;
+}
+
+.form_groupby_attent_info li span input {
+	border: none;
+	height: 20px;
+}
+
+.form_groupby_not_login {
+	text-indent: 20px;
+	height: 50px;
+	line-height: 50px;
+}
+
+#groupbuyform .my_account {
+	color: #777;
+	font-size: 12px;
+	padding-left: 10px;
+}
+
+#groupbuyform .form_groupby_attent li span input {
+	border: #ccc 1px solid;
+	height: 20px;
+}
+
+.groupbuy_attend_list li {
+	line-height: 30px;
+	height: 30px;
+	border-bottom: #dddcbe 1px dashed;
+	padding-left: 10px;
+}
+
+.groupbuy_member_detail #mem_list {
+	width: 98%;
+	margin: auto;
+}
+
+.groupbuy_member_detail #mem_list #mard_del {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	background: url(../../../static/image/op.png);
+	background-position: 0 -20px;
+}
+
+.groupbuy_member_detail #mem_list #mard_normal {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	background: url(../../../static/image/op.png);
+	background-position: 0 -20px;
+}
+
+.groupbuy_member_detail #mem_list th,.groupbuy_member_detail #mem_list td
+	{
+	line-height: 30px;
+	height: 30px;
+	border-bottom: #dddcbe 1px dashed;
+}
+
+.groupbuy_member_detail #mem_list .deleted td {
+	color: #999;
+	text-decoration: line-through;
+}
+
+.groupbuy_member_detail #mem_list #mard_del {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	background: url(../../../static/image/op.png);
+	background-position: 0 -20px;
+}
+
+.groupbuy_member_detail #mem_list #mard_normal {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	background: url(../../../static/image/op.png);
+	background-position: 0 -80px;
+}
+
+#allgroupbuyslist .searchcat,#allgroupbuyslist .searchattr {
+	padding: 5px 10px 5px 10px;
+	border: 1px solid #E7D9BE;
+	background: url("../image/streetsearch_new_bg.png") repeat-x scroll left
+		bottom transparent;
+	margin: 0 auto 10px;
+	width: 692px;
+}
+
+#allgroupbuyslist .searchcat a,#allgroupbuyslist .searchattr a {
+	line-height: 24px;
+	margin-left: 10px;
+}
