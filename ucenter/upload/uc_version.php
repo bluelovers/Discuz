@@ -29,6 +29,6 @@ if ($___ucenter_server___['basefilename'] == 'avatar') {
 }
 
 @require_once UC_ROOT.'./lib/hook_sc.php';
-@require_once UC_ROOT.'./extensions/'.$___ucenter_server___['basefilename'].'_hooks.php';
+@include_once UC_ROOT.'./extensions/'.$___ucenter_server___['basefilename'].'_hooks.php';
 
 ?>

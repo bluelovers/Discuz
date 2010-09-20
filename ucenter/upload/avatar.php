@@ -21,7 +21,7 @@ $check = isset($_GET['check_file_exists']) ? $_GET['check_file_exists'] : '';
 $avatar = './data/avatar/'.get_avatar($uid, $size, $type);
 
 // bluelovers
-require UC_ROOT.'./uc_version.php';
+include UC_ROOT.'./uc_version.php';
 // bluelovers
 
 if(file_exists(dirname(__FILE__).'/'.$avatar)) {
