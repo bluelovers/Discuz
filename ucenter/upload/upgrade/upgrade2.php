@@ -17,6 +17,10 @@ $lock_file = UC_ROOT.'./data/upgrade.lock';
 require UC_ROOT.'./data/config.inc.php';
 require UC_ROOT.'./lib/db.class.php';
 
+// bluelovers
+require UC_ROOT.'./upgrade/upgrade_sc.inc.php';
+// bluelovers
+
 error_reporting(7);
 @set_magic_quotes_runtime(0);
 $PHP_SELF = htmlspecialchars($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);
@@ -123,7 +127,35 @@ if(!$action) {
 		$db->query("UPDATE ".UC_DBTABLEPRE."applications SET authkey='$authkey' WHERE appid='$appid'");
 	}
 
-	header("Location: upgrade2.php?action=pm&forward=".urlencode($forward));
+	// bluelovers
+	if (is_array($upgradetable)) {
+
+		$tablepre = UC_DBTABLEPRE;
+		$dbcharset = UC_DBCHARSET;
+
+		foreach ($upgradetable as $start => $sqla) {
+			if ($sqla[0]) {
+				echo "升級數據表 [ $start ] {$tablepre}{$sqla[0]} {$sqla[0][3]}:";
+
+				$successed = upgradetable($sqla);
+
+				if($successed === TRUE) {
+					echo ' <font color=green>OK</font><br />';
+				} elseif($successed === FALSE) {
+					echo ' <font color=red>ERROR</font><br />';
+				} elseif($successed == 'TABLE NOT EXISTS') {
+					echo '<span class=red>數據表不存在</span>升級無法繼續，請確認您的版本是否正確!</font><br />';
+					showfooter();
+					exit;
+				}
+			}
+		}
+	}
+
+	echo "<br>下一步 <a href=\"upgrade2.php?action=pm&forward=".urlencode($forward)."\">upgrade2.php?action=pm&forward=".urlencode($forward)."</a>";
+	// bluelovers
+
+//	header("Location: upgrade2.php?action=pm&forward=".urlencode($forward));
 
 } elseif($action == 'pm') {
 
@@ -160,7 +192,7 @@ if(!$action) {
 				msgfromid='$data[msgfromid]',msgtoid='$data[msgtoid]',folder='$data[folder]',new='$data[new]',subject='$data[subject]',
 				dateline='$data[dateline]',message='$data[message]',delstatus='$data[delstatus]',related='".time()."'", 'SILENT');
 		}
-	
+
 		$end = $start + $limit;
 		echo "短消息數據已處理 $start / $total ...";
 		$url_forward = "upgrade2.php?action=pm&start=$end&total=$total&forward=".urlencode($forward);
@@ -277,6 +309,97 @@ function createtable($sql, $dbcharset) {
 	$type = in_array($type, array('MYISAM', 'HEAP')) ? $type : 'MYISAM';
 	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
 	(mysql_get_server_info() > '4.1' ? " ENGINE=$type default CHARSET=".UC_DBCHARSET : " TYPE=$type");
+}
+
+function upgradetable($updatesql) {
+	global $db, $tablepre, $dbcharset;
+
+	$tablepre = UC_DBTABLEPRE;
+	$dbcharset = UC_DBCHARSET;
+
+	$successed = TRUE;
+
+	if(is_array($updatesql) && !empty($updatesql[0])) {
+
+		list($table, $action, $field, $sql) = $updatesql;
+
+		if(empty($field) && !empty($sql)) {
+
+			$query = "ALTER TABLE {$tablepre}{$table} ";
+			if($action == 'INDEX') {
+				$successed = $db->query("$query $sql", "SILENT");
+			} elseif ($action == 'UPDATE') {
+				$successed = $db->query("UPDATE {$tablepre}{$table} SET $sql", 'SILENT');
+			}
+
+		} elseif($tableinfo = loadtable($table)) {
+
+			$fieldexist = isset($tableinfo[$field]) ? 1 : 0;
+
+			$query = "ALTER TABLE {$tablepre}{$table} ";
+
+			if($action == 'MODIFY') {
+
+				$query .= $fieldexist ? "MODIFY $field $sql" : "ADD $field $sql";
+				$successed = $db->query($query, 'SILENT');
+
+			} elseif($action == 'CHANGE') {
+
+				$field2 = trim(substr($sql, 0, strpos($sql, ' ')));
+				$field2exist = isset($tableinfo[$field2]);
+
+				if($fieldexist && ($field == $field2 || !$field2exist)) {
+					$query .= "CHANGE $field $sql";
+				} elseif($fieldexist && $field2exist) {
+					$db->query("ALTER TABLE {$tablepre}{$table} DROP $field2", 'SILENT');
+					$query .= "CHANGE $field $sql";
+				} elseif(!$fieldexist && $fieldexist2) {
+					$db->query("ALTER TABLE {$tablepre}{$table} DROP $field2", 'SILENT');
+					$query .= "ADD $sql";
+				} elseif(!$fieldexist && !$field2exist) {
+					$query .= "ADD $sql";
+				}
+				$successed = $db->query($query);
+
+			} elseif($action == 'ADD') {
+
+				$query .= $fieldexist ? "CHANGE $field $field $sql" :  "ADD $field $sql";
+				$successed = $db->query($query);
+
+			} elseif($action == 'DROP') {
+				if($fieldexist) {
+					$successed = $db->query("$query DROP $field", "SILENT");
+				}
+				$successed = TRUE;
+			}
+
+		} else {
+
+			$successed = 'TABLE NOT EXISTS';
+
+		}
+	}
+	return $successed;
+}
+
+function loadtable($table, $force = 0) {
+	global $db, $tablepre, $dbcharset;
+	static $tables = array();
+
+	$tablepre = UC_DBTABLEPRE;
+	$dbcharset = UC_DBCHARSET;
+
+	if(!isset($tables[$table]) || $force) {
+		if($db->version() > '4.1') {
+			$query = $db->query("SHOW FULL COLUMNS FROM {$tablepre}$table", 'SILENT');
+		} else {
+			$query = $db->query("SHOW COLUMNS FROM {$tablepre}$table", 'SILENT');
+		}
+		while($field = @$db->fetch_array($query)) {
+			$tables[$table][$field['Field']] = $field;
+		}
+	}
+	return $tables[$table];
 }
 
 function runquery($query) {

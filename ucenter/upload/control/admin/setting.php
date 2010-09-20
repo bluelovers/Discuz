@@ -39,7 +39,7 @@ class control extends adminbase {
 			$pmcenter = getgpc('pmcenter', 'P');
 			$sendpmseccode = getgpc('sendpmseccode', 'P');
 			$dateformat = str_replace(array('yyyy', 'mm', 'dd'), array('y', 'n', 'j'), strtolower($dateformat));
-			$timeformat = $timeformat == 1 ? 'H:i' : 'h:i A';
+			$timeformat = $timeformat == 1 ? 'H:i:s' : 'h:i:s A';
 			$timeoffset = in_array($timeoffset, array('-12', '-11', '-10', '-9', '-8', '-7', '-6', '-5', '-4', '-3.5', '-3', '-2', '-1', '0', '1', '2', '3', '3.5', '4', '4.5', '5', '5.5', '5.75', '6', '6.5', '7', '8', '9', '9.5', '10', '11', '12')) ? $timeoffset : 8;
 
 			$this->set_setting('dateformat', $dateformat);
@@ -61,7 +61,7 @@ class control extends adminbase {
 			$this->_add_note_for_setting($settings);
 		}
 		$settings['dateformat'] = str_replace(array('y', 'n', 'j'), array('yyyy', 'mm', 'dd'), $settings['dateformat']);
-		$settings['timeformat'] = $settings['timeformat'] == 'H:i' ? 1 : 0;
+		$settings['timeformat'] = ($settings['timeformat'] == 'H:i:s' || $settings['timeformat'] == 'H:i') ? 1 : 0;
 		$settings['pmcenter'] = $settings['pmcenter'] ? 1 : 0;
 		$a = getgpc('a');
 		$this->view->assign('a', $a);

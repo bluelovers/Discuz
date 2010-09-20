@@ -19,6 +19,10 @@ require ROOT_PATH.'./install/lang.inc.php';
 require ROOT_PATH.'./install/db.class.php';
 require ROOT_PATH.'./install/func.inc.php';
 
+// bluelovers
+require ROOT_PATH.'./upgrade/upgrade_sc.inc.php';
+// bluelovers
+
 file_exists(ROOT_PATH.'./install/extvar.inc.php') && require ROOT_PATH.'./install/extvar.inc.php';
 
 $view_off = getgpc('view_off');
@@ -154,6 +158,30 @@ if($method == 'show_license') {
 		}
 
 		runquery($sql);
+
+		// bluelovers
+		if (is_array($upgradetable)) {
+
+			$dbcharset = DBCHARSET;
+
+			foreach ($upgradetable as $start => $sqla) {
+				if ($sqla[0]) {
+					echo "升級數據表 [ $start ] {$tablepre}{$sqla[0]} {$sqla[0][3]}:";
+
+					$successed = upgradetable($sqla);
+
+					if($successed === TRUE) {
+						echo ' <font color=green>OK</font><br />';
+					} elseif($successed === FALSE) {
+						echo ' <font color=red>ERROR</font><br />';
+					} elseif($successed == 'TABLE NOT EXISTS') {
+						echo '<span class=red>數據表不存在</span>升級無法繼續，請確認您的版本是否正確!</font><br />';
+						exit;
+					}
+				}
+			}
+		}
+		// bluelovers
 
 		VIEW_OFF && show_msg('initdbresult_succ');
 

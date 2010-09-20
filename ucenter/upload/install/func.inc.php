@@ -457,7 +457,7 @@ function show_header() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>$title</title>
 <link rel="stylesheet" href="style.css" type="text/css" media="all" />
 <script type="text/javascript">
@@ -576,10 +576,10 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-				// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎŞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-				// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-				// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
+	$ckey_length = 4;	// éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
+				// åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢å¤§ç ´è§£é›£åº¦ã€‚
+				// å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
+				// ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
@@ -693,6 +693,104 @@ function runquery($sql) {
 
 }
 
+function createtable($sql, $dbcharset) {
+	$type = strtoupper(preg_replace("/^\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*$/isU", "\\2", $sql));
+	$type = in_array($type, array('MYISAM', 'HEAP')) ? $type : 'MYISAM';
+	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
+	(mysql_get_server_info() > '4.1' ? " ENGINE=$type default CHARSET=".DBCHARSET : " TYPE=$type");
+}
+
+function upgradetable($updatesql) {
+	global $db, $tablepre, $dbcharset;
+
+//	$tablepre = UC_DBTABLEPRE;
+	$dbcharset = DBCHARSET;
+
+	$successed = TRUE;
+
+	if(is_array($updatesql) && !empty($updatesql[0])) {
+
+		list($table, $action, $field, $sql) = $updatesql;
+
+		if(empty($field) && !empty($sql)) {
+
+			$query = "ALTER TABLE {$tablepre}{$table} ";
+			if($action == 'INDEX') {
+				$successed = $db->query("$query $sql", "SILENT");
+			} elseif ($action == 'UPDATE') {
+				$successed = $db->query("UPDATE {$tablepre}{$table} SET $sql", 'SILENT');
+			}
+
+		} elseif($tableinfo = loadtable($table)) {
+
+			$fieldexist = isset($tableinfo[$field]) ? 1 : 0;
+
+			$query = "ALTER TABLE {$tablepre}{$table} ";
+
+			if($action == 'MODIFY') {
+
+				$query .= $fieldexist ? "MODIFY $field $sql" : "ADD $field $sql";
+				$successed = $db->query($query, 'SILENT');
+
+			} elseif($action == 'CHANGE') {
+
+				$field2 = trim(substr($sql, 0, strpos($sql, ' ')));
+				$field2exist = isset($tableinfo[$field2]);
+
+				if($fieldexist && ($field == $field2 || !$field2exist)) {
+					$query .= "CHANGE $field $sql";
+				} elseif($fieldexist && $field2exist) {
+					$db->query("ALTER TABLE {$tablepre}{$table} DROP $field2", 'SILENT');
+					$query .= "CHANGE $field $sql";
+				} elseif(!$fieldexist && $fieldexist2) {
+					$db->query("ALTER TABLE {$tablepre}{$table} DROP $field2", 'SILENT');
+					$query .= "ADD $sql";
+				} elseif(!$fieldexist && !$field2exist) {
+					$query .= "ADD $sql";
+				}
+				$successed = $db->query($query);
+
+			} elseif($action == 'ADD') {
+
+				$query .= $fieldexist ? "CHANGE $field $field $sql" :  "ADD $field $sql";
+				$successed = $db->query($query);
+
+			} elseif($action == 'DROP') {
+				if($fieldexist) {
+					$successed = $db->query("$query DROP $field", "SILENT");
+				}
+				$successed = TRUE;
+			}
+
+		} else {
+
+			$successed = 'TABLE NOT EXISTS';
+
+		}
+	}
+	return $successed;
+}
+
+function loadtable($table, $force = 0) {
+	global $db, $tablepre, $dbcharset;
+	static $tables = array();
+
+//	$tablepre = UC_DBTABLEPRE;
+	$dbcharset = DBCHARSET;
+
+	if(!isset($tables[$table]) || $force) {
+		if($db->version() > '4.1') {
+			$query = $db->query("SHOW FULL COLUMNS FROM {$tablepre}$table", 'SILENT');
+		} else {
+			$query = $db->query("SHOW COLUMNS FROM {$tablepre}$table", 'SILENT');
+		}
+		while($field = @$db->fetch_array($query)) {
+			$tables[$table][$field['Field']] = $field;
+		}
+	}
+	return $tables[$table];
+}
+
 function charcovert($string) {
 	if(!get_magic_quotes_gpc()) {
 		$string = str_replace('\'', '\\\'', $string);
@@ -706,7 +804,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// ²åÈëµ½×îºóÒ»ĞĞ
+		// æ’å…¥åˆ°æœ€å¾Œä¸€è¡Œ
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -965,13 +1063,13 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : ÓÃ»§Ãû²»ºÏ·¨
-	-2 : °üº¬²»ÔÊĞí×¢²áµÄ´ÊÓï
-	-3 : ÓÃ»§ÃûÒÑ¾­´æÔÚ
-	-4 : email ¸ñÊ½ÓĞÎó
-	-5 : email ²»ÔÊĞí×¢²á
-	-6 : ¸Ã email ÒÑ¾­±»×¢²á
-	>1 : ±íÊ¾³É¹¦£¬ÊıÖµÎª UID
+	-1 : ç”¨æˆ¶åä¸åˆæ³•
+	-2 : åŒ…å«ä¸å…è¨±è¨»å†Šçš„è©èª
+	-3 : ç”¨æˆ¶åå·²ç¶“å­˜åœ¨
+	-4 : email æ ¼å¼æœ‰èª¤
+	-5 : email ä¸å…è¨±è¨»å†Š
+	-6 : è©² email å·²ç¶“è¢«è¨»å†Š
+	>1 : è¡¨ç¤ºæˆåŠŸï¼Œæ•¸å€¼ç‚º UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

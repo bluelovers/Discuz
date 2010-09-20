@@ -107,6 +107,7 @@ class pmmodel {
 				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgtoid='$uid' AND (related='0' AND msgfromid>'0' OR msgfromid='0') AND folder='inbox' AND new='1'";
 				$num = $this->db->result_first($sql);
 				return $num;
+			case 'outbox':
 			case 'inbox':
 				if($filter == 'newpm') {
 					$filteradd = "msgtoid='$uid' AND (related='0' AND msgfromid>'0' OR msgfromid='0') AND folder='inbox' AND new='1'";
@@ -140,6 +141,7 @@ class pmmodel {
 			case 'newbox':
 				$folder = 'inbox';
 				$filter = 'newpm';
+			case 'outbox':
 			case 'inbox':
 				if($filter == 'newpm') {
 					$filteradd = "pm.msgtoid='$uid' AND (pm.related='0' AND pm.msgfromid>'0' OR pm.msgfromid='0') AND pm.folder='inbox' AND pm.new='1'";

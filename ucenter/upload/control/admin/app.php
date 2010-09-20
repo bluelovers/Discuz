@@ -63,7 +63,7 @@ class control extends adminbase {
 		} else {
 			$type = getgpc('type', 'P');
 			$name = getgpc('name', 'P');
-			$url = getgpc('url', 'P');
+			$url = rtrim(getgpc('url', 'P'), '/\\');
 			$ip = getgpc('ip', 'P');
 			$viewprourl = getgpc('viewprourl', 'P');
 			$authkey = getgpc('authkey', 'P');
@@ -84,10 +84,10 @@ class control extends adminbase {
 			}
 			$tagtemplates = $this->serialize($tagtemplates, 1);
 
-			if(!$_ENV['misc']->check_url($_POST['url'])) {
+			if(!$_ENV['misc']->check_url($url)) {
 				$this->message('app_add_url_invalid', 'BACK');
 			}
-			if(!empty($_POST['ip']) && !$_ENV['misc']->check_ip($_POST['ip'])) {
+			if(!empty($ip) && !$_ENV['misc']->check_ip($ip)) {
 				$this->message('app_add_ip_invalid', 'BACK');
 			}
 			$app = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."applications WHERE name='$name'");
@@ -128,6 +128,7 @@ class control extends adminbase {
 		if($status == '1') {
 			echo 'document.getElementById(\'status_'.$appid.'\').innerHTML = "<img src=\'images/correct.gif\' border=\'0\' class=\'statimg\' \/><span class=\'green\'>'.$this->lang['app_connent_ok'].'</span>";testlink();';
 		} else {
+			echo '// '.$url."\n";
 			echo 'document.getElementById(\'status_'.$appid.'\').innerHTML = "<img src=\'images/error.gif\' border=\'0\' class=\'statimg\' \/><span class=\'red\'>'.$this->lang['app_connent_false'].'</span>";testlink();';
 		}
 
@@ -140,7 +141,7 @@ class control extends adminbase {
 		if($this->submitcheck()) {
 			$type = getgpc('type', 'P');
 			$name = getgpc('name', 'P');
-			$url = getgpc('url', 'P');
+			$url = rtrim(getgpc('url', 'P'), '/\\');
 			$ip = getgpc('ip', 'P');
 			$viewprourl = getgpc('viewprourl', 'P');
 			$apifilename = trim(getgpc('apifilename', 'P'));
@@ -152,7 +153,7 @@ class control extends adminbase {
 			if(getgpc('apppath', 'P')) {
 				$app['extra']['apppath'] = $this->_realpath(getgpc('apppath', 'P'));
 				if($app['extra']['apppath']) {
-					$apifile = $app['extra']['apppath'].'./api/uc.php';
+					$apifile = $app['extra']['apppath'].'./api/'.$app['apifilename'];
 					if(!file_exists($apifile)) {
 						$this->message('app_apifile_not_exists', 'BACK', 0, array('$apifile' => $apifile));
 					}
@@ -160,7 +161,7 @@ class control extends adminbase {
 					preg_match("/define\(\'UC_CLIENT_VERSION\'\, \'([^\']+?)\'\)/i", $s, $m);
 					$uc_client_version = @$m[1];
 
-					//�жϰ汾
+					//判斷版本
 					if(!$uc_client_version || $uc_client_version <= '1.0.0') {
 						$this->message('app_apifile_too_low', 'BACK', 0, array('$apifile' => $apifile));
 					}

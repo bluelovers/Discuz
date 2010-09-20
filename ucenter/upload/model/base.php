@@ -297,7 +297,7 @@ class base {
 
 	function date($time, $type = 3) {
 		$format[] = $type & 2 ? (!empty($this->settings['dateformat']) ? $this->settings['dateformat'] : 'Y-n-j') : '';
-		$format[] = $type & 1 ? (!empty($this->settings['timeformat']) ? $this->settings['timeformat'] : 'H:i') : '';
+		$format[] = $type & 1 ? (!empty($this->settings['timeformat']) ? $this->settings['timeformat'] : 'H:i:s') : '';
 		return gmdate(implode(' ', $format), $time + $this->settings['timeoffset']);
 	}
 
@@ -419,7 +419,8 @@ class base {
 			}
 		}
 
-		$strcut = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
+//		$strcut = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
+		$strcut = str_replace(array('&', '&amp;#', '"', '<', '>'), array('&amp;', '&#', '&quot;', '&lt;', '&gt;'), $strcut);
 
 		return $strcut.$dot;
 	}
@@ -471,6 +472,147 @@ class base {
 		}
 		return $string;
 	}
+
+	// bluelovers
+
+	function array_inarray_key($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (array_key_exists($key, $arr1)) $ret[$key] = $arr1[$key];
+			}
+		}
+
+		return $ret;
+	}
+
+	function array_inarray_value($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (in_array($key, $arr1)) $ret[$key] = $key;
+			}
+		}
+
+		return $ret;
+	}
+
+	function implodeids($array, $prefix = '') {
+		if(!empty($array)) {
+			return "'{$prefix}".implode("','{$prefix}", is_array($array) ? $array : array($array))."'";
+		} else {
+			return '';
+		}
+	}
+
+	function implode_mode ($pieces, $mode = 'mysql', $ret = '') {
+		$ret = is_array($ret) ? $ret : array();
+		$array = array();
+
+		switch ($mode) {
+			case 'mysql_0':
+				$c = '';
+				$ret[2] = '';
+
+				foreach ($pieces as $key => $value) {
+					$ret[2] .= $c.'`'.$key.'`=\''.$value.'\'';
+					$c = ',';
+				}
+
+				break;
+			case 'mysql_1':
+				$c = '';
+				$ret[0] = $ret[1] = '';
+
+				$ret[0] = '`'.$this->implode_by_key(null, $pieces, '`,`').'`';
+				$ret[1] = $this->implodeids($pieces);
+
+				break;
+			case 'mysql_2':
+				$c = '';
+				$ret[0] = $ret[1] = $ret[2] = '';
+
+				$ret = $this->implode_mode($pieces, 'mysql_1', $ret);
+				$ret = $this->implode_mode($pieces, 'mysql_0', $ret);
+
+				break;
+			case 'mysql':
+			default:
+				foreach ($pieces as $key) {
+					$array[] = $this->implodeids($key);
+				}
+
+				$ret = array('`'.$this->implode_by_key(null, $key, '`,`').'`', '('.implode("),\n(", $array).')');
+
+				break;
+		}
+
+		return $ret;
+	}
+
+	function implode_by_key ($key, $pieces, $glue = ',', $doids = false, $prefix = '') {
+		$array = array();
+
+		if ($key === null) {
+			$array = array_keys($pieces);
+		} else {
+			foreach ($pieces as $value) {
+				$array[] = $value[$key];
+			}
+		}
+
+		$array = is_array($array) ? $array : array($array);
+
+		return $doids ? "'{$prefix}".implode("'{$glue}'{$prefix}", $array)."'" : implode($glue.$prefix, $array);
+	}
+
+	function dhtmlspecialchars($string, $quote_style = 0) {
+		if(is_array($string)) {
+			foreach($string as $key => $val) {
+				$string[$key] = self::dhtmlspecialchars($val, $quote_style);
+			}
+		} else {
+
+			$searcharray1 = array('&', '"', '<', '>');
+			$replacearray1 = array('&amp;', '&quot;', '&lt;', '&gt;');
+
+			if ($quote_style & ENT_QUOTES) {
+				$searcharray1[] = "'";
+				$replacearray1[] = '&#039;';
+			}
+
+			$searcharray = array
+				(
+					"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+					"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+				);
+			$replacearray = array
+				(
+					"&#\\1;",
+					"&#\\1;",
+				);
+
+			$string = preg_replace($searcharray, $replacearray, str_replace($searcharray1, $replacearray1, $string));
+		}
+		return $string;
+	}
+
+	function dexit($message, $pre = 0) {
+		if ($pre) echo '<pre>';
+		if ($pre > 1) $message = self::dhtmlspecialchars($message);
+		if (is_object($message)) {
+			var_export($message);
+		} elseif (is_array($message)) {
+			print_r($message);
+		} else {
+			echo $message;
+		}
+		exit();
+	}
+
+	// bluelovers
 
 }
 
