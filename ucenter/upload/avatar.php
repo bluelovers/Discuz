@@ -19,6 +19,11 @@ $type = isset($_GET['type']) ? $_GET['type'] : '';
 $check = isset($_GET['check_file_exists']) ? $_GET['check_file_exists'] : '';
 
 $avatar = './data/avatar/'.get_avatar($uid, $size, $type);
+
+// bluelovers
+require UC_ROOT.'./uc_version.php';
+// bluelovers
+
 if(file_exists(dirname(__FILE__).'/'.$avatar)) {
 	if($check) {
 		echo 1;

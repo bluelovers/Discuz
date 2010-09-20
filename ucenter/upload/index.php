@@ -32,6 +32,10 @@ $_SERVER	= daddslashes($_SERVER);
 $_FILES		= daddslashes($_FILES);
 $_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
 
+// bluelovers
+require UC_ROOT.'./uc_version.php';
+// bluelovers
+
 if(!@include UC_DATADIR.'config.inc.php') {
 	exit('The file <b>data/config.inc.php</b> does not exist, perhaps because of UCenter has not been installed, <a href="install/index.php"><b>Please click here to install it.</b></a>.');
 }
@@ -58,7 +62,13 @@ if(file_exists(UC_ROOT.RELEASE_ROOT.'model/base.php')) {
 	require UC_ROOT.'model/base.php';
 }
 
-if(in_array($m, array('app', 'frame', 'user', 'pm', 'pm_client', 'tag', 'feed', 'friend', 'domain', 'credit', 'mail', 'version'))) {
+// bluelovers
+$methodarray = array('app', 'frame', 'user', 'pm', 'pm_client', 'tag', 'feed', 'friend', 'domain', 'credit', 'mail', 'version');
+
+scRunHooks( 'CheckMethodAuthBefore', array(&$methodarray) );
+// bluelovers
+
+if(in_array($m, $methodarray)) {
 
 	if(file_exists(UC_ROOT.RELEASE_ROOT."control/$m.php")) {
 		include UC_ROOT.RELEASE_ROOT."control/$m.php";

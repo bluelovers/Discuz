@@ -32,6 +32,10 @@ $_SERVER	= daddslashes($_SERVER);
 $_FILES		= daddslashes($_FILES);
 $_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
 
+// bluelovers
+require UC_ROOT.'./uc_version.php';
+// bluelovers
+
 require UC_DATADIR.'config.inc.php';
 require UC_ROOT.'model/base.php';
 require UC_ROOT.'model/admin.php';
@@ -43,7 +47,13 @@ $a = empty($a) ? 'index' : $a;
 
 define('RELEASE_ROOT', '');
 
-if(in_array($m, array('admin', 'app', 'badword', 'pm', 'cache', 'db', 'domain', 'frame', 'log', 'note', 'feed', 'mail', 'setting', 'user', 'credit', 'seccode', 'tool', 'plugin'))) {
+// bluelovers
+$methodarray = array('admin', 'app', 'badword', 'pm', 'cache', 'db', 'domain', 'frame', 'log', 'note', 'feed', 'mail', 'setting', 'user', 'credit', 'seccode', 'tool', 'plugin');
+
+scRunHooks( 'CheckMethodAuthBefore_InAdmin', array(&$methodarray) );
+// bluelovers
+
+if(in_array($m, $methodarray)) {
 	include UC_ROOT."control/admin/$m.php";
 	$control = new control();
 	$method = 'on'.$a;
