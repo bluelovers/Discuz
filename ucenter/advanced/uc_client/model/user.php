@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 878 2008-12-15 03:27:41Z zhaoxiongfei $
+	$Id: user.php 968 2009-10-29 02:06:45Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -30,6 +30,11 @@ class usermodel {
 
 	function get_user_by_username($username) {
 		$arr = $this->db->fetch_first("SELECT * FROM ".UC_DBTABLEPRE."members WHERE username='$username'");
+		return $arr;
+	}
+
+	function get_user_by_email($email) {
+		$arr = $this->db->fetch_first("SELECT * FROM ".UC_DBTABLEPRE."members WHERE email='$email'");
 		return $arr;
 	}
 
@@ -103,12 +108,13 @@ class usermodel {
 		return $user['uid'];
 	}
 
-	function add_user($username, $password, $email, $uid = 0, $questionid = '', $answer = '') {
+	function add_user($username, $password, $email, $uid = 0, $questionid = '', $answer = '', $regip = '') {
+		$regip = empty($regip) ? $this->base->onlineip : $regip;
 		$salt = substr(uniqid(rand()), -6);
 		$password = md5(md5($password).$salt);
 		$sqladd = $uid ? "uid='".intval($uid)."'," : '';
 		$sqladd .= $questionid > 0 ? " secques='".$this->quescrypt($questionid, $answer)."'," : " secques='',";
-		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."members SET $sqladd username='$username', password='$password', email='$email', regip='".$this->base->onlineip."', regdate='".$this->base->time."', salt='$salt'");
+		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."members SET $sqladd username='$username', password='$password', email='$email', regip='$regip', regdate='".$this->base->time."', salt='$salt'");
 		$uid = $this->db->insert_id();
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."memberfields SET uid='$uid'");
 		return $uid;
@@ -147,6 +153,9 @@ class usermodel {
 
 	function delete_user($uidsarr) {
 		$uidsarr = (array)$uidsarr;
+		if(!$uidsarr) {
+			return 0;
+		}
 		$uids = $this->base->implode($uidsarr);
 		$arr = $this->db->fetch_all("SELECT uid FROM ".UC_DBTABLEPRE."protectedmembers WHERE uid IN ($uids)");
 		$puids = array();

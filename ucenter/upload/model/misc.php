@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc.php 845 2008-12-08 05:36:51Z zhaoxiongfei $
+	$Id: misc.php 930 2009-04-15 02:41:36Z wangjinbo $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -75,7 +75,7 @@ class miscmodel {
 			$boundary = $encodetype == 'URLENCODE' ? '' : ';'.substr($post, 0, trim(strpos($post, "\n")));
 			$out .= $encodetype == 'URLENCODE' ? "Content-Type: application/x-www-form-urlencoded\r\n" : "Content-Type: multipart/form-data$boundary\r\n";
 			$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-			$out .= "Host: $host\r\n";
+			$out .= "Host: $host:$port\r\n";
 			$out .= 'Content-Length: '.strlen($post)."\r\n";
 			$out .= "Connection: Close\r\n";
 			$out .= "Cache-Control: no-cache\r\n";
@@ -87,7 +87,7 @@ class miscmodel {
 			//$out .= "Referer: $boardurl\r\n";
 			$out .= "Accept-Language: zh-cn\r\n";
 			$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-			$out .= "Host: $host\r\n";
+			$out .= "Host: $host:$port\r\n";
 			$out .= "Connection: Close\r\n";
 			$out .= "Cookie: $cookie\r\n\r\n";
 		}

@@ -45,6 +45,10 @@
 	<th><i>string</i> answer</th>
 	<td>安全提問答案</td>
 	</tr>
+	<tr>
+	<th><i>string</i> regip</th>
+	<td>註冊ip</td>
+	</tr>
 </tbody>
 </table>
 
@@ -118,7 +122,7 @@ if($uid <= 0) {
 <tbody>
 	<tr>
 	<th><i>string</i> username</th>
-	<td>用戶名 / 用戶 ID</td>
+	<td>用戶名 / 用戶 ID / 用戶 E-mail</td>
 	</tr>
 	<tr>
 	<th><i>string</i> password</th>
@@ -129,6 +133,7 @@ if($uid <= 0) {
 	<td>
 	是否使用用戶 ID登錄<br />
 	<em>1:</em>使用用戶 ID登錄<br />
+	<em>2:</em>使用用戶 E-mail登錄<br />
 	<em>0:</em><strong>(默認值)</strong> 使用用戶名登錄<br />
 	</td>
 	</tr>
@@ -375,7 +380,7 @@ if($ucresult == -1) {
 <h3>刪除用戶</h3>
 
 <div class="submsg">
-<h4><i>integer</i> uc_user_delete(<i>string/array</i> username)</h4>
+<h4><i>integer</i> uc_user_delete(<i>integer/array</i> uid)</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -387,7 +392,7 @@ if($ucresult == -1) {
 </thead>
 <tbody>
 	<tr>
-	<th><i>string/array</i> username</th>
+	<th><i>integer/array</i> uid</th>
 	<td>用戶名</td>
 	</tr>
 </tbody>
@@ -417,7 +422,7 @@ if($ucresult == -1) {
 <h3>刪除用戶頭像</h3>
 
 <div class="submsg">
-<h4><i>integer</i> uc_user_deleteavatar(<i>string/array</i> username)</h4>
+<h4><i>integer</i> uc_user_deleteavatar(<i>integer/array</i> uid)</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -429,7 +434,7 @@ if($ucresult == -1) {
 </thead>
 <tbody>
 	<tr>
-	<th><i>string/array</i> username</th>
+	<th><i>integer/array</i> uid</th>
 	<td>用戶名</td>
 	</tr>
 </tbody>

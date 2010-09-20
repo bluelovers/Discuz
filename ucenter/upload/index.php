@@ -4,11 +4,11 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: index.php 918 2009-01-21 01:24:29Z zhaoxiongfei $
+	$Id: index.php 961 2009-09-21 02:35:50Z zhaoxiongfei $
 */
 
-define('UC_SERVER_VERSION', '1.5.0');
-define('UC_SERVER_RELEASE', '20090121');
+define('UC_SERVER_VERSION', '1.5.1');
+define('UC_SERVER_RELEASE', '20100519');
 
 error_reporting(0);
 set_magic_quotes_runtime(0);
@@ -38,7 +38,7 @@ if(!@include UC_DATADIR.'config.inc.php') {
 
 $m = getgpc('m');
 $a = getgpc('a');
-$release = getgpc('release');
+$release = intval(getgpc('release'));
 if(empty($m) && empty($a)) {
 	header('Location: admin.php');
 	exit;

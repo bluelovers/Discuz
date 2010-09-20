@@ -134,7 +134,7 @@ class dbstuff {
 	}
 
 	function halt($message = '', $sql = '') {
-		api_msg('run_sql_error', $message.'<br /><br />'.$sql.'<br /> '.mysql_error(), 0);
+		show_error('run_sql_error', $message.'<br /><br />'.$sql.'<br /> '.mysql_error(), 0);
 	}
 }
 

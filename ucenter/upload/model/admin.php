@@ -25,10 +25,9 @@ class adminbase extends base {
 		$this->view->assign('sid', $this->view->sid);
 		$this->view->assign('iframe', getgpc('iframe'));
 		$a = getgpc('a');
-		if(getgpc('m') !='user' && $a != 'login' && $a != 'logout') {
+		if(!(getgpc('m') =='user' && ($a == 'login' || $a == 'logout'))) {
 			$this->check_priv();
 		}
-		
 	}
 
 	function check_priv() {

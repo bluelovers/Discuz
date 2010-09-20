@@ -4,11 +4,11 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 753 2008-11-14 06:48:25Z cnteacher $
+	$Id: db.class.php 922 2009-02-19 01:30:22Z zhaoxiongfei $
 */
 
 
-class db {
+class ucclient_db {
 	var $querynum = 0;
 	var $link;
 	var $histories;
@@ -154,9 +154,16 @@ class db {
 			$this->connect($this->dbhost, $this->dbuser, $this->dbpw, $this->dbname, $this->dbcharset, $this->pconnect, $this->tablepre, $this->time);
 			$this->query($sql);
 		} else {
-			$s = '<b>Error:</b>'.$error.'<br />';
+			$s = '';
+			if($message) {
+				$s = "<b>UCenter info:</b> $message<br />";
+			}
+			if($sql) {
+				$s .= '<b>SQL:</b>'.htmlspecialchars($sql).'<br />';
+			}
+			$s .= '<b>Error:</b>'.$error.'<br />';
 			$s .= '<b>Errno:</b>'.$errorno.'<br />';
-			$s .= '<b>SQL:</b>:'.$sql;
+			$s = str_replace(UC_DBTABLEPRE, '[Table]', $s);
 			exit($s);
 		}
 	}

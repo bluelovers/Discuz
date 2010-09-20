@@ -4,7 +4,7 @@
 [Discuz!] (C)2001-2009 Comsenz Inc.
 This is NOT a freeware, use is subject to license terms
 
-$Id: index.php 843 2008-12-05 08:02:58Z zhaoxiongfei $
+$Id: index.php 957 2009-08-24 02:16:16Z zhaoxiongfei $
 */
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -113,9 +113,9 @@ if($method == 'show_license') {
 		if(empty($dbname)) {
 			show_msg('dbname_invalid', $dbname, 0);
 		} else {
-			if(!@mysql_connect($dbhost, $dbuser, $dbpw)) {
-				$errno = mysql_errno();
-				$error = mysql_error();
+			if(!$link = @mysql_connect($dbhost, $dbuser, $dbpw)) {
+				$errno = mysql_errno($link);
+				$error = mysql_error($link);
 				if($errno == 1045) {
 					show_msg('database_errno_1045', $error, 0);
 				} elseif($errno == 2003) {
@@ -125,15 +125,15 @@ if($method == 'show_license') {
 				}
 			}
 			if(mysql_get_server_info() > '4.1') {
-				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET ".DBCHARSET);
+				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET ".DBCHARSET, $link);
 			} else {
-				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname`");
+				mysql_query("CREATE DATABASE IF NOT EXISTS `$dbname`", $link);
 			}
 
 			if(mysql_errno()) {
 				show_msg('database_errno_1044', mysql_error(), 0);
 			}
-			mysql_close();
+			mysql_close($link);
 		}
 
 		if(strpos($tablepre, '.') !== false || intval($tablepre{0})) {

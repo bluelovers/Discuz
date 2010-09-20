@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 921 2009-01-22 01:10:55Z zhaoxiongfei $
+	$Id: user.php 969 2009-10-29 02:07:08Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -37,7 +37,7 @@ class usercontrol extends base {
 				$synstr = '';
 				foreach($this->cache['apps'] as $appid => $app) {
 					if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
-						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/uc.php?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
 					}
 				}
 				return $synstr;
@@ -52,7 +52,7 @@ class usercontrol extends base {
 			$synstr = '';
 			foreach($this->cache['apps'] as $appid => $app) {
 				if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
-					$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/uc.php?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+					$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
 				}
 			}
 			return $synstr;
@@ -67,6 +67,7 @@ class usercontrol extends base {
 		$email = $this->input('email');
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
+		$regip = $this->input('regip');
 
 		if(($status = $this->_check_username($username)) < 0) {
 			return $status;
@@ -75,7 +76,7 @@ class usercontrol extends base {
 			return $status;
 		}
 
-		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer);
+		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer, $regip);
 		return $uid;
 	}
 
@@ -110,8 +111,10 @@ class usercontrol extends base {
 		$checkques = $this->input('checkques');
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
-		if($isuid) {
+		if($isuid == 1) {
 			$user = $_ENV['user']->get_user_by_uid($username);
+		} elseif($isuid == 2) {
+			$user = $_ENV['user']->get_user_by_email($username);
 		} else {
 			$user = $_ENV['user']->get_user_by_username($username);
 		}
@@ -285,14 +288,15 @@ class usercontrol extends base {
 			return -3;
 		}
 
-		$file = @$_FILES['Filedata']['tmp_name'];
-		$filetype = '.jpg';
+		list($width, $height, $type, $attr) = getimagesize($_FILES['Filedata']['tmp_name']);
+		$imgtype = array(1 => '.gif', 2 => '.jpg', 3 => '.png');
+		$filetype = $imgtype[$type];
 		$tmpavatar = UC_DATADIR.'./tmp/upload'.$uid.$filetype;
 		file_exists($tmpavatar) && @unlink($tmpavatar);
 		if(@copy($_FILES['Filedata']['tmp_name'], $tmpavatar) || @move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpavatar)) {
 			@unlink($_FILES['Filedata']['tmp_name']);
 			list($width, $height, $type, $attr) = getimagesize($tmpavatar);
-			if($width < 10 || $height < 10 || $width > 3000 || $height > 3000 || $type == 4) {
+			if($width < 10 || $height < 10 || $type == 4) {
 				@unlink($tmpavatar);
 				return -2;
 			}

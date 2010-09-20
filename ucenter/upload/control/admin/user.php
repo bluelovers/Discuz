@@ -31,8 +31,7 @@ class control extends adminbase {
 
 	function control() {
 		parent::__construct();
-		if($_GET['a'] != 'login' && $_GET['a'] != 'logout') {
-			$this->check_priv();
+		if(getgpc('a') != 'login' && getgpc('a') != 'logout') {
 			if(!$this->user['isfounder'] && !$this->user['allowadminuser']) {
 				$this->message('no_permission_for_this_module');
 			}
@@ -143,7 +142,6 @@ class control extends adminbase {
 	}
 
 	function onadd() {
-		$this->check_priv();
 		if(!$this->submitcheck('submit')) {
 			exit;
 		}
@@ -174,7 +172,6 @@ class control extends adminbase {
 	}
 
 	function onls() {
-		$this->check_priv();
 
 		include_once UC_ROOT.'view/default/admin.lang.php';
 

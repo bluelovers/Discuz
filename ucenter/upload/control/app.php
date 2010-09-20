@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: app.php 885 2008-12-16 01:13:36Z monkey $
+	$Id: app.php 924 2009-02-25 03:52:14Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -33,7 +33,6 @@ class appcontrol extends base {
 
 	function onadd() {
 		$ucfounderpw = getgpc('ucfounderpw', 'P');
-		$apptype = getgpc('apptype', 'P');
 		$apptype = getgpc('apptype', 'P');
 		$appname = getgpc('appname', 'P');
 		$appurl = getgpc('appurl', 'P');

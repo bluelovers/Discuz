@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 916 2009-01-19 05:56:07Z monkey $
+	$Id: user.php 968 2009-10-29 02:06:45Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -68,6 +68,7 @@ class usercontrol extends base {
 		$email = $this->input('email');
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
+		$regip = $this->input('regip');
 
 		if(($status = $this->_check_username($username)) < 0) {
 			return $status;
@@ -75,7 +76,7 @@ class usercontrol extends base {
 		if(($status = $this->_check_email($email)) < 0) {
 			return $status;
 		}
-		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer);
+		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer, $regip);
 		return $uid;
 	}
 
@@ -89,7 +90,7 @@ class usercontrol extends base {
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
 
-		if(!$ignoreoldpw && $email && ($status = $this->_check_email($email, $username)) < 0) {
+		if($email && ($status = $this->_check_email($email, $username)) < 0) {
 			return $status;
 		}
 		$status = $_ENV['user']->edit_user($username, $oldpw, $newpw, $email, $ignoreoldpw, $questionid, $answer);
@@ -110,8 +111,10 @@ class usercontrol extends base {
 		$checkques = $this->input('checkques');
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
-		if($isuid) {
+		if($isuid == 1) {
 			$user = $_ENV['user']->get_user_by_uid($username);
+		} elseif($isuid == 2) {
+			$user = $_ENV['user']->get_user_by_email($username);
 		} else {
 			$user = $_ENV['user']->get_user_by_username($username);
 		}

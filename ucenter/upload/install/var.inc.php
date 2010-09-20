@@ -12,8 +12,8 @@ if(!defined('IN_COMSENZ')) {
 }
 
 define('SOFT_NAME', 'UCenter');
-define('SOFT_VERSION', '1.5.0');
-define('SOFT_RELEASE', '20090121');
+define('SOFT_VERSION', '1.5.1');
+define('SOFT_RELEASE', '20100501');
 define('INSTALL_LANG', 'TC_UTF8');
 
 define('CONFIG', ROOT_PATH.'./data/config.inc.php');

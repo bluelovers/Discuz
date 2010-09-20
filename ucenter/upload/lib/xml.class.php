@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: xml.class.php 845 2008-12-08 05:36:51Z zhaoxiongfei $
+	$Id: xml.class.php 971 2009-11-16 02:20:26Z zhaoxiongfei $
 */
 
 function xml_unserialize(&$xml, $isnormal = FALSE) {
@@ -24,7 +24,7 @@ function xml_serialize($arr, $htmlon = FALSE, $isnormal = FALSE, $level = 1) {
 			$s .= $space."<item id=\"$k\">\r\n".xml_serialize($v, $htmlon, $isnormal, $level + 1).$space."</item>\r\n";
 		}
 	}
-	$s = preg_replace("/([\x01-\x09\x0b-\x0c\x0e-\x1f])+/", ' ', $s);
+	$s = preg_replace("/([\x01-\x08\x0b-\x0c\x0e-\x1f])+/", ' ', $s);
 	return $level == 1 ? $s."</root>" : $s;
 }
 
@@ -63,6 +63,7 @@ class XML {
 	}
 
 	function open(&$parser, $tag, $attributes) {
+		$this->data = '';
 		$this->failed = FALSE;
 		if(!$this->isnormal) {
 			if(isset($attributes['id']) && !is_string($this->document[$attributes['id']])) {
@@ -84,9 +85,7 @@ class XML {
 
 	function data(&$parser, $data) {
 		if($this->last_opened_tag != NULL) {
-			$this->data = $data;
-		} else {
-			$this->data = '';
+			$this->data .= $data;
 		}
 	}
 

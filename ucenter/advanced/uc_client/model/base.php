@@ -70,7 +70,7 @@ class base {
 
 	function init_db() {
 		require_once UC_ROOT.'lib/db.class.php';
-		$this->db = new db();
+		$this->db = new ucclient_db();
 		$this->db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, '', UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
 	}
 
