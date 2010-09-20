@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: global.inc.php 4432 2010-09-14 04:05:23Z yumiao $
@@ -21,9 +21,9 @@ $allowvars = array('wwwname', 'wwwurl', 'sitename',
 					'commentperpage', 'noticeperpage', 'goodperpage', 'consumeperpage', 'shopsearchperpage',
 					'consumesearchperpage', 'goodsearchperpage', 
 					'cardperpage', 'albumsearchperpage', 'allowcreateimg', 'fontpath', 'seccode',
-					'siteclosed', 'siteclosed_reason', 'multipleshop', 'auditnewshops', 'defaultshopgroup');//允许提交的settings变量名
+					'siteclosed', 'siteclosed_reason', 'multipleshop', 'auditnewshops', 'defaultshopgroup');//允許提交的settings變量名
 
-//读入缓存
+//讀入緩存
 $cachefile = B_ROOT.'./data/system/config.cache.php';
 if(!file_exists($cachefile)) {
 	updatesettingcache();
@@ -34,7 +34,7 @@ $editvalue['siteclosed'] = $editvalue['siteclosed'] ? $editvalue['siteclosed'] :
 
 if(!empty($_POST['valuesubmit'])) {
 
-	//提交了数据
+	//提交了數據
 	$item = $checkresults = array();
 	$key = $rpsql = $comma = '';
 	if(intval($_POST['auditnewshops']) == 0 && empty($_POST['defaultshopgroup'])) {
@@ -58,11 +58,11 @@ if(!empty($_POST['valuesubmit'])) {
 		$sql = 'REPLACE INTO '.tname('settings').' (`variable`, `value`) VALUES '.$rpsql;
 		DB::query($sql);
 	}
-	updatesettingcache(); //更新设置缓存
+	updatesettingcache(); //更新設置緩存
 	cpmsg('message_success', 'admin.php?action=global');
 
 } else {
-	//没有提交数据
+	//沒有提交數據
 	shownav('global', 'settings_basic');
 	showsubmenu('settings_basic', array(
 	array('settings_basic', 'global', '1'),
@@ -185,7 +185,7 @@ if(!empty($_POST['valuesubmit'])) {
 	showsetting('global_consumeperpage', 'consumeperpage', $editvalue['consumeperpage'], 'number');
 	showsetting('global_commentperpage', 'commentperpage', $editvalue['commentperpage'], 'number');
 
-	// 关闭站点
+	// 關閉站點
 	showsetting('global_siteclosed', array('siteclosed', array(
 	array(1, lang('yes'), array('siteclosedext' => '')),
 	array(0, lang('no'), array('siteclosedext' => 'none'))

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: index.inc.php 4229 2010-08-19 09:21:19Z fanshengshuai $

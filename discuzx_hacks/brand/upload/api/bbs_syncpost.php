@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: bbs_syncpost.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -11,8 +11,8 @@ if(!defined('IN_ADMIN') && !defined('IN_STORE')) {
 	exit('Acess Denied');
 }
 /**
- *判断版块是否存在
- *@param $fid - 版块ID
+ *判斷版塊是否存在
+ *@param $fid - 版塊ID
  */
  
 function checkbbsfid($fid) {
@@ -41,8 +41,8 @@ function checkbbsfid($fid) {
     }
 }
 /**
- *判断主题是否存在
- *param $tid - 主题id
+ *判斷主題是否存在
+ *param $tid - 主題id
  */
  
 function checkbbstid($tid) {
@@ -73,7 +73,7 @@ function checkbbstid($tid) {
 }
 
 /**
- *同步更新相册
+ *同步更新相冊
  */
 function syncalbum($albumid) {
 	global $_G, $_SC, $_SGLOBAL;
@@ -115,7 +115,7 @@ function syncalbum($albumid) {
  	$data['item'] = $album;
  	$data['photolist'] = $photolist;
  	$data['message']['itemid'] = $album['itemid'];
- 	//插入主题信息
+ 	//插入主題信息
     $author = $_SGLOBAL['panelinfo']['username'];
     $authorid = $_SGLOBAL['panelinfo']['uid'];
     $subject = "[".b_lang('album')."]".$data['item']['subject'];
@@ -472,7 +472,7 @@ function syncpost($itemid, $mname) {
         unset($db);
         return false;
     } 	
- 	//插入主题信息
+ 	//插入主題信息
     $author = $_SGLOBAL['panelinfo']['username'];
     $authorid = $_SGLOBAL['panelinfo']['uid'];
     $subject = "[".b_lang($mname)."]".$item['subject'];

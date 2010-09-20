@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: common.func.php 4490 2010-09-15 09:31:46Z bihuizi $
@@ -102,7 +102,7 @@ function arraytostring($array, $dot='/', $dot2='/') {
 	return $result;
 }
 
-//将数组加上单引号,并整理成串
+//將數組加上單引號,並整理成串
 function simplode($sarr, $comma=',') {
 	return '\''.implode('\''.$comma.'\'', $sarr).'\'';
 }
@@ -187,20 +187,20 @@ function geturl($pstring, $urlmode=0) {
 		}
 	}
 
-	//URL缓存
+	//URL緩存
 	$cachekey = $pstring.$urlmode;
 	if(empty($_SGLOBAL['url_cache'])) $_SGLOBAL['url_cache'] = array();
 	if(!empty($_SGLOBAL['url_cache'][$cachekey])) {
 		return $_SGLOBAL['url_cache'][$cachekey];
 	}
 
-	//url结果
+	//url結果
 	$theurl = '';
 
-	//强制php模式
+	//強制php模式
 	$isphp = !empty($spaceself)?1:strexists($pstring, 'php/1');
 
-	//首页链接
+	//首頁鏈接
 	if($pstring == 'action/index') $pstring = '';
 
 	//搜索友好模式
@@ -252,20 +252,20 @@ function geturl($pstring, $urlmode=0) {
 			if(empty($para)) $pre = '/';
 
 			if($urlmode == 1) {
-				//全部路径
+				//全部路徑
 				$theurl = B_URL_ALL.$pre.$para;
 			} elseif($urlmode == 2) {
-				//处理
+				//處理
 				$theurl = B_URL.$pre.$para;
 				$theurl = url_remake($theurl);
 			} else {
-				//常规
+				//常規
 				$theurl = B_URL.$pre.$para;
 			}
 		}
 	}
 
-	//url缓存
+	//url緩存
 	$_SGLOBAL['url_cache'][$cachekey] = $theurl;
 
 	return $theurl;
@@ -396,7 +396,7 @@ function sgmdate($timestamp, $dateformat='', $format=0) {
 	return $result;
 }
 
-//获得表
+//獲得表
 function tname($name, $mode=0) {
 	global $_G, $_SC, $lang;
 
@@ -412,10 +412,10 @@ function tname($name, $mode=0) {
 function authcode($string, $operation, $key = '', $expiry = 0) {
 	global $_G, $_SGLOBAL;
 
-	$ckey_length = 4;	// 随机密钥长度 取值 0-32;
-	// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
-	// 取值越大，密文变动规律越大，密文变化 = 16 的 $ckey_length 次方
-	// 当此值为 0 时，则不产生随机密钥
+	$ckey_length = 4;	// 隨機密鑰長度 取值 0-32;
+	// 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
+	// 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
+	// 當此值為 0 時，則不產生隨機密鑰
 
 	$key = md5($key ? $key : $_G['authkey']);
 	$keya = md5(substr($key, 0, 16));
@@ -463,7 +463,7 @@ function authcode($string, $operation, $key = '', $expiry = 0) {
 }
 
 /**
- * 从 Cookie 中取出登录信息
+ * 從 Cookie 中取出登錄信息
  */
 function getcookie() {
 	global $_G, $_SGLOBAL, $_SCET;
@@ -504,7 +504,7 @@ function getcookie() {
 	if(empty($_G['member']['timeoffset'])) $_G['member']['timeoffset'] = $_G['member']['timeoffset'] = $_G['setting']['timeoffset'];
 }
 
-//数组转换成字串
+//數組轉換成字串
 function arrayeval($array, $level = 0) {
 	$space = '';
 	$evaluate = "Array $space(";
@@ -555,7 +555,7 @@ function ssetcookie($var, $value = '', $life = 0, $prefix = 1, $httponly = false
 }
 
 /**
- * 连接数据库
+ * 連接數據庫
  */
 function dbconnect($mode=0) {
 	global $_G, $_SGLOBAL, $_SC;
@@ -621,7 +621,7 @@ function showxml($text, $title='') {
 	exit;
 }
 
-//显示信息
+//顯示信息
 function showmessage($message, $url_forward='', $second=3, $vars=array(), $checkresults = array()) {
 	global $_G, $_SGLOBAL, $lang, $mlang, $_SC, $_SSCONFIG;
 
@@ -656,14 +656,14 @@ function showmessage($message, $url_forward='', $second=3, $vars=array(), $check
 		echo '</root>';
 	} else {
 		if($url_forward && empty($second)) {
-			//直接301跳转
+			//直接301跳轉
 			obclean();
 			header("HTTP/1.1 301 Moved Permanently");
 			header("Location: $url_forward");
 		} else {
 			$tpl_file = 'templates/site/default/showmessage.html.php';
 			$fullpath = 1;
-			//显示
+			//顯示
 			obclean();
 			if(!empty($url_forward)) {
 				$second = $second * 1000;
@@ -764,7 +764,7 @@ function replacetable($tablename, $insertsqlarr) {
 	DB::query('REPLACE INTO '.tname($tablename).' ('.$insertkeysql.') VALUES ('.$insertvaluesql.') ');
 }
 
-//简单跳转的函数
+//簡單跳轉的函數
 function jumpurl($url, $time=1000, $mode='js') {
 	if($mode == 'js') {
 		echo "<script>
@@ -780,7 +780,7 @@ function jumpurl($url, $time=1000, $mode='js') {
 	exit;
 }
 
-//获取文件名后缀
+//獲取文件名後綴
 function fileext($filename) {
 	return strtolower(trim(substr(strrchr($filename, '.'), 1)));
 }
@@ -826,7 +826,7 @@ function censor($message, $mod=0) {
 	return $message;
 }
 
-//读文件
+//讀文件
 function sreadfile($filename, $mode='r', $remote=0, $maxsize=0, $jumpnum=0) {
 	if($jumpnum > 5) return '';
 	$contents = '';
@@ -897,7 +897,7 @@ function sreadfile($filename, $mode='r', $remote=0, $maxsize=0, $jumpnum=0) {
 				$contents = curl_exec($ch);
 				curl_close($ch);
 			} else {
-				//无法远程上传
+				//無法遠程上傳
 			}
 		}
 	} else {
@@ -910,7 +910,7 @@ function sreadfile($filename, $mode='r', $remote=0, $maxsize=0, $jumpnum=0) {
 	return $contents;
 }
 
-//写文件
+//寫文件
 function writefile($filename, $writetext, $filemod='text', $openmod='w', $eixt=1) {
 	if(!@$fp = fopen($filename, $openmod)) {
 		if($eixt) {
@@ -962,7 +962,7 @@ function initurl($url) {
 	return $urls;
 }
 
-//编译模板文件
+//編譯模板文件
 function template($tplfile, $fullpath=0) {
 	global $_G;
 
@@ -996,7 +996,7 @@ function template($tplfile, $fullpath=0) {
 	return $objfile;
 }
 
-//格式化路径
+//格式化路徑
 function srealpath($path) {
 	$path = str_replace('./', '', $path);
 	if(DIRECTORY_SEPARATOR == '\\') {
@@ -1007,7 +1007,7 @@ function srealpath($path) {
 	return $path;
 }
 
-//模块
+//模塊
 function block($thekey, $param) {
 	global $_G, $_SGLOBAL, $_SBLOCK, $lang, $_BCACHE;
 
@@ -1021,7 +1021,7 @@ function block($thekey, $param) {
 	}
 	$_SBLOCK[$thekey] = array();
 
-	//缓存key
+	//緩存key
 	$cachekey = $multicachekey = smd5($thekey.$param);
 
 	$paramarr = parseparameter($param, 0);
@@ -1034,7 +1034,7 @@ function block($thekey, $param) {
 	}
 
 	if(!empty($paramarr['perpage']) && !empty($_G['page'])) {
-		//分页
+		//分頁
 		$cachekey = smd5($thekey.$param.$_G['page']);
 	}
 
@@ -1042,20 +1042,20 @@ function block($thekey, $param) {
 		$cacheupdatetime = $paramarr['cachetime'];
 	} else {
 		$cacheupdatetime = 3600*24*30+rand(0, 1000);
-		//默认缓存时间一个月
+		//默認緩存時間一個月
 	}
 
 	if($cacheupdatetime) {
-		//获取缓存
+		//獲取緩存
 
 		if(!empty($paramarr['perpage'])) {
-			//获取分页计数缓存
+			//獲取分頁計數緩存
 			$_BCACHE->get($multicachekey);
 			if(!isset($_SBLOCK[$multicachekey])) {
-				$multineedcache = 1;//没有分页计数缓存
+				$multineedcache = 1;//沒有分頁計數緩存
 			} else {
-				//创建下次更新时?
-				if(!empty($_SBLOCK[$multicachekey]['filemtime'])) $_SBLOCK[$multicachekey]['updatetime'] = $_SBLOCK[$multicachekey]['filemtime'] + $cacheupdatetime; //文件缓存方式
+				//創建下次更新時?
+				if(!empty($_SBLOCK[$multicachekey]['filemtime'])) $_SBLOCK[$multicachekey]['updatetime'] = $_SBLOCK[$multicachekey]['filemtime'] + $cacheupdatetime; //文件緩存方式
 				if(!empty($_SBLOCK[$multicachekey]['updatetime']) && $_SBLOCK[$multicachekey]['updatetime'] < $_G['timestamp']) {
 					$multineedcache = 2; //需要更新
 				}
@@ -1064,10 +1064,10 @@ function block($thekey, $param) {
 
 		$_BCACHE->get($cachekey);
 		if(!isset($_SBLOCK[$cachekey])) {
-			$needcache = 1;//没有缓存
+			$needcache = 1;//沒有緩存
 		} else {
-			//创建下次更新时?
-			if(!empty($_SBLOCK[$cachekey]['filemtime'])) $_SBLOCK[$cachekey]['updatetime'] = $_SBLOCK[$cachekey]['filemtime'] + $cacheupdatetime; //文件缓存方式
+			//創建下次更新時?
+			if(!empty($_SBLOCK[$cachekey]['filemtime'])) $_SBLOCK[$cachekey]['updatetime'] = $_SBLOCK[$cachekey]['filemtime'] + $cacheupdatetime; //文件緩存方式
 			if(!empty($_SBLOCK[$multicachekey]['updatetime']) && $_SBLOCK[$cachekey]['updatetime'] < $_G['timestamp']) {
 				$needcache = 2;//需要更新
 			}
@@ -1075,7 +1075,7 @@ function block($thekey, $param) {
 	}
 
 	if($multineedcache && !empty($paramarr['perpage'])) {
-		//分页计数缓存
+		//分頁計數緩存
 		require_once(B_ROOT.'./source/function/block.func.php');
 		$multicount = $block_func($paramarr, $multicachekey, 1);
 		$_SBLOCK[$multicachekey]['value'] = serialize($multicount);
@@ -1133,7 +1133,7 @@ function snl2br($message) {
 	return nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
 }
 
-//替换字符串中的特殊字符
+//替換字符串中的特殊字符
 //去掉指定字符串中\\或\'前的\
 function sstripslashes($string) {
 
@@ -1199,7 +1199,7 @@ function getwheresql($wheresqlarr) {
 	return $result;
 }
 
-//格式化大小函数,根据字节数自动显示成'KB','MB'等等
+//格式化大小函數,根據字節數自動顯示成'KB','MB'等等
 function formatsize($size, $prec=3) {
 	$size = round(abs($size));
 	$units = array(0=>" B ", 1=>" KB", 2=>" MB", 3=>" GB", 4=>" TB");
@@ -1211,7 +1211,7 @@ function formatsize($size, $prec=3) {
 	return $size.$units[$unit];
 }
 
-//写错误日志函数
+//寫錯誤日誌函數
 function errorlog($type, $message, $halt = 0) {
 	global $_G, $_SGLOBAL;
 	@$fp = fopen(B_ROOT.'./log/errorlog.php', 'a');
@@ -1222,7 +1222,7 @@ function errorlog($type, $message, $halt = 0) {
 	}
 }
 
-//调试信息,显示进程处理时间
+//調試信息,顯示進程處理時間
 function debuginfo($echo=1) {
 	global $_G, $_SGLOBAL, $_BCACHE;
 
@@ -1242,10 +1242,10 @@ function debuginfo($echo=1) {
 }
 
 /**
- * 品牌空间的字符串长度计算（汉字和英文都算1个）
- * @param $string='', 需要计算的字符串
+ * 品牌空間的字符串長度計算（漢字和英文都算1個）
+ * @param $string='', 需要計算的字符串
  * @param $charset, 字符集, gbk或utf8
- * @return 文字长度
+ * @return 文字長度
  */
 function bstrlen($string, $charset='') {
 	global $_G, $_SC;
@@ -1302,12 +1302,12 @@ function bstrlen($string, $charset='') {
 }
 
 /**
- * 品牌空间的字符串长度截断（汉字和英文都算1个）
- * @param $string='', 需要计算的字符串
- * @param $length='', 需要截断的字符长度
- * @param $havedot='', 截断后是否显示省略符号
+ * 品牌空間的字符串長度截斷（漢字和英文都算1個）
+ * @param $string='', 需要計算的字符串
+ * @param $length='', 需要截斷的字符長度
+ * @param $havedot='', 截斷後是否顯示省略符號
  * @param $charset, 字符集, gbk或utf8
- * @return 文字长度
+ * @return 文字長度
  */
 function cutstr($string, $length, $havedot=0, $charset='') {
 	global $_G, $_SC;
@@ -1387,8 +1387,8 @@ function cutstr($string, $length, $havedot=0, $charset='') {
 }
 
 /**
- * 去除ubb代码
- * @param $str=''，字符串， $length截断长度
+ * 去除ubb代碼
+ * @param $str=''，字符串， $length截斷長度
  * @return 字符串
  */
 function messagecutstr($str, $length=255) {
@@ -1410,7 +1410,7 @@ function messagecutstr($str, $length=255) {
 			return trim($str);
 }
 
-//生成分页URL地址集合
+//生成分頁URL地址集合
 function multi($num, $perpage, $curpage, $mpurl, $phpurl=1) {
 
 	global $_G, $_SHTML, $lang, $_SGLOBAL;
@@ -1493,7 +1493,7 @@ function multi($num, $perpage, $curpage, $mpurl, $phpurl=1) {
 	return $multipage;
 }
 
-//跟SGMDATE函数对应
+//跟SGMDATE函數對應
 function sdate($dateformat, $timestamp, $format=0) {
 	echo sgmdate($timestamp, $dateformat, $format);
 }
@@ -1514,7 +1514,7 @@ function getselectstr($var, $optionarray, $value='', $other='') {
 	return $selectstr;
 }
 
-//在$sql前强制加上 SELECT
+//在$sql前強制加上 SELECT
 function getblocksql($sql) {
 	$sql = trim($sql);
 	$sql = str_replace(';', '', $sql);
@@ -1524,7 +1524,7 @@ function getblocksql($sql) {
 	return $sql;
 }
 
-//读取指定目录下的文件
+//讀取指定目錄下的文件
 function sreaddir($dir, $ext='') {
 
 	$filearr = array();
@@ -1546,7 +1546,7 @@ function sreaddir($dir, $ext='') {
 	return $filearr;
 }
 
-//TAG处理函数
+//TAG處理函數
 function tagshow($message, $tagarr) {
 	global $_G, $_SGLOBAL;
 	$message = preg_replace("/\s*(\<.+?\>)\s*/ies", "tagcode('\\1')", $message);
@@ -1560,7 +1560,7 @@ function tagshow($message, $tagarr) {
 	return $message;
 }
 
-//TAG处理(屏蔽<xxx>)
+//TAG處理(屏蔽<xxx>)
 function tagcode($str) {
 	global $_G, $_SGLOBAL;
 	if(empty($_SGLOBAL['tagcodecount'])) $_SGLOBAL['tagcodecount'] = 0;
@@ -1569,7 +1569,7 @@ function tagcode($str) {
 	return "[\tSUPESITETAGCODE$_SGLOBAL[tagcodecount]\t]";
 }
 
-//TAG处理函数
+//TAG處理函數
 function tagshowname($thename, $thetext) {
 	$name = rawurlencode($thename);
 	$thetext = str_replace('\\"', '"', $thetext);
@@ -1580,7 +1580,7 @@ function tagshowname($thename, $thetext) {
 	}
 }
 
-//如果$string不是变量，则返回加上‘’的字符串
+//如果$string不是變量，則返回加上『』的字符串
 function getdotstring($string, $vartype, $allownull=false, $varscope=array(), $sqlmode=1, $unique=true) {
 
 	if(is_array($string)) {
@@ -1627,7 +1627,7 @@ function getdotstring($string, $vartype, $allownull=false, $varscope=array(), $s
 	return $string;
 }
 
-//将数组中相同的值去掉,同时将后面的键名也忽略掉
+//將數組中相同的值去掉,同時將後面的鍵名也忽略掉
 function sarray_unique($array) {
 	$newarray = array();
 	if(!empty($array) && is_array($array)) {
@@ -1639,11 +1639,11 @@ function sarray_unique($array) {
 	return $newarray;
 }
 
-//返回标准零时区时间戳
+//返回標準零時區時間戳
 function sstrtotime($timestamp) {
 	global $_G;
 
-	$timestamp = trim($timestamp);	//过滤首尾空格
+	$timestamp = trim($timestamp);	//過濾首尾空格
 	if(empty($timestamp)) return 0;
 	$hour = $minute = $second = $month = $day = $year = 0;
 	$exparr = $timearr = array();
@@ -1673,7 +1673,7 @@ function sstrtotime($timestamp) {
 	return gmmktime($hour, $minute, $second, $month, $day, $year) - $_G['setting']['timeoffset'] * 3600;
 }
 
-//获取系统分类
+//獲取系統分類
 function getcategory($type='', $space='|----', $delbase=0) {
 	global $_G, $_SGLOBAL;
 
@@ -1690,7 +1690,7 @@ function getcategory($type='', $space='|----', $delbase=0) {
 		if($miniupid == '') $miniupid = $value['upid'];
 		$tree->setNode($value['catid'], $value['upid'], $value);
 	}
-	//根目录
+	//根目錄
 	$listarr = array();
 	if(DB::num_rows($query) > 0) {
 		$categoryarr = $tree->getChilds($miniupid);
@@ -1712,7 +1712,7 @@ function getcategory($type='', $space='|----', $delbase=0) {
 
 }
 
-//获取模型分类
+//獲取模型分類
 function getmodelcategory($name, $space='|----') {
 	global $_G, $_SGLOBAL;
 	$listarr = array();
@@ -1724,7 +1724,7 @@ function getmodelcategory($name, $space='|----') {
 			if($miniupid === '') $miniupid = $category['upid'];
 			$tree->setNode($category['catid'], $category['upid'], $category);
 		}
-		//根目录
+		//根目錄
 		if(count($_SGLOBAL[$name.'cates']) > 0) {
 			$categoryarr = $tree->getChilds($miniupid);
 			foreach ($categoryarr as $key => $catid) {
@@ -1738,7 +1738,7 @@ function getmodelcategory($name, $space='|----') {
 	return $listarr;
 }
 
-//获取本店铺允许使用的模型分类
+//獲取本店舖允許使用的模型分類
 function mymodelcategory($mname, $pre='|----') {
 	global $_G, $_SGLOBAL;
 	$catlist = array();
@@ -1764,7 +1764,7 @@ function mymodelcategory($mname, $pre='|----') {
 	}
 }
 
-//获取点评模型
+//獲取點評模型
 function getcommentmodel($cmid) {
 	global $_G, $_SGLOBAL;
 
@@ -1777,7 +1777,7 @@ function getcommentmodel($cmid) {
 	return $commentmodelarr;
 }
 
-//获取店长ID
+//獲取店長ID
 function getshopuid($type) {
 	global $_G, $_SGLOBAL, $item;
 
@@ -1789,7 +1789,7 @@ function getshopuid($type) {
 	}
 }
 
-//获取论坛附件文件的url地址
+//獲取論壇附件文件的url地址
 function getbbsattachment($attach) {
 	global $_G;
 
@@ -1815,7 +1815,7 @@ function cuturl($url, $length=65) {
 	return $urllink;
 }
 
-//资讯标题样式生成函数
+//資訊標題樣式生成函數
 function mktitlestyle($styletitle) {
 	if(empty($styletitle)) {
 		return '';
@@ -1859,7 +1859,7 @@ function scensor($string, $mod=0) {
 	return $string;
 }
 
-//获取用户数据
+//獲取用戶數據
 function getpassport($username, $password) {
 	$passport = array();
 	if(!@include_once B_ROOT.'./uc_client/client.php') {
@@ -1875,7 +1875,7 @@ function getpassport($username, $password) {
 	return $passport;
 }
 
-//产生form防伪码
+//產生form防偽碼
 function formhash() {
 	global $_G, $_SGLOBAL;
 
@@ -1886,7 +1886,7 @@ function formhash() {
 	return $_SGLOBAL['formhash'];
 }
 
-//获取用户
+//獲取用戶
 function getmember() {
 	global $_G, $_SGLOBAL, $_SC;
 
@@ -1916,12 +1916,12 @@ function ckstart($start, $perpage) {
 	}
 }
 
-//处理头像
+//處理頭像
 function avatar($uid, $size='small') {
 	return UC_API.'/avatar.php?uid='.$uid.'&size='.$size;
 }
 
-//检查验证码
+//檢查驗證碼
 function ckseccode($seccode) {
 	global $_G, $_SCOOKIE;
 
@@ -1933,7 +1933,7 @@ function ckseccode($seccode) {
 	return $check;
 }
 
-//判断是否设置论坛
+//判斷是否設置論壇
 function exists_discuz() {
 	global $_G, $_SC;
 	if(!empty($_SC['bbs_url'])) {
@@ -1943,7 +1943,7 @@ function exists_discuz() {
 	}
 }
 
-//检查邮箱是否有效
+//檢查郵箱是否有效
 function isemail($email) {
 	return strlen($email) > 6 && preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $email);
 }
@@ -1981,7 +1981,7 @@ function updatecredit($action, $uids){
 
 }
 
-//通过某物件得到所属店铺的店铺组ID
+//通過某物件得到所屬店舖的店舖組ID
 function getgroupid($type, $itemid) {
 	global $_G, $_SGLOBAL;
 
@@ -1996,7 +1996,7 @@ function getgroupid($type, $itemid) {
 }
 
 /**
- * 检查是否操作创始人
+ * 檢查是否操作創始人
  */
 function ckfounder($uid) {
 	global $_G, $_SC;
@@ -2024,7 +2024,7 @@ function formatcomment($comment, $repeatids = array(), $style=0) {
 	if(!$style) {
 
 		if(!empty($_G['setting']['commfloornum'])) {
-			//削楼功能
+			//削樓功能
 			if($_G['setting']['commfloornum'] < $comment['floornum']) {
 				$cutfloor = $comment['floornum'] - $_G['setting']['commfloornum'];
 				$searchstr = "/\<div id=\"cid_{$comment['cid']}_$cutfloor\".*?\<div id=\"cid_{$comment['cid']}_".($cutfloor+1)."_title\"/is";
@@ -2033,7 +2033,7 @@ function formatcomment($comment, $repeatids = array(), $style=0) {
 			}
 
 		} else {
-			//高层电梯
+			//高層電梯
 			if($comment['floornum'] > 49) {
 				$elevatordetail = <<<EOF
 						<div id="cid_{$comment['cid']}_elevator" class="floor_op">
@@ -2061,7 +2061,7 @@ EOF;
 
 		}
 
-		//隐藏重复盖楼
+		//隱藏重複蓋樓
 		if(!empty($_G['setting']['commhidefloor']) && in_array($comment['firstcid'], $repeatids)) {
 			$tipdetail = "<p id=\"cid_{$comment['cid']}_tip_detail\" class=\"hidetip\">$lang[comment_floor_repeat] <a class=\"color_red\" href=\"javascript:;\" onclick=\"operatefloor({$comment['cid']});\">[{$lang['comment_floor_view_repeat']}]</a><p></div>";
 			$searcharr[] = 'class="old"';
@@ -2099,7 +2099,7 @@ EOF;
 	}
 	return $comment;
 }
-//公告标题样式生成函数
+//公告標題樣式生成函數
 function pktitlestyle($styletitle) {
 	$styletitle = substr($styletitle, 1);
 	if(empty($styletitle)) {
@@ -2125,7 +2125,7 @@ if(!function_exists('htmlspecialchars_decode')) {
 	}
 }
 
-//取得系统设置
+//取得系統設置
 function refreshbrandsetting() {
 	global $_G, $_SGLOBAL, $_SSCONFIG, $_SC, $lang;
 
@@ -2139,7 +2139,7 @@ function refreshbrandsetting() {
 	}
 }
 
-// 检查各种过期状态
+// 檢查各種過期狀態
 function ck_item_status($itemid, $mname, $showmessage = 1, $shopid = 0) {
 	global $_G, $_SGLOBAL;
 	$selectsql = $wheresql = '';
@@ -2190,10 +2190,10 @@ function ck_item_status($itemid, $mname, $showmessage = 1, $shopid = 0) {
 }
 
 /**
- * 加载 Class
+ * 加載 Class
  *
- * @param $m 类名
- * @param $param 实例化参数
+ * @param $m 類名
+ * @param $param 實例化參數
  */
 function loadClass($m, $param = ''){
 	if(!file_exists(B_ROOT.'./source/class/'.$m.'.class.php')){
@@ -2206,7 +2206,7 @@ function loadClass($m, $param = ''){
 }
 
 /**
- * 初始化 缓存的class
+ * 初始化 緩存的class
  */
 function data_cache_start() {
 	global $_G, $_BCACHE;
@@ -2217,12 +2217,12 @@ function data_cache_start() {
 }
 
 /**
- * 取得附件图片URL路径（多服务器冗余）
- * @param $url=''，附件表记录的图片相对位置
- * @param $thumb, 检测并返回缩略图
- * @param $nopicurl，检测到图片不存在时使用的无图提示图片URL
- * @param $force，强制返回图片URL
- * @return 图片URL
+ * 取得附件圖片URL路徑（多服務器冗余）
+ * @param $url=''，附件表記錄的圖片相對位置
+ * @param $thumb, 檢測並返回縮略圖
+ * @param $nopicurl，檢測到圖片不存在時使用的無圖提示圖片URL
+ * @param $force，強制返回圖片URL
+ * @return 圖片URL
  */
 function getattachurl($url='', $thumb=0, $nopicurl='', $force=0) {
 	global $_G;
@@ -2234,9 +2234,9 @@ function getattachurl($url='', $thumb=0, $nopicurl='', $force=0) {
 	if($force || strpos($url, 'http://')!==false) {
 		$url = $url;
 	} elseif($url && file_exists(A_DIR.'/'.$url)) {
-		//原始图片检查
+		//原始圖片檢查
 		if($_G['setting']['attachmenturlcount']>1) {
-			//附件多域名，基本平均分布算法
+			//附件多域名，基本平均分佈算法
 			$this_a = ord(substr($url, -12, -11))%$_G['setting']['attachmenturlcount'];
 			$this_aurl = $_G['setting']['attachmenturlarr'][$this_a];
 		} else {
@@ -2246,7 +2246,7 @@ function getattachurl($url='', $thumb=0, $nopicurl='', $force=0) {
 		if($thumb && file_exists(A_DIR.'/' . $url . '.thumb.jpg')) {
 			$url = $this_aurl.'/' . $url . '.thumb.jpg';
 		}elseif($thumb && file_exists(A_DIR.'/'.substr($url,0,-4).'.thumb.jpg')) {
-			//调用缩略图检查
+			//調用縮略圖檢查
 			$url = $this_aurl.'/'.substr($url,0,-4).'.thumb.jpg';
 		} else {
 			$url = $this_aurl.'/'.$url;
@@ -2257,8 +2257,8 @@ function getattachurl($url='', $thumb=0, $nopicurl='', $force=0) {
 	return $url;
 }
 
-//取GB2312字符串首字母,原理是GBK汉字是按拼音顺序编码的
-//如果是utf8的则转为gbk的，再进行取就行了
+//取GB2312字符串首字母,原理是GBK漢字是按拼音順序編碼的
+//如果是utf8的則轉為gbk的，再進行取就行了
 $dict=array(
 	'a'=>0xB0C4,
 	'b'=>0xB2C0,
@@ -2369,7 +2369,7 @@ function showarraytoxml($phparray = array(), $encoding='GBK', $unityitem=0) {
 
 function biconv($string, $from='GBK', $to='UTF-8', $ignore=1) {
 	if(strncasecmp($from, $to, 3)==0) {
-		//两字符串前3个字节忽略大小写相等，不需要转换编码
+		//兩字符串前3個字節忽略大小寫相等，不需要轉換編碼
 		return $string;
 	}
 	if(is_array($string)) {
@@ -2387,7 +2387,7 @@ function biconv($string, $from='GBK', $to='UTF-8', $ignore=1) {
 }
 
 /**
- * 将地区分类转成json
+ * 將地區分類轉成json
  */
 function json_encode_region($sourcearr) {
 	global $_G, $_SC;
@@ -2413,7 +2413,7 @@ function json_encode_region($sourcearr) {
 }
 
 /**
- * 更新信息统计
+ * 更新信息統計
  */
 function updateshopitemnum($type, $shopid = '') {
 	global $_G, $_SGLOBAL, $_POST;
@@ -2477,7 +2477,7 @@ function sizecount($filesize) {
 }
 
 /**
- * 循环建立文件夹
+ * 循環建立文件夾
  *
  * @param string $dir
  * @param string $mode
@@ -2492,10 +2492,10 @@ function dmkdir($dir, $mode = 0777){
 }
 
 /**
- * 写日志
+ * 寫日誌
  *
- * @param $file 日志文件
- * @param $log 日志内容
+ * @param $file 日誌文件
+ * @param $log 日誌內容
  */
 function writelog($file, $log) {
 	global $_G, $_SGLOBAL;

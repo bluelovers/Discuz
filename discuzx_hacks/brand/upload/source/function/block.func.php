@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: block.func.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -39,9 +39,9 @@ function block_sql($paramarr, $multicachekey='', $returncount=0) {
 		}
 	}
 
-	//查询数据
+	//查詢數據
 	if($listcount) {
-		//查询
+		//查詢
 		$query = DB::query($sqlstring);
 		while ($value = DB::fetch($query)) {
 			if(isset($value['subjectimage'])) {

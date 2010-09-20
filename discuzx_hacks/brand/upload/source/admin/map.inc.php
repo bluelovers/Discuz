@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: map.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -33,13 +33,13 @@ if(!empty($_POST['valuesubmit'])) {
 	if(empty($editvalue)) {
 		cpmsg('no_item', 'admin.php?action=list&m='.$mname);
 	}
-	//显示导航以及表头
+	//顯示導航以及表頭
 	shownav($mname, $mname.'_'.$_GET['action']);
 	showsubmenu($mname.'_'.$_GET['action']);
 	showformheader('map');
 	showtableheader();
 
-	showmapsetting('shop', $_G['setting']['mapapikey'], $editvalue['mapapimark']); //显示地图设置
+	showmapsetting('shop', $_G['setting']['mapapikey'], $editvalue['mapapimark']); //顯示地圖設置
 	showhiddenfields(array('itemid' => $editvalue['itemid']));
 	showhiddenfields(array('nid' => $editvalue['nid']));
 	showhiddenfields(array('valuesubmit' => 'yes'));

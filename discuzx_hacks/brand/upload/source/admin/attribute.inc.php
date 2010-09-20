@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: attribute.inc.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -13,7 +13,7 @@ if(!defined('IN_ADMIN')) {
 $cid = $_REQUEST['cid'] ? $_REQUEST['cid'] : 0;
 
 /**
-*判断本分类是否可编辑属性列表
+*判斷本分類是否可編輯屬性列表
 */
 $type = checkcid($cid);
 
@@ -25,7 +25,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	}
 	DB::query('INSERT INTO '.tname('attribute')." (attr_name, cat_id, attr_type, attr_row)
 					VALUES ('$_POST[name]', '$cid', '$_POST[attr_type]', '$newrow');");
-	//updatesubcatid(); //更新子分类关系
+	//updatesubcatid(); //更新子分類關係
 	$attr_id = DB::insert_id();
 	if($_POST['attr_type'] == '0' && !empty($_POST['newvalues'])) {
 		$newvalues = explode("\r\n", $_POST['newvalues']);
@@ -92,7 +92,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 			$attributes[$key]['attr_values'] = implode("\r\n", $values);
 		}
 	}
-	//添加或更改属性的编辑页面
+	//添加或更改屬性的編輯頁面
 	shownav('catmanage', 'attribute_'.$_GET['op']);
 	showsubmenu('attribute_'.$_GET['op']);
 	showtips('attribute_'.$_GET['op'].'_tips');
@@ -169,14 +169,14 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 
 } else {
 
-	//读取属性列表
+	//讀取屬性列表
 	$query = DB::query("SELECT * FROM ".tname("attribute")." WHERE cat_id = $cid ORDER BY attr_id");
 	while($result = DB::fetch($query)) {
-		//属性可选值列表
+		//屬性可選值列表
 		//$result['attr_values'] = explode("\n", $result['attr_values']);
 		$attrlist[] = $result;
 	}
-	//没有提交数据的列表页
+	//沒有提交數據的列表頁
 	shownav('catmanage', 'attribute_list');
 	showsubmenu('attribute_list');
 	showtips('attribute_list_tips');
@@ -209,9 +209,9 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 }
 
 /**
-判断本分类是否可编辑属性列表
-@param 类型 参数名  意义
-@param int 分类id
+判斷本分類是否可編輯屬性列表
+@param 類型 參數名  意義
+@param int 分類id
 @return false
 xuhui 10-4-15 上午9:41
 */

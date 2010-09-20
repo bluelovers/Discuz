@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: nav.inc.php 4337 2010-09-06 04:48:05Z fanshengshuai $
@@ -98,7 +98,7 @@ if(!empty($_POST['valuesubmit'])){
 	cpmsg('message_success', '?action=nav');
 }
 
-// 处理提交的删除操作
+// 處理提交的刪除操作
 if($_GET['op']=='del' && !empty($navid)) {
 
 	$navitem = DB::result_first('select type from '.tname('nav').' where navid='.$navid);
@@ -241,7 +241,7 @@ if($_GET['op']=='del' && !empty($navid)) {
 	showformfooter();
 	bind_ajax_form();
 } else {
-	//没有提交数据的列表页
+	//沒有提交數據的列表頁
 	shownav('global', 'nav_list');
 	showsubmenu('nav_list', array(
 		array('nav_list', 'nav', '1'),

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: batch.attribute.php 4413 2010-09-13 09:10:48Z xuhui $
@@ -24,11 +24,11 @@ if(!empty($_REQUEST['ajax'])) {
 }
 
 /**
- * 读取筛选器
- * @param $var - 变量名   （最好标注下类型）
- * @param $type_id - 商品分类id
+ * 讀取篩選器
+ * @param $var - 變量名   （最好標注下類型）
+ * @param $type_id - 商品分類id
  * @param $life - 生命期
- * @param $prefix - 前缀
+ * @param $prefix - 前綴
  * @return
  */
 function getattribute($type_id) {
@@ -50,11 +50,11 @@ function getattribute($type_id) {
 }
 
 /**
- * 格式化筛选器
- * @param $var - 变量名   （最好标注下类型）
- * @param $type_id - 商品分类id
- * @param $attrs - 已筛选属性值
- * @param $prefix - 前缀
+ * 格式化篩選器
+ * @param $var - 變量名   （最好標注下類型）
+ * @param $type_id - 商品分類id
+ * @param $attrs - 已篩選屬性值
+ * @param $prefix - 前綴
  * @return
  */
 function formatattrs($type_id, $attrvalues = array(), $keyword = '', $phpfile='goodsearch.php') {
@@ -78,11 +78,11 @@ function formatattrs($type_id, $attrvalues = array(), $keyword = '', $phpfile='g
 }
 
 /**
- * 格式化，并返回筛选器链接
- * @param $type_id - 商品分类id
- * @param $attr_id - 属性id
- * @param $attr_value - 属性值
- * @param $attrvalues - 当前筛选条件
+ * 格式化，並返回篩選器鏈接
+ * @param $type_id - 商品分類id
+ * @param $attr_id - 屬性id
+ * @param $attr_value - 屬性值
+ * @param $attrvalues - 當前篩選條件
  * @return
  */
 function getattrurl($type_id, $attr_id, $attr_value = NULL, $attrvalues=array(), $keyword = '', $phpfile='goodsearch.php') {
@@ -110,9 +110,9 @@ function getattrurl($type_id, $attr_id, $attr_value = NULL, $attrvalues=array(),
 }
 
 /**
- * 根据链接URL，返回当前已选筛选条件
- * @param $params - url中的参数
- * @return $attrvalues - 当前筛选条件
+ * 根據鏈接URL，返回當前已選篩選條件
+ * @param $params - url中的參數
+ * @return $attrvalues - 當前篩選條件
  */
 function getattrvalues($params) {
 	$params = trim(strip_tags($params));
@@ -137,9 +137,9 @@ function getattrvalues($params) {
 }
 
 /**
- * 返回分类或者子分类列表
- * @param $catid - 分类id
- * @param $categorylist - 全部分类列表
+ * 返回分類或者子分類列表
+ * @param $catid - 分類id
+ * @param $categorylist - 全部分類列表
  * @return $searchcats
  */
 function getsearchcats($categorylist, $catid = 0) {
@@ -165,10 +165,10 @@ function getsearchcats($categorylist, $catid = 0) {
 }
 
 /**
- * 审核信息追加属性设置
- * @param $type_id - 商品分类id
+ * 審核信息追加屬性設置
+ * @param $type_id - 商品分類id
  * @param $life - 生命期
- * @param $prefix - 前缀
+ * @param $prefix - 前綴
  * @return $attrsettings
  */
 function getattributesettingsupdate($catid, $attrvalues) {
@@ -213,10 +213,10 @@ function getattributesettingsupdate($catid, $attrvalues) {
 }
 
 /**
- * 追加属性设置
- * @param $type_id - 商品分类id
+ * 追加屬性設置
+ * @param $type_id - 商品分類id
  * @param $life - 生命期
- * @param $prefix - 前缀
+ * @param $prefix - 前綴
  * @return $attrsettings
  */
 function getattributesettings($type_id, $itemid) {
@@ -270,10 +270,10 @@ function getattributesettings($type_id, $itemid) {
 }
 
 /**
- * 更新属性设置
- * @param $type_id - 商品分类id
+ * 更新屬性設置
+ * @param $type_id - 商品分類id
  * @param $life - 生命期
- * @param $prefix - 前缀
+ * @param $prefix - 前綴
  * @return $attrsettings
  */
 function setattributesettings($type_id, $itemid, $attrvalues = NULL) {
@@ -303,9 +303,9 @@ function setattributesettings($type_id, $itemid, $attrvalues = NULL) {
 }
 
 /**
- * 统计分类下结果数之和
- * @param $catid - 分类id
- * @param $catnums - 分类结果数
+ * 統計分類下結果數之和
+ * @param $catid - 分類id
+ * @param $catnums - 分類結果數
  * @return $catnums
  */
 function getcatcount($catid=0, $catnums) {
@@ -322,9 +322,9 @@ function getcatcount($catid=0, $catnums) {
 }
 
 /**
- * 属性搜索，获得使用当前筛选属性结果的itemid
- * @param $attrvalues - 分类id
- * @return $attr_in，NULL为没有筛选条件，0为无结果
+ * 屬性搜索，獲得使用當前篩選屬性結果的itemid
+ * @param $attrvalues - 分類id
+ * @return $attr_in，NULL為沒有篩選條件，0為無結果
  */
 function getattr_in($catid, $attrvalues) {
 	global $_G, $_SGLOBAL, $_BCACHE, $_SBLOCK;
@@ -364,10 +364,10 @@ function getattr_in($catid, $attrvalues) {
 }
 
 /**
- * 读取单个对象的所有属性
- * @param $itemid - 对象id
- * @param $type_id - 分类id
- * @return $itemattr - 该对象的所有属性名和值
+ * 讀取單個對象的所有屬性
+ * @param $itemid - 對像id
+ * @param $type_id - 分類id
+ * @return $itemattr - 該對象的所有屬性名和值
  */
 function getattr($itemid, $type_id) {
 	global $_G, $_SGLOBAL;

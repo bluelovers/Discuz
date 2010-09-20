@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset={$_G['charset']}" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8'charset']}" />
 		<title>{$seo_title}</title>
 		<meta name="description" content="{$seo_description}" />
 		<meta name="keywords" content="$seo_keywords" />
@@ -59,7 +59,7 @@
 				<!--{/loop}-->
 			</ul>
 			<!--{/if}-->
-		</div><!-- Header 结束 -->
+		</div><!-- Header 結束 -->
 		<script charset="utf-8" type="text/javascript" src="static/js/effect_common.js"></script>
 		<script type="text/javascript">
 			function addupcid(upcid) {

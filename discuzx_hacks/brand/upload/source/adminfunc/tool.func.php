@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: tool.func.php 4446 2010-09-14 11:35:06Z xuhui $
@@ -11,7 +11,7 @@ if(!defined('IN_STORE') && !defined('IN_ADMIN')) {
 	exit('Acess Denied');
 }
 
-//更新子分类关联
+//更新子分類關聯
 function updatesubcatid($upid=0,$type = null) {
 	global $_G, $_SGLOBAL;
 	$typequery = $type != null ? ' AND type = \''.$type.'\'' : '';
@@ -30,12 +30,12 @@ function updatesubcatid($upid=0,$type = null) {
 		$subcatstr = implode(', ', $subcats);
 		if(!$subcatstr) { $subcatstr = $topcat['catid'];}
 		DB::query('UPDATE '.tname('categories').' SET subcatid=\''.$subcatstr.'\' WHERE catid=\''.$topcat['catid'].'\' LIMIT 1;');
-		updatesubcatid($topcat['catid']);  //递归处理所有子分类
+		updatesubcatid($topcat['catid']);  //遞歸處理所有子分類
 	}
 	return 'message_success';
 }
 
-//更新店长权限
+//更新店長權限
 function updatememberstats($uid=0) {
 	global $_G, $_SGLOBAL;
 	/*$where = array();
@@ -46,7 +46,7 @@ function updatememberstats($uid=0) {
 	$where[] = 'm.myshopid>0';
 	$shopgrade = array("='0'", "='1'", ">'2'");
 	$shopstatus = array('none', 'unverified', 'verified');
-	//grade和status的对应关系
+	//grade和status的對應關係
 	$wheresql = implode(' AND ', $where);
 	/*foreach($shopgrade as $key=>$value) {
 		DB::query('UPDATE '.tname('members').' m INNER JOIN '.tname('shopitems')." s ON m.myshopid=s.itemid SET m.myshopstatus='{$shopstatus[$key]}' WHERE $wheresql AND s.grade{$value}");
@@ -54,7 +54,7 @@ function updatememberstats($uid=0) {
 	return 'message_success';
 }
 
-//更新显示顺序
+//更新顯示順序
 function changedisplayorder($displayarr = array(), $mname='shop', $wheresql='') {
 	global $_G, $_SGLOBAL, $cookie_referer;
 
@@ -70,7 +70,7 @@ function changedisplayorder($displayarr = array(), $mname='shop', $wheresql='') 
 
 
 
-//删除信息
+//刪除信息
 function delmitems($wheresql='', $type = 'shop') {
 	global $_G, $_SGLOBAL, $itemarr, $mname, $_BCACHE;
 
@@ -84,7 +84,7 @@ function delmitems($wheresql='', $type = 'shop') {
 		if($type=='shop') {
 			$subsql = str_replace(' itemid IN', ' shopid IN', $wheresql);
 			if($_POST['opdelete']) {
-				//递归删除所有店铺的子元素
+				//遞歸刪除所有店舖的子元素
 				delmitems($subsql, 'good');
 				delmitems($subsql, 'consume');
 				delmitems($subsql, 'notice');
@@ -104,7 +104,7 @@ function delmitems($wheresql='', $type = 'shop') {
 			delmitems($subsql, 'photo');
 			$selectsql = ' i.itemid, i.subjectimage ';
 			$joinsql = tname($type.'items').' i';
-			// 删除关联信息
+			// 刪除關聯信息
 			$related_sql = str_replace(' itemid IN', ' IN', $wheresql);
 			DB::query("DELETE FROM ".tname('relatedinfo')." WHERE relatedtype = 'album' AND $relatedid ".$related_sql);
 		} elseif($type=='photo') {
@@ -122,7 +122,7 @@ function delmitems($wheresql='', $type = 'shop') {
 		}
 		$thisalbumid = 0;
 		$query = DB::query('SELECT '.$selectsql.' FROM '.$joinsql.' WHERE '.$thissql);
-		$filefields = array('subjectimage', 'banner', 'windowsimg');//删除图片
+		$filefields = array('subjectimage', 'banner', 'windowsimg');//刪除圖片
 		while($value = DB::fetch($query)) {
 			foreach($filefields as $v) {
 				if(!empty($value[$v]) && strstr($value[$v], '.jpg')) {
@@ -133,10 +133,10 @@ function delmitems($wheresql='', $type = 'shop') {
 			$thisalbumid = $value['albumid'];
 		}
 		if(in_array($type, array('album', 'photo'))) {
-			$query = DB::query('DELETE i FROM '.tname($type.'items').' i WHERE '.$thissql);//删除相册和图片信息，只有item表
+			$query = DB::query('DELETE i FROM '.tname($type.'items').' i WHERE '.$thissql);//刪除相冊和圖片信息，只有item表
 			if($type=='photo' && $thisalbumid>0) {
 				$picnums = DB::affected_rows($query);
-				$query = DB::query('UPDATE '.tname('albumitems')." SET `picnum`=`picnum`-$picnums WHERE itemid='$thisalbumid'");//删除相册和图片信息，只有item表
+				$query = DB::query('UPDATE '.tname('albumitems')." SET `picnum`=`picnum`-$picnums WHERE itemid='$thisalbumid'");//刪除相冊和圖片信息，只有item表
 				if(!empty($thisalbumid)) {
 					require_once(B_ROOT.'./api/bbs_syncpost.php');
 					syncalbum($thisalbumid);
@@ -156,7 +156,7 @@ function delmitems($wheresql='', $type = 'shop') {
 				deletetable('shopmessage', array('itemid'=>$itemid));
 			}
 		} else {
-			$query = DB::query('DELETE i, m FROM '.tname($type.'items').' i INNER JOIN '.tname($type.'message').' m ON i.itemid=m.itemid WHERE '.$thissql);//删除信息
+			$query = DB::query('DELETE i, m FROM '.tname($type.'items').' i INNER JOIN '.tname($type.'message').' m ON i.itemid=m.itemid WHERE '.$thissql);//刪除信息
 		}
 	}
 }
@@ -185,22 +185,22 @@ function changeowner($uid=1, $itemarr='') {
 	if(!empty($itemarr)) {
 		$uid = intval($uid);
 		if($mname!='shop') {
-			cpmsg('mod_notinshop', $cookie_referer); //非店铺不能修改所有者
+			cpmsg('mod_notinshop', $cookie_referer); //非店舖不能修改所有者
 		}
 
 		if($uid>0) {
 			require_once(B_ROOT.'./uc_client/client.php');
 			$tmp = uc_get_user($uid, 1);
-			$uid = intval($tmp[0]); //让UC验证该id是否存在
+			$uid = intval($tmp[0]); //讓UC驗證該id是否存在
 			$username = addslashes($tmp[1]);
 			$email = addslashes($tmp[2]);
 			if(!($uid>0 && $username)) {
-				cpmsg('no_uid', $cookie_referer, '', '', true, 3);//UC中没有该用户
+				cpmsg('no_uid', $cookie_referer, '', '', true, 3);//UC中沒有該用戶
 			}
 
 			$thisshopid = DB::result_first("SELECT myshopid FROM ".tname('members')." WHERE uid='$uid'");
 			if($thisshopid === false) {
-				//会员表中没有该用户，自动插入数据
+				//會員表中沒有該用戶，自動插入數據
 				$insertsqlarr = array(
 						'uid' => $uid,
 						'username' => $username,
@@ -223,12 +223,12 @@ function changeowner($uid=1, $itemarr='') {
 				$_BCACHE->deltype('sitelist', 'shop', $uid);
 			}
 		} else {
-			cpmsg('no_uidanditemid', $cookie_referer);//提交的数据不合法
+			cpmsg('no_uidanditemid', $cookie_referer);//提交的數據不合法
 		}
 	}
 }
 
-//被删除或更改店铺所有者的店长重置myshopid
+//被刪除或更改店舖所有者的店長重置myshopid
 function updatemyshopid($itemid) {
 	global $_BCACHE;
 
@@ -248,7 +248,7 @@ function changeallowner() {
 	return 'message_success';
 }
 
-//后台管理日志
+//後台管理日誌
 function managelog($items = '', $opcheck = 3, $check_txt = '') {
 	global $_G, $_SGLOBAL, $mname;
 
@@ -279,7 +279,7 @@ function managelog($items = '', $opcheck = 3, $check_txt = '') {
 	}
 }
 
-//审核短信通知
+//審核短信通知
 function gradechange($items='', $opcheck=3, $check_txt='', $model='shop') {
 	global $_G, $_SGLOBAL;
 	require_once(B_ROOT.'./uc_client/client.php');
@@ -305,7 +305,7 @@ function gradechange($items='', $opcheck=3, $check_txt='', $model='shop') {
 			switch($opcheck) {
 				case 1:
 					$pmtitle = lang('mod_checktitle_fail');
-					//if($model == 'shop') DB::query('UPDATE '.tname('members')." SET myshopstatus='unverified' WHERE uid IN ('$passuids')");//审核后将状态更新至members表
+					//if($model == 'shop') DB::query('UPDATE '.tname('members')." SET myshopstatus='unverified' WHERE uid IN ('$passuids')");//審核後將狀態更新至members表
 					break;
 				case 2:
 					$pmtitle = lang('mod_checktitle_close');
@@ -340,7 +340,7 @@ function gradechange($items='', $opcheck=3, $check_txt='', $model='shop') {
 		}
 	}
 
-	//grade_s店铺状态信息数据冗余到相册、消费券等各个物件表中
+	//grade_s店舖狀態信息數據冗余到相冊、消費券等各個物件表中
 	if($model=='shop') {
 		$models = array('album', 'consume', 'good', 'groupbuy', 'notice', 'photo');
 		foreach($models as $m) {
@@ -350,7 +350,7 @@ function gradechange($items='', $opcheck=3, $check_txt='', $model='shop') {
 }
 
 /**
- * 检查模型状态
+ * 檢查模形狀態
  */
 function checkmodel($name) {
 	$state = true;
@@ -423,12 +423,12 @@ function update_album_info($subjectarr=array(), $mname='album', $wheresql='') {
 		exit;
 }
 
-// 更改相册分类和属性（管理员）
+// 更改相冊分類和屬性（管理員）
 function album_movecat($itemarr=array()) {
 	global $_G, $_SGLOBAL, $cookie_referer;
 	require_once(B_ROOT.'./batch.attribute.php');
 	$num_ok = $num_error = 0;
-	//验证catid
+	//驗證catid
 	$catid = $_POST['catid'] = DB::result_first('SELECT catid FROM '.tname('categories')." WHERE catid='$_POST[catid]' AND `type`='album'");
 	if($catid && $itemarr) {
 		foreach($itemarr as $itemid) {
@@ -451,13 +451,13 @@ function album_movecat($itemarr=array()) {
 	cpmsg('no_operation');
 }
 
-// 更改相册分类和属性（店长）
+// 更改相冊分類和屬性（店長）
 function album_movecat_panel($wheresql) {
 	global $_G, $_SGLOBAL, $cookie_referer;
 	require_once(B_ROOT.'./batch.attribute.php');
 	$num_ok = $num_error = 0;
 	$itemarr = $gradearr = array();
-	//验证catid
+	//驗證catid
 	$catid = $_POST['catid'] = DB::result_first('SELECT catid FROM '.tname('categories')." WHERE catid='$_POST[catid]' AND `type`='album'");
 	if($_SGLOBAL['panelinfo']['group']['album_field'] != 'all' && !in_array($catid, explode(",", $_SGLOBAL['panelinfo']['group']['album_field']))) {
 		cpmsg('no_perm', $cookie_referer);
@@ -516,7 +516,7 @@ function setalbumimg() {
 	$imgurl = DB::result_first('SELECT subjectimage FROM '.tname('photoitems').' WHERE '.$pwheresql);
 	if($imgurl) {
 		if(strpos($imgurl, 'http://')===0) {
-			//远程图片的相册保存到本地做个缩略图
+			//遠程圖片的相冊保存到本地做個縮略圖
 			$oldalbumimg = DB::result_first('SELECT subjectimage FROM '.tname('albumitems')." WHERE $awheresql AND frombbs='1'");
 			if(!empty($oldalbumimg)) {
 				@unlink(A_DIR.'/'.$oldalbumimg);
@@ -676,7 +676,7 @@ function change_row(&$im, $size, $angle, $x, $y, $str, $color, $font, $row_charn
 function batchmodadmindeletecache($mname) {
 	global $_G, $_BCACHE;
 	if($_GET['operation']=='setalbumimg') {
-		//相册封面的删除缓存单独处理
+		//相冊封面的刪除緩存單獨處理
 		$_BCACHE->deltype('detail', 'album', 0, intval($_GET['albumid']));
 	} else {
 		$_BCACHE->deltype('index', $mname);
@@ -703,7 +703,7 @@ function batchmodadmindeletecache($mname) {
 function batchmodpaneldeletecache($mname) {
 	global $_G, $_SGLOBAL, $_BCACHE;
 	if($_GET['operation']=='setalbumimg') {
-		//相册封面的删除缓存单独处理
+		//相冊封面的刪除緩存單獨處理
 		$_BCACHE->deltype('detail', 'album', 0, intval($_GET['albumid']));
 	} else {
 		foreach($_POST['item'] as $itemid) {
@@ -718,10 +718,10 @@ function batchmodpaneldeletecache($mname) {
 }
 
 /*
- *删除分类后，更新店铺组设置
+ *刪除分類後，更新店舖組設置
 */
 function synscategroiesforgroup($type,$catid) {
-	//取出所有店铺组的分类设置
+	//取出所有店舖組的分類設置
 	$grouplistneedsyns = array();
 	$categorylist = getmodelcategory($type);
 	$query = DB::query("SELECT id, ".$type."_field FROM ".DB::table("shopgroup")."");
@@ -737,7 +737,7 @@ function synscategroiesforgroup($type,$catid) {
 			$grouplistneedsyns[] = $result;
 		}
 	}
-	//判断是否更新、是则进行数据更新
+	//判斷是否更新、是則進行數據更新
 	if(!empty($grouplistneedsyns)) {
 		foreach($grouplistneedsyns as $group) {
 			DB::update('shopgroup', array($type.'_field' => implode(",", $group['catids'])), "id='$group[id]'");

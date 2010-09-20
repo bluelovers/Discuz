@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: attr.inc.php 4300 2010-09-02 10:21:06Z fanshengshuai $
@@ -26,7 +26,7 @@ if($mid == 6) {
 if(submitcheck('listsubmit')) {
 	$update_item = array('allowshow'=>'allowshow','isrequired'=>'isrequired','allowpost'=>'allowpost');
 
-	// 如果不可用，就不必填，也不为注册项目
+	// 如果不可用，就不必填，也不為註冊項目
 	foreach($_POST['display'] as $key=>$value) {
 		if($_POST['allowpost'][$key] == 0){
 			$_POST['allowshow'][$key] = 0;
@@ -60,7 +60,7 @@ if(submitcheck('listsubmit')) {
 	cpmsg('update_success', '?action=attr&type='.$_GET['type']);
 }
 
-// 处理提交的删除操作
+// 處理提交的刪除操作
 if($_GET['op']=='del' && !empty($attrid)) {
 
 	$fieldname = DB::result_first('select fieldname from '.tname('modelcolumns').' where id='.$attrid);
@@ -75,7 +75,7 @@ if($_GET['op']=='del' && !empty($attrid)) {
 	cpmsg('attr_has_deleted','?action=attr&type='.$_GET['type']);
 }
 
-// 处理提交过来的增加和修改操作
+// 處理提交過來的增加和修改操作
 if(submitcheck('valuesubmit')){
 	$arr_data = array();
 	$arr_data['fieldtitle'] = $_POST['fieldtitle'];
@@ -205,7 +205,7 @@ if($_GET['op'] == 'add' || $_GET['op'] == 'edit') {
 	showformfooter();
 	bind_ajax_form();
 } else {
-	// 列表页
+	// 列表頁
 	shownav('global', 'menu_attr');
 	showsubmenu('menu_attr', array(
 		array('attr_shop', 'attr&type=shop', $_GET['type'] == 'shop' ? 1:0),

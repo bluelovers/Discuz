@@ -1,12 +1,12 @@
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: effect_common.js 3776 2010-07-16 08:21:35Z yexinhao $
  */
 
-//滚动
+//滾動
 function simplescroll(c, config) {
 	this.config = config ? config : {start_delay:0000, speed: 23, delay:3000, direction:1 , scrollItemCount:1, movecount:1};
 	this.container = document.getElementById(c);
@@ -88,13 +88,13 @@ function simplescroll(c, config) {
 	this.init();
 }
 
-//复制URL地址
+//複製URL地址
 function setCopy(_sTxt){
 	if(navigator.userAgent.toLowerCase().indexOf('ie') > -1) {
 		clipboardData.setData('Text',_sTxt);
-		alert ("网址“"+_sTxt+"”\n已经复制到您的剪贴板中\n您可以使用Ctrl+V快捷键粘贴到需要的地方");
+		alert ("網址「"+_sTxt+"」\n已經複製到您的剪貼板中\n您可以使用Ctrl+V快捷鍵粘貼到需要的地方");
 	} else {
-		prompt("请复制网站地址:",_sTxt); 
+		prompt("請複製網站地址:",_sTxt); 
 	}
 }
 
@@ -110,7 +110,7 @@ function addBookmark(title, url) {
 	}
 }
  
- //设为首页
+ //設為首頁
 function sethomepage(obj,url){
 	if(_dk.client.isIE){
 		obj.style.behavior = "url(#default#homepage)";

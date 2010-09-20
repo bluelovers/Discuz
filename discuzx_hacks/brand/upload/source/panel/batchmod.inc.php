@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: batchmod.inc.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -12,7 +12,7 @@ if(!defined('IN_STORE')) {
 }
 
 @set_time_limit(100);
-//删除二次确认之前，写入跳转cookie
+//刪除二次確認之前，寫入跳轉cookie
 if(empty($_POST['confirmed'])) {
 	ssetcookie('batch_referer', $_SERVER['HTTP_REFERER'], 300);
 	$cookie_referer = $_G['cookie']['batch_referer'] = $_SERVER['HTTP_REFERER'];
@@ -47,7 +47,7 @@ if($mname=='shop') {
 	cpmsg('no_perm', $cookie_referer);
 }
 
-//普通用户只允许操作自己的
+//普通用戶只允許操作自己的
 if($_G['myshopstatus'] == 'verified') {
 	if($mname == 'shop') {
 		$wheresql .= ' AND itemid=\''.$_G['myshopid'].'\'';
@@ -60,7 +60,7 @@ if($_G['myshopstatus'] == 'verified') {
 
 require_once(B_ROOT.'./source/adminfunc/tool.func.php');
 
-//删除列表、以及对应物件的缓存
+//刪除列表、以及對應物件的緩存
 batchmodpaneldeletecache($mname);
 
 //操作方法
@@ -99,7 +99,7 @@ switch($_REQUEST['operation']) {
 				$extra_input .= '<input type="hidden" name="item[]" value="'.$value.'" />';
 			}
 			$extra_input .= '<input type="hidden" name="operation" value="delete" /><input type="hidden" name="opdelete" value="'.$_POST['opdelete'].'" />';
-			cpmsg('mod_delete_confirm', $BASESCRIPT.'?action=batchmod&m='.$mname, 'form', $extra_input);//二次确认
+			cpmsg('mod_delete_confirm', $BASESCRIPT.'?action=batchmod&m='.$mname, 'form', $extra_input);//二次確認
 		} else {
 			if(in_array($mname, array('good', 'notice', 'consume', 'groupbuy'))) {
 				$subnum = DB::result_first("SELECT count(*) FROM ".tname($mname."items")." i INNER JOIN ".tname($mname.'message')." m ON i.itemid=m.itemid  WHERE i.itemid IN ($items) and i.shopid = '$_G[myshopid]'");

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: editor_ajax_img.func.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -163,7 +163,7 @@ function showattachshtml() {
 	if($_GET['albumid']>0) {
 		$wheresql .= " AND albumid='$_GET[albumid]'";
 	} elseif($_GET['albumid']==-1) {
-		//albumid -1 为默认相册，0 为全部图片
+		//albumid -1 為默認相冊，0 為全部圖片
 		$wheresql .= " AND albumid='0'";
 	}
 	$query = DB::query($selectsql.$wheresql.$limitsql);

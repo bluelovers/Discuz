@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: style.css 4488 2010-09-15 08:32:26Z fanshengshuai $
@@ -54,11 +54,11 @@ label.error {
 input,textarea {
 	padding: 2px;
 	border: 1px solid #B2B8BD;
-	/*GOOGLE MAP 样式冲突background: #fff url(../../../static/image/textfield_bg.png) no-repeat left top;*/
+	/*GOOGLE MAP 樣式衝突background: #fff url(../../../static/image/textfield_bg.png) no-repeat left top;*/
 	margin-right: 5px;
 }
 
-input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
+input:hover,textarea:hover { /*GOOGLE MAP 樣式衝突background-color: #FFF;*/
 	border-color: #e3caa9;
 }
 
@@ -96,7 +96,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	background: url(image/bg_guess.gif) no-repeat 50% 0;
 }
 
-/*--当前位置--*/
+/*--當前位置--*/
 .enable {
 	padding: 0;
 	height: 19px;
@@ -134,7 +134,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	margin-top: 42px;
 	height: 40px;
 	line-height: 40px;
-	font-family: "微软雅黑", "黑体", "宋体";
+	font-family: "微軟雅黑", "黑體", "細明體";
 	font-weight: blod;
 	font-size: 20px;
 	position: absolute;
@@ -408,8 +408,8 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	margin-bottom: 20px;
 	height: 23px;
 	text-align: right;
-	font-family: "宋体"
-}  /*分页*/
+	font-family: "細明體"
+}  /*分頁*/
 .content .pages a,.content .pages strong,.content .pages span {
 	display: inline-block;
 	*display: inline;
@@ -720,7 +720,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	padding: 10px;
 	width: 720px;
 	font-size: 14px;
-}  /*新增商品详细说明样式*/
+}  /*新增商品詳細說明樣式*/
 #goods .content .intro2 h4,#groupbuy .intro h4 {
 	font-size: 14px;
 	font-weight: 800;
@@ -754,7 +754,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	float: right;
 }
 
-/*--更多商品图片--*/
+/*--更多商品圖片--*/
 .targetpic_prev,.targetpic_next,.targetpic_main {
 	float: left;
 	height: 330px;
@@ -828,7 +828,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	border: none;
 }
 
-/*--金币竞拍--*/
+/*--金幣競拍--*/
 .c_orange {
 	font-weight: bolder;
 	color: #FFA700
@@ -963,7 +963,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	display: inline;
 }
 
-/*竞拍说明*/
+/*競拍說明*/
 #auction_explain {
 	width: 425px;
 	background: #FFFCE9;
@@ -1180,7 +1180,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	width: 96%
 }
 
-/*--资讯列表--*/
+/*--資訊列表--*/
 #newslist .content {
 	border: 1px solid #CCCCCC;
 }
@@ -1222,7 +1222,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	margin-top: 20px;
 }
 
-/*--资讯--*/
+/*--資訊--*/
 #news {
 	position: relative;
 }
@@ -1309,7 +1309,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	background-position: 7px -11px;
 }
 
-/*--店铺--*/
+/*--店舖--*/
 #seller .sidebar {
 	float: left;
 	width: 230px;
@@ -1520,7 +1520,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	overflow: hidden;
 }
 
-/* 最近来访 */
+/* 最近來訪 */
 #seller .last_visited {
 	overflow: hidden;
 	zoom: 1;
@@ -1610,7 +1610,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	vertical-align: middle;
 }
 
-/* @group 店铺首页 */ /* --橱窗公告-- */
+/* @group 店舖首頁 */ /* --櫥窗公告-- */
 .content .showpic {
 	position: relative;
 	width: 740px;
@@ -1769,7 +1769,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	width: 163px;
 	height: 21px;
 	line-height: 21px;
-	font-family: "宋体";
+	font-family: "細明體";
 	font-size: 14px;
 	overflow: hidden;
 }
@@ -1863,7 +1863,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	height: 15px;
 	line-height: 15px;
 	color: #2C5F94;
-	font-family: "宋体"
+	font-family: "細明體"
 }
 
 #seller .productlist li p a {
@@ -1879,7 +1879,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	height: 90px;
 }
 
-/*--滚动公告--*/
+/*--滾動公告--*/
 .shop_notice {
 	position: relative;
 	z-index: 1;
@@ -1906,7 +1906,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	float: left;
 	width: 640px;
 	background-color: none;
-	font-family: "宋体";
+	font-family: "細明體";
 	overflow: hidden;
 }
 
@@ -1947,7 +1947,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	overflow: hidden;
 }
 
-/*--店铺活动--*/
+/*--店舖活動--*/
 #stormovement {
 	margin-bottom: 15px;
 }
@@ -2031,7 +2031,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	width: 100%;
 	height: 21px;
 	line-height: 21px;
-	font-family: "宋体";
+	font-family: "細明體";
 	font-size: 14px;
 	overflow: hidden;
 }
@@ -2073,7 +2073,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	overflow: hidden;
 }
 
-/*消费劵列表{consumerlist}*/
+/*消費券列表{consumerlist}*/
 .all_consumer {
 	padding: 0 10px;
 	overflow: hidden;
@@ -2177,7 +2177,7 @@ input:hover,textarea:hover { /*GOOGLE MAP 样式冲突background-color: #FFF;*/
 	padding-top: 25px;
 }
 
-/*--地图--*/
+/*--地圖--*/
 #map {
 	width: 980px;
 }
@@ -2401,9 +2401,9 @@ dl.tags .thison,dl.tags .thison:hover {
 	padding: 5px;
 }
 
-/*消费劵{consumer}*/
+/*消費券{consumer}*/
 #consumer {
-	font-family: "宋体";
+	font-family: "細明體";
 }
 
 .print_img em,.print_img dd a {
@@ -2704,7 +2704,7 @@ dl.tags .thison,dl.tags .thison:hover {
 	vertical-align: middle;
 }
 
-/*当前位置*/
+/*當前位置*/
 #position,#position a,#temposition div,#temposition a {
 	background: #fbfbfb url(../../../static/image/position_bg.gif) no-repeat
 		0 0
@@ -2750,7 +2750,7 @@ dl.tags .thison,dl.tags .thison:hover {
 	overflow: hidden;
 }
 
-/*前台相册列表*/
+/*前台相冊列表*/
 #albumlist {
 	overflow: hidden;
 	margin: 10px;
@@ -2783,7 +2783,7 @@ dl.tags .thison,dl.tags .thison:hover {
 	margin: 8px 0px 5px 5px;
 }
 
-/*评分样式*/
+/*評分樣式*/
 #seller .sidebar .score,.main .sidebar .score dl {
 	border: 1px solid #92A6CA;
 }

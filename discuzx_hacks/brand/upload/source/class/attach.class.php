@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: attach.class.php 4443 2010-09-14 10:00:24Z fanshengshuai $
@@ -18,7 +18,7 @@ class attach {
 
 	function check_attach_size($attach_size) {
 		global $_G;
-		// 如果 $_G['setting']['attach']['filesize'] 为 0 ,就是不限制附件大小
+		// 如果 $_G['setting']['attach']['filesize'] 為 0 ,就是不限制附件大小
 		if($_G['setting']['attach']['filesize']>0 && ($attach_size > $_G['setting']['attach']['filesize'])){
 			return false;
 		}else{
@@ -53,7 +53,7 @@ class attach {
 		//	return false;
 		//}
 
-		// 文件大小检测
+		// 文件大小檢測
 		if(!$this->check_attach_size($attach['size'])){
 			@unlink($attach['tmp_name']);
 			return -1;
@@ -121,18 +121,18 @@ class attach {
 
 		$patharr = $deault = array('file'=>'', 'thumb'=>'', 'name'=>'', 'type'=>'', 'size'=>0);
 
-		//debug 传入参数
+		//debug 傳入參數
 		$filename = strip_tags($filearr['name']);
 		$tmpname = str_replace('\\', '\\\\', $filearr['tmp_name']);
 
-		//debug 文件后缀
+		//debug 文件後綴
 		$ext = fileext($filename);
 
 		$patharr['name'] = addslashes($filename);
 		$patharr['type'] = $ext;
 		$patharr['size'] = $filearr['size'];
 
-		// 文件大小检测
+		// 文件大小檢測
 		if(!$this->check_attach_size($patharr['size'])){
 			@unlink($tmpname);
 			cpmsg('attach_too_big','');
@@ -156,12 +156,12 @@ class attach {
 			$_SGLOBAL['_num']++;
 			$filemain = $_G['uid'].'_'.sgmdate($_G['timestamp'], 'YmdHis').$_SGLOBAL['_num'].random(4);
 
-			//debug 得到存储目录
+			//debug 得到存儲目錄
 			$dirpath = $this->getattachdir();
 			if(!empty($dirpath)) $dirpath .= '/';
 			$patharr['file'] = $dirpath.$filemain.'.'.$ext;
 
-			//debug 上传
+			//debug 上傳
 			$newfilename = A_DIR.'/'.$patharr['file'];
 		}
 		if(@copy($tmpname, $newfilename)) {
@@ -172,10 +172,10 @@ class attach {
 		}
 		@unlink($tmpname);
 
-		//debug 缩略图水印
+		//debug 縮略圖水印
 		if($isimage && empty($objfile)) {
 			if($ext != 'gif') {
-				//debug 缩略图
+				//debug 縮略圖
 				if($havethumb == 1) {
 					$patharr['thumb'] = loadClass('image')->makethumb($newfilename, $thumbarr);
 				}
@@ -221,11 +221,11 @@ class attach {
 			@fclose(fopen($attach_dir.'/index.htm', 'w'));
 		}
 
-		//debug 得到存储目录
+		//debug 得到存儲目錄
 		if(!empty($dirpath)) $dirpath .= '/';
 		$patharr['file'] = $dirpath.$filemain.'.'.$ext;
 
-		//debug 上传
+		//debug 上傳
 		$content = sreadfile($url, 'rb', 1, $maxsize);
 		if(empty($content)) return $blank;
 		writefile(A_DIR.'/'.$patharr['file'], $content, 'text', 'wb', 0);
@@ -233,10 +233,10 @@ class attach {
 
 		$patharr['size'] = filesize(A_DIR.'/'.$patharr['file']);
 
-		//debug 缩略图水印
+		//debug 縮略圖水印
 		if($isimage) {
 			if($mkthumb && $ext != 'gif') {
-				//debug 缩略图
+				//debug 縮略圖
 				$patharr['thumb'] = loadClass('image')->makethumb($patharr['file'], $thumbarr);
 				//debug 加水印
 				//if(!empty($patharr['thumb'])) loadClass('image')->makewatermark($patharr['file']);

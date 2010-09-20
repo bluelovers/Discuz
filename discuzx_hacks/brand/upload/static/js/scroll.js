@@ -1,6 +1,6 @@
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: scroll.js 3787 2010-07-18 13:35:09Z fanshengshuai $

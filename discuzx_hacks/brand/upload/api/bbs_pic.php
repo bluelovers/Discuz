@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: bbs_pic.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -12,13 +12,13 @@ if(!defined('IN_ADMIN')) {
 }
 
 /**
- * 得到帖子中的图片
+ * 得到帖子中的圖片
  * @param $tid - 帖子ID
  * @param $firstpostonly - 首帖
- * @param $page - 分页参数
- * @param $limit - 每页列出数目，初始为 9
- * @param $minsize - 附件体积最少为，单位KB
- * @param $getcount - 是否取总数（若取总数则不取具体信息）
+ * @param $page - 分頁參數
+ * @param $limit - 每頁列出數目，初始為 9
+ * @param $minsize - 附件體積最少為，單位KB
+ * @param $getcount - 是否取總數（若取總數則不取具體信息）
  */
 function list_thread_pic($tid=0, $firstpostonly=0, $page=0, $limit=9, $minsize=20, $getcount=0){
 	global $_G, $_SC;
@@ -60,11 +60,11 @@ function list_thread_pic($tid=0, $firstpostonly=0, $page=0, $limit=9, $minsize=2
 
 			$countsql = "SELECT count(a.aid) FROM {$bbs_dbpre}attachments a";
 			$count = $db->result_first("$countsql WHERE $wheresql");
-			return $count; //返回计数
+			return $count; //返回計數
 
 		} else {
 
-			// 得到附件目录
+			// 得到附件目錄
 			$sql ="SELECT * FROM {$bbs_dbpre}settings WHERE variable IN ('attachurl', 'boardurl', 'ftp')";
 			$query = $db->query($sql);
 			while($rs = $db->fetch_array($query)){
@@ -101,7 +101,7 @@ function list_thread_pic($tid=0, $firstpostonly=0, $page=0, $limit=9, $minsize=2
  * 得到帖子信息
  * @param $tid - 帖子ID
  * @param $returnpid - 返回首帖pid
- * @param $msgleng - 内容截断的长度
+ * @param $msgleng - 內容截斷的長度
  */
 function list_threads($tid=0, $msgleng=255){
 	global $_G, $_SC;

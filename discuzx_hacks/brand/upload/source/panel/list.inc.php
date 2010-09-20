@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: list.inc.php 4476 2010-09-15 04:51:33Z fanshengshuai $
@@ -13,7 +13,7 @@ if(!defined('IN_STORE')) {
 if(empty($_SGLOBAL['panelinfo']['enable'.$mname])) {
 	cpmsg('no_perm');
 }
-//店长没有店铺列表
+//店長沒有店舖列表
 if($mname=='shop') {
 	header('Location:panel.php?action=edit&m=shop');
 }
@@ -65,7 +65,7 @@ switch($mname) {
 showtips($mname.'_list_tips');
 
 if($mname == 'album' && $_GET['type'] == 'default') {
-	//默认相册不在表中，直接显示
+	//默認相冊不在表中，直接顯示
 	require_once(B_ROOT.'./source/adminfunc/list_photo.func.php');
 	$album_default['subject'] = lang('album_default');
 	$album_default['shopid'] = $_G['myshopid'];
@@ -79,18 +79,18 @@ if($mname == 'album' && $_GET['type'] == 'default') {
 	showlistphoto($mname, $mlist, $multipage);
 } else {
 
-	//搜索条件拼合
+	//搜索條件拼合
 	if($mname == 'shop') {
 		$joinsql = ' c.title FROM '.tname('shopitems').' s INNER JOIN '.tname('shopgroup').' c ON s.groupid=c.id';
 		$countsql = substr($joinsql, 8);
 	} elseif($mname == 'album') {
-		//店长自定义相册
+		//店長自定義相冊
 		$joinsql = ' c.subject AS title FROM '.tname($mname.'items').' s INNER JOIN '.tname('shopitems').' c ON s.shopid=c.itemid';
 		$countsql = substr($joinsql, 19);
-		//区分用户相册还是论坛导入相册
+		//區分用戶相冊還是論壇導入相冊
 		$where[] = $_GET['type']=='import'?"s.frombbs='1'":"s.frombbs='0'";
 	} elseif($mname == 'photo') {
-		//相册中的图片
+		//相冊中的圖片
 		$joinsql = ' c.subject AS title FROM '.tname($mname.'items').' s LEFT JOIN '.tname('albumitems').' c ON s.albumid=c.itemid';
 		$countsql = substr($joinsql, 19);
 	}  else {
@@ -118,7 +118,7 @@ if($mname == 'album' && $_GET['type'] == 'default') {
 	if(!in_array($_GET['sc'], array('DESC', 'ASC'))) {
 		$_GET['sc'] = 'DESC';
 	}
-	//分页处理
+	//分頁處理
 	$tpp = 15;
 	$pstart = ($_GET['page']-1)*$tpp;
 	$query = DB::query("SELECT count(*) AS count $countsql $wheresql");
@@ -126,7 +126,7 @@ if($mname == 'album' && $_GET['type'] == 'default') {
 	foreach($_GET as $key=>$_value) { if($key!='page') $url .= '&'.$key.'='.$_value;}
 	$url = '?'.substr($url, 1);
 	$multipage = multi($value['count'], $tpp, $_GET['page'], 'panel.php'.$url, $phpurl=1);
-	//数据查询
+	//數據查詢
 	$query = DB::query("SELECT s.*, $joinsql $wheresql ORDER BY s.$_GET[order] $_GET[sc] LIMIT $pstart, $tpp;");
 
 	if($mname == 'album' || $mname == 'photo') {

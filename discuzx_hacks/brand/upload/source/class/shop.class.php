@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: shop.class.php 4374 2010-09-08 08:58:55Z fanshengshuai $
@@ -36,7 +36,7 @@ class shop {
 	}
 
 	/**
-	 * 重置店的属性
+	 * 重置店的屬性
 	 * */
 	function __init_status($grade=null){
 		if(!empty($grade)){
@@ -53,7 +53,7 @@ class shop {
 	}
 
 	/**
-	 * 检查店的状态
+	 * 檢查店的狀態
 	 */
 	function check_status (){
 		global $_G, $_SGLOBAL;
@@ -70,7 +70,7 @@ class shop {
 	}
 
 	/**
-	 * 关闭一个店
+	 * 關閉一個店
 	 */
 	function close_shop($shopid=0){
 		if($shopid != 0){
@@ -84,7 +84,7 @@ class shop {
 	}
 
 	/**
-	 * 查询已经发布的计数
+	 * 查詢已經發佈的計數
 	 *
 	 * @param unknown_type $mname
 	 * @param unknown_type $shopid
@@ -94,15 +94,15 @@ class shop {
 	}
 
 	/**
-	 * 更新商铺的某个模型发布计数
+	 * 更新商舖的某個模型發佈計數
 	 *
 	 * @param string $mname 模型
 	 * @param int $shopid
-	 * @param int $opt_num 要增加或者减少的数量，减少用负数
+	 * @param int $opt_num 要增加或者減少的數量，減少用負數
 	 */
 	function update_item_num($mname, $shopid, $opt_num = 1) {
 		$opt_num = self::get_item_num($mname, $shopid) + $opt_num;
-		// 因为操作数可以为负值，所以有为0的情况，这种情况说明现在的数据库已经出现问题了
+		// 因為操作數可以為負值，所以有為0的情況，這種情況說明現在的數據庫已經出現問題了
 		if ($opt_num < 0) {
 			$opt_num = 0;
 		}
@@ -113,8 +113,8 @@ class shop {
 	}
 
 	/**
-	 * 根据UID得到SHOP模型
-	 * Param : $uid 用户UID
+	 * 根據UID得到SHOP模型
+	 * Param : $uid 用戶UID
 	 * Return : shop 模型
 	 */
 	function get_shop_by_uid($uid) {
@@ -122,7 +122,7 @@ class shop {
 	}
 
 	/**
-	 * 根据Itemid查询商铺ID
+	 * 根據Itemid查詢商舖ID
 	 *
 	 * @param unknown_type $mname
 	 * @param unknown_type $itemid
@@ -138,7 +138,7 @@ class shop {
 	}
 
 	/**
-	 * 列出用户拥有的商铺列表
+	 * 列出用戶擁有的商舖列表
 	 */
 	function ls_myshops($uid = 0) {
 		global $_G, $_BCACHE, $_SBLOCK;
@@ -170,7 +170,7 @@ class shop {
 	}
 
 	/**
-	 * 填充店模型数据
+	 * 填充店模型數據
 	 * */
 	function set_model_data($data){
 		$this->model_date = $data;

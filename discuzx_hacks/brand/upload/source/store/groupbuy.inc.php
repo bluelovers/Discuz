@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: groupbuy.inc.php 4373 2010-09-08 08:27:09Z yumiao $
@@ -115,7 +115,7 @@ if(submitcheck('submitgroupbuyjoin')) {
 
 if(empty($_g_xid)) {
 	$tpp = $_G['setting']['groupbuyperpage'];
-	//团购列表
+	//團購列表
 	$_BCACHE->cachesql('groupbuylist', 'SELECT i.itemid FROM '.tname('groupbuyitems')." i WHERE i.shopid='$shop[itemid]' AND i.grade>2 ORDER BY i.displayorder_s ASC, i.itemid DESC", 0, 1, $tpp, 0, 'storelist', 'groupbuy', $shop['itemid']);
 	$groupbuylist_multipage = $_SBLOCK['groupbuylist_multipage'];
 	$resultcount = $_SBLOCK['groupbuylist_listcount'];
@@ -185,7 +185,7 @@ if(empty($_g_xid)) {
 		$groupbuy_join_list[] = $res;
 	}
 
-	//导出 Excel
+	//導出 Excel
 	if($_GET['exportexcel'] == 1) {
 		header("Content-Disposition: attachment; filename=".$groupbuy['subject'].".csv");
 		header('Content-Type:APPLICATION/OCTET-STREAM');
@@ -218,10 +218,10 @@ if(empty($_g_xid)) {
 		$groupbuy['groupbuyprice'] = round($groupbuy['groupbuyprice']);
 	$relatedarr = array();
 	$relatedarr = getrelatedinfo('groupbuy', $groupbuy['itemid'], $shop['itemid']);
-	//更新统计数
+	//更新統計數
 	$isupdate = freshcookie($action,$groupbuy['itemid']);
 	if($isupdate || !$_G['setting']['updateview']) updateviewnum($action,$groupbuy['itemid']);
-	//评论
+	//評論
 	$listcount = $groupbuy['replynum'];
 	$_G['setting']['viewspace_pernum'] = intval($_G['setting']['viewspace_pernum']);
 	$type = 'groupbuy';

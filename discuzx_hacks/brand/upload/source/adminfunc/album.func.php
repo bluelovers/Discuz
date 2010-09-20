@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: album.func.php 4379 2010-09-09 03:00:50Z fanshengshuai $
@@ -12,9 +12,9 @@ if(!defined('IN_BRAND')) {
 }
 
 /**
- * 创建相册
+ * 創建相冊
  * @param
- * @return 相册id
+ * @return 相冊id
  */
 function createalbum($shopid=0, $catid=0, $uid=0, $username='', $subject='', $description='') {
 	global $_G, $_SGLOBAL;
@@ -27,7 +27,7 @@ function createalbum($shopid=0, $catid=0, $uid=0, $username='', $subject='', $de
 	foreach(array('subject', 'description') as $value) {
 		$$value = trim(strip_tags($$value));
 	}
-	//判断必填，设置插入数据库的数据
+	//判斷必填，設置插入數據庫的數據
 	foreach(array('shopid', 'catid', 'uid', 'username', 'subject') as $value) {
 		if(empty($$value)) {
 			cpmsg($value.'_not_selected', '', '', '', true, true);
@@ -45,7 +45,7 @@ function createalbum($shopid=0, $catid=0, $uid=0, $username='', $subject='', $de
 	if(!$albumid) {
 		cpmsg('album_creat_error', '', '', '', true, true);
 	}
-	//相册属性
+	//相冊屬性
 	if(!empty($_POST['attr_ids'])) {
 		require_once B_ROOT."./batch.attribute.php";
 		setattributesettings($catid, $albumid, $_POST['attr_ids']);
@@ -54,9 +54,9 @@ function createalbum($shopid=0, $catid=0, $uid=0, $username='', $subject='', $de
 }
 
 /**
- * 显示相册筛选器
+ * 顯示相冊篩選器
  * @param
- * @return 无
+ * @return 無
  */
 function showalbumattr() {
 	global $_G, $_SC;
@@ -64,7 +64,7 @@ function showalbumattr() {
 
 	echo '
 	<script type="text/javascript" charset="'.$_G['charset'].'">
-		$(function() { getAlbumAttrList();}); //页面加载完成加载相册筛选器
+		$(function() { getAlbumAttrList();}); //頁面加載完成加載相冊篩選器
 		$("#album_catid").change(function() { getAlbumAttrList();});
 		function getAlbumAttrList() {
 			$("#album_attr").load("batch.attribute.php?ajax=1&type=album&typeid="+$("#album_catid").val());

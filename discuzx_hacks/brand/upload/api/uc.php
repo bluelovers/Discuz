@@ -1,30 +1,30 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: uc.php 4374 2010-09-08 08:58:55Z fanshengshuai $
  */
 
-define('UC_CLIENT_VERSION', '1.5.0');	//note UCenter 版本标识
+define('UC_CLIENT_VERSION', '1.5.0');	//note UCenter 版本標識
 define('UC_CLIENT_RELEASE', '20081031');
 
-define('API_DELETEUSER', 1);		//note 用户删除 API 接口开关
-define('API_RENAMEUSER', 1);		//note 用户改名 API 接口开关
-define('API_GETTAG', 1);		//note 获取标签 API 接口开关
-define('API_SYNLOGIN', 1);		//note 同步登录 API 接口开关
-define('API_SYNLOGOUT', 1);		//note 同步登出 API 接口开关
-define('API_UPDATEPW', 1);		//note 更改用户密码 开关
-define('API_UPDATEBADWORDS', 1);	//note 更新关键字列表 开关
-define('API_UPDATEHOSTS', 1);		//note 更新域名解析缓存 开关
-define('API_UPDATEAPPS', 1);		//note 更新应用列表 开关
-define('API_UPDATECLIENT', 1);		//note 更新客户端缓存 开关
-define('API_UPDATECREDIT', 1);		//note 更新用户积分 开关
-define('API_GETCREDIT', 1);	//向 UC 提供积分 开关
-define('API_GETCREDITSETTINGS', 1);	//note 向 UCenter 提供积分设置 开关
-define('API_UPDATECREDITSETTINGS', 1);	//note 更新应用积分设置 开关
-define('API_ADDFEED', 1);	//向 UCHome 添加feed 开关
+define('API_DELETEUSER', 1);		//note 用戶刪除 API 接口開關
+define('API_RENAMEUSER', 1);		//note 用戶改名 API 接口開關
+define('API_GETTAG', 1);		//note 獲取標籤 API 接口開關
+define('API_SYNLOGIN', 1);		//note 同步登錄 API 接口開關
+define('API_SYNLOGOUT', 1);		//note 同步登出 API 接口開關
+define('API_UPDATEPW', 1);		//note 更改用戶密碼 開關
+define('API_UPDATEBADWORDS', 1);	//note 更新關鍵字列表 開關
+define('API_UPDATEHOSTS', 1);		//note 更新域名解析緩存 開關
+define('API_UPDATEAPPS', 1);		//note 更新應用列表 開關
+define('API_UPDATECLIENT', 1);		//note 更新客戶端緩存 開關
+define('API_UPDATECREDIT', 1);		//note 更新用戶積分 開關
+define('API_GETCREDIT', 1);	//向 UC 提供積分 開關
+define('API_GETCREDITSETTINGS', 1);	//note 向 UCenter 提供積分設置 開關
+define('API_UPDATECREDITSETTINGS', 1);	//note 更新應用積分設置 開關
+define('API_ADDFEED', 1);	//向 UCHome 添加feed 開關
 
 define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
@@ -33,7 +33,7 @@ define('API_RETURN_FORBIDDEN', '-2');
 define('IN_BRAND', true);
 define('B_ROOT', substr(dirname(__FILE__), 0, -3));
 
-//获取时间
+//獲取時間
 $_G['timestamp'] = time();
 
 if(defined('IN_UC')) {
@@ -44,7 +44,7 @@ if(defined('IN_UC')) {
 	include_once(B_ROOT.'./source/function/common.func.php');
 	include_once(B_ROOT.'./data/system/config.cache.php');
 
-	//链接数据库
+	//鏈接數據庫
 	dbconnect();
 
 } else {
@@ -58,7 +58,7 @@ if(defined('IN_UC')) {
 	include_once(B_ROOT.'./source/function/common.func.php');
 	include_once(B_ROOT.'./data/system/config.cache.php');
 
-	//链接数据库
+	//鏈接數據庫
 	dbconnect();
 
 	$get = $post = array();
@@ -122,10 +122,10 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		//note 用户删除 API 接口
+		//note 用戶刪除 API 接口
 		include_once B_ROOT.'./source/function/admin.func.php';
 
-		//获得用户
+		//獲得用戶
 		$uids = $get['ids'];
 		$query = DB::query("SELECT uid FROM ".tname('members')." WHERE uid IN ($uids)");
 		while ($value = DB::fetch($query)) {
@@ -141,7 +141,7 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		//编辑用户
+		//編輯用戶
 		$old_username = $get['oldusername'];
 		$new_username = $get['newusername'];
 
@@ -166,7 +166,7 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		//note 同步登录 API 接口
+		//note 同步登錄 API 接口
 		obclean();
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 		$uid = intval($get['uid']);
@@ -174,7 +174,7 @@ class uc_note {
 		$cookietime = 2592000;
 		$ss_auth_key = md5($_G['setting']['sitekey'].$_SERVER['HTTP_USER_AGENT']);
 		include_once(B_ROOT.'./source/class/db_mysql.class.php');
-		//链接数据库
+		//鏈接數據庫
 		dbconnect();
 
 		$query = DB::query("SELECT * FROM ".tname('members')." WHERE uid='$uid'");

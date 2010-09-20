@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: block_sql.func.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -13,16 +13,16 @@ if(!defined('IN_BRAND')) {
 
 function runsql($paramarr, $bbsdb='', $returncount=0, $multicachekey='') {
 	global $_G, $_SGLOBAL, $_SBLOCK;
-	//处理SQL
+	//處理SQL
 	$sqlstring = getblocksql($paramarr['sql']);
 
 	//初始化
 	$listcount = 1;
 
-	//连接数据库
+	//連接數據庫
 	//$thedb = empty($bbsdb)?$_SGLOBAL['db']:$bbsdb;
 
-	//分页
+	//分頁
 	if(!empty($paramarr['perpage'])) {
 		$countsql = '';
 		if(empty($countsql)) {
@@ -45,11 +45,11 @@ function runsql($paramarr, $bbsdb='', $returncount=0, $multicachekey='') {
 		}
 		if(!empty($countsql)) {
 			if($returncount>0) {
-				//需要更新计数缓存时
+				//需要更新計數緩存時
 				$listcount = DB::result_first($countsql);
 				return $listcount;
 			} else {
-				//无需更新缓存时
+				//無需更新緩存時
 				$listcount = intval(unserialize($_SBLOCK[$multicachekey]['value']));
 			}
 			if($listcount) {
@@ -78,13 +78,13 @@ function runsql($paramarr, $bbsdb='', $returncount=0, $multicachekey='') {
 	}
 	return array($sqlstring, $listcount);
 }
-//获取数量sql
+//獲取數量sql
 function getcountsql($sqlstring, $rule, $tablename, $where) {
 	preg_match("/$rule/i", $sqlstring, $mathes);
 	if(empty($mathes)) {
 		$countsql = '';
 	} else {
-		if($where < 0) $mathes[$where] = '1';//无限制条件
+		if($where < 0) $mathes[$where] = '1';//無限制條件
 		$countsql = "SELECT COUNT(*) FROM {$mathes[$tablename]} WHERE {$mathes[$where]}";
 	}
 	return $countsql;

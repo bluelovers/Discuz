@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: ads.inc.php 4379 2010-09-09 03:00:50Z fanshengshuai $
@@ -70,7 +70,7 @@ if(!empty($_POST['valuesubmit'])) {
 	$sitetheme = saddslashes($_POST['sitetheme']);
 	DB::query('REPLACE INTO '.tname('settings').' (`variable`, `value`) VALUES (\'sitetheme\', \''.$sitetheme.'\')');
 	updatesettingcache();
-	updatebrandadscache();//生成缓存
+	updatebrandadscache();//生成緩存
 	$_BCACHE->deltype('index');
 	$_BCACHE->deltype('sidebar');
 	cpmsg('message_success', 'admin.php?action=ads');

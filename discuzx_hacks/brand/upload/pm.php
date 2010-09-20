@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: pm.php 4407 2010-09-13 08:17:51Z fanshengshuai $
@@ -13,7 +13,7 @@ $send_result = '';
 $act = $_GET['act'];
 $filter = $_GET['filter'];
 
-// 跳转到查看短信得页面
+// 跳轉到查看短信得頁面
 if(!empty($filter) && in_array($filter,array('systempm','privatepm','announcepm'))) {
 	$pm->view_pm($filter);
 	exit;
@@ -57,19 +57,19 @@ if($act == 'list') {
 } else {
 	$msgto = intval($_REQUEST['msgto']);
 	if(intval($_G['uid']) == $msgto) {
-		// 不能给自己发消息
+		// 不能給自己發消息
 		$send_result = 'notallowtomyself';
 	} elseif($_G['uid'] < 1) {
-		// 没有 LOGIN
+		// 沒有 LOGIN
 		$send_result = 'notlogin';
-		// 发送窗口
+		// 發送窗口
 	} elseif($act == 'sendbox') {
 		if(empty($send_result)) {
 			$user = DB::fetch(DB::query('SELECT uid,username FROM '.tname('members')." WHERE uid='$msgto'"));
 			$uid = $user['uid'];
 			$username = $user['username'];
 		}
-		// 发送操作
+		// 發送操作
 	} elseif($act == 'send') {
 		if(submitcheck('pmsubmit')) {
 			$subject = $_POST['subject'];

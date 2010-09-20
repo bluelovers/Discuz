@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: notice.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -29,7 +29,7 @@ if(empty($_GET['xid'])) {
 
 } else {
 
-	//公告详情
+	//公告詳情
 	$notice = $_BCACHE->getiteminfo('notice', $_GET['xid'], $_GET['id']);
 	$notice['message'] = bbcode2html($notice['message']);
 	if(!$notice) {
@@ -37,7 +37,7 @@ if(empty($_GET['xid'])) {
 	}
 	$allowreply = ($shop['allowreply'] && $notice['allowreply']) ? 1 : 0;
 	$notice['time'] = date('Y-m-d', $notice['dateline']);
-	//更新统计数
+	//更新統計數
 	$isupdate = freshcookie($action,$notice['itemid']);
 	if($isupdate || !$_G['setting']['updateview']) updateviewnum($action, $notice['itemid']);
 	if(!empty($notice['jumpurl'])) {
@@ -46,7 +46,7 @@ if(empty($_GET['xid'])) {
 		header("Location:$notice[jumpurl]");
 		exit();
 	}
-	//评论
+	//評論
 	$listcount = $notice['replynum'];
 	$_G['setting']['viewspace_pernum'] = intval($_G['setting']['viewspace_pernum']);
 	$type = 'notice';

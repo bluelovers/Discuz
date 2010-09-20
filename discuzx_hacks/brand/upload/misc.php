@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: misc.php 4477 2010-09-15 05:08:30Z fanshengshuai $
@@ -17,9 +17,9 @@ include_once (B_ROOT.'./language/swfupload.lang.php');
 
 $shopid = 0;
 
-$albumcats = getmodelcategory('album', '|--'); //读入相册分类
+$albumcats = getmodelcategory('album', '|--'); //讀入相冊分類
 
-//日志记录
+//日誌記錄
 
 function misclog($text) {
 	@$fp = fopen(B_ROOT.'./data/log/misc.log.php', 'a');
@@ -39,7 +39,7 @@ if($_GET['ac'] == 'swfupload') {
 		$thisshopid = 0;
 
 		if($_GET['ineditor']) {
-			//编辑器中的数据返回
+			//編輯器中的數據返回
 			if(pkperm('isadmin')) {
 				$albumurl = rawurlencode('admin.php?action=ajax_editor&cont=imgattachlist&albumid=');
 				$thisshopid = $_G['cookie']['shopid'];
@@ -48,7 +48,7 @@ if($_GET['ac'] == 'swfupload') {
 				$albumurl = rawurlencode('panel.php?action=ajax_editor&cont=imgattachlist&shopid='.$_G['myshopid'].'&albumid=');
 			}
 		} else {
-			//普通上传中的数据返回
+			//普通上傳中的數據返回
 			if(pkperm('isadmin')) {
 				$thisshopid = $_G['cookie']['shopid'];
 				$albumurl = rawurlencode('admin.php?action=list&m=photo&shopid=0&filtersubmit=GO&albumid=');
@@ -77,7 +77,7 @@ if($_GET['ac'] == 'swfupload') {
 			<albums>";
 				if($_GET['ineditor']) {
 						echo "	<album id=\"0\">$slang[album_default]</album>";
-						//编辑器上传只列出默认相册，返回相册id -1
+						//編輯器上傳只列出默認相冊，返回相冊id -1
 				} else {
 					if(pkperm('isadmin')) {
 						$wheresql = " WHERE itemid='$_GET[albumid]'";
@@ -112,15 +112,15 @@ if($_GET['ac'] == 'swfupload') {
 			$shop_info = DB::fetch_first("select grade from ".tname('shopitems')." where itemid=".$_G['myshopid']);
 			if(pkperm('isadmin') || ($shop_info['grade'] == 3)) {
 				getpanelinfo();
-				//现有相册
+				//現有相冊
 				if(pkperm('isadmin')) {
 					$albumid = $_POST['albumid'];
 					if(empty($albumid)) {
-						//编辑器上传默认相册
+						//編輯器上傳默認相冊
 						$shopid = intval($_POST['shopid']);
 					} else {
 						$sql = 'SELECT shopid, subjectimage FROM '.tname('albumitems')." WHERE itemid='$albumid' LIMIT 1";
-						//非默认相册
+						//非默認相冊
 						$query = DB::fetch_first($sql);
 						$shopid = $query['shopid'];
 						$albumimg = $query['subjectimage'];
@@ -130,14 +130,14 @@ if($_GET['ac'] == 'swfupload') {
 					if(empty($_POST['albumid'])) {
 						$albumid = 0;
 					} else {
-						//检查是否为该商家创建的相册
+						//檢查是否為該商家創建的相冊
 						$query = DB::fetch_first('SELECT shopid, subjectimage, grade FROM '.tname('albumitems')." WHERE itemid='$_POST[albumid]' AND shopid='$_G[myshopid]' LIMIT 1");
 
 						$shopid = $query['shopid'];
 						$albumimg = $query['subjectimage'];
 						$albumgrade = $query['grade'];
 						if(empty($shopid)) {
-							$albumid = 0; //不属于自己的相册，将传到默认相册中
+							$albumid = 0; //不屬於自己的相冊，將傳到默認相冊中
 						} else {
 							$albumid = $_POST['albumid'];
 							if($_SGLOBAL['panelinfo']['group']['verifyalbum']) {
@@ -166,7 +166,7 @@ if($_GET['ac'] == 'swfupload') {
 					$photoid = DB::insert('photoitems', array('shopid'=>$shopid, 'albumid'=>$albumid, 'uid'=>$_G['uid'], 'username'=>$_G['username'], 'subject'=>$attach['title'], 'subjectimage'=>$attach['attachment'], 'dateline'=>$_G['timestamp'], 'lastpost'=>$_G['timestamp'], 'allowreply'=>'1', 'grade'=>$grade), 1);
 				}
 				if(empty($photoid) || $photoid<0) {
-					//插入数据库失败则删除文件
+					//插入數據庫失敗則刪除文件
 					@unlink(A_DIR.'/'.$attach['attachment']);
 				}
 				$updatesql = array();
@@ -174,7 +174,7 @@ if($_GET['ac'] == 'swfupload') {
 					$updatesql[] = " `picnum`=`picnum`+1 ";
 				}
 				if(empty($albumimg) && $photoid) {
-					//相册无封面图片时设置封面图片
+					//相冊無封面圖片時設置封面圖片
 					$updatesql[] = " `subjectimage`='$attach[attachment]' ";
 				}
 				if($updatesql) {

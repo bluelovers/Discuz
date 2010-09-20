@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: brandpost.func.php 4472 2010-09-15 03:22:43Z xuhui $
@@ -12,12 +12,12 @@ if(!defined('IN_BRAND')) {
 }
 
 /**
- * 后台发布信息时提交数据处理函数
+ * 後台發佈信息時提交數據處理函數
  */
 
 /**
- * 后台权限检查
- * @param $permtype=''，目前没有用户组概念，权限检查仅为检查 verified通过验证的商家/unverified未经审核通过的商家/isadmin站长。以后考虑按功能来分权限
+ * 後台權限檢查
+ * @param $permtype=''，目前沒有用戶組概念，權限檢查僅為檢查 verified通過驗證的商家/unverified未經審核通過的商家/isadmin站長。以後考慮按功能來分權限
  * @return 是否
  */
 function pkperm($permtype) {
@@ -25,18 +25,18 @@ function pkperm($permtype) {
 
 	if(ckfounder($_G['uid'])) {
 		if($permtype != 'unverified') {
-			return true;//管理员有所有权限
+			return true;//管理員有所有權限
 		} else {
 			return false;
 		}
 	} elseif($permtype == 'isadmin' && $_G['member']['allowadmincp']) {
 		return true;
 	} elseif($_G['uid'] == 0 || !$_G['myshopid'] || $_G['myshopstatus'] == 'none') {
-		return false;//游客或者未提交入驻没有任何权限
+		return false;//遊客或者未提交入駐沒有任何權限
 	} elseif($_G['myshopid'] > 0 && $_G['myshopstatus'] == 'unverified' && $permtype == 'unverified') {
-		return true;//提交入驻申请未审核的
+		return true;//提交入駐申請未審核的
 	} elseif($_G['myshopid'] > 0 && $_G['myshopstatus'] == 'verified') {
-		//入驻通过的权限
+		//入駐通過的權限
 		switch($permtype) {
 			case 'verified':
 				return true;
@@ -49,7 +49,7 @@ function pkperm($permtype) {
 				break;
 		}
 	}
-	return false;//默认为无权限
+	return false;//默認為無權限
 }
 
 /**
@@ -81,7 +81,7 @@ function getmodelinfoall($type, $value) {
 }
 
 /**
- * 检查提交的模型信息
+ * 檢查提交的模型信息
  * return array
  */
 function checkvalues($valuearr, $isedit=0, $admincp=1) {
@@ -96,7 +96,7 @@ function checkvalues($valuearr, $isedit=0, $admincp=1) {
 					}
 				}
 			}
-			//判断是否是必填
+			//判斷是否是必填
 			if(!empty($value['isrequired'])) {
 				if(preg_match("/^(img|flash|file)$/i", $value['formtype'])) {
 					if(empty($_FILES[$value['fieldname']]['name']) && $isedit == 0) {
@@ -108,7 +108,7 @@ function checkvalues($valuearr, $isedit=0, $admincp=1) {
 					}
 				}
 			}
-			if(!preg_match("/^(img|flash|file)$/i", $value['formtype'])) {	//判断长度是否符合要求
+			if(!preg_match("/^(img|flash|file)$/i", $value['formtype'])) {	//判斷長度是否符合要求
 				if(!preg_match("/^(TEXT|MEDIUMTEXT|LONGTEXT|FLOAT|DOUBLE)$/i", $value['fieldtype'])) {
 					if(isset($_POST[$value['fieldname']]) && (!is_array($_POST[$value['fieldname']]) && bstrlen(trim($_POST[$value['fieldname']])) > 0)) {
 						if(in_array($value['fieldname'], array('priceo', 'minprice', 'maxprice'))) {
@@ -131,7 +131,7 @@ function checkvalues($valuearr, $isedit=0, $admincp=1) {
 }
 
 /**
- * 拼合sql语句
+ * 拼合sql語句
  * return array
  */
 function getsetsqlarr($valuearr) {
@@ -140,7 +140,7 @@ function getsetsqlarr($valuearr) {
 		foreach ($valuearr as $value) {
 			if(isset($_POST[$value['fieldname']])) {
 				if(!preg_match("/^(img|flash|file)$/i", $value['formtype'])) {
-					//提交来后的数据过滤
+					//提交來後的數據過濾
 					if(preg_match("/^(VARCHAR|CHAR|TEXT|MEDIUMTEXT|LONGTEXT)$/i", $value['fieldtype'])) {
 						if($value['formtype'] == 'checkbox') {
 							$_POST[$value['fieldname']] = implode("\n", shtmlspecialchars($_POST[$value['fieldname']]));
@@ -169,11 +169,11 @@ function getsetsqlarr($valuearr) {
 
 function pk_strip_tags($str) {
 	$farr = array(
-			"/\s+/",  //过滤多余的空白
+			"/\s+/",  //過濾多餘的空白
 			"/<div/isU",
 			"/<\/div>/isU",
-			"/<(\/?)(script|i?frame|style|html|body|title|link|object|meta|\?|\%)([^>]*?)>/isU",  //过滤 <script 等恶意代码
-			"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",  //过滤javascript的on事件
+			"/<(\/?)(script|i?frame|style|html|body|title|link|object|meta|\?|\%)([^>]*?)>/isU",  //過濾 <script 等惡意代碼
+			"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",  //過濾javascript的on事件
 
 	);
 	$tarr = array(
@@ -220,7 +220,7 @@ function pkpost($cacheinfo, $cp=1) {
 			}
 		}
 	}
-	//输入检查
+	//輸入檢查
 	$_POST['subject'] = trim(strip_tags($_POST['subject']));
 	$itemid = $_POST['itemid'];
 	$checkresults = array();
@@ -228,24 +228,24 @@ function pkpost($cacheinfo, $cp=1) {
 		array_push($checkresults, array('subject'=>lang('space_suject_length_error')));
 	}
 
-	//数据检查
+	//數據檢查
 	checkvalues(array_merge($resultitems, $resultmessage), 1, 1);
 
-	//商品价格处理 Start
+	//商品價格處理 Start
 	if($modelsinfoarr['modelname'] == 'good') {
 		if(($_POST['minprice'] > 0) && ($_POST['maxprice'] > 0) && ($_POST['maxprice'] < $_POST['minprice'])) {
 			array_push($checkresults, array('maxprice'=>lang('maxprice_must_big_then_minprice')));
 		}
 	}
-	//商品价格处理 End
-	//修改时检验标题图片是否修改
+	//商品價格處理 End
+	//修改時檢驗標題圖片是否修改
 	$defaultmessage = array();
 	if(!empty($itemid)) {
-		if(empty($_POST['subjectimage_value']) || !empty($_FILES['subjectimage']['name'])) {	//当file删除时，或修改时执行删除操作
+		if(empty($_POST['subjectimage_value']) || !empty($_FILES['subjectimage']['name'])) {	//當file刪除時，或修改時執行刪除操作
 			$query = DB::query('SELECT * FROM '.tname($modelsinfoarr['modelname'].'items').' WHERE itemid = \''.$itemid.'\'');
 			$defaultmessage = DB::fetch($query);
 			$hash = getmodelhash($modelsinfoarr['mid'], $itemid);
-			deletetable('attachments', array('hash' => $hash, 'subject' => 'subjectimage'));	//删除附件表
+			deletetable('attachments', array('hash' => $hash, 'subject' => 'subjectimage'));	//刪除附件表
 			updatetable($modelsinfoarr['modelname'].'items', array('subjectimage' => ''), array('itemid'=>$itemid));
 			$ext = fileext($defaultmessage['subjectimage']);
 			if(in_array($ext, array('jpg', 'jpeg', 'png'))) {
@@ -255,7 +255,7 @@ function pkpost($cacheinfo, $cp=1) {
 		}
 	}
 
-	//构建数据
+	//構建數據
 	$setsqlarr = $setitemsqlarr = array();
 	$setsqlarr = getsetsqlarr($resultitems);
 	$itemgrade = DB::result_first("SELECT grade FROM ".tname($mname."items")." WHERE itemid = '$itemid'");
@@ -267,7 +267,7 @@ function pkpost($cacheinfo, $cp=1) {
 	}
 	$setsqlarr['catid'] = $_POST['catid'];
 	if($modelsinfoarr['modelname'] != 'shop') {
-		//限制必填信息所属店铺
+		//限制必填信息所屬店舖
 		if(pkperm('isadmin')) {
 			if(empty($_POST['shopid'])) {
 				array_push($checkresults, array('shopid'=>lang('please_select_shopid')));
@@ -324,7 +324,7 @@ function pkpost($cacheinfo, $cp=1) {
 	$setsqlarr['username'] = $_G['username'];
 	$setsqlarr['lastpost'] = $setsqlarr['dateline'];
 
-	// 标题图片处理 Start
+	// 標題圖片處理 Start
 	if(!empty($modelsinfoarr['thumbsize'])) {
 		$modelsinfoarr['thumbsize'] = explode(',', trim($modelsinfoarr['thumbsize']));
 		$modelsinfoarr['subjectimagewidth'] = $modelsinfoarr['thumbsize'][0];
@@ -367,7 +367,7 @@ function pkpost($cacheinfo, $cp=1) {
 
 		$uploadfilearr = $ids = array();
 		$subjectimageid = '';
-		$uploadfilearr = uploadfile(array(array('fieldname'=>'subjectimage', 'fieldcomment'=>'图片标题', 'formtype'=>'img')), $modelsinfoarr['mid'], 0, 1, $modelsinfoarr['subjectimagewidth'], $modelsinfoarr['subjectimageheight']);
+		$uploadfilearr = uploadfile(array(array('fieldname'=>'subjectimage', 'fieldcomment'=>'圖片標題', 'formtype'=>'img')), $modelsinfoarr['mid'], 0, 1, $modelsinfoarr['subjectimagewidth'], $modelsinfoarr['subjectimageheight']);
 		if(!empty($uploadfilearr)) {
 			$feedsubjectimg = $uploadfilearr;
 			foreach($uploadfilearr as $tmpkey => $tmpvalue) {
@@ -383,20 +383,20 @@ function pkpost($cacheinfo, $cp=1) {
 			$setsqlarr['imagetype'] = 1;
 		}
 	}
-	/* --------- 标题图片处理 End --------------*/
+	/* --------- 標題圖片處理 End --------------*/
 
-	//词语过滤
+	//詞語過濾
 	if(!empty($modelsinfoarr['allowfilter'])) $setsqlarr = scensor($setsqlarr, 1);
-	//发布时间
+	//發佈時間
 	$setsqlarr['dateline'] = $_G['timestamp'];
 
-	// 商品添加简介
+	// 商品添加簡介
 	if($mname == "good") {
 		$setsqlarr['intro'] = trim(strip_tags($_POST['intro']));
 	}
 
 	if(empty($itemid)) {
-		//插入数据
+		//插入數據
 		$itemid = inserttable($modelsinfoarr['modelname'].'items', $setsqlarr, 1);
 
 		if(in_array($modelsinfoarr['modelname'], array('good', 'notice', 'consume', 'album', 'groupbuy')))
@@ -418,10 +418,10 @@ function pkpost($cacheinfo, $cp=1) {
 			$setsqlarr['grade'] = 0;
 		}
 		if(pkperm('isadmin')) {
-			//站长可以post任何数据
-			updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$itemid));//权限限制
+			//站長可以post任何數據
+			updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$itemid));//權限限制
 		} else {
-			// 店长不允许更改店铺组
+			// 店長不允許更改店舖組
 			unset($setsqlarr['groupid']);
 			if($modelsinfoarr['modelname'] == 'shop') {
 				unset($setsqlarr['validity_start']);
@@ -429,14 +429,14 @@ function pkpost($cacheinfo, $cp=1) {
 				if($itemgrade > 1 && $_SGLOBAL['panelinfo']['group']['verify'.$modelsinfoarr['modelname']]) {
 					$updatesqlarr = $setsqlarr;
 				} else {
-					//店长提交店铺权限检查
+					//店長提交店舖權限檢查
 					updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$_G['myshopid']));
 				}
 			} else {
 				if($itemgrade > 1 && $_SGLOBAL['panelinfo']['group']['verify'.$modelsinfoarr['modelname']]) {
 					$updatesqlarr = $setsqlarr;
 				} else {
-					//店长只能更改管理的店铺的信息
+					//店長只能更改管理的店舖的信息
 					updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$itemid, 'shopid'=>$_G['myshopid']));
 				}
 			}
@@ -456,8 +456,8 @@ function pkpost($cacheinfo, $cp=1) {
 		if(!empty($resultmessage)) {
 			foreach($resultmessage as $value) {
 				if(preg_match("/^(img|flash|file)$/i", $value['formtype']) && !empty($defaultmessage[$value['fieldname']])) {
-					if(empty($_POST[$value['fieldname'].'_value']) || !empty($_FILES[$value['fieldname']]['name'])) {	//当file删除时，或修改时执行删除操作
-						deletetable('attachments', array('hash' => $hash, 'subject' => $value['fieldname']));	//删除附件表
+					if(empty($_POST[$value['fieldname'].'_value']) || !empty($_FILES[$value['fieldname']]['name'])) {	//當file刪除時，或修改時執行刪除操作
+						deletetable('attachments', array('hash' => $hash, 'subject' => $value['fieldname']));	//刪除附件表
 						updatetable($modelsinfoarr['modelname'].'message', array($value['fieldname'] => ''), array('itemid'=>$itemid));
 						@unlink(A_DIR.'/'.substr($defaultmessage[$value['fieldname']] , 0, strrpos($defaultmessage[$value['fieldname']], '.')).'.thumb.jpg');
 						@unlink(A_DIR.'/'.$defaultmessage[$value['fieldname']].'.thumb.jpg');
@@ -468,7 +468,7 @@ function pkpost($cacheinfo, $cp=1) {
 		}
 	}
 
-	//内容
+	//內容
 	$setsqlarr = $uploadfilearr = $ids = array();
 	$setsqlarr = getsetsqlarr($resultmessage);
 	$uploadfilearr = $feedcolum = uploadfile($resultmessage, $modelsinfoarr['modelname'], $itemid, 0);
@@ -497,11 +497,11 @@ function pkpost($cacheinfo, $cp=1) {
 		}
 	}
 
-	//添加内容
+	//添加內容
 	if(!empty($modelsinfoarr['allowfilter'])) $setsqlarr = scensor($setsqlarr, 1);
 	if($op == 'add') {
 		$setsqlarr['itemid'] = $itemid;
-		//添加内容
+		//添加內容
 		inserttable($modelsinfoarr['modelname'].'message', $setsqlarr);
 
 	} else {
@@ -509,7 +509,7 @@ function pkpost($cacheinfo, $cp=1) {
 			$_SGLOBAL['updatesqlarr'] = array_merge($updatesqlarr, $setsqlarr);
 
 		} else {
-			//更新内容
+			//更新內容
 			updatetable($modelsinfoarr['modelname'].'message', $setsqlarr, array('nid'=>$_POST['nid'], 'itemid'=>$itemid));
 		}
 
@@ -519,7 +519,7 @@ function pkpost($cacheinfo, $cp=1) {
 
 	return $itemid;
 }
-// 指处理自定义中的所有上传
+// 指處理自定義中的所有上傳
 function uploadfile($valuearr, $mid=2, $itemid=0, $havethumb=1, $width=100, $height=100) {
 	global $_G, $_SGLOBAL;
 
@@ -535,16 +535,16 @@ function uploadfile($valuearr, $mid=2, $itemid=0, $havethumb=1, $width=100, $hei
 			if(!empty($filearr['name'])) {
 				$setsqlarr[$value['fieldname']] = array('fieldcomment' => $value['fieldcomment'], 'filepath' => '', 'error' => '', 'aid' => '');
 				if(empty($filearr['size']) || empty($filearr['tmp_name'])) {
-					//获取上传文件大小失败，请选择其他文件上传
+					//獲取上傳文件大小失敗，請選擇其他文件上傳
 					$setsqlarr[$value['fieldname']]['error'] = modelmsg('get_upload_size_error');
 					break;
 				}
 				$fileext = fileext($filearr['name']);
 				if ($value['fieldname'] == 'subjectimage'){
-					$newfilearr = loadClass('attach')->savelocalfile($filearr, array($width, $height), '', 1);	//标题图片上传
+					$newfilearr = loadClass('attach')->savelocalfile($filearr, array($width, $height), '', 1);	//標題圖片上傳
 				}else{
 					list($width,$height) = explode(',',$value['thumbsize']);
-					$newfilearr = loadClass('attach')->savelocalfile($filearr, array($width, $height), '', 1);	//自定义图片上传
+					$newfilearr = loadClass('attach')->savelocalfile($filearr, array($width, $height), '', 1);	//自定義圖片上傳
 				}
 				if($value['formtype'] == 'img') {
 					$attachinfo	= @getimagesize(A_DIR.'/'.$newfilearr['file']);
@@ -559,12 +559,12 @@ function uploadfile($valuearr, $mid=2, $itemid=0, $havethumb=1, $width=100, $hei
 				}
 
 				if(empty($newfilearr['file'])) {
-					//上传文件失败，请您稍后尝试重新上传
+					//上傳文件失敗，請您稍後嘗試重新上傳
 					$setsqlarr[$value['fieldname']]['error'] = modelmsg('upload_error');
 					break;
 				}
 
-				//数据库
+				//數據庫
 				$insertsqlarr = array(
 					'uid' => $_G['uid'],
 					'dateline' => $_G['timestamp'],
@@ -592,7 +592,7 @@ function getmodelhash($mid=2, $itemid=0, $pre='i') {
 	return 'm'.$mid.$pre.$itemid;
 }
 
-//模型语言包调用
+//模型語言包調用
 function pkmodelmsg($key) {
 	global $_G, $_SGLOBAL;
 	include_once(B_ROOT.'./language/model.lang.php');
@@ -824,7 +824,7 @@ function pkregion($showarr) {
 		*/
 }
 /**
- * 获取地区设置
+ * 獲取地區設置
  * $param
  * return array
  */
@@ -841,10 +841,10 @@ function getupid($id,$list) {
 	return '|'.$upid;
 }
 /**
- * 获取关联信息
- * $param $type 类型
- * $param $itemid 对象ID
- * $param $shopid 商铺ID
+ * 獲取關聯信息
+ * $param $type 類型
+ * $param $itemid 對像ID
+ * $param $shopid 商舖ID
  * return array
  */
 function getrelatedinfo($type, $itemid, $shopid) {
@@ -863,7 +863,7 @@ function getrelatedinfo($type, $itemid, $shopid) {
 }
 
 /**
- * 获取店铺组设置信息及店铺自定义权限设置。
+ * 獲取店舖組設置信息及店舖自定義權限設置。
  * return
  */
 function getpanelinfo($shopid = null) {
@@ -883,7 +883,7 @@ function getpanelinfo($shopid = null) {
 }
 
 /**
- * 批准店铺、商品、消费券、公告、相册、的更新内容
+ * 批准店舖、商品、消費券、公告、相冊、的更新內容
  *return
  */
 function pkupdate($cacheinfo, $update) {
@@ -903,7 +903,7 @@ function pkupdate($cacheinfo, $update) {
 			$resultimage[] = $result;
 		}
 	}
-	//构建数据
+	//構建數據
 	$setsqlarr = $setitemsqlarr = array();
 	$setsqlarr = getsetsqlarr($resultitems);
 	$setsqlarr['subjectimage'] = isset($_POST['subjectimage']) ? $_POST['subjectimage']: '';
@@ -923,7 +923,7 @@ function pkupdate($cacheinfo, $update) {
 		}
 		@unlink(A_DIR.'/'.$defaultmessage['subjectimage']);
 	}
-	updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$itemid));//权限限制
+	updatetable($modelsinfoarr['modelname'].'items', $setsqlarr, array('itemid'=>$itemid));//權限限制
 
 	$setsqlarr = getsetsqlarr($resultmessage);
 	$setsqlarr['message'] = $_POST['message'];
@@ -949,7 +949,7 @@ function pkupdate($cacheinfo, $update) {
 	}
 
 	if($setsqlarr) {
-		updatetable($modelsinfoarr['modelname'].'message', $setsqlarr, array('itemid'=>$itemid));//权限限制
+		updatetable($modelsinfoarr['modelname'].'message', $setsqlarr, array('itemid'=>$itemid));//權限限制
 	}
 	if(!empty($_POST['relatedidstr'])) {
 		$shopid = $_POST['shopid'];
@@ -980,8 +980,8 @@ function pkupdate($cacheinfo, $update) {
 }
 
 /**
- * 修改店铺内容统计数据
- * 添加、删除商品、相册、公告、消费券时，修改店铺的内容统计数据。
+ * 修改店舖內容統計數據
+ * 添加、刪除商品、相冊、公告、消費券時，修改店舖的內容統計數據。
  *return
  */
 function itemnumreset($type, $shopid, $do = 'add', $num = 1) {
@@ -995,7 +995,7 @@ function itemnumreset($type, $shopid, $do = 'add', $num = 1) {
 	DB::query("UPDATE ".tname("shopitems")." SET $fieldname = $fieldname $dosql $num WHERE itemid = $shopid ;");
 }
 /*
- * 序列化字符串中带有引号时，反序列化时会出错。
+ * 序列化字符串中帶有引號時，反序列化時會出錯。
  */
 function mb_unserialize($serial_str) {
 	$serial_str= preg_replace('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $serial_str );

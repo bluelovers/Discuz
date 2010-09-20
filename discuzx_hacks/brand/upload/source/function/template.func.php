@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: template.func.php 4374 2010-09-08 08:58:55Z fanshengshuai $
@@ -12,7 +12,7 @@ if(!defined('IN_BRAND')) {
 }
 
 /**
- * 读模板页进行替换后写入到cache页里
+ * 讀模板頁進行替換後寫入到cache頁裡
  *
  * @param string $tplfile ：模板文件名
  * @param string $objfile ：cache文件名
@@ -82,13 +82,13 @@ function parse_template($tplfile, $objfile, $template='') {
 		} else {
 			$needwrite = true;
 		}
-		//再次写入
+		//再次寫入
 		if($needwrite) writefile($objfile, $template, 'text', 'w', 0);
 	}
 }
 
 /**
- * 正则表达式匹配替换
+ * 正則表達式匹配替換
  *
  * @param string $var ：
  * @return
@@ -98,7 +98,7 @@ function addquote($var) {
 }
 
 /**
- * 正则表达式匹配替换
+ * 正則表達式匹配替換
  *
  * @param string $expr ：
  * @return
@@ -125,7 +125,7 @@ function languagevar($var) {
 }
 
 /**
- * 将模板中的块替换成BLOCK函数
+ * 將模板中的塊替換成BLOCK函數
  *
  * @param string $cachekey ：
  * @param string $parameter ：
@@ -136,7 +136,7 @@ function blocktags($cachekey, $parameter) {
 }
 
 /**
- * 正则表达式匹配替换
+ * 正則表達式匹配替換
  *
  * @param string $expr ：
  * @param string $statement ：

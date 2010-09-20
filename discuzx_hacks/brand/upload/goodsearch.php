@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: goodsearch.php 4374 2010-09-08 08:58:55Z fanshengshuai $
@@ -16,7 +16,7 @@ $tagarrs = $goodlist = $where = $value = array();
 $tagids = $joinsql = $wheresql = '';
 $query = NULL;
 
-//常见id处理
+//常見id處理
 foreach(array('itemid', 'nid', 'uid', 'catid', 'tagid', 'shopid') as $value) {
 	$_GET[$value] = $_POST[$value] = intval(!empty($_POST[$value])?$_POST[$value]:$_GET[$value]);
 }
@@ -24,7 +24,7 @@ $_GET['keyword'] = trim(addslashes(rawurldecode($_REQUEST['keyword'])));
 
 $catid = empty($_GET['catid']) ? 0 : $_GET['catid'];
 
-$categorylist = getmodelcategory('good'); //读商品分类
+$categorylist = getmodelcategory('good'); //讀商品分類
 
 include_once('./batch.attribute.php');
 $searchcats = getsearchcats($categorylist, $catid);
@@ -36,17 +36,17 @@ if(is_array($searchcats)) {
 	}
 
 }
-$tagids = implode(',', $tagid);//搜索分类id拼合
+$tagids = implode(',', $tagid);//搜索分類id拼合
 
-//属性筛选器
+//屬性篩選器
 $attrvalues = empty($_GET['params'])?array():getattrvalues($_GET['params']);
 if($catid && $categorylist[$catid]['havechild'] == 0) {
 	$attform = formatattrs($catid, $attrvalues, $_GET['keyword']);
 }
-//属性搜索
+//屬性搜索
 $attr_in = getattr_in($catid,$attrvalues);
 
-//条件拼合
+//條件拼合
 $attr_in!==NULL && $where[] = $attr_in;
 $where[] = 'i.grade_s>2 AND i.grade>2';
 $_GET['keyword'] && $where[] = 'i.subject LIKE \'%'.$_GET['keyword'].'%\'';
@@ -57,10 +57,10 @@ if($catid>0 && $tagids) {
 }
 $wheresql = implode(' AND ', $where);
 
-//分页处理
+//分頁處理
 $tpp = $_G['setting']['goodsearchperpage'];
 
-//查询分类结果
+//查詢分類結果
 if(!($catid && $categorylist[$catid]['havechild'] == 0)) {
 	$_BCACHE->cachesql('catnums', 'SELECT COUNT(i.itemid) as count, i.catid FROM '.tname('gooditems').' i WHERE '.$wheresql.' GROUP BY i.catid', 0, 0, 100, 0, 'sitelist', 'good');
 	foreach($_SBLOCK['catnums'] as $value) {
@@ -79,7 +79,7 @@ if(!($catid && $categorylist[$catid]['havechild'] == 0)) {
 	}
 }
 
-//数据查询，拆分SQL，分片缓存
+//數據查詢，拆分SQL，分片緩存
 $_BCACHE->cachesql('goodsearch', 'SELECT i.itemid, i.shopid FROM '.tname('gooditems').' i WHERE '.$wheresql.' ORDER BY i.displayorder ASC, i.itemid DESC', 0, 1, $tpp, 0, 'sitelist', 'good');
 $multipage = $_SBLOCK['goodsearch_multipage'];
 $resultcount = $_SBLOCK['goodsearch_listcount'];

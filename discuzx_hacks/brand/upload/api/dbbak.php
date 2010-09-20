@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: dbbak.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -11,22 +11,22 @@ error_reporting(0);
 
 define('IN_COMSENZ', true);
 define('ROOT_PATH', dirname(__FILE__).'/../');
-//note 错误代码定义
-define('EXPLOR_SUCCESS', 0);//note 导出成功
-define('IMPORT_SUCCESS', 0);//note 导入成功
-define('DELETE_SQLPATH_SUCCESS', 4);//note 删除备份文件成功
-define('MKDIR_ERROR', 1);//note 创建目录失败
-define('DATABASE_EXPORT_FILE_INVALID', 2);//note 备份文件写入失败
-define('RUN_SQL_ERROR', 3);//note sql执行错误
-define('SQLPATH_NULL_NOEXISTS', 4);//note sqlpath为空或者目录不存在
-define('SQLPATH_NOMATCH_BAKFILE', 5);//note 指定sqlpaht没有找到合法的备份文件
-define('BAK_FILE_LOSE', 6);//note 备份文件缺失
-define('DIR_NO_EXISTS', 7);//note 指定备份目录不存在
-define('DELETE_DUMPFILE_ERROR', 8);//note 删除指定的数据库备份文件错误
-define('DB_API_NO_MATCH', 9);//note 备份接口程序暂不支持此种应用的备份
+//note 錯誤代碼定義
+define('EXPLOR_SUCCESS', 0);//note 導出成功
+define('IMPORT_SUCCESS', 0);//note 導入成功
+define('DELETE_SQLPATH_SUCCESS', 4);//note 刪除備份文件成功
+define('MKDIR_ERROR', 1);//note 創建目錄失敗
+define('DATABASE_EXPORT_FILE_INVALID', 2);//note 備份文件寫入失敗
+define('RUN_SQL_ERROR', 3);//note sql執行錯誤
+define('SQLPATH_NULL_NOEXISTS', 4);//note sqlpath為空或者目錄不存在
+define('SQLPATH_NOMATCH_BAKFILE', 5);//note 指定sqlpaht沒有找到合法的備份文件
+define('BAK_FILE_LOSE', 6);//note 備份文件缺失
+define('DIR_NO_EXISTS', 7);//note 指定備份目錄不存在
+define('DELETE_DUMPFILE_ERROR', 8);//note 刪除指定的數據庫備份文件錯誤
+define('DB_API_NO_MATCH', 9);//note 備份接口程序暫不支持此種應用的備份
 
-$sizelimit = 2000;//note 分卷的大小，单位K，默认为2000K，请不要设置的太大，一面超出php可操作的内存
-$usehex = true;//note 使用十六进制，可以最大程度避免字符集问题。
+$sizelimit = 2000;//note 分卷的大小，單位K，默認為2000K，請不要設置的太大，一面超出php可操作的內存
+$usehex = true;//note 使用十六進制，可以最大程度避免字符集問題。
 
 $code = @$_GET['code'];
 $apptype = @$_GET['apptype'];
@@ -34,9 +34,9 @@ $apptype = @$_GET['apptype'];
 $apptype = strtolower($apptype);
 
 if($apptype == 'discuz') {
-	require ROOT_PATH.'./config.inc.php';//note 加载配置文件
+	require ROOT_PATH.'./config.inc.php';//note 加載配置文件
 } elseif($apptype == 'uchome' || $apptype == 'supesite' || $apptype == 'supev' || $apptype == 'brand' || $apptype == 'other') {//note uchome or supsite  or brand or supev
-	require ROOT_PATH.'./config.php';//note 加载配置文件
+	require ROOT_PATH.'./config.php';//note 加載配置文件
 } elseif($apptype == 'ucenter') {//note ucenter
 	require ROOT_PATH.'./data/config.inc.php';
 } elseif($apptype == 'ecmall') {//note ecmall
@@ -195,8 +195,8 @@ $db = new dbstuff();
 $version = '';
 if($apptype == 'discuz') {//note discuz
 
-	define('BACKUP_DIR', ROOT_PATH.'forumdata/');//note 数据库备份文件放置路径
-	$tablepre = $tablepre;//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'forumdata/');//note 數據庫備份文件放置路徑
+	$tablepre = $tablepre;//note 表前綴賦值，不同的產品請修改此表達式
 	if(empty($dbcharset)) {
 		$dbcharset = in_array(strtolower($charset), array('gbk', 'big5', 'utf-8')) ? str_replace('-', '', $charset) : '';
 	}
@@ -207,22 +207,22 @@ if($apptype == 'discuz') {//note discuz
 
 } elseif($apptype == 'uchome' || $apptype == 'supesite' || $apptype == 'brand' || $apptype == 'other') {//note uchome
 
-	define('BACKUP_DIR', ROOT_PATH.'./data/');//note 数据库备份文件放置路径
-	$tablepre = $_SC['tablepre'];//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'./data/');//note 數據庫備份文件放置路徑
+	$tablepre = $_SC['tablepre'];//note 表前綴賦值，不同的產品請修改此表達式
 	$dbcharset = $_SC['dbcharset'];
 	$db->connect($_SC['dbhost'], $_SC['dbuser'], $_SC['dbpw'], $_SC['dbname'], $dbcharset, $_SC['pconnect'], $tablepre);
 
 } elseif($apptype == 'ucenter') {//note ucenter
 
-	define('BACKUP_DIR', ROOT_PATH.'./data/backup/');//note 数据库备份文件放置路径
-	$tablepre = UC_DBTABLEPRE;//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'./data/backup/');//note 數據庫備份文件放置路徑
+	$tablepre = UC_DBTABLEPRE;//note 表前綴賦值，不同的產品請修改此表達式
 	$dbcharset = UC_DBCHARSET;
 	$db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, UC_DBNAME, $dbcharset, UC_DBCONNECT, $tablepre);
 
 } elseif($apptype == 'ecmall') {//note ecmall
 
-	define('BACKUP_DIR', ROOT_PATH.'./data/backup/');//note 数据库备份文件放置路径
-	$tablepre = DB_PREFIX;//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'./data/backup/');//note 數據庫備份文件放置路徑
+	$tablepre = DB_PREFIX;//note 表前綴賦值，不同的產品請修改此表達式
 	$dbcharset = (CHARSET == 'utf-8') ? 'utf8' : CHARSET;
 	$cfg = parse_url(DB_CONFIG);
 	if(empty($cfg['pass'])) {
@@ -237,8 +237,8 @@ if($apptype == 'discuz') {//note discuz
 
 } elseif($apptype == 'supev') {//note supev
 
-	define('BACKUP_DIR', ROOT_PATH.'data/backup/');//note 数据库备份文件放置路径
-	$tablepre = $tablepre;//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'data/backup/');//note 數據庫備份文件放置路徑
+	$tablepre = $tablepre;//note 表前綴賦值，不同的產品請修改此表達式
 	if(empty($dbcharset)) {
 		$dbcharset = in_array(strtolower($charset), array('gbk', 'big5', 'utf-8')) ? str_replace('-', '', $charset) : '';
 	}
@@ -246,14 +246,14 @@ if($apptype == 'discuz') {//note discuz
 
 } elseif($apptype == 'ecshop') {//note ecshop
 
-	define('BACKUP_DIR', ROOT_PATH.'data/backup/');//note 数据库备份文件放置路径
-	$tablepre = $prefix;//note 表前缀赋值，不同的产品请修改此表达式
+	define('BACKUP_DIR', ROOT_PATH.'data/backup/');//note 數據庫備份文件放置路徑
+	$tablepre = $prefix;//note 表前綴賦值，不同的產品請修改此表達式
 	$dbcharset = 'utf8';
 	$db->connect($db_host, $db_user, $db_pass, $db_name, $dbcharset, 0, $tablepre);
 
 }
 
-if($get['method'] == 'export') {//note 导出备份
+if($get['method'] == 'export') {//note 導出備份
 
 	$db->query('SET SQL_QUOTE_SHOW_CREATE=0', 'SILENT');
 
@@ -262,7 +262,7 @@ if($get['method'] == 'export') {//note 导出备份
 	$tables = array();
 	$tables = arraykeys2(fetchtablelist($tablepre), 'Name');
 
-	if($apptype == 'discuz') {//note discuz的备份需要备份插件表关联的数据
+	if($apptype == 'discuz') {//note discuz的備份需要備份插件表關聯的數據
 		$query = $db->query("SELECT datatables FROM {$tablepre}plugins WHERE datatables<>''");
 		while($plugin = $db->fetch_array($query)) {
 			foreach(explode(',', $plugin['datatables']) as $table) {
@@ -278,7 +278,7 @@ if($get['method'] == 'export') {//note 导出备份
 	$version = $version ? $version : $apptype;
 	$idstring = '# Identify: '.base64_encode("$timestamp,$version,$apptype,multivol,$get[volume]")."\n";
 
-	if(!isset($get['sqlpath']) || empty($get['sqlpath'])) {//note 若没有指定存放目录，则设定存放备份数据的目录
+	if(!isset($get['sqlpath']) || empty($get['sqlpath'])) {//note 若沒有指定存放目錄，則設定存放備份數據的目錄
 		$get['sqlpath'] = 'backup_'.date('ymd', $timestamp).'_'.random(6);
 		if(!mkdir(BACKUP_DIR.'./'.$get['sqlpath'], 0777)) {
 			api_msg('mkdir_error', 'make dir error:'.BACKUP_DIR.'./'.$get['sqlpath']);
@@ -289,7 +289,7 @@ if($get['method'] == 'export') {//note 导出备份
 		}
 	}
 
-	if(!isset($get['backupfilename']) || empty($get['backupfilename'])) {//note 若没有指定备份文件名，则设定保存数据的文件名
+	if(!isset($get['backupfilename']) || empty($get['backupfilename'])) {//note 若沒有指定備份文件名，則設定保存數據的文件名
 		$get['backupfilename'] = date('ymd', $timestamp).'_'.random(6);
 	}
 
@@ -297,7 +297,7 @@ if($get['method'] == 'export') {//note 导出备份
 	$get['tableid'] = isset($get['tableid']) ? intval($get['tableid']) : 0;
 	$get['startfrom'] = isset($get['startfrom']) ? intval($get['startfrom']) : 0;
 
-	//note count() 有待于优化
+	//note count() 有待於優化
 	$complete = true;
 	for(; $complete && $get['tableid'] < count($tables) && strlen($sqldump) + 500 < $sizelimit * 1000; $get['tableid']++) {
 		$sqldump .= sqldumptable($tables[$get['tableid']], strlen($sqldump));
@@ -334,7 +334,7 @@ if($get['method'] == 'export') {//note 导出备份
 		api_msg('explor_success', 'explor_success');
 	}
 
-} elseif($get['method'] == 'import') {//note 导入备份，即恢复数据
+} elseif($get['method'] == 'import') {//note 導入備份，即恢復數據
 
 	if(!isset($get['dumpfile']) || empty($get['dumpfile'])) {
 		$get['dumpfile'] = get_dumpfile_by_path($get['sqlpath']);
@@ -356,7 +356,7 @@ if($get['method'] == 'export') {//note 导出备份
 	unset($sqldump);
 
 	foreach($sqlquery as $sql) {
-		//note 兼容SQL建表格式，调整为当前版本和字符集合适的建表语句
+		//note 兼容SQL建表格式，調整為當前版本和字符集合適的建表語句
 		$sql = syntablestruct(trim($sql), $db->version() > '4.1', $dbcharset);
 
 		if($sql != '') {
@@ -371,7 +371,7 @@ if($get['method'] == 'export') {//note 导出备份
 	$get['dumpfile'] = $next_dumpfile;
 	auto_next($get, BACKUP_DIR.$get['sqlpath'].'/'.$cur_file);
 
-} elseif($get['method'] == 'ping') {//note 探测某个指定目录下是否有备份数据
+} elseif($get['method'] == 'ping') {//note 探測某個指定目錄下是否有備份數據
 
 	if($get['dir'] && is_dir(BACKUP_DIR.$get['dir'])) {
 		echo "1";exit;
@@ -379,7 +379,7 @@ if($get['method'] == 'export') {//note 导出备份
 		echo "-1";exit;
 	}
 
-} elseif($get['method'] == 'list') {//note 列出可用的备份目录，以xml格式返回
+} elseif($get['method'] == 'list') {//note 列出可用的備份目錄，以xml格式返回
 
 	$str = "<root>\n";
 	$directory = dir(BACKUP_DIR);
@@ -397,7 +397,7 @@ if($get['method'] == 'export') {//note 导出备份
 	echo $str;
 	exit;
 
-} elseif($get['method'] == 'view') {//note 显示具体的某一个备份目录下的详情
+} elseif($get['method'] == 'view') {//note 顯示具體的某一個備份目錄下的詳情
 
 	$sqlpath = trim($get['sqlpath']);
 	if(empty($sqlpath) || !is_dir(BACKUP_DIR.$sqlpath)) {
@@ -423,7 +423,7 @@ if($get['method'] == 'export') {//note 导出备份
 	echo $str;
 	exit;
 
-} elseif($get['method'] == 'delete') {//note 删除具体的某一个备份目录下的备份文件，目录同时也删除
+} elseif($get['method'] == 'delete') {//note 刪除具體的某一個備份目錄下的備份文件，目錄同時也刪除
 
 	$sqlpath = trim($get['sqlpath']);
 	if(empty($sqlpath) || !is_dir(BACKUP_DIR.$sqlpath)) {
@@ -444,26 +444,26 @@ if($get['method'] == 'export') {//note 导出备份
 
 function syntablestruct($sql, $version, $dbcharset) {
 
-	//note 是否为建表语句
+	//note 是否為建表語句
 	if(strpos(trim(substr($sql, 0, 18)), 'CREATE TABLE') === false) {
 		return $sql;
 	}
 
-	//note 自动判断当前建表语句的版本
+	//note 自動判斷當前建表語句的版本
 	$sqlversion = strpos($sql, 'ENGINE=') === false ? false : true;
 
-	//note 如果都为同一版本，则不做处理
+	//note 如果都為同一版本，則不做處理
 	if($sqlversion === $version) {
 
-		//note 如果为高版本，并且设置了转换的字符集，则进行替换。
+		//note 如果為高版本，並且設置了轉換的字符集，則進行替換。
 		return $sqlversion && $dbcharset ? preg_replace(array('/ character set \w+/i', '/ collate \w+/i', "/DEFAULT CHARSET=\w+/is"), array('', '', "DEFAULT CHARSET=$dbcharset"), $sql) : $sql;
 	}
 
-	//note 如果低转高
+	//note 如果低轉高
 	if($version) {
 		return preg_replace(array('/TYPE=HEAP/i', '/TYPE=(\w+)/is'), array("ENGINE=MEMORY DEFAULT CHARSET=$dbcharset", "ENGINE=\\1 DEFAULT CHARSET=$dbcharset"), $sql);
 
-	//note 如果高转低
+	//note 如果高轉低
 	} else {
 		return preg_replace(array('/character set \w+/i', '/collate \w+/i', '/ENGINE=MEMORY/i', '/\s*DEFAULT CHARSET=\w+/is', '/\s*COLLATE=\w+/is', '/ENGINE=(\w+)(.*)/is'), array('', '', 'ENGINE=HEAP', '', '', 'TYPE=\\1\\2'), $sql);
 	}
@@ -588,7 +588,7 @@ function sqldumptable($table, $currsize = 0) {
 
 		$create = $db->fetch_row($createtable);
 
-		//debug 判断是否在不同数据库
+		//debug 判斷是否在不同數據庫
 		if(strpos($table, '.') !== false) {
 			$tablename = substr($table, strpos($table, '.') + 1);
 			$create[1] = str_replace("CREATE TABLE $tablename", 'CREATE TABLE '.$table, $create[1]);

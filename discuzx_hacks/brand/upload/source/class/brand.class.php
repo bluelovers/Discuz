@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: db.class.php 4067 2010-07-30 08:38:14Z fanshengshuai $
@@ -151,7 +151,7 @@ class brand {
 			$_G['setting']['attachmenturl'] = 'attachments';
 		}
 		
-		// 外部调用带绝对地址
+		// 外部調用帶絕對地址
 		define('A_URL', B_URL.'/'.$_G['setting']['attachmenturl']);
 	}
 	function _init_cache() {
@@ -214,7 +214,7 @@ class brand {
 	}
 	function _run_cron () {
 		global $_G, $_SGLOBAL;
-		// 计划任务
+		// 計劃任務
 		@include_once(B_ROOT.'./data/system/cron.cache.php');
 		if(empty($_SGLOBAL['cronnextrun']) || $_SGLOBAL['cronnextrun'] <= $_G['timestamp']) {
 			include_once(B_ROOT.'./source/function/cron.func.php');

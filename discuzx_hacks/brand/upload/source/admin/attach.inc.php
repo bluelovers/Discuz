@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: attach.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -11,7 +11,7 @@ if(!defined('IN_ADMIN')) {
 	exit('Acess Denied');
 }
 
-// 检索出所有model的图片大小
+// 檢索出所有model的圖片大小
 $query = DB::query('select mid,modelname,thumbsize from '.tname('models').'');
 while ($res = DB::fetch($query)){
 	$_models[] = $res ;
@@ -65,7 +65,7 @@ if(submitcheck('settingsubmit')){
 	cpmsg('update_success','?action=attach');
 }
 
-//添加或更改分类的编辑页面
+//添加或更改分類的編輯頁面
 shownav('global', 'nav_attach');
 showsubmenu('nav_attach', array(
 	array('settings_basic', 'global', '0'),

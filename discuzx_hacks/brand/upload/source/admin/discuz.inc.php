@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: discuz.inc.php 4463 2010-09-15 02:00:55Z bihuizi $
@@ -11,7 +11,7 @@ if(!defined('IN_ADMIN')) {
 	exit('Acess Denied');
 }
 
-// 处理提交过来的增加和修改操作
+// 處理提交過來的增加和修改操作
 if(submitcheck('valuesubmit')){
 	$conf = file_get_contents(B_ROOT.'config.php');
 	$arr_data = array();
@@ -19,7 +19,7 @@ if(submitcheck('valuesubmit')){
 
 	foreach($arr_data as $k=>$v){
 		if(preg_match('/^db(.+?)$/',$k,$parem)){
-			// 如果是密码，判断是不是含有＊，如果有六个，不修改
+			// 如果是密碼，判斷是不是含有＊，如果有六個，不修改
 			if($k == 'dbpw') {
 				if(strpos($v, '******') === false) {
 					$conf = preg_replace('/\$_SC\[\'bbs_dbpw\'\].+;/','$_SC[\'bbs_dbpw\'] = \''.$v.'\';',$conf);
@@ -45,14 +45,14 @@ if(submitcheck('valuesubmit')){
 	}
 }
 
-// 数据库密码显示为＊
+// 數據庫密碼顯示為＊
 if(strlen($_SC['bbs_dbpw']) > 3) {
 	$_SC['bbs_dbpw'] = substr($_SC['bbs_dbpw'], 0, 1) . '******' . substr($_SC['bbs_dbpw'], strlen($_SC['bbs_dbpw']) - 1);
 } else {
 	$_SC['bbs_dbpw'] = '******';
 }
 
-//添加或更改分类的编辑页面
+//添加或更改分類的編輯頁面
 shownav('global', 'nav_discuz');
 showsubmenu('nav_discuz');
 showtips('nav_discuz_tips');

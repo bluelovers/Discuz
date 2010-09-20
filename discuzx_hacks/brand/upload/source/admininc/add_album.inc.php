@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: add_album.inc.php 4442 2010-09-14 09:43:34Z yumiao $
@@ -29,7 +29,7 @@ if(!empty($_POST['valuesubmit'])){
 	}
 }
 
-//添加或更改的页面
+//添加或更改的頁面
 shownav('infomanage', 'nav_album_add', $_SGLOBAL['panelinfo']['subject']);
 showformheader('add&m=album');
 showtableheader('');

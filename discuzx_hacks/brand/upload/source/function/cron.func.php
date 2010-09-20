@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: cron.func.php 4374 2010-09-08 08:58:55Z fanshengshuai $
@@ -13,14 +13,14 @@ if(!defined('IN_BRAND')) {
 
 include_once(B_ROOT.'./data/system/crons.cache.php');
 
-//执行计划任务，并更新计划任务CACHE
+//執行計劃任務，並更新計劃任務CACHE
 function runcron($cronid = 0) {
 	global $_G, $_SGLOBAL, $_SBLOCK, $lang;
 
-	//锁定
+	//鎖定
 	$lockfile = B_ROOT.'./log/cron.lock.log';
 	if(file_exists($lockfile)) {
-		if($_G['timestamp'] - filemtime($lockfile) < 300) {//5分钟
+		if($_G['timestamp'] - filemtime($lockfile) < 300) {//5分鐘
 			return;
 		}
 	}
@@ -29,7 +29,7 @@ function runcron($cronid = 0) {
 		fclose($fp);
 	}
 
-	//读取cron列表缓存
+	//讀取cron列表緩存
 	if(empty($_SGLOBAL['crons'])) return;
 
 	@set_time_limit(1000);
@@ -54,7 +54,7 @@ function runcron($cronid = 0) {
 	@unlink($lockfile);
 }
 
-//下次执行的时间
+//下次執行的時間
 function cronnextrun($cronids) {
 	global $_G, $_SGLOBAL;
 
@@ -162,7 +162,7 @@ function crontodaynextrun($cron, $hour = -2, $minute = -2) {
 	return $nexttime;
 }
 
-//一小时内下次执行的分钟
+//一小時內下次執行的分鐘
 function cronnextminute($nextminutes, $minutenow) {
 	foreach($nextminutes as $nextminute) {
 		if($nextminute > $minutenow) {

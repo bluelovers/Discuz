@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[品牌空间] (C)2001-2009 Comsenz Inc.
+	[品牌空間] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: db.inc.php 19482 2009-09-02 07:09:38Z monkey $

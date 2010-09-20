@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: edit.inc.php 4476 2010-09-15 04:51:33Z fanshengshuai $
@@ -10,7 +10,7 @@
 if(!defined('IN_STORE')) {
 	exit('Acess Denied');
 }
-// 没有审核的用户进入后台后，能编辑的店铺属性
+// 沒有審核的用戶進入後台後，能編輯的店舖屬性
 if(pkperm('unverified')) {
 	$allow_unverified_fields = array('itemid', 'nid', 'subject', 'catid', 'message', 'tel', 'address');
 	foreach ($cacheinfo['columns'] as $key=>$value) {
@@ -22,7 +22,7 @@ if(pkperm('unverified')) {
 
 if(!empty($_POST['valuesubmit'])) {
 	if($_GET['m'] == "notice" || $_GET['m']=='shop') {
-		//标题样式
+		//標題樣式
 		empty($_POST['strong'])?$_POST['strong']='':$_POST['strong']=1;
 		empty($_POST['underline'])?$_POST['underline']='':$_POST['underline']=1;
 		empty($_POST['em'])?$_POST['em']='':$_POST['em']=1;
@@ -46,7 +46,7 @@ if(!empty($_POST['valuesubmit'])) {
 		$_POST['isdiscount'] = $_SGLOBAL['panelinfo']['isdiscount'];
 		$_POST['groupid'] = $_SGLOBAL['panelinfo']['groupid'];
 	}
-	// 提交了数据  Check the perm
+	// 提交了數據  Check the perm
 	if(pkperm('unverified')) {
 		$tmparr = array();
 		foreach($allow_unverified_fields as $value) {
@@ -119,7 +119,7 @@ if(!empty($_POST['valuesubmit'])) {
 			}
 		}
 
-		//删除相关缓存
+		//刪除相關緩存
 		$_BCACHE->deltype('sitelist', 'attr');
 		$_BCACHE->deltype('sitelist', $mname);
 		$_BCACHE->deltype('storelist', $mname, $_G['myshopid']);
@@ -133,7 +133,7 @@ if(!empty($_POST['valuesubmit'])) {
 
 } else {
 
-	//没有提交数据
+	//沒有提交數據
 	$editvalue = $echofield = array();
 	if($_GET['action'] == 'edit') {
 		if($mname == 'shop') {
@@ -186,7 +186,7 @@ if(!empty($_POST['valuesubmit'])) {
 	$required = '<span style="color:red">*</span>';
 
 	if(pkperm('unverified')) {
-		//显示导航以及表头
+		//顯示導航以及表頭
 		shownav($mname, $mname.'_unverified');
 		showsubmenu($mname.'_unverified');
 		showtips($mname.'_unverified_tips');
@@ -216,7 +216,7 @@ if(!empty($_POST['valuesubmit'])) {
 		exit;
 	}
 
-	//显示导航以及表头
+	//顯示導航以及表頭
 	switch($mname) {
 		case 'good':
 			shownav('infomanage', $mname.'_'.$_GET['action']);
@@ -254,9 +254,9 @@ if(!empty($_POST['valuesubmit'])) {
 	showtips($mname.'_'.$_GET['action'].'_tips');
 	showformheader('edit&m='.$mname, 'enctype');
 	showtableheader('', '', 'id="shoptable"');
-	showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, 'panel'); //显示基本字段
+	showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, 'panel'); //顯示基本字段
 
-	//读取自定义字段
+	//讀取自定義字段
 	foreach ($cacheinfo['columns'] as $value) {
 		if($value['allowpost'] == 0) {
 			continue;

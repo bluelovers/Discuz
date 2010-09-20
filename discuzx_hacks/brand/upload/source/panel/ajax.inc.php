@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: ajax.inc.php 4446 2010-09-14 11:35:06Z xuhui $
@@ -53,7 +53,7 @@ $relatedtype = trim($_GET['relatedtype']);
 
 if($_GET['opt']=='getCat' && $_GET['catid'] > 0) {
 
-	// 取出店铺组下可用的分类
+	// 取出店舖組下可用的分類
 	$mycats = mymodelcategory($catType);
 	if($mycats){
 		foreach($mycats as $cat) {
@@ -65,7 +65,7 @@ if($_GET['opt']=='getCat' && $_GET['catid'] > 0) {
 
 } elseif($opt == 'getallCat' && $_GET['groupid'] > 0) {
 
-	// 取出店铺组下可用的分类
+	// 取出店舖組下可用的分類
 	$mycats = mymodelcategory($catType);
 	if($mycats){
 		echo '<option value="0" selected="selected">'.lang('please_select')."</option>\n";
@@ -77,7 +77,7 @@ if($_GET['opt']=='getCat' && $_GET['catid'] > 0) {
 	}
 } elseif($_GET['opt'] == 'search') {
 
-	//关联信息中搜索该商铺下的关联对象
+	//關聯信息中搜索該商舖下的關聯對像
 	$itemid = !empty($_GET['itemid']) ? intval($_GET['itemid']) : '';
 	$keyword = trim($_GET['keyword']);
 	$keyword = biconv($keyword, 'UTF-8', $_G['charset']);
@@ -132,7 +132,7 @@ if($_GET['opt']=='getCat' && $_GET['catid'] > 0) {
 	}
 
 } else {
-	//其他情况
+	//其他情況
 	echo "<option value=\"0\" selected=\"selected\">".lang('please_select')."</option>\n";
 }
 

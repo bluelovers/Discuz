@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: import.inc.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -43,10 +43,10 @@ showsubmenu('menu_album', array(
 showtips('photo_import_tips');
 
 if($step == 1) {
-	//默认填写基本信息页面
+	//默認填寫基本信息頁面
 	clearimportcookie();
 
-	//论坛来的导入相册
+	//論壇來的導入相冊
 	if(!empty($_GET['frombbs']) && $_GET['tid']>0) {
 		ssetcookie('i_referer', 'admin.php?action=import&m=album&tid='.$_GET['tid'], 900);
 		ssetcookie('shopid', '', -86400 * 365);
@@ -54,7 +54,7 @@ if($step == 1) {
 		exit();
 	}
 
-	//相册管理来的继续导入相册
+	//相冊管理來的繼續導入相冊
 	if(!empty($_GET['fromalbum']) && $_GET['albumid']>0) {
 		ssetcookie('i_albumid', $albumid, 900);
 		$shopid = DB::result_first('SELECT shopid FROM '.tname('albumitems')." WHERE itemid='$albumid'");
@@ -88,9 +88,9 @@ if($step == 1) {
 	showformfooter();
 	showimportthreadjs();
 } elseif($step==2) {
-	//设置cookie
+	//設置cookie
 	require_once(B_ROOT.'./api/bbs_pic.php');
-	$count = list_thread_pic($tid, $_POST['firstonly'], $page-1, 1, 20, 1); //查询一次获得总数
+	$count = list_thread_pic($tid, $_POST['firstonly'], $page-1, 1, 20, 1); //查詢一次獲得總數
 	setimportcookie();
 	ssetcookie('i_count', $count, 900);
 	ssetcookie('i_maxpage', ceil($count/$perpage), 900);
@@ -98,7 +98,7 @@ if($step == 1) {
 	header('Location:admin.php?action=import&m=album&step=3');
 
 } elseif($step==3) {
-	//图片列表显示页面
+	//圖片列表顯示頁面
 	require_once(B_ROOT.'./api/bbs_pic.php');
 	$list_pic = list_thread_pic($tid, $firstonly, $page-1, $perpage, $minsize);
 	showformheader('import');
@@ -107,18 +107,18 @@ if($step == 1) {
 	showhiddenfields(array('step' => '4'));
 	showhiddenfields(array('page' => $page));
 
-	showattachshtml(); //图片列表
+	showattachshtml(); //圖片列表
 
 	showalbummod();
-	showformfooter();//批量操作的form结束
+	showformfooter();//批量操作的form結束
 } elseif($step==4) {
-	//数据提交处理页面
+	//數據提交處理頁面
 	$attachs = getpostattach();
 	$updatesql = array();
 	if($_POST['albumop'] == 'new') {
 		require_once(B_ROOT.'./source/adminfunc/album.func.php');
 		$albumid = createalbum($shopid, $_POST['catid'], $authorid, $author, $_POST['albumname'], $_POST['albumdesc']);
-		//更新相册记录为从论坛导入的相册
+		//更新相冊記錄為從論壇導入的相冊
 		$imgurl = $attachs[0]['url'];
 		if(strpos($imgurl, 'http://')===0) {
 			$remoteattach = loadClass('attach')->saveremotefile($imgurl, array(320, 240));
@@ -145,7 +145,7 @@ if($step == 1) {
 	$updatesql[] = " `picnum`=`picnum`+$pics ";
 	DB::query('UPDATE '.tname('albumitems').' SET '.implode(', ', $updatesql)." WHERE itemid='$albumid'");
 	$importmsg = '<a href="store.php?id='.$shopid.'&action=album&xid='.$albumid.'" target="_blank">'.$albumsubject.'</a>';
-	//删除列表缓存
+	//刪除列表緩存
 	$_BCACHE->deltype('sitelist', 'album');
 	$_BCACHE->deltype('storelist', 'album', $shopid);
 	$_BCACHE->deltype('storelist', 'photo', $shopid, $albumid);
@@ -208,7 +208,7 @@ function showattachshtml() {
 		</style>
 	';
 	if($sqlaids) {
-		//去重检查的sql
+		//去重檢查的sql
 		$repeats = array();
 		$query = DB::query('SELECT bbsaid FROM '.tname('photoitems')." WHERE bbsaid IN ($sqlaids) GROUP BY bbsaid");
 		while($temprow = DB::fetch($query)) {
@@ -219,7 +219,7 @@ function showattachshtml() {
 		<script type="text/javascript">
 			var repeataids = new Array('.$repeatjsarr.');
 			'.(!empty($_GET['jump'])?'
-			//控制跳转下一页的js
+			//控制跳轉下一頁的js
 			var jumpurl = "admin.php?action=import&step=3&page=";
 			if(repeataids.length == $(".photo_div").length) {
 				if('.$page.' == '.$maxpage.') {
@@ -229,7 +229,7 @@ function showattachshtml() {
 				}
 				window.location.href = jumpurl;
 			}':'').'
-			//去重检查的js
+			//去重檢查的js
 			function norepeatcheck() {
 				var norepeatst = $("#norepeat")[0].checked;
 				if(norepeatst){
@@ -259,7 +259,7 @@ function showattachshtml() {
 				norepeatst = false;
 			}
 
-			//js设置cookie的方法
+			//js設置cookie的方法
 			function jSetCookie(key, value, lifetime) {
 				var exp  = new Date();
 				exp.setTime(exp.getTime() + lifetime*1000);
@@ -271,7 +271,7 @@ function showattachshtml() {
 				if(ckarr != null) return unescape(ckarr[2]); return null;
 			}
 
-			//页面初始化时执行去重检查
+			//頁面初始化時執行去重檢查
 			$(function(){ norepeatcheck();});
 		</script>
 		';
@@ -320,7 +320,7 @@ function showalbummod() {
 	));
 	echo '
 	<script type="text/javascript" charset="'.$_G['charset'].'">
-		//分类变更时读取属性筛选器
+		//分類變更時讀取屬性篩選器
 		$("#album_catid").change(function() { getAlbumAttrList();});
 		function getAlbumAttrList() {
 			jSetCookie("'.$_SC['cookiepre'].'imp_catid", $("#album_catid").val(), 900);
@@ -333,7 +333,7 @@ function showalbummod() {
 					$("#album_attr :input").change(function() { setAlbumAttrCookie();});
 				});
 		}
-		//分类改变时读取相册属性cookie
+		//分類改變時讀取相冊屬性cookie
 		function getAlbumAttrCookie() {
 			var attrlength = $("#album_attr :input[name^=\'attr_ids\']").length;
 			var attrkey = "";
@@ -347,7 +347,7 @@ function showalbummod() {
 				}
 			}
 		}
-		//属性改变时设置属性cookie
+		//屬性改變時設置屬性cookie
 		function setAlbumAttrCookie() {
 			var attrlength = $("#album_attr :input[name^=\'attr_ids\']").length;
 			var attrname = "";
@@ -359,7 +359,7 @@ function showalbummod() {
 				jSetCookie("'.$_SC['cookiepre'].'imp_attr_"+attrkey, attrvalue, 900);
 			}
 		}
-		//页面初始化时选择分类
+		//頁面初始化時選擇分類
 		$(function(){ readAlbumCatid();});
 		function readAlbumCatid() {
 			var albumcatid = jGetCookie("'.$_SC['cookiepre'].'imp_catid");
@@ -367,13 +367,13 @@ function showalbummod() {
 			$("#album_catid").val(albumcatid);
 			getAlbumAttrList();
 		}
-	</script>'; //属性联动
+	</script>'; //屬性聯動
 	showsubmit('listsubmit', 'submit', '');
 	showtablefooter();
 }
 
 function getpostattach() {
-	//从POST数据得到附件数组
+	//從POST數據得到附件數組
 	$retattach = array();
 	foreach($_POST['item'] as $aid) {
 		$attach = array();
@@ -417,7 +417,7 @@ function showimportthreadjs() {
 		}
 		$("#tid").blur(function() {tidblurdo();});
 		$("#cpform").submit(function() {
-			//form表单提交 当没有t_pid的时候才尝试重新获取t_pid
+			//form表單提交 當沒有t_pid的時候才嘗試重新獲取t_pid
 			if(t_pid<=0) { return tidblurdo();}
 		});
 EOF;

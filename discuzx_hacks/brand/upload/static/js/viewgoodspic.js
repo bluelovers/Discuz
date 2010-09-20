@@ -1,6 +1,6 @@
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: viewgoodspic.js 3776 2010-07-16 08:21:35Z yexinhao $
@@ -245,7 +245,7 @@ function zoomST(c) {
 			zoomadjust = 1;
 			$i('zoomimglayer').style.filter = '';
 			$i('zoomimglayer_bg').style.display = '';
-			$i('zoomimglayer').innerHTML = '<table cellspacing=2" bgcolor="#FFFFFF"><tr bgcolor="#F4F9FE"><td style="text-align: right">鼠标滚轮缩放图片  <a href="###" style="background:none; margin:0; padding:0; width:20px; float:none;" onclick="zoomimgadjust(event, 1)"><img src="static/image/goodview_resize.gif" border="0" style="vertical-align: middle" title="实际大小" /></a> <a href="###" style="background:none; margin:0; padding:0; width:20px; float:none;" onclick="zoomclose()"><img style="vertical-align: middle" src="static/image/goodview_close.gif" title="关闭" /></a>&nbsp;</td></tr><tr><td align="center" id="zoomimgbox"><img id="zoomimg" style="cursor: move; margin: 5px;" src="' + zoomobj['zimg'] + '" width="' + $i('zoomimglayer').style.width + '" height="' + $i('zoomimglayer').style.height + '"></td></tr><tr><td>'+zoomobj['title']+'</td></tr></table>';
+			$i('zoomimglayer').innerHTML = '<table cellspacing=2" bgcolor="#FFFFFF"><tr bgcolor="#F4F9FE"><td style="text-align: right">鼠標滾輪縮放圖片  <a href="###" style="background:none; margin:0; padding:0; width:20px; float:none;" onclick="zoomimgadjust(event, 1)"><img src="static/image/goodview_resize.gif" border="0" style="vertical-align: middle" title="實際大小" /></a> <a href="###" style="background:none; margin:0; padding:0; width:20px; float:none;" onclick="zoomclose()"><img style="vertical-align: middle" src="static/image/goodview_close.gif" title="關閉" /></a>&nbsp;</td></tr><tr><td align="center" id="zoomimgbox"><img id="zoomimg" style="cursor: move; margin: 5px;" src="' + zoomobj['zimg'] + '" width="' + $i('zoomimglayer').style.width + '" height="' + $i('zoomimglayer').style.height + '"></td></tr><tr><td>'+zoomobj['title']+'</td></tr></table>';
 			$i('zoomimglayer').style.overflow = 'hidden';
 			$i('zoomimglayer').style.width = $i('zoomimglayer').style.height = 'auto';
 			if(is_ie){

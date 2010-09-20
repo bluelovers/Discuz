@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: cache.func.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -11,7 +11,7 @@ if(!defined('IN_BRAND')) {
 	exit('Access Denied');
 }
 
-//更新用户组CACHE
+//更新用戶組CACHE
 function updateshopgroupcache() {
 	global $_G, $_SGLOBAL;
 
@@ -38,12 +38,12 @@ function updatesettingcache() {
 		$_G['setting'][$set['variable']] = $set['value'];
 	}
 
-	// 附件设置
+	// 附件設置
 	$_G['setting']['attach'] = unserialize($_G['setting']['attach']);
 
 	$_G['setting']['attachmenturlarr'] = explode("\r\n", trim($_G['setting']['attachmenturls']));
 
-	//缩略图设置
+	//縮略圖設置
 	if(empty($_G['setting']['thumbarray'])) {
 		$_G['setting']['thumbarray'] = array(
 			'news' => array('400','300')
@@ -52,7 +52,7 @@ function updatesettingcache() {
 		$_G['setting']['thumbarray'] = unserialize($_G['setting']['thumbarray']);
 	}
 
-	//读取UC中论坛地址
+	//讀取UC中論壇地址
 	require_once(B_ROOT.'./uc_client/client.php');
 	$ucapparray = uc_app_ls();
 	if(count($ucapparray) > 0) {
@@ -64,14 +64,14 @@ function updatesettingcache() {
 		}
 	}
 
-	// 读取导航
+	// 讀取導航
 	$query = DB::query('SELECT name,flag,url,target,highlight FROM '.tname('nav').' WHERE (type=\'sys\' or type=\'site\') and shopid=0 and available=1 order by displayorder limit 7');
 	while($value = DB::fetch($query)){
 		$value['ext'] = (($value['target']==1)?' target=\'_blank\'':'').' style=\''.pktitlestyle($value['highlight']).'\'';
 		$_G['setting']['site_nav'][$value['flag']]=$value;
 	}
 
-	// 会员卡商家导航
+	// 會員卡商家導航
 	if(empty($_G['setting']['enablecard'])) unset($_G['setting']['site_nav']['card']);
 
 	// make cache
@@ -100,7 +100,7 @@ function updatecronscache() {
 }
 
 /**
- * 更新计划任务的CACHE
+ * 更新計劃任務的CACHE
  */
 function updatecroncache($cronnextrun=0) {
 	global $_G, $_SGLOBAL;
@@ -118,7 +118,7 @@ function updatecroncache($cronnextrun=0) {
 	writefile($croncachefile, $text, 'php');
 }
 
-//更新站点公告
+//更新站點公告
 function updateannouncementcache() {
 	global $_G, $_SGLOBAL;
 
@@ -133,7 +133,7 @@ function updateannouncementcache() {
 	writefile($cachefile, $cachetext, 'php');
 }
 
-//更新分类缓存
+//更新分類緩存
 function updatecategorycache() {
 	global $_G, $_SGLOBAL;
 	$types = array('region', 'shop', 'good', 'notice', 'consume', 'album', 'groupbuy');
@@ -154,7 +154,7 @@ function updatecategorysingle($type) {
 	writefile($cachefile, $cachetext, 'php');
 }
 
-//更新模型缓存
+//更新模型緩存
 function updatemodel($type, $value) {
 	global $_G, $_SGLOBAL;
 
@@ -228,7 +228,7 @@ function updatemodel($type, $value) {
 }
 
 /**
- * 更新展示设置缓存
+ * 更新展示設置緩存
  */
 function updatebrandadscache($force=true, $cachetime=43200) {
 	global $_G, $_SGLOBAL;
@@ -284,7 +284,7 @@ function updatebrandadscache($force=true, $cachetime=43200) {
 				}
 				$ads[$ad['variable'].'arr'] = $itemarr;
 				$ad['value'] = implode(',', $temparr);
-				//拼凑两类缓存，$ads['consume']给后台设置，$ads['consumearr']['itemid']、$ads['consumearr']['shopid']给前台展示
+				//拼湊兩類緩存，$ads['consume']給後台設置，$ads['consumearr']['itemid']、$ads['consumearr']['shopid']給前台展示
 				break;
 			case 'ads_show_type':
 				break;
@@ -302,7 +302,7 @@ function updatebrandadscache($force=true, $cachetime=43200) {
 }
 
 /**
- * 更新过滤词设置缓存
+ * 更新過濾詞設置緩存
  */
 function updatecensorcache($force=true, $cachetime='43200', $censorvalue='') {
 	global $_G, $_SGLOBAL;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: list.inc.php 4411 2010-09-13 09:01:01Z fanshengshuai $
@@ -16,7 +16,7 @@ $where = array();
 $_GET['grade'] = isset($_GET['grade'])?intval($_GET['grade']):-1;
 $_GET['subject'] = trim(strip_tags($_GET['subject']));
 
-// 导航和子菜单处理
+// 導航和子菜單處理
 switch($mname) {
 	case 'good':
 		shownav('infomanage', $mname.'_list');
@@ -55,18 +55,18 @@ switch($mname) {
 }
 showtips($mname.'_list_tips');
 
-// 搜索条件拼合
+// 搜索條件拼合
 if($mname == 'shop') {
 	$joinsql = ' c.title FROM '.tname('shopitems').' s left join '.tname('shopgroup').' c on s.groupid = c.id';
 	$countsql = substr($joinsql, 8);
 } elseif($mname == 'album') {
-	// 店长自定义相册
+	// 店長自定義相冊
 	$joinsql = ' c.subject AS title FROM '.tname($mname.'items').' s INNER JOIN '.tname('shopitems').' c ON s.shopid=c.itemid';
 	$countsql = substr($joinsql, 19);
-	// 区分用户相册还是论坛导入相册
+	// 區分用戶相冊還是論壇導入相冊
 	$where[] = $_GET['type']=='import'?"s.frombbs='1'":"s.frombbs='0'";
 } elseif($mname == 'photo') {
-	// 相册中的图片
+	// 相冊中的圖片
 	$joinsql = ' c.subject AS title FROM '.tname($mname.'items').' s LEFT JOIN '.tname('albumitems').' c ON s.albumid=c.itemid';
 	$countsql = substr($joinsql, 19);
 }  else {
@@ -74,7 +74,7 @@ if($mname == 'shop') {
 	$countsql = substr($joinsql, 19);
 }
 
-// 查询条件处理
+// 查詢條件處理
 if(!empty($_GET['filtersubmit'])) {
 	!empty($_GET['itemid']) && $where[] = "s.itemid='{$_GET['itemid']}'";
 	!empty($_GET['uid']) && $where[] = "s.uid='{$_GET['uid']}'";
@@ -82,17 +82,17 @@ if(!empty($_GET['filtersubmit'])) {
 		$where[] = "s.groupid='{$_GET['groupid']}'";
 	}
 
-	// 组
+	// 組
 	if($mname!='shop' && !empty($_GET['groupid']) && $_GET['shopid'] == 0) {
 		$where[] = "c.groupid='{$_GET['groupid']}'";
 	}
 
-	// 某个店铺下
+	// 某個店舖下
 	if($mname!='shop' && !empty($_GET['shopid'])) {
 		$where[] = "s.shopid='{$_GET['shopid']}'";
 	}
 
-	// 推荐商铺
+	// 推薦商舖
 	if($mname=='shop' && !empty($_GET['recommend']) && in_array($_GET['recommend'], array('yes', 'no'))) {
 		switch($_GET['recommend']) {
 			case 'yes':
@@ -119,9 +119,9 @@ if(!empty($_GET['filtersubmit'])) {
 	!empty($_GET['subject']) && $where[] = "s.subject LIKE '%{$_GET['subject']}%'";
 	!empty($_GET['username']) && $where[] = "s.username LIKE '%{$_GET['username']}%'";
 	$_GET['updatepass'] == 1 && $where[] =  "s.updateverify='1'";
-	// 特殊情况取消以上所有where条件
+	// 特殊情況取消以上所有where條件
 	if($mname == 'album' && $_GET['type']=='default') {
-		// 选默认相册
+		// 選默認相冊
 		$joinsql = " '".lang('album_default')."' AS name FROM ".tname('shopitems').' s';
 		$countsql = substr($joinsql, 19);
 		$where = array();
@@ -158,12 +158,12 @@ if(!in_array($_GET['sc'], array('DESC', 'ASC'))) {
 }
 $cats = getmodelcategory($mname);
 
-//搜索页还是列表页
+//搜索頁還是列表頁
 if(empty($_REQUEST['filtersubmit'])) {
 	show_searchfrom_webmaster($mname);
 }else{
 
-	//分页处理
+	//分頁處理
 	$tpp = 15;
 	$pstart = ($_GET['page']-1)*$tpp;
 	$query = DB::query("SELECT count(*) AS count $countsql $wheresql");
@@ -172,11 +172,11 @@ if(empty($_REQUEST['filtersubmit'])) {
 	!empty($url_recommend)?$url.$url_recommend:'';
 	$url = '?'.substr($url, 1);
 	$multipage = multi($value['count'], $tpp, $_GET['page'], 'admin.php'.$url, $phpurl=1);
-	// 数据查询
+	// 數據查詢
 	$query = DB::query("SELECT s.*, $joinsql $wheresql ORDER BY s.$_GET[order] $_GET[sc] LIMIT $pstart, $tpp;");
 
 	if($mname=='album' || $mname=='photo') {
-		// 相册和相册中的图片的显示
+		// 相冊和相冊中的圖片的顯示
 		require_once(B_ROOT.'./source/adminfunc/list_photo.func.php');
 		$step=0;
 		$mlist .= "<div id=\"pList_0\" act=\"pList\" style=\"margin-top:10px;\"><ul class=\"impressList clear\"> ";
@@ -184,11 +184,11 @@ if(empty($_REQUEST['filtersubmit'])) {
 		while($value = DB::fetch($query)) {
 			$step++;
 
-			// 选默认相册时有特殊情况
+			// 選默認相冊時有特殊情況
 			if($mname=='album' && $_GET['type']=='default') {
 				$value['shopid'] = $value['itemid'];
 				$value['itemid'] = 0;
-				list($value['name'], $value['subject']) = array( $value['subject'], $value['name']);//变量交换下
+				list($value['name'], $value['subject']) = array( $value['subject'], $value['name']);//變量交換下
 			}
 
 			if ($mname == "album") {
@@ -202,7 +202,7 @@ if(empty($_REQUEST['filtersubmit'])) {
 
 		showlistphoto($mname, $mlist, $multipage);
 
-		// 选默认相册时不出现批量操作
+		// 選默認相冊時不出現批量操作
 		if(!($mname=='album' && $_GET['type']=='default')) {
 			showlistmod($mname);
 		}
@@ -220,7 +220,7 @@ overflow:hidden;
 		}
 		</style>";
 	} else {
-		// 普通列表显示
+		// 普通列表顯示
 		while($value = DB::fetch($query)) {
 			$mlist .= showlistrow($mname, $value);
 		}

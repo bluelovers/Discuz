@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: tool.inc.php 4337 2010-09-06 04:48:05Z fanshengshuai $
@@ -58,10 +58,10 @@ if(!empty($_GET['operation'])) {
 		} elseif($_GET['step'] == 3) {
 			$_REQUEST['type'] = explode('_', $_REQUEST['type']);
 			if(in_array('data', $_REQUEST['type'])) {
-				//删除数据缓存
+				//刪除數據緩存
 				$_BCACHE->flush();
 
-				//JS数据缓存
+				//JS數據緩存
 				$tpl = dir(B_ROOT.'./data/cache/js');
 				$tpl->handle;
 				while($entry = $tpl->read()) {
@@ -72,7 +72,7 @@ if(!empty($_GET['operation'])) {
 				$tpl->close();
 			}
 			if(in_array('tpl', $_REQUEST['type'])) {
-				//删除设置缓存
+				//刪除設置緩存
 
 				$tpl = dir(B_ROOT.'./data/cache/tpl');
 				$tpl->handle;
@@ -97,10 +97,10 @@ if(!empty($_GET['operation'])) {
 					$state = checkmodel($value['modelname']);
 				}
 
-				updatesettingcache();//更新设置缓存
-				updatecensorcache();//更新过滤词缓存
-				updatebrandadscache();//更新首页展示缓存
-				updatecategorycache();//更新分类缓存
+				updatesettingcache();//更新設置緩存
+				updatecensorcache();//更新過濾詞緩存
+				updatebrandadscache();//更新首頁展示緩存
+				updatecategorycache();//更新分類緩存
 				updatecronscache();
 			}
 			cpmsg('update_cache_succeed', '', 'succeed', '', false);
@@ -193,7 +193,7 @@ if(!empty($_GET['operation'])) {
 				$query = DB::query("SELECT * FROM ".tname("crons")." WHERE cronid = '{$_GET[edit]}'");
 				$cron = DB::fetch($query);
 
-				//没有提交数据
+				//沒有提交數據
 				shownav('tool_cron', 'cron_edit');
 				showsubmenu('cron_edit');
 				showtips('cron_edit_tips');
@@ -316,7 +316,7 @@ if(!empty($_GET['operation'])) {
 								));
 					showsubmit('deletesubmit', 'submit', '');
 					showtablefooter();
-					showformfooter();//批量操作的form结束
+					showformfooter();//批量操作的form結束
 					bind_ajax_form();
 			}
 		}

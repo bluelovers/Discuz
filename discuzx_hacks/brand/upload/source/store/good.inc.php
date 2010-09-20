@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: good.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -29,7 +29,7 @@ if(empty($_GET['xid'])) {
 	
 	$theurl = "store.php?id=$shop[itemid]&action=good";
 } else {
-	//商品详情
+	//商品詳情
 	$good = $_BCACHE->getiteminfo('good', $_GET['xid'], $_GET['id']);
 	$good['message'] = bbcode2html($good['message']);
 	if(!$good) {
@@ -39,10 +39,10 @@ if(empty($_GET['xid'])) {
 	$good['time'] = date('Y-m-d H:i', $good['dateline']);
 	$relatedarr = array();
 	$relatedarr = getrelatedinfo('good', $good['itemid'], $shop['itemid']);
-	//更新统计数
+	//更新統計數
 	$isupdate = freshcookie($action,$good['itemid']);
 	if($isupdate || !$_G['setting']['updateview']) updateviewnum($action,$good['itemid']);
-	//评论
+	//評論
 	$listcount = $good['replynum'];
 	$_G['setting']['viewspace_pernum'] = intval($_G['setting']['viewspace_pernum']);
 	$type = 'good';

@@ -1,6 +1,6 @@
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: header.js 4326 2010-09-04 08:13:37Z fanshengshuai $

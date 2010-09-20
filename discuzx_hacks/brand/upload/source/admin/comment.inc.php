@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: comment.inc.php 4324 2010-09-04 07:08:16Z fanshengshuai $
@@ -31,7 +31,7 @@ showsubmenu('menu_comment', array(
 ));
 showtips('comment_list_tips');
 
-//搜索条件拼合
+//搜索條件拼合
 if(!empty($_GET['filtersubmit']) || !empty($_GET['filter']) || !empty($_GET['sc']) || !empty($_GET['itemid']) || !empty($_GET['author']) || !empty($_GET['message'])) {
 	$wheresql .= !empty($_GET['type'])?' AND s.type=\''.$_GET['type'].'\'':'';
 	$wheresql .= !empty($_GET['itemid'])?' AND s.itemid=\''.$_GET['itemid'].'\'':'';
@@ -64,7 +64,7 @@ if(!in_array($_GET['sc'], array('DESC', 'ASC'))) {
 
 if(submitcheck('filtersubmit')) {
 
-	//分页处理
+	//分頁處理
 	$tpp = 15;
 	$_GET['page'] = $_GET['page']>0?intval($_GET['page']):1;
 	$pstart = ($_GET['page']-1)*$tpp;
@@ -77,7 +77,7 @@ if(submitcheck('filtersubmit')) {
 	}
 	$url = '?'.substr($url, 1);
 	$multipage = multi($value['count'], $tpp, $_GET['page'], 'admin.php'.$url, $phpurl=1);
-	//数据查询
+	//數據查詢
 	$query = DB::query('SELECT * FROM '.tname("spacecomments").' s '.$wheresql.' ORDER BY s.'.$_GET['order'].' '.$_GET['sc'].' LIMIT '.$pstart.', '.$tpp.';');
 	while($value = DB::fetch($query)) {
 		if(!empty($value['upcid'])) {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: nav.inc.php 4337 2010-09-06 04:48:05Z fanshengshuai $
@@ -107,7 +107,7 @@ if(!empty($_POST['valuesubmit'])){
 	}
 }
 
-// 处理提交的删除操作
+// 處理提交的刪除操作
 if($_GET['op']=='del' && !empty($navid)) {
 	$_BCACHE->deltype('detail', 'nav', $_G['myshopid']);
 	$navitem = DB::result_first('select type from '.tname('nav')." WHERE navid='$navid' AND shopid='$_G[myshopid]'");
@@ -181,7 +181,7 @@ if($_GET['op']=='add' || $_GET['op']=='edit') {
 		$rowitems[$value['flag']] = $value;
 	}
 
-	// 合并用户和默认导航设置
+	// 合併用戶和默認導航設置
 	foreach($nav_default as $key => $value) {
 		if(!isset($rowitems[$key])) {
 			$rowitems[$key] = $value;

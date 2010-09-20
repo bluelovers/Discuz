@@ -1,7 +1,7 @@
 <?exit?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=$_G['charset']" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8'charset']" />
 <title>$lang['pm']</title>
 <script type="text/javascript" src="static/js/jquery.js"></script>
 <script type="text/javascript" src="static/js/jquery.cycle.lite.min.js"></script>
@@ -15,7 +15,7 @@
 </head>
 
 <!--/**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: report.html.php 4379 2010-09-09 03:00:50Z fanshengshuai $

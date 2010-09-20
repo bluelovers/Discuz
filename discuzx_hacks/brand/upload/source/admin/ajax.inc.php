@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: ajax.inc.php 4446 2010-09-14 11:35:06Z xuhui $
@@ -64,7 +64,7 @@ if ($opt == 'getshop' && $_GET['catid']>0) {
 
 } elseif ($opt == 'getCat' && $_GET['catid']>0){
 
-	// 取出店铺组下可用的分类
+	// 取出店舖組下可用的分類
 	$catid = intval($_GET['catid']);
 	$sql = 'select * from '.tname('shopgroup').' where type=\'shop\' and id='.$catid;
 	$aviable_field = DB::fetch(DB::query($sql));
@@ -81,7 +81,7 @@ if ($opt == 'getshop' && $_GET['catid']>0) {
 	}
 } elseif($opt == 'getallCat' && $_GET['groupid'] > 0){
 
-	// 取出店铺组下可用的分类
+	// 取出店舖組下可用的分類
 	$sql = 'select * from '.tname('shopgroup').' where type=\'shop\' and id='.$groupid;
 	$aviable_field = DB::fetch(DB::query($sql));
 	if(empty($aviable_field[$catType.'_field'])){
@@ -117,7 +117,7 @@ if ($opt == 'getshop' && $_GET['catid']>0) {
 	}
 } elseif($opt == 'search') {
 
-	//关联信息中搜索该商铺下的关联对象
+	//關聯信息中搜索該商舖下的關聯對像
 	$shopid = intval($_GET['shopid']);
 	$itemid = !empty($_GET['itemid']) ? intval($_GET['itemid']) : '';
 	$keyword = trim($_GET['keyword']);
@@ -173,7 +173,7 @@ if ($opt == 'getshop' && $_GET['catid']>0) {
 	}
 
 } elseif ($opt == 'getThread' && $_GET['tid']>0) {
-	//管理员专用
+	//管理員專用
 	require_once(B_ROOT.'./api/bbs_pic.php');
 	showxmlheader('GBK');
 	echo '<threadinfo>';
@@ -181,7 +181,7 @@ if ($opt == 'getshop' && $_GET['catid']>0) {
 	echo '</threadinfo>';
 
 } else {
-	//其他情况
+	//其他情況
 	echo "<option value=\"0\" selected=\"selected\">".lang('please_select')."</option>\n";
 }
 

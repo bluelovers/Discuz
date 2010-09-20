@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: store.php 4406 2010-09-13 07:48:43Z fanshengshuai $
@@ -23,14 +23,14 @@ $modelsinfoarr = $cacheinfo['models'];
 $categories = $cacheinfo['categories'];
 
 
-// 允许的方法
+// 允許的方法
 $acs = array('index', 'good', 'notice', 'consume', 'album', 'map', 'groupbuy');
 if(!in_array($_GET['action'], $acs)) {
 	$_GET['action'] = 'index';
 }
 $action = $_GET['action'];
 
-// 当前导航样式
+// 當前導航樣式
 if(in_array($action, array('good', 'notice', 'consume', 'album', 'map', 'groupbuy'))) {
 	$cur_store_style = $action;
 	if($action == "good") {
@@ -82,7 +82,7 @@ if($shop['grade'] == 0) {
 	}
 }
 
-// 查询自定义字段内容
+// 查詢自定義字段內容
 if(empty($shop)) {
 	showmessage('not_found', 'index.php');
 } else {
@@ -137,7 +137,7 @@ if(empty($shop['mapapimark'])) {
 	$shop['mapapimark'] = "(39.917,116.397)";
 }
 
-// 分类
+// 分類
 $guidearr = $thecat = array();
 $thecat['upid'] = $_SGLOBAL['shopcates'][$shop['catid']]['upid'];
 $thecat['upname'] = $_SGLOBAL['shopcates'][$thecat['upid']]['name'];
@@ -159,7 +159,7 @@ if(!empty($cacheinfo['fielddefault']['subjectimage'])) $lang['photo_title'] = $c
 if(!empty($cacheinfo['fielddefault']['catid'])) $lang['system_catid'] = $cacheinfo['fielddefault']['catid'];
 if(!empty($cacheinfo['fielddefault']['message'])) $lang['content'] = $cacheinfo['fielddefault']['message'];
 
-// 自定义类别
+// 自定義類別
 if(!empty($cacheinfo['columns'])) {
 	foreach($cacheinfo['columns'] as $tmpvalue) {
 		if(!empty($tmpvalue['fielddata'])) {
@@ -171,7 +171,7 @@ if(!empty($cacheinfo['columns'])) {
 	}
 }
 
-// 初始化店铺的标题和关键字，放在包含模型文件前面
+// 初始化店舖的標題和關鍵字，放在包含模型文件前面
 $seo_title = $shop['subject'].' - '.$_G['setting']['sitename'];
 $seo_title = strip_tags($seo_title);
 
@@ -197,7 +197,7 @@ if($action == 'map') {
 } else {
 	$comment_itemid = $shop['itemid'];
 	$type = 'shop';
-	// 判断是否已经赋值了Meta中的Message信息，放在包含文件后面
+	// 判斷是否已經賦值了Meta中的Message信息，放在包含文件後面
 	if(!empty($shop['description'])) {
 		$seo_description = $shop['description'];
 	} else {
@@ -208,7 +208,7 @@ if($action == 'map') {
 if($action == 'index' || $_GET['xid']) {
 	$perpage = $_G['setting']['commentperpage'];
 	$page = $_GET['page'];
-	// 评论
+	// 評論
 	if($action == 'index') {
 		$listcount = $shop['replynum'];
 	}
@@ -269,7 +269,7 @@ include brandtheme('header.html.php', $btheme);
 include brandtheme($action.'.html.php', $btheme);
 include template('templates/site/default/footer.html.php', 1);
 
-ob_out(); //正则处理url/模板
+ob_out(); //正則處理url/模板
 
 function brandtheme($tpl, $btheme) {
 	if($btheme!='default' && file_exists(B_ROOT.'./templates/store/'.$btheme.'/'.$tpl)) {

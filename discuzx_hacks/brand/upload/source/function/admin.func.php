@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: admin.func.php 4378 2010-09-09 02:55:13Z fanshengshuai $
@@ -11,7 +11,7 @@ if(!defined('IN_BRAND')) {
 	exit('Access Denied');
 }
 
-//获取限制条件
+//獲取限制條件
 function getwheres($intkeys, $strkeys, $randkeys, $likekeys, $pre='') {
 
 	$wherearr = array();
@@ -58,7 +58,7 @@ function getwheres($intkeys, $strkeys, $randkeys, $likekeys, $pre='') {
 }
 
 
-//删除用户信息
+//刪除用戶信息
 function deletespace($uids) {
 	global $_G, $_SGLOBAL;
 
@@ -114,7 +114,7 @@ function deletespace($uids) {
 	}
 }
 
-//获取数目
+//獲取數目
 function getcount($tablename, $wherearr, $get='COUNT(*)') {
 	global $_G, $_SGLOBAL;
 	if(empty($wherearr)) {

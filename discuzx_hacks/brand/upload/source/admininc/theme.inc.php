@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: theme.inc.php 4442 2010-09-14 09:43:34Z yumiao $
@@ -15,7 +15,7 @@ if(!$wheresql) {
 }
 
 if($_GET['op']=='usetheme') {
-	//提交数据的处理
+	//提交數據的處理
 	$themeid = intval(substr($_GET['theme'], 1));
 	$query = DB::query("UPDATE ".tname("shopitems")." SET themeid = '$themeid' WHERE $wheresql LIMIT 1");
 	if(DB::affected_rows($query)) {
@@ -30,7 +30,7 @@ if($_GET['op']=='usetheme') {
 	if(empty($editvalue)) {
 		cpmsg('no_item', $BASESCRIPT.'?action=list&m='.$mname);
 	}
-	//显示导航以及表头
+	//顯示導航以及表頭
 	$subjectnav = $BASESCRIPT == 'admin.php' ? $editvalue['subject'] : '';
 	shownav($mname, $mname.'_'.$_GET['action'], $subjectnav);
 	if(pkperm('isadmin')) {

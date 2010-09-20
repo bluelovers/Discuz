@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: image.class.php 4461 2010-09-15 01:44:00Z fanshengshuai $
@@ -42,10 +42,10 @@ class image {
 	}
 
 	/**
-	 * 生成缩略图
+	 * 生成縮略圖
 	 *
-	 * @param $source 图片地址
-	 * @param $thumbsizearr 缩略图大小
+	 * @param $source 圖片地址
+	 * @param $thumbsizearr 縮略圖大小
 	 * @param $dstfile 保存位置
 	 */
 	function makethumb($source, $thumbsizearr = array(100, 100), $dstfile='') {
@@ -55,7 +55,7 @@ class image {
 	/**
 	 * 加水印
 	 *
-	 * @param $srcfile 图片文件
+	 * @param $srcfile 圖片文件
 	 */
 	function makewatermark($srcfile) {
 		$this->Watermark($srcfile);

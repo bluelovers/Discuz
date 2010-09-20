@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: tree.class.php 3775 2010-07-16 07:46:52Z yexinhao $
@@ -49,7 +49,7 @@ class Tree {
 	}
 
 	function getLayer($id, $space = false) {
-		//重新计算级数
+		//重新計算級數
 		$this->layer[$id] = 0;
 		$this->countid = $id;
 		$this->reSetLayer($id);
@@ -65,8 +65,8 @@ class Tree {
 			$id = $parent[$this->layer[$id]] = $this->parent[$id];
 		}
 
-		ksort($parent);	//按照键名排序
-		reset($parent); //数组指针移回第一个单元
+		ksort($parent);	//按照鍵名排序
+		reset($parent); //數組指針移回第一個單元
 
 		return $parent;
 	}

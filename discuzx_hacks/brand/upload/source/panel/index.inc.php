@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: index.inc.php 4359 2010-09-07 07:58:57Z fanshengshuai $
@@ -14,7 +14,7 @@ if(!defined('IN_STORE')) {
 shownav('store', 'index');
 
 if($shop->grade == 0){
-	// 待审核
+	// 待審核
 	echo
 	'<div class="indextext">
 		<div class="welcometitle">
@@ -29,7 +29,7 @@ if($shop->grade == 0){
 		</div>
 	</div>';
 }elseif($shop->grade == 1){
-	// 驳回
+	// 駁回
 	echo
 		'<div class="indextext">
 			<div class="welcometitle">
@@ -45,7 +45,7 @@ if($shop->grade == 0){
 		</div>';
 	exit;
 }elseif($shop->grade == 2){
-	// 关闭
+	// 關閉
 	echo
 	'<div class="indextext">
 		<div class="welcometitle">
@@ -63,7 +63,7 @@ if($shop->grade == 0){
 }else{
 	if(!$_G['member']['taskstatus']) {
 		if(!cktask()) {
-			//新手任务
+			//新手任務
 			echo
 			'<div class="indextext">
 				<div class="welcometitle">
@@ -81,7 +81,7 @@ if($shop->grade == 0){
 				</div>
 			</div>';
 		} else {
-			//完成任务
+			//完成任務
 			echo
 			'<div class="indextext">
 				<div class="welcometitle">
@@ -103,7 +103,7 @@ if($shop->grade == 0){
 			</div>';
 		}
 	} else {
-		//正常页面
+		//正常頁面
 		echo
 		'<div class="indextext">
 			<div class="welcometitle">

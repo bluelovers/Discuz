@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: card.php 4397 2010-09-10 10:07:01Z fanshengshuai $
@@ -21,7 +21,7 @@ $tpp = $_G['setting']['cardperpage'];
 $active['card'] = ' class="active"';
 $location['name'] = (empty($_GET['keyword'])?'' : $_GET['keyword'].' - ') . $_G['setting']['site_nav']['card']['name'];
 
-//消费券列表
+//消費券列表
 $_BCACHE->cachesql('cardsearch', 'SELECT itemid FROM '.tname('shopitems').' WHERE isdiscount=1 AND grade>2 ORDER BY displayorder ASC, itemid DESC', 0, 1, $tpp, 0, 'sitelist', 'shop');
 $multipage = $_SBLOCK['cardsearch_multipage'];
 $resultcount = $_SBLOCK['cardsearch_listcount'];

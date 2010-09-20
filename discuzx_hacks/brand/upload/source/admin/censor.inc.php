@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: censor.inc.php 4337 2010-09-06 04:48:05Z fanshengshuai $
@@ -13,14 +13,14 @@ if(!defined('IN_ADMIN')) {
 
 $censor = array();
 
-$allowvars = array('censor');//允许提交的settings变量名
+$allowvars = array('censor');//允許提交的settings變量名
 
-//读入缓存
+//讀入緩存
 updatecensorcache(false, 86400);
 
 if(!empty($_POST['valuesubmit'])) {
 
-	//提交了数据
+	//提交了數據
 	$censorarr = explode("\n", $_POST['censor']);
 	$newcensorstr = $censorstr = $censorcomma = '';
 	foreach($censorarr as $value) {
@@ -37,11 +37,11 @@ if(!empty($_POST['valuesubmit'])) {
 	if(!empty($rpsql)) {
 		DB::query('REPLACE INTO '.tname('data').' (`variable`, `value`) VALUES '.$rpsql);
 	}
-	updatecensorcache(true, 43200, $censorvalue); //更新设置缓存
+	updatecensorcache(true, 43200, $censorvalue); //更新設置緩存
 	cpmsg('message_success', 'admin.php?action=censor');
 
 } else {
-	//没有提交数据
+	//沒有提交數據
 	$query = DB::query('SELECT * FROM '.tname('data').' WHERE variable=\'censor\' LIMIT 1');
 	$censor = DB::fetch($query);
 	shownav('global', 'settings_censor');

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: attend.php 4452 2010-09-14 12:35:50Z fanshengshuai $
@@ -17,13 +17,13 @@ if (!$_G['setting']['multipleshop']) {
 $do = $_GET['do'];
 require_once(B_ROOT.'./uc_client/client.php');
 include_once(B_ROOT.'./source/function/cache.func.php');
-//读入缓存
+//讀入緩存
 $mname = 'shop';
 $cacheinfo = getmodelinfoall('modelname', $mname);
 $mid = $cacheinfo['models']['mid'];
 
 if($do && $do=="register") {
-	//第三步，提交数据，检查填写的基本信息
+	//第三步，提交數據，檢查填寫的基本信息
 	if(submitcheck('attendsubmit')) {
 
 		$checkunits = array(
@@ -78,7 +78,7 @@ if($do && $do=="register") {
 			showmessage('applicant_info_failed', '', '', '', $checkresults);
 		}
 		$exist_user_auth = false;
-		//没有登录
+		//沒有登錄
 		if(empty($_G['uid'])) {
 
 			setcookie('_refer', 'admin.php?action='.$_GET['action'].'&m='.$GET['m']);
@@ -113,7 +113,7 @@ if($do && $do=="register") {
 				}
 			}
 
-			// 设置LOGIN
+			// 設置LOGIN
 			$cookievalue = authcode(md5($_POST['password'])."\t$newuid", 'ENCODE');
 			ssetcookie('auth', $cookievalue, $cookietime, 1, true);
 			setcookie('_refer', '');
@@ -155,7 +155,7 @@ if($do && $do=="register") {
 		$shop['address'] = $_POST['address'];
 		$shop['catid'] = $_POST['catid'];
 		$shop['validity_end'] = mktime(0,0,0,date('m',$_G['timestamp']),date('d',$_G['timestamp']), (date('Y',$_G['timestamp']) + 10));
-		// 自动为用户加商店
+		// 自動為用戶加商店
 		$shopid = inserttable('shopitems',$shop,1);
 
 		$itemmessage['itemid'] = $shopid;
@@ -182,7 +182,7 @@ if($do && $do=="register") {
 		showmessage('no_submit', geturl('attend.php'));
 	}
 } elseif($do && $do=="attend") {
-	//第二步，填写基本信息
+	//第二步，填寫基本信息
 
 	$uid = $_G['uid'];
 	$ucurl = avatar($uid);
@@ -211,6 +211,6 @@ if($do && $do=="register") {
 	include template('templates/site/default/attend_step1.html.php', 1);
 }
 
-ob_out(); //正则处理url/模板
+ob_out(); //正則處理url/模板
 
 ?>

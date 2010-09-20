@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: common.php 4401 2010-09-13 02:44:25Z fanshengshuai $
@@ -25,7 +25,7 @@ brand::init();
 
 include_once(B_ROOT.'./language/brand.lang.php');
 
-// 检查关闭站点
+// 檢查關閉站點
 if (!ckfounder($_G['uid']) && $_G['setting']['siteclosed']) {
 	if (ACTION != 'auth' && ACTION != 'seccod') {
 		showmessage($_G['setting']['siteclosed_reason']);
@@ -49,16 +49,16 @@ if(file_exists(B_ROOT.'./index.html')) {
 	define('S_ISPHP', '1');
 }
 
-// config.cache不存在将刷新页面
+// config.cache不存在將刷新頁面
 refreshbrandsetting();
 
-// 读取用户组
+// 讀取用戶組
 if(!@include_once(B_ROOT.'./data/system/shopgroup.cache.php')) {
 	include_once(B_ROOT.'./source/function/cache.func.php');
 	updateshopgroupcache();
 }
 
-// 读取分类
+// 讀取分類
 $cattypes = array('region', 'shop', 'good', 'notice', 'consume', 'album', 'groupbuy');
 foreach($cattypes as $cattype) {
 	if(!@include_once(B_ROOT.'./data/system/'.$cattype.'category.cache.php')) {
@@ -67,17 +67,17 @@ foreach($cattypes as $cattype) {
 	}
 }
 
-// 读取分类
+// 讀取分類
 $categorylist = $cats = $cats_plus = array();
 $_G['categorylist'] = getmodelcategory('shop');
 
-// 读取消息
+// 讀取消息
 if (exists_discuz()) {
 	$pm = loadClass('pm');
 	$pm_new = $pm->pm_new;
 }
 
-// 初始化 SEO 标题
+// 初始化 SEO 標題
 $seo_title = $_G['setting']['sitename'] . ' - ' . $_G['setting']['wwwname'];
 $seo_keywords = $_G['setting']['seokeywords'];
 $seo_description = $_G['setting']['seodescription'];

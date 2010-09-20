@@ -1,5 +1,5 @@
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: index.js 4237 2010-08-20 09:10:33Z fanshengshuai $

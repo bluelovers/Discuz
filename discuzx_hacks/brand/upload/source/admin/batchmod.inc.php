@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: batchmod.inc.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -14,7 +14,7 @@ if(!defined('IN_ADMIN')) {
 require_once B_ROOT.'./source/class/shop.class.php';
 
 @set_time_limit(100);
-//删除二次确认之前，写入跳转cookie
+//刪除二次確認之前，寫入跳轉cookie
 if(empty($_POST['confirmed'])) {
 	ssetcookie('batch_referer', $_SERVER['HTTP_REFERER'], 300);
 	$cookie_referer = $_G['cookie']['batch_referer'] = $_SERVER['HTTP_REFERER'];
@@ -50,7 +50,7 @@ require_once(B_ROOT.'./source/adminfunc/tool.func.php');
 
 $wheresql = " itemid IN ($items)";
 
-//删除首页、列表、以及对应物件的缓存
+//刪除首頁、列表、以及對應物件的緩存
 batchmodadmindeletecache($mname);
 
 //操作方法
@@ -110,10 +110,10 @@ switch($_REQUEST['operation']) {
 				$extra_input .= '<input type="hidden" name="item_shopid['.$value.']" value="'.$_POST['item_shopid'][$value].'" />';
 			}
 			$extra_input .= '<input type="hidden" name="operation" value="delete" /><input type="hidden" name="opdelete" value="'.$_POST['opdelete'].'" />';
-			cpmsg('mod_delete_confirm', 'admin.php?action=batchmod&m='.$mname, 'form', $extra_input);//二次确认
+			cpmsg('mod_delete_confirm', 'admin.php?action=batchmod&m='.$mname, 'form', $extra_input);//二次確認
 		} else {
 			if(in_array($mname, array('good', 'notice', 'consume', 'album', 'groupbuy'))) {
-				// 删除的时候更新计数
+				// 刪除的時候更新計數
 				$shopid_query = DB::query("select * from ".DB::table($mname.'items'). " where " .$wheresql);
 				while ($__item = DB::fetch($shopid_query)) {
 					shop::update_item_num($mname, $__item['shopid'], -1);
@@ -127,8 +127,8 @@ switch($_REQUEST['operation']) {
 					$frombbs = '';
 				}
 			}
-			delmitems($wheresql, $mname); //删除信息
-			if($mname=='shop') { updatememberstats();} //删除完信息后更新
+			delmitems($wheresql, $mname); //刪除信息
+			if($mname=='shop') { updatememberstats();} //刪除完信息後更新
 			$opsql = $wheresql = '';
 			cpmsg('message_success', $cookie_referer);
 		}
@@ -166,7 +166,7 @@ switch($_REQUEST['operation']) {
 					}
 					if($setsqlarr) {
 						$setsqlarr['updateverify'] = 0;
-						updatetable($mname.'items', $setsqlarr, array('itemid'=>$itemid));//权限限制
+						updatetable($mname.'items', $setsqlarr, array('itemid'=>$itemid));//權限限制
 						DB::query("UPDATE ".tname("photoitems")." SET `grade` = 3 WHERE grade = 0 AND albumid = '$itemid'");
 						if(!empty($update['attr_ids'])) {
 							DB::query("DELETE FROM ".tname('itemattribute')." WHERE itemid='$itemid'");
@@ -219,7 +219,7 @@ switch($_REQUEST['operation']) {
 }
 if(!empty($opsql) && !empty($wheresql)) {
 
-	// 如果是批量移动所属店铺，更新店铺中的计数,需要在模型的店铺没有变之前先更新，
+	// 如果是批量移動所屬店舖，更新店舖中的計數,需要在模型的店舖沒有變之前先更新，
 	if ($_REQUEST['operation'] == "moveshop") {
 		foreach ($itemarr as $v) {
 			if($mname == "album" && is_album_from_bbs($v)) {
@@ -227,7 +227,7 @@ if(!empty($opsql) && !empty($wheresql)) {
 			}
 			$old_shopid = shop::get_shopid_by_itemid($mname, $v);
 
-			// 多选的情况下有可能转到一个店铺中
+			// 多選的情況下有可能轉到一個店舖中
 			if ($old_shopid != $_POST['opshopid']) {
 				shop::update_item_num($mname, $old_shopid, -1);
 				shop::update_item_num($mname, $_POST['opshopid'], 1);
@@ -236,7 +236,7 @@ if(!empty($opsql) && !empty($wheresql)) {
 	}
 
 	DB::query($opsql.' WHERE '.$wheresql);
-	//选择相册移动店铺时，同时更改图片的所属店铺
+	//選擇相冊移動店舖時，同時更改圖片的所屬店舖
 	if($_REQUEST['operation']=='moveshop' && $mname=='album') {
 		$opsql_photo = str_replace('albumitems ', 'photoitems ', $opsql);
 		$wheresql_photo = str_replace(' itemid IN', ' albumid IN', $wheresql);
@@ -258,7 +258,7 @@ cpmsg('message_success', $cookie_referer);
 
 
 /**
- * 查询相册是否是论坛导入
+ * 查詢相冊是否是論壇導入
  *
  * @param int $albumid
  */
@@ -268,7 +268,7 @@ function is_album_from_bbs($albumid) {
 }
 
 /**
- * 是否需要想论坛推送
+ * 是否需要想論壇推送
  *
  * @param int $albumid
  */

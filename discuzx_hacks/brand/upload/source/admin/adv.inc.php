@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: adv.inc.php 4240 2010-08-23 09:27:08Z fanshengshuai $
@@ -22,7 +22,7 @@ if(!empty($_G['gp_preview'])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<meta http-equiv="Content-Type" content="text/html; charset=<?=CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8>" />
 <head>
 <script type="text/javascript">var IMGDIR = '<? echo $_G['setting']['sitetheme']['imgdir']; ?>', cookiepre = '<?=$_G['config']['cookie']['cookiepre']?>', cookiedomain = '<?=$_G['config']['cookie']['cookiedomain']?>', cookiepath = '<?=$_G['config']['cookie']['cookiepath']?>';</script>
 <script type="text/javascript" src="static/js/common.js"></script>

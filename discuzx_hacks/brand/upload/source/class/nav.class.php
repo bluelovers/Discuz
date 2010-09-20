@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: nav.class.php 4371 2010-09-08 06:03:14Z fanshengshuai $
@@ -10,7 +10,7 @@
 class nav {
 
 	/**
-	 * 系统默认自定义导航，实例化后会初始化数组
+	 * 系統默認自定義導航，實例化後會初始化數組
 	 *
 	 * @var array
 	 */
@@ -25,10 +25,10 @@ class nav {
 	}
 
 	/**
-	 * 店铺自定义导航是否已经入库
+	 * 店舖自定義導航是否已經入庫
 	 *
-	 * @param int $shopid  商铺 ID
-	 * @param array_or_string $nav_flag 导航标志，可以为数组,为空就用系统默认自定义导航
+	 * @param int $shopid  商舖 ID
+	 * @param array_or_string $nav_flag 導航標誌，可以為數組,為空就用系統默認自定義導航
 	 */
 	function check_shop_nav($shopid = 0, $nav_flag = '') {
 		global $_G, $_SGLOBAL;
@@ -58,9 +58,9 @@ class nav {
 	}
 
 	/**
-	 * 商铺的自定义导航
+	 * 商舖的自定義導航
 	 *
-	 * @param int $shopid 商铺 ID
+	 * @param int $shopid 商舖 ID
 	 */
 	function get_shop_nav($shopid) {
 		global $_G, $_SGLOBAL, $_BCACHE, $_SBLOCK;
@@ -91,9 +91,9 @@ class nav {
 	}
 
 	/**
-	 * 系统默认自定义导航
+	 * 系統默認自定義導航
 	 *
-	 * @param int $shopid 商铺 ID
+	 * @param int $shopid 商舖 ID
 	 */
 	function get_shop_nav_default($shopid) {
 		global $_G, $lang;

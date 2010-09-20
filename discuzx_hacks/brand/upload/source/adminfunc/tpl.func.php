@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: tpl.func.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -167,7 +167,7 @@ function cpheader() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$_G[charset]">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="static/image/admin/admincp.css" rel="stylesheet" type="text/css" />
 <link href="static/image/admin/calendar.css" rel="stylesheet" type="text/css" />
 </head>
@@ -591,7 +591,7 @@ echo "</body></html>";
 		echo '
 		<script type="text/javascript">
 		var newhtml = "";
-		newhtml += \'<table class="tb tb2"><tr><th class="partition edited">&#x60A8;&#x5F53;&#x524D;&#x4F7F;&#x7528;&#x7684; Discuz! &#x7A0B;&#x5E8F;&#x7248;&#x672C;&#x6709;&#x91CD;&#x8981;&#x66F4;&#x65B0;&#xFF0C;&#x8BF7;&#x53C2;&#x7167;&#x4EE5;&#x4E0B;&#x63D0;&#x793A;&#x8FDB;&#x884C;&#x53CA;&#x65F6;&#x5347;&#x7EA7;</th></tr>\';
+		newhtml += \'<table class="tb tb2"><tr><th class="partition edited">您當前使用的 Discuz! 程序版本有重要更新，請參照以下提示進行及時升級</th></tr>\';
 		newhtml += \'<tr><td class="tipsblock"><a href="http://faq.comsenz.com/checkversion.php?product=Brand&version='.B_VER.'&release='.B_RELEASE.'&charset='.$_G['charset'].'&dbcharset='.$_SC['dbcharset'].'" target="_blank"><img src="'.$newsurl.'" onload="showbrandnews()" /></a></td></tr></table>\';
 		$("#brandnews").css({display: "none"});
 		$("#brandnews").html(newhtml);
@@ -669,7 +669,7 @@ function show_style_picker($id, $color) {
 	</script>	';
 }
 
-// 标题
+// 標題
 function showstyletitle($mname, $color) {
 	$lang_title = lang($mname.'_stytletitle');
 	$lang_fontcolor = lang($mname.'_fontcolor');
@@ -838,14 +838,14 @@ function showmapsetting($mname, $mapapikey, $mapapimark) {
                 }
             }
             function maploading() {
-                //半透明层覆盖页面，显示loading
+                //半透明層覆蓋頁面，顯示loading
                 $("#loading").css('display', 'block');
                 $("#background").css({'height':$(document).height(),'width':$(document).width()});
                 $("#background").css('display', 'block');
 
             }
             function maploaded() {
-                //隐藏半透明层、loading
+                //隱藏半透明層、loading
                 $("#loading").css('display', 'none');
                 $("#background").css('display', 'none');
             }
@@ -860,7 +860,7 @@ EOF;
 function showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, $file='admin') {
 	global $_G, $_SGLOBAL, $item;
 
-	//编辑页面基本字段
+	//編輯頁面基本字段
 	$required = '<span style="color:red">*</span>';
 	pklabel(array('type'=>'input', 'other'=>'style="'.pktitlestyle($editvalue['styletitle']).'"', 'alang'=>$mname.'_subject', 'name'=>'subject', 'value'=>$editvalue['subject'], 'required'=>$required));
 	if($mname == 'notice' || $mname == 'shop') {
@@ -896,7 +896,7 @@ function showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, $file='ad
 	if($mname != 'consume') {
 		pklabel(array('type'=>'file', 'alang'=>$mname.'_subjectimage', 'name'=>'subjectimage', 'value'=>$editvalue['subjectimage'], 'fileurl'=>A_URL.'/'.$editvalue['subjectimage']));
 	}
-	// 过期时间
+	// 過期時間
 	if(in_array($mname,array('shop', 'good', 'consume', 'notice', 'groupbuy'))){
 		if(empty($editvalue['validity_start'])){
 			$editvalue['validity_start'] = date('Y-m-d', $_G['timestamp']);
@@ -935,7 +935,7 @@ function showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, $file='ad
 			showconsumemaker(array($uploadimgradio, $createimgradio), $file);
 		}
 	}
-	/* 显示商品描述 */
+	/* 顯示商品描述 */
 	if($mname == 'good') {
 		pklabel(array('type'=>'textarea', 'alang'=>'good_intro', 'name'=>'intro', 'value'=>$editvalue['intro']));
 	}
@@ -974,7 +974,7 @@ function showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist, $file='ad
 	}*/
 }
 
-//显示用户名注册字段
+//顯示用戶名註冊字段
 function showusernamefield() {
 	//$required = '<span style="color:red">*</span>';
 	showsetting('ucreg_username', 'ucreg_username', '', 'text');
@@ -1039,7 +1039,7 @@ function showlistsearch($mname) {
 		$opcheckstr .= '&nbsp; <input class="radio" type="radio" name="opcheck" value="'.$key.'"'.(pkperm('isadmin')?' onClick="showchecktxt('.$key.');"':'').'> '.$value.' &nbsp;';
 		$gradestr .= '<option value="'.$key.'" '.($_GET['grade']==$key?'selected="selected"':'').'>'.$value.'</option>';
 	}
-	//搜索框显示
+	//搜索框顯示
 	echo '<form method="get" name="listform" id="theform" action="'.$_SERVER['SCRIPT_NAME'].'">';
 	echo '<input type="hidden" name="action" value="list" /><input type="hidden" name="m" value="'.$mname.'" />';
 	showtableheader($mname.'_search', 'notop search_header');
@@ -1182,7 +1182,7 @@ function show_searchfrom_webmaster($mname) {
 		$gradestr .= '<option value="'.$key.'" '.($_GET['grade']==$key?'selected="selected"':'').'>'.$value.'</option>';
 	}
 
-	//搜索框显示
+	//搜索框顯示
 	echo '<form method="get" name="listform" id="theform" action="'.$_SERVER['SCRIPT_NAME'].'">';
 	echo '<style>input {width:250px;}</style><input type="hidden" name="action" value="list" /><input type="hidden" name="m" value="'.$mname.'" />';
 	showtableheader($mname.'_search', 'notop');
@@ -1197,25 +1197,25 @@ function show_searchfrom_webmaster($mname) {
 				}
 			}
 		}
-		//所属用户组
+		//所屬用戶組
 		$search_items[] = $mname.'_groupid'.'::<select name="groupid" id="shop_incat"><option value="0">'.lang('please_select').'</option>'.$catstr.'</select>';
-		//所属分类
+		//所屬分類
 		$search_items[] = $mname.'_catid'.'::'.InteractionCategoryMenu($cats,'catid',null,null);
 	} else {
 		if($mname=='album' && $_GET['from']=='addphoto') {
-			//相册所属店铺
+			//相冊所屬店舖
 			$search_items[] = $mname.'_shopid'.'::<select name="shopid" id="shop_incat"><option value="'.$_G['cookie']['shopid'].'">'.$_G['cookie']['shopid'].'</option></select>';
 		} else {
-			//所属店铺
+			//所屬店舖
 			$search_items[] = 'search_shopid'.'::<input type="text" name="shopid" value="'.(empty($_GET['shopid'])?'':$_GET['shopid']).'" size="6" />';
 		}
 		if($mname != 'photo') {
-			//所属分类
+			//所屬分類
 			$search_items[] = $mname.'_catid'.'::'.InteractionCategoryMenu($cats,'catid',null,null);
 		}
 	}
 	if($mname=='album') {
-		//相册类型默认相册还是自定义相册
+		//相冊類型默認相冊還是自定義相冊
 		$search_items[] = $mname.'_type'.'::<select name="type"><option value="user" selected="selected">'.lang('album_user').'</option><option value="import">'.lang('album_import').'</option><option value="default">'.lang('album_default').'</option></select>';
 	} elseif($mname=='photo') {
 		//none
@@ -1249,7 +1249,7 @@ function show_searchfrom_webmaster($mname) {
 		$tmp = explode('::',$v);
 		showsetting($tmp[0], '', '',$tmp[1]);
 	}
-	// 显示搜索按钮
+	// 顯示搜索按鈕
 	showsetting('', '', '', '<input style="width:50px;" class="btn" type="submit" name="filtersubmit" value="'.lang('search').'" />');
 	showtablefooter();
 	showformfooter();
@@ -1347,10 +1347,10 @@ function show_searchform_brandlinks() {
 }
 
 function showlistnormal($mname, $mlist, $multipage) {
-		showformheader('batchmod&m='.$mname);//批量操作的form表头
+		showformheader('batchmod&m='.$mname);//批量操作的form表頭
 		if($mname=='shop'){$len_cat=60;$len_opt=115;$len_status=60;}else{$len_cat=160;$len_opt=80;$len_status=60;}
 
-	//数据显示
+	//數據顯示
 	showtableheader($mname.'_listresult', 'notop');
 	if(pkperm('isadmin')) {
 		$subtitlearr = array(
@@ -1392,7 +1392,7 @@ function showlistnormal($mname, $mlist, $multipage) {
 
 function showlistmod($mname) {
 	global $_G, $catstr, $opcheckstr, $gradestr, $_SGLOBAL, $_SC;
-	//下拉框拼凑
+	//下拉框拼湊
 	$opcheckstr="";
 	foreach($_SGLOBAL['shopgrade'] as $key=>$value) {
 		if(($_G['myshopstatus'] == 'verified') && ($key == 0 || $key == 5 || (!pkperm('isadmin') && $key == 1))) {
@@ -1402,8 +1402,8 @@ function showlistmod($mname) {
 		}
 	}
 	//批量操作方法
-	$opt_master_pass = ($_GET['optpass'] == 1) ? true : false; //快速操作，管理员点击待审核列表时，只出现更改审核状态的设置
-	$update_master_pass = ($_GET['updatepass'] == 1) ? true : false; //审核通过店铺，修改信息后站长审核页面。
+	$opt_master_pass = ($_GET['optpass'] == 1) ? true : false; //快速操作，管理員點擊待審核列表時，只出現更改審核狀態的設置
+	$update_master_pass = ($_GET['updatepass'] == 1) ? true : false; //審核通過店舖，修改信息後站長審核頁面。
 	showtableheader(lang('operation_form'), 'nobottom');
 	if(!$opt_master_pass && !$update_master_pass) {
 		showsubtitle(array('', 'operation', 'option'));
@@ -1452,7 +1452,7 @@ function showlistmod($mname) {
 			});
 		</script>';
 
-	// 如果进入的是待审核快速操作选项
+	// 如果進入的是待審核快速操作選項
 	if($opt_master_pass) {
 
 		if($mname == 'shop') {
@@ -1525,7 +1525,7 @@ function showlistmod($mname) {
 				});
 		</script>';
 	} else {
-		// 调整显示顺序,除了图片外都有显示顺序
+		// 調整顯示順序,除了圖片外都有顯示順序
 		if($mname != 'photo') {
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 					'<input class="radio" type="radio" name="operation" value="display">',
@@ -1533,7 +1533,7 @@ function showlistmod($mname) {
 					''
 			));
 		}
-	//一般情况的批量操作选项
+	//一般情況的批量操作選項
 		if($mname == 'album') {
 			$mycats = array();
 			if(pkperm('isadmin')) {
@@ -1554,7 +1554,7 @@ function showlistmod($mname) {
 		}
 
 
-		//站长修改店铺组和分类
+		//站長修改店舖組和分類
 		if(pkperm('isadmin') && $mname=='shop') {
 			echo '<tr class="hover">
 					<td class="td25"><input type="radio" value="changecat" name="operation" class="radio"></td>
@@ -1578,7 +1578,7 @@ function showlistmod($mname) {
 			));
 		}
 
-		//站长修改信息所属店铺
+		//站長修改信息所屬店舖
 		if(pkperm('isadmin') && $mname!='shop' && $mname!='photo'){
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 					'<input class="radio" type="radio" name="operation" value="moveshop">',
@@ -1587,7 +1587,7 @@ function showlistmod($mname) {
 			));
 		}
 
-		//更改店铺状态
+		//更改店舖狀態
 		showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 				'<input class="radio" type="radio" name="operation" value="check">',
 				lang('mod_check'),
@@ -1595,7 +1595,7 @@ function showlistmod($mname) {
 		));
 
 		if($mname=='shop') {
-			//店铺状态短信通知
+			//店舖狀態短信通知
 			showtablerow('id="check_trid" style="display:none;"', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'',
 						lang('mod_check_textarea'),
@@ -1604,22 +1604,22 @@ function showlistmod($mname) {
 			showtablerow('id="newgroupfield" style="display:none;"', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'','<font color="red">'.lang('shop_newgroupid').'</font>',' <span id="newgroupselect" class="vtop tips2">'.lang('mod_check_newgroupid_comment').'</span>'
 			));
-			//店铺状态短信通知js
+			//店舖狀態短信通知js
 			echo $checktextjavascript;
 
-			//是否首页推荐
+			//是否首頁推薦
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'<input class="radio" type="radio" name="operation" value="recommend">',
 						lang('mod_recommend'),
 						'&nbsp; <input class="radio" type="radio" name="opallowreply" value="1"> '.lang('yes').' &nbsp; &nbsp; <input class="radio" type="radio" name="opallowreply" value="0"> '.lang('no')
 						));
-			//会员卡
+			//會員卡
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'<input class="radio" type="radio" name="operation" value="discount">',
 						lang('mod_discount'),
 						'&nbsp; <input class="radio" type="radio" name="opdiscount" value="1"> '.lang('mod_discount_yes').' &nbsp; &nbsp; <input class="radio" type="radio" name="opdiscount" value="0"> '.lang('mod_discount_no')
 			));
-			//店铺所有者
+			//店舖所有者
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'<input class="radio" type="radio" name="operation" value="owner">',
 						lang('mod_owner'),
@@ -1627,7 +1627,7 @@ function showlistmod($mname) {
 			));
 		}
 
-		//是否允许评论
+		//是否允許評論
 		if($mname != 'photo' && $mname != 'album') {
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 						'<input class="radio" type="radio" name="operation" value="allowreply">',
@@ -1636,7 +1636,7 @@ function showlistmod($mname) {
 						));
 		}
 
-		//删除信息
+		//刪除信息
 		showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 				'<input class="radio" type="radio" name="operation" value="delete">',
 				lang('mod_delete'),
@@ -1651,7 +1651,7 @@ function showlistmod($mname) {
 }
 
 function show_cat_shop_linkarea($name='shopid', $string=1) {
-	//三级联动菜单选择店铺
+	//三級聯動菜單選擇店舖
 	global $_G, $_SGLOBAL, $mname, $_SC;
 	$catstr = '';
 	$query = DB::query('SELECT * FROM '.tname('shopgroup').' WHERE type=\'shop\'');
@@ -1690,7 +1690,7 @@ function show_cat_shop_linkarea($name='shopid', $string=1) {
 	}
 }
 
-//批量修改店铺分类
+//批量修改店舖分類
 function show_shop_changecat() {
 	global $_G, $_SGLOBAL;
 
@@ -1718,11 +1718,11 @@ function show_searchfrom_comment($subtype) {
 	global $_G, $categorylist, $_GET, $_SERVER, $_SGLOBAL, $catstr, $opcheckstr, $gradestr;
 	$catstr = $opcheckstr = $gradestr = '';
 	$typelist=array('shop', 'good', 'consume', 'notice', 'groupbuy');
-	//下拉框拼凑
+	//下拉框拼湊
 	foreach($typelist as $key=>$value) {
 		$catstr .= '<option value="'.$value.'">'.lang($subtype.'_'.$value).'</option>';
 	}
-	//搜索框显示
+	//搜索框顯示
 	echo '<form method="get" name="listform" id="theform" action="'.$_SERVER['SCRIPT_NAME'].'">';
 	echo '<style>input {width:250px;}</style><input type="hidden" name="action" value="'.$subtype.'" /><input type="hidden" name="m" value="'.$mname.'" />';
 	showtableheader($subtype.'_search', 'notop');
@@ -1752,9 +1752,9 @@ function show_searchfrom_comment($subtype) {
 }
 
 function showlistcomment($mlist, $multipage, $subtype) {
-	showformheader($subtype);//批量操作的form表头
+	showformheader($subtype);//批量操作的form表頭
 
-	//数据显示
+	//數據顯示
 	showtableheader($subtype.'_listresult', 'notop');
 	$subtitlearr = array(
 			0 => '<input type="checkbox" onclick="checkall(this.form, \'cid\')" name="chkall" checked>',
@@ -1828,9 +1828,9 @@ function showcronrow($cron) {
 }
 
 function showcronlist($cronlist) {
-	showformheader('tool&operation=cron');//批量操作的form表头
+	showformheader('tool&operation=cron');//批量操作的form表頭
 
-	//数据显示
+	//數據顯示
 	showtableheader('cron_listresult', 'notop');
 	$subtitlearr = array(
 			0 => '<input type="checkbox" onclick="checkall(this.form, \'cronid\')" name="chkall">',
@@ -1850,7 +1850,7 @@ function showcronlist($cronlist) {
 }
 
 /**
-* 关联信息JS
+* 關聯信息JS
 */
 function showrelatedinfojs($type, $groupid, $itemid, $shopid, $file = 'panel') {
 	global $_GET;
@@ -1876,22 +1876,22 @@ function showrelatedinfojs($type, $groupid, $itemid, $shopid, $file = 'panel') {
 			}
 		}
 		$(function(){
-			//移到右边
+			//移到右邊
 			$("#source_add").click(function() {
 				$("#source option:selected").remove().appendTo("#related");
 				return false;
 			});
-			//移到左边
+			//移到左邊
 			$("#target_remove").click(function() {
 				$("#related option:selected").remove().appendTo("#source");
 				return false;
 			});
-			//双击选项
+			//雙擊選項
 			$("#source").dblclick(function(){
 				$("option:selected",this).remove().appendTo("#related");
 				return false;
 			});
-			//双击选项
+			//雙擊選項
 			$("#related").dblclick(function(){
 				$("option:selected",this).remove().appendTo("#source");
 				return false;
@@ -1913,7 +1913,7 @@ function showrelatedinfojs($type, $groupid, $itemid, $shopid, $file = 'panel') {
 }
 
 /**
-* 关联信息表单
+* 關聯信息表單
 */
 function showrelatedinfo($type) {
 	global $_G, $_SGLOBAL, $relatedarr;
@@ -1965,7 +1965,7 @@ function showrelatedinfo($type) {
 }
 
 /**
-* 添加消费卷系统生成和个人上传表单
+* 添加消費卷系統生成和個人上傳表單
 */
 function showconsumemaker($radio=array(), $file='admin') {
 	global $_G, $_SGLOBAL, $_SSCONFIG, $editvalue;
@@ -2051,7 +2051,7 @@ function bind_ajax_form($form = 'cpform'){
 	echo '<script type="text/javascript" charset="'.$GLOBALS['_SC']['charset'].'">bindform("'.$form.'");</script>';
 }
 /**
- * 显示该模型下允许使用的分类
+ * 顯示該模型下允許使用的分類
  *
  * @param string $type 模型
  */

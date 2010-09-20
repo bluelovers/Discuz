@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: data_cache.class.php 4443 2010-09-14 10:00:24Z fanshengshuai $
@@ -24,9 +24,9 @@ class bcache {
 
 	/**
 	 * 初始化
-	 * @param $cachemode，缓存类型，文件、数据库、memcache等
-	 * @param $cachegrade, 数据表缓存分表等级
-	 * @param $allowcache，是否开启缓存
+	 * @param $cachemode，緩存類型，文件、數據庫、memcache等
+	 * @param $cachegrade, 數據表緩存分表等級
+	 * @param $allowcache，是否開啟緩存
 	 * @return true or false
 	 */
 	public function __construct($cachemode='database', $cachegrade=1, $allowcache=1) {
@@ -72,15 +72,15 @@ class bcache {
 	}
 
 	/**
-	 * 设置缓存，队列模式，在类销毁的时候才实际写入缓存。默认情况缓存永久不更新，当后台发生操作时更新对应页面，对应功能的部分缓存
-	 * @param $cachekey，缓存key
-	 * @param $cachevalue, 缓存值
-	 * @param $updatetime, 过期到达时间（当前时间+缓存有效时间）
-	 * @param $pagetype， 缓存所在页面类型
-	 * @param $usetype， 缓存所在模块功能类型
-	 * @param $shopid， 缓存所在店铺id
-	 * @param $infoid， 缓存所在信息id
-	 * @return 当前队列中等待写入的缓存数 or false
+	 * 設置緩存，隊列模式，在類銷毀的時候才實際寫入緩存。默認情況緩存永久不更新，當後台發生操作時更新對應頁面，對應功能的部分緩存
+	 * @param $cachekey，緩存key
+	 * @param $cachevalue, 緩存值
+	 * @param $updatetime, 過期到達時間（當前時間+緩存有效時間）
+	 * @param $pagetype， 緩存所在頁面類型
+	 * @param $usetype， 緩存所在模塊功能類型
+	 * @param $shopid， 緩存所在店舖id
+	 * @param $infoid， 緩存所在信息id
+	 * @return 當前隊列中等待寫入的緩存數 or false
 	 */
 	public function set($cachekey, $cachevalue, $updatetime=0, $pagetype='other', $usetype='other', $shopid=0, $infoid=0) {
 		global $_G, $_SGLOBAL;
@@ -114,9 +114,9 @@ class bcache {
 	}
 
 	/**
-	 * 获取缓存，本函数不返回缓存值，不建议直接使用，尽量用cachesql
-	 * @param $cachekey，缓存key
-	 * @return cachekey，使用时请用$_SBLOCK['cachename']或者$_SBLOCK['cachekey']
+	 * 獲取緩存，本函數不返回緩存值，不建議直接使用，盡量用cachesql
+	 * @param $cachekey，緩存key
+	 * @return cachekey，使用時請用$_SBLOCK['cachename']或者$_SBLOCK['cachekey']
 	 */
 	public function get($cachekey) {
 		if($this->allowcache) {
@@ -128,9 +128,9 @@ class bcache {
 	}
 
 	/**
-	 * 删除缓存
-	 * @param $cachekey，缓存key，或者key的数组
-	 * @return cachekey，删除个数
+	 * 刪除緩存
+	 * @param $cachekey，緩存key，或者key的數組
+	 * @return cachekey，刪除個數
 	 */
 	public function delete($cachekey='') {
 		if($this->allowcache) {
@@ -152,12 +152,12 @@ class bcache {
 	}
 
 	/**
-	 * 按分片缓存类型删除缓存
-	 * @param $pagetype，页面类型
-	 * @param $usetype，物件类型
-	 * @param $shopid，店铺ID
+	 * 按分片緩存類型刪除緩存
+	 * @param $pagetype，頁面類型
+	 * @param $usetype，物件類型
+	 * @param $shopid，店舖ID
 	 * @param $infoid，信息ID
-	 * @return cachekey，删除个数
+	 * @return cachekey，刪除個數
 	 */
 	public function deltype($pagetype='all', $usetype='all', $shopid=0, $infoid=0) {
 		global $_G;
@@ -166,7 +166,7 @@ class bcache {
 			$delcount = 0;
 
 			if(($pagetype=='all' && $usetype=='all' && !$shopid && !$infoid)) {
-				//按类型删除缓存需要一些必填参数组合
+				//按類型刪除緩存需要一些必填參數組合
 				return false;
 			}
 
@@ -232,16 +232,16 @@ class bcache {
 	}
 
 	/**
-	 * 取得店铺信息，分片缓存
-	 * @param $shopid，店铺id
-	 * @return 店铺信息以及评分信息
+	 * 取得店舖信息，分片緩存
+	 * @param $shopid，店舖id
+	 * @return 店舖信息以及評分信息
 	 */
 	public function getshopinfo($shopid) {
 		global $_G, $_SBLOCK;
 		$shopinfo = array();
 		$shopid = intval($shopid);
 		if($shopid>0) {
-			//数据查询，拆分SQL，分片缓存
+			//數據查詢，拆分SQL，分片緩存
 			$sql = 'SELECT * FROM '.tname('shopitems').' i INNER JOIN '.tname('shopmessage')." m ON i.itemid=m.itemid WHERE i.itemid='$shopid' AND i.grade>2";
 			$this->cachesql('shopinfo', $sql, 0, 0, 1, 0, 'detail', 'shop', $shopid, 0);
 			$sql = 'SELECT * FROM '.tname('scorestats')." WHERE itemid='$shopid'";
@@ -258,11 +258,11 @@ class bcache {
 		return $shopinfo;
 	}
 	/**
-	 * 取得店铺信息，分片缓存
-	 * @param $type，信息类型，good/notice/consume等
+	 * 取得店舖信息，分片緩存
+	 * @param $type，信息類型，good/notice/consume等
 	 * @param $itemid，信息id
-	 * @param $shopid，店铺id
-	 * @return 店铺信息以及评分信息
+	 * @param $shopid，店舖id
+	 * @return 店舖信息以及評分信息
 	 */
 	public function getiteminfo($type, $itemid, $shopid) {
 		global $_G, $_SBLOCK;
@@ -270,7 +270,7 @@ class bcache {
 		$itemid = intval($itemid);
 		$shopid = intval($shopid);
 		if($itemid>0 && $shopid>0 && in_array($type, array('good', 'notice', 'consume', 'album', 'photo', 'groupbuy'))) {
-			//数据查询，拆分SQL，分片缓存
+			//數據查詢，拆分SQL，分片緩存
 			if(in_array($type, array('album', 'photo'))) {
 				$joinsql = '';
 			} else {
@@ -416,7 +416,7 @@ class bcache {
 	}
 
 	protected function flush_file() {
-		//文件存储模式=>全部删除
+		//文件存儲模式=>全部刪除
 		$cachedir = B_ROOT.'./data/cache/block';
 		$dirs = sreaddir($cachedir);
 		foreach ($dirs as $value) {
@@ -471,7 +471,7 @@ class bcache {
 		foreach($this->mkcachetables as $thistable) {
 			$enginetype = mysql_get_server_info() > '4.1' ? " ENGINE=MYISAM".(empty($dbcharset)?"":" DEFAULT CHARSET=$dbcharset" ): " TYPE=MYISAM";
 			if(strexists($thistable, 'cache')) {
-				//表名必须含有cache
+				//表名必須含有cache
 				$creatsql = "CREATE TABLE `$thistable` (
 					cachekey varchar(16) NOT NULL default '',
 					uid mediumint(8) unsigned NOT NULL default '0',
@@ -480,14 +480,14 @@ class bcache {
 					updatetime int(10) unsigned NOT NULL default '0',
 					PRIMARY KEY  (cachekey)
 					) $enginetype";
-				DB::query($creatsql, 'SILENT');//创建分表
+				DB::query($creatsql, 'SILENT');//創建分表
 			}
 		}
 
 		foreach($this->mkcaches as $thiscache) {
 			$thetable = tname('cache_'.substr($thiscache['cachekey'], 0, $this->cachegrade));
 			if(strexists($thetable, 'cache')) {
-				//表名必须含有cache
+				//表名必須含有cache
 				$insertsql = '(\''.addslashes($thiscache['cachekey']).'\', \''.$thiscache['uid'].'\', \'sql\', \''.addslashes($thiscache['cachevalue']).'\', \''.$thiscache['updatetime'].'\')';
 				DB::query('REPLACE INTO '.$thetable.' (cachekey, uid, cachename, value, updatetime) VALUES '.$insertsql, 'UNBUFFERED');
 			}

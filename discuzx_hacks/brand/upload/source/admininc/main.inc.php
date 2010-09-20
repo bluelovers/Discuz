@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: main.inc.php 4379 2010-09-09 03:00:50Z fanshengshuai $
@@ -25,7 +25,7 @@ echo <<<EOT
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>$title</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=$_G[charset]">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="Comsenz Inc." name="Copyright" />
 		<link rel="stylesheet" href="static/image/admin/admincp.css" type="text/css" media="all" />
 		<script language="javascript" type="text/javascript" src="static/js/jquery.js" charset="utf-8"></script>
@@ -69,7 +69,7 @@ if(pkperm('isadmin')) {
 	}
 
 } else {
-	cpmsg('无权限', 'index.php');
+	cpmsg('無權限', 'index.php');
 }
 
 echo <<<EOT

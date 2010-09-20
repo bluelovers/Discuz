@@ -1,14 +1,14 @@
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: common.js 4468 2010-09-15 02:56:02Z fanshengshuai $
  */
 
 /**
- * 发送短消息对话框
- * @param pm_to 要发给用户ID
+ * 發送短消息對話框
+ * @param pm_to 要發給用戶ID
  */
 function pm_send(pm_to) {
 	show_pm_box();
@@ -21,7 +21,7 @@ function pm_send(pm_to) {
 }
 
 /**
- * 店铺通知
+ * 店舖通知
  */
 function pm_view(pm_type) {
 	show_pm_box();
@@ -37,7 +37,7 @@ function show_pm_box() {
 	if (!$("#pm_border")[0]) {
 		$("#append_parent").append('<div id="pm_border" style="display:none;"></div>');
 	}
-	$("#pm_border").html('<div onclick="pm_close();" style="position:absolute;margin-left:480px;margin-top:5px;z-index:10006;cursor:pointer;color:#999;" class="pm_close">关闭</div><iframe id="iframe_pm" frameborder=0 width="100%" height="100%"></iframe>');
+	$("#pm_border").html('<div onclick="pm_close();" style="position:absolute;margin-left:480px;margin-top:5px;z-index:10006;cursor:pointer;color:#999;" class="pm_close">關閉</div><iframe id="iframe_pm" frameborder=0 width="100%" height="100%"></iframe>');
 	$("#pm_border").css({
 		"top": ($(document).scrollTop() + 100) + "px",
 		"left": ($(document).width() - 520) / 2 + "px"
@@ -45,22 +45,22 @@ function show_pm_box() {
 }
 
 /**
- * 关闭发送消息的层
+ * 關閉發送消息的層
  */
 function pm_close() {
 	$("#pm_border").hide("slow");
 }
 
 /**
- * 显示举报层
- * @param type 举报对象类型
- * @param id 举报对象ID
+ * 顯示舉報層
+ * @param type 舉報對像類型
+ * @param id 舉報對像ID
  */
 function report(type, id) {
 	if (!$("#reportdiv")[0]) {
 		$("#append_parent").append('<div id="reportdiv" style="display:none;"></div>');
 	}
-	$("#reportdiv").html('<div onclick="closereportdiv();" style="position:absolute;margin-left:270px;margin-top:5px;z-index:10006;cursor:pointer;" class="pm_close">关闭</div><iframe src="report.php?type=' + type + '&id=' + id + '" frameborder=0 width="100%" height="100%"></iframe>');
+	$("#reportdiv").html('<div onclick="closereportdiv();" style="position:absolute;margin-left:270px;margin-top:5px;z-index:10006;cursor:pointer;" class="pm_close">關閉</div><iframe src="report.php?type=' + type + '&id=' + id + '" frameborder=0 width="100%" height="100%"></iframe>');
 	$("#reportdiv").css({
 		"top": ($(document).scrollTop() + 100) + "px",
 		"left": ($(document).width() - 520) / 2 + "px"
@@ -70,14 +70,14 @@ function report(type, id) {
 }
 
 /**
- * 关闭举报层
+ * 關閉舉報層
  */
 function closereportdiv() {
 	$("#reportdiv").hide("slow");
 }
 
 /**
- * 登录验证码
+ * 登錄驗證碼
  */
 function updateseccode() {
 	var img = 'seccode.php?rand=' + Math.random();
@@ -216,7 +216,7 @@ function ajaxform_ok(data) {
 
 
 /**
- * 绑定模拟AJAX表单提交事件
+ * 綁定模擬AJAX表單提交事件
  * 
  */
 function bindform(formname) {
@@ -276,12 +276,12 @@ function bindform(formname) {
 					try {
 						data = doc.body ? doc.body.innerHTML: null;
 						if (data == "") {
-							error_trace('服务器没有任何返回结果。');
+							error_trace('服務器沒有任何返回結果。');
 						} else {
 							error_trace(data);
 						}
 					} catch(err) {
-						error_trace("服务器内部错误！");
+						error_trace("服務器內部錯誤！");
 					}
 					
 				}
@@ -298,7 +298,7 @@ function bindform(formname) {
 }
 
 /**
- * 模拟AJAX提交后，如果出现错误，则显示错误信息
+ * 模擬AJAX提交後，如果出現錯誤，則顯示錯誤信息
  * @param data
  */
 function error_trace(data) {
@@ -306,7 +306,7 @@ function error_trace(data) {
 }
 
 /**
- * 多级联动菜单
+ * 多級聯動菜單
  * 
  */
 function createmultiselect(select_id, select_name, select_content, select_parent, select_init_val) {
@@ -364,7 +364,7 @@ function show_comment_score_area() {
 	} else {
 		$("#comment_score_area").hide();
 		$("#ico_opt").attr('src','static/image/ico_add.png');
-		$("#ico_opt").attr('title','展开');
+		$("#ico_opt").attr('title','展開');
 	}
 }
 

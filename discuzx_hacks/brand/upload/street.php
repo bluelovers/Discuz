@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: street.php 4374 2010-09-08 08:58:55Z fanshengshuai $
@@ -15,7 +15,7 @@ $tagarrs = $where = $shoplist = $value = array();
 $tagids = $joinsql = $wheresql = '';
 $query = NULL;
 
-//常见id处理
+//常見id處理
 foreach(array('itemid', 'nid', 'uid', 'catid', 'tagid') as $value) {
 	$_GET[$value] = $_POST[$value] = intval(!empty($_POST[$value])?$_POST[$value]:$_GET[$value]);
 }
@@ -60,28 +60,28 @@ if(!empty($region)) {
             $regionlist_select .= '<a href="street.php?region='.$key.(!empty($catid)?'&catid='.$catid:'').'">'.$category['name'].'</a>&nbsp;&nbsp;';
     }
 }
-$tagids = !empty($_GET['tagid']) && $_G['categorylist'][$_GET['tagid']]['upid']==$_GET['catid']?$_GET['tagid']:$_G['categorylist'][$_GET['catid']]['subcatid']; //搜索分类id拼合
+$tagids = !empty($_GET['tagid']) && $_G['categorylist'][$_GET['tagid']]['upid']==$_GET['catid']?$_GET['tagid']:$_G['categorylist'][$_GET['catid']]['subcatid']; //搜索分類id拼合
 !empty($region) ? $where[] = 'i.region IN ('.$regionlist[$region]['subcatid'].')':'';
 $tagarrs = !empty($_G['categorylist'][$_GET['catid']]['subcatid']) ? explode(', ', $_G['categorylist'][$_GET['catid']]['subcatid'])
-: ''; //二级分类的显示
+: ''; //二級分類的顯示
 array_shift($tagarrs);
-//if($_GET['range'] != 'all' && !$_GET['keyword'] && !$tagids) { showmessage('no_tagids');} //二级分类不存在
+//if($_GET['range'] != 'all' && !$_GET['keyword'] && !$tagids) { showmessage('no_tagids');} //二級分類不存在
 $all = $thisstreet = '';
 $_GET['range'] == 'all' ? $all = 'checked' : $thisstreet = 'checked';
 
-//条件拼合
+//條件拼合
 $joinsql = ' FROM '.tname('shopitems').' s LEFT JOIN '.tname('scorestats').' ss ON ss.itemid=s.itemid';
 
-//提交了搜索数据
+//提交了搜索數據
 $_GET['range'] != 'all' && !empty($tagids) && $where[] = 'i.catid IN ('.$tagids.')';
 $where[] = 'i.grade>2';
 $_GET['keyword'] && $where[] = 'i.subject LIKE \'%'.$_GET['keyword'].'%\'';
 $wheresql = implode(' AND ', $where);
 
-//分页处理
+//分頁處理
 $tpp = $_G['setting']['shopsearchperpage'];
 
-//数据查询，拆分SQL，分片缓存
+//數據查詢，拆分SQL，分片緩存
 $_BCACHE->cachesql('shopsearch', 'SELECT i.itemid FROM '.tname('shopitems').' i WHERE '.$wheresql.' ORDER BY i.displayorder ASC, i.isdiscount DESC, i.replynum DESC', 0, 1, $tpp, 0, 'sitelist', 'shop');
 $multipage = $_SBLOCK['shopsearch_multipage'];
 $resultcount = $_SBLOCK['shopsearch_listcount'];
@@ -95,6 +95,6 @@ $location['tagname'] = $_G['categorylist'][$_GET['tagid']]['name'];
 $seo_title = ($catid == 0 ? "" : $_G['categorylist'][$catid]['name'] . " - ") . $location['name'] . " - " . $seo_title;
 include template('templates/site/default/street.html.php', 1);
 
-ob_out(); //正则处理url/模板
+ob_out(); //正則處理url/模板
 
 ?>

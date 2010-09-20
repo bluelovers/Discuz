@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: list_photo.func.php 4476 2010-09-15 04:51:33Z fanshengshuai $
@@ -21,7 +21,7 @@ function showlistrowalbum($value) {
 	
 	$value['subject'] = cutstr($value['subject'], 15);
 
-	// 上传的链接
+	// 上傳的鏈接
 	if($value['itemid']>0) {
 		if($value['frombbs']) {
 			if(pkperm('isadmin')) {
@@ -99,7 +99,7 @@ function showlistrowphoto($value) {
 }
 
 function showlistphoto($mname, $mlist, $multipage) {
-	//数据列表显示
+	//數據列表顯示
 	showformheader('batchmod&m='.$mname);
 	showtableheader($mname.'_listresult', 'notop');
 	showsubtitle(array());

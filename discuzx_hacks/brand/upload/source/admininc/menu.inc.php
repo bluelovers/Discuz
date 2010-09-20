@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: menu.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -11,7 +11,7 @@ if(!defined('IN_ADMIN') && !defined('IN_STORE')) {
 	exit('Access Denied');
 }
 
-//二级菜单
+//二級菜單
 
 if(pkperm('isadmin')) {
 	require_once(B_ROOT.'./source/admininc/perm.inc.php');

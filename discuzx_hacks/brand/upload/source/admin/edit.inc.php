@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: edit.inc.php 4473 2010-09-15 04:04:13Z fanshengshuai $
@@ -41,7 +41,7 @@ if(!empty($_POST['valuesubmit'])) {
 
 	$checkresults = array();
 	if($mname == "notice" || $mname == "shop" ) {
-		//标题样式
+		//標題樣式
 		empty($_POST['strongsubject'])?$_POST['strongsubject']='':$_POST['strongsubject']=1;
 		empty($_POST['underlinesubject'])?$_POST['underlinesubject']='':$_POST['underlinesubject']=1;
 		empty($_POST['emsubject'])?$_POST['emsubject']='':$_POST['emsubject']=1;
@@ -56,7 +56,7 @@ if(!empty($_POST['valuesubmit'])) {
 	if($mname=='consume' && (strtotime($_POST['validity_end'])<strtotime($_POST['validity_start']))) {
 		array_push($checkresults, array('validity_end'=>lang('consume_validity_error')));
 	}
-	//检查新增到UC注册
+	//檢查新增到UC註冊
 	$ucid = 0;
 	$ucname = $ucemail = $ucpwd = '';
 	if($mname=='shop' && !empty($_POST['ucreg_username'])) {
@@ -93,14 +93,14 @@ if(!empty($_POST['valuesubmit'])) {
 		$ucdata = uc_get_user($ucid, 1);
 		list($ucid, $ucname, $ucemail) = $ucdata;
 
-		//unset所有uc注册变量
+		//unset所有uc註冊變量
 		$ucarr = array('ucreg_username', 'ucreg_password', 'ucreg_rtpassword', 'ucreg_email');
 		foreach($ucarr as $value) {
 			unset($_POST[$value]);
 		}
 	}
 
-	//提交了数据
+	//提交了數據
 	if($itemid = pkpost($cacheinfo)) {
 
 		if(in_array($mname, array('good', 'notice', 'consume', 'album', 'groupbuy'))) {
@@ -135,15 +135,15 @@ if(!empty($_POST['valuesubmit'])) {
 			syncpost($itemid, $mname);
 		}
 		$shopid = intval($_G['cookie']['shopid']);
-		//删除各种分类的缓存
+		//刪除各種分類的緩存
 		$_BCACHE->deltype('sitelist', 'attr');
 		$_BCACHE->deltype('sitelist', $mname);
 		$_BCACHE->deltype('storelist', $mname, $shopid);
 		if($mname=='shop') {
-			//删除各种分类的缓存
+			//刪除各種分類的緩存
 			$_BCACHE->deltype('detail', 'shop', $_POST['itemid']);
 			if($ucid>0) {
-				//新注册账号
+				//新註冊賬號
 				$insertsqlarr = array(
 					'uid' => $ucid,
 					'username' => $ucname,
@@ -159,16 +159,16 @@ if(!empty($_POST['valuesubmit'])) {
 			}
 			cpmsg('update_success', 'admin.php?action=list&m='.$mname);
 		} else {
-			//删除各种分类的缓存
+			//刪除各種分類的緩存
 			$_BCACHE->deltype('detail', $mname, $shopid, $_POST['itemid']);
 			cpmsg('update_success', 'admin.php?action='.($_POST['itemid']?'list':'add').'&m='.$mname);
 		}
 	}
 } else {
-	//没有提交数据
+	//沒有提交數據
 	$editvalue = $echofield = array();
 
-	//判断信息id
+	//判斷信息id
 	if($_GET['action']=='edit') {
 		if($_GET['itemid']) {
 			$wheresql = ' i.itemid=\''.$_GET['itemid'].'\'';
@@ -187,7 +187,7 @@ if(!empty($_POST['valuesubmit'])) {
 		}
 		$editvalue['dateline'] = sgmdate($editvalue['dateline']);
 
-		//管理员查看基本信息&& $mname=='shop'
+		//管理員查看基本信息&& $mname=='shop'
 		if($_GET['op']=='adminview') {
 			if(empty($_SGLOBAL['panelinfo'])) {
 				getpanelinfo($_GET['itemid']);
@@ -214,9 +214,9 @@ if(!empty($_POST['valuesubmit'])) {
 				}
 				if($mname!='shop') {
 					if($update['grade'] == 0 || $update['grade'] == 3) {
-						$update['grade'] = '显示';
+						$update['grade'] = '顯示';
 					} elseif($update['grade'] == '2') {
-						$update['grade'] = '关闭';
+						$update['grade'] = '關閉';
 					}
 				} else {
 					$update['grade'] = lang('grade_5');
@@ -247,9 +247,9 @@ if(!empty($_POST['valuesubmit'])) {
 			if($mname!='shop') {
 				$editvalue['subjectimage'] = !empty($editvalue['subjectimage']) ?  B_URL.'/'.getattachurl($editvalue['subjectimage']):'';
 				if($editvalue['grade'] == 0 || $editvalue['grade'] == 3) {
-					$editvalue['grade'] = '显示';
+					$editvalue['grade'] = '顯示';
 				} elseif($editvalue['grade'] == '2') {
-					$editvalue['grade'] = '关闭';
+					$editvalue['grade'] = '關閉';
 				}
 				require_once( B_ROOT.'/batch.attribute.php');
 				$attributes = getattr($_GET['itemid'], $editvalue['catid']);
@@ -352,7 +352,7 @@ if(!empty($_POST['valuesubmit'])) {
 		}
 	}
 
-	//显示导航以及表头
+	//顯示導航以及表頭
 	if($mname == 'shop') {
 		shownav('shop', $mname.'_'.$_GET['action'], $editvalue['subject']);
 	} else {
@@ -392,15 +392,15 @@ if(!empty($_POST['valuesubmit'])) {
 	showtableheader();
 
 	if($_GET['action']=='add' && $mname=='shop') {
-		showusernamefield();//注册显示
+		showusernamefield();//註冊顯示
 	}
 
 	if($mname == 'shop') {
 		$grouplist = getgrouplist();
 		showsetting('shop_groupid', array('groupid', $grouplist), $editvalue['groupid'], 'select', '', '', '', '', '<span style="color:red">*</span>');
 	}
-	showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist); //显示基本字段
-	//读取自定义字段
+	showbasicfield($mname, $editvalue, $_SSCONFIG, $categorylist); //顯示基本字段
+	//讀取自定義字段
 	foreach ($cacheinfo['columns'] as $value) {
 		if($mname == "groupbuy" && preg_match('/^user_|^ext_/',$value['fieldname'])) {
 			continue;

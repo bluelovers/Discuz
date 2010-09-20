@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: category.inc.php 4359 2010-09-07 07:58:57Z fanshengshuai $
@@ -28,7 +28,7 @@ $_POST['commtmodel'] = intval($_POST['commtmodel']);
 if($type != 'shop') {
 	$_POST['cmid'] = 0;
 	$_POST['commtmodel'] = 0;
-	//读取地区分类、商品分类、图库分类
+	//讀取地區分類、商品分類、圖庫分類
 	$categorylist = getmodelcategory($type);
 }
 $checkresults = array();
@@ -37,7 +37,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 		cpmsg('category_subject_error');
 		//array_push($checkresults, array('subject'=>lang('category_subject_error')));
 	}
-	//提交了添加数据
+	//提交了添加數據
 	$subjects = explode("\r\n", $_POST['subject']);
 	foreach($subjects as $subject) {
 		if(!empty($subject))
@@ -48,7 +48,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	}
 	DB::query('INSERT INTO '.tname('categories')." (upid, name, note, type, displayorder, cmid, commtmodel)
 							VALUES ".implode(",", $insertstr).";");
-	updatesubcatid(); //更新子分类关系
+	updatesubcatid(); //更新子分類關係
 	include_once(B_ROOT.'./source/function/cache.func.php');
 	updatecategorycache();
 	header('Location: admin.php?action=category&type='.$type);
@@ -63,15 +63,15 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 		cpmsg('category_info_error', '', '', '', true, true, $checkresults);
 	}
 
-	//提交了修改数据
+	//提交了修改數據
 	DB::query('UPDATE '.tname('categories')." SET upid='$_POST[upid]', name='$_POST[subject]', note='$_POST[note]', displayorder='$_POST[displayorder]', cmid='$_POST[cmid]', commtmodel='$_POST[commtmodel]' WHERE catid='$_POST[catid]';");
-	updatesubcatid(); //更新子分类关系
+	updatesubcatid(); //更新子分類關係
 	include_once(B_ROOT.'./source/function/cache.func.php');
 	updatecategorycache();
 	header('Location: admin.php?action=category&type='.$type);
 
 } elseif($_GET['op']=='del' && !empty($_GET['catid'])) {
-	//提交了删除数据
+	//提交了刪除數據
 	if($categorylist[$_GET['catid']]['havechild']) { cpmsg('category_delete_had_subcat', 'admin.php?action=category&type='.$type);}
 	if(in_array($type, array('shop', 'good', 'notice', 'consume', 'album'))) {
 		$itemtname = $type.'items';
@@ -86,15 +86,15 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	$result = DB::fetch($query);
 	if($result['count']>0) { cpmsg($cdhit, 'admin.php?action=category&type='.$type);}
 	DB::query('DELETE FROM '.tname('categories')." WHERE catid='$_GET[catid]' LIMIT 1;");
-	updatesubcatid($type); //更新子分类关系
+	updatesubcatid($type); //更新子分類關係
 	if(in_array($type, array('good', 'notice', 'album', 'consume', 'groupbuy'))) {
-		synscategroiesforgroup($type, $_GET['catid']); //更新店铺组设置	
+		synscategroiesforgroup($type, $_GET['catid']); //更新店舖組設置	
 	}
 	include_once(B_ROOT.'./source/function/cache.func.php');
 	updatecategorycache();
 	header('Location: admin.php?action=category&type='.$type);
 } elseif(!empty($_POST['listsubmit'])) {
-	//提交了数据
+	//提交了數據
 	$item = array();
 	foreach($_POST['display'] as $key=>$value) {
 		$query = '';
@@ -105,12 +105,12 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 			DB::query($query);
 		}
 	}
-	updatesubcatid(); //更新子分类关系
+	updatesubcatid(); //更新子分類關係
 	include_once(B_ROOT.'./source/function/cache.func.php');
 	updatecategorycache();
 	header('Location: admin.php?action=category&type='.$type);
 } elseif($_GET['op'] == 'add' || $_GET['op'] == 'edit') {
-	//添加或更改分类的编辑页面
+	//添加或更改分類的編輯頁面
 	shownav('catmanage', 'category_'.$_GET['op']);
 	showsubmenu('category_'.$_GET['op']);
 	showtips('category_'.$_GET['op'].'_tips');
@@ -161,7 +161,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	showtablefooter();
 	showformfooter();
 } else {
-	//没有提交数据的列表页
+	//沒有提交數據的列表頁
 	shownav('catmanage', 'category_'.$type.'_list');
 	showsubmenu('menu_category_'.$type);
 	showtips('category_list_tips_'.$type);

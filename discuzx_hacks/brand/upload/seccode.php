@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: seccode.php 4381 2010-09-09 03:05:09Z fanshengshuai $
@@ -13,19 +13,19 @@ require_once('./common.php');
 $seccodedata = array (
 	'width' => 87,
 	'height' => 35,
-	'adulterate' => '1',//随机背景图形
-	'angle' => '0',//随机倾斜度
-	'shadow' => '1',//阴影
+	'adulterate' => '1',//隨機背景圖形
+	'angle' => '0',//隨機傾斜度
+	'shadow' => '1',//陰影
 );
 
 if(intval($_GET['w'] > 0)) $seccodedata['width'] = $_GET['w'];
 if(intval($_GET['h'] > 0)) $seccodedata['height'] = $_GET['h'];
 
 
-//验证码
+//驗證碼
 $seccode = mkseccode();
 
-//设定cookie
+//設定cookie
 ssetcookie('seccode', authcode($seccode, 'ENCODE'));
 
 if(function_exists('imagecreate') && function_exists('imagecolorset') && function_exists('imagecopyresized') &&
@@ -111,7 +111,7 @@ if(function_exists('imagecreate') && function_exists('imagecolorset') && functio
 	echo $image;
 }
 
-//生成随机
+//生成隨機
 function mkseccode() {
 	$seccode = random(6, 1);
 	$s = sprintf('%04s', base_convert($seccode, 10, 24));

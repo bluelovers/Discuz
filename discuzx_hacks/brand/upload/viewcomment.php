@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: viewcomment.php 4378 2010-09-09 02:55:13Z fanshengshuai $
@@ -16,7 +16,7 @@ include_once(B_ROOT.'./source/function/misc.func.php');
 $_POST['typeid'] = intval($_POST['typeid']);
 $_POST['delitemid'] = intval($_POST['delitemid']);
 if(!in_array($_POST['type'], array('shop', 'good', 'consume', 'notice', 'photo', 'albumn', 'groupbuy'))) {
-//提交评论类型的限制
+//提交評論類型的限制
 	showmessage('Type Denied');
 }
 
@@ -95,7 +95,7 @@ if(submitcheck('submitdelcomm') && $_SGET['do'] == 'del') {
 	if(!empty($checkresults)) {
 		showmessage('comment_submit_error', '', '', '', $checkresults);
 	}
-	//更新用户最新更新时间
+	//更新用戶最新更新時間
 	if($_G['uid']) {
 		updatetable('members', array('updatetime'=>$_G['timestamp'], 'lastcommenttime'=>$_G['timestamp']), array('uid'=>$_G['uid']));
 	}
@@ -104,7 +104,7 @@ if(submitcheck('submitdelcomm') && $_SGET['do'] == 'del') {
 	$_POST['commentmessage'] = '<div class=\"new\"><span name=\"cid_{cid}_info\">'.preg_replace("/\s*\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s*/is", "<div class=\"quote\"><blockquote>\\1</blockquote></div>", $_POST['commentmessage']).'</span></div>';
 	$_POST['type'] = saddslashes($_POST['type']);
 
-	//关于盖楼
+	//關於蓋樓
 	$comment = array('floornum' => 0, 'firstcid' =>0);
 	if($upcid) {
 		if($_G['uid'] != $item['uid']) showmessage('no_permission');
@@ -137,7 +137,7 @@ if(submitcheck('submitdelcomm') && $_SGET['do'] == 'del') {
 		$_POST['message'] = $comment['message'].$_POST['commentmessage'];
 	}
 
-	//回复词语屏蔽
+	//回複詞語屏蔽
 	$_POST['commentmessage'] = censor($_POST['commentmessage']);
 	$shopuid = getshopuid($type);
 	$subtype = !empty($commentscorestr) ? '1' : '0';

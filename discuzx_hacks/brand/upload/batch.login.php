@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: batch.login.php 4456 2010-09-14 13:45:18Z yexinhao $
@@ -22,7 +22,7 @@ if(postget('refer')) {
 		$refer = B_URL_ALL;
 	}
 }
-// // 防止死循环
+// // 防止死循環
 if(strpos($refer,'login.php')) $refer="index.php";
 
 include_once(B_ROOT.'./uc_client/client.php');
@@ -62,7 +62,7 @@ switch ($action) {
 				}
 			}
 
-			//登录成功
+			//登錄成功
 
 			$uid = $_G['uid'] = $members['uid'];
 			$_G['username'] = $members['username'];

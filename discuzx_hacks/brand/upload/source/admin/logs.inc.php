@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2099 Comsenz Inc.
+ *      [品艈飼间潬(C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: admincp_logs.php 10422 2010-05-11 07:02:05Z liulanbo $

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: group.inc.php 4400 2010-09-13 02:36:34Z yumiao $
@@ -13,9 +13,9 @@ if(!defined('IN_ADMIN')) {
 
 $id = $_REQUEST['id'] ? $_REQUEST['id'] : 0;
 $types = array('album', 'good', 'notice', 'consume', 'groupbuy');
-$allowvars = array('title', 'album_field', 'good_field', 'notice_field', 'consume_field', 'groupbuy_field', 'enablegood', 'enablenotice', 'enableconsume', 'enablealbum', 'enablegroupbuy', 'enablebrandlinks', 'verifygood', 'verifynotice', 'verifyconsume', 'verifyalbum', 'verifyshop', 'verifygroupbuy', 'consumemaker', 'maxnumgood', 'maxnumnotice', 'maxnumalbum', 'maxnumconsume', 'maxnumgroupbuy', 'maxnumbrandlinks');//允许提交的settings变量名
+$allowvars = array('title', 'album_field', 'good_field', 'notice_field', 'consume_field', 'groupbuy_field', 'enablegood', 'enablenotice', 'enableconsume', 'enablealbum', 'enablegroupbuy', 'enablebrandlinks', 'verifygood', 'verifynotice', 'verifyconsume', 'verifyalbum', 'verifyshop', 'verifygroupbuy', 'consumemaker', 'maxnumgood', 'maxnumnotice', 'maxnumalbum', 'maxnumconsume', 'maxnumgroupbuy', 'maxnumbrandlinks');//允許提交的settings變量名
 
-// 处理提交过来的增加和修改操作
+// 處理提交過來的增加和修改操作
 $checkresults = array();
 if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	if(empty($_POST['title'])) {
@@ -96,7 +96,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 			$group[$v.'_field'] = explode(",", $group[$v.'_field']);
 		}
 	}
-	// 添加或更改属性的编辑页面
+	// 添加或更改屬性的編輯頁面
 	shownav('shop', 'group_'.$_GET['op']);
 	showsubmenu('menu_group_add', array(
 		array('nav_group', 'group', '0'),
@@ -161,7 +161,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 	cpmsg('message_success', 'admin.php?action=group');
 
 } else {
-	//读取用户组信息
+	//讀取用戶組信息
 	$query = DB::query("SELECT * FROM ".tname("shopgroup")." ORDER BY id ASC;");
 	while($result = DB::fetch($query)) {
 	    $result['album_field'] = explode(",", $result['album_field']);
@@ -171,7 +171,7 @@ if($_GET['op']=='add' && !empty($_POST['valuesubmit'])) {
 		$result['groupbuy_field'] = explode(",", $result['groupbuy_field']);
 	    $grouplist[] = $result;
 	}
-	//添加或更改分类的编辑页面
+	//添加或更改分類的編輯頁面
 	shownav('shop', 'nav_group');
 	showsubmenu('nav_group', array(
 		array('nav_group', 'group', '1'),
@@ -227,13 +227,13 @@ function showmultiplejs() {
     $(function(){';
     foreach($types as $k=>$v) {
     	echo '
-           //移到右边
+           //移到右邊
            $("#'.$v.'_add").click(function() {$("#'.$v.'_s option:selected").remove().appendTo("#'.$v.'");return false;});
-           //移到左边
+           //移到左邊
            $("#'.$v.'_remove").click(function() {$("#'.$v.' option:selected").remove().appendTo("#'.$v.'_s");return false;});
-           //双击选项
+           //雙擊選項
            $("#'.$v.'_s").dblclick(function(){$("option:selected",this).remove().appendTo("#'.$v.'");return false;});
-           //双击选项
+           //雙擊選項
            $("#'.$v.'").dblclick(function(){$("option:selected",this).remove().appendTo("#'.$v.'_s");return false;});
     	';
     }

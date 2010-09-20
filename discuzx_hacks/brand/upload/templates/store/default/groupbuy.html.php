@@ -1,7 +1,7 @@
 <?exit?>
 
 <!--/**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: groupbuy.html.php 4397 2010-09-10 10:07:01Z fanshengshuai $

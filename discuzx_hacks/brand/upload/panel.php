@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: panel.php 4364 2010-09-08 01:02:33Z fanshengshuai $
@@ -23,7 +23,7 @@ if(intval($_GET['shopid']) > 0) {
 	}
 }
 
-//权限检查
+//權限檢查
 if(pkperm('isadmin')) {
 	showmessage('admin_no_perm_to_panel', 'index.php');
 } elseif($_G['myshopstatus'] == 'verified') {
@@ -59,10 +59,10 @@ if(pkperm('isadmin')) {
 
 $BASESCRIPT = 'panel.php';
 
-// 读入商家后台与店长后台的公共文件，包含变量初始化/常见id处理/载入语言包/grade关系等
+// 讀入商家後台與店長後台的公共文件，包含變量初始化/常見id處理/載入語言包/grade關係等
 require_once (B_ROOT.'./source/admininc/common.inc.php');
 
-//二次登录确认(半个小时)
+//二次登錄確認(半個小時)
 $cpaccess = 0;
 $query = DB::query("SELECT errorcount FROM ".tname('adminsession')." WHERE uid='$_G[uid]' AND dateline+1800>='$_G[timestamp]'");
 if($session = DB::fetch($query)) {
@@ -80,7 +80,7 @@ if($session = DB::fetch($query)) {
 }
 
 switch ($cpaccess) {
-	case '1'://可以登录
+	case '1'://可以登錄
 		if(submitcheck('dologin', 1)) {
 			if(!$passport = getpassport($_G['username'], $_POST['admin_password'])) {
 				DB::query("UPDATE ".tname('adminsession')." SET errorcount=errorcount+1 WHERE uid='$_G[uid]'");
@@ -104,9 +104,9 @@ switch ($cpaccess) {
 			exit();
 		}
 		break;
-	case '2'://登录成功
+	case '2'://登錄成功
 		break;
-	default://尝试次数太多禁止登录
+	default://嘗試次數太多禁止登錄
 		showmessage('excessive_number_of_attempts_to_sign');
 		break;
 }
@@ -114,17 +114,17 @@ switch ($cpaccess) {
 $shop = loadClass('shop',$_G['myshopid']);
 
 if($shop->status == 'new') {
-	// 新的，没有被审核的
+	// 新的，沒有被審核的
 	$actions = array('index', 'edit', 'map', 'list');
 }elseif($shop->status == 'close') {
-	// 关闭的
+	// 關閉的
 	$actions = array('index');
 }elseif($shop->status == 'normal') {
 	// 正常的
 	$actions = array('index', 'batchmod', 'list', 'edit', 'add', 'map', 'theme', 'nav', 'report', 'brandlinks', 'modifypasswd');
 }
 
-//店长后台新手任务
+//店長後台新手任務
 if(!$_G['member']['taskstatus'] && (($mname=="shop" && $_GET['action'] =='edit') || $_GET['action']=='add') && $_GET['intask']) {
 	if($mname=="shop") {
 		$taskmessage = array($lang["task_step_1_title"],$lang["task_step_1_message"]);
@@ -148,14 +148,14 @@ if(!$_G['member']['taskstatus'] && (($mname=="shop" && $_GET['action'] =='edit')
 	}
 }
 
-//调入不同的action
+//調入不同的action
 if($_GET['action'] == 'ajax') {
-	//店长使用的ajax数据调用
+	//店長使用的ajax數據調用
 	require_once(B_ROOT.'./source/panel/ajax.inc.php');
 
 	exit;
 }elseif($_GET['action']=='ajax_editor') {
-	//站长与店长公用的ajax编辑器调用
+	//站長與店長公用的ajax編輯器調用
 	if(empty($_SGLOBAL['panelinfo']['enablealbum'])) {
 		$_GET['cont']='www';
 	}
@@ -172,7 +172,7 @@ if($_GET['action'] == 'ajax') {
 	if($_G['inajax'] != 1) {
 		cpheader();
 	}
-	require_once B_ROOT.'./source/panel/'.$_GET['action'].'.inc.php'; //后台功能模块
+	require_once B_ROOT.'./source/panel/'.$_GET['action'].'.inc.php'; //後台功能模塊
 	$title = 'cplog_'.$_GET['action'].($_GET['operation'] ? '_'.$_GET['operation'] : '');
 } else {
 	cpheader();

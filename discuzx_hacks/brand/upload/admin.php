@@ -1,14 +1,14 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: admin.php 4397 2010-09-10 10:07:01Z fanshengshuai $
  */
 
 @define('IN_ADMIN', true);
-// 自定义后台页面地址
+// 自定義後台頁面地址
 @define('ADMINSCRIPT', 'admin.php');
 require_once('./common.php');
 require_once(B_ROOT.'./source/adminfunc/tpl.func.php');
@@ -18,7 +18,7 @@ if(!pkperm('isadmin')) {
 	showmessage('no_permission', 'index.php');
 }
 
-//删除安装程序
+//刪除安裝程序
 if(@file_exists(DISCUZ_ROOT.'./install/index.php') && !DISCUZ_DEBUG) {
 	@unlink(DISCUZ_ROOT.'./install/index.php');
 	if(@file_exists(DISCUZ_ROOT.'./install/index.php')) {
@@ -26,28 +26,28 @@ if(@file_exists(DISCUZ_ROOT.'./install/index.php') && !DISCUZ_DEBUG) {
 	}
 }
 
-//允许的模型
+//允許的模型
 $models = array('shop', 'good', 'notice', 'consume', 'album', 'photo', 'brandlinks', 'groupbuy');
 
 $BASESCRIPT = 'admin.php';
-//读入商家后台与店长后台的公共文件，包含变量初始化/常见id处理/载入语言包/grade关系等
+//讀入商家後台與店長後台的公共文件，包含變量初始化/常見id處理/載入語言包/grade關係等
 require_once (B_ROOT.'./source/admininc/common.inc.php');
 
-//调入不同的action
+//調入不同的action
 if($_GET['action']=='ajax') {
 	$_GET['inajax'] = 1;
 	@header('Content-Type: text/html; charset='.$_G['charset']);
-	require_once(B_ROOT.'./source/admin/ajax.inc.php'); //站长使用的ajax数据调用
+	require_once(B_ROOT.'./source/admin/ajax.inc.php'); //站長使用的ajax數據調用
 	exit;
 }
 if($_GET['action']=='ajax_editor') {
 	require_once(B_ROOT.'./source/adminfunc/editor_ajax_img.func.php');
 	geteditcont($_GET['cont'], 0);
-	//站长与店长公用的ajax编辑器调用
+	//站長與店長公用的ajax編輯器調用
 	exit;
 }
 
-//二次登录确认(半个小时)
+//二次登錄確認(半個小時)
 $cpaccess = 0;
 $query = DB::query("SELECT errorcount FROM ".tname('adminsession')." WHERE uid='$_G[uid]' AND dateline+1800>='$_G[timestamp]'");
 if($session = DB::fetch($query)) {
@@ -65,7 +65,7 @@ if($session = DB::fetch($query)) {
 }
 
 switch ($cpaccess) {
-	case '1'://可以登录
+	case '1'://可以登錄
 		if(submitcheck('dologin', 1)) {
 			if(!$passport = getpassport($_G['username'], $_POST['admin_password'])) {
 				DB::query("UPDATE ".tname('adminsession')." SET errorcount=errorcount+1 WHERE uid='$_G[uid]'");
@@ -91,9 +91,9 @@ switch ($cpaccess) {
 			exit();
 		}
 		break;
-	case '2'://登录成功
+	case '2'://登錄成功
 		break;
-	default://尝试次数太多禁止登录
+	default://嘗試次數太多禁止登錄
 		showmessage('excessive_number_of_attempts_to_sign');
 		break;
 }
@@ -115,7 +115,7 @@ if(empty($_GET['action']) || isset($_GET['frames'])) {
 			cpmsg('noaccess');
 		}
 	}
-	require_once B_ROOT.'./source/admin/'.$_GET['action'].'.inc.php'; //后台功能模块
+	require_once B_ROOT.'./source/admin/'.$_GET['action'].'.inc.php'; //後台功能模塊
 	$title = 'cplog_'.$_GET['action'].(!empty($_GET['operation']) ? '_'.$_GET['operation'] : '');
 } else {
 	if($_G['inajax'] != 1) {

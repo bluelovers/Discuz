@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: index.php 4337 2010-09-06 04:48:05Z fanshengshuai $
@@ -275,7 +275,7 @@ if($method == 'show_license') {
 		} else {
 			show_msg('admininfo_invalid', '', 0);
 		}
-		config_edit(); //写配置文件
+		config_edit(); //寫配置文件
 
 		$uid = $adminuser['uid'];
 
@@ -307,7 +307,7 @@ if($method == 'show_license') {
 		touch($lockfile);
 		VIEW_OFF && show_msg('initdbresult_succ');
 
-		//设置SITEKEY等
+		//設置SITEKEY等
 		$sitekey = substr(_generate_key(), 4, 16);
 		runquery("REPLACE INTO ".ORIG_TABLEPRE."settings (`variable` ,`value`) VALUES ('sitekey', '$sitekey')");
 

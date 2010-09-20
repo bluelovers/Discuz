@@ -1,7 +1,7 @@
 <?php
 
 /**
- *      [品牌空间] (C)2001-2010 Comsenz Inc.
+ *      [品牌空間] (C)2001-2010 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: block.inc.php 4360 2010-09-07 08:03:59Z fanshengshuai $
@@ -140,7 +140,7 @@ if(($_GET['op'] == 'edit' || $_GET['op'] == 'add') && !empty($_POST['valuesubmit
 	showformfooter();
 	bind_ajax_form();
 }
-//加密函数
+//加密函數
 function passport_encrypt($txt, $key) {
 	srand((double)microtime() * 1000000);
 	$encrypt_key = md5(rand(0, 32000));
@@ -153,7 +153,7 @@ function passport_encrypt($txt, $key) {
 	return base64_encode(passport_key($tmp, $key));
 }
 
-//加密函数
+//加密函數
 function passport_key($txt, $encrypt_key) {
 	$encrypt_key = md5($encrypt_key);
 	$ctr = 0;
