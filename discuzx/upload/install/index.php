@@ -351,6 +351,15 @@ if($method == 'show_license') {
 		$sql = str_replace("\r\n", "\n", $sql);
 		runquery($sql);
 
+		// bluelovers
+		// 增加額外安裝 SQL
+		if (file_exists(ROOT_PATH.'./install/data/install_data_ex.sql')) {
+			$sql = file_get_contents(ROOT_PATH.'./install/data/install_data_ex.sql');
+			$sql = str_replace("\r\n", "\n", $sql);
+			runquery($sql);
+		}
+		// bluelovers
+
 		$onlineip = $_SERVER['REMOTE_ADDR'];
 		$timestamp = time();
 		$backupdir = substr(md5($_SERVER['SERVER_ADDR'].$_SERVER['HTTP_USER_AGENT'].substr($timestamp, 0, 4)), 8, 6);
