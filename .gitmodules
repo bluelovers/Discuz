@@ -1,0 +1,3 @@
+[submodule "discuzx/upload/extensions/libs/scophp"]
+	path = discuzx/upload/extensions/libs/scophp
+	url = D:/xampp/htdocs/libs/scophp/
