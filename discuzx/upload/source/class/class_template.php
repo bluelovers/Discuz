@@ -303,6 +303,11 @@ class template {
 	function hooktags($hookid, $key = '') {
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
+
+		// bluelovers
+		$key_old = $key;
+		// bluelovers
+
 		$key = $key !== '' ? "[$key]" : '';
 		$dev = '';//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 
@@ -323,7 +328,12 @@ class template {
 		 *
 		 * 數組 key 的含義請參考相關模版
 		 */
-		$this->replacecode['replace'][$i] = "<? {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) ?"."><"."?= \$_G['setting']['pluginhooks']['$hookid']$key; ?".">";
+
+		$d1 = $d2 = '';
+		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags_Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags_After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+
+		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start--><? {$dev}{$d1}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) ?"."><"."?= \$_G['setting']['pluginhooks']['$hookid']$key;{$d2} ?"."><!--Hook: $hookid - End-->";
 		return $search;
 	}
 
