@@ -394,14 +394,25 @@ function get_constellation($birthmonth,$birthday) {
 	$birthmonth = intval($birthmonth);
 	$birthday = intval($birthday);
 	$idx = $birthmonth;
-	if ($birthday <= 22) {
-		if (1 == $birthmonth) {
-			$idx = 12;
-		} else {
-			$idx = $birthmonth - 1;
-		}
-	}
-	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
+//	if ($birthday <= 22) {
+//		if (1 == $birthmonth) {
+//			$idx = 12;
+//		} else {
+//			$idx = $birthmonth - 1;
+//		}
+//	}
+//	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
+
+	if ($birthmonth < 1 || $birthmonth > 12 || $birthday < 1 || $birthday > 31) return '';
+
+	$carray = array(22, 20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 22, 22);
+
+	$_idx = ($birthday >= $carray[$idx]) ? $idx : $idx - 1;
+	if ($_idx < 1) $_idx = 12;
+	$idx = $_idx;
+	$_idx = $_idx - 1;
+
+	return lang('space', 'constellation_' . $idx);
 }
 
 function get_zodiac($birthyear) {
