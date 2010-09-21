@@ -719,7 +719,7 @@ $lang = array
 	'email_check_send' => '驗證郵箱的激活鏈接已經發送到你剛才填寫的郵箱,你會在幾分鐘之內收到激活郵件，請注意查收。',
 	'email_error' => '填寫的郵箱格式錯誤,請重新填寫',
 
-	'theme_does_not_exist' => '指定的風格不存在',
+	'theme_does_not_exist' => '指定的風格（{style}）不存在',
 	'css_contains_elements_of_insecurity' => '你提交的內容含有不安全元素',
 
 	'upload_images_completed' => '上傳圖片完成了',

@@ -228,7 +228,8 @@ if (submitcheck('diysubmit')) {
 	$spacecss = preg_replace("/(\<|\>)/is", '', $spacecss);
 
 	$currentlayout = getstr($_POST['currentlayout'],5, 1, 1);
-	$style = empty($_POST['style'])?'':preg_replace("/[^0-9a-z]/i", '', $_POST['style']);
+//	$style = empty($_POST['style'])?'':preg_replace("/[^0-9a-z]/i", '', $_POST['style']);
+	$style = empty($_POST['style'])?'':preg_replace("/[^0-9a-z_-]/i", '', $_POST['style']);
 
 	$layoutdata = dstripslashes(getgpc('layoutdata', 'P'));
 	require_once libfile('class/xml');
@@ -238,7 +239,8 @@ if (submitcheck('diysubmit')) {
 	if($style && $style != 'uchomedefault') {
 		$cssfile = DISCUZ_ROOT.'./static/space/'.$style.'/style.css';
 		if(!file_exists($cssfile)) {
-			showmessage('theme_does_not_exist');
+//			showmessage('theme_does_not_exist');
+			showmessage('theme_does_not_exist', '', array('style' => $style));
 		}
 	}
 
