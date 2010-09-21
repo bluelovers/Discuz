@@ -19,7 +19,33 @@ if(!defined('FTP_ERR_SERVER_DISABLED')) {
 }
 
 
-
+/**
+ * ----------------------------------------------
+ * @example  A  object by yourself
+ * ----------------------------------------------
+ * $ftp = & discuz_ftp::instance();
+ * if(!$ftp->connect()) {
+ *     showmessage('FTP_ERR_'.$ftp->error());
+ * }
+ * $ftp->upload('/source/dir/file.name', 'target/dir/file.ext');
+ * if($ftp->error()) {
+ *     showmessage('ftp succeed upload');
+ * } else {
+ *     showmessage('FTP_ERR_'.$ftp->error());
+ * }
+ * $ftp->ftp_close();
+ * ----------------------------------------------
+ * @example  B  use function in function_core.php
+ * ----------------------------------------------
+ * $succeed = ftpcmd('upload', '/source/file.name');
+ * if(!$succeed) {
+ *     showmessage('FTP_ERR_'.ftpcmd('error));
+ * } else {
+ *     showmessage('ftp succeed upload');
+ * }
+ * ftpcmd('close');
+ *
+ */
 class discuz_ftp
 {
 
@@ -30,6 +56,10 @@ class discuz_ftp
 	var $connectid;
 	var $_error;
 
+	/**
+	 * @return discuz_ftp
+	 * @package discuz_ftp
+	 **/
 	function &instance() {
 		static $object;
 		if(empty($object)) {

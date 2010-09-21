@@ -157,19 +157,31 @@ function getuserprofile($field) {
 	}
 }
 
-function daddslashes($string, $force = 1) {
+function daddslashes($string, $force = 1, $strip = FALSE) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
 			unset($string[$key]);
-			$string[addslashes($key)] = daddslashes($val, $force);
+			$string[addslashes($key)] = daddslashes($val, $force, $strip);
 		}
 	} else {
-		$string = addslashes($string);
+//		$string = addslashes($string);
+		$string = addslashes($strip ? stripslashes($string) : $string);
 	}
 	return $string;
 }
 
+/**
+ * 字符串解密加密
+ **/
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+	/**
+	 * 隨機密鑰長度 取值 0-32;
+	 * 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
+	 * 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
+	 * 當此值為 0 時，則不產生隨機密鑰
+	 *
+	 * @var int
+	 **/
 	$ckey_length = 4;
 	$key = md5($key != '' ? $key : getglobal('authkey'));
 	$keya = md5(substr($key, 0, 16));
@@ -223,14 +235,40 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
-function dhtmlspecialchars($string) {
+/**
+ * @param string $string
+ * @param ENT_QUOTES|null $quote_style
+ * @return string
+ **/
+function dhtmlspecialchars($string, $quote_style = 0) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $quote_style);
 		}
 	} else {
-		$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1',
-		str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string));
+//		$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1',
+//		str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string));
+
+		$searcharray1 = array('&', '"', '<', '>');
+		$replacearray1 = array('&amp;', '&quot;', '&lt;', '&gt;');
+
+		if ($quote_style & ENT_QUOTES) {
+			$searcharray1[] = "'";
+			$replacearray1[] = '&#039;';
+		}
+
+		$searcharray = array
+			(
+				"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+				"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+			);
+		$replacearray = array
+			(
+				"&#\\1;",
+				"&#\\1;",
+			);
+
+		$string = preg_replace($searcharray, $replacearray, str_replace($searcharray1, $replacearray1, $string));
 	}
 	return $string;
 }
@@ -339,19 +377,77 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		$staticavatar = $_G['setting']['avatarmethod'];
 	}
 
+	// bluelovers
+	$ext = '';
+
+	if (is_array($size)) {
+		$class = isset($size['class']) ? $size['class'] : $size[0];
+		$style = $style.(isset($size['style']) ? $size['style'] : $size[1]);
+
+		if (isset($size['class'])) {
+			unset($size['class']);
+		} else {
+			unset($size[0]);
+		}
+		if (isset($size['style'])) {
+			unset($size['style']);
+		} else {
+			unset($size[1]);
+		}
+
+		if (is_array($size) && count($size)) {
+			foreach ($size as $k => $v) {
+				$ext .= ' '.$k.'="'.$v.'"';
+			}
+		}
+
+		$size = $class;
+	} else {
+		$class = $size;
+	}
+	$size = explode('_', $size);
+	$size = $size[0];
+	// bluelovers
+
 	$ucenterurl = empty($ucenterurl) ? $_G['setting']['ucenterurl'] : $ucenterurl;
 	$size = in_array($size, array('big', 'middle', 'small')) ? $size : 'middle';
 	$uid = abs(intval($uid));
-	if(!$staticavatar && !$static) {
-		return $returnsrc ? $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size : '<img src="'.$ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').'" />';
+
+	// bluelovers
+	$class = empty($class) ? $size : $class;
+
+	$ext2 = '';
+
+	if($uid > 0) {
+	// bluelovers
+
+		$ext2 .= ' onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'"';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+		$ext2 .= '" lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
+		$ext = $ext2 . ' ' . $ext;
+
+		if(!$staticavatar && !$static) {
+			return $returnsrc ? $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size : '<img src="'.$ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').'"'.$ext.' />';
+		} else {
+			$uid = sprintf("%09d", $uid);
+			$dir1 = substr($uid, 0, 3);
+			$dir2 = substr($uid, 3, 2);
+			$dir3 = substr($uid, 5, 2);
+			$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
+			return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
+		}
+
+	// bluelovers
 	} else {
-		$uid = sprintf("%09d", $uid);
-		$dir1 = substr($uid, 0, 3);
-		$dir2 = substr($uid, 3, 2);
-		$dir3 = substr($uid, 5, 2);
-		$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
-		return $returnsrc ? $file : '<img src="'.$file.'" onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'" />';
+//		$ext2 .= ' onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'"';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+//		$ext2 .= '" lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
+		$ext = $ext2 . ' ' . $ext;
+
+		$file = (!preg_match('/^http:\/\//i', IMGDIR) ? $GLOBALS['boardurl'] : '').IMGDIR.'/syspm.gif';
+		return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
 	}
+	// bluelovers
 }
 
 function lang($file, $langvar = null, $vars = array(), $default = null) {
@@ -750,14 +846,36 @@ function dimplode($array) {
 	}
 }
 
-function libfile($libname, $folder = '') {
-	$libpath = DISCUZ_ROOT.'/source/'.$folder;
+// bluelovers
+function sclass_exists($class) {
+	return (class_exists($class, false) || interface_exists($class, false)) ? true : false;
+}
+// bluelovers
+
+function libfile($libname, $folder = '', $source = 'source/') {
+//	$libpath = DISCUZ_ROOT.'/source/'.$folder;
+	$libpath = DISCUZ_ROOT.'/'.(is_array($source) ? implode('/', $source) : $source).'/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
-		return realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
+//		return realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
+		$ret = "{$libpath}/{$pre}/{$pre}_{$name}.php";
 	} else {
-		return realpath("{$libpath}/{$libname}.php");
+//		return realpath("{$libpath}/{$libname}.php");
+		$ret = realpath("{$libpath}/{$libname}.php");
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_File')) {
+		$ret = Scorpio_File::file($ret);
+	} else {
+		$ret = str_replace(array('\\', '//'), '/', $ret);
+	}
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.'', array(&$ret, DISCUZ_ROOT));
+	}
+	// bluelovers
+
+	return $ret;
 }
 
 function cutstr($string, $length, $dot = ' ...') {
@@ -1584,6 +1702,14 @@ function showmessage($message, $url_forward = '', $values = array(), $extraparam
 	dexit();
 }
 
+/**
+ * 檢查是否正確提交了表單
+ *
+ * @param $var 需要檢查的變量
+ * @param $allowget 是否允許GET方式
+ * @param $seccodecheck 驗證碼檢測是否開啟
+ * @return 返回是否正確提交了表單
+ */
 function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 	if(!getgpc($var)) {
 		return FALSE;
@@ -1875,7 +2001,11 @@ function getonlinenum($fid = 0, $tid = 0) {
 	return DB::result_first('SELECT count(*) FROM '.DB::table("common_session")." WHERE 1 $sql");
 }
 
-function sizecount($size) {
+/**
+ * 顯示為易於讀取的文件單位
+ **/
+function sizecount($size = 0) {
+	/*
 	if($size >= 1073741824) {
 		$size = round($size / 1073741824 * 100) / 100 . ' GB';
 	} elseif($size >= 1048576) {
@@ -1886,6 +2016,11 @@ function sizecount($size) {
 		$size = $size . ' Bytes';
 	}
 	return $size;
+	*/
+
+	$i = 0;
+	$sizename = array(' Bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
+	return ($size ? round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) : 0) . $sizename[$i];
 }
 
 function swapclass($class1, $class2 = '') {

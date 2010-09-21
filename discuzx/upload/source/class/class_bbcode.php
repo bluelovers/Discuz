@@ -18,6 +18,10 @@ class bbcode {
 	var $html_s_str = array();
 	var $html_r_str = array();
 
+	/**
+	 * @return bbcode
+	 * @package bbcode
+	 **/
 	function &instance() {
 		static $object;
 		if(empty($object)) {

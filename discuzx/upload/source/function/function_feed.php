@@ -11,12 +11,41 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+function _feed_add($langkey, $icon = '') {
+	$_lang_template = '';
+
+	if (is_array($langkey) && count($langkey) >= 2) {
+		if (lang($langkey[0], $langkey[1], null, true)) {
+			$_lang_template = $langkey;
+		}
+		$langkey = call_user_func_array('lang', $langkey);
+	} else {
+		if ($langkey && lang('feed', $langkey, null, true)) {
+			$_lang_template = $langkey;
+		}
+		$langkey = $langkey ? lang('feed', $langkey) : '';
+	}
+
+	if ($icon == 'share' && $_lang_template && $langkey && !strexists($langkey, '{actor}')) {
+		$langkey = '{actor} '.$langkey;
+	}
+
+	return array($langkey, $_lang_template);
+}
+
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
 	global $_G;
 
-	$title_template = $title_template?lang('feed', $title_template):'';
-	$body_template = $body_template?lang('feed', $body_template):'';
-	$body_general = $body_general?lang('feed', $body_general):'';
+	// bluelovers
+	$_lang_template = array();
+	list($title_template, $_lang_template['title_template']) = _feed_add($title_template, $icon);
+	list($body_template, $_lang_template['body_template']) = _feed_add($body_template, $icon);
+	list($body_general, $_lang_template['body_general']) = _feed_add($body_general, $icon);
+	// bluelovers
+
+//	$title_template = $title_template?lang('feed', $title_template):'';
+//	$body_template = $body_template?lang('feed', $body_template):'';
+//	$body_general = $body_general?lang('feed', $body_general):'';
 	if(empty($uid) || empty($username)) {
 		$uid = $username = '';
 	}
@@ -48,6 +77,13 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['title_data'] = serialize(dstripslashes($title_data));
 	$feedarr['body_data'] = serialize(dstripslashes($body_data));
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
+
+	// bluelovers
+	if ($_lang_template = array_filter($_lang_template)) {
+		$feedarr['lang_template'] = $_lang_template ? serialize($_lang_template) : '';
+	}
+	// bluelovers
+
 	$feedarr = daddslashes($feedarr);
 
 	if(is_numeric($icon)) {
@@ -71,6 +107,7 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	}
 }
 
+//整理feed
 function mkfeed($feed, $actors=array()) {
 	global $_G;
 
@@ -79,6 +116,21 @@ function mkfeed($feed, $actors=array()) {
 	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@unserialize($feed['body_data']));
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
+	// bluelovers
+	$_lang_template = empty($feed['lang_template']) ? array() : unserialize($feed['lang_template']);
+	if (is_array($_lang_template)) {
+		foreach ($_lang_template as $_k_ => $_v_) {
+			$feed[$_k_] = is_array($_v_) ? call_user_func_array('lang', $_v_) : lang('feed', $_v_);
+
+			if ($feed['icon'] == 'share' && !strexists($feed[$_k_], '{actor}')) {
+				$feed[$_k_] = '{actor} '.$feed[$_k_];
+			}
+		}
+	}
+//	debug(array($feed, $lang_feed));
+	// bluelovers
+
+	//title
 	$searchs = $replaces = array();
 	if($feed['title_data']) {
 		foreach (array_keys($feed['title_data']) as $key) {
@@ -92,6 +144,7 @@ function mkfeed($feed, $actors=array()) {
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
+	//body
 	$searchs = $replaces = array();
 	$searchs[] = '{actor}';
 	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
@@ -112,6 +165,7 @@ function mkfeed($feed, $actors=array()) {
 
 	$feed['body_general'] = feed_mktarget($feed['body_general']);
 
+	//icon
 	if(is_numeric($feed['icon'])) {
 		$feed['icon_image'] = "http://appicon.manyou.com/icons/{$feed['icon']}";
 	} else {
@@ -136,7 +190,9 @@ function feed_mktarget($html) {
 	return $html;
 }
 
-
+/**
+ * 產生動態
+ **/
 function feed_publish($id, $idtype, $add=0) {
 	global $_G;
 

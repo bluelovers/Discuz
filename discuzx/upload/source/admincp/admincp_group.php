@@ -405,6 +405,11 @@ var rowtypedata = [
 		showsetting('groups_editgroup_visible_all', 'gviewpermnew', $group['gviewperm'], 'radio');
 		showsetting('groups_editgroup_description', 'descriptionnew', $group['description'], 'textarea');
 		showsetting('groups_editgroup_rules', 'rulesnew', $group['rules'], 'textarea');
+
+		// bluelovers
+		showsetting('groups_editgroup_article', 'articlenew', $group['article'], 'textarea');
+		// bluelovers
+
 		if($groupicon) {
 			$groupicon = '<input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupicon.'?'.random(6).'" width="48" height="48" />';
 		}
@@ -423,10 +428,29 @@ var rowtypedata = [
 		$_G['gp_gviewpermnew'] = intval($_G['gp_gviewpermnew']);
 		$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
 		$_G['gp_rulesnew'] = dhtmlspecialchars(censor(trim($_G['gp_rulesnew'])));
+
+		// bluelovers
+		$_G['gp_articlenew'] = dhtmlspecialchars(censor(trim($_G['gp_articlenew'])));
+		// bluelovers
+
 		$_G['gp_namenew'] = dhtmlspecialchars(censor(trim($_G['gp_namenew'])));
 		$icondata = array();
-		$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
-		$bannernew = upload_icon_banner($group, $_FILES['bannernew'], 'banner');
+//		$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
+//		$bannernew = upload_icon_banner($group, $_FILES['bannernew'], 'banner');
+
+		// bluelovers
+		if($_FILES['iconnew']) {
+			$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
+		} else {
+			$iconnew = $_G['gp_iconnew'];
+		}
+		if($_FILES['bannernew']) {
+			$bannernew = upload_icon_banner($group, $_FILES['bannernew'], 'banner');
+		} else {
+			$bannernew = $_G['gp_bannernew'];
+		}
+		// bluelovers
+
 		if($iconnew) {
 			$icondata['icon'] = $iconnew;
 		}
@@ -446,6 +470,11 @@ var rowtypedata = [
 			'description' => $_G['gp_descriptionnew'],
 			'gviewperm' => $_G['gp_gviewpermnew'],
 			'rules' => $_G['gp_rulesnew'],
+
+			// bluelovers
+			'article' => $_G['gp_articlenew'],
+			// bluelovers
+
 			'jointype' => $_G['gp_jointypenew'],
 		));
 		DB::update('forum_forumfield', $groupdata, "fid='$fid'");

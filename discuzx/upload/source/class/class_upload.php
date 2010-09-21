@@ -7,7 +7,28 @@
  *      $Id: class_upload.php 16662 2010-09-13 01:15:36Z monkey $
  */
 
-
+/**
+ * 本地上傳類
+ *
+ * @example
+ *
+ * $upload = new discuz_upload();
+ * $upload->init($attach, 'forum');
+ * if($upload->error()) {
+ *     showmessage('upload error');
+ * }
+ * ... 權限判斷等等
+ * ...
+ * $upload->save();
+ * if($upload->error()) {
+ *     if(!defined('IN_ADMINCP')) {
+ *        showmessage($upload->errormessage());
+ *    } else {
+ *        cpmsg($upload->errormessage(), '', 'error');
+ *    }
+ * }
+ *
+ */
 Class discuz_upload{
 
 	var $attach = array();
@@ -20,6 +41,14 @@ Class discuz_upload{
 
 	}
 
+	/**
+     * Enter description here...
+     *
+     * @param 上傳的 $attach
+     * @param 'forum', 'group', 'album', 'portal', 'common', 'temp', 'category' $type
+     * @param 擴展id, 目前僅應用於group類型 $extid
+     * @return boolean
+     */
 	function init($attach, $type = 'temp', $extid = 0, $forcename = '') {
 
 		if(!is_array($attach) || empty($attach) || !$this->is_upload_file($attach['tmp_name']) || trim($attach['name']) == '' || $attach['size'] == 0) {
@@ -53,6 +82,19 @@ Class discuz_upload{
 
 	}
 
+	/**
+     * 保存上傳文件至本地
+     * @return boolean
+     *
+     *
+     * @errorcode:  $this->error()
+     * 0    = 上傳成功
+     * -101 = 上傳文件不存在或不合法
+     * -102 = 非圖片類型文件
+     * -103 = 無法寫入文件或寫入失敗
+     * -104 = 無法識別的圖像文件格式
+     *
+     */
 	function save() {
 
 		if(empty($this->attach) || empty($this->attach['tmp_name']) || empty($this->attach['target'])) {

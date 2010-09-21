@@ -52,6 +52,9 @@ class tree {
 		}
 	}
 
+	/**
+	 * 重新計算級數
+	 **/
 	function getLayer($id, $space = false) {
 		$this->layer[$id] = 0;
 		$this->countid = $id;
@@ -68,7 +71,9 @@ class tree {
 			$id = $parent[$this->layer[$id]] = $this->parent[$id];
 		}
 
+		// 按照鍵名排序
 		ksort($parent);
+		// 數組指針移回第一個單元
 		reset($parent);
 
 		return $parent;

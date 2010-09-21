@@ -28,6 +28,10 @@ class discuz_admincp
 	var $sessionlife = 1800;
 	var $sessionlimit = 0;
 
+	/**
+	 * @return discuz_admincp
+	 * @package discuz_admincp
+	 **/
 	function &instance() {
 		static $object;
 		if(empty($object)) {

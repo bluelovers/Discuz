@@ -15,6 +15,10 @@ class credit {
 
 	function credit() {}
 
+	/**
+	 * @return credit
+	 * @package credit
+	 **/
 	function &instance() {
 		static $object;
 		if(empty($object)) {
@@ -23,6 +27,9 @@ class credit {
 		return $object;
 	}
 
+	/**
+	 * 獲取指定動作能獲得多少積分
+	 **/
 	function execrule($action, $uid = 0, $needle = '', $coef = 1, $update = 1, $fid = 0) {
 		global $_G;
 
@@ -81,24 +88,31 @@ class credit {
 				$newcycle = false;
 				$logarr = array();
 				switch($rule['cycletype']) {
+					// 一次性獎勵
 					case 0:
 						break;
+
+					// 每天限次數
 					case 1:
+					// 不限週期
 					case 4:
 						if($rule['cycletype'] == 1) {
 							$today = strtotime(dgmdate($_G['timestamp'], 'Y-m-d'));
+							// 判斷是否為昨天
 							if($rulelog['dateline'] < $today && $rule['rewardnum']) {
 								$rulelog['cyclenum'] =  0;
 								$newcycle = true;
 							}
 						}
 						if(empty($rule['rewardnum']) || $rulelog['cyclenum'] < $rule['rewardnum']) {
+							// 驗證是否為需要去重操作
 							if($rule['norepeat']) {
 								$repeat = $this->checkcheating($rulelog, $needle, $rule['norepeat']);
 								if($repeat && !$newcycle) {
 									return false;
 								}
 							}
+							// 更新次數
 							if($rule['rewardnum']) {
 								$remain = $rule['rewardnum'] - $rulelog['cyclenum'];
 								if($remain < $coef) {
@@ -115,11 +129,14 @@ class credit {
 						}
 						break;
 
+					// 整點
 					case 2:
+					// 間隔分鐘
 					case 3:
 						$nextcycle = 0;
 						if($rulelog['starttime']) {
 							if($rule['cycletype'] == 2) {
+								// 上一次執行時間
 								$start = strtotime(dgmdate($rulelog['starttime'], 'Y-m-d H:00:00'));
 								$nextcycle = $start+$rule['cycletime']*3600;
 							} else {
@@ -127,6 +144,7 @@ class credit {
 							}
 						}
 						if($_G['timestamp'] <= $nextcycle && $rulelog['cyclenum'] < $rule['rewardnum']) {
+							// 驗證是否為需要去重操作
 							if($rule['norepeat']) {
 								$repeat = $this->checkcheating($rulelog, $needle, $rule['norepeat']);
 								if($repeat && !$newcycle) {
@@ -159,6 +177,7 @@ class credit {
 						break;
 				}
 				if($update) {
+					// 記錄操作歷史
 					if($rule['norepeat'] && $needle) {
 						$this->updatecheating($rulelog, $needle, $newcycle);
 					}
@@ -349,20 +368,29 @@ class credit {
 		}
 	}
 
+	/**
+	 * 記錄操作歷史
+	 **/
 	function updatecheating($rulelog, $needle, $newcycle) {
 		if($needle) {
 			$logarr = array();
 			switch($rulelog['norepeat']) {
 				case 0:
 					break;
+
+				// 信息去重
 				case 1:
 					$info = empty($rulelog['info'])||$newcycle ? $needle : $rulelog['info'].','.$needle;
 					$logarr['info'] = addslashes($info);
 					break;
+
+				// 用戶去重
 				case 2:
 					$user = empty($rulelog['user'])||$newcycle ? $needle : $rulelog['user'].','.$needle;
 					$logarr['user'] = addslashes($user);
 					break;
+
+				// 應用去重
 				case 3:
 					$app = empty($rulelog['app'])||$newcycle ? $needle : $rulelog['app'].','.$needle;
 					$logarr['app'] = addslashes($app);
@@ -450,24 +478,33 @@ class credit {
 		return $log;
 	}
 
+	/**
+	 * 防積分重複獎勵同個人或同信息
+	 **/
 	function checkcheating($rulelog, $needle, $checktype) {
 
 		$repeat = false;
 		switch($checktype) {
 			case 0:
 				break;
+
+			// 信息去重
 			case 1:
 				$infoarr = explode(',', $rulelog['info']);
 				if(!empty($rulelog['info']) && in_array($needle, $infoarr)) {
 					$repeat = true;
 				}
 				break;
+
+			// 用戶去重
 			case 2:
 				$userarr = explode(',', $rulelog['user']);
 				if(!empty($rulelog['user']) && in_array($needle, $userarr)) {
 					$repeat = true;
 				}
 				break;
+
+			// 應用去重
 			case 3:
 				$apparr = explode(',', $rulelog['app']);
 				if(!empty($rulelog['app']) && in_array($needle, $apparr)) {

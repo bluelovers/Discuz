@@ -212,13 +212,16 @@ var rowtypedata = [
 		showsubtitle(array('', 'misc_bbcode_tag', 'available', 'display', 'display_order', 'misc_bbcode_icon', 'misc_bbcode_icon_file', ''));
 		$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." ORDER BY displayorder");
 		while($bbcode = DB::fetch($query)) {
+			$bbcode['icon'] = dhtmlspecialchars($bbcode['icon']);
+
 			showtablerow('', array('class="td25"', 'class="td21"', 'class="td25"', 'class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td21"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$bbcode[id]\">",
 				"<input type=\"text\" class=\"txt\" size=\"15\" name=\"tagnew[$bbcode[id]]\" value=\"$bbcode[tag]\">",
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$bbcode[id]]\" value=\"1\" ".($bbcode['available'] ? 'checked="checked"' : NULL).">",
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"displaynew[$bbcode[id]]\" value=\"1\" ".($bbcode['available'] == '2' ? 'checked="checked"' : NULL).">",
 				"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$bbcode[id]]\" value=\"$bbcode[displayorder]\">",
-				$bbcode['icon'] ? "<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>" : ' ',
+//				$bbcode['icon'] ? "<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>" : ' ',
+				$bbcode['icon'] && !$bbcode['icontype'] ? "<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/editor/$bbcode[icon]\" border=\"0\"></a></em>" : ' ',
 				"<input type=\"text\" class=\"txt\" size=\"25\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">",
 				"<a href=\"".ADMINSCRIPT."?action=misc&operation=bbcode&edit=$bbcode[id]\" class=\"act\">$lang[detail]</a>"
 			));
@@ -315,6 +318,13 @@ var rowtypedata = [
 			showformheader("misc&operation=bbcode&edit=$edit");
 			showtableheader();
 			showsetting('misc_bbcode_edit_tag', 'tagnew', $bbcode['tag'], 'text');
+
+			// bluelovers
+			showsetting('misc_bbcode_edit_tag_alias', 'tag_aliasnew', $bbcode['tag_alias'], 'text');
+			showsetting('misc_bbcode_icon', 'iconnew', $bbcode['icon'], 'textarea');
+			showsetting('misc_bbcode_edit_icontype', 'icontypenew', $bbcode['icontype'], 'text');
+			// bluelovers
+
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
@@ -337,6 +347,12 @@ var rowtypedata = [
 			$promptnew = $_G['gp_promptnew'];
 			$permnew = implode("\t", $_G['gp_permnew']);
 
+			// bluelovers
+			$iconnew = trim($_G['gp_iconnew']);
+			$tag_aliasnew = trim($_G['gp_tag_aliasnew']);
+			$icontypenew = trim($_G['gp_icontypenew']);
+			// bluelovers
+
 			if(!preg_match("/^[0-9a-z]+$/i", $tagnew)) {
 				cpmsg('dzcode_edit_tag_invalid', '', 'error');
 			} elseif($paramsnew < 1 || $paramsnew > 3 || $nestnew < 1 || $nestnew > 3) {
@@ -344,10 +360,28 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
-			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
+//			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
+
+			// bluelovers
+			DB::update('forum_bbcode', array(
+				'tag' => $tagnew,
+				'replacement' => $replacementnew,
+				'example' => $examplenew,
+				'explanation' => $explanationnew,
+				'params' => $paramsnew,
+				'nest' => $nestnew,
+
+				'perm' => $permnew,
+
+				'icon' => $iconnew,
+				'icontype' => $icontypenew,
+				'tag_alias' => $tag_aliasnew,
+
+			), array('id' => $edit));
+			// bluelovers
 
 			updatecache(array('bbcodes', 'bbcodes_display'));
-			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode', 'succeed');
+			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode&edit='.$edit, 'succeed');
 
 		}
 	}

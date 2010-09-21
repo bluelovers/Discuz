@@ -17,6 +17,10 @@ class task {
 
 	function task() {}
 
+	/**
+	 * @return task
+	 * @package task
+	 **/
 	function &instance() {
 		static $object;
 		if(empty($object)) {

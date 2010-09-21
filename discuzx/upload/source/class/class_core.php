@@ -38,14 +38,23 @@ class discuz_core {
 		'GLOBALS' => 1,
 		'_GET' => 1,
 		'_POST' => 1,
-		'_REQUEST' => 1,
+//		'_REQUEST' => 1,
+		'_REQUEST' => 0,
 		'_COOKIE' => 1,
 		'_SERVER' => 1,
 		'_ENV' => 1,
 		'_FILES' => 1,
+
+		// bluelovers
+		'_SESSION' => 1,
+		// bluelovers
 	);
 
-	function &instance() {
+	/**
+	 * @return discuz_core
+	 * @package discuz_core
+	 **/
+	static function &instance() {
 		static $object;
 		if(empty($object)) {
 			$object = new discuz_core();
@@ -73,9 +82,28 @@ class discuz_core {
 		$this->initated = true;
 	}
 
+	// bluelovers
+	function _int_extensions() {
+		include_once libfile('Constants', 'libs/scophp/Scorpio/libs/', 'extensions/');
+		include_once libfile('Hook', 'libs/scophp/Scorpio/libs/', 'extensions/');
+		include_once libfile('File', 'libs/scophp/Scorpio/libs/', 'extensions/');
+
+		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core {}");
+		if (!sclass_exists('Scorpio_File')) eval("class Scorpio_File extends Scorpio_File_Core {}");
+
+		@include_once libfile('hooks/core', '', 'extensions/');
+
+		foreach (get_included_files() as $fn) {
+			Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+		}
+	}
+	// bluelovers
+
 	function _init_env() {
 
-		error_reporting(E_ERROR);
+		//設置錯誤報告等級 以及關閉自動轉義
+//		error_reporting(E_ERROR);
+		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
 		if(phpversion() < '5.3.0') {
 			set_magic_quotes_runtime(0);
 		}
@@ -93,6 +121,10 @@ class discuz_core {
 			exit('function_core.php is missing');
 		}
 
+		// bluelovers
+		$this->_int_extensions();
+		// bluelovers
+
 		if(function_exists('ini_get')) {
 			$memorylimit = @ini_get('memory_limit');
 			if($memorylimit && return_bytes($memorylimit) < 33554432 && function_exists('ini_set')) {
@@ -101,10 +133,39 @@ class discuz_core {
 		}
 
 		define('IS_ROBOT', checkrobot());
+		// bluelovers
+		if (session_id()) {
+//			$this->debug_log(__METHOD__, 'Session is Started: '.session_id());
+		} else {
+//			$this->debug_log(__METHOD__, 'Session is Close');
+			$this->superglobal['_SESSION'] = 0;
+		}
+
+//		$this->debug_log(__METHOD__, '[INI] register_globals: '.ini_get('register_globals'));
+
+//		$this->debug_log(__METHOD__, $_REQUEST);
+//		$this->debug_log(__METHOD__, array_keys($this->superglobal));
+		if (ini_get('register_globals') && array_keys_exists($_REQUEST, array_keys($this->superglobal))) {
+			// Prevent GLOBALS override attacks
+			exit('Global variable overload attack. IP: '.$this->_get_client_ip());
+		}
+		// bluelovers
+
 
 		foreach ($GLOBALS as $key => $value) {
-			if (!isset($this->superglobal[$key])) {
+			if (!isset($this->superglobal[$key]) || (isset($this->superglobal[$key]) && $this->superglobal[$key] == 0)) {
+				// bluelovers
+//				$this->debug_log(__METHOD__, "Unset:1 \$GLOBALS[{$key}]");
+				// bluelovers
+
 				$GLOBALS[$key] = null; unset($GLOBALS[$key]);
+
+			// bluelovers
+			} elseif ($key != 'GLOBALS') {
+//				$this->debug_log(__METHOD__, "Unset:0 \$GLOBALS[{$key}]");
+//				$this->debug_log(__METHOD__, $GLOBALS[$key]);
+			// bluelovers
+
 			}
 		}
 
@@ -207,14 +268,67 @@ class discuz_core {
 
 		$_GET['diy'] = empty($_GET['diy']) ? '' : $_GET['diy'];
 
-		foreach(array_merge($_POST, $_GET) as $k => $v) {
+		// bluelovers
+		$_REQUEST = array_merge($_GET, $_POST);
+
+//		$this->debug_log(__METHOD__, $GLOBALS['_REQUEST']);
+		// bluelovers
+
+		//將所有POST，GET來的數據存在$this->var['gp_'.$k]中
+//		foreach(array_merge($_POST, $_GET) as $k => $v) {
+//			$this->var['gp_'.$k] = $v;
+//		}
+		foreach($_REQUEST as $k => $v) {
 			$this->var['gp_'.$k] = $v;
 		}
+
+		//mod方法，DX根據不同的MOD來掉用不同的文件
+		//例如forum.php中require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php'
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 	}
+
+	// bluelovers
+	function debug_log($key, $vars, $focus = 0) {
+		static $_config;
+		static $firephp;
+
+		if ($firephp < 0) return;
+
+		if (!$this->config) {
+			if (!$_config) {
+				$_config = array();
+				@include DISCUZ_ROOT.'./config/config_global.php';
+			}
+
+			if ($_config['debug']) $focus = 1;
+		}
+
+		if ($focus || (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG)) {
+//			static $firephp;
+
+			if (!$firephp) {
+				if (@require_once(DISCUZ_ROOT.'./extensions/libs/FirePHPCore/FirePHP.class.php')) {
+					$firephp = FirePHP::getInstance(true);
+				} else {
+					$firephp = -1;
+					return;
+				}
+			}
+
+			if ($key == null) {
+				global $_G;
+				$key = $_G['basescript'];
+			}
+
+			$firephp->log($vars, $key);
+
+//			debug(array($vars, $key));
+		}
+	}
+	// bluelovers
 
 	function _init_config() {
 
@@ -417,6 +531,12 @@ class discuz_core {
 		$this->var['timenow'] = array(
 			'time' => dgmdate(TIMESTAMP),
 			'offset' => $timeoffset >= 0 ? ($timeoffset == 0 ? '' : '+'.$timeoffset) : $timeoffset
+
+			// bluelovers
+			,'year' => date('Y', TIMESTAMP + 3600 * $timeoffset),
+			'month' => date('n', TIMESTAMP + 3600 * $timeoffset),
+			'date' => date('j', TIMESTAMP + 3600 * $timeoffset)
+			// bluelovers
 		);
 		$this->timezone_set($timeoffset);
 
@@ -784,11 +904,19 @@ class DB
 		return $res;
 	}
 
-	function implode_field_value($array, $glue = ',') {
+	function implode_field_value($array, $glue = ',', $fields = array()) {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
-			$sql .= $comma."`$k`='$v'";
-			$comma = $glue;
+			// copy from convert
+			if(empty($fields) || isset($fields[$k])) {
+			// copy from convert
+
+				$sql .= $comma."`$k`='$v'";
+				$comma = $glue;
+
+			// copy from convert
+			}
+			// copy from convert
 		}
 		return $sql;
 	}
@@ -805,6 +933,13 @@ class DB
 		DB::checkquery($sql);
 		return DB::_execute('fetch_first', $sql);
 	}
+
+	// bluelovers
+	function query_first($sql) {
+		DB::checkquery($sql);
+		return DB::_execute('fetch_first', $sql);
+	}
+	// bluelovers
 
 	function result($resourceid, $row = 0) {
 		return DB::_execute('result', $resourceid, $row);
@@ -960,6 +1095,11 @@ class DB
 
 }
 
+/**
+ * @example
+ * $discuz = & discuz_core::instance();
+ * $discuz->session;
+ **/
 class discuz_session {
 
 	var $sid = null;
@@ -967,7 +1107,13 @@ class discuz_session {
 	var $isnew = false;
 	var $newguest = array('sid' => 0, 'ip1' => 0, 'ip2' => 0, 'ip3' => 0, 'ip4' => 0,
 	'uid' => 0, 'username' => '', 'groupid' => 7, 'invisible' => 0, 'action' => 0,
-	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0);
+	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0,
+
+	// bluelovers
+	'gender' => 0, 'session_lang' => '',
+	// bluelovers
+
+	);
 
 	var $old =  array('sid' =>  '', 'ip' =>  '', 'uid' =>  0);
 

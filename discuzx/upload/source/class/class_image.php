@@ -11,7 +11,35 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-
+/**
+ * 圖片處理類
+ *
+ * @example
+ *
+ * require_once libfile('class/image');
+ *
+ * $img = new image;
+ *
+ * $r = $img->Thumb($attachfile, '', $w, $h, 'fixwr');
+ * //生成 $attachfile.'thumb.jpg' 為文件名的縮略圖
+ * $r = $img->Thumb($attachfile, 'temp/test.jpg', $w, $h, 'fixwr');
+ * //生成 /data/attachment/test/test.jpg' 為文件名的縮略圖
+ *
+ * if($r) {
+ *    $isthumb = $r;
+ * } else {
+ *    $error = $img->error();
+ *    showmessage('Thumb Error');
+ * }
+ *
+ * $r = $img->Watermark($attachfile);
+ * //為 $attachfile 加水印
+ * if(!$r) {
+ *    $error = $img->error();
+ *    showmessage('Watermark Error');
+ * }
+ *
+ */
 class image {
 
 	var $source = '';
@@ -41,7 +69,20 @@ class image {
 		);
 	}
 
-
+	/**
+     * 生成圖片的縮略圖
+     *
+     * @param $source 圖片源路徑
+     * @param $target 生成的縮略圖路徑，路徑為相對 data/attachment/ 的文件名
+     *    本地圖片省略時自動加後綴 .thumb.jpg，遠程圖片無法省略
+     * @param $thumbwidth 縮略寬度
+     * @param $thumbheight 縮略高度
+     * @param $thumbtype 縮略方法
+     *    fixnone / 1 : 小於指定大小、保持比率（默認）
+     *      fixwr / 2 : 與指定大小相同、保持比率，超出部分剪切
+     * @param $nosuffix 縮略圖路徑不加 .thumb.jpg 後綴
+     * @return 是否處理完畢
+     */
 	function Thumb($source, $target, $thumbwidth, $thumbheight, $thumbtype = 1, $nosuffix = 0) {
 		global $_G;
 		$return = $this->init('thumb', $source, $target, $nosuffix);
@@ -62,6 +103,13 @@ class image {
 		return $this->sleep($return);
 	}
 
+	/**
+     * 生成圖片的水印
+     * @param $source 圖片源路徑
+     * @param $target 生成的圖片路徑，省略表示同 $source
+     * @param $type forum - 論壇; portal - 門戶; album - 空間相冊
+     * @return 是否處理完畢
+     */
 	function Watermark($source, $target = '', $type = 'forum') {
 		global $_G;
 		$return = $this->init('watermask', $source, $target);
@@ -82,6 +130,14 @@ class image {
 		return $this->sleep($return);
 	}
 
+	/**
+     * $this->error() 返回值（用於處理失敗時）
+     *     0: 圖片不符合處理條件，無需處理正常退出
+     *    -1: $source 為無效的圖片文件
+     *    -2: 文件權限不足無法處理圖片($source 圖片無法讀取、$target 路徑不可寫)
+     *    -3: 系統設置錯誤無法處理圖片
+     *    -4: 服務器缺少處理圖片所需的功能
+     */
 	function error() {
 		return $this->errorcode;
 	}
