@@ -73,7 +73,7 @@ $predefinedvars = array('available' => array(), 'boardimg' => array(), 'imgdir' 
 	'wrapbg' => array(0),
 	'wrapbordercolor' => array(0),
 
-	'msgfontsize' => array(1, $lang['styles_edit_type_post'], '14px'),
+	'msgfontsize' => array(1, $lang['styles_edit_type_post'], '12px'),
 	'contentwidth' => array(1),
 	'contentseparate' => array(0),
 

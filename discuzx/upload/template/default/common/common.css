@@ -174,7 +174,7 @@ a { color: {LINK}; text-decoration: none; }
 /* 必填項 */ .rq { color: red; }
 
 /* 文本框 */
-	.px, .pt { padding: 2px 4px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; font-size: 14px; color: {MIDTEXT}; }
+	.px, .pt { padding: 2px 4px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; font-size: 12px; color: {MIDTEXT}; }
 		.px:focus, .pt:focus { border-color: #6FB1DF; color: {LINK}; -moz-box-shadow: 0 0 5px #6FB1DF; }
 		.px { height: 20px; }
 			.pns .px { height: 18px; line-height: 18px; }

@@ -322,7 +322,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <meta http-equiv="Content-Type" content="text/html;charset=<?=$_GET['charset']?>" />
 <title>New Document</title>
 <style>
-body { font-size:14px; line-height:1.8em; padding-right: 4px; padding-left: 8px; padding-bottom: 8px; margin: 0px; padding-top: 8px; }
+body { font-size:12px; line-height:1.8em; padding-right: 4px; padding-left: 8px; padding-bottom: 8px; margin: 0px; padding-top: 8px; }
 </style>
 <meta content="mshtml 6.00.2900.3132" name=generator>
 </head>
