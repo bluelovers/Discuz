@@ -70,37 +70,57 @@ function forum(&$forum) {
 	return TRUE;
 }
 
-function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 0, $showhide = FALSE, $evalue = FALSE, $special = 0) {
+function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 0, $showhide = FALSE, $evalue = FALSE, $special = 0, $exdata = array()) {
+	/*
+	 * 修正可接受選擇多個 fid
+	 * 更改 HTML 樣式(縮排.版塊簡介...)
+	 */
 	global $_G;
 
 	if(!isset($_G['cache']['forums'])) {
 		loadcache('forums');
 	}
+
+	// bluelovers
+	$selectedfid = is_array($selectedfid) ? $selectedfid : explode(',', $selectedfid);
+	// bluelovers
+
 	$forumcache = &$_G['cache']['forums'];
 	$forumlist = $tableformat ? '<dl><dd><ul>' : '<optgroup label="&nbsp;">';
 	foreach($forumcache as $forum) {
 		if((!$forum['status'] || $forum['hidemenu']) && !$showhide) {
 			continue;
 		}
+
+		// bluelovers
+		$c = $cc = '　';
+		$_add = $forum['description'] ? " title=\"".dhtmlspecialchars($forum[description], ENT_QUOTES)."\" " : '';
+		// bluelovers
+
 		if($forum['type'] == 'group') {
 			if($tableformat) {
-				$forumlist .= '</ul></dd></dl><dl><dt><a href="forum.php?gid='.$forum['fid'].'">'.$forum['name'].'</a></dt><dd><ul>';
+				$forumlist .= '</ul></dd></dl><dl><dt'.' title="'.dhtmlspecialchars($forum['name'].($forum['description'] ? "\n".$forum['description'] : '')).'" '.'><a href="forum.php?gid='.$forum['fid'].'"'.$_add.'>'.$forum['name'].'</a></dt><dd><ul>';
 			} else {
-				$forumlist .= $groupselectable ? '<option value="'.($evalue ? 'gid_' : '').$forum['fid'].'" class="bold">--'.$forum['name'].'</option>' : '</optgroup><optgroup label="--'.$forum['name'].'">';
+				$forumlist .= $groupselectable ? '<option value="'.($evalue ? 'gid_' : '').$forum['fid'].'" class="bold select_group"'.$_add.'>--'.$forum['name'].'</option>' : '</optgroup><optgroup label="--'.$forum['name'].'"'.$_add.' class="select_group">';
 			}
 			$visible[$forum['fid']] = true;
 		} elseif($forum['type'] == 'forum' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || (substr($forum['allowpostspecial'], -$special, 1)))) {
 			if($tableformat) {
-				$forumlist .= '<li'.($_G['fid'] == $forum['fid'] ? ' class="current"' : '').'><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'">'.$forum['name'].'</a></li>';
+				$forumlist .= '<li'.($_G['fid'] == $forum['fid'] ? ' class="current"' : '').''.' title="'.dhtmlspecialchars($forum['name'].($forum['description'] ? "\n".$forum['description'] : '')).'" '.'><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'"'.$_add.'>'.$forum['name'].'</a></li>';
 			} else {
-				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && $selectedfid == $forum['fid'] ? ' selected' : '').'>'.$forum['name'].'</option>';
+				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && in_array($forum['fid'], $selectedfid) ? ' selected' : '').''.$_add.'>'.$c.$forum['name'].'</option>';
 			}
 			$visible[$forum['fid']] = true;
 		} elseif($forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
+
+			// bluelovers
+			$c .= $cc;
+			// bluelovers
+
 			if($tableformat) {
-				$forumlist .=  '<li class="sub'.($_G['fid'] == $forum['fid'] ? ' current' : '').'"><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'">'.$forum['name'].'</a></li>';
+				$forumlist .=  '<li class="sub'.($_G['fid'] == $forum['fid'] ? ' current' : '').'"'.' title="'.dhtmlspecialchars($forum['name'].($forum['description'] ? "\n".$forum['description'] : '')).'" '.'><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'"'.$_add.'>'.$forum['name'].'</a></li>';
 			} else {
-				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && $selectedfid == $forum['fid'] ? ' selected' : '').'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
+				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && in_array($forum['fid'], $selectedfid) ? ' selected' : '').''.$_add.'>'.$c.$forum['name'].'</option>';
 			}
 		}
 	}

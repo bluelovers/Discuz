@@ -629,15 +629,25 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {
+	// ±ÀÂËªO¶ô
+
 	if(!$_G['forum']['ismoderator'] || !in_array($_G['adminid'], array(1,2))) {
 		showmessage('group_admin_noallowed');
 	}
 	if(submitcheck('grouprecommend')) {
 		if($_G['gp_recommend'] != $_G['forum']['recommend']) {
-			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".intval($_G['gp_recommend'])."' WHERE fid='$_G[fid]'");
+//			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".intval($_G['gp_recommend'])."' WHERE fid='$_G[fid]'");
+
+			// bluelovers
+			$_G['gp_recommend'] = is_array($_G['gp_recommend']) ? implode(',', array_unique($_G['gp_recommend'])) : intval($_G['gp_recommend']);
+
+			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".$_G['gp_recommend']."' WHERE fid='$_G[fid]'");
+			// bluelovers
+
 			require_once libfile('function/cache');
 			updatecache('forumrecommend');
 		}
+
 		showmessage('grouprecommend_succeed', '', array(), array('closetime' => true, 'showdialog' => 1));
 	} else {
 		require_once libfile('function/forumlist');
