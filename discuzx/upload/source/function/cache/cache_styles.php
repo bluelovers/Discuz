@@ -123,8 +123,23 @@ function writetocsscache($data) {
 			$cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/'.$entry;
 			!file_exists($cssfile) && $cssfile = $dir.$entry;
 			$cssdata = @implode('', file($cssfile));
+
+			// bluelovers
+			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			} elseif($data['tpldir'] != 'default' && file_exists($cssfile = DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			}
+			// bluelovers
+
 			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/extend_'.$entry)) {
 				$cssdata .= @implode('', file($cssfile));
+
+			// bluelovers
+			} elseif($data['tpldir'] != 'default' && file_exists($cssfile = DISCUZ_ROOT.'./template/'.'default'.'/common/extend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			// bluelovers
+
 			}
 			if(is_array($_G['setting']['plugins']['available']) && $_G['setting']['plugins']['available']) {
 				foreach($_G['setting']['plugins']['available'] as $plugin) {
@@ -141,7 +156,8 @@ function writetocsscache($data) {
 			if($entry == 'module.css') {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
-			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+//			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+			$cssdata = preg_replace(array('/[ \t]*([,;:\{\}])[ \t]*/', '/[\t\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry.'', 'w')) {
 				fwrite($fp, $cssdata);
 				fclose($fp);
