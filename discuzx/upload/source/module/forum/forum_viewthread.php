@@ -133,6 +133,11 @@ if(!$_G['gp_from']) {
 
 $metakeywords = strip_tags($_G['forum_thread']['subject']);
 
+// bluelovers
+// fixed: Warning: in_array() expects parameter 2 to be array, boolean given in
+$_G['setting']['rewritestatus'] = $_G['setting']['rewritestatus'] ? $_G['setting']['rewritestatus'] : array();
+// bluelovers
+
 if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 	$canonical = rewriteoutput('forum_viewthread', 1, '', $_G['tid'], 1, '', '');
 } elseif(in_array('all_script', $_G['setting']['rewritestatus'])) {
