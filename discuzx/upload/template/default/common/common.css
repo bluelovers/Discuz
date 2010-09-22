@@ -45,7 +45,7 @@ IE8 專用：			.ie8 .foo { ... }
 /* ------------------------------------------------------------------------ 重定義瀏覽器默認樣式 */
 * { margin: 0; padding: 0; word-wrap: break-word; }
 body { {BGCODE}; }
-body, input, button, select, textarea { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
+html, body, input, button, select, textarea { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
 	textarea { resize: none; }
 table { empty-cells: show; border-collapse: collapse; }
 	caption, th { text-align: left; font-weight: 400; }
@@ -579,7 +579,7 @@ a { color: {LINK}; text-decoration: none; }
 
 /* 應用列表*/
 	.appl ul { margin: 3px 0; }
-	.appl li { height: 28px; line-height: 28px; white-space: nowrap; font-size: 14px; text-overflow: ellipsis; overflow: hidden; }
+	.appl li { height: 28px; line-height: 28px; white-space: nowrap; /*font-size: 14px;*/ text-overflow: ellipsis; overflow: hidden; }
 	.appl li a { text-decoration: none !important; }
 	.appl img { margin: 5px 5px -3px 0; }
 	.appl span { float: right; font-size: 12px; }
