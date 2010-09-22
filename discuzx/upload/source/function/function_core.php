@@ -171,14 +171,14 @@ function daddslashes($string, $force = 1, $strip = FALSE) {
 }
 
 /**
- * ¦r²Å¦ê¸Ñ±K¥[±K
+ * å­—ç¬¦ä¸²è§£å¯†åŠ å¯†
  **/
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 	/**
-	 * ÀH¾÷±KÆ_ªø«× ¨ú­È 0-32;
-	 * ¥[¤JÀH¾÷±KÆ_¡A¥i¥H¥O±K¤åµL¥ô¦ó³W«ß¡A§Y«K¬O­ì¤å©M±KÆ_§¹¥ş¬Û¦P¡A¥[±Kµ²ªG¤]·|¨C¦¸¤£¦P¡A¼W¤j¯}¸ÑÃø«×¡C
-	 * ¨ú­È¶V¤j¡A±K¤åÅÜ°Ê³W«ß¶V¤j¡A±K¤åÅÜ¤Æ = 16 ªº $ckey_length ¦¸¤è
-	 * ·í¦¹­È¬° 0 ®É¡A«h¤£²£¥ÍÀH¾÷±KÆ_
+	 * éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
+	 * åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢å¤§ç ´è§£é›£åº¦ã€‚
+	 * å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
+	 * ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
 	 *
 	 * @var int
 	 **/
@@ -450,7 +450,17 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	// bluelovers
 }
 
-function lang($file, $langvar = null, $vars = array(), $default = null) {
+/**
+ * åŠ è¼‰èªè¨€
+ *
+ * @param $file - èªè¨€æ–‡ä»¶ï¼Œå¯åŒ…å«è·¯å¾‘å¦‚ forum/xxx home/xxx
+ * @param $langvar - èªè¨€æ–‡å­—ç´¢å¼•
+ * @param $vars - è®Šé‡æ›¿æ›æ•¸çµ„
+ * @return èªè¨€æ–‡å­—
+ */
+//function lang($file, $langvar = null, $vars = array(), $default = null) {
+//}
+function lang($file, $langvar = null, $vars = array(), $default = null, $checkmode = 0) {
 	global $_G;
 	list($path, $file) = explode('/', $file);
 	if(!$file) {
@@ -461,19 +471,60 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 	if($path != 'plugin') {
 		$key = $path == '' ? $file : $path.'_'.$file;
 		if(!isset($_G['lang'][$key])) {
+
+			// bluelovers
+			$lang = null;
+			// bluelovers
+
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
+
+			// bluelovers
+			if (sclass_exists('Scorpio_Hook')) {
+				Scorpio_Hook::execute('Func_'.__FUNCTION__.'', array('load_lang:after', &$lang, array(
+					'key' => $key,
+					'file' => $file,
+					'langvar' => $langvar,
+					'vars' => $vars,
+					'default' => $default,
+				)));
+			}
+			// bluelovers
+
 			$_G['lang'][$key] = $lang;
 		}
 		$returnvalue = &$_G['lang'];
 	} else {
 		if(!isset($_G['lang']['plugin'])) {
+
+			// bluelovers
+			$lang = null;
+			// bluelovers
+
 			include DISCUZ_ROOT.'./data/plugindata/lang_plugin.php';
+
+			// bluelovers
+			if (sclass_exists('Scorpio_Hook')) {
+				Scorpio_Hook::execute('Func_'.__FUNCTION__.'', array('load_lang_plugindata:after', &$lang, array(
+					'langvar' => $langvar,
+					'vars' => $vars,
+					'default' => $default,
+				)));
+			}
+			// bluelovers
+
 			$_G['lang']['plugin'] = $lang;
 		}
 		$returnvalue = &$_G['lang']['plugin'];
 		$key = &$file;
 	}
 	$return = $langvar !== null ? (isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null) : $returnvalue[$key];
+
+	// bluelovers
+	if ($checkmode) {
+		return $return ? $return : null;
+	}
+	// bluelovers
+
 	$return = $return === null ? ($default !== null ? $default : $langvar) : $return;
 	if($vars && is_array($vars)) {
 		$searchs = $replaces = array();
@@ -1703,12 +1754,12 @@ function showmessage($message, $url_forward = '', $values = array(), $extraparam
 }
 
 /**
- * ÀË¬d¬O§_¥¿½T´£¥æ¤Fªí³æ
+ * æª¢æŸ¥æ˜¯å¦æ­£ç¢ºæäº¤äº†è¡¨å–®
  *
- * @param $var »İ­nÀË¬dªºÅÜ¶q
- * @param $allowget ¬O§_¤¹³\GET¤è¦¡
- * @param $seccodecheck ÅçÃÒ½XÀË´ú¬O§_¶}±Ò
- * @return ªğ¦^¬O§_¥¿½T´£¥æ¤Fªí³æ
+ * @param $var éœ€è¦æª¢æŸ¥çš„è®Šé‡
+ * @param $allowget æ˜¯å¦å…è¨±GETæ–¹å¼
+ * @param $seccodecheck é©—è­‰ç¢¼æª¢æ¸¬æ˜¯å¦é–‹å•Ÿ
+ * @return è¿”å›æ˜¯å¦æ­£ç¢ºæäº¤äº†è¡¨å–®
  */
 function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 	if(!getgpc($var)) {
@@ -2002,7 +2053,7 @@ function getonlinenum($fid = 0, $tid = 0) {
 }
 
 /**
- * Åã¥Ü¬°©ö©óÅª¨úªº¤å¥ó³æ¦ì
+ * é¡¯ç¤ºç‚ºæ˜“æ–¼è®€å–çš„æ–‡ä»¶å–®ä½
  **/
 function sizecount($size = 0) {
 	/*

@@ -1,0 +1,19 @@
+.edt .btn {
+	float: none;
+}
+
+.e_hide {
+	background:url("{STATICURL}image/editor/wy_icon.png") no-repeat scroll 0 0 transparent;
+}
+
+.edt .cusbbcode a { width:  auto; height: auto; min-width: 20px; min-height: 20px; }
+
+.edt .bar, .edt .b1r, .edt .b2r {
+
+	height: auto;
+	/*
+	min-height: 44px;
+	*/
+	min-height: 22px;
+
+}
