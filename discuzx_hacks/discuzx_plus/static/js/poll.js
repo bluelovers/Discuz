@@ -13,11 +13,11 @@ Array.prototype.indexOf = function(substr,start) {
 
 Array.prototype.distinct = function() {
 	var $ = this;
-	var o1 = {}; //存放去重複值
-	var o2 = {}; //存放重複值
-	var o3 = []; //存放重複值
+	var o1 = {}; //存放去重复值
+	var o2 = {}; //存放重复值
+	var o3 = []; //存放重复值
 
-	var o; //數組單個變量
+	var o; //数组单个变量
 	for(var i=0;o = $[i];i++) {
 		if(o in o1) {
 			if(!(o in o2)) o2[o] = o;
@@ -27,7 +27,7 @@ Array.prototype.distinct = function() {
 		}
 	}
 
-	$.length = 0; //清空原數組
+	$.length = 0; //清空原数组
 
 	for(o in o1){
 		$.push(o);
@@ -45,7 +45,7 @@ function checknum(box) {
 	if(box.checked) {
 		if(choice_num > 0 && (choice_arr.length + 1) > choice_num) {
 			box.checked = false;
-			showPrompt(null, null, "本投票最多只允許選擇" + choice_num + "項！", 2000);
+			showPrompt(null, null, "本投票最多只允许选择" + choice_num + "项！", 2000);
 		} else {
 			choice_arr.push(box.value);
 		}
@@ -188,8 +188,8 @@ function pollzoom(obj, fromobj) {
 			if(choiceid && $('pollnum_' + choiceid)) { pollnum = parseInt($('pollnum_' + choiceid).innerHTML); }
 			var pollbuttonhtml = '<button type="submit" onclick="ajaxsmallsubmit(' + choiceid + ')">投票</button>';
 			var althtml = '<strong>' + (obj.alt ? obj.alt : '') + '</strong><span><span id="pollnum_zoom_' + choiceid + '">' + pollnum + '</span> 票</span>';
-			var prevhtml = '<li class="prev"><a href="javascript:;" title="上一項" ' + ($('option_image_' + obj.getAttribute('prevchoiceid')) ? 'onclick="pollzoomother(' + obj.getAttribute('prevchoiceid') + ', ' + obj.getAttribute('choiceid') + ')"' : 'class="disabled"') + ' >上一項</a></li>';
-			var nexthtml = '<li class="next"><a href="javascript:;" title="下一項" ' + ($('option_image_' + obj.getAttribute('nextchoiceid')) ? 'onclick="pollzoomother(' + obj.getAttribute('nextchoiceid') + ', ' + obj.getAttribute('choiceid') + ')"' : 'class="disabled"') + ' >下一項</a></li>';
+			var prevhtml = '<li class="prev"><a href="javascript:;" title="上一项" ' + ($('option_image_' + obj.getAttribute('prevchoiceid')) ? 'onclick="pollzoomother(' + obj.getAttribute('prevchoiceid') + ', ' + obj.getAttribute('choiceid') + ')"' : 'class="disabled"') + ' >上一项</a></li>';
+			var nexthtml = '<li class="next"><a href="javascript:;" title="下一项" ' + ($('option_image_' + obj.getAttribute('nextchoiceid')) ? 'onclick="pollzoomother(' + obj.getAttribute('nextchoiceid') + ', ' + obj.getAttribute('choiceid') + ')"' : 'class="disabled"') + ' >下一项</a></li>';
 			var ctrlhtml = '<div class="zoomtool cl"><ul>' + prevhtml + '<li class="poll">' + pollbuttonhtml + '</li>' + nexthtml + '</ul></div>';
 
 			$(append_parent).removeChild(menu);
@@ -198,7 +198,7 @@ function pollzoom(obj, fromobj) {
 			menu.style.overflow = 'visible';
 			menu.style.width = (w < 300 ? 300 : w) + 20 + 'px';
 			menu.style.height = h + 50 + 'px';
-			menu.innerHTML = '<div class="zoominner">' + ctrlhtml + '<p class="cl" id="' + menuid + '_ctrl"><span class="y"><a href="' + zimg + '" class="imglink" target="_blank" title="在新窗口打開">在新窗口打開</a><a href="javascipt:;" id="' + menuid + '_adjust" class="imgadjust" title="實際大小">實際大小</a><a href="javascript:;" onclick="hideMenu()" class="imgclose" title="關閉">關閉</a></span>' + althtml + '</p><div align="center" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div></div>';
+			menu.innerHTML = '<div class="zoominner">' + ctrlhtml + '<p class="cl" id="' + menuid + '_ctrl"><span class="y"><a href="' + zimg + '" class="imglink" target="_blank" title="在新窗口打开">在新窗口打开</a><a href="javascipt:;" id="' + menuid + '_adjust" class="imgadjust" title="实际大小">实际大小</a><a href="javascript:;" onclick="hideMenu()" class="imgclose" title="关闭">关闭</a></span>' + althtml + '</p><div align="center" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div></div>';
 			$(append_parent).appendChild(menu);
 			$(menuid + '_adjust').onclick = function(e) {adjust(e, 1)};
 			if(BROWSER.ie){

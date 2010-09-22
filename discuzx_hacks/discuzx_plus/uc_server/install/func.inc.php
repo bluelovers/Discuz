@@ -457,7 +457,7 @@ function show_header() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
 <title>$title</title>
 <link rel="stylesheet" href="style.css" type="text/css" media="all" />
 <script type="text/javascript">
@@ -576,8 +576,12 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// ˦뺃ܔﳤ戠ȡֵ 0-32;
-				// 쓈닦뺃ܔԁ΄ΞȎꎹ悉㬼䱣ʇԭ΄ꍃܔȫϠͬ㬼ӃܽṻҲ롃ﴎ⻍죬Զ䳆ƽℑ戡十			// ȡֵԽ䳣샜΄ᤶ﹦Խ䳣샜΄᤻ 16 儠$ckey_length 䎷튉			// 屴˖廑 0 ʱ㬔ⲻ⺉ꋦ뺃ܔ	$key = md5($key ? $key : UC_KEY);
+	$ckey_length = 4;	// 隨機密鑰長度 取值 0-32;
+				// 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
+				// 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
+				// 當此值為 0 時，則不產生隨機密鑰
+
+	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
 	$keyb = md5(substr($key, 16, 16));
 	$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
@@ -702,7 +706,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// ⥈뵽׮곒됐
+		// 插入到最後一行
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -961,9 +965,13 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : Ӄ맃벻ꏷ稈-2 : ༺첻ԊЭע⡵Ĵʓ-3 : Ӄ맃뒑攚
-	-4 : email 豊퓐γ
-	-5 : email ⻔ʐ헢⡊	-6 : 胠email ґ뗢⡊	>1 : ᭊ馣슽ֵΪ UID
+	-1 : 用戶名不合法
+	-2 : 包含不允許註冊的詞語
+	-3 : 用戶名已經存在
+	-4 : email 格式有誤
+	-5 : email 不允許註冊
+	-6 : 該 email 已經被註冊
+	>1 : 表示成功，數值為 UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

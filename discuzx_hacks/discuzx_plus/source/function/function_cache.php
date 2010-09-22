@@ -8,9 +8,9 @@
  */
 
 /**
-* æ›´æ–°ç·©å­˜
-* @param $cachename - ç·©å­˜æ–‡ä»¶åç¨±
-* @return è¿”å›ç·©å­˜$_Gæ•¸çµ„
+* ¸üĞÂ»º´æ
+* @param $cachename - »º´æÎÄ¼şÃû³Æ
+* @return ·µ»Ø»º´æ$_GÊı×é
 */
 function updatecache($cachename = '', $modulename = '') {
 
@@ -18,9 +18,9 @@ function updatecache($cachename = '', $modulename = '') {
 
 	include_once DISCUZ_ROOT.'./source/discuzxplus_version.php';
 
-	//note å®šç¾©ç·©å­˜æ–‡ä»¶åå’Œç·©å­˜å…§å®¹ï¼Œ
-	//note æ³¨æ„ï¼šç¨ç«‹å‹ç·©å­˜ï¼ˆç·©å­˜æ–‡ä»¶ä¸­åªæœ‰ä¸€ç¨®å…§å®¹ï¼‰ä½ç½®è¦é å‰
-	//note ç¶œåˆå‹ç·©å­˜ï¼ˆç·©å­˜æ–‡ä»¶å«æœ‰å¤šå€‹ç·©å­˜å…§å®¹ï¼‰ä½ç½®è¦é å¾Œï¼Œå¦å‰‡å¯èƒ½å¼•èµ·åŠŸèƒ½ç•°å¸¸
+	//note ¶¨Òå»º´æÎÄ¼şÃûºÍ»º´æÄÚÈİ£¬
+	//note ×¢Òâ£º¶ÀÁ¢ĞÍ»º´æ£¨»º´æÎÄ¼şÖĞÖ»ÓĞÒ»ÖÖÄÚÈİ£©Î»ÖÃÒª¿¿Ç°
+	//note ×ÛºÏĞÍ»º´æ£¨»º´æÎÄ¼şº¬ÓĞ¶à¸ö»º´æÄÚÈİ£©Î»ÖÃÒª¿¿ºó£¬·ñÔò¿ÉÄÜÒıÆğ¹¦ÄÜÒì³£
 
 	if(!empty($modulename)) {
 		require_once libfile('cache/'.$modulename, 'include');
@@ -36,7 +36,7 @@ function updatecache($cachename = '', $modulename = '') {
 }
 
 /**
-* æ›´æ–°é…ç½®
+* ¸üĞÂÅäÖÃ
 */
 function updatesettings() {
 	global $_G;
@@ -45,11 +45,11 @@ function updatesettings() {
 }
 
 /**
-* æ›¸å¯«ç·©å­˜
-* @param $script - è…³æœ¬åç¨±
-* @param $cachenames - ç·©å­˜é¡å‹
-* @param $cachedata - ç·©å­˜æ•¸æ“šï¼Œå¦‚æœå­˜åœ¨ç·©å­˜æ•¸æ“šå‰‡ä¸éœ€è¦chachenames
-* @param $prefix - ç·©å­˜å‰ç¶´
+* ÊéĞ´»º´æ
+* @param $script - ½Å±¾Ãû³Æ
+* @param $cachenames - »º´æÀàĞÍ
+* @param $cachedata - »º´æÊı¾İ£¬Èç¹û´æÔÚ»º´æÊı¾İÔò²»ĞèÒªchachenames
+* @param $prefix - »º´æÇ°×º
 */
 function writetocache($script, $cachenames, $cachedata = '', $prefix = 'cache_') {
 	global $_G;
@@ -74,8 +74,8 @@ function writetocache($script, $cachenames, $cachedata = '', $prefix = 'cache_')
 }
 
 /**
-* å¡«å……ç·©å­˜æ•¸æ“š
-* @param $cachename - ç·©å­˜é¡å‹
+* Ìî³ä»º´æÊı¾İ
+* @param $cachename - »º´æÀàĞÍ
 */
 function getcachearray($cachename, $script = '') {
 	global $_G;
@@ -127,7 +127,7 @@ function getcachearray($cachename, $script = '') {
 
 			include DISCUZ_ROOT.'./config/config_ucenter.php';
 			$data['ucenterurl'] = UC_API;
-			//note é©—è­‰ç¢¼
+			//note ÑéÖ¤Âë
 			$data['seccodedata'] = $data['seccodedata'] ? unserialize($data['seccodedata']) : array();
 			if($data['seccodedata']['type'] == 2) {
 				if(extension_loaded('ming')) {
@@ -143,7 +143,7 @@ function getcachearray($cachename, $script = '') {
 				$data['seccodedata']['height'] = 24;
 			}
 
-			//note åœ–ç‰‡æ°´å°
+			//note Í¼Æ¬Ë®Ó¡
 			$data['watermarktype'] = !empty($data['watermarktype']) ? unserialize($data['watermarktype']) : array();
 			$data['watermarktext'] = !empty($data['watermarktext']) ? unserialize($data['watermarktext']) : array();
 			$_G['setting']['version'] = $data['version'] = XPLUS_VERSION;
@@ -211,10 +211,10 @@ function getcachearray($cachename, $script = '') {
 }
 
 /**
-* ç²å–ç·©å­˜ä¸­çš„è®Šé‡
-* @param $data - åŸå§‹æ•¸æ“š
-* @param $type - é¡å‹ VAR è¡¨ç¤ºè®Šé‡ å¦å‰‡æ˜¯å¸¸é‡
-* @return è¿”å›è®Šé‡åºåˆ—
+* »ñÈ¡»º´æÖĞµÄ±äÁ¿
+* @param $data - Ô­Ê¼Êı¾İ
+* @param $type - ÀàĞÍ VAR ±íÊ¾±äÁ¿ ·ñÔòÊÇ³£Á¿
+* @return ·µ»Ø±äÁ¿ĞòÁĞ
 */
 function getcachevars($data, $type = 'VAR') {
 	$evaluate = '';
@@ -233,10 +233,10 @@ function getcachevars($data, $type = 'VAR') {
 }
 
 /**
-* PHPæ•¸çµ„è½‰æ›æˆä»£ç¢¼
-* @param $array	- æ•¸çµ„
-* @param $level	- ç¸®é€²ç”¨å¹¾å€‹è£½è¡¨ç¬¦
-* @return è¿”å›æ•¸çµ„çš„æ–‡æœ¬å­—ç¬¦ä¸²
+* PHPÊı×é×ª»»³É´úÂë
+* @param $array	- Êı×é
+* @param $level	- Ëõ½øÓÃ¼¸¸öÖÆ±í·û
+* @return ·µ»ØÊı×éµÄÎÄ±¾×Ö·û´®
 */
 function arrayeval($array, $level = 0) {
 	if(!is_array($array)) {

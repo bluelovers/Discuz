@@ -4,7 +4,7 @@
 [UCenter] (C)2001-2009 Comsenz Inc.
 This is NOT a freeware, use is subject to license terms
 
-$Id: base.php 879 2008-12-15 03:28:36Z zhaoxiongfei $
+$Id: base.php 980 2009-12-22 03:12:49Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -140,8 +140,12 @@ class base {
 
 	function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-		$ckey_length = 4;	// ˦뺃ܔﳤ戠ȡֵ 0-32;
-		// 쓈닦뺃ܔԁ΄ΞȎꎹ悉㬼䱣ʇԭ΄ꍃܔȫϠͬ㬼ӃܽṻҲ롃ﴎ⻍죬Զ䳆ƽℑ戡十	// ȡֵԽ䳣샜΄ᤶ﹦Խ䳣샜΄᤻ 16 儠$ckey_length 䎷튉	// 屴˖廑 0 ʱ㬔ⲻ⺉ꋦ뺃ܔ		$key = md5($key ? $key : UC_KEY);
+		$ckey_length = 4;	// 隨機密鑰長度 取值 0-32;
+		// 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
+		// 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
+		// 當此值為 0 時，則不產生隨機密鑰
+
+		$key = md5($key ? $key : UC_KEY);
 		$keya = md5(substr($key, 0, 16));
 		$keyb = md5(substr($key, 16, 16));
 		$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';

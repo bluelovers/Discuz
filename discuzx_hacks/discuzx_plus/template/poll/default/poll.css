@@ -3,7 +3,7 @@
 http://www.comsenz.com
 ----------------------------------*/
 * { margin: 0; padding: 0; }
-body { background: #D3DDDC url(images/bg.jpg) repeat-x 0 0; } /** ·≥æÕº∆¨ **/
+body { background: #D3DDDC url(images/bg.jpg) repeat-x 0 0; } /** ±≥æ∞Õº∆¨ **/
 body, input, button, select, textarea { font:12px Tahoma,Helvetica,sans-serif;color:#333; }
 	textarea { resize: none; }
 table { empty-cells: show; border-collapse: collapse; }
@@ -26,9 +26,9 @@ a { color: #333; text-decoration: none; }
 
 .wp { margin: 0 auto 20px; width:878px; }
 #hd { padding: 10px 0; }
-.mn { padding: 20px; border: 3px solid #C9D3D2; background: #FFF; -moz-border-radius: 8px; } /**  ·üø‚èü **/
+.mn { padding: 20px; border: 3px solid #C9D3D2; background: #FFF; -moz-border-radius: 8px; } /**  ±ﬂøÚœﬂ **/
 .info { margin-bottom: 20px; }
-	.info h1 { padding: 8px 0; font-weight: 100; font-size: 22px; text-align: center; color: #333; } /** ·™å‚†™*/
+	.info h1 { padding: 8px 0; font-weight: 100; font-size: 22px; text-align: center; color: #333; } /** ±ÍÃ‚ **/
 	.info p { line-height: 22px; font-size: 14px; color: #666; }
 #ft { margin-top: 30px; padding-top: 10px; border-top: 1px solid #CCC ; text-align: center; color: #666; }
 	#ft p { padding: 5px 0; }

@@ -12,9 +12,9 @@ if(!defined('IN_COMSENZ')) {
 }
 
 define('SOFT_NAME', 'UCenter');
-define('SOFT_VERSION', '1.5.1');
-define('SOFT_RELEASE', '20100501');
-define('INSTALL_LANG', 'SC_UTF8');
+define('SOFT_VERSION', '1.5.2');
+define('SOFT_RELEASE', '20101001');
+define('INSTALL_LANG', 'SC_GBK');
 
 define('CONFIG', ROOT_PATH.'./data/config.inc.php');
 
@@ -22,8 +22,8 @@ $sqlfile = ROOT_PATH.'./install/uc.sql';
 
 $lockfile = ROOT_PATH.'./data/install.lock';
 
-define('CHARSET', 'utf-8');
-define('DBCHARSET', 'utf8');
+define('CHARSET', 'gbk');
+define('DBCHARSET', 'gbk');
 
 define('ORIG_TABLEPRE', 'uc_');
 

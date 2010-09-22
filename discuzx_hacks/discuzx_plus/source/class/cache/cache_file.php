@@ -61,11 +61,11 @@ class ultrax_cache {
 
 	function cache_exists($key) {
 		$cache_file = $this->get_cache_file_path($key);
-		if(!file_exists($cache_file)) {//note 牒存巹炀搽处詺
+		if(!file_exists($cache_file)) {//note 缓存文件不存在
 			return false;
 		}
 		$data = $this->_get_cache($key);
-		if($data['life'] && (filemtime($cache_file) < time() - $data['life'])) {//note 式顫鬼啔
+		if($data['life'] && (filemtime($cache_file) < time() - $data['life'])) {//note 数据过期
 			return false;
 		}
 		return true;

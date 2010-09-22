@@ -12,11 +12,11 @@ if(!defined('IN_DISCUZ')) {
 }
 
 /**
- * é¡¯ç¤ºç³»çµ±æ¶ˆæ¯ï¼ˆç°¡æ˜“æ¨¡å¼ï¼Œç„¡éœ€åŠ è¼‰ Style)
- * ä¾è³´ï¼šfunction_core
- * @param string $message æ¶ˆæ¯ï¼Œèªè¨€åŒ… message
- * @param string $title æ¨™é¡Œï¼Œ æ”¯æŒèªè¨€åŒ… messageï¼Œ é»˜èª system message
- * @param array $msgvar æ¶ˆæ¯èªè¨€çš„æ‹“å±•è®Šé‡åƒæ•¸
+ * ÏÔÊ¾ÏµÍ³ÏûÏ¢£¨¼òÒ×Ä£Ê½£¬ÎŞĞè¼ÓÔØ Style)
+ * ÒÀÀµ£ºfunction_core
+ * @param string $message ÏûÏ¢£¬ÓïÑÔ°ü message
+ * @param string $title ±êÌâ£¬ Ö§³ÖÓïÑÔ°ü message£¬ Ä¬ÈÏ system message
+ * @param array $msgvar ÏûÏ¢ÓïÑÔµÄÍØÕ¹±äÁ¿²ÎÊı
  */
 function show_system_message($message, $title = '', $msgvar = array()) {
 	$message = lang('message', $message, $msgvar);
@@ -25,7 +25,7 @@ function show_system_message($message, $title = '', $msgvar = array()) {
 	echo <<<EOT
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
 <title>$title</title>
 <meta name="keywords" content="" />
 <meta name="description" content="System Message - Discuz! Board" />

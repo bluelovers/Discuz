@@ -37,7 +37,7 @@ class template {
 		$var_regexp = "((\\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\-\>)?[a-zA-Z0-9_\x7f-\xff]*)(\[[a-zA-Z0-9_\-\.\"\'\[\]\$\x7f-\xff]+\])*)";
 		$const_regexp = "([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)";
 
-		//note è§£æžæ”¯æŒå­æ¨¡æ¿ï¼Œä»£ç¢¼å¾ªç’°åŸ·è¡Œï¼Œç‚ºçš„æ˜¯å¯ä»¥è§£æžå­æ¨¡æ¿ç•¶ä¸­çš„å­æ¨¡æ¿ï¼Œé»˜èª 3 å±¤åµŒå¥—
+		//note ½âÎöÖ§³Ö×ÓÄ£°å£¬´úÂëÑ­»·Ö´ÐÐ£¬ÎªµÄÊÇ¿ÉÒÔ½âÎö×ÓÄ£°åµ±ÖÐµÄ×ÓÄ£°å£¬Ä¬ÈÏ 3 ²ãÇ¶Ì×
 		$headerexists = preg_match("/{(sub)?template\s+[\w\/]+?header\}/", $template);
 		$this->subtemplates = array();
 		for($i = 1; $i <= 3; $i++) {
@@ -56,7 +56,7 @@ class template {
 		$template = preg_replace("/[\n\r\t]*\{avatar\((.+?)\)\}[\n\r\t]*/ie", "\$this->avatartags('\\1')", $template);
 		$template = preg_replace("/[\n\r\t]*\{eval\s+(.+?)\s*\}[\n\r\t]*/ies", "\$this->evaltags('\\1')", $template);
 		$template = preg_replace("/[\n\r\t]*\{csstemplate\}[\n\r\t]*/ies", "\$this->loadcsstemplate('\\1')", $template);
-		//noteX åŽ»é™¤ $template = preg_replace("/\{faq\s+(.+?)\}/ies", "faqvar('\\1')", $template);
+		//noteX È¥³ý $template = preg_replace("/\{faq\s+(.+?)\}/ies", "faqvar('\\1')", $template);
 		$template = str_replace("{LF}", "<?=\"\\n\"?>", $template);
 		$template = preg_replace("/\{(\\\$[a-zA-Z0-9_\-\>\[\]\'\"\$\.\x7f-\xff]+)\}/s", "<?=\\1?>", $template);
 		$template = preg_replace("/$var_regexp/es", "template::addquote('<?=\\1?>')", $template);

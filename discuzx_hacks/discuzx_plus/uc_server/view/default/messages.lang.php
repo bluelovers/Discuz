@@ -57,4 +57,6 @@ $lang = array(
 	'pm_send_regdays_error' => '註冊 #$pmsendregdays 天之內不能發送短消息',
 	'pm_send_limit1day_error' => '對不起，超出了您24小時最大發送短消息數，請返回。',
 	'pm_send_floodctrl_error' => '對不起，您兩次發送短消息間隔太短，請返回。',
+	
+	'file_check_failed' => '校驗文件不存在，無法校驗',
 );

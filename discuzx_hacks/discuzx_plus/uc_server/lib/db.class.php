@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 923 2009-02-19 01:30:38Z zhaoxiongfei $
+	$Id: db.class.php 980 2009-12-22 03:12:49Z zhaoxiongfei $
 */
 
 

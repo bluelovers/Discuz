@@ -30,8 +30,8 @@ JSMENU['zIndex'] = {'win':200,'menu':300,'dialog':400,'prompt':500};
 JSMENU['float'] = '';
 //note ajax
 var AJAX = [];
-AJAX['url'] = [];//note 每個URL只允許生成一個AJAX對象，防止重複點擊。
-AJAX['stack'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];//note ajax 對像時間佔位堆棧。預置位10個，應該足夠用了。
+AJAX['url'] = [];//note 每个URL只允许生成一个AJAX对象，防止重复点击。
+AJAX['stack'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];//note ajax 对象时间占位堆栈。预置位10个，应该足够用了。
 //note smiliesOnload
 var CURRENTSTYPE = null;
 var discuz_uid = isUndefined(discuz_uid) ? 0 : discuz_uid;
@@ -309,7 +309,7 @@ function zoom(obj, zimg) {
 			menu.style.overflow = 'visible';
 			menu.style.width = (w < 300 ? 300 : w) + 20 + 'px';
 			menu.style.height = h + 50 + 'px';
-			menu.innerHTML = '<div class="zoominner"><p id="' + menuid + '_ctrl"><span class="y"><a href="' + zimg + '" class="imglink" target="_blank" title="在新窗口打開">在新窗口打開</a><a href="javascipt:;" id="' + menuid + '_adjust" class="imgadjust" title="實際大小">實際大小</a><a href="javascript:;" onclick="hideMenu()" class="imgclose" title="關閉">關閉</a></span>鼠標滾輪縮放圖片</p><div align="center" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div></div>';
+			menu.innerHTML = '<div class="zoominner"><p id="' + menuid + '_ctrl"><span class="y"><a href="' + zimg + '" class="imglink" target="_blank" title="在新窗口打开">在新窗口打开</a><a href="javascipt:;" id="' + menuid + '_adjust" class="imgadjust" title="实际大小">实际大小</a><a href="javascript:;" onclick="hideMenu()" class="imgclose" title="关闭">关闭</a></span>鼠标滚轮缩放图片</p><div align="center" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div></div>';
 			$('append_parent').appendChild(menu);
 			$(menuid + '_adjust').onclick = function(e) {adjust(e, 1)};
 			if(BROWSER.ie){
@@ -368,22 +368,22 @@ function loadcss(cssname) {
 }
 
 /**
-* 顯示菜單
-* @param v	數組格式的參數 詳情如下
-* ctrlid	控制菜單的 id
-* menuid	顯示菜單的 id
-* showid	彈出菜單的 id
-* evt		響應函數的事件		click:鼠標左鍵點擊ctrlObj觸發 mouseover:鼠標移到ctrlObj上觸發
-* pos		菜單位置
-* duration	菜單持續		0:菜單顯示即開始計時 1:鼠標移開ctrlObj即開始計時 2:鼠標移開ctrlObj及menuObj即開始計時 3:菜單一直顯示
-* timeout	菜單持續時間
-* mtype		菜單類型		menu:普通菜單 win:浮窗 prompt:提示信息 dialog:對話框
-* maxh		菜單最大高度
-* layer		菜單層級
-* cache		是否緩存菜單		0:否 1:是
-* drag		拖拽菜單對象的id
+* 显示菜单
+* @param v	数组格式的参数 详情如下
+* ctrlid	控制菜单的 id
+* menuid	显示菜单的 id
+* showid	弹出菜单的 id
+* evt		响应函数的事件		click:鼠标左键点击ctrlObj触发 mouseover:鼠标移到ctrlObj上触发
+* pos		菜单位置
+* duration	菜单持续		0:菜单显示即开始计时 1:鼠标移开ctrlObj即开始计时 2:鼠标移开ctrlObj及menuObj即开始计时 3:菜单一直显示
+* timeout	菜单持续时间
+* mtype		菜单类型		menu:普通菜单 win:浮窗 prompt:提示信息 dialog:对话框
+* maxh		菜单最大高度
+* layer		菜单层级
+* cache		是否缓存菜单		0:否 1:是
+* drag		拖拽菜单对象的id
 * fade		淡入淡出效果
-* cover		覆蓋整個頁面
+* cover		覆盖整个页面
 * zindex
 */
 function showMenu(v) {
@@ -744,9 +744,9 @@ function fetchOffset(obj, mode) {
 }
 
 /**
-* 隱藏菜單
-* @param attr	菜單屬性 空字串:隱藏所有菜單 字串:隱藏指定menuid的菜單 數字:隱藏某一層菜單
-* @param mtype	菜單類型 參見showMenu函數
+* 隐藏菜单
+* @param attr	菜单属性 空字串:隐藏所有菜单 字串:隐藏指定menuid的菜单 数字:隐藏某一层菜单
+* @param mtype	菜单类型 参见showMenu函数
 */
 function hideMenu(attr, mtype) {
 	attr = isUndefined(attr) ? '' : attr;
@@ -802,11 +802,11 @@ function hideMenu(attr, mtype) {
 }
 
 /**
-* 顯示提示信息
-* @param ctrlid		彈出提示信息的對象
-* @param evt		點擊彈出還是鼠標移上去彈出
-* @param msg		提示信息內容
-* @param timeout	提示信息持續時間
+* 显示提示信息
+* @param ctrlid		弹出提示信息的对象
+* @param evt		点击弹出还是鼠标移上去弹出
+* @param msg		提示信息内容
+* @param timeout	提示信息持续时间
 */
 function showPrompt(ctrlid, evt, msg, timeout) {
 	var menuid = ctrlid ? ctrlid + '_pmenu' : 'ntcwin';
@@ -905,13 +905,13 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 }
 
 /**
-* 顯示對話框
-* @param msg		提示信息內容
-* @param mode		對話框模式 alert:有確定按鈕 confirm:有確定和取消按鈕 notice:有確定按鈕 info:沒有按鈕
-* @param t		標題
-* @param func		點「確定」執行的函數
-* @param cover		覆蓋整個頁面
-* @param funccancel 點「取消」執行的函數
+* 显示对话框
+* @param msg		提示信息内容
+* @param mode		对话框模式 alert:有确定按钮 confirm:有确定和取消按钮 notice:有确定按钮 info:没有按钮
+* @param t		标题
+* @param func		点“确定”执行的函数
+* @param cover		覆盖整个页面
+* @param funccancel 点“取消”执行的函数
 */
 function showDialog(msg, mode, t, func, cover, funccancel) {
 	cover = isUndefined(cover) ? (mode == 'info' ? 0 : 1) : cover;
@@ -927,12 +927,12 @@ function showDialog(msg, mode, t, func, cover, funccancel) {
 	$('append_parent').appendChild(menuObj);
 	var s = '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
 	s += t ? t : '提示信息';
-	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="關閉">關閉</a></span></h3>';
+	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="关闭">关闭</a></span></h3>';
 	if(mode == 'info') {
 		s += msg ? msg : '';
 	} else {
 		s += '<div class="c' + (mode == 'info' ? '' : ' altw') + '"><div class="' + (mode == 'alert' ? 'alert_error' : 'alert_info') + '"><p>' + msg + '</p></div></div>';
-		s += '<p class="o pns"><button id="fwin_dialog_submit" value="true" class="pn pnc"><strong>確定</strong></button>';
+		s += '<p class="o pns"><button id="fwin_dialog_submit" value="true" class="pn pnc"><strong>确定</strong></button>';
 		s += mode == 'confirm' ? '<button id="fwin_dialog_cancel" value="true" class="pn" onclick="hideMenu(\'' + menuid + '\', \'dialog\')"><strong>取消</strong></button>' : '';
 		s += '</p>';
 	}
@@ -955,11 +955,11 @@ function showDialog(msg, mode, t, func, cover, funccancel) {
 }
 
 /**
-* 顯示浮動窗口
+* 显示浮动窗口
 * @param k		浮窗的key
-* @param url		浮窗請求的url
-* @param mode		get和post兩種方式
-* @param cache		是否緩存浮窗		0:否 1:是 -1強制瀏覽器更新
+* @param url		浮窗请求的url
+* @param mode		get和post两种方式
+* @param cache		是否缓存浮窗		0:否 1:是 -1强制浏览器更新
 */
 function showWindow(k, url, mode, cache, menuv) {
 	mode = isUndefined(mode) ? 'get' : mode;
@@ -985,7 +985,7 @@ function showWindow(k, url, mode, cache, menuv) {
 			menuObj.act = $(url).action;
 			ajaxpost(url, 'fwin_content_' + k, '', '', '', function() {initMenu();show();});
 		}
-		loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> 請稍候...')}, 500);
+		loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> 请稍候...')}, 500);
 	};
 	var initMenu = function() {
 		clearTimeout(loadingst);
@@ -1045,12 +1045,12 @@ function hideWindow(k, all) {
 
 function Ajax(recvType, waitId) {
 
-	for(var stackId = 0; stackId < AJAX['stack'].length && AJAX['stack'][stackId] != 0; stackId++);//note 查詢空閒的時間位
-	AJAX['stack'][stackId] = 1;//note 表示該任務佔位
+	for(var stackId = 0; stackId < AJAX['stack'].length && AJAX['stack'][stackId] != 0; stackId++);//note 查询空闲的时间位
+	AJAX['stack'][stackId] = 1;//note 表示该任务占位
 
 	var aj = new Object();
 
-	aj.loading = '請稍候...';//note public
+	aj.loading = '请稍候...';//note public
 	aj.recvType = recvType ? recvType : 'XML';//note public
 	aj.waitId = waitId ? $(waitId) : null;//note public
 
@@ -1060,12 +1060,12 @@ function Ajax(recvType, waitId) {
 	aj.stackId = 0;
 	aj.stackId = stackId;
 
-	//note loading 為 null 時，表示使用默認，為空字符串時表示不顯示。
+	//note loading 为 null 时，表示使用默认，为空字符串时表示不显示。
 	aj.setLoading = function(loading) {
 		if(typeof loading !== 'undefined' && loading !== null) aj.loading = loading;
 	};
 
-	//note 默認為 XML 方式
+	//note 默认为 XML 方式
 	aj.setRecvType = function(recvtype) {
 		aj.recvType = recvtype;
 	};
@@ -1119,12 +1119,12 @@ function Ajax(recvType, waitId) {
 				aj.resultHandle(aj.XMLHttpRequest.responseText, aj);
 			} else if(aj.recvType == 'XML') {
 				if(!aj.XMLHttpRequest.responseXML || !aj.XMLHttpRequest.responseXML.lastChild || aj.XMLHttpRequest.responseXML.lastChild.localName == 'parsererror') {
-					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">內部錯誤，無法顯示此內容</a>' , aj);
+					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">内部错误，无法显示此内容</a>' , aj);
 				} else {
 					aj.resultHandle(aj.XMLHttpRequest.responseXML.lastChild.firstChild.nodeValue, aj);
 				}
 			}
-			AJAX['stack'][aj.stackId] = 0;//note 清空標誌位，使其它對像有時間段可以被申請
+			AJAX['stack'][aj.stackId] = 0;//note 清空标志位，使其它对象有时间段可以被申请
 		}
 	};
 
@@ -1197,7 +1197,7 @@ function hostconvert(url) {
 	return url;
 }
 
-//note 封裝函數參數
+//note 封装函数参数
 function newfunction(func) {
 	var args = [];
 	for(var i=1; i<arguments.length; i++) args.push(arguments[i]);
@@ -1268,9 +1268,9 @@ function ajaxupdateevents(obj, tagName) {
 function ajaxupdateevent(o) {
 	if(typeof o == 'object' && o.getAttribute) {
 		if(o.getAttribute('ajaxtarget')) {
-			if(!o.id) o.id = Math.random();//note 該標籤唯一標識
-			var ajaxevent = o.getAttribute('ajaxevent') ? o.getAttribute('ajaxevent') : 'click';//note 默認為 click 事件
-			var ajaxurl = o.getAttribute('ajaxurl') ? o.getAttribute('ajaxurl') : o.href;//note 默認為 click 事件
+			if(!o.id) o.id = Math.random();//note 该标签唯一标识
+			var ajaxevent = o.getAttribute('ajaxevent') ? o.getAttribute('ajaxevent') : 'click';//note 默认为 click 事件
+			var ajaxurl = o.getAttribute('ajaxurl') ? o.getAttribute('ajaxurl') : o.href;//note 默认为 click 事件
 			_attachEvent(o, ajaxevent, newfunction('ajaxget', ajaxurl, o.getAttribute('ajaxtarget'), o.getAttribute('ajaxwaitid'), o.getAttribute('ajaxloading'), o.getAttribute('ajaxdisplay')));
 			if(o.getAttribute('ajaxfunc')) {
 				o.getAttribute('ajaxfunc').match(/(\w+)\((.+?)\)/);
@@ -1281,10 +1281,10 @@ function ajaxupdateevent(o) {
 }
 
 /*
- *@ url: 需求請求的 url
- *@ id : 顯示的 id
- *@ waitid: 等待的 id，默認為顯示的 id，如果 waitid 為空字符串，則不顯示 loading...， 如果為 null，則在 showid 區域顯示
- *@ linkid: 是哪個鏈接觸發的該 ajax 請求，該對象的屬性(如 ajaxdisplay)保存了一些 ajax 請求過程需要的數據。
+ *@ url: 需求请求的 url
+ *@ id : 显示的 id
+ *@ waitid: 等待的 id，默认为显示的 id，如果 waitid 为空字符串，则不显示 loading...， 如果为 null，则在 showid 区域显示
+ *@ linkid: 是哪个链接触发的该 ajax 请求，该对象的属性(如 ajaxdisplay)保存了一些 ajax 请求过程需要的数据。
 */
 function ajaxget(url, showid, waitid, loading, display, recall) {
 	waitid = typeof waitid == 'undefined' || waitid === null ? showid : waitid;
@@ -1292,8 +1292,8 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	x.setLoading(loading);
 	x.setWaitId(waitid);
 	x.display = typeof display == 'undefined' || display == null ? '' : display;
-	x.showId = $(showid);//note 自定義屬性。
-	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;//note 紀錄 showId 的最原始的顯示狀態
+	x.showId = $(showid);//note 自定义属性。
+	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;//note 纪录 showId 的最原始的显示状态
 
 	if(url.substr(strlen(url) - 1) == '#') {
 		url = url.substr(0, strlen(url) - 1);
@@ -1308,7 +1308,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 			evaled = true;
 		}
 		if(!evaled && (typeof ajaxerror == 'undefined' || !ajaxerror)) {
-			//note 隱藏 Loading... 切換內容顯示狀態
+			//note 隐藏 Loading... 切换内容显示状态
 			if(x.showId) {
 				x.showId.style.display = x.showId.orgdisplay;
 				x.showId.style.display = x.display;
@@ -1329,7 +1329,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	});
 }
 
-//note id 為 menuid
+//note id 为 menuid
 function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	var waitid = typeof waitid == 'undefined' || waitid === null ? showid : (waitid !== '' ? waitid : '');
 	var showidclass = !showidclass ? '' : showidclass;
@@ -1353,7 +1353,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 				}
 			}
 		} catch(e) {
-			s = '內部錯誤，無法顯示此內容';
+			s = '内部错误，无法显示此内容';
 		}
 
 		if(s != '' && s.indexOf('ajaxerror') != -1) {
@@ -1380,7 +1380,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 		ajaxframe.loading = 0;
 		$('append_parent').removeChild(ajaxframe);
 	};
-	//note 避免重複創建iframe，判斷IFRAME對象是否存在
+	//note 避免重复创建iframe，判断IFRAME对象是否存在
 	if(!ajaxframe) {
 		if (BROWSER.ie) {
 			ajaxframe = document.createElement('<iframe name="' + ajaxframeid + '" id="' + ajaxframeid + '"></iframe>');
@@ -1449,7 +1449,7 @@ function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall) {
 	doane();
 }
 
-//note 得到一個定長的hash值， 依賴於 stringxor()
+//note 得到一个定长的hash值， 依赖于 stringxor()
 function hash(string, length) {
 	var length = length ? length : 32;
 	var start = 0;
@@ -1466,7 +1466,7 @@ function hash(string, length) {
 	return result;
 }
 
-//note 將兩個字符串進行異或運算，結果為英文字符組合
+//note 将两个字符串进行异或运算，结果为英文字符组合
 function stringxor(s1, s2) {
 	var s = '';
 	var hash = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1480,7 +1480,7 @@ function stringxor(s1, s2) {
 
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
-	var waiting = waiting ? waiting : '請稍候...';
+	var waiting = waiting ? waiting : '请稍候...';
 	$('ajaxwaitid').innerHTML = waiting;
 	$('ajaxwaitid').style.display = display;
 }
@@ -1607,12 +1607,12 @@ function AC_FL_RunContent() {
 			str += '></embed>';
 		}
 	} else {
-		str = '此內容需要 Adobe Flash Player 9.0.124 或更高版本<br /><a href="http://www.adobe.com/go/getflashplayer/" target="_blank"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="下載 Flash Player" /></a>';
+		str = '此内容需要 Adobe Flash Player 9.0.124 或更高版本<br /><a href="http://www.adobe.com/go/getflashplayer/" target="_blank"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="下载 Flash Player" /></a>';
 	}
 	return str;
 }
 
-//note 模擬下拉菜單
+//note 模拟下拉菜单
 function simulateSelect(selectId, widthvalue) {
 	var selectObj = $(selectId);
 	if(!selectObj) return;
@@ -1757,25 +1757,25 @@ function showselect(obj, inpid, t, rettype) {
 		if(!t) {
 			s += showselect_row(inpid, '一天', 1, 0, rettype);
 			s += showselect_row(inpid, '一周', 7, 0, rettype);
-			s += showselect_row(inpid, '一個月', 30, 0, rettype);
-			s += showselect_row(inpid, '三個月', 90, 0, rettype);
-			s += showselect_row(inpid, '自定義', -2);
+			s += showselect_row(inpid, '一个月', 30, 0, rettype);
+			s += showselect_row(inpid, '三个月', 90, 0, rettype);
+			s += showselect_row(inpid, '自定义', -2);
 		} else {
 			if($(t)) {
 				var lis = $(t).getElementsByTagName('LI');
 				for(i = 0;i < lis.length;i++) {
 					s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML">' + lis[i].innerHTML + '</a>';
 				}
-				s += showselect_row(inpid, '自定義', -1);
+				s += showselect_row(inpid, '自定义', -1);
 			} else {
 				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">永久</a>';
 				s += showselect_row(inpid, '7 天', 7, 1, rettype);
 				s += showselect_row(inpid, '14 天', 14, 1, rettype);
-				s += showselect_row(inpid, '一個月', 30, 1, rettype);
-				s += showselect_row(inpid, '三個月', 90, 1, rettype);
+				s += showselect_row(inpid, '一个月', 30, 1, rettype);
+				s += showselect_row(inpid, '三个月', 90, 1, rettype);
 				s += showselect_row(inpid, '半年', 182, 1, rettype);
 				s += showselect_row(inpid, '一年', 365, 1, rettype);
-				s += showselect_row(inpid, '自定義', -1);
+				s += showselect_row(inpid, '自定义', -1);
 			}
 		}
 		$(div.id).innerHTML = s;
@@ -1813,7 +1813,7 @@ function showColorBox(ctrlid, layer, k) {
 		menu.unselectable = true;
 		menu.style.display = 'none';
 		var coloroptions = ['Black', 'Sienna', 'DarkOliveGreen', 'DarkGreen', 'DarkSlateBlue', 'Navy', 'Indigo', 'DarkSlateGray', 'DarkRed', 'DarkOrange', 'Olive', 'Green', 'Teal', 'Blue', 'SlateGray', 'DimGray', 'Red', 'SandyBrown', 'YellowGreen', 'SeaGreen', 'MediumTurquoise', 'RoyalBlue', 'Purple', 'Gray', 'Magenta', 'Orange', 'Yellow', 'Lime', 'Cyan', 'DeepSkyBlue', 'DarkOrchid', 'Silver', 'Pink', 'Wheat', 'LemonChiffon', 'PaleGreen', 'PaleTurquoise', 'LightBlue', 'Plum', 'White'];
-		var colortexts = ['黑色', '赭色', '暗橄欖綠色', '暗綠色', '暗灰藍色', '海軍色', '靛青色', '墨綠色', '暗紅色', '暗桔黃色', '橄欖色', '綠色', '水鴨色', '藍色', '灰石色', '暗灰色', '紅色', '沙褐色', '黃綠色', '海綠色', '間綠寶石', '皇家藍', '紫色', '灰色', '紅紫色', '橙色', '黃色', '酸橙色', '青色', '深天藍色', '暗紫色', '銀色', '粉色', '淺黃色', '檸檬綢色', '蒼綠色', '蒼寶石綠', '亮藍色', '洋李色', '白色'];
+		var colortexts = ['黑色', '赭色', '暗橄榄绿色', '暗绿色', '暗灰蓝色', '海军色', '靛青色', '墨绿色', '暗红色', '暗桔黄色', '橄榄色', '绿色', '水鸭色', '蓝色', '灰石色', '暗灰色', '红色', '沙褐色', '黄绿色', '海绿色', '间绿宝石', '皇家蓝', '紫色', '灰色', '红紫色', '橙色', '黄色', '酸橙色', '青色', '深天蓝色', '暗紫色', '银色', '粉色', '浅黄色', '柠檬绸色', '苍绿色', '苍宝石绿', '亮蓝色', '洋李色', '白色'];
 		var str = '';
 		for(var i = 0; i < 40; i++) {
 			str += '<input type="button" style="background-color: ' + coloroptions[i] + '"' + (typeof setEditorTip == 'function' ? ' onmouseover="setEditorTip(\'' + colortexts[i] + '\')" onmouseout="setEditorTip(\'\')"' : '') + ' onclick="'
@@ -1897,7 +1897,7 @@ function smilies_onload(id, smcols, seditorkey) {
 					'" id="' + seditorkey + 'smilie_' + s[0] + '_td"><img id="smilie_' + s[0] + '" width="' + s[3] +'" height="' + s[4] +'" src="' + smilieimg + '" alt="' + s[1] + '" />' : '<td>';
 			}
 			$('fastsmilies').innerHTML = '<table cellspacing="0" cellpadding="0"><tr>' + smilies_fastdata + '</tr></table>' +
-				'<p class="ptw"><a href="javascript:;" onclick="showMenu({\'ctrlid\':\'' + seditorkey + 'sml\',\'evt\':\'click\',\'layer\':2});doane(event)">顯示所有表情</a></p>';
+				'<p class="ptw"><a href="javascript:;" onclick="showMenu({\'ctrlid\':\'' + seditorkey + 'sml\',\'evt\':\'click\',\'layer\':2});doane(event)">显示所有表情</a></p>';
 		}
 	}
 }
@@ -1927,8 +1927,8 @@ function smilies_switch(id, smcols, type, page, seditorkey) {
 	if(smilies_array[type].length > 2) {
 		prevpage = ((prevpage = parseInt(page) - 1) < 1) ? smilies_array[type].length - 1 : prevpage;
 		nextpage = ((nextpage = parseInt(page) + 1) == smilies_array[type].length) ? 1 : nextpage;
-		smiliespage = '<div class="z"><a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + prevpage + ', \'' + seditorkey + '\');doane(event);">上頁</a>' +
-			'<a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + nextpage + ', \'' + seditorkey + '\');doane(event);">下頁</a></div>' +
+		smiliespage = '<div class="z"><a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + prevpage + ', \'' + seditorkey + '\');doane(event);">上页</a>' +
+			'<a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + nextpage + ', \'' + seditorkey + '\');doane(event);">下页</a></div>' +
 			page + '/' + (smilies_array[type].length - 1);
 	}
 	$(id + '_data').innerHTML = smiliesdata;
@@ -1977,7 +1977,7 @@ function loadimgsize(imgurl, editor) {
 			$(editor + '_image_status').innerHTML = '';
 		} else {
 			$(editor + '_image_submit').disabled = true;
-			$(editor + '_image_status').innerHTML = ' 驗證圖片中...';
+			$(editor + '_image_status').innerHTML = ' 验证图片中...';
 			setTimeout(function () { s.loadCheck(); }, 100);
 		}
 	};
@@ -2098,7 +2098,7 @@ function initTab(frameId, type) {
 	if (typeof document['diyform'] == 'object' || $(frameId).className.indexOf('tab') < 0) return false;
 	type = type || 'click';
 	var tabs = $(frameId+'_title').childNodes;
-	//note 得到所有的標籤
+	//note 得到所有的标签
 	var arrTab = [];
 	for(var i in tabs) {
 		if (tabs[i]['nodeType'] == 1 && tabs[i]['className'].indexOf('move-span') > -1) {
@@ -2110,9 +2110,9 @@ function initTab(frameId, type) {
 	tab.className = 'tb cl';
 	var len = arrTab.length;
 	for(var i = 0;i < len; i++) {
-		//note 單個tab標籤的ID
+		//note 单个tab标签的ID
 		var tabId = arrTab[i].id;
-		//note 標籤為框架的,把框架的所有列組裝成一個ID為 tabId+'_content'的元素，添加到tab框架的內容中
+		//note 标签为框架的,把框架的所有列组装成一个ID为 tabId+'_content'的元素，添加到tab框架的内容中
 		if (hasClass(arrTab[i],'frame') || hasClass(arrTab[i],'tab')) {
 			var arrColumn = [];
 			for (var j in arrTab[i].childNodes) {
@@ -2125,13 +2125,13 @@ function initTab(frameId, type) {
 			for (var k = 0; k < colLen; k++) {
 				frameContent.appendChild(arrColumn[k]);
 			}
-		//note 標籤為模塊的，直接把內容添加到tab框架的內容中
+		//note 标签为模块的，直接把内容添加到tab框架的内容中
 		} else {
 			var frameContent = $(tabId+'_content');
 			frameContent = frameContent || document.createElement('div');
 		}
 		frameContent.style.display = counter ? 'none' : '';
-		//note 把組裝的內容添加到tab框架的內容中
+		//note 把组装的内容添加到tab框架的内容中
 		$(frameId+'_content').appendChild(frameContent);
 
 		var li = document.createElement('li');
@@ -2149,7 +2149,7 @@ function initTab(frameId, type) {
 	}
 	$(frameId+'_title').appendChild(tab);
 }
-//note tab框架的切換
+//note tab框架的切换
 function switchTabUl (e) {
 	e = e || window.event;
 	var aim = e.target || e.srcElement;
@@ -2169,7 +2169,7 @@ function switchTabUl (e) {
 	}
 }
 
-//note Ctrl+Enter 模擬點擊
+//note Ctrl+Enter 模拟点击
 function ctrlEnter(event, btnId, onlyEnter) {
 	if(isUndefined(onlyEnter)) onlyEnter = 0;
 	if((event.ctrlKey || onlyEnter) && event.keyCode == 13) {
@@ -2179,7 +2179,7 @@ function ctrlEnter(event, btnId, onlyEnter) {
 	return true;
 }
 
-//note 判斷元素class屬性是否含 className
+//note 判断元素class属性是否含 className
 function hasClass(elem, className) {
 	return elem.className && (" " + elem.className + " ").indexOf(" " + className + " ") != -1;
 }
@@ -2216,7 +2216,7 @@ function slideshow(el) {
 	if(typeof slideshow.entities == 'undefined') {
 		slideshow.entities = [];
 	}
-	//note 保證唯一實例
+	//note 保证唯一实例
 	for(var i=0,L=slideshow.entities.length; i<L;i++) {
 		if(slideshow.entities[i].blockid == this.blockid) {
 			return ;
@@ -2242,9 +2242,9 @@ function slideshow(el) {
 	for(var i=0, L=this.elements.length; i<L; i++) {
 		this.elements[i].style.display = "none";
 	}
-	//note 設置父容器 position 為 relative
+	//note 设置父容器 position 为 relative
 	this.container.parentNode.style.position = 'relative';
-	//note 創建slidebar
+	//note 创建slidebar
 	this.slidebar = document.createElement('div');
 	this.slidebar.className = 'slidebar';
 	this.slidebar.style.display = 'none';
@@ -2257,7 +2257,7 @@ function slideshow(el) {
 	this.container.parentNode.appendChild(this.slidebar);
 	this.controls = this.slidebar.getElementsByTagName('li');
 
-	//note 設置第 index 張圖片為當前圖片
+	//note 设置第 index 张图片为当前图片
 	this.active = function(index) {
 		this.elements[this.index].style.display = "none";
 		this.elements[index].style.display = "block";
@@ -2265,11 +2265,11 @@ function slideshow(el) {
 		this.controls[index].className = 'on';
 		this.index = index;
 	};
-	//note 用戶手動設置第 index 張圖片為當前圖片
+	//note 用户手动设置第 index 张图片为当前图片
 	this.xactive = function(index) {
 		clearTimeout(this.timer);
 		this.active(index);
-		//note 暫停 8s 後再繼續
+		//note 暂停 8s 后再继续
 		var ss = this;
 		this.timer = setTimeout(function(){
 			ss.run();
@@ -2278,14 +2278,14 @@ function slideshow(el) {
 	this.run = function() {
 		var index = this.index + 1 < this.length ? this.index + 1 : 0;
 		this.active(index);
-		//note 2s 定時輪換
+		//note 2s 定时轮换
 		var ss = this;
 		this.timer = setTimeout(function(){
 			ss.run();
 		}, 2500);
 	};
 
-	//note 所有圖片
+	//note 所有图片
 	var imgs = el.getElementsByTagName('img');
 	for(i=0, L=imgs.length; i<L; i++) {
 		this.imgs.push(imgs[i]);
@@ -2307,7 +2307,7 @@ function slideshow(el) {
 		return true;
 	};
 
-	//note 得高度和寬度
+	//note 得高度和宽度
 	this.getSize(imgs[0]);
 
 	this.checkLoad = function () {
@@ -2404,7 +2404,7 @@ function setCopy(text, msg){
 			showDialog(msg, 'notice');
 		}
 	} else {
-		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">點此複製到剪貼板</div>' +
+		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">点此复制到剪贴板</div>' +
 		AC_FL_RunContent('id', 'clipboardswf', 'name', 'clipboardswf', 'devicefont', 'false', 'width', '200', 'height', '40', 'src', STATICURL + 'image/common/clipboard.swf', 'menu', 'false',  'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent', 'style' , 'margin-top:-20px') + '</div>';
 		showDialog(msg, 'info');
 		text = text.replace(/[\xA0]/g, ' ');
@@ -2428,13 +2428,13 @@ function showdistrict(container, elems, totallevel, changelevel) {
 }
 
 /**
- * 插入塗鴉
- * @param String fid: 要關閉的層ID
- * @param String oid: 要插入到對象的目標ID
- * @param String url: 塗鴉文件的地址
- * @param String tid: 切換標籤ID
- * @param String from: 塗鴉從哪來的
- * @return 沒有返回值
+ * 插入涂鸦
+ * @param String fid: 要关闭的层ID
+ * @param String oid: 要插入到对象的目标ID
+ * @param String url: 涂鸦文件的地址
+ * @param String tid: 切换标签ID
+ * @param String from: 涂鸦从哪来的
+ * @return 没有返回值
  */
 function setDoodle(fid, oid, url, tid, from) {
 	if(tid == null) {
@@ -2462,7 +2462,7 @@ function setDoodle(fid, oid, url, tid, from) {
 }
 
 function searchFocus(obj) {
-	if(obj.value == '請輸入搜索內容') {
+	if(obj.value == '请输入搜索内容') {
 		obj.value = '';
 	}
 	$('sc').className = 'y f';
@@ -2470,7 +2470,7 @@ function searchFocus(obj) {
 
 function searchBlur(obj) {
 	if(obj.value == '' ) {
-		obj.value = '請輸入搜索內容';
+		obj.value = '请输入搜索内容';
 		$('sc').className = 'y';
 	}
 }
@@ -2531,7 +2531,7 @@ function updatesecqaa(idhash) {
 		}
 		$('checksecqaaverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 		ajaxget('misc.php?mod=secqaa&action=update&idhash=' + idhash, 'secqaa_' + idhash, null, '', '', function() {
-			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updatesecqaa(\''+idhash+'\')">刷新驗證問答</span>';}, 180000);
+			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updatesecqaa(\''+idhash+'\')">刷新验证问答</span>';}, 180000);
 		});
 	}
 }
@@ -2545,7 +2545,7 @@ function updateseccode(idhash, play) {
 			}
 			$('checkseccodeverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 			ajaxget('misc.php?mod=seccode&action=update&idhash=' + idhash, 'seccode_' + idhash, null, '', '', function() {
-				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updateseccode(\''+idhash+'\')">刷新驗證碼</span>';}, 180000);
+				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updateseccode(\''+idhash+'\')">刷新验证码</span>';}, 180000);
 			});
 		}
 	} else {
@@ -2574,9 +2574,9 @@ function checksec(type, idhash, showmsg, recall) {
 			obj.innerHTML = '<img src="'+ IMGDIR + '/check_error.gif" width="16" height="16" class="vm" />';
 			if(showmsg) {
 				if(type == 'code') {
-					showDialog('驗證碼錯誤，請重新填寫');
+					showDialog('验证码错误，请重新填写');
 				} else if(type == 'qaa') {
-					showDialog('驗證問答錯誤，請重新填寫');
+					showDialog('验证问答错误，请重新填写');
 				}
 				recall(0);
 			}
@@ -2665,9 +2665,9 @@ function succeedhandle_ls(location, str) {
 }
 
 /*
- * 圖片旋轉
- * @param imgid		圖片id
- * @param direct	旋轉方向 1左 2右
+ * 图片旋转
+ * @param imgid		图片id
+ * @param direct	旋转方向 1左 2右
  */
 function imageRotate(imgid, direct) {
 	var image = $(imgid);

@@ -19,7 +19,7 @@ if(!function_exists('sendmail')) {
 	include libfile('function/mail');
 }
 
-empty($mrefreshtime) && $mrefreshtime = 2000; //跳轉間隔時間
+empty($mrefreshtime) && $mrefreshtime = 2000; //跳转间隔时间
 
 if($_G['uid']) {
 	$ucsynlogin = uc_user_synlogin($_G['uid']);

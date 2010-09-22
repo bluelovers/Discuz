@@ -8,7 +8,7 @@
  */
 
 /**
- * æœ¬åœ°ä¸Šå‚³é¡
+ * ±¾µØÉÏ´«Àà
  *
  * @example
  *
@@ -17,7 +17,7 @@
  * if($upload->error()) {
  * 	showmessage('upload error');
  * }
- * ... æ¬Šé™åˆ¤æ–·ç­‰ç­‰
+ * ... È¨ÏŞÅĞ¶ÏµÈµÈ
  * ...
  * $upload->save();
  * if($upload->error()) {
@@ -45,9 +45,9 @@ Class discuz_upload{
 	/**
 	 * Enter description here...
 	 *
-	 * @param ä¸Šå‚³çš„ $attach
+	 * @param ÉÏ´«µÄ $attach
 	 * @param 'forum', 'group', 'album', 'portal', 'common', 'temp', 'category' $type
-	 * @param æ“´å±•id, ç›®å‰åƒ…æ‡‰ç”¨æ–¼groupé¡å‹ $extid
+	 * @param À©Õ¹id, Ä¿Ç°½öÓ¦ÓÃÓÚgroupÀàĞÍ $extid
 	 * @return boolean
 	 */
 	function init($attach, $type = 'temp', $extid = 0, $forcename = '') {
@@ -88,16 +88,16 @@ Class discuz_upload{
 	}
 
 	/**
-	 * ä¿å­˜ä¸Šå‚³æ–‡ä»¶è‡³æœ¬åœ°
+	 * ±£´æÉÏ´«ÎÄ¼şÖÁ±¾µØ
 	 * @return boolean
 	 *
 	 *
 	 * @errorcode:  $this->error()
-	 * 0    = ä¸Šå‚³æˆåŠŸ
-	 * -101 = ä¸Šå‚³æ–‡ä»¶ä¸å­˜åœ¨æˆ–ä¸åˆæ³•
-	 * -102 = éåœ–ç‰‡é¡å‹æ–‡ä»¶
-	 * -103 = ç„¡æ³•å¯«å…¥æ–‡ä»¶æˆ–å¯«å…¥å¤±æ•—
-	 * -104 = ç„¡æ³•è­˜åˆ¥çš„åœ–åƒæ–‡ä»¶æ ¼å¼
+	 * 0    = ÉÏ´«³É¹¦
+	 * -101 = ÉÏ´«ÎÄ¼ş²»´æÔÚ»ò²»ºÏ·¨
+	 * -102 = ·ÇÍ¼Æ¬ÀàĞÍÎÄ¼ş
+	 * -103 = ÎŞ·¨Ğ´ÈëÎÄ¼ş»òĞ´ÈëÊ§°Ü
+	 * -104 = ÎŞ·¨Ê¶±ğµÄÍ¼ÏñÎÄ¼ş¸ñÊ½
 	 *
 	 */
 	function save() {
@@ -122,7 +122,7 @@ Class discuz_upload{
 	}
 
 	/**
-	 * æŸ¥çœ‹å‰ä¸€æ“ä½œæ˜¯å¦æœ‰éŒ¯èª¤
+	 * ²é¿´Ç°Ò»²Ù×÷ÊÇ·ñÓĞ´íÎó
 	 *
 	 * @return unknown
 	 */
@@ -135,7 +135,7 @@ Class discuz_upload{
 	}
 
 	/**
-	 * è¿”å›æ–‡ä»¶åä¸­çš„å¾Œç¶´
+	 * ·µ»ØÎÄ¼şÃûÖĞµÄºó×º
 	 * @static
 	 * @param unknown_type $filename
 	 * @return unknown
@@ -145,9 +145,9 @@ Class discuz_upload{
 	}
 
 	/**
-	 * åˆ¤æ–·æ–‡ä»¶æ˜¯å¦æ˜¯åœ–ç‰‡å¾Œç¶´
+	 * ÅĞ¶ÏÎÄ¼şÊÇ·ñÊÇÍ¼Æ¬ºó×º
 	 *
-	 * @param å¾Œç¶´ $ext
+	 * @param ºó×º $ext
 	 * @return unknown
 	 */
 	function is_image_ext($ext) {
@@ -179,7 +179,7 @@ Class discuz_upload{
 	}
 
 	/**
-	 * åˆ¤æ–·æ˜¯å¦æ˜¯ä¸Šå‚³æ–‡ä»¶
+	 * ÅĞ¶ÏÊÇ·ñÊÇÉÏ´«ÎÄ¼ş
 	 * @static
 	 *
 	 * @param unknown_type $source
@@ -190,10 +190,10 @@ Class discuz_upload{
 	}
 
 	/**
-	 * ä¾æ“šé¡å‹,è¿”å›ç›¸æ‡‰çš„æ–‡ä»¶å
+	 * ÒÀ¾İÀàĞÍ,·µ»ØÏàÓ¦µÄÎÄ¼şÃû
 	 *
-	 * @param ä¸Šå‚³é¡å‹ $type
-	 * @param æ“´å±•id $extid
+	 * @param ÉÏ´«ÀàĞÍ $type
+	 * @param À©Õ¹id $extid
 	 * @return unknown
 	 */
 	function get_target_filename($type, $extid = 0, $forcename = '') {
@@ -206,9 +206,9 @@ Class discuz_upload{
 	}
 
 	/**
-	 * è¿”å›å­˜å„²æ–‡ä»¶çš„å®‰å…¨å¾Œç¶´
+	 * ·µ»Ø´æ´¢ÎÄ¼şµÄ°²È«ºó×º
 	 *
-	 * @param å¾Œç¶´ string $ext
+	 * @param ºó×º string $ext
 	 * @return unknown
 	 */
 	function get_target_extension($ext) {
@@ -217,7 +217,7 @@ Class discuz_upload{
 	}
 
 	/**
-	 * ç²å–æ–‡ä»¶æœ€çµ‚å­˜å„²è·¯å¾‘
+	 * »ñÈ¡ÎÄ¼ş×îÖÕ´æ´¢Â·¾¶
 	 *
 	 * @param string $type
 	 * @param int $extid
@@ -236,12 +236,12 @@ Class discuz_upload{
 	}
 
 	/**
-	 * æª¢æŸ¥ç›®æ¨™è·¯å¾‘æ˜¯å¦å­˜åœ¨
+	 * ¼ì²éÄ¿±êÂ·¾¶ÊÇ·ñ´æÔÚ
 	 * @static
-	 * @param é¡å‹ $type
-	 * @param å­ç›®éŒ„1 $sub1
-	 * @param å­ç›®éŒ„2 $sub2
-	 * @return æª¢æŸ¥çµæ§‹
+	 * @param ÀàĞÍ $type
+	 * @param ×ÓÄ¿Â¼1 $sub1
+	 * @param ×ÓÄ¿Â¼2 $sub2
+	 * @return ¼ì²é½á¹¹
 	 */
 	function check_dir_exists($type = '', $sub1 = '', $sub2 = '') {
 
@@ -262,7 +262,7 @@ Class discuz_upload{
 	}
 
 	/**
-	 * å­˜å„²æ–‡ä»¶åˆ°æœ¬åœ°
+	 * ´æ´¢ÎÄ¼şµ½±¾µØ
 	 *
 	 * @static
 	 *
@@ -297,11 +297,11 @@ Class discuz_upload{
 	}
 
 	/**
-	 * æª¢æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨, å¦å‰‡å°±å»ºç«‹
+	 * ¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ, ·ñÔò¾Í½¨Á¢
 	 *
 	 * @param string $dir
-	 * @param booleanæ˜¯å¦å‰µå»ºindexæ–‡ä»¶ $index
-	 * @return å‰µå»ºçµæœ
+	 * @param booleanÊÇ·ñ´´½¨indexÎÄ¼ş $index
+	 * @return ´´½¨½á¹û
 	 */
 	function make_dir($dir, $index = true) {
 		$res = true;

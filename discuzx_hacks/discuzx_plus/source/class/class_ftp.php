@@ -92,13 +92,13 @@ class discuz_ftp
 	}
 
 	/**
-	 * ä¸Šå‚³æ–‡ä»¶åˆ°ftpæœå‹™å™¨
+	 * ÉÏ´«ÎÄ¼şµ½ftp·şÎñÆ÷
 	 *
-	 * @param sourcefile $source åŸå§‹æ–‡ä»¶(çµ•å°åœ°å€)
-	 * @param targetfile $target ç›®æ¨™æ–‡ä»¶(ç›¸å°æ–¼ftpæ ¹çš„çµ•å°åœ°å€)
+	 * @param sourcefile $source Ô­Ê¼ÎÄ¼ş(¾ø¶ÔµØÖ·)
+	 * @param targetfile $target Ä¿±êÎÄ¼ş(Ïà¶ÔÓÚftp¸ùµÄ¾ø¶ÔµØÖ·)
 	 * @return boolean
 	 *
-	 * @example ç•¶ä¸Šå‚³é‡åˆ°éŒ¯èª¤, è«‹ä½¿ç”¨ $this->error() æŸ¥çœ‹éŒ¯èª¤ä»£ç¢¼
+	 * @example µ±ÉÏ´«Óöµ½´íÎó, ÇëÊ¹ÓÃ $this->error() ²é¿´´íÎó´úÂë
 	 */
 	function upload($source, $target) {
 		if($this->error()) {
@@ -136,7 +136,7 @@ class discuz_ftp
 	}
 
 	/**
-	 * æ ¹æ“š $this->config ä¸­çš„åƒæ•¸é€£æ¥æœå‹™å™¨
+	 * ¸ù¾İ $this->config ÖĞµÄ²ÎÊıÁ¬½Ó·şÎñÆ÷
 	 *
 	 * @return unknown
 	 */
@@ -159,16 +159,16 @@ class discuz_ftp
 	}
 
 	/**
-	 * é€£æ¥æœå‹™å™¨
+	 * Á¬½Ó·şÎñÆ÷
 	 *
-	 * @param æœå‹™å™¨ $ftphost
-	 * @param ç”¨æˆ¶å $username
-	 * @param å¯†ç¢¼ $password
-	 * @param æ ¹è·¯å¾‘ $ftppath
-	 * @param ç«¯å£ $ftpport
-	 * @param è¶…æ™‚ $timeout
-	 * @param SSLæ¨¡å¼ $ftpssl
-	 * @param PASVæ¨¡å¼ $ftppasv
+	 * @param ·şÎñÆ÷ $ftphost
+	 * @param ÓÃ»§Ãû $username
+	 * @param ÃÜÂë $password
+	 * @param ¸ùÂ·¾¶ $ftppath
+	 * @param ¶Ë¿Ú $ftpport
+	 * @param ³¬Ê± $timeout
+	 * @param SSLÄ£Ê½ $ftpssl
+	 * @param PASVÄ£Ê½ $ftppasv
 	 * @return boolean
 	 */
 	function ftp_connect($ftphost, $username, $password, $ftppath, $ftpport = 21, $timeout = 30, $ftpssl = 0, $ftppasv = 0) {
@@ -205,7 +205,7 @@ class discuz_ftp
 	}
 
 	/**
-	 * è¨­å®šéŒ¯èª¤ä»£ç¢¼
+	 * Éè¶¨´íÎó´úÂë
 	 * @param unknown_type $code
 	 */
 	function set_error($code = 0) {
@@ -213,7 +213,7 @@ class discuz_ftp
 	}
 
 	/**
-	 * è¿”å›éŒ¯èª¤ä»£ç¢¼
+	 * ·µ»Ø´íÎó´úÂë
 	 * @return int
 	 */
 	function error() {
@@ -221,7 +221,7 @@ class discuz_ftp
 	}
 
 	/**
-	 * æ¸…ç†å‘½ä»¤åƒæ•¸
+	 * ÇåÀíÃüÁî²ÎÊı
 	 * @param string $str
 	 * @return string
 	 */
@@ -230,7 +230,7 @@ class discuz_ftp
 	}
 
 	/**
-	 * ä»¥ä¸‹å‡½æ•¸å‡ç‚ºå° FTP å‡½æ•¸çš„å°è£, ä½¿ç”¨åƒè€ƒè¦‹PHPæ–‡æª”
+	 * ÒÔÏÂº¯Êı¾ùÎª¶Ô FTP º¯ÊıµÄ·â×°, Ê¹ÓÃ²Î¿¼¼ûPHPÎÄµµ
 	 *
 	 */
 

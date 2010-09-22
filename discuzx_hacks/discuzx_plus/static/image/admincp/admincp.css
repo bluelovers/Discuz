@@ -408,7 +408,7 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 .header, .header td, .header th{ border-top: 1px dotted #DEEFFB; font-weight: 700; }
 .smallefont{font-size: 11px}
 
-/* è¦ªà ª/
+/* µ¯´° */
 .fwin { text-align: left; background: #FFF; }
 .t_l, .t_c, .t_r, .m_l, .m_r, .b_l, .b_c, .b_r { overflow: hidden; background: #000; opacity: 0.2; filter: alpha(opacity=20); }
 .t_l, .t_r, .b_l, .b_r { width: 10px; height: 10px; line-height: 10px; font-size: 0; }
@@ -441,7 +441,7 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 .fwin .ss em { background: #eee; width: 16px; line-height: 18px; display: block; float: left; margin: 2px; cursor: pointer; padding-left: 7px;}
 .fwin .ss em.a { background: #09f; color: #FFF;}
 
-/* .cl --> Clear ×”è¸˜ÕºÏ */
+/* .cl --> Clear ×Ô¶¯±ÕºÏ */
 .cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .cl { zoom: 1; }
 

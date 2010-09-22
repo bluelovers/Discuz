@@ -500,6 +500,7 @@ function get_dumpfile_by_path($path) {
 }
 
 function api_msg($code, $msg) {
+	$msg = htmlspecialchars($msg);
 	$out = "<root>\n";
 	$out .= "\t<error errorCode=\"".constant(strtoupper($code))."\" errorMessage=\"$msg\" />\n";
 	$out .= "\t<fileinfo>\n";

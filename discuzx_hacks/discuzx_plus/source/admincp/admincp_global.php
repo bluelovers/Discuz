@@ -70,7 +70,7 @@ if($operation == 'index') {
 
 		$db = & DB::object();
 
-		//note å…¼å®¹æ€§åˆ¤æ–·
+		//note ¼æÈÝÐÔÅÐ¶Ï
 		$tabletype = $db->version() > '4.1' ? 'Engine' : 'Type';
 		$tablepre = $_G['config']['db'][1]['tablepre'];
 		$dbcharset = $_G['config']['db'][1]['dbcharset'];

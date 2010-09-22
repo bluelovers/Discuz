@@ -12,9 +12,9 @@ if(!defined('IN_DISCUZ')) {
 }
 
 /**
-* ç™»é™¸å‡½æ•¸
-* @return ç™»éŒ„ç‹€æ…‹
-* 1 = æˆåŠŸï¼Œ 2 = æˆåŠŸè‡ªå‹•æ¿€æ´»ï¼Œ0 = å¤±æ•—
+* µÇÂ½º¯Êı
+* @return µÇÂ¼×´Ì¬
+* 1 = ³É¹¦£¬ 2 = ³É¹¦×Ô¶¯¼¤»î£¬0 = Ê§°Ü
 */
 function userlogin($username, $password, $questionid, $answer, $loginfield = 'username') {
 	$return = array();
@@ -33,12 +33,12 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 		loaducenter();
 	}
 	if($isuid == 3) {
-		if(preg_match('/^[1-9]\d*$/', $username)) {//note username ç‚ºuidçš„å¯èƒ½æ€§å¾ˆå¤§
+		if(preg_match('/^[1-9]\d*$/', $username)) {//note username ÎªuidµÄ¿ÉÄÜĞÔºÜ´ó
 			$return['ucresult'] = uc_user_login($username, $password, 1, 1, $questionid, $answer);
-		} elseif(isemail($username)) {//note username ç‚ºemailçš„å¯èƒ½æ€§å¾ˆå¤§
+		} elseif(isemail($username)) {//note username ÎªemailµÄ¿ÉÄÜĞÔºÜ´ó
 			$return['ucresult'] = uc_user_login($username, $password, 2, 1, $questionid, $answer);
 		}
-		if($return['ucresult'][0] <= 0) {//note é©—è­‰å¤±æ•—ï¼Œå˜—è©¦ä½¿ç”¨ username æ–¹å¼ç™»éŒ„
+		if($return['ucresult'][0] <= 0) {//note ÑéÖ¤Ê§°Ü£¬³¢ÊÔÊ¹ÓÃ username ·½Ê½µÇÂ¼
 			$return['ucresult'] = uc_user_login($username, $password, 0, 1, $questionid, $answer);
 		}
 	} else {
@@ -66,7 +66,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 
 	$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='".$return['ucresult']['uid']."'");
 	if(!$member) {
-		//è‡ªå‹•æ¿€æ´»
+		//×Ô¶¯¼¤»î
 		$return['member'] = autoactivationuser($return['ucresult']['uid']);
 		if($return['member']) {
 			$return['status'] = 2;
@@ -127,7 +127,7 @@ function setloginstatus($member, $cookietime) {
 	$_G['member'] = $member;
 	$_G['core']->session->isnew = 1;
 
-	//note å­˜æ”¾ç™»éŒ„æ•¸æ“š
+	//note ´æ·ÅµÇÂ¼Êı¾İ
 	dsetcookie('auth', authcode("{$member['password']}\t{$member['uid']}", 'ENCODE'), $cookietime, 1, true);
 	dsetcookie('loginuser');
 	dsetcookie('activationauth');

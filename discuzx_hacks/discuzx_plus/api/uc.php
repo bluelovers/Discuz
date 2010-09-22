@@ -7,16 +7,25 @@
  *      $Id: uc.php 616 2010-09-08 12:13:02Z yexinhao $
  */
 
-define('UC_CLIENT_VERSION', '1.5.1');	//note UCenter à¦±î±ªÊ¶
+define('UC_CLIENT_VERSION', '1.5.1');	//note UCenter °æ±¾±êÊ¶
 define('UC_CLIENT_RELEASE', '20100501');
 
-define('API_DELETEUSER', 1);		//Óƒë§‰î³½ API í“¿Ú¿ê¹˜
-define('API_RENAMEUSER', 1);		//Óƒë§ƒëžè„ API í“¿Ú¿ê¹˜
-define('API_GETTAG', 1);		//ë±ˆá±ªÇ© API í“¿Ú¿ê¹˜
-define('API_SYNLOGIN', 1);		//Í¬â½µÇ‚ì PI í“¿Ú¿ê¹˜
-define('API_SYNLOGOUT', 1);		//Í¬â½µÇ³æŸ³PI í“¿Ú¿ê¹˜
-define('API_UPDATEPW', 1);		//è¼¸Ä“uçƒœÂ« ïª¹ØŠdefine('API_UPDATEBADWORDS', 1);	//è¼1Ø¼ì—–Pá­ ïª¹ØŠdefine('API_UPDATEHOSTS', 1);		//è¼ÂˆOSTÎ„ì¾ ïª¹ØŠdefine('API_UPDATEAPPS', 1);		//è¼Â“æ“ƒPá­ ïª¹ØŠdefine('API_UPDATECLIENT', 1);		//è¼Â¿Í»ç¶‹ëº´æ¨‘ê¹˜
-define('API_UPDATECREDIT', 1);		//è¼Â“uç¶»ç™˜ïª¹ØŠdefine('API_GETCREDIT', 1);	//Ï² UC Ì¡é§í·– ïª¹ØŠdefine('API_GETCREDITSETTINGS', 1);	//Ï² UC Ì¡é§í·–É¨Öƒ ïª¹ØŠdefine('API_UPDATECREDITSETTINGS', 1);	//è¼Â“æ“ƒë½·Ö‰è–ƒ ïª¹ØŠdefine('API_ADDFEED', 1);	//Ï² UCHome Ì­ì“¦eed ïª¹ØŠ
+define('API_DELETEUSER', 1);		//ÓÃ»§É¾³ý API ½Ó¿Ú¿ª¹Ø
+define('API_RENAMEUSER', 1);		//ÓÃ»§ÃûÐÞ¸Ä API ½Ó¿Ú¿ª¹Ø
+define('API_GETTAG', 1);		//»ñÈ¡±êÇ© API ½Ó¿Ú¿ª¹Ø
+define('API_SYNLOGIN', 1);		//Í¬²½µÇÂ¼ API ½Ó¿Ú¿ª¹Ø
+define('API_SYNLOGOUT', 1);		//Í¬²½µÇ³ö API ½Ó¿Ú¿ª¹Ø
+define('API_UPDATEPW', 1);		//¸ü¸ÄÓÃ»§ÃÜÂë ¿ª¹Ø
+define('API_UPDATEBADWORDS', 1);	//¸üÐÂ¹Ø¼ü×ÖÁÐ±í ¿ª¹Ø
+define('API_UPDATEHOSTS', 1);		//¸üÐÂHOSTÎÄ¼þ ¿ª¹Ø
+define('API_UPDATEAPPS', 1);		//¸üÐÂÓ¦ÓÃÁÐ±í ¿ª¹Ø
+define('API_UPDATECLIENT', 1);		//¸üÐÂ¿Í»§¶Ë»º´æ ¿ª¹Ø
+define('API_UPDATECREDIT', 1);		//¸üÐÂÓÃ»§»ý·Ö ¿ª¹Ø
+define('API_GETCREDIT', 1);	//Ïò UC Ìá¹©»ý·Ö ¿ª¹Ø
+define('API_GETCREDITSETTINGS', 1);	//Ïò UC Ìá¹©»ý·ÖÉèÖÃ ¿ª¹Ø
+define('API_UPDATECREDITSETTINGS', 1);	//¸üÐÂÓ¦ÓÃ»ý·ÖÉèÖÃ ¿ª¹Ø
+define('API_ADDFEED', 1);	//Ïò UCHome Ìí¼Ófeed ¿ª¹Ø
+
 define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '1');
@@ -138,14 +147,15 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		//note Í¬â½µÇ‚ì PI í“¿ÚŠ		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
+		//note Í¬²½µÇÂ¼ API ½Ó¿Ú
+		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 		$cookietime = 31536000;
 		$uid = intval($get['uid']);
 		$query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid'");
 		if($member = DB::fetch($query)) {
 			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
 		} elseif(!empty($_G['setting']['autoactivationuser'])) {
-			//×”æ¯¼å
+			//×Ô¶¯¼¤»î
 			require_once libfile('function/login');
 			$result = autoactivationuser($uid);
 			if($result) {
@@ -161,7 +171,8 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		//note Í¬â½µÇ³æŸ³PI í“¿ÚŠ		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
+		//note Í¬²½µÇ³ö API ½Ó¿Ú
+		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 
 		dsetcookie('auth', '', -31536000);
 	}
@@ -241,7 +252,8 @@ class uc_note {
 		fwrite($fp, $s);
 		fclose($fp);
 
-		//Å¤ÖƒÎ„ì¾Š		if($UC_API && is_writeable(DISCUZ_ROOT.'./config/config_ucenter.php')) {
+		//ÅäÖÃÎÄ¼þ
+		if($UC_API && is_writeable(DISCUZ_ROOT.'./config/config_ucenter.php')) {
 			if(preg_match('/^https?:\/\//is', $UC_API)) {
 				$configfile = trim(file_get_contents(DISCUZ_ROOT.'./config/config_ucenter.php'));
 				$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
