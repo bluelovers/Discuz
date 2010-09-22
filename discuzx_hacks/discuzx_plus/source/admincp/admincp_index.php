@@ -69,13 +69,13 @@ echo '<div id="boardnews"></div>';
 //showsubmenu('home_security_tips');
 //echo '<ul class="safelist">'.$securityadvise.'</ul>';
 
-//note �����������������Ȩ���ߵ�
+//note 服務器環境及程序版權作者等
 loaducenter();
 
 showtableheader('home_sys_info', 'fixpadding');
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallfont"'), array(
 	cplang('home_discuz_version'),
-	'Discuz! XPlus'.XPLUS_VERSION.' Release '.XPLUS_RELEASE.' <a href="http://www.comsenz.com/purchase/discuz/" class="lightlink2 smallfont" target="_blank">&#19987;&#19994;&#25903;&#25345;&#19982;&#26381;&#21153;</a> <a href="http://idc.comsenz.com" class="lightlink2 smallfont" target="_blank">&#68;&#105;&#115;&#99;&#117;&#122;&#33;&#19987;&#29992;&#20027;&#26426;</a>'
+	'Discuz! XPlus'.XPLUS_VERSION.' Release '.XPLUS_RELEASE.' <a href="http://www.comsenz.com/purchase/discuz/" class="lightlink2 smallfont" target="_blank">專業支持與服務</a> <a href="http://idc.comsenz.com" class="lightlink2 smallfont" target="_blank">&#68;&#105;&#115;&#99;&#117;&#122;&#33;專用主機</a>'
 ));
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallfont"'), array(
 	cplang('home_ucclient_version'),
@@ -106,22 +106,22 @@ showtablefooter();
 showtableheader('home_dev', 'fixpadding');
 showtablerow('', array('class="vtop td24 lineheight"'), array(
 	cplang('home_dev_copyright'),
-	'<span class="bold"><a href="http://www.comsenz.com" class="lightlink2" target="_blank">&#x5eb7;&#x76db;&#x521b;&#x60f3;(&#x5317;&#x4eac;)&#x79d1;&#x6280;&#x6709;&#x9650;&#x516c;&#x53f8; (Comsenz Inc.)</a></span>'
+	'<span class="bold"><a href="http://www.comsenz.com" class="lightlink2" target="_blank">康盛創想(北京)科技有限公司 (Comsenz Inc.)</a></span>'
 ));
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallfont team"'), array(
 	cplang('home_dev_manager'),
-	'<a href="http://www.discuz.net/home.php?mod=space&uid=1" class="lightlink2 smallfont" target="_blank">&#x6234;&#x5FD7;&#x5EB7; (Kevin \'Crossday\' Day)</a>'
+	'<a href="http://www.discuz.net/home.php?mod=space&uid=1" class="lightlink2 smallfont" target="_blank">戴志康 (Kevin \'Crossday\' Day)</a>'
 ));
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight"'), array(
 	cplang('home_dev_links'),
-	'<a href="http://www.comsenz.com" class="lightlink2" target="_blank">&#x516C;&#x53F8;&#x7F51;&#x7AD9;</a>,
-		<a href="http://idc.comsenz.com" class="lightlink2" target="_blank">&#x865A;&#x62DF;&#x4E3B;&#x673A;</a>,
-		<a href="http://www.comsenz.com/category-51" class="lightlink2" target="_blank">&#x8D2D;&#x4E70;&#x6388;&#x6743;</a>,
-		<a href="http://www.discuz.com/" class="lightlink2" target="_blank">&#x44;&#x69;&#x73;&#x63;&#x75;&#x7A;&#x21;&#x20;&#x4EA7;&#x54C1;</a>,
-		<a href="http://www.comsenz.com/downloads/styles/discuz" class="lightlink2" target="_blank">&#x6A21;&#x677F;</a>,
-		<a href="http://www.comsenz.com/downloads/plugins/discuz" class="lightlink2" target="_blank">&#x63D2;&#x4EF6;</a>,
-		<a href="http://faq.comsenz.com" class="lightlink2" target="_blank">&#x6587;&#x6863;</a>,
-		<a href="http://www.discuz.net/" class="lightlink2" target="_blank">&#x8BA8;&#x8BBA;&#x533A;</a>'
+	'<a href="http://www.comsenz.com" class="lightlink2" target="_blank">公司網站</a>,
+		<a href="http://idc.comsenz.com" class="lightlink2" target="_blank">虛擬主機</a>,
+		<a href="http://www.comsenz.com/category-51" class="lightlink2" target="_blank">購買授權</a>,
+		<a href="http://www.discuz.com/" class="lightlink2" target="_blank">&#x44;&#x69;&#x73;&#x63;&#x75;&#x7A;&#x21;&#x20;產品</a>,
+		<a href="http://www.comsenz.com/downloads/styles/discuz" class="lightlink2" target="_blank">模板</a>,
+		<a href="http://www.comsenz.com/downloads/plugins/discuz" class="lightlink2" target="_blank">插件</a>,
+		<a href="http://faq.comsenz.com" class="lightlink2" target="_blank">文檔</a>,
+		<a href="http://www.discuz.net/" class="lightlink2" target="_blank">討論區</a>'
 ));
 showtablefooter();
 

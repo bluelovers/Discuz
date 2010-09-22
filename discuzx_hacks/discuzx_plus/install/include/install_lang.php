@@ -9,332 +9,332 @@
 
 define('UC_VERNAME', '中文版');
 $lang = array(
-	'SC_GBK' => '简体中文版',
-	'TC_BIG5' => '繁体中文版',
-	'SC_UTF8' => '简体中文 UTF8 版',
-	'TC_UTF8' => '繁体中文 UTF8 版',
+	'SC_GBK' => '簡體中文版',
+	'TC_BIG5' => '繁體中文版',
+	'SC_UTF8' => '簡體中文 UTF8 版',
+	'TC_UTF8' => '繁體中文 UTF8 版',
 	'EN_ISO' => 'ENGLISH ISO8859',
 	'EN_UTF8' => 'ENGLIST UTF-8',
 
-	'title_install' => SOFT_NAME.' 安装向导',
+	'title_install' => SOFT_NAME.' 安裝嚮導',
 	'agreement_yes' => '我同意',
 	'agreement_no' => '我不同意',
 	'notset' => '不限制',
 
 	'message_title' => '提示信息',
-	'error_message' => '错误信息',
+	'error_message' => '錯誤信息',
 	'message_return' => '返回',
 	'return' => '返回',
-	'install_wizard' => '安装向导',
+	'install_wizard' => '安裝嚮導',
 	'config_nonexistence' => '配置文件不存在',
-	'nodir' => '目录不存在',
-	'short_open_tag_invalid' => '对不起，请将 php.ini 中的 short_open_tag 设置为 On，否则无法继续安装。',
-	'redirect' => '浏览器会自动跳转页面，无需人工干预。<br>除非当您的浏览器没有自动跳转时，请点击这里',
-	'auto_redirect' => '浏览器会自动跳转页面，无需人工干预',
-	'database_errno_2003' => '无法连接数据库，请检查数据库是否启动，数据库服务器地址是否正确',
-	'database_errno_1044' => '无法创建新的数据库，请检查数据库名称填写是否正确',
-	'database_errno_1045' => '无法连接数据库，请检查数据库用户名或者密码是否正确',
-	'database_errno_1064' => 'SQL 语法错误',
+	'nodir' => '目錄不存在',
+	'short_open_tag_invalid' => '對不起，請將 php.ini 中的 short_open_tag 設置為 On，否則無法繼續安裝。',
+	'redirect' => '瀏覽器會自動跳轉頁面，無需人工干預。<br>除非當您的瀏覽器沒有自動跳轉時，請點擊這裡',
+	'auto_redirect' => '瀏覽器會自動跳轉頁面，無需人工干預',
+	'database_errno_2003' => '無法連接數據庫，請檢查數據庫是否啟動，數據庫服務器地址是否正確',
+	'database_errno_1044' => '無法創建新的數據庫，請檢查數據庫名稱填寫是否正確',
+	'database_errno_1045' => '無法連接數據庫，請檢查數據庫用戶名或者密碼是否正確',
+	'database_errno_1064' => 'SQL 語法錯誤',
 
-	'dbpriv_createtable' => '没有CREATE TABLE权限，无法继续安装',
-	'dbpriv_insert' => '没有INSERT权限，无法继续安装',
-	'dbpriv_select' => '没有SELECT权限，无法继续安装',
-	'dbpriv_update' => '没有UPDATE权限，无法继续安装',
-	'dbpriv_delete' => '没有DELETE权限，无法继续安装',
-	'dbpriv_droptable' => '没有DROP TABLE权限，无法安装',
+	'dbpriv_createtable' => '沒有CREATE TABLE權限，無法繼續安裝',
+	'dbpriv_insert' => '沒有INSERT權限，無法繼續安裝',
+	'dbpriv_select' => '沒有SELECT權限，無法繼續安裝',
+	'dbpriv_update' => '沒有UPDATE權限，無法繼續安裝',
+	'dbpriv_delete' => '沒有DELETE權限，無法繼續安裝',
+	'dbpriv_droptable' => '沒有DROP TABLE權限，無法安裝',
 
-	'db_not_null' => '数据库中已经安装过 UCenter, 继续安装会清空原有数据。',
-	'db_drop_table_confirm' => '继续安装会清空全部原有数据，您确定要继续吗?',
+	'db_not_null' => '數據庫中已經安裝過 UCenter, 繼續安裝會清空原有數據。',
+	'db_drop_table_confirm' => '繼續安裝會清空全部原有數據，您確定要繼續嗎?',
 
-	'writeable' => '可写',
-	'unwriteable' => '不可写',
+	'writeable' => '可寫',
+	'unwriteable' => '不可寫',
 	'old_step' => '上一步',
 	'new_step' => '下一步',
 
-	'database_errno_2003' => '无法连接数据库，请检查数据库是否启动，数据库服务器地址是否正确',
-	'database_errno_1044' => '无法创建新的数据库，请检查数据库名称填写是否正确',
-	'database_errno_1045' => '无法连接数据库，请检查数据库用户名或者密码是否正确',
-	'database_connect_error' => '数据库连接错误',
+	'database_errno_2003' => '無法連接數據庫，請檢查數據庫是否啟動，數據庫服務器地址是否正確',
+	'database_errno_1044' => '無法創建新的數據庫，請檢查數據庫名稱填寫是否正確',
+	'database_errno_1045' => '無法連接數據庫，請檢查數據庫用戶名或者密碼是否正確',
+	'database_connect_error' => '數據庫連接錯誤',
 
-	'step_env_check_title' => '开始安装',
-	'step_env_check_desc' => '环境以及文件目录权限检查',
-	'step_db_init_title' => '安装数据库',
-	'step_db_init_desc' => '正在执行数据库安装',
+	'step_env_check_title' => '開始安裝',
+	'step_env_check_desc' => '環境以及文件目錄權限檢查',
+	'step_db_init_title' => '安裝數據庫',
+	'step_db_init_desc' => '正在執行數據庫安裝',
 
-	'step1_file' => '目录文件',
-	'step1_need_status' => '所需状态',
-	'step1_status' => '当前状态',
-	'not_continue' => '请将以上红叉部分修正再试',
+	'step1_file' => '目錄文件',
+	'step1_need_status' => '所需狀態',
+	'step1_status' => '當前狀態',
+	'not_continue' => '請將以上紅叉部分修正再試',
 
-	'tips_dbinfo' => '填写数据库信息',
+	'tips_dbinfo' => '填寫數據庫信息',
 	'tips_dbinfo_comment' => '',
-	'tips_admininfo' => '填写管理员信息',
-	'step_ext_info_title' => '安装成功。',
-	'step_ext_info_comment' => '点击进入登陆',
+	'tips_admininfo' => '填寫管理員信息',
+	'step_ext_info_title' => '安裝成功。',
+	'step_ext_info_comment' => '點擊進入登陸',
 
-	'ext_info_succ' => '安装成功。',
+	'ext_info_succ' => '安裝成功。',
 	'install_submit' => '提交',
-	'install_locked' => '安装锁定，已经安装过了，如果您确定要重新安装，请到服务器上删除<br /> '.str_replace(ROOT_PATH, '', $lockfile),
-	'error_quit_msg' => '您必须解决以上问题，安装才可以继续',
+	'install_locked' => '安裝鎖定，已經安裝過了，如果您確定要重新安裝，請到服務器上刪除<br /> '.str_replace(ROOT_PATH, '', $lockfile),
+	'error_quit_msg' => '您必須解決以上問題，安裝才可以繼續',
 
-	'step_app_reg_title' => '设置运行环境',
-	'step_app_reg_desc' => '检测服务器环境以及设置 UCenter',
-	'tips_ucenter' => '请填写 UCenter 相关信息',
-	'tips_ucenter_comment' => 'UCenter 是 Comsenz 公司产品的核心服务程序，Discuz! Board 的安装和运行依赖此程序。如果您已经安装了 UCenter，请填写以下信息。否则，请到 <a href="http://www.discuz.com/" target="blank">Comsenz 产品中心</a> 下载并且安装，然后再继续。',
+	'step_app_reg_title' => '設置運行環境',
+	'step_app_reg_desc' => '檢測服務器環境以及設置 UCenter',
+	'tips_ucenter' => '請填寫 UCenter 相關信息',
+	'tips_ucenter_comment' => 'UCenter 是 Comsenz 公司產品的核心服務程序，Discuz! Board 的安裝和運行依賴此程序。如果您已經安裝了 UCenter，請填寫以下信息。否則，請到 <a href="http://www.discuz.com/" target="blank">Comsenz 產品中心</a> 下載並且安裝，然後再繼續。',
 
-	'advice_mysql_connect' => '请检查 mysql 模块是否正确加载',
-	'advice_fsockopen' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
-	'advice_gethostbyname' => '是否php配置中禁止了gethostbyname函数。请联系空间商，确定开启了此项功能',
-	'advice_file_get_contents' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
-	'advice_xml_parser_create' => '该函数需要 PHP 支持 XML。请联系空间商，确定开启了此项功能',
+	'advice_mysql_connect' => '請檢查 mysql 模塊是否正確加載',
+	'advice_fsockopen' => '該函數需要 php.ini 中 allow_url_fopen 選項開啟。請聯繫空間商，確定開啟了此項功能',
+	'advice_gethostbyname' => '是否php配置中禁止了gethostbyname函數。請聯繫空間商，確定開啟了此項功能',
+	'advice_file_get_contents' => '該函數需要 php.ini 中 allow_url_fopen 選項開啟。請聯繫空間商，確定開啟了此項功能',
+	'advice_xml_parser_create' => '該函數需要 PHP 支持 XML。請聯繫空間商，確定開啟了此項功能',
 
 	'ucurl' => 'UCenter 的 URL',
-	'ucpw' => 'UCenter 创始人密码',
+	'ucpw' => 'UCenter 創始人密碼',
 	'ucip' => 'UCenter 的IP地址',
-	'ucenter_ucip_invalid' => '格式错误，请填写正确的 IP 地址',
-	'ucip_comment' => '绝大多数情况下您可以不填',
+	'ucenter_ucip_invalid' => '格式錯誤，請填寫正確的 IP 地址',
+	'ucip_comment' => '絕大多數情況下您可以不填',
 
-	'tips_siteinfo' => '请填写站点信息',
-	'sitename' => '站点名称',
-	'siteurl' => '站点 URL',
+	'tips_siteinfo' => '請填寫站點信息',
+	'sitename' => '站點名稱',
+	'siteurl' => '站點 URL',
 
-	'forceinstall' => '强制安装',
-	'dbinfo_forceinstall_invalid' => '当前数据库当中已经含有同样表前缀的数据表，您可以修改“表名前缀”来避免删除旧的数据，或者选择强制安装。强制安装会删除旧数据，且无法恢复',
+	'forceinstall' => '強制安裝',
+	'dbinfo_forceinstall_invalid' => '當前數據庫當中已經含有同樣表前綴的數據表，您可以修改「表名前綴」來避免刪除舊的數據，或者選擇強制安裝。強制安裝會刪除舊數據，且無法恢復',
 
-	'click_to_back' => '点击返回上一步',
-	'adminemail' => '系统信箱 Email',
-	'adminemail_comment' => '用于发送程序错误报告',
-	'dbhost_comment' => '数据库服务器地址, 一般为 localhost',
-	'tablepre_comment' => '同一数据库运行多个论坛时，请修改前缀',
-	'forceinstall_check_label' => '我要删除数据，强制安装 !!!',
+	'click_to_back' => '點擊返回上一步',
+	'adminemail' => '系統信箱 Email',
+	'adminemail_comment' => '用於發送程序錯誤報告',
+	'dbhost_comment' => '數據庫服務器地址, 一般為 localhost',
+	'tablepre_comment' => '同一數據庫運行多個論壇時，請修改前綴',
+	'forceinstall_check_label' => '我要刪除數據，強制安裝 !!!',
 
-	'uc_url_empty' => '您没有填写 UCenter 的 URL，请返回填写',
-	'uc_url_invalid' => 'URL 格式错误',
-	'uc_url_unreachable' => 'UCenter 的 URL 地址可能填写错误，请检查',
-	'uc_ip_invalid' => '无法解析该域名，请填写站点的 IP',
-	'uc_admin_invalid' => 'UCenter 创始人密码错误，请重新填写',
-	'uc_data_invalid' => '通信失败，请检查 UCenter 的URL 地址是否正确 ',
-	'uc_dbcharset_incorrect' => 'UCenter 数据库字符集与当前应用字符集不一致',
-	'uc_api_add_app_error' => '向 UCenter 添加应用错误',
-	'uc_dns_error' => 'UCenter DNS解析错误，请返回填写一下 UCenter 的 IP地址',
+	'uc_url_empty' => '您沒有填寫 UCenter 的 URL，請返回填寫',
+	'uc_url_invalid' => 'URL 格式錯誤',
+	'uc_url_unreachable' => 'UCenter 的 URL 地址可能填寫錯誤，請檢查',
+	'uc_ip_invalid' => '無法解析該域名，請填寫站點的 IP',
+	'uc_admin_invalid' => 'UCenter 創始人密碼錯誤，請重新填寫',
+	'uc_data_invalid' => '通信失敗，請檢查 UCenter 的URL 地址是否正確 ',
+	'uc_dbcharset_incorrect' => 'UCenter 數據庫字符集與當前應用字符集不一致',
+	'uc_api_add_app_error' => '向 UCenter 添加應用錯誤',
+	'uc_dns_error' => 'UCenter DNS解析錯誤，請返回填寫一下 UCenter 的 IP地址',
 
-	'ucenter_ucurl_invalid' => 'UCenter 的URL为空，或者格式错误，请检查',
-	'ucenter_ucpw_invalid' => 'UCenter 的创始人密码为空，或者格式错误，请检查',
-	'siteinfo_siteurl_invalid' => '站点URL为空，或者格式错误，请检查',
-	'siteinfo_sitename_invalid' => '站点名称为空，或者格式错误，请检查',
-	'dbinfo_dbhost_invalid' => '数据库服务器为空，或者格式错误，请检查',
-	'dbinfo_dbname_invalid' => '数据库名为空，或者格式错误，请检查',
-	'dbinfo_dbuser_invalid' => '数据库用户名为空，或者格式错误，请检查',
-	'dbinfo_dbpw_invalid' => '数据库密码为空，或者格式错误，请检查',
-	'dbinfo_adminemail_invalid' => '系统邮箱为空，或者格式错误，请检查',
-	'dbinfo_tablepre_invalid' => '数据表前缀为空，或者格式错误，请检查',
-	'admininfo_username_invalid' => '管理员用户名为空，或者格式错误，请检查',
-	'admininfo_email_invalid' => '管理员Email为空，或者格式错误，请检查',
-	'admininfo_password_invalid' => '管理员密码为空，请填写',
-	'admininfo_password2_invalid' => '两次密码不一致，请检查',
+	'ucenter_ucurl_invalid' => 'UCenter 的URL為空，或者格式錯誤，請檢查',
+	'ucenter_ucpw_invalid' => 'UCenter 的創始人密碼為空，或者格式錯誤，請檢查',
+	'siteinfo_siteurl_invalid' => '站點URL為空，或者格式錯誤，請檢查',
+	'siteinfo_sitename_invalid' => '站點名稱為空，或者格式錯誤，請檢查',
+	'dbinfo_dbhost_invalid' => '數據庫服務器為空，或者格式錯誤，請檢查',
+	'dbinfo_dbname_invalid' => '數據庫名為空，或者格式錯誤，請檢查',
+	'dbinfo_dbuser_invalid' => '數據庫用戶名為空，或者格式錯誤，請檢查',
+	'dbinfo_dbpw_invalid' => '數據庫密碼為空，或者格式錯誤，請檢查',
+	'dbinfo_adminemail_invalid' => '系統郵箱為空，或者格式錯誤，請檢查',
+	'dbinfo_tablepre_invalid' => '數據表前綴為空，或者格式錯誤，請檢查',
+	'admininfo_username_invalid' => '管理員用戶名為空，或者格式錯誤，請檢查',
+	'admininfo_email_invalid' => '管理員Email為空，或者格式錯誤，請檢查',
+	'admininfo_password_invalid' => '管理員密碼為空，請填寫',
+	'admininfo_password2_invalid' => '兩次密碼不一致，請檢查',
 
-	'install_dzfull' => '<br><label><input type="radio"'.(getgpc('install_ucenter') != 'no' ? ' checked="checked"' : '').' name="install_ucenter" value="yes" onclick="if(this.checked)$(\'form_items_2\').style.display=\'none\';" /> 全新安装 Discuz!X XPlus (含 UCenter Server)</label>',
-	'install_dzonly' => '<br><label><input type="radio"'.(getgpc('install_ucenter') == 'no' ? ' checked="checked"' : '').' name="install_ucenter" value="no" onclick="if(this.checked)$(\'form_items_2\').style.display=\'\';" /> 仅安装 Discuz!X XPlus (手工指定已经安装的 UCenter Server)</label>',
+	'install_dzfull' => '<br><label><input type="radio"'.(getgpc('install_ucenter') != 'no' ? ' checked="checked"' : '').' name="install_ucenter" value="yes" onclick="if(this.checked)$(\'form_items_2\').style.display=\'none\';" /> 全新安裝 Discuz!X XPlus (含 UCenter Server)</label>',
+	'install_dzonly' => '<br><label><input type="radio"'.(getgpc('install_ucenter') == 'no' ? ' checked="checked"' : '').' name="install_ucenter" value="no" onclick="if(this.checked)$(\'form_items_2\').style.display=\'\';" /> 僅安裝 Discuz!X XPlus (手工指定已經安裝的 UCenter Server)</label>',
 
-	'username' => '管理员账号',
-	'email' => '管理员 Email',
-	'password' => '管理员密码',
-	'password_comment' => '管理员密码不能为空',
-	'password2' => '重复密码',
+	'username' => '管理員賬號',
+	'email' => '管理員 Email',
+	'password' => '管理員密碼',
+	'password_comment' => '管理員密碼不能為空',
+	'password2' => '重複密碼',
 
-	'admininfo_invalid' => '管理员信息不完整，请检查管理员账号，密码，邮箱',
-	'dbname_invalid' => '数据库名为空，请填写数据库名称',
-	'tablepre_invalid' => '数据表前缀为空，或者格式错误，请检查',
-	'admin_username_invalid' => '非法用户名，用户名长度不应当超过 15 个英文字符，且不能包含特殊字符，一般是中文，字母或者数字',
-	'admin_password_invalid' => '密码和上面不一致，请重新输入',
-	'admin_email_invalid' => 'Email 地址错误，此邮件地址已经被使用或者格式无效，请更换为其他地址',
-	'admin_invalid' => '您的信息管理员信息没有填写完整，请仔细填写每个项目',
-	'admin_exist_password_error' => '该用户已经存在，如果您要设置此用户为论坛的管理员，请正确输入该用户的密码，或者请更换论坛管理员的名字',
+	'admininfo_invalid' => '管理員信息不完整，請檢查管理員賬號，密碼，郵箱',
+	'dbname_invalid' => '數據庫名為空，請填寫數據庫名稱',
+	'tablepre_invalid' => '數據表前綴為空，或者格式錯誤，請檢查',
+	'admin_username_invalid' => '非法用戶名，用戶名長度不應當超過 15 個英文字符，且不能包含特殊字符，一般是中文，字母或者數字',
+	'admin_password_invalid' => '密碼和上面不一致，請重新輸入',
+	'admin_email_invalid' => 'Email 地址錯誤，此郵件地址已經被使用或者格式無效，請更換為其他地址',
+	'admin_invalid' => '您的信息管理員信息沒有填寫完整，請仔細填寫每個項目',
+	'admin_exist_password_error' => '該用戶已經存在，如果您要設置此用戶為論壇的管理員，請正確輸入該用戶的密碼，或者請更換論壇管理員的名字',
 
-	'tagtemplates_subject' => '标题',
-	'tagtemplates_uid' => '用户 ID',
-	'tagtemplates_username' => '发帖者',
+	'tagtemplates_subject' => '標題',
+	'tagtemplates_uid' => '用戶 ID',
+	'tagtemplates_username' => '發帖者',
 	'tagtemplates_dateline' => '日期',
-	'tagtemplates_url' => '主题地址',
+	'tagtemplates_url' => '主題地址',
 
-	'uc_version_incorrect' => '您的 UCenter 服务端版本过低，请升级 UCenter 服务端到最新版本，并且升级，下载地址：http://www.comsenz.com/ 。',
-	'config_unwriteable' => '安装向导无法写入配置文件, 请设置 config.inc.php 程序属性为可写状态(777)',
+	'uc_version_incorrect' => '您的 UCenter 服務端版本過低，請升級 UCenter 服務端到最新版本，並且升級，下載地址：http://www.comsenz.com/ 。',
+	'config_unwriteable' => '安裝嚮導無法寫入配置文件, 請設置 config.inc.php 程序屬性為可寫狀態(777)',
 
-	'install_in_processed' => '正在安装...',
-	'install_succeed' => '安装成功，点击进入',
-	'install_founder_contact' => '进入下一步',
+	'install_in_processed' => '正在安裝...',
+	'install_succeed' => '安裝成功，點擊進入',
+	'install_founder_contact' => '進入下一步',
 
 	'init_credits_karma' => '威望',
-	'init_credits_money' => '金钱',
+	'init_credits_money' => '金錢',
 
-	'init_postno0' => '楼主',
-	'init_postno1' => '沙发',
+	'init_postno0' => '樓主',
+	'init_postno1' => '沙發',
 	'init_postno2' => '板凳',
 	'init_postno3' => '地板',
 
 	'init_support' => '支持',
-	'init_opposition' => '反对',
+	'init_opposition' => '反對',
 
-	'init_group_0' => '会员',
-	'init_group_1' => '管理员',
-	'init_group_2' => '超级版主',
+	'init_group_0' => '會員',
+	'init_group_1' => '管理員',
+	'init_group_2' => '超級版主',
 	'init_group_3' => '版主',
-	'init_group_4' => '禁止发言',
-	'init_group_5' => '禁止访问',
+	'init_group_4' => '禁止發言',
+	'init_group_5' => '禁止訪問',
 	'init_group_6' => '禁止 IP',
-	'init_group_7' => '游客',
-	'init_group_8' => '等待验证会员',
+	'init_group_7' => '遊客',
+	'init_group_8' => '等待驗證會員',
 	'init_group_9' => '乞丐',
 	'init_group_10' => '新手上路',
-	'init_group_11' => '注册会员',
-	'init_group_12' => '中级会员',
-	'init_group_13' => '高级会员',
-	'init_group_14' => '金牌会员',
-	'init_group_15' => '论坛元老',
+	'init_group_11' => '註冊會員',
+	'init_group_12' => '中級會員',
+	'init_group_13' => '高級會員',
+	'init_group_14' => '金牌會員',
+	'init_group_15' => '論壇元老',
 
-	'init_rank_1' => '新生入学',
-	'init_rank_2' => '小试牛刀',
-	'init_rank_3' => '实习记者',
+	'init_rank_1' => '新生入學',
+	'init_rank_2' => '小試牛刀',
+	'init_rank_3' => '實習記者',
 	'init_rank_4' => '自由撰稿人',
 	'init_rank_5' => '特聘作家',
 
-	'init_cron_1' => '清空今日发帖数',
-	'init_cron_2' => '清空本月在线时间',
-	'init_cron_3' => '每日数据清理',
-	'init_cron_4' => '生日统计与邮件祝福',
-	'init_cron_5' => '主题回复通知',
+	'init_cron_1' => '清空今日發帖數',
+	'init_cron_2' => '清空本月在線時間',
+	'init_cron_3' => '每日數據清理',
+	'init_cron_4' => '生日統計與郵件祝福',
+	'init_cron_5' => '主題回復通知',
 	'init_cron_6' => '每日公告清理',
-	'init_cron_7' => '限时操作清理',
-	'init_cron_8' => '论坛推广清理',
-	'init_cron_9' => '每月主题清理',
-	'init_cron_10' => '每日 X-Space更新用户',
-	'init_cron_11' => '每周主题更新',
+	'init_cron_7' => '限時操作清理',
+	'init_cron_8' => '論壇推廣清理',
+	'init_cron_9' => '每月主題清理',
+	'init_cron_10' => '每日 X-Space更新用戶',
+	'init_cron_11' => '每週主題更新',
 
-	'init_bbcode_1' => '使内容横向滚动，这个效果类似 HTML 的 marquee 标签，注意：这个效果只在 Internet Explorer 浏览器下有效。',
-	'init_bbcode_2' => '嵌入 Flash 动画',
-	'init_bbcode_3' => '显示 QQ 在线状态，点这个图标可以和他（她）聊天',
-	'init_bbcode_4' => '上标',
-	'init_bbcode_5' => '下标',
-	'init_bbcode_6' => '嵌入 Windows media 音频',
-	'init_bbcode_7' => '嵌入 Windows media 音频或视频',
+	'init_bbcode_1' => '使內容橫向滾動，這個效果類似 HTML 的 marquee 標籤，注意：這個效果只在 Internet Explorer 瀏覽器下有效。',
+	'init_bbcode_2' => '嵌入 Flash 動畫',
+	'init_bbcode_3' => '顯示 QQ 在線狀態，點這個圖標可以和他（她）聊天',
+	'init_bbcode_4' => '上標',
+	'init_bbcode_5' => '下標',
+	'init_bbcode_6' => '嵌入 Windows media 音頻',
+	'init_bbcode_7' => '嵌入 Windows media 音頻或視頻',
 
-	'init_qihoo_searchboxtxt' =>'输入关键词,快速搜索本论坛',
-	'init_threadsticky' =>'全局置顶,分类置顶,本版置顶',
+	'init_qihoo_searchboxtxt' =>'輸入關鍵詞,快速搜索本論壇',
+	'init_threadsticky' =>'全局置頂,分類置頂,本版置頂',
 
-	'init_default_style' => '默认风格',
-	'init_default_forum' => '默认版块',
-	'init_default_template' => '默认模板套系',
-	'init_default_template_copyright' => '康盛创想（北京）科技有限公司',
+	'init_default_style' => '默認風格',
+	'init_default_forum' => '默認版塊',
+	'init_default_template' => '默認模板套系',
+	'init_default_template_copyright' => '康盛創想（北京）科技有限公司',
 
 	'init_dataformat' => 'Y-n-j',
-	'init_modreasons' => '广告/SPAM\r\n恶意灌水\r\n违规内容\r\n文不对题\r\n重复发帖\r\n\r\n我很赞同\r\n精品文章\r\n原创内容',
-	'init_link' => 'Discuz! 官方论坛',
-	'init_link_note' => '提供最新 Discuz! 产品新闻、软件下载与技术交流',
+	'init_modreasons' => '廣告/SPAM\r\n惡意灌水\r\n違規內容\r\n文不對題\r\n重複發帖\r\n\r\n我很贊同\r\n精品文章\r\n原創內容',
+	'init_link' => 'Discuz! 官方論壇',
+	'init_link_note' => '提供最新 Discuz! 產品新聞、軟件下載與技術交流',
 
-	'init_promotion_task' => '网站推广任务',
-	'init_gift_task' => '红包类任务',
-	'init_avatar_task' => '头像类任务',
+	'init_promotion_task' => '網站推廣任務',
+	'init_gift_task' => '紅包類任務',
+	'init_avatar_task' => '頭像類任務',
 
-	'license' => '<div class="license"><h1>中文版授权协议 适用于中文用户</h1>
+	'license' => '<div class="license"><h1>中文版授權協議 適用於中文用戶</h1>
 
-<p>版权所有 (c) 2001-2010，康盛创想（北京）科技有限公司保留所有权利。</p>
+<p>版權所有 (c) 2001-2010，康盛創想（北京）科技有限公司保留所有權利。</p>
 
-<p>感谢您选择 Discuz! 论坛产品。希望我们的努力能为您提供一个高效快速和强大的社区论坛解决方案。</p>
+<p>感謝您選擇 Discuz! 論壇產品。希望我們的努力能為您提供一個高效快速和強大的社區論壇解決方案。</p>
 
-<p>Discuz! 英文全称为 Crossday Discuz! Board，中文全称为 Discuz! 论坛，以下简称 Discuz!。</p>
+<p>Discuz! 英文全稱為 Crossday Discuz! Board，中文全稱為 Discuz! 論壇，以下簡稱 Discuz!。</p>
 
-<p>康盛创想（北京）科技有限公司为 Discuz! 产品的开发商，依法独立拥有 Discuz! 产品著作权（中国国家版权局著作权登记号 2006SR11895）。康盛创想（北京）科技有限公司网址为 http://www.comsenz.com，Discuz! 官方网站网址为 http://www.discuz.com，Discuz! 官方讨论区网址为 http://www.discuz.net。</p>
+<p>康盛創想（北京）科技有限公司為 Discuz! 產品的開發商，依法獨立擁有 Discuz! 產品著作權（中國國家版權局著作權登記號 2006SR11895）。康盛創想（北京）科技有限公司網址為 http://www.comsenz.com，Discuz! 官方網站網址為 http://www.discuz.com，Discuz! 官方討論區網址為 http://www.discuz.net。</p>
 
-<p>Discuz! 著作权已在中华人民共和国国家版权局注册，著作权受到法律和国际公约保护。使用者：无论个人或组织、盈利与否、用途如何（包括以学习和研究为目的），均需仔细阅读本协议，在理解、同意、并遵守本协议的全部条款后，方可开始使用 Discuz! 软件。</p>
+<p>Discuz! 著作權已在中華人民共和國國家版權局註冊，著作權受到法律和國際公約保護。使用者：無論個人或組織、盈利與否、用途如何（包括以學習和研究為目的），均需仔細閱讀本協議，在理解、同意、並遵守本協議的全部條款後，方可開始使用 Discuz! 軟件。</p>
 
-<p>本授权协议适用且仅适用于 Discuz! X 版本，康盛创想（北京）科技有限公司拥有对本授权协议的最终解释权。</p>
+<p>本授權協議適用且僅適用於 Discuz! X 版本，康盛創想（北京）科技有限公司擁有對本授權協議的最終解釋權。</p>
 
-<h3>I. 协议许可的权利</h3>
+<h3>I. 協議許可的權利</h3>
 <ol>
-<li>您可以在完全遵守本最终用户授权协议的基础上，将本软件应用于非商业用途，而不必支付软件版权授权费用。</li>
-<li>您可以在协议规定的约束和限制范围内修改 Discuz! 源代码(如果被提供的话)或界面风格以适应您的网站要求。</li>
-<li>您拥有使用本软件构建的论坛中全部会员资料、文章及相关信息的所有权，并独立承担与文章内容的相关法律义务。</li>
-<li>获得商业授权之后，您可以将本软件应用于商业用途，同时依据所购买的授权类型中确定的技术支持期限、技术支持方式和技术支持内容，自购买时刻起，在技术支持期限内拥有通过指定的方式获得指定范围内的技术支持服务。商业授权用户享有反映和提出意见的权力，相关意见将被作为首要考虑，但没有一定被采纳的承诺或保证。</li>
+<li>您可以在完全遵守本最終用戶授權協議的基礎上，將本軟件應用於非商業用途，而不必支付軟件版權授權費用。</li>
+<li>您可以在協議規定的約束和限制範圍內修改 Discuz! 源代碼(如果被提供的話)或界面風格以適應您的網站要求。</li>
+<li>您擁有使用本軟件構建的論壇中全部會員資料、文章及相關信息的所有權，並獨立承擔與文章內容的相關法律義務。</li>
+<li>獲得商業授權之後，您可以將本軟件應用於商業用途，同時依據所購買的授權類型中確定的技術支持期限、技術支持方式和技術支持內容，自購買時刻起，在技術支持期限內擁有通過指定的方式獲得指定範圍內的技術支持服務。商業授權用戶享有反映和提出意見的權力，相關意見將被作為首要考慮，但沒有一定被採納的承諾或保證。</li>
 </ol>
 
-<h3>II. 协议规定的约束和限制</h3>
+<h3>II. 協議規定的約束和限制</h3>
 <ol>
-<li>未获商业授权之前，不得将本软件用于商业用途（包括但不限于企业网站、经营性网站、以营利为目或实现盈利的网站）。购买商业授权请登陆http://www.discuz.com参考相关说明，也可以致电8610-51657885了解详情。</li>
-<li>不得对本软件或与之关联的商业授权进行出租、出售、抵押或发放子许可证。</li>
-<li>无论如何，即无论用途如何、是否经过修改或美化、修改程度如何，只要使用 Discuz! 的整体或任何部分，未经书面许可，论坛页面页脚处的 Discuz! 名称和康盛创想（北京）科技有限公司下属网站（http://www.comsenz.com、http://www.discuz.com 或 http://www.discuz.net） 的链接都必须保留，而不能清除或修改。</li>
-<li>禁止在 Discuz! 的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于重新分发。</li>
-<li>如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。</li>
+<li>未獲商業授權之前，不得將本軟件用於商業用途（包括但不限於企業網站、經營性網站、以營利為目或實現盈利的網站）。購買商業授權請登陸http://www.discuz.com參考相關說明，也可以致電8610-51657885瞭解詳情。</li>
+<li>不得對本軟件或與之關聯的商業授權進行出租、出售、抵押或發放子許可證。</li>
+<li>無論如何，即無論用途如何、是否經過修改或美化、修改程度如何，只要使用 Discuz! 的整體或任何部分，未經書面許可，論壇頁面頁腳處的 Discuz! 名稱和康盛創想（北京）科技有限公司下屬網站（http://www.comsenz.com、http://www.discuz.com 或 http://www.discuz.net） 的鏈接都必須保留，而不能清除或修改。</li>
+<li>禁止在 Discuz! 的整體或任何部分基礎上以發展任何派生版本、修改版本或第三方版本用於重新分發。</li>
+<li>如果您未能遵守本協議的條款，您的授權將被終止，所被許可的權利將被收回，並承擔相應法律責任。</li>
 </ol>
 
-<h3>III. 有限担保和免责声明</h3>
+<h3>III. 有限擔保和免責聲明</h3>
 <ol>
-<li>本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的。</li>
-<li>用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买产品技术服务之前，我们不承诺提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。</li>
-<li>康盛创想（北京）科技有限公司不对使用本软件构建的论坛中的文章或信息承担责任。</li>
+<li>本軟件及所附帶的文件是作為不提供任何明確的或隱含的賠償或擔保的形式提供的。</li>
+<li>用戶出於自願而使用本軟件，您必須瞭解使用本軟件的風險，在尚未購買產品技術服務之前，我們不承諾提供任何形式的技術支持、使用擔保，也不承擔任何因使用本軟件而產生問題的相關責任。</li>
+<li>康盛創想（北京）科技有限公司不對使用本軟件構建的論壇中的文章或信息承擔責任。</li>
 </ol>
 
-<p>有关 Discuz! 最终用户授权协议、商业授权与技术服务的详细内容，均由 Discuz! 官方网站独家提供。康盛创想（北京）科技有限公司拥有在不事先通知的情况下，修改授权协议和服务价目表的权力，修改后的协议或价目表对自改变之日起的新授权用户生效。</p>
+<p>有關 Discuz! 最終用戶授權協議、商業授權與技術服務的詳細內容，均由 Discuz! 官方網站獨家提供。康盛創想（北京）科技有限公司擁有在不事先通知的情況下，修改授權協議和服務價目表的權力，修改後的協議或價目表對自改變之日起的新授權用戶生效。</p>
 
-<p>电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始安装 Discuz!，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。</p></div>',
+<p>電子文本形式的授權協議如同雙方書面簽署的協議一樣，具有完全的和等同的法律效力。您一旦開始安裝 Discuz!，即被視為完全理解並接受本協議的各項條款，在享有上述條款授予的權力的同時，受到相關的約束和限制。協議許可範圍以外的行為，將直接違反本授權協議並構成侵權，我們有權隨時終止授權，責令停止損害，並保留追究相關責任的權力。</p></div>',
 
-	'uc_installed' => '您已经安装过 UCenter，如果需要重新安装，请删除 data/install.lock 文件',
-	'i_agree' => '我已仔细阅读，并同意上述条款中的所有内容',
+	'uc_installed' => '您已經安裝過 UCenter，如果需要重新安裝，請刪除 data/install.lock 文件',
+	'i_agree' => '我已仔細閱讀，並同意上述條款中的所有內容',
 	'supportted' => '支持',
 	'unsupportted' => '不支持',
 	'max_size' => '支持/最大尺寸',
-	'project' => '项目',
+	'project' => '項目',
 	'ucenter_required' => '所需配置',
 	'ucenter_best' => '最佳配置',
-	'curr_server' => '当前服务器',
-	'env_check' => '环境检查',
-	'os' => '操作系统',
+	'curr_server' => '當前服務器',
+	'env_check' => '環境檢查',
+	'os' => '操作系統',
 	'php' => 'PHP 版本',
-	'attachmentupload' => '附件上传',
+	'attachmentupload' => '附件上傳',
 	'unlimit' => '不限制',
 	'version' => '版本',
-	'gdversion' => 'GD 库',
-	'allow' => '允许',
-	'unix' => '类Unix',
-	'diskspace' => '磁盘空间',
-	'priv_check' => '目录、文件权限检查',
-	'func_depend' => '函数依赖性检查',
-	'func_name' => '函数名称',
-	'check_result' => '检查结果',
-	'suggestion' => '建议',
-	'advice_mysql' => '请检查 mysql 模块是否正确加载',
-	'advice_fopen' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
-	'advice_file_get_contents' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
-	'advice_xml' => '该函数需要 PHP 支持 XML。请联系空间商，确定开启了此项功能',
-	'none' => '无',
+	'gdversion' => 'GD 庫',
+	'allow' => '允許',
+	'unix' => '類Unix',
+	'diskspace' => '磁盤空間',
+	'priv_check' => '目錄、文件權限檢查',
+	'func_depend' => '函數依賴性檢查',
+	'func_name' => '函數名稱',
+	'check_result' => '檢查結果',
+	'suggestion' => '建議',
+	'advice_mysql' => '請檢查 mysql 模塊是否正確加載',
+	'advice_fopen' => '該函數需要 php.ini 中 allow_url_fopen 選項開啟。請聯繫空間商，確定開啟了此項功能',
+	'advice_file_get_contents' => '該函數需要 php.ini 中 allow_url_fopen 選項開啟。請聯繫空間商，確定開啟了此項功能',
+	'advice_xml' => '該函數需要 PHP 支持 XML。請聯繫空間商，確定開啟了此項功能',
+	'none' => '無',
 
-	'dbhost' => '数据库服务器',
-	'dbuser' => '数据库用户名',
-	'dbpw' => '数据库密码',
-	'dbname' => '数据库名',
-	'tablepre' => '数据表前缀',
+	'dbhost' => '數據庫服務器',
+	'dbuser' => '數據庫用戶名',
+	'dbpw' => '數據庫密碼',
+	'dbname' => '數據庫名',
+	'tablepre' => '數據表前綴',
 
-	'ucfounderpw' => '创始人密码',
-	'ucfounderpw2' => '重复创始人密码',
+	'ucfounderpw' => '創始人密碼',
+	'ucfounderpw2' => '重複創始人密碼',
 
-	'init_log' => '初始化记录',
-	'clear_dir' => '清空目录',
-	'select_db' => '选择数据库',
-	'create_table' => '建立数据表',
+	'init_log' => '初始化記錄',
+	'clear_dir' => '清空目錄',
+	'select_db' => '選擇數據庫',
+	'create_table' => '建立數據表',
 	'succeed' => '成功 ',
 
-	'testdata' => '附加数据',
-	'testdata_check_label' => '安装首页模板，演示专题和完整地区数据（四级）',
-	'install_test_data' => '正在安装附加数据',
+	'testdata' => '附加數據',
+	'testdata_check_label' => '安裝首頁模板，演示專題和完整地區數據（四級）',
+	'install_test_data' => '正在安裝附加數據',
 
-	'method_undefined' => '未定义方法',
-	'database_nonexistence' => '数据库操作对象不存在',
-	'skip_current' => '跳过本步',
-	'topic' => '专题',
+	'method_undefined' => '未定義方法',
+	'database_nonexistence' => '數據庫操作對像不存在',
+	'skip_current' => '跳過本步',
+	'topic' => '專題',
 
 );
 
 $msglang = array(
-	'config_nonexistence' => '您的 config.inc.php 不存在, 无法继续安装, 请用 FTP 将该文件上传后再试。',
+	'config_nonexistence' => '您的 config.inc.php 不存在, 無法繼續安裝, 請用 FTP 將該文件上傳後再試。',
 );
 
 

@@ -13,23 +13,23 @@ if(!defined('IN_DISCUZ')) {
 
 class seccode {
 
-	var $code;			//note 100000-999999 ·¶Î§ÄÚËæ»ú
-	var $type 	= 0;		//note 0 Ó¢ÎÄÍ¼Æ¬ÑéÖ¤Âë  1 ÖĞÎÄÍ¼Æ¬ÑéÖ¤Âë  2 Flash ÑéÖ¤Âë  3 ÓïÒôÑéÖ¤Âë
-	var $width 	= 150;		//note ¿í¶È
-	var $height 	= 60;		//note ¸ß¶È
-	var $background	= 1;		//note Ëæ»úÍ¼Æ¬±³¾°
-	var $adulterate	= 1;		//note Ëæ»ú±³¾°Í¼ĞÎ
-	var $ttf 	= 0;		//note Ëæ»ú TTF ×ÖÌå
-	var $angle 	= 0;		//note Ëæ»úÇãĞ±¶È(TTF)
-	var $warping 	= 0;		//note Ëæ»úÅ¤Çú(TTF)
-	var $scatter	= 0;		//note Í¼Æ¬´òÉ¢
-	var $color 	= 1;		//note Ëæ»úÑÕÉ«
-	var $size 	= 0;		//note Ëæ»ú´óĞ¡
-	var $shadow 	= 1;		//note ÎÄ×ÖÒõÓ°
-	var $animator 	= 0;		//note /GIF ¶¯»­
-	var $fontpath	= '';		//note TTF ×Ö¿âÄ¿Â¼
-	var $datapath	= '';		//note Í¼Æ¬¡¢ÉùÒô¡¢Flash µÈÊı¾İÄ¿Â¼
-	var $includepath= '';		//note ÆäËü°üº¬ÎÄ¼şÄ¿Â¼
+	var $code;			//note 100000-999999 ç¯„åœå…§éš¨æ©Ÿ
+	var $type 	= 0;		//note 0 è‹±æ–‡åœ–ç‰‡é©—è­‰ç¢¼  1 ä¸­æ–‡åœ–ç‰‡é©—è­‰ç¢¼  2 Flash é©—è­‰ç¢¼  3 èªéŸ³é©—è­‰ç¢¼
+	var $width 	= 150;		//note å¯¬åº¦
+	var $height 	= 60;		//note é«˜åº¦
+	var $background	= 1;		//note éš¨æ©Ÿåœ–ç‰‡èƒŒæ™¯
+	var $adulterate	= 1;		//note éš¨æ©ŸèƒŒæ™¯åœ–å½¢
+	var $ttf 	= 0;		//note éš¨æ©Ÿ TTF å­—é«”
+	var $angle 	= 0;		//note éš¨æ©Ÿå‚¾æ–œåº¦(TTF)
+	var $warping 	= 0;		//note éš¨æ©Ÿæ‰­æ›²(TTF)
+	var $scatter	= 0;		//note åœ–ç‰‡æ‰“æ•£
+	var $color 	= 1;		//note éš¨æ©Ÿé¡è‰²
+	var $size 	= 0;		//note éš¨æ©Ÿå¤§å°
+	var $shadow 	= 1;		//note æ–‡å­—é™°å½±
+	var $animator 	= 0;		//note /GIF å‹•ç•«
+	var $fontpath	= '';		//note TTF å­—åº«ç›®éŒ„
+	var $datapath	= '';		//note åœ–ç‰‡ã€è²éŸ³ã€Flash ç­‰æ•¸æ“šç›®éŒ„
+	var $includepath= '';		//note å…¶å®ƒåŒ…å«æ–‡ä»¶ç›®éŒ„
 
 	var $fontcolor;
 	var $im;
@@ -470,24 +470,24 @@ class seccode {
 usage:
 include_once './include/seccode.class.php';
 $code = new seccode();
-$code->code = $seccode;						//100000-999999 ·¶Î§ÄÚËæ»ú
-$code->type = $_G['setting']['seccodedata']['type'];                             //0 Ó¢ÎÄÍ¼Æ¬ÑéÖ¤Âë		Ïà¹ØÊı¾İÄ¿Â¼:/fonts/gif, /fonts/en
-								//1 ÖĞÎÄÍ¼Æ¬ÑéÖ¤Âë		Ïà¹ØÊı¾İÄ¿Â¼:/fonts/ch
-								//2 Flash ÑéÖ¤Âë		Ïà¹ØÊı¾İÄ¿Â¼:/seccode/flash
-								//3 ÓïÒôÑéÖ¤Âë			Ïà¹ØÊı¾İÄ¿Â¼:/seccode/sound, /seccode/flash
-$code->width = $_G['setting']['seccodedata']['width'];                           //¿í¶È
-$code->height = $_G['setting']['seccodedata']['height'];                         //¸ß¶È
-$code->background = $_G['setting']['seccodedata']['background'];                 //Ëæ»úÍ¼Æ¬±³¾°			Ïà¹ØÊı¾İÄ¿Â¼:/seccode/background
-$code->adulterate = $_G['setting']['seccodedata']['adulterate'];                 //Ëæ»ú±³¾°Í¼ĞÎ
-$code->ttf = $_G['setting']['seccodedata']['ttf'];                               //Ëæ»ú TTF ×ÖÌå			Ïà¹ØÊı¾İÄ¿Â¼:/fonts/en, /fonts/ch
-$code->angle = $_G['setting']['seccodedata']['angle'];                           //Ëæ»úÇãĞ±¶È
-$code->color = $_G['setting']['seccodedata']['color'];                           //Ëæ»úÑÕÉ«
-$code->size = $_G['setting']['seccodedata']['size'];                             //Ëæ»ú´óĞ¡
-$code->shadow = $_G['setting']['seccodedata']['shadow'];                         //ÎÄ×ÖÒõÓ°
-$code->animator = $_G['setting']['seccodedata']['animator'];                     //GIF ¶¯»­			Ïà¹ØClass:/include/gifmerge.class.php
-$code->fontpath = DISCUZ_ROOT.'./static/image/seccode/font/';		//TTF ×Ö¿âÄ¿Â¼
-$code->datapath = DISCUZ_ROOT.'./static/image/common/seccode/';		//Í¼Æ¬¡¢ÉùÒô¡¢Flash µÈÊı¾İÄ¿Â¼
-$code->includepath = DISCUZ_ROOT.'./include/';			//ÆäËü°üº¬ÎÄ¼şÄ¿Â¼
+$code->code = $seccode;						//100000-999999 ç¯„åœå…§éš¨æ©Ÿ
+$code->type = $_G['setting']['seccodedata']['type'];                             //0 è‹±æ–‡åœ–ç‰‡é©—è­‰ç¢¼		ç›¸é—œæ•¸æ“šç›®éŒ„:/fonts/gif, /fonts/en
+								//1 ä¸­æ–‡åœ–ç‰‡é©—è­‰ç¢¼		ç›¸é—œæ•¸æ“šç›®éŒ„:/fonts/ch
+								//2 Flash é©—è­‰ç¢¼		ç›¸é—œæ•¸æ“šç›®éŒ„:/seccode/flash
+								//3 èªéŸ³é©—è­‰ç¢¼			ç›¸é—œæ•¸æ“šç›®éŒ„:/seccode/sound, /seccode/flash
+$code->width = $_G['setting']['seccodedata']['width'];                           //å¯¬åº¦
+$code->height = $_G['setting']['seccodedata']['height'];                         //é«˜åº¦
+$code->background = $_G['setting']['seccodedata']['background'];                 //éš¨æ©Ÿåœ–ç‰‡èƒŒæ™¯			ç›¸é—œæ•¸æ“šç›®éŒ„:/seccode/background
+$code->adulterate = $_G['setting']['seccodedata']['adulterate'];                 //éš¨æ©ŸèƒŒæ™¯åœ–å½¢
+$code->ttf = $_G['setting']['seccodedata']['ttf'];                               //éš¨æ©Ÿ TTF å­—é«”			ç›¸é—œæ•¸æ“šç›®éŒ„:/fonts/en, /fonts/ch
+$code->angle = $_G['setting']['seccodedata']['angle'];                           //éš¨æ©Ÿå‚¾æ–œåº¦
+$code->color = $_G['setting']['seccodedata']['color'];                           //éš¨æ©Ÿé¡è‰²
+$code->size = $_G['setting']['seccodedata']['size'];                             //éš¨æ©Ÿå¤§å°
+$code->shadow = $_G['setting']['seccodedata']['shadow'];                         //æ–‡å­—é™°å½±
+$code->animator = $_G['setting']['seccodedata']['animator'];                     //GIF å‹•ç•«			ç›¸é—œClass:/include/gifmerge.class.php
+$code->fontpath = DISCUZ_ROOT.'./static/image/seccode/font/';		//TTF å­—åº«ç›®éŒ„
+$code->datapath = DISCUZ_ROOT.'./static/image/common/seccode/';		//åœ–ç‰‡ã€è²éŸ³ã€Flash ç­‰æ•¸æ“šç›®éŒ„
+$code->includepath = DISCUZ_ROOT.'./include/';			//å…¶å®ƒåŒ…å«æ–‡ä»¶ç›®éŒ„
 $code->display();
 
 */

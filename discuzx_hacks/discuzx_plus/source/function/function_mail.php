@@ -21,7 +21,7 @@ function sendmail($toemail, $subject, $message, $from = '') {
 $message = <<<EOT
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$_G[charset]">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>$subject</title>
 </head>
 <body>

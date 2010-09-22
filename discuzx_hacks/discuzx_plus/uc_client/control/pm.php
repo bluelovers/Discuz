@@ -13,7 +13,7 @@ define('PMLIMIT1DAY_ERROR', -1);
 define('PMFLOODCTRL_ERROR', -2);
 define('PMMSGTONOTFRIEND', -3);
 define('PMSENDREGDAYS', -4);
-define('PMUSERLIMIT1DAY_ERROR', -5);//note 超出24最大发送人数
+define('PMUSERLIMIT1DAY_ERROR', -5);//note 悻虫泊桩涑封媿葖式
 
 class pmcontrol extends base {
 

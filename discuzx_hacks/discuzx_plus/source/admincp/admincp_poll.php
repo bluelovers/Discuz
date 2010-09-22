@@ -274,7 +274,7 @@ if($operation == 'setting') {
 			if($starttime > $endtime) {
 				cpmsg('poll_error_daterange', '', 'error');
 			}
-			//debug 1 cookie, 2 ÓÃ»§Ãû, 3 ip, 4 share object
+			//debug 1 cookie, 2 ç”¨æˆ¶å, 3 ip, 4 share object
 			$_G['gp_repeattype'] = bindec(intval($_G['gp_repeattype'][4]).intval($_G['gp_repeattype'][3]).intval($_G['gp_repeattype'][2]).intval($_G['gp_repeattype'][1]));
 			$data = array(
 				'available' => intval($_G['gp_available']),
@@ -300,7 +300,7 @@ if($operation == 'setting') {
 
 		}
 
-	//Ñ¡ÏîÉèÖÃ
+	//é¸é …è¨­ç½®
 	} elseif($operation == 'choiceedit') {
 
 		if(!$itemid) {
@@ -328,7 +328,7 @@ if($operation == 'setting') {
 				));
 			}
 
-			//FlashÉÏ´«Ñ¡Ïî
+			//Flashä¸Šå‚³é¸é …
 			if($flashupload) {
 
 				showtableheader('nav_poll_choiceedit', 'fixpadding');
@@ -356,10 +356,10 @@ if($operation == 'setting') {
 				</div>
 				";
 
-			//ÆÕÍ¨Í¶Æ±Ñ¡Ïî
+			//æ™®é€šæŠ•ç¥¨é¸é …
 			} else {
 
-				//ÅúÁ¿ĞÂÔöÑ¡Ïî
+				//æ‰¹é‡æ–°å¢é¸é …
 				if($new || $_G['gp_multioptions']) {
 					showtableheader('poll_choice_multi_add', 'fixpadding');
 					showformheader('poll&operation=choiceedit', 'enctype');
@@ -370,7 +370,7 @@ if($operation == 'setting') {
 					showformfooter();
 					showtablefooter();
 
-				//±à¼­Ò³Ãæ
+				//ç·¨è¼¯é é¢
 				} else {
 					$choice_setting = array();
 					$query = DB::query("SELECT * FROM ".DB::table('poll_choice')." WHERE itemid = '$itemid' ORDER BY displayorder");
@@ -432,7 +432,7 @@ if($operation == 'setting') {
 			$newchoiceoption = is_array($_G['gp_newchoicetitle']) ? $_G['gp_newchoicetitle'] : array();
 			$choiceoption = is_array($_G['gp_choiceoption']) ?  $_G['gp_choiceoption']  : array();
 
-			//µ¥¸öinputĞŞ¸Ä
+			//å–®å€‹inputä¿®æ”¹
 			if($choiceoption) {
 				foreach($choiceoption as $choiceid => $value) {
 					$value = trim(strip_tags($value));
@@ -449,9 +449,9 @@ if($operation == 'setting') {
 				}
 			}
 
-			//¶à¸ötextarea
+			//å¤šå€‹textarea
 			$newchoiceoption = $_G['gp_ismultioptions'] ? explode("\n", $_G['gp_newchoiceoptions']) : $newchoiceoption;
-			//µ¥¸öinputÔö¼Ó
+			//å–®å€‹inputå¢åŠ 
 			if($newchoiceoption) {
 				foreach($newchoiceoption as $key => $value) {
 					$caption = dhtmlspecialchars(trim($value));
@@ -757,7 +757,7 @@ if($operation == 'setting') {
 					));
 				}
 			} else {
-				showsubmit('', '', '', '<a href="'.ADMINSCRIPT.'?action=poll&operation=counter&countpollsubmit=yes&formid='.$itemid.'">»¹Ã»ÓĞ½øĞĞ¹ıÊı¾İ·ÖÎö£¬µã»÷½øĞĞ·ÖÎö</a>');
+				showsubmit('', '', '', '<a href="'.ADMINSCRIPT.'?action=poll&operation=counter&countpollsubmit=yes&formid='.$itemid.'">é‚„æ²’æœ‰é€²è¡Œéæ•¸æ“šåˆ†æï¼Œé»æ“Šé€²è¡Œåˆ†æ</a>');
 			}
 
 			showsubmit('', '', '', $multipage);
@@ -789,7 +789,7 @@ if($operation == 'setting') {
 					));
 				}
 			} else {
-				showsubmit('', '', '', '<a href="'.ADMINSCRIPT.'?action=poll&operation=counter&countoptionsubmit=yes&formid='.$itemid.'&formip='.$_G['gp_ip'].'">»¹Ã»ÓĞ½øĞĞ¹ıÊı¾İ·ÖÎö£¬µã»÷½øĞĞ·ÖÎö</a>');
+				showsubmit('', '', '', '<a href="'.ADMINSCRIPT.'?action=poll&operation=counter&countoptionsubmit=yes&formid='.$itemid.'&formip='.$_G['gp_ip'].'">é‚„æ²’æœ‰é€²è¡Œéæ•¸æ“šåˆ†æï¼Œé»æ“Šé€²è¡Œåˆ†æ</a>');
 			}
 
 			showtablefooter();

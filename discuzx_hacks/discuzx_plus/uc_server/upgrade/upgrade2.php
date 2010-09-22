@@ -79,7 +79,7 @@ EOT;
 
 if(file_exists($lock_file) && $action != 'upgsecques') {
 	showheader();
-	showerror('升级被锁定，应该是已经升级过了，如果已经恢复数据请手动删除<br />'.str_replace(UC_ROOT, '', $lock_file).'<br />之后再来刷新页面');
+	showerror('升級被鎖定，應該是已經升級過了，如果已經恢復數據請手動刪除<br />'.str_replace(UC_ROOT, '', $lock_file).'<br />之後再來刷新頁面');
 	showfooter();
 }
 
@@ -89,10 +89,10 @@ if(!$action) {
 
 ?>
 
-	<p>本程序用于升级 UCenter 1.0 到 UCenter 1.5</p>
-	<p>运行本升级程序之前，请确认已经上传 UCenter 1.5 的全部文件和目录</p>
-	<p>强烈建议您升级之前备份数据库资料</p>
-	<p><a href="<?php echo $PHP_SELF;?>?action=db">如果您已确认完成上面的步骤,请点这里升级</a></p>
+	<p>本程序用於升級 UCenter 1.0 到 UCenter 1.5</p>
+	<p>運行本升級程序之前，請確認已經上傳 UCenter 1.5 的全部文件和目錄</p>
+	<p>強烈建議您升級之前備份數據庫資料</p>
+	<p><a href="<?php echo $PHP_SELF;?>?action=db">如果您已確認完成上面的步驟,請點這裡升級</a></p>
 
 <?php
 	showfooter();
@@ -129,7 +129,7 @@ if(!$action) {
 
 	showheader();
 
-	echo "<h4>处理短消息数据</h4>";
+	echo "<h4>處理短消息數據</h4>";
 
 	$db = new db;
 	$db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, UC_DBNAME, UC_DBCHARSET);
@@ -145,10 +145,10 @@ if(!$action) {
 		$db->query("REPLACE INTO ".UC_DBTABLEPRE."settings (k, v) VALUES('version', '1.5.0')");
 		@touch($lock_file);
 		if($forward) {
-			echo "<br /><br /><br /><a href=\"$forward\">浏览器会自动跳转页面，无需人工干预。除非当您的浏览器长时间没有自动跳转时，请点击这里</a>";
+			echo "<br /><br /><br /><a href=\"$forward\">瀏覽器會自動跳轉頁面，無需人工干預。除非當您的瀏覽器長時間沒有自動跳轉時，請點擊這裡</a>";
 			echo "<script>setTimeout(\"redirect('$forward');\", 1250);</script>";
 		} else {
-			echo "升级完成。";
+			echo "升級完成。";
 		}
 	} else {
 		$query = $db->query("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE related=0 LIMIT $start, $limit");
@@ -162,9 +162,9 @@ if(!$action) {
 		}
 	
 		$end = $start + $limit;
-		echo "短消息数据已处理 $start / $total ...";
+		echo "短消息數據已處理 $start / $total ...";
 		$url_forward = "upgrade2.php?action=pm&start=$end&total=$total&forward=".urlencode($forward);
-		echo "<br /><br /><br /><a href=\"$url_forward\">浏览器会自动跳转页面，无需人工干预。除非当您的浏览器长时间没有自动跳转时，请点击这里</a>";
+		echo "<br /><br /><br /><a href=\"$url_forward\">瀏覽器會自動跳轉頁面，無需人工干預。除非當您的瀏覽器長時間沒有自動跳轉時，請點擊這裡</a>";
 		echo "<script>setTimeout(\"redirect('$url_forward');\", 1250);</script>";
 	}
 
@@ -175,7 +175,7 @@ if(!$action) {
 	$lock_file = UC_ROOT.'./data/upgsecques.lock';
 	if(file_exists($lock_file)) {
 		showheader();
-		showerror('升级被锁定，应该是已经升级过了安全提问，如果已经恢复数据请手动删除<br />'.str_replace(UC_ROOT, '', $lock_file).'<br />之后再来刷新页面');
+		showerror('升級被鎖定，應該是已經升級過了安全提問，如果已經恢復數據請手動刪除<br />'.str_replace(UC_ROOT, '', $lock_file).'<br />之後再來刷新頁面');
 	}
 	$uc_authcode = getgpc('uc_authcode', 'C');
 
@@ -183,7 +183,7 @@ if(!$action) {
 		$uc_founderpw = getgpc('uc_founderpw');
 		if(empty($uc_founderpw) || UC_FOUNDERPW !=  md5(md5($uc_founderpw).UC_FOUNDERSALT)) {
 			echo '<form method="post">';
-			echo '请输入UCenter创始人密码:<input type="password" name="uc_founderpw" /> <input type="submit" value="提交" />';
+			echo '請輸入UCenter創始人密碼:<input type="password" name="uc_founderpw" /> <input type="submit" value="提交" />';
 			exit;
 		} else {
 			setcookie('uc_authcode', authcode(UC_FOUNDERPW, 'ENCODE', UC_KEY));
@@ -194,7 +194,7 @@ if(!$action) {
 
 	if(!is_dir(UC_ROOT.'./data/upgsecques')) {
 		showheader();
-		showerror('请先将论坛下 ./forumdata/upgsecques 目录上传到UCenter 目录 ./data/ 下，之后<a href="javascript:location.reload();" target="_self">刷新此页面</a>');
+		showerror('請先將論壇下 ./forumdata/upgsecques 目錄上傳到UCenter 目錄 ./data/ 下，之後<a href="javascript:location.reload();" target="_self">刷新此頁面</a>');
 	}
 	$num = getgpc('num');
 	$num = $num ? intval($num) : 1;
@@ -216,7 +216,7 @@ if(!$action) {
 		dir_clear(UC_ROOT.'./data/upgsecques');
 		setcookie('uc_authcode', '');
 		showheader();
-		echo '安全提问升级完成，感谢您使用本程序';
+		echo '安全提問升級完成，感謝您使用本程序';
 	} else {
 		showheader();
 		$sql = file_get_contents($dump_file);
@@ -224,9 +224,9 @@ if(!$action) {
 		$db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, UC_DBNAME, UC_DBCHARSET);
 		runquery($sql);
 		$num++;
-		echo "安全提问正在导入";
+		echo "安全提問正在導入";
 		$url_forward = "upgrade2.php?action=upgsecques&num=$num&random=$random";
-		echo "<br /><br /><br /><a href=\"$url_forward\">浏览器会自动跳转页面，无需人工干预。除非当您的浏览器长时间没有自动跳转时，请点击这里</a>";
+		echo "<br /><br /><br /><a href=\"$url_forward\">瀏覽器會自動跳轉頁面，無需人工干預。除非當您的瀏覽器長時間沒有自動跳轉時，請點擊這裡</a>";
 		echo "<script>setTimeout(\"redirect('$url_forward');\", 1250);</script>";
 	}
 
@@ -317,8 +317,8 @@ function showheader() {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
-<title>UCenter 升级程序( $version_old &gt;&gt; $version_new)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UCenter 升級程序( $version_old &gt;&gt; $version_new)</title>
 <meta name="MSSmartTagsPreventParsing" content="TRUE">
 <meta http-equiv="MSThemeCompatible" content="Yes">
 <style>
@@ -348,7 +348,7 @@ input		{color: #085878; font-family: Tahoma, verdana, arial; font-size: 12px; ba
 <table width="98%" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr>
 <td class="install" height="30" valign="bottom"><font color="#FF0000">&gt;&gt;</font>
-UCenter  升级程序( $version_old &gt;&gt; $version_new)</td>
+UCenter  升級程序( $version_old &gt;&gt; $version_new)</td>
 </tr>
 <tr>
 <td>
@@ -357,8 +357,8 @@ UCenter  升级程序( $version_old &gt;&gt; $version_new)</td>
 </tr>
 <tr>
 <td align="center">
-<b>本升级程序只能从 $version_old 升级到 $version_new ，运行之前，请确认已经上传所有文件，并做好数据备份<br />
-升级当中有任何问题请访问技术支持站点 <a href="http://www.discuz.net" target="_blank">http://www.discuz.net</a></b>
+<b>本升級程序只能從 $version_old 升級到 $version_new ，運行之前，請確認已經上傳所有文件，並做好數據備份<br />
+升級當中有任何問題請訪問技術支持站點 <a href="http://www.discuz.net" target="_blank">http://www.discuz.net</a></b>
 </td>
 </tr>
 <tr>
@@ -399,7 +399,7 @@ function redirect($url) {
 	setTimeout('redirect();', 1000);
 </script>
 <br /><br />
-&gt;&gt;<a href="$url">浏览器会自动跳转页面，无需人工干预。除非当您的浏览器长时间没有自动跳转时，请点击这里</a>
+&gt;&gt;<a href="$url">瀏覽器會自動跳轉頁面，無需人工干預。除非當您的瀏覽器長時間沒有自動跳轉時，請點擊這裡</a>
 <br /><br />
 EOT;
 	showfooter();
@@ -540,10 +540,10 @@ function upg_pms() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// 随机密钥长度 取值 0-32;
-	// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
-	// 取值越大，密文变动规律越大，密文变化 = 16 的 $ckey_length 次方
-	// 当此值为 0 时，则不产生随机密钥
+	$ckey_length = 4;	// 隨機密鑰長度 取值 0-32;
+	// 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
+	// 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
+	// 當此值為 0 時，則不產生隨機密鑰
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));

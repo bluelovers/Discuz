@@ -14,7 +14,7 @@ class control extends pluginbase {
 	function onindex() {
 
 		if(!$ucfiles = @file(UC_ROOT.'./control/admin/ucfiles.md5')) {
-			$this->message('校验文件不存在，无法校验');
+			$this->message('校驗文件不存在，無法校驗');
 		}
 
 		$this->load('app');

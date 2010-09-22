@@ -302,7 +302,7 @@ function cpheader() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=7" />
 <link href="static/image/admincp/admincp.css" rel="stylesheet" type="text/css" />
 </head>
@@ -812,7 +812,7 @@ function cpfooter() {
 		echo <<<EOT
 <script type="text/javascript">
 	var newhtml = '';
-	newhtml += '<table class="tb tb2"><tr><th class="partition edited">&#x60A8;&#x5F53;&#x524D;&#x4F7F;&#x7528;&#x7684 Discuz! &#x7A0B;&#x5E8F;&#x7248;&#x672C;&#x6709;&#x91CD;&#x8981;&#x66F4;&#x65B0;&#xFF0C;&#x8BF7;&#x53C2;&#x7167;&#x4EE5;&#x4E0B;&#x63D0;&#x793A;&#x8FDB;&#x884C;&#x53CA;&#x65F6;&#x5347;&#x7EA7</th></tr>';
+	newhtml += '<table class="tb tb2"><tr><th class="partition edited">您當前使用&#x7684 Discuz! 程序版本有重要更新，請參照以下提示進行及時升&#x7EA7</th></tr>';
 	newhtml += '<tr><td class="tipsblock"><a href="http://faq.comsenz.com/checkversion.php?product=Xplus&version={$version}&release={$release}&charset={$charset}" target="_blank"><img src="{$newsurl}" onload="shownews()" /></a></td></tr></table>';
 	\$('boardnews').style.display = 'none';
 	\$('boardnews').innerHTML = newhtml;

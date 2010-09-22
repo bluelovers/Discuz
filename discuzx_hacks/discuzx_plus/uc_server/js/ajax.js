@@ -147,7 +147,7 @@ function appendscript(src, text, reload) {
 	$('append').appendChild(scriptNode);
 }
 
-// 得到一个定长的 hash 值， 依赖于 stringxor()
+// 得到一個定長的 hash 值， 依賴於 stringxor()
 function hash(string, length) {
 	var length = length ? length : 32;
 	var start = 0;
@@ -192,7 +192,7 @@ function newfunc(func){
 function ajaxmenu(url, position) {
 	e = is_ie ? event : ajaxmenu.caller.arguments[0];
 	controlid = is_ie ? e.srcElement : e.target;
-	var menuid = hash(url);// 使每个 url 对应一个弹出层，避免重复请求
+	var menuid = hash(url);// 使每個 url 對應一個彈出層，避免重複請求
 	createmenu(menuid);
 
 	showmenu2(e, menuid, position, controlid);

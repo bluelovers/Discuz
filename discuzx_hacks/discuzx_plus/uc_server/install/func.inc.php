@@ -457,7 +457,7 @@ function show_header() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>$title</title>
 <link rel="stylesheet" href="style.css" type="text/css" media="all" />
 <script type="text/javascript">
@@ -576,12 +576,8 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-				// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎÞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-				// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-				// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
-
-	$key = md5($key ? $key : UC_KEY);
+	$ckey_length = 4;	// Ë¦ëºƒÜ”ï³¤æˆ È¡Öµ 0-32;
+				// ì“ˆë‹¦ëºƒÜ”ï£¬ï‰’ÔîƒœÎ„ÎžÈŽêŽ¹æ‚‰ã¬¼ä±£Ê‡Ô­Î„êƒÜ”ïªÈ«Ï Í¬ã¬¼ÓƒÜ½á¹»Ò²ë¡ƒï´Žâ»ì£¬Ô¶ä³†Æ½â„‘æˆ¡å			// È¡ÖµÔ½ä³£ìƒœÎ„á¤¶ï¹¦Â‰Ô½ä³£ìƒœÎ„á¤»ï ½ 16 å„ $ckey_length äŽ·íŠ‰			// å±´Ë–å»‘ 0 Ê±ã¬”â²»âº‰ê‹¦ëºƒÜ”ïŠŠ	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
 	$keyb = md5(substr($key, 16, 16));
 	$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
@@ -706,7 +702,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// ²åÈëµ½×îºóÒ»ÐÐ
+		// â¥ˆëµ½×®ê³’ë
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -965,13 +961,9 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : ÓÃ»§Ãû²»ºÏ·¨
-	-2 : °üº¬²»ÔÊÐí×¢²áµÄ´ÊÓï
-	-3 : ÓÃ»§ÃûÒÑ¾­´æÔÚ
-	-4 : email ¸ñÊ½ÓÐÎó
-	-5 : email ²»ÔÊÐí×¢²á
-	-6 : ¸Ã email ÒÑ¾­±»×¢²á
-	>1 : ±íÊ¾³É¹¦£¬ÊýÖµÎª UID
+	-1 : Óƒë§ƒë²»ê·ç¨ˆ-2 : à¼ºì²»ÔŠÐ­×¢â¡µÄ´Ê“ïŠ‰-3 : Óƒë§ƒë’‘î­´æ”š
+	-4 : email è±Ší“Î³
+	-5 : email â»”Êí—¢â¡Š	-6 : èƒ email Ò‘î­±ë—¢â¡Š	>1 : á­Šî³‰é¦£ìŠ½ÖµÎª UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

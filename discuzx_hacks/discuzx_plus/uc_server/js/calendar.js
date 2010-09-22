@@ -21,7 +21,7 @@ function loadcalendar() {
 	s += '<thead>';
 	s += '<tr align="center" id="calendar_week">';
 	s += '<th><a href="###" onclick="refreshcalendar(yy, mm-1)" title="上一月">《</a></th>';
-	s += '<th colspan="5" style="text-align: center"><a href="###" onclick="showdiv(\'year\');_cancelBubble(event)" title="点击选择年份" id="year"></a>&nbsp; - &nbsp;<a id="month" title="点击选择月份" href="###" onclick="showdiv(\'month\');_cancelBubble(event)"></a></th>';
+	s += '<th colspan="5" style="text-align: center"><a href="###" onclick="showdiv(\'year\');_cancelBubble(event)" title="點擊選擇年份" id="year"></a>&nbsp; - &nbsp;<a id="month" title="點擊選擇月份" href="###" onclick="showdiv(\'month\');_cancelBubble(event)"></a></th>';
 	s += '<th><A href="###" onclick="refreshcalendar(yy, mm+1)" title="下一月">》</A></th>';
 	s += '</tr>';
 	s += '<tr id="calendar_header"><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>';
@@ -33,7 +33,7 @@ function loadcalendar() {
 			s += "<td id=d" + (i * 7 + j) + " height=\"19\">0</td>";
 		s += "</tr>";
 	}
-	s += '<tr id="hourminute"><td colspan="7" align="center"><input type="text" size="2" value="" id="hour" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'> 点 <input type="text" size="2" value="" id="minute" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'> 分</td></tr>';
+	s += '<tr id="hourminute"><td colspan="7" align="center"><input type="text" size="2" value="" id="hour" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'> 點 <input type="text" size="2" value="" id="minute" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'> 分</td></tr>';
 	s += '</tbody>';
 	s += '</table></div></div>';
 	s += '<div id="calendar_year" onclick="_cancelBubble(event)" style="display: none; z-index: 130;" class="calendarmenu"><div class="col" style="float: left; margin-right: 5px;">';

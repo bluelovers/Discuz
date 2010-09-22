@@ -140,12 +140,8 @@ class base {
 
 	function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-		$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-		// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎŞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-		// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-		// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
-
-		$key = md5($key ? $key : UC_KEY);
+		$ckey_length = 4;	// Ë¦ëºƒÜ”ï³¤æˆ È¡Öµ 0-32;
+		// ì“ˆë‹¦ëºƒÜ”ï£¬ï‰’ÔîƒœÎ„ÎÈê¹æ‚‰ã¬¼ä±£Ê‡Ô­Î„êƒÜ”ïªÈ«Ï Í¬ã¬¼ÓƒÜ½á¹»Ò²ë¡ƒï´â»ì£¬Ô¶ä³†Æ½â„‘æˆ¡å	// È¡ÖµÔ½ä³£ìƒœÎ„á¤¶ï¹¦Â‰Ô½ä³£ìƒœÎ„á¤»ï ½ 16 å„ $ckey_length ä·íŠ‰	// å±´Ë–å»‘ 0 Ê±ã¬”â²»âº‰ê‹¦ëºƒÜ”ïŠŠ		$key = md5($key ? $key : UC_KEY);
 		$keya = md5(substr($key, 0, 16));
 		$keyb = md5(substr($key, 16, 16));
 		$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';

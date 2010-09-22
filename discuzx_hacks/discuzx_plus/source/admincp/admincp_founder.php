@@ -22,11 +22,11 @@ if($operation == 'perm') {
 	$do = !in_array(getgpc('do'), array('group', 'member', 'gperm')) ? 'member' : getgpc('do');
 	shownav('global', 'menu_global_perm');
 
-	//note �Ŷ�ְ��
+	//note 團隊職務
 	if($do == 'group') {
 		$id = intval(getgpc('id'));
 
-		//note ��ɾ��
+		//note 增刪改
 		if(!$id) {
 			$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
 			$groups = array();
@@ -76,7 +76,7 @@ if($operation == 'perm') {
 				}
 				cpmsg('founder_perm_group_update_succeed', 'action=founder&operation=perm&do=group', 'succeed');
 			}
-		//note Ȩ�ޱ༭
+		//note 權限編輯
 		} else {
 			if(!submitcheck('submit')) {
 
@@ -142,7 +142,7 @@ if($operation == 'perm') {
 			}
 		}
 
-	//note �Ŷӳ�Ա
+	//note 團隊成員
 	} elseif($do == 'member') {
 
 		$founders = $_G['config']['admincp']['founder'] !== '' ? explode(',', str_replace(' ', '', addslashes($_G['config']['admincp']['founder']))) : array();
@@ -171,7 +171,7 @@ if($operation == 'perm') {
 		}
 		$id = empty($_G['gp_id']) ? 0 : $_G['gp_id'];
 
-		//note ��ɾ��
+		//note 增刪改
 		if(!$id) {
 			if(!submitcheck('submit')) {
 				showsubmenu('menu_global_perm', array(
@@ -247,7 +247,7 @@ if($operation == 'perm') {
 				}
 				cpmsg('founder_perm_member_update_succeed', 'action=founder&operation=perm&do=member', 'succeed');
 			}
-		//note Ȩ�ޱ༭
+		//note 權限編輯
 		} else {
 			if(!submitcheck('submit')) {
 				$member = DB::fetch_first("SELECT * FROM ".DB::table('common_admincp_member')." WHERE uid='$id'");

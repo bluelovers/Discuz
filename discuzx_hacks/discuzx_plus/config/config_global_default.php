@@ -9,60 +9,60 @@
 
 $_config = array();
 
-// Êý¾Ý¿â·þÎñÆ÷ÉèÖÃ
+// æ•¸æ“šåº«æœå‹™å™¨è¨­ç½®
 $_config['db']['map'] = array();
-$_config['db'][1]['dbhost']  		= 'localhost';		// ·þÎñÆ÷µØÖ·
-$_config['db'][1]['dbuser']  		= 'root';		// ÓÃ»§
-$_config['db'][1]['dbpw'] 	 	= 'root';		// ÃÜÂë
-$_config['db'][1]['dbcharset'] 		= 'utf8';		// ×Ö·û¼¯
-$_config['db'][1]['pconnect'] 		= 0;			// ÊÇ·ñ³ÖÐøÁ¬½Ó
-$_config['db'][1]['dbname']  		= 'ultrax';		// Êý¾Ý¿â
-$_config['db'][1]['tablepre'] 		= 'xplus_';		// ±íÃûÇ°×º
+$_config['db'][1]['dbhost']  		= 'localhost';		// æœå‹™å™¨åœ°å€
+$_config['db'][1]['dbuser']  		= 'root';		// ç”¨æˆ¶
+$_config['db'][1]['dbpw'] 	 	= 'root';		// å¯†ç¢¼
+$_config['db'][1]['dbcharset'] 		= 'utf8';		// å­—ç¬¦é›†
+$_config['db'][1]['pconnect'] 		= 0;			// æ˜¯å¦æŒçºŒé€£æŽ¥
+$_config['db'][1]['dbname']  		= 'ultrax';		// æ•¸æ“šåº«
+$_config['db'][1]['tablepre'] 		= 'xplus_';		// è¡¨åå‰ç¶´
 
-// ÄÚ´æ·þÎñÆ÷ÓÅ»¯ÉèÖÃ£¨ÒÔÏÂÉèÖÃÐèÒªPHPÀ©Õ¹×é¼þÖ§³Ö£¬ÆäÖÐ memcache ÓÅÏÈÓÚÆäËûÉèÖÃ£¬µ± memcache ÎÞ·¨ÆôÓÃÊ±£¬»á×Ô¶¯¿ªÆôÁíÍâµÄÁ½ÖÖÓÅ»¯Ä£Ê½£©
+// å…§å­˜æœå‹™å™¨å„ªåŒ–è¨­ç½®ï¼ˆä»¥ä¸‹è¨­ç½®éœ€è¦PHPæ“´å±•çµ„ä»¶æ”¯æŒï¼Œå…¶ä¸­ memcache å„ªå…ˆæ–¼å…¶ä»–è¨­ç½®ï¼Œç•¶ memcache ç„¡æ³•å•Ÿç”¨æ™‚ï¼Œæœƒè‡ªå‹•é–‹å•Ÿå¦å¤–çš„å…©ç¨®å„ªåŒ–æ¨¡å¼ï¼‰
 //  -----------------  CONFIG MEMORY  ----------------- //
 $_config['memory']['prefix'] = 'xplus_';
-$_config['memory']['eaccelerator'] = 1;				// Æô¶¯¶Ô eaccelerator µÄÖ§³Ö
-$_config['memory']['xcache'] = 0;				// Æô¶¯¶Ô xcache µÄÖ§³Ö
-$_config['memory']['memcache']['server'] = '';			// memcache ·þÎñÆ÷µØÖ·
-$_config['memory']['memcache']['port'] = 11211;			// memcache ·þÎñÆ÷¶Ë¿Ú
-$_config['memory']['memcache']['pconnect'] = 1;			// memcache ÊÇ·ñ³¤¾ÃÁ¬½Ó
-$_config['memory']['memcache']['timeout'] = 1;			// memcache ·þÎñÆ÷Á¬½Ó³¬Ê±
+$_config['memory']['eaccelerator'] = 1;				// å•Ÿå‹•å° eaccelerator çš„æ”¯æŒ
+$_config['memory']['xcache'] = 0;				// å•Ÿå‹•å° xcache çš„æ”¯æŒ
+$_config['memory']['memcache']['server'] = '';			// memcache æœå‹™å™¨åœ°å€
+$_config['memory']['memcache']['port'] = 11211;			// memcache æœå‹™å™¨ç«¯å£
+$_config['memory']['memcache']['pconnect'] = 1;			// memcache æ˜¯å¦é•·ä¹…é€£æŽ¥
+$_config['memory']['memcache']['timeout'] = 1;			// memcache æœå‹™å™¨é€£æŽ¥è¶…æ™‚
 
 //  -----------------  CONFIG CACHE  ----------------- //
 $_config['cache']['main']['type'] = '';
 
 //  -----------------  CONFIG default CACHE  ----------------- //
 $_config['cache']['main']['file']['path'] = 'data/xpluscache';
-$_config['cache']['type'] 			= 'sql';	// »º´æÀàÐÍ file=ÎÄ¼þ»º´æ, sql=Êý¾Ý¿â»º´æ
+$_config['cache']['type'] 			= 'sql';	// ç·©å­˜é¡žåž‹ file=æ–‡ä»¶ç·©å­˜, sql=æ•¸æ“šåº«ç·©å­˜
 
-// Ò³ÃæÊä³öÉèÖÃ
-$_config['output']['charset'] 			= 'utf-8';	// Ò³Ãæ×Ö·û¼¯
-$_config['output']['forceheader']		= 1;		// Ç¿ÖÆÊä³öÒ³Ãæ×Ö·û¼¯£¬ÓÃÓÚ±ÜÃâÄ³Ð©»·¾³ÂÒÂë
-$_config['output']['gzip'] 			= 0;		// ÊÇ·ñ²ÉÓÃ Gzip Ñ¹ËõÊä³ö
-$_config['output']['tplrefresh'] 		= 1;		// Ä£°å×Ô¶¯Ë¢ÐÂ¿ª¹Ø 0=¹Ø±Õ, 1=´ò¿ª
-$_config['output']['language'] 			= 'zh_cn';	// Ò³ÃæÓïÑÔ zh_cn/zh_tw
-$_config['output']['staticurl'] 		= 'static/';	// Õ¾µã¾²Ì¬ÎÄ¼þÂ·¾¶£¬¡°/¡±½áÎ²
+// é é¢è¼¸å‡ºè¨­ç½®
+$_config['output']['charset'] 			= 'utf-8';	// é é¢å­—ç¬¦é›†
+$_config['output']['forceheader']		= 1;		// å¼·åˆ¶è¼¸å‡ºé é¢å­—ç¬¦é›†ï¼Œç”¨æ–¼é¿å…æŸäº›ç’°å¢ƒäº‚ç¢¼
+$_config['output']['gzip'] 			= 0;		// æ˜¯å¦æŽ¡ç”¨ Gzip å£“ç¸®è¼¸å‡º
+$_config['output']['tplrefresh'] 		= 1;		// æ¨¡æ¿è‡ªå‹•åˆ·æ–°é–‹é—œ 0=é—œé–‰, 1=æ‰“é–‹
+$_config['output']['language'] 			= 'zh_tw';	// é é¢èªžè¨€ zh_cn/zh_tw
+$_config['output']['staticurl'] 		= 'static/';	// ç«™é»žéœæ…‹æ–‡ä»¶è·¯å¾‘ï¼Œã€Œ/ã€çµå°¾
 
-// COOKIE ÉèÖÃ
-$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIEÇ°×º
-$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE×÷ÓÃÓò
-$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE×÷ÓÃÂ·¾¶
+// COOKIE è¨­ç½®
+$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIEå‰ç¶´
+$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIEä½œç”¨åŸŸ
+$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIEä½œç”¨è·¯å¾‘
 
-// Ä¬ÈÏ³ÌÐòÒÔ¼°ÓòÃû°ó¶¨ÉèÖÃ
+// é»˜èªç¨‹åºä»¥åŠåŸŸåç¶å®šè¨­ç½®
 $_config['app']['default']			= '';
-$_config['app']['domain']['default']		= '';		// ³ýÈ¥ÉÏÃæµÄÓòÃûÖ®ÍâµÄµØÖ·°ó¶¨µÄÓòÃû
+$_config['app']['domain']['default']		= '';		// é™¤åŽ»ä¸Šé¢çš„åŸŸåä¹‹å¤–çš„åœ°å€ç¶å®šçš„åŸŸå
 
-// Õ¾µã°²È«ÉèÖÃ
-$_config['security']['authkey']			= 'c46b90xHlZAj7FuH';	// Õ¾µã¼ÓÃÜÃÜÔ¿
-$_config['security']['urlxssdefend']		= true;		// ×ÔÉí URL XSS ·ÀÓù
-$_config['security']['attackevasive']		= 0;		// CC ¹¥»÷·ÀÓù 1|2|4
+// ç«™é»žå®‰å…¨è¨­ç½®
+$_config['security']['authkey']			= 'c46b90xHlZAj7FuH';	// ç«™é»žåŠ å¯†å¯†é‘°
+$_config['security']['urlxssdefend']		= true;		// è‡ªèº« URL XSS é˜²ç¦¦
+$_config['security']['attackevasive']		= 0;		// CC æ”»æ“Šé˜²ç¦¦ 1|2|4
 
-$_config['admincp']['founder']			= '1';		// Õ¾µã´´Ê¼ÈË£ºÓµÓÐÕ¾µã¹ÜÀíºóÌ¨µÄ×î¸ßÈ¨ÏÞ£¬Ã¿¸öÕ¾µã¿ÉÒÔÉèÖÃ 1Ãû»ò¶àÃû´´Ê¼ÈË
-								// ¿ÉÒÔÊ¹ÓÃuid£¬Ò²¿ÉÒÔÊ¹ÓÃÓÃ»§Ãû£»¶à¸ö´´Ê¼ÈËÖ®¼äÇëÊ¹ÓÃ¶ººÅ",¡±·Ö¿ª;
-$_config['admincp']['forcesecques']		= 0;		// ¹ÜÀíÈËÔ±±ØÐëÉèÖÃ°²È«ÌáÎÊ²ÅÄÜ½øÈëÏµÍ³ÉèÖÃ 0=·ñ, 1=ÊÇ[°²È«]
-$_config['admincp']['checkip']			= 1;		// ºóÌ¨¹ÜÀí²Ù×÷ÊÇ·ñÑéÖ¤¹ÜÀíÔ±µÄ IP, 1=ÊÇ[°²È«], 0=·ñ¡£½öÔÚ¹ÜÀíÔ±ÎÞ·¨µÇÂ½ºóÌ¨Ê±ÉèÖÃ 0¡£
-$_config['admincp']['runquery']			= 1;		// ÊÇ·ñÔÊÐíºóÌ¨ÔËÐÐ SQL Óï¾ä 1=ÊÇ 0=·ñ[°²È«]
-$_config['admincp']['dbimport']			= 1;		// ÊÇ·ñÔÊÐíºóÌ¨»Ö¸´ÂÛÌ³Êý¾Ý  1=ÊÇ 0=·ñ[°²È«]
+$_config['admincp']['founder']			= '1';		// ç«™é»žå‰µå§‹äººï¼šæ“æœ‰ç«™é»žç®¡ç†å¾Œå°çš„æœ€é«˜æ¬Šé™ï¼Œæ¯å€‹ç«™é»žå¯ä»¥è¨­ç½® 1åæˆ–å¤šåå‰µå§‹äºº
+								// å¯ä»¥ä½¿ç”¨uidï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨ç”¨æˆ¶åï¼›å¤šå€‹å‰µå§‹äººä¹‹é–“è«‹ä½¿ç”¨é€—è™Ÿ",ã€åˆ†é–‹;
+$_config['admincp']['forcesecques']		= 0;		// ç®¡ç†äººå“¡å¿…é ˆè¨­ç½®å®‰å…¨æå•æ‰èƒ½é€²å…¥ç³»çµ±è¨­ç½® 0=å¦, 1=æ˜¯[å®‰å…¨]
+$_config['admincp']['checkip']			= 1;		// å¾Œå°ç®¡ç†æ“ä½œæ˜¯å¦é©—è­‰ç®¡ç†å“¡çš„ IP, 1=æ˜¯[å®‰å…¨], 0=å¦ã€‚åƒ…åœ¨ç®¡ç†å“¡ç„¡æ³•ç™»é™¸å¾Œå°æ™‚è¨­ç½® 0ã€‚
+$_config['admincp']['runquery']			= 1;		// æ˜¯å¦å…è¨±å¾Œå°é‹è¡Œ SQL èªžå¥ 1=æ˜¯ 0=å¦[å®‰å…¨]
+$_config['admincp']['dbimport']			= 1;		// æ˜¯å¦å…è¨±å¾Œå°æ¢å¾©è«–å£‡æ•¸æ“š  1=æ˜¯ 0=å¦[å®‰å…¨]
 
 ?>

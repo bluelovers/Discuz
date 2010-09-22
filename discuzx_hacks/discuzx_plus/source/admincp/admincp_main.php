@@ -28,7 +28,7 @@ echo <<<EOT
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <title>$title</title>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta content="Comsenz Inc." name="Copyright" />
 <link rel="stylesheet" href="static/image/admincp/admincp.css" type="text/css" media="all" />
 <script src="static/js/common.js" type="text/javascript"></script>

@@ -42,7 +42,7 @@ if($delaids) {
 	DB::query("DELETE FROM ".DB::table('forum_attachmentfield')." WHERE aid IN (".dimplode($delaids).")", 'UNBUFFERED');
 }
 
-//note 到期恢复禁言用户
+//note 鍒版湡鎭㈠京绂佽█鐢ㄦ埗
 $uids = $members = array();
 $query = DB::query("SELECT uid, groupid, credits FROM ".DB::table('common_member')." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$_G[timestamp]'");
 while($row = DB::fetch($query)) {
@@ -75,8 +75,8 @@ if($uids) {
 }
 
 /**
-* 删除非空目录
-* @param $path 目录
+* 鍒櫎闈炵┖鐩寗
+* @param $path 鐩寗
 */
 function removedir($dirname, $keepdir = FALSE) {
 	$dirname = wipespecial($dirname);

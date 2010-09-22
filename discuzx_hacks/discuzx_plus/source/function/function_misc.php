@@ -285,11 +285,11 @@ function procthread($thread) {
 }
 
 /**
-* ¸üĞÂä¯ÀÀ´ÎÊı
-* @param $table - ¸üĞÂÄÇ¸ö±í
-* @idcol - id×Ö¶ÎÃû³Æ
-* @viewscol - ä¯ÀÀ´ÎÊı×Ö¶ÎÃû³Æ
-* @logfile - ÈÕÖ¾ÎÄ¼ş
+* æ›´æ–°ç€è¦½æ¬¡æ•¸
+* @param $table - æ›´æ–°é‚£å€‹è¡¨
+* @idcol - idå­—æ®µåç¨±
+* @viewscol - ç€è¦½æ¬¡æ•¸å­—æ®µåç¨±
+* @logfile - æ—¥èªŒæ–‡ä»¶
 */
 function updateviews($table, $idcol, $viewscol, $logfile) {
 	$viewlog = $viewarray = array();
@@ -327,7 +327,7 @@ function checkreasonpm() {
 }
 
 function procreportlog($tids = '', $pids = '', $del = FALSE) {
-	return;//noteX ¾Ù±¨¹¦ÄÜ´ıUCH
+	return;//noteX èˆ‰å ±åŠŸèƒ½å¾…UCH
 	global $_G;
 
 	if(!$pids && $tids) {
@@ -362,7 +362,7 @@ function sendreasonpm($var, $item, $notevar) {
 }
 
 /**
-* ¹ÜÀí²Ù×÷¼°ÆÀ·ÖÀíÓÉÑ¡Ïî
+* ç®¡ç†æ“ä½œåŠè©•åˆ†ç†ç”±é¸é …
 */
 function modreasonselect($isadmincp = 0) {
 	global $_G;
@@ -377,7 +377,7 @@ function modreasonselect($isadmincp = 0) {
 }
 
 
-//notex Ò»ÏÂº¯ÊıÀ´Ô´ÓÚ admincp_cpanlel.php
+//notex ä¸€ä¸‹å‡½æ•¸ä¾†æºæ–¼ admincp_cpanlel.php
 
 function acpmsg($message, $url = '', $type = '', $extra = '') {
 	if(defined('IN_ADMINCP')) {
@@ -423,8 +423,8 @@ function implodearray($array, $skip = array()) {
 	return $return;
 }
 
-//note ³¹µ×É¾³ıÒ»Ğ©Ö÷Ìâ
-//note post.fun.php ĞèÒªº¯ÊıÎÄ¼ş
+//note å¾¹åº•åˆªé™¤ä¸€äº›ä¸»é¡Œ
+//note post.fun.php éœ€è¦å‡½æ•¸æ–‡ä»¶
 function deletethreads($tids = array()) {
 	global $_G;
 
@@ -468,7 +468,7 @@ function deletethreads($tids = array()) {
 	return $threadsdel;
 }
 
-//note ´Ó»ØÊÕÕ¾ÖĞ»Ö¸´Ö÷Ìâ
+//note å¾å›æ”¶ç«™ä¸­æ¢å¾©ä¸»é¡Œ
 function undeletethreads($tids) {
 	global $_G;
 	$threadsundel = 0;

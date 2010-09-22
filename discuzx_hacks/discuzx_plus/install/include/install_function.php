@@ -486,7 +486,7 @@ function show_header() {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=$charset" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>$title</title>
 <link rel="stylesheet" href="images/style.css" type="text/css" media="all" />
 <script type="text/javascript">
@@ -632,10 +632,10 @@ function setdefault($var, $default) {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-				// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎŞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-				// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-				// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
+	$ckey_length = 4;	// éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
+				// åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢å¤§ç ´è§£é›£åº¦ã€‚
+				// å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
+				// ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
@@ -800,7 +800,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// ²åÈëµ½×îºóÒ»ĞĞ
+		// æ’å…¥åˆ°æœ€å¾Œä¸€è¡Œ
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -1062,13 +1062,13 @@ function check_adminuser($username, $password, $email) {
 	if($ucresult['uid'] <= 0) {
 		$uid = uc_user_register($username, $password, $email);
 		/*
-		-1 : ÓÃ»§Ãû²»ºÏ·¨
-		-2 : °üº¬²»ÔÊĞí×¢²áµÄ´ÊÓï
-		-3 : ÓÃ»§ÃûÒÑ¾­´æÔÚ
-		-4 : email ¸ñÊ½ÓĞÎó
-		-5 : email ²»ÔÊĞí×¢²á
-		-6 : ¸Ã email ÒÑ¾­±»×¢²á
-		>1 : ±íÊ¾³É¹¦£¬ÊıÖµÎª UID
+		-1 : ç”¨æˆ¶åä¸åˆæ³•
+		-2 : åŒ…å«ä¸å…è¨±è¨»å†Šçš„è©èª
+		-3 : ç”¨æˆ¶åå·²ç¶“å­˜åœ¨
+		-4 : email æ ¼å¼æœ‰èª¤
+		-5 : email ä¸å…è¨±è¨»å†Š
+		-6 : è©² email å·²ç¶“è¢«è¨»å†Š
+		>1 : è¡¨ç¤ºæˆåŠŸï¼Œæ•¸å€¼ç‚º UID
 		*/
 		if($uid == -1 || $uid == -2) {
 			$error = 'admin_username_invalid';
@@ -1255,14 +1255,14 @@ function install_testdata($username, $uid) {
 	global $_G, $db, $tablepre;
 	showjsmessage(lang('install_test_data')." ... ".lang('succeed'));
 
-	//µ¼ÈëÎÄ¼ş
+	//å°å…¥æ–‡ä»¶
 	$arr = array(
 			0=> array('importfile'=>'./data/portal_index.xml','primaltplname'=>'portal/index', 'targettplname'=>'portal/index'),
 			1=> array('importfile'=>'./data/portal_portal_topic_content_1.xml','primaltplname'=>'portal/portal_topic_content', 'targettplname'=>'portal/portal_topic_content_1'),
 	);
 	$_G = array('db'=>$db,'tablepre'=>$tablepre, 'uid'=>$uid, 'username'=>$username);
 	foreach ($arr as $v) {
-		//Èç¹ûÊÇ×¨Ìâ£¬ÔòĞÂ½¨×¨Ìâ
+		//å¦‚æœæ˜¯å°ˆé¡Œï¼Œå‰‡æ–°å»ºå°ˆé¡Œ
 		if ($v['primaltplname'] == 'portal/portal_topic_content') {
 			$topicid = str_replace($v['primaltplname'].'_', '' ,$v['targettplname']);
 			$setarr['topicid'] = $topicid;
@@ -1279,7 +1279,7 @@ function install_testdata($username, $uid) {
 		import_diy($v['importfile'], $v['primaltplname'], $v['targettplname']);
 	}
 
-	//°²×°ÏêÏ¸µØÇøÊı¾İ
+	//å®‰è£è©³ç´°åœ°å€æ•¸æ“š
 	$sqlfile = ROOT_PATH.'./install/data/common_district.sql';
 	if(file_exists($sqlfile)) {
 		$_G['db']->query("TRUNCATE TABLE ".$_G['tablepre']."common_district");
@@ -1356,25 +1356,25 @@ function getstatinfo() {
 	dfopen($funcurl."?action=newinstall&q=$q");
 }
 
-//µÃµ½¿ò¼ÜµÄHTML
+//å¾—åˆ°æ¡†æ¶çš„HTML
 function getframehtml($data = array()) {
 	global $_G;
 	$html = $style = '';
 	foreach ((array)$data as $id => $content) {
 		list($flag, $name) = explode('`', $id);
-		//´¦Àíframe
+		//è™•ç†frame
 		if ($flag == 'frame') {
 			$fattr = $content['attr'];
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
 			$html .= '<div id="'.$fattr['name'].'" class="'.$fattr['className'].'">';
-			//´¦Àí±êÌâ
+			//è™•ç†æ¨™é¡Œ
 			if (checkhastitle($fattr['titles'])) {
 				$style = gettitlestyle($fattr['titles']);
 				$html .= '<div class="'.implode(' ',$fattr['titles']['className']).'"'.$style.'>'.gettitlehtml($fattr['titles'], 'frame').'</div>';
 			}
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
-				//µ¥ÁĞ´¦Àí
+				//å–®åˆ—è™•ç†
 				if ($colflag == 'column') {
 					$html .= '<div id="'.$colname.'" class="'.$coldata['attr']['className'].'">';
 					$html .= '<div id="'.$colname.'_temp" class="move-span temp"></div>';
@@ -1383,7 +1383,7 @@ function getframehtml($data = array()) {
 				}
 			}
 			$html .= '</div>';
-		//´¦ÀíTab
+		//è™•ç†Tab
 		} elseif ($flag == 'tab') {
 			$fattr = $content['attr'];
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
@@ -1391,9 +1391,9 @@ function getframehtml($data = array()) {
 			$switchtype = 'click';
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
-				//µ¥ÁĞ´¦Àí
+				//å–®åˆ—è™•ç†
 				if ($colflag == 'column') {
-					//´¦Àí±êÌâ, tab µÄ±êÌâÎªµÚÒ»ÁĞ,ËùÒÔ±êÌâÎÄ×ÖÔÚµÚÒ»ÁĞÀï
+					//è™•ç†æ¨™é¡Œ, tab çš„æ¨™é¡Œç‚ºç¬¬ä¸€åˆ—,æ‰€ä»¥æ¨™é¡Œæ–‡å­—åœ¨ç¬¬ä¸€åˆ—è£¡
 					if (checkhastitle($fattr['titles'])) {
 						$style = gettitlestyle($fattr['titles']);
 						$title = gettitlehtml($fattr['titles'], 'tab');
@@ -1407,9 +1407,9 @@ function getframehtml($data = array()) {
 			$html .= '<div id="'.$fattr['name'].'_content" class="tb-c"></div>';
 			$html .= '<script type="text/javascript">initTab("'.$fattr['name'].'","'.$switchtype.'");</script>';
 			$html .= '</div>';
-		//´¦Àíblock
+		//è™•ç†block
 		} elseif ($flag == 'block') {
-			//Ä£¿éµÄÊôĞÔÖµ
+			//æ¨¡å¡Šçš„å±¬æ€§å€¼
 			$battr = $content['attr'];
 			$bid = intval(str_replace('portal_block_', '', $battr['name']));
 			if (!empty($bid)) {
@@ -1431,7 +1431,7 @@ function gettitlestyle($title) {
 	$style = $style ? ' style=\''.$style.'\'' : '';
 	return $style;
 }
-//¼ì²éÊÇ·ñÓĞ±êÌâ
+//æª¢æŸ¥æ˜¯å¦æœ‰æ¨™é¡Œ
 function checkhastitle($title) {
 	if (!is_array($title)) return false;
 	foreach ($title as $k => $v) {
@@ -1441,7 +1441,7 @@ function checkhastitle($title) {
 	return false;
 }
 
-//´¦Àí¶à±êÌâĞÅÏ¢,·µ»Ø±êÌâµÄhtml´úÂë
+//è™•ç†å¤šæ¨™é¡Œä¿¡æ¯,è¿”å›æ¨™é¡Œçš„htmlä»£ç¢¼
 function gettitlehtml($title, $type) {
 	global $_G;
 	if (!is_array($title)) return '';
@@ -1449,7 +1449,7 @@ function gettitlehtml($title, $type) {
 	foreach ($title as $k => $v) {
 		if (in_array(strval($k),array('className','style'))) continue;
 		if (empty($v['src']) && empty($v['text'])) continue;
-		//k == first µÄÎªÖ÷±êÌâ
+		//k == first çš„ç‚ºä¸»æ¨™é¡Œ
 		$one = "<span class=\"{$v['className']}\"";
 		$style = $color = "";
 		$style .= empty($v['font-size']) ? '' : "font-size:{$v['font-size']}px;";
@@ -1468,18 +1468,18 @@ function gettitlehtml($title, $type) {
 		}
 		$one .= '</span>';
 
-		//È¥³ı¾ø¶ÔÂ·¾¶
+		//å»é™¤çµ•å°è·¯å¾‘
 		$siteurl = str_replace(array('/','.'),array('\/','\.'),$_G['siteurl']);
 		$one = preg_replace('/\"'.$siteurl.'(.*?)\"/','"$1"',$one);
 
-		//Ö÷±êÌâ·ÅÔÚµÚÒ»Î»
+		//ä¸»æ¨™é¡Œæ”¾åœ¨ç¬¬ä¸€ä½
 		$html = $k === 'first' ? $one.$html : $html.$one;
 	}
 	return $html;
 }
 
 /**
- * ½«ÓÉblock_export µ¼³öµÄÊı¾İµ¼Èë
+ * å°‡ç”±block_export å°å‡ºçš„æ•¸æ“šå°å…¥
  * @param <type> $data
  */
 function block_import($data) {
@@ -1489,20 +1489,20 @@ function block_import($data) {
 	}
 	$data = daddslashes($data);
 	$stylemapping = array();
-	if($data['style']) {//µ¼Èëstyle²¢µÃµ½¶ÔÓ¦¹ØÏµ
+	if($data['style']) {//å°å…¥styleä¸¦å¾—åˆ°å°æ‡‰é—œä¿‚
 		$hashes = $styles = array();
 		foreach($data['style'] as $value) {
 			$hashes[] = $value['hash'];
 			$styles[$value['hash']] = $value['styleid'];
 		}
-		// ²éÕÒ¿âÖĞÒÑÓĞµÄÑùÊ½£¬²¢µÃµ½Ó³Éä¹ØÏµ
+		// æŸ¥æ‰¾åº«ä¸­å·²æœ‰çš„æ¨£å¼ï¼Œä¸¦å¾—åˆ°æ˜ å°„é—œä¿‚
 		$query = $_G['db']->query('SELECT styleid, hash FROM '.$_G['tablepre']."common_block_style WHERE hash IN (".dimplode($hashes).')');
 		while($value=$_G['db']->fetch_array($query)) {
 			$id = $styles[$value['hash']];
 			$stylemapping[$id] = intval($value['styleid']);
 			unset($styles[$value['hash']]);
 		}
-		// ĞÂµÄÑùÊ½£¬Ìí¼Óµ½¿âÖĞ
+		// æ–°çš„æ¨£å¼ï¼Œæ·»åŠ åˆ°åº«ä¸­
 		foreach($styles as $id) {
 			$style = $data['style'][$id];
 			$style['styleid'] = '';
@@ -1517,7 +1517,7 @@ function block_import($data) {
 		}
 	}
 
-	// ²åÈëblock²¢µÃµ½Ó³Éä¹ØÏµ
+	// æ’å…¥blockä¸¦å¾—åˆ°æ˜ å°„é—œä¿‚
 	$blockmapping = array();
 	foreach($data['block'] as $block) {
 		$oid = $block['bid'];
@@ -1540,7 +1540,7 @@ function block_import($data) {
 	return $blockmapping;
 }
 
-//µÃµ½ËùÓĞ¿ò¼ÜÃûºÍÄ£¿éID
+//å¾—åˆ°æ‰€æœ‰æ¡†æ¶åå’Œæ¨¡å¡ŠID
 function getframeblock($data) {
 	global $_G;
 
@@ -1549,19 +1549,19 @@ function getframeblock($data) {
 
 	foreach ((array)$data as $id => $content) {
 		list($flag, $name) = explode('`', $id);
-		//´¦Àíframe
+		//è™•ç†frame
 		if ($flag == 'frame' || $flag == 'tab') {
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
-				//µ¥ÁĞ´¦Àí
+				//å–®åˆ—è™•ç†
 				if ($colflag == 'column') {
 					getframeblock($coldata,$framename);
 				}
 			}
 			$_G['curtplframe'][$name] = array('type'=>$flag,'name'=>$name);
-		//´¦ÀíBlock
+		//è™•ç†Block
 		} elseif ($flag == 'block') {
-			//Ä£¿éµÄÊôĞÔÖµ
+			//æ¨¡å¡Šçš„å±¬æ€§å€¼
 			$battr = $content['attr'];
 			$bid = intval(str_replace('portal_block_', '', $battr['name']));
 			if (!empty($bid)) {
@@ -1571,7 +1571,7 @@ function getframeblock($data) {
 	}
 }
 
-//µ¼ÈëDIYÎÄ¼ş
+//å°å…¥DIYæ–‡ä»¶
 function import_diy($importfile, $primaltplname, $targettplname) {
 	global $_G;
 
@@ -1585,7 +1585,7 @@ function import_diy($importfile, $primaltplname, $targettplname) {
 
 	if ($diycontent) {
 
-		//µÃµ½Ô­frameIDºÍĞÂframeID
+		//å¾—åˆ°åŸframeIDå’Œæ–°frameID
 		foreach ($diycontent['layoutdata'] as $key => $value) {
 			if (!empty($value)) getframeblock($value);
 		}
@@ -1594,14 +1594,14 @@ function import_diy($importfile, $primaltplname, $targettplname) {
 			$newframe[] = $value['type'].random(6);
 		}
 
-		//µ¼ÈëblockÊı¾İ
+		//å°å…¥blockæ•¸æ“š
 		$mapping = array();
 		if (!empty($diycontent['blockdata'])) {
 			$mapping = block_import($diycontent['blockdata']);
 			unset($diycontent['bockdata']);
 		}
 
-		//µÃµ½Ô­blockIDºÍĞÂblockID
+		//å¾—åˆ°åŸblockIDå’Œæ–°blockID
 		$oldbids = $newbids = array();
 		if (!empty($mapping)) {
 			foreach($mapping as $obid=>$nbid) {
@@ -1610,18 +1610,18 @@ function import_diy($importfile, $primaltplname, $targettplname) {
 			}
 		}
 
-		//Ìæ»»¿ò¼ÜÃûºÍÄ£¿éÑùÊ½Ãû
+		//æ›¿æ›æ¡†æ¶åå’Œæ¨¡å¡Šæ¨£å¼å
 		require_once ROOT_PATH.'./source/class/class_xml.php';
 		$xml = array2xml($diycontent['layoutdata'],true);
 		$xml = str_replace($oldbids, $newbids, $xml);
 		$xml = str_replace((array)array_keys($_G['curtplframe']), $newframe, $xml);
 		$diycontent['layoutdata'] = xml2array($xml);
 
-		//Ìæ»»cssÑùÊ½Ãû
+		//æ›¿æ›cssæ¨£å¼å
 		$css = str_replace($oldbids, $newbids, $diycontent['spacecss']);
 		$css = str_replace((array)array_keys($_G['curtplframe']), $newframe, $css);
 
-		//DIY Êı¾İÉú³ÉÎÄ¼ş²¢Èë¿â
+		//DIY æ•¸æ“šç”Ÿæˆæ–‡ä»¶ä½µå…¥åº«
 		$arr['spacecss'] = $css;
 		$arr['layoutdata'] = $diycontent['layoutdata'];
 		$arr['style'] = $diycontent['style'];
@@ -1629,7 +1629,7 @@ function import_diy($importfile, $primaltplname, $targettplname) {
 	}
 	return $arr;
 }
-//Á¬½Ó×Ö·û
+//é€£æ¥å­—ç¬¦
 function dimplode($array) {
 	if(!empty($array)) {
 		return "'".implode("','", is_array($array) ? $array : array($array))."'";
@@ -1638,10 +1638,10 @@ function dimplode($array) {
 	}
 }
 /**
- * ¸ñÊ½»¯field×Ö¶ÎºÍvalue£¬²¢×é³ÉÒ»¸ö×Ö·û´®
+ * æ ¼å¼åŒ–fieldå­—æ®µå’Œvalueï¼Œä¸¦çµ„æˆä¸€å€‹å­—ç¬¦ä¸²
  *
- * @param array $array ¸ñÊ½Îª key=>value Êı×é
- * @param ·Ö¸î·û $glue
+ * @param array $array æ ¼å¼ç‚º key=>value æ•¸çµ„
+ * @param åˆ†å‰²ç¬¦ $glue
  * @return string
  */
 function implode_field_value($array, $glue = ',') {
