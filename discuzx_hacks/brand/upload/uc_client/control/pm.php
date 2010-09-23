@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: pm.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: pm.php 1008 2010-07-01 03:24:57Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,7 @@ define('PMLIMIT1DAY_ERROR', -1);
 define('PMFLOODCTRL_ERROR', -2);
 define('PMMSGTONOTFRIEND', -3);
 define('PMSENDREGDAYS', -4);
+define('PMUSERLIMIT1DAY_ERROR', -5);
 
 class pmcontrol extends base {
 
@@ -93,6 +94,20 @@ class pmcontrol extends base {
 						} else {
 							return PMFLOODCTRL_ERROR;
 						}
+					}
+				}
+			}
+			if(($pmuserlimit1day = $this->settings['pmuserlimit1day']) > 0) {
+				$num = count($msgto);
+				if($num == 1) {
+					if(!$_ENV['pm']->check_pm_user_period($this->user['uid'], $msgto[0], 86400)) {
+						if(($_ENV['pm']->countuser_by_fromuid($this->user['uid'], 86400) + 1) > $pmuserlimit1day) {
+							return PMUSERLIMIT1DAY_ERROR;
+						}
+					}
+				} else {
+					if(($_ENV['pm']->countuser_by_fromuid($this->user['uid'], 86400) + $num) > $pmuserlimit1day) {
+						return PMUSERLIMIT1DAY_ERROR;
 					}
 				}
 			}
@@ -214,7 +229,7 @@ class pmcontrol extends base {
 
  	 	require_once UC_ROOT.'lib/uccode.class.php';
 		$this->uccode = new uccode();
-		$status = false;
+		$status = FALSE;
 		foreach($pms as $key => $pm) {
 			$pms[$key]['message'] = $this->uccode->complie($pms[$key]['message']);
 			!$status && $status = $pm['msgtoid'] && $pm['new'];

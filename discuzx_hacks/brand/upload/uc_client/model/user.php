@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: user.php 968 2009-10-29 02:06:45Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -42,9 +42,9 @@ class usermodel {
 		$guestexp = '\xA1\xA1|\xAC\xA3|^Guest|^\xD3\xCE\xBF\xCD|\xB9\x43\xAB\xC8';
 		$len = strlen($username);
 		if($len > 15 || $len < 3 || preg_match("/\s+|^c:\\con\\con|[%,\*\"\s\<\>\&]|$guestexp/is", $username)) {
-			return false;
+			return FALSE;
 		} else {
-			return true;
+			return TRUE;
 		}
 	}
 
@@ -60,9 +60,9 @@ class usermodel {
 		$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($censorusername = trim($censorusername)), '/')).')$/i';
 		$usernamereplaced = isset($_CACHE['badwords']['findpattern']) && !empty($_CACHE['badwords']['findpattern']) ? @preg_replace($_CACHE['badwords']['findpattern'], $_CACHE['badwords']['replace'], $username) : $username;
 		if(($usernamereplaced != $username) || ($censorusername && preg_match($censorexp, $username))) {
-			return false;
+			return FALSE;
 		} else {
-			return true;
+			return TRUE;
 		}
 	}
 
@@ -83,12 +83,12 @@ class usermodel {
 		$censorexp = '/('.str_replace("\r\n", '|', preg_quote(trim($censoremail), '/')).')$/i';
 		if($accessemail || $censoremail) {
 			if(($accessemail && !preg_match($accessexp, $email)) || ($censoremail && preg_match($censorexp, $email))) {
-				return false;
+				return FALSE;
 			} else {
-				return true;
+				return TRUE;
 			}
 		} else {
-			return true;
+			return TRUE;
 		}
 	}
 
@@ -187,7 +187,7 @@ class usermodel {
 	}
 
 	function name2id($usernamesarr) {
-		$usernamesarr = uc_addslashes($usernamesarr, 1, true);
+		$usernamesarr = uc_addslashes($usernamesarr, 1, TRUE);
 		$usernames = $this->base->implode($usernamesarr);
 		$query = $this->db->query("SELECT uid FROM ".UC_DBTABLEPRE."members WHERE username IN($usernames)");
 		$arr = array();

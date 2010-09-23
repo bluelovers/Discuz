@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: uccode.class.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: uccode.class.php 753 2008-11-14 06:48:25Z cnteacher $
 */
 
 class uccode {
@@ -28,22 +28,30 @@ class uccode {
 
 	function complie($message) {
 		$message = htmlspecialchars($message);
-		if(strpos($message, '[/code]') !== false) {
+		if(strpos($message, '[/code]') !== FALSE) {
 			$message = preg_replace("/\s*\[code\](.+?)\[\/code\]\s*/ies", "\$this->codedisp('\\1')", $message);
 		}
-		if(strpos($message, '[/url]') !== false) {
+		if(strpos($message, '[/url]') !== FALSE) {
 			$message = preg_replace("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/|www\.)([^\[\"']+?))?\](.+?)\[\/url\]/ies", "\$this->parseurl('\\1', '\\5')", $message);
 		}
-		if(strpos($message, '[/email]') !== false) {
+		if(strpos($message, '[/email]') !== FALSE) {
 			$message = preg_replace("/\[email(=([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+))?\](.+?)\[\/email\]/ies", "\$this->parseemail('\\1', '\\4')", $message);
 		}
 		$message = str_replace(array(
 			'[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]',
+
+			'[italic]', '[/italic]',
+			'[s]', '[/s]',
+
 			'[i]', '[/i]', '[u]', '[/u]', '[list]', '[list=1]', '[list=a]',
 			'[list=A]', '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
 		), array(
-			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>', '<i>',
-			'</i>', '<u>', '</u>', '<ul>', '<ul type="1">', '<ul type="a">',
+			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>',
+
+			'<i>', '</i>',
+			'<s>', '</s>',
+
+			'<i>', '</i>', '<u>', '</u>', '<ul>', '<ul type="1">', '<ul type="a">',
 			'<ul type="A">', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 		), preg_replace(array(
 			"/\[color=([#\w]+?)\]/i",
@@ -60,10 +68,10 @@ class uccode {
 			"<p align=\"\\1\">",
 			"<span style=\"float: \\1;\">"
 		), $message));
-		if(strpos($message, '[/quote]') !== false) {
+		if(strpos($message, '[/quote]') !== FALSE) {
 			$message = preg_replace("/\s*\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s*/is", $this->tpl_quote(), $message);
 		}
-		if(strpos($message, '[/img]') !== false) {
+		if(strpos($message, '[/img]') !== FALSE) {
 			$message = preg_replace(array(
 				"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"

@@ -4,17 +4,17 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: xml.class.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: xml.class.php 972 2009-11-16 02:20:39Z zhaoxiongfei $
 */
 
-function xml_unserialize(&$xml, $isnormal = false) {
+function xml_unserialize(&$xml, $isnormal = FALSE) {
 	$xml_parser = new XML($isnormal);
 	$data = $xml_parser->parse($xml);
 	$xml_parser->destruct();
 	return $data;
 }
 
-function xml_serialize($arr, $htmlon = false, $isnormal = false, $level = 1) {
+function xml_serialize($arr, $htmlon = FALSE, $isnormal = FALSE, $level = 1) {
 	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
 	$space = str_repeat("\t", $level);
 	foreach($arr as $k => $v) {
@@ -37,7 +37,7 @@ class XML {
 	var $last_opened_tag;
 	var $isnormal;
 	var $attrs = array();
-	var $failed = false;
+	var $failed = FALSE;
 
 	function __construct($isnormal) {
 		$this->XML($isnormal);
@@ -64,18 +64,18 @@ class XML {
 
 	function open(&$parser, $tag, $attributes) {
 		$this->data = '';
-		$this->failed = false;
+		$this->failed = FALSE;
 		if(!$this->isnormal) {
 			if(isset($attributes['id']) && !is_string($this->document[$attributes['id']])) {
 				$this->document  = &$this->document[$attributes['id']];
 			} else {
-				$this->failed = true;
+				$this->failed = TRUE;
 			}
 		} else {
 			if(!isset($this->document[$tag]) || !is_string($this->document[$tag])) {
 				$this->document  = &$this->document[$tag];
 			} else {
-				$this->failed = true;
+				$this->failed = TRUE;
 			}
 		}
 		$this->stack[] = &$this->document;

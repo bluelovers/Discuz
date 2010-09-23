@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 4228 2010-08-19 08:49:24Z fanshengshuai $
+	$Id: user.php 968 2009-10-29 02:06:45Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -29,7 +29,7 @@ class usercontrol extends base {
 		$this->app = $this->cache['apps'][UC_APPID];
 	}
 
-	// -1 未开启
+	// -1 未開啟
 	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');

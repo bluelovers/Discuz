@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: db.class.php 979 2009-12-16 07:13:57Z zhaoxiongfei $
 */
 
 
@@ -86,7 +86,7 @@ class ucclient_db {
 		$this->query("DELETE FROM {$this->tablepre}sqlcaches WHERE expiry<$this->time");
 	}
 
-	function query($sql, $type = '', $cachetime = false) {
+	function query($sql, $type = '', $cachetime = FALSE) {
 		$func = $type == 'UNBUFFERED' && @function_exists('mysql_unbuffered_query') ? 'mysql_unbuffered_query' : 'mysql_query';
 		if(!($query = $func($sql, $this->link)) && $type != 'SILENT') {
 			$this->halt('MySQL Query Error', $sql);

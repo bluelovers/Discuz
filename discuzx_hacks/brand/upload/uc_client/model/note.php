@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: note.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: note.php 916 2009-01-19 05:56:07Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -49,10 +49,10 @@ class notemodel {
 		);
 	}
 
-	function get_total_num($all = true) {
+	function get_total_num($all = TRUE) {
 	}
 
-	function get_list($page, $ppp, $totalnum, $all = true) {
+	function get_list($page, $ppp, $totalnum, $all = TRUE) {
 	}
 
 	function delete_note($ids) {
@@ -108,7 +108,7 @@ class notemodel {
 
 	function sendone($appid, $noteid = 0, $note = '') {
 		require_once UC_ROOT.'./lib/xml.class.php';
-		$return = false;
+		$return = FALSE;
 		$app = $this->apps[$appid];
 		if($noteid) {
 			$note = $this->_get_note_by_id($noteid);
@@ -130,7 +130,7 @@ class notemodel {
 		} else {
 			$url = $this->get_url_code($note['operation'], $note['getdata'], $appid);
 			$note['postdata'] = str_replace(array("\n", "\r"), '', $note['postdata']);
-			$response = trim($_ENV['misc']->dfopen2($url, 0, $note['postdata'], '', 1, $app['ip'], UC_NOTE_TIMEOUT, true));
+			$response = trim($_ENV['misc']->dfopen2($url, 0, $note['postdata'], '', 1, $app['ip'], UC_NOTE_TIMEOUT, TRUE));
 		}
 
 		$returnsucceed = $response != '' && ($response == 1 || is_array(xml_unserialize($response)));
@@ -144,10 +144,10 @@ class notemodel {
 				$_ENV[$this->operations[$note['operation']][2]]->$func($appid, $response);
 			}
 			$this->db->query("UPDATE ".UC_DBTABLEPRE."notelist SET app$appid='1', totalnum=totalnum+1, succeednum=succeednum+1, dateline='{$this->base->time}' $closedsqladd WHERE noteid='$note[noteid]'", 'SILENT');
-			$return = true;
+			$return = TRUE;
 		} else {
 			$this->db->query("UPDATE ".UC_DBTABLEPRE."notelist SET app$appid = app$appid-'1', totalnum=totalnum+1, dateline='{$this->base->time}' $closedsqladd WHERE noteid='$note[noteid]'", 'SILENT');
-			$return = false;
+			$return = FALSE;
 		}
 		return $return;
 	}
@@ -172,7 +172,7 @@ class notemodel {
 			}
 		}
 		if($appcount < 1) {
-			return true;
+			return TRUE;
 			//$closedsqladd = ",closed='1'";
 		}
 	}

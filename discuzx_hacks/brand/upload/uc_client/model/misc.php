@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: misc.php 846 2008-12-08 05:37:05Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -53,16 +53,16 @@ class miscmodel {
 	function test_api($url, $ip = '') {
 	}
 
-	function dfopen2($url, $limit = 0, $post = '', $cookie = '', $bysocket = false, $ip = '', $timeout = 15, $block = true, $encodetype  = 'URLENCODE') {
+	function dfopen2($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE') {
 		$__times__ = isset($_GET['__times__']) ? intval($_GET['__times__']) + 1 : 1;
 		if($__times__ > 2) {
 			return '';
 		}
-		$url .= (strpos($url, '?') === false ? '?' : '&')."__times__=$__times__";
+		$url .= (strpos($url, '?') === FALSE ? '?' : '&')."__times__=$__times__";
 		return $this->dfopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype);
 	}
 
-	function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = false	, $ip = '', $timeout = 15, $block = true, $encodetype  = 'URLENCODE') {
+	function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE	, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE') {
 		//error_log("[uc_client]\r\nurl: $url\r\npost: $post\r\n\r\n", 3, 'c:/log/php_fopen.txt');
 		$return = '';
 		$matches = parse_url($url);

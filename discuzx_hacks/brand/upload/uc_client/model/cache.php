@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: cache.php 4337 2010-09-06 04:48:05Z fanshengshuai $
+	$Id: cache.php 846 2008-12-08 05:37:05Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -44,7 +44,7 @@ class cachemodel {
 				$s = "<?php\r\n";
 				foreach((array)$modules as $m) {
 					$method = "_get_$m";
-					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), true).";\r\n";
+					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\r\n";
 				}
 				$s .= "\r\n?>";
 				@file_put_contents(UC_DATADIR."./cache/$cachefile.php", $s);
@@ -54,7 +54,7 @@ class cachemodel {
 				$s = "<?php\r\n";
 				foreach($modules as $m) {
 					$method = "_get_$m";
-					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), true).";\r\n";
+					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\r\n";
 				}
 				$s .= "\r\n?>";
 				@file_put_contents(UC_DATADIR."./cache/$file.php", $s);
