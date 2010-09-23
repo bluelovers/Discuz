@@ -1026,32 +1026,33 @@ function check_adminuser($username, $password, $email) {
 
 	@include CONFIG;
 	include ROOT_PATH.'./uc_client/client.php';
+
 	$error = '';
-	$uid = uc_user_register($username, $password, $email);
-	/*
-	-1 : 用戶名不合法
-	-2 : 包含不允許註冊的詞語
-	-3 : 用戶名已經存在
-	-4 : email 格式有誤
-	-5 : email 不允許註冊
-	-6 : 該 email 已經被註冊
-	>1 : 表示成功，數值為 UID
-	*/
-	if($uid == -1 || $uid == -2) {
-		$error = 'admin_username_invalid';
-	} elseif($uid == -4 || $uid == -5 || $uid == -6) {
-		$error = 'admin_email_invalid';
-	} elseif($uid == -3) {
-		$ucresult = uc_user_login($username, $password);
-		list($tmp['uid'], $tmp['username'], $tmp['password'], $tmp['email']) = uc_addslashes($ucresult);
-		$ucresult = $tmp;
-		if($ucresult['uid'] <= 0) {
+	$ucresult = uc_user_login($username, $password);
+	list($tmp['uid'], $tmp['username'], $tmp['password'], $tmp['email']) = uc_addslashes($ucresult);
+	$ucresult = $tmp;
+	if($ucresult['uid'] <= 0) {
+		$uid = uc_user_register($username, $password, $email);
+		/*
+		-1 : 用戶名不合法
+		-2 : 包含不允許註冊的詞語
+		-3 : 用戶名已經存在
+		-4 : email 格式有誤
+		-5 : email 不允許註冊
+		-6 : 該 email 已經被註冊
+		>1 : 表示成功，數值為 UID
+		*/
+		if($uid == -1 || $uid == -2) {
+			$error = 'admin_username_invalid';
+		} elseif($uid == -4 || $uid == -5 || $uid == -6) {
+			$error = 'admin_email_invalid';
+		} elseif($uid == -3) {
 			$error = 'admin_exist_password_error';
-		} else {
-			$uid = $ucresult['uid'];
-			$email = $ucresult['email'];
-			$password = $ucresult['password'];
 		}
+	} else {
+		$uid = $ucresult['uid'];
+		$email = $ucresult['email'];
+		$password = $ucresult['password'];
 	}
 
 	if(!$error && $uid > 0) {
