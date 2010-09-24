@@ -129,6 +129,11 @@ while ($row = $db_source->fetch_array($query)) {
 			'taobao' => $rowfield['taobao'],
 			'address' => $rowfield['location'],
 			'bio' => $rowfield['bio'],
+
+			// bluelovers
+			'nickname' => $rowfield['nickname'],
+			// bluelovers
+
 		),
 		'field_forum' => array(
 			'customshow' => $row['customshow'],
@@ -142,10 +147,23 @@ while ($row = $db_source->fetch_array($query)) {
 	foreach($unset as $k) {
 		unset($row[$k]);
 	}
+
+	// bluelovers
+	for ($i=1; $i++; $i<=8) {
+		if (isset($rowfield['field_'.$i]) && !empty($rowfield['field_'.$i])) {
+			$update['profile']['field'.$i] = $rowfield['field'.$i] = $rowfield['field_'.$i];
+		}
+	}
+	// bluelovers
+
 	foreach($update as $table => $trow) {
 		$data = implode_field_value($trow, ',', db_table_fields($db_target, $table_target.'_'.$table));
 		$db_target->query("UPDATE {$table_target}_$table SET $data WHERE uid='$row[uid]'");
 	}
+
+	// bluelovers
+	if ($rowfield['authstr'] == '') $row['emailstatus'] = 1;
+	// bluelovers
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
 

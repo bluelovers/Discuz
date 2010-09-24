@@ -31,6 +31,10 @@ while ($blog = $db_source->fetch_array($query)) {
 		}
 	}
 
+	// bluelovers
+	$blog['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $blog['message']);
+	// bluelovers
+
 	$nextid = $blog['blogid'];
 
 	$blog  = daddslashes($blog, 1);
@@ -43,5 +47,9 @@ while ($blog = $db_source->fetch_array($query)) {
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." blogid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
+
+// bluelovers
+$db_target->query("UPDATE $table_target SET message =  replace( message, 'image/face/', 'static/image/smiley/comcom/'  ) ");
+// bluelovers
 
 ?>

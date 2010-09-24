@@ -32,9 +32,20 @@ while($row = $db_source->fetch_array($query)) {
 	$threadtypes_types = $threadtypes['types'];
 	ksort($threadtypes_types);
 	foreach($threadtypes_types as $typeid => $name) {
-		$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => $name), 1);
-		$typenames[$newtypeid] = $name;
-		$db_target->query("UPDATE $table_target_thread SET typeid='$newtypeid' WHERE fid='$nextid' AND typeid='$typeid'");
+
+		// bluelovers
+		// 過濾無效的名稱
+		if ($name = trim($name)) {
+		// bluelovers
+
+			$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => $name), 1);
+			$typenames[$newtypeid] = $name;
+			$db_target->query("UPDATE $table_target_thread SET typeid='$newtypeid' WHERE fid='$nextid' AND typeid='$typeid'");
+
+		// bluelovers
+		}
+		// bluelovers
+
 	}
 	unset($threadtypes['selectbox'], $threadtypes['flat']);
 	$threadtypes['icons'] = array();

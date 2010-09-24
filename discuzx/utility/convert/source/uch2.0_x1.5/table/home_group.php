@@ -165,6 +165,11 @@ function getmtag($start) {
 			'dateline' => TIMESTAMP,
 			'founderuid' => $founder['founderuid'],
 			'foundername' => $founder['foundername'],
+
+			// bluelovers
+			'icon' => daddslashes($mtag['pic']),
+			// bluelovers
+
 			'membernum' => $mtag['membernum']
 		);
 	$db_target->insert('forum_forumfield', $forumfieldarr);

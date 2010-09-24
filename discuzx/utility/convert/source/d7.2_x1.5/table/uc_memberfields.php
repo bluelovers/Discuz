@@ -31,6 +31,14 @@ if(empty($nexttable)) {
 
 		$nextid = $row['uid'];
 
+		// bluelovers
+		for ($i=1; $i++; $i<=8) {
+			if (isset($row['field_'.$i]) && !empty($row['field_'.$i])) {
+				$row['field'.$i] = $row['field_'.$i];
+			}
+		}
+		// bluelovers
+
 		$row  = daddslashes($row, 1);
 
 		$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));

@@ -67,6 +67,20 @@ while ($row = $db_source->fetch_array($query)) {
 
 	unset($row['tradetypes'], $row['typemodels'], $row['postcredits'], $row['replycredits'], $row['getattachcredits'], $row['postattachcredits'], $row['digestcredits']);
 
+	// bluelovers
+	$row['extra'] = $row['extra'] ? unserialize($row['extra']) : array();
+
+	foreach (array('post_readperm', 'post_maxpostsperdayreply') as $_k_) {
+		if (isset($row[$_k_]) && $row[$_k_]) {
+			$row['extra'][$_k_] = $row[$_k_];
+
+			unset($row[$_k_]);
+		}
+	}
+
+	$row['extra'] = $row['extra'] ? serialize($row['extra']) : '';
+	// bluelovers
+
 	$row  = daddslashes($row, 1);
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));

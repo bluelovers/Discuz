@@ -23,6 +23,11 @@ if($start == 0) {
 $query = $db_source->query("SELECT * FROM $table_source WHERE pid>'$start' LIMIT $limit");
 while($row = $db_source->fetch_array($query)) {
 	$nextid = $row['pid'];
+
+	// bluelovers
+	$row['message'] = str_replace("\r\n", "\n", $row['message']);
+	// bluelovers
+
 	$row = daddslashes($row, 1);
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
 	$db_target->query("INSERT INTO $table_target SET $data");
