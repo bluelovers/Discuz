@@ -43,6 +43,7 @@ ALTER TABLE `pre_forum_threadclass` ADD `ishide` TINYINT( 1 ) NOT NULL DEFAULT '
 # 因插件產生的特殊主題
 ALTER TABLE `pre_forum_thread` ADD `specialextra` VARCHAR( 100 ) NOT NULL COMMENT '因插件產生的特殊主題';
 
+DROP TABLE IF EXISTS `pre_forum_thread_specialextra`;
 CREATE TABLE `pre_forum_thread_specialextra` (
 	`tid` MEDIUMINT( 8 )  UNSIGNED NOT NULL DEFAULT '0',
 	`fid` SMALLINT( 6 ) UNSIGNED NOT NULL DEFAULT '0',
@@ -114,6 +115,7 @@ ALTER TABLE `pre_forum_bbcode` CHANGE `example` `example` TEXT NOT NULL DEFAULT 
 ALTER TABLE `pre_common_session` ADD `gender` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT '性別';
 ALTER TABLE `pre_common_session` ADD `session_lang` CHAR( 15 ) NOT NULL COMMENT '語言';
 
+DROP TABLE IF EXISTS `pre_common_session_data`;
 CREATE TABLE `pre_common_session_data` (
 `sid` CHAR( 6 ) NOT NULL ,
 `uid` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0',
