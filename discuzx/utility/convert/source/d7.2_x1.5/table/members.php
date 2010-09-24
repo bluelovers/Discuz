@@ -149,7 +149,7 @@ while ($row = $db_source->fetch_array($query)) {
 	}
 
 	// bluelovers
-	for ($i=1; $i++; $i<=8) {
+	for ($i=1; $i<=8; $i++) {
 		if (isset($rowfield['field_'.$i]) && !empty($rowfield['field_'.$i])) {
 			$update['profile']['field'.$i] = $rowfield['field'.$i] = $rowfield['field_'.$i];
 		}
