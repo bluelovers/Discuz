@@ -102,8 +102,8 @@ class discuz_core {
 	function _init_env() {
 
 		//設置錯誤報告等級 以及關閉自動轉義
-//		error_reporting(E_ERROR);
-		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
+		error_reporting(E_ERROR);
+//		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
 		if(phpversion() < '5.3.0') {
 			set_magic_quotes_runtime(0);
 		}

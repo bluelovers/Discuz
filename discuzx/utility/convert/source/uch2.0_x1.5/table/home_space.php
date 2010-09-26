@@ -166,6 +166,12 @@ while ($space = $db_source->fetch_array($query)) {
 	if(empty($newspace['position'])) $setarr['position'] = $space['none'];
 	if(empty($newspace['realname'])) $setarr['realname'] = $space['name'];
 
+	// bluelovers
+	isset($setarr['site']) && $setarr['site'] = s_trim($setarr['site'], "\\/");
+	isset($setarr['bio']) && $setarr['bio'] = s_trim($setarr['bio'], "\\/");
+	isset($setarr['realname']) && $setarr['realname'] = s_trim($setarr['realname'], "\\/");
+	// bluelovers
+
 	if($setarr) {
 		$updatesql = getupdatesql($setarr);
 		$db_target->query("UPDATE {$newpre}common_member_profile SET $updatesql WHERE uid='$space[uid]'");

@@ -833,6 +833,11 @@ function dmktime($date) {
 
 function save_syscache($cachename, $data) {
 	static $isfilecache, $allowmem;
+
+	// bluelovers
+	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before', array(&$cachename, &$data, array(&$isfilecache, &$allowmem)));
+	// bluelovers
+
 	if($isfilecache === null) {
 		$isfilecache = getglobal('config/cache/type');
 		$allowmem = memory('check');
@@ -1400,7 +1405,39 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 	return $credit->updatecreditbyrule($action, $uids, $coef, $fid);
 }
 
+/**
+ * 添加積分
+ * @param Integer $uids: 用戶uid或者uid數組
+ * @param String $dataarr: member count相關操作數組，例: array('extcredits1' => 1, 'doings' => -1)
+ * @param Boolean $checkgroup: 是否檢查用戶組 true or false
+ * @param String $operation: 積分記錄操作類型(不記錄積分日誌可忽略)
+ * @param Integer $relatedid: 積分記錄相關 ID(不記錄積分日誌可忽略)
+ * @param String $ruletxt: 動畫效果中的積分規則文本(UTF-8格式)
+ *
+ * @link http://www.bbsapp.com/thread-76-1-1.html
+ *
+ * 積分記錄操作類型對照表
 
+	關聯 ID
+	含義
+TRC	common_task.taskid	任務獎勵積分
+RTC	forum_thread.tid	發表懸賞主題扣除積分
+RAC	forum_thread.tid	最佳答案獲取懸賞積分
+MRC	common_magic.mid	道具隨即獲取積分
+TFR	common_member.uid	積分轉賬轉出
+RCV	common_member.uid	積分轉賬接收
+CEC	common_member.uid	積分兌換
+ECU	common_member.uid	通過ucenter 兌換積分
+SAC	forum_attachment.aid	出售附件獲得積分
+BAC	forum_attachment.aid	購買附件支出積分
+PRC	forum_post.pid	帖子被評分所得積分
+STC	forum_thread.tid	出售主題獲得積分
+BTC	forum_thread.tid	購買主題支出積分
+AFD	common_member.uid	購買積分即積分充值
+UGP	common_usergroup.groupid	購買擴展用戶組支出積分
+RPC	common_report.id        	舉報功能中的獎懲
+ACC	forum_activity.tid	參與活動扣除積分
+ */
 function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
 	if(empty($uids)) return;
 	if(!is_array($dataarr) || empty($dataarr)) return;
@@ -1483,7 +1520,12 @@ function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
 		$db = & DB::object();
-		$_G['debuginfo'] = array('time' => number_format((dmicrotime() - $_G['starttime']), 6), 'queries' => $db->querynum, 'memory' => ucwords($_G['memory']));
+//		$_G['debuginfo'] = array('time' => number_format((dmicrotime() - $_G['starttime']), 6), 'queries' => $db->querynum, 'memory' => ucwords($_G['memory']));
+
+		$ios = function_exists('get_included_files') ? count(get_included_files()) : 0;
+		$umem = function_exists('memory_get_usage') ? strtolower(sizecount(memory_get_usage(), 1)) : 0;
+
+		$_G['debuginfo'] = array('time' => number_format((dmicrotime() - $_G['starttime']), 6), 'queries' => $db->querynum, 'memory' => ucwords($_G['memory']), 'ios' => $ios, 'umem' => $umem);
 		return TRUE;
 	} else {
 		return FALSE;
@@ -1590,27 +1632,72 @@ function adshow($parameter) {
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 }
 
+/**
+ * 顯示提示信息
+ *
+ * @param $message - 提示信息，可中文也可以是 lang_message.php 中的數組 key 值
+ * @param $url_forward - 提示後跳轉的 url
+ * @param $values - 提示信息中可替換的變量值 array(key => value ...) 形式
+ * @param $extraparam - 擴展參數 array(key => value ...) 形式
+ **/
 function showmessage($message, $url_forward = '', $values = array(), $extraparam = array(), $custom = 0) {
 	global $_G;
 
 	$param = array(
+
+		/** 跳轉控制 **/
 		'header'	=> false,
+		// header跳轉
 		'timeout'	=> null,
+		// 定時跳轉
 		'refreshtime'	=> null,
+		// 自定義跳轉時間
 		'closetime'	=> null,
+		// 自定義關閉時間，限於 msgtype = 2
 		'locationtime'	=> null,
+		// 自定義跳轉時間，限於 msgtype = 2
+		/** 內容控制 **/
 		'alert'		=> null,
+		// alert 圖標樣式 right/info/error
 		'return'	=> false,
+		// 顯示請返回
 		'redirectmsg'	=> 0,
+		// 下載時用的提示信息，當跳轉時顯示的信息樣式
+		// 0:如果您的瀏覽器沒有自動跳轉，請點擊此鏈接
+		// 1:如果 n 秒後下載仍未開始，請點擊此鏈接
 		'msgtype'	=> 1,
+		// 信息樣式
+		// 1:非 Ajax
+		// 2:Ajax 彈出框
+		// 3:Ajax 只顯示信息文本
 		'showmsg'	=> true,
+		// 顯示信息文本
 		'showdialog'	=> false,
+		// 關閉原彈出框顯示 showDialog 信息，限於 msgtype = 2
 		'login'		=> false,
+		// 未登錄時顯示登錄鏈接
+
+		/** Ajax 控制 **/
 		'handle'	=> false,
+		// 執行 js 回調函數
 		'extrajs'	=> '',
 	);
 
 	$navtitle = lang('core', 'title_board_message');
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_custom', array(array(
+			'message' => &$message,
+			'url_forward' => &$url_forward,
+			'values' => &$values,
+			'extraparam' => &$extraparam,
+			'custom' => &$custom,
+			'param' => &$param,
+			'navtitle' => &$navtitle,
+		)));
+	}
+	// bluelovers
 
 	if($custom) {
 		$alerttype = 'alert_info';

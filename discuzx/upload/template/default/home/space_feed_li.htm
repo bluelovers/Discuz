@@ -13,9 +13,9 @@
 		<!--{if empty($_G['home']['tpl'][hidden_menu])}-->
 		<!--{eval $_G[gp_key] = $key = random(8);}-->
 		<!--{if $value['idtype']=='doid'}-->
-		(<a href="javascript:;" {if $_G['uid']}onclick="docomment_get('$value[id]', '$key');"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="{$_G[gp_key]}_do_a_op_$value[id]">{lang reply}</a>)
+		(<a href="javascript:;" {if $_G['uid']}onclick="docomment_get('$value[id]', '$key');"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="{$_G[gp_key]}_do_a_op_$value[id]" class="sctpl_reply">{lang reply}</a>)
 		<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
-		(<a href="javascript:;" {if $_G['uid']}onclick="feedcomment_get($value[feedid]);"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="feedcomment_a_op_$value[feedid]">{lang comment}</a>)
+		(<a href="javascript:;" {if $_G['uid']}onclick="feedcomment_get($value[feedid]);"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="feedcomment_a_op_$value[feedid]" class="sctpl_reply">{lang comment}</a>)
 		<!--{/if}-->
 		<!--{/if}-->
 
@@ -23,6 +23,10 @@
 
 			<!--{if empty($_G['home']['tpl'][hidden_hot]) && $value[hot]}-->
 			<div class="hot"><a href="home.php?mod=spacecp&ac=feed&feedid=$value[feedid]"><em>$value[hot]</em>{lang join_immediately}</a></div>
+			<!--{/if}-->
+
+			<!--{if $value['image']}-->
+			<img src="$value[image]" alt="" class="tn sctpl_feed_image" />
 			<!--{/if}-->
 
 			<!--{if $value['image_1']}-->
@@ -45,9 +49,13 @@
 			<!--{/if}-->
 
 			<!--{if !empty($value['body_data']['flashvar'])}-->
+
+				<!--{if empty($value['body_data']['imgurl']) && ($value['image'] || $value['image_1'])}--><!--{eval $value['body_data']['imgurl'] = ($value['image'] ? $value['image'] : $value['image_1']);}--><!--{/if}-->
+
 				<!--{if !empty($value['body_data']['imgurl'])}-->
 				<table class="mtm" title="{lang click_play}" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');"><tr><td class="vdtn hm" style="background: url($value['body_data']['imgurl']) no-repeat">
 					<img src="{IMGDIR}/vds.png" alt="{lang click_play}" />
+					<!--img src="{STATICURL}image/plus/common/vd.png" alt="{lang click_play}" /-->
 				</td></tr></table>
 				<!--{else}-->
 				<img src="{IMGDIR}/vd.gif" alt="{lang click_play}" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');" class="tn" />

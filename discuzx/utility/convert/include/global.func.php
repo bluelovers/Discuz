@@ -767,3 +767,15 @@ if(!function_exists('file_put_contents')) {
 		return $return;
 	}
 }
+
+// bluelovers
+function s_trim($string, $charlist = null, $ltrim = 0) {
+	$ret = $string;
+
+	$ret = str_replace(array("\r\n", "\n\r"), "\n", $ret);
+	$ret = preg_replace("/[ 　]+\n/", "", $ret);
+	$ret = rtrim($ret, $charlist);
+
+	return $ret;
+}
+// bluelovers

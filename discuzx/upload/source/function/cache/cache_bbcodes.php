@@ -20,40 +20,129 @@ function build_cache_bbcodes() {
 		3 => "/\[{bbtag}=(['\"]?)([^\"\[]+?)(['\"]?),(['\"]?)([^\"\[]+?)(['\"]?)\]([^\"\[]+?)\[\/{bbtag}\]/is"
 	);
 
-	while($bbcode = DB::fetch($query)) {
-		$bbcode['perm'] = explode("\t", $bbcode['perm']);
-		if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
-			continue;
+	// bluelovers
+	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_init_regexp', array(array('regexp' => &$regexp,
+				)));
+	// bluelovers
+
+	while ($bbcode = DB::fetch($query)) {
+
+		// bluelovers
+		$switchstop = 0;
+
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_perm', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
+
+		if (!$switchstop) {
+		// bluelovers
+
+			$bbcode['perm'] = explode("\t", $bbcode['perm']);
+			if (in_array('', $bbcode['perm']) || !$bbcode['perm']) {
+				continue;
+			}
+
+		// bluelovers
 		}
-		$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
-		$bbcode['replacement'] = preg_replace("/([\r\n])/", '', $bbcode['replacement']);
-		switch($bbcode['params']) {
-			case 2:
-				$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
-				$bbcode['replacement'] = str_replace('{2}', '\\4', $bbcode['replacement']);
-				break;
-			case 3:
-				$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
-				$bbcode['replacement'] = str_replace('{2}', '\\5', $bbcode['replacement']);
-				$bbcode['replacement'] = str_replace('{3}', '\\7', $bbcode['replacement']);
-				break;
-			default:
-				$bbcode['replacement'] = str_replace('{1}', '\\1', $bbcode['replacement']);
-				break;
-		}
-		if(preg_match("/\{(RANDOM|MD5)\}/", $bbcode['replacement'])) {
-			$search = str_replace('is', 'ies', $search);
-			$replace = '\''.str_replace('{RANDOM}', '_\'.random(6).\'', str_replace('{MD5}', '_\'.md5(\'\\1\').\'', $bbcode['replacement'])).'\'';
-		} else {
-			$replace = $bbcode['replacement'];
+		$switchstop = 0;
+
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_define1', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
+
+		if (!$switchstop) {
+		// bluelovers
+
+			$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
+			$bbcode['replacement'] = preg_replace("/([\r\n])/", '', $bbcode['replacement']);
+
+		// bluelovers
 		}
 
-		foreach($bbcode['perm'] as $groupid) {
-			for($i = 0; $i < $bbcode['nest']; $i++) {
-				$data[$groupid]['searcharray'][] = $search;
-				$data[$groupid]['replacearray'][] = $replace;
+		$switchstop = 0;
+
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_switch', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
+
+		if (!$switchstop) {
+		// bluelovers
+
+			switch ($bbcode['params']) {
+				case 2:
+					$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
+					$bbcode['replacement'] = str_replace('{2}', '\\4', $bbcode['replacement']);
+					break;
+				case 3:
+					$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
+					$bbcode['replacement'] = str_replace('{2}', '\\5', $bbcode['replacement']);
+					$bbcode['replacement'] = str_replace('{3}', '\\7', $bbcode['replacement']);
+					break;
+				default:
+					$bbcode['replacement'] = str_replace('{1}', '\\1', $bbcode['replacement']);
+					break;
 			}
+
+		// bluelovers
 		}
+		$switchstop = 0;
+
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_define2', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
+
+		if (!$switchstop) {
+		// bluelovers
+
+			if (preg_match("/\{(RANDOM|MD5)\}/", $bbcode['replacement'])) {
+				$search = str_replace('is', 'ies', $search);
+				$replace = '\'' . str_replace('{RANDOM}', '_\'.random(6).\'', str_replace('{MD5}', '_\'.md5(\'\\1\').\'', $bbcode['replacement'])) . '\'';
+			} else {
+				$replace = $bbcode['replacement'];
+			}
+
+		// bluelovers
+		}
+
+		$switchstop = 0;
+
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_define3', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
+
+		if (!$switchstop) {
+		// bluelovers
+
+			foreach($bbcode['perm'] as $groupid) {
+				for($i = 0; $i < $bbcode['nest']; $i++) {
+					$data[$groupid]['searcharray'][] = $search;
+					$data[$groupid]['replacearray'][] = $replace;
+				}
+			}
+
+		// bluelovers
+		}
+		// bluelovers
 	}
 
 	save_syscache('bbcodes', $data);

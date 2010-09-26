@@ -50,7 +50,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 		$post['message'] = html2bbcode($post['message']);
 
 		// bluelovers
-		$post['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $post['message']);
+		$post['message'] = s_trim($post['message']);
 		// bluelovers
 
 		$post = daddslashes($post);

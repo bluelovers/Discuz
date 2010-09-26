@@ -32,7 +32,7 @@ while ($blog = $db_source->fetch_array($query)) {
 	}
 
 	// bluelovers
-	$blog['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $blog['message']);
+	$blog['message'] = s_trim($blog['message']);
 	$blog['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $blog['message']);
 	// bluelovers
 

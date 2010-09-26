@@ -17,13 +17,15 @@ $start = intval(getgpc('start'));
 $home = load_process('home');
 $fid = intval(getgpc('fid')) ? intval(getgpc('fid')) : intval($home['forum']['poll']) ? intval($home['forum']['poll']) : 0;
 if(!$fid) {
+	$board_name = 'UCHome數據';
 	$forumname = 'UCHome投票數據';
 
 	$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='forum' AND `name`='$forumname'");
 	if(!empty($value)) {
 		$fid = intval($value['fid']);
 	} else {
-		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='group' AND `name`='$forumname'");
+//		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='group' AND `name`='$forumname'");
+		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE type='group' AND status='1' AND `name`='$board_name'");
 		if($value) {
 			$fup = intval($value['fid']);
 		} else {

@@ -79,6 +79,10 @@ while ($row = $db_source->fetch_array($query)) {
 	}
 
 	$row['extra'] = $row['extra'] ? serialize($row['extra']) : '';
+
+	$row['description'] = s_trim($row['description']);
+	$row['rules'] = s_trim($row['rules']);
+	$row['article'] = s_trim($row['article']);
 	// bluelovers
 
 	$row  = daddslashes($row, 1);

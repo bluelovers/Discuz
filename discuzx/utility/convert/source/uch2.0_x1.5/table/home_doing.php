@@ -27,7 +27,7 @@ while ($doing = $db_source->fetch_array($query)) {
 	$nextid = $doing['doid'];
 
 	// bluelovers
-	$doing['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $doing['message']);
+	$doing['message'] = s_trim($doing['message']);
 	$doing['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $doing['message']);
 	// bluelovers
 

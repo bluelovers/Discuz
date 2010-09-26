@@ -49,6 +49,13 @@ while ($row = $db_source->fetch_array($query)) {
 	$db_target->query("INSERT INTO {$table_target}_profile SET $data");
 	$db_target->query("INSERT INTO {$table_target}_status SET $data");
 
+	// bluelovers
+	$rowfield['site'] = s_trim($rowfield['site'], "\\/");
+	$rowfield['bio'] = s_trim($rowfield['bio'], "\\/");
+	$rowfield['sightml'] = s_trim($rowfield['sightml'], "\\/");
+	$rowfield['nickname'] = s_trim($rowfield['nickname'], "\\/");
+	// bluelovers
+
 	$row  = daddslashes($row, 1);
 
 	$unset = array(

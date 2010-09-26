@@ -159,3 +159,4 @@ ALTER TABLE `pre_forum_forumfield` ADD `article` TEXT NOT NULL COMMENT '約束�
 # 導覽列修正
 UPDATE `pre_common_nav` SET `name` = '設施', `url` = 'plugin.php' WHERE `id` =6;
 UPDATE `pre_common_nav` SET `name` = '社區', `title` = 'Home' WHERE `id` =4;
+UPDATE `pre_common_nav` SET `name` = '專題', `title` = 'Special' WHERE `id` =1;

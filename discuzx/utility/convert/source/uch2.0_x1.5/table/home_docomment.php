@@ -25,7 +25,7 @@ while ($docomment = $db_source->fetch_array($query)) {
 	$nextid = $docomment['id'];
 
 	// bluelovers
-	$docomment['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $docomment['message']);
+	$docomment['message'] = s_trim($docomment['message']);
 	$docomment['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $docomment['message']);
 	// bluelovers
 

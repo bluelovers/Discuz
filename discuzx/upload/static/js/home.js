@@ -543,6 +543,9 @@ function resizeTx(obj){
 	if($(oid)) $(oid).style.display = obj.scrollHeight > 30 ? '':'none';
 }
 
+/*
+ * 顯示預設表情
+ */
 function showFace(showid, target, dropstr) {
 	if($(showid + '_menu') != null) {
 		$(showid+'_menu').style.display = '';
@@ -553,7 +556,7 @@ function showFace(showid, target, dropstr) {
 		faceDiv.style.position = 'absolute';
 		faceDiv.style.zIndex = 1001;
 		var faceul = document.createElement("ul");
-		for(i=1; i<31; i++) {
+		for(i=1; i<21; i++) {
 			var faceli = document.createElement("li");
 			faceli.innerHTML = '<img src="' + STATICURL + 'image/smiley/comcom/'+i+'.gif" onclick="insertFace(\''+showid+'\','+i+', \''+ target +'\', \''+dropstr+'\')" style="cursor:pointer; position:relative;" />';
 			faceul.appendChild(faceli);

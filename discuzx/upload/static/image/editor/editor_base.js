@@ -249,6 +249,10 @@ function foreColor(e) {
 	fDisplayColorBoard(e);
 	gSetColorType = "foreColor";
 }
+
+/*
+ * 顯示預設表情
+ */
 function faceBox(e) {
 	if(gIsIE){
 		var e = window.event;
@@ -261,7 +265,7 @@ function faceBox(e) {
 	dvFaceBox.style.top = 33 + "px";
 	dvFaceBox.innerHTML = "";
 	var faceul = document.createElement("ul");
-	for(i=1; i<31; i++) {
+	for(i=1; i<21; i++) {
 		var faceli = document.createElement("li");
 		faceli.innerHTML = '<img src="' + parent.STATICURL + 'image/smiley/comcom/'+i+'.gif" onclick="insertImg(this.src);" style="cursor:pointer;" />';
 		faceul.appendChild(faceli);
