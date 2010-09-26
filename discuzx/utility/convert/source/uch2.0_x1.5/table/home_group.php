@@ -48,6 +48,11 @@ while($value = $db_source->fetch_array($threadquery)) {
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
 		$post['message'] = html2bbcode($post['message']);
+
+		// bluelovers
+		$post['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $post['message']);
+		// bluelovers
+
 		$post = daddslashes($post);
 		$postarr = array(
 			'fid' => $sid,

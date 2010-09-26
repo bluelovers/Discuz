@@ -25,7 +25,7 @@ while($row = $db_source->fetch_array($query)) {
 	$nextid = $row['pid'];
 
 	// bluelovers
-	$row['message'] = str_replace("\r\n", "\n", $row['message']);
+	$row['message'] = str_replace(arrar("\r\n", "\n\r"), "\n", $row['message']);
 	// bluelovers
 
 	$row = daddslashes($row, 1);
