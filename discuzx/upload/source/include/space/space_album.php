@@ -301,9 +301,21 @@ if($id) {
 	$pricount = 0;
 	$picmode = 0;
 
+//	if(empty($_GET['view'])) {
+//		$_GET['view'] = 'we';
+//	}
+
+	// bluelovers
 	if(empty($_GET['view'])) {
-		$_GET['view'] = 'we';
+		space_merge($space, 'field_home');
+
+		if($space['feedfriend']) {
+			$_GET['view'] = $_G['gp_view'] = 'we';
+		} else {
+			$_GET['view'] = $_G['gp_view'] = 'all';
+		}
 	}
+	// bluelovers
 
 	$gets = array(
 		'mod' => 'space',

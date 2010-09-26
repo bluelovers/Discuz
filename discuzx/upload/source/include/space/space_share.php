@@ -68,7 +68,19 @@ if($id) {
 		$f_index = '';
 		$need_count = true;
 
-		if(empty($_GET['view'])) $_GET['view'] = 'we';
+//		if(empty($_GET['view'])) $_GET['view'] = 'we';
+
+		// bluelovers
+		if(empty($_GET['view'])) {
+			space_merge($space, 'field_home');
+
+			if($space['feedfriend']) {
+				$_GET['view'] = $_G['gp_view'] = 'we';
+			} else {
+				$_GET['view'] = $_G['gp_view'] = 'all';
+			}
+		}
+		// bluelovers
 
 		if($_GET['view'] == 'all') {
 			$wheresql = "1";
@@ -91,7 +103,8 @@ if($id) {
 			$wheresql = "uid='$space[uid]'";
 
 		}
-		$actives = array($_GET['view'] => ' class="a"');
+//		$actives = array($_GET['view'] => ' class="a"');
+		$actives = array($_G['gp_view'] => ' class="a"');
 
 		if($_GET['type'] && $_GET['type'] != 'all') {
 			$sub_actives = array('type_'.$_GET['type'] => ' class="a"');

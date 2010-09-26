@@ -57,6 +57,10 @@ function blog_post($POST, $olds=array()) {
 	$POST['tag'] = getstr($POST['tag'], 500, 1, 1);
 	$POST['tag'] = censor($POST['tag']);
 
+	// bluelovers
+	$POST['message'] = scotext::lf($POST['message']);
+	// bluelovers
+
 	if($_G['mobile']) {
 		$POST['message'] = getstr($POST['message'], 0, 1, 0, 1);
 		$POST['message'] = censor($POST['message']);

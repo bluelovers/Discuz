@@ -258,7 +258,7 @@ function procthread($thread, $timeformat = 'd') {
 		$posts = $postsnum;
 		$topicpages = ceil($posts / $_G['ppp']);
 		for($i = 1; $i <= $topicpages; $i++) {
-			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			if(!in_array('forum_viewthread', (array)$_G['setting']['rewritestatus'])) {
 				$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'" target="_blank">'.$i.'</a> ';
 			} else {
 				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';

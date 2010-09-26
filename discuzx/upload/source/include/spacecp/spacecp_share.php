@@ -67,6 +67,12 @@ if($_GET['op'] == 'delete') {
 
 			$feed_hash_data = "uid{$id}";
 
+			// bluelovers
+			if($id == $space['uid']) {
+				showmessage('share_space_not_self');
+			}
+			// bluelovers
+
 			$tospace = getspace($id);
 			if(empty($tospace)) {
 				showmessage('space_does_not_exist');
@@ -104,6 +110,13 @@ if($_GET['op'] == 'delete') {
 			if(!$blog = DB::fetch($query)) {
 				showmessage('blog_does_not_exist');
 			}
+
+			// bluelovers
+			if($blog['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($blog['status'], array(1, 2))) {
 				showmessage('moderate_blog_not_share');
 			}
@@ -141,6 +154,13 @@ if($_GET['op'] == 'delete') {
 			if(!$album = DB::fetch($query)) {
 				showmessage('album_does_not_exist');
 			}
+
+			// bluelovers
+			if($album['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if($album['friend']) {
 				showmessage('album_can_not_share');
 			}
@@ -175,6 +195,13 @@ if($_GET['op'] == 'delete') {
 			if(!$pic = DB::fetch($query)) {
 				showmessage('image_does_not_exist');
 			}
+
+			// bluelovers
+			if($pic['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($pic['status'], array(1, 2))) {
 				showmessage('moderate_pic_not_share');
 			}
@@ -213,6 +240,13 @@ if($_GET['op'] == 'delete') {
 			$actives = array('share' => ' class="active"');
 
 			$thread = DB::fetch(DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid='$id'"));
+
+			// bluelovers
+			if($thread['authorid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($thread['displayorder'], array(-2, -3))) {
 				showmessage('moderate_thread_not_share');
 			}
@@ -292,7 +326,8 @@ if($_GET['op'] == 'delete') {
 			}
 			$arr['itemid'] = '0';
 			$arr['fromuid'] = '0';
-			$arr['title_template'] = lang('spacecp', 'share_link');
+//			$arr['title_template'] = lang('spacecp', 'share_link');
+			$arr['title_template'] = array('spacecp', 'share_link');
 			$arr['body_template'] = '{link}';
 
 			$link_text = sub_url($link, 45);
@@ -308,19 +343,22 @@ if($_GET['op'] == 'delete') {
 				);
 			}
 			if(!empty($flashvar)) {
-				$arr['title_template'] = lang('spacecp', 'share_video');
+//				$arr['title_template'] = lang('spacecp', 'share_video');
+				$arr['title_template'] = array('spacecp', 'share_video');
 				$type = 'video';
 				$arr['body_data']['flashvar'] = $flashvar['flv'];
 				$arr['body_data']['host'] = 'flash';
 				$arr['body_data']['imgurl'] = $flashvar['imgurl'];
 			}
 			if(preg_match("/\.(mp3|wma)$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_music');
+//				$arr['title_template'] = lang('spacecp', 'share_music');
+				$arr['title_template'] = array('spacecp', 'share_music');
 				$arr['body_data']['musicvar'] = $link;
 				$type = 'music';
 			}
 			if(preg_match("/\.swf$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_flash');
+//				$arr['title_template'] = lang('spacecp', 'share_flash');
+				$arr['title_template'] = array('spacecp', 'share_flash');
 				$arr['body_data']['flashaddr'] = $link;
 				$type = 'flash';
 			}
@@ -343,7 +381,8 @@ if($_GET['op'] == 'delete') {
 		if($arr['status'] == 0 && ckprivacy('share', 'feed')) {
 			require_once libfile('function/feed');
 			feed_add('share',
-				'{actor} '.$arr['title_template'],
+//				'{actor} '.$arr['title_template'],
+				(($type == 'link') ? $arr['title_template'] : '{actor} '.$arr['title_template']),
 				array('hash_data' => $feed_hash_data),
 				$arr['body_template'],
 				$arr['body_data'],
@@ -355,7 +394,13 @@ if($_GET['op'] == 'delete') {
 
 		$arr['body_data'] = serialize($arr['body_data']);
 
-		$setarr = daddslashes($arr);
+//		$setarr = daddslashes($arr);
+
+		// bluelovers
+		@include_once libfile('function/share');
+		$setarr = _share_add($arr);
+		// bluelovers
+
 		$sid = DB::insert('home_share', $setarr, 1);
 		switch($type) {
 			case 'space':

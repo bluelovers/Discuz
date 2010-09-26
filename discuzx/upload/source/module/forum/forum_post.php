@@ -218,6 +218,10 @@ if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && pr
 	showmessage('post_hide_nopermission');
 }
 
+// bluelovers
+$message = scotext::lf($message);
+// bluelovers
+
 if(periodscheck('postmodperiods', 0)) {
 	$modnewthreads = $modnewreplies = 1;
 } else {

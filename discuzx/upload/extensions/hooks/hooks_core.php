@@ -11,7 +11,6 @@
 	$Id: hooks_core.php 109 2010-08-01 22:22:26Z user $
 */
 
-/*
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
 function _eFunc_libfile(&$ret, $root, $force = 0) {
@@ -28,9 +27,16 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
+			/*
 			case 'source/function/function_cache.php':
 
 				@include_once libfile('hooks/cache', '', 'extensions/');
+
+				break;
+			*/
+			case 'source/function/function_share.php':
+
+				@include_once libfile('hooks/share', '', 'extensions/');
 
 				break;
 			default:
@@ -40,7 +46,6 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 		}
 	}
 }
-*/
 
 Scorpio_Hook::add('Func_showmessage:Before_custom', '_eFunc_showmessage_Before_custom');
 

@@ -10,6 +10,12 @@
 function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);
 
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$share));
+	}
+	// bluelovers
+
 	$searchs = $replaces = array();
 	if($share['body_data']) {
 		foreach (array_keys($share['body_data']) as $key) {
@@ -17,6 +23,13 @@ function mkshare($share) {
 			$replaces[] = $share['body_data'][$key];
 		}
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array(&$share, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$share['body_template'] = str_replace($searchs, $replaces, $share['body_template']);
 
 	return $share;

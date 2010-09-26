@@ -54,6 +54,9 @@ if(submitcheck('addsubmit')) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
 	}
 
+	// bluelovers
+	$_POST['message'] = scotext::lf($_POST['message']);
+	// bluelovers
 
 //	$message = getstr($_POST['message'], 200, 1, 1, 1);
 	$message = getstr($_POST['message'], $message_strlen, 1, 1, 1);
@@ -151,6 +154,10 @@ if(submitcheck('addsubmit')) {
 	if($waittime > 0) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
 	}
+
+	// bluelovers
+	$_POST['message'] = scotext::lf($_POST['message']);
+	// bluelovers
 
 //	$message = getstr($_POST['message'], 200, 1, 1, 1);
 	$message = getstr($_POST['message'], $message_strlen, 1, 1, 1);

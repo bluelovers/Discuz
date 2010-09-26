@@ -16,7 +16,20 @@ $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 
-if(empty($_G['gp_view'])) $_G['gp_view'] = 'all';
+//if(empty($_G['gp_view'])) $_G['gp_view'] = 'all';
+
+// bluelovers
+if(empty($_G['gp_view'])) {
+	space_merge($space, 'field_home');
+
+	if($space['feedfriend']) {
+		$_GET['view'] = $_G['gp_view'] = 'we';
+	} else {
+		$_GET['view'] = $_G['gp_view'] = 'all';
+	}
+}
+// bluelovers
+
 $_G['gp_order'] = empty($_G['gp_order']) ? 'dateline' : $_G['gp_order'];
 
 $allowviewuserthread = $_G['setting']['allowviewuserthread'];

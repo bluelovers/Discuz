@@ -16,7 +16,19 @@ $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 
-if(empty($_GET['view'])) $_GET['view'] = 'we';
+//if(empty($_GET['view'])) $_GET['view'] = 'we';
+
+// bluelovers
+if(empty($_GET['view'])) {
+	space_merge($space, 'field_home');
+
+	if($space['feedfriend']) {
+		$_GET['view'] = $_G['gp_view'] = 'we';
+	} else {
+		$_GET['view'] = $_G['gp_view'] = 'all';
+	}
+}
+// bluelovers
 
 $perpage = 20;
 $perpage = mob_perpage($perpage);

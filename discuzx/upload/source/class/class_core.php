@@ -87,9 +87,11 @@ class discuz_core {
 		include_once libfile('Constants', 'libs/scophp/Scorpio/libs/', 'extensions/');
 		include_once libfile('Hook', 'libs/scophp/Scorpio/libs/', 'extensions/');
 		include_once libfile('File', 'libs/scophp/Scorpio/libs/', 'extensions/');
+		include_once libfile('text', 'libs/scophp/Scorpio/helpers/', 'extensions/');
 
 		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core {}");
 		if (!sclass_exists('Scorpio_File')) eval("class Scorpio_File extends Scorpio_File_Core {}");
+		if (!sclass_exists('scotext')) eval("class scotext extends Scorpio_helper_text_Core {}");
 
 		@include_once libfile('hooks/core', '', 'extensions/');
 
@@ -103,7 +105,7 @@ class discuz_core {
 
 		//設置錯誤報告等級 以及關閉自動轉義
 		error_reporting(E_ERROR);
-//		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
+		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
 		if(phpversion() < '5.3.0') {
 			set_magic_quotes_runtime(0);
 		}

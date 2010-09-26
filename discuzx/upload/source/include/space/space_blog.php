@@ -147,7 +147,19 @@ if($id) {
 	loadcache('blogcategory');
 	$category = $_G['cache']['blogcategory'];
 
-	if(empty($_GET['view'])) $_GET['view'] = 'we';
+//	if(empty($_GET['view'])) $_GET['view'] = 'we';
+
+	// bluelovers
+	if(empty($_GET['view'])) {
+		space_merge($space, 'field_home');
+
+		if($space['feedfriend']) {
+			$_GET['view'] = $_G['gp_view'] = 'we';
+		} else {
+			$_GET['view'] = $_G['gp_view'] = 'all';
+		}
+	}
+	// bluelovers
 
 	$perpage = 10;
 	$perpage = mob_perpage($perpage);
