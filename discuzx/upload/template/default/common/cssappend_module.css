@@ -12,3 +12,8 @@
 /** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
 	.spi dl { font-size: inherit; }
 /** end **/
+
+/* ----------------------------------------------------------------------- 文章、日誌等頁面樣式 */
+/** forum::viewthread,portal::view,portal::comment,home::space **/
+		.vw .d { font-size: inherit; }
+/** end **/

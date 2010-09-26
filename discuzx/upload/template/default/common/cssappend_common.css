@@ -62,7 +62,11 @@ html[xmlns] .clearfix {
 /* ~~~~~~~~~~~~ */
 
 .pmo, .xs2 {
+	/*
 	font: {FONTSIZE} {FONT};
+	font-family: {FONT};
+	*/
+	font-size: inherit !important;
 }
 
 .pmo em {
@@ -225,7 +229,7 @@ input, button, select, textarea { vertical-align:middle; }
 	padding:1px 10px 3px 15px;
 }
 
-.space_doing_li .sctpl_message {
+.space_doing .sctpl_message, .space_doing_li .sctpl_message {
 	display:inline-block;
 	vertical-align:top;
 }
@@ -233,3 +237,5 @@ input, button, select, textarea { vertical-align:middle; }
 .space_doing_li .sctpl_dateline, .space_doing_li .sctpl_reply, .space_doing_li .sctpl_ip {
 	vertical-align:bottom;
 }
+
+.space_doing .sctpl_message img, .space_doing_li .sctpl_message img { vertical-align:middle; }

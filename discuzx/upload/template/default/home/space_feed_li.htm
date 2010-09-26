@@ -1,12 +1,12 @@
-<li class="cl $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);">
+<li class="cl $value[magic_class] space_feed_li sctpl_feed_type_{$value[idtype]}" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);">
 	<!--{if $value[uid] && empty($_G['home']['tpl'][hidden_more])}-->
 	<a href="home.php?mod=spacecp&ac=feed&op=menu&feedid=$value[feedid]" class="o{if $_G['uid'] == $value[uid]} del{/if}" id="a_feed_menu_$value[feedid]" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" title="{if $_G['uid'] != $value[uid]}{lang show_more_options}{else}{lang delete_feed}{/if}" style="display:none;">{lang menu}</a>
 	<!--{/if}-->
 	<div class="cl" {$value[style]}>
 		<a class="t" href="home.php?mod=space&uid=$_GET[uid]&do=home&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="{lang just_look_dynamic}"><img src="$value[icon_image]" /></a>
-		$value[title_template] 
+		<span class="sctpl_feed_title_template">$value[title_template]</span>
 		<!--{if $value[new]}-->
-		<span style="color:red;">New</span> 
+		<span style="color:red;">New</span>
 		<!--{/if}-->
 		<span class="xg1"><!--{date($value[dateline], 'u')}--></span>
 
@@ -39,7 +39,7 @@
 			<!--{/if}-->
 
 			<!--{if $value['body_template']}-->
-			<div class="d"{if $value['image_3']} style="clear: both; zoom: 1;"{/if}>
+			<div class="d sctpl_feed_body_template"{if $value['image_3']} style="clear: both; zoom: 1;"{/if}>
 				$value[body_template]
 			</div>
 			<!--{/if}-->
@@ -67,10 +67,10 @@
 			<!--{/if}-->
 		</div>
 	</div>
-	
+
 	<!--{if $value['idtype']=='doid'}-->
-	<div id="{$key}_$value[id]" style="display:none;"></div>
+	<div id="{$key}_$value[id]" style="display:none;" class="sctpl_feed_comment"></div>
 	<!--{elseif $value['idtype']}-->
-	<div id="feedcomment_$value[feedid]" style="display:none;"></div>
+	<div id="feedcomment_$value[feedid]" style="display:none;" class="sctpl_feed_comment"></div>
 	<!--{/if}-->
 </li>

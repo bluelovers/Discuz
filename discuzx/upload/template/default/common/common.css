@@ -90,7 +90,7 @@ a { color: {LINK}; text-decoration: none; }
 	/* 字號 .xs --> text size 文字大小, 0=10px, 1=12px, 2=14px ,3=16px by Pony */
 	.xs0 { font-family: {SMFONT}; font-size: {SMFONTSIZE}; }
 	.xs1 { font-size: 12px !important; }
-	.xs2 { font-size: 14px !important; }
+	/*.xs2 { font-size: 14px !important; }*/
 	.xs3 { font-size: 16px !important; }
 	/* 顏色 .xg --> text gray level, 1=#999, 2=#666 */
 	.xg1, .xg1 a { color: {LIGHTTEXT} !important; }
