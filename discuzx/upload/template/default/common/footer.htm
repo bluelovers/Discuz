@@ -36,16 +36,12 @@
 						!$nav['type'] && ($nav['id'] == 'stat' && $_G['group']['allowstatdata'] || $nav['id'] == 'report' && $_G['uid'] || $nav['id'] == 'archiver'))}-->$nav[code]<span class="pipe">|</span><!--{/if}--><!--{/loop}-->
 				<strong><a href="$_G['setting']['siteurl']" target="_blank">$_G['setting']['sitename']</a></strong>
 				<!--{if $_G['setting']['icp']}-->( <a href="http://www.miitbeian.gov.cn/" target="_blank">$_G['setting']['icp']</a> )<!--{/if}-->
-				<!--{if $_G['setting']['statcode']}-->$_G['setting']['statcode']<!--{/if}-->				
+				<!--{if $_G['setting']['statcode']}-->$_G['setting']['statcode']<!--{/if}-->
 				<!--{hook/global_footerlink}-->
 			</p>
 			<p class="xs0">
 				{lang time_now}
-				<span id="debuginfo">
-				<!--{if debuginfo()}-->, Processed in $_G[debuginfo][time] second(s), $_G[debuginfo][queries] queries
-					<!--{if $_G['gzipcompress']}-->, Gzip On<!--{/if}--><!--{if $_G['memory']}-->, <!--{echo ucwords($_G['memory'])}--> On<!--{/if}-->.
-				<!--{/if}-->
-				</span>
+				{subtpl subblock/common/footer_debuginfo}
 			</p>
 		</div>
 		<div id="frt">
