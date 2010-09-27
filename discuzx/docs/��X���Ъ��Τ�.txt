@@ -1,0 +1,9 @@
+SELECT t2 . *
+FROM (
+		SELECT email
+		FROM `pre_common_member`
+		GROUP BY email
+		HAVING count( * ) >1
+	)t1
+	LEFT JOIN `pre_common_member` AS t2 ON t1.email = t2.email
+WHERE t1.email = t2.email
