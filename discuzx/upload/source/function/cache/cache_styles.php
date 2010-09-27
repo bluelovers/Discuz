@@ -77,6 +77,14 @@ function build_cache_styles() {
 			}
 		}
 		$data['verhash'] = random(3);
+
+		// bluelvoers
+		// 修正 DX 設計上的BUG 造成 available 永遠為空值
+		if ($data['styleid'] == $defaultstyleid) {
+			$data['available'] = 1;
+		}
+		// bluelovers
+
 		$styledata[] = $data;
 	}
 	foreach($styledata as $data) {

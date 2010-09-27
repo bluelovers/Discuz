@@ -23,6 +23,13 @@ $query = $db_source->query("SELECT  * FROM $table_source");
 while ($row = $db_source->fetch_array($query)) {
 	if(in_array($row['variable'], $skips)) continue;
 
+	// bluelovers
+	// 修正升級時造成預設風格沒有正確設定為默認
+	if ($row['variable'] == 'styleid') {
+		$row['value'] = 1;
+	}
+	// bluelovers
+
 	if(isset($newsetting[$row['variable']])) {
 		$rownew['svalue'] = array();
 		if($row['variable'] == 'my_search_status' && $row['value'] != -1) {
@@ -57,6 +64,14 @@ while ($row = $db_source->fetch_array($query)) {
 
 			$rownew['svalue'] = $row['value'];
 		}
+
+		// bluelovers
+		// 壓縮優化非 serialize 的值
+		if (!preg_match("/(a|O|s|b)\x3a[0-9]*?((\x3a((\x7b?(.+)\x7d)|(\x22(.+)\x22\x3b)))|(\x3b))/", $rownew['svalue'])) {
+			$rownew['svalue'] = s_trim($rownew['svalue']);
+		}
+		// bluelovers
+
 		$rownew  = daddslashes($rownew, 1);
 
 		$data = implode_field_value($rownew, ',', db_table_fields($db_target, $table_target));

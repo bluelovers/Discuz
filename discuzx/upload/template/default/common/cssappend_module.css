@@ -11,6 +11,8 @@
 
 /** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
 	.spi dl { font-size: inherit; }
+	.pls img.avatar { margin: 0px; }
+	.pls .avatar img { max-width:120px; }
 /** end **/
 
 /* ----------------------------------------------------------------------- 文章、日誌等頁面樣式 */

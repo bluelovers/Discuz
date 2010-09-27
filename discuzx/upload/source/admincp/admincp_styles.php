@@ -73,7 +73,8 @@ $predefinedvars = array('available' => array(), 'boardimg' => array(), 'imgdir' 
 	'wrapbg' => array(0),
 	'wrapbordercolor' => array(0),
 
-	'msgfontsize' => array(1, $lang['styles_edit_type_post'], '12px'),
+//	'msgfontsize' => array(1, $lang['styles_edit_type_post'], '14px'),
+	'msgfontsize' => array(1, $lang['styles_edit_type_post'], ''),
 	'contentwidth' => array(1),
 	'contentseparate' => array(0),
 
@@ -157,6 +158,9 @@ if($operation == 'admin') {
 				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;</p><img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\"/></a>
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\">($style[tplname])</p></td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
+
+				<p style=\"margin: 2px 0\"><label>$lang[available] <input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$id]\" value=\"1\" $available></label></p>
+
 				<p style=\"margin: 2px 0\"><label>$lang[default] <input type=\"radio\" class=\"radio\" name=\"defaultnew\" value=\"$id\" $isdefault /></label></p>
 				<p style=\"margin: 2px 0\"><label>$lang[styles_uninstall] ".($isdefault ? '<input class="checkbox" type="checkbox" disabled="disabled" />' : '<input class="checkbox" type="checkbox" name="delete[]" value="'.$id.'" />')."</label></p>
 				<p style=\"margin: 8px 0 2px\"><a href=\"".ADMINSCRIPT."?action=styles&operation=edit&id=$id\">$lang[edit]</a></p>
@@ -226,6 +230,14 @@ if($operation == 'admin') {
 					DB::query("UPDATE ".DB::table('common_style')." SET name='$namenew[$id]', available='$availablenew[$id]' WHERE styleid='$id'");
 				}
 			}
+
+			// bluelovers
+			// 修正 DX 設計上的BUG 造成某些狀況下 defaultid 為空值
+			if (count($sarray) == 1 && $defaultid != $id) {
+				$defaultid = $id;
+				$availablenew[$defaultid] = 1;
+			}
+			// bluelovers
 
 			$delete = $_G['gp_delete'];
 			if(!empty($delete) && is_array($delete)) {

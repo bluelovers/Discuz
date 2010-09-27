@@ -234,10 +234,11 @@ function build_cache_setting() {
 		}
 	}
 
+	// 修正 DX 設計上的BUG 造成 available 永遠為空值
 	$data['styles'] = array();
 	$query = DB::query("SELECT s.styleid, s.name, s.extstyle, t.directory FROM ".DB::table('common_style')." s
 				LEFT JOIN ".DB::table('common_template')." t ON s.templateid=t.templateid
-				WHERE s.available='1'");
+				WHERE s.available='1' OR s.styleid='$data[styleid]'");
 	while($style = DB::fetch($query)) {
 		$data['styles'][$style['styleid']] = dhtmlspecialchars($style['name']);
 	}

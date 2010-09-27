@@ -268,7 +268,7 @@ function procthread($thread, $timeformat = 'd') {
 			}
 		}
 		if($topicpages > 6) {
-			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			if(!in_array('forum_viewthread', (array)$_G['setting']['rewritestatus'])) {
 				$pagelinks .= ' .. <a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$topicpages.'" target="_blank">'.$topicpages.'</a> ';
 			} else {
 				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
