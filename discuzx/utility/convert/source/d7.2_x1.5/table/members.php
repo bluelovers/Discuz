@@ -54,6 +54,23 @@ while ($row = $db_source->fetch_array($query)) {
 	$rowfield['bio'] = s_trim($rowfield['bio'], "\\/");
 	$rowfield['sightml'] = s_trim($rowfield['sightml'], "\\/");
 	$rowfield['nickname'] = s_trim($rowfield['nickname'], "\\/");
+
+	if (!s_valid_url($rowfield['site'])) {
+		$rowfield['site'] = '';
+	}
+
+	if (s_trim($rowfield['nickname'], "\\/@＠?!#&mp;%^_.-+=0123456789asdj") || s_valid_email($rowfield['nickname']) || s_valid_url($rowfield['nickname'])) {
+		$rowfield['nickname'] = '';
+	}
+	if (s_trim($rowfield['bio'], "\\/@＠?!#&mp;%^_.-+=0123456789asd") || s_valid_email($rowfield['bio'])) {
+		$rowfield['bio'] = '';
+	}
+
+	foreach (array('icq', 'alipay', 'taobao', 'qq', 'yahoo', 'msn') as $___k_) {
+		if (empty($rowfield[$___k_]) || !(s_valid_email($rowfield[$___k_]) || preg_match("/^[a-z0-9_-]+$/i", $rowfield[$___k_]))) {
+			$rowfield[$___k_] = '';
+		}
+	}
 	// bluelovers
 
 	$row  = daddslashes($row, 1);
@@ -161,6 +178,10 @@ while ($row = $db_source->fetch_array($query)) {
 			$update['profile']['field'.$i] = $rowfield['field'.$i] = $rowfield['field_'.$i];
 		}
 	}
+
+	if (!(s_valid_email($update['profile']['field1']) || preg_match("/^[a-z0-9_-]+$/i", $update['profile']['field1']))) {
+		$update['profile']['field1'] = '';
+	}
 	// bluelovers
 
 	foreach($update as $table => $trow) {
@@ -169,7 +190,11 @@ while ($row = $db_source->fetch_array($query)) {
 	}
 
 	// bluelovers
-	if ($rowfield['authstr'] == '') $row['emailstatus'] = 1;
+	if (!s_valid_email($row['email']) || empty($row['email']) || (empty($row['timeoffset']) && !($row['posts'] > 0 || $row['threads'] > 0 || $row['digestposts'] > 0)) || !empty($rowfield['authstr'])) {
+		$row['emailstatus'] = 0;
+	} elseif ($rowfield['authstr'] == '' && ($row['posts'] > 0 || $row['threads'] > 0 || $row['digestposts'] > 0)) {
+		$row['emailstatus'] = 1;
+	}
 	// bluelovers
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));

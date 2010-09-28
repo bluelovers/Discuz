@@ -14,3 +14,5 @@
 /discuzx/upload/data/avatar/*.*
 /discuzx/upload/data/cache/*.*
 /discuzx/upload/data/cache/diy/*.*
+
+/discuzx/utility/convert/data/config.inc.php
