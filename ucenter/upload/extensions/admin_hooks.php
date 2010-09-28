@@ -8,20 +8,14 @@
 	$Id:  $
 */
 
-scAddHooks('Init_AdminBaseControlClass_After', 'eInit_AdminBaseControlClass_After');
+scAddHooks('CheckMethodAuthBefore_InAdmin', 'eCheckMethodAuthBefore_InAdmin');
 
-function eInit_AdminBaseControlClass_After (&$control) {
-	global $m, $a;
+function eCheckMethodAuthBefore_InAdmin (&$methodarray) {
 
-	switch ($m) {
-		case 'setting':
-
-//			$control->_setting_items = array_merge($control->_setting_items, array(
-//				'',
-//			));
-
-			break;
+	if (!in_array($_SERVER['REMOTE_ADDR'], array('122.116.39.240', '192.168.0.25', '192.168.1.25'))) {
+		exit(header("HTTP/1.1 403 Forbidden"));
 	}
+
 }
 
 ?>
