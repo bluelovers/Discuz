@@ -577,8 +577,10 @@ if(!submitcheck('settingsubmit')) {
 		$setting['seokeywords'] = unserialize($setting['seokeywords']);
 
 		$rewritedata = rewritedata();
-		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : '';
-		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : '';
+//		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : '';
+		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : array();
+//		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : '';
+		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : array();
 		showtips('setting_tips');
 		showtableheader();
 		showtitle('<em class="right">'.cplang('setting_seo_rewritestatus_viewrule').'</em>'.cplang('setting_seo_rewritestatus'));
