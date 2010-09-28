@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 16787 2010-09-14 09:49:47Z monkey $
+ *      $Id: lang_misc.php 17183 2010-09-26 01:13:53Z monkey $
  */
 
 $lang = array
@@ -260,6 +260,7 @@ $lang = array
 	'perms_allowclick' => '允許表態',
 	'perms_allowmyop' => '允許使用應用',
 	'perms_allowcomment' => '發表留言/評論',
+	'perms_allowstatdata' => '查看統計數據報表',
 	'perms_allowstat' => '允許查看趨勢統計',
 	'perms_allowpostarticle' => '發表文章',
 

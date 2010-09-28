@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 16630 2010-09-10 08:33:25Z monkey $
+	$Id: bbcode.js 17237 2010-09-27 06:16:37Z monkey $
 */
 
 var re;
@@ -90,6 +90,9 @@ function bbcode2html(str) {
 		if(allowimgcode) {
 			str = str.replace(/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<img src="$1" border="0" alt="" style="max-width:400px" />');
 			str = str.replace(/\[attachimg\](\d+)\[\/attachimg\]/ig, function ($1, $2) {
+				if(!$('image_' + $2)) {
+					return '';
+				}
 				width = $('image_' + $2).getAttribute('cwidth');
 				if(!width) {
 					re = /cwidth=(["']?)(\d+)(\1)/i;

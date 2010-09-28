@@ -64,7 +64,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 						</div>
 						<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 							<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-							<div class="mtm"><!--{template common/seccheck}--></div>
+							<div class="mtm sec"><!--{template common/seccheck}--></div>
 						<!--{/if}-->
 						<input type="hidden" name="formhash" value="{FORMHASH}" />
 						<input type="hidden" name="subject" value="" />

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16999 2010-09-19 02:06:41Z monkey $
+ *      $Id: lang_template.php 17208 2010-09-26 09:09:11Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
@@ -1305,7 +1305,7 @@ $lang = array (
   'comment_my_information' => '評論我的信息',
   'complete_task' => '完成任務',
   'credit_consumption' => '積分消費',
-  'filtering_rules_message_1' => '你可以決定屏蔽哪些用戶組的動態，屏蔽用戶組內的組員所發佈的動態都將被屏蔽掉。',
+  'filtering_rules_message_1' => '你可以決定屏蔽哪些用戶組的動態，屏蔽用戶組內的組員所發佈的動態都將被屏蔽掉(僅限查看好友的動態時生效)。',
   'filtering_rules_message_2' => '點擊一下首頁好友動態列表後面的屏蔽標誌，就可以屏蔽指定好友指定類型的動態了。<br />下面列出的是你已經屏蔽的動態類型識別名和好友名，你可以選擇是否取消屏蔽。',
   'filtering_rules_message_3' => '點擊一下通知列表後面的屏蔽標誌，就可以屏蔽指定好友指定類型的通知了。<br />下面列出的是你已經屏蔽的通知類型和好友名，你可以選擇是否取消屏蔽。',
   'filtering_rules_title_1' => '篩選規則一：屏蔽指定用戶組的動態',

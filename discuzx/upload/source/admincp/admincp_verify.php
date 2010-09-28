@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 16595 2010-09-10 02:10:48Z zhengqingpeng $
+ *      $Id: admincp_verify.php 17251 2010-09-28 01:11:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -334,7 +334,7 @@ EOF;
 					$verifylist .= $str."\n";
 					$showtitle = false;
 				}
-				$title .= "\n";
+				$verifylist = $title."\n".$verifylist;
 				$filename = date('Ymd', TIMESTAMP).'.xls';
 
 				define('FOOTERDISABLED', true);
@@ -344,8 +344,7 @@ EOF;
 				header('Content-Disposition: attachment; filename='.$filename);
 				header('Pragma: no-cache');
 				header('Expires: 0');
-				echo $title;
-				echo $verifylist;
+				echo diconv($verifylist, $_G['charset'], 'UCS-2LE');
 				exit();
 			} else {
 				cpmsg('members_verify_succeed', 'action=verify&operation=verify&do='.$vid.'&anchor=pass', 'succeed');
@@ -373,9 +372,19 @@ EOF;
 						if($_G['gp_verify'][$value['vid']] == 'refusal') {
 							$refusalfields = !empty($_G['gp_refusal'][$value['vid']]) ? $_G['gp_refusal'][$value['vid']] : $verifysetting['field'];
 							$fieldtitle = $common = '';
+							$deleteverifyimg = false;
 							foreach($refusalfields as $key => $field) {
 								$fieldtitle .= $common.$_G['cache']['profilesetting'][$field]['title'];
 								$common = ',';
+								if($_G['cache']['profilesetting'][$field]['formtype'] == 'file') {
+									$deleteverifyimg = true;
+									@unlink(getglobal('setting/attachdir').'./profile/'.$fields[$key]);
+									$fields[$field] = '';
+								}
+							}
+							if($deleteverifyimg) {
+								$newfields = daddslashes(serialize($fields));
+								DB::update('common_member_verify_info', array('field' => $newfields), array('vid' => $value['vid']));
 							}
 							if($value['verifytype']) {
 								$verify["verify"]['-1'][] = $value['uid'];
@@ -437,20 +446,14 @@ EOF;
 		showsetting('members_verify_enable', "verify[available]", $verifyarr['available'], 'radio');
 		$verificonhtml = '';
 		if($verifyarr['icon']) {
-			$valueparse = parse_url($verifyarr['icon']);
-			if(isset($valueparse['host'])) {
-				$verificon = $verif['icon'];
-			} else {
-				$verificon = $_G['setting']['attachurl'].'common/'.$verifyarr['icon'].'?'.random(6);
-			}
-			$verificonhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$verificon.'" />';
+			$verificonhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$verifyarr['icon'].'" />';
 		}
 
-		showsetting('members_verify_icon', 'iconnew', $verifyarr['icon'], 'filetext', '', 0, $verificonhtml);
+		showsetting('members_verify_icon', 'iconnew', str_replace($_G['setting']['attachurl'].'common/', '', $verifyarr['icon']), 'filetext', '', 0, $verificonhtml);
 		showsetting('members_verify_showicon', "verify[showicon]", $verifyarr['showicon'], 'radio');
 		$list = array();
 		$varname = array('verify[field]', array(), 'isfloat');
-		$query = DB::query("SELECT title, fieldid, available FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY available DESC, displayorder DESC");
+		$query = DB::query("SELECT title, fieldid, available FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY available DESC, displayorder");
 		while($value = DB::fetch($query)) {
 			if(!in_array($value['fieldid'], array('constellation', 'zodiac', 'birthyear', 'birthmonth', 'resideprovince', 'birthprovince', 'residedist', 'residecommunity'))) {
 				$varname[1][] = array($value['fieldid'], $value['title'], $value['fieldid']);
@@ -474,8 +477,8 @@ EOF;
 		}
 		if($_G['gp_deleteicon']) {
 			$valueparse = parse_url($verifyarr['icon']);
-			if(!isset($valueparse['host'])) {
-				@unlink($_G['setting']['attachurl'].'common/'.$verifyarr['icon']);
+			if(!isset($valueparse['host']) && preg_match('/^'.preg_quote($_G['setting']['attachurl'].'common/', '/').'/', $verifyarr['icon'])) {
+				@unlink($verifyarr['icon']);
 			}
 			$verifynew['icon'] = '';
 		}
@@ -526,11 +529,7 @@ EOF;
 			$verificon = '';
 			if($_G['setting']['verify'][$i]['icon']) {
 				$valueparse = parse_url($_G['setting']['verify'][$i]['icon']);
-				if(isset($valueparse['host'])) {
-					$verificon = $_G['setting']['verify'][$i]['icon'];
-				} else {
-					$verificon = $_G['setting']['attachurl'].'common/'.$_G['setting']['verify'][$i]['icon'].'?'.random(6);
-				}
+				$verificon = $_G['setting']['verify'][$i]['icon'];
 			}
 			showtablerow('', array('class="td25"', '', '', 'class="td25"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[verify][$i][available]\" value=\"1\" ".($_G['setting']['verify'][$i]['available'] ? 'checked' : '')." />",

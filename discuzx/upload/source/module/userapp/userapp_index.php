@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_index.php 17007 2010-09-19 02:33:22Z zhengqingpeng $
+ *      $Id: userapp_index.php 17155 2010-09-25 05:55:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ ckstart($start, $perpage);
 
 $_G['home_today'] = strtotime('today');
 
-if(empty($_G['uid']) || empty($_G['gp_view'])) $_G['gp_view'] = 'top';
+if(empty($_G['gp_view'])) $_G['gp_view'] = 'top';
 space_merge($space, 'field_home');
 if($_G['gp_view'] == 'top') {
 

@@ -237,7 +237,7 @@ class block_activity {
 			.($bannedids ? ' AND t.tid NOT IN ('.dimplode($bannedids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
-			." AND t.closed='0' AND t.isgroup='0'";
+			." AND t.isgroup='0'";
 		$where = '';
 		if(in_array($orderby, array('weekstart','monthstart'))) {
 			$historytime = 0;
@@ -303,7 +303,7 @@ class block_activity {
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', $data['subject']), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'].($viewmod ? '&from=portal' : ''),
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : IMGDIR.'/nophoto.gif'),
+				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(

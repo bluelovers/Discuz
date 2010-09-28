@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
+ *      $Id: spacecp_usergroup.php 17230 2010-09-27 03:50:59Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -151,7 +151,7 @@ if(in_array($do, array('buy', 'exit'))) {
 	if($_G['setting']['verify']['enabled']) {
 		for($i = 1; $i < 6; $i++) {
 			if($_G['setting']['verify'][$i]['available']) {
-				$verifyicon[$i] = !empty($_G['setting']['verify'][$i]['icon']) ? '<img src="'.$_G['setting']['attachurl'].'/common/'.$_G['setting']['verify'][$i]['icon'].'" alt="'.$_G['setting']['verify'][$i]['title'].'" class="vm" title="'.$_G['setting']['verify'][$i]['title'].'" />' : $_G['setting']['verify'][$i]['title'];
+				$verifyicon[$i] = !empty($_G['setting']['verify'][$i]['icon']) ? '<img src="'.$_G['setting']['verify'][$i]['icon'].'" alt="'.$_G['setting']['verify'][$i]['title'].'" class="vm" title="'.$_G['setting']['verify'][$i]['title'].'" />' : $_G['setting']['verify'][$i]['title'];
 			}
 		}
 	}
@@ -236,7 +236,7 @@ if(in_array($do, array('buy', 'exit'))) {
 				} else {
 					$groupidnew = DB::result_first("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND '".$_G['member']['credits']."'>=creditshigher AND '$credits'<creditslower LIMIT 1");
 					if(in_array($_G['adminid'], array(1, 2, 3))) {
-						$query = DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE groupid IN (".dimplode($extgroupidarray)."') AND radminid='$_G[adminid]' LIMIT 1");
+						$query = DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE groupid IN (".dimplode($extgroupidarray).") AND radminid='$_G[adminid]' LIMIT 1");
 						$adminidnew = (DB::num_rows($query)) ? $_G['adminid'] : 0;
 					} else {
 						$adminidnew = 0;

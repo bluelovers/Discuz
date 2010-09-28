@@ -79,7 +79,7 @@ class block_friendlink extends commonblock_html {
 		if($group1) {
 			$return .= '<ul class="m cl">';
 			foreach($group1 as $value) {
-				$return .= '<li>'
+				$return .= '<li class="cl">'
 					. '<div class="forumlogo"><a target="_blank" href="'.$value['url'].'"><img border="0" alt="'.$value['name'].'" src="'.$value['logo'].'"></a></div>'
 					. '<div class="forumcontent"><h5><a target="_blank" href="'.$value['url'].'">'.$value['name'].'</a></h5><p>'.$value['description'].'</p></div>'
 					. '</li>';

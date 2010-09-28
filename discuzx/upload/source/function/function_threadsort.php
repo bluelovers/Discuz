@@ -18,11 +18,11 @@ function gettypetemplate($option, $optionvalue) {
 		if($option['type'] == 'calendar') {
 			$showoption[$option['identifier']]['value'] = '<script type="text/javascript" src="'.$_G['setting']['jspath'].'calendar.js?'.VERHASH.'"></script><input type="text" name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" value="'.$optionvalue['value'].'" onclick="showcalendar(event, this, false)" '.$optionvalue['unchangeable'].' class="px"/>';
 		} elseif($option['type'] == 'image') {
-			$showoption[$option['identifier']]['value'] = '<button type="button" class="pn" onclick="uploadWindow(function (aid, url){updatesortattach(aid, url, \''.$_G['setting']['attachurl'].'forum\')})"><span>'.($optionvalue['value'] ? lang('forum/misc', 'sort_update') : lang('forum/misc', 'sort_upload')).'</span></button>
-								<input type="hidden" name="typeoption['.$option['identifier'].'][aid]" id="sortaid" value="'.$optionvalue['value']['aid'].'" tabindex="1" />'.
-								($optionvalue['value']['aid'] ? '<input type="hidden" name="oldsortaid" value="'.$optionvalue['value']['aid'].'" tabindex="1" />' : '').
-								'<input type="hidden" name="typeoption['.$option['identifier'].'][url]" id="sortattachurl" '.($optionvalue['value']['url'] ? 'value="'.$optionvalue['value']['url'].'"' : '').'tabindex="1" />
-								<div id="sortattach_image" class="ptn">';
+			$showoption[$option['identifier']]['value'] = '<button type="button" class="pn" onclick="uploadWindow(function (aid, url){updatesortattach(aid, url, \''.$_G['setting']['attachurl'].'forum\', \''.$option['identifier'].'\')})"><span>'.($optionvalue['value'] ? lang('forum/misc', 'sort_update') : lang('forum/misc', 'sort_upload')).'</span></button>
+				<input type="hidden" name="typeoption['.$option['identifier'].'][aid]" id="sortaid_'.$option['identifier'].'" value="'.$optionvalue['value']['aid'].'" tabindex="1" />'.
+				($optionvalue['value']['aid'] ? '<input type="hidden" name="oldsortaid['.$option['identifier'].']" value="'.$optionvalue['value']['aid'].'" tabindex="1" />' : '').
+				'<input type="hidden" name="typeoption['.$option['identifier'].'][url]" id="sortattachurl_'.$option['identifier'].'" '.($optionvalue['value']['url'] ? 'value="'.$optionvalue['value']['url'].'"' : '').'tabindex="1" />
+				<div id="sortattach_image_'.$option['identifier'].'" class="ptn">';
 
 			if($optionvalue['value']['url']) {
 				$showoption[$option['identifier']]['value'] .= '<a href="'.$optionvalue['value']['url'].'" target="_blank"><img class="spimg" src="'.$optionvalue['value']['url'].'" alt="" /></a>';
@@ -68,7 +68,7 @@ function quicksearch($sortoptionarray) {
 				$quicksearch[$optionid]['identifier'] = $option['identifier'];
 				$quicksearch[$optionid]['unit'] = $option['unit'];
 				$quicksearch[$optionid]['type'] = $option['type'];
-				if(in_array($option['type'], array('radio', 'select'))) {
+				if(in_array($option['type'], array('radio', 'select', 'checkbox'))) {
 					$quicksearch[$optionid]['choices'] = $option['choices'];
 				} elseif(!empty($option['searchtxt'])) {
 					$choices = array();
@@ -212,7 +212,7 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 
 	if($templatearray && $sortthreadlist) {
 		foreach($threadlist as $thread) {
-			$thread['digest'] = $thread['digest'] ? '&nbsp;<img src="'.IMGDIR.'/digest_'.$thread['digest'].'.gif" class="vm" alt="" title="" />' : '';
+			$thread['digest'] = $thread['digest'] ? '&nbsp;<img src="'.$_G['style']['imgdir'].'/digest_'.$thread['digest'].'.gif" class="vm" alt="" title="" />' : '';
 			$sortdata[$thread['tid']]['subject'] = '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'" '.$thread['highlight'].'>'.$thread['subject'].'</a>'.$thread['digest'];
 			$sortdata[$thread['tid']]['author'] = '<a href="home.php?mod=space&uid='.$thread['authorid'].'" target="_blank">'.$thread['author'].'</a>';
 		}

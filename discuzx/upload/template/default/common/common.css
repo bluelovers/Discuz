@@ -155,6 +155,9 @@ a { color: {LINK}; text-decoration: none; }
 .crly { padding: 6px 8px; border: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 1.6em; }
 .mncr { overflow: hidden; float: left; margin-top: -1px; width: 50px; height: 6px; background: url({IMGDIR}/attinbg.gif) no-repeat -25px 0; }
 
+/* 如果驗證碼有錯亂，可添加此樣式.sec（全局，修改時要小心，會涉及分享、快速回復和 feed日誌相冊中的評論等地方） by Pony */
+.ie6 .sec .p_pop { white-space: expression(this.offsetWidth >= 220 ? 'normal' : 'nowrap'); width: expression(this.offsetWidth >= 220 ? 200 : 'auto'); }
+
 
 /* ------------------------------------------------------------------------ 表單及表單元素 */
 		/*
@@ -204,10 +207,8 @@ a { color: {LINK}; text-decoration: none; }
 			.ie6 .pns .pn { line-height: 18px; }
 			.ie7 .pns .pn { line-height: 20px; }
 		.pnn .pn * { padding: 0 10px; }
-		a.pn { height: 29px; }
-			.ie_all a.pn { height: 31px; }
-			.pns a.pn { height: 24px; }
-				.ie_all .pns a.pn { height: 26px; }
+		a.pn, .ie6 a.pn, .ie7 a.pn { height: 24px; line-height: 24px; }
+			.pns a.pn, .ie6 .pns a.pn, .ie7 .pns a.pn { height: 22px; line-height: 22px; }
 
 /* 單選按鈕及多選框 */ .pr, .pc { vertical-align: middle; margin-bottom: 1px; }
 
@@ -360,7 +361,8 @@ a { color: {LINK}; text-decoration: none; }
 						.p_pop .reg_tip a:hover { background: transparent none; text-shadow: none; color: {HIGHLIGHTLINK}; }
 
 /* 頁面主區域 */
-	#ct {  }
+	#ct { min-height: 400px; }
+		.ie6 #ct { height: 400px; }
 		.mn { overflow: hidden; }
 		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
 		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
@@ -375,8 +377,6 @@ a { color: {LINK}; text-decoration: none; }
 		.mw { width: 100%; float: none; }
 		.mnw { clear: both; border-top: 1px solid #CCC; }
 		.mnh { width: 643px; background: {COMMONBG}; margin-bottom: 0; }
-
-	#ct, .sd, .mnh { min-height: 400px; _height: 400px; }
 
 /* 頁尾 */
 	#ft { padding: 10px 0 50px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT}; }
@@ -504,7 +504,7 @@ a { color: {LINK}; text-decoration: none; }
 		* html .a_cb { top: expression(offsetParent.scrollTop+20); }
 	/* 文章漂浮廣告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
 
-	.a_h, .a_mu, .a_c, .a_p, .a_f { text-align: center; }
+	.a_h, .a_mu, .a_c, .a_p, .a_f, .a_t { text-align: center; }
 
 /* ------------------------------------------------------------------------ 列表樣式 */
 		/*
@@ -848,8 +848,6 @@ a { color: {LINK}; text-decoration: none; }
 	.fastlg_fm { margin-right: 5px; padding-right: 5px; border-right: 1px solid {COMMONBORDER}; }
 	.fastlg .px, #ls_more .px { height: 16px; line-height: 16px; font-size: 12px; }
 	.fastlg .pn { height: 22px; line-height: 22px; *line-height: 18px; }
-	.reglk { margin-top: 4px; display: block; width: 4em; height: 20px; border: 1px solid; border-color: {SPECIALBORDER} {HIGHLIGHTLINK} {HIGHLIGHTLINK} {SPECIALBORDER}; background: {SPECIALBG}; text-align: center; line-height: 20px; text-decoration: none !important; }
-		.ie_all.reglk { margin-top: 3px; }
 	.fastlg .ftid { vertical-align: middle; }
 	#ls_fastloginfield_ctrl { vertical-align: middle; border: none; background-color: transparent; }
 	.psw_w { padding-left: 5px; width: 67px; }
@@ -960,7 +958,6 @@ a { color: {LINK}; text-decoration: none; }
 	.focus .moreinfo { float: right; display: inline; margin-right: 10px; padding: 6px 15px 6px 0; background: url({IMGDIR}/arw_r.gif) no-repeat 100% 50%; }
 
 /* 分享的驗證碼（全局） by Pony */
-.mn .sec .px { width: 150px; }
 .m_c .sec .secq { display: block; margin: 5px 0 10px; }
 
 /* ------------------------------------------------------------------------ 拖拽及頁面 DIY */
@@ -1123,7 +1120,7 @@ a { color: {LINK}; text-decoration: none; }
 		.b_poll dd li .pc { float: left; margin: 4px 0 0 -20px; }
 	.b_debate {}
 		.b_debate dt { padding-left: 20px; background: url({IMGDIR}/debatesmall.gif) no-repeat 0 10px; }
-		.b_debate .chart { position: relative; margin: 8px auto; width: 279px; height: 78px; background: url({IMGDIR}/p_debate_chart.png) no-repeat 0 0; }
+		.b_debate .chart { position: relative; margin: 8px auto; padding: 0; width: 279px; height: 78px; background: url({IMGDIR}/p_debate_chart.png) no-repeat 0 0; }
 		.b_debate .chart strong { position: absolute; top: 25px; width: 80px; font-size: 14px; text-align: center; }
 			.b_debate .chart .debater2 { right: 0; }
 		.b_debate .chart1, .b_debate .chart2 { position: absolute; left: 80px; bottom: 0; width: 40px; background: url({IMGDIR}/p_debate_chart.png) no-repeat 0 -78px; }

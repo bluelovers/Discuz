@@ -209,7 +209,7 @@ class block_attachment {
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($special ? ' AND t.special IN ('.dimplode($special).')' : '')
 			.((in_array(3, $special) && $rewardstatus) ? ($rewardstatus == 1 ? ' AND t.price < 0' : ' AND t.price > 0') : '')
-			. " AND t.closed='0' AND t.isgroup='0'";
+			. " AND t.isgroup='0'";
 		$orderbysql = $historytime = '';
 		switch($orderby) {
 			case 'dateline':

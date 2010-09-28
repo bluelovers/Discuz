@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 16986 2010-09-19 01:17:14Z zhangguosheng $
+ *      $Id: lang_admincp.php 17243 2010-09-27 08:18:03Z zhangguosheng $
  */
 
 
@@ -122,6 +122,7 @@ $lang = array
 	'credits_unit' => '積分單位',
 	'credits_import' => '兌入',
 	'credits_inport' => '兌出',
+	'credits_hiddeninheader' => '頁頭隱藏',
 	'rmb' => '人民幣',
 	'rmb_yuan' => '元',
 	'posts' => '發帖數',
@@ -954,22 +955,22 @@ $lang = array
 	'setting_manyou_tips' => '<li>開啟漫遊應用功能後，用戶可以自由選擇各種不同的應用(諸如開心農場、快樂莊園、德克薩斯撲克、榮光醫院......)在站內進行使用。</li>
 		<li>開啟漫遊搜索功能後，用戶可以使用基於漫遊的搜索功能。</li>
 		<li>如果你更改了站點地址、站點名稱等信息，請選擇"同步漫遊信息"提交即可。</li>
-		<li>漫遊功能由 <a target="_blank" href="http://www.manyou.com/www/">MYOP開放平台</a> 提供， Manyou Open Platform(Manyou開放平台/MYOP)服務是由Comsenz公司為應用開發者提供的開放平台，啟用漫遊服務前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">請先閱讀MYOP網站服務協議</a></li>',
+		<li>漫遊功能由 <a target="_blank" href="http://www.manyou.com/www/">MYOP開放平台</a> 提供， Manyou Open Platform(Manyou開放平台/MYOP)服務是由 Comsenz 公司為應用開發者提供的開放平台，啟用漫遊服務前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">請先閱讀MYOP網站服務協議</a></li>',
 	'setting_manyou_base' => '基本設置',
 	'setting_manyou_base_status' => '啟用漫遊應用',
 	'setting_manyou_base_status_comment' => '選擇是否開啟漫遊應用。如果關閉漫遊應用，你的網站用戶將不能使用任何基於漫遊的應用',
 	'setting_manyou_search_status' => '啟用漫遊搜索',
-	'setting_manyou_search_status_comment' => '漫遊搜索是專為Discuz產品量身定做的高效、全文搜索服務，無須佔用論壇的MySQL資源',
+	'setting_manyou_search_status_comment' => '漫遊搜索是專為 Discuz 產品量身定做的高效、全文搜索服務，無須佔用論壇的 MySQL 資源',
 	'setting_manyou_search_invite' => '漫遊搜索邀請碼',
 	'setting_manyou_search_invite_comment' => '目前處於測試階段，需要輸入邀請碼方可開通漫遊搜索，<a href="http://www.discuz.net/thread-1669366-1-1.html" target="_blank">點擊這裡申請邀請碼</a>',
 	'setting_manyou_base_status_no' => '尚未開啟漫遊功能，不能進行此管理。',
-	'setting_manyou_base_ip' => 'MYOP/搜索的IP',
-	'setting_manyou_base_ip_comment' => '默認為空。如果你的服務器因DNS解析問題無法使用MYOP/搜索服務，請填寫MYOP的IP地址。<a href="http://faq.comsenz.com/viewnews-400" target="_blank">查看MYOP的IP</a>',
-	'setting_manyou_base_close_prompt' => '關閉MYOP的更新提示',
-	'setting_manyou_base_close_prompt_comment' => '你的站點開啟了MYOP多應用服務後，當平台有了新的信息的時候MYOP會自動提示給管理員。關閉本功能後，你將不再獲取更新提示。',
+	'setting_manyou_base_ip' => 'MYOP/搜索的 IP',
+	'setting_manyou_base_ip_comment' => '默認為空。如果你的服務器因 DNS 解析問題無法使用MYOP/搜索服務，請填寫 MYOP 的 IP 地址。<a href="http://faq.comsenz.com/viewnews-400" target="_blank">查看 MYOP 的 IP</a>',
+	'setting_manyou_base_close_prompt' => '關閉 MYOP 的更新提示',
+	'setting_manyou_base_close_prompt_comment' => '你的站點開啟了 MYOP 多應用服務後，當平台有了新的信息的時候 MYOP 會自動提示給管理員。關閉本功能後，你將不再獲取更新提示。',
 	'setting_manyou_base_refresh' => '同步漫遊信息',
 	'setting_manyou_base_refresh_comment' => '如果更改了導航名稱、搜索設置等，請同步漫遊信息。',
-	'setting_manyou_base_showgift_comment' => '如果你開啟了MYOP平台的禮物應用後，可以在首頁顯示「推薦禮物」。',
+	'setting_manyou_base_showgift_comment' => '如果你開啟了 MYOP 平台的禮物應用後，可以在首頁顯示「推薦禮物」。',
 	'setting_manyou_manage' => '漫遊應用管理',
 	'setting_manyou_search_manage' => '漫遊搜索管理',
 
@@ -1034,9 +1035,9 @@ $lang = array
 	'setting_seo_seotitle' => '標題',
 	'setting_seo_seotitle_comment' => '設置這裡的標題會替換以下模塊頁面的模塊標題，可以使用 {bbname} 表示當前的站點名稱',
 	'setting_seo_seokeywords' => 'SEO 關鍵字',
-	'setting_seo_seokeywords_comment' => 'SEO關鍵字 項出現在頁面頭部的 Meta 標籤中，用於記錄本頁面的關鍵字，多個關鍵字間請用半角逗號 "," 隔開',
+	'setting_seo_seokeywords_comment' => 'SEO 關鍵字出現在頁面頭部的 Meta 標籤中，用於記錄本頁面的關鍵字，多個關鍵字間請用半角逗號 "," 隔開',
 	'setting_seo_seodescription' => 'SEO 描述',
-	'setting_seo_seodescription_comment' => 'SEO描述 出現在頁面頭部的 Meta 標籤中，用於記錄本頁面的概要與描述',
+	'setting_seo_seodescription_comment' => 'SEO 描述出現在頁面頭部的 Meta 標籤中，用於記錄本頁面的概要與描述',
 	'setting_seo_seohead' => '其他頭部信息',
 	'setting_seo_seohead_comment' => '如需在 &lt;head&gt;&lt;/head&gt; 中添加其他的 HTML 代碼，可以使用本設置，否則請留空',
 	'setting_seo_rewritestatus' => '<span class="spectitle">URL 靜態化</span>',
@@ -1649,13 +1650,13 @@ $lang = array
 
 	'setting_attach_album' => '空間附件',
 	'setting_attach_album_maxtimage' => '圖片最大尺寸',
-	'setting_attach_album_maxtimage_comment' => '本功能需要PHP環境支持GD才生效，如果用戶上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行縮小該圖片並顯示，比如可以設置為 寬：1024px，高：768px，但都不能小於300px。設置為0，則不做任何處理。',
+	'setting_attach_album_maxtimage_comment' => '如果用戶上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行縮小該圖片並顯示，比如可以設置為 寬：1024px，高：768px，但都不能小於 300px。設置為 0，則不做任何處理。',
 
-	'setting_portal_article_attach' => '門戶附件',
-	'setting_portal_article_img_thumb_closed' => '開啟文章圖片縮略圖',
-	'setting_portal_article_img_thumb_closed_comment' => '是否開啟文章上傳圖片的縮略圖',
-	'setting_portal_article_imgsize' => '文章圖片縮略圖尺寸',
-	'setting_portal_article_imgsize_comment' => '如果上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行生成相應的小圖片，默認大小為300*300',
+	'setting_attach_portal_article_attach' => '門戶附件',
+	'setting_attach_portal_article_img_thumb_closed' => '開啟文章圖片縮略圖',
+	'setting_attach_portal_article_img_thumb_closed_comment' => '是否開啟文章上傳圖片的縮略圖',
+	'setting_attach_portal_article_imgsize' => '文章圖片縮略圖尺寸',
+	'setting_attach_portal_article_imgsize_comment' => '如果上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行生成相應的小圖片，默認大小為 300*300',
 
 	'setting_attach_antileech' => '防盜鏈設置',
 	'setting_attach_antileech_expire' => '附件鏈接有效期',
@@ -1688,24 +1689,24 @@ $lang = array
 	'setting_search_srchhotkeywords' => '熱門關鍵詞',
 	'setting_search_srchhotkeywords_comment' => '每行一個',
 
-	'settings_sphinx' => 'sphinx全文檢索設置',
+	'settings_sphinx' => 'Sphinx 全文檢索設置',
     'settings_sphinx_sphinxon' => '是否開啟',
-    'settings_sphinx_sphinxon_comment' => '設置是否開啟sphin全文檢索功能，開啟前確認sphinx安裝及配置成功。',
-    'settings_sphinx_sphinxhost' => '設置sphinx主機名，或者sphinx服務socket地址',
-    'settings_sphinx_sphinxhost_comment' => '填寫sphinx主機名：例如,本地主機填寫「localhost」，或者填寫sphinx服務socket地址，必須是絕對地址：例如，/tmp /sphinx.sock。',
-    'settings_sphinx_sphinxport' => '設置sphinx主機端口',
-    'settings_sphinx_sphinxport_comment' => '填寫sphinx主機端口：例如，3312，主機名填寫socket地址的，則此處不需要設置。',
+    'settings_sphinx_sphinxon_comment' => '設置是否開啟 Sphinx 全文檢索功能，開啟前確認 Sphinx 安裝及配置成功。',
+    'settings_sphinx_sphinxhost' => '設置 Sphinx 主機名，或者 Sphinx 服務 socket 地址',
+    'settings_sphinx_sphinxhost_comment' => '填寫 Sphinx 主機名：例如,本地主機填寫「localhost」，或者填寫 Sphinx 服務 socket 地址，必須是絕對地址：例如，/tmp/sphinx.sock。',
+    'settings_sphinx_sphinxport' => '設置 Sphinx 主機端口',
+    'settings_sphinx_sphinxport_comment' => '填寫 Sphinx 主機端口：例如，3312，主機名填寫 socket 地址的，則此處不需要設置。',
     'settings_sphinx_sphinxsubindex' => '設置標題索引名',
-    'settings_sphinx_sphinxsubindex_comment' => '填寫sphinx配置中的標題主索引名及標題增量索引名：例如，「threads,threads_mintue」。<br />注意：多個索引使用英文符號「,」連接，必須按照sphinx配置文件中的索引名填寫。',
+    'settings_sphinx_sphinxsubindex_comment' => '填寫 Sphinx 配置中的標題主索引名及標題增量索引名：例如，「threads,threads_mintue」。<br />注意：多個索引使用英文符號「,」連接，必須按照 Sphinx 配置文件中的索引名填寫。',
     'settings_sphinx_sphinxmsgindex' => '設置全文索引名',
-    'settings_sphinx_sphinxmsgindex_comment' => '填寫sphinx配置中的全文主索引名及全文增量索引名：例如，「posts,posts_mintue」。<br />注意：多個索引使用英文符號「,」連接，必須按照sphinx配置文件中的索引名填寫。',
+    'settings_sphinx_sphinxmsgindex_comment' => '填寫 Sphinx 配置中的全文主索引名及全文增量索引名：例如，「posts,posts_mintue」。<br />注意：多個索引使用英文符號「,」連接，必須按照 Sphinx 配置文件中的索引名填寫。',
     'settings_sphinx_sphinxmaxquerytime' => '設置最大搜索時間',
     'settings_sphinx_sphinxmaxquerytime_comment' => '填寫最大搜索時間,以毫秒為單位。參數必須是非負整數。默認值為 0,意思是不做限制。',
     'settings_sphinx_sphinxlimit' => '設置最大返回匹配項數目',
     'settings_sphinx_sphinxlimit_comment' => '填寫最大返回匹配項數目，必須是非負整數，默認值10000.',
     'settings_sphinx_sphinxrank' => '設置全文索引評分模式',
-    'settings_sphinx_sphinxrank_comment' => '(1)SPH_RANK_PROXIMITY_BM25， 默認模式，同時使用詞組評分和BM25評分，並且將二者結合。[默認]
-<br />(2)SPH_RANK_BM25，統計相關度計算模式，僅使用BM25評分計算(與大多數全文檢索引擎相同)。這個模式比較快，但是可能使包含多個詞的查詢的結果質量下降。
+    'settings_sphinx_sphinxrank_comment' => '(1)SPH_RANK_PROXIMITY_BM25， 默認模式，同時使用詞組評分和 BM25 評分，並且將二者結合。[默認]
+<br />(2)SPH_RANK_BM25，統計相關度計算模式，僅使用 BM25 評分計算(與大多數全文檢索引擎相同)。這個模式比較快，但是可能使包含多個詞的查詢的結果質量下降。
 <br />(3)SPH_RANK_NONE，禁用評分的模式，這是最快的模式。實際上這種模式與布爾搜索相同。所有的匹配項都被賦予權重1。',
 
 	'setting_ranklist' => '排行榜設置',
@@ -1725,9 +1726,9 @@ $lang = array
 	'setting_ranklist_block_name' => '模塊名稱',
 	'setting_ranklist_index_cache_time' => '排行榜首頁緩存時間(單位：小時)',
 	'setting_ranklist_cache_time' => '緩存時間(單位：小時)',
-	'setting_ranklist_cache_time_comment' => '請根據服務器的負載情況，設置合理的更新時間間隔。最少不能低於5小時。',
+	'setting_ranklist_cache_time_comment' => '請根據服務器的負載情況，設置合理的更新時間間隔。最少不能低於 5 小時。',
 	'setting_ranklist_show_num' => '顯示條數',
-	'setting_ranklist_block_comment' => '請根據服務器的負載情況，設置合理的更新時間間隔。最少不能低於5小時。顯示條數默認為20條。',
+	'setting_ranklist_block_comment' => '請根據服務器的負載情況，設置合理的更新時間間隔。最少不能低於 5 小時。顯示條數默認為 20 條。',
 	'setting_ranklist_show_num_comment' => '更改條數後，緩存更新後才會顯示',
 	'setting_ranklist_update_cache' => '更新緩存',
 	'setting_ranklist_update_cache_choose' => '選擇更新緩存模塊',
@@ -2628,7 +2629,7 @@ $lang = array
 	'members_profile_edit_available' => '啟用',
 	'members_profile_edit_field_type' => '填寫類型',
 	'members_profile_edit_display_order' => '顯示順序',
-	'members_profile_edit_display_order_comment' => '值越大顯示越靠前',
+	'members_profile_edit_display_order_comment' => '值越大顯示越靠後',
 	'members_profile_edit_text' => '單行文本框',
 	'members_profile_edit_textarea' => '多行文本框',
 	'members_profile_edit_radio' => '單選框',
@@ -3150,11 +3151,11 @@ $lang = array
 	'usergroups_edit_home_allow_comment' => '發表留言/評論',
 	'usergroups_edit_home_allow_video_photo_ignore' => '不受視頻認證限制',
 	'usergroups_edit_home_allow_view_video_photo' => '允許查看視頻認證',
-	'usergroups_edit_home_allow_space_diy_html' => '允許自定義模塊使用HTML',
+	'usergroups_edit_home_allow_space_diy_html' => '允許自定義模塊使用 HTML',
 	'usergroups_edit_home_allow_space_diy_html_comment' => '注意: 開放 HTML 功能將產生安全隱患，請慎用。建議只在十分必要的情況下使用，並限制只開放給最核心的管理人員',
-	'usergroups_edit_home_allow_space_diy_bbcode' => '允許自定義模塊使用BBCODE',
+	'usergroups_edit_home_allow_space_diy_bbcode' => '允許自定義模塊使用 BBCODE',
 	'usergroups_edit_home_allow_space_diy_bbcode_comment' => '設置是否解析個人主頁自定義模塊中的 BBCODE 代碼',
-	'usergroups_edit_home_allow_space_diy_imgcode' => '允許自定義模塊使用[img]',
+	'usergroups_edit_home_allow_space_diy_imgcode' => '允許自定義模塊使用 [img]',
 	'usergroups_edit_home_allow_space_diy_imgcode_comment' => '設置是否解析個人主頁自定義模塊中的 [img] 代碼',
 
 	'usergroups_edit_group' => '群組相關',
@@ -5028,7 +5029,7 @@ $lang = array
 	'article_tag_setting' => '設置標籤顯示名稱',
 
 	'diytemplate'=> 'DIY頁面管理',
-	'diytemplate_perm_tips' => '<li>此處設置的用戶權限將作用於此頁面所有DIY添加的模塊(模塊不繼承所在頁面權限除外)</li><li>模塊是否繼承所在頁面權限和單個模塊的權限的設置在「模塊管理」=>「管理權限」中設置</li><li>權限判斷的規則：由小到大(模塊的權限大於所在頁面的權限)</li>',
+	'diytemplate_perm_tips' => '<li>此處設置的用戶權限將作用於此頁面所有DIY添加的模塊(模塊不繼承所在頁面權限除外)</li><li>模塊是否繼承所在頁面權限和單個模塊的權限的設置在「模塊管理」=>「管理權限」中設置</li><li>1、權限由小到大(模塊的權限大於所在頁面的權限)；2、權限"允許管理"即可以管理模塊屬性又可以管理模塊數據；<br />3、權限"允許推送"且非"推送需要審核"可以管理模塊數據； 4、權限"允許推送"且"推送需要審核"可以推送但不可以管理模塊數據</li>',
 	'diytemplate_name'=> '頁面名稱',
 	'diytemplate_name_comment'=> '使用些模板的頁面的名稱',
 	'diytemplate_targettplname'=> '生成模板',
@@ -5213,13 +5214,13 @@ $lang = array
 	'block_perm_edit' => '編輯模塊權限',
 	'block_perm_inheritance' => '繼承所在頁面權限',
 	'block_perm_manage' => '允許管理',
-	'block_perm_recommend' => '允許推薦',
-	'block_perm_needverify' => '推薦需要審核',
+	'block_perm_recommend' => '允許推送',
+	'block_perm_needverify' => '推送需要審核',
 	'block_perm_update_succeed' => '權限更新成功。',
 	'block_has_no_allowauthorizedblock' => '所在的用戶組沒有允許被授權管理模塊',
 	'block_choose_blockclass_to_add_jscall' => '請先選擇模塊分類',
 	'block_diytemplate' => '所屬頁面',
-	'block_perm_tips' => '<li>不選擇繼承所在頁面的權限，所在頁面的權限設置將不會作用於此模塊</li><li>只添加用戶名，不選擇任何權限可實現此用戶可以管理所在頁面其它模塊，但不可以管理此模塊(要求此模塊繼承所在頁面權限，並且所在頁面權限中有此用戶名)</li><li>權限判斷的規則：由小到大(模塊的權限大於所在頁面的權限)</li>',
+	'block_perm_tips' => '<li>不選擇繼承所在頁面的權限，所在頁面的權限設置將不會作用於此模塊</li><li>只添加用戶名，不選擇任何權限可實現此用戶可以管理所在頁面其它模塊，但不可以管理此模塊(要求此模塊繼承所在頁面權限，並且所在頁面權限中有此用戶名)</li><li>1、權限由小到大(模塊的權限大於所在頁面的權限)；2、權限"允許管理"即可以管理模塊屬性又可以管理模塊數據；<br />3、權限"允許推送"且非"推送需要審核"可以管理模塊數據； 4、權限"允許推送"且"推送需要審核"可以推送但不可以管理模塊數據</li>',
 
 	'topic' => '專題管理',
 	'topic_id' => '專題ID',

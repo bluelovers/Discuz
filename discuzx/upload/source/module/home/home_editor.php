@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_editor.php 16863 2010-09-16 04:47:45Z maruitao $
+ *      $Id: home_editor.php 17104 2010-09-21 05:36:57Z maruitao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -231,9 +231,9 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <a href="javascript:;" onClick="fontsize(5,this)" class="n" style="font-size:large;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_large')?></a>
 </div>
 
-<div id="divList" class="eMenu" style="display:none;top:35px;left:26px;width:60px;height:40px;"><a href="javascript:;" onClick="format('Insertorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_order')?></a><a href="javascript:;" onClick="format('Insertunorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_unorder')?></a></div>
-<div id="divAlign" class="eMenu" style="display:none;top:35px;left:26px;width:60px;height:60px;"><a href="javascript:;" onClick="format('Justifyleft');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_left')?></a><a href="javascript:;" onClick="format('Justifycenter');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_center')?></a><a href="javascript:;" onClick="format('Justifyright');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_right')?></a></div>
-<div id="divInOut" class="eMenu" style="display:none;top:35px;left:26px;width:60px;height:40px;"><a href="javascript:;" onClick="format('Indent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_inc')?></a><a href="javascript:;" onClick="format('Outdent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_dec')?></a></div>
+<div id="divList" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Insertorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_order')?></a><a href="javascript:;" onClick="format('Insertunorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_unorder')?></a></div>
+<div id="divAlign" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:60px;"><a href="javascript:;" onClick="format('Justifyleft');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_left')?></a><a href="javascript:;" onClick="format('Justifycenter');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_center')?></a><a href="javascript:;" onClick="format('Justifyright');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_right')?></a></div>
+<div id="divInOut" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Indent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_inc')?></a><a href="javascript:;" onClick="format('Outdent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_dec')?></a></div>
 
 <div id="dvForeColor" class="eMenu" style="display:none;top:35px;left:26px;width:90px;">
 <a href="javascript:;" onClick="format(gSetColorType,'#800000')" class="n cs fRd1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_darkred')?></span></a>

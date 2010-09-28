@@ -62,8 +62,10 @@
 				</tr>
 				$categorytree
 			</table>
+			<!--{elseif empty($_G['cache']['portalcategory'])}-->
+			<p>{lang portalcp_has_no_category}</p>
 			<!--{else}-->
-			<p>{lang portalcp_index_message1}</p>
+			<p>{lang portalcp_index_message}</p>
 			<!--{/if}-->
 		</div>
 	</div>

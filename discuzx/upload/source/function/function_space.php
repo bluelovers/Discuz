@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 17017 2010-09-19 04:24:08Z zhangguosheng $
+ *      $Id: function_space.php 17224 2010-09-27 01:48:22Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -378,7 +378,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= '<div class="d">'.$value['body_template'].'</div>';
 					if ($value['type'] == 'video') {
 						if(!empty($value['body_data']['imgurl'])) {
-							$html .= '<table class="mtm" title="'.lang('space', 'click_play').'" onclick="javascript:showFlash(\''.$value['body_data']['host'].'\', \''.$value['body_data']['flashvar'].'\', this, \''.$value['sid'].'\');"><tr><td class="vdtn hm" style="background: url('.$value['body_data']['imgurl'].') no-repeat"><img src="'.IMGDIR.'/vds.png" alt="'.lang('space', 'click_play').'" /></td></tr></table>';
+							$html .= '<table class="mtm" title="'.lang('space', 'click_play').'" onclick="javascript:showFlash(\''.$value['body_data']['host'].'\', \''.$value['body_data']['flashvar'].'\', this, \''.$value['sid'].'\');"><tr><td class="vdtn hm" style="background: url('.$value['body_data']['imgurl'].') no-repeat"><img src="'.STATICURL.'/image/common/vds.png" alt="'.lang('space', 'click_play').'" /></td></tr></table>';
 						} else {
 							$html .= "<img src=\"".STATICURL."/image/common/vd.gif\" alt=\"".lang('space', 'click_play')."\" onclick=\"javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['sid']}');\" class=\"tn\" />";
 						}

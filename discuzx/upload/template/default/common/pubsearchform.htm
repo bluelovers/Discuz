@@ -18,12 +18,12 @@
 				<td><input type="text" name="srchtxt" id="srchtxt" value="{lang enter_content}" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" /></td>
 				<td>&nbsp;<!--{echo implode('', $slist);}--></td>
 				<td><button type="submit" id="search_submit" name="searchsubmit" class="xw1" value="true">{lang search}</button></td>
-				<td><a href="search.php?mod=forum&adv=yes" target="_blank" class="xi2">{lang advanced_search}</a></td>
+				<td><a href="search.php?mod=search&adv=yes" target="_blank" class="xi2">{lang advanced_search}</a></td>
 				<td>
 					<div class="hot">
 						<!--{if $_G['setting']['srchhotkeywords']}-->
 						<strong class="xw1 xi1">{lang hot_search}: </strong>
-						<!--{loop $_G['setting']['srchhotkeywords'] $val}--><!--{if $val = trim($val)}--><a href="search.php?mod=forum&srchtxt={echo rawurlencode($val)}&formhash=f1c7ceaa&searchsubmit=true" target="_blank" class="xi2">$val</a><span class="pipe">|</span><!--{/if}--><!--{/loop}-->
+						<!--{loop $_G['setting']['srchhotkeywords'] $val}--><!--{if $val = trim($val)}--><a href="search.php?mod=search&srchtxt={echo rawurlencode($val)}&formhash=f1c7ceaa&searchsubmit=true" target="_blank" class="xi2">$val</a><span class="pipe">|</span><!--{/if}--><!--{/loop}-->
 						<!--{/if}-->
 					</div>
 				</td>

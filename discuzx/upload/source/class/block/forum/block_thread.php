@@ -299,7 +299,7 @@ class block_thread {
 			.($picrequired ? ' AND t.attachment = 2' : '')
 			.($bannedids ? ' AND t.tid NOT IN ('.dimplode($bannedids).')' : '')
 			.$keyword
-			." AND t.closed='0' AND t.isgroup='0'";
+			." AND t.isgroup='0'";
 
 		if($lastpost) {
 			$time = TIMESTAMP - $lastpost;

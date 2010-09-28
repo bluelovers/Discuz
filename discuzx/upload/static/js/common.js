@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17077 2010-09-20 08:48:40Z monkey $
+	$Id: common.js 17196 2010-09-26 06:27:21Z monkey $
 */
 
 var BROWSER = {};
@@ -1250,12 +1250,14 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
 }
 
-function showDialog(msg, mode, t, func, cover, funccancel, leftmsg) {
+function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, canceltxt) {
 	cover = isUndefined(cover) ? (mode == 'info' ? 0 : 1) : cover;
 	leftmsg = isUndefined(leftmsg) ? '' : leftmsg;
 	mode = in_array(mode, ['confirm', 'notice', 'info']) ? mode : 'alert';
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
+	confirmtxt = confirmtxt ? confirmtxt : '確定';
+	canceltxt = canceltxt ? canceltxt : '取消';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
 	menuObj = document.createElement('div');
@@ -1270,8 +1272,8 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg) {
 		s += msg ? msg : '';
 	} else {
 		s += '<div class="c altw"><div class="' + (mode == 'alert' ? 'alert_error' : 'alert_info') + '"><p>' + msg + '</p></div></div>';
-		s += '<p class="o pns">' + (leftmsg ? '<span class="z xg1">' + leftmsg + '</span>' : '') + '<button id="fwin_dialog_submit" value="true" class="pn pnc"><strong>確定</strong></button>';
-		s += mode == 'confirm' ? '<button id="fwin_dialog_cancel" value="true" class="pn" onclick="hideMenu(\'' + menuid + '\', \'dialog\')"><strong>取消</strong></button>' : '';
+		s += '<p class="o pns">' + (leftmsg ? '<span class="z xg1">' + leftmsg + '</span>' : '') + '<button id="fwin_dialog_submit" value="true" class="pn pnc"><strong>'+confirmtxt+'</strong></button>';
+		s += mode == 'confirm' ? '<button id="fwin_dialog_cancel" value="true" class="pn" onclick="hideMenu(\'' + menuid + '\', \'dialog\')"><strong>'+canceltxt+'</strong></button>' : '';
 		s += '</p>';
 	}
 	s += '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
@@ -2443,7 +2445,7 @@ function slideshow(el) {
 
 	this.runRoll = function() {
 		for(var i = 0; i < this.slidenum; i++) {
-			this.slideshows[i].style.display = "block";
+			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = "block";
 			for(var j=0,L=this.slideother.length; j<L; j++) {
 				this.slideother[j].childNodes[i].style.display = "block";
 			}
@@ -2856,7 +2858,7 @@ function createPalette(colorid,id) {
 function cardInit() {
 	var a = document.body.getElementsByTagName('a');
 	for(var i = 0;i < a.length;i++){
-		if(a[i].getAttribute('c') && a[i].getAttribute('c')) {
+		if(a[i].getAttribute('c')) {
 			a[i].setAttribute('mid', hash(a[i].href));
 			a[i].onmouseover = function() {cardShow(this)};
 			a[i].onmouseout = function() {clearTimeout(USERCARDST);};
@@ -2870,10 +2872,15 @@ function cardShow(obj) {
 	pos = obj.getAttribute('c') == '1' ? '43' : obj.getAttribute('c');
 	USERCARDST = setTimeout(function() {ajaxmenu(obj, 500, 1, 2, pos, null, 'p_pop card');}, 250);
 }
-function cardUpdatedoing(scdoing) {
+function cardUpdatedoing(scdoing, op) {
 	if($(scdoing)) {
-		$('return_' + scdoing).style.display = 'none';
-		$(scdoing).style.display = '';
+		if(!op) {
+			$('return_' + scdoing).style.display = 'none';
+			$(scdoing).style.display = '';
+		} else {
+			$('return_' + scdoing).style.display = '';
+			$(scdoing).style.display = 'none';
+		}
 	}
 }
 function cardSubmitdoing(scdoing) {

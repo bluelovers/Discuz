@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 17048 2010-09-20 00:45:16Z cnteacher $
+ *      $Id: function_misc.php 17236 2010-09-27 05:54:06Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -300,8 +300,8 @@ function updateviews($table, $idcol, $viewscol, $logfile) {
 	$viewlog = $viewarray = array();
 	$newlog = DISCUZ_ROOT.$logfile.random(6);
 	if(@rename(DISCUZ_ROOT.$logfile, $newlog)) {
-		unlink($newlog);
 		$viewlog = file($newlog);
+		unlink($newlog);
 		if(is_array($viewlog) && !empty($viewlog)) {
 			$viewlog = array_count_values($viewlog);
 			foreach($viewlog as $id => $views) {

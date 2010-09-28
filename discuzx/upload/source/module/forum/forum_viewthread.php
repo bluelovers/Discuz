@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 17055 2010-09-20 02:14:59Z monkey $
+ *      $Id: forum_viewthread.php 17159 2010-09-25 06:13:49Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,11 +14,10 @@ if(!defined('IN_DISCUZ')) {
 define('SQL_ADD_THREAD', ' t.dateline, t.special, t.lastpost AS lastthreadpost, ');
 
 require_once libfile('function/forumlist');
-
-$page = max(1, $_G['page']);
-
 require_once libfile('function/discuzcode');
 require_once libfile('function/post');
+
+$page = max(1, $_G['page']);
 
 $threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array();
 $threadtable_info = !empty($_G['cache']['threadtable_info']) ? $_G['cache']['threadtable_info'] : array();

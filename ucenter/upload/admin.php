@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admin.php 1001 2010-05-27 00:51:55Z zhaoxiongfei $
+	$Id: admin.php 1016 2010-09-20 07:25:57Z cnteacher $
 */
 
 define('UC_SERVER_VERSION', '1.5.2');

@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc_stat.php 16407 2010-09-06 06:50:06Z wangjinbo $
+	$Id: misc_stat.php 17195 2010-09-26 06:16:25Z zhengqingpeng $
 */
 
 if(!$_G['group']['allowstatdata']) {
@@ -126,7 +126,7 @@ function getstatvars_basic() {
 	@$statvars['membersaddavg'] = round($statvars['members'] / $members_runtime);
 	$statvars['memnonpost'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_count')." WHERE posts='0'");
 	$statvars['mempost'] = $statvars['members'] - $statvars['memnonpost'];
-	$statvars['admins'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE adminid<>'0'");
+	$statvars['admins'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE adminid<>'0' AND adminid<>'-1'");
 	$statvars['lastmember'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE regdate>'".(TIMESTAMP - 86400)."'");
 	$statvars['mempostpercent'] = number_format((double)$statvars['mempost'] / $statvars['members'] * 100, 2);
 
@@ -236,8 +236,8 @@ function getstatvars_threadsrank() {
 
 	for($i = 0; $i < 20; $i++) {
 		$bgclass = $i % 2 ? ' class="alt"' : '';
-		$threadsrank .= "<tr".$bgclass."><td class=\"stat_subject\"><a href=\"viewthread.php?tid={$threadview[$i]['tid']}\">{$threadview[$i]['subject']}</a>&nbsp;</td><td class=\"stat_num\">{$threadview[$i]['views']}</td>\n".
-			"<td class=\"stat_subject\"><a href=\"viewthread.php?tid={$threadreply[$i]['tid']}\">{$threadreply[$i]['subject']}</a><td class=\"stat_num\">{$threadreply[$i]['replies']}</td></tr>\n";
+		$threadsrank .= "<tr".$bgclass."><td class=\"stat_subject\"><a href=\"forum.php?mod=viewthread&tid={$threadview[$i]['tid']}\">{$threadview[$i]['subject']}</a>&nbsp;</td><td class=\"stat_num\">{$threadview[$i]['views']}</td>\n".
+			"<td class=\"stat_subject\"><a href=\"forum.php?mod=viewthread&tid={$threadreply[$i]['tid']}\">{$threadreply[$i]['subject']}</a><td class=\"stat_num\">{$threadreply[$i]['replies']}</td></tr>\n";
 	}
 
 	$statvars['threadsrank'] = $threadsrank;

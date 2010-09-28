@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 16662 2010-09-13 01:15:36Z monkey $
+ *      $Id: misc_swfupload.php 17148 2010-09-25 03:56:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if($_G['gp_operation'] == 'config' && $_G['uid']) {
+if($_G['gp_operation'] == 'config') {
 
 	$swfhash = md5(substr(md5($_G['config']['security']['authkey']), 8).$_G['uid']);
 	$xmllang = lang('forum/swfupload');

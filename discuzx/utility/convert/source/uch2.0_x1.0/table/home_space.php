@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_space.php 10469 2010-05-11 09:12:14Z monkey $
+ * $Id: home_space.php 17145 2010-09-25 03:15:58Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);
@@ -26,8 +26,13 @@ $query = $db_source->query("SELECT s.*, sf.*
 	LIMIT $limit");
 while ($space = $db_source->fetch_array($query)) {
 
+	$username = daddslashes($space['username']);
 	foreach (array('member','member_count','member_field_forum','member_field_home','member_profile','member_status') as $value) {
-		$db_target->query("INSERT INTO {$newpre}common_{$value} (uid) VALUES ('$space[uid]')", 'SILENT');
+		if($value == 'member') {
+			$db_target->query("INSERT INTO {$newpre}common_{$value} (uid, username) VALUES ('$space[uid]', '$username')", 'SILENT');
+		} else {
+			$db_target->query("INSERT INTO {$newpre}common_{$value} (uid) VALUES ('$space[uid]')", 'SILENT');
+		}
 	}
 
 	$nextid = $space['uid'];

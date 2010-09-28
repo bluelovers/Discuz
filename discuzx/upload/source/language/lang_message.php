@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 17014 2010-09-19 04:04:45Z zhangguosheng $
+ *      $Id: lang_message.php 17209 2010-09-26 09:14:34Z zhengqingpeng $
  */
 
 $lang = array
@@ -751,7 +751,7 @@ $lang = array
 	'not_open_registration_invite' => '非常抱歉，本站目前暫時不允許用戶直接註冊，需要有效的好友邀請鏈接才能註冊',
 	'not_open_invite' => '非常抱歉，本站目前暫時不允許用戶通過邀請鏈接註冊',
 
-	'getpasswd_account_notmatch' => '你的賬戶資料中沒有完整的Email地址，不能使用取回密碼功能，如有疑問請與管理員聯繫。',
+	'getpasswd_account_notmatch' => '你填寫的賬戶資料不匹配，不能使用取回密碼功能，如有疑問請與管理員聯繫。',
 	'getpasswd_email_notmatch' => '輸入的Email地址與用戶名不匹配，請重新確認。',
 	'getpasswd_send_succeed' => '取回密碼的方法已經通過 Email 發送到你的信箱中，<br />請在 3 天之內修改你的密碼。',
 	'user_does_not_exist' => '該用戶不存',
@@ -805,7 +805,7 @@ $lang = array
 	'invite_friend_ok' => '好友邀請確認完成了',
 
 	'should_not_invite_your_own' => '對不起，你不能通過訪問自己的邀請鏈接來邀請自己。',
-	'close_invite' => '對不起，你目前還沒有權限來進行邀請好友操作',
+	'close_invite' => '對不起，你目前還沒有權限來進行邀請好友操作，返回上一頁。',
 
 	'field_required' => '個人資料中的必填項目「\\1」 不能為空，請確認',
 	'friend_self_error' => '對不起，你不能加自己為好友',
@@ -1107,6 +1107,7 @@ $lang = array
 	'start_time_is_greater_than_end_time' => '統計開始日期不能小於結束日期',
 	'start_time_end_time_is_equal_to' => '統計開始日期不能等於結束日期',
 	'home_no_privilege' => '該頁面需要登陸後才能查看',
+	'article_push_invalid_repeat' => '不要重複推送這篇內容',
 
 );
 

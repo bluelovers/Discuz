@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 16495 2010-09-07 08:24:53Z zhengqingpeng $
+ *      $Id: home_space.php 17253 2010-09-28 01:40:59Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -58,14 +58,14 @@ if(empty($space)) {
 		$_GET['do'] = $do = 'profile';
 	}
 
-	if(!ckprivacy($do, 'view')) {
+	if($do != 'profile' && !ckprivacy($do, 'view')) {
 		$_G['privacy'] = 1;
 		require_once libfile('space/profile', 'include');
 		include template('home/space_privacy');
 		exit();
 	}
 
-	if(!$space['self']) $_GET['view'] = 'me';
+	if(!$space['self'] && $_GET['view'] != 'eccredit') $_GET['view'] = 'me';
 
 	get_my_userapp();
 

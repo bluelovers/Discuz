@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 16807 2010-09-15 05:00:57Z zhangguosheng $
+	$Id: portal_diy.js 17168 2010-09-25 07:46:33Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -920,7 +920,7 @@ spaceDiy.extend({
 	},
 	goonDIY : function () {
 		if ($('prefile').value == '1') {
-			showDialog('<div style="line-height:28px;">按確定按鈕將打開暫存數據並DIY，<br />按取消按鈕將刪除暫存數據。</div>','confirm','是否繼續暫存數據的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()');
+			showDialog('<div style="line-height:28px;">按繼續按鈕將打開暫存數據並DIY，<br />按刪除按鈕將刪除暫存數據。</div>','confirm','是否繼續暫存數據的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '繼續', '刪除');
 		} else if (location.search.indexOf('preview=yes') > -1) {
 			this.enablePreviewButton();
 		} else {

@@ -22,7 +22,7 @@
 			<!--{if $join}-->
 				<!--{if $group['dailyprice']}-->
 					<tr>
-						<td>{lang memcp_usergroups_dailyprice}</td><td>{$extcredits[$creditstrans][title]} $group[dailyprice] {$extcredits[$creditstrans][unit]}</td>
+						<td>{lang memcp_usergroups_dailyprice}</td><td>{$_G[setting][extcredits][$_G[setting][creditstrans]][title]} $group[dailyprice] {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}</td>
 					</tr>
 					<tr>
 						<td>{lang memcp_usergroups_credit}</td><td>$usermaxdays {lang days}</td>

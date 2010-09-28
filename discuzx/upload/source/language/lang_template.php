@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16865 2010-09-16 04:51:31Z monkey $
+ *      $Id: lang_template.php 17263 2010-09-28 02:21:13Z zhangguosheng $
  *
  *      This file is automatically generate
  */
@@ -172,6 +172,7 @@ $lang = array (
   'delete' => '刪除',
   'submit' => '提交',
   'anonymous' => '匿名',
+  'guest' => '遊客',
   'upload' => '上傳',
   'e_attach_insert' => '點擊文件名添加到帖子內容中',
   'e_attach_inserturl' => '，"attach://" 開頭的附件地址支持任何人下載請謹慎添加',

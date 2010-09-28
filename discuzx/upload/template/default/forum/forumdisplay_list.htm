@@ -85,7 +85,7 @@
 				<tbody id="$thread[id]">
 					<tr>
 						<td class="icn">
-							<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" title="{if in_array($thread['displayorder'], array(1, 2, 3, 4))}{if $thread['displayorder'] == 1}{lang thread_type1} - {elseif $thread['displayorder'] == 2}{lang thread_type2} - {elseif $thread['displayorder'] == 3}{lang thread_type3} - {elseif $thread['displayorder'] == 4}{lang thread_type4} - {/if}{/if}{lang target_blank}" target="_blank">
+							<a href="forum.php?mod=viewthread&tid={if !$thread['moved']}$thread[tid]{else}$thread[closed]{/if}&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" title="{if in_array($thread['displayorder'], array(1, 2, 3, 4))}{if $thread['displayorder'] == 1}{lang thread_type1} - {elseif $thread['displayorder'] == 2}{lang thread_type2} - {elseif $thread['displayorder'] == 3}{lang thread_type3} - {elseif $thread['displayorder'] == 4}{lang thread_type4} - {/if}{/if}{lang target_blank}" target="_blank">
 							<!--{if $thread[folder] == 'lock'}-->
 								<img src="{IMGDIR}/folder_lock.gif" />
 							<!--{elseif $thread['special'] == 1}-->
@@ -175,7 +175,7 @@
 							<!--{hook/forumdisplay_author $key}-->
 							<cite>
 							<!--{if $thread['authorid'] && $thread['author']}-->
-								<a href="home.php?mod=space&uid=$thread[authorid]" c="1">$thread[author]</a><!--{if $verify[$thread['authorid']]}-->$verify[$thread[authorid]]<!--{/if}-->
+								<a href="home.php?mod=space&uid=$thread[authorid]" c="1">$thread[author]</a><!--{if !empty($verify[$thread['authorid']])}-->$verify[$thread[authorid]]<!--{/if}-->
 							<!--{else}-->
 								<!--{if $_G['forum']['ismoderator']}-->
 									<a href="home.php?mod=space&uid=$thread[authorid]" c="1">{lang anonymous}</a>

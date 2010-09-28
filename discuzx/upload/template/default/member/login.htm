@@ -159,7 +159,9 @@ hideWindow('register');
 var pwdclear = 0;
 function initinput_login() {
 	document.body.focus();
-	$('loginform_$loginhash').username.focus();
+	if($('loginform_$loginhash')) {
+		$('loginform_$loginhash').username.focus();
+	}
 	<!--{if !$_G['setting']['autoidselect']}-->
 		simulateSelect('loginfield_$loginhash');
 	<!--{/if}-->

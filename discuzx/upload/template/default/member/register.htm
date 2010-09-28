@@ -45,10 +45,10 @@ setMenuPosition('fwin_register', 'fwin_register', '00');
 				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('register')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
 		</h3>
-		<div class="c cl floatwrap">$bbrulestxt</div>
-		<p class="fsb pns cl">
+		<div class="c cl{if !empty($_G['gp_infloat'])} floatwrap{/if}">$bbrulestxt</div>
+		<p class="fsb pns cl{if empty($_G['gp_infloat'])} hm{/if}">
 			<button class="pn pnc" onclick="$('agreebbrule').checked = true;display('layer_reg');display('layer_reginfo_t');display('layer_reginfo_b');display('layer_bbrule');{if $_G['setting']['sitemessage'][register] && ($bbrules && $bbrulesforce)}showRegprompt();{/if}"><span>{lang agree}</span></button>
-			<button class="pn" onclick="hideWindow('register')"><span>{lang disagree}</span></button>
+			<button class="pn" onclick="{if !empty($_G['gp_infloat'])}hideWindow('register'){else}location.href='{if $_G['gp_referer']}$_G[gp_referer]{else}$_G['referer']{/if}'{/if}"><span>{lang disagree}</span></button>
 		</p>
 	</div>
 	<!--{hook/register_top}-->
@@ -71,14 +71,14 @@ setMenuPosition('fwin_register', 'fwin_register', '00');
 					<label><em>{lang password}:</em><input type="password" name="{$_G['setting']['reginput']['password']}" size="25" id="password" onkeypress="detectCapsLock(event, this)" tabindex="1" class="txt" /> *</label>
 					<label><em>{lang password_confirm}:</em><input type="password" name="{$_G['setting']['reginput']['password2']}" size="25" id="password2" onkeypress="detectCapsLock(event, this)" tabindex="1" value="" class="txt" /> *</label>
 					<label><em>{lang email}:</em><input type="text" name="{$_G['setting']['reginput']['email']}" autocomplete="off" size="25" id="email" onBlur="checkemail()" tabindex="1" class="txt" /> *</label>
-					<!--{if !$invite && ($_G['setting']['regstatus'] == 2 || $_G['setting']['regstatus'] == 3)}-->
-						<label><em>{lang invite_code}:</em><input type="text" name="invitecode" autocomplete="off" size="25" id="invitecode"{if $_G['setting']['regstatus'] == 2} onBlur="checkinvite()"{/if} tabindex="1" class="txt" /><!--{if $_G['setting']['regstatus'] == 2}--> *<!--{/if}--></label>
-					<!--{/if}-->
 					</span>
 					<!--{if $_G[gp_action] == 'activation'}-->
 						<span id="activation_user">
 							<label><em>{lang username}:</em>$username</label>
 						</span>
+					<!--{/if}-->
+					<!--{if empty($invite) && ($_G['setting']['regstatus'] == 2 || $_G['setting']['regstatus'] == 3)}-->
+						<label class="xs2"><em>{lang invite_code}:</em><input type="text" name="invitecode" autocomplete="off" size="25" id="invitecode"{if $_G['setting']['regstatus'] == 2} onBlur="checkinvite()"{/if} tabindex="1" class="txt" /><!--{if $_G['setting']['regstatus'] == 2}--> *<!--{/if}--></label>
 					<!--{/if}-->
 					<!--{if $secqaacheck || $seccodecheck}-->
 						<div class="rgs">

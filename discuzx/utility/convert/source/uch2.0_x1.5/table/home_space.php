@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_space.php 15720 2010-08-25 23:56:08Z monkey $
+ * $Id: home_space.php 17194 2010-09-26 06:05:16Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);
@@ -26,15 +26,24 @@ $query = $db_source->query("SELECT s.*, sf.*
 	LIMIT $limit");
 while ($space = $db_source->fetch_array($query)) {
 
+	$username = daddslashes($space['username']);
 	foreach (array('member','member_count','member_field_forum','member_field_home','member_profile','member_status') as $value) {
-		$db_target->query("INSERT INTO {$newpre}common_{$value} (uid) VALUES ('$space[uid]')", 'SILENT');
+		if($value == 'member') {
+			$db_target->query("INSERT INTO {$newpre}common_{$value} (uid, username) VALUES ('$space[uid]', '$username')", 'SILENT');
+		} else {
+			$db_target->query("INSERT INTO {$newpre}common_{$value} (uid) VALUES ('$space[uid]')", 'SILENT');
+		}
 	}
 
 	$nextid = $space['uid'];
 
-	$space['privacy'] = unserialize($space['privacy']);
-	$space['privacy']['feed'] = array();
-	$space['privacy'] = serialize($space['privacy']);
+	if(!empty($space['privacy'])) {
+		$space['privacy'] = unserialize($space['privacy']);
+		$space['privacy']['feed'] = array();
+		$space['privacy'] = serialize($space['privacy']);
+	} else {
+		$space['privacy'] = '';
+	}
 	$space  = daddslashes($space, 1);
 
 	$newquery = $db_target->query("SELECT * FROM {$newpre}common_member WHERE uid='$space[uid]'");

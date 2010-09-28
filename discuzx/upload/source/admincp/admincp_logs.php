@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 16982 2010-09-18 01:43:29Z cnteacher $
+ *      $Id: admincp_logs.php 17234 2010-09-27 05:33:36Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -228,13 +228,13 @@ if($operation == 'illegal') {
 	}
 	$select_operation_html .= '</select>';
 
-	showtablerow('', array('','','class="td28"', 'class="td28"', '', 'class="td28"', ''), array(
-		'<b>'.cplang('logs_viewtype').'</b>',
-		'<label>'.cplang('username').':<input type="text" name="srch_username" class="txt" value="'.$srch_username.'" /><label>',
-		'<label>'.cplang('uid').':<input type="text" name="srch_uid" class="txt" value="'.$srch_uid.'" /><label>',
-		cplang('time').':<input type="text" name="srch_starttime" class="txt" value="'.$srch_starttime.'" onclick="showcalendar(event, this)" />- <input type="text" name="srch_endtime" class="txt" value="'.$srch_endtime.'" onclick="showcalendar(event, this)" />',
-		$select_operation_html,
-		'<label>'.cplang('logs_lpp').':<input type="text" name="perpage" class="txt" value="'.$perpage.'" size="5" /><label>',
+	showtableheader('logs_viewtype', 'fixpadding');
+	showtablerow('', array(''), array(
+		'<label>'.cplang('username').':<input type="text" name="srch_username" class="txt" value="'.$srch_username.'" /><label>&nbsp;'.
+		'<label>'.cplang('uid').':<input type="text" name="srch_uid" class="txt" value="'.$srch_uid.'" /><label>&nbsp;'.
+		cplang('time').':<input type="text" name="srch_starttime" class="txt" value="'.$srch_starttime.'" onclick="showcalendar(event, this)" />- <input type="text" name="srch_endtime" class="txt" value="'.$srch_endtime.'" onclick="showcalendar(event, this)" />&nbsp;'.
+		$select_operation_html.'&nbsp;'.
+		'<label>'.cplang('logs_lpp').':<input type="text" name="perpage" class="txt" value="'.$perpage.'" size="5" /><label>&nbsp;'.
 		'<input type="submit" name="srchlogbtn" class="btn" value="'.$lang['search'].'" />',
 	));
 	showtablefooter();
@@ -254,11 +254,11 @@ if($operation == 'illegal') {
 	$multipage = multi($num, $perpage, $page, $mpurl, 0, 3);
 
 	$query = DB::query("SELECT l.*, u.username
-						FROM ".DB::table('common_credit_log')." l
-						LEFT JOIN ".DB::table('common_member')." u
-						ON l.uid=u.uid
-						WHERE $where
-						ORDER BY l.dateline DESC LIMIT $start_limit, $perpage");
+		FROM ".DB::table('common_credit_log')." l
+		LEFT JOIN ".DB::table('common_member')." u
+		ON l.uid=u.uid
+		WHERE $where
+		ORDER BY l.dateline DESC LIMIT $start_limit, $perpage");
 
 	while($log = DB::fetch($query)) {
 		$log['dateline'] = dgmdate($log['dateline'], 'y-n-j H:i');
@@ -499,7 +499,7 @@ EOD;
 
 	} else {
 
-		if($deletelist = dimplode($delete)) {
+		if($deletelist = dimplode($_G['gp_delete'])) {
 			DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id IN ($deletelist)");
 		}
 

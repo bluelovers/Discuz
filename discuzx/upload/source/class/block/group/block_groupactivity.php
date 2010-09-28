@@ -299,7 +299,7 @@ class block_groupactivity {
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'],
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : IMGDIR.'/nophoto.gif'),
+				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(
