@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_forum.php 16752 2010-09-14 05:19:51Z liulanbo $
+ *      $Id: modcp_forum.php 17136 2010-09-25 01:39:54Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -38,9 +38,8 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 
 			require_once libfile('function/discuzcode');
 			$forumupdate = true;
-			$descnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
 			$rulesnew = $alloweditrules ? addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(stripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1))) : addslashes($_G['forum']['rules']);
-			DB::query("UPDATE ".DB::table('forum_forumfield')." SET description='$descnew', rules='$rulesnew' WHERE fid='$_G[fid]'");
+			DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
 
 			$_G['forum']['description'] = html2bbcode(dstripslashes($descnew));
 			$_G['forum']['rules'] = html2bbcode(dstripslashes($rulesnew));

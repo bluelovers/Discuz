@@ -4,7 +4,7 @@
 	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc.php 846 2008-12-08 05:37:05Z zhaoxiongfei $
+	$Id: misc.php 1018 2010-09-26 07:35:47Z cnteacher $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -94,7 +94,15 @@ class miscmodel {
 			$out .= "Connection: Close\r\n";
 			$out .= "Cookie: $cookie\r\n\r\n";
 		}
-		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+		if(function_exists('fsockopen')) {
+			$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+		} elseif (function_exists('pfsockopen')) {
+			$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+		} else {
+			$fp = false;
+		}
+
 		if(!$fp) {
 			return '';
 		} else {

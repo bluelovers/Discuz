@@ -21,7 +21,7 @@
 					</tr>
 					<!--{loop $tradesums $tradesum}-->
 						<tr class="{echo swapclass('alt')}">
-							<td><a target="_blank" href="viewthread.php?do=tradeinfo&tid=$tradesum[tid]&pid=$tradesum[pid]">$tradesum[subject]</a></td>
+							<td><a target="_blank" href="forum.php?mod=viewthread&do=tradeinfo&tid=$tradesum[tid]&pid=$tradesum[pid]">$tradesum[subject]</a></td>
 							<td><a target="_blank" href="space.php?uid=$tradesum[sellerid]">$tradesum[seller]</a></td>
 							<td>$tradesum[tradesum]</td>
 						</tr>
@@ -40,7 +40,7 @@
 					<!--{eval unset($swapc);}-->
 					<!--{loop $totalitems $totalitem}-->
 						<tr class="{echo swapclass('alt')}">
-							<td><a target="_blank" href="viewthread.php?do=tradeinfo&tid=$tradesum[tid]&pid=$tradesum[pid]">$totalitem[subject]</a></td>
+							<td><a target="_blank" href="forum.php?mod=viewthread&do=tradeinfo&tid=$tradesum[tid]&pid=$tradesum[pid]">$totalitem[subject]</a></td>
 							<td><a target="_blank" href="space.php?uid=$totalitem[sellerid]">$totalitem[seller]</a></td>
 							<td>$totalitem[totalitems]</td>
 						</tr>

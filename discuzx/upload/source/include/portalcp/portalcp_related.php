@@ -66,10 +66,10 @@ if($op == 'manual') {
 	if($wheresql) {
 		$wheresql = " WHERE ".$wheresql;
 	}
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')."$wheresql"), 0);
+	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')."$wheresql LIMIT 50"), 0);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')."$wheresql ORDER BY dateline DESC");
-		while ($value = DB::fetch($query)) {
+		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')."$wheresql ORDER BY dateline DESC LIMIT 50");
+		while($value = DB::fetch($query)) {
 			$articlelist[] = $value;
 		}
 	}
@@ -93,12 +93,11 @@ if($op == 'manual') {
 		}
 	}
 } else {
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')), 0);
-	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." ORDER BY dateline DESC");
-		while ($value = DB::fetch($query)) {
-			$articlelist[] = $value;
-		}
+	$count = 0;
+	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." ORDER BY dateline DESC LIMIT 50");
+	while($value = DB::fetch($query)) {
+		$articlelist[] = $value;
+		$count++;
 	}
 }
 $category = category_showselect('portal', 'searchcate', false, $_G[gp_searchcate]);

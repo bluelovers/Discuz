@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_filesock.php 16654 2010-09-12 13:39:40Z monkey $
+ *      $Id: function_filesock.php 17199 2010-09-26 07:12:20Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,15 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 		$out .= "Connection: Close\r\n";
 		$out .= "Cookie: $cookie\r\n\r\n";
 	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} elseif(function_exists('pfsockopen')) {
+		$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} else {
+		$fp = '';
+	}
+
 	if(!$fp) {
 		return '';
 	} else {

@@ -45,7 +45,7 @@
 	<!--{loop $repeatusers $user}-->
 	<tr>
 		<td><input name="delete[]" type="checkbox" class="checkbox" value="$user[username]" /></td>
-		<td><b><!--{if !$user[locked]}--><a href="plugin.php?id=myrepeats:switch&username=$user[usernameenc]">$user[username]</a></b><!--{else}-->$user[username] ({lang myrepeats:locked})<!--{/if}--></td>
+		<td><b><!--{if !$user[locked]}--><a href="plugin.php?id=myrepeats:switch&username=$user[usernameenc]&formhash={FORMHASH}">$user[username]</a></b><!--{else}-->$user[username] ({lang myrepeats:locked})<!--{/if}--></td>
 		<td><input name="comment[{$user[username]}]" class="px" value="$user[comment]" size="40" /></td>
 		<td><!--{if $user[lastswitch]}-->$user[lastswitch]<!--{else}-->{lang myrepeats:nouse}<!--{/if}--></td>
 	</tr>

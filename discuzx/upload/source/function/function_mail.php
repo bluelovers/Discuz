@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_mail.php 16711 2010-09-13 07:24:17Z zhengqingpeng $
+ *      $Id: function_mail.php 17265 2010-09-28 02:26:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,9 +61,9 @@ EOT;
 
 	$email_subject = '=?'.CHARSET.'?B?'.base64_encode(preg_replace("/[\r|\n]/", '', '['.$_G['setting']['sitename'].'] '.$subject)).'?=';
 	$email_message = chunk_split(base64_encode(str_replace("\n", "\r\n", str_replace("\r", "\n", str_replace("\r\n", "\n", str_replace("\n\r", "\r", $message))))));
-
-	$headers = "From: $email_from{$maildelimiter}X-Priority: 3{$maildelimiter}X-Mailer: DISCUZ ".DISCUZ_VERSION."{$maildelimiter}MIME-Version: 1.0{$maildelimiter}Content-type: text/html; charset=".CHARSET."{$maildelimiter}Content-Transfer-Encoding: base64{$maildelimiter}";
-
+	$host = $_SERVER['HTTP_HOST'];
+	$version = $_G['setting']['version'];
+	$headers = "From: $email_from{$maildelimiter}X-Priority: 3{$maildelimiter}X-Mailer: $host $version {$maildelimiter}MIME-Version: 1.0{$maildelimiter}Content-type: text/html; charset=".CHARSET."{$maildelimiter}Content-Transfer-Encoding: base64{$maildelimiter}";
 	if($_G['setting']['mail']['mailsend'] == 1) {
 		if(function_exists('mail') && @mail($email_to, $email_subject, $email_message, $headers)) {
 			return true;

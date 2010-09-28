@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 16065 2010-08-31 05:58:59Z zhangguosheng $
+ *      $Id: install_function.php 17202 2010-09-26 07:37:33Z cnteacher $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -820,7 +820,15 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 		$out .= "Connection: Close\r\n";
 		$out .= "Cookie: $cookie\r\n\r\n";
 	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} elseif (function_exists('pfsockopen')) {
+		$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} else {
+		$fp = false;
+	}
+
 	if(!$fp) {
 		return '';
 	} else {
@@ -1058,7 +1066,7 @@ function save_uc_config($config, $file) {
 
 	$success = false;
 
-	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = explode('|', $config);
+	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = $config;
 
 	$link = mysql_connect($ucdbhost, $ucdbuser, $ucdbpw, 1);
 	$uc_connnect = $link && mysql_select_db($ucdbname, $link) ? 'mysql' : '';
@@ -1107,7 +1115,7 @@ function _generate_key() {
 }
 
 function uc_write_config($config, $file, $password) {
-	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = explode('|', $config);
+	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = $config;
 	$ucauthkey = _generate_key();
 	$ucsiteid = _generate_key();
 	$ucmykey = _generate_key();
@@ -1168,7 +1176,7 @@ function install_uc_server() {
 	$appid = $db->insert_id($link);
 	$db->query("ALTER TABLE {$uctablepre}notelist ADD COLUMN app$appid tinyint NOT NULL");
 
-	$config = "$appauthkey|$appid|$ucdbhost|$ucdbname|$ucdbuser|$ucdbpw|$ucdbcharset|$uctablepre|$uccharset|$ucapi|$ucip";
+	$config = array($appauthkey,$appid,$ucdbhost,$ucdbname,$ucdbuser,$ucdbpw,$ucdbcharset,$uctablepre,$uccharset,$ucapi,$ucip);
 	save_uc_config($config, ROOT_PATH.'./config/config_ucenter.php');
 
 	$salt = substr(uniqid(rand()), -6);

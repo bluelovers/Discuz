@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 17046 2010-09-19 11:31:52Z zhengqingpeng $
+ *      $Id: admincp_moderate.php 17235 2010-09-27 05:36:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -44,16 +44,16 @@ if($operation == 'members') {
 			$validatenum = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'"), 0);
 			$members = '';
 			if($validatenum) {
-				$multipage = multi($validatenum, $_G['setting']['memberperpage'], $page, 'action=moderate&operation=members&sendemail=$sendemail');
+				$multipage = multi($validatenum, $_G['setting']['memberperpage'], $page, ADMINSCRIPT.'?action=moderate&operation=members&sendemail='.$sendemail);
 				$vuids = '0';
-				$query = DB::query("SELECT m.uid, m.username, m.groupid, m.email, m.regdate, ms.regip, v.message, v.submittimes, v.submitdate, v.moddate, v.admin, v.remark
+				$query = DB::query("SELECT m.uid, m.username, m.groupid, m.email, m.regdate, ms.regip, v.message, v.submittimes, v.submitdate, v.moddate, v.admin, v.remark, v.uid as vuid
 					FROM ".DB::table('common_member_validate')." v
 					LEFT JOIN ".DB::table('common_member')." m ON v.uid=m.uid
 					LEFT JOIN ".DB::table('common_member_status')." ms ON m.uid=ms.uid
 					WHERE v.status='0' ORDER BY v.submitdate DESC LIMIT $start_limit, ".$_G['setting']['memberperpage']);
 				while($member = DB::fetch($query)) {
 					if($member['groupid'] != 8) {
-						$vuids .= ','.$member['uid'];
+						$vuids .= ','.$member['vuid'];
 						continue;
 					}
 					$member['regdate'] = dgmdate($member['regdate']);
@@ -662,7 +662,7 @@ if($operation == 'threads') {
 			showtagfooter('tbody');
 		}
 
-		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
+		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input class="checkbox" type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
 		showtablefooter();
 		showformfooter();
 
@@ -955,7 +955,7 @@ if($operation == 'threads') {
 
 		}
 
-		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
+		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input class="checkbox" type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
 		showtablefooter();
 		showformfooter();
 

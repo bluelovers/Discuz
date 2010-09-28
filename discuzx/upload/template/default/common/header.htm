@@ -78,7 +78,7 @@
 					</p>
 					<p>
 						<!--{eval $upgradecredit = $_G['uid'] && $_G['group']['grouptype'] == 'member' && $_G['group']['groupcreditslower'] != 999999999 ? $_G['group']['groupcreditslower'] - $_G['member']['credits'] : false;}-->
-						{lang credits}: <a href="home.php?mod=spacecp&ac=credit">$_G[member][credits]</a><!--{loop $_G['setting']['extcredits'] $extcreditid $extcredit}--> , {$extcredit[img]}$extcredit[title]: <a href="home.php?mod=spacecp&ac=credit" id="hcredit_$extcreditid"><!--{echo getuserprofile('extcredits'.$extcreditid);}--></a> {$extcredit[unit]}<!--{/loop}--> , {lang usergroup}: <a href="home.php?mod=spacecp&ac=usergroup"{if $upgradecredit !== 'false'} id="g_upmine" class="xi2" onmouseover="showMenu({'ctrlid':this.id, 'pos':'21'});"{/if}>$_G[group][grouptitle]</a>
+						{lang credits}: <a href="home.php?mod=spacecp&ac=credit">$_G[member][credits]</a><!--{loop $_G['setting']['extcredits'] $extcreditid $extcredit}--><!--{if empty($extcredit['hiddeninheader'])}--> , {$extcredit[img]}$extcredit[title]: <a href="home.php?mod=spacecp&ac=credit" id="hcredit_$extcreditid"><!--{echo getuserprofile('extcredits'.$extcreditid);}--></a> {$extcredit[unit]}<!--{/if}--><!--{/loop}--> , {lang usergroup}: <a href="home.php?mod=spacecp&ac=usergroup"{if $upgradecredit !== 'false'} id="g_upmine" class="xi2" onmouseover="showMenu({'ctrlid':this.id, 'pos':'21'});"{/if}>$_G[group][grouptitle]</a>
 					</p>
 				</div>
 				<!--{elseif !empty($_G['cookie']['loginuser'])}-->
@@ -87,7 +87,7 @@
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang activation}</a>
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
 				</p>
-				<!--{elseif !IS_ROBOT}-->
+				<!--{else}-->
 					<!--{template member/login_simple}-->
 				<!--{/if}-->
 			</div>

@@ -170,7 +170,7 @@
 											allCreditObj.innerHTML = parseInt(allCreditObj.innerHTML) - parseInt(values['deduction']);
 											var x = new Ajax();
 											x.get('home.php?mod=spacecp&ac=invite&op=showinvite&inajax=1', function(s){
-												$('invitelist').innerHTML = s;
+												ajaxinnerhtml($('invitelist'), s);
 					   						});
 											showCreditPrompt();
 										}

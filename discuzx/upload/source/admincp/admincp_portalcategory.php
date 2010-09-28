@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 16859 2010-09-16 03:32:09Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 17244 2010-09-27 09:25:12Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -79,7 +79,7 @@ SCRIPT;
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $portalcategory[$_G['gp_newsetindex']]['caturl']), 0, 1);
 		}
 		include_once libfile('function/cache');
-		updatecache(array('portalcategory','diytemplatename', 'setting'));
+		updatecache(array('portalcategory','diytemplatename'));
 
 		cpmsg('portalcategory_update_succeed', 'action=portalcategory', 'succeed');
 	}
@@ -178,7 +178,7 @@ SCRIPT;
 			if($portalcategory[$_GET['catid']]['foldername']) delportalcategoryfolder($_GET['catid']);
 
 			deleteportalcategory($_GET['catid']);
-			updatecache(array('portalcategory','diytemplatename','setting'));
+			updatecache(array('portalcategory','diytemplatename'));
 			cpmsg('portalcategory_delete_succeed', 'action=portalcategory', 'succeed');
 		}
 
@@ -282,7 +282,7 @@ SCRIPT;
 		}
 
 		if($portalcategory[$_GET['catid']]['foldername']) delportalcategoryfolder($_GET['catid']);
-		updatecache(array('portalcategory','diytemplatename','setting'));
+		updatecache(array('portalcategory','diytemplatename'));
 		loadcache('portalcategory', true);
 		remakecategoryfile($updatecategoryfile);
 		cpmsg('portalcategory_delete_succeed', 'action=portalcategory', 'succeed');
@@ -359,7 +359,7 @@ SCRIPT;
 		showtableheader();
 		$catemsg = '';
 		if($cate['username']) $catemsg .= $lang['portalcategory_username'].' '.$cate['username'];
-		if($cate['dateline']) $catemsg .= ' '.$lang['portalcategory_dateline'].' '.dgmdate($cate['dateline'],'Y-h-d m:i:s');
+		if($cate['dateline']) $catemsg .= ' '.$lang['portalcategory_dateline'].' '.dgmdate($cate['dateline'],'Y-m-d m:i:s');
 		if($cate['upid']) $catemsg .= ' '.$lang['portalcategory_upname'].': <a href="'.ADMINSCRIPT.'?action=portalcategory&operation=edit&catid='.$cate['upid'].'">'.$portalcategory[$cate['upid']]['catname'].'</a>';
 		if($catemsg) showtitle($catemsg);
 		showsetting('portalcategory_catname', 'catname', html_entity_decode($cate['catname']), 'text');
@@ -646,7 +646,6 @@ SCRIPT;
 					}
 				}
 			}
-			$cachearr[] = 'setting';
 		}
 
 		if($_G['gp_setindex']) {

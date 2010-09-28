@@ -17,9 +17,13 @@
 			<div id="block_selection">
 
 				<ul class="tb cl">
+					<!--{if $allowmanage}-->
 					<li id="li_setting"{if $op=="block"} class="a"{/if}><a href="portal.php?mod=portalcp&ac=block&bid=$bid&op=block">{lang block_properties}</a></li>
+					<!--{/if}-->
 					<!--{if $bid && !$is_htmlblock}-->
-					<li id="li_data"{if $op=="data"} class="a"{/if}><a href="portal.php?mod=portalcp&ac=block&bid=$bid&op=data">{lang block_data}</a></li>
+						<!--{if $allowmanage || $allowdata}-->
+						<li id="li_data"{if $op=="data"} class="a"{/if}><a href="portal.php?mod=portalcp&ac=block&bid=$bid&op=data">{lang block_data}</a></li>
+						<!--{/if}-->
 					<!--{/if}-->
 					<!--{if $is_recommendable}-->
 					<li id="li_itemdata"{if $op=="itemdata"} class="a"{/if}><a href="portal.php?mod=portalcp&ac=block&bid=$bid&op=itemdata">{lang block_itemdata}</a></li>

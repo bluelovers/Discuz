@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_pm.php 16954 2010-09-17 07:23:30Z zhengqingpeng $
+ *      $Id: spacecp_pm.php 17092 2010-09-21 02:22:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ loaducenter();
 
 if($_GET['op'] == 'checknewpm') {
 
-	if($_G['uid'] && $_G['member']['newpm']) {
+	if($_G['uid'] && !$_G['member']['newpm']) {
 		$ucnewpm = intval(uc_pm_checknew($_G['uid']));
 		if($_G['member']['newpm'] != $ucnewpm) {
 			DB::query("UPDATE ".DB::table('common_member')." SET newpm='$ucnewpm' WHERE uid='$_G[uid]'");

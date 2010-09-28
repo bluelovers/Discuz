@@ -42,7 +42,7 @@
 				<!--{if $isfirstpost && $_G['forum'][threadtypes][types]}-->
 					<div class="ftid">
 						<select name="typeid" id="typeid" width="80">
-						<!--{if !$_G['forum']['threadtypes']['required']}--><option value="0">{lang types}</option><!--{/if}-->
+						<option value="0">{lang select_thread_catgory}</option>
 						<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
 							<option value="$typeid"{if $thread['typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
 						<!--{/loop}-->

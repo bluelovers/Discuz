@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_group.php 16050 2010-08-31 04:54:54Z wangjinbo $
+ *      $Id: search_group.php 17256 2010-09-28 01:48:27Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,7 +87,7 @@ if(!submitcheck('searchsubmit', 1)) {
 				}
 			}
 		}
-		$groupnum = !empty($index['ids']['group']) ? count(explode(',', $index['ids']['group'])) : 0;
+		$groupnum = !empty($index['ids']['group']) ? count(explode(',', $index['ids']['group'])) - 1 : 0;
 		if($index['ids']['group'] && ($viewgroup || empty($searchstring[2]))) {
 			if(empty($viewgroup)) {
 				$index['ids']['group'] = implode(',', array_slice(explode(',', $index['ids']['group']), 0, 9));

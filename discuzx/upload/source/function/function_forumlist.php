@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 15312 2010-08-23 05:35:23Z lifangming $
+ *      $Id: function_forumlist.php 17227 2010-09-27 02:22:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -313,14 +313,14 @@ function showstars($num) {
 	$alt = 'alt="Rank: '.$num.'"';
 	if(empty($_G['setting']['starthreshold'])) {
 		for($i = 0; $i < $num; $i++) {
-			echo '<img src="'.IMGDIR.'/star_level1.gif" '.$alt.' />';
+			echo '<img src="'.$_G['style']['imgdir'].'/star_level1.gif" '.$alt.' />';
 		}
 	} else {
 		for($i = 3; $i > 0; $i--) {
 			$numlevel = intval($num / pow($_G['setting']['starthreshold'], ($i - 1)));
 			$num = ($num % pow($_G['setting']['starthreshold'], ($i - 1)));
 			for($j = 0; $j < $numlevel; $j++) {
-				echo '<img src="'.IMGDIR.'/star_level'.$i.'.gif" '.$alt.' />';
+				echo '<img src="'.$_G['style']['imgdir'].'/star_level'.$i.'.gif" '.$alt.' />';
 			}
 		}
 	}

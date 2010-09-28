@@ -35,7 +35,7 @@
 		</p>
 	<!--{elseif $_G[gp_operation] == 'exchange'}-->
 		<div class="c">
-			<input type="hidden" name="operation" value="exchange" />			
+			<input type="hidden" name="operation" value="exchange" />
 			<input type="hidden" name="exchangeamount" value="$exchangeamount" />
 			<input type="hidden" name="fromcredits" value="$fromcredits" />
 			<input type="hidden" name="tocredits" value="$tocredits" />
@@ -74,6 +74,25 @@
 		</p>
 	<!--{/if}-->
 </form>
+
+<!--{if $_G[inajax]}-->
+<script type="text/javascript">
+if(BROWSER.ie == 6) {
+	var popWindow = {
+			coversel: function (id) {
+				id = isUndefined(id) ? 'fwin_credit' : id;
+				var obj = $(id);
+				if(!obj) return false;
+				var frm = document.createElement('<iframe frameborder="0" style="position:absolute;z-index:-1;"></iframe>');
+				frm.style.width = obj.offsetWidth + 'px';
+				frm.style.height = obj.offsetHeight + 'px';
+				obj.insertBefore(frm, obj.firstChild);
+			}
+		}
+	popWindow.coversel();
+}
+</script>
+<!--{/if}-->
 
 <!--{if !$_G[inajax]}-->
 		</div>

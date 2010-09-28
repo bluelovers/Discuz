@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_share.php 15087 2010-08-19 02:11:11Z wangjinbo $
+ *      $Id: spacecp_share.php 17227 2010-09-27 02:22:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -303,7 +303,7 @@ if($_GET['op'] == 'delete') {
 			$flashvar = parseflv($link);
 			if(empty($flashvar) && preg_match("/\.flv$/i", $link)) {
 				$flashvar = array(
-					'flv' => IMGDIR.'/flvplayer.swf?&autostart=true&file='.urlencode($link),
+					'flv' => $_G['style']['imgdir'].'/flvplayer.swf?&autostart=true&file='.urlencode($link),
 					'imgurl' => ''
 				);
 			}

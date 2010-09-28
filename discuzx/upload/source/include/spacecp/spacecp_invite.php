@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_invite.php 16883 2010-09-16 06:28:39Z zhengqingpeng $
+ *      $Id: spacecp_invite.php 17090 2010-09-20 10:38:14Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,7 +64,7 @@ if(!$creditnum) {
 	$inviteurl = getinviteurl(0, 0, $appid);
 }
 if(!$allowinvite) {
-	showmessage('close_invite', $baseurl, array(), $_G['inajax'] ? array('showdialog'=>1, 'showmsg' => true, 'closetime' => true) : array());
+	showmessage('close_invite', '', array(), $_G['inajax'] ? array('showdialog'=>1, 'showmsg' => true, 'closetime' => true) : array());
 }
 
 if(submitcheck('emailinvite')) {

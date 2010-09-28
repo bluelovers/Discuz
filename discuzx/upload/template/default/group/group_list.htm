@@ -121,7 +121,7 @@
 								<td class="by">
 									<cite>
 									<!--{if $thread['authorid'] && $thread['author']}-->
-										<a href="home.php?mod=space&uid=$thread[authorid]">$thread[author]</a><!--{if $verify[$thread['authorid']]}-->$verify[$thread[authorid]]<!--{/if}-->
+										<a href="home.php?mod=space&uid=$thread[authorid]">$thread[author]</a><!--{if !empty($verify[$thread['authorid']])}-->$verify[$thread[authorid]]<!--{/if}-->
 									<!--{else}-->
 										<!--{if $_G['forum']['ismoderator']}-->
 											<a href="home.php?mod=space&uid=$thread[authorid]">{lang anonymous}</a>

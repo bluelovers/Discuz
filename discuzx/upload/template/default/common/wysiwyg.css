@@ -5,7 +5,7 @@ http://www.comsenz.com
 */
 * { margin: 0; padding: 0; word-wrap: break-word; }
 html, body { border: 0 !important; }
-body { background: #FFF; font: 14px/1.5 {FONT}; color: {TABLETEXT}; height: 400px; }
+body { background: #FFF; font: {FONTSIZE} {FONT}; font-size: {MSGFONTSIZE}; color: {TABLETEXT}; height: 400px; }
 li { list-style-type: disc; margin-left: 2em; }
 ol { *margin: 0; padding: 0; }
 .litype_1 li, ol li { list-style-type: decimal; }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 17051 2010-09-20 00:51:50Z cnteacher $
+ *      $Id: class_core.php 17161 2010-09-25 06:33:30Z cnteacher $
  */
 
 define('IN_DISCUZ', true);
@@ -214,6 +214,7 @@ class discuz_core {
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+
 	}
 
 	function _init_config() {
@@ -265,6 +266,11 @@ class discuz_core {
 			if(strpos($temp, '<') !== false || strpos($temp, '"') !== false) {
 				system_error('request_tainting');
 			}
+		}
+
+		$attackevasive = $this->config['security']['attackevasive'];
+		if($attackevasive && (!defined('CURSCRIPT') || CURSCRIPT != 'misc' || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
+			require_once libfile('misc/security', 'include');
 		}
 
 		$allowgzip = $this->config['output']['gzip'] && empty($this->var['inajax']) && $this->var['mod'] != 'attachment' && EXT_OBGZIP;

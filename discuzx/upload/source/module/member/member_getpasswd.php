@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_getpasswd.php 9182 2010-04-27 08:08:42Z zhaoxiongfei $
+ *      $Id: member_getpasswd.php 17149 2010-09-25 04:02:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,7 +42,7 @@ if($_G['gp_uid'] && $_G['gp_id']) {
 		DB::query("UPDATE ".DB::table('common_member')." SET password='$password' WHERE uid='$_G[gp_uid]'");
 		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET authstr='' WHERE uid='$_G[gp_uid]'");
 
-		showmessage('getpasswd_succeed', '', array(), array('login' => 1));
+		showmessage('getpasswd_succeed', 'index.php', array(), array('login' => 1));
 	}
 
 }

@@ -57,7 +57,7 @@
 					page = parseInt(pageId);
 					gid = isUndefined(gid) ? 0 : parseInt(gid);
 					var x = new Ajax();
-					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid, function(s) {
+					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&' + Math.random(), function(s) {
 						var data = eval('('+s+')');
 						var singlenum = parseInt(data['singlenum']);
 						var maxfriendnum = parseInt(data['maxfriendnum']);
@@ -92,7 +92,7 @@
 				scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
 				if(BROWSER.ie) {
 					scriptNode.onreadystatechange = function () {
-						if(scriptNode.readyState == 'loaded') {
+						if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {
 							selector();
 						}
 					}

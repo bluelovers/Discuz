@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 16620 2010-09-10 06:53:02Z liulanbo $
+ *      $Id: forum_ajax.php 17227 2010-09-27 02:22:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,7 +67,7 @@ if($_G['gp_action'] == 'checkusername') {
 } elseif($_G['gp_action'] == 'checkuserexists') {
 
 	$check = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='".trim($_G['gp_username'])."'");
-	$check ? showmessage('<img src="'.IMGDIR.'/check_right.gif" width="13" height="13">', '', array(), array('msgtype' => 3))
+	$check ? showmessage('<img src="'.$_G['style']['imgdir'].'/check_right.gif" width="13" height="13">', '', array(), array('msgtype' => 3))
 		: showmessage('username_nonexistence', '', array(), array('msgtype' => 3));
 
 } elseif($_G['gp_action'] == 'attachlist') {

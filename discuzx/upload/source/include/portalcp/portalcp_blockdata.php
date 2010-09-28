@@ -24,7 +24,7 @@ if(checkperm('allowdiy')) {
 } else {
 	$permissions = getallowdiytemplate($_G['uid']);
 	foreach($permissions as $value) {
-		if($value['allowmanage']) {
+		if($value['allowmanage'] || ($value['allowrecommend'] && empty($value['needverify'])) || ($op=='recommend' && $value['allowrecommend'])) {
 			$tpls[] = $value['targettplname'];
 		}
 	}
@@ -36,7 +36,7 @@ if($tpls) {
 	}
 }
 if(!$_G['group']['allowdiy']) {
-	$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND allowmanage='1'");
+	$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND allowmanage='1' OR (allowrecommend='1' AND needverify='0')");
 	while(($value=DB::fetch($query))) {
 		$bids[] = intval($value['bid']);
 	}

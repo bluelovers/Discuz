@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 16680 2010-09-13 03:01:08Z wangjinbo $
+ *      $Id: space_profile.php 17192 2010-09-26 05:15:58Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,10 +89,12 @@ $profiles = array();
 $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
 
 foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
-	if($field['available'] && $field['invisible'] != '1'
+	if(($field['available'] && $field['invisible'] != '1'
 		&& ($space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1))
 		&& strlen($space[$fieldid]) > 0
-		&& (!$_G['inajax'] || $field['showincard'])) {
+		&& (!$_G['inajax'] || $field['showincard']))
+		|| $field['showinthread']
+		|| $field['showincard'] ) {
 
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
@@ -128,7 +130,6 @@ $allowupdatedoing = $space['uid'] == $_G['uid'] && checkperm('allowdoing');
 
 if($_G['setting']['verify']['enabled']) {
 	space_merge($space, 'verify');
-	$attachurl = getglobal('setting/attachurl');
 }
 dsetcookie('home_diymode', 1);
 

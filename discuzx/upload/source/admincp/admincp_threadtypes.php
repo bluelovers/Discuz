@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 16666 2010-09-13 01:41:51Z monkey $
+ *      $Id: admincp_threadtypes.php 17257 2010-09-28 01:59:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -686,7 +686,7 @@ EOT;
 						if($identifier) {
 							if(in_array($insertoptionid[$optionid]['type'], array('radio', 'select'))) {
 								$create_tableoption_sql .= "$separator$identifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'\r\n";
-							} elseif($insertoptionid[$optionid]['type'] == 'number') {
+							} elseif(in_array($insertoptionid[$optionid]['type'], array('number', 'range'))) {
 								$create_tableoption_sql .= "$separator$identifier int(10) UNSIGNED NOT NULL DEFAULT '0'\r\n";
 							} else {
 								$create_tableoption_sql .= "$separator$identifier mediumtext NOT NULL\r\n";
@@ -728,7 +728,7 @@ EOT;
 							$fieldname = $identifier;
 							if(in_array($insertoptionid[$optionid]['type'], array('radio', 'select'))) {
 								$fieldtype = 'smallint(6) UNSIGNED NOT NULL DEFAULT \'0\'';
-							} elseif($insertoptionid[$optionid]['type'] == 'number') {
+							} elseif(in_array($insertoptionid[$optionid]['type'], array('number', 'range'))) {
 								$fieldtype = 'int(10) UNSIGNED NOT NULL DEFAULT \'0\'';
 							} else {
 								$fieldtype = 'mediumtext NOT NULL';

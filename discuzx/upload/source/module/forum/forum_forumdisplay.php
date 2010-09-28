@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 17016 2010-09-19 04:17:05Z monkey $
+ *      $Id: forum_forumdisplay.php 17186 2010-09-26 02:22:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,7 @@ $_G['action']['fid'] = $_G['fid'];
 $_G['gp_specialtype'] = isset($_G['gp_specialtype']) ? $_G['gp_specialtype'] : '';
 $_G['gp_dateline'] = isset($_G['gp_dateline']) ? intval($_G['gp_dateline']) : 0;
 $_G['gp_digest'] = isset($_G['gp_digest']) ? 1 : '';
+$_G['gp_archiveid'] = isset($_G['gp_archiveid']) ? intval($_G['gp_archiveid']) : 0;
 
 $showoldetails = isset($_G['gp_showoldetails']) ? $_G['gp_showoldetails'] : '';
 switch($showoldetails) {
@@ -160,6 +161,7 @@ if($_G['forum']['modworks'] || $_G['forum']['modnewposts']) {
 
 $optionadd = $filterurladd = $searchsorton = '';
 
+$quicksearchlist = array();
 if(!empty($_G['forum']['threadsorts']['types'])) {
 	require_once libfile('function/threadsort');
 
@@ -505,7 +507,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 			$thread['typehtml'] = '<em><a title="'.$_G['forum']['threadtypes']['types'][$thread['typeid']].'" href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'&amp;filter=typeid&amp;typeid='.$thread['typeid'].'">'.'<img style="vertical-align: middle;padding-right:4px;" src="'.$_G['forum']['threadtypes']['icons'][$thread['typeid']].'" alt="'.$_G['forum']['threadtypes']['types'][$thread['typeid']].'" /></a></em>';
 		}
 	} else {
-		$thread['typeid'] = '';
+		$thread['typeid'] = $thread['typehtml'] = '';
 	}
 
 	$thread['sorthtml'] = $thread['sortid'] && !empty($_G['forum']['threadsorts']['prefix']) && isset($_G['forum']['threadsorts']['types'][$thread['sortid']]) ?
@@ -597,7 +599,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 	} else {
 		$thread['id'] = 'normalthread_'.$thread['tid'];
 	}
-	if($_G['setting']['verify']['enabled']) {
+	if(isset($_G['setting']['verify']['enabled']) && $_G['setting']['verify']['enabled']) {
 		$verifyuids[$thread['authorid']] = $thread['authorid'];
 	}
 
@@ -611,7 +613,7 @@ if($_G['setting']['verify']['enabled'] && $verifyuids) {
 	while($value = DB::fetch($verifyquery)) {
 		foreach($_G['setting']['verify'] as $vid => $vsetting) {
 			if($vsetting['available'] && $vsetting['showicon'] && !empty($vsetting['icon']) && $value['verify'.$vid] == 1) {
-				$verify[$value['uid']] .= "<a href=\"home.php?mod=spacecp&ac=profile&op=verify&vid=$vid\" target=\"_blank\">".(!empty($vsetting['icon']) ? '<img src="'.getglobal('setting/attachurl').'/common/'.$vsetting['icon'].'" class="vm" alt="'.$vsetting['title'].'" title="'.$vsetting['title'].'" />' : $vsetting['title']).'</a>';
+				$verify[$value['uid']] .= "<a href=\"home.php?mod=spacecp&ac=profile&op=verify&vid=$vid\" target=\"_blank\">".(!empty($vsetting['icon']) ? '<img src="'.$vsetting['icon'].'" class="vm" alt="'.$vsetting['title'].'" title="'.$vsetting['title'].'" />' : $vsetting['title']).'</a>';
 			}
 		}
 
@@ -628,6 +630,7 @@ if(!empty($grouptids)) {
 	}
 }
 
+$stemplate = $sortexpiration = null;
 if($_G['forum']['threadsorts']['types'] && $sortoptionarray && $templatearray) {
 	$sortid = intval($_G['gp_sortid']);
 	$sortlistarray = showsorttemplate($_G['gp_sortid'], $_G['fid'], $sortoptionarray, $templatearray, $_G['forum_threadlist'], $threadids);
@@ -675,6 +678,7 @@ $_G['group']['allowpost'] = (!$_G['forum']['postperm'] && $_G['group']['allowpos
 $fastpost = $fastpost && !$_G['forum']['allowspecialonly'];
 $_G['group']['allowpost'] = isset($_G['forum']['allowpost']) && $_G['forum']['allowpost'] == -1 ?  false : $_G['group']['allowpost'];
 
+$guestpost = null;
 if(!$_G['uid']) {
 	$guestpost = $_G['perm']['allowpost'] && !$_G['group']['allowpost'];
 	if($guestpost) {

@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: threadtype.php 16404 2010-09-06 06:38:01Z wangjinbo $
+ * $Id: threadtype.php 17162 2010-09-25 06:39:02Z monkey $
  */
 
 $curprg = basename(__FILE__);
@@ -32,7 +32,7 @@ while($row = $db_source->fetch_array($query)) {
 	$threadtypes_types = $threadtypes['types'];
 	ksort($threadtypes_types);
 	foreach($threadtypes_types as $typeid => $name) {
-		$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => $name), 1);
+		$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => addslashes($name)), 1);
 		$typenames[$newtypeid] = $name;
 		$db_target->query("UPDATE $table_target_thread SET typeid='$newtypeid' WHERE fid='$nextid' AND typeid='$typeid'");
 	}

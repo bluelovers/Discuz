@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_register.php 16800 2010-09-15 03:22:31Z monkey $
+ *      $Id: member_register.php 17228 2010-09-27 02:37:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,30 +61,32 @@ $query = DB::query("SELECT * FROM ".DB::table('common_setting')." WHERE skey IN 
 while($setting = DB::fetch($query)) {
 	$$setting['skey'] = $setting['svalue'];
 }
+if($_G['setting']['regverify']) {
+	if($_G['setting']['areaverifywhite']) {
+		$location = $whitearea = '';
+		require_once libfile('function/misc');
+		$location = trim(convertip($_G['clientip'], "./"));
+		if($location) {
+			$whitearea = preg_quote(trim($_G['setting']['areaverifywhite']), '/');
+			$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
+			$whitearea = '.*'.$whitearea.'.*';
+			$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+			if(@preg_match($whitearea, $location)) {
+				$_G['setting']['regverify'] = 0;
+			}
+		}
+	}
 
-if($_G['setting']['areaverifywhite']) {
-	$location = $whitearea = '';
-	require_once libfile('function/misc');
-	$location = trim(convertip($_G['clientip'], "./"));
-	if($location) {
-		$whitearea = preg_quote(trim($_G['setting']['areaverifywhite']), '/');
-		$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
-		$whitearea = '.*'.$whitearea.'.*';
-		$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
-		if(@preg_match($whitearea, $location)) {
-			$_G['setting']['regverify'] = 0;
+	if($_G['cache']['ipctrl']['ipverifywhite']) {
+		foreach(explode("\n", $_G['cache']['ipctrl']['ipverifywhite']) as $ctrlip) {
+			if(preg_match("/^(".preg_quote(($ctrlip = trim($ctrlip)), '/').")/", $_G['clientip'])) {
+				$_G['setting']['regverify'] = 0;
+				break;
+			}
 		}
 	}
 }
 
-if($_G['cache']['ipctrl']['ipverifywhite']) {
-	foreach(explode("\n", $_G['cache']['ipctrl']['ipverifywhite']) as $ctrlip) {
-		if(preg_match("/^(".preg_quote(($ctrlip = trim($ctrlip)), '/').")/", $_G['clientip'])) {
-			$_G['setting']['regverify'] = 0;
-			break;
-		}
-	}
-}
 $groupinfo = array();
 if($_G['setting']['regverify']) {
 	$groupinfo['groupid'] = 8;
@@ -104,7 +106,6 @@ $auth = $_G['gp_auth'];
 require_once libfile('function/profile');
 
 $invite = getinvite();
-
 if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	if($_G['gp_action'] == 'activation') {
@@ -156,7 +157,6 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	$invite = getinvite();
 	if($_G['setting']['regstatus'] == 2 && empty($invite)) {
 		showmessage('not_open_registration_invite');
 	}
@@ -278,6 +278,19 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 	}
 
+	if($_G['setting']['regfloodctrl']) {
+		if($regattempts = DB::result_first("SELECT count FROM ".DB::table('common_regip')." WHERE ip='$_G[clientip]' AND count>'0' AND dateline>'$_G[timestamp]'-86400")) {
+			if($regattempts >= $_G['setting']['regfloodctrl']) {
+				showmessage('register_flood_ctrl', NULL, array('regfloodctrl' => $_G['setting']['regfloodctrl']));
+			} else {
+				DB::query("UPDATE ".DB::table('common_regip')." SET count=count+1 WHERE ip='$_G[clientip]' AND count>'0'");
+			}
+		} else {
+			DB::query("INSERT INTO ".DB::table('common_regip')." (ip, count, dateline)
+				VALUES ('$_G[clientip]', '1', '$_G[timestamp]')");
+		}
+	}
+
 	$secques = $questionid > 0 ? random(8) : '';
 
 	if(!$activation) {
@@ -309,19 +322,6 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 			uc_user_delete($uid);
 		}
 		showmessage('profile_uid_duplicate', '', array('uid' => $uid));
-	}
-
-	if($_G['setting']['regfloodctrl']) {
-		if($regattempts = DB::result_first("SELECT count FROM ".DB::table('common_regip')." WHERE ip='$_G[clientip]' AND count>'0' AND dateline>'$_G[timestamp]'-86400")) {
-			if($regattempts >= $_G['setting']['regfloodctrl']) {
-				showmessage('register_flood_ctrl', NULL, array('regfloodctrl' => $_G['setting']['regfloodctrl']));
-			} else {
-				DB::query("UPDATE ".DB::table('common_regip')." SET count=count+1 WHERE ip='$_G[clientip]' AND count>'0'");
-			}
-		} else {
-			DB::query("INSERT INTO ".DB::table('common_regip')." (ip, count, dateline)
-				VALUES ('$_G[clientip]', '1', '$_G[timestamp]')");
-		}
 	}
 
 	$password = md5(random(10));

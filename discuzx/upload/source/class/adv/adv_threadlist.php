@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_threadlist.php 16825 2010-09-15 07:08:20Z monkey $
+ *      $Id: adv_threadlist.php 17227 2010-09-27 02:22:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -130,7 +130,7 @@ class adv_threadlist {
 			$vttid = $parameters[$adid][\'tid\'];
 			$notag = true;
 			$adcode = $adid ? (!$parameters[$adid][\'mode\'] ? \'<tbody><tr><td colspan=\'.($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? 6 : 5).\'>\'.$codes[$adid].\'</td></tr></tbody>\'
-			: \'<tr><td class="icn"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" target="_blank"><img src="\'.IMGDIR.\'/folder_new.gif" /></a></td>\'.
+			: \'<tr><td class="icn"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" target="_blank"><img src="\'.$_G[\'style\'][\'imgdir\'].\'/folder_new.gif" /></a></td>\'.
 				($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? \'<td class="o"></td>\' : \'\').
 				\'<td class="new"><a href="\'.($parameters[$adid][\'threadurl\'] ? $parameters[$adid][\'threadurl\'] : \'forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\']).\'" class="xst">\'.$codes[$adid].\'</a></td>\'.
 				\'<td class="by"><cite><a href="home.php?mod=space&uid=\'.$vt[$vttid][\'authorid\'].\'">\'.$vt[$vttid][\'author\'].\'</a></cite><em>\'.dgmdate($vt[$vttid][\'dateline\'], \'d\').\'</em></td>\'.

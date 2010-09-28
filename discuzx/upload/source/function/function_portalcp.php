@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 16830 2010-09-15 07:27:59Z zhangguosheng $
+ *      $Id: function_portalcp.php 17229 2010-09-27 03:48:07Z zhangguosheng $
  */
 
 function get_uploadcontent($attach) {
@@ -339,14 +339,17 @@ function block_export($bids) {
 	$query = DB::query('SELECT * FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).')');
 	while($value=DB::fetch($query)) {
 		$value['param'] = unserialize($value['param']);
+		if(!empty($value['blockstyle'])) $value['blockstyle'] = unserialize($value['blockstyle']);
+
 		$return['block'][$value['bid']] = $value;
-		$styleids[] = intval($value['styleid']);
+		if(!empty($value['styleid'])) $styleids[] = intval($value['styleid']);
 	}
 	if($styleids) {
 		$styleids = array_unique($styleids);
 		$query = DB::query('SELECT * FROM '.DB::table('common_block_style')." WHERE styleid IN (".dimplode($styleids).')');
 		while($value=DB::fetch($query)) {
 			$value['template'] = unserialize($value['template']);
+			if(!empty($value['fields'])) $value['fields'] = unserialize($value['fields']);
 			$return['style'][$value['styleid']] = $value;
 		}
 	}
@@ -381,6 +384,10 @@ function block_import($data) {
 				$style['template'] = dstripslashes($style['template']);
 				$style['template'] = addslashes(serialize($style['template']));
 			}
+			if(is_array($style['fields'])) {
+				$style['fields'] = dstripslashes($style['fields']);
+				$style['fields'] = addslashes(serialize($style['fields']));
+			}
 			$newid = DB::insert('common_block_style', $style, true);
 			$stylemapping[$id] = $newid;
 		}
@@ -400,6 +407,10 @@ function block_import($data) {
 		if(is_array($block['param'])) {
 			$block['param'] = dstripslashes($block['param']);
 			$block['param'] = addslashes(serialize($block['param']));
+		}
+		if(is_array($block['blockstyle'])) {
+			$block['blockstyle'] = dstripslashes($block['blockstyle']);
+			$block['blockstyle'] = addslashes(serialize($block['blockstyle']));
 		}
 		$newid = DB::insert('common_block', $block, true);
 		$blockmapping[$oid] = $newid;
@@ -806,7 +817,7 @@ function getblockperm($bid) {
 
 	$block = DB::fetch_first('SELECT tb.*,b.notinherited FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
 	if($block && $block['notinherited'] == '0') {
-		$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_template_permission')." WHERE targettplname='$block[targettplname]'");
+		$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_template_permission')." WHERE targettplname='$block[targettplname]' AND uid='$_G[uid]'");
 		if(!$perm) {
 			$tplpre = 'portal/list_';
 			if(substr($block['targettplname'], 0, 12) == $tplpre){

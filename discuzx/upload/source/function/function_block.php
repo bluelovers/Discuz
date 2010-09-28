@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 16908 2010-09-16 10:40:05Z zhangguosheng $
+ *      $Id: function_block.php 17191 2010-09-26 04:05:16Z zhangguosheng $
  */
 
 function block_script($blockclass, $script) {
@@ -253,21 +253,12 @@ function block_template($bid) {
 			$order++;
 
 			$rkey = $rpattern = $rvalue = $rtpl = array();
+			$rkeyplug = false;
 			if(isset($thestyle['template']['index']) && is_array($thestyle['template']['index']) && isset($thestyle['template']['index'][$order])) {
 				$rkey[] = 'index_'.$order;
 				$rpattern[] = '/\s*\[index='.$order.'\](.*?)\[\/index\]\s*/is';
 				$rvalue[] = '';
 				$rtpl[] = $thestyle['template']['index'][$order];
-			}
-			if(!empty($thestyle['template']['indexplus'])) {
-				foreach($thestyle['template']['indexplus'] as $k=>$v) {
-					if(isset($v[$order])) {
-						$rkey[] = 'index'.$k.'='.$order;
-						$rpattern[] = '/\[index'.$k.'='.$order.'\](.*?)\[\/index'.$k.'\]/is';
-						$rvalue[] = '';
-						$rtpl[] = $v[$order];
-					}
-				}
 			}
 			if(empty($rkey)) {
 				$rkey[] = 'loop';
@@ -282,6 +273,19 @@ function block_template($bid) {
 				} else {
 					$rtpl[] = $thestyle['template']['loop'];
 				}
+			}
+			if(!empty($thestyle['template']['indexplus'])) {
+				foreach($thestyle['template']['indexplus'] as $k=>$v) {
+					if(isset($v[$order])) {
+						$rkey[] = 'index'.$k.'='.$order;
+						$rkeyplug = true;
+						$rpattern[] = '/\[index'.$k.'='.$order.'\](.*?)\[\/index'.$k.'\]/is';
+						$rvalue[] = '';
+						$rtpl[] = $v[$order];
+					}
+				}
+			}
+			if(empty($rkeyplug)) {
 				if(!empty($thestyle['template']['loopplus'])) {
 					foreach($thestyle['template']['loopplus'] as $k=>$v) {
 						$rkey[] = 'loop'.$k;
@@ -861,9 +865,10 @@ function block_parse_template($str_template, &$arr) {
 		}
 	}
 	$match = array();
-	if(preg_match('/\[order=(\d+|odd|even)\](.*?)\[\/order]/is', $str_template, $match)) {
-		$order = $match[1];
-		$template['order'][$order] = trim($match[2]);
+	if(preg_match_all('/\[order=(\d+|odd|even)\](.*?)\[\/order]/is', $str_template, $match)) {
+		foreach($match[1] as $key => $order) {
+			$template['order'][$order] = trim($match[2][$key]);
+		}
 	}
 	$match = array();
 	if(preg_match_all('/\[(order\d)=(\d+|odd|even)\](.*?)\[\/\\1]/is', $str_template, $match)) {

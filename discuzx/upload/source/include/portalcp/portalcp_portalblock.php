@@ -18,13 +18,13 @@ if(!checkperm('allowdiy') && !checkperm('allowauthorizedblock')) {
 
 loadcache(array('diytemplatename'));
 loadcache('diytemplatename');
-$pageblocks = $tpls = $bids = $blocks = array();
+$pageblocks = $tpls = $bids = $blocks = $tplpermissions = $blockpermissions = array();
 if(checkperm('allowdiy')) {
 	$tpls = array_keys($_G['cache']['diytemplatename']);
 } else {
-	$permissions = getallowdiytemplate($_G['uid']);
-	foreach($permissions as $value) {
-		if($value['allowmanage'] || ($op=='recommend' && $value['allowrecommend'])) {
+	$tplpermissions = getallowdiytemplate($_G['uid']);
+	foreach($tplpermissions as $value) {
+		if($value['allowmanage'] || ($value['allowrecommend'] && empty($value['needverify'])) || ($op=='recommend' && $value['allowrecommend'])) {
 			$tpls[] = $value['targettplname'];
 		}
 	}
@@ -41,11 +41,14 @@ if($tpls) {
 }
 $pageblocks['others'] = array();
 if(!$_G['group']['allowdiy']) {
-	$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND allowmanage='1'");
+	$query = DB::query('SELECT bid,allowmanage,allowrecommend,needverify FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND allowmanage='1' OR (allowrecommend='1' AND needverify='0')");
 	while(($value=DB::fetch($query))) {
-		$bids[] = intval($value['bid']);
-		$pageblocks['others'][] = intval($value['bid']);
+		$bid = intval($value['bid']);
+		$blockpermissions[$bid] = $value;
+		$bids[] = $bid;
+		$pageblocks['others'][] = $bid;
 	}
+} else {
 }
 $bids = array_unique($bids);
 
@@ -106,7 +109,7 @@ if($op == 'recommend') {
 
 		require_once libfile('function/block');
 		$wheresql = implode(' AND ',$wherearr);
-		$query = DB::query('SELECT b.bid, b.`name`, b.blockclass, b.script, tb.targettplname FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql LIMIT 100");
+		$query = DB::query('SELECT b.bid, b.`name`, b.blockclass, b.script, b.notinherited, tb.targettplname FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql LIMIT 100");
 		while(($value=DB::fetch($query))) {
 			$value['name'] = empty($value['name']) ? '#'.$value['bid'] : $value['name'];
 			$theclass = block_getclass($value['blockclass']);
@@ -116,6 +119,7 @@ if($op == 'recommend') {
 			$value['diyurl'] = $diyurl['url'];
 			$value['tplname'] = $diytemplate[$value['targettplname']];
 			$value['isrecommendable'] = block_isrecommendable($value);
+			$value['perm'] = formatblockpermissoin($value);
 			$blocks[$value['bid']] = $value;
 		}
 	}
@@ -146,9 +150,10 @@ if($op == 'recommend') {
 	}
 
 	if($bids) {
-		$query = DB::query('SELECT bid, `name`, blockclass FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).")");
+		$query = DB::query('SELECT b.bid, b.`name`, b.blockclass, b.notinherited, tb.targettplname FROM '.DB::table('common_block').' b LEFT JOIN '.DB::table('common_template_block').' tb ON tb.bid=b.bid WHERE b.bid IN ('.dimplode($bids).')');
 		while(($value=DB::fetch($query))) {
 			$value['isrecommendable'] = block_isrecommendable($value);
+			$value['perm'] = formatblockpermissoin($value);
 			$value['name'] = !empty($value['name']) ? $value['name'] : '#'.$value['bid'];
 			$blocks[$value['bid']] = $value;
 		}
@@ -156,5 +161,33 @@ if($op == 'recommend') {
 }
 
 include_once template("portal/portalcp_portalblock");
+
+function formatblockpermissoin($block) {
+	global $tplpermissions, $blockpermissions;
+	$perm = array('allowproperty' => 0, 'allowdata'=> 0);
+	$bid = !empty($block) ? $block['bid'] : 0;
+	if(!empty($bid)) {
+		if(checkperm('allowdiy')) {
+			$perm = array('allowproperty' => 1, 'allowdata'=> 1);
+		} else {
+			if(isset($blockpermissions[$bid])) {
+				if($blockpermissions[$bid]['allowmanage']) {
+					$perm = array('allowproperty' => 1, 'allowdata'=> 1);
+				}
+				if ($blockpermissions[$bid]['allowrecommend'] && !$blockpermissions[$bid]['needverify']) {
+					$perm['allowdata'] = 1;
+				}
+			} elseif(!$block['notinherited'] && $block['targettplname'] && isset($tplpermissions[$block['targettplname']])) {
+				if($tplpermissions[$block['targettplname']]['allowmanage']) {
+					$perm = array('allowproperty' => 1, 'allowdata'=> 1);
+				}
+				if ($tplpermissions[$block['targettplname']]['allowrecommend'] && !$tplpermissions[$block['targettplname']]['needverify']) {
+					$perm['allowdata'] = 1;
+				}
+			}
+		}
+	}
+	return $perm;
+}
 
 ?>

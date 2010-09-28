@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 16575 2010-09-09 06:17:42Z liulanbo $
+ *      $Id: admincp_counter.php 17255 2010-09-28 01:46:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -247,7 +247,7 @@ if(submitcheck('forumsubmit', 1)) {
 				$fieldname = $identifier;
 				if(in_array($options[$identifier], array('radio', 'select'))) {
 					$fieldtype = 'smallint(6) UNSIGNED NOT NULL DEFAULT \'0\'';
-				} elseif($options[$identifier] == 'number') {
+				} elseif(in_array($options[$identifier], array('number', 'range'))) {
 					$fieldtype = 'int(10) UNSIGNED NOT NULL DEFAULT \'0\'';
 				} else {
 					$fieldtype = 'mediumtext NOT NULL';

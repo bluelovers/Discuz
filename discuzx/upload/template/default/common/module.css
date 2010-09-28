@@ -101,10 +101,11 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 	.el {}
 		.et { margin: 20px 0 10px; }
 		.el li { padding: 10px 20px; min-height: 20px; border-bottom: 1px dashed {COMMONBORDER}; }
-			.ie6 .el, .ie6 .el li { position: relative; zoom: 1; }
+			.ie6 .el, .ie6 .el li { zoom: 1; }
 		.el .t { position: absolute; margin: 1px 0 0 -20px; }
 		.el .o { overflow: hidden; float: right; margin: 4px -20px -4px 0; width: 16px; height: 16px; text-indent: 20px; background: url({IMGDIR}/op.png) no-repeat -2px -62px; }
-			.ie6 .el .o { position: absolute; right: 0; top: 14px; margin: 0; }
+			/* 外寬改變時 .ie6 .el .o, .ie6 .xlda .el .o, .ie6 .favl .o 的 margin 值需要更改 */
+			.ie6 .el .o { position: absolute; margin: 2px 0 0 525px; }
 			.el .del { background-position: -2px -22px; }
 		.el .d { padding-top: 10px; color: {MIDTEXT}; }
 		.ec .tn { margin: 10px 10px 0 0; cursor: pointer; }
@@ -118,6 +119,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		/* 有頭像的動態列表 */
 		.xlda .el { overflow: hidden; float: left; margin-top: -4px; width: 100%; }
 			.xlda .el li { margin-bottom: -4px; padding-top: 14px; }
+				.ie6 .xlda .el .o { margin: 2px 0 0 460px; }
 		#share_preview .h { display: none; }
 /** end **/
 
@@ -283,6 +285,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		.fl_icn { padding-right: 10px !important; width: 31px; }
 		.fl_by { width: 220px; }
 			.fl_by div { margin-left: 10px; width: 210px; padding-left: 8px; word-break: keep-all; word-wrap: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+				.fl_by div .xi2 { zoom: 1; }
 			.fl_by cite { display: block; }
 		.fl_i { width: 150px; text-align: right; }
 			.fl_i em { display: block; width: 5em; }
@@ -305,7 +308,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /* ------------------------------------------------------------------------ 主題列表樣式 */
-/** forum::forumdisplay,forum::viewthread,forum::modcp,group::index,group::group,group::my,group::forumdisplay,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat **/
+/** forum::forumdisplay,forum::viewthread,forum::modcp,group,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat **/
 /* fct --> froumatction 板塊功能按鈕 */
 	.fct a { float: left; margin-left: 8px; }
 	.fa_fav, .fa_rss, .fa_achv, .fa_bin, .fa_ivt { padding-left: 20px; background: no-repeat 0 50%; }
@@ -398,6 +401,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 /* 默認分類信息 by michael */
 .ie6 .cgtl { width: auto; }
+	.cgtl { overflow: hidden; }
 	.cgtl td, .cgtl th, .cgtl caption { padding: 5px; border-bottom: 1px solid {SPECIALBORDER}; }
 	.cgtl caption { background: {SPECIALBG}; border-top: 1px solid {SPECIALBORDER}; font-size: 14px; font-weight: 700; }
 	.cgtl th { width: 16%; }
@@ -428,7 +432,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.pls p em, .pls dt em { color: {NOTICETEXT}; }
 			.pls dd, .pls dt { float: left; overflow: hidden; height: 1.6em; line-height: 1.6em; }
 				.pls dt { margin-right: 5px; width: 50px; }
-				.pls dd { width: 70px; }
+				.pls dd { width: 75px; }
 	.ad .pls { background: {CONTENTSEPARATE}; padding: 0; height: 4px; }
 	.ad .plc { background: {SPECIALBG}; padding: 0; overflow: hidden; }
 	.pl .pnv .pls { background: {SPECIALBG}; border: solid {SPECIALBORDER}; border-width: 0 1px 1px 0; line-height: 16px; }
@@ -548,7 +552,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.cmstar em { float: left; width: 16px; height: 16px; overflow: hidden; text-indent: -9999px; }
 
 /* 第二頁顯示主題標題 #tach -> Thread Author by lushnis */
-	#tath { padding: 10px 20px; width: 120px; line-height: 24px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+	#tath { padding: 10px 10px 10px 20px; width: 130px; line-height: 24px; white-space: nowrap; word-break: keep-all; word-wrap: normal; text-overflow: ellipsis; overflow: hidden; }
 		#tath img { width: 24px; height: 24px; vertical-align: middle; }
 
 #f_pst .plc { padding: 20px; }
@@ -977,9 +981,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.sl .h { padding: 6px 10px; _height: 1%; background: {COMMONBG}; border-bottom: 1px solid {COMMONBORDER}; }
 
 /* .favl -> fav_list 收藏列表 by Pony */
-	* html .favl li { zoom: 1; }
 	.favl .o { background: url({IMGDIR}/op.png) no-repeat -4px -2px; }
 		.favl .o:hover { background-position: -4px -22px; }
+		.ie6 .favl .o { margin-left: 774px; }
 
 /* .cmt -> comment feed中的評論區域 by Pony */
 	.cmt { margin: 10px 24px 0 0; padding: 10px; border: 1px solid #EAEAEA; background: {COMMONBG}; zoom: 1; }
@@ -997,6 +1001,8 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		/* feed 區域裡的評論 */
 		.el .cmt li { padding-right: 0; border-bottom: none; }
 		.el .tri { display: none; }
+		/* feed 區域中評論的驗證碼 */
+		.el .cmt .sec .px { width: 80px !important; }
 
 /* .pll -> poll_list 投票列表 */
 	.pll {}

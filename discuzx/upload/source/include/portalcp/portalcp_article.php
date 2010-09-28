@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 17013 2010-09-19 04:04:41Z zhangguosheng $
+ *      $Id: portalcp_article.php 17206 2010-09-26 08:42:20Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -583,6 +583,14 @@ function portalcp_get_postmessage($post) {
 	$forum = DB::fetch_first('SELECT * FROM '.DB::table('forum_forum')." WHERE fid='$post[fid]'");
 	require_once libfile('function/discuzcode');
 	$language = lang('forum/misc');
+	if($forum['type'] == 'sub' && $forum['status'] == 3) {
+		loadcache('grouplevels');
+		$grouplevel = $_G['grouplevels'][$forum['level']];
+		$group_postpolicy = $grouplevel['postpolicy'];
+		if(is_array($group_postpolicy)) {
+			$forum = array_merge($forum, $group_postpolicy);
+		}
+	}
 	$post['message'] = preg_replace($language['post_edit_regexp'], '', $post['message']);
 	return discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $forum['allowsmilies'], $forum['allowbbcode'], ($forum['allowimgcode'] && $_G['setting']['showimages'] ? 1 : 0), $forum['allowhtml'], 0, 0, $post['authorid'], $forum['allowmediacode'], $post['pid']);
 }
