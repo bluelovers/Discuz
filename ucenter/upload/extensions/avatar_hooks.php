@@ -10,8 +10,6 @@
 
 !defined('IN_UC') && exit('Access Denied');
 
-
-
 include UC_ROOT.'./data/config.inc.php';
 require_once UC_ROOT.'./lib/db.class.php';
 
@@ -23,10 +21,96 @@ if ($mfavatar = $db->result_first("SELECT avatar FROM ".UC_DBTABLEPRE."memberfie
 	if($check) {
 		echo 1;
 		exit;
+	} else {
+		dheader_cache(1800, 2, null, 'avatar_'.$uid);
 	}
 
 	header('Location: '.$mfavatar);
 	exit();
+}
+
+function dheader_cache ($s = 0, $mode = 0, $lastmodified = 0, $etag = '') {
+
+	global $_SERVER;
+
+	$timestamp = time();
+
+	$header = array();
+	$ss = '';
+
+	if ($s < 0) {
+		$header['Expires'] = -1;
+		$header['Cache-Control'] = 'no-store, private, post-check=0, pre-check=0, max-age=0';
+		$header['Pragma'] = 'no-cache';
+	} else {
+
+		$lastmodified = $lastmodified > 0 ? $lastmodified : $timestamp;
+
+		if ($mode) {
+
+//			$ims = preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE'] );
+
+			if (($strpos = strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], ';')) !== false) {
+				$ims = substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, $strpos);
+			} else {
+				$ims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+			}
+
+			if (empty($ims)) {
+				// make Etag like Last-Modified
+				if (($strpos = strpos($_SERVER['HTTP_IF_NONE_MATCH'], ';')) !== false) {
+					$ims = substr($_SERVER['HTTP_IF_NONE_MATCH'], 0, $strpos);
+				} else {
+					$ims = $_SERVER['HTTP_IF_NONE_MATCH'];
+				}
+			}
+
+			$ims = strtotime($ims);
+
+			if ($mode > 1 && ($lastmodified - $ims) < $s) {
+				header('HTTP/1.0 304 Not Modified', true);
+				exit;
+			} else {
+				$ss .= '$ims: '.$ims."<br>";
+				$ss .= '$ims date: '.gmdate('D, d M Y H:i:s T', $ims)."<br>";
+				$ss .= '$lastmodified: '.$lastmodified."<br>";
+				$ss .= 'HTTP_IF_MODIFIED_SINCE: '.$_SERVER['HTTP_IF_MODIFIED_SINCE'].'<br>';
+				$ss .= 'HTTP_IF_NONE_MATCH: '.$_SERVER['HTTP_IF_NONE_MATCH'].'<br>';
+
+				$header['Last-Modified'] = gmdate('D, d M Y H:i:s T', $lastmodified);
+				$header['Etag'] = gmdate('D, d M Y H:i:s T', $lastmodified).($etag ? ';'.$etag : '');
+			}
+		}
+
+		if ($s) {
+			$header['Cache-Control'] = 'max-age='.$s.', public';
+			$header['Expires'] = gmdate('D, d M Y H:i:s T', $lastmodified + $s);
+		}
+	}
+
+	if ($header) {
+
+		foreach ($header as $_k_ => $_v_) {
+			header($_k_.': '.$_v_, true);
+//			$ss .= $_k_.': '.$_v_."<br>";
+		}
+
+//		$headers = apache_request_headers();
+//
+//foreach ($headers as $header => $value) {
+//    echo "$header: $value <br />\n";
+//}
+//
+//echo "------------------<br>";
+//
+//		foreach ($_SERVER as $_k_ => $_v_) {
+//			echo $_k_.': '.$_v_."<br>";
+//		}
+//
+//echo "------------------<br>";
+//
+//		exit($ss);
+	}
 }
 
 ?>
