@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 17014 2010-09-19 04:04:45Z zhangguosheng $
+ *      $Id: lang_message.php 17291 2010-09-29 04:07:12Z zhangguosheng $
  */
 
 $lang = array
@@ -43,7 +43,6 @@ $lang = array
 	'period_nopermission' => '對不起，管理員設置了每日 {banperiods} 不能進行此操作或訪問此頁面，請其他時間再試。',
 	'submit_seccode_invalid' => '驗證碼填寫錯誤，請返回修改。',
 	'submit_secqaa_invalid' => '驗證問答的答案填寫錯誤，請返回修改。',
-	'submit_invalid' => '你的請求來路不正確，無法提交。',
 	'not_loggedin' => '對不起，你還未登錄，無法進行此操作。',
 	'action_closed' => '站點尚未開啟此功能，或者此功能已經被管理員禁止，請返回。',
 	'board_closed' => '對不起，本站點暫時關閉，詳情請 <a href="mailto:'.$_G['setting']['adminemail'].'">聯繫管理員</a>。',
@@ -751,7 +750,7 @@ $lang = array
 	'not_open_registration_invite' => '非常抱歉，本站目前暫時不允許用戶直接註冊，需要有效的好友邀請鏈接才能註冊',
 	'not_open_invite' => '非常抱歉，本站目前暫時不允許用戶通過邀請鏈接註冊',
 
-	'getpasswd_account_notmatch' => '你的賬戶資料中沒有完整的Email地址，不能使用取回密碼功能，如有疑問請與管理員聯繫。',
+	'getpasswd_account_notmatch' => '你填寫的賬戶資料不匹配，不能使用取回密碼功能，如有疑問請與管理員聯繫。',
 	'getpasswd_email_notmatch' => '輸入的Email地址與用戶名不匹配，請重新確認。',
 	'getpasswd_send_succeed' => '取回密碼的方法已經通過 Email 發送到你的信箱中，<br />請在 3 天之內修改你的密碼。',
 	'user_does_not_exist' => '該用戶不存',
@@ -805,7 +804,7 @@ $lang = array
 	'invite_friend_ok' => '好友邀請確認完成了',
 
 	'should_not_invite_your_own' => '對不起，你不能通過訪問自己的邀請鏈接來邀請自己。',
-	'close_invite' => '對不起，你目前還沒有權限來進行邀請好友操作',
+	'close_invite' => '對不起，你目前還沒有權限來進行邀請好友操作，返回上一頁。',
 
 	'field_required' => '個人資料中的必填項目「\\1」 不能為空，請確認',
 	'friend_self_error' => '對不起，你不能加自己為好友',
@@ -822,7 +821,7 @@ $lang = array
 	'showcredit_do_success' => '你已經成功增加上榜積分，趕快查看自己的最新排名吧',
 	'showcredit_friend_do_success' => '你已經成功贈送好友上榜積分，好友會收到通知的',
 
-	'submit_invalid' => '你的請求來路不正確或表單驗證串不符，無法提交。請嘗試使用標準的web瀏覽器進行操作。',
+	'submit_invalid' => '你的請求來路不正確或表單驗證串不符，無法提交。',
 	'no_privilege_my_app_status' => '對不起，當前站點已經關閉了用戶多應用服務。',
 	'no_privilege_myapp' => '對不起，該應用不存在或已關閉，你可以<a href="userapp.php?mod=manage&my_suffix=%2Fapp%2Flist">選擇其他應用</a>',
 
@@ -1107,6 +1106,7 @@ $lang = array
 	'start_time_is_greater_than_end_time' => '統計開始日期不能小於結束日期',
 	'start_time_end_time_is_equal_to' => '統計開始日期不能等於結束日期',
 	'home_no_privilege' => '該頁面需要登陸後才能查看',
+	'article_push_invalid_repeat' => '不要重複推送這篇內容',
 
 );
 

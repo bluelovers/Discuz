@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_blog.php 14599 2010-08-12 10:03:03Z zhengqingpeng $
+ *      $Id: function_blog.php 17174 2010-09-25 09:31:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -167,7 +167,7 @@ function blog_post($POST, $olds=array()) {
 
 	$message = addslashes($message);
 
-	if(empty($titlepic)) {
+	if(empty($titlepic) && empty($olds)) {
 		$titlepic = getmessagepic($message);
 		$blogarr['picflag'] = 0;
 	}
@@ -215,9 +215,12 @@ function blog_post($POST, $olds=array()) {
 		'message' => $message,
 		'postip' => $_G['clientip'],
 		'target_ids' => $POST['target_ids'],
-		'tag' => $POST['tag'],
-		'pic' => $titlepic
+		'tag' => $POST['tag']
 	);
+
+	if(!empty($titlepic)) {
+		$fieldarr['pic'] = $titlepic;
+	}
 
 	if($olds) {
 		DB::update('home_blogfield', $fieldarr, array('blogid'=>$blogid));

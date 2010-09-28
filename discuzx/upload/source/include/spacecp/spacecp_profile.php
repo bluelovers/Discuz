@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 16892 2010-09-16 07:50:10Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 17200 2010-09-26 07:13:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,7 +136,8 @@ if(submitcheck('profilesubmit')) {
 	if($_G['gp_deletefile'] && is_array($_G['gp_deletefile'])) {
 		foreach($_G['gp_deletefile'] as $key => $value) {
 			@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
-			$setarr[$key] = '';
+			@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
+			$verifyarr[$key] = $setarr[$key] = '';
 		}
 	}
 	if($_FILES) {

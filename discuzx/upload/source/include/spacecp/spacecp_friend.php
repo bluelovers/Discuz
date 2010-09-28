@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 16279 2010-09-02 09:33:15Z zhengqingpeng $
+ *      $Id: spacecp_friend.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -416,7 +416,7 @@ if($op == 'add') {
 	if($_GET['subop'] == 'delete') {
 		$_GET['uid'] = intval($_GET['uid']);
 		DB::query("DELETE FROM ".DB::table('home_blacklist')." WHERE uid='$space[uid]' AND buid='$_GET[uid]'");
-		showmessage('do_success', "home.php?mod=space&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
+		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 
 	if(submitcheck('blacklistsubmit')) {
@@ -433,7 +433,7 @@ if($op == 'add') {
 
 		DB::insert('home_blacklist', array('uid'=>$space['uid'], 'buid'=>$tospace['uid'], 'dateline'=>$_G['timestamp']), 0, true);
 
-		showmessage('do_success', "home.php?mod=space&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
+		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 
 } elseif($op == 'rand') {

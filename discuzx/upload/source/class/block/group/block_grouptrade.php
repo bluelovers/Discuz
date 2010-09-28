@@ -72,6 +72,15 @@ class block_grouptrade {
 				),
 				'default' => 'dateline'
 			),
+			'gviewperm' => array(
+				'title' => 'grouptrade_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'grouptrade_gviewperm_only_member'),
+					array('1', 'grouptrade_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'grouptrade_titlelength',
 				'type' => 'text',
@@ -173,9 +182,10 @@ class block_grouptrade {
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
 
 		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).")");
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
 			while($value = DB::fetch($query)) {
 				$fids[] = intval($value['fid']);
 			}
@@ -218,7 +228,7 @@ class block_grouptrade {
 					$historytime = mktime(0, 0, 0, date('m', TIMESTAMP), date('d', TIMESTAMP), date('Y', TIMESTAMP));
 				break;
 				case 'weekhots':
-					$week = gmdate('w', TIMESTAMP) - 1;
+					$week = dgmdate(TIMESTAMP, 'w', getglobal('setting/timeformat')) - 1;
 					$week = $week != -1 ? $week : 6;
 					$historytime = mktime(0, 0, 0, date('m', TIMESTAMP), date('d', TIMESTAMP) - $week, date('Y', TIMESTAMP));
 				break;
@@ -248,7 +258,7 @@ class block_grouptrade {
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&do=tradeinfo&tid='.$data['tid'].'&pid='.$data['pid'],
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : IMGDIR.'/nophoto.gif'),
+				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(

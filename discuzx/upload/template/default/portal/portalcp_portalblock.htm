@@ -70,8 +70,12 @@
 				<td>$block[datasrc]</td>
 				<td><!--{if $block[diyurl]}--><a href="$block[diyurl]" target="_blank">$block[tplname]</a><!--{else}-->$block[tplname]<!--{/if}--></td>
 				<td>
+					<!--{if $block['perm']['allowproperty']}-->
 					<a href="portal.php?mod=portalcp&ac=block&op=block&bid=$block[bid]" target="_blank">{lang property}</a>
+					<!--{/if}-->
+					<!--{if $block['perm']['allowdata']}-->
 					<a href="portal.php?mod=portalcp&ac=block&op=data&bid=$block[bid]" target="_blank">{lang data}</a>
+					<!--{/if}-->
 					<!--{if $block['isrecommendable']}-->
 					<a href="portal.php?mod=portalcp&ac=blockdata&op=manage&searchkey=%23$block[bid]" target="_blank">{lang moderate}</a>
 					<a href="portal.php?mod=portalcp&ac=block&op=itemdata&bid=$block[bid]" target="_blank">{lang block_itemdata}</a>
@@ -103,9 +107,14 @@
 					<!--{loop $value $bid}-->
 					<li>
 						<em>
+							
+							<!--{if $blocks[$bid]['perm']['allowproperty']}-->
 							<a href="portal.php?mod=portalcp&ac=block&op=block&bid=$bid" target="_blank">{lang property}</a>
 							<span class="pipe">|</span>
+							<!--{/if}-->
+							<!--{if $blocks[$bid]['perm']['allowdata']}-->
 							<a href="portal.php?mod=portalcp&ac=block&op=data&bid=$bid" target="_blank">{lang data}</a>
+							<!--{/if}-->
 							<!--{if $blocks[$bid][isrecommendable]}-->
 							<span class="pipe">|</span>
 							<a href="portal.php?mod=portalcp&ac=blockdata&op=manage&searchkey=%23$bid" target="_blank">{lang moderate}</a>

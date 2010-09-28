@@ -576,10 +576,10 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-				// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎŞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-				// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-				// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
+	$ckey_length = 4;	// éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
+				// åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢å¤§ç ´è§£é›£åº¦ã€‚
+				// å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
+				// ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
@@ -706,7 +706,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// ²åÈëµ½×îºóÒ»ĞĞ
+		// æ’å…¥åˆ°æœ€å¾Œä¸€è¡Œ
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -758,7 +758,15 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 		$out .= "Connection: Close\r\n";
 		$out .= "Cookie: $cookie\r\n\r\n";
 	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} elseif (function_exists('pfsockopen')) {
+		$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} else {
+		$fp = false;
+	}
+
 	if(!$fp) {
 		return '';
 	} else {
@@ -965,13 +973,13 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : ÓÃ»§Ãû²»ºÏ·¨
-	-2 : °üº¬²»ÔÊĞí×¢²áµÄ´ÊÓï
-	-3 : ÓÃ»§ÃûÒÑ¾­´æÔÚ
-	-4 : email ¸ñÊ½ÓĞÎó
-	-5 : email ²»ÔÊĞí×¢²á
-	-6 : ¸Ã email ÒÑ¾­±»×¢²á
-	>1 : ±íÊ¾³É¹¦£¬ÊıÖµÎª UID
+	-1 : ç”¨æˆ¶åä¸åˆæ³•
+	-2 : åŒ…å«ä¸å…è¨±è¨»å†Šçš„è©èª
+	-3 : ç”¨æˆ¶åå·²ç¶“å­˜åœ¨
+	-4 : email æ ¼å¼æœ‰èª¤
+	-5 : email ä¸å…è¨±è¨»å†Š
+	-6 : è©² email å·²ç¶“è¢«è¨»å†Š
+	>1 : è¡¨ç¤ºæˆåŠŸï¼Œæ•¸å€¼ç‚º UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

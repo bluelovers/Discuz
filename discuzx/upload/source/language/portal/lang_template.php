@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16968 2010-09-17 08:50:35Z monkey $
+ *      $Id: lang_template.php 17286 2010-09-29 01:12:59Z zhangguosheng $
  *
  *      This file is automatically generate
  */
@@ -91,7 +91,7 @@ $lang = array (
   'block_stop' => '屏蔽',
   'block_template' => '模塊模板',
   'block_type' => '模塊分類',
-  'block_type_convert_tips' => '此模塊分類支持轉換模塊的類型，但<font color=\'red\'>可能會存在部分特殊字段的丟失且模塊的顯示樣式將會變為自定義模板</font>，請根據需要使用。<br/><font color=\'red\'>注意：</font>選擇下拉列表中的模塊類型以後模塊分類就發生改變。',
+  'block_type_convert_tips' => '此模塊分類支持轉換模塊的類型，但<font color=\'red\'>可能會存在部分特殊字段的丟失且模塊的顯示樣式將會變為自定義模板</font>，請根據需要使用。<br/><font color=\'red\'>注意：</font>選擇下拉列表中的模塊類型以後模塊分類立即發生改變。',
   'block_view_banned_data' => '查看屏蔽數據',
   'current_data_odd' => '當前數據是否在奇數行',
   'current_data_order' => '當前數據順序',
@@ -211,7 +211,8 @@ $lang = array (
   'article_numbers' => '文章數',
   'category_name' => '分類名稱',
   'category_push_select' => '選擇一個頻道分類：',
-  'portalcp_index_message1' => '您還未被授權管理任何頻道欄目',
+  'portalcp_index_message' => '您還未被授權管理任何頻道欄目',
+  'portalcp_has_no_category' => '您還沒有創建任何頻道欄目',
 
 
   'select_mod' => '選擇模塊',
@@ -234,6 +235,7 @@ $lang = array (
   'move_up' => '上移',
   'selected_tag_selected' => '將選中項標記為已選',
   'wait_select' => '待選',
+  'max_wait_select' => '最多顯示50條',
 
   'link_to_internet' => '網絡鏈接',
   'modify' => '修改',

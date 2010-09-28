@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_thread.php 16856 2010-09-16 02:53:58Z wangjinbo $
+ *      $Id: space_thread.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -113,7 +113,7 @@ if($_G['gp_view'] == 'all') {
 			$_G['cache']['space_thread'][$alltype] = array();
 			save_syscache('space_thread', $_G['cache']['space_thread']);
 
-			showmessage('thread_delete_succeed', 'home.php?mod=space&do=thread&view=all');
+			showmessage('thread_delete_succeed', 'home.php?mod=space&uid='.$space['uid'].'&do=thread&view=all');
 		}
 	}
 	$orderactives = array($_G['gp_order'] => ' class="a"');

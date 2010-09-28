@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_space.php 17060 2010-09-20 02:41:46Z cnteacher $
+ *      $Id: lang_space.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 $lang = array(
@@ -106,8 +106,8 @@ $lang = array(
 				'block4'=>'自由模塊4','block5'=>'自由模塊5'),
 
 	'block_title' => '<div class="blocktitle title"><span>{bname}</span>{more}</div>',
-	'blog_li' => '<dl class="bbda cl"><dt><a href="home.php?mod=space&do=blog&uid={uid}&id={blogid}" target="_blank">{subject}</a><span class="xg2 xw0"> {date}</span></dt>',
-	'blog_li_img' => '<dd class="atc"><a href="home.php?mod=space&do=blog&uid={uid}&id={blogid}" target="_blank"><img src="{src}" class="summaryimg" /></a></dd>',
+	'blog_li' => '<dl class="bbda cl"><dt><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank">{subject}</a><span class="xg2 xw0"> {date}</span></dt>',
+	'blog_li_img' => '<dd class="atc"><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank"><img src="{src}" class="summaryimg" /></a></dd>',
 	'blog_li_ext' => '<dd class="xg1"><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank">({viewnum})次閱讀</a><span class="pipe">|</span><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}#comment" target="_blank">({replynum})個評論</a></dd>',
 	'album_li' => '<li><div class="c"><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank"><img src="{src}" alt="{albumname}" width="120" /></a></div><p><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank" title="{albumname]}">{albumname}</a></p><span>圖片數:({picnum})</span><span>更新 {date}</span></li>',
 	'doing_li' => '<li>{message}</li><br />{date} {from} 回復({replynum})',

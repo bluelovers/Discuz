@@ -83,6 +83,15 @@ class block_groupattachment {
 				),
 				'default' => 'dateline'
 			),
+			'gviewperm' => array(
+				'title' => 'groupattachment_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupattachment_gviewperm_only_member'),
+					array('1', 'groupattachment_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'dateline' => array(
 				'title' => 'groupattachment_dateline',
 				'type' => 'mradio',
@@ -207,11 +216,12 @@ class block_groupattachment {
 		$dateline = isset($parameter['dateline']) ? intval($parameter['dateline']) : '8640000';
 		$threadmethod = !empty($parameter['threadmethod']) ? 1 : 0;
 		$isimage = isset($parameter['isimage']) ? intval($parameter['isimage']) : '';
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).")");
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
 			while($value = DB::fetch($query)) {
 				$fids[] = intval($value['fid']);
 			}

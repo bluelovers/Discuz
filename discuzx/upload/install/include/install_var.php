@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_var.php 16492 2010-09-07 08:02:28Z monkey $
+ *      $Id: install_var.php 17205 2010-09-26 08:19:20Z monkey $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -63,12 +63,12 @@ define('UNDEFINE_FUNC', 32);
 define('MISSING_PARAMETER', 33);
 define('LOCK_FILE_NOT_TOUCH', 34);
 
-$func_items = array('mysql_connect', 'fsockopen', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
+$func_items = array('mysql_connect', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
 
 $env_items = array
 (
 	'os' => array('c' => 'PHP_OS', 'r' => 'notset', 'b' => 'unix'),
-	'php' => array('c' => 'PHP_VERSION', 'r' => '4.0', 'b' => '5.0'),
+	'php' => array('c' => 'PHP_VERSION', 'r' => '4.3', 'b' => '5.0'),
 	'attachmentupload' => array('r' => 'notset', 'b' => '2M'),
 	'gdversion' => array('r' => '1.0', 'b' => '2.0'),
 	'diskspace' => array('r' => '10M', 'b' => 'notset'),
@@ -267,5 +267,5 @@ $serialize_sql_setting = array (
     'qq' => 'QQ號',
   ),
 );
-serial
+
 ?>

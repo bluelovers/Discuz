@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_friend.php 16927 2010-09-17 02:44:05Z zhengqingpeng $
+ *      $Id: space_friend.php 17201 2010-09-26 07:16:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ if($_GET['view'] == 'online') {
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_session')." $wheresql"), 0);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql ORDER BY lastactivity DESC LIMIT $start,$perpage");
+		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql AND invisible='0' ORDER BY lastactivity DESC LIMIT $start,$perpage");
 		while($value = DB::fetch($query)) {
 
 			if($value['magichidden']) {

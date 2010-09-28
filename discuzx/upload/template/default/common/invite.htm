@@ -2,7 +2,7 @@
 <!--{if !$_G['inajax']}-->
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
-	<div class="z"><a href="portal.php" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em> {lang invite}</div>
+	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em> {lang invite}</div>
 </div>
 <div id="ct" class="wp cl">
 	<div class="mn">
@@ -57,7 +57,7 @@
 					page = parseInt(pageId);
 					gid = isUndefined(gid) ? 0 : parseInt(gid);
 					var x = new Ajax();
-					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid, function(s) {
+					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&' + Math.random(), function(s) {
 						var data = eval('('+s+')');
 						var singlenum = parseInt(data['singlenum']);
 						var maxfriendnum = parseInt(data['maxfriendnum']);
@@ -92,7 +92,7 @@
 				scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
 				if(BROWSER.ie) {
 					scriptNode.onreadystatechange = function () {
-						if(scriptNode.readyState == 'loaded') {
+						if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {
 							selector();
 						}
 					}

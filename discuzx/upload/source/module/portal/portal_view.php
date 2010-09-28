@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 17045 2010-09-19 09:59:46Z zhangguosheng $
+ *      $Id: portal_view.php 17118 2010-09-21 08:16:14Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -153,7 +153,7 @@ if($article['allowcomment']) {
 			$article['commentnum'] = getcount($posttable, array('tid'=>$article['id'], 'first'=>'0'));
 
 			if($article['allowcomment']) {
-				$query = DB::query("SELECT first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, pid
+				$query = DB::query("SELECT pid, first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, status
 					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND first='0' ORDER BY dateline DESC LIMIT 0,20");
 				$attachpids = -1;
 				$attachtags = array();

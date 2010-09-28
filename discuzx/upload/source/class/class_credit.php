@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 16961 2010-09-17 07:54:14Z zhengqingpeng $
+ *      $Id: class_credit.php 17278 2010-09-28 07:51:50Z zhengqingpeng $
  */
 
 class credit {
@@ -314,19 +314,21 @@ class credit {
 			$updatearray['credits'] = $credits;
 			$member['credits'] = $credits;
 		}
+		$sendnotify = false;
 		if(empty($group) || $group['type'] == 'member' && !($member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower'])) {
 			$newgroup = DB::fetch_first("SELECT grouptitle, groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $member[credits]>=creditshigher AND $member[credits]<creditslower LIMIT 1");
 			if(!empty($newgroup)) {
 				if($member['groupid'] != $newgroup['groupid']) {
 					$updatearray['groupid'] = $groupid = $newgroup['groupid'];
-					notification_add($uid, 'system', 'user_usergroup', array(
-						'usergroup' => '<a href="home.php?mod=spacecp&ac=credit&op=usergroup">'.$newgroup['grouptitle'].'</a>',
-					), 1);
+					$sendnotify = true;
 				}
 			}
 		}
 		if($updatearray) {
 			DB::update('common_member', $updatearray, array('uid' => $uid));
+		}
+		if($sendnotify) {
+			notification_add($uid, 'system', 'user_usergroup', array('usergroup' => '<a href="home.php?mod=spacecp&ac=credit&op=usergroup">'.$newgroup['grouptitle'].'</a>'), 1);
 		}
 
 		return $groupid;

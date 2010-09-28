@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_searchindex.php 17047 2010-09-19 23:44:22Z monkey $
+ *      $Id: lang_admincp_searchindex.php 17266 2010-09-28 02:31:54Z cnteacher $
  *
  *	This file is automatically generate
  */
@@ -784,11 +784,11 @@ $lang = array (
     'setting_attach_antileech_remote_hide_dir' => '隱藏遠程附件真實路徑',
     'setting_attach_antileech_remote_hide_dir_comment' => '選擇是，將加重本地服務器負擔，並明顯增加本地服務器流量；選擇否，下載的附件與上傳的附件文件名將會不一致。',
     'setting_attach_album_maxtimage' => '圖片最大尺寸',
-    'setting_attach_album_maxtimage_comment' => '本功能需要PHP環境支持GD才生效，如果用戶上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行縮小該圖片並顯示，比如可以設置為 寬：1024px，高：768px，但都不能小於300px。設置為0，則不做任何處理。',
-    'setting_portal_article_img_thumb_closed' => '開啟文章圖片縮略圖',
-    'setting_portal_article_img_thumb_closed_comment' => '是否開啟文章上傳圖片的縮略圖',
-    'setting_portal_article_imgsize' => '文章圖片縮略圖尺寸',
-    'setting_portal_article_imgsize_comment' => '如果上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行生成相應的小圖片，默認大小為300*300',
+    'setting_attach_album_maxtimage_comment' => '如果用戶上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行縮小該圖片並顯示，比如可以設置為 寬：1024px，高：768px，但都不能小於 300px。設置為 0，則不做任何處理。',
+    'setting_attach_portal_article_img_thumb_closed' => '開啟文章圖片縮略圖',
+    'setting_attach_portal_article_img_thumb_closed_comment' => '是否開啟文章上傳圖片的縮略圖',
+    'setting_attach_portal_article_imgsize' => '文章圖片縮略圖尺寸',
+    'setting_attach_portal_article_imgsize_comment' => '如果上傳一些尺寸很大的數碼圖片，則程序會按照本設置進行生成相應的小圖片，默認大小為 300*300',
     'setting_imgwater_image_watermarks_portal' => '文章圖片水印設置',
     'setting_imgwater_image_watermarkstatus' => '水印',
     'setting_imgwater_image_watermarkstatus_none' => '不啟用水印功能',
@@ -836,24 +836,24 @@ $lang = array (
     'setting_search_status_group' => '搜索群組',
     'setting_search_srchhotkeywords' => '熱門關鍵詞',
     'setting_search_srchhotkeywords_comment' => '每行一個',
-    'settings_sphinx' => 'sphinx全文檢索設置',
+    'settings_sphinx' => 'Sphinx 全文檢索設置',
     'settings_sphinx_sphinxon' => '是否開啟',
-    'settings_sphinx_sphinxhost' => '設置sphinx主機名，或者sphinx服務socket地址',
-    'settings_sphinx_sphinxport' => '設置sphinx主機端口',
+    'settings_sphinx_sphinxhost' => '設置 Sphinx 主機名，或者 Sphinx 服務 socket 地址',
+    'settings_sphinx_sphinxport' => '設置 Sphinx 主機端口',
     'settings_sphinx_sphinxsubindex' => '設置標題索引名',
     'settings_sphinx_sphinxmsgindex' => '設置全文索引名',
     'settings_sphinx_sphinxmaxquerytime' => '設置最大搜索時間',
     'settings_sphinx_sphinxlimit' => '設置最大返回匹配項數目',
     'settings_sphinx_sphinxrank' => '設置全文索引評分模式',
-    'settings_sphinx_sphinxon_comment' => '設置是否開啟sphin全文檢索功能，開啟前確認sphinx安裝及配置成功。',
-    'settings_sphinx_sphinxhost_comment' => '填寫sphinx主機名：例如,本地主機填寫「localhost」，或者填寫sphinx服務socket地址，必須是絕對地址：例如，/tmp /sphinx.sock。',
-    'settings_sphinx_sphinxport_comment' => '填寫sphinx主機端口：例如，3312，主機名填寫socket地址的，則此處不需要設置。',
-    'settings_sphinx_sphinxsubindex_comment' => '填寫sphinx配置中的標題主索引名及標題增量索引名：例如，「threads,threads_mintue」。注意：多個索引使用英文符號「,」連接，必須按照sphinx配置文件中的索引名填寫。',
-    'settings_sphinx_sphinxmsgindex_comment' => '填寫sphinx配置中的全文主索引名及全文增量索引名：例如，「posts,posts_mintue」。注意：多個索引使用英文符號「,」連接，必須按照sphinx配置文件中的索引名填寫。',
+    'settings_sphinx_sphinxon_comment' => '設置是否開啟 Sphinx 全文檢索功能，開啟前確認 Sphinx 安裝及配置成功。',
+    'settings_sphinx_sphinxhost_comment' => '填寫 Sphinx 主機名：例如,本地主機填寫「localhost」，或者填寫 Sphinx 服務 socket 地址，必須是絕對地址：例如，/tmp/sphinx.sock。',
+    'settings_sphinx_sphinxport_comment' => '填寫 Sphinx 主機端口：例如，3312，主機名填寫 socket 地址的，則此處不需要設置。',
+    'settings_sphinx_sphinxsubindex_comment' => '填寫 Sphinx 配置中的標題主索引名及標題增量索引名：例如，「threads,threads_mintue」。注意：多個索引使用英文符號「,」連接，必須按照 Sphinx 配置文件中的索引名填寫。',
+    'settings_sphinx_sphinxmsgindex_comment' => '填寫 Sphinx 配置中的全文主索引名及全文增量索引名：例如，「posts,posts_mintue」。注意：多個索引使用英文符號「,」連接，必須按照 Sphinx 配置文件中的索引名填寫。',
     'settings_sphinx_sphinxmaxquerytime_comment' => '填寫最大搜索時間,以毫秒為單位。參數必須是非負整數。默認值為 0,意思是不做限制。',
     'settings_sphinx_sphinxlimit_comment' => '填寫最大返回匹配項數目，必須是非負整數，默認值10000.',
-    'settings_sphinx_sphinxrank_comment' => '(1)SPH_RANK_PROXIMITY_BM25， 默認模式，同時使用詞組評分和BM25評分，並且將二者結合。[默認]
-(2)SPH_RANK_BM25，統計相關度計算模式，僅使用BM25評分計算(與大多數全文檢索引擎相同)。這個模式比較快，但是可能使包含多個詞的查詢的結果質量下降。
+    'settings_sphinx_sphinxrank_comment' => '(1)SPH_RANK_PROXIMITY_BM25， 默認模式，同時使用詞組評分和 BM25 評分，並且將二者結合。[默認]
+(2)SPH_RANK_BM25，統計相關度計算模式，僅使用 BM25 評分計算(與大多數全文檢索引擎相同)。這個模式比較快，但是可能使包含多個詞的查詢的結果質量下降。
 (3)SPH_RANK_NONE，禁用評分的模式，這是最快的模式。實際上這種模式與布爾搜索相同。所有的匹配項都被賦予權重1。',
     'setting_uc_appid' => 'UCenter 應用 ID',
     'setting_uc_appid_comment' => '該值為當前站點在 UCenter 的應用 ID，一般情況請不要改動',
@@ -1544,7 +1544,7 @@ $lang = array (
     'members_profile_edit_showinthread_comment' => '選擇是，還需在帖子內容頁中選擇展示位置',
     'members_profile_edit_allowsearch' => '允許搜索',
     'members_profile_edit_display_order' => '顯示順序',
-    'members_profile_edit_display_order_comment' => '值越大顯示越靠前',
+    'members_profile_edit_display_order_comment' => '值越大顯示越靠後',
     'members_profile' => '用戶欄目',
     'members_profile_edit' => '編輯用戶欄目',
     'members_profile_edit_field_desc' => '欄目描述',
@@ -1748,7 +1748,6 @@ $lang = array (
     'usergroups_edit_basic_allowsendpm' => '允許發送短消息',
     'usergroups_edit_post_html' => '允許使用 HTML 代碼',
     'usergroups_edit_post_html_comment' => '注意: 開放 HTML 功能將產生安全隱患，請慎用。建議只在十分必要的情況下使用，並限制只開放給最核心的管理人員',
-    'usergroups_edit_basic_allow_stat' => '允許查看趨勢統計',
     'usergroups_edit_basic_search_post_comment' => '此設置只對搜索論壇有效。注意: 當數據量大時，全文搜索將非常耗費服務器資源，請慎用',
     'usergroups_edit_basic_search' => '允許使用搜索',
     'usergroups_edit_basic_reasonpm' => '操作理由短消息通知作者',
@@ -1907,9 +1906,9 @@ $lang = array (
     'usergroups_edit_home_allow_friend' => '允許加好友',
     'usergroups_edit_home_allow_myop' => '允許使用漫遊(Manyou)應用',
     'usergroups_edit_home_allow_video_photo_ignore' => '不受視頻認證限制',
-    'usergroups_edit_home_allow_space_diy_html' => '允許自定義模塊使用HTML',
-    'usergroups_edit_home_allow_space_diy_bbcode' => '允許自定義模塊使用BBCODE',
-    'usergroups_edit_home_allow_space_diy_imgcode' => '允許自定義模塊使用[img]',
+    'usergroups_edit_home_allow_space_diy_html' => '允許自定義模塊使用 HTML',
+    'usergroups_edit_home_allow_space_diy_bbcode' => '允許自定義模塊使用 BBCODE',
+    'usergroups_edit_home_allow_space_diy_imgcode' => '允許自定義模塊使用 [img]',
     'usergroups_edit_group' => '群組相關',
     'usergroups_edit_group_build' => '允許建立群組的數量',
     'usergroups_edit_group_build_comment' => '範圍1-255，0為不允許建立群組',
@@ -2679,6 +2678,11 @@ $lang = array (
     'end_time' => '終止時間',
     'announce' => '站點公告',
   ),
+  'logs' =>
+  array (
+    'logs_viewtype' => '查看方式',
+    'logs' => '運行記錄',
+  ),
   'checktools' =>
   array (
     'filecheck_completed' => '校驗結果',
@@ -2801,10 +2805,6 @@ $lang = array (
   'counter' =>
   array (
     'counter' => '更新統計',
-  ),
-  'logs' =>
-  array (
-    'logs' => '運行記錄',
   ),
   '_anchorindex' =>
   array (
@@ -3151,10 +3151,10 @@ $lang = array (
       'setting_attach_remote_preview_comment' => 'remote',
       'setting_attach_album_maxtimage' => 'albumattach',
       'setting_attach_album_maxtimage_comment' => 'albumattach',
-      'setting_portal_article_img_thumb_closed' => 'portalarticle',
-      'setting_portal_article_img_thumb_closed_comment' => 'portalarticle',
-      'setting_portal_article_imgsize' => 'portalarticle',
-      'setting_portal_article_imgsize_comment' => 'portalarticle',
+      'setting_attach_portal_article_img_thumb_closed' => 'portalarticle',
+      'setting_attach_portal_article_img_thumb_closed_comment' => 'portalarticle',
+      'setting_attach_portal_article_imgsize' => 'portalarticle',
+      'setting_attach_portal_article_imgsize_comment' => 'portalarticle',
       'setting_imgwater_image_watermarkstatus' => 'album',
       'setting_imgwater_image_watermarkstatus_none' => 'album',
       'setting_imgwater_image_watermarkminwidthheight' => 'album',
@@ -3256,7 +3256,6 @@ $lang = array (
       'usergroups_edit_basic_allowsendpm' => 'basic',
       'usergroups_edit_post_html' => 'post',
       'usergroups_edit_post_html_comment' => 'basic',
-      'usergroups_edit_basic_allow_stat' => 'basic',
       'usergroups_edit_basic_search_post_comment' => 'basic',
       'usergroups_edit_basic_search' => 'basic',
       'usergroups_edit_basic_reasonpm' => 'basic',

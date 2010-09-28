@@ -14,20 +14,24 @@
 				<!--{if $_G['setting']['verify']['enabled']}-->
 					<!--{loop $_G['setting']['verify'] $vid $verify}-->
 						<!--{if $verify['available'] && $space['verify'.$vid] == 1}-->
-							<a href="home.php?mod=spacecp&ac=profile&op=verify&vid=$vid" target="_blank"><!--{if $verify[icon]}--><img src="{$attachurl}/common/$verify[icon]" class="vm" alt="$verify[title]" title="$verify[title]" /><!--{else}-->$verify[title]<!--{/if}--></a>&nbsp;
+							<a href="home.php?mod=spacecp&ac=profile&op=verify&vid=$vid" target="_blank"><!--{if $verify[icon]}--><img src="$verify[icon]" class="vm" alt="$verify[title]" title="$verify[title]" /><!--{else}-->$verify[title]<!--{/if}--></a>&nbsp;
 						<!--{/if}-->
 					<!--{/loop}-->
 				<!--{/if}-->
 			</p>
 			<!--{hook/space_card_baseinfo_middle}-->
-			<!--{if $space[spacenote]}--><div{if $allowupdatedoing}{eval $scdoingid='scdoing'.random(4);} id="return_$scdoingid" onclick="cardUpdatedoing('$scdoingid')"{/if}>$space[spacenote]<!--{if $allowupdatedoing}--> <a href="javascript:;" class="xi2">[{lang update_doing}]</a><!--{/if}--></div><!--{/if}-->
-			<!--{if $allowupdatedoing}-->
+			<!--{if $space[spacenote]}--><div{if $allowupdatedoing}{eval $scdoingid='scdoing'.random(4);} id="return_$scdoingid" onclick="cardUpdatedoing('$scdoingid', 0)"{/if}>$space[spacenote]<!--{if $allowupdatedoing}--> <a href="javascript:;" class="xi2">[{lang update_doing}]</a><!--{/if}--></div><!--{/if}-->
+			<!--{if $space[spacenote] && $allowupdatedoing}-->
 				<form id="$scdoingid" method="post" action="home.php?mod=spacecp&ac=doing&inajax=1" onsubmit="return false;" style="display:none">
 					<input type="hidden" name="addsubmit" value="true" />
 					<input type="hidden" name="fromcard" value="1" />
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
 					<textarea name="message" class="card_msg pt xs1"><!--{echo strip_tags($space[spacenote])}--></textarea>
-					<p class="ptn pns cl"><button type="button" onclick="cardSubmitdoing('$scdoingid');" class="pn"><span>{lang save}</span></button></p>
+					<p class="ptn pns cl">
+						<button type="button" onclick="cardSubmitdoing('$scdoingid');" class="pn"><span>{lang save}</span></button>
+						<span class="pipe">|</span>
+						<a href="javascript:;" onclick="cardUpdatedoing('$scdoingid', 1)">{lang cancel}</a>
+					</p>
 				</form>
 			<!--{/if}-->
 			<!--{hook/space_card_baseinfo_bottom}-->

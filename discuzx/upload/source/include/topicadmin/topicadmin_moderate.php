@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_moderate.php 17279 2010-09-28 08:08:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -350,7 +350,7 @@ if(!submitcheck('modsubmit')) {
 				$uidarray = $tuidarray = $ruidarray = array();
 				$postlist = getfieldsofposts('first, authorid, dateline', "tid IN ($moderatetids)");
 				foreach($postlist as $post) {
-					if($post['dateline'] > $losslessdel) {
+					if($post['dateline'] < $losslessdel) {
 						if($post['first']) {
 							updatemembercount($post['authorid'], array('threads' => -1, 'post' => -1), false);
 						} else {
@@ -729,7 +729,7 @@ function set_stamp($typeid, $stampaction, &$threadlist, $expiration) {
 		} else {
 			DB::query("UPDATE ".DB::table('forum_thread')." SET stamp='".$_G['cache']['stamptypeid'][$typeid]."' WHERE tid IN ($moderatetids)");
 		}
-		!empty($moderatetids) && updatemodlog($moderatetids, $stampaction, $expiration, 0);
+		!empty($moderatetids) && updatemodlog($moderatetids, $stampaction, $expiration, 0, '', $_G['cache']['stamptypeid'][$typeid]);
 	}
 }
 

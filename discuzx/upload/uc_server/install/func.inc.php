@@ -758,7 +758,15 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 		$out .= "Connection: Close\r\n";
 		$out .= "Cookie: $cookie\r\n\r\n";
 	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} elseif (function_exists('pfsockopen')) {
+		$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} else {
+		$fp = false;
+	}
+
 	if(!$fp) {
 		return '';
 	} else {

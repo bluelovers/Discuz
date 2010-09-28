@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 17047 2010-09-19 23:44:22Z monkey $
+ *      $Id: lang_template.php 17274 2010-09-28 07:17:03Z monkey $
  *
  *      This file is automatically generate
  */
@@ -306,7 +306,7 @@ $lang = array (
   'mod_forum_recommend_expiration' => '時間期限',
   'mod_forum_recommend_list' => '更新列表',
   'mod_message_forum_nopermission' => '對不起，你無此權限！',
-  'mod_message_forum_update' => '版塊簡介和版規更新成功，請繼續操作',
+  'mod_message_forum_update' => '版規更新成功，請繼續操作',
   'mod_message_forum_updaterecommend' => '推薦主題更新成功，請繼續操作',
   'more_settings' => '更多設置',
   'post_html' => 'HTML 代碼',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_upload.php 14648 2010-08-13 03:06:07Z shanzongjun $
+ *      $Id: spacecp_upload.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -133,7 +133,7 @@ if(submitcheck('albumsubmit')) {
 				require_once libfile('function/feed');
 				feed_publish($albumid, 'albumid');
 			}
-			showmessage('do_success', "home.php?mod=space&do=album&picid=$picid");
+			showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=album&picid=$picid");
 		} else {
 			showmessage($uploadStat, 'home.php?mod=spacecp&ac=upload');
 		}

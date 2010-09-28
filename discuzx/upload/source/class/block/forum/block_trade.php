@@ -197,7 +197,7 @@ class block_trade {
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
-			." AND t.closed='0' AND t.isgroup='0'";
+			." AND t.isgroup='0'";
 		$where = '';
 		if(in_array($orderby, array('todayhots','weekhots','monthhots'))) {
 			$historytime = 0;
@@ -236,7 +236,7 @@ class block_trade {
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&do=tradeinfo&tid='.$data['tid'].'&pid='.$data['pid'].($viewmod ? '&from=portal' : ''),
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : IMGDIR.'/nophoto.gif'),
+				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(

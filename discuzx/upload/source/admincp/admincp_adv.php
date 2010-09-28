@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 15149 2010-08-19 08:02:46Z monkey $
+ *      $Id: admincp_adv.php 17216 2010-09-26 10:04:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -437,7 +437,7 @@ if($operation == 'ad') {
 			if($_FILES['advnew'.$advnew['style']]) {
 				require_once libfile('class/upload');
 				$upload = new discuz_upload();
-				if($upload->init($_FILES['advnew'.$advnew['style']], 'common') && $upload->save()) {
+				if($upload->init($_FILES['advnew'.$advnew['style']], 'common') && $upload->save(1)) {
 					$advnew[$advnew['style']]['url'] = $_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
 				}
 			} else {

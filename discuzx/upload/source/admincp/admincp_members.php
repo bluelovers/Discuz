@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 16709 2010-09-13 07:15:41Z monkey $
+ *      $Id: admincp_members.php 17293 2010-09-29 05:29:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -149,7 +149,7 @@ if($operation == 'search') {
 	foreach($title as $v) {
 		$subject .= $v.",";
 	}
-	$subject = "UID,".$lang['username'].",".$subject."\n";
+	$detail = "UID,".$lang['username'].",".$subject."\n".$detail;
 	$filename = date('Ymd', TIMESTAMP).'.csv';
 
 	ob_end_clean();
@@ -158,8 +158,7 @@ if($operation == 'search') {
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
-	echo $subject;
-	echo $detail;
+	echo diconv($detail, $_G['charset'], 'UCS-2LE');
 	exit();
 
 } elseif($operation == 'repeat') {
@@ -505,12 +504,9 @@ if($operation == 'search') {
 				showtablerow('', array('class="td23"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), $resetcredits);
 				showtablefooter();
 				echo '</td></tr>';
-				unset($search_condition['groupid']);
-				showhiddenfields($search_condition);
 				showtagheader('tbody', 'messagebody');
 				shownewsletter();
 				showtagfooter('tbody');
-
 				showsubmit('rewardsubmit', 'submit', 'td', '<input class="checkbox" type="checkbox" name="notifymember" value="1" onclick="$(\'messagebody\').style.display = this.checked ? \'\' : \'none\'" id="credits_notify" /><label for="credits_notify">'.cplang('members_reward_notify').'</label>');
 
 			}
@@ -522,7 +518,7 @@ if($operation == 'search') {
 		}
 
 	} else {
-
+		if(!empty($_POST['conditions'])) $search_condition = unserialize(stripslashes($_POST['conditions']));
 		$membernum = countmembers($search_condition, $urladd);
 		notifymembers('reward', 'creditsnotify');
 
@@ -593,7 +589,7 @@ if($operation == 'search') {
 		}
 
 	} else {
-
+		if(!empty($_POST['conditions'])) $search_condition = unserialize(stripslashes($_POST['conditions']));
 		$membernum = countmembers($search_condition, $urladd);
 		notifymembers('confermedal', 'medalletter');
 
@@ -1615,7 +1611,7 @@ EOT;
 		DB::query("UPDATE ".DB::table('common_member')." SET $emailadd regdate='$regdatenew', emailstatus='$emailstatusnew', status='$status', timeoffset='{$_G['gp_timeoffsetnew']}' $passwordadd WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_field_home')." SET addsize='$addsize', addfriend='$addfriend' WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_count')." SET posts='{$_G['gp_postsnew']}', digestposts='{$_G['gp_digestpostsnew']}' WHERE uid='{$_G['gp_uid']}'");
-		DB::query("UPDATE ".DB::table('common_member_status')." SET regip='{$_G['gp_regipnew']}', lastvisit='$lastvisitnew', lastip='{$_G['gp_lastipnew']}' WHERE uid='{$_G['gp_uid']}'");
+		DB::query("UPDATE ".DB::table('common_member_status')." SET regip='{$_G['gp_regipnew']}', lastvisit='$lastvisitnew', lastip='{$_G['gp_lastipnew']}', invisible='{$_G['gp_invisiblenew']}' WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET customstatus='{$_G['gp_cstatusnew']}', sightml='$sightmlnew' WHERE uid='{$_G['gp_uid']}'");
 		if($fieldarr) {
 			$fieldadd = implode(',', $fieldarr);
@@ -1880,7 +1876,7 @@ EOT;
 		}
 	} else {
 
-		$query = DB::query("SELECT title, fieldid, description, available, formtype, displayorder FROM ".DB::table('common_member_profile_setting')." ORDER BY available DESC, displayorder DESC");
+		$query = DB::query("SELECT title, fieldid, description, available, formtype, displayorder FROM ".DB::table('common_member_profile_setting')." ORDER BY available DESC, displayorder");
 		$list = array();
 		while($value = DB::fetch($query)) {
 			$list[$value['fieldid']] = $value;

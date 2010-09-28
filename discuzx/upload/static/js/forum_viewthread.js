@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 17054 2010-09-20 02:08:51Z monkey $
+	$Id: forum_viewthread.js 17126 2010-09-21 09:34:16Z monkey $
 */
 
 var replyreload = '';
@@ -318,7 +318,13 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 function showPostWin(action, href) {
 	if(BROWSER.ie && BROWSER.ie < 7) {
 		window.open(href);
+		doane(event);
 	} else {
 		showWindow(action, href, 'get', 0);
 	}
+}
+
+function copyThreadUrl(obj) {
+	setCopy($('thread_subject').innerHTML + '\n' + obj.href + '\n', '帖子地址已經複製到剪貼板');
+	return false;
 }

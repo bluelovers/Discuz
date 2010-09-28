@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 15834 2010-08-27 05:13:39Z zhangguosheng $
+ *      $Id: index.php 17288 2010-09-29 02:20:24Z cnteacher $
  */
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -159,9 +159,12 @@ if($method == 'show_license') {
 				show_msg('uc_admin_invalid', '', 0);
 			} else {
 				list($appauthkey, $appid) = explode('|', $ucconfig);
+				$ucconfig_array = explode('|', $ucconfig);
+				$ucconfig_array[] = $ucapi;
+				$ucconfig_array[] = $ucip;
 				if(empty($appauthkey) || empty($appid)) {
 					show_msg('uc_data_invalid', '', 0);
-				} elseif($succeed = save_uc_config($ucconfig."|$ucapi|$ucip", ROOT_PATH.CONFIG_UC)) {
+				} elseif($succeed = save_uc_config($ucconfig_array, ROOT_PATH.CONFIG_UC)) {
 					if(VIEW_OFF) {
 						show_msg('app_reg_success');
 					} else {

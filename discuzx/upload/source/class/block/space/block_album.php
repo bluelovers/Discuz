@@ -141,7 +141,7 @@ class block_album {
 				'id' => $data['albumid'],
 				'idtype' => 'albumid',
 				'title' => cutstr($data['albumname'], $titlelength, ''),
-				'url' => "home.php?mod=space&do=album&uid=$data[uid]&id=$data[albumid]",
+				'url' => "home.php?mod=space&uid=$data[uid]&do=album&id=$data[albumid]",
 				'pic' => 'album/'.$data['pic'],
 				'picflag' => $data['picflag'],
 				'summary' => '',

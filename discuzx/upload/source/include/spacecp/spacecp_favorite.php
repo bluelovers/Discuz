@@ -21,7 +21,7 @@ if($_GET['op'] == 'delete') {
 
 	if(submitcheck('deletesubmit')) {
 		DB::query('DELETE FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
-		showmessage('do_success', 'home.php?mod=space&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+		showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 
 } else {

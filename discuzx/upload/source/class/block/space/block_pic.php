@@ -162,7 +162,7 @@ class block_pic {
 				'id' => $data['picid'],
 				'idtype' => 'picid',
 				'title' => cutstr($data['title'], $titlelength, ''),
-				'url' => "home.php?mod=space&do=album&uid=$data[uid]&picid=$data[picid]",
+				'url' => "home.php?mod=space&uid=$data[uid]&do=album&picid=$data[picid]",
 				'pic' => $data['remote'] >= 2 ? 'forum/'.$data['filepath'] : 'album/'.$data['filepath'],
 				'picflag' => ($data['remote'] == 1 || $data['remote'] == 3) ? '2' : '1',
 				'summary' => $data['title'],

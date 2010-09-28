@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_discuzcode.php 16832 2010-09-15 07:38:31Z wangjinbo $
+ *      $Id: function_discuzcode.php 17227 2010-09-27 02:22:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,7 +62,7 @@ function karmaimg($rate, $ratetimes) {
 	if($rate && $ratetimes) {
 		$image = $rate > 0 ? 'agree.gif' : 'disagree.gif';
 		for($i = 0; $i < ceil(abs($rate) / $ratetimes); $i++) {
-			$karmaimg .= '<img src="'.IMGDIR.'/'.$image.'" border="0" alt="" />';
+			$karmaimg .= '<img src="'.$_G['style']['imgdir'].'/'.$image.'" border="0" alt="" />';
 		}
 	}
 	return $karmaimg;
@@ -525,7 +525,7 @@ function parseflv($url, $width = 0, $height = 0) {
 	} elseif(strpos($lowerurl, 'http://www.ouou.com/fun_funview') !== FALSE) {
 		$str = file_get_contents($url);
 		if(!empty($str) && preg_match("/var\sflv\s=\s'(.+?)';/i", $str, $matches)) {
-			$flv = IMGDIR.'/flvplayer.swf?&autostart=true&file='.urlencode($matches[1]);
+			$flv = $_G['style']['imgdir'].'/flvplayer.swf?&autostart=true&file='.urlencode($matches[1]);
 			if(!$width && !$height && preg_match("/var\simga=\s'(.+?)';/i", $str, $image)) {
 				$imgurl = trim($image[1]);
 			}

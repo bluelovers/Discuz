@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 17031 2010-09-19 06:17:43Z zhengqingpeng $
+ *      $Id: space_home.php 17249 2010-09-27 10:17:23Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -169,7 +169,7 @@ if(!IS_ROBOT) {
 
 		if($_GET['view'] == 'me') {
 			while ($value = DB::fetch($query)) {
-				if(!isset($hotlist[$value['friend']]) && !isset($hotlist_all[$value['friend']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value = mkfeed($value);
 
 					if($value['dateline']>=$_G['home_today']) {
@@ -189,7 +189,7 @@ if(!IS_ROBOT) {
 			$uid_feedcount = array();
 
 			while ($value = DB::fetch($query)) {
-				if(!isset($hotlist[$value['friend']]) && !isset($hotlist_all[$value['friend']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value = mkfeed($value);
 					if(ckicon_uid($value)) {
 
@@ -306,8 +306,8 @@ if($space['self'] && empty($start)) {
 	if($space['feedfriend']) {
 		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN ($space[feedfriend]) ORDER BY lastactivity DESC LIMIT 15");
 		while ($value = DB::fetch($query)) {
-			if($olfcount < 16 && !$value['invisible']) {
-				$olfriendlist[] = $value;
+			if($olfcount < 15 && !$value['invisible']) {
+				$olfriendlist[$value['uid']] = $value;
 				$ols[$value['uid']] = 1;
 				$oluids[$value['uid']] = $value['uid'];
 				$olfcount++;
@@ -318,9 +318,9 @@ if($space['self'] && empty($start)) {
 		$query = DB::query("SELECT fuid AS uid, fusername AS username, num FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC, dateline DESC LIMIT 0,32");
 		while ($value = DB::fetch($query)) {
 			if(empty($oluids[$value['uid']])) {
-				$olfriendlist[] = $value;
+				$olfriendlist[$value['uid']] = $value;
 				$olfcount++;
-				if($olfcount == 16) break;
+				if($olfcount == 15) break;
 			}
 		}
 	}

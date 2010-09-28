@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 17068 2010-09-20 04:02:30Z zhengqingpeng $
+ *      $Id: forum_misc.php 17198 2010-09-26 07:09:23Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -886,7 +886,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				foreach($_POST as $key => $value) {
 					if(empty($_G['cache']['profilesetting'][$key])) continue;
 					$value = cutstr(dhtmlspecialchars(trim($value)), 100, '.');
-					if(empty($value)) {
+					if(empty($value) && $key != 'residedist' && $key != 'residecommunity') {
 						showmessage('activity_exile_field');
 					}
 					$ufielddata['userfield'][$key] = $value;
@@ -1136,13 +1136,15 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	}
 	$filename = "activity_{$_G[tid]}.csv";
 
+	include template('forum/activity_export');
+	$csvstr = diconv(ob_get_contents(), $_G['charset'], 'UCS-2LE');
 	ob_end_clean();
 	header('Content-Encoding: none');
 	header('Content-Type: application/octet-stream');
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
-	include template('forum/activity_export');
+	echo $csvstr;
 } elseif($_G['gp_action'] == 'tradeorder') {
 
 	$trades = array();

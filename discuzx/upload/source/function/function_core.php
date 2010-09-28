@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 16965 2010-09-17 08:43:56Z monkey $
+ *      $Id: function_core.php 17218 2010-09-27 00:00:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -687,7 +687,7 @@ function dmktime($date) {
 function save_syscache($cachename, $data) {
 	static $isfilecache, $allowmem;
 	if($isfilecache === null) {
-		$isfilecache = getglobal('config/cache/type');
+		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
 	}
 
@@ -1094,8 +1094,10 @@ function output_ajax() {
 function runhooks() {
 	global $_G;
 	if(defined('CURMODULE')) {
-		$hscript = $_G['basescript'].(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : '')) ? '_'.$do : '');
-		hookscript(CURMODULE, $hscript);
+		hookscript(CURMODULE, $_G['basescript']);
+		if(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''))) {
+			hookscript(CURMODULE, $_G['basescript'].'_'.$do);
+		}
 	}
 }
 
@@ -1145,9 +1147,14 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 
 function hookscriptoutput($tplfile) {
 	global $_G;
-	$hscript = $_G['basescript'].(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : '')) ? '_'.$do : '');
 	hookscript('global', 'global');
-	hookscript(CURMODULE, $hscript, 'outputfuncs', array('template' => $tplfile, 'message' => $_G['hookscriptmessage'], 'values' => $_G['hookscriptvalues']));
+	if(defined('CURMODULE')) {
+		$param = array('template' => $tplfile, 'message' => $_G['hookscriptmessage'], 'values' => $_G['hookscriptvalues']);
+		hookscript(CURMODULE, $_G['basescript'], 'outputfuncs', $param);
+		if(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''))) {
+			hookscript(CURMODULE, $_G['basescript'].'_'.$do, 'outputfuncs', $param);
+		}
+	}
 }
 
 function pluginmodule($pluginid, $type) {
@@ -1513,7 +1520,7 @@ function showmessage($message, $url_forward = '', $values = array(), $extraparam
 	if($param['msgtype'] == 2 && $param['login']) {
 		dheader('location: member.php?mod=logging&action=login&handlekey='.$handlekey.'&infloat=yes&inajax=yes&guestmessage=yes');
 	}
-	$show_jsmessage = str_replace("'", "\\\'", strip_tags($show_message));
+	$show_jsmessage = str_replace("'", "\\'", strip_tags($show_message));
 	if(!$param['showmsg']) {
 		$show_message = '';
 	}

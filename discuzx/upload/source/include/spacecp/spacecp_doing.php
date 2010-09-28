@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_doing.php 17024 2010-09-19 05:47:42Z zhangguosheng $
+ *      $Id: spacecp_doing.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -164,7 +164,7 @@ if(submitcheck('addsubmit')) {
 
 	if($updo['uid'] != $_G['uid']) {
 		notification_add($updo['uid'], 'doing', 'doing_reply', array(
-			'url'=>"home.php?mod=space&do=doing&doid=$updo[doid]&highlight=$newid",
+			'url'=>"home.php?mod=space&uid=$updo[uid]&do=doing&doid=$updo[doid]&highlight=$newid",
 			'from_id'=>$updo['doid'],
 			'from_idtype'=>'doid'));
 		updatecreditbyaction('comment', 0, array(), 'doing'.$updo['doid']);

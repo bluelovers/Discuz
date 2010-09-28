@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 17046 2010-09-19 11:31:52Z zhengqingpeng $
+ *      $Id: admincp_moderate.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -44,16 +44,16 @@ if($operation == 'members') {
 			$validatenum = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'"), 0);
 			$members = '';
 			if($validatenum) {
-				$multipage = multi($validatenum, $_G['setting']['memberperpage'], $page, 'action=moderate&operation=members&sendemail=$sendemail');
+				$multipage = multi($validatenum, $_G['setting']['memberperpage'], $page, ADMINSCRIPT.'?action=moderate&operation=members&sendemail='.$sendemail);
 				$vuids = '0';
-				$query = DB::query("SELECT m.uid, m.username, m.groupid, m.email, m.regdate, ms.regip, v.message, v.submittimes, v.submitdate, v.moddate, v.admin, v.remark
+				$query = DB::query("SELECT m.uid, m.username, m.groupid, m.email, m.regdate, ms.regip, v.message, v.submittimes, v.submitdate, v.moddate, v.admin, v.remark, v.uid as vuid
 					FROM ".DB::table('common_member_validate')." v
 					LEFT JOIN ".DB::table('common_member')." m ON v.uid=m.uid
 					LEFT JOIN ".DB::table('common_member_status')." ms ON m.uid=ms.uid
 					WHERE v.status='0' ORDER BY v.submitdate DESC LIMIT $start_limit, ".$_G['setting']['memberperpage']);
 				while($member = DB::fetch($query)) {
 					if($member['groupid'] != 8) {
-						$vuids .= ','.$member['uid'];
+						$vuids .= ','.$member['vuid'];
 						continue;
 					}
 					$member['regdate'] = dgmdate($member['regdate']);
@@ -662,7 +662,7 @@ if($operation == 'threads') {
 			showtagfooter('tbody');
 		}
 
-		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
+		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input class="checkbox" type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
 		showtablefooter();
 		showformfooter();
 
@@ -955,7 +955,7 @@ if($operation == 'threads') {
 
 		}
 
-		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
+		showsubmit('modsubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'delete\')">'.cplang('moderate_all_delete').'</a> &nbsp;<a href="#all" onclick="mod_setbg_all(\'ignore\')">'.cplang('moderate_all_ignore').'</a> &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_all_cancel').'</a> &nbsp;<label><input class="checkbox" type="checkbox" name="apply_all" id="chk_apply_all"  value="1" disabled="disabled" />'.cplang('moderate_apply_all').'</label>', $multipage, false);
 		showtablefooter();
 		showformfooter();
 
@@ -1230,7 +1230,7 @@ if($operation == 'threads') {
 				"<h3><a href=\"javascript:;\" onclick=\"display_toggle('$blog[blogid]');\">$blog[subject]</a> $blog_censor_text</h3><p>$blog[postip]</p>",
 				$blog[classname],
 				"<p><a target=\"_blank\" href=\"".ADMINSCRIPT."?action=members&operation=search&uid=$blog[uid]&submit=yes\">$blog[username]</a></p> <p>$blog[dateline]</p>",
-				"<a href=\"home.php?mod=space&do=blog&uid=$blog[uid]&id=$blog[blogid]&modblogkey=$blog[modblogkey]\" target=\"_blank\">$lang[view]</a>&nbsp;<a href=\"home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]&modblogkey=$blog[modblogkey]\" target=\"_blank\">$lang[edit]</a>",
+				"<a href=\"home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]&modblogkey=$blog[modblogkey]\" target=\"_blank\">$lang[view]</a>&nbsp;<a href=\"home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]&modblogkey=$blog[modblogkey]\" target=\"_blank\">$lang[edit]</a>",
 			));
 			showtablerow("id=\"mod_$blog[blogid]_row2\"", 'colspan="4" style="padding: 10px; line-height: 180%;"', '<div style="overflow: auto; overflow-x: hidden; max-height:120px; height:auto !important; height:100px; word-break: break-all;">'.$blog['message'].'</div>');
 			showtablerow("id=\"mod_$blog[blogid]_row3\"", 'class="threadopt threadtitle" colspan="4"', "<a href=\"?action=moderate&operation=blogs&fast=1&blogid=$blog[blogid]&moderate[$blog[blogid]]=validate&page=$page&frame=no\" target=\"fasthandle\">$lang[validate]</a> | <a href=\"?action=moderate&operation=blogs&fast=1&blogid=$blog[blogid]&moderate[$blog[blogid]]=delete&page=$page&frame=no\" target=\"fasthandle\">$lang[delete]</a> | <a href=\"?action=moderate&operation=blogs&fast=1&blogid=$blog[blogid]&moderate[$blog[blogid]]=ignore&page=$page&frame=no\" target=\"fasthandle\">$lang[ignore]</a>");
@@ -1383,7 +1383,7 @@ if($operation == 'threads') {
 				"<h3><a href=\"javascript:;\" onclick=\"display_toggle('$pic[picid]');\">$pic[title]</a> $pic_censor_text</h3><p>$pic[postip]</p>",
 				"<a target=\"_blank\" href=\"home.php?mod=space&uid=$pic[uid]&do=album&id=$pic[albumid]\">$pic[albumname]</a>",
 				"<p><a target=\"_blank\" href=\"".ADMINSCRIPT."?action=members&operation=search&uid=$pic[uid]&submit=yes\">$pic[username]</a></p> <p>$pic[dateline]</p>",
-				"<a target=\"_blank\" href=\"home.php?mod=space&do=album&uid=$pic[uid]&picid=$pic[picid]&modpickey=$pic[modpickey]\">$lang[view]</a>",
+				"<a target=\"_blank\" href=\"home.php?mod=space&uid=$pic[uid]&do=album&picid=$pic[picid]&modpickey=$pic[modpickey]\">$lang[view]</a>",
 			));
 			showtablerow("id=\"mod_$pic[picid]_row2\"", 'colspan="4" style="padding: 10px; line-height: 180%;"', '<div style="overflow: auto; overflow-x: hidden; max-height:120px; height:auto !important; height:100px; word-break: break-all;"><img src="'.$pic['url'].'" /></div>');
 			showtablerow("id=\"mod_$pic[picid]_row3\"", 'class="threadopt threadtitle" colspan="4"', "<a href=\"?action=moderate&operation=pictures&fast=1&picid=$pic[picid]&moderate[$pic[picid]]=validate&page=$page&frame=no\" target=\"fasthandle\">$lang[validate]</a> | <a href=\"?action=moderate&operation=pictures&fast=1&picid=$pic[picid]&moderate[$pic[picid]]=delete&page=$page&frame=no\" target=\"fasthandle\">$lang[delete]</a> | <a href=\"?action=moderate&operation=pictures&fast=1&picid=$pic[picid]&moderate[$pic[picid]]=ignore&page=$page&frame=no\" target=\"fasthandle\">$lang[ignore]</a>");
@@ -1692,7 +1692,7 @@ if($operation == 'threads') {
 					$sharetitle = lang('admincp', 'share_type_thread');
 					break;
 				case 'pic':
-					$shareurl = "home.php?mod=space&do=album&uid=$share[fromuid]&picid=$share[itemid]&modpickey=$share[modkey]";
+					$shareurl = "home.php?mod=space&uid=$share[fromuid]&do=album&picid=$share[itemid]&modpickey=$share[modkey]";
 					$sharetitle = lang('admincp', 'share_type_pic');
 					break;
 				case 'space':
@@ -1700,11 +1700,11 @@ if($operation == 'threads') {
 					$sharetitle = lang('admincp', 'share_type_space');
 					break;
 				case 'blog':
-					$shareurl = "home.php?mod=space&do=blog&uid=$share[fromuid]&id=$share[itemid]&modblogkey=$share[modkey]";
+					$shareurl = "home.php?mod=space&uid=$share[fromuid]&do=blog&id=$share[itemid]&modblogkey=$share[modkey]";
 					$sharetitle = lang('admincp', 'share_type_blog');
 					break;
 				case 'album':
-					$shareurl = "home.php?mod=space&do=album&uid=$share[fromuid]&id=$share[itemid]&modalbumkey=$share[modkey]";
+					$shareurl = "home.php?mod=space&uid=$share[fromuid]&do=album&id=$share[itemid]&modalbumkey=$share[modkey]";
 					$sharetitle = lang('admincp', 'share_type_album');
 					break;
 				case 'article':
@@ -1924,19 +1924,19 @@ if($operation == 'threads') {
 			switch($comment['idtype']) {
 				case 'uid':
 					$commenttype = lang('admincp', 'comment_uid');
-					$viewurl = "home.php?mod=space&do=wall&uid=$comment[uid]#comment_anchor_$comment[cid]";
+					$viewurl = "home.php?mod=space&uid=$comment[uid]&do=wall#comment_anchor_$comment[cid]";
 					break;
 				case 'blogid':
 					$commenttype = lang('admincp', 'comment_blogid');
-					$viewurl = "home.php?mod=space&do=blog&uid=$comment[uid]&id=$comment[id]&modblogkey=$comment[modkey]#comment_anchor_$comment[cid]";
+					$viewurl = "home.php?mod=space&uid=$comment[uid]&do=blog&id=$comment[id]&modblogkey=$comment[modkey]#comment_anchor_$comment[cid]";
 					break;
 				case 'picid':
 					$commenttype = lang('admincp', 'comment_picid');
-					$viewurl = "home.php?mod=space&do=album&uid=$comment[uid]&picid=$comment[id]&modpickey=$comment[modkey]#comment_anchor_$comment[cid]";
+					$viewurl = "home.php?mod=space&uid=$comment[uid]&do=album&picid=$comment[id]&modpickey=$comment[modkey]#comment_anchor_$comment[cid]";
 					break;
 				case 'sid':
 					$commenttype = lang('admincp', 'comment_sid');
-					$viewurl = "home.php?mod=space&do=share&uid=$comment[uid]&id=$comment[id]#comment_anchor_$comment[cid]";
+					$viewurl = "home.php?mod=space&uid=$comment[uid]&do=share&id=$comment[id]#comment_anchor_$comment[cid]";
 					break;
 			}
 			showtagheader('tbody', '', true, 'hover');

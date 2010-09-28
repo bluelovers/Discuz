@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: google.js 15155 2010-08-19 08:16:19Z monkey $
+	$Id: google.js 17172 2010-09-25 08:17:48Z zhangguosheng $
 */
 
 document.writeln('<script type="text/javascript">');
@@ -17,7 +17,7 @@ document.writeln('	document.gform.submit();');
 document.writeln('	return;');
 document.writeln('}');
 document.writeln('</script>');
-document.writeln('<form name="gform" id="gform" method="get" autocomplete="off" action="http://www.google.cn/search?" target="_blank" onSubmit="validate_google(this);">');
+document.writeln('<form name="gform" id="gform" method="get" autocomplete="off" action="http://www.google.com/search?" target="_blank" onSubmit="validate_google(this);">');
 document.writeln('<input type="hidden" name="client" value="' + (!google_client ? 'aff-discuz' : google_client) + '" />');
 document.writeln('<input type="hidden" name="ie" value="' + google_charset + '" />');
 document.writeln('<input type="hidden" name="oe" value="UTF-8" />');

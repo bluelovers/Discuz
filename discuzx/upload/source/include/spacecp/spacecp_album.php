@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 15038 2010-08-18 07:10:15Z zhengqingpeng $
+ *      $Id: spacecp_album.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -158,7 +158,7 @@ if($_GET['op'] == 'edit') {
 			}
 			DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
 		}
-		showmessage('do_success', "home.php?mod=space&do=album&uid=$_G[gp_uid]&view=me");
+		showmessage('do_success', "home.php?mod=space&uid=$_G[gp_uid]&do=album&view=me");
 	}
 } elseif($_GET['op'] == 'editpic') {
 
@@ -169,11 +169,11 @@ if($_GET['op'] == 'edit') {
 	if($albumid > 0) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
 		if(!$album = DB::fetch($query)) {
-			showmessage('no_privilege', 'home.php?mod=space&do=album&view=me', array(), array('return' => true));
+			showmessage('no_privilege', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
 		}
 
 		if($album['uid'] != $_G['uid'] && !$managealbum) {
-			showmessage('no_privilege', 'home.php?mod=space&do=album&view=me', array(), array('return' => true));
+			showmessage('no_privilege', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
 		}
 	} else {
 		$album['uid'] = $_G['uid'];
@@ -263,7 +263,7 @@ if($_GET['op'] == 'edit') {
 
 		}
 
-		$url = $return ? "home.php?mod=spacecp&ac=album&op=editpic&albumid=$albumid&page=$_POST[page]" : 'home.php?mod=space&do=album&view=me';
+		$url = $return ? "home.php?mod=spacecp&ac=album&op=editpic&albumid=$albumid&page=$_POST[page]" : 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me';
 		if($_G['inajax']) {
 			showmessage('do_success', $url, array('title' => $title),  array('showdialog' => 3, 'showmsg' => true, 'closetime' => true));
 		} else {

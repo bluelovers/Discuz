@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 16968 2010-09-17 08:50:35Z monkey $
+ *      $Id: admincp_setting.php 17260 2010-09-28 02:18:33Z zhengqingpeng $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -113,7 +113,7 @@ if(!submitcheck('settingsubmit')) {
 			$isfounder ? array('setting_attach_remote', 'remote', $_G['gp_anchor'] == 'remote') : '',
 			array('setting_attach_forumattach', 'forumattach', $_G['gp_anchor'] == 'forumattach'),
 			array('setting_attach_album', 'albumattach', $_G['gp_anchor'] == 'albumattach'),
-			array('setting_portal_article_attach', 'portalarticle', $_G['gp_anchor'] == 'portalarticle'),
+			array('setting_attach_portal_article_attach', 'portalarticle', $_G['gp_anchor'] == 'portalarticle'),
 		));
 	} elseif($operation == 'styles') {
 		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('global', 'index', 'forumdisplay', 'viewthread', 'refresh', 'sitemessage')) ? $_G['gp_anchor'] : 'global';
@@ -857,13 +857,13 @@ if(!submitcheck('settingsubmit')) {
 		echo '<div id="base"'.($_G['gp_anchor'] != 'base' ? ' style="display: none"' : '').'>';
 
 		showtableheader('setting_credits_extended', 'fixpadding');
-		showsubtitle(array('setting_credits_available', 'credits_id', 'credits_img', 'credits_title', 'credits_unit', 'setting_credits_init', 'setting_credits_ratio', 'credits_inport', 'credits_import'), '');
+		showsubtitle(array('setting_credits_available', 'credits_id', 'credits_img', 'credits_title', 'credits_unit', 'setting_credits_init', 'setting_credits_ratio', 'credits_inport', 'credits_import', 'credits_hiddeninheader'), '');
 
 		$setting['extcredits'] = unserialize($setting['extcredits']);
 		$setting['initcredits'] = explode(',', $setting['initcredits']);
 
 		for($i = 1; $i <= 8; $i++) {
-			showtablerow('', array('width="40"', 'class="td22"', 'class="td22"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), array(
+			showtablerow('', array('width="40"', 'class="td22"', 'class="td22"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'width="40"', 'width="40"', 'width="80"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[extcredits][$i][available]\" value=\"1\" ".($setting['extcredits'][$i]['available'] ? 'checked' : '')." />",
 				'extcredits'.$i,
 				"<input type=\"text\" class=\"txt\" size=\"8\" name=\"settingnew[extcredits][$i][img]\" value=\"{$setting['extcredits'][$i]['img']}\">",
@@ -873,7 +873,8 @@ if(!submitcheck('settingsubmit')) {
 				"<input type=\"text\" class=\"txt\" size=\"3\" name=\"settingnew[initcredits][$i]\" value=\"".intval($setting['initcredits'][$i])."\">",
 				"<input type=\"text\" class=\"txt\" size=\"3\" name=\"settingnew[extcredits][$i][ratio]\" value=\"".(float)$setting['extcredits'][$i]['ratio']."\" onkeyup=\"if(this.value != '0' && \$('allowexchangeout$i').checked == false && \$('allowexchangein$i').checked == false) {\$('allowexchangeout$i').checked = true;\$('allowexchangein$i').checked = true;} else if(this.value == '0') {\$('allowexchangeout$i').checked = false;\$('allowexchangein$i').checked = false;}\">",
 				"<input class=\"checkbox\" type=\"checkbox\" size=\"3\" name=\"settingnew[extcredits][$i][allowexchangeout]\" value=\"1\" ".($setting['extcredits'][$i]['allowexchangeout'] ? 'checked' : '')." id=\"allowexchangeout$i\">",
-				"<input class=\"checkbox\" type=\"checkbox\" size=\"3\" name=\"settingnew[extcredits][$i][allowexchangein]\" value=\"1\" ".($setting['extcredits'][$i]['allowexchangein'] ? 'checked' : '')." id=\"allowexchangein$i\">"
+				"<input class=\"checkbox\" type=\"checkbox\" size=\"3\" name=\"settingnew[extcredits][$i][allowexchangein]\" value=\"1\" ".($setting['extcredits'][$i]['allowexchangein'] ? 'checked' : '')." id=\"allowexchangein$i\">",
+				"<input class=\"checkbox\" type=\"checkbox\" size=\"3\" name=\"settingnew[extcredits][$i][hiddeninheader]\" value=\"1\" ".($setting['extcredits'][$i]['hiddeninheader'] ? 'checked' : '')." id=\"hiddeninheader$i\">"
 			));
 		}
 		showtablerow('', 'colspan="10" class="lineheight"', $lang['setting_credits_extended_comment']);
@@ -1261,8 +1262,8 @@ EOT;
 		showtablefooter();
 
 		showtableheader('', '', 'id="portalarticle"'.($_G['gp_anchor'] != 'portalarticle' ? ' style="display: none"' : ''));
-		showsetting('setting_portal_article_img_thumb_closed', 'settingnew[portalarticleimgthumbclosed]', !$setting['portalarticleimgthumbclosed'], 'radio');
-		showsetting('setting_portal_article_imgsize', array('settingnew[portalarticleimgthumbwidth]', 'settingnew[portalarticleimgthumbheight]'), array(intval($setting['portalarticleimgthumbwidth']), intval($setting['portalarticleimgthumbheight'])), 'multiply');
+		showsetting('setting_attach_portal_article_img_thumb_closed', 'settingnew[portalarticleimgthumbclosed]', !$setting['portalarticleimgthumbclosed'], 'radio');
+		showsetting('setting_attach_portal_article_imgsize', array('settingnew[portalarticleimgthumbwidth]', 'settingnew[portalarticleimgthumbheight]'), array(intval($setting['portalarticleimgthumbwidth']), intval($setting['portalarticleimgthumbheight'])), 'multiply');
 		showsubmit('settingsubmit');
 		showtablefooter();
 
@@ -1393,35 +1394,35 @@ EOT;
 		showtableheader('setting_search_status', 'fixpadding');
 		showsubtitle(array('setting_search_onoff', 'search_item_name', 'setting_serveropti_searchctrl', 'setting_serveropti_maxspm', 'setting_serveropti_maxsearchresults'));
 		$search_portal = array(
-				$setting['search']['portal']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][portal][status]" value="1" checked="checked" />' : '<input type="checkbox" name="settingnew[search][portal][status]" value="1" />',
+				$setting['search']['portal']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][portal][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][portal][status]" value="1" />',
 				cplang('setting_search_status_portal'),
 				'<input type="text" class="txt" name="settingnew[search][portal][searchctrl]" value="'.$setting['search']['portal']['searchctrl'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][portal][maxspm]" value="'.$setting['search']['portal']['maxspm'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][portal][maxsearchresults]" value="'.$setting['search']['portal']['maxsearchresults'].'" />',
 			);
 		$search_forum = array(
-				$setting['search']['forum']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][forum][status]" value="1" checked="checked" />' : '<input type="checkbox" name="settingnew[search][forum][status]" value="1" />',
+				$setting['search']['forum']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][forum][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][forum][status]" value="1" />',
 				cplang('setting_search_status_forum'),
 				'<input type="text" class="txt" name="settingnew[search][forum][searchctrl]" value="'.$setting['search']['forum']['searchctrl'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][forum][maxspm]" value="'.$setting['search']['forum']['maxspm'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][forum][maxsearchresults]" value="'.$setting['search']['forum']['maxsearchresults'].'" />',
 			);
 		$search_blog = array(
-				$setting['search']['blog']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][blog][status]" value="1" checked="checked" />' : '<input type="checkbox" name="settingnew[search][blog][status]" value="1" />',
+				$setting['search']['blog']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][blog][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][blog][status]" value="1" />',
 				cplang('setting_search_status_blog'),
 				'<input type="text" class="txt" name="settingnew[search][blog][searchctrl]" value="'.$setting['search']['blog']['searchctrl'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][blog][maxspm]" value="'.$setting['search']['blog']['maxspm'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][blog][maxsearchresults]" value="'.$setting['search']['blog']['maxsearchresults'].'" />',
 			);
 		$search_album = array(
-				$setting['search']['album']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][album][status]" value="1" checked="checked" />' : '<input type="checkbox" name="settingnew[search][album][status]" value="1" />',
+				$setting['search']['album']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][album][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][album][status]" value="1" />',
 				cplang('setting_search_status_album'),
 				'<input type="text" class="txt" name="settingnew[search][album][searchctrl]" value="'.$setting['search']['album']['searchctrl'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][album][maxspm]" value="'.$setting['search']['album']['maxspm'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][album][maxsearchresults]" value="'.$setting['search']['album']['maxsearchresults'].'" />',
 			);
 		$search_group = array(
-				$setting['search']['group']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][group][status]" value="1" checked="checked" />' : '<input type="checkbox" name="settingnew[search][group][status]" value="1" />',
+				$setting['search']['group']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][group][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][group][status]" value="1" />',
 				cplang('setting_search_status_group'),
 				'<input type="text" class="txt" name="settingnew[search][group][searchctrl]" value="'.$setting['search']['group']['searchctrl'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][group][maxspm]" value="'.$setting['search']['group']['maxspm'].'" />',
@@ -1699,7 +1700,7 @@ EOT;
 
 		$key = $mySiteId . $siteName . $siteUrl . $ucUrl . $siteCharset . $siteTimeZone . $siteRealNameEnable . $mySiteKey . $siteKey;
 		$key = md5($key);
-
+		$siteTimeZone = urlencode($siteTimeZone);
 		$siteName = urlencode($siteName);
 
 		$register = true;
@@ -1860,7 +1861,8 @@ EOT;
 					'available' => $value['available'],
 					'showinthread' => $value['showinthread'],
 					'allowexchangein' => $value['allowexchangein'],
-					'allowexchangeout' => $value['allowexchangeout']
+					'allowexchangeout' => $value['allowexchangeout'],
+					'hiddeninheader' => $value['hiddeninheader'],
 					);
 				$settingnew['initcredits'][$key] = intval($settingnew['initcredits'][$key]);
 			}

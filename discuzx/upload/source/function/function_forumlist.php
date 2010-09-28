@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 15312 2010-08-23 05:35:23Z lifangming $
+ *      $Id: function_forumlist.php 17269 2010-09-28 03:51:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -139,29 +139,16 @@ function visitedforums() {
 }
 
 function moddisplay($moderators, $type, $inherit = 0) {
-	if($type == 'selectbox') {
-		if($moderators) {
-			$modlist = '';
-			foreach(explode("\t", $moderators) as $moderator) {
-				$modlist .= '<li><a href="home.php?mod=space&username='.rawurlencode($moderator).'" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a></li>';
-			}
-		} else {
-			$modlist = '';
+	if($moderators) {
+		$modlist = $comma = '';
+		foreach(explode("\t", $moderators) as $moderator) {
+			$modlist .= $comma.'<a class="notabs" href="home.php?mod=space&username='.rawurlencode($moderator).'" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
+			$comma = ', ';
 		}
-
-		return $modlist;
 	} else {
-		if($moderators) {
-			$modlist = $comma = '';
-			foreach(explode("\t", $moderators) as $moderator) {
-				$modlist .= $comma.'<a class="notabs" href="home.php?mod=space&username='.rawurlencode($moderator).'" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
-				$comma = ', ';
-			}
-		} else {
-			$modlist = '';
-		}
-		return $modlist;
+		$modlist = '';
 	}
+	return $modlist;
 }
 
 function getcacheinfo($tid) {
@@ -313,14 +300,14 @@ function showstars($num) {
 	$alt = 'alt="Rank: '.$num.'"';
 	if(empty($_G['setting']['starthreshold'])) {
 		for($i = 0; $i < $num; $i++) {
-			echo '<img src="'.IMGDIR.'/star_level1.gif" '.$alt.' />';
+			echo '<img src="'.$_G['style']['imgdir'].'/star_level1.gif" '.$alt.' />';
 		}
 	} else {
 		for($i = 3; $i > 0; $i--) {
 			$numlevel = intval($num / pow($_G['setting']['starthreshold'], ($i - 1)));
 			$num = ($num % pow($_G['setting']['starthreshold'], ($i - 1)));
 			for($j = 0; $j < $numlevel; $j++) {
-				echo '<img src="'.IMGDIR.'/star_level'.$i.'.gif" '.$alt.' />';
+				echo '<img src="'.$_G['style']['imgdir'].'/star_level'.$i.'.gif" '.$alt.' />';
 			}
 		}
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_blog.php 14322 2010-08-10 08:35:00Z zhengqingpeng $
+ *      $Id: spacecp_blog.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,7 +64,7 @@ if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
 	require_once libfile('function/blog');
 	if($newblog = blog_post($_POST, $blog)) {
 		if(empty($blog) && $newblog['topicid']) {
-			$url = 'home.php?mod=space&do=topic&topicid='.$newblog['topicid'].'&view=blog&quickforward=1';
+			$url = 'home.php?mod=space&uid='.$_G['uid'].'&do=topic&topicid='.$newblog['topicid'].'&view=blog&quickforward=1';
 		} else {
 			$url = 'home.php?mod=space&uid='.$newblog['uid'].'&do=blog&quickforward=1&id='.$newblog['blogid'];
 		}

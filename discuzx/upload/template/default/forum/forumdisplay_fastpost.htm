@@ -17,7 +17,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 				<!--{if $_G['forum'][threadtypes][types]}-->
 					<div class="ftid">
 						<select name="typeid" id="typeid" width="80">
-						<!--{if !$_G['forum']['threadtypes']['required']}--><option value="0">{lang types}</option><!--{/if}-->
+						<option value="0">{lang select_thread_catgory}</option>
 						<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
 							<option value="$typeid"><!--{echo strip_tags($name);}--></option>
 						<!--{/loop}-->
@@ -56,7 +56,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 					</div>
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 						<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-						<div class="mtm"><!--{template common/seccheck}--></div>
+						<div class="mtm sec"><!--{template common/seccheck}--></div>
 					<!--{/if}-->
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
 					<input type="hidden" name="usesig" value="$usesigcheck" />

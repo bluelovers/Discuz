@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 17017 2010-09-19 04:24:08Z zhangguosheng $
+ *      $Id: function_space.php 17280 2010-09-28 08:15:08Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,8 +87,8 @@ function getblockhtml($blockname,$parameters = array()) {
 			$do = $blockname;
 			$managehtml = '';
 			$avatar = empty($parameters['banavatar']) ? 'middle' : $parameters['banavatar'];
-			$html .= "<div class=\"hm\"><p><a href=\"home.php?mod=space&uid={$space['uid']}\" target=\"__blank\">".avatar($space['uid'],$avatar).'</a></p>';
-			$html .= "<h2><a href=\"home.php?mod=space&uid={$space['uid']}\" target=\"__blank\">".$space['username']."</a></h2>";
+			$html .= "<div class=\"hm\"><p><a href=\"home.php?mod=space&uid=$uid\" target=\"__blank\">".avatar($uid,$avatar).'</a></p>';
+			$html .= "<h2><a href=\"home.php?mod=space&uid=$uid\" target=\"__blank\">".$space['username']."</a></h2>";
 			$html .= '</div><ul class="xl xl2 cl ul_list">';
 
 			$magicinfo = $showmagicgift = false;
@@ -99,7 +99,7 @@ function getblockhtml($blockname,$parameters = array()) {
 
 			if ($space['self']) {
 				$html .= '<li class="ul_diy"><a href="home.php?mod=space&diy=yes">'.lang('space', 'block_profile_diy').'</a></li>';
-				$html .= '<li class="ul_msg"><a href="home.php?mod=space&do=wall">'.lang('space', 'block_profile_wall').'</a></li>';
+				$html .= '<li class="ul_msg"><a href="home.php?mod=space&uid='.$uid.'&do=wall">'.lang('space', 'block_profile_wall').'</a></li>';
 				$html .= '<li class="ul_avt"><a href="home.php?mod=spacecp&ac=avatar">'.lang('space', 'block_profile_avatar').'</a></li>';
 				$html .= '<li class="ul_profile"><a href="home.php?mod=spacecp&ac=profile">'.lang('space', 'block_profile_update').'</a></li>';
 				if($showmagicgift) {
@@ -113,7 +113,7 @@ function getblockhtml($blockname,$parameters = array()) {
 				}
 			} else {
 				require_once libfile('function/friend');
-				$isfriend = friend_check($space['uid']);
+				$isfriend = friend_check($uid);
 				if (!$isfriend) {
 					$html .= "<li class='ul_add'><a href=\"home.php?mod=spacecp&ac=friend&op=add&uid=$space[uid]&handlekey=addfriendhk_{$space[uid]}\" id=\"a_friend_li_{$space[uid]}\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">".lang('space', 'block_profile_friend_add')."</a></li>";
 				} else {
@@ -146,12 +146,12 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= '<ul id="umanageli_menu" class="p_pop" style="width: 80px; display:none;">';
 					$html .= '<li><a href="admin.php?action=threads&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
 					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
-					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&uid='.$space['uid'].'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
-					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&uid='.$space['uid'].'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
-					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&uid='.$space['uid'].'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
+					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
+					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
+					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
 					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
-					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&authorid='.$space['uid'].'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
-					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&uid='.$space['uid'].'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
+					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
+					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
 					$html .= '<li><a href="admin.php?action=threads&operation=group&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
 					$html .= '<li><a href="admin.php?action=prune&searchsubmit=1&operation=group&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
 					$html .= '</ul>';
@@ -171,7 +171,7 @@ function getblockhtml($blockname,$parameters = array()) {
 							$credittype = $_G['setting']['extcredits'][$extcredits]['title'];
 						}
 						$html .= '<div id="magicreceivegift">';
-						$html .= '<a onclick="showWindow(\'magicgift\', this.href, \'get\', 0)" href="home.php?mod=spacecp&ac=magic&op=receivegift&uid='.$space['uid'].'" title="'.lang('magic/gift', 'gift_receive_gift', array('percredit'=>$percredit,'credittype'=>$credittype)).'">';
+						$html .= '<a onclick="showWindow(\'magicgift\', this.href, \'get\', 0)" href="home.php?mod=spacecp&ac=magic&op=receivegift&uid='.$uid.'" title="'.lang('magic/gift', 'gift_receive_gift', array('percredit'=>$percredit,'credittype'=>$credittype)).'">';
 						$html .= '<img src="'.STATICURL.'image/magic/gift.gif" alt="gift" />';
 						$html .= '</a>';
 						$html .= '</div>';
@@ -194,13 +194,13 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= "<li>".$extcredit['img'].$extcredit['title'].': <a href="home.php?mod=spacecp&ac=credit">'.($space['extcredits'.$extcreditid] ? $space['extcredits'.$extcreditid] : '--').'</a>';
 				}
 			}
-			if(empty($parameters['banfriends'])) $html .= "<li>".lang('space', 'friends').': <a href="home.php?mod=space&uid='.$space['uid'].'&do=friend&view=me&from=space">'.($space['friends'] ? $space['friends'] : '--')."</a></li>";
+			if(empty($parameters['banfriends'])) $html .= "<li>".lang('space', 'friends').': <a href="home.php?mod=space&uid='.$uid.'&do=friend&view=me&from=space">'.($space['friends'] ? $space['friends'] : '--')."</a></li>";
 			if(empty($parameters['banthreads']) && $_G['setting']['allowviewuserthread'] !== false || $_G['adminid'] == 1) {
-				$html .= "<li>".lang('space', 'threads').': <a href="home.php?mod=space&uid='.$space['uid'].'&do=thread&view=me&from=space">'.($space['threads'] ? $space['threads'] : '--')."</a></li>";
+				$html .= "<li>".lang('space', 'threads').': <a href="home.php?mod=space&uid='.$uid.'&do=thread&view=me&from=space">'.($space['threads'] ? $space['threads'] : '--')."</a></li>";
 			}
-			if(empty($parameters['banblogs'])) $html .= "<li>".lang('space', 'blogs').': <a href="home.php?mod=space&uid='.$space['uid'].'&do=blog&view=me&from=space">'.($space['blogs'] ? $space['blogs'] : '--')."</a></li>";
-			if(empty($parameters['banalbums'])) $html .= "<li>".lang('space', 'albums').': <a href="home.php?mod=space&uid='.$space['uid'].'&do=album&view=me&from=space">'.($space['albums'] ? $space['albums'] : '--')."</a></li>";
-			if(empty($parameters['bansharings'])) $html .= "<li>".lang('space', 'sharings').': <a href="home.php?mod=space&uid='.$space['uid'].'&do=share&view=me&from=space">'.($space['sharings'] ? $space['sharings'] : '--')."</a></li>";
+			if(empty($parameters['banblogs'])) $html .= "<li>".lang('space', 'blogs').': <a href="home.php?mod=space&uid='.$uid.'&do=blog&view=me&from=space">'.($space['blogs'] ? $space['blogs'] : '--')."</a></li>";
+			if(empty($parameters['banalbums'])) $html .= "<li>".lang('space', 'albums').': <a href="home.php?mod=space&uid='.$uid.'&do=album&view=me&from=space">'.($space['albums'] ? $space['albums'] : '--')."</a></li>";
+			if(empty($parameters['bansharings'])) $html .= "<li>".lang('space', 'sharings').': <a href="home.php?mod=space&uid='.$uid.'&do=share&view=me&from=space">'.($space['sharings'] ? $space['sharings'] : '--')."</a></li>";
 			$html .= '</ul>';
 			$html = '<div id="pcd">'.$html.'</div>';
 			break;
@@ -262,7 +262,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= '<p>'.lang('space','block_view_noperm').'</p>';
 				}
 			}
-			$more = $html ? '<p class="ptm" style="text-align: right;"><a href="home.php?mod=space&uid='.$space['uid'].'&do=blog&view=me&from=space">'.lang('space', 'viewmore').'</a></p>' : '';
+			$more = $html ? '<p class="ptm" style="text-align: right;"><a href="home.php?mod=space&uid='.$uid.'&do=blog&view=me&from=space">'.lang('space', 'viewmore').'</a></p>' : '';
 			$contentclassname = ' xld';
 			$html = $html.$more;
 			break;
@@ -378,7 +378,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= '<div class="d">'.$value['body_template'].'</div>';
 					if ($value['type'] == 'video') {
 						if(!empty($value['body_data']['imgurl'])) {
-							$html .= '<table class="mtm" title="'.lang('space', 'click_play').'" onclick="javascript:showFlash(\''.$value['body_data']['host'].'\', \''.$value['body_data']['flashvar'].'\', this, \''.$value['sid'].'\');"><tr><td class="vdtn hm" style="background: url('.$value['body_data']['imgurl'].') no-repeat"><img src="'.IMGDIR.'/vds.png" alt="'.lang('space', 'click_play').'" /></td></tr></table>';
+							$html .= '<table class="mtm" title="'.lang('space', 'click_play').'" onclick="javascript:showFlash(\''.$value['body_data']['host'].'\', \''.$value['body_data']['flashvar'].'\', this, \''.$value['sid'].'\');"><tr><td class="vdtn hm" style="background: url('.$value['body_data']['imgurl'].') no-repeat"><img src="'.STATICURL.'/image/common/vds.png" alt="'.lang('space', 'click_play').'" /></td></tr></table>';
 						} else {
 							$html .= "<img src=\"".STATICURL."/image/common/vd.gif\" alt=\"".lang('space', 'click_play')."\" onclick=\"javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['sid']}');\" class=\"tn\" />";
 						}
@@ -454,7 +454,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			if(!empty($parameters['mp3list'])) {
 				$authcode = substr(md5($_G['authkey'].$uid), 6, 16);
 				$view = ($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile']) ? '&view=admin' : '';
-				$querystring = urlencode("home.php?mod=space&do=index&op=getmusiclist&uid=$uid&hash=$authcode$view&t=".TIMESTAMP);
+				$querystring = urlencode("home.php?mod=space&uid=$uid&do=index&op=getmusiclist&hash=$authcode$view&t=".TIMESTAMP);
 				$swfurl = STATICURL.'image/common/mp3player.swf?config='.$querystring;
 				if(empty($parameters['config']['height']) && $parameters['config']['height'] !== 0) {
 					$parameters['config']['height'] = '200px';

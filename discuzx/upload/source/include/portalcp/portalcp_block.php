@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 16908 2010-09-16 10:40:05Z zhangguosheng $
+ *      $Id: portalcp_block.php 17243 2010-09-27 08:18:03Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ $oparr = array('block', 'data', 'style', 'itemdata', 'setting', 'remove', 'item'
 				'getblock', 'thumbsetting', 'push', 'recommend', 'verifydata', 'managedata',
 				'saveblockclassname', 'saveblocktitle', 'convert');
 $op = in_array($_GET['op'], $oparr) ? $_GET['op'] : 'block';
-$allowmanage = 0;
+$allowmanage = $allowdata = 0;
 
 $block = array();
 $bid = !empty($_G['gp_bid']) ? intval($_G['gp_bid']) : 0;
@@ -29,6 +29,10 @@ if($bid) {
 	$blockperm = getblockperm($bid);
 	if($blockperm['allowmanage']) {
 		$allowmanage = 1;
+		$allowdata = 1;
+	}
+	if ($blockperm['allowrecommend'] && !$blockperm['needverify']) {
+		$allowdata = 1;
 	}
 }
 
@@ -143,7 +147,7 @@ if($op == 'block') {
 	$blockclassname = lang('blockclass', 'blockclass_'.($block['blockclass'] ? $block['blockclass'] : $_G['gp_classname']));
 
 } elseif($op == 'data') {
-	if(!$bid || !$allowmanage) {
+	if(!$bid || (!$allowmanage && !$allowdata)) {
 		showmessage('block_edit_nopermission');
 	}
 
@@ -256,7 +260,7 @@ if($op == 'block') {
 
 } elseif($op == 'itemdata') {
 
-	if(!$bid || !$allowmanage) {
+	if(!$bid ||  (!$allowmanage && !$allowdata)) {
 		showmessage('block_edit_nopermission');
 	}
 	if(!$is_recommendable) {
@@ -326,7 +330,7 @@ if($op == 'block') {
 
 } elseif($op == 'remove') {
 
-	if(!$bid || !$allowmanage) {
+	if(!$bid || (!$allowmanage && !$allowdata)) {
 		showmessage('block_edit_nopermission');
 	}
 
@@ -356,7 +360,7 @@ if($op == 'block') {
 
 	$item = $perm = array();
 	if($op == 'item') {
-		if(!$allowmanage) {
+		if(!$allowmanage && !$allowdata) {
 			showmessage('block_edit_nopermission');
 		}
 		if($itemid) {
@@ -392,8 +396,7 @@ if($op == 'block') {
 			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype']);
 		}
 	} elseif($op=='verifydata' || $op=='managedata') {
-		$perm = getblockperm($bid);
-		if(!$perm['allowmanage']) {
+		if(!$allowmanage && !$allowdata) {
 			showmessage('no_right_manage_data');
 		}
 		if($dataid) {
@@ -695,16 +698,16 @@ function block_convert($bid, $toblockclass) {
 			if($blockstyle) {
 				$blockstyle['name'] = '';
 				$blockstyle['blockclass'] = $toblockclass;
-				foreach($blockstyle['fields'] as &$value) {
-					$value = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
+				foreach($blockstyle['fields'] as $key => $value) {
+					$blockstyle['fields'][$key] = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
 				}
 
 				$fun = create_function('&$v','$v = "{".$v."}";');
 				array_walk($convertrule['searchkeys'], $fun);
 				array_walk($convertrule['replacekeys'], $fun);
 
-				foreach($blockstyle['template'] as &$value) {
-					$value = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
+				foreach($blockstyle['template'] as $key => $value) {
+					$blockstyle['template'][$key] = str_replace($convertrule['searchkeys'], $convertrule['replacekeys'], $value);
 				}
 				unset($block['bid']);
 				$block['styleid'] = '0';

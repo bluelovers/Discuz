@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_share.php 15087 2010-08-19 02:11:11Z wangjinbo $
+ *      $Id: spacecp_share.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -273,7 +273,7 @@ if($_GET['op'] == 'delete') {
 
 			$actives = array('share' => ' class="active"');
 
-			$_G['refer'] = 'home.php?mod=space&do=share&view=me';
+			$_G['refer'] = 'home.php?mod=space&uid='.$_G['uid'].'&do=share&view=me';
 			$type = 'link';
 			$_GET['op'] = 'link';
 			$linkdefault = 'http://';
@@ -303,7 +303,7 @@ if($_GET['op'] == 'delete') {
 			$flashvar = parseflv($link);
 			if(empty($flashvar) && preg_match("/\.flv$/i", $link)) {
 				$flashvar = array(
-					'flv' => IMGDIR.'/flvplayer.swf?&autostart=true&file='.urlencode($link),
+					'flv' => $_G['style']['imgdir'].'/flvplayer.swf?&autostart=true&file='.urlencode($link),
 					'imgurl' => ''
 				);
 			}
@@ -390,7 +390,7 @@ if($_GET['op'] == 'delete') {
 		$needle = $id ? $type.$id : '';
 		updatecreditbyaction('createshare', $_G['uid'], array('sharings' => 1), $needle);
 
-		$referer = "home.php?mod=space&do=share&view=$_GET[view]&from=$_GET[from]";
+		$referer = "home.php?mod=space&uid=$_G[uid]&do=share&view=$_GET[view]&from=$_GET[from]";
 		showmessage('do_success', dreferer(), array('sid' => $sid), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 

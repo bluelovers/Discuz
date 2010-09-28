@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_logging.php 16806 2010-09-15 04:34:00Z monkey $
+ *      $Id: member_logging.php 17133 2010-09-25 00:35:09Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -156,10 +156,11 @@ class logging_ctl {
 
 function clearcookies() {
 	global $_G;
-	foreach(array('sid', 'auth', 'visitedfid', 'onlinedetail', 'loginuser', 'activationauth', 'disableprompt', 'indextype') as $k) {
+	foreach($_G['cookie'] as $k => $v) {
 		dsetcookie($k);
 	}
 	$_G['uid'] = $_G['adminid'] = 0;
 	$_G['username'] = $_G['member']['password'] = '';
 }
+
 ?>

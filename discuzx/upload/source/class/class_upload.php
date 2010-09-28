@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_upload.php 16662 2010-09-13 01:15:36Z monkey $
+ *      $Id: class_upload.php 17215 2010-09-26 10:04:38Z monkey $
  */
 
 
@@ -53,7 +53,16 @@ Class discuz_upload{
 
 	}
 
-	function save() {
+	function save($ignore = 0) {
+		if($ignore) {
+			if(!$this->save_to_local($this->attach['tmp_name'], $this->attach['target'])) {
+				$this->errorcode = -103;
+				return false;
+			} else {
+				$this->errorcode = 0;
+				return true;
+			}
+		}
 
 		if(empty($this->attach) || empty($this->attach['tmp_name']) || empty($this->attach['target'])) {
 			$this->errorcode = -101;
@@ -79,7 +88,7 @@ Class discuz_upload{
 	}
 
 	function errormessage() {
-		return error('file_upload_error_'.$this->errorcode, array(), 1);
+		return lang('error', 'file_upload_error_'.$this->errorcode);
 	}
 
 	function fileext($filename) {

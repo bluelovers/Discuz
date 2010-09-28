@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_comment.php 15477 2010-08-24 07:36:35Z zhangguosheng $
+ *      $Id: portalcp_comment.php 17261 2010-09-28 02:21:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,7 @@ if($_GET['op'] == 'requote') {
 		showmessage('comment_edit_noexist');
 	}
 
-	if(!$_G['group']['allowmanagearticle'] && $_G['uid'] != $comment['uid'] && $_G['adminid'] != 1 && $_G['gp_modarticlecommentkey'] != modauthkey($comment['cid'])) {
+	if((!$_G['group']['allowmanagearticle'] && $_G['uid'] != $comment['uid'] && $_G['adminid'] != 1 && $_G['gp_modarticlecommentkey'] != modauthkey($comment['cid'])) || $_G['groupid'] == '7') {
 		showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 	}
 

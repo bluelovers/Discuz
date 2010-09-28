@@ -3,7 +3,7 @@
 <!--{if $_G['setting']['verify']['enabled']}-->
 	<!--{loop $_G['setting']['verify'] $vid $verify}-->
 		<!--{if $verify['available'] && $post['verify'.$vid] == 1}-->
-			<a href="home.php?mod=spacecp&ac=profile&op=verify&vid=$vid" target="_blank"><!--{if $verify[icon]}--><img src="{$_G[setting][attachurl]}/common/$verify[icon]" class="vm" alt="$verify[title]" title="$verify[title]" /><!--{else}-->$verify[title]<!--{/if}--></a>&nbsp;
+			<a href="home.php?mod=spacecp&ac=profile&op=verify&vid=$vid" target="_blank"><!--{if $verify[icon]}--><img src="$verify[icon]" class="vm" alt="$verify[title]" title="$verify[title]" /><!--{else}-->$verify[title]<!--{/if}--></a>&nbsp;
 		<!--{/if}-->
 	<!--{/loop}-->
 <!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 16861 2010-09-16 03:46:42Z liulanbo $
+ *      $Id: update.php 17157 2010-09-25 06:07:12Z monkey $
  */
 
 include_once('../source/class/class_core.php');
@@ -244,84 +244,85 @@ if($_GET['step'] == 'start') {
 		while($value=DB::fetch($query)) {
 			$settings[$value[skey]] = $value['svalue'];
 		}
-		if($settings['seotitle'] && !unserialize($settings['seotitle'])) {
+		if($settings['seotitle'] && unserialize($settings['seotitle']) === FALSE) {
 			$rownew = array('forum' => $settings['seotitle']);
 			DB::insert('common_setting', array(
 				'skey' => 'seotitle',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['seodescription'] && unserialize($settings['seodescription'])) {
-			$rownew = array('forum' => $settings['seodescription']);
-			DB::insert('common_setting', array(
-				'skey' => 'seodescription',
-				'svalue' => serialize($rownew),
-			), false, true);
-		}
-		if($serialize['seokeywords'] && unserialize($settings['seokeywords'])) {
+		if($settings['seokeywords'] && unserialize($settings['seokeywords']) === FALSE) {
 			$rownew = array('forum' => $settings['seokeywords']);
 			DB::insert('common_setting', array(
 				'skey' => 'seokeywords',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-
-		if($settings['watermarkminheight'] && !unserialize($settings['watermarkminheight'])) {
-			$rownew = array('forum' => $settings['watermarkminheight']);
+		if($settings['seodescription'] && unserialize($settings['seodescription']) === FALSE) {
+			$rownew = array('forum' => $settings['seodescription']);
+			DB::insert('common_setting', array(
+				'skey' => 'seodescription',
+				'svalue' => addslashes(serialize($rownew)),
+			), false, true);
+		}
+		if($settings['watermarkminheight'] && unserialize($settings['watermarkminheight']) === FALSE) {
+			$rownew = array('portal' => $settings['watermarkminheight'], 'forum' => $settings['watermarkminheight'], 'album' => $settings['watermarkminheight']);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarkminheight',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarkminwidth'] && !unserialize($settings['watermarkminwidth'])) {
-			$rownew = array('forum' => $settings['watermarkminwidth']);
+		if($settings['watermarkminwidth'] && unserialize($settings['watermarkminwidth']) === FALSE) {
+			$rownew = array('portal' => $settings['watermarkminwidth'], 'forum' => $settings['watermarkminwidth'], 'album' => $settings['watermarkminwidth']);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarkminwidth',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarkquality'] && !unserialize($settings['watermarkquality'])) {
-			$rownew = array('forum' => $settings['watermarkquality']);
+		if($settings['watermarkquality'] && unserialize($settings['watermarkquality']) === FALSE) {
+			$rownew = array('portal' => $settings['watermarkquality'], 'forum' => $settings['watermarkquality'], 'album' => $settings['watermarkquality']);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarkquality',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarkstatus'] && !unserialize($settings['watermarkstatus'])) {
-			$rownew = array('forum' => $settings['watermarkstatus']);
+		if($settings['watermarkstatus'] && unserialize($settings['watermarkstatus']) === FALSE) {
+			$rownew = array('portal' => $settings['watermarkstatus'], 'forum' => $settings['watermarkstatus'], 'album' => $settings['watermarkstatus']);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarkstatus',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarktrans'] && !unserialize($settings['watermarktrans'])) {
-			$rownew = array('forum' => $settings['watermarktrans']);
+		if($settings['watermarktrans'] && unserialize($settings['watermarktrans']) === FALSE) {
+			$rownew = array('portal' => $settings['watermarktrans'], 'forum' => $settings['watermarktrans'], 'album' => $settings['watermarktrans']);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarktrans',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarktype'] && !unserialize($settings['watermarktype'])) {
+		if($settings['watermarktype'] && unserialize($settings['watermarktype']) === FALSE) {
 			$watermarktype_map = array(
 				0 => 'gif',
 				1 => 'png',
 				2 => 'text',
 			);
-			$rownew = array('forum' => $watermarktype_map[$settings['watermarktype']]);
+			$rownew = array('portal' => $watermarktype_map[$settings['watermarktype']], 'forum' => $watermarktype_map[$settings['watermarktype']], 'album' => $watermarktype_map[$settings['watermarktype']]);
 			DB::insert('common_setting', array(
 				'skey' => 'watermarktype',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
-		if($settings['watermarktext'] && !unserialize($settings['watermarktext'])) {
+		if($settings['watermarktext'] && unserialize($settings['watermarktext']) === FALSE) {
 			$rownew = array();
 			$watermarktext = (array)unserialize($settings['watermarktext']);
 			foreach($watermarktext as $data_k => $data_v) {
+				$rownew[$data_k]['portal'] = $data_v;
 				$rownew[$data_k]['forum'] = $data_v;
+				$rownew[$data_k]['album'] = $data_v;
 			}
 			DB::insert('common_setting', array(
 				'skey' => 'watermarktext',
-				'svalue' => serialize($rownew),
+				'svalue' => addslashes(serialize($rownew)),
 			), false, true);
 		}
 		DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('group_allowfeed', '1')");
@@ -532,7 +533,7 @@ if($_GET['step'] == 'start') {
 		$nextop = 'group_index';
 		if(!DB::result_first('SELECT skey FROM '.DB::table('common_setting')." WHERE skey='group_recommend' LIMIT 1")) {
 			DB::query("UPDATE ".DB::table('common_usergroup_field')."
-				SET allowcommentarticle=allowcomment,allowblogmod=allowblog,allowdoingmod=allowdoing,allowuploadmod=allowupload,allowsharemod=allowshare,allowstatdata=allowstat,allowdownlocalimg=allowpostarticle");
+				SET allowcommentarticle=allowcomment,allowblogmod=allowblog,allowdoingmod=allowdoing,allowuploadmod=allowupload,allowsharemod=allowshare,allowdownlocalimg=allowpostarticle");
 		}
 		show_msg("用戶組權限升級完畢", "$theurl?step=data&op=$nextop");
 

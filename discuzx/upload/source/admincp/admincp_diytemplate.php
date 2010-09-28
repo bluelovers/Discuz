@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_diytemplate.php 16179 2010-09-01 08:31:42Z zhangguosheng $
+ *      $Id: admincp_diytemplate.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -122,7 +122,7 @@ SEARCH;
 					"<a href=\"$diyurl[url]\" title=\"$diytitle\" target=\"_blank\">$value[name]</a>",
 					'<span title="'.cplang('diytemplate_path').'./data/diy/'.$value['targettplname'].'.htm">'.$value['targettplname'].'</span>',
 					'<span title="'.cplang('diytemplate_path').$_G['style']['tpldir'].'/'.$value['primaltplname'].'.htm">'.$value['primaltplname'].'</span>',
-					"<a href=\"home.php?mod=space&do=profile&uid=$value[uid]\" target=\"_blank\">$value[username]</a>",
+					"<a href=\"home.php?mod=space&uid=$value[uid]&do=profile\" target=\"_blank\">$value[username]</a>",
 					$value[dateline],
 					'<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=edit&targettplname='.$value['targettplname'].'">'.cplang('edit').'</a> '.
 					'<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname='.$value['targettplname'].'">'.cplang('diytemplate_perm').'</a>',

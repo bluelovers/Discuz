@@ -100,7 +100,7 @@ class block_doing {
 				'id' => $data['doid'],
 				'idtype' => 'doid',
 				'title' => cutstr(strip_tags($data['message']), $titlelength, ''),
-				'url' => 'home.php?mod=space&do=doing&uid='.$data['uid'].'&doid='.$data['doid'],
+				'url' => 'home.php?mod=space&uid='.$data['uid'].'&do=doing&doid='.$data['doid'],
 				'pic' => '',
 				'summary' => '',
 				'fields' => array(

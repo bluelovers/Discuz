@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 17075 2010-09-20 08:31:30Z monkey $
+ *      $Id: cache_setting.php 17250 2010-09-28 01:07:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -102,6 +102,16 @@ function build_cache_setting() {
 		arsort($data['heatthread']['iconlevels']);
 	} else {
 		$data['heatthread']['iconlevels'] = array();
+	}
+	if($data['verify']) {
+		foreach($data['verify'] as $key => $value) {
+			if($value['available']) {
+				$icourl = parse_url($value['icon']);
+				if(!$icourl['host']) {
+					$data['verify'][$key]['icon'] = $data['attachurl'].'common/'.$value['icon'];
+				}
+			}
+		}
 	}
 
 	if($data['recommendthread']['status']) {
@@ -351,6 +361,7 @@ function build_cache_setting() {
 	}
 
 	save_syscache('setting', $data);
+	$_G['setting'] = $data;
 }
 
 function get_cachedata_setting_creditspolicy() {
@@ -401,7 +412,7 @@ function get_cachedata_setting_plugin() {
 						case 25:
 							if($module['type'] == 25) $navtype = 3;
 							$module['url'] = $module['url'] ? $module['url'] : 'plugin.php?id='.$plugin['identifier'].':'.$module['name'];
-							if(!DB::result_first("SELECT count(*) FROM ".DB::table('common_nav')." WHERE navtype='$navtype' AND type='3' AND identifier='$plugin[identifier]' AND name='$module[menu]'")) {
+							if(!DB::result_first("SELECT count(*) FROM ".DB::table('common_nav')." WHERE navtype='$navtype' AND type='3' AND identifier='$plugin[identifier]'")) {
 								DB::insert('common_nav', array(
 								'name' => $module['menu'],
 								'title' => $module['navtitle'],
@@ -560,7 +571,7 @@ function get_cachedata_mainnav() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND (available='1' OR type='0') AND parentid='0' ORDER BY displayorder");
 	while($nav = DB::fetch($query)) {
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
-		if($nav['identifier'] == 3 && !$_G['setting']['groupstatus']) {
+		if($nav['identifier'] == 3 && $nav['type'] == 0 && !$_G['setting']['groupstatus']) {
 			$nav['available'] = 0;
 		}
 		if($nav['type'] == 3) {
@@ -568,10 +579,10 @@ function get_cachedata_mainnav() {
 				continue;
 			}
 		}
-		if($nav['identifier'] == 5 && !$_G['setting']['my_app_status']) {
+		if($nav['identifier'] == 5 && $nav['type'] == 0 && !$_G['setting']['my_app_status']) {
 			$nav['available'] = 0;
 		}
-		if($nav['identifier'] == 8 && !$_G['setting']['ranklist']['status']) {
+		if($nav['identifier'] == 8 && $nav['type'] == 0 && !$_G['setting']['ranklist']['status']) {
 			$nav['available'] = 0;
 		}
 		$nav['style'] = parsehighlight($nav['highlight']);
@@ -606,7 +617,7 @@ function get_cachedata_mainnav() {
 				$data['menunavs'][] = '<ul class="p_pop h_pop" id="'.$navid.'_menu" style="display: none">'.$subnavs.'</ul>';
 			}
 		}
-		if($nav['identifier'] == 6) {
+		if($nav['identifier'] == 6 && $nav['type'] == 0) {
 			if(!empty($_G['setting']['plugins']['jsmenu'])) {
 				$onmouseover .= "showMenu({'ctrlid':this.id,'menuid':'plugin_menu'})";
 			} else {

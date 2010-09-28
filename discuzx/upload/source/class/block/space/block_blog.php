@@ -204,6 +204,7 @@ class block_blog {
 			$fieldsql = ', bf.pic, b.picflag, bf.message';
 		}
 		$wheres[] = "b.friend = '0'";
+		$wheres[] = "b.status='0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql ORDER BY b.$orderby DESC";
 		$query = DB::query($sql." LIMIT $startrow,$items;");
@@ -220,7 +221,7 @@ class block_blog {
 				'id' => $data['blogid'],
 				'idtype' => 'blogid',
 				'title' => cutstr($data['subject'], $titlelength, ''),
-				'url' => 'home.php?mod=space&do=blog&uid='.$data[uid].'&id='.$data['blogid'],
+				'url' => 'home.php?mod=space&uid='.$data[uid].'&do=blog&id='.$data['blogid'],
 				'pic' => $data['pic'],
 				'picflag' => $data['picflag'],
 				'summary' => $data['message'] ? preg_replace("/&amp;[a-z]+\;/i", '', cutstr(strip_tags($data['message']), $summarylength, '')) : '',

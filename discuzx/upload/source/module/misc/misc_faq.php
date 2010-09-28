@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_faq.php 13682 2010-07-29 08:37:44Z monkey $
+ *      $Id: misc_faq.php 17275 2010-09-28 07:25:23Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,6 +31,7 @@ if($_G['gp_action'] == 'faq') {
 	$id = intval($_G['gp_id']);
 	if($ffaq = DB::fetch_first("SELECT title FROM ".DB::table('forum_faq')." WHERE fpid='$id'")) {
 
+		$navtitle = $ctitle;
 		$navigation = "<em>&rsaquo;</em> $ctitle";
 		$faqlist = array();
 		$messageid = empty($_G['gp_messageid']) ? 0 : $_G['gp_messageid'];
@@ -47,6 +48,8 @@ if($_G['gp_action'] == 'faq') {
 	}
 
 } elseif($_G['gp_action'] == 'search') {
+
+	$navtitle = lang('core', 'search');
 	if(submitcheck('searchsubmit')) {
 		$keyword = isset($_G['gp_keyword']) ? trim($_G['gp_keyword']) : '';
 		if($keyword) {
@@ -85,6 +88,8 @@ if($_G['gp_action'] == 'faq') {
 	$navigation = '<em>&rsaquo;</em> '.$_G['setting']['plugins']['faq'][$_G['gp_id']]['name'];
 	include pluginmodule($_G['gp_id'], 'faq');
 
+} else {
+	$navtitle = lang('core', 'faq');
 }
 
 include template('common/faq');
