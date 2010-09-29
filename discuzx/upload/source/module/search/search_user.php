@@ -24,11 +24,12 @@ if($_G['config']['app']['domain']['home'] || $_G['config']['app']['domain']['def
 } else {
 	$url = 'home.php';
 }
+
 $url .= '?mod=spacecp&ac=search';
 if($_G['gp_srchtxt']) {
 	$url .= '&username='.$_G['gp_srchtxt'].'&searchsubmit=yes';
 }
 
-header('Location: '.$url);
+dheader('Location: '.$url);
 
 ?>

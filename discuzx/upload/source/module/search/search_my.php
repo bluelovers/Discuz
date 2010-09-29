@@ -38,7 +38,7 @@ function my_http_build_query ($data, $key = '', $isEncode = true) {
 }
 
 if (!$_G['setting']['my_siteid']) {
-	header('Location: index.php');
+	dheader('Location: index.php');
 	exit;
 }
 
@@ -98,6 +98,6 @@ if ($_G['setting']['my_search_domain']) {
 }
 $url = 'http://' . $domain . '/f/discuz?' . my_http_build_query($params);
 
-header('Location: ' . $url);
+dheader('Location: ' . $url);
 
 ?>

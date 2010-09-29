@@ -64,7 +64,7 @@ $my_prefix = getsiteurl();
 updatecreditbyaction('useapp', 0, array(), $appid);
 
 if (!$my_suffix) {
-	header('Location: userapp.php?mod=app&id='.$my_appId.'&my_suffix='.urlencode(base64_encode('/')));
+	dheader('Location: userapp.php?mod=app&id='.$my_appId.'&my_suffix='.urlencode(base64_encode('/')));
 	exit;
 }
 

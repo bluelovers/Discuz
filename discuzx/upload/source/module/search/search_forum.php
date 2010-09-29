@@ -60,7 +60,7 @@ if(!empty($srchfid) && !is_numeric($srchfid)) {
 }
 
 if($_G['setting']['my_search_status'] && $_G['setting']['my_search_progress'] && !$srchfrom && !$searchid) {
-	header("Location: search.php?mod=my&q=".urlencode($keyword).(intval($srhfid) ? "&fId=$srhfid" : '')."&module=forum".($_G['gp_adv'] ? "&isAdv=1" : ''));
+	dheader("Location: search.php?mod=my&q=".urlencode($keyword).(intval($srhfid) ? "&fId=$srhfid" : '')."&module=forum".($_G['gp_adv'] ? "&isAdv=1" : ''));
 	die;
 }
 
