@@ -172,7 +172,13 @@
 							<!--{elseif $_GET['view']=='visitor' || $_GET['view'] == 'trace'}-->
 								<div class="xg1"><!--{date($value[dateline], 'n{lang month}j{lang day}')}--></div>
 							<!--{elseif $_GET['view']=='online'}-->
-								<div class="xg1"><!--{date($ols[$value[uid]], 'H:i')}--></div>
+								<div class="xg1">
+									<!--{date($ols[$value[uid]], 'H:i')}-->
+									<!--{if $_G[adminid] == 1}-->
+										<span class="pipe">|</span>
+										<span class="sctpl_ip">{$value[ip1]}.{$value[ip2]}.{$value[ip3]}.{$value[ip4]}</span>
+									<!--{/if}-->
+								</div>
 							<!--{else}-->
 								<div class="xg1">
 									<a href="home.php?mod=spacecp&ac=friend&op=changenum&uid=$value[uid]&handlekey=hotuserhk_{$value[uid]}" id="friendnum_$value[uid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang hot}(<span id="spannum_$value[uid]">$value[num]</span>)</a><span class="pipe">|</span>

@@ -1208,9 +1208,17 @@ function output() {
 	$_G['domain'] = array();
 	$port = empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
 	if(is_array($_G['setting']['domain']['app'])) {
+
+		// bluelovers
+		if (!isset($_G['setting']['domain']['app']['userapp'])) {
+			$_G['setting']['domain']['app']['userapp'] = null;
+		}
+		// bluelovers
+
 		foreach($_G['setting']['domain']['app'] as $app => $domain) {
 			if($domain || $_G['setting']['domain']['app']['default']) {
-				$appphp = "{$app}.php";
+//				$appphp = "{$app}.php";
+				$appphp = "{$app}";
 				if(!$domain) {
 					$domain = $_G['setting']['domain']['app']['default'];
 				}

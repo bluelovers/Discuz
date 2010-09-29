@@ -73,6 +73,7 @@
 					<tr>
 						<th>{lang group_image}</th>
 						<td>
+							<!--{if 0}-->
 							<input type="file" name="bannernew" id="bannernew" class="pf" size="25" />
 				<!--{if $_G['forum']['banner']}-->
 							<label><input type="checkbox" name="deletebanner" class="pc" value="1" /> {lang group_no_image}</label>
@@ -89,20 +90,37 @@
 									{lang group_image_filesize_limit}
 								<!--{/if}-->
 							</p>
+							<!--{else}-->
+								<input type="text" name="bannernew" id="bannernew" class="pf px" size="36" value="$_G[forum][banner]" />
+							<!--{/if}-->
+
+							<!--{if $_G['forum']['banner']}-->
+								<div style="margin-top:1em;max-width: 544px; max-height: 200px; overflow: hidden;">
+									<img alt="" class="vm" style="margin-right: 1em;" src="$_G[forum][banner]?{TIMESTAMP}" />
+								</div>
+							<!--{/if}-->
 						</td>
 					</tr>
 					<!--{/if}-->
 					<tr>
 						<th>{lang group_icon}</th>
 						<td>
+							<!--{if 0}-->
 							<input type="file" id="iconnew" class="pf vm" size="25" name="iconnew" />
 							<p class="d">
-								{lang group_icon_resize} &nbsp; 
+								{lang group_icon_resize} &nbsp;
 								<!--{if $_G[setting][group_imgsizelimit]}-->
 									{lang group_image_filesize_limit}
 								<!--{/if}--></p>
+
+							<!--{else}-->
+								<input type="text" name="iconnew" id="iconnew" class="pf px" size="36" value="$_G['forum']['icon']" />
+							<!--{/if}-->
+
 							<!--{if $_G['forum']['icon']}-->
-								<img width="48" height="48" alt="" class="vm" style="margin-right: 1em;" src="$_G[forum][icon]?{TIMESTAMP}" />
+								<div style="margin-top:1em;">
+									<img width="48" height="48" alt="" class="vm" style="margin-right: 1em;" src="$_G[forum][icon]?{TIMESTAMP}" />
+								</div>
 							<!--{/if}-->
 						</td>
 					</tr>
