@@ -33,7 +33,7 @@ if($_GET['view'] == 'online') {
 	if($_GET['type']=='near') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=near";
 		$ip = explode('.', $_G['clientip']);
-		$wheresql = " WHERE ip1='$ip[0]' AND ip2='$ip[1]' AND ip3='$ip[2]'";
+		$wheresql = " WHERE ip1='$ip[0]' and (ip2='$ip[1]' or ip3='$ip[2]' or ip4='$ip[3]')";
 	} elseif($_GET['type']=='friend') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=friend";
 		$space['feedfriend'] = !empty($space['feedfriend']) ? $space['feedfriend'] : -1;
