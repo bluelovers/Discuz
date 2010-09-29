@@ -400,7 +400,7 @@ EOT;
 		$query = DB::query("SELECT type, groupid, grouptitle, radminid FROM ".DB::table('common_usergroup')." ORDER BY (creditshigher<>'0' || creditslower<>'0'), creditslower, groupid");
 		$grouplist = $groupcount = array();
 		while($ggroup = DB::fetch($query)) {
-			$checked = $_G['gp_id'] == $ggroup['groupid'] || in_array($ggroup['groupid'], $_G['gp_multi']);
+			$checked = $_G['gp_id'] == $ggroup['groupid'] || in_array($ggroup['groupid'], (array)$_G['gp_multi']);
 			$ggroup['type'] = $ggroup['type'] == 'special' && $ggroup['radminid'] ? 'specialadmin' : $ggroup['type'];
 			$groupcount[$ggroup['type']]++;
 			$grouplist[$ggroup['type']] .= '<input class="left checkbox ck" chkvalue="'.$ggroup['type'].'" name="multi[]" value="'.$ggroup['groupid'].'" type="checkbox" '.($checked ? 'checked="checked" ' : '').'/>'.

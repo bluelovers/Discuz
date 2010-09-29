@@ -35,7 +35,11 @@ if($_G['gp_view'] == 'top') {
 	$frienduseapp = $hotapp = $newapp = $todayhot = array();
 	$query = DB::query("SELECT * FROM ".DB::table('common_myapp_count')." WHERE usedate='$today' ORDER BY todayuse DESC LIMIT 0,14");
 	while ($value = DB::fetch($query)) {
-		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
+		/**
+		 * Warning: array_merge() [function.array-merge]: Argument #1 is not an array in source\module\userapp\userapp_index.php on line 38
+		 * 	array_merge ( NULL, array ('appid' => '1014835', 'usetotal' => '1', 'girluse' => '1', 'boyuse' => '0', 'todayuse' => '1', 'usedate' => '1285689600', 'install' => '0', 'dateline' =>  '0') )
+		 */
+		$value = array_merge((array)$_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$todayhot[$value['appid']] = $value;
 		}
@@ -43,7 +47,7 @@ if($_G['gp_view'] == 'top') {
 
 	$query = DB::query("SELECT * FROM ".DB::table('common_myapp_count')." ORDER BY dateline DESC LIMIT 0,10");
 	while ($value = DB::fetch($query)) {
-		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
+		$value = array_merge((array)$_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$newapp[$value['appid']] = $value;
 		}
@@ -51,7 +55,7 @@ if($_G['gp_view'] == 'top') {
 
 	$query = DB::query("SELECT * FROM ".DB::table('common_myapp_count')." ORDER BY usetotal DESC LIMIT 0,10");
 	while ($value = DB::fetch($query)) {
-		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
+		$value = array_merge((array)$_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$hotapp[$value['appid']] = $value;
 		}
@@ -59,14 +63,14 @@ if($_G['gp_view'] == 'top') {
 
 	$query = DB::query("SELECT * FROM ".DB::table('common_myapp_count')." WHERE girluse!='0' ORDER BY girluse DESC LIMIT 0,10");
 	while ($value = DB::fetch($query)) {
-		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
+		$value = array_merge((array)$_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$girluseapp[$value['appid']] = $value;
 		}
 	}
 	$query = DB::query("SELECT * FROM ".DB::table('common_myapp_count')." WHERE boyuse!='0' ORDER BY boyuse DESC LIMIT 0,10");
 	while ($value = DB::fetch($query)) {
-		$value = array_merge($_G['cache']['myapp'][$value['appid']], $value);
+		$value = array_merge((array)$_G['cache']['myapp'][$value['appid']], $value);
 		if(!empty($value['appname'])) {
 			$boyuseapp[$value['appid']] = $value;
 		}

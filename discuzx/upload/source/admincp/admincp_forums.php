@@ -536,7 +536,7 @@ var rowtypedata = [
 		$forumselect = '';
 		$sgid = 0;
 		foreach($_G['cache']['forums'] as $forums) {
-			$checked = $fid == $forums['fid'] || in_array($forums['fid'], $_G['gp_multi']);
+			$checked = $fid == $forums['fid'] || in_array($forums['fid'], (array)$_G['gp_multi']);
 			if($forums['type'] == 'group') {
 				$sgid = $forums['fid'];
 				$forumselect .= '</div><em class="cl">'.

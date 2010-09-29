@@ -198,7 +198,8 @@ class template {
 		// bluelovers
 		$template = preg_replace("/\r\n/s", "\n", $template);
 		$template = preg_replace("/[\r\n]{2,}/s", "\n", $template);
-		$template = preg_replace("/([\n\r])[\t ]+/s", "\\1", $template);
+//		$template = preg_replace("/([\n\r])[\t ]+/s", "\\1", $template);
+		$template = preg_replace("/([\n\r])[\t]+/s", "\\1", $template);
 		// bluelovers
 
 		flock($fp, 2);

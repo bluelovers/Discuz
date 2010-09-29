@@ -577,10 +577,8 @@ if(!submitcheck('settingsubmit')) {
 		$setting['seokeywords'] = unserialize($setting['seokeywords']);
 
 		$rewritedata = rewritedata();
-//		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : '';
-		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : array();
-//		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : '';
-		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : array();
+		$setting['rewritestatus'] = isset($setting['rewritestatus']) ? unserialize($setting['rewritestatus']) : '';
+		$setting['rewriterule'] = isset($setting['rewriterule']) ? unserialize($setting['rewriterule']) : '';
 		showtips('setting_tips');
 		showtableheader();
 		showtitle('<em class="right">'.cplang('setting_seo_rewritestatus_viewrule').'</em>'.cplang('setting_seo_rewritestatus'));
@@ -592,7 +590,7 @@ if(!submitcheck('settingsubmit')) {
 			    cplang('setting_seo_rewritestatus_'.$k),
 			    implode(', ', array_keys($rewritedata['rulevars'][$k])),
 			    '<input onclick="doane(event)" name="settingnew[rewriterule]['.$k.']" class="txt" value="'.htmlspecialchars($v).'"/>',
-			    '<input type="checkbox" name="settingnew[rewritestatus][]" class="checkbox" value="'.$k.'" '.(in_array($k, $setting['rewritestatus']) ? 'checked="checked"' : '').'/>'
+			    '<input type="checkbox" name="settingnew[rewritestatus][]" class="checkbox" value="'.$k.'" '.(in_array($k, (array)$setting['rewritestatus']) ? 'checked="checked"' : '').'/>'
 			));
 		}
 		showtablefooter();

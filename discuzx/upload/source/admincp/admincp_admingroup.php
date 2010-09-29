@@ -193,7 +193,7 @@ if(!$operation) {
 		$query = DB::query("SELECT u.radminid, u.groupid, u.grouptitle FROM ".DB::table('common_admingroup')." a LEFT JOIN ".DB::table('common_usergroup')." u ON u.groupid=a.admingid ORDER BY u.radminid, a.admingid");
 		$grouplist = $gutype = '';
 		while($ggroup = DB::fetch($query)) {
-			$checked = $_G['gp_id'] == $ggroup['groupid'] || in_array($ggroup['groupid'], $_G['gp_multi']);
+			$checked = $_G['gp_id'] == $ggroup['groupid'] || in_array($ggroup['groupid'], (array)$_G['gp_multi']);
 			if($gutype != $ggroup['radminid']) {
 				$grouplist .= '<em><span class="right"><input name="checkall_'.$ggroup['radminid'].'" onclick="checkAll(\'value\', this.form, \'g'.$ggroup['radminid'].'\', \'checkall_'.$ggroup['radminid'].'\')" type="checkbox" class="vmiddle checkbox" /></span>'.
 					($ggroup['radminid'] == 1 ? $lang['usergroups_system_1'] : ($ggroup['radminid'] == 2 ? $lang['usergroups_system_2'] : $lang['usergroups_system_3'])).'</em>';
