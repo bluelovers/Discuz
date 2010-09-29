@@ -72,4 +72,19 @@ function _eFunc_showmessage_Before_custom($agv = array()) {
 	}
 }
 
+Scorpio_Hook::add('Func_dheader:Before', '_eFunc_dheader_Before');
+
+function _eFunc_dheader_Before($string, $replace, $http_response_code) {
+	global $_G;
+
+	if (preg_match('/^\s*location:\s*(http:\/\/)?(.*)\s*$/is', $string, $matches)) {
+		if ($matches[1] == 'http://') {
+
+		} else {
+			$string = 'location: '.$_G['siteurl'].$matches[2];
+		}
+	}
+
+}
+
 ?>
