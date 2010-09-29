@@ -59,10 +59,10 @@ while ($row = $db_source->fetch_array($query)) {
 		$rowfield['site'] = '';
 	}
 
-	if (s_trim($rowfield['nickname'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asdj") || s_valid_email($rowfield['nickname']) || s_valid_url($rowfield['nickname'])) {
+	if (!s_trim($rowfield['nickname'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asdj") || s_valid_email($rowfield['nickname']) || s_valid_url($rowfield['nickname'])) {
 		$rowfield['nickname'] = '';
 	}
-	if (s_trim($rowfield['bio'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asd") || s_valid_email($rowfield['bio'])) {
+	if (!s_trim($rowfield['bio'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asd") || s_valid_email($rowfield['bio'])) {
 		$rowfield['bio'] = '';
 	}
 

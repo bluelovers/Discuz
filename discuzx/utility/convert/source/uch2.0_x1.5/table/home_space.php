@@ -107,6 +107,18 @@ while ($space = $db_source->fetch_array($query)) {
 		$db_target->query("UPDATE {$newpre}common_member_count SET $updatesql WHERE uid='$space[uid]'");
 	}
 
+	// bluelovers
+	if ($space['note']) {
+		$space['note'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $space['note']);
+		$space['note'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $space['note']);
+	}
+
+	if ($space['spacenote']) {
+		$space['spacenote'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $space['spacenote']);
+		$space['spacenote'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $space['spacenote']);
+	}
+	// bluelovers
+
 	$setarr = array();
 	$setarr['videophoto'] = $space['videopic'];
 	$setarr['domain'] = $space['domain'];
@@ -133,10 +145,10 @@ while ($space = $db_source->fetch_array($query)) {
 	$space['none'] = '';
 
 	$setarr = array();
-	if(empty($newspace['gender'])) $setarr['gender'] = $space['sex'];
-	if(empty($newspace['birthyear'])) $setarr['birthyear'] = $space['birthyear'];
-	if(empty($newspace['birthmonth'])) $setarr['birthmonth'] = $space['birthmonth'];
-	if(empty($newspace['birthday'])) $setarr['birthday'] = $space['birthday'];
+	if(empty($newspace['gender']) || $space['sex']) $setarr['gender'] = $space['sex'];
+	if(empty($newspace['birthyear']) || $space['birthyear'] > 0) $setarr['birthyear'] = $space['birthyear'];
+	if(empty($newspace['birthmonth']) || $space['birthmonth'] > 0) $setarr['birthmonth'] = $space['birthmonth'];
+	if(empty($newspace['birthday']) || $space['birthday'] > 0) $setarr['birthday'] = $space['birthday'];
 	if(empty($newspace['constellation'])) $setarr['constellation'] = $space['none'];
 	if(empty($newspace['zodiac'])) $setarr['zodiac'] = $space['none'];
 	if(empty($newspace['telephone'])) $setarr['telephone'] = $space['none'];
