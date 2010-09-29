@@ -281,11 +281,21 @@ function dexit($message = '') {
 
 function dheader($string, $replace = true, $http_response_code = 0) {
 	$string = str_replace(array("\r", "\n"), array('', ''), $string);
+
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$string, &$replace, &$http_response_code));
+	}
+
 	if(empty($http_response_code) || PHP_VERSION < '4.3' ) {
 		@header($string, $replace);
 	} else {
 		@header($string, $replace, $http_response_code);
 	}
+
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array(&$string, &$replace, &$http_response_code));
+	}
+
 	if(preg_match('/^\s*location:/is', $string)) {
 		exit();
 	}
