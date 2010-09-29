@@ -364,13 +364,29 @@ if($action == 'index') {
 
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
-			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
-			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+//			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+			$iconnew = $_FILES['iconnew'] ? upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon') : $_G['gp_iconnew'];
+//			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+			$bannernew = $_FILES['bannernew'] ? upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner') : $_G['gp_bannernew'];
 			if($iconnew) {
 				$iconsql .= ", icon='$iconnew'";
+
+				// bluelovers
+				if (!preg_match('/^https?:\/\//i', $_G['forum']['icon']) && preg_match('/^https?:\/\//i', $iconnew)) {
+					@unlink($_G['forum']['icon']);
+				}
+				// bluelovers
+
 			}
 			if($bannernew && empty($deletebanner)) {
 				$iconsql .= ", banner='$bannernew'";
+
+				// bluelovers
+				if (!preg_match('/^https?:\/\//i', $_G['forum']['banner']) && preg_match('/^https?:\/\//i', $bannernew)) {
+					@unlink($_G['forum']['banner']);
+				}
+				// bluelovers
+
 			} elseif($deletebanner) {
 				$iconsql .= ", banner=''";
 				@unlink($_G['forum']['banner']);
@@ -388,6 +404,12 @@ if($action == 'index') {
 			$groupselect = get_groupselect($firstgid, $_G['forum']['fup']);
 			$gviewpermselect = $jointypeselect = array('','','');
 			$_G['forum']['descriptionnew'] = str_replace("<br />", '', $_G['forum']['description']);
+
+			// bluelovers
+			$_G['forum']['rulesnew'] = str_replace("<br />", '', $_G['forum']['rules']);
+			$_G['forum']['articlenew'] = str_replace("<br />", '', $_G['forum']['article']);
+			// bluelovers
+
 			$jointypeselect[$_G['forum']['jointype']] = 'checked="checked"';
 			$gviewpermselect[$_G['forum']['gviewperm']] = 'checked="checked"';
 			if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {
@@ -629,7 +651,7 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {
-	// ±¿¬À™O∂Ù
+	// Êé®Ëñ¶ÊùøÂ°ä
 
 	if(!$_G['forum']['ismoderator'] || !in_array($_G['adminid'], array(1,2))) {
 		showmessage('group_admin_noallowed');

@@ -174,7 +174,10 @@ function mygrouplist($uid, $orderby = '', $fieldarray = array(), $num = 0, $star
 
 function get_groupimg($imgname, $imgtype = '') {
 	global $_G;
-	$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
+//	$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
+	// 群組圖片修正為可判斷是否為 url 圖片
+	$imgpath = preg_match('/^https?:\/\//i', $imgname) ? $imgname : $_G['setting']['attachurl'].'group/'.$imgname;
+
 	if($imgname) {
 		return $imgpath;
 	} else {

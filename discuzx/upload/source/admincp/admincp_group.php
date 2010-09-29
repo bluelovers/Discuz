@@ -44,6 +44,12 @@ if($operation == 'setting') {
 		showsetting('', $varname, $group_admingroupids, 'omcheckbox');
 		showsetting('forums_edit_posts_allowfeed', 'settingnew[group_allowfeed]', $setting['group_allowfeed'], 'radio');
 
+		// bluelovers
+		showtitle('groups_setting_seo');
+		showsetting('groups_setting_seo_description', 'descriptionnew', $_G['setting']['group_description'], 'textarea');
+		showsetting('groups_setting_seo_keyword', 'keywordsnew', $_G['setting']['group_keywords'], 'text');
+		// bluelovers
+
 		showsubmit('updategroupsetting');
 		showtablefooter();
 		showformfooter();
@@ -416,8 +422,10 @@ var rowtypedata = [
 		if($groupbanner) {
 			$groupbanner = '<input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupbanner.'?'.random(6).'" />';
 		}
-		showsetting('groups_editgroup_icon', 'iconnew', '', 'file', '', 0, $groupicon);
-		showsetting('groups_editgroup_banner', 'bannernew', '', 'file', '', 0, $groupbanner);
+//		showsetting('groups_editgroup_icon', 'iconnew', '', 'file', '', 0, $groupicon);
+		showsetting('groups_editgroup_icon', 'iconnew', $group['icon'], 'filetext', '', 0, $groupicon);
+//		showsetting('groups_editgroup_banner', 'bannernew', '', 'file', '', 0, $groupbanner);
+		showsetting('groups_editgroup_banner', 'bannernew', $group['banner'], 'filetext', '', 0, $groupbanner);
 		showsubmit('editsubmit');
 		showtablefooter();
 		showformfooter();
