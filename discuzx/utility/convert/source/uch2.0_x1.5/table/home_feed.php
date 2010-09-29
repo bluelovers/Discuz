@@ -24,6 +24,17 @@ while ($feed = $db_source->fetch_array($query)) {
 
 	$nextid = $feed['feedid'];
 
+	// bluelovers
+	if ($tmp = unserialize($feed['title_data'])) {
+		if ($tmp['message']) {
+			$tmp['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $tmp['message']);
+			$tmp['message'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $tmp['message']);
+
+			$feed['title_data'] = serialize($tmp);
+		}
+	}
+	// bluelovers
+
 	$feed  = daddslashes($feed, 1);
 
 	$data = implode_field_value($feed, ',', db_table_fields($db_target, $table_target));
