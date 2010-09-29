@@ -239,3 +239,8 @@ input, button, select, textarea { vertical-align:middle; }
 }
 
 .space_doing .sctpl_message img, .space_doing_li .sctpl_message img { vertical-align:middle; }
+
+/* 表情 */
+
+.sllt { max-width: 400px; }
+.slg { min-height:33px; }
