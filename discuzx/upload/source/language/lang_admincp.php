@@ -5364,7 +5364,7 @@ $lang = array
 RewriteEngine On
 
 # 修改以下語句中的 /discuz 為你的論壇目錄地址，如果程序放在根目錄中，請將 /discuz 修改為 /
-RewriteBase /discuz
+RewriteBase /{siteroot}
 
 # Rewrite 系統規則請勿修改
 {apache2}

@@ -323,6 +323,11 @@ if($operation == 'filecheck') {
 		$rule['{nginx}'] .= 'rewrite ^([^\.]*)/'.$v.'$ $1/'.stripslashes(pvadd($rewritedata['rulereplace'][$k]))." last;\n";
 	}
 	$rule['{nginx}'] .= "if (!-e \$request_filename) {\n\treturn 404;\n}";
+
+	// bluelovers
+	$rule['{siteroot}'] = trim($_G['siteroot'], '/');
+	// bluelovers
+
 	echo str_replace(array_keys($rule), $rule, cplang('rewrite_message'));
 
 } elseif($operation == 'robots') {
