@@ -191,6 +191,8 @@ while ($space = $db_source->fetch_array($query)) {
 	isset($setarr['site']) && $setarr['site'] = s_trim($setarr['site'], "\\/");
 	isset($setarr['bio']) && $setarr['bio'] = s_trim($setarr['bio'], "\\/");
 	isset($setarr['realname']) && $setarr['realname'] = s_trim($setarr['realname'], "\\/");
+
+	if(empty($newspace['nickname'])) $setarr['nickname'] = $setarr['realname'] ? $setarr['realname'] : s_trim($space['name'], "\\/");
 	// bluelovers
 
 	if($setarr) {

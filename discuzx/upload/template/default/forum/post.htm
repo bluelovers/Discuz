@@ -219,7 +219,7 @@
 							<p id="{$editorid}_adv_4">
 								<a id="{$editorid}_autotypeset" title="{lang e_autotypeset}">Autotypeset</a>
 								<a id="{$editorid}_insertorderedlist" title="{lang e_orderedlist}">Orderedlist</a>
-								<a id="{$editorid}_insertunorderedlist" title="{lang e_unorderedlist}">Unorderedlist</a>								
+								<a id="{$editorid}_insertunorderedlist" title="{lang e_unorderedlist}">Unorderedlist</a>
 							</p>
 						</div>
 						<div class="b1r" id="{$editorid}_adv_s1">
@@ -250,12 +250,12 @@
 						<!--{if $_G['cache']['bbcodes_display'][$_G['groupid']]}-->
 						<div class="b2r nbl">
 							<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-								<!--{if $bbcode['i'] % 2 != 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
+								<!--{if $bbcode['i'] % 2 != 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img _src="{STATICURL}image/common/$bbcode[icon]" src="{STATICURL}image/editor/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
 							<!--{/loop}-->
 							<!--{hook/post_editorctrl_top}-->
 							<br id="{$editorid}_adv_7" />
 							<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-								<!--{if $bbcode['i'] % 2 == 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
+								<!--{if $bbcode['i'] % 2 == 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img _src="{STATICURL}image/common/$bbcode[icon]" src="{STATICURL}image/editor/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
 							<!--{/loop}-->
 							<!--{hook/post_editorctrl_bottom}-->
 						</div>
