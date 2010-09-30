@@ -180,7 +180,7 @@
 					<!--{if $post['invisible'] == 0}-->
 						<span class="pipe">|</span><a href="forum.php?mod=viewthread&action=printable&tid=$_G[tid]" target="_blank">{lang thread_printable}</a>
 					<!--{/if}-->
-					<!--{if $_G['forum_thread']['readperm']}-->| <em class="xg2">{lang readperm_thread} $_G[forum_thread][readperm]</em><!--{/if}-->					
+					<!--{if $_G['forum_thread']['readperm']}-->| <em class="xg2">{lang readperm_thread} $_G[forum_thread][readperm]</em><!--{/if}-->
 				<!--{/if}-->
 				</div>
 			</div>
@@ -287,7 +287,7 @@
 							<a href="javascript:;" id="mgc_post_$post[pid]" onmouseover="showMenu(this.id)" class="mgc">{lang thread_magic}</a>
 						<!--{/if}-->
 
-						<!--{if $_G['forum_thread']['special'] == 3 && ($_G['forum']['ismoderator'] && (!$_G['setting']['rewardexpiration'] || $_G['setting']['rewardexpiration'] > 0 && ($_G[timestamp] - $_G['forum_thread']['dateline']) / 86400 > $_G['setting']['rewardexpiration']) || $_G['forum_thread']['authorid'] == $_G['uid']) && $post['authorid'] != $_G['forum_thread']['authorid'] && $post['first'] == 0 && $_G['uid'] != $post['authorid'] && $_G['forum_thread']['price'] > 0}-->
+						<!--{if $_G['forum_thread']['special'] == 3 && ($_G['forum']['ismoderator'] && (!$_G['setting']['rewardexpiration'] || $_G['setting']['rewardexpiration'] > 0 && ($_G[timestamp] - $_G['forum_thread']['dateline']) / 86400 > $_G['setting']['rewardexpiration']) || $_G['forum_thread']['authorid'] == $_G['uid']) && (1 || $post['authorid'] != $_G['forum_thread']['authorid']) && $post['first'] == 0 && (1 || $_G['uid'] != $post['authorid']) && $_G['forum_thread']['price'] > 0}-->
 							<a href="javascript:;" onclick="setanswer($post['pid'], '$_G[gp_from]')">{lang reward_set_bestanswer}</a>
 						<!--{/if}-->
 

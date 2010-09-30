@@ -230,6 +230,11 @@ class discuz_core {
 			$_G['siteurl'] = str_replace(SUB_DIR, '/', $_G['siteurl']);
 			$_G['siteroot'] = str_replace(SUB_DIR, '/', $_G['siteroot']);
 		}
+
+		// bluelovers
+		$_G['PHP_SELF_URI'] = preg_replace('/^(\.?\/)+/', '', $_SERVER["REQUEST_URI"]);
+		// bluelovers
+
 		$this->var = & $_G;
 
 	}

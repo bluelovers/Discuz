@@ -69,6 +69,11 @@
 				$threadplughtml
 			<!--{/if}-->
 		<!--{else}-->
+			<!--{if $_G[forum_thread][special] == 3 && $bestpost['pid'] == $post['pid']}-->
+				<div class="rwdbst" id="reward_bestanswer">
+					<h3 class="psth">{lang reward_bestanswer}<!--{if $bestpost['balog']['answererdateline'] && 0}--> <span class="sctpl_dateline"><!--{echo dgmdate($bestpost['balog']['answererdateline'], 'u');}--></span><!--{/if}--></h3>
+				</div>
+			<!--{/if}-->
 			<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">$post[message]</td></tr></table>
 		<!--{/if}-->
 

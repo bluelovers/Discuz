@@ -825,19 +825,50 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 	$forward = 'forum.php?mod=viewthread&tid='.$_G['tid'].($_G['gp_from'] ? '&from='.$_G['gp_from'] : '');
 	$posttable = getposttablebytid($_G['tid']);
-	$post = DB::fetch_first("SELECT authorid, first FROM ".DB::table($posttable)." WHERE pid='$_G[gp_pid]' and tid='$_G[tid]'");
+//	$post = DB::fetch_first("SELECT authorid, first FROM ".DB::table($posttable)." WHERE pid='$_G[gp_pid]' and tid='$_G[tid]'");
+	$post = DB::fetch_first("SELECT authorid, first, pid FROM ".DB::table($posttable)." WHERE pid='$_G[gp_pid]' and tid='$_G[tid]'");
 
-	if(!($thread['special'] == 3 && $post && ($_G['forum']['ismoderator'] && (!$_G['setting']['rewardexpiration'] || $_G['setting']['rewardexpiration'] > 0 && ($_G['timestamp'] - $thread['dateline']) / 86400 > $_G['setting']['rewardexpiration']) || $thread['authorid'] == $_G['uid']) && $post['authorid'] != $thread['authorid'] && $post['first'] == 0 && $_G['uid'] != $post['authorid'] && $thread['price'] > 0)) {
+	// bluelovers
+	// 改良為可設置自己的回答為最佳答案
+	// 限制於 XX 小時內 不可以設定自己的答案為最佳答案
+	// 優化最佳答案
+	$karmabestanswerlimit = 24;
+	// bluelovers
+
+	if(!($thread['special'] == 3 && $post && ($_G['forum']['ismoderator'] && (!$_G['setting']['rewardexpiration'] || $_G['setting']['rewardexpiration'] > 0 && ($_G['timestamp'] - $thread['dateline']) / 86400 > $_G['setting']['rewardexpiration']) || $thread['authorid'] == $_G['uid']) && (1 || $post['authorid'] != $thread['authorid']) && $post['first'] == 0 && (1 || $_G['uid'] != $post['authorid']) && $thread['price'] > 0)) {
 		showmessage('reward_cant_operate');
-	} elseif($post['authorid'] == $thread['authorid']) {
-		showmessage('reward_cant_self');
+//	} elseif($post['authorid'] == $thread['authorid']) {
+//		showmessage('reward_cant_self');
+
+	// bluelovers
+	} elseif($post['authorid'] == $thread['authorid'] && $_G['timestamp'] - $thread['dateline'] < 3600 * $karmabestanswerlimit) {
+		showmessage('reward_cant_self', '', array('wait_hour' => $karmabestanswerlimit));
+	// bluelovers
+
 	} elseif($thread['price'] < 0) {
 		showmessage('reward_repeat_selection');
 	}
+
+	// bluelovers
+	DB::query("DELETE FROM ".DB::table('forum_thread_rewardlog')." WHERE tid='$_G[tid]' and answererid='$post[authorid]'");
+//	DB::query("UPDATE ".DB::table('forum_thread_rewardlog')." SET answererid='$post[authorid]', answererdateline='$_G[timestamp]', answererpid='$post[pid]', setreward_uid='$_G[uid]', setreward_author='$_G[username]' WHERE tid='$_G[tid]' and authorid='$thread[authorid]'");
+
+	DB::insert('forum_thread_rewardlog', array(
+			'tid' => $_G['tid'],
+			'authorid' => $thread['authorid'],
+
+			'answererid' => $post['authorid'],
+			'answererdateline' => $_G['timestamp'],
+			'answererpid' => $post['pid'],
+			'setreward_uid' => $_G['uid'],
+			'setreward_author' => $_G['username'],
+	));
+	// bluelovers
+
 	updatemembercount($post['authorid'], array($_G['setting']['creditstransextra'][2] => $thread['price']), 1, 'RAC', $_G['tid']);
 	$thread['price'] = '-'.$thread['price'];
 	DB::query("UPDATE ".DB::table('forum_thread')." SET price='$thread[price]' WHERE tid='$_G[tid]'");
-	DB::query("UPDATE ".DB::table($posttable)." SET dateline=$thread[dateline]+1 WHERE pid='$_G[gp_pid]'");
+//	DB::query("UPDATE ".DB::table($posttable)." SET dateline=$thread[dateline]+1 WHERE pid='$_G[gp_pid]'");
 
 	$thread['dateline'] = dgmdate($thread['dateline']);
 	if($_G['uid'] != $thread['authorid']) {

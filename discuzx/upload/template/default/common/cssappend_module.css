@@ -5,7 +5,7 @@
 /** end **/
 
 /** search **/
-/* ·j´M */
+/* æœå°‹ */
 
 /** end **/
 
@@ -39,9 +39,14 @@
 		.rate_red { width:45px; height:50px; float:left; background:url({STATICURL}image/plus/common/rate_red.gif) no-repeat center top; margin:1px; text-align:center; color:#ff6645; font-weight:bold; font-size:18px; line-height:27px; font-family: Georgia, "Times New Roman", Times, serif !important; padding-right:3px;}
 		.rate_red p, .rate dt .rate_red p { display:block; font-weight:100; margin:0px; padding:0px; border:0px; color:#FFFFFF; font-size:11px; }
 
+	/* æœ€ä½³ç­”æ¡ˆ */
+		.rwdbst .psta { float: left; width: 60px; }
+			.rwdbst .psta img { width: 48px; height: 48px; }
+
+		.psth { min-width:240px; width:auto; display:inline-block; padding-right: 30px; max-width: {CONTENTWIDTH}; }
 /** end **/
 
-/* ----------------------------------------------------------------------- ¤å³¹¡B¤é»xµ¥­¶­±¼Ë¦¡ */
+/* ----------------------------------------------------------------------- æ–‡ç« ã€æ—¥èªŒç­‰é é¢æ¨£å¼ */
 /** forum::viewthread,portal::view,portal::comment,home::space **/
 		.vw .d { font-size: inherit; }
 /** end **/

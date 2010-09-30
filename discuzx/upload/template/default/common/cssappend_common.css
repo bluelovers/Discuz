@@ -101,6 +101,7 @@ input, button, select, textarea { vertical-align:middle; }
 /* avatar */
 
 .avatar_small_19 { max-height: 19px; max-width: 19px; }
+.avatar_small_48 { max-height: 48px; max-width: 48px; }
 
 .topnav .avatar_small_19 {
 	border:1px solid #CCCCCC;
