@@ -12,4 +12,5 @@ if(!defined('IN_DISCUZ')) {
 	</div>
 </center>
 </body>
+<?php output(); ?>
 </html>

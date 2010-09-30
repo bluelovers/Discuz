@@ -48,6 +48,12 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		}
 	}
 
+	// bluelovers
+	if (isset($field['choices'])) {
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	}
+	// bluelovers
+
 	$html = '';
 	if($fieldid == 'birthday') {
 		if($field['unchangeable'] && !empty($space[$fieldid])) {
@@ -147,14 +153,18 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		if($field['formtype']=='textarea') {
 			$html = "<textarea name=\"$fieldid\" id=\"$fieldid\" rows=\"3\" cols=\"40\" class=\"pt\" tabindex=\"1\">$space[$fieldid]</textarea>";
 		} elseif($field['formtype']=='select') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" tabindex=\"1\">";
-			foreach($field['choices'] as $op) {
-				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
+//			foreach($field['choices'] as $op) {
+//				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
+//			}
+			foreach($field['choices'] as $op => $op_value) {
+				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">{$op_value}</option>";
 			}
+
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op) {
@@ -162,7 +172,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op) {
 				$html .= ''
@@ -170,7 +180,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 					."$op</label>&nbsp;&nbsp;";
 			}
 		} elseif($field['formtype']=='radio') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			foreach($field['choices'] as $op) {
 				$html .= ''
 						."<label><input type=\"radio\" name=\"{$fieldid}\" tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
@@ -245,7 +255,11 @@ function profile_check($fieldid, &$value, $space=array()) {
 	}
 
 	if($field['choices']) {
-		$field['choices'] = explode("\n", $field['choices']);
+//		$field['choices'] = explode("\n", $field['choices']);
+
+		// bluelovers
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+		// bluelovers
 	}
 	if($field['formtype'] == 'text' || $field['formtype'] == 'textarea') {
 		$value = getstr($value, '', 1, 1);

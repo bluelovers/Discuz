@@ -17,9 +17,14 @@ function build_cache_fields_optional() {
 
 	while($field = DB::fetch($query)) {
 		$choices = array();
+		// bluelvoers
+		// 修正 $field['selective'] 不存在於 DX 1.5
+		$field['selective'] = !empty($field['choices']);
+		// bluelovers
 		if($field['selective']) {
 			foreach(explode("\n", $field['choices']) as $item) {
-				list($index, $choice) = explode('=', $item);
+//				list($index, $choice) = explode('=', $item);
+				list($index, $choice) = explode('=', $item, 2);
 				$choices[trim($index)] = trim($choice);
 			}
 			$field['choices'] = $choices;

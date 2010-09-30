@@ -1187,7 +1187,8 @@ function rewriteoutput($type, $returntype, $host) {
 	}
 }
 
-function output() {
+//function output() {
+function output($in_ajax = false) {
 
 	global $_G;
 
@@ -1217,11 +1218,16 @@ function output() {
 
 		foreach($_G['setting']['domain']['app'] as $app => $domain) {
 			if($domain || $_G['setting']['domain']['app']['default']) {
-//				$appphp = "{$app}.php";
-				$appphp = "{$app}";
+				$appphp = "{$app}.php";
 				if(!$domain) {
 					$domain = $_G['setting']['domain']['app']['default'];
 				}
+
+				// bluelovers
+				$_G['domain']['search'][$app.'2'] = "<a href=\"{$app}.php\"";
+				$_G['domain']['replace'][$app.'2'] = '<a href="http://'.$domain.$port.$_G['siteroot'].$app."\"";
+				// bluelovers
+
 				$_G['domain']['search'][$app] = "<a href=\"{$app}.php";
 				$_G['domain']['replace'][$app] = '<a href="http://'.$domain.$port.$_G['siteroot'].$appphp;
 				$_G['domain']['pregxprw'][$app] = '<a href\="http\:\/\/('.preg_quote($domain.$port.$_G['siteroot'], '/').')'.$appphp;
@@ -1237,6 +1243,12 @@ function output() {
 
 		$_G['domain']['search'] && $content = str_replace($_G['domain']['search'], $_G['domain']['replace'], $content);
 
+		// bluelovers
+		if ($_G['setting']['domain']['app']['default'] || $_G['setting']['rewritestatus']) {
+			$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
+		}
+		// bluelovers
+
 		$_G['setting']['domain']['app']['default'] && $content = preg_replace("/<a href=\"([^\"]+)\"/e", "rewriteoutput('site_default', 0, '".$_G['setting']['domain']['app']['default'].$port.$_G['siteroot']."', '\\1')", $content);
 
 		if($_G['setting']['rewritestatus'] && !defined('IN_MODCP') && !defined('IN_ADMINCP')) {
@@ -1245,11 +1257,28 @@ function output() {
 			$content = preg_replace($array['search'], $array['replace'], $content);
 		}
 
-		ob_end_clean();
-		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
+		// bluelovers
+		if (!$in_ajax) {
+		// bluelovers
+			ob_end_clean();
+			$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
 
-		echo $content;
+			echo $content;
+
+//			phpinfo();
+//			exit();
+
+		// bluelovers
+		} else {
+			return $content;
+		}
+		// bluelovers
 	}
+
+	// bluelovers
+	if ($in_ajax) return;
+	// bluelovers
+
 	if($_G['setting']['ftp']['connid']) {
 		@ftp_close($_G['setting']['ftp']['connid']);
 	}
@@ -1273,7 +1302,17 @@ function output() {
 }
 
 function output_ajax() {
-	$s = ob_get_contents();
+
+	// bluelvoers
+	if (!$s = output(true)) {
+	// bluelvoers
+
+		$s = ob_get_contents();
+
+	// bluelvoers
+	}
+	// bluelvoers
+
 	ob_end_clean();
 	$s = preg_replace("/([\\x01-\\x08\\x0b-\\x0c\\x0e-\\x1f])+/", ' ', $s);
 	$s = str_replace(array(chr(0), ']]>'), array(' ', ']]&gt;'), $s);

@@ -16,6 +16,18 @@ function build_cache_profilesetting() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY displayorder");
 
 	while($field = DB::fetch($query)) {
+
+		// bluelovers
+		if($field['choices'] && (1 || $field['selective'] || in_array($field['formtype'], array('select')))) {
+			$choices = array();
+			foreach(explode("\n", $field['choices']) as $item) {
+				list($index, $choice) = explode('=', $item, 2);
+				$choices[trim($index)] = trim($choice);
+			}
+			$field['choices'] = $choices;
+		}
+		// bluelovers
+
 		$data[$field['fieldid']] = $field;
 	}
 
