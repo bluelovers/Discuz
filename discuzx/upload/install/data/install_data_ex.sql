@@ -24,8 +24,6 @@ CREATE TABLE IF NOT EXISTS pre_forum_thread_rewardlog (
   KEY `userid` (`authorid`,`answererid`)
 ) ENGINE=MyISAM;
 
-ALTER TABLE pre_common_member_profile ADD `nickname` VARCHAR( 255 ) NOT NULL DEFAULT '';
-
 #地區資料
 ALTER TABLE `pre_common_district` ADD `displayorder` TINYINT( 1 ) NOT NULL DEFAULT '0';
 
@@ -127,6 +125,9 @@ INDEX ( `uid` )
 
 # 個人資料修正
 
+ALTER TABLE pre_common_member_profile ADD `nickname` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '暱稱';
+ALTER TABLE `pre_common_member_profile` ADD `customstatus` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '自定義頭銜';
+
 INSERT INTO pre_common_member_profile_setting (
 `fieldid` ,
 `available` ,
@@ -146,10 +147,12 @@ INSERT INTO pre_common_member_profile_setting (
 )
 VALUES (
 'nickname', '1', '0', '0', '暱稱', '', '0', '0', '0', '0', '1', 'text', '0', '', ''
+), (
+'customstatus', '1', '0', '0', '自定義頭銜', '', '0', '0', '0', '0', '1', 'text', '0', '', ''
 );
 
-UPDATE `pre_common_member_profile_setting` SET `invisible` = '0' WHERE `fieldid` IN ('bloodtype', '	constellation', 'zodiac', 'nickname', 'nationality');
-UPDATE `pre_common_member_profile_setting` SET `allowsearch` = '1' WHERE `fieldid` IN ('bloodtype', 'constellation', 'zodiac', 'nickname', 'nationality', 'affectivestatus', 'lookingfor', 'site', 'bio', 'interest', 'gender');
+UPDATE `pre_common_member_profile_setting` SET `invisible` = '0' WHERE `fieldid` IN ('bloodtype', '	constellation', 'zodiac', 'nickname', 'nationality', 'customstatus');
+UPDATE `pre_common_member_profile_setting` SET `allowsearch` = '1' WHERE `fieldid` IN ('bloodtype', 'constellation', 'zodiac', 'nickname', 'nationality', 'affectivestatus', 'lookingfor', 'site', 'bio', 'interest', 'gender', 'customstatus');
 
 ALTER TABLE `pre_common_member_profile_setting` ADD `typename` VARCHAR( 20 ) NOT NULL DEFAULT '' COMMENT '資料類別';
 
