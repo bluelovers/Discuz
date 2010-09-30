@@ -936,6 +936,30 @@ function showMenu(v) {
 	}
 }
 
+/*
+showid
+    彈出菜單的 id
+
+menuid
+    菜單 id
+pos
+    菜單位置 必須是字串類型 默認值：'43'
+	採用基點+方向二元定位法可衍生出幾十種菜單位置
+	基點是指基於 showObj 的某一點
+    基點：
+        中心    0
+        左上角    1
+        右上角    2
+        右下角    3
+        左下角    4
+
+    方向：
+        中心    0
+        左上方    1
+        右上方    2
+        右下方    3
+        左下方    4
+*/
 function setMenuPosition(showid, menuid, pos) {
 	var showObj = $(showid);
 	var menuObj = menuid ? $(menuid) : $(showid + '_menu');
@@ -1185,10 +1209,14 @@ function showPrompt(ctrlid, evt, msg, timeout) {
 				$(ctrlid).onmouseover = prompting;
 			}
 		}
-		showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+//		showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+		// 補回 DX 1.0 的積分提示效果
+		showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'fade':1,'zindex':JSMENU['zIndex']['prompt']});
 		$(ctrlid).unselectable = false;
 	} else {
-		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+//		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+		// 補回 DX 1.0 的積分提示效果
+		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'fade':1,'zindex':JSMENU['zIndex']['prompt']});
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
 	}
 }
@@ -1216,7 +1244,9 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	for(i = 1; i <= 8; i++) {
 		v = parseInt(Math.abs(parseInt(notice[i])) / 5) + 1;
 		if(notice[i] !== '0' && creditinfo[i]) {
-			s += '<span>' + creditinfo[i][0] + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
+//			s += '<span>' + creditinfo[i][0] + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
+			// 補回 DX 1.0 的積分提示效果
+			s += '<span>' + creditinfo[i][0] + '<u>' + basev[i] + '</u>' + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
 		}
 		if(notice[i] > 0) {
 			notice[i] = parseInt(notice[i]) - v;
@@ -1247,9 +1277,35 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	} else {
 		$('creditpromptdiv').innerHTML = s;
 	}
-	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+//	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+
+	// bluelovers
+	// 補回 DX 1.0 的積分提示效果
+	if(!bk) {
+		bk = check ? 0 : 1;
+		setTimeout(function () { creditShow(creditinfo, notice, basev, bk, 0, creditrule); }, first ? 2500 : 100);
+	} else {
+		setTimeout(function () { hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin')); }, 1500);
+	}
+	// bluelovers
 }
 
+/*
+msg
+    對話框內容
+mode
+    對話框模式
+    info    沒有按鈕        一般信息
+    notice    有確定按鈕        通知信息
+    alert    有確定按鈕        錯誤信息
+    confirm    有確定和取消按鈕    確認信息
+t
+    對話框標題
+func
+    點「確定」執行的函數 可以是一個函數（推薦）也可以是一段 js 代碼
+cover
+    是否覆蓋整個頁面 1:是 0:否   一般信息 cover 默認值是 0    其他信息 cover 默認值是 1
+*/
 function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, canceltxt) {
 	cover = isUndefined(cover) ? (mode == 'info' ? 0 : 1) : cover;
 	leftmsg = isUndefined(leftmsg) ? '' : leftmsg;
@@ -2230,7 +2286,8 @@ function initTab(frameId, type) {
 		var li = document.createElement('li');
 		li.id = tabId;
 		li.className = counter ? '' : 'a';
-		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
+//		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
+		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : (!arrTab[i]['textContent'] ? 'Undefined' : arrTab[i]['textContent']);
 		var a = arrTab[i].getElementsByTagName('a');
 		var href = a && a[0] ? a[0].href : 'javascript:;';
 		var onclick = type == 'click' ? ' onclick="return false;"' : '';
