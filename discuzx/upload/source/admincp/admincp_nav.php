@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_nav.php 17112 2010-09-21 06:57:54Z zhangguosheng $
+ *      $Id: admincp_nav.php 17285 2010-09-29 01:09:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -76,7 +76,7 @@ if($operation == 'headernav') {
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] ? 'checked' : '').">",
 					"<a href=\"".ADMINSCRIPT."?action=nav&operation=headernav&do=edit&id=$nav[id]\" class=\"act\">$lang[edit]</a>"
 				));
-				if($nav['identifier'] == 6) {
+				if($nav['identifier'] == 6 && $nav['type'] == 0) {
 					$subnavnum = count($pluginsubnav);
 					foreach($pluginsubnav as $row) {
 						$subnavnum--;
@@ -229,7 +229,7 @@ EOT;
 			$parentselect = array(array('0', cplang('misc_customnav_parent_top')));
 			$parentname = '';
 			while($pnavs = DB::fetch($query)) {
-				if($pnavs['id'] != $id) {
+				if($pnavs['id'] != $id && !($pnavs['identifier'] == 6 && $pnavs['type'] == 0)) {
 					$parentselect[] = array($pnavs['id'], '&nbsp;&nbsp;'.$pnavs['name']);
 					if($nav['parentid'] == $pnavs['id']) {
 						$parentname = ' - '.$pnavs['name'];

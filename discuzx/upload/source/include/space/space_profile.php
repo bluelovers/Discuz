@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 17192 2010-09-26 05:15:58Z zhangguosheng $
+ *      $Id: space_profile.php 17277 2010-09-28 07:38:49Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -91,15 +91,13 @@ $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array()
 foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
 	if(($field['available'] && $field['invisible'] != '1'
 		&& ($space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1))
-		&& strlen($space[$fieldid]) > 0
-		&& (!$_G['inajax'] || $field['showincard']))
-		|| $field['showinthread']
-		|| $field['showincard'] ) {
-
-		$val = profile_show($fieldid, $space);
-		if($val !== false) {
-			if ($val == '')  $val = '&nbsp;';
-			$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
+		&& strlen($space[$fieldid]) > 0)) {
+		if(!$_G['inajax'] && ($field['showinthread'] || $field['showincard']) || $_G['inajax'] && $field['showincard']) {
+			$val = profile_show($fieldid, $space);
+			if($val !== false) {
+				if ($val == '')  $val = '&nbsp;';
+				$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
+			}
 		}
 	}
 }

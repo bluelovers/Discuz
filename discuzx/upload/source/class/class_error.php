@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_error.php 16880 2010-09-16 06:21:29Z cnteacher $
+ *      $Id: class_error.php 17283 2010-09-28 09:14:58Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ class discuz_error
 
 	function system_error($message, $show = true, $save = true, $halt = true) {
 		if(!empty($message)) {
-			$messsge = lang('error', $messsage);
+			$message = lang('error', $message);
 		} else {
 			$message = lang('error', 'error_unknow');
 		}
@@ -210,8 +210,10 @@ EOT;
 		$file =  DISCUZ_ROOT.'./data/log/'.date("Ym").'_errorlog.php';
 		$hash = md5($message);
 
-		$discuz = & discuz_core::instance();
-		$user = '<b>User:</b> uid='.intval($discuz->uid).'; IP='.$discuz->var['clientip'].'; RIP:'.$_SERVER['REMOTE_ADDR'];
+		$uid = getglobal('uid');
+		$ip = getglobal('clientip');
+
+		$user = '<b>User:</b> uid='.intval($uid).'; IP='.$ip.'; RIP:'.$_SERVER['REMOTE_ADDR'];
 		$uri = 'Request: '.htmlspecialchars(discuz_error::clear($_SERVER['REQUEST_URI']));
 		$message = "<?PHP exit;?>\t{$time}\t$message\t$hash\t$user $uri\n";
 		if($fp = @fopen($file, 'rb')) {

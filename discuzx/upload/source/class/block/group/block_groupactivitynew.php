@@ -27,6 +27,15 @@ class block_groupactivitynew extends block_groupactivity {
 				'type' => 'select',
 				'value' => array()
 			),
+			'gviewperm' => array(
+				'title' => 'groupactivity_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupactivity_gviewperm_only_member'),
+					array('1', 'groupactivity_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupactivity_titlelength',
 				'type' => 'text',

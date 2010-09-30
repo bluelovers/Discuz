@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_topic.php 15321 2010-08-23 06:20:40Z xupeng $
+ *      $Id: admincp_topic.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -150,7 +150,7 @@ SEARCH;
 					.($value['closed'] ? ' ['.cplang('topic_closed_yes').']' : ''),
 					$value['domain'] && !empty($_G['setting']['domain']['root']['topic']) ? 'http://'.$value['domain'].'.'.$_G['setting']['domain']['root']['topic'] : '',
 					$value['name'],
-					"<a href=\"home.php?mod=space&do=profile&uid=$value[uid]\" target=\"_blank\">$value[username]</a>",
+					"<a href=\"home.php?mod=space&uid=$value[uid]&do=profile\" target=\"_blank\">$value[username]</a>",
 					dgmdate($value[dateline]),
 					"<a href=\"portal.php?mod=portalcp&ac=topic&topicid=$value[topicid]\" target=\"_blank\">".cplang('topic_edit')."</a>&nbsp;&nbsp;".
 					"<a href=\"portal.php?mod=topic&topicid=$value[topicid]&diy=yes\" target=\"_blank\">DIY</a>".

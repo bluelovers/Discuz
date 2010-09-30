@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 17251 2010-09-28 01:11:43Z monkey $
+ *      $Id: admincp_verify.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -225,7 +225,7 @@ EOF;
 				$query = DB::query("SELECT v.*, f.*, m.username FROM ".DB::table('common_member_verify')." v LEFT JOIN ".DB::table('common_member_profile')." f USING(uid) LEFT JOIN ".DB::table('common_member')." m USING(uid) WHERE $wheresql $ordersql LIMIT $start, $perpage");
 			}
 			while($value = DB::fetch($query)) {
-				$value['username'] = '<a href="home.php?mod=space&do=profile&uid='.$value['uid'].'" target="_blank">'.avatar($value['uid'], "small").'<br/>'.$value['username'].'</a>';
+				$value['username'] = '<a href="home.php?mod=space&uid='.$value['uid'].'&do=profile" target="_blank">'.avatar($value['uid'], "small").'<br/>'.$value['username'].'</a>';
 				if($anchor != 'pass') {
 					$fields = $anchor != 'pass' ? unserialize($value['field']) : $_G['setting']['verify'][$vid]['field'];
 					$verifytype = $value['verifytype'] ? $_G['setting']['verify'][$value['verifytype']]['title'] : $lang['members_verify_profile'];

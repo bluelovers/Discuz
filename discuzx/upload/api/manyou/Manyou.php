@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 16221 2010-09-02 03:14:57Z chenchunshao $
+ *      $Id: Manyou.php 17268 2010-09-28 03:36:38Z zhengqingpeng $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -547,12 +547,12 @@ class SearchHelper {
 
 		$result = array();
 		$sql = sprintf("SELECT COUNT(*) FROM %s
-				WHERE true %s", DB::table('forum_forum'), $where);
+				WHERE 1 %s", DB::table('forum_forum'), $where);
 
 		$result['totalNum'] = DB::result_first($sql);
 
 		$sql = sprintf("SELECT * FROM %s
-				WHERE true %s
+				WHERE 1 %s
 				ORDER BY fid",
 				DB::table('forum_forum'), $where);
 		$query = DB::query($sql);

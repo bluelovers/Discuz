@@ -154,7 +154,7 @@ if($op == 'recommend') {
 		while(($value=DB::fetch($query))) {
 			$value['isrecommendable'] = block_isrecommendable($value);
 			$value['perm'] = formatblockpermissoin($value);
-			$value['name'] = !empty($value['name']) ? $value['name'] : '#'.$value['bid'];
+			$value['name'] = !empty($value['name']) ? $value['name'] : '<strong>#'.$value['bid'].'</strong>';
 			$blocks[$value['bid']] = $value;
 		}
 	}

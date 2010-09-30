@@ -59,6 +59,15 @@ class block_groupattachmentnew extends block_groupattachment {
 				'type' => 'radio',
 				'default' => 0
 			),
+			'gviewperm' => array(
+				'title' => 'groupattachment_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupattachment_gviewperm_only_member'),
+					array('1', 'groupattachment_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupattachment_titlelength',
 				'type' => 'text',

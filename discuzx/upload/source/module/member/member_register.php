@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_register.php 17228 2010-09-27 02:37:28Z zhengqingpeng $
+ *      $Id: member_register.php 17289 2010-09-29 02:49:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -465,9 +465,11 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 	dsetcookie('activationauth', '');
 	dsetcookie('invite_auth', '');
 
+	$regverify = $_G['setting']['regverify'];
 	loadcache('setting', true);
 	$_G['setting']['lastmember'] = $username;
 	save_syscache('setting', $_G['setting']);
+	$_G['setting']['regverify'] = $regverify;
 
 	if(!empty($_G['inajax'])) {
 		$_G['setting']['msgforward'] = unserialize($_G['setting']['msgforward']);

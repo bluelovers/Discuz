@@ -32,6 +32,15 @@ class block_grouptradehot extends block_grouptrade {
 				),
 				'default' => 'weekhots'
 			),
+			'gviewperm' => array(
+				'title' => 'grouptrade_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'grouptrade_gviewperm_only_member'),
+					array('1', 'grouptrade_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'grouptrade_titlelength',
 				'type' => 'text',

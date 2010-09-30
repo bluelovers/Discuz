@@ -43,6 +43,15 @@ class block_groupactivitycity extends block_groupactivity {
 				),
 				'default' => 'dateline'
 			),
+			'gviewperm' => array(
+				'title' => 'groupactivity_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupactivity_gviewperm_only_member'),
+					array('1', 'groupactivity_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupactivity_titlelength',
 				'type' => 'text',

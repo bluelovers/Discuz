@@ -72,6 +72,15 @@ class block_groupthreadhot extends block_groupthread {
 				),
 				'default' => '0'
 			),
+			'gviewperm' => array(
+				'title' => 'groupthread_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupthread_gviewperm_only_member'),
+					array('1', 'groupthread_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupthread_titlelength',
 				'type' => 'text',

@@ -8,7 +8,7 @@
  */
 
 /**
- * ���a�W����
+ * 本地上傳類
  *
  * @example
  *
@@ -17,7 +17,7 @@
  * if($upload->error()) {
  *     showmessage('upload error');
  * }
- * ... �v���P�_����
+ * ... 權限判斷等等
  * ...
  * $upload->save();
  * if($upload->error()) {
@@ -44,9 +44,9 @@ Class discuz_upload{
 	/**
      * Enter description here...
      *
-     * @param �W�Ǫ� $attach
+     * @param 上傳的 $attach
      * @param 'forum', 'group', 'album', 'portal', 'common', 'temp', 'category' $type
-     * @param �X�iid, �ثe�����Ω�group���� $extid
+     * @param 擴展id, 目前僅應用於group類型 $extid
      * @return boolean
      */
 	function init($attach, $type = 'temp', $extid = 0, $forcename = '') {
@@ -83,16 +83,16 @@ Class discuz_upload{
 	}
 
 	/**
-     * �O�s�W�Ǥ��ܥ��a
+     * 保存上傳文件至本地
      * @return boolean
      *
      *
      * @errorcode:  $this->error()
-     * 0    = �W�Ǧ��\
-     * -101 = �W�Ǥ�󤣦s�b�Τ��X�k
-     * -102 = �D�Ϥ��������
-     * -103 = �L�k�g�J���μg�J����
-     * -104 = �L�k�ѧO���Ϲ����榡
+     * 0    = 上傳成功
+     * -101 = 上傳文件不存在或不合法
+     * -102 = 非圖片類型文件
+     * -103 = 無法寫入文件或寫入失敗
+     * -104 = 無法識別的圖像文件格式
      *
      */
 	function save($ignore = 0) {

@@ -1,6 +1,6 @@
 <!--{subtemplate common/header_common}-->
 	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
-	<!--{if $_G['basescript'] == 'forum' || $_G['forum']['status'] == 3}-->
+	<!--{if $_G['basescript'] == 'forum'}-->
 		<!--{if !empty($_G['cookie']['widthauto']) && empty($_G['disabledwidthauto'])}-->
 			<link rel="stylesheet" id="css_widthauto" type="text/css" href="data/cache/style_{STYLEID}_widthauto.css?{VERHASH}" />
 			<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>

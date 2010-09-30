@@ -103,7 +103,7 @@ class discuz_core {
 
 	function _init_env() {
 
-		//³]¸m¿ù»~³ø§iµ¥¯Å ¥H¤ÎÃö³¬¦Û°ÊÂà¸q
+		//è¨­ç½®éŒ¯èª¤å ±å‘Šç­‰ç´š ä»¥åŠé—œé–‰è‡ªå‹•è½‰ç¾©
 		error_reporting(E_ERROR);
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
 		if(phpversion() < '5.3.0') {
@@ -276,7 +276,7 @@ class discuz_core {
 //		$this->debug_log(__METHOD__, $GLOBALS['_REQUEST']);
 		// bluelovers
 
-		//±N©Ò¦³POST¡AGET¨Óªº¼Æ¾Ú¦s¦b$this->var['gp_'.$k]¤¤
+		//å°‡æ‰€æœ‰POSTï¼ŒGETä¾†çš„æ•¸æ“šå­˜åœ¨$this->var['gp_'.$k]ä¸­
 //		foreach(array_merge($_POST, $_GET) as $k => $v) {
 //			$this->var['gp_'.$k] = $v;
 //		}
@@ -284,8 +284,8 @@ class discuz_core {
 			$this->var['gp_'.$k] = $v;
 		}
 
-		//mod¤èªk¡ADX®Ú¾Ú¤£¦PªºMOD¨Ó±¼¥Î¤£¦Pªº¤å¥ó
-		//¨Ò¦pforum.php¤¤require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php'
+		//modæ–¹æ³•ï¼ŒDXæ ¹æ“šä¸åŒçš„MODä¾†æ‰ç”¨ä¸åŒçš„æ–‡ä»¶
+		//ä¾‹å¦‚forum.phpä¸­require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php'
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));

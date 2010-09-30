@@ -72,6 +72,15 @@ class block_grouptrade {
 				),
 				'default' => 'dateline'
 			),
+			'gviewperm' => array(
+				'title' => 'grouptrade_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'grouptrade_gviewperm_only_member'),
+					array('1', 'grouptrade_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'grouptrade_titlelength',
 				'type' => 'text',
@@ -173,9 +182,10 @@ class block_grouptrade {
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
 
 		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).")");
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
 			while($value = DB::fetch($query)) {
 				$fids[] = intval($value['fid']);
 			}

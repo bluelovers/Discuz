@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_core.php 16913 2010-09-17 01:10:24Z monkey $
+ *      $Id: lang_core.php 17276 2010-09-28 07:25:35Z zhangguosheng $
  */
 
 $lang = array
@@ -195,6 +195,8 @@ $lang = array
 	'title_userapp_index_we' => '好友在玩什麼',
 	'title_userapp_index_me' => '我在玩的',
 	'title_userapp_manage' => '{userapp}管理',
+	'faq' => '幫助',
+	'search' => '搜索',
 );
 
 ?>

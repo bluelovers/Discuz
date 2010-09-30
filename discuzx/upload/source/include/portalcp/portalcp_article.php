@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 17206 2010-09-26 08:42:20Z zhengqingpeng $
+ *      $Id: portalcp_article.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -251,7 +251,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 				$blog = DB::fetch_first("SELECT * FROM ".DB::table('home_blog')." WHERE blogid='$id'");
 				if(!empty($blog)) {
 					$notify = array(
-						'url' => "home.php?mod=space&do=blog&id=$id",
+						'url' => "home.php?mod=space&uid=$blog[uid]&do=blog&id=$id",
 						'subject' => $blog['subject']
 					);
 					$touid = $blog['uid'];

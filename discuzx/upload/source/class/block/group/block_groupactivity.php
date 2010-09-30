@@ -92,6 +92,15 @@ class block_groupactivity {
 				),
 				'default' => 'dateline'
 			),
+			'gviewperm' => array(
+				'title' => 'groupactivity_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupactivity_gviewperm_only_member'),
+					array('1', 'groupactivity_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupactivity_titlelength',
 				'type' => 'text',
@@ -205,11 +214,12 @@ class block_groupactivity {
 		$place		= !empty($parameter['place']) ? $parameter['place'] : '';
 		$class		= !empty($parameter['class']) ? $parameter['class'] : '';
 		$gender		= !empty($parameter['gender']) ? intval($parameter['gender']) : '';
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).")");
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
 			while($value = DB::fetch($query)) {
 				$fids[] = intval($value['fid']);
 			}
@@ -295,8 +305,8 @@ class block_groupactivity {
 				$data['time'] .= ' - '.dgmdate($data['starttimeto']);
 			}
 			$list[] = array(
-				'id' => $data['pid'],
-				'idtype' => 'pid',
+				'id' => $data['tid'],
+				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'],
 				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),

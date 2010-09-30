@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 17211 2010-09-26 09:20:51Z zhangguosheng $
+ *      $Id: admincp_members.php 17293 2010-09-29 05:29:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1611,7 +1611,7 @@ EOT;
 		DB::query("UPDATE ".DB::table('common_member')." SET $emailadd regdate='$regdatenew', emailstatus='$emailstatusnew', status='$status', timeoffset='{$_G['gp_timeoffsetnew']}' $passwordadd WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_field_home')." SET addsize='$addsize', addfriend='$addfriend' WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_count')." SET posts='{$_G['gp_postsnew']}', digestposts='{$_G['gp_digestpostsnew']}' WHERE uid='{$_G['gp_uid']}'");
-		DB::query("UPDATE ".DB::table('common_member_status')." SET regip='{$_G['gp_regipnew']}', lastvisit='$lastvisitnew', lastip='{$_G['gp_lastipnew']}' WHERE uid='{$_G['gp_uid']}'");
+		DB::query("UPDATE ".DB::table('common_member_status')." SET regip='{$_G['gp_regipnew']}', lastvisit='$lastvisitnew', lastip='{$_G['gp_lastipnew']}', invisible='{$_G['gp_invisiblenew']}' WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET customstatus='{$_G['gp_cstatusnew']}', sightml='$sightmlnew' WHERE uid='{$_G['gp_uid']}'");
 		if($fieldarr) {
 			$fieldadd = implode(',', $fieldarr);

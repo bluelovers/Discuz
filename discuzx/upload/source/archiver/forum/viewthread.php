@@ -17,7 +17,7 @@ include loadarchiver('common/header');
 	</p>
 	<h3><?php echo $post['subject']; ?></h3>
 	<?php if($_G['forum_threadpay']): include template('forum/viewthread_pay'); else: ?>
-		<?php echo nl2br(dhtmlspecialchars($post['message'])); ?>
+		<?php echo nl2br(messagecutstr($post['message'])); ?>
 	<?php endif; ?>
 	<?php endforeach; ?>
 	<div class="page">

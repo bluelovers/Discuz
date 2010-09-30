@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 17209 2010-09-26 09:14:34Z zhengqingpeng $
+ *      $Id: lang_message.php 17291 2010-09-29 04:07:12Z zhangguosheng $
  */
 
 $lang = array
@@ -43,7 +43,6 @@ $lang = array
 	'period_nopermission' => '對不起，管理員設置了每日 {banperiods} 不能進行此操作或訪問此頁面，請其他時間再試。',
 	'submit_seccode_invalid' => '驗證碼填寫錯誤，請返回修改。',
 	'submit_secqaa_invalid' => '驗證問答的答案填寫錯誤，請返回修改。',
-	'submit_invalid' => '你的請求來路不正確，無法提交。',
 	'not_loggedin' => '對不起，你還未登錄，無法進行此操作。',
 	'action_closed' => '站點尚未開啟此功能，或者此功能已經被管理員禁止，請返回。',
 	'board_closed' => '對不起，本站點暫時關閉，詳情請 <a href="mailto:'.$_G['setting']['adminemail'].'">聯繫管理員</a>。',
@@ -822,7 +821,7 @@ $lang = array
 	'showcredit_do_success' => '你已經成功增加上榜積分，趕快查看自己的最新排名吧',
 	'showcredit_friend_do_success' => '你已經成功贈送好友上榜積分，好友會收到通知的',
 
-	'submit_invalid' => '你的請求來路不正確或表單驗證串不符，無法提交。請嘗試使用標準的web瀏覽器進行操作。',
+	'submit_invalid' => '你的請求來路不正確或表單驗證串不符，無法提交。',
 	'no_privilege_my_app_status' => '對不起，當前站點已經關閉了用戶多應用服務。',
 	'no_privilege_myapp' => '對不起，該應用不存在或已關閉，你可以<a href="userapp.php?mod=manage&my_suffix=%2Fapp%2Flist">選擇其他應用</a>',
 

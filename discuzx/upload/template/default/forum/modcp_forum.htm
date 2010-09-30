@@ -38,10 +38,12 @@
 					<input type="hidden" name="formhash" value="{FORMHASH}">
 					<input type="hidden" name="fid" value="$_G[fid]">
 					<table cellspacing="0" cellpadding="0">
+						<caption>
+							<h4>{lang forum_rules}</h4>
+							<div id="rulespreview"></div>
+						</caption>
 						<tr>
-							<th valign="top">{lang forum_rules}:</th>
-							<td>
-								<div id="rulespreview"></div>
+							<td class="ptm">
 								<div class="tedt">
 									<div class="bar">
 										<div class="y"><a href="javascript:;" onclick="$('rulespreview').innerHTML = bbcode2html($('rulesmessage').value)">{lang memcp_profile_preview}</a></div>
@@ -56,16 +58,14 @@
 								<div>{lang forum_not_allow}</div>
 								<!--{/if}-->
 							</td>
-							<td></td>
-							<td>
-								{lang discuzcode} {lang enabled}<br />
-								{lang post_imgcode} {lang enabled}<br />
-								{lang post_html} {lang disabled}<br />
+							<td width="15%" valign="top" class="ptm">
+								<p>{lang discuzcode} {lang enabled}</p>
+								<p>{lang post_imgcode} {lang enabled}</p>
+								<p>{lang post_html} {lang disabled}</p>
 							</td>
 						</tr>
 						<tr>
-							<td>&nbsp;</td>
-							<td colspan="3">
+							<td colspan="2">
 								<button type="submit" name="editsubmit" class="pn" value="true"><strong>{lang submit}</strong></button>
 								<!--{if $forumupdate}-->
 									{lang mod_message_forum_update}

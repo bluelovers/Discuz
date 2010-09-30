@@ -221,7 +221,7 @@ class block_blog {
 				'id' => $data['blogid'],
 				'idtype' => 'blogid',
 				'title' => cutstr($data['subject'], $titlelength, ''),
-				'url' => 'home.php?mod=space&do=blog&uid='.$data[uid].'&id='.$data['blogid'],
+				'url' => 'home.php?mod=space&uid='.$data[uid].'&do=blog&id='.$data['blogid'],
 				'pic' => $data['pic'],
 				'picflag' => $data['picflag'],
 				'summary' => $data['message'] ? preg_replace("/&amp;[a-z]+\;/i", '', cutstr(strip_tags($data['message']), $summarylength, '')) : '',

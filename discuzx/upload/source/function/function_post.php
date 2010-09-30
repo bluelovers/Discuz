@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 16350 2010-09-06 00:45:15Z monkey $
+ *      $Id: function_post.php 17273 2010-09-28 06:37:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -455,13 +455,13 @@ function postfeed($feed) {
 	}
 }
 
-function messagecutstr($str, $length) {
+function messagecutstr($str, $length = 0) {
 	global $_G;
 	$language = lang('forum/misc');
 	loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'icons', 'domainwhitelist'));
 	$bbcodes = 'b|i|u|p|color|size|font|align|list|indent|float';
 	$bbcodesclear = 'email|code|free|table|tr|td|img|swf|flash|attach|media|audio|payto'.($_G['cache']['bbcodes_display'][$_G['groupid']] ? '|'.implode('|', array_keys($_G['cache']['bbcodes_display'][$_G['groupid']])) : '');
-	$str = cutstr(strip_tags(preg_replace(array(
+	$str = strip_tags(preg_replace(array(
 			"/\[hide=?\d*\](.+?)\[\/hide\]/is",
 			"/\[quote](.*?)\[\/quote]/si",
 			$language['post_edit_regexp'],
@@ -477,7 +477,10 @@ function messagecutstr($str, $length) {
 			'',
 			'',
 			'',
-		), $str)), $length);
+		), $str));
+	if($length) {
+		$str = cutstr($str, $length);
+	}
 	$str = preg_replace($_G['cache']['smilies']['searcharray'], '', $str);
 	return trim($str);
 }

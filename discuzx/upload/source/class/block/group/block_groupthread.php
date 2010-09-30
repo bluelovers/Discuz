@@ -86,6 +86,15 @@ class block_groupthread {
 				),
 				'default' => '0'
 			),
+			'gviewperm' => array(
+				'title' => 'groupthread_gviewperm',
+				'type' => 'mradio',
+				'value' => array(
+					array('0', 'groupthread_gviewperm_only_member'),
+					array('1', 'groupthread_gviewperm_all_member')
+				),
+				'default' => '1'
+			),
 			'titlelength' => array(
 				'title' => 'groupthread_titlelength',
 				'type' => 'text',
@@ -207,13 +216,14 @@ class block_groupthread {
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$orderby	= in_array($parameter['orderby'], array('dateline','replies','views','threads', 'heats', 'recommends')) ? $parameter['orderby'] : 'lastpost';
 		$picrequired = !empty($parameter['picrequired']) ? 1 : 0;
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		if(empty($fids)) {
 			$groups = array();
 			if($typeids) {
-				$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).")");
+				$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
 				while($value = DB::fetch($query)) {
 					$groups[$value['fid']] = $value;
 					$fids[] = intval($value['fid']);

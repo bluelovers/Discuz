@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_article.php 16546 2010-09-08 08:50:48Z shanzongjun $
+ *      $Id: admincp_article.php 17282 2010-09-28 09:04:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -122,7 +122,7 @@ if($operation == 'tag') {
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[aid]\">",
 						$value[title],
 						$category[$value['catid']]['catname'],
-						"<a href=\"home.php?mod=space&do=profile&uid=$value[uid]\" target=\"_blank\">$value[username]</a>",
+						"<a href=\"home.php?mod=space&uid=$value[uid]&do=profile\" target=\"_blank\">$value[username]</a>",
 						dgmdate($value[dateline])
 					));
 			}

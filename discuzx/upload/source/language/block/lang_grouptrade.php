@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_grouptrade.php 13245 2010-07-23 04:04:28Z xupeng $
+ *      $Id: lang_grouptrade.php 17284 2010-09-28 09:58:16Z zhangguosheng $
  */
 
 $lang = array
@@ -90,6 +90,9 @@ $lang = array
 	'grouptrade_orderby_monthstart' => '按一月內活動開始時間排序',
 	'grouptrade_orderby_weekexp' => '按一周內報名截止時間排序',
 	'grouptrade_orderby_monthexp' => '按一月內報名截止時間排序',
+	'grouptrade_gviewperm' => '群組瀏覽權限',
+	'grouptrade_gviewperm_only_member' => '僅成員',
+	'grouptrade_gviewperm_all_member' => '所有人',
 );
 
 ?>
