@@ -129,6 +129,19 @@
 	<!--{if !empty($post['ratelog'])}-->
 		<dl id="ratelog_$post[pid]" class="rate{if !empty($_G['cookie']['ratecollapse'])} rate_collapse{/if}">
 			<!--{if $_G['setting']['ratelogon']}-->
+
+				<dt>
+					<!--{if !empty($postlist[$post[pid]]['totalrate'])}-->
+						<strong><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang have}{echo count($postlist[$post[pid]][totalrate]);}{lang people_score}, {lang rate_view}"><!--{echo count($postlist[$post[pid]][totalrate]);}--></a></strong>
+						<p><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)">{lang rate_view}</a></p>
+					<!--{/if}-->
+
+					<dt style="width: auto;">
+						<!--{if $post['rate'] > 0}--><div class="rate_red">+$post['rate']<p>Points</p></div><!--{elseif $post['rate'] <= 0}--><div class="rate_yellow">$post['rate']<p>Points</p></div><!--{/if}-->
+					</dt>
+
+				</dt>
+
 				<dd style="margin:0">
 			<!--{else}-->
 				<dt>
@@ -141,6 +154,28 @@
 			<!--{/if}-->
 				<div id="post_rate_$post[pid]"></div>
 				<!--{if $_G['setting']['ratelogon']}-->
+
+					<ul class="cl">
+						<!--{loop $post['ratelog'] $uid $ratelog}-->
+							<li>
+								<div id="rate_{$post[pid]}_{$uid}_menu" class="attp" style="display: none;">
+									<p class="crly">$ratelog[reason] &nbsp;&nbsp;
+										<!--{loop $ratelog['score'] $id $score}-->
+											<!--{if $score > 0}-->
+												<em>{$_G['setting']['extcredits'][$id][title]} + $score $_G['setting']['extcredits'][$id][unit]</em>
+											<!--{else}-->
+												<span>{$_G['setting']['extcredits'][$id][title]} $score $_G['setting']['extcredits'][$id][unit]</span>
+											<!--{/if}-->
+										<!--{/loop}-->
+									</p>
+									<p class="mncr"></p>
+								</div>
+								<p id="rate_{$post[pid]}_{$uid}" onmouseover="showMenu({'ctrlid':this.id,'pos':'12'})" class="mtn mbn"><a href="home.php?mod=space&uid=$uid" target="_blank" class="avt" c="1"><!--{echo avatar($uid, 'small');}--></a></p>
+								<p><a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a></p>
+							</li>
+						<!--{/loop}-->
+					</ul>
+
 					<table class="ratl">
 						<tr>
 							<th class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></th>
@@ -181,6 +216,7 @@
 						<!--{/loop}-->
 						&nbsp;<a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}" class="xi2">{lang rate_view}</a>
 					</p>
+
 				<!--{else}-->
 					<ul class="cl">
 						<!--{loop $post['ratelog'] $uid $ratelog}-->

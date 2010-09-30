@@ -13,6 +13,32 @@
 	.spi dl { font-size: inherit; }
 	.pls img.avatar { margin: 0px; }
 	.pls .avatar img { max-width:120px; }
+
+		.rate table.ratl {
+			background:none repeat scroll 0 0 #EBF2F8;
+			border:1px solid #0099CC;
+			line-height:1.6em;
+			padding:6px 8px;
+			margin-top:20px;
+		}
+
+		.rate p.ratc {
+			background:url({IMGDIR}/attachinfobg.gif) no-repeat scroll 50% 0 transparent;
+			margin-top:-1px;
+		}
+
+		.rate table.ratl .ratl_l {
+			background-color: #ffffff;
+		}
+
+		.ratl th, .ratl td { padding-left: 10px; }
+
+		.rate_yellow { width:45px; height:50px; float:left; background:url({STATICURL}image/plus/common/rate_yellow.gif) no-repeat center top; margin:1px; text-align:center; color:#217AB3; font-weight:bold; font-size:18px; line-height:27px; font-family: Georgia, "Times New Roman", Times, serif !important; padding-right:3px;}
+		.rate_yellow p, .rate dt .rate_yellow p { display:block; font-weight:100; margin:0px; padding:0px; border:0px; color:#858D92; font-size:11px; }
+
+		.rate_red { width:45px; height:50px; float:left; background:url({STATICURL}image/plus/common/rate_red.gif) no-repeat center top; margin:1px; text-align:center; color:#ff6645; font-weight:bold; font-size:18px; line-height:27px; font-family: Georgia, "Times New Roman", Times, serif !important; padding-right:3px;}
+		.rate_red p, .rate dt .rate_red p { display:block; font-weight:100; margin:0px; padding:0px; border:0px; color:#FFFFFF; font-size:11px; }
+
 /** end **/
 
 /* ----------------------------------------------------------------------- 文章、日誌等頁面樣式 */

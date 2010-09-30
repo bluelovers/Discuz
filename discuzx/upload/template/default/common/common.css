@@ -1,4 +1,4 @@
-/* ----------------------------------
+﻿/* ----------------------------------
 
 Main CSS file for Discuz! X
 (C) Comsenz Inc.
@@ -75,8 +75,8 @@ a { color: {LINK}; text-decoration: none; }
 	/* 空白分隔 blank by lushnis */
 	hr.bk { margin-bottom: 10px !important; *margin-bottom: 2px !important; height: 0; border: none; border-top: 1px solid {WRAPBG}; background: transparent; color: transparent; }
 		.n .sd hr.bk { border-top-color: #F9F9F9; }
-	/* 清除Margin */	
-	hr.m0 { margin-left: 0px; margin-right: 0px; }	
+	/* 清除Margin */
+	hr.m0 { margin-left: 0px; margin-right: 0px; }
 
 /* 頁面標題、文章標題、粗體字 */
 	/* .wx --> weight text 粗體字，通常用於大標題 */
@@ -476,7 +476,7 @@ a { color: {LINK}; text-decoration: none; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
 	/* tab的強調信息提示 */
-.tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 12px; }	
+.tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 12px; }
 	/* 極簡 Tab */
 .tbx { margin: 10px 0; }
 	.tbx span { margin-right: 10px; cursor: pointer; }
@@ -598,7 +598,7 @@ a { color: {LINK}; text-decoration: none; }
 		.tbn .mt { padding: 10px; }
 
 /* 道具 magic */
-.mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; } 
+.mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; }
 
 /* 友情鏈接 */
 	.lk img { float: left; margin-right: 5px; margin-bottom: 5px; width: 88px; height: 31px; }
@@ -922,7 +922,7 @@ a { color: {LINK}; text-decoration: none; }
 			* html .pc_inner span { display: inline-block; }
 				.pc_inner span a { color: #FFEA97; text-decoration: underline; }
 				.pc_inner span em { color: {LIGHTLINK}; font-size: 18px; font-weight: 400; }
-				.pc_inner span u { font-size: 10px; text-decoration: none; }				
+				.pc_inner span u { font-size: 10px; text-decoration: none; }
 				.pc_inner span em.desc { color: #930; }
 			.pc_btn img { opacity: 0.5; }
 				.pc_btn:hover img { opacity: 1; }
@@ -964,7 +964,7 @@ a { color: {LINK}; text-decoration: none; }
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
 	.title { padding: 0 10px; height: 32px; font-size: 14px; font-weight: 700; line-height: 32px; overflow: hidden; }
 		.frame-title, .frametitle, .tab-title { background: {COMMONBG} url({IMGDIR}/title.png) repeat-x 0 100%; }
-		
+
 	/* 新的框架結構 */
 	.frame-1-1-l, .frame-1-1-1-l, .frame-1-1-1-c, .frame-2-1-l, .frame-1-2-l, .frame-3-1-l, .frame-1-3-l { float: left; }
 	.frame-1-1-r, .frame-1-1-1-r, .frame-2-1-r, .frame-1-2-r, .frame-3-1-r, .frame-1-3-r { float: right; }
@@ -997,7 +997,7 @@ a { color: {LINK}; text-decoration: none; }
 	.frame-1-1-1 .col-l { float: left; width: 33.3%; }
 	.frame-1-1-1 .col-c { float: left; width: 33.3%; }
 	.frame-1-1-1 .col-r { float: right; width: 33.3%; }
-	
+
 	.frame .frame-1-1-1 .col-l, .frame .frame-1-1-1 .col-c, .frame .frame-1-1-1 .col-r { padding: 0; width: 33%; }
 	.frame .frame-1-1 .col-l, .frame .frame-1-1 .col-r { width: 49.9%; }
 	/* End */
