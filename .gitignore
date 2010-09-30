@@ -16,3 +16,6 @@
 /discuzx/upload/data/cache/diy/*.*
 
 /discuzx/utility/convert/data/config.inc.php
+/discuzx/upload/convert
+/discuzx/upload/uc_server
+/discuzx/upload/.htaccess
