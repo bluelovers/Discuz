@@ -131,7 +131,7 @@
 								<!--{/if}-->
 								&nbsp;$verifyperm[$fid][$perm]
 							<!--{else}-->
-								<!--{if $forumperm[$fid][$perm]}--><img src="{IMGDIR}/data_valid.gif" alt="data_valid" /><!--{else}--><img src="{IMGDIR}/data_invalid.gif" alt="data_invalid" /><!--{/if}-->																						
+								<!--{if $forumperm[$fid][$perm]}--><img src="{IMGDIR}/data_valid.gif" alt="data_valid" /><!--{else}--><img src="{IMGDIR}/data_invalid.gif" alt="data_invalid" /><!--{/if}-->
 							<!--{/if}-->
 						</td>
 					<!--{/loop}-->
@@ -180,7 +180,7 @@
 <!--{else}-->
 	<!--{subtemplate home/spacecp_header}-->
 			<!--{subtemplate home/spacecp_usergroup_header}-->
-			<!--{eval 
+			<!--{eval
 				$permtype = array(0 => '{lang permission_menu_normaloptions}', 1 => '{lang permission_modoptions_name}');
 			}-->
 			<div class="tdats">
@@ -261,10 +261,10 @@
 									<!--{if in_array($group['groupid'], $extgroupids) && $switchmaingroup && $group['grouptype'] == 'special' && $group['groupid'] != $_G['groupid']}-->
 										<a href="home.php?mod=spacecp&ac=usergroup&do=exit&groupid=$group['groupid']&perms=$type&handlekey=exitgrouphk" class="xw1 xi2" onclick="showWindow('group', this.href, 'get', 0);">{lang memcp_usergroups_exit}</a>
 									<!--{/if}-->
-									<!--{if $group['grouptype']=='special' && $group['groupid'] != $_G['groupid'] && array_key_exists($group['groupid'], $publicgroup) && !$publicgroup[$group['groupid']]['allowsetmain']}-->
+									<!--{if $group['grouptype']=='special' && $group['groupid'] != $_G['groupid'] && array_key_exists($group['groupid'], (array)$publicgroup) && !$publicgroup[$group['groupid']]['allowsetmain']}-->
 										<a href="home.php?mod=spacecp&ac=usergroup&do=buy&groupid=$group['groupid']&perms=$type&handlekey=buygrouphk" class="xw1 xi2" onclick="showWindow('group', this.href, 'get', 0);">{lang memcp_usergroups_buy}</a>
 									<!--{/if}-->
-									<!--{if array_key_exists($group['groupid'], $groupterms['ext'])}-->
+									<!--{if array_key_exists($group['groupid'], (array)$groupterms['ext'])}-->
 										<span class="notice">{lang memcp_usergroups_timelimit}: <!--{date($groupterms[ext][$group['groupid']])}--></span>
 									<!--{/if}-->
 								</th>
