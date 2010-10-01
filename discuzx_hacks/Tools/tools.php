@@ -16,8 +16,8 @@ $tools = & discuz_core::instance();
 
 $toolspw = '1';   
 /* 
-   Èç¹û²»ĞèÒªÔÚÊı¾İ¿âÖĞÉèÖÃ£¬ÇëĞŞ¸ÄÉÏÃæÒ»ĞĞµ¥ÒıºÅÖĞµÄÖµÎªÏëÒªµÄÃÜÂë
-   ÀıÈç $toolspw = 'QWESASDGy';  ÔòÔÚµÇÂ½µÄÊ±ºòĞèÒªÊäÈëµÄÃÜÂëÎª£ºQWESASDGy
+   å¦‚æœä¸éœ€è¦åœ¨æ•¸æ“šåº«ä¸­è¨­ç½®ï¼Œè«‹ä¿®æ”¹ä¸Šé¢ä¸€è¡Œå–®å¼•è™Ÿä¸­çš„å€¼ç‚ºæƒ³è¦çš„å¯†ç¢¼
+   ä¾‹å¦‚ $toolspw = 'QWESASDGy';  å‰‡åœ¨ç™»é™¸çš„æ™‚å€™éœ€è¦è¼¸å…¥çš„å¯†ç¢¼ç‚ºï¼šQWESASDGy
 */
 $toolspw = $toolspw ? md5($toolspw) : '';
 $toolskey = '';
@@ -25,7 +25,7 @@ foreach($_G['config']['db'][1] as $key => $value) {
 	$$key = $value;
 }
 
-//Ä£°åÓïÑÔ°ü´¦Àí ±ÜÃâÃ»ÓĞÉú²ú¹ØÓÚÓïÑÔ°ü»º´æµÄÊ±ºòÓ¢ÎÄ
+//æ¨¡æ¿èªè¨€åŒ…è™•ç† é¿å…æ²’æœ‰ç”Ÿç”¢é—œæ–¼èªè¨€åŒ…ç·©å­˜çš„æ™‚å€™è‹±æ–‡
 if(!file_exists('./data/plugindata/tools.lang.php')){
 	require DISCUZ_ROOT.'./data/plugindata/tools.lang.'.CHARSET.'.php';
 } else {
@@ -39,9 +39,9 @@ foreach($templatelang['tools'] as $key => $value){
 	$key = 'tools_'.$key;
 	$$key = $value;
 }
-//Ä£°åÓïÑÔ°ü´¦Àí end
+//æ¨¡æ¿èªè¨€åŒ…è™•ç† end
 
-//Êı¾İ¿âÁ¬½ÓÅĞ¶Ï
+//æ•¸æ“šåº«é€£æ¥åˆ¤æ–·
 $dbtest = getcookie(dbtest);
 if(empty($toolspw)) {
 	$authtype = 'B';
@@ -91,10 +91,10 @@ if((empty($dbtest) || $dbtest==0) && (getcookie('toolsauth') ==  $toolspw)){
 		//toolsmessage('tools:successconfig',"$_G[basescript].php");
 	}
 }
-//Êı¾İ¿âÁ¬½ÓÅĞ¶Ï end
+//æ•¸æ“šåº«é€£æ¥åˆ¤æ–· end
 
 
-//ÃÜÂëÅĞ¶Ï
+//å¯†ç¢¼åˆ¤æ–·
 	
 	if($toolspw == ''){
 		toolsmessage(toolslang('emptypw'),"$_G[basescript].php");
@@ -118,7 +118,7 @@ if((empty($dbtest) || $dbtest==0) && (getcookie('toolsauth') ==  $toolspw)){
 	} elseif(getcookie('toolsauth') !=  $toolspw) {
 		$_G['gp_action'] = 'login';
 	}
-//ÃÜÂëÅĞ¶Ï end
+//å¯†ç¢¼åˆ¤æ–· end
 
 if(!$tools->initated && $dbtest){
 	$tools->_init_db();
@@ -128,7 +128,7 @@ if(!$tools->initated && $dbtest){
 	$tools->_init_session();
 }
 
-//ÓÒ²à²Ëµ¥
+//å³å´èœå–®
 $menu = array(
 		'setadmin' => toolslang('setadmin'),
 		'closesite' => toolslang('closesite'),
@@ -141,7 +141,7 @@ $menu = array(
 		'recoverdb' => toolslang('recoverdb'),
 		'logout' => toolslang('logout'),
 	);
-//ÓÒ²à²Ëµ¥ end
+//å³å´èœå–® end
 
 $action = $_G['gp_action'];
 $type = $_G['gp_type'];
@@ -153,7 +153,7 @@ if($action != NULL){
 }
 
 
-//Á÷³Ì¿ªÊ¼
+//æµç¨‹é–‹å§‹
 if($action == NULL) {
 	$action = 'welcome';
 } elseif($action == 'login') {
@@ -378,7 +378,7 @@ if($action == NULL) {
 	}
 }
 
-//Á÷³Ì½áÊø
+//æµç¨‹çµæŸ
 include template('tools:tools');
 
 
