@@ -7,3 +7,20 @@ FROM (
 	)t1
 	LEFT JOIN `pre_common_member` AS t2 ON t1.email = t2.email
 WHERE t1.email = t2.email
+
+#------------
+
+SELECT t2.uid, t2.email, t2.username, t4.realname, t4.nickname, t4.birthyear, t4.birthmonth, t4.birthday, t4.gender, t4.customstatus, credits, t3 . *
+FROM (
+
+SELECT email
+	FROM (`pre_common_member`
+	GROUP BY email
+	HAVING count( * ) >1
+	ORDER BY uid
+	)t1
+	LEFT JOIN `pre_common_member` AS t2 ON t1.email = t2.email
+	LEFT JOIN pre_common_member_count AS t3 ON t2.uid = t3.uid
+	LEFT JOIN `pre_common_member_profile` AS t4 ON t2.uid = t4.uid
+WHERE t1.email = t2.email
+LIMIT 0 , 30

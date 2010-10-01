@@ -26,6 +26,15 @@ $query = $db_source->query("SELECT s.*, sf.*
 	LIMIT $limit");
 while ($space = $db_source->fetch_array($query)) {
 
+	// bluelovers
+	// 只匯入已經存在於目標資料庫內的用戶
+	// 適用於以論壇為主的升級轉換
+	if (!$_temp_ = $db_target->fetch_first("SELECT * FROM {$newpre}common_member WHERE uid = '$space[uid]'", 'SILENT')) {
+		$nextid = $space['uid'];
+		continue;
+	}
+	// bluelovers
+
 	$username = daddslashes($space['username']);
 	foreach (array('member','member_count','member_field_forum','member_field_home','member_profile','member_status') as $value) {
 		if($value == 'member') {
