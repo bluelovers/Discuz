@@ -1,0 +1,27 @@
+<div id="toolsh">
+	<div class="bm">
+		$des
+	</div>
+	<div class="bm">
+	
+		<table class="tb">
+			<tbody>	
+				<tr>
+				<th width="300px">{$tools_tablename}</th>
+				<th width="100px">{$tools_tablesize}</th>
+				<th width="140px"><p class="ptn cl"><button class="pn vm" onclick="jumpurl('$_G['basescript'].php?action=$action&type=allcheck')"><strong>{$tools_allcheck}</button></strong></p></td>
+				<th width="130px"><p class="ptn cl"><button class="pn vm" onclick="jumpurl('$_G['basescript'].php?action=$action&type=allrepair')"><strong>{$tools_allrepair}</button></strong></p></td>
+				</tr>
+				<!--{loop $tablelists $name $value}-->
+				<tr>
+				<th>$name</th>
+				<td>$value[size] KB</td>
+				<td><!--{if !$value[statu]}--><p class="ptn cl"><button class="pn vm" onclick="jumpurl('$_G['basescript'].php?action=$action&type=check&table=$name')"><strong>{$tools_check}</button><!--{elseif $value[statu]!='OK'}--><span class="red">$value[statu]</span><!--{else}-->$value[statu]<!--{/if}--></td>
+				<td><!--{if $value[statu]!='OK' && $value[statu]!='Not Support CHECK'}--><p class="ptn cl"><button class="pn vm" onclick="jumpurl('$_G['basescript'].php?action=$action&type=repair&table=$name')"><strong>{$tools_repair}</button></strong></p><!--{/if}--></td>
+				</tr>
+				<!--{/loop}-->
+			</tbody>
+		</table>
+	
+	</div>
+</div>

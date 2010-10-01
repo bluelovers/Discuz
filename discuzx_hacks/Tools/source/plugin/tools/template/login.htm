@@ -1,0 +1,45 @@
+<div id="toolsh">
+	<div class="bm">
+		$des
+	</div>
+	<div class="bm">
+	<!--{if !$toolspw}-->
+		<table class="tb">
+			<tbody>
+				<tr>
+				<th width="400px">{$tools_nopassword}</th>
+				</tr>
+			</tbody>
+		</table>
+	<!--{else}-->
+	<!--{if $authtype == 'B'}-->
+		<table class="tb">
+			<tbody>
+				<tr>
+				<th width="400px">{$tools_authtypeb}</th>
+				</tr>
+			</tbody>
+		</table>
+	<!--{else}-->
+		<table class="tb">
+			<tbody>
+				<tr>
+				<th width="400px">{$tools_authtypea}</th>
+				</tr>
+			</tbody>
+		</table>
+	<!--{/if}-->
+	<form action="$_G['basescript'].php" method="post">
+		<table class="tb">
+			<tbody>
+				<tr>
+				<th width="50px">{$tools_password}</th>
+				<td width="200px"><input type="password" maxlength="40" size="25" name="toolspassword" class="textinput"></td>
+				<td><button class="pn" value="true" name="loginsubmit" type="submit"><em>{$tools_submit}</em></button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<!--{/if}-->
+	</div>
+</div>

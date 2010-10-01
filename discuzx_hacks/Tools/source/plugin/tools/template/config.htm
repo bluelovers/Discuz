@@ -1,0 +1,49 @@
+<div id="toolsh">
+	<div class="bm">
+		$des
+	</div>
+	<div class="bm">
+	<form action="$_G['basescript'].php?action=$action" method="post">
+		<table class="tb">
+			<tbody>
+				<tr>
+				<th width="200px">{$tools_ucdbstatu}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--{if $ucdbstatu}-->{$tools_right}<!--{else}-->{$tools_failed}<!--{/if}--></th>
+				<td>{$tools_ucdbext}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--{if $ucdbext}-->{$tools_ext}<!--{else}-->{$tools_noext}<!--{/if}--></td>
+				</tr>
+
+				<tr>
+					<th>{$tools_ucdbhost}</th>
+					<td><input type="text" size="35" name="dbhost" class="textinput" value="{UC_DBHOST}"></td>
+				</tr>
+		                <tr>
+					<th>{$tools_ucdbuser}</th>
+					<td><input type="text" size="35" name="dbusername" class="textinput" value="{UC_DBUSER}"></td>
+					</tr>
+		                <tr>
+					<th>{$tools_ucdbpw}</th>
+					<td><input type="text" size="35" name="dbpw" class="textinput" value="{UC_DBPW}"></td>
+				</tr>
+				<tr>
+					<th>{$tools_ucdbname}</th>
+					<td><input type="text" size="35" name="dbname" class="textinput" value="{UC_DBNAME}"></td>
+				</tr>
+				<tr>
+					<th>{$tools_ucdbpre}</th>
+					<td><input type="text" size="35" name="tablepre" class="textinput" value="{$uctabpre}"></td>
+				</tr>
+				<tr>
+					<th>{$tools_ucapi}</th>
+					<td><input type="text" size="35" name="ucapi" class="textinput" value="{UC_API}"></td>
+				</tr>
+				<tr>
+					<th>{$tools_ucip}</th>
+					<td><input type="text" size="35" name="ucip" class="textinput" value="{UC_IP}"></td>
+				</tr>
+		                <tr>
+					<td><button class="pn" value="true" name="submit" type="submit"><em>{$tools_submit}</em></button></td>
+		                </tr>
+			</tbody>
+		</table>
+	</form>
+	</div>
+</div>
