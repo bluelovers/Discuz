@@ -35,8 +35,11 @@ function deletemember($uids, $other = 1) {
 		deletepost("authorid IN ($uids)", true, false);
 	}
 
+	//note 刪除空間信息
+	//feed
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid IN ($uids) OR (id IN ($uids) AND idtype='uid')", 'UNBUFFERED');
 
+	//note 記錄
 	$doids = array();
 	$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE uid IN ($uids)");
 	while ($value = DB::fetch($query)) {
@@ -45,50 +48,70 @@ function deletemember($uids, $other = 1) {
 
 	DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 刪除記錄回復
 	$delsql = !empty($doids) ? "doid IN (".dimplode($doids).") OR " : "";
 	DB::query("DELETE FROM ".DB::table('home_docomment')." WHERE $delsql uid IN ($uids)", 'UNBUFFERED');
 
+	//note 分享
 	DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 相冊數據
 	DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 刪除積分記錄
 	DB::query("DELETE FROM ".DB::table('common_credit_rule_log')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('common_credit_rule_log_field')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 刪除通知
 	DB::query("DELETE FROM ".DB::table('home_notification')." WHERE (uid IN ($uids) OR authorid IN ($uids))", 'UNBUFFERED');
 
+	//note 刪除打招呼
 	DB::query("DELETE FROM ".DB::table('home_poke')." WHERE (uid IN ($uids) OR fromuid IN ($uids))", 'UNBUFFERED');
 
+	//note 刪除圖片附件
 	$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid IN ($uids)");
 	while ($value = DB::fetch($query)) {
 		deletepicfiles($value);
 	}
 
+	//note 數據
 	DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note blog
+	//note 數據刪除
 	DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 評論
 	DB::query("DELETE FROM ".DB::table('home_comment')." WHERE (uid IN ($uids) OR authorid IN ($uids) OR (id IN ($uids) AND idtype='uid'))", 'UNBUFFERED');
 
+	//note 訪客
 	DB::query("DELETE FROM ".DB::table('home_visitor')." WHERE (uid IN ($uids) OR vuid IN ($uids))", 'UNBUFFERED');
 
+	//note class
 	DB::query("DELETE FROM ".DB::table('home_class')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 好友
 	DB::query("DELETE FROM ".DB::table('home_friend')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 
+	//note 刪除腳印
 	DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//刪除邀請記錄
 	DB::query("DELETE FROM ".DB::table('common_invite')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 
+	//note 刪除郵件隊列
 	DB::query("DELETE FROM ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." USING ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." WHERE ".DB::table('common_mailcron').".touid IN ($uids) AND ".DB::table('common_mailcron').".cid=".DB::table('common_mailqueue').".cid", 'UNBUFFERED');
 
+	//note 漫遊邀請
 	DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE (touid IN ($uids) OR fromuid IN ($uids))", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_userapp')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_userappfield')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note 排行榜
 	DB::query("DELETE FROM ".DB::table('home_show')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
+	//note Manyou Log
 	manyoulog('user', $uids, 'delete');
 
 	require_once libfile('function/forum');
