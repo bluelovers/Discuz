@@ -993,7 +993,7 @@ EOF;
 				<th id="password_0">$lang[setting_mail_setting_password]</th>
 			</tr>
 EOF;
-		foreach($setting['mail']['smtp'] as $id => $smtp) {
+		foreach((array)$setting['mail']['smtp'] as $id => $smtp) {
 			$checkauth = $smtp['auth'] ? 'checked' : '';
 			$smtp['auth_password'] = $smtp['auth_password'] ? $smtp['auth_password']{0}.'********'.substr($smtp['auth_password'], -2) : '';
 
@@ -1164,7 +1164,8 @@ EOT;
 
 	} elseif($operation == 'datetime') {
 
-		$checktimeformat = array($setting['timeformat'] == 'H:i' ? 24 : 12 => 'checked');
+//		$checktimeformat = array($setting['timeformat'] == 'H:i' ? 24 : 12 => 'checked');
+		$checktimeformat = array(($setting['timeformat'] == 'H:i' || $setting['timeformat'] == 'H:i:s') ? 24 : 12 => 'checked');
 
 		$setting['userdateformat'] = dateformat($setting['userdateformat']);
 		$setting['dateformat'] = dateformat($setting['dateformat']);
@@ -2075,7 +2076,8 @@ EOT;
 	}
 
 	if(isset($settingnew['timeformat'])) {
-		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i' : 'h:i A';
+//		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i' : 'h:i A';
+		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i:s' : 'h:i:s A';
 	}
 
 	if(isset($settingnew['dateformat'])) {

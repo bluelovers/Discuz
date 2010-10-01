@@ -18,7 +18,9 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		loadcache('profilesetting');
 	}
 	$field = $_G['cache']['profilesetting'][$fieldid];
-	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'constellation', 'zodiac', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince', 'residedist', 'residecommunity'))) {
+//	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'constellation', 'zodiac', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince', 'residedist', 'residecommunity'))) {
+//	}
+	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'constellation', 'zodiac', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince', 'residedist', 'residecommunity', 'birthdist', 'birthcommunity'))) {
 		return '';
 	}
 
@@ -153,11 +155,14 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		if($field['unchangeable'] && !empty($space[$fieldid])) {
 			return '<span>'.$space['birthprovince'].'-'.$space['birthcity'].'</span>';
 		}
-		$values = array(0, 0);
-		$elems = array('birthprovince', 'birthcity');
+//		$values = array(0, 0);
+//		$elems = array('birthprovince', 'birthcity');
+		$values = array(0,0,0,0);
+		$elems = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
 		if(!empty($space['birthprovince'])) {
 			$html = profile_show('birthcity', $space);
-			$html .= '&nbsp;&nbsp;<a href="javascript:;" onclick="showdistrict(\'birthdistrictbox\', [\'birthprovince\', \'birthcity\'], 2); return false;">'.lang('spacecp', 'profile_edit').'</a>';
+//			$html .= '&nbsp;&nbsp;<a href="javascript:;" onclick="showdistrict(\'birthdistrictbox\', [\'birthprovince\', \'birthcity\'], 2); return false;">'.lang('spacecp', 'profile_edit').'</a>';
+			$html .= '&nbsp;&nbsp;<a href="javascript:;" onclick="showdistrict(\'birthdistrictbox\', [\'birthprovince\', \'birthcity\', \'birthdist\', \'birthcommunity\'], 4); return false;">'.lang('spacecp', 'profile_edit').'</a>';
 			$html .= '<p id="birthdistrictbox"></p>';
 		} else {
 			$html = '<p id="birthdistrictbox">'.showdistrict($values, $elems, 'birthdistrictbox').'</p>';
@@ -315,7 +320,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 	if(in_array($fieldid, array('birthday', 'birthmonth', 'birthyear', 'gender'))) {
 		$value = intval($value);
 		return true;
-	} elseif(in_array($fieldid, array('resideprovince', 'residecity', 'birthprovince', 'birthcity', 'residedist', 'residecommunity'))) {
+//	} elseif(in_array($fieldid, array('resideprovince', 'residecity', 'birthprovince', 'birthcity', 'residedist', 'residecommunity'))) {
+	} elseif(in_array($fieldid, array('resideprovince', 'residecity', 'birthprovince', 'birthcity', 'residedist', 'residecommunity', 'birthdist', 'birthcommunity'))) {
 		$value = getstr($value, '', 1, 1);
 		return true;
 	}
@@ -399,7 +405,11 @@ function profile_show($fieldid, $space=array()) {
 		}
 		return $return;
 	} elseif($fieldid=='birthcity') {
-		return $space['birthprovince'].'&nbsp;'.$space['birthcity'];
+//		return $space['birthprovince'].'&nbsp;'.$space['birthcity'];
+		return $space['birthprovince']
+				.(!empty($space['birthcity']) ? '&nbsp;'.$space['birthcity'] : '')
+				.(!empty($space['birthdist']) ? '&nbsp;'.$space['birthdist'] : '')
+				.(!empty($space['birthcommunity']) ? '&nbsp;'.$space['birthcommunity'] : '');
 	} elseif($fieldid=='residecity') {
 		return $space['resideprovince']
 				.(!empty($space['residecity']) ? '&nbsp;'.$space['residecity'] : '')

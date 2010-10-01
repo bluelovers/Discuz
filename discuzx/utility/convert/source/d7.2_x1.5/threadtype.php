@@ -34,7 +34,9 @@ while($row = $db_source->fetch_array($query)) {
 	foreach($threadtypes_types as $typeid => $name) {
 		// bluelovers
 		// 過濾無效的名稱
-		if ($name = trim($name)) {
+		$name = str_replace(array('&nbsp;', '&nbsp'), ' ', $name);
+
+		if ($name = s_trim($name, null, 1)) {
 		// bluelovers
 
 			$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => addslashes($name)), 1);

@@ -1590,7 +1590,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
-					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
+					'spviewperm' => implode("\t", (array)$_G['gp_spviewpermnew']),
 				));
 			}
 			if($forumfielddata) {

@@ -1485,8 +1485,10 @@ EOT;
 		$gendercheck = array($member['gender'] => 'checked');
 		$pscheck = array($member['pmsound'] => 'checked');
 
-		$member['regdate'] = dgmdate($member['regdate'], 'Y-n-j h:i A');
-		$member['lastvisit'] = dgmdate($member['lastvisit'], 'Y-n-j h:i A');
+//		$member['regdate'] = dgmdate($member['regdate'], 'Y-n-j h:i A');
+//		$member['lastvisit'] = dgmdate($member['lastvisit'], 'Y-n-j h:i A');
+		$member['regdate'] = dgmdate($member['regdate'], 'Y-n-j h:i:s A');
+		$member['lastvisit'] = dgmdate($member['lastvisit'], 'Y-n-j h:i:s A');
 
 		$member['bio'] = html2bbcode($member['bio']);
 		$member['signature'] = html2bbcode($member['sightml']);

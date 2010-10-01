@@ -97,7 +97,7 @@ foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
 		// 修正為只要設定為不隱藏的資料就會顯示在個人資料頁內
 		if(!$_G['inajax'] && ($field['showinthread'] || $field['showincard'] || 1) || $_G['inajax'] && $field['showincard']) {
 			$val = profile_show($fieldid, $space);
-			if($val !== false && $val !== '') {
+			if($val !== false && trim(str_replace(array('&nbsp;', '&nbsp', '　'), ' ', (string)$val)) !== '') {
 				if ($val == '')  $val = '&nbsp;';
 				$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
 			}

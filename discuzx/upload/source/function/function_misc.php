@@ -32,6 +32,11 @@ function convertip($ip) {
 				$return = convertip_full($ip, $fullipfile);
 			}
 		}
+
+		// bluelovers
+		$return = ltrim($return, '-');
+		$return = ltrim($return, '-');
+		// bluelovers
 	}
 
 	return $return;

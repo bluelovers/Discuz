@@ -110,6 +110,12 @@ if(submitcheck('profilesubmit')) {
 		} else {
 			if($key=='birthprovince') {
 				$key = 'birthcity';
+
+			// bluelovers
+			} elseif ($key == 'birthdist' || $key == 'birthcommunity') {
+				$key = 'birthcity';
+			// bluelovers
+
 			} elseif($key=='resideprovince' || $key=='residecommunity'||$key=='residedist') {
 				$key = 'residecity';
 			} elseif($key=='birthyear' || $key=='birthmonth') {
@@ -336,6 +342,11 @@ if($operation == 'password') {
 	$allowitems = array();
 	if($operation == 'base') {
 		$allowitems = array('realname', 'gender', 'birthday', 'birthcity', 'residecity', 'residedist', 'affectivestatus', 'lookingfor', 'bloodtype', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8');
+
+		// bluelovers
+		$allowitems = $allowitems + array('birthdist', 'birthcommunity');
+		// bluelvoers
+
 	} elseif($operation == 'contact') {
 		$allowitems = array('telephone', 'mobile', 'alipay', 'icq', 'qq', 'yahoo', 'msn', 'taobao');
 	} elseif($operation == 'edu') {

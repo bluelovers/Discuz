@@ -9,7 +9,7 @@
 
 					<div class="pbm mbm bbda cl">
 						<h2 class="mbn">
-							{$space[username]} 
+							{$space[username]}
 							<!--{if TIMESTAMP - $space['lastactivitydb'] <= 10800}-->
 								<img src="{IMGDIR}/ol.gif" alt="online" title="{lang online}" class="vm" />&nbsp;
 							<!--{/if}-->
@@ -107,8 +107,8 @@
 						<li><em>{lang regdate}</em>$space[regdate]</li>
 						<li><em>{lang last_visit}</em>$space[lastvisit]</li>
 						<!--{if $_G[uid] == $space[uid] || $_G[group][allowviewip]}-->
-						<li><em>{lang register_ip}</em>$space[regip] - $space[regip_loc]</li>
-						<li><em>{lang last_visit_ip}</em>$space[lastip] - $space[lastip_loc]</li>
+						<li><em>{lang register_ip}</em>$space[regip]{if $space[regip_loc]} - $space[regip_loc]{/if}</li>
+						<li><em>{lang last_visit_ip}</em>$space[lastip]{if $space[lastip_loc]} - $space[lastip_loc]{/if}</li>
 						<!--{/if}-->
 						<li><em>{lang last_activity_time}</em>$space[lastactivity]</li>
 						<li><em>{lang last_post_time}</em>$space[lastpost]</li>

@@ -60,7 +60,7 @@
 			<!--{/if}-->
 			<!--{if checkperm('allowbanuser')}-->
 				<a href="{if $_G[adminid] == 1}admin.php?action=members&operation=ban&username=$space[username]&frames=yes{else}forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]{/if}" target="_blank" class="xi1">{lang user_ban}</a>
-			<!--{/if}-->			
+			<!--{/if}-->
 			<a href="forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$space[username]" target="_blank" class="xi1">{lang manage_post}</a>
 		<!--{/if}-->
 		<!--{hook/space_card_option}-->
@@ -78,6 +78,7 @@
 	<!--{/if}-->
 	<div class="f cl">
 		<ul>
+			<!--{if $space[customstatus]}--><li><em class="xg1">{lang permission_basic_status}&nbsp;</em>$space[customstatus]</li><!--{/if}-->
 		<!--{loop $profiles $value}-->
 			<li><em class="xg1">$value[title]&nbsp;</em>$value[value]</li>
 		<!--{/loop}-->

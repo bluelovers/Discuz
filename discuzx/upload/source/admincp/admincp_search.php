@@ -33,15 +33,42 @@ if($_G['gp_searchsubmit'] && $keywords) {
 	foreach($searchindex as $script => $index) {
 		foreach($index as $key => $value) {
 			$matched = TRUE;
-			foreach($kws as $kw) {
-				if(strpos(strtolower($value), strtolower($kw)) === FALSE) {
-					$matched = FALSE;
-					break;
+
+			// bluelovers
+			if (is_array($value)) {
+				foreach($value as $key__ => $value__) {
+					$matched = TRUE;
+
+					foreach($kws as $kw) {
+						if(strpos(strtolower($value__), strtolower($kw)) === FALSE && strpos(strtolower($key__), strtolower($kw)) === FALSE) {
+							$matched = FALSE;
+							break;
+						}
+					}
+
+					if($matched) {
+						$result[] = array($script, $value, $key);
+					}
 				}
+			} else {
+			// bluelovers
+
+				foreach($kws as $kw) {
+					if(strpos(strtolower($value), strtolower($kw)) === FALSE && strpos(strtolower($key), strtolower($kw)) === FALSE) {
+						$matched = FALSE;
+						break;
+					}
+				}
+
+				if($matched) {
+					$result[] = array($script, $value, $key);
+				}
+
+			// bluelovers
 			}
-			if($matched) {
-				$result[] = array($script, $value, $key);
-			}
+			// bluelovers
+
+
 		}
 	}
 	if($result) {
@@ -73,7 +100,8 @@ if($_G['gp_searchsubmit'] && $keywords) {
 					$preurl .= '&operation='.$op;
 				}
 				$anchor = !empty($anchorindex[$ac][$item[2]]) ? '&anchor='.$anchorindex[$ac][$item[2]] : '';
-				$results[$item[0]] .= '<div class="news"><a href="'.$preurl.'&highlight='.rawurlencode($keywords).$anchor.'"  target="_blank">'.$item[1].'</a></div>';
+//				$results[$item[0]] .= '<div class="news"><a href="'.$preurl.'&highlight='.rawurlencode($keywords).$anchor.'"  target="_blank">'.$item[1].'</a></div>';
+				$results[$item[0]] .= '<div class="news"><a href="'.$preurl.'&highlight='.rawurlencode($keywords).$anchor.'"  target="_blank">'.$item[1].'</a>'.' <span class="lightfont">'.$item[2].'</span>'.'</div>';
 				$count++;
 			}
 		}

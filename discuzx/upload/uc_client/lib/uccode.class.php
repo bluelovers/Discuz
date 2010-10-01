@@ -40,18 +40,26 @@ class uccode {
 		$message = str_replace(array(
 			'[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]',
 
+			// bluelovers
 			'[italic]', '[/italic]',
 			'[s]', '[/s]',
+			// bluelovers
 
 			'[i]', '[/i]', '[u]', '[/u]', '[list]', '[list=1]', '[list=a]',
 			'[list=A]', '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
 		), array(
+//			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>', '<i>',
+//			'</i>', '<u>', '</u>', '<ul>', '<ul type="1">', '<ul type="a">',
+
+			// bluelovers
 			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>',
 
 			'<i>', '</i>',
 			'<s>', '</s>',
 
 			'<i>', '</i>', '<u>', '</u>', '<ul>', '<ul type="1">', '<ul type="a">',
+			// bluelovers
+
 			'<ul type="A">', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 		), preg_replace(array(
 			"/\[color=([#\w]+?)\]/i",

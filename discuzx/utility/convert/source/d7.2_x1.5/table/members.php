@@ -51,19 +51,18 @@ while ($row = $db_source->fetch_array($query)) {
 
 	// bluelovers
 	$rowfield['site'] = s_trim($rowfield['site'], "\\/");
-	$rowfield['bio'] = s_trim($rowfield['bio'], "\\/");
 	$rowfield['sightml'] = s_trim($rowfield['sightml'], "\\/");
-	$rowfield['nickname'] = s_trim($rowfield['nickname'], "\\/");
 
 	if (!s_valid_url($rowfield['site'])) {
 		$rowfield['site'] = '';
 	}
 
-	if (!s_trim($rowfield['nickname'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asdj") || s_valid_email($rowfield['nickname']) || s_valid_url($rowfield['nickname'])) {
-		$rowfield['nickname'] = '';
-	}
-	if (!s_trim($rowfield['bio'], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asd") || s_valid_email($rowfield['bio'])) {
-		$rowfield['bio'] = '';
+	foreach (array('bio', 'nickname', 'customstatus') as $___k_) {
+		$rowfield[$___k_] = s_trim($rowfield[$___k_], "\\/", 1);
+
+		if (!s_trim($rowfield[$___k_], "\\/@＠?!#&mp;%\*\^_.-+=0123456789asd") || s_valid_email($rowfield[$___k_]) || s_valid_url($rowfield[$___k_])) {
+			$rowfield[$___k_] = '';
+		}
 	}
 
 	foreach (array('icq', 'alipay', 'taobao', 'qq', 'yahoo', 'msn') as $___k_) {
@@ -158,6 +157,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 			// bluelovers
 			'nickname' => $rowfield['nickname'],
+//			'customstatus' => $rowfield['customstatus'],
 			// bluelovers
 
 		),

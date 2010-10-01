@@ -389,6 +389,7 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 
 	// bluelovers
 	$ext = '';
+	$random = '';
 
 	if (is_array($size)) {
 		$class = isset($size['class']) ? $size['class'] : $size[0];
@@ -403,6 +404,13 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 			unset($size['style']);
 		} else {
 			unset($size[1]);
+		}
+		if (isset($size['random'])) {
+			$random = getglobal('timestamp');
+			unset($size['random']);
+		} else {
+			$random = getglobal('timestamp');
+			unset($size[2]);
 		}
 
 		if (is_array($size) && count($size)) {
@@ -426,7 +434,9 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	// bluelovers
 	$class = empty($class) ? $size : $class;
 
-	$ext2 = '';
+	$url_ext = $ext2 = '';
+
+	if ($random) $url_ext .= '&random='.$random;
 
 	if($uid > 0) {
 	// bluelovers
@@ -437,13 +447,19 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		$ext = $ext2 . ' ' . $ext;
 
 		if(!$staticavatar && !$static) {
-			return $returnsrc ? $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size : '<img src="'.$ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').'"'.$ext.' />';
+
+			$file = $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').$url_ext;
+
+			return $returnsrc ? $file : '<img src="'.$file.'"'.$ext.' />';
 		} else {
 			$uid = sprintf("%09d", $uid);
 			$dir1 = substr($uid, 0, 3);
 			$dir2 = substr($uid, 3, 2);
 			$dir3 = substr($uid, 5, 2);
 			$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
+
+			if ($url_ext) $file .= '?'.$url_ext;
+
 			return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
 		}
 
