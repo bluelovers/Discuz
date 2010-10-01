@@ -1759,14 +1759,14 @@ EOT;
 			showsubmenu("$lang[members_profile_edit] - $field[title]");
 			showformheader('members&operation=profile&fieldid='.$fieldid);
 			showtableheader();
-			if($field['customable']) {
+			if(1 || $field['customable']) {
 				showsetting('members_profile_edit_name', 'title', $field['title'], 'text');
 				showsetting('members_profile_edit_desc', 'description', $field['description'], 'text');
 			} else {
 				showsetting('members_profile_edit_name', '', '', ' '.$field['title']);
 				showsetting('members_profile_edit_desc', '', '', ' '.$field['description']);
 			}
-			if(!$field['isfixed2']) {
+			if(1 || !$field['isfixed2']) {
 				showsetting('members_profile_edit_form_type', array('formtype', array(
 						array('text', $lang['members_profile_edit_text'], array('valuenumber' => '', 'fieldchoices' => 'none', 'fieldvalidate'=>'')),
 						array('textarea', $lang['members_profile_edit_textarea'], array('valuenumber' => '', 'fieldchoices' => 'none', 'fieldvalidate'=>'')),
@@ -1820,7 +1820,7 @@ EOT;
 				'allowsearch' => intval($_POST['allowsearch']),
 				'displayorder' => intval($_POST['displayorder'])
 			);
-			if($field['customable']) {
+			if($field['customable'] || (!$field['customable'] && !empty($_POST['title']))) {
 				$_POST['title'] = dhtmlspecialchars(trim($_POST['title']));
 				if(empty($_POST['title'])) {
 					cpmsg('members_profile_edit_title_empty_error', 'action=members&operation=profile&fieldid='.$fieldid, 'error');
@@ -1834,7 +1834,7 @@ EOT;
 				$setarr['unchangeable'] = intval($_POST['unchangeable']);
 				$setarr['needverify'] = intval($_POST['needverify']);
 			}
-			if(!$field['isfixed2']) {
+			if(!$field['isfixed2'] || (!$field['customable'] && !empty($_POST['choices']))) {
 				$setarr['formtype'] = strtolower(trim($_POST['formtype']));
 				$setarr['size'] = intval($_POST['size']);
 				if($_POST['choices']) {
@@ -1872,7 +1872,7 @@ EOT;
 				DB::insert('common_setting', array('skey'=>'privacy', 'svalue'=> addslashes(serialize($_G['setting']['privacy']))), false, true);
 				updatecache('setting');
 			}
-			cpmsg('members_profile_edit_succeed', 'action=members&operation=profile', 'succeed');
+			cpmsg('members_profile_edit_succeed', 'action=members&operation=profile'.($fieldid ? '&fieldid='.$fieldid : ''), 'succeed');
 		}
 	} else {
 

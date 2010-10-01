@@ -89,12 +89,15 @@ $profiles = array();
 $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
 
 foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
-	if(($field['available'] && $field['invisible'] != '1'
+	if(($field['available'] && $_G['adminid'] == 1) || ($field['available'] && $field['invisible'] != '1'
 		&& ($space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1))
 		&& strlen($space[$fieldid]) > 0)) {
-		if(!$_G['inajax'] && ($field['showinthread'] || $field['showincard']) || $_G['inajax'] && $field['showincard']) {
+		// 更改個人資料顯示邏輯
+		// DX預設只有 設定為顯示在名片或者主題內的才會顯示在個人資料頁
+		// 修正為只要設定為不隱藏的資料就會顯示在個人資料頁內
+		if(!$_G['inajax'] && ($field['showinthread'] || $field['showincard'] || 1) || $_G['inajax'] && $field['showincard']) {
 			$val = profile_show($fieldid, $space);
-			if($val !== false) {
+			if($val !== false && $val !== '') {
 				if ($val == '')  $val = '&nbsp;';
 				$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
 			}

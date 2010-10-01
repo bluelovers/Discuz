@@ -22,7 +22,9 @@ function build_cache_profilesetting() {
 			$choices = array();
 			foreach(explode("\n", $field['choices']) as $item) {
 				list($index, $choice) = explode('=', $item, 2);
-				$choices[trim($index)] = trim($choice);
+				$choice = trim($choice);
+				$index = trim($index);
+				$choices[$index] = ($choice === '' || $choice === null) ? $index : $choice;
 			}
 			$field['choices'] = $choices;
 		}

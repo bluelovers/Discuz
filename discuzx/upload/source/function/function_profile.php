@@ -104,16 +104,50 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		if($field['unchangeable'] && $space[$fieldid] > 0) {
 			return '<span>'.lang('space', 'gender_'.intval($space[$fieldid])).'</span>';
 		}
-		$selected = array($space[$fieldid]=>' selected="selected"');
-		$html = '<select name="gender" id="gender" tabindex="1">';
-		if($field['unchangeable']) {
-			$html .= '<option value="">'.lang('space', 'gender').'</option>';
+
+		// bluelovers
+		if (!$field['choices']) {
+		// bluelovers
+
+			$selected = array($space[$fieldid]=>' selected="selected"');
+			$html = '<select name="gender" id="gender" tabindex="1">';
+			if($field['unchangeable']) {
+				$html .= '<option value="">'.lang('space', 'gender').'</option>';
+			} else {
+				$html .= '<option value="0"'.($space[$fieldid]=='0' ? ' selected="selected"' : '').'>'.lang('space', 'gender_0').'</option>';
+			}
+			$html .= '<option value="1"'.($space[$fieldid]=='1' ? ' selected="selected"' : '').'>'.lang('space', 'gender_1').'</option>'
+				.'<option value="2"'.($space[$fieldid]=='2' ? ' selected="selected"' : '').'>'.lang('space', 'gender_2').'</option>'
+				.'</select>';
+
+		// bluelovers
 		} else {
-			$html .= '<option value="0"'.($space[$fieldid]=='0' ? ' selected="selected"' : '').'>'.lang('space', 'gender_0').'</option>';
+
+//			$field['choices'] = array_merge(array(
+//				'0' => lang('space', 'gender_0'),
+//				'1' => lang('space', 'gender_1'),
+//				'2' => lang('space', 'gender_2'),
+//			), $field['choices']);
+
+			$field['choices'] = array(
+				0 => lang('space', 'gender_0'),
+				1 => lang('space', 'gender_1'),
+				2 => lang('space', 'gender_2'),
+			) + $field['choices'];
+
+			$html = "<select name=\"$fieldid\" id=\"$fieldid\" tabindex=\"1\">";
+
+			if($field['unchangeable']) {
+				$html .= '<option value="">'.lang('space', 'gender').'</option>';
+			}
+
+			foreach($field['choices'] as $op => $op_value) {
+				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">{$op_value}</option>";
+			}
+
+			$html .= '</select>';
 		}
-		$html .= '<option value="1"'.($space[$fieldid]=='1' ? ' selected="selected"' : '').'>'.lang('space', 'gender_1').'</option>'
-			.'<option value="2"'.($space[$fieldid]=='2' ? ' selected="selected"' : '').'>'.lang('space', 'gender_2').'</option>'
-			.'</select>';
+		// bluelovers
 
 	} elseif($fieldid=='birthcity') {
 		if($field['unchangeable'] && !empty($space[$fieldid])) {
@@ -167,24 +201,37 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 //			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
-				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
+//			foreach($field['choices'] as $op) {
+//				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
+//			}
+			foreach($field['choices'] as $op => $op_value) {
+				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op_value</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
 //			$field['choices'] = explode("\n", $field['choices']);
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
+//			foreach($field['choices'] as $op) {
+//				$html .= ''
+//					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
+//					."$op</label>&nbsp;&nbsp;";
+//			}
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
-					."$op</label>&nbsp;&nbsp;";
+					."$op_value</label>&nbsp;&nbsp;";
 			}
 		} elseif($field['formtype']=='radio') {
 //			$field['choices'] = explode("\n", $field['choices']);
-			foreach($field['choices'] as $op) {
+//			foreach($field['choices'] as $op) {
+//				$html .= ''
+//						."<label><input type=\"radio\" name=\"{$fieldid}\" tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
+//						."$op</label>&nbsp;&nbsp;";
+//			}
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 						."<label><input type=\"radio\" name=\"{$fieldid}\" tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
-						."$op</label>&nbsp;&nbsp;";
+						."$op_value</label>&nbsp;&nbsp;";
 			}
 		} elseif($field['formtype']=='file') {
 			$html = "<input type=\"file\" value=\"\" name=\"$fieldid\" tabindex=\"1\" class=\"pf\" style=\"height:26px;\" /><input type=\"hidden\" name=\"$fieldid\" value=\"$space[$fieldid]\" />";
@@ -246,6 +293,25 @@ function profile_check($fieldid, &$value, $space=array()) {
 	}
 
 	include_once libfile('function/home');
+
+	// bluelovers
+	$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+
+	if(in_array($fieldid, array('gender'))) {
+		$field['choices'] = array(
+				0 => lang('space', 'gender_0'),
+				1 => lang('space', 'gender_1'),
+				2 => lang('space', 'gender_2'),
+			) + $field['choices'];
+
+//		print_r($field['choices']);
+//		exit();
+
+		$value = intval($value);
+		return (bool)array_key_exists($value, $field['choices']);
+	}
+	// bluelovers
+
 	if(in_array($fieldid, array('birthday', 'birthmonth', 'birthyear', 'gender'))) {
 		$value = intval($value);
 		return true;
@@ -254,13 +320,9 @@ function profile_check($fieldid, &$value, $space=array()) {
 		return true;
 	}
 
-	if($field['choices']) {
+//	if($field['choices']) {
 //		$field['choices'] = explode("\n", $field['choices']);
-
-		// bluelovers
-		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
-		// bluelovers
-	}
+//	}
 	if($field['formtype'] == 'text' || $field['formtype'] == 'textarea') {
 		$value = getstr($value, '', 1, 1);
 		if($field['size'] && strlen($value) > $field['size']) {
@@ -274,7 +336,10 @@ function profile_check($fieldid, &$value, $space=array()) {
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {
-			if(in_array($op, $field['choices'])) {
+//			if(in_array($op, $field['choices'])) {
+//				$arr[] = $op;
+//			}
+			if(array_key_exists($op, $field['choices'])) {
 				$arr[] = $op;
 			}
 		}
@@ -283,7 +348,10 @@ function profile_check($fieldid, &$value, $space=array()) {
 			return false;
 		}
 	} elseif($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
-		if(!in_array($value, $field['choices'])){
+//		if(!in_array($value, $field['choices'])){
+//			return false;
+//		}
+		if(!array_key_exists($value, $field['choices'])){
 			return false;
 		}
 	}
@@ -301,8 +369,29 @@ function profile_show($fieldid, $space=array()) {
 		return false;
 	}
 
+	// bluelovers
+	$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	$value = $space[$fieldid];
+	// bluelovers
+
 	if($fieldid=='gender') {
-		return lang('space', 'gender_'.intval($space['gender']));
+
+		// bluelovers
+
+		$field['choices'] = array(
+			0 => lang('space', 'gender_0'),
+			1 => lang('space', 'gender_1'),
+			2 => lang('space', 'gender_2'),
+		) + $field['choices'];
+
+		if (!array_key_exists($value, $field['choices'])) {
+			$value = 0;
+		}
+
+		return $field['choices'][$value];
+		// bluelovers
+
+//		return lang('space', 'gender_'.intval($space['gender']));
 	} elseif($fieldid=='birthday') {
 		$return = $space['birthyear'] ? $space['birthyear'].' '.lang('space', 'year').' ' : '';
 		if($space['birthmonth'] && $space['birthday']) {
@@ -319,6 +408,26 @@ function profile_show($fieldid, $space=array()) {
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
+
+	// bluelovers
+
+	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
+		$arr = array();
+		foreach ($value as $op) {
+			if(array_key_exists($op, $field['choices'])) {
+				$arr[] = $field['choices'][$op];
+			}
+		}
+		$value = implode("\n", $arr);
+
+		return nl2br(trim($value, "\n"));
+
+	} elseif ($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
+
+		return isset($field['choices'][$value]) ? $field['choices'][$value] : false;
+
+	// bluelovers
+
 	} else {
 		return nl2br($space[$fieldid]);
 	}
