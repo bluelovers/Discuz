@@ -140,10 +140,10 @@ class base {
 
 	function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-		$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
-		// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎÞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
-		// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
-		// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
+		$ckey_length = 4;	// éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
+		// åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŽŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæžœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢žå¤§ç ´è§£é›£åº¦ã€‚
+		// å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
+		// ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
 
 		$key = md5($key ? $key : UC_KEY);
 		$keya = md5(substr($key, 0, 16));
@@ -297,6 +297,7 @@ class base {
 
 	function date($time, $type = 3) {
 		$format[] = $type & 2 ? (!empty($this->settings['dateformat']) ? $this->settings['dateformat'] : 'Y-n-j') : '';
+//		$format[] = $type & 1 ? (!empty($this->settings['timeformat']) ? $this->settings['timeformat'] : 'H:i') : '';
 		$format[] = $type & 1 ? (!empty($this->settings['timeformat']) ? $this->settings['timeformat'] : 'H:i:s') : '';
 		return gmdate(implode(' ', $format), $time + $this->settings['timeoffset']);
 	}

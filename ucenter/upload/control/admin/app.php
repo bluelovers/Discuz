@@ -63,6 +63,7 @@ class control extends adminbase {
 		} else {
 			$type = getgpc('type', 'P');
 			$name = getgpc('name', 'P');
+//			$url = getgpc('url', 'P');
 			$url = rtrim(getgpc('url', 'P'), '/\\');
 			$ip = getgpc('ip', 'P');
 			$viewprourl = getgpc('viewprourl', 'P');
@@ -125,10 +126,12 @@ class control extends adminbase {
 			$url = $_ENV['note']->get_url_code('test', '', $appid);
 			$status = $_ENV['app']->test_api($url, $ip);
 		}
+		// bluelovers
+		echo '/* '.$url." */\n";
+		// bluelovers
 		if($status == '1') {
 			echo 'document.getElementById(\'status_'.$appid.'\').innerHTML = "<img src=\'images/correct.gif\' border=\'0\' class=\'statimg\' \/><span class=\'green\'>'.$this->lang['app_connent_ok'].'</span>";testlink();';
 		} else {
-			echo '// '.$url."\n";
 			echo 'document.getElementById(\'status_'.$appid.'\').innerHTML = "<img src=\'images/error.gif\' border=\'0\' class=\'statimg\' \/><span class=\'red\'>'.$this->lang['app_connent_false'].'</span>";testlink();';
 		}
 
@@ -141,6 +144,7 @@ class control extends adminbase {
 		if($this->submitcheck()) {
 			$type = getgpc('type', 'P');
 			$name = getgpc('name', 'P');
+//			$url = getgpc('url', 'P');
 			$url = rtrim(getgpc('url', 'P'), '/\\');
 			$ip = getgpc('ip', 'P');
 			$viewprourl = getgpc('viewprourl', 'P');
@@ -153,7 +157,8 @@ class control extends adminbase {
 			if(getgpc('apppath', 'P')) {
 				$app['extra']['apppath'] = $this->_realpath(getgpc('apppath', 'P'));
 				if($app['extra']['apppath']) {
-					$apifile = $app['extra']['apppath'].'./api/'.$app['apifilename'];
+//					$apifile = $app['extra']['apppath'].'./api/uc.php';
+					$apifile = $app['extra']['apppath'].'./api/'.$apifilename;
 					if(!file_exists($apifile)) {
 						$this->message('app_apifile_not_exists', 'BACK', 0, array('$apifile' => $apifile));
 					}
@@ -245,7 +250,7 @@ class control extends adminbase {
 		$notedata = $this->_format_notedata($notedata);
 		$notedata['UC_API'] = UC_API;
 		$_ENV['note']->add('updateapps', '', $this->serialize($notedata, 1));
-		$_ENV['note']->send();	
+		$_ENV['note']->send();
 	}
 
 	function _format_notedata($notedata) {

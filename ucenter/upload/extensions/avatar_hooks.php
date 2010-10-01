@@ -22,7 +22,8 @@ if ($mfavatar = $db->result_first("SELECT avatar FROM ".UC_DBTABLEPRE."memberfie
 		echo 1;
 		exit;
 	} else {
-		dheader_cache(1800, 2, null, 'avatar_'.$uid);
+		dheader_cache(1800, (empty($random) ? 2 : 1), null, 'avatar_'.$uid);
+//		@header("HTTP/1.1 301 Moved Permanently");
 	}
 
 	header('Location: '.$mfavatar);
@@ -37,6 +38,9 @@ function dheader_cache ($s = 0, $mode = 0, $lastmodified = 0, $etag = '') {
 
 	$header = array();
 	$ss = '';
+
+//	$r = 'D, d M Y H:i:s T';
+	$r = 'r';
 
 	if ($s < 0) {
 		$header['Expires'] = -1;
@@ -72,19 +76,19 @@ function dheader_cache ($s = 0, $mode = 0, $lastmodified = 0, $etag = '') {
 				exit;
 			} else {
 				$ss .= '$ims: '.$ims."<br>";
-				$ss .= '$ims date: '.gmdate('D, d M Y H:i:s T', $ims)."<br>";
+				$ss .= '$ims date: '.gmdate($r, $ims)."<br>";
 				$ss .= '$lastmodified: '.$lastmodified."<br>";
 				$ss .= 'HTTP_IF_MODIFIED_SINCE: '.$_SERVER['HTTP_IF_MODIFIED_SINCE'].'<br>';
 				$ss .= 'HTTP_IF_NONE_MATCH: '.$_SERVER['HTTP_IF_NONE_MATCH'].'<br>';
 
-				$header['Last-Modified'] = gmdate('D, d M Y H:i:s T', $lastmodified);
-				$header['Etag'] = gmdate('D, d M Y H:i:s T', $lastmodified).($etag ? ';'.$etag : '');
+				$header['Last-Modified'] = gmdate($r, $lastmodified);
+				$header['Etag'] = gmdate($r, $lastmodified).($etag ? ';'.$etag : '');
 			}
 		}
 
 		if ($s) {
 			$header['Cache-Control'] = 'max-age='.$s.', public';
-			$header['Expires'] = gmdate('D, d M Y H:i:s T', $lastmodified + $s);
+			$header['Expires'] = gmdate($r, $lastmodified + $s);
 		}
 	}
 
