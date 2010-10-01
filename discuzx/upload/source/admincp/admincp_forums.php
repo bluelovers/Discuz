@@ -1016,7 +1016,7 @@ EOT;
 						}
 					}
 					$showverify = true;
-					foreach($_G['setting']['verify'] as $vid => $verify) {
+					foreach((array)$_G['setting']['verify'] as $vid => $verify) {
 						if($verify['available']) {
 							if($showverify) {
 								showtablerow('', '', array('<b>'.$lang['forums_edit_perm_verify'].'</b>'));
