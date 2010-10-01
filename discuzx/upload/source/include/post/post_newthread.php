@@ -37,9 +37,13 @@ if(!$_G['uid'] && ($_G['setting']['need_avatar'] || $_G['setting']['need_email']
 
 checklowerlimit('post', 0, 1, $_G['forum']['fid']);
 
+// bluelovers
+$isfirstpost = 1;
+// bluelovers
+
 if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 
-	$isfirstpost = 1;
+//	$isfirstpost = 1;
 	$allownoticeauthor = 1;
 	$tagoffcheck = '';
 	$showthreadsorts = !empty($sortid) || $_G['forum']['threadsorts']['required'] && empty($special);
@@ -299,8 +303,10 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	$isgroup = $_G['forum']['status'] == 3 ? 1 : 0;
 	$posttableid = getposttableid('p');
 
-	DB::query("INSERT INTO ".DB::table('forum_thread')." (fid, posttableid, readperm, price, typeid, sortid, author, authorid, subject, dateline, lastpost, lastposter, displayorder, digest, special, attachment, moderated, status, isgroup)
-		VALUES ('$_G[fid]', '$posttableid', '$readperm', '$price', '$typeid', '$sortid', '$author', '$_G[uid]', '$subject', '$_G[timestamp]', '$_G[timestamp]', '$author', '$displayorder', '$digest', '$special', '0', '$moderated', '$thread[status]', '$isgroup')");
+//	DB::query("INSERT INTO ".DB::table('forum_thread')." (fid, posttableid, readperm, price, typeid, sortid, author, authorid, subject, dateline, lastpost, lastposter, displayorder, digest, special, attachment, moderated, status, isgroup)
+//		VALUES ('$_G[fid]', '$posttableid', '$readperm', '$price', '$typeid', '$sortid', '$author', '$_G[uid]', '$subject', '$_G[timestamp]', '$_G[timestamp]', '$author', '$displayorder', '$digest', '$special', '0', '$moderated', '$thread[status]', '$isgroup')");
+	DB::query("INSERT INTO ".DB::table('forum_thread')." (fid, posttableid, readperm, price, typeid, sortid, author, authorid, subject, dateline, lastpost, lastposter, displayorder, digest, special, attachment, moderated, status, isgroup, specialextra)
+		VALUES ('$_G[fid]', '$posttableid', '$readperm', '$price', '$typeid', '$sortid', '$author', '$_G[uid]', '$subject', '$_G[timestamp]', '$_G[timestamp]', '$author', '$displayorder', '$digest', '$special', '0', '$moderated', '$thread[status]', '$isgroup', '$specialextra')");
 	$tid = DB::insert_id();
 
 
@@ -343,6 +349,12 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			VALUES ('$tid', '$_G[uid]', '$_G[timestamp]', '$endtime', '0', '0', '0', '0', '$_G[gp_umpire]', '', '', '$affirmpoint', '$negapoint', '')");
 
 	} elseif($special == 127) {
+
+		// bluelovers
+		// 因插件產生的特殊主題
+		DB::query("INSERT INTO ".DB::table('forum_thread_specialextra')." (tid, fid, specialextra)
+			VALUES ('$tid', '$_G[fid]', '$specialextra')");
+		// bluelovers
 
 		$message .= chr(0).chr(0).chr(0).$specialextra;
 

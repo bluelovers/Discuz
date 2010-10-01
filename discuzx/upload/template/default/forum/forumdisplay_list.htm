@@ -214,6 +214,17 @@
 			<!--{if $showreward}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang thread_reward}</a></li><!--{/if}-->
 			<!--{if $showactivity}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=activity$forumdisplayadd[specialtype]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang thread_activity}</a></li><!--{/if}-->
 			<!--{if $showdebate}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=debate$forumdisplayadd[specialtype]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang thread_debate}</a></li><!--{/if}-->
+
+			<!--{if $_G['setting']['threadplugins']}-->
+				<!-- 插件的特殊主題 -->
+				<li><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&filter=specialtype&amp;specialtype=specialextra$forumdisplayadd[specialtype]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang thread_specialextra}</a></li>
+
+				<!--{loop $_G['forum']['threadplugin'] $tpid}-->
+					<!--{if array_key_exists($tpid, $_G['setting']['threadplugins']) && @in_array($tpid, $_G['group']['allowthreadplugin'])}-->
+						<li class=" "{if $_G['setting']['threadplugins'][$tpid][icon]} style="background-image:url($_G[setting][threadplugins][$tpid][icon])"{/if}><a href="forum.php?mod=forumdisplay&amp;fid=$_G[fid]&filter=specialextra&amp;specialextra=$tpid$forumdisplayadd[specialtype]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{$_G[setting][threadplugins][$tpid][name]}</a></li>
+					<!--{/if}-->
+				<!--{/loop}-->
+		<!--{/if}-->
 		</ul>
 	</div>
 	<div id="filter_dateline_menu" class="p_pop" style="display:none">

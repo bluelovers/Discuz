@@ -35,11 +35,11 @@ function deletemember($uids, $other = 1) {
 		deletepost("authorid IN ($uids)", true, false);
 	}
 
-	//note §R°£ªÅ¶¡«H®§
+	//note åˆªé™¤ç©ºé–“ä¿¡æ¯
 	//feed
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid IN ($uids) OR (id IN ($uids) AND idtype='uid')", 'UNBUFFERED');
 
-	//note °O¿ı
+	//note è¨˜éŒ„
 	$doids = array();
 	$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE uid IN ($uids)");
 	while ($value = DB::fetch($query)) {
@@ -48,67 +48,67 @@ function deletemember($uids, $other = 1) {
 
 	DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note §R°£°O¿ı¦^´_
+	//note åˆªé™¤è¨˜éŒ„å›å¾©
 	$delsql = !empty($doids) ? "doid IN (".dimplode($doids).") OR " : "";
 	DB::query("DELETE FROM ".DB::table('home_docomment')." WHERE $delsql uid IN ($uids)", 'UNBUFFERED');
 
-	//note ¤À¨É
+	//note åˆ†äº«
 	DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note ¬Û¥U¼Æ¾Ú
+	//note ç›¸å†Šæ•¸æ“š
 	DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note §R°£¿n¤À°O¿ı
+	//note åˆªé™¤ç©åˆ†è¨˜éŒ„
 	DB::query("DELETE FROM ".DB::table('common_credit_rule_log')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('common_credit_rule_log_field')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note §R°£³qª¾
+	//note åˆªé™¤é€šçŸ¥
 	DB::query("DELETE FROM ".DB::table('home_notification')." WHERE (uid IN ($uids) OR authorid IN ($uids))", 'UNBUFFERED');
 
-	//note §R°£¥´©Û©I
+	//note åˆªé™¤æ‰“æ‹›å‘¼
 	DB::query("DELETE FROM ".DB::table('home_poke')." WHERE (uid IN ($uids) OR fromuid IN ($uids))", 'UNBUFFERED');
 
-	//note §R°£¹Ï¤ùªş¥ó
+	//note åˆªé™¤åœ–ç‰‡é™„ä»¶
 	$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid IN ($uids)");
 	while ($value = DB::fetch($query)) {
 		deletepicfiles($value);
 	}
 
-	//note ¼Æ¾Ú
+	//note æ•¸æ“š
 	DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
 	//note blog
-	//note ¼Æ¾Ú§R°£
+	//note æ•¸æ“šåˆªé™¤
 	DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note µû½×
+	//note è©•è«–
 	DB::query("DELETE FROM ".DB::table('home_comment')." WHERE (uid IN ($uids) OR authorid IN ($uids) OR (id IN ($uids) AND idtype='uid'))", 'UNBUFFERED');
 
-	//note ³X«È
+	//note è¨ªå®¢
 	DB::query("DELETE FROM ".DB::table('home_visitor')." WHERE (uid IN ($uids) OR vuid IN ($uids))", 'UNBUFFERED');
 
 	//note class
 	DB::query("DELETE FROM ".DB::table('home_class')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note ¦n¤Í
+	//note å¥½å‹
 	DB::query("DELETE FROM ".DB::table('home_friend')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 
-	//note §R°£¸}¦L
+	//note åˆªé™¤è…³å°
 	DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//§R°£ÁÜ½Ğ°O¿ı
+	//åˆªé™¤é‚€è«‹è¨˜éŒ„
 	DB::query("DELETE FROM ".DB::table('common_invite')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 
-	//note §R°£¶l¥ó¶¤¦C
+	//note åˆªé™¤éƒµä»¶éšŠåˆ—
 	DB::query("DELETE FROM ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." USING ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." WHERE ".DB::table('common_mailcron').".touid IN ($uids) AND ".DB::table('common_mailcron').".cid=".DB::table('common_mailqueue').".cid", 'UNBUFFERED');
 
-	//note º©¹CÁÜ½Ğ
+	//note æ¼«éŠé‚€è«‹
 	DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE (touid IN ($uids) OR fromuid IN ($uids))", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_userapp')." WHERE uid IN ($uids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_userappfield')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
-	//note ±Æ¦æº]
+	//note æ’è¡Œæ¦œ
 	DB::query("DELETE FROM ".DB::table('home_show')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
 	//note Manyou Log
@@ -123,6 +123,9 @@ function deletemember($uids, $other = 1) {
 	return $numdeleted;
 }
 
+/**
+ * åˆªé™¤è¨è«–
+ **/
 function deletepost($condition, $unbuffered = true, $deleteattach = true) {
 	global $_G;
 	loadcache('posttableids');
@@ -149,12 +152,21 @@ function deletepost($condition, $unbuffered = true, $deleteattach = true) {
 	return $num;
 }
 
+/**
+ * åˆªé™¤è©±é¡Œ
+ **/
 function deletethread($condition, $unbuffered = true) {
 	$deletedthreads = 0;
 	deleteattach($condition, $unbuffered);
 	foreach(array(
 		'forum_thread', 'forum_polloption', 'forum_poll', 'forum_trade', 'forum_activity', 'forum_activityapply',
 		'forum_debate', 'forum_debatepost', 'forum_threadmod', 'forum_relatedthread',
+
+		// bluelovers
+		// å› æ’ä»¶ç”¢ç”Ÿçš„ç‰¹æ®Šä¸»é¡Œ
+		'forum_thread_specialextra',
+		// bluelovers
+
 		'forum_typeoptionvar', 'forum_postposition', 'forum_poststick', 'forum_pollvoter') as $table) {
 		DB::delete($table, $condition, 0, $unbuffered);
 		if($table == 'forum_thread') {
@@ -187,6 +199,9 @@ function deleteattach($condition, $unbuffered = true) {
 	DB::delete('forum_attachmentfield', $condition.' AND pid>0', 0, $unbuffered);
 }
 
+/**
+ * åˆªé™¤è©•è«–
+ **/
 function deletecomments($cids) {
 	global $_G;
 
@@ -209,14 +224,17 @@ function deletecomments($cids) {
 
 	if(empty($dels)) return array();
 
+	// æ•¸æ“šåˆªé™¤
 	DB::query("DELETE FROM ".DB::table('home_comment')." WHERE cid IN (".dimplode($newcids).")");
 
 	if($counts) {
+		// æ‰£é™¤ç©åˆ†
 		foreach ($counts as $uid => $setarr) {
 			batchupdatecredit('comment', $uid, array(), $setarr['coef']);
 		}
 	}
 	if($blognums) {
+		// çµ±è¨ˆæ•¸æ“š
 		$nums = renum($blognums);
 		foreach ($nums[0] as $num) {
 			DB::query("UPDATE ".DB::table('home_blog')." SET replynum=replynum-$num WHERE blogid IN (".dimplode($nums[1][$num]).")");
@@ -226,6 +244,9 @@ function deletecomments($cids) {
 }
 
 
+/**
+ * åˆªé™¤åšå®¢
+ **/
 function deleteblogs($blogids) {
 	global $_G;
 
@@ -261,6 +282,9 @@ function deleteblogs($blogids) {
 	return $blogs;
 }
 
+/**
+ * åˆªé™¤äº‹ä»¶
+ **/
 function deletefeeds($feedids) {
 	global $_G;
 
@@ -270,6 +294,7 @@ function deletefeeds($feedids) {
 	$query = DB::query("SELECT * FROM ".DB::table('home_feed')." WHERE feedid IN (".dimplode($feedids).")");
 	while ($value = DB::fetch($query)) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
+			// ç®¡ç†å“¡/ä½œè€…
 			$newfeedids[] = $value['feedid'];
 			$feeds[] = $value;
 		}
@@ -282,7 +307,9 @@ function deletefeeds($feedids) {
 	return $feeds;
 }
 
-
+/**
+ * åˆªé™¤åˆ†äº«
+ **/
 function deleteshares($sids) {
 	global $_G;
 
@@ -316,7 +343,9 @@ function deleteshares($sids) {
 	return $shares;
 }
 
-
+/**
+ * åˆªé™¤è¨˜éŒ„
+ **/
 function deletedoings($ids) {
 	global $_G;
 
@@ -351,6 +380,9 @@ function deletedoings($ids) {
 	return $doings;
 }
 
+/**
+ * åˆªé™¤ç©ºé–“
+ **/
 function deletespace($uid) {
 	global $_G;
 
@@ -365,6 +397,9 @@ function deletespace($uid) {
 	}
 }
 
+/**
+ * åˆªé™¤åœ–ç‰‡
+ **/
 function deletepics($picids) {
 	global $_G;
 
@@ -409,6 +444,9 @@ function deletepics($picids) {
 	return $pics;
 }
 
+/**
+ * åˆªé™¤åœ–ç‰‡æ–‡ä»¶
+ **/
 function deletepicfiles($pics) {
 	global $_G;
 	$remotes = array();
@@ -418,6 +456,9 @@ function deletepicfiles($pics) {
 	}
 }
 
+/**
+ * åˆªé™¤ç›¸å†Š
+ **/
 function deletealbums($albumids) {
 	global $_G;
 
@@ -462,6 +503,9 @@ function deletealbums($albumids) {
 	return $dels;
 }
 
+/**
+ * åˆªé™¤æŠ•ç¥¨
+ **/
 function deletepolls($pids) {
 	global $_G;
 
