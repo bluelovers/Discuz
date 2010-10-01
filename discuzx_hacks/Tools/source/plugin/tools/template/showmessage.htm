@@ -1,0 +1,50 @@
+<!--{if !$_G['inajax']}-->
+	{template tools:header}
+	<div id="pt" class="wp"><a href="forum.php" class="nvhm">$_G['setting']['bbname']</a> &rsaquo; {lang board_message}</div>
+	<div id="ct" class="wp cl w">
+		<div class="ch">
+			<label class="wx">Tools</label>
+		</div>
+		<div class="nfl">
+<!--{else}-->
+	{template common/header_ajax}
+<!--{/if}-->
+<!--{if $param[msgtype] == 1 || $param[msgtype] == 2 && !$_G[inajax]}-->
+		<div class="f_c altw">
+			<div class="$alerttype">
+				<p>$show_message</p>
+				<!--{if $url_forward}-->
+					<!--{if !$param[redirectmsg]}-->
+						<p class="alert_btnleft"><a href="$url_forward">{lang message_forward}</a></p>
+					<!--{else}-->
+						<p class="alert_btnleft"><a href="$url_forward">{lang attach_forward}</a></p>
+					<!--{/if}-->
+				<!--{elseif $allowreturn}-->
+					<p class="alert_btnleft"><a href="javascript:history.back()">{lang message_go_back}</a></p>
+				<!--{/if}-->
+				<!--{if $param[login]}-->
+					<p class="alert_btnleft"><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)">{lang login}</a></p>
+				<!--{/if}-->
+			</div>
+		</div>
+<!--{elseif $param[msgtype] == 2}-->
+		<h3 class="flb"><em>{lang board_message}</em>{if $_G[inajax]}<span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']');" title="{lang close}">{lang close}</a></span>{/if}</h3>
+		<div class="c altw">
+			<div class="$alerttype">$show_message</div>
+		</div>
+		<!--{if $param[login]}-->
+			<p class="o pns">
+				<button type="button" class="pn pnc" onclick="hideWindow('$_G['gp_handlekey']');showWindow('login', 'member.php?mod=logging&action=login');"><strong>{lang confirms}</strong></button>
+				<button type="button" class="pn" onclick="hideWindow('$_G['gp_handlekey']');"><em>{lang cancel}</em></button>
+			</p>
+		<!--{else}-->
+			<p class="o pns"><button type="button" class="pn pnc" onclick="hideWindow('$_G['gp_handlekey']');"><strong>{lang close}</strong></button></p>
+		<!--{/if}-->
+<!--{else}-->$show_message<!--{/if}-->
+<!--{if !$_G['inajax']}-->
+		</div>
+	</div>
+	{template tools:footer}
+<!--{else}-->
+	{template common/footer_ajax}
+<!--{/if}-->

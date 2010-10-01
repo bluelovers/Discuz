@@ -1,0 +1,22 @@
+<div id="toolsh">
+	<div class="bm">
+		$des
+	</div>
+	<div class="bm">
+	<form action="$_G['basescript'].php?action=$action" method="post">
+		<table class="tdat">
+			<tbody>
+				<tr class='alt h'><th>{$tools_baktiem}</th><th>{$tools_version}</th><th>{$tools_time}</th><th>{$tools_type}</th><th>{$tools_total}</th><th>{$tools_import}</th></tr>
+                		<!--{loop $exportlog $value}-->
+				<tr><td>$value[filename]</td><td>$value[version]</td><td>$value[dateline]</td><td>$value[method]</td><td>$value[volume]</td><td><a href="$_G['basescript'].php?action=$action&detail=$value[filename]"><font color='blue'>{$tools_open}</font></a></td></tr>
+                		<!--{/loop}-->
+                		<!--{if count($detailarray)>0}-->
+                		<!--{loop $detailarray $value}-->
+                		<tr><td colspan="5">$value</td><td><a href="$_G['basescript'].php?action=$action&importbak={$value}-1.sql"><font color='blue'>{$tools_import}</font></a></td></tr>
+                		<!--{/loop}-->
+                		<!--{/if}-->
+			</tbody>
+		</table>
+	</form>
+	</div>
+</div>
