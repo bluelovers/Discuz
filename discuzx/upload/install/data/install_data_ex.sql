@@ -166,7 +166,7 @@ UPDATE `pre_common_member_profile_setting` SET `invisible` = '0' WHERE `fieldid`
 UPDATE `pre_common_member_profile_setting` SET `allowsearch` = '1' WHERE `fieldid` IN ('bloodtype', 'constellation', 'zodiac', 'nickname', 'nationality', 'affectivestatus', 'lookingfor', 'site', 'bio', 'interest', 'gender', 'customstatus',
 	'nationality',
 	'birthprovince', 'birthcity', 'birthdist', 'birthcommunity',
-	'resideprovince', 'residecity', 'residedist', 'residecommunity'
+	'resideprovince', 'residecity', 'residedist', 'residecommunity', 'realname', 'nickname'
 );
 UPDATE `pre_common_member_profile_setting` SET `showincard` = '1' WHERE `fieldid` IN ('constellation', 'nickname', 'customstatus');
 
