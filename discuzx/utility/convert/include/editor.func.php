@@ -100,7 +100,13 @@ function getoptionvalue($option, $text) {
 	return isset($matches[3]) ? trim($matches[3]) : '';
 }
 
-function html2bbcode($text) {
+function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
+
+	// bluelovers
+	$strip && $text = stripslashes($text);
+	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+	// bluelovers
+
 	$text = strip_tags($text, '<table><tr><td><b><strong><i><em><u><a><div><span><p><strike><blockquote><ol><ul><li><font><img><br><br/><h1><h2><h3><h4><h5><h6><script>');
 
 	if(ismozilla()) {
@@ -165,15 +171,28 @@ function html2bbcode($text) {
 	$text = recursion('span', $text, 'spantag');
 	$text = recursion('p', $text, 'ptag');
 
+	// bluelovers
+	$text = recursion('s', $text, 'simpletag', 's');
+	// bluelvoers
+
 	$pregfind = array("/(?<!\r|\n|^)\[(\/list|list|\*)\]/", "/<li>(.*)((?=<li>)|<\/li>)/iU", "/<p.*>/iU", "/<p><\/p>/i", "/(<a>|<\/a>|<\/li>)/is", "/<\/?(A|LI|FONT|DIV|SPAN)>/siU", "/\[url[^\]]*\]\[\/url\]/i", "/\[url=javascript:[^\]]*\](.+?)\[\/url\]/is");
 	$pregreplace = array("\n[\\1]", "\\1\n", "\n", '', '', '', '', "\\1");
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
-	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
-	$strreplace = array(' ', '<', '>', '&');
-	$text = str_replace($strfind, $strreplace, $text);
+//	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
+//	$strreplace = array(' ', '<', '>', '&');
+//	$text = str_replace($strfind, $strreplace, $text);
 
-	return htmlspecialchars(trim($text));
+//	return htmlspecialchars(trim($text));
+
+	// bluelovers
+	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+
+//	$text = dhtmlspecialchars(trim($text));
+	$text = dhtmlspecialchars(trim($text), null, $htmlspecialchars_decode, ENT_QUOTES);
+	$strip && $text = addslashes($text);
+	return $text;
+	// bluelovers
 }
 
 function imgtag($attributes) {

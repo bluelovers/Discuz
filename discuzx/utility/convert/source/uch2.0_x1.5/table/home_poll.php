@@ -59,8 +59,8 @@ while($value = $db_source->fetch_array($pollquery)) {
 	$optionuser = array();
 	$postnum = 1;
 	$nextid = $value['pid'];
-	$value['summary'] = !empty($value['summary']) ? html2bbcode($value['summary']) : '';
-	$value['message'] = html2bbcode($value['message']);
+	$value['summary'] = !empty($value['summary']) ? html2bbcode($value['summary'], 0, 1) : '';
+	$value['message'] = html2bbcode($value['message'], 0, 1);
 	$pollpreview = $value['option'] = unserialize($value['option']);
 	$value = daddslashes($value);
 	$threadarr = array(
@@ -168,7 +168,7 @@ while($value = $db_source->fetch_array($pollquery)) {
 	$lastpost = array();
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('comment')." WHERE id='$value[pid]' AND idtype='pid' ORDER BY dateline");
 	while($comment = $db_source->fetch_array($query)) {
-		$comment['message'] = html2bbcode($comment['message']);
+		$comment['message'] = html2bbcode($comment['message'], 0, 1);
 		$comment = daddslashes($comment);
 		$postarr = array(
 			'fid' => $fid,

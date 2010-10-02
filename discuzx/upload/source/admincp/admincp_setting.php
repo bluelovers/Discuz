@@ -1752,15 +1752,19 @@ EOT;
 	}
 
 	if(isset($settingnew['censoruser'])) {
-		$settingnew['censoruser'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['censoruser']));
+//		$settingnew['censoruser'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['censoruser']));
+		$settingnew['censoruser'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\n", $settingnew['censoruser']));
 	}
 
 	if(isset($settingnew['ipregctrl'])) {
-		$settingnew['ipregctrl'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['ipregctrl']));
+//		$settingnew['ipregctrl'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['ipregctrl']));
+		$settingnew['ipregctrl'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\n", $settingnew['ipregctrl']));
 	}
 
 	if(isset($settingnew['ipaccess'])) {
-		if($settingnew['ipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['ipaccess']))) {
+//		if($settingnew['ipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['ipaccess']))) {
+//		}
+		if($settingnew['ipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['ipaccess']))) {
 			if(!ipaccess($_G['clientip'], $settingnew['ipaccess'])) {
 				cpmsg('setting_ipaccess_invalid', '', 'error');
 			}
@@ -1777,7 +1781,9 @@ EOT;
 	}
 
 	if(isset($settingnew['adminipaccess'])) {
-		if($settingnew['adminipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['adminipaccess']))) {
+//		if($settingnew['adminipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['adminipaccess']))) {
+//		}
+		if($settingnew['adminipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['adminipaccess']))) {
 			if(!ipaccess($_G['clientip'], $settingnew['adminipaccess'])) {
 				cpmsg('setting_adminipaccess_invalid', '', 'error');
 			}
@@ -2056,7 +2062,8 @@ EOT;
 					$periodarray[] = $period;
 				}
 			}
-			$settingnew[$periods] = implode("\r\n", $periodarray);
+//			$settingnew[$periods] = implode("\r\n", $periodarray);
+			$settingnew[$periods] = implode("\n", $periodarray);
 		}
 	}
 
@@ -2133,7 +2140,8 @@ EOT;
 	}
 
 	if(isset($settingnew['jsrefdomains'])) {
-		$settingnew['jsrefdomains'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['jsrefdomains']));
+//		$settingnew['jsrefdomains'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['jsrefdomains']));
+		$settingnew['jsrefdomains'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['jsrefdomains']));
 	}
 
 	if(isset($settingnew['jsdateformat'])) {
@@ -2280,7 +2288,8 @@ EOT;
 	}
 
 	if(isset($settingnew['domainwhitelist'])) {
-		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['domainwhitelist']));
+//		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['domainwhitelist']));
+		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['domainwhitelist']));
 	}
 
 	if(isset($settingnew['shownewuser']) && !$settingnew['shownewuser']) {
@@ -2381,7 +2390,8 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		$s .= "\r\n".$replace;
+//		$s .= "\r\n".$replace;
+		$s .= "\n".$replace;
 	}
 	return $s;
 }

@@ -15,7 +15,8 @@ function build_cache_domainwhitelist() {
 	$query = DB::query("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='domainwhitelist'");
 
 	if($result = DB::result($query, 0)) {
-		$data = explode("\r\n", $result);
+//		$data = explode("\r\n", $result);
+		$data = preg_split('/\r\n|\n/', $result);
 	} else {
 		$data = array();
 	}

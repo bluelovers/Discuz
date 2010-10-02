@@ -15,13 +15,16 @@ function xml2array(&$xml, $isnormal = FALSE) {
 }
 
 function array2xml($arr, $htmlon = TRUE, $isnormal = FALSE, $level = 1) {
-	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
+//	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
+	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<root>\n" : '';
 	$space = str_repeat("\t", $level);
 	foreach($arr as $k => $v) {
 		if(!is_array($v)) {
-			$s .= $space."<item id=\"$k\">".($htmlon ? '<![CDATA[' : '').$v.($htmlon ? ']]>' : '')."</item>\r\n";
+//			$s .= $space."<item id=\"$k\">".($htmlon ? '<![CDATA[' : '').$v.($htmlon ? ']]>' : '')."</item>\r\n";
+			$s .= $space."<item id=\"$k\">".($htmlon ? '<![CDATA[' : '').$v.($htmlon ? ']]>' : '')."</item>\n";
 		} else {
-			$s .= $space."<item id=\"$k\">\r\n".array2xml($v, $htmlon, $isnormal, $level + 1).$space."</item>\r\n";
+//			$s .= $space."<item id=\"$k\">\r\n".array2xml($v, $htmlon, $isnormal, $level + 1).$space."</item>\r\n";
+			$s .= $space."<item id=\"$k\">\n".array2xml($v, $htmlon, $isnormal, $level + 1).$space."</item>\n";
 		}
 	}
 	$s = preg_replace("/([\x01-\x08\x0b-\x0c\x0e-\x1f])+/", ' ', $s);

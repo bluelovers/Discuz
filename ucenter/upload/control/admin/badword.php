@@ -87,7 +87,8 @@ class control extends adminbase {
 		$s = '';
 		if($data) {
 			foreach($data as $v) {
-				$s .= $v['find'].'='.$v['replacement']."\r\n";
+//				$s .= $v['find'].'='.$v['replacement']."\r\n";
+				$s .= $v['find'].'='.$v['replacement']."\n";
 			}
 		}
 		@header('Content-Disposition: inline; filename=CensorWords.txt');

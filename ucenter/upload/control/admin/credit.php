@@ -151,9 +151,16 @@ class control extends adminbase {
 
 				if($data) {
 					$_CACHE['credits'][$appid] = $data;
+					/*
 					$s = "<?php\r\n";
 					$s .= '$_CACHE[\'credits\'] = '.var_export($_CACHE['credits'], TRUE).";\r\n";
 					$s .= "\r\n?>";
+					*/
+
+					$s = "<?php\n";
+					$s .= '$_CACHE[\'credits\'] = '.var_export($_CACHE['credits'], TRUE).";\n";
+					$s .= "\n?>";
+
 					$fp = @fopen(UC_DATADIR.'cache/credits.php', 'w');
 					@fwrite($fp, $s);
 					@fclose($fp);

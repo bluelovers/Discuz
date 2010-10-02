@@ -117,10 +117,20 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			'[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]', '[s]', '[/s]', '[hr]', '[/p]',
 			'[i=s]', '[i]', '[/i]', '[u]', '[/u]', '[list]', '[list=1]', '[list=a]',
 			'[list=A]', "\r\n[*]", '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
+
+			// bluelovers
+			, "\n[*]",
+			// bluelovers
+
 			), array(
 			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>', '<strike>', '</strike>', '<hr class="l" />', '</p>', '<i class="pstatus">', '<i>',
 			'</i>', '<u>', '</u>', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
 			'<ul type="A" class="litype_3">', '<li>', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
+
+			// bluelovers
+			, "<li>",
+			// bluelovers
+
 			), preg_replace(array(
 			"/\[color=([#\w]+?)\]/i",
 			"/\[color=(rgb\([\d\s,]+?\))\]/i",
@@ -405,8 +415,10 @@ function jammer() {
 	for($i = 0; $i < mt_rand(5, 15); $i++) {
 		$randomstr .= chr(mt_rand(32, 59)).' '.chr(mt_rand(63, 126));
 	}
-	return mt_rand(0, 1) ? '<font style="font-size:10px;color:'.WRAPBG.'">'.$randomstr.'</font>'."\r\n" :
-		"\r\n".'<span style="display:none">'.$randomstr.'</span>';
+//	return mt_rand(0, 1) ? '<font style="font-size:10px;color:'.WRAPBG.'">'.$randomstr.'</font>'."\r\n" :
+//		"\r\n".'<span style="display:none">'.$randomstr.'</span>';
+	return mt_rand(0, 1) ? '<font style="font-size:10px;color:'.WRAPBG.'">'.$randomstr.'</font>'."\n" :
+		"\n".'<span style="display:none">'.$randomstr.'</span>';
 }
 
 function highlight($text, $words, $prepend) {

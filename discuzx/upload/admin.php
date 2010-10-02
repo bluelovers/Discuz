@@ -28,7 +28,6 @@ $admincp = new discuz_admincp();
 $admincp->core  = & $discuz;
 $admincp->init();
 
-
 $admincp_actions_founder = array('templates', 'db', 'founder', 'postsplit', 'threadsplit');
 $admincp_actions_normal = array('index', 'setting', 'members', 'profilefields', 'admingroup', 'usergroups',
 	'forums', 'threadtypes', 'threads', 'moderate', 'attach', 'smilies', 'recyclebin', 'prune',

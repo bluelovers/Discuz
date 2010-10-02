@@ -79,8 +79,12 @@ class usermodel {
 		$setting = $this->base->get_setting(array('accessemail', 'censoremail'));
 		$accessemail = $setting['accessemail'];
 		$censoremail = $setting['censoremail'];
-		$accessexp = '/('.str_replace("\r\n", '|', preg_quote(trim($accessemail), '/')).')$/i';
-		$censorexp = '/('.str_replace("\r\n", '|', preg_quote(trim($censoremail), '/')).')$/i';
+//		$accessexp = '/('.str_replace("\r\n", '|', preg_quote(trim($accessemail), '/')).')$/i';
+//		$censorexp = '/('.str_replace("\r\n", '|', preg_quote(trim($censoremail), '/')).')$/i';
+
+		$accessexp = '/('.str_replace(array("\r\n", "\n"), '|', preg_quote(trim($accessemail), '/')).')$/i';
+		$censorexp = '/('.str_replace(array("\r\n", "\n"), '|', preg_quote(trim($censoremail), '/')).')$/i';
+
 		if($accessemail || $censoremail) {
 			if(($accessemail && !preg_match($accessexp, $email)) || ($censoremail && preg_match($censorexp, $email))) {
 				return FALSE;

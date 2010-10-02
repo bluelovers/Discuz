@@ -49,7 +49,8 @@ $lang = array
 	'feed_profile_update_contact' => '{actor} 更新了自己的聯繫方式',
 	'feed_profile_update_edu' => '{actor} 更新了自己的教育情況',
 	'feed_profile_update_work' => '{actor} 更新了自己的工作信息',
-	'feed_profile_update_info' => '{actor} 更新了自己的個人信息',
+//	'feed_profile_update_info' => '{actor} 更新了自己的個人信息',
+	'feed_profile_update_info' => '{actor} 更新了自己的興趣愛好等個人信息',
 	'feed_profile_update_bbs' => '{actor} 更新了自己的廣場信息',
 	'feed_profile_update_verify' => '{actor} 更新了自己的認證信息',
 

@@ -186,7 +186,8 @@ if($method == 'show_license') {
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script>'."\r\n";
+//			echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script>'."\r\n";
+			echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script>'."\n";
 			show_footer();
 		}
 

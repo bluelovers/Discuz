@@ -344,6 +344,11 @@ if(ISFRAME && !parent.document.getElementById('leftmenu')) {
 <div class="container" id="cpcontainer">
 EOT;
 
+// bluelovers
+// 用於修正語法凸顯
+/* ?><? */
+// bluelovers
+
 	if(empty($_G['inajax'])) {
 		register_shutdown_function('cpfooter');
 	}

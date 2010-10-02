@@ -973,7 +973,10 @@ function save_config_file($filename, $config, $default, $deletevar) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
+	/*
 	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
+	*/
+	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	if(!is_writable($filename) || !($len = file_put_contents($filename, $content))) {
 		file_put_contents(DISCUZ_ROOT.'./data/config_global.php', $content);
 		return 0;
@@ -1021,10 +1024,12 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	foreach ($array as $key => $val) {
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\r\n";
+//			$return .= "\r\n// $newline //\r\n";
+			$return .= "\n// $newline //\n";
 			if($key == 'admincp') {
 				$newline = str_pad(' Founders: $_config[\'admincp\'][\'founder\'] = \'1,2,3\'; ', 70, '-', STR_PAD_BOTH);
-				$return .= "// $newline //\r\n";
+//				$return .= "// $newline //\r\n";
+				$return .= "// $newline //\n";
 			}
 		}
 
@@ -1034,7 +1039,8 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 			$return .= buildarray($val, $level + 1, $pre);
 		} else {
 			$val =  is_string($val) || strlen($val) > 12 || !preg_match("/^\-?[1-9]\d*$/", $val) ? '\''.addcslashes($val, '\'\\').'\'' : $val;
-			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+//			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\n";
 		}
 	}
 	return $return;

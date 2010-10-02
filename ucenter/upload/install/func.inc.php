@@ -503,7 +503,8 @@ function loginit($logfile) {
 
 function showjsmessage($message) {
 	if(VIEW_OFF) return;
-	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\r\n";
+//	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\r\n";
+	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\n";
 	flush();
 	ob_flush();
 }
@@ -552,6 +553,8 @@ function config_edit() {
 	$ucauthkey = generate_key();
 	$ucsiteid = generate_key();
 	$ucmykey = generate_key();
+
+	/*
 	$config = "<?php \r\ndefine('UC_DBHOST', '$dbhost');\r\n";
 	$config .= "define('UC_DBUSER', '$dbuser');\r\n";
 	$config .= "define('UC_DBPW', '$dbpw');\r\n";
@@ -569,6 +572,26 @@ function config_edit() {
 	$config .= "define('UC_MYKEY', '$ucmykey');\r\n";
 	$config .= "define('UC_DEBUG', false);\r\n";
 	$config .= "define('UC_PPP', 20);\r\n";
+	*/
+
+	$config = "<?php \ndefine('UC_DBHOST', '$dbhost');\n";
+	$config .= "define('UC_DBUSER', '$dbuser');\n";
+	$config .= "define('UC_DBPW', '$dbpw');\n";
+	$config .= "define('UC_DBNAME', '$dbname');\n";
+	$config .= "define('UC_DBCHARSET', '".DBCHARSET."');\n";
+	$config .= "define('UC_DBTABLEPRE', '$tablepre');\n";
+	$config .= "define('UC_COOKIEPATH', '/');\n";
+	$config .= "define('UC_COOKIEDOMAIN', '');\n";
+	$config .= "define('UC_DBCONNECT', 0);\n";
+	$config .= "define('UC_CHARSET', '".CHARSET."');\n";
+	$config .= "define('UC_FOUNDERPW', '$ucfounderpw');\n";
+	$config .= "define('UC_FOUNDERSALT', '$ucsalt');\n";
+	$config .= "define('UC_KEY', '$ucauthkey');\n";
+	$config .= "define('UC_SITEID', '$ucsiteid');\n";
+	$config .= "define('UC_MYKEY', '$ucmykey');\n";
+	$config .= "define('UC_DEBUG', false);\n";
+	$config .= "define('UC_PPP', 20);\n";
+
 	$fp = fopen(CONFIG, 'w');
 	fwrite($fp, $config);
 	fclose($fp);
@@ -644,7 +667,8 @@ function show_install() {
 ?>
 <script type="text/javascript">
 function showmessage(message) {
-	document.getElementById('notice').value += message + "\r\n";
+//	document.getElementById('notice').value += message + "\r\n";
+	document.getElementById('notice').value += message + "\n";
 }
 function initinput() {
 	window.location='<?php echo 'index.php?step='.($GLOBALS['step']);?>';
@@ -805,7 +829,8 @@ function insertconfig($s, $find, $replace) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
 		// 插入到最後一行
-		$s .= "\r\n".$replace;
+//		$s .= "\r\n".$replace;
+		$s .= "\n".$replace;
 	}
 	return $s;
 }
@@ -834,27 +859,49 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 	$port = !empty($matches['port']) ? $matches['port'] : 80;
 
 	if($post) {
-		$out = "POST $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		//$out .= "Referer: $boardurl\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= 'Content-Length: '.strlen($post)."\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cache-Control: no-cache\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "POST $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		//$out .= "Referer: $boardurl\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= 'Content-Length: '.strlen($post)."\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cache-Control: no-cache\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "POST $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		//$out .= "Referer: $boardurl\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "Content-Type: application/x-www-form-urlencoded\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= 'Content-Length: '.strlen($post)."\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cache-Control: no-cache\n";
+		$out .= "Cookie: $cookie\n\n";
+
 		$out .= $post;
 	} else {
-		$out = "GET $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		//$out .= "Referer: $boardurl\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "GET $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		//$out .= "Referer: $boardurl\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "GET $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		//$out .= "Referer: $boardurl\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cookie: $cookie\n\n";
 	}
 
 	if(function_exists('fsockopen')) {

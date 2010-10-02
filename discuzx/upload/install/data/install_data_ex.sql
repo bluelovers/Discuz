@@ -2,9 +2,13 @@
 # 增加註解
 ALTER TABLE `pre_forum_threadclass` COMMENT = '主題分類 typeid threadtypes';
 ALTER TABLE `pre_forum_threadtype`  COMMENT = '分類信息 sortid threadsorts';
+ALTER TABLE `pre_home_poke`  COMMENT = '打招呼';
+ALTER TABLE `pre_common_syscache`  COMMENT = '系統緩存';
 
-ALTER TABLE `pre_home_feed` ADD `lang_template` TINYTEXT NOT NULL DEFAULT '' COMMENT '語言模板';
-ALTER TABLE `pre_home_share` ADD `lang_template` TINYTEXT NOT NULL DEFAULT '' COMMENT '語言模板';
+
+ALTER TABLE `pre_home_feed` ADD `lang_template` TEXT NOT NULL DEFAULT '' COMMENT '語言模板';
+ALTER TABLE `pre_home_share` ADD `lang_template` TEXT NOT NULL DEFAULT '' COMMENT '語言模板';
+ALTER TABLE `pre_home_notification` ADD `lang_template` TEXT NOT NULL DEFAULT '' COMMENT '語言模板';
 
 #修改為可推薦多個板塊
 ALTER TABLE `pre_forum_forum` CHANGE `recommend` `recommend` TEXT NOT NULL DEFAULT '' COMMENT '推薦的板塊';
@@ -128,6 +132,8 @@ INDEX ( `uid` )
 ALTER TABLE pre_common_member_profile ADD `nickname` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '暱稱';
 #ALTER TABLE `pre_common_member_profile` ADD `customstatus` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '自定義頭銜';
 
+ALTER TABLE pre_common_member_profile ADD `birthdist` VARCHAR( 20 ) NOT NULL DEFAULT '' COMMENT '出生行政區/縣';
+ALTER TABLE pre_common_member_profile ADD `birthcommunity` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '出生小區';
 INSERT INTO pre_common_member_profile_setting VALUES('birthdist', 1, 0, 0, '出生縣', '出生行政區/縣', 0, 0, 0, 0, 0, 0, 0, 'text', 0, '', '');
 INSERT INTO pre_common_member_profile_setting VALUES('birthcommunity', 1, 0, 0, '出生小區', '', 0, 0, 0, 0, 0, 0, 0, 'text', 0, '', '');
 
@@ -163,6 +169,9 @@ UPDATE `pre_common_member_profile_setting` SET `allowsearch` = '1' WHERE `fieldi
 	'resideprovince', 'residecity', 'residedist', 'residecommunity'
 );
 UPDATE `pre_common_member_profile_setting` SET `showincard` = '1' WHERE `fieldid` IN ('constellation', 'nickname', 'customstatus');
+
+UPDATE `pre_common_member_profile_setting` SET `formtype` = 'textarea' WHERE `fieldid` IN ('lookingfor');
+UPDATE `pre_common_member_profile_setting` SET `formtype` = 'select' WHERE `fieldid` IN ('gender');
 
 ALTER TABLE `pre_common_member_profile_setting` ADD `typename` VARCHAR( 20 ) NOT NULL DEFAULT '' COMMENT '資料類別';
 

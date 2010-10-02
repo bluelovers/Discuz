@@ -30,3 +30,11 @@ Disallow: /home-spacecp-*
 Disallow: /userapp-app-*
 Disallow: /*-misc-*
 Disallow: /*-attachment-*
+
+# 如果開啟 rewrite 則將以下的取消註釋
+#Disallow: /redirect.php
+#Disallow: /forumdisplay.php
+#Disallow: /viewthread.php
+#Disallow: /viewthread.php?tid=
+#Disallow: /redirect.php?tid=
+#Disallow: /forumdisplay.php?fid=

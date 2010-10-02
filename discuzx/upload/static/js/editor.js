@@ -635,7 +635,9 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('輸入一個列表項目.\r\n留空或者點擊取消完成此列表.', '')) {
+//			while(listvalue = prompt('輸入一個列表項目.\r\n留空或者點擊取消完成此列表.', '')) {
+//			}
+			while(listvalue = prompt('輸入一個列表項目.\n留空或者點擊取消完成此列表.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -1132,7 +1134,8 @@ function insertText(text, movestart, moveend, select, sel) {
 				sel = editbox.sel;
 				editbox.sel = null;
 			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
+//			sel.text = text.replace(/\r?\n/g, '\r\n');
+			sel.text = text.replace(/\r?\n/g, '\n');
 			if(!isUndefined(movestart)) {
 				sel.moveStart('character', -strlen(text) +movestart);
 				sel.moveEnd('character', -moveend);

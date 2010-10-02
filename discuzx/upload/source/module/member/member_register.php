@@ -70,7 +70,8 @@ if($_G['setting']['regverify']) {
 			$whitearea = preg_quote(trim($_G['setting']['areaverifywhite']), '/');
 			$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
 			$whitearea = '.*'.$whitearea.'.*';
-			$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+//			$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+			$whitearea = '/^('.str_replace(array("\r\n", ' ', "\n"), array('.*|.*', '', '.*|.*'), $whitearea).')$/i';
 			if(@preg_match($whitearea, $location)) {
 				$_G['setting']['regverify'] = 0;
 			}
@@ -202,7 +203,8 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	}
 
-	$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($_G['setting']['censoruser'] = trim($_G['setting']['censoruser'])), '/')).')$/i';
+//	$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($_G['setting']['censoruser'] = trim($_G['setting']['censoruser'])), '/')).')$/i';
+	$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' ', "\n"), array('.*', '|', '', '|'), preg_quote(($_G['setting']['censoruser'] = trim($_G['setting']['censoruser'])), '/')).')$/i';
 
 	if($_G['setting']['censoruser'] && @preg_match($censorexp, $username)) {
 		showmessage('profile_username_protect');

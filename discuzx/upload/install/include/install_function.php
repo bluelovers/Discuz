@@ -532,7 +532,8 @@ function loginit($logfile) {
 
 function showjsmessage($message) {
 	if(VIEW_OFF) return;
-	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\r\n";
+//	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\r\n";
+	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\n";
 	flush();
 	ob_flush();
 }
@@ -589,7 +590,10 @@ function save_config_file($filename, $config, $default) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
+	/*
 	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
+	*/
+	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	file_put_contents($filename, $content);
 }
 
@@ -771,7 +775,8 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		$s .= "\r\n".$replace;
+//		$s .= "\r\n".$replace;
+		$s .= "\n".$replace;
 	}
 	return $s;
 }
@@ -800,25 +805,45 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 	$port = !empty($matches['port']) ? $matches['port'] : 80;
 
 	if($post) {
-		$out = "POST $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= 'Content-Length: '.strlen($post)."\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cache-Control: no-cache\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "POST $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= 'Content-Length: '.strlen($post)."\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cache-Control: no-cache\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "POST $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "Content-Type: application/x-www-form-urlencoded\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= 'Content-Length: '.strlen($post)."\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cache-Control: no-cache\n";
+		$out .= "Cookie: $cookie\n\n";
+
 		$out .= $post;
 	} else {
-		$out = "GET $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "GET $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "GET $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cookie: $cookie\n\n";
 	}
 
 	if(function_exists('fsockopen')) {
@@ -1121,6 +1146,8 @@ function uc_write_config($config, $file, $password) {
 	$ucmykey = _generate_key();
 	$salt = substr(_generate_key(), 0, 6);
 	$pw = md5(md5($password).$salt);
+
+	/*
 	$config = "<?php \r\ndefine('UC_DBHOST', '$ucdbhost');\r\n";
 	$config .= "define('UC_DBUSER', '$ucdbuser');\r\n";
 	$config .= "define('UC_DBPW', '$ucdbpw');\r\n";
@@ -1138,6 +1165,26 @@ function uc_write_config($config, $file, $password) {
 	$config .= "define('UC_MYKEY', '$ucmykey');\r\n";
 	$config .= "define('UC_DEBUG', false);\r\n";
 	$config .= "define('UC_PPP', 20);\r\n";
+	*/
+
+	$config = "<?php \ndefine('UC_DBHOST', '$ucdbhost');\n";
+	$config .= "define('UC_DBUSER', '$ucdbuser');\n";
+	$config .= "define('UC_DBPW', '$ucdbpw');\n";
+	$config .= "define('UC_DBNAME', '$ucdbname');\n";
+	$config .= "define('UC_DBCHARSET', '$ucdbcharset');\n";
+	$config .= "define('UC_DBTABLEPRE', '$uctablepre');\n";
+	$config .= "define('UC_COOKIEPATH', '/');\n";
+	$config .= "define('UC_COOKIEDOMAIN', '');\n";
+	$config .= "define('UC_DBCONNECT', 0);\n";
+	$config .= "define('UC_CHARSET', '".$uccharset."');\n";
+	$config .= "define('UC_FOUNDERPW', '$pw');\n";
+	$config .= "define('UC_FOUNDERSALT', '$salt');\n";
+	$config .= "define('UC_KEY', '$ucauthkey');\n";
+	$config .= "define('UC_SITEID', '$ucsiteid');\n";
+	$config .= "define('UC_MYKEY', '$ucmykey');\n";
+	$config .= "define('UC_DEBUG', false);\n";
+	$config .= "define('UC_PPP', 20);\n";
+
 	$fp = fopen($file, 'w');
 	fwrite($fp, $config);
 	fclose($fp);
@@ -1254,7 +1301,8 @@ function getvars($data, $type = 'VAR') {
 			continue;
 		}
 		if(is_array($val)) {
-			$evaluate .= buildarray($val, 0, "\${$key}")."\r\n";
+//			$evaluate .= buildarray($val, 0, "\${$key}")."\r\n";
+			$evaluate .= buildarray($val, 0, "\${$key}")."\n";
 		} else {
 			$val = addcslashes($val, '\'\\');
 			$evaluate .= $type == 'VAR' ? "\$$key = '$val';\n" : "define('".strtoupper($key)."', '$val');\n";
@@ -1273,10 +1321,12 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	foreach ($array as $key => $val) {
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\r\n";
+//			$return .= "\r\n// $newline //\r\n";
+			$return .= "\n// $newline //\n";
 			if($key == 'admincp') {
 				$newline = str_pad(' Founders: $_config[\'admincp\'][\'founder\'] = \'1,2,3\'; ', 70, '-', STR_PAD_BOTH);
-				$return .= "// $newline //\r\n";
+//				$return .= "// $newline //\r\n";
+				$return .= "// $newline //\n";
 			}
 		}
 
@@ -1286,7 +1336,8 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 			$return .= buildarray($val, $level + 1, $pre);
 		} else {
 			$val =  is_string($val) || strlen($val) > 12 || !preg_match("/^\-?[1-9]\d*$/", $val) ? '\''.addcslashes($val, '\'\\').'\'' : $val;
-			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+//			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\n";
 		}
 	}
 	return $return;
@@ -1307,7 +1358,8 @@ function upg_comsenz_stats() {
 		$contact = serialize(array('qq' => $qq, 'msn' => $msn, 'email' => $email));
 		$db->query("REPLACE {$tablepre}common_setting (skey, svalue) VALUES ('founder_contact', '$contact')");
 		$is_run = ture;
-		echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script><iframe src="../" style="display:none"></iframe>'."\r\n";
+//		echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script><iframe src="../" style="display:none"></iframe>'."\r\n";
+		echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script><iframe src="../" style="display:none"></iframe>'."\n";
 		show_header();
 		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
 		echo '<li><a href="../">'.lang('install_succeed').'</a><br>';

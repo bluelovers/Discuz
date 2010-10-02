@@ -152,7 +152,8 @@ function insertunit(text, textend, moveend) {
 		if(textend != '') {
 			text = text + sel.text + textend;
 		}
-		sel.text = text.replace(/\r?\n/g, '\r\n');
+//		sel.text = text.replace(/\r?\n/g, '\r\n');
+		sel.text = text.replace(/\r?\n/g, '\n');
 		if(!moveend) {
 			sel.moveStart('character', -endlen);
 			sel.moveEnd('character', -endlen);

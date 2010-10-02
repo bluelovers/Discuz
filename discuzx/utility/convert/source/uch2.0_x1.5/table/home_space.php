@@ -29,7 +29,7 @@ while ($space = $db_source->fetch_array($query)) {
 	// bluelovers
 	// 只匯入已經存在於目標資料庫內的用戶
 	// 適用於以論壇為主的升級轉換
-	if (!$_temp_ = $db_target->fetch_first("SELECT * FROM {$newpre}common_member WHERE uid = '$space[uid]'", 'SILENT')) {
+	if (!($_temp_ = $db_target->fetch_first("SELECT * FROM {$newpre}common_member WHERE uid = '$space[uid]'", 'SILENT'))) {
 		$nextid = $space['uid'];
 		continue;
 	}
@@ -126,6 +126,8 @@ while ($space = $db_source->fetch_array($query)) {
 		$space['spacenote'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $space['spacenote']);
 		$space['spacenote'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $space['spacenote']);
 	}
+
+	$space['name'] = s_trim_nickname($space['name']);
 	// bluelovers
 
 	$setarr = array();
@@ -154,10 +156,15 @@ while ($space = $db_source->fetch_array($query)) {
 	$space['none'] = '';
 
 	$setarr = array();
+//	if(empty($newspace['gender'])) $setarr['gender'] = $space['sex'];
+//	if(empty($newspace['birthyear'])) $setarr['birthyear'] = $space['birthyear'];
+//	if(empty($newspace['birthmonth'])) $setarr['birthmonth'] = $space['birthmonth'];
+//	if(empty($newspace['birthday'])) $setarr['birthday'] = $space['birthday'];
 	if(empty($newspace['gender']) || $space['sex']) $setarr['gender'] = $space['sex'];
 	if(empty($newspace['birthyear']) || $space['birthyear'] > 0) $setarr['birthyear'] = $space['birthyear'];
 	if(empty($newspace['birthmonth']) || $space['birthmonth'] > 0) $setarr['birthmonth'] = $space['birthmonth'];
 	if(empty($newspace['birthday']) || $space['birthday'] > 0) $setarr['birthday'] = $space['birthday'];
+
 	if(empty($newspace['constellation'])) $setarr['constellation'] = $space['none'];
 	if(empty($newspace['zodiac'])) $setarr['zodiac'] = $space['none'];
 	if(empty($newspace['telephone'])) $setarr['telephone'] = $space['none'];
@@ -194,19 +201,18 @@ while ($space = $db_source->fetch_array($query)) {
 	if(empty($newspace['idcardtype'])) $setarr['idcardtype'] = $space['none'];
 	if(empty($newspace['company'])) $setarr['company'] = $space['none'];
 	if(empty($newspace['position'])) $setarr['position'] = $space['none'];
-	if(empty($newspace['realname'])) $setarr['realname'] = $space['name'];
+//	if(empty($newspace['realname'])) $setarr['realname'] = $space['name'];
+	if(empty($newspace['realname']) || !empty($space['name'])) $setarr['realname'] = $space['name'];
 
 	// bluelovers
-	isset($setarr['site']) && $setarr['site'] = s_trim($setarr['site'], "\\/");
-	isset($setarr['bio']) && $setarr['bio'] = s_trim($setarr['bio'], "\\/");
-	isset($setarr['realname']) && $setarr['realname'] = s_trim($setarr['realname'], "\\/");
-
-	if(empty($newspace['nickname'])) $setarr['nickname'] = $setarr['realname'] ? $setarr['realname'] : s_trim($space['name'], "\\/");
+	if(empty($newspace['nickname'])) $setarr['nickname'] = $space['name'];
 	// bluelovers
 
 	if($setarr) {
 		$updatesql = getupdatesql($setarr);
 		$db_target->query("UPDATE {$newpre}common_member_profile SET $updatesql WHERE uid='$space[uid]'");
+
+//		showmessage($updatesql);
 	}
 
 

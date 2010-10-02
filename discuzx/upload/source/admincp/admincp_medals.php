@@ -260,7 +260,8 @@ if(!$operation) {
 			if(textend != '') {
 				text = text + sel.text + textend;
 			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
+//			sel.text = text.replace(/\r?\n/g, '\r\n');
+			sel.text = text.replace(/\r?\n/g, '\n');
 			sel.moveStart('character', -strlen(text));
 		} else {
 			$('formulapermnew').value += text;

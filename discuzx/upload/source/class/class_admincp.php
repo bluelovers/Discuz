@@ -91,6 +91,7 @@ class discuz_admincp
 				$this->cpaccess = $this->isfounder ? 1 : -2;
 
 			} elseif($_G['setting']['adminipaccess'] && !ipaccess($_G['clientip'], $_G['setting']['adminipaccess'])) {
+
 				$this->do_user_login();
 
 			} elseif ($session && empty($session['uid'])) {

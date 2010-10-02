@@ -335,7 +335,8 @@ class pmmodel {
 		return trim($this->base->cutstr(preg_replace(array(
 				"/\[(email|code|quote|img)=?.*\].*?\[\/(email|code|quote|img)\]/siU",
 				"/\[\/?(b|i|url|u|color|size|font|align|list|indent|float)=?.*\]/siU",
-				"/\r\n/",
+//				"/\r\n/",
+				"/\r\n|\n/",
 			), '', $str), $length));
 	}
 

@@ -19,25 +19,45 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 	$port = !empty($matches['port']) ? $matches['port'] : 80;
 
 	if($post) {
-		$out = "POST $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= 'Content-Length: '.strlen($post)."\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cache-Control: no-cache\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "POST $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= 'Content-Length: '.strlen($post)."\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cache-Control: no-cache\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "POST $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "Content-Type: application/x-www-form-urlencoded\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= 'Content-Length: '.strlen($post)."\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cache-Control: no-cache\n";
+		$out .= "Cookie: $cookie\n\n";
+
 		$out .= $post;
 	} else {
-		$out = "GET $path HTTP/1.0\r\n";
-		$out .= "Accept: */*\r\n";
-		$out .= "Accept-Language: zh-cn\r\n";
-		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$out .= "Host: $host\r\n";
-		$out .= "Connection: Close\r\n";
-		$out .= "Cookie: $cookie\r\n\r\n";
+//		$out = "GET $path HTTP/1.0\r\n";
+//		$out .= "Accept: */*\r\n";
+//		$out .= "Accept-Language: zh-cn\r\n";
+//		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+//		$out .= "Host: $host\r\n";
+//		$out .= "Connection: Close\r\n";
+//		$out .= "Cookie: $cookie\r\n\r\n";
+
+		$out = "GET $path HTTP/1.0\n";
+		$out .= "Accept: */*\n";
+		$out .= "Accept-Language: zh-cn\n";
+		$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\n";
+		$out .= "Host: $host\n";
+		$out .= "Connection: Close\n";
+		$out .= "Cookie: $cookie\n\n";
 	}
 
 	if(function_exists('fsockopen')) {

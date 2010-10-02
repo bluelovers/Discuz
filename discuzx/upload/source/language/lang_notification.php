@@ -137,11 +137,23 @@ $lang = array
 
 	'reward_bestanswer' => '你的回復被懸賞主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 的作者 {actor} 選為懸賞最佳答案 &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
-	'comment_add' => '{actor} 點評了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 發表的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
+//	'comment_add' => '{actor} 點評了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 發表的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
+	'comment_add' => '{actor} 點評了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 發表的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>
+<p class="summary">{actor} 說：<span>{commentmsg}</span></p>',
 
 	'repquote_noticeauthor' => '{actor} 引用了你的帖子 <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank">{subject}</a> &nbsp; <a class="lit" href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank">查看</a>',
 
 	'reppost_noticeauthor' => '{actor} 答覆了你的帖子 <a href="forum.php?mod=redirect&goto=findpost&ptid={tid}&pid={pid}" target="_blank">{subject}</a> &nbsp; <a class="lit" href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank">查看</a>',
+
+	// bluelovers
+//	'repquote_noticeauthor' => '{actor} 引用了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}&fchannel=nthread" target="_blank">{subject}</a> 發表的帖子
+//<p class="summary">你的帖子：<span>{noticeauthormsg}</span></p><p class="summary">{actor} 說：<span>{postmsg}</span></p>
+//<p class="mbn"><a href="forum.php?mod=post&action=reply&fid={fid}&tid={tid}&reppost={pid}" target="_blank">回覆</a><span class="pipe">|</span><a class="lit" href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank">查看</a></p>',
+//
+//	'reppost_noticeauthor' => '{actor} 答覆了你曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}&fchannel=nthread" target="_blank">{subject}</a> 發表的帖子
+//<p class="summary">你的帖子：<span>{noticeauthormsg}</span></p><p class="summary">{actor} 說：<span>{postmsg}</span></p>
+//<p class="mbn"><a href="forum.php?mod=post&action=reply&fid={fid}&tid={tid}&reppost={pid}" target="_blank">回覆</a><span class="pipe">|</span><a class="lit" href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank">查看</a></p>',
+	// bluelovers
 
 	'task_reward_credit' => '恭喜你完成任務：<a href="home.php?mod=task&do=view&id={taskid}" target="_blank">{name}</a>，獲得積分 {creditbonus} &nbsp; <a href="home.php?mod=spacecp&ac=credit&op=base" target="_blank" class="lit">查看我的積分 &rsaquo;</a></p>',
 
@@ -157,6 +169,7 @@ $lang = array
 
 	'grouplevel_update' => '恭喜你，你的群組 {groupname} 已經升級到了 {newlevel}。',
 
+	// 邀請用戶參加/查看主題
 	'thread_invite' => '{actor} 邀請你{invitename} <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 	'invite_friend' => '恭喜你成功邀請到 {actor} 並成為你的好友',
 

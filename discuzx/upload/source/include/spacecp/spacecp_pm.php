@@ -248,15 +248,20 @@ if($_GET['op'] == 'checknewpm') {
 		$filename = $touser[1].'.txt';
 	}
 	$contents = lang('space', 'pm_export_header');
-	$contents .= "\r\n\r\n================================================================\r\n";
+//	$contents .= "\r\n\r\n================================================================\r\n";
+	$contents .= "\n\n================================================================\n";
 	if($touser) {
 		$contents .= lang('space', 'pm_export_touser', array('touser' => $touser[1]));
-		$contents .= "\r\n================================================================\r\n";
+//		$contents .= "\r\n================================================================\r\n";
+		$contents .= "\n================================================================\n";
 	}
-	$contents .= "\r\n";
+//	$contents .= "\r\n";
+	$contents .= "\n";
 	foreach($list as $key => $val) {
-		$contents .= $val['msgfrom']."\t".dgmdate($val['dateline'])."\r\n";
-		$contents .= str_replace(array('<br>', '<br />', '&nbsp;'), array("\r\n", "\r\n", ' '), $val['message'])."\r\n\r\n";
+//		$contents .= $val['msgfrom']."\t".dgmdate($val['dateline'])."\r\n";
+//		$contents .= str_replace(array('<br>', '<br />', '&nbsp;'), array("\r\n", "\r\n", ' '), $val['message'])."\r\n\r\n";
+		$contents .= $val['msgfrom']."\t".dgmdate($val['dateline'])."\n";
+		$contents .= str_replace(array('<br>', '<br />', '&nbsp;'), array("\n", "\n", ' '), $val['message'])."\n\n";
 	}
 
 	$filesize = strlen($contents);

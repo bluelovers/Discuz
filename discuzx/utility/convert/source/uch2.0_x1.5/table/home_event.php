@@ -90,7 +90,7 @@ while ($event = $db_source->fetch_array($event_query)) {
 		'special' => 4
 	);
 	$tid = $db_target->insert('forum_thread', daddslashes($threadarr), true);
-	$event['detail'] = html2bbcode($event['detail']);
+	$event['detail'] = html2bbcode($event['detail'], 0, 1);
 	$postarr = array(
 		'fid' => $eventfid,
 		'tid' => $tid,
@@ -133,7 +133,7 @@ while ($event = $db_source->fetch_array($event_query)) {
 		$inserts = array();
 		$query = $db_source->query('SELECT * FROM '.$db_source->table_name('comment')." WHERE id='$event[eventid]' AND idtype='eventid' ORDER BY cid");
 		while($value=$db_source->fetch_array($query)) {
-			$value['message'] = addslashes(html2bbcode($value['message']));
+			$value['message'] = addslashes(html2bbcode($value['message'], 0, 1));
 			$value['author'] = addslashes($value['author']);
 			$inserts[] = "('$fid', '$tid', '$value[author]', '$value[authorid]', '$value[dateline]', '$value[message]')";
 		}

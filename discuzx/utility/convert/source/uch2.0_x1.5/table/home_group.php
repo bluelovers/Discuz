@@ -47,7 +47,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
-		$post['message'] = html2bbcode($post['message']);
+		$post['message'] = html2bbcode($post['message'], 0, 1);
 
 		// bluelovers
 		$post['message'] = s_trim($post['message']);
@@ -164,7 +164,7 @@ function getmtag($start) {
 	$sid = $db_target->insert('forum_forum', $forumarr, true);
 	$forumfieldarr = array(
 			'fid' => $sid,
-			'description' => daddslashes(html2bbcode($mtag['announcement'])),
+			'description' => daddslashes(html2bbcode($mtag['announcement'], 0, 1)),
 			'jointype' => $mtag['joinperm'] ? ($mtag['joinperm'] == 1 ? 2 : 1) : 0,
 			'gviewperm' => $mtag['viewperm'] ? 0 : 1,
 			'dateline' => TIMESTAMP,

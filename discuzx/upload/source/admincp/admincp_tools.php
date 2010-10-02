@@ -145,7 +145,8 @@ function insertunit(text, obj) {
 		$(obj).value = $(obj).value.substr(0, $(obj).selectionStart) + text + $(obj).value.substr($(obj).selectionEnd);
 	} else if(document.selection && document.selection.createRange) {
 		var sel = document.selection.createRange();
-		sel.text = text.replace(/\r?\n/g, '\r\n');
+//		sel.text = text.replace(/\r?\n/g, '\r\n');
+		sel.text = text.replace(/\r?\n/g, '\n');
 		sel.moveStart('character', -strlen(text));
 	} else {
 		$(obj).value += text;
