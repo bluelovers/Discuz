@@ -11,6 +11,10 @@ if(submitcheck()) {
 		'usergroup' => getgpc('targetgroup'),
 		'extcredits' => getgpc('extcredits'),
 		'forum' => getgpc('forum'),
+
+		// bluelovers
+		'domain' => getgpc('domain'),
+		// bluelovers
 	);
 	save_process('home', $home);
 } else {
@@ -168,6 +172,27 @@ if(submitcheck()) {
 		),'bg1'
 	);
 	show_table_footer();
+
+	// bluelovers
+	show_table_header();
+	show_table_row(array(array('colspan="3"', lang('config_convert_domain'))), 'header title');
+	show_table_row(
+		array(
+			lang('config_domain_forum_data'),
+			array('class="bg1" width="10%" align="center"', '->'),
+			array('class="bg2" width="45%"', '<textarea name="domain[forum]" rows="5" style="width: 99%;"></textarea>')
+		),'bg1'
+	);
+	show_table_row(
+		array(
+			lang('config_domain_home_data'),
+			array('class="bg1" width="10%" align="center"', '->'),
+			array('class="bg2" width="45%"', '<textarea name="domain[home]" rows="5" style="width: 99%;"></textarea>')
+		),'bg1'
+	);
+	show_table_footer();
+	// bluelovers
+
 	show_form_footer('submit', 'config_convert');
 	exit();
 }
