@@ -1361,8 +1361,26 @@ EOT;
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
 					$check = 0;
 					foreach($rule as $i => $v) {
-						if($v != $rules[$rid]['extcredits'.$i] || $creditspolicy[$rules[$rid]['action']]['cycletype'] != $rules[$rid]['cycletype'] || $creditspolicy[$rules[$rid]['action']]['rewardnum'] != $rules[$rid]['rewardnum'] || $creditspolicy[$rules[$rid]['action']]['cycletime'] != $rules[$rid]['cycletime']) {
+//						if($v != $rules[$rid]['extcredits'.$i] || $creditspolicy[$rules[$rid]['action']]['cycletype'] != $rules[$rid]['cycletype'] || $creditspolicy[$rules[$rid]['action']]['rewardnum'] != $rules[$rid]['rewardnum'] || $creditspolicy[$rules[$rid]['action']]['cycletime'] != $rules[$rid]['cycletime']) {
+//						}
+
+						/*
+							タ縩だ穝BUG
+							-----------------
+							タ絋縩だ穝砏玥狦赣縩だ砏玥籔办縩だ砏玥
+							玥ぃ穦瞷办縩だ砏玥FIDず
+							办砏玥穝狾遏穦穝
+
+							DX 20101001 玻ネ肩BUG
+							-------------------------
+							ㄏ籔办縩だ砏玥
+							FID Τ玻ネ办砏玥ず
+							办縩だ砏玥穝硑Θぃ穦穝
+						*/
+						if($v != $rules[$rid]['extcredits'.$i]) {
 							$check = 1;
+
+//							dexit($rid.'-'.$check.var_export($rule, true).var_export($rules[$rid], true));
 						}
 						$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = $v;
 					}

@@ -195,14 +195,14 @@
 					<tr>
 						<th>{lang post_promotion_url1}</th>
 						<td class="pns">
-							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuid=$_G[uid]" size="50" /> 
+							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuid=$_G[uid]" size="50" />
 							<button type="submit" class="pn vm" onclick="setCopy('$_G[siteurl]?fromuid=$_G[uid]', '{lang promotion_url_copied}');" type="submit"><em>{lang copy}</em></button>
 						</td>
 					</tr>
 					<tr>
 						<th>{lang post_promotion_url2}</th>
 						<td class="pns">
-							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuser={echo rawurlencode($_G[username])}" size="50" /> 
+							<input type="text" class="px vm" onclick="this.select();setCopy(this.value, '{lang promotion_url_copied}');" value="$_G[siteurl]?fromuser={echo rawurlencode($_G[username])}" size="50" />
 							<button type="submit" class="pn vm" onclick="setCopy('$_G[siteurl]?fromuser={echo rawurlencode($_G[username])}', '{lang promotion_url_copied}');"><em>{lang copy}</em></button>
 						</td>
 					</tr>
@@ -232,6 +232,15 @@
 					<!--{/loop}-->
 				</tr>
 				<!--{loop $list $key $value}-->
+				<!-- 如果積分規則皆為 0 則不顯示 //-->
+				<!--{eval $_stop_ = 1;}-->
+				<!--{loop $_G['setting']['extcredits'] $key $credit}-->
+					<!--{eval $creditkey = 'extcredits'.$key;}-->
+					<!--{if $value[$creditkey] || $_G['gp_fid']}-->
+					<!--{eval $_stop_ = 0; break; }-->
+					<!--{/if}-->
+				<!--{/loop}-->
+				<!--{if !$_stop_}-->
 				<tr>
 					<td class="alt">$value[rulename]</td>
 					<td>$_TPL[cycletype][$value[cycletype]]</td>
@@ -241,6 +250,7 @@
 					<td class="{if $key % 2 == 0}alt{/if}"><!--{if $value[$creditkey] > 0}-->+$value[$creditkey]<!--{elseif $value[$creditkey] < 0}-->$value[$creditkey]<!--{else}-->&nbsp;<!--{/if}--></td>
 					<!--{/loop}-->
 				</tr>
+				<!--{/if}-->
 				<!--{/loop}-->
 			</table>
 		<!--{/if}-->

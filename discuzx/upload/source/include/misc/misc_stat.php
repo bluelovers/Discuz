@@ -32,7 +32,8 @@ $cols['tgroup'] = array('group', 'groupthread', 'grouppost');
 $cols['home'] = array('doing', 'docomment', 'blog', 'blogcomment', 'pic', 'piccomment', 'share', 'sharecomment');
 $cols['space'] = array('wall','poke', 'click');
 
-$type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
+//$type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
+$type = !empty($_GET['types']) ? '' : (empty($_GET['type'])?'all':$_GET['type']);
 
 $primarybegin = !empty($_G['gp_primarybegin']) ? $_G['gp_primarybegin'] : dgmdate($_G['timestamp']-2592000, 'Y-m-d');
 $primaryend = !empty($_G['gp_primaryend']) ? $_G['gp_primaryend'] : dgmdate($_G['timestamp'], 'Y-m-d');
@@ -110,7 +111,16 @@ require_once libfile('function/home');
 $siteurl = getsiteurl();
 $types = '';
 $merge = !empty($_GET['merge']) ? '&merge=1' : '';
-foreach($_GET['types'] as $value) {
+//foreach((array)$_GET['types'] as $value) {
+//}
+
+// bluelovers
+$_G['gp_types'] = is_array($_G['gp_types']) ? $_G['gp_types'] : array();
+
+foreach($_G['gp_types'] as $value) {
+
+// bluelovers
+
 	$types .= '&types[]='.$value;
 	$actives[$value] = ' class="a"';
 }

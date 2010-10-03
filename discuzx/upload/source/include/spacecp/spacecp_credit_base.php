@@ -239,9 +239,22 @@ if($_G['gp_op'] == 'base') {
 	if(!empty($_G['gp_fid'])) {
 		$_G['gp_fid'] = intval($_G['gp_fid']);
 		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
-		foreach($flist as $action => $value) {
-			$list[$value['action']] = $value;
+
+		// bluelovers
+		if (is_array($flist)){
+		// bluelovers
+
+			foreach($flist as $action => $value) {
+				$list[$value['action']] = $value;
+			}
+
+		// bluelovers
 		}
+		// bluelovers
+
+//		echo '<pre>';
+//		print_r($list);
+//		exit();
 	}
 }
 include_once template("home/spacecp_credit_base");
