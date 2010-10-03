@@ -31,7 +31,7 @@ if($start == 0) {
 	$db_target->query("TRUNCATE $table_target");
 
 //	$dateline_start = $db_source->result_first("SELECT dateline FROM {$table_source}posts WHERE dateline > 0");
-	$dateline_start = $db_source->result_first("SELECT dateline FROM {$table_source}posts WHERE dateline > 0 and dateline > ".strtotime('1971-01-01'));
+	$dateline_start = $db_target->result_first("SELECT dateline FROM {$db_target->tablepre}forum_post WHERE dateline > 0 and dateline > ".strtotime('1971-01-01'));
 	$dateline_start = strtotime(gmdate('Y-m-d', $dateline_start + $timeoffset * 3600)) - 3600 * $timeoffset;
 
 	$start = $dateline_start;
@@ -46,7 +46,7 @@ if ($start < $timestamp) {
 		$daytime = gmdate('Ymd', $dateline + $timeoffset * 3600);
 
 		$row = array(
-			'post' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}posts WHERE dateline BETWEEN $dateline AND $nextid"),
+			'post' => $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}forum_post WHERE dateline BETWEEN $dateline AND $nextid"),
 
 	//		'thread' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}threads WHERE dateline BETWEEN $dateline AND $nextid"),
 	//
@@ -56,12 +56,19 @@ if ($start < $timestamp) {
 	//		'activity' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}threads WHERE special = '4' and dateline BETWEEN $dateline AND $nextid"),
 	//		'debate' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}threads WHERE special = '5' and dateline BETWEEN $dateline AND $nextid"),
 
-			'register' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}members WHERE regdate BETWEEN $dateline AND $nextid"),
-			'login' => $db_source->result_first("SELECT COUNT(*) FROM {$table_source}members WHERE lastvisit BETWEEN $dateline AND $nextid") + $db_source->result_first("SELECT COUNT(*) FROM {$table_source}members WHERE lastactivity BETWEEN $dateline AND $nextid"),
+			'group' => $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}forum_forumfield WHERE dateline BETWEEN $dateline AND $nextid"),
+			'groupjoin' => $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}forum_groupuser WHERE joindateline BETWEEN $dateline AND $nextid"),
+
+			'register' => $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}common_member WHERE regdate BETWEEN $dateline AND $nextid"),
+			'login' => $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}common_member_status WHERE lastvisit BETWEEN $dateline AND $nextid") + $db_source->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}common_member_status WHERE lastactivity BETWEEN $dateline AND $nextid"),
 		);
 
-		$query = $db_source->query("SELECT COUNT(*) as count, special FROM {$table_source}threads WHERE dateline BETWEEN $dateline AND $nextid GROUP BY special");
-		while ($_tmp = $db_source->fetch_array($query)) {
+		foreach (array('pic', 'blog', 'share', 'doing', 'docomment', 'poke') as $_k) {
+			$row[$_k] = $db_target->result_first("SELECT COUNT(*) FROM {$db_target->tablepre}home_{$_k} WHERE dateline BETWEEN $dateline AND $nextid");
+		}
+
+		$query = $db_target->query("SELECT COUNT(*) as count, special FROM {$db_target->tablepre}forum_thread WHERE dateline BETWEEN $dateline AND $nextid GROUP BY special");
+		while ($_tmp = $db_target->fetch_array($query)) {
 			$_k = 'thread';
 
 			switch ($_tmp['special']) {
@@ -83,6 +90,28 @@ if ($start < $timestamp) {
 			}
 
 			$row[$_k] += $_tmp['count'];
+		}
+
+		$query = $db_target->query("SELECT COUNT(*) as count, idtype FROM {$db_target->tablepre}home_comment WHERE dateline BETWEEN $dateline AND $nextid GROUP BY idtype");
+		while ($_tmp = $db_target->fetch_array($query)) {
+			$_k = '';
+
+			switch ($_tmp['idtype']) {
+				case 'blogid':
+					$_k = 'blogcomment';
+					break;
+				case 'picid':
+					$_k = 'piccomment';
+					break;
+				case 'sid':
+					$_k = 'sharecomment';
+					break;
+				case 'uid':
+					$_k = 'wall';
+					break;
+			}
+
+			$_k && $row[$_k] = $_tmp['count'];
 		}
 
 		$row = array_filter($row);

@@ -17,8 +17,8 @@ $nextid = 0;
 
 $start = getgpc('start');
 if($start == 0) {
-	$db_target->query("TRUNCATE $table_target");
-	$db_target->query("TRUNCATE $table_target_field");
+//	$db_target->query("TRUNCATE $table_target");
+//	$db_target->query("TRUNCATE $table_target_field");
 }
 
 $usergroup = array('groupid', 'radminid', 'type', 'system', 'grouptitle', 'creditshigher', 'creditslower', 'stars', 'color', 'allowvisit', 'allowsendpm', 'allowinvite', 'allowmailinvite', 'maxinvitenum', 'inviteprice', 'maxinviteday');
@@ -53,8 +53,16 @@ while ($data = $db_source->fetch_array($query)) {
 
 //	$db_target->query("INSERT INTO $table_target SET $userdatalist");
 //	$db_target->query("INSERT INTO $table_target_field SET $userfielddatalist");
-	$db_target->query("REPLACE INTO $table_target SET $userdatalist");
-	$db_target->query("REPLACE INTO $table_target_field SET $userfielddatalist");
+
+	// bluelovers
+	if (!$chk = $db_target->result_first("SELECT groupid FROM $table_target WHERE groupid = '$nextid'")) {
+		$db_target->query("REPLACE INTO $table_target SET $userdatalist");
+		$db_target->query("REPLACE INTO $table_target_field SET $userfielddatalist");
+	} else {
+		$db_target->query("UPDATE $table_target SET $userdatalist WHERE groupid = '$nextid'");
+		$db_target->query("UPDATE $table_target_field SET $userfielddatalist WHERE groupid = '$nextid'");
+	}
+	// bluelovers
 }
 
 // bluelovers

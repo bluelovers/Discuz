@@ -53,9 +53,11 @@ foreach (array('start', 'tables', 'steps') as $program) {
 				define('PROGRAM_TYPE', $program);
 				require $prg_dir[$program].$prg;
 				save_process_main($prg);
-				showmessage("轉換程序 $prg 執行完畢， 現在跳轉到下一個程序", "index.php?a=convert&source=$source", null, 500);
+//				showmessage("轉換程序 $prg 執行完畢， 現在跳轉到下一個程序", "index.php?a=convert&source=$source", null, 500);
+				showmessage("轉換程序 $program => $prg 執行完畢， 現在跳轉到下一個程序", "index.php?a=convert&source=$source", null, 1000);
 			} else {
-				showmessage('數據轉換中斷! 無法找到轉換程序 '.$prg);
+//				showmessage('數據轉換中斷! 無法找到轉換程序 '.$prg);
+				showmessage('數據轉換中斷! 無法找到轉換程序 '.$program.' => '.$prg);
 			}
 		} else {
 			$process[$program.'_is_end'] = 1;
