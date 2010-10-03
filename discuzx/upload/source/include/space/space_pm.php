@@ -75,7 +75,9 @@ if($_GET['subop'] == 'view') {
 }
 
 if($list) {
-	$today = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+//	$today = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+	$today = $_G['timenow']['todayzero'];
+
 	foreach ($list as $key => $value) {
 		$value['message'] = str_replace('&amp;', '&', $value['message']);
 		$value['message'] = preg_replace("/&[a-z]+\;/i", '', $value['message']);

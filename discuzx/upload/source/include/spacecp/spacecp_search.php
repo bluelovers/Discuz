@@ -13,6 +13,10 @@ if(!defined('IN_DISCUZ')) {
 
 $myfields = array('uid','gender','birthyear','birthmonth','birthday','birthprovince','birthcity','resideprovince','residecity', 'residedist', 'residecommunity');
 
+// bluelovers
+$myfields = $myfields + array('birthdist', 'birthcommunity');
+// bluelovers
+
 loadcache('profilesetting');
 $fields = array();
 foreach ($_G['cache']['profilesetting'] as $key => $value) {
@@ -66,7 +70,15 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		$_GET[$fkey] = trim($_GET[$fkey]);
 		if($_GET[$fkey]) {
 			$havefield = 1;
-			$wherearr[] = "sf.$fkey = '$_GET[$fkey]'";
+//			$wherearr[] = "sf.$fkey = '$_GET[$fkey]'";
+
+			// bluelovers
+			if ($fkey == 'gender' && $_GET[$fkey] < 0) {
+				$wherearr[] = "sf.$fkey = '0'";
+			} else {
+				$wherearr[] = "sf.$fkey = '$_GET[$fkey]'";
+			}
+			// bluelovers
 		}
 	}
 
@@ -91,6 +103,8 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		while ($value = DB::fetch($query)) {
 			$space['friends'][$value['fuid']] = $value['fuid'];
 		}
+
+//		dexit(implode(' AND ', $wherearr));
 
 		$query = DB::query("SELECT s.* $fsql FROM ".implode(',', $fromarr)." WHERE ".implode(' AND ', $wherearr)." LIMIT 0,100");
 		while ($value = DB::fetch($query)) {
@@ -127,15 +141,20 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		if(empty($_GET['all'])) $selectstr = $i == $space['birthday']?' selected=\"selected\"':'';
 		$birthdayhtml .= "<option value=\"$i\"$selectstr>$i</option>";
 	}
+	/*
+	// 實際上 DX 沒有使用到本段代碼
+
 	$bloodhtml = '';
 	foreach (array('A','B','O','AB') as $value) {
 		if(empty($_GET['all'])) $selectstr = $value == $space['blood']?' selected=\"selected\"':'';
 		$bloodhtml .= "<option value=\"$value\"$selectstr>$value</option>";
 	}
+	*/
 	$marryarr = array($space['marry'] => ' selected');
 
 	include_once libfile('function/profile');
-	$birthcityhtml = showdistrict(array(0,0), array('birthprovince', 'birthcity'), 'birthcitybox');
+//	$birthcityhtml = showdistrict(array(0,0), array('birthprovince', 'birthcity'), 'birthcitybox');
+	$birthcityhtml = showdistrict(array(0,0, 0, 0), array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity'), 'birthcitybox');
 	$residecityhtml = showdistrict(array(0,0, 0, 0), array('resideprovince', 'residecity', 'residedist', 'residecommunity'), 'residecitybox');
 
 	foreach ($fields as $fkey => $fvalue) {
@@ -143,7 +162,8 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 			$fvalue['html'] = '<input type="text" name="field_'.$fkey.'" value="" class="px" />';
 		} else {
 			$fvalue['html'] = "<select name=\"field_$fkey\"><option value=\"\">---</option>";
-			$optionarr = explode("\n", $fvalue['choices']);
+//			$optionarr = explode("\n", $fvalue['choices']);
+			$optionarr = is_array($fvalue['choices']) ? $fvalue['choices'] : explode("\n", $fvalue['choices']);
 			foreach ($optionarr as $ov) {
 				$ov = trim($ov);
 				if($ov) {

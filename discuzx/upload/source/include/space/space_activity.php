@@ -106,7 +106,8 @@ $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
 
-	$today = strtotime(dgmdate($_G['timestamp'], 'Y-m-d'));
+//	$today = strtotime(dgmdate($_G['timestamp'], 'Y-m-d'));
+	$today = $_G['timenow']['todayzero'];
 	$order = '';
 	if($_G['gp_view'] != 'all') {
 		$wheresql .= " AND a.starttimefrom >'$today'";

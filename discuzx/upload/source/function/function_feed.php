@@ -107,7 +107,7 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	}
 }
 
-//¾ã²zfeed
+//æ•´ç†feed
 function mkfeed($feed, $actors=array()) {
 	global $_G;
 
@@ -128,6 +128,8 @@ function mkfeed($feed, $actors=array()) {
 		}
 	}
 //	debug(array($feed, $lang_feed));
+
+	$actors && $actors = array_unique($actors);
 	// bluelovers
 
 	//title
@@ -140,7 +142,8 @@ function mkfeed($feed, $actors=array()) {
 	}
 
 	$searchs[] = '{actor}';
-	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+//	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
@@ -191,7 +194,7 @@ function feed_mktarget($html) {
 }
 
 /**
- * ²£¥Í°ÊºA
+ * ç”¢ç”Ÿå‹•æ…‹
  **/
 function feed_publish($id, $idtype, $add=0) {
 	global $_G;

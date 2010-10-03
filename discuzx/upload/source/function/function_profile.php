@@ -87,17 +87,17 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			$selectstr = $i == $space['birthday']?' selected':'';
 			$birthdayhtml .= "<option value=\"$i\"$selectstr>$i</option>";
 		}
-		$html = '<select id="birthyear" name="birthyear" onchange="showbirthday();" tabindex="1">'
+		$html = '<select id="birthyear" name="birthyear" onchange="showbirthday();" _tabindex="1">'
 				.'<option value="">'.lang('space', 'year').'</option>'
 				.$birthyeayhtml
 				.'</select>'
 				.'&nbsp;&nbsp;'
-				.'<select id="birthmonth" name="birthmonth" onchange="showbirthday();" tabindex="1">'
+				.'<select id="birthmonth" name="birthmonth" onchange="showbirthday();" _tabindex="1">'
 				.'<option value="">'.lang('space', 'month').'</option>'
 				.$birthmonthhtml
 				.'</select>'
 				.'&nbsp;&nbsp;'
-				.'<select id="birthday" name="birthday" tabindex="1">'
+				.'<select id="birthday" name="birthday" _tabindex="1">'
 				.'<option value="">'.lang('space', 'day').'</option>'
 				.$birthdayhtml
 				.'</select>';
@@ -112,7 +112,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		// bluelovers
 
 			$selected = array($space[$fieldid]=>' selected="selected"');
-			$html = '<select name="gender" id="gender" tabindex="1">';
+			$html = '<select name="gender" id="gender" _tabindex="1">';
 			if($field['unchangeable']) {
 				$html .= '<option value="">'.lang('space', 'gender').'</option>';
 			} else {
@@ -131,13 +131,26 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 //				'2' => lang('space', 'gender_2'),
 //			), $field['choices']);
 
-			$field['choices'] = array(
-				0 => lang('space', 'gender_0'),
+//			print_r($field['choices']);
+//			exit();
+
+//			$field['choices'] = scoarray::overlay(array(
+//				'' => lang('space', 'gender'),
+//				-1 => lang('space', 'gender_0'),
+////				0 => lang('space', 'gender_0'),
+//				1 => lang('space', 'gender_1'),
+//				2 => lang('space', 'gender_2'),
+//			) + $field['choices'], $field['choices']);
+
+			$field['choices'] = scoarray::merge(array(
+				'' => lang('space', 'gender'),
+				-1 => lang('space', 'gender_0'),
+//				0 => lang('space', 'gender_0'),
 				1 => lang('space', 'gender_1'),
 				2 => lang('space', 'gender_2'),
-			) + $field['choices'];
+			), $field['choices'], false);
 
-			$html = "<select name=\"$fieldid\" id=\"$fieldid\" tabindex=\"1\">";
+			$html = "<select name=\"$fieldid\" id=\"$fieldid\" _tabindex=\"1\">";
 
 			if($field['unchangeable']) {
 				$html .= '<option value="">'.lang('space', 'gender').'</option>';
@@ -190,10 +203,10 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			}
 		}
 		if($field['formtype']=='textarea') {
-			$html = "<textarea name=\"$fieldid\" id=\"$fieldid\" rows=\"3\" cols=\"40\" class=\"pt\" tabindex=\"1\">$space[$fieldid]</textarea>";
+			$html = "<textarea name=\"$fieldid\" id=\"$fieldid\" rows=\"3\" cols=\"40\" class=\"pt\" _tabindex=\"1\">$space[$fieldid]</textarea>";
 		} elseif($field['formtype']=='select') {
 //			$field['choices'] = explode("\n", $field['choices']);
-			$html = "<select name=\"$fieldid\" tabindex=\"1\">";
+			$html = "<select name=\"$fieldid\" _tabindex=\"1\">";
 //			foreach($field['choices'] as $op) {
 //				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
 //			}
@@ -204,7 +217,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
 //			$field['choices'] = explode("\n", $field['choices']);
-			$html = "<select name=\"$fieldid\" multiple=\"multiplue\" tabindex=\"1\">";
+			$html = "<select name=\"$fieldid\" multiple=\"multiplue\" _tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 //			foreach($field['choices'] as $op) {
 //				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
@@ -218,34 +231,34 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 //			foreach($field['choices'] as $op) {
 //				$html .= ''
-//					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
+//					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" _tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
 //					."$op</label>&nbsp;&nbsp;";
 //			}
 			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
-					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
+					."<label><input type=\"checkbox\" name=\"{$fieldid}[]\" _tabindex=\"1\" value=\"$op\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." class=\"pc\" />"
 					."$op_value</label>&nbsp;&nbsp;";
 			}
 		} elseif($field['formtype']=='radio') {
 //			$field['choices'] = explode("\n", $field['choices']);
 //			foreach($field['choices'] as $op) {
 //				$html .= ''
-//						."<label><input type=\"radio\" name=\"{$fieldid}\" tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
+//						."<label><input type=\"radio\" name=\"{$fieldid}\" _tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
 //						."$op</label>&nbsp;&nbsp;";
 //			}
 			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
-						."<label><input type=\"radio\" name=\"{$fieldid}\" tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
+						."<label><input type=\"radio\" name=\"{$fieldid}\" _tabindex=\"1\" value=\"$op\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." class=\"pc\" />"
 						."$op_value</label>&nbsp;&nbsp;";
 			}
 		} elseif($field['formtype']=='file') {
-			$html = "<input type=\"file\" value=\"\" name=\"$fieldid\" tabindex=\"1\" class=\"pf\" style=\"height:26px;\" /><input type=\"hidden\" name=\"$fieldid\" value=\"$space[$fieldid]\" />";
+			$html = "<input type=\"file\" value=\"\" name=\"$fieldid\" _tabindex=\"1\" class=\"pf\" style=\"height:26px;\" /><input type=\"hidden\" name=\"$fieldid\" value=\"$space[$fieldid]\" />";
 			if(!empty($space[$fieldid])) {
 				$url = getglobal('setting/attachurl').'./profile/'.$space[$fieldid];
-				$html .= "&nbsp;<label><input type=\"checkbox\" class=\"checkbox\" tabindex=\"1\" name=\"deletefile[$fieldid]\" value=\"yes\" />".lang('spacecp', 'delete')."</label><br /><a href=\"$url\" target=\"_blank\"><img src=\"$url\" style=\"max-width: 500px;\" /></a>";
+				$html .= "&nbsp;<label><input type=\"checkbox\" class=\"checkbox\" _tabindex=\"1\" name=\"deletefile[$fieldid]\" value=\"yes\" />".lang('spacecp', 'delete')."</label><br /><a href=\"$url\" target=\"_blank\"><img src=\"$url\" style=\"max-width: 500px;\" /></a>";
 			}
 		} else {
-			$html = "<input type=\"text\" value=\"$space[$fieldid]\" tabindex=\"1\" name=\"$fieldid\" class=\"px\" />";
+			$html = "<input type=\"text\" value=\"$space[$fieldid]\" _tabindex=\"1\" name=\"$fieldid\" class=\"px\" />";
 		}
 	}
 
@@ -303,8 +316,18 @@ function profile_check($fieldid, &$value, $space=array()) {
 	$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
 
 	if(in_array($fieldid, array('gender'))) {
+		$value = intval($value);
+
+		if ($value <= 0) {
+			$value = 0;
+
+			return true;
+		}
+
 		$field['choices'] = array(
-				0 => lang('space', 'gender_0'),
+				'' => lang('space', 'gender'),
+				-1 => lang('space', 'gender_0'),
+//				0 => lang('space', 'gender_0'),
 				1 => lang('space', 'gender_1'),
 				2 => lang('space', 'gender_2'),
 			) + $field['choices'];
@@ -312,7 +335,6 @@ function profile_check($fieldid, &$value, $space=array()) {
 //		print_r($field['choices']);
 //		exit();
 
-		$value = intval($value);
 		return (bool)array_key_exists($value, $field['choices']);
 	}
 	// bluelovers
@@ -384,11 +406,19 @@ function profile_show($fieldid, $space=array()) {
 
 		// bluelovers
 
-		$field['choices'] = array(
-			0 => lang('space', 'gender_0'),
+//		$field['choices'] = array(
+//			0 => lang('space', 'gender_0'),
+//			1 => lang('space', 'gender_1'),
+//			2 => lang('space', 'gender_2'),
+//		) + $field['choices'];
+
+		$field['choices'] = scoarray::merge(array(
+			'' => lang('space', 'gender'),
+			-1 => lang('space', 'gender_0'),
+//			0 => lang('space', 'gender_0'),
 			1 => lang('space', 'gender_1'),
 			2 => lang('space', 'gender_2'),
-		) + $field['choices'];
+		), $field['choices'], false);
 
 		if (!array_key_exists($value, $field['choices'])) {
 			$value = 0;
@@ -473,7 +503,7 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 	for($i=0;$i<$showlevel;$i++) {
 		$level = $i+1;
 		$jscall = "showdistrict('$container', ['$elems[0]', '$elems[1]', '$elems[2]', '$elems[3]'], $showlevel, $level)";
-		$html .= '<select name="'.$elems[$i].'" id="'.$elems[$i].'" onchange="'.$jscall.'" tabindex="1">';
+		$html .= '<select name="'.$elems[$i].'" id="'.$elems[$i].'" onchange="'.$jscall.'" _tabindex="1">';
 		$html .= '<option value="">'.lang('spacecp', 'district_level_'.$level).'</option>';
 		foreach($options[$level] as $option) {
 			$selected = $option[0] == $values[$i] ? ' selected="selected"' : '';

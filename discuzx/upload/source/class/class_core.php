@@ -88,10 +88,12 @@ class discuz_core {
 		include_once libfile('Hook', 'libs/scophp/Scorpio/libs/', 'extensions/');
 		include_once libfile('File', 'libs/scophp/Scorpio/libs/', 'extensions/');
 		include_once libfile('text', 'libs/scophp/Scorpio/helpers/', 'extensions/');
+		include_once libfile('array', 'libs/scophp/Scorpio/helpers/', 'extensions/');
 
 		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core {}");
 		if (!sclass_exists('Scorpio_File')) eval("class Scorpio_File extends Scorpio_File_Core {}");
 		if (!sclass_exists('scotext')) eval("class scotext extends Scorpio_helper_text_Core {}");
+		if (!sclass_exists('scoarray')) eval("class scoarray extends Scorpio_helper_array_Core {}");
 
 		@include_once libfile('hooks/core', '', 'extensions/');
 
@@ -548,7 +550,9 @@ class discuz_core {
 			// bluelovers
 			,'year' => date('Y', TIMESTAMP + 3600 * $timeoffset),
 			'month' => date('n', TIMESTAMP + 3600 * $timeoffset),
-			'date' => date('j', TIMESTAMP + 3600 * $timeoffset)
+			'date' => date('j', TIMESTAMP + 3600 * $timeoffset),
+
+			'todayzero' => dmktime(date('Y-n-j', TIMESTAMP + 3600 * $timeoffset)) - 3600 * $timeoffset,
 			// bluelovers
 		);
 		$this->timezone_set($timeoffset);
