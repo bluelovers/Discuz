@@ -105,6 +105,7 @@ if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." feedid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
+// bluelovers
 function _fix_link($value, $key) {
 	global $domain;
 	global $replace;
@@ -131,5 +132,6 @@ function _fix_link($value, $key) {
 
 	return $value;
 }
+// bluelovers
 
 ?>

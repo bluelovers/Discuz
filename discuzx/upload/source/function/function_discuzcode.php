@@ -115,22 +115,23 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 
 		$message = str_replace(array(
 			'[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]', '[s]', '[/s]', '[hr]', '[/p]',
+
+			// bluelovers
+			"\s*[*]", '[list=A]\s*', '[list]\s*', '[list=1]\s*', '[list=a]\s*',
+			// bluelovers
+
 			'[i=s]', '[i]', '[/i]', '[u]', '[/u]', '[list]', '[list=1]', '[list=a]',
 			'[list=A]', "\r\n[*]", '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
 
-			// bluelovers
-			, "\n[*]",
-			// bluelovers
-
 			), array(
 			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>', '<strike>', '</strike>', '<hr class="l" />', '</p>', '<i class="pstatus">', '<i>',
+
+			// bluelovers
+			"<li>", '<ul type="A" class="litype_3">', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
+			// bluelovers
+
 			'</i>', '<u>', '</u>', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
 			'<ul type="A" class="litype_3">', '<li>', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
-
-			// bluelovers
-			, "<li>",
-			// bluelovers
-
 			), preg_replace(array(
 			"/\[color=([#\w]+?)\]/i",
 			"/\[color=(rgb\([\d\s,]+?\))\]/i",

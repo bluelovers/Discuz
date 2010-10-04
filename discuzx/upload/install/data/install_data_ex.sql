@@ -5,6 +5,7 @@ ALTER TABLE `pre_forum_threadtype`  COMMENT = '分類信息 sortid threadsorts';
 ALTER TABLE `pre_home_poke`  COMMENT = '打招呼';
 ALTER TABLE `pre_common_syscache`  COMMENT = '系統緩存';
 
+ALTER TABLE `pre_home_share` ADD `data_index` VARCHAR( 255 ) NOT NULL DEFAULT '' COMMENT '索引值';
 
 ALTER TABLE `pre_home_feed` ADD `lang_template` TEXT NOT NULL DEFAULT '' COMMENT '語言模板';
 ALTER TABLE `pre_home_share` ADD `lang_template` TEXT NOT NULL DEFAULT '' COMMENT '語言模板';
