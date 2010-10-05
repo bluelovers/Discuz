@@ -15,7 +15,9 @@ function xml_unserialize(&$xml, $isnormal = FALSE) {
 }
 
 function xml_serialize($arr, $htmlon = FALSE, $isnormal = FALSE, $level = 1) {
-//	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
+	/*
+	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
+	*/
 	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<root>\n" : '';
 	$space = str_repeat("\t", $level);
 	foreach($arr as $k => $v) {
