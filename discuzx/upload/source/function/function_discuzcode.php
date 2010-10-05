@@ -48,14 +48,40 @@ function creditshide($creditsrequire, $message, $pid) {
 }
 
 function codedisp($code) {
+//	global $_G;
+//	$_G['forum_discuzcode']['pcodecount']++;
+//	$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
+//	$code = str_replace("\n", "<li>", $code);
+//	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($_G['forum_discuzcode'], $code);
+//	$_G['forum_discuzcode']['codecount']++;
+//	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
+
+	return codedisp2('<pre name="theCode" class="brush: plain;">'.dhtmlspecialchars(stripslashes($code)).'</pre>');
+}
+
+// bluelovers
+function codedisp2($code) {
 	global $_G;
 	$_G['forum_discuzcode']['pcodecount']++;
-	$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
-	$code = str_replace("\n", "<li>", $code);
+	$code = str_replace(
+		array("\t", '\\"', '\\"')
+		, array('[tab][/tab]', '"', '"')
+		, nl2brcode($code));
 	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($_G['forum_discuzcode'], $code);
 	$_G['forum_discuzcode']['codecount']++;
 	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
 }
+
+function nl2brcode($string) {
+	$string = str_replace(array("\r\n", "\r", "\n"), '[br][/br]', $string);
+	return $string;
+
+//	because each OS have different ASCII chars for linebreak:
+//	windows = \r\n
+//	unix = \n
+//	mac = \r
+}
+// bluelovers
 
 function karmaimg($rate, $ratetimes) {
 	$karmaimg = '';
@@ -208,8 +234,10 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				"bbcodeurl('\\1', '<img src=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" />')",
 				"parseimg('\\1', '\\2', '\\3')"
 			) : array(
-				"bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')",
-				"bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')"
+//				"bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')",
+//				"bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')"
+				"bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')",
+				"bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')"
 			), $message);
 		}
 	}
@@ -248,14 +276,16 @@ function parseurl($url, $text, $scheme) {
 		if(strlen($url) > $length) {
 			$text = substr($url, 0, intval($length * 0.5)).' ... '.substr($url, - intval($length * 0.3));
 		}
-		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank">'.$text.'</a>';
+//		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank">'.$text.'</a>';
+		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank" class="bbocde_link">'.$text.'</a>';
 	} else {
 		$url = substr($url, 1);
 		if(substr(strtolower($url), 0, 4) == 'www.') {
 			$url = 'http://'.$url;
 		}
 		$url = !$scheme ? $_G['siteurl'].$url : $url;
-		return '<a href="'.$url.'" target="_blank">'.$text.'</a>';
+//		return '<a href="'.$url.'" target="_blank">'.$text.'</a>';
+		return '<a href="'.$url.'" target="_blank" target="_blank" class="bbocde_link">'.$text.'</a>';
 	}
 }
 
@@ -297,9 +327,11 @@ function parseed2k($url) {
 	$url = 'ed2k://'.$url.'/';
 	$name = addslashes($name);
 	if($type == 'file') {
-		return '<a href="'.$url.'" target="_blank"><script language="javascript">document.write(htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\'))))</script> ('.sizecount($size).')</a>';
+//		return '<a href="'.$url.'" target="_blank"><script language="javascript">document.write(htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\'))))</script> ('.sizecount($size).')</a>';
+		return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_ed2k">'.scotext::unescape(urldecode($name)).' ('.sizecount($size).')</a>';
 	} else {
-		return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+//		return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+		return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_ed2k">'.$url.'</a>';
 	}
 }
 
@@ -312,9 +344,11 @@ function parseattachurl($aid, $ext) {
 function parseemail($email, $text) {
 	if(!$email && preg_match("/\s*([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+)\s*/i", $text, $matches)) {
 		$email = trim($matches[0]);
-		return '<a href="mailto:'.$email.'">'.$email.'</a>';
+//		return '<a href="mailto:'.$email.'">'.$email.'</a>';
+		return '<a href="mailto:'.$email.'" class="bbocde_link bbocde_link_email">'.$email.'</a>';
 	} else {
-		return '<a href="mailto:'.substr($email, 1).'">'.$text.'</a>';
+//		return '<a href="mailto:'.substr($email, 1).'">'.$text.'</a>';
+		return '<a href="mailto:'.substr($email, 1).'" class="bbocde_link bbocde_link_email">'.$text.'</a>';
 	}
 }
 
@@ -443,7 +477,8 @@ function parsemedia($params, $url) {
 			case 'mov':
 				return '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$width.'" height="'.$height.'"><param name="autostart" value="'.($autostart ? '' : 'false').'" /><param name="src" value="'.$url.'" /><embed src="'.$url.'" autostart="'.($autostart ? 'true' : 'false').'" type="video/quicktime" controller="true" width="'.$width.'" height="'.$height.'"></embed></object>';
 			default:
-				return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+//				return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+				return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_media">'.$url.'</a>';
 		}
 	}
 	return;
