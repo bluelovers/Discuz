@@ -281,7 +281,12 @@ function dhtmlspecialchars($string, $quote_style = null, $htmlspecialchars_decod
 }
 
 function dexit($message = '') {
-	echo $message;
+//	echo $message;
+	if (is_array($message)) {
+		print_r($message);
+	} else {
+		echo($message);
+	}
 	output();
 	exit();
 }
