@@ -28,6 +28,8 @@ if ($mfavatar = $db->result_first("SELECT avatar FROM ".UC_DBTABLEPRE."memberfie
 
 	header('Location: '.$mfavatar);
 	exit();
+} elseif(empty($random)) {
+	dheader_cache(1800, (empty($random) ? 2 : 1), null, 'avatar_'.$uid);
 }
 
 function dheader_cache ($s = 0, $mode = 0, $lastmodified = 0, $etag = '') {

@@ -40,11 +40,11 @@ if(file_exists(dirname(__FILE__).'/'.$avatar)) {
 	$avatar_url = 'images/noavatar_'.$size.'.gif';
 }
 
-if(empty($random)) {
-	header("HTTP/1.1 301 Moved Permanently");
-	header("Last-Modified:".date('r'));
-	header("Expires: ".date('r', time() + 86400));
-}
+//if(empty($random)) {
+//	header("HTTP/1.1 301 Moved Permanently");
+//	header("Last-Modified:".date('r'));
+//	header("Expires: ".date('r', time() + 86400));
+//}
 
 header('Location: '.UC_API.'/'.$avatar_url);
 exit;
