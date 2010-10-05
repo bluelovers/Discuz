@@ -1468,8 +1468,29 @@ function AC_GetArgs(args, classid, mimeType) {
 	ret.objAttrs = new Object();
 	for (var i = 0; i < args.length; i = i + 2){
 		var currArg = args[i].toLowerCase();
+
+		// bluelovers
+		var currVal = args[i+1];
+		// bluelovers
+
 		switch (currArg){
-			case "classid":break;
+			case "classid":
+
+				// bluelovers
+				if (currVal) classid = currVal;
+				// bluelovers
+
+				break;
+
+			// bluelovers
+			case "type":
+
+				if (currVal) {
+					ret.objAttrs[currArg] = mimeType = currVal;
+				}
+
+				break;
+			// bluelovers
 			case "pluginspage":ret.embedAttrs[args[i]] = 'http://www.macromedia.com/go/getflashplayer';break;
 			case "src":ret.embedAttrs[args[i]] = args[i+1];ret.params["movie"] = args[i+1];break;
 			case "codebase":ret.objAttrs[args[i]] = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0';break;

@@ -35,9 +35,10 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 				break;
 			*/
 			case 'source/function/function_share.php':
-
 				@include_once libfile('hooks/share', '', 'extensions/');
-
+				break;
+			case 'source/function/function_discuzcode.php':
+				@include_once libfile('hooks/discuzcode', '', 'extensions/');
 				break;
 			default:
 //				dexit($file);

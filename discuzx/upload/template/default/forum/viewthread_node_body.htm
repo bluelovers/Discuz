@@ -134,19 +134,17 @@
 	<!--{if !empty($post['ratelog'])}-->
 		<dl id="ratelog_$post[pid]" class="rate{if !empty($_G['cookie']['ratecollapse'])} rate_collapse{/if}">
 			<!--{if $_G['setting']['ratelogon']}-->
-
 				<dt>
 					<!--{if !empty($postlist[$post[pid]]['totalrate'])}-->
 						<strong><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang have}{echo count($postlist[$post[pid]][totalrate]);}{lang people_score}, {lang rate_view}"><!--{echo count($postlist[$post[pid]][totalrate]);}--></a></strong>
 						<p><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)">{lang rate_view}</a></p>
 					<!--{/if}-->
-
-					<dt style="width: auto;">
-						<!--{if $post['rate'] > 0}--><div class="rate_red">+$post['rate']<p>Points</p></div><!--{elseif $post['rate'] <= 0}--><div class="rate_yellow">$post['rate']<p>Points</p></div><!--{/if}-->
-					</dt>
-
 				</dt>
-
+				<!--{rem 顯示總評分 }-->
+				<dt style="width: auto;">
+					<!--{if $post['rate'] > 0}--><div class="rate_red">+$post['rate']<p>Points</p></div><!--{elseif $post['rate'] <= 0}--><div class="rate_yellow">$post['rate']<p>Points</p></div><!--{/if}-->
+				</dt>
+				<!--{rem 顯示總評分 end }-->
 				<dd style="margin:0">
 			<!--{else}-->
 				<dt>
@@ -155,11 +153,17 @@
 						<p><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)">{lang rate_view}</a></p>
 					<!--{/if}-->
 				</dt>
+				<!--{rem 顯示總評分 }-->
+				<dt style="width: auto;">
+					<!--{if $post['rate'] > 0}--><div class="rate_red">+$post['rate']<p>Points</p></div><!--{elseif $post['rate'] <= 0}--><div class="rate_yellow">$post['rate']<p>Points</p></div><!--{/if}-->
+				</dt>
+				<!--{rem 顯示總評分 end }-->
 				<dd>
 			<!--{/if}-->
 				<div id="post_rate_$post[pid]"></div>
 				<!--{if $_G['setting']['ratelogon']}-->
 
+					<!--{rem 顯示評分列表時仍然顯示簡易頭像列表 }-->
 					<ul class="cl">
 						<!--{loop $post['ratelog'] $uid $ratelog}-->
 							<li>
@@ -180,6 +184,7 @@
 							</li>
 						<!--{/loop}-->
 					</ul>
+					<!--{rem 顯示評分列表時仍然顯示簡易頭像列表 end }-->
 
 					<table class="ratl">
 						<tr>
