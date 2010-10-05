@@ -340,12 +340,15 @@ if($_GET['op'] == 'delete') {
 // bluelovers
 } elseif ($_GET['op'] == 'docomment') {
 	$query = DB::fetch_first("SELECT dc.* FROM ".DB::table('home_docomment')." dc WHERE dc.id='$id' AND dc.doid='$doid'");
+//	!$query && $query = DB::fetch_first("SELECT dc.* FROM ".DB::table('home_doing')." dc WHERE dc.doid='$doid'");
 
-	if (empty($_G['gp_message']) && $query['uid'] != $_G['uid'] && $query['username']) {
+	if (empty($_G['gp_message']) && DB::result_first("SELECT count(*) FROM ".DB::table('home_docomment')." dc WHERE dc.doid='$doid' AND uid NOT IN ('{$_G[uid]}', '{$query[uid]}')") && $query['uid'] != $_G['uid'] && $query['username']) {
 		$_G['gp_message'] = '@'.dhtmlspecialchars($query['username']).' ';
 	} else {
 		$_G['gp_message'] = !empty($_G['gp_message']) ? dhtmlspecialchars($_G['gp_message']) : '';
 	}
+
+//	dexit($_G['gp_message']);
 
 // bluelovers
 

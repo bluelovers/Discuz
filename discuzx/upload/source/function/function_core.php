@@ -420,7 +420,7 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		if (isset($size['random'])) {
 			$random = getglobal('timestamp');
 			unset($size['random']);
-		} else {
+		} elseif (isset($size[2])) {
 			$random = getglobal('timestamp');
 			unset($size[2]);
 		}
