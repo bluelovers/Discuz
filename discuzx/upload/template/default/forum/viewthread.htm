@@ -217,7 +217,8 @@
 			<td class="modmenu plc ptm pbm xi2">
 				<!--{if $modmenu['thread']}-->
 					<script type="text/javascript">
-						$('modmenu').lastChild.style.visibility = 'hidden';
+						/* $('modmenu').lastChild.style.visibility = 'hidden'; */
+						if ($('modmenu').lastChild.style) $('modmenu').lastChild.style.visibility = 'hidden';
 						document.write($('modmenu').innerHTML);
 					</script>
 				<!--{/if}-->

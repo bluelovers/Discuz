@@ -56,24 +56,31 @@ function codedisp($code) {
 //	$_G['forum_discuzcode']['codecount']++;
 //	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
 
-	return codedisp2('<pre name="theCode" class="brush: plain;">'.dhtmlspecialchars(stripslashes($code)).'</pre>');
+	return codedisp2($code);
 }
 
 // bluelovers
-function codedisp2($code) {
+function codedisp2($code, $brush = 'plain') {
 	global $_G;
 	$_G['forum_discuzcode']['pcodecount']++;
 	$code = str_replace(
 		array("\t", '\\"', '\\"')
 		, array('[tab][/tab]', '"', '"')
 		, nl2brcode($code));
-	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($_G['forum_discuzcode'], $code);
+
+//	dexit($code);
+
+	$_G['extensions']['SyntaxHighlighter']['brush'][$brush] = $brush;
+
+	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
+
+	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = $code;
 	$_G['forum_discuzcode']['codecount']++;
 	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
 }
 
-function nl2brcode($string) {
-	$string = str_replace(array("\r\n", "\r", "\n"), '[br][/br]', $string);
+function nl2brcode($string, $r=0, $s = '[br][/br]') {
+	$string = str_replace($r ? $s : array("\r\n", "\n"), $r ? "\n" : $s, $string);
 	return $string;
 
 //	because each OS have different ASCII chars for linebreak:
@@ -103,6 +110,10 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
+
+		// bluelvoers
+		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/ies", "codedisp2('\\2', '\\1')", $message);
+		// bluelvoers
 	}
 
 	$msglower = strtolower($message);
@@ -143,34 +154,34 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 		$message = str_replace(array(
 			'[/color]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]', '[s]', '[/s]', '[hr]', '[/p]',
-
-			// bluelovers
-			"\s*[*]", '[list=A]\s*', '[list]\s*', '[list=1]\s*', '[list=a]\s*',
-			// bluelovers
-
 			'[i=s]', '[i]', '[/i]', '[u]', '[/u]', '[list]', '[list=1]', '[list=a]',
 			'[list=A]', "\r\n[*]", '[*]', '[/list]', '[indent]', '[/indent]', '[/float]'
-
 			), array(
 			'</font>', '</font>', '</font>', '</p>', '<strong>', '</strong>', '<strike>', '</strike>', '<hr class="l" />', '</p>', '<i class="pstatus">', '<i>',
-
-			// bluelovers
-			"<li>", '<ul type="A" class="litype_3">', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
-			// bluelovers
-
 			'</i>', '<u>', '</u>', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
 			'<ul type="A" class="litype_3">', '<li>', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 			), preg_replace(array(
+			// bluelovers
+			"/\s*\[\*\]/i", '/\[list=A\]\s*/i', '/\[list\]\s*/i', '/\[list=1\]\s*/i', '/\[list=a\]\s*/i',
+			// bluelovers
+
 			"/\[color=([#\w]+?)\]/i",
 			"/\[color=(rgb\([\d\s,]+?\))\]/i",
 			"/\[size=(\d{1,2}?)\]/i",
 			"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
 			"/\[font=([^\[\<]+?)\]/i",
-			"/\[align=(left|center|right)\]/i",
-			"/\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/i",
-			"/\[float=(left|right)\]/i"
+//			"/\[align=(left|center|right)\]/i",
+//			"/\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/i",
+//			"/\[float=(left|right)\]/i"
+			"/\n?\[align=(left|center|right)\]/i",
+			"/\n?\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/i",
+			"/\n?\[float=(left|right)\]/i"
 
 			), array(
+			// bluelovers
+			"<li>", '<ul type="A" class="litype_3">', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
+			// bluelovers
+
 			"<font color=\"\\1\">",
 			"<font style=\"color:\\1\">",
 			"<font size=\"\\1\">",
@@ -265,7 +276,12 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		$message = preg_replace("/\r\n|\n|\r/e", "jammer()", $message);
 	}
 
-	return $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+//	return $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+	$message = $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+
+	$message = nl2brcode(str_replace('[tab][/tab]', "\t", $message), 1);
+
+	return $message;
 }
 
 function parseurl($url, $text, $scheme) {
@@ -377,11 +393,16 @@ function parsetable($width, $bgcolor, $message) {
 			($width == '' ? NULL : 'style="width:'.$width.'"').
 			($bgcolor ? ' bgcolor="'.$bgcolor.'">' : '>').
 			str_replace('\\"', '"', preg_replace(array(
-					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
-					"/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
-					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
-					"/\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
-					"/\[\/td\]\s*\[\/tr\]\s*/i"
+//					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
+//					"/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
+//					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
+//					"/\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
+//					"/\[\/td\]\s*\[\/tr\]\s*/i"
+					"/\s*\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
+					"/\s*\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
+					"/\s*\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
+					"/\s*\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
+					"/\s*\[\/td\]\s*\[\/tr\]\s*/i"
 				), array(
 					"parsetrtd('\\1', '0', '0', '\\2')",
 					"parsetrtd('td', '0', '0', '\\1')",

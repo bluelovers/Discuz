@@ -47,7 +47,7 @@ if($operation == 'setting') {
 		// bluelovers
 		showtitle('groups_setting_seo');
 		showsetting('groups_setting_seo_description', 'descriptionnew', $_G['setting']['group_description'], 'textarea');
-		showsetting('groups_setting_seo_keyword', 'keywordsnew', $_G['setting']['group_keywords'], 'text');
+		showsetting('groups_setting_seo_keyword', 'keywordsnew', $_G['setting']['group_keywords'], 'textarea');
 		// bluelovers
 
 		showsubmit('updategroupsetting');

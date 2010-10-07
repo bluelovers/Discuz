@@ -336,6 +336,7 @@ function sarray_rand($arr, $num=1) {
 }
 
 function my_showgift() {
+	// 只相容 UCH 的禮物展示
 	global $_G, $space;
 	if($_G['setting']['my_showgift'] && $_G['my_userapp'][$_G['home_gift_appid']]) {
 		echo '<script language="javascript" type="text/javascript" src="http://gift.manyou-apps.com/recommend.js"></script>';

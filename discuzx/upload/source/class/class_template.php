@@ -333,8 +333,8 @@ class template {
 		 */
 
 		$d1 = $d2 = '';
-		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags_Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
-		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags_After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags:Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags:After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
 
 		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start--><? {$dev}{$d1}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) ?"."><"."?= \$_G['setting']['pluginhooks']['$hookid']$key;{$d2} ?"."><!--Hook: $hookid - End-->";
 		return $search;

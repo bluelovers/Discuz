@@ -248,3 +248,14 @@ input, button, select, textarea { vertical-align:middle; }
 
 .sllt { max-width: 400px; }
 .slg { min-height:33px; }
+
+pre, code {
+	width:inherit;
+	word-break: break-all;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	*white-space: pre;           /* IE */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}

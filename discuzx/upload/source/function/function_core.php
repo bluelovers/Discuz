@@ -942,7 +942,13 @@ function dimplode($array) {
 
 // bluelovers
 function sclass_exists($class) {
-	return (class_exists($class, false) || interface_exists($class, false)) ? true : false;
+	static $data = array();
+
+	if (!$data[$class]) {
+		$data[$class] = (class_exists($class, false) || interface_exists($class, false)) ? true : false;
+	}
+
+	return $data[$class];
 }
 // bluelovers
 
@@ -1269,21 +1275,39 @@ function output($in_ajax = false) {
 
 		$content = ob_get_contents();
 
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_rewrite_domain', array(&$content, &$in_ajax));
+		}
+		// bluelovers
+
 		$_G['domain']['search'] && $content = str_replace($_G['domain']['search'], $_G['domain']['replace'], $content);
 
 		// bluelovers
-		if ($_G['setting']['domain']['app']['default'] || $_G['setting']['rewritestatus']) {
-			$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_rewrite_domain_app', array(&$content, &$in_ajax));
 		}
 		// bluelovers
 
 		$_G['setting']['domain']['app']['default'] && $content = preg_replace("/<a href=\"([^\"]+)\"/e", "rewriteoutput('site_default', 0, '".$_G['setting']['domain']['app']['default'].$port.$_G['siteroot']."', '\\1')", $content);
+
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_rewrite_content', array(&$content, &$in_ajax));
+		}
+		// bluelovers
 
 		if($_G['setting']['rewritestatus'] && !defined('IN_MODCP') && !defined('IN_ADMINCP')) {
 			$searcharray = $replacearray = array();
 			$array = rewritedata();
 			$content = preg_replace($array['search'], $array['replace'], $content);
 		}
+
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_rewrite_content_echo', array(&$content, &$in_ajax));
+		}
+		// bluelovers
 
 		// bluelovers
 		if (!$in_ajax) {

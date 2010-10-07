@@ -30,6 +30,10 @@ function bbcode2html(str) {
 		return '';
 	}
 
+	// bluelovers
+	str = preg_replace(['(\r\n|\n|\r)'], ['\n'], str);
+	// bluelovers
+
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
 	}
@@ -65,9 +69,12 @@ function bbcode2html(str) {
 		str = str.replace(/\[size=(\d+?)\]/ig, '<font size="$1">');
 		str = str.replace(/\[size=(\d+(\.\d+)?(px|pt)+?)\]/ig, '<font style="font-size: $1">');
 		str = str.replace(/\[font=([^\[\<]+?)\]/ig, '<font face="$1">');
-		str = str.replace(/\[align=([^\[\<]+?)\]/ig, '<p align="$1">');
-		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
-		str = str.replace(/\[float=([^\[\<]+?)\]/ig, '<br style="clear: both"><span style="float: $1;">');
+//		str = str.replace(/\[align=([^\[\<]+?)\]/ig, '<p align="$1">');
+//		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
+//		str = str.replace(/\[float=([^\[\<]+?)\]/ig, '<br style="clear: both"><span style="float: $1;">');
+		str = str.replace(/\n?\[align=([^\[\<]+?)\]/ig, '<p align="$1">');
+		str = str.replace(/\n?\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
+		str = str.replace(/\n?\[float=([^\[\<]+?)\]/ig, '<br style="clear: both"><span style="float: $1;">');
 		str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
 
 		re = /\[table(?:=(\d{1,4}%?)(?:,([\(\)%,#\w ]+))?)?\]\s*([\s\S]+?)\s*\[\/table\]/ig;
@@ -76,9 +83,12 @@ function bbcode2html(str) {
 		}
 
 		str = preg_replace([
-			'\\\[\\\/color\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\\[\\\/align\\\]', '\\\[\\\/p\\\]', '\\\[b\\\]', '\\\[\\\/b\\\]',
-			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\\[hr\\\]', '\\\[list\\\]', '\\\[list=1\\\]', '\\\[list=a\\\]',
-			'\\\[list=A\\\]', '\\s?\\\[\\\*\\\]', '\\\[\\\/list\\\]', '\\\[indent\\\]', '\\\[\\\/indent\\\]', '\\\[\\\/float\\\]'
+//			'\\\[\\\/color\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\\[\\\/align\\\]', '\\\[\\\/p\\\]', '\\\[b\\\]', '\\\[\\\/b\\\]',
+//			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\\[hr\\\]', '\\\[list\\\]', '\\\[list=1\\\]', '\\\[list=a\\\]',
+//			'\\\[list=A\\\]', '\\s?\\\[\\\*\\\]', '\\\[\\\/list\\\]', '\\\[indent\\\]', '\\\[\\\/indent\\\]', '\\\[\\\/float\\\]'
+			'\\\[\\\/color\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\s*\\\[\\\/align\\\]\\n?', '\\s*\\\[\\\/p\\\]\\n?', '\\\[b\\\]', '\\\[\\\/b\\\]',
+			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\n?\\\[hr\\\]\\n?', '\\\[list\\\]\\s*', '\\\[list=1\\\]\\s*', '\\\[list=a\\\]\\s*',
+			'\\\[list=A\\\]\\s*', '\\s*\\\[\\\*\\\]', '\\s*\\\[\\\/list\\\]', '\\n?\\\[indent\\\]', '\\s*\\\[\\\/indent\\\]\\n?', '\\s*\\\[\\\/float\\\]\\n?'
 			], [
 			'</font>', '</font>', '</font>', '</p>', '</p>', '<b>', '</b>', '<i>',
 			'</i>', '<u>', '</u>', '<strike>', '</strike>', '<hr class="l" />', '<ul>', '<ul type=1 class="litype_1">', '<ul type=a class="litype_2">',
@@ -130,9 +140,12 @@ function clearcode(str) {
 	str= str.replace(/\[size=(\d+?)\]\[\/size\]/ig, '', str);
 	str= str.replace(/\[size=(\d+(\.\d+)?(px|pt)+?)\]\[\/size\]/ig, '', str);
 	str= str.replace(/\[font=([^\[\<]+?)\]\[\/font\]/ig, '', str);
-	str= str.replace(/\[align=([^\[\<]+?)\]\[\/align\]/ig, '', str);
-	str= str.replace(/\[p=(\d{1,2}), (\d{1,2}), (left|center|right)\]\[\/p\]/ig, '', str);
-	str= str.replace(/\[float=([^\[\<]+?)\]\[\/float\]/ig, '', str);
+//	str= str.replace(/\[align=([^\[\<]+?)\]\[\/align\]/ig, '', str);
+//	str= str.replace(/\[p=(\d{1,2}), (\d{1,2}), (left|center|right)\]\[\/p\]/ig, '', str);
+//	str= str.replace(/\[float=([^\[\<]+?)\]\[\/float\]/ig, '', str);
+	str= str.replace(/\n?\[align=([^\[\<]+?)\]\[\/align\]\n?/ig, '', str);
+	str= str.replace(/\n?\[p=(\d{1,2}), (\d{1,2}), (left|center|right)\]\[\/p\]\n?/ig, '', str);
+	str= str.replace(/\n?\[float=([^\[\<]+?)\]\[\/float\]\n?/ig, '', str);
 	str= str.replace(/\[quote\]\[\/quote\]/ig, '', str);
 	str= str.replace(/\[code\]\[\/code\]/ig, '', str);
 	str= str.replace(/\[table\]\[\/table\]/ig, '', str);
@@ -164,8 +177,10 @@ function dstag(options, text, tagname) {
 	if(in_array(tagname, ['div', 'p'])) {
 		align = getoptionvalue('align', options);
 		if(in_array(align, ['left', 'center', 'right'])) {
-			prepend = '[align=' + align + ']' + prepend;
-			append += '[/align]';
+//			prepend = '[align=' + align + ']' + prepend;
+//			append += '[/align]';
+			prepend = '\n[align=' + align + ']' + prepend;
+			append += '[/align]\n';
 		} else {
 			append += '\n';
 		}
@@ -207,9 +222,10 @@ function ptag(options, text, tagname) {
 	align = in_array(align, ['left', 'center', 'right']) ? align : 'left';
 
 	if(lineHeight === null && textIndent === null) {
-		return '[align=' + align + ']' + text + '[/align]';
+		return '\n[align=' + align + ']' + text + '[/align]\n';
 	} else {
-		return '[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + text + '[/p]';
+//		return '[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + text + '[/p]';
+		return '\n[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + text + '[/p]\n';
 	}
 }
 
@@ -292,23 +308,40 @@ function html2bbcode(str) {
 		str = preg_replace([
 			'<table([^>]*(width|background|background-color|bgcolor)[^>]*)>',
 			'<table[^>]*>',
+//			'<tr[^>]*(?:background|background-color|bgcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
+//			'<tr[^>]*>',
+//			'(<t[dh]([^>]*(left|center|right)[^>]*)>)\\\s*([\\\s\\\S]+?)\\\s*(<\/t[dh]>)',
+//			'<t[dh]([^>]*(width|colspan|rowspan)[^>]*)>',
+//			'<t[dh][^>]*>',
+//			'<\/t[dh]>',
+
+			// bluelovers
+			'\\\s*(<t[dh]([^>]*(left|center|right)[^>]*)>)\\\s*([\\\s\\\S]+?)\\\s*(<\/t[dh]>)',
+			'\\\s*<t[dh]([^>]*(width|colspan|rowspan)[^>]*)>',
+			'\\\s*<t[dh][^>]*>',
+			'\\\s*<\/t[dh]>',
 			'<tr[^>]*(?:background|background-color|bgcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
 			'<tr[^>]*>',
-			'(<t[dh]([^>]*(left|center|right)[^>]*)>)\\\s*([\\\s\\\S]+?)\\\s*(<\/t[dh]>)',
-			'<t[dh]([^>]*(width|colspan|rowspan)[^>]*)>',
-			'<t[dh][^>]*>',
-			'<\/t[dh]>',
+			// bluelovers
+
 			'<\/tr>',
 			'<\/table>'
 		], [
 			function($1, $2) {return tabletag($2);},
 			'[table]\n',
-			function($1, $2, $3) {return '[tr=' + $3 + ']';},
-			'[tr]',
+//			function($1, $2, $3) {return '[tr=' + $3 + ']';},
+//			'[tr]',
 			function($1, $2, $3, $4, $5, $6) {return $2 + '[align=' + $4 + ']' + $5 + '[/align]' + $6},
 			function($1, $2) {return tdtag($2);},
 			'[td]',
-			'[/td]',
+//			'[/td]',
+			'[/td]\n',
+
+			// bluelovers
+			function($1, $2, $3) {return '[tr=' + $3 + ']\n';},
+			'[tr]\n',
+			// bluelovers
+
 			'[/tr]\n',
 			'[/table]'
 		], str);
@@ -335,6 +368,10 @@ function html2bbcode(str) {
 		str = recursion('div', str, 'dstag');
 		str = recursion('p', str, 'ptag');
 		str = recursion('span', str, 'dstag');
+
+		// bluelovers
+		str = preg_replace(['\\\n{2,}?(\\\[(p|align|float))', '(\\\[\\\/(p|align|float))\\\n?'], ['\n$1', '$1'], str);
+		// bluelovers
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');
@@ -351,7 +388,8 @@ function tablesimple(s, table, str) {
 	if(strpos(str, '[tr=') || strpos(str, '[td=')) {
 		return s;
 	} else {
-		return '[table=' + table + ']\n' + preg_replace(['\\\[tr\\\]', '\\\[\\\/td\\\]\\\s?\\\[td\\\]', '\\\[\\\/tr\\\]\s?', '\\\[td\\\]', '\\\[\\\/td\\\]', '\\\[\\\/td\\\]\\\[\\\/tr\\\]'], ['', '|', '', '', '', '', ''], str) + '[/table]';
+//		return '[table=' + table + ']\n' + preg_replace(['\\\[tr\\\]', '\\\[\\\/td\\\]\\\s?\\\[td\\\]', '\\\[\\\/tr\\\]\s?', '\\\[td\\\]', '\\\[\\\/td\\\]', '\\\[\\\/td\\\]\\\[\\\/tr\\\]'], ['', '|', '', '', '', '', ''], str) + '[/table]';
+		return '[table=' + table + ']\n' + preg_replace(['\\\[tr\\\]', '\\\[\\\/td\\\]\\\s*\\\[td\\\]', '\\\[\\\/tr\\\]\s*', '\\\[td\\\]', '\\\[\\\/td\\\]', '\\\[\\\/td\\\]\\\[\\\/tr\\\]'], ['', '|', '', '', '', '', ''], str) + '[/table]';
 	}
 }
 
@@ -493,14 +531,22 @@ function parsetable(width, bgcolor, str) {
 		str = str.replace(/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ig, function($1, $2, $3, $4, $5) {
 			return '<tr' + ($2 ? ' style="background-color: ' + $2 + '"' : '') + '><td' + ($3 ? ' colspan="' + $3 + '"' : '') + ($4 ? ' rowspan="' + $4 + '"' : '') + ($5 ? ' width="' + $5 + '"' : '') + '>';
 		});
-		str = str.replace(/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ig, function($1, $2) {
+//		str = str.replace(/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ig, function($1, $2) {
+//			return '</td><td' + ($2 ? ' width="' + $2 + '"' : '') + '>';
+//		});
+		str = str.replace(/\s*\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ig, function($1, $2) {
 			return '</td><td' + ($2 ? ' width="' + $2 + '"' : '') + '>';
 		});
-		str = str.replace(/\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ig, function($1, $2, $3, $4) {
+//		str = str.replace(/\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ig, function($1, $2, $3, $4) {
+//			return '</td><td' + ($2 ? ' colspan="' + $2 + '"' : '') + ($3 ? ' rowspan="' + $3 + '"' : '') + ($4 ? ' width="' + $4 + '"' : '') + '>';
+//		});
+		str = str.replace(/\s*\[\/td\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ig, function($1, $2, $3, $4) {
 			return '</td><td' + ($2 ? ' colspan="' + $2 + '"' : '') + ($3 ? ' rowspan="' + $3 + '"' : '') + ($4 ? ' width="' + $4 + '"' : '') + '>';
 		});
-		str = str.replace(/\[\/td\]\s*\[\/tr\]\s*/ig, '</td></tr>');
-		str = str.replace(/<td> <\/td>/ig, '<td>&nbsp;</td>');
+//		str = str.replace(/\[\/td\]\s*\[\/tr\]\s*/ig, '</td></tr>');
+//		str = str.replace(/<td> <\/td>/ig, '<td>&nbsp;</td>');
+		str = str.replace(/\s*\[\/td\]\s*\[\/tr\]\s*/ig, '</td></tr>');
+		str = str.replace(/<td>\s*<\/td>/ig, '<td></td>');
 	}
 	return '<table ' + (width == '' ? '' : 'width="' + width + '" ') + 'class="t_table"' + (isUndefined(bgcolor) ? '' : ' style="background-color: ' + bgcolor + '"') + simple +'>' + str + '</table>';
 }
@@ -513,6 +559,7 @@ function recursion(tagname, text, dofunction, extraargs) {
 	if(extraargs == null) {
 		extraargs = '';
 	}
+
 	tagname = tagname.toLowerCase();
 
 	var open_tag = '<' + tagname;

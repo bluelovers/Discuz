@@ -3,6 +3,9 @@
 #
 
 User-agent: *
+# 測試階段拒絕搜尋引擎訪問
+Disallow: /
+
 Disallow: /api/
 Disallow: /data/
 Disallow: /source/

@@ -225,7 +225,8 @@ class block_groupattachment {
 			while($value = DB::fetch($query)) {
 				$fids[] = intval($value['fid']);
 			}
-			$fids = array_unique($fids);
+//			$fids = array_unique($fids);
+			$fids = array_unique((array)$fids);
 		}
 		$datalist = $list = array();
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')

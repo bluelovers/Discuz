@@ -49,7 +49,8 @@ if($_GET['view'] == 'online') {
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_session')." $wheresql"), 0);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql AND invisible='0' ORDER BY lastactivity DESC LIMIT $start,$perpage");
+//		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql AND invisible='0' ORDER BY lastactivity DESC LIMIT $start,$perpage");
+		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql AND invisible='0' ORDER BY (uid > 0) DESC, lastactivity DESC LIMIT $start,$perpage");
 		while($value = DB::fetch($query)) {
 
 			if($value['magichidden']) {
@@ -64,7 +65,8 @@ if($_GET['view'] == 'online') {
 			}
 
 			if(!$value['invisible']) $ols[$value['uid']] = $value['lastactivity'];
-			$list[$value['uid']] = $value;
+//			$list[$value['uid']] = $value;
+			$list[$value['uid'] ? $value['uid'] : $value['ip1'].'.'.$value['ip2'].'.'.$value['ip3'].'.'.$value['ip4']] = $value;
 			$fuids[$value['uid']] = $value['uid'];
 		}
 

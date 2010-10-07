@@ -943,7 +943,8 @@ function showEditorMenu(tag, params) {
 					for (var row = 0; row < rows; row++) {
 						str += '<tr>\n';
 						for (col = 0; col < columns; col++) {
-							str += '<td>&nbsp;</td>\n';
+//							str += '<td>&nbsp;</td>\n';
+							str += '<td></td>\n';
 						}
 						str += '</tr>\n';
 					}
@@ -951,9 +952,11 @@ function showEditorMenu(tag, params) {
 				} else {
 					str = '[table=' + (width ? width : '50%') + (bgcolor ? ',' + bgcolor : '') + ']\n';
 					for (var row = 0; row < rows; row++) {
-						str += '[tr]';
+//						str += '[tr]';
+						str += '[tr]\n';
 						for (col = 0; col < columns; col++) {
-							str += '[td] [/td]';
+//							str += '[td] [/td]';
+							str += '[td][/td]\n';
 						}
 						str += '[/tr]\n';
 					}
