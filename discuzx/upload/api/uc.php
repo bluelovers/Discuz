@@ -178,7 +178,11 @@ class uc_note {
 		$uid = intval($get['uid']);
 		$query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid'");
 		if($member = DB::fetch($query)) {
-			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+//			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+			dsetcookie('auth', authcode(implode(array(
+				$member[password], $member[uid],
+				$_G['clientip'], TIMESTAMP, $get['agent'],
+			), "\t"), 'ENCODE'), $cookietime);
 		}
 	}
 

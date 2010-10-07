@@ -45,7 +45,8 @@ class plugin_myrepeats {
 				$userlist[] = $user['username'];
 			}
 			$cookievalue = implode("\t", $userlist);
-			dsetcookie('mrd', $cookievalue ? $cookievalue : "\t", 3600);
+//			dsetcookie('mrd', $cookievalue ? $cookievalue : "\t", 3600);
+			dsetcookie('mrd', $cookievalue ? addslashes($cookievalue) : "\t", 3600);
 		}
 		$this->global_usernav_extra1 = '<span class="pipe">|</span><span id="myrepeats" class="showmenu" onmouseover="showMenu(this.id)">'.lang('plugin/myrepeats', 'switch').'</span>';
 		$list = '<ul id="myrepeats_menu" class="p_pop" style="display:none;">';

@@ -479,7 +479,19 @@ class discuz_core {
 			if($auth = getglobal('auth', 'cookie')) {
 				$auth = daddslashes(explode("\t", authcode($auth, 'DECODE')));
 			}
-			list($discuz_pw, $discuz_uid) = empty($auth) || count($auth) < 2 ? array('', '') : $auth;
+//			list($discuz_pw, $discuz_uid) = empty($auth) || count($auth) < 2 ? array('', '') : $auth;
+			list($discuz_pw, $discuz_uid) = empty($auth) || count((array)$auth) < 2 ? array('', '') : $auth;
+
+			// bluelovers
+			if ($discuz_uid) {
+				// 參考對應 function_member.php ; setloginstatus
+				// 修改為要求瀏覽器訊息 必須要符合 否則視同無效
+				if ($auth[4] != md5($_SERVER['HTTP_USER_AGENT'])) {
+					unset($discuz_pw, $discuz_uid);
+				}
+			}
+//			dexit(array($discuz_pw, $discuz_uid, $auth));
+			// bluelovers
 
 			if($discuz_uid) {
 				$user = getuserbyuid($discuz_uid);
@@ -1188,6 +1200,15 @@ class discuz_session {
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
+		// bluelovers
+		if ($uid > 0) {
+			$profile = getuserprofile('gender');
+			$this->set('gender', $profile);
+
+//			dexit($profile);
+		}
+		// bluelvoers
+
 		return $this->var;
 	}
 
@@ -1195,7 +1216,9 @@ class discuz_session {
 
 		global $_G;
 		$onlinehold = $_G['setting']['onlinehold'];
-		$guestspan = 60;
+//		$guestspan = 60;
+		//BUG: 增加時間後 似乎仍然無法解決產生與自己相同IP的訪客BUG
+		$guestspan = 1800;
 
 		$onlinehold = time() - $onlinehold;
 		$guestspan = time() - $guestspan;

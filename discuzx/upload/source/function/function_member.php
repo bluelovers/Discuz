@@ -87,7 +87,11 @@ function setloginstatus($member, $cookietime) {
 	$_G['member'] = $member;
 	$_G['core']->session->isnew = 1;
 
-	dsetcookie('auth', authcode("{$member['password']}\t{$member['uid']}", 'ENCODE'), $cookietime, 1, true);
+//	dsetcookie('auth', authcode("{$member['password']}\t{$member['uid']}", 'ENCODE'), $cookietime, 1, true);
+	dsetcookie('auth', authcode(implode(array(
+		$member['password'], $member['uid'],
+		$_G['clientip'], TIMESTAMP, md5($_SERVER['HTTP_USER_AGENT']),
+	), "\t"), 'ENCODE'), $cookietime, 1, true);
 	dsetcookie('loginuser');
 	dsetcookie('activationauth');
 	dsetcookie('pmnum');

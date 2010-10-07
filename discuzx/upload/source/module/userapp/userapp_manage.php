@@ -41,6 +41,11 @@ if(submitcheck('ordersubmit')) {
 $my_prefix = 'http://uchome.manyou.com';
 if(empty($_GET['my_suffix'])) {
 	$appId = intval($_GET['appid']);
+
+	// bluelovers
+	$_G['action']['fid'] = $appId;
+	// bluelovers
+
 	if ($appId) {
 		$mode = $_GET['mode'];
 		if($mode == 'about') {

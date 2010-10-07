@@ -19,10 +19,15 @@ $cachelist = array('userapp','usergroups', 'myapp');
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'index' : $discuz->var['mod'];
 
-$appid = empty($_G['gp_id']) ? '': intval($_G['gp_id']);
+//$appid = empty($_G['gp_id']) ? '': intval($_G['gp_id']);
+$appid = empty($_G['gp_id']) ? 0: intval($_G['gp_id']);
 if($appid) {
 	$mod = 'app';
 }
+
+// bluelovers
+$_G['action']['fid'] = $appid;
+// bluelovers
 
 $discuz->cachelist = $cachelist;
 $discuz->init();
