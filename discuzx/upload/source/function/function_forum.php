@@ -508,6 +508,7 @@ function loadforum() {
 					}
 				}
 			}
+
 		} else {
 			$fid = 0;
 		}

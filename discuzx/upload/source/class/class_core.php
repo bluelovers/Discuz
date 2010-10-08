@@ -267,6 +267,10 @@ class discuz_core {
 			$_FILES = daddslashes($_FILES);
 		}
 
+		// bluelovers
+		Scorpio_Hook::execute('Func_'.__METHOD__.':After_MAGIC_QUOTES_GPC', array());
+		// bluelovers
+
 		$prelength = strlen($this->config['cookie']['cookiepre']);
 		foreach($_COOKIE as $key => $val) {
 			if(substr($key, 0, $prelength) == $this->config['cookie']['cookiepre']) {

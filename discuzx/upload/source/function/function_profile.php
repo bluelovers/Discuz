@@ -451,6 +451,11 @@ function profile_show($fieldid, $space=array()) {
 
 	// bluelovers
 
+	} elseif ($fieldid == 'bio') {
+		require_once libfile('function/discuzcode');
+
+		return discuzcode($space[$fieldid]);
+
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {

@@ -239,6 +239,9 @@ if(submitcheck('addsubmit')) {
 		$setarr['upid'] = $topupdo['upid'];
 		$setarr['grade'] = $updo['grade'];
 	}
+
+//	dexit(array($topupdo, $updo, $setarr));
+
 	// bluelovers
 
 	//最多層級

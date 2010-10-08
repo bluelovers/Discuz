@@ -716,6 +716,11 @@ if($_G['setting']['forumjump']) {
 	$forummenu = forumselect(FALSE, 1);
 }
 
+// bluelovers
+require_once libfile('function/discuzcode');
+$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+// bluelovers
+
 $template = 'diy:forum/forumdisplay:'.$_G['fid'];
 
 if(!empty($_G['forum']['threadsorts']['templatelist']) && $_G['forum']['status'] != 3) {

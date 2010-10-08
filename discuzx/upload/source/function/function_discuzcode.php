@@ -109,14 +109,17 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	static $authorreplyexist;
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
-		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
+//		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
+		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/iesU", "codedisp('\\1')", $message);
 
 		// bluelvoers
-		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/ies", "codedisp2('\\2', '\\1')", $message);
+//		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/ies", "codedisp2('\\2', '\\1')", $message);
+		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/iesU", "codedisp2('\\2', '\\1')", $message);
 		// bluelvoers
 	}
 
 	$msglower = strtolower($message);
+//	$msglower = mb_strtolower($message);
 
 	$htmlon = $htmlon && $allowhtml ? 1 : 0;
 
@@ -137,6 +140,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			$message = preg_replace("/ed2k:\/\/(.+?)\//e", "parseed2k('\\1')", $message);
 		}
 	}
+
+//	dexit($message);
 
 	if(!$bbcodeoff && $allowbbcode) {
 		if(strpos($msglower, '[/url]') !== FALSE) {
@@ -214,6 +219,16 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		if($parsetype != 1 && $allowbbcode < 0 && isset($_G['cache']['bbcodes'][-$allowbbcode])) {
 			$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], $_G['cache']['bbcodes'][-$allowbbcode]['replacearray'], $message);
 		}
+
+		/*
+			http://discuz.bluelovers.net/thread-22224.html
+			http://in-here.us/thread/22224/1/1.html
+
+			BUG: 部分文章經過以下處理後 會變為空白
+			加入 U 之後 似乎就修正此問題
+		*/
+//		dexit($message);
+
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
 			if(strpos($msglower, '[hide]') !== FALSE) {
 				if($authorreplyexist === null) {
@@ -221,14 +236,18 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 					$authorreplyexist = !$_G['forum']['ismoderator'] ? DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND ".($_G['uid'] ? "authorid='$_G[uid]'" : "authorid=0 AND useip='$_G[clientip]'")." LIMIT 1") : TRUE;
 				}
 				if($authorreplyexist) {
-					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
+//					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
+					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/isU", tpl_hide_reply(), $message);
 				} else {
-					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
+//					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
+					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/isU", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
+
 			if(strpos($msglower, '[hide=') !== FALSE) {
-				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
+//				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
+				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/iesU", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
 	}

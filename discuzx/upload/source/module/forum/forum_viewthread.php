@@ -805,7 +805,7 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 	static $signatures;
 
 	if (!isset($signatures[$post['authorid']])) {
-		$post['signature'] = $post['usesig'] ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? discuzcode($post['signature']) : '') : discuzcode($post['signature'])) : '';
+//		$post['signature'] = $post['usesig'] ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? discuzcode($post['signature']) : '') : discuzcode($post['signature'])) : '';
 
 		$signatures[$post['authorid']] = $post['signature'];
 	} else {

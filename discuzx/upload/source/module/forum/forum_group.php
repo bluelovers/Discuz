@@ -36,7 +36,8 @@ if($_G['fid']) {
 	if(!$metakeywords) {
 		$metakeywords = $_G['forum']['name'];
 	}
-	$metadescription = $_G['forum']['description'];
+//	$metadescription = $_G['forum']['description'];
+	$metadescription = strip_tags($_G['forum']['description']);
 	if(!$metadescription) {
 		$metadescription = $_G['forum']['name'];
 	}
@@ -57,6 +58,13 @@ if($_G['fid']) {
 	$groupuser = DB::fetch_first("SELECT * FROM ".DB::table('forum_groupuser')." WHERE fid='$_G[fid]' AND uid='$_G[uid]'");
 	$onlinemember = grouponline($_G['fid'], 1);
 	$groupmanagers = $_G['forum']['moderators'];
+
+	// bluelovers
+	if ($action != 'manage') {
+		require_once libfile('function/discuzcode');
+		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	}
+	// bluelovers
 }
 
 if(in_array($action, array('out', 'viewmember', 'manage', 'index', 'memberlist'))) {
@@ -274,7 +282,8 @@ if($action == 'index') {
 		if($newfid) {
 			$jointype = intval($_G['gp_jointype']);
 			$gviewperm = intval($_G['gp_gviewperm']);
-			$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+//			$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+			$descriptionnew = censor(rtrim($_G['gp_descriptionnew']));
 			DB::query("INSERT INTO ".DB::table('forum_forumfield')."(fid, description, jointype, gviewperm, dateline, founderuid, foundername, membernum) VALUES ('$newfid', '$descriptionnew', '$jointype', '$gviewperm', '".TIMESTAMP."', '$_G[uid]', '$_G[username]', '1')");
 			DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$_G[gp_fup]'");
 			DB::query("INSERT INTO ".DB::table('forum_groupuser')."(fid, uid, username, level, joindateline) VALUES ('$newfid', '$_G[uid]', '$_G[username]', '1', '".TIMESTAMP."')");
@@ -372,7 +381,7 @@ if($action == 'index') {
 				$iconsql .= ", icon='$iconnew'";
 
 				// bluelovers
-				if (!preg_match('/^https?:\/\//i', $_G['forum']['icon']) && preg_match('/^https?:\/\//i', $iconnew)) {
+				if (!preg_match('/^https?:\/\//i', $_G['forum']['icon']) && preg_match('/^https?:\/\//i', $iconnew) && preg_match('/data\/attachment/i', $_G['forum']['icon'])) {
 					@unlink($_G['forum']['icon']);
 				}
 				// bluelovers
@@ -382,22 +391,27 @@ if($action == 'index') {
 				$iconsql .= ", banner='$bannernew'";
 
 				// bluelovers
-				if (!preg_match('/^https?:\/\//i', $_G['forum']['banner']) && preg_match('/^https?:\/\//i', $bannernew)) {
+				if (!preg_match('/^https?:\/\//i', $_G['forum']['banner']) && preg_match('/^https?:\/\//i', $bannernew) && preg_match('/data\/attachment/i', $_G['forum']['banner'])) {
 					@unlink($_G['forum']['banner']);
 				}
 				// bluelovers
 
 			} elseif($deletebanner) {
 				$iconsql .= ", banner=''";
-				@unlink($_G['forum']['banner']);
+//				@unlink($_G['forum']['banner']);
+				preg_match('/data\/attachment/i', $_G['forum']['banner']) && @unlink($_G['forum']['banner']);
 			}
-			$_G['gp_descriptionnew'] = nl2br(dhtmlspecialchars(censor(trim($_G['gp_descriptionnew']))));
+//			$_G['gp_descriptionnew'] = nl2br(dhtmlspecialchars(censor(trim($_G['gp_descriptionnew']))));
+			$_G['gp_descriptionnew'] = censor(rtrim($_G['gp_descriptionnew']));
 			$_G['gp_jointypenew'] = intval($_G['gp_jointypenew']);
 			if($_G['gp_jointypenew'] == '-1' && $_G['uid'] != $_G['forum']['founderuid']) {
 				showmessage('group_close_only_founder');
 			}
 			$_G['gp_gviewpermnew'] = intval($_G['gp_gviewpermnew']);
 			DB::query("UPDATE ".DB::table('forum_forumfield')." SET description='$_G[gp_descriptionnew]', jointype='$_G[gp_jointypenew]', gviewperm='$_G[gp_gviewpermnew]'$iconsql WHERE fid='$_G[fid]'");
+
+//			dexit("UPDATE ".DB::table('forum_forumfield')." SET description='$_G[gp_descriptionnew]', jointype='$_G[gp_jointypenew]', gviewperm='$_G[gp_gviewpermnew]'$iconsql WHERE fid='$_G[fid]'");
+
 			showmessage('group_setup_succeed', $url);
 		} else {
 			$firstgid = $_G['cache']['grouptype']['second'][$_G['forum']['fup']]['fup'];
@@ -648,6 +662,14 @@ if($action == 'index') {
 	} else {
 		showmessage('undefined_action');
 	}
+
+	// bluelovers
+	if ($action == 'manage') {
+		require_once libfile('function/discuzcode');
+		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	}
+	// bluelovers
+
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {

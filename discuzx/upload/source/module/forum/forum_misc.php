@@ -262,7 +262,8 @@ if($_G['gp_action'] == 'paysucceed') {
 	}
 	if(submitcheck('postappendsubmit')) {
 		$message = censor($_G['gp_postappendmessage']);
-		$message = $post['message'] . "\n\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
+//		$message = $post['message'] . "\n\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
+		$message = $post['message'] . "\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
 		require_once libfile('function/post');
 		$bbcodeoff = checkbbcodes($message, 0);
 		DB::update($posttable, array(

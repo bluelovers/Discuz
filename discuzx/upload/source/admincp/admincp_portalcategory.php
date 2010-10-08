@@ -15,7 +15,8 @@ cpheader();
 $operation = in_array($operation, array('delete', 'move', 'perm', 'add', 'edit')) ? $operation : 'list';
 
 loadcache('portalcategory');
-$portalcategory = $_G['cache']['portalcategory'];
+//$portalcategory = $_G['cache']['portalcategory'];
+$portalcategory = (array)$_G['cache']['portalcategory'];
 
 if($operation == 'list') {
 

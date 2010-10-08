@@ -11,6 +11,21 @@
 	$Id: hooks_core.php 109 2010-08-01 22:22:26Z user $
 */
 
+Scorpio_Hook::add('Func_discuz_core::_init_input:After_MAGIC_QUOTES_GPC', '_eFunc_discuz_core__init_input_After_MAGIC_QUOTES_GPC');
+
+function _eFunc_discuz_core__init_input_After_MAGIC_QUOTES_GPC() {
+	$_GET = scoarray::map_all('scotext::lf', $_GET);
+	$_POST = scoarray::map_all('scotext::lf', $_POST);
+
+	if (isset($_POST['message']) && !scotext::is_ascii($_POST['message'])) {
+		global $_G;
+
+		$ER = error_reporting( ~ E_NOTICE);
+		$_POST['message'] = iconv($_G['config']['output']['charset'], $_G['config']['output']['charset'] . '//IGNORE', $_POST['message']);
+		error_reporting($ER);
+	}
+}
+
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
 function _eFunc_libfile(&$ret, $root, $force = 0) {
@@ -76,9 +91,7 @@ function _eFunc_showmessage_Before_custom($agv = array()) {
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 
 function _eFunc_output_Before_rewrite_content_echo(&$content, &$in_ajax) {
-	global $_G;
-
-	if ($_G['setting']['rewritestatus'] && !defined('IN_MODCP') && !defined('IN_ADMINCP')) {
+	if (!defined('IN_MODCP') && !defined('IN_ADMINCP')) {
 		$content = preg_replace("/<a\s+href=\"(#+|javascript\:\s*;?|\s*)\"/i", "<a href=\"javascript:void(0);\"", $content);
 	}
 }
@@ -86,13 +99,8 @@ function _eFunc_output_Before_rewrite_content_echo(&$content, &$in_ajax) {
 Scorpio_Hook::add('Func_output:Before_rewrite_domain_app', '_eFunc_output_Before_rewrite_domain_app');
 
 function _eFunc_output_Before_rewrite_domain_app(&$content, &$in_ajax) {
-	global $_G;
-
-	if ($_G['setting']['rewritestatus'] && !defined('IN_MODCP') && !defined('IN_ADMINCP')) {
-		if (1 || $_G['setting']['domain']['app']['default']) {
-//			$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
-			$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9,\.;\(\)]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
-		}
+	if (!defined('IN_MODCP') && !defined('IN_ADMINCP')) {
+		$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9,\.;\(\)]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
 	}
 }
 
@@ -179,7 +187,7 @@ EOF
 
 		$hook_data .= $ss;
 	} elseif ($hookid == 'forumdisplay_postbutton_bottom' || $hookid == 'forumdisplay_postbutton_top') {
-		$hook_data .= '<div style="padding: 10px 10px;"><span style="width: 100px;height: 32px;padding: 10px 20px 10px 35px;background: url(static/image/plus/common/refresh.gif) no-repeat 0px 0px;"><a onclick="window.location.reload();" href="#">刷新</a></span></div>';
+		$hook_data .= '<div style="padding: 10px 10px;"><span style="width: 100px;height: 32px;padding: 10px 20px 10px 35px;background: url(static/image/plus/common/refresh.gif) no-repeat 0px 0px;"><a href="#" onclick="window.location.reload();">刷新</a></span></div>';
 	}
 
 }

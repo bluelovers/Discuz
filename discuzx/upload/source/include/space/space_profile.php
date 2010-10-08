@@ -138,6 +138,11 @@ $navtitle = lang('space', 'sb_profile', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_profile', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_profile', array('who' => $space['username']));
 
+// bluelovers
+require_once libfile('function/discuzcode');
+$space['sightml'] && $space['sightml'] = discuzcode($post['sightml']);
+// bluelovers
+
 if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");

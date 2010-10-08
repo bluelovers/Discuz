@@ -123,8 +123,13 @@ function grouplist($orderby = 'displayorder', $fieldarray = array(), $num = 1, $
 	}
 	while($group = DB::fetch($query)) {
 		$group['iconstatus'] = $group['icon'] ? 1 : 0;
-		isset($group['icon']) && $group['icon'] = get_groupimg($group['icon'], 'icon');
-		isset($group['banner']) && $group['banner'] = get_groupimg($group['banner']);
+//		isset($group['icon']) && $group['icon'] = get_groupimg($group['icon'], 'icon');
+//		isset($group['banner']) && $group['banner'] = get_groupimg($group['banner']);
+
+		//BUG: 不知名BUG isset 無法正確判斷是否存在
+		$group['icon'] = get_groupimg($group['icon'], 'icon');
+		$group['banner'] = get_groupimg($group['banner']);
+
 		$group['orderid'] = $orderid ? intval($orderid) : '';
 		isset($group['dateline']) && $group['dateline'] = $group['dateline'] ? dgmdate($group['dateline'], 'd') : '';
 		isset($group['lastupdate']) && $group['lastupdate'] = $group['lastupdate'] ? dgmdate($group['lastupdate'], 'd') : '';

@@ -101,12 +101,19 @@ function getgpc($k, $type='GP') {
 		case 'G': $var = &$_GET; break;
 		case 'P': $var = &$_POST; break;
 		case 'C': $var = &$_COOKIE; break;
+
+		// bluelovers
+		case 'S': $var = &$_SERVER; break;
+		// bluelovers
+
 		default:
-			if(isset($_GET[$k])) {
-				$var = &$_GET;
-			} else {
-				$var = &$_POST;
-			}
+//			if(isset($_GET[$k])) {
+//				$var = &$_GET;
+//			} else {
+//				$var = &$_POST;
+//			}
+			$var = &$_REQUEST;
+
 			break;
 	}
 

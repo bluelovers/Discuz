@@ -41,7 +41,7 @@
 
 								<!--{if $action == 'index' && ($status == 2 || $status == 3)}-->
 									<p class="mtm">
-										{lang group_join_type}: 
+										{lang group_join_type}:
 										<!--{if $_G['forum']['jointype'] == 1}-->
 											<strong>{lang group_join_type_invite}</strong>
 										<!--{elseif $_G['forum']['jointype'] == 2}-->
@@ -66,7 +66,7 @@
 					<div class="bm">
 						<div class="bm_c xld xlda cl">
 							<dl>
-								<dd class="m"><img src="$_G[forum][icon]" alt="$_G[forum][name]" width="48" height="48" /></dd>
+								<dd class="m"><img src="$_G[forum][icon]" alt="$_G[forum][name]" _width="48" _height="48" /></dd>
 								<dt>$_G[forum][name]</dt>
 								<!--{if $_G[forum][description]}--><dd>$_G[forum][description]</dd><!--{/if}-->
 								<dd class="cl">
@@ -75,7 +75,7 @@
 								</dd>
 								<!--{if $action == 'index' && ($status == 2 || $status == 3)}-->
 								<dd>
-									{lang group_join_type}: 
+									{lang group_join_type}:
 									<!--{if $_G['forum']['jointype'] == 1}-->
 										<strong>{lang group_join_type_invite}</strong>
 									<!--{elseif $_G['forum']['jointype'] == 2}-->

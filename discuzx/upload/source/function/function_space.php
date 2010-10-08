@@ -446,6 +446,11 @@ function getblockhtml($blockname,$parameters = array()) {
 			if(empty($grouplist)) $grouplist = array();
 			foreach ($grouplist as $groupid => $group) {
 				$group['groupid'] = $groupid;
+
+				// bluelovers
+//				$group['icon'] = get_groupimg($group['icon'], 'icon');
+				// bluelvoers
+
 				$html .= lang('space', 'group_li',$group);
 			}
 			$html = '<ul class="ml mls cl">'.$html.'</ul>';

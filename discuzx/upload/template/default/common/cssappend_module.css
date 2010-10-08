@@ -50,3 +50,9 @@
 /** forum::viewthread,portal::view,portal::comment,home::space **/
 		.vw .d { font-size: inherit; }
 /** end **/
+
+/** group **/
+/* 搜尋 */
+	#nv_group .xlda .m { margin:8px 10px 8px -65px; }
+	#nv_group .xlda .m img { max-width: 150px; max-height: 150px; }
+/** end **/
