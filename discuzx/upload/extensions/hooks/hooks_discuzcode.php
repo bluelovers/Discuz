@@ -162,4 +162,10 @@ class scoembed {
 	}
 }
 
+Scorpio_Hook::add('Func_discuzcode:After_nl2br', '_eFunc_discuzcode_After_nl2br');
+
+function _eFunc_discuzcode_After_nl2br($conf) {
+	$conf['message'] = nl2brcode(str_replace('[tab][/tab]', "\t", $conf['message']), 1);
+}
+
 ?>

@@ -188,6 +188,18 @@ EOF
 		$hook_data .= $ss;
 	} elseif ($hookid == 'forumdisplay_postbutton_bottom' || $hookid == 'forumdisplay_postbutton_top') {
 		$hook_data .= '<div style="padding: 10px 10px;"><span style="width: 100px;height: 32px;padding: 10px 20px 10px 35px;background: url(static/image/plus/common/refresh.gif) no-repeat 0px 0px;"><a href="#" onclick="window.location.reload();">刷新</a></span></div>';
+	} elseif ($hookid == 'global_header_seohead') {
+
+		$ss = <<<EOF
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
 	}
 
 }
