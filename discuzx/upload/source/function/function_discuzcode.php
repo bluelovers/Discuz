@@ -108,6 +108,27 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 	static $authorreplyexist;
 
+	// bluelovers
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_code', array(array(
+			'message'			=> &$message
+			, 'smileyoff'		=> &$smileyoff
+			, 'bbcodeoff'		=> &$bbcodeoff
+			, 'htmlon'			=> &$htmlon
+			, 'allowsmilies'	=> &$allowsmilies
+			, 'allowbbcode'		=> &$allowbbcode
+			, 'allowimgcode'	=> &$allowimgcode
+			, 'allowhtml'		=> &$allowhtml
+			, 'jammer'			=> &$jammer
+			, 'parsetype'		=> &$parsetype
+			, 'authorid'		=> &$authorid
+			, 'allowmediacode'	=> &$allowmediacode
+			, 'pid'				=> &$pid
+			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
+	)));
+	// bluelovers
+
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 //		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/iesU", "codedisp('\\1')", $message);
@@ -143,6 +164,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			, 'allowmediacode'	=> &$allowmediacode
 			, 'pid'				=> &$pid
 			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
 	)));
 	// bluelovers
 
@@ -180,6 +203,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 
@@ -206,6 +231,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 
@@ -231,6 +258,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 
@@ -310,6 +339,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 
@@ -342,6 +373,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 
@@ -383,6 +416,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'allowmediacode'	=> &$allowmediacode
 				, 'pid'				=> &$pid
 				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
 		)));
 		// bluelovers
 	}
@@ -427,6 +462,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			, 'allowmediacode'	=> &$allowmediacode
 			, 'pid'				=> &$pid
 			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
 	)));
 	// bluelovers
 
@@ -459,6 +496,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			, 'allowmediacode'	=> &$allowmediacode
 			, 'pid'				=> &$pid
 			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
 	)));
 	// bluelovers
 
@@ -487,6 +526,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			, 'allowmediacode'	=> &$allowmediacode
 			, 'pid'				=> &$pid
 			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
 	)));
 	// bluelovers
 
