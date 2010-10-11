@@ -16,9 +16,10 @@
 		$('modlayercount').innerHTML = count;
 	}
 	function toggle_post(id) {
-		var obj = $('list_note_' + id); 
-		obj.style.display='block'; 
-		obj.style.height = obj.style.height == '55px' ? 'auto' : '55px' ;
+		var obj = $('list_note_' + id);
+		obj.style.display='block';
+//		obj.style.height = obj.style.height == '55px' ? 'auto' : '55px' ;
+		obj.style.maxHeight = obj.style.maxHeight == '100px' ? '500px' : '100px' ;
 	}
 	 function modthreads(operation) {
 		var checked = 0;
@@ -48,7 +49,7 @@
 			<li{if $op == 'replies'} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=moderate&op=replies{$forcefid}" hidefocus="true">{lang mod_option_subject_modreplies}</a></li>
 		<!--{/if}-->
 		<!--{if $_G['group']['allowmoduser']}-->
-			<li{if $op == 'members'} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=moderate&op=members" hidefocus="true">{lang mod_option_moduser}</a></li>
+			<li{if $op == 'members'} class="a"{/if}><a href="{$cpscript}?mod=modcp&action=moderate&op=members{$forcefid}" hidefocus="true">{lang mod_option_moduser}</a></li>
 		<!--{/if}-->
 	</ul>
 
@@ -62,18 +63,23 @@
 							<th width="10%">{lang mod_moderate_selectforum}: </th>
 							<th width="40%">
 								<span class="ftid">
-									<select name="fid" id="fid" width="124" class="ps">
+									<select name="fid" id="fid" _width="124" width="168" class="ps">
 										<option value="0">{lang all}</option>
-										<!--{loop $modforums[list] $id $name}-->
-										<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
-										<!--{/loop}-->
+										<!--{rem 美化板塊選擇樣式}-->
+										<!--{if $modforumselect}-->
+											$modforumselect
+										<!--{else}-->
+											<!--{loop $modforums[list] $id $name}-->
+											<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
+											<!--{/loop}-->
+										<!--{/if}-->
 									</select>
 								</span>
 							</td>
 							<th width="10%">{lang mod_moderate_thread_range}: </th>
 							<td width="40%">
 								<span class="ftid">
-									<select name="filter" id="filter" width="124" class="ps">
+									<select name="filter" id="filter" _width="124" width="168" class="ps">
 										<option value="0" $filtercheck[0]><!--{if $op == 'replies'}-->{lang mod_moderate_reply_num}<!--{else}-->{lang mod_moderate_thread_num}<!--{/if}--></option>
 										<option value="-3" $filtercheck[-3]><!--{if $op == 'replies'}-->{lang mod_moderate_ignorereply_num}<!--{else}-->{lang mod_moderate_ignorethread_num}<!--{/if}--></option>
 									</select>
@@ -114,9 +120,9 @@
 							<a href="forum.php?mod=forumdisplay&fid={$post[fid]}" target="_blank" class="xi2 xw1">{$modforums[list][$post[fid]]}</a> &rsaquo; <span class="xw1">$post[tsubject]</span><!--{if $post[subject]}-->&rsaquo; <span class="xw1">$post[subject]</span><!--{/if}-->
 						</p>
 						<p class="pbn">
-							<span class="xi2">$post[author]</span> 
+							<span class="xi2">$post[author]</span>
 							<span class="xg1">{lang poston} $post[dateline]</span>
-							<div id="list_note_{$post[id]}" style="overflow: auto; overflow-x: hidden; height:55px; word-break: break-all;">
+							<div id="list_note_{$post[id]}" style="overflow: auto; overflow-x: hidden; max-height:100px; word-break: break-all;">
 								$post[message] $post[attach] $post[sortinfo]
 							</div>
 						</p>
@@ -145,7 +151,7 @@
 						<th width="10%">{lang mod_moderate_member_range}:</th>
 						<td width="90%">
 							<span class="ftid">
-								<select name="filter" id="filter" width="150" class="ps">
+								<select name="filter" id="filter" _width="150" width="168" class="ps">
 									<option value="0" $filtercheck[0]>{lang mod_moderate_member_never} ( $count[0] )</option>
 									<option value="1" $filtercheck[1]>{lang mod_moderate_member_already} ( $count[1] )</option>
 								</select>

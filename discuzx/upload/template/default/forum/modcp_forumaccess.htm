@@ -65,10 +65,15 @@
 						<th width="15%">{lang mod_moderate_selectforum}:</th>
 						<td width="80%">
 							<span class="ftid">
-								<select name="fid" id="fid" class="ps" width="108">
-									<!--{loop $modforums[list] $id $name}-->
-									<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
-									<!--{/loop}-->
+								<select name="fid" id="fid" class="ps" _width="108" width="168">
+									<!--{rem 美化板塊選擇樣式}-->
+									<!--{if $modforumselect}-->
+										$modforumselect
+									<!--{else}-->
+										<!--{loop $modforums[list] $id $name}-->
+										<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
+										<!--{/loop}-->
+									<!--{/if}-->
 								</select>
 							</span>
 						</td>
@@ -76,7 +81,7 @@
 					<tr>
 						<th>{lang username}:</th>
 						<td>
-							<input type="text" size="20" value="$new_user" name="new_user" class="px" /> &nbsp;&nbsp;
+							<input type="text" size="20" value="$new_user" name="new_user" class="px" style="width: 180px" /> &nbsp;&nbsp;
 						</td>
 					</tr>
 					<tr>

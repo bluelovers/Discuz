@@ -8,9 +8,14 @@
 			</span>
 			<span class="ftid">
 				<select name="fid" id="fid" width="150" class="ps" change="location.href='{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&fid='+$('fid').value">
-					<!--{loop $modforums[list] $id $name}-->
-					<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
-					<!--{/loop}-->
+					<!--{rem 美化板塊選擇樣式}-->
+					<!--{if $modforumselect}-->
+						$modforumselect
+					<!--{else}-->
+						<!--{loop $modforums[list] $id $name}-->
+						<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
+						<!--{/loop}-->
+					<!--{/if}-->
 				</select>
 			</span>
 			<!--{else}-->

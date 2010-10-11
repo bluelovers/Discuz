@@ -86,6 +86,18 @@ function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 
 	// bluelovers
 
 	$forumcache = &$_G['cache']['forums'];
+
+	// bluelovers
+	$forumcache2 = array();
+
+	if (is_array($groupselectable)) {
+		$forumcache2 = $groupselectable[1];
+		$groupselectable = $groupselectable[0];
+
+//		dexit($forumcache);
+	}
+	// bluelovers
+
 	$forumlist = $tableformat ? '<dl><dd><ul>' : '<optgroup label="&nbsp;">';
 	foreach($forumcache as $forum) {
 		if((!$forum['status'] || $forum['hidemenu']) && !$showhide) {
@@ -94,7 +106,7 @@ function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 
 
 		// bluelovers
 		$c = $cc = '　';
-		$_add = $forum['description'] ? " title=\"".dhtmlspecialchars($forum[description], ENT_QUOTES)."\" " : '';
+		$_add = $forum['description'] ? " title=\"".dhtmlspecialchars($forum['description'], ENT_QUOTES)."\" " : '';
 		// bluelovers
 
 		if($forum['type'] == 'group') {
@@ -115,6 +127,10 @@ function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 
 
 			// bluelovers
 			$c .= $cc;
+
+			if($forumcache2 && !in_array($forum['fid'], array_keys($forumcache2))) {
+				continue;
+			}
 			// bluelovers
 
 			if($tableformat) {

@@ -13,6 +13,16 @@ if(!defined('IN_DISCUZ')) {
 
 define('IN_MODCP', true);
 
+// bluelovers
+$navtitle = lang('template', 'forum_manager', array('$_G[setting][navs][2][navname]' => $_G[setting][navs][2][navname]));
+
+if ($_G['forum']) {
+	$upnavlink = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_G['gp_extra']) && !IS_ROBOT ? '&amp;'.preg_replace("/^(&amp;)*/", '', $_G['gp_extra']) : '');
+	$navigation .= ' <em>&rsaquo;</em> <a href="'.$upnavlink.'">'.(strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name']).'</a>';
+	$navtitle = (strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name']).' - '.$navtitle;
+}
+// bluelovers
+
 $cpscript = basename($_G['PHP_SELF']);
 if(!empty($_G['forum']) && $_G['forum']['status'] == 3) {
 	showmessage('group_admin_enter_panel', 'forum.php?mod=group&action=manage&fid='.$_G['fid']);
@@ -70,6 +80,15 @@ if($modforums === null) {
 
 	$modsession->set('modforums', $modforums, true);
 }
+
+// bluelvoers
+require_once libfile('function/forumlist');
+
+$_tmp = $_G['gp_action'] == 'recyclebin' ? $modforums['recyclebins'] : $modforums['list'];
+$modforumselect = forumselect(($_tmp ? array(0, $_tmp) : 0), 0, $_G['fid']);
+
+//dexit(array($modforums, $modforumselect));
+// bluelovers
 
 if($_G['fid'] && $_G['forum']['ismoderator']) {
 	dsetcookie('modcpfid', $_G['fid']);

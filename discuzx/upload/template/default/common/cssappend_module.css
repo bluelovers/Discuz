@@ -44,6 +44,12 @@
 			.rwdbst .psta img { width: 48px; height: 48px; }
 
 		.psth { min-width:240px; width:auto; display:inline-block; padding-right: 30px; max-width: {CONTENTWIDTH}; }
+
+	/* 強制限制文章區域最大長度 避免整體頁面過長 */
+	.pg_viewthread div.pcb .t_fsz .t_f { /*max-height: 200em;*/ max-height: 5120px; overflow-y:auto; display: block; }
+	/* .pg_viewthread div.pcb { overflow-y: visible !important; } */
+
+	#k_rate { padding-left: 30px; }
 /** end **/
 
 /* ----------------------------------------------------------------------- 文章、日誌等頁面樣式 */
@@ -52,7 +58,14 @@
 /** end **/
 
 /** group **/
-/* 搜尋 */
 	#nv_group .xlda .m { margin:8px 10px 8px -65px; }
 	#nv_group .xlda .m img { max-width: 150px; max-height: 150px; }
+
+	#nv_group .xlda dt.sctpl_title {  }
+	#nv_group .xlda dd.sctpl_description { display:inline-block; }
+
+/** end **/
+
+/** forum::modcp **/
+	select#fid { width: 100%; max-width: 190px; }
 /** end **/

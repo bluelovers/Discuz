@@ -259,3 +259,7 @@ pre, code {
 	*white-space: pre;           /* IE */
 	word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
+
+div#fid_ctrl_menu, .sltm, .p_pop { max-height: 20em; overflow-y: auto; }
+.p_pop.p_pop_showselect a { padding-right: 20px; }
+.p_pop.card { overflow-y: visible; }
