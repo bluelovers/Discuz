@@ -18,4 +18,6 @@
 /discuzx/utility/convert/data/config.inc.php
 /discuzx/upload/convert
 /discuzx/upload/uc_server
-/discuzx/upload/.htaccess
+#/discuzx/upload/.htaccess
+
+/discuzx/upload/uc_client/data/cache/*.php
