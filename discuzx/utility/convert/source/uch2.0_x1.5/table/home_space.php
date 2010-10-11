@@ -74,7 +74,9 @@ while ($space = $db_source->fetch_array($query)) {
 	$setarr['newprompt'] = $space['notenum'] + $space['myinvitenum'] + $space['pokenum'] + $space['addfriendnum'];
 	$set['newpm'] = $space['newpm'];
 
-	if(empty($newspace['groupid'])) {
+//	if(empty($newspace['groupid'])) {
+//	}
+	if(empty($newspace['groupid']) || in_array($space['groupid'], array(10, 9, 8))) {
 		if(empty($home['usergroup'][$space['groupid']])) {
 			$setarr['groupid'] = $defaultgid;
 		} else {

@@ -17,7 +17,8 @@ while($row = $db_source->fetch_array($query)) {
 	$newsetting[$row['skey']] = $row['skey'];
 }
 
-$skips = array('attachdir', 'attachurl', 'cachethreaddir', 'jspath', 'my_status');
+//$skips = array('attachdir', 'attachurl', 'cachethreaddir', 'jspath', 'my_status');
+$skips = array('attachdir', 'attachurl', 'cachethreaddir', 'jspath', 'my_status', 'bbclosed');
 
 $query = $db_source->query("SELECT  * FROM $table_source");
 while ($row = $db_source->fetch_array($query)) {
@@ -79,4 +80,9 @@ while ($row = $db_source->fetch_array($query)) {
 		$db_target->query("REPLACE INTO $table_target SET $data");
 	}
 }
+
+// bluelovers
+$db_target->query("REPLACE INTO $table_target SET skey='bbclosed', svalue='1'");
+// bluelovers
+
 ?>

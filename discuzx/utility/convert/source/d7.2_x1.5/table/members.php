@@ -270,6 +270,22 @@ if($nextid) {
 	fclose($fp);
 
 	showmessage("繼續轉換數據表 ".$table_source." uid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+
+// bluelovers
+} else {
+
+	$db_target->query("REPLACE INTO `{$db_target->tablepre}common_setting` ( skey, svalue )
+		VALUES (
+		'lastmember', (
+			SELECT username
+			FROM `{$db_target->tablepre}common_member`
+			ORDER BY regdate DESC
+			LIMIT 1
+		)
+	)");
+
+// bluelvoers
+
 }
 
 ?>
