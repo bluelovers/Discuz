@@ -2524,7 +2524,8 @@ class My extends Manyou {
 			}
 			if ($settings) {
 				DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
-				require_once DISCUZ_ROOT . './source/function/function_cache.php';
+//				require_once DISCUZ_ROOT . './source/function/function_cache.php';
+				require_once libfile('function/cache');
 				updatecache('setting');
 				return true;
 			}

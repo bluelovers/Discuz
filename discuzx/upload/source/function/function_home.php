@@ -29,7 +29,8 @@ function getstr($string, $length, $in_slashes=0, $out_slashes=0, $bbcode=0, $htm
 	}
 
 	if($bbcode) {
-		require_once DISCUZ_ROOT.'./source/class/class_bbcode.php';
+//		require_once DISCUZ_ROOT.'./source/class/class_bbcode.php';
+		include_once libfile('class/bbcode');
 		$bb = & bbcode::instance();
 		$string = $bb->bbcode2html($string, $bbcode);
 	}

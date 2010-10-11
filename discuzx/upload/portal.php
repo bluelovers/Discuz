@@ -17,8 +17,10 @@ $cachelist = array('userapp', 'portalcategory');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 
-require DISCUZ_ROOT.'./source/function/function_home.php';
-require DISCUZ_ROOT.'./source/function/function_portal.php';
+//require DISCUZ_ROOT.'./source/function/function_home.php';
+//require DISCUZ_ROOT.'./source/function/function_portal.php';
+require_once libfile('function/home');
+require_once libfile('function/portal');
 
 if(empty($_GET['mod']) || !in_array($_GET['mod'], array('list', 'view', 'comment', 'portalcp', 'topic', 'attachment'))) $_GET['mod'] = 'index';
 

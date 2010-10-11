@@ -50,6 +50,7 @@ switch ($mod) {
 $discuz->init();
 
 define('CURMODULE', $mod);
-require DISCUZ_ROOT.'./source/module/misc/misc_'.$mod.'.php';
+//require DISCUZ_ROOT.'./source/module/misc/misc_'.$mod.'.php';
+include libfile('misc/'.$mod, 'module');
 
 ?>

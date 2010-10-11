@@ -165,7 +165,8 @@ if($operation == 'export') {
 		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.'), '', $_G['gp_filename']);
 
 		if($_G['gp_usezip']) {
-			require_once './source/class/class_zip.php';
+//			require_once './source/class/class_zip.php';
+			include_once libfile('class/zip');
 		}
 
 		if($_G['gp_method'] == 'multivol') {

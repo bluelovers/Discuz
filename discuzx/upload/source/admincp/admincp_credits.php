@@ -177,7 +177,8 @@ if($operation == 'list') {
 					}
 				} else {
 					if($rule['cycletype'] != 0 && ($rule['cycletype'] == 4 && !$rule['rewardnum'])) {
-						require_once DISCUZ_ROOT.'./source/class/class_credit.php';
+//						require_once DISCUZ_ROOT.'./source/class/class_credit.php';
+						include_once libfile('class/credit');
 						credit::deletelogbyfid($rid, $fid);
 					}
 					unset($policy[$ruleinfo['action']]);

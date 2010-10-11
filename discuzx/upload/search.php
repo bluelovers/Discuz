@@ -55,7 +55,7 @@ if($mod == 'curforum') {
 	$_G['gp_srhfid'] = '';
 }
 
-require DISCUZ_ROOT.'./source/module/search/search_'.$mod.'.php';
-
+//require DISCUZ_ROOT.'./source/module/search/search_'.$mod.'.php';
+include libfile('search/'.$mod, 'module');
 
 ?>

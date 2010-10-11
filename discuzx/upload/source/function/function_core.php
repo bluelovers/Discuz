@@ -591,7 +591,8 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 
 	if(empty($timecompare) || $tplrefresh == 1 || ($tplrefresh > 1 && !($timestamp % $tplrefresh))) {
 		if(empty($timecompare) || @filemtime(DISCUZ_ROOT.$subtpl) > $timecompare) {
-			require_once DISCUZ_ROOT.'/source/class/class_template.php';
+//			require_once DISCUZ_ROOT.'/source/class/class_template.php';
+			require_once libfile('class/template');;
 			$template = new template();
 			$template->parse_template($maintpl, $templateid, $tpldir, $file, $cachefile);
 			return TRUE;
@@ -1072,22 +1073,26 @@ function rewritedata() {
 		}
 
 		if(in_array('portal_article', $_G['setting']['rewritestatus'])) {
-			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+//			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&(?:amp;)?page\=(\d+|))?\"([^\>]*)\>/e";
 			$data['replace']['portal_article'] = "rewriteoutput('portal_article', 0, '\\1', '\\3', '\\5', '\\6')";
 		}
 
 		if(in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
-			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+//			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&(?:amp;)?page\=(\d+|))?\"([^\>]*)\>/e";
 			$data['replace']['forum_forumdisplay'] = "rewriteoutput('forum_forumdisplay', 0, '\\1', '\\3', '\\5', '\\6')";
 		}
 
 		if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&amp;extra\=(page\%3D(\d+))?)?(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+//			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&amp;extra\=(page\%3D(\d+))?)?(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&(?:amp;)?extra\=(page\%3D(\d+|))?)?(&(?:amp;)?page\=(\d+|))?\"([^\>]*)\>/e";
 			$data['replace']['forum_viewthread'] = "rewriteoutput('forum_viewthread', 0, '\\1', '\\3', '\\8', '\\6', '\\9')";
 		}
 
 		if(in_array('group_group', $_G['setting']['rewritestatus'])) {
-			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+//			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&(?:amp;)?page\=(\d+|))?\"([^\>]*)\>/e";
 			$data['replace']['group_group'] = "rewriteoutput('group_group', 0, '\\1', '\\3', '\\5', '\\6')";
 		}
 
@@ -1139,9 +1144,12 @@ function rewritedata() {
 	return $data;
 }
 
+//function rewriteoutput($type, $returntype, $host) {
+//}
 function rewriteoutput($type, $returntype, $host) {
 	global $_G;
-	$host = $host ? 'http://'.$host : '';
+//	$host = $host ? 'http://'.$host : '';
+	$host = $host ? (strpos($host, 'http') !== 0 ? 'http://'.$host : $host) : '';
 	$fextra = '';
 	if($type == 'forum_forumdisplay') {
 		list(,,, $fid, $page, $extra) = func_get_args();
@@ -1211,7 +1219,9 @@ function rewriteoutput($type, $returntype, $host) {
 		);
 	} elseif($type == 'site_default') {
 		list(,,, $url) = func_get_args();
-		if(!preg_match('/^\w+\.php/i', $url)) {
+//		if(!preg_match('/^\w+\.php/i', $url)) {
+//		}
+		if($returntype >= 0 && !preg_match('/^\w+\.php/i', $url)) {
 			$host = '';
 		}
 		if(!$returntype) {
@@ -1220,7 +1230,24 @@ function rewriteoutput($type, $returntype, $host) {
 			return $host.$url;
 		}
 	}
-	$href = str_replace(array_keys($r), $r, $_G['setting']['rewriterule'][$type]).$fextra;
+
+	// bluelovers
+	$rewriterule = $_G['setting']['rewriterule'][$type];
+
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_rewrite_href', array(&$type, &$returntype, &$host, &$r, &$fextra, &$extra, &$rewriterule));
+	}
+	// bluelovers
+
+//	$href = str_replace(array_keys($r), $r, $_G['setting']['rewriterule'][$type]).$fextra;
+	$href = str_replace(array_keys($r), $r, $rewriterule).$fextra;
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After_rewrite_href', array(&$type, &$returntype, &$host, &$r, &$fextra, &$extra, &$rewriterule));
+	}
+	// bluelovers
+
 	if(!$returntype) {
 		return '<a href="'.$host.$href.'"'.dstripslashes($extra).'>';
 	} else {
@@ -1317,21 +1344,16 @@ function output($in_ajax = false) {
 		// bluelovers
 
 		// bluelovers
-		if (!$in_ajax) {
-		// bluelovers
-			ob_end_clean();
-			$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
 
-			echo $content;
+//		dexit($array);
 
-//			phpinfo();
-//			exit();
+		if ($in_ajax) return $content;
+		// bluelovers
 
-		// bluelovers
-		} else {
-			return $content;
-		}
-		// bluelovers
+		ob_end_clean();
+		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
+
+		echo $content;
 	}
 
 	// bluelovers
@@ -1383,12 +1405,25 @@ function output_ajax() {
 
 function runhooks() {
 	global $_G;
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array());
+	}
+	// bluelovers
+
 	if(defined('CURMODULE')) {
 		hookscript(CURMODULE, $_G['basescript']);
 		if(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''))) {
 			hookscript(CURMODULE, $_G['basescript'].'_'.$do);
 		}
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array());
+	}
+	// bluelovers
 }
 
 function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func = '') {
@@ -2174,7 +2209,8 @@ function dmkdir($dir, $mode = 0777, $makeindex = TRUE){
 		dmkdir(dirname($dir));
 		@mkdir($dir, $mode);
 		if(!empty($makeindex)) {
-			@touch($dir.'/index.html'); @chmod($dir.'/index.html', 0777);
+//			@touch($dir.'/index.html'); @chmod($dir.'/index.html', 0777);
+			@touch($dir.'/index.htm'); @chmod($dir.'/index.htm', 0777);
 		}
 	}
 	return true;

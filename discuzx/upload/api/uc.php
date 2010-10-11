@@ -100,7 +100,8 @@ class uc_note {
 		while($row = DB::fetch($query)) {
 			$ids .= $row['uid'];
 		}
-		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
+//		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
+		require_once libfile('function/delete');
 		$ids && deletemember($ids);
 
 		return API_RETURN_SUCCEED;

@@ -40,7 +40,7 @@ if($mod == 'register' && $discuz->var['mod'] != $_G['setting']['regname']) {
 runhooks();
 
 require libfile('function/member');
-require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
-
+//require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
+include libfile('member/'.$mod, 'module');
 
 ?>
