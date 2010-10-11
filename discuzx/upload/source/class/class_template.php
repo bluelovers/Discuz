@@ -196,12 +196,17 @@ class template {
 		$template = preg_replace("/[\n\r\t]*\{block\s+([a-zA-Z0-9_\[\]]+)\}(.+?)\{\/block\}/ies", "\$this->stripblock('\\1', '\\2')", $template);
 
 		// bluelovers
-		$template = preg_replace("/\r\n/s", "\n", $template);
-//		$template = preg_replace("/[\r\n]{2,}/s", "\n", $template);
-		$template = preg_replace("/\n{2,}/s", "\n", $template);
-//		$template = preg_replace("/([\n\r])[\t ]+/s", "\\1", $template);
-//		$template = preg_replace("/([\n\r])[\t]+/s", "\\1", $template);
-		$template = preg_replace("/\n\t+/s", "\n", $template);
+//		$template = preg_replace("/\r\n/s", "\n", $template);
+////		$template = preg_replace("/[\r\n]{2,}/s", "\n", $template);
+//		$template = preg_replace("/\n{2,}/s", "\n", $template);
+////		$template = preg_replace("/([\n\r])[\t ]+/s", "\\1", $template);
+////		$template = preg_replace("/([\n\r])[\t]+/s", "\\1", $template);
+//		$template = preg_replace("/\n\t+/s", "\n", $template);
+
+		Scorpio_Hook::execute('Class_'.__METHOD__.':Before_fwrite', array(array(
+				'template'			=> &$template
+				, 'cachefile'		=> &$cachefile
+		)));
 		// bluelovers
 
 		flock($fp, 2);
@@ -372,10 +377,23 @@ class template {
 		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css?{VERHASH}" />';
 		$content = $this->csscurmodules = '';
 		$content = @implode('', file(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_module.css'));
+//		dexit($content);
+
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
 		if($this->csscurmodules) {
 //			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);;
-			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])[ \t]*/', ((defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? '/[\t]/' : '/[\t\n\r]/'), '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);;
+//			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])[ \t]*/', ((defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? '/[\t]/' : '/[\t\n\r]/'), '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);;
+
+			// bluelovers
+			Scorpio_Hook::execute('Class_'.__METHOD__.':Before_fwrite', array(array(
+				'cssdata'			=> &$this->csscurmodules
+				, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
+			)));
+
+//			dexit(array('Class_'.__METHOD__.':Before_fwrite', $this->csscurmodules));
+
+			// bluelovers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_'.$_G['basescript'].'_'.CURMODULE.'.css', 'w')) {
 //				fwrite($fp, $this->csscurmodules);
 				fwrite($fp, str_replace('\"', '"', $this->csscurmodules));

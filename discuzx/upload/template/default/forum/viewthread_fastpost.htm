@@ -19,6 +19,11 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 
 				<span id="fastpostreturn"></span>
 
+				<div class="pbt cl">
+					<span id="subjecthide" class="z">RE: $_G[forum_thread][subject] [<a href="javascript:;" onclick="display('subjecthide');display('subjectbox');$('subject').value='RE: {echo htmlspecialchars(str_replace('\'', '\\\'', $_G[forum_thread][subject]))}'" class="xg1 xw0">{lang modify}</a>]</span>
+					<span id="subjectbox" style="display:none"><input name="subject" id="subject" class="px" value="" tabindex="21" style="width: 25em" /></span>
+				</div>
+
 				<!--{if $_G[forum_thread][special] == 5 && empty($firststand)}-->
 				<div class="pbt cl">
 					<div class="ftid sslt">
@@ -67,7 +72,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 							<div class="mtm sec"><!--{template common/seccheck}--></div>
 						<!--{/if}-->
 						<input type="hidden" name="formhash" value="{FORMHASH}" />
-						<input type="hidden" name="subject" value="" />
+						<!--input type="hidden" name="subject" value="" /-->
 						<p class="ptm">
 							<button {if !$guestreply}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
 							<!--{if $_G['gp_ordertype'] != 1 && empty($_G[gp_from])}-->

@@ -17,6 +17,8 @@
 	<!--{if $_GET[diy] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
 	<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_css_diy.css?{VERHASH}" />
 	<!--{/if}-->
+
+	<!--{hook/global_header_javascript2}-->
 </head>
 
 <body id="nv_{$_G[basescript]}" class="pg_{CURMODULE}" onkeydown="if(event.keyCode==27) return false;">
@@ -91,7 +93,7 @@
 					<!--{template member/login_simple}-->
 				<!--{/if}-->
 			</div>
-			
+
 			<!--{if !IS_ROBOT}-->
 				<div id="qmenu_menu" class="p_pop" style="display: none; zoom: 1;">
 					<!--{if $_G['uid']}-->

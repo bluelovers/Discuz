@@ -54,7 +54,8 @@ if($_G['gp_goto'] == 'findpost') {
 	foreach($threadtableids as $tableid) {
 		$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
 		$post = getallwithposts(array(
-			'select' => 'p.tid, p.dateline, t.status, t.special, t.replies',
+//			'select' => 'p.tid, p.dateline, t.status, t.special, t.replies',
+			'select' => 'p.tid, p.dateline, t.status, t.special, t.replies, t.sortid',
 			'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table($threadtable)." t USING(tid)",
 			'where' => "p.pid='$pid'",
 		));
@@ -63,6 +64,16 @@ if($_G['gp_goto'] == 'findpost') {
 			break;
 		}
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_check_nonexistence', array(array(
+			'goto' => &$_G['gp_goto'],
+			'post' => &$post,
+		)));
+	}
+	// bluelovers
+
 	if($post) {
 		$ordertype = !isset($_GET['ordertype']) && getstatus($post['status'], 4) ? 1 : intval($ordertype);
 		$sqladd = $post['special'] ? "AND first=0" : '';
@@ -114,15 +125,31 @@ if($_G['gp_goto'] == 'lastpost') {
 	foreach($threadtableids as $tableid) {
 		$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
 		if($_G['tid']) {
-			$query = DB::query("SELECT tid, replies, special, status FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND displayorder>='0'");
+//			$query = DB::query("SELECT tid, replies, special, status FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND displayorder>='0'");
+			$query = DB::query("SELECT tid, replies, special, status, sortid FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND displayorder>='0'");
 		} else {
-			$query = DB::query("SELECT tid, replies, special, status FROM ".DB::table($threadtable)." WHERE fid='$_G[fid]' AND displayorder>='0' ORDER BY lastpost DESC LIMIT 1");
+//			$query = DB::query("SELECT tid, replies, special, status FROM ".DB::table($threadtable)." WHERE fid='$_G[fid]' AND displayorder>='0' ORDER BY lastpost DESC LIMIT 1");
+			$query = DB::query("SELECT tid, replies, special, status, sortid FROM ".DB::table($threadtable)." WHERE fid='$_G[fid]' AND displayorder>='0' ORDER BY lastpost DESC LIMIT 1");
 		}
 		if(DB::num_rows($query)) {
 			break;
 		}
 	}
-	if(!$thread = DB::fetch($query)) {
+
+	// bluelovers
+	$thread = DB::fetch($query);
+
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_check_nonexistence', array(array(
+			'goto' => &$_G['gp_goto'],
+			'thread' => &$thread,
+		)));
+	}
+	// bluelovers
+
+//	if(!$thread = DB::fetch($query)) {
+//	}
+	if(!$thread) {
 		showmessage('thread_nonexistence');
 	}
 	if(!getstatus($thread['status'], 4)) {
@@ -133,7 +160,8 @@ if($_G['gp_goto'] == 'lastpost') {
 
 	$_G['tid'] = $thread['tid'];
 
-	require_once DISCUZ_ROOT.'./source/module/forum/forum_viewthread.php';
+//	require_once DISCUZ_ROOT.'./source/module/forum/forum_viewthread.php';
+	include libfile('forum/viewthread', 'module');
 	exit();
 
 } elseif($_G['gp_goto'] == 'nextnewset') {

@@ -28,6 +28,19 @@ if(!in_array(0, $threadtableids)) {
 $archiveid = intval($_G['gp_archiveid']);
 $displayorderadd = $_G['uid'] ? " OR (t.displayorder IN ('-4', '-3', '-2') AND t.authorid='{$_G['uid']}')" : '';
 
+// bluelovers
+if (sclass_exists('Scorpio_Hook')) {
+	Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_thread_init', array(array(
+		'displayorderadd' => &$displayorderadd,
+		'page' => &$page,
+		'threadtableids' => &$threadtableids,
+		'threadtable_info' => &$threadtable_info,
+		'archiveid' => &$archiveid,
+		'forum' => &$_G['forum'],
+	)));
+}
+// bluelovers
+
 if(empty($archiveid) || !in_array($archiveid, $threadtableids)) {
 	$threadtable = !empty($_G['forum']['threadtableid']) ? "forum_thread_{$_G['forum']['threadtableid']}" : 'forum_thread';
 	$_G['forum_thread'] = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." t WHERE tid='$_G[tid]'".($_G['forum_auditstatuson'] ? '' : " AND (displayorder>='0' $displayorderadd)"));
@@ -49,6 +62,15 @@ if(empty($archiveid) || !in_array($archiveid, $threadtableids)) {
 	$threadtable = 'forum_thread';
 	$_G['forum_thread'] = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." t WHERE tid='$_G[tid]'".($_G['forum_auditstatuson'] ? '' : " AND (displayorder>='0' $displayorderadd)"));
 }
+
+// bluelovers
+if (sclass_exists('Scorpio_Hook')) {
+	Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_check_nonexistence', array(array(
+		'thread' => &$_G['forum_thread'],
+		'forum' => &$_G['forum'],
+	)));
+}
+// bluelovers
 
 if(!$_G['forum_thread']) {
 	showmessage('thread_nonexistence');
@@ -426,6 +448,13 @@ if(empty($_G['gp_viewpid'])) {
 	}
 	$multipage_archive = $_G['forum_thread']['is_archived'] ? "archive={$_G['forum_thread']['archiveid']}" : '';
 	$multipage = multi($_G['forum_thread']['replies'] + 1, $_G['ppp'], $page, "forum.php?mod=viewthread&tid=$_G[tid]".(!empty($multipage_archive) ? "&{$multipage_archive}" : '')."&amp;extra=$_G[gp_extra]".($ordertype && $ordertype != getstatus($_G['forum_thread']['status'], 4) ? "&amp;ordertype=$ordertype" : '').(isset($_G['gp_highlight']) ? "&amp;highlight=".rawurlencode($_G['gp_highlight']) : '').(!empty($_G['gp_authorid']) ? "&amp;authorid=$_G[gp_authorid]" : '').(!empty($_G['gp_from']) ? "&amp;from=$_G[gp_from]" : '').$specialextra);
+
+	// bluelovers
+//	$_G['url_canonical'] = "forum.php?mod=viewthread&tid=$_G[tid]".(!empty($multipage_archive) ? "&{$multipage_archive}" : '')."&extra=$_G[gp_extra]".($ordertype && $ordertype != getstatus($_G['forum_thread']['status'], 4) ? "&amp;ordertype=$ordertype" : '').(isset($_G['gp_highlight']) ? "&amp;highlight=".rawurlencode($_G['gp_highlight']) : '').(!empty($_G['gp_authorid']) ? "&amp;authorid=$_G[gp_authorid]" : '').(!empty($_G['gp_from']) ? "&amp;from=$_G[gp_from]" : '').$specialextra;
+
+	$_G['url_canonical'] = rewriteoutput('forum_viewthread', 1, $_G['siteurl'], $_G['tid'], $page);
+	// bluelovers
+
 } else {
 	$_G['gp_viewpid'] = intval($_G['gp_viewpid']);
 	$pageadd = "AND p.pid='$_G[gp_viewpid]'";

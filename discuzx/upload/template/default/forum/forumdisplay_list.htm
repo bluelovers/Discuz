@@ -29,14 +29,14 @@
 					<div class="tf">
 						<span id="atarget" {if !empty($_G['cookie']['atarget'])}onclick="setatarget(0)" class="y atarget_1"{else}onclick="setatarget(1)" class="y"{/if} title="{lang new_window_thread}">{lang new_window}</span>
 						{lang screening}:
-						<a id="filter_special" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
+						<a id="filter_special" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)" onmouseover="this.onclick()">
 							<!--{if $_G['gp_specialtype'] == 'poll'}-->{lang thread_poll}<!--{elseif $_G['gp_specialtype'] == 'trade'}-->{lang thread_trade}<!--{elseif $_G['gp_specialtype'] == 'reward'}-->{lang thread_reward}<!--{elseif $_G['gp_specialtype'] == 'activity'}-->{lang thread_activity}<!--{elseif $_G['gp_specialtype'] == 'debate'}-->{lang thread_debate}<!--{else}-->{lang threads_all}<!--{/if}-->
 						</a>
-						<a id="filter_dateline" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
+						<a id="filter_dateline" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)" onmouseover="this.onclick()">
 							<!--{if $_G['gp_dateline'] == 86400}-->{lang last_1_days}<!--{elseif $_G['gp_dateline'] == 172800}-->{lang last_2_days}<!--{elseif $_G['gp_dateline'] == 604800}-->{lang list_one_week}<!--{elseif $_G['gp_dateline'] == 2592000}-->{lang list_one_month}<!--{elseif $_G['gp_dateline'] == 7948800}-->{lang list_three_month}<!--{else}-->{lang search_any_date}<!--{/if}-->
 						</a>
 						<span class="pipe">|</span>{lang orderby}:
-						<a id="filter_orderby" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
+						<a id="filter_orderby" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)" onmouseover="this.onclick()">
 							<!--{if $_G['gp_orderby'] == 'dateline'}-->{lang list_post_time}<!--{elseif $_G['gp_orderby'] == 'replies'}-->{lang replies}<!--{elseif $_G['gp_orderby'] == 'views'}-->{lang views}<!--{elseif $_G['gp_orderby'] == 'lastpost'}-->{lang lastpost}<!--{elseif $_G['gp_orderby'] == 'heats'}-->{lang order_heats}<!--{else}-->{lang list_default_sort}<!--{/if}-->
 						</a>
 						<span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=digest&digest=1$forumdisplayadd[digest]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang digest_posts}</a><!--{if !empty($_G[setting][recommendthread][status])}--><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=recommend&recommend=1&orderby=recommends$forumdisplayadd[recommend]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang order_recommends}</a><!--{/if}-->

@@ -165,7 +165,14 @@ function writetocsscache($data) {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
 //			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
-			$cssdata = preg_replace(array('/[ \t]*([,;:\{\}])[ \t]*/', '/[\t\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+
+			// bluelovers
+			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_fwrite', array(array(
+					'cssdata'			=> &$cssdata
+					, 'entry'		=> &$entry
+			)));
+			// bluelvoers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry.'', 'w')) {
 				fwrite($fp, $cssdata);
 				fclose($fp);

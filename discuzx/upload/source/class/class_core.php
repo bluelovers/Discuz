@@ -248,9 +248,20 @@ class discuz_core {
 
 		if(!empty($_GET['rewrite'])) {
 			$query_string = '?mod=';
-			$param = explode('-', $_GET['rewrite']);
-			$query_string .= $_GET['mod'] = $param[0];
-			array_shift($param);
+//			$param = explode('-', $_GET['rewrite']);
+//			$query_string .= $_GET['mod'] = $param[0];
+//			array_shift($param);
+
+			// bluelovers
+			$param = explode('-', trim($_GET['rewrite'], '-'));
+			if ($_REQUEST['mod'] || $_GET['mod']) {
+				$query_string .= $_GET['mod'];
+			} else {
+				$query_string .= $_GET['mod'] = $param[0];
+				array_shift($param);
+			}
+			// bluelovers
+
 			$paramc = count($param);
 			for($i = 0;$i < $paramc;$i+=2) {
 				$_REQUEST[$param[$i]] = $_GET[$param[$i]] = $param[$i + 1];
@@ -268,7 +279,7 @@ class discuz_core {
 		}
 
 		// bluelovers
-		Scorpio_Hook::execute('Func_'.__METHOD__.':After_MAGIC_QUOTES_GPC', array());
+		Scorpio_Hook::execute('Class_'.__METHOD__.':After_MAGIC_QUOTES_GPC', array());
 		// bluelovers
 
 		$prelength = strlen($this->config['cookie']['cookiepre']);

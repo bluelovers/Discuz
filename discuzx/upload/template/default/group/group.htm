@@ -67,8 +67,8 @@
 						<div class="bm_c xld xlda cl">
 							<dl>
 								<dd class="m"><img src="$_G[forum][icon]" alt="$_G[forum][name]" _width="48" _height="48" /></dd>
-								<dt>$_G[forum][name]</dt>
-								<!--{if $_G[forum][description]}--><dd>$_G[forum][description]</dd><!--{/if}-->
+								<dt class="sctpl_title">$_G[forum][name]</dt>
+								<!--{if $_G[forum][description]}--><dd class="sctpl_description">$_G[forum][description]</dd><!--{/if}-->
 								<dd class="cl">
 									<span class="y"><a href="home.php?mod=spacecp&ac=favorite&type=group&id={$_G[forum][fid]}&handlekey=sharealbumhk_{$_G[forum][fid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang favorite}" class="fa_fav">{lang favorite}</a><span class="pipe">|</span><!--{if $_G[setting][rssstatus] && !$_G['gp_archiveid']}--><a href="forum.php?mod=rss&fid=$_G[fid]&auth=$rssauth" target="_blank" title="RSS" class="fa_rss">RSS</a><!--{/if}--><!--{if $status == 'isgroupuser'}--><span class="pipe">|</span><a href="javascript:;" onclick="showWindow('invite','misc.php?mod=invite&action=group&id=$_G[fid]')" class="fa_ivt"><strong class="xi2">{lang my_buddylist_invite}</strong></a><!--{/if}--></span>
 									<!--{if $_G['current_grouplevel']['icon']}--><img src="$_G[current_grouplevel][icon]" title="{lang group_level}: $_G[current_grouplevel][leveltitle]" class="vm"> <!--{/if}-->{lang credits}: $_G[forum][commoncredits]<span class="pipe">|</span>{lang group_moderator_title}: <!--{eval $i = 1;}--><!--{loop $groupmanagers $manage}--><!--{if $i <= 0}-->, <!--{/if}--><!--{eval $i--;}--><a href="home.php?mod=space&uid=$manage[uid]" target="_blank" class="xi2">$manage[username]</a> <!--{/loop}-->

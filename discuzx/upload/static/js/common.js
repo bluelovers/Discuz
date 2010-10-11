@@ -1602,6 +1602,12 @@ function simulateSelect(selectId, widthvalue) {
 			hideMenu(menuObj.id);
 			return false;
 		};
+
+		// bluelovers
+		if (selectObj.options[i].getAttribute('title')) li.title = selectObj.options[i].getAttribute('title');
+		if (selectObj.options[i].getAttribute('alt')) li.alt = selectObj.options[i].getAttribute('alt');
+		// bluelvoers
+
 		ul.appendChild(li);
 	}
 
@@ -1894,7 +1900,8 @@ function showselect(obj, inpid, t, rettype) {
 		div = document.createElement('div');
 		div.id = obj.id + '_menu';
 		div.style.display = 'none';
-		div.className = 'p_pop';
+//		div.className = 'p_pop';
+		div.className = 'p_pop p_pop_showselect';
 		$('append_parent').appendChild(div);
 		s = '';
 		if(!t) {
@@ -1907,7 +1914,18 @@ function showselect(obj, inpid, t, rettype) {
 			if($(t)) {
 				var lis = $(t).getElementsByTagName('LI');
 				for(i = 0;i < lis.length;i++) {
-					s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML">' + lis[i].innerHTML + '</a>';
+
+					// bluelovers
+					if (inpid == 'reason' || t == 'reasonselect') {
+						s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value += ($(\'' + inpid + '\').value ? \'\\n\' : \'\') + this.innerHTML;">' + lis[i].innerHTML + '</a>';
+					} else {
+					// bluelovers
+
+						s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML">' + lis[i].innerHTML + '</a>';
+
+					// bluelovers
+					}
+					// bluelovers
 				}
 				s += showselect_row(inpid, '自定義', -1);
 			} else {

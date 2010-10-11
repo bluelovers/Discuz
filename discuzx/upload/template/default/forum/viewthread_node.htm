@@ -230,6 +230,18 @@
 				<!--{/if}-->
 				<!--{hook/viewthread_useraction}-->
 			</div>
+
+		<!--{elseif !IS_ROBOT && !$_G['forum_thread']['archiveid']}-->
+			<!--{rem // bluelovers }-->
+			<div class="uo{if $_G['group']['allowrecommend'] && $_G['setting']['recommendthread'][status]} nrate{/if}">
+				<!--{if $post['invisible'] == 0}-->
+					<!--{if $_G['group']['raterange'] && $post['authorid']}-->
+						<a id="k_rate" href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}">{lang rate}&nbsp;</a>
+					<!--{/if}-->
+				<!--{/if}-->
+				<!--{hook/viewthread_useraction_not_first}-->
+			</div>
+			<!--{rem // bluelovers }-->
 		<!--{/if}-->
 		<!--{if $post['signature'] && ($_G['setting']['bannedmessages'] & 4 && (($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1)))}-->
 			<div class="sign">{lang member_signature_banned}</div>
