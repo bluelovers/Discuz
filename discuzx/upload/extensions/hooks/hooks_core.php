@@ -11,9 +11,9 @@
 	$Id: hooks_core.php 109 2010-08-01 22:22:26Z user $
 */
 
-Scorpio_Hook::add('Func_discuz_core::_init_input:After_MAGIC_QUOTES_GPC', '_eFunc_discuz_core__init_input_After_MAGIC_QUOTES_GPC');
+Scorpio_Hook::add('Class_discuz_core::_init_input:After_MAGIC_QUOTES_GPC', '_eClass_discuz_core__init_input_After_MAGIC_QUOTES_GPC');
 
-function _eFunc_discuz_core__init_input_After_MAGIC_QUOTES_GPC() {
+function _eClass_discuz_core__init_input_After_MAGIC_QUOTES_GPC() {
 	$_GET = scoarray::map_all('scotext::lf', $_GET);
 	$_POST = scoarray::map_all('scotext::lf', $_POST);
 
@@ -42,18 +42,20 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
-			/*
 			case 'source/function/function_cache.php':
-
+			case 'source/function/cache/cache_styles.php':
+			case 'source/class/class_template.php':
 				@include_once libfile('hooks/cache', '', 'extensions/');
-
 				break;
-			*/
 			case 'source/function/function_share.php':
 				@include_once libfile('hooks/share', '', 'extensions/');
 				break;
 			case 'source/function/function_discuzcode.php':
 				@include_once libfile('hooks/discuzcode', '', 'extensions/');
+				break;
+			case 'forum.php':
+			case 'source/module/forum/forum_viewthread.php':
+				@include_once libfile('hooks/forum', '', 'extensions/');
 				break;
 			default:
 //				dexit($file);
@@ -100,7 +102,70 @@ Scorpio_Hook::add('Func_output:Before_rewrite_domain_app', '_eFunc_output_Before
 
 function _eFunc_output_Before_rewrite_domain_app(&$content, &$in_ajax) {
 	if (!defined('IN_MODCP') && !defined('IN_ADMINCP')) {
-		$content = preg_replace("/<a(\s+(?:[a-z]+)=\"[a-z0-9,\.;\(\)]+\")+\s+href=\"([^\"]+)\"/i", "<a href=\"\\2\"\\1", $content);
+
+		$safepreg = array();
+		$safepreg[0] = '[a-z0-9,\/\.;\(\)\s_\:\-\+\[\]]+';
+//		$safepreg[1] = '[^"]+';
+//		$safepreg[3] = '[a-z0-9,\/\.;\(\)\s_\:]';
+		$safepreg[3] = '\w';
+		$safepreg[1] = '(?:[^\'">]|' .$safepreg[3]. '(?!\\4|>))+';
+		$safepreg[2] = '[a-z]+';
+
+//		$content = '/<(a|link|base)(\s+(?:' + $safepreg[2] + ')=("|\')' + $safepreg[0] + '\\2)+\s+href=("|\')(' + $safepreg[1] + ')\\3/i';
+
+		$content = preg_replace(array(
+//			"/<a(\s+(?:[a-z]+)=\"[a-z0-9,\.;\(\)\s]+\")+\s+href=\"([^\"]+)\"/i",
+//			"/<link(\s+(?:[a-z]+)=\"[a-z0-9,\.;\(\)\s]+\")+\s+href=\"([^\"]+)\"/i",
+//			'/<(a|link)(\s+(?:' + $safepreg[2] + ')=("|\')' + $safepreg[0] + '\\3)+\s+href=("|\')(' + $safepreg[1] + ')\\4/i',
+//			"/<(link|a)((?:\s+(?:[a-z]+)=(\"|')[a-z0-9,\/\.;\(\)\s]+\\3)+)\s+href=(\"|')([^\"]+)\\4/i",
+			'/<(link|a)((?:\s+(?:' . $safepreg[2] . ')=("|\')' . $safepreg[0] . '\\3)+)\s+href=("|\')(' . $safepreg[1] . ')\\4/i',
+//			'/<(img|script)((?:\s+(?:' . $safepreg[2] . ')=("|\')' . $safepreg[0] . '\\3)+)\s+src=("|\')(' . $safepreg[1] . ')\\4/i',
+		), array(
+//			"<a href=\"\\2\"\\1",
+//			"<link href=\"\\2\"\\1",
+			"<\\1 href=\"\\5\"\\2",
+//			"<\\1 src=\"\\5\"\\2",
+		), $content);
+
+		global $_G;
+		$content = preg_replace("/<(base|link|script|img) (href|src)=\"([^\"]+)\"/e", "'<\\1 \\2=\"'._rewriteoutput('site_default', -1, '".$_G['siteurl']."', '\\3').'\"'", $content);
+
+//		$data = rewritedata();
+//		$content = preg_replace(str_replace(array('/<a ', '\>/e'), array('/<(base|link) ', '\/?\>/e'), $data['search']['forum_viewthread']), "_rewriteoutput('\\1', 'forum_viewthread', 0, '".$_G['setting']['domain']['app']['default'].$port.$_G['siteroot']."', '\\2')", $content);
+
+//		dexit(str_replace(array('/<a ', '\>/e'), array('/<(base|link) ', '\/?\>/e'), $data['search']['forum_viewthread']));
+
+
+	}
+}
+
+function _rewriteoutput($type, $returntype, $host) {
+	$args = func_get_args();
+//	array_shift($args);
+
+	list(,,, $url) = func_get_args();
+	if (!preg_match('/https?:\/\//i', $url)
+//		&& preg_match('/\w+\.(js|css|ico|png|jpg|gif|swf)/i', $url)
+		&& in_array(Scorpio_File_Core::fileext($url), array('js', 'css', 'ico', 'png', 'jpg', 'gif', 'swf'))
+	) {
+		$ret = call_user_func_array('rewriteoutput', $args);
+	} else {
+		$ret = $url;
+	}
+
+	return $ret;
+}
+
+Scorpio_Hook::add('Func_rewriteoutput:Before_rewrite_href', '_eFunc_rewriteoutput_Before_rewrite_href');
+
+function _eFunc_rewriteoutput_Before_rewrite_href(&$type, &$returntype, &$host, &$r, &$fextra, &$extra, &$rewriterule) {
+	if (!defined('IN_MODCP') && !defined('IN_ADMINCP')) {
+		if(($type == 'forum_forumdisplay' || $type == 'group_group' || $type == 'portal_article') && ($r['{page}'] == 1 || $r['{page}'] == 0)) {
+			$rewriterule = str_replace('/{page}', '', $rewriterule);
+		} elseif($type == 'forum_viewthread' && ($r['{prevpage}'] == 1 || $r['{prevpage}'] == 0)) {
+			$rewriterule = str_replace('/{prevpage}', '', $rewriterule);
+			if (($r['{page}'] == 1 || $r['{page}'] == 0)) $rewriterule = str_replace('/{page}', '', $rewriterule);
+		}
 	}
 }
 
