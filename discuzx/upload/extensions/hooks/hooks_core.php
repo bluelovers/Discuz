@@ -119,12 +119,12 @@ function _eFunc_output_Before_rewrite_domain_app(&$content, &$in_ajax) {
 //			'/<(a|link)(\s+(?:' + $safepreg[2] + ')=("|\')' + $safepreg[0] + '\\3)+\s+href=("|\')(' + $safepreg[1] + ')\\4/i',
 //			"/<(link|a)((?:\s+(?:[a-z]+)=(\"|')[a-z0-9,\/\.;\(\)\s]+\\3)+)\s+href=(\"|')([^\"]+)\\4/i",
 			'/<(link|a)((?:\s+(?:' . $safepreg[2] . ')=("|\')' . $safepreg[0] . '\\3)+)\s+href=("|\')(' . $safepreg[1] . ')\\4/i',
-//			'/<(img|script)((?:\s+(?:' . $safepreg[2] . ')=("|\')' . $safepreg[0] . '\\3)+)\s+src=("|\')(' . $safepreg[1] . ')\\4/i',
+			'/<(img|script)((?:\s+(?:' . $safepreg[2] . ')=("|\')' . $safepreg[0] . '\\3)+)\s+src=("|\')(' . $safepreg[1] . ')\\4/i',
 		), array(
 //			"<a href=\"\\2\"\\1",
 //			"<link href=\"\\2\"\\1",
 			"<\\1 href=\"\\5\"\\2",
-//			"<\\1 src=\"\\5\"\\2",
+			"<\\1 src=\"\\5\"\\2",
 		), $content);
 
 		global $_G;
@@ -189,55 +189,66 @@ Scorpio_Hook::add('Tpl_Func_hooktags:Before', '_eTpl_Func_hooktags_Before');
 function _eTpl_Func_hooktags_Before(&$hook_data, $hookid, $key) {
 	global $_G;
 
-	if ($hookid == 'viewthread_bottom' && $_G['extensions']['SyntaxHighlighter']['brush']) {
+	if (
+		(
+			$hookid == 'viewthread_bottom'
+			|| ($hookid == 'viewthread_endline' && (!empty($_G['gp_viewpid']) || $_G['inajax']))
+		) && $_G['extensions']['SyntaxHighlighter']['brush']
+	) {
 		$ss = '';
+		$_G['extensions']['SyntaxHighlighter']['brush'] = null;
+
+//		dexit($_G['extensions']['SyntaxHighlighter']['brush']);
 
 //		foreach((array)$_G['extensions']['SyntaxHighlighter']['brush'] as $brush) {
 //
 //		}
 
-		$path = 'extensions/js/SyntaxHighlighter/';
+		$path = $_G['siteurl'].'extensions/js/SyntaxHighlighter/';
+//		$js_run = (empty($_G['gp_viewpid']) || $_G['inajax']) ? 'highlight' : 'all';
 
 		$ss = <<<EOF
 <!-- Include required JS files -->
-<script type="text/javascript" src="{$path}src/shCore.js"></script>
-<script type="text/javascript" src="{$path}src/shAutoloader.js"></script>
+<script src="{$path}src/shCore.js" type="text/javascript" _reload="1"></script>
+<script src="{$path}src/shAutoloader.js" type="text/javascript" _reload="1"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" reload="1">
 SyntaxHighlighter.autoloader.apply(null, [
-	'applescript            {$path}scripts/shBrushAppleScript.js',
-	'actionscript3 as3      {$path}scripts/shBrushAS3.js',
-	'bash shell             {$path}scripts/shBrushBash.js',
-	'coldfusion cf          {$path}scripts/shBrushColdFusion.js',
-	'cpp c                  {$path}scripts/shBrushCpp.js',
-	'c# c-sharp csharp      {$path}scripts/shBrushCSharp.js',
-	'css                    {$path}scripts/shBrushCss.js',
-	'delphi pascal          {$path}scripts/shBrushDelphi.js',
-	'diff patch pas         {$path}scripts/shBrushDiff.js',
-	'erl erlang             {$path}scripts/shBrushErlang.js',
-	'groovy                 {$path}scripts/shBrushGroovy.js',
-	'java                   {$path}scripts/shBrushJava.js',
-	'jfx javafx             {$path}scripts/shBrushJavaFX.js',
-	'js jscript javascript  {$path}scripts/shBrushJScript.js',
-	'perl pl                {$path}scripts/shBrushPerl.js',
-	'php                    {$path}scripts/shBrushPhp.js',
-	'text plain             {$path}scripts/shBrushPlain.js',
-	'py python              {$path}scripts/shBrushPython.js',
-	'ruby rails ror rb      {$path}scripts/shBrushRuby.js',
-	'sass scss              {$path}scripts/shBrushSass.js',
-	'scala                  {$path}scripts/shBrushScala.js',
-	'sql                    {$path}scripts/shBrushSql.js',
-	'vb vbnet               {$path}scripts/shBrushVb.js',
-	'xml xhtml xslt html    {$path}scripts/shBrushXml.js',
+	'applescript			{$path}scripts/shBrushAppleScript.js',
+	'actionscript3 as3		{$path}scripts/shBrushAS3.js',
+	'bash shell				{$path}scripts/shBrushBash.js',
+	'coldfusion cf			{$path}scripts/shBrushColdFusion.js',
+	'cpp c					{$path}scripts/shBrushCpp.js',
+	'c# c-sharp csharp		{$path}scripts/shBrushCSharp.js',
+	'css					{$path}scripts/shBrushCss.js',
+	'delphi pascal			{$path}scripts/shBrushDelphi.js',
+	'diff patch pas			{$path}scripts/shBrushDiff.js',
+	'erl erlang				{$path}scripts/shBrushErlang.js',
+	'groovy					{$path}scripts/shBrushGroovy.js',
+	'java					{$path}scripts/shBrushJava.js',
+	'jfx javafx				{$path}scripts/shBrushJavaFX.js',
+	'js jscript javascript	{$path}scripts/shBrushJScript.js',
+	'perl pl				{$path}scripts/shBrushPerl.js',
+	'php php5 php3 php4		{$path}scripts/shBrushPhp.js',
+	'text plain txt			{$path}scripts/shBrushPlain.js',
+	'py python				{$path}scripts/shBrushPython.js',
+	'ruby rails ror rb		{$path}scripts/shBrushRuby.js',
+	'sass scss				{$path}scripts/shBrushSass.js',
+	'scala					{$path}scripts/shBrushScala.js',
+	'sql mysql				{$path}scripts/shBrushSql.js',
+	'vb vbnet				{$path}scripts/shBrushVb.js',
+	'xml xhtml xslt html	{$path}scripts/shBrushXml.js',
 ]);
 
-SyntaxHighlighter.config.clipboardSwf = '{$path}/scripts/clipboard.swf';
+//SyntaxHighlighter.config.clipboardSwf = '{$path}/scripts/clipboard.swf';
 //SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.defaults['smart-tabs'] = true;
 //SyntaxHighlighter.defaults['collapse'] = true;
 //SyntaxHighlighter.defaults['highlight'] = true;
+SyntaxHighlighter.defaults['toolbar'] = false;
 
 SyntaxHighlighter.all();
+//SyntaxHighlighter.highlight();
 </script>
 
 <!-- Include *at least* the core style and default theme -->

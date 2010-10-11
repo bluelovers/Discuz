@@ -168,4 +168,42 @@ function _eFunc_discuzcode_After_nl2br($conf) {
 	$conf['message'] = nl2brcode(str_replace('[tab][/tab]', "\t", $conf['message']), 1);
 }
 
+Scorpio_Hook::add('Func_discuzcode:After_highlight', '_eFunc_discuzcode_After_highlight');
+
+function _eFunc_discuzcode_After_highlight($conf) {
+	$find = $replace = array();
+
+	$find[]		= '/\s+$/is';
+	$replace[]	= '';
+
+	if ($find && $replace) {
+		$conf['message'] = preg_replace($find, $replace, $conf['message']);
+	}
+}
+
+Scorpio_Hook::add('Func_discuzcode:Before_code', '_eFunc_discuzcode_Before_code');
+
+function _eFunc_discuzcode_Before_code($conf) {
+	$conf['message'] = scotext::lf($conf['message']);
+}
+
+Scorpio_Hook::add('Func_discuzcode:Before_bbcodes', '_eFunc_discuzcode_Before_bbcodes');
+
+function _eFunc_discuzcode_Before_bbcodes($conf) {
+	$find = $replace = array();
+
+	$find[]		= '/(\[\/h[1-6]\])\n{2,}(\[h[1-6]\])/is';
+	$replace[]	= "\\1\n\\2";
+
+	$find[]		= '/\[h([1-6])\](.+?)\[\/h\\1\](?:\r\n|\n)?/is';
+	$replace[]	= "<h\\1 class=\"bbcode_headline\">\\2</h\\1>";
+
+	$find[]		= '/\s*\[(seo)(?:=([\w,]+))?\]((?:[^\[]|\[(?!\/\\1\])).*)\[\/\\1\]\s*/iesU';
+	$replace[]	= '';
+
+	if ($find && $replace) {
+		$conf['message'] = preg_replace($find, $replace, $conf['message']);
+	}
+}
+
 ?>

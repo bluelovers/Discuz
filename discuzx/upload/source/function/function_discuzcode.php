@@ -70,6 +70,8 @@ function codedisp2($code, $brush = 'plain') {
 
 //	dexit($code);
 
+	$brush = $brush ? $brush : 'plain';
+
 	$_G['extensions']['SyntaxHighlighter']['brush'][$brush] = $brush;
 
 	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
@@ -131,11 +133,16 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 //		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
-		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/iesU", "codedisp('\\1')", $message);
+//		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/iesU", "codedisp('\\1')", $message);
 
 		// bluelvoers
 //		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/ies", "codedisp2('\\2', '\\1')", $message);
-		$message = preg_replace("/\s*\[code=([\w,]+)\](.+?)\[\/code\]\s*/iesU", "codedisp2('\\2', '\\1')", $message);
+//		$message = preg_replace("/\s?\[code\]((?:[^\[\]\/]|.(?!\[\/code\])).+?)\[\/code\]\s?/iesU", "codedisp('\\1')", $message);
+
+		$_regexval = '(?:[^\[]|\[(?!\/\\1\])).*';
+
+		$message = preg_replace("/\s*\[(code)(?:=([\w,]+))?\](".$_regexval.")\[\/\\1\]\s*/iesU", "codedisp2('\\3', '\\2')", $message);
+//		$message = preg_replace("/\s*\[(php|perl|csharp|css|cpp|delphi|java|javascript|python|ruby|sql|vb|xml|c|perl)(?:=([\w,]+))?\](".$_regexval.")\[\/\\1\]\s*/iesU", "codedisp2('\\3', '\\1')", $message);
 		// bluelvoers
 	}
 
