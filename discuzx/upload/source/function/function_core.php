@@ -857,6 +857,21 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
+
+	// bluelovers
+	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_format', array(array(
+		'timestamp' => &$timestamp,
+		'format' => &$format,
+		'timeoffset' => &$timeoffset,
+		'uformat' => &$uformat,
+		'dformat' => &$dformat,
+		'tformat' => &$tformat,
+		'dtforma' => &$dtformat,
+		'offset' => &$offset,
+		'lang' => &$lang,
+	)));
+	// bluelovers
+
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
 	if($format == 'u') {
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;

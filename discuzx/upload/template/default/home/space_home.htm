@@ -64,6 +64,37 @@
 				</div>
 			</div>
 			<!--{/if}-->
+
+			<div class="drag">
+				<!--[diy=diybirthtop]--><div id="diybirthtop" class="area"></div><!--[/diy]-->
+			</div>
+
+			<!--{if $birthlist}-->
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>{lang friends_birthday_reminder}</h2>
+				</div>
+				<div class="bm_c">
+					<table cellpadding="2" cellspacing="4">
+					<!--{loop $birthlist $key $values}-->
+					<tr>
+						<td align="right" valign="top">
+						<!--{if $values[0]['istoday']}-->{lang today}<!--{else}-->{$values[0][birthmonth]}-{$values[0][birthday]}<!--{/if}-->
+						</td>
+						<td style="padding-left:10px;">
+							<ul>
+							<!--{loop $values $value}-->
+							<li><a href="home.php?mod=space&uid=$value[uid]">$value[username]</a></li>
+							<!--{/loop}-->
+							</ul>
+						</td>
+					</tr>
+					<!--{/loop}-->
+					</table>
+				</div>
+			</div>
+			<!--{/if}-->
+
 			<div class="drag">
 				<!--[diy=diydefaultusertop]--><div id="diydefaultusertop" class="area"></div><!--[/diy]-->
 			</div>
@@ -251,36 +282,6 @@
 						</li>
 						<!--{/loop}-->
 					</ul>
-				</div>
-			</div>
-			<!--{/if}-->
-
-			<div class="drag">
-				<!--[diy=diybirthtop]--><div id="diybirthtop" class="area"></div><!--[/diy]-->
-			</div>
-
-			<!--{if $birthlist}-->
-			<div class="bm">
-				<div class="bm_h cl">
-					<h2>{lang friends_birthday_reminder}</h2>
-				</div>
-				<div class="bm_c">
-					<table cellpadding="2" cellspacing="4">
-					<!--{loop $birthlist $key $values}-->
-					<tr>
-						<td align="right" valign="top">
-						<!--{if $values[0]['istoday']}-->{lang today}<!--{else}-->{$values[0][birthmonth]}-{$values[0][birthday]}<!--{/if}-->
-						</td>
-						<td style="padding-left:10px;">
-							<ul>
-							<!--{loop $values $value}-->
-							<li><a href="home.php?mod=space&uid=$value[uid]">$value[username]</a></li>
-							<!--{/loop}-->
-							</ul>
-						</td>
-					</tr>
-					<!--{/loop}-->
-					</table>
 				</div>
 			</div>
 			<!--{/if}-->

@@ -127,17 +127,16 @@ Scorpio_Hook::add('Func_showmessage:Before_custom', '_eFunc_showmessage_Before_c
  * 結果造成論壇轉換過來的用戶標誌位有問題
  */
 function _eFunc_showmessage_Before_custom($agv = array()) {
-	if (in_array($agv['message'], array('login_succeed', 'login_succeed_inactive_member', 'login_activation'))) {
-		if ($agv['values']['uid'] > 0) {
-			$user = DB::query_first("SELECT avatarstatus, uid FROM ".DB::table('common_member')." WHERE uid='{$agv['values']['uid']}' LIMIT 1");
+	if ($agv['values']['uid'] > 0 && in_array($agv['message'], array('login_succeed', 'login_succeed_inactive_member', 'login_activation'))) {
+		global $_G;
+		$user = DB::query_first("SELECT avatarstatus, uid FROM ".DB::table('common_member')." WHERE uid='{$agv['values']['uid']}' LIMIT 1");
 
-			if(!empty($user) && $user['uid'] && empty($user['avatarstatus']) && uc_check_avatar($user['uid'], 'middle')) {
-				DB::update('common_member', array('avatarstatus'=>'1'), array('uid'=>$_G['uid']));
+		if(!empty($user) && $user['uid'] && empty($user['avatarstatus']) && uc_check_avatar($user['uid'], 'middle')) {
+			DB::update('common_member', array('avatarstatus'=>'1'), array('uid'=>$_G['uid']));
 
-				updatecreditbyaction('setavatar');
+			updatecreditbyaction('setavatar');
 
-				if($_G['setting']['my_app_status']) manyoulog('user', $user['uid'], 'update');
-			}
+			if($_G['setting']['my_app_status']) manyoulog('user', $user['uid'], 'update');
 		}
 	}
 }
@@ -341,6 +340,12 @@ EOF
 		$hook_data .= $ss;
 	}
 
+}
+
+Scorpio_Hook::add('Func_dgmdate:Before_format', '_eFunc_dgmdate_Before_format');
+
+function _eFunc_dgmdate_Before_format($conf) {
+	if ($conf['format'] == 'n-j H:i') $conf['format'] = 'n-j H:i:s';
 }
 
 ?>

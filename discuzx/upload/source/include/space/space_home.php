@@ -389,28 +389,68 @@ if($space['self'] && empty($start)) {
 	if($space['feedfriend']) {
 		$birthdaycache = DB::fetch_first("SELECT variable, value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='birthday'");
 		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
-			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*3, 'n-j'));
+//			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*3, 'n-j'));
+			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*7, 'n-j'));
 			list($n_month, $n_day) = explode('-', dgmdate($_G['timestamp'], 'n-j'));
-			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*7, 'n-j'));
+//			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*7, 'n-j'));
+			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*45, 'n-j'));
 			if($e_month == $s_month) {
 				$wheresql = "sf.birthmonth='$s_month' AND sf.birthday>='$s_day' AND sf.birthday<='$e_day'";
+
+			// bluelovers
+			} elseif ($e_month < $s_month) {
+				// 修正跨月跨年的問題
+
+				$wheresql = "(
+						(sf.birthmonth='$s_month' AND sf.birthday>='$s_day')
+						OR (sf.birthmonth>'$s_month')
+						OR (sf.birthmonth<='$e_month' AND sf.birthday<='$e_day')
+						OR (sf.birthmonth>=1 AND sf.birthmonth<'$e_month')
+					) AND sf.birthday > 0";
+
+			// bluelovers
 			} else {
 				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
 			}
 
+			// bluelovers
+			$birthlist_nextyear = array();
+			// bluelovers
+
+//			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
+//				FROM ".DB::table('common_member_profile')." sf
+//				LEFT JOIN ".DB::table('common_member')." s USING(uid)
+//				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)");
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
 				FROM ".DB::table('common_member_profile')." sf
 				LEFT JOIN ".DB::table('common_member')." s USING(uid)
-				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)");
+				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)
+				ORDER BY (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username
+				LIMIT 10");
 			while ($value = DB::fetch($query)) {
 				$value['istoday'] = 0;
 				if($value['birthmonth'] == $n_month && $value['birthday'] == $n_day) {
 					$value['istoday'] = 1;
 				}
 				$key = sprintf("%02d", $value['birthmonth']).sprintf("%02d", $value['birthday']);
-				$birthlist[$key][] = $value;
-				ksort($birthlist);
+
+//				$birthlist[$key][] = $value;
+
+				// bluelovers
+				if ($value['birthmonth'] >= $n_month) {
+					$birthlist[$key][] = $value;
+				} else {
+					$birthlist_nextyear[$key][] = $value;
+				}
+				// bluelovers
+
+//				ksort($birthlist);
 			}
+			// bluelovers
+			ksort($birthlist_nextyear);
+			ksort($birthlist);
+			$birthlist = array_merge($birthlist, $birthlist_nextyear);
+			// bluelovers
 
 			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'birthday', '".addslashes(serialize($birthlist))."', '".getexpiration()."')");
 		} else {
