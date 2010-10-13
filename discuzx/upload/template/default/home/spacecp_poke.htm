@@ -9,10 +9,7 @@
 	<div class="mn">
 		<div class="bm bw0">
 			<h1 class="mt"><img alt="poke" src="{STATICURL}image/feed/poke.gif" class="vm" /> {lang poke}</h1>
-			<ul class="tb cl">
-				<li$actives[poke]><a href="home.php?mod=spacecp&ac=poke">{lang poke_received}</a></li>
-				<li$actives[send]><a href="home.php?mod=spacecp&ac=poke&op=send">{lang say_hi}</a></li>
-			</ul>
+			<!--{subtpl subblock/home/space_notice_nav}-->
 <!--{/if}-->
 <!--{if $op == 'send' || $op == 'reply'}-->
 		<!--{if $_G[inajax]}-->
@@ -75,7 +72,7 @@
 <!--{elseif $op == 'view'}-->
 			<!--{loop $list $key $subvalue}-->
 			<p class="pbm mbm bbda">
-				<!--{if $subvalue[fromuid]==$space[uid]}-->{lang me}<!--{else}--><a href="home.php?mod=space&uid=$subvalue[fromuid]" class="xi2">{$value[fromusername]}</a><!--{/if}-->: 
+				<!--{if $subvalue[fromuid]==$space[uid]}-->{lang me}<!--{else}--><a href="home.php?mod=space&uid=$subvalue[fromuid]" class="xi2">{$value[fromusername]}</a><!--{/if}-->:
 				<span class="xw0">
 					<!--{if $subvalue[iconid]}-->{$icons[$subvalue[iconid]]}<!--{else}-->{lang say_hi}<!--{/if}-->
 					<!--{if $subvalue[note]}-->, {lang say}: $subvalue[note]<!--{/if}-->
@@ -156,7 +153,7 @@
 					if($('poke_ul')) {
 						$('poke_ul').innerHTML = '<p class="emp">{lang ignore_all_poke}</p>';
 					}
-				}				
+				}
 			</script>
 <!--{/if}-->
 <!--{if !$_G[inajax]}-->

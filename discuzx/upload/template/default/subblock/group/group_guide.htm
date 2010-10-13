@@ -1,0 +1,25 @@
+			<!--{if $action == 'create' || (empty($gid) && empty($sgid))}-->
+				<div class="bm" onmouseover="jQuery('#g_guide').fadeIn('slow').show()">
+					<div class="bm_h cl">
+						<h2>{lang create_group_step}</h2>
+					</div>
+					<div class="bm_c">
+						<ul id="g_guide" class="mbm" {if $action != 'create'}style="display: none;"{/if}>
+							<li onclick="if ($('create_group_btn')) window.location.href = $('create_group_btn').href;"><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
+							<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
+							<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
+							<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
+						</ul>
+						<!--{if $action != 'create'}--><a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a><!--{/if}-->
+					</div>
+				</div>
+			<!--{else}-->
+				<div class="bm bw0">
+					<div class="bm_c">
+						<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+					</div>
+				</div>
+			<!--{/if}-->
+			<div class="drag">
+				<!--[diy=diysidemiddle]--><div id="diysidemiddle" class="area"></div><!--[/diy]-->
+			</div>
