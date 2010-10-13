@@ -56,4 +56,26 @@ function _eFunc_writetocsscache_Before_fwrite($conf) {
 //	}
 }
 
+Scorpio_Hook::add('Func_updatecache:After_lostcaches', '_eFunc_updatecache_After_lostcaches');
+
+function _eFunc_updatecache_After_lostcaches($conf) {
+	extract($conf, EXTR_REFS);
+
+	static $loadedcache = array();
+	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+	$caches = array();
+	foreach ($cachenames as $k) {
+		if(!isset($loadedcache[$k])) {
+			$loadedcache[$k] = true;
+
+			if ($k == 'blockclass') {
+				require_once libfile('function/block');
+				blockclass_cache();
+			} else {
+				$caches[] = $k;
+			}
+		}
+	}
+}
+
 ?>

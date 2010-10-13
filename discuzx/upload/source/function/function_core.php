@@ -759,6 +759,7 @@ function loadcache($cachenames, $force = false) {
 }
 
 function cachedata($cachenames) {
+	//BUG: 當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存
 	global $_G;
 	static $isfilecache, $allowmem;
 
@@ -798,6 +799,11 @@ function cachedata($cachenames) {
 		$cachenames = $lostcaches;
 		unset($lostcaches);
 	}
+
+	// bluelovers
+	$lostcaches = array();
+	// bluelvoers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
@@ -809,7 +815,24 @@ function cachedata($cachenames) {
 				fclose($fp);
 			}
 		}
+
+		// bluelovers
+		$lostcaches[] = $syscache['cname'];
+		// bluelovers
 	}
+
+	// bluelovers
+	$lostcaches = array_diff($cachenames, $lostcaches);
+//	dexit(array(array_diff($cachenames, $lostcaches), $cachenames, $lostcaches));
+
+	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':After', array(array(
+		'cachenames'	=> &$cachenames,
+		'lostcaches'	=> &$lostcaches,
+		'isfilecache'	=> &$isfilecache,
+		'allowmem'		=> &$allowmem,
+		'data'			=> &$data,
+	)));
+	// bluelovers
 
 	foreach($cachenames as $name) {
 		if($data[$name] === null) {

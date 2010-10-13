@@ -75,6 +75,48 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 	}
 }
 
+Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
+
+function _eFunc_cachedata_After($conf) {
+	extract($conf, EXTR_REFS);
+
+	static $loadedcache = array();
+	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+	$caches = array();
+	foreach ($cachenames as $k) {
+		if(!isset($loadedcache[$k])) {
+			$k2 = $k;
+
+			if (preg_match('/^usergroup_\d+$/', $k)) {
+				$k2 = 'usergroups';
+			} elseif ($k == 'style_default') {
+				$k2 = 'styles';
+			}
+
+			$caches[] = $k2;
+			$caches_load[] = $k;
+			$loadedcache[$k] = true;
+		}
+	}
+
+	if(!empty($caches)) {
+		@include_once libfile('function/cache');
+
+		updatecache($caches);
+		loadcache($caches_load, true);
+
+		$cachedata = cachedata($caches_load);
+		foreach($cachedata as $_k => $_v) {
+			$data[$_k] = $_v;
+		}
+
+//		static $c;
+//		$c++;
+//
+//		($c > 0) && dexit(array($caches, $caches_load, $cachenames));
+	}
+}
+
 Scorpio_Hook::add('Func_showmessage:Before_custom', '_eFunc_showmessage_Before_custom');
 
 /*

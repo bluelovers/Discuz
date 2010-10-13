@@ -15,6 +15,10 @@ function updatecache($cachename = '') {
 
 	$updatelist = empty($cachename) ? array() : (is_array($cachename) ? $cachename : array($cachename));
 
+	// bluelovers
+	$lostcaches = array();
+	// bluelovers
+
 	if(!$updatelist) {
 		@include_once libfile('cache/setting', 'function');
 		build_cache_setting();
@@ -22,16 +26,44 @@ function updatecache($cachename = '') {
 		$cachedirhandle = dir($cachedir);
 		while($entry = $cachedirhandle->read()) {
 			if(!in_array($entry, array('.', '..')) && preg_match("/^cache\_([\_\w]+)\.php$/", $entry, $entryr) && $entryr[1] != 'setting' && substr($entry, -4) == '.php' && is_file($cachedir.'/'.$entry)) {
-				@include_once libfile('cache/'.$entryr[1], 'function');
-				call_user_func('build_cache_'.$entryr[1]);
+//				@include_once libfile('cache/'.$entryr[1], 'function');
+//				call_user_func('build_cache_'.$entryr[1]);
+
+				if (@include_once(libfile('cache/'.$entryr[1], 'function'))) {
+					call_user_func('build_cache_'.$entryr[1]);
+
+				// bluelovers
+				} else {
+					$lostcaches[] = $entryr[1];
+				// bluelovers
+
+				}
 			}
 		}
 	} else {
 		foreach($updatelist as $entry) {
-			@include_once libfile('cache/'.$entry, 'function');
-			call_user_func('build_cache_'.$entry);
+//			@include_once libfile('cache/'.$entry, 'function');
+//			call_user_func('build_cache_'.$entry);
+
+			if (@include_once(libfile('cache/'.$entry, 'function'))) {
+				call_user_func('build_cache_'.$entry);
+
+			// bluelovers
+			} else {
+				$lostcaches[] = $entry;
+			// bluelovers
+
+			}
 		}
 	}
+
+	// bluelovers
+	if ($lostcaches) {
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':After_lostcaches', array(array(
+			'cachenames'	=> &$lostcaches,
+		)));
+	}
+	// bluelovers
 
 }
 

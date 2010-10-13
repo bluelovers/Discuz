@@ -164,13 +164,8 @@ if($op == 'blockclass') {
 
 	// bluelovers
 	// 某些狀況下會因為沒有 blockclass 緩存而無法顯示 DIY 模塊
-	// 原因在於沒有 blockclass 的緩存時不會自動產生 blockclass
-	if (!$_G['cache']['blockclass']) {
-		require_once libfile('function/block');
-		blockclass_cache();
-
-		loadcache('blockclass', 1);
-	}
+	// 原因在於 DX 設計下沒有 blockclass 的緩存時不會自動產生 blockclass
+	// 已經由 hook 來修正此問題
 	// bluelovers
 
 } elseif($op == 'style') {
