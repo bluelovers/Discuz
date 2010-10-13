@@ -15,6 +15,7 @@
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
 		<div class="bm fl cl">
 			<div class="bm_h">
+				<span class="y xw1"><a href="group.php?mod=my">{lang my_group} &rsaquo;</a></span>
 				<h1 class="xs2">$curtype[name]</h1>
 			</div>
 			<!--{if $typelist}-->
@@ -56,7 +57,7 @@
 							<tr class="fl_row">
 								<!--{/if}-->
 								<td class="fl_g" style="width: $curtype[forumcolwidth]">
-									<div class="fl_icn_g"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></div>
+									<div class="fl_icn_g"><a href="forum.php?mod=group&fid=$fid" title="$val[name]" class="avt"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></div>
 									<dl>
 										<dt><a href="forum.php?mod=group&fid=$fid" title="$val[name]">$val[name]</a></dt>
 										<dd>{lang group_total_members_threads}</dd>
@@ -72,7 +73,7 @@
 						<table cellspacing="0" cellpadding="0" class="fl_tb">
 						<!--{loop $list $fid $val}-->
 							<tr class="fl_row">
-								<td class="fl_icn"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></td>
+								<td class="fl_icn"><a href="forum.php?mod=group&fid=$fid" title="$val[name]" class="avt"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></td>
 								<td>
 									<!--{hook/index_grouplist $fid}-->
 									<strong><a href="forum.php?mod=group&fid=$fid" title="$val[name]">$val[name]</a></strong>
