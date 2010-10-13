@@ -279,3 +279,5 @@ div#fid_ctrl_menu, .sltm, .p_pop { max-height: 260px; overflow-y: auto; }
 .p_pop.card, #qmenu_menu { overflow-y: visible; }
 
 .avt:hover img { border-color: #154BA0; }
+
+.bbcode_highlight, .bbcode_tag { color: #ff0000; font-weight:bold; }

@@ -168,9 +168,9 @@ function _eFunc_discuzcode_After_nl2br($conf) {
 	$conf['message'] = nl2brcode(str_replace('[tab][/tab]', "\t", $conf['message']), 1);
 }
 
-Scorpio_Hook::add('Func_discuzcode:After_highlight', '_eFunc_discuzcode_After_highlight');
+Scorpio_Hook::add('Func_discuzcode:Before_jammer', '_eFunc_discuzcode_Before_jammer');
 
-function _eFunc_discuzcode_After_highlight($conf) {
+function _eFunc_discuzcode_Before_jammer($conf) {
 	$find = $replace = array();
 
 	$find[]		= '/\s+$/is';

@@ -449,10 +449,6 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 	}
 
-	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
-		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
-	}
-
 	// bluelovers
 	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_highlight', array(array(
 			'message'			=> &$message
@@ -474,21 +470,36 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	)));
 	// bluelovers
 
-	if(!empty($_G['gp_highlight'])) {
-		$highlightarray = explode('+', $_G['gp_highlight']);
+	if(!empty($_G['gp_highlight']) || 1) {
+//		$highlightarray = explode('+', $_G['gp_highlight']);
+
+		// bluelovers
+		$highlightarray = (strpos($_G['gp_highlight'], ',') !== false) ? explode(',', preg_replace('/\++|\s+/', ' ', $_G['gp_highlight'])) : preg_split('/\++|\s+/', $_G['gp_highlight']);
+//		$highlightarray = $highlightarray + array('排障', '欺騙', 'dhcp', '網絡執法', '網絡', 'DNS Client');
+		$highlightarray = array_map('preg_quote', array_unique(array_filter($highlightarray)));
+
+//		dexit($highlightarray);
+		// bluelovers
+
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
 		if($sppos !== FALSE) {
 			$specialextra = substr($message, $sppos + 3);
 			$message = substr($message, 0, $sppos);
 		}
-		$message = preg_replace(array("/(^|>)([^<]+)(?=<|$)/sUe", "/<highlight>(.*)<\/highlight>/siU"), array("highlight('\\2', \$highlightarray, '\\1')", "<strong><font color=\"#FF0000\">\\1</font></strong>"), $message);
+//		$message = preg_replace(array("/(^|>)([^<]+)(?=<|$)/sUe", "/<highlight>(.*)<\/highlight>/siU"), array("highlight('\\2', \$highlightarray, '\\1')", "<strong><font color=\"#FF0000\">\\1</font></strong>"), $message);
+		!empty($highlightarray) && $message = preg_replace(array(
+			'/(?<=^|>)([^<>]*)('.preg_replace('/\s+/', '\s+', implode($highlightarray, '|')).')/miU',
+		), array(
+			'\1<span class="bbcode_tag bbcode_highlight">\2</span>',
+		), $message);
+
 		if($sppos !== FALSE) {
 			$message = $message.chr(0).chr(0).chr(0).$specialextra;
 		}
 	}
 
 	// bluelovers
-	Scorpio_Hook::execute('Func_'.__FUNCTION__.':After_highlight', array(array(
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_code2', array(array(
 			'message'			=> &$message
 			, 'smileyoff'		=> &$smileyoff
 			, 'bbcodeoff'		=> &$bbcodeoff
@@ -508,7 +519,32 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	)));
 	// bluelovers
 
+	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
+		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
+	}
+
 	unset($msglower);
+
+	// bluelovers
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_jammer', array(array(
+			'message'			=> &$message
+			, 'smileyoff'		=> &$smileyoff
+			, 'bbcodeoff'		=> &$bbcodeoff
+			, 'htmlon'			=> &$htmlon
+			, 'allowsmilies'	=> &$allowsmilies
+			, 'allowbbcode'		=> &$allowbbcode
+			, 'allowimgcode'	=> &$allowimgcode
+			, 'allowhtml'		=> &$allowhtml
+			, 'jammer'			=> &$jammer
+			, 'parsetype'		=> &$parsetype
+			, 'authorid'		=> &$authorid
+			, 'allowmediacode'	=> &$allowmediacode
+			, 'pid'				=> &$pid
+			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
+	)));
+	// bluelovers
 
 	if($jammer) {
 		$message = preg_replace("/\r\n|\n|\r/e", "jammer()", $message);
