@@ -683,6 +683,10 @@ class discuz_core {
 			$this->var['group'] = array_merge($this->var['group'], $this->var['cache']['admingroup_'.$this->var['member']['adminid']]);
 		}
 
+		// bluelovers
+		Scorpio_Hook::execute('Class_'.__METHOD__.':After', array(&$this));
+		// bluelovers
+
 	}
 
 	function _init_style() {

@@ -50,7 +50,8 @@ require_once libfile('function/mail');
 foreach ($list as $cid => $value) {
 	$mlist = $sublist[$cid];
 	if($value['email'] && $mlist) {
-		$subject = getstr($mlist[0]['subject'], 80, 0, 0, 0, -1);
+//		$subject = getstr($mlist[0]['subject'], 80, 0, 0, 0, -1);
+		$subject = getstr($mlist[0]['subject'], $_G['setting']['maxpostsize_subject'], 0, 0, 0, -1);
 		$message = '';
 		foreach ($mlist as $subvalue) {
 			if($subvalue['message']) {

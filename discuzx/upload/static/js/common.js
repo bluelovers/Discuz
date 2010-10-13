@@ -181,21 +181,27 @@ function strlen(str) {
 	return (BROWSER.ie && str.indexOf('\n') != -1) ? str.replace(/\r?\n/g, '_').length : str.length;
 }
 
-function mb_strlen(str) {
+//function mb_strlen(str) {
+//}
+function mb_strlen(str, mode) {
 	var len = 0;
 	for(var i = 0; i < str.length; i++) {
-		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
+//		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
+		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? (mode ? 1 : 3) : 2) : 1;
 	}
 	return len;
 }
 
-function mb_cutstr(str, maxlen, dot) {
+//function mb_cutstr(str, maxlen, dot) {
+//}
+function mb_cutstr(str, maxlen, dot, mode) {
 	var len = 0;
 	var ret = '';
 	var dot = !dot ? '...' : '';
 	maxlen = maxlen - dot.length;
 	for(var i = 0; i < str.length; i++) {
-		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
+//		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
+		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? (mode ? 1 : 3) : 2) : 1;
 		if(len > maxlen) {
 			ret += dot;
 			break;
@@ -220,7 +226,11 @@ function htmlspecialchars(str) {
 }
 
 function display(id) {
-	$(id).style.display = $(id).style.display == '' ? 'none' : '';
+//	$(id).style.display = $(id).style.display == '' ? 'none' : '';
+	who = (typeof id == 'object') ? id : $(id);
+//	who.style.display = who.style.display == '' ? 'none' : '';
+
+	who.style.display != 'none' ? jQuery(who).fadeOut('slow').hide() : jQuery(who).fadeIn('slow').css('display', '');
 }
 
 function checkall(form, prefix, checkall) {
@@ -2669,7 +2679,8 @@ function showPreview(val, id) {
 function toggle_collapse(objname, noimg, complex, lang) {
 	var obj = $(objname);
 	if(obj) {
-		obj.style.display = obj.style.display == '' ? 'none' : '';
+//		obj.style.display = obj.style.display == '' ? 'none' : '';
+		display(obj);
 		var collapsed = getcookie('collapse');
 		collapsed = updatestring(collapsed, objname, !obj.style.display);
 		setcookie('collapse', collapsed, (collapsed ? 2592000 : -2592000));
@@ -3037,17 +3048,21 @@ function navShow(id) {
 	}
 }
 
-function strLenCalc(obj, checklen, maxlen) {
+//function strLenCalc(obj, checklen, maxlen) {
+//}
+function strLenCalc(obj, checklen, maxlen, mode) {
 	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = maxlen, len = strlen(v);
 	for(var i = 0; i < v.length; i++) {
 		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
-			curlen -= charset == 'utf-8' ? 2 : 1;
+//			curlen -= charset == 'utf-8' ? 2 : 1;
+			curlen -= charset == 'utf-8' ? (mode ? 0 : 2) : 1;
 		}
 	}
-	if(curlen >= len) {
+	if(curlen >= len || 1) {
 		$(checklen).innerHTML = curlen - len;
 	} else {
-		obj.value = mb_cutstr(v, maxlen, true);
+//		obj.value = mb_cutstr(v, maxlen, true);
+//		obj.value = mb_cutstr(v, maxlen, true, mode);
 	}
 }
 

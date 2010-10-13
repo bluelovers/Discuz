@@ -143,8 +143,22 @@ input, button, select, textarea { vertical-align:middle; }
 
 /* subblock/forum/forum_forumjump */
 
-.pgt .pg a:hover, .pgt .pg strong:hover, .pgt .pg:hover a, .pgt .pg:hover strong {
+.pg kbd {
+	float: left; display: inline; margin-left: 4px; padding: 0; height: 26px; border: 1px solid; border-color: {SPECIALBORDER}; background-repeat: no-repeat; color: {LINK}; overflow: hidden; text-decoration: none;
+}
+.pg kbd input {
+	border: 0px none;
+	height: 99%;
+	padding: 2px;
+}
+#pgt .pg a, #pgt .pg strong { display: none; }
+#pgt .pg a:hover, #pgt .pg strong:hover, #pgt .pg:hover a, #pgt .pg:hover strong, #pgt .pg a.nxt {
 	display: inherit;
+}
+
+.ttp a, .ttp strong {
+	-moz-border-radius:20px;-webkit-border-radius:20px;border-radius:20px;
+	padding:3px 8px;
 }
 
 /* 當為隱藏分類時 */
@@ -260,6 +274,8 @@ pre, code {
 	word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
-div#fid_ctrl_menu, .sltm, .p_pop { max-height: 20em; overflow-y: auto; }
+div#fid_ctrl_menu, .sltm, .p_pop { max-height: 260px; overflow-y: auto; }
 .p_pop.p_pop_showselect a { padding-right: 20px; }
-.p_pop.card { overflow-y: visible; }
+.p_pop.card, #qmenu_menu { overflow-y: visible; }
+
+.avt:hover img { border-color: #154BA0; }

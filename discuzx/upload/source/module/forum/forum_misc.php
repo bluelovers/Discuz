@@ -548,8 +548,8 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes+$ratetimes WHERE pid='$_G[gp_pid]'");
 		if($post['first']) {
 			$threadrate = intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
-			DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
-
+//			DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
+			DB::query("UPDATE ".DB::table('forum_thread')." SET rate=(SELECT rate FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND first=1) WHERE tid='$_G[tid]'");
 		}
 
 		require_once libfile('function/discuzcode');

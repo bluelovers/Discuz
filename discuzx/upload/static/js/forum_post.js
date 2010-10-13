@@ -63,9 +63,10 @@ function validate(theform) {
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showDialog('請完成標題或內容欄');
 		return false;
-	} else if(mb_strlen(theform.subject.value) > 80) {
-		showDialog('您的標題超過 80 個字符的限制');
-		return false;
+//	} else if(mb_strlen(theform.subject.value) > 80) {
+//		showDialog('您的標題超過 80 個字符的限制');
+	} else if(mb_strlen(theform.subject.value, true) > maxpostsize_subject) {
+		showDialog('您的標題超過 '+maxpostsize_subject+' 個字符的限制');
 	}
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {

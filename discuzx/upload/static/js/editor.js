@@ -798,7 +798,8 @@ function showEditorMenu(tag, params) {
 	selection = sel ? (wysiwyg ? sel.htmlText : sel.text) : getSel();
 
 	if(menu) {
-		showMenu({'ctrlid':ctrlid,'evt':'click','timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':in_array(tag, ['attach', 'image']) ? ctrlid + '_ctrl' : 1});
+//		showMenu({'ctrlid':ctrlid,'evt':'click','timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':in_array(tag, ['attach', 'image']) ? ctrlid + '_ctrl' : 1});
+		showMenu({'ctrlid':ctrlid,'evt':'click','timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':in_array(tag, ['attach', 'image']) ? ctrlid + '_ctrl' : 0});
 	} else {
 		switch(tag) {
 			case 'url':

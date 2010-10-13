@@ -160,8 +160,10 @@
 								<!--{/if}-->
 								<!--{if $thread['rate'] > 0}-->
 									<img src="{IMGDIR}/agree.gif" align="absmiddle" alt="agree" title="{lang rate_credit_add}" />
+									<!--{if $thread['rate'] > 1}--> [<span class="rate_credit_add">+{$thread[rate]}</span>]<!--{/if}-->
 								<!--{elseif $thread['rate'] < 0}-->
 									<img src="{IMGDIR}/disagree.gif" align="absmiddle" alt="disagree" title="{lang posts_deducted}" />
+									<!--{if $thread['rate'] < -1}--> [<strong class="rate_credit_reduce">{$thread[rate]}</strong>]<!--{/if}-->
 								<!--{/if}-->
 							<!--{/if}-->
 							<!--{if $thread[multipage]}-->

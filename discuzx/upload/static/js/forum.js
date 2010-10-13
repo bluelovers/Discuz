@@ -161,8 +161,10 @@ function fastpostvalidate(theform, noajaxpost) {
 	if(theform.message.value == '' && theform.subject.value == '') {
 		s = '請完成標題或內容欄。';
 		theform.message.focus();
-	} else if(mb_strlen(theform.subject.value) > 80) {
-		s = '您的標題超過 80 個字符的限制。';
+//	} else if(mb_strlen(theform.subject.value) > 80) {
+//		s = '您的標題超過 80 個字符的限制。';
+	} else if(mb_strlen(theform.subject.value, true) > maxpostsize_subject) {
+		s = '您的標題超過 '+maxpostsize_subject+' 個字符的限制。';
 		theform.subject.focus();
 	}
 	if(!disablepostctrl && ((postminchars != 0 && mb_strlen(theform.message.value) < postminchars) || (postmaxchars != 0 && mb_strlen(theform.message.value) > postmaxchars))) {

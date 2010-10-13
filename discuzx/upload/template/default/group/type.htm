@@ -26,6 +26,14 @@
 			<!--{/if}-->
 			<!--{hook/index_top}-->
 			<!--{if $list}-->
+
+				<!--{if $list}-->
+					<div class="pgs cl tbmu">
+						$multipage
+						<span class="pgb y"><a href="group.php">{lang return_index}</a></span>
+					</div>
+				<!--{/if}-->
+
 				<div class="tbmu cl bw0">
 					<span class="y">
 					<select title="{lang orderby}" onchange="location.href=this.value" class="ps">
@@ -48,7 +56,7 @@
 							<tr class="fl_row">
 								<!--{/if}-->
 								<td class="fl_g" style="width: $curtype[forumcolwidth]">
-									<div class="fl_icn_g"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" /></a></div>
+									<div class="fl_icn_g"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></div>
 									<dl>
 										<dt><a href="forum.php?mod=group&fid=$fid" title="$val[name]">$val[name]</a></dt>
 										<dd>{lang group_total_members_threads}</dd>
@@ -64,7 +72,7 @@
 						<table cellspacing="0" cellpadding="0" class="fl_tb">
 						<!--{loop $list $fid $val}-->
 							<tr class="fl_row">
-								<td class="fl_icn"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" /></a></td>
+								<td class="fl_icn"><a href="forum.php?mod=group&fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a></td>
 								<td>
 									<!--{hook/index_grouplist $fid}-->
 									<strong><a href="forum.php?mod=group&fid=$fid" title="$val[name]">$val[name]</a></strong>
@@ -98,31 +106,7 @@
 	<div class="sd">
 		<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
 		<!--{hook/index_side_top}-->
-		<!--{if empty($gid) && empty($sgid)}-->
-			<div class="bm">
-				<div class="bm_h cl">
-					<h2>{lang create_group_step}</h2>
-				</div>
-				<div class="bm_c">
-					<ul id="g_guide" class="mbm">
-						<li><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
-						<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
-						<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
-						<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
-					</ul>
-					<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
-				</div>
-			</div>
-			<div class="drag">
-				<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
-			</div>
-		<!--{else}-->
-			<div class="bm bw0">
-				<div class="bm_c">
-					<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
-				</div>
-			</div>
-		<!--{/if}-->
+		<!--{subtpl subblock/group/group_guide}-->
 		<!--[diy=diytopgrouptop]--><div id="diytopgrouptop" class="area"></div><!--[/diy]-->
 		<!--{if $topgrouplist}-->
 			<div id="g_top" class="bm">

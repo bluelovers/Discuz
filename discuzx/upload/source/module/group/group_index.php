@@ -51,7 +51,8 @@ if($gid) {
 }
 
 if(empty($curtype)) {
-	if($_G['uid'] && empty($_G['mod'])) {
+	// 取消自動跳轉到我的群組
+	if(0 && $_G['uid'] && empty($_G['mod'])) {
 		$usergroups = getuserprofile('groups');
 		if(!empty($usergroups)) {
 			dheader('Location:group.php?mod=my');
@@ -136,6 +137,15 @@ $metadescription = $_G['setting']['seodescription']['group'];
 if(!$metadescription) {
 	$metadescription = $_G['setting']['navs'][3]['navname'];
 }
+
+// bluelovers
+if (sclass_exists('Scorpio_Hook')) {
+	Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_template', array(array(
+		'curtype' => &$curtype,
+	)));
+}
+// bluelovers
+
 if(empty($curtype)) {
 	include template('diy:group/index');
 } else {

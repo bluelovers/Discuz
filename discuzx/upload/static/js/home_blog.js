@@ -9,8 +9,11 @@ function validate_ajax(obj) {
 	var subject = $('subject');
 	if (subject) {
 		var slen = strlen(subject.value);
-		if (slen < 1 || slen > 80) {
-			alert("標題長度(1~80字符)不符合要求");
+//		if (slen < 1 || slen > 80) {
+//		}
+		if (slen < 1 || slen > maxpostsize_subject) {
+//			alert("標題長度(1~80字符)不符合要求");
+			alert("目前標題長度 "+slen+" 不符合要求(1~"+maxpostsize_subject+"字符)");
 			subject.focus();
 			return false;
 		}

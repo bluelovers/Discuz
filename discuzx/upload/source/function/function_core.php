@@ -2045,6 +2045,11 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 		$lang['next'] = '&rsaquo;&rsaquo;';
 	} else {
 		$shownum = $showkbd = FALSE;
+
+		// bluelvoers
+//		$showkbd = TRUE;
+		// bluelvoers
+
 		$lang['prev'] = '&nbsp;&nbsp;';
 		$lang['next'] = lang('core', 'nextpage');
 	}
@@ -2088,8 +2093,13 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 		}
 
 		$multipage .= ($to < $pages ? '<a href="'.$mpurl.'page='.$pages.$a_name.'" class="last"'.$ajaxtarget.'>... '.$realpages.'</a>' : '').
-		($curpage < $pages && !$simple ? '<a href="'.$mpurl.'page='.($curpage + 1).$a_name.'" class="nxt"'.$ajaxtarget.'>'.$lang['next'].'</a>' : '').
-		($showkbd && !$simple && $pages > $page && !$ajaxtarget ? '<kbd><input type="text" name="custompage" size="3" onkeydown="if(event.keyCode==13) {window.location=\''.$mpurl.'page=\'+this.value; doane(event);}" /></kbd>' : '');
+
+		// bluelvoers
+		($showkbd && !$simple && $pages > $page && !$ajaxtarget ? '<kbd><input type="text" name="custompage" size="3" onkeydown="if(event.keyCode==13) {window.location=\''.$mpurl.'page=\'+this.value; doane(event);}" /></kbd>' : '').
+		// bluelvoers
+
+		($curpage < $pages && !$simple ? '<a href="'.$mpurl.'page='.($curpage + 1).$a_name.'" class="nxt"'.$ajaxtarget.'>'.$lang['next'].'</a>' : '');
+//		($showkbd && !$simple && $pages > $page && !$ajaxtarget ? '<kbd><input type="text" name="custompage" size="3" onkeydown="if(event.keyCode==13) {window.location=\''.$mpurl.'page=\'+this.value; doane(event);}" /></kbd>' : '');
 
 		$multipage = $multipage ? '<div class="pg">'.($shownum && !$simple ? '<em>&nbsp;'.$num.'&nbsp;</em>' : '').$multipage.'</div>' : '';
 	}

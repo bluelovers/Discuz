@@ -69,3 +69,16 @@
 /** forum::modcp **/
 	select#fid { width: 100%; max-width: 190px; }
 /** end **/
+
+/** forum::post,group::post **/
+.fnm { width: auto; min-width: 260px; }
+.fszm { width: auto; min-width: 55px; line-height: normal; padding-right: 1em; }
+	* html .fszm li a { overflow: hidden; width: auto; min-width: 35px; }
+/** end **/
+
+/** group **/
+	#g_guide { background: url({IMGDIR}/g_guide.png) no-repeat 10px 18px; }
+		#g_guide li { border-bottom: 1px dashed {COMMONBORDER}; }
+		#g_guide a, #g_guide label { display: block; padding: 7px 0 7px 40px; height: 36px; }
+		#g_guide strong { display: block; }
+/** end **/

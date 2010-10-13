@@ -42,7 +42,8 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		check_articleperm($catid);
 	}
 
-	$_POST['title'] = getstr(trim($_POST['title']), 80, 1, 1);
+//	$_POST['title'] = getstr(trim($_POST['title']), 80, 1, 1);
+	$_POST['title'] = getstr(trim($_POST['title']), $_G['setting']['maxpostsize_subject'], 1, 1);
 	if(strlen($_POST['title']) < 1) {
 		showmessage('title_not_too_little');
 	}

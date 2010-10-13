@@ -26,6 +26,12 @@ function _eClass_discuz_core__init_input_After_MAGIC_QUOTES_GPC() {
 	}
 }
 
+Scorpio_Hook::add('Class_discuz_core::_init_setting:After', '_eClass_discuz_core__init_setting_After');
+
+function _eClass_discuz_core__init_setting_After(&$discuz_core) {
+	if (!$discuz_core->var['setting']['maxpostsize_subject']) $discuz_core->var['setting']['maxpostsize_subject'] = 80;
+}
+
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
 function _eFunc_libfile(&$ret, $root, $force = 0) {
@@ -56,6 +62,10 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 			case 'forum.php':
 			case 'source/module/forum/forum_viewthread.php':
 				@include_once libfile('hooks/forum', '', 'extensions/');
+				break;
+			case 'group.php':
+			case 'source/module/group/group_index.php':
+				@include_once libfile('hooks/group', '', 'extensions/');
 				break;
 			default:
 //				dexit($file);
@@ -267,8 +277,19 @@ EOF
 	} elseif ($hookid == 'global_header_seohead') {
 
 		$ss = <<<EOF
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
+<script type="text/javascript" src="/libs_js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
+	} elseif ($hookid == 'global_header_javascript') {
+		$ss = <<<EOF
+<script type="text/javascript">var maxpostsize_subject = {$_G['setting']['maxpostsize_subject']};</script>
 EOF
 ;
 /*

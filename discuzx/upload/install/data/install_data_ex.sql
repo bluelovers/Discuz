@@ -188,3 +188,19 @@ UPDATE `pre_common_setting` SET `svalue` = '180' WHERE `skey` = 'feedday';
 
 # 修正缺少了論壇回帖發帖的動態
 REPLACE INTO `pre_common_setting` VALUES ('privacy', 'a:2:{s:4:"view";a:8:{s:5:"index";i:0;s:6:"friend";i:0;s:4:"wall";i:0;s:4:"home";i:0;s:5:"doing";i:0;s:4:"blog";i:0;s:5:"album";i:0;s:5:"share";i:0;}s:4:"feed";a:17:{s:5:"doing";i:1;s:4:"blog";i:1;s:6:"upload";i:1;s:5:"share";i:1;s:4:"poll";i:1;s:8:"joinpoll";i:1;s:6:"friend";i:1;s:7:"comment";i:1;s:4:"show";i:1;s:6:"credit";i:1;s:9:"spaceopen";i:1;s:6:"invite";i:1;s:4:"task";i:1;s:7:"profile";i:1;s:5:"click";i:1;s:9:"newthread";i:1;s:8:"newreply";i:1;}}');
+
+# 修正標題長度
+REPLACE INTO `pre_common_setting` (`skey`, `svalue`) VALUES ('maxpostsize_subject', '120');
+
+ALTER TABLE `pre_forum_forumrecommend` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_forum_thread` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_forum_trade` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_forum_tradelog` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_home_blog` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_forum_rsscache` CHANGE `subject` `subject` CHAR( 120 ) NOT NULL DEFAULT '';
+
+ALTER TABLE `pre_forum_post` CHANGE `subject` `subject` VARCHAR( 120 ) NOT NULL DEFAULT '';
+ALTER TABLE `pre_forum_polloption` CHANGE `polloption` `polloption` VARCHAR( 120 ) NOT NULL DEFAULT '';
+
+#----------
+ALTER TABLE `pre_forum_attachment` CHANGE `filename` `filename` VARCHAR( 100 ) NOT NULL DEFAULT '';

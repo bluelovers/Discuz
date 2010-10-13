@@ -32,7 +32,7 @@
 					function succeedhandle_attentiongroup(locationhref) {
 						hideWindow('attentiongroup');
 						location.href = locationhref;
-					} 
+					}
 				</script>
 
 			</ul>
@@ -148,7 +148,7 @@
 					<ul class="ml mls cl">
 						<!--{loop $grouplist $groupid $group}-->
 						<li>
-							<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" /></a>
+							<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a>
 							<p><a href="forum.php?mod=group&fid=$groupid" title="$group[name]">$group[name]</a></p>
 						</li>
 						<!--{/loop}-->
@@ -186,7 +186,7 @@
 					<ul class="ml mls cl">
 						<!--{loop $randgroup $key $group}-->
 						<li>
-							<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" class="avt" target="_blank"><img src="$group[icon]" alt="$group[name]" /></a>
+							<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" class="avt" target="_blank"><img src="$group[icon]" alt="$group[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a>
 							<p><a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" target="_blank">$group[name]</a></p>
 						</li>
 						<!--{/loop}-->
@@ -205,7 +205,7 @@
 				<ul class="ml mls cl">
 					<!--{loop $friendgrouplist $groupid $group}-->
 					<li>
-						<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt" target="_blank"><img src="$group[icon]" alt="$group[name]" /></a>
+						<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt" target="_blank"><img src="$group[icon]" alt="$group[name]" onerror="this.src='static/image/common/groupicon.gif'" /></a>
 						<p><a href="forum.php?mod=group&fid=$groupid" title="$group[name]" target="_blank">$group[name]</a></p>
 					</li>
 					<!--{/loop}-->

@@ -25,8 +25,9 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 					</div>
 					<script type="text/javascript" reload="1">simulateSelect('typeid');</script>
 				<!--{/if}-->
-				<input type="text" id="subject" name="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', 80);" tabindex="11" style="width: 25em" />
-				<span>{lang comment_message1} <strong id="checklen">80</strong> {lang comment_message2}</span>
+				<!--input type="text" id="subject" name="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', 80);" tabindex="11" style="width: 25em" /-->
+				<input type="text" id="subject" name="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', maxpostsize_subject, true);" tabindex="11" style="width: 25em" />
+				<span>{lang comment_message1} <!--strong id="checklen">80</strong--><strong id="checklen">{$_G['setting']['maxpostsize_subject']}</strong> {lang comment_message2}</span>
 			</div>
 
 			<div class="cl">

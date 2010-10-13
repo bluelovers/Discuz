@@ -91,7 +91,7 @@
 				</table>
 				<!--{hook/spacecp_middle}-->
 				<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
-				
+
 					<!--{if $_G['setting']['blogcategorystat'] && $categoryselect}-->
 					<tr>
 						<th>{lang site_categories}</th>
@@ -101,7 +101,7 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-					
+
 					<tr>
 						<th>{lang personal_category}</th>
 						<td>
@@ -203,11 +203,13 @@
 			</form>
 			<script type="text/javascript">
 				function validate(obj) {
-					
+
 					var subject = $('subject');
 					if (subject) {
 						var slen = strlen(subject.value);
-						if (slen < 1 || slen > 80) {
+//						if (slen < 1 || slen > 80) {
+//						}
+						if (slen < 1 || slen > {$_G['setting']['maxpostsize_subject']}) {
 							alert("{lang alert_title_text}");
 							subject.focus();
 							return false;
@@ -231,7 +233,7 @@
 							}
 						}
 					}
-					
+
 					if($('seccode')) {
 						var code = $('seccode').value;
 						var x = new Ajax();

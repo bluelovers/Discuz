@@ -83,7 +83,8 @@ while($value = $db_source->fetch_array($threadquery)) {
 	$db_target->insert('common_member_count', array('uid' => $value['uid']), 0, false, true);
 	$db_target->query("UPDATE ".$db_target->table('common_member_count')." SET threads=threads+1 WHERE uid='$value[uid]'", 'UNBUFFERED');
 	$db_target->query("UPDATE ".$db_target->table('forum_groupuser')." SET threads=threads+1 WHERE fid='$sid' AND uid='$value[uid]'", 'UNBUFFERED');
-	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum] WHERE fid='$sid'", 'UNBUFFERED');
+//	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum] WHERE fid='$sid'", 'UNBUFFERED');
+	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum], commoncredits=(commoncredits+1+$value[replynum]) WHERE fid='$sid'", 'UNBUFFERED');
 
 }
 $force = false;

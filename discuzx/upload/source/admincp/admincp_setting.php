@@ -827,6 +827,11 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_permissions_allowmoderatingthread', 'settingnew[allowmoderatingthread]', $setting['allowmoderatingthread'], 'radio');
 		showsetting('setting_permissions_memliststatus', 'settingnew[memliststatus]', $setting['memliststatus'], 'radio');
 		showsetting('setting_permissions_reportpost', 'settingnew[reportpost]', $setting['reportpost'], 'radio');
+
+		// bluelovers
+		showsetting('setting_permissions_maxpostsize_subject', 'settingnew[maxpostsize_subject]', $setting['maxpostsize_subject'], 'text');
+		// bluelvoers
+
 		showsetting('setting_permissions_minpostsize', 'settingnew[minpostsize]', $setting['minpostsize'], 'text');
 		showsetting('setting_permissions_maxpostsize', 'settingnew[maxpostsize]', $setting['maxpostsize'], 'text');
 		showsetting('setting_permissions_alloweditpost', array('settingnew[alloweditpost]', array(
