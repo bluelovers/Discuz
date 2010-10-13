@@ -46,7 +46,8 @@ if($operation == 'list') {
 		array_push($rules, $lowerlimit);
 
 		foreach($rules as $rid => $rule) {
-			$tdarr = array($rule['rulename'], $rule['rid'] ? $lang['setting_credits_policy_cycletype_'.$rule['cycletype']] : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A');
+//			$tdarr = array($rule['rulename'], $rule['rid'] ? $lang['setting_credits_policy_cycletype_'.$rule['cycletype']] : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A');
+			$tdarr = array($rule['rulename'].' <span class="lightfont"> ( '.$rule['action'].' )</span>', $rule['rid'] ? $lang['setting_credits_policy_cycletype_'.$rule['cycletype']] : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A');
 			for($i = 1; $i <= 8; $i++) {
 				if($_G['setting']['extcredits'][$i]) {
 					array_push($tdarr, '<input name="credit['.$rule['rid'].']['.$i.']" class="txt" value="'.$rule['extcredits'.$i].'" />');
@@ -91,6 +92,11 @@ if($operation == 'list') {
 	if($rid) {
 		$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE rid='$rid'");
 		$ruleinfo = DB::fetch($query);
+
+		// bluelovers
+		$ruleinfo_global = $ruleinfo;
+		// bluelvoers
+
 		if($fid) {
 			$query = DB::query("SELECT f.name AS forumname, ff.creditspolicy
 				FROM ".DB::table('forum_forum')." f
@@ -119,6 +125,14 @@ if($operation == 'list') {
 
 		showtableheader('', 'nobottom', 'id="edit"');
 		if($rid) {
+
+			// bluelovers
+			if(!$fid) {
+				showsetting('setting_credits_policy_name', 'rule[rulename]', $ruleinfo['rulename'], 'text');
+				showsetting('setting_credits_policy_action', 'rule[action]', $ruleinfo['action'], 'text');
+			}
+			// bluelovers
+
 			showsetting('setting_credits_policy_cycletype', array('rule[cycletype]', array(
 				array(0, $lang['setting_credits_policy_cycletype_0'], array('cycletimetd' => 'none', 'rewardnumtd' => 'none')),
 				array(1, $lang['setting_credits_policy_cycletype_1'], array('cycletimetd' => 'none', 'rewardnumtd' => '')),
@@ -154,6 +168,10 @@ if($operation == 'list') {
 				$rule['rewardnum'] = 1;
 			}
 			foreach($rule as $key => $val) {
+				// bluelovers
+				if (in_array($key, array('rulename', 'action'))) continue;
+				// bluelovers
+
 				$rule[$key] = (float)$val;
 			}
 			$havecredit = false;
@@ -165,6 +183,7 @@ if($operation == 'list') {
 				}
 			}
 			if($fid) {
+				//TODO: 待修正 - 當積分策略等於全域積分策略時清除 fid
 				$fids = $ruleinfo['fids'] ? explode(',', $ruleinfo['fids']) : array();
 				if($havecredit) {
 					$rule['rid'] = $rid;
