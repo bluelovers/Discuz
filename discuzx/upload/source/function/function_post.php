@@ -255,6 +255,7 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 }
 
 function checkflood() {
+	// BUG: 當允許遊客發文時 此防禦機制無效
 	global $_G;
 	if(!$_G['group']['disablepostctrl'] && $_G['uid']) {
 		$isflood = $_G['setting']['floodctrl'] && (TIMESTAMP - $_G['setting']['floodctrl'] <= getuserprofile('lastpost'));

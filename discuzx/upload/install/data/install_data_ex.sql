@@ -204,3 +204,8 @@ ALTER TABLE `pre_forum_polloption` CHANGE `polloption` `polloption` VARCHAR( 120
 
 #----------
 ALTER TABLE `pre_forum_attachment` CHANGE `filename` `filename` VARCHAR( 100 ) NOT NULL DEFAULT '';
+
+
+ALTER TABLE `pre_home_poke` ADD `ignore` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `pre_home_poke` ADD INDEX ( `ignore` ) ;
+ALTER TABLE `pre_home_pokearchive` ADD INDEX `uid` ( `uid` , `fromuid` ) ;

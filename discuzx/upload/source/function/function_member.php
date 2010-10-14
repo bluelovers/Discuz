@@ -172,6 +172,12 @@ function getuidfields() {
 		'home_friend|uid,fuid',
 		'home_friendlog|uid,fuid',
 		'home_pic',
+
+		// bluelovers
+		'home_poke|uid,fromuid',
+		'home_pokearchive|uid,fromuid',
+		// bluelovers
+
 		'home_share',
 		'home_userapp',
 		'home_userappfield',
