@@ -105,9 +105,9 @@ if(!submitcheck('searchsubmit', 1)) {
 				$threadlist[$post['tid']]['message'] = bat_highlight(messagecutstr($post['message'], 200), $keyword);
 			}
 		}
-		$multipage = multi($index['num'], $_G['tpp'], $page, "search.php?m=forum&searchid=$searchid&orderby=$orderby&ascdesc=$ascdesc&searchsubmit=yes");
+		$multipage = multi($index['num'], $_G['tpp'], $page, "search.php?mod=forum&searchid=$searchid&orderby=$orderby&ascdesc=$ascdesc&searchsubmit=yes");
 
-		$url_forward = 'search.php?m=forum&'.$_SERVER['QUERY_STRING'];
+		$url_forward = 'search.php?mod=forum&'.$_SERVER['QUERY_STRING'];
 
 		$fulltextchecked = $searchstring[1] == 'fulltext' ? 'checked="checked"' : '';
 
@@ -167,7 +167,7 @@ if(!submitcheck('searchsubmit', 1)) {
 				$searchindex = array('id' => $index['searchid'], 'dateline' => $index['dateline']);
 				break;
 			} elseif($_G['adminid'] != '1' && $index['flood']) {
-				showmessage('search_ctrl', 'search.php?m=forum', array('searchctrl' => $_G['setting']['search']['forum']['searchctrl']));
+				showmessage('search_ctrl', 'search.php?mod=forum', array('searchctrl' => $_G['setting']['search']['forum']['searchctrl']));
 			}
 		}
 
@@ -182,14 +182,14 @@ if(!submitcheck('searchsubmit', 1)) {
 			if(!$srchtxt && !$srchuid && !$srchuname && !$srchfrom && !in_array($srchfilter, array('digest', 'top')) && !is_array($special)) {
 				dheader('Location: search.php?mod=forum');
 			} elseif(isset($srchfid) && !empty($srchfid) && $srchfid != 'all' && !(is_array($srchfid) && in_array('all', $srchfid)) && empty($forumsarray)) {
-				showmessage('search_forum_invalid', 'search.php?m=forum');
+				showmessage('search_forum_invalid', 'search.php?mod=forum');
 			} elseif(!$fids) {
 				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 			}
 
 			if($_G['adminid'] != '1' && $_G['setting']['search']['forum']['maxspm']) {
 				if((DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_searchindex')." WHERE srchmod='$srchmod' AND dateline>'$_G[timestamp]'-60")) >= $_G['setting']['search']['forum']['maxspm']) {
-					showmessage('search_toomany', 'search.php?m=forum', array('maxspm' => $_G['setting']['search']['forum']['maxspm']));
+					showmessage('search_toomany', 'search.php?mod=forum', array('maxspm' => $_G['setting']['search']['forum']['maxspm']));
 				}
 			}
 
