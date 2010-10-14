@@ -11,6 +11,10 @@ $curprg = basename(__FILE__);
 $table_source = $db_source->tablepre.'poke';
 $table_target = $db_target->tablepre.'home_poke';
 
+// bluelovers
+$table_target2 = $table_target.'archive';
+// bluelovers
+
 $start = getgpc('start');
 $start = empty($start) ? 0 : intval($start);
 $limit = $setting['limit']['poke'] ? $setting['limit']['poke'] : 10000;
@@ -19,6 +23,10 @@ $done = true;
 
 if($start == 0) {
 	$db_target->query("TRUNCATE $table_target");
+
+	// bluelovers
+	$db_target->query("TRUNCATE $table_target2");
+	// bluelovers
 }
 
 $query = $db_source->query("SELECT * FROM $table_source ORDER BY uid LIMIT $start, $limit");
@@ -26,11 +34,23 @@ while ($value = $db_source->fetch_array($query)) {
 
 	$done = false;
 
+	// bluelovers
+	if (!$value['uid'] || !$value['fromuid']) continue;
+
+	$value['pokeuid'] = $value['uid'] + $value['fromuid'];
+	unset($value['pid']);
+	// bluelovers
+
 	$value  = daddslashes($value, 1);
 
 	$data = implode_field_value($value, ',', db_table_fields($db_target, $table_target));
 
 	$db_target->query("REPLACE INTO $table_target SET $data");
+
+	// bluelovers
+	$data = implode_field_value($value, ',', db_table_fields($db_target, $table_target2));
+	$db_target->query("INSERT INTO $table_target2 SET $data");
+	// bluelovers
 }
 
 if($done == false) {
