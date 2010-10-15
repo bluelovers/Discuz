@@ -837,6 +837,10 @@ class db_mysql
 			$this->sqldebug[] = array($sql, number_format((dmicrotime() - $starttime), 6), debug_backtrace());
 		}
 
+		// bluelovers
+		$this->lastsql['query'] = $sql;
+		// bluelovers
+
 		$this->querynum++;
 		return $query;
 	}

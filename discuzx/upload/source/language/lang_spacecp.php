@@ -194,10 +194,14 @@ $lang = array(
 	'profile_censor' => '(含有敏感詞彙)',
 	'profile_verify_modify_error' => '{verify}已經認證通過不允許修改',
 
-	'district_level_1' => '-省份-',
-	'district_level_2' => '-城市-',
-	'district_level_3' => '-州縣-',
-	'district_level_4' => '-鄉鎮-',
+//	'district_level_1' => '-省份-',
+//	'district_level_2' => '-城市-',
+//	'district_level_3' => '-州縣-',
+//	'district_level_4' => '-鄉鎮-',
+	'district_level_1' => '----',
+	'district_level_2' => '----',
+	'district_level_3' => '----',
+	'district_level_4' => '----',
 
 	'spacecp_message_prompt' => '(支持 {msg} 代碼,最大 1000 字)',
 	'card_update_doing' => ' <a class="xi2" href="###">[更新記錄]</a>',
