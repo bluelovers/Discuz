@@ -169,7 +169,9 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 
 	$addsortid = !empty($sortid) ? "sortid='$sortid' AND" : '';
 	$addthreadid = !empty($threadids) ? "AND tid IN (".dimplode($threadids).")" : '';
-	$query = DB::query("SELECT sortid, tid, optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE $addsortid fid='$fid' $addthreadid");
+//	$query = DB::query("SELECT sortid, tid, optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE $addsortid fid='$fid' $addthreadid");
+	$query = DB::query("SELECT sortid, tid, optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE $addsortid ".($addthreadid ? 1 : "fid='$fid'")." $addthreadid");
+
 	while($sortthread = DB::fetch($query)) {
 		$optionid = $sortthread['optionid'];
 		$sortid = $sortthread['sortid'];
@@ -230,6 +232,23 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 		foreach($sortthreadlist as $tid => $option) {
 			$sortid = $option['sortid'];
 			$sortexpiration[$sortid][$tid] = $option['expiration'];
+
+			// bluelovers
+			if (empty($templatearray[$sortid])) {
+				unset($option['sortid']);
+				unset($option['expiration']);
+				$stemplate[$sortid][$tid] = '';
+
+				foreach ($option as $title => $value) {
+					if (!empty($value)) {
+						$stemplate[$sortid][$tid] .= '<em>'.$title.'</em>: '.$value.' ';
+					}
+				}
+
+				continue;
+			}
+			// bluelovers
+
 			$stemplate[$sortid][$tid] = preg_replace(
 							array("/\{sortname\}/i", "/\{author\}/i", "/\{subject\}/i", "/\[url\](.+?)\[\/url\]/i"),
 							array(
