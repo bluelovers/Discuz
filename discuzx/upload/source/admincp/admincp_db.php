@@ -728,11 +728,15 @@ if($operation == 'export') {
 						$table[Name],
 						$table[$tabletype],
 						$table[Rows],
-						$table[Data_length],
-						$table[Index_length],
-						$table[Data_free],
+//						$table[Data_length],
+//						$table[Index_length],
+//						$table[Data_free],
+						sizecount($table[Data_length]),
+						sizecount($table[Index_length]),
+						sizecount($table[Data_free]),
 					));
-					$totalsize += $table['Data_length'] + $table['Index_length'];
+//					$totalsize += $table['Data_length'] + $table['Index_length'];
+					$totalsize += $table['Data_free'];
 				}
 			}
 		}
