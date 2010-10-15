@@ -82,3 +82,8 @@
 		#g_guide a, #g_guide label { display: block; padding: 7px 0 7px 40px; height: 36px; }
 		#g_guide strong { display: block; }
 /** end **/
+
+/** forum::viewthread,group::viewthread,home::task,misc::stat **/
+	/* 進度條 */
+		.pbg, .pbr { -webkit-border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; border-radius: 6px 6px 6px 6px; }
+/** end **/
