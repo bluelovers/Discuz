@@ -2,13 +2,12 @@
 
 /*
 	Scorpio (C)2000-2010 Bluelovers Net.
-	This is NOT a freeware, use is subject to license terms
 
-	$HeadURL: svn://localhost/trunk/discuz_x/upload/extensions/hooks/hooks_cache.php $
-	$Revision: 109 $
+	$HeadURL: $
+	$Revision: $
 	$Author: bluelovers$
-	$Date: 2010-08-02 06:22:26 +0800 (Mon, 02 Aug 2010) $
-	$Id: hooks_cache.php 109 2010-08-01 22:22:26Z user $
+	$Date: $
+	$Id: $
 */
 
 Scorpio_Hook::add('Class_template::parse_template:Before_fwrite', '_eClass_template_parse_template_Before_fwrite');

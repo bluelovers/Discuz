@@ -2,13 +2,12 @@
 
 /*
 	Scorpio (C)2000-2010 Bluelovers Net.
-	This is NOT a freeware, use is subject to license terms
 
-	$HeadURL: svn://localhost/trunk/discuz_x/upload/extensions/hooks/hooks_core.php $
-	$Revision: 109 $
+	$HeadURL: $
+	$Revision: $
 	$Author: bluelovers$
-	$Date: 2010-08-02 06:22:26 +0800 (Mon, 02 Aug 2010) $
-	$Id: hooks_core.php 109 2010-08-01 22:22:26Z user $
+	$Date: $
+	$Id: $
 */
 
 Scorpio_Hook::add('Class_discuz_core::_init_input:After_MAGIC_QUOTES_GPC', '_eClass_discuz_core__init_input_After_MAGIC_QUOTES_GPC');
@@ -58,6 +57,9 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 				break;
 			case 'source/function/function_discuzcode.php':
 				@include_once libfile('hooks/discuzcode', '', 'extensions/');
+				break;
+			case 'source/function/function_home.php':
+				@include_once libfile('hooks/home', '', 'extensions/');
 				break;
 			case 'forum.php':
 			case 'source/module/forum/forum_viewthread.php':
