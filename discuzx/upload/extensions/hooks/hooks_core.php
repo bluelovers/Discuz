@@ -321,7 +321,7 @@ EOF
 
 		$ss = <<<EOF
 <!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
-<script type="text/javascript" src="/libs_js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/libs_js/jquery.js"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOF
 ;
