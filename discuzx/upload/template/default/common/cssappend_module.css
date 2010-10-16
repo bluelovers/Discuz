@@ -87,3 +87,7 @@
 	/* 進度條 */
 		.pbg, .pbr { -webkit-border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; border-radius: 6px 6px 6px 6px; }
 /** end **/
+
+/** forum::viewthread,portal::view,portal::comment,home::space **/
+	.vw .d, .vw .ph { color: inherit; }
+/** end **/

@@ -323,6 +323,7 @@ EOF
 <!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
 <script type="text/javascript" src="/libs_js/jquery.js"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
+<script type="text/javascript" src="{$path}extensions/js/common.js"></script>
 EOF
 ;
 /*
@@ -332,7 +333,7 @@ EOF
 		$hook_data .= $ss;
 	} elseif ($hookid == 'global_header_javascript') {
 		$ss = <<<EOF
-<script type="text/javascript">var maxpostsize_subject = {$_G['setting']['maxpostsize_subject']};</script>
+<script type="text/javascript" reload="1">var maxpostsize_subject = {$_G['setting']['maxpostsize_subject']};</script>
 EOF
 ;
 /*
