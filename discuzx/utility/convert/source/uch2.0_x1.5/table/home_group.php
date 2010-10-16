@@ -50,7 +50,10 @@ while($value = $db_source->fetch_array($threadquery)) {
 		$post['message'] = html2bbcode($post['message'], 0, 1);
 
 		// bluelovers
-		$post['message'] = s_trim($post['message']);
+		if ($post['isthread']) {
+			$post['subject'] = $value['subject'];
+			$post['dateline'] = $value['dateline'];
+		}
 		// bluelovers
 
 		$post = daddslashes($post);
@@ -178,7 +181,8 @@ function getmtag($start) {
 
 			'membernum' => $mtag['membernum']
 		);
-	$db_target->insert('forum_forumfield', $forumfieldarr);
+//	$db_target->insert('forum_forumfield', $forumfieldarr);
+	$db_target->insert('forum_forumfield', $forumfieldarr, 0, 1);
 	$db_target->query("UPDATE ".$db_target->table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$fid'");
 
 	foreach($groupuser as $uid => $user) {
@@ -215,7 +219,8 @@ function getprofield($start) {
 
 	if(!$gid) {
 		$gid = $db_target->insert('forum_forum', array('type' => 'group', 'name' => '空間群組', 'status' => 3), 1);
-		$db_target->insert('forum_forumfield', array('fid' => $gid));
+//		$db_target->insert('forum_forumfield', array('fid' => $gid));
+		$db_target->insert('forum_forumfield', array('fid' => $gid), 0, 1);
 	}
 
 	$profield = $db_source->fetch_first("SELECT * FROM ".$db_source->table('profield')." WHERE fieldid>'$start' ORDER BY fieldid LIMIT 1");
@@ -255,7 +260,8 @@ function getprofield($start) {
 			$data[$field] = $forumfields[$field];
 		}
 	}
-	$db_target->insert('forum_forumfield', $data);
+//	$db_target->insert('forum_forumfield', $data);
+	$db_target->insert('forum_forumfield', $data, 0, 1);
 
 	return true;
 }

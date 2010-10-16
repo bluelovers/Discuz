@@ -7,6 +7,7 @@
  */
 
 $curprg = basename(__FILE__);
+require_once DISCUZ_ROOT.'./include/editor.func.php';
 
 $table_source = $db_source->tablepre . 'posts';
 $table_target = $db_target->tablepre . 'forum_post';
@@ -25,7 +26,14 @@ while($row = $db_source->fetch_array($query)) {
 	$nextid = $row['pid'];
 
 	// bluelovers
+//	$s = '<textarea style="width: 100%; height: 300px">'.$row['message'].'</textarea>';
+
 	$row['message'] = s_trim($row['message']);
+	$text = bbcode_fix($row['message']);
+
+//	if (($text != $row['message']) && ($nextid > $start + 500)) showmessage($s.'<textarea style="width: 100%; height: 300px">'.$text.'</textarea>');
+
+	$row['message'] = $text;
 	// bluelovers
 
 	$row = daddslashes($row, 1);

@@ -785,7 +785,13 @@ function s_trim($string, $charlist = null, $ltrim = 0, $strip = false) {
 	$ret = str_replace("\r\n", "\n", $ret);
 //	$ret = preg_replace(array("/[ \t]+\r?\n/iU", "/　+\n/iU"), "\n", $ret);
 //	$ret = preg_replace(array("/(　|\t| )+$|(　|\t| )+\n/U", "/^\n+|\n$/"), array("\n", ''), $ret);
-	$ret = preg_replace(array("/(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+$|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+\n/sU", "/^\n+|\s*\n+$/"), array("\n", ''), $ret);
+	$ret = preg_replace(array(
+		"/(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+$|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+\n/sU",
+		"/^\n+|\s*$/s",
+		'/[\t ]+(\n)/iSUu',
+	), array(
+		"\n", '', '\\1'
+	), $ret);
 
 	$ret = rtrim($ret, $charlist);
 
