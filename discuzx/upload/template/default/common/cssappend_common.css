@@ -281,3 +281,13 @@ div#fid_ctrl_menu, .sltm, .p_pop { max-height: 260px; overflow-y: auto; }
 .avt:hover img { border-color: #154BA0; }
 
 .bbcode_highlight, .bbcode_tag { color: #ff0000; font-weight:bold; }
+
+h1.ts #thread_subject, #share_ul h1.ph, .vw .ph, .pcb h1, .pcb h2 {
+	font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
+	text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
+	font-weight: 800;
+}
+
+h1.ts #thread_subject, #share_ul h1.ph, .vw .ph {
+	font-size:32px;
+}

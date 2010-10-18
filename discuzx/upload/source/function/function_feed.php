@@ -11,37 +11,8 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function _feed_add($langkey, $icon = '') {
-	$_lang_template = '';
-
-	if (is_array($langkey) && count($langkey) >= 2) {
-		if (lang($langkey[0], $langkey[1], null, true)) {
-			$_lang_template = $langkey;
-		}
-		$langkey = call_user_func_array('lang', $langkey);
-	} else {
-		if ($langkey && lang('feed', $langkey, null, true)) {
-			$_lang_template = $langkey;
-		}
-		$langkey = $langkey ? lang('feed', $langkey) : '';
-	}
-
-	if ($icon == 'share' && $_lang_template && $langkey && !strexists($langkey, '{actor}')) {
-		$langkey = '{actor} '.$langkey;
-	}
-
-	return array($langkey, $_lang_template);
-}
-
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
 	global $_G;
-
-	// bluelovers
-	$_lang_template = array();
-	list($title_template, $_lang_template['title_template']) = _feed_add($title_template, $icon);
-	list($body_template, $_lang_template['body_template']) = _feed_add($body_template, $icon);
-	list($body_general, $_lang_template['body_general']) = _feed_add($body_general, $icon);
-	// bluelovers
 
 //	$title_template = $title_template?lang('feed', $title_template):'';
 //	$body_template = $body_template?lang('feed', $body_template):'';
@@ -79,8 +50,10 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
 
 	// bluelovers
-	if ($_lang_template = array_filter($_lang_template)) {
-		$feedarr['lang_template'] = $_lang_template ? serialize($_lang_template) : '';
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_feedarr_addslashes', array(array(
+			'feedarr' => &$feedarr,
+		)));
 	}
 	// bluelovers
 
@@ -117,16 +90,10 @@ function mkfeed($feed, $actors=array()) {
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
 	// bluelovers
-	$_lang_template = empty($feed['lang_template']) ? array() : unserialize($feed['lang_template']);
-	if (is_array($_lang_template)) {
-		foreach ($_lang_template as $_k_ => $_v_) {
-			$feed[$_k_] = is_array($_v_) ? call_user_func_array('lang', $_v_) : lang('feed', $_v_);
-
-			if ($feed['icon'] == 'share' && !strexists($feed[$_k_], '{actor}')) {
-				$feed[$_k_] = '{actor} '.$feed[$_k_];
-			}
-		}
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$feed));
 	}
+
 //	debug(array($feed, $lang_feed));
 
 	$actors && $actors = array_unique($actors);

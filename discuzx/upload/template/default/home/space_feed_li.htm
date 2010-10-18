@@ -25,7 +25,7 @@
 			<div class="hot"><a href="home.php?mod=spacecp&ac=feed&feedid=$value[feedid]"><em>$value[hot]</em>{lang join_immediately}</a></div>
 			<!--{/if}-->
 
-			<!--{if $value['image']}-->
+			<!--{if $value['image'] && $value['image'] != $value['image_1']}-->
 			<img src="$value[image]" alt="" class="tn sctpl_feed_image" />
 			<!--{/if}-->
 
@@ -53,7 +53,7 @@
 				<!--{if empty($value['body_data']['imgurl']) && ($value['image'] || $value['image_1'])}--><!--{eval $value['body_data']['imgurl'] = ($value['image'] ? $value['image'] : $value['image_1']);}--><!--{/if}-->
 
 				<!--{if !empty($value['body_data']['imgurl'])}-->
-				<table class="mtm" title="{lang click_play}" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');"><tr><td class="vdtn hm" style="background: url($value['body_data']['imgurl']) no-repeat">
+				<table class="mtm" title="{lang click_play}" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');"><tr><td class="vdtn hm" style="background: url($value['body_data']['imgurl']) 50% 50% no-repeat">
 					<img src="{IMGDIR}/vds.png" alt="{lang click_play}" />
 					<!--img src="{STATICURL}image/plus/common/vd.png" alt="{lang click_play}" /-->
 				</td></tr></table>

@@ -387,28 +387,58 @@ if($_GET['op'] == 'delete') {
 		$arr['username'] = $_G['username'];
 		$arr['dateline'] = $_G['timestamp'];
 
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_feed', array(array(
+				'arr' => &$arr,
+				'parseLink' => &$parseLink,
+				'flashvar' => &$flashvar,
+			)));
+		}
+
+		$_feedid = 0;
+		// bluelovers
 
 		if($arr['status'] == 0 && ckprivacy('share', 'feed')) {
 			require_once libfile('function/feed');
-			feed_add('share',
+//			feed_add('share',
 //				'{actor} '.$arr['title_template'],
-				(($type == 'link') ? $arr['title_template'] : '{actor} '.$arr['title_template']),
+			$_feedid = feed_add('share',
+				$arr['title_template'],
 				array('hash_data' => $feed_hash_data),
 				$arr['body_template'],
 				$arr['body_data'],
 				$arr['body_general'],
-				array($arr['image']),
-				array($arr['image_link'])
+//				array($arr['image']),
+//				array($arr['image_link'])
+				(is_array($arr['image']) ? $arr['image'] : array($arr['image'])),
+				(is_array($arr['image_link']) ? $arr['image_link'] : array($arr['image_link']))
+
+				// bluelovers
+				, '', '', '', 1
+				// bluelvoers
 			);
 		}
 
 		$arr['body_data'] = serialize($arr['body_data']);
 
-//		$setarr = daddslashes($arr);
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_share', array(array(
+				'arr' => &$arr,
+				'setarr' => &$setarr,
+			)));
+		}
+		// bluelovers
+
+		$setarr = daddslashes($arr);
 
 		// bluelovers
-		@include_once libfile('function/share');
-		$setarr = _share_add($arr);
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_share_insert', array(array(
+				'setarr' => &$setarr,
+			)));
+		}
 		// bluelovers
 
 		$sid = DB::insert('home_share', $setarr, 1);
@@ -437,6 +467,17 @@ if($_GET['op'] == 'delete') {
 			include_once libfile('function/stat');
 			updatestat('share');
 		}
+
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_notification', array(array(
+				'arr' => &$arr,
+				'setarr' => &$setarr,
+				'sid' => $sid,
+				'feedid' => $_feedid,
+			)));
+		}
+		// bluelovers
 
 		if($note_uid && $note_uid != $_G['uid']) {
 			notification_add($note_uid, 'sharenotice', $note_message, $note_values);

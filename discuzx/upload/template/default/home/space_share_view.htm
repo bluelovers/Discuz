@@ -63,9 +63,26 @@
 				<span class="xg1"><!--{date($share[dateline])}--></span>
 			</div>
 			<div id="share_article" class="ec d cl">
-				<!--{if $share['image']}-->
-				<a href="$share[image_link]" class="sctpl_feed_image"><img src="$share[image]" class="tn" style="margin-top: 0;" alt="" /></a>
-				<!--{/if}-->
+
+				<span style="float: left; max-width: ">
+					<!--{if $share['image'] && $share['image'] != $value['image_1']}-->
+					<a href="$share[image_link]" class="sctpl_feed_image"><img src="$share[image]" class="tn" style="margin-top: 0;" alt="" /></a>
+					<!--{/if}-->
+
+					<!--{if $share['image_1']}-->
+					<br><a href="$share[image_1_link]"{$share[target]}><img src="$share[image_1]" alt="" class="tn" /></a>
+					<!--{/if}-->
+					<!--{if $share['image_2']}-->
+					<br><a href="$share[image_2_link]"{$share[target]}><img src="$share[image_2]" alt="" class="tn" /></a>
+					<!--{/if}-->
+					<!--{if $share['image_3']}-->
+					<br><a href="$share[image_3_link]"{$share[target]}><img src="$share[image_3]" alt="" class="tn" /></a>
+					<!--{/if}-->
+					<!--{if $share['image_4']}-->
+					<br><a href="$share[image_4_link]"{$share[target]}><img src="$share[image_4]" alt="" class="tn" /></a>
+					<!--{/if}-->
+				</span>
+
 				<span class="d sctpl_feed_body_template">{$share[body_template]}</span><br />
 				<!--{if 'video' == $share['type']}-->
 				<div class="tn" id="flash_div_$share[sid]" class="sctpl_feed_click">

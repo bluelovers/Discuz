@@ -92,7 +92,7 @@
 			<!--{elseif $_G[gp_action] == 'stamp'}-->
 				<p>{lang admin_stamp_select}:</p>
 				<p class="tah_body">
-					<select name="stamp" id="stamp" class="ps" onchange="updatestampimg()">
+					<select name="stamp" id="stamp" class="ps" onchange="updatestampimg()" onkeyup="this.onchange()">
 						<option value="">{lang admin_stamp_none}</option>
 					<!--{loop $_G['cache']['stamps'] $stampid $stamp}-->
 						<!--{if $stamp['type'] == 'stamp'}-->
@@ -118,7 +118,7 @@
 			<!--{elseif $_G[gp_action] == 'stamplist'}-->
 				<p>{lang admin_stamplist_select}:</p>
 				<p class="tah_body mbm">
-					<select name="stamplist" id="stamplist" class="ps" onchange="updatestamplistimg()">
+					<select name="stamplist" id="stamplist" class="ps" onchange="updatestamplistimg()" onkeyup="this.onchange()">
 					<!--{if $thread[icon] >= 0}--><option value="$thread[icon]">{lang admin_stamplist_current}</option><!--{/if}-->
 					<option value="">{lang admin_stamplist_none}</option>
 					<!--{loop $_G['cache']['stamps'] $stampid $stamp}-->

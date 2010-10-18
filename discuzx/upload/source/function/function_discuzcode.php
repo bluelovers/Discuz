@@ -829,6 +829,11 @@ function parseflv($url, $width = 0, $height = 0) {
 	$lowerurl = strtolower($url);
 	$flv = '';
 	$imgurl = '';
+
+	// bluelovers
+	$imagearray = array();
+	// bluelovers
+
 	if($lowerurl != str_replace(array('player.youku.com/player.php/sid/','tudou.com/v/','player.ku6.com/refer/'), '', $lowerurl)) {
 		$flv = $url;
 	} elseif(strpos($lowerurl, 'v.youku.com/v_show/') !== FALSE) {
@@ -889,6 +894,10 @@ function parseflv($url, $width = 0, $height = 0) {
 					$imgurl = $url.$filename;
 				}
 			}
+
+			// bluelovers
+			$url = 'http://www.youtube.com/watch?v='.$matches[1];
+			// bluelovers
 		}
 	} elseif(strpos($lowerurl, 'tv.mofile.com/') !== FALSE) {
 		if(preg_match("/http:\/\/tv.mofile.com\/([^\/]+)/i", $url, $matches)) {
@@ -956,9 +965,24 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array(array(
+			'url' => &$url,
+			'imgurl' => &$imgurl,
+			'imagearray' => &$imagearray,
+			'flv' => &$flv,
+			'width' => &$width,
+			'height' => &$height,
+		)));
+	}
+	// bluelovers
+
 	if($flv) {
 		if(!$width && !$height) {
-			return array('flv' => $flv, 'imgurl' => $imgurl);
+//			return array('flv' => $flv, 'imgurl' => $imgurl);
+			return array('flv' => $flv, 'imgurl' => $imgurl, 'url' => $url, 'imagearray' => $imagearray);
 		} else {
 			$width = addslashes($width);
 			$height = addslashes($height);

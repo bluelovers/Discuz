@@ -309,6 +309,8 @@ if(!IS_ROBOT) {
 	}
 }
 
+//dexit($feed_list);
+
 $olfriendlist = $visitorlist = $task = $ols = $birthlist = $guidelist = array();
 $oluids = array();
 $groups = array();

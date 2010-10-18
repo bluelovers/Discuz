@@ -53,6 +53,9 @@ function _eFunc_libfile(&$ret, $root, $force = 0) {
 				@include_once libfile('hooks/cache', '', 'extensions/');
 				break;
 			case 'source/function/function_share.php':
+			case 'source/include/spacecp/spacecp_share.php':
+
+			case 'source/function/function_feed.php':
 				@include_once libfile('hooks/share', '', 'extensions/');
 				break;
 			case 'source/function/function_discuzcode.php':
@@ -349,6 +352,65 @@ Scorpio_Hook::add('Func_dgmdate:Before_format', '_eFunc_dgmdate_Before_format');
 
 function _eFunc_dgmdate_Before_format($conf) {
 	if ($conf['format'] == 'n-j H:i') $conf['format'] = 'n-j H:i:s';
+}
+
+function _url_exists($url, $allow302 = false, &$refurl = '') {
+    $hdrs = @get_headers($url, 1);
+
+	if (is_array($hdrs)) {
+	    preg_match('%^HTTP/\d+\.\d+\s+(\d{3})\s+.*$%', $hdrs[0], $result);
+		$result = $result[1];
+	} else {
+		$result = 0;
+	}
+
+    if ($allow302 && $result == 302 && $hdrs['Location']) {
+		$refurl = $hdrs['Location'];
+    }
+
+    return (0 || ($allow302 && $result == 302) || ($result >= 200 && $result < 300)) ? $hdrs : false;
+}
+
+function url_get_html() {
+    $args = func_get_args();
+	$content = curl($args[0]);
+
+    $dom = htmldom($content['exec']);
+    return $dom;
+}
+
+function &htmldom($content) {
+	@include_once libfile('simple_html_dom', 'libs/simple_html_dom', 'extensions/');
+
+	$dom = new simple_html_dom;
+	$dom->load($content, true);
+
+	return $dom;
+}
+
+function curl($url) {
+	include_once libfile('Curl', 'libs/scophp/Scorpio/libs/Helper/', 'extensions/');
+	if (!sclass_exists('scocurl')) eval("class scocurl extends Scorpio_Helper_Curl_Core {}");
+
+//	scocurl::instance($url)->setopt(CURLOPT_FOLLOWLOCATION, true)->setopt(CURLOPT_HEADER, true)->setopt(CURLOPT_COOKIEJAR, true)->exec();
+//	$c = scocurl::_self()->getExec(true);
+//	scocurl::_self()->close();
+
+//echo $url;
+
+	scocurl::instance($url)->setopt(array(
+//		CURLOPT_FOLLOWLOCATION => true,
+//		CURLOPT_HEADER => true,
+//		CURLOPT_COOKIEJAR => true,
+	))->exec();
+	$c = scocurl::_self()->close()->getExec(1);
+
+//	echo '<pre>';
+//	print_r($c);
+//
+//	dexit();
+
+	return $c;
 }
 
 ?>

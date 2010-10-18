@@ -205,4 +205,31 @@ function _eFunc_discuzcode_Before_bbcodes($conf) {
 	}
 }
 
+Scorpio_Hook::add('Func_parseflv:After', '_eFunc_parseflv_After');
+
+function _eFunc_parseflv_After($conf) {
+	extract($conf, EXTR_REFS);
+
+	if ($flv && !$width && !$height) {
+		if (preg_match("/http:\/\/(?:www.youtube.com\/watch\?v=|youtu\.be\/)([^\/&]+)&?/i", $url, $matches)) {
+
+			$url_path = 'http://img.youtube.com/vi/'.$matches[1].'/';
+
+//			$_imgurl = $url_path.0.'.jpg';
+//			if (_url_exists($_imgurl)) {
+//
+//			}
+
+			foreach (array('default', 1, 2, 3, 0) as $_k) {
+				$_imgurl = $url_path.$_k.'.jpg';
+				if (_url_exists($_imgurl)) {
+					$imagearray[] = $_imgurl;
+				}
+			}
+
+			$imgurl = $_imgurl[0] ? $_imgurl[0] : $imgurl;
+		}
+	}
+}
+
 ?>

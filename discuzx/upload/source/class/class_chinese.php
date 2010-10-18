@@ -242,6 +242,27 @@ class Chinese {
 		}
 	}
 
+	// bluelovers
+	function sc2tc($str){
+		require_once CODETABLE_DIR.'sctc.table.php';
+		$outstr="";
+
+		for($i=0; $i < strlen($str); $i++) {
+			$ch=ord(substr($str,$i,1));
+			if($ch > 127) {
+				$char=substr($str,$i,3);
+				$loc=strpos(strSC,$char);
+				if ($loc !== false) $char=substr(strTC,$loc,3);
+				$outstr.=$char;
+				$i+=2;
+			} else {
+				$outstr.=substr($str,$i,1);
+			}
+		}
+		return $outstr;
+	}
+	// bluelovers
+
 }
 
 ?>

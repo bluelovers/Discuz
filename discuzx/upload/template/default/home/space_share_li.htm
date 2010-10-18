@@ -14,7 +14,7 @@
 		<span class="xg1"><!--{date($value[dateline], 'u')}--></span>
 	</div>
 	<div class="ec cl">
-		<!--{if $value['image']}-->
+		<!--{if $value['image'] && $value['image'] != $value['image_1']}-->
 		<a href="$value[image_link]" class="sctpl_feed_image"><img src="$value[image]" class="tn" alt="" /></a>
 		<!--{/if}-->
 		<div class="d sctpl_feed_body_template">
@@ -39,6 +39,20 @@
 		<!--{elseif $value['type'] == 'flash'}-->
 			<span class="sctpl_feed_click"><img src="{IMGDIR}/flash.gif" alt="{lang click_view}" onclick="javascript:showFlash('flash', '{$value['body_data']['flashaddr']}', this, '{$value['sid']}');" class="tn" /></span>
 		<!--{/if}-->
+
+		<!--{if $value['image_1']}-->
+		<a href="$value[image_1_link]"{$value[target]}><img src="$value[image_1]" alt="" class="tn" /></a>
+		<!--{/if}-->
+		<!--{if $value['image_2']}-->
+		<a href="$value[image_2_link]"{$value[target]}><img src="$value[image_2]" alt="" class="tn" /></a>
+		<!--{/if}-->
+		<!--{if $value['image_3']}-->
+		<a href="$value[image_3_link]"{$value[target]}><img src="$value[image_3]" alt="" class="tn" /></a>
+		<!--{/if}-->
+		<!--{if $value['image_4']}-->
+		<a href="$value[image_4_link]"{$value[target]}><img src="$value[image_4]" alt="" class="tn" /></a>
+		<!--{/if}-->
+
 		<!--{if $value[body_general]}-->
 		<div class="quote sctpl_feed_body_general{if $value['image']} z{/if}"><blockquote id="quote_{$id}">$value[body_general]</blockquote></div>
 		<!--{/if}-->

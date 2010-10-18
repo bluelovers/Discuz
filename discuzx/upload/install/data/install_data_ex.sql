@@ -209,3 +209,8 @@ ALTER TABLE `pre_forum_attachment` CHANGE `filename` `filename` VARCHAR( 100 ) N
 ALTER TABLE `pre_home_poke` ADD `ignore` TINYINT( 1 ) NOT NULL DEFAULT '0';
 ALTER TABLE `pre_home_poke` ADD INDEX ( `ignore` ) ;
 ALTER TABLE `pre_home_pokearchive` ADD INDEX `uid` ( `uid` , `fromuid` ) ;
+
+ALTER TABLE `pre_home_share` ADD `image_1` VARCHAR( 255 ) NOT NULL DEFAULT '',
+ADD `image_2` VARCHAR( 255 ) NOT NULL DEFAULT '',
+ADD `image_3` VARCHAR( 255 ) NOT NULL DEFAULT '',
+ADD `image_4` VARCHAR( 255 ) NOT NULL DEFAULT '';
