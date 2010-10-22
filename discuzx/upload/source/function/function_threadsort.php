@@ -50,7 +50,7 @@ function gettypetemplate($option, $optionvalue) {
 			}
 		}
 	} elseif(in_array($option['type'], array('textarea'))) {
-		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" rows="$option[rowsize]" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0{if $option[maxlength]}, \'$option[maxlength]\'{/if})" '.$optionvalue['unchangeable'].' class="pt">'.$optionvalue['value'].'</textarea><span>';
+		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" rows="'.$option['rowsize'].'" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0{if $option[maxlength]}, \'$option[maxlength]\'{/if})" '.$optionvalue['unchangeable'].' class="pt">'.$optionvalue['value'].'</textarea><span>';
 	}
 
 	return $showoption;
@@ -355,12 +355,12 @@ function threadsort_checkoption($sortid = 0, $unchangeable = 1) {
 
 	$_G['forum_selectsortid'] = $sortid ? intval($sortid) : '';
 	loadcache(array('threadsort_option_'.$sortid));
-
 	$_G['forum_optionlist'] = $_G['cache']['threadsort_option_'.$sortid];
 	$_G['forum_checkoption'] = array();
 	if(is_array($_G['forum_optionlist'])) {
 		foreach($_G['forum_optionlist'] as $optionid => $option) {
 			$_G['forum_checkoption'][$option['identifier']]['optionid'] = $optionid;
+			$_G['forum_checkoption'][$option['identifier']]['title'] = $option['title'];
 			$_G['forum_checkoption'][$option['identifier']]['type'] = $option['type'];
 			$_G['forum_checkoption'][$option['identifier']]['required'] = $option['required'] ? 1 : 0;
 			$_G['forum_checkoption'][$option['identifier']]['unchangeable'] = $_G['gp_action'] == 'edit' && $unchangeable && $option['unchangeable'] ? 1 : 0;
@@ -442,9 +442,9 @@ function threadsort_validator($sortoption, $pid) {
 	$postaction = $_G['tid'] && $pid ? "edit&tid=$_G[tid]&pid=$pid" : 'newthread';
 	$_G['forum_optiondata'] = array();
 	foreach($_G['forum_checkoption'] as $var => $option) {
-		if($_G['forum_checkoption'][$var]['required'] && !$sortoption[$var]) {
+		if($_G['forum_checkoption'][$var]['required'] && (!$sortoption[$var] && $_G['forum_checkoption'][$var]['type'] != 'number')) {
 			showmessage('threadtype_required_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
-		} elseif($sortoption[$var] && ($_G['forum_checkoption'][$var]['type'] == 'number' && !is_numeric($sortoption[$var]) || $_G['forum_checkoption'][$var]['type'] == 'email' && !isemail($sortoption[$var]))){
+		} elseif($sortoption[$var] !== NULL && ($_G['forum_checkoption'][$var]['type'] == 'number' && !is_numeric($sortoption[$var]) || $_G['forum_checkoption'][$var]['type'] == 'email' && !isemail($sortoption[$var]))){
 			showmessage('threadtype_format_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
 		} elseif($sortoption[$var] && $_G['forum_checkoption'][$var]['maxlength'] && strlen($typeoption[$var]) > $_G['forum_checkoption'][$var]['maxlength']) {
 			showmessage('threadtype_toolong_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
@@ -462,6 +462,7 @@ function threadsort_validator($sortoption, $pid) {
 		$sortoption[$var] = $_G['forum_checkoption'][$var]['type'] != 'image' ? dhtmlspecialchars(censor(trim($sortoption[$var]))) : addslashes(serialize($sortoption[$var]));
 		$_G['forum_optiondata'][$_G['forum_checkoption'][$var]['optionid']] = $sortoption[$var];
 	}
+
 	return $_G['forum_optiondata'];
 }
 

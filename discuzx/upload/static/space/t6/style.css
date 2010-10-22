@@ -5,8 +5,8 @@ Powered by Discuz! X
 
 body { background: #D5B48A url(images/bg.png) repeat-x 0 30px; }
 
-#hd { background: none; }
-#hd h2 { padding-top: 33px; color: #FFF; }
+#hd { background: none; color: #FFF; }
+#hd h2 { padding-top: 33px; }
 
 #nv { bottom: auto; left: auto; top: 45px; right: 0; }
 	#nv li { padding: 0 2px; background: transparent; opacity: 1; filter: alpha(opacity=100); }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 17279 2010-09-28 08:08:47Z monkey $
+ *      $Id: topicadmin_moderate.php 17478 2010-10-19 09:05:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,7 +64,7 @@ switch($frommodcp) {
 		$_G['referer'] = "forum.php?mod=modcp&action=forum&op=recommend".(getgpc('show') ? "&show=getgpc('show')" : '')."&fid=$_G[fid]";
 		break;
 	default:
-		$_G['referer'] = $operation != 'delete' ? $_G['gp_redirect'] : 'forum.php?mod=forumdisplay&fid='.$_G['fid'];
+		$_G['referer'] = $operation != 'delete' ? $_G['gp_redirect'] : 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_G['gp_listextra']) ? '&'.rawurldecode($_G['gp_listextra']) : '');
 		break;
 }
 

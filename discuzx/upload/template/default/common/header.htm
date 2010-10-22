@@ -42,7 +42,7 @@
 						<!--{if $_G['group']['allowinvisible']}-->
 							<span id="loginstatus" class="xg1">
 								<a href="member.php?mod=switchstatus" title="{lang login_switch_invisible_mode}" onclick="ajaxget(this.href, 'loginstatus');doane(event);">
-								<!--{if $_G['session']['invisible']}-->
+								<!--{if $_G['member']['invisible']}-->
 									{lang login_invisible_mode}
 								<!--{else}-->
 									{lang login_normal_mode}

@@ -5,8 +5,8 @@ Powered by Discuz! X
 
 body { background: #373D45 url(images/bg.png) 0 0; }
 
-#hd { background: transparent url(images/header.png) no-repeat 0 100%; }
-	#hd h2, #hd h2 a { color: #FFF; }
+#hd { background: transparent url(images/header.png) no-repeat 0 100%; color: #FFF; }
+	#hd a { color: #FFF; }
 
 #ct, .n, .w { background: #E3DFCE url(images/ct.png) 0 -41px !important; }
 

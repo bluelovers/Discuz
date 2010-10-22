@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc_stat.php 17195 2010-09-26 06:16:25Z zhengqingpeng $
+	$Id: misc_stat.php 17333 2010-10-09 07:53:59Z monkey $
 */
 
 if(!$_G['group']['allowstatdata']) {
@@ -54,11 +54,11 @@ if($op == 'basic') {
 	$statvars = getstatvars('team');
 	extract($statvars);
 	include template('forum/stat_team');
-} elseif($op == 'modworks') {
+} elseif($op == 'modworks' && $_G['setting']['modworkstatus']) {
 	$statvars = getstatvars('modworks');
 	extract($statvars);
 	include template('forum/stat_misc');
-} elseif($op == 'memberlist') {
+} elseif($op == 'memberlist' && $_G['setting']['memliststatus']) {
 	$statvars = getstatvars('memberlist');
 	extract($statvars);
 	include template('forum/stat_memberlist');
@@ -68,6 +68,8 @@ if($op == 'basic') {
 	include template('forum/stat_misc');
 } elseif($op == 'trend') {
 	include libfile('misc/stat', 'include');
+} else {
+	showmessage('undefined_action');
 }
 
 function getstatvars($type) {

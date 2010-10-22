@@ -397,7 +397,7 @@ a { color: {LINK}; text-decoration: none; }
 		.bm_h .o { float: right; width: 30px; }
 			.bm_h .o img { float: right; margin-top: 11px; cursor: pointer; }
 		.bm_h .i { padding-left: 10px; }
-		.bm_h { padding: 0 10px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid {CONTENTSEPARATE}; background: {COMMONBG}; line-height: 31px; }
+		.bm_h { padding: 0 10px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid {CONTENTSEPARATE}; background: {COMMONBG}; line-height: 31px; white-space: nowrap; overflow: hidden; }
 		.bmw { border: 1px solid {COMMONBORDER}; }
 			.bmw .bm_h { border-top-color: {WRAPBG}; border-right: 1px solid {WRAPBG}; border-bottom-color: {CONTENTSEPARATE}; border-left: 1px solid {WRAPBG}; background: {SPECIALBG}; }
 				.bmw .bm_h a { color: {HIGHLIGHTLINK}; }

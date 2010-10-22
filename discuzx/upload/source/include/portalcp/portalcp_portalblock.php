@@ -49,6 +49,12 @@ if(!$_G['group']['allowdiy']) {
 		$pageblocks['others'][] = $bid;
 	}
 } else {
+	$query = DB::query('SELECT bid FROM '.DB::table('common_block')." WHERE blocktype = '1'");
+	while(($value=DB::fetch($query))) {
+		$bid = intval($value['bid']);
+		$bids[] = $bid;
+		$pageblocks['others'][] = $bid;
+	}
 }
 $bids = array_unique($bids);
 
@@ -65,27 +71,27 @@ foreach($pageblocks as $key=>$value) {
 
 if($op == 'recommend') {
 
-	$blockclass = '';
+	$sql = '';
 	switch ($_GET['idtype']) {
 		case 'tid' :
-			$blockclass = 'forum_thread';
+			$sql = " AND (blockclass='forum_thread' OR blockclass='forum_attachment')";
 			break;
 		case 'gtid' :
-			$blockclass = 'group_thread';
+			$sql = " AND (blockclass='group_thread' OR blockclass='group_attachment')";
 			break;
 		case 'blogid' :
-			$blockclass = 'space_blog';
+			$sql = " AND blockclass ='space_blog'";
 			break;
 		case 'picid' :
-			$blockclass = 'space_pic';
+			$sql = " AND blockclass ='space_pic'";
 			break;
 		case 'aid' :
-			$blockclass = 'portal_article';
+			$sql = " AND blockclass ='portal_article'";
 			break;
 	}
 
 	if($bids) {
-		$query = DB::query('SELECT bid, `name` FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).") AND blockclass='$blockclass'");
+		$query = DB::query('SELECT bid, `name` FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).")$sql");
 		while(($value=DB::fetch($query))) {
 			$blocks[$value['bid']] = !empty($value['name']) ? $value['name'] : '#'.$value['bid'];
 		}

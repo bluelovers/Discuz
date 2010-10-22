@@ -55,7 +55,7 @@
 		<form method="post" autocomplete="off" id="postform"
 			{if $_G[gp_action] == 'newthread'}action="forum.php?mod=post&action={if $special != 2}newthread{else}newtrade{/if}&fid=$_G[fid]&extra=$extra&topicsubmit=yes"
 			{elseif $_G[gp_action] == 'reply'}action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$extra&replysubmit=yes"
-			{elseif $_G[gp_action] == 'edit'}action="forum.php?mod=post&action=edit&extra=$extra&editsubmit=yes&mod=$mod" $enctype
+			{elseif $_G[gp_action] == 'edit'}action="forum.php?mod=post&action=edit&extra=$extra&editsubmit=yes" $enctype
 			{/if}
 			onsubmit="return validate(this)">
 			<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />

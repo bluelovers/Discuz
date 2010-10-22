@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_copy.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_copy.php 17451 2010-10-19 05:48:45Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,9 @@ if(!submitcheck('modsubmit')) {
 	$modaction = 'CPY';
 	$reason = checkreasonpm();
 	$copyto = $_G['gp_copyto'];
-	$toforum = DB::fetch_first("SELECT fid, name, modnewposts FROM ".DB::table('forum_forum')." WHERE fid='$copyto' AND status='1' AND type<>'group'");
+	$toforum = DB::fetch_first("SELECT f.fid, f.name, f.modnewposts, ff.threadsorts FROM ".DB::table('forum_forum')." f
+								LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
+								WHERE f.fid='$copyto' AND f.status='1' AND f.type<>'group'");
 	if(!$toforum) {
 		showmessage('admin_copy_invalid');
 	} else {
@@ -35,7 +37,14 @@ if(!submitcheck('modsubmit')) {
 			showmessage('admin_copy_hava_mod');
 		}
 	}
+	$toforum['threadsorts_arr'] = unserialize($toforum['threadsorts']);
 
+	if($thread['sortid'] != 0 && $toforum['threadsorts_arr']['types'][$thread['sortid']]) {
+		$query = DB::query("SELECT * FROM ".DB::table('forum_typeoptionvar')." WHERE sortid = '{$thread['sortid']}' AND tid = '{$thread['tid']}'");
+		while ($result = DB::fetch($query)) {
+			$typeoptionvar[] = $result;
+		}
+	}
 
 	unset($thread['tid']);
 	$thread['fid'] = $copyto;
@@ -58,6 +67,13 @@ if(!submitcheck('modsubmit')) {
 		$pid = insertpost($post);
 	}
 
+	if($typeoptionvar) {
+		foreach($typeoptionvar AS $key => $value) {
+			$value['tid'] = $threadid;
+			$value['fid'] = $toforum['fid'];
+			DB::insert('forum_typeoptionvar', $value);
+		}
+	}
 	updatepostcredits('+', $post['authorid'], 'post', $_G['fid']);
 
 	updateforumcount($copyto);

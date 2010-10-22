@@ -15,7 +15,7 @@
 				<!--{/if}-->
 			</p>
 			<!--{if $_G['group']['allowupload']}-->
-				<p><!--{if !$attach[pid]}--><label for="albumaid_$image[aid]"><input type="checkbox" class="pc" id="albumaid_$image[aid]" name="albumaid[]" value="$image[aid]" /> {lang save_to_album}</label><!--{/if}--></p>
+				<p><!--{if !$attach[pid]}--><input type="hidden" class="pc" id="albumaid_$image[aid]" name="albumaid[]" value="" /><label for="albumaidchk_$image[aid]"><input id="albumaidchk_$image[aid]" type="checkbox" class="pc" onclick="$('albumaid_$image[aid]').value=this.checked?this.value:''" value="$image[aid]" /> {lang save_to_album}</label><!--{/if}--></p>
 			<!--{/if}-->
 		</td>
 		<!--{if $i % 4 == 0 && isset($imagelist[$i])}--></tr><tr><!--{/if}-->

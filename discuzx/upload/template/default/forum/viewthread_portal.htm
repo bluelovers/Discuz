@@ -40,7 +40,17 @@
 			<div class="h">
 				<h1 class="ph hm">$_G[forum_thread][subject]</h1>
 				<p class="xg1">
-					{lang posted_by}: <a href="home.php?mod=space&uid=$_G[forum_thread][authorid]">$_G[forum_thread][author]</a><span class="pipe">|</span>
+					{lang posted_by}:
+					<!--{if $_G[forum_thread][author] && $_G[forum_thread][authorid]}-->
+					<a href="home.php?mod=space&uid=$_G[forum_thread][authorid]">$_G[forum_thread][author]</a>
+					<!--{else}-->
+						<!--{if $_G['forum']['ismoderator']}-->
+							<a href="home.php?mod=space&uid=$_G[forum_thread][authorid]">{lang anonymous}</a>
+						<!--{else}-->
+							{lang anonymous}
+						<!--{/if}-->
+					<!--{/if}-->
+					<span class="pipe">|</span>
 					{lang dateline}: <!--{date($_G[forum_thread][dateline])}--><span class="pipe">|</span>
 					{lang home_view_num}: $_G[forum_thread][views]<span class="pipe">|</span>
 					{lang comment_num}: $_G[forum_thread][replies]

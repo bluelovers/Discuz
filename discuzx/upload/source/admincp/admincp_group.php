@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 16686 2010-09-13 03:12:35Z liulanbo $
+ *      $Id: admincp_group.php 17383 2010-10-15 08:30:21Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -896,7 +896,7 @@ function searchgroups($submit) {
 	showsetting('groups_manage_name', 'srchname', $srchname, 'text');
 	showsetting('groups_manage_id', 'srchfid', $srchfid, 'text');
 	showsetting('groups_editgroup_category', '', '', '<select name="selectgroupid[]" multiple="multiple" size="10"><option value="all"'.(in_array('all', $_G['gp_selectgroupid']) ? ' selected' : '').'>'.cplang('unlimited').'</option>'.$groupselect.'</select>');
-	showsetting('groups_manage_membercount', array('memberhigher', 'memberlower'), array($_G['gp_memberhigher'], $_G['gp_memberlower']), 'range');
+	showsetting('groups_manage_membercount', array('memberlower', 'memberhigher'), array($_G['gp_memberlower'], $_G['gp_memberhigher']), 'range');
 	showsetting('groups_manage_threadcount', array('threadshigher', 'threadslower'), array($threadshigher, $threadslower), 'range');
 	showsetting('groups_manage_replycount', array('postshigher', 'postslower'), array($postshigher, $postslower), 'range');
 	showsetting('groups_manage_createtime', array('datelineafter', 'datelinebefore'), array($datelineafter, $datelinebefore), 'daterange');
@@ -937,8 +937,8 @@ function countgroups() {
 	$conditions .= $_G['gp_threadshigher'] != '' ? " AND f.threads>'$_G[gp_threadshigher]'" : '';
 	$conditions .= $_G['gp_threadslower'] != '' ? " AND f.threads<'$_G[gp_threadslower]'" : '';
 
-	$conditions .= $_G['gp_memberhigher'] != '' ? " AND ff.membernum<'".strtotime($_G['gp_memberhigher'])."'" : '';
-	$conditions .= $_G['gp_memberlower'] != '' ? " AND ff.membernum>'".strtotime($_G['gp_memberlower'])."'" : '';
+	$conditions .= $_G['gp_memberhigher'] != '' ? " AND ff.membernum<'".intval($_G['gp_memberhigher'])."'" : '';
+	$conditions .= $_G['gp_memberlower'] != '' ? " AND ff.membernum>'".intval($_G['gp_memberlower'])."'" : '';
 
 	$conditions .= $_G['gp_datelinebefore'] != '' ? " AND ff.dateline<'".strtotime($_G['gp_datelinebefore'])."'" : '';
 	$conditions .= $_G['gp_datelineafter'] != '' ? " AND ff.dateline>'".strtotime($_G['gp_datelineafter'])."'" : '';

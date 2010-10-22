@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_addons.php 15137 2010-08-19 06:55:44Z monkey $
+ *      $Id: admincp_addons.php 17341 2010-10-09 12:15:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -21,7 +21,6 @@ if(!$operation) {
 	showsubmenu('addons', array(
 		array('addons_list', 'addons', 1),
 		array('addons_add', 'addons&operation=add', 0),
-		array('addons_bbsapp', 'http://www.comsenz.com/services/addon', 0, 1, 1),
 	));
 	showtips('addons_tips');
 
@@ -156,7 +155,6 @@ if(!$operation) {
 		showsubmenu('addons', array(
 			array('addons_list', 'addons', 0),
 			array('addons_add', 'addons&operation=add', 1),
-			array('addons_bbsapp', 'http://www.comsenz.com/services/addon', 0, 1, 1),
 		));
 		showtips('addons_add_tips');
 
@@ -166,7 +164,7 @@ if(!$operation) {
 			showsubtitle(array('addons_recommend', ''));
 			echo '<tr><td>';
 			foreach($data as $row) {
-				echo '<div class="hover" style="float:left;width:20%;padding-bottom:5px"><div style="text-align:center"><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.
+				echo '<div class="hover" style="float:left;width:20%;height:100px;padding:5px 0"><div style="text-align:center"><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.
 				($row['logo'] ? '<img width="100" height="50" src="'.$row['logo'].'" />' : '<img width="100" height="50" src="static/image/common/none.gif" />').
 				'</a><br /><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.$row['sitename'].'</a></div></div>';
 			}

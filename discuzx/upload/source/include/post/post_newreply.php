@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 17063 2010-09-20 02:57:03Z zhengqingpeng $
+ *      $Id: post_newreply.php 17513 2010-10-20 07:23:27Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -482,7 +482,6 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			if($_G['forum']['type'] == 'sub') {
 				DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='".$_G['forum']['fup']."'", 'UNBUFFERED');
 			}
-			my_post_log('update', array('pid' => $pid));
 		}
 
 		$feed = array();

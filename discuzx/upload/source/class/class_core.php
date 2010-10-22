@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 17161 2010-09-25 06:33:30Z cnteacher $
+ *      $Id: class_core.php 17469 2010-10-19 08:20:46Z monkey $
  */
 
 define('IN_DISCUZ', true);
@@ -268,8 +268,18 @@ class discuz_core {
 			}
 		}
 
-		$attackevasive = $this->config['security']['attackevasive'];
-		if($attackevasive && (!defined('CURSCRIPT') || CURSCRIPT != 'misc' || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
+
+		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || CURSCRIPT != 'misc' || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
+			if(is_string($this->config['security']['attackevasive'])) {
+				$attackevasive_tmp = explode('|', $this->config['security']['attackevasive']);
+				$attackevasive = 0;
+				foreach($attackevasive_tmp AS $key => $value) {
+					$attackevasive += intval($value);
+				}
+				unset($attackevasive_tmp);
+			} else {
+				$attackevasive = $this->config['security']['attackevasive'];
+			}
 			require_once libfile('misc/security', 'include');
 		}
 
@@ -529,13 +539,14 @@ class discuz_core {
 
 	function _init_style() {
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
-		$styleid = intval(!empty($this->var['forum']['styleid']) ? $this->var['forum']['styleid'] : $styleid);
+		if(intval(!empty($this->var['forum']['styleid']))) {
+			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
+		}
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
 				$this->var['style'] = $this->var['cache']['style_'.$styleid];
 			}
-			$this->var['group']['allowdiy'] = 0;
 		}
 
 		if(is_array($this->var['style'])) {

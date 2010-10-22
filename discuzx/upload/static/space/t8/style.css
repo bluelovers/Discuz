@@ -5,8 +5,7 @@ Powered by Discuz! X
 
 body { background: #FFA6A1 url(images/bg.png); }
 
-#hd { background: url(images/header.png) no-repeat 0 0; }
-#hd h2 { color: #FFF; }
+#hd { background: url(images/header.png) no-repeat 0 0; color: #FFF; }
 
 #nv, #home { bottom: 12px; }
 

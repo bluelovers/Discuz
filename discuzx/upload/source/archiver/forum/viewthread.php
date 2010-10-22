@@ -17,7 +17,7 @@ include loadarchiver('common/header');
 	</p>
 	<h3><?php echo $post['subject']; ?></h3>
 	<?php if($_G['forum_threadpay']): include template('forum/viewthread_pay'); else: ?>
-		<?php echo nl2br(messagecutstr($post['message'])); ?>
+		<?php echo archivermessage($post['message']); ?>
 	<?php endif; ?>
 	<?php endforeach; ?>
 	<div class="page">
@@ -29,4 +29,14 @@ include loadarchiver('common/header');
 	<?php echo lang('forum/archiver', 'full_version'); ?>:
 	<a href="forum.php?mod=viewthread&tid=<?php echo $_G['tid']; ?>&page=<?php echo $page; ?>" target="_blank"><strong><?php echo $_G['forum_thread']['subject']; ?></strong></a>
 </div>
-<?php include loadarchiver('common/footer'); ?>
+<?php include loadarchiver('common/footer');
+
+function archivermessage($message) {
+	return nl2br(preg_replace(array('/&amp;(#\d{3,5};)/', "/\[hide=?\d*\](.+?)\[\/hide\]/is"),
+		array('&\\1', '<b>**** Hidden Message *****</b>'),
+		str_replace(array('&', '"', '<', '>', "\t", '   ', '  '),
+		array('&amp;', '&quot;', '&lt;', '&gt;', '&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'),
+		$message)));
+}
+
+?>

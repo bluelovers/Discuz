@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_membersearch.php 14415 2010-08-11 08:30:51Z xupeng $
+ *      $Id: class_membersearch.php 17381 2010-10-15 06:07:28Z zhangguosheng $
  */
 
 class membersearch {
@@ -151,11 +151,11 @@ class membersearch {
 		$fields = membersearch::getfield();
 		foreach ($fields as $key=>$value) {
 			$return = array();
-			if($condition[$key]) {
+			if(isset($condition[$key])) {
 				$return = membersearch::makeset($key, $condition[$key], membersearch::gettype($key));
-			} elseif($condition[$key.'_low'] || $condition[$key.'_high']) {
+			} elseif(isset($condition[$key.'_low']) || isset($condition[$key.'_high'])) {
 				$return = membersearch::makerange($key, $condition[$key.'_low'], $condition[$key.'_high'], membersearch::gettype($key));
-			} elseif($condition[$key.'_after'] || $condition[$key.'_before']) {
+			} elseif(isset($condition[$key.'_after']) || isset($condition[$key.'_before'])) {
 				$condition[$key.'_after'] = dmktime($condition[$key.'_after']);
 				$condition[$key.'_before'] = dmktime($condition[$key.'_before']);
 				$return = membersearch::makerange($key, $condition[$key.'_after'], $condition[$key.'_before'], membersearch::gettype($key));
@@ -206,7 +206,7 @@ class membersearch {
 			} elseif(!$islikesearch && strexists($value, '*')) {
 				$islikesearch = true;
 			}
-			if($value) {
+			if($value !== null) {
 				$values[] = $value;
 			}
 		}

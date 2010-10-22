@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.php 17219 2010-09-27 00:30:26Z monkey $
+ *      $Id: search.php 17414 2010-10-18 09:44:41Z monkey $
  */
 
 define('APPTYPEID', 0);
@@ -50,9 +50,6 @@ if($mod == 'curforum') {
 	$mod = 'forum';
 	$_G['gp_srchfid'] = array($_G['gp_srhfid']);
 	$_G['gp_srhfid'] = $_G['gp_srhfid'];
-} elseif($mod == 'forum') {
-	$_G['gp_srchfid'] = array();
-	$_G['gp_srhfid'] = '';
 }
 
 require DISCUZ_ROOT.'./source/module/search/search_'.$mod.'.php';

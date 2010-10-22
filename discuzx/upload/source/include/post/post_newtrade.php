@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newtrade.php 17059 2010-09-20 02:35:09Z zhengqingpeng $
+ *      $Id: post_newtrade.php 17325 2010-10-09 00:43:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -249,12 +249,12 @@ if($modnewthreads) {
 		postfeed($feed);
 	}
 	if($digest) {
-		foreach($digestcredits as $id => $addcredits) {
-			$postcredits[$id] = (isset($postcredits[$id]) ? $postcredits[$id] : 0) + $addcredits;
-		}
+		updatepostcredits('+',  $_G['uid'], 'digest', $_G['fid']);
 	}
-	updatepostcredits('+', $_G['uid'], 'post', $_G['fid']);
-	DB::query("UPDATE ".DB::table('common_member_count')." SET threads=threads+1 WHERE uid='$_G[uid]'");
+	updatepostcredits('+',  $_G['uid'], 'post', $_G['fid']);
+	if($isgroup) {
+		DB::query("UPDATE ".DB::table('forum_groupuser')." SET threads=threads+1, lastupdate='".TIMESTAMP."' WHERE uid='$_G[uid]' AND fid='$_G[fid]'");
+	}
 
 	if($displayorder != -4) {
 		$lastpost = "$tid\t$subject\t$_G[timestamp]\t$author";
@@ -263,8 +263,15 @@ if($modnewthreads) {
 			DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='".$_G['forum']['fup']."'", 'UNBUFFERED');
 		}
 	}
+
+	if($_G['forum']['status'] == 3) {
+		require_once libfile('function/group');
+		updateactivity($_G['fid'], 0);
+		require_once libfile('function/grouplog');
+		updategroupcreditlog($_G['fid'], $_G['uid']);
+	}
 	include_once libfile('function/stat');
-	updatestat('trade');
+	updatestat($isgroup ? 'groupthread' : 'trade');
 	if(!empty($_G['gp_continueadd'])) {
 		dheader("location: forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes");
 	} else {

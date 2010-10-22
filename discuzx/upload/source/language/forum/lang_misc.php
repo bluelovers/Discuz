@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 17183 2010-09-26 01:13:53Z monkey $
+ *      $Id: lang_misc.php 17334 2010-10-09 08:34:23Z liulanbo $
  */
 
 $lang = array
@@ -107,15 +107,6 @@ $lang = array
 	'trade_message_4' => '可輸入付款方式、銀行賬號等信息',
 	'trade_message_5' => '可輸入發貨公司、發貨單號等信息',
 	'trade_message_13' => '可輸入發貨公司、發貨單號等信息',
-
-	'reportpost_your' => '你',
-	'reportpost_recommend' => ' 在推薦',
-	'reportpost_delate' => ' 在舉報',
-	'reportpost_post' => ' 的帖子',
-	'reportpost_yourpost' => '你的帖子',
-	'reportpost_thread' => ' 的主題',
-	'reportpost_yourthread' => '你的主題',
-	'reportpost_say' => '時說',
 
 	'credit_payment' => '積分充值',
 	'credit_forum_payment' => '論壇積分充值',

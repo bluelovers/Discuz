@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_home.php 16618 2010-09-10 06:50:34Z zhengqingpeng $
+ *      $Id: function_home.php 17471 2010-10-19 08:22:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -209,7 +209,7 @@ function formatsize($size) {
 }
 
 function ckfriend($touid, $friend, $target_ids='') {
-	global $_G, $space;
+	global $_G;
 
 	if(empty($_G['uid'])) return $friend?false:true;
 	if($touid == $_G['uid']) return true;
@@ -224,7 +224,7 @@ function ckfriend($touid, $friend, $target_ids='') {
 			break;
 		case 1:
 			include_once libfile('function/friend');
-			if(friend_check($space['uid'])) {
+			if(friend_check($touid)) {
 				$_G[$var] = true;
 			}
 			break;

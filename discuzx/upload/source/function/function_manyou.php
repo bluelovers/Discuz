@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_manyou.php 16644 2010-09-11 03:33:30Z monkey $
+ *      $Id: function_manyou.php 17426 2010-10-19 02:39:34Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,7 +44,6 @@ function manyou_getuserapp($panel = 0) {
 							$showcount++;
 						} else {
 							$_G['my_menu_more'] = 1;
-							break;
 						}
 					}
 				}

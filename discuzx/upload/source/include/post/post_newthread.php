@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 17059 2010-09-20 02:35:09Z zhengqingpeng $
+ *      $Id: post_newthread.php 17314 2010-10-08 00:44:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -430,12 +430,8 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			'images'=>array()
 		);
 
-		if(!isset($_G['gp_addfeed'])) {
-			$space = array();
-			space_merge($space, 'field_home');
-			$_G['gp_addfeed'] = $space['privacy']['feed']['newreply'];
-		}
 		if(!empty($_G['gp_addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
+			$message = !$price ? $message : '';
 			if($special == 0) {
 				$feed['icon'] = 'thread';
 				$feed['title_template'] = 'feed_thread_title';

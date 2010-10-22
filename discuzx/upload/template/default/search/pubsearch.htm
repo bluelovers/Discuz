@@ -1,15 +1,16 @@
-<!--{if $searchid || ($_G['gp_adv'] && $checkarray[posts] && CURMODULE == 'forum')}-->
+<!--{eval $keywordenc = $keyword ? rawurlencode($keyword) : '';}-->
+<!--{if $searchid || ($_G['gp_adv'] && $checkarray[posts] && CURMODULE == 'forum')}-->	
 	<table id="tpsch" class="mbm" cellspacing="0" cellpadding="0">
 		<tr>
 			<td><h1><a href="./" title="$_G['setting']['bbname']">{BOARDLOGO}</a></h1></td>
 			<td>
 				<ul class="tb cl">
-					<!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><li{if CURMODULE == 'portal'} class="a"{/if}><a href="search.php?mod=portal{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang portal}</a></li><!--{/block}--><!--{/if}-->
-					<!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><li{if CURMODULE == 'forum'} class="a"{/if}><a href="search.php?mod=forum{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a></li><!--{/block}--><!--{/if}-->
-					<!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><li{if CURMODULE == 'blog'} class="a"{/if}><a href="search.php?mod=blog{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang blog}</a></li><!--{/block}--><!--{/if}-->
-					<!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><li{if CURMODULE == 'album'} class="a"{/if}><a href="search.php?mod=album{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang album}</a></li><!--{/block}--><!--{/if}-->
-					<!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><li{if CURMODULE == 'group'} class="a"{/if}><a href="search.php?mod=group{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a></li><!--{/block}--><!--{/if}-->
-					<!--{block slist[user]}--><li{if CURMODULE == 'user'} class="a"{/if}><a href="search.php?mod=user{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang users}</a></li><!--{/block}-->
+					<!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><li{if CURMODULE == 'portal'} class="a"{/if}><a href="search.php?mod=portal{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang portal}</a></li><!--{/block}--><!--{/if}-->
+					<!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><li{if CURMODULE == 'forum'} class="a"{/if}><a href="search.php?mod=forum{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a></li><!--{/block}--><!--{/if}-->
+					<!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><li{if CURMODULE == 'blog'} class="a"{/if}><a href="search.php?mod=blog{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang blog}</a></li><!--{/block}--><!--{/if}-->
+					<!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><li{if CURMODULE == 'album'} class="a"{/if}><a href="search.php?mod=album{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang album}</a></li><!--{/block}--><!--{/if}-->
+					<!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><li{if CURMODULE == 'group'} class="a"{/if}><a href="search.php?mod=group{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a></li><!--{/block}--><!--{/if}-->
+					<!--{block slist[user]}--><li{if CURMODULE == 'user'} class="a"{/if}><a href="search.php?mod=user{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang users}</a></li><!--{/block}-->
 					<!--{echo implode("", $slist);}-->					
 				</ul>
 				<table id="tps_form" cellspacing="0" cellpadding="0">
@@ -174,14 +175,14 @@
 				</tr>
 				<tr>
 					<td class="hm xs2 pbm" width="400">
-						<!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><!--{if CURMODULE == 'portal'}--><strong>{lang portal}</strong><!--{else}--><a href="search.php?mod=portal{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang portal}</a><!--{/if}--><!--{/block}--><!--{/if}-->
-						<!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><!--{if CURMODULE == 'forum'}--><strong>$_G['setting']['navs'][2]['navname']</strong><!--{else}--><a href="search.php?mod=forum{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a><!--{/if}--><!--{/block}--><!--{/if}-->
-						<!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><!--{if CURMODULE == 'blog'}--><strong>{lang blog}</strong><!--{else}--><a href="search.php?mod=blog{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang blog}</a><!--{/if}--><!--{/block}--><!--{/if}-->
-						<!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><!--{if CURMODULE == 'album'}--><strong>{lang album}</strong><!--{else}--><a href="search.php?mod=album{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang album}</a><!--{/if}--><!--{/block}--><!--{/if}-->
-						<!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><!--{if CURMODULE == 'group'}--><strong>$_G['setting']['navs'][3]['navname']</strong><!--{else}--><a href="search.php?mod=group{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a><!--{/if}--><!--{/block}--><!--{/if}-->
+						<!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><!--{if CURMODULE == 'portal'}--><strong>{lang portal}</strong><!--{else}--><a href="search.php?mod=portal{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang portal}</a><!--{/if}--><!--{/block}--><!--{/if}-->
+						<!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><!--{if CURMODULE == 'forum'}--><strong>$_G['setting']['navs'][2]['navname']</strong><!--{else}--><a href="search.php?mod=forum{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a><!--{/if}--><!--{/block}--><!--{/if}-->
+						<!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><!--{if CURMODULE == 'blog'}--><strong>{lang blog}</strong><!--{else}--><a href="search.php?mod=blog{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang blog}</a><!--{/if}--><!--{/block}--><!--{/if}-->
+						<!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><!--{if CURMODULE == 'album'}--><strong>{lang album}</strong><!--{else}--><a href="search.php?mod=album{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang album}</a><!--{/if}--><!--{/block}--><!--{/if}-->
+						<!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><!--{if CURMODULE == 'group'}--><strong>$_G['setting']['navs'][3]['navname']</strong><!--{else}--><a href="search.php?mod=group{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a><!--{/if}--><!--{/block}--><!--{/if}-->
 						<!--{echo implode("<span class=\"pipe\">|</span>", $slist);}-->
 						<span class="pipe">|</span>
-						<!--{if CURMODULE == 'user'}--><strong>{lang user}</strong><!--{else}--><a href="search.php?mod=user{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang user}</a><!--{/if}-->
+						<!--{if CURMODULE == 'user'}--><strong>{lang user}</strong><!--{else}--><a href="search.php?mod=user{if $keyword}&srchtxt=$keywordenc&searchsubmit=yes{/if}">{lang user}</a><!--{/if}-->
 					</td>
 					<td></td>
 				</tr>

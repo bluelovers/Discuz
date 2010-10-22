@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 17234 2010-09-27 05:33:36Z monkey $
+ *      $Id: admincp_logs.php 17319 2010-10-08 06:59:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -39,7 +39,7 @@ $logs = array_reverse($logs);
 
 if(empty($_G['gp_keyword'])) {
 	$num = count($logs);
-	$multipage = multi($num, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&lpp=$lpp".(!empty($_G['gp_day']) ? '&day='.$_G['gp_day'] : ''), 0, 3);
+	$multipage = multi($num, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&lpp=$lpp".(!empty($_G['gp_day']) ? '&day='.$_GET['day'] : ''), 0, 3);
 	$logs = array_slice($logs, $start, $lpp);
 
 } else {

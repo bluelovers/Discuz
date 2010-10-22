@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 17186 2010-09-26 02:22:54Z monkey $
+ *      $Id: forum_forumdisplay.php 17497 2010-10-20 03:15:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -308,17 +308,16 @@ if($filter) {
 			foreach($filterfield as $option) {
 				foreach($geturl as $field => $value) {
 					if(in_array($field, $filterfield) && $option != $field && $field != 'page') {
-						$forumdisplayadd[$option] .= '&'.$field.'='.$value;
+						$forumdisplayadd[$option] .= '&'.$option.'='.$value;
 					}
 				}
 				if($issort) {
 					$sfilterfield = array_merge(array('filter', 'sortid', 'orderby', 'fid'), $filterfield);
 					foreach($geturl as $soption => $value) {
-						$forumdisplayadd[$option] .= !in_array($soption, $sfilterfield) ? "&$soption=$value" : '';
+						$forumdisplayadd[$soption] .= !in_array($soption, $sfilterfield) ? "&$soption=$value" : '';
 					}
 				}
 			}
-
 			if($issort && is_array($quicksearchlist)) {
 				foreach($quicksearchlist as $option) {
 					$identifier = $option['identifier'];
@@ -329,18 +328,18 @@ if($filter) {
 			}
 
 			foreach($geturl as $field => $value) {
-				if(in_array($field, $filterfield) && $field != 'page') {
+				if(in_array($value, $filterfield) && $value != 'page') {
 					$filteradd .= $sp;
-					if($field == 'digest') {
+					if($value == 'digest') {
 						$filteradd .= "AND t.digest>'0'";
-					} elseif($field == 'recommend' && $_G['setting']['recommendthread']['status']) {
+					} elseif($value == 'recommend' && $_G['setting']['recommendthread']['status']) {
 						$filteradd .= "AND t.recommends>'".intval($_G['setting']['recommendthread']['iconlevels'][0])."'";
-					} elseif($field == 'specialtype') {
-						$filteradd .= "AND t.special='$specialtype[$value]'";
-					} elseif($field == 'dateline') {
-						$filteradd .= $value ? "AND t.dateline>='".(TIMESTAMP - $value)."'" : '';
+					} elseif($value == 'specialtype') {
+						$filteradd .= "AND t.special='".$specialtype[$_G['gp_'.$value]]."'";
+					} elseif($value == 'dateline') {
+						$filteradd .= $_G['gp_'.$value] ? "AND t.dateline>='".(TIMESTAMP - $_G['gp_'.$value])."'" : '';
 					} else {
-						$filteradd .= "AND t.$field='$value'";
+						$filteradd .= $_G['gp_'.$value] ? "AND t.$value='".$_G['gp_'.$value]."'" : '';
 					}
 					$sp = ' ';
 				}
@@ -396,6 +395,7 @@ if(($_G['forum']['status'] != 3 && $_G['forum']['allowside']) || !empty($_G['for
 	}
 }
 
+$forumdisplayadd['page'] = '';
 if($_G['forum']['threadsorts']['types'] && $sortoptionarray && ($_G['gp_searchoption'] || $_G['gp_searchsort'])) {
 	$sortid = intval($_G['gp_sortid']);
 
@@ -553,6 +553,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 	}
 
 	$thread['moved'] = $thread['heatlevel'] = 0;
+	$thread['icontid'] = !$thread['moved'] && $thread['isgroup'] != 1 ? $thread['tid' ] : $thread['closed'];
 	if($_G['forum']['status'] != 3 && ($thread['closed'] || ($_G['forum']['autoclose'] && TIMESTAMP - $thread[$closedby] > $_G['forum']['autoclose']))) {
 		$thread['new'] = 0;
 		if($thread['isgroup'] == 1) {
@@ -623,10 +624,11 @@ if($_G['setting']['verify']['enabled'] && $verifyuids) {
 $_G['forum_threadnum'] = count($_G['forum_threadlist']) - $separatepos;
 
 if(!empty($grouptids)) {
-	$query = DB::query("SELECT t.tid, f.name, f.fid FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid WHERE t.tid IN(".dimplode($grouptids).")");
+	$query = DB::query("SELECT t.tid, t.views, f.name, f.fid FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid WHERE t.tid IN(".dimplode($grouptids).")");
 	while($row = DB::fetch($query)) {
 		$groupnames[$row['tid']]['name'] = $row['name'];
 		$groupnames[$row['tid']]['fid'] = $row['fid'];
+		$groupnames[$row['tid']]['views'] = $row['views'];
 	}
 }
 

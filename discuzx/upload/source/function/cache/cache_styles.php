@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 16669 2010-09-13 02:00:12Z monkey $
+ *      $Id: cache_styles.php 17366 2010-10-12 08:29:38Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,6 +12,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_styles() {
+	global $_G;
+
 	$stylevars = $styledata = array();
 	$defaultstyleid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey = 'styleid'");
 	$zoomstatus = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey = 'zoomstatus'");

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 17050 2010-09-20 00:48:44Z cnteacher $
+ *      $Id: forum_attachment.php 17487 2010-10-19 10:21:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ define('NOROBOT', TRUE);
 
 if($_G['gp_uid'] != $_G['uid'] && $_G['gp_uid']) {
 	$_G['gp_uid'] = intval($_G['gp_uid']);
-	$groupid = DB::result_first("SELECT groupid FROM ".DB::table('common_member')." WHERE uid='$_G[uid]'");
+	$groupid = DB::result_first("SELECT groupid FROM ".DB::table('common_member')." WHERE uid='$_G[gp_uid]'");
 	loadcache('usergroup_'.$groupid);
 	$_G['group'] = $_G['cache']['usergroup_'.$groupid];
 }
@@ -28,7 +28,7 @@ $aid = $_G['gp_aid'];
 if($_G['setting']['attachexpire']) {
 	$k = $_G['gp_k'];
 	$t = $_G['gp_t'];
-	$authk = !$requestmode ? substr(md5($aid.md5($_G['authkey']).$t.$_G['gp_uid']), 0, 8) : md5($aid.md5($_G['config']['security']['authkey']).$t);
+	$authk = !$requestmode ? substr(md5($aid.md5($_G['config']['security']['authkey']).$t.$_G['gp_uid']), 0, 8) : md5($aid.md5($_G['config']['security']['authkey']).$t);
 	if(empty($k) || empty($t) || $k != $authk || TIMESTAMP - $t > $_G['setting']['attachexpire'] * 3600) {
 		$aid = intval($aid);
 		if($attach = DB::fetch_first("SELECT pid, tid, isimage FROM ".DB::table('forum_attachment')." WHERE aid='$aid'")) {

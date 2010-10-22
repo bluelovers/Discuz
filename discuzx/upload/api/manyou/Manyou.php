@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 17268 2010-09-28 03:36:38Z zhengqingpeng $
+ *      $Id: Manyou.php 17372 2010-10-14 10:19:31Z zhouguoqiang $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -13,7 +13,7 @@ class Manyou {
 
 	var $siteId;
 	var $siteKey;
-	var $myVersion = '0.1';
+	var $myVersion = '0.2';
 
 	var $timezone;
 	var $version;
@@ -719,6 +719,20 @@ class SearchHelper {
 				}
 
 				if ($k == 'displayorder') {
+					if ($v >= 0) {
+						$result['displayStatus'] = 'normal';
+					} elseif ($v = -1) {
+						$result['displayStatus'] = 'recycled';
+					} elseif ($v = -2) {
+						$result['displayStatus'] = 'unapproved';
+					} elseif ($v = -3) {
+						$result['displayStatus'] = 'ignored';
+					} elseif ($v = -4) {
+						$result['displayStatus'] = 'draft';
+					} else {
+						$result['displayStatus'] = 'unknown';
+					}
+
 					switch($v) {
 						case 1:
 							$v = 'board';
@@ -831,6 +845,7 @@ class SearchHelper {
 						'anonymous'	=> 'isAnonymous',
 						'subject'	=> 'subject',
 						'message'	=> 'content',
+						'invisible'	=> 'displayStatus',
 						'htmlon'	=> 'isHtml',
 						'attachment'	=> 'isAttached',
 						'rate'	=> 'rate',
@@ -845,6 +860,27 @@ class SearchHelper {
 					 );
 		foreach($row as $k => $v) {
 			if (array_key_exists($k, $map)) {
+				if ($k == 'invisible') {
+					switch($v) {
+						case 0:
+							$v = 'normal';
+							break;
+						case -1:
+							$v = 'recycled';
+							break;
+						case -2:
+							$v = 'unapproved';
+							break;
+						case -3:
+							$v = 'ignored';
+							break;
+						case -4:
+							$v = 'draft';
+							break;
+						default:
+							$v = 'unkonwn';
+					}
+				}
 				if ($k == 'dateline') {
 					$result[$map[$k]] = dgmdate($v, 'Y-m-d H:i:s', 8);
 					continue;

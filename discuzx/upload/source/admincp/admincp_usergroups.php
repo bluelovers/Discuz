@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
+ *      $Id: admincp_usergroups.php 17435 2010-10-19 04:24:32Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -516,6 +516,7 @@ EOT;
 		showsetting('usergroups_edit_post_html', 'allowhtmlnew', $group['allowhtml'], 'radio');
 		showsetting('usergroups_edit_basic_allow_statdata', 'allowstatdatanew', $group['allowstatdata'], 'radio');
 		showsetting('usergroups_edit_basic_search_post', 'allowfulltextnew', $group['allowsearch'] & 32, 'radio');
+		$group['allowsearch'] = $group['allowsearch'] > 32 ? $group['allowsearch'] - 32 : $group['allowsearch'];
 		showsetting('usergroups_edit_basic_search', array('allowsearchnew', array(
 			cplang('setting_search_status_portal'),
 			cplang('setting_search_status_forum'),

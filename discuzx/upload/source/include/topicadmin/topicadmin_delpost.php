@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_delpost.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_delpost.php 17508 2010-10-20 06:10:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,7 +50,7 @@ if(!submitcheck('modsubmit')) {
 		if(!$post['first']) {
 			$posts[] = $post;
 			$pids .= $comma.$post['pid'];
-			if($post['dateline'] > $losslessdel) {
+			if($post['dateline'] < $losslessdel) {
 				updatemembercount($post['authorid'], array('posts' => -1), false);
 			} else {
 				$puidarray[] = $post['authorid'];

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 15262 2010-08-20 09:11:53Z zhangguosheng $
+ *      $Id: index.php 17443 2010-10-19 05:24:58Z zhangguosheng $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -45,7 +45,6 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 						break;
 					case 'forum':
 						$_ENV['curapp'] = 'forum';
-						$_GET = array('mod' => 'forumdisplay', 'fid' => $id);
 						$_GET['mod'] = 'forumdisplay';
 						$_GET['fid'] = $id;
 						break;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 16638 2010-09-10 10:02:57Z zhangguosheng $
+ *      $Id: portalcp_upload.php 17351 2010-10-11 05:03:55Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,16 +16,17 @@ require_once libfile('class/upload');
 $upload = new discuz_upload();
 $downremotefile = false;
 $aid = intval(getgpc('aid'));
+$catid = intval(getgpc('catid'));
 if($aid) {
 	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$aid'");
 	if(!$article = DB::fetch($query)) {
 		portal_upload_error(lang('portalcp', 'article_noexist'));
 	}
-	if(!$_G['group']['allowmanagearticle'] && (!$_G['group']['allowpostarticle'] || $article['uid'] != $_G['uid'])) {
+	if(check_articleperm($catid, $aid, $article, false, true) !== true) {
 		portal_upload_error(lang('portalcp', 'article_noallowed'));
 	}
 } else {
-	if(!$_G['group']['allowpostarticle'] && !$_G['group']['allowmanagearticle']) {
+	if(check_articleperm($catid, $aid, null, false, true) !== true) {
 		portal_upload_error(lang('portalcp', 'article_publish_noallowed'));
 	}
 }

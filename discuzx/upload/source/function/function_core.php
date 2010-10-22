@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 17218 2010-09-27 00:00:29Z monkey $
+ *      $Id: function_core.php 17487 2010-10-19 10:21:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -765,8 +765,8 @@ function cutstr($string, $length, $dot = ' ...') {
 		return $string;
 	}
 
-	$pre = '{%';
-	$end = '%}';
+	$pre = chr(1);
+	$end = chr(1);
 	$string = str_replace(array('&amp;', '&quot;', '&lt;', '&gt;'), array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), $string);
 
 	$strcut = '';
@@ -811,6 +811,10 @@ function cutstr($string, $length, $dot = ' ...') {
 
 	$strcut = str_replace(array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 
+	$pos = strrpos($s, chr(1));
+	if($pos !== false) {
+		$strcut = substr($s,0,$pos);
+	}
 	return $strcut.$dot;
 }
 
@@ -827,7 +831,7 @@ function dstripslashes($string) {
 
 function aidencode($aid, $type = 0) {
 	global $_G;
-	$s = !$type ? $aid.'|'.substr(md5($aid.md5($_G['authkey']).TIMESTAMP.$_G['uid']), 0, 8).'|'.TIMESTAMP.'|'.$_G['uid'] : $aid.'|'.md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP).'|'.TIMESTAMP;
+	$s = !$type ? $aid.'|'.substr(md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP.$_G['uid']), 0, 8).'|'.TIMESTAMP.'|'.$_G['uid'] : $aid.'|'.md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP).'|'.TIMESTAMP;
 	return rawurlencode(base64_encode($s));
 }
 

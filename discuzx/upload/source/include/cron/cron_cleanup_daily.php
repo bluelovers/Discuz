@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 16833 2010-09-15 07:39:38Z zhengqingpeng $
+ *      $Id: cron_cleanup_daily.php 17435 2010-10-19 04:24:32Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {

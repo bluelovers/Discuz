@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 17243 2010-09-27 08:18:03Z zhangguosheng $
+ *      $Id: portalcp_block.php 17505 2010-10-20 05:42:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -144,7 +144,13 @@ if($op == 'block') {
 	$dateformats = block_getdateformats($block['dateformat']);
 
 	$block['summary'] = htmlspecialchars($block['summary']);
-	$blockclassname = lang('blockclass', 'blockclass_'.($block['blockclass'] ? $block['blockclass'] : $_G['gp_classname']));
+	$blockclassname = '';
+	$blockclass = $block['blockclass'] ? $block['blockclass'] : $_G['gp_classname'];
+	$arr = explode('_', $blockclass);
+	if(count($arr) == 2) {
+		$blockclassname = $_G['cache']['blockclass'][$arr[0]]['subs'][$blockclass]['name'];
+	}
+	$blockclassname = empty($blockclassname) ? $blockclass : $blockclassname;
 
 } elseif($op == 'data') {
 	if(!$bid || (!$allowmanage && !$allowdata)) {
@@ -369,7 +375,7 @@ if($op == 'block') {
 		}
 	} elseif($op == 'push') {
 
-		$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype']);
+		$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
 		if($itemid) {
 			$item['itemid'] = $itemid;
 		}
@@ -393,7 +399,8 @@ if($op == 'block') {
 			if(in_array($_GET['idtype'],array('tid', 'gtid', 'aid', 'picid', 'blogid'))) {
 				$_GET['idtype'] = $_GET['idtype'].'s';
 			}
-			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype']);
+			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
+			if(empty($item)) showmessage('block_data_type_invalid');
 		}
 	} elseif($op=='verifydata' || $op=='managedata') {
 		if(!$allowmanage && !$allowdata) {
@@ -645,20 +652,11 @@ function block_ban_item($block, $item) {
 	DB::update('common_block', array('param'=>$parameters), array('bid'=>intval($block['bid'])));
 }
 
-function get_push_item($blockstyle, $id, $idtype) {
+function get_push_item($blockstyle, $id, $idtype, $blockclass, $script) {
 	$item = array();
 	$obj = null;
-	if($idtype == 'tids') {
-		$obj = block_script('forum', 'thread');
-	} elseif($idtype == 'gtids') {
-		$obj = block_script('group', 'groupthread');
-	} elseif($idtype == 'aids') {
-		$obj = block_script('portal', 'article');
-	} elseif($idtype == 'picids') {
-		$obj = block_script('space', 'pic');
-	} elseif($idtype == 'blogids') {
-		$obj = block_script('space', 'blog');
-	}
+	list($blockclass) = explode('_', $blockclass);
+	$obj = block_script($blockclass, $script);
 	if($obj && is_object($obj)) {
 		$paramter = array($idtype => intval($id));
 		$return = $obj->getData($blockstyle, $paramter);

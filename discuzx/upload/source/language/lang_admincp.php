@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 17243 2010-09-27 08:18:03Z zhangguosheng $
+ *      $Id: lang_admincp.php 17408 2010-10-18 08:48:25Z zhengqingpeng $
  */
 
 
@@ -2140,8 +2140,8 @@ $lang = array
 	'threadtype_edit_inputsize' => '表單顯示長度(可選)',
 	'threadtype_edit_searchtxt' => '搜索範圍預置值(可選)',
 	'threadtype_edit_searchtxt_comment' => '設置項目的快速搜索預置數值，逗號分隔，例如：<i>0,50,10</i>，將顯示 0 - 50、50 - 100 的搜索快捷鏈接',
-	'threadtype_edit_rowsize' => '輸入框行數(可選)：',
-	'threadtype_edit_colsize' => '輸入框寬度(可選)：',
+	'threadtype_edit_rowsize' => '輸入框行數(可選)',
+	'threadtype_edit_colsize' => '輸入框寬度(可選)',
 	'threadtype_edit_choices' => '字段內容',
 	'threadtype_edit_choices_comment' => '只在項目為可選時有效，每行一個字段，等號前面為字段索引(建議用數字)，後面為內容，例如: <br /><i>1 = 光電鼠標<br />2 = 機械鼠標<br />3 = 沒有鼠標</i><br />注意: 字段確定後請勿修改索引和內容的對應關係，但仍可以新增字段。如需調換顯示順序，可以通過移動整行的上下位置來實現',
 	'threadtype_edit_images_weight' => '圖片最大寬度(可選)',
@@ -2510,9 +2510,9 @@ $lang = array
 	'members_search_email_comment' => '可使用通配符 *',
 	'members_search_postsrange' => '發帖數介於',
 	'members_search_regip' => '註冊 IP 開始於',
-	'members_search_regip_comment' => '如 192.168',
+	'members_search_regip_comment' => '如 192.168，可使用通配符 *',
 	'members_search_lastip' => '上次訪問 IP 開始於',
-	'members_search_lastip_comment' => '如 192.168',
+	'members_search_lastip_comment' => '如 192.168，可使用通配符 *',
 	'members_search_repeatip' => 'IP 地址',
 	'members_search_regdaterange' => '註冊日期介於',
 	'members_search_lastvisitrange' => '最後訪問時間介於',
@@ -3323,8 +3323,8 @@ $lang = array
 	'prune_post_nonexistence' => '沒有與條件匹配的帖子。',
 
 	'specialuser_defaultuser' => '推薦好友',
-	'specialuser_defaultuser_tips' => '<li>以下為推薦好友列表，沒添加則為空。可添加好友。</li><li>顯示順序的數值越小，推薦優先級越高。</li>',
-	'specialuser_defaultuser_add_tips' => '<li>用戶名和原因需同時填寫。</li><li>已設置的好友不可重複添加。</li>',
+	'specialuser_defaultuser_tips' => '<li>以下為推薦好友列表，沒添加則為空。可添加好友。</li><li>推薦優先級的數值越小，優先級越高。</li>',
+	'specialuser_defaultuser_add_tips' => '<li>用戶名和原因需同時填寫。</li><li>已添加的用戶不可重複添加。</li>',
 	'specialuser_defaultuser_del_succeed' => '刪除推薦好友成功。',
 	'specialuser_defaultuser_edit_succeed' => '編輯成功。',
 	'specialuser_defaultuser_add_invaild' => '需要同時輸入用戶名和添加原因，請返回。',
@@ -3333,7 +3333,7 @@ $lang = array
 	'specialuser_defaultuser_noreason_invalid' => '請輸入原因，請返回。',
 	'specialuser_defaultuser_add_succeed' =>'添加推薦好友成功。',
 	'specialuser_hotuser' => '明星會員',
-	'specialuser_hotuser_tips' => '<li>以下為明星會員列表，沒推薦則為空。可添加推薦。</li><li>顯示順序的數值越小，推薦優先級越高。</li>',
+	'specialuser_hotuser_tips' => '<li>以下為明星會員列表，沒推薦則為空。可添加推薦。</li><li>推薦優先級的數值越小，優先級越高。</li>',
 	'specialuser_hotuser_del_succeed' => '刪除明星會員成功。',
 	'specialuser_hotuser_edit_succeed' => '編輯成功。',
 	'specialuser_hotuser_add_invaild' => '需要同時輸入用戶名和推薦原因，請返回。',
@@ -3341,6 +3341,7 @@ $lang = array
 	'specialuser_hotuser_nouser_invalid' => '該用戶不存在，請返回。',
 	'specialuser_hotuser_noreason_invalid' => '請輸入原因，請返回。',
 	'specialuser_hotuser_add_succeed' =>'添加會員成功。',
+	'specialuser_order' =>'推薦優先級',
 
 	'doing_tips' => '<li>批量記錄信息管理用於刪除記錄使用，並且連同對應的回復一同刪除。</li><li>關鍵字可以使用限定符 {x} 以限定相鄰兩字符間可忽略的文字，x 是忽略字符的個數，如 "a{1}s{2}s"(不含引號) 可以搜索到 "<b>ass</b>" 也可搜索到 "<b>a</b>x<b>s</b>x<b>s</b>" 和 "<b>a</b>x<b>s</b>xx<b>s</b>" 等等。</li><li>提醒：點擊搜索結果頁的<b>刪除</b>按鈕，將會直接刪除相關信息！</li>',
 	'doing' => '記錄管理',

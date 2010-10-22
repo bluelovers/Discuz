@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: spacecp_album.php 17343 2010-10-11 01:44:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -342,7 +342,7 @@ if($_GET['op'] == 'edit') {
 			DB::update('home_feed', array('hot'=>$_POST['hot']), array('id'=>$picid, 'idtype'=>'picid'));
 		}
 
-		showmessage('do_success', dreferer().'&quickforward=1');
+		showmessage('do_success', dreferer());
 	}
 
 }

@@ -7,7 +7,6 @@ INSERT INTO pre_common_admingroup SET `admingid`='18',`alloweditpost`='0',`allow
 INSERT INTO pre_common_admingroup SET `admingid`='19',`alloweditpost`='0',`alloweditpoll`='0',`allowstickthread`='0',`allowmodpost`='1',`allowdelpost`='0',`allowmassprune`='0',`allowrefund`='0',`allowcensorword`='0',`allowviewip`='1',`allowbanip`='1',`allowedituser`='0',`allowmoduser`='1',`allowbanuser`='1',`allowpostannounce`='0',`allowviewlog`='0',`allowbanpost`='0',`supe_allowpushthread`='0',`allowhighlightthread`='0',`allowdigestthread`='0',`allowrecommendthread`='0',`allowbumpthread`='0',`allowclosethread`='0',`allowmovethread`='0',`allowedittypethread`='0',`allowstampthread`='0',`allowcopythread`='0',`allowmergethread`='0',`allowsplitthread`='0',`allowrepairthread`='0',`allowwarnpost`='0',`allowviewreport`='0',`alloweditforum`='0',`allowremovereward`='0',`allowedittrade`='0',`alloweditactivity`='0',`allowstickreply`='0',`allowmanagearticle`='0',`allowaddtopic`='0',`allowmanagetopic`='0',`allowdiy`='0',`allowclearrecycle`='0',`managefeed`='0',`managedoing`='0',`manageshare`='0',`manageblog`='0',`managealbum`='0',`managecomment`='0',`managemagiclog`='0',`managereport`='0',`managehotuser`='0',`managedefaultuser`='0',`managevideophoto`='0',`managemagic`='0',`manageclick`='0',`allowstamplist`='0';
 
 REPLACE INTO pre_common_addon (`key`, `title`, `sitename`, `siteurl`, `description`, `contact`, `logo`, `system`) VALUES ('25z5wh0o00', 'Comsenz', 'Comsenz官方網站', 'http://www.comsenz.com', 'Comsenz官方網站推薦的論壇模板與插件', 'ts@comsenz.com', 'http://www.comsenz.com/addon/logo.gif', 1);
-REPLACE INTO pre_common_addon (`key`, `title`, `sitename`, `siteurl`, `description`, `contact`, `logo`, `system`) VALUES ('R051uc9D1i', 'DPS', 'DPS 插件中心', 'http://bbs.7dps.com', '社區插件(應用)下載中心', 'http://bbs.7dps.com/thread-1646-1-1.html', 'http://api.7dps.com/addons/logo.gif', 1);
 
 INSERT INTO pre_common_credit_rule VALUES ('1','發表主題','post','4','0','0','0','0','2','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('2','發表回復','reply','4','0','0','0','0','1','0','0','0','0','0','0','');
@@ -383,7 +382,6 @@ INSERT INTO pre_common_setting VALUES ('reglinkname','註冊');
 INSERT INTO pre_common_setting VALUES ('regstatus','1');
 INSERT INTO pre_common_setting VALUES ('regverify','0');
 INSERT INTO pre_common_setting VALUES ('relatedtag','');
-INSERT INTO pre_common_setting VALUES ('reportpost','1');
 INSERT INTO pre_common_setting VALUES ('rewardforumid','0');
 INSERT INTO pre_common_setting VALUES ('rewritecompatible','');
 INSERT INTO pre_common_setting VALUES ('rewritestatus','0');
@@ -581,7 +579,7 @@ INSERT INTO pre_common_smiley VALUES ('70','0','5','stamp','推薦','006.gif');
 INSERT INTO pre_common_smiley VALUES ('71','0','6','stamp','原創','007.gif');
 INSERT INTO pre_common_smiley VALUES ('72','0','7','stamp','版主推薦','008.gif');
 INSERT INTO pre_common_smiley VALUES ('73','0','8','stamp','爆料','009.gif');
-INSERT INTO pre_common_smiley VALUES ('74','2','9','stamplist','精華','001.small.gif');
+INSERT INTO pre_common_smiley VALUES ('74','0','9','stamplist','精華','001.small.gif');
 INSERT INTO pre_common_smiley VALUES ('75','0','10','stamplist','熱帖','002.small.gif');
 INSERT INTO pre_common_smiley VALUES ('76','0','11','stamplist','美圖','003.small.gif');
 INSERT INTO pre_common_smiley VALUES ('77','0','12','stamplist','優秀','004.small.gif');

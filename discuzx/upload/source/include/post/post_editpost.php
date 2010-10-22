@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 17067 2010-09-20 03:14:33Z zhengqingpeng $
+ *      $Id: post_editpost.php 17332 2010-10-09 06:51:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ if($_G['setting']['magicstatus']) {
 $isfirstpost = $orig['first'] ? 1 : 0;
 $isorigauthor = $_G['uid'] && $_G['uid'] == $orig['authorid'];
 $isanonymous = $_G['group']['allowanonymous'] && getgpc('isanonymous') ? 1 : 0;
-$audit = $orig['invisible'] == -2 || $thread['displayorder'] == -2 ? $audit : 0;
+$audit = $orig['invisible'] == -2 || $thread['displayorder'] == -2 ? $_G['gp_audit'] : 0;
 
 if(empty($orig)) {
 	showmessage('undefined_action');
@@ -602,6 +602,7 @@ if(!submitcheck('editsubmit')) {
 		}
 
 		if($_G['forum_auditstatuson'] && $audit == 1) {
+			DB::query("UPDATE ".DB::table('forum_post')." SET status='4' WHERE pid='$pid' AND status='0' AND invisible='-2'");
 			updatepostcredits('+', $orig['authorid'], ($isfirstpost ? 'post' : 'reply'), $_G['fid']);
 			updatemodworks('MOD', 1);
 			updatemodlog($_G['tid'], 'MOD');
@@ -634,7 +635,7 @@ if(!submitcheck('editsubmit')) {
 		$message = preg_replace('/\[attachimg\](\d+)\[\/attachimg\]/is', '[attach]\1[/attach]', $message);
 		$parseurloff = !empty($_G['gp_parseurloff']);
 		DB::query("UPDATE ".DB::table($posttable)." SET message='$message', usesig='$_G[gp_usesig]', htmlon='$htmlon', bbcodeoff='$bbcodeoff', parseurloff='$parseurloff',
-			smileyoff='$smileyoff', status=status|4, subject='$subject' ".(DB::result_first("SELECT aid FROM ".DB::table('forum_attachment')." WHERE pid='$pid' LIMIT 1") ? ", attachment='1'" : '')." $anonymousadd ".($_G['forum_auditstatuson'] && $audit == 1 ? ",invisible='0'" : ", invisible='$pinvisible'").", tags='".implode(',', $tagarray)."' WHERE pid='$pid'");
+			smileyoff='$smileyoff', subject='$subject' ".(DB::result_first("SELECT aid FROM ".DB::table('forum_attachment')." WHERE pid='$pid' LIMIT 1") ? ", attachment='1'" : '')." $anonymousadd ".($_G['forum_auditstatuson'] && $audit == 1 ? ",invisible='0'" : ", invisible='$pinvisible'").", tags='".implode(',', $tagarray)."' WHERE pid='$pid'");
 
 		$_G['forum']['lastpost'] = explode("\t", $_G['forum']['lastpost']);
 

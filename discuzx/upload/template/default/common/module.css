@@ -884,7 +884,8 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			.vw .s strong { font-weight: 400; color: #F00; }
 		.vw .d { margin: 15px 0; min-height: 100px; font-size: 14px; line-height: 1.8; color: #000; }
 			.vw .d img { max-width: 620px; }
-			* html .vw .d img { width: expression(this.width > 620 ? 620:true); }
+			.ie6 .vw .d img { width: expression(this.width > 620 ? 620:true); }
+			.vwtb { table-layout: fixed; width: 100%; }
 		.vw .d ol, .vw .d ul { margin: 1em 2em; }
 			.vw .d ul li { list-style-type: disc; }
 			.vw .d .ml { margin: 0; }

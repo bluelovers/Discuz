@@ -7,9 +7,11 @@
 				<div id="left_temp" class="move-span temp"></div>
 				<!--{/if}-->
 				<!--{loop $leftlist $key $value}-->
-				<div id="$key" class="block move-span">
-					$value
-				</div>
+				<!--{if !empty($key)}-->
+					<div id="$key" class="block move-span">
+						$value
+					</div>
+				<!--{/if}-->
 				<!--{/loop}-->
 			</div>
 
@@ -18,9 +20,11 @@
 				<div id="center_temp" class="move-span temp"></div>
 				<!--{/if}-->
 				<!--{loop $centerlist $key $value}-->
-					<div id="$key" class="block move-span">
-						$value
-					</div>
+					<!--{if !empty($key)}-->
+						<div id="$key" class="block move-span">
+							$value
+						</div>
+					<!--{/if}-->
 				<!--{/loop}-->
 			</div>
 
@@ -30,9 +34,11 @@
 				<div id="right_temp" class="move-span temp"></div>
 				<!--{/if}-->
 				<!--{loop $rightlist $key $value}-->
-				<div id="$key" class="block move-span">
-					$value
-				</div>
+				<!--{if !empty($key)}-->
+					<div id="$key" class="block move-span">
+						$value
+					</div>
+				<!--{/if}-->
 				<!--{/loop}-->
 			</div>
 			<!--{/if}-->

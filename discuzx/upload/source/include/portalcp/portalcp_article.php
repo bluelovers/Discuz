@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: portalcp_article.php 17351 2010-10-11 05:03:55Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,7 +37,7 @@ if(empty($article) && $catid && $portalcategory[$catid]['disallowpublish']) {
 if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 	if($aid) {
-		check_articleperm($article['catid'],$aid);
+		check_articleperm($article['catid'], $aid, $article);
 	} else {
 		check_articleperm($catid);
 	}
@@ -285,7 +285,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 } elseif(submitcheck('pushplussubmit')) {
 
 	if($aid) {
-		check_articleperm($article['catid'],$aid);
+		check_articleperm($article['catid'], $aid, $article);
 	} else {
 		showmessage('no_article_specified_for_pushplus', dreferer());
 	}
@@ -325,7 +325,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 } elseif(submitcheck('verifysubmit')) {
 	if($aid) {
-		check_articleperm($article['catid'],$aid, true);
+		check_articleperm($article['catid'], $aid, $article, true);
 	} else {
 		showmessage('article_not_exist', dreferer());
 	}
@@ -358,7 +358,7 @@ if ($op == 'delpage') {
 	if(!$aid) {
 		showmessage('article_edit_nopermission');
 	}
-	check_articleperm($article['catid'],$aid);
+	check_articleperm($article['catid'], $aid, $article);
 
 
 	$pageorder = intval($_GET['pageorder']);
@@ -381,7 +381,7 @@ if ($op == 'delpage') {
 	if(!$aid) {
 		showmessage('article_edit_nopermission');
 	}
-	check_articleperm($article['catid'],$aid);
+	check_articleperm($article['catid'], $aid, $article);
 
 	if(submitcheck('deletesubmit')) {
 		include_once libfile('function/delete');
@@ -418,14 +418,14 @@ if ($op == 'delpage') {
 
 } elseif($op == 'verify') {
 	if($aid) {
-		check_articleperm($article['catid'],$aid);
+		check_articleperm($article['catid'], $aid, $article);
 	} else {
 		showmessage('article_not_exist', dreferer());
 	}
 
 } elseif($op == 'pushplus') {
 	if($aid) {
-		check_articleperm($article['catid'],$aid);
+		check_articleperm($article['catid'], $aid, $article);
 	} else {
 		showmessage('no_article_specified_for_pushplus', dreferer());
 	}
@@ -453,7 +453,7 @@ if ($op == 'delpage') {
 	if($aid) {
 		$catid = intval($article['catid']);
 	}
-	check_articleperm($catid, $aid);
+	check_articleperm($catid, $aid, $article);
 
 	$page = empty($_GET['page'])?1:intval($_GET['page']);
 	if($page<1) $page = 1;
@@ -461,7 +461,6 @@ if ($op == 'delpage') {
 
 	$pageselect = '';
 
-	require_once libfile('function/portalcp');
 	$category = $_G['cache']['portalcategory'];
 	$cate = $category[$catid];
 
@@ -594,26 +593,4 @@ function portalcp_get_postmessage($post) {
 	$post['message'] = preg_replace($language['post_edit_regexp'], '', $post['message']);
 	return discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $forum['allowsmilies'], $forum['allowbbcode'], ($forum['allowimgcode'] && $_G['setting']['showimages'] ? 1 : 0), $forum['allowhtml'], 0, 0, $post['authorid'], $forum['allowmediacode'], $post['pid']);
 }
-
-function check_articleperm($catid,$aid=0, $isverify = false) {
-	global $_G, $article;
-
-	if(empty($catid) && empty($aid)) showmessage('article_category_empty');
-
-	if($_G['group']['allowmanagearticle'] || (empty($aid) && $_G['group']['allowpostarticle']) || $_G['gp_modarticlekey'] == modauthkey($aid)) {
-		return true;
-	}
-
-	$permission = getallowcategory($_G['uid']);
-	if(isset($permission[$catid])) {
-		if($permission[$catid]['allowmanage'] || (empty($aid) && $permission[$catid]['allowpublish'])) {
-			return true;
-		}
-	}
-	if(!$isverify && $aid && !empty($article['uid']) && $article['uid'] == $_G['uid'] && ($article['status'] == 1 && $_G['group']['allowpostarticlemod'] || empty($_G['group']['allowpostarticlemod']))) {
-		return true;
-	}
-	showmessage('article_edit_nopermission');
-}
-
 ?>

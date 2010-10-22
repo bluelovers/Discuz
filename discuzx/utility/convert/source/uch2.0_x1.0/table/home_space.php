@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_space.php 17145 2010-09-25 03:15:58Z zhengqingpeng $
+ * $Id: home_space.php 17394 2010-10-18 02:23:32Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);
@@ -37,9 +37,14 @@ while ($space = $db_source->fetch_array($query)) {
 
 	$nextid = $space['uid'];
 
-	$space['privacy'] = unserialize($space['privacy']);
-	$space['privacy']['feed'] = array();
-	$space['privacy'] = serialize($space['privacy']);
+	if(!empty($space['privacy'])) {
+		$space['privacy'] = unserialize($space['privacy']);
+		$space['privacy']['feed'] = array();
+		$space['privacy'] = serialize($space['privacy']);
+	} else {
+		$space['privacy'] = '';
+	}
+
 	$space  = daddslashes($space, 1);
 
 	$newquery = $db_target->query("SELECT * FROM {$newpre}common_member WHERE uid='$space[uid]'");

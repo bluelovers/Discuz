@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 17250 2010-09-28 01:07:42Z monkey $
+ *      $Id: cache_setting.php 17360 2010-10-11 07:57:19Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -105,7 +105,7 @@ function build_cache_setting() {
 	}
 	if($data['verify']) {
 		foreach($data['verify'] as $key => $value) {
-			if($value['available']) {
+			if($value['available'] && !empty($value['icon'])) {
 				$icourl = parse_url($value['icon']);
 				if(!$icourl['host']) {
 					$data['verify'][$key]['icon'] = $data['attachurl'].'common/'.$value['icon'];

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 16446 2010-09-07 02:41:03Z zhengqingpeng $
+ *      $Id: my.php 17371 2010-10-14 09:49:26Z zhouguoqiang $
  */
 
 define('CURSCRIPT', 'api');
@@ -1704,9 +1704,7 @@ class My extends Manyou {
 		$query = DB::query($sql);
 		while($post = DB::fetch($query)) {
 			$result['maxPid'] = $post['pid'];
-			if ($post['invisible'] == 0) {
-				$result['data'][$post['pid']] = SearchHelper::convertPost($post);
-			}
+			$result['data'][$post['pid']] = SearchHelper::convertPost($post);
 		}
 
 		return $result;
@@ -1986,9 +1984,7 @@ class My extends Manyou {
 		$tIds = $authors =  array();
 		while($post = DB::fetch($query)) {
 			$result[$key] = $post['pid'];
-			if ($post['invisible'] == 0) {
-				$result['data'][$post['pid']] = SearchHelper::convertPost($post);
-			}
+			$result['data'][$post['pid']] = SearchHelper::convertPost($post);
 		}
 		return $result;
 	}
@@ -2253,9 +2249,7 @@ class My extends Manyou {
 		$query = DB::query($sql);
 		while($thread = DB::fetch($query)) {
 			$result['maxTid'] = $thread['tid'];
-			if ($thread['displayorder'] >= 0) {
-				$result['data'][$thread['tid']] = SearchHelper::convertThread($thread);
-			}
+			$result['data'][$thread['tid']] = SearchHelper::convertThread($thread);
 		}
 
 		return $result;
@@ -2312,7 +2306,6 @@ class My extends Manyou {
 
 		if ($res['data']) {
 			$_tableInfo['tables'] = $tables;
-			$res['table'] = $_tableInfo;
 
 			$postThreadIds = $authors = array();
 			foreach($res['data'] as $tId => $thread) {
@@ -2370,9 +2363,7 @@ class My extends Manyou {
 		$tIds = array();
 		while($thread = DB::fetch($query)) {
 			$result[$key] = $thread['tid'];
-			if ($thread['displayorder'] >= 0) {
-				$result['data'][$thread['tid']] = SearchHelper::convertThread($thread);
-			}
+			$result['data'][$thread['tid']] = SearchHelper::convertThread($thread);
 		}
 		return $result;
 	}
@@ -2463,7 +2454,6 @@ class My extends Manyou {
 
 		if ($res['data']) {
 			$_tableInfo['tables'] = $tables;
-			$res['table'] = $_tableInfo;
 
 			$_tIds = array();
 			$authors = array();

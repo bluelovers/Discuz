@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_drag.js 15155 2010-08-19 08:16:19Z monkey $
+	$Id: home_drag.js 17317 2010-10-08 05:09:22Z zhangguosheng $
 */
 
 var Drags       = [];
@@ -23,7 +23,7 @@ var rootSibling = null;
 
 var D1Target    = null;
 
-Number.prototype.NaN0=function(){return isNaN(this)?0:this;}
+Number.prototype.NaN0=function(){return isNaN(this)?0:this;};
 
 function CreateDragContainer(){
 	var cDrag        = DragDrops.length;

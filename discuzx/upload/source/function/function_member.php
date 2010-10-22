@@ -78,6 +78,9 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 
 function setloginstatus($member, $cookietime) {
 	global $_G;
+	foreach($_G['cookie'] as $k => $v) {
+		dsetcookie($k);
+	}
 	$_G['uid'] = $member['uid'];
 	$_G['username'] = $member['username'];
 	$_G['adminid'] = $member['adminid'];
@@ -85,7 +88,8 @@ function setloginstatus($member, $cookietime) {
 	$_G['formhash'] = formhash();
 	$_G['session']['invisible'] = getuserprofile('invisible');
 	$_G['member'] = $member;
-	$_G['core']->session->isnew = 1;
+	$discuz = & discuz_core::instance();
+	$discuz->session->isnew = true;
 
 	dsetcookie('auth', authcode("{$member['password']}\t{$member['uid']}", 'ENCODE'), $cookietime, 1, true);
 	dsetcookie('loginuser');

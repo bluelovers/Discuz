@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 17273 2010-09-28 06:37:43Z monkey $
+ *      $Id: function_post.php 17421 2010-10-18 14:09:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ function getattach($pid, $posttime = 0) {
 	$query = DB::query("SELECT a.*, af.description
 		FROM ".DB::table('forum_attachment')." a
 		LEFT JOIN ".DB::table('forum_attachmentfield')." af USING(aid)
-		WHERE (a.uid='$_G[uid]' AND a.tid='0' $sqladd1) $sqladd2");
+		WHERE (a.uid='$_G[uid]' AND a.tid='0' $sqladd1) $sqladd2 ORDER BY a.aid DESC");
 	if(!empty($_G['fid']) && $_G['forum']['attachextensions']) {
 		$allowext = str_replace(' ', '', $_G['forum']['attachextensions']);
 		$allowext = explode(',', $allowext);
@@ -145,6 +145,9 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 			$image = new image;
 		}
 		if(!empty($_G['gp_albumaid'])) {
+			array_unshift($_G['gp_albumaid'], '');
+			$_G['gp_albumaid'] = array_unique($_G['gp_albumaid']);
+			unset($_G['gp_albumaid'][0]);
 			$query = DB::query("SELECT * FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($_G['gp_albumaid']).")");
 			while($attach = DB::fetch($query)) {
 				$albumattach[$attach['aid']] = $attach;
@@ -335,6 +338,8 @@ function updatepostcredits($operator, $uidarray, $action, $fid = 0) {
 	foreach($uidarray as $uid) {
 		if($uid == $_G['uid']) {
 			updatecreditbyaction($action, $uid, $extsql, '', $val, 1, $fid);
+		} elseif(empty($uid)) {
+			continue;
 		} else {
 			batchupdatecredit($action, $uid, $extsql, $val, $fid);
 		}

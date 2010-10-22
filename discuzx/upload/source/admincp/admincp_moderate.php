@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: admincp_moderate.php 17405 2010-10-18 04:30:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -737,13 +737,11 @@ if($operation == 'threads') {
 					$recyclebintids .= ','.$thread['tid'];
 				}
 				$pm = 'pm_'.$thread['tid'];
-				if(isset($$pm) && $$pm <> '' && $thread['authorid']) {
+				if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $thread['authorid']) {
 					$pmlist[] = array(
 						'action' => 'modthreads_delete',
-						'notevar' => array('threadsubject' => $threadsubject, 'reason' => stripslashes($reason)),
+						'notevar' => array('threadsubject' => $thread['subject'], 'reason' => stripslashes($_G['gp_'.$pm])),
 						'authorid' => $thread['authorid'],
-						'thread' =>  $thread['subject'],
-						'reason' => dhtmlspecialchars($$pm)
 					);
 				}
 			}
@@ -785,20 +783,18 @@ if($operation == 'threads') {
 				$validatedthreads[] = $thread;
 
 				$pm = 'pm_'.$thread['tid'];
-				if(isset($$pm) && $$pm <> '' && $thread['authorid']) {
+				if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $thread['authorid']) {
 					$pmlist[] = array(
 							'action' => 'modthreads_validate',
-							'notevar' => array('tid' => $_G['tid'], 'threadsubject' => $threadsubject, 'reason' => stripslashes($reason)),
+						'notevar' => array('tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'reason' => dhtmlspecialchars($_G['gp_'.$pm])),
 							'authorid' => $thread['authorid'],
-							'tid' => $thread['tid'],
-							'thread' => $thread['subject'],
-							'reason' => dhtmlspecialchars($$pm)
 							);
 				}
 			}
 
 			if($tids) {
 
+				$validates = DB::query("UPDATE ".DB::table('forum_post')." SET status='4' WHERE tid IN ($tids) AND status='0' AND invisible='-2'");
 				updatepost(array('invisible' => '0'), "tid IN ($tids) AND first='1'");
 				DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0', moderated='1' WHERE tid IN ($tids)");
 				$validates = DB::affected_rows();
@@ -815,10 +811,7 @@ if($operation == 'threads') {
 
 		if($pmlist) {
 			foreach($pmlist as $pm) {
-				$reason = $pm['reason'];
-				$threadsubject = $pm['thread'];
-				$tid = intval($pm['tid']);
-				notification_add($pm['authorid'], 'system', $pm['action'], $pm['notvar'], 1);
+				notification_add($pm['authorid'], 'system', $pm['action'], $pm['notevar'], 1);
 			}
 		}
 		if($_G['gp_fast']) {
@@ -892,12 +885,12 @@ if($operation == 'threads') {
 			$fidadd['fids'] = " p.fid='$modfid'";
 		}
 
-		$modcount = getcountofposts(DB::table('forum_post').' p INNER JOIN '.DB::table('forum_thread').' t ON p.tid=t.tid', "p.invisible='$displayorder' AND p.first='0' $fidadd[and]$fidadd[fids]".($modfid == -1 ? " AND t.isgroup='1'" : '')." $sqlwhere");
+		$modcount = getcountofposts(DB::table('forum_post').' p INNER JOIN '.DB::table('forum_thread').' t ON p.tid=t.tid', "p.invisible='$displayorder' AND p.first='0' AND t.displayorder>='0' $fidadd[and]$fidadd[fids]".($modfid == -1 ? " AND t.isgroup='1'" : '')." $sqlwhere");
 		$start_limit = ($page - 1) * $ppp;
 		$postarray = getallwithposts(array(
 			'select' => 'f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, p.pid, p.fid, p.tid, p.author, p.authorid, p.subject, p.dateline, p.message, p.useip, p.attachment, p.htmlon, p.smileyoff, p.bbcodeoff, t.subject AS tsubject',
 			'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=p.tid LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=p.fid",
-			'where' => "p.invisible='$displayorder' AND p.first='0' $fidadd[and]$fidadd[fids]".($modfid ==-1 ? " AND t.isgroup='1'" : '')." $sqlwhere",
+			'where' => "p.invisible='$displayorder' AND p.first='0' AND t.displayorder>='0' $fidadd[and]$fidadd[fids]".($modfid ==-1 ? " AND t.isgroup='1'" : '')." $sqlwhere",
 			'order' => 'p.dateline DESC',
 			'limit' => "$start_limit, $ppp",
 		));
@@ -1025,14 +1018,11 @@ if($operation == 'threads') {
 			foreach($postarray as $post) {
 				$pids .= $comma.$post['pid'];
 				$pm = 'pm_'.$post['pid'];
-				if(isset($$pm) && $$pm <> '' && $post['authorid']) {
+				if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $post['authorid']) {
 					$pmlist[] = array(
 						'action' => 'modreplies_delete',
-						'notevar' => array('post' => $post, 'reason' => stripslashes($reason)),
+						'notevar' => array('pid' => $post['pid'], 'post' => dhtmlspecialchars(cutstr($post['message'], 30)), 'reason' => dhtmlspecialchars($_G['gp_'.$pm])),
 						'authorid' => $post['authorid'],
-						'tid' => $post['tid'],
-						'post' =>  dhtmlspecialchars(cutstr($post['message'], 30)),
-						'reason' => dhtmlspecialchars($$pm)
 					);
 				}
 				$comma = ',';
@@ -1075,14 +1065,11 @@ if($operation == 'threads') {
 				$threads[$post['tid']]['attachadd'] = $threads[$post['tid']]['attachadd'] || $post['attachment'] ? ', attachment=\'1\'' : '';
 
 				$pm = 'pm_'.$post['pid'];
-				if(isset($$pm) && $$pm <> '' && $post['authorid']) {
+				if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $post['authorid']) {
 					$pmlist[] = array(
 						'action' => 'modreplies_validate',
-						'notevar' => array('tid' => $_G['tid'], 'post' => $post, 'reason' => stripslashes($reason)),
+						'notevar' => array('pid' => $post['pid'], 'tid' => $post['tid'], 'post' => dhtmlspecialchars(cutstr($post['message'], 30)), 'reason' => dhtmlspecialchars($_G['gp_'.$pm])),
 						'authorid' => $post['authorid'],
-						'tid' => $post['tid'],
-						'post' =>  dhtmlspecialchars(cutstr($post['message'], 30)),
-						'reason' => dhtmlspecialchars($$pm)
 					);
 				}
 			}
@@ -1096,6 +1083,7 @@ if($operation == 'threads') {
 			}
 
 			if(!empty($pidarray)) {
+				$validates = DB::query("UPDATE ".DB::table('forum_post')." SET status='4' WHERE pid IN (0,".implode(',', $pidarray).") AND status='0' AND invisible='-2'");
 				$validates = updatepost(array('invisible' => '0'), "pid IN (0,".implode(',', $pidarray).")");
 				updatemodworks('MOD', $validates);
 			} else {
@@ -1105,10 +1093,7 @@ if($operation == 'threads') {
 
 		if($pmlist) {
 			foreach($pmlist as $pm) {
-				$reason = $pm['reason'];
-				$post = $pm['post'];
-				$tid = intval($pm['tid']);
-				notification_add($pm['authorid'], 'system', $pm['action'], $pm['notvar'], 1);
+				notification_add($pm['authorid'], 'system', $pm['action'], $pm['notevar'], 1);
 			}
 		}
 		if($_G['gp_fast']) {
@@ -1785,7 +1770,15 @@ if($operation == 'threads') {
 					unserialize($share['body_data']),
 					$share['body_general'],
 					array($share['image']),
-					array($share['image_link'])
+					array($share['image_link']),
+					'',
+					'',
+					'',
+					0,
+					0,
+					'',
+					$share['uid'],
+					$share['username']
 				);
 			}
 			$validates = DB::affected_rows();

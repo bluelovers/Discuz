@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 17260 2010-09-28 02:18:33Z zhengqingpeng $
+ *      $Id: admincp_setting.php 17440 2010-10-19 05:02:30Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -99,7 +99,7 @@ if(!submitcheck('settingsubmit')) {
 			array('setting_mail_check', 'mailcheck', $_G['gp_anchor'] == 'check')
 		));
 	} elseif($operation == 'sec') {
-		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'seccode', 'secqaa')) ? $_G['gp_anchor'] : 'base';
+		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'seccode', 'secqaa', 'reginput')) ? $_G['gp_anchor'] : 'base';
 		showsubmenuanchors('setting_sec', array(
 			array('setting_sec_base', 'base', $_G['gp_anchor'] == 'base'),
 			array('setting_sec_seccode', 'seccode', $_G['gp_anchor'] == 'seccode'),
@@ -127,7 +127,7 @@ if(!submitcheck('settingsubmit')) {
 			array('setting_styles_sitemessage', 'setting&operation=styles&anchor=sitemessage', $current['sitemessage'])
 		));
 	} elseif($operation == 'functions') {
-		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('mod', 'heatthread', 'recommend', 'comment', 'other')) ? $_G['gp_anchor'] : 'mod';
+		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('mod', 'heatthread', 'recommend', 'comment', 'activity', 'other')) ? $_G['gp_anchor'] : 'mod';
 		showsubmenuanchors('setting_functions', array(
 			array('setting_functions_mod', 'mod', $_G['gp_anchor'] == 'mod'),
 			array('setting_functions_heatthread', 'heatthread', $_G['gp_anchor'] == 'heatthread'),
@@ -826,7 +826,6 @@ if(!submitcheck('settingsubmit')) {
 		showtagfooter('tbody');
 		showsetting('setting_permissions_allowmoderatingthread', 'settingnew[allowmoderatingthread]', $setting['allowmoderatingthread'], 'radio');
 		showsetting('setting_permissions_memliststatus', 'settingnew[memliststatus]', $setting['memliststatus'], 'radio');
-		showsetting('setting_permissions_reportpost', 'settingnew[reportpost]', $setting['reportpost'], 'radio');
 		showsetting('setting_permissions_minpostsize', 'settingnew[minpostsize]', $setting['minpostsize'], 'text');
 		showsetting('setting_permissions_maxpostsize', 'settingnew[maxpostsize]', $setting['maxpostsize'], 'text');
 		showsetting('setting_permissions_alloweditpost', array('settingnew[alloweditpost]', array(
@@ -1686,7 +1685,7 @@ EOT;
 		$siteKey = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
 		$siteLanguage = $_G['config']['output']['language'];
 		$siteVersion = $_G['setting']['version'];
-		$myVersion = '0.1';
+		$myVersion = '0.2';
 		$productType = 'DISCUZX';
 		$siteRealNameEnable = '';
 		$siteRealAvatarEnable = '';

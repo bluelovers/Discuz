@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 16778 2010-09-14 08:43:20Z zhangguosheng $
+ *      $Id: function_profile.php 17355 2010-10-11 06:36:14Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -155,7 +155,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
 			$field['choices'] = explode("\n", $field['choices']);
-			$html = "<select name=\"$fieldid\" multiple=\"multiplue\" tabindex=\"1\">";
+			$html = "<select name=\"{$fieldid}[]\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op) {
 				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";

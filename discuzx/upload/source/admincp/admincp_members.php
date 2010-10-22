@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 17293 2010-09-29 05:29:02Z zhangguosheng $
+ *      $Id: admincp_members.php 17380 2010-10-15 06:07:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -103,11 +103,12 @@ if($operation == 'search') {
 		showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
 		echo $members;
 		foreach($search_condition as $k => $v) {
-			$condition_str .= '&'.$k.'='.$v;
-			if($k == 'groupid') {
-				foreach($search_condition['groupid'] as $value ) {
-					$condition_str .= '&groupid[]='.$value;
+			if(is_array($v)) {
+				foreach($v as $value ) {
+					$condition_str .= '&'.$k.'[]='.$value;
 				}
+			} else {
+				$condition_str .= '&'.$k.'='.$v;
 			}
 		}
 
@@ -119,7 +120,6 @@ if($operation == 'search') {
 
 } elseif($operation == 'export') {
 	$uids = searchmembers($search_condition, 10000);
-	$info = array();
 	$detail = '';
 	if($uids && is_array($uids)) {
 		$conditions = 'p.uid IN ('.dimplode($uids).')';
@@ -129,13 +129,10 @@ if($operation == 'search') {
 				p.occupation,p.position,p.revenue,p.affectivestatus,p.lookingfor,p.bloodtype,p.height,p.weight,p.alipay,p.icq,p.qq,
 				p.yahoo,p.msn,p.taobao,p.site,p.bio,p.interest,p.field1,p.field2,p.field3,p.field4,p.field5,p.field6,p.field7,p.field8 FROM ".
 				DB::table('common_member_profile')." p LEFT JOIN ".DB::table('common_member')." m ON p.uid =m.uid WHERE ".$conditions);
-		while($value = DB::fetch($query)) {
-			$info[$value['uid']] = $value;
-		}
-
-		foreach($info as $v) {
-			foreach($v as $value) {
+		while($v = DB::fetch($query)) {
+			foreach($v as $key => $value) {
 				$value = preg_replace('/\s+/', ' ', $value);
+				if($key == 'gender') $value = lang('space', 'gender_'.$value);
 				$detail .= strlen($value) > 11 && is_numeric($value) ? '['.$value.'],' : $value.',';
 			}
 			$detail = $detail."\n";
@@ -193,8 +190,8 @@ if($operation == 'search') {
 			$searchmember = DB::fetch_first("SELECT m.username AS username, ms.regip AS regip, ms.lastip AS lastip
 				FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_status')." ms ON m.uid=ms.uid
 				WHERE m.uid='$_G[gp_uid]'");
-			unset($_G['gp_uid']);
 			$urladd .= '&uid='.$_G['gp_uid'];
+			unset($_G['gp_uid']);
 		} elseif(!empty($_G['gp_ip'])) {
 			$ids = $regip = $lastip = $_G['gp_ip'];
 			$ids = "'".$ids."'";
@@ -1160,7 +1157,7 @@ EOT;
 
 	if(!submitcheck('bansubmit')) {
 
-		echo '<script src="include/js/calendar.js" type="text/javascript"></script>';
+		echo '<script src="static/js/calendar.js" type="text/javascript"></script>';
 		shownav('user', 'members_ban_user');
 		showsubmenu($lang['members_ban_user'].($member['username'] ? ' - '.$member['username'] : ''));
 		showtips('members_ban_tips');
@@ -2126,10 +2123,10 @@ function showsearchform($operation = '') {
 	showsetting('members_search_regdaterange', array('regdate_after', 'regdate_before'), array($_G['gp_regdate_after'], $_G['gp_regdate_before']), 'daterange');
 	showsetting('members_search_lastvisitrange', array('lastvisit_after', 'lastvisit_before'), array($_G['gp_lastvisit_after'], $_G['gp_lastvisit_before']), 'daterange');
 	showsetting('members_search_lastpostrange', array('lastpost_after', 'lastpost_before'), array($_G['gp_lastpost_after'], $_G['gp_lastpost_before']), 'daterange');
-	showsetting('members_search_lockstatus', array('lockstatus', array(
+	showsetting('members_search_lockstatus', array('status', array(
 		array(-1, $lang['yes']),
 		array(0, $lang['no']),
-	)), $_G['gp_lockstatus'], 'mradio');
+	)), $_G['gp_status'], 'mradio');
 	showsetting('members_search_emailstatus', array('emailstatus', array(
 		array(1, $lang['yes']),
 		array(0, $lang['no']),
@@ -2138,10 +2135,10 @@ function showsearchform($operation = '') {
 		array(1, $lang['yes']),
 		array(0, $lang['no']),
 	)), $_G['gp_avatarstatus'], 'mradio');
-	showsetting('members_search_videostatus', array('videostatus', array(
+	showsetting('members_search_videostatus', array('videophotostatus', array(
 		array(1, $lang['yes']),
 		array(0, $lang['no']),
-	)), $_G['gp_videostatus'], 'mradio');
+	)), $_G['gp_videophotostatus'], 'mradio');
 	$yearselect = $monthselect = $dayselect = "<option value=\"\">".cplang('nolimit')."</option>\n";
 	$yy=dgmdate(TIMESTAMP, 'Y');
 	for($y=$yy; $y>=$yy-100; $y--) {

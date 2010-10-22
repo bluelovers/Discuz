@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_index.php 16997 2010-09-19 02:05:32Z zhangguosheng $
+ *      $Id: admincp_index.php 17342 2010-10-09 12:21:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -300,8 +300,7 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight team"'
 	<a href="http://www.discuz.net/home.php?mod=space&uid=122" class="lightlink2 smallfont" target="_blank">Lao Gui</a>
 	<a href="http://www.discuz.net/home.php?mod=space&uid=159" class="lightlink2 smallfont" target="_blank">Tyc</a>
 	<a href="http://www.discuz.net/home.php?mod=space&uid=177" class="lightlink2 smallfont" target="_blank">Stoneage</a>
-	<a href="http://www.discuz.net/home.php?mod=space&uid=7155" class="lightlink2 smallfont" target="_blank">Gregry</a>
-	<a href="http://www.7dps.com" class="lightlink2 smallfont" target="_blank">Discuz! Product Support</a>'
+	<a href="http://www.discuz.net/home.php?mod=space&uid=7155" class="lightlink2 smallfont" target="_blank">Gregry</a>'
 ));
 showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight"'), array(
 	cplang('home_dev_links'),

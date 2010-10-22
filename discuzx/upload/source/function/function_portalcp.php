@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 17229 2010-09-27 03:48:07Z zhangguosheng $
+ *      $Id: function_portalcp.php 17351 2010-10-11 05:03:55Z zhangguosheng $
  */
 
 function get_uploadcontent($attach) {
@@ -175,12 +175,34 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 		}
 
 		$tpldata = daddslashes(serialize($data));
-		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
+		$diytplname = getdiytplname($targettplname);
+		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
 	}
 
 	return $r;
 }
 
+function getdiytplname($targettplname) {
+	$diytplname = DB::result("SELECT name FROM ".DB::table('common_diy_data')." WHERE targettplname='$targettplname'");
+	if(empty($diytplname)) {
+		$sql = '';
+		if (substr($targettplname, 0, 27) == 'portal/portal_topic_content') {
+			$id = intval(str_replace('portal/portal_topic_content_', '', $targettplname));
+			if(!empty($id)) {
+				$sql = "SELECT title FROM ".DB::table('portal_topic')." WHERE topicid='$id'";
+			}
+		} elseif (substr($targettplname, 0, 11) == 'portal/list') {
+			$id = intval(str_replace('portal/list_', '', $targettplname));
+			if(!empty($id)) {
+				$sql = "SELECT catname FROM ".DB::table('portal_category')." WHERE catid='$id'";
+			}
+		}
+		if(!empty($sql)) {
+			$diytplname = DB::result(DB::query($sql));
+		}
+	}
+	return $diytplname;
+}
 function getframehtml($data = array()) {
 	global $_G;
 	$html = $style = '';
@@ -868,6 +890,38 @@ function getblockperm($bid) {
 	}
 
 	return $perm;
+}
+
+function check_articleperm($catid, $aid = 0, $article = array(), $isverify = false, $return = false) {
+	global $_G;
+
+	if(empty($catid) && empty($aid)) {
+		if(!$return) {
+			showmessage('article_category_empty');
+		} else {
+			return 'article_category_empty';
+		}
+	}
+
+	if($_G['group']['allowmanagearticle'] || (empty($aid) && $_G['group']['allowpostarticle']) || $_G['gp_modarticlekey'] == modauthkey($aid)) {
+		return true;
+	}
+
+	$permission = getallowcategory($_G['uid']);
+	if(isset($permission[$catid])) {
+		if($permission[$catid]['allowmanage'] || (empty($aid) && $permission[$catid]['allowpublish'])) {
+			return true;
+		}
+	}
+	if(!$isverify && $aid && !empty($article['uid']) && $article['uid'] == $_G['uid'] && ($article['status'] == 1 && $_G['group']['allowpostarticlemod'] || empty($_G['group']['allowpostarticlemod']))) {
+		return true;
+	}
+
+	if(!$return) {
+		showmessage('article_edit_nopermission');
+	} else {
+		return 'article_edit_nopermission';
+	}
 }
 
 ?>

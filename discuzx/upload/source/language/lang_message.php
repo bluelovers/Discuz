@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 17291 2010-09-29 04:07:12Z zhangguosheng $
+ *      $Id: lang_message.php 17505 2010-10-20 05:42:15Z zhangguosheng $
  */
 
 $lang = array
@@ -154,9 +154,9 @@ $lang = array
 	'post_edit_succeed' => '你的帖子編輯成功，現在將轉入主題頁。<br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 需要轉入主題列表請點擊這裡 ]</a>',
 	'post_reply_succeed' => '非常感謝，你的回復已經發佈，現在將轉入主題頁。<br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 需要轉入主題列表請點擊這裡 ]</a>',
 	'post_check' => '指定的帖子不存在或已被刪除或正在被審核。<br /><a href="forum.php?mod=viewthread&tid={tid}">[ 嘗試轉入主題請點擊這裡 ]</a>',
-	'post_reply_mod_succeed' => '非常感謝，管理員設置了需要對新回復進行審核，你的帖子通過審核後將被顯示出來，現在將轉入主題列表。',
+	'post_reply_mod_succeed' => '非常感謝，管理員設置了需要對新回復進行審核，你的帖子通過審核後將被顯示出來。',
 	'post_newthread_succeed' => '非常感謝，你的主題已經發佈，現在將轉入主題頁。<br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 需要轉入主題列表請點擊這裡 ]</a>',
-	'edit_reply_mod_succeed' => '非常感謝，管理員設置了需要對編輯後的回復進行審核，你的帖子通過審核後將被顯示出來，現在將轉入主題列表。',
+	'edit_reply_mod_succeed' => '非常感謝，管理員設置了需要對編輯後的回復進行審核，你的帖子通過審核後將被顯示出來。',
 	'edit_newthread_mod_succeed' => '管理員設置了對編輯後的主題進行審核，你的帖子通過審核後才會顯示。',
 	'post_newthread_blog_succeed' => '非常感謝，你的文章已經發佈，現在將轉入文集。',
 	'post_newthread_blog_invalid' => '對不起，你沒有權限或管理員設置了禁止在本版發表文章，請返回。',
@@ -194,7 +194,7 @@ $lang = array
 	'profile_email_domain_illegal' => 'Email 包含不可使用的郵箱域名',
 	'profile_alipay_illegal' => '支付寶賬號無效，請返回重新填寫。',
 	'profile_alipay_msn' => 'MSN 賬號無效，請返回重新填寫。',
-	'profile_required_info_invalid' => '你沒有填寫必填項目，請返回修改。',
+	'profile_required_info_invalid' => '你沒有填寫必填項目或必填項目格式不正確，請返回修改。',
 	'profile_sig_toolong' => '你的簽名長度超過 {maxsigsize} 字符的限制，請返回修改。',
 	'profile_avatar_invalid' => '你設置的頭像類型無效，請返回修改。',
 	'profile_avatar_size_invalid' => '讀取遠程頭像尺寸失敗，如確認頭像地址無誤，請返回輸入頭像的寬、高代替原有的「*」。',
@@ -429,10 +429,10 @@ $lang = array
 	'debate_umpire_comment_invalid' => '裁判已經進行了評判，你不能再進行編輯，請返回。',
 	'debate_stand_invalid' => '你沒有選擇立場，請返回。',
 	'debate_stand_incorrect' => '你選擇的立場與上一次不一致，請返回確認。',
-	'threadtype_required_invalid' => '資料填寫不全，請返回檢查{typetitle}選項',
-	'threadtype_format_invalid' => '資料格式不正確，請返回檢查{typetitle}選項',
-	'threadtype_toolong_invalid' => '資料長度過長，請返回檢查{typetitle}選項',
-	'threadtype_num_invalid' => '資料數值不正確，請返回檢查{typetitle}選項',
+	'threadtype_required_invalid' => '資料填寫不全，請返回檢查 {typetitle} 選項',
+	'threadtype_format_invalid' => '資料格式不正確，請返回檢查 {typetitle} 選項',
+	'threadtype_toolong_invalid' => '資料長度過長，請返回檢查 {typetitle} 選項',
+	'threadtype_num_invalid' => '資料數值不正確，請返回檢查 {typetitle} 選項',
 	'threadtype_unchangeable_invalid' => '資料不得修改，請返回檢查{typetitle}選項',
 	'threadtype_expiration_invalid' => '此主題必須指定有效期，請返回修改。',
 	'reprint_invalid' => '轉帖數據不存在，請返回。',
@@ -1012,6 +1012,7 @@ $lang = array
 	'block_noexist' => '指定要查看的欄目不存在',
 	'block_no_recommend_library' => '此模塊不含推薦庫',
 	'block_no_right_recommend' => '你沒有權限向該模塊推薦數據',
+	'block_data_type_invalid' => '數據類型不匹配，無法推送',
 	'data_in_mod_library' => '該數據已經在模塊推薦庫裡了',
 	'no_right_manage_data' => '你沒有權限管理該模塊的推薦數據',
 

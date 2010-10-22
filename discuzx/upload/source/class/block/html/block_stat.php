@@ -126,7 +126,7 @@ class block_stat extends commonblock_html {
 	function getdata($style, $parameter) {
 		global $_G;
 		if(in_array('posts', $parameter['option']) || in_array('bbsnewposts', $parameter['option'])) {
-			$sql = "SELECT sum(f.posts) AS posts, sum(f.todayposts) AS todayposts FROM ".DB::table('forum_forum')." f WHERE f.status IN ('1','2')";
+			$sql = "SELECT sum(f.posts) AS posts, sum(f.todayposts) AS todayposts FROM ".DB::table('forum_forum')." f WHERE f.status='1'";
 			$forum = DB::fetch_first($sql);
 		}
 		if(in_array('groups', $parameter['option']) || in_array('groupmembers', $parameter['option']) || in_array('groupnewposts', $parameter['option'])) {

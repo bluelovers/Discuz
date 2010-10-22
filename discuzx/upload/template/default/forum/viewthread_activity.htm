@@ -47,7 +47,7 @@
 			<dt>{lang activity_already}:</dt>
 			<dd>
 				<em>$allapplynum</em> {lang activity_member_unit}
-				<!--{if $post['invisible'] == 0 && ($_G['forum_thread']['authorid'] == $_G['uid'] || $_G['group']['alloweditactivity'])}-->
+				<!--{if $post['invisible'] == 0 && ($_G['forum_thread']['authorid'] == $_G['uid'] || (in_array($_G['group']['radminid'], array(1, 2)) && $_G['group']['alloweditactivity']) || ( $_G['group']['radminid'] == 3 && $_G['forum']['ismoderator'] && $_G['group']['alloweditactivity']))}-->
 					<span class="pipe">|</span>
 					<span class="xi2"><a href="misc.php?mod=invite&action=thread&id=$_G[tid]" onclick="showWindow('invite', this.href, 'get', 0);">{lang invite}</a></span> &nbsp; 
 					<span class="xi2"><a href="forum.php?mod=misc&action=activityapplylist&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}" onclick="showWindow('activity', this.href, 'get', 0)" title="{lang manage}">{lang manage}</a> &nbsp; <a href="forum.php?mod=misc&action=activityexport&tid=$_G[tid]" title="{lang pm_archive}">{lang pm_archive}</a></span>
@@ -105,6 +105,7 @@
 				<!--{if $_G['setting']['activitycredit'] && $activity['credit'] && !$applied}--><p class="xi1">{lang activity_need_credit} $activity[credit] {$_G['setting']['extcredits'][$_G['setting']['activitycredit']][title]}</p><!--{/if}-->
 				<div class="actfm">
 					<table summary="{lang activity_join}" cellpadding="0" cellspacing="0" class="actl">
+					<!--{if $activity['cost']}-->
 						<tr>
 							<th>{lang activity_paytype}</th>
 							<td>
@@ -112,6 +113,7 @@
 								<p><input class="pr" type="radio" value="1" name="payment" id="payment_1" /> <label for="payment_1">{lang activity_would_payment}</label> <input name="payvalue" size="3" class="px pxs vm" onfocus="$('payment_1').checked = true;" /> {lang payment_unit}</p>
 							</td>
 						</tr>
+					<!--{/if}-->
 					<!--{if !empty($activity['ufield']['userfield'])}-->
 						<!--{loop $activity['ufield']['userfield'] $fieldid}-->
 						<!--{if $settings[$fieldid][available]}-->
@@ -182,7 +184,9 @@
 			<tr>
 				<th width="140">&nbsp;</th>
 				<th>{lang leaveword}</th>
+				<!--{if $activity['cost']}-->
 				<th width="60">{lang activity_payment}</th>
+				<!--{/if}-->
 				<th width="110">{lang activity_jointime}</th>
 			</tr>
 			<!--{loop $applylistverified $apply}-->
@@ -192,7 +196,9 @@
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $_G['forum_thread']['authorid'] == $_G['uid'] && $apply[message]}-->$apply[message]<!--{/if}--></td>
+					<!--{if $activity['cost']}-->
 					<td><!--{if $apply[payment] >= 0}-->$apply[payment] {lang payment_unit}<!--{else}-->{lang activity_self}<!--{/if}--></td>
+					<!--{/if}-->
 					<td>$apply[dateline]</td>
 				</tr>
 			<!--{/loop}-->
@@ -207,7 +213,9 @@
 			<tr>
 				<th width="140">&nbsp;</th>
 				<th>{lang leaveword}</th>
+				<!--{if $activity['cost']}-->
 				<th width="60">{lang activity_payment}</th>
+				<!--{/if}-->
 				<th width="110">{lang activity_jointime}</th>
 			</tr>
 			<!--{loop $applylist $apply}-->
@@ -217,7 +225,9 @@
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $apply[message]}--><p>$apply[message]</p><!--{/if}--></td>
+					<!--{if $activity['cost']}-->
 					<td><!--{if $apply[payment] >= 0}-->$apply[payment] {lang payment_unit}<!--{else}-->{lang activity_self}<!--{/if}--></td>
+					<!--{/if}-->
 					<td>$apply[dateline]</td>
 				</tr>
 			<!--{/loop}-->

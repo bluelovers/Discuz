@@ -471,10 +471,9 @@ function fSetModeTip(obj){
 		dv.style.zIndex = "999";
 		dv.style.fontSize = "12px";
 		dv.id = "dvModeTip";
-		dv.style.padding = "2 2 2 2px";
+		dv.style.padding = "2px";
 		dv.style.border = "1px #000000 solid";
 		dv.style.backgroundColor = "#FFFFCC";
-		dv.style.height = "12px";
 		dv.innerHTML = "編輯源碼";
 		document.body.appendChild(dv);
 	}else{

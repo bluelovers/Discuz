@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_specialuser.php 17040 2010-09-19 09:12:55Z zhengqingpeng $
+ *      $Id: admincp_specialuser.php 17401 2010-10-18 03:35:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -52,8 +52,8 @@ if($suboperation !== 'adduser') {
 		showtips('specialuser_'.$op.'_tips');
 		showformheader($url, '', 'userforum');
 		showtableheader();
-		$status ? showsubtitle(array('', 'display_order', 'uid', 'username', 'reason', 'operator', 'time', ''))
-				 : showsubtitle(array('', 'display_order', 'uid', 'username', 'reason', 'operator', 'time'));
+		$status ? showsubtitle(array('', 'specialuser_order', 'uid', 'username', 'reason', 'operator', 'time', ''))
+				 : showsubtitle(array('', 'specialuser_order', 'uid', 'username', 'reason', 'operator', 'time', ''));
 		$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status='$status' ORDER BY displayorder LIMIT ".(($page - 1) * $_G['ppp']).",{$_G['ppp']} ");
 		while($specialuser = DB::fetch($query)) {
 
@@ -68,9 +68,6 @@ if($suboperation !== 'adduser') {
 				$specialuser['dateline'],
 				"<a href=\"".ADMINSCRIPT."?action=specialuser&operation=$op&do=edit&uid=$specialuser[uid]\" class=\"act\">".$lang['edit']."</a>"
 				);
-			if(!$status) {
-				unset($arr['5']);
-			}
 			showtablerow('', '', $arr);
 		}
 		$usercount = DB::result_first("SELECT count(*) FROM ".DB::table('home_specialuser')." WHERE status='$status'");

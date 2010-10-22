@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 16790 2010-09-15 01:43:36Z monkey $
+ *      $Id: admincp_db.php 17365 2010-10-12 08:10:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,7 +23,7 @@ cpheader();
 if(!isfounder()) cpmsg('noaccess_isfounder', '', 'error');
 
 
-$excepttables = array($tablepre.'adminsessions', $tablepre.'failedlogins', $tablepre.'pmsearchindex', $tablepre.'relatedthreads', $tablepre.'rsscaches', $tablepre.'searchindex', $tablepre.'spacecaches', $tablepre.'sessions');
+$excepttables = array($tablepre.'common_admincp_session', $tablepre.'common_syscache', $tablepre.'common_failedlogin', $tablepre.'forum_rsscache', $tablepre.'common_searchindex', $tablepre.'forum_spacecache', $tablepre.'common_session');
 
 $query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('backupdir', 'custombackup')");
 while($var = DB::fetch($query)) {

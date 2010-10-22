@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_eccredit.php 13978 2010-08-04 05:22:49Z xupeng $
+ *      $Id: spacecp_eccredit.php 17427 2010-10-19 02:49:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -116,7 +116,8 @@ if($_G['gp_op'] == 'list') {
 		DB::query("INSERT INTO ".DB::table('forum_tradecomment')." (pid, orderid, type, raterid, rater, ratee, rateeid, score, message, dateline) VALUES ('$pid', '$orderid', '$type', '$_G[uid]', '$_G[username]', '$order[$ratee]', '$order[$rateeid]', '$score', '$message', '$_G[timestamp]')");
 
 		if(!$order['offline'] || $order['credit']) {
-			if(DB::result_first("SELECT COUNT(score) FROM ".DB::table('forum_tradecomment')." WHERE raterid='$_G[uid]' AND type='$type'") < $_G['setting']['ec_credit']['maxcreditspermonth']) {
+			$monthfirstday = mktime(0, 0, 0, date('m', TIMESTAMP), 1, date('Y', TIMESTAMP));
+			if(DB::result_first("SELECT COUNT(score) FROM ".DB::table('forum_tradecomment')." WHERE raterid='$_G[uid]' AND type='$type' AND dateline>='$monthfirstday' AND rateeid='$order[$rateeid]'") < $_G['setting']['ec_credit']['maxcreditspermonth']) {
 				updateusercredit($uid, $type ? 'sellercredit' : 'buyercredit', $level);
 			}
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_sofa.php 15449 2010-08-24 05:16:36Z monkey $
+ *      $Id: magic_sofa.php 17305 2010-09-29 13:18:28Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -77,7 +77,7 @@ class magic_sofa {
 			'usesig' => '1',
 		));
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies+1, moderated='1' WHERE tid='$_G[tid]'", 'UNBUFFERED');
+		DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies+1, moderated='1' WHERE tid='$_G[gp_tid]'", 'UNBUFFERED');
 		DB::query("UPDATE ".DB::table('forum_forum')." SET posts=posts+1, todayposts=todayposts+1 WHERE fid='$post[fid]'", 'UNBUFFERED');
 
 		usemagic($this->magic['magicid'], $this->magic['num']);

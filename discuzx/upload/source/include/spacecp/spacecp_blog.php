@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_blog.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: spacecp_blog.php 17343 2010-10-11 01:44:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -102,7 +102,7 @@ if($_GET['op'] == 'delete') {
 			DB::update('home_feed', array('hot'=>$_POST['hot']), array('id'=>$blog['blogid'], 'idtype'=>'blogid'));
 		}
 
-		showmessage('do_success', "home.php?mod=space&uid=$blog[uid]&do=blog&quickforward=1&id=$blog[blogid]");
+		showmessage('do_success', "home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]");
 	}
 
 } else {

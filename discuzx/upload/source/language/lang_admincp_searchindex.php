@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_searchindex.php 17266 2010-09-28 02:31:54Z cnteacher $
+ *      $Id: lang_admincp_searchindex.php 17334 2010-10-09 08:34:23Z liulanbo $
  *
  *	This file is automatically generate
  */
@@ -546,7 +546,6 @@ $lang = array (
     'setting_permissions_allowmoderatingthread' => '是否提示用戶自己有未審核的主題或者帖子',
     'setting_permissions_allowmoderatingthread_comment' => '選擇「是」，用戶如果有正在審核的主題，將可以在帖子列表頁看到提示。',
     'setting_permissions_memliststatus' => '允許查看會員列表',
-    'setting_permissions_reportpost' => '允許報告內容',
     'setting_permissions_minpostsize' => '帖子最小字數(字節)',
     'setting_permissions_minpostsize_comment' => '管理組成員可通過「發帖不受限制」設置而不受影響，0 為不限制',
     'setting_permissions_maxpostsize' => '帖子最大字數(字節)',

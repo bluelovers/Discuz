@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_register.php 17289 2010-09-29 02:49:33Z zhengqingpeng $
+ *      $Id: member_register.php 17415 2010-10-18 09:51:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -278,16 +278,17 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 	}
 
+	$regipsql = '';
 	if($_G['setting']['regfloodctrl']) {
 		if($regattempts = DB::result_first("SELECT count FROM ".DB::table('common_regip')." WHERE ip='$_G[clientip]' AND count>'0' AND dateline>'$_G[timestamp]'-86400")) {
 			if($regattempts >= $_G['setting']['regfloodctrl']) {
 				showmessage('register_flood_ctrl', NULL, array('regfloodctrl' => $_G['setting']['regfloodctrl']));
 			} else {
-				DB::query("UPDATE ".DB::table('common_regip')." SET count=count+1 WHERE ip='$_G[clientip]' AND count>'0'");
+				$regipsql = "UPDATE ".DB::table('common_regip')." SET count=count+1 WHERE ip='$_G[clientip]' AND count>'0'";
 			}
 		} else {
-			DB::query("INSERT INTO ".DB::table('common_regip')." (ip, count, dateline)
-				VALUES ('$_G[clientip]', '1', '$_G[timestamp]')");
+			$regipsql = "INSERT INTO ".DB::table('common_regip')." (ip, count, dateline)
+				VALUES ('$_G[clientip]', '1', '$_G[timestamp]')";
 		}
 	}
 
@@ -326,6 +327,9 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	$password = md5(random(10));
 
+	if($regipsql) {
+		DB::query($regipsql);
+	}
 
 	if($invite && $_G['setting']['inviteconfig']['invitegroupid']) {
 		$groupinfo['groupid'] = $_G['setting']['inviteconfig']['invitegroupid'];

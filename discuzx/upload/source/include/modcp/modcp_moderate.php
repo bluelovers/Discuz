@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 16941 2010-09-17 05:12:38Z monkey $
+ *      $Id: modcp_moderate.php 17375 2010-10-15 02:20:31Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -319,14 +319,14 @@ if($op == 'replies') {
 	$page = max(1, intval($_G['page']));
 	$start_limit = ($page - 1) * $ppp;
 
-	$modcount = getcountofposts(DB::table('forum_post'), "invisible='$pstat' AND first='0' AND ".($modfidsadd ? $modfidsadd : '1'));
+	$modcount = getcountofposts(DB::table('forum_post').' p INNER JOIN '.DB::table('forum_thread').' t ON p.tid=t.tid', "p.invisible='$pstat' AND p.first='0' AND t.displayorder>='0' AND ".($modfidsadd ? 'p.'.$modfidsadd : '1'));
 	$multipage = multi($modcount, $ppp, $page, "{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&filter=$filter&fid=$_G[fid]");
 
 	if($modcount) {
 		$postarray = getallwithposts(array(
 			'select' => 'f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, p.pid, p.fid, p.tid, p.authorid, p.author, p.subject, p.dateline, p.message, p.useip, p.attachment, p.htmlon, p.smileyoff, p.bbcodeoff, t.subject AS tsubject',
 			'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=p.tid LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=p.fid",
-			'where' => "p.invisible='$pstat' AND p.first='0' AND ".($modfidsadd ? "p.{$modfidsadd}" : '1'),
+			'where' => "p.invisible='$pstat' AND p.first='0' AND t.displayorder>='0' AND ".($modfidsadd ? "p.{$modfidsadd}" : '1'),
 			'order' => 'p.dateline DESC',
 			'limit' => "$start_limit, $ppp",
 		));

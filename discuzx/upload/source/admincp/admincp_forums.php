@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 17043 2010-09-19 09:51:54Z monkey $
+ *      $Id: admincp_forums.php 17432 2010-10-19 03:47:01Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -445,12 +445,27 @@ var rowtypedata = [
 		), "fid='$source'");
 		updatepost(array('fid' => $target), "fid='$source'");
 
-		$sourceforum = DB::fetch_first("SELECT threads, posts FROM ".DB::table('forum_forum')." WHERE fid='$source'");
-		$targetforum = DB::fetch_first("SELECT threads, posts FROM ".DB::table('forum_forum')." WHERE fid='$target'");
+		$sourceforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$source'");
+		$targetforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$target'");
+		$sourcethreadtypes = (array)unserialize($sourceforum['threadtypes']);
+		$targethreadtypes = (array)unserialize($targetforum['threadtypes']);
+		if(!$targethreadtypes['types']) {
+			$targethreadtypes['types'] = array();
+		}
+		if(!$targethreadtypes['icons']) {
+			$targethreadtypes['icons'] = array();
+		}
+		$targethreadtypes['types'] = $targethreadtypes['types'] + $sourcethreadtypes['types'];
+		$targethreadtypes['icons'] = $targethreadtypes['icons'] + $sourcethreadtypes['icons'];
+
 		DB::update('forum_forum', array(
 			'threads' => $targetforum['threads'] + $sourceforum['threads'],
 			'posts' => $targetforum['posts'] + $sourceforum['posts'],
 		), "fid='$target'");
+		DB::update('forum_forumfield', array(
+			'threadtypes' => addslashes(serialize($targethreadtypes))
+		), "fid='$target'");
+		DB::update('forum_threadclass', array('fid' => $target), "fid='$source'");
 		DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid='$source'");
 		DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid='$source'");
 		DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE fid='$source'");
@@ -1359,11 +1374,15 @@ EOT;
 				foreach($_G['gp_creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
 					$check = 0;
+					$havecredit = false;
 					foreach($rule as $i => $v) {
 						if($v != $rules[$rid]['extcredits'.$i] || $creditspolicy[$rules[$rid]['action']]['cycletype'] != $rules[$rid]['cycletype'] || $creditspolicy[$rules[$rid]['action']]['rewardnum'] != $rules[$rid]['rewardnum'] || $creditspolicy[$rules[$rid]['action']]['cycletime'] != $rules[$rid]['cycletime']) {
 							$check = 1;
 						}
 						$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = $v;
+						if($v) {
+							$havecredit = true;
+						}
 					}
 					$cpfids = explode(',', $rules[$rid]['fids']);
 					$cpfidsnew = array();
@@ -1372,10 +1391,10 @@ EOT;
 							continue;
 						}
 						if($cpfid != $fid) {
-							$cpfidsnew[] = $cpfid;
+							$cpfidsnew[$fid] = $cpfid;
 						}
 					}
-					if($check) {
+					if($check && $havecredit) {
 						$cpfidsnew[] = $fid;
 						$creditspolicynew[$rules[$rid]['action']]['fids'] = $rules[$rid]['fids'] = implode(',', $cpfidsnew);
 					} else {

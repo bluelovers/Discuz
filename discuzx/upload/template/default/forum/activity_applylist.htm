@@ -28,7 +28,9 @@
 						<td>{lang activity_join_members}</td>
 						<td>{lang leaveword}</td>
 						<td>{lang extension_project}</td>
+						<!--{if $activity['cost']}-->
 						<td>{lang activity_payment}</td>
+						<!--{/if}-->
 						<td>{lang activity_jointime}</td>
 						<!--{if $isactivitymaster}--><td>{lang status}</td><!--{/if}-->
 					</tr>
@@ -59,7 +61,9 @@
 								{lang no_informations}
 							<!--{/if}-->
 						</td>
+						<!--{if $activity['cost']}-->
 						<td><!--{if $apply[payment] >= 0}-->$apply[payment] {lang payment_unit}<!--{else}-->{lang activity_self}<!--{/if}--></td>
+						<!--{/if}-->
 						<td>$apply[dateline]</td>
 						<!--{if $isactivitymaster}-->
 							<td><!--{if $apply[verified] == 1}-->

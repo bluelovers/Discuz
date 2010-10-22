@@ -8,8 +8,7 @@ body { background: #000 url(images/bg.png) repeat-x 0 30px; }
 #ct { color: #FFF; }
 #ct a { color: #8DBE00; }
 
-#hd { background: url(images/header.png) no-repeat 50% 100%; }
-	#hd h2 { color: #FFF; }
+#hd { background: url(images/header.png) no-repeat 50% 100%; color: #FFF; }
 #nv { bottom: auto; left: auto; top: 45px; right: 0; }
 #nv li { padding: 0px 2px; }
 	#nv a, #nv a:visited { padding: 0px 10px; }

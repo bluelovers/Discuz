@@ -39,7 +39,7 @@
 						<a id="filter_orderby" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
 							<!--{if $_G['gp_orderby'] == 'dateline'}-->{lang list_post_time}<!--{elseif $_G['gp_orderby'] == 'replies'}-->{lang replies}<!--{elseif $_G['gp_orderby'] == 'views'}-->{lang views}<!--{elseif $_G['gp_orderby'] == 'lastpost'}-->{lang lastpost}<!--{elseif $_G['gp_orderby'] == 'heats'}-->{lang order_heats}<!--{else}-->{lang list_default_sort}<!--{/if}-->
 						</a>
-						<span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=digest&digest=1$forumdisplayadd[digest]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang digest_posts}</a><!--{if !empty($_G[setting][recommendthread][status])}--><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=recommend&recommend=1&orderby=recommends$forumdisplayadd[recommend]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang order_recommends}</a><!--{/if}-->
+						<span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=digest$forumdisplayadd[digest]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang digest_posts}</a><!--{if !empty($_G[setting][recommendthread][status])}--><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=recommend&orderby=recommends$forumdisplayadd[recommend]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang order_recommends}</a><!--{/if}-->
 					</div>
 				</th>
 				<td class="by">{lang author}</td>
@@ -51,6 +51,7 @@
 	<div class="bm_c">
 		<form method="post" autocomplete="off" name="moderate" id="moderate" action="forum.php?mod=topicadmin&action=moderate&fid=$_G[fid]&infloat=yes&nopost=yes">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="listextra" value="$extra" />
 			<table summary="forum_$_G[fid]" {if !$separatepos}id="forum_$_G[fid]"{/if} cellspacing="0" cellpadding="0">
 			<!--{if (!$simplestyle || !$_G['forum']['allowside'] && $page == 1) && !empty($announcement)}-->
 				<tbody>
@@ -85,7 +86,7 @@
 				<tbody id="$thread[id]">
 					<tr>
 						<td class="icn">
-							<a href="forum.php?mod=viewthread&tid={if !$thread['moved']}$thread[tid]{else}$thread[closed]{/if}&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" title="{if in_array($thread['displayorder'], array(1, 2, 3, 4))}{if $thread['displayorder'] == 1}{lang thread_type1} - {elseif $thread['displayorder'] == 2}{lang thread_type2} - {elseif $thread['displayorder'] == 3}{lang thread_type3} - {elseif $thread['displayorder'] == 4}{lang thread_type4} - {/if}{/if}{lang target_blank}" target="_blank">
+							<a href="forum.php?mod=viewthread&tid=$thread[icontid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" title="{if in_array($thread['displayorder'], array(1, 2, 3, 4))}{if $thread['displayorder'] == 1}{lang thread_type1} - {elseif $thread['displayorder'] == 2}{lang thread_type2} - {elseif $thread['displayorder'] == 3}{lang thread_type3} - {elseif $thread['displayorder'] == 4}{lang thread_type4} - {/if}{/if}{lang target_blank}" target="_blank">
 							<!--{if $thread[folder] == 'lock'}-->
 								<img src="{IMGDIR}/folder_lock.gif" />
 							<!--{elseif $thread['special'] == 1}-->
@@ -186,7 +187,7 @@
 							</cite>
 							<em>$thread[dateline]</em>
 						</td>
-						<td class="num"><a href="forum.php?mod=viewthread&tid=$thread[tid]&extra=$extra" class="xi2">$thread[replies]</a><em>$thread[views]</em></td>
+						<td class="num"><a href="forum.php?mod=viewthread&tid=$thread[tid]&extra=$extra" class="xi2">$thread[replies]</a><em><!--{if $thread['isgroup'] != 1}-->$thread[views]<!--{else}-->{$groupnames[$thread[tid]][views]}<!--{/if}--></em></td>
 						<td class="by">
 							<cite><!--{if $thread['lastposter']}--><a href="{if $thread[digest] != -2}home.php?mod=space&username=$thread[lastposterenc]{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}" c="1">$thread[lastposter]</a><!--{else}-->{lang anonymous}<!--{/if}--></cite>
 							<em><a href="{if $thread[digest] != -2}forum.php?mod=redirect&tid=$thread[tid]&goto=lastpost$highlight#lastpost{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}">$thread[lastpost]</a></em>

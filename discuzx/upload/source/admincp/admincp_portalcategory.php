@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 17244 2010-09-27 09:25:12Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 17392 2010-10-18 01:47:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -466,8 +466,9 @@ SCRIPT;
 			}
 			$parentdir = getportalcategoryfulldir($cate['upid']);
 			if($parentdir === false) cpmsg(cplang('portalcategory_parentfoldername_empty').','.cplang('return'), NULL, 'error');
-			$isexists = DB::fetch_first("SELECT catid FROM ".DB::table('portal_category')." WHERE foldername='$foldername'");
-			if($isexists && $isexists['catid'] != $_GET['catid']) {
+			$isexists = DB::fetch_first("SELECT catid, upid FROM ".DB::table('portal_category')." WHERE foldername='$foldername'");
+			$_GET['upid'] = isset($_GET['upid']) ? $_GET['upid'] : $cate['upid'];
+			if($isexists && $isexists['upid'] == $_GET['upid']) {
 				cpmsg(cplang('portalcategory_foldername_duplicate').','.cplang('return'), NULL, 'error');
 			} elseif(!$isexists && is_dir(DISCUZ_ROOT.'./'.$parentdir.$foldername)) {
 				cpmsg(cplang('portalcategory_foldername_exists').','.cplang('return'), NULL, 'error');

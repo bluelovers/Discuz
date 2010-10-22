@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 16444 2010-09-07 02:34:40Z zhengqingpeng $
+ *      $Id: uc.php 17361 2010-10-11 08:46:50Z zhengqingpeng $
  */
 
 define('UC_CLIENT_VERSION', '1.5.1');
@@ -95,13 +95,13 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 		$uids = str_replace("'", '', stripcslashes($get['ids']));
-		$ids = 0;
+		$ids = array();
 		$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE uid IN ($uids)");
 		while($row = DB::fetch($query)) {
-			$ids .= $row['uid'];
+			$ids[] = $row['uid'];
 		}
 		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
-		$ids && deletemember($ids);
+		$ids && deletemember(dimplode($ids));
 
 		return API_RETURN_SUCCEED;
 	}

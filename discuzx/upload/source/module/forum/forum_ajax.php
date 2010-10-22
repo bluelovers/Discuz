@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 17227 2010-09-27 02:22:18Z zhangguosheng $
+ *      $Id: forum_ajax.php 17421 2010-10-18 14:09:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -86,7 +86,7 @@ if($_G['gp_action'] == 'checkusername') {
 } elseif($_G['gp_action'] == 'imagelist') {
 
 	require_once libfile('function/post');
-	$attachlist = getattach($_G['gp_pid']);
+	$attachlist = getattach($_G['gp_pid'], intval($_G['gp_posttime']));
 	$imagelist = $attachlist['imgattachs']['unused'];
 
 	include template('common/header_ajax');

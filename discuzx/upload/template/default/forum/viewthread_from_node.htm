@@ -39,10 +39,25 @@
 				<!--{/if}-->
 				
 			</span>
-			<!--{if $post[author]}-->
-			<a href="home.php?mod=space&uid=$post[authorid]" id="author_$post[pid]">{$post[author]}</a>
-			<!--{else}-->
-			{lang anonymous}
+			<!--{if $post['authorid'] && !$post['anonymous']}-->
+				<!--{if !$_G['setting']['authoronleft']}--><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" class="xi2">$post[author]</a>$authorverifys<!--{/if}-->
+				<!--{hook/viewthread_postheader $postcount}-->
+				<em id="author_$post[pid]">{lang poston}</em>
+				<!--{if $post['invisible'] == 0}-->
+					<!--{if !IS_ROBOT && !$_G['gp_authorid'] && !$_G['forum_thread']['archiveid']}-->
+						<span class="pipe">|</span><a href="forum.php?mod=viewthread&tid=$post[tid]&page=$page&authorid=$post[authorid]" rel="nofollow">{lang thread_show_author}</a>
+					<!--{elseif !$_G['forum_thread']['archiveid']}-->
+						<span class="pipe">|</span><a href="forum.php?mod=viewthread&tid=$post[tid]&page=$page" rel="nofollow">{lang thread_show_all}</a>
+					<!--{/if}-->
+				<!--{/if}-->
+			<!--{elseif $post['authorid'] && $post['username'] && $post['anonymous']}-->
+				{lang anonymous}
+				<!--{hook/viewthread_postheader $postcount}-->
+				<em id="author_$post[pid]">{lang poston}</em>
+			<!--{elseif !$post['authorid'] && !$post['username']}-->
+				{lang guest}
+				<!--{hook/viewthread_postheader $postcount}-->
+				<em id="author_$post[pid]">{lang poston}</em>
 			<!--{/if}-->
 			<span class="xg1 xw0">$post[dateline]</span>
 		</dt>

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 16869 2010-09-16 05:21:15Z monkey $
+	$Id: editor.js 17307 2010-09-30 01:21:17Z monkey $
 */
 
 var DISCUZCODE = [];
@@ -329,7 +329,7 @@ function ctlent(event) {
 	if(event.keyCode == 9) {
 		doane(event);
 	}
-	if(event.keyCode == 8) {
+	if(event.keyCode == 8 && wysiwyg) {
 		var sel = getSel();
 		if(sel) {
 			doane(event);

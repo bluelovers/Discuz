@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: admincp_verify.php 17359 2010-10-11 07:56:22Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,7 +15,6 @@ $operation = $operation ? $operation : '';
 $anchor = in_array($_G['gp_anchor'], array('base', 'edit', 'verify', 'verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'authstr', 'refusal', 'pass')) ? $_G['gp_anchor'] : 'base';
 $current = array($anchor => 1);
 $navmenu = array();
-
 
 if($operation == 'verify') {
 	loadcache('profilesetting');
@@ -465,6 +464,9 @@ EOF;
 		showtablefooter();
 		showformfooter();
 	} else {
+		foreach( $_G['setting']['verify'] AS $key => $value) {
+			$_G['setting']['verify'][$key]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['icon']);
+		}
 		$verifynew = getgpc('verify');
 		if($_FILES['iconnew']) {
 			$data = array('extid' => "$vid");
@@ -472,9 +474,7 @@ EOF;
 		} else {
 			$iconnew = $_G['gp_iconnew'];
 		}
-		if($iconnew) {
-			$verifynew['icon'] = $iconnew;
-		}
+		$verifynew['icon'] = $iconnew;
 		if($_G['gp_deleteicon']) {
 			$valueparse = parse_url($verifyarr['icon']);
 			if(!isset($valueparse['host']) && preg_match('/^'.preg_quote($_G['setting']['attachurl'].'common/', '/').'/', $verifyarr['icon'])) {
@@ -494,19 +494,19 @@ EOF;
 		if(!empty($verifynew['field']['birthcity'])) {
 			$verifynew['field']['birthprovince'] = 'birthprovince';
 		}
-
 		$_G['setting']['verify'][$vid] = $verifynew;
 		$_G['setting']['verify']['enabled'] = false;
 		for($i = 1; $i <= 5; $i++) {
-			if($_G['setting']['verify'][$i]['available']) {
+			if($_G['setting']['verify'][$i]['available'] && !$_G['setting']['verify']['enabled']) {
 				$_G['setting']['verify']['enabled'] = true;
-				break;
 			}
+			$_G['setting']['verify'][$i]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $_G['setting']['verify'][$i]['icon']);
 		}
 		$setting = array(
 			'skey' => 'verify',
 			'svalue' => addslashes(serialize($_G['setting']['verify']))
 		);
+
 		DB::insert('common_setting', $setting, 0, true);
 		updatecache(array('setting'));
 		cpmsg('members_verify_update_succeed', 'action=verify', 'succeed');
@@ -525,6 +525,9 @@ EOF;
 		showformheader("verify");
 		showtableheader('members_verify_setting', 'fixpadding');
 		showsubtitle(array('members_verify_available', 'members_verify_id', 'members_verify_title', ''), 'header');
+		foreach( $_G['setting']['verify'] AS $key => $value) {
+			$_G['setting']['verify'][$key]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['icon']);
+		}
 		for($i = 1; $i <= 5; $i++) {
 			$verificon = '';
 			if($_G['setting']['verify'][$i]['icon']) {
@@ -535,7 +538,7 @@ EOF;
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[verify][$i][available]\" value=\"1\" ".($_G['setting']['verify'][$i]['available'] ? 'checked' : '')." />",
 				'verify'.$i,
 				"<input type=\"text\" class=\"txt\" size=\"8\" name=\"settingnew[verify][$i][title]\" value=\"{$_G['setting']['verify'][$i]['title']}\">".
-					($verificon ? '<img src="'.$verificon.'" />' : ''),
+					($verificon ? '<img src="'.$_G['setting']['attachurl'].'common/'.$verificon.'" />' : ''),
 				"<a href=\"".ADMINSCRIPT."?action=verify&operation=edit&anchor=base&vid=$i\">".$lang['edit']."</a>"
 			));
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 13886 2010-08-03 01:06:21Z monkey $
+ *      $Id: forum_rss.php 17326 2010-10-09 01:50:49Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -133,7 +133,7 @@ function updatersscache($num) {
 				}
 				$thread['message'] = $post['message'];
 				$thread['status'] = $post['status'];
-				$thread['description'] = $thread['readperm'] > 0 || $thread['price'] > 0 || $thread['status'] & 1 ? '' : addslashes(nl2br(messagecutstr($thread['message'], 250 - strlen($attachdata))).$attachdata);
+				$thread['description'] = $thread['readperm'] > 0 || $thread['price'] > 0 || $thread['status'] & 1 ? '' : addslashes(messagecutstr($thread['message'], 250 - strlen($attachdata)).$attachdata);
 				DB::query("REPLACE INTO ".DB::table('forum_rsscache')." (lastupdate, fid, tid, dateline, forum, author, subject, description)
 					VALUES ('$_G[timestamp]', '$fid', '$thread[tid]', '$thread[dateline]', '$forum[name]', '$thread[author]', '$thread[subject]', '$thread[description]')");
 			}

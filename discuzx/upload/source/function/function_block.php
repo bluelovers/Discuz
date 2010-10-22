@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 17191 2010-09-26 04:05:16Z zhangguosheng $
+ *      $Id: function_block.php 17511 2010-10-20 06:31:12Z zhangguosheng $
  */
 
 function block_script($blockclass, $script) {
@@ -185,7 +185,7 @@ function block_updatecache($bid, $forceupdate=false) {
 		$theclass = block_getclass($block['blockclass']);
 		$thestyle = !empty($block['styleid']) ? block_getstyle($block['styleid']) : unserialize($block['blockstyle']);
 
-		if(in_array($block['blockclass'], array('forum_thread', 'group_thread', 'space_blog', 'space_pic', 'portal_article'))) {
+		if(in_array($block['blockclass'], array('forum_thread', 'forum_attachment', 'group_thread', 'group_attachment', 'space_blog', 'space_pic', 'portal_article'))) {
 			$datalist = array();
 			$mapping = array('forum_thread'=>'tid', 'group_thread'=>'tid', 'space_blog'=>'blogid', 'space_blog'=>'picid', 'portal_article'=>'aid');
 			$idtype = $mapping[$block['blockclass']];
@@ -757,7 +757,7 @@ function blockclass_cache() {
 		$blockclass['subs'] = array();
 
 		$dh = opendir($dir);
-		while(($filename=readdir($dh))) {
+		while(($filename = readdir($dh))) {
 			$match = $info = $fieldsconvert = array();
 			$scriptname = $scriptclass = '';
 			if(preg_match('/^(block_[\w]+)\.php$/i', $filename, $match)) {

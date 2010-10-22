@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_medal_daily.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: cron_medal_daily.php 17509 2010-10-20 06:16:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ $medalnewarray = array();
 $query = DB::query("SELECT me.id, me.uid, me.medalid, me.expiration, mf.medals
 					FROM ".DB::table('forum_medallog')." me
 					LEFT JOIN ".DB::table('common_member_field_forum')." mf USING (uid)
-					WHERE me.status=1 AND me.expiration<".TIMESTAMP);
+					WHERE me.status=1 AND me.expiration>'0' AND me.expiration<".TIMESTAMP);
 
 while($medalnew = DB::fetch($query)) {
 	$medalsnew = array();

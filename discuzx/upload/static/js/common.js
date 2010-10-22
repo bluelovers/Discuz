@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17196 2010-09-26 06:27:21Z monkey $
+	$Id: common.js 17464 2010-10-19 08:00:34Z zhangguosheng $
 */
 
 var BROWSER = {};
@@ -1319,7 +1319,9 @@ function showWindow(k, url, mode, cache, menuv) {
 			menuObj.act = $(url).action;
 			ajaxpost(url, 'fwin_content_' + k, '', '', '', function() {initMenu();show();});
 		}
-		loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> 請稍候...')}, 500);
+		if(parseInt(BROWSER.ie) != 6) {
+			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> 請稍候...')}, 500);
+		}
 	};
 	var initMenu = function() {
 		clearTimeout(loadingst);
@@ -2230,11 +2232,24 @@ function initTab(frameId, type) {
 		var li = document.createElement('li');
 		li.id = tabId;
 		li.className = counter ? '' : 'a';
+		var reg = new RegExp('style=\"(.*?)\"', 'gi');
+		var matchs = '', style = '', imgs = '';
+		while((matchs = reg.exec(arrTab[i].innerHTML))) {
+			if(matchs[1].substr(matchs[1].length,1) != ';') {
+				matchs[1] += ';';
+			}
+			style += matchs[1];
+		}
+		style = style ? ' style="'+style+'"' : '';
+		reg = new RegExp('(<img.*?>)', 'gi');
+		while((matchs = reg.exec(arrTab[i].innerHTML))) {
+			imgs += matchs[1];
+		}
 		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
 		var a = arrTab[i].getElementsByTagName('a');
 		var href = a && a[0] ? a[0].href : 'javascript:;';
 		var onclick = type == 'click' ? ' onclick="return false;"' : '';
-		li.innerHTML = '<a href="'+href+'"'+onclick+' onfocus="this.blur();">'+li.innerHTML+'</a>';
+		li.innerHTML = '<a href="' + href + '"' + onclick + ' onfocus="this.blur();" ' + style + '>' + imgs + li.innerHTML + '</a>';
 		_attachEvent(li, type, switchTabUl);
 		tab.appendChild(li);
 		$(frameId+'_title').removeChild(arrTab[i]);

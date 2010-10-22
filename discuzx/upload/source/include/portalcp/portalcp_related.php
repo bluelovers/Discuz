@@ -10,7 +10,6 @@
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-require_once libfile('function/portalcp');
 
 $op = in_array($_GET['op'], array('manual','search','add','get')) ? $_GET['op'] : '';
 $aid = intval($_G['gp_aid']);
@@ -102,22 +101,4 @@ if($op == 'manual') {
 }
 $category = category_showselect('portal', 'searchcate', false, $_G[gp_searchcate]);
 include_once template("portal/portalcp_related_article");
-
-function check_articleperm($catid,$aid=0) {
-	global $_G;
-
-	if(empty($catid) && empty($aid)) showmessage('article_category_empty');
-
-	if($_G['group']['allowmanagearticle'] || (empty($aid) && $_G['group']['allowpostarticle'])) {
-		return true;
-	}
-
-	$permission = getallowcategory($_G['uid']);
-	if(isset($permission[$catid])) {
-		if($permission[$catid]['allowmanage'] || (empty($aid) && $permission[$catid]['allowpublish'])) {
-			return true;
-		}
-	}
-	showmessage('article_edit_nopermission');
-}
 ?>

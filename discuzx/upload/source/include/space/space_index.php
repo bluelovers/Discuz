@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_index.php 17029 2010-09-19 06:08:14Z zhengqingpeng $
+ *      $Id: space_index.php 17496 2010-10-20 03:03:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,11 +64,6 @@ if ($_GET['op'] == 'getmusiclist') {
 
 }else{
 
-	$widths = getlayout($userdiy['currentlayout']);
-	$leftlist = formatdata($userdiy, 'left');
-	$centerlist = formatdata($userdiy, 'center');
-	$rightlist = formatdata($userdiy, 'right');
-
 	if($_G['setting']['realname'] && empty($_G['setting']['name_allowviewspace']) && $_G['adminid'] != 1) {
 		space_merge($space, 'profile');
 		if(!empty($space['realname'])) {
@@ -108,6 +103,17 @@ if ($_GET['op'] == 'getmusiclist') {
 		updatecreditbyaction('visit', 0, array(), $space['uid']);
 	}
 
+	if($do != 'profile' && !ckprivacy($do, 'view')) {
+		$_G['privacy'] = 1;
+		require_once libfile('space/profile', 'include');
+		include template('home/space_privacy');
+		exit();
+	}
+	$widths = getlayout($userdiy['currentlayout']);
+	$leftlist = formatdata($userdiy, 'left');
+	$centerlist = formatdata($userdiy, 'center');
+	$rightlist = formatdata($userdiy, 'right');
+
 	dsetcookie('home_diymode', 1);
 }
 
@@ -120,7 +126,7 @@ function formatdata($data, $position) {
 	$groupstatus = getglobal('setting/groupstatus');
 	$list = array();
 	foreach ((array)$data['block']['frame`frame1']['column`frame1_'.$position] as $blockname => $blockdata) {
-		if (strpos($blockname, 'block`') === false) continue;
+		if (strpos($blockname, 'block`') === false || empty($blockdata) || !isset($blockdata['attr']['name'])) continue;
 		$name = $blockdata['attr']['name'];
 		if($groupstatus && $name == 'group' || $name != 'group') {
 			$list[$name] = getblockhtml($name, $data['parameters'][$name]);
