@@ -23,15 +23,7 @@
 	<!--{if $special === null}-->
 		<em>{lang post_forum_navigation}</em>
 	<!--{else}-->
-		<!--{block actiontitle}-->
-			<!--{if $special == 1}-->{lang post_newthreadpoll}
-			<!--{elseif $special == 2}-->{lang post_newthreadtrade}
-			<!--{elseif $special == 3}-->{lang post_newthreadreward}
-			<!--{elseif $special == 4}-->{lang post_newthreadactivity}
-			<!--{elseif $special == 5}-->{lang post_newthreaddebate}
-			<!--{else}-->{lang send_posts}
-			<!--{/if}-->
-		<!--{/block}-->
+		<!--{block actiontitle}--><!--{if $special == 1}-->{lang post_newthreadpoll}<!--{elseif $special == 2}-->{lang post_newthreadtrade}<!--{elseif $special == 3}-->{lang post_newthreadreward}<!--{elseif $special == 4}-->{lang post_newthreadactivity}<!--{elseif $special == 5}-->{lang post_newthreaddebate}<!--{else}-->{lang send_posts}<!--{/if}--><!--{/block}-->
 		<em>$actiontitle</em>
 	<!--{/if}-->
 	<!--{if !empty($_G['gp_infloat'])}-->
@@ -46,10 +38,10 @@
 			<!--{if $special === null}-->
 				<button id="postbtn" class="pn pnc y" onclick="hideWindow('nav');showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=' + selectfid)" disabled="disabled"><span>{lang send_posts}</span></button>
 			<!--{else}-->
-				<button id="postbtn" class="pn pnc y" onclick="hideWindow('nav');window.location.href='forum.php?mod=post&action=newthread&fid=' + selectfid + '&special=$_G[gp_special]'" disabled="disabled"><span>$actiontitle</span></button>
+				<button id="postbtn" class="pn pnc y" onclick="hideWindow('nav');window.location.href='forum.php?mod=post&action=newthread&fid=' + selectfid + '&special=$special'" disabled="disabled"><span>$actiontitle</span></button>
 			<!--{/if}-->
 		<!--{/if}-->
-		<span class="pbnv">$_G['setting']['bbname']<span id="pbnv"></span> <a id="enterbtn" class="xi2" href="javascript:;" onclick="locationforums(currentblock, currentfid)">[{lang nav_forum}]</a></span>
+		<span class="pbnv">$_G['setting']['bbname']<span id="pbnv"></span> <a id="enterbtn" class="xg1" href="javascript:;" onclick="locationforums(currentblock, currentfid)">[{lang nav_forum}]</a></span>
 	</p>
 	<ul class="pbl cl">
 		<li id="block_group"></li>
@@ -84,11 +76,11 @@ function switchforums(obj, block, fid) {
 	}
 	var s = '';
 	if(fid != 'common') {
-		$('enterbtn').removeAttribute("disabled");
+		$('enterbtn').className = 'xi2';
 		currentblock = block;
 		currentfid = fid;
 	} else {
-		$('enterbtn').setAttribute("disabled", "disabled");
+		$('enterbtn').className = 'xg1';
 	}
 	if(block == 1) {
 		var lis = $('fs_forum_' + fid).getElementsByTagName('LI');
@@ -103,6 +95,7 @@ function switchforums(obj, block, fid) {
 		switchforum = switchsubforum = '';
 		selectfid = 0;
 		$('postbtn').setAttribute("disabled", "disabled");
+		$('postbtn').className = 'pn xg1 y';
 	} else if(block == 2) {
 		selectfid = fid;
 		if($('fs_subforum_' + fid)) {
@@ -118,10 +111,12 @@ function switchforums(obj, block, fid) {
 		switchforum = obj.innerHTML;
 		switchsubforum = '';
 		$('postbtn').removeAttribute("disabled");
+		$('postbtn').className = 'pn pnc y';
 	} else {
 		selectfid = fid;
 		switchsubforum = obj.innerHTML;
 		$('postbtn').removeAttribute("disabled");
+		$('postbtn').className = 'pn pnc y';
 	}
 	lastswitchobj = obj;
 	$('pbnv').innerHTML = switchforum ? '&nbsp;&gt;&nbsp;' + switchforum + (switchsubforum ? '&nbsp;&gt;&nbsp;' + switchsubforum : '') : '';

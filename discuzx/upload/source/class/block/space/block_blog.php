@@ -91,6 +91,7 @@ class block_blog {
 				'uid' => array('name' => lang('blockclass', 'blockclass_blog_field_uid'), 'formtype' => 'text', 'datatype' => 'int'),
 				'username' => array('name' => lang('blockclass', 'blockclass_blog_field_username'), 'formtype' => 'text', 'datatype' => 'string'),
 				'avatar' => array('name' => lang('blockclass', 'blockclass_blog_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar_middle' => array('name' => lang('blockclass', 'blockclass_blog_field_avatar_middle'), 'formtype' => 'text', 'datatype' => 'string'),
 				'avatar_big' => array('name' => lang('blockclass', 'blockclass_blog_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'replynum' => array('name' => lang('blockclass', 'blockclass_blog_field_replynum'), 'formtype' => 'text', 'datatype' => 'int'),
 				'viewnum' => array('name' => lang('blockclass', 'blockclass_blog_field_viewnum'), 'formtype' => 'text', 'datatype' => 'int'),
@@ -188,7 +189,7 @@ class block_blog {
 		if($uids) {
 			$wheres[] = 'b.uid IN ('.dimplode($uids).')';
 		}
-		if($catid) {
+		if($catid && !in_array('0', $catid)) {
 			$wheres[] = 'b.catid IN ('.dimplode($catid).')';
 		}
 		if($hours) {
@@ -230,8 +231,9 @@ class block_blog {
 					'dateline'=>$data['dateline'],
 					'uid'=>$data['uid'],
 					'username'=>$data['username'],
-					'avatar' => avatar($data['uid'], 'small', true),
-					'avatar_big' => avatar($data['uid'], 'middle', true),
+					'avatar' => avatar($data['uid'], 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar($data['uid'], 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar($data['uid'], 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'replynum'=>$data['replynum'],
 					'viewnum'=>$data['viewnum'],
 					'click1'=>$data['click1'],

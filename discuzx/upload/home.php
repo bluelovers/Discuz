@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home.php 16805 2010-09-15 03:56:11Z zhangguosheng $
+ *      $Id: home.php 21671 2011-04-07 06:21:13Z zhangguosheng $
  */
 
 define('APPTYPEID', 1);
@@ -19,14 +19,14 @@ require_once './source/function/function_home.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('magic','userapp','usergroups');
+$cachelist = array('magic','userapp','usergroups', 'diytemplatenamehome');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 
 $space = array();
 
 $mod = getgpc('mod');
-if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'userapp', 'invite', 'task', 'medal'))) {
+if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'invite', 'task', 'medal', 'rss'))) {
 	$mod = 'space';
 	$_GET['do'] = 'home';
 }

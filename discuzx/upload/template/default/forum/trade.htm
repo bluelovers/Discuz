@@ -64,9 +64,9 @@
 								<!--{if $trade['transport'] == 4}--><input type="hidden" name="transport" value="4">{lang post_trade_transport_physical}<!--{/if}-->
 								</p>
 								<!--{if $trade['transport'] == 1 or $trade['transport'] == 2 or $trade['transport'] == 4}-->
-									<!--{if !empty($trade['ordinaryfee'])}--> <label><input class="pr" type="radio" name="fee" value="1" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[ordinaryfee];calcsum()"{/if} /> {lang post_trade_transport_mail} $trade[ordinaryfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[ordinaryfee]</script><!--{/if}--><!--{/if}-->
-									<!--{if !empty($trade['expressfee'])}--> <label><input class="pr" type="radio" name="fee" value="3" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[expressfee];calcsum()"{/if} /> {lang post_trade_transport_express} $trade[expressfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[expressfee]</script><!--{/if}--><!--{/if}-->
-									<!--{if !empty($trade['emsfee'])}--> <label><input class="pr" type="radio" name="fee" value="2" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[emsfee];calcsum()"{/if} /> EMS $trade[emsfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[emsfee]</script><!--{/if}--><!--{/if}-->
+									<!--{if !empty($trade['ordinaryfee'])}--><label class="lb"><input class="pr" type="radio" name="fee" value="1" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[ordinaryfee];calcsum()"{/if} />{lang post_trade_transport_mail} $trade[ordinaryfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[ordinaryfee]</script><!--{/if}--><!--{/if}-->
+									<!--{if !empty($trade['expressfee'])}--><label class="lb"><input class="pr" type="radio" name="fee" value="3" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[expressfee];calcsum()"{/if} />{lang post_trade_transport_express} $trade[expressfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[expressfee]</script><!--{/if}--><!--{/if}-->
+									<!--{if !empty($trade['emsfee'])}--><label class="lb"><input class="pr" type="radio" name="fee" value="2" checked="checked" {if $trade['transport'] == 2}onclick="feevalue = $trade[emsfee];calcsum()"{/if} /> EMS $trade[emsfee] {lang payment_unit}</label><!--{if $trade['transport'] == 2}--><script type="text/javascript">feevalue = $trade[emsfee]</script><!--{/if}--><!--{/if}-->
 								<!--{/if}-->
 							</td>
 						</tr>
@@ -74,11 +74,12 @@
 							<th>{lang trade_paymethod}</th>
 							<td>
 								<!--{if !$_G['uid']}-->
-									<label><input type="hidden" name="offline" value="0" checked="checked" /> {lang trade_pay_alipay}</label>
+									<label><input type="hidden" name="offline" value="0" checked="checked" />{lang trade_pay_alipay}</label>
 								<!--{elseif !$trade['account'] && !$trade['tenpayaccount']}-->
-									<input type="hidden" name="offline" value="1" checked="checked" /> {lang trade_pay_offline}
+									<input type="hidden" name="offline" value="1" checked="checked" />{lang trade_pay_offline}
 								<!--{else}-->
-									<label><input type="radio" class="pr" name="offline" value="0" checked="checked" /> {lang trade_pay_alipay}</label> <label><input type="radio" class="pr" name="offline" value="1" /> {lang trade_pay_offline}</label>
+									<label class="lb"><input type="radio" class="pr" name="offline" value="0" checked="checked" />{lang trade_pay_alipay}</label>
+									<label class="lb"><input type="radio" class="pr" name="offline" value="1" />{lang trade_pay_offline}</label>
 								<!--{/if}-->
 							</td>
 						</tr>
@@ -120,7 +121,7 @@
 						<tr>
 							<th>&nbsp;</th>
 							<td class="pns">
-								<button class="pn pnp" type="submit" id="tradesubmit" name="tradesubmit" value="true"><span>{lang trade_buy_confirm}</span></button>
+								<button class="pn pnc" type="submit" id="tradesubmit" name="tradesubmit" value="true"><span>{lang trade_buy_confirm}</span></button>
 								<!--{if !$_G['uid']}--><em class="xg2">{lang trade_guest_alarm}</em><!--{/if}-->
 							</td>
 						</tr>
@@ -136,6 +137,7 @@
 				v = (credit * $('tradepost').number.value + feevalue);
 				if(v > currentcredit) {
 					$('crediterror').innerHTML = '{lang trade_buy_crediterror}';
+					$('tradesubmit').disabled = true;
 				} else {
 					$('crediterror').innerHTML = '';
 				}

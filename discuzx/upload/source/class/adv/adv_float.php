@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_float.php 14249 2010-08-10 01:33:04Z monkey $
+ *      $Id: adv_float.php 19237 2010-12-23 04:27:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,6 +33,11 @@ class adv_float {
 				'type' => 'mselect',
 				'value' => array(),
 			),
+			'category' => array(
+				'title' => 'float_category',
+				'type' => 'mselect',
+				'value' => array(),
+			),
 			'position' => array(
 				'title' => 'float_position',
 				'type' => 'mradio',
@@ -58,8 +63,21 @@ class adv_float {
 				}
 			}
 		}
-
+		loadcache('portalcategory');
+		$this->categoryvalue[] = array(-1, 'float_index');
+		$this->getcategory(0);
+		$settings['category']['value'] = $this->categoryvalue;
 		return $settings;
+	}
+
+	function getcategory($upid) {
+		global $_G;
+		foreach($_G['cache']['portalcategory'] as $category) {
+			if($category['upid'] == $upid) {
+				$this->categoryvalue[] = array($category['catid'], str_repeat('&nbsp;', $category['level'] * 4).$category['catname']);
+				$this->getcategory($category['catid']);
+			}
+		}
 	}
 
 	function setsetting(&$advnew, &$parameters) {
@@ -73,6 +91,9 @@ class adv_float {
 		if(is_array($parameters['extra']['groups']) && in_array(0, $parameters['extra']['groups'])) {
 			$parameters['extra']['groups'] = array();
 		}
+		if(is_array($parameters['extra']['category']) && in_array(0, $parameters['extra']['category'])) {
+			$parameters['extra']['category'] = array();
+		}
 	}
 
 	function evalcode() {
@@ -81,6 +102,7 @@ class adv_float {
 			if($params[2] != $parameter[\'position\']
 			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !(in_array($_G[\'fid\'], $parameter[\'fids\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'fids\']))
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !(in_array($_G[\'grouptypeid\'], $parameter[\'groups\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'groups\']))
+			|| $_G[\'basescript\'] == \'portal\' && $parameter[\'category\'] && !(!empty($_G[\'catid\']) && in_array($_G[\'catid\'], $parameter[\'category\']) || empty($_G[\'catid\']) && in_array(-1, $parameter[\'category\']))
 			) {
 				$checked = false;
 			}',

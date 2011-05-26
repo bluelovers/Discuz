@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_feed.php 14940 2010-08-17 07:22:23Z zhangguosheng $
+ *      $Id: spacecp_feed.php 20083 2011-02-14 02:48:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ if($_GET['op'] == 'delete') {
 		if(deletefeeds(array($feedid))) {
 			showmessage('do_success', dreferer(), array('feedid' => $feedid));
 		} else {
-			showmessage('no_privilege');
+			showmessage('no_privilege_feed_del');
 		}
 	}
 } elseif($_GET['op'] == 'ignore') {

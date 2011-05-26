@@ -5,7 +5,7 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
+		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=doing">{lang doing}</a>
 		<!--{if $_GET['view']=='me'}-->
 		 <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=doing&view=me">{$space[username]}{lang somebody_doing}</a>
@@ -45,9 +45,9 @@
 				<!--{template home/space_doing_form}-->
 				<!--{hook/space_doing_bottom}-->
 				<ul class="tb cl">
-					<li$actives[we]><a href="home.php?mod=space&uid=$space[uid]&do=$do&view=we">{lang me_friend_doing}</a></li>
-					<li$actives[me]><a href="home.php?mod=space&uid=$space[uid]&do=$do&view=me">{lang doing_view_me}</a></li>
-					<li$actives[all]><a href="home.php?mod=space&uid=$space[uid]&do=$do&view=all">{lang view_all}</a></li>
+					<li$actives[we]><a href="home.php?mod=space&do=$do&view=we">{lang me_friend_doing}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&do=$do&view=me">{lang doing_view_me}</a></li>
+					<li$actives[all]><a href="home.php?mod=space&do=$do&view=all">{lang view_all}</a></li>
 				</ul>
 			</div>
 		<!--{else}-->
@@ -109,7 +109,7 @@
 			<p class="emp">{lang doing_no_replay}<!--{if $space[self]}-->{lang doing_now}<!--{/if}--></p>
 		<!--{/if}-->
 
-		
+
 <!--{if empty($diymode)}-->
 		</div>
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->

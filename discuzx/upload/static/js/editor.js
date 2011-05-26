@@ -2,16 +2,10 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 17307 2010-09-30 01:21:17Z monkey $
+	$Id: editor.js 22686 2011-05-17 08:27:15Z monkey $
 */
 
-var DISCUZCODE = [];
-DISCUZCODE['num'] = '-1';
-DISCUZCODE['html'] = [];
-var editorcurrentheight = 400;
-var savedataInterval = 30;
-
-var editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
+var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
 
 function newEditor(mode, initialtext) {
 	wysiwyg = parseInt(mode);
@@ -31,6 +25,8 @@ function newEditor(mode, initialtext) {
 		} else {
 			var iframe = document.createElement('iframe');
 			iframe.frameBorder = '0';
+			iframe.tabIndex = 2;
+			iframe.hideFocus = true;
 			iframe.style.display = 'none';
 			editbox = textobj.parentNode.appendChild(iframe);
 			editbox.id = editorid + '_iframe';
@@ -48,7 +44,6 @@ function newEditor(mode, initialtext) {
 	}
 	setEditorEvents();
 	initEditor();
-	$(editorid + '_body').style.visibility = 'visible';
 }
 
 function setEditorTip(s) {
@@ -65,7 +60,7 @@ function initEditor() {
 		if(buttons[i].id.indexOf(editorid + '_') != -1) {
 			buttons[i].href = 'javascript:;';
 			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
-				buttons[i].innerHTML = !editorisfull ? '全屏' : '恢復';
+				buttons[i].innerHTML = !editorisfull ? '全屏' : '返回';
 				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? '恢復編輯器大小' : '全屏方式編輯');};
 				buttons[i].onclick = function(e) {editorfull();doane();}
 			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
@@ -76,7 +71,9 @@ function initEditor() {
 				if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'url') {
 					buttons[i].onclick = function(e) {discuzcode('unlink');discuzcode('url');doane();};
 				} else {
-					buttons[i].onclick = function(e) {discuzcode(this.id.substr(this.id.indexOf('_') + 1));doane();};
+					if(!buttons[i].getAttribute('init')) {
+						buttons[i].onclick = function(e) {discuzcode(this.id.substr(this.id.indexOf('_') + 1));doane();};
+					}
 				}
 			}
 			buttons[i].onmouseout = function(e) {setEditorTip('');};
@@ -96,9 +93,10 @@ function initEditor() {
 		_attachEvent(window, 'scroll', function () { editorcontrolpos(); }, document);
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
-		$(editorid + '_fullswitcher').onclick = null;
+		$(editorid + '_fullswitcher').onclick = function () {
+			showDialog('你的瀏覽器不支持此功能，請升級瀏覽器版本', 'notice', '友情提示');
+		};
 		$(editorid + '_fullswitcher').className = 'xg1';
-		$(editorid + '_fullswitcher').title = '你的瀏覽器不支持此功能';
 	}
 	if($(editorid + '_svdsecond') && savedatat === null) {
 		savedatac = savedataInterval;
@@ -144,7 +142,7 @@ function editorcontrolpos() {
 		return;
 	}
 	var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
-	if(scrollTop > editorcontroltop && editorcurrentheight > 400) {
+	if(scrollTop > editorcontroltop && editorcurrentheight > editorminheight) {
 		$(editorid + '_controls').style.position = 'fixed';
 		$(editorid + '_controls').style.top = '0px';
 		$(editorid + '_controls').style.width = editorcontrolwidth + 'px';
@@ -167,7 +165,7 @@ function editorsize(op, v) {
 	} else {
 		editorheight = v;
 	}
-	editorcurrentheight = editorheight > 400 ? editorheight : 400;
+	editorcurrentheight = editorheight > editorminheight ? editorheight : editorminheight;
 	if($(editorid + '_iframe')) {
 		$(editorid + '_iframe').style.height = $(editorid + '_iframe').contentWindow.document.body.style.height = editorcurrentheight + 'px';
 	}
@@ -284,7 +282,7 @@ function editorfull(op) {
 	if(iswysiwyg) {
 		switchEditor(1);
 	}
-	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '恢復' : '全屏';
+	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '返回' : '全屏';
 }
 
 function editorsimple() {
@@ -295,7 +293,9 @@ function editorsimple() {
 		$(editorid + '_adv_s0').className = 'b2r';
 		$(editorid + '_adv_s1').className = 'b2r';
 		$(editorid + '_adv_s2').className = 'b2r';
-		$(editorid + '_switcher').style.display = 'none';
+		if(allowswitcheditor) {
+			$(editorid + '_switcher').style.display = 'none';
+		}
 		simplodemode = 1;
 	} else {
 		v = '';
@@ -304,14 +304,56 @@ function editorsimple() {
 		$(editorid + '_adv_s0').className = 'b1r';
 		$(editorid + '_adv_s1').className = 'b1r';
 		$(editorid + '_adv_s2').className = 'b2r nbr';
-		$(editorid + '_switcher').style.display = '';
+		if(allowswitcheditor) {
+			$(editorid + '_switcher').style.display = '';
+		}
 		simplodemode = 0;
 	}
 	setcookie('editormode_' + editorid, simplodemode ? 1 : -1, 2592000);
-	for(i = 1;i <= 8;i++) {
+	for(i = 1;i <= 9;i++) {
 		if($(editorid + '_adv_' + i)) {
 			$(editorid + '_adv_' + i).style.display = v;
 		}
+	}
+}
+
+function pasteWord(str) {
+	var mstest = /<\w[^>]* class="?[MsoNormal|xl]"?/gi;
+	if(mstest.test(str)){
+		str = str.replace(/<!--\[if[\s\S]+?<!\[endif\]-->/gi, "");
+		str = str.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, "<$1$3");
+		str = str.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, function ($1, $2, $3, $4) {
+			var style = '';
+			re = new RegExp('(^|[;\\s])color:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'color:' + match[2] + ';';
+			}
+			re = new RegExp('(^|[;\\s])text-indent:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'text-indent:' + parseInt(parseInt(match[2]) / 10) + 'em;';
+			}
+			re = new RegExp('(^|[;\\s])font-size:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'font-size:' + match[2] + ';';
+			}
+			if(style) {
+				style = ' style="' + style + '"';
+			}
+			return '<' + $2 + style + $4;
+		});
+		htstrml = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
+		str = str.replace(/<\\?\?xml[^>]*>/gi, "");
+		str = str.replace(/<\/?\w+:[^>]*>/gi, "");
+		str = str.replace(/&nbsp;/, " ");
+		var re = new RegExp("(<P)([^>]*>.*?)(<\/P>)", 'ig');
+		str = str.replace(re, "<div$2</div>");
+		if(!wysiwyg) {
+			str = html2bbcode(str);
+		}
+		insertText(str, str.length, 0);
 	}
 }
 
@@ -332,25 +374,29 @@ function ctlent(event) {
 	if(event.keyCode == 8 && wysiwyg) {
 		var sel = getSel();
 		if(sel) {
-			doane(event);
 			insertText('', sel.length - 1, 0);
+			doane(event);
 		}
 	}
 }
 
 function checkFocus() {
-	var obj = wysiwyg ? editwin : textobj;
+	var obj = wysiwyg ? (!BROWSER.chrome ? editwin.document.body : editwin) : textobj;
 	if(!obj.hasfocus) {
-		obj.focus();
-		if(BROWSER.chrome && !obj.safarifocus) {
-			var sel = editwin.getSelection();
-			var node = editdoc.body.lastChild;
-			var range = editdoc.createRange();
-			range.selectNodeContents(node);
-			sel.removeAllRanges();
-			sel.addRange(range);
-			obj.safarifocus = true;
+		if(!BROWSER.safari || BROWSER.chrome) {
+			obj.focus();
 		}
+		try {
+			if(BROWSER.safari && !obj.safarifocus) {
+				var sel = editwin.getSelection();
+				var node = editdoc.body.lastChild;
+				var range = editdoc.createRange();
+				range.selectNodeContents(node);
+				sel.removeAllRanges();
+				sel.addRange(range);
+				obj.safarifocus = true;
+			}
+		} catch(e) {}
 	}
 }
 
@@ -375,7 +421,7 @@ function setUnselectable(obj) {
 function writeEditorContents(text) {
 	if(wysiwyg) {
 		if(text == '' && (BROWSER.firefox || BROWSER.opera)) {
-			text = '<br />';
+			text = '<p></p>';
 		}
 		if(initialized && !(BROWSER.firefox && BROWSER.firefox >= '3' || BROWSER.opera)) {
 			editdoc.body.innerHTML = text;
@@ -398,7 +444,11 @@ function writeEditorContents(text) {
 				editdoc.getElementById('editorheader').appendChild(scriptNode);
 			}
 			editdoc.body.contentEditable = true;
+			editdoc.body.spellcheck = false;
 			initialized = true;
+			if(BROWSER.safari) {
+				editdoc.onclick = safariSel;
+			}
 		}
 	} else {
 		textobj.value = text;
@@ -406,6 +456,16 @@ function writeEditorContents(text) {
 
 	setEditorStyle();
 
+}
+
+function safariSel(e) {
+	e = e.target;
+	if(e.tagName.match(/(img|embed)/i)) {
+		var sel = editwin.getSelection(),rng= editdoc.createRange(true);
+		rng.selectNode(e);
+		sel.removeAllRanges();
+		sel.addRange(rng);
+	}
 }
 
 function getEditorContents() {
@@ -449,7 +509,6 @@ function setEditorEvents() {
 			editdoc.body.attachEvent('onmouseup', setContext);
 			editdoc.body.attachEvent('onkeyup', setContext);
 			editdoc.body.attachEvent('onkeydown', ctlent);
-
 		}
 	}
 	editwin.onfocus = function(e) {this.hasfocus = true;};
@@ -513,6 +572,10 @@ function applyFormat(cmd, dialog, argument) {
 			break;
 		case 'forecolor':
 			wrapTags('color', argument);
+			break;
+		case 'hilitecolor':
+		case 'backcolor':
+			wrapTags('backcolor', argument);
 			break;
 	}
 }
@@ -586,7 +649,7 @@ function discuzcode(cmd, arg) {
 
 	checkFocus();
 
-	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor']) && !arg) {
+	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
 	} else if(cmd.substr(0, 3) == 'cst') {
@@ -599,7 +662,7 @@ function discuzcode(cmd, arg) {
 		return;
 	} else if(!wysiwyg && cmd == 'removeformat') {
 		var simplestrip = new Array('b', 'i', 'u');
-		var complexstrip = new Array('font', 'color', 'size');
+		var complexstrip = new Array('font', 'color', 'backcolor', 'size');
 
 		var str = getSel();
 		if(str === false) {
@@ -612,16 +675,24 @@ function discuzcode(cmd, arg) {
 			str = stripComplex(complexstrip[tag], str);
 		}
 		insertText(str);
-	} else if(!wysiwyg && cmd == 'undo') {
+	} else if(cmd == 'undo') {
 		addSnapshot(getEditorContents());
 		moveCursor(-1);
 		if((str = getSnapshot()) !== false) {
-			editdoc.value = str;
+			if(wysiwyg) {
+				editdoc.body.innerHTML = str;
+			} else {
+				editdoc.value = str;
+			}
 		}
-	} else if(!wysiwyg && cmd == 'redo') {
+	} else if(cmd == 'redo') {
 		moveCursor(1);
 		if((str = getSnapshot()) !== false) {
-			editdoc.value = str;
+			if(wysiwyg) {
+				editdoc.body.innerHTML = str;
+			} else {
+				editdoc.value = str;
+			}
 		}
 	} else if(!wysiwyg && in_array(cmd, ['insertorderedlist', 'insertunorderedlist'])) {
 		var listtype = cmd == 'insertorderedlist' ? '1' : '';
@@ -650,6 +721,23 @@ function discuzcode(cmd, arg) {
 		sel = stripSimple('url', sel);
 		sel = stripComplex('url', sel);
 		insertText(sel);
+	} else if(cmd == 'floatleft' || cmd == 'floatright') {
+		var arg = cmd == 'floatleft' ? 'left' : 'right';
+		if(wysiwyg) {
+			if(txt = getSel()) {
+				argm = arg == 'left' ? 'right' : 'left';
+				insertText('<br style="clear: both"><table class="float" style="float: ' + arg + '; margin-' + argm + ': 5px;"><tbody><tr><td>' + txt + '</td></tr></tbody></table>', true);
+			}
+		} else {
+			var opentag = '[float=' + arg + ']';
+			var closetag = '[/float]';
+			if(txt = getSel()) {
+				txt = opentag + txt + closetag;
+				insertText(txt, strlen(txt), 0);
+			} else {
+				insertText(opentag + closetag, opentag.length, closetag.length);
+			}
+		}
 	} else if(cmd == 'rst') {
 		loadData();
 		setEditorTip('數據已恢復');
@@ -662,9 +750,23 @@ function discuzcode(cmd, arg) {
 		if(confirm('您確認要清除所有內容嗎？')) {
 			clearContent();
 		}
+	} else if(cmd == 'downremoteimg') {
+		showDialog('<div id="remotedowninfo"><p class="mbn">正在下載遠程附件，請稍等……</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
+		var message = wysiwyg ? html2bbcode(getEditorContents()) : (!editorform.parseurloff.checked ? parseurl(editorform.message.value) : editorform.message.value);
+		var oldValidate = editorform.onsubmit;
+		var oldAction = editorform.action;
+		editorform.onsubmit = '';
+		editorform.action = 'forum.php?mod=ajax&action=downremoteimg&wysiwyg='+(wysiwyg ? 1 : 0);
+		editorform.target = "ajaxpostframe";
+		editorform.message.value = message;
+		editorform.submit();
+		editorform.onsubmit = oldValidate;
+		editorform.action = oldAction;
+		editorform.target = "";
 	} else {
+		var formatcmd = cmd == 'backcolor' && !BROWSER.ie ? 'hilitecolor' : cmd;
 		try {
-			var ret = applyFormat(cmd, false, (isUndefined(arg) ? true : arg));
+			var ret = applyFormat(formatcmd, false, (isUndefined(arg) ? true : arg));
 		} catch(e) {
 			var ret = false;
 		}
@@ -676,9 +778,10 @@ function discuzcode(cmd, arg) {
 	if(wysiwyg) {
 		setContext(cmd);
 	}
-	if(in_array(cmd, ['bold', 'italic', 'underline', 'strikethrough', 'inserthorizontalrule', 'fontname', 'fontsize', 'forecolor', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', 'removeformat', 'unlink', 'undo', 'redo'])) {
+	if(in_array(cmd, ['bold', 'italic', 'underline', 'strikethrough', 'inserthorizontalrule', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', 'floatleft', 'floatright', 'removeformat', 'unlink', 'undo', 'redo'])) {
 		hideMenu();
 	}
+	doane();
 	return ret;
 }
 
@@ -781,12 +884,15 @@ function formatFontsize(csssize) {
 
 function showEditorMenu(tag, params) {
 	var sel, selection;
-	var str = '';
+	var str = '', strdialog = 0, stitle = '';
 	var ctrlid = editorid + (params ? '_cst' + params + '_' : '_') + tag;
 	var opentag = '[' + tag + ']';
 	var closetag = '[/' + tag + ']';
 	var menu = $(ctrlid + '_menu');
 	var pos = [0, 0];
+	var menuwidth = 270;
+	var menupos = '43!';
+	var menutype = 'menu';
 
 	if(BROWSER.ie) {
 		sel = wysiwyg ? editdoc.selection.createRange() : document.selection.createRange();
@@ -796,7 +902,24 @@ function showEditorMenu(tag, params) {
 	selection = sel ? (wysiwyg ? sel.htmlText : sel.text) : getSel();
 
 	if(menu) {
-		showMenu({'ctrlid':ctrlid,'evt':'click','timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':in_array(tag, ['attach', 'image']) ? ctrlid + '_ctrl' : 1});
+		if($(ctrlid).getAttribute('menupos') !== null) {
+			menupos = $(ctrlid).getAttribute('menupos');
+		}
+		if($(ctrlid).getAttribute('menuwidth') !== null) {
+			menu.style.width = $(ctrlid).getAttribute('menuwidth') + 'px';
+		}
+		if(menupos == '00') {
+			menu.className = 'fwinmask';
+			if($(editorid + '_' + tag + '_menu').style.visibility == 'hidden') {
+				$(editorid + '_' + tag + '_menu').style.visibility = 'visible';
+			} else {
+				showMenu({'ctrlid':ctrlid,'mtype':'win','evt':'click','pos':menupos,'timeout':250,'duration':3,'drag':ctrlid + '_ctrl'});
+			}
+		} else {
+			showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':1});
+		}
+
+
 	} else {
 		switch(tag) {
 			case 'url':
@@ -805,6 +928,9 @@ function showEditorMenu(tag, params) {
 				break;
 			case 'forecolor':
 				showColorBox(ctrlid, 1);
+				return;
+			case 'backcolor':
+				showColorBox(ctrlid, 1, '', 1);
 				return;
 			case 'code':
 				if(wysiwyg) {
@@ -830,13 +956,20 @@ function showEditorMenu(tag, params) {
 				str += '<div id="tbltips_msg" style="display: none">「[tr=顏色]」 定義行背景<br />「[td=寬度]」 定義列寬<br />「[td=列跨度,行跨度,寬度]」 定義行列跨度<br /><br />快速書寫表格範例：<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>用「|」分隔每一列，表格中如有「|」用「\\|」代替，換行用「\\n」代替。</div>';
 				break;
 			case 'aud':
-				str = '<p class="pbn">請輸入音樂文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn"><label for="' + ctrlid + '_param_2"><input type="checkbox" id="' + ctrlid + '_param_2" class="pc" value="1"/> 是否自動播放</label><br /></p><p class="xg2 pbn">支持 wma mp3 ra rm 等音樂格式<br />示例: http://server/audio.wma</p>';
+				str = '<p class="pbn">請輸入音樂文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">支持 wma mp3 ra rm 等音樂格式<br />示例: http://server/audio.wma</p>';
 				break;
 			case 'vid':
-				str = '<p class="pbn">請輸入視頻地址:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="pbn"><label for="' + ctrlid + '_param_4"><input type="checkbox" id="' + ctrlid + '_param_4" class="pc" value="1"/> 是否自動播放</label><br /></p><p class="xg2 pbn">支持優酷、土豆、56、酷6等視頻站的視頻網址<br />支持 wmv avi rmvb mov swf flv 等視頻格式<br />示例: http://server/movie.wmv</p>';
+				str = '<p class="pbn">請輸入視頻地址:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">支持優酷、土豆、56、酷6等視頻站的視頻網址<br />支持 wmv avi rmvb mov swf flv 等視頻格式<br />示例: http://server/movie.wmv</p>';
 				break;
 			case 'fls':
 				str = '<p class="pbn">請輸入 Flash 文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">支持 swf flv 等 Flash 網址<br />示例: http://server/flash.swf</p>';
+				break;
+			case 'pasteword':
+				stitle = '從 Word 粘貼內容';
+				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">請通過快捷鍵(Ctrl+V)把 Word 文件中的內容粘貼到上方</p>';
+				menuwidth = 600;
+				menupos = '00';
+				menutype = 'win';
 				break;
 			default:
 				var haveSel = selection == null || selection == false || in_array(trim(selection), ['', 'null', 'undefined', 'false']) ? 0 : 1;
@@ -856,10 +989,19 @@ function showEditorMenu(tag, params) {
 		menu.id = ctrlid + '_menu';
 		menu.style.display = 'none';
 		menu.className = 'p_pof upf';
-		menu.style.width = (tag == 'tpl' ? 192 : 270) + 'px';
+		menu.style.width = menuwidth + 'px';
+		if(menupos == '00') {
+			menu.className = 'fwinmask';
+			s = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
+				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">關閉</a></span></h3><div class="c">' + str + '</div>'
+				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button></p>'
+				+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
+		} else {
+			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">關閉</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button></div></div>';
+		}
+		menu.innerHTML = s;
 		$(editorid + '_editortoolbar').appendChild(menu);
-		menu.innerHTML = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu()" class="flbc" href="javascript:;">關閉</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button><button type="submit" onClick="hideMenu()" class="pn"><em>取消</em></button></div></div>';
-		showMenu({'ctrlid':ctrlid,'evt':'click','duration':3,'cache':0,'drag':1});
+		showMenu({'ctrlid':ctrlid,'mtype':menutype,'evt':'click','duration':3,'cache':0,'drag':1,'pos':menupos});
 	}
 
 	try {
@@ -960,8 +1102,7 @@ function showEditorMenu(tag, params) {
 				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'aud':
-				var auto = $(ctrlid + '_param_2').checked ? '=1' : '';
-				insertText('[audio' + auto +']' + $(ctrlid + '_param_1').value + '[/audio]', 7, 8, false, sel);
+				insertText('[audio]' + $(ctrlid + '_param_1').value + '[/audio]', 7, 8, false, sel);
 				break;
 			case 'fls':
 				if($(ctrlid + '_param_2').value && $(ctrlid + '_param_3').value) {
@@ -982,8 +1123,7 @@ function showEditorMenu(tag, params) {
 						ext = 'rtsp';
 					}
 				}
-				var auto = $(ctrlid + '_param_4').checked ? ',1' : '';
-				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + auto +']' + mediaUrl + '[/media]';
+				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + ']' + mediaUrl + '[/media]';
 				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'image':
@@ -1001,6 +1141,11 @@ function showEditorMenu(tag, params) {
 					insertText('[img' + style + ']' + src + '[/img]', 0, 0, false, sel);
 				}
 				$(ctrlid + '_param_1').value = '';
+				break;
+			case 'pasteword':
+				pasteWord($(ctrlid + '_param_1').contentWindow.document.body.innerHTML);
+				hideMenu('', 'win');
+				break;
 			default:
 				var first = $(ctrlid + '_param_1').value;
 				if($(ctrlid + '_param_2')) var second = $(ctrlid + '_param_2').value;
@@ -1040,25 +1185,25 @@ function autoTypeset() {
 
 function getSel() {
 	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
+		try {
 			selection = editwin.getSelection();
 			checkFocus();
+			range = selection ? selection.getRangeAt(0) : editdoc.createRange();
+			return readNodes(range.cloneContents(), false);
+		} catch(e) {
 			try {
-				range = selection ? selection.getRangeAt(0) : editdoc.createRange();
-				return readNodes(range.cloneContents(), false);
-			} catch(e) {
-				return;
-			}
-		} else {
-			var range = editdoc.selection.createRange();
-			if(range.htmlText && range.text) {
-				return range.htmlText;
-			} else {
-				var htmltext = '';
-				for(var i = 0; i < range.length; i++) {
-					htmltext += range.item(i).outerHTML;
+				var range = editdoc.selection.createRange();
+				if(range.htmlText && range.text) {
+					return range.htmlText;
+				} else {
+					var htmltext = '';
+					for(var i = 0; i < range.length; i++) {
+						htmltext += range.item(i).outerHTML;
+					}
+					return htmltext;
 				}
-				return htmltext;
+			} catch(e) {
+				return '';
 			}
 		}
 	} else {
@@ -1077,18 +1222,9 @@ function getSel() {
 function insertText(text, movestart, moveend, select, sel) {
 	checkFocus();
 	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
-			applyFormat('removeformat');
-			var fragment = editdoc.createDocumentFragment();
-			var holder = editdoc.createElement('div');
-			holder.innerHTML = text;
-
-			while(holder.firstChild) {
-				fragment.appendChild(holder.firstChild);
-			}
-			insertNodeAtSelection(fragment);
-		} else {
-
+		try {
+			editdoc.execCommand('insertHTML', false, text);
+		} catch(e) {
 			if(!isUndefined(editdoc.selection) && editdoc.selection.type != 'Text' && editdoc.selection.type != 'None') {
 				movestart = false;
 				editdoc.selection.clear();
@@ -1164,6 +1300,42 @@ function stripSimple(tag, str, iterations) {
 		}
 	}
 	return str;
+}
+
+function readNodes(root, toptag) {
+	var html = "";
+	var moz_check = /_moz/i;
+
+	switch(root.nodeType) {
+		case Node.ELEMENT_NODE:
+		case Node.DOCUMENT_FRAGMENT_NODE:
+			var closed;
+			if(toptag) {
+				closed = !root.hasChildNodes();
+				html = '<' + root.tagName.toLowerCase();
+				var attr = root.attributes;
+				for(var i = 0; i < attr.length; ++i) {
+					var a = attr.item(i);
+					if(!a.specified || a.name.match(moz_check) || a.value.match(moz_check)) {
+						continue;
+					}
+					html += " " + a.name.toLowerCase() + '="' + a.value + '"';
+				}
+				html += closed ? " />" : ">";
+			}
+			for(var i = root.firstChild; i; i = i.nextSibling) {
+				html += readNodes(i, true);
+			}
+			if(toptag && !closed) {
+				html += "</" + root.tagName.toLowerCase() + ">";
+			}
+			break;
+
+		case Node.TEXT_NODE:
+			html = htmlspecialchars(root.data);
+			break;
+	}
+	return html;
 }
 
 function stripComplex(tag, str, iterations) {
@@ -1247,96 +1419,6 @@ function setCaretAtEnd() {
 	}
 }
 
-function insertNodeAtSelection(text) {
-	checkFocus();
-
-	var sel = editwin.getSelection();
-	var range = sel ? sel.getRangeAt(0) : editdoc.createRange();
-	sel.removeAllRanges();
-	range.deleteContents();
-
-	var node = range.startContainer;
-	var pos = range.startOffset;
-
-	switch(node.nodeType) {
-		case Node.ELEMENT_NODE:
-			if(text.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-				selNode = text.firstChild;
-			} else {
-				selNode = text;
-			}
-			node.insertBefore(text, node.childNodes[pos]);
-			add_range(selNode);
-			break;
-
-		case Node.TEXT_NODE:
-			if(text.nodeType == Node.TEXT_NODE) {
-				var text_length = pos + text.length;
-				node.insertData(pos, text.data);
-				range = editdoc.createRange();
-				range.setEnd(node, text_length);
-				range.setStart(node, text_length);
-				sel.addRange(range);
-			} else {
-				node = node.splitText(pos);
-				var selNode;
-				if(text.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-					selNode = text.firstChild;
-				} else {
-					selNode = text;
-				}
-				node.parentNode.insertBefore(text, node);
-				add_range(selNode);
-			}
-			break;
-	}
-}
-
-function add_range(node) {
-	checkFocus();
-	var sel = editwin.getSelection();
-	var range = editdoc.createRange();
-	range.selectNodeContents(node);
-	sel.removeAllRanges();
-	sel.addRange(range);
-}
-
-function readNodes(root, toptag) {
-	var html = "";
-	var moz_check = /_moz/i;
-
-	switch(root.nodeType) {
-		case Node.ELEMENT_NODE:
-		case Node.DOCUMENT_FRAGMENT_NODE:
-			var closed;
-			if(toptag) {
-				closed = !root.hasChildNodes();
-				html = '<' + root.tagName.toLowerCase();
-				var attr = root.attributes;
-				for(var i = 0; i < attr.length; ++i) {
-					var a = attr.item(i);
-					if(!a.specified || a.name.match(moz_check) || a.value.match(moz_check)) {
-						continue;
-					}
-					html += " " + a.name.toLowerCase() + '="' + a.value + '"';
-				}
-				html += closed ? " />" : ">";
-			}
-			for(var i = root.firstChild; i; i = i.nextSibling) {
-				html += readNodes(i, true);
-			}
-			if(toptag && !closed) {
-				html += "</" + root.tagName.toLowerCase() + ">";
-			}
-			break;
-
-		case Node.TEXT_NODE:
-			html = htmlspecialchars(root.data);
-			break;
-	}
-	return html;
-}
-
 function moveCursor(increment) {
 	var test = cursor + increment;
 	if(test >= 0 && stack[test] != null && !isUndefined(stack[test])) {
@@ -1363,4 +1445,25 @@ function getSnapshot() {
 	} else {
 		return false;
 	}
+}
+
+function loadimgsize(imgurl, editor, p) {
+	var editor = !editor ? editorid : editor;
+	var s = new Object();
+	var p = !p ? '_image' : p;
+	s.img = new Image();
+	s.img.src = imgurl;
+	s.loadCheck = function () {
+		if(s.img.complete) {
+			$(editor + p + '_param_2').value = s.img.width ? s.img.width : '';
+			$(editor + p + '_param_3').value = s.img.height ? s.img.height : '';
+		} else {
+			setTimeout(function () {s.loadCheck();}, 100);
+		}
+	};
+	s.loadCheck();
+}
+
+if(typeof jsloaded == 'function') {
+	jsloaded('editor');
 }

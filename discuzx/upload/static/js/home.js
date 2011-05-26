@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 16010 2010-08-31 00:34:55Z monkey $
+	$Id: home.js 22765 2011-05-20 03:06:12Z zhengqingpeng $
 */
 
 var note_step = 0;
@@ -71,7 +71,8 @@ function checkAll(form, name) {
 }
 
 function cnCode(str) {
-	str = str.replace(/&|<|"|>/ig, '', str);
+	str = str.replace(/<\/?[^>]+>|\[\/?.+?\]|"/ig, "");
+	str = str.replace(/\s{2,}/ig, ' ');
 	return BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(str) : str;
 }
 
@@ -261,6 +262,8 @@ function showFlash(host, flashvar, obj, shareid) {
 	    + '<param name="movie" value="FLASHADDR" />'
 	    + '<param name="quality" value="high" />'
 	    + '<param name="bgcolor" value="#FFFFFF" />'
+	    + '<param name="allowScriptAccess" value="none" />'
+	    + '<param name="allowNetworking" value="internal" />'
 	    + '<embed width="480" height="400" menu="false" quality="high" src="FLASHADDR" type="application/x-shockwave-flash" />'
 	    + '</object>';
 	var videoFlash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="480" height="450">'
@@ -1039,6 +1042,74 @@ function succeedhandle_pmsend(locationhref, message, param) {
 	ajaxget('home.php?mod=spacecp&ac=pm&op=viewpmid&pmid=' + param['pmid'], 'pm_append', 'ajaxwaitid', '', null, 'pmsendappend()');
 }
 
+function getchatpmappendmember() {
+	var users = document.getElementsByName('users[]');
+	var appendmember = '';
+	if(users.length) {
+		var comma = '';
+		for(var i = 0; i < users.length; i++) {
+			appendmember += comma + users[i].value;
+			if(!comma) {
+				comma = ',';
+			}
+		}
+	}
+	if($('username').value) {
+		appendmember = appendmember ? (appendmember + ',' + $('username').value) : $('username').value;
+	}
+	var href = $('a_appendmember').href + '&memberusername=' + appendmember;
+	showWindow('a_appendmember', href, 'get', 0);
+}
+
+function markreadpm(markreadids) {
+	var markreadidarr = markreadids.split(',');
+	if(markreadidarr.length > 0) {
+		for(var i = 0; i < markreadidarr.length; i++) {
+			$(markreadidarr[i]).className = 'bbda cl';
+		}
+	}
+}
+
+function setpmstatus(form) {
+	var ids_gpmid = new Array();
+	var ids_plid = new Array();
+	var type = '';
+	var requesturl = '';
+	var markreadids = new Array();
+
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(e.id && e.id.match('a_delete') && e.checked) {
+			var idarr = new Array();
+			idarr = e.id.split('_');
+			if(idarr[1] == 'deleteg') {
+				ids_gpmid.push(idarr[2]);
+				markreadids.push('gpmlist_' + idarr[2]);
+			} else if(idarr[1] == 'delete') {
+				ids_plid.push(idarr[2]);
+				markreadids.push('pmlist_' + idarr[2]);
+			}
+		}
+	}
+
+	if(ids_gpmid.length > 0) {
+		requesturl += '&gpmids=' + ids_gpmid.join(',');
+	}
+	if(ids_plid.length > 0) {
+		requesturl += '&plids=' + ids_plid.join(',');
+	}
+
+	if(requesturl) {
+		ajaxget('home.php?mod=spacecp&ac=pm&op=setpmstatus' + requesturl, '', 'ajaxwaitid', '', 'none', 'markreadpm(\''+ markreadids.join(',') +'\')');
+	}
+}
+
+function changedeletedpm(pmid) {
+	$('pmlist_' + pmid).style.display = 'none';
+	var membernum = parseInt($('membernum').innerHTML);
+	$('membernum').innerHTML = membernum - 1;
+}
+
 function changeOrderRange(id) {
 	if(!$(id)) return false;
 	var url = window.location.href;
@@ -1053,5 +1124,38 @@ function changeOrderRange(id) {
 			window.location = url;
 			return false;
 		}
+	}
+}
+
+function addBlockLink(id, tag) {
+	if(!$(id)) return false;
+	var a = $(id).getElementsByTagName(tag);
+	var taglist = {'A':1, 'INPUT':1, 'IMG':1};
+	for(var i = 0, len = a.length; i < len; i++) {
+		a[i].onmouseover = function () {
+			if(this.className.indexOf(' hover') == -1) {
+				this.className = this.className + ' hover';
+			}
+		};
+		a[i].onmouseout = function () {
+			this.className = this.className.replace(' hover', '');
+		};
+		a[i].onclick = function (e) {
+			e = e ? e : window.event;
+			var target = e.target || e.srcElement;
+			if(!taglist[target.tagName]) {
+				window.location.href = $(this.id + '_a').href;
+			}
+		};
+	}
+}
+
+function checkSynSignature() {
+	if($('to_signhtml').value == '1') {
+		$('syn_signature').className = 'syn_signature';
+		$('to_signhtml').value = '0';
+	} else {
+		$('syn_signature').className = 'syn_signature_check';
+		$('to_signhtml').value = '1';
 	}
 }

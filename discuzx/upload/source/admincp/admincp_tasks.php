@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tasks.php 15149 2010-08-19 08:02:46Z monkey $
+ *      $Id: admincp_tasks.php 20616 2011-03-01 01:05:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,7 +23,7 @@ $custom_scripts = array_keys($custom_types);
 
 $submenus = array();
 foreach($custom_types as $k => $v) {
-	$submenus[] = array($v['name'], "tasks&operation=add&script=$k");
+	$submenus[] = array($v['name'], "tasks&operation=add&script=$k", $_G['gp_script'] == $k);
 }
 
 if(!($operation)) {
@@ -33,7 +33,7 @@ if(!($operation)) {
 		shownav('extended', 'nav_tasks');
 		showsubmenu('nav_tasks', array(
 			array('admin', 'tasks', 1),
-			$submenus ? array(array('menu' => 'add', 'submenu' => $submenus), '', 0) : array(),
+			$submenus ? array(array('menu' => 'add', 'submenu' => $submenus)) : array(),
 			array('nav_task_type', 'tasks&operation=type', 0)
 		));
 		showformheader('tasks');
@@ -70,11 +70,11 @@ if(!($operation)) {
 			$checked = $task['available'] ? ' checked="checked"' : '';
 
 			if($task['starttime'] && $task['endtime']) {
-				$task['time'] = dgmdate($task['starttime'], 'y-m-d').' ~ '.dgmdate($task['endtime'], 'y-m-d');
+				$task['time'] = dgmdate($task['starttime'], 'y-m-d H:i').' ~ '.dgmdate($task['endtime'], 'y-m-d H:i');
 			} elseif($task['starttime'] && !$task['endtime']) {
-				$task['time'] = dgmdate($task['starttime'], 'y-m-d').' '.cplang('tasks_online');
+				$task['time'] = dgmdate($task['starttime'], 'y-m-d H:i').' '.cplang('tasks_online');
 			} elseif(!$task['starttime'] && $task['endtime']) {
-				$task['time'] = dgmdate($task['endtime'], 'y-m-d').' '.cplang('tasks_offline');
+				$task['time'] = dgmdate($task['endtime'], 'y-m-d H:i').' '.cplang('tasks_offline');
 			} else {
 				$task['time'] = cplang('nolimit');
 			}
@@ -115,7 +115,11 @@ if(!($operation)) {
 
 		updatecache('setting');
 
-		cpmsg($checksettingsok ? 'tasks_succeed' : 'tasks_setting_invalid', 'action=tasks', $checksettingsok ? 'succeed' : 'error');
+		if($checksettingsok) {
+			cpmsg('tasks_succeed', 'action=tasks', 'succeed');
+		} else {
+			cpmsg('tasks_setting_invalid', '', 'error');
+		}
 
 	}
 
@@ -133,7 +137,7 @@ if(!($operation)) {
 		$task_periodtype = $task->periodtype;
 		$task_conditions = $task->conditions;
 	} else {
-		cpmsg('undefined_action', '', 'error');
+		cpmsg('parameters_error', '', 'error');
 	}
 
 	if(!submitcheck('addsubmit')) {
@@ -142,7 +146,7 @@ if(!($operation)) {
 		shownav('extended', 'nav_tasks');
 		showsubmenu('nav_tasks', array(
 			array('admin', 'tasks', 0),
-			array(array('menu' => 'add', 'submenu' => $submenus), '', 1),
+			array(array('menu' => 'add', 'submenu' => $submenus), 1),
 			array('nav_task_type', 'tasks&operation=type', 0)
 		));
 
@@ -151,8 +155,8 @@ if(!($operation)) {
 		showsetting('tasks_add_name', 'name', $task_name, 'text');
 		showsetting('tasks_add_desc', 'description', $task_description, 'textarea');
 		showsetting('tasks_add_icon', 'iconnew', $task_icon, 'text');
-		showsetting('tasks_add_starttime', 'starttime', '', 'calendar');
-		showsetting('tasks_add_endtime', 'endtime', '', 'calendar');
+		showsetting('tasks_add_starttime', 'starttime', '', 'calendar', '', 0, '', 1);
+		showsetting('tasks_add_endtime', 'endtime', '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_periodtype', array('periodtype', array(
 			array(0, cplang('tasks_add_periodtype_hour')),
 			array(1, cplang('tasks_add_periodtype_day')),
@@ -264,8 +268,8 @@ if(!($operation)) {
 	} else {
 
 		$applyperm = $_G['gp_grouplimit'] == 'special' && is_array($_G['gp_applyperm']) ? implode("\t", $_G['gp_applyperm']) : $_G['gp_grouplimit'];
-		$_G['gp_starttime'] = dmktime($_G['gp_starttime']);
-		$_G['gp_endtime'] = dmktime($_G['gp_endtime']);
+		$_G['gp_starttime'] = strtotime($_G['gp_starttime']);
+		$_G['gp_endtime'] = strtotime($_G['gp_endtime']);
 		$reward = $_G['gp_reward'];
 		$prize = $_G['gp_prize_'.$reward];
 		$bonus = $_G['gp_bonus_'.$reward];
@@ -328,7 +332,7 @@ if(!($operation)) {
 		shownav('extended', 'nav_tasks');
 		showsubmenu('nav_tasks', array(
 			array('admin', 'tasks', 0),
-			array(array('menu' => 'add', 'submenu' => $submenus), '', 0),
+			array(array('menu' => 'add', 'submenu' => $submenus)),
 			array('nav_task_type', 'tasks&operation=type', 0)
 		));
 
@@ -337,8 +341,8 @@ if(!($operation)) {
 		showsetting('tasks_add_name', 'name', $task['name'], 'text');
 		showsetting('tasks_add_desc', 'description', $task['description'], 'textarea');
 		showsetting('tasks_add_icon', 'iconnew', $task['icon'], 'text');
-		showsetting('tasks_add_starttime', 'starttime', $task['starttime'] ? dgmdate($task['starttime'], 'y-m-d') : '', 'calendar');
-		showsetting('tasks_add_endtime', 'endtime', $task['endtime'] ? dgmdate($task['endtime'], 'y-m-d') : '', 'calendar');
+		showsetting('tasks_add_starttime', 'starttime', $task['starttime'] ? dgmdate($task['starttime'], 'Y-m-d H:i') : '', 'calendar', '', 0, '', 1);
+		showsetting('tasks_add_endtime', 'endtime', $task['endtime'] ? dgmdate($task['endtime'], 'Y-m-d H:i') : '', 'calendar', '', 0, '', 1);
 		showsetting('tasks_add_periodtype', array('periodtype', array(
 			array(0, cplang('tasks_add_periodtype_hour')),
 			array(1, cplang('tasks_add_periodtype_day')),
@@ -453,8 +457,8 @@ if(!($operation)) {
 	} else {
 
 		$applyperm = $_G['gp_grouplimit'] == 'special' && is_array($_G['gp_applyperm']) ? implode("\t", $_G['gp_applyperm']) : $_G['gp_grouplimit'];
-		$_G['gp_starttime'] = dmktime($_G['gp_starttime']);
-		$_G['gp_endtime'] = dmktime($_G['gp_endtime']);
+		$_G['gp_starttime'] = strtotime($_G['gp_starttime']);
+		$_G['gp_endtime'] = strtotime($_G['gp_endtime']);
 		$reward = $_G['gp_reward'];
 		$prize = $_G['gp_prize_'.$reward];
 		$bonus = $_G['gp_bonus_'.$reward];
@@ -527,7 +531,7 @@ if(!($operation)) {
 	shownav('extended', 'nav_tasks');
 	showsubmenu('nav_tasks', array(
 		array('admin', 'tasks', 0),
-		$submenus ? array(array('menu' => 'add', 'submenu' => $submenus), '', 0) : array(),
+		$submenus ? array(array('menu' => 'add', 'submenu' => $submenus)) : array(),
 		array('nav_task_type', 'tasks&operation=type', 1)
 	));
 	showtips('tasks_tips_add_type');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_warn.php 17006 2010-09-19 02:24:55Z monkey $
+ *      $Id: topicadmin_warn.php 20099 2011-02-15 01:55:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowwarnpost']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_warnpost');
 }
 
 $topiclist = $_G['gp_topiclist'];
@@ -105,8 +105,6 @@ if(!submitcheck('modsubmit')) {
 	'modtids'	=> 0,
 	'modlog'	=> $thread
 	);
-
-	procreportlog('', $pids);
 
 }
 

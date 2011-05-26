@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_friendlink.php 13556 2010-07-28 06:11:31Z xupeng $
+ *      $Id: lang_friendlink.php 18915 2010-12-08 09:15:25Z zhangguosheng $
  */
 
 $lang = array
@@ -18,6 +18,10 @@ $lang = array
 	'friendlink_type_group2' => '分組2',
 	'friendlink_type_group3' => '分組3',
 	'friendlink_type_group4' => '分組4',
+	'friendlink_titlelength' => '站點名稱長度',
+	'friendlink_titlelength_comment' => '設置站點名稱的最大長度',
+	'friendlink_summarylength' => '簡介長度',
+	'friendlink_summarylength_comment' => '設置站點簡介最大長度',
 );
 
 ?>

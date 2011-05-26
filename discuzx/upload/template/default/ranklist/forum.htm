@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -18,10 +17,10 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_forum}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_orderby] == 'threads'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&orderby=threads">{lang ranklist_post}</a></li>
-				<li{if $_G[gp_orderby] == 'posts'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&orderby=posts">{lang ranklist_reply}</a></li>
-				<li{if $_G[gp_orderby] == 'thismonth'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&orderby=thismonth">{lang ranklist_post_month}</a></li>
-				<li{if $_G[gp_orderby] == 'today'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&orderby=today">{lang ranklist_post_day}</a></li>
+				<li{if $_G[gp_view] == 'threads'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&view=threads">{lang ranklist_post}</a></li>
+				<li{if $_G[gp_view] == 'posts'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&view=posts">{lang ranklist_reply}</a></li>
+				<li{if $_G[gp_view] == 'thismonth'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&view=thismonth">{lang ranklist_post_month}</a></li>
+				<li{if $_G[gp_view] == 'today'} class="a"{/if}><a href="misc.php?mod=ranklist&type=forum&view=today">{lang ranklist_post_day}</a></li>
 			</ul>
 			<!--{if $forumsrank}-->
 				<div class="tl">
@@ -30,9 +29,9 @@
 							<td class="icn" height="36">&nbsp;</td>
 							<th>{lang forum}</th>
 							<td width="100">
-								<!--{if $_G[gp_orderby] == 'today'}-->{lang ranklist_forum_day_post}
-								<!--{elseif $_G[gp_orderby] == 'posts'}-->{lang reply}
-								<!--{elseif $_G[gp_orderby] == 'thismonth'}-->{lang ranklist_forum_month_post}
+								<!--{if $_G[gp_view] == 'today'}-->{lang ranklist_forum_day_post}
+								<!--{elseif $_G[gp_view] == 'posts'}-->{lang reply}
+								<!--{elseif $_G[gp_view] == 'thismonth'}-->{lang ranklist_forum_month_post}
 								<!--{else}-->{lang ranklist_forum_post}<!--{/if}-->
 							</td>
 						</tr>

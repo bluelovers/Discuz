@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 16957 2010-09-17 07:43:07Z monkey $
+ *      $Id: admincp_threads.php 22409 2011-05-06 05:24:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -16,38 +16,43 @@ require_once libfile('function/post');
 cpheader();
 
 $optype = $_G['gp_optype'];
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
 if((!$operation && !$optype) || ($operation == 'group' && empty($optype))) {
-	if(!submitcheck('searchsubmit') && empty($_G['gp_search'])) {
+	if(!submitcheck('searchsubmit', 1) && empty($_G['gp_search'])) {
 		$newlist = 1;
+		$_G['gp_intype'] = '';
 		$_G['gp_detail'] = 1;
 		$_G['gp_inforum'] = 'all';
 		$_G['gp_starttime'] = dgmdate(TIMESTAMP - 86400 * 30, 'Y-n-j');
 	}
-
+	$intypes = '';
+	if($_G['gp_inforum'] && $_G['gp_inforum'] != 'all' && $_G['gp_intype']) {
+		$forumthreadtype = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_inforum]'");
+		if($forumthreadtype) {
+			$forumthreadtype = unserialize($forumthreadtype);
+			foreach($forumthreadtype['types'] as $typeid => $typename) {
+				$intypes .= '<option value="'.$typeid.'"'.($typeid == $_G['gp_intype'] ? ' selected' : '').'>'.$typename.'</option>';
+			}
+		}
+	}
 	require_once libfile('function/forumlist');
-
-	$forumselect = '<select name="inforum"><option value="all">&nbsp;&nbsp;> '.$lang['all'].'</option>'.
-		'<option value="">&nbsp;</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+	$forumselect = '<b>'.$lang['threads_search_forum'].':</b><br><br><select name="inforum" onchange="ajaxget(\'forum.php?mod=ajax&action=getthreadtypes&selectname=intype&fid=\' + this.value, \'forumthreadtype\')"><option value="all">&nbsp;&nbsp;> '.$lang['all'].'</option><option value="">&nbsp;</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+	$typeselect = $lang['threads_move_type'].' <span id="forumthreadtype"><select name="intype">'.$intypes.'<option value="0"></option></select></span>';
 	if(isset($_G['gp_inforum'])) {
 		$forumselect = preg_replace("/(\<option value=\"$_G[gp_inforum]\")(\>)/", "\\1 selected=\"selected\" \\2", $forumselect);
 	}
 
-	$typeselect = $sortselect = '';
+	$sortselect = '';
 	$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
 	while($type = DB::fetch($query)) {
 		if($type['special']) {
 			$sortselect .= '<option value="'.$type['typeid'].'">&nbsp;&nbsp;> '.$type['name'].'</option>';
-		} else {
-			$typeselect .= '<option value="'.$type['typeid'].'">&nbsp;&nbsp;> '.$type['name'].'</option>';
 		}
 	}
 
 	if(isset($_G['gp_insort'])) {
 		$sortselect = preg_replace("/(\<option value=\"{$_G['gp_insort']}\")(\>)/", "\\1 selected=\"selected\" \\2", $sortselect);
-	}
-
-	if(isset($_G['gp_intype'])) {
-		$typeselect = preg_replace("/(\<option value=\"{$_G['gp_intype']}\")(\>)/", "\\1 selected=\"selected\" \\2", $typeselect);
 	}
 
 	echo <<<EOT
@@ -68,17 +73,23 @@ EOT;
 		array('threads_search', !$_G['gp_searchsubmit']),
 		array('nav_maint_threads', $_G['gp_searchsubmit'])
 	));
-	showtips('threads_tips');
-	showtagheader('div', 'threadsearch', !submitcheck('searchsubmit') && empty($newlist));
+	if(empty($newlist)) {
+		$search_tips = 1;
+		showtips('threads_tips');
+	}
+	showtagheader('div', 'threadsearch', !submitcheck('searchsubmit', 1) && empty($newlist));
 	showformheader('threads'.($operation ? '&operation='.$operation : ''), '', 'threadforum');
 	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
 	showtableheader();
 	showsetting('threads_search_detail', 'detail', $_G['gp_detail'], 'radio');
 	if($operation != 'group') {
-		showsetting('threads_search_forum', '', '', $forumselect);
+		showtablerow('', array('class="rowform" colspan="2" style="width:auto;"'), array($forumselect.$typeselect));
 	}
 	showsetting('threads_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
-	empty($_G['gp_starttime']) && $_G['gp_starttime'] = date('Y-m-d', time() - 86400 * 30);
+	if(!$fromumanage) {
+		empty($_G['gp_starttime']) && $_G['gp_starttime'] = date('Y-m-d', time() - 86400 * 30);
+	}
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsetting('threads_search_time', array('starttime', 'endtime'), array($_G['gp_starttime'], $_G['gp_endtime']), 'daterange');
 	showsetting('threads_search_user', 'users', $_G['gp_users'], 'text');
 	showsetting('threads_search_keyword', 'keywords', $_G['gp_keywords'], 'text');
@@ -134,12 +145,12 @@ EOT;
 	showtablefooter();
 	showformfooter();
 	showtagfooter('div');
-	if(submitcheck('searchsubmit') || $newlist) {
+	if(submitcheck('searchsubmit', 1) || $newlist) {
 		$operation == 'group' && $_G['gp_inforum'] = 'isgroup';
 		$sql = '';
 		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] != 'all' && $_G['gp_inforum'] != 'isgroup' ? " AND fid='{$_G['gp_inforum']}'" : '';
 		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] == 'isgroup' ? " AND isgroup='1'" : ' AND isgroup=\'0\'';
-		$sql .= $_G['gp_intype'] != '' && $_G['gp_intype'] != 'all' ? " AND typeid='{$_G['gp_intype']}'" : '';
+		$sql .= $_G['gp_intype'] != '' ? " AND typeid='{$_G['gp_intype']}'" : '';
 		$sql .= $_G['gp_insort'] != '' && $_G['gp_insort'] != 'all' ? " AND sortid='{$_G['gp_insort']}'" : '';
 		$sql .= $_G['gp_viewsless'] != '' ? " AND views<'{$_G['gp_viewsless']}'" : '';
 		$sql .= $_G['gp_viewsmore'] != '' ? " AND views>'{$_G['gp_viewsmore']}'" : '';
@@ -231,7 +242,7 @@ EOT;
 				if($threadlist) {
 					foreach($threadlist as $thread) {
 						$threads .= showtablerow('', array('class="td25"', '', '', '', 'class="td25"', 'class="td25"'), array(
-							"<input class=\"checkbox\" type=\"checkbox\" name=\"tidarray[]\" value=\"$thread[tid]\" checked />",
+							"<input class=\"checkbox\" type=\"checkbox\" name=\"tidarray[]\" value=\"$thread[tid]\" />",
 							"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]".($thread['displayorder'] != -4 ? '' : '&modthreadkey='.modauthkey($thread['tid']))."\" target=\"_blank\">$thread[subject]</a>".($thread['readperm'] ? " - [$lang[threads_readperm] $thread[readperm]]" : '').($thread['price'] ? " - [$lang[threads_price] $thread[price]]" : ''),
 						"<a href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\" target=\"_blank\">".(empty($thread['isgroup']) ? $_G['cache']['forums'][$thread[fid]]['name'] : $groupsname[$thread[fid]])."</a>",
 							"<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>",
@@ -261,8 +272,11 @@ EOT;
 		showtagheader('div', 'threadlist', TRUE);
 		showformheader('threads&frame=no'.($operation ? '&operation='.$operation : ''), 'target="threadframe"');
 		showhiddenfields($_G['gp_detail'] ? array('fids' => $fids) : array('fids' => $fids, 'tids' => $tids));
-		showtableheader(cplang('threads_result').' '.$threadcount.' <a href="###" onclick="$(\'threadlist\').style.display=\'none\';$(\'threadsearch\').style.display=\'\';$(\'threadforum\').pp.value=\'\';$(\'threadforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>', 'nobottom');
-
+		if(!$search_tips) {
+			showtableheader(cplang('threads_new_result').' '.$threadcount, 'nobottom');
+		} else {
+			showtableheader(cplang('threads_result').' '.$threadcount.' <a href="###" onclick="$(\'threadlist\').style.display=\'none\';$(\'threadsearch\').style.display=\'\';$(\'threadforum\').pp.value=\'\';$(\'threadforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>', 'nobottom');
+		}
 		if(!$threadcount) {
 
 			showtablerow('', 'colspan="3"', cplang('threads_thread_nonexistence'));
@@ -272,44 +286,44 @@ EOT;
 			if($_G['gp_detail']) {
 				showsubtitle(array('', 'subject', 'forum', 'author', 'threads_replies', 'threads_views', 'threads_lastpost'));
 				echo $threads;
-				showtablerow('', array('class="td25"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" checked="checked" onclick="checkAll(\'prefix\', this.form, \'tidarray\', \'chkall\')" /><label for="chkall">'.cplang('select_all').'</label>'));
+				showtablerow('', array('class="td25" colspan="7"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'tidarray\', \'chkall\')" /><label for="chkall">'.cplang('select_all').'</label>'));
 				showtablefooter();
 				showtableheader('operation', 'notop');
 
 			}
 			showsubtitle(array('', 'operation', 'option'));
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-				'<input class="radio" type="radio" name="optype" value="moveforum" onclick="this.form.modsubmit.disabled=false;">',
+				'<input class="radio" type="radio" id="optype_moveforum" name="optype" value="moveforum" onclick="this.form.modsubmit.disabled=false;">',
 				$lang['threads_move_forum'],
-				'<select name="toforum" onchange="ajaxget(\'forum.php?mod=ajax&action=getthreadtypes&fid=\' + this.value, \'threadtypes\')">'.forumselect(FALSE, 0, 0, TRUE).'</select>'.
-				$lang['threads_move_type'].' <span id="threadtypes"><select name="threadtypeid"><option value="0" /></option></select></span>'
+				'<select name="toforum" onchange="$(\'optype_moveforum\').checked=\'checked\';ajaxget(\'forum.php?mod=ajax&action=getthreadtypes&fid=\' + this.value, \'threadtypes\')">'.forumselect(FALSE, 0, 0, TRUE).'</select>'.
+				$lang['threads_move_type'].' <span id="threadtypes"><select name="threadtypeid" onchange="$(\'optype_moveforum\').checked=\'checked\'"><option value="0"></option></select></span>'
 			));
 			if($operation != 'group') {
 				showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-					'<input class="radio" type="radio" name="optype" value="movesort" onclick="this.form.modsubmit.disabled=false;">',
+					'<input class="radio" type="radio" id="optype_movesort" name="optype" value="movesort" onclick="this.form.modsubmit.disabled=false;">',
 					$lang['threads_move_sort'],
-					'<select name="tosort"><option value="0">&nbsp;&nbsp;> '.$lang['threads_search_type_none'].'</option>'.$sortselect.'</select>'
+					'<select name="tosort" onchange="$(\'optype_movesort\').checked=\'checked\';"><option value="0">&nbsp;&nbsp;> '.$lang['threads_search_type_none'].'</option>'.$sortselect.'</select>'
 				));
 				showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-					'<input class="radio" type="radio" name="optype" value="stick" onclick="this.form.modsubmit.disabled=false;">',
+					'<input class="radio" type="radio" id="optype_stick" name="optype" value="stick" onclick="this.form.modsubmit.disabled=false;">',
 					$lang['threads_stick'],
-					'<input class="radio" type="radio" name="stick_level" value="0" checked> '.$lang['threads_remove'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="1"> '.$lang['threads_stick_one'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="2"> '.$lang['threads_stick_two'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="3"> '.$lang['threads_stick_three']
+					'<input class="radio" type="radio" name="stick_level" value="0" onclick="$(\'optype_stick\').checked=\'checked\'"> '.$lang['threads_remove'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="1" onclick="$(\'optype_stick\').checked=\'checked\'"> '.$lang['threads_stick_one'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="2" onclick="$(\'optype_stick\').checked=\'checked\'"> '.$lang['threads_stick_two'].' &nbsp; &nbsp;<input class="radio" type="radio" name="stick_level" value="3" onclick="$(\'optype_stick\').checked=\'checked\'"> '.$lang['threads_stick_three']
 				));
 				showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-					'<input class="radio" type="radio" name="optype" value="addstatus" onclick="this.form.modsubmit.disabled=false;">',
+					'<input class="radio" type="radio" id="optype_addstatus" name="optype" value="addstatus" onclick="this.form.modsubmit.disabled=false;">',
 					$lang['threads_open_close'],
-					'<input class="radio" type="radio" name="status" value="0" checked> '.$lang['open'].' &nbsp; &nbsp;<input class="radio" type="radio" name="status" value="1"> '.$lang['closed']
+					'<input class="radio" type="radio" name="status" value="0" onclick="$(\'optype_addstatus\').checked=\'checked\'"> '.$lang['open'].' &nbsp; &nbsp;<input class="radio" type="radio" name="status" value="1"  onclick="$(\'optype_addstatus\').checked=\'checked\'"> '.$lang['closed']
 				));
 			}
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-				'<input class="radio" type="radio" name="optype" value="delete" onclick="this.form.modsubmit.disabled=false;">',
+				'<input class="radio" type="radio" id="optype_delete" name="optype" value="delete" onclick="this.form.modsubmit.disabled=false;">',
 				$lang['threads_delete'],
-				'<input class="checkbox" type="checkbox" name="donotupdatemember" id="donotupdatemember" value="1" checked="checked" /><label for="donotupdatemember"> '.$lang['threads_delete_no_update_member'].'</label>'
+				'<input class="checkbox" type="checkbox" name="donotupdatemember" id="donotupdatemember" value="1" /><label for="donotupdatemember"> '.$lang['threads_delete_no_update_member'].'</label>'
 			));
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
-				'<input class="radio" type="radio" name="optype" value="adddigest" onclick="this.form.modsubmit.disabled=false;">',
+				'<input class="radio" type="radio" name="optype" id="optype_adddigest" value="adddigest" onclick="this.form.modsubmit.disabled=false;">',
 				$lang['threads_add_digest'],
-				'<input class="radio" type="radio" name="digest_level" value="0" checked> '.$lang['threads_remove'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="1"> '.$lang['threads_digest_one'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="2"> '.$lang['threads_digest_two'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="3"> '.$lang['threads_digest_three']
+				'<input class="radio" type="radio" name="digest_level" value="0" onclick="$(\'optype_adddigest\').checked=\'checked\'"> '.$lang['threads_remove'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="1" onclick="$(\'optype_adddigest\').checked=\'checked\'"> '.$lang['threads_digest_one'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="2" onclick="$(\'optype_adddigest\').checked=\'checked\'"> '.$lang['threads_digest_two'].' &nbsp; &nbsp;<input class="radio" type="radio" name="digest_level" value="3" onclick="$(\'optype_adddigest\').checked=\'checked\'"> '.$lang['threads_digest_three']
 			));
 			showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
 				'<input class="radio" type="radio" name="optype" value="deleteattach" onclick="this.form.modsubmit.disabled=false;">',
@@ -329,7 +343,8 @@ EOT;
 
 } else {
 
-	$tidsadd = isset($_G['gp_tids']) ? 'tid IN ('.$_G['gp_tids'].')' : 'tid IN ('.dimplode($_G['gp_tidarray']).')';
+	$tidsarray = isset($_G['gp_tids']) ? explode(',', $_G['gp_tids']) : $_G['gp_tidarray'];
+	$tidsadd = 'tid IN ('.dimplode($tidsarray).')';
 	if($optype == 'moveforum') {
 
 		if(!DB::result_first("SELECT fid FROM ".DB::table('forum_forum')." WHERE fid='{$_G['gp_toforum']}' AND type<>'group'")) {
@@ -362,29 +377,8 @@ EOT;
 
 	} elseif($optype == 'delete') {
 
-		if(!$_G['gp_donotupdatemember']) {
-			$tuidarray = $ruidarray = array();
-			$postarray = getfieldsofposts('first, authorid', $tidsadd);
-			foreach($postarray as $post) {
-				if($post['authorid']) {
-					if($post['first']) {
-						$tuidarray[] = $post['authorid'];
-					} else {
-						$ruidarray[] = $post['authorid'];
-					}
-				}
-			}
-			if($tuidarray) {
-				updatepostcredits('-', $tuidarray, 'post');
-			}
-			if($ruidarray) {
-				updatepostcredits('-', $ruidarray, 'reply');
-			}
-		}
-
 		require_once libfile('function/delete');
-		deletepost($tidsadd);
-		deletethread($tidsadd);
+		deletethread($tidsarray, !$_G['gp_donotupdatemember'], !$_G['gp_donotupdatemember']);
 
 		if($_G['setting']['globalstick']) {
 			updatecache('globalstick');
@@ -401,12 +395,8 @@ EOT;
 
 	} elseif($optype == 'deleteattach') {
 
-		$query = DB::query("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE $tidsadd");
-		while($attach = DB::fetch($query)) {
-			dunlink($attach);
-		}
-		DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE $tidsadd");
-		DB::query("DELETE FROM ".DB::table('forum_attachmentfield')." WHERE $tidsadd");
+		require_once libfile('function/delete');
+		deleteattach($tidsarray, 'tid');
 		DB::query("UPDATE ".DB::table('forum_thread')." SET attachment='0' WHERE $tidsadd");
 		updatepost(array('attachment' => '0'), $tidsadd);
 
@@ -459,7 +449,7 @@ EOT;
 
 	} elseif($operation == 'forumstick') {
 		shownav('topic', 'threads_forumstick');
-		loadcache('forums');
+		loadcache(array('forums', 'grouptype'));
 		$forumstickthreads = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='forumstickthreads'");
 		$forumstickthreads = isset($forumstickthreads) ? unserialize($forumstickthreads) : array();
 		if(!submitcheck('forumsticksubmit')) {
@@ -471,17 +461,24 @@ EOT;
 			if(!$do) {
 				showformheader('threads&operation=forumstick');
 				showtableheader('admin', 'fixpadding');
-				showsubtitle(array('', 'subject', 'forum', 'edit'));
+				showsubtitle(array('', 'subject', 'threads_forumstick_forum', 'threads_forumstick_group', 'edit'));
 				if(is_array($forumstickthreads)) {
 					foreach($forumstickthreads as $k => $v) {
 						$forumnames = array();
 						foreach($v['forums'] as $forum_id){
-							$forumnames[] = $_G['cache']['forums'][$forum_id]['name'];
+							if($_G['cache']['forums'][$forum_id]['name']) {
+								$forumnames[] = $name = $_G['cache']['forums'][$forum_id]['name'];
+							} elseif($_G['cache']['grouptype']['first'][$forum_id]['name']) {
+								$grouptypes[] = $name = $_G['cache']['grouptype']['first'][$forum_id]['name'];
+							} elseif($_G['cache']['grouptype']['second'][$forum_id]['name']) {
+								$grouptypes[] = $name = $_G['cache']['grouptype']['second'][$forum_id]['name'];
+							}
 						}
 						showtablerow('', array('class="td25"'), array(
 							"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$k\">",
 							"<a href=\"forum.php?mod=viewthread&tid=$v[tid]\" target=\"_blank\">$v[subject]</a>",
 							implode(', ', $forumnames),
+							implode(', ', $grouptypes),
 							"<a href=\"".ADMINSCRIPT."?action=threads&operation=forumstick&do=edit&id=$k\">$lang[threads_forumstick_targets_change]</a>",
 						));
 					}
@@ -495,7 +492,10 @@ EOT;
 				showtableheader('add', 'fixpadding');
 				showsetting('threads_forumstick_threadurl', 'forumstick_url', '', 'text');
 				$targetsselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+				require_once libfile('function/group');
+				$groupselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.get_groupselect(0, 0, 0).'</select>';
 				showsetting('threads_forumstick_targets', '', '', $targetsselect);
+				showsetting('threads_forumstick_targetgroups', '', '', $groupselect);
 				echo '<input type="hidden" value="add" name="do" />';
 				showsubmit('forumsticksubmit', 'submit');
 				showtablefooter();
@@ -505,10 +505,14 @@ EOT;
 				showformheader("threads&operation=forumstick&do=edit&id={$_G['gp_id']}");
 				showtableheader('edit', 'fixpadding');
 				$targetsselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+				require_once libfile('function/group');
+				$groupselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.get_groupselect(0, 0, 0).'</select>';
 				foreach($forumstickthreads[$_G['gp_id']]['forums'] as $target) {
 					$targetsselect = preg_replace("/(\<option value=\"$target\")([^\>]*)(\>)/", "\\1 \\2 selected=\"selected\" \\3", $targetsselect);
+					$groupselect = preg_replace("/(\<option value=\"$target\")([^\>]*)(\>)/", "\\1 \\2 selected=\"selected\" \\3", $groupselect);
 				}
 				showsetting('threads_forumstick_targets', '', '', $targetsselect);
+				showsetting('threads_forumstick_targetgroups', '', '', $groupselect);
 				echo '<input type="hidden" value="edit" name="do" />';
 				echo "<input type=\"hidden\" value=\"{$_G['gp_id']}\" name=\"id\" />";
 				showsubmit('forumsticksubmit', 'submit');
@@ -599,13 +603,11 @@ EOT;
 				$forumstickthreads[$_G['gp_id']]['forums'] = $_G['gp_forumsticktargets'];
 				DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='4' WHERE tid='$forumstick_tid'");
 			}
-			$forumstickthreads_cache = forumsticktrans($forumstickthreads);
-			save_syscache('forumstick', $forumstickthreads_cache);
 
 			$forumstickthreads = addslashes(serialize($forumstickthreads));
 			DB::query("REPLACE INTO ".DB::table('common_setting')."(skey, svalue) VALUES('forumstickthreads', '$forumstickthreads')");
-			updatecache(array('globalstick', 'setting'));
-			cpmsg("threads_forumstick_{$do}_succeed", "action=threads&operation=forumstick", 'succeed');
+			updatecache(array('forumstick', 'setting'));
+			cpmsg('threads_forumstick_'.$do.'_succeed', "action=threads&operation=forumstick", 'succeed');
 		}
 	} elseif($operation == 'postposition') {
 
@@ -704,10 +706,10 @@ EOT;
 					} else {
 						$r_replies = $_G['gp_replies'] ? $_G['gp_replies'] : $_G['gp_above_replies'];
 						if($r_replies = max(0, intval($r_replies))) {
-							$limit_start = 2 * ($page - 1);
+							$limit_start = 20 * ($page - 1);
 							if($count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies'")) {
-								$multipage = multi($count, 2, $page, ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies");
-								$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies' LIMIT $limit_start, 2");
+								$multipage = multi($count, 20, $page, ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies");
+								$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies' LIMIT $limit_start, 20");
 								$have = 0;
 								while($thread = DB::fetch($query)) {
 									if(getstatus($thread['status'], 1)) continue;
@@ -755,8 +757,15 @@ function create_position(&$select, $lastpid = 0) {
 	if(empty($select) || !is_array($select)) {
 		return 0;
 	}
-	$round = 500;
 	$tid = $select[0];
+	if(empty($lastpid)) {
+		$check = DB::result_first("SELECT tid FROM ".DB::table('forum_postposition')." WHERE tid='$tid' LIMIT 1");
+		if($check) {
+			unset($select[0]);
+			return 0;
+		}
+	}
+	$round = 500;
 	$posttable = getposttablebytid($tid);
 	$query = DB::query("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$tid' AND pid>'$lastpid' ORDER BY pid ASC LIMIT 0, $round");
 	while($post = DB::fetch($query)) {
@@ -771,21 +780,6 @@ function create_position(&$select, $lastpid = 0) {
 	} else {
 		return $lastid;
 	}
-}
-
-function forumsticktrans($forumstickthreads) {
-	$forumstickcached = array();
-	foreach($forumstickthreads as $threads) {
-		foreach($threads['forums'] as $fid) {
-			$forumstickcached[$fid][] = $threads;
-		}
-	}
-	foreach($forumstickcached as $fid => $threads) {
-		foreach($forumstickcached[$fid] as $k => $v) {
-			unset($forumstickcached[$fid][$k]['forums']);
-		}
-	}
-	return $forumstickcached;
 }
 
 ?>

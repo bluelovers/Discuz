@@ -28,11 +28,11 @@
 							<!--{if $space[recentnote]}--><div class="quote"><blockquote>$space[recentnote]</blockquote></div><!--{/if}-->
 							<p class="mtw cl">
 							<!--{if $_G['uid']}-->
-								<a href="home.php?mod=invite&accept=yes" class="pn pnp z"><strong class="z">{lang accept_invitation}</strong></a>
+								<a href="home.php?mod=invite&accept=yes" class="pn pnc z"><strong class="z">{lang accept_invitation}</strong></a>
 								<a href="home.php?mod=invite&accept=no" class="pn z"><strong class="z">{lang lgnore_invitation}</strong></a>
 							<!--{else}-->
 								<!--{if $_G['setting']['regstatus']}-->
-								<a href="member.php?mod={$_G[setting][regname]}&referer=$jumpurl" onclick="showWindow('register', this.href)" class="pn z"><strong class="z">{lang want_to_register}</strong></a>
+								<a href="member.php?mod={$_G[setting][regname]}&referer=$jumpurl" class="pn z"><strong class="z">{lang want_to_register}</strong></a>
 								<!--{/if}-->
 								<a href="member.php?mod=logging&action=login&referer=$jumpurl" onclick="showWindow('login', this.href)" class="pn z"><strong class="z">{lang register_immediately}</strong></a>
 							<!--{/if}-->

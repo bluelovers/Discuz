@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 17249 2010-09-27 10:17:23Z zhengqingpeng $
+ *      $Id: space_home.php 22540 2011-05-12 02:51:25Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,9 +22,10 @@ if(empty($_G['setting']['feedhotday'])) {
 
 $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 
+space_merge($space, 'count');
+
 if(empty($_GET['view'])) {
 	if($space['self']) {
-		space_merge($space, 'count');
 		if($_G['setting']['showallfriendnum'] && $space['friends'] < $_G['setting']['showallfriendnum']) {
 			$_GET['view'] = 'all';
 		} else {
@@ -60,38 +61,41 @@ $gets = array(
 	'view' => $_GET['view'],
 	'order' => $_GET['order'],
 	'appid' => $_GET['appid'],
+	'type' => $_GET['type'],
 	'icon' => $_GET['icon']
 );
 $theurl = 'home.php?'.url_implode($gets);
 $hotlist = array();
 if(!IS_ROBOT) {
-
-	if($space['self'] && empty($start) && $_G['setting']['feedhotnum'] > 0 && ($_GET['view'] == 'we' || $_GET['view'] == 'all')) {
-		$hotlist_all = array();
-		$hotstarttime = $_G['timestamp'] - $_G['setting']['feedhotday']*3600*24;
-		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(hot) WHERE dateline>='$hotstarttime' ORDER BY hot DESC LIMIT 0,10");
-		while ($value = DB::fetch($query)) {
-			if($value['hot']>0 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
-				if(empty($hotlist)) {
-					$hotlist[$value['feedid']] = $value;
-				} else {
-					$hotlist_all[$value['feedid']] = $value;
-				}
-			}
-		}
-		$nexthotnum = $_G['setting']['feedhotnum'] - 1;
-		if($nexthotnum > 0) {
-			if(count($hotlist_all)> $nexthotnum) {
-				$hotlist_key = array_rand($hotlist_all, $nexthotnum);
-				if($nexthotnum == 1) {
-					$hotlist[$hotlist_key] = $hotlist_all[$hotlist_key];
-				} else {
-					foreach ($hotlist_key as $key) {
-						$hotlist[$key] = $hotlist_all[$key];
+	$feed_users = $feed_list = $user_list = $filter_list  = $list = $magic = array();
+	if($_GET['view'] != 'app') {
+		if($space['self'] && empty($start) && $_G['setting']['feedhotnum'] > 0 && ($_GET['view'] == 'we' || $_GET['view'] == 'all')) {
+			$hotlist_all = array();
+			$hotstarttime = $_G['timestamp'] - $_G['setting']['feedhotday']*3600*24;
+			$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(hot) WHERE dateline>='$hotstarttime' ORDER BY hot DESC LIMIT 0,10");
+			while ($value = DB::fetch($query)) {
+				if($value['hot']>0 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+					if(empty($hotlist)) {
+						$hotlist[$value['feedid']] = $value;
+					} else {
+						$hotlist_all[$value['feedid']] = $value;
 					}
 				}
-			} else {
-				$hotlist = array_merge($hotlist, $hotlist_all);
+			}
+			$nexthotnum = $_G['setting']['feedhotnum'] - 1;
+			if($nexthotnum > 0) {
+				if(count($hotlist_all)> $nexthotnum) {
+					$hotlist_key = array_rand($hotlist_all, $nexthotnum);
+					if($nexthotnum == 1) {
+						$hotlist[$hotlist_key] = $hotlist_all[$hotlist_key];
+					} else {
+						foreach ($hotlist_key as $key) {
+							$hotlist[$key] = $hotlist_all[$key];
+						}
+					}
+				} else {
+					$hotlist = array_merge($hotlist, $hotlist_all);
+				}
 			}
 		}
 	}
@@ -120,6 +124,66 @@ if(!IS_ROBOT) {
 
 		$diymode = 1;
 		if($space['self'] && $_GET['from'] != 'space') $diymode = 0;
+
+	} elseif($_GET['view'] == 'app' && $_G['setting']['my_app_status']) {
+
+		if ($_G['gp_type'] == 'all') {
+
+			$wheresql = "1";
+			$ordersql = "dateline DESC";
+			$f_index = '';
+
+		} else {
+
+			if(empty($space['feedfriend'])) $_G['gp_type'] = 'me';
+
+			if($_G['gp_type'] == 'me') {
+				$wheresql = "uid='$_G[uid]'";
+				$ordersql = "dateline DESC";
+				$f_index = '';
+
+			} else {
+				$wheresql = "uid IN ('0',$space[feedfriend])";
+				$ordersql = "dateline DESC";
+				$f_index = 'USE INDEX(dateline)';
+				$_G['gp_type'] = 'we';
+				$_G['home_tpl_hidden_time'] = 1;
+			}
+		}
+
+		$icon = empty($_GET['icon'])?'':trim($_GET['icon']);
+		if($icon) {
+			$wheresql .= " AND icon='$icon'";
+		}
+		$multi = '';
+
+		$feed_list = $appfeed_list = $hiddenfeed_list = $filter_list = $hiddenfeed_num = $icon_num = array();
+		$count = $filtercount = 0;
+		$query = DB::query("SELECT * FROM ".DB::table('home_feed_app')." $f_index
+			WHERE $wheresql
+			ORDER BY $ordersql
+			LIMIT $start,$perpage");
+		while ($value = DB::fetch($query)) {
+			$feed_list[$value['icon']][] = $value;
+			$count++;
+		}
+		$multi = simplepage($count, $perpage, $page, $theurl);
+		require_once libfile('function/feed');
+
+		$list = array();
+		foreach ($feed_list as $key => $values) {
+			$nowcount = 0;
+			foreach ($values as $value) {
+				$value = mkfeed($value);
+				$nowcount++;
+				if($nowcount>5 && empty($icon)) {
+					break;
+				}
+				$list[$key][] = $value;
+			}
+		}
+		$need_count = false;
+		$typeactives = array($_G['gp_type'] => ' class="a"');
 
 	} else {
 
@@ -157,7 +221,6 @@ if(!IS_ROBOT) {
 	}
 	$gidactives[$gid] = ' class="a"';
 
-	$feed_users = $feed_list = $user_list = $filter_list  = $list = $mlist = $magic = array();
 	$count = $filtercount = 0;
 	$multi = '';
 
@@ -256,7 +319,6 @@ $defaultusers = $newusers = $showusers = array();
 if($space['self'] && empty($start)) {
 
 	space_merge($space, 'field_home');
-
 	if($_GET['view'] == 'we') {
 		require_once libfile('function/friend');
 		$groups = friend_group_list();
@@ -391,7 +453,14 @@ if($space['self'] && empty($start)) {
 }
 
 dsetcookie('home_readfeed', $_G['timestamp'], 365*24*3600);
-
+if($_G['uid']) {
+	$defaultstr = getdefaultdoing();
+	space_merge($space, 'status');
+	if(!$space['profileprogress']) {
+		include_once libfile('function/profile');
+		$space['profileprogress'] = countprofileprogress();
+	}
+}
 $actives = array($_GET['view'] => ' class="a"');
 if($_G['gp_from'] == 'space') {
 	if($_G['gp_do'] == 'home') {
@@ -400,24 +469,22 @@ if($_G['gp_from'] == 'space') {
 		$metadescription = lang('space', 'sb_feed', array('who' => $space['username']));
 	}
 } else {
-	$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['home']);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('home');
 	if(!$navtitle) {
 		$navtitle = $_G['setting']['navs'][4]['navname'];
+		$nobbname = false;
 	} else {
 		$nobbname = true;
 	}
 
-	$metakeywords = $_G['setting']['seokeywords']['home'];
 	if(!$metakeywords) {
 		$metakeywords = $_G['setting']['navs'][4]['navname'];
 	}
 
-	$metadescription = $_G['setting']['seodescription']['home'];
 	if(!$metadescription) {
 		$metadescription = $_G['setting']['navs'][4]['navname'];
 	}
 }
-
 if(empty($cp_mode)) include_once template("diy:home/space_home");
 
 ?>

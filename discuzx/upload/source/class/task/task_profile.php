@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_profile.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: task_profile.php 18074 2010-11-11 07:15:30Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,19 +41,28 @@ class task_profile {
 		global $_G;
 
 		$fields = lang('task/profile', 'profile_fields');
+		loadcache('profilesetting');
+		$fieldsql = array();
 		foreach($fields as $k => $v) {
 			$nk = explode('.', $k);
-			$fieldsnew[$nk[1]] = $v;
-		}
-		$result = DB::fetch_first("SELECT ".implode(',', array_keys($fields))." FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid WHERE m.uid='$_G[uid]'");
-		$none = array();
-		foreach($result as $k => $v) {
-			if(!trim($v)) {
-				$none[] = $fieldsnew[$k];
+			if(isset($_G['cache']['profilesetting'][$nk[1]])) {
+				$fieldsnew[$nk[1]] = $v;
+				$fieldsql[] = $k;
 			}
 		}
-		$csc = intval((count($fields) - count($none)) / count($fields) * 100);
-		return array($none, $csc);
+		if($fieldsql) {
+			$result = DB::fetch_first("SELECT ".implode(',', $fieldsql)." FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid WHERE m.uid='$_G[uid]'");
+			$none = array();
+			foreach($result as $k => $v) {
+				if(!trim($v)) {
+					$none[] = $fieldsnew[$k];
+				}
+			}
+			$csc = intval((count($fields) - count($none)) / count($fields) * 100);
+			return array($none, $csc);
+		} else {
+			return true;
+		}
 	}
 
 }

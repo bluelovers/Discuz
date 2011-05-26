@@ -76,8 +76,8 @@ uc_pm_location($uid);
 	<tr>
 	<th><i>bool</i> more</th>
 	<td>是否顯示更多信息<br />
-	<em>2:</em>返回短消息數、公共消息數、最後消息時間, 最後消息內容<br />
-	<em>1:</em>返回短消息數、公共消息數、最後消息時間<br />
+	<em>2:</em>返回短消息數、最後消息時間, 最後消息內容<br />
+	<em>1:</em>返回短消息數、最後消息時間<br />
 	<em>0:</em><strong>(默認值)</strong> 只返回短消息數<br />
 	</td>
 	</tr>
@@ -140,12 +140,8 @@ uc_pm_location($uid);
 	<td>私人消息數</td>
 	</tr>
 	<tr>
-	<th><i>integer</i> ['announcepm']</th>
-	<td>公共消息數</td>
-	</tr>
-	<tr>
-	<th><i>integer</i> ['systempm']</th>
-	<td>系統消息數</td>
+	<th><i>integer</i> ['newchatpm']</th>
+	<td>群聊消息數</td>
 	</tr>
 </tbody>
 </table>
@@ -169,12 +165,8 @@ uc_pm_location($uid);
 	<td>私人消息數</td>
 	</tr>
 	<tr>
-	<th><i>integer</i> ['announcepm']</th>
-	<td>公共消息數</td>
-	</tr>
-	<tr>
-	<th><i>integer</i> ['systempm']</th>
-	<td>系統消息數</td>
+	<th><i>integer</i> ['newchatpm']</th>
+	<td>群聊消息數</td>
 	</tr>
 	<tr>
 	<th><i>integer</i> ['lastdate']</th>
@@ -211,7 +203,7 @@ if(uc_pm_checknew($uid)) {
 <h3>發送短消息</h3>
 
 <div class="submsg">
-<h4><i>integer</i> uc_pm_send(<i>integer</i> fromuid , <i>string</i> msgto , <i>string</i> subject , <i>string</i> message [, <i>bool</i> instantly , <i>integer</i> replypmid , <i>bool</i> isusername])</h4>
+<h4><i>integer</i> uc_pm_send(<i>integer</i> fromuid , <i>string</i> msgto , <i>string</i> subject , <i>string</i> message [, <i>bool</i> instantly , <i>integer</i> replypmid , <i>bool</i> isusername , <i>integer</i> type])</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -224,7 +216,7 @@ if(uc_pm_checknew($uid)) {
 <tbody>
 	<tr>
 	<th><i>integer</i> fromuid</th>
-	<td>發件人用戶 ID，0 為系統消息</td>
+	<td>發件人用戶 ID</td>
 	</tr>
 	<tr>
 	<th><i>string</i> msgto</th>
@@ -262,6 +254,14 @@ if(uc_pm_checknew($uid)) {
 	<em>0:</em><strong>(默認值)</strong> msgto 參數為用戶 ID<br />
 	</td>
 	</tr>
+	<tr>
+	<th><i>integer</i> type</th>
+	<td>
+	消息類別<br />
+	<em>1:</em>群聊消息<br />
+	<em>0:</em><strong>(默認值)</strong>私人消息<br />
+	</td>
+	</tr>
 </tbody>
 </table>
 
@@ -279,17 +279,23 @@ if(uc_pm_checknew($uid)) {
 	<td>
 	<em>大於 0:</em>發送成功的最後一條消息 ID<br />
 	<em>0:</em>發送失敗<br />
-	<em>-1:</em>超出了24小時最大允許發送短消息數目<br />
-	<em>-2:</em>不滿足兩次發送短消息最短間隔<br />
-	<em>-3:</em>不能給非好友批量發送短消息<br />
+	<em>-1:</em>超過兩人會話的最大上限<br />
+	<em>-2:</em>超過兩次發送短消息時間間隔<br />
+	<em>-3:</em>不能給非好友批量發送短消息(已廢棄)<br />
 	<em>-4:</em>目前還不能使用發送短消息功能（註冊多少日後才可以使用發短消息限制）<br />
+	<em>-5:</em>超過群聊會話的最大上限<br />
+	<em>-6:</em>在忽略列表中<br />
+	<em>-7:</em>超過群聊人數上限<br />
+	<em>-8:</em>不能給自己發短消息<br />
+	<em>-9:</em>收件人為空<br />
+	<em>-10:</em>發起群聊人數小於兩人<br />
 	</td>
 	</tr>
 </tbody>
 </table>
 
 <br />
-本接口函數用於發送短消息。當 instantly 為 1 時，短消息會直接發送出去，否則本函數會發送一個 header 的 location 請求，使當前頁面跳轉到短消息中心的發送短消息頁面。因此，當 instantly 為 0 時請不要在這個函數運行前後有任何的輸出性的代碼。fromuid 為 0 時為發送系統消息。msgto 默認為用戶 ID，如果要讓用戶名作為參數，可讓 isusername 為 1。replypid 為 0 表示發送的短消息為短消息話題的發起者，如果 replypid 為指定的消息 ID 則表示發送的短消息為回復指定短消息話題的回覆信息。如果 instantly 為 1，那麼發送成功後函數返回發送成功的最後一條消息 ID，返回 0 表示發送失敗。
+本接口函數用於發送短消息。當 instantly 為 1 時，短消息會直接發送出去，否則本函數會發送一個 header 的 location 請求，使當前頁面跳轉到短消息中心的發送短消息頁面。因此，當 instantly 為 0 時請不要在這個函數運行前後有任何的輸出性的代碼。type 為 1 時為發送群聊消息。msgto 默認為用戶 ID，如果要讓用戶名作為參數，可讓 isusername 為 1。replypid 為 0 表示發送的短消息為短消息話題的發起者，如果 replypid 為指定的消息 ID 則表示發送的短消息為回復指定短消息話題的回覆信息。如果 instantly 為 1，那麼發送成功後函數返回發送成功的最後一條消息 ID，返回 0 表示發送失敗。
 
 <h6><a href="###" class="spread" onclick="collapse(this, 's3')">發送短消息示例 (PHP)</a></h6>
 <div class="code" id="s3" style="display: none"><pre>
@@ -345,7 +351,7 @@ if(uc_pm_send($uid, $_POST['msgto'], $_POST['subject'], $_POST['message'])) {
 <tbody>
 	<tr>
 	<th><i>integer</i></th>
-	<td>被刪除的短消息數</td>
+	<td>1: 刪除成功，0: 刪除失敗</td>
 	</tr>
 </tbody>
 </table>
@@ -356,8 +362,7 @@ if(uc_pm_send($uid, $_POST['msgto'], $_POST['subject'], $_POST['message'])) {
 <h6><a href="###" class="spread" onclick="collapse(this, 's4')">刪除短消息示例 (PHP)</a></h6>
 <div class="code" id="s4" style="display: none"><pre>
 $if(!empty($_POST['delete']) && is_array($_POST['delete'])) {
-	$num = uc_pm_delete($uid, 'inbox',  $_POST['delete']);
-	echo "刪除了 $num 條短消息";
+	uc_pm_delete($uid, 'inbox',  $_POST['delete']);
 }
 </pre></div>
 
@@ -399,7 +404,7 @@ $if(!empty($_POST['delete']) && is_array($_POST['delete'])) {
 <tbody>
 	<tr>
 	<th><i>integer</i></th>
-	<td>被刪除的短消息數</td>
+	<td>1: 刪除成功, 0: 刪除失敗</td>
 	</tr>
 </tbody>
 </table>
@@ -409,11 +414,51 @@ $if(!empty($_POST['delete']) && is_array($_POST['delete'])) {
 
 </div>
 
+<br />
+
+<div class="submsg">
+<h4>uc_pm_deletechat(<i>integer</i> uid , <i>array</i> plids [, <i>bool</i> type])</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>array</i> plids</th>
+	<td>要刪除的消息會話 ID 數組</td>
+	</tr>
+	<tr>
+	<th><i>bool</i> type</th>
+	<td>
+	類別<br />
+	<em>0:</em><strong>(默認值)</strong> 退出群聊<br />
+	<em>1:</em>刪除群聊<br />
+	</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+本接口函數用於群聊短消息的退出和刪除。plids 參數是一個自由 Key 數組類型，如「 array(1, 2, 3, 4, 5 ...) 」，數組的每一個值均為 ID。
+
+</div>
+
+<br />
+
 <a name="delete"></a>
 <h3>標記短消息已讀/未讀狀態</h3>
 
 <div class="submsg">
-<h4>uc_pm_readstatus(<i>integer</i> uid , <i>array</i> uids [, <i>array</i> pmids, <i>bool</i> status])</h4>
+<h4>uc_pm_readstatus(<i>integer</i> uid , <i>array</i> uids [, <i>array</i> plids, <i>bool</i> status])</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -434,7 +479,7 @@ $if(!empty($_POST['delete']) && is_array($_POST['delete'])) {
 	</tr>
 	<tr>
 	<th><i>array</i> pmids</th>
-	<td>要標記的消息 ID 數組，默認值空數組</td>
+	<td>要標記的會話 ID 數組，默認值空數組</td>
 	</tr>
 	<tr>
 	<th><i>bool</i> status</th>
@@ -448,7 +493,7 @@ $if(!empty($_POST['delete']) && is_array($_POST['delete'])) {
 </table>
 
 <br />
-本接口函數用於標記短消息的已讀/未讀狀態。uids 和 pmids 參數是一個自由 Key 數組類型，如「 array(1, 2, 3, 4, 5 ...) 」，數組的每一個值均為 ID。
+本接口函數用於標記短消息的已讀/未讀狀態。uids 和 plids 參數是一個自由 Key 數組類型，如「 array(1, 2, 3, 4, 5 ...) 」，數組的每一個值均為 ID。
 
 <h6><a href="###" class="spread" onclick="collapse(this, 's9')">標記短消息狀態示例 (PHP)</a></h6>
 <div class="code" id="s9" style="display: none"><pre>
@@ -501,8 +546,6 @@ echo "短消息已標記為已讀";
 	<td class="max">
 	過濾方式<br />
 	<em>newpm:</em><strong>(默認值)</strong> 未讀消息，folder 為 inbox 和 outbox 時使用<br />
-	<em>systempm:</em>系統消息，folder 為 inbox 時使用<br />
-	<em>announcepm:</em>公共消息，folder 為 inbox 時使用<br />
 	</td>
 	</tr>
 	<tr>
@@ -572,7 +615,7 @@ echo "短消息已標記為已讀";
 <h3>獲取短消息內容</h3>
 
 <div class="submsg">
-<h4><i>array</i> uc_pm_view(<i>integer</i> uid , <i>integer</i> pmid [, <i>integer</i> touid , <i>integer</i> daterange])</h4>
+<h4><i>array</i> uc_pm_view(<i>integer</i> uid , <i>integer</i> pmid [, <i>integer</i> touid , <i>integer</i> daterange , <i>integer</i> page , <i>integer</i> pagesize , <i>integer</i> type , <i>integer</i> isplid])</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -605,6 +648,22 @@ echo "短消息已標記為已讀";
 	<em>5:</em>更早<br />
 	</td>
 	</tr>
+	<tr>
+	<th><i>integer</i> page</th>
+	<td>當前頁碼</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> pagesize</th>
+	<td>每頁最大條數</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> type</th>
+	<td>消息類型 1: 私人消息, 2: 群聊消息</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> isplid</th>
+	<td>touid參數是會話id還是用戶id</td>
+	</tr>
 </tbody>
 </table>
 
@@ -619,21 +678,80 @@ echo "短消息已標記為已讀";
 <tbody>
 	<tr>
 	<th><i>array</i></th>
-	<td>短消息內容數據，其中單條消息數組結構請參看<a href="pm.htm#table1">附表</a></td>
+	<td>短消息內容數據，其中單條消息數組結構請參看<a href="pm.htm#table2">附表</a></td>
 	</tr>
 </tbody>
 </table>
 
 <br />
-本接口函數用於返回指定用戶的指定消息 ID 的消息，返回的數據中包含針對這個消息的回復。如果指定 touid 參數，那麼短消息將列出所有 uid 和 touid 之間的短消息，daterange 可以指定返回消息的日期範圍。
+本接口函數用於返回指定用戶的指定消息 ID 的消息，返回的數據中包含針對這個消息的回復。如果指定 touid 參數，那麼短消息將列出所有 uid 和 touid 之間的短消息，daterange 可以指定返回消息的日期範圍, page 和 pagesize 可以指定返回消息的頁碼和頁面大小。
 
 </div>
+
+<a name="viewnum"></a>
+<h3>查找會話消息數量</h3>
+
+<div class="submsg">
+<h4><i>integer</i> uc_pm_view_num(<i>integer</i> uid , <i>integer</i> touid , <i>bool</i> isplid)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> touid</th>
+	<td>查找的會話 ID 或者用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>bool</i> isplid</th>
+	<td>touid參數是會話 ID 還是用戶 ID</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i></th>
+	<td>指定會話的消息數量</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+
+<h6><a href="###" class="spread" onclick="collapse(this, 's4')">查找會話消息數量示例 (PHP)</a></h6>
+<div class="code" id="s4" style="display: none"><pre>
+
+	uc_pm_view_num($uid, $plid, 1);
+
+</pre></div>
+
+</div>
+
+<br />
 
 <a name="viewnode"></a>
 <h3>獲取單條短消息內容</h3>
 
 <div class="submsg">
-<h4><i>integer</i> uc_pm_viewnode(<i>integer</i> uid [, <i>integer</i> type , <i>integer</i> pmid])</h4>
+<h4><i>integer</i> uc_pm_viewnode(<i>integer</i> uid , <i>integer</i> type , <i>integer</i> pmid)</h4>
 
 <h5>函數參數</h5>
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
@@ -652,14 +770,12 @@ echo "短消息已標記為已讀";
 	<th><i>integer</i> type</th>
 	<td>
 	消息的類型<br />
-	<em>0:</em><strong>(默認值)</strong> 獲取指定單條消息<br />
-	<em>1:</em>獲取指定用戶發的最後單條消息<br />
-	<em>2:</em>獲取指定用戶收的最後單條消息<br />
+	<em>0: </em>獲取指定單條消息<br />
 	</td>
 	</tr>
 	<tr>
 	<th><i>integer</i> pmid</th>
-	<td>消息 ID，默認值 0，type 為 0 時本參數有效</td>
+	<td>消息 ID</td>
 	</tr>
 </tbody>
 </table>
@@ -675,13 +791,158 @@ echo "短消息已標記為已讀";
 <tbody>
 	<tr>
 	<th><i>array</i></th>
-	<td>短消息內容數據，其中單條消息數組結構請參看<a href="pm.htm#table1">附表</a></td>
+	<td>短消息內容數據，其中單條消息數組結構請參看<a href="pm.htm#table2">附表</a></td>
 	</tr>
 </tbody>
 </table>
 
 <br />
-如果 type 為 0，則本接口函數返回指定 pmid 的單條消息內容。如果 type 為 1 或 2，則本接口函數返回指定用戶接收的最後單條消息內容。
+
+</div>
+
+<a name="chatpmmemberlist"></a>
+<h3>查找群聊成員列表</h3>
+
+<div class="submsg">
+<h4><i>integer</i> uc_pm_chatpmmemberlist(<i>integer</i> uid , <i>integer</i> plid)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> plid</th>
+	<td>群聊會話 ID</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>array</i></th>
+	<td>返回群聊的成員列表<a href="pm.htm#table3">附表</a></td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+
+</div>
+
+<a name="kickchatpm"></a>
+<h3>踢出群聊成員</h3>
+
+<div class="submsg">
+<h4><i>integer</i> uc_pm_kickchatpm(<i>integer</i> plid , <i>integer</i> uid , <i>integer</i> touid)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> plid</th>
+	<td>會話 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> touid</th>
+	<td>踢出的用戶 ID</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i></th>
+	<td>1: 踢出成功, 2: 踢出失敗</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
+
+</div>
+
+<a name="appendchatpm"></a>
+<h3>添加群聊成員</h3>
+
+<div class="submsg">
+<h4><i>integer</i> uc_pm_appendchatpm(<i>integer</i> plid , <i>integer</i> uid , <i>integer</i> touid)</h4>
+
+<h5>函數參數</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>參數</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i> plid</th>
+	<td>會話 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> uid</th>
+	<td>用戶 ID</td>
+	</tr>
+	<tr>
+	<th><i>integer</i> touid</th>
+	<td>添加的用戶 ID</td>
+	</tr>
+</tbody>
+</table>
+
+<h5>返回值</h5>
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+<thead>
+	<tr>
+	<th>值</th>
+	<td>含義</td>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+	<th><i>integer</i></th>
+	<td>1: 添加成功, 2: 添加失敗</td>
+	</tr>
+</tbody>
+</table>
+
+<br />
 
 </div>
 
@@ -886,20 +1147,82 @@ uc_pm_blackls_delete(1, array('username1', ''username2'));
 <div class="line"></div>
 
 <a name="table1"></a>
-<h3>附表：單條消息數組結構</h3>
+<h3>附表：消息列表單條數組結構</h3>
 
 <div class="submsg">
 <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
 	<tbody>
-	<tr><th style="width:150px"><i>integer</i> ['pmid']</th><td>消息 ID</td></tr>
-	<tr><th style="width:150px"><i>string</i> ['msgfrom']</th><td>發件人用戶名</td></tr>
-	<tr><th style="width:150px"><i>integer</i> ['msgfromid']</th><td>發件人用戶 ID</td></tr>
-	<tr><th style="width:150px"><i>integer</i> ['msgtoid']</th><td>收件人用戶 ID</td></tr>
-	<tr><th style="width:150px"><i>integer</i> ['new']</th><td><em>1:</em>未讀短消息<br /><em>0:</em>已讀短消息<br /></td></tr>
+
+	<tr><th style="width:150px"><i>integer</i> ['plid']</th><td>會話 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['uid']</th><td>當前用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>bool</i> ['isnew']</th><td>是否未讀標記</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['pmnum']</th><td>該會話相對於當前用戶的消息數量</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['lastupdate']</th><td>當前用戶的最後更新時間</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['lastdateline']</th><td>會話最後更新時間</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['authorid']</th><td>會話發起者 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['pmtype']</th><td>會話類別 1: 私人消息, 2: 群聊消息</td></tr>
 	<tr><th style="width:150px"><i>string</i> ['subject']</th><td>標題</td></tr>
-	<tr><th style="width:150px"><i>integer</i> ['dateline']</th><td>發送時間的時間戳</td></tr>
-	<tr><th style="width:150px"><i>string</i> ['message']</th><td>內容</td></tr>
-	<tr><th style="width:150px"><i>integer</i> ['daterange']</th><td><em>1:</em>今天<br /><em>2:</em>昨天<br /><em>3:</em>前天<br /><em>4:</em>上周<br /><em>5:</em>更早<br /></td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['members']</th><td>會話參與人數</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['touid']</th><td>pmtype參數為1時,該返回值表示對方用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['tousername']</th><td>pmtype參數為1時,該返回值表示對方用戶名</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['founddateline']</th><td>會話發起時間</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['lastauthorid']</th><td>會話最後一條的發送人 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['lastauthor']</th><td>會話最後一條的發送人用戶名</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['lastsummary']</th><td>會話最後一條的發送的內容截取</td></tr>
+
+	<tr><th style="width:150px"><i>integer</i> ['pmid'][兼容]</th><td>消息 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['msgfromid'][兼容]</th><td>發件人用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['msgfrom'][兼容]</th><td>發件人用戶名</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['msgtoid'][兼容]</th><td>收件人用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['new'][兼容]</th><td><em>1:</em>未讀短消息<br /><em>0:</em>已讀短消息<br /></td></tr>
+	<tr><th style="width:150px"><i>string</i> ['message'][兼容]</th><td>內容</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['dateline'][兼容]</th><td>發送時間的時間戳</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['daterange'][兼容]</th><td><em>1:</em>今天<br /><em>2:</em>昨天<br /><em>3:</em>前天<br /><em>4:</em>上周<br /><em>5:</em>更早<br /></td></tr>
+
+</tbody>
+</table>
+</div>
+
+
+<a name="table2"></a>
+<h3>附表：消息詳細內容單條數組結構</h3>
+
+<div class="submsg">
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+
+	<tr><th style="width:150px"><i>integer</i> ['pmid']</th><td>消息 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['plid']</th><td>所屬會話 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['authorid']</th><td>消息發起者 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['author']</th><td>消息發起者用戶名</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['pmtype']</th><td>會話類別 1: 私人消息, 2: 群聊消息</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['subject']</th><td>標題</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['members']</th><td>會話參與人數</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['dateline']</th><td>消息發起時間</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['message']</th><td>消息內容</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['founderuid']</th><td>發起會話的用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['founddateline']</th><td>會話發起時間</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['touid']</th><td>pmtype參數為1時,該返回值表示對方用戶 ID</td></tr>
+
+	兼容
+	<tr><th style="width:150px"><i>integer</i> ['msgfromid'][兼容]</th><td>發件人用戶 ID</td></tr>
+	<tr><th style="width:150px"><i>string</i> ['msgfrom'][兼容]</th><td>發件人用戶名</td></tr>
+	<tr><th style="width:150px"><i>integer</i> ['msgtoid'][兼容]</th><td>收件人用戶 ID</td></tr>
+
+</tbody>
+</table>
+</div>
+
+<a name="table3"></a>
+<h3>附表：群聊成員列表單個數組結構</h3>
+
+<div class="submsg">
+<table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+	<tbody>
+
+	<tr><th style="width:150px"><i>integer</i> ['author']</th><td>群聊發起者 ID</td></tr>
+	<tr><th style="width:150px"><i>array</i> ['member']</th><td>所有成員用戶 ID 列表 如: 「 array(1, 2, 3, ...) 」</td></tr>
+
 </tbody>
 </table>
 </div>

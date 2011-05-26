@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_album.php 16634 2010-09-10 09:33:09Z liyulong $
+ *      $Id: admincp_album.php 20638 2011-03-01 03:26:36Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,6 +23,26 @@ $starttime = $_G['gp_starttime'];
 $endtime = $_G['gp_endtime'];
 $searchsubmit = $_G['gp_searchsubmit'];
 $albumids = $_G['gp_albumids'];
+$friend = $_G['gp_friend'];
+$orderby = $_G['gp_orderby'];
+$ordersc = $_G['gp_ordersc'];
+
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
+$muticondition = '';
+$muticondition .= $albumname ? '&albumname='.$albumname : '';
+$muticondition .= $albumid ? '&albumid='.$albumid : '';
+$muticondition .= $uid ? '&uid='.$uid : '';
+$muticondition .= $users ? '&users='.$users : '';
+$muticondition .= $starttime ? '&starttime='.$starttime : '';
+$muticondition .= $endtime ? '&endtime='.$endtime : '';
+$muticondition .= $friend ? '&friend='.$friend : '';
+$muticondition .= $orderby ? '&orderby='.$orderby : '';
+$muticondition .= $ordersc ? '&ordersc='.$ordersc : '';
+$muticondition .= $fromumanage ? '&fromumanage='.$fromumanage : '';
+$muticondition .= $searchsubmit ? '&searchsubmit='.$searchsubmit : '';
+$muticondition .= $_G['gp_search'] ? '&search='.$_G['gp_search'] : '';
+$muticondition .= $detail ? '&detail='.$detail : '';
 
 if(!submitcheck('albumsubmit')) {
 	if(empty($_G['gp_search'])) {
@@ -31,8 +51,13 @@ if(!submitcheck('albumsubmit')) {
 		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
 
-	$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
-	$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	if($fromumanage) {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? '' : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? '' : $endtime;
+	} else {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	}
 
 	shownav('topic', 'nav_album');
 	showsubmenu('nav_album', array(
@@ -43,7 +68,9 @@ if(!submitcheck('albumsubmit')) {
 		array('album_search', !$searchsubmit),
 		array('nav_album', $searchsubmit)
 	));
-	showtips('album_tips');
+	if($muticondition) {
+		showtips('album_tips');
+	}
 	echo <<<EOT
 <script type="text/javascript" src="static/js/calendar.js"></script>
 <script type="text/JavaScript">
@@ -59,11 +86,15 @@ EOT;
 	showtableheader();
 	showsetting('album_search_detail', 'detail', $detail, 'radio');
 	showsetting('album_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[topic_dateline]</option><option value='updatetime'>$lang[updatetime]</option><option value='picnum'>$lang[pic_num]</option></select> ");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
 	showsetting('album_search_albumname', 'albumname', $albumname, 'text');
 	showsetting('album_search_albumid', 'albumid', $albumid, 'text');
 	showsetting('album_search_uid', 'uid', $uid, 'text');
 	showsetting('album_search_user', 'users', $users, 'text');
+	showsetting('blog_search_friend', '', $friend, "<select name='friend'><option value='0'>$lang[setting_home_privacy_alluser]</option><option value='1'>$lang[setting_home_privacy_friend]</option><option value='2'>$lang[setting_home_privacy_specified_friend]</option><option value='3'>$lang[setting_home_privacy_self]</option><option value='4'>$lang[setting_home_privacy_password]</option></select>");
 	showsetting('album_search_time', array('starttime', 'endtime'), array($starttime, $endtime), 'daterange');
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsubmit('searchsubmit');
 	showtablefooter();
 	showformfooter();
@@ -88,7 +119,6 @@ EOT;
 		}
 		if($albums) {
 			$selectalbumids = array_keys($albums);
-			$selectalbumids = implode("','", $selectalbumids);
 			if($_POST['optype'] == 'delete') {
 				include_once libfile('function/delete');
 				$deletecount = count(deletealbums($selectalbumids));
@@ -97,7 +127,7 @@ EOT;
 				$tocatid = intval($_POST['tocatid']);
 				$catids[] = $tocatid;
 				$catids = array_merge($catids);
-				DB::update('home_album', array('catid'=>$tocatid), 'albumid IN ('.$selectalbumids.')');
+				DB::update('home_album', array('catid'=>$tocatid), 'albumid IN ('.dimplode($selectalbumids).')');
 				foreach($catids as $catid) {
 					$catid = intval($catid);
 					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_album')." WHERE catid = '$catid'");
@@ -113,7 +143,7 @@ EOT;
 	}
 
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('albumforum').searchsubmit.click();</script>
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('albumforum').searchsubmit.click();</script>
 <?php
 
 }
@@ -140,13 +170,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		$sql .= " AND a.albumname='$albumname'";
 	}
 
-	if($starttime != '0') {
+	if($starttime != '') {
 		$starttime = strtotime($starttime);
 		$sql .= " AND a.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
-		if($endtime != '0') {
+		if($endtime != '') {
 			$endtime = strtotime($endtime);
 			$sql .= " AND a.dateline<'$endtime'";
 		}
@@ -172,6 +202,10 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		$sql .= " AND a.uid IN ($uids)";
 	}
 
+	$sql .= $friend ? " AND a.friend = '$friend'" : '';
+	$orderby = $orderby ? "a.$orderby" : 'a.updatetime';
+	$ordersc = $ordersc ? "$ordersc" : 'DESC';
+
 	if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
 		$error = 'album_mod_range_illegal';
 	}
@@ -180,7 +214,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		if($detail) {
 			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
 			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-			$query = DB::query("SELECT * FROM ".DB::table('home_album')." a WHERE 1 $sql ORDER BY a.updatetime DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+			$query = DB::query("SELECT * FROM ".DB::table('home_album')." a WHERE 1 $sql ORDER BY $orderby $ordersc LIMIT ".(($page - 1) * $perpage).",{$perpage}");
 			$albums = '';
 
 			include_once libfile('function/home');
@@ -191,18 +225,37 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$album['pic'] = STATICURL.'image/common/nopublish.gif';
 				}
 				$album['updatetime'] = dgmdate($album['updatetime']);
+				switch ($album['friend']) {
+					case '0':
+						$privacy_name = $lang[setting_home_privacy_alluser];
+						break;
+					case '1':
+						$privacy_name = $lang[setting_home_privacy_friend];
+						break;
+					case '2':
+						$privacy_name = $lang[setting_home_privacy_specified_friend];
+						break;
+					case '3':
+						$privacy_name = $lang[setting_home_privacy_self];
+						break;
+					case '4':
+						$privacy_name = $lang[setting_home_privacy_password];
+						break;
+					default:
+						$privacy_name = $lang[setting_home_privacy_alluser];
+				}
+				$album['friend'] = $album['friend'] ? " <a href=\"".ADMINSCRIPT."?action=album&friend=$album[friend]\">$privacy_name</a>" : $privacy_name;
 				$albums .= showtablerow('', '', array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"ids[]\" value=\"$album[albumid]\" />",
 					"<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\" target=\"_blank\"><img src='$album[pic]' /></a>",
 					"<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\" target=\"_blank\">$album[albumname]</a>",
 					"<a href=\"home.php?mod=space&uid=$album[uid]\" target=\"_blank\">".$album['username']."</a>",
-					$album['updatetime']
+					$album['updatetime'],"<a href=\"".ADMINSCRIPT."?action=pic&albumid=$album[albumid]\">".$album['picnum']."</a>",
+					$album['friend']
 				), TRUE);
 			}
 			$albumcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_album')." a WHERE 1 $sql");
-			$multi = multi($albumcount, $perpage, $page, ADMINSCRIPT."?action=album");
-			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=album&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
-			$multi = str_replace("window.location='".ADMINSCRIPT."?action=album&amp;page='+this.value", "page(this.value)", $multi);
+			$multi = multi($albumcount, $perpage, $page, ADMINSCRIPT."?action=album$muticondition");
 		} else {
 			$albumcount = 0;
 			$query = DB::query("SELECT a.albumid FROM ".DB::table('home_album')." a WHERE 1 $sql");
@@ -220,13 +273,17 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	showtagheader('div', 'postlist', $searchsubmit || $newlist);
 	showformheader('album&frame=no', 'target="albumframe"');
-	showtableheader(cplang('album_result').' '.$albumcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'albumforum\').pp.value=\'\';$(\'albumforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	if(!$muticondition) {
+		showtableheader(cplang('album_new_result').' '.$albumcount, 'fixpadding');
+	} else {
+		showtableheader(cplang('album_result').' '.$albumcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'albumforum\').pp.value=\'\';$(\'albumforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	}
 
 	if($error) {
 		echo "<tr><td class=\"lineheight\" colspan=\"15\">$lang[$error]</td></tr>";
 	} else {
 		if($detail) {
-			showsubtitle(array('', 'albumpic', 'albumname', 'author', 'updatetime'));
+			showsubtitle(array('', 'albumpic', 'albumname', 'author', 'updatetime', 'pic_num', 'privacy'));
 			echo $albums;
 			$optypehtml = ''
 			.'<input type="radio" name="optype" id="optype_delete" value="delete" class="radio" /><label for="optype_delete">'.cplang('delete').'</label>&nbsp;&nbsp;'

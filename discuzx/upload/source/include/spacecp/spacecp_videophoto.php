@@ -4,14 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_videophoto.php 15410 2010-08-24 02:55:14Z zhengqingpeng $
+ *      $Id: spacecp_videophoto.php 22572 2011-05-12 09:35:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-if(empty($_G['setting']['videophoto'])) {
+if(empty($_G['setting']['verify'][7]['available'])) {
 	showmessage('no_open_videophoto');
 }
 

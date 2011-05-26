@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_medal.php 16665 2010-09-13 01:39:03Z monkey $
+ *      $Id: home_medal.php 22728 2011-05-18 09:05:00Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,6 +16,7 @@ if(!$_G['uid'] && $_G['gp_action']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
 }
 
+$_G['mnid'] = 'mn_common';
 $medallist = $medallogs = array();
 $tpp = 10;
 $page = max(1, intval($_G['gp_page']));
@@ -25,7 +26,7 @@ if(empty($_G['gp_action'])) {
 	include libfile('function/forum');
 	$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." WHERE available='1' ORDER BY displayorder LIMIT 0,100");
 	while($medal = DB::fetch($query)) {
-		$medal['permission'] = medalformulaperm($medal['permission'], 2);
+		$medal['permission'] = medalformulaperm(serialize(array('medal' => unserialize($medal['permission']))), 1);
 		$medallist[$medal['medalid']] = $medal;
 	}
 
@@ -54,7 +55,7 @@ if(empty($_G['gp_action'])) {
 
 	$applysucceed = FALSE;
 	$medalpermission = $medal['permission'] ? unserialize($medal['permission']) : '';
-	if($medalpermission[0]) {
+	if($medalpermission[0] || $medalpermission['usergroupallow']) {
 		include libfile('function/forum');
 		medalformulaperm(serialize(array('medal' => $medalpermission)), 1);
 
@@ -68,16 +69,18 @@ if(empty($_G['gp_action'])) {
 	}
 
 	if($applysucceed) {
+		$expiration = empty($medal['expiration'])? 0 : TIMESTAMP + $medal['expiration'] * 86400;
 		if($medal['type'] == 1) {
 			$usermedal = DB::fetch_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'");
+			$medal['medalid'] = $medal['medalid'].(empty($expiration) ? '' : '|'.$expiration);
 			$medalnew = $usermedal['medals'] ? $usermedal['medals']."\t".$medal['medalid'] : $medal['medalid'];
 			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET medals='$medalnew' WHERE uid='$_G[uid]'");
 			$medalmessage = 'medal_get_succeed';
 		} else {
 			$medalmessage = 'medal_apply_succeed';
+			manage_addnotify('verifymedal');
 		}
 
-		$expiration = empty($medal['expiration'])? 0 : TIMESTAMP + $medal['expiration'] * 86400;
 		DB::query("INSERT INTO ".DB::table('forum_medallog')." (uid, medalid, type, dateline, expiration, status) VALUES ('$_G[uid]', '$medalid', '$medal[type]', '$_G[timestamp]', '$expiration', '0')");
 		showmessage($medalmessage, 'home.php?mod=medal', array('medalname' => $medal['name']));
 	}
@@ -125,7 +128,7 @@ if(empty($_G['gp_action'])) {
 	}
 
 } else {
-	showmessage('undefined_action', NULL);
+	showmessage('undefined_action');
 }
 
 $navtitle = lang('core', 'title_medals_list');

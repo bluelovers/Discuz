@@ -13,22 +13,26 @@ if(!defined('IN_DISCUZ')) {
 
 if($_GET['op'] == 'delete') {
 
-	$favid = intval($_GET['favid']);
-	$thevalue = DB::fetch_first('SELECT * FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
-	if(empty($thevalue) || $thevalue['uid'] != $_G['uid']) {
-		showmessage('favorite_does_not_exist');
-	}
+	if($_G['gp_checkall']) {
+		if($_G['gp_favorite']) {
+			DB::query('DELETE FROM '.DB::table('home_favorite')." WHERE uid='$_G[uid]' AND favid IN (".dimplode($_G['gp_favorite']).")");
+		}
+		showmessage('favorite_delete_succeed', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1');
+	} else {
+		$favid = intval($_GET['favid']);
+		$thevalue = DB::fetch_first('SELECT * FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
+		if(empty($thevalue) || $thevalue['uid'] != $_G['uid']) {
+			showmessage('favorite_does_not_exist');
+		}
 
-	if(submitcheck('deletesubmit')) {
-		DB::query('DELETE FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
-		showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+		if(submitcheck('deletesubmit')) {
+			DB::query('DELETE FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
+			showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid, 'id' => $thevalue['id']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+		}
 	}
 
 } else {
 
-	ckrealname('favorite');
-
-	ckvideophoto('favorite');
 
 	cknewuser();
 
@@ -83,8 +87,8 @@ if($_GET['op'] == 'delete') {
 	$description = '';
 	$description_show = nl2br($description);
 
-	$fav_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE idtype='$idtype' AND id='$id'");
-	if(submitcheck('favoritesubmit')) {
+	$fav_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE id='$id' AND idtype='$idtype'");
+	if(submitcheck('favoritesubmit') || $type == 'forum' || $type == 'group') {
 		$arr = array(
 			'uid' => intval($_G['uid']),
 			'idtype' => $idtype,
@@ -98,6 +102,10 @@ if($_GET['op'] == 'delete') {
 		switch($type) {
 			case 'thread':
 				DB::query("UPDATE ".DB::table('forum_thread')." SET favtimes=favtimes+1 WHERE tid='$id'");
+				if($_G['setting']['heatthread']['type'] == 2) {
+					require_once libfile('function/forum');
+					update_threadpartake($id);
+				}
 				break;
 			case 'forum':
 				DB::query("UPDATE ".DB::table('forum_forum')." SET favtimes=favtimes+1 WHERE fid='$id'");
@@ -118,7 +126,7 @@ if($_GET['op'] == 'delete') {
 				DB::query("UPDATE ".DB::table('portal_article_count')." SET favtimes=favtimes+1 WHERE aid='$id'");
 				break;
 		}
-		showmessage('favorite_do_success', dreferer(), array(), array('showdialog' => true, 'closetime' => true));
+		showmessage('favorite_do_success', dreferer(), array('id' => $id), array('showdialog' => true, 'closetime' => true));
 	}
 }
 

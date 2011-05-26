@@ -1,16 +1,18 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: plugin.php 895 2008-12-23 02:57:07Z monkey $
+	$Id: plugin.php 1059 2011-03-01 07:25:09Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
 
 class pluginbase extends adminbase {
-
+	public function serialize($s, $htmlon = 0) {
+		parent::serialize($s, $htmlon);
+	}
 	var $plugin = array();
 	var $plugins = array();
 

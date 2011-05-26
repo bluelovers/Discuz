@@ -1,4 +1,5 @@
 <!--{template common/header}-->
+<!--{if empty($_G['gp_showratetip'])}-->
 <!--{if empty($_G['gp_infloat'])}-->
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
@@ -21,15 +22,17 @@
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="tid" value="$_G[tid]" />
 		<input type="hidden" name="pid" value="$_G[gp_pid]" />
+		<input type="hidden" name="referer" value="$referer" />
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="rate"><!--{/if}-->
-		<div class="c mark">
-			<table class="dt mbm">
+		<div class="c">
+			<table cellspacing="0" cellpadding="0" class="dt mbm">
 				<tr>
 					<th>&nbsp;</th>
 					<th width="65">&nbsp;</th>
 					<th width="65">{lang rate_raterange}</th>
 					<th width="55">{lang rate_todayleft}</th>
 				</tr>
+				<!--{eval $rateselfflag = 0;}-->
 				<!--{loop $ratelist $id $options}-->
 					<tr>
 						<td>{$_G['setting']['extcredits'][$id][img]} {$_G['setting']['extcredits'][$id][title]}</td>
@@ -39,23 +42,47 @@
 							<ul id="scoreoption$id" style="display:none">$options</ul>
 						</td>
 						<td>{$_G['group']['raterange'][$id]['min']} ~ {$_G['group']['raterange'][$id]['max']}</td>
+						<!--{eval $rateselfflag = $_G['group']['raterange'][$id][isself] ? 1 : $rateselfflag;}-->
 						<td>$maxratetoday[$id]</td>
 					</tr>
 				<!--{/loop}-->
 			</table>
 
 			<div class="tpclg">
-				<h4>
-					<a onclick="showselect(this, 'reason', 'reasonselect')" class="dpbtn" href="javascript:;">^</a>
-					{lang admin_operation_explain}:
-				</h4>
-				<p><textarea id="reason" name="reason" class="pt" onkeyup="seditor_ctlent(event, '$(\'rateform\').ratesubmit.click()')"></textarea></p>
-				<ul id="reasonselect" style="display: none"><!--{echo modreasonselect()}--></ul>
+				<h4>{lang user_operation_explain}:</h4>
+				<table cellspacing="0" cellpadding="0" class="reason_slct">
+					<!--{eval $selectreason = modreasonselect(0, 'userreasons')}-->
+					<!--{if $selectreason}-->
+					 	<tr>
+					 		<td>
+					 			<ul id="reasonselect" class="reasonselect pt">$selectreason</ul>
+					 			<script type="text/javascript" reload="1">
+					 				var reasonSelectOption = $('reasonselect').getElementsByTagName('li');
+					 				if (reasonSelectOption) {
+					 					for (i=0; i<reasonSelectOption.length; i++) {
+					 						reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
+					 						reasonSelectOption[i].onmouseout = function() { this.className = ''; }
+					 						reasonSelectOption[i].onclick = function() {
+					 							$('reason').value = this.innerHTML;
+					 						}
+					 					}
+					 				}
+					 			</script>
+					 		</td>
+					 	</tr>
+					<!--{/if}-->
+					<tr>
+				 	 	<td><input type="text" name="reason" id="reason" class="px" onkeyup="seditor_ctlent(event, '$(\'rateform\').ratesubmit.click()')" /></td>
+					</tr>
+				</table>
 			</div>
+			<!--{if $rateselfflag}-->
+				<div class="xg1">{lang admin_rate}</div>
+			<!--{/if}-->
 		</div>
 		<p class="o pns">
-			<button name="ratesubmit" type="submit" class="pn pnc" ><span>{lang confirms}</span></button>
-			<input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} /> <label for="sendreasonpm" />{lang admin_pm}</label>
+			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
+			<button name="ratesubmit" type="submit" value="true" class="pn pnc"><span>{lang confirms}</span></button>
 		</p>
 	</form>
 </div>
@@ -73,6 +100,7 @@
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="tid" value="$_G[tid]">
 		<input type="hidden" name="pid" value="$_G[gp_pid]">
+		<input type="hidden" name="referer" value="$referer" />
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="rate"><!--{/if}-->
 		<div class="c floatwrap">
 			<table class="list" cellspacing="0" cellpadding="0">
@@ -98,8 +126,8 @@
 		</div>
 	</div>
 	<div class="o pns">
-		<label class="z"><input class="pc" type="checkbox" name="chkall" onclick="checkall(this.form, 'logid')" /> {lang checkall}</label>
-		<label><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} /> <label for="sendreasonpm" />{lang admin_pm}</label>
+		<label class="z" onclick="checkall(this.form, 'logid')"><input class="pc" type="checkbox" name="chkall" />{lang checkall}</label> 
+		<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
 		{lang admin_operation_explain}: <input name="reason" class="px vm" />
 		<button class="pn pnc vm" type="submit" value="true" name="ratesubmit"><span>{lang submit}</span></button>
 	</div>
@@ -122,5 +150,25 @@ loadcss('forum_moderator');
 		</div>
 	</div>
 </div>
+<!--{/if}-->
+<!--{else}-->
+
+	<h3 class="flb">
+		<em id="return_$_G[gp_handlekey]">{lang board_message}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	</h3>
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<div class="c altw">
+		<div class="alert_right">
+			<p>{lang push_succeed}</p>
+			<p class="alert_btnleft">
+				<a href="javascript:;" class="xi1" onclick="hideWindow('$_G[gp_handlekey]');showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[gp_tid]&pid=$_G[gp_pid]', 'get', -1);return false;">{lang click_here}</a> {lang rate_thread}
+			</p>
+		</div>
+		</div>
+		<p class="o pns">
+			<button onclick="hideWindow('rate');" id="closebtn" class="pn pnc" type="button" fwin="rate"><strong>{lang close}</strong></button>
+		</p>
+
 <!--{/if}-->
 <!--{template common/footer}-->

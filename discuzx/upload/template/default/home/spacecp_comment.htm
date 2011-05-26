@@ -16,14 +16,14 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=comment&op=edit&cid=$cid{if $_G[gp_modcommentkey]}&modcommentkey=$_G[gp_modcommentkey]{/if}" {if $_G[inajax]} onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="editsubmit" value="true" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">
 			<p>
 				<label for="message">{lang edit_content}:</label>
-				<span id="editface_{$cid}" onclick="showFace(this.id, 'message_{$cid}');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
+				<span id="editface_{$cid}" onclick="showFace(this.id, 'message_{$cid}');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 			</p>
 			<textarea id="message_{$cid}" name="message" cols="70" onkeydown="ctrlEnter(event, 'editsubmit_btn');" rows="8" class="pt mtn">$comment[message]</textarea>
 		</div>
@@ -43,7 +43,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="deletecommentform_{$cid}" name="deletecommentform_{$cid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=comment&op=delete&cid=$cid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="deletesubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
@@ -63,7 +63,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="replycommentform_{$comment[cid]}" name="replycommentform_{$comment[cid]}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=comment" {if $_G[inajax]} onsubmit="ajaxpost('replycommentform_{$comment[cid]}', 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="id" value="$comment[id]" />
 		<input type="hidden" name="idtype" value="$comment[idtype]" />
 		<input type="hidden" name="cid" value="$comment[cid]" />
@@ -74,9 +74,9 @@
 			<div class="c">
 				<p>
 					<label for="message">{lang content}:</label>
-					<span id="replyface_{$comment[cid]}" onclick="showFace(this.id, 'message_pop_{$comment[cid]}');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
+					<span id="replyface_{$comment[cid]}" onclick="showFace(this.id, 'message_pop_{$comment[cid]}');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 					<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
-					<span id="editdoodle_{$cid}" onclick="showWindow(this.id, 'home.php?mod=magic&mid=doodle&showid=comment_doodle&target=message_pop_{$comment[cid]}', 'get', 0)" style="cursor: pointer;"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" class="vm" />{$_G[setting][magics][doodle]}</span>
+					<span id="editdoodle_{$cid}" onclick="showWindow(this.id, 'home.php?mod=magic&mid=doodle&showid=comment_doodle&target=message_pop_{$comment[cid]}', 'get', 0)" class="cur1"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" class="vm" />{$_G[setting][magics][doodle]}</span>
 					<!--{/if}-->
 				</p>
 				<textarea id="message_pop_{$comment[cid]}" name="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');" rows="8" cols="70" class="pt mtn"></textarea>

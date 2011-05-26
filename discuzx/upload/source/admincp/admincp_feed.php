@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_feed.php 16756 2010-09-14 06:26:39Z zhengqingpeng $
+ *      $Id: admincp_feed.php 20811 2011-03-04 07:35:59Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -161,11 +161,19 @@ EOF;
 	$endtime = $_G['gp_endtime'];
 	$searchsubmit = $_G['gp_searchsubmit'];
 	$feedids = $_G['gp_feedids'];
+
+	$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
 	showtips('feed_tips');
 	if(!submitcheck('feedsubmit')) {
 
-		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
-		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+		if($fromumanage) {
+			$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? '' : $starttime;
+			$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? '' : $endtime;
+		} else {
+			$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
+			$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+		}
 
 		echo <<<EOT
 	<script type="text/javascript" src="static/js/calendar.js"></script>
@@ -193,6 +201,7 @@ EOT;
 		showsetting('feed_search_feedid', 'feedid', $feedid, 'text');
 		showsetting('feed_search_hot', array('hot1', 'hot2'), array('', ''), 'range');
 		showsetting('feed_search_time', array('starttime', 'endtime'), array($starttime, $endtime), 'daterange');
+		echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 		showsubmit('searchsubmit');
 		showtablefooter();
 		showformfooter();
@@ -206,7 +215,7 @@ EOT;
 		$cpmsg = cplang('feed_succeed', array('deletecount' => $deletecount));
 
 	?>
-	<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('feedforum').searchsubmit.click();</script>
+	<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('feedforum').searchsubmit.click();</script>
 	<?php
 
 	}
@@ -233,13 +242,13 @@ EOT;
 			$sql .= " AND f.icon='$icon'";
 		}
 
-		if($starttime != '0') {
+		if($starttime != '') {
 			$starttime = strtotime($starttime);
 			$sql .= " AND f.dateline>'$starttime'";
 		}
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
-			if($endtime != '0') {
+			if($endtime != '') {
 				$endtime = strtotime($endtime);
 				$sql .= " AND f.dateline<'$endtime'";
 			}
@@ -284,7 +293,7 @@ EOT;
 
 					$feed = mkfeed($feed);
 
-					$feeds .= showtablerow('', '', array(
+					$feeds .= showtablerow('', array('style="width:20px;"', 'style="width:260px;"', '', 'style="width:120px;"', 'style="width:60px;"'), array(
 						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$feed[feedid]\" />",
 						$feed['title_template'],
 						$feed['body_template'],

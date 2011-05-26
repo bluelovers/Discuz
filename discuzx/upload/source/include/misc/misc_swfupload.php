@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 13315 2010-07-26 02:09:58Z monkey $
+ *      $Id: misc_swfupload.php 22616 2011-05-16 02:20:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,8 +54,10 @@ if($op == "finish") {
 
 	$hash = md5($_G['uid'].UC_KEY);
 	$uploadurl = urlencode(getsiteurl().'home.php?mod=misc&ac=swfupload'.($iscamera ? '&op=screen' : ($isdoodle ? '&op=doodle&from=':'')));
-	if($isupload && !checkperm('allowupload')) {
-		$hash = '';
+	if($isupload) {
+		if(!checkperm('allowupload')) {
+			$hash = '';
+		}
 	} else {
 		$filearr = $dirstr = array();
 		if($iscamera) {
@@ -82,20 +84,26 @@ if($op == "finish") {
 	}
 	$feedurl = urlencode(getsiteurl().'home.php?mod=misc&ac=swfupload&op=finish&random='.random(8).'&albumid=');
 	$albumurl = urlencode(getsiteurl().'home.php?mod=space&do=album'.($isdoodle ? '&picid=' : '&id='));
-	$max = @ini_get(upload_max_filesize);
-	$unit = strtolower(substr($max, -1, 1));
-	if($unit == 'k') {
-		$max = intval($max)*1024;
-	} elseif($unit == 'm') {
-		$max = intval($max)*1024*1024;
-	} elseif($unit == 'g') {
-		$max = intval($max)*1024*1024*1024;
+	$max = 0;
+	if(!empty($_G['group']['maximagesize'])) {
+		$max = intval($_G['group']['maximagesize']);
+	} else {
+		$max = @ini_get(upload_max_filesize);
+		$unit = strtolower(substr($max, -1, 1));
+		if($unit == 'k') {
+			$max = intval($max)*1024;
+		} elseif($unit == 'm') {
+			$max = intval($max)*1024*1024;
+		} elseif($unit == 'g') {
+			$max = intval($max)*1024*1024*1024;
+		}
 	}
 	$albums = getalbums($_G['uid']);
 	loadcache('albumcategory');
 	$categorys = $_G['cache']['albumcategory'];
-	$categorystat = $_G['setting']['albumcategorystat'] ? intval($_G['setting']['albumcategorystat']) : 0;
-	$categoryrequired = $_G['setting']['albumcategoryrequired'] ? intval($_G['setting']['albumcategoryrequired']) : 0;
+	$categorystat = $_G['setting']['albumcategorystat'] && !empty($categorys) ? intval($_G['setting']['albumcategorystat']) : 0;
+	$categoryrequired = $_G['setting']['albumcategoryrequired'] && !empty($categorys) ? intval($_G['setting']['albumcategoryrequired']) : 0;
+
 } elseif($op == "screen" || $op == "doodle") {
 
 	if(empty($GLOBALS['HTTP_RAW_POST_DATA'])) {
@@ -133,7 +141,12 @@ if($op == "finish") {
 		$picid =  $uploadfiles['picid'];
 		if($op == "doodle") {
 			$fileurl = pic_get($uploadfiles['filepath'], 'album', $uploadfiles['thumb'], $uploadfiles['remote'], 0);
-
+			$remote = $uploadfiles['remote'] > 1 ? $uploadfiles['remote'] - 2 : $uploadfiles['remote'];
+			if(!$remote) {
+				if(!preg_match("/^http\:\/\//i", $fileurl)) {
+					$fileurl = getsiteurl().$fileurl;
+				}
+			}
 			require_once libfile('function/magic');
 			usemagic($magic['magicid'], $magic['num'], 1);
 			updatemagiclog($magic['magicid'], '2', '1', '0');

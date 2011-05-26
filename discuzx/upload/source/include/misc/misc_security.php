@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_security.php 17164 2010-09-25 06:45:18Z cnteacher $
+ *      $Id: misc_security.php 20931 2011-03-08 10:34:52Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,6 +12,17 @@ if(!defined('IN_DISCUZ')) {
 }
 
 global $_G;
+
+if(is_string($this->config['security']['attackevasive'])) {
+	$attackevasive_tmp = explode('|', $this->config['security']['attackevasive']);
+	$attackevasive = 0;
+	foreach($attackevasive_tmp AS $key => $value) {
+		$attackevasive += intval($value);
+	}
+	unset($attackevasive_tmp);
+} else {
+	$attackevasive = $this->config['security']['attackevasive'];
+}
 
 $lastrequest = isset($_G['cookie']['lastrequest']) ? authcode($_G['cookie']['lastrequest'], 'DECODE') : '';
 
@@ -51,7 +62,7 @@ if($attackevasive & 8) {
 			}
 			$question .= ' = ?';
 			dsetcookie('visitcode', authcode(md5($answer).'|0|'.TIMESTAMP, 'ENCODE'), TIMESTAMP + 816400, 1, true);
-			securitymessage($question, '<input type="text" name="answer" size="8" maxlength="150" /><input class="button" type="submit" name="secqsubmit" value=" Submit " />', FALSE, TRUE);
+			securitymessage($question, '<input type="text" name="answer" size="8" maxlength="150" /><input type="submit" name="secqsubmit" class="button" value=" Submit " />', FALSE, TRUE);
 		} else {
 			dsetcookie('visitcode', authcode($visitcode.'|1|'.TIMESTAMP, 'ENCODE'), TIMESTAMP + 816400, 1, true);
 		}

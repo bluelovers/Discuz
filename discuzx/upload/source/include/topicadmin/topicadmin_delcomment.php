@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_delcomment.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_delcomment.php 20099 2011-02-15 01:55:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowdelpost'] || empty($_G['gp_topiclist'])) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_delcomment');
 }
 
 if(!submitcheck('modsubmit')) {
@@ -20,7 +20,7 @@ if(!submitcheck('modsubmit')) {
 	$commentid = $_G['gp_topiclist'][0];
 	$pid = DB::result_first("SELECT pid FROM ".DB::table('forum_postcomment')." WHERE id='$commentid'");
 	if(!$pid) {
-		showmessage('undefined_action', NULL);
+		showmessage('postcomment_not_found');
 	}
 	$deleteid = '<input type="hidden" name="topiclist" value="'.$commentid.'" />';
 
@@ -34,13 +34,17 @@ if(!submitcheck('modsubmit')) {
 	$commentid = intval($_G['gp_topiclist']);
 	$postcomment = DB::fetch_first("SELECT * FROM ".DB::table('forum_postcomment')." WHERE id='$commentid'");
 	if(!$postcomment) {
-		showmessage('undefined_action', NULL);
+		showmessage('postcomment_not_found');
 	}
 	DB::delete('forum_postcomment', "id='$commentid'");
-	if(!DB::result_first("SELECT count(*) FROM ".DB::table('forum_postcomment')." WHERE pid='$postcomment[pid]'")) {
-		DB::update('forum_post', array('comment' => 0), "pid='$postcomment[pid]'");
+	$result = DB::result_first("SELECT count(*) FROM ".DB::table('forum_postcomment')." WHERE pid='$postcomment[pid]'");
+	if(!$result) {
+		$posttable = $_G['forum_thread']['posttable'] ? $_G['forum_thread']['posttable'] : 'forum_post';
+		DB::update($posttable, array('comment' => 0), "pid='$postcomment[pid]'");
 	}
-	updatepostcredits('-', $postcomment['authorid'], 'reply', $_G['fid']);
+	if(!$postcomment['rpid']) {
+		updatepostcredits('-', $postcomment['authorid'], 'reply', $_G['fid']);
+	}
 
 	$query = DB::query('SELECT comment FROM '.DB::table('forum_postcomment')." WHERE pid='$postcomment[pid]' AND score='1'");
 	$totalcomment = array();

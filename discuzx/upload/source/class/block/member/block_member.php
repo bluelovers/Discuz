@@ -58,6 +58,20 @@ class block_member {
 				'type' => 'radio',
 				'default' => ''
 			),
+			'emailstatus' => array(
+				'title' => 'memberlist_emailstatus',
+				'type' => 'mcheckbox',
+				'value' => array(
+					array(1, 'memberlist_yes'),
+				),
+				'default' => ''
+			),
+			'verifystatus' => array(
+				'title' => 'memberlist_verifystatus',
+				'type' => 'mcheckbox',
+				'value' => array(),
+				'default' => '',
+			),
 			'orderby' => array(
 				'title' => 'memberlist_orderby',
 				'type' => 'mradio',
@@ -73,6 +87,8 @@ class block_member {
 					array('digestposts', 'memberlist_orderby_digestposts'),
 					array('regdate', 'memberlist_orderby_regdate'),
 					array('show', 'memberlist_orderby_show'),
+					array('special', 'memberlist_orderby_special'),
+					array('todayposts', 'memberlist_orderby_todayposts'),
 				),
 				'default' => 'credits'
 			),
@@ -99,6 +115,17 @@ class block_member {
 				'default' => 0
 			),
 		);
+		$verifys = getglobal('setting/verify');
+		if(!empty($verifys)) {
+			foreach($verifys as $key => $value) {
+				if($value['title']) {
+					$this->setting['verifystatus']['value'][] = array($key, $value['title']);
+				}
+			}
+		}
+		if(empty($this->setting['verifystatus']['value'])) {
+			unset($this->setting['verifystatus']);
+		}
 	}
 
 	function name() {
@@ -115,11 +142,17 @@ class block_member {
 				'url' => array('name' => lang('blockclass', 'blockclass_member_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_member_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'avatar' => array('name' => lang('blockclass', 'blockclass_member_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar_middle' => array('name' => lang('blockclass', 'blockclass_member_field_avatar_middle'), 'formtype' => 'text', 'datatype' => 'string'),
 				'avatar_big' => array('name' => lang('blockclass', 'blockclass_member_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'regdate' => array('name' => lang('blockclass', 'blockclass_member_field_regdate'), 'formtype' => 'date', 'datatype' => 'date'),
 				'posts' => array('name' => lang('blockclass', 'blockclass_member_field_posts'), 'formtype' => 'text', 'datatype' => 'int'),
+				'threads' => array('name' => lang('blockclass', 'blockclass_member_field_threads'), 'formtype' => 'text', 'datatype' => 'int'),
 				'digestposts' => array('name' => lang('blockclass', 'blockclass_member_field_digestposts'), 'formtype' => 'text', 'datatype' => 'int'),
 				'credits' => array('name' => lang('blockclass', 'blockclass_member_field_credits'), 'formtype' => 'text', 'datatype' => 'int'),
+				'reason' => array('name' => lang('blockclass', 'blockclass_member_field_reason'), 'formtype' => 'text', 'datatype' => 'string'),
+				'unitprice' => array('name' => lang('blockclass', 'blockclass_member_field_unitprice'), 'formtype' => 'text', 'datatype' => 'int'),
+				'showcredit' => array('name' => lang('blockclass', 'blockclass_member_field_showcredit'), 'formtype' => 'text', 'datatype' => 'int'),
+				'shwonote' => array('name' => lang('blockclass', 'blockclass_member_field_shwonote'), 'formtype' => 'text', 'datatype' => 'string'),
 				);
 		foreach($_G['setting']['extcredits'] as $key=>$value) {
 			$fields['extcredits'.$key] = array('name'=>$value['title'], 'formtype'=>'text', 'datatype'=>'int');
@@ -165,10 +198,12 @@ class block_member {
 		$groupid	= !empty($parameter['groupid']) && !in_array(0, $parameter['groupid']) ? $parameter['groupid'] : array();
 		$startrow	= !empty($parameter['startrow']) ? intval($parameter['startrow']) : 0;
 		$items		= !empty($parameter['items']) ? intval($parameter['items']) : 10;
-		$orderby	= isset($parameter['orderby']) && in_array($parameter['orderby'],array('credits', 'extcredits', 'threads', 'posts', 'digestposts', 'regdate', 'show', 'blogs', 'albums', 'doings', 'sharings')) ? $parameter['orderby'] : '';
+		$orderby	= isset($parameter['orderby']) && in_array($parameter['orderby'],array('credits', 'extcredits', 'threads', 'posts', 'digestposts', 'regdate', 'show', 'blogs', 'albums', 'doings', 'sharings', 'special', 'todayposts')) ? $parameter['orderby'] : '';
 		$special    = isset($parameter['special']) && strlen($parameter['special']) ? intval($parameter['special']) : null;
 		$lastpost	= !empty($parameter['lastpost']) ? intval($parameter['lastpost']) : '';
 		$avatarstatus = !empty($parameter['avatarstatus']) ? 1 : 0;
+		$emailstatus = !empty($parameter['emailstatus']) ? 1 : 0;
+		$verifystatus = !empty($parameter['verifystatus']) ? $parameter['verifystatus'] : array();
 		$profiles = array();
 		$profiles['gender']		= !empty($parameter['gender']) ? intval($parameter['gender']) : 0;
 		$profiles['resideprovince']	= !empty($parameter['xresideprovince']) ? $parameter['xresideprovince'] : '';
@@ -180,13 +215,10 @@ class block_member {
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
-		$list = array();
+		$list = $todayuids = $todayposts = array();
 		$tables = $wheres = array();
 		$sqlorderby = '';
 		$tables[] = DB::table('common_member').' m';
-		if($uids) {
-			$wheres[] = 'm.uid IN ('.dimplode($uids).')';
-		}
 		if($groupid) {
 			$wheres[] = 'm.groupid IN ('.dimplode($groupid).')';
 		}
@@ -195,6 +227,22 @@ class block_member {
 		}
 		if($avatarstatus) {
 			$wheres[] = "m.avatarstatus='1'";
+		}
+		if($emailstatus) {
+			$wheres[] = "m.emailstatus='1'";
+		}
+		if(!empty($verifystatus)) {
+			$flag = false;
+			foreach($verifystatus as $value) {
+				if(isset($_G['setting']['verify'][$value])) {
+					$flag = true;
+					$wheres[] = "cmv.verify$value='1'";
+				}
+			}
+			if($flag) {
+				$tables[] = DB::table('common_member_verify').' cmv';
+				$wheres[] = 'cmv.uid=m.uid';
+			}
 		}
 		$tables[] = DB::table('common_member_count').' mc';
 		$wheres[] = 'mc.uid=m.uid';
@@ -205,11 +253,16 @@ class block_member {
 				$wheres[] = "mp.$key='$value'";
 			}
 		}
+
+		$reason = $show = '';
 		if($special !== null) {
-			$special = $special ? 1 : 0;
+			$special = in_array($special, array(-1, 0, 1)) ? $special : -1;
 			$tables[] = DB::table('home_specialuser').' su';
-			$wheres[] = "su.status='$special'";
+			if($special != -1) {
+				$wheres[] = "su.status='$special'";
+			}
 			$wheres[] = 'su.uid=m.uid';
+			$reason = ', su.reason';
 		}
 		if($lastpost) {
 			$time = TIMESTAMP - $lastpost;
@@ -236,20 +289,43 @@ class block_member {
 				$sqlorderby = " ORDER BY mc.$orderby DESC";
 				break;
 			case 'show':
+				$show = ', s.unitprice, s.credit as showcredit, s.note as shwonote';
 				$tables[] = DB::table('home_show')." s";
 				$wheres[] = 's.uid=m.uid';
-				$sqlorderby = ' ORDER BY s.unitprice DESC';
+				$sqlorderby = ' ORDER BY s.unitprice DESC, s.credit DESC';
+				break;
+			case 'special':
+				$sqlorderby = $special !== null ? ' ORDER BY su.displayorder, dateline DESC' : '';
+				break;
+			case 'todayposts':
+				$todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
+				$inuids = $uids ? ' AND uid IN ('.dimplode($uids).')' : '';
+				$query = DB::query('SELECT uid, count(*) as sum FROM '.DB::table('common_member_action_log')."
+						WHERE dateline>=$todaytime AND action='".getuseraction('pid')."'$inuids GROUP BY uid ORDER BY sum DESC LIMIT 1000");
+				while($value = DB::fetch($query)) {
+					$todayposts[$value['uid']] = $value['sum'];
+					$todayuids[] = $value['uid'];
+				}
+				if(empty($todayuids)) {
+					$todayuids = array(0);
+				}
+				$uids = $todayuids;
 				break;
 		}
+
+		if($uids) {
+			$wheres[] = 'm.uid IN ('.dimplode($uids).')';
+		}
+		$wheres[] = '(m.groupid < 4 OR m.groupid > 8)';
 
 		$tables = array_unique($tables);
 		$wheres = array_unique($wheres);
 		$tablesql = implode(',',$tables);
 		$wheresql = implode(' AND ',$wheres);
-		$query = DB::query("SELECT m.*, mc.* FROM $tablesql WHERE $wheresql $sqlorderby LIMIT $startrow,$items");
-		$uids = array();
+		$query = DB::query("SELECT m.*, mc.*$reason$show FROM $tablesql WHERE $wheresql $sqlorderby LIMIT $startrow,$items");
+		$resultuids = array();
 		while($data = DB::fetch($query)){
-			$uids[] = intval($data['uid']);
+			$resultuids[] = intval($data['uid']);
 			$list[] = array(
 				'id' => $data['uid'],
 				'idtype' => 'uid',
@@ -259,8 +335,9 @@ class block_member {
 				'picflag' => 0,
 				'summary' => '',
 				'fields' => array(
-					'avatar' => avatar($data['uid'], 'small', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
-					'avatar_big' => avatar($data['uid'], 'middle', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
+					'avatar' => avatar($data['uid'], 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar($data['uid'], 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar($data['uid'], 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'credits' => $data['credits'],
 					'extcredits1' => $data['extcredits1'],
 					'extcredits2' => $data['extcredits2'],
@@ -271,16 +348,20 @@ class block_member {
 					'extcredits7' => $data['extcredits7'],
 					'extcredits8' => $data['extcredits8'],
 					'regdate' => $data['regdate'],
-					'posts' => $data['posts'],
+					'posts' => empty($todayposts[$data['uid']]) ? $data['posts'] : $todayposts[$data['uid']],
 					'threads' => $data['threads'],
 					'digestposts' => $data['digestposts'],
+					'reason' => isset($data['reason']) ? $data['reason'] : '',
+					'unitprice' => isset($data['unitprice']) ? $data['unitprice'] : '',
+					'showcredit' => isset($data['showcredit']) ? $data['showcredit'] : '',
+					'shwonote' => isset($data['shwonote']) ? $data['shwonote'] : '',
 				)
 			);
 		}
-		if($uids) {
+		if($resultuids) {
 			include_once libfile('function/profile');
 			$profiles = array();
-			$query = DB::query('SELECT * FROM '.DB::table('common_member_profile')." WHERE uid IN (".dimplode($uids).")");
+			$query = DB::query('SELECT * FROM '.DB::table('common_member_profile')." WHERE uid IN (".dimplode($resultuids).")");
 			while($data = DB::fetch($query)) {
 				$profile = array();
 				foreach($data as $fieldid=>$fieldvalue) {
@@ -296,6 +377,19 @@ class block_member {
 				if($profiles[$uid]) {
 					$list[$i]['fields'] = array_merge($list[$i]['fields'], $profiles[$uid]);
 				}
+			}
+
+			if(!empty($todayuids)) {
+				$datalist = array();
+				foreach($todayuids as $uid) {
+					foreach($list as $user) {
+						if($user['id'] == $uid) {
+							$datalist[] = $user;
+							break;
+						}
+					}
+				}
+				$list = $datalist;
 			}
 		}
 		return array('html' => '', 'data' => $list);

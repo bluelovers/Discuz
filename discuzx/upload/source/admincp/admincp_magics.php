@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_magics.php 16161 2010-09-01 04:02:13Z monkey $
+ *      $Id: admincp_magics.php 22741 2011-05-19 02:52:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -20,7 +20,8 @@ if($operation == 'admin') {
 
 		shownav('extended', 'magics', 'admin');
 		showsubmenu('nav_magics', array(
-			array('admin', 'magics&operation=admin', 1)
+			array('admin', 'magics&operation=admin', 1),
+			array('nav_magics_confer', 'members&operation=confermagic', 0)
 		));
 		showtips('magics_tips');
 
@@ -37,7 +38,7 @@ if($operation == 'admin') {
 
 		showtableheader('magics_list', 'fixpadding');
 		$newmagics = getmagics();
-		showsubtitle(array('', 'display_order', 'available', 'name', $lang['price'], $lang['magics_num'].'('.$lang['magic_suppytype'].')', 'weight'));
+		showsubtitle(array('', 'display_order', '<input type="checkbox" onclick="checkAll(\'prefix\', this.form, \'available\', \'availablechk\')" class="checkbox" id="availablechk" name="availablechk">'.cplang('available'), 'name', $lang['price'], $lang['magics_num'], 'weight'));
 
 		$query = DB::query("SELECT * FROM ".DB::table('common_magic')." ORDER BY displayorder");
 		while($magic = DB::fetch($query)) {
@@ -56,7 +57,7 @@ if($operation == 'admin') {
 					(file_exists(DISCUZ_ROOT.'./static/image/magic/'.$magic['identifier'].'.gif') ? '<img class="vmiddle" src="static/image/magic/'.$magic['identifier'].'.gif" />' : ''),
 				"<input type=\"text\" class=\"txt\" name=\"price[$magic[magicid]]\" value=\"$magic[price]\">".$credits,
 				"<input type=\"text\" class=\"txt\" name=\"num[$magic[magicid]]\" value=\"$magic[num]\">".
-					($magic['supplytype'] ? '+'.$magic['supplynum'].'/'.$lang['magic_suppytype_'.$magic['supplytype']] : ''),
+					($magic['supplytype'] ? '/ '.$magic['supplynum'].' / '.$lang['magic_suppytype_'.$magic['supplytype']] : ''),
 				"<input type=\"text\" class=\"txt\" name=\"weight[$magic[magicid]]\" value=\"$magic[weight]\"><input type=\"hidden\" name=\"identifier[$magic[magicid]]\" value=\"$magic[identifier]\">",
 				"<a href=\"".ADMINSCRIPT."?action=magics&operation=edit&magicid=$magic[magicid]\" class=\"act\">$lang[detail]</a>"
 			));
@@ -64,8 +65,8 @@ if($operation == 'admin') {
 		}
 		foreach($newmagics as $newmagic) {
 			$credits = '<select name="newcredit['.$newmagic['class'].']">';
-			for($i = 1; $i <= 8; $i++) {
-				$credits .= '<option value="'.$i.'">'.$_G['setting']['extcredits'][$i]['title'].'</option>';
+			foreach($_G['setting']['extcredits'] as $i => $extcredit) {
+				$credits .= '<option value="'.$i.'">'.$extcredit['title'].'</option>';
 			}
 			$credits .= '</select>';
 			showtablerow('', array('class="td25"', 'class="td25"', 'class="td25"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', '', ''), array(
@@ -82,15 +83,14 @@ if($operation == 'admin') {
 				'<font color="#F00">New!</font>'
 			));
 		}
-		showsubmit('magicsubmit', 'submit', 'del');
+		showsubmit('magicsubmit', 'submit', 'del', '&nbsp;&nbsp;<input type="checkbox" onclick="checkAll(\'prefix\', this.form, \'available\', \'availablechk1\')" class="checkbox" id="availablechk1" name="availablechk1">'.cplang('available'));
 		showtablefooter();
 		showformfooter();
 
 	} else {
 		if(is_array($_G['gp_settingsnew'])) {
-			foreach($_G['gp_settingsnew'] as $variable => $value) {
-				DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$value' WHERE skey='$variable'");
-			}
+			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('magicstatus', '{$_G[gp_settingsnew][magicstatus]}')");
+			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('magicdiscount', '{$_G[gp_settingsnew][magicdiscount]}')");
 		}
 
 		if($ids = dimplode($_G['gp_delete'])) {
@@ -101,6 +101,12 @@ if($operation == 'admin') {
 
 		if(is_array($_G['gp_name'])) {
 			foreach($_G['gp_name'] as $id => $val) {
+				if(!is_array($_G['gp_available']) || !is_array($_G['gp_identifier']) ||
+					!is_array($_G['gp_displayorder']) || !is_array($_G['gp_credit']) ||
+					!is_array($_G['gp_price'][$id]) || !is_array($_G['gp_num'][$id]) ||
+					!is_array($_G['gp_weight']) || !preg_match('/^\w+$/', $_G['gp_identifier'][$id])) {
+					continue;
+				}
 				DB::query("UPDATE ".DB::table('common_magic')." SET available='".$_G['gp_available'][$id]."', name='$val', identifier='".$_G['gp_identifier'][$id]."', displayorder='".$_G['gp_displayorder'][$id]."', credit='".$_G['gp_credit'][$id]."', price='".$_G['gp_price'][$id]."', num='".$_G['gp_num'][$id]."', weight='".$_G['gp_weight'][$id]."' WHERE magicid='$id'");
 			}
 		}
@@ -138,7 +144,7 @@ if($operation == 'admin') {
 
 		$magicperm = unserialize($magic['magicperm']);
 
-		$groups = $fourms = array();
+		$groups = $forums = array();
 		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup'));
 		while($group = DB::fetch($query)) {
 			$groups[$group['groupid']] = $group['grouptitle'];
@@ -148,7 +154,8 @@ if($operation == 'admin') {
 
 		shownav('extended', 'magics', 'admin');
 		showsubmenu('nav_magics', array(
-			array('admin', 'magics&operation=admin', 0)
+			array('admin', 'magics&operation=admin', 0),
+			array('nav_magics_confer', 'members&operation=confermagic', 0)
 		));
 		echo '<br />';
 
@@ -173,6 +180,7 @@ if($operation == 'admin') {
 		showsetting('magics_edit_credit', array('creditnew', $credits), $magic['credit'], 'select');
 		showsetting('magics_edit_price', 'pricenew', $magic['price'], 'text');
 		showsetting('magics_edit_num', 'numnew', $magic['num'], 'text');
+		showsetting('magics_edit_supplynum', 'supplynumnew', $magic['supplynum'], 'text');
 		showsetting('magics_edit_weight', 'weightnew', $magic['weight'], 'text');
 		showsetting('magics_edit_supplytype', array('supplytypenew', array(
 			array(0, $lang['magics_goods_stack_none']),
@@ -180,7 +188,6 @@ if($operation == 'admin') {
 			array(2, $lang['magics_goods_stack_week']),
 			array(3, $lang['magics_goods_stack_month']),
 		)), $magic['supplytype'], 'mradio');
-		showsetting('magics_edit_supplynum', 'supplynumnew', $magic['supplynum'], 'text');
 		showsetting('magics_edit_useperoid', array('useperoidnew', array(
 			array(0, $lang['magics_edit_useperoid_none']),
 			array(1, $lang['magics_edit_useperoid_day']),
@@ -239,6 +246,7 @@ if($operation == 'admin') {
 		$supplynumnew = $_G['gp_supplytypenew'] ? intval($_G['gp_supplynumnew']) : 0;
 		$usenumnew = intval($_G['gp_usenumnew']);
 		$useperoidnew = $_G['gp_useperoidnew'] ? intval($_G['gp_useperoidnew']) : 0;
+		$creditnew = intval($_G['gp_creditnew']);
 
 		if(!$namenew) {
 			cpmsg('magics_parameter_invalid', '', 'error');
@@ -249,7 +257,7 @@ if($operation == 'admin') {
 			cpmsg('magics_identifier_invalid', '', 'error');
 		}
 
-		DB::query("UPDATE ".DB::table('common_magic')." SET name='$namenew', description='$descriptionnew', price='$_G[gp_pricenew]', num='$_G[gp_numnew]', supplytype='$supplytypenew', supplynum='$supplynumnew', useperoid='$useperoidnew', usenum='$usenumnew', weight='$_G[gp_weightnew]', magicperm='$magicpermnew' WHERE magicid='$magicid'");
+		DB::query("UPDATE ".DB::table('common_magic')." SET name='$namenew', description='$descriptionnew', price='$_G[gp_pricenew]', num='$_G[gp_numnew]', supplytype='$supplytypenew', supplynum='$supplynumnew', useperoid='$useperoidnew', usenum='$usenumnew', weight='$_G[gp_weightnew]', magicperm='$magicpermnew', credit='$creditnew' WHERE magicid='$magicid'");
 
 		updatecache(array('setting', 'magics'));
 		cpmsg('magics_data_succeed', 'action=magics&operation=admin', 'succeed');

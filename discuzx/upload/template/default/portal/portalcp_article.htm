@@ -13,15 +13,15 @@
 		{lang article_delete_sure}
 		<input type="hidden" name="optype" value="0" class="pc" />
 		<!--{else}-->
-		<label><input type="radio" name="optype" value="0" class="pc" /> {lang article_delete_direct}</label>&nbsp;&nbsp;&nbsp;
-		<label><input type="radio" name="optype" value="1" class="pc" checked="checked" /> {lang article_delete_recyclebin}</label>
+		<label class="lb"><input type="radio" name="optype" value="0" class="pc" />{lang article_delete_direct}</label>
+		<label class="lb"><input type="radio" name="optype" value="1" class="pc" checked="checked" />{lang article_delete_recyclebin}</label>
 		<!--{/if}-->
 	</div>
 	<p class="o pns">
 		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
 	<input type="hidden" name="aid" value="$_GET[aid]" />
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="deletesubmit" value="true" />
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 </form>
@@ -33,15 +33,15 @@
 
 <form method="post" autocomplete="off" id="aritcle_verify_$aid" action="portal.php?mod=portalcp&ac=article&op=verify&aid=$aid">
 	<div class="c">
-		<input type="radio" class="pr" name="status" value="0" id="status_0"{if $article[status]=='1'} checked{/if} /><label for="status_0">{lang passed}</label>&nbsp;
-		<input type="radio" class="pr" name="status" value="-1" id="status_x" /><label for="status_x">{lang delete}</label>&nbsp;
-		<input type="radio" class="pr" name="status" value="2" id="status_2"{if $article[status]=='2'} checked{/if} /><label for="status_2">{lang ignore}</label>
+		<label for="status_0" class="lb"><input type="radio" class="pr" name="status" value="0" id="status_0"{if $article[status]=='1'} checked="checked"{/if} />{lang passed}</label>
+		<label for="status_x" class="lb"><input type="radio" class="pr" name="status" value="-1" id="status_x" />{lang delete}</label>
+		<label for="status_2" class="lb"><input type="radio" class="pr" name="status" value="2" id="status_2"{if $article[status]=='2'} checked="checked"{/if} />{lang ignore}</label>
 	</div>
 	<p class="o pns">
 		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
 	<input type="hidden" name="aid" value="$aid" />
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
 	<input type="hidden" name="verifysubmit" value="true" />
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -75,14 +75,35 @@
 		<button type="submit" class="pn pnc vm"><span>{lang submit}</span></button>
 	</p>
 </form>
+<!--{elseif $op == 'add_success'}-->
+<div class="nfl">
+	<div class="f_c altw">
+		<div class="alert_right">
+			<p>{lang article_send_succeed}</p>
+			<p class="alert_btnleft">
+				<!--{if !empty($article_add_page_url)}-->
+				<a href="$article_add_page_url">{lang article_add_page}</a>
+				<span class="pipe">|</span>
+				<!--{/if}-->
+				<a href="$article_add_url">{lang article_send_continue}</a>
+				<span class="pipe">|</span>
+				<a href="$viewarticleurl">{lang view_article}</a>
+			</p>
+		</div>
+	</div>
+</div>
+<!--{if !empty($_G['cookie']['clearUserdata']) && $_G['cookie']['clearUserdata'] == 'home'}-->
+	<script type="text/javascript">saveUserdata('home', '')</script>
+<!--{/if}-->
 <!--{else}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">$_G[setting][navs][1][navname]</a> <em>&rsaquo;</em>
-		<a href="$cate[caturl]">$cate[catname]</a> <em>&rsaquo;</em>
+		<!--{if $catid }-->
+		<a href="$portalcategory[$catid]['caturl']">$portalcategory[$catid]['catname']</a> <em>&rsaquo;</em>
+		<!--{/if}-->
 		<!--{if !empty($aid)}-->
 		<a href="portal.php?mod=portalcp&ac=article&aid=$article[aid]">{lang article_edit}</a>
 		<!--{else}-->
@@ -91,20 +112,33 @@
 	</div>
 </div>
 
-<div id="ct" class="ct2_a wp cl">
+<div id="ct" class="ct2_a ct2_a_r wp cl">
 	<div class="mn" style="float: left;">
 		<div class="bm bw0">
 			<h1 class="mt"><!--{if !empty($aid)}-->{lang article_edit}<!--{else}-->{lang article_publish}<!--{/if}--></h1>
 			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 			<form method="post" autocomplete="off" id="articleform" action="portal.php?mod=portalcp&ac=article{if $_G[gp_modarticlekey]}&modarticlekey=$_G[gp_modarticlekey]{/if}" enctype="multipart/form-data">
 				<!--{hook/portalcp_top}-->
-				<div class="pbn">
-					<input type="text" class="px p_fre" id="title" name="title" value="$article[title]" size="80" />
+				<div class="dopt cl">
+					<span class="z mtn">{lang article_title}:&nbsp;</span>
+					<input type="text" name="title" id="title" class="px" value="$article[title]" size="80" />
+					<input type="button" id="color_style" class="pn colorwd" title="{lang select_color}" fwin="eleStyle" onclick="change_title_color(this.id);" style="background-color:$stylecheck[0]" />
+					<input type="hidden" id="highlight_style_0" name="highlight_style[0]" value="$stylecheck[0]" />
+					<input type="hidden" id="highlight_style_1" name="highlight_style[1]" value="$stylecheck[1]" />
+					<input type="hidden" id="highlight_style_2" name="highlight_style[2]" value="$stylecheck[2]" />
+					<input type="hidden" id="highlight_style_3" name="highlight_style[3]" value="$stylecheck[3]" />
+					<a href="javascript:;" id="highlight_op_1" onclick="switchhl(this, 1)" class="dopt_b{if $stylecheck[1]} cnt{/if}" style="text-decoration:none;font-weight:700" title="{lang e_bold}">B</a>
+					<a href="javascript:;" id="highlight_op_2" onclick="switchhl(this, 2)" class="dopt_i{if $stylecheck[2]} cnt{/if}" style="text-decoration:none;font-style:italic" title="{lang e_italic}">I</a>
+					<a href="javascript:;" id="highlight_op_3" onclick="switchhl(this, 3)" class="dopt_l{if $stylecheck[3]} cnt{/if}" style="text-decoration:underline" title="{lang e_underline}">U</a>
+				</div>
+				<div class="dopt mtn cl">
+					<span class="z mtn">{lang page_title}:&nbsp;</span>
+					<input type="text" name="pagetitle" id="pagetitle" class="px" value="$article_content[title]" size="80" />
 				</div>
 				<div class="exfm pns cl">
 					<div class="sinf sppoll z">
-						<!--{if empty($article['aid'])}-->
 						<dl>
+						<!--{if empty($article['aid'])}-->
 							<dt>{lang article_auto_grab}</dt>
 							<dd>
 								<span class="ftid">
@@ -113,25 +147,23 @@
 										<option value="blogid"$idtypes[blogid]>{lang blog} id</option>
 									</select>
 								</span>
-								<script type="text/javascript">simulateSelect('from_idtype');</script>
+								<script type="text/javascript">simulateSelect('from_idtype', 81);</script>
 								<input type="text" name="from_id" id="from_id" value="$_GET[from_id]" size="8" class="px p_fre vm" />&nbsp;
 								<button type="button" name="from_button" class="pn vm" onclick="return from_get();"><em>{lang grab}</em></button>
 								<input type="hidden" name="id" value="$_GET[from_id]" />
 								<input type="hidden" name="idtype" value="$_GET[from_idtype]" />
 							</dd>
-						</dl>
 						<!--{/if}-->
-						<dl>
 							<dt>{lang article_url}</dt>
 							<dd><input type="text" class="px p_fre" name="url" value="$article[url]" size="30" /></dd>
-						</dl>
-						<dl>
 							<dt>{lang article_author}</dt>
 							<dd><input type="text" name="author" class="px p_fre" value="$article[author]" size="30" /></dd>
-						</dl>
+						<!--{if $_G['cache']['portalcategory'] && $categoryselect}-->
+							<dt>{lang article_category}</dt>
+							<dd><div class="ftid">$categoryselect</div><script type="text/javascript">simulateSelect('catid', 158);</script></dd>
+						<!--{/if}-->
 
 						<!--{if $article['aid']}-->
-						<dl>
 							<dt>{lang article_page}</dt>
 							<dd>
 								<span class="z">{lang article_page_save}</span>
@@ -144,21 +176,31 @@
 								<a href=""></a>
 								<div class="pgm cl">$multi</div>
 							</dd>
-						</tr>
 						<!--{/if}-->
+						</dl>
 					</div>
 					<div class="sadd z">
 						<dl>
 							<dt>{lang article_source}</dt>
-							<dd><input type="text" name="from" class="px p_fre" value="$article[from]" size="30" /></dd>
-						</dl>
-						<dl>
+							<dd>
+								<input type="text" id="from" name="from" class="px p_fre" value="$article[from]" {if $from_cookie}size="10"{else}size="30"{/if} />
+								<!--{if $from_cookie}-->
+								<select name="from_cookie" id="from_cookie" class="ps" onchange="$('from').value=this.value;" style="width:96px;">
+									<option value="" selected>{lang choose_please}</option>
+									<!--{loop $from_cookie $var}-->
+									<option value="$var">$var</option>
+									<!--{/loop}-->
+								</select>
+								<!--{/if}-->
+							</dd>
 							<dt>{lang article_source_url}</dt>
 							<dd><input type="text" name="fromurl" class="px p_fre" value="$article[fromurl]" size="30" /></dd>
-						</dl>
-                        <dl>
 							<dt>{lang article_dateline}</dt>
 							<dd><input type="text" name="dateline" class="px p_fre" value="$article[dateline]" size="30" onclick="showcalendar(event, this, true)" /></dd>
+							<!--{if $cate[allowcomment]}-->
+								<dt>{lang article_comment_setup}</dt>
+								<dd><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} />{lang article_forbidcomment_description}</label></dd>
+							<!--{/if}-->
 						</dl>
 						<div><input type="hidden" id="conver" name="conver" value="" /></div>
 					</div>
@@ -166,9 +208,9 @@
 				</div>
 
 				<div class="pbw">
-					<script language="javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
+					<script type="text/javascript" language="javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
 					<textarea class="userData" name="content" id="uchome-ttHtmlEditor" style="height: 100%; width: 100%; display: none; border: 0px">$article_content[content]</textarea>
-					<iframe src="home.php?mod=editor&charset={CHARSET}&allowhtml=1&isportal=1" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:808px;height:400px;border: 1px solid #C5C5C5;"></iframe>
+					<iframe src="home.php?mod=editor&charset={CHARSET}&allowhtml=1&isportal=1" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:808px;height:400px;border:1px solid #C5C5C5;position:relative;"></iframe>
 				</div>
 
 				<!--{hook/portalcp_middle}-->
@@ -177,7 +219,7 @@
 					<div class="bm_h cl">
 						<h2>{lang article_description}</h2>
 					</div>
-					<div class="bm_c"><textarea name="summary" cols="80" class="pt" style="width: 846px; w\idth: 744px;">$article[summary]</textarea></div>
+					<div class="bm_c"><textarea name="summary" cols="80" class="pt" style="width: 98.7%; height: 51px;">$article[summary]</textarea></div>
 				</div>
 
 				<div class="bm bml">
@@ -187,8 +229,7 @@
 					<div class="bm_c">
 						<!--{loop $article_tags $key $tag}-->
 						<input type="checkbox" name="tag[$key]" id="article_tag_$key" class="pc"{if $article_tags[$key]} checked="checked"{/if} />
-						<label for="article_tag_$key">$tag_names[$key]</label>
-						&nbsp;&nbsp;
+						<label for="article_tag_$key" class="lb">$tag_names[$key]</label>
 						<!--{/loop}-->
 					</div>
 				</div>
@@ -210,17 +251,16 @@
 
 				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-					<div class="exfm pns"><!--{template common/seccheck}--></div>
+					<div class="exfm pns"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->
 
 				<div class="ptm pbm">
 					<button type="button" id="issuance" class="pn pnc" name="articlebutton" onclick="validate(this);"><strong>{lang submit}</strong></button>
-					<label><input type="checkbox" name="addpage" value="1" class="pc"> {lang article_page_save_after}</label>
-					<!--{if $cate[allowcomment]}--><span class="pipe">|</span><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} /> {lang article_forbidcomment_description}</label><!--{/if}-->
+					<label><input type="checkbox" name="addpage" class="pc" value="1" />{lang article_page_save_after}</label>
+					<!--{if $article[contents]}--><span class="pipe">|</span><label for="ck_showinnernav"><input type="checkbox" name="showinnernav" id="ck_showinnernav" class="pc" value="1"{if !empty($article['showinnernav'])}checked="checked"{/if} />{lang article_show_inner_navigation}</label><!--{/if}-->
 				</div>
 
 				<input type="hidden" id="aid" name="aid" value="$article[aid]" />
-				<input type="hidden" name="catid" id="catid" value="$catid" />
 				<input type="hidden" name="cid" value="$article_content[cid]" />
 				<input type="hidden" id="attach_ids" name="attach_ids" value="0" />
 				<input type="hidden" name="articlesubmit" value="true" />
@@ -228,12 +268,12 @@
 			</form>
 		</div>
 	</div>
-	<div class="appl" style="float: right; margin-top: 45px; border: none; background-color: transparent;">
+	<div class="appl posta">
 		<h3 class="mbm pbm bbs">{lang attachment_upload}</h3>
 		<div class="pbm xg1">{lang attachment_upload_comment}</div>
 		<div id="attachbodyhidden" style="display:none;">
-			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid&catid=$catid" enctype="multipart/form-data" target="uploadframe" style="background: transparent;">
-				<input type="file" name="attach" class="pf" size="8" />
+			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid&catid=$catid" enctype="multipart/form-data" target="uploadframe">
+				<input type="file" name="attach" class="pf" size="6" />
 				<span id="localfile"></span>
 				<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -243,10 +283,10 @@
 
 		<script src="{$_G[setting][jspath]}portal_upload.js?{VERHASH}" type="text/javascript"></script>
 		<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-
-		<div id="attach_image_body" class="bn">$article[attach_image]</div>
-		<div id="attach_file_body" class="bn">$article[attach_file]</div>
-
+		<div class="posta_c">
+			<div id="attach_image_body" class="bn">$article[attach_image]</div>
+			<div id="attach_file_body" class="bn">$article[attach_file]</div>
+		</div>
 	</div>
 </div>
 
@@ -276,6 +316,7 @@ function validate(obj) {
 		}
 	}
 	edit_save();
+	window.onbeforeunload = null;
 	obj.form.submit();
 	return false;
 }
@@ -304,9 +345,36 @@ function raid_delete(aid) {
 		p.removeChild(node);
 	}   
 }
+function switchhl(obj, v) {
+	if(parseInt($('highlight_style_' + v).value)) {
+		$('highlight_style_' + v).value = 0;
+		obj.className = obj.className.replace(/ cnt/, '');
+	} else {
+		$('highlight_style_' + v).value = 1;
+		obj.className += ' cnt';
+	}
+}
+function change_title_color(hlid) {
+	var showid = hlid;
+	if(!$(showid + '_menu')) {
+		var str = '';
+		var coloroptions = {'0' : '#000', '1' : '#EE1B2E', '2' : '#EE5023', '3' : '#996600', '4' : '#3C9D40', '5' : '#2897C5', '6' : '#2B65B7', '7' : '#8F2A90', '8' : '#EC1282'};
+		var menu = document.createElement('div');
+		menu.id = showid + '_menu';
+		menu.className = 'cmen';
+		menu.style.display = 'none';
+		for(var i in coloroptions) {
+			str += '<a href="javascript:;" onclick="$(\'highlight_style_0\').value=\'' + coloroptions[i] + '\';$(\'' + showid + '\').style.backgroundColor=\'' + coloroptions[i] + '\';hideMenu(\'' + menu.id + '\')" style="background:' + coloroptions[i] + ';color:' + coloroptions[i] + ';">' + coloroptions[i] + '</a>';
+		}
+		menu.innerHTML = str;
+		$('append_parent').appendChild(menu);
+	}
+	showMenu({'ctrlid':hlid + '_ctrl','evt':'click','showid':showid});
+}
 if($('title')) {
 	$('title').focus();
 }
+setConver('$article[conver]');
 </script>
 
 <!--{/if}-->

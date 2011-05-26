@@ -1,19 +1,20 @@
 DROP TABLE IF EXISTS uc_applications;
 CREATE TABLE uc_applications (
   appid smallint(6) unsigned NOT NULL auto_increment,
-  type char(16) NOT NULL default '',
-  name char(20) NOT NULL default '',
-  url char(255) NOT NULL default '',
-  authkey char(255) NOT NULL default '',
-  ip char(15) NOT NULL default '',
-  viewprourl CHAR(255) NOT NULL,
-  apifilename CHAR( 30 ) NOT NULL DEFAULT 'uc.php',
-  charset char(8) NOT NULL default '',
-  dbcharset char(8) NOT NULL default '',
+  `type` varchar(16) NOT NULL default '',
+  `name` varchar(20) NOT NULL default '',
+  url varchar(255) NOT NULL default '',
+  authkey varchar(255) NOT NULL default '',
+  ip varchar(15) NOT NULL default '',
+  viewprourl varchar(255) NOT NULL,
+  apifilename varchar( 30 ) NOT NULL DEFAULT 'uc.php',
+  charset varchar(8) NOT NULL default '',
+  dbcharset varchar(8) NOT NULL default '',
   synlogin tinyint(1) NOT NULL default '0',
   recvnote tinyint(1) DEFAULT '0',
-  extra mediumtext NOT NULL,
-  tagtemplates mediumtext NOT NULL,
+  extra text NOT NULL,
+  tagtemplates text NOT NULL,
+  allowips text NOT NULL,
   PRIMARY KEY  (appid)
 ) TYPE=MyISAM;
 
@@ -21,7 +22,7 @@ DROP TABLE IF EXISTS uc_members;
 CREATE TABLE uc_members (
   uid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   username char(15) NOT NULL DEFAULT '',
-  password char(32) NOT NULL DEFAULT '',
+  `password` char(32) NOT NULL DEFAULT '',
   email char(32) NOT NULL DEFAULT '',
   myid char(30)  NOT NULL DEFAULT '',
   myidkey char(16) NOT NULL DEFAULT '',
@@ -41,27 +42,6 @@ CREATE TABLE uc_memberfields (
   uid mediumint(8) unsigned NOT NULL,
   blacklist text NOT NULL,
   PRIMARY KEY(uid)
-) TYPE=MyISAM;
-
-DROP TABLE IF EXISTS uc_pms;
-CREATE TABLE uc_pms (
-  pmid int(10) unsigned NOT NULL auto_increment,
-  msgfrom varchar(15) NOT NULL default '',
-  msgfromid mediumint(8) unsigned NOT NULL default '0',
-  msgtoid mediumint(8) unsigned NOT NULL default '0',
-  folder enum('inbox','outbox') NOT NULL default 'inbox',
-  new tinyint(1) NOT NULL default '0',
-  subject varchar(75) NOT NULL default '',
-  dateline int(10) unsigned NOT NULL default '0',
-  message text NOT NULL,
-  delstatus tinyint(1) unsigned NOT NULL default '0',
-  related int(10) unsigned NOT NULL default '0',
-  fromappid SMALLINT(6) UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY(pmid),
-  KEY msgtoid(msgtoid,folder,dateline),
-  KEY msgfromid(msgfromid,folder,dateline),
-  KEY related (related),
-  KEY getnum (msgtoid,folder,delstatus)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS uc_newpm;
@@ -103,8 +83,8 @@ CREATE TABLE uc_sqlcache (
 
 DROP TABLE IF EXISTS uc_settings;
 CREATE TABLE uc_settings (
-  k varchar(32) NOT NULL default '',
-  v text NOT NULL,
+  `k` varchar(32) NOT NULL default '',
+  `v` text NOT NULL,
   PRIMARY KEY  (k)
 ) Type=MyISAM;
 
@@ -112,11 +92,12 @@ REPLACE INTO uc_settings(k, v) VALUES ('accessemail','');
 REPLACE INTO uc_settings(k, v) VALUES ('censoremail','');
 REPLACE INTO uc_settings(k, v) VALUES ('censorusername','');
 REPLACE INTO uc_settings(k, v) VALUES ('dateformat','y-n-j');
-REPLACE INTO uc_settings(k, v) VALUES ('doublee','1');
+REPLACE INTO uc_settings(k, v) VALUES ('doublee','0');
 REPLACE INTO uc_settings(k, v) VALUES ('nextnotetime','0');
 REPLACE INTO uc_settings(k, v) VALUES ('timeoffset','28800');
-REPLACE INTO uc_settings(k, v) VALUES ('pmlimit1day','100');
-REPLACE INTO uc_settings(k, v) VALUES ('pmuserlimit1day','30');
+REPLACE INTO uc_settings(k, v) VALUES ('privatepmthreadlimit','25');
+REPLACE INTO uc_settings(k, v) VALUES ('chatpmthreadlimit','30');
+REPLACE INTO uc_settings(k, v) VALUES ('chatpmmemberlimit','35');
 REPLACE INTO uc_settings(k, v) VALUES ('pmfloodctrl','15');
 REPLACE INTO uc_settings(k, v) VALUES ('pmcenter','1');
 REPLACE INTO uc_settings(k, v) VALUES ('sendpmseccode','1');
@@ -132,7 +113,7 @@ REPLACE INTO uc_settings(k, v) VALUES ('mailauth_password', 'password');
 REPLACE INTO uc_settings(k, v) VALUES ('maildelimiter', '0');
 REPLACE INTO uc_settings(k, v) VALUES ('mailusername', '1');
 REPLACE INTO uc_settings(k, v) VALUES ('mailsilent', '1');
-REPLACE INTO uc_settings(k, v) VALUES ('version', '1.5.0');
+REPLACE INTO uc_settings(k, v) VALUES ('version', '1.6.0');
 
 
 DROP TABLE IF EXISTS uc_badwords;
@@ -267,4 +248,172 @@ CREATE TABLE uc_mailqueue (
   PRIMARY KEY  (mailid),
   KEY appid (appid),
   KEY level (level,failures)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_members;
+CREATE TABLE uc_pm_members (
+  plid mediumint(8) unsigned NOT NULL default '0',
+  uid mediumint(8) unsigned NOT NULL default '0',
+  isnew tinyint(1) unsigned NOT NULL default '0',
+  pmnum int(10) unsigned NOT NULL default '0',
+  lastupdate int(10) unsigned NOT NULL default '0',
+  lastdateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (plid,uid),
+  KEY isnew (isnew),
+  KEY lastdateline (uid,lastdateline),
+  KEY lastupdate (uid,lastupdate)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_lists;
+CREATE TABLE uc_pm_lists (
+  plid mediumint(8) unsigned NOT NULL auto_increment,
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  pmtype tinyint(1) unsigned NOT NULL default '0',
+  subject varchar(80) NOT NULL,
+  members smallint(5) unsigned NOT NULL default '0',
+  min_max varchar(17) NOT NULL,
+  dateline int(10) unsigned NOT NULL default '0',
+  lastmessage text NOT NULL,
+  PRIMARY KEY  (plid),
+  KEY pmtype (pmtype),
+  KEY min_max (min_max),
+  KEY authorid (authorid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_indexes;
+CREATE TABLE uc_pm_indexes (
+  pmid mediumint(8) unsigned NOT NULL auto_increment,
+  plid mediumint(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_0;
+CREATE TABLE uc_pm_messages_0 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_1;
+CREATE TABLE uc_pm_messages_1 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_2;
+CREATE TABLE uc_pm_messages_2 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_3;
+CREATE TABLE uc_pm_messages_3 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_4;
+CREATE TABLE uc_pm_messages_4 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_5;
+CREATE TABLE uc_pm_messages_5 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_6;
+CREATE TABLE uc_pm_messages_6 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_7;
+CREATE TABLE uc_pm_messages_7 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_8;
+CREATE TABLE uc_pm_messages_8 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS uc_pm_messages_9;
+CREATE TABLE uc_pm_messages_9 (
+  pmid mediumint(8) unsigned NOT NULL default '0',
+  plid mediumint(8) unsigned NOT NULL default '0',
+  authorid mediumint(8) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  dateline int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (pmid),
+  KEY plid (plid,delstatus,dateline),
+  KEY dateline (plid,dateline)
 ) TYPE=MyISAM;

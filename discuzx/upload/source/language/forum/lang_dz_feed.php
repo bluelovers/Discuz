@@ -4,20 +4,20 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_dz_feed.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_dz_feed.php 20562 2011-02-28 02:11:17Z congyushuai $
  */
 
 $lang = array
 (
-	'feed_thread_pin_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 置頂了',
+	'feed_thread_pin_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 置頂',
 
-	'feed_thread_digest_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 加精了',
+	'feed_thread_digest_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 加精',
 
-	'feed_thread_highlight_title' =>	'{actor} 發表的主題 {subject} 被 {operater} 高亮了',
+	'feed_thread_highlight_title' =>	'{actor} 發表的主題 {subject} 被 {operater} 高亮',
 
-	'feed_thread_del_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 刪除了',
+	'feed_thread_del_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 刪除',
 
-	'feed_thread_move_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 移動了',
+	'feed_thread_move_title' =>		'{actor} 發表的主題 {subject} 被 {operater} 移動',
 
 	'feed_thread_views_title' =>		'{actor} 發表的主題 {subject} 查看數超過了 {count}',
 
@@ -43,7 +43,7 @@ $lang = array
 
 	'feed_user_posts_title' =>		'{actor} 的發帖數達到 {count}',
 
-	'feed_user_digest_title' =>		'{actor} 的精華貼數達到 {count}',
+	'feed_user_digest_title' =>		'{actor} 的精華帖數達到 {count}',
 
 	'feed_user_medal_title' =>		'{actor} 得到勳章 {medal} 獎勵',
 

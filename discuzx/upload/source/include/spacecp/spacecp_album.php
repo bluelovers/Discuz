@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 17343 2010-10-11 01:44:05Z zhengqingpeng $
+ *      $Id: spacecp_album.php 22185 2011-04-25 09:18:47Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,11 +22,11 @@ if($_GET['op'] == 'edit') {
 
 	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
 	if(!$album = DB::fetch($query)) {
-		showmessage('no_privilege');
+		showmessage('album_does_not_exist');
 	}
 
 	if($album['uid'] != $_G['uid'] && !checkperm('managealbum')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_album_edit');
 	}
 
 	if(submitcheck('editsubmit')) {
@@ -73,7 +73,7 @@ if($_GET['op'] == 'edit') {
 			}
 		}
 
-		DB::update('home_album', array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids']), array('albumid'=>$albumid));
+		DB::update('home_album', array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids'], 'depict'=>dhtmlspecialchars($_POST['depict'])), array('albumid'=>$albumid));
 		showmessage('spacecp_edit_ok', "home.php?mod=spacecp&ac=album&op=edit&albumid=$albumid");
 	}
 
@@ -133,15 +133,16 @@ if($_GET['op'] == 'edit') {
 
 	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
 	if(!$album = DB::fetch($query)) {
-		showmessage('no_privilege');
+		showmessage('album_does_not_exist');
 	}
+
 	if($album['uid'] != $_G['uid'] && !checkperm('managealbum')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_album_del');
 	}
 
 	$albums = getalbums($album['uid']);
 	if(empty($albums[$albumid])) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_album_delother');
 	}
 
 	if(submitcheck('deletesubmit')) {
@@ -169,75 +170,42 @@ if($_GET['op'] == 'edit') {
 	if($albumid > 0) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
 		if(!$album = DB::fetch($query)) {
-			showmessage('no_privilege', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
+			showmessage('album_does_not_exist', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
 		}
 
 		if($album['uid'] != $_G['uid'] && !$managealbum) {
-			showmessage('no_privilege', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
+			showmessage('no_privilege_pic_edit', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
 		}
 	} else {
 		$album['uid'] = $_G['uid'];
 	}
 	if(submitcheck('editpicsubmit')) {
 		$return = true;
-		if($_GET['subop'] == 'delete') {
-			$updates = $deleteids = array();
-			foreach ($_POST['title'] as $picid => $value) {
-				if(empty($_POST['ids'][$picid])) {
-					$title = getstr($value, 150, 1, 1);
-					$title = censor($title);
-					if(censormod($title)) {
-						$pic_status = 1;
-					} else {
-						$pic_status = 0;
-					}
-
-					$wherearr = array('picid'=>$picid);
-					if(!$managealbum) $wherearr['uid'] = $_G['uid'];
-
-					DB::update('home_pic', array('title' => $title, 'status' => $pic_status), $wherearr);
-				} else {
-					$deleteids[$picid] = $picid;
-				}
+		foreach ($_POST['title'] as $picid => $value) {
+			if($value == $_G['gp_oldtitle'][$picid]) {
+				continue;
 			}
-			if($deleteids) {
+			$title = getstr($value, 150, 1, 1);
+			$title = censor($title);
+			if(censormod($title)) {
+				$pic_status = 1;
+				manage_addnotify('verifypic');
+			} else {
+				$pic_status = 0;
+			}
+			$wherearr = array('picid'=>$picid);
+			if(!$managealbum) $wherearr['uid']  = $_G['uid'];
+			DB::update('home_pic', array('title'=>$title, 'status' => $pic_status), $wherearr);
+		}
+		if($_GET['subop'] == 'delete') {
+			if($_POST['ids']) {
 				require_once libfile('function/delete');
-				deletepics($deleteids);
+				deletepics($_POST['ids']);
 
 				if($albumid > 0) $return = album_update_pic($albumid);
 			}
 
-		} elseif($_GET['subop'] == 'update') {
-
-			foreach ($_POST['title'] as $picid => $value) {
-				$title = getstr($value, 150, 1, 1);
-				$title = censor($title);
-				if(censormod($title)) {
-					$pic_status = 1;
-				} else {
-					$pic_status = 0;
-				}
-
-				$wherearr = array('picid'=>$picid);
-				if(!$managealbum) $wherearr['uid']  = $_G['uid'];
-
-				DB::update('home_pic', array('title'=>$title, 'status' => $pic_status), $wherearr);
-			}
-
 		} elseif($_GET['subop'] == 'move') {
-			foreach ($_POST['title'] as $picid => $value) {
-				$title = getstr($value, 150, 1, 1);
-				$title = censor($title);
-				if(censormod($title)) {
-					$pic_status = 1;
-				} else {
-					$pic_status = 0;
-				}
-
-				$wherearr = array('picid'=>$picid);
-				if(!$managealbum) $wherearr['uid'] = $_G['uid'];
-				DB::update('home_pic', array('title'=>$title, 'status' => $pic_status), $wherearr);
-			}
 			if($_POST['ids']) {
 				$plussql = $managealbum?'':"AND uid='$_G[uid]'";
 				$_POST['newalbumid'] = intval($_POST['newalbumid']);
@@ -324,12 +292,12 @@ if($_GET['op'] == 'edit') {
 
 } elseif($_GET['op'] == 'edithot') {
 	if(!checkperm('managealbum')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_edithot_album');
 	}
 
 	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE picid='$picid'");
 	if(!$pic = DB::fetch($query)) {
-		showmessage('no_privilege');
+		showmessage('image_does_not_exist');
 	}
 
 	if(submitcheck('hotsubmit')) {

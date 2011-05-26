@@ -29,19 +29,16 @@ function getranklistcache($name, $dateline = '') {
 			$ranklist = getranklist_pictures_index(9);
 			break;
 		case 'threads_hot':
-			$ranklist = getranklist_threads(10, $dateline, 'heats DESC');
-			break;
-		case 'threads_fav':
-			$ranklist = getranklist_threads(10, 0, 'favtimes DESC');
+			$ranklist = getranklist_thread(10, 'heats', $dateline);
 			break;
 		case 'blogs_hot':
-			$ranklist = getranklist_blogs(10, $dateline);
+			$ranklist = getranklist_blog(10, 'hot', $dateline);
 			break;
 		case 'polls_hot':
-			$ranklist = getranklist_polls(10, $dateline);
+			$ranklist = getranklist_poll(10, 'heats', $dateline);
 			break;
 		case 'activities_hot':
-			$ranklist = getranklist_activities(10, $dateline);
+			$ranklist = getranklist_activity(10, 'heats', $dateline);
 			break;
 		case 'girllist':
 			$ranklist = getranklist_girls(0, 10);
@@ -83,22 +80,22 @@ if($ranklist_setting['picture']['available']) {
 	$pictures = getranklistcache('pictures');
 }
 if($ranklist_setting['thread']['available']) {
-	$threads_hot = getranklistcache('threads_hot', $dateline);
+	$threads_hot = getranklistcache('threads_hot', $before);
 	$i++;
 	$thread_pos = $i;
 }
 if($ranklist_setting['blog']['available']) {
-	$blogs_hot = getranklistcache('blogs_hot', $dateline);
+	$blogs_hot = getranklistcache('blogs_hot', $before);
 	$i++;
 	$blog_pos = $i;
 }
 if($ranklist_setting['poll']['available']) {
-	$polls_hot = getranklistcache('polls_hot', $dateline);
+	$polls_hot = getranklistcache('polls_hot', $before);
 	$i++;
 	$poll_pos = $i;
 }
 if($ranklist_setting['activity']['available']) {
-	$activities_hot = getranklistcache('activities_hot', $dateline);
+	$activities_hot = getranklistcache('activities_hot', $before);
 	$i++;
 	$activity_pos = $i;
 }

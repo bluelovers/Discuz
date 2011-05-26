@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_member.php 15373 2010-08-24 01:19:22Z monkey $
+ *      $Id: modcp_member.php 22321 2011-04-29 09:42:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -63,7 +63,7 @@ if($op == 'edit') {
 
 	}
 
-} elseif($op == 'ban' && $_G['group']['allowbanuser']) {
+} elseif($op == 'ban' && ($_G['group']['allowbanuser'] || $_G['group']['allowbanvisituser'])) {
 
 	$_G['gp_uid'] = isset($_G['gp_uid']) ? intval($_G['gp_uid']) : '';
 	$_G['gp_username'] = isset($_G['gp_username']) ? trim($_G['gp_username']) : '';
@@ -78,6 +78,9 @@ if($op == 'edit') {
 		}
 
 		if($_G['gp_bannew'] == 4 || $_G['gp_bannew'] == 5) {
+			if($_G['gp_bannew'] == 4 && !$_G['group']['allowbanuser'] || $_G['gp_bannew'] == 5 && !$_G['group']['allowbanvisituser']) {
+				acpmsg('admin_nopermission');
+			}
 			$groupidnew = $_G['gp_bannew'];
 			$banexpirynew = !empty($_G['gp_banexpirynew']) ? TIMESTAMP + $_G['gp_banexpirynew'] * 86400 : 0;
 			$banexpirynew = $banexpirynew > TIMESTAMP ? $banexpirynew : 0;
@@ -90,6 +93,7 @@ if($op == 'edit') {
 				$sql .= ', groupexpiry=0';
 			}
 			$adminidnew = -1;
+			DB::delete('forum_postcomment', "authorid='$member[uid]' AND rpid>'0'");
 		} elseif($member['groupid'] == 4 || $member['groupid'] == 5) {
 			if(!empty($member['groupterms']['main']['groupid'])) {
 				$groupidnew = $member['groupterms']['main']['groupid'];
@@ -119,10 +123,10 @@ if($op == 'edit') {
 		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".($member['groupterms'] ? addslashes(serialize($member['groupterms'])) : '')."' WHERE uid='$member[uid]'");
 		if($_G['gp_bannew'] == 4) {
 			$notearr = array(
-					'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
-					'day' => $_G['gp_banexpirynew'],
-					'reason' => $reason
-				);
+				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
+				'day' => $_G['gp_banexpirynew'],
+				'reason' => $reason
+			);
 			notification_add($member['uid'], 'system', 'member_ban_speak', $notearr, 1);
 		}
 		acpmsg('modcp_member_ban_succeed', "$cpscript?mod=modcp&action=$_G[gp_action]&op=$op");
@@ -195,7 +199,7 @@ function loadmember(&$uid, &$username, &$error) {
 
 	if($uid || $username != '') {
 
-		$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, mf.groupterms, mp.bio, mf.sightml, u.type AS grouptype, uf.allowsigbbcode, uf.allowsigimgcode FROM ".DB::table('common_member')." m
+		$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, mf.groupterms, mp.bio, mf.sightml, u.type AS grouptype, uf.allowsigbbcode, uf.allowsigimgcode, m.credits FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_field_forum')." mf ON mf.uid=m.uid
 			LEFT JOIN ".DB::table('common_usergroup')." u ON u.groupid=m.groupid
 			LEFT JOIN ".DB::table('common_member_profile')." mp ON mp.uid=m.uid

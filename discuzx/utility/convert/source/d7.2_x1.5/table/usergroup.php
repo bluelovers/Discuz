@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: usergroup.php 15815 2010-08-27 02:56:14Z monkey $
+ * $Id: usergroup.php 21738 2011-04-11 07:06:36Z svn_project_zhangjie $
  */
 
 $curprg = basename(__FILE__);
@@ -38,6 +38,20 @@ while ($data = $db_source->fetch_array($query)) {
 
 	foreach($usergroup_field as $field) {
 		$userfielddata[$field]= $data[$field];
+	}
+	$userfielddata['allowpostimage'] = $userfielddata['allowpostattach'];
+
+	if($userfielddata['raterange']) {
+		$raterangearray = array();
+		foreach(explode("\n", $userfielddata['raterange']) as $range) {
+			$range = explode("\t", $range);
+			if(count($range) == 4) {
+				$raterangearray[$range[0]] = implode("\t", array($range[0], 'isself' => 0, 'min' => $range[1], 'max' => $range[2], 'mrpd' => $range[3]));
+			}
+		}
+		if(!empty($raterangearray)) {
+			$userfielddata['raterange'] = implode("\n", $raterangearray);
+		}
 	}
 
 	$userdatalist = implode_field_value($userdata, ',', db_table_fields($db_target, $table_target));

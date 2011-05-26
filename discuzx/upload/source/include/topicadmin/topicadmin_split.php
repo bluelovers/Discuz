@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_split.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_split.php 20099 2011-02-15 01:55:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowsplitthread']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_splitthread');
 }
 
 $posttable = getposttablebytid($_G['tid']);
@@ -74,7 +74,7 @@ if(!submitcheck('modsubmit')) {
 	}
 
 	DB::query("UPDATE ".DB::table($posttable)." SET tid='$newtid' WHERE pid IN ($pids)");
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid' WHERE pid IN ($pids)");
+	updateattachtid("pid IN ($pids)", $_G['tid'], $newtid);
 
 	$splitauthors = array();
 	$query = DB::query("SELECT pid, tid, authorid, subject, dateline FROM ".DB::table($posttable)." WHERE tid='$newtid' AND invisible='0' GROUP BY authorid ORDER BY dateline");

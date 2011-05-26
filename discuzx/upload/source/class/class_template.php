@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_template.php 16868 2010-09-16 05:06:28Z cnteacher $
+ *      $Id: class_template.php 21577 2011-04-01 02:07:21Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -104,6 +104,8 @@ class template {
 		$template = preg_replace("/\"(http)?[\w\.\/:]+\?[^\"]+?&[^\"]+?\"/e", "\$this->transamp('\\0')", $template);
 		$template = preg_replace("/\<script[^\>]*?src=\"(.+?)\"(.*?)\>\s*\<\/script\>/ies", "\$this->stripscriptamp('\\1', '\\2')", $template);
 		$template = preg_replace("/[\n\r\t]*\{block\s+([a-zA-Z0-9_\[\]]+)\}(.+?)\{\/block\}/ies", "\$this->stripblock('\\1', '\\2')", $template);
+		$template = preg_replace("/\<\?(\s{1})/is", "<?php\\1", $template);
+		$template = preg_replace("/\<\?\=(.+?)\?\>/is", "<?php echo \\1;?>", $template);
 
 		flock($fp, 2);
 		fwrite($fp, $template);
@@ -126,13 +128,32 @@ class template {
 			@include DISCUZ_ROOT.'./source/language/lang_template.php';
 			$this->language['inner'] = $lang;
 			if(!$isplugin) {
-				list($path) = explode('/', $this->file);
+
+				if(defined('IN_MOBILE')) {
+					list($path) = explode('/', str_replace('mobile/', '', $this->file));
+				} else {
+					list($path) = explode('/', $this->file);
+				}
+
 				@include DISCUZ_ROOT.'./source/language/'.$path.'/lang_template.php';
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
+
+				if(defined('IN_MOBILE')) {
+					@include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
+					$this->language['inner'] = array_merge($this->language['inner'], $lang);
+				}
 			} else {
-				$templatelang = array();
-				@include DISCUZ_ROOT.'./data/plugindata/'.$vars[0].'.lang.php';
-				$this->language['plugin'][$vars[0]] = $templatelang[$vars[0]];
+				global $_G;
+				if(empty($_G['config']['plugindeveloper'])) {
+					loadcache('pluginlanguage_template');
+				} elseif(!isset($_G['cache']['pluginlanguage_template'][$vars[0]]) && preg_match("/^[a-z]+[a-z0-9_]*$/i", $vars[0])) {
+					if(@include(DISCUZ_ROOT.'./data/plugindata/'.$vars[0].'.lang.php')) {
+						$_G['cache']['pluginlanguage_template'][$vars[0]] = $templatelang[$vars[0]];
+					} else {
+						loadcache('pluginlanguage_template');
+					}
+				}
+				$this->language['plugin'][$vars[0]] = $_G['cache']['pluginlanguage_template'][$vars[0]];
 			}
 		}
 		if(isset($langvar[$var])) {
@@ -147,7 +168,7 @@ class template {
 		$this->blocks[] = $bid;
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--BLOCK_TAG_$i-->";
-		$this->replacecode['replace'][$i] = "<?php block_display('$bid'); ?>";
+		$this->replacecode['replace'][$i] = "<?php block_display('$bid');?>";
 		return $search;
 	}
 
@@ -164,7 +185,7 @@ class template {
 		$parameter = stripslashes($parameter);
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--AD_TAG_$i-->";
-		$this->replacecode['replace'][$i] = "<?php ".(!$varname ? 'echo ' : '$'.$varname.'=')."adshow(\"$parameter\"); ?>";
+		$this->replacecode['replace'][$i] = "<?php ".(!$varname ? 'echo ' : '$'.$varname.'=')."adshow(\"$parameter\");?>";
 		return $search;
 	}
 
@@ -172,7 +193,7 @@ class template {
 		$parameter = stripslashes($parameter);
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--DATE_TAG_$i-->";
-		$this->replacecode['replace'][$i] = "<?php echo dgmdate($parameter); ?>";
+		$this->replacecode['replace'][$i] = "<?php echo dgmdate($parameter);?>";
 		return $search;
 	}
 
@@ -180,7 +201,7 @@ class template {
 		$parameter = stripslashes($parameter);
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--AVATAR_TAG_$i-->";
-		$this->replacecode['replace'][$i] = "<?php echo avatar($parameter); ?>";
+		$this->replacecode['replace'][$i] = "<?php echo avatar($parameter);?>";
 		return $search;
 	}
 
@@ -188,16 +209,20 @@ class template {
 		$php = str_replace('\"', '"', $php);
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--EVAL_TAG_$i-->";
-		$this->replacecode['replace'][$i] = "<?php $php ?>";
+		$this->replacecode['replace'][$i] = "<?php $php?>";
 		return $search;
 	}
 
 	function hooktags($hookid, $key = '') {
+		global $_G;
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
 		$key = $key !== '' ? "[$key]" : '';
-		$dev = '';//for Developer $dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
-		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key; ?>";
+		$dev = '';
+		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
+			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
+		}
+		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 		return $search;
 	}
 
@@ -232,7 +257,7 @@ class template {
 			}
 			$scriptcss .= '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_'.$_G['basescript'].'_'.CURMODULE.'.css?{VERHASH}" />';
 		}
-		$scriptcss .= '{if $_G[uid] && isset($_G[cookie][extstyle])}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[cookie][extstyle]/style.css" />{elseif $_G[style][defaultextstyle]}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[style][defaultextstyle]/style.css" />{/if}';
+		$scriptcss .= '{if $_G[uid] && isset($_G[cookie][extstyle]) && strpos($_G[cookie][extstyle], TPLDIR) !== false}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[cookie][extstyle]/style.css" />{elseif $_G[style][defaultextstyle]}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[style][defaultextstyle]/style.css" />{/if}';
 		return $scriptcss;
 	}
 

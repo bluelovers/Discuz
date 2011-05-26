@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_topicadmin.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: forum_topicadmin.php 22043 2011-04-20 08:56:19Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,13 +35,14 @@ $frommodcp = !empty($_G['gp_frommodcp']) ? intval($_G['gp_frommodcp']) : 0;
 $navigation = $navtitle = '';
 
 if(!empty($_G['tid'])) {
+	$_G['gp_archiveid'] = intval($_G['gp_archiveid']);
 	if(!empty($_G['gp_archiveid']) && in_array($_G['gp_archiveid'], $threadtableids)) {
 		$threadtable = "forum_thread_{$_G['gp_archiveid']}";
 	} else {
 		$threadtable = 'forum_thread';
 	}
 
-	$thread = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND fid='$_G[fid]' AND displayorder>='0'");
+	$thread = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND fid='$_G[fid]'".(!$_G['forum_auditstatuson'] ? "  AND displayorder>='0'" : ''));
 	if(!$thread) {
 		showmessage('thread_nonexistence');
 	}
@@ -60,10 +61,6 @@ if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_
 	$sendreasonpm = 0;
 }
 
-$postcredits = $_G['forum']['postcredits'] ? $_G['forum']['postcredits'] : $_G['setting']['creditspolicy']['post'];
-$replycredits = $_G['forum']['replycredits'] ? $_G['forum']['replycredits'] : $_G['setting']['creditspolicy']['reply'];
-$digestcredits = $_G['forum']['digestcredits'] ? $_G['forum']['digestcredits'] : $_G['setting']['creditspolicy']['digest'];
-$postattachcredits = $_G['forum']['postattachcredits'] ? $_G['forum']['postattachcredits'] : $_G['setting']['creditspolicy']['postattach'];
 $_G['gp_handlekey'] = 'mods';
 
 

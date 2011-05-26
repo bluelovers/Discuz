@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: notify_credit.php 10986 2010-05-19 05:41:21Z monkey $
+ *      $Id: notify_credit.php 22319 2011-04-29 09:40:43Z monkey $
  */
+
+define('IN_API', true);
+define('CURSCRIPT', 'api');
 
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
@@ -60,7 +63,7 @@ window.location.href='$_G[siteurl]forum.php?mod=misc&action=paysucceed';
 </html>
 EOS;
 	} else {
-		header('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed');
+		dheader('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed');
 	}
 } else {
 	exit($notifydata['notify']);

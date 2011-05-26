@@ -13,6 +13,7 @@ if(!defined('IN_DISCUZ')) {
 class block_article {
 	var $setting = array();
 	function block_article() {
+		global $_G;
 		$this->setting = array(
 			'aids'	=> array(
 				'title' => 'articlelist_aids',
@@ -23,6 +24,10 @@ class block_article {
 				'title' => 'articlelist_uids',
 				'type' => 'text',
 				'value' => ''
+			),
+			'keyword' => array(
+				'title' => 'articlelist_keyword',
+				'type' => 'text'
 			),
 			'catid' => array(
 				'title' => 'articlelist_catid',
@@ -66,6 +71,18 @@ class block_article {
 				),
 				'default' => 'dateline'
 			),
+			'publishdateline' => array(
+				'title' => 'articlelist_publishdateline',
+				'type'=> 'mradio',
+				'value' => array(
+					array('0', 'articlelist_publishdateline_nolimit'),
+					array('3600', 'articlelist_publishdateline_hour'),
+					array('86400', 'articlelist_publishdateline_day'),
+					array('604800', 'articlelist_publishdateline_week'),
+					array('2592000', 'articlelist_publishdateline_month'),
+				),
+				'default' => '0'
+			),
 			'titlelength' => array(
 				'title' => 'articlelist_titlelength',
 				'type' => 'text',
@@ -82,6 +99,15 @@ class block_article {
 				'default' => 0
 			),
 		);
+		loadcache('click');
+		$clicks = !empty($_G['cache']['click']['aid']) ? $_G['cache']['click']['aid'] : array();
+		if(!empty($clicks)){
+			foreach($clicks as $key => $value) {
+				if($value['available']) {
+					$this->setting['orderby']['value'][] = array('click'.$key, lang('block/articlelist', 'articlelist_orderby_click', array('clickname'=>$value['name'])));
+				}
+			}
+		}
 	}
 
 	function name() {
@@ -97,6 +123,7 @@ class block_article {
 				'uid' => array('name' => lang('blockclass', 'blockclass_article_field_uid'), 'formtype' => 'text', 'datatype' => 'int'),
 				'username' => array('name' => lang('blockclass', 'blockclass_article_field_username'), 'formtype' => 'text', 'datatype' => 'string'),
 				'avatar' => array('name' => lang('blockclass', 'blockclass_article_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+				'avatar_middle' => array('name' => lang('blockclass', 'blockclass_article_field_avatar_middle'), 'formtype' => 'text', 'datatype' => 'string'),
 				'avatar_big' => array('name' => lang('blockclass', 'blockclass_article_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'url' => array('name' => lang('blockclass', 'blockclass_article_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_article_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
@@ -178,14 +205,17 @@ class block_article {
 		$parameter = $this->cookparameter($parameter);
 		$aids		= !empty($parameter['aids']) ? explode(',', $parameter['aids']) : array();
 		$uids		= !empty($parameter['uids']) ? explode(',', $parameter['uids']) : array();
+		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
 		$tag		= !empty($parameter['tag']) ? $parameter['tag'] : array();
 		$starttime	= !empty($parameter['starttime']) ? strtotime($parameter['starttime']) : 0;
 		$endtime	= !empty($parameter['endtime']) ? strtotime($parameter['endtime']) : 0;
+		$publishdateline	= isset($parameter['publishdateline']) ? intval($parameter['publishdateline']) : 0;
 		$startrow	= isset($parameter['startrow']) ? intval($parameter['startrow']) : 0;
 		$items		= isset($parameter['items']) ? intval($parameter['items']) : 10;
 		$titlelength = isset($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength = isset($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
-		$orderby	= in_array($parameter['orderby'], array('dateline', 'viewnum', 'commentnum')) ? $parameter['orderby'] : 'dateline';
+		$clickarr = array('click1', 'click2', 'click3', 'click4', 'click5', 'click6', 'click7', 'click8');
+		$orderby	= in_array($parameter['orderby'], array_merge(array('dateline', 'viewnum', 'commentnum'), $clickarr)) ? $parameter['orderby'] : 'dateline';
 		$catid = array();
 		if(!empty($parameter['catid'])) {
 			if($parameter['catid'][0] == '0') {
@@ -220,8 +250,12 @@ class block_article {
 			$catid = array_unique($catid);
 			$wheres[] = 'at.catid IN ('.dimplode($catid).')';
 		}
-		if($style['getpic'] && $picrequired) {
+		if($style['getpic'] || $picrequired) {
 			$wheres[] = "at.pic != ''";
+		}
+		if($publishdateline) {
+			$time = TIMESTAMP - $publishdateline;
+			$wheres[] = "at.dateline >= '$time'";
 		}
 		if($starttime) {
 			$wheres[] = "at.dateline >= '$starttime'";
@@ -244,15 +278,24 @@ class block_article {
 				$wheres[] = "(at.tag & $v) = $v";
 			}
 		}
+		if($keyword) {
+			require_once libfile('function/search');
+			$keyword = searchkey($keyword, "at.title LIKE '%{text}%'");
+		}
+
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$orderby = ($orderby == 'dateline') ? 'at.dateline DESC ' : "ac.$orderby DESC";
-		$query = DB::query("SELECT at.*, ac.viewnum, ac.commentnum FROM ".DB::table('portal_article_title')." at LEFT JOIN ".DB::table('portal_article_count')." ac ON at.aid=ac.aid WHERE $wheresql ORDER BY $orderby LIMIT $startrow, $items");
+		if(in_array($orderby, $clickarr)) {
+			$orderby = "at.$orderby DESC,at.dateline DESC";
+		} else {
+			$orderby = ($orderby == 'dateline') ? 'at.dateline DESC ' : "ac.$orderby DESC";
+		}
+		$query = DB::query("SELECT at.*, ac.viewnum, ac.commentnum FROM ".DB::table('portal_article_title')." at LEFT JOIN ".DB::table('portal_article_count')." ac ON at.aid=ac.aid WHERE $wheresql$keyword ORDER BY $orderby LIMIT $startrow, $items");
 		while($data = DB::fetch($query)) {
 			if(empty($data['pic'])) {
 				$data['pic'] = STATICURL.'image/common/nophoto.gif';
 				$data['picflag'] = '0';
 			} else {
-				$data['pic'] = 'portal/'.$data['pic'];
+				$data['pic'] = $data['pic'];
 				$data['picflag'] = $data['remote'] == '1' ? '2' : '1';
 			}
 			$list[] = array(
@@ -266,8 +309,9 @@ class block_article {
 				'fields' => array(
 					'uid'=>$data['uid'],
 					'username'=>$data['username'],
-					'avatar' => avatar($data['uid'], 'small', true),
-					'avatar_big' => avatar($data['uid'], 'middle', true),
+					'avatar' => avatar($data['uid'], 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar($data['uid'], 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar($data['uid'], 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'fulltitle' => $data['title'],
 					'dateline'=>$data['dateline'],
 					'caturl'=> $_G['cache']['portalcategory'][$data['catid']]['caturl'],

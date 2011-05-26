@@ -4,14 +4,25 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 17200 2010-09-26 07:13:56Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 22376 2011-05-05 02:45:12Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='profilegroup'");
+$defaultop = '';
+if(!empty($result['svalue'])) {
+	$profilegroup = unserialize($result['svalue']);
+	foreach($profilegroup as $key => $value) {
+		if($value['available']) {
+			$defaultop = $key;
+			break;
+		}
+	}
+}
 
-$operation = in_array($_GET['op'], array('base', 'contact', 'edu', 'work', 'info', 'bbs', 'password', 'verify')) ? trim($_GET['op']) : 'base';
+$operation = in_array($_GET['op'], array('base', 'contact', 'edu', 'work', 'info', 'password', 'verify')) ? trim($_GET['op']) : $defaultop;
 $space = getspace($_G['uid']);
 space_merge($space, 'field_home');
 space_merge($space, 'profile');
@@ -38,6 +49,8 @@ $validate = array();
 if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8) {
 	$validate = DB::fetch_first("SELECT * FROM ".DB::table('common_member_validate')." WHERE uid='$_G[uid]' AND status='1'");
 }
+
+$conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] && DB::result_first("SELECT conisregister FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 
 if(submitcheck('profilesubmit')) {
 
@@ -68,13 +81,27 @@ if(submitcheck('profilesubmit')) {
 			$vid = 0;
 		}
 	}
+	if(isset($_POST['birthprovince'])) {
+		$initcity = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
+		foreach($initcity as $key) {
+			$_G['gp_'.$key] = $_POST[$key] = !empty($_POST[$key]) ? $_POST[$key] : '';
+		}
+	}
+	if(isset($_POST['resideprovince'])) {
+		$initcity = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
+		foreach($initcity as $key) {
+			$_G['gp_'.$key] = $_POST[$key] = !empty($_POST[$key]) ? $_POST[$key] : '';
+		}
+	}
 	foreach($_POST as $key => $value) {
 		$field = $_G['cache']['profilesetting'][$key];
-		if(in_array($key, $forumfield)) {
+		if(in_array($field['formtype'], array('text', 'textarea')) || in_array($key, $forumfield)) {
 			$censor->check($value);
-			if($censor->modbanned()) {
+			if($censor->modbanned() || $censor->modmoderated()) {
 				profile_showerror($key, lang('spacecp', 'profile_censor'));
 			}
+		}
+		if(in_array($key, $forumfield)) {
 			if($key == 'sightml') {
 				loadcache(array('smilies', 'smileytypes'));
 				$value = cutstr($value, $_G['group']['maxsigsize'], '');
@@ -102,10 +129,6 @@ if(submitcheck('profilesubmit')) {
 		if(empty($field)) {
 			continue;
 		} elseif(profile_check($key, $value, $space)) {
-			$censor->check($value);
-			if($censor->modbanned()) {
-				profile_showerror($key, lang('spacecp', 'profile_censor'));
-			}
 			$setarr[$key] = dhtmlspecialchars(trim($value));
 		} else {
 			if($key=='birthprovince') {
@@ -135,9 +158,11 @@ if(submitcheck('profilesubmit')) {
 	}
 	if($_G['gp_deletefile'] && is_array($_G['gp_deletefile'])) {
 		foreach($_G['gp_deletefile'] as $key => $value) {
-			@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
-			@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
-			$verifyarr[$key] = $setarr[$key] = '';
+			if(isset($_G['cache']['profilesetting'][$key])) {
+				@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
+				@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
+				$verifyarr[$key] = $setarr[$key] = '';
+			}
 		}
 	}
 	if($_FILES) {
@@ -145,6 +170,9 @@ if(submitcheck('profilesubmit')) {
 		$upload = new discuz_upload();
 
 		foreach($_FILES as $key => $file) {
+			if(!isset($_G['cache']['profilesetting'][$key])) {
+				continue;
+			}
 			$upload->init($file, 'profile');
 			$attach = $upload->attach;
 
@@ -176,6 +204,10 @@ if(submitcheck('profilesubmit')) {
 	}
 	if($vid && !empty($verifyinfo['field']) && is_array($verifyinfo['field'])) {
 		foreach($verifyinfo['field'] as $key => $fvalue) {
+			if(!isset($verifyconfig['field'][$key])) {
+				unset($verifyinfo['field'][$key]);
+				continue;
+			}
 			if(empty($verifyarr[$key]) && !isset($verifyarr[$key]) && isset($verifyinfo['field'][$key])) {
 				$verifyarr[$key] = !empty($fvalue) && $key != $fvalue ? $fvalue : $space[$key];
 			}
@@ -214,6 +246,9 @@ if(submitcheck('profilesubmit')) {
 		if(!$count) {
 			DB::insert('common_member_verify', array('uid' => $_G['uid']));
 		}
+		if($_G['setting']['verify'][$vid]['available']) {
+			manage_addnotify('verify_'.$vid, 0, array('langkey' => 'manage_verify_field', 'verifyname' => $_G['setting']['verify'][$vid]['title'], 'doid' => $vid));
+		}
 	}
 
 	if(isset($_POST['privacy'])) {
@@ -225,30 +260,37 @@ if(submitcheck('profilesubmit')) {
 		DB::update('common_member_field_home', array('privacy'=>addslashes(serialize($space['privacy']))), array('uid'=>$space['uid']));
 	}
 
-	if($_G['setting']['my_app_status']) manyoulog('user', $_G['uid'], 'update');
+	manyoulog('user', $_G['uid'], 'update');
 
 	include_once libfile('function/feed');
 	feed_add('profile', 'feed_profile_update_'.$operation, array('hash_data'=>'profile'));
-
-	profile_showsuccess();
+	countprofileprogress();
+	$message = $vid ? lang('spacecp', 'profile_verify_verifying', array('verify' => $verifyconfig['title'])) : '';
+	profile_showsuccess($message);
 
 } elseif(submitcheck('passwordsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	$membersql = $memberfieldsql = $authstradd1 = $authstradd2 = $newpasswdadd = '';
 	$setarr = array();
 	$emailnew = dhtmlspecialchars($_G['gp_emailnew']);
+	$ignorepassword = 0;
+	if($_G['setting']['connect']['allow'] && DB::result_first("SELECT conisregister FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'")) {
+		$_G['gp_oldpassword'] = '';
+		$ignorepassword = 1;
+	}
 
 	if($_G['gp_questionidnew'] === '') {
 		$_G['gp_questionidnew'] = $_G['gp_answernew'] = '';
 	} else {
 		$secquesnew = $_G['gp_questionidnew'] > 0 ? random(8) : '';
 	}
+
 	if(!empty($_G['gp_newpassword']) && $_G['gp_newpassword'] != $_G['gp_newpassword2']) {
 		showmessage('profile_passwd_notmatch', '', array(), array('return' => true));
 	}
 
 	loaducenter();
-	$ucresult = uc_user_edit($_G['username'], $_G['gp_oldpassword'], $_G['gp_newpassword'], $emailnew != $_G['member']['email'] ? $emailnew : '', 0, $_G['gp_questionidnew'], $_G['gp_answernew']);
+	$ucresult = uc_user_edit($_G['username'], $_G['gp_oldpassword'], $_G['gp_newpassword'], $emailnew != $_G['member']['email'] ? $emailnew : '', $ignorepassword, $_G['gp_questionidnew'], $_G['gp_answernew']);
 	if($ucresult == -1) {
 		showmessage('profile_passwd_wrong', '', array(), array('return' => true));
 	} elseif($ucresult == -4) {
@@ -259,34 +301,18 @@ if(submitcheck('profilesubmit')) {
 		showmessage('profile_email_duplicate', '', array(), array('return' => true));
 	}
 
-	if($emailnew != $_G['member']['email']) {
-		$setarr['email'] = $emailnew;
-		$setarr['emailstatus'] = 0;
-	}
 	if(!empty($_G['gp_newpassword']) || $secquesnew) {
 		$setarr['password'] = md5(random(10));
 	}
+	if($_G['setting']['connect']['allow']) {
+		DB::update('common_member_connect', array('conisregister' => 0), array('uid' => $_G['uid']));
+	}
 
 	$authstr = false;
-	if($_G['adminid'] == 0 && $emailnew != $_G['member']['email']) {
-		if($_G['setting']['regverify'] == 1 && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8)) {
-			$idstring = random(6);
-			$setarr['groupid'] = $groupid = 8;
-			loadcache('usergroup_8');
-			$authstr = true;
-			DB::update('common_member_field_forum', array('authstr' => TIMESTAMP."\t2\t".$idstring), array('uid' => $_G['uid']));
-			$verifyurl = "{$_G[siteurl]}member.php?mod=activate&amp;uid={$_G[uid]}&amp;id=$idstring";
-			$email_verify_message = lang('email', 'email_verify_message', array(
-				'username' => $_G['member']['username'],
-				'bbname' => $_G['setting']['bbname'],
-				'siteurl' => $_G['siteurl'],
-				'url' => $verifyurl
-			));
-			include_once libfile('function/mail');
-			sendmail("{$_G[member][username]} <$emailnew>", lang('email', 'email_verify_subject'), $email_verify_message);
-		} else {
-			emailcheck_send($space['uid'], $emailnew);
-		}
+	if($emailnew != $_G['member']['email']) {
+		$authstr = true;
+		emailcheck_send($space['uid'], $emailnew);
+		dsetcookie('newemail', "$space[uid]\t$emailnew\t$_G[timestamp]", 31536000);
 	}
 	if($setarr) {
 		DB::update('common_member', $setarr, array('uid' => $_G['uid']));
@@ -303,6 +329,13 @@ if($operation == 'password') {
 
 	$resend = getcookie('resendemail');
 	$resend = empty($resend) ? true : (TIMESTAMP - $resend) > 300;
+	$newemail = getcookie('newemail');
+	$space['newemail'] = !$space['emailstatus'] ? $space['email'] : '';
+	if(!empty($newemail)) {
+		$mailinfo = explode("\t", $newemail);
+		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
+	}
+
 	if($_G['gp_resend'] && $resend) {
 		$toemail = $space['newemail'] ? $space['newemail'] : $space['email'];
 		emailcheck_send($space['uid'], $toemail);
@@ -311,7 +344,9 @@ if($operation == 'password') {
 	} elseif ($_G['gp_resend']) {
 		showmessage('send_activate_mail_error', "home.php?mod=spacecp&ac=profile&op=password");
 	}
-
+	if(!empty($space['newemail'])) {
+		$acitvemessage = lang('spacecp', 'email_acitve_message', array('newemail' => $space['newemail'], 'imgdir' => $_G['style']['imgdir']));
+	}
 	$actives = array('password' =>' class="a"');
 	$navtitle = lang('core', 'title_password_security');
 
@@ -334,16 +369,8 @@ if($operation == 'password') {
 	$actives = array('profile' =>' class="a"');
 	$opactives = array($operation =>' class="a"');
 	$allowitems = array();
-	if($operation == 'base') {
-		$allowitems = array('realname', 'gender', 'birthday', 'birthcity', 'residecity', 'residedist', 'affectivestatus', 'lookingfor', 'bloodtype', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8');
-	} elseif($operation == 'contact') {
-		$allowitems = array('telephone', 'mobile', 'alipay', 'icq', 'qq', 'yahoo', 'msn', 'taobao');
-	} elseif($operation == 'edu') {
-		$allowitems = array('graduateschool', 'education');
-	} elseif($operation == 'work') {
-		$allowitems = array('occupation', 'company', 'position', 'revenue');
-	} elseif($operation == 'info') {
-		$allowitems = array('idcardtype', 'idcard', 'address', 'zipcode', 'nationality', 'residecommunity', 'residesuite', 'height', 'weight', 'site', 'bio', 'interest');
+	if(in_array($operation, array('base', 'contact', 'edu', 'work', 'info'))) {
+		$allowitems = $profilegroup[$operation]['field'];
 	} elseif($operation == 'verify') {
 		if($vid == 0) {
 			foreach($_G['setting']['verify'] as $key => $setting) {
@@ -360,7 +387,7 @@ if($operation == 'password') {
 	$showbtn = ($vid && $verify['verify'.$vid] != 1) || empty($vid);
 	if(!empty($verify) && is_array($verify)) {
 		foreach($verify as $key => $flag) {
-			if(in_array($key, array('verify1', 'verify2', 'verify3', 'verify4', 'verify5')) && $flag == 1) {
+			if(in_array($key, array('verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'verify6', 'verify7')) && $flag == 1) {
 				$verifyid = intval(substr($key, -1, 1));
 				foreach($_G['setting']['verify'][$verifyid]['field'] as $field) {
 					$_G['cache']['profilesetting'][$field]['unchangeable'] = 1;
@@ -380,36 +407,18 @@ if($operation == 'password') {
 	}
 	$htmls = $settings = array();
 	foreach($allowitems as $fieldid) {
-		$html = profile_setting($fieldid, $space, $vid ? false : true);
-		if($html) {
-			$settings[$fieldid] = $_G['cache']['profilesetting'][$fieldid];
-			$htmls[$fieldid] = $html;
+		if(!in_array($fieldid, array('sightml', 'customstatus', 'timeoffset'))) {
+			$html = profile_setting($fieldid, $space, $vid ? false : true);
+			if($html) {
+				$settings[$fieldid] = $_G['cache']['profilesetting'][$fieldid];
+				$htmls[$fieldid] = $html;
+			}
 		}
 	}
 
 }
 
 include template("home/spacecp_profile");
-
-function get_constellation($birthmonth,$birthday) {
-	$birthmonth = intval($birthmonth);
-	$birthday = intval($birthday);
-	$idx = $birthmonth;
-	if ($birthday <= 22) {
-		if (1 == $birthmonth) {
-			$idx = 12;
-		} else {
-			$idx = $birthmonth - 1;
-		}
-	}
-	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
-}
-
-function get_zodiac($birthyear) {
-	$birthyear = intval($birthyear);
-	$idx = (($birthyear - 1900) % 12) + 1;
-	return $idx > 0 && $idx <= 12 ? lang('space', 'zodiac_'. $idx) : '';
-}
 
 function profile_showerror($key, $extrainfo) {
 	echo '<script>';
@@ -418,9 +427,9 @@ function profile_showerror($key, $extrainfo) {
 	exit();
 }
 
-function profile_showsuccess() {
+function profile_showsuccess($message = '') {
 	echo '<script type="text/javascript">';
-	echo 'parent.show_success();';
+	echo "parent.show_success('$message');";
 	echo '</script>';
 	exit();
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_list.php 17431 2010-10-19 03:35:51Z zhangguosheng $
+ *      $Id: portal_list.php 21365 2011-03-24 02:42:39Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,18 +13,18 @@ if(!defined('IN_DISCUZ')) {
 
 $_G['catid'] = $catid = max(0,intval($_GET['catid']));
 if(empty($catid)) {
-	showmessage("list_choose_category", dreferer());
+	showmessage('list_choose_category', dreferer());
 }
 $portalcategory = &$_G['cache']['portalcategory'];
 $cat = $portalcategory[$catid];
 
 if(empty($cat)) {
-	showmessage("list_category_noexist", dreferer());
+	showmessage('list_category_noexist', dreferer());
 }
 require_once libfile('function/portalcp');
 $categoryperm = getallowcategory($_G['uid']);
 if($cat['closed'] && !$_G['group']['allowdiy'] && !$categoryperm[$catid]['allowmanage']) {
-	showmessage("list_category_is_closed", dreferer());
+	showmessage('list_category_is_closed', dreferer());
 }
 
 if(!empty($cat['url']))	dheader('location:'.$cat['url']);
@@ -41,9 +41,28 @@ foreach ($_G['setting']['navs'] as $navsvalue) {
 	}
 }
 $page = max(1, intval($_GET['page']));
-$navtitle = $cat['catname'].($page>1?" ($page)":'');
-$metadescription = empty($cat['description']) ? $cat['catname'] : $cat['description'];
-$metakeywords =  empty($cat['keyword']) ? $cat['catname'] : $cat['keyword'];
+foreach($cat['ups'] as $val) {
+	$cats[] = $val['catname'];
+}
+$catseoset = array(
+	'seotitle' => $cat['seotitle'],
+	'seokeywords' => $cat['keyword'],
+	'seodescription' => $cat['description']
+);
+$seodata = array('firstcat' => $cats[0], 'secondcat' => $cats[1], 'curcat' => $cat['catname'], 'page' => intval($_G['gp_page']));
+list($navtitle, $metadescription, $metakeywords) = get_seosetting('articlelist', $seodata, $catseoset);
+if(!$navtitle) {
+	$navtitle = get_title_page($cat['catname'], $_G['page']);
+	$nobbname = false;
+} else {
+	$nobbname = true;
+}
+if(!$metakeywords) {
+	$metakeywords = $cat['catname'];
+}
+if(!$metadescription) {
+	$metadescription = $cat['catname'];
+}
 
 $file = 'portal/list:'.$catid;
 include template('diy:'.$file, NULL, NULL, NULL, $cat['primaltplname']);
@@ -67,8 +86,14 @@ function category_get_wheresql($cat) {
 	return $wheresql;
 }
 
-function category_get_list($cat, $wheresql, $page = 1, $perpage = 15) {
+function category_get_list($cat, $wheresql, $page = 1, $perpage = 0) {
 	global $_G;
+	$cat['perpage'] = empty($cat['perpage']) ? 15 : $cat['perpage'];
+	$cat['maxpages'] = empty($cat['maxpages']) ? 1000 : $cat['maxpages'];
+	$perpage = intval($perpage);
+	$page = intval($page);
+	$perpage = empty($perpage) ? $cat['perpage'] : $perpage;
+	$page = empty($page) ? 1 : min($page, $cat['maxpages']);
 	$start = ($page-1)*$perpage;
 	if($start<0) $start = 0;
 	$list = array();
@@ -79,8 +104,9 @@ function category_get_list($cat, $wheresql, $page = 1, $perpage = 15) {
 		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." at WHERE $wheresql ORDER BY at.dateline DESC LIMIT $start,$perpage");
 		while ($value = DB::fetch($query)) {
 			$value['catname'] = $value['catid'] == $cat['catid'] ? $cat['catname'] : $_G['cache']['portalcategory'][$value['catid']]['catname'];
+			$value['onerror'] = '';
 			if($value['pic']) {
-				$value['pic'] = pic_get($value['pic'], 'portal', $value['thumb'], $value['remote']);
+				$value['pic'] = pic_get($value['pic'], '', $value['thumb'], $value['remote'], 1, 1);
 			}
 			$value['dateline'] = dgmdate($value['dateline']);
 			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
@@ -89,7 +115,7 @@ function category_get_list($cat, $wheresql, $page = 1, $perpage = 15) {
 				$pricount++;
 			}
 		}
-		$multi = multi($count, $perpage, $page, $cat['caturl']);
+		$multi = multi($count, $perpage, $page, $cat['caturl'], $cat['maxpages']);
 	}
 	return $return = array('list'=>$list,'count'=>$count,'multi'=>$multi,'pricount'=>$pricount);
 }
@@ -141,7 +167,7 @@ function category_get_list_more($cat, $wheresql, $hassub = true,$hasnew = true,$
 
 				while ($value = DB::fetch($query)) {
 					$value['catname'] = $value['catid'] == $cat['catid'] ? $cat['catname'] : $_G['cache']['portalcategory'][$value['catid']]['catname'];
-					if($value['pic']) $value['pic'] = pic_get($value['pic'], 'portal', $value['thumb'], $value['remote']);
+					if($value['pic']) $value['pic'] = pic_get($value['pic'], '', $value['thumb'], $value['remote'], 1, 1);
 					$value['timestamp'] = $value['dateline'];
 					$value['dateline'] = dgmdate($value['dateline']);
 					$list[] = $value;
@@ -155,5 +181,22 @@ function category_get_list_more($cat, $wheresql, $hassub = true,$hasnew = true,$
 		}
 	}
 	return $data;
+}
+
+function article_title_style($value = array()) {
+
+	$style = array();
+	$highlight = '';
+	if($value['highlight']) {
+		$style = explode('|', $value['highlight']);
+		$highlight = ' style="';
+		$highlight .= $style[0] ? 'color: '.$style[0].';' : '';
+		$highlight .= $style[1] ? 'font-weight: bold;' : '';
+		$highlight .= $style[2] ? 'font-style: italic;' : '';
+		$highlight .= $style[3] ? 'text-decoration: underline;' : '';
+		$highlight .= '"';
+	}
+	return $highlight;
+
 }
 ?>

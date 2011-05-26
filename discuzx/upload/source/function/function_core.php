@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 17487 2010-10-19 10:21:29Z monkey $
+ *      $Id: function_core.php 22775 2011-05-20 05:43:23Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,11 +22,20 @@ function updatesession($force = false) {
 
 	global $_G;
 	static $updated = false;
+
 	if(!$updated) {
+		if($_G['uid']) {
+			if($_G['cookie']['ulastactivity']) {
+				$ulastactivity = authcode($_G['cookie']['ulastactivity'], 'DECODE');
+			} else {
+				$ulastactivity = getuserprofile('lastactivity');
+				dsetcookie('ulastactivity', authcode($ulastactivity, 'ENCODE'), 31536000);
+			}
+		}
 		$discuz = & discuz_core::instance();
 		$oltimespan = $_G['setting']['oltimespan'];
 		$lastolupdate = $discuz->session->var['lastolupdate'];
-		if($_G['uid'] && $oltimespan && TIMESTAMP - ($lastolupdate ? $lastolupdate : $_G['member']['lastactivity']) > $oltimespan * 60) {
+		if($_G['uid'] && $oltimespan && TIMESTAMP - ($lastolupdate ? $lastolupdate : $ulastactivity) > $oltimespan * 60) {
 			DB::query("UPDATE ".DB::table('common_onlinetime')."
 				SET total=total+'$oltimespan', thismonth=thismonth+'$oltimespan', lastupdate='" . TIMESTAMP . "'
 				WHERE uid='{$_G['uid']}'");
@@ -54,11 +63,12 @@ function updatesession($force = false) {
 
 		$updated = true;
 
-		if($_G['uid'] && TIMESTAMP - $_G['member']['lastactivity'] > 21600) {
-			if($oltimespan && TIMESTAMP - $_G['member']['lastactivity'] > 43200) {
+		if($_G['uid'] && TIMESTAMP - $ulastactivity > 21600) {
+			if($oltimespan && TIMESTAMP - $ulastactivity > 43200) {
 				$total = DB::result_first("SELECT total FROM ".DB::table('common_onlinetime')." WHERE uid='$_G[uid]'");
 				DB::update('common_member_count', array('oltime' => round(intval($total) / 60)), "uid='$_G[uid]'", 1);
 			}
+			dsetcookie('ulastactivity', authcode(TIMESTAMP, 'ENCODE'), 31536000);
 			DB::update('common_member_status', array('lastip' => $_G['clientip'], 'lastactivity' => TIMESTAMP, 'lastvisit' => TIMESTAMP), "uid='$_G[uid]'", 1);
 		}
 	}
@@ -117,10 +127,7 @@ function getgpc($k, $type='GP') {
 function getuserbyuid($uid) {
 	static $users = array();
 	if(empty($users[$uid])) {
-		$users[$uid] = DB::fetch_first("SELECT m.*, mc.*, ms.* FROM ".DB::table('common_member')." m
-			LEFT JOIN ".DB::table('common_member_count')." mc USING(uid)
-			LEFT JOIN ".DB::table('common_member_status')." ms USING(uid)
-			WHERE m.uid='$uid'");
+		$users[$uid] = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$uid'");
 	}
 	return $users[$uid];
 }
@@ -131,12 +138,12 @@ function getuserprofile($field) {
 		return $_G['member'][$field];
 	}
 	static $tablefields = array(
-		'count'		=> array('extcredits1','extcredits2','extcredits3','extcredits4','extcredits5','extcredits6','extcredits7','extcredits8','friends','posts','threads','digestposts','doings','blogs','albums','sharings','attachsize','views','oltime'),
-		'status'	=> array('regip','lastip','lastvisit','lastactivity','lastpost','lastsendmail','notifications','myinvitations','pokes','pendingfriends','invisible','buyercredit','sellercredit','favtimes','sharetimes'),
+		'count'		=> array('extcredits1','extcredits2','extcredits3','extcredits4','extcredits5','extcredits6','extcredits7','extcredits8','friends','posts','threads','digestposts','doings','blogs','albums','sharings','attachsize','views','oltime','todayattachs','todayattachsize'),
+		'status'	=> array('regip','lastip','lastvisit','lastactivity','lastpost','lastsendmail','invisible','buyercredit','sellercredit','favtimes','sharetimes','profileprogress'),
 		'field_forum'	=> array('publishfeed','customshow','customstatus','medals','sightml','groupterms','authstr','groups','attentiongroup'),
-		'field_home'	=> array('videophoto','spacename','spacedescription','domain','addsize','addfriend','menunum','theme','spacecss','blockposition','recentnote','spacenote','privacy','feedfriend','acceptemail','magicgift'),
+		'field_home'	=> array('videophoto','spacename','spacedescription','domain','addsize','addfriend','menunum','theme','spacecss','blockposition','recentnote','spacenote','privacy','feedfriend','acceptemail','magicgift','stickblogs'),
 		'profile'	=> array('realname','gender','birthyear','birthmonth','birthday','constellation','zodiac','telephone','mobile','idcardtype','idcard','address','zipcode','nationality','birthprovince','birthcity','resideprovince','residecity','residedist','residecommunity','residesuite','graduateschool','company','education','occupation','position','revenue','affectivestatus','lookingfor','bloodtype','height','weight','alipay','icq','qq','yahoo','msn','taobao','site','bio','interest','field1','field2','field3','field4','field5','field6','field7','field8'),
-		'verify'	=> array('verify1', 'verify2', 'verify3', 'verify4', 'verify5'),
+		'verify'	=> array('verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'verify6', 'verify7'),
 	);
 	$profiletable = '';
 	foreach($tablefields as $table => $fields) {
@@ -146,9 +153,12 @@ function getuserprofile($field) {
 		}
 	}
 	if($profiletable) {
-		$data = DB::fetch_first("SELECT ".implode(',', $tablefields[$table])." FROM ".DB::table('common_member_'.$table)." WHERE uid='$_G[uid]'");
+		$data = array();
+		if($_G['uid']) {
+			$data = DB::fetch_first("SELECT ".implode(', ', $tablefields[$profiletable])." FROM ".DB::table('common_member_'.$profiletable)." WHERE uid='$_G[uid]'");
+		}
 		if(!$data) {
-			foreach($tablefields[$table] as $k) {
+			foreach($tablefields[$profiletable] as $k) {
 				$data[$k] = '';
 			}
 		}
@@ -159,7 +169,9 @@ function getuserprofile($field) {
 
 function daddslashes($string, $force = 1) {
 	if(is_array($string)) {
-		foreach($string as $key => $val) {
+		$keys = array_keys($string);
+		foreach($keys as $key) {
+			$val = $string[$key];
 			unset($string[$key]);
 			$string[addslashes($key)] = daddslashes($val, $force);
 		}
@@ -229,8 +241,10 @@ function dhtmlspecialchars($string) {
 			$string[$key] = dhtmlspecialchars($val);
 		}
 	} else {
-		$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1',
-		str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string));
+		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		if(strpos($string, '&amp;#') !== false) {
+			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
+		}
 	}
 	return $string;
 }
@@ -242,13 +256,27 @@ function dexit($message = '') {
 }
 
 function dheader($string, $replace = true, $http_response_code = 0) {
+	$islocation = substr(strtolower(trim($string)), 0, 8) == 'location';
+	if(defined('IN_MOBILE') && strpos($string, 'mobile') === false && $islocation) {
+		if (strpos($string, '?') === false) {
+			$string = $string.'?mobile=yes';
+		} else {
+			if(strpos($string, '#') === false) {
+				$string = $string.'&mobile=yes';
+			} else {
+				$str_arr = explode('#', $string);
+				$str_arr[0] = $str_arr[0].'&mobile=yes';
+				$string = implode('#', $str_arr);
+			}
+		}
+	}
 	$string = str_replace(array("\r", "\n"), array('', ''), $string);
 	if(empty($http_response_code) || PHP_VERSION < '4.3' ) {
 		@header($string, $replace);
 	} else {
 		@header($string, $replace, $http_response_code);
 	}
-	if(preg_match('/^\s*location:/is', $string)) {
+	if($islocation) {
 		exit();
 	}
 }
@@ -266,6 +294,10 @@ function dsetcookie($var, $value = '', $life = 0, $prefix = 1, $httponly = false
 	if($value == '' || $life < 0) {
 		$value = '';
 		$life = -1;
+	}
+
+	if(defined('IN_MOBILE')) {
+		$httponly = false;
 	}
 
 	$life = $life > 0 ? getglobal('timestamp') + $life : ($life < 0 ? getglobal('timestamp') - 31536000 : 0);
@@ -295,18 +327,49 @@ function formhash($specialadd = '') {
 }
 
 function checkrobot($useragent = '') {
-	static $kw_spiders = 'Bot|Crawl|Spider|slurp|sohu-search|lycos|robozilla';
-	static $kw_browsers = 'MSIE|Netscape|Opera|Konqueror|Mozilla';
+	static $kw_spiders = array('bot', 'crawl', 'spider' ,'slurp', 'sohu-search', 'lycos', 'robozilla');
+	static $kw_browsers = array('msie', 'netscape', 'opera', 'konqueror', 'mozilla');
 
-	$useragent = empty($useragent) ? $_SERVER['HTTP_USER_AGENT'] : $useragent;
+	$useragent = strtolower(empty($useragent) ? $_SERVER['HTTP_USER_AGENT'] : $useragent);
+	if(strpos($useragent, 'http://') === false && dstrpos($useragent, $kw_browsers)) return false;
+	if(dstrpos($useragent, $kw_spiders)) return true;
+	return false;
+}
+function checkmobile() {
+	global $_G;
+	$mobile = array();
+	static $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+				'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
+				'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
+				'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
+				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
+				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
+				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
+		$_G['mobile'] = $v;
+		return true;
+	}
+	$brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
+	if(dstrpos($useragent, $brower)) return false;
 
-	if(!strexists($useragent, 'http://') && preg_match("/($kw_browsers)/i", $useragent)) {
-		return false;
-	} elseif(preg_match("/($kw_spiders)/i", $useragent)) {
+	$_G['mobile'] = 'unknown';
+	if($_GET['mobile'] === 'yes') {
 		return true;
 	} else {
 		return false;
 	}
+}
+
+function dstrpos($string, &$arr, $returnvalue = false) {
+	if(empty($string)) return false;
+	foreach((array)$arr as $v) {
+		if(strpos($string, $v) !== false) {
+			$return = $returnvalue ? $v : true;
+			return $return;
+		}
+	}
+	return false;
 }
 
 function isemail($email) {
@@ -368,30 +431,46 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
 			$_G['lang'][$key] = $lang;
 		}
+		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
+			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
+		}
 		$returnvalue = &$_G['lang'];
 	} else {
-		if(!isset($_G['lang']['plugin'])) {
-			include DISCUZ_ROOT.'./data/plugindata/lang_plugin.php';
-			$_G['lang']['plugin'] = $lang;
+		if(empty($_G['config']['plugindeveloper'])) {
+			loadcache('pluginlanguage_script');
+		} elseif(!isset($_G['cache']['pluginlanguage_script'][$file]) && preg_match("/^[a-z]+[a-z0-9_]*$/i", $file)) {
+			if(@include(DISCUZ_ROOT.'./data/plugindata/'.$file.'.lang.php')) {
+				$_G['cache']['pluginlanguage_script'][$file] = $scriptlang[$file];
+			} else {
+				loadcache('pluginlanguage_script');
+			}
 		}
-		$returnvalue = &$_G['lang']['plugin'];
+		$returnvalue = & $_G['cache']['pluginlanguage_script'];
 		$key = &$file;
 	}
 	$return = $langvar !== null ? (isset($returnvalue[$key][$langvar]) ? $returnvalue[$key][$langvar] : null) : $returnvalue[$key];
 	$return = $return === null ? ($default !== null ? $default : $langvar) : $return;
+	$searchs = $replaces = array();
 	if($vars && is_array($vars)) {
-		$searchs = $replaces = array();
 		foreach($vars as $k => $v) {
 			$searchs[] = '{'.$k.'}';
 			$replaces[] = $v;
 		}
-		$return = str_replace($searchs, $replaces, $return);
 	}
+	if(is_string($return) && strpos($return, '{_G/') !== false) {
+		preg_match_all('/\{_G\/(.+?)\}/', $return, $gvar);
+		foreach($gvar[0] as $k => $v) {
+			$searchs[] = $v;
+			$replaces[] = getglobal($gvar[1][$k]);
+		}
+	}
+	$return = str_replace($searchs, $replaces, $return);
 	return $return;
 }
 
 function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefile, $tpldir, $file) {
-	static $tplrefresh, $timestamp;
+	static $tplrefresh, $timestamp, $targettplname;
 	if($tplrefresh === null) {
 		$tplrefresh = getglobal('config/output/tplrefresh');
 		$timestamp = getglobal('timestamp');
@@ -402,6 +481,14 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 			require_once DISCUZ_ROOT.'/source/class/class_template.php';
 			$template = new template();
 			$template->parse_template($maintpl, $templateid, $tpldir, $file, $cachefile);
+			if($targettplname === null) {
+				$targettplname = getglobal('style/tplfile');
+				if(!empty($targettplname)) {
+					$targettplname = strtr($targettplname, ':', '_');
+					update_template_block($targettplname, $template->blocks);
+				}
+				$targettplname = true;
+			}
 			return TRUE;
 		}
 	}
@@ -410,57 +497,50 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 
 function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primaltpl='') {
 	global $_G;
+
 	static $_init_style = false;
 	if($_init_style === false) {
 		$discuz = & discuz_core::instance();
 		$discuz->_init_style();
 		$_init_style = true;
 	}
-	if(strexists($file, ':')) {
+	$oldfile = $file;
+	if(strpos($file, ':') !== false) {
 		$clonefile = '';
 		list($templateid, $file, $clonefile) = explode(':', $file);
 		$oldfile = $file;
 		$file = empty($clonefile) || STYLEID != $_G['cache']['style_default']['styleid'] ? $file : $file.'_'.$clonefile;
 		if($templateid == 'diy' && STYLEID == $_G['cache']['style_default']['styleid']) {
 			$_G['style']['prefile'] = '';
-			$diypath = DISCUZ_ROOT.'./data/diy/';
+			$diypath = DISCUZ_ROOT.'./data/diy/'; //DIY模板文件目錄
 			$preend = '_diy_preview';
-			$previewname = $diypath.$file.$preend.'.htm';
 			$_G['gp_preview'] = !empty($_G['gp_preview']) ? $_G['gp_preview'] : '';
 			$curtplname = $oldfile;
-			if(file_exists($diypath.$file.'.htm')) {
+			if(isset($_G['cache']['diytemplatename'.$_G['basescript']])) {
+				$diytemplatename = &$_G['cache']['diytemplatename'.$_G['basescript']];
+			} else {
+				$diytemplatename = &$_G['cache']['diytemplatename'];
+			}
+			$tplsavemod = 0;
+			if(isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm') && ($tplsavemod = 1) || ($file = $primaltpl ? $primaltpl : $oldfile) && isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm')) {
 				$tpldir = 'data/diy';
-				!$gettplfile && $_G['style']['tplsavemod'] = 1;
-
+				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				$flag = file_exists($previewname);
-				if($_G['gp_preview'] == 'yes') {
-					$file .= $flag ? $preend : '';
-				} else {
-					$_G['style']['prefile'] = $flag ? 1 : '';
+				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或預覽模式下做以下判斷
+					$flag = file_exists($diypath.$file.$preend.'.htm');
+					if($_G['gp_preview'] == 'yes') {
+						$file .= $flag ? $preend : '';
+					} else {
+						$_G['style']['prefile'] = $flag ? 1 : '';
+					}
 				}
-
-			} elseif(file_exists($diypath.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
-				$file = $primaltpl ? $primaltpl : $oldfile;
-				$tpldir = 'data/diy';
-				!$gettplfile && $_G['style']['tplsavemod'] = 0;
-
-				$curtplname = $file;
-				$flag = file_exists($previewname);
-				if($_G['gp_preview'] == 'yes') {
-					$file .= $flag ? $preend : '';
-				} else {
-					$_G['style']['prefile'] = $flag ? 1 : '';
-				}
-
 			} else {
 				$file = $primaltpl ? $primaltpl : $oldfile;
 			}
 			$tplrefresh = $_G['config']['output']['tplrefresh'];
-			$tplmtime = @filemtime($diypath.$file.'.htm');
-			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && $tplmtime && $tplmtime < @filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
+			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && filemtime($diypath.$file.'.htm') < filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
 				if (!updatediytemplate($file)) {
-					@unlink($diypath.$file.'.htm');
+					unlink($diypath.$file.'.htm');
 					$tpldir = '';
 				}
 			}
@@ -479,20 +559,54 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	$file .= !empty($_G['inajax']) && ($file == 'common/header' || $file == 'common/footer') ? '_ajax' : '';
 	$tpldir = $tpldir ? $tpldir : (defined('TPLDIR') ? TPLDIR : '');
 	$templateid = $templateid ? $templateid : (defined('TEMPLATEID') ? TEMPLATEID : '');
-	$tplfile = ($tpldir ? $tpldir.'/' : './template/').$file.'.htm';
 	$filebak = $file;
+
+	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, 'mobile/') === false || $_G['forcemobilemessage']) {
+		$file = 'mobile/'.$oldfile;
+	}
+
+	$tplfile = ($tpldir ? $tpldir.'/' : './template/').$file.'.htm';
+
 	$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.$_G['basescript'].'_'.CURMODULE;
+
+	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+		if(strpos($tpldir, 'plugin')) {
+			if(!file_exists(DISCUZ_ROOT.$tpldir.'/'.$file.'.htm')) {
+				require_once libfile('class/error');
+				discuz_error::template_error('template_notfound', $tpldir.'/'.$file.'.htm');
+			} else {
+				$mobiletplfile = $tpldir.'/'.$file.'.htm';
+			}
+		}
+		!$mobiletplfile && $mobiletplfile = $file.'.htm';
+		if(strpos($tpldir, 'plugin') && file_exists(DISCUZ_ROOT.$mobiletplfile)) {
+			$tplfile = $mobiletplfile;
+		} elseif(!file_exists(DISCUZ_ROOT.TPLDIR.'/'.$mobiletplfile)) {
+			$mobiletplfile = './template/default/'.$mobiletplfile;
+			if(!file_exists(DISCUZ_ROOT.$mobiletplfile) && !$_G['forcemobilemessage']) {
+				$tplfile = str_replace('mobile/', '', $tplfile);
+				$file = str_replace('mobile/', '', $file);
+				define('TPL_DEFAULT', true);
+			} else {
+				$tplfile = $mobiletplfile;
+			}
+		} else {
+			$tplfile = TPLDIR.'/'.$mobiletplfile;
+		}
+	}
+
 	$cachefile = './data/template/'.(defined('STYLEID') ? STYLEID.'_' : '_').$templateid.'_'.str_replace('/', '_', $file).'.tpl.php';
+
 	if($templateid != 1 && !file_exists(DISCUZ_ROOT.$tplfile)) {
 		$tplfile = './template/default/'.$filebak.'.htm';
 	}
+
 	if($gettplfile) {
 		return $tplfile;
 	}
 	checktplrefresh($tplfile, $tplfile, @filemtime(DISCUZ_ROOT.$cachefile), $templateid, $cachefile, $tpldir, $file);
 	return DISCUZ_ROOT.$cachefile;
 }
-
 
 function modauthkey($id) {
 	global $_G;
@@ -506,7 +620,7 @@ function getcurrentnav() {
 	}
 	$mnid = '';
 	$_G['basefilename'] = $_G['basefilename'] == $_G['basescript'] ? $_G['basefilename'] : $_G['basescript'].'.php';
-	if(array_key_exists($_G['basefilename'], $_G['setting']['navmns'])) {
+	if(isset($_G['setting']['navmns'][$_G['basefilename']])) {
 		foreach($_G['setting']['navmns'][$_G['basefilename']] as $navmn) {
 			if($navmn[0] == array_intersect_assoc($navmn[0], $_GET)) {
 				$mnid = $navmn[1];
@@ -515,7 +629,7 @@ function getcurrentnav() {
 	}
 	if(!$mnid && isset($_G['setting']['navdms'])) {
 		foreach($_G['setting']['navdms'] as $navdm => $navid) {
-			if(strexists(strtolower($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']), $navdm)) {
+			if(strpos(strtolower($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']), $navdm) !== false) {
 				$mnid = $navid;
 				break;
 			}
@@ -549,10 +663,8 @@ function loadcache($cachenames, $force = false) {
 		foreach($cachedata as $cname => $data) {
 			if($cname == 'setting') {
 				$_G['setting'] = $data;
-			} elseif(strexists($cname, 'usergroup_'.$_G['groupid'])) {
-				$_G['cache'][$cname] = $_G['perm'] = $_G['group'] = $data;
-			} elseif(!$_G['uid'] && strexists($cname, $_G['setting']['newusergroupid'])) {
-				$_G['perm'] = $data;
+			} elseif(strpos($cname, 'usergroup_'.$_G['groupid']) !== false) {
+				$_G['cache'][$cname] = $_G['group'] = $data;
 			} elseif($cname == 'style_default') {
 				$_G['cache'][$cname] = $_G['style'] = $data;
 			} elseif($cname == 'grouplevels') {
@@ -569,7 +681,7 @@ function cachedata($cachenames) {
 	global $_G;
 	static $isfilecache, $allowmem;
 
-	if($isfilecache === null) {
+	if(!isset($isfilecache)) {
 		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
 	}
@@ -644,7 +756,7 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
 	if($format == 'u') {
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
-		$s = gmdate(!$uformat ? $dtformat : $uformat, $timestamp);
+		$s = gmdate(!$uformat ? str_replace(":i", ":i:s", $dtformat) : $uformat, $timestamp);
 		$time = TIMESTAMP + $timeoffset * 3600 - $timestamp;
 		if($timestamp >= $todaytimestamp) {
 			if($time > 3600) {
@@ -686,7 +798,7 @@ function dmktime($date) {
 
 function save_syscache($cachename, $data) {
 	static $isfilecache, $allowmem;
-	if($isfilecache === null) {
+	if(!isset($isfilecache)) {
 		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
 	}
@@ -723,6 +835,11 @@ function block_get($parameter) {
 			$_G['block'][$bid] = memory('get', 'blockcache_'.$bid);
 			if($_G['block'][$bid] === null) {
 				$lostbids[] = $bid;
+			} else {
+				$styleid = $_G['block'][$bid]['styleid'];
+				if($styleid && !isset($_G['blockstyle_'.$styleid])) {
+					$_G['blockstyle_'.$styleid] = memory('get', 'blockstylecache_'.$styleid);
+				}
 			}
 		}
 	}
@@ -732,6 +849,10 @@ function block_get($parameter) {
 		foreach ($lostbids as $bid) {
 			if(isset($_G['block'][$bid])) {
 				memory('set', 'blockcache_'.$bid, $_G['block'][$bid], getglobal('setting/memory/diyblock/ttl'));
+				$styleid = $_G['block'][$bid]['styleid'];
+				if($styleid && $_G['blockstyle_'.$styleid]) {
+					memory('set', 'blockstylecache_'.$styleid, $_G['blockstyle_'.$styleid], getglobal('setting/memory/diyblock/ttl'));
+				}
 			}
 		}
 	}
@@ -758,6 +879,24 @@ function libfile($libname, $folder = '') {
 	} else {
 		return realpath("{$libpath}/{$libname}.php");
 	}
+}
+
+function dstrlen($str) {
+	if(strtolower(CHARSET) != 'utf-8') {
+		return strlen($str);
+	}
+	$count = 0;
+	for($i = 0; $i < strlen($str); $i++){
+		$value = ord($str[$i]);
+		if($value > 127) {
+			$count++;
+			if($value >= 192 && $value <= 223) $i++;
+			elseif($value >= 224 && $value <= 239) $i = $i + 2;
+			elseif($value >= 240 && $value <= 247) $i = $i + 3;
+	    	}
+    		$count++;
+	}
+	return $count;
 }
 
 function cutstr($string, $length, $dot = ' ...') {
@@ -811,14 +950,15 @@ function cutstr($string, $length, $dot = ' ...') {
 
 	$strcut = str_replace(array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 
-	$pos = strrpos($s, chr(1));
+	$pos = strrpos($strcut, chr(1));
 	if($pos !== false) {
-		$strcut = substr($s,0,$pos);
+		$strcut = substr($strcut,0,$pos);
 	}
 	return $strcut.$dot;
 }
 
 function dstripslashes($string) {
+	if(empty($string)) return $string;
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
 			$string[$key] = dstripslashes($val);
@@ -829,98 +969,20 @@ function dstripslashes($string) {
 	return $string;
 }
 
-function aidencode($aid, $type = 0) {
+function aidencode($aid, $type = 0, $tid = 0) {
 	global $_G;
-	$s = !$type ? $aid.'|'.substr(md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP.$_G['uid']), 0, 8).'|'.TIMESTAMP.'|'.$_G['uid'] : $aid.'|'.md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP).'|'.TIMESTAMP;
+	$s = !$type ? $aid.'|'.substr(md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP.$_G['uid']), 0, 8).'|'.TIMESTAMP.'|'.$_G['uid'].'|'.$tid : $aid.'|'.md5($aid.md5($_G['config']['security']['authkey']).TIMESTAMP).'|'.TIMESTAMP;
 	return rawurlencode(base64_encode($s));
 }
 
 function getforumimg($aid, $nocache = 0, $w = 140, $h = 140, $type = '') {
 	global $_G;
-	$key = authcode("$aid\t$w\t$h", 'ENCODE', $_G['config']['security']['authkey']);
+	$key = md5($aid.'|'.$w.'|'.$h);
 	return 'forum.php?mod=image&aid='.$aid.'&size='.$w.'x'.$h.'&key='.rawurlencode($key).($nocache ? '&nocache=yes' : '').($type ? '&type='.$type : '');
-}
-
-function rewritedata() {
-	global $_G;
-	$data = array();
-	if(!defined('IN_ADMINCP')) {
-		if(in_array('portal_topic', $_G['setting']['rewritestatus'])) {
-			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topic\=(.+?)?\"([^\>]*)\>/e";
-			$data['replace']['portal_topic'] = "rewriteoutput('portal_topic', 0, '\\1', '\\3', '\\4')";
-		}
-
-		if(in_array('portal_article', $_G['setting']['rewritestatus'])) {
-			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
-			$data['replace']['portal_article'] = "rewriteoutput('portal_article', 0, '\\1', '\\3', '\\5', '\\6')";
-		}
-
-		if(in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
-			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
-			$data['replace']['forum_forumdisplay'] = "rewriteoutput('forum_forumdisplay', 0, '\\1', '\\3', '\\5', '\\6')";
-		}
-
-		if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&amp;extra\=(page\%3D(\d+))?)?(&amp;page\=(\d+))?\"([^\>]*)\>/e";
-			$data['replace']['forum_viewthread'] = "rewriteoutput('forum_viewthread', 0, '\\1', '\\3', '\\8', '\\6', '\\9')";
-		}
-
-		if(in_array('group_group', $_G['setting']['rewritestatus'])) {
-			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
-			$data['replace']['group_group'] = "rewriteoutput('group_group', 0, '\\1', '\\3', '\\5', '\\6')";
-		}
-
-		if(in_array('home_space', $_G['setting']['rewritestatus'])) {
-			$data['search']['home_space'] = "/".$_G['domain']['pregxprw']['home']."\?mod=space&(amp;)?(uid\=(\d+)|username\=([^&]+?))\"([^\>]*)\>/e";
-			$data['replace']['home_space'] = "rewriteoutput('home_space', 0, '\\1', '\\4', '\\5', '\\6')";
-		}
-
-		if(in_array('all_script', $_G['setting']['rewritestatus'])) {
-			$data['search']['all_script'] = "/".$_G['domain']['pregxprw']['all_script']."(([a-z]+)\.php)?\?mod=([^\"]+?)\"([^\>]*)?\>/e";
-			$data['replace']['all_script'] = "rewriteoutput('all_script', 0, '\\1', '\\4', '\\5', '\\6', '\\7')";
-		}
-	} else {
-		$data['rulesearch']['portal_topic'] = 'topic-{name}.html';
-		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topic={name}';
-		$data['rulevars']['portal_topic']['{name}'] = '(.+)';
-
-		$data['rulesearch']['portal_article'] = 'article-{id}-{page}.html';
-		$data['rulereplace']['portal_article'] = 'portal.php?mod=view&aid={id}&page={page}';
-		$data['rulevars']['portal_article']['{id}'] = '([0-9]+)';
-		$data['rulevars']['portal_article']['{page}'] = '([0-9]+)';
-
-		$data['rulesearch']['forum_forumdisplay'] = 'forum-{fid}-{page}.html';
-		$data['rulereplace']['forum_forumdisplay'] = 'forum.php?mod=forumdisplay&fid={fid}&page={page}';
-		$data['rulevars']['forum_forumdisplay']['{fid}'] = '(\w+)';
-		$data['rulevars']['forum_forumdisplay']['{page}'] = '([0-9]+)';
-
-		$data['rulesearch']['forum_viewthread'] = 'thread-{tid}-{page}-{prevpage}.html';
-		$data['rulereplace']['forum_viewthread'] = 'forum.php?mod=viewthread&tid={tid}&extra=page\%3D{prevpage}&page={page}';
-		$data['rulevars']['forum_viewthread']['{tid}'] = '([0-9]+)';
-		$data['rulevars']['forum_viewthread']['{page}'] = '([0-9]+)';
-		$data['rulevars']['forum_viewthread']['{prevpage}'] = '([0-9]+)';
-
-		$data['rulesearch']['group_group'] = 'group-{fid}-{page}.html';
-		$data['rulereplace']['group_group'] = 'forum.php?mod=group&fid={fid}&page={page}';
-		$data['rulevars']['group_group']['{fid}'] = '([0-9]+)';
-		$data['rulevars']['group_group']['{page}'] = '([0-9]+)';
-
-		$data['rulesearch']['home_space'] = 'space-{user}-{value}.html';
-		$data['rulereplace']['home_space'] = 'home.php?mod=space&{user}={value}';
-		$data['rulevars']['home_space']['{user}'] = '(username|uid)';
-		$data['rulevars']['home_space']['{value}'] = '(.+)';
-
-		$data['rulesearch']['all_script'] = '{script}-{param}.html';
-		$data['rulereplace']['all_script'] = '{script}.php?rewrite={param}';
-		$data['rulevars']['all_script']['{script}'] = '([a-z]+)';
-		$data['rulevars']['all_script']['{param}'] = '(.+)';
-	}
-	return $data;
 }
 
 function rewriteoutput($type, $returntype, $host) {
 	global $_G;
-	$host = $host ? 'http://'.$host : '';
 	$fextra = '';
 	if($type == 'forum_forumdisplay') {
 		list(,,, $fid, $page, $extra) = func_get_args();
@@ -942,6 +1004,12 @@ function rewriteoutput($type, $returntype, $host) {
 			'{user}' => $uid ? 'uid' : 'username',
 			'{value}' => $uid ? $uid : $username,
 		);
+	} elseif($type == 'home_blog') {
+		list(,,, $uid, $blogid, $extra) = func_get_args();
+		$r = array(
+			'{uid}' => $uid,
+			'{blogid}' => $blogid,
+		);
 	} elseif($type == 'group_group') {
 		list(,,, $fid, $page, $extra) = func_get_args();
 		$r = array(
@@ -959,51 +1027,65 @@ function rewriteoutput($type, $returntype, $host) {
 			'{id}' => $id,
 			'{page}' => $page ? $page : 1,
 		);
-	} elseif($type == 'all_script') {
-		list(,,, $script, $param, $extra) = func_get_args();
-		if(!$script) $script = 'index';
-		if(preg_match('/^space&(amp;)?u[^&]+$/', $param)) {
-			$extra .= ' c=1';
-		}
-		if(strexists($extra, 'showWindow') || strexists($extra, 'ajax') || strexists($param, '/') || strexists($param, '%2F') || strexists($param, '-')) {
-			return '<a href="'.$script.'.php?mod='.$param.'"'.dstripslashes($extra).'>';
-		}
-		if(($apos = strrpos($param, '#')) !== FALSE) {
-			$fextra = substr($param, $apos);
-			$param = substr($param, 0, $apos);
-		}
-		$param = str_replace('&amp;', '&', $param);
-		parse_str($param, $params);
-		$param = $comma = '';
-		$i = 0;
-		foreach($params as $k => $v) {
-			if($i) {
-				$param .= $comma.$k.'-'.rawurlencode($v);
-				$comma = '-';
-			} else {
-				$param .= $k.'-';$i++;
-			}
-		}
+	} elseif($type == 'forum_archiver') {
+		list(,, $action, $value, $page, $extra) = func_get_args();
+		$host = '';
 		$r = array(
-			'{script}' => $script,
-			'{param}' => substr($param, -1) != '-' ? $param : substr($param, 0, strlen($param) -1),
+			'{action}' => $action,
+			'{value}' => $value,
 		);
-	} elseif($type == 'site_default') {
-		list(,,, $url) = func_get_args();
-		if(!preg_match('/^\w+\.php/i', $url)) {
-			$host = '';
-		}
-		if(!$returntype) {
-			return '<a href="'.$host.$url.'"';
-		} else {
-			return $host.$url;
+		if($page) {
+			$fextra = '?page='.$page;
 		}
 	}
 	$href = str_replace(array_keys($r), $r, $_G['setting']['rewriterule'][$type]).$fextra;
 	if(!$returntype) {
-		return '<a href="'.$host.$href.'"'.dstripslashes($extra).'>';
+		return '<a href="'.$host.$href.'"'.(!empty($extra) ? stripslashes($extra) : '').'>';
 	} else {
 		return $host.$href;
+	}
+}
+
+function mobilereplace($file, $replace) {
+	global $_G;
+	if(strpos($replace, 'mobile=') === false) {
+		if(strpos($replace, '?') === false) {
+			$replace = 'href="'.$file.$replace.'?mobile=yes"';
+		} else {
+			$replace = 'href="'.$file.$replace.'&mobile=yes"';
+		}
+		return $replace;
+	} else {
+		return 'href="'.$file.$replace.'"';
+	}
+}
+
+function mobileoutput() {
+	global $_G;
+	if(!defined('TPL_DEFAULT')) {
+		$content = ob_get_contents();
+		ob_end_clean();
+		$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+
+		ob_start();
+		$content = '<?xml version="1.0" encoding="utf-8"?>'.$content;
+		if('utf-8' != CHARSET) {
+			@header('Content-Type: text/html; charset=utf-8');
+			$content = diconv($content, CHARSET, 'utf-8');
+		}
+		echo $content;
+		exit();
+
+	} elseif (defined('TPL_DEFAULT') && !$_G['cookie']['dismobilemessage'] && $_G['mobile']) {
+		ob_end_clean();
+		ob_start();
+		$_G['forcemobilemessage'] = true;
+		$query_sting_tmp = str_replace(array('&mobile=yes', 'mobile=yes'), array(''), $_SERVER['QUERY_STRING']);
+		$_G['setting']['mobile']['pageurl'] = $_G['siteurl'].substr($_G['PHP_SELF'], 1).($query_sting_tmp ? '?'.$query_sting_tmp.'&mobile=no' : '?mobile=no' );
+		unset($query_sting_tmp);
+		dsetcookie('dismobilemessage', '1', 3600);
+		showmessage('not_in_mobile');
+		exit;
 	}
 }
 
@@ -1021,41 +1103,15 @@ function output() {
 	if(!empty($_G['blockupdate'])) {
 		block_updatecache($_G['blockupdate']['bid']);
 	}
-	if(empty($_G['setting']['domain']['app']['default'])) {
-		$temp = parse_url($_G['siteurl']);
-		$_G['setting']['domain']['app']['default'] = $temp['host'];
-	}
-	$_G['domain'] = array();
-	$port = empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
-	if(is_array($_G['setting']['domain']['app'])) {
-		foreach($_G['setting']['domain']['app'] as $app => $domain) {
-			if($domain || $_G['setting']['domain']['app']['default']) {
-				$appphp = "{$app}.php";
-				if(!$domain) {
-					$domain = $_G['setting']['domain']['app']['default'];
-				}
-				$_G['domain']['search'][$app] = "<a href=\"{$app}.php";
-				$_G['domain']['replace'][$app] = '<a href="http://'.$domain.$port.$_G['siteroot'].$appphp;
-				$_G['domain']['pregxprw'][$app] = '<a href\="http\:\/\/('.preg_quote($domain.$port.$_G['siteroot'], '/').')'.$appphp;
-			} else {
-				$_G['domain']['pregxprw'][$app] = "<a href\=\"(){$app}.php";
-			}
-		}
-		$_G['domain']['pregxprw']['all_script'] .= '<a href\="http\:\/\/(('.implode('|', $_G['setting']['domain']['app']).')'.preg_quote($port.$_G['siteroot'], '/').')';
-	}
-	if($_G['setting']['rewritestatus'] || $_G['domain']['search']) {
 
+	if(defined('IN_MOBILE')) {
+		mobileoutput();
+	}
+	$havedomain = implode('', $_G['setting']['domain']['app']);
+	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
 		$content = ob_get_contents();
+		$content = output_replace($content);
 
-		$_G['domain']['search'] && $content = str_replace($_G['domain']['search'], $_G['domain']['replace'], $content);
-
-		$_G['setting']['domain']['app']['default'] && $content = preg_replace("/<a href=\"([^\"]+)\"/e", "rewriteoutput('site_default', 0, '".$_G['setting']['domain']['app']['default'].$port.$_G['siteroot']."', '\\1')", $content);
-
-		if($_G['setting']['rewritestatus'] && !defined('IN_MODCP') && !defined('IN_ADMINCP')) {
-			$searcharray = $replacearray = array();
-			$array = rewritedata();
-			$content = preg_replace($array['search'], $array['replace'], $content);
-		}
 
 		ob_end_clean();
 		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
@@ -1067,8 +1123,7 @@ function output() {
 	}
 	$_G['setting']['ftp'] = array();
 
-	if(defined('CACHE_FILE') && CACHE_FILE && !defined('CACHE_FORBIDDEN')) {
-		global $_G;
+	if(defined('CACHE_FILE') && CACHE_FILE && !defined('CACHE_FORBIDDEN') && !defined('IN_MOBILE')) {
 		if(diskfreespace(DISCUZ_ROOT.'./'.$_G['setting']['cachethreaddir']) > 1000000) {
 			if($fp = @fopen(CACHE_FILE, 'w')) {
 				flock($fp, LOCK_EX);
@@ -1084,7 +1139,29 @@ function output() {
 	}
 }
 
+function output_replace($content) {
+	global $_G;
+	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
+	if(!empty($_G['setting']['output']['str']['search'])) {
+		if(empty($_G['setting']['domain']['app']['default'])) {
+			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+		}
+		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
+	}
+	if(!empty($_G['setting']['output']['preg']['search'])) {
+		if(empty($_G['setting']['domain']['app']['default'])) {
+			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl']), $_G['setting']['output']['preg']['search']);
+			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+		}
+
+		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+	}
+
+	return $content;
+}
+
 function output_ajax() {
+	global $_G;
 	$s = ob_get_contents();
 	ob_end_clean();
 	$s = preg_replace("/([\\x01-\\x08\\x0b-\\x0c\\x0e-\\x1f])+/", ' ', $s);
@@ -1092,40 +1169,55 @@ function output_ajax() {
 	if(defined('DISCUZ_DEBUG') && DISCUZ_DEBUG && @include(libfile('function/debug'))) {
 		function_exists('debugmessage') && $s .= debugmessage(1);
 	}
+	$havedomain = implode('', $_G['setting']['domain']['app']);
+	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
+        $s = output_replace($s);
+	}
 	return $s;
 }
 
 function runhooks() {
-	global $_G;
+	if(!defined('HOOKTYPE')) {
+		define('HOOKTYPE', !defined('IN_MOBILE') ? 'hookscript' : 'hookscriptmobile');
+	}
 	if(defined('CURMODULE')) {
-		hookscript(CURMODULE, $_G['basescript']);
-		if(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''))) {
-			hookscript(CURMODULE, $_G['basescript'].'_'.$do);
+		global $_G;
+		if($_G['setting']['plugins'][HOOKTYPE.'_common']) {
+			hookscript('common', 'global', 'funcs', array(), 'common');
 		}
+		hookscript(CURMODULE, $_G['basescript']);
 	}
 }
 
 function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func = '') {
 	global $_G;
 	static $pluginclasses;
-	if(!isset($_G['setting']['hookscript'][$hscript][$script][$type])) {
+	if($hscript == 'home') {
+		if($script != 'spacecp') {
+			$script = 'space_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+		} else {
+			$script .= !empty($_G['gp_ac']) ? '_'.$_G['gp_ac'] : (!empty($_GET['ac']) ? '_'.$_GET['ac'] : '');
+		}
+	}
+	if(!isset($_G['setting'][HOOKTYPE][$hscript][$script][$type])) {
 		return;
 	}
 	if(!isset($_G['cache']['plugin'])) {
 		loadcache('plugin');
 	}
-	foreach((array)$_G['setting']['hookscript'][$hscript][$script]['module'] as $identifier => $include) {
-		$hooksadminid[$identifier] = !$_G['setting']['hookscript'][$hscript][$script]['adminid'][$identifier] || ($_G['setting']['hookscript'][$hscript][$script]['adminid'][$identifier] && $_G['adminid'] > 0 && $_G['setting']['hookscript'][$hscript][$script]['adminid'][$identifier] >= $_G['adminid']);
+	foreach((array)$_G['setting'][HOOKTYPE][$hscript][$script]['module'] as $identifier => $include) {
+		$hooksadminid[$identifier] = !$_G['setting'][HOOKTYPE][$hscript][$script]['adminid'][$identifier] || ($_G['setting'][HOOKTYPE][$hscript][$script]['adminid'][$identifier] && $_G['adminid'] > 0 && $_G['setting']['hookscript'][$hscript][$script]['adminid'][$identifier] >= $_G['adminid']);
 		if($hooksadminid[$identifier]) {
 			@include_once DISCUZ_ROOT.'./source/plugin/'.$include.'.class.php';
 		}
 	}
-	if(@is_array($_G['setting']['hookscript'][$hscript][$script][$type])) {
-		$funcs = !$func ? $_G['setting']['hookscript'][$hscript][$script][$type] : array($func => $_G['setting']['hookscript'][$hscript][$script][$type][$func]);
+	if(@is_array($_G['setting'][HOOKTYPE][$hscript][$script][$type])) {
+		$_G['inhookscript'] = true;
+		$funcs = !$func ? $_G['setting'][HOOKTYPE][$hscript][$script][$type] : array($func => $_G['setting'][HOOKTYPE][$hscript][$script][$type][$func]);
 		foreach($funcs as $hookkey => $hookfuncs) {
 			foreach($hookfuncs as $hookfunc) {
 				if($hooksadminid[$hookfunc[0]]) {
-					$classkey = 'plugin_'.($hookfunc[0].($hscript != 'global' ? '_'.$hscript : ''));
+					$classkey = (HOOKTYPE != 'hookscriptmobile' ? '' : 'mobile').'plugin_'.($hookfunc[0].($hscript != 'global' ? '_'.$hscript : ''));
 					if(!class_exists($classkey)) {
 						continue;
 					}
@@ -1136,29 +1228,47 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 						continue;
 					}
 					$return = $pluginclasses[$classkey]->$hookfunc[1]($param);
+
 					if(is_array($return)) {
-						foreach($return as $k => $v) {
-							$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
+						if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
+							foreach($return as $k => $v) {
+								$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
+							}
 						}
 					} else {
-						$_G['setting']['pluginhooks'][$hookkey] .= $return;
+						if(!is_array($_G['setting']['pluginhooks'][$hookkey])) {
+							$_G['setting']['pluginhooks'][$hookkey] .= $return;
+						} else {
+							foreach($_G['setting']['pluginhooks'][$hookkey] as $k => $v) {
+								$_G['setting']['pluginhooks'][$hookkey][$k] .= $return;
+							}
+						}
 					}
 				}
 			}
 		}
 	}
+	$_G['inhookscript'] = false;
 }
 
 function hookscriptoutput($tplfile) {
 	global $_G;
+	if(!empty($_G['hookscriptoutput'])) {
+		return;
+	}
+	if(!empty($_G['gp_mobiledata'])) {
+		require_once libfile('class/mobiledata');
+		$mobiledata = new mobiledata();
+		if($mobiledata->validator()) {
+			$mobiledata->outputvariables();
+		}
+	}
 	hookscript('global', 'global');
 	if(defined('CURMODULE')) {
 		$param = array('template' => $tplfile, 'message' => $_G['hookscriptmessage'], 'values' => $_G['hookscriptvalues']);
 		hookscript(CURMODULE, $_G['basescript'], 'outputfuncs', $param);
-		if(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''))) {
-			hookscript(CURMODULE, $_G['basescript'].'_'.$do, 'outputfuncs', $param);
-		}
 	}
+	$_G['hookscriptoutput'] = true;
 }
 
 function pluginmodule($pluginid, $type) {
@@ -1168,7 +1278,7 @@ function pluginmodule($pluginid, $type) {
 	}
 	list($identifier, $module) = explode(':', $pluginid);
 	if(!is_array($_G['setting']['plugins'][$type]) || !array_key_exists($pluginid, $_G['setting']['plugins'][$type])) {
-		showmessage('undefined_action');
+		showmessage('plugin_nonexistence');
 	}
 	if(!empty($_G['setting']['plugins'][$type][$pluginid]['url'])) {
 		dheader('location: '.$_G['setting']['plugins'][$type][$pluginid]['url']);
@@ -1193,43 +1303,8 @@ function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = 
 }
 
 function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0) {
-	global $_G;
-
-	include_once libfile('class/credit');
-	$credit = & credit::instance();
-	$limit = $credit->lowerlimit($action, $uid, $coef, $fid);
-	if($returnonly) return $limit;
-	if($limit !== true) {
-		$GLOBALS['id'] = $limit;
-		$lowerlimit = is_array($action) && $action['extcredits'.$limit] ? abs($action['extcredits'.$limit]) + $_G['setting']['creditspolicy']['lowerlimit'][$limit] : $_G['setting']['creditspolicy']['lowerlimit'][$limit];
-		$rulecredit = array();
-		if(!is_array($action)) {
-			$rule = $credit->getrule($action, $fid);
-			foreach($_G['setting']['extcredits'] as $extcreditid => $extcredit) {
-				if($rule['extcredits'.$extcreditid]) {
-					$rulecredit[] = $extcredit['title'].($rule['extcredits'.$extcreditid] > 0 ? '+'.$rule['extcredits'.$extcreditid] : $rule['extcredits'.$extcreditid]);
-				}
-			}
-		} else {
-			$rule = array();
-		}
-		$values = array(
-			'title' => $_G['setting']['extcredits'][$limit]['title'],
-			'lowerlimit' => $lowerlimit,
-			'unit' => $_G['setting']['extcredits'][$limit]['unit'],
-			'ruletext' => $rule['rulename'],
-			'rulecredit' => implode(', ', $rulecredit)
-		);
-		if(!is_array($action)) {
-			if(!$fid) {
-				showmessage('credits_policy_lowerlimit', '', $values);
-			} else {
-				showmessage('credits_policy_lowerlimit_fid', '', $values);
-			}
-		} else {
-			showmessage('credits_policy_lowerlimit_norule', '', $values);
-		}
-	}
+	require_once libfile('function/credit');
+	return _checklowerlimit($action, $uid, $coef, $fid, $returnonly);
 }
 
 function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $fid = 0) {
@@ -1244,43 +1319,15 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 
 
 function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
-	if(empty($uids)) return;
-	if(!is_array($dataarr) || empty($dataarr)) return;
-	if($operation && $relatedid) {
-		$writelog = true;
-		$log = array(
-			'uid' => $uids,
-			'operation' => $operation,
-			'relatedid' => $relatedid,
-			'dateline' => time(),
-		);
-	} else {
-		$writelog = false;
+	if(!empty($uids) && (is_array($dataarr) && $dataarr)) {
+		require_once libfile('function/credit');
+		return _updatemembercount($uids, $dataarr, $checkgroup, $operation, $relatedid, $ruletxt);
 	}
-	$data = array();
-	foreach($dataarr as $key => $val) {
-		if(empty($val)) continue;
-		$val = intval($val);
-		$id = intval($key);
-		if(0< $id && $id < 9) {
-			$data['extcredits'.$id] = $val;
-			$writelog && $log['extcredits'.$id] = $val;
-		} else {
-			$data[$key] = $val;
-		}
-	}
-	if($writelog) {
-		DB::insert('common_credit_log', $log);
-	}
-	if($data) {
-		include_once libfile('class/credit');
-		$credit = & credit::instance();
-		$credit->updatemembercount($data, $uids, $checkgroup, $ruletxt);
-	}
+	return true;
 }
 
 function checkusergroup($uid = 0) {
-	include_once libfile('class/credit');
+	require_once libfile('class/credit');
 	$credit = & credit::instance();
 	$credit->checkusergroup($uid);
 }
@@ -1311,12 +1358,16 @@ function checkformulacredits($formula) {
 	);
 }
 
-function debug($var = null) {
+function debug($var = null, $vardump = false) {
 	echo '<pre>';
 	if($var === null) {
 		print_r($GLOBALS);
 	} else {
-		print_r($var);
+		if($vardump) {
+			var_dump($var);
+		} else {
+			print_r($var);
+		}
 	}
 	exit();
 }
@@ -1325,7 +1376,14 @@ function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
 		$db = & DB::object();
-		$_G['debuginfo'] = array('time' => number_format((dmicrotime() - $_G['starttime']), 6), 'queries' => $db->querynum, 'memory' => ucwords($_G['memory']));
+		$_G['debuginfo'] = array(
+		    'time' => number_format((dmicrotime() - $_G['starttime']), 6),
+		    'queries' => $db->querynum,
+		    'memory' => ucwords($_G['memory'])
+		    );
+		if($db->slaveid) {
+			$_G['debuginfo']['queries'] = 'Total '.$db->querynum.', Slave '.$db->slavequery;
+		}
 		return TRUE;
 	} else {
 		return FALSE;
@@ -1426,173 +1484,14 @@ function adshow($parameter) {
 	}
 	$adfunc = 'ad_'.$params[0];
 	$_G['setting']['pluginhooks'][$adfunc] = null;
-	$hscript = $_G['basescript'].(($do = !empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : '')) ? '_'.$do : '');
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
-	hookscript('ad', $hscript, 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
+	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 }
 
 function showmessage($message, $url_forward = '', $values = array(), $extraparam = array(), $custom = 0) {
-	global $_G;
-
-	$param = array(
-		'header'	=> false,
-		'timeout'	=> null,
-		'refreshtime'	=> null,
-		'closetime'	=> null,
-		'locationtime'	=> null,
-		'alert'		=> null,
-		'return'	=> false,
-		'redirectmsg'	=> 0,
-		'msgtype'	=> 1,
-		'showmsg'	=> true,
-		'showdialog'	=> false,
-		'login'		=> false,
-		'handle'	=> false,
-		'extrajs'	=> '',
-	);
-
-	$navtitle = lang('core', 'title_board_message');
-
-	if($custom) {
-		$alerttype = 'alert_info';
-		$show_message = $message;
-		include template('common/showmessage');
-		dexit();
-	}
-
-	define('CACHE_FORBIDDEN', TRUE);
-	$_G['setting']['msgforward'] = @unserialize($_G['setting']['msgforward']);
-	$handlekey = $leftmsg = '';
-
-	if(empty($_G['inajax']) && (!empty($_G['gp_quickforward']) || $_G['setting']['msgforward']['quick'] && $_G['setting']['msgforward']['messages'] && @in_array($message, $_G['setting']['msgforward']['messages']))) {
-		$param['header'] = true;
-	}
-	if(!empty($_G['inajax'])) {
-		$handlekey = $_G['gp_handlekey'] = !empty($_G['gp_handlekey']) ? htmlspecialchars($_G['gp_handlekey']) : '';
-		$param['handle'] = true;
-	}
-	if(!empty($_G['inajax'])) {
-		$param['msgtype'] = empty($_G['gp_ajaxmenu']) && (empty($_POST) || !empty($_G['gp_nopost'])) ? 2 : 3;
-	}
-	if($url_forward) {
-		$param['timeout'] = true;
-		if($param['handle'] && !empty($_G['inajax'])) {
-			$param['showmsg'] = false;
-		}
-	}
-
-	foreach($extraparam as $k => $v) {
-		$param[$k] = $v;
-	}
-	if(array_key_exists('set', $extraparam)) {
-		$setdata = array('1' => array('msgtype' => 3));
-		if($setdata[$extraparam['set']]) {
-			foreach($setdata[$extraparam['set']] as $k => $v) {
-				$param[$k] = $v;
-			}
-		}
-	}
-
-	$timedefault = intval($param['refreshtime'] === null ? $_G['setting']['msgforward']['refreshtime'] : $param['refreshtime']);
-	if($param['timeout'] !== null) {
-		$refreshsecond = !empty($timedefault) ? $timedefault : 3;
-		$refreshtime = $refreshsecond * 1000;
-	} else {
-		$refreshtime = $refreshsecond = 0;
-	}
-
-	if($param['login'] && $_G['uid'] || $url_forward) {
-		$param['login'] = false;
-	}
-
-	$param['header'] = $url_forward && $param['header'] ? true : false;
-
-	if($param['header']) {
-		header("HTTP/1.1 301 Moved Permanently");
-		dheader("location: ".str_replace('&amp;', '&', $url_forward));
-	}
-
-	$_G['hookscriptmessage'] = $message;
-	$_G['hookscriptvalues'] = $values;
-	$vars = explode(':', $message);
-	if(count($vars) == 2) {
-		$show_message = lang('plugin/'.$vars[0], $vars[1], $values);
-	} else {
-		$show_message = lang('message', $message, $values);
-	}
-	if($param['msgtype'] == 2 && $param['login']) {
-		dheader('location: member.php?mod=logging&action=login&handlekey='.$handlekey.'&infloat=yes&inajax=yes&guestmessage=yes');
-	}
-	$show_jsmessage = str_replace("'", "\\'", strip_tags($show_message));
-	if(!$param['showmsg']) {
-		$show_message = '';
-	}
-
-	if($param['msgtype'] == 3) {
-		$show_message = str_replace(lang('message', 'return_search'), lang('message', 'return_replace'), $show_message);
-	}
-
-	$allowreturn = !$param['timeout'] && stristr($show_message, lang('message', 'return')) || $param['return'] ? true : false;
-	if($param['alert'] === null) {
-		$alerttype = $url_forward ? (preg_match('/\_(succeed|success)$/', $message) ? 'alert_right' : 'alert_info') : ($allowreturn ? 'alert_error' : 'alert_info');
-	} else {
-		$alerttype = 'alert_'.$param['alert'];
-	}
-
-	$extra = '';
-	if($param['handle']) {
-		$valuesjs = $comma = $subjs = '';
-		foreach($values as $k => $v) {
-			if(is_array($v)) {
-				$subcomma = '';
-				foreach ($v as $subk => $subv) {
-					$subjs .= $subcomma.'\''.$subk.'\':\''.$subv.'\'';
-					$subcomma = ',';
-				}
-				$valuesjs .= $comma.'\''.$k.'\':{'.$subjs.'}';
-			} else {
-				$valuesjs .= $comma.'\''.$k.'\':\''.$v.'\'';
-			}
-			$comma = ',';
-		}
-		$valuesjs = '{'.$valuesjs.'}';
-		if($url_forward) {
-			$extra .= 'if($(\'return_'.$handlekey.'\')) $(\'return_'.$handlekey.'\').className=\'onerror\';if(typeof succeedhandle_'.$handlekey.'==\'function\') {succeedhandle_'.$handlekey.'(\''.$url_forward.'\', \''.$show_jsmessage.'\', '.$valuesjs.');}';
-		} else {
-			$extra .= 'if(typeof errorhandle_'.$handlekey.'==\'function\') {errorhandle_'.$handlekey.'(\''.$show_jsmessage.'\', '.$valuesjs.');}';
-		}
-	}
-	if($param['closetime'] !== null) {
-		$param['closetime'] = $param['closetime'] === true ? $timedefault : $param['closetime'];
-		$leftmsg = $param['closetime'].lang('message', 'showmessage_closetime');
-	}
-	if($param['locationtime'] !== null) {
-		$param['locationtime'] = $param['locationtime'] === true ? $timedefault : $param['locationtime'];
-		$leftmsg = $param['locationtime'].lang('message', 'showmessage_locationtime');
-	}
-	if($handlekey) {
-		if($param['showdialog']) {
-			$st = $param['closetime'] !== null ? 'setTimeout("hideMenu(\'fwin_dialog\', \'dialog\')", '.($param['closetime'] * 1000).');' : '';
-			$st .= $param['locationtime'] !== null ?'setTimeout("window.location.href =\''.$url_forward.'\';", '.($param['locationtime'] * 1000).');' : '';
-			$extra .= 'hideWindow(\''.$handlekey.'\');showDialog(\''.$show_jsmessage.'\', \'notice\', null, '.($param['locationtime'] !== null ? 'function () { window.location.href =\''.$url_forward.'\'; }' : 'null').', 0, null, \''.$leftmsg.'\');'.$st;
-			$param['closetime'] = null;
-			$st = '';
-		}
-		if($param['closetime'] !== null) {
-			$extra .= 'setTimeout("hideWindow(\''.$handlekey.'\')", '.($param['closetime'] * 1000).');';
-		}
-	} else {
-		$st = $param['locationtime'] !== null ?'setTimeout("window.location.href =\''.$url_forward.'\';", '.($param['locationtime'] * 1000).');' : '';
-	}
-	if(!$extra && $param['timeout']) {
-		$extra .= 'setTimeout("window.location.href =\''.$url_forward.'\';", '.$refreshtime.');';
-	}
-	$show_message .= $extra ? '<script type="text/javascript" reload="1">'.$extra.$st.'</script>' : '';
-	$show_message .= $param['extrajs'] ? $param['extrajs'] : '';
-
-	include template('common/showmessage');
-	dexit();
+	require_once libfile('function/message');
+	return dshowmessage($message, $url_forward, $values, $extraparam, $custom);
 }
 
 function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
@@ -1600,6 +1499,13 @@ function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 		return FALSE;
 	} else {
 		global $_G;
+		if(!empty($_G['gp_mobiledata'])) {
+			require_once libfile('class/mobiledata');
+			$mobiledata = new mobiledata();
+			if($mobiledata->validator()) {
+				return TRUE;
+			}
+		}
 		if($allowget || ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_G['gp_formhash']) && $_G['gp_formhash'] == formhash() && empty($_SERVER['HTTP_X_FLASH_VERSION']) && (empty($_SERVER['HTTP_REFERER']) ||
 		preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST'])))) {
 			if(checkperm('seccode')) {
@@ -1634,15 +1540,29 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 		$lang['next'] = '&rsaquo;&rsaquo;';
 	} else {
 		$shownum = $showkbd = FALSE;
-		$lang['prev'] = '&nbsp;&nbsp;';
-		$lang['next'] = lang('core', 'nextpage');
+		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+			$lang['prev'] = lang('core', 'prevpage');
+			$lang['next'] = lang('core', 'nextpage');
+		} else {
+			$lang['prev'] = '&nbsp;&nbsp;';
+			$lang['next'] = lang('core', 'nextpage');
+		}
 	}
-
+	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+		$dot = '..';
+		$page = intval($page) < 10 && intval($page) > 0 ? $page : 4 ;
+	} else {
+		$dot = '...';
+	}
 	$multipage = '';
 	$mpurl .= strpos($mpurl, '?') !== FALSE ? '&amp;' : '?';
 
 	$realpages = 1;
 	$_G['page_next'] = 0;
+	$page -= strlen($curpage) - 1;
+	if($page <= 0) {
+		$page = 1;
+	}
 	if($num > $perpage) {
 
 		$offset = floor($page * 0.5);
@@ -1668,15 +1588,13 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 			}
 		}
 		$_G['page_next'] = $to;
-
-		$multipage = ($curpage - $offset > 1 && $pages > $page ? '<a href="'.$mpurl.'page=1'.$a_name.'" class="first"'.$ajaxtarget.'>1 ...</a>' : '').
+		$multipage = ($curpage - $offset > 1 && $pages > $page ? '<a href="'.$mpurl.'page=1'.$a_name.'" class="first"'.$ajaxtarget.'>1 '.$dot.'</a>' : '').
 		($curpage > 1 && !$simple ? '<a href="'.$mpurl.'page='.($curpage - 1).$a_name.'" class="prev"'.$ajaxtarget.'>'.$lang['prev'].'</a>' : '');
 		for($i = $from; $i <= $to; $i++) {
 			$multipage .= $i == $curpage ? '<strong>'.$i.'</strong>' :
 			'<a href="'.$mpurl.'page='.$i.($ajaxtarget && $i == $pages && $autogoto ? '#' : $a_name).'"'.$ajaxtarget.'>'.$i.'</a>';
 		}
-
-		$multipage .= ($to < $pages ? '<a href="'.$mpurl.'page='.$pages.$a_name.'" class="last"'.$ajaxtarget.'>... '.$realpages.'</a>' : '').
+		$multipage .= ($to < $pages ? '<a href="'.$mpurl.'page='.$pages.$a_name.'" class="last"'.$ajaxtarget.'>'.$dot.' '.$realpages.'</a>' : '').
 		($curpage < $pages && !$simple ? '<a href="'.$mpurl.'page='.($curpage + 1).$a_name.'" class="nxt"'.$ajaxtarget.'>'.$lang['next'].'</a>' : '').
 		($showkbd && !$simple && $pages > $page && !$ajaxtarget ? '<kbd><input type="text" name="custompage" size="3" onkeydown="if(event.keyCode==13) {window.location=\''.$mpurl.'page=\'+this.value; doane(event);}" /></kbd>' : '');
 
@@ -1699,6 +1617,7 @@ function simplepage($num, $perpage, $curpage, $mpurl) {
 }
 
 function censor($message, $modword = NULL, $return = FALSE) {
+	global $_G;
 	require_once libfile('class/censor');
 	$censor = discuz_censor::instance();
 	$censor->check($message, $modword);
@@ -1707,7 +1626,28 @@ function censor($message, $modword = NULL, $return = FALSE) {
 		if($return) {
 			return array('message' => lang('message', 'word_banned', array('wordbanned' => $wordbanned)));
 		}
-		showmessage('word_banned', '', array('wordbanned' => $wordbanned));
+		if(!defined('IN_ADMINCP')) {
+			showmessage('word_banned', '', array('wordbanned' => $wordbanned));
+		} else {
+			cpmsg(lang('message', 'word_banned'), '', 'error', array('wordbanned' => $wordbanned));
+		}
+	}
+	if($_G['group']['allowposturl'] == 0 || $_G['group']['allowposturl'] == 2) {
+		$urllist = get_url_list($message);
+		if(is_array($urllist[1])) foreach($urllist[1] as $key => $val) {
+			if(!$val = trim($val)) continue;
+			if(!iswhitelist($val)) {
+				if($_G['group']['allowposturl'] == 0) {
+					showmessage('post_url_nopermission');
+				} elseif($_G['group']['allowposturl'] == 2) {
+					$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
+					$message = preg_replace(
+						array("@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i", "@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i"),
+						array('\\1', ''),
+						$message);
+				}
+			}
+		}
 	}
 	return $message;
 }
@@ -1716,6 +1656,19 @@ function censormod($message) {
 	global $_G;
 	if($_G['group']['ignorecensor']) {
 		return false;
+	}
+	$modposturl = false;
+	if($_G['group']['allowposturl'] == 1) {
+		$urllist = get_url_list($message);
+		if(is_array($urllist[1])) foreach($urllist[1] as $key => $val) {
+			if(!$val = trim($val)) continue;
+			if(!iswhitelist($val)) {
+				$modposturl = true;
+			}
+		}
+	}
+	if($modposturl) {
+		return true;
 	}
 
 	require_once libfile('class/censor');
@@ -1760,30 +1713,10 @@ function runlog($file, $message, $halt=0) {
 
 	$nowurl = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
 	$log = dgmdate($_G['timestamp'], 'Y-m-d H:i:s')."\t".$_G['clientip']."\t$_G[uid]\t{$nowurl}\t".str_replace(array("\r", "\n"), array(' ', ' '), trim($message))."\n";
-	$yearmonth = dgmdate($_G['timestamp'], 'Ym');
-	$logdir = DISCUZ_ROOT.'./data/log/';
-	if(!is_dir($logdir)) mkdir($logdir, 0777);
-	$logfile = $logdir.$yearmonth.'_'.$file.'.php';
-	if(@filesize($logfile) > 2048000) {
-		$dir = opendir($logdir);
-		$length = strlen($file);
-		$maxid = $id = 0;
-		while($entry = readdir($dir)) {
-			if(strexists($entry, $yearmonth.'_'.$file)) {
-				$id = intval(substr($entry, $length + 8, -4));
-				$id > $maxid && $maxid = $id;
-			}
-		}
-		closedir($dir);
-		$logfilebak = $logdir.$yearmonth.'_'.$file.'_'.($maxid + 1).'.php';
-		@rename($logfile, $logfilebak);
+	writelog($file, $log);
+	if($halt) {
+		exit();
 	}
-	if($fp = @fopen($logfile, 'a')) {
-		@flock($fp, 2);
-		fwrite($fp, "<?PHP exit;?>\t".str_replace(array('<?', '?>', "\r", "\n"), '', $log)."\n");
-		fclose($fp);
-	}
-	if($halt) exit();
 }
 
 function stripsearchkey($string) {
@@ -1808,17 +1741,14 @@ function dreferer($default = '') {
 	global $_G;
 
 	$default = empty($default) ? $GLOBALS['_t_curapp'] : '';
-	if(empty($_G['referer'])) {
-		$referer = !empty($_G['gp_referer']) ? $_G['gp_referer'] : $_SERVER['HTTP_REFERER'];
-		$_G['referer'] = preg_replace("/([\?&])((sid\=[a-z0-9]{6})(&|$))/i", '\\1', $referer);
-		$_G['referer'] = substr($_G['referer'], -1) == '?' ? substr($_G['referer'], 0, -1) : $_G['referer'];
-	} else {
-		$_G['referer'] = htmlspecialchars($_G['referer']);
-	}
+	$_G['referer'] = !empty($_G['gp_referer']) ? $_G['gp_referer'] : $_SERVER['HTTP_REFERER'];
+	$_G['referer'] = substr($_G['referer'], -1) == '?' ? substr($_G['referer'], 0, -1) : $_G['referer'];
 
 	if(strpos($_G['referer'], 'member.php?mod=logging')) {
 		$_G['referer'] = $default;
 	}
+	$_G['referer'] = htmlspecialchars($_G['referer']);
+	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
 	return strip_tags($_G['referer']);
 }
 
@@ -1832,7 +1762,7 @@ function ftpcmd($cmd, $arg1 = '') {
 		$ftp = & discuz_ftp::instance();
 	}
 	if(!$ftp->enabled) {
-		return 0;
+		return $ftp->error();
 	} elseif($ftp->enabled && !$ftp->connectid) {
 		$ftp->connect();
 	}
@@ -1852,18 +1782,28 @@ function diconv($str, $in_charset, $out_charset = CHARSET, $ForceTable = FALSE) 
 
 	$in_charset = strtoupper($in_charset);
 	$out_charset = strtoupper($out_charset);
-	if($in_charset != $out_charset) {
-		require_once libfile('class/chinese');
-		$chinese = new Chinese($in_charset, $out_charset, $ForceTable);
-		$strnew = $chinese->Convert($str);
-		if(!$ForceTable && !$strnew && $str) {
-			$chinese = new Chinese($in_charset, $out_charset, 1);
-			$strnew = $chinese->Convert($str);
-		}
-		return $strnew;
-	} else {
+
+	if(empty($str) || $in_charset == $out_charset) {
 		return $str;
 	}
+
+	$out = '';
+
+	if(!$ForceTable) {
+		if(function_exists('iconv')) {
+			$out = iconv($in_charset, $out_charset.'//IGNORE', $str);
+		} elseif(function_exists('mb_convert_encoding')) {
+			$out = mb_convert_encoding($str, $out_charset, $in_charset);
+		}
+	}
+
+	if($out == '') {
+		require_once libfile('class/chinese');
+		$chinese = new Chinese($in_charset, $out_charset, true);
+		$out = $chinese->Convert($str);
+	}
+
+	return $out;
 }
 
 function renum($array) {
@@ -1876,7 +1816,6 @@ function renum($array) {
 }
 
 function getonlinenum($fid = 0, $tid = 0) {
-
 	if($fid) {
 		$sql = " AND fid='$fid'";
 	}
@@ -1915,7 +1854,7 @@ function writelog($file, $log) {
 		$length = strlen($file);
 		$maxid = $id = 0;
 		while($entry = readdir($dir)) {
-			if(strexists($entry, $yearmonth.'_'.$file)) {
+			if(strpos($entry, $yearmonth.'_'.$file) !== false) {
 				$id = intval(substr($entry, $length + 8, -4));
 				$id > $maxid && $maxid = $id;
 			}
@@ -1938,6 +1877,23 @@ function getcolorpalette($colorid, $id, $background, $fun = '') {
 	return "<input id=\"c$colorid\" onclick=\"c{$colorid}_frame.location='static/image/admincp/getcolor.htm?c{$colorid}|{$id}|{$fun}';showMenu({'ctrlid':'c$colorid'})\" type=\"button\" class=\"colorwd\" value=\"\" style=\"background: $background\"><span id=\"c{$colorid}_menu\" style=\"display: none\"><iframe name=\"c{$colorid}_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe></span>";
 }
 
+function getstatus($status, $position) {
+	$t = $status & pow(2, $position - 1) ? 1 : 0;
+	return $t;
+}
+
+function setstatus($position, $value, $baseon = null) {
+	$t = pow(2, $position - 1);
+	if($value) {
+		$t = $baseon | $t;
+	} elseif ($baseon !== null) {
+		$t = $baseon & ~$t;
+	} else {
+		$t = ~$t;
+	}
+	return $t & 0xFFFF;
+}
+
 function notification_add($touid, $type, $note, $notevars = array(), $system = 0) {
 	global $_G;
 
@@ -1957,7 +1913,9 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 		} else {
 			$notestring = lang('notification', $note, $notevars);
 		}
+		$frommyapp = false;
 	} else {
+		$frommyapp = true;
 		$notestring = $note;
 	}
 
@@ -1967,7 +1925,7 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 			WHERE uid='$touid' AND from_id='$notevars[from_id]' AND from_idtype='$notevars[from_idtype]'");
 	}
 	if(empty($oldnote['from_num'])) $oldnote['from_num'] = 0;
-
+	$notevars['from_num'] = $notevars['from_num'] ? $notevars['from_num'] : 1;
 	$setarr = array(
 		'uid' => $touid,
 		'type' => $type,
@@ -1978,7 +1936,7 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 		'dateline' => $_G['timestamp'],
 		'from_id' => $notevars['from_id'],
 		'from_idtype' => $notevars['from_idtype'],
-		'from_num' => ($oldnote['from_num']+1)
+		'from_num' => ($oldnote['from_num']+$notevars['from_num'])
 	);
 	if($system) {
 		$setarr['authorid'] = 0;
@@ -1993,12 +1951,11 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 	}
 
 	if(empty($oldnote['new'])) {
-		DB::query("UPDATE ".DB::table('common_member_status')." SET notifications=notifications+1 WHERE uid='$touid'");
 		DB::query("UPDATE ".DB::table('common_member')." SET newprompt=newprompt+1 WHERE uid='$touid'");
 
 		require_once libfile('function/mail');
 		$mail_subject = lang('notification', 'mail_to_user');
-		sendmail_touser($touid, $mail_subject, $notestring, $type);
+		sendmail_touser($touid, $mail_subject, $notestring, $frommyapp ? 'myapp' : $type);
 	}
 
 	if(!$system && $_G['uid'] && $touid != $_G['uid']) {
@@ -2006,13 +1963,32 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 	}
 }
 
-function sendpm($toid, $subject, $message, $fromid = '') {
+function manage_addnotify($type, $from_num = 0, $langvar = array()) {
+	global $_G;
+	$notifyusers = unserialize($_G['setting']['notifyusers']);
+	$notifytypes = explode(',', $_G['setting']['adminnotifytypes']);
+	$notifytypes = array_flip($notifytypes);
+	$notearr = array('from_id' => 1,'from_idtype' => $type, 'from_num' => $from_num);
+	if($langvar) {
+		$langkey = $langvar['langkey'];
+		$notearr = array_merge($notearr, $langvar);
+	} else {
+		$langkey = 'manage_'.$type;
+	}
+	foreach($notifyusers as $uid => $user) {
+		if($user['types'][$notifytypes[$type]]) {
+			notification_add($uid, $type, $langkey, $notearr, 1);
+		}
+	}
+}
+
+function sendpm($toid, $subject, $message, $fromid = '', $replypmid = 0, $isusername = 0, $type = 0) {
 	global $_G;
 	if($fromid === '') {
 		$fromid = $_G['uid'];
 	}
 	loaducenter();
-	uc_pm_send($fromid, $toid, $subject, $message);
+	return uc_pm_send($fromid, $toid, $subject, $message, 1, $replypmid, $isusername, $type);
 }
 
 function g_icon($groupid, $return = 0) {
@@ -2021,9 +1997,9 @@ function g_icon($groupid, $return = 0) {
 		$s =  '';
 	} else {
 		if(substr($_G['cache']['usergroups'][$groupid]['icon'], 0, 5) == 'http:') {
-			$s = '<img src="'.$_G['cache']['usergroups'][$groupid]['icon'].'" align="absmiddle">';
+			$s = '<img src="'.$_G['cache']['usergroups'][$groupid]['icon'].'" alt="" class="vm" />';
 		} else {
-			$s = '<img src="'.$_G['setting']['attachurl'].'common/'.$_G['cache']['usergroups'][$groupid]['icon'].'" align="absmiddle">';
+			$s = '<img src="'.$_G['setting']['attachurl'].'common/'.$_G['cache']['usergroups'][$groupid]['icon'].'" alt="" class="vm" />';
 		}
 	}
 	if($return) {
@@ -2052,168 +2028,61 @@ function space_key($uid, $appid=0) {
 }
 
 
-function getposttablebytid($tid) {
+function getposttablebytid($tids, $primary = 0) {
 	global $_G;
-	loadcache('threadtableids');
-	$threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array();
-	if(!in_array(0, $threadtableids)) {
-		$threadtableids = array_merge(array(0), $threadtableids);
+
+	$isstring = false;
+	if(!is_array($tids)) {
+		$tids = array(intval($tids));
+		$isstring = true;
 	}
+	$tids = array_unique($tids);
+	$tids = array_flip($tids);
+	if(!$primary) {
+		loadcache('threadtableids');
+		$threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array();
+		if(!in_array(0, $threadtableids)) {
+			$threadtableids = array_merge(array(0), $threadtableids);
+		}
+	} else {
+		$threadtableids = array(0);
+	}
+	$tables = array();
+	$posttable = '';
+	$singletable = count($tids) > 1 ? false : true;
 	foreach($threadtableids as $tableid) {
 		$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
-		$posttableid = DB::result_first("SELECT posttableid FROM ".DB::table($threadtable)." WHERE tid='$tid'");
-		if($posttableid !== false) {
+		$query = DB::query("SELECT tid, posttableid FROM ".DB::table($threadtable)." WHERE tid IN(".dimplode(array_keys($tids)).")");
+		while ($value = DB::fetch($query)) {
+			$posttable = 'forum_post'.($value['posttableid'] ? "_$value[posttableid]" : '');
+			$tables[$posttable][$value['tid']] = $value['tid'];
+			unset($tids[$value['tid']]);
+		}
+		if(!count($tids)) {
 			break;
 		}
 	}
-	if(!$posttableid) {
-		return 'forum_post';
+	if(empty($posttable)) {
+		$posttable = 'forum_post';
+		$tables[$posttable] = array_flip($tids);
 	}
-	return 'forum_post_'.$posttableid;
+	return $isstring ? $posttable : $tables;
 }
 
-function getposttableid($type) {
+function getposttable($tableid = 0, $prefix = false) {
 	global $_G;
-	loadcache('posttable_info');
-	if($type == 'a') {
-		$tabletype = 'addition';
-	} else {
-		$tabletype = 'primary';
-	}
-	if(!empty($_G['cache']['posttable_info'])) {
-		foreach($_G['cache']['posttable_info'] as $key => $value) {
-			if($value['type'] == $tabletype) {
-				return $key;
-			}
-		}
-	}
-	return NULL;
-}
-
-function getposttable($type, $noprefix = true) {
-	$tableid = getposttableid($type);
-	if($type == 'a' && $tableid === NULL) {
-		return NULL;
-	}
+	$tableid = intval($tableid);
 	if($tableid) {
-		$tablename = "forum_post_$tableid";
+		loadcache('posttableids');
+		$tableid = $_G['cache']['posttableids'] && in_array($tableid, $_G['cache']['posttableids']) ? $tableid : 0;
+		$tablename = 'forum_post'.($tableid ? "_$tableid" : '');
 	} else {
 		$tablename = 'forum_post';
 	}
-
-	if(!$noprefix) {
+	if($prefix) {
 		$tablename = DB::table($tablename);
 	}
 	return $tablename;
-}
-
-function getcountofposts($from, $condition) {
-	$ptable = getposttable('p');
-	$atable = getposttable('a');
-
-	$from_clause = str_replace(DB::table('forum_post'), DB::table($ptable), $from);
-	$sum = DB::result_first("SELECT COUNT(*) FROM $from_clause WHERE $condition");
-	if($atable) {
-		$from_clause = str_replace(DB::table('forum_post'), DB::table($atable), $from);
-		$sum += DB::result_first("SELECT COUNT(*) FROM $from_clause WHERE $condition");
-	}
-	return $sum;
-}
-
-function getfieldsofposts($field, $condition) {
-	$ptable = getposttable('p');
-	$atable = getposttable('a');
-
-	$query = DB::query("SELECT $field FROM ".DB::table($ptable)." WHERE $condition");
-	$result = array();
-	while($post = DB::fetch($query)) {
-		$result[] = $post;
-	}
-	if($atable) {
-		$query = DB::query("SELECT $field FROM ".DB::table($atable)." WHERE $condition");
-		while($post = DB::fetch($query)) {
-			$result[] = $post;
-		}
-	}
-	return $result;
-}
-
-function getallwithposts($sqlstruct, $onlyprimarytable = false) {
-	$ptable = getposttable('p');
-	$atable = getposttable('a');
-	$result = array();
-
-	$from_clause = str_replace(DB::table('forum_post'), DB::table($ptable), $sqlstruct['from']);
-	$sql = "SELECT {$sqlstruct['select']} FROM $from_clause WHERE {$sqlstruct['where']}";
-	$sqladd = '';
-	if (!empty($sqlstruct['order'])) {
-		$sqladd .= " ORDER BY {$sqlstruct['order']}";
-	}
-	if(!empty($sqlstruct['limit'])) {
-		$sqladd .= " LIMIT {$sqlstruct['limit']}";
-	}
-	$sql = $sql . $sqladd;
-	$query = DB::query($sql);
-	while($row = DB::fetch($query)) {
-		$result[] = $row;
-	}
-
-	if(!$onlyprimarytable && $atable !== NULL) {
-		$from_clause = str_replace(DB::table('forum_post'), DB::table($atable), $sqlstruct['from']);
-		$sql = "SELECT {$sqlstruct['select']} FROM $from_clause WHERE {$sqlstruct['where']}";
-		$sql = $sql . $sqladd;
-
-		$query = DB::query($sql);
-		while($row = DB::fetch($query)) {
-			$result[] = $row;
-		}
-	}
-	return $result;
-}
-
-function insertpost($data) {
-	if(isset($data['tid'])) {
-		$tableid = DB::result_first("SELECT posttableid FROM ".DB::table('forum_thread')." WHERE tid='{$data['tid']}'");
-	} else {
-		$tableid = getposttableid('p');
-		$data['tid'] = 0;
-	}
-	$pid = DB::insert('forum_post_tableid', array('pid' => null), true);
-
-	if(!$tableid) {
-		$tablename = 'forum_post';
-	} else {
-		$tablename = "forum_post_$tableid";
-	}
-
-	$data = array_merge($data, array('pid' => $pid));
-
-	DB::insert($tablename, $data);
-	if($pid % 1024 == 0) {
-		DB::delete('forum_post_tableid', "pid<$pid");
-	}
-	save_syscache('max_post_id', $pid);
-	return $pid;
-}
-
-function updatepost($data, $condition, $unbuffered = false) {
-	global $_G;
-	loadcache('posttableids');
-	$affected_rows = 0;
-	if(!empty($_G['cache']['posttableids'])) {
-		$posttableids = $_G['cache']['posttableids'];
-	} else {
-		$posttableids = array('0');
-	}
-	foreach($posttableids as $id) {
-		if($id == 0) {
-			DB::update('forum_post', $data, $condition, $unbuffered);
-		} else {
-			DB::update("forum_post_$id", $data, $condition, $unbuffered);
-		}
-		$affected_rows += DB::affected_rows();
-	}
-	return $affected_rows;
 }
 
 function memory($cmd, $key='', $value='', $ttl = 0) {
@@ -2261,8 +2130,8 @@ function getcount($tablename, $condition) {
 	} else {
 		$where = $condition;
 	}
-	$row = DB::fetch_first("SELECT COUNT(*) AS num FROM ".DB::table($tablename)." WHERE $where");
-	return $row['num'];
+	$ret = intval(DB::result_first("SELECT COUNT(*) AS num FROM ".DB::table($tablename)." WHERE $where"));
+	return $ret;
 }
 
 function sysmessage($message) {
@@ -2284,15 +2153,14 @@ function forumperm($permstr, $groupid = 0) {
 	}
 	if($_G['setting']['verify']['enabled']) {
 		getuserprofile('verify1');
-		for($i = 1; $i < 6; $i++) {
-			if($_G['member']['verify'.$i] == 1) {
-				$groupidarray[] = 'v'.$i;
+		foreach($_G['setting']['verify'] as $vid => $verify) {
+			if($verify['available'] && $_G['member']['verify'.$vid] == 1) {
+				$groupidarray[] = 'v'.$vid;
 			}
 		}
 	}
 	return preg_match("/(^|\t)(".implode('|', $groupidarray).")(\t|$)/", $permstr);
 }
-
 
 if(!function_exists('file_put_contents')) {
 	if(!defined('FILE_APPEND')) define('FILE_APPEND', 8);
@@ -2369,8 +2237,8 @@ function cknewuser($return=0) {
 function manyoulog($logtype, $uids, $action, $fid = '') {
 	global $_G;
 
-	$action = daddslashes($action);
-	if($logtype == 'user') {
+	if($_G['setting']['my_app_status'] && $logtype == 'user') {
+		$action = daddslashes($action);
 		$values = array();
 		$uids = is_array($uids) ? $uids : array($uids);
 		foreach($uids as $uid) {
@@ -2381,6 +2249,28 @@ function manyoulog($logtype, $uids, $action, $fid = '') {
 			DB::query("REPLACE INTO ".DB::table('common_member_log')." (`uid`, `action`, `dateline`) VALUES ".implode(',', $values));
 		}
 	}
+}
+
+function useractionlog($uid, $action) {
+	$uid = intval($uid);
+	if(empty($uid) || empty($action)) {
+		return false;
+	}
+	$action = getuseraction($action);
+	$timestamp = TIMESTAMP;
+	DB::query("INSERT INTO ".DB::table('common_member_action_log')." (`uid`, `action`, `dateline`) VALUES ('$uid', '$action', '$timestamp')");
+	return true;
+}
+
+function getuseraction($var) {
+	$value = false;
+	$ops = array('tid', 'pid', 'blogid', 'picid', 'doid', 'sid', 'aid', 'uid_cid', 'blogid_cid', 'sid_cid', 'picid_cid', 'aid_cid', 'topicid_cid');
+	if(is_numeric($var)) {
+		$value = isset($ops[$var]) ? $ops[$var] : false;
+	} else {
+		$value = array_search($var, $ops);
+	}
+	return $value;
 }
 
 function getuserapp($panel = 0) {
@@ -2411,6 +2301,235 @@ function return_bytes($val) {
         case 'k': $val *= 1024;
     }
     return $val;
+}
+
+function get_url_list($message) {
+	$return = array();
+
+	(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\].+?\[\/img\]|\[flash[^\]]*\].+?\[\/flash\]/is", '', $message);
+	if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", $message, $urllist)) {
+		foreach($urllist[0] as $key => $val) {
+			$val = trim($val);
+			$return[0][$key] = $val;
+			if(!preg_match('/^http:\/\//is', $val)) $val = 'http://'.$val;
+			$tmp = parse_url($val);
+			$return[1][$key] = $tmp['host'];
+			if($tmp['port']){
+				$return[1][$key] .= ":$tmp[port]";
+			}
+		}
+	}
+
+	return $return;
+}
+
+function iswhitelist($host) {
+	global $_G;
+	static $iswhitelist = array();
+
+	if(isset($iswhitelist[$host])) {
+		return $iswhitelist[$host];
+	}
+	$hostlen = strlen($host);
+	$iswhitelist[$host] = false;
+	if(is_array($_G['cache']['domainwhitelist'])) foreach($_G['cache']['domainwhitelist'] as $val) {
+		$domainlen = strlen($val);
+		if($domainlen > $hostlen) {
+			continue;
+		}
+		if(substr($host, -$domainlen) == $val) {
+			$iswhitelist[$host] = true;
+			break;
+		}
+	}
+	if($iswhitelist[$host] == false) {
+		$iswhitelist[$host] = $host == $_SERVER['HTTP_HOST'];
+	}
+	return $iswhitelist[$host];
+}
+
+function update_template_block($targettplname, $blocks) {
+	if(!empty($blocks) && !empty($targettplname)) {
+		$oldbids = array();
+		$query = DB::query('SELECT bid FROM '.DB::table('common_template_block')." WHERE targettplname='$targettplname'");
+		while($value = DB::fetch($query)) {
+			$oldbids[] = $value['bid'];
+		}
+		$newaddbids = array_diff($blocks, $oldbids);
+		DB::delete('common_template_block', array('targettplname'=>$targettplname));
+		$values = array();
+		foreach ($blocks as $bid) {
+			$values[] = "('$targettplname','$bid')";
+		}
+		if (!empty($values)) {
+			DB::query("INSERT INTO ".DB::table('common_template_block')." (targettplname,bid) VALUES ".implode(',', $values));
+		}
+		if(!empty($newaddbids)) {
+			require_once libfile('class/blockpermission');
+			$tplpermission = & template_permission::instance();
+			$tplpermission->add_blocks($targettplname, $newaddbids);
+		}
+	}
+}
+
+if(!function_exists('http_build_query')) {
+	function http_build_query($data, $numeric_prefix='', $arg_separator='', $prefix='') {
+		$render = array();
+		if (empty($arg_separator)) {
+			$arg_separator = ini_get('arg_separator.output');
+			empty($arg_separator) && $arg_separator = '&';
+		}
+		foreach ((array) $data as $key => $val) {
+			if (is_array($val) || is_object($val)) {
+				$_key = empty($prefix) ? "{$key}[%s]" : sprintf($prefix, $key) . "[%s]";
+				$_render = http_build_query($val, '', $arg_separator, $_key);
+				if (!empty($_render)) {
+					$render[] = $_render;
+				}
+			} else {
+				if (is_numeric($key) && empty($prefix)) {
+					$render[] = urlencode("{$numeric_prefix}{$key}") . "=" . urlencode($val);
+				} else {
+					if (!empty($prefix)) {
+						$_key = sprintf($prefix, $key);
+						$render[] = urlencode($_key) . "=" . urlencode($val);
+					} else {
+						$render[] = urlencode($key) . "=" . urlencode($val);
+					}
+				}
+			}
+		}
+		$render = implode($arg_separator, $render);
+		if (empty($render)) {
+			$render = '';
+		}
+		return $render;
+	}
+}
+
+function getrelatedlink($extent) {
+	global $_G;
+	loadcache('relatedlink');
+	$allextent = array('article' => 0, 'forum' => 1, 'group' => 2, 'blog' => 3);
+	$links = array();
+	if($_G['cache']['relatedlink'] && isset($allextent[$extent])) {
+		foreach($_G['cache']['relatedlink'] as $link) {
+			$link['extent'] = sprintf('%04b', $link['extent']);
+			if($link['extent'][$allextent[$extent]] && $link['name'] && $link['url']) {
+				$links[] = daddslashes($link);
+			}
+		}
+	}
+	return $links;
+}
+
+function getattachtablebyaid($aid) {
+	$tableid = DB::result_first("SELECT tableid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'");
+	return 'forum_attachment_'.($tableid >= 0 && $tableid < 10 ? intval($tableid) : 'unused');
+}
+
+function getattachtableid($tid) {
+	$tid = (string)$tid;
+	return intval($tid{strlen($tid)-1});
+}
+
+function getattachtablebytid($tid) {
+	return 'forum_attachment_'.getattachtableid($tid);
+}
+
+function getattachtablebypid($pid) {
+	$tableid = DB::result_first("SELECT tableid FROM ".DB::table('forum_attachment')." WHERE pid='$pid' LIMIT 1");
+	return 'forum_attachment_'.($tableid >= 0 && $tableid < 10 ? intval($tableid) : 'unused');
+}
+
+function getattachnewaid($uid = 0) {
+	global $_G;
+	$uid = !$uid ? $_G['uid'] : $uid;
+	return DB::insert('forum_attachment', array('tid' => 0, 'pid' => 0, 'uid' => $uid, 'tableid' => 127), true);
+}
+
+function get_seosetting($page, $data = array(), $defset = array()) {
+	global $_G;
+	$searchs = array('{bbname}');
+	$replaces = array($_G['setting']['bbname']);
+
+	$seotitle = $seodescription = $seokeywords = '';
+	$titletext = $defset['seotitle'] ? $defset['seotitle'] : $_G['setting']['seotitle'][$page];
+	$descriptiontext = $defset['seodescription'] ? $defset['seodescription'] : $_G['setting']['seodescription'][$page];
+	$keywordstext = $defset['seokeywords'] ? $defset['seokeywords'] : $_G['setting']['seokeywords'][$page];
+	preg_match_all("/\{([a-z0-9_-]+?)\}/", $titletext.$descriptiontext.$keywordstext, $pageparams);
+	if($pageparams) {
+		foreach($pageparams[1] as $var) {
+			$searchs[] = '{'.$var.'}';
+			if($var == 'page') {
+				$data['page'] = $data['page'] > 1 ? lang('core', 'page', array('page' => $data['page'])) : '';
+			}
+			$replaces[] = $data[$var] ? strip_tags($data[$var]) : '';
+		}
+		if($titletext) {
+			$seotitle = strreplace_strip_split($searchs, $replaces, $titletext);
+		}
+		if($descriptiontext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
+			$seodescription = strreplace_strip_split($searchs, $replaces, $descriptiontext);
+		}
+		if($keywordstext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
+			$seokeywords = strreplace_strip_split($searchs, $replaces, $keywordstext);
+		}
+	}
+	return array($seotitle, $seodescription, $seokeywords);
+}
+
+
+function strreplace_strip_split($searchs, $replaces, $str) {
+	$searchspace = array('((\s*\-\s*)+)', '((\s*\,\s*)+)', '((\s*\|\s*)+)', '((\s*\t\s*)+)', '((\s*_\s*)+)');
+	$replacespace = array('-', ',', '|', ' ', '_');
+	return trim(preg_replace($searchspace, $replacespace, str_replace($searchs, $replaces, $str)), ' ,-|_');
+}
+
+function get_title_page($navtitle, $page){
+	if($page > 1) {
+		$navtitle .= ' - '.lang('core', 'page', array('page' => $page));
+	}
+	return $navtitle;
+}
+function getimgthumbname($fileStr, $extend='.thumb.jpg', $holdOldExt=true) {
+	if(empty($fileStr)) {
+		return '';
+	}
+	if(!$holdOldExt) {
+		$fileStr = substr($fileStr, 0, strrpos($fileStr, '.'));
+	}
+	$extend = strstr($extend, '.') ? $extend : '.'.$extend;
+	return $fileStr.$extend;
+}
+
+function updatemoderate($idtype, $ids, $status = 0) {
+	global $_G;
+	$ids = is_array($ids) ? $ids : array($ids);
+	if(!$ids) {
+		return;
+	}
+	if(!$status) {
+		foreach($ids as $id) {
+			DB::insert('common_moderate', array('id' => $id, 'idtype' => $idtype, 'status' => 0, 'dateline' => $_G['timestamp']), false, true);
+		}
+	} elseif($status == 1) {
+		DB::update('common_moderate', array('status' => 1), "id IN (".dimplode($ids).") AND idtype='$idtype'");
+	} elseif($status == 2) {
+		DB::delete('common_moderate', "id IN (".dimplode($ids).") AND idtype='$idtype'");
+	}
+}
+
+function userappprompt() {
+	global $_G;
+
+	if($_G['setting']['my_app_status'] && $_G['setting']['my_openappprompt'] && empty($_G['cookie']['userappprompt'])) {
+		$sid = $_G['setting']['my_siteid'];
+		$ts = $_G['timestamp'];
+		$key = md5($sid.$ts.$_G['setting']['my_sitekey']);
+		$uchId = $_G['uid'] ? $_G['uid'] : 0;
+		echo '<script type="text/javascript" src="http://notice.uchome.manyou.com/notice/userNotice?sId='.$sid.'&ts='.$ts.'&key='.$key.'&uchId='.$uchId.'" charset="UTF-8"></script>';
+	}
 }
 
 ?>

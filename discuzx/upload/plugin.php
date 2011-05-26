@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: plugin.php 6734 2010-03-25 07:13:10Z cnteacher $
+ *      $Id: plugin.php 20095 2011-02-14 09:32:12Z liulanbo $
  */
 
 define('APPTYPEID', 127);
@@ -33,7 +33,7 @@ define('CURMODULE', $identifier);
 runhooks();
 
 if(empty($identifier) || !preg_match("/^[a-z0-9_\-]+$/i", $module) || !in_array($identifier, $_G['setting']['plugins']['available'])) {
-	showmessage('undefined_action');
+	showmessage('plugin_nonexistence');
 } elseif($pluginmodule['adminid'] && ($_G['adminid'] < 1 || ($_G['adminid'] > 0 && $pluginmodule['adminid'] < $_G['adminid']))) {
 	showmessage('plugin_nopermission');
 } elseif(@!file_exists(DISCUZ_ROOT.($modfile = './source/plugin/'.$pluginmodule['directory'].$module.'.inc.php'))) {

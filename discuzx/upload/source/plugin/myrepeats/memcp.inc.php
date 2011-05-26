@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memcp.inc.php 12326 2010-07-05 06:42:42Z monkey $
+ *      $Id: memcp.inc.php 18014 2010-11-10 05:52:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,20 +22,21 @@ if(in_array('', $myrepeatsusergroups)) {
 $singleprem = FALSE;
 $permusers = array();
 if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
-	$query = DB::query("SELECT * FROM ".DB::table('myrepeats')." WHERE username='$_G[username]'");
-	if(!DB::num_rows($query)) {
-		showmessage('myrepeats:usergroup_disabled');
-	} else {
-		$singleprem = TRUE;
-		while($user = DB::fetch($query)) {
-			$permusers[] = $user['uid'];
-		}
-		$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($permusers).")");
-		$permusers = array();
-		while($user = DB::fetch($query)) {
-			$permusers[] = $user['username'];
-		}
-	}
+	$singleprem = TRUE;
+}
+
+$query = DB::query("SELECT * FROM ".DB::table('myrepeats')." WHERE username='$_G[username]'");
+while($user = DB::fetch($query)) {
+	$permusers[] = $user['uid'];
+}
+$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($permusers).")");
+$permusers = array();
+while($user = DB::fetch($query)) {
+	$permusers[] = $user['username'];
+}
+
+if(!$permusers && $singleprem) {
+	showmessage('myrepeats:usergroup_disabled');
 }
 
 if($_G['gp_pluginop'] == 'add' && submitcheck('adduser')) {

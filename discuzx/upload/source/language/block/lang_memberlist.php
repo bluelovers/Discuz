@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_memberlist.php 14763 2010-08-16 02:20:32Z xupeng $
+ *      $Id: lang_memberlist.php 20017 2011-01-28 04:30:42Z zhangguosheng $
  */
 
 $lang = array
@@ -21,7 +21,9 @@ $lang = array
 	'memberlist_residecity' => '居住城市',
 	'memberlist_birthcity' => '出生城市',
 	'memberlist_avatarstatus' => '過濾無頭像用戶',
-	'memberlist_special_default' => '默認好友',
+	'memberlist_emailstatus' => '通過郵件認證',
+	'memberlist_verifystatus' => '已通過的認證',
+	'memberlist_special_default' => '推薦好友',
 	'memberlist_startrow' => '起始數據行數',
 	'memberlist_startrow_comment' => '如需設定起始的數據行數，請輸入具體數值，0 為從第一行開始，以此類推',
 	'memberlist_groupid' => '用戶組',
@@ -38,9 +40,11 @@ $lang = array
 	'memberlist_orderby_doings' => '按記錄數倒序',
 	'memberlist_orderby_sharings' => '按分享數倒序',
 	'memberlist_orderby_show' => '按競價排行排序',
+	'memberlist_orderby_special' => '按推薦優先級排序',
 	'memberlist_orderby_threads' => '按主題數倒序',
 	'memberlist_orderby_digestposts' => '按精華帖數倒序',
 	'memberlist_orderby_regdate' => '按註冊日期倒序',
+	'memberlist_orderby_todayposts' => '按今日發帖數倒序',
 	'memberlist_lastpost' => '最後發帖時間',
 	'memberlist_lastpost_nolimit' => '不限制',
 	'memberlist_lastpost_hour' => '最近1小時',
@@ -49,8 +53,9 @@ $lang = array
 	'memberlist_lastpost_month' => '最近一月',
 	'memberlist_orderby_extcreditselect' => '擴展積分',
 	'memberlist_orderby_extcreditselect_comment' => '按指定擴展積分倒序排序的積分值',
-	'memberlist_orderby_hours' => '按小時內發貼數倒序',
+	'memberlist_orderby_hours' => '按小時內發帖數倒序',
 	'memberlist_orderby_hours_comment' => '指定時間內發帖數倒序排序的時間值',
+	'memberlist_yes' => '是',
 );
 
 ?>

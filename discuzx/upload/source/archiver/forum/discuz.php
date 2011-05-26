@@ -5,7 +5,7 @@ if(!defined('IN_DISCUZ')) {
 include loadarchiver('common/header');
 ?>
 <div id="nav">
-	<a href="forum.php?archiver=1"><strong><?php echo $_G['setting']['bbname']; ?></strong></a>
+	<a href="./"><strong><?php echo $_G['setting']['bbname']; ?></strong></a>
 </div>
 <div id="content">
 	<?php foreach($catlist as $key => $cat): ?>
@@ -13,14 +13,14 @@ include loadarchiver('common/header');
 	<?php if(!empty($cat['forums'])): ?>
 	<ul>
 		<?php foreach($cat['forums'] as $fid): ?>
-		<li><a href="forum.php?mod=forumdisplay&fid=<?php echo $fid; ?>&archiver=1"><?php echo $forumlist[$fid]['name']; ?></a></li>
+		<li><a href="?fid-<?php echo $fid; ?>.html"><?php echo $forumlist[$fid]['name']; ?></a></li>
 		<?php endforeach; ?>
 	</ul>
 	<?php endif; ?>
 	<?php endforeach; ?>
 </div>
-<div id="footer">
+<div id="end">
 	<?php echo lang('forum/archiver', 'full_version'); ?>:
-	<a href="forum.php" target="_blank"><strong><?php echo $_G['setting']['bbname']; ?></strong></a>
+	<a href="../forum.php" target="_blank"><strong><?php echo $_G['setting']['bbname']; ?></strong></a>
 </div>
 <?php include loadarchiver('common/footer'); ?>

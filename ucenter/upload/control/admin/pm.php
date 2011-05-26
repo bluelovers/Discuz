@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: pm.php 753 2008-11-14 06:48:25Z cnteacher $
+	$Id: pm.php 1066 2011-03-07 09:20:31Z svn_project_zhangjie $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -25,95 +25,189 @@ class control extends adminbase {
 	}
 
 	function onls() {
-		$folder = 'inbox';
-		$filter = 'announcepm';
-		$status = 0;
-		if($this->submitcheck()) {
-			$delnum = $_ENV['pm']->deletepm($this->user['uid'], $_POST['delete']);
-			$status = 1;
-			$this->writelog('pm_delete', "delete=".implode(',', $_POST['delete']));
+		$pmlist = array();
+		if($this->submitcheck() || getgpc('searchpmsubmit', 'G')) {
+			$srchtablename = intval(getgpc('srchtablename', 'R'));
+			$srchauthor = trim(getgpc('srchauthor', 'R'));
+			$srchstarttime = trim(getgpc('srchstarttime', 'R'));
+			$srchendtime = trim(getgpc('srchendtime', 'R'));
+			$srchmessage = trim(getgpc('srchmessage', 'R'));
+
+			$wheresql = array();
+			if(!$srchtablename) {
+				$srchtablename = 0;
+			}
+			if($srchauthor) {
+				$this->load('user');
+				$uidarr = $_ENV['user']->name2id(explode(',', $srchauthor));
+				$wheresql[] = "authorid IN (".$this->implode($uidarr).")";
+			}
+			if($srchstarttime) {
+				$wheresql[] = "dateline>='".strtotime($srchstarttime)."'";
+			}
+			if($srchendtime) {
+				$wheresql[] = "dateline<'".strtotime($srchendtime)."'";
+			}
+			if($srchmessage) {
+				$wheresql[] = "message LIKE '%{$srchmessage}%'";
+			}
+
+			$count = 0;
+			if(!empty($wheresql)) {
+				$count = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pm_messages_".(string)$srchtablename." WHERE ".implode(' AND ', $wheresql));
+			}
+			if($count) {
+				$page = intval(getgpc('page', 'R'));
+				$page = $page ? $page : 1;
+				$start = ($page-1) * UC_PPP;
+				$limit = UC_PPP;
+				$query = $this->db->query("SELECT * FROM ".UC_DBTABLEPRE."pm_messages_".(string)$srchtablename." WHERE ".implode(' AND ', $wheresql)." LIMIT $start, $limit");
+				while($message = $this->db->fetch_array($query)) {
+					$message['dateline'] = $this->date($message['dateline']);
+					$user[] = $message['authorid'];
+					$pmlist[] = $message;
+				}
+				$this->load('user');
+				$usernamearr = $_ENV['user']->id2name($user);
+				foreach($pmlist as $key => $value) {
+					$pmlist[$key]['author'] = $usernamearr[$pmlist[$key]['authorid']];
+				}
+				$multipage = $this->page($count, UC_PPP, $page, 'admin.php?m=pm&a=ls&srchtablename='.$srchtablename.'&srchauthor='.urlencode($srchauthor).'&srchstarttime='.urlencode($srchstarttime).'&srchendtime='.urlencode($srchendtime).'&srchmessage='.urlencode($srchmessage).'&searchpmsubmit=true');
+			}
 		}
-		$pmnum = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms WHERE msgtoid='0' AND folder='inbox'");
-		$pmlist = $_ENV['pm']->get_pm_list($this->user['uid'], $pmnum, $folder, $filter, $_GET['page']);
-		$multipage = $this->page($pmnum, 10, $_GET['page'], 'admin.php?m=pm&a=ls');
-		$extra = 'extra='.rawurlencode($_GET['extra']);
-		$a = getgpc('a');
-		$this->view->assign('a', $a);
-		$this->view->assign('status', $status);
+
+		$pmnum = 0;
+		for($i = 0; $i < 10; $i++) {
+			$pmnum += $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pm_messages_".(string)$i);
+		}
+		$this->view->assign('pmnum', $pmnum);
+		$this->view->assign('count', $count);
 		$this->view->assign('pmlist', $pmlist);
-		$this->view->assign('extra', $extra);
 		$this->view->assign('multipage', $multipage);
-
-		$this->view->display('admin_pm');
+		$this->view->assign('srchtablename', $srchtablename);
+		$this->view->assign('srchauthor', $srchauthor);
+		$this->view->assign('srchstarttime', $srchstarttime);
+		$this->view->assign('srchendtime', $srchendtime);
+		$this->view->assign('srchmessage', $srchmessage);
+		$this->view->display('admin_pm_search');
 	}
 
-	function onview() {
-		$pmid = @is_numeric($_GET['pmid']) ? $_GET['pmid'] : 0;
-		$pms = $_ENV['pm']->get_pm_by_pmid($this->user['uid'], $pmid);
-
-		if($pms[0]) {
-			$pms = $pms[0];
-			require_once UC_ROOT.'lib/uccode.class.php';
-			$this->uccode = new uccode();
-			$this->uccode->lang = &$this->lang;
-			$pms['message'] = $this->uccode->complie($pms['message']);
-			$pms['dateline'] = $this->date($pms['dateline']);
-		}
-
-		$extra = 'extra='.rawurlencode($_GET['extra']);
-		$a = getgpc('a');
-		$this->view->assign('a', $a);
-		$this->view->assign('pms', $pms);
-		$this->view->assign('extra', $extra);
-
-		$this->view->display('admin_pm');
-	}
-
-	function onsend() {
-		$status = 0;
+	function ondelete() {
+		$srchtablename = intval(getgpc('srchtablename', 'R'));
+		$srchauthor = trim(getgpc('srchauthor', 'R'));
+		$srchstarttime = trim(getgpc('srchstarttime', 'R'));
+		$srchendtime = trim(getgpc('srchendtime', 'R'));
+		$srchmessage = trim(getgpc('srchmessage', 'R'));
 		if($this->submitcheck()) {
-			$lastpmid = $_ENV['pm']->sendpm($_POST['subject'], $_POST['message'], $this->user['isfounder'] ? '' : $this->user, 0);
-			$status = 1;
-			$this->writelog('pm_send', "subject=".htmlspecialchars($_POST['subject']));
+			$pmids = getgpc('deletepmid');
+			if(empty($pmids)) {
+				$this->message('pm_delete_noselect', 'admin.php?m=pm&a=ls&srchtablename='.$srchtablename.'&srchauthor='.urlencode($srchauthor).'&srchstarttime='.urlencode($srchstarttime).'&srchendtime='.urlencode($srchendtime).'&srchmessage='.urlencode($srchmessage).'&searchpmsubmit=true');
+			}
+			foreach($pmids as $pmid) {
+				$query = $this->db->query("SELECT * FROM ".UC_DBTABLEPRE."pm_indexes i LEFT JOIN ".UC_DBTABLEPRE."pm_lists l ON i.plid=l.plid WHERE i.pmid='$pmid'");
+				if($index = $this->db->fetch_array($query)) {
+					$this->db->query("DELETE FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($index['plid'])." WHERE pmid='$pmid'");
+					if($index['pmtype'] == 1) {
+						$authorcount = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($index['plid'])." WHERE plid='".$index['plid']."' AND delstatus IN (0, 2)");
+						$othercount = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($index['plid'])." WHERE plid='".$index['plid']."' AND delstatus IN (0, 1)");
+						$users = explode('_', $index['min_max']);
+						if($users[0] == $index['authorid']) {
+							$other = $users[1];
+						} else {
+							$other = $users[0];
+						}
+						if($authorcount + $othercount == 0) {
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$index['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_lists WHERE plid='".$index['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_indexes WHERE plid='".$index['plid']."'");
+						} else {
+							if($authorcount){
+								$this->db->query("UPDATE ".UC_DBTABLEPRE."pm_members SET pmnum='$authorcount' WHERE plid='".$index['plid']."' AND uid='".$index['authorid']."'");
+							} else {
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$index['plid']."' AND uid='".$index['authorid']."'");
+							}
+							if($othercount) {
+								$this->db->query("UPDATE ".UC_DBTABLEPRE."pm_members SET pmnum='$othercount' WHERE plid='".$index['plid']."' AND uid='".$other."'");
+							} else {
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$index['plid']."' AND uid='".$other."'");
+							}
+						}
+					} elseif($index['pmtype'] == 2) {
+						$count = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($index['plid'])." WHERE plid='".$index['plid']."'");
+						if(!$count) {
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$index['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_lists WHERE plid='".$index['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_indexes WHERE plid='".$index['plid']."'");
+						} else {
+							$this->db->query("UPDATE ".UC_DBTABLEPRE."pm_members SET pmnum='$count' WHERE plid='".$index['plid']."'");
+						}
+					}
+				}
+			}
+			$this->message('pm_clear_succeed', 'admin.php?m=pm&a=ls&srchtablename='.$srchtablename.'&srchauthor='.urlencode($srchauthor).'&srchstarttime='.urlencode($srchstarttime).'&srchendtime='.urlencode($srchendtime).'&srchmessage='.urlencode($srchmessage).'&searchpmsubmit=true');
 		}
-		$this->view->assign('status', $status);
-		$this->view->display('admin_pm_send');
 	}
 
 	function onclear() {
 		$delnum = 0;
-		if($this->submitcheck()) {
-			$cleardays = intval(getgpc('cleardays', 'P'));
-			$unread = getgpc('unread') ? 1 : 0;
-			$usernames = trim(getgpc('usernames', 'P'));
-			$sqladd = '';
-			if($cleardays > 0) {
-				$sqladd .= ' AND dateline < '.($this->time - $cleardays * 86400);
-			}
-			if($unread) {
-				$sqladd .= " AND new='0'";
-			}
+		if($this->submitcheck() || getgpc('clearpmsubmit', 'G')) {
+			$usernames = trim(getgpc('usernames', 'R'));
+			$pertask = intval(getgpc('pertask', 'R'));
+			$current = intval(getgpc('current', 'R'));
+			$pertask = $pertask ? $pertask : 100;
+			$current = $current > 0 ? $current : 0;
+			$next = $current + $pertask;
+			$nexturl = "admin.php?m=pm&a=clear&usernames=$usernames&current=$next&pertask=$pertask&clearpmsubmit=1";
+
 			if($usernames) {
 				$uids = 0;
+				$processed = 0;
 				$usernames = "'".implode("', '", explode(',', $usernames))."'";
 				$query = $this->db->query("SELECT uid FROM ".UC_DBTABLEPRE."members WHERE username IN ($usernames)");
 				while($res = $this->db->fetch_array($query)) {
 					$uids .= ','.$res['uid'];
 				}
 				if($uids) {
-					$sqladd .= " AND (msgfromid IN ($uids) OR msgtoid IN ($uids))";
+					$query = $this->db->query("SELECT m.plid, m.uid, t.pmtype, t.authorid FROM ".UC_DBTABLEPRE."pm_members m LEFT JOIN ".UC_DBTABLEPRE."pm_lists t ON m.plid=t.plid WHERE m.uid IN ($uids) LIMIT $pertask");
+					while($member = $this->db->fetch_array($query)) {
+						$processed = 1;
+						if($member['pmtype'] == 1) {
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($member['plid'])." WHERE plid='".$member['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_lists WHERE plid='".$member['plid']."'");
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$member['plid']."'");
+							$adjust = $this->db->affected_rows();
+							$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_indexes WHERE plid='".$member['plid']."'");
+						} elseif($member['pmtype'] == 2) {
+							if($member['authorid'] == $member['uid']) {
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($member['plid'])." WHERE plid='".$member['plid']."'");
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_lists WHERE plid='".$member['plid']."'");
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$member['plid']."'");
+								$adjust = $this->db->affected_rows();
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_indexes WHERE plid='".$member['plid']."'");
+							} else {
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE.$_ENV['pm']->getposttablename($member['plid'])." WHERE plid='".$member['plid']."' AND authorid IN (".$uids.")");
+								$affectpmnum = $this->db->affected_rows();
+								$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pm_members WHERE plid='".$member['plid']."' AND uid IN (".$uids.")");
+								$affectmembers = $this->db->affected_rows();
+								$adjust = $affectmembers;
+								$this->db->query("UPDATE ".UC_DBTABLEPRE."pm_members SET pmnum=pmnum-'$affectpmnum' WHERE plid='".$member['plid']."'");
+								$this->db->query("UPDATE ".UC_DBTABLEPRE."pm_lists SET members=members-'$affectmembers' WHERE plid='".$member['plid']."'");
+							}
+						}
+					}
 				}
-			}
-			
-			if($sqladd) {
-				$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms WHERE 1 $sqladd", 'UNBUFFERED');
-				$delnum = $this->db->affected_rows();
-				$status = 1;
-				$this->writelog('pm_clear', "cleardays=$cleardays&unread=$unread");
+				if($processed) {
+					$this->message('pm_clear_processing', $nexturl, 0, array('current' => $current, 'next' => $next));
+				} else {
+					$this->message('pm_clear_succeed', 'admin.php?m=pm&a=clear');
+				}
 			}
 		}
 
-		$pmnum = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms");
+		$pmnum = 0;
+		for($i = 0; $i < 10; $i++) {
+			$pmnum += $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pm_messages_".(string)$i);
+		}
 		$this->view->assign('pmnum', $pmnum);
 		$this->view->assign('delnum', $delnum);
 		$this->view->assign('status', $status);

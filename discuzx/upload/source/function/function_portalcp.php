@@ -4,32 +4,33 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 17351 2010-10-11 05:03:55Z zhangguosheng $
+ *      $Id: function_portalcp.php 22482 2011-05-10 03:07:05Z maruitao $
  */
 
-function get_uploadcontent($attach) {
+function get_uploadcontent($attach, $type='portal', $dotype='') {
 
 	$return = '';
+	$dotype = $dotype ? 'checked' : '';
 	if($attach['isimage']) {
-		$pic = pic_get($attach['attachment'], 'portal', $attach['thumb'], $attach['remote'], 0);
-		$small_pic = $attach['thumb'] ? ($pic.'.thumb.jpg') : '';
-		$check = $attach['pic'] == $attach['attachment'] ? checked : '';
+		$pic = pic_get($attach['attachment'], $type, $attach['thumb'], $attach['remote'], 0);
+		$small_pic = $attach['thumb'] ? getimgthumbname($pic) : '';
+		$check = $attach['pic'] == $type.'/'.$attach['attachment'] ? 'checked' : $dotype;
 		$aid = $check ? $attach['aid'] : '';
 
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
 		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
-		$return .= '<td class="bbs">';
-		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'> '.lang('portalcp', 'set_to_conver').'</label><br>';
+		$return .= '<td align="right" class="bbs">';
+		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label><br>';
 		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
-		$return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
+		if($type == 'portal') $return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
 		$return .= '</td>';
 		$return .= '</table>';
 
 	} else {
-		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%">';
-		$return .= '<td><a href="portal.php?mod=attachment&id='.$attach['attachid'].'" target="_blank">'.$attach['filename'].'</a></td>';
-		$return .= '<td>';
+		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
+		$return .= '<td width="50" class="bbs"><a href="portal.php?mod=attachment&id='.$attach['attachid'].'" target="_blank">'.$attach['filename'].'</a></td>';
+		$return .= '<td align="right" class="bbs">';
 		$return .= '<a href="javascript:void(0);" onclick="insertFile(\''.$attach['filename'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'\');return false;">'.lang('portalcp', 'insert_file').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
 		$return .= '</td>';
@@ -40,35 +41,20 @@ function get_uploadcontent($attach) {
 }
 
 function getallowcategory($uid){
+	global $_G;
 	$permission = array();
 	if (empty($uid)) return $permission;
-	if(getglobal('group/allowauthorizedarticle')) {
+	if(getstatus($_G['member']['allowadmincp'], 2) || getstatus($_G['member']['allowadmincp'], 3)) {
 		$uid = max(0,intval($uid));
 		$query = DB::query('SELECT * FROM '.DB::table('portal_category_permission')." WHERE uid='$uid'");
-		$allcategory = getglobal('cache/portalcategory');
-
 		while($value = DB::fetch($query)) {
 			if ($value['allowpublish'] || $value['allowmanage']) {
 				$catid = $value['catid'];
 				$permission[$catid] = $value;
-				$children = $allcategory[$catid]['children'];
-				if((!$allcategory[$catid]['notinheritedarticle'] || $allcategory[$catid]['level'] == 0) && is_array($children) && count($children) > 0) getinheritancecategoryarticle($catid, $permission, $value);
 			}
 		}
 	}
 	return $permission;
-}
-function getinheritancecategoryarticle($catid, &$permission, $value) {
-	$allcategory = getglobal('cache/portalcategory');
-	$children = $allcategory[$catid]['children'];
-	foreach($children as $childcatid) {
-		if(!$allcategory[$childcatid]['notinheritedarticle']) {
-			$value['catid'] = $childcatid;
-			$permission[$childcatid] = $value;
-		}
-		$catchildren = $allcategory[$childcatid]['children'];
-		if(!$allcategory[$childcatid]['notinheritedarticle'] && is_array($catchildren) && count($catchildren) > 0) getinheritancecategoryarticle($childcatid, $permission, $value);
-	}
 }
 
 function getpermissioncategory($category, $permission = array()) {
@@ -82,7 +68,7 @@ function getpermissioncategory($category, $permission = array()) {
 				$cats[$cur['upid']]['permissionchildren'][$cur['catid']] = $cur['catid'];
 				$cur = $category[$cur['upid']];
 			}
-		} else {
+		} elseif(empty($cats[$v])) {
 			$cats[$v] = array();
 		}
 	}
@@ -93,92 +79,62 @@ function getpermissioncategory($category, $permission = array()) {
 function getallowdiytemplate($uid){
 	if (empty($uid)) return false;
 	$permission = array();
-	if(getglobal('group/allowauthorizedblock')) {
-		$portalcategory = getglobal('cache/portalcategory');
-		$diytemplatename = getglobal('cache/diytemplatename');
-		$lang = lang('portalcp');
-		$uid = max(0,intval($uid));
-		$query = DB::query("SELECT tp.* FROM ".DB::table('common_template_permission')." tp WHERE tp.uid='$uid'");
-		while($value = DB::fetch($query)) {
-			if ($value['allowmanage'] || $value['allowrecommend']) {
-				$value['name'] = $diytemplatename[$value['targettplname']] ? $diytemplatename[$value['targettplname']] : $lang['diytemplate_name_null'];
-				$catid = intval(str_replace('portal/list_', '', $value['targettplname']));
-				if($catid && isset($portalcategory[$catid])){
-					$children = $portalcategory[$catid]['children'];
-					if((!$portalcategory[$catid]['notinheritedblock'] || $portalcategory[$catid]['level'] == 0) && is_array($children) && count($children) > 0) getinheritancecategoryblock($catid, $permission, $value);
-				}
-				$permission[$value['targettplname']] = $value;
-			}
-		}
+	$uid = max(0,intval($uid));
+	$query = DB::query("SELECT tp.* FROM ".DB::table('common_template_permission')." tp WHERE tp.uid='$uid'");
+	while($value = DB::fetch($query)) {
+			$permission[$value['targettplname']] = $value;
 	}
 	return $permission;
-}
-function getinheritancecategoryblock($catid, &$permission, $value) {
-	$portalcategory = getglobal('cache/portalcategory');
-	$children = $portalcategory[$catid]['children'];
-	foreach($children as $childcatid) {
-		if(!$portalcategory[$childcatid]['notinheritedblock']) {
-			$value['name'] = $portalcategory[$childcatid]['catname'];
-			$value['targettplname'] = 'portal/list_'.$childcatid;
-			$permission[$value['targettplname']] = $value;
-		}
-		$categorychildren = $portalcategory[$childcatid]['children'];
-		if(!$portalcategory[$childcatid]['notinheritedblock'] && is_array($categorychildren) && count($categorychildren) > 0) getinheritancecategoryblock($childcatid, $permission, $value);
-	}
 }
 
 function save_diy_data($primaltplname, $targettplname, $data, $database = false, $optype = '') {
 	global $_G;
 	if (empty($data) || !is_array($data)) return false;
+	checksecurity($data['spacecss']);
 	$file = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/'.$primaltplname.'.htm';
 	if (!file_exists($file)) {
 		$file = './template/default/'.$primaltplname.'.htm';
 	}
+	if(!file_exists($file)) return false;
 	$content = file_get_contents(DISCUZ_ROOT.$file);
-	$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", '', $content);
+	$content = preg_replace("/\<\!\-\-\[name\].+?\[\/name\]\-\-\>\s+/is", '', $content);
+	$content = preg_replace("/\<script src\=\"misc\.php\?mod\=diyhelp\&action\=get.+?\>\<\/script\>/", '', $content);
 	foreach ($data['layoutdata'] as $key => $value) {
+		$key = trimdxtpllang($key);
 		$html = '';
 		$html .= '<div id="'.$key.'" class="area">';
 		$html .= getframehtml($value);
 		$html .= '</div>';
 		$content = preg_replace("/(\<\!\-\-\[diy\=$key\]\-\-\>).+?(\<\!\-\-\[\/diy\]\-\-\>)/is", "\\1".$html."\\2", $content);
 	}
+	$data['spacecss'] = str_replace('.content', '.dxb_bc', $data['spacecss']);
+	$data['spacecss'] = trimdxtpllang($data['spacecss']);
 	$content = preg_replace("/(\<style id\=\"diy_style\" type\=\"text\/css\"\>).*?(\<\/style\>)/is", "\\1".$data['spacecss']."\\2", $content);
 	if (!empty($data['style'])) {
 		$content = preg_replace("/(\<link id\=\"style_css\" rel\=\"stylesheet\" type\=\"text\/css\" href\=\").+?(\"\>)/is", "\\1".$data['style']."\\2", $content);
 	}
 
 	$flag = $optype == 'savecache' ? true : false;
-
-	$targettplname = $flag ? $targettplname.'_diy_preview' : $targettplname;
-
-	if(!$flag) @unlink('./data/diy/'.$targettplname.'_diy_preview.htm');
-
-	$tplfile =DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm';
-
-	if (file_exists($tplfile) && !$flag) copy($tplfile, $tplfile.'.bak');
-
-	$tplpath = dirname($tplfile);
-	if (!is_dir($tplpath)) dmkdir($tplpath);
-	$r = file_put_contents($tplfile, $content);
-
-	if ($r && $database && !$flag) {
-		DB::delete('common_template_block', array('targettplname'=>$targettplname));
-		if (!empty($_G['curtplbid'])) {
-			$values = array();
-			foreach ($_G['curtplbid'] as $bid) {
-				$values[] = "('$targettplname','$bid')";
-			}
-			if (!empty($values)) {
-				DB::query("INSERT INTO ".DB::table('common_template_block')." (targettplname,bid) VALUES ".implode(',', $values));
-			}
-		}
-
-		$tpldata = daddslashes(serialize($data));
-		$diytplname = getdiytplname($targettplname);
-		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
+	if($flag) {
+		$targettplname = $targettplname.'_diy_preview';
+	} else {
+		@unlink('./data/diy/'.$targettplname.'_diy_preview.htm');
 	}
 
+	$tplfile =DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm';
+	$tplpath = dirname($tplfile);
+	if (!is_dir($tplpath)) {
+		dmkdir($tplpath);
+	} else {
+		if (file_exists($tplfile) && !$flag) copy($tplfile, $tplfile.'.bak');
+	}
+	$r = file_put_contents($tplfile, $content);
+	if ($r && $database && !$flag) {
+		$tpldata = daddslashes(serialize($data));
+		$diytplname = getdiytplname($targettplname);
+		$diytplname = addslashes($diytplname);
+		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
+	}
 	return $r;
 }
 
@@ -207,20 +163,26 @@ function getframehtml($data = array()) {
 	global $_G;
 	$html = $style = '';
 	foreach ((array)$data as $id => $content) {
+		$id = trimdxtpllang($id);
 		$flag = $name = '';
 		list($flag, $name) = explode('`', $id);
 		if ($flag == 'frame') {
 			$fattr = $content['attr'];
+			$fattr['name'] = trimdxtpllang($fattr['name']);
+			$fattr['className'] = trimdxtpllang($fattr['className']);
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
 			$html .= '<div id="'.$fattr['name'].'" class="'.$fattr['className'].'">';
 			if (checkhastitle($fattr['titles'])) {
 				$style = gettitlestyle($fattr['titles']);
-				$html .= '<div class="'.implode(' ',$fattr['titles']['className']).'"'.$style.'>'.gettitlehtml($fattr['titles'], 'frame').'</div>';
+				$cn = trimdxtpllang(implode(' ',$fattr['titles']['className']));
+				$html .= '<div class="'.$cn.'"'.$style.'>'.gettitlehtml($fattr['titles'], 'frame').'</div>';
 			}
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
+				$colname = trimdxtpllang($colname);
+				$cn = trimdxtpllang($coldata['attr']['className']);
 				if ($colflag == 'column') {
-					$html .= '<div id="'.$colname.'" class="'.$coldata['attr']['className'].'">';
+					$html .= '<div id="'.$colname.'" class="'.$cn.'">';
 					$html .= '<div id="'.$colname.'_temp" class="move-span temp"></div>';
 					$html .= getframehtml($coldata);
 					$html .= '</div>';
@@ -229,18 +191,23 @@ function getframehtml($data = array()) {
 			$html .= '</div>';
 		} elseif ($flag == 'tab') {
 			$fattr = $content['attr'];
+			$fattr['name'] = trimdxtpllang($fattr['name']);
+			$fattr['className'] = trimdxtpllang($fattr['className']);
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
 			$html .= '<div id="'.$fattr['name'].'" class="'.$fattr['className'].'">';
 			$switchtype = 'click';
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
+				$colname = trimdxtpllang($colname);
+				$cn = trimdxtpllang($coldata['attr']['className']);
 				if ($colflag == 'column') {
 					if (checkhastitle($fattr['titles'])) {
 						$style = gettitlestyle($fattr['titles']);
 						$title = gettitlehtml($fattr['titles'], 'tab');
 					}
 					$switchtype = is_array($fattr['titles']['switchType']) && !empty($fattr['titles']['switchType'][0]) ? $fattr['titles']['switchType'][0] : 'click';
-					$html .= '<div id="'.$colname.'" class="'.$coldata['attr']['className'].'"'.$style.' switchtype="'.$switchtype.'">'.$title;
+					$switchtype = in_array(strtolower($switchtype), array('click', 'mouseover')) ? $switchtype : 'click';
+					$html .= '<div id="'.$colname.'" class="'.$cn.'"'.$style.' switchtype="'.$switchtype.'">'.$title;
 					$html .= getframehtml($coldata);
 					$html .= '</div>';
 				}
@@ -264,7 +231,7 @@ function gettitlestyle($title) {
 	$style = '';
 	if (is_array($title['style']) && count($title['style'])) {
 		foreach ($title['style'] as $k=>$v){
-			$style .= $k.':'.$v.';';
+			$style .= trimdxtpllang($k).':'.trimdxtpllang($v).';';
 		}
 	}
 	$style = $style ? ' style=\''.$style.'\'' : '';
@@ -286,6 +253,14 @@ function gettitlehtml($title, $type) {
 	foreach ($title as $k => $v) {
 		if (in_array(strval($k),array('className','style'))) continue;
 		if (empty($v['src']) && empty($v['text'])) continue;
+		$v['className'] = trimdxtpllang($v['className']);
+		$v['font-size'] = intval($v['font-size']);
+		$v['margin'] = intval($v['margin']);
+		$v['float'] = trimdxtpllang($v['float']);
+		$v['color'] = trimdxtpllang($v['color']);
+		$v['src'] = trimdxtpllang($v['src']);
+		$v['href'] = trimdxtpllang($v['href']);
+		$v['text'] = htmlspecialchars(str_replace(array('{', '$'), array('{ ', '$ '), $v['text']));
 		$one = "<span class=\"{$v['className']}\"";
 		$style = $color = "";
 		$style .= empty($v['font-size']) ? '' : "font-size:{$v['font-size']}px;";
@@ -300,7 +275,7 @@ function gettitlehtml($title, $type) {
 		} else {
 			$style = empty($style) ? '' : ' style="'.$style.'"';
 			$colorstyle = empty($color) ? '' : ' style="'.$color.'"';
-			$one .= $style.'><a href="'.$v['href'].'"'.$colorstyle.'>'.$img.$v['text'].'</a>';
+			$one .= $style.'><a href="'.$v['href'].'" target="_blank"'.$colorstyle.'>'.$img.$v['text'].'</a>';
 		}
 		$one .= '</span>';
 
@@ -508,6 +483,7 @@ function import_diy($file) {
 	$content = file_get_contents($file);
 	require_once libfile('class/xml');
 	if (empty($content)) return $arr;
+	$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>\s+/i", '', $content);
 	$diycontent = xml2array($content);
 
 	if ($diycontent) {
@@ -523,7 +499,7 @@ function import_diy($file) {
 		$mapping = array();
 		if (!empty($diycontent['blockdata'])) {
 			$mapping = block_import($diycontent['blockdata']);
-			unset($diycontent['bockdata']);
+			unset($diycontent['blockdata']);
 		}
 
 		$oldbids = $newbids = array();
@@ -567,13 +543,21 @@ function import_diy($file) {
 
 function checkprimaltpl($template) {
 	global $_G;
-
+	if(!$template || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $template)) {
+		return 'diy_template_filename_invalid';
+	}
 	$primaltplname = DISCUZ_ROOT.$_G['cache']['style_default']['tpldir'].'/'.$template.'.htm';
 	if (!file_exists($primaltplname)) {
 		$primaltplname = DISCUZ_ROOT.'./template/default/'.$template.'.htm';
 	}
-	if (!is_file($primaltplname)) showmessage('diy_template_noexist');
-	return $primaltplname;
+	$pathinfos = pathinfo($primaltplname);
+	if(strtolower($pathinfos['extension']) != 'htm') {
+		return 'diy_template_extension_invalid';
+	}
+	if (!is_file($primaltplname)) {
+		return 'diy_template_noexist';
+	}
+	return true;
 }
 
 function article_tagnames() {
@@ -723,14 +707,16 @@ function updatetopic($topic = ''){
 	}
 
 	$setarr = array(
-			'title' => $_POST['title'],
-			'name' => $_POST['name'],
-			'domain' => $_POST['domain'],
-			'summary' => getstr($_POST['summary'], '', 1, 1),
-			'keyword' => getstr($_POST['keyword'], '', 1, 1),
-			'useheader' => $_POST['useheader'] ? '1' : '0',
-			'usefooter' => $_POST['usefooter'] ? '1' : '0',
-		);
+		'title' => $_POST['title'],
+		'name' => $_POST['name'],
+		'domain' => $_POST['domain'],
+		'summary' => getstr($_POST['summary'], '', 1, 1),
+		'keyword' => getstr($_POST['keyword'], '', 1, 1),
+		'useheader' => $_POST['useheader'] ? '1' : '0',
+		'usefooter' => $_POST['usefooter'] ? '1' : '0',
+		'allowcomment' => $_POST['allowcomment'] ? 1 : 0,
+		'closed' => $_POST['closed'] ? 0 : 1,
+	);
 
 	if($_POST['deletecover'] && $topic['cover']) {
 		if($topic['picflag'] != '0') pic_delete(str_replace('portal/', '', $topic['cover']), 'portal', 0, $topic['picflag'] == '2' ? '1' : '0');
@@ -755,12 +741,11 @@ function updatetopic($topic = ''){
 
 	$primaltplname = '';
 	if(empty($topicid) || empty($topic['primaltplname']) || ($topic['primaltplname'] && $topic['primaltplname'] != 'portal/'.$_POST['primaltplname'])) {
-		$primaltplname = $_POST['primaltplname'];
-		if(!$primaltplname || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $primaltplname)) {
-			return 'topic_filename_invalid';
+		$primaltplname = 'portal/'.$_POST['primaltplname'];
+		$checktpl = checkprimaltpl($primaltplname);
+		if($checktpl !== true) {
+			return $checktpl;
 		}
-		$primaltplname = 'portal/'.str_replace(array('/', '\\', '.'), '', $primaltplname);
-		checkprimaltpl($primaltplname);
 		$setarr['primaltplname'] = $primaltplname;
 	}
 
@@ -783,18 +768,13 @@ function updatetopic($topic = ''){
 		DB::insert('common_domain', array('domain' => $_POST['domain'], 'domainroot' => addslashes($_G['setting']['domain']['root']['topic']), 'id' => $topicid, 'idtype' => 'topic'));
 	}
 
-	$makediyfile = false;
-	if($primaltplname && !empty($topic['primaltplname']) && $topic['primaltplname'] != $primaltplname) {
+	if($topic['primaltplname'] != $primaltplname) {
 		$targettplname = 'portal/portal_topic_content_'.$topicid;
 		DB::update('common_diy_data',array('primaltplname'=>$primaltplname),array('targettplname'=>$targettplname));
-		if(DB::affected_rows()>0){
-			updatediytemplate($targettplname);
-		} else {
-			$makediyfile = true;
-		}
+		updatediytemplate($targettplname);
 	}
 
-	if($primaltplname && empty($topic['primaltplname']) || $primaltplname && $makediyfile) {
+	if($primaltplname && empty($topic['primaltplname'])) {
 		$content = file_get_contents(DISCUZ_ROOT.'./template/default/'.$primaltplname.'.htm');
 		$tplfile = DISCUZ_ROOT.'./data/diy/portal/portal_topic_content_'.$topicid.'.htm';
 		$tplpath = dirname($tplfile);
@@ -833,62 +813,33 @@ function getblockperm($bid) {
 	$bid = max(0, intval($bid));
 	if(!$bid) return $perm;
 	$allperm = array('allowmanage'=>'1','allowrecommend'=>'1','needverify'=>'0');
-	if(checkperm('allowdiy')) return $allperm;
-	$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_block_permission')." WHERE bid = '$bid' AND uid='$_G[uid]'");
-	if($perm) return $perm;
-
-	$block = DB::fetch_first('SELECT tb.*,b.notinherited FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
-	if($block && $block['notinherited'] == '0') {
-		$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_template_permission')." WHERE targettplname='$block[targettplname]' AND uid='$_G[uid]'");
-		if(!$perm) {
-			$tplpre = 'portal/list_';
-			if(substr($block['targettplname'], 0, 12) == $tplpre){
-				$protalcategory = loadcache('portalcategory');
-				$catid = intval(str_replace($tplpre, '', $block['targettplname']));
-				if(isset($portalcategory[$catid])) {
-					$cattpls = array();
-					$cattplname = '';
-					if(!$portalcategory[$catid]['notinheritedblock'] && $portalcategory[$catid]['upid']){
-						$cattplname = $tplpre.$catid;
-					}
-					while($cattplname) {
-						$cattpls[] = $cattplname;
-						$catupid =$portalcategory[$catid]['upid'];
-						if(!$portalcategory[$catupid]['notinheritedblock'] && $portalcategory[$catupid]['upid']
-								|| $portalcategory[$catupid]['level'] == '0'){
-							$cattplname = $tplpre.$catupid;
-						} else {
-							$cattplname = '';
-						}
-					}
-					if(!empty($cattpls)){
-						$tplperm = array();
-						$query = DB::query('SELECT * FROM '.DB::table('common_template_permission').' WHERE targettplname IN ('.dimplode($cattpls).')');
-						while($value = DB::fetch($query)){
-							$tplperm[$value['targettplname']] = $value;
-						}
-						foreach($cattpls as $targettplname) {
-							if($tplperm[$targettplname]) {
-								$perm = $tplperm[$targettplname];
-								break;
-							}
-						}
-					}
-				}
-			} elseif(substr($block['targettplname'], 0, 28) == 'portal/portal_topic_content_') {
-				if(!empty($_G['group']['allowmanagetopic'])) {
+	if(checkperm('allowdiy')) {
+		return $allperm;
+	} elseif (!getstatus($_G['member']['allowadmincp'], 4) && !getstatus($_G['member']['allowadmincp'], 5) && !checkperm('allowmanagetopic') && !checkperm('allowaddtopic')) {
+		return $perm;
+	}
+	require_once libfile('class/blockpermission');
+	$blockpermsission = & block_permission::instance();
+	$perm = $blockpermsission->get_perms_by_bid($bid, $_G['uid']);
+	$perm = $perm ? $perm[0] : '';
+	if(empty($perm)) {
+		$block = DB::fetch_first('SELECT tb.*,b.blocktype,b.uid FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
+		if(empty($block['targettplname']) && empty($block['blocktype'])) {
+			if(($_G['group']['allowmanagetopic'] || ($_G['group']['allowaddtopic'] && $block['uid'] == $_G['uid']))) {
+				$perm = $allperm;
+			}
+		} elseif(substr($block['targettplname'], 0, 28) == 'portal/portal_topic_content_') {
+			if(!empty($_G['group']['allowmanagetopic'])) {
+				$perm = $allperm;
+			} elseif($_G['group']['allowaddtopic']) {
+				$id = str_replace('portal/portal_topic_content_', '', $block['targettplname']);
+				$topic = DB::fetch_first('SELECT uid FROM '.DB::table('portal_topic')." WHERE topicid='".intval($id)."'");
+				if($topic['uid'] == $_G['uid']) {
 					$perm = $allperm;
-				} elseif($_G['group']['allowaddtopic']) {
-					$id = str_replace('portal/portal_topic_content_', '', $block['targettplname']);
-					$topic = DB::fetch_first('SELECT uid FROM '.DB::table('portal_topic')." WHERE topicid='".intval($id)."'");
-					if($topic['uid'] == $_G['uid']) {
-						$perm = $allperm;
-					}
 				}
 			}
 		}
 	}
-
 	return $perm;
 }
 
@@ -924,4 +875,79 @@ function check_articleperm($catid, $aid = 0, $article = array(), $isverify = fal
 	}
 }
 
+function getportalarticletplname($catid, $primaltplname = ''){
+	global $_G;
+	loadcache('portalcategory');
+	$oldcatid = $catid;
+	$portalcategory = $_G['cache']['portalcategory'];
+	while(!empty($catid)) {
+		if(!empty($portalcategory[$catid]['articleprimaltplname'])) {
+			$primaltplname = $portalcategory[$catid]['articleprimaltplname'];
+			break;
+		} else {
+			$catid = $portalcategory[$catid]['upid'];
+		}
+	}
+	$catid = empty($catid) ? $oldcatid : $catid;
+	return array($catid, $primaltplname);
+}
+
+function addportalarticlecomment($id, $message, $idtype = 'aid') {
+	global $_G;
+
+	$id = intval($id);
+	if(empty($id)) {
+		return 'comment_comment_noexist';
+	}
+	$message = getstr($message, $_G['group']['allowcommentarticle'], 1, 1, 1, 0);
+	if(strlen($message) < 2) return 'content_is_too_short';
+
+	$idtype = in_array($idtype, array('aid' ,'topicid')) ? $idtype : 'aid';
+	$tablename = $idtype == 'aid' ? 'portal_article_title' : 'portal_topic';
+	$data = DB::fetch_first("SELECT uid,allowcomment FROM ".DB::table($tablename)." WHERE $idtype='$id'");
+	if(empty($data)) {
+		return 'comment_comment_noexist';
+	}
+	if($data['allowcomment'] != 1) {
+		return 'comment_comment_notallowed';
+	}
+
+	$message = censor($message);
+	if(censormod($message)) {
+		$comment_status = 1;
+	} else {
+		$comment_status = 0;
+	}
+
+	$setarr = array(
+		'uid' => $_G['uid'],
+		'username' => $_G['username'],
+		'id' => $id,
+		'idtype' => $idtype,
+		'postip' => $_G['onlineip'],
+		'dateline' => $_G['timestamp'],
+		'status' => $comment_status,
+		'message' => $message
+	);
+
+	$pcid = DB::insert('portal_comment', $setarr, true);
+
+	if($comment_status == 1) {
+		updatemoderate($idtype.'_cid', $pcid);
+		$notifykey = $idtype == 'aid' ? 'verifyacommont' : 'verifytopiccommont';
+		manage_addnotify($notifykey);
+	}
+	$tablename = $idtype == 'aid' ? 'portal_article_count' : 'portal_topic';
+	DB::query("UPDATE ".DB::table($tablename)." SET commentnum=commentnum+1 WHERE $idtype='$id'");
+	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
+
+	if($data['uid'] != $_G['uid']) {
+		updatecreditbyaction('portalcomment', 0, array(), $idtype.$id);
+	}
+	return 'do_success';
+}
+
+function trimdxtpllang($s){
+	return str_replace(array('{', '$', '<', '>'), array('{ ', '$ ', '', ''), $s);
+}
 ?>

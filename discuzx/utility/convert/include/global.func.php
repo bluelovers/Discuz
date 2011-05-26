@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: global.func.php 10854 2010-05-17 08:44:08Z cnteacher $
+ * $Id: global.func.php 20661 2011-03-01 08:08:07Z shanzongjun $
  */
 
 function remaintime($time) {
@@ -555,10 +555,11 @@ function show_config_input($type, $config, $error = array()) {
 	}
 	foreach ($config as $key => $value) {
 		$addmsg = $error && $key == 'dbhost' ? lang($error) : '';
+		$tip = $key == 'pconnect' ? lang('tips_pconnect') : '';
 		show_table_row(	array(
 		array('width="150"', lang('config_'.$key)),
 		array('class="bg2"', '<input type="text" size="40" name="newconfig['.$type.']['.$key.']" value="'.htmlspecialchars($value).'">'),
-		array('class="bg2"', '<font color="red">'.$addmsg.'</font>')
+		array('class="bg2"', '<font color="red">'.$tip.'</font><font color="red">'.$addmsg.'</font>')
 		), 'bg1'
 		);
 	}

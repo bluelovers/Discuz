@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_highlight.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: magic_highlight.php 19561 2011-01-10 02:28:57Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,6 +21,7 @@ class magic_highlight {
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
 	var $magic = array();
 	var $parameters = array();
+	var $idtypearray = array('blogid', 'tid');
 
 	function getsetting(&$magic) {
 		global $_G;
@@ -56,45 +57,62 @@ class magic_highlight {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_tid'])) {
-			showmessage(lang('magic/highlight', 'highlight_info_nonexistence'));
+		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
+		if(!in_array($idtype, $this->idtypearray)) {
+			showmessage(lang('magic/highlight', 'highlight_info_notype'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		}
+		if(empty($_G['gp_id'])) {
+			showmessage(lang('magic/highlight', 'highlight_info_nonexistence_'.$idtype));
 		}
 
-		$thread = getpostinfo($_G['gp_tid'], 'tid', array('fid', 'authorid', 'subject'));
-		$this->_check($thread['fid']);
-		magicthreadmod($_G['gp_tid']);
-
-		DB::query("UPDATE ".DB::table('forum_thread')." SET highlight='$_G[gp_highlight_color]', moderated='1' WHERE tid='$_G[gp_tid]'");
-		$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
-		$expiration = TIMESTAMP + $this->parameters['expiration'] * 3600;
+		if($idtype == 'tid') {
+			$info = getpostinfo($_G['gp_id'], $idtype, array('fid', 'authorid', 'subject'));
+			$this->_check($info['fid']);
+			magicthreadmod($_G['gp_id']);
+			DB::query("UPDATE ".DB::table('forum_thread')." SET highlight='$_G[gp_highlight_color]', moderated='1' WHERE tid='$_G[gp_id]'");
+			$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
+			$expiration = TIMESTAMP + $this->parameters['expiration'] * 3600;
+			updatemagicthreadlog($_G['gp_id'], $this->magic['magicid'], $expiration > 0 ? 'EHL' : 'HLT', $expiration);
+			if($info['authorid'] != $_G['uid']) {
+				notification_add($info['authorid'], 'magic', lang('magic/stick', 'highlight_notification'), array('tid' => $_G['gp_id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+			}
+		} elseif($idtype == 'blogid') {
+			$info = getpostinfo($_G['gp_id'], $idtype, array('uid', 'subject'));
+			DB::query("UPDATE ".DB::table('home_blogfield')." SET magiccolor='$_G[gp_highlight_color]' WHERE blogid='$_G[gp_id]'");
+			if($info['uid'] != $_G['uid']) {
+				notification_add($info['uid'], 'magic', lang('magic/stick', 'highlight_notification_blogid'), array('blogid' => $_G['gp_id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+			}
+		}
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
-		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_G['gp_tid']);
-		updatemagicthreadlog($_G['gp_tid'], $this->magic['magicid'], $expiration > 0 ? 'EHL' : 'HLT', $expiration);
+		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, $idtype, $_G['gp_id']);
 
-		if($thread['authorid'] != $_G['uid']) {
-			notification_add($thread['authorid'], 'magic', lang('magic/stick', 'highlight_notification'), array('tid' => $_G['gp_tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
-		}
-
-		showmessage(lang('magic/highlight', 'highlight_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/highlight', 'highlight_succeed_'.$idtype), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$tid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		if($tid) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid'));
-			$this->_check($thread['fid']);
+		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
+		if(!in_array($idtype, $this->idtypearray)) {
+			showmessage(lang('magic/highlight', 'highlight_info_notype'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
 		}
-		$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
+		if($id) {
+			$info = getpostinfo($_G['gp_id'], $idtype);
+			if($idtype == 'tid') {
+				$this->_check($info['fid']);
+				$this->parameters['expiration'] = $this->parameters['expiration'] && $idtype == 'tid' ? intval($this->parameters['expiration']) : 24;
+			}
+		}
 		magicshowtype('top');
 		$lang = lang('magic/highlight');
-		magicshowsetting(lang('magic/highlight', 'highlight_info', array('expiration' => $this->parameters['expiration'])), 'tid', $tid, 'text');
+		magicshowsetting(lang('magic/highlight', 'highlight_info_'.$idtype, array('expiration' => $this->parameters['expiration'])), 'id', $id, 'hidden');
 echo <<<EOF
 	<p class="mtm mbn">$lang[highlight_color]</p>
 	<div class="hasd mbm cl">
 		<input type="hidden" id="highlight_color" name="highlight_color" />
-		<input type="text" readonly="readonly" class="crl" id="highlight_color_show" />
+		<input type="hidden" id="highlight_idtype" name="idtype" value="$idtype"/>
+		<input type="text" id="highlight_color_show" class="crl readonly="readonly"" />
 		<a href="javascript:;" id="highlight_color_ctrl" class="dpbtn" onclick="showHighLightColor('highlight_color')">^</a>
 	</div>
 	<script type="text/javascript" reload="1">
@@ -122,9 +140,12 @@ EOF;
 
 	function buy() {
 		global $_G;
+		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
 		if(!empty($_G['gp_id'])) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid'));
-			$this->_check($thread['fid']);
+			$info = getpostinfo($_G['gp_id'], $idtype);
+			if($idtype == 'tid') {
+				$this->_check($info['fid']);
+			}
 		}
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 17351 2010-10-11 05:03:55Z zhangguosheng $
+ *      $Id: portalcp_article.php 22552 2011-05-12 05:36:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,11 +48,15 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	}
 	$_POST['title'] = censor($_POST['title']);
 
-	if(empty($_POST['summary'])) $_POST['summary'] = preg_replace("/(\s|###NextPage###)+/", ' ', $_POST['content']);
+	$_POST['pagetitle'] = getstr(trim($_POST['pagetitle']), 60, 1, 1);
+	$_POST['pagetitle'] = censor($_POST['pagetitle']);
+
+	$highlight_style = $_G['gp_highlight_style'];
+	$style = '';
+	$style = implode('|',$highlight_style);
+	if(empty($_POST['summary'])) $_POST['summary'] = preg_replace("/(\s|###NextPage(\[title=.*?\])?###)+/", ' ', $_POST['content']);
 	$summary = portalcp_get_summary(stripslashes($_POST['summary']));
 	$summary = censor($summary);
-	$prename = getstr(dhtmlspecialchars($_POST['prename']), 255, 1, 1);
-	$prename = censor($prename);
 
 	$_G['gp_author'] = dhtmlspecialchars($_G['gp_author']);
 	$_G['gp_url'] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_url']));
@@ -61,7 +65,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	$_G['gp_dateline'] = !empty($_G['gp_dateline']) ? strtotime($_G['gp_dateline']) : TIMESTAMP;
 	$_G['gp_shorttitle'] = getstr(trim(dhtmlspecialchars($_G['gp_shorttitle'])), 80, 1, 1);
 	$_G['gp_shorttitle'] = censor($_G['gp_shorttitle']);
-	if(censormod($prename) || censormod($_G['gp_shorttitle']) || censormod($_POST['title']) || $_G['group']['allowpostarticlemod']) {
+	if(censormod($_G['gp_shorttitle']) || censormod($_POST['title']) || $_G['group']['allowpostarticlemod']) {
 		$article_status = 1;
 	} else {
 		$article_status = 0;
@@ -77,21 +81,22 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		'url' => $_G['gp_url'],
 		'allowcomment' => !empty($_POST['forbidcomment']) ? '0' : '1',
 		'summary' => addslashes($summary),
-		'prename' => $prename,
-		'preurl' => $_POST['preurl'],
 		'catid' => intval($_POST['catid']),
 		'tag' => article_make_tag($_POST['tag']),
 		'status' => $article_status,
+		'highlight' => $style,
+		'showinnernav' => empty($_POST['showinnernav']) ? '0' : '1',
 	);
+
 	if(empty($setarr['catid'])) {
 		showmessage('article_choose_system_category');
 	}
 
 	if($_G['gp_conver']) {
-		$converfiles = unserialize(stripcslashes($_G['gp_conver']));
-		$setarr['pic'] = $converfiles['pic'];
-		$setarr['thumb'] = $converfiles['thumb'];
-		$setarr['remote'] = $converfiles['remote'];
+		$converfiles = unserialize(stripslashes($_G['gp_conver']));
+		$setarr['pic'] = addslashes($converfiles['pic']);
+		$setarr['thumb'] = intval($converfiles['thumb']);
+		$setarr['remote'] = intval($converfiles['remote']);
 	}
 
 	$id = 0;
@@ -157,7 +162,12 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	} else {
 		$article_status = 0;
 	}
-	$contents = explode('###NextPage###', $content);
+
+	$regexp = '/(###NextPage(\[title=(.*?)\])?###)+/';
+	preg_match_all($regexp, $content ,$arr);
+	$pagetitle = !empty($arr[3]) ? $arr[3] : array();
+	$pagetitle = array_map('trim', $pagetitle);
+	$contents = preg_split($regexp, $content);
 	$content_count = count($contents);
 
 	$pageorder = intval($_POST['pageorder']);
@@ -179,14 +189,16 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 	if($article_content) {
 		$setarr = array(
+			'title' => $_POST['pagetitle'],
 			'content' => trim($contents[0]),
 			'pageorder' => $pageorder,
 			'dateline' => $_G['timestamp']
 		);
 		DB::update('portal_article_content', $setarr, array('cid'=>$cid));
-		if(censormod($contents[0])) {
-			DB::update('portal_article_title', array('status' => 1), array('aid' => $aid));
+		if($article_status == 1) {
+			DB::update('portal_article_title', array('status' => '1'), array('aid' => $aid));
 		}
+
 		unset($contents[0]);
 	}
 
@@ -194,13 +206,17 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		$inserts = array();
 		foreach ($contents as $key => $value) {
 			$value = trim($value);
-			$inserts[] = "('$aid', '$value', '".($pageorder+$key)."', '$_G[timestamp]', '$id', '$idtype')";
+			$inserts[] = "('$aid', '".(empty($pagetitle[$key-1]) ? $_POST['pagetitle'] : $pagetitle[$key-1])."', '$value', '".($pageorder+$key)."', '$_G[timestamp]', '$id', '$idtype')";
 		}
 		DB::query("INSERT INTO ".DB::table('portal_article_content')."
-			(aid, content, pageorder, dateline, id, idtype)
+			(aid, title, content, pageorder, dateline, id, idtype)
 			VALUES ".implode(',', $inserts));
 
 		DB::query('UPDATE '.DB::table('portal_article_title')." SET status = '$article_status', contents = contents+".count($inserts)." WHERE aid='$aid'");
+	}
+	if($article_status == 1) {
+		updatemoderate('aid', $aid);
+		manage_addnotify('verifyarticle');
 	}
 
 	$newaids = array();
@@ -275,12 +291,31 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	}
 
 
-	if($_POST['addpage']) {
-		$url = 'portal.php?mod=portalcp&ac=article&op=addpage&aid='.$aid;
-	} else {
-		$url = $_POST['url']?"portal.php?mod=list&catid=$_POST[catid]":'portal.php?mod=view&aid='.$aid;
+	$viewarticleurl = $_POST['url']?"portal.php?mod=list&catid=$_POST[catid]":'portal.php?mod=view&aid='.$aid;
+
+	if(trim($_G['gp_from']) != '') {
+		$from_cookie = '';
+		$from_cookie_array = array();
+		$from_cookie = stripslashes(getcookie('from_cookie'));
+		$from_cookie_array = explode('\t', $from_cookie);
+		$from_cookie_array[] = $_G['gp_from'];
+		$from_cookie_array = array_unique($from_cookie_array);
+		$from_cookie_array = array_filter($from_cookie_array);
+		$from_cookie_num = count($from_cookie_array);
+		$from_cookie_start = $from_cookie_num - 10;
+		$from_cookie_start = $from_cookie_start > 0 ? $from_cookie_start : 0;
+		$from_cookie_array = array_slice($from_cookie_array, $from_cookie_start, $from_cookie_num);
+		$from_cookie = implode('\t', $from_cookie_array);
+		dsetcookie('from_cookie', $from_cookie);
 	}
-	showmessage('do_success', $url);
+	dsetcookie('clearUserdata', 'home');
+	$op = 'add_success';
+	$article_add_page_url = '';
+	$article_add_url = 'portal.php?mod=portalcp&ac=article&catid='.$catid;
+	if($_G['gp_addpage']) {
+		$article_add_page_url = $article_add_url.'&op=addpage&aid='.$aid;
+	}
+	include_once template("portal/portalcp_article");dexit();
 
 } elseif(submitcheck('pushplussubmit')) {
 
@@ -319,7 +354,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 	$pluscount = count($posts);
 	DB::query('UPDATE '.DB::table('portal_article_title')." SET contents=contents+'$pluscount', owncomment='1' WHERE aid='$aid'");
-	$commentnum = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_comment')." WHERE aid='$aid'");
+	$commentnum = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_comment')." WHERE id='$aid' AND idtype='aid'");
 	DB::update('portal_article_count', array('commentnum'=>intval($commentnum)), array('aid'=>$aid));
 	showmessage('pushplus_do_success', $tourl, array(), array('header'=>1, 'refreshtime'=>0));
 
@@ -405,15 +440,25 @@ if ($op == 'delpage') {
 	$aids = $_POST['aids'];
 	$optype = $_POST['optype'];
 	if(empty($optype) || $optype == 'push') showmessage('article_action_invalid');
+	$aids = array_map('intval', $aids);
+	$aids = array_filter($aids);
 	if(empty($aids)) showmessage('article_not_choose');
 
 	if (submitcheck('batchsubmit')) {
 		if ($optype == 'trash' || $optype == 'delete') {
 				require_once libfile('function/delete');
 				$istrash = $optype == 'trash' ? 1 : 0;
-				$article = deletearticle($_POST['aids'], $istrash);
+				$article = deletearticle($aids, $istrash);
 				showmessage('article_delete_success', dreferer("portal.php?mod=portalcp&ac=category&catid={$article[0][catid]}"));
+		} elseif($optype == 'move') {
+			if($catid) {
+				DB::update('portal_article_title', array('catid'=>$catid), 'aid IN('.dimplode($aids).')');
+				showmessage('article_move_success', dreferer("portal.php?mod=portalcp&ac=category&catid=$catid"));
+			} else {
+				showmessage('article_move_select_cat', dreferer());
+			}
 		}
+
 	}
 
 } elseif($op == 'verify') {
@@ -450,19 +495,48 @@ if ($op == 'delpage') {
 
 } else {
 
+	if(empty($_G['cache']['portalcategory'])) {
+		showmessage('portal_has_not_category');
+	}
+
+	if(!checkperm('allowmanagearticle') && !checkperm('allowpostarticle')) {
+		$allowcategorycache = array();
+		if($allowcategory = getallowcategory($_G['uid'])) {
+			foreach($allowcategory as $catid => $category) {
+				$allowcategorycache[$catid] = $_G['cache']['portalcategory'][$catid];
+			}
+		}
+		$_G['cache']['portalcategory'] = $allowcategorycache;
+	}
+
+	if(empty($_G['cache']['portalcategory'])) {
+		showmessage('portal_article_add_nopermission');
+	}
+
+	$category = $_G['cache']['portalcategory'];
+	$cate = $category[$catid];
+	$categoryselect = category_showselect('portal', 'catid', false, !empty($article['catid']) ? $article['catid'] : $catid);
+
 	if($aid) {
 		$catid = intval($article['catid']);
 	}
-	check_articleperm($catid, $aid, $article);
+
+	if($aid && $article['highlight']) {
+		$stylecheck = '';
+		$stylecheck = explode('|', $article['highlight']);
+	}
+
+	$from_cookie_str = '';
+	$from_cookie = array();
+	$from_cookie_str = stripcslashes(getcookie('from_cookie'));
+	$from_cookie = explode('\t', $from_cookie_str);
+	$from_cookie = array_filter($from_cookie);
 
 	$page = empty($_GET['page'])?1:intval($_GET['page']);
 	if($page<1) $page = 1;
 	$start = $page-1;
 
 	$pageselect = '';
-
-	$category = $_G['cache']['portalcategory'];
-	$cate = $category[$catid];
 
 	if($article) {
 
@@ -474,7 +548,7 @@ if ($op == 'delpage') {
 		}
 
 		$article['attach_image'] = $article['attach_file'] = '';
-		$query = DB::query("SELECT * FROM ".DB::table('portal_attachment')." WHERE aid='$aid' ORDER BY attachid");
+		$query = DB::query("SELECT * FROM ".DB::table('portal_attachment')." WHERE aid='$aid' ORDER BY attachid DESC");
 		while ($value = DB::fetch($query)) {
 			if($value['isimage']) {
 				if($article['pic']) {
@@ -484,6 +558,24 @@ if ($op == 'delpage') {
 			} else {
 				$article['attach_file'] .= get_uploadcontent($value);
 			}
+		}
+		if($article['idtype'] == 'tid') {
+			$query = DB::query("SELECT * FROM ".DB::table(getattachtablebytid($article['id']))." WHERE tid='$article[id]'");
+			while ($value = DB::fetch($query)) {
+				if($value['isimage']) {
+					if($article['pic']) {
+						$value['pic'] = $article['pic'];
+					}
+					$value['attachid'] = $value['aid'];
+					$article['attach_image'] .= get_uploadcontent($value, 'forum');
+				} else {
+					$article['attach_file'] .= get_uploadcontent($value, 'forum');
+				}
+			}
+		}
+
+		if($article['pic']) {
+			$article['conver'] = addslashes(serialize(array('pic'=>$article['pic'], 'thumb'=>$article['thumb'], 'remote'=>$article['remote'])));
 		}
 
 		if($article['contents'] > 0) {
@@ -518,7 +610,11 @@ if ($op == 'delpage') {
 
 		$havepush = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')." WHERE id='$_GET[from_id]' AND idtype='$_GET[from_idtype]'"), 0);
 		if($havepush) {
-			showmessage('article_push_'.$_GET['from_idtype'].'_invalid_repeat', '', array(), array('return'=>true));
+			if($_GET['from_idtype'] == 'blogid') {
+				showmessage('article_push_blogid_invalid_repeat', '', array(), array('return'=>true));
+			} else {
+				showmessage('article_push_tid_invalid_repeat', '', array(), array('return'=>true));
+			}
 		}
 
 		switch ($_GET['from_idtype']) {
@@ -532,7 +628,8 @@ if ($op == 'delpage') {
 				}
 				$article['title'] = getstr($blog['subject'], 0);
 				$article['summary'] = portalcp_get_summary($blog['message']);
-				$blog['message'] .= lang('portalcp', 'article_pushplus_info', array('author'=>$blog['username'], 'url'=>'home.php?mod=space&uid='.$blog['uid'].'&do=blog&id='.$blog['blogid']));
+				$article['fromurl'] = 'home.php?mod=space&uid='.$blog[uid].'&do=blog&id='.$blog[blogid];
+				$article['author'] = $blog['username'];
 				$article_content['content'] = dhtmlspecialchars($blog['message']);
 			}
 			break;
@@ -545,14 +642,24 @@ if ($op == 'delpage') {
 				$article['title'] = $thread['subject'];
 				$thread['message'] = portalcp_get_postmessage($thread);
 				$article['summary'] = portalcp_get_summary($thread['message']);
-				$thread['message'] .= lang('portalcp', 'article_pushplus_info', array('author'=>$thread['author'], 'url'=>'forum.php?mod=viewthread&tid='.$thread['tid']));
+				$article['fromurl'] = 'forum.php?mod=viewthread&tid='.$thread['tid'];
+				$article['author'] = $thread['author'];
 				$article_content['content'] = dhtmlspecialchars($thread['message']);
 
-				$query = DB::query("SELECT aid FROM ".DB::table('forum_attachment')." WHERE pid='$thread[pid]'");
+				$article['attach_image'] = $article['attach_file'] = '';
+				$query = DB::query("SELECT * FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE pid='$thread[pid]' ORDER BY aid DESC");
 				while($attach = DB::fetch($query)) {
 					$attachcode = '[attach]'.$attach['aid'].'[/attach]';
 					if(!strexists($article_content['content'], $attachcode)) {
 						$article_content['content'] .= '<br /><br />'.$attachcode;
+					}
+					if($attach['isimage']) {
+						if($article['pic']) {
+							$attach['pic'] = $article['pic'];
+						}
+						$article['attach_image'] .= get_uploadcontent($attach, 'forum');
+					} else {
+						$article['attach_file'] .= get_uploadcontent($attach, 'forum');
 					}
 				}
 			}

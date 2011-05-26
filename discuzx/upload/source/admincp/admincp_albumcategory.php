@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_albumcategory.php 16782 2010-09-14 09:11:35Z zhangguosheng $
+ *      $Id: admincp_albumcategory.php 20616 2011-03-01 01:05:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -23,8 +23,8 @@ if($operation == 'list') {
 
 		shownav('portal', 'albumcategory');
 		showsubmenu('albumcategory',  array(
-					array('list', 'albumcategory', 1)
-				));
+			array('list', 'albumcategory', 1)
+		));
 
 		showformheader('albumcategory');
 		showtableheader();
@@ -116,11 +116,11 @@ SCRIPT;
 			cpmsg('albumcategory_delete_succeed', 'action=albumcategory', 'succeed');
 		}
 
-		shownav('album', 'albumcategory');
+		shownav('portal', 'albumcategory');
 		showsubmenu('albumcategory',  array(
-					array('list', 'albumcategory', 0),
-					array('delete', 'albumcategory&operation=delete&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'albumcategory', 0),
+			array('delete', 'albumcategory&operation=delete&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('albumcategory&operation=delete&catid='.$_GET['catid']);
 		showtableheader();
@@ -133,7 +133,7 @@ SCRIPT;
 			);
 		}
 		include_once libfile('function/portalcp');
-		showsetting('albumcategory_article_moveto', '', '', category_showselect('portal', 'tocatid', false, $category[$_GET['catid']]['upid']));
+		showsetting('albumcategory_article_moveto', '', '', category_showselect('album', 'tocatid', false, $category[$_GET['catid']]['upid']));
 		showsubmit('deletesubmit');
 		showtablefooter();
 		showformfooter();

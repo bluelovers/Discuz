@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_smilies.php 13987 2010-08-04 06:12:54Z chenchunshao $
+ *      $Id: admincp_smilies.php 19831 2011-01-19 07:54:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -407,7 +407,11 @@ EOT;
 
 		require_once libfile('function/importdata');
 		$renamed = import_smilies();
-		cpmsg($renamed ? 'smilies_import_succeed_renamed' : 'smilies_import_succeed', 'action=smilies', 'succeed');
+		if($renamed) {
+			cpmsg('smilies_import_succeed_renamed', 'action=smilies', 'succeed');
+		} else {
+			cpmsg('smilies_import_succeed', 'action=smilies', 'succeed');
+		}
 
 	}
 

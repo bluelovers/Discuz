@@ -5,14 +5,14 @@
 	</h3>
 	<form method="post" autocomplete="off" id="attentionform" name="attentionform" action="group.php?mod=attentiongroup" onsubmit="ajaxpost('attentionform', 'return_attentiongroup', 'return_attentiongroup', 'onerror');return false;">
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="cl">
 			<div class="bm_c attgroup cl">
 				<ul>
 				<!--{loop $usergroups['groups'] $groupid $groupname}-->
 					<!--{if in_array($groupid, $attentiongroup)}-->
-					<li id="li$groupid"><input type="checkbox" value="$groupid" name="attentiongroupid[]" id="attentiongroupid_$groupid" checked="checked" onclick="attention_checkbox(this, 'attentionform', 'attentiongroupid', 5)" class="pc"><label for="attentiongroupid_$groupid"> $groupname</label></li>
+					<li id="li$groupid"><label for="attentiongroupid_$groupid"><input type="checkbox" name="attentiongroupid[]" id="attentiongroupid_$groupid" class="pc" value="$groupid" checked="checked" onclick="attention_checkbox(this, 'attentionform', 'attentiongroupid', 5)" />$groupname</label></li>
 					<!--{/if}-->
 				<!--{/loop}-->
 					<li id="heightline"></li>
@@ -23,7 +23,7 @@
 				<ul>
 					<!--{loop $usergroups['groups'] $groupid $groupname}-->
 						<!--{if !in_array($groupid, $attentiongroup)}-->
-						<li id="li$groupid"><input type="checkbox" value="$groupid" name="attentiongroupid[]" id="attentiongroupid_$groupid" onclick="attention_checkbox(this, 'attentionform', 'attentiongroupid', 5)" class="pc"><label for="attentiongroupid_$groupid"> $groupname</label></li>
+						<li id="li$groupid"><label for="attentiongroupid_$groupid"><input type="checkbox" name="attentiongroupid[]" id="attentiongroupid_$groupid" class="pc" value="$groupid" onclick="attention_checkbox(this, 'attentionform', 'attentiongroupid', 5)" />$groupname</label></li>
 						<!--{/if}-->
 					<!--{/loop}-->
 					<li id="lowerline"></li>

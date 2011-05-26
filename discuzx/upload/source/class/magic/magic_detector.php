@@ -54,14 +54,14 @@ class magic_detector {
 		$mid = !empty($_G['magics']['gift']) ? intval($_G['magics']['gift']['magicid']) : 0;
 		if($mid) {
 			$query = DB::query('SELECT * FROM '.DB::table('common_magiclog')." WHERE magicid = '$mid' AND action='2' AND uid != '$_G[uid]' ORDER BY dateline DESC LIMIT 0,$limit");
-			while($value = $_SGLOBAL['db']->fetch_array($query)) {
+			while($value=DB::fetch($query)) {
 				$uids[] = intval($value['uid']);
 			}
 		}
 		if($uids) {
 			$counter = 0;
 			$query = DB::query('SELECT m.username, mfh.uid, mfh.magicgift FROM '.DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_field_home')." mfh USING(uid) WHERE m.uid IN (".dimplode($uids).")");
-			while(($value=DB::fetch($query))) {
+			while($value=DB::fetch($query)) {
 				$info = !empty($value['magicgift']) ? unserialize($value['magicgift']) : array();
 				if(!empty($info['left']) && (empty($info['receiver']) || !in_array($_G['uid'], $info['receiver']))) {
 					$value['avatar'] = addcslashes(avatar($value['uid'], 'small'), "'");

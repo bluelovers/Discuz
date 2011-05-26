@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 17216 2010-09-26 10:04:54Z monkey $
+ *      $Id: admincp_adv.php 21777 2011-04-12 03:12:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,6 +15,8 @@ $root = '<a href="'.ADMINSCRIPT.'?action=adv">'.cplang('adv_admin').'</a>';
 
 $operation = $operation ? $operation : 'list';
 
+$defaulttargets = array('portal', 'home', 'member', 'forum', 'group', 'userapp', 'plugin');
+
 if(!empty($_G['gp_preview'])) {
 	$_G['gp_advnew'][$_G['gp_advnew']['style']]['url'] = $_G['gp_TMPadvnew'.$_G['gp_advnew']['style']] ? $_G['gp_TMPadvnew'.$_G['gp_advnew']['style']] : $_G['gp_advnew'.$_G['gp_advnew']['style']];
 	$data = dstripslashes(encodeadvcode($_G['gp_advnew']));
@@ -22,20 +24,20 @@ if(!empty($_G['gp_preview'])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<meta http-equiv="Content-Type" content="text/html; charset=<?=CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
 <head>
-<script type="text/javascript">var IMGDIR = '<? echo $_G['style']['imgdir']; ?>', cookiepre = '<?=$_G['config']['cookie']['cookiepre']?>', cookiedomain = '<?=$_G['config']['cookie']['cookiedomain']?>', cookiepath = '<?=$_G['config']['cookie']['cookiepath']?>';</script>
+<script type="text/javascript">var IMGDIR = '<?php echo $_G['style']['imgdir']; ?>', cookiepre = '<?php echo $_G['config']['cookie']['cookiepre'];?>', cookiedomain = '<?php echo $_G['config']['cookie']['cookiedomain'];?>', cookiepath = '<?php echo $_G['config']['cookie']['cookiepath'];?>';</script>
 <script type="text/javascript" src="static/js/common.js"></script>
-<link rel="stylesheet" type="text/css" href="data/cache/style_<?=$_G['setting']['styleid']?>_common.css" />
+<link rel="stylesheet" type="text/css" href="data/cache/style_<?php echo $_G['setting']['styleid'];?>_common.css" />
 </head>
 <body>
 <div id="append_parent"></div><div id="ajaxwaitid"></div>
 <div id="hd"><div class="wp">
-<?=$data?>
+<?php echo $data;?>
 </div></div>
 </body>
 </html>
-<?
+<?php
 
 exit;
 }
@@ -48,6 +50,7 @@ if($operation == 'ad') {
 
 		shownav('extended', 'adv_admin');
 		$type = $_G['gp_type'];
+		$target = $_G['gp_target'];
 		$typeadd = '';
 		if($type) {
 			$advfile = libfile('adv/'.$type, 'class');
@@ -84,6 +87,7 @@ if($operation == 'ad') {
 		$conditions .= $starttime > 0 ? " AND starttime>='".(TIMESTAMP - $starttime)."'" : ($starttime == -1 ? " AND starttime='0'" : '');
 		$conditions .= $endtime > 0 ? " AND endtime>0 AND endtime<'".(TIMESTAMP + $endtime)."'" : ($endtime == -1 ? " AND endtime='0'" : '');
 		$conditions .= $type ? " AND type='$type'" : '';
+		$conditions .= $target ? " AND targets LIKE '%".$target."%'" : '';
 		$order_by = $orderby == 'starttime' ? 'starttime' : ($orderby == 'type' ? 'type' : ($orderby == 'displayorder' ? 'displayorder' : 'advid DESC'));
 
 		$advnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_advertisement')." WHERE 1 $conditions");
@@ -140,11 +144,17 @@ if($operation == 'ad') {
 			));
 		}
 
-		$multipage = multi($advnum, $advppp, $page, ADMINSCRIPT.'?action=adv&operation=ad'.($type ? '&type='.rawurlencode($type) : '').($title ? '&title='.rawurlencode($title) : '').($starttime ? "&starttime=$starttime" : '').($endtime ? "&endtime=$endtime" : '').($orderby ? "&orderby=$orderby" : ''), 0, 3, TRUE, TRUE);
+		$multipage = multi($advnum, $advppp, $page, ADMINSCRIPT.'?action=adv&operation=ad'.($type ? '&type='.rawurlencode($type) : '').($target ? '&target='.rawurlencode($target) : '').($title ? '&title='.rawurlencode($title) : '').($starttime ? "&starttime=$starttime" : '').($endtime ? "&endtime=$endtime" : '').($orderby ? "&orderby=$orderby" : ''), 0, 3, TRUE, TRUE);
 
 		$starttimecheck = array($starttime => 'selected="selected"');
 		$endtimecheck = array($endtime => 'selected="selected"');
 		$orderbycheck = array($orderby => 'selected="selected"');
+
+		$targetselect = '<select name="target"><option>'.$lang['adv_targets'].'</option>';
+		foreach($defaulttargets as $v) {
+			$targetselect .= '<option value="'.$v.'"'.($v == $target ? ' selected="selected"' : '').'>'.$lang['adv_edit_targets_'.$v].'</option>';
+		}
+		$targetselect .= '</select>';
 
 		showsubmit('advsubmit', 'submit', 'del', $type ? '<input type="button" class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=adv&operation=add&type='.$_G['gp_type'].($_G['gp_type'] != 'custom' ? '' : '&customid='.$_G['gp_customid']).'\'" value="'.cplang('add').'" />' : '', $multipage.'
 <input type="text" class="txt" name="title" value="'.$title.'" size="15" onkeyup="if(event.keyCode == 13) this.form.searchsubmit.click()" onclick="this.value=\'\'"> &nbsp;&nbsp;
@@ -176,7 +186,8 @@ if($operation == 'ad') {
 '.(!$type ? '<option value="type" '.$orderbycheck['type'].'> '.cplang('adv_type').'</option>' : '').'
 <option value="displayorder" '.$orderbycheck['displayorder'].'> '.cplang('display_order').'</option>
 </select> &nbsp;&nbsp;
-<input type="button" class="btn" name="searchsubmit" value="'.cplang('search').'" onclick="if(this.form.title.value==\''.cplang('adv_inputtitle').'\'){this.form.title.value=\'\'}location.href=\''.ADMINSCRIPT.'?action=adv&operation=ad'.($type ? '&type='.rawurlencode($type) : '').'&title=\'+this.form.title.value+\'&starttime=\'+this.form.starttime.value+\'&endtime=\'+this.form.endtime.value+\'&orderby=\'+this.form.orderby.value;"> &nbsp;
+'.$targetselect.' &nbsp;&nbsp;
+<input type="button" class="btn" name="searchsubmit" value="'.cplang('search').'" onclick="if(this.form.title.value==\''.cplang('adv_inputtitle').'\'){this.form.title.value=\'\'}location.href=\''.ADMINSCRIPT.'?action=adv&operation=ad'.($type ? '&type='.rawurlencode($type) : '').'&title=\'+this.form.title.value+\'&starttime=\'+this.form.starttime.value+\'&endtime=\'+this.form.endtime.value+\'&target=\'+this.form.target.value+\'&orderby=\'+this.form.orderby.value;"> &nbsp;
 		');
 		showtablefooter();
 		showformfooter();
@@ -186,16 +197,6 @@ if($operation == 'ad') {
 		$advids = dimplode($_G['gp_delete']);
 
 		if($advids) {
-			$query = DB::query("SELECT parameters FROM ".DB::table('common_advertisement')." WHERE advid IN ($advids)");
-			while($adv = DB::fetch($query)) {
-				$parameters = unserialize($adv['parameters']);
-				if($parameters['url']) {
-					$valueparse = parse_url($parameters['url']);
-					if(!isset($valueparse['host'])) {
-						@unlink($parameters['url']);
-					}
-				}
-			}
 			DB::query("DELETE FROM ".DB::table('common_advertisement')." WHERE advid IN ($advids)");
 		}
 
@@ -220,7 +221,7 @@ if($operation == 'ad') {
 			$advid = $_G['gp_advid'];
 			$adv = DB::fetch_first("SELECT * FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
 			if(!$adv) {
-				cpmsg('undefined_action', '', 'error');
+				cpmsg('advertisement_nonexistence', '', 'error');
 			}
 			$adv['parameters'] = unserialize($adv['parameters']);
 			$type = $adv['type'];
@@ -394,7 +395,9 @@ if($operation == 'ad') {
 
 		if($operation == 'edit') {
 			$advid = $_G['gp_advid'];
-			$type = DB::result_first("SELECT type FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
+			$adv = DB::fetch_first("SELECT * FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
+			$type = $adv['type'];
+			$adv['parameters'] = unserialize($adv['parameters']);
 		} else {
 			$type = $_G['gp_type'];
 		}
@@ -429,8 +432,6 @@ if($operation == 'ad') {
 
 		if($operation == 'add') {
 			$advid = DB::insert('common_advertisement', array('available' => 1, 'type' => $type), 1);
-		} else {
-			$type = DB::result_first("SELECT type FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
 		}
 
 		if($advnew['style'] == 'image' || $advnew['style'] == 'flash') {
@@ -438,7 +439,7 @@ if($operation == 'ad') {
 				require_once libfile('class/upload');
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['advnew'.$advnew['style']], 'common') && $upload->save(1)) {
-					$advnew[$advnew['style']]['url'] = $_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
+					$advnew[$advnew['style']]['url'] = $_G['siteurl'].$_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
 				}
 			} else {
 				$advnew[$advnew['style']]['url'] = $_G['gp_advnew'.$advnew['style']];
@@ -463,17 +464,49 @@ if($operation == 'ad') {
 		updatecache('setting');
 
 		if($operation == 'edit') {
-			cpmsg('adv_succeed', $_G['gp_referer'], 'succeed');
+			cpmsg('adv_succeed', dreferer(), 'succeed');
 		} else {
 			cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
 		}
 
 	}
 
+} elseif($operation == 'setting') {
+
+	if(submitcheck('advsubmit')) {
+		$_G['gp_advexpirationnew']['allow'] = $_G['gp_advexpirationnew']['allow'] && $_G['gp_advexpirationnew']['day'] > 0 && $_G['gp_advexpirationnew']['method'] && $_G['gp_advexpirationnew']['users'];
+		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('advexpiration', '".addslashes(serialize($_G['gp_advexpirationnew']))."')");
+		updatecache('setting');
+		cpmsg('setting_update_succeed', 'action=adv&operation=setting', 'succeed');
+	} else {
+		shownav('extended', 'adv_admin');
+		showsubmenu('adv_admin', array(
+			array('adv_admin_setting', 'adv&operation=setting', 1),
+			array('adv_admin_list', 'adv&operation=list', 0),
+			array('adv_admin_listall', 'adv&operation=ad', 0),
+		));
+
+		$advexpiration = (array)unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='advexpiration'"));
+		showformheader('adv&operation=setting');
+		showtableheader();
+		showsetting('adv_setting_advexpiration', 'advexpirationnew[allow]', $advexpiration['allow'], 'radio', 0, 1);
+		showsetting('adv_setting_advexpiration_day', 'advexpirationnew[day]', $advexpiration['day'], 'text');
+		showsetting('adv_setting_advexpiration_method', array('advexpirationnew[method]', array(
+			array('email', cplang('adv_setting_advexpiration_method_email')),
+			array('notice', cplang('adv_setting_advexpiration_method_notice')),
+		)), $advexpiration['method'], 'mcheckbox');
+		showsetting('adv_setting_advexpiration_users', 'advexpirationnew[users]', $advexpiration['users'], 'textarea');
+		showtagfooter('tbody');
+		showsubmit('advsubmit');
+		showtablefooter();
+		showformfooter();
+	}
+
 } elseif($operation == 'list') {
 
 	shownav('extended', 'adv_admin');
 	showsubmenu('adv_admin', array(
+		array('adv_admin_setting', 'adv&operation=setting', 0),
 		array('adv_admin_list', 'adv&operation=list', 1),
 		array('adv_admin_listall', 'adv&operation=ad', 0),
 	));
@@ -481,6 +514,11 @@ if($operation == 'ad') {
 
 	$advs = getadvs();
 	showtableheader('', 'fixpadding');
+
+	echo '<tr><td colspan="4">'.$lang['adv_targets'].': &nbsp;&nbsp; ';
+	foreach($defaulttargets as $target) {
+		echo '<a href="'.ADMINSCRIPT.'?action=adv&operation=ad&target='.$target.'">'.$lang['adv_edit_targets_'.$target].'</a> &nbsp;&nbsp; ';
+	}
 
 	$row = 4;
 	$rowwidth = 1 / $row * 100;

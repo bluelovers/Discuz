@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_specialuser.php 17401 2010-10-18 03:35:50Z zhengqingpeng $
+ *      $Id: admincp_specialuser.php 19831 2011-01-19 07:54:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {

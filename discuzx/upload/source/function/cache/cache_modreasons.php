@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_modreasons.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_modreasons.php 19647 2011-01-12 09:25:33Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,14 +12,13 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_modreasons() {
-	$data = array();
-	$query = DB::query("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='modreasons'");
-
-	$modreasons = DB::result($query, 0);
-	$modreasons = str_replace(array("\r\n", "\r"), array("\n", "\n"), $modreasons);
-	$data = explode("\n", trim($modreasons));
-
-	save_syscache('modreasons', $data);
+	foreach(array('modreasons', 'userreasons') AS $key) {
+		$data = array();
+		$reasons = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='$key'");
+		$reasons = str_replace(array("\r\n", "\r"), array("\n", "\n"), $reasons);
+		$data = explode("\n", trim($reasons));
+		save_syscache($key, $data);
+	}
 }
 
 ?>

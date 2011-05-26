@@ -9,10 +9,10 @@
 </div>
 <!--{if $_G['forum']['threadtypes']}-->
 	<ul class="ttp bm cl">
-		<li{if !$_G['gp_typeid']} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]">{lang forum_viewall}</a></li>
+		<li id="ttp_all"{if !$_G['gp_typeid']} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]">{lang forum_viewall}</a></li>
 		<!--{if $_G['forum']['threadtypes']}-->
 			<!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
-				<li{if $_G['gp_typeid'] == $id} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]">$name</a>
+				<li{if $_G['gp_typeid'] == $id} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]{if $_G['gp_typeid'] != $id}&filter=typeid&typeid=$id$forumdisplayadd[typeid]{/if}">$name</a>
 			<!--{/loop}-->
 		<!--{/if}-->
 		<!--{hook/forumdisplay_filter_extra}-->
@@ -37,6 +37,7 @@
 			<input type="hidden" name="listextra" value="$extra" />
 			<table cellpadding="0" cellspacing="0" border="0">
 				<!--{if $_G['forum_threadcount']}-->
+					<tbody class="emptb"><tr><td class="icn"></td><!--{if $_G['forum']['ismoderator']}--><td class="o"></td><!--{/if}--><th></th><td class="by"></td><td class="num"></td><td class="by"></td></tr></tbody>
 					<!--{loop $_G['forum_threadlist'] $key $thread}-->
 						<!--{ad/threadlist}-->
 						<tbody id="$thread[id]">
@@ -88,9 +89,9 @@
 									<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 									<!--{if $thread['price'] > 0}-->
 										<!--{if $thread['special'] == '3'}-->
-										- <span style="color: #C60">[{lang thread_reward}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]} <span class="bold">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}]</span>
+										- <span style="color: #C60">[{lang thread_reward}<span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 										<!--{else}-->
-										- [{lang price} {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]} <span class="bold">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}]
+										- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
 										<!--{/if}-->
 									<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
 										- <span style="color: #269F11">[{lang reward_solved}]</span>

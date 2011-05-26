@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 16279 2010-09-02 09:33:15Z zhengqingpeng $
+ *      $Id: space_notice.php 22054 2011-04-20 10:51:36Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$perpage = 100;
+$perpage = 30;
 $perpage = mob_perpage($perpage);
 
 $page = empty($_GET['page'])?0:intval($_GET['page']);
@@ -26,6 +26,7 @@ $multi = '';
 
 $view = (!empty($_GET['view']) && in_array($_GET['view'], array('userapp')))?$_GET['view']:'notice';
 $actives = array($view=>' class="a"');
+$opactives['notice'] = 'class="a"';
 
 if($view == 'userapp') {
 
@@ -34,12 +35,6 @@ if($view == 'userapp') {
 	if($_GET['op'] == 'del') {
 		$appid = intval($_GET['appid']);
 		DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE appid='$appid' AND touid='$_G[uid]'");
-
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_myinvite')." WHERE touid='$_G[uid]'"), 0);
-		$changecount = $count - $space['myinvitations'];
-		if($changecount) {
-			member_status_update($_G['uid'], array('myinvitations' => $changecount));
-		}
 
 		showmessage('do_success', "home.php?mod=space&do=notice&view=userapp&quickforward=1");
 	}
@@ -66,99 +61,64 @@ if($view == 'userapp') {
 		}
 	}
 
-	if(empty($count) && $space['myinvitations']) {
-		$changecount = 0 - $space['myinvitations'];
-		if($changecount) {
-			member_status_update($_G['uid'], array('myinvitations' => $changecount));
-		}
-	}
-
 } else {
-	space_merge($space, 'status');
 
 	if(!empty($_GET['ignore'])) {
 		DB::update('home_notification', array('new'=>'0', 'from_num'=>0), array('new'=>'1', 'uid'=>$_G['uid']));
-
-		$changecount = 0 - $space['notifications'];
-		if($changecount) {
-			member_status_update($_G['uid'], array('notifications' => $changecount));
-		}
 	}
 
 	foreach (array('wall', 'piccomment', 'blogcomment', 'clickblog', 'clickpic', 'sharecomment', 'doing', 'friend', 'credit', 'bbs', 'system', 'thread', 'task', 'group') as $key) {
 		$noticetypes[$key] = lang('notification', "type_$key");
 	}
 
+	$isread = in_array($_G['gp_isread'], array(0, 1)) ? intval($_G['gp_isread']) : 0;
 	$type = trim($_GET['type']);
-	$typesql = $type?"AND type='$type'":'';
+	$wherearr = array();
+	if(!empty($type)) {
+		$wherearr[] = "`type`='$type'";
+	}
+	$new = !$isread;
+	$wherearr[] = "`new`='$new'";
 
-	$fuids = $newids = array();
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $typesql"), 0);
+	$sql = ' AND '.implode(' AND ', $wherearr);
+
+
+	$newnotify = false;
+	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $sql"), 0);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $typesql ORDER BY new DESC, dateline DESC LIMIT $start,$perpage");
+		$limitstr = $isread ? " LIMIT $start,$perpage" : '';
+		$query = DB::query("SELECT * FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $sql ORDER BY new DESC, dateline DESC $limitstr");
 		while ($value = DB::fetch($query)) {
 			if($value['new']) {
-				$newids[] = $value['id'];
+				$newnotify = true;
 				$value['style'] = 'color:#000;font-weight:bold;';
 			} else {
 				$value['style'] = '';
 			}
-			$fuids[$value['id']] = $value['authorid'];
+			$value['rowid'] = '';
+			if(in_array($value['type'], array('friend', 'poke'))) {
+				$value['rowid'] = ' id="'.($value['type'] == 'friend' ? 'pendingFriend_' : 'pokeQuery_').$value['authorid'].'" ';
+			}
 			if($value['from_num'] > 0) $value['from_num'] = $value['from_num'] - 1;
 			$list[$value['id']] = $value;
 		}
-		if($fuids) {
-			require_once libfile('function/friend');
-			friend_check($fuids);
 
-			foreach($fuids as $key => $fuid) {
-				$value = array();
-				$value['isfriend'] = $fuid==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$fuid] ? 1 : 0;
-				$list[$key] = array_merge($list[$key], $value);
-			}
-
-		}
-		$multi = multi($count, $perpage, $page, "home.php?mod=space&do=$do");
-	}
-
-	$newnotice = $space['notifications'];
-	if($newids) {
-		DB::query("UPDATE ".DB::table('home_notification')." SET new='0', from_num='0' WHERE id IN (".dimplode($newids).")");
-		$newcount = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' AND new='1'"), 0);
-
-		$changecount = $newcount - $space['notifications'];
-		if($changecount) {
-			member_status_update($_G['uid'], array('notifications' => $changecount));
-		}
-
-		$space['notifications'] = $newcount;
-	}
-
-	$newprompt = 0;
-	foreach (array('notifications','myinvitations','pokes','pendingfriends') as $key) {
-		$newprompt = $newprompt + $space[$key];
-	}
-
-	if($newprompt != $space['newprompt']) {
-		$space['newprompt'] = $newprompt;
-		DB::update('common_member', array('newprompt'=>$newprompt), array('uid'=>$_G['uid']));
-	}
-
-	if($newprompt) {
-		$pokes = $pendingfriends = array();
-		if($space['pendingfriends']) {
-			$query = DB::query("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 0, 2");
-			while($value = DB::fetch($query)) {
-				$pendingfriends[] = $value;
-			}
-		}
-		if($space['pokes']) {
-			$query = DB::query("SELECT * FROM ".DB::table('home_poke')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 0, 2");
-			while($value = DB::fetch($query)) {
-				$pokes[] = $value;
-			}
+		$multi = '';
+		if($isread) {
+			$multi = multi($count, $perpage, $page, "home.php?mod=space&do=$do&isread=1");
 		}
 	}
+
+	if($newnotify) {
+		DB::query("UPDATE ".DB::table('home_notification')." SET new='0' WHERE uid='$_G[uid]' AND new='1'");
+	}
+
+	if($space['newprompt']) {
+		DB::update('common_member', array('newprompt'=>0), array('uid'=>$_G['uid']));
+	}
+
+	$readtag = array($isread => ' class="a"');
+
 
 }
 dsetcookie('promptstate_'.$_G['uid'], $newprompt, 31536000);

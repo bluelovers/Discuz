@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 17236 2010-09-27 05:54:06Z liulanbo $
+ *      $Id: function_misc.php 21331 2011-03-23 06:50:00Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -217,7 +217,6 @@ function procthread($thread, $timeformat = 'd') {
 	global $_G;
 
 	$lastvisit = $_G['member']['lastvisit'];
-	loadcache('icons');
 	if(empty($_G['forum_colorarray'])) {
 		$_G['forum_colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 	}
@@ -329,31 +328,6 @@ function checkreasonpm() {
 	return $reason;
 }
 
-function procreportlog($tids = '', $pids = '', $del = FALSE) {
-	return false;
-	global $_G;
-
-	if(!$pids && $tids) {
-		$pids = $comma = '';
-		$postarray = getfieldsofposts('pid', "tid IN ($tids)".($del ? '' : ' AND first=1'));
-		foreach($postarray as $post) {
-			$pids .= $comma.$post['pid'];
-			$comma = ',';
-		}
-	}
-	if($pids) {
-		if($del) {
-			DB::query("DELETE FROM ".DB::table('forum_report')." WHERE pid IN ($pids)", 'UNBUFFERED');
-		} else {
-			DB::query("UPDATE ".DB::table('forum_report')." SET status=0 WHERE pid IN ($pids)", 'UNBUFFERED');
-		}
-		if($_G['forum']['modworks'] && !DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_report')." WHERE fid='$_G[fid]' AND status=1")) {
-			DB::query("UPDATE ".DB::table('forum_forum')." SET modworks='0' WHERE fid='$_G[fid]'", 'UNBUFFERED');
-		}
-	}
-
-}
-
 function sendreasonpm($var, $item, $notevar) {
 	global $_G;
 	if(!empty($var['authorid']) && $var['authorid'] != $_G['uid']) {
@@ -364,16 +338,23 @@ function sendreasonpm($var, $item, $notevar) {
 	}
 }
 
-function modreasonselect($isadmincp = 0) {
+function modreasonselect($isadmincp = 0, $reasionkey = 'modreasons') {
 	global $_G;
-	if(!isset($_G['cache']['modreasons']) || !is_array($_G['cache']['modreasons'])) {
-		loadcache(array('modreasons', 'stamptypeid'));
+	if(!isset($_G['cache'][$reasionkey]) || !is_array($_G['cache'][$reasionkey])) {
+		loadcache(array($reasionkey, 'stamptypeid'));
 	}
 	$select = '';
-	foreach($_G['cache']['modreasons'] as $reason) {
-		$select .= !$isadmincp ? ($reason ? '<li>'.$reason.'</li>' : '<li></li>') : ($reason ? '<option value="'.htmlspecialchars($reason).'">'.$reason.'</option>' : '<option></option>');
+	if(!empty($_G['cache'][$reasionkey])) {
+		foreach($_G['cache'][$reasionkey] as $reason) {
+			$select .= !$isadmincp ? ($reason ? '<li>'.$reason.'</li>' : '<li>--------</li>') : ($reason ? '<option value="'.htmlspecialchars($reason).'">'.$reason.'</option>' : '<option></option>');
+		}
 	}
-	return $select;
+	if($select) {
+		return $select;
+	} else {
+		return false;
+	}
+
 }
 
 
@@ -422,49 +403,6 @@ function implodearray($array, $skip = array()) {
 	return $return;
 }
 
-function deletethreads($tids = array()) {
-	global $_G;
-
-	static $cleartable = array(
-		'forum_threadmod', 'forum_relatedthread', 'forum_post', 'forum_poll',
-		'forum_polloption', 'forum_trade', 'forum_activity', 'forum_activityapply', 'forum_debate',
-		'forum_debatepost', 'forum_attachment', 'forum_typeoptionvar', 'forum_forumrecommend', 'forum_postposition'
-	);
-
-	foreach($tids as $tid) {
-		my_thread_log('delete', array('tid' => $tid));
-	}
-
-	$threadsdel = 0;
-	if($tids = dimplode($tids)) {
-		$auidarray = array();
-		$query = DB::query("SELECT uid, attachment, dateline, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE tid IN ($tids)");
-		while($attach = DB::fetch($query)) {
-			dunlink($attach);
-			if($attach['dateline'] > $_G['setting']['losslessdel']) {
-				$auidarray[$attach['uid']] = !empty($auidarray[$attach['uid']]) ? $auidarray[$attach['uid']] + 1 : 1;
-			}
-		}
-
-		if($auidarray) {
-			updateattachcredits('-', $auidarray, $_G['setting']['creditspolicy']['postattach']);
-		}
-
-		require_once libfile('function/delete');
-		foreach($cleartable as $tb) {
-			if($tb == 'forum_post') {
-				deletepost("tid IN ($tids)");
-				continue;
-			}
-			DB::query("DELETE FROM ".DB::table($tb)." WHERE tid IN ($tids)", 'UNBUFFERED');
-		}
-
-		DB::query("DELETE FROM ".DB::table('forum_thread')." WHERE tid IN ($tids)");
-		$threadsdel = DB::affected_rows();
-	}
-	return $threadsdel;
-}
-
 function undeletethreads($tids) {
 	global $_G;
 	$threadsundel = 0;
@@ -474,17 +412,24 @@ function undeletethreads($tids) {
 		}
 		$tids = '\''.implode('\',\'', $tids).'\'';
 
-		$tuidarray = $ruidarray = $fidarray = array();
-		$postarray = getfieldsofposts('fid, first, authorid', "tid IN ($tids)");
-		foreach($postarray as $post) {
-			if($post['first']) {
-				$tuidarray[] = $post['authorid'];
-			} else {
-				$ruidarray[] = $post['authorid'];
+		$tuidarray = $ruidarray = $fidarray = $posttabletids = array();
+		$query = DB::query('SELECT tid, posttableid FROM '.DB::table('forum_thread')." WHERE tid IN ($tids)");
+		while($thread = DB::fetch($query)) {
+			$posttabletids[$thread['posttableid'] ? $thread['posttableid'] : 0][] = $thread['tid'];
+		}
+		foreach($posttabletids as $posttableid => $ptids) {
+			$query = DB::query('SELECT fid, first, authorid FROM '.DB::table(getposttable($posttableid))." WHERE tid IN (".dimplode($ptids).")");
+			while($post = DB::fetch($query)) {
+				if($post['first']) {
+					$tuidarray[] = $post['authorid'];
+				} else {
+					$ruidarray[] = $post['authorid'];
+				}
+				if(!in_array($post['fid'], $fidarray)) {
+					$fidarray[] = $post['fid'];
+				}
 			}
-			if(!in_array($post['fid'], $fidarray)) {
-				$fidarray[] = $post['fid'];
-			}
+			updatepost(array('invisible' => '0'), "tid IN (".dimplode($ptids).")", true, $posttableid);
 		}
 		if($tuidarray) {
 			updatepostcredits('+', $tuidarray, 'post');
@@ -493,7 +438,6 @@ function undeletethreads($tids) {
 			updatepostcredits('+', $ruidarray, 'reply');
 		}
 
-		updatepost(array('invisible' => '0'), "tid IN ($tids)", true);
 		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0', moderated='1' WHERE tid IN ($tids)");
 		$threadsundel = DB::affected_rows();
 
@@ -506,4 +450,65 @@ function undeletethreads($tids) {
 	}
 	return $threadsundel;
 }
+
+function recyclebinpostdelete($deletepids, $posttableid = false) {
+	if(empty($deletepids)) {
+		return 0;
+	}
+
+	require_once libfile('function/delete');
+	return deletepost($deletepids, 'pid', true, $posttableid);
+}
+
+function recyclebinpostundelete($undeletepids, $posttableid = false) {
+	global $_G;
+	$postsundel = 0;
+	if(empty($undeletepids)) {
+		return $postsundel;
+	}
+
+	foreach($undeletepids as $pid) {
+		my_post_log('restore', array('pid' => $pid));
+	}
+
+	$undeletepids = dimplode($undeletepids);
+
+	loadcache('posttableids');
+	$posttableids = !empty($_G['cache']['posttableids']) ? ($posttableid !== false && in_array($posttableid, $_G['cache']['posttableids']) ? array($posttableid) : $_G['cache']['posttableids']): array('0');
+
+	$postarray = $ruidarray = $fidarray = $tidarray = array();
+	foreach($posttableids as $ptid) {
+		$query = DB::query('SELECT fid, tid, first, authorid FROM '.DB::table(getposttable($ptid))." WHERE pid IN ($undeletepids)");
+		while($post = DB::fetch($query)) {
+			$postarray[] = $post;
+		}
+	}
+	if(empty($postarray)) {
+		return $postsundel;
+	}
+
+	foreach($postarray as $key => $post) {
+		if(!$post['first']) {
+			$ruidarray[] = $post['authorid'];
+		}
+		$fidarray[$post['fid']] = $post['fid'];
+		$tidarray[$post['tid']] = $post['tid'];
+	}
+
+	$postsundel = updatepost(array('invisible' => '0'), "pid IN ($undeletepids)", true, $posttableid);
+
+	include_once libfile('function/post');
+	if($ruidarray) {
+		updatepostcredits('+', $ruidarray, $creditspolicy['reply']);
+	}
+	foreach($tidarray as $tid) {
+		updatethreadcount($tid, 1);
+	}
+	foreach($fidarray as $fid) {
+		updateforumcount($fid);
+	}
+
+	return $postsundel;
+}
+
 ?>

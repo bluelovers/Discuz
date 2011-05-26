@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_error.php 16868 2010-09-16 05:06:28Z cnteacher $
+ *      $Id: lang_error.php 21026 2011-03-10 07:46:16Z congyushuai $
  */
 
 $lang = array
@@ -29,6 +29,7 @@ $lang = array
 	'system_init_ok' => '網站系統初始化完成，請<a href="index.php">點擊這裡</a>進入',
 	'backtrace' => '運行信息',
 	'error_end_message' => '<a href="http://{host}">{host}</a> 已經將此出錯信息詳細記錄, 由此給您帶來的訪問不便我們深感歉意',
+	'mobile_error_end_message' => '<a href="http://{host}">{host}</a> 此錯誤給您帶來的不便我們深感歉意',
 
 	'file_upload_error_-101' => '上傳失敗！上傳文件不存在或不合法，請返回。',
 	'file_upload_error_-102' => '上傳失敗！非圖片類型文件，請返回。',

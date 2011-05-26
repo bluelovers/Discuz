@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_grouplist.php 7294 2010-04-01 10:11:19Z xupeng $
+ *      $Id: lang_grouplist.php 19504 2011-01-05 04:51:17Z monkey $
  */
 
 $lang = array
@@ -22,8 +22,8 @@ $lang = array
 	'grouplist_orderby' => '群組排序方式',
 	'grouplist_orderby_comment' => '設置以哪一字段或方式對群組進行排序',
 	'grouplist_orderby_dateline' => '按創建時間倒序',
-	'grouplist_orderby_posts' => '按總發貼數倒序',
-	'grouplist_orderby_todayposts' => '按今日發貼數倒序',
+	'grouplist_orderby_posts' => '按總發帖數倒序',
+	'grouplist_orderby_todayposts' => '按今日發帖數倒序',
 	'grouplist_orderby_threads' => '按話題數倒序',
 	'grouplist_orderby_level' => '按等級倒序',
 	'grouplist_orderby_membernum' => '按成員數倒序',

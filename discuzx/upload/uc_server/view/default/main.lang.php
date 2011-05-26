@@ -3,7 +3,7 @@
 $lang = array(
 
 	'other' => '其他',
-	'app_connent_ok' => '通信成功',
+	'app_connent_ok' => '通信成功 ',
 	'app_connent_false' => '通信失敗',
 
 	'note_deleteuser' => '刪除用戶',
@@ -21,7 +21,7 @@ $lang = array(
 	'note_list' => '通知列表',
 	'note_test' => '測試',
 	'note_delete' => '刪除',
-	'note_succeed' => '通知成功',
+	'note_succeed' => '通知成功 ',
 	'note_na' => '未通知',
 	'note_false' => '通知失敗',
 	'note_times' => '次',

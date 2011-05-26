@@ -22,7 +22,7 @@
 			{lang magics_operation_present}{lang magic}
 		<!--{/if}-->
 		</em>
-		<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]')" title="{lang close}">{lang close}</a><!--{/if}--></span>
+		<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}--></span>
 	</h3>
 	<div class="c">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -41,21 +41,22 @@
 				<dt class="z">
 					<div class="mbm pbm bbda">
 						<p>$magic[name]</p>
-						<p class="mtn xw0 xg1">$magic[description]</p>						
-						<p class="mtn xw0 mbn">{lang magics_price}: <span{if $magic[discountprice] && $magic[price] != $magic[discountprice]} style="text-decoration:line-through;"{/if}>{$_G['setting']['extcredits'][$magic[credit]][title]} <span class="xi1 xw1 xs2">$magic[price]</span> {$_G['setting']['extcredits'][$magic[credit]][unit]}</span> ({lang magics_yourcredit} <span class="xi1 xw1 xs2"><!--{echo getuserprofile('extcredits'.$magic[credit])}--></span> {$_G['setting']['extcredits'][$magic[credit]][unit]})</p>
+						<p class="mtn xw0 xg1">$magic[description]</p>
+						<p class="mtm xw0 mbn">{lang magics_price}: <span{if $magic[discountprice] && $magic[price] != $magic[discountprice]} style="text-decoration:line-through;"{/if}>{$_G['setting']['extcredits'][$magic[credit]][title]} <span class="xi1 xw1 xs2" id="magicprice">$magic[price]</span> {$_G['setting']['extcredits'][$magic[credit]][unit]}</span></p>
+						<!--{if $magic[discountprice] && $magic[price] != $magic[discountprice]}-->
+							<p class="xw0 mbn">{lang magics_discountprice}: {$_G['setting']['extcredits'][$magic[credit]][title]} <span class="xi1 xw1 xs2" id="discountprice">$magic[discountprice]</span> $_G['setting']['extcredits'][$magic[credit]][unit]</p>
+						<!--{/if}-->
+						<p class="xw0 xg1">{lang magics_yourcredit} <!--{echo getuserprofile('extcredits'.$magic[credit])}--> {$_G['setting']['extcredits'][$magic[credit]][unit]}</p>
+						<p class="mtm xw0 mbn">{lang magics_weight}: <span class="xi1 xw1 xs2" id="magicweight">$magic[weight]</span></p>
+						<p class="xw0 xg1">{lang my_magic_volume} $allowweight</p>
 					</div>
 					<div class="xw0">
 						<p class="mtn xw0">{lang stock}: <span class="xi1 xw1 xs2">$magic[num]</span> {lang magics_unit}</p>
-						<p class="mtn">{lang magics_weight}: $magic[weight]</p>
-						<!--{if $magic[discountprice] && $magic[price] != $magic[discountprice]}-->
-							<p class="mtn">{lang magics_discountprice}: <span class="xi1">{$_G['setting']['extcredits'][$magic[credit]][title]} $magic[discountprice] $_G['setting']['extcredits'][$magic[credit]][unit]</span></p>
-						<!--{/if}-->
-
 						<!--{if $useperoid !== true}-->
 							<p class="xi1 mtn"><!--{if $magic['useperoid'] == 1}-->{lang magics_outofperoid_1}<!--{elseif $magic['useperoid'] == 2}-->{lang magics_outofperoid_2}<!--{elseif $magic['useperoid'] == 3}-->{lang magics_outofperoid_3}<!--{elseif $magic['useperoid'] == 4}-->{lang magics_outofperoid_4}<!--{/if}--><!--{if $useperoid > 0}-->{lang magics_outofperoid_value}<!--{else}-->{lang magics_outofperoid_noperm}<!--{/if}--></p>
 						<!--{/if}-->
 						<!--{if !$useperm}--><p class="xi1 mtn">{lang magics_permission_no}</p><!--{/if}-->
-						<p class="mtn">{lang memcp_usergroups_buy} <input name="magicnum" type="text" size="2" autocomplete="off" value="1" class="px pxs" /> {lang magics_unit}</p>
+						<p class="mtn">{lang memcp_usergroups_buy} <input id="magicnum" name="magicnum" type="text" size="2" autocomplete="off" value="1" class="px pxs" onkeyup="compute();" /> {lang magics_unit}</p>
 					</div>
 				</dt>
 			</dl>
@@ -69,7 +70,7 @@
 				<tr>
 					<th>{lang magics_target_present}</th>
 					<td class="hasd cl">
-						<input type="text" id="selectedusername" name="tousername" size="12" autocomplete="off" value="" class="px pxn p_fre" style="margin-right: 0;" />
+						<input type="text" id="selectedusername" name="tousername" size="12" autocomplete="off" value="" class="px p_fre" style="margin-right: 0;" />
 						<!--{if $buddyarray}-->
 						<a href="javascript:;" onclick="showselect(this, 'selectedusername', 'selectusername')" class="dpbtn">&nabla;</a>
 						<ul id="selectusername" style="display:none">
@@ -82,7 +83,7 @@
 				</tr>
 				<tr>
 					<th>{lang magics_num}</th>
-					<td><input name="magicnum" type="text" size="12" autocomplete="off" value="1" class="px pxn p_fre" /></td>
+					<td><input name="magicnum" type="text" size="12" autocomplete="off" value="1" class="px p_fre" /></td>
 				</tr>
 				<tr>
 					<th>{lang magics_present_message}</th>
@@ -119,6 +120,30 @@
 		showDialog('{lang magics_confirm}', 'confirm', '', 'ajaxpost(\'magicform\', \'return_magics\', \'return_magics\', \'onerror\');');
 		doane(e);
 		return false;
+	}
+	function compute() {
+		var totalcredit = <!--{echo getuserprofile('extcredits'.$magic[credit])}-->;
+		var totalweight = $allowweight;
+		var magicprice = $('magicprice').innerHTML;
+		if($('discountprice')) {
+			magicprice = $('discountprice').innerHTML;
+		}
+		if(isNaN(parseInt($('magicnum').value))) {
+			$('magicnum').value = 0;
+			return;
+		}
+		if(!$('magicnum').value || totalcredit < 1 || totalweight < 1) {
+			$('magicnum').value = 0;
+			return;
+		}
+		var curprice = $('magicnum').value * magicprice;
+		var curweight = $('magicnum').value * $('magicweight').innerHTML;
+		if(curprice > totalcredit) {
+			$('magicnum').value = parseInt(totalcredit / magicprice);
+		} else if(curweight > totalweight) {
+			$('magicnum').value = parseInt(totalweight / $('magicweight').innerHTML);
+		}
+		$('magicnum').value = parseInt($('magicnum').value);
 	}
 </script>
 

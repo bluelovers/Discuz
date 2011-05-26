@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_blog.php 17343 2010-10-11 01:44:05Z zhengqingpeng $
+ *      $Id: spacecp_blog.php 20084 2011-02-14 02:58:04Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,16 +20,25 @@ if($blogid) {
 		LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid)
 		WHERE b.blogid='$blogid'");
 	$blog = DB::fetch($query);
+	if($blog['tag']) {
+		$tagarray_all = $array_temp = $blogtag_array = array();
+		$tagarray_all = explode("\t", $blog['tag']);
+		if($tagarray_all) {
+			foreach($tagarray_all as $var) {
+				if($var) {
+					$array_temp = explode(',', $var);
+					$blogtag_array[] = $array_temp['1'];
+				}
+			}
+		}
+		$blog['tag'] = implode(',', $blogtag_array);
+	}
 }
 
 if(empty($blog)) {
 	if(!checkperm('allowblog')) {
 		showmessage('no_authority_to_add_log', '', array(), array('return' => true));
 	}
-
-	ckrealname('blog');
-
-	ckvideophoto('blog');
 
 	cknewuser();
 
@@ -54,7 +63,7 @@ if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
 		$blog = array();
 	} else {
 		if(!checkperm('allowblog')) {
-			showmessage('no_authority_to_add_log');
+			showmessage('no_privilege_blog');
 		}
 	}
 
@@ -71,6 +80,7 @@ if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
 		if($_G['gp_modblogkey']) {
 			$url .= "&modblogkey=$_G[gp_modblogkey]";
 		}
+		dsetcookie('clearUserdata', 'home');
 		showmessage('do_success', $url);
 	} else {
 		showmessage('that_should_at_least_write_things', NULL, array(), array('return'=>1));
@@ -87,9 +97,32 @@ if($_GET['op'] == 'delete') {
 		}
 	}
 
+} elseif($_GET['op'] == 'stick') {
+	space_merge($space, 'field_home');
+
+	$stickflag = $_GET['stickflag'] ? 1 : 0;
+	if(submitcheck('sticksubmit')) {
+		if($space['uid'] === $blog['uid'] && empty($blog['status'])) {
+			$stickblogs = explode(',', $space['stickblogs']);
+			$pos = array_search($blogid, $stickblogs);
+			if($pos !== false) {
+				unset($stickblogs[$pos]);
+			}
+			$blogs = implode(',', $stickblogs);
+			$blogs = empty($_POST['stickflag']) ? $blogs : $blogid.','.$blogs;
+			$stickblogs = explode(',', $blogs);
+			$stickblogs = array_filter($stickblogs);
+			$space['stickblogs'] = implode(',', $stickblogs);
+			DB::update('common_member_field_home', array('stickblogs' => $space['stickblogs']), array('uid' => $space['uid']));
+			showmessage('do_success', dreferer("home.php?mod=space&uid=$blog[uid]&do=blog&view=me"));
+		} else {
+			showmessage('failed_to_stick_operation');
+		}
+	}
+
 } elseif($_GET['op'] == 'edithot') {
 	if(!checkperm('manageblog')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_edithot_blog');
 	}
 
 	if(submitcheck('hotsubmit')) {

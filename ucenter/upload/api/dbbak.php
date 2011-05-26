@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: dbbak.php 17033 2008-12-04 02:24:03Z zhaoxiongfei $
@@ -308,7 +308,7 @@ if($get['method'] == 'export') {
 	$dumpfile = BACKUP_DIR.$get['sqlpath'].'/'.$get['backupfilename'].'-'.$get['volume'].'.sql';
 	if(trim($sqldump)) {
 		$sqldump = "$idstring".
-			"# <?exit();?>\n".
+			"# <?php exit();?>\n".
 			"# $apptype Multi-Volume Data Dump Vol.$get[volume]\n".
 			"# Time: $time\n".
 			"# Type: $apptype\n".

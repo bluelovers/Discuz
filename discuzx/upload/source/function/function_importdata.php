@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_importdata.php 16208 2010-09-02 02:14:54Z monkey $
+ *      $Id: function_importdata.php 20638 2011-03-01 03:26:36Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -106,4 +106,67 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 	return $renamed;
 }
 
+function import_block($xmlurl, $clientid, $xmlkey = '', $signtype = '', $ignoreversion = 1, $update = 0) {
+	global $_G, $importtxt;
+	$_G['gp_importtype'] = $_G['gp_importtxt'] = '';
+	$xmlurl = strip_tags($xmlurl);
+	$clientid = strip_tags($clientid);
+	$xmlkey = strip_tags($xmlkey);
+	$parse = parse_url($xmlurl);
+	if(!empty($parse['host'])) {
+		$queryarr = explode('&', $parse['query']);
+		$para = array();
+		foreach($queryarr as $value){
+			$k = $v = '';
+			list($k,$v) = explode('=', $value);
+			if(!empty($k) && !empty($v)) {
+				$para[$k] = $v;
+			}
+		}
+		$para['clientid'] = $clientid;
+		$para['op'] = 'getconfig';
+		$para['charset'] = CHARSET;
+		$signurl = create_sign_url($para, $xmlkey, $signtype);
+		$pos = strpos($xmlurl, '?');
+		$pos = $pos === false ? strlen($xmlurl) : $pos;
+		$signurl = substr($xmlurl, 0, $pos).'?'.$signurl;
+		$importtxt = @dfsockopen($signurl);
+	} else {
+		$importtxt = @implode('', file($xmlurl));
+	}
+	$blockarrays = getimportdata('Discuz! Block', 0);
+	if(empty($blockarrays['name']) || empty($blockarrays['fields']) || empty($blockarrays['getsetting'])) {
+		cpmsg(cplang('import_data_typeinvalid').cplang($importtxt), '', 'error');
+	}
+	if(empty($ignoreversion) && strip_tags($blockarrays['version']) != strip_tags($_G['setting']['version'])) {
+		cpmsg(cplang('blockxml_import_version_invalid'), '', 'error', array('cur_version' => $blockarrays['version'], 'set_version' => $_G['setting']['version']));
+	}
+	$data = array(
+		'name' => htmlspecialchars($blockarrays['name']),
+		'version' => htmlspecialchars($blockarrays['version']),
+		'url' => $xmlurl,
+		'clientid' => $clientid,
+		'key' => $xmlkey,
+		'signtype' => !empty($signtype) ? 'MD5' : '',
+		'data' => serialize($blockarrays)
+	);
+	$data = daddslashes($data);
+	if(!$update) {
+		DB::insert('common_block_xml', $data);
+	} else {
+		DB::update('common_block_xml', $data, "`id`='$update'");
+	}
+}
+
+function create_sign_url($para, $key = '', $signtype = ''){
+	ksort($para);
+	$url = http_build_query($para);
+	if(!empty($signtype) && strtoupper($signtype) == 'MD5') {
+		$sign = md5(urldecode($url).$key);
+		$url = $url.'&sign='.$sign;
+	} else {
+		$url = $url.'&sign='.$key;
+	}
+	return $url;
+}
 ?>

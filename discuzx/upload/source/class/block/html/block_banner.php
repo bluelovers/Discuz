@@ -26,7 +26,7 @@ class block_banner extends commonblock_html {
 		$settings = array(
 			'pic' => array(
 				'title' => 'banner_pic',
-				'type' => 'text',
+				'type' => 'mfile',
 				'default' => 'http://'
 			),
 			'url' => array(
@@ -56,7 +56,7 @@ class block_banner extends commonblock_html {
 			),
 			'text' => array(
 				'title' => 'banner_text',
-				'type' => 'text',
+				'type' => 'textarea',
 				'default' => ''
 			),
 		);

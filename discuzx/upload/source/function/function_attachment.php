@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_attachment.php 16751 2010-09-14 05:16:45Z monkey $
+ *      $Id: function_attachment.php 20980 2011-03-09 09:38:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,14 +72,9 @@ function attachtype($type, $returnval = 'html') {
 function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) {
 	global $_G;
 
-	$query = DB::query("SELECT a.*, af.description, l.relatedid AS payed
-		FROM ".DB::table('forum_attachment')." a
-		LEFT JOIN ".DB::table('forum_attachmentfield')." af ON a.aid=af.aid
-		LEFT JOIN ".DB::table('common_credit_log')." l ON l.relatedid=a.aid AND l.uid='$_G[uid]' AND l.operation='BAC'
-		WHERE a.pid IN ($attachpids)");
-
+	$query = DB::query("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." a WHERE a.pid IN ($attachpids)");
 	$attachexists = FALSE;
-	$skipattachcode = array();
+	$skipattachcode = $aids = $payaids = $findattach = array();
 	while($attach = DB::fetch($query)) {
 		$attachexists = TRUE;
 		if($skipaids && in_array($attach['aid'], $skipaids)) {
@@ -92,36 +87,55 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		$attach['imgalt'] = $attach['isimage'] ? strip_tags(str_replace('"', '\"', $attach['description'] ? $attach['description'] : $attach['filename'])) : '';
 		$attach['attachicon'] = attachtype($extension."\t".$attach['filetype']);
 		$attach['attachsize'] = sizecount($attach['filesize']);
-		$attach['attachimg'] = $_G['setting']['attachimgpost'] && $attach['isimage'] && (!$attach['readperm'] || $_G['group']['readaccess'] >= $attach['readperm']) ? 1 : 0;
+		if($attach['isimage'] && !$_G['setting']['attachimgpost']) {
+			$attach['isimage'] = 0;
+		}
+		$attach['attachimg'] = $attach['isimage'] && (!$attach['readperm'] || $_G['group']['readaccess'] >= $attach['readperm']) ? 1 : 0;
+		if($attach['attachimg']) {
+			$GLOBALS['aimgs'][$attach['pid']][] = $attach['aid'];
+		}
 		if($attach['price']) {
 			if($_G['setting']['maxchargespan'] && TIMESTAMP - $attach['dateline'] >= $_G['setting']['maxchargespan'] * 3600) {
-				DB::query("UPDATE ".DB::table('forum_attachment')." SET price='0' WHERE aid='$attach[aid]'");
+				DB::query("UPDATE ".DB::table(getattachtablebytid($_G['tid']))." SET price='0' WHERE aid='$attach[aid]'");
 				$attach['price'] = 0;
-			} else {
-				if(!$_G['uid'] || (!$_G['forum']['ismoderator'] && $attach['uid'] != $_G['uid'] && !$attach['payed'])) {
-					$attach['unpayed'] = 1;
-				}
+			} elseif(!$_G['forum_attachmentdown'] && $_G['uid'] != $attach['uid']) {
+				$payaids[$attach['aid']] = $attach['pid'];
 			}
 		}
-
-		$attach['payed'] = $attach['payed'] || $_G['forum_attachmentdown'] || $_G['uid'] == $attach['uid'] ? 1 : 0;
+		$attach['payed'] = $_G['forum_attachmentdown'] || $_G['uid'] == $attach['uid'] ? 1 : 0;
 		$attach['url'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/';
 		$attach['dateline'] = dgmdate($attach['dateline'], 'u');
 		$postlist[$attach['pid']]['attachments'][$attach['aid']] = $attach;
 		if(!empty($attachtags[$attach['pid']]) && is_array($attachtags[$attach['pid']]) && in_array($attach['aid'], $attachtags[$attach['pid']])) {
-			$findattach[$attach['pid']][] = "/\[attach\]$attach[aid]\[\/attach\]/i";
-			$replaceattach[$attach['pid']][] = attachtag($attach['pid'], $attach['aid'], $postlist);
+			$findattach[$attach['pid']][$attach['aid']] = "/\[attach\]$attach[aid]\[\/attach\]/i";
 			$attached = 1;
 		}
 
 		if(!$attached) {
 			if($attach['isimage']) {
-				$postlist[$attach['pid']]['imagelist'] .= attachlist($attach);
+				$postlist[$attach['pid']]['imagelist'][] = $attach['aid'];
+				$postlist[$attach['pid']]['imagelistcount']++;
+				if($postlist[$attach['pid']]['first']) {
+					$GLOBALS['firstimgs'][] = $attach['aid'];
+				}
 			} else {
 				if(!$_G['forum_skipaidlist'] || !in_array($attach['aid'], $_G['forum_skipaidlist'])) {
-					$postlist[$attach['pid']]['attachlist'] .= attachlist($attach);
+					$postlist[$attach['pid']]['attachlist'][] = $attach['aid'];
 				}
 			}
+		}
+		$aids[] = $attach['aid'];
+	}
+	if($aids) {
+		$query = DB::query("SELECT aid, pid, downloads FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).")");
+		while($attach = DB::fetch($query)) {
+			$postlist[$attach['pid']]['attachments'][$attach['aid']]['downloads'] = $attach['downloads'];
+		}
+	}
+	if($payaids) {
+		$query = DB::query("SELECT relatedid FROM ".DB::table('common_credit_log')." WHERE relatedid IN (".dimplode(array_keys($payaids)).") AND uid='$_G[uid]' AND operation='BAC'");
+		while($creditlog = DB::fetch($query)) {
+			$postlist[$payaids[$creditlog['relatedid']]]['attachments'][$creditlog['relatedid']]['payed'] = 1;
 		}
 	}
 	if(!empty($skipattachcode)) {
@@ -135,8 +149,10 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 	if($attachexists) {
 		foreach($attachtags as $pid => $aids) {
 			if($findattach[$pid]) {
-				$postlist[$pid]['message'] = preg_replace($findattach[$pid], $replaceattach[$pid], $postlist[$pid]['message'], 1);
-				$postlist[$pid]['message'] = preg_replace($findattach[$pid], '', $postlist[$pid]['message']);
+				foreach($findattach[$pid] as $aid => $find) {
+					$postlist[$pid]['message'] = preg_replace($find, attachinpost($postlist[$pid]['attachments'][$aid], $postlist[$pid]['first']), $postlist[$pid]['message'], 1);
+					$postlist[$pid]['message'] = preg_replace($find, '', $postlist[$pid]['message']);
+				}
 			}
 		}
 	} else {
@@ -146,11 +162,29 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 
 function attachwidth($width) {
 	global $_G;
-	if($_G['setting']['imagemaxwidth'] && $width) {
-		return 'width="'.($width > $_G['setting']['imagemaxwidth'] ? $_G['setting']['imagemaxwidth'].'" class="zoom" onclick="zoom(this, this.src)"' : $width.'"');
+	if($_G['setting']['imagemaxwidth']) {
+		return 'class="zoom" onclick="zoom(this, this.src)" width="'.($width > $_G['setting']['imagemaxwidth'] ? $_G['setting']['imagemaxwidth'] : $width).'"';
 	} else {
 		return 'thumbImg="1"';
 	}
+}
+
+function packaids($attach) {
+	global $_G;
+	return aidencode($attach['aid'], 0, $_G['tid']);
+}
+
+function showattach($post, $type = 0) {
+	$type = !$type ? 'attachlist' : 'imagelist';
+	$return = '';
+	if(!empty($post[$type]) && is_array($post[$type])) {
+		foreach($post[$type] as $aid) {
+			if(!empty($post['attachments'][$aid])) {
+				$return .= $type($post['attachments'][$aid], $post['first']);
+			}
+		}
+	}
+	return $return;
 }
 
 ?>

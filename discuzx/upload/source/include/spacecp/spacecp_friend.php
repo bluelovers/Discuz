@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: spacecp_friend.php 22000 2011-04-19 14:35:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,7 +23,7 @@ $actives = array($op=>' class="a"');
 if($op == 'add') {
 
 	if(!checkperm('allowfriend')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_addfriend');
 	}
 
 	if($uid == $_G['uid']) {
@@ -70,7 +70,6 @@ if($op == 'add') {
 			}
 
 			notification_add($uid, 'friend', 'friend_add');
-
 			showmessage('friends_add', dreferer(), array('username' => $tospace['username'], 'uid'=>$uid, 'from' => $_G['gp_from']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		}
 
@@ -86,17 +85,21 @@ if($op == 'add') {
 			showmessage('waiting_for_the_other_test');
 		}
 
-		if($tospace['videophotostatus']) {
-			ckvideophoto('friend', $tospace);
-		}
-
-		ckrealname('friend');
-
 		if(submitcheck('addsubmit')) {
 
 			$_POST['gid'] = intval($_POST['gid']);
 			$_POST['note'] = censor($_POST['note']);
 			friend_add($uid, $_POST['gid'], $_POST['note']);
+
+			$note = array(
+				'uid' => $_G['uid'],
+				'url' => 'home.php?mod=spacecp&ac=friend&op=add&uid='.$_G['uid'].'&from=notice',
+				'from_id' => $_G['uid'],
+				'from_idtype' => 'friendrequest',
+				'note' => !empty($_POST['note']) ? lang('spacecp', 'friend_request_note', array('note' => $_POST['note'])) : ''
+			);
+
+			notification_add($uid, 'friend', 'friend_request', $note);
 
 			require_once libfile('function/mail');
 			$values = array(
@@ -128,13 +131,7 @@ if($op == 'add') {
 		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]'"), 0);
 		if($count) {
 			DB::delete('home_friend_request', array('uid'=>$_G['uid']));
-			space_merge($space, 'count');
-			$space['newprompt'] = intval($space['newprompt'] - $count);
-			if($space['newprompt'] < 0) {
-				$space['newprompt'] = 0;
-			}
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends='0' WHERE uid='$_G[uid]'");
-			DB::query("UPDATE ".DB::table('common_member')." SET newprompt='$space[newprompt]' WHERE uid='$_G[uid]'");
+
 			dsetcookie('promptstate_'.$_G['uid'], $space['newprompt'], 31536000);
 		}
 		showmessage('do_success', 'home.php?mod=spacecp&ac=friend&op=request');
@@ -143,7 +140,7 @@ if($op == 'add') {
 } elseif($op == 'addconfirm') {
 
 	if(!checkperm('allowfriend')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_addfriend');
 	}
 	if($_GET['key'] == $space['key']) {
 
@@ -360,15 +357,7 @@ if($op == 'add') {
 		}
 	} else {
 
-		space_merge($space, 'status');
-
-		if($space['pendingfriends'] > 0) {
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends=0 WHERE uid='$space[uid]'");
-			$newprompt = $space['newprompt'] - $space['pendingfriends'];
-			if($newprompt<1) $newprompt = 0;
-			DB::query("UPDATE ".DB::table('common_member')." SET newprompt='$newprompt' WHERE uid='$space[uid]'");
-			dsetcookie('promptstate_'.$space['uid'], $newprompt, 31536000);
-		}
+		dsetcookie('promptstate_'.$space['uid'], $newprompt, 31536000);
 
 	}
 
@@ -483,20 +472,20 @@ if($op == 'add') {
 	$perpage = 20;
 
 	$page = empty($_G['gp_page'])?0:intval($_G['gp_page']);
+	$gid = isset($_G['gp_gid']) ? intval($_G['gp_gid']) : -1;
 	if($page<1) $page = 1;
 	$start = ($page-1) * $perpage;
 	$json = array();
 	$wheresql = '';
-	if($_G['gp_gid']) {
-		$gid = intval($_G['gp_gid']);
-		$wheresql = " AND gid='$gid'";
+	if($gid > -1) {
+		$wheresql = " AND f.gid='$gid'";
 	}
 	$singlenum = 0;
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' $wheresql"), 0);
+	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_friend')." f WHERE f.uid='$_G[uid]' $wheresql");
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' $wheresql ORDER BY num DESC, dateline DESC LIMIT $start,$perpage");
+		$query = DB::query("SELECT f.*, m.username FROM ".DB::table('home_friend')." f LEFT JOIN ".DB::table('common_member')." m ON f.fuid=m.uid WHERE f.uid='$_G[uid]' $wheresql ORDER BY f.num DESC, f.dateline DESC LIMIT $start,$perpage");
 		while($value = DB::fetch($query)) {
-			$value['fusername'] = daddslashes($value['fusername']);
+			$value['fusername'] = daddslashes($value['username']);
 			$value['avatar'] = avatar($value['fuid'], 'small', true);
 			$singlenum++;
 			$json[$value['fuid']] = "$value[fuid]:{'uid':$value[fuid], 'username':'$value[fusername]', 'avatar':'$value[avatar]'}";
@@ -517,8 +506,6 @@ if($op == 'add') {
 		$list[$value['uid']] = $value;
 	}
 	$navtitle = lang('core', 'title_search_friend');
-} elseif ($op == 'getonequery') {
-	$friendquery = DB::fetch_first("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 1, 1");
 }
 
 include template('home/spacecp_friend');

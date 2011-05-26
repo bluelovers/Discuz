@@ -4,11 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 17361 2010-10-11 08:46:50Z zhengqingpeng $
+ *      $Id: uc.php 22575 2011-05-13 01:52:21Z zhengqingpeng $
  */
 
-define('UC_CLIENT_VERSION', '1.5.1');
-define('UC_CLIENT_RELEASE', '20100501');
+error_reporting(0);
+
+define('UC_CLIENT_VERSION', '1.6.0');
+define('UC_CLIENT_RELEASE', '20110501');
 
 define('API_DELETEUSER', 1);
 define('API_RENAMEUSER', 1);
@@ -25,46 +27,56 @@ define('API_GETCREDIT', 1);
 define('API_GETCREDITSETTINGS', 1);
 define('API_UPDATECREDITSETTINGS', 1);
 define('API_ADDFEED', 1);
-
 define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '1');
-define('IN_DISCUZ', true);
-define('DISCUZ_ROOT', dirname(dirname(__FILE__)).'/');
-define('CURSCRIPT', 'api');
 
-error_reporting(0);
-require_once DISCUZ_ROOT.'./config/config_global.php';
-require_once DISCUZ_ROOT.'./config/config_ucenter.php';
-require_once DISCUZ_ROOT.'./source/function/function_core.php';
-require_once DISCUZ_ROOT.'./source/class/class_core.php';
+@define('IN_DISCUZ', true);
+@define('IN_API', true);
+@define('CURSCRIPT', 'api');
 
-$discuz = & discuz_core::instance();
-$discuz->init();
 
-require DISCUZ_ROOT.'./config/config_ucenter.php';
+if(!defined('IN_UC')) {
+	define('DISCUZ_ROOT', dirname(dirname(__FILE__)).'/');
+	require_once DISCUZ_ROOT.'./config/config_global.php';
+	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
+	require_once DISCUZ_ROOT.'./source/function/function_core.php';
+	require_once DISCUZ_ROOT.'./source/class/class_core.php';
 
-$get = $post = array();
+	$discuz = & discuz_core::instance();
+	$discuz->init();
 
-$code = @$_GET['code'];
-parse_str(authcode($code, 'DECODE', UC_KEY), $get);
+	require DISCUZ_ROOT.'./config/config_ucenter.php';
 
-if(time() - $get['time'] > 3600) {
-	exit('Authracation has expiried');
-}
-if(empty($get)) {
-	exit('Invalid Request');
-}
+	$get = $post = array();
 
-include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
-$post = xml_unserialize(file_get_contents('php://input'));
+	$code = @$_GET['code'];
+	parse_str(authcode($code, 'DECODE', UC_KEY), $get);
 
-if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
-	$uc_note = new uc_note();
-	echo $uc_note->$get['action']($get, $post);
-	exit();
+	if(time() - $get['time'] > 3600) {
+		exit('Authracation has expiried');
+	}
+	if(empty($get)) {
+		exit('Invalid Request');
+	}
+
+	include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
+	$post = xml_unserialize(file_get_contents('php://input'));
+
+	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
+		$uc_note = new uc_note();
+		echo $uc_note->$get['action']($get, $post);
+		exit();
+	} else {
+		exit(API_RETURN_FAILED);
+	}
 } else {
-	exit(API_RETURN_FAILED);
+	define('DISCUZ_ROOT', $app['extra']['apppath']);
+	require_once DISCUZ_ROOT.'./config/config_global.php';
+	require_once DISCUZ_ROOT.'./source/class/class_core.php';
+	$discuz = new db_mysql();
+	$discuz->set_config($_config['db']);
+	$discuz->connect();
 }
 
 class uc_note {
@@ -94,14 +106,14 @@ class uc_note {
 		if(!API_DELETEUSER) {
 			return API_RETURN_FORBIDDEN;
 		}
-		$uids = str_replace("'", '', stripcslashes($get['ids']));
+		$uids = str_replace("'", '', stripslashes($get['ids']));
 		$ids = array();
 		$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE uid IN ($uids)");
 		while($row = DB::fetch($query)) {
 			$ids[] = $row['uid'];
 		}
 		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
-		$ids && deletemember(dimplode($ids));
+		$ids && deletemember($ids);
 
 		return API_RETURN_SUCCEED;
 	}
@@ -112,6 +124,9 @@ class uc_note {
 		if(!API_RENAMEUSER) {
 			return API_RETURN_FORBIDDEN;
 		}
+
+
+
 		$tables = array(
 			'common_block' => array('id' => 'uid', 'name' => 'username'),
 			'common_invite' => array('id' => 'fuid', 'name' => 'fusername'),
@@ -121,7 +136,6 @@ class uc_note {
 			'common_report' => array('id' => 'uid', 'name' => 'username'),
 
 			'forum_thread' => array('id' => 'authorid', 'name' => 'author'),
-			'forum_post' => array('id' => 'authorid', 'name' => 'author'),
 			'forum_activityapply' => array('id' => 'uid', 'name' => 'username'),
 			'forum_groupuser' => array('id' => 'uid', 'name' => 'username'),
 			'forum_pollvoter' => array('id' => 'uid', 'name' => 'username'),
@@ -150,6 +164,13 @@ class uc_note {
 			'portal_topic' => array('id' => 'uid', 'name' => 'username'),
 			'portal_topic_pic' => array('id' => 'uid', 'name' => 'username'),
 		);
+
+		loadcache("posttableids");
+		if($_G['cache']['posttableids']) {
+			foreach($_G['cache']['posttableids'] AS $tableid) {
+				$tables[getposttable($tableid)] = array('id' => 'authorid', 'name' => 'author');
+			}
+		}
 
 		foreach($tables as $table => $conf) {
 			DB::query("UPDATE ".DB::table($table)." SET `$conf[name]`='$get[newusername]' WHERE `$conf[id]`='$get[uid]' AND `$conf[name]`='$get[oldusername]'");

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp.js 16598 2010-09-10 03:12:36Z monkey $
+	$Id: admincp.js 22381 2011-05-05 03:05:16Z monkey $
 */
 
 function redirect(url) {
@@ -26,8 +26,13 @@ function checkAll(type, form, value, checkall, changestyle) {
 			}
 		} else if(type == 'prefix' && e.name && e.name != checkall && (!value || (value && e.name.match(value)))) {
 			e.checked = form.elements[checkall].checked;
-			if(changestyle && e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
-				e.parentNode.className = e.checked ? 'checked' : '';
+			if(changestyle) {
+				if(e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
+					e.parentNode.className = e.checked ? 'checked' : '';
+				}
+				if(e.parentNode.parentNode && e.parentNode.parentNode.tagName.toLowerCase() == 'div') {
+					e.parentNode.parentNode.className = e.checked ? 'item checked' : 'item';
+				}
 			}
 		}
 	}
@@ -115,6 +120,11 @@ function addrow(obj, type) {
 	addrowdirect = 0;
 }
 
+function deleterow(obj) {
+	var table = obj.parentNode.parentNode.parentNode.parentNode.parentNode;
+	var tr = obj.parentNode.parentNode.parentNode;
+	table.deleteRow(tr.rowIndex);
+}
 function dropmenu(obj){
 	showMenu({'ctrlid':obj.id, 'menuid':obj.id + 'child', 'evt':'mouseover'});
 	$(obj.id + 'child').style.top = (parseInt($(obj.id + 'child').style.top) - Math.max(document.body.scrollTop, document.documentElement.scrollTop)) + 'px';
@@ -187,15 +197,24 @@ function entersubmit(e, name) {
 }
 
 function parsetag(tag) {
-	var str = document.body.innerHTML.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
-		if(tag && $3.indexOf(tag) != -1) {
-			$3 = $3.replace(tag, '<h_>');
+	var parse = function (tds) {
+		for(var i = 0; i < tds.length; i++) {
+			if(tds[i].getAttribute('s') == '1') {
+				var str = tds[i].innerHTML.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
+					if(tag && $3.indexOf(tag) != -1) {
+						re = new RegExp(tag, "g");
+						$3 = $3.replace(re, '<h_>');
+					}
+					return $2 + $3;
+					});
+				tds[i].innerHTML = str.replace(/<h_>/ig, function($1, $2) {
+					return '<font class="highlight">' + tag + '</font>';
+					});
+			}
 		}
-		return $2 + $3;
-		});
-	document.body.innerHTML = str.replace(/<h_>/ig, function($1, $2) {
-		return '<font class="highlight">' + tag + '</font>';
-		});
+	}
+	parse(document.body.getElementsByTagName('td'));
+	parse(document.body.getElementsByTagName('span'));
 }
 
 function sdisplay(id, obj) {
@@ -283,4 +302,16 @@ function srchforum() {
 		}
 	}
 	return false;
+}
+
+function setfaq(obj, id) {
+	if(!$(id)) {
+		return;
+	}
+	$(id).style.display = '';
+	if(!obj.onmouseout) {
+		obj.onmouseout = function () {
+			$(id).style.display = 'none';
+		}
+	}
 }

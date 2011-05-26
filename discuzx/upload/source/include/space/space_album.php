@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_album.php 16856 2010-09-16 02:53:58Z wangjinbo $
+ *      $Id: space_album.php 20784 2011-03-03 10:27:32Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -99,9 +99,20 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username']));
-	$metakeywords = $album['albumname'];
-	$metadescription = $album['albumname'];
+	$seodata = array('album' => $album['albumname'], 'user' => $album['username'], 'depict' => $album['depict']);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('album', $seodata);
+	if(empty($navtitle)) {
+		$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username']));
+		$nobbname = false;
+	} else {
+		$nobbname = true;
+	}
+	if(empty($metakeywords)) {
+		$metakeywords = $album['albumname'];
+	}
+	if(empty($metadescription)) {
+		$metadescription = $album['albumname'];
+	}
 
 	include_once template("diy:home/space_album_view");
 
@@ -165,7 +176,7 @@ if($id) {
 		$nextid = $list[$newkeys[3]]['picid'];
 
 		foreach ($newkeys as $nkey) {
-			$piclist[] = $list[$nkey];
+			$piclist[$nkey] = $list[$nkey];
 		}
 	} else {
 		$newkeys = array($nowkey-1, $nowkey, $nowkey+1);
@@ -252,22 +263,7 @@ if($id) {
 	$actives = array('me' =>' class="a"');
 
 	if($album['picnum']) {
-		if($_GET['goto']=='down') {
-			$sequence = empty($_G['cookie']['pic_sequence'])?$album['picnum']:intval($_G['cookie']['pic_sequence']);
-			$sequence++;
-			if($sequence>$album['picnum']) {
-				$sequence = 1;
-			}
-		} elseif($_GET['goto']=='up') {
-			$sequence = empty($_G['cookie']['pic_sequence'])?$album['picnum']:intval($_G['cookie']['pic_sequence']);
-			$sequence--;
-			if($sequence<1) {
-				$sequence = $album['picnum'];
-			}
-		} else {
-			$sequence = 1;
-		}
-		dsetcookie('pic_sequence', $sequence);
+		$sequence = $nowkey + 1;
 	}
 
 	$diymode = intval($_G['cookie']['home_diymode']);
@@ -392,6 +388,7 @@ if($id) {
 
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
 			$wheresql .= " AND albumname LIKE '%$searchkey%'";
+			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);

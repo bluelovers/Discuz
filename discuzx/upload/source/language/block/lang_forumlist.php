@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_forumlist.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_forumlist.php 19504 2011-01-05 04:51:17Z monkey $
  */
 
 $lang = array
@@ -19,7 +19,7 @@ $lang = array
 	'forumlist_orderby_comment' => '設置以哪一字段或方式對版塊進行排序',
 	'forumlist_orderby_displayorder' => '按顯示順序順序排序',
 	'forumlist_orderby_threads' => '按主題數倒序排序',
-	'forumlist_orderby_todayposts' => '按今日發貼數倒序排序',
+	'forumlist_orderby_todayposts' => '按今日發帖數倒序排序',
 	'forumlist_orderby_posts' => '按帖子數倒序排序',
 );
 

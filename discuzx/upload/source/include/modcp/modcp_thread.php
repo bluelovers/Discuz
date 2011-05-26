@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 16034 2010-08-31 03:13:53Z cnteacher $
+ *      $Id: modcp_thread.php 21309 2011-03-23 02:07:26Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -35,7 +35,7 @@ if($op == 'thread') {
 	}
 
 	if($_G['fid'] && $_G['forum']['ismoderator']) {
-		if($do == 'search' &&  submitcheck('submit')) {
+		if($do == 'search' &&  submitcheck('submit', 1)) {
 
 			$sql = '';
 
@@ -159,6 +159,10 @@ if($op == 'post') {
 
 	$threadoptionselect = range(1, 3);
 
+	$posttableid = intval($_G['gp_posttableid']);
+	$posttableselect = getposttableselect();
+
+	$cachekey = 'srchresult_p_'.$posttableid.'_'.$_G['fid'];
 	$fidadd = '';
 	if($_G['fid'] && $modforums['list'][$_G['fid']]) {
 		$fidadd = "AND fid='$_G[fid]'";
@@ -179,55 +183,26 @@ if($op == 'post') {
 			return;
 		}
 
-		$tidsdelete = $pidsdelete = '0';
+		$pidsdelete = $tidsdelete = array();
 		$prune = array('forums' => array(), 'thread' => array());
 
 		if($pids = dimplode($_G['gp_delete'])) {
-			$tidsdelete = $pidsdelete = '0';
-			$postarray = getfieldsofposts('fid, tid, pid, first, authorid', "pid IN ($pids) $fidadd");
-			foreach($postarray as $post) {
+			$query = DB::query('SELECT fid, tid, pid, first, authorid FROM '.DB::table(getposttable($posttableid)).' WHERE '."pid IN ($pids) $fidadd");
+			while($post = DB::fetch($query)) {
 				$prune['forums'][] = $post['fid'];
 				@$prune['thread'][$post['tid']]++;
-
-				$pidsdelete .= ",$post[pid]";
-				$tidsdelete .= $post['first'] ? ",$post[tid]" : '';
+				$pidsdelete[$post['pid']] = $post['pid'];
 				if($post['first']) {
-					my_thread_log('delete', array('tid' => $post['tid']));
-				} else {
-					my_post_log('delete', array('pid' => $post['pid']));
+					$tidsdelete[$post['tid']] = $post['tid'];
 				}
 			}
 		}
 
 		if($pidsdelete) {
 			require_once libfile('function/post');
-
-			if(!getgpc('nocredit')) {
-				$postsarray = $tuidarray = $ruidarray = array();
-				$postarray1 = getfieldsofposts('pid, first, authorid', "pid IN ($pidsdelete)");
-				$postarray2 = getfieldsofposts('pid, first, authorid', "tid IN ($tidsdelete)");
-				while((list($tmpkey, $post) = each($postarray1)) || (list($tmpkey, $post) = each($postarray2))) {
-					$postsarray[$post['pid']] = $post;
-				}
-				foreach($postsarray as $post) {
-					if($post['first']) {
-						$tuidarray[] = $post['authorid'];
-					} else {
-						$ruidarray[] = $post['authorid'];
-					}
-				}
-				if($tuidarray) {
-					updatepostcredits('-', $tuidarray, 'post');
-				}
-				if($ruidarray) {
-					updatepostcredits('-', $ruidarray, 'reply');
-				}
-			}
-
 			require_once libfile('function/delete');
-			$deletedposts = deletepost("pid IN ($pidsdelete)");
-			$deletedposts += deletepost("tid IN ($tidsdelete)");
-			$deletedthreads = deletethread("tid IN ($tidsdelete)");
+			$deletedposts = deletepost($pidsdelete, 'pid', !getgpc('nocredit'), $posttableid);
+			$deletedthreads = deletethread($tidsdelete, !getgpc('nocredit'));
 
 			if(count($prune['thread']) < 50) {
 				foreach($prune['thread'] as $tid => $decrease) {
@@ -248,7 +223,6 @@ if($op == 'post') {
 			}
 
 		}
-
 
 		$do = 'list';
 	}
@@ -325,20 +299,18 @@ if($op == 'post') {
 
 		if($sql) {
 
-			$postarray = getfieldsofposts('pid', "1 $fidadd $sql ORDER BY dateline DESC LIMIT 1000");
-			$pids = $comma = '';
-			$count = 0;
-			foreach($postarray as $pid) {
-				$pids .= $comma.$pid['pid'];
-				$comma = ',';
-				$count ++;
+			$query = DB::query('SELECT pid FROM '.DB::table(getposttable($posttableid))." WHERE 1 $fidadd $sql ORDER BY dateline DESC LIMIT 1000");
+			$pids = array();
+			while($post = DB::fetch($query)) {
+				$pids[] = $post['pid'];
 			}
 
-			$result['pids'] = $pids;
-			$result['count'] = $count;
+			$result['pids'] = implode(',', $pids);
+			$result['count'] = count($pids);
 			$result['fid'] = $_G['fid'];
+			$result['posttableid'] = $posttableid;
 
-			$modsession->set('srchresult_p'.$_G['fid'], $result, true);
+			$modsession->set($cachekey, $result, true);
 
 			unset($result, $pids);
 			$do = 'list';
@@ -354,8 +326,8 @@ if($op == 'post') {
 	$query = $multipage = '';
 
 	if($do == 'list') {
-
-		$result = $modsession->get('srchresult_p'.$_G['fid']);
+		$postarray = array();
+		$result = $modsession->get($cachekey);
 		$threadoptionselect[$result['threadoption']] = 'selected';
 
 		if($result['fid'] == $_G['fid']) {
@@ -365,13 +337,15 @@ if($op == 'post') {
 			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_G[gp_action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 			if($total && $result['pids']) {
 				$start = ($page - 1) * $_G['tpp'];
-				$postarray = getallwithposts(array(
-					'select' => 'p.*, t.subject as tsubject',
-					'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-					'where' => "pid IN ($result[pids])",
-					'order' => 'dateline DESC',
-					'limit' => "$start, $_G[tpp]",
-				));
+				$query = DB::query('SELECT p.*, t.subject as tsubject '.
+					'FROM '.DB::table(getposttable($result['posttableid']))." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) ".
+					"WHERE pid IN ($result[pids]) ".
+					'ORDER BY dateline DESC '.
+					"LIMIT $start, $_G[tpp]"
+					);
+				while($value = DB::fetch($query)) {
+					$postarray[] = $value;
+				}
 			}
 		}
 	}

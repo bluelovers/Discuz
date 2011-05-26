@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_menu.php 16066 2010-08-31 06:01:58Z zhangguosheng $
+ *      $Id: lang_admincp_menu.php 21679 2011-04-08 04:13:12Z congyushuai $
  */
 
 $lang = array
@@ -16,7 +16,7 @@ $lang = array
 	'header_forum' => '論壇',
 	'header_user' => '用戶',
 	'header_topic' => '內容',
-	'header_extended' => '擴展',
+	'header_extended' => '運營',
 	'header_plugin' => '插件',
 	'header_style' => '界面',
 	'header_adv' => '廣告',
@@ -38,7 +38,8 @@ $lang = array
 	'menu_setting_access' => '註冊與訪問',
 	'menu_setting_customnav' => '導航設置',
 	'menu_setting_styles' => '界面設置',
-	'menu_setting_optimize' => '優化設置',
+	'menu_setting_optimize' => '性能優化',
+	'menu_setting_seo' => 'SEO設置',
 	'menu_setting_functions' => '站點功能',
 	'menu_setting_domain' => '域名設置',
 	'menu_setting_user' => '用戶權限',
@@ -51,10 +52,11 @@ $lang = array
 	'menu_setting_uc' => 'UCenter 設置',
 	'menu_setting_uchome' => 'UCHome 設置',
 	'menu_setting_home' => '空間設置',
-	'menu_setting_manyou' => 'Manyou 設置',
 	'menu_setting_search' => '搜索設置',
 	'menu_setting_district' => '地區設置',
 	'menu_setting_ranklist' => '排行榜設置',
+	'menu_setting_mobile' => '手機版訪問設置',
+	'menu_setting_tag' => '標籤管理',
 
 	'menu_forums' => '版塊管理',
 	'menu_forums_merge' => '版塊合併',
@@ -69,6 +71,7 @@ $lang = array
 	'menu_members_ipban' => '禁止 IP',
 	'menu_members_credits' => '積分獎懲',
 	'menu_members_profile' => '用戶欄目',
+	'menu_members_profile_group' => '用戶欄目分組',
 	'menu_members_verify_setting' => '認證設置',
 	'menu_members_stat' => '資料統計',
 	'menu_moderate_modmembers' => '審核新用戶',
@@ -95,8 +98,9 @@ $lang = array
 	'menu_posting_tags' => '標籤管理',
 	'menu_posting_censors' => '詞語過濾',
 	'menu_maint_report' => '用戶舉報',
-	'menu_threads_forumstick' => '多版塊置頂',
+	'menu_threads_forumstick' => '版塊/群組置頂',
 	'menu_post_position_index' => '帖子優化',
+	'menu_postcomment' => '帖子點評管理',
 	'menu_maint_doing' => '記錄管理',
 	'menu_maint_blog' => '日誌管理',
 	'menu_maint_feed' => '動態管理',
@@ -107,6 +111,7 @@ $lang = array
 
 	'menu_posting_attachtypes' => '附件類型尺寸',
 	'menu_moderate_recyclebin' => '主題回收站',
+	'menu_moderate_recyclebinpost' => '回帖回收站',
 
 	'menu_founder' => '站點信息',
 	'menu_founder_perm' => '後台管理團隊',
@@ -122,6 +127,7 @@ $lang = array
 	'menu_misc_help' => '站點幫助',
 	'menu_google' => 'Google 搜索',
 	'menu_ec' => '電子商務',
+	'menu_card' => '充值卡密',
 
 	'menu_styles' => '風格管理',
 	'menu_styles_templates' => '模板管理',
@@ -133,12 +139,13 @@ $lang = array
 	'menu_misc_onlinelist' => '在線列表圖標',
 
 	'menu_misc_link' => '友情鏈接',
+	'menu_misc_relatedlink' => '關聯鏈接',
 	'memu_focus_topic' => '站長推薦',
 	'menu_adv_custom' => '站點廣告',
 
 	'menu_misc_announce' => '站點公告',
 	'menu_tools_updatecaches' => '更新緩存',
-	'menu_tools_postposition' => '高樓貼優化',
+	'menu_tools_postposition' => '高樓帖優化',
 	'menu_tools_updatecounters' => '更新統計',
 	'menu_tools_javascript' => '數據調用',
 	'menu_tools_relatedtag' => ' 標籤聚合',
@@ -159,14 +166,18 @@ $lang = array
 	'menu_albumcategory' => '相冊分類',
 	'menu_block' => '模塊管理',
 	'menu_blockstyle' => '模塊模板',
+	'menu_blockxml' => '第三方模塊',
 	'menu_topic' => '專題管理',
-	'menu_diytemplate' => 'DIY頁面管理',
+	'menu_diytemplate' => '頁面管理',
 
 	'menu_group_setting' => '群組設置',
 	'menu_group_type' => '群組分類',
 	'menu_group_manage' => '群組管理',
 	'menu_group_userperm' => '群主權限',
 	'menu_group_level' => '群組等級',
+
+	'menu_setting_manyou' => 'Manyou 設置',
+	'menu_setting_qqconnect' => 'QQ 綁定設置',
 
 	'admincp_title' => $_G['setting']['bbname'].' 管理中心',
 

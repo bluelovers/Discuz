@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 17496 2010-10-20 03:03:15Z zhengqingpeng $
+ *      $Id: home_space.php 20942 2011-03-09 02:37:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,19 @@ if($_GET['username']) {
 
 $dos = array('index', 'doing', 'blog', 'album', 'friend', 'wall',
 	'notice', 'share', 'home', 'pm', 'videophoto', 'favorite',
-	'thread', 'trade', 'poll', 'activity', 'debate', 'reward', 'profile');
+	'thread', 'trade', 'poll', 'activity', 'debate', 'reward', 'profile', 'plugin');
 
 $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
-if($do == 'index' && $_G['inajax']) {
+if($do == 'index' && ($_G['inajax'] || !$_G['setting']['homestatus'])) {
 	$do = 'profile';
+}
+
+if(in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
+	if(!$_G['setting']['homestatus']) {
+		showmessage('home_status_off');
+	}
+} else {
+	$_G['mnid'] = 'mn_common';
 }
 
 if(empty($uid) || in_array($do, array('notice', 'pm'))) $uid = $_G['uid'];

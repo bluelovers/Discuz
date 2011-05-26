@@ -1,18 +1,27 @@
-<p class="tbmu">
+<ul class="tb cl">
+	<li $subactives[index]><a href="home.php?mod=magic&action=shop">{lang default}</a></li>
+	<li $subactives[hot]><a href="home.php?mod=magic&action=shop&operation=hot">{lang top}</a></li>
+</ul>
+<div class="tbmu">
+	<!--{if $_G['group']['maxmagicsweight']}-->
+		{lang magics_capacity}: <span class="xi1">$totalweight</span>/{$_G['group']['maxmagicsweight']}<span class="pipe">|</span>
+	<!--{/if}-->
 	<!--{if $magiccredits}-->
-		<span class="y">
 			<!--{if $_G['group']['magicsdiscount']}-->{lang magics_discount}<span class="pipe">|</span><!--{/if}-->
 			{lang you_have_now}
 			<!--{eval $i = 0;}-->
 			<!--{loop $magiccredits $id}-->
-				<!--{if $i != 0}-->, <!--{/if}--><span class="xi1">{$_G['setting']['extcredits'][$id][img]} {$_G['setting']['extcredits'][$id][title]} <!--{echo getuserprofile('extcredits'.$id);}--> {$_G['setting']['extcredits'][$id][unit]}</span>
+				<!--{if $i != 0}-->, <!--{/if}-->{$_G['setting']['extcredits'][$id][img]} {$_G['setting']['extcredits'][$id][title]} <span class="xi1"><!--{echo getuserprofile('extcredits'.$id);}--></span> {$_G['setting']['extcredits'][$id][unit]}
 				<!--{eval $i++;}-->
 			<!--{/loop}-->
-		</span>
+			<!--{if ($_G['setting']['ec_ratio'] && ($_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting'][ec_tenpay_bargainor] || $_G['setting']['ec_account'])) || $_G['setting']['card']['open']}-->
+				<span class="pipe">|</span><a href="home.php?mod=spacecp&ac=credit&op=buy">{lang buy_credits}</a>
+			<!--{/if}-->
+			<!--{if $_G[setting][exchangestatus]}-->
+				<span class="pipe">|</span><a href="home.php?mod=spacecp&ac=credit&op=exchange">{lang credit_exchange}</a>
+			<!--{/if}-->
 	<!--{/if}-->
-	<a $subactives[index]href="home.php?mod=magic&action=shop&operation=index">{lang default}</a><span class="pipe">|</span>
-	<a $subactives[hot]href="home.php?mod=magic&action=shop&operation=hot">{lang top}</a>
-</p>
+</div>
 <!--{if $magiclist}-->
 	<ul class="mtm ml mlm mgcl cl">
 	<!--{loop $magiclist $key $magic}-->
@@ -24,14 +33,14 @@
 			<p class="xg1" title="$magic[description]">$magic[description]</p>
 			<p>{lang magics_price}
 				<!--{if {$_G['setting']['extcredits'][$magic[credit]][unit]}}-->
-					<strong class="xi1 xw0">{$_G['setting']['extcredits'][$magic[credit]][title]} $magic[price] {$_G['setting']['extcredits'][$magic[credit]][unit]}/{lang magics_unit}</strong>
+					{$_G['setting']['extcredits'][$magic[credit]][title]} <strong class="xi1 xw1 xs2">$magic[price]</strong> {$_G['setting']['extcredits'][$magic[credit]][unit]}/{lang magics_unit}
 				<!--{else}-->
-					<strong class="xi1 xw0">$magic[price] {$_G['setting']['extcredits'][$magic[credit]][title]}/{lang magics_unit}</strong>
+					<strong class="xi1 xw1 xs2">$magic[price]</strong> {$_G['setting']['extcredits'][$magic[credit]][title]}/{lang magics_unit}
 				<!--{/if}-->
-				<!--{if $operation == 'hot'}--><font class="xg1">({lang sold} $magic[salevolume] {lang magics_unit})</font><!--{/if}-->
+				<!--{if $operation == 'hot'}--><em class="xg1">({lang sold} $magic[salevolume] {lang magics_unit})</em><!--{/if}-->
 			</p>
-			
-			<p>
+
+			<p class="mtn">
 				<!--{if $magic['num'] > 0}-->
 					<a href="home.php?mod=magic&action=shop&operation=buy&mid=$magic[identifier]" onclick="showWindow('magics', this.href);return false;" class="xi2 xw1">{lang magics_operation_buy}</a>
 					<!--{if $_G['group']['allowmagics'] > 1}-->

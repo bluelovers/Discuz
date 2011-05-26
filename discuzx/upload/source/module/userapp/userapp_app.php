@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_app.php 16967 2010-09-17 08:50:32Z zhengqingpeng $
+ *      $Id: userapp_app.php 22039 2011-04-20 08:37:29Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,13 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 if($appid == '1036584') {
 } else {
-	require_once libfile('function/spacecp');
-	ckrealname('userapp');
-
-	ckvideophoto('userapp');
-
 	if(!checkperm('allowmyop')) {
-		showmessage('no_privilege', '', array(), array('return' => true));
+		showmessage('no_privilege_myop', '', array(), array('return' => true));
 	}
 }
 
@@ -28,18 +23,6 @@ $query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE appid='$ap
 if($app = DB::fetch($query)) {
 	if($app['flag']<0) {
 		showmessage('no_privilege_myapp');
-	}
-	$today = strtotime(dgmdate($_G['timestamp'], 'Y-m-d'));
-	if($appid != '1036584' && !getcount('home_userapp_stat', array('uid' => $_G['uid'], 'appid' => $appid, 'dateline'=>$today))) {
-		DB::query("UPDATE ".DB::table('common_myapp_count')." SET todayuse='0', usedate='$today' WHERE appid='$appid' AND  usedate != '$today'");
-
-		DB::insert('home_userapp_stat', array('uid' => $_G['uid'], 'appid' => $appid, 'dateline'=>$today));
-		space_merge($space, 'profile');
-		$extsql = '';
-		if($space['gender']) {
-			$extsql = $space['gender'] == 1 ? ', boyuse=boyuse+1' : ', girluse=girluse+1';
-		}
-		DB::query("UPDATE ".DB::table('common_myapp_count')." SET usetotal=usetotal+1, todayuse=todayuse+1 $extsql WHERE appid='$appid'");
 	}
 }
 
@@ -64,7 +47,7 @@ $my_prefix = getsiteurl();
 updatecreditbyaction('useapp', 0, array(), $appid);
 
 if (!$my_suffix) {
-	header('Location: userapp.php?mod=app&id='.$my_appId.'&my_suffix='.urlencode(base64_encode('/')));
+	dheader('Location: userapp.php?mod=app&id='.$my_appId.'&my_suffix='.urlencode(base64_encode('/')));
 	exit;
 }
 
@@ -88,13 +71,12 @@ if ($_SERVER['QUERY_STRING']) {
 	$current_url = $current_url.'?'.$_SERVER['QUERY_STRING'];
 }
 $extra = $_GET['my_extra'];
-$timestamp = $_G['timestamp'];
 $url .= '&my_current='.urlencode($current_url);
 $url .= '&my_extra='.urlencode($extra);
-$url .= '&my_ts='.$timestamp;
+$url .= '&my_ts='.$_G['timestamp'];
 $url .= '&my_appVersion='.$app['version'];
 $url .= '&my_fullscreen='.$isFullscreen;
-$hash = $_G['setting']['my_siteid'].'|'.$_G['uid'].'|'.$appid.'|'.$current_url.'|'.$extra.'|'.$timestamp.'|'.$_G['setting']['my_sitekey'];
+$hash = $_G['setting']['my_siteid'].'|'.$_G['uid'].'|'.$appid.'|'.$current_url.'|'.$extra.'|'.$_G['timestamp'].'|'.$_G['setting']['my_sitekey'];
 $hash = md5($hash);
 $url .= '&my_sig='.$hash;
 $my_suffix = urlencode($my_suffix);

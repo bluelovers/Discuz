@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blockstyle.php 15321 2010-08-23 06:20:40Z xupeng $
+ *      $Id: admincp_blockstyle.php 20616 2011-03-01 01:05:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -85,14 +85,16 @@ BLOCKCLASSSEL;
 			if($_GET['styleid']) {
 				$styleid = intval($_GET['styleid']);
 				DB::update('common_block_style', $arr, array('styleid'=>$styleid));
-				$msg = 'blockstyle_edit_succeed';
+				require_once libfile('function/cache');
+				updatecache('blockclass');
+				cpmsg('blockstyle_edit_succeed', 'action=blockstyle&operation=edit&blockclass='.$_GET['blockclass'].'&styleid='.$styleid.'&preview='.($_POST['preview']?'1':'0'), 'succeed');
 			} else {
 				$styleid = DB::insert('common_block_style', $arr, true);
 				$msg = 'blockstyle_create_succeed';
+				require_once libfile('function/cache');
+				updatecache('blockclass');
+				cpmsg('blockstyle_create_succeed', 'action=blockstyle&operation=edit&blockclass='.$_GET['blockclass'].'&styleid='.$styleid.'&preview='.($_POST['preview']?'1':'0'), 'succeed');
 			}
-			require_once libfile('function/cache');
-			updatecache('blockclass');
-			cpmsg($msg, 'action=blockstyle&operation=edit&blockclass='.$_GET[blockclass].'&styleid='.$styleid.'&preview='.($_POST['preview']?'1':'0'), 'succeed');
 		}
 
 		if($_GET['styleid']) {
@@ -208,13 +210,13 @@ BLOCKCLASSSEL;
 
 	$_GET = $_GET + $_POST;
 	$searchctrl = '<span style="float: right; padding-right: 40px;">'
-				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show">'.cplang('show_search').'</a>'
-				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide" style="display:none">'.cplang('hide_search').'</a>'
+				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show" style="display:none">'.cplang('show_search').'</a>'
+				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 				.'</span>';
 	showsubmenu('blockstyle',  array(
-			array('list', 'blockstyle', 1),
-			array('add', 'blockstyle&operation=add', 0)
-		), $searchctrl);
+		array('list', 'blockstyle', 1),
+		array('add', 'blockstyle&operation=add', 0)
+	), $searchctrl);
 
 	$mpurl = ADMINSCRIPT.'?action=blockstyle';
 	$intkeys = array('styleid');
@@ -259,7 +261,7 @@ BLOCKCLASSSEL;
 
 	$adminscript = ADMINSCRIPT;
 	echo <<<SEARCH
-<form method="post" autocomplete="off" action="$adminscript" id="tb_search" style="display:none">
+<form method="post" autocomplete="off" action="$adminscript" id="tb_search">
 	<div style="margin-top:8px;">
 		<table cellspacing="3" cellpadding="3">
 			<tr>
@@ -353,7 +355,7 @@ function jsinsertunit() {
 		}
 	}
 </script>
-<?
+<?php
 }
 
 ?>

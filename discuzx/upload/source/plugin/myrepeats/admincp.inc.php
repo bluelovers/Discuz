@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp.inc.php 16615 2010-09-10 06:29:25Z monkey $
+ *      $Id: admincp.inc.php 18582 2010-11-29 07:12:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -43,7 +43,7 @@ if(!empty($_G['gp_srchuid'])) {
 	}
 } elseif(!empty($_G['gp_srchrepeat'])) {
 	$extra = '&srchrepeat='.rawurlencode(stripslashes($_G['gp_srchrepeat']));
-	$srchadd = "AND mr.username='$srchrepeat'";
+	$srchadd = "AND mr.username='$_G[gp_srchrepeat]'";
 	$searchtext = $Plang['search'].' "'.stripslashes($_G['gp_srchrepeat']).'" '.$Plang['repeats'].'&nbsp;';
 }
 

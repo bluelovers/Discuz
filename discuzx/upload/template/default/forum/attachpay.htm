@@ -9,7 +9,7 @@
 		<div class="bm bw0">
 <!--{/if}-->
 
-<form id="attachpayform" method="post" autocomplete="off" action="forum.php?mod=misc&action=attachpay{if !empty($_G['gp_infloat'])}&paysubmit=yes&infloat=yes" onsubmit="ajaxpost('attachpayform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{else}"{/if}>
+<form id="attachpayform" method="post" autocomplete="off" action="forum.php?mod=misc&action=attachpay&tid={$_G[tid]}{if !empty($_G['gp_infloat'])}&paysubmit=yes&infloat=yes" onsubmit="ajaxpost('attachpayform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{else}"{/if}>
 	<div class="f_c">
 		<h3 class="flb">
 			<em id="return_$_G['gp_handlekey']">{lang pay_attachment}</em>
@@ -18,7 +18,7 @@
 			</span>
 		</h3>
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<input type="hidden" name="referer" value="$_G['referer']" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="aid" value="$aid" />
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 		<div class="c">
@@ -60,7 +60,7 @@
 		</div>
 		<div class="o pns">
 			<!--{if $status != 1}-->
-				<label><input name="buyall" type="checkbox" class="pc" value="yes" /> {lang buy_all_attch}</label>
+				<label><input name="buyall" type="checkbox" class="pc" value="yes" />{lang buy_all_attch}</label>
 				<button class="pn pnc" type="submit" name="paysubmit" value="true"><span><!--{if $status == 0}-->{lang pay_attachment}<!--{else}-->{lang free_buy}<!--{/if}--></span></button>
 			<!--{/if}-->
 			<button class="pn pnc" type="button" onclick="hideWindow('$_G['gp_handlekey']');"><span>{lang close}</span></button>

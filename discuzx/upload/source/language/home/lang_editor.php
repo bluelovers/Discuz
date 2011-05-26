@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_editor.php 13663 2010-07-29 07:55:13Z monkey $
+ *      $Id: lang_editor.php 20565 2011-02-28 02:24:52Z congyushuai $
  */
 
 $lang = array(
@@ -24,7 +24,7 @@ $lang = array(
 	'editor_hyperlink' => '超鏈接',
 	'editor_remove_link' => '移除鏈接',
 	'editor_link_image' => '引用圖片',
-	'editor_link_flash' => '引用視頻FLASH',
+	'editor_link_flash' => '引用視頻FLASH或MP3音樂',
 	'editor_insert_smiley' => '插入表情',
 	'editor_doodle' => '塗鴉',
 	'editor_pagebreak' => '插入分頁標誌',
@@ -67,11 +67,13 @@ $lang = array(
 	'editor_ok' => '確定',
 	'editor_cancel' => '取消',
 	'editor_prompt_textlink' => '請輸入選定文字鏈接地址',
-	'editor_prompt_imagelink' => '請輸入圖片URL地址',
-	'editor_prompt_videolink' => '請輸入視頻URL地址',
-	'editor_prompt_video_flash' => 'Flash動畫',
-	'editor_prompt_video_media' => 'Media視頻',
-	'editor_prompt_video_real' => 'Real視頻',
+	'editor_prompt_imagelink' => '請輸入圖片 URL 地址',
+	'editor_prompt_pagetitle' => '請輸入分頁標題',
+	'editor_prompt_videolink' => '請輸入視頻 URL 地址',
+	'editor_prompt_video_flash' => 'Flash 動畫',
+	'editor_prompt_video_media' => 'Media 視頻',
+	'editor_prompt_video_real' => 'Real 視頻',
+	'editor_prompt_mp3' => 'mp3 音樂',
 );
 
 ?>

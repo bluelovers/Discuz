@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_activitylist.php 13245 2010-07-23 04:04:28Z xupeng $
+ *      $Id: lang_activitylist.php 22074 2011-04-21 06:07:15Z zhangguosheng $
  */
 
 $lang = array
@@ -89,8 +89,10 @@ $lang = array
 	'activitylist_orderby_monthstart' => '按一月內活動開始時間排序',
 	'activitylist_orderby_weekexp' => '按一周內報名截止時間排序',
 	'activitylist_orderby_monthexp' => '按一月內報名截止時間排序',
-	'activitylist_orderby_weekhot' => '按一周內熱度排序',
-	'activitylist_orderby_monthhot' => '按一月內熱度排序',
+	'activitylist_orderby_weekhot' => '按一周內已參加人數排序',
+	'activitylist_orderby_monthhot' => '按一月內已參加人數排序',
+	'activitylist_orderby_alltimehot' => '按所有未結束活動已參加人數排序',
+	'activitylist_highlight' => '獲得高亮值',
 );
 
 ?>

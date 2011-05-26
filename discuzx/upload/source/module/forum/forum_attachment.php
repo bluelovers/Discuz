@@ -4,15 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 17487 2010-10-19 10:21:29Z monkey $
+ *      $Id: forum_attachment.php 21614 2011-04-02 06:27:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 define('NOROBOT', TRUE);
+@list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = explode('|', base64_decode($_G['gp_aid']));
 
-@list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid']) = explode('|', base64_decode($_G['gp_aid']));
+if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$_G[gp_aid]'"))) {
+	dheader('location: forum.php?mod=redirect&goto=findpost&pid='.$attach['pid'].'&ptid='.$attach['tid']);
+}
 
 if($_G['gp_uid'] != $_G['uid'] && $_G['gp_uid']) {
 	$_G['gp_uid'] = intval($_G['gp_uid']);
@@ -23,7 +26,16 @@ if($_G['gp_uid'] != $_G['uid'] && $_G['gp_uid']) {
 
 $requestmode = !empty($_G['gp_request']) && empty($_G['gp_uid']);
 
-$aid = $_G['gp_aid'];
+$aid = intval($_G['gp_aid']);
+
+$tableid = !empty($_G['gp_tableid']) ? getattachtableid($_G['gp_tableid']) : DB::result_first("SELECT tableid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'");
+if(!is_numeric($tableid)) {
+	if(!$requestmode) {
+		showmessage('attachment_nonexistence');
+	} else {
+		exit;
+	}
+}
 
 if($_G['setting']['attachexpire']) {
 	$k = $_G['gp_k'];
@@ -31,12 +43,12 @@ if($_G['setting']['attachexpire']) {
 	$authk = !$requestmode ? substr(md5($aid.md5($_G['config']['security']['authkey']).$t.$_G['gp_uid']), 0, 8) : md5($aid.md5($_G['config']['security']['authkey']).$t);
 	if(empty($k) || empty($t) || $k != $authk || TIMESTAMP - $t > $_G['setting']['attachexpire'] * 3600) {
 		$aid = intval($aid);
-		if($attach = DB::fetch_first("SELECT pid, tid, isimage FROM ".DB::table('forum_attachment')." WHERE aid='$aid'")) {
+		if($attach = DB::fetch_first("SELECT pid, tid, isimage FROM ".DB::table('forum_attachment_'.$tableid)." WHERE aid='$aid'")) {
 			if($attach['isimage']) {
 				dheader('location: '.$_G['siteurl'].'static/image/common/none.gif');
 			} else {
 				if(!$requestmode) {
-					showmessage('attachment_expired', '', array('aid' => aidencode($aid), 'pid' => $attach['pid'], 'tid' => $attach['tid']));
+					showmessage('attachment_expired', '', array('aid' => aidencode($aid, 0, $attach['tid']), 'pid' => $attach['pid'], 'tid' => $attach['tid']));
 				} else {
 					exit;
 				}
@@ -80,7 +92,7 @@ if(in_array($archiveid, $threadtableids)) {
 
 $attachexists = FALSE;
 if(!empty($aid) && is_numeric($aid)) {
-	$attach = DB::fetch_first("SELECT * FROM ".DB::table('forum_attachment')." WHERE aid='$aid'");
+	$attach = DB::fetch_first("SELECT * FROM ".DB::table('forum_attachment_'.$tableid)." WHERE aid='$aid'");
 	$thread = DB::fetch_first("SELECT tid, fid, posttableid, price, special FROM ".DB::table($threadtable)." WHERE tid='$attach[tid]' AND displayorder>='0'");
 	if($attach) {
 		$posttable = $thread['posttableid'] ? "forum_post_{$thread['posttableid']}" : 'forum_post';
@@ -100,29 +112,35 @@ if(!$attachexists) {
 }
 
 if(!$requestmode) {
-	$forum = DB::fetch_first("SELECT f.fid, f.viewperm, f.getattachperm, a.allowgetattach FROM ".DB::table('forum_forumfield')." f
+	$forum = DB::fetch_first("SELECT f.fid, f.viewperm, f.getattachperm, a.allowgetattach, a.allowgetimage FROM ".DB::table('forum_forumfield')." f
 		LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
 		WHERE f.fid='$thread[fid]'");
 
 	$_GET['fid'] = $forum['fid'];
 
-	$allowgetattach = !empty($forum['allowgetattach']) || ($_G['group']['allowgetattach'] && !$forum['getattachperm']) || forumperm($forum['getattachperm']);
+	if($attach['isimage']) {
+		$allowgetattach = !empty($forum['allowgetimage']) || (($_G['group']['allowgetimage'] || $_G['uid'] == $attach['uid']) && !$forum['getattachperm']) || forumperm($forum['getattachperm']);
+	} else {
+		$allowgetattach = !empty($forum['allowgetattach']) || (($_G['group']['allowgetattach']  || $_G['uid'] == $attach['uid']) && !$forum['getattachperm']) || forumperm($forum['getattachperm']);
+	}
 	if($allowgetattach && ($attach['readperm'] && $attach['readperm'] > $_G['group']['readaccess']) && $_G['adminid'] <= 0 && !($_G['uid'] && $_G['uid'] == $attach['uid'])) {
 		showmessage('attachment_forum_nopermission', NULL, array(), array('login' => 1));
 	}
 
+	$ismoderator = in_array($_G['adminid'], array(1, 2)) ? 1 : ($_G['adminid'] == 3 ? DB::result_first("SELECT uid FROM ".DB::table('forum_moderator')." m INNER JOIN ".DB::table($threadtable)." t ON t.tid='$attach[tid]' AND t.fid=m.fid WHERE m.uid='$_G[uid]'") : 0);
+
 	$ispaid = FALSE;
-	if(!$thread['special'] && $thread['price'] > 0 && (!$_G['uid'] || ($_G['uid'] && $_G['uid'] != $attach['uid'] && $_G['adminid'] <=0))) {
-		if(!$_G['uid'] || $_G['uid'] && !$ispaid = DB::result_first("SELECT uid FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='BTC' AND relatedid='$attach[tid]'")) {
+	$exemptvalue = $ismoderator ? 128 : 16;
+	if(!$thread['special'] && $thread['price'] > 0 && (!$_G['uid'] || ($_G['uid'] != $attach['uid'] && !($_G['group']['exempt'] & $exemptvalue)))) {
+		if(!$_G['uid'] || $_G['uid'] && !($ispaid = DB::result_first("SELECT uid FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='BTC' AND relatedid='$attach[tid]'"))) {
 			showmessage('attachment_payto', 'forum.php?mod=viewthread&tid='.$attach['tid']);
 		}
 	}
 
-	$ismoderator = in_array($_G['adminid'], array(1, 2)) ? 1 : ($_G['adminid'] == 3 ? DB::result_first("SELECT uid FROM ".DB::table('forum_moderator')." m INNER JOIN ".DB::table($threadtable)." t ON t.tid='$attach[tid]' AND t.fid=m.fid WHERE m.uid='$_G[uid]'") : 0);
 	$exemptvalue = $ismoderator ? 64 : 8;
 	if($attach['price'] && (!$_G['uid'] || ($_G['uid'] != $attach['uid'] && !($_G['group']['exempt'] & $exemptvalue)))) {
 		$payrequired = $_G['uid'] ? !DB::result_first("SELECT uid FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND relatedid='$attach[aid]' AND operation='BAC'") : 1;
-		$payrequired && showmessage('attachement_payto_attach', 'forum.php?mod=misc&action=attachpay&aid='.$attach['aid']);
+		$payrequired && showmessage('attachement_payto_attach', 'forum.php?mod=misc&action=attachpay&aid='.$attach['aid'].'&tid='.$attach['tid']);
 	}
 }
 
@@ -133,19 +151,23 @@ if(empty($_G['gp_nothumb']) && $attach['isimage'] && $attach['thumb']) {
 	$db = DB::object();
 	$db->close();
 	!$_G['config']['output']['gzip'] && ob_end_clean();
-	dheader('Content-Disposition: inline; filename='.$attach['filename'].'.thumb.jpg');
+	dheader('Content-Disposition: inline; filename='.getimgthumbname($attach['filename']));
 	dheader('Content-Type: image/pjpeg');
 	if($attach['remote']) {
-		$_G['setting']['ftp']['hideurl'] ? getremotefile($attach['attachment'].'.thumb.jpg') : dheader('location:'.$_G['setting']['ftp']['attachurl'].'forum/'.$attach['attachment'].'.thumb.jpg');
+		$_G['setting']['ftp']['hideurl'] ? getremotefile(getimgthumbname($attach['attachment'])) : dheader('location:'.$_G['setting']['ftp']['attachurl'].'forum/'.getimgthumbname($attach['attachment']));
 	} else {
-		getlocalfile($_G['setting']['attachdir'].'/forum/'.$attach['attachment'].'.thumb.jpg');
+		getlocalfile($_G['setting']['attachdir'].'/forum/'.getimgthumbname($attach['attachment']));
 	}
 	exit();
 }
 
 $filename = $_G['setting']['attachdir'].'/forum/'.$attach['attachment'];
 if(!$attach['remote'] && !is_readable($filename)) {
-	showmessage('attachment_nonexistence');
+	if(!$requestmode) {
+		showmessage('attachment_nonexistence');
+	} else {
+		exit;
+	}
 }
 
 if(!$requestmode) {
@@ -220,6 +242,11 @@ if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
 } else {
 	dheader('Content-Disposition: attachment; filename='.$attach['filename']);
 }
+if($isimage) {
+	dheader('Content-Type: image');
+} else {
+	dheader('Content-Type: application/octet-stream');
+}
 
 dheader('Content-Length: '.$filesize);
 
@@ -254,12 +281,9 @@ function getremotefile($file) {
 	global $_G;
 	@set_time_limit(0);
 	if(!@readfile($_G['setting']['ftp']['attachurl'].'forum/'.$file)) {
-		require_once libfile('function/ftp');
-		if(!($_G['setting']['ftp']['connid'] = dftp_connect($_G['setting']['ftp']['host'], $_G['setting']['ftp']['username'], authcode($_G['setting']['ftp']['password'], 'DECODE', md5($_G['config']['security']['authkey'])), $_G['setting']['ftp']['attachdir'], $_G['setting']['ftp']['port'], $_G['setting']['ftp']['ssl']))) {
-			return FALSE;
-		}
+		$ftp = ftpcmd('object');
 		$tmpfile = @tempnam($_G['setting']['attachdir'], '');
-		if(dftp_get($_G['setting']['ftp']['connid'], $tmpfile, $file, FTP_BINARY)) {
+		if($ftp->ftp_get($tmpfile, 'forum/'.$file, FTP_BINARY)) {
 			@readfile($tmpfile);
 			@unlink($tmpfile);
 		} else {

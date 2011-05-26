@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_feed.php 14490 2010-08-12 04:32:34Z zhengqingpeng $
+ *      $Id: lang_feed.php 19827 2011-01-19 07:07:40Z monkey $
  */
 
 $lang = array
@@ -50,7 +50,7 @@ $lang = array
 	'feed_profile_update_edu' => '{actor} 更新了自己的教育情況',
 	'feed_profile_update_work' => '{actor} 更新了自己的工作信息',
 	'feed_profile_update_info' => '{actor} 更新了自己的個人信息',
-	'feed_profile_update_bbs' => '{actor} 更新了自己的廣場信息',
+	'feed_profile_update_bbs' => '{actor} 更新了自己的論壇信息',
 	'feed_profile_update_verify' => '{actor} 更新了自己的認證信息',
 
 	'feed_add_attachsize' => '{actor} 用 {credit} 個積分兌換了 {size} 附件空間，可以上傳更多的圖片啦(<a href="home.php?mod=spacecp&ac=credit&op=addsize">我也來兌換</a>)',

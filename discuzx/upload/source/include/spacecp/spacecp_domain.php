@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_domain.php 16639 2010-09-11 02:50:00Z cnteacher $
+ *      $Id: spacecp_domain.php 20556 2011-02-25 10:19:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ $domainlength = checkperm('domainlength');
 if($_G['setting']['allowspacedomain'] && !empty($_G['setting']['domain']['root']['home']) && $domainlength) {
 	checklowerlimit('modifydomain');
 } else {
-	showmessage('no_privilege');
+	showmessage('no_privilege_spacedomain');
 }
 
 if(submitcheck('domainsubmit')) {
@@ -44,8 +44,15 @@ if(submitcheck('domainsubmit')) {
 		}
 	}
 
-	showmessage('do_success', 'home.php?mod=spacecp&ac=domain');
+	showmessage('domain_succeed', 'home.php?mod=spacecp&ac=domain');
 }
+
+$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='profilegroup'");
+$defaultop = '';
+if(!empty($result['svalue'])) {
+	$profilegroup = unserialize($result['svalue']);
+}
+
 $actives = array('profile' =>' class="a"');
 $opactives = array('domain' =>' class="a"');
 

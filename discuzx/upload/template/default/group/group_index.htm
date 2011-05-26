@@ -23,10 +23,10 @@
 		<!--{if $newthreadlist['dateline']['data']}-->
 			<table cellpadding="0" cellspacing="0" border="0">
 				<tbody id="$thread[id]">
-				<!--{loop $newthreadlist['dateline']['data'] $tid $thread}-->
+				<!--{loop $newthreadlist['dateline']['data'] $thread}-->
 						<tr>
 							<td class="icn">
-								<a href="forum.php?mod=viewthread&tid=$tid&extra=$extra" title="{lang target_blank}" target="_blank">
+								<a href="forum.php?mod=viewthread&tid=$thread[tid]" title="{lang target_blank}" target="_blank">
 								<!--{if $thread[folder] == 'lock'}-->
 									<img src="{IMGDIR}/folder_lock.gif" />
 								<!--{elseif $thread['special'] == 1}-->
@@ -39,13 +39,15 @@
 									<img src="{IMGDIR}/activitysmall.gif" alt="{lang thread_activity}" />
 								<!--{elseif $thread['special'] == 5}-->
 									<img src="{IMGDIR}/debatesmall.gif" alt="{lang thread_debate}" />
+								<!--{elseif in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
+								<img src="{IMGDIR}/pin_$thread[displayorder].gif" alt="$_G[setting][threadsticky][3-$thread[displayorder]]" />
 								<!--{else}-->
 									<img src="{IMGDIR}/folder_$thread[folder].gif" />
 								<!--{/if}-->
 								</a>
 							</td>
 							<th>
-								<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$tid" class="xst">$thread[subject]</a></span>
+								<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$thread[tid]" class="xst">$thread[subject]</a></span>
 							</th>
 							<td class="by">
 								<cite>
@@ -62,17 +64,17 @@
 								<em>$thread[dateline]</em>
 							</td>
 							<td class="num">
-								<a class="xi2" href="forum.php?mod=viewthread&tid=$tid">$thread[replies]</a><em>$thread[views]</em>
+								<a class="xi2" href="forum.php?mod=viewthread&tid=$thread[tid]">$thread[replies]</a><em>$thread[views]</em>
 							</td>
 							<td class="by">
 								<cite>
 									<!--{if $thread['lastposterenc']}-->
-										<a href="{if $thread[digest] != -2}home.php?mod=space&username=$thread[lastposterenc]{else}forum.php?mod=viewthread&tid=$tid&page={echo max(1, $thread[pages]);}{/if}">$thread[lastposter]</a>
+										<a href="{if $thread[digest] != -2}home.php?mod=space&username=$thread[lastposterenc]{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}">$thread[lastposter]</a>
 									<!--{else}-->
 										{lang anonymous}
 									<!--{/if}-->
 								</cite>
-								<em><a href="{if $thread[digest] != -2}forum.php?mod=redirect&tid=$tid&goto=lastpost#lastpost{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}">$thread[lastpost]</a></em>
+								<em><a href="{if $thread[digest] != -2}forum.php?mod=redirect&tid=$thread[tid]&goto=lastpost#lastpost{else}forum.php?mod=viewthread&tid=$thread[tid]&page={echo max(1, $thread[pages]);}{/if}">$thread[lastpost]</a></em>
 							</td>
 						</tr>
 				<!--{/loop}-->

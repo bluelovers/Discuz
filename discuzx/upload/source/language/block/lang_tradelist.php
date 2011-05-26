@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_tradelist.php 13245 2010-07-23 04:04:28Z xupeng $
+ *      $Id: lang_tradelist.php 21128 2011-03-16 05:52:27Z zhangguosheng $
  */
 
 $lang = array
@@ -88,6 +88,7 @@ $lang = array
 	'tradelist_orderby_monthstart' => '按一月內活動開始時間排序',
 	'tradelist_orderby_weekexp' => '按一周內報名截止時間排序',
 	'tradelist_orderby_monthexp' => '按一月內報名截止時間排序',
+	'tradelist_highlight' => '獲得高亮值',
 );
 
 ?>

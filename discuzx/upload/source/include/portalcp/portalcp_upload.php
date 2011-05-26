@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 17351 2010-10-11 05:03:55Z zhangguosheng $
+ *      $Id: portalcp_upload.php 21495 2011-03-28 09:23:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ if($aid) {
 
 if($operation == 'downremotefile') {
 	$arrayimageurl = $temp = $imagereplace = array();
-	$string = stripcslashes($_G['gp_content']);
+	$string = stripslashes($_G['gp_content']);
 	$downremotefile = true;
 	preg_match_all("/\<img.+src=('|\"|)?(.*)(\\1)([\s].*)?\>/ismUe", $string, $temp, PREG_SET_ORDER);
 	if(is_array($temp) && !empty($temp)) {
@@ -117,14 +117,14 @@ if($attachs) {
 		}
 
 		if(getglobal('setting/ftp/on') && ((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['size'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
-			if(ftpcmd('upload', 'portal/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'portal/'.$attach['attachment'].'.thumb.jpg'))) {
+			if(ftpcmd('upload', 'portal/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'portal/'.getimgthumbname($attach['attachment'])))) {
 				@unlink($_G['setting']['attachdir'].'/portal/'.$attach['attachment']);
-				@unlink($_G['setting']['attachdir'].'/portal/'.$attach['attachment'].'.thumb.jpg');
+				@unlink($_G['setting']['attachdir'].'/portal/'.getimgthumbname($attach['attachment']));
 				$attach['remote'] = 1;
 			} else {
 				if(getglobal('setting/ftp/mirror')) {
 					@unlink($attach['target']);
-					@unlink($attach['target'].'.thumb.jpg');
+					@unlink(getimgthumbname($attach['target']));
 					portal_upload_error(lang('portalcp', 'upload_remote_failed'));
 				}
 			}
@@ -173,21 +173,23 @@ function portal_upload_error($msg) {
 
 function portal_upload_show($attach) {
 
-	$imagehtml = $filehtml = '';
+	$imagehtml = $filehtml = $coverstr ='';
 
 	if($attach['isimage']) {
-		$imagehtml = get_uploadcontent($attach);
+		$imagehtml = get_uploadcontent($attach, 'portal', 'upload');
+		$coverstr = addslashes(serialize(array('pic'=>'portal/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote'])));
 	} else {
-		$filehtml = get_uploadcontent($attach);
+		$filehtml = get_uploadcontent($attach, 'portal', 'upload');
 	}
 
 	echo '<script>';
-	if($imagehtml) echo 'parent.$(\'attach_image_body\').innerHTML += \''.addslashes($imagehtml).'\';';
-	if($filehtml) echo 'parent.$(\'attach_file_body\').innerHTML += \''.addslashes($filehtml).'\';';
-
+	if($imagehtml) echo 'parent.$(\'attach_image_body\').innerHTML = \''.addslashes($imagehtml).'\'+parent.$(\'attach_image_body\').innerHTML;';
+	if($filehtml) echo 'parent.$(\'attach_file_body\').innerHTML = \''.addslashes($filehtml).'\'+parent.$(\'attach_file_body\').innerHTML;';
 	echo 'if(parent.$(\'localfile_'.$_GET['attach_target_id'].'\') != null)parent.$(\'localfile_'.$_GET['attach_target_id'].'\').style.display = \'none\';';
 	echo 'parent.$(\'attach_ids\').value += \','.$attach['attachid'].'\';';
+	if($coverstr) echo 'if(parent.$(\'conver\').value == \'\')parent.$(\'conver\').value = \''.$coverstr.'\';';
 	echo '</script>';
+
 }
 
 ?>

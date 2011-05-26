@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 17360 2010-10-11 07:57:19Z zhengqingpeng $
+ *      $Id: cache_setting.php 22694 2011-05-17 09:58:35Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,16 +15,16 @@ function build_cache_setting() {
 	global $_G;
 
 	$table = 'common_setting';
-	$skipkeys = array('posttableids', 'siteuniqueid', 'mastermobile', 'bbrules', 'bbrulestxt', 'closedreason',
+	$skipkeys = array('posttableids', 'siteuniqueid', 'mastermobile', 'closedreason',
 		'creditsnotify', 'backupdir', 'custombackup', 'jswizard', 'maxonlines', 'modreasons', 'newsletter',
-		'welcomemsg', 'welcomemsgtxt', 'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
-		'ipverifywhite', 'fastsmiley'
+		'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
+		'ipverifywhite', 'fastsmiley', 'defaultdoing', 'profilegroup',
 		);
-	$serialized = array('memory', 'search', 'creditspolicy', 'ftp', 'secqaa', 'ec_credit', 'qihoo', 'spacedata',
+	$serialized = array('reginput', 'memory', 'search', 'creditspolicy', 'ftp', 'secqaa', 'ec_credit', 'qihoo', 'spacedata',
 		'infosidestatus', 'uc', 'indexhot', 'relatedtag', 'sitemessage', 'uchome', 'heatthread', 'recommendthread',
-		'disallowfloat', 'allowviewuserthread', 'advtype', 'click', 'rewritestatus', 'rewriterule', 'privacy', 'focus',
+		'disallowfloat', 'allowviewuserthread', 'advtype', 'click', 'card', 'rewritestatus', 'rewriterule', 'privacy', 'focus',
 		'forumkeys', 'article_tags', 'verify', 'seotitle', 'seodescription', 'seokeywords', 'domain', 'ranklist',
-		'seccodedata', 'inviteconfig'
+		'seccodedata', 'inviteconfig', 'advexpiration', 'allowpostcomment', /*(IN_MOBILE)*/ 'mobile', 'connect'
 		);
 
 	$data = array();
@@ -107,7 +107,7 @@ function build_cache_setting() {
 		foreach($data['verify'] as $key => $value) {
 			if($value['available'] && !empty($value['icon'])) {
 				$icourl = parse_url($value['icon']);
-				if(!$icourl['host']) {
+				if(!$icourl['host'] && !file_exists($value['icon'])) {
 					$data['verify'][$key]['icon'] = $data['attachurl'].'common/'.$value['icon'];
 				}
 			}
@@ -123,6 +123,10 @@ function build_cache_setting() {
 		}
 	} else {
 		$data['recommendthread'] = array('allow' => 0);
+	}
+
+	if($data['commentnumber'] && !$data['allowpostcomment']) {
+		$data['commentnumber'] = 0;
 	}
 
 	if(!empty($data['ftp'])) {
@@ -158,7 +162,7 @@ function build_cache_setting() {
 	$data['commentitem'] = $commentitem;
 
 	if($data['allowviewuserthread']['allow']) {
-		$data['allowviewuserthread'] = is_array($data['allowviewuserthread']['fids']) && $data['allowviewuserthread']['fids'] ? dimplode($data['allowviewuserthread']['fids']) : '';
+		$data['allowviewuserthread'] = is_array($data['allowviewuserthread']['fids']) && $data['allowviewuserthread']['fids'] && !in_array('', $data['allowviewuserthread']['fids']) ? dimplode($data['allowviewuserthread']['fids']) : '';
 	} else {
 		$data['allowviewuserthread'] = false;
 	}
@@ -195,7 +199,7 @@ function build_cache_setting() {
 		unset($data['relatedtag']['status'], $data['relatedtag']['order'], $relatedtag);
 	}
 
-	$data['domain']['defaultindex'] = isset($data['defaultindex']) ? $data['defaultindex'] : '';
+	$data['domain']['defaultindex'] = isset($data['defaultindex']) && $data['defaultindex'] != '#' ? $data['defaultindex'] : '';
 	$data['domain']['holddomain'] = isset($data['holddomain']) ? $data['holddomain'] : '';
 	$data['domain']['list'] = array();
 	$query = DB::query("SELECT * FROM ".DB::table('common_domain')." WHERE idtype IN('subarea', 'forum', 'topic', 'channel')");
@@ -269,14 +273,14 @@ function build_cache_setting() {
 	$data['creditstrans'] = $creditstranssi[0];
 	unset($creditstranssi[0]);
 	$data['creditstransextra'] = $creditstranssi;
-	for($i = 1;$i < 10;$i++) {
+	for($i = 1;$i < 11;$i++) {
 		$data['creditstransextra'][$i] = $data['creditstrans'] ? (!$data['creditstransextra'][$i] ? $data['creditstrans'] : $data['creditstransextra'][$i]) : 0;
 	}
 	$data['exchangestatus'] = $allowexchangein && $allowexchangeout;
 	$data['transferstatus'] = isset($data['extcredits'][$data['creditstrans']]);
 
 	list($data['zoomstatus'], $data['imagemaxwidth']) = explode("\t", $data['zoomstatus']);
-	$data['imagemaxwidth'] = substr(trim($data['imagemaxwidth']), -1, 1) != '%' && $data['imagemaxwidth'] <= 1920 ? $data['imagemaxwidth'] : '';
+	$data['imagemaxwidth'] = intval($data['imagemaxwidth']);
 
 	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
 	$data['ucenterurl'] = UC_API;
@@ -292,7 +296,7 @@ function build_cache_setting() {
 	$focus = array();
 	if($data['focus']['data']) {
 		foreach($data['focus']['data'] as $k => $v) {
-			if($v['position']) {
+			if($v['available'] && $v['position']) {
 				foreach($v['position'] as $position) {
 					$focus[$position][$k] = $k;
 				}
@@ -301,14 +305,15 @@ function build_cache_setting() {
 	}
 	$data['focus'] = $focus;
 
-	list($data['plugins'], $data['pluginlinks'], $data['hookscript'], $data['threadplugins'], $data['specialicon']) = get_cachedata_setting_plugin();
+	list($data['plugins'], $data['pluginlinks'], $data['hookscript'], $data['hookscriptmobile'], $data['threadplugins'], $data['specialicon']) = get_cachedata_setting_plugin();
 
 	if(empty($data['defaultindex'])) $data['defaultindex'] = array();
-	list($data['navs'], $data['subnavs'], $data['menunavs'], $data['navmns'], $data['navmn'], $data['navdms']) = get_cachedata_mainnav();
+	list($data['navs'], $data['subnavs'], $data['menunavs'], $data['navmns'], $data['navmn'], $data['navdms'], $data['navlogos']) = get_cachedata_mainnav();
 
 	$data['footernavs'] = get_cachedata_footernav();
 	$data['spacenavs'] = get_cachedata_spacenavs();
 	$data['mynavs'] = get_cachedata_mynavs();
+	$data['topnavs'] = get_cachedata_topnav();
 
 	require_once DISCUZ_ROOT.'./uc_client/client.php';
 	$ucapparray = uc_app_ls();
@@ -360,6 +365,61 @@ function build_cache_setting() {
 		@unlink($cachedir.'/'.$tidmd5[0].'/'.$tidmd5[1].'/'.$tidmd5[2].'/0.htm');
 	}
 
+	$reginputbwords = array('username', 'password', 'password2', 'email');
+	if(in_array($data['reginput']['username'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['username'])) {
+		$data['reginput']['username'] = random(6);
+	}
+	if(in_array($data['reginput']['password'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['password'])) {
+		$data['reginput']['password'] = random(6);
+	}
+	if(in_array($data['reginput']['password2'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['password2'])) {
+		$data['reginput']['password2'] = random(6);
+	}
+	if(in_array($data['reginput']['email'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['email'])) {
+		$data['reginput']['email'] = random(6);
+	}
+
+	$defaultcurhost = empty($_G['setting']['domain']['app']['default']) ? '{CURHOST}' : $_G['setting']['domain']['app']['default'];
+	$output = array('str'=>array(), 'preg' => array()); //str為二級域名的查找和替換，preg為rewrite和默認域名的查找和替換
+	$_G['domain'] = array();
+	if(is_array($_G['setting']['domain']['app'])) {
+		$apps = $_G['setting']['domain']['app'];
+		$repflag = $apps['portal'] || $apps['forum'] || $apps['group'] || $apps['home'] || $apps['default'];
+		foreach($apps as $app => $domain) {
+			if(in_array($app, array('default', 'mobile'))) {
+				continue;
+			}
+			$appphp = "{$app}.php";
+			if(!$domain) {
+				$domain = $defaultcurhost;
+			}
+			if($domain != '{CURHOST}') {
+				$domain = 'http://'.$domain.$_G['siteport'].'/';
+			}
+			if($repflag) {
+				$output['str']['search'][$app] = "<a href=\"{$app}.php";
+				$output['str']['replace'][$app] = '<a href="'.$domain.$appphp;
+				$_G['domain']['pregxprw'][$app] = '<a href\="('.preg_quote($domain, '/').')'.$appphp;
+			} else {
+				$_G['domain']['pregxprw'][$app] = '<a href\="()'.$appphp;
+			}
+		}
+	}
+	if($_G['setting']['rewritestatus'] || $output['str']['search']) {
+		if($_G['setting']['rewritestatus']) {
+			require_once libfile('function/admincp');
+			$output['preg'] = rewritedata(0);
+		}
+		if($repflag) {
+			if($defaultcurhost != '{CURHOST}') {
+				$defaultcurhost = 'http://'.$defaultcurhost.$_G['siteport'].'/';
+			}
+			$output['preg']['search'][] = "/<a href=\"(\w+\.php)/";
+			$output['preg']['replace'][] = '<a href="'.$defaultcurhost."$1";
+		}
+	}
+	$data['output'] = $output;
+
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
 }
@@ -379,28 +439,28 @@ function get_cachedata_setting_creditspolicy() {
 	return $data;
 }
 
-function get_cachedata_setting_plugin() {
+function get_cachedata_setting_plugin($method = '') {
 	global $_G;
 	$data  = array();
 
-	$data['plugins'] = $data['pluginlinks'] = $data['hookscript'] = $data['threadplugins'] = $data['specialicon'] = $adminmenu = $scriptlang = array();
-	$query = DB::query("SELECT pluginid, available, name, identifier, directory, datatables, modules, version FROM ".DB::table('common_plugin')."");
+	$data['plugins'] = $data['pluginlinks'] = $data['hookscript'] = $data['hookscriptmobile'] = $data['threadplugins'] = $data['specialicon'] = $adminmenu = array();
+	$data['plugins']['hookscript_common'] = $data['plugins']['hookscript_discuzcode'] = $data['plugins']['hookscript_deletethread'] = $data['plugins']['hookscript_deletepost'] = false;
+	$data['plugins']['hookscriptmobile_common'] = $data['plugins']['hookscriptmobile_discuzcode'] = $data['plugins']['hookscriptmobile_deletethread'] = $data['plugins']['hookscriptmobile_deletepost'] = false;
+	$query = DB::query("SELECT pluginid, available, name, identifier, directory, datatables, modules, version FROM ".DB::table('common_plugin'));
 	$data['plugins']['available'] = array();
 	while($plugin = DB::fetch($query)) {
+		$available = !$method && $plugin['available'] || $method && ($plugin['available'] || $method == $plugin['identifier']);
 		$addadminmenu = $plugin['available'] && DB::result_first("SELECT count(*) FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]'") ? TRUE : FALSE;
 		$plugin['modules'] = unserialize($plugin['modules']);
-		if($plugin['available']) {
+		if($available) {
 			$data['plugins']['available'][] = $plugin['identifier'];
 			$data['plugins']['version'][$plugin['identifier']] = $plugin['version'];
-			if(!empty($plugin['modules']['extra']['langexists'])) {
-				@include DISCUZ_ROOT.'./data/plugindata/'.$plugin['identifier'].'.lang.php';
-			}
 		}
 		$plugin['directory'] = $plugin['directory'].((!empty($plugin['directory']) && substr($plugin['directory'], -1) != '/') ? '/' : '');
 		if(is_array($plugin['modules'])) {
 			unset($plugin['modules']['extra']);
 			foreach($plugin['modules'] as $k => $module) {
-				if($plugin['available'] && isset($module['name'])) {
+				if($available && isset($module['name'])) {
 					$k = '';
 					switch($module['type']) {
 						case 1:
@@ -411,6 +471,8 @@ function get_cachedata_setting_plugin() {
 							if($module['type'] == 24) $navtype = 2;
 						case 25:
 							if($module['type'] == 25) $navtype = 3;
+						case 27:
+							if($module['type'] == 27) $navtype = 4;
 							$module['url'] = $module['url'] ? $module['url'] : 'plugin.php?id='.$plugin['identifier'].':'.$module['name'];
 							if(!DB::result_first("SELECT count(*) FROM ".DB::table('common_nav')." WHERE navtype='$navtype' AND type='3' AND identifier='$plugin[identifier]'")) {
 								DB::insert('common_nav', array(
@@ -446,10 +508,10 @@ function get_cachedata_setting_plugin() {
 							$k = !$k ? 'spacecp_profile' : $k;
 						case 19:
 							$k = !$k ? 'spacecp_credit' : $k;
-							$data['plugins'][$k][$plugin['identifier'].':'.$module['name']] = array('displayorder' => $module['displayorder'], 'adminid' => $module['adminid'], 'name' => $module['menu'], 'url' => $module['url'], 'directory' => $plugin['directory']);
-							break;
 						case 21:
 							$k = !$k ? 'portalcp' : $k;
+						case 26:
+							$k = !$k ? 'space_thread' : $k;
 							$data['plugins'][$k][$plugin['identifier'].':'.$module['name']] = array('displayorder' => $module['displayorder'], 'adminid' => $module['adminid'], 'name' => $module['menu'], 'url' => $module['url'], 'directory' => $plugin['directory']);
 							break;
 						case 3:
@@ -459,13 +521,17 @@ function get_cachedata_setting_plugin() {
 							$data['plugins']['include'][$plugin['identifier']] = array('displayorder' => $module['displayorder'], 'adminid' => $module['adminid'], 'script' => $plugin['directory'].$module['name']);
 							break;
 						case 11:
+							$k = 'hookscript';
+						case 28:
+							$k = !$k ? 'hookscriptmobile' : $k;
 							$script = $plugin['directory'].$module['name'];
 							@include_once DISCUZ_ROOT.'./source/plugin/'.$script.'.class.php';
 							$classes = get_declared_classes();
 							$classnames = array();
-							$cnlen = strlen('plugin_'.$plugin['identifier']);
+							$namekey = ($k == 'hookscriptmobile' ? 'mobile' : '').'plugin_'.$plugin['identifier'];
+							$cnlen = strlen($namekey);
 							foreach($classes as $classname) {
-								if(substr($classname, 0, $cnlen) == 'plugin_'.$plugin['identifier']) {
+								if(substr($classname, 0, $cnlen) == $namekey) {
 									$hscript = substr($classname, $cnlen + 1);
 									$classnames[$hscript ? $hscript : 'global'] = $classname;
 								}
@@ -473,20 +539,38 @@ function get_cachedata_setting_plugin() {
 							foreach($classnames as $hscript => $classname) {
 								$hookmethods = get_class_methods($classname);
 								foreach($hookmethods as $funcname) {
+									if($hscript == 'global' && $funcname == 'common') {
+										$data['plugins'][$k.'_common'] = true;
+									}
+									if($hscript == 'global' && $funcname == 'discuzcode') {
+										$data['plugins'][$k.'_discuzcode'] = true;
+									}
+									if($hscript == 'global' && $funcname == 'deletethread') {
+										$data['plugins'][$k.'_deletethread'] = true;
+									}
+									if($hscript == 'global' && $funcname == 'deletepost') {
+										$data['plugins'][$k.'_deletepost'] = true;
+									}
 									$v = explode('_', $funcname);
 									$curscript = $v[0];
 									if(!$curscript || $classname == $funcname) {
 										continue;
 									}
-									if(!@in_array($script, $data['hookscript'][$hscript][$curscript]['module'])) {
-										$data['hookscript'][$hscript][$curscript]['module'][$plugin['identifier']] = $script;
-										$data['hookscript'][$hscript][$curscript]['adminid'][$plugin['identifier']] = $module['adminid'];
+									if($hscript == 'home') {
+										$curscript .= '_'.$v[1];
+									}
+									if(!@in_array($script, $data[$k][$hscript][$curscript]['module'])) {
+										$data[$k][$hscript][$curscript]['module'][$plugin['identifier']] = $script;
+										$data[$k][$hscript][$curscript]['adminid'][$plugin['identifier']] = $module['adminid'];
 									}
 									if(preg_match('/\_output$/', $funcname)) {
 										$varname = preg_replace('/\_output$/', '', $funcname);
-										$data['hookscript'][$hscript][$curscript]['outputfuncs'][$varname][] = array('displayorder' => $module['displayorder'], 'func' => array($plugin['identifier'], $funcname));
+										$data[$k][$hscript][$curscript]['outputfuncs'][$varname][] = array('displayorder' => $module['displayorder'], 'func' => array($plugin['identifier'], $funcname));
+									} elseif(preg_match('/\_message$/', $funcname)) {
+										$varname = preg_replace('/\_message$/', '', $funcname);
+										$data[$k][$hscript][$curscript]['messagefuncs'][$varname][] = array('displayorder' => $module['displayorder'], 'func' => array($plugin['identifier'], $funcname));
 									} else {
-										$data['hookscript'][$hscript][$curscript]['funcs'][$funcname][] = array('displayorder' => $module['displayorder'], 'func' => array($plugin['identifier'], $funcname));
+										$data[$k][$hscript][$curscript]['funcs'][$funcname][] = array('displayorder' => $module['displayorder'], 'func' => array($plugin['identifier'], $funcname));
 									}
 								}
 							}
@@ -512,36 +596,44 @@ function get_cachedata_setting_plugin() {
 			$adminmenu[] = array('url' => "plugins&operation=config&do=$plugin[pluginid]", 'action' => 'plugins_config_'.$plugin['pluginid'], 'name' => $plugin['name']);
 		}
 	}
-	$_G['setting']['plugins']['available'] = $data['plugins']['available'];
-	$file = DISCUZ_ROOT.'./data/plugindata/lang_plugin.php';
-	if($fp = @fopen($file, 'wb')) {
-		fwrite($fp, "<?php\n".getcachevars(array('lang' => $scriptlang)).'?>');
-		fclose($fp);
+	if(!$method) {
+		$_G['setting']['plugins']['available'] = $data['plugins']['available'];
+		save_syscache('adminmenu', $adminmenu);
 	}
 
-	writetocache('adminmenu', getcachevars(array('adminmenu' => $adminmenu)));
-
 	$data['pluginhooks'] = array();
-	foreach($data['hookscript'] as $hscript => $hookscript) {
-		foreach($hookscript as $curscript => $scriptdata) {
-			if(is_array($scriptdata['funcs'])) {
-				foreach($scriptdata['funcs'] as $funcname => $funcs) {
-					usort($funcs, 'pluginmodulecmp');
-					$tmp = array();
-					foreach($funcs as $k => $v) {
-						$tmp[$k] = $v['func'];
+	foreach(array('hookscript', 'hookscriptmobile') as $hooktype) {
+		foreach($data[$hooktype] as $hscript => $hookscript) {
+			foreach($hookscript as $curscript => $scriptdata) {
+				if(is_array($scriptdata['funcs'])) {
+					foreach($scriptdata['funcs'] as $funcname => $funcs) {
+						usort($funcs, 'pluginmodulecmp');
+						$tmp = array();
+						foreach($funcs as $k => $v) {
+							$tmp[$k] = $v['func'];
+						}
+						$data[$hooktype][$hscript][$curscript]['funcs'][$funcname] = $tmp;
 					}
-					$data['hookscript'][$hscript][$curscript]['funcs'][$funcname] = $tmp;
 				}
-			}
-			if(is_array($scriptdata['outputfuncs'])) {
-				foreach($scriptdata['outputfuncs'] as $funcname => $funcs) {
-					usort($funcs, 'pluginmodulecmp');
-					$tmp = array();
-					foreach($funcs as $k => $v) {
-						$tmp[$k] = $v['func'];
+				if(is_array($scriptdata['outputfuncs'])) {
+					foreach($scriptdata['outputfuncs'] as $funcname => $funcs) {
+						usort($funcs, 'pluginmodulecmp');
+						$tmp = array();
+						foreach($funcs as $k => $v) {
+							$tmp[$k] = $v['func'];
+						}
+						$data[$hooktype][$hscript][$curscript]['outputfuncs'][$funcname] = $tmp;
 					}
-					$data['hookscript'][$hscript][$curscript]['outputfuncs'][$funcname] = $tmp;
+				}
+				if(is_array($scriptdata['messagefuncs'])) {
+					foreach($scriptdata['messagefuncs'] as $funcname => $funcs) {
+						usort($funcs, 'pluginmodulecmp');
+						$tmp = array();
+						foreach($funcs as $k => $v) {
+							$tmp[$k] = $v['func'];
+						}
+						$data[$hooktype][$hscript][$curscript]['messagefuncs'][$funcname] = $tmp;
+					}
 				}
 			}
 		}
@@ -560,7 +652,7 @@ function get_cachedata_setting_plugin() {
 		}
 	}
 
-	return 	array($data['plugins'], $data['pluginlinks'], $data['hookscript'], $data['threadplugins'], $data['specialicon']);
+	return array($data['plugins'], $data['pluginlinks'], $data['hookscript'], $data['hookscriptmobile'], $data['threadplugins'], $data['specialicon']);
 
 }
 
@@ -571,7 +663,13 @@ function get_cachedata_mainnav() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND (available='1' OR type='0') AND parentid='0' ORDER BY displayorder");
 	while($nav = DB::fetch($query)) {
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
+		if($nav['identifier'] == 1 && $nav['type'] == 0 && !$_G['setting']['portalstatus']) {
+			$nav['available'] = 0;
+		}
 		if($nav['identifier'] == 3 && $nav['type'] == 0 && !$_G['setting']['groupstatus']) {
+			$nav['available'] = 0;
+		}
+		if($nav['identifier'] == 4 && $nav['type'] == 0 && !$_G['setting']['homestatus']) {
 			$nav['available'] = 0;
 		}
 		if($nav['type'] == 3) {
@@ -586,7 +684,6 @@ function get_cachedata_mainnav() {
 			$nav['available'] = 0;
 		}
 		$nav['style'] = parsehighlight($nav['highlight']);
-		$nav['url'] = $_G['config']['app']['domain'][$nav['identifier']] ? 'http://'.$_G['config']['app']['domain'][$nav['identifier']] : $nav['url'];
 		$data['navs'][$id]['navname'] = $nav['name'];
 		$data['navs'][$id]['filename'] = $nav['url'];
 		$data['navs'][$id]['available'] = $nav['available'];
@@ -613,7 +710,7 @@ function get_cachedata_mainnav() {
 				$onmouseover = 'navShow(\''.substr($navid, 3).'\')';
 				$data['subnavs'][$navid] = $subnavs;
 			} else {
-				$onmouseover = 'showMenu({\'ctrlid\':this.id})';
+				$onmouseover = 'showMenu({\'ctrlid\':this.id,\'ctrlclass\':\'hover\',\'duration\':2})';
 				$data['menunavs'][] = '<ul class="p_pop h_pop" id="'.$navid.'_menu" style="display: none">'.$subnavs.'</ul>';
 			}
 		}
@@ -625,9 +722,14 @@ function get_cachedata_mainnav() {
 				continue;
 			}
 		}
-		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";
-		$data['navs'][$id]['navid'] = $navid;
-		$data['navs'][$id]['level'] = $nav['level'];
+
+		if($nav['logo']) {
+			$navlogo = str_replace('{STATICURL}', STATICURL, $nav['logo']);
+			if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navlogo) && !(($valueparse = parse_url($navlogo)) && isset($valueparse['host']))) {
+				$navlogo = $_G['setting']['attachurl'].'common/'.$nav['logo'];
+			}
+			$data['navlogos'][$navid] = '<a href="'.$nav['url'].'" title="'.$_G['setting']['bbname'].'"><img src="'.$navlogo.'" alt="'.$_G['setting']['bbname'].'" border="0" /></a>';
+		}
 
 		$purl = parse_url($nav['url']);
 		$getvars = array();
@@ -639,10 +741,20 @@ function get_cachedata_mainnav() {
 		} elseif($purl['path']) {
 			$data['navmn'][$purl['path']] = $navid;
 		}
+		if($nav['type'] == 0) {
+			$domainkey = substr($purl['path'], 0, -strlen(strrchr($purl['path'], '.')));
+			if(!empty($_G['setting']['domain']['app'][$domainkey])) {
+				$nav['url'] = 'http://'.$_G['setting']['domain']['app'][$domainkey];
+			}
+		}
+
+		$data['navs'][$id]['navid'] = $navid;
+		$data['navs'][$id]['level'] = $nav['level'];
+		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";
 	}
 	$data['menunavs'] = implode('', $data['menunavs']);
 
-	return array($data['navs'], $data['subnavs'], $data['menunavs'], $data['navmns'], $data['navmn'], $data['navdms']);
+	return array($data['navs'], $data['subnavs'], $data['menunavs'], $data['navmns'], $data['navmn'], $data['navdms'], $data['navlogos']);
 
 }
 
@@ -765,6 +877,29 @@ function get_cachedata_mynavs() {
 		$data['mynavs'][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'level' => $nav['level']);
 	}
 	return $data['mynavs'];
+}
+
+function get_cachedata_topnav() {
+	global $_G;
+
+	$data['topnavs'] = array();
+	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='4' ORDER BY displayorder");
+	while($nav = DB::fetch($query)) {
+		$nav['extra'] = '';
+		if(!$nav['type']) {
+			if($nav['identifier'] == 'sethomepage') {
+				$nav['url'] = 'javascript:;';
+				$nav['extra'] = ' onclick="setHomepage(\''.$_G['siteurl'].'\');"';
+			} elseif($nav['identifier'] == 'setfavorite') {
+				$nav['url'] = $_G['siteurl'];
+				$nav['extra'] = ' onclick="addFavorite(this.href, \''.addslashes($_G['setting']['bbname']).'\');return false;"';
+			}
+		}
+		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
+		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
+		$data['topnavs'][$nav['subtype']][$id] = array('available' => $nav['available'], 'navname' => $nav['name'], 'code' => $nav['code'], 'type' => $nav['type'], 'level' => $nav['level'], 'id' => $nav['identifier']);
+	}
+	return $data['topnavs'];
 }
 
 function writetojscache() {

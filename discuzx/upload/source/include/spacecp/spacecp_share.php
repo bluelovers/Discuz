@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_share.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: spacecp_share.php 22767 2011-05-20 03:23:37Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,13 +21,13 @@ if($_GET['op'] == 'delete') {
 	}
 } elseif($_GET['op'] == 'edithot') {
 	if(!checkperm('manageshare')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_edithot_share');
 	}
 
 	if($sid) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE sid='$sid'");
 		if(!$share = DB::fetch($query)) {
-			showmessage('no_privilege');
+			showmessage('share_does_not_exist');
 		}
 	}
 
@@ -43,11 +43,8 @@ if($_GET['op'] == 'delete') {
 
 
 	if(!checkperm('allowshare')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_share');
 	}
-	ckrealname('share');
-
-	ckvideophoto('share');
 
 	cknewuser();
 
@@ -216,11 +213,13 @@ if($_GET['op'] == 'delete') {
 			if(in_array($thread['displayorder'], array(-2, -3))) {
 				showmessage('moderate_thread_not_share');
 			}
-			$posttable = getposttable('p');
+			$posttable = getposttable();
 			$post = DB::fetch(DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid='$id' AND first='1'"));
 
 			$arr['title_template'] = lang('spacecp', 'share_thread');
 			$arr['body_template'] = '<b>{subject}</b><br>{author}<br>{message}';
+			$attachment = !preg_match("/\[hide=?\d*\](.*?)\[\/hide\]/is", $post['message'], $a) && preg_match("/\[attach\]\d+\[\/attach\]/i", $a[1]);
+
 			$arr['body_data'] = array(
 				'subject' => "<a href=\"forum.php?mod=viewthread&tid=$id\">$thread[subject]</a>",
 				'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>",
@@ -228,7 +227,7 @@ if($_GET['op'] == 'delete') {
 			);
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $thread['uid'];
-			$attachment = DB::fetch_first('SELECT attachment, isimage, thumb, remote FROM '.DB::table('forum_attachment')." WHERE tid='$id' AND isimage IN ('1', '-1') LIMIT 0,1");
+			$attachment = $attachment ? DB::fetch_first('SELECT attachment, isimage, thumb, remote FROM '.DB::table(getattachtablebytid($id))." WHERE tid='$id' AND isimage IN ('1', '-1') LIMIT 0,1") : false;
 			if($attachment) {
 				$arr['image'] = pic_get($attachment['attachment'], 'forum', $attachment['thumb'], $attachment['remote'], 1);
 				$arr['image_link'] = "forum.php?mod=viewthread&tid=$id";
@@ -261,7 +260,7 @@ if($_GET['op'] == 'delete') {
 			'summary' => getstr($article['summary'], 150, 0, 1, 0, -1)
 			);
 			if($article['pic']) {
-				$arr['image'] = pic_get($article['pic'], 'portal', $article['thumb'], $article['remote'], 1);
+				$arr['image'] = pic_get($article['pic'], 'portal', $article['thumb'], $article['remote'], 1, 1);
 				$arr['image_link'] = "portal.php?mod=view&aid=$article[aid]";
 			}
 			$note_uid = $article['uid'];
@@ -281,7 +280,14 @@ if($_GET['op'] == 'delete') {
 			break;
 	}
 
+	$commentcable = array('blog' => 'blogid', 'pic' => 'picid', 'thread' => 'thread', 'article' => 'article');
+
 	if(submitcheck('sharesubmit', 0, $seccodecheck, $secqaacheck)) {
+
+		$magvalues = array();
+		$redirecturl = '';
+		$showmessagecontent = '';
+
 		if($type == 'link') {
 			$link = dhtmlspecialchars(trim($_POST['link']));
 			if($link) {
@@ -326,6 +332,102 @@ if($_GET['op'] == 'delete') {
 			}
 		}
 
+		if($_G['gp_iscomment'] && $_POST['general'] && $commentcable[$type] && $id) {
+
+			$currenttype = $commentcable[$type];
+			$currentid = $id;
+
+			if($currenttype == 'article') {
+				$article = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$currentid'");
+				include_once libfile('function/portal');
+				loadcache('portalcategory');
+				$cat = $_G['cache']['portalcategory'][$article['catid']];
+				$article['allowcomment'] = !empty($cat['allowcomment']) && !empty($article['allowcomment']) ? 1 : 0;
+				if(!$article['allowcomment']) {
+					showmessage('no_privilege_commentadd', '', array(), array('return' => true));
+				}
+				if($article['idtype'] == 'blogid') {
+					$currentid = $article['id'];
+					$currenttype = 'blogid';
+				} elseif($article['idtype'] == 'tid') {
+					$currentid = $article['id'];
+					$currenttype = 'thread';
+				}
+			}
+
+			if($currenttype == 'thread') {
+				$_G['setting']['seccodestatus'] = 0;
+				$_G['setting']['secqaa']['status'] = 0;
+
+				$_POST['replysubmit'] = true;
+				$_GET['tid'] = $currentid;
+				$_G['gp_action'] = 'reply';
+				$_G['gp_message'] = $_POST['general'];
+				if($commentcable[$type] == 'article') {
+					$_POST['portal_referer'] = 'portal.php?mod=view&aid='.$id;
+				}
+
+				include_once libfile('function/forum');
+				require_once libfile('function/post');
+				loadforum();
+
+				$inspacecpshare = 1;
+
+				include_once libfile('forum/post', 'module');
+				$redirecturl = $url ? $url : '';
+				$showmessagecontent = ($modnewreplies && $commentcable[$type] != 'article') ? 'do_success_thread_share_mod' : '';
+
+			} elseif($currenttype == 'article') {
+
+				if(!checkperm('allowcommentarticle')) {
+					showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
+				}
+
+				include_once libfile('function/spacecp');
+				include_once libfile('function/portalcp');
+
+				cknewuser();
+
+				$waittime = interval_check('post');
+				if($waittime > 0) {
+					showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
+				}
+
+				$aid = intval($currentid);
+				$message = $_POST['general'];
+
+				$retmessage = addportalarticlecomment($aid, $message);
+				if($retmessage != 'do_success') {
+					showmessage($retmessage);
+				}
+
+			} elseif($currenttype == 'picid' || $currenttype == 'blogid') {
+
+				if(!checkperm('allowcomment')) {
+					showmessage('no_privilege_comment', '', array(), array('return' => true));
+				}
+				cknewuser();
+				$waittime = interval_check('post');
+				if($waittime > 0) {
+					showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
+				}
+				$message = getstr($_POST['general'], 0, 1, 1, 2);
+				if(strlen($message) < 2) {
+					showmessage('content_is_too_short', '', array(), array('return' => true));
+				}
+				include_once libfile('class/bbcode');
+				$bbcode = & bbcode::instance();
+
+				require_once libfile('function/comment');
+				$cidarr = add_comment($message, $currentid, $currenttype, 0);
+				if($cidarr['cid']) {
+					$magvalues['cid'] = $cidarr['cid'];
+					$magvalues['id'] = $currentid;
+				}
+			}
+			$magvalues['type'] = $commentcable[$type];
+		}
+
 		$arr['body_general'] = getstr($_POST['general'], 150, 1, 1, 1);
 		$arr['body_general'] = censor($arr['body_general']);
 		if(censormod($arr['body_general']) || $_G['group']['allowsharemod']) {
@@ -357,6 +459,7 @@ if($_GET['op'] == 'delete') {
 
 		$setarr = daddslashes($arr);
 		$sid = DB::insert('home_share', $setarr, 1);
+
 		switch($type) {
 			case 'space':
 				DB::query("UPDATE ".DB::table('common_member_status')." SET sharetimes=sharetimes+1 WHERE uid='$id'");
@@ -372,10 +475,19 @@ if($_GET['op'] == 'delete') {
 				break;
 			case 'thread':
 				DB::query("UPDATE ".DB::table('forum_thread')." SET sharetimes=sharetimes+1 WHERE tid='$id'");
+				if($_G['setting']['heatthread']['type'] == 2) {
+					require_once libfile('function/forum');
+					update_threadpartake($id);
+				}
 				break;
 			case 'article':
 				DB::query("UPDATE ".DB::table('portal_article_count')." SET sharetimes=sharetimes+1 WHERE aid='$id'");
 				break;
+		}
+
+		if($arr['status'] == 1) {
+			updatemoderate('sid', $sid);
+			manage_addnotify('verifyshare');
 		}
 
 		if($type == 'link' || !DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_share')." WHERE uid='$_G[uid]' AND itemid='$id' AND type='$type'")) {
@@ -391,7 +503,15 @@ if($_GET['op'] == 'delete') {
 		updatecreditbyaction('createshare', $_G['uid'], array('sharings' => 1), $needle);
 
 		$referer = "home.php?mod=space&uid=$_G[uid]&do=share&view=$_GET[view]&from=$_GET[from]";
-		showmessage('do_success', dreferer(), array('sid' => $sid), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+		$magvalues['sid'] = $sid;
+
+		if(!$redirecturl) {
+			$redirecturl = dreferer();
+		}
+		if(!$showmessagecontent) {
+			$showmessagecontent = 'do_success';
+		}
+		showmessage($showmessagecontent, $redirecturl, $magvalues, ($_G['inajax'] && $_GET['view'] != 'me' ? array('showdialog'=>1, 'showmsg' => true, 'closetime' => true) : array()));
 	}
 
 	$arr['body_data'] = serialize($arr['body_data']);

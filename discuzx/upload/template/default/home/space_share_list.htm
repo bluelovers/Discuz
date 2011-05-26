@@ -20,15 +20,13 @@
 	<div class="mn">
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
 		<div class="bm bw0">
-			<!--{hook/space_share_top}-->
 			<!--{if $space[self]}-->
 				<h1 class="mt"><img alt="share" src="{STATICURL}image/feed/share.gif" class="vm" /> {lang share}</h1>
 				<!--{template home/space_share_form}-->
-				<!--{hook/space_share_bottom}-->
 				<ul class="tb cl">
-					<li$actives[we]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=we">{lang friend_share}</a></li>
-					<li$actives[me]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=me">{lang my_share}</a></li>
-					<li$actives[all]><a href="home.php?mod=space&uid=$space[uid]&do=share&view=all">{lang view_all}</a></li>
+					<li$actives[we]><a href="home.php?mod=space&do=share&view=we">{lang friend_share}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&do=share&view=me">{lang my_share}</a></li>
+					<li$actives[all]><a href="home.php?mod=space&do=share&view=all">{lang view_all}</a></li>
 				</ul>
 			<!--{else}-->
 				<!--{eval

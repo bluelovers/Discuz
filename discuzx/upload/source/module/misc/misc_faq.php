@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_faq.php 17275 2010-09-28 07:25:23Z zhangguosheng $
+ *      $Id: misc_faq.php 21981 2011-04-19 03:47:32Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,14 +44,13 @@ if($_G['gp_action'] == 'faq') {
 		}
 
 	} else {
-		showmessage("faq_content_empty", 'misc.php?mod=faq');
+		showmessage('faq_content_empty', 'misc.php?mod=faq');
 	}
 
 } elseif($_G['gp_action'] == 'search') {
 
 	$navtitle = lang('core', 'search');
 	if(submitcheck('searchsubmit')) {
-		$keyword = isset($_G['gp_keyword']) ? trim($_G['gp_keyword']) : '';
 		if($keyword) {
 			$sqlsrch = '';
 			$searchtype = in_array($_G['gp_searchtype'], array('all', 'title', 'message')) ? $_G['gp_searchtype'] : 'all';

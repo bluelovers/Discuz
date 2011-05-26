@@ -33,7 +33,7 @@ table{ border-collapse:collapse; }
 		.tb .pdleft1{ padding-left:67px; }
 .tb2{}
 	.tb2 th, .tb2 td{ padding:3px 5px; }
-	.tbopt{ width:120px; }
+	.tbopt{ width:130px; }
 .btnbox{ text-align:center; }
 	.btnbox input{ margin:0 2px; }
 	.btnbox textarea{ margin-bottom:10px; height:150px; }
@@ -56,10 +56,10 @@ table{ border-collapse:collapse; }
 .stepstat{ position:relative; bottom:-15px; left:80px; *width:593px; height:30px; }
 	.stepstatbg{ position:absolute; top:18px; z-index:90; width:535px; height:9px; overflow:hidden; background:#81C6F0 url(bg_stepstatus.gif) no-repeat; }
 	.stepstat ul{ position:absolute; top:3px; left:-2px; z-index:100; list-style:none; width:600px; white-space:nowrap; overflow:hidden; }
-		.stepstat li{ float:left; text-indent:-9999px; width:175px; height:30px; background:url(bg_repno.gif) no-repeat 0 -38px; }
-		.stepstat .current{ background:url(bg_repno.gif) no-repeat 0 -71px; }
+		.stepstat li{ float:left; text-indent:20px; width:175px; height:30px; line-height:14px; font-size:12px; background:url(bg_repno.gif) no-repeat 0 -38px; }
+		.stepstat .current{ background:url(bg_repno.gif) no-repeat 0 -71px; font-weight:700; }
 		.stepstat .unactivated{ background:url(bg_repno.gif) no-repeat 0 -103px; }
-		.stepstat .last{ width:20px; }
+		.stepstat .last{ width:50px; }
 .stepstat1{ background-position:-750px 0; }
 .stepstat2{ background-position:-570px 0; }
 .stepstat3{ background-position:-390px 0; }

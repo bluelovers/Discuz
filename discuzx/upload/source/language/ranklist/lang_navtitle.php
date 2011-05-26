@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_navtitle.php 16768 2010-09-14 08:00:07Z wangjinbo $
+ *      $Id: lang_navtitle.php 19830 2011-01-19 07:53:48Z shanzongjun $
  *
  *      This file is automatically generate
  */
@@ -15,13 +15,16 @@ $lang = array(
   'ranklist_title_member_girl' => '美女排行',
   'ranklist_title_member_boy' => '帥哥排行',
   'ranklist_title_member_friend' => '好友數排行',
+  'ranklist_title_member_invite' => '邀請排行',
   'ranklist_title_member_post' => '發帖數排行',
   'ranklist_title_member_blog' => '日誌數排行',
+  'ranklist_title_member_onlinetime' => '在線時間排行',
 
   'ranklist_title_thread_reply' => '帖子回復排行',
   'ranklist_title_thread_view' => '帖子查看排行',
   'ranklist_title_thread_share' => '帖子分享排行',
   'ranklist_title_thread_favorite' => '帖子收藏排行',
+  'ranklist_title_thread_heat' => '帖子熱度排行',
 
   'ranklist_title_blog_heat' => '日誌人氣排行',
   'ranklist_title_blog_reply' => '日誌評論排行',
@@ -61,6 +64,9 @@ $lang = array(
   'ranklist_title_group_post' => '群組回復排行',
   'ranklist_title_group_post_30' => '群組最近 30 天發帖排行',
   'ranklist_title_group_post_24' => '群組最近 24 小時發帖排行',
+
+  'ranklist_title_app_today' => '今日應用活躍排行',
+  'ranklist_title_app_all' => '最流行應用',
 );
 
 ?>

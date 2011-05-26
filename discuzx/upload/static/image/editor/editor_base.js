@@ -4,7 +4,6 @@ var gIEVer = fGetIEVer();
 var gLoaded = false;
 var ev = null;
 var gIsHtml = true;
-
 var pos = 0;
 var sLength = 0;
 
@@ -30,14 +29,31 @@ function fSetEditable(){
 }
 
 function renewContent() {
+
+	var evalevent = function (obj) {
+		var script = obj.parentNode.innerHTML;
+		var re = /onclick="(.+?)["|>]/ig;
+		var matches = re.exec(script);
+		if(matches != null) {
+			matches[1] = matches[1].replace(/this\./ig, 'obj.');
+			eval(matches[1]);
+		}
+	};
+
 	if(window.confirm('您確定要恢復上次保存?')) {
-		var data = loadUserdata('UCHome');
+		var data = loadUserdata('home');
 		if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
 			parent.showDialog('沒有可以恢復的數據！');
 			return;
 		}
 		var data = data.split(/\x09\x09/);
-		var formObj = parent.$(parent.$('subject').form.id);
+		if(parent.$('subject')) {
+			var formObj = parent.$('subject').form;
+		} else if(parent.$('title')) {
+			var formObj = parent.$('title').form;
+		} else {
+			return;
+		}
 		for(var i = 0; i < formObj.elements.length; i++) {
 			var el = formObj.elements[i];
 			if(el.name != '' && (el.tagName == 'TEXTAREA' || el.tagName == 'INPUT' && (el.type == 'text' || el.type == 'checkbox' || el.type == 'radio'))) {
@@ -53,7 +69,7 @@ function renewContent() {
 								evalevent(el);
 							}
 						} else if(ele[1] == 'TEXTAREA') {
-							if(ele[0] == 'message') {
+							if(ele[0] == 'message' || ele[0] == 'content') {
 								var f = window.frames["HtmlEditor"];
 								f.document.body.innerHTML = elvalue;
 							} else {
@@ -92,6 +108,7 @@ window.onload = function(){
 	}catch(e){
 	}
 }
+
 window.onbeforeunload = parent.edit_save;
 
 function fSetColor(){
@@ -157,7 +174,7 @@ document.onclick = function(e){
 		}catch(e){}
 	}
 	try{
-		if(fInObj(el, "createUrl") || fInObj(el, "createImg") || fInObj(el, "createSwf")){
+		if(fInObj(el, "createUrl") || fInObj(el, "createImg") || fInObj(el, "createSwf") || fInObj(el, "createPage")){
 			return;
 		}
 	}catch(e){}
@@ -180,7 +197,8 @@ var arrMatch = {
 	faceBox:"editFaceBox",
 	icoUrl:"createUrl",
 	icoImg:"createImg",
-	icoSwf:"createSwf"
+	icoSwf:"createSwf",
+	icoPage:"createPage"
 }
 function format(type, para){
 	var f = window.frames["HtmlEditor"];
@@ -211,9 +229,9 @@ function format(type, para){
 		}
 	}else{
 		if(type == 'insertHTML') {
-			if(window.Event){
+			try{
 				f.document.execCommand('insertHTML', false, para);
-			} else {
+			}catch(exp){
 				var obj = f.document.selection.createRange();
 				obj.pasteHTML(para);
 				obj.collapse(false);
@@ -263,7 +281,7 @@ function faceBox(e) {
 	var faceul = document.createElement("ul");
 	for(i=1; i<31; i++) {
 		var faceli = document.createElement("li");
-		faceli.innerHTML = '<img src="' + parent.STATICURL + 'image/smiley/comcom/'+i+'.gif" onclick="insertImg(this.src);" style="cursor:pointer;" />';
+		faceli.innerHTML = '<img src="' + parent.STATICURL + 'image/smiley/comcom/'+i+'.gif" onclick="insertImg(this.src);" class="cur1" />';
 		faceul.appendChild(faceli);
 	}
 	dvFaceBox.appendChild(faceul);
@@ -398,6 +416,8 @@ function createFlash(e, show) {
 				flashtag = '[flash=media]';
 			} else if(sFlashType==2) {
 				flashtag = '[flash=real]';
+			} else if(sFlashType==3) {
+				flashtag = '[flash=mp3]';
 			} else {
 				flashtag = '[flash]';
 			}
@@ -501,7 +521,7 @@ function f_GetY(e)
 }
 function fHideMenu(){
 	try{
-		var arr = ["fontface", "fontsize", "dvForeColor", "dvPortrait", "divAlign", "divList" ,"divInOut", "editFaceBox", "createUrl", "createImg", "createSwf"];
+		var arr = ["fontface", "fontsize", "dvForeColor", "dvPortrait", "divAlign", "divList" ,"divInOut", "editFaceBox", "createUrl", "createImg", "createSwf", "createPage"];
 		for(var i=0;i<arr.length;i++){
 			var obj = $(arr[i]);
 			if(obj){
@@ -521,8 +541,29 @@ function fHide(obj){
 	obj.style.display="none";
 }
 
-function pageBreak() {
-	format("insertHTML", '###NextPage###');
+function pageBreak(e, show) {
+	if(!show) {
+		var obj = $('pageTitle');
+		var title = obj ? obj.value : '';
+		if(obj) {
+			obj.value = '';
+		}
+		var insertText = title ? '[title='+title+']': '';
+		setCaret();
+		format("insertHTML", '###NextPage'+insertText+'###');
+		fHide($('createPage'));
+	} else {
+		if(gIsIE){
+			var e = window.event;
+		}
+		getCaret();
+		var dvSwfBox = $("createPage");
+		var iX = e.clientX;
+		var iY = e.clientY;
+		dvSwfBox.style.display = "";
+		dvSwfBox.style.left = (iX-300) + "px";
+		dvSwfBox.style.top = 33 + "px";
+	}
 }
 function changeEditType(flag, ev){
 	gIsHtml = flag;

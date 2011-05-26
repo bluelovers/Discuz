@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_reward.php 14070 2010-08-05 08:02:35Z xupeng $
+ *      $Id: space_reward.php 20818 2011-03-04 08:21:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,6 +16,7 @@ $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $_G['gp_flag'] = empty($_G['gp_flag']) ? 0 : intval($_G['gp_flag']);
+$opactives['reward'] = 'class="a"';
 
 if(empty($_GET['view'])) $_GET['view'] = 'we';
 
@@ -24,8 +25,7 @@ $perpage = mob_perpage($perpage);
 $start = ($page-1)*$perpage;
 ckstart($start, $perpage);
 
-$list = array();
-$userlist = array();
+$list = $userlist = array();
 $hiddennum = $count = $pricount = 0;
 
 $gets = array(
@@ -49,11 +49,15 @@ $ordersql = 't.dateline DESC';
 $need_count = true;
 require_once libfile('function/misc');
 if($_GET['view'] == 'all') {
-	$ordertype = in_array($_G['gp_order'], array('new', 'hot')) ? $_G['gp_order'] : 'new';
+	$start = 0;
+	$perpage = 100;
+
+	$alltype = $ordertype = in_array($_G['gp_order'], array('new', 'hot')) ? $_G['gp_order'] : 'new';
 	if($_GET['order'] == 'hot') {
 		$wheresql .= " AND t.replies>='$minhot'";
 	}
 	$orderactives = array($ordertype => ' class="a"');
+	loadcache('space_reward');
 } elseif($_GET['view'] == 'me') {
 	$wheresql = "t.authorid = '$space[uid]' AND t.special='3'";
 } else {
@@ -83,34 +87,67 @@ $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
 
+	$wheresql .= $_G['gp_view'] != 'me' ? " AND t.displayorder>='0'" : '';
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	if($_G['gp_flag'] < 0) {
 		$wheresql .= " AND t.price < '0'";
+		$alltype .= '1';
 	} elseif($_G['gp_flag'] > 0) {
 		$wheresql .= " AND t.price > '0'";
+		$alltype .= '0';
 	}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t WHERE $wheresql"),0);
-	if($count) {
-		$query = DB::query("SELECT t.* FROM ".DB::table('forum_thread')." t
-			WHERE $wheresql
-			ORDER BY $ordersql LIMIT $start,$perpage");
-	}
-}
+	$havecache = false;
+	if($_G['gp_view'] == 'all') {
 
-if($count) {
-	while($value = DB::fetch($query)) {
-		if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
-			$hiddennum++;
-			continue;
+		$cachetime = $_G['gp_order'] == 'hot' ? 43200 : 3000;
+		if(!empty($_G['cache']['space_reward'][$alltype]) && is_array($_G['cache']['space_reward'][$alltype])) {
+			$cachearr = $_G['cache']['space_reward'][$alltype];
+			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
+				$list = $cachearr['data'];
+				$hiddennum = $cachearr['hiddennum'];
+				$havecache = true;
+			}
 		}
-		$list[] = procthread($value);
 	}
-	$multi = multi($count, $perpage, $page, $theurl);
+	if(!$havecache) {
+		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t WHERE $wheresql"),0);
+		if($count) {
+			$query = DB::query("SELECT t.* FROM ".DB::table('forum_thread')." t
+				WHERE $wheresql
+				ORDER BY $ordersql LIMIT $start,$perpage");
+
+			while($value = DB::fetch($query)) {
+				if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
+					$hiddennum++;
+					continue;
+				}
+				$list[] = procthread($value);
+			}
+
+			if($_G['gp_view'] == 'all') {
+				$_G['cache']['space_reward'][$alltype] = array(
+					'dateline' => $_G['timestamp'],
+					'hiddennum' => $hiddennum,
+					'data' => $list
+				);
+				save_syscache('space_reward', $_G['cache']['space_reward']);
+			}
+
+			if($_G['gp_view'] != 'all') {
+				$multi = multi($count, $perpage, $page, $theurl);
+			}
+
+		}
+	} else {
+		$count = count($list);
+	}
 }
+
 $creditid = 0;
 if($_G['setting']['creditstransextra'][2]) {
 	$creditid = intval($_G['setting']['creditstransextra'][2]);

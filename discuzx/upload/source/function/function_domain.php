@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_domain.php 16829 2010-09-15 07:27:51Z zhangguosheng $
+ *      $Id: function_domain.php 18449 2010-11-24 02:11:16Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,7 +19,7 @@ function domaincheck($domain, $domainroot, $domainlength, $msgtype = 1) {
 	if(strlen($domain) > 30) {
 		$msgtype ? showmessage('two_domain_length_not_more_than_30_characters', '', array(), array('return' => true)) : cpmsg('two_domain_length_not_more_than_30_characters', '', 'error');
 	}
-	if(!preg_match("/^[a-z][a-z0-9]*$/", $domain)) {
+	if(!preg_match("/^[a-z0-9]*$/", $domain)) {
 		$msgtype ? showmessage('only_two_names_from_english_composition_and_figures', '', array(), array('return' => true)) : cpmsg('only_two_names_from_english_composition_and_figures', '', 'error');
 	}
 
@@ -38,7 +38,6 @@ function isholddomain($domain) {
 	global $_G;
 
 	$domain = strtolower($domain);
-	if(preg_match("/^[^a-z]/i", $domain)) return true;
 	$holdmainarr = empty($_G['setting']['holddomain'])?array('www'):explode('|', $_G['setting']['holddomain']);
 	$ishold = false;
 	foreach ($holdmainarr as $value) {

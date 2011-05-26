@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_poll.php 14009 2010-08-04 07:42:16Z cnteacher $
+ *      $Id: thread_poll.php 19433 2010-12-31 04:04:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ if($count = DB::fetch_first("SELECT MAX(votes) AS max, SUM(votes) AS total FROM 
 	while($options = DB::fetch($query)) {
 		$viewvoteruid[] = $options['voterids'];
 		$voterids .= "\t".$options['voterids'];
-		$option = preg_replace("/\[url=(https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);
+		$option = preg_replace("/\[url=(https?){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);
 		$polloptions[$opts++] = array
 		(
 			'polloptionid'	=> $options['polloptionid'],

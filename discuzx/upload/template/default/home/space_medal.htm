@@ -3,7 +3,6 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
 		<a href="home.php?mod=medal">{lang medals}</a>
 	</div>
 </div>
@@ -11,27 +10,25 @@
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
-			<h1 class="mt"><img src="{STATICURL}image/feed/medal.gif" alt="{lang medals_list}" class="vm" /> {lang medals_list}</h1>
-
-			<ul class="tb cl">
-				<li{if empty($_G[gp_action])} class="a"{/if}><a href="home.php?mod=medal">{lang medals_center}</a></li>
-				<li{if $_G[gp_action] == 'log'} class="a"{/if}><a href="home.php?mod=medal&action=log">{lang my_medals}</a></li>
-			</ul>
+			<h1 class="mt">
+				<img src="{STATICURL}image/feed/medal.gif" alt="{lang medals_list}" class="vm" />
+				<!--{if $_G[gp_action] == 'log'}-->{lang my_medals}
+				<!--{else}-->{lang medals_center}<!--{/if}-->
+			</h1>
 
 			<!--{if empty($_G[gp_action])}-->
 				<form method="post" autocomplete="off" action="home.php?mod=medal&action=apply&medalsubmit=yes">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="medalid" value="" />
 
-				<h3 class="tbmu mbw cl"><span class="y xg1 xw0">{lang total} <!--{echo count($medallist);}--> {lang unit}</span><!--{if $medallogs}-->{lang medals_all}<!--{else}-->{lang all}<!--{/if}--></h3>
 				<!--{if $medallist}-->
-					<ul class="ml mlm mdl cl">
+					<table cellspacing="0" cellpadding="0" class="mdl dt">
 						<!--{loop $medallist $key $medal}-->
-						<li class="pns">
-							<img src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" />
-							<p class="mtn"><strong>$medal[name]</strong></p>
-							<p class="xg1" title="$medal[description]">$medal[description]</p>
-							<span>
+						<tr>
+							<td class="m"><img src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" /></td>
+							<td class="xw1">$medal[name]</td>
+							<td class="xg1" title="$medal[description]">$medal[description]</td>
+							<td>
 								<!--{if $medal[expiration]}-->
 									{lang expire} $medal[expiration] {lang days},
 								<!--{/if}-->
@@ -46,15 +43,17 @@
 										{lang medals_type_2}
 									<!--{/if}-->
 								<!--{/if}-->
-							</span>
+							</td>
+							<td>
 							<!--{if $medal[type] && $_G['uid']}-->
 								<button type="button" class="pn" onclick="this.form.medalid.value = '$medal[medalid]';this.form.submit();return false;">
 									<em><!--{if !$medal[permission]}-->{lang medals_apply}<!--{else}-->{lang medals_draw}<!--{/if}--></em>
 								</button>
 							<!--{/if}-->
-						</li>
+							<td>
+						</tr>
 						<!--{/loop}-->
-					</ul>
+					</table>
 				<!--{else}-->
 					<!--{if $medallogs}-->
 						<p class="emp">{lang medals_nonexistence}</p>
@@ -78,8 +77,7 @@
 			<!--{elseif $_G[gp_action] == 'log'}-->
 
 				<!--{if $mymedals}-->
-					<h3 class="tbmu mbw cl"><span class="y xg1 xw0">{lang medals_oneself_num}</span>{lang my_medals}</h3>
-					<ul class="ml mlm mdl mdlow cl">
+					<ul class="ml mlm mdlow mtw cl">
 						<!--{loop $mymedals $mymedal}-->
 						<li>
 							<img src="{STATICURL}image/common/$mymedal[image]" alt="$mymedal[name]" />
@@ -110,7 +108,13 @@
 		</div>
 	</div>
 	<div class="appl">
-		<!--{subtemplate common/userabout}-->
+		<div class="tbn">
+			<h2 class="mt bbda">{lang medals}</h2>
+			<ul>
+				<li{if empty($_G[gp_action])} class="a"{/if}><a href="home.php?mod=medal">{lang medals_center}</a></li>
+				<li{if $_G[gp_action] == 'log'} class="a"{/if}><a href="home.php?mod=medal&action=log">{lang my_medals}</a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 

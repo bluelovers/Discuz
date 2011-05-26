@@ -33,7 +33,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 		} elseif(isemail($username)) {
 			$return['ucresult'] = uc_user_login($username, $password, 2, 1, $questionid, $answer);
 		}
-		if($return['ucresult'][0] <= 0) {
+		if($return['ucresult'][0] <= 0 && $return['ucresult'][0] != -3) {
 			$return['ucresult'] = uc_user_login($username, $password, 0, 1, $questionid, $answer);
 		}
 	} else {
@@ -78,16 +78,14 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 
 function setloginstatus($member, $cookietime) {
 	global $_G;
-	foreach($_G['cookie'] as $k => $v) {
-		dsetcookie($k);
-	}
 	$_G['uid'] = $member['uid'];
-	$_G['username'] = $member['username'];
+	$_G['username'] = addslashes($member['username']);
 	$_G['adminid'] = $member['adminid'];
 	$_G['groupid'] = $member['groupid'];
 	$_G['formhash'] = formhash();
 	$_G['session']['invisible'] = getuserprofile('invisible');
 	$_G['member'] = $member;
+	loadcache('usergroup_'.$_G['groupid']);
 	$discuz = & discuz_core::instance();
 	$discuz->session->isnew = true;
 
@@ -95,26 +93,39 @@ function setloginstatus($member, $cookietime) {
 	dsetcookie('loginuser');
 	dsetcookie('activationauth');
 	dsetcookie('pmnum');
+
+	include_once libfile('function/stat');
+	updatestat('login', 1);
+	if(defined('IN_MOBILE')) {
+		updatestat('mobilelogin', 1);
+	}
+	if($_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+		updatestat('connectlogin', 1);
+	}
+	updatecreditbyaction('daylogin', $_G['uid']);
+	checkusergroup($_G['uid']);
 }
 
-function logincheck() {
+function logincheck($username) {
 	global $_G;
 	$return = 0;
-	$login = DB::fetch_first("SELECT count, lastupdate FROM ".DB::table('common_failedlogin')." WHERE ip='$_G[clientip]'");
-	$return = (!$login || (TIMESTAMP - $login['lastupdate'] > 900)) ? 4 : max(0, 5 - $login['count']);
+	$username = addslashes(trim(stripslashes($username)));
+	$login = DB::fetch_first("SELECT count, lastupdate FROM ".DB::table('common_failedlogin')." WHERE ip='$_G[clientip]' AND username='$username'");
+	$return = (!$login || (TIMESTAMP - $login['lastupdate'] > 900)) ? 4 : max(0, 4 - $login['count']);
 
 	if(!$login) {
-		DB::query("REPLACE INTO ".DB::table('common_failedlogin')." (ip, count, lastupdate) VALUES ('$_G[clientip]', '1', '$_G[timestamp]')");
+		DB::query("REPLACE INTO ".DB::table('common_failedlogin')." (ip, username, count, lastupdate) VALUES ('$_G[clientip]', '$username', '0', '$_G[timestamp]')");
 	} elseif(TIMESTAMP - $login['lastupdate'] > 900) {
-		DB::query("REPLACE INTO ".DB::table('common_failedlogin')." (ip, count, lastupdate) VALUES ('$_G[clientip]', '1', '$_G[timestamp]')");
+		DB::query("REPLACE INTO ".DB::table('common_failedlogin')." (ip, username, count, lastupdate) VALUES ('$_G[clientip]', '$username', '0', '$_G[timestamp]')");
 		DB::query("DELETE FROM ".DB::table('common_failedlogin')." WHERE lastupdate<$_G[timestamp]-901", 'UNBUFFERED');
 	}
 	return $return;
 }
 
-function loginfailed() {
+function loginfailed($username) {
 	global $_G;
-	DB::query("UPDATE ".DB::table('common_failedlogin')." SET count=count+1, lastupdate='$_G[timestamp]' WHERE ip='$_G[clientip]'");
+	$username = addslashes(trim(stripslashes($username)));
+	DB::query("UPDATE ".DB::table('common_failedlogin')." SET count=count+1, lastupdate='$_G[timestamp]' WHERE ip='$_G[clientip]' AND username='$username'");
 }
 
 function getuidfields() {
@@ -137,7 +148,16 @@ function getuidfields() {
 		'forum_activity',
 		'forum_activityapply',
 		'forum_attachment',
-		'forum_attachmentfield',
+		'forum_attachment_0',
+		'forum_attachment_1',
+		'forum_attachment_2',
+		'forum_attachment_3',
+		'forum_attachment_4',
+		'forum_attachment_5',
+		'forum_attachment_6',
+		'forum_attachment_7',
+		'forum_attachment_8',
+		'forum_attachment_9',
 		'forum_creditslog',
 		'forum_debate',
 		'forum_debatepost',
@@ -238,7 +258,6 @@ function getinvite() {
 	return $result;
 }
 
-
 function replacesitevar($string, $replaces = array()) {
 	global $_G;
 	$sitevars = array(
@@ -251,6 +270,17 @@ function replacesitevar($string, $replaces = array()) {
 	);
 	$replaces = array_merge($sitevars, $replaces);
 	return str_replace(array_keys($replaces), array_values($replaces), $string);
+}
+
+function clearcookies() {
+	global $_G;
+	foreach($_G['cookie'] as $k => $v) {
+		if($k != 'widthauto') {
+			dsetcookie($k);
+		}
+	}
+	$_G['uid'] = $_G['adminid'] = 0;
+	$_G['username'] = $_G['member']['password'] = '';
 }
 
 ?>

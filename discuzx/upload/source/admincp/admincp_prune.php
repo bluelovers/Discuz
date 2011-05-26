@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_prune.php 16845 2010-09-15 09:41:41Z monkey $
+ *      $Id: admincp_prune.php 20479 2011-02-24 09:06:10Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 $searchsubmit = $_G['gp_searchsubmit'];
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
 
 require_once libfile('function/misc');
 loadcache('forums');
@@ -39,8 +40,13 @@ if(!submitcheck('prunesubmit')) {
 		$forumselect = $forumselect ? $forumselect : $lang['none'];
 	}
 
-	$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_starttime']) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $_G['gp_starttime'];
-	$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_endtime']) ? dgmdate(TIMESTAMP, 'Y-n-j') : $_G['gp_endtime'];
+	if($fromumanage) {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_starttime']) ? '' : $_G['gp_starttime'];
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_endtime']) ? '' : $_G['gp_endtime'];
+	} else {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_starttime']) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $_G['gp_starttime'];
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $_G['gp_endtime']) ? dgmdate(TIMESTAMP, 'Y-n-j') : $_G['gp_endtime'];
+	}
 
 	shownav('topic', 'nav_prune'.($operation ? '_'.$operation : ''));
 	showsubmenusteps('nav_prune'.($operation ? '_'.$operation : ''), array(
@@ -57,16 +63,24 @@ function page(number) {
 }
 </script>
 EOT;
+
+	$posttableselect = getposttableselect();
 	showtagheader('div', 'searchposts', !$searchsubmit);
 	showformheader("prune".($operation ? '&operation='.$operation : ''), '', 'pruneforum');
 	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
 	showtableheader();
 	showsetting('prune_search_detail', 'detail', $_G['gp_detail'], 'radio');
+	if($posttableselect) {
+		showsetting('prune_search_select_postsplit', '', '', $posttableselect);
+	}
 	if($operation != 'group') {
 		showsetting('prune_search_forum', '', '', $forumselect);
 	}
 	showsetting('prune_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
-	empty($_G['gp_starttime']) && $_G['gp_starttime'] = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
+	if(!$fromumanage) {
+		empty($_G['gp_starttime']) && $_G['gp_starttime'] = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
+	}
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsetting('prune_search_time', array('starttime', 'endtime'), array($_G['gp_starttime'], $_G['gp_endtime']), 'daterange');
 	showsetting('prune_search_user', 'users', $_G['gp_users'], 'text');
 	showsetting('prune_search_ip', 'useip', $_G['gp_useip'], 'text');
@@ -79,17 +93,22 @@ EOT;
 
 } else {
 
-	$tidsdelete = $pidsdelete = '0';
+	$pidsdelete = $tidsdelete = array();
 	$pids = authcode($_G['gp_pids'], 'DECODE');
 	$pidsadd = $pids ? 'pid IN ('.$pids.')' : 'pid IN ('.dimplode($_G['gp_pidarray']).')';
 
-	$postarray = getfieldsofposts('fid, tid, pid, first, authorid', "$pidsadd");
-	foreach($postarray as $post) {
+	loadcache('posttableids');
+	$posttable = in_array($_G['gp_posttableid'], $_G['cache']['posttableids']) ? $_G['gp_posttableid'] : 0;
+	$query = DB::query("SELECT fid, tid, pid, first, authorid FROM ".DB::table(getposttable($posttable))." WHERE $pidsadd");
+
+	while($post = DB::fetch($query)) {
 		$prune['forums'][] = $post['fid'];
 		$prune['thread'][$post['tid']]++;
 
-		$pidsdelete .= ",$post[pid]";
-		$tidsdelete .= $post['first'] ? ",$post[tid]" : '';
+		$pidsdelete[] = $post['pid'];
+		if($post['first']) {
+			$tidsdelete[] = $post['tid'];
+		}
 		if($post['first']) {
 			my_thread_log('delete', array('tid' => $post['tid']));
 		} else {
@@ -99,36 +118,9 @@ EOT;
 
 	if($pidsdelete) {
 		require_once libfile('function/post');
-
-		if(!$_G['gp_donotupdatemember']) {
-			$postsarray = $tuidarray = $ruidarray = array();
-			$postarray1 = getfieldsofposts('fid, pid, first, authorid', "pid IN ($pidsdelete)");
-			$postarray2 = getfieldsofposts('fid, pid, first, authorid', "tid IN ($tidsdelete)");
-			while((list($tmpkey, $post) = each($postarray1)) || (list($tmpkey, $post) = each($postarray2))) {
-				$forumpostsarray[$post['fid']][$post['pid']] = $post;
-			}
-			foreach($forumpostsarray as $fid => $postsarray) {
-				$tuidarray = $ruidarray = array();
-				foreach($postsarray as $post) {
-					if($post['first']) {
-						$tuidarray[] = $post['authorid'];
-					} else {
-						$ruidarray[] = $post['authorid'];
-					}
-				}
-				if($tuidarray) {
-					updatepostcredits('-', $tuidarray, 'post', $fid);
-				}
-				if($ruidarray) {
-					updatepostcredits('-', $ruidarray, 'reply', $fid);
-				}
-			}
-		}
-
 		require_once libfile('function/delete');
-		$deletedposts = deletepost("pid IN ($pidsdelete)");
-		$deletedposts += deletepost("tid IN ($tidsdelete)");
-		$deletedthreads = deletethread("tid IN ($tidsdelete)");
+		$deletedposts = deletepost($pidsdelete, 'pid', !$_G['gp_donotupdatemember'], $posttable);
+		$deletedthreads = deletethread($tidsdelete, !$_G['gp_donotupdatemember'], !$_G['gp_donotupdatemember']);
 
 		if(count($prune['thread']) < 50) {
 			foreach($prune['thread'] as $tid => $decrease) {
@@ -160,12 +152,15 @@ EOT;
 	$cpmsg = cplang('prune_succeed', array('deletedthreads' => $deletedthreads, 'deletedposts' => $deletedposts));
 
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('pruneforum').searchsubmit.click();</script>
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('pruneforum').searchsubmit.click();</script>
 <?php
 
 }
 
 if(submitcheck('searchsubmit', 1)) {
+
+	loadcache('posttableids');
+	$posttable = in_array($_G['gp_posttableid'], $_G['cache']['posttableids']) ? $_G['gp_posttableid'] : 0;
 
 	$_G['gp_detail'] = !empty($_GET['users']) ? true : $_G['gp_detail'];
 	$pids = $postcount = '0';
@@ -173,7 +168,7 @@ if(submitcheck('searchsubmit', 1)) {
 	$operation == 'group' && $_G['gp_forums'] = 'isgroup';
 	$_G['gp_keywords'] = trim($_G['gp_keywords']);
 	$_G['gp_users'] = trim($_G['gp_users']);
-	if(($_G['gp_starttime'] == '0' && $_G['gp_endtime'] == '0') || ($_G['gp_keywords'] == '' && $_G['gp_useip'] == '' && $_G['gp_users'] == '')) {
+	if(($_G['gp_starttime'] == '' && $_G['gp_endtime'] == '' && !$fromumanage) || ($_G['gp_keywords'] == '' && $_G['gp_useip'] == '' && $_G['gp_users'] == '')) {
 		$error = 'prune_condition_invalid';
 	}
 
@@ -248,14 +243,13 @@ if(submitcheck('searchsubmit', 1)) {
 		if($_G['gp_detail']) {
 			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
 			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-			$postarray = getallwithposts(array(
-				'select' => 'p.fid, p.tid, p.pid, p.author, p.authorid, p.dateline, t.subject, p.message, t.isgroup',
-				'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				'where' => "1 $sql",
-				'limit' => ($page - 1) * $perpage.", {$perpage}"));
+			$query = DB::query("SELECT p.fid, p.tid, p.pid, p.author, p.authorid, p.dateline, t.subject, p.message, t.isgroup
+				FROM ".DB::table(getposttable($posttable))." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)
+				WHERE 1 $sql
+				LIMIT ".($page - 1) * $perpage.", {$perpage}");
 			$posts = '';
 			$groupsname = $groupsfid = $postlist = array();
-			foreach($postarray as $post) {
+			while($post = DB::fetch($query)) {
 				if($post['isgroup']) {
 					$groupsfid[$post[fid]] = $post['fid'];
 				}
@@ -282,21 +276,14 @@ if(submitcheck('searchsubmit', 1)) {
 					), TRUE);
 				}
 			}
-			$postcount = getcountofposts(
-				DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				"1 $sql"
-			);
+			$postcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable($posttable))." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE 1 $sql");
 			$multi = multi($postcount, $perpage, $page, ADMINSCRIPT."?action=prune");
 			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=prune&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
 			$multi = str_replace("window.location='".ADMINSCRIPT."?action=prune&amp;page='+this.value", "page(this.value)", $multi);
 		} else {
 			$postcount = 0;
-			$postarray = getallwithposts(array(
-				'select' => 'pid',
-				'from' => DB::table('forum_post')." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid)",
-				'where' => "1 $sql",
-			));
-			foreach($postarray as $post) {
+			$query = DB::query('SELECT pid FROM '.DB::table(getposttable($posttable))." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE 1 $sql");
+			while($post = DB::fetch($query)) {
 				$pids .= ','.$post['pid'];
 				$postcount++;
 			}
@@ -310,7 +297,7 @@ if(submitcheck('searchsubmit', 1)) {
 
 	showtagheader('div', 'postlist', $searchsubmit);
 	showformheader('prune&frame=no'.($operation ? '&operation='.$operation : ''), 'target="pruneframe"');
-	showhiddenfields(array('pids' => authcode($pids, 'ENCODE')));
+	showhiddenfields(array('pids' => authcode($pids, 'ENCODE'), 'posttableid' => $posttable));
 	showtableheader(cplang('prune_result').' '.$postcount.' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'pruneforum\').pp.value=\'\';$(\'pruneforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>', 'fixpadding');
 
 	if($error) {

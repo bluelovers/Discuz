@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_post.php 17028 2010-09-19 06:00:02Z monkey $
+ *      $Id: task_post.php 20396 2011-02-23 03:21:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -70,7 +70,7 @@ class task_post {
 		$this->conditions['forumid']['value'][] = array(0, '&nbsp;');
 		if(empty($_G['cache']['forums'])) $_G['cache']['forums'] = array();
 		foreach($_G['cache']['forums'] as $fid => $forum) {
-			$this->conditions['forumid']['value'][] = array($fid, ($forum['type'] == 'forum' ? str_repeat('&nbsp;', 4) : ($forum['type'] == 'sub' ? str_repeat('&nbsp;', 8) : '')).$forum['name']);
+			$this->conditions['forumid']['value'][] = array($fid, ($forum['type'] == 'forum' ? str_repeat('&nbsp;', 4) : ($forum['type'] == 'sub' ? str_repeat('&nbsp;', 8) : '')).$forum['name'], $forum['type'] == 'group' ? 1 : 0);
 		}
 	}
 
@@ -84,6 +84,7 @@ class task_post {
 				$taskvars[$taskvar['variable']] = $taskvar['value'];
 			}
 		}
+		$taskvars['num'] = $taskvars['num'] ? $taskvars['num'] : 1;
 
 		$tbladd = $sqladd = '';
 		if($taskvars['act'] == 'newreply' && $taskvars['threadid']) {
@@ -108,7 +109,7 @@ class task_post {
 
 		$sqladd .= ($taskvars['time'] = floatval($taskvars['time'])) ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
 
-		$num = getcountofposts(DB::table('forum_post')." p $tbladd", "p.authorid='{$_G['uid']}' $sqladd");
+		$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable())." p $tbladd WHERE p.authorid='{$_G['uid']}' $sqladd");
 
 		if($num && $num >= $taskvars['num']) {
 			return TRUE;
@@ -136,6 +137,7 @@ class task_post {
 			$value = '<a href="home.php?mod=space&uid='.$authorid.'"><strong>'.$value.'</strong></a>';
 		}
 		$taskvars['complete']['num']['value'] = intval($taskvars['complete']['num']['value']);
+		$taskvars['complete']['num']['value'] = $taskvars['complete']['num']['value'] ? $taskvars['complete']['num']['value'] : 1;
 		if($taskvars['complete']['act']['value'] == 'newreply') {
 			if($taskvars['complete']['threadid']) {
 				$return .= lang('task/post', 'task_complete_act_newreply_thread', array('value' => $value, 'num' => $taskvars['complete']['num']['value']));

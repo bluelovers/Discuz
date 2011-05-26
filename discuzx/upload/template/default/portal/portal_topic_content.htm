@@ -10,7 +10,6 @@
 <div id="widgets">
 </div>
 <div class="wp">
-<!--{if empty($_GET['bid'])}-->
 <!--[diy=diypage]-->
 <div id="diypage" class="area">
 	<div id="frame1" class="frame move-span frame-1 cl">
@@ -19,8 +18,14 @@
 	</div>
 </div>
 <!--[/diy]-->
-<!--{else}-->
-<!--{eval block_display_content_archive($_GET['bid']);}-->
+<!--{if $topic['allowcomment']==1}-->
+	{eval
+		$data = &$topic;
+		$common_url = "portal.php?mod=comment&id=$topicid&idtype=topicid";
+		$form_url = "portal.php?mod=portalcp&ac=comment";
+		$commentlist = portaltopicgetcomment($topicid);	}
+	<!--{template portal/portal_comment}-->
 <!--{/if}-->
 </div>
+<script src="misc.php?mod=diyhelp&action=get&type=topic&diy=$_G['gp_diy']&topicid=$topicid&r={echo random(4)}" type="text/javascript"></script>
 <!--{subtemplate common/footer}-->

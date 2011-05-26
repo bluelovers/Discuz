@@ -2,6 +2,11 @@
 	$_G[home_tpl_titles] = array(lang('userapp/template', 'app_management'));
 }-->
 <!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>$_G[setting][navs][5][navname]
+	</div>
+</div>
 
 <!--{if $_GET['ac'] == 'deleteapp'}-->
 
@@ -10,7 +15,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="userapp.php?mod=manage&my_suffix=%2Fuserapp%2Funinstall%3FappId%3D$_G[gp_appid]">
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="delappsubmit" value="true" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<input type="hidden" name="formhash" value="{FORMHASH}" />

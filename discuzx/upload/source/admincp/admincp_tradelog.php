@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tradelog.php 13897 2010-08-03 02:15:41Z shanzongjun $
+ *      $Id: admincp_tradelog.php 22192 2011-04-26 01:36:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -37,7 +37,8 @@ showsubmenu('nav_ec', array(
 	array('nav_ec_alipay', 'ec&operation=alipay&mod=forum', 0),
 	array('nav_ec_credit', 'ec&operation=credit&mod=forum', 0),
 	array('nav_ec_orders', 'ec&operation=orders&mod=forum', 0),
-	array('nav_ec_tradelog', 'tradelog&mod=forum', 1)
+	array('nav_ec_tradelog', 'tradelog&mod=forum', 1),
+	array('nav_ec_inviteorders', 'ec&operation=inviteorders', 0)
 ));
 showtableheader();
 showsubtitle(array('tradelog_trade_no', 'tradelog_trade_name', 'tradelog_buyer', 'tradelog_seller', 'tradelog_money', $lang['tradelog_credit']."({$_G[setting][extcredits][$_G['setting']['creditstransextra'][5]][title]})", 'tradelog_fee', 'tradelog_order_status'));
@@ -65,7 +66,7 @@ foreach($statuss as $key => $value) {
 }
 $statusselect .= '</select>';
 
-showsubmit('', '', "$lang[tradelog_order_count] $num, $lang[tradelog_trade_total] $count[pricesum] $lang[rmb_yuan], $lang[tradelog_trade_totalcredit] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][5]][title]} $count[creditsum] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][5]][unit]}, $lang[tradelog_fee_total] $count[taxsum] $lang[rmb_yuan]", '', $multipage.$statusselect);
+showsubmit('', '', "$lang[tradelog_order_count] $num, $lang[tradelog_trade_total] ".intval($count['pricesum'])." $lang[rmb_yuan], $lang[tradelog_trade_totalcredit] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][5]][title]} $count[creditsum] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][5]][unit]}, $lang[tradelog_fee_total] ".intval($count['taxsum'])." $lang[rmb_yuan]", '', $multipage.$statusselect);
 showtablefooter();
 
 ?>

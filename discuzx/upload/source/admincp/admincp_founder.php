@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_founder.php 10769 2010-05-14 10:06:05Z monkey $
+ *      $Id: admincp_founder.php 22528 2011-05-11 05:43:55Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -19,7 +19,7 @@ if(empty($admincp) || !is_object($admincp) || !$admincp->isfounder) {
 
 if($operation == 'perm') {
 
-	$do = !in_array(getgpc('do'), array('group', 'member', 'gperm')) ? 'member' : getgpc('do');
+	$do = !in_array(getgpc('do'), array('group', 'member', 'gperm', 'notifyusers')) ? 'member' : getgpc('do');
 	shownav('founder', 'menu_founder_perm');
 
 	if($do == 'group') {
@@ -35,6 +35,7 @@ if($operation == 'perm') {
 				showsubmenu('menu_founder_perm', array(
 					array('nav_founder_perm_member', 'founder&operation=perm&do=member',  0),
 					array('nav_founder_perm_group', 'founder&operation=perm&do=group', 1),
+					array('nav_founder_perm_notifyusers', 'founder&operation=perm&do=notifyusers', 0),
 				));
 				showformheader('founder&operation=perm&do=group');
 				showtableheader();
@@ -110,7 +111,7 @@ if($operation == 'perm') {
 						if(!$checked) {
 							$checkedall = false;
 						}
-						$row .= '<div class="item'.($checked ? ' checked' : '').'"><a class="right" title="'.cplang('config').'" href="'.ADMINSCRIPT.'?frames=yes&action=founder&operation=perm&do=gperm&gset='.$topkey.'_'.$k.'" target="_blank">&nbsp;</a><label class="txt"><input name="permnew[]" value="'.$item[1].'" class="checkbox" type="checkbox" '.($checked ? 'checked="checked" ' : '').' onclick="checkclk(this)" />'.cplang($item[0]).'</label></div>';
+						$row .= $item[1] ? '<div class="item'.($checked ? ' checked' : '').'"><a class="right" title="'.cplang('config').'" href="'.ADMINSCRIPT.'?frames=yes&action=founder&operation=perm&do=gperm&gset='.$topkey.'_'.$k.'" target="_blank">&nbsp;</a><label class="txt"><input name="permnew[]" value="'.$item[1].'" class="checkbox" type="checkbox" '.($checked ? 'checked="checked" ' : '').' onclick="checkclk(this)" />'.cplang($item[0]).'</label></div>' : '';
 					}
 					$row .= '</td></tr>';
 					if($topkey != 'setting') {
@@ -172,6 +173,7 @@ if($operation == 'perm') {
 				showsubmenu('menu_founder_perm', array(
 					array('nav_founder_perm_member', 'founder&operation=perm&do=member',  1),
 					array('nav_founder_perm_group', 'founder&operation=perm&do=group', 0),
+					array('nav_founder_perm_notifyusers', 'founder&operation=perm&do=notifyusers', 0),
 				));
 				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
 				$groupselect = '<select name="newcpgroupid"><option value="0">'.cplang('founder_master').'</option>';
@@ -234,12 +236,11 @@ if($operation == 'perm') {
 						cpmsg('founder_perm_member_duplicate', '', 'error', array('name' => $_G['gp_newcpusername']));
 					}
 					DB::insert('common_admincp_member', array('uid' => $newcpuid, 'cpgroupid' => $_G['gp_newcpgroupid']));
-					DB::update('common_member', array('allowadmincp' => 1), "uid='$newcpuid'");
 				}
 				if(!empty($_G['gp_delete'])) {
 					DB::delete('common_admincp_member', 'uid IN ('.dimplode($_G['gp_delete']).')');
-					DB::update('common_member', array('allowadmincp' => 0), 'uid IN ('.dimplode($_G['gp_delete']).')');
 				}
+				updatecache('founder');
 				cpmsg('founder_perm_member_update_succeed', 'action=founder&operation=perm&do=member', 'succeed');
 			}
 		} else {
@@ -293,7 +294,7 @@ if($operation == 'perm') {
 					}
 					$row .= '</td></tr>';
 					if($topkey != 'setting') {
-						showtitle('<input class="checkbox" type="checkbox" onclick="permcheckall(this, \'perms_'.$topkey.'\')" '.($checkedall ? 'checked="checked" ' : '').'/> '.cplang('nav_'.$topkey).'</label>');
+						showtitle('<input class="checkbox" type="checkbox" onclick="permcheckall(this, \'perms_'.$topkey.'\')" '.($checkedall ? 'checked="checked" ' : '').'/> '.cplang('header_'.$topkey).'</label>');
 					} else {
 						showtitle('founder_perm_setting');
 					}
@@ -357,6 +358,72 @@ if($operation == 'perm') {
 			cpmsg('founder_perm_gperm_update_succeed', 'action=founder&operation=perm', 'succeed');
 		}
 
+	} elseif($do == 'notifyusers') {
+		$notifyusers = unserialize($_G['setting']['notifyusers']);
+		$notifytypes = explode(',', $_G['setting']['adminnotifytypes']);
+		if(!submitcheck('submit')) {
+			showpermstyle();
+			showsubmenu('menu_founder_perm', array(
+				array('nav_founder_perm_member', 'founder&operation=perm&do=member',  0),
+				array('nav_founder_perm_group', 'founder&operation=perm&do=group', 0),
+				array('nav_founder_perm_notifyusers', 'founder&operation=perm&do=notifyusers', 1),
+			));
+			showtips('founder_notifyusers_tips');
+			showformheader('founder&operation=perm&do=notifyusers');
+			showtableheader();
+			showsubtitle(array('', 'username', '', 'founder_notifyusers_types'));
+			foreach($notifyusers as $uid => $user) {
+				$types = '';
+				foreach($notifytypes as $key => $typename) {
+					$checked = $user['types'][$key] ? ' checked' : '';
+					if(substr($typename, 0, 7) == 'verify_') {
+						$i = substr($typename, -1, 1);
+						if($_G['setting']['verify'][$i]['available']) {
+							$tname = $_G['setting']['verify'][$i]['title'];
+						} else {
+							continue;
+						}
+					} else {
+						$tname = cplang('founder_notidyusers_'.$typename);
+					}
+					$types .= "<div class=\"item$checked\"><label class=\"txt\"><input class=\"checkbox\" onclick=\"checkclk(this)\" type=\"checkbox\" name=\"notifytypes_{$uid}[{$typename}]\" value=\"1\"$checked>".$tname.'</label></div>';
+				}
+				showtablerow('style="height:20px"', array('class="td25"', 'class="td24"', 'class="td25"', 'class="vtop"'), array(
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$uid\">",
+					"<input type=\"hidden\" class=\"txtnobd\" name=\"name[$uid]\" value=\"$user[username]\">$user[username]",
+					'<input name="chkall_'.$uid.'" id="chkall_'.$uid.'" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'notifytypes_'.$uid.'\', \'chkall_'.$uid.'\', 1)" />'.cplang('select_all'),
+					$types
+					));
+			}
+			showtablerow('style="height:20px"', array('', 'colspan="3"'), array(cplang('add_new'), '<input class="txt" type="text" name="newusername" value="" />'));
+			showsubmit('submit', 'submit', 'del');
+			showtablefooter();
+			showformfooter();
+		} else {
+			$newnotifyusers = array();
+			if($_G['gp_name']) {
+				foreach($_G['gp_name'] as $uid => $username) {
+					if($_G['gp_delete'] && in_array($uid, $_G['gp_delete'])) {
+						continue;
+					}
+					$types = '';
+					foreach($notifytypes as $typename) {
+						$types .= intval($_G['gp_notifytypes_'.$uid][$typename]);
+					}
+					$newnotifyusers[$uid] = array('username' => $username, 'types' => $types);
+				}
+			}
+			if($_G['gp_newusername']) {
+				$newusername = addslashes($_G['gp_newusername']);
+				$newuid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$newusername'");
+				if($newuid) {
+					$newnotifyusers[$newuid] = array('username' => $newusername, 'types' => '');
+				}
+			}
+			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('notifyusers', '".addslashes(serialize($newnotifyusers))."')");
+			updatecache('setting');
+			cpmsg('founder_perm_notifyusers_succeed', 'action=founder&operation=perm&do=notifyusers', 'succeed');
+		}
 	}
 }
 
@@ -400,6 +467,7 @@ function permcheckall(obj, perms, t) {
 					e.style.visibility = obj.checked ? 'hidden' : 'visible';
 				}
 			}
+			e.parentNode.parentNode.className = e.checked ? 'item checked' : 'item';
 		}
 	}
 }

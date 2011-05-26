@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: members.php 15719 2010-08-25 23:51:36Z monkey $
+ * $Id: members.php 17836 2010-11-03 05:24:59Z cnteacher $
  */
 
 $curprg = basename(__FILE__);
@@ -94,7 +94,7 @@ while ($row = $db_source->fetch_array($query)) {
 	$update = array(
 		'status' => array(
 			'regip' => $row['regip'],
-			'lastip' => $row['regip'],
+			'lastip' => $row['lastip'],
 			'lastvisit' => $row['lastvisit'],
 			'lastactivity' => $row['lastactivity'],
 			'lastpost' => $row['lastpost'],

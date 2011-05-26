@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumsort.php 7183 2010-03-30 07:58:28Z tiger $
+ *      $Id: function_threadsort.php 22709 2011-05-18 02:47:40Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function gettypetemplate($option, $optionvalue) {
+function gettypetemplate($option, $optionvalue, $optionid) {
 	global $_G;
 
 	if(in_array($option['type'], array('number', 'text', 'email', 'calendar', 'image', 'url', 'range', 'upload', 'range'))) {
@@ -31,26 +31,35 @@ function gettypetemplate($option, $optionvalue) {
 			$showoption[$option['identifier']]['value'] .= '</div>';
 
 		} else {
-			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.$optionvalue['value'].'" '.$optionvalue['unchangeable'].' class="px"/>';
+			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="px" tabindex="1" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.$optionvalue['value'].'" '.$optionvalue['unchangeable'].' />';
 		}
 	} elseif(in_array($option['type'], array('radio', 'checkbox', 'select'))) {
 		if($option['type'] == 'select') {
-			$showoption[$option['identifier']]['value'] = '<span class="ftid"><select name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" tabindex="1" '.$optionvalue['unchangeable'].' class="ps">';
-			foreach($option['choices'] as $id => $value) {
-				$showoption[$option['identifier']]['value'] .= '<option value="'.$id.'" '.$optionvalue['value'][$id].'>'.$value.'</option>';
+			if(empty($optionvalue['value'])) {
+				$showoption[$option['identifier']]['value'] = '<span id="select_'.$option['identifier'].'"><select tabindex="1" onchange="changeselectthreadsort(this.value, \''.$optionid.'\');checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" '.$optionvalue['unchangeable'].' class="ps">';
+				$showoption[$option['identifier']]['value'] .= '<option value="0">'.lang('forum/template', 'please_select').'</option>';
+				foreach($option['choices'] as $id => $value) {
+					if(!$value['foptionid']) {
+						$showoption[$option['identifier']]['value'] .= '<option value="'.$id.'">'.$value['content'].' '.(($value['level'] == 1) ? '' : '>').'</option>';
+					}
+				}
+				$showoption[$option['identifier']]['value'] .= '</select></span>';
+			} else {
+				foreach($optionvalue['value'] as $selectedkey => $selectedvalue) {
+					$showoption[$option['identifier']]['value'] = '<span id="select_'.$option['identifier'].'"><script type="text/javascript">changeselectthreadsort(\''.$selectedkey.'\', '.$optionid.');</script></span>';
+				}
 			}
-			$showoption[$option['identifier']]['value'] .= '</select></span>';
 		} elseif($option['type'] == 'radio') {
 			foreach($option['choices'] as $id => $value) {
-				$showoption[$option['identifier']]['value'] .= '<span class="fb"><input type="radio" class="pr" name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" onclick="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" value="'.$id.'" '.$optionvalue['value'][$id].' '.$optionvalue['unchangeable'].' class="pr">'.$value.'</span>';
+				$showoption[$option['identifier']]['value'] .= '<span class="fb"><input type="radio" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="pr" value="'.$id.'" tabindex="1" onclick="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" '.$optionvalue['value'][$id].' '.$optionvalue['unchangeable'].' />'.$value.'</span>';
 			}
 		} elseif($option['type'] == 'checkbox') {
 			foreach($option['choices'] as $id => $value) {
-				$showoption[$option['identifier']]['value'] .= '<span class="fb"><input type="checkbox" class="pc" name="typeoption['.$option['identifier'].'][]" tabindex="1" id="typeoption_'.$option['identifier'].'" onclick="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" value="'.$id.'" '.$optionvalue['value'][$id][$id].' '.$optionvalue['unchangeable'].' class="pc">'.$value.'</span>';
+				$showoption[$option['identifier']]['value'] .= '<span class="fb"><input type="checkbox" name="typeoption['.$option['identifier'].'][]" id="typeoption_'.$option['identifier'].'" class="pc" tabindex="1" value="'.$id.'" onclick="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\')" '.$optionvalue['value'][$id][$id].' '.$optionvalue['unchangeable'].' />'.$value.'</span>';
 			}
 		}
 	} elseif(in_array($option['type'], array('textarea'))) {
-		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" tabindex="1" id="typeoption_'.$option['identifier'].'" rows="'.$option['rowsize'].'" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0{if $option[maxlength]}, \'$option[maxlength]\'{/if})" '.$optionvalue['unchangeable'].' class="pt">'.$optionvalue['value'].'</textarea><span>';
+		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="pt" tabindex="1" rows="'.$option['rowsize'].'" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0{if $option[maxlength]}, \'$option[maxlength]\'{/if})" '.$optionvalue['unchangeable'].'>'.$optionvalue['value'].'</textarea><span>';
 	}
 
 	return $showoption;
@@ -68,6 +77,7 @@ function quicksearch($sortoptionarray) {
 				$quicksearch[$optionid]['identifier'] = $option['identifier'];
 				$quicksearch[$optionid]['unit'] = $option['unit'];
 				$quicksearch[$optionid]['type'] = $option['type'];
+				$quicksearch[$optionid]['search'] = $option['search'];
 				if(in_array($option['type'], array('radio', 'select', 'checkbox'))) {
 					$quicksearch[$optionid]['choices'] = $option['choices'];
 				} elseif(!empty($option['searchtxt'])) {
@@ -92,14 +102,14 @@ function quicksearch($sortoptionarray) {
 }
 
 function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selecturladd = array(), $sortfid = 0) {
-
+	global $_G;
 	$sortid = intval($sortid);
 	$selectsql = '';
 	$optionide = $searchsorttids = array();
 
 	if($selecturladd) {
 		foreach($sortoptionarray[$sortid] as $optionid => $option) {
-			if(in_array($option['type'], array('radio', 'select', 'range'))) {
+			if(in_array($option['type'], array('checkbox', 'radio', 'select', 'range'))) {
 				$optionide[$option['identifier']] = $option['type'];
 			}
 		}
@@ -115,6 +125,26 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 					} else {
 						$sql = "($fieldname BETWEEN ".intval($value[0])." AND ".intval($value[1]).")";
 					}
+				} elseif($optionide[$fieldname] == 'checkbox') {
+					$sql = "$fieldname LIKE '%".$value."%'";
+				} elseif($optionide[$fieldname] == 'select') {
+					$subvalues = $currentchoices = array();
+					if(!empty($_G['forum_optionlist'])) {
+						foreach($_G['forum_optionlist'] as $subkey => $subvalue) {
+							if($subvalue['identifier'] == $fieldname) {
+								$currentchoices = $subvalue['choices'];
+								break;
+							}
+						}
+					}
+					if(!empty($currentchoices)) {
+						foreach($currentchoices as $subkey => $subvalue) {
+							if(preg_match('/^'.$value.'\.'.'/i', $subkey) || preg_match('/^'.$value.'$'.'/i', $subkey)) {
+								$subvalues[] = $subkey;
+							}
+						}
+					}
+					$sql = "$fieldname IN (".dimplode($subvalues).")";
 				} else {
 					$sql = "$fieldname='$value'";
 				}
@@ -127,13 +157,31 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 		foreach($searchoption as $optionid => $option) {
 			$fieldname = $sortoptionarray[$sortid][$optionid]['identifier'] ? $sortoptionarray[$sortid][$optionid]['identifier'] : 1;
 			if($option['value']) {
-				if(in_array($option['type'], array('number', 'radio', 'select'))) {
+				if(in_array($option['type'], array('number', 'radio'))) {
 					$option['value'] = intval($option['value']);
 					$exp = '=';
 					if($option['condition']) {
 						$exp = $option['condition'] == 1 ? '>' : '<';
 					}
 					$sql = "$fieldname$exp'$option[value]'";
+				} elseif($option['type'] == 'select') {
+					$subvalues = $currentchoices = array();
+					if(!empty($_G['forum_optionlist'])) {
+						foreach($_G['forum_optionlist'] as $subkey => $subvalue) {
+							if($subvalue['identifier'] == $fieldname) {
+								$currentchoices = $subvalue['choices'];
+								break;
+							}
+						}
+					}
+					if(!empty($currentchoices)) {
+						foreach($currentchoices as $subkey => $subvalue) {
+							if(preg_match('/^'.$option['value'].'/i', $subkey)) {
+								$subvalues[] = $subkey;
+							}
+						}
+					}
+					$sql = "$fieldname IN (".dimplode($subvalues).")";
 				} elseif($option['type'] == 'checkbox') {
 					$sql = "$fieldname LIKE '%".(implode("%", $option['value']))."%'";
 				} elseif($option['type'] == 'range') {
@@ -184,6 +232,8 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 						$sortthreadlist[$tid][$arrayoption['title']] .= $arrayoption['choices'][$choiceid].'&nbsp;';
 						$_G['optionvaluelist'][$sortid][$tid][$arrayoption['identifier']]['value'] .= $arrayoption['choices'][$choiceid].'&nbsp;';
 					}
+				} elseif($arrayoption['type'] == 'select') {
+					$sortthreadlist[$tid][$arrayoption['title']] = $_G['optionvaluelist'][$sortid][$tid][$arrayoption['identifier']]['value'] = $arrayoption['choices'][$sortthread['value']]['content'];
 				} else {
 					$sortthreadlist[$tid][$arrayoption['title']] = $_G['optionvaluelist'][$sortid][$tid][$arrayoption['identifier']]['value'] = $arrayoption['choices'][$sortthread['value']];
 				}
@@ -287,15 +337,27 @@ function threadsortshow($sortid, $tid) {
 						foreach(explode("\t", $optiondata[$optionid]['value']) as $choiceid) {
 							$_G['forum_option'][$option['identifier']]['value'] .= $option['choices'][$choiceid].'&nbsp;';
 						}
-					} elseif(in_array($option['type'], array('radio', 'select'))) {
+					} elseif($option['type'] == 'radio') {
 						$_G['forum_option'][$option['identifier']]['value'] = $option['choices'][$optiondata[$optionid]['value']];
+					} elseif($option['type'] == 'select') {
+						$tmpchoiceid = $tmpidentifiervalue = array();
+						foreach(explode('.', $optiondata[$optionid]['value']) as $choiceid) {
+							$tmpchoiceid[] = $choiceid;
+							$tmpidentifiervalue[] = $option['choices'][implode('.', $tmpchoiceid)];
+						}
+						$_G['forum_option'][$option['identifier']]['value'] = implode(' &raquo; ', $tmpidentifiervalue);
+						unset($tmpchoiceid, $tmpidentifiervalue);
 					} elseif($option['type'] == 'image') {
 						$imgoptiondata = unserialize($optiondata[$optionid]['value']);
 						$threadsortshow['sortaids'][] = $imgoptiondata['aid'];
 						if(empty($templatearray['viewthread'])) {
 							$maxwidth = $option['maxwidth'] ? 'width="'.$option['maxwidth'].'"' : '';
 							$maxheight = $option['maxheight'] ? 'height="'.$option['maxheight'].'"' : '';
-							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<img src=\"".$imgoptiondata['url']."\" onload=\"thumbImg(this)\" $maxwidth $maxheight border=\"0\">" : '';
+							if(!defined('IN_MOBILE')) {
+								$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<img src=\"".$imgoptiondata['url']."\" onload=\"thumbImg(this)\" $maxwidth $maxheight border=\"0\">" : '';
+							} else {
+								$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? "<a href=\"".$imgoptiondata['url']."\" target=\"_blank\">".lang('mobile/template', 'viewimg')."</a>" : '';
+							}
 						} else {
 							$_G['forum_option'][$option['identifier']]['value'] = $imgoptiondata['url'] ? $imgoptiondata['url'] : './static/image/common/nophoto.gif';
 						}
@@ -350,11 +412,73 @@ function showoption($var, $type) {
 	}
 }
 
+function sortthreadsortselectoption($sortid) {
+	global $_G;
+
+	if(empty($_G['cache']['threadsort_option_'.$sortid])) {
+		return false;
+	}
+	foreach($_G['cache']['threadsort_option_'.$sortid] as $key => $value) {
+		if($value['type'] == 'select' && !empty($value['choices'])) {
+			$newsort = array();
+			$level = 0;
+
+			foreach($value['choices'] as $subkey => $subvalue) {
+
+				$newsort[$subkey]['content'] = $subvalue;
+				$newsort[$subkey]['foptionid'] = trim(substr($subkey, 0, strrpos($subkey, '.'))) ? trim(substr($subkey, 0, strrpos($subkey, '.'))) : '0';
+				$newsort[$subkey]['count'] = count(explode('.', $subkey));
+
+				$subkeyarr = explode('.', $subkey);
+				if($countsubkeyarr = count($subkeyarr)) {
+					$tmpkey = '';
+					for($i = 0;$i < $countsubkeyarr;$i++) {
+						$subkeyarr[$i] = trim($subkeyarr[$i]);
+
+						if(isset($newsort[$tmpkey.$subkeyarr[$i]]['level'])) {
+							if(($countsubkeyarr - $i) > $newsort[$tmpkey.$subkeyarr[$i]]['level']) {
+								$newsort[$tmpkey.$subkeyarr[$i]]['level'] = $countsubkeyarr - $i;
+							}
+						} else {
+							$newsort[$tmpkey.$subkeyarr[$i]]['level'] = $countsubkeyarr - $i;
+						}
+						$tmpkey .= $subkeyarr[$i].'.';
+					}
+				}
+				$newsort[$subkey]['optionid'] = $subkey;
+			}
+			$_G['cache']['threadsort_option_'.$sortid][$key]['choices'] = $newsort;
+		}
+	}
+}
+
+function cmpchoicekey($stringa, $stringb) {
+	$arraya = explode('.', $stringa);
+	$arrayb = explode('.', $stringb);
+	$counta = count($arraya);
+	$countb = count($arrayb);
+	if($counta == $countb) {
+		foreach($arraya as $key => $value) {
+			$valuea = intval(trim($value));
+			$valueb = intval(trim($arrayb[$key]));
+			if($valuea != $valueb) {
+				return ($valuea < $valueb) ? -1 : 1;
+			} else {
+				continue;
+			}
+		}
+		return 0;
+	} else {
+		return ($counta < $countb) ? -1 : 1;
+	}
+}
+
 function threadsort_checkoption($sortid = 0, $unchangeable = 1) {
 	global $_G;
 
 	$_G['forum_selectsortid'] = $sortid ? intval($sortid) : '';
 	loadcache(array('threadsort_option_'.$sortid));
+	sortthreadsortselectoption($sortid);
 	$_G['forum_optionlist'] = $_G['cache']['threadsort_option_'.$sortid];
 	$_G['forum_checkoption'] = array();
 	if(is_array($_G['forum_optionlist'])) {
@@ -415,7 +539,7 @@ function threadsort_optiondata($pid, $sortid, $sortoptionarray, $templatearray) 
 			$_G['forum_option'][$option['identifier']]['required'] = $option['required'] ? '*' : '';
 			$_G['forum_option'][$option['identifier']]['tips'] = '<span id="check'.$option['identifier'].'"></span>';
 
-			$showoption = gettypetemplate($option, $_G['forum_optionlist'][$optionid]);
+			$showoption = gettypetemplate($option, $_G['forum_optionlist'][$optionid], $optionid);
 			$_G['forum_option'][$option['identifier']]['value'] = $showoption[$option['identifier']]['value'];
 
 			$searchcontent['title'][] = '/{('.$option['identifier'].')}/e';
@@ -444,14 +568,18 @@ function threadsort_validator($sortoption, $pid) {
 	foreach($_G['forum_checkoption'] as $var => $option) {
 		if($_G['forum_checkoption'][$var]['required'] && (!$sortoption[$var] && $_G['forum_checkoption'][$var]['type'] != 'number')) {
 			showmessage('threadtype_required_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
-		} elseif($sortoption[$var] !== NULL && ($_G['forum_checkoption'][$var]['type'] == 'number' && !is_numeric($sortoption[$var]) || $_G['forum_checkoption'][$var]['type'] == 'email' && !isemail($sortoption[$var]))){
+		} elseif($sortoption[$var] && ($_G['forum_checkoption'][$var]['type'] == 'number' && !is_numeric($sortoption[$var]) || $_G['forum_checkoption'][$var]['type'] == 'email' && !isemail($sortoption[$var]))){
 			showmessage('threadtype_format_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
-		} elseif($sortoption[$var] && $_G['forum_checkoption'][$var]['maxlength'] && strlen($typeoption[$var]) > $_G['forum_checkoption'][$var]['maxlength']) {
+		} elseif($sortoption[$var] && $_G['forum_checkoption'][$var]['maxlength'] && strlen($sortoption[$var]) > $_G['forum_checkoption'][$var]['maxlength']) {
 			showmessage('threadtype_toolong_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
 		} elseif($sortoption[$var] && (($_G['forum_checkoption'][$var]['maxnum'] && $sortoption[$var] > $_G['forum_checkoption'][$var]['maxnum']) || ($_G['forum_checkoption'][$var]['minnum'] && $sortoption[$var] < $_G['forum_checkoption'][$var]['minnum']))) {
 			showmessage('threadtype_num_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
 		} elseif($sortoption[$var] && $_G['forum_checkoption'][$var]['unchangeable'] && !($_G['tid'] && $pid)) {
 			showmessage('threadtype_unchangeable_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
+		} elseif($sortoption[$var] && ($_G['forum_checkoption'][$var]['type'] == 'select')) {
+			if($_G['forum_optionlist'][$_G['forum_checkoption'][$var]['optionid']]['choices'][$sortoption[$var]]['level'] != 1) {
+				showmessage('threadtype_select_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
+			}
 		}
 		if($_G['forum_checkoption'][$var]['type'] == 'checkbox') {
 			$sortoption[$var] = $sortoption[$var] ? implode("\t", $sortoption[$var]) : '';
@@ -459,11 +587,52 @@ function threadsort_validator($sortoption, $pid) {
 			$sortoption[$var] = $sortoption[$var] ? (substr(strtolower($sortoption[$var]), 0, 4) == 'www.' ? 'http://'.$sortoption[$var] : $sortoption[$var]) : '';
 		}
 
-		$sortoption[$var] = $_G['forum_checkoption'][$var]['type'] != 'image' ? dhtmlspecialchars(censor(trim($sortoption[$var]))) : addslashes(serialize($sortoption[$var]));
+		if($_G['forum_checkoption'][$var]['type'] == 'image') {
+			$sortoption[$var] = addslashes(serialize($sortoption[$var]));
+		} elseif($_G['forum_checkoption'][$var]['type'] == 'select') {
+			$sortoption[$var] = censor(trim($sortoption[$var]));
+		} else {
+			$sortoption[$var] = dhtmlspecialchars(censor(trim($sortoption[$var])));
+		}
 		$_G['forum_optiondata'][$_G['forum_checkoption'][$var]['optionid']] = $sortoption[$var];
 	}
 
 	return $_G['forum_optiondata'];
 }
 
+function getsortedoptionlist() {
+	global $_G;
+
+	$forum_optionlist = $_G['forum_optionlist'];
+	foreach($_G['forum_optionlist'] as $key => $value) {
+		$choicesarr = $value['choices'];
+		uksort($choicesarr, 'cmpchoicekey');
+		$forum_optionlist[$key]['choices'] = $choicesarr;
+	}
+	$forum_optionlist = optionlistxml($forum_optionlist, 's');
+	$forum_optionlist = '<?xml version="1.0" encoding="'.CHARSET.'"?>'."".'<forum_optionlist>'.$forum_optionlist.'</forum_optionlist>';
+	return $forum_optionlist;
+}
+
+function optionlistxml($input, $pre = '') {
+	$str = '';
+	foreach($input as $key => $value) {
+		$key = $pre.strval($key);
+		if(is_array($value)) {
+			$str .= "<$key>";
+			$str .= optionlistxml($value, $pre);
+			$str .="</$key>";
+		} else {
+			if(is_bool($value)) {
+				$value = ($value == true) ? 'true' : 'false';
+			}
+			if(htmlspecialchars($value) != $value) {
+				$str .= "<$key><![CDATA[$value]]></$key>";
+			} else {
+				$str .= "<$key>$value</$key>";
+			}
+		}
+	}
+	return $str;
+}
 ?>

@@ -24,9 +24,9 @@
 <!--{elseif $_GET['op'] == 'block'}-->
 <ul class="blocks content selector">
 <!--{loop $block $key $value}-->
-	<!--{eval if($_G['setting']['allowviewuserthread'] === false && $key == 'thread') continue;}-->
-	<!--{eval if(!$_G['setting']['groupstatus'] && $key == 'group') continue;}-->
-	<li id="chk$key"><a href="javascript:;" onclick="drag.toggleBlock('$key');this.blur();return false;">$value</a></li>
+	<!--{if check_ban_block($key, $space)}-->
+		<li id="chk$key"><a href="javascript:;" onclick="drag.toggleBlock('$key');this.blur();return false;">$value</a></li>
+	<!--{/if}-->
 <!--{/loop}-->
 </ul>
 <!--{elseif $_GET['op'] == 'image'}-->
@@ -76,7 +76,7 @@
 		<div class="photo_list cl">
 			<div id="currentimgdiv" class="z" style="width:446px;">
 				<center><ul><li class="thumb" style="border:1px solid #ccc; padding:2px;"><img id="currentimg" alt="" src=""/></li></ul>
-				<div class="z" style="cursor:pointer" onclick="spaceDiy.changeBgImgDiv();">{lang replace}</div></center>
+				<div class="z cur1" onclick="spaceDiy.changeBgImgDiv();">{lang replace}</div></center>
 			</div>
 			<div id="diyimages" class="z" style="width:446px;display:none;">
 				<div id="diyimg_prev" class="z">$multi</div>
@@ -136,7 +136,7 @@
 					<tr>
 						<td>{lang background_color}:</td>
 						<td><input type="text" id="colorValue" value="" size="6" onchange="spaceDiy.setBgColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('bpb', 'colorValue', 'white', 'spaceDiy.setBgColor');}-->
+						<input id="cbpb" onclick="createPalette('bpb', 'colorValue', 'spaceDiy.setBgColor');" type="button" class="pn colorwd" value="" />
 						</td>
 					</tr>
 				</table>
@@ -146,13 +146,13 @@
 					<tr>
 						<td>{lang text_color}:</td>
 						<td><input type="text" id="textColorValue" value="" size="6" onchange="spaceDiy.setTextColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('tpb', 'textColorValue', 'white', 'spaceDiy.setTextColor');}-->
+						<input id="ctpb" onclick="createPalette('tpb', 'textColorValue', 'spaceDiy.setTextColor');" type="button" class="pn colorwd" value="" />
 						</td>
 					</tr>
 					<tr>
 						<td>{lang link_color}:</td>
 						<td><input type="text" id="linkColorValue" value="" size="6" onchange="spaceDiy.setLinkColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('lpb', 'linkColorValue', 'white', 'spaceDiy.setLinkColor');}-->
+						<input id="clpb" onclick="createPalette('lpb', 'linkColorValue', 'spaceDiy.setLinkColor');" type="button" class="pn colorwd" value="" />
 						</td>
 					</tr>
 				</table>
@@ -162,6 +162,121 @@
 </dl>
 <!--{elseif $_GET['op'] == 'getblock'}-->
 	$blockhtml
+<!--{elseif $_GET['op'] == 'editnv'}-->
+	<h3 class="flb">
+		<em id="return_$_G[gp_handlekey]">{lang editing_nv}</em>
+		<span>
+			<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
+		</span>
+	</h3>
+	<form id="nvformsetting" name="nvformsetting" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=index" onsubmit="ajaxpost('nvformsetting','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');" class="fdiy">
+		<div class="c diywin" style="max-height:350px;width:420px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
+			<div id="nv_setting">
+				<table class="tfm">
+					<tr>
+						<th>{lang space_nv_hidden}</th>
+						<td>
+							<label><input type="radio" name="nvhidden" value="1"{if $personalnv[nvhidden] == '1'} checked="checked"{/if}>{lang yes}</label>
+							<label><input type="radio" name="nvhidden" value="0"{if empty($personalnv[nvhidden])} checked="checked"{/if}>{lang no}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang main_page}</th>
+						<td>
+							<input type="text" name="index" value="{if !isset($personalnv[items][index])}{lang main_page}{else}$personalnv[items][index]{/if}" class="px" />
+							<label><input type="radio" name="banindex" value="1"{if !empty($personalnv[banitems][index])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banindex" value="0"{if empty($personalnv[banitems][index])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang feed}</th>
+						<td>
+							<input type="text" name="feed" value="{if !isset($personalnv[items][feed])}{lang feed}{else}$personalnv[items][feed]{/if}" class="px" />
+							<label><input type="radio" name="banfeed" value="1"{if !empty($personalnv[banitems][feed])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banfeed" value="0"{if empty($personalnv[banitems][feed])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang doing}</th>
+						<td>
+							<input type="text" name="doing" value="{if !isset($personalnv[items][doing])}{lang doing}{else}$personalnv[items][doing]{/if}" class="px" />
+							<label><input type="radio" name="bandoing" value="1"{if !empty($personalnv[banitems][doing])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="bandoing" value="0"{if empty($personalnv[banitems][doing])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang blog}</th>
+						<td>
+							<input type="text" name="blog" value="{if !isset($personalnv[items][blog])}{lang blog}{else}$personalnv[items][blog]{/if}" class="px" />
+							<label><input type="radio" name="banblog" value="1"{if !empty($personalnv[banitems][blog])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banblog" value="0"{if empty($personalnv[banitems][blog])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang album}</th>
+						<td>
+							<input type="text" name="album" value="{if !isset($personalnv[items][album])}{lang album}{else}$personalnv[items][album]{/if}" class="px" />
+							<label><input type="radio" name="banalbum" value="1"{if !empty($personalnv[banitems][album])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banalbum" value="0"{if empty($personalnv[banitems][album])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<!--{if $_G['setting']['allowviewuserthread'] !== false}-->
+					<tr>
+						<th>{lang topic}</th>
+						<td>
+							<input type="text" name="topic" value="{if !isset($personalnv[items][topic])}{lang topic}{else}$personalnv[items][topic]{/if}" class="px" />
+							<label><input type="radio" name="bantopic" value="1"{if !empty($personalnv[banitems][topic])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="bantopic" value="0"{if empty($personalnv[banitems][topic])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<!--{/if}-->
+					<tr>
+						<th>{lang share}</th>
+						<td>
+							<input type="text" name="share" value="{if !isset($personalnv[items][share])}{lang share}{else}$personalnv[items][share]{/if}" class="px" />
+							<label><input type="radio" name="banshare" value="1"{if !empty($personalnv[banitems][share])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banshare" value="0"{if empty($personalnv[banitems][share])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang friends}</th>
+						<td>
+							<input type="text" name="friends" value="{if !isset($personalnv[items][friends])}{lang friends}{else}$personalnv[items][friends]{/if}" class="px" />
+							<label><input type="radio" name="banfriends" value="1"{if !empty($personalnv[banitems][friends])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banfriends" value="0"{if empty($personalnv[banitems][friends])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang message_board}</th>
+						<td>
+							<input type="text" name="wall" value="{if !isset($personalnv[items][wall])}{lang message_board}{else}$personalnv[items][wall]{/if}" class="px" />
+							<label><input type="radio" name="banwall" value="1"{if !empty($personalnv[banitems][wall])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banwall" value="0"{if empty($personalnv[banitems][wall])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang memcp_profile}</th>
+						<td>
+							<input type="text" name="profile" value="{if !isset($personalnv[items][profile])}{lang memcp_profile}{else}$personalnv[items][profile]{/if}" class="px" />
+							<label><input type="radio" name="banprofile" value="1"{if !empty($personalnv[banitems][profile])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banprofile" value="0"{if empty($personalnv[banitems][profile])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="o pns">
+			<input type="hidden" name="editnvsubmit" value="true" />
+			<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<button type="submit" class="pn pnc" id="editnvsubmitbtn"><strong>{lang determine}</strong></button>
+		</div>
+	</form>
+<script type="text/javascript" reload="1">
+function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+	spaceDiy.getPersonalNv();
+	hideWindow('{$_G['gp_handlekey']}');}
+</script>
 <!--{elseif $_GET['op'] == 'edit'}-->
 <h3 class="flb">
 	<em id="return_$_G[gp_handlekey]">{lang editing_module}</em>
@@ -174,7 +289,12 @@
 			<div class="c diywin" style="max-height:350px;width:420px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
 				<div id="block_setting">
 					<table class="tfm">
+						<tr>
+							<th>{lang space_block_title}</th>
+							<td><input type="text" name="blocktitle" value="$para[title]" class="px" /></td>
+						</tr>
 						<!--{if ($blockname == 'profile')}-->
+						<!--{eval $para['banavatar'] = empty($para['banavatar']) ? 'middle' : $para['banavatar'];}-->
 						<tr>
 							<th>{lang avatarsize}</th>
 							<td>
@@ -199,14 +319,11 @@
 						</tr>
 						<!--{elseif in_array($blockname, array('block1', 'block2', 'block3', 'block4', 'block5'))}-->
 						<tr>
-							<th>{lang module_title}</th>
-							<td><input type="text" name="blocktitle" value="$para[title]" class="px" /></td>
-						</tr>
-						<tr>
 							<!--{eval $msg .= $_G['group']['allowspacediyhtml'] ? 'HTML ' : ''}-->
 							<!--{eval $msg .= $_G['group']['allowspacediybbcode'] ? 'BBCODE ' : ''}-->
 							<!--{eval $msg .= $_G['group']['allowspacediyimgcode'] ? 'IMG ' : ''}-->
 							<!--{eval $msg = $msg ? lang('spacecp', 'spacecp_message_prompt', array('msg' => $msg)) : ''}-->
+							<!--{eval $para['content'] = dhtmlspecialchars($para['content']);}-->
 							<th>{lang custom_content}<br><span style=" font-weight: 400; ">{$msg}</span></th>
 							<td>
 								<div class="tedt">
@@ -226,14 +343,28 @@
 								</script>
 							</td>
 						</tr>
+						<!--{elseif in_array($blockname, array('personalinfo'))}-->
+						
 						<!--{else}-->
-						<tr>
-							<th>{lang space_block_title}</th>
-							<td><input type="text" name="blocktitle" value="$para[title]" class="px" /></td>
-						</tr>
 						<tr>
 							<th>{lang show_num_of}</th>
 							<td><input type="text" name="shownum" value="$para[shownum]" class="px" /></td>
+						</tr>
+						<!--{/if}-->
+						
+						<!--{if $blockname == 'blog'}-->
+						<tr>
+							<th>{lang show_message}</th>
+							<td><input type="text" name="showmessage" value="$para[showmessage]" class="px" />  {lang show_message_tips}</td>
+						</tr>
+						<!--{elseif $blockname == 'myapp'}-->
+						<!--{eval $para['logotype'] = empty($para['logotype']) ? 'icon' : $para['logotype'];}-->
+						<tr>
+							<th>{lang myapp_img}</th>
+							<td>
+								<label><input type="radio" name="logotype" value="logo"{if $para[logotype] == 'logo'} checked="checked"{/if}>{lang big}</label>
+								<label><input type="radio" name="logotype" value="icon"{if $para[logotype] == 'icon'} checked="checked"{/if}>{lang small}</label>
+							</td>
 						</tr>
 						<!--{/if}-->
 					</table>
@@ -288,17 +419,17 @@
 							<p class="mbn">
 								{lang cron_tab_color}
 								<input type="text" name="crontabcolor" id="usercrontabcolor_v" value="{$config['crontabcolor']}" size="7" class="px p_fre" />
-								<input id="cm_ctc" onclick="createPalette('m_ctc', 'usercrontabcolor_v');" type="button" class="colorwd" value="" style="background: {$config['crontabcolor']}">
+								<input id="cm_ctc" onclick="createPalette('m_ctc', 'usercrontabcolor_v');" type="button" class="pn colorwd" value="" style="background-color: {$config['crontabcolor']}">
 							</p>
 							<p class="mbn">
 								{lang button_color}
 								<input type="text" name="buttoncolor" id="userbuttoncolor_v" value="{$config['buttoncolor']}" size="7" class="px p_fre" />
-								<input id="cm_bc" onclick="createPalette('m_bc', 'userbuttoncolor_v');" type="button" class="colorwd" value="" style="background: {$config['buttoncolor']}">
+								<input id="cm_bc" onclick="createPalette('m_bc', 'userbuttoncolor_v');" type="button" class="pn colorwd" value="" style="background-color: {$config['buttoncolor']}">
 							</p>
 							<p class="mbn">
 								{lang play_list_color}
 								<input type="text" name="fontcolor" id="userfontcolor_v" value="{$config['fontcolor']}" size="7" class="px p_fre" />
-								<input id="cm_fc" onclick="createPalette('m_fc', 'userfontcolor_v');" type="button" class="colorwd" value="" style="background: {$config['fontcolor']}">
+								<input id="cm_fc" onclick="createPalette('m_fc', 'userfontcolor_v');" type="button" class="pn colorwd" value="" style="background-color: {$config['fontcolor']}">
 							</p>
 						</td>
 					</tr>
@@ -320,7 +451,7 @@
 				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
 				<input type="hidden" name="act" value="config" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
-				<button type="submit" class="pn pnc" id="musicsubmitbtn"><strong>{lang determine}</strong></button>
+				<button type="submit" class="pn pnc"><strong>{lang determine}</strong></button>
 			</div>
 		</form>
 	</div>
@@ -380,7 +511,10 @@
 				 for (var i in ids) {
 					 if (typeof ids[i] == 'object' && ids[i].checked) {
 						id = parseInt(ids[i].value)+1;
-						$(id).parentNode.removeChild($(id));
+						var obj = $(id);
+						if(obj) {
+							obj.parentNode.removeChild(obj);
+						}
 					 }
 				 }
 			}
@@ -423,7 +557,7 @@
 				<input type="hidden" name="act" value="addmusic" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<button type="button" name="addone" onclick="addMenu();return false;" class="pn"><em>{lang increase}</em></button>&nbsp;
-				<button type="submit" class="pn pnc" id="musicsubmitbtn"><strong>{lang determine}</strong></button>
+				<button type="submit" class="pn pnc"><strong>{lang determine}</strong></button>
 			</div>
 		</form>
 	</div>
@@ -480,7 +614,7 @@
 				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
 				<input type="hidden" name="act" value="editlist" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
-				<button type="submit" class="pn pnc" id="musicsubmitbtn"><strong>{lang update_ablum_list}</strong></button>
+				<button type="submit" class="pn pnc"><strong>{lang update_ablum_list}</strong></button>
 			</div>
 		</form>
 		<!--{else}-->
@@ -506,7 +640,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 
 <!--{eval $space[domainurl] = space_domain($space);}-->
 <strong id="spacename"><!--{if $space[spacename]}-->$space[spacename]<!--{else}-->$space[username]{lang somebody_space}<!--{/if}--></strong>
-<a id="domainurl" href="$space[domainurl]" onclick="javascript:setCopy('$space[domainurl]', '{lang copy_space_address}');return false;" class="xs0 xw0">$space[domainurl]</a>
+<a id="domainurl" href="$space[domainurl]" onclick="setCopy('$space[domainurl]', '{lang copy_space_address}');return false;" class="xs0 xw0">$space[domainurl]</a>
 <span id="spacedescription" class="xw0">$space[spacedescription]</span>
 <script type="text/javascript" reload="1">spaceDiy.initSpaceInfo();</script>
 
@@ -524,7 +658,8 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 	<a id="domainurledit" style="display: none;">$space[domainurl]</a>
 	<span><em class="xw0 xs1">{lang my_space_describe}: </em><input type="text" class="px" style="width:600px" value="{$space['spacedescription']}" name="spacedescription" /></span>
 </form>
-
+<!--{elseif $_GET['op'] == 'getpersonalnv'}-->
+<!--{subtemplate home/space_header_personalnv}-->
 <!--{else}-->
 <ul>
   <li> NONE </li>

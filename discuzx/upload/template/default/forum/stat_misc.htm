@@ -97,7 +97,7 @@
 					</tr>
 					<!--{loop $forums $forum}-->
 						<tr class="{echo swapclass('alt')}">
-							<td><a href="misc.php?mod=stat&op=forumstat&fid={$forum['fid']}">$forum['name']</a></td>
+							<td><a href="misc.php?mod=stat&op=forumstat&fid={$forum['fid']}">$forum['name']</a><!--{if $forum['type'] == 'sub'}--><span class="xg1"> ({lang stats_forums_sub})</span><!--{/if}--></td>
 							<td>$forum['posts']</td>
 						</tr>
 					<!--{/loop}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_merge.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_merge.php 20934 2011-03-09 01:18:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowmergethread']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_mergethread');
 }
 
 if(!submitcheck('modsubmit')) {
@@ -20,11 +20,13 @@ if(!submitcheck('modsubmit')) {
 	include template('forum/topicadmin_action');
 
 } else {
+
 	$posttable = getposttablebytid($_G['tid']);
+	$othertid = intval($_G['gp_othertid']);
+	$otherposttable = getposttablebytid($othertid);
 	$modaction = 'MRG';
 
 	$reason = checkreasonpm();
-	$othertid = intval($_G['gp_othertid']);
 
 	$other = DB::fetch_first("SELECT tid, fid, authorid, subject, views, replies, dateline, special FROM ".DB::table('forum_thread')." WHERE tid='$othertid' AND displayorder>='0'");
 	if(!$other) {
@@ -39,12 +41,21 @@ if(!submitcheck('modsubmit')) {
 	$other['views'] = intval($other['views']);
 	$other['replies']++;
 
+	if($posttable != $otherposttable) {
+		$query = DB::query("SELECT * FROM ".DB::table($otherposttable)." WHERE tid='$othertid'");
+		while($row = DB::fetch($query)) {
+			$row = daddslashes($row);
+			DB::insert($posttable, $row);
+		}
+		DB::delete($otherposttable, "tid='$othertid'");
+	}
+
 	$firstpost = DB::fetch_first("SELECT pid, fid, authorid, author, subject, dateline FROM ".DB::table($posttable)." WHERE tid IN ('$_G[tid]', '$othertid') AND invisible='0' ORDER BY dateline LIMIT 1");
 
 	DB::query("UPDATE ".DB::table($posttable)." SET tid='$_G[tid]' WHERE tid='$othertid'");
 	$postsmerged = DB::affected_rows();
 
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$_G[tid]' WHERE tid='$othertid'");
+	updateattachtid("tid='$othertid'", $othertid, $_G['tid']);
 	DB::query("DELETE FROM ".DB::table('forum_thread')." WHERE tid='$othertid'");
 	DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid='$othertid'");
 

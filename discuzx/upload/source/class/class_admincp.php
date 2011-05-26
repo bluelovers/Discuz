@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_admincp.php 16134 2010-08-31 10:49:28Z cnteacher $
+ *      $Id: class_admincp.php 21498 2011-03-29 04:45:05Z monkey $
  */
 
 class discuz_admincp
@@ -162,7 +162,7 @@ class discuz_admincp
 		if($admin_username != '') {
 
 			require_once libfile('function/member');
-			if(logincheck()) {
+			if(logincheck($_POST['admin_username'])) {
 				if((empty($_POST['admin_questionid']) || empty($_POST['admin_answer'])) && $_G['config']['admincp']['forcesecques']) {
 					$this->do_user_login();
 				}
@@ -184,7 +184,7 @@ class discuz_admincp
 						$this->cpaccess = -2;
 					}
 				} else {
-					loginfailed();
+					loginfailed($_POST['admin_username']);
 				}
 			} else {
 				$this->cpaccess = -4;
@@ -202,9 +202,10 @@ class discuz_admincp
 			return $this->perms['all'];
 		}
 
-		if(!empty($_POST) && !array_key_exists('_allowpost', $this->perms)) {
+		if(!empty($_POST) && !array_key_exists('_allowpost', $this->perms) && $action.'_'.$operation != 'misc_custommenu') {
 			return false;
 		}
+		$this->perms['misc_custommenu'] = 1;
 
 		$key = $action;
 		if(isset($this->perms[$key])) {
@@ -244,7 +245,7 @@ class discuz_admincp
 
 	function checkfounder($user) {
 		$founders = str_replace(' ', '', $this->cpsetting['founder']);
-		if(!$user['uid'] || !$user['groupid'] == 1 || !$user['adminid'] == 1) {
+		if(!$user['uid'] || $user['groupid'] != 1 || $user['adminid'] != 1) {
 			return false;
 		} elseif(empty($founders)) {
 			return true;

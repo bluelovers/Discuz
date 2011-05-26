@@ -1,6 +1,6 @@
 <li class="cl $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);">
 	<!--{if $value[uid] && empty($_G['home']['tpl'][hidden_more])}-->
-	<a href="home.php?mod=spacecp&ac=feed&op=menu&feedid=$value[feedid]" class="o{if $_G['uid'] == $value[uid]} del{/if}" id="a_feed_menu_$value[feedid]" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" title="{if $_G['uid'] != $value[uid]}{lang show_more_options}{else}{lang delete_feed}{/if}" style="display:none;">{lang menu}</a>
+	<a href="home.php?mod=spacecp&ac=feed&op=menu&feedid=$value[feedid]" class="o{if $_G['uid'] == $value[uid]} del{/if}" id="a_feed_menu_$value[feedid]" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" title="{if $_G['uid'] != $value[uid]}{lang shield_feed}{else}{lang delete_feed}{/if}" style="display:none;">{lang menu}</a>
 	<!--{/if}-->
 	<div class="cl" {$value[style]}>
 		<a class="t" href="home.php?mod=space&uid=$_GET[uid]&do=home&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="{lang just_look_dynamic}"><img src="$value[icon_image]" /></a>
@@ -14,7 +14,7 @@
 		<!--{eval $_G[gp_key] = $key = random(8);}-->
 		<!--{if $value['idtype']=='doid'}-->
 		(<a href="javascript:;" {if $_G['uid']}onclick="docomment_get('$value[id]', '$key');"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="{$_G[gp_key]}_do_a_op_$value[id]">{lang reply}</a>)
-		<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
+		<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','eventid'))}-->
 		(<a href="javascript:;" {if $_G['uid']}onclick="feedcomment_get($value[feedid]);"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="feedcomment_a_op_$value[feedid]">{lang comment}</a>)
 		<!--{/if}-->
 		<!--{/if}-->

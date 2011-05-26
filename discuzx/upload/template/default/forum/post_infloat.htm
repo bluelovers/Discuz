@@ -19,12 +19,16 @@
 				<input type="hidden" name="noticeauthor" value="$noticeauthor" />
 				<input type="hidden" name="noticetrimstr" value="$noticetrimstr" />
 				<input type="hidden" name="noticeauthormsg" value="$noticeauthormsg" />
+				<!--{if $reppid}-->
+					<input type="hidden" name="reppid" value="$reppid" />
+				<!--{/if}-->
 				<!--{if $_G[gp_reppost]}-->
 					<input type="hidden" name="reppost" value="$_G[gp_reppost]" />
 				<!--{elseif $_G[gp_repquote]}-->
 					<input type="hidden" name="reppost" value="$_G[gp_repquote]" />
 				<!--{/if}-->
 			<!--{/if}-->
+			<!--{hook/post_infloat_top}-->
 			<div class="pbt cl">
 				<!--{if $_G[gp_action] == 'newthread' && ($threadsorts = $_G['forum'][threadsorts])}-->
 					<div class="ftid">
@@ -41,14 +45,16 @@
 				<!--{/if}-->
 				<!--{if $isfirstpost && $_G['forum'][threadtypes][types]}-->
 					<div class="ftid">
-						<select name="typeid" id="typeid" width="80">
+						<select name="typeid" id="typeid_float" width="80">
 						<option value="0">{lang select_thread_catgory}</option>
 						<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
+							<!--{if empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']}-->
 							<option value="$typeid"{if $thread['typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
+							<!--{/if}-->
 						<!--{/loop}-->
 						</select>
 					</div>
-					<script type="text/javascript" reload="1">simulateSelect('typeid');</script>
+					<script type="text/javascript" reload="1">simulateSelect('typeid_float');</script>
 				<!--{/if}-->
 				<!--{if $_G[gp_action] != 'reply'}-->
 					<span><input name="subject" id="subject" class="px" value="$postinfo[subject]" tabindex="21" style="width: 25em" /></span>
@@ -92,11 +98,13 @@
 			<!--{/if}-->
 		</div>
 	</div>
+	<!--{hook/post_infloat_middle}-->
 	<div class="o pns" id="moreconf">
 		<!--{if $_G[gp_action] == 'newthread' && $_G['setting']['sitemessage'][newthread] || $_G[gp_action] == 'reply' && $_G['setting']['sitemessage'][reply]}-->
 			<a href="javascript:;" id="custominfo" class="y"><img src="{IMGDIR}/info_small.gif" alt="{lang faq}" /></a>
 		<!--{/if}-->
 		<button type="submit" id="postsubmit" class="pn pnc z" value="true" name="{if $_G[gp_action] == 'newthread'}topicsubmit{elseif $_G[gp_action] == 'reply'}replysubmit{/if}" tabindex="23"><span><!--{if $_G[gp_action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_G[gp_action] == 'reply'}-->{lang join_thread}<!--{/if}--></span></button>
+		<!--{hook/post_infloat_btn_extra}-->
 	</div>
 </form>
 

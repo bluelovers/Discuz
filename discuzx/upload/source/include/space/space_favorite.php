@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_share.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: space_favorite.php 22215 2011-04-26 06:51:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,13 +24,12 @@ ckstart($start, $perpage);
 
 $idtypes = array('thread'=>'tid', 'forum'=>'fid', 'blog'=>'blogid', 'group'=>'gid', 'album'=>'albumid', 'space'=>'uid', 'article'=>'aid');
 $_GET['type'] = isset($idtypes[$_GET['type']]) ? $_GET['type'] : 'all';
-$actives = array($_GET['type'] => ' class="a"');
+$actives[$_GET['type']] = ' class="a"';
 
 $gets = array(
 	'mod' => 'space',
 	'uid' => $space['uid'],
 	'do' => 'favorite',
-	'view' => 'me',
 	'type' => $_GET['type'],
 	'from' => $_GET['from']
 );
@@ -76,13 +75,13 @@ $multi = multi($count, $perpage, $page, $theurl);
 
 dsetcookie('home_diymode', $diymode);
 
-if(!$_G['gp_type']) {
-	$_G['gp_type'] = 'all';
+if(!$_GET['type']) {
+	$_GET['type'] = 'all';
 }
-if($_G['gp_type'] == 'group') {
+if($_GET['type'] == 'group') {
 	$navtitle = lang('core', 'title_group_favorite', array('gorup' => $_G['setting']['navs'][3]['navname']));
 } else {
-	$navtitle = lang('core', 'title_'.$_G['gp_type'].'_favorite');
+	$navtitle = lang('core', 'title_'.$_GET['type'].'_favorite');
 }
 
 include_once template("diy:home/space_favorite");

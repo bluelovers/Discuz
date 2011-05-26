@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -18,19 +17,19 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_picture}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_orderby] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&orderby=heats&before=$_G['gp_before']">{lang hot_pic_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'hot'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=hot&orderby=$_G['gp_orderby']">{lang hot_pic_ranklist}</a></li>
 				<!--{if $clicks}-->
 				<!--{loop $clicks $key $value}-->
-				<li{if $_G[gp_orderby] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&orderby=$key&before=$_G['gp_before']">$value[name]{lang ranklist}</a></li>
+				<li{if $_G[gp_view] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=$key&orderby=$_G['gp_orderby']">$value[name]{lang ranklist}</a></li>
 				<!--{/loop}-->
 				<!--{/if}-->
-				<li{if $_G[gp_orderby] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&orderby=sharetimes&before=$_G['gp_before']">{lang ranklist_share}</a></li>
+				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=sharetimes&orderby=$_G['gp_orderby']">{lang ranklist_share}</a></li>
 			</ul>
 			<p id="before" class="tbmu">
-				<a href="misc.php?mod=ranklist&type=picture&orderby=$_G[gp_orderby]&before=thismonth" id="2592000" {if $_G['gp_before'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&orderby=$_G[gp_orderby]&before=thisweek" id="604800" {if $_G['gp_before'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&orderby=$_G[gp_orderby]&before=today" id="86400" {if $_G['gp_before'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&orderby=$_G[gp_orderby]&before=all" id="all" {if $_G['gp_before'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $_G['gp_orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $_G['gp_orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=today" id="86400" {if $_G['gp_orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=all" id="all" {if $_G['gp_orderby'] == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $picturelist}-->
 				<ul class="ptw ml mla cl">
@@ -40,9 +39,9 @@
 							<!--{if $picture['rank'] <= 3}--><img src="{IMGDIR}/rank_$picture['rank'].gif" alt="$picture['rank']" class="picrank" /><!--{/if}-->
 							<a href="home.php?mod=space&uid=$picture['uid']&do=album&picid=$picture['picid']" title="$picture['albumname']" target="_blank"><img src="{$picture['url']}" alt="" /></a>
 						</div>
-						<!--{if $_G[gp_orderby] == 'heats'}--><p class="ptm">{lang views} $picture[hot]</p>
-						<!--{elseif $_G[gp_orderby] == 'sharetimes'}--><p class="ptm">{lang ranklist_thread_share} $picture[sharetimes]</p>
-						<!--{else}--><p class="ptm">$clicks[$_G[gp_orderby]][name] $picture['click'.$_G[gp_orderby]]</p><!--{/if}-->
+						<!--{if $_G[gp_view] == 'hot'}--><p class="ptm">{lang views} $picture[hot]</p>
+						<!--{elseif $_G[gp_view] == 'sharetimes'}--><p class="ptm">{lang ranklist_thread_share} $picture[sharetimes]</p>
+						<!--{else}--><p class="ptm">$clicks[$_G[gp_view]][name] $picture['click'.$_G[gp_view]]</p><!--{/if}-->
 						<span><a href="home.php?mod=space&uid=$picture['uid']" target="_blank">$picture[username]</a></span>
 					</li>
 				<!--{/loop}-->

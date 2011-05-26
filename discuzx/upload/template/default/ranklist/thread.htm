@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -18,16 +17,17 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_thread}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_orderby] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&orderby=replies&before=$_G['gp_before']">{lang ranklist_reply}</a></li>
-				<li{if $_G[gp_orderby] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&orderby=views&before=$_G['gp_before']">{lang visit_ranklist}</a></li>
-				<li{if $_G[gp_orderby] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&orderby=sharetimes&before=$_G['gp_before']">{lang ranklist_share}</a></li>
-				<li{if $_G[gp_orderby] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&orderby=favtimes&before=$_G['gp_before']">{lang ranklist_favorite}</a></li>
+				<li{if $_G[gp_view] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=replies&orderby=$_G['gp_orderby']">{lang ranklist_reply}</a></li>
+				<li{if $_G[gp_view] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=views&orderby=$_G['gp_orderby']">{lang visit_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=sharetimes&orderby=$_G['gp_orderby']">{lang ranklist_share}</a></li>
+				<li{if $_G[gp_view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=favtimes&orderby=$_G['gp_orderby']">{lang ranklist_favorite}</a></li>
+				<li{if $_G[gp_view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=heats&orderby=$_G['gp_orderby']">{lang ranklist_hot}</a></li>
 			</ul>
 			<p id="before" class="tbmu{if $threadlist} bw0{/if}">
-				<a href="misc.php?mod=ranklist&type=thread&orderby=$_G[gp_orderby]&before=thisweek" id="604800" {if $_G['gp_before'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&orderby=$_G[gp_orderby]&before=thismonth" id="2592000" {if $_G['gp_before'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&orderby=$_G[gp_orderby]&before=today" id="86400" {if $_G['gp_before'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&orderby=$_G[gp_orderby]&before=all" id="all" {if $_G['gp_before'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $_G['gp_orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $_G['gp_orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_G[gp_view]&orderby=today" id="86400" {if $_G['gp_orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_G[gp_view]&orderby=all" id="all" {if $_G['gp_orderby'] == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $threadlist}-->
 				<div class="tl">
@@ -39,9 +39,10 @@
 								<td class="frm">{lang forum}</td>
 								<td class="by">{lang author}</td>
 								<td width="60">
-									<!--{if $_G[gp_orderby] == 'views'}-->{lang ranklist_thread_view}
-									<!--{elseif $_G[gp_orderby] == 'sharetimes'}-->{lang ranklist_thread_share}
-									<!--{elseif $_G[gp_orderby] == 'favtimes'}-->{lang ranklist_thread_favorite}
+									<!--{if $_G[gp_view] == 'views'}-->{lang ranklist_thread_view}
+									<!--{elseif $_G[gp_view] == 'sharetimes'}-->{lang ranklist_thread_share}
+									<!--{elseif $_G[gp_view] == 'favtimes'}-->{lang ranklist_thread_favorite}
+									<!--{elseif $_G[gp_view] == 'heats'}-->{lang ranklist_thread_heat}
 									<!--{else}-->{lang ranklist_thread_reply}<!--{/if}-->
 								</td>
 							</tr>
@@ -56,9 +57,10 @@
 									<em>$thread['dateline']</em>
 								</td>
 								<td>
-									<!--{if $_G[gp_orderby] == 'views'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['views']</a>
-									<!--{elseif $_G[gp_orderby] == 'sharetimes'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['sharetimes']</a>
-									<!--{elseif $_G[gp_orderby] == 'favtimes'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['favtimes']</a>
+									<!--{if $_G[gp_view] == 'views'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['views']</a>
+									<!--{elseif $_G[gp_view] == 'sharetimes'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['sharetimes']</a>
+									<!--{elseif $_G[gp_view] == 'favtimes'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['favtimes']</a>
+									<!--{elseif $_G[gp_view] == 'heats'}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['heats']</a>
 									<!--{else}--><a href="forum.php?mod=viewthread&tid={$thread['tid']}" class="xi2" target="_blank">$thread['replies']</a><!--{/if}-->
 								</td>
 							</tr>

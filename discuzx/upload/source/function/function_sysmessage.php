@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_sysmessage.php 7312 2010-04-06 05:21:28Z monkey $
+ *      $Id: function_sysmessage.php 20659 2011-03-01 07:23:01Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ function show_system_message($message, $title = '', $msgvar = array()) {
 <meta name="description" content="System Message - Discuz! Board" />
 <meta name="generator" content="Discuz! " />
 <meta name="author" content="Discuz! Team and Comsenz UI Team" />
-<meta name="copyright" content="2001-2010 Comsenz Inc." />
+<meta name="copyright" content="2001-2011 Comsenz Inc." />
 <meta name="MSSmartTagsPreventParsing" content="True" />
 <meta http-equiv="MSThemeCompatible" content="Yes" />
 </head>

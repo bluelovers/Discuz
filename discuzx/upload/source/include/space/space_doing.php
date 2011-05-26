@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_doing.php 16856 2010-09-16 02:53:58Z wangjinbo $
+ *      $Id: space_doing.php 19158 2010-12-20 08:21:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,6 +75,7 @@ if($doid) {
 
 if($searchkey = stripsearchkey($_GET['searchkey'])) {
 	$wheresql .= " AND message LIKE '%$searchkey%'";
+	$searchkey = dhtmlspecialchars($searchkey);
 }
 
 if(empty($count)) {
@@ -160,6 +161,7 @@ if($_G['uid']) {
 	} else {
 		$navtitle = lang('core', 'title_me_friend_doing');
 	}
+	$defaultstr = getdefaultdoing();
 } else {
 	$navtitle = lang('core', 'title_newest_doing');
 }

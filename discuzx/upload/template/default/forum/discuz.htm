@@ -1,28 +1,47 @@
 <!--{subtemplate common/header}-->
 
-<!--{subtemplate common/pubsearchform}-->
 
-<!--{ad/text/wp a_t}-->
-<style id="diy_style" type="text/css"></style>
-<div class="wp">
-	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
-</div>
-
-<div id="ct" class="wp cl{if $_G['setting']['forumallowside']} ct2{/if}">
-	<div id="chart" class="bm bw0 cl">
-		<!--{if $_G['uid']}--><p class="y"><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><span class="pipe">|</span><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2">{lang show_newthreads}</a></p><!--{/if}-->
-		<p class="chart">{lang index_today}: <em>$todayposts</em><span class="pipe">|</span>{lang index_yesterday}: $postdata[0]<span class="pipe">|</span>{lang index_posts}: <em>$posts</em><span class="pipe">|</span>{lang index_members}: <em>$_G['cache']['userstats']['totalmembers']</em><!--{if $_G['setting']['lastmember']}--><span class="pipe">|</span>{lang welcome_new_members}: <em><a href="home.php?mod=space&username={echo rawurlencode($_G['setting']['lastmember'])}" target="_blank" class="xi2">$_G['setting']['lastmember']</a></em><!--{/if}--></p>
-	</div>
+<div id="pt" class="bm cl">
 	<!--{if empty($gid) && $announcements}-->
-		<div id="an" class="bm bw0">
+	<div class="y">
+		<div id="an">
 			<dl class="cl">
 				<dt class="z xw1">{lang announcements}:&nbsp;</dt>
 				<dd>
-					<div id="anc" class="xi2"><ul id="ancl">$announcements</ul></div>
+					<div id="anc"><ul id="ancl">$announcements</ul></div>
 				</dd>
 			</dl>
 		</div>
 		<script type="text/javascript">announcement();</script>
+	</div>
+	<!--{/if}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php">{$_G[setting][navs][2][navname]}</a>$navigation
+	</div>
+	<div class="z"><!--{hook/index_status_extra}--></div>
+</div>
+
+
+<!--{if empty($gid)}-->
+	<!--{ad/text/wp a_t}-->
+<!--{/if}-->
+
+	<style id="diy_style" type="text/css"></style>
+
+<!--{if empty($gid)}-->
+	<div class="wp">
+		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+	</div>
+<!--{/if}-->
+
+<div id="ct" class="wp cl{if $_G['setting']['forumallowside']} ct2{/if}">
+	<!--{if empty($gid)}-->
+		<div id="chart" class="bm bw0 cl">
+			<p class="chart z">{lang index_today}: <em>$todayposts</em><span class="pipe">|</span>{lang index_yesterday}: <em>$postdata[0]</em><span class="pipe">|</span>{lang index_posts}: <em>$posts</em><span class="pipe">|</span>{lang index_members}: <em>$_G['cache']['userstats']['totalmembers']</em><!--{if $_G['setting']['lastmember']}--><span class="pipe">|</span>{lang welcome_new_members}: <em><a href="home.php?mod=space&username={echo rawurlencode($_G['setting']['lastmember'])}" target="_blank" class="xi2">$_G['setting']['lastmember']</a></em><!--{/if}--></p>
+			<div class="y">
+				<!--{if $_G['uid']}--><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><!--{/if}--><!--{if !empty($_G['setting']['search']['forum']['status'])}--><!--{if $_G['uid']}--><span class="pipe">|</span><!--{/if}--><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2">{lang show_newthreads}</a><!--{/if}-->
+			</div>
+		</div>
 	<!--{/if}-->
 
 	<div class="mn">
@@ -43,9 +62,9 @@
 							</dl>
 						<!--{/loop}-->
 					</div>
-					<ul class="xl heatl">
+					<ul class="xl xl1 heatl">
 					<!--{loop $_G['cache']['heats']['subject'] $data}-->
-						<li><!--{if $_G['adminid'] == 1}--><a class="d" href="forum.php?mod=misc&action=removeindexheats&tid=$data[tid]" onclick="return removeindexheats()">delete</a><!--{/if}--><a href="forum.php?mod=viewthread&tid=$data[tid]" target="_blank" class="xi2">$data[subject]</a></li>
+						<li><!--{if $_G['adminid'] == 1}--><a class="d" href="forum.php?mod=misc&action=removeindexheats&tid=$data[tid]" onclick="return removeindexheats()">delete</a><!--{/if}-->&middot; <a href="forum.php?mod=viewthread&tid=$data[tid]" target="_blank" class="xi2">$data[subject]</a></li>
 					<!--{/loop}-->
 					</ul>
 				</div>
@@ -95,7 +114,7 @@
 											<a href="$forumurl" class="xi2">{lang url_link}</a>
 										<!--{elseif is_array($forum['lastpost'])}-->
 											<!--{if $cat['forumcolumns'] < 3}-->
-												<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->{lang anonymous}<!--{/if}--></cite>
+												<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
 											<!--{else}-->
 												<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost">{lang forum_lastpost}: $forum[lastpost][dateline]</a>
 											<!--{/if}-->
@@ -131,7 +150,7 @@
 									<!--{if $forum['redirect']}-->
 										<a href="$forumurl" class="xi2">{lang url_link}</a>
 									<!--{elseif is_array($forum['lastpost'])}-->
-										<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->{lang anonymous}<!--{/if}--></cite>
+										<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
 									<!--{else}-->
 										{lang never}
 									<!--{/if}-->
@@ -152,6 +171,9 @@
 		</div>
 
 		<!--{hook/index_middle}-->
+		<div class="wp mtn">
+			<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+		</div>
 
 		<!--{if empty($gid) && $_G['setting']['whosonlinestatus']}-->
 			<div id="online" class="bm oll">
@@ -236,7 +258,4 @@
 	<!--{/if}-->
 </div>
 
-<div class="wp mtn">
-	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
-</div>
 <!--{subtemplate common/footer}-->

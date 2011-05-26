@@ -4,61 +4,91 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 17421 2010-10-18 14:09:19Z monkey $
+ *      $Id: function_post.php 22762 2011-05-20 01:25:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function getattach($pid, $posttime = 0) {
+function getattach($pid, $posttime = 0, $aids = '') {
 	global $_G;
 
 	require_once libfile('function/attachment');
 	$attachs = $imgattachs = array();
-	$sqladd1 = $posttime > 0 ? "AND a.dateline>'$posttime'" : '';
-	$sqladd2 = $pid > 0 ? "OR a.pid='$pid'" : '';
-	$query = DB::query("SELECT a.*, af.description
-		FROM ".DB::table('forum_attachment')." a
-		LEFT JOIN ".DB::table('forum_attachmentfield')." af USING(aid)
-		WHERE (a.uid='$_G[uid]' AND a.tid='0' $sqladd1) $sqladd2 ORDER BY a.aid DESC");
+	$aids = $aids ? explode('|', $aids) : array();
+	if($aids) {
+		$aidsnew = array();
+		foreach($aids as $aid) {
+			if($aid) {
+				$aidsnew[] = intval($aid);
+			}
+		}
+		$aids = "aid IN (".dimplode($aidsnew).") AND";
+	} else {
+		$aids = '';
+	}
+	$sqladd1 = $posttime > 0 ? "AND af.dateline>'$posttime'" : '';
 	if(!empty($_G['fid']) && $_G['forum']['attachextensions']) {
-		$allowext = str_replace(' ', '', $_G['forum']['attachextensions']);
+		$allowext = str_replace(' ', '', strtolower($_G['forum']['attachextensions']));
 		$allowext = explode(',', $allowext);
 	} else {
 		$allowext = '';
 	}
+	$query = DB::query("SELECT a.*, af.*
+		FROM ".DB::table('forum_attachment')." a
+		LEFT JOIN ".DB::table('forum_attachment_unused')." af USING(aid)
+		WHERE $aids (af.uid='$_G[uid]' AND a.tid='0' $sqladd1) ORDER BY a.aid DESC");
 	while($attach = DB::fetch($query)) {
 		$attach['filenametitle'] = $attach['filename'];
-		$attach['ext'] = fileext($attach['filename']);
+		$attach['ext'] = strtolower(fileext($attach['filename']));
 		if($allowext && !in_array($attach['ext'], $allowext)) {
 			continue;
 		}
-		$attach['filename'] = cutstr($attach['filename'], $_G['setting']['allowattachurl'] ? 25 : 30);
-		$attach['attachsize'] = sizecount($attach['filesize']);
-		$attach['dateline'] = dgmdate($attach['dateline']);
-		$attach['filetype'] = attachtype($attach['ext']."\t".$attach['filetype']);
-		if($attach['isimage'] < 1) {
-			if($attach['isimage']) {
-				$attach['url'] = $attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
-				$attach['width'] = $attach['width'] > 300 ? 300 : $attach['width'];
+		getattach_row($attach, $attachs, $imgattachs);
+	}
+	if($pid > 0) {
+		$query = DB::query("SELECT a.*, af.*
+			FROM ".DB::table('forum_attachment')." a
+			LEFT JOIN ".DB::table(getattachtablebytid($_G['tid']))." af USING(aid)
+			WHERE a.pid='$pid' ORDER BY a.aid DESC");
+		while($attach = DB::fetch($query)) {
+			$attach['filenametitle'] = $attach['filename'];
+			$attach['ext'] = fileext($attach['filename']);
+			if($allowext && !in_array($attach['ext'], $allowext)) {
+				continue;
 			}
-			if($attach['pid']) {
-				$attachs['used'][] = $attach;
-			} else {
-				$attachs['unused'][] = $attach;
-			}
-		} else {
-			$attach['url'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'/forum';
-			$attach['width'] = $attach['width'] > 300 ? 300 : $attach['width'];
-			if($attach['pid']) {
-				$imgattachs['used'][] = $attach;
-			} else {
-				$imgattachs['unused'][] = $attach;
-			}
+			getattach_row($attach, $attachs, $imgattachs);
 		}
 	}
 	return array('attachs' => $attachs, 'imgattachs' => $imgattachs);
+}
+
+function getattach_row($attach, &$attachs, &$imgattachs) {
+	global $_G;
+	$attach['filename'] = cutstr($attach['filename'], $_G['setting']['allowattachurl'] ? 25 : 30);
+	$attach['attachsize'] = sizecount($attach['filesize']);
+	$attach['dateline'] = dgmdate($attach['dateline']);
+	$attach['filetype'] = attachtype($attach['ext']."\t".$attach['filetype']);
+	if($attach['isimage'] < 1) {
+		if($attach['isimage']) {
+			$attach['url'] = $attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
+			$attach['width'] = $attach['width'] > 300 ? 300 : $attach['width'];
+		}
+		if($attach['pid']) {
+			$attachs['used'][] = $attach;
+		} else {
+			$attachs['unused'][] = $attach;
+		}
+	} else {
+		$attach['url'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'/forum';
+		$attach['width'] = $attach['width'] > 300 ? 300 : $attach['width'];
+		if($attach['pid']) {
+			$imgattachs['used'][] = $attach;
+		} else {
+			$imgattachs['unused'][] = $attach;
+		}
+	}
 }
 
 function parseattachmedia($attach) {
@@ -94,49 +124,48 @@ function ftpupload($aids, $uid = 0) {
 	if(!$aids || !$_G['setting']['ftp']['on']) {
 		return;
 	}
-	$query = DB::query("SELECT aid, thumb, attachment, filename, filesize, picid FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).") AND uid='$uid' AND remote='0'");
-	$aids = $pics = array();
+	$attachtables = $pics = array();
+	$query = DB::query("SELECT aid, tableid FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).") AND uid='$uid'");
 	while($attach = DB::fetch($query)) {
-		$attach['ext'] = fileext($attach['filename']);
-		if(((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['filesize'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
-			if(ftpcmd('upload', 'forum/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'forum/'.$attach['attachment'].'.thumb.jpg'))) {
-				dunlink($attach);
-				$aids[] = $attach['aid'];
-				if($attach['picid']) {
-					$pics[] = $attach['picid'];
+		$attachtables[$attach['tableid']][] = $attach['aid'];
+	}
+	foreach($attachtables as $attachtable => $aids) {
+		$attachtable = 'forum_attachment_'.$attachtable;
+		$query = DB::query("SELECT aid, thumb, attachment, filename, filesize, picid FROM ".DB::table($attachtable)." WHERE aid IN (".dimplode($aids).") AND remote='0'");
+		$aids = array();
+		while($attach = DB::fetch($query)) {
+			$attach['ext'] = fileext($attach['filename']);
+			if(((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['filesize'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
+				if(ftpcmd('upload', 'forum/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'forum/'.getimgthumbname($attach['attachment'])))) {
+					dunlink($attach);
+					$aids[] = $attach['aid'];
+					if($attach['picid']) {
+						$pics[] = $attach['picid'];
+					}
 				}
 			}
 		}
-	}
 
-	if($aids) {
-		DB::update('forum_attachment', array('remote' => 1), "aid IN (".dimplode($aids).")");
-		if($pics) {
-			DB::update('home_pic', array('remote' => 3), "picid IN (".dimplode($pics).")");
+		if($aids) {
+			DB::update($attachtable, array('remote' => 1), "aid IN (".dimplode($aids).")");
 		}
+	}
+	if($pics) {
+		DB::update('home_pic', array('remote' => 3), "picid IN (".dimplode($pics).")");
 	}
 }
 
-function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $attachupdate = array(), $uid = 0) {
+function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = array(), $uid = 0) {
 	global $_G;
 	$uid = $uid ? $uid : $_G['uid'];
 	$uidadd = $_G['forum']['ismoderator'] ? '' : " AND uid='$uid'";
-	$attachnum = $_G['group']['allowpostattach'];
 	if($attachnew) {
 		$newaids = array_keys($attachnew);
 		$newattach = $newattachfile = $albumattach = array();
-		$query = DB::query("SELECT aid, tid, attachment FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($newaids).")$uidadd");
+		$query = DB::query("SELECT * FROM ".DB::table('forum_attachment_unused')." WHERE aid IN (".dimplode($newaids).")$uidadd");
 		while($attach = DB::fetch($query)) {
-			if($_G['group']['maxattachnum']) {
-				if($attachnum <= 0) {
-					unset($attachnew[$attach['aid']]);
-					continue;
-				} else {
-					$attachnum--;
-				}
-			}
-			if(!$attach['tid']) {
-				$newattach[$attach['aid']] = $attach['aid'];
+			$newattach[$attach['aid']] = daddslashes($attach);
+			if($attach['isimage']) {
 				$newattachfile[$attach['aid']] = $attach['attachment'];
 			}
 		}
@@ -148,21 +177,36 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 			array_unshift($_G['gp_albumaid'], '');
 			$_G['gp_albumaid'] = array_unique($_G['gp_albumaid']);
 			unset($_G['gp_albumaid'][0]);
-			$query = DB::query("SELECT * FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($_G['gp_albumaid']).")");
-			while($attach = DB::fetch($query)) {
-				$albumattach[$attach['aid']] = $attach;
+			foreach($_G['gp_albumaid'] as $aid) {
+				if(isset($newattach[$aid])) {
+					$albumattach[$aid] = $newattach[$aid];
+				}
 			}
 		}
 		foreach($attachnew as $aid => $attach) {
-			$update = array(
-				'readperm' => $_G['group']['allowsetattachperm'] ? $attach['readperm'] : 0,
-				'price' => $_G['group']['maxprice'] ? (intval($attach['price']) <= $_G['group']['maxprice'] ? intval($attach['price']) : $_G['group']['maxprice']) : 0,
-				'tid' => $tid,
-				'pid' => $pid,
-				'uid' => $uid
-			);
-			if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark']) && !empty($newattachfile[$aid])) {
-				$image->Watermark($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], '', 'forum');
+			$update = array();
+			$update['readperm'] = $_G['group']['allowsetattachperm'] ? $attach['readperm'] : 0;
+			$update['price'] = $_G['group']['maxprice'] ? (intval($attach['price']) <= $_G['group']['maxprice'] ? intval($attach['price']) : $_G['group']['maxprice']) : 0;
+			$update['tid'] = $tid;
+			$update['pid'] = $pid;
+			$update['uid'] = $uid;
+			$update['description'] = cutstr(dhtmlspecialchars($attach['description']), 100);
+			DB::update(getattachtablebytid($tid), $update, "aid='$aid'");
+			if(!$newattach[$aid]) {
+				continue;
+			}
+			$update = array_merge($update, $newattach[$aid]);
+			if(!empty($newattachfile[$aid])) {
+				if($_G['setting']['thumbstatus'] && $_G['forum']['disablethumb']) {
+					$update['thumb'] = 0;
+					@unlink($_G['setting']['attachdir'].'/forum/'.getimgthumbname($newattachfile[$aid]));
+					if(!empty($albumattach[$aid])) {
+						$albumattach[$aid]['thumb'] = 0;
+					}
+				}
+				if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
+					$image->Watermark($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], '', 'forum');
+				}
 			}
 			if(!empty($_G['gp_albumaid']) && isset($albumattach[$aid])) {
 				$newalbum = 0;
@@ -178,22 +222,25 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 					'dateline' => $albumattach[$aid]['dateline'],
 					'postip' => $_G['clientip'],
 					'filename' => $albumattach[$aid]['filename'],
-					'title' => $albumattach[$aid]['description'],
+					'title' => cutstr(dhtmlspecialchars($attach['description']), 100),
 					'type' => fileext($albumattach[$aid]['attachment']),
 					'size' => $albumattach[$aid]['filesize'],
 					'filepath' => $albumattach[$aid]['attachment'],
 					'thumb' => $albumattach[$aid]['thumb'],
 					'remote' => $albumattach[$aid]['remote'] + 2,
 				);
+
 				$update['picid'] = DB::insert('home_pic', $picdata, 1);
+
 				if($newalbum) {
 					require_once libfile('function/home');
 					require_once libfile('function/spacecp');
 					album_update_pic($_G['gp_uploadalbum']);
 				}
 			}
-			DB::query("REPLACE INTO ".DB::table('forum_attachmentfield')." (aid, tid, pid, uid, description) VALUES ('$aid', '$tid', '$pid', '$uid', '".cutstr(dhtmlspecialchars($attach['description']), 100)."')");
-			DB::update('forum_attachment', $update, "aid='$aid'$uidadd");
+			DB::insert(getattachtablebytid($tid), $update, false, true);
+			DB::update('forum_attachment', array('tid' => $tid, 'pid' => $pid, 'tableid' => getattachtableid($tid)), "aid='$aid'");
+			DB::delete('forum_attachment_unused', "aid='$aid'");
 		}
 		if(!empty($_G['gp_albumaid'])) {
 			$albumdata = array(
@@ -207,35 +254,29 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 		}
 	}
 
-	$query = DB::query("SELECT aid, attachment, thumb, remote FROM ".DB::table('forum_attachment')." WHERE uid='$uid'");
-	$delaids = array();
+	$query = DB::query("SELECT aid, attachment, thumb, remote FROM ".DB::table(getattachtablebytid($tid))." WHERE uid='$uid'");
 	while($attach = DB::fetch($query)) {
 		$aids[] = $attach['aid'];
-		if($attachdel && in_array($attach['aid'], $attachdel)) {
-			$delaids[] = $attach['aid'];
-			unset($newattach[$attach['aid']]);
-			dunlink($attach);
-		}
 		if($attachupdate && array_key_exists($attach['aid'], $attachupdate) && $attachupdate[$attach['aid']]) {
 			dunlink($attach);
 		}
 	}
 
-	if($newattach && $uid == $_G['uid']) {
-		updatecreditbyaction('postattach', $uid, array(), '', count($newattach));
+	if(!$modnewthreads && $newattach && $uid == $_G['uid']) {
+		updatecreditbyaction('postattach', $uid, array(), '', count($newattach), 1, $_G['fid']);
 	}
 
 	if($attachupdate) {
 		$uaids = dimplode($attachupdate);
-		$query = DB::query("SELECT aid, width, filename, filetype, filesize, attachment, isimage, thumb, remote FROM ".DB::table('forum_attachment')." WHERE aid IN ($uaids)$uidadd");
-		DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid IN ($uaids)$uidadd");
+		$query = DB::query("SELECT aid, width, filename, filesize, attachment, isimage, thumb, remote FROM ".DB::table('forum_attachment_unused')." WHERE aid IN ($uaids)$uidadd");
+		DB::query("DELETE FROM ".DB::table('forum_attachment_unused')." WHERE aid IN ($uaids)$uidadd");
 		$attachupdate = array_flip($attachupdate);
 		while($attach = DB::fetch($query)) {
 			$update = $attach;
 			$update['dateline'] = TIMESTAMP;
 			$update['remote'] = 0;
 			unset($update['aid']);
-			DB::update('forum_attachment', $update, "aid='".$attachupdate[$attach['aid']]."'$uidadd");
+			DB::update(getattachtablebytid($tid), $update, "aid='".$attachupdate[$attach['aid']]."'$uidadd");
 			if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 				$image->Watermark($_G['setting']['attachdir'].'/forum/'.$attach['attachment'], '', 'forum');
 			}
@@ -243,15 +284,13 @@ function updateattach($postattachcredits, $tid, $pid, $attachnew, $attachdel, $a
 		}
 	}
 
-	if($delaids) {
-		DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($delaids).")", 'UNBUFFERED');
-		DB::query("DELETE FROM ".DB::table('forum_attachmentfield')." WHERE aid IN (".dimplode($delaids).")", 'UNBUFFERED');
-	}
-
-	$attachcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_attachment')." WHERE tid='$tid'".($pid > 0 ? " AND pid='$pid'" : ''));
-	$attachment = $attachcount ? (DB::result_first("SELECT count(*) FROM ".DB::table('forum_attachment')." WHERE tid='$tid'".($pid > 0 ? " AND pid='$pid'" : '')." AND isimage != 0") ? 2 : 1) : 0;
+	$attachcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getattachtablebytid($tid))." WHERE tid='$tid'".($pid > 0 ? " AND pid='$pid'" : ''));
+	$attachment = $attachcount ? (DB::result_first("SELECT COUNT(*) FROM ".DB::table(getattachtablebytid($tid))." WHERE tid='$tid'".($pid > 0 ? " AND pid='$pid'" : '')." AND isimage != 0") ? 2 : 1) : 0;
 
 	DB::query("UPDATE ".DB::table('forum_thread')." SET attachment='$attachment' WHERE tid='$tid'", 'UNBUFFERED');
+	if(!$attachment) {
+		DB::delete('forum_threadimage', "tid='$tid'");
+	}
 	$posttable = getposttablebytid($tid);
 	DB::query("UPDATE ".DB::table($posttable)." SET attachment='$attachment' WHERE pid='$pid'", 'UNBUFFERED');
 	$_G['forum_attachexist'] = $attachment;
@@ -277,7 +316,8 @@ function checkmaxpostsperhour() {
 	if(!$_G['group']['disablepostctrl'] && $_G['uid']) {
 
 		if($_G['group']['maxpostsperhour']) {
-			$userposts = getcountofposts(DB::table('forum_post'), "authorid='$_G[uid]' AND dateline>$_G[timestamp]-3600");
+			$timestamp = $_G['timestamp']-3600;
+			$userposts = DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_member_action_log')." WHERE dateline>$timestamp AND `action`='".getuseraction('pid')."' AND uid='$_G[uid]'");
 			$isflood = $userposts && ($userposts >= $_G['group']['maxpostsperhour']);
 			if($isflood) {
 				$morepostsperhour = true;
@@ -289,7 +329,7 @@ function checkmaxpostsperhour() {
 
 function checkpost($subject, $message, $special = 0) {
 	global $_G;
-	if(strlen($subject) > 80) {
+	if(dstrlen($subject) > 80) {
 		return 'post_subject_toolong';
 	}
 	if(!$_G['group']['disablepostctrl'] && !$special) {
@@ -350,20 +390,10 @@ function updatepostcredits($operator, $uidarray, $action, $fid = 0) {
 	}
 }
 
-function updateattachcredits($operator, $uidarray, $creditsarray) {
+function updateattachcredits($operator, $uidarray) {
 	global $_G;
-	$creditsadd1 = '';
-	if(is_array($creditsarray)) {
-		foreach($creditsarray as $id => $addcredits) {
-			$creditsadd1[] = "extcredits$id=extcredits$id$operator$addcredits*\$attachs";
-		}
-	}
-	if(is_array($creditsadd1)) {
-		$creditsadd1 = implode(', ', $creditsadd1);
-		foreach($uidarray as $uid => $attachs) {
-			eval("\$creditsadd2 = \"$creditsadd1\";");
-			DB::query("UPDATE ".DB::table('common_member_count')." SET $creditsadd2 WHERE uid = $uid", 'UNBUFFERED');
-		}
+	foreach($uidarray as $uid => $attachs) {
+		updatecreditbyaction('postattach', $uid, array(), '', $operator == '-' ? -$attachs : $attachs, 1, $_G['fid']);
 	}
 }
 
@@ -373,13 +403,13 @@ function updateforumcount($fid) {
 		FROM ".DB::table('forum_thread')." t, ".DB::table('forum_forum')." f
 		WHERE f.fid='$fid' AND t.fid=f.fid AND t.displayorder>='0'"));
 
-	$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter FROM ".DB::table('forum_thread')."
+	$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter, closed FROM ".DB::table('forum_thread')."
 		WHERE fid='$fid' AND displayorder='0' ORDER BY lastpost DESC LIMIT 1");
 
 	$thread['subject'] = addslashes($thread['subject']);
 	$thread['lastposter'] = $thread['author'] ? addslashes($thread['lastposter']) : lang('forum/misc', 'anonymous');
-
-	DB::query("UPDATE ".DB::table('forum_forum')." SET posts='$replycount', threads='$threadcount', lastpost='$thread[tid]\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]' WHERE fid='$fid'", 'UNBUFFERED');
+	$tid = $thread['closed'] > 1 ? $thread['closed'] : $thread['tid'];
+	DB::query("UPDATE ".DB::table('forum_forum')." SET posts='$replycount', threads='$threadcount', lastpost='$tid\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]' WHERE fid='$fid'", 'UNBUFFERED');
 }
 
 function updatethreadcount($tid, $updateattach = 0) {
@@ -460,14 +490,18 @@ function postfeed($feed) {
 	}
 }
 
-function messagecutstr($str, $length = 0) {
+function messagecutstr($str, $length = 0, $dot = ' ...') {
 	global $_G;
+	$sppos = strpos($str, chr(0).chr(0).chr(0));
+	if($sppos !== false) {
+		$str = substr($str, 0, $sppos);
+	}
 	$language = lang('forum/misc');
-	loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'icons', 'domainwhitelist'));
+	loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist'));
 	$bbcodes = 'b|i|u|p|color|size|font|align|list|indent|float';
 	$bbcodesclear = 'email|code|free|table|tr|td|img|swf|flash|attach|media|audio|payto'.($_G['cache']['bbcodes_display'][$_G['groupid']] ? '|'.implode('|', array_keys($_G['cache']['bbcodes_display'][$_G['groupid']])) : '');
 	$str = strip_tags(preg_replace(array(
-			"/\[hide=?\d*\](.+?)\[\/hide\]/is",
+			"/\[hide=?\d*\](.*?)\[\/hide\]/is",
 			"/\[quote](.*?)\[\/quote]/si",
 			$language['post_edit_regexp'],
 			"/\[url=?.*?\](.+?)\[\/url\]/si",
@@ -484,61 +518,79 @@ function messagecutstr($str, $length = 0) {
 			'',
 		), $str));
 	if($length) {
-		$str = cutstr($str, $length);
+		$str = cutstr($str, $length, $dot);
 	}
 	$str = preg_replace($_G['cache']['smilies']['searcharray'], '', $str);
+	if($_G['setting']['plugins'][HOOKTYPE.'_discuzcode']) {
+		$_G['discuzcodemessage'] = & $str;
+		$param = func_get_args();
+		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'messagecutstr'), 'discuzcode');
+	}
 	return trim($str);
 }
 
-function get_url_list($message) {
-	$return = array();
-
-	(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\].+?\[\/img\]|\[flash[^\]]*\].+?\[\/flash\]/is", '', $message);
-	if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", $message, $urllist)) {
-		foreach($urllist[0] as $key => $val) {
-			$val = trim($val);
-			$return[0][$key] = $val;
-			if(!preg_match('/^http:\/\//is', $val)) $val = 'http://'.$val;
-			$tmp = parse_url($val);
-			$return[1][$key] = $tmp['host'];
-			if($tmp['port']){
-				$return[1][$key] .= ":$tmp[port]";
-			}
-		}
+function savepostposition($tid, $pid, $returnposition = false) {
+	$res = DB::query("INSERT INTO ".DB::table('forum_postposition')." SET tid='$tid', pid='$pid'");
+	if(!$returnposition) {
+		return $res;
+	} else {
+		return DB::insert_id();
 	}
-
-	return $return;
 }
 
-function iswhitelist($host) {
+function setthreadcover($pid, $tid = 0, $aid = 0) {
 	global $_G;
-	static $iswhitelist = array();
-
-	if(isset($iswhitelist[$host])) {
-		return $iswhitelist[$host];
+	$cover = 0;
+	if(empty($_G['uid']) || !intval($_G['setting']['forumpicstyle']['thumbwidth']) || !intval($_G['setting']['forumpicstyle']['thumbwidth'])) {
+		return false;
 	}
-	$hostlen = strlen($host);
-	$iswhitelist[$host] = false;
-	if(is_array($_G['cache']['domainwhitelist'])) foreach($_G['cache']['domainwhitelist'] as $val) {
-		$domainlen = strlen($val);
-		if($domainlen > $hostlen) {
-			continue;
+	if(($pid || $aid) && empty($tid)) {
+		if($aid) {
+			$attachtable = getattachtablebyaid($aid);
+			$wheresql = "aid='$aid' AND isimage IN ('1', '-1')";
+		} else {
+			$attachtable = getattachtablebypid($pid);
+			$wheresql = "pid='$pid' AND isimage IN ('1', '-1') ORDER BY width DESC LIMIT 1";
 		}
-		if(substr($host, -$domainlen) == $val) {
-			$iswhitelist[$host] = true;
-			break;
+		$query = DB::query("SELECT * FROM ".DB::table($attachtable)." WHERE $wheresql");
+		if(!$attach = DB::fetch($query)) {
+			return false;
+		}
+		if(empty($_G['forum']['ismoderator']) && $_G['uid'] != $attach['uid']) {
+			return false;
+		}
+		$pid = empty($pid) ? $attach['pid'] : $pid;
+		$tid = empty($tid) ? $attach['tid'] : $tid;
+
+		$basedir = !$_G['setting']['attachdir'] ? (DISCUZ_ROOT.'./data/attachment/') : $_G['setting']['attachdir'];
+		$coverdir = 'threadcover/'.substr(md5($tid), 0, 2).'/'.substr(md5($tid), 2, 2).'/';
+		dmkdir($basedir.'./forum/'.$coverdir);
+		$picsource = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
+
+		require_once libfile('class/image');
+		$image = new image();
+		if($image->Thumb($picsource, 'forum/'.$coverdir.$tid.'.jpg', $_G['setting']['forumpicstyle']['thumbwidth'], $_G['setting']['forumpicstyle']['thumbheight'], 2)) {
+			$remote = '';
+			if(getglobal('setting/ftp/on')) {
+				if(ftpcmd('upload', 'forum/'.$coverdir.$tid.'.jpg')) {
+					$remote = '-';
+				}
+			}
+			$cover = DB::result_first("SELECT COUNT(*) FROM ".DB::table($attachtable)." WHERE pid='$pid' AND isimage IN ('1', '-1')");
+			$cover = $remote.$cover;
+		} else {
+			return false;
 		}
 	}
-	if($iswhitelist[$host] == false) {
-		$iswhitelist[$host] = $host == $_SERVER['HTTP_HOST'];
+	if($tid || $cover) {
+		if(empty($cover)) {
+			$oldcover = DB::result_first("SELECT cover FROM ".DB::table('forum_thread')." WHERE tid='$tid'");
+			$cover = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getattachtablebytid($tid))." WHERE pid='$pid' AND isimage IN ('1', '-1')");
+			$cover = $cover && $oldcover < 0 ? '-'.$cover : $cover;
+		}
+		DB::update('forum_thread', array('cover' => $cover), array('tid'=>$tid));
 	}
-	return $iswhitelist[$host];
-}
-
-
-function savepostposition($tid, $pid) {
-	$res = DB::query("REPLACE INTO ".DB::table('forum_postposition')." SET tid='$tid', pid='$pid'");
-	return $res;
+	return true;
 }
 
 ?>

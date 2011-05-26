@@ -5,8 +5,9 @@ http://www.comsenz.com
 */
 /*Popup Calendar*/
 #calendar { padding: 5px; text-align: left; border: 1px solid {DROPMENUBORDER}; background: {WRAPBG}; margin-bottom: 0.8em; }
-	#calendar td { padding: 2px; font-weight: bold;}
+	#calendar td { padding: 2px; font-weight: 700; }
 	#calendar_week td { height: 2em; line-height: 2em; border-bottom: 1px solid {SPECIALBORDER};}
+		#calendar_week a { color: {HIGHLIGHTLINK}; }
 	#hourminute td {padding: 4px 2px; border-top: 1px solid {SPECIALBORDER};}
 		.calendar_expire, .calendar_expire a:link, .calendar_expire a:visited {	color: {MIDTEXT}; font-weight: normal; }
 		.calendar_default, .calendar_default a:link, .calendar_default a:visited { color: {HIGHLIGHTLINK};}

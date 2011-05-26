@@ -56,7 +56,7 @@ class magic_visit {
 		}
 		$count = count($uids);
 		if(!$count) {
-			showmessage("magicuse_has_no_valid_friend");
+			showmessage('magicuse_has_no_valid_friend');
 		} elseif($count == 1) {
 			$fids = array($uids[0]);
 		} else {
@@ -88,7 +88,19 @@ class magic_visit {
 			DB::query('REPLACE INTO '.DB::table('home_poke').'(uid, fromuid, fromusername, note, dateline, iconid) VALUES '.implode(',',$inserts));
 			$ids = array_diff($fids, $repokeids);
 			if($ids) {
-				DB::query('UPDATE '.DB::table('common_member_status').' SET pokes = pokes + 1 WHERE uid IN ('.dimplode($ids).')');
+				require_once libfile('function/spacecp');
+				$pokemsg = makepokeaction($icon);
+				$pokenote = array(
+							'fromurl' => 'home.php?mod=space&uid='.$_G['uid'],
+							'fromusername' => $_G['username'],
+							'fromuid' => $_G['uid'],
+							'from_id' => $_G['uid'],
+							'from_idtype' => 'pokequery',
+							'pokemsg' => $pokemsg
+						);
+				foreach($ids as $puid) {
+					notification_add($puid, 'poke', 'poke_request', $pokenote);
+				}
 			}
 		} elseif($_POST['visitway'] == 'comment') {
 			$message = getstr($_POST['visitmsg'], 255, 1, 1);
@@ -102,7 +114,7 @@ class magic_visit {
 			}
 			DB::query('INSERT INTO '.DB::table('home_comment')."(uid, id, idtype, authorid, author, ip, dateline, message) VALUES ".implode(",", $inserts));
 			DB::query('INSERT INTO '.DB::table('home_notification')."(uid, type, new, authorid, author, note, dateline) VALUES ".implode(",",$note_inserts));
-			DB::query('UPDATE '.DB::table('common_member_status')." SET notifications = notifications + 1 WHERE uid IN (".dimplode($fids).")");
+			DB::query('UPDATE '.DB::table('common_member')." SET newprompt = newprompt + 1 WHERE uid IN (".dimplode($fids).")");
 		} else {
 			foreach ($fids as $fid) {
 				$inserts[] = "('$fid', '$_G[uid]', '$_G[username]', '$_G[timestamp]')";

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 16651 2010-09-12 04:03:53Z cnteacher $
+ *      $Id: admincp_misc.php 21860 2011-04-14 06:45:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -90,7 +90,7 @@ var rowtypedata = [
 	]
 ]
 </script>
-<?
+<?php
 
 		shownav('extended', 'misc_link');
 		showsubmenu('nav_misc_links');
@@ -127,40 +127,13 @@ var rowtypedata = [
 
 	} else {
 
-		if(is_array($_G['gp_delete'])) {
-			$ids = $comma =	'';
-			foreach($_G['gp_delete'] as $id)	{
-				$ids .=	"$comma'$id'";
-				$comma = ',';
-			}
-			DB::delete('common_friendlink', "id IN ($ids)");
-		}
-
-		$type_arr = array();
-		$query = DB::query("SELECT id FROM ".DB::table('common_friendlink')." ORDER BY displayorder");
-		while($link = DB::fetch($query)) {
-			$type_arr['portal'][$link['id']] = '0';
-			$type_arr['forum'][$link['id']] = '0';
-			$type_arr['group'][$link['id']] = '0';
-			$type_arr['home'][$link['id']] = '0';
-		}
-
-		foreach($_G['gp_portal'] as $id => $v) {
-			$type_arr['portal'][$id] = $v;
-		}
-		foreach($_G['gp_forum'] as $id => $v) {
-			$type_arr['forum'][$id] = $v;
-		}
-		foreach($_G['gp_group'] as $id => $v) {
-			$type_arr['group'][$id] = $v;
-		}
-		foreach($_G['gp_home'] as $id => $v) {
-			$type_arr['home'][$id] = $v;
+		if($_G['gp_delete']) {
+			DB::delete('common_friendlink', "id IN (".dimplode($_G['gp_delete']).")");
 		}
 
 		if(is_array($_G['gp_name'])) {
 			foreach($_G['gp_name'] as $id => $val) {
-				$type_str = $type_arr['portal'][$id].$type_arr['forum'][$id].$type_arr['group'][$id].$type_arr['home'][$id];
+				$type_str = intval($_G['gp_portal'][$id]).intval($_G['gp_forum'][$id]).intval($_G['gp_group'][$id]).intval($_G['gp_home'][$id]);
 				$type_str = intval($type_str, '2');
 				DB::update('common_friendlink', array(
 					'displayorder' => $_G['gp_displayorder'][$id],
@@ -192,6 +165,91 @@ var rowtypedata = [
 
 		updatecache('forumlinks');
 		cpmsg('forumlinks_succeed', 'action=misc&operation=link', 'succeed');
+
+	}
+
+} elseif($operation == 'relatedlink') {
+
+	if(!submitcheck('linksubmit')) {
+
+?>
+<script type="text/JavaScript">
+var rowtypedata = [
+	[
+		[1,'', 'td25'],
+		[1,'<input type="text" class="txt" name="newname[]" size="15">'],
+		[1,'<input type="text" name="newurl[]" size="50">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newarticle[]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newforum[]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newgroup[]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newblog[]">']
+	]
+]
+</script>
+<?php
+
+		shownav('extended', 'misc_relatedlink');
+		showsubmenu('nav_misc_relatedlink');
+		showtips('misc_relatedlink_tips');
+		showformheader('misc&operation=relatedlink');
+		showtableheader();
+		showsubtitle(array('', 'misc_relatedlink_edit_name', 'misc_relatedlink_edit_url', '<input class="checkbox" type="checkbox" name="articleall" onclick="checkAll(\'prefix\', this.form, \'article\', \'articleall\')">'.cplang('misc_relatedlink_extent_article'), '<input class="checkbox" type="checkbox" name="forumall" onclick="checkAll(\'prefix\', this.form, \'forum\', \'forumall\')">'.cplang('misc_relatedlink_extent_forum'), '<input class="checkbox" type="checkbox" name="groupall" onclick="checkAll(\'prefix\', this.form, \'group\', \'groupall\')">'.cplang('misc_relatedlink_extent_group'),'<input class="checkbox" type="checkbox" name="blogall" onclick="checkAll(\'prefix\', this.form, \'blog\', \'blogall\')">'.cplang('misc_relatedlink_extent_blog')));
+
+		$query = DB::query("SELECT * FROM ".DB::table('common_relatedlink')." ORDER BY id DESC");
+		while($link = DB::fetch($query)) {
+			$extent = sprintf('%04b', $link['extent']);
+			showtablerow('', array('class="td25"', '', '', 'class="td26"', 'class="td26"', 'class="td26"', ''), array(
+				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$link['id'].'" />',
+				'<input type="text" class="txt" name="name['.$link[id].']" value="'.$link['name'].'" size="15" />',
+				'<input type="text" name="url['.$link[id].']" value="'.$link['url'].'" size="50" />',
+				'<input class="checkbox" type="checkbox" value="1" name="article['.$link[id].']" '.($extent[0] ? "checked" : '').'>',
+				'<input class="checkbox" type="checkbox" value="1" name="forum['.$link[id].']" '.($extent[1] ? "checked" : '').'>',
+				'<input class="checkbox" type="checkbox" value="1" name="group['.$link[id].']" '.($extent[2] ? "checked" : '').'>',
+				'<input class="checkbox" type="checkbox" value="1" name="blog['.$link[id].']" '.($extent[3] ? "checked" : '').'>',
+			));
+		}
+
+		echo '<tr><td></td><td colspan="6"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['misc_relatedlink_add'].'</a></div></td></tr>';
+		showsubmit('linksubmit', 'submit', 'del');
+		showtablefooter();
+		showformfooter();
+
+	} else {
+
+		if($_G['gp_delete']) {
+			DB::delete('common_relatedlink', "id IN (".dimplode($_G['gp_delete']).")");
+		}
+
+		if(is_array($_G['gp_name'])) {
+			foreach($_G['gp_name'] as $id => $val) {
+				$extent_str = intval($_G['gp_article'][$id]).intval($_G['gp_forum'][$id]).intval($_G['gp_group'][$id]).intval($_G['gp_blog'][$id]);
+				$extent_str = intval($extent_str, '2');
+				DB::update('common_relatedlink', array(
+					'name' => $_G['gp_name'][$id],
+					'url' => $_G['gp_url'][$id],
+					'extent' => $extent_str,
+				), array(
+					'id' => $id,
+				));
+			}
+		}
+
+		if(is_array($_G['gp_newname'])) {
+			foreach($_G['gp_newname'] as $key => $value) {
+				if($value) {
+					$extent_str = intval($_G['gp_newarticle'][$key]).intval($_G['gp_newforum'][$key]).intval($_G['gp_newgroup'][$key]).intval($_G['gp_newblog'][$key]);
+					$extent_str = intval($extent_str, '2');
+					DB::insert('common_relatedlink', array(
+						'name' => $value,
+						'url' => $_G['gp_newurl'][$key],
+						'extent' => $extent_str,
+					));
+				}
+			}
+		}
+
+		updatecache('relatedlink');
+		cpmsg('relatedlink_succeed', 'action=misc&operation=relatedlink', 'succeed');
 
 	}
 
@@ -290,7 +348,7 @@ var rowtypedata = [
 
 		$bbcode = DB::fetch_first("SELECT * FROM ".DB::table('forum_bbcode')." WHERE id='$edit'");
 		if(!$bbcode) {
-			cpmsg('undefined_action', '', 'error');
+			cpmsg('bbcode_not_found', '', 'error');
 		}
 
 		if(!submitcheck('editsubmit')) {
@@ -366,11 +424,27 @@ var rowtypedata = [
 		dheader('Content-Encoding: none');
 		dheader('Content-Disposition: attachment; filename=CensorWords.txt');
 		dheader('Content-Type: text/plain');
-
-		$query = DB::query("SELECT find, replacement FROM ".DB::table('common_word')." ORDER BY find ASC");
+		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
+		while($result = DB::fetch($query)) {
+			$result['used'] = 0;
+			$word_type[$result['id']] = $result;
+		}
+		$query = DB::query("SELECT find, replacement, type FROM ".DB::table('common_word')." ORDER BY type ASC, find ASC");
 		while($censor = DB::fetch($query)) {
 			$censor['replacement'] = str_replace('*', '', $censor['replacement']) <> '' ? $censor['replacement'] : '';
+			if($word_type[$censor['type']]['used'] == 0 && $word_type[$censor['type']]) {
+				if($temp_type == 1) {
+					echo "[/type]\n";
+				}
+				echo "\n[type:".$word_type[$censor['type']]['typename']."]\n";
+				$temp_type = 1;
+				$word_type[$censor['type']]['used'] = 1;
+			}
 			echo $censor['find'].($censor['replacement'] != '' ? '='.dstripslashes($censor['replacement']) : '')."\n";
+		}
+		if($temp_type == 1) {
+			echo "[/type]\n";
+			unset($temp_type);
 		}
 		define('FOOTERDISABLED' , 1);
 		exit();
@@ -386,39 +460,90 @@ var rowtypedata = [
 			}
 			DB::free_result($query);
 		}
-
-		$censorarray = explode("\n", $addcensors);
+		$typesearch = "\[type\:(.+?)\](.+?)\[\/type\]";
+		preg_match_all("/($typesearch)/is", $addcensors, $wordmatch);
+		$wordmatch[3][] = preg_replace("/($typesearch)/is", '', $addcensors);
 		$updatecount = $newcount = $ignorecount = 0;
-		foreach($censorarray as $censor) {
-			list($newfind, $newreplace) = array_map('trim', explode('=', $censor));
-			$newreplace = $newreplace <> '' ? daddslashes(str_replace("\\\'", '\'', $newreplace), 1) : '**';
-			if(strlen($newfind) < 3) {
-				$ignorecount ++;
-				continue;
-			} elseif(isset($oldwords[md5($newfind)])) {
-				if($_G['gp_overwrite'] && ($_G['adminid'] == 1 || $oldwords[md5($newfind)] == $_G['member']['username'])) {
-					$updatecount ++;
-					DB::update('common_word', array(
-						'replacement' => $newreplace,
-					), "`find`='$newfind'");
-				} else {
-					$ignorecount ++;
+		foreach($wordmatch[3] AS $key => $val) {
+			$word_type = 0;
+			if($wordmatch[2][$key] && !$wordtype_used[$key]) {
+				if(!$word_type = DB::result_first("SELECT id FROM ".DB::table('common_word_type')." WHERE typename = '{$wordmatch[2][$key]}'")) {
+					$wordmatch[2][$key] = daddslashes($wordmatch[2][$key]);
+					DB::insert('common_word_type', array('typename' => $wordmatch[2][$key]), true);
+					$word_type = DB::insert_id();
 				}
-			} else {
-				$newcount ++;
-				DB::insert('common_word', array(
-					'admin' => $_G['username'],
-					'find' => $newfind,
-					'replacement' => $newreplace,
-				));
-				$oldwords[md5($newfind)] = $_G['member']['username'];
+				$wordtype_used[$key] = 1;
 			}
+			$word_type = $word_type ? $word_type : 0 ;
+
+			$censorarray = explode("\n", $val);
+			foreach($censorarray as $censor) {
+				list($newfind, $newreplace) = array_map('trim', explode('=', $censor));
+				$newreplace = $newreplace <> '' ? daddslashes(str_replace("\\\'", '\'', $newreplace), 1) : '**';
+				if(strlen($newfind) < 3) {
+					if($newfind != '') {
+						$ignorecount ++;
+					}
+					continue;
+				} elseif(isset($oldwords[md5($newfind)])) {
+					if($_G['gp_overwrite'] && ($_G['adminid'] == 1 || $oldwords[md5($newfind)] == $_G['member']['username'])) {
+						$updatecount ++;
+						DB::update('common_word', array(
+							'replacement' => $newreplace,
+							'type' => ($word_type ? $word_type : (intval($_G['gp_wordtype_select']) ? intval($_G['gp_wordtype_select']) : 0))
+						), "`find`='$newfind'");
+					} else {
+						$ignorecount ++;
+					}
+				} else {
+					$newcount ++;
+					DB::insert('common_word', array(
+						'admin' => $_G['username'],
+						'find' => $newfind,
+						'replacement' => $newreplace,
+						'type' => ($word_type ? $word_type : (intval($_G['gp_wordtype_select']) ? intval($_G['gp_wordtype_select']) : 0))
+					));
+					$oldwords[md5($newfind)] = $_G['member']['username'];
+				}
+			}
+
 		}
+
+
 		updatecache('censor');
 		cpmsg('censor_batch_add_succeed', "action=misc&operation=censor&anchor=import", 'succeed', array('newcount' => $newcount, 'updatecount' => $updatecount, 'ignorecount' => $ignorecount));
 
+	} elseif(submitcheck('wordtypesubmit')) {
+		if(is_array($_G['gp_delete'])) {
+			$del_ids = dimplode($_G['gp_delete']);
+			DB::query("DELETE FROM ".DB::table('common_word_type')." WHERE id IN (".$del_ids.")");
+			DB::query("UPDATE ".DB::table('common_word')." SET type = 0 WHERE type IN (".$del_ids.")");
+		}
+		if(is_array($_G['gp_typename'])) {
+			foreach($_G['gp_typename'] AS $key => $val) {
+				if(!$_G['gp_delete'][$key] && !empty($val)) {
+					DB::update("common_word_type", array('typename' => $val), "`id` = '$key'");
+				}
+			}
+		}
+		if($_G['gp_newtypename']) {
+			foreach($_G['gp_newtypename'] AS $key => $val) {
+				$val = trim($val);
+				if(!empty($val)) {
+					$sqladd .= $sqladd ? ",('{$val}')" : "('{$val}')";
+				}
+			}
+			if($sqladd) {
+				DB::query("INSERT INTO ".DB::table('common_word_type')."(typename)VALUES $sqladd");
+			}
+		}
+		cpmsg('censor_wordtype_edit', 'action=misc&operation=censor&anchor=wordtype', 'succeed');
 	} elseif(!submitcheck('censorsubmit')) {
 		$sqladd = '1';
+		if(!empty($_G['gp_censor_search_type'])) {
+			$sqladd .= " AND type = '{$_G['gp_censor_search_type']}'";
+		}
+
 		if(!empty($_G['gp_censorkeyword'])) {
 			$censorkeyword = str_replace(array('%', '_'), array('\%', '\_'), $_G['gp_censorkeyword']);
 			$sqladd .= " AND find LIKE '%{$censorkeyword}%'";
@@ -427,28 +552,41 @@ var rowtypedata = [
 		$ppp = 50;
 		$startlimit = ($page - 1) * $ppp;
 
+		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
+		while($result = DB::fetch($query)) {
+			$result['typename'] = dhtmlspecialchars($result['typename']);
+			$word_type[$result['id']] = $result;
+			$word_type_option .= "<option value=\"{$result['id']}\">{$result['typename']}</option>";
+			if(!empty($_G['gp_censor_search_type'])) {
+				$word_type_option_search .= "<option value=\"{$result['id']}\"".($_G['gp_censor_search_type'] == $result['id'] ? 'selected' : '' ).">{$result['typename']}</option>";
+			}
+		}
+
 		shownav('topic', 'nav_posting_censor');
-		$anchor = in_array($_G['gp_anchor'], array('list', 'import')) ? $_G['gp_anchor'] : 'list';
+		$anchor = in_array($_G['gp_anchor'], array('list', 'import', 'wordtype', 'showanchor')) ? $_G['gp_anchor'] : 'list';
 		showsubmenuanchors('nav_posting_censor', array(
 			array('admin', 'list', $anchor == 'list'),
-			array('misc_censor_batch_add', 'import', $anchor == 'import')
+			array('misc_censor_batch_add', 'import', $anchor == 'import'),
+			array('misc_censor_wordtype_edit', 'wordtype', $anchor == 'wordtype'),
 		));
 		showtips('misc_censor_tips', 'list_tips', $anchor == 'list');
 		showtips('misc_censor_batch_add_tips', 'import_tips', $anchor == 'import');
+		showtips('misc_censor_wordtype_tips', 'wordtype_tips', $anchor == 'wordtype');
 
 		showtagheader('div', 'list', $anchor == 'list');
 		showformheader("misc&operation=censor&page=$page", '', 'keywordsearch');
 		showtableheader();
-		echo '<br /><br /><form method="post">'. $lang['keywords'].'<input type="text" name="censorkeyword" value="'.$_G['gp_censorkeyword'].'" /> &nbsp;<input type="submit" name="censor_search" value="'.$lang[search].'" class="btn" /></form>';
+		echo '<br /><br /><form method="post">'. $lang['keywords'].': <input type="text" name="censorkeyword" value="'.$_G['gp_censorkeyword'].'" /> &nbsp; <select name="censor_search_type"><option value = "">'.cplang("misc_censor_wordtype_search").'</option><option value="0">'.cplang('misc_censor_word_default_typename').'</option>'.($word_type_option_search ? $word_type_option_search : $word_type_option).'</select> &nbsp;<input type="submit" name="censor_search" value="'.$lang[search].'" class="btn" /> </form>';
 		showtablefooter();
 
 		showformheader("misc&operation=censor&page=$page", '', 'listform');
 		showtableheader('', 'fixpadding');
-		showsubtitle(array('', 'misc_censor_word', 'misc_censor_replacement', 'operator'));
+		showsubtitle(array('', 'misc_censor_word', 'misc_censor_replacement', 'misc_censor_type', 'operator'));
+
 		$multipage = '';
 		$totalcount = DB::result_first("SELECT count(*) FROM ".DB::table('common_word')." WHERE $sqladd");
 		if($totalcount) {
-			$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=misc&operation=censor");
+			$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=misc&operation=censor".($censorkeyword ? "&censorkeyword=".$censorkeyword : '' ));
 			$query = DB::query("SELECT * FROM ".DB::table('common_word')." WHERE $sqladd ORDER BY find ASC LIMIT $startlimit, $ppp");
 			while($censor =	DB::fetch($query)) {
 				$censor['replacement'] = dstripslashes($censor['replacement']);
@@ -465,12 +603,22 @@ var rowtypedata = [
 					$optionselected['{REPLACE}'] = 'selected';
 					$replacedisplay = '';
 				}
+				$word_type_tmp = "<select name='wordtype_select[{$censor['id']}]' id='wordtype_select'><option value='0'>".cplang('misc_censor_word_default_typename')."</option>";
+				foreach($word_type AS $key => $val) {
+					if($censor['type'] == $val['id']) {
+						$word_type_tmp .= "<option value='{$val['id']}' selected>{$val['typename']}</option>";
+					} else {
+						$word_type_tmp .= "<option value='{$val['id']}'>{$val['typename']}</option>";
+					}
+				}
+				$word_type_tmp .= "</select>";
 				showtablerow('', array('class="td25"', '', '', 'class="td26"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$censor[id]\" $disabled>",
 					"<input type=\"text\" class=\"txt\" size=\"30\" name=\"find[$censor[id]]\" value=\"$censor[find]\" $disabled>",
 					'<select name="replace['.$censor['id'].']" onchange="if(this.options[this.options.selectedIndex].value==\'{REPLACE}\'){$(\'divbanned'.$censor['id'].'\').style.display=\'\';$(\'divbanned'.$censor['id'].'\').value=\'\';}else{$(\'divbanned'.$censor['id'].'\').style.display=\'none\';}" '.$disabled.'>
 					<option value="{BANNED}" '.$optionselected['{BANNED}'].'>'.cplang('misc_censor_word_banned').'</option><option value="{MOD}" '.$optionselected['{MOD}'].'>'.cplang('misc_censor_word_moderated').'</option><option value="{REPLACE}" '.$optionselected['{REPLACE}'].'>'.cplang('misc_censor_word_replaced').'</option></select>
 					<input class="txt" type="text" size="10" name="replacecontent['.$censor['id'].']" value="'.$censor['replacement'].'" id="divbanned'.$censor['id'].'" '.$replacedisplay.' '.$disabled.'>',
+					$word_type_tmp,
 					$censor['admin']
 				));
 			}
@@ -478,14 +626,29 @@ var rowtypedata = [
 		$misc_censor_word_banned = cplang('misc_censor_word_banned');
 		$misc_censor_word_moderated = cplang('misc_censor_word_moderated');
 		$misc_censor_word_replaced = cplang('misc_censor_word_replaced');
+		$misc_censor_word_newtypename = cplang('misc_censor_word_newtypename');
+		$misc_censor_word_default_typename = cplang('misc_censor_word_default_typename');
 		echo <<<EOT
 <script type="text/JavaScript">
 	var rowtypedata = [
-		[[1,''], [1,'<input type="text" class="txt" size="30" name="newfind[]">'], [1, ' <select onchange="if(this.options[this.options.selectedIndex].value==\'{REPLACE}\'){this.nextSibling.style.display=\'\';}else{this.nextSibling.style.display=\'none\';}" name="newreplace[]" $disabled><option value="{BANNED}">$misc_censor_word_banned</option><option value="{MOD}">$misc_censor_word_moderated</option><option value="{REPLACE}">$misc_censor_word_replaced</option></select><input class="txt" type="text" size="15" name="newreplacecontent[]" style="display:none;">'], [1,'']],
+		[
+			[1,''],
+			[1,'<input type="text" class="txt" size="30" name="newfind[]">'], [1, ' <select onchange="if(this.options[this.options.selectedIndex].value==\'{REPLACE}\'){this.nextSibling.style.display=\'\';}else{this.nextSibling.style.display=\'none\';}" name="newreplace[]" $disabled><option value="{BANNED}">$misc_censor_word_banned</option><option value="{MOD}">$misc_censor_word_moderated</option><option value="{REPLACE}">$misc_censor_word_replaced</option></select><input class="txt" type="text" size="15" name="newreplacecontent[]" style="display:none;">']
+EOT;
+		if($word_type_option) {
+			echo ", [1,' <select onchange=\"if(this.options[this.options.selectedIndex].value==\'0\'){this.nextSibling.style.display=\'\';}else{this.nextSibling.style.display=\'none\';}\" name=\"newwordtype[]\" id=\"newwordtype[]\"><option value=\"0\" selected>{$misc_censor_word_default_typename}</option>{$word_type_option}</select><input class=\"txt\" type=\"text\" size=\"10\" name=\"newtypename[]\" >']";
+		}
+echo <<<EOT
+			, [1,'']
+		],
+		[
+			[1,''],
+			[1,'<input type="text" class="txt" size="30" name="newtypename[]">']
+		]
 	];
 	</script>
 EOT;
-		echo '<tr><td></td><td colspan="2"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['add_new'].'</a></div></td></tr>';
+		echo '<tr><td></td><td colspan="4"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['add_new'].'</a></div></td></tr>';
 
 		showsubmit('censorsubmit', 'submit', 'del', '', $multipage, false);
 		showtablefooter();
@@ -495,12 +658,32 @@ EOT;
 		showtagheader('div', 'import', $anchor == 'import');
 		showformheader("misc&operation=censor&page=$page", 'fixpadding');
 		showtableheader('', 'fixpadding', 'importform');
+		showtablerow('', 'class="vtop rowform"', "<select name=\"wordtype_select\"><option value='0'>".cplang('misc_censor_word_default_typename')."</option>$word_type_option</select>");
 		showtablerow('', 'class="vtop rowform"', '<br /><textarea name="addcensors" class="tarea" rows="10" cols="80"></textarea><br /><br />'.mradio('overwrite', array(
 				0 => cplang('misc_censor_batch_add_no_overwrite'),
 				1 => cplang('misc_censor_batch_add_overwrite'),
 				2 => cplang('misc_censor_batch_add_clear')
 		), '', FALSE));
+
 		showsubmit('addcensorsubmit');
+		showtablefooter();
+		showformfooter();
+		showtagfooter('div');
+
+
+		showtagheader('div', 'wordtype', $anchor == 'wordtype');
+		showformheader("misc&operation=censor", 'fixpadding');
+		showtableheader('', 'fixpadding', 'wordtypeform');
+		showsubtitle(array('', 'misc_censor_wordtype_name'));
+		if($wordtypecount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_word_type'))) {
+			$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
+			while($result = DB::fetch($query)) {
+				showtablerow('', array('class="td25"', ''), array("<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"{$result['id']}\" $disabled>", "<input type=\"text\" class=\"txt\" size=\"10\" name=\"typename[{$result['id']}]\" value=\"{$result['typename']}\">"));
+			}
+		}
+
+		echo '<tr><td></td><td colspan="2"><div><a href="###" onclick="addrow(this, 1)" class="addtr">'.$lang['add_new'].'</a></div></td></tr>';
+		showsubmit('wordtypesubmit', 'submit', 'del', '', '', false);
 		showtablefooter();
 		showformfooter();
 		showtagfooter('div');
@@ -522,6 +705,7 @@ EOT;
 				DB::update('common_word', array(
 					'find' => $_G['gp_find'][$id],
 					'replacement' => $_G['gp_replace'][$id],
+					'type' => $_G['gp_wordtype_select'][$id],
 				), "id='$id' AND ('{$_G['adminid']}'='1' OR admin='{$_G['username']}')");
 			}
 		}
@@ -529,6 +713,9 @@ EOT;
 		$newfind_array = !empty($_G['gp_newfind']) ? $_G['gp_newfind'] : array();
 		$newreplace_array = !empty($_G['gp_newreplace']) ? $_G['gp_newreplace'] : array();
 		$newreplacecontent_array = !empty($_G['gp_newreplacecontent']) ? $_G['gp_newreplacecontent'] : array();
+		$newwordtype = !empty($_G['gp_newwordtype']) ? $_G['gp_newwordtype'] : array();
+		$newtypename = !empty($_G['gp_newtypename']) ? $_G['gp_newtypename'] : array();
+
 		foreach($newfind_array as $key => $value) {
 			$newfind = trim(str_replace('=', '', $newfind_array[$key]));
 			$newreplace  = trim($newreplace_array[$key]);
@@ -540,6 +727,24 @@ EOT;
 				if($newreplace == '{REPLACE}') {
 					$newreplace = daddslashes(str_replace("\\\'", '\'', $newreplacecontent_array[$key]), 1);
 				}
+
+				if($newtypename) {
+					$newtypename = daddslashes($newtypename);
+				}
+
+				if($newwordtype) {
+					$newwordtype[$key] = intval($newwordtype[$key]);
+				}
+
+				if($newwordtype[$key] == 0) {
+					if(!empty($newtypename[$key])) {
+						$newtypename[$key] = daddslashes($newtypename[$key]);
+						$newwordtype[$key] = DB::insert('common_word_type', array(
+							'typename' => $newtypename[$key]
+						), true);
+					}
+				}
+
 				if($oldcenser = DB::fetch_first("SELECT admin FROM ".DB::table('common_word')." WHERE find='$newfind'")) {
 					cpmsg('censor_keywords_existence', '', 'error');
 				} else {
@@ -547,6 +752,7 @@ EOT;
 						'admin' => $_G['username'],
 						'find' => $newfind,
 						'replacement' => $newreplace,
+						'type' => $newwordtype[$key],
 					));
 				}
 			}
@@ -583,7 +789,7 @@ EOT;
 			$stampicons[$smiley['url']] = $smiley['typeid'];
 			$stamplist[] = $smiley;
 		}
-		$tselect = '<select><option value="0">'.cplang('none').'</option><option value="1">'.cplang('misc_stamp_option_stick').'</option><option value="2">'.cplang('misc_stamp_option_digest').'</option><option value="3">'.cplang('misc_stamp_option_recommend').'</option></select>';
+		$tselect = '<select><option value="0">'.cplang('none').'</option><option value="1">'.cplang('misc_stamp_option_stick').'</option><option value="2">'.cplang('misc_stamp_option_digest').'</option><option value="3">'.cplang('misc_stamp_option_recommend').'</option><option value="4">'.cplang('misc_stamp_option_recommendto').'</option></select>';
 		$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE type='stamp' ORDER BY displayorder");
 		while($smiley =	DB::fetch($query)) {
 			$s = $r = array();
@@ -725,14 +931,13 @@ EOT;
 			}
 		}
 
+		DB::update('common_smiley', array('typeid' => 0), "type='stamplist'");
 		if(is_array($_G['gp_stampicon'])) {
 			foreach($_G['gp_stampicon'] as $k => $v) {
 				if($_G['gp_typeidnew'][$k]) {
 					$k = 0;
 				}
-				DB::update('common_smiley', array(
-				    'typeid' => $k
-				), "id='$v' AND type='stamplist'");
+				DB::update('common_smiley', array('typeid' => $k), "id='$v' AND type='stamplist'");
 			}
 		}
 
@@ -767,7 +972,7 @@ var rowtypedata = [
 	]
 ];
 </script>
-<?
+<?php
 
 		shownav('global', 'nav_posting_attachtype');
 		showsubmenu('nav_posting_attachtype');
@@ -930,7 +1135,7 @@ var rowtypedata = [
 		$cronid = empty($_G['gp_run']) ? $_G['gp_edit'] : $_G['gp_run'];
 		$cron = DB::fetch_first("SELECT * FROM ".DB::table('common_cron')." WHERE cronid='$cronid'");
 		if(!$cron) {
-			cpmsg('undefined_action', '', 'error');
+			cpmsg('cron_not_found', '', 'error');
 		}
 		$cron['filename'] = str_replace(array('..', '/', '\\'), array('', '', ''), $cron['filename']);
 		$cronminute = str_replace("\t", ',', $cron['minute']);
@@ -1005,7 +1210,7 @@ var rowtypedata = [
 				), "cronid='$cronid'");
 
 				updatecache('crons');
-
+				require_once libfile('class/cron');
 				discuz_cron::run($cronid);
 
 				cpmsg('crons_succeed', 'action=misc&operation=cron', 'succeed');
@@ -1017,6 +1222,7 @@ var rowtypedata = [
 			if(!file_exists(DISCUZ_ROOT.($cronfile = "./source/include/cron/$cron[filename]"))) {
 				cpmsg('crons_run_invalid', '', 'error', array('cronfile' => $cronfile));
 			} else {
+				require_once libfile('class/cron');
 				discuz_cron::run($cron['cronid']);
 				cpmsg('crons_run_succeed', 'action=misc&operation=cron', 'succeed');
 			}
@@ -1024,7 +1230,6 @@ var rowtypedata = [
 		}
 
 	}
-
 
 } elseif($operation == 'focus') {
 
@@ -1056,13 +1261,13 @@ var rowtypedata = [
 			showtips('misc_focus_tips');
 			showformheader('misc&operation=focus');
 			showtableheader('admin', 'fixpadding');
-			showsubtitle(array('', 'available', 'subject', ''));
+			showsubtitle(array('', 'subject', 'available', ''));
 			if(is_array($focus['data'])) {
 				foreach($focus['data'] as $k => $v) {
-					showtablerow('', array('class="td25"', 'class="td25"'), array(
+					showtablerow('', array('class="td25"','', 'class="td25"', 'class="td25"'), array(
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$k\">",
-						"<input type=\"checkbox\" class=\"checkbox\" name=\"available[$k]\" value=\"1\" ".($v['available'] ? 'checked' : '').">",
 						'<a href="'.$v['url'].'" target="_blank">'.$v[subject].'</a>',
+						"<input type=\"checkbox\" class=\"checkbox\" name=\"available[$k]\" value=\"1\" ".($v['available'] ? 'checked' : '').">",
 						"<a href=\"".ADMINSCRIPT."?action=misc&operation=focus&do=edit&id=$k\" class=\"act\">$lang[edit]</a>",
 					));
 				}
@@ -1085,6 +1290,7 @@ var rowtypedata = [
 					$newfocus['data'][$k] = $v;
 				}
 			}
+			$newfocus['cookie'] = $focus['cookie'];
 			DB::insert('common_setting', array(
 				'skey' => 'focus',
 				'svalue' => addslashes(serialize(dstripslashes($newfocus))),
@@ -1148,7 +1354,7 @@ var rowtypedata = [
 				), false, true);
 				updatecache(array('setting', 'focus'));
 			} else {
-				cpmsg('focus_topic_addrequired');
+				cpmsg('focus_topic_addrequired', '', 'error');
 			}
 
 			cpmsg('focus_add_succeed', 'action=misc&operation=focus', 'succeed');
@@ -1195,8 +1401,8 @@ var rowtypedata = [
 					'available' => '1',
 					'subject' => cutstr($_G['gp_focus_subject'], 80),
 					'summary' => $_G['gp_focus_summary'],
-					'image' => ($focus_aid = intval($focus_aid)) ? "forum.php?mod=image&aid=$focus_aid&size=58x58&key=".rawurlencode(authcode($focus_aid."\t58\t58", 'ENCODE', $_G['config']['security']['authkey'])) : $_G['gp_focus_image'],
-					'aid' => $focus_aid,
+					'image' => $_G['gp_focus_image'],
+					'aid' => 0,
 					'filename' => $focus_filename,
 					'position' => $_G['gp_focus_position'],
 				);
@@ -1225,6 +1431,7 @@ var rowtypedata = [
 			showformheader('misc&operation=focus&do=config');
 			showtableheader('config', 'fixpadding');
 			showsetting('misc_focus_area_title', 'focus_title', empty($focus['title']) ? cplang('misc_focus') : $focus['title'], 'text');
+			showsetting('misc_focus_area_cookie', 'focus_cookie', empty($focus['cookie']) ? 0 : $focus['cookie'], 'text');
 			showsubmit('confsubmit', 'submit');
 			showtablefooter();
 			showformfooter();
@@ -1233,6 +1440,8 @@ var rowtypedata = [
 
 			$focus['title'] = trim($_G['gp_focus_title']);
 			$focus['title'] = empty($focus['title']) ? cplang('misc_focus') : $focus['title'];
+			$focus['cookie'] = trim(intval($_G['gp_focus_cookie']));
+			$focus['cookie'] = empty($focus['cookie']) ? 0 : $focus['cookie'];
 			DB::insert('common_setting', array(
 				'skey' => 'focus',
 				'svalue' => addslashes(serialize(dstripslashes($focus)))
@@ -1337,7 +1546,7 @@ EOT;
 			updatemenu('index');
 			cpmsg('custommenu_add_succeed', rawurldecode($_G['gp_url']), 'succeed', array('title' => cplang($_G['gp_title'])));
 		} else {
-			cpmsg('undefined_action', '', 'error');
+			cpmsg('parameters_error', '', 'error');
 		}
 	}
 

@@ -35,28 +35,25 @@ http://www.comsenz.com
 	.tpclg h4 span { float: left; }
 	.tpclg h4 .dpbtn { border-width: 1px; }
 	.tpclg .pt { margin: 5px 0; width: 212px; overflow: hidden; }
-	.tpclg .pt, .tpcl .pt { background: {WRAPBG}; }
 		.tpcl { margin: 10px 0; border-top: 1px solid #DDD; }
 			.tpcl li { *overflow:hidden; *margin-bottom: -2px; height: 28px; line-height: 18px; border-top: 1px solid {WRAPBG}; border-bottom: 1px solid #DDD; zoom: 1; }
 			.tpcl .copt { height: auto; }
 			.dopt { visibility: hidden; overflow: hidden; white-space: nowrap; }
 			.copt .dopt { visibility: visible; }
-				.dopt p .px, .hasd .px { width: 100px; height: 16px; line-height: 16px; background: {WRAPBG}; font-size: 12px; float: left; }
-				.dopt span .crl { width: 23px; border-right: none;  height: 20px; border-style: solid; border-color: #707070 #CECECE #CECECE #ABABAB; border-width: 1px 0 1px 1px; }
-				.dopt a { float: left; text-indent: -999px; margin-right: 3px; width: 22px; height: 20px; text-align: center; }
-					.dopt_b, .dopt_i, .dopt_l { border: 1px solid #F1F5FA; outline: none; }
-					.dopt .cnt { border: 1px solid #999; background-color: {WRAPBG}; }
+				.dopt p .px, .hasd .px { width: 100px; float: left; }
+				.dopt span .crl { width: 21px; height: 21px; border-style: solid; border-color: #707070 #CECECE #CECECE #ABABAB; border-width: 1px 0 1px 1px; }
 
 			.tpcl table { width: 100%; }
 				.tpcl td { vertical-align: top; padding: 5px; }
 			.tpcl .labeltxt { display: block; cursor: pointer; width: 100%; background: url(../../{IMGDIR}/arrwd.gif) no-repeat 100% 8px; }
 				.copt .labeltxt { float: left; cursor: default; width: 45px; background: none; color: #09C; }
-			.tpcl .checkbox { margin-top: 3px; *margin-top: -2px; }
+			.tpcl .pc { margin: 3px; }
+				.ie7 .tpcl .pc { margin-top: -2px; }
 			.tpcl img { vertical-align: middle; }
 	.tahfx { overflow: hidden; white-space: nowrap; width: 217px; *border-right: 1px solid {WRAPBORDERCOLOR}; }
-		.tahfx select { width: 160px; height: 20px; *width: expression(this.offsetWidth > 180 ? 'auto':'180'); }
+		.tahfx select { width: 160px; *width: expression(this.offsetWidth > 180 ? 'auto':'180'); }
 
-#toolbarroot {top: 0pt; left: 0pt; width: 96%; z-index: 9000; position: fixed; height: 30px;}
+#toolbarroot { top: 0; left: 0; width: 96%; z-index: 9000; position: fixed; height: 30px; }
 #toolbardiv { min-width:980px; height:27px; line-height:27px; padding:1px; border-bottom:1px solid {WRAPBORDERCOLOR}; background: #EEE;}
 #togglediv { width:22px; height:22px; border:1px solid #09f; position:absolute; right:5px; top:3px; z-index:9998; cursor:pointer; text-align:center;}
 

@@ -11,21 +11,21 @@
 <script type="text/javascript">var fid = parseInt('$_G[fid]'), tid = parseInt('$_G[tid]');</script>
 <!--{if $_G['forum']['ismoderator']}-->
 	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js?{VERHASH}"></script>
-	<form method="post" autocomplete="off" name="modactions" id="modactions">
-	<input type="hidden" name="formhash" value="{FORMHASH}" />
-	<input type="hidden" name="optgroup" />
-	<input type="hidden" name="operation" />
-	<input type="hidden" name="listextra" value="$_G[gp_extra]" />
-	</form>
 <!--{/if}-->
+<form method="post" autocomplete="off" name="modactions" id="modactions">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<input type="hidden" name="optgroup" />
+<input type="hidden" name="operation" />
+<input type="hidden" name="listextra" value="$_G[gp_extra]" />
+</form>
 
 <script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
-<script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']);var imagemaxwidth = '{IMAGEMAXWIDTH}';var aimgcount = new Array();</script>
+<script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']);var imagemaxwidth = '{$_G['setting']['imagemaxwidth']}';var aimgcount = new Array();</script>
 
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
-		<a href="./" id="fjump"{if $_G['setting']['forumjump'] == 1} onmouseover="showMenu({'ctrlid':this.id})"{/if} class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation <em>&rsaquo;</em> {lang user_threads}
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation <em>&rsaquo;</em> {lang user_threads}
 	</div>
 </div>
 
@@ -37,8 +37,8 @@
 <div id="ct" class="ct2 wp cl">
 	<div class="mn">
 		<div class="bm vw pl">
-			<div class="h">
-				<h1 class="ph hm">$_G[forum_thread][subject]</h1>
+			<div class="h hm">
+				<h1 class="ph">$_G[forum_thread][subject]</h1>
 				<p class="xg1">
 					{lang posted_by}:
 					<!--{if $_G[forum_thread][author] && $_G[forum_thread][authorid]}-->
@@ -54,14 +54,8 @@
 					{lang dateline}: <!--{date($_G[forum_thread][dateline])}--><span class="pipe">|</span>
 					{lang home_view_num}: $_G[forum_thread][views]<span class="pipe">|</span>
 					{lang comment_num}: $_G[forum_thread][replies]
-					<!--{if $_G['group']['raterange'] && $post['authorid']}-->
-					<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}');return false;">{lang rate}</a>
-					<!--{/if}-->
-					<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid']))}-->
+					<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] <= $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid'] && !(!$alloweditpost_status && $edittimelimit && TIMESTAMP - $post['dbdateline'] > $edittimelimit)))}-->
 					<span class="pipe">|</span><a href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}"><!--{if $_G['forum_thread']['special'] == 2 && !$post['message']}-->{lang post_add_aboutcounter}<!--{else}-->{lang edit}</a><!--{/if}-->
-					<!--{/if}-->
-					<!--{if $_G[uid] && $_G[uid] == $_G[forum_thread][authorid]}-->
-					<span class="pipe">|</span><a href="misc.php?mod=invite&action=thread&id=$_G[tid]" class="xg1" onclick="showWindow('invite', this.href, 'get', 0);">{lang invite}</a>
 					<!--{/if}-->
 					<span class="pipe">|</span><a href="forum.php?mod=viewthread&tid=$_G[tid]" class="xg1">{lang thread_mod}</a>
 				</p>
@@ -73,22 +67,28 @@
 						<td>
 							<!--{subtemplate forum/viewthread_node_body}-->
 
-							<!--{if $post['first'] && !$_G['forum_thread']['archiveid']}-->
+							<!--{if !IS_ROBOT && $post['first'] && !$_G['forum_thread']['archiveid']}-->
 								<!--{if !empty($lastmod['modaction'])}--><div class="modact xs1"><a href="forum.php?mod=misc&action=viewthreadmod&tid=$_G[tid]" title="{lang thread_mod}" onclick="showWindow('viewthreadmod', this.href)">{lang thread_mod_by}</a></div><!--{/if}-->
-								<div class="xs1 uo{if $_G['group']['allowrecommend'] && $_G['setting']['recommendthread'][status]} nrate{/if}">
-									<!--{if $post['invisible'] == 0}-->
+								<!--{if $post['invisible'] == 0}-->
+									<div id="p_btn" class="mtw mbm cl xs1">
+										<!--{hook/viewthread_useraction_prefix}-->
+										<!--{if $_G['setting']['homestatus']}-->
+											<a href="home.php?mod=spacecp&ac=share&type=thread&id=$_G[tid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' {lang activity_member_unit}{lang thread_share}'"><i><img src="{IMGDIR}/oshr.png" alt="{lang thread_share}" />{lang thread_share}<span id="sharenumber">{$_G['forum_thread']['sharetimes']}</span></i></a>
+										<!--{/if}-->
+										<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'"><i><img src="{IMGDIR}/fav.gif" alt="{lang thread_favorite}" />{lang thread_favorite}<span id="favoritenumber">{$_G['forum_thread']['favtimes']}</span></i></a>
+										<!--{if ($_G['group']['allowrecommend'] || !$_G['uid']) && $_G['setting']['recommendthread']['status']}-->
+											<a id="recommend_add" href="forum.php?mod=misc&action=recommend&do=add&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate({$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_add').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][addtext]'"><i><img src="{IMGDIR}/rec_add.gif" alt="$_G['setting']['recommendthread'][addtext]" />$_G['setting']['recommendthread'][addtext]<span id="recommendv_add">$_G[forum_thread][recommend_add]</span></i></a>
+											<a id="recommend_subtract" href="forum.php?mod=misc&action=recommend&do=subtract&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate(-{$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_subtract').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][subtracttext]'"><i><img src="{IMGDIR}/rec_subtract.gif" alt="$_G['setting']['recommendthread'][subtracttext]" />$_G['setting']['recommendthread'][subtracttext]<span id="recommendv_subtract">$_G[forum_thread][recommend_sub]</span></i></a>
+										<!--{/if}-->
 										<!--{if $_G['group']['raterange'] && $post['authorid']}-->
-											<a id="k_rate" href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}">{lang rate}</a>
+											<a href="javascript:;" id="ak_rate" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}');return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}"><i><img src="{IMGDIR}/agree.gif" alt="{lang rate}" />{lang rate}</i></a>
 										<!--{/if}-->
-										<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'">{lang thread_favorite}<span id="favoritenumber">{$_G['forum_thread']['favtimes']}</span></a>
-										<a href="home.php?mod=spacecp&ac=share&type=thread&id=$_G[tid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' {lang activity_member_unit}{lang thread_share}'">{lang thread_share}<span id="sharenumber">{$_G['forum_thread']['sharetimes']}</span></a>
-										<!--{if $_G['perm']['allowrecommend'] && $_G['setting']['recommendthread']['status']}-->
-											<a id="recommend_add" href="forum.php?mod=misc&action=recommend&do=add&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate({$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_add').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][addtext]'">$_G['setting']['recommendthread'][addtext]<span id="recommendv_add">$_G[forum_thread][recommend_add]</span></a>
-											<a id="recommend_subtract" href="forum.php?mod=misc&action=recommend&do=subtract&tid=$_G[tid]" {if $_G['uid']}onclick="ajaxmenu(this, 3000, 1, 0, '43', 'recommendupdate(-{$_G['group']['allowrecommend']})');return false;"{else} onclick="showWindow('login', this.href)"{/if} onmouseover="this.title = $('recommendv_subtract').innerHTML + ' {lang activity_member_unit}$_G[setting][recommendthread][subtracttext]'">$_G['setting']['recommendthread'][subtracttext]<span id="recommendv_subtract">$_G[forum_thread][recommend_sub]</span></a>
+										<!--{if $post['first'] && $_G[uid] && $_G[uid] == $post[authorid]}-->
+											<a href="misc.php?mod=invite&action=thread&id=$_G[tid]" onclick="showWindow('invite', this.href, 'get', 0);"><i><img src="{IMGDIR}/activitysmall.gif" alt="{lang invite}" />{lang invite}</i></a>
 										<!--{/if}-->
-									<!--{/if}-->
-									<!--{hook/viewthread_useraction}-->
-								</div>
+										<!--{hook/viewthread_useraction}-->
+									</div>
+								<!--{/if}-->
 							<!--{/if}-->
 						</td>
 					</tr>
@@ -96,7 +96,20 @@
 			</div>
 			<!--{/if}-->
 			<!--{if !empty($aimgs[$post[pid]])}-->
-			<script type="text/javascript" reload="1">aimgcount[{$post[pid]}] = [<!--{echo implode(',', $aimgs[$post[pid]]);}-->];attachimgshow($post[pid]);</script>
+			<script type="text/javascript" reload="1">
+				aimgcount[{$post[pid]}] = [<!--{echo dimplode($aimgs[$post[pid]]);}-->];
+				attachimggroup($post['pid']);
+				<!--{if empty($_G['setting']['lazyload'])}-->
+					<!--{if !$post['imagelistthumb']}-->
+						attachimgshow($post[pid]);
+					<!--{else}-->
+						attachimgshow($post[pid], 1);
+					<!--{/if}-->
+				<!--{/if}-->
+				<!--{if $post['imagelistthumb']}-->
+					attachimglstshow($post['pid'], <!--{echo intval($_G['setting']['lazyload'])}-->);
+				<!--{/if}-->
+			</script>
 			<!--{/if}-->
 		</div>
 
@@ -160,6 +173,12 @@
 		</div>
 	</div>
 </div>
+
+<!--{if !IS_ROBOT && !empty($_G[setting][lazyload])}-->
+	<script type="text/javascript">
+	new lazyload();
+	</script>
+<!--{/if}-->
 
 <div class="wp mtn">
 	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->

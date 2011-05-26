@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_regverify.php 13279 2010-07-23 07:03:29Z monkey $
+ *      $Id: member_regverify.php 20095 2011-02-14 09:32:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8 && submitcheck('verif
 			WHERE uid='$_G[uid]'");
 		showmessage('submit_verify_succeed', 'home.php?mod=spacecp&ac=profile');
 	} else {
-		showmessage('undefined_action', NULL);
+		showmessage('undefined_action');
 	}
 
 }

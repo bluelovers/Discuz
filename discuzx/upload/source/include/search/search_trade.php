@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_trade.php 6870 2010-03-26 06:47:11Z redstone $
+ *      $Id: search_trade.php 18409 2010-11-23 03:58:39Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -153,24 +153,10 @@ if(!empty($searchid)) {
 			}
 
 			if($srchtxt) {
-				if(preg_match("(AND|\+|&|\s)", $srchtxt) && !preg_match("(OR|\|)", $srchtxt)) {
-					$andor = ' AND ';
-					$sqltxtsrch = '1';
-					$srchtxt = preg_replace("/( AND |&| )/is", "+", $srchtxt);
-				} else {
-					$andor = ' OR ';
-					$sqltxtsrch = '0';
-					$srchtxt = preg_replace("/( OR |\|)/is", "+", $srchtxt);
-				}
-				$srchtxt = str_replace('*', '%', addcslashes($srchtxt, '%_'));
-				foreach(explode('+', $srchtxt) as $text) {
-					$text = trim($text);
-					if($text) {
-						$sqltxtsrch .= $andor;
-						$sqltxtsrch .= "tr.subject LIKE '%$text%'";
-					}
-				}
-				$sqlsrch .= " AND ($sqltxtsrch)";
+				require_once libfile('function/search');
+				$srcharr = searchkey($srchtxt, "tr.subject LIKE '%{text}%'", true);
+				$srchtxt = $srcharr[0];
+				$sqlsrch .= $srcharr[1];
 			}
 
 			if($srchuid) {

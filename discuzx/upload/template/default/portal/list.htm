@@ -4,7 +4,6 @@
 <!--{eval $wheresql = category_get_wheresql($cat);}-->
 <!--{eval $list = category_get_list($cat, $wheresql, $page);}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
@@ -25,8 +24,9 @@
 		<!--[diy=listcontenttop]--><div id="listcontenttop" class="area"></div><!--[/diy]-->
 		<div class="bm">
 			<div class="bm_h cl">
+				<!--{if $_G[setting][rssstatus] && !$_G['gp_archiveid']}--><a href="portal.php?mod=rss&catid=$cat[catid]" class="y xi2 rss" target="_blank" title="RSS">{lang rss_subscribe_this}</a><!--{/if}-->
 				<!--{if ($_G['group']['allowpostarticle'] || $_G['group']['allowmanagearticle'] || $categoryperm[$catid]['allowmanage'] || $categoryperm[$catid]['allowpublish']) && empty($cat['disallowpublish'])}-->
-				<a href="portal.php?mod=portalcp&ac=article&catid=$cat[catid]" class="y xi2 xw1">{lang article_publish}</a>
+				<a href="portal.php?mod=portalcp&ac=article&catid=$cat[catid]" class="y xi2 addnew">{lang article_publish}</a>
 				<!--{/if}-->
 				<h1 class="xs2">$cat[catname]</h1>
 			</div>
@@ -41,10 +41,11 @@
 			<!--{/if}-->
 			<div class="bm_c xld">
 			<!--{loop $list['list'] $value}-->
+			<!--{eval $highlight = article_title_style($value);}-->
 				<dl class="bbda cl">
-					<dt class="xs2"><a href="portal.php?mod=view&aid=$value[aid]" target="_blank">$value[title]</a> <!--{if $value[status] == 1}-->({lang moderate_need})<!--{/if}--></dt>
-					<!--{if $value[pic]}--><dd class="atc"><a href="portal.php?mod=view&aid=$value[aid]" target="_blank"><img src="$value[pic]" alt="$value[title]" /></a></dd><!--{/if}-->
-					<dd class="xs2">
+					<dt class="xs2"><a href="portal.php?mod=view&aid=$value[aid]" target="_blank" class="xi2" $highlight>$value[title]</a> <!--{if $value[status] == 1}-->({lang moderate_need})<!--{/if}--></dt>
+					<dd class="xs2 cl">
+						<!--{if $value[pic]}--><div class="atc"><a href="portal.php?mod=view&aid=$value[aid]" target="_blank"><img src="$value[pic]" alt="$value[title]" class="tn" /></a></div><!--{/if}-->
 						$value[summary]
 					</dd>
 					<dd>

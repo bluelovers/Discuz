@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_thread.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: space_thread.php 22480 2011-05-10 02:30:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,8 +15,9 @@ $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
+$opactives['thread'] = 'class="a"';
 
-if(empty($_G['gp_view'])) $_G['gp_view'] = 'all';
+if(empty($_G['gp_view'])) $_G['gp_view'] = 'me';
 $_G['gp_order'] = empty($_G['gp_order']) ? 'dateline' : $_G['gp_order'];
 
 $allowviewuserthread = $_G['setting']['allowviewuserthread'];
@@ -52,12 +53,11 @@ $wheresql .= $_G['gp_view'] != 'me' ? " AND t.displayorder>='0'" : '';
 $f_index = '';
 $ordersql = 't.dateline DESC';
 $need_count = true;
-
+$viewuserthread = false;
 if($_G['gp_view'] == 'all') {
 	$start = 0;
 	$perpage = 100;
 	$alltype = 'dateline';
-	$wheresql = "t.displayorder>='0'";
 	loadcache('space_thread');
 	if($_G['gp_order'] == 'hot') {
 		$wheresql .= " AND t.replies>='$minhot'";
@@ -75,15 +75,21 @@ if($_G['gp_view'] == 'all') {
 			require_once libfile('function/post');
 			$moderate = $_G['gp_moderate'];
 			$tidsadd = 'tid IN ('.dimplode($moderate).')';
-			$tuidarray = $ruidarray = $fids = array();
-			$postarray = getfieldsofposts('fid, first, authorid', $tidsadd);
-			foreach($postarray as $post) {
-				if($post['first']) {
-					$tuidarray[$post['fid']][] = $post['authorid'];
-				} else {
-					$ruidarray[$post['fid']][] = $post['authorid'];
+			$tuidarray = $ruidarray = $fids = $posttablearr = array();
+			$query = DB::query('SELECT tid, posttableid FROM '.DB::table('forum_thread').' WHERE '.$tidsadd);
+			while($value = DB::fetch($query)) {
+				$posttablearr[$value['posttableid'] ? $value['posttableid'] : 0][] = $value['tid'];
+			}
+			foreach($posttablearr as $posttableid => $ids) {
+				$query = DB::query('SELECT fid, first, authorid FROM '.DB::table(getposttable($posttableid)).' WHERE tid IN ('.dimplode($ids).')');
+				while($post = DB::fetch($query)) {
+					if($post['first']) {
+						$tuidarray[$post['fid']][] = $post['authorid'];
+					} else {
+						$ruidarray[$post['fid']][] = $post['authorid'];
+					}
+					$fids[$post['fid']] = $post['fid'];
 				}
-				$fids[$post['fid']] = $post['fid'];
 			}
 			if($tuidarray) {
 				foreach($tuidarray as $fid => $uids) {
@@ -99,9 +105,8 @@ if($_G['gp_view'] == 'all') {
 			}
 
 			require_once libfile('function/delete');
-			deletepost($tidsadd);
-			deletethread($tidsadd);
-			DB::query("DELETE FROM ".DB::table('forum_postcomment')." WHERE ".$tidsadd." AND authorid='$space[uid]'");
+			deletethread($moderate);
+			DB::query("DELETE FROM ".DB::table('forum_postcomment')." WHERE $tidsadd AND authorid='$space[uid]'");
 
 			foreach($fids as $fid) {
 				updateforumcount(intval($fid));
@@ -123,13 +128,16 @@ if($_G['gp_view'] == 'all') {
 	if($_GET['from'] == 'space') $diymode = 1;
 
 	$viewtype = in_array($_G['gp_type'], array('reply', 'thread', 'postcomment')) ? $_G['gp_type'] : 'thread';
-	$filter = in_array($_G['gp_filter'], array('recyclebin', 'save', 'aduit', 'close', 'common')) ? $_G['gp_filter'] : '';
+	$filter = in_array($_G['gp_filter'], array('recyclebin', 'ignored', 'save', 'aduit', 'close', 'common')) ? $_G['gp_filter'] : '';
 	if($viewtype == 'thread') {
+		$statusfield = 'displayorder';
 		$wheresql .= " AND t.authorid = '$space[uid]'";
 		if($filter == 'recyclebin') {
 			$wheresql .= " AND t.displayorder='-1'";
 		} elseif($filter == 'aduit') {
-			$wheresql .= " AND (t.displayorder='-2' OR t.displayorder='-3')";
+			$wheresql .= " AND t.displayorder='-2'";
+		} elseif($filter == 'ignored') {
+			$wheresql .= " AND t.displayorder='-3'";
 		} elseif($filter == 'save') {
 			$wheresql .= " AND t.displayorder='-4'";
 		} elseif($filter == 'close') {
@@ -140,15 +148,15 @@ if($_G['gp_view'] == 'all') {
 			if($allowviewuserthread === false && $_G['adminid'] != 1) {
 				showmessage('ban_view_other_thead');
 			}
-			if(!$allowviewuserthread && $_G['adminid'] != 1) {
-				showmessage('allow_view_other_thead_but_no_detail');
+			$viewuserthread = true;
+			$viewfids = str_replace("'", '', $allowviewuserthread);
+			if(!empty($viewfids)) {
+				$viewfids = explode(',', $viewfids);
 			}
-			$fidsql = empty($allowviewuserthread) ? '' : " AND t.fid IN($allowviewuserthread) ";
-			$wheresql .= "$fidsql AND t.displayorder>='0'";
 		}
-		$ordersql = 't.lastpost DESC';
+		$ordersql = 't.tid DESC';
 	} elseif($viewtype == 'postcomment') {
-		$posttable = getposttable('p');
+		$posttable = getposttable();
 		require_once libfile('function/post');
 		$query = DB::query("SELECT c.*, p.authorid, p.tid, p.pid, p.fid, p.invisible, p.dateline, p.message, t.special, t.status, t.subject, t.digest,t.attachment, t.replies, t.views, t.lastposter, t.lastpost
 			FROM ".DB::table('forum_postcomment')." c
@@ -174,23 +182,29 @@ if($_G['gp_view'] == 'all') {
 		$need_count = false;
 
 	} else {
+		$statusfield = 'invisible';
 		$postsql = $threadsql = '';
 		if($filter == 'recyclebin') {
-			$postsql .= " AND p.invisible='-1'";
+			$postsql .= " AND p.invisible='-5'";
 		} elseif($filter == 'aduit') {
 			$postsql .= " AND p.invisible='-2'";
 		} elseif($filter == 'save') {
-			$postsql .= " AND p.invisible='-3'";
+			$postsql .= " AND p.invisible='-3' AND t.displayorder='-4'";
+		} elseif($filter == 'ignored') {
+			$postsql .= " AND p.invisible='-3' AND t.displayorder!='-4'";
 		} elseif($filter == 'close') {
 			$threadsql .= " AND t.closed='1'";
 		} elseif($filter == 'common') {
 			$postsql .= " AND p.invisible='0'";
 			$threadsql .= " AND t.displayorder>='0' AND t.closed='0'";
-		} else {
-			$threadsql .= '';
+		} elseif($space['uid'] != $_G['uid']) {
+			if($allowviewuserthread === false && $_G['adminid'] != 1) {
+				showmessage('ban_view_other_thead');
+			}
+			$threadsql .= empty($allowviewuserthread) ? '' : " AND t.fid IN($allowviewuserthread) ";
 		}
 		$postsql .= " AND p.first='0'";
-		$posttable = getposttable('p');
+		$posttable = getposttable();
 
 		require_once libfile('function/post');
 		$query = DB::query("SELECT p.authorid, p.tid, p.pid, p.fid, p.invisible, p.dateline, p.message, t.special, t.status, t.subject, t.digest,t.attachment, t.replies, t.views, t.lastposter, t.lastpost, t.displayorder FROM ".DB::table($posttable)." p
@@ -206,9 +220,17 @@ if($_G['gp_view'] == 'all') {
 		}
 		if($fids) {
 			$fids = array_unique($fids);
-			$query = DB::query("SELECT fid, name FROM ".DB::table('forum_forum')." WHERE fid IN (".dimplode($fids).")");
+			$query = DB::query("SELECT fid, name, status FROM ".DB::table('forum_forum')." WHERE fid IN (".dimplode($fids).")");
 			while($forum = DB::fetch($query)) {
-				$forums[$forum['fid']] = $forum['name'];
+				if(!$_G['setting']['groupstatus'] && $forum['status'] == 3) {
+				} else {
+					$forums[$forum['fid']] = $forum['name'];
+				}
+			}
+			foreach($list as $key => $val) {
+				if(!$forums[$val['fid']]) {
+					unset($list[$key]);
+				}
 			}
 		}
 
@@ -251,6 +273,7 @@ if($need_count) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	$havecache = false;
@@ -275,6 +298,13 @@ if($need_count) {
 				$hiddennum++;
 				continue;
 			}
+			if($viewuserthread && $value['authorid'] != $_G['uid']) {
+				if(($_G['adminid'] != 1 && !empty($viewfids) && !in_array($value['fid'], $viewfids)) || $value['displayorder'] < 0) {
+					$hiddennum++;
+					continue;
+				}
+			}
+
 			$fids[] = $value['fid'];
 			$list[] = procthread($value);
 		}
@@ -282,12 +312,16 @@ if($need_count) {
 			$fids = array_unique($fids);
 			$query = DB::query("SELECT fid, name, status FROM ".DB::table('forum_forum')." WHERE fid IN (".dimplode($fids).")");
 			while($forum = DB::fetch($query)) {
-				$forums[$forum['fid']] = $forum['name'];
+				if(!$_G['setting']['groupstatus'] && $forum['status'] == 3) {
+				} else {
+					$forums[$forum['fid']] = $forum['name'];
+				}
 			}
 		}
 		foreach($list as $key => $val) {
-			if($forums[$val[fid]['status']] != 3 && $val['closed'] > 1) {
+			if(!$forums[$val['fid']] || $val['closed'] > 0) {
 				unset($list[$key]);
+				$hiddennum++;
 			}
 		}
 		if($_G['gp_view'] == 'all') {

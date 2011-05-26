@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_comment.php 17261 2010-09-28 02:21:05Z zhangguosheng $
+ *      $Id: portalcp_comment.php 19018 2010-12-13 10:06:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,7 +69,9 @@ if($_GET['op'] == 'requote') {
 
 	if(submitcheck('deletesubmit')) {
 		DB::query("DELETE FROM ".DB::table('portal_comment')." WHERE cid='$cid'");
-		DB::query("UPDATE ".DB::table('portal_article_count')." SET commentnum=commentnum+'-1' WHERE aid='$comment[aid]'");
+		$idtype = in_array($comment['idtype'], array('aid' ,'topicid')) ? $comment['idtype'] : 'aid';
+		$tablename = $idtype == 'aid' ? 'portal_article_count' : 'portal_topic';
+		DB::query("UPDATE ".DB::table($tablename)." SET commentnum=commentnum+'-1' WHERE $idtype='$comment[id]'");
 		showmessage('do_success', dreferer());
 	}
 
@@ -83,18 +85,20 @@ if(submitcheck('commentsubmit', 0, $seccodecheck, $secqaacheck)) {
 		showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 	}
 
-	$aid = intval($_POST['aid']);
+	$id = 0;
+	$idtype = '';
+	if(!empty($_POST['aid'])) {
+		$id = intval($_POST['aid']);
+		$idtype = 'aid';
+	} elseif(!empty($_POST['topicid'])) {
+		$id = intval($_POST['topicid']);
+		$idtype = 'topicid';
+	}
 
-	$article = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$aid'");
-	if(empty($article)) {
-		showmessage("comment_comment_noexist");
-	}
-	if($article['allowcomment'] != 1) {
-		showmessage("comment_comment_notallowed");
-	}
+
+	$message = $_POST['message'];
 
 	require_once libfile('function/spacecp');
-	ckrealname('comment');
 
 	cknewuser();
 
@@ -102,30 +106,13 @@ if(submitcheck('commentsubmit', 0, $seccodecheck, $secqaacheck)) {
 	if($waittime > 0) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
 	}
-	$message = getstr($_POST['message'], $_G['group']['allowcommentarticle'], 1, 1, 1, 0);
-	if(strlen($message) < 2) showmessage('content_is_too_short');
-	$message = censor($message);
-	if(censormod($message)) {
-		$comment_status = 1;
+
+	$retmessage = addportalarticlecomment($id, $message, $idtype);
+	if($retmessage == 'do_success') {
+		showmessage('do_success', $_POST['referer'] ? $_POST['referer'] : "portal.php?mod=comment&id=$id&idtype=$idtype");
 	} else {
-		$comment_status = 0;
+		showmessage($retmessage, dreferer("portal.php?mod=comment&id=$id&idtype=$idtype"));
 	}
-
-	$setarr = array(
-		'uid' => $_G['uid'],
-		'username' => $_G['username'],
-		'aid' => $aid,
-		'postip' => $_G['onlineip'],
-		'dateline' => $_G['timestamp'],
-		'status' => $comment_status,
-		'message' => $message
-	);
-
-	DB::insert('portal_comment', $setarr);
-
-	DB::query("UPDATE ".DB::table('portal_article_count')." SET commentnum=commentnum+1 WHERE aid='$aid'");
-	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
-	showmessage('do_success', $_POST['referer'] ? $_POST['referer'] : "portal.php?mod=comment&quickforward=1&aid=$aid");
 }
 
 include_once template("portal/portalcp_comment");

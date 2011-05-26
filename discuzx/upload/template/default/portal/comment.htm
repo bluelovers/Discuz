@@ -18,18 +18,18 @@
 	<div class="mn">
 		<div class="bm vw">
 			<div class="h hm">
-				<h1 class="ph"><a href="portal.php?mod=view&aid=$aid">$article[title]</a></h1>
-				<p>{lang comment} ($article[commentnum])<span class="pipe">|</span><a href="portal.php?mod=comment&aid=$aid#message" class="xi2 xw1">{lang post_comment}</a></p>
+				<h1 class="ph"><a href="$url">$csubject[title]</a></h1>
+				<p>{lang comment} ($csubject[commentnum])<!--{if $csubject['allowcomment'] == 1}--><span class="pipe">|</span><a href="javascript:;" onclick="location.href=location.href.replace(/(\#.*)/, '')+'#message';$('message').focus();return false;" class="xi2 xw1">{lang post_comment}</a><!--{/if}--></p>
 			</div>
 			<div class="bm_c">
 			<!--{loop $commentlist $comment}-->
 				<!--{template portal/comment_li}-->
 			<!--{/loop}-->
 			<!--{if $pricount}-->
-				<p class="mbw">{lang hide_portal_comment}</p>
+				<p class="mbn mtn y">{lang hide_portal_comment}</p>
 			<!--{/if}-->
 			<div class="pgs cl mtm mbm">$multi</div>
-			<!--{if $article['allowcomment'] == 1}-->
+			<!--{if $csubject['allowcomment'] == 1}-->
 				<form name="cform" action="portal.php?mod=portalcp&ac=comment" method="post" autocomplete="off">
 					<div class="tedt">
 						<div class="area">
@@ -38,9 +38,14 @@
 					</div>
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 						<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-						<div class="mtm"><!--{template common/seccheck}--></div>
+						<div class="mtm"><!--{subtemplate common/seccheck}--></div>
 					<!--{/if}-->
-					<input type="hidden" name="aid" value="$aid">
+
+					<!--{if $idtype == 'topicid' }-->
+						<input type="hidden" name="topicid" value="$id">
+					<!--{else}-->
+						<input type="hidden" name="aid" value="$id">
+					<!--{/if}-->
 					<input type="hidden" name="formhash" value="{FORMHASH}">
 					<p class="ptn"><button type="submit" name="commentsubmit" value="true" class="pn"><strong>{lang comment}</strong></button></p>
 				</form>

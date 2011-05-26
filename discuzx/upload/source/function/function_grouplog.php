@@ -17,7 +17,7 @@ function updategroupcreditlog($fid, $uid) {
 		return false;
 	}
 	$today = date('Ymd', TIMESTAMP);
-	$updategroupcredit = getcookie('updategroupcredit_'.$fid);
+	$updategroupcredit = getcookie('groupcredit_'.$fid);
 	if($updategroupcredit < $today) {
 		$status = DB::result_first("SELECT logdate FROM ".DB::table('forum_groupcreditslog')." WHERE fid='$fid' AND uid='$uid' AND logdate='$today'");
 		if(empty($status)) {
@@ -46,6 +46,6 @@ function updategroupcreditlog($fid, $uid) {
 				}
 			}
 		}
-		dsetcookie('updategroupcredit_'.$fid, $today, 86400);
+		dsetcookie('groupcredit_'.$fid, $today, 86400);
 	}
 }

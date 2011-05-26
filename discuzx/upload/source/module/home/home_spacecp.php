@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_spacecp.php 16838 2010-09-15 08:07:12Z monkey $
+ *      $Id: home_spacecp.php 22021 2011-04-20 07:00:41Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,10 +17,17 @@ require_once libfile('function/magic');
 $acs = array('space', 'doing', 'upload', 'comment', 'blog', 'album', 'relatekw', 'common', 'class',
 	'swfupload', 'poke', 'friend', 'eccredit', 'favorite',
 	'avatar', 'profile', 'theme', 'feed', 'privacy', 'pm', 'share', 'invite','sendmail',
-	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search');
+	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search', 'promotion');
 
 $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
 $op = empty($_GET['op'])?'':$_GET['op'];
+$_G['mnid'] = 'mn_common';
+
+if(in_array($ac, array('privacy'))) {
+	if(!$_G['setting']['homestatus']) {
+		showmessage('home_status_off');
+	}
+}
 
 if(empty($_G['uid'])) {
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {

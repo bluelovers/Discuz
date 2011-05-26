@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_diy.js 16274 2010-09-02 09:01:31Z zhangguosheng $
+	$Id: common_diy.js 22487 2011-05-10 03:46:05Z zhangguosheng $
 */
 
 String.prototype.property2js = function(){
@@ -57,7 +57,7 @@ styleCss.prototype.addRule = function(selector, styles, n, porperty) {
 	}
 	s = s.indexOf('!important') > -1 || s.indexOf('! important') > -1 ? s : s.replace(/;/g,' !important;');
 	s = s + styles;
-	if(typeof n == "undefined") {
+	if (typeof n == 'undefined' || !isNaN(n)) {
 		n = this.rules.length;
 	}
 	if (this.sheet.insertRule) {
@@ -340,7 +340,7 @@ var Util = {
 			clearTimeout(fadeTimer);
 			for (i=0;i<this.stack.length;i++) {
 				if (this.stack[i] == obj ) {
-					this.stack.splice(i,1); break;
+					this.stack.splice(i,1);break;
 				}
 			}
 
@@ -463,7 +463,7 @@ var Util = {
 		this.tabTitleClass = 'tab-title';
 		this.tabContentClass = 'tb-c';
 		this.moving = 'moving';
-		this.contentClass = 'content';
+		this.contentClass = 'dxb_bc';
 		this.tmpBoxElement = null ;
 		this.dargRelative = {};
 		this.scroll = {};
@@ -473,6 +473,9 @@ var Util = {
 		this.isChange = false;
 		this.fn = '';
 		this._replaceFlag = false;
+		this.sampleMode = false;
+		this.sampleBlocks = null;
+		this.advancedStyleSheet = null;
 	};
 	Drag.prototype = {
 		getTmpBoxElement : function () {
@@ -649,14 +652,19 @@ var Util = {
 		},
 		initPosition : function () {
 			this.data = [],this.allBlocks = [];
+			var blocks = $C(this.blockClass);
+			for(var i = 0; i < blocks.length; i++) {
+				if (blocks[i]['id'].indexOf('temp') < 0) {
+					this.checkEdit(blocks[i]);
+					this.allBlocks.push(blocks[i]['id'].replace('portal_block_',''));
+				}
+			}
 			var areaLen = this.moveableArea.length;
 			for (var j = 0; j < areaLen; j++ ) {
-				var areaId = this.moveableArea[j];
-				var area = $(areaId);
+				var area = this.moveableArea[j];
 				var areaData = [];
-				if (typeof area == 'undefined' || area == null) continue;
 				if (typeof area == 'object') {
-					this.checkTempDiv(areaId);
+					this.checkTempDiv(area.id);
 					var frames = area.childNodes;
 					for (var i in frames) {
 						if (typeof(frames[i]) != 'object') continue;
@@ -665,7 +673,7 @@ var Util = {
 							areaData.push(this.initFrame(frames[i]));
 						}
 					}
-					this.data[areaId] = areaData;
+					this.data[area.id] = areaData;
 				}
 			}
 			this._replaceFlag = true;
@@ -700,6 +708,7 @@ var Util = {
 		checkEdit : function (ele) {
 			if (!ele || Util.hasClass(ele, 'temp') || ele.getAttribute('noedit')) return false;
 			var id = ele.id;
+			var _method = this;
 			if (!$(id+'_edit')) {
 				var _method = this;
 				var dom = document.createElement('div');
@@ -709,14 +718,15 @@ var Util = {
 				ele.appendChild(dom);
 				$(id+'_edit_menu').onclick = function (e){Drag.prototype.toggleMenu.call(_method, e, this);};
 			}
+			ele.onmouseover = function (e) {Drag.prototype.showEdit.call(_method,e);};
+			ele.onmouseout = function (e) {Drag.prototype.hideEdit.call(_method,e);};
 		},
 		initFrame : function (frameEle) {
 			if (typeof(frameEle) != 'object') return '';
-			var _method = this;
 			var frameId = frameEle.id;
-			this.checkEdit(frameEle);
-			frameEle.onmouseover = function (e) {Drag.prototype.showEdit.call(_method,e);};
-			frameEle.onmouseout = function (e) {Drag.prototype.hideEdit.call(_method,e);};
+			if(!this.sampleMode) {
+				this.checkEdit(frameEle);
+			}
 			var moveable = Util.hasClass(frameEle, this.moveableObject);
 			var frameObj = '';
 			if (Util.hasClass(frameEle, this.tabClass)) {
@@ -758,14 +768,12 @@ var Util = {
 							var frameObj2 = this.initFrame(ele);
 							frameObj.addFrame(columnId, frameObj2);
 						} else if (Util.hasClass(ele, this.blockClass) || Util.hasClass(ele, this.moveableObject)) {
-							this.checkEdit(ele);
 							var block = new Block(ele.id, ele.className, Util.getOffset(ele, false), Util.getOffset(ele, true));
 							for (var k in ele.children) {
 								if (Util.hasClass(ele.children[k], this.titleClass)) this._initTitle(block, ele.children[k]);
 							}
 							this._initEleTitle(block, ele);
 							frameObj.addBlock(columnId, block);
-							if (ele.id.indexOf('temp') < 0) this.allBlocks.push(ele.id.replace('portal_block_',''));
 						}
 					}
 				}
@@ -896,7 +904,7 @@ var Util = {
 			if (Util.hasClass($(id),this.tabClass) && typeof this.menu['tab'] == 'object') html += this._getMenuHtmlLi(id, this.menu['tab']);
 			if (Util.hasClass($(id),this.frameClass) && typeof this.menu['frame'] == 'object') html += this._getMenuHtmlLi(id, this.menu['frame']);
 			if (Util.hasClass($(id),this.blockClass) && typeof this.menu['block'] == 'object') html += this._getMenuHtmlLi(id, this.menu['block']);
-			if (typeof this.menu['default'] == 'object') html += this._getMenuHtmlLi(id, this.menu['default']);
+			if (typeof this.menu['default'] == 'object' && this.getObjByName(id)) html += this._getMenuHtmlLi(id, this.menu['default']);
 			html += '</ul>';
 			return html == '<ul></ul>' ? '' : html;
 		},
@@ -918,6 +926,7 @@ var Util = {
 			this.menu[objId].push({'cmdName':cmdName, 'cmd':cmd});
 		},
 		setDefalutMenu : function () {},
+		setSampleMenu : function () {},
 
 		getPositionKey : function (n) {
 			this.initPosition();
@@ -930,13 +939,15 @@ var Util = {
 		},
 
 		checkTempDiv : function (_id) {
-			var id = _id+'_temp';
-			var dom = $(id);
-			if (dom == null || typeof dom == 'undefined') {
-				dom  = document.createElement("div");
-				dom.className = this.moveableObject+' temp';
-				dom.id = id;
-				$(_id).appendChild(dom);
+			if(_id) {
+				var id = _id+'_temp';
+				var dom = $(id);
+				if (dom == null || typeof dom == 'undefined') {
+					dom  = document.createElement("div");
+					dom.className = this.moveableObject+' temp';
+					dom.id = id;
+					$(_id).appendChild(dom);
+				}
 			}
 		},
 		_setCssPosition : function (ele, value) {
@@ -1037,7 +1048,7 @@ var Util = {
 				if (!dom) {
 					dom = document.createElement('div');
 					dom.id = ele.id+'_content';
-					dom.className = Util.hasClass(ele, this.frameClass) ? 'content cl '+ele.className.substr(ele.className.lastIndexOf(' ')+1) : 'content cl';
+					dom.className = Util.hasClass(ele, this.frameClass) ? this.contentClass+' cl '+ele.className.substr(ele.className.lastIndexOf(' ')+1) : this.contentClass+' cl';
 				}
 				var frame = this.getObjByName(ele.id);
 				if (frame) {
@@ -1100,7 +1111,7 @@ var Util = {
 						}
 						var frameContent = document.createElement('div');
 						frameContent.id = tabId + '_content';
-						frameContent.className = Util.hasClass(tabs[i], this.frameClass) ? 'content cl '+tabs[i].className.substr(tabs[i].className.lastIndexOf(' ')+1) : 'content cl';
+						frameContent.className = Util.hasClass(tabs[i], this.frameClass) ? this.contentClass+' cl '+tabs[i].className.substr(tabs[i].className.lastIndexOf(' ')+1) : this.contentClass+' cl';
 						var colLen = arrColumn.length;
 						for (var k = 0; k < colLen; k++) {
 							frameContent.appendChild(arrColumn[k]);
@@ -1209,24 +1220,14 @@ var Util = {
 		},
 		_getMoveableArea : function (ele) {
 			ele = ele ? ele : document.body;
-			var children = ele.childNodes;
-			var len = children.length;
-			for (var i = 0; i < len; i++) {
-				if (children[i].nodeType != 1) continue;
-				if (children[i].nodeName.toUpperCase() == 'DIV' && Util.hasClass(children[i],this.areaClass)) {
-					if (children[i]['id']) this.moveableArea.push(children[i]['id']);
-				} else {
-					this._getMoveableArea(children[i]);
-				}
-			}
-			return true;
+			this.moveableArea = $C(this.areaClass, ele, 'div');
 		},
 		initMoveableArea : function () {
 			var _method = this;
 			this._getMoveableArea();
 			var len = this.moveableArea.length;
 			for (var i = 0; i < len; i++) {
-				var el = $(this.moveableArea[i]);
+				var el = this.moveableArea[i];
 				if (el == null || typeof el == 'undefined') return false;
 				el.ondragstart = function (e) {return false;};
 				el.onmouseover = function (e) {Drag.prototype.initDragObj.call(_method, e);};
@@ -1236,11 +1237,102 @@ var Util = {
 			}
 			if ($('contentframe')) $('contentframe').ondragstart = function (e) {return false;};
 		},
-		init : function () {
+		disableAdvancedStyleSheet : function () {
+			if(this.advancedStyleSheet) {
+				this.advancedStyleSheet.disabled = true;
+			}
+		},
+		enableAdvancedStyleSheet : function () {
+			if(this.advancedStyleSheet) {
+				this.advancedStyleSheet.disabled = false;
+			}
+		},
+		getStyleSheetIndex : function (name) {
+			var index = -1;
+			var all = document.styleSheets;
+			for (var i=0;i<all.length;i++) {
+				var ownerNode = all[i].ownerNode || all[i].owningElement;
+				if (ownerNode.id && ownerNode.id == name) {
+					index = i;
+					break;
+				}
+			}
+			return index;
+		},
+		init : function (sampleMode) {
+			this.initCommon();
+			this.setSampleMode(sampleMode);
+			if(!this.sampleMode) {
+				this.initAdvanced();
+			} else {
+				this.initSample();
+			}
+			return true;
+		},
+		initAdvanced : function () {
 			this.initMoveableArea();
 			this.initPosition();
 			this.setDefalutMenu();
-			return true;
+			this.enableAdvancedStyleSheet();
+			this.showControlPanel();
+			this.initTips();
+			if(this.goonDIY) this.goonDIY();
+			this.openfn();
+		},
+
+		openfn : function () {
+			var openfn = loadUserdata('openfn');
+			if(openfn) {
+				if(typeof openfn == 'function') {
+					openfn();
+				} else {
+					eval(openfn);
+				}
+				saveUserdata('openfn', '');
+			}
+		},
+		initCommon : function () {
+			var index = this.getStyleSheetIndex('diy_common');
+			this.advancedStyleSheet = index != -1 ? document.styleSheets[index] : null;
+			this.menu = [];
+		},
+		initSample : function () {
+			this._getMoveableArea();
+			this.initPosition();
+			this.sampleBlocks = $C(this.blockClass);
+			this.initSampleBlocks();
+			this.disableAdvancedStyleSheet('diy_common');
+			this.setSampleMenu();
+			this.disableAdvancedStyleSheet();
+			this.hideControlPanel();
+		},
+		initSampleBlocks : function () {
+			if(this.sampleBlocks) {
+				for(var i = 0; i < this.sampleBlocks.length; i++){
+					this.checkEdit(this.sampleBlocks[i]);
+				}
+			}
+		},
+		setSampleMode : function (sampleMode) {
+			if(loadUserdata('diy_advance_mode')) {
+				this.sampleMode = '';
+			} else {
+				this.sampleMode = sampleMode;
+				saveUserdata('diy_advance_mode', sampleMode ? '' : '1');
+			}
+
+		},
+
+		hideControlPanel : function() {
+			Util.show('samplepanel');
+			Util.hide('controlpanel');
+			Util.hide('diy-tg');
+		},
+
+		showControlPanel : function() {
+			Util.hide('samplepanel');
+			Util.show('controlpanel');
+			Util.show('diy-tg');
 		},
 		checkHasFrame : function (obj) {
 			obj = !obj ? this.data : obj;
@@ -1261,6 +1353,21 @@ var Util = {
 					if (typeof window['c'+name[i]+'_frame'] == 'object' && !BROWSER.ie) delete window['c'+name[i]+'_frame'];
 				}
  			}
+		},
+		saveViewTip : function (tipname) {
+			if(tipname) {
+				saveUserdata(tipname, '1');
+				Util.hide(tipname);
+			}
+			doane();
+		},
+		initTips : function () {
+			var tips = ['diy_backup_tip'];
+			for(var i = 0; i < tips.length; i++) {
+				if(tips[i] && !loadUserdata(tips[i])) {
+					Util.show(tips[i]);
+				}
+			}
 		},
 		extend : function (obj) {
 			for (var i in obj) {
@@ -1283,8 +1390,8 @@ var Util = {
 	};
 	DIY.prototype = {
 
-		init : function () {
-			drag.init();
+		init : function (mod) {
+			drag.init(mod);
 			this.style = document.diyform.style.value;
 			if (this.style == '') {
 				var reg = RegExp('topic\(.*)\/style\.css');
@@ -1394,7 +1501,17 @@ var Util = {
 		},
 		getSpacecssStr : function() {
 			var css = '';
+			var selectors = ['body', '#hd','#ct', 'BODY'];
 			for (var i in this.spacecss) {
+				var name = i.split(' ')[0];
+				if(selectors.indexOf(name) == -1 && !drag.getObjByName(name.substr(1))) {
+					for(var k in this.spacecss) {
+						if (k.indexOf(i) > -1) {
+							this.spacecss[k] = [];
+						}
+					}
+					continue;
+				}
 				var rule = this.spacecss[i];
 				if (typeof rule == "function") continue;
 				var one = '';
@@ -1629,7 +1746,6 @@ var Util = {
 			var propertyJs = property.property2js();
 			if (typeof value == 'undefined') value = '';
 			var selector = this.getSelector(currentDiv);
-			if (!isNaN(num) || typeof num == 'undefined') num = 0;
 
 			if (!this.backFlag) {
 				var rule = this.styleSheet.getRule(selector,propertyJs);
@@ -1717,7 +1833,7 @@ var Util = {
 					eval(cmd[i]+'('+newData+')');
 					this.backFlag = false;
 				}
-			} else {
+			}else {
 				newData = typeof step['newData'] == 'undefined' || step['oldData'] == '' ? '' : '"' + step['newData'].join('","') + '"';
 				this.backFlag = true;
 				eval(cmd+'('+newData+')');

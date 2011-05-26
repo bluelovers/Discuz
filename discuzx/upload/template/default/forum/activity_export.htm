@@ -19,6 +19,6 @@ $activity[class]: $thread[subject]
 {lang activity_join_members},{lang leaveword},<!--{if $activity['cost']}-->{lang activity_payment},<!--{/if}-->{lang activity_jointime},{lang status}$ufield
 <!--{echo "\n";}-->
 <!--{loop $applylist $apply}-->
-	$apply[username],$apply[message],<!--{if $activity['cost']}--><!--{if $apply[payment] >= 0}-->$apply[payment] {lang payment_unit}<!--{else}-->{lang activity_self}<!--{/if}--><!--{/if}-->,$apply[dateline],<!--{if $apply[verified]}-->{lang activity_allow_join}<!--{else}-->{lang activity_cant_audit}<!--{/if}--><!--{if $apply[fielddata]}-->$apply[fielddata]<!--{/if}-->
+	$apply[username],$apply[message],<!--{if $activity['cost']}--><!--{if $apply[payment] >= 0}-->$apply[payment] {lang payment_unit}<!--{else}-->{lang activity_self}<!--{/if}-->,<!--{/if}-->$apply[dateline],<!--{if $apply[verified]}-->{lang activity_allow_join}<!--{else}-->{lang activity_cant_audit}<!--{/if}--><!--{if $apply[fielddata]}-->$apply[fielddata]<!--{/if}-->
 	<!--{echo "\n";}-->
 <!--{/loop}-->

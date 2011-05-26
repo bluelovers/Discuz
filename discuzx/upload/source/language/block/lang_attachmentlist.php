@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_attachmentlist.php 11884 2010-06-18 06:40:35Z xupeng $
+ *      $Id: lang_attachmentlist.php 22411 2011-05-06 06:09:35Z zhangguosheng $
  */
 
 $lang = array
@@ -23,11 +23,6 @@ $lang = array
 	'attachmentlist_titlelength_comment' => '設置當附件名稱/帖子標題顯示的最大長度',
 	'attachmentlist_summarylength' => '內容長度',
 	'attachmentlist_summarylength_comment' => '設置附件介紹/帖子內容顯示的最大長度',
-	'attachmentlist_isimage' => '附件類型',
-	'attachmentlist_isimage_comment' => '設置調用的附件類型',
-	'attachmentlist_isimage_0' => '全部附件',
-	'attachmentlist_isimage_1' => '圖片附件',
-	'attachmentlist_isimage_2' => '普通附件',
 	'attachmentlist_maxwidth' => '圖片最大寬度(像素)',
 	'attachmentlist_maxwidth_comment' => '設置是否自動縮小或放大圖片的尺寸到本設定的寬度，0 為不自動縮放',
 	'attachmentlist_maxheight' => '圖片最大高度(像素)',
@@ -53,20 +48,13 @@ $lang = array
 	'attachmentlist_special_reward_0' => '全部',
 	'attachmentlist_special_reward_1' => '已解決',
 	'attachmentlist_special_reward_2' => '未解決',
-	'attachmentlist_orderby' => '附件排序方式',
-	'attachmentlist_orderby_comment' => '設置以哪一字段或方式對附件進行排序',
-	'attachmentlist_orderby_dateline' => '按最後更新日期排序',
-	'attachmentlist_orderby_downloads' => '按下載次數倒序排序',
-	'attachmentlist_orderby_hourdownloads' => '按小時下載次數倒序排序',
-	'attachmentlist_orderby_todaydownloads' => '按當天下載次數倒序排序',
-	'attachmentlist_orderby_weekdownloads' => '按本周下載次數倒序排序',
-	'attachmentlist_orderby_monthdownloads' => '按當月下載次數倒序排序',
 	'attachmentlist_dateline' => '附件上傳時間',
 	'attachmentlist_dateline_nolimit' => '不限制',
 	'attachmentlist_dateline_hour' => '最近1小時',
 	'attachmentlist_dateline_day' => '最近24小時',
 	'attachmentlist_dateline_week' => '最近1周',
 	'attachmentlist_dateline_month' => '最近1月',
+	'attachmentlist_highlight' => '獲得高亮值',
 
 );
 

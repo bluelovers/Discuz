@@ -1,10 +1,10 @@
 <?php
 
 /*
-[Discuz!] (C)2001-2009 Comsenz Inc.
+[Discuz!] (C)2001-2099 Comsenz Inc.
 This is NOT a freeware, use is subject to license terms
 
-$Id: index.php 957 2009-08-24 02:16:16Z zhaoxiongfei $
+$Id: index.php 1059 2011-03-01 07:25:09Z monkey $
 */
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -14,6 +14,7 @@ set_magic_quotes_runtime(0);
 define('IN_COMSENZ', TRUE);
 define('ROOT_PATH', dirname(__FILE__).'/../');
 
+require ROOT_PATH.'./release/release.php';
 require ROOT_PATH.'./install/var.inc.php';
 require ROOT_PATH.'./install/lang.inc.php';
 require ROOT_PATH.'./install/db.class.php';

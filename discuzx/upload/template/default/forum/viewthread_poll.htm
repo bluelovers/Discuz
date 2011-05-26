@@ -11,10 +11,12 @@
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<div class="pinf">
 		<!--{if $multiple}--><strong>{lang poll_multiple}{lang thread_poll}</strong><!--{if $maxchoices}-->: ( {lang poll_more_than} )<!--{/if}--><!--{else}--><strong>{lang poll_single}{lang thread_poll}</strong><!--{/if}--><!--{if $visiblepoll && $_G['group']['allowvote']}--> , {lang poll_after_result}<!--{/if}-->, {lang poll_voterscount}
-		<!--{if !$visiblepoll && ($overt || $_G['adminid'] == 1) && $post['invisible'] == 0}-->
+		<!--{if !$visiblepoll && ($overt || $_G['adminid'] == 1 || $thread['authorid'] == $_G['uid']) && $post['invisible'] == 0}-->
 			<a href="forum.php?mod=misc&action=viewvote&tid=$_G[tid]" onclick="showWindow('viewvote', this.href)">{lang poll_view_voters}</a>
 		<!--{/if}-->
 	</div>
+
+	<!--{hook/viewthread_poll_top}-->
 
 	<!--{if $_G[forum_thread][remaintime]}-->
 	<p class="ptmr">
@@ -55,11 +57,11 @@
 						<td>$option[percent]% <em style="color:#$option[color]">($option[votes])</em></td>
 					</tr>
 				<!--{/if}-->
-
 			<!--{/loop}-->
 			<tr>
 				<!--{if $_G['group']['allowvote']}--><td class="selector">&nbsp;</td><!--{/if}-->
 				<td colspan="2">
+					<!--{hook/viewthread_poll_bottom}-->
 					<!--{if $_G['group']['allowvote'] && !$_G['forum_thread']['is_archived']}-->
 						<button class="pn" type="submit" disabled="disabled" name="pollsubmit" id="pollsubmit" value="true"{if $post['invisible'] < 0} disabled="disabled"{/if}><span>{lang submit}</span></button>
 						<!--{if $overt}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_footerbanner.php 12322 2010-07-05 06:18:27Z monkey $
+ *      $Id: adv_footerbanner.php 22514 2011-05-10 11:11:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,6 +33,11 @@ class adv_footerbanner {
 				'type' => 'mselect',
 				'value' => array(),
 			),
+			'category' => array(
+				'title' => 'footerbanner_category',
+				'type' => 'mselect',
+				'value' => array(),
+			),
 			'position' => array(
 				'title' => 'footerbanner_position',
 				'type' => 'mradio',
@@ -47,6 +52,7 @@ class adv_footerbanner {
 		loadcache(array('forums', 'grouptype'));
 		$settings['fids']['value'][] = $settings['groups']['value'][] = array(0, '&nbsp;');
 		$settings['fids']['value'][] = $settings['groups']['value'][] = array(-1, 'footerbanner_index');
+		$settings['fids']['value'][] = array(-2, 'Archiver');
 		if(empty($_G['cache']['forums'])) $_G['cache']['forums'] = array();
 		foreach($_G['cache']['forums'] as $fid => $forum) {
 			$settings['fids']['value'][] = array($fid, ($forum['type'] == 'forum' ? str_repeat('&nbsp;', 4) : ($forum['type'] == 'sub' ? str_repeat('&nbsp;', 8) : '')).$forum['name']);
@@ -59,8 +65,21 @@ class adv_footerbanner {
 				}
 			}
 		}
-
+		loadcache('portalcategory');
+		$this->categoryvalue[] = array(-1, 'footerbanner_index');
+		$this->getcategory(0);
+		$settings['category']['value'] = $this->categoryvalue;
 		return $settings;
+	}
+
+	function getcategory($upid) {
+		global $_G;
+		foreach($_G['cache']['portalcategory'] as $category) {
+			if($category['upid'] == $upid) {
+				$this->categoryvalue[] = array($category['catid'], str_repeat('&nbsp;', $category['level'] * 4).$category['catname']);
+				$this->getcategory($category['catid']);
+			}
+		}
 	}
 
 	function setsetting(&$advnew, &$parameters) {
@@ -74,14 +93,18 @@ class adv_footerbanner {
 		if(is_array($parameters['extra']['groups']) && in_array(0, $parameters['extra']['groups'])) {
 			$parameters['extra']['groups'] = array();
 		}
+		if(is_array($parameters['extra']['category']) && in_array(0, $parameters['extra']['category'])) {
+			$parameters['extra']['category'] = array();
+		}
 	}
 
 	function evalcode() {
 		return array(
 			'check' => '
 			if($params[2] != $parameter[\'position\']
-			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !(in_array($_G[\'fid\'], $parameter[\'fids\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'fids\']))
+			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !(!defined(\'IN_ARCHIVER\') && (in_array($_G[\'fid\'], $parameter[\'fids\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'fids\'])) || defined(\'IN_ARCHIVER\') && in_array(-2, $parameter[\'fids\']))
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !(in_array($_G[\'grouptypeid\'], $parameter[\'groups\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'groups\']))
+			|| $_G[\'basescript\'] == \'portal\' && $parameter[\'category\'] && !(!empty($_G[\'catid\']) && in_array($_G[\'catid\'], $parameter[\'category\']) || empty($_G[\'catid\']) && in_array(-1, $parameter[\'category\']))
 			) {
 				$checked = false;
 			}',

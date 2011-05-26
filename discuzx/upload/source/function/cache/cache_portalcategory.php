@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_portalcategory.php 17246 2010-09-27 09:25:31Z zhangguosheng $
+ *      $Id: cache_portalcategory.php 17789 2010-11-02 05:20:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,7 +79,7 @@ function build_cache_portalcategory() {
 		$data[$key]['caturl'] = $url;
 
 		if($data[$key]['shownav']) {
-			$rs = DB::update('common_nav', array('url' => $url, 'name' =>$value['catname']), array('type' => '4','identifier' => $key));
+			$rs = DB::update('common_nav', array('url' => addslashes($url), 'name' =>addslashes($value['catname'])), array('type' => '4','identifier' => $key));
 		}
 	}
 

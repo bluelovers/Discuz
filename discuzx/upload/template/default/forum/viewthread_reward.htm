@@ -2,7 +2,7 @@
 	<div class="{if $_G['forum_thread']['price'] > 0}rusld{elseif $_G['forum_thread']['price'] < 0}rsld{/if} z">
 		<cite>$rewardprice</cite>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}
 	</div>
-	<div class="rwdn" style="width:{echo IMAGEMAXWIDTH-100}px; *width:{echo IMAGEMAXWIDTH-140}px">
+	<div class="rwdn">
 		<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">$post[message]</td></tr></table>
 		<!--{if $_G['forum_thread']['price'] > 0 && !$_G['forum_thread']['is_archived']}-->
 			<p class="pns mtw"><button name="answer" value="ture" class="pn" onclick="showWindow('reply', 'forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}')"><span>{lang reward_answer}</span></button></p>
@@ -15,10 +15,10 @@
 <!--{elseif $post['imagelist'] || $post['attachlist']}-->
 	<div class="pattl">
 		<!--{if $post['imagelist']}-->
-			$post['imagelist']
+			 <!--{echo showattach($post, 1)}-->
 		<!--{/if}-->
 		<!--{if $post['attachlist']}-->
-			$post[attachlist]
+			 <!--{echo showattach($post)}-->
 		<!--{/if}-->
 	</div>
 <!--{/if}-->

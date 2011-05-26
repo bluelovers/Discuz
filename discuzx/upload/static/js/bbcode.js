@@ -2,10 +2,14 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 17237 2010-09-27 06:16:37Z monkey $
+	$Id: bbcode.js 22651 2011-05-16 10:08:23Z monkey $
 */
 
-var re;
+var re, DISCUZCODE = [];
+DISCUZCODE['num'] = '-1';
+DISCUZCODE['html'] = [];
+EXTRAFUNC['bbcode2html'] = [];
+EXTRAFUNC['html2bbcode'] = [];
 
 function addslashes(str) {
 	return preg_replace(['\\\\', '\\\'', '\\\/', '\\\(', '\\\)', '\\\[', '\\\]', '\\\{', '\\\}', '\\\^', '\\\$', '\\\?', '\\\.', '\\\*', '\\\+', '\\\|'], ['\\\\', '\\\'', '\\/', '\\(', '\\)', '\\[', '\\]', '\\{', '\\}', '\\^', '\\$', '\\?', '\\.', '\\*', '\\+', '\\|'], str);
@@ -34,6 +38,10 @@ function bbcode2html(str) {
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
 	}
 
+	if(fetchCheckbox('allowimgurl')) {
+		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
+	}
+
 	if(!allowhtml || !fetchCheckbox('htmlon')) {
 		str = str.replace(/</g, '&lt;');
 		str = str.replace(/>/g, '&gt;');
@@ -42,13 +50,20 @@ function bbcode2html(str) {
 		}
 	}
 
+	for(i in EXTRAFUNC['bbcode2html']) {
+		EXTRASTR = str;
+		try {
+			eval('str = ' + EXTRAFUNC['bbcode2html'][i] + '()');
+		} catch(e) {}
+	}
+
 	if(!fetchCheckbox('smileyoff') && allowsmilies) {
 		if(typeof smilies_type == 'object') {
 			for(var typeid in smilies_array) {
 				for(var page in smilies_array[typeid]) {
 					for(var i in smilies_array[typeid][page]) {
 						re = new RegExp(preg_quote(smilies_array[typeid][page][i][1]), "g");
-						str = str.replace(re, '<img src="' + STATICURL + 'image/smiley/' + smilies_type[typeid][1] + '/' + smilies_array[typeid][page][i][2] + '" border="0" smilieid="' + smilies_array[typeid][page][i][0] + '" alt="' + smilies_array[typeid][page][i][1] + '" />');
+						str = str.replace(re, '<img src="' + STATICURL + 'image/smiley/' + smilies_type['_' + typeid][1] + '/' + smilies_array[typeid][page][i][2] + '" border="0" smilieid="' + smilies_array[typeid][page][i][0] + '" alt="' + smilies_array[typeid][page][i][1] + '" />');
 					}
 				}
 			}
@@ -57,17 +72,19 @@ function bbcode2html(str) {
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
 		str = clearcode(str);
-		str = str.replace(/\[url\]\s*((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|synacast){1}:\/\/|www\.)([^\[\"']+?)\s*\[\/url\]/ig, function($1, $2, $3, $4) {return cuturl($2 + $4);});
-		str = str.replace(/\[url=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|synacast){1}:\/\/|www\.|mailto:)?([^\s\[\"']+?)\]([\s\S]+?)\[\/url\]/ig, '<a href="$1$3" target="_blank">$4</a>');
+		str = str.replace(/\[url\]\s*((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)([^\[\"']+?)\s*\[\/url\]/ig, function($1, $2, $3, $4) {return cuturl($2 + $4);});
+		str = str.replace(/\[url=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.|mailto:)?([^\r\n\[\"']+?)\]([\s\S]+?)\[\/url\]/ig, '<a href="$1$3" target="_blank">$4</a>');
 		str = str.replace(/\[email\](.*?)\[\/email\]/ig, '<a href="mailto:$1">$1</a>');
 		str = str.replace(/\[email=(.[^\[]*)\](.*?)\[\/email\]/ig, '<a href="mailto:$1" target="_blank">$2</a>');
 		str = str.replace(/\[color=([^\[\<]+?)\]/ig, '<font color="$1">');
+		str = str.replace(/\[backcolor=([^\[\<]+?)\]/ig, '<font style="background-color:$1">');
 		str = str.replace(/\[size=(\d+?)\]/ig, '<font size="$1">');
 		str = str.replace(/\[size=(\d+(\.\d+)?(px|pt)+?)\]/ig, '<font style="font-size: $1">');
 		str = str.replace(/\[font=([^\[\<]+?)\]/ig, '<font face="$1">');
 		str = str.replace(/\[align=([^\[\<]+?)\]/ig, '<p align="$1">');
-		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
-		str = str.replace(/\[float=([^\[\<]+?)\]/ig, '<br style="clear: both"><span style="float: $1;">');
+		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
+		str = str.replace(/\[float=left\]/ig, '<br style="clear: both"><span style="float: left; margin-right: 5px;">');
+		str = str.replace(/\[float=right\]/ig, '<br style="clear: both"><span style="float: right; margin-left: 5px;">');
 		str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
 
 		re = /\[table(?:=(\d{1,4}%?)(?:,([\(\)%,#\w ]+))?)?\]\s*([\s\S]+?)\s*\[\/table\]/ig;
@@ -76,11 +93,11 @@ function bbcode2html(str) {
 		}
 
 		str = preg_replace([
-			'\\\[\\\/color\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\\[\\\/align\\\]', '\\\[\\\/p\\\]', '\\\[b\\\]', '\\\[\\\/b\\\]',
+			'\\\[\\\/color\\\]', '\\\[\\\/backcolor\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\\[\\\/align\\\]', '\\\[\\\/p\\\]', '\\\[b\\\]', '\\\[\\\/b\\\]',
 			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\\[hr\\\]', '\\\[list\\\]', '\\\[list=1\\\]', '\\\[list=a\\\]',
 			'\\\[list=A\\\]', '\\s?\\\[\\\*\\\]', '\\\[\\\/list\\\]', '\\\[indent\\\]', '\\\[\\\/indent\\\]', '\\\[\\\/float\\\]'
 			], [
-			'</font>', '</font>', '</font>', '</p>', '</p>', '<b>', '</b>', '<i>',
+			'</font>', '</font>', '</font>', '</font>', '</p>', '</p>', '<b>', '</b>', '<i>',
 			'</i>', '<u>', '</u>', '<strike>', '</strike>', '<hr class="l" />', '<ul>', '<ul type=1 class="litype_1">', '<ul type=a class="litype_2">',
 			'<ul type=A class="litype_3">', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 			], str, 'g');
@@ -115,7 +132,9 @@ function bbcode2html(str) {
 	}
 
 	if(!allowhtml || !fetchCheckbox('htmlon')) {
-		str = preg_replace(['\t', '   ', '  ', '(\r\n|\n|\r)'], ['&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;', '<br />'], str);
+		str = str.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
+			return $2 + preg_replace(['\t', '   ', '  ', '(\r\n|\n|\r)'], ['&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;', '<br />'], $3);
+		});
 	}
 
 	return str;
@@ -123,7 +142,7 @@ function bbcode2html(str) {
 
 function clearcode(str) {
 	str= str.replace(/\[url\]\[\/url\]/ig, '', str);
-	str= str.replace(/\[url=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|synacast){1}:\/\/|www\.|mailto:)?([^\s\[\"']+?)\]\[\/url\]/ig, '', str);
+	str= str.replace(/\[url=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.|mailto:)?([^\s\[\"']+?)\]\[\/url\]/ig, '', str);
 	str= str.replace(/\[email\]\[\/email\]/ig, '', str);
 	str= str.replace(/\[email=(.[^\[]*)\]\[\/email\]/ig, '', str);
 	str= str.replace(/\[color=([^\[\<]+?)\]\[\/color\]/ig, '', str);
@@ -205,11 +224,12 @@ function ptag(options, text, tagname) {
 		align = getoptionvalue('align', options);
 	}
 	align = in_array(align, ['left', 'center', 'right']) ? align : 'left';
+	style = getoptionvalue('style', options);
 
 	if(lineHeight === null && textIndent === null) {
-		return '[align=' + align + ']' + text + '[/align]';
+		return '[align=' + align + ']' + (style ? '<span style="' + style + '">' : '') + text + (style ? '</span>' : '') + '[/align]';
 	} else {
-		return '[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + text + '[/p]';
+		return '[p=' + lineHeight + ', ' + textIndent + ', ' + align + ']' + (style ? '<span style="' + style + '">' : '') + text + (style ? '</span>' : '') + '[/p]';
 	}
 }
 
@@ -268,6 +288,12 @@ function getoptionvalue(option, text) {
 function html2bbcode(str) {
 
 	if((allowhtml && fetchCheckbox('htmlon')) || trim(str) == '') {
+		for(i in EXTRAFUNC['html2bbcode']) {
+			EXTRASTR = str;
+			try {
+				eval('str = ' + EXTRAFUNC['html2bbcode'][i] + '()');
+			} catch(e) {}
+		}
 		str = str.replace(/<img[^>]+smilieid=(["']?)(\d+)(\1)[^>]*>/ig, function($1, $2, $3) {return smileycode($3);});
 		str = str.replace(/<img([^>]*aid=[^>]*)>/ig, function($1, $2) {return imgtag($2);});
 		return str;
@@ -281,8 +307,19 @@ function html2bbcode(str) {
 
 	str= str.replace(/&((#(32|127|160|173))|shy|nbsp);/ig, ' ');
 
+	if(fetchCheckbox('allowimgurl')) {
+		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
+	}
+
 	if(!fetchCheckbox('parseurloff')) {
 		str = parseurl(str, 'bbcode', false);
+	}
+
+	for(i in EXTRAFUNC['html2bbcode']) {
+		EXTRASTR = str;
+		try {
+			eval('str = ' + EXTRAFUNC['html2bbcode'][i] + '()');
+		} catch(e) {}
 	}
 
 	str = str.replace(/<br\s+?style=(["']?)clear: both;?(\1)[^\>]*>/ig, '');
@@ -290,17 +327,21 @@ function html2bbcode(str) {
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
 		str = preg_replace([
-			'<table([^>]*(width|background|background-color|bgcolor)[^>]*)>',
+			'<table[^>]*float:\\\s*(left|right)[^>]*><tbody><tr><td>\\\s*([\\\s\\\S]+?)\\\s*<\/td><\/tr></tbody><\/table>',
+			'<table([^>]*(width|background|background-color|backcolor)[^>]*)>',
 			'<table[^>]*>',
-			'<tr[^>]*(?:background|background-color|bgcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
+			'<tr[^>]*(?:background|background-color|backcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
 			'<tr[^>]*>',
 			'(<t[dh]([^>]*(left|center|right)[^>]*)>)\\\s*([\\\s\\\S]+?)\\\s*(<\/t[dh]>)',
 			'<t[dh]([^>]*(width|colspan|rowspan)[^>]*)>',
 			'<t[dh][^>]*>',
 			'<\/t[dh]>',
 			'<\/tr>',
-			'<\/table>'
+			'<\/table>',
+			'<h\\\d[^>]*>',
+			'<\/h\\\d>'
 		], [
+			function($1, $2, $3) {return '[float=' + $2 + ']' + $3 + '[/float]';},
 			function($1, $2) {return tabletag($2);},
 			'[table]\n',
 			function($1, $2, $3) {return '[tr=' + $3 + ']';},
@@ -310,7 +351,9 @@ function html2bbcode(str) {
 			'[td]',
 			'[/td]',
 			'[/tr]\n',
-			'[/table]'
+			'[/table]',
+			'[b]',
+			'[/b]'
 		], str);
 
 		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\\1>/ig, "[size=$1]$2[/size]\n\n");
@@ -334,7 +377,7 @@ function html2bbcode(str) {
 		str = recursion('ul', str, 'listtag');
 		str = recursion('div', str, 'dstag');
 		str = recursion('p', str, 'ptag');
-		str = recursion('span', str, 'dstag');
+		str = recursion('span', str, 'fonttag');
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');
@@ -435,6 +478,7 @@ function parsestyle(tagoptions, prepend, append) {
 		['align', true, 'text-align:\\s*(left|center|right);?', 1],
 		['float', true, 'float:\\s*(left|right);?', 1],
 		['color', true, '(^|[;\\s])color:\\s*([^;]+);?', 2],
+		['backcolor', true, '(^|[;\\s])background-color:\\s*([^;]+);?', 2],
 		['font', true, 'font-family:\\s*([^;]+);?', 1],
 		['size', true, 'font-size:\\s*(\\d+(\\.\\d+)?(px|pt|in|cm|mm|pc|em|ex|%|));?', 1],
 		['size', true, 'font-size:\\s*(x\\-small|small|medium|large|x\\-large|xx\\-large|\\-webkit\\-xxx\\-large);?', 1, 'size'],
@@ -684,4 +728,8 @@ function tdtag(attributes) {
 	return in_array(width, ['', '0', '100%']) ?
 		(colspan == 1 && rowspan == 1 ? '[td]' : '[td=' + colspan + ',' + rowspan + ']') :
 		(colspan == 1 && rowspan == 1 ? '[td=' + width + ']' : '[td=' + colspan + ',' + rowspan + ',' + width + ']');
+}
+
+if(typeof jsloaded == 'function') {
+	jsloaded('bbcode');
 }

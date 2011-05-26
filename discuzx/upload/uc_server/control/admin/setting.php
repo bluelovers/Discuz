@@ -1,17 +1,17 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: setting.php 775 2008-11-26 09:30:04Z zhaoxiongfei $
+	$Id: setting.php 1094 2011-05-05 02:29:01Z svn_project_zhangjie $
 */
 
 !defined('IN_UC') && exit('Access Denied');
 
 class control extends adminbase {
 
-	var $_setting_items = array('doublee', 'accessemail', 'censoremail', 'censorusername', 'dateformat', 'timeoffset', 'timeformat', 'extra', 'maildefault', 'mailsend', 'mailserver', 'mailport', 'mailauth', 'mailfrom', 'mailauth_username', 'mailauth_password', 'maildelimiter', 'mailusername', 'mailsilent', 'pmcenter', 'pmlimit1day', 'pmfloodctrl', 'sendpmseccode', 'pmsendregdays');
+	var $_setting_items = array('doublee', 'accessemail', 'censoremail', 'censorusername', 'dateformat', 'timeoffset', 'timeformat', 'extra', 'maildefault', 'mailsend', 'mailserver', 'mailport', 'mailauth', 'mailfrom', 'mailauth_username', 'mailauth_password', 'maildelimiter', 'mailusername', 'mailsilent', 'pmcenter', 'privatepmthreadlimit', 'chatpmthreadlimit', 'chatpmmemberlimit', 'pmfloodctrl', 'sendpmseccode', 'pmsendregdays');
 
 	function __construct() {
 		$this->control();
@@ -33,7 +33,9 @@ class control extends adminbase {
 			$timeformat = getgpc('timeformat', 'P');
 			$dateformat = getgpc('dateformat', 'P');
 			$timeoffset = getgpc('timeoffset', 'P');
-			$pmlimit1day = getgpc('pmlimit1day', 'P');
+			$privatepmthreadlimit = getgpc('privatepmthreadlimit', 'P');
+			$chatpmthreadlimit = getgpc('chatpmthreadlimit', 'P');
+			$chatpmmemberlimit = getgpc('chatpmmemberlimit', 'P');
 			$pmfloodctrl = getgpc('pmfloodctrl', 'P');
 			$pmsendregdays = getgpc('pmsendregdays', 'P');
 			$pmcenter = getgpc('pmcenter', 'P');
@@ -46,7 +48,9 @@ class control extends adminbase {
 			$this->set_setting('timeformat', $timeformat);
 			$timeoffset = $timeoffset * 3600;
 			$this->set_setting('timeoffset', $timeoffset);
-			$this->set_setting('pmlimit1day', intval($pmlimit1day));
+			$this->set_setting('privatepmthreadlimit', intval($privatepmthreadlimit));
+			$this->set_setting('chatpmthreadlimit', intval($chatpmthreadlimit));
+			$this->set_setting('chatpmmemberlimit', intval($chatpmmemberlimit));
 			$this->set_setting('pmfloodctrl', intval($pmfloodctrl));
 			$this->set_setting('pmsendregdays', intval($pmsendregdays));
 			$this->set_setting('pmcenter', $pmcenter);
@@ -69,7 +73,9 @@ class control extends adminbase {
 		$this->view->assign('dateformat', $settings['dateformat']);
 		$timeformatchecked = array($settings['timeformat'] => 'checked="checked"');
 		$this->view->assign('timeformat', $timeformatchecked);
-		$this->view->assign('pmlimit1day', $settings['pmlimit1day']);
+		$this->view->assign('privatepmthreadlimit', $settings['privatepmthreadlimit']);
+		$this->view->assign('chatpmthreadlimit', $settings['chatpmthreadlimit']);
+		$this->view->assign('chatpmmemberlimit', $settings['chatpmmemberlimit']);
 		$this->view->assign('pmsendregdays', $settings['pmsendregdays']);
 		$this->view->assign('pmfloodctrl', $settings['pmfloodctrl']);
 		$pmcenterchecked = array($settings['pmcenter'] => 'checked="checked"');
@@ -78,7 +84,7 @@ class control extends adminbase {
 		$sendpmseccodechecked = array($settings['sendpmseccode'] => 'checked="checked"');
 		$this->view->assign('sendpmseccode', $sendpmseccodechecked);
 		$timeoffset = intval($settings['timeoffset'] / 3600);
-		$checkarray = array($timeoffset => 'selected="selected"');
+		$checkarray = array($timeoffset < 0 ? '0'.substr($timeoffset, 1) : $timeoffset => 'selected="selected"');
 		$this->view->assign('checkarray', $checkarray);
 		$this->view->assign('updated', $updated);
 		$this->view->display('admin_setting');

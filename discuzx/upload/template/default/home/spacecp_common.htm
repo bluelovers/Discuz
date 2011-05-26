@@ -19,11 +19,11 @@
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<input type="hidden" name="ignoresubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<input type="hidden" name="referer" value="$_G[referer]">
+		<input type="hidden" name="referer" value="{echo dreferer()}">
 		<div class="c altw">
 			<p>{lang no_view_notice_next}</p>
-			<p class="ptn"><label><input type="radio" name="authorid" id="authorid1" value="$_GET[authorid]" checked> {lang shield_this_friend}</label></p>
-			<p class="ptn"><label><input type="radio" name="authorid" id="authorid0" value="0"> {lang shield_all_friend}</label></p>
+			<p class="ptn"><label><input type="radio" name="authorid" id="authorid1" value="$_GET[authorid]" checked="checked" />{lang shield_this_friend}</label></p>
+			<p class="ptn"><label><input type="radio" name="authorid" id="authorid0" value="0" />{lang shield_all_friend}</label></p>
 		</div>
 		<p class="o pns">
 			<button type="submit" name="feedignoresubmit" value="true" class="pn pnc"><strong>{lang determine}</strong></button>
@@ -34,7 +34,7 @@
 
 	<!--{loop $my_userapp $value}-->
 	<!--{if $value['allowsidenav']}-->
-	<li><img {if $value[icon]}src="$value[icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[appid]'"{else} src="http://appicon.manyou.com/icons/$value[appid]"{/if}><a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
+	<li><!--{if $value[appstatus]}--><span class="{if $value[appstatus]==1}appnew{else}apphot{/if}"></span><!--{/if}--><a href="userapp.php?mod=app&id=$value[appid]"><img {if $value[icon]}src="$value[icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[appid]'"{else} src="http://appicon.manyou.com/icons/$value[appid]"{/if}>$value[appname]</a></li>
 	<!--{/if}-->
 	<!--{/loop}-->
 <!--{elseif $_GET['op']=='modifyunitprice'}-->
@@ -47,10 +47,10 @@
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<input type="hidden" name="modifysubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<input type="hidden" name="referer" value="$_G[referer]">
+		<input type="hidden" name="referer" value="{echo dreferer()}">
 		<div class="c altw">
 			<p>{lang modify_unitprice_note}</p>
-			<p class="ptn"><label>{lang bid_single_price}:<input type="text" name="unitprice" class="px" value="$showinfo[unitprice]"></label></p>
+			<p class="ptn"><label>{lang bid_single_price}: <input type="text" name="unitprice" class="px" value="$showinfo[unitprice]" /></label></p>
 		</div>
 		<p class="o pns">
 			<button type="submit" name="unitpriceysubmit" value="true" class="pn pnc"><strong>{lang determine}</strong></button>

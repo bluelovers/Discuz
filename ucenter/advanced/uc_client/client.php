@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: client.php 1015 2010-09-18 05:26:20Z cnteacher $
+	$Id: client.php 1079 2011-04-02 07:29:36Z zhengqingpeng $
 */
 
 if(!defined('UC_API')) {
@@ -14,8 +14,8 @@ if(!defined('UC_API')) {
 error_reporting(0);
 
 define('IN_UC', TRUE);
-define('UC_CLIENT_VERSION', '1.5.2');
-define('UC_CLIENT_RELEASE', '20101001');
+define('UC_CLIENT_VERSION', '1.6.0');
+define('UC_CLIENT_RELEASE', '20110501');
 define('UC_ROOT', substr(__FILE__, 0, -10));
 define('UC_DATADIR', UC_ROOT.'./data/');
 define('UC_DATAURL', UC_API.'/data');
@@ -208,7 +208,15 @@ function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE,
 		$out .= "Connection: Close\r\n";
 		$out .= "Cookie: $cookie\r\n\r\n";
 	}
-	$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} elseif (function_exists('pfsockopen')) {
+		$fp = @pfsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+	} else {
+		$fp = false;
+	}
+
 	if(!$fp) {
 		return '';
 	} else {
@@ -385,10 +393,10 @@ function uc_pm_checknew($uid, $more = 0) {
 	return (!$more || UC_CONNECT == 'mysql') ? $return : uc_unserialize($return);
 }
 
-function uc_pm_send($fromuid, $msgto, $subject, $message, $instantly = 1, $replypmid = 0, $isusername = 0) {
+function uc_pm_send($fromuid, $msgto, $subject, $message, $instantly = 1, $replypmid = 0, $isusername = 0, $type = 0) {
 	if($instantly) {
 		$replypmid = @is_numeric($replypmid) ? $replypmid : 0;
-		return call_user_func(UC_API_FUNC, 'pm', 'sendpm', array('fromuid'=>$fromuid, 'msgto'=>$msgto, 'subject'=>$subject, 'message'=>$message, 'replypmid'=>$replypmid, 'isusername'=>$isusername));
+		return call_user_func(UC_API_FUNC, 'pm', 'sendpm', array('fromuid'=>$fromuid, 'msgto'=>$msgto, 'subject'=>$subject, 'message'=>$message, 'replypmid'=>$replypmid, 'isusername'=>$isusername, 'type' => $type));
 	} else {
 		$fromuid = intval($fromuid);
 		$subject = rawurlencode($subject);
@@ -405,22 +413,26 @@ function uc_pm_send($fromuid, $msgto, $subject, $message, $instantly = 1, $reply
 }
 
 function uc_pm_delete($uid, $folder, $pmids) {
-	return call_user_func(UC_API_FUNC, 'pm', 'delete', array('uid'=>$uid, 'folder'=>$folder, 'pmids'=>$pmids));
+	return call_user_func(UC_API_FUNC, 'pm', 'delete', array('uid'=>$uid, 'pmids'=>$pmids));
 }
 
 function uc_pm_deleteuser($uid, $touids) {
 	return call_user_func(UC_API_FUNC, 'pm', 'deleteuser', array('uid'=>$uid, 'touids'=>$touids));
 }
 
-function uc_pm_readstatus($uid, $uids, $pmids = array(), $status = 0) {
-	return call_user_func(UC_API_FUNC, 'pm', 'readstatus', array('uid'=>$uid, 'uids'=>$uids, 'pmids'=>$pmids, 'status'=>$status));
+function uc_pm_deletechat($uid, $plids, $type = 0) {
+	return call_user_func(UC_API_FUNC, 'pm', 'deletechat', array('uid'=>$uid, 'plids'=>$plids, 'type'=>$type));
+}
+
+function uc_pm_readstatus($uid, $uids, $plids = array(), $status = 0) {
+	return call_user_func(UC_API_FUNC, 'pm', 'readstatus', array('uid'=>$uid, 'uids'=>$uids, 'plids'=>$plids, 'status'=>$status));
 }
 
 function uc_pm_list($uid, $page = 1, $pagesize = 10, $folder = 'inbox', $filter = 'newpm', $msglen = 0) {
 	$uid = intval($uid);
 	$page = intval($page);
 	$pagesize = intval($pagesize);
-	$return = call_user_func(UC_API_FUNC, 'pm', 'ls', array('uid'=>$uid, 'page'=>$page, 'pagesize'=>$pagesize, 'folder'=>$folder, 'filter'=>$filter, 'msglen'=>$msglen));
+	$return = call_user_func(UC_API_FUNC, 'pm', 'ls', array('uid'=>$uid, 'page'=>$page, 'pagesize'=>$pagesize, 'filter'=>$filter, 'msglen'=>$msglen));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }
 
@@ -429,19 +441,50 @@ function uc_pm_ignore($uid) {
 	return call_user_func(UC_API_FUNC, 'pm', 'ignore', array('uid'=>$uid));
 }
 
-function uc_pm_view($uid, $pmid, $touid = 0, $daterange = 1) {
+function uc_pm_view($uid, $pmid = 0, $touid = 0, $daterange = 1, $page = 0, $pagesize = 10, $type = 0, $isplid = 0) {
 	$uid = intval($uid);
 	$touid = intval($touid);
+	$page = intval($page);
+	$pagesize = intval($pagesize);
 	$pmid = @is_numeric($pmid) ? $pmid : 0;
-	$return = call_user_func(UC_API_FUNC, 'pm', 'view', array('uid'=>$uid, 'pmid'=>$pmid, 'touid'=>$touid, 'daterange'=>$daterange));
+	$return = call_user_func(UC_API_FUNC, 'pm', 'view', array('uid'=>$uid, 'pmid'=>$pmid, 'touid'=>$touid, 'daterange'=>$daterange, 'page' => $page, 'pagesize' => $pagesize, 'type'=>$type, 'isplid'=>$isplid));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }
 
-function uc_pm_viewnode($uid, $type = 0, $pmid = 0) {
+function uc_pm_view_num($uid, $touid, $isplid) {
 	$uid = intval($uid);
+	$touid = intval($touid);
+	$isplid = intval($isplid);
+	return call_user_func(UC_API_FUNC, 'pm', 'viewnum', array('uid' => $uid, 'touid' => $touid, 'isplid' => $isplid));
+}
+
+function uc_pm_viewnode($uid, $type, $pmid) {
+	$uid = intval($uid);
+	$type = intval($type);
 	$pmid = @is_numeric($pmid) ? $pmid : 0;
-	$return = call_user_func(UC_API_FUNC, 'pm', 'viewnode', array('uid'=>$uid, 'pmid'=>$pmid, 'type'=>$type));
+	$return = call_user_func(UC_API_FUNC, 'pm', 'viewnode', array('uid'=>$uid, 'type'=>$type, 'pmid'=>$pmid));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
+}
+
+function uc_pm_chatpmmemberlist($uid, $plid = 0) {
+	$uid = intval($uid);
+	$plid = intval($plid);
+	$return = call_user_func(UC_API_FUNC, 'pm', 'chatpmmemberlist', array('uid'=>$uid, 'plid'=>$plid));
+	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
+}
+
+function uc_pm_kickchatpm($plid, $uid, $touid) {
+	$uid = intval($uid);
+	$plid = intval($plid);
+	$touid = intval($touid);
+	return call_user_func(UC_API_FUNC, 'pm', 'kickchatpm', array('uid'=>$uid, 'plid'=>$plid, 'touid'=>$touid));
+}
+
+function uc_pm_appendchatpm($plid, $uid, $touid) {
+	$uid = intval($uid);
+	$plid = intval($plid);
+	$touid = intval($touid);
+	return call_user_func(UC_API_FUNC, 'pm', 'appendchatpm', array('uid'=>$uid, 'plid'=>$plid, 'touid'=>$touid));
 }
 
 function uc_pm_blackls_get($uid) {
@@ -508,7 +551,6 @@ function uc_avatar($uid, $type = 'virtual', $returnhtml = 1) {
 			'name', 'mycamera',
 			'quality','high',
 			'bgcolor','#ffffff',
-			'wmode','transparent',
 			'menu', 'false',
 			'swLiveConnect', 'true',
 			'allowScriptAccess', 'always'

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_addons.php 17341 2010-10-09 12:15:34Z monkey $
+ *      $Id: admincp_addons.php 22609 2011-05-16 01:55:33Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -20,15 +20,52 @@ if(!$operation) {
 	shownav('addons');
 	showsubmenu('addons', array(
 		array('addons_list', 'addons', 1),
-		array('addons_add', 'addons&operation=add', 0),
+		array('addons_plugin', 'http://addons.discuz.com', 0, 1, 1),
 	));
 	showtips('addons_tips');
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_addon')." ORDER BY `system` DESC,`key` ASC");
+	$addons = array();
+	$query = DB::query("SELECT * FROM ".DB::table('common_addon')." ORDER BY `key` ASC");
 	while($addon = DB::fetch($query)) {
+		$addons[] = $addon['key'];
 		showproviderinfo($addon, 0);
 	}
-	echo '<input class="btn" type="button" onclick="location.href=\''.ADMINSCRIPT.'?action=addons&operation=add\'" value="'.cplang('addons_more').'" />';
+
+	$extra = !empty($_G['gp_category']) ? '&category='.rawurlencode($_G['gp_category']) : '';
+	$data = dfsockopen(ADDONS_SERVER.'/list.xml');
+	require_once libfile('class/xml');
+	if(strtoupper(CHARSET) != 'UTF-8') {
+		require_once libfile('class/chinese');
+		$c = new Chinese('utf8', CHARSET, TRUE);
+		$data = $c->Convert($data);
+	}
+	$data = xml2array($data);
+
+	showtableheader('addons_recommend');
+	if(is_array($data) && $data) {
+		$data = dstrip_tags($data);
+		echo '<tr><td>';
+		foreach($data as $row) {
+			if(in_array($row['key'], $addons)) {
+				continue;
+			}
+			echo '<div class="hover" style="float:left;width:20%;height:80px;padding:5px 0"><div style="text-align:center"><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.
+			($row['logo'] ? '<img width="100" height="50" src="'.$row['logo'].'" />' : '<img width="100" height="50" src="static/image/common/none.gif" />').
+			'</a><br /><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.$row['sitename'].'</a></div></div>';
+		}
+		echo '</td></tr>';
+
+	} else {
+		echo '<tr><td>'.$lang['addons_provider_listinvalid'].'</td></tr>';
+	}
+	showtablefooter();
+
+	showformheader('addons&operation=add');
+	showtableheader('addons_add_input');
+	showsetting('addons_provider_key', 'providerkey', '', 'text');
+	showsubmit('newsubmit');
+	showtablefooter();
+	showformfooter();
 
 } elseif($operation == 'list') {
 
@@ -112,9 +149,11 @@ if(!$operation) {
 				}
 			}
 		}
+
+		$data['ThumbWidth'] = !isset($data['ThumbWidth']) ? 100 : $data['ThumbWidth'];
 		echo '<tr><th colspan="3" class="partition">'.($row['Time'] != '' ? '<div class="right">'.$row['Time'].'</div>' : '').'<a href="'.$row['Url'].'" target="_blank">'.($row['Greenplugin'] ? '<img class="vmiddle" title="'.$lang['addons_greenplugin'].'" src="static/image/admincp/greenplugin.gif" /> ' : '').$row['Name'].($row['Version'] != '' ? ' '.$row['Version'] : '').'</a></th></tr>'.
-			'<tr><td width="110">'.($row['Thumb'] != '' ? '<a href="'.$row['Url'].'" target="_blank"><img onerror="this.src=\'static/image/common/none.gif\'" src="'.$row['Thumb'].'" width="100" /></a>' : '').'</td>'.
-			'<td width="90%" class="lineheight" valign="top">'.($row['Charset'] != '' ? $lang['addons_charset'].implode(', ', $Charset).'<br /><br />' : '').($row['Description'] != '' ? nl2br($row['Description']) : '').'</td></tr>';
+			'<tr><td valign="top" width="'.($data['ThumbWidth'] + 10).'">'.($row['Thumb'] != '' ? '<a href="'.$row['Url'].'" target="_blank"><img onerror="this.src=\'static/image/common/none.gif\'" src="'.$row['Thumb'].'" width="'.$data['ThumbWidth'].'" /></a>' : '').'</td>'.
+			'<td class="lineheight" valign="top">'.($row['Charset'] != '' ? $lang['addons_charset'].implode(', ', $Charset).'<br /><br />' : '').($row['Description'] != '' ? nl2br($row['Description']) : '').'</td></tr>';
 		if($count == 20) {
 			break;
 		}
@@ -139,67 +178,22 @@ if(!$operation) {
 
 } elseif($operation == 'add') {
 
-	if(empty($_G['gp_providerkey'])) {
-
-		$extra = !empty($_G['gp_category']) ? '&category='.rawurlencode($_G['gp_category']) : '';
-		$data = dfsockopen(ADDONS_SERVER.'/list.xml');
-		require_once libfile('class/xml');
-		if(strtoupper(CHARSET) != 'UTF-8') {
-			require_once libfile('class/chinese');
-			$c = new Chinese('utf8', CHARSET, TRUE);
-			$data = $c->Convert($data);
-		}
-		$data = xml2array($data);
-
-		shownav('addons');
-		showsubmenu('addons', array(
-			array('addons_list', 'addons', 0),
-			array('addons_add', 'addons&operation=add', 1),
-		));
-		showtips('addons_add_tips');
-
-		showtableheader();
-		if(is_array($data) && $data) {
-			$data = dstrip_tags($data);
-			showsubtitle(array('addons_recommend', ''));
-			echo '<tr><td>';
-			foreach($data as $row) {
-				echo '<div class="hover" style="float:left;width:20%;height:100px;padding:5px 0"><div style="text-align:center"><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.
-				($row['logo'] ? '<img width="100" height="50" src="'.$row['logo'].'" />' : '<img width="100" height="50" src="static/image/common/none.gif" />').
-				'</a><br /><a href="'.ADMINSCRIPT.'?action=addons&operation=add&providerkey='.$row['key'].'">'.$row['sitename'].'</a></div></div>';
-			}
-			echo '</td></tr>';
-
-		} else {
-			echo '<tr><td>'.$lang['addons_provider_listinvalid'].'</td></tr>';
-		}
-		showtablefooter();
-
-		showformheader('addons&operation=add');
-		showtableheader('addons_add_input');
-		showsetting('addons_provider_key', 'providerkey', '', 'text');
-		showsubmit('newsubmit');
-		showtablefooter();
-		showformfooter();
-
-	} else {
-		$_G['gp_providerkey'] = trim($_G['gp_providerkey']);
-		if(!$_G['gp_providerkey']) {
-			cpmsg('addons_provider_nonexistence', '', 'error');
-		}
-		$addon = DB::fetch_first("SELECT * FROM ".DB::table('common_addon')." WHERE `key`='{$_G['gp_providerkey']}'");
-		if($addon) {
-			dheader('location:'.$BASESCRIPT.'?action=addons&operation=list&provider='.rawurlencode($_G['gp_providerkey']));
-		}
-		require_once DISCUZ_ROOT.'./source/discuz_version.php';
-		$baseparm = 'version='.rawurlencode(DISCUZ_VERSION).'&release='.rawurlencode(DISCUZ_RELEASE).'&charset='.rawurlencode(CHARSET);
-		$providerapi = trim(dfsockopen(ADDONS_SERVER, 0, $baseparm.'&key='.rawurlencode($_G['gp_providerkey'])));
-		if(!$providerapi) {
-			cpmsg('addons_provider_disabled', '', 'error');
-		}
-		DB::insert('common_addon', array('key' => $_G['gp_providerkey']));
+	$_G['gp_providerkey'] = trim($_G['gp_providerkey']);
+	if(!$_G['gp_providerkey']) {
+		cpmsg('addons_provider_nonexistence', '', 'error');
+	}
+	$addon = DB::fetch_first("SELECT * FROM ".DB::table('common_addon')." WHERE `key`='{$_G['gp_providerkey']}'");
+	if($addon) {
 		dheader('location:'.$BASESCRIPT.'?action=addons&operation=list&provider='.rawurlencode($_G['gp_providerkey']));
 	}
+	require_once DISCUZ_ROOT.'./source/discuz_version.php';
+	$baseparm = 'version='.rawurlencode(DISCUZ_VERSION).'&release='.rawurlencode(DISCUZ_RELEASE).'&charset='.rawurlencode(CHARSET);
+	$providerapi = trim(dfsockopen(ADDONS_SERVER, 0, $baseparm.'&key='.rawurlencode($_G['gp_providerkey'])));
+	if(!$providerapi) {
+		cpmsg('addons_provider_disabled', '', 'error');
+	}
+	DB::insert('common_addon', array('key' => $_G['gp_providerkey']));
+	dheader('location:'.$BASESCRIPT.'?action=addons&operation=list&provider='.rawurlencode($_G['gp_providerkey']));
 
 }
 
@@ -212,7 +206,7 @@ function showproviderinfo($addon, $simple) {
 	}
 	showtableheader('', $simple ? 'noborder' : '');
 	echo (!$simple ? '<tr><th colspan="3" class="partition"><a href="'.ADMINSCRIPT.'?action=addons&operation=list&provider='.$addon['key'].'">'.$addon['title'].'</a></th></tr>' : '').
-		'<tr><td width="110" valign="top"><a href="'.ADMINSCRIPT.'?action=addons&operation=list&provider='.$addon['key'].'"><img onerror="this.src=\'static/image/common/none.gif\'" src="'.$addon['logo'].'" width="100" height="50" /></a></td>'.
+		'<tr><td width="110" valign="top"><a href="'.ADMINSCRIPT.'?action=addons&operation=list&provider='.$addon['key'].'"><img onerror="this.src=\'static/image/common/none.gif\'" src="'.$addon['logo'].'" /></a></td>'.
 		'<td valign="top">'.nl2br($addon['description']).'<br /><br />'.
 		cplang('addons_provider').'<a href="'.$addon['siteurl'].'" target="_blank">'.$addon['sitename'].'</a>&nbsp;&nbsp;'.
 		cplang('addons_contact').$contact.'</td>'.

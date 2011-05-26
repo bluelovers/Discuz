@@ -3,14 +3,14 @@
 		<script type="text/javascript">
 		var slideSpeed = 5000;
 		var slideImgsize = [{$_G[forum][modrecommend][imagewidth]},{$_G['forum'][modrecommend][imageheight]}];
-		var slideBorderColor = '{SPECIALBORDER}';
-		var slideBgColor = '{COMMONBG}';
+		var slideBorderColor = '{$_G['style']['specialborder']}';
+		var slideBgColor = '{$_G['style']['commonbg']}';
 		var slideImgs = new Array();
 		var slideImgLinks = new Array();
 		var slideImgTexts = new Array();
-		var slideSwitchColor = '{TABLETEXT}';
-		var slideSwitchbgColor = '{COMMONBG}';
-		var slideSwitchHiColor = '{SPECIALBORDER}';
+		var slideSwitchColor = '{$_G['style']['tabletext']}';
+		var slideSwitchbgColor = '{$_G['style']['commonbg']}';
+		var slideSwitchHiColor = '{$_G['style']['specialborder']}';
 		<!--{loop $_G['forum']['recommendlist']['images'] $k $imginfo}-->
 			slideImgs[<!--{echo $k+1}-->] = '$imginfo[filename]';
 			slideImgLinks[<!--{echo $k+1}-->] = 'forum.php?mod=viewthread&tid=$imginfo[tid]';

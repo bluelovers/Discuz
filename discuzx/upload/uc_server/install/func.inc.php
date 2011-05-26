@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: forum.func.php 14122 2008-08-20 06:06:33Z cnteacher $
@@ -483,7 +483,7 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2010 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
 	</div>
 </div>
 </body>
@@ -653,7 +653,7 @@ function initinput() {
 	<div class="main">
 		<div class="btnbox"><textarea name="notice" style="width: 80%;"  readonly="readonly" id="notice"></textarea></div>
 		<div class="btnbox marginbot">
-	<input type="button" name="submit" value="<?=lang('install_in_processed')?>" disabled style="height: 25" id="laststep" onclick="initinput()">
+	<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled style="height: 25" id="laststep" onclick="initinput()">
 	</div>
 <?php
 }

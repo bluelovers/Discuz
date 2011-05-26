@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_post.php 16635 2010-09-10 09:40:57Z monkey $
+ *      $Id: lang_post.php 20567 2011-02-28 02:30:15Z congyushuai $
  */
 
 $lang = array
 (
 	'post_name' => '論壇帖子類任務',
-	'post_desc' => '通過發帖回帖完成任務，活躍論壇的氛圍。',
+	'post_desc' => '通過發帖回帖完成任務，活躍論壇的氛圍',
 	'post_complete_var_act' => '動作',
 	'post_complete_var_act_newthread' => '發新主題',
 	'post_complete_var_act_newreply' => '發新回復',
@@ -27,10 +27,10 @@ $lang = array
 	'post_complete_var_time_comment' => '設置會員從申請任務到完成任務的時間限制，會員在此時間內未能完成任務則不能領取獎勵並標記任務失敗，0 或留空為不限制',
 
 	'task_complete_forumid' => '在版塊 {value} ',
-	'task_complete_act_newthread' => '發新主題 {num} 次。',
-	'task_complete_act_newpost' => '發新主題/回復 {num} 次。',
-	'task_complete_act_newreply_thread' => '在「{value}」回復主題 {num} 次。',
-	'task_complete_act_newreply_author' => '回復作者「{value}」的主題 {num} 次。',
+	'task_complete_act_newthread' => '發新主題 {num} 次',
+	'task_complete_act_newpost' => '發新主題/回復 {num} 次',
+	'task_complete_act_newreply_thread' => '在「{value}」回復主題 {num} 次',
+	'task_complete_act_newreply_author' => '回復作者「{value}」的主題 {num} 次',
 );
 
 ?>

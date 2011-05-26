@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_portal.php 16050 2010-08-31 04:54:54Z wangjinbo $
+ *      $Id: search_portal.php 22166 2011-04-25 02:03:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,8 +31,6 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '', 'trade' => '', 'threadsort' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 
 
@@ -120,8 +118,8 @@ if(!submitcheck('searchsubmit', 1)) {
 
 			$num = $ids = 0;
 			$_G['setting']['search']['portal']['maxsearchresults'] = $_G['setting']['search']['portal']['maxsearchresults'] ? intval($_G['setting']['search']['portal']['maxsearchresults']) : 500;
-			$srchtxtsql = addcslashes($srchtxt, '%_');
-			$query = DB::query("SELECT aid FROM ".DB::table('portal_article_title')." WHERE title LIKE '%$srchtxtsql%' ORDER BY aid DESC LIMIT ".$_G['setting']['search']['portal']['maxsearchresults']);
+			list($srchtxt, $srchtxtsql) = searchkey($keyword, "title LIKE '%{text}%'", true);
+			$query = DB::query("SELECT aid FROM ".DB::table('portal_article_title')." WHERE 1 $srchtxtsql ORDER BY aid DESC LIMIT ".$_G['setting']['search']['portal']['maxsearchresults']);
 			while($article = DB::fetch($query)) {
 				$ids .= ','.$article['aid'];
 				$num++;
@@ -138,7 +136,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['portal']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=portal&searchid=$searchid&searchsubmit=yes");
+		dheader("location: search.php?mod=portal&searchid=$searchid&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

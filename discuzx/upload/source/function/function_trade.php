@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_trade.php 10053 2010-05-06 07:43:40Z wangjinbo $
+ *      $Id: function_trade.php 17820 2010-11-03 00:50:04Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -56,6 +56,7 @@ function trade_create($trade) {
 	$item_price = floatval($item_price);
 
 	switch($transport) {
+		case 'offline'	: $item_transport = 0; break;
 		case 'seller'	: $item_transport = 1; break;
 		case 'buyer'	: $item_transport = 2; break;
 		case 'virtual'	: $item_transport = 3; break;

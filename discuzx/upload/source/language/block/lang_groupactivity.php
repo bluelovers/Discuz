@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_groupactivity.php 17284 2010-09-28 09:58:16Z zhangguosheng $
+ *      $Id: lang_groupactivity.php 21128 2011-03-16 05:52:27Z zhangguosheng $
  */
 
 $lang = array
@@ -92,8 +92,10 @@ $lang = array
 	'groupactivity_orderby_weekexp' => '按一周內報名截止時間排序',
 	'groupactivity_orderby_monthexp' => '按一月內報名截止時間排序',
 	'groupactivity_gviewperm' => '群組瀏覽權限',
+	'groupactivity_gviewperm_nolimit' => '不限制',
 	'groupactivity_gviewperm_only_member' => '僅成員',
 	'groupactivity_gviewperm_all_member' => '所有人',
+	'groupactivity_highlight' => '獲得高亮值',
 );
 
 ?>

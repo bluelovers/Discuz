@@ -4,10 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 16710 2010-09-13 07:21:46Z monkey $
+ *      $Id: function_admincp.php 22760 2011-05-20 01:03:11Z monkey $
  */
 
-if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
+if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
@@ -19,7 +19,7 @@ function istpldir($dir) {
 }
 
 function isplugindir($dir) {
-	return !$dir || (!preg_match("/(\.\.|[\\\\]+$)/", $dir) && substr($dir, -1) =='/');
+	return preg_match("/^[a-z]+[a-z0-9_]*\/$/", $dir);
 }
 
 function ispluginkey($key) {
@@ -220,6 +220,7 @@ function shownav($header = '', $menu = '', $nav = '') {
 }
 
 function showmenu($key, $menus, $return = 0) {
+	global $_G;
 	$body = '';
 	if(is_array($menus)) {
 		foreach($menus as $menu) {
@@ -227,6 +228,18 @@ function showmenu($key, $menus, $return = 0) {
 				list($action, $operation, $do) = explode('_', $menu[1]);
 				$menu[1] = $action.($operation ? '&operation='.$operation.($do ? '&do='.$do : '') : '');
 				$body .= '<li><a href="'.(substr($menu[1], 0, 4) == 'http' ? $menu[1] : ADMINSCRIPT.'?action='.$menu[1]).'" hidefocus="true" target="'.($menu[2] ? $menu[2] : 'main').'"'.($menu[3] ? $menu[3] : '').'><em onclick="menuNewwin(this)" title="'.cplang('nav_newwin').'"></em>'.cplang($menu[0]).'</a></li>';
+			} elseif($menu[0] && $menu[2]) {
+				if($menu[2] == 1) {
+					$id = 'M'.substr(md5($menu[0]), 0, 8);
+					$hide = false;
+					if(!empty($_G['cookie']['cpmenu_'.$id])) {
+						$hide = true;
+					}
+					$body .= '<li class="s"><div class="lsub'.($hide ? '' : ' desc').'" subid="'.$id.'"><div onclick="lsub(\''.$id.'\', this.parentNode)">'.$menu[0].'</div><ol style="display:'.($hide ? 'none' : '').'" id="'.$id.'">';
+				}
+				if($menu[2] == 2) {
+					$body .= '</ol></div></li>';
+				}
 			}
 		}
 	}
@@ -240,7 +253,7 @@ function showmenu($key, $menus, $return = 0) {
 function updatemenu($key) {
 	@include DISCUZ_ROOT.'./source/admincp/admincp_menu.php';
 	$s = showmenu($key, $menu[$key], 1);
-	echo '<script type="text/JavaScript">parent.$(\'menu_'.$key.'\').innerHTML = \''.str_replace("'", "\'", $s).'\';parent.initCpMenus(\'leftmenu\');parent.$(\'cmain\').innerHTML = parent.initCpMap();</script>';
+	echo '<script type="text/JavaScript">parent.$(\'menu_'.$key.'\').innerHTML = \''.str_replace("'", "\'", $s).'\';parent.initCpMenus(\'leftmenu\');parent.initCpMap();</script>';
 }
 
 function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
@@ -250,6 +263,7 @@ function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
 function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
 	global $_G;
 	$vars = explode(':', $message);
+	$values['ADMINSCRIPT'] = ADMINSCRIPT;
 	if(count($vars) == 2) {
 		$message = lang('plugin/'.$vars[0], $vars[1], $values);
 	} else {
@@ -281,15 +295,15 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 			'<p class="marginbot"><a href="###" onclick="$(\'loadingform\').submit();" class="lightlink">'.cplang('message_redirect').'</a></p></form><br /><script type="text/JavaScript">setTimeout("$(\'loadingform\').submit();", 2000);</script>';
 	} else {
 		$message .= $extra.($type == 'loading' ? '<img src="static/image/admincp/ajax_loader.gif" class="marginbot" />' : '');
-		$return = cplang('return');
 		if($url) {
 			if($type == 'button') {
 				$message = "<br />$message<br /><p class=\"margintop\"><input type=\"submit\" class=\"btn\" name=\"submit\" value=\"".cplang('start')."\" onclick=\"location.href='$url'\" />";
 			} else {
 				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
-				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", 2000);</script>";
+				$timeout = $type != 'loading' ? 10000 : 0;
+				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", $timeout);</script>";
 			}
-		} elseif(strpos($message, $return)) {
+		} elseif($type != 'succeed') {
 			$message .= '<p class="marginbot">'.
 			"<script type=\"text/javascript\">".
 			"if(history.length > (BROWSER.ie ? 0 : 1)) document.write('<a href=\"javascript:history.go(-1);\" class=\"lightlink\">".cplang('message_return')."</a>');".
@@ -327,14 +341,14 @@ function cpheader() {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=$charset">
 <meta http-equiv="x-ua-compatible" content="ie=7" />
-<link href="static/image/admincp/admincp.css" rel="stylesheet" type="text/css" />
+<link href="static/image/admincp/admincp.css?{$_G[style][verhash]}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <script type="text/JavaScript">
-var admincpfilename = '$basescript', IMGDIR = '$IMGDIR', STYLEID = '$STYLEID', VERHASH = '$VERHASH', IN_ADMINCP = true, ISFRAME = $frame, STATICURL='static/', SITEURL = '$_G[siteurl]';
+var admincpfilename = '$basescript', IMGDIR = '$IMGDIR', STYLEID = '$STYLEID', VERHASH = '$VERHASH', IN_ADMINCP = true, ISFRAME = $frame, STATICURL='static/', SITEURL = '$_G[siteurl]', JSPATH = '{$_G[setting][jspath]}';
 </script>
-<script src="static/js/common.js" type="text/javascript"></script>
-<script src="static/js/admincp.js" type="text/javascript"></script>
+<script src="static/js/common.js?{$_G[style][verhash]}" type="text/javascript"></script>
+<script src="static/js/admincp.js?{$_G[style][verhash]}" type="text/javascript"></script>
 <script type="text/javascript">
 if(ISFRAME && !parent.document.getElementById('leftmenu')) {
 	redirect(admincpfilename + '?frames=yes&' + document.URL.substr(document.URL.indexOf(admincpfilename) + 10));
@@ -358,10 +372,10 @@ function showsubmenu($title, $menus = array(), $right = '', $replace = array()) 
 			$s .= '<ul class="tab1">';
 			foreach($menus as $k => $menu) {
 				if(is_array($menu[0])) {
-					$s .= '<li id="addjs'.$k.'" class="'.($menu[2] ? ' current' : 'hasdropmenu').'" onmouseover="dropmenu(this);"><a href="#"><span>'.cplang($menu[0]['menu']).'<em>&nbsp;&nbsp;</em></span></a><div id="addjs'.$k.'child" class="dropmenu" style="display:none;">';
+					$s .= '<li id="addjs'.$k.'" class="'.($menu[1] ? 'current' : 'hasdropmenu').'" onmouseover="dropmenu(this);"><a href="#"><span>'.cplang($menu[0]['menu']).'<em>&nbsp;&nbsp;</em></span></a><div id="addjs'.$k.'child" class="dropmenu" style="display:none;">';
 					if(is_array($menu[0]['submenu'])) {
 						foreach($menu[0]['submenu'] as $submenu) {
-							$s .= $submenu[1] ? '<a href="'.ADMINSCRIPT.'?action='.$submenu[1].'" onclick="'.$submenu[2].'">'.cplang($submenu[0]).'</a>' : '<a><b>'.cplang($submenu[0]).'</b></a>';
+							$s .= $submenu[1] ? '<a href="'.ADMINSCRIPT.'?action='.$submenu[1].'" class="'.($submenu[2] ? 'current' : '').'" onclick="'.$submenu[3].'">'.cplang($submenu[0]).'</a>' : '<a><b>'.cplang($submenu[0]).'</b></a>';
 						}
 					}
 					$s .= '</div></li>';
@@ -376,14 +390,28 @@ function showsubmenu($title, $menus = array(), $right = '', $replace = array()) 
 	echo !empty($menus) ? '<div class="floattop">'.$s.'</div><div class="floattopempty"></div>' : $s;
 }
 
-function showsubmenusteps($title, $menus = array()) {
+function showsubmenusteps($title, $menus = array(), $mleft = array(), $mright = array()) {
 	$s = '<div class="itemtitle">'.($title ? '<h3>'.cplang($title).'</h3>' : '');
+	if(is_array($mleft)) {
+		$s .= '<ul class="tab1" style="margin-right:10px">';
+		foreach($mleft as $k => $menu) {
+			$s .= '<li'.($menu[2] ? ' class="current"' : '').'><a href="'.(!$menu[4] ? ADMINSCRIPT.'?action='.$menu[1] : $menu[1]).'"'.(!empty($menu[3]) ? ' target="_blank"' : '').'><span>'.cplang($menu[0]).'</span></a></li>';
+		}
+		$s .= '</ul>';
+	}
 	if(is_array($menus)) {
 		$s .= '<ul class="stepstat">';
 			$i = 0;
 		foreach($menus as $menu) {
 			$i++;
 			$s .= '<li'.($menu[1] ? ' class="current"' : '').' id="step'.$i.'">'.$i.'.'.cplang($menu[0]).'</li>';
+		}
+		$s .= '</ul>';
+	}
+	if(is_array($mright)) {
+		$s .= '<ul class="tab1">';
+		foreach($mright as $k => $menu) {
+			$s .= '<li'.($menu[2] ? ' class="current"' : '').'><a href="'.(!$menu[4] ? ADMINSCRIPT.'?action='.$menu[1] : $menu[1]).'"'.(!empty($menu[3]) ? ' target="_blank"' : '').'><span>'.cplang($menu[0]).'</span></a></li>';
 		}
 		$s .= '</ul>';
 	}
@@ -420,7 +448,7 @@ EOT;
 	echo !empty($menus) ? '<div class="floattop">'.$s.'</div><div class="floattopempty"></div>' : $s;
 }
 
-function showtips($tips, $id = 'tips', $display = TRUE) {
+function showtips($tips, $id = 'tips', $display = TRUE, $title = '') {
 	$tips = cplang($tips);
 	$tips = preg_replace('#</li>\s*<li>#i', '</li><li>', $tips);
 	$tmp = explode('</li><li>', substr($tips, 4, -5));
@@ -433,8 +461,9 @@ function showtips($tips, $id = 'tips', $display = TRUE) {
 		}
 	}
 	unset($tmp);
-	showtableheader('tips', '', 'id="'.$id.'"'.(!$display ? ' style="display: none;"' : ''), 0);
-	showtablerow('', 'class="tipsblock"', '<ul id="'.$id.'lis">'.$tips.'</ul>');
+	$title = $title ? $title : 'tips';
+	showtableheader($title, '', 'id="'.$id.'"'.(!$display ? ' style="display: none;"' : ''), 0);
+	showtablerow('', 'class="tipsblock" s="1"', '<ul id="'.$id.'lis">'.$tips.'</ul>');
 	showtablefooter();
 }
 
@@ -477,11 +506,11 @@ function showtableheader($title = '', $classname = '', $extra = '', $titlespan =
 function showmultititle() {
 	global $_G;
 	if(isset($_G['showtableheader_multi']) && $_G['showsetting_multi'] == 0) {
-		echo '<tr><td class="tbm">';
+		echo '<tr><td class="tbm"><div>';
 		foreach($_G['showtableheader_multi'] as $row) {
 			echo '<div class="multicol">'.$row.'</div>';
 		}
-		echo '</td></tr>';
+		echo '</div></td></tr>';
 	}
 }
 
@@ -493,13 +522,15 @@ function showtagheader($tagname, $id, $display = FALSE, $classname = '') {
 	echo '<'.$tagname.($classname ? " class=\"$classname\"" : '').' id="'.$id.'"'.($display ? '' : ' style="display: none"').'>';
 }
 
-function showtitle($title, $extra = '') {
+function showtitle($title, $extra = '', $multi = 1) {
 	global $_G;
 	if(!empty($_G['showsetting_multi'])) {
 		return;
 	}
 	echo "\n".'<tr'.($extra ? " $extra" : '').'><th colspan="15" class="partition">'.cplang($title).'</th></tr>';
-	showmultititle();
+	if($multi) {
+		showmultititle();
+	}
 }
 
 function showsubtitle($title = array(), $rowclass='header') {
@@ -593,7 +624,11 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$s .= '<select name="'.$varname[0].'" '.$extra.'>';
 		foreach($varname[1] as $option) {
 			$selected = $option[0] == $value ? 'selected="selected"' : '';
-			$s .= "<option value=\"$option[0]\" $selected>".$option[1]."</option>\n";
+			if(empty($option[2])) {
+				$s .= "<option value=\"$option[0]\" $selected>".$option[1]."</option>\n";
+			} else {
+				$s .= "<optgroup label=\"".$option[1]."\"></optgroup>\n";
+			}
 		}
 		$s .= '</select>';
 	} elseif($type == 'mradio' || $type == 'mradio2') {
@@ -655,7 +690,11 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$s .= '<select name="'.$varname[0].'" multiple="multiple" size="10" '.$extra.'>';
 		foreach($varname[1] as $option) {
 			$selected = is_array($value) && in_array($option[0], $value) ? 'selected="selected"' : '';
-			$s .= "<option value=\"$option[0]\" $selected>".$option[1]."</option>\n";
+			if(empty($option[2])) {
+				$s .= "<option value=\"$option[0]\" $selected>".$option[1]."</option>\n";
+			} else {
+				$s .= "<optgroup label=\"".$option[1]."\"></optgroup>\n";
+			}
 		}
 		$s .= '</select>';
 	} elseif($type == 'color') {
@@ -692,9 +731,25 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	$name = cplang($setname);
 	$name .= $name && substr($name, -1) != ':' ? ':' : '';
 	$name = $disabled ? '<span class="lightfont">'.$name.'</span>' : $name;
-	$setid = isset($_G['showsetting_multi']) ? 'S'.(!$setid ? substr(md5($setname), 0, 4) : $setid) : '';
+	$setid = !$setid ? substr(md5($setname), 0, 4) : $setid;
+	$setid = isset($_G['showsetting_multi']) ? 'S'.$setid : $setid;
+	if(!empty($_G['showsetting_multirow'])) {
+		if(empty($_G['showsetting_multirow_n'])) {
+			echo '<tr>';
+		}
+		echo '<td class="vtop rowform"><p class="td27m">'.$name.'</p>'.$s.'</td>';
+		$_G['showsetting_multirow_n']++;
+		if($_G['showsetting_multirow_n'] == 2) {
+			if(empty($_G['showsetting_multirow_n'])) {
+				echo '</tr>';
+			}
+			$_G['showsetting_multirow_n'] = 0;
+		}
+		return;
+	}
 	if(!isset($_G['showsetting_multi'])) {
-		showtablerow('', 'colspan="2" class="td27"', $name);
+		$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
+		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
 			$_G['setting_JS'] .= 'var ss = new Array();';
@@ -709,10 +764,10 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!$nocomment && ($type != 'omcheckbox' || $varname[2] != 'isfloat')) {
 		if(!isset($_G['showsetting_multi'])) {
-			showtablerow('class="noborder"', array('class="vtop rowform"', 'class="vtop tips2"'), array(
+			showtablerow('class="noborder" onmouseover="setfaq(this, \'faq'.$setid.'\')"', array('class="vtop rowform"', 'class="vtop tips2" s="1"'), array(
 				$s,
 				($comment ? $comment : cplang($setname.'_comment', false)).($type == 'textarea' ? '<br />'.cplang('tips_textarea') : '').
-				($disabled ? '<br /><span class="smalltxt" style="color:#FF0000">'.cplang($setname.'_disabled', false).'</span>' : NULL)
+				($disabled ? '<br /><span class="smalltxt" style="color:#F00">'.cplang($setname.'_disabled', false).'</span>' : NULL)
 			));
 		} else {
 			if($_G['showsetting_multi'] == 0) {
@@ -725,7 +780,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			$_G['setting_JS'] .= 'ss[\''.$setid.'\'] += \'<div class="multicol">'.$s.'</div>\';';
 		}
 	} else {
-		showtablerow('class="noborder"', array('colspan="2" class="vtop rowform"'), array($s));
+		showtablerow('class="noborder" onmouseover="setfaq(this, \'faq'.$setid.'\')"', array('colspan="2" class="vtop rowform"'), array($s));
 	}
 
 	if($hidden) {
@@ -898,16 +953,24 @@ function getimportdata($name = '', $addslashes = 1, $ignoreerror = 0) {
 		$data = @implode('', file($_FILES['importfile']['tmp_name']));
 		@unlink($_FILES['importfile']['tmp_name']);
 	} else {
-		$data = $_G['gp_importtxt'] && MAGIC_QUOTES_GPC ? dstripslashes($_G['gp_importtxt']) : $GLOBALS['importtxt'];
+		if(!empty($_G['gp_importtxt'])) {
+			$data = MAGIC_QUOTES_GPC ? dstripslashes($_G['gp_importtxt']) : $_G['gp_importtxt'];
+		} else {
+			$data = $GLOBALS['importtxt'];
+		}
 	}
 	require_once libfile('class/xml');
 	$xmldata = xml2array($data);
 	if(!is_array($xmldata) || !$xmldata) {
-		cpmsg('import_data_invalid', '', 'error');
+		if(!$ignoreerror) {
+			cpmsg(cplang('import_data_invalid').cplang($data), '', 'error');
+		} else {
+			return array();
+		}
 	} else {
 		if($name && $name != $xmldata['Title']) {
 			if(!$ignoreerror) {
-				cpmsg('import_data_typeinvalid', '', 'error');
+				cpmsg(cplang('import_data_typeinvalid').cplang($data), '', 'error');
 			} else {
 				return array();
 			}
@@ -1164,6 +1227,109 @@ function checkformulaperm($formula) {
 		array('+', '-', '*', '/', '(', ')', '<', '=', '>', '!', 'and', 'or', ' ', '{', '}', "'"),
 		array('regdate', 'regday', 'regip', 'lastip', 'buyercredit', 'sellercredit', 'digestposts', 'posts', 'threads', 'oltime', 'extcredits[1-8]', 'field[\d]+')
 	);
+}
+
+function getposttableselect() {
+	global $_G;
+
+	loadcache('posttable_info');
+	if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
+		$posttableselect = '<select name="posttableid" id="posttableid" class="ps">';
+		foreach($_G['cache']['posttable_info'] as $posttableid => $data) {
+			$posttableselect .= '<option value="'.$posttableid.'"'.($_G['gp_posttableid'] == $posttableid ? ' selected="selected"' : '').'>'.($data['memo'] ? $data['memo'] : 'post_'.$posttableid).'</option>';
+		}
+		$posttableselect .= '</select>';
+	} else {
+		$posttableselect = '';
+	}
+	return $posttableselect;
+}
+
+function rewritedata($alldata = 1) {
+	global $_G;
+	$data = array();
+	if(!$alldata) {
+		if(in_array('portal_topic', $_G['setting']['rewritestatus'])) {
+			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topic\=(.+?)?\"([^\>]*)\>/e";
+			$data['replace']['portal_topic'] = "rewriteoutput('portal_topic', 0, '\\1', '\\3', '\\4')";
+		}
+
+		if(in_array('portal_article', $_G['setting']['rewritestatus'])) {
+			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['portal_article'] = "rewriteoutput('portal_article', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_forumdisplay'] = "rewriteoutput('forum_forumdisplay', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&amp;extra\=(page\%3D(\d+))?)?(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_viewthread'] = "rewriteoutput('forum_viewthread', 0, '\\1', '\\3', '\\8', '\\6', '\\9')";
+		}
+
+		if(in_array('group_group', $_G['setting']['rewritestatus'])) {
+			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['group_group'] = "rewriteoutput('group_group', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('home_space', $_G['setting']['rewritestatus'])) {
+			$data['search']['home_space'] = "/".$_G['domain']['pregxprw']['home']."\?mod=space&(amp;)?(uid\=(\d+)|username\=([^&]+?))\"([^\>]*)\>/e";
+			$data['replace']['home_space'] = "rewriteoutput('home_space', 0, '\\1', '\\4', '\\5', '\\6')";
+		}
+
+		if(in_array('home_blog', $_G['setting']['rewritestatus'])) {
+			$data['search']['home_blog'] = "/".$_G['domain']['pregxprw']['home']."\?mod=space&(amp;)?uid\=(\d+)&(amp;)?do=blog&(amp;)?id=(\d+)\"([^\>]*)\>/e";
+			$data['replace']['home_blog'] = "rewriteoutput('home_blog', 0, '\\1', '\\3', '\\6', '\\7')";
+		}
+
+		if(in_array('forum_archiver', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_archiver'] = "/<a href\=\"\?(fid|tid)\-(\d+)\.html(&page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_archiver'] = "rewriteoutput('forum_archiver', 0, '\\1', '\\2', '\\4', '\\5')";
+		}
+	} else {
+		$data['rulesearch']['portal_topic'] = 'topic-{name}.html';
+		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topic={name}';
+		$data['rulevars']['portal_topic']['{name}'] = '(.+)';
+
+		$data['rulesearch']['portal_article'] = 'article-{id}-{page}.html';
+		$data['rulereplace']['portal_article'] = 'portal.php?mod=view&aid={id}&page={page}';
+		$data['rulevars']['portal_article']['{id}'] = '([0-9]+)';
+		$data['rulevars']['portal_article']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_forumdisplay'] = 'forum-{fid}-{page}.html';
+		$data['rulereplace']['forum_forumdisplay'] = 'forum.php?mod=forumdisplay&fid={fid}&page={page}';
+		$data['rulevars']['forum_forumdisplay']['{fid}'] = '(\w+)';
+		$data['rulevars']['forum_forumdisplay']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_viewthread'] = 'thread-{tid}-{page}-{prevpage}.html';
+		$data['rulereplace']['forum_viewthread'] = 'forum.php?mod=viewthread&tid={tid}&extra=page\%3D{prevpage}&page={page}';
+		$data['rulevars']['forum_viewthread']['{tid}'] = '([0-9]+)';
+		$data['rulevars']['forum_viewthread']['{page}'] = '([0-9]+)';
+		$data['rulevars']['forum_viewthread']['{prevpage}'] = '([0-9]+)';
+
+		$data['rulesearch']['group_group'] = 'group-{fid}-{page}.html';
+		$data['rulereplace']['group_group'] = 'forum.php?mod=group&fid={fid}&page={page}';
+		$data['rulevars']['group_group']['{fid}'] = '([0-9]+)';
+		$data['rulevars']['group_group']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['home_space'] = 'space-{user}-{value}.html';
+		$data['rulereplace']['home_space'] = 'home.php?mod=space&{user}={value}';
+		$data['rulevars']['home_space']['{user}'] = '(username|uid)';
+		$data['rulevars']['home_space']['{value}'] = '(.+)';
+
+		$data['rulesearch']['home_blog'] = 'blog-{uid}-{blogid}.html';
+		$data['rulereplace']['home_blog'] = 'home.php?mod=space&uid={uid}&do=blog&id={blogid}';
+		$data['rulevars']['home_blog']['{uid}'] = '([0-9]+)';
+		$data['rulevars']['home_blog']['{blogid}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_archiver'] = '{action}-{value}.html';
+		$data['rulereplace']['forum_archiver'] = 'index.php?action={action}&value={value}';
+		$data['rulevars']['forum_archiver']['{action}'] = '(fid|tid)';
+		$data['rulevars']['forum_archiver']['{value}'] = '([0-9]+)';
+	}
+	return $data;
 }
 
 ?>

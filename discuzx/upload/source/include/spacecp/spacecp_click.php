@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_click.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: spacecp_click.php 21247 2011-03-21 06:45:20Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,7 +54,7 @@ if(!$item = DB::fetch($query)) {
 $hash = md5($item['uid']."\t".$item['dateline']);
 if($_GET['op'] == 'add') {
 	if(!checkperm('allowclick') || $_GET['hash'] != $hash) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_click');
 	}
 
 	if($item['uid'] == $_G['uid']) {

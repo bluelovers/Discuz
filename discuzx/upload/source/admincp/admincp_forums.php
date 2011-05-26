@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 17432 2010-10-19 03:47:01Z monkey $
+ *      $Id: admincp_forums.php 22495 2011-05-10 06:17:09Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -28,14 +28,14 @@ if($operation == 'admin') {
 
 ?>
 <script type="text/JavaScript">
-var forumselect = '<?=$forums?>';
+var forumselect = '<?php echo $forums;?>';
 var rowtypedata = [
-	[[1, ''], [1,'<input type="text" class="txt" name="newcatorder[]" value="0" />', 'td25'], [5, '<input name="newcat[]" value="<?php cplang('forums_admin_add_category_name', null, true);?>" size="20" type="text" class="txt" />']],
-	[[1, ''], [1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [5, '<div class="board"><input name="newforum[{1}][]" value="<?php cplang('forums_admin_add_forum_name', null, true);?>" size="20" type="text" class="txt" /><select name="newinherited[{1}][]"><option value=""><?php cplang('forums_edit_newinherited', null, true);?></option>' + forumselect + '</select></div>']],
-	[[1, ''], [1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [5, '<div class="childboard"><input name="newforum[{1}][]" value="<?php cplang('forums_admin_add_forum_name', null, true);?>" size="20" type="text" class="txt" />&nbsp;<label><input name="inherited[{1}][]" type="checkbox" class="checkbox" value="1">&nbsp;<?php cplang('forums_edit_inherited', null, true);?></label></div>']],
+	[[1, ''], [1,'<input type="text" class="txt" name="newcatorder[]" value="0" />', 'td25'], [5, '<div><input name="newcat[]" value="<?php cplang('forums_admin_add_category_name', null, true);?>" size="20" type="text" class="txt" /><a href="javascript:;" class="deleterow" onClick="deleterow(this)"><?php cplang('delete', null, true);?></a></div>']],
+	[[1, ''], [1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [5, '<div class="board"><input name="newforum[{1}][]" value="<?php cplang('forums_admin_add_forum_name', null, true);?>" size="20" type="text" class="txt" /><a href="javascript:;" class="deleterow" onClick="deleterow(this)"><?php cplang('delete', null, true);?></a><select name="newinherited[{1}][]"><option value=""><?php cplang('forums_edit_newinherited', null, true);?></option>' + forumselect + '</select></div>']],
+	[[1, ''], [1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [5, '<div class="childboard"><input name="newforum[{1}][]" value="<?php cplang('forums_admin_add_forum_name', null, true);?>" size="20" type="text" class="txt" /><a href="javascript:;" class="deleterow" onClick="deleterow(this)"><?php cplang('delete', null, true);?></a>&nbsp;<label><input name="inherited[{1}][]" type="checkbox" class="checkbox" value="1">&nbsp;<?php cplang('forums_edit_inherited', null, true);?></label></div>']],
 ];
 </script>
-<?
+<?php
 		showformheader('forums');
 		echo '<div style="height:30px;line-height:30px;"><a href="javascript:;" onclick="show_all()">'.cplang('show_all').'</a> | <a href="javascript:;" onclick="hide_all()">'.cplang('hide_all').'</a> <input type="text" id="srchforumipt" class="txt" /> <input type="submit" class="btn" value="'.cplang('search').'" onclick="return srchforum()" /></div>';
 		showtableheader('');
@@ -123,8 +123,8 @@ var rowtypedata = [
 
 		$table_forum_columns = array('fup', 'type', 'name', 'status', 'displayorder', 'styleid', 'allowsmilies',
 			'allowhtml', 'allowbbcode', 'allowimgcode', 'allowanonymous', 'allowpostspecial', 'alloweditrules',
-			'alloweditpost', 'modnewposts', 'recyclebin', 'jammer', 'forumcolumns', 'threadcaches', 'disablewatermark',
-			'autoclose', 'simple', 'allowside', 'allowtag', 'allowfeed');
+			'alloweditpost', 'modnewposts', 'recyclebin', 'jammer', 'forumcolumns', 'threadcaches', 'disablewatermark', 'disablethumb',
+			'autoclose', 'simple', 'allowside', 'allowfeed');
 		$table_forumfield_columns = array('fid', 'attachextensions', 'threadtypes', 'viewperm', 'postperm', 'replyperm',
 			'getattachperm', 'postattachperm', 'postimageperm');
 
@@ -134,6 +134,12 @@ var rowtypedata = [
 
 				$fupforum = get_forum_by_fid($fup);
 				if(empty($fupforum)) continue;
+
+				if($fupforum['fup']) {
+					$groupforum = get_forum_by_fid($fupforum['fup']);
+				} else {
+					$groupforum = $fupforum;
+				}
 
 				foreach($forums as $key => $forumname) {
 
@@ -157,14 +163,15 @@ var rowtypedata = [
 
 					} else {
 						$forumfields['allowsmilies'] = $forumfields['allowbbcode'] = $forumfields['allowimgcode'] = 1;
-						$forumfields['allowpostspecial'] = 127;
+						$forumfields['allowpostspecial'] = 1;
 						$forumfields['allowside'] = 0;
-						$forumfields['allowtag'] = 0;
 						$forumfields['allowfeed'] = 0;
+						$forumfields['recyclebin'] = 1;
 					}
 
 					$forumfields['fup'] = $fup ? $fup : 0;
 					$forumfields['type'] = $fupforum['type'] == 'forum' ? 'sub' : 'forum';
+					$forumfields['styleid'] = $groupforum['styleid'];
 					$forumfields['name'] = $forumname;
 					$forumfields['status'] = 1;
 					$forumfields['displayorder'] = $_G['gp_neworder'][$fup][$key];
@@ -179,6 +186,7 @@ var rowtypedata = [
 					$forumfields['fid'] = $fid = DB::insert('forum_forum', $data, 1);
 
 					$data = array();
+					$forumfields['threadtypes'] = copy_threadclasses($forumfields['threadtypes'], $fid);
 					foreach($table_forumfield_columns as $field) {
 						if(isset($forumfields[$field])) {
 							$data[$field] = $forumfields[$field];
@@ -291,7 +299,7 @@ var rowtypedata = [
 
 			if(is_array($_G['gp_delete'])) {
 				foreach($_G['gp_delete'] as $uid) {
-					DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE uid='$uid' AND ((fid='$fid' AND inherited='0') OR (fid IN ('".implode('\',\'', $fidarray)."') AND inherited='1'))");
+					DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE uid='$uid' AND ((fid='$fid' AND inherited='0') OR (fid IN (".dimplode($fidarray).") AND inherited='1'))");
 				}
 
 				$excludeuids = 0;
@@ -399,15 +407,18 @@ var rowtypedata = [
 			}
 		}
 
-		$moderators = $tab = '';
-		$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
-		while($mod = DB::fetch($query)) {
-			$moderators .= $tab.addslashes($mod['username']);
-			$tab = "\t";
+		$fidarray[] = $fid;
+		foreach($fidarray as $fid) {
+			$moderators = $tab = '';
+			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
+			while($mod = DB::fetch($query)) {
+				$moderators .= $tab.addslashes($mod['username']);
+				$tab = "\t";
+			}
+			DB::update('forum_forumfield', array(
+				'moderators' => $moderators,
+			), "fid='$fid'");
 		}
-		DB::update('forum_forumfield', array(
-			'moderators' => $moderators,
-		), "fid='$fid'");
 		cpmsg('forums_moderators_update_succeed', "mod=forum&action=forums&operation=moderators&fid=$fid", 'succeed');
 
 	}
@@ -449,14 +460,8 @@ var rowtypedata = [
 		$targetforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$target'");
 		$sourcethreadtypes = (array)unserialize($sourceforum['threadtypes']);
 		$targethreadtypes = (array)unserialize($targetforum['threadtypes']);
-		if(!$targethreadtypes['types']) {
-			$targethreadtypes['types'] = array();
-		}
-		if(!$targethreadtypes['icons']) {
-			$targethreadtypes['icons'] = array();
-		}
-		$targethreadtypes['types'] = $targethreadtypes['types'] + $sourcethreadtypes['types'];
-		$targethreadtypes['icons'] = $targethreadtypes['icons'] + $sourcethreadtypes['icons'];
+		$targethreadtypes['types'] = array_merge((array)$targethreadtypes['types'], (array)$sourcethreadtypes['types']);
+		$targethreadtypes['icons'] = array_merge((array)$targethreadtypes['icons'], (array)$sourcethreadtypes['icons']);
 
 		DB::update('forum_forum', array(
 			'threads' => $targetforum['threads'] + $sourceforum['threads'],
@@ -619,11 +624,21 @@ var rowtypedata = [
 			showtableheader();
 			showsetting('forums_edit_basic_cat_name', 'namenew', $mforum[0]['name'], 'text');
 			showsetting('forums_edit_basic_cat_name_color', 'extranew[namecolor]', $mforum[0]['extra']['namecolor'], 'color');
-			showsetting('forums_edit_extend_sub_horizontal', 'forumcolumnsnew', $mforum[0]['forumcolumns'], 'text');
+			showsetting('forums_edit_basic_cat_style', '', '', $styleselect);
+			showsetting('forums_edit_extend_forum_horizontal', 'forumcolumnsnew', $mforum[0]['forumcolumns'], 'text');
+			showsetting('forums_edit_extend_cat_sub_horizontal', 'catforumcolumnsnew', $mforum[0]['catforumcolumns'], 'text');
 			if(!empty($_G['setting']['domain']['root']['forum'])) {
 				showsetting('forums_edit_extend_domain', '', '', 'http://<input type="text" name="domainnew" class="txt" value="'.$mforum[0]['domain'].'" style="width:100px; margin-right:0px;" >.'.$_G['setting']['domain']['root']['forum']);
+			} else {
+				showsetting('forums_edit_extend_domain', 'domainnew', '', 'text', 'disabled');
 			}
 			showsetting('forums_cat_display', 'statusnew', $mforum[0]['status'], 'radio');
+			showtablefooter();
+			showtips('setting_seo_forum_tips', 'seo_tips', true, 'setseotips');
+			showtableheader();
+			showsetting('forums_edit_basic_seotitle', 'seotitlenew', htmlspecialchars($mforum[0]['seotitle']), 'text');
+			showsetting('forums_edit_basic_keyword', 'keywordsnew', htmlspecialchars($mforum[0]['keywords']), 'text');
+			showsetting('forums_edit_basic_seodescription', 'seodescriptionnew', htmlspecialchars($mforum[0]['seodescription']), 'textarea');
 			showsubmit('detailsubmit');
 			showtablefooter();
 
@@ -754,7 +769,7 @@ var rowtypedata = [
 						} else {
 							$forumicon = $_G['setting']['attachurl'].'common/'.$forum['icon'].'?'.random(6);
 						}
-						$forumiconhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$forumicon.'" />';
+						$forumiconhtml = '<label><input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$forumicon.'" /><br />';
 					}
 					showsetting('forums_edit_basic_icon', 'iconnew', $forum['icon'], 'filetext', '', 0, $forumiconhtml);
 					showsetting('forums_edit_basic_icon_width', 'extranew[iconwidth]', $forum['extra']['iconwidth'], 'text');
@@ -765,37 +780,61 @@ var rowtypedata = [
 						} else {
 							$forumbanner = $_G['setting']['attachurl'].'common/'.$forum['banner'].'?'.random(6);
 						}
-						$forumbannerhtml = '<label><input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$forumbanner.'" />';
+						$forumbannerhtml = '<label><input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$forumbanner.'" /><br />';
 					}
 					showsetting('forums_edit_basic_banner', 'bannernew', $forum['banner'], 'filetext', '', 0, $forumbannerhtml);
 				}
 				showsetting('forums_edit_basic_display', 'statusnew', $forum['status'], 'radio');
-				showsetting('forums_edit_basic_hidemenu', 'hidemenunew', $forum['hidemenu'], 'radio');
 				if(!$multiset) {
 					showsetting('forums_edit_basic_up', '', '', $fupselect);
 				}
 				showsetting('forums_edit_basic_redirect', 'redirectnew', $forum['redirect'], 'text');
+				showmultititle();
 				showsetting('forums_edit_basic_description', 'descriptionnew', str_replace('&amp;', '&', html2bbcode($forum['description'])), 'textarea');
 				showsetting('forums_edit_basic_rules', 'rulesnew', str_replace('&amp;', '&', html2bbcode($forum['rules'])), 'textarea');
-				showsetting('forums_edit_basic_keyword', 'keywordsnew', $forum['keywords'], 'text');
 				showsetting('forums_edit_basic_keys', 'keysnew', $forumkeys[$fid], 'text');
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					$iname = $multiset ? "multinew[{$_G[showsetting_multi]}][domainnew]" : 'domainnew';
 					showsetting('forums_edit_extend_domain', '', '', 'http://<input type="text" name="'.$iname.'" class="txt" value="'.$forum['domain'].'" style="width:100px; margin-right:0px;" >.'.$_G['setting']['domain']['root']['forum']);
+				} elseif(!$multiset) {
+					showsetting('forums_edit_extend_domain', 'domainnew', '', 'text', 'disabled');
 				}
+				showtablefooter();
+				if(!$multiset) {
+					showtips('setting_seo_forum_tips', 'seo_tips', true, 'setseotips');
+				}
+				showtableheader();
+				showsetting('forums_edit_basic_seotitle', 'seotitlenew', htmlspecialchars($forum['seotitle']), 'text');
+				showsetting('forums_edit_basic_keyword', 'keywordsnew', htmlspecialchars($forum['keywords']), 'text');
+				showsetting('forums_edit_basic_seodescription', 'seodescriptionnew', htmlspecialchars($forum['seodescription']), 'textarea');
 				showtablefooter();
 				showtagfooter('div');
 
 				showtagheader('div', 'extend', $anchor == 'extend');
 				showtableheader('forums_edit_extend', 'nobottom');
 				showsetting('forums_edit_extend_style', '', '', $styleselect);
-				showsetting('forums_edit_extend_sub_horizontal', 'forumcolumnsnew', $forum['forumcolumns'], 'text');
-				showsetting('forums_edit_extend_subforumsindex', array('subforumsindexnew', array(
-					array(-1, cplang('default')),
-					array(1, cplang('yes')),
-					array(0, cplang('no'))
-				), 1), $forum['subforumsindex'], 'mradio');
-				showsetting('forums_edit_extend_simple', 'simplenew', $forum['simple'], 'radio');
+				if($forum['type'] != 'sub') {
+					showsetting('forums_edit_extend_sub_horizontal', 'forumcolumnsnew', $forum['forumcolumns'], 'text');
+					showsetting('forums_edit_extend_subforumsindex', array('subforumsindexnew', array(
+						array(-1, cplang('default')),
+						array(1, cplang('yes')),
+						array(0, cplang('no'))
+					), 1), $forum['subforumsindex'], 'mradio');
+					showsetting('forums_edit_extend_simple', 'simplenew', $forum['simple'], 'radio');
+				} else {
+					if($_GET['multi']) {
+						showsetting('forums_edit_extend_sub_horizontal', '', '', cplang('forums_edit_sub_multi_tips'));
+						showsetting('forums_edit_extend_subforumsindex', '', '', cplang('forums_edit_sub_multi_tips'));
+						showsetting('forums_edit_extend_simple', '', '', cplang('forums_edit_sub_multi_tips'));
+					}
+				}
+				showsetting('forums_edit_extend_widthauto', array('widthautonew', array(
+					array(0, cplang('default')),
+					array(-1, cplang('forums_edit_extend_widthauto_-1')),
+					array(1, cplang('forums_edit_extend_widthauto_1')),
+				), 1), $forum['widthauto'], 'mradio');
+				showsetting('forums_edit_extend_picstyle', 'picstylenew', $forum['picstyle'], 'radio');
+				showmultititle();
 				showsetting('forums_edit_extend_allowside', 'allowsidenew', $forum['allowside'], 'radio');
 				showsetting('forums_edit_extend_recommend_top', 'allowglobalsticknew', $forum['allowglobalstick'], 'radio');
 				showsetting('forums_edit_extend_defaultorderfield', array('defaultorderfieldnew', array(
@@ -809,7 +848,9 @@ var rowtypedata = [
 					array(1, cplang('forums_edit_extend_order_asc'))
 				)), $forum['defaultorder'], 'mradio');
 				showsetting('forums_edit_extend_threadcache', 'threadcachesnew', $forum['threadcaches'], 'text');
+				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'text');
 				showsetting('forums_edit_extend_edit_rules', 'alloweditrulesnew', $forum['alloweditrules'], 'radio');
+				showmultititle();
 				showsetting('forums_edit_extend_recommend', 'modrecommendnew[open]', $forum['modrecommend']['open'], 'radio', '', 1);
 				showsetting('forums_edit_extend_recommend_sort', array('modrecommendnew[sort]', array(
 					array(1, cplang('forums_edit_extend_recommend_sort_auto')),
@@ -843,6 +884,7 @@ var rowtypedata = [
 				showsetting('forums_edit_posts_alloweditpost', 'alloweditpostnew', $forum['alloweditpost'], 'radio');
 				showsetting('forums_edit_posts_allowappend', 'allowappendnew', $forum['allowappend'], 'radio');
 				showsetting('forums_edit_posts_recyclebin', 'recyclebinnew', $forum['recyclebin'], 'radio');
+				showmultititle();
 				showsetting('forums_edit_posts_html', 'allowhtmlnew', $forum['allowhtml'], 'radio');
 				showsetting('forums_edit_posts_bbcode', 'allowbbcodenew', $forum['allowbbcode'], 'radio');
 				showsetting('forums_edit_posts_imgcode', 'allowimgcodenew', $forum['allowimgcode'], 'radio');
@@ -850,6 +892,8 @@ var rowtypedata = [
 				showsetting('forums_edit_posts_smilies', 'allowsmiliesnew', $forum['allowsmilies'], 'radio');
 				showsetting('forums_edit_posts_jammer', 'jammernew', $forum['jammer'], 'radio');
 				showsetting('forums_edit_posts_anonymous', 'allowanonymousnew', $forum['allowanonymous'], 'radio');
+				showmultititle();
+				showsetting('forums_edit_posts_disablethumb', 'disablethumbnew', $forum['disablethumb'], 'radio');
 				showsetting('forums_edit_posts_disablewatermark', 'disablewatermarknew', $forum['disablewatermark'], 'radio');
 
 				showsetting('forums_edit_posts_allowpostspecial', array('allowpostspecialnew', array(
@@ -867,6 +911,7 @@ var rowtypedata = [
 					showsetting('forums_edit_posts_threadplugin', array('threadpluginnew', $threadpluginarray), $forum['threadplugin'], 'mcheckbox');
 				}
 				showsetting('forums_edit_posts_allowspecialonly', 'allowspecialonlynew', $forum['allowspecialonly'], 'radio');
+				showmultititle();
 				showsetting('forums_edit_posts_autoclose', array('autoclosenew', array(
 					array(0, cplang('forums_edit_posts_autoclose_none'), array('autoclose_time' => 'none')),
 					array(1, cplang('forums_edit_posts_autoclose_dateline'), array('autoclose_time' => '')),
@@ -885,31 +930,58 @@ var rowtypedata = [
 				if(!$multiset) {
 					showtagheader('div', 'credits', $anchor == 'credits');
 					showtableheader('forums_edit_credits_policy', 'fixpadding');
-					echo '<tr><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th>';
+					echo '<tr class="header"><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th><th class="td25">'.cplang('custom').'</th>';
 					foreach($_G['setting']['extcredits'] as $i => $extcredit) {
-						echo '<th valign="top">'.$extcredit['title'].'</th>';
+						echo '<th>'.$extcredit['title'].'</th>';
 					}
-					echo '</tr>';
+					echo '<th>&nbsp;</th></tr>';
 
 					if(is_array($_G['setting']['extcredits'])) {
 						foreach($rules as $rid => $rule) {
 							$globalrule = $rule;
-							$rule = isset($forum['creditspolicy'][$rule['action']]) ? $forum['creditspolicy'][$rule['action']] : $rule;
-							$tdarr = array($rule['rulename'], $rule['rid'] ? cplang('setting_credits_policy_cycletype_'.$rule['cycletype']) : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A');
+							$readonly = $checked = '';
+							if(isset($forum['creditspolicy'][$rule['action']])) {
+								$rule = $forum['creditspolicy'][$rule['action']];
+								$checked = ' checked="checked"';
+							} else {
+								for($i = 1; $i <= 8; $i++) {
+									$rule['extcredits'.$i] = '';
+								}
+								$readonly = ' readonly="readonly" style="display:none;"';
+							}
+							$usecustom = '<input type="checkbox" name="usecustom['.$rule['rid'].']" onclick="modifystate(this);" value="1" class="checkbox" '.$checked.' />';
+							$tdarr = array($rule['rulename'], $rule['rid'] ? cplang('setting_credits_policy_cycletype_'.$rule['cycletype']) : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A', $usecustom);
+
 							for($i = 1; $i <= 8; $i++) {
 								if($_G['setting']['extcredits'][$i]) {
-									array_push($tdarr, '<input name="creditnew['.$rule['rid'].']['.$i.']" class="txt" value="'.$rule['extcredits'.$i].'" />('.($globalrule['extcredits'.$i]).')');
+									array_push($tdarr, '<input type="text" name="creditnew['.$rule['rid'].']['.$i.']" class="txt smtxt" value="'.$rule['extcredits'.$i].'" '.$readonly.' /><span class="sml">('.($globalrule['extcredits'.$i]).')</span>');
 								}
 							}
 							$opstr = '<a href="'.ADMINSCRIPT.'?action=credits&operation=edit&rid='.$rule['rid'].'&fid='.$fid.'" title="" class="act">'.cplang('edit').'</a>';
 							array_push($tdarr, $opstr);
-							showtablerow('', array_fill(0, count($_G['setting']['extcredits']) + 4, 'class="td28"'), $tdarr);
+							showtablerow('', array_fill(4, count($_G['setting']['extcredits']) + 4, 'width="70"'), $tdarr);
 						}
 
 					}
-					showtablerow('', 'class="lineheight" colspan="9"', cplang('forums_edit_credits_comment', array('fid' => $fid)));
+					showtablerow('', 'class="lineheight" colspan="13"', cplang('forums_edit_credits_comment', array('fid' => $fid)));
 
 					showtablefooter();
+					print <<<EOF
+					<script type="text/javascript">
+						function modifystate(custom) {
+							var trObj = custom.parentNode.parentNode;
+							var inputsObj = trObj.getElementsByTagName('input');
+							for(key in inputsObj) {
+								var obj = inputsObj[key];
+								if(typeof obj == 'object' && obj.type != 'checkbox') {
+									obj.value = '';
+									obj.readOnly = custom.checked ? false : true;
+									obj.style.display = obj.readOnly ? 'none' : '';
+								}
+							}
+						}
+					</script>
+EOF;
 					showtagfooter('div');
 				}
 
@@ -921,47 +993,47 @@ var rowtypedata = [
 		var rowtypedata = [
 			[
 				[1,'', 'td25'],
-				[1,'<input type="checkbox" class="checkbox" name="newenable[]" checked="checked" />', 'td25'],
 				[1,'<input type="text" size="2" name="newdisplayorder[]" value="0" />'],
 				[1,'<input type="text" name="newname[]" />'],
 				[1,'<input type="text" name="newicon[]" />'],
+				[1,'<input type="checkbox" class="checkbox" name="newenable[]" checked="checked" />'],
+				[1,'<input type="checkbox" class="checkbox" name="newmoderators[]" />'],
 				[1,'']
 			],
 		];
 	</script>
 EOT;
-						showtagheader('div', 'threadtypes', $anchor == 'threadtypes');
+					showtagheader('div', 'threadtypes', $anchor == 'threadtypes');
 
-						showtableheader('forums_edit_threadtypes_config', 'nobottom');
-						showsetting('forums_edit_threadtypes_status', array('threadtypesnew[status]', array(
-							array(1, cplang('yes'), array('threadtypes_config' => '', 'threadtypes_manage' => '')),
-							array(0, cplang('no'), array('threadtypes_config' => 'none', 'threadtypes_manage' => 'none'))
-						), TRUE), $forum['threadtypes']['status'], 'mradio');
-						showtagheader('tbody', 'threadtypes_config', $forum['threadtypes']['status']);
-						showsetting('forums_edit_threadtypes_required', 'threadtypesnew[required]', $forum['threadtypes']['required'], 'radio');
-						showsetting('forums_edit_threadtypes_listable', 'threadtypesnew[listable]', $forum['threadtypes']['listable'], 'radio');
-						showsetting('forums_edit_threadtypes_prefix',
+					showtableheader('forums_edit_threadtypes_config', 'nobottom');
+					showsetting('forums_edit_threadtypes_status', array('threadtypesnew[status]', array(
+						array(1, cplang('yes'), array('threadtypes_config' => '', 'threadtypes_manage' => '')),
+						array(0, cplang('no'), array('threadtypes_config' => 'none', 'threadtypes_manage' => 'none'))
+					), TRUE), $forum['threadtypes']['status'], 'mradio');
+					showtagheader('tbody', 'threadtypes_config', $forum['threadtypes']['status']);
+					showsetting('forums_edit_threadtypes_required', 'threadtypesnew[required]', $forum['threadtypes']['required'], 'radio');
+					showsetting('forums_edit_threadtypes_listable', 'threadtypesnew[listable]', $forum['threadtypes']['listable'], 'radio');
+					showsetting('forums_edit_threadtypes_prefix',
+						array(
+							'threadtypesnew[prefix]',
 							array(
-								'threadtypesnew[prefix]',
-								array(
-									array(0, cplang('forums_edit_threadtypes_noprefix')),
-									array(1, cplang('forums_edit_threadtypes_textonly')),
-									array(2, cplang('forums_edit_threadtypes_icononly')),
-								),
+								array(0, cplang('forums_edit_threadtypes_noprefix')),
+								array(1, cplang('forums_edit_threadtypes_textonly')),
+								array(2, cplang('forums_edit_threadtypes_icononly')),
 							),
-							$forum['threadtypes']['prefix'], 'mradio'
-						);
-						showtagfooter('tbody');
-						showtablefooter();
+						),
+						$forum['threadtypes']['prefix'], 'mradio'
+					);
+					showtagfooter('tbody');
+					showtablefooter();
 
-						showtagheader('div', 'threadtypes_manage', $forum['threadtypes']['status']);
-						showtableheader('forums_edit_threadtypes', 'noborder fixpadding');
-						showsubtitle(array('delete', 'enable', 'display_order', 'forums_edit_threadtypes_name', 'forums_edit_threadtypes_icon'));
-						echo $typeselect;
-						echo '<tr><td colspan="7"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.cplang('threadtype_infotypes_add').'</a></div></td></tr>';
-						showtablefooter();
-						showtagfooter('div');
-
+					showtagheader('div', 'threadtypes_manage', $forum['threadtypes']['status']);
+					showtableheader('forums_edit_threadtypes', 'noborder fixpadding');
+					showsubtitle(array('delete', 'display_order', 'forums_edit_threadtypes_name', 'forums_edit_threadtypes_icon', 'enable', 'forums_edit_threadtypes_moderators'));
+					echo $typeselect;
+					echo '<tr><td colspan="7"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.cplang('threadtype_infotypes_add').'</a></div></td></tr>';
+					showtablefooter();
+					showtagfooter('div');
 					showtagfooter('div');
 
 					showtagheader('div', 'threadsorts', $anchor == 'threadsorts');
@@ -984,7 +1056,6 @@ EOT;
 					echo $sortselect;
 					showtablefooter();
 					showtagfooter('div');
-
 					showtagfooter('div');
 				}
 
@@ -1027,7 +1098,7 @@ EOT;
 								$checked = strstr($forum[$perm], "\t$group[groupid]\t") ? 'checked="checked"' : NULL;
 								$colums[] = '<input class="checkbox" type="checkbox" name="'.$perm.'[]" value="'.$group['groupid'].'" chkvalue="'.$group['groupid'].'" '.$checked.'>';
 							}
-							showtablerow('', array('width="21%"', 'width="13%"', 'width="13%"', 'width="13%"', 'width="13%"', 'width="13%"', 'width="13%"'), $colums);
+							showtablerow('', array('width="21%"', 'width="13%"', 'width="13%"', 'width="13%"', 'width="16%"', 'width="13%"', 'width="13%"'), $colums);
 						}
 					}
 					$showverify = true;
@@ -1173,7 +1244,7 @@ EOT;
 						showtitle($setting['name']);
 						foreach($setting['setting'] as $varid => $var) {
 							if($var['type'] != 'select') {
-								showsetting($var['title'], 'pluginnew['.$varid.']', $forum['plugin'][$varid], 'radio', '', 0, $var['description']);
+								showsetting($var['title'], 'pluginnew['.$varid.']', $forum['plugin'][$varid], $var['type'], '', 0, $var['description']);
 							} else {
 								showsetting($var['title'], array('pluginnew['.$varid.']', $var['select']), $forum['plugin'][$varid], $var['type'], '', 0, $var['description']);
 							}
@@ -1239,10 +1310,13 @@ EOT;
 		if(!empty($_G['gp_domainnew']) && !empty($_G['setting']['domain']['root']['forum'])) {
 			$domain = strtolower(trim($_G['gp_domainnew']));
 		}
+		require_once libfile('function/discuzcode');
 		if($_G['gp_type'] == 'group') {
-
 			if($_G['gp_namenew']) {
+				$newstyleid = intval($_G['gp_styleidnew']);
 				$forumcolumnsnew = $_G['gp_forumcolumnsnew'] > 1 ? intval($_G['gp_forumcolumnsnew']) : 0;
+				$catforumcolumnsnew = $_G['gp_catforumcolumnsnew'] > 1 ? intval($_G['gp_catforumcolumnsnew']) : 0;
+				$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descriptionnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					deletedomain($fid, 'subarea');
 					if(!empty($domain)) {
@@ -1253,15 +1327,32 @@ EOT;
 				DB::update('forum_forum', array(
 					'name' => $_G['gp_namenew'],
 					'forumcolumns' => $forumcolumnsnew,
+					'catforumcolumns' => $catforumcolumnsnew,
 					'domain' => $domain,
 					'status' => intval($_G['gp_statusnew']),
+					'styleid' => $newstyleid,
 				), "fid='$fid'");
 
 				$extranew = is_array($_G['gp_extranew']) ? $_G['gp_extranew'] : array();
 				$extranew = serialize($extranew);
 				DB::update('forum_forumfield', array(
 					'extra' => $extranew,
+					'description' => $descriptionnew,
+					'seotitle' => $_G['gp_seotitlenew'],
+					'keywords' => $_G['gp_keywordsnew'],
+					'seodescription' => $_G['gp_seodescriptionnew'],
 				), "fid='$fid'");
+
+				loadcache('forums');
+				$subfids = array();
+				get_subfids($fid);
+
+				if($newstyleid != $mforum[0]['styleid'] && !empty($subfids)) {
+					DB::update('forum_forum', array(
+						'styleid' => $newstyleid,
+					), "fid IN (".dimplode($subfids).")");
+				}
+
 				updatecache('forums');
 
 				cpmsg('forums_edit_succeed', 'action=forums', 'succeed');
@@ -1270,9 +1361,6 @@ EOT;
 			}
 
 		} else {
-
-			require_once libfile('function/discuzcode');
-
 			$extensionarray = array();
 			foreach(explode(',', $_G['gp_attachextensionsnew']) as $extension) {
 				if($extension = trim($extension)) {
@@ -1352,11 +1440,12 @@ EOT;
 				'jammer' => $_G['gp_jammernew'],
 				'allowanonymous' => $_G['gp_allowanonymousnew'],
 				'forumcolumns' => $forumcolumnsnew,
+				'catforumcolumns' => $catforumcolumnsnew,
 				'threadcaches' => $threadcachesnew,
 				'simple' => $simplenew,
 				'allowglobalstick' => $allowglobalsticknew,
+				'disablethumb' => $_G['gp_disablethumbnew'],
 				'disablewatermark' => $_G['gp_disablewatermarknew'],
-				'allowtag' => $_G['gp_allowtagnew'],
 				'autoclose' => intval($_G['gp_autoclosenew'] * $_G['gp_autoclosetimenew']),
 				'allowfeed' => $_G['gp_allowfeednew'],
 				'domain' => $domain,
@@ -1373,17 +1462,14 @@ EOT;
 				$creditspolicy = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
 				foreach($_G['gp_creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
-					$check = 0;
-					$havecredit = false;
-					foreach($rule as $i => $v) {
-						if($v != $rules[$rid]['extcredits'.$i] || $creditspolicy[$rules[$rid]['action']]['cycletype'] != $rules[$rid]['cycletype'] || $creditspolicy[$rules[$rid]['action']]['rewardnum'] != $rules[$rid]['rewardnum'] || $creditspolicy[$rules[$rid]['action']]['cycletime'] != $rules[$rid]['cycletime']) {
-							$check = 1;
-						}
-						$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = $v;
-						if($v) {
-							$havecredit = true;
+					$usedefault = $_G['gp_usecustom'][$rid] ? false : true;
+
+					if(!$usedefault) {
+						foreach($rule as $i => $v) {
+							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
 						}
 					}
+
 					$cpfids = explode(',', $rules[$rid]['fids']);
 					$cpfidsnew = array();
 					foreach($cpfids as $cpfid) {
@@ -1391,17 +1477,17 @@ EOT;
 							continue;
 						}
 						if($cpfid != $fid) {
-							$cpfidsnew[$fid] = $cpfid;
+							$cpfidsnew[] = $cpfid;
 						}
 					}
-					if($check && $havecredit) {
+					if(!$usedefault) {
 						$cpfidsnew[] = $fid;
 						$creditspolicynew[$rules[$rid]['action']]['fids'] = $rules[$rid]['fids'] = implode(',', $cpfidsnew);
 					} else {
 						$rules[$rid]['fids'] = implode(',', $cpfidsnew);
 						unset($creditspolicynew[$rules[$rid]['action']]);
 					}
-					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids'] ), array('rid' => $rid));
+					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids']), array('rid' => $rid));
 				}
 				$forumfielddata = array();
 				$forumfielddata['creditspolicy'] = addslashes(serialize($creditspolicynew));
@@ -1415,7 +1501,7 @@ EOT;
 						$newname = array_unique($_G['gp_newname']);
 						if($newname) {
 							foreach($newname as $key => $val) {
-								$val = trim($val);
+								$newname[$key] = $val = strip_tags(trim(str_replace(array("'", "\""), array(), $val)), "<font><span><b><strong>");
 								if($_G['gp_newenable'][$key] && $val) {
 									$newtypeid = DB::result_first("SELECT typeid FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' AND name='$val'");
 									if(!$newtypeid) {
@@ -1445,11 +1531,14 @@ EOT;
 							while($type = DB::fetch($query)) {
 								if($threadtypesnew['options']['name'][$type['typeid']] != $type['name'] ||
 									$threadtypesnew['options']['displayorder'][$type['typeid']] != $type['displayorder'] ||
-									$threadtypesnew['options']['icon'][$type['typeid']] != $type['icon']) {
+									$threadtypesnew['options']['icon'][$type['typeid']] != $type['icon'] ||
+									$threadtypesnew['options']['moderators'][$type['typeid']] != $type['moderators']) {
+									$threadtypesnew['options']['name'][$type['typeid']] = strip_tags(trim(str_replace(array("'", "\""), array(), $threadtypesnew['options']['name'][$type['typeid']])), "<font><span><b><strong>");
 									DB::update('forum_threadclass', array(
 										'name' => $threadtypesnew['options']['name'][$type['typeid']],
 										'displayorder' => $threadtypesnew['options']['displayorder'][$type['typeid']],
 										'icon' => $threadtypesnew['options']['icon'][$type['typeid']],
+										'moderators' => $threadtypesnew['options']['moderators'][$type['typeid']],
 									), "typeid='{$type['typeid']}'");
 								}
 							}
@@ -1468,6 +1557,7 @@ EOT;
 								$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
 							}
 							$threadtypesnew['icons'][$type['typeid']] = trim($threadtypesnew['options']['icon'][$type['typeid']]);
+							$threadtypesnew['moderators'][$type['typeid']] = $threadtypesnew['options']['moderators'][$type['typeid']];
 						}
 						$threadtypesnew = $threadtypesnew['types'] ? addslashes(serialize(array
 							(
@@ -1476,6 +1566,7 @@ EOT;
 							'prefix' => $threadtypesnew['prefix'],
 							'types' => $threadtypesnew['types'],
 							'icons' => $threadtypesnew['icons'],
+							'moderators' => $threadtypesnew['moderators'],
 							))) : '';
 					}
 					$forumfielddata['threadtypes'] = $threadtypesnew;
@@ -1495,6 +1586,7 @@ EOT;
 									$threadsortsnew['types'][$sort['typeid']] = $sort['name'];
 								}
 								$threadsortsnew['expiration'][$sort['typeid']] = $sort['expiration'];
+								$threadsortsnew['description'][$sort['typeid']] = $sort['description'];
 								$threadsortsnew['show'][$sort['typeid']] = $threadsortsnew['options']['show'][$sort['typeid']] ? 1 : 0;
 							}
 						}
@@ -1510,6 +1602,7 @@ EOT;
 							'types' => $threadsortsnew['types'],
 							'show' => $threadsortsnew['show'],
 							'expiration' => $threadsortsnew['expiration'],
+							'description' => $threadsortsnew['description'],
 							'defaultshow' => $threadsortsnew['default'] ? $threadsortsnew['defaultshow'] : '',
 							'templatelist' => $threadsortsnew['templatelist'],
 							))) : '';
@@ -1594,12 +1687,15 @@ EOT;
 				'rules' => $rulesnew,
 				'attachextensions' => $_G['gp_attachextensionsnew'],
 				'modrecommend' => $modrecommendnew,
+				'seotitle' => $_G['gp_seotitlenew'],
 				'keywords' => $_G['gp_keywordsnew'],
+				'seodescription' => $_G['gp_seodescriptionnew'],
 				'threadplugin' => $threadpluginnew,
 				'extra' => $extranew,
 				'commentitem' => $_G['gp_commentitemnew'],
 				'formulaperm' => $_G['gp_formulapermnew'],
-				'hidemenu' => $_G['gp_hidemenunew'],
+				'picstyle' => $_G['gp_picstylenew'],
+				'widthauto' => $_G['gp_widthautonew'],
 			));
 			if(!$multiset) {
 				$forumfielddata = array_merge($forumfielddata, array(
@@ -1609,6 +1705,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
+					'relatedgroup' => $_G['gp_relatedgroupnew'],
 					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
 				));
 			}
@@ -1665,28 +1762,8 @@ EOT;
 		while($thread = DB::fetch($query)) {
 			$tids[] = $thread['tid'];
 		}
-		$tids = implode(',', $tids);
 		require_once libfile('function/delete');
-		if($tids) {
-			$query = DB::query("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE tid IN ($tids)");
-			while($attach = DB::fetch($query)) {
-				dunlink($attach);
-			}
-
-			foreach(array('forum_thread', 'forum_threadmod', 'forum_relatedthread', 'forum_post', 'forum_poll',
-				'forum_polloption', 'forum_trade', 'forum_activity', 'forum_activityapply', 'forum_debate',
-				'forum_debatepost', 'forum_attachment', 'forum_typeoptionvar', 'forum_forumrecommend', 'forum_postposition') as $value) {
-				if($value == 'forum_post') {
-					deletepost("tid IN ($tids)", true);
-					continue;
-				}
-				DB::query("DELETE FROM ".DB::table($value)." WHERE tid IN ($tids)", 'UNBUFFERED');
-				if($value == 'attachments') {
-					DB::query("DELETE FROM ".DB::table('forum_attachmentfield')." WHERE tid IN ($tids)", 'UNBUFFERED');
-				}
-			}
-		}
-
+		deletethread($tids);
 		deletedomain($fid, 'forum');
 		deletedomain($fid, 'subarea');
 		if($currow + $pp > $total) {
@@ -1924,10 +2001,10 @@ function showforum_moderators($forum) {
 			foreach($moderators as $moderator) {
 				$mods[] = $forum['inheritedmod'] ? '<b>'.$moderator.'</b>' : $moderator;
 			}
-			$r = '<a href="'.ADMINSCRIPT.'?action=forums&operation=moderators&fid='.$forum['fid'].'" title="'.cplang('forums_moderators_comment').'">'.$r.'</a> ...';
+			$r = '<a href="'.ADMINSCRIPT.'?action=forums&operation=moderators&fid='.$forum['fid'].'" title="'.cplang('forums_moderators_comment').'">'.$r.' &raquo;</a>';
 			$r .= '<div class="dropmenu1" id="mods_'.$forum['fid'].'_menu" style="display: none">'.implode('<br />', $mods).'</div>';
 		} else {
-			$r = '<a href="'.ADMINSCRIPT.'?action=forums&operation=moderators&fid='.$forum['fid'].'" title="'.cplang('forums_moderators_comment').'">'.$r.'</a>';
+			$r = '<a href="'.ADMINSCRIPT.'?action=forums&operation=moderators&fid='.$forum['fid'].'" title="'.cplang('forums_moderators_comment').'">'.$r.' &raquo;</a>';
 		}
 
 
@@ -1952,17 +2029,21 @@ function getthreadclasses_html($fid) {
 
 	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder");
 	while($type = DB::fetch($query)) {
-		$enablechecked = '';
+		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
 		if(isset($threadtypes['types'][$type['typeid']])) {
 			$enablechecked = ' checked="checked"';
 		}
+		if($type['moderators']) {
+			$moderatorschecked = ' checked="checked"';
+		}
 		$typeselect .= showtablerow('', array('class="td25"'), array(
 			"<input type=\"checkbox\" class=\"checkbox\" name=\"threadtypesnew[options][delete][]\" value=\"{$type['typeid']}\" />",
-			'<input type="checkbox" name="threadtypesnew[options][enable]['.$type['typeid'].']" value="1" class="checkbox"'.$enablechecked.' />',
 			"<input type=\"text\" size=\"2\" name=\"threadtypesnew[options][displayorder][{$type['typeid']}]\" value=\"{$type['displayorder']}\" />",
-			"<input type=\"text\" name=\"threadtypesnew[options][name][{$type['typeid']}]\" value=\"{$type['name']}\" />",
+			"<input type=\"text\" name=\"threadtypesnew[options][name][{$type['typeid']}]\" value=\"".(str_replace(array("'", "\""), array(), $type['name']))."\" />",
 			"<input type=\"text\" name=\"threadtypesnew[options][icon][{$type['typeid']}]\" value=\"{$type['icon']}\" />",
+			'<input type="checkbox" name="threadtypesnew[options][enable]['.$type['typeid'].']" value="1" class="checkbox"'.$enablechecked.' />',
+			"<input type=\"checkbox\" class=\"checkbox\" name=\"threadtypesnew[options][moderators][{$type['typeid']}]\" value=\"1\"{$moderatorschecked} />",
 		), TRUE);
 	}
 	return $typeselect;
@@ -1987,4 +2068,34 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+function get_subfids($fid) {
+	global $subfids, $_G;
+	$subfids[] = $fid;
+	foreach($_G['cache']['forums'] as $key => $value) {
+		if($value['fup'] == $fid) {
+			get_subfids($value['fid']);
+		}
+	}
+}
+
+function copy_threadclasses($threadtypes, $fid) {
+	global $_G;
+	if($threadtypes) {
+		$threadtypes = unserialize($threadtypes);
+		$i = 0;
+		$data = array();
+		foreach($threadtypes['types'] as $key => $val) {
+			$data = array('fid' => $fid, 'name' => addslashes($val), 'displayorder' => $i++, 'icon' => addslashes($threadtypes['icons'][$key]), 'moderators' => $threadtypes['moderators'][$key]);
+			$newtypeid = DB::insert('forum_threadclass', $data, 1);
+			$newtypes[$newtypeid] = $val;
+			$newicons[$newtypeid] = $threadtypes['icons'][$key];
+			$newmoderators[$newtypeid] = $threadtypes['moderators'][$key];
+		}
+		$threadtypes['types'] = $newtypes;
+		$threadtypes['icons'] = $newicons;
+		$threadtypes['moderators'] = $newmoderators;
+		return serialize($threadtypes);
+	}
+	return '';
+}
 ?>

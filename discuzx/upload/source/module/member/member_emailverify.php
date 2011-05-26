@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_emailverify.php 14407 2010-08-11 07:31:29Z zhengqingpeng $
+ *      $Id: member_emailverify.php 20095 2011-02-14 09:32:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,7 +17,7 @@ $member = DB::fetch_first("SELECT mf.authstr FROM ".DB::table('common_member')."
 	WHERE m.uid='$_G[uid]' AND mf.uid=m.uid AND m.groupid='8'");
 
 if(!$member) {
-	showmessage('undefined_action', NULL);
+	showmessage('member_not_found');
 }
 
 if($_G['setting']['regverify'] == 2) {

@@ -4,16 +4,15 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_index.php 17496 2010-10-20 03:03:15Z zhengqingpeng $
+ *      $Id: space_index.php 19160 2010-12-20 08:57:24Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] && $_G['gp_view'] != 'admin' && $_G['gp_diy'] != 'yes') {
-	header("Location:home.php?mod=space&uid=$space[uid]&do=profile");
-
+if(($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] && $_G['gp_view'] != 'admin' && $_G['gp_diy'] != 'yes') || defined('IN_MOBILE')) {
+	dheader("Location:home.php?mod=space&uid=$space[uid]&do=profile");
 }
 
 require_once libfile('function/space');
@@ -64,16 +63,8 @@ if ($_GET['op'] == 'getmusiclist') {
 
 }else{
 
-	if($_G['setting']['realname'] && empty($_G['setting']['name_allowviewspace']) && $_G['adminid'] != 1) {
-		space_merge($space, 'profile');
-		if(!empty($space['realname'])) {
-			require_once libfile('function/spacecp');
-			ckrealname('viewspace');
-		}
-	}
-
 	$viewuids = $_G['cookie']['viewuids']?explode('_', $_G['cookie']['viewuids']):array();
-	if($_G['uid'] && !$space['self'] && !in_array($space['uid'], $viewuids)) {
+	if(!$_G['setting']['preventrefresh'] || ($_G['uid'] && !$space['self'] && !in_array($space['uid'], $viewuids))) {
 		member_count_update($space['uid'], array('views' => 1));
 		$viewuids[$space['uid']] = $space['uid'];
 		dsetcookie('viewuids', implode('_', $viewuids));
@@ -109,10 +100,11 @@ if ($_GET['op'] == 'getmusiclist') {
 		include template('home/space_privacy');
 		exit();
 	}
+
 	$widths = getlayout($userdiy['currentlayout']);
-	$leftlist = formatdata($userdiy, 'left');
-	$centerlist = formatdata($userdiy, 'center');
-	$rightlist = formatdata($userdiy, 'right');
+	$leftlist = formatdata($userdiy, 'left', $space);
+	$centerlist = formatdata($userdiy, 'center', $space);
+	$rightlist = formatdata($userdiy, 'right', $space);
 
 	dsetcookie('home_diymode', 1);
 }
@@ -120,15 +112,26 @@ if ($_GET['op'] == 'getmusiclist') {
 $navtitle = !empty($space['spacename']) ? $space['spacename'] : lang('space', 'sb_space', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_space', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_space', array('who' => $space['username']));
+$space['medals'] = getuserprofile('medals');
+if($space['medals']) {
+	loadcache('medals');
+	foreach($space['medals'] = explode("\t", $space['medals']) as $key => $medalid) {
+		list($medalid, $medalexpiration) = explode("|", $medalid);
+		if(isset($_G['cache']['medals'][$medalid]) && (!$medalexpiration || $medalexpiration > TIMESTAMP)) {
+			$space['medals'][$key] = $_G['cache']['medals'][$medalid];
+		} else {
+			unset($space['medals'][$key]);
+		}
+	}
+}
 include_once(template('home/space_index'));
 
-function formatdata($data, $position) {
-	$groupstatus = getglobal('setting/groupstatus');
+function formatdata($data, $position, $space) {
 	$list = array();
 	foreach ((array)$data['block']['frame`frame1']['column`frame1_'.$position] as $blockname => $blockdata) {
 		if (strpos($blockname, 'block`') === false || empty($blockdata) || !isset($blockdata['attr']['name'])) continue;
 		$name = $blockdata['attr']['name'];
-		if($groupstatus && $name == 'group' || $name != 'group') {
+		if(check_ban_block($name, $space)) {
 			$list[$name] = getblockhtml($name, $data['parameters'][$name]);
 		}
 	}

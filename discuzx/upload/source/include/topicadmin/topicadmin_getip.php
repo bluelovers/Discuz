@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_getip.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_getip.php 20099 2011-02-15 01:55:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowviewip']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_viewip');
 }
 
 $pid = $_G['gp_pid'];

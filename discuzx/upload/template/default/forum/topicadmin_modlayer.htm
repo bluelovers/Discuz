@@ -1,8 +1,8 @@
-<div id="mdly" style="display: none;">
+<div id="mdly" style="display: none;{if $_G['forum']['picstyle']} margin-top: 20px;{/if}">
 	<input type="hidden" name="optgroup" />
 	<input type="hidden" name="operation" />
 	<a class="cp" href="javascript:;" title="{lang minimize}" onclick="$('mdly').className='cpd'">{lang minimize}</a>
-	<label><input type="checkbox" name="chkall" class="pc" onclick="if(!($('mdct').innerHTML = modclickcount = checkall(this.form, 'moderate'))) {$('mdly').style.display = 'none';}" /> {lang checkall}</label>
+	<label><input type="checkbox" name="chkall" class="pc" onclick="if(!($('mdct').innerHTML = modclickcount = checkall(this.form, 'moderate'))) {$('mdly').style.display = 'none';}" />{lang checkall}</label>
 	<h6><span>{lang admin_select}</span><strong onclick="$('mdly').className='';" onmouseover="this.title='{lang maximize}'" id="mdct"></strong><span>{lang piece}: </span></h6>
 	<p>
 		<!--{if $_G['group']['allowdelpost']}-->

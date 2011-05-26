@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_forumupload.php 16864 2010-09-16 04:48:29Z monkey $
+ *      $Id: class_forumupload.php 19297 2010-12-27 05:55:47Z monkey $
  */
 
 class forum_upload {
@@ -19,7 +19,7 @@ class forum_upload {
 	function forum_upload() {
 		global $_G;
 
-		$this->uid = intval($_G['gp_uid']);
+		$_G['uid'] = $this->uid = intval($_G['gp_uid']);
 		$swfhash = md5(substr(md5($_G['config']['security']['authkey']), 8).$this->uid);
 		$this->aid = 0;
 		$this->simple = !empty($_G['gp_simple']) ? $_G['gp_simple'] : 0;
@@ -42,9 +42,9 @@ class forum_upload {
 			$this->uploadmsg(2);
 		}
 
-		$allowupload = !$_G['group']['maxattachnum'] || $_G['group']['maxattachnum'] && $_G['group']['maxattachnum'] > DB::result_first("SELECT count(*) FROM ".DB::table('forum_attachment')." WHERE uid='$_G[uid]' AND dateline>'$_G[timestamp]'-86400");
+		$allowupload = !$_G['group']['maxattachnum'] || $_G['group']['maxattachnum'] && $_G['group']['maxattachnum'] > getuserprofile('todayattachs');;
 		if(!$allowupload) {
-			$this->uploadmsg(9);
+			$this->uploadmsg(6);
 		}
 
 		if($_G['group']['attachextensions'] && (!preg_match("/(^|\s|,)".preg_quote($upload->attach['ext'], '/')."($|\s|,)/i", $_G['group']['attachextensions']) || !$upload->attach['ext'])) {
@@ -71,13 +71,13 @@ class forum_upload {
 		}
 
 		if($upload->attach['size'] && $_G['group']['maxsizeperday']) {
-			$todaysize = intval(DB::result_first("SELECT SUM(filesize) FROM ".DB::table('forum_attachment')." WHERE uid='$_G[uid]' AND dateline>'$_G[timestamp]'-86400"));
-			$todaysize += $upload->attach['size'];
+			$todaysize = getuserprofile('todayattachsize') + $upload->attach['size'];
 			if($todaysize >= $_G['group']['maxsizeperday']) {
 				$this->error_sizelimit = 'perday|'.$_G['group']['maxsizeperday'];
-				$this->uploadmsg(6);
+				$this->uploadmsg(11);
 			}
 		}
+		updatemembercount($_G['uid'], array('todayattachs' => 1, 'todayattachsize' => $upload->attach['size']));
 		$upload->save();
 		if($upload->error() == -103) {
 			$this->uploadmsg(8);
@@ -85,6 +85,9 @@ class forum_upload {
 			$this->uploadmsg(9);
 		}
 		$thumb = $remote = $width = 0;
+		if($_G['gp_type'] == 'image' && !$upload->attach['isimage']) {
+			$this->uploadmsg(7);
+		}
 		if($upload->attach['isimage']) {
 			if($_G['setting']['thumbstatus']) {
 				require_once libfile('class/image');
@@ -99,21 +102,21 @@ class forum_upload {
 		if($_G['gp_type'] != 'image' && $upload->attach['isimage']) {
 			$upload->attach['isimage'] = -1;
 		}
-		DB::query("INSERT INTO ".DB::table('forum_attachment')." (tid, pid, dateline, readperm, price, filename, filetype, filesize, attachment, downloads, isimage, uid, thumb, remote, width)
-			VALUES ('0', '0', '$_G[timestamp]', '0', '0', '".$upload->attach['name']."', '".$upload->attach['type']."', '".$upload->attach['size']."', '".$upload->attach['attachment']."', '0', '".$upload->attach['isimage']."', '".$this->uid."', '$thumb', '$remote', '$width')");
-		$this->aid = DB::insert_id();
+		$this->aid = $aid = getattachnewaid($this->uid);
+		DB::query("INSERT INTO ".DB::table('forum_attachment_unused')." (aid, dateline, filename, filesize, attachment, isimage, uid, thumb, remote, width)
+			VALUES ('$aid', '$_G[timestamp]', '".$upload->attach['name']."', '".$upload->attach['size']."', '".$upload->attach['attachment']."', '".$upload->attach['isimage']."', '".$this->uid."', '$thumb', '$remote', '$width')");
 		$this->uploadmsg(0);
 	}
 
 	function uploadmsg($statusid) {
 		global $_G;
+		$this->error_sizelimit = !empty($this->error_sizelimit) ? $this->error_sizelimit : 0;
 		if($this->simple == 1) {
-			echo 'DISCUZUPLOAD|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'];
+			echo 'DISCUZUPLOAD|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.$this->error_sizelimit;
 		} elseif($this->simple == 2) {
-			if(empty($this->error_sizelimit)) $this->error_sizelimit = 0;
 			echo 'DISCUZUPLOAD|'.($_G['gp_type'] == 'image' ? '1' : '0').'|'.$statusid.'|'.$this->aid.'|'.$this->attach['isimage'].'|'.$this->attach['attachment'].'|'.$this->attach['name'].'|'.$this->error_sizelimit;
 		} else {
-			echo $this->aid;
+			echo $statusid ? 'error' : $this->aid;
 		}
 		exit;
 	}

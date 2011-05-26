@@ -62,10 +62,10 @@
 			<p>{lang memcp_credits_addfunds_msg}</p>
 			<p class="mtn">	
 			<!--{if $_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid]}-->
-				<label><input name="apitype" type="radio" value="tenpay" id="apitype_tenpay" checked="checked" /> <img title="{lang apitype_tenpay}" alt="{lang apitype_tenpay}" onclick="$('apitype_tenpay').checked=true" src="{STATICURL}image/common/tenpay_logo.gif" /></label>
+				<label><input name="apitype" type="radio" value="tenpay" id="apitype_tenpay" checked="checked" /><img title="{lang apitype_tenpay}" alt="{lang apitype_tenpay}" onclick="$('apitype_tenpay').checked=true" src="{STATICURL}image/common/tenpay_logo.gif" /></label>
 			<!--{/if}-->
 			<!--{if $_G[setting][ec_account]}-->
-				<label><input name="apitype" type="radio" value="alipay" id="apitype_alipay" {if !($_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid])}checked="checked"{/if} /> <img title="{lang apitype_alipay}" alt="{lang apitype_alipay}" onclick="$('apitype_alipay').checked=true" src="{STATICURL}image/common/alipay_logo.gif" /></label>
+				<label><input name="apitype" type="radio" value="alipay" id="apitype_alipay" {if !($_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid])}checked="checked"{/if} /><img title="{lang apitype_alipay}" alt="{lang apitype_alipay}" onclick="$('apitype_alipay').checked=true" src="{STATICURL}image/common/alipay_logo.gif" /></label>
 			<!--{/if}-->
 			</p>
 		</div>

@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admin.php 996 2010-05-18 09:13:50Z zhaoxiongfei $
+	$Id: admin.php 1098 2011-05-19 01:28:17Z svn_project_zhangjie $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -21,7 +21,7 @@ class adminbase extends base {
 		parent::__construct();
 		$this->cookie_status = isset($_COOKIE['sid']) ? 1 : 0;
 		$sid = $this->cookie_status ? getgpc('sid', 'C') : rawurlencode(getgpc('sid', 'R'));
-		$this->view->sid = $sid;
+		$this->view->sid = $this->sid_decode($sid) ? $sid : '';
 		$this->view->assign('sid', $this->view->sid);
 		$this->view->assign('iframe', getgpc('iframe'));
 		$a = getgpc('a');
@@ -52,6 +52,8 @@ class adminbase extends base {
 			} else {
 				$this->user['username'] = 'UCenterAdministrator';
 				$this->user['admin'] = 1;
+				$this->view->sid = $this->sid_encode($this->user['username']);
+				$this->setcookie('sid', $this->view->sid, 86400);
 			}
 			$this->view->assign('user', $this->user);
 		}
@@ -75,7 +77,7 @@ class adminbase extends base {
 		}
 		if($fp = @fopen($logfile, 'a')) {
 			@flock($fp, 2);
-			@fwrite($fp, "<?PHP exit;?>\t".str_replace(array('<?', '?>'), '', $log)."\n");
+			@fwrite($fp, "<?PHP exit;?>\t".str_replace(array('<?', '?>', '<?php'), '', $log)."\n");
 			@fclose($fp);
 		}
 	}
@@ -118,7 +120,7 @@ class adminbase extends base {
 		@list($username, $check) = explode("\t", $s);
 		if($check == substr(md5($ip.$agent), 0, 8)) {
 			return $username;
-		} else {
+		} else {			
 			return FALSE;
 		}
 	}

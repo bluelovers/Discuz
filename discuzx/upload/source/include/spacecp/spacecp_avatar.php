@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_avatar.php 9904 2010-05-05 07:54:40Z zhengqingpeng $
+ *      $Id: spacecp_avatar.php 18515 2010-11-25 07:35:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,7 +23,7 @@ if(empty($space['avatarstatus']) && uc_check_avatar($_G['uid'], 'middle')) {
 
 	updatecreditbyaction('setavatar');
 
-	if($_G['setting']['my_app_status']) manyoulog('user', $_G['uid'], 'update');
+	manyoulog('user', $_G['uid'], 'update');
 }
 $actives = array('avatar' =>' class="a"');
 include template("home/spacecp_avatar");

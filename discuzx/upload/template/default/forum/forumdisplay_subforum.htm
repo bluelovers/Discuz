@@ -26,7 +26,7 @@
 					</div>
 					<dl{if !empty($sub[extra][iconwidth]) && !empty($sub[icon])} style="margin-left: {$sub[extra][iconwidth]}px;"{/if}>
 						<dt><a href="$forumurl" {if !empty($sub[redirect])}target="_blank"{/if} style="{if !empty($sub[extra][namecolor])}color: {$sub[extra][namecolor]};{/if}">$sub[name]</a><!--{if $sub[todayposts] && !$sub['redirect']}--><em class="xw0 xi1" title="{lang forum_todayposts}"> ($sub[todayposts])</em><!--{/if}--></dt>
-						<dd><em>{lang forum_threads}: $sub[threads]</em>, <em>{lang forum_posts}: $sub[posts]</em></dd>
+						<!--{if empty($sub[redirect])}--><dd><em>{lang forum_threads}: $sub[threads]</em>, <em>{lang forum_posts}: $sub[posts]</em></dd><!--{/if}-->
 						<dd>
 						<!--{if $sub['permission'] == 1}-->
 							{lang private_forum}
@@ -35,7 +35,7 @@
 								<a href="$forumurl" class="xi2">{lang url_link}</a>
 							<!--{elseif is_array($sub['lastpost'])}-->
 								<!--{if $_G['forum']['forumcolumns'] < 3}-->
-									<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($sub[lastpost][subject], 30)}--></a> <cite>$sub[lastpost][dateline] <!--{if $sub['lastpost']['author']}-->$sub['lastpost']['author']<!--{else}-->{lang anonymous}<!--{/if}--></cite>
+									<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($sub[lastpost][subject], 30)}--></a> <cite>$sub[lastpost][dateline] <!--{if $sub['lastpost']['author']}-->$sub['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
 								<!--{else}-->
 									<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&goto=lastpost#lastpost">{lang forum_lastpost}: $sub[lastpost][dateline]</a>
 								<!--{/if}-->
@@ -61,7 +61,7 @@
 					<!--{if $sub['moderators']}--><p>{lang forum_moderators}: $sub[moderators]</p><!--{/if}-->
 				</td>
 				<td class="fl_i">
-					<span class="xi2">$sub[threads]</span><span class="xg1"> / $sub[posts]</span>
+					<!--{if empty($sub[redirect])}--><span class="xi2">$sub[threads]</span><span class="xg1"> / $sub[posts]</span><!--{/if}-->
 				</td>
 				<td class="fl_by">
 					<div>
@@ -71,7 +71,7 @@
 						<!--{if $sub['redirect']}-->
 							<a href="$forumurl" class="xi2">{lang url_link}</a>
 						<!--{elseif is_array($sub['lastpost'])}-->
-							<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($sub[lastpost][subject], 30)}--></a> <cite>$sub[lastpost][dateline] <!--{if $sub['lastpost']['author']}-->$sub['lastpost']['author']<!--{else}-->{lang anonymous}<!--{/if}--></cite>
+							<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($sub[lastpost][subject], 30)}--></a> <cite>$sub[lastpost][dateline] <!--{if $sub['lastpost']['author']}-->$sub['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
 						<!--{else}-->
 							{lang never}
 						<!--{/if}-->

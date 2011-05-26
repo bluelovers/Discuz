@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_threadlist.php 17227 2010-09-27 02:22:18Z zhangguosheng $
+ *      $Id: adv_threadlist.php 22111 2011-04-21 10:21:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -135,8 +135,8 @@ class adv_threadlist {
 				\'<td class="new"><a href="\'.($parameters[$adid][\'threadurl\'] ? $parameters[$adid][\'threadurl\'] : \'forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\']).\'" class="xst">\'.$codes[$adid].\'</a></td>\'.
 				\'<td class="by"><cite><a href="home.php?mod=space&uid=\'.$vt[$vttid][\'authorid\'].\'">\'.$vt[$vttid][\'author\'].\'</a></cite><em>\'.dgmdate($vt[$vttid][\'dateline\'], \'d\').\'</em></td>\'.
 				\'<td class="num"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" class="xi2">\'.$vt[$vttid][\'replies\'].\'</a><em>\'.$vt[$vttid][\'views\'].\'</em></td>\'.
-				($_G[\'forum\'][\'allowside\'] && $_G[\'basescript\'] != \'group\' ? \'\' : \'<td class="by"><cite><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'">\'.$vt[$vttid][\'lastposter\'].\'</a></cite>\'.
-				\'<em><a href="forum.php?mod=redirect&tid=\'.$vt[$vttid][\'tid\'].\'&goto=lastpost#lastpost">\'.dgmdate($vt[$vttid][\'lastpost\'], \'u\').\'</a></em></td>\').
+				\'<td class="by"><cite><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'">\'.$vt[$vttid][\'lastposter\'].\'</a></cite>\'.
+				\'<em><a href="forum.php?mod=redirect&tid=\'.$vt[$vttid][\'tid\'].\'&goto=lastpost#lastpost">\'.dgmdate($vt[$vttid][\'lastpost\'], \'u\').\'</a></em></td>\'.
 				\'</tr>\') : \'\';',
 		);
 	}

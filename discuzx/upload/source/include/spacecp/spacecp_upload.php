@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_upload.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: spacecp_upload.php 22318 2011-04-29 09:34:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -70,6 +70,7 @@ if(submitcheck('albumsubmit')) {
 		$setarr['friend'] = $_POST['friend'];
 		$setarr['password'] = $_POST['password'];
 		$setarr['target_ids'] = $_POST['target_ids'];
+		$setarr['depict'] = dhtmlspecialchars($_POST['depict']);
 
 		$albumid = DB::insert('home_album', $setarr, 1);
 
@@ -165,11 +166,8 @@ if(submitcheck('albumsubmit')) {
 } else {
 
 	if(!checkperm('allowupload')) {
-		showmessage('no_privilege', '', array(), array('return' => true));
+		showmessage('no_privilege_upload', '', array(), array('return' => true));
 	}
-	ckrealname('album');
-
-	ckvideophoto('album');
 
 	cknewuser();
 
@@ -185,7 +183,7 @@ if(submitcheck('albumsubmit')) {
 		space_merge($space, 'count');
 		space_merge($space, 'field_home');
 		$maxspacesize = $maxspacesize + $space['addsize'] * 1024 * 1024;
-		$haveattachsize = formatsize($maxspacesize - $space['attachsize']);
+		$haveattachsize = ($maxspacesize < $space['attachsize'] ? '-':'').formatsize($maxspacesize - $space['attachsize']);
 	} else {
 		$haveattachsize = 0;
 	}

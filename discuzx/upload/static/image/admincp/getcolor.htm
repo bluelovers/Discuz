@@ -28,7 +28,7 @@ function showcolors() {
 }
 
 function setvalue(obj) {
-	parent.$(varname).style.background = setv;
+	parent.$(varname).style.backgroundColor = setv;
 	parent.$(varnamev).value = setv;
 	if(fun) eval('parent.'+fun+'("'+setv+'")');
 }
@@ -56,6 +56,6 @@ body { margin:0px;background-color:#333; }
 <div id="colors"></div>
 <script type="text/javascript">
 showcolors();
-try {document.getElementById('box').style.background = cvalue;} catch(e) {}
+try {document.getElementById('box').style.backgroundColor = cvalue;} catch(e) {}
 </script>
 </body>

@@ -69,12 +69,12 @@ window.onload = testlink;
 				</tr>
 				<tr>
 					<td>
-						<input type="radio" name="installtype" class="radio" checked="checked" onclick="$('url').style.display='';$('custom').style.display='none';" />{lang app_install_by_url}
-						<input type="radio" name="installtype" class="radio" onclick="$('url').style.display='none';$('custom').style.display='';" />{lang app_install_by_custom}
+						<input type="radio" name="installtype" class="radio" checked="checked" onclick="$('url').style.display='none';$('custom').style.display='';" />{lang app_install_by_custom}
+						<input type="radio" name="installtype" class="radio" onclick="$('url').style.display='';$('custom').style.display='none';" />{lang app_install_by_url}
 					</td>
 				</tr>
 			</table>
-			<div id="url">
+			<div id="url" style="display:none;">
 				<form method="post" action="" target="_blank" onsubmit="document.appform.action=document.appform.appurl.value;" name="appform">
 					<table class="opt">
 						<tr>
@@ -91,10 +91,23 @@ window.onload = testlink;
 					</div>
 				</form>
 			</div>
-			<div id="custom" style="display:none;">
+			<div id="custom">
 				<form action="admin.php?m=app&a=add" method="post">
 				<input type="hidden" name="formhash" value="{FORMHASH}">
 					<table class="opt">
+						<tr>
+							<th colspan="2">{lang app_type}:</th>
+						</tr>
+						<tr>
+							<td>
+							<select name="type">
+								<!--{loop $typelist $typeid $typename}-->
+									<option value="$typeid"> $typename </option>
+								<!--{/loop}-->
+							</select>
+							</td>
+							<td></td>
+						</tr>
 						<tr>
 							<th colspan="2">{lang app_name}:</th>
 						</tr>
@@ -123,19 +136,8 @@ window.onload = testlink;
 							<td><input type="text" class="txt" name="authkey" value="" /></td>
 							<td>{lang app_key_comment}</td>
 						</tr>
-						<tr>
-							<th colspan="2">{lang app_type}:</th>
-						</tr>
-						<tr>
-							<td>
-							<select name="type">
-								<!--{loop $typelist $typeid $typename}-->
-									<option value="$typeid"> $typename </option>
-								<!--{/loop}-->
-							</select>
-							</td>
-							<td></td>
-						</tr>
+
+
 						<tr>
 							<th colspan="2">{lang app_path}:</th>
 						</tr>
@@ -170,6 +172,7 @@ window.onload = testlink;
 							<td><textarea class="area" name="tagtemplates"></textarea></td>
 							<td valign="top">{lang app_tagtemplates_comment}</td>
 						</tr>
+
 						<tr>
 							<th colspan="2">{lang app_tagfields}:</th>
 						</tr>
@@ -217,6 +220,20 @@ window.onload = testlink;
 						<th colspan="2">{lang app_id}: $appid</th>
 					</tr>
 					<tr>
+						<th colspan="2">{lang app_type}:</th>
+					</tr>
+					<tr>
+						<td>
+						<select name="type">
+							<!--{loop $typelist $typeid $typename}-->
+							<option value="$typeid" {if $typeid == $type}selected="selected"{/if}> $typename </option>
+							<!--{/loop}-->
+						</select>
+						</td>
+						<td></td>
+					</tr>
+
+					<tr>
 						<th colspan="2">{lang app_name}:</th>
 					</tr>
 					<tr>
@@ -251,19 +268,7 @@ window.onload = testlink;
 						<td><input type="text" class="txt" name="authkey" value="$authkey" /></td>
 						<td>{lang app_key_comment}</td>
 					</tr>
-					<tr>
-						<th colspan="2">{lang app_type}:</th>
-					</tr>
-					<tr>
-						<td>
-						<select name="type">
-							<!--{loop $typelist $typeid $typename}-->
-							<option value="$typeid" {if $typeid == $type}selected="selected"{/if}> $typename </option>
-							<!--{/loop}-->
-						</select>
-						</td>
-						<td></td>
-					</tr>
+
 					<tr>
 						<th colspan="2">{lang app_path}:</th>
 					</tr>
@@ -291,6 +296,7 @@ window.onload = testlink;
 						</td>
 						<td>{lang app_api_filename_comment}</td>
 					</tr>
+
 					<tr>
 						<th colspan="2">{lang app_tagtemplates}:</th>
 					</tr>

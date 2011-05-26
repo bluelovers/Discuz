@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 16370 2010-09-06 02:13:13Z monkey $
+ *      $Id: admincp_styles.php 22614 2011-05-16 02:15:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -338,7 +338,7 @@ if($operation == 'admin') {
 			LEFT JOIN ".DB::table('common_template')." t ON s.templateid=t.templateid
 			WHERE s.styleid='$id'");
 		if(!$style) {
-			cpmsg('undefined_action', '', 'error');
+			cpmsg('style_not_found', '', 'error');
 		}
 		list($style['extstyle'], $style['defaultextstyle']) = explode('|', $style['extstyle']);
 		$style['extstyle'] = explode("\t", $style['extstyle']);
@@ -398,6 +398,7 @@ if($operation == 'admin') {
 		$adv = !empty($_G['gp_adv']) ? 1 : 0;
 
 		shownav('style', 'styles_edit');
+
 		showsubmenu(cplang('styles_admin').' - '.$style['name'], array(
 			array('admin', 'styles', 0),
 			array('import', 'styles&operation=import', 0),
@@ -443,8 +444,10 @@ function imgpre_switch(id) {
 }
 </script>
 <br />
-<iframe class="preview" frameborder="0" src="<?=ADMINSCRIPT?>?action=styles&preview=yes&styleid=<?=$id?>"></iframe>
-<?
+<iframe class="preview" frameborder="0" src="<?php echo ADMINSCRIPT;?>?action=styles&preview=yes&styleid=<?php echo $id;?>"></iframe>
+<?php
+
+		showtips('styles_tips');
 
 		showformheader("styles&operation=edit&id=$id");
 		showtableheader($lang['styles_edit'], 'nobottom');
@@ -506,6 +509,9 @@ function imgpre_switch(id) {
 		$copyids = $_G['gp_copyids'];
 		$stylevarbgimg = $_G['gp_stylevarbgimg'];
 		$stylevarbgextra = $_G['gp_stylevarbgextra'];
+		if(!in_array($_G['gp_defaultextstylenew'], $_G['gp_extstylenew'])) {
+			$_G['gp_extstylenew'][] = $_G['gp_defaultextstylenew'];
+		}
 		$extstylenew = implode("\t", $_G['gp_extstylenew']).'|'.$_G['gp_defaultextstylenew'];
 
 		if($_G['gp_newcvar'] && $_G['gp_newcsubst']) {

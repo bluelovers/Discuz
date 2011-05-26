@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: space_diy.js 16053 2010-08-31 05:05:53Z zhangguosheng $
+	$Id: space_diy.js 21831 2011-04-13 08:53:11Z maruitao $
 */
 
 var drag = new Drag();
@@ -195,9 +195,46 @@ spaceDiy.extend({
 				$('spacename').appendChild(dom);
 			}
 			$('spaceinfoshow').onmousedown = function () {spaceDiy.showEditSpaceInfo();};
-			$('spaceinfoshow').onmouseover = function () {$('infoedit').style.display='inline';};
-			$('spaceinfoshow').onmouseout = function () {$('infoedit').style.display='none';};
 		}
+		if ($('nv')) {
+			if(!$('nv').getElementsByTagName('li').length) {
+				$('nv').getElementsByTagName('ul')[0].className = 'mininv';
+			}
+			$('nv').onmouseover = function () {spaceDiy.showEditNvInfo();};
+			$('nv').onmouseout = function () {spaceDiy.hideEditNvInfo();};
+		}
+	},
+	showEditNvInfo : function () {
+		var nv = $('editnvinfo');
+		if(!nv) {
+			var dom = document.createElement('div');
+			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">設置</span>';
+			$('nv').appendChild(dom.childNodes[0]);
+		} else {
+			nv.style.display = '';
+		}
+	},
+	hideEditNvInfo : function () {
+		var nv = $('editnvinfo');
+		if(nv) {
+			nv.style.display = 'none';
+		}
+	},
+	opNvEditInfo : function () {
+		showWindow('showpersonalnv', 'home.php?mod=spacecp&ac=index&op=editnv','get',0);
+	},
+	getPersonalNv : function (show) {
+		var x = new Ajax();
+		show = !show ? '' : '&show=1';
+		x.get('home.php?mod=spacecp&ac=index&op=getpersonalnv&inajax=1'+show, function(s) {
+			if($('nv')) {
+				$('hd').removeChild($('nv'));
+			}
+			var dom = document.createElement('div');
+			dom.innerHTML = !s ? '&nbsp;' : s;
+			$('hd').appendChild(dom.childNodes[0]);
+			spaceDiy.initSpaceInfo();
+		});
 	}
 });
 

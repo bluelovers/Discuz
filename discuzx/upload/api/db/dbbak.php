@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dbbak.php 16790 2010-09-15 01:43:36Z monkey $
+ *      $Id: dbbak.php 22319 2011-04-29 09:40:43Z monkey $
  */
+
+@define('IN_API', true);
+@define('CURSCRIPT', 'api');
 
 error_reporting(0);
 

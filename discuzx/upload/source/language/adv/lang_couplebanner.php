@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_couplebanner.php 12322 2010-07-05 06:18:27Z monkey $
+ *      $Id: lang_couplebanner.php 19237 2010-12-23 04:27:46Z monkey $
  */
 
 $lang = array
@@ -22,6 +22,8 @@ $lang = array
 	'couplebanner_position_right' => '右側',
 	'couplebanner_coupleadid' => '上/下聯廣告',
 	'couplebanner_coupleadid_comment' => '設置和當前廣告配對的上/下聯廣告',
+	'couplebanner_category' => '投放門戶頻道',
+	'couplebanner_category_comment' => '設置廣告投放的頻道分類，當廣告投放範圍中包含「門戶」時有效',
 );
 
 ?>

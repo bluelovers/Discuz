@@ -1,7 +1,6 @@
 <!--{template common/header}-->
 <table cellspacing="0" cellpadding="0" class="dt">
 	<caption>
-		<h3 class="ptw">{lang trade_rate}</h3>
 		<p class="tbmu bw0" style="padding: 10px 0;">
 		<!--{if in_array($filter, array('thisweek', 'thismonth', 'halfyear', 'before')) && in_array($from, array('buyer', 'seller'))}-->
 			<a class="a" href="javascript:;" hidefocus="true">
@@ -57,7 +56,7 @@
 					<!--{/if}-->
 				</td>
 				<td>
-					<a href="forum.php?mod=redirect&goto=findpost&special=trade&pid=$comment[pid]" target="_blank">$comment[subject]</a><br />
+					<a href="forum.php?mod=redirect&goto=findpost&pid=$comment[pid]" target="_blank">$comment[subject]</a><br />
 					<!--{if $from == 'myself'}-->
 						<!--{if $comment[type]}-->{lang trade_buyer}: <!--{else}-->{lang trade_seller}: <!--{/if}--><a href="home.php?mod=space&uid=$comment[rateeid]" target="_blank">$comment[ratee]</a>
 					<!--{else}-->

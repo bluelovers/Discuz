@@ -132,7 +132,7 @@ class block_forum {
 			." LIMIT $startrow, $items"
 		);
 		$datalist = $list = array();
-		$attachurl = preg_match('/^(http|ftp|ftps|https):\/\//', $_G['setting']['attachurl']) ? $_G['setting']['attachurl'] : $_G['setting']['attachurl'];
+		$attachurl = preg_match('/^(http|ftp|ftps|https):\/\//', $_G['setting']['attachurl']) ? $_G['setting']['attachurl'] : $_G['siteurl'].$_G['setting']['attachurl'];
 		while($data = DB::fetch($query)) {
 			$data['icon'] = $data['icon'] ? $data['icon'] : 'static/image/common/forum_new.gif';
 			$list[] = array(

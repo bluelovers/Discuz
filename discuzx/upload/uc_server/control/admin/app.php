@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: app.php 1003 2010-06-02 02:21:31Z zhaoxiongfei $
+	$Id: app.php 1090 2011-05-03 07:33:28Z cnteacher $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -71,6 +71,7 @@ class control extends adminbase {
 			$synlogin = getgpc('synlogin', 'P');
 			$recvnote = getgpc('recvnote', 'P');
 			$apifilename = trim(getgpc('apifilename', 'P'));
+			//$allowips = getgpc('allowips', 'P');
 
 			$tagtemplates = array();
 			$tagtemplates['template'] = getgpc('tagtemplates', 'P');
@@ -92,11 +93,13 @@ class control extends adminbase {
 			}
 			$app = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."applications WHERE name='$name'");
 			if($app) {
-				$this->db->query("UPDATE ".UC_DBTABLEPRE."applications SET name='$name', url='$url', ip='$ip', viewprourl='$viewprourl', apifilename='$apifilename', authkey='$authkey', synlogin='$synlogin', type='$type', tagtemplates='$tagtemplates' WHERE appid='$app[appid]'");
-				$appid = $app['appid'];
+				$this->message('app_add_name_invalid', 'BACK');
 			} else {
 				$extra = serialize(array('apppath'=> getgpc('apppath', 'P')));
-				$this->db->query("INSERT INTO ".UC_DBTABLEPRE."applications SET name='$name', url='$url', ip='$ip', viewprourl='$viewprourl', apifilename='$apifilename', authkey='$authkey', synlogin='$synlogin', type='$type', recvnote='$recvnote', extra='$extra', tagtemplates='$tagtemplates'");
+				$this->db->query("INSERT INTO ".UC_DBTABLEPRE."applications SET name='$name', url='$url', ip='$ip',
+					viewprourl='$viewprourl', apifilename='$apifilename', authkey='$authkey', synlogin='$synlogin',
+					type='$type', recvnote='$recvnote', extra='$extra',
+					tagtemplates='$tagtemplates'");
 				$appid = $this->db->insert_id();
 			}
 
@@ -149,6 +152,7 @@ class control extends adminbase {
 			$synlogin = getgpc('synlogin', 'P');
 			$recvnote = getgpc('recvnote', 'P');
 			$extraurl = getgpc('extraurl', 'P');
+			//$allowips = getgpc('allowips', 'P');
 			if(getgpc('apppath', 'P')) {
 				$app['extra']['apppath'] = $this->_realpath(getgpc('apppath', 'P'));
 				if($app['extra']['apppath']) {
@@ -190,7 +194,11 @@ class control extends adminbase {
 			$tagtemplates = $this->serialize($tagtemplates, 1);
 
 			$extra = addslashes(serialize($app['extra']));
-			$this->db->query("UPDATE ".UC_DBTABLEPRE."applications SET appid='$appid', name='$name', url='$url', type='$type', ip='$ip', viewprourl='$viewprourl', apifilename='$apifilename', authkey='$authkey', synlogin='$synlogin', recvnote='$recvnote', extra='$extra', tagtemplates='$tagtemplates' WHERE appid='$appid'");
+			$this->db->query("UPDATE ".UC_DBTABLEPRE."applications SET appid='$appid', name='$name', url='$url',
+				type='$type', ip='$ip', viewprourl='$viewprourl', apifilename='$apifilename', authkey='$authkey',
+				synlogin='$synlogin', recvnote='$recvnote', extra='$extra', 
+				tagtemplates='$tagtemplates'
+				WHERE appid='$appid'");
 			$updated = true;
 			$this->load('cache');
 			$_ENV['cache']->updatedata('apps');
@@ -214,6 +222,7 @@ class control extends adminbase {
 		$app = $_ENV['app']->get_app_by_appid($appid);
 		$this->view->assign('isfounder', $this->user['isfounder']);
 		$this->view->assign('appid', $app['appid']);
+		$this->view->assign('allowips', $app['allowips']);
 		$this->view->assign('name', $app['name']);
 		$this->view->assign('url', $app['url']);
 		$this->view->assign('ip', $app['ip']);

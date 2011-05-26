@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_float.php 12322 2010-07-05 06:18:27Z monkey $
+ *      $Id: lang_float.php 19237 2010-12-23 04:27:46Z monkey $
  */
 
 $lang = array
@@ -20,6 +20,8 @@ $lang = array
 	'float_position_comment' => '設置廣告漂浮的位置',
 	'float_position_left' => '左側',
 	'float_position_right' => '右側',
+	'float_category' => '投放門戶頻道',
+	'float_category_comment' => '設置廣告投放的頻道分類，當廣告投放範圍中包含「門戶」時有效',
 );
 
 ?>

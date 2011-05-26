@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_profilefield.php 13903 2010-08-03 02:38:55Z zhengqingpeng $
+ *      $Id: admincp_profilefield.php 20095 2011-02-14 09:32:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -84,7 +84,7 @@ EOT;
 
 	$field = DB::fetch_first("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE fieldid='$id'");
 	if(!$field) {
-		cpmsg('undefined_action', '', 'error');
+		cpmsg('profilefield_not_found', '', 'error');
 	}
 
 	if(!submitcheck('editsubmit')) {

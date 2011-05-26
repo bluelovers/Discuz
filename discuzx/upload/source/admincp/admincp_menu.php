@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: admincp_menu.php 21972 2011-04-19 02:51:52Z monkey $
  */
 
 global $_G;
@@ -41,8 +41,9 @@ $menu['index'] = array_merge($menu['index'], $custommenu);
 $menu['global'] = array(
 	array('menu_setting_basic', 'setting_basic'),
 	array('menu_setting_access', 'setting_access'),
-	array('menu_setting_optimize', 'setting_seo'),
 	array('menu_setting_functions', 'setting_functions'),
+	array('menu_setting_optimize', 'setting_cachethread'),
+	array('menu_setting_seo', 'setting_seo'),
 	array('menu_setting_domain', 'domain'),
 	array('menu_setting_home', 'setting_home'),
 	array('menu_setting_user', 'setting_permissions'),
@@ -55,6 +56,7 @@ $menu['global'] = array(
 	array('menu_setting_search', 'setting_search'),
 	array('menu_setting_district', 'district'),
 	array('menu_setting_ranklist', 'setting_ranklist'),
+	array('menu_setting_mobile', 'setting_mobile'),
 );
 
 $menu['style'] = array(
@@ -71,24 +73,35 @@ $menu['style'] = array(
 
 $menu['topic'] = array(
 	array('menu_moderate_posts', 'moderate'),
-	array('menu_maint_threads', 'threads'),
-	array('menu_maint_prune', 'prune'),
-	array('menu_maint_attaches', 'attach'),
-	array('menu_maint_threads_group', 'threads_group'),
-	array('menu_maint_prune_group', 'prune_group'),
-	array('menu_maint_attaches_group', 'attach_group'),
-	array('menu_moderate_recyclebin', 'recyclebin'),
 	array('menu_posting_censors', 'misc_censor'),
 	array('menu_maint_report', 'report'),
-	array('menu_threads_forumstick', 'threads_forumstick'),
-	array('menu_post_position_index', 'threads_postposition'),
-	array('menu_maint_doing', 'doing'),
-	array('menu_maint_blog', 'blog'),
-	array('menu_maint_feed', 'feed'),
-	array('menu_maint_album', 'album'),
-	array('menu_maint_pic', 'pic'),
-	array('menu_maint_comment', 'comment'),
-	array('menu_maint_share', 'share'),
+	array('menu_setting_tag', 'tag'),
+	array(cplang('nav_forum'), '', 1),
+		array('menu_maint_threads', 'threads'),
+		array('menu_maint_prune', 'prune'),
+		array('menu_maint_attaches', 'attach'),
+	array(cplang('nav_forum'), '', 2),
+	array(cplang('nav_group'), '', 1),
+		array('menu_maint_threads_group', 'threads_group'),
+		array('menu_maint_prune_group', 'prune_group'),
+		array('menu_maint_attaches_group', 'attach_group'),
+	array(cplang('nav_group'), '', 2),
+	array(cplang('thread'), '', 1),
+    		array('menu_moderate_recyclebin', 'recyclebin'),
+		array('menu_moderate_recyclebinpost', 'recyclebinpost'),
+		array('menu_threads_forumstick', 'threads_forumstick'),
+		array('menu_post_position_index', 'threads_postposition'),
+		array('menu_postcomment', 'postcomment'),
+	array(cplang('thread'), '', 2),
+	array(cplang('nav_home'), '', 1),
+		array('menu_maint_doing', 'doing'),
+		array('menu_maint_blog', 'blog'),
+		array('menu_maint_feed', 'feed'),
+		array('menu_maint_album', 'album'),
+		array('menu_maint_pic', 'pic'),
+		array('menu_maint_comment', 'comment'),
+		array('menu_maint_share', 'share'),
+	array(cplang('nav_home'), '', 2),
 );
 
 $menu['user'] = array(
@@ -111,7 +124,7 @@ $menu['user'] = array(
 
 if(is_array($_G['setting']['verify'])) {
 	foreach($_G['setting']['verify'] as $vid => $verify) {
-		if($verify['available']) {
+		if($vid != 7 && $verify['available']) {
 			$menu['user'][] = array($verify['title'], "verify_verify_$vid");
 		}
 	}
@@ -119,13 +132,14 @@ if(is_array($_G['setting']['verify'])) {
 
 $menu['portal'] = array(
 	array('menu_portalcategory', 'portalcategory'),
-	array('menu_blogcategory', 'blogcategory'),
-	array('menu_albumcategory', 'albumcategory'),
 	array('menu_article', 'article'),
-	array('menu_blockstyle', 'blockstyle'),
-	array('menu_block', 'block'),
 	array('menu_topic', 'topic'),
 	array('menu_diytemplate', 'diytemplate'),
+	array('menu_block', 'block'),
+	array('menu_blockstyle', 'blockstyle'),
+	array('menu_blockxml', 'blockxml'),
+	array('menu_blogcategory', 'blogcategory'),
+	array('menu_albumcategory', 'albumcategory'),
 );
 
 $menu['forum'] = array(
@@ -143,6 +157,7 @@ $menu['group'] = array(
 );
 
 $menu['extended'] = array(
+	array('menu_misc_announce', 'announce'),
 	array('menu_adv_custom', 'adv'),
 	array('menu_tasks', 'tasks'),
 	array('menu_magics', 'magics'),
@@ -151,6 +166,8 @@ $menu['extended'] = array(
 	array('menu_ec', 'setting_ec'),
 	array('menu_misc_link', 'misc_link'),
 	array('memu_focus_topic', 'misc_focus'),
+	array('menu_misc_relatedlink', 'misc_relatedlink'),
+	array('menu_card', 'card')
 );
 
 if(file_exists($menudir = DISCUZ_ROOT.'./source/admincp/menu')) {
@@ -181,9 +198,9 @@ if($isfounder) {
 		array('menu_plugins', 'plugins'),
 	);
 }
-@include_once DISCUZ_ROOT.'./data/cache/cache_adminmenu.php';
-if(is_array($adminmenu)) {
-	foreach($adminmenu as $row) {
+loadcache('adminmenu');
+if(is_array($_G['cache']['adminmenu'])) {
+	foreach($_G['cache']['adminmenu'] as $row) {
 		$menu['plugin'][] = array($row['name'], $row['action']);
 	}
 }
@@ -193,7 +210,6 @@ if(!$menu['plugin']) {
 
 $menu['tools'] = array(
 	array('menu_tools_updatecaches', 'tools_updatecache'),
-	array('menu_misc_announce', 'announce'),
 	array('menu_tools_updatecounters', 'counter'),
 	array('menu_logs', 'logs'),
 	array('menu_misc_cron', 'misc_cron'),
@@ -207,7 +223,6 @@ if($isfounder) {
 		array('menu_founder_perm', 'founder_perm'),
 		array('menu_setting_mail', 'setting_mail'),
 		array('menu_setting_uc', 'setting_uc'),
-		array('menu_setting_manyou', 'setting_manyou'),
 		array('menu_db', 'db_export'),
 		array('menu_postsplit', 'postsplit_manage'),
 		array('menu_threadsplit', 'threadsplit_manage'),

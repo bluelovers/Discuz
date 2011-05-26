@@ -4,9 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: google.php 11381 2010-06-01 07:46:13Z cnteacher $
+ *      $Id: google.php 22319 2011-04-29 09:40:43Z monkey $
  */
 
+@define('IN_API', true);
 @define('CURSCRIPT', 'api');
 
 require_once('../../source/class/class_core.php');
@@ -111,17 +112,24 @@ class GoogleAPI
 					$thread['message'] = '';
 					if($msg) {
 						if($thread['posttableid']) {
-							$tablename = 'forum_post_'.intval($thread['posttableid']);
+							$tablenamelist['forum_post_'.intval($thread['posttableid'])][] = $thread['tid'];
 						} else {
-							$tablename = 'forum_post';
-						}
-
-						$pquery = DB::query("SELECT message FROM ".DB::table($tablename)." WHERE tid='$thread[tid]' AND first=1", 'SILENT');
-						if($pquery && $post = DB::fetch($pquery)) {
-							$thread['message'] = htmlspecialchars($post['message']);
+							$tablenamelist['forum_post'][] = $thread['tid'];
 						}
 					}
+					$threadlist[$thread['tid']] = $thread;
+				}
+				if($msg) {
+					foreach($tablenamelist AS $tablename => $tids) {
+						$pquery = DB::query("SELECT tid, message FROM ".DB::table($tablename)." WHERE tid IN (".dimplode($tids).") AND first=1", 'SILENT');
+						while($pquery && $post = DB::fetch($pquery)) {
+							$threadlist[$post['tid']]['message'] = htmlspecialchars($post['message']);
+						}
+					}
+					unset($tablenamelist);
+				}
 
+				foreach($threadlist AS $tid => $thread) {
 					$xmlcontent .=
 					"	<thread>\n".
 					"		<tid>$thread[tid]</tid>\n".
@@ -147,7 +155,14 @@ class GoogleAPI
 	function on_gts() {
 		$xmlcontent = '';
 		$threads = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread'));
-		$posts = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_post'));
+
+		$posts = 0;
+		loadcache('posttableids');
+		if($_G['cache']['posttableids']) {
+			foreach($_G['cache']['posttableids'] AS $tableid) {
+				$posts += DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable($tableid))." LIMIT 1");
+			}
+		}
 		$members = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member'));
 		$bbname = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='bbname'");
 		$yesterdayposts = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='historyposts'");

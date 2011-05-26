@@ -14,21 +14,21 @@ if(!defined('IN_DISCUZ')) {
 define('NOROBOT', TRUE);
 
 $url = '';
-if($_G['config']['app']['domain']['home'] || $_G['config']['app']['domain']['default']) {
+if($_G['setting']['domain']['app']['home'] || $_G['setting']['domain']['app']['default']) {
 	$port = empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
-	$appphp = '';
-	if(!$_G['config']['app']['domain']['home']) {
-		$appphp = 'home.php';
+	$domain = '';
+	if($_G['setting']['domain']['app']['home']) {
+		$domain = $_G['setting']['domain']['app']['home'];
+	} else {
+		$domain = $_G['setting']['domain']['app']['default'];
 	}
-	$url = 'http://'.$domain.$port.$_G['siteroot'].$appphp;
-} else {
-	$url = 'home.php';
+	$url = 'http://'.$domain.$port.'/';
 }
-$url .= '?mod=spacecp&ac=search';
+$url .= 'home.php?mod=spacecp&ac=search';
 if($_G['gp_srchtxt']) {
 	$url .= '&username='.$_G['gp_srchtxt'].'&searchsubmit=yes';
 }
 
-header('Location: '.$url);
+dheader('Location: '.$url);
 
 ?>

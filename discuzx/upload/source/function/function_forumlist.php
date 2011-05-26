@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 17269 2010-09-28 03:51:56Z monkey $
+ *      $Id: function_forumlist.php 22254 2011-04-27 01:12:11Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -70,43 +70,47 @@ function forum(&$forum) {
 	return TRUE;
 }
 
-function forumselect($groupselectable = FALSE, $tableformat = 0, $selectedfid = 0, $showhide = FALSE, $evalue = FALSE, $special = 0) {
+function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 0, $showhide = FALSE, $evalue = FALSE, $special = 0) {
 	global $_G;
 
 	if(!isset($_G['cache']['forums'])) {
 		loadcache('forums');
 	}
 	$forumcache = &$_G['cache']['forums'];
-	$forumlist = $tableformat ? '<dl><dd><ul>' : '<optgroup label="&nbsp;">';
+	$forumlist = $arrayformat ? array() : '<optgroup label="&nbsp;">';
 	foreach($forumcache as $forum) {
-		if((!$forum['status'] || $forum['hidemenu']) && !$showhide) {
+		if(!$forum['status'] && !$showhide) {
 			continue;
 		}
+		if($selectedfid) {
+			if(!is_array($selectedfid)) {
+				$selected = $selectedfid == $forum['fid'] ? ' selected' : '';
+			} else {
+				$selected = in_array($forum['fid'], $selectedfid) ? ' selected' : '';
+			}
+		}
 		if($forum['type'] == 'group') {
-			if($tableformat) {
-				$forumlist .= '</ul></dd></dl><dl><dt><a href="forum.php?gid='.$forum['fid'].'">'.$forum['name'].'</a></dt><dd><ul>';
+			if($arrayformat) {
+				$forumlist[$forum['fid']]['name'] = $forum['name'];
 			} else {
 				$forumlist .= $groupselectable ? '<option value="'.($evalue ? 'gid_' : '').$forum['fid'].'" class="bold">--'.$forum['name'].'</option>' : '</optgroup><optgroup label="--'.$forum['name'].'">';
 			}
 			$visible[$forum['fid']] = true;
 		} elseif($forum['type'] == 'forum' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || (substr($forum['allowpostspecial'], -$special, 1)))) {
-			if($tableformat) {
-				$forumlist .= '<li'.($_G['fid'] == $forum['fid'] ? ' class="current"' : '').'><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'">'.$forum['name'].'</a></li>';
+			if($arrayformat) {
+				$forumlist[$forum['fup']]['sub'][$forum['fid']] = $forum['name'];
 			} else {
-				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && $selectedfid == $forum['fid'] ? ' selected' : '').'>'.$forum['name'].'</option>';
+				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.'>'.$forum['name'].'</option>';
 			}
 			$visible[$forum['fid']] = true;
-		} elseif($forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
-			if($tableformat) {
-				$forumlist .=  '<li class="sub'.($_G['fid'] == $forum['fid'] ? ' current' : '').'"><a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'">'.$forum['name'].'</a></li>';
-			} else {
-				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.($selectedfid && $selectedfid == $forum['fid'] ? ' selected' : '').'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
-			}
+		} elseif(!$arrayformat && $forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
+			$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
 		}
 	}
-	$forumlist .= $tableformat ? '</ul></dd></dl>' : '</optgroup>';
-	$forumlist = str_replace($tableformat ? '<dl><dd><ul></ul></dd></dl>' : '<optgroup label="&nbsp;"></optgroup>', '', $forumlist);
-
+	if(!$arrayformat) {
+		$forumlist .= '</optgroup>';
+		$forumlist = str_replace('<optgroup label="&nbsp;"></optgroup>', '', $forumlist);
+	}
 	return $forumlist;
 }
 
@@ -116,19 +120,18 @@ function visitedforums() {
 	$count = 0;
 	$visitedforums = '';
 	$fidarray = array($_G['forum']['fid']);
-	$_G['cookie']['visitedfid'] = !isset($_G['cookie']['visitedfid']) ? '' : $_G['cookie']['visitedfid'];
+	$_G['cookie']['visitedfid'] = isset($_G['cookie']['visitedfid']) ? $_G['cookie']['visitedfid'] : '';
 
 	if(!empty($_G['cookie']['visitedfid'])) {
 		foreach(explode('D', $_G['cookie']['visitedfid']) as $fid) {
 			if(isset($_G['cache']['forums'][$fid]) && !in_array($fid, $fidarray)) {
-				$fidarray[] = $fid;
 				if($fid != $_G['forum']['fid']) {
 					$visitedforums .= '<li><a href="forum.php?mod=forumdisplay&fid='.$fid.'">'.$_G['cache']['forums'][$fid]['name'].'</a></li>';
 					if(++$count >= $_G['setting']['visitedforums']) {
 						break;
 					}
-
 				}
+				$fidarray[] = $fid;
 			}
 		}
 	}
@@ -142,7 +145,7 @@ function moddisplay($moderators, $type, $inherit = 0) {
 	if($moderators) {
 		$modlist = $comma = '';
 		foreach(explode("\t", $moderators) as $moderator) {
-			$modlist .= $comma.'<a class="notabs" href="home.php?mod=space&username='.rawurlencode($moderator).'" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
+			$modlist .= $comma.'<a href="home.php?mod=space&username='.rawurlencode($moderator).'" class="notabs" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
 			$comma = ', ';
 		}
 	} else {
@@ -181,9 +184,6 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 	if($modrecommend['sort'] && (TIMESTAMP - $modrecommend['updatetime'] > $modrecommend['cachelife'] || $force)) {
 		$query = DB::query("SELECT tid, moderatorid, aid FROM ".DB::table('forum_forumrecommend')." WHERE fid='$fid'");
 		while($row = DB::fetch($query)) {
-			if($row['aid'] && $modrecommend['sort'] == 2 || $modrecommend['sort'] == 1) {
-				@unlink(DISCUZ_ROOT.'./data/imagecache/'.intval($row['aid']).'_'.$imgw.'_'.$imgh.'.jpg');
-			}
 			if($modrecommend['sort'] == 2 && $row['moderatorid']) {
 				$modedtids[] = $row['tid'];
 			}
@@ -213,20 +213,27 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 			}
 		}
 		if($tids && $imagenum) {
-			$attacharray = getallwithposts(array(
-				'select' => 'p.fid, p.tid, a.aid',
-				'from' => DB::table('forum_post')." p INNER JOIN ".DB::table('forum_attachment')." a ON a.pid=p.pid and a.isimage IN ('1', '-1') AND a.width>='$imgw'",
-				'where' => "p.tid IN (".dimplode($tids).") AND p.first='1'"));
-			foreach($attacharray as $attachment) {
-				if(isset($recommendimagelist[$attachment['tid']])) {
-					continue;
-				}
-				$key = authcode($attachment['aid']."\t".$imgw."\t".$imgh, 'ENCODE', $_G['config']['security']['authkey']);
-				$recommendlist[$attachment['tid']]['filename'] = $attachment['aid']."\t".$imgw."\t".$imgh."\t".$key;
-				$recommendimagelist[$attachment['tid']] = $recommendlist[$attachment['tid']];
-				$addimg[$attachment['tid']] = ",'$attachment[aid]', '".addslashes($recommendlist[$attachment['tid']]['filename'])."', '1'";
-				if(count($recommendimagelist) == $imagenum) {
-					break;
+			$attachtables = array();
+			foreach($tids as $tid) {
+				$attachtables[getattachtablebytid($tid)][] = $tid;
+			}
+			foreach($attachtables as $attachtable => $tids) {
+				$query = DB::query('SELECT p.fid, p.tid, a.aid
+							FROM '.DB::table(getposttable())." p
+							INNER JOIN ".DB::table($attachtable)." a
+							ON a.pid=p.pid AND a.isimage IN ('1', '-1') AND a.width>='$imgw'"."
+							WHERE p.tid IN (".dimplode($tids).") AND p.first='1'");
+				while($attachment = DB::fetch($query)) {
+					if(isset($recommendimagelist[$attachment['tid']])) {
+						continue;
+					}
+					$key = md5($attachment['aid'].'|'.$imgw.'|'.$imgh);
+					$recommendlist[$attachment['tid']]['filename'] = $attachment['aid']."\t".$imgw."\t".$imgh."\t".$key;
+					$recommendimagelist[$attachment['tid']] = $recommendlist[$attachment['tid']];
+					$addimg[$attachment['tid']] = ",'', '".addslashes($recommendlist[$attachment['tid']]['filename'])."', '1'";
+					if(count($recommendimagelist) == $imagenum) {
+						break;
+					}
 				}
 			}
 		}
@@ -328,6 +335,23 @@ function get_forumimg($imgname) {
 		}
 		return $imgpath;
 	}
+}
+
+function forumleftside() {
+	global $_G;
+	$leftside = array('favorites' => array(), 'forums' => array());
+	$leftside['forums'] = forumselect(FALSE, 1);
+	if($_G['uid']) {
+		$query = DB::query("SELECT favid, id, title FROM ".DB::table('home_favorite')." WHERE uid='$_G[uid]' AND idtype='fid' ORDER BY dateline DESC");
+		while($result = DB::fetch($query)) {
+			if($_G['fid'] == $result['id']) {
+				$_G['forum_fidinfav'] = $result['favid'];
+			}
+			$leftside['favorites'][$result['id']] = array($result['title'], $result['favid']);
+		}
+	}
+	$_G['leftsidewidth_mwidth'] = $_G['setting']['leftsidewidth'] + 15;
+	return $leftside;
 }
 
 ?>

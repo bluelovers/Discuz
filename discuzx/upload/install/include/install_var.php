@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_var.php 17205 2010-09-26 08:19:20Z monkey $
+ *      $Id: install_var.php 22671 2011-05-17 06:00:21Z monkey $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -63,7 +63,7 @@ define('UNDEFINE_FUNC', 32);
 define('MISSING_PARAMETER', 33);
 define('LOCK_FILE_NOT_TOUCH', 34);
 
-$func_items = array('mysql_connect', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
+$func_items = array('mysql_connect', 'fsockopen', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
 
 $env_items = array
 (
@@ -83,7 +83,6 @@ $dirfile_items = array
 	'data' => array('type' => 'dir', 'path' => './data'),
 	'cache' => array('type' => 'dir', 'path' => './data/cache'),
 	'cache' => array('type' => 'dir', 'path' => './data/avatar'),
-	'imagecache' => array('type' => 'dir', 'path' => './data/imagecache'),
 	'plugindata' => array('type' => 'dir', 'path' => './data/plugindata'),
 	'sysdata' => array('type' => 'dir', 'path' => './data/sysdata'),
 	'request' => array('type' => 'dir', 'path' => './data/request'),
@@ -140,6 +139,9 @@ $form_db_init_items = array
 		'password2' => array('type' => 'password', 'required' => 1, 'reg' => '/^.*$/'),
 		'email' => array('type' => 'text', 'required' => 1, 'reg' => '/@/', 'value' => array('type' => 'var', 'var' => 'adminemail')),
 		'testdata' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
+		'portalstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
+		'homestatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
+		'groupstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
 	)
 );
 
@@ -244,18 +246,18 @@ $serialize_sql_setting = array (
   ),
   'recommendthread' =>
   array (
-    'status' => '1',
+    'status' => '0',
     'addtext' => '支持',
     'subtracttext' => '反對',
     'defaultshow' => '1',
     'daycount' => '0',
     'ownthread' => '0',
-    'iconlevels' => '0,100,200',
+    'iconlevels' => '50,100,200',
   ),
   'seotitle' =>
   array (
     'portal' => '門戶',
-    'forum' => '',
+    'forum' => '論壇',
     'group' => '群組',
     'home' => '家園',
     'userapp' => '應用',
@@ -265,6 +267,157 @@ $serialize_sql_setting = array (
     'realname' => '真實姓名',
     'mobile' => '手機',
     'qq' => 'QQ號',
+  ),
+  'article_tags' =>
+  array (
+    1 => '原創',
+    2 => '熱點',
+    3 => '組圖',
+    4 => '爆料',
+    5 => '頭條',
+    6 => '幻燈',
+    7 => '滾動',
+    8 => '推薦',
+  ),
+  'verify' =>
+  array (
+    6 =>
+    array (
+      'title' => '實名認證',
+      'available' => '0',
+      'showicon' => '0',
+      'viewrealname' => '0',
+      'field' =>
+      array (
+        'realname' => 'realname',
+      ),
+      'icon' => false,
+    ),
+    'enabled' => false,
+    1 =>
+    array (
+      'icon' => '',
+    ),
+    2 =>
+    array (
+      'icon' => '',
+    ),
+    3 =>
+    array (
+      'icon' => '',
+    ),
+    4 =>
+    array (
+      'icon' => '',
+    ),
+    5 =>
+    array (
+      'icon' => '',
+    ),
+    7 =>
+    array (
+      'title' => '視頻認證',
+      'available' => '0',
+      'showicon' => '0',
+      'viewvideophoto' => '0',
+      'icon' => '',
+    ),
+  ),
+  'focus' =>
+  array (
+    'title' => '站長推薦',
+    'data' =>
+    array (
+    ),
+    'cookie' => '1',
+  ),
+  'profilegroup' =>
+  array (
+    'base' =>
+    array (
+      'available' => 1,
+      'displayorder' => 0,
+      'title' => '基本資料',
+      'field' =>
+      array (
+        'realname' => 'realname',
+        'gender' => 'gender',
+        'birthday' => 'birthday',
+        'birthcity' => 'birthcity',
+        'residecity' => 'residecity',
+        'residedist' => 'residedist',
+        'affectivestatus' => 'affectivestatus',
+        'lookingfor' => 'lookingfor',
+        'bloodtype' => 'bloodtype',
+        'field1' => 'field1',
+        'field2' => 'field2',
+        'field3' => 'field3',
+        'field4' => 'field4',
+        'field5' => 'field5',
+        'field6' => 'field6',
+        'field7' => 'field7',
+        'field8' => 'field8',
+      ),
+    ),
+    'contact' =>
+    array (
+      'title' => '聯繫方式',
+      'available' => '1',
+      'displayorder' => '1',
+      'field' =>
+      array (
+        'telephone' => 'telephone',
+        'mobile' => 'mobile',
+        'icq' => 'icq',
+        'qq' => 'qq',
+        'yahoo' => 'yahoo',
+        'msn' => 'msn',
+        'taobao' => 'taobao',
+      ),
+    ),
+    'edu' =>
+    array (
+      'available' => 1,
+      'displayorder' => 2,
+      'title' => '教育情況',
+      'field' =>
+      array (
+        'graduateschool' => 'graduateschool',
+        'education' => 'education',
+      ),
+    ),
+    'work' =>
+    array (
+      'available' => 1,
+      'displayorder' => 3,
+      'title' => '工作情況',
+      'field' =>
+      array (
+        'occupation' => 'occupation',
+        'company' => 'company',
+        'position' => 'position',
+        'revenue' => 'revenue',
+      ),
+    ),
+    'info' =>
+    array (
+      'title' => '個人信息',
+      'available' => '1',
+      'displayorder' => '4',
+      'field' =>
+      array (
+        'idcardtype' => 'idcardtype',
+        'idcard' => 'idcard',
+        'address' => 'address',
+        'zipcode' => 'zipcode',
+        'site' => 'site',
+        'bio' => 'bio',
+        'interest' => 'interest',
+        'sightml' => 'sightml',
+        'customstatus' => 'customstatus',
+        'timeoffset' => 'timeoffset',
+      ),
+    ),
   ),
 );
 

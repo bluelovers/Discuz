@@ -11,7 +11,7 @@
 
 <div class="tm_c" id="floatlayout_topicadmin">
 	<h3 class="flb">
-		<em id="return_mods"><!--{if in_array($_G[gp_action], array('delpost', 'banpost', 'warn'))}-->{lang admin_select_piece}<!--{elseif $_G['gp_action'] == 'delcomment'}-->{lang topicadmin_select_comment}<!--{else}-->{lang admin_select_one_piece}<!--{/if}--></em>
+		<em id="return_mods"><!--{if in_array($_G[gp_action], array('delpost', 'banpost', 'warn', 'stickreply'))}-->{lang admin_select_piece}<!--{elseif $_G['gp_action'] == 'delcomment'}-->{lang topicadmin_select_comment}<!--{else}-->{lang admin_select_one_piece}<!--{/if}--></em>
 		<span>
 			<a href="javascript:;" class="flbc" onclick="{if $_G[gp_action] == 'stamp'}if ($('threadstamp')) $('threadstamp').innerHTML = oldthreadstamp;{/if}hideWindow('mods')" title="{lang close}">{lang close}</a>
 		</span>
@@ -20,6 +20,7 @@
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="fid" value="$_G[fid]">
 		<input type="hidden" name="tid" value="$_G[tid]">
+		<!--{if !empty($_G['gp_page'])}--><input type="hidden" name="page" value="$_G['gp_page']" /><!--{/if}-->
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 		<div class="c">
 			<div class="{if $_G[gp_action] != 'split'}tplw{else}tpmh{/if}">
@@ -33,21 +34,25 @@
 				<input type="hidden" name="archiveid" value="$archiveid" />
 				{lang admin_threadsplit_restore}
 			<!--{elseif $_G[gp_action] == 'copy'}-->
-				<p>{lang admin_target}:</p>
-				<p class="tah_body">
-					<select name="copyto" class="ps">$forumselect</select>
+				<p class="mbn tahfx">
+					{lang admin_target}: <select name="copyto" id="copyto" class="ps vm" onchange="ajaxget('forum.php?mod=ajax&action=getthreadtypes&fid=' + this.value, 'threadtypes')">
+						$forumselect
+					</select>
+				</p>
+				<p class="mbn tahfx">
+					{lang admin_targettype}: <span id="threadtypes"><select name="threadtypeid" class="ps vm"><option value="0" /></option></select></span>
 				</p>
 			<!--{elseif $_G[gp_action] == 'banpost'}-->
 				$banid
 				<ul class="llst">
-					<li><label><input type="radio" name="banned" class="pr" value="1" $checkban /> {lang admin_banpost}</label></li>
-					<li><label><input type="radio" name="banned" class="pr" value="0" $checkunban /> {lang admin_unbanpost}</label></li>
+					<li><label><input type="radio" name="banned" class="pr" value="1" $checkban />{lang admin_banpost}</label></li>
+					<li><label><input type="radio" name="banned" class="pr" value="0" $checkunban />{lang admin_unbanpost}</label></li>
 				</ul>
 			<!--{elseif $_G[gp_action] == 'warn'}-->
 				$warnpid
 				<ul class="llst">
-					<li><label><input type="radio" name="warned" class="pr" value="1" $checkwarn /> {lang topicadmin_warn_add}</label></li>
-					<li><label><input type="radio" name="warned" class="pr" value="0" $checkunwarn /> {lang topicadmin_warn_delete}</label></li>
+					<li><label><input type="radio" name="warned" class="pr" value="1" $checkwarn />{lang topicadmin_warn_add}</label></li>
+					<li><label><input type="radio" name="warned" class="pr" value="0" $checkunwarn />{lang topicadmin_warn_delete}</label></li>
 				</ul>
 				<!--{if ($modpostsnum == 1 || $authorcount == 1) && $authorwarnings > 0}-->
 					<br /><div style="clear: both; text-align: right;" title="{lang topicadmin_warn_prompt}">{lang topicadmin_warn_nums}</div>
@@ -71,7 +76,7 @@
 					</tr>
 					<tr>
 						<th>{lang pay_author_income}</th>
-						<td>{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]} $payment[netincome] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}</td>
+						<td>$payment[netincome] {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}</td>
 					</tr>
 				</table>
 			<!--{elseif $_G[gp_action] == 'split'}-->
@@ -148,8 +153,8 @@
 			<!--{elseif $_G[gp_action] == 'stickreply'}-->
 				$stickpid
 				<ul class="llst">
-					<li><label><input type="radio" name="stickreply" class="pr" value="1"{if empty($_G['gp_undo'])} checked="checked"{/if}/> {lang admin_stickreply} </label></li>
-					<li><label><input type="radio" name="stickreply" class="pr" value="0"{if !empty($_G['gp_undo'])} checked="checked"{/if}/> {lang admin_unstickreply} </label></li>
+					<li><label><input type="radio" name="stickreply" class="pr" value="1"{if empty($_G['gp_undo'])} checked="checked"{/if}/>{lang admin_stickreply} </label></li>
+					<li><label><input type="radio" name="stickreply" class="pr" value="0"{if !empty($_G['gp_undo'])} checked="checked"{/if}/>{lang admin_unstickreply} </label></li>
 				</ul>
 			<!--{/if}-->
 			</div>
@@ -163,8 +168,8 @@
 			</div>
 		</div>
 		<div class="o pns">
+			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
 			<button type="submit" name="modsubmit" id="modsubmit" value="ture" class="pn pnc"><span>{lang confirms}</span></button>
-			<input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} /> <label for="sendreasonpm" />{lang admin_pm}</label>
 		</div>
 	</form>
 </div>
@@ -176,6 +181,9 @@ function succeedhandle_mods(locationhref) {
 	<!--{elseif $_G[gp_action] == 'banpost' || $_G[gp_action] == 'warn'}-->
 		<!--{loop $topiclist $pid}-->
 			ajaxget('forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$pid&modclick=yes', 'post_$pid', 'post_$pid');
+			if($('topiclist_$pid')) {
+				$('modactions').removeChild($('topiclist_$pid'));
+			}
 		<!--{/loop}-->
 		hideWindow('mods');
 		resetmodcount();

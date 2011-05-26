@@ -16,7 +16,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="shareform_{$sid}" name="shareform_{$sid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=share&op=delete&sid=$sid&type=$_GET[type]" {if $_G[inajax] && $_GET[gp_type]!='view'} onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="deletesubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
@@ -38,7 +38,7 @@
 		<!--{if !empty($_G['gp_inajax'])}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=share&op=edithot&sid=$sid">
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="hotsubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">{lang new_hot}:<input type="text" name="hot" value="$share[hot]" size="10" class="px" /></div>
@@ -73,7 +73,7 @@
 			<!--{/if}-->
 			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 				<!--{block sectpl}--><sec> <span id="sec<hash>" class="secq" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-				<div class="sec"><!--{template common/seccheck}--></div>
+				<div class="sec"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->
 		</div>
 		<p class="o pns">
@@ -92,9 +92,9 @@
 		<em id="return_$_G[gp_handlekey]">{lang share}</em>
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
-	<form method="post" autocomplete="off" id="shareform_{$id}" name="shareform_{$id}" action="home.php?mod=spacecp&ac=share&type=$type&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]'{if $type == 'thread'}, null, null, null, 'shareupdate()'{/if});"{/if}>
+	<form method="post" autocomplete="off" id="shareform_{$id}" name="shareform_{$id}" action="home.php?mod=spacecp&ac=share&type=$type&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]'{if $type == 'thread'}, null, null, null, 'if(typeof shareupdate==\'function\') shareupdate();'{/if});"{/if}>
 		<input type="hidden" name="sharesubmit" value="true">
-		<input type="hidden" name="referer" value="$_G[referer]">
+		<input type="hidden" name="referer" value="{echo dreferer()}">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<div class="c">
@@ -105,20 +105,34 @@
 			<textarea id="general_{$id}" name="general" cols="50" rows="5" class="pt mtn" style="width: 400px;" onkeydown="ctrlEnter(event, 'sharesubmit_btn')" onkeyup="showPreview(this.value, 'quote_{$id}')"></textarea>
 			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 			<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-			<div class="mtm sec"><!--{template common/seccheck}--></div>
-		<!--{/if}-->
+			<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
+			<!--{/if}-->
 			<ul id="share_preview" class="el mtm cl 1">
 			<!--{eval $value = $arr;}-->
 			<!--{subtemplate home/space_share_li}-->
 			</ul>
 		</div>
 		<p class="o pns">
+			<!--{if $commentcable[$type]}-->
+			<label><input type="checkbox" class="pc" name="iscomment" value="1"/><!--{if $type == 'thread'}-->{lang post_add_inonetime}<!--{else}-->{lang comment_add_inonetime}<!--{/if}--></label>
+			<!--{/if}-->
 			<button type="submit" name="sharesubmit_btn" id="sharesubmit_btn" class="pn pnc" value="true"><strong>{lang determine}</strong></button>
 		</p>
 	</form>
 	<!--{if $_G[inajax]}-->
 	<script type="text/javascript">
 		function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+			if(values['cid'] && $('comment_ul') && !$('replynum_'+values['id'])) {
+				comment_add(values['cid']);
+			}
+			if($('replynum_'+values['id'])) {
+				var a = parseInt($('replynum_'+values['id']).innerHTML);
+				var b = a + 1;
+				$('replynum_'+values['id']).innerHTML = b + '';
+			}
+			if(values['type'] == 'thread' || values['type'] == 'article') {
+				setTimeout("location.href='" + url + "';", 3000);
+			}
 			showCreditPrompt();
 		}
 	</script>

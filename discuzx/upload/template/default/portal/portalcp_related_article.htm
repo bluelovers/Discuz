@@ -24,7 +24,7 @@
 <!--{elseif ($op == 'search')}-->
 	<!--{loop $articlelist $list}-->
 		<li>
-			<input type="checkbox" name="article" id="article_$list[aid]_pc" class="pc" value="$list[aid]" onclick="getarticlenum();"/> 
+			<input type="checkbox" name="article" id="article_$list[aid]_pc" class="pc" value="$list[aid]" onclick="getarticlenum();"/>
 			<label for="article_$list[aid]_pc" id="article_$list[aid]">$list[title]</label>
 		</li>
 	<!--{/loop}-->
@@ -32,7 +32,7 @@
 	<!--{loop $articlelist $ra}-->
 		<li id="raid_li_$ra[aid]">
 			<input type="hidden" name="raids[]" value="$ra[aid]" size="5">
-			<a href="portal.php?mod=view&aid=$ra[aid]" target="_blank">$ra[title]</a> 
+			<a href="portal.php?mod=view&aid=$ra[aid]" target="_blank">$ra[title]</a>
 			({lang article_id}: $ra[aid])
 			<a href="javascript:;" onclick="raid_delete($ra[aid]);" class="xg1">{lang delete}</a>
 		</li>
@@ -49,18 +49,20 @@
 				<input type="text" name="manualid" id="manualid" class="px vm" value="0" size="10" />&nbsp;
 				<button type="button" name="raid_button" class="pn" value="false" onclick="manualadd();"><em>{lang add_by_self}</em></button>
 			</div>
-			$category 
+			$category
 			<input type="text" name="searchkey" id="searchkey" class="px vm" value="$searchkey" size="10" />&nbsp;
 			<button type="button" name="search_button" class="pn vm" value="false" onclick="articlesearch();"><em>{lang search}</em></button>
 		</div>
 		<div class="cl">
-			<div class="z">
-				<p class="mtm mbn">{lang wait_select}(<span id="articlenum">0</span>/<span id="articlenumall">$count</span> {lang max_wait_select})</p>
+			<div class="z" id="chkalldiv">
+				<p class="mtm mbn cl">
+					<span class="xg1 y">{lang wait_select}(<span id="articlenum">0</span>/<span id="articlenumall">$count</span> {lang max_wait_select})</span>
+					<label class="chkall"><input type="checkbox" name="chkall" id="chkall" class="pc" value="" onclick="selectall();"/>{lang select_all}</label>
+				</p>
 				<ul id="articlelist" class="bartl">
 				<!--{loop $articlelist $list}-->
 					<li>
-						<input type="checkbox" name="article" id="article_$list[aid]_pc" class="pc" value="$list[aid]" onclick="getarticlenum();"/> 
-						<label for="article_$list[aid]_pc" id="article_$list[aid]">$list[title]</label>
+						<input type="checkbox" name="article" id="article_$list[aid]_pc" class="pc" value="$list[aid]" onclick="getarticlenum();"/><label for="article_$list[aid]_pc" id="article_$list[aid]">$list[title]</label>
 					</li>
 				<!--{/loop}-->
 				</ul>
@@ -127,7 +129,7 @@
 			} else {
 				str = str + ',' + list[i].id;
 			}
-	       
+
 		}
 		$('selectedarray').value = str;
 		$('selectednum').innerHTML = list.length;
@@ -189,7 +191,7 @@
 				return false;
 			}
 		});
-		
+
 	}
 	function getarticlenum() {
 		var article = document.getElementsByName("article");
@@ -205,7 +207,7 @@
 		var relatedid = $("selectedarray").value;
 		if(relatedid) {
 			var url = 'portal.php?mod=portalcp&ac=related&op=add&catid=$catid&aid=$aid&inajax=1&relatedid='+relatedid;
-			var x = new Ajax();	
+			var x = new Ajax();
 			x.get(url, function(s){
 				s = trim(s);
 				if(s) {
@@ -246,6 +248,21 @@
 		} else {
 			return true;
 		}
+	}
+	function selectall() {
+		var input = document.getElementById("chkalldiv").getElementsByTagName("input");
+		var checkall = 'chkall';
+		count = 0;
+		for(var i = 0; i < input.length; i++) {
+			var e = input[i];
+			if(e.name && e.name != checkall) {
+				e.checked = input[checkall].checked;
+				if(e.checked) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 	getrelatedarticle();
 	</script>

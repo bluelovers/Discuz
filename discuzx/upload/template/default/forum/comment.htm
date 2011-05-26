@@ -33,7 +33,7 @@
 						<!--{eval $item = trim($item);}-->
 						<!--{if $item}-->
 							items += '<input type="hidden" id="itemc_$i" name="commentitem[$item]" value="" />';
-							itemrow = '<span id="itemt_$i" class="z xg1" style="cursor:pointer" title="{lang comment_give_ip}" onclick="itemdisable($i)">&nbsp;$item</span>';
+							itemrow = '<span id="itemt_$i" class="z xg1 cur1" title="{lang comment_give_ip}" onclick="itemdisable($i)">&nbsp;$item</span>';
 							itemstar = '';
 							<!--{loop $items $j}-->
 							itemstar += '<em onclick="itemclk($i, $j)" onmouseover="itemop($i, $j)" onmouseout="itemset($i)" title="$itemlang[$j]($j)"{if !$j} style="width: 10px;"{/if}>$itemlang[$j]</em>';

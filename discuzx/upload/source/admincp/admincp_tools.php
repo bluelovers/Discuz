@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tools.php 13868 2010-08-02 07:34:35Z zhengqingpeng $
+ *      $Id: admincp_tools.php 21799 2011-04-13 02:42:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -86,8 +86,7 @@ if($operation == 'updatecache') {
 			'data/log',
 			'data/template',
 			'data/threadcache',
-			'data/diy',
-			'data/imagecache',
+			'data/diy'
 		);
 
 		foreach(array('data/cache', 'data/log', 'data/template', 'data/attachment', 'data/diy') as $directory) {
@@ -152,7 +151,7 @@ function insertunit(text, obj) {
 	}
 }
 </script>
-<?
+<?php
 
 }
 

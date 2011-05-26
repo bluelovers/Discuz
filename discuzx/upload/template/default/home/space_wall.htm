@@ -10,7 +10,7 @@
 			<div class="bm_c">
 				<form id="quickcommentform_{$space[uid]}" action="home.php?mod=spacecp&ac=comment" method="post" autocomplete="off" onsubmit="ajaxpost('quickcommentform_{$space[uid]}', 'return_qcwall_$space[uid]');doane(event);">
 					<p>
-						<span id="comment_face" title="{lang insert_emoticons}" onclick="showFace(this.id, 'comment_message');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
+						<span id="comment_face" title="{lang insert_emoticons}" onclick="showFace(this.id, 'comment_message');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 						<!--{hook/space_wall_face_extra}-->
 						<!--{if $_G['setting']['magicstatus'] && $_G['setting']['magics']['doodle']}-->
 						<a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target=comment_message" onclick="showWindow(this.id, this.href, 'get', '0')"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" class="vm" />{$_G[setting][magics][doodle]}</a>
@@ -21,7 +21,7 @@
 							<!--{if $_G['uid']}-->
 								<textarea id="comment_message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');" name="message" rows="5" class="pt"></textarea>
 							<!--{else}-->
-								<div class="pt hm">{lang login_to_wall} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" onclick="showWindow('register', this.href)" class="xi2">$_G['setting']['reglinkname']</a></div>
+								<div class="pt hm">{lang login_to_wall} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a></div>
 							<!--{/if}-->
 						</div>
 					</div>

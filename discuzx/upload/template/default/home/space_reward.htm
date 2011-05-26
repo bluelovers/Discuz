@@ -6,11 +6,8 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
-		<a href="home.php?mod=space&do=reward">{lang reward}</a>
-		<!--{if $_GET['view']=='me'}-->
-		 <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=reward&view=me">{$space[username]}{lang somebody_reward}</a>
-		<!--{/if}-->
+		<a href="home.php?mod=space&do=thread">{lang post}</a> <em>&rsaquo;</em>
+		<a href="home.php?mod=space&uid=$space[uid]&do=reward&view=me">{lang reward}</a>
 	</div>
 </div>
 <style id="diy_style" type="text/css"></style>
@@ -26,9 +23,9 @@
 		<!--{/if}-->
 		<!--{if $space[self]}-->
 			<ul class="tb cl">
-				<li$actives[we]><a href="home.php?mod=space&uid=$space[uid]&do=reward&view=we">{lang friend_reward}</a></li>
-				<li$actives[me]><a href="home.php?mod=space&uid=$space[uid]&do=reward&view=me">{lang my_reward}</a></li>
-				<li$actives[all]><a href="home.php?mod=space&uid=$space[uid]&do=reward&view=all">{lang view_all}</a></li>
+				<li$actives[we]><a href="home.php?mod=space&do=reward&view=we">{lang friend_reward}</a></li>
+				<li$actives[me]><a href="home.php?mod=space&do=reward&view=me">{lang my_reward}</a></li>
+				<!--{if $_G['setting']['homestatus']}--><li$actives[all]><a href="home.php?mod=space&do=reward&view=all">{lang view_all}</a></li><!--{/if}-->
 				<!--{if $_G[group][allowpostreward]}-->
 					<li class="o">
 						<!--{if $_G[setting][rewardforumid]}-->
@@ -73,9 +70,9 @@
 						<cite><!--{eval echo abs($thread['price']);}--><span>$_G[setting][extcredits][$creditid][title]</span></cite>
 						<em><!--{if $thread[price] < 0}-->{lang has_been_resolved}<!--{else}-->{lang unresolved}<!--{/if}--></em>
 					</div>
-					<h4><a href="forum.php?mod=viewthread&tid=$thread[tid]">$thread[subject]</a></h4>
-					<p class="mtm"><a href="home.php?mod=space&uid=$thread[authorid]" c="1">$thread[author]</a> <span class="xg1">$thread[dateline]</span></p>
-					<p class="mtm xg1"><!--{if $thread[replies]}-->{lang have} $thread[replies] {lang unit}<!--{else}-->{lang not_yet}<!--{/if}-->{lang security_answer}<span class="pipe">|</span><a href="forum.php?mod=post&action=reply&fid=$thread[fid]&tid=$thread[tid]">{lang i_answer}</a></p>
+					<h4><a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank">$thread[subject]</a></h4>
+					<p class="mtm"><a href="home.php?mod=space&uid=$thread[authorid]" c="1" target="_blank">$thread[author]</a> <span class="xg1">$thread[dateline]</span></p>
+					<p class="mtm xg1"><!--{if $thread[replies]}-->{lang have} $thread[replies] {lang unit}<!--{else}-->{lang not_yet}<!--{/if}-->{lang security_answer}<span class="pipe">|</span><a href="forum.php?mod=post&action=reply&fid=$thread[fid]&tid=$thread[tid]" target="_blank">{lang i_answer}</a></p>
 				</li>
 				<!--{/loop}-->
 				<!--{if count($list)%2!=0}-->
@@ -93,7 +90,7 @@
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 	</div>
 	<div class="appl">
-		<!--{subtemplate common/userabout}-->
+		<!--{subtemplate home/space_thread_nav}-->
 
 		<div class="drag">
 			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
@@ -105,7 +102,8 @@
 </div>
 <script type="text/javascript">
 	function fuidgoto(fuid) {
-		window.location.href = 'home.php?mod=space&do=reward&view=we&<!--{if $_G[gp_flag]}-->flag=$_G[gp_flag]&<!--{/if}-->fuid='+fuid;
+		var parameter = fuid != '' ? '&fuid='+fuid : '';
+		window.location.href = 'home.php?mod=space&do=reward&view=we<!--{if $_G[gp_flag]}-->&flag=$_G[gp_flag]<!--{/if}-->'+parameter;
 	}
 	function filterFlag(flag) {
 		window.location.href = 'home.php?mod=space&do=$_G[gp_do]&<!--{if $_G[gp_order]}-->order=hot&<!--{/if}-->view=$_G[gp_view]&<!--{if $_G[gp_fuid]}-->fuid=$_G[gp_fuid]&<!--{/if}-->flag='+flag;

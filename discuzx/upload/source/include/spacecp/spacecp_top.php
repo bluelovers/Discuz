@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_top.php 15369 2010-08-23 12:43:36Z zhengqingpeng $
+ *      $Id: spacecp_top.php 21195 2011-03-18 06:55:50Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,7 +42,7 @@ if(submitcheck('friendsubmit')) {
 		DB::insert('home_show', array('uid'=>$fuid, 'username'=>$_POST['fusername'], 'credit'=>$showcredit), 0, true);
 	}
 
-	member_count_update($space['uid'], array('credit'=>(0-$showcredit)));
+	updatemembercount($space['uid'], array($_G['setting']['creditstransextra'][6] => (0-$showcredit)), true, 'RKC', $space['uid']);
 
 	notification_add($fuid, 'credit', 'showcredit', array('credit'=>$showcredit));
 
@@ -76,7 +76,7 @@ if(submitcheck('friendsubmit')) {
 		DB::insert('home_show', array('uid'=>$_G['uid'], 'username'=>$_G['username'], 'unitprice' => $unitprice, 'credit'=>$showcredit, 'note'=>$_POST['note']), 0, true);
 	}
 
-	member_count_update($space['uid'], array('credit'=>(0-$showcredit)));
+	updatemembercount($space['uid'], array($_G['setting']['creditstransextra'][6] => (0-$showcredit)), true, 'RKC', $space['uid']);
 
 	if(ckprivacy('show', 'feed')) {
 		require_once libfile('function/feed');

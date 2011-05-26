@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blogcategory.php 16526 2010-09-08 03:38:09Z zhangguosheng $
+ *      $Id: admincp_blogcategory.php 20616 2011-03-01 01:05:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -23,8 +23,8 @@ if($operation == 'list') {
 
 		shownav('portal', 'blogcategory');
 		showsubmenu('blogcategory',  array(
-					array('list', 'blogcategory', 1)
-				));
+			array('list', 'blogcategory', 1)
+		));
 
 		showformheader('blogcategory');
 		showtableheader();
@@ -118,9 +118,9 @@ SCRIPT;
 
 		shownav('portal', 'blogcategory');
 		showsubmenu('blogcategory',  array(
-					array('list', 'blogcategory', 0),
-					array('delete', 'blogcategory&operation=delete&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'blogcategory', 0),
+			array('delete', 'blogcategory&operation=delete&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('blogcategory&operation=delete&catid='.$_GET['catid']);
 		showtableheader();

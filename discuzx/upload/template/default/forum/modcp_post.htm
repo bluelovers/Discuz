@@ -4,6 +4,7 @@
 		<li><a href="{$cpscript}?mod=modcp&action=thread&op=thread{$forcefid}" hidefocus="true">{lang mod_option_subject_forum}</a></li>
 		<li class="a"><a href="{$cpscript}?mod=modcp&action=thread&op=post{$forcefid}" hidefocus="true">{lang mod_option_subject_delete}</a></li>
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebin{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebin}</a></li>
+		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
 	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
@@ -58,6 +59,12 @@
 					<th>{lang modcp_posts_ip}:</th>
 					<td><input type="text" name="useip" class="px" value="$result[useip]" style="width: 180px" /></td>
 				</tr>
+				<!--{if $posttableselect}-->
+				<tr>
+					<th>{lang posttable_branch}</th>
+					<td colspan="3"><span class="ftid">$posttableselect</span></td>
+				</tr>
+				<!--{/if}-->
 				<tr>
 					<td>&nbsp;</td>
 					<td colspan="3">
@@ -83,6 +90,7 @@
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="fid" value="$_G[fid]" />
 			<input type="hidden" name="do" value="delete" />
+			<input type="hidden" name="posttableid" value="$posttableid" />
 			<table cellspacing="0" cellpadding="0">
 				<tr class="th">
 					<!--{if $_G['group']['allowmassprune']}--><td width="40">&nbsp;</td><!--{/if}-->
@@ -117,9 +125,9 @@
 						<td colspan="{if $_G['group']['allowmassprune']}4{else}3{/if}" class="ptm">
 							<!--{if $multipage}-->$multipage<!--{/if}-->
 							<!--{if $postlist && $_G['group']['allowmassprune']}-->
-								<input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form, 'delete')" /> <label for="chkall">{lang delete_check}</label> 
+								<label for="chkall"><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form, 'delete')" />{lang delete_check}</label> 
 								<button type="submit" name="deletesubmit" id="deletesubmit" class="pn" value="true"><strong>{lang delete}</strong></button> 
-								<input type="checkbox" name="nocredit" id="nocredit" class="pc" value="1" checked="checked"> <label for="nocredit">{lang modcp_posts_member_credits}</label>
+								<label for="nocredit"><input type="checkbox" name="nocredit" id="nocredit" class="pc" value="1" checked="checked" />{lang modcp_posts_member_credits}</label>
 							<!--{/if}-->
 						</td>
 					</tr>
@@ -132,4 +140,5 @@
 <script type="text/javascript" reload="1">
 	simulateSelect('fid');
 	simulateSelect('threadoption');
+	simulateSelect('posttableid');
 </script>

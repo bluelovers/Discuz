@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_activity.php 16882 2010-09-16 06:26:59Z liulanbo $
+ *      $Id: thread_activity.php 20005 2011-01-27 10:10:01Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ if($_G['uid']) {
 }
 $applylist = array();
 $activity = DB::fetch_first("SELECT * FROM ".DB::table('forum_activity')." WHERE tid='$_G[tid]'");
-$activityclose = $activity['expiration'] ? ($activity['expiration'] > TIMESTAMP - date('Z') ? 0 : 1) : 0;
+$activityclose = $activity['expiration'] ? ($activity['expiration'] > TIMESTAMP ? 0 : 1) : 0;
 $activity['starttimefrom'] = dgmdate($activity['starttimefrom'], 'u');
 $activity['starttimeto'] = $activity['starttimeto'] ? dgmdate($activity['starttimeto']) : 0;
 $activity['expiration'] = $activity['expiration'] ? dgmdate($activity['expiration']) : 0;
@@ -41,7 +41,7 @@ if($activity['ufield']) {
 				$query = DB::query("SELECT ".implode(',', $activity['ufield']['userfield'])." FROM ".DB::table('common_member_profile')." WHERE uid='$_G[uid]'");
 				$ufielddata['userfield'] = DB::fetch($query);
 			}
-			$html = profile_setting($fieldid, $ufielddata['userfield'], true);
+			$html = profile_setting($fieldid, $ufielddata['userfield'], false, true);
 			if($html) {
 				$settings[$fieldid] = $_G['cache']['profilesetting'][$fieldid];
 				$htmls[$fieldid] = $html;
@@ -53,10 +53,10 @@ if($activity['ufield']) {
 }
 
 if($activity['aid']) {
-	$attach = DB::fetch_first("SELECT a.*,af.description FROM ".DB::table('forum_attachment')." a LEFT JOIN ".DB::table('forum_attachmentfield')." af USING(aid) WHERE a.aid='$activity[aid]'");
+	$attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE aid='$activity[aid]'");
 	if($attach['isimage']) {
 		$activity['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
-		$activity['thumb'] = $activity['attachurl'].($attach['thumb'] ? '.thumb.jpg' : '');
+		$activity['thumb'] = $attach['thumb'] ? getimgthumbname($activity['attachurl']) : $activity['attachurl'];
 		$activity['width'] = $attach['thumb'] && $_G['setting']['thumbwidth'] < $attach['width'] ? $_G['setting']['thumbwidth'] : $attach['width'];
 	}
 	$skipaids[] = $activity['aid'];
@@ -68,12 +68,13 @@ $noverifiednum = 0;
 $query = DB::query("SELECT aa.username, aa.uid, aa.verified, aa.dateline, aa.message, aa.payment, aa.ufielddata, m.groupid FROM ".DB::table('forum_activityapply')." aa
 	LEFT JOIN ".DB::table('common_member')." m USING(uid)
 	LEFT JOIN ".DB::table('common_member_field_forum')." mf USING(uid)
-	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline");
+	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline DESC");
 while($activityapplies = DB::fetch($query)) {
 	$activityapplies['dateline'] = dgmdate($activityapplies['dateline'], 'u');
 	if($activityapplies['verified'] == 1) {
 		$activityapplies['ufielddata'] = unserialize($activityapplies['ufielddata']);
-		if(count($applylist) < 8) {
+		if(count($applylist) < $_G['setting']['activitypp']) {
+			$activityapplies['message'] = preg_replace("/(".lang('forum/misc', 'contact').".*)/", '', $activityapplies['message']);
 			$applylist[] = $activityapplies;
 		}
 	} else {

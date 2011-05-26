@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_space.php 17394 2010-10-18 02:23:32Z zhengqingpeng $
+ * $Id: home_space.php 17393 2010-10-18 02:18:12Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);

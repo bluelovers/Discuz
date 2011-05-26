@@ -55,7 +55,7 @@
 									<!--{if $_G['uid'] == $tradelog[buyerid]}-->
 										<button class="pn" type="button" onclick="window.open('home.php?mod=spacecp&ac=eccredit&op=rate&orderid=$tradelog[orderid]&type=0', '', '')"><span>{lang eccredit1}</span></button>
 									<!--{elseif $_G['uid'] == $tradelog[sellerid]}-->
-										<button class="pn pnp" type="button" onclick="window.open('home.php?mod=spacecp&ac=eccredit&op=rate&orderid=$tradelog[orderid]&type=1', '', '')"><span>{lang eccredit1}</span></button>
+										<button class="pn" type="button" onclick="window.open('home.php?mod=spacecp&ac=eccredit&op=rate&orderid=$tradelog[orderid]&type=1', '', '')"><span>{lang eccredit1}</span></button>
 									<!--{/if}-->
 									</td>
 								<!--{/if}-->
@@ -126,13 +126,16 @@
 							<dd><!--{if $tradelog[status] == 0 && $tradelog[buyerid] == $_G['uid']}--><span><input type="text" id="newnumber" name="newnumber" value="$tradelog[number]" class="px" style="width:100px" /></span><!--{else}-->$tradelog[number]<!--{/if}--></dd>
 							<dt>{lang post_trade_transport}</dt>
 							<dd>
+								<!--{if $tradelog['transport'] == 0}-->{lang post_trade_transport_offline}<!--{/if}-->
 								<!--{if $tradelog['transport'] == 1}-->{lang post_trade_transport_seller}<!--{/if}-->
 								<!--{if $tradelog['transport'] == 2}-->{lang post_trade_transport_buyer}<!--{/if}-->
 								<!--{if $tradelog['transport'] == 3}-->{lang post_trade_transport_virtual}<!--{/if}-->
 								<!--{if $tradelog['transport'] == 4}-->{lang post_trade_transport_physical}<!--{/if}-->
-								&nbsp;{lang trade_transportfee}
-								<!--{if $tradelog[status] == 0 && $tradelog[sellerid] == $_G['uid']}--><span><input type="text" name="newfee" value="$tradelog['transportfee']" class="px" style="width:100px" /></span>&nbsp;<!--{else}-->$tradelog[transportfee]&nbsp;<!--{/if}-->
-								{lang payment_unit}
+								<!--{if $tradelog['transport']}-->
+									&nbsp;{lang trade_transportfee}
+									<!--{if $tradelog[status] == 0 && $tradelog[sellerid] == $_G['uid']}--><span><input type="text" name="newfee" value="$tradelog['transportfee']" class="px" style="width:100px" /></span>&nbsp;<!--{else}-->$tradelog[transportfee]&nbsp;<!--{/if}-->								
+									{lang payment_unit}
+								<!--{/if}-->
 							</dd>
 						<!--{if $tradelog['transport'] != 3}-->
 							<dt><label for="newbuyername">{lang trade_buyername}</label></dt>

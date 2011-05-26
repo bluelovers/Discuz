@@ -5,80 +5,164 @@ Main CSS file for Discuz! X
 http://www.comsenz.com
 Created & Modified by Lushnis, Pony, Dfox & DragonLee.
 
-1. 重定義瀏覽器默認樣式
-2. 全局常用 CSS 樣式
-3. 表單及表單元素
-4. 頁面佈局以及通用的區塊樣式
-5. 列表樣式
-6. 其他特定功能塊
-	1. 個人中心面板
-	2. 簡易編輯器
-	3. 彈出菜單、彈出層及彈出窗口
-	4. 聯繫人列表、短消息窗口
-	5. 登錄和註冊
-	6. 其他
-7. 拖拽及頁面 DIY
+----------------------------------
 
-*  其他頁面專用樣式參見 module.css
+結構目錄：
+	1. 重定義瀏覽器默認樣式
+	2. 全局常用 CSS 樣式
+	3. 表單及表單元素
+	4. 頁面佈局以及通用的區塊樣式
+	5. 列表樣式vwmy
+	6. 其他特定功能塊
+		1. 個人中心面板
+		2. 簡易編輯器
+		3. 彈出菜單、彈出層及彈出窗口
+		4. 聯繫人列表、短消息窗口
+		5. 登錄和註冊
+		6. 其他
+	7. 拖拽及頁面 DIY
+
+	*  其他頁面專用樣式參見 module.css
 
 ----------------------------------
 
 常用變量說明：
 
-通用邊框顏色：		{COMMONBORDER}		#CDCDCD
-通用背景填充色：		{COMMONBG}			#F2F2F2
-特殊邊框顏色：		{SPECIALBORDER}		#D1D9DF
-特殊背景填充色：		{SPECIALBG}			#E9F2F9
+	通用邊框顏色：		{COMMONBORDER}		#CDCDCD
+	通用背景填充色：		{COMMONBG}			#F2F2F2
+	特殊邊框顏色：		{SPECIALBORDER}		#D1D9DF
+	特殊背景填充色：		{SPECIALBG}			#E9F2F9
+
+----------------------------------
+
+CSS 樣式模塊的格式示例：
+
+	Name:			模塊名稱
+	Level:			級別（Global, Channel, Function）
+	Dependent:		依賴關係，該模塊必須依賴於何種模塊
+	Sample:			用法示例，或指出改模塊所作用的直接頁面
+	Explain:		附加說明
+	Author:			創建者 日期(兩位數年月日時)
+	Last Modify:	最終修改者 日期(兩位數年月日時)
+
+----------------------------------
+
+CSS 寫作注意事項：
+	1. 屬性寫在一行內，屬性之間、屬性名和值之間以及屬性與「{}」之間須有空格，例如：.class { width: 400px; height: 300px; }
+	2. 屬性的書寫順序：
+		2.1. 按照元素模型由外及內，由整體到細節書寫，大致分為五組：
+			位置：position,left,right,float
+			盒模型屬性：display,margin,padding,width,height
+			邊框與背景：border,background
+			段落與文本：line-height,text-indent,font,color,text-decoration,...
+			其他屬性：overflow,cursor,visibility,...
+		2.2. 針對特殊瀏覽器的屬性，應寫在標準屬性之前，例如：-webkit-box-shadow:; -moz-box-shadow:; box-shaow:;
+	3. 謹慎添加新的選擇符規則，尤其不可濫用 id，盡可能繼承和復用已有樣式
+	4. 選擇符、屬性、值均用小寫（格式的顏色值除外），縮寫的選擇符名稱須說明縮寫前的全稱，例如 .cl -> Clearfix
+	5. 避免使用各種 CSS Hack，如需對 IE 進行特殊定義，請參閱下節「關於 CSS Hack 的說明」
+	6. 勿使用冗餘低效的 CSS 寫法，例如：
+		ul li a span { ... }
+	7. 慎用 !important
+	8. 建議使用在 class/id 名稱中的詞語
+		6.1. 表示狀態：a->active
+		6.2. 表示結構：h->header,c->content,f->footer
+		6.3. 表示區域：mn->main,sd->side,nv-navigation,mu->menu
+		6.4. 表示樣式：l-list,tab,p_pop
+	9. 開發過程中的未定事項，須用 [!] 標出，以便於後續討論整理
 
 ----------------------------------
 
 關於 CSS Hack 的說明：
 
-所有 IE瀏覽器適用：	.ie_all .foo { ... }
-IE6 專用：			.ie6 .foo { ... }
-IE7 專用：			.ie7 .foo { ... }
-IE8 專用：			.ie8 .foo { ... }
+	所有 IE瀏覽器適用：	.ie_all .foo { ... }
+	IE6 專用：			.ie6 .foo { ... }
+	IE7 專用：			.ie7 .foo { ... }
+	IE8 專用：			.ie8 .foo { ... }
 
 ---------------------------------- */
 
+/*
+	Name:			mod_reset
+	Level:			Global
+	Explain:		重定義瀏覽器默認樣式
+	Last Modify:	Pony
+*/
+	* { word-wrap: break-word; }
+	body { {BGCODE}; }
+	body, input, button, select, textarea { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
+		textarea { resize: none; }
+	body, ul, ol, li, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset, .pr, .pc { margin: 0; padding: 0; }
+	table { empty-cells: show; border-collapse: collapse; }
+		caption, th { text-align: left; font-weight: 400; }
+	ul li, .xl li { list-style: none; }
+	h1, h2, h3, h4, h5, h6 { font-size: 1em; }
+	em, cite { font-style: normal; }
+	a { color: {LINK}; text-decoration: none; }
+		a:hover { text-decoration: underline; }
+		a img { border: none; }
+	label { cursor: pointer; }
+/*
+	Name:			mod_float
+	Level:			Global
+	Sample:			class="z/y"
+	Explain:		.z/.y 浮動 left/right
+	Last Modify:	lushnis
+*/
+	.z { float: left; } .y { float: right; }
 
-/* ------------------------------------------------------------------------ 重定義瀏覽器默認樣式 */
-* { margin: 0; padding: 0; word-wrap: break-word; }
-body { {BGCODE}; }
-body, input, button, select, textarea { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
-	textarea { resize: none; }
-table { empty-cells: show; border-collapse: collapse; }
-	caption, th { text-align: left; font-weight: 400; }
-ul li, .xl li { list-style: none; }
-h1, h2, h3, h4, h5, h6 { font-size: 1em; }
-em, cite { font-style: normal; }
-a { color: {LINK}; text-decoration: none; }
-	a:hover { text-decoration: underline; }
-	a img { border: none; }
+/*
+	Name:			mod_clearfix
+	Level:			Global
+	Sample:			class="cl"
+	Explain:		Clearfix,避免因子元素浮動而導致的父元素高度缺失能問題
+	Last Modify:	lushnis
+*/
+	.cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
 
-/* ------------------------------------------------------------------------ 全局常用 CSS 樣式 */
-
-/* .z/.y 浮動 left/right */ .z { float: left; } .y { float: right; }
-
-/* 自動閉合浮動 .cl --> Clear */ .cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
-
-/* 分隔線 */
+/*
+	Name:			mod_hr
+	Level:			Global
+	Sample:			<hr />
+	Explain:		重定義 <hr /> 元素的樣式，去除默認邊距
+	Last Modify:	lushnis
+*/
 	hr { display: block; clear: both; *margin-top: -8px !important; *margin-bottom: -8px !important; }
 		.mn hr, .sd hr { margin: 0 10px; }
 		.area hr { margin-left: 0 !important; margin-right: 0 !important; }
-	/* 實心分隔線 <hr class="l" /> */
+/*
+	Name:			mod_hr_solid
+	Level:			Global
+	Dependent:		mod_hr
+	Sample:			<hr class="l" />
+	Explain:		定義 1px 高度實線樣式的 <hr /> 元素，具有兩個個擴展樣式，.l2 和 .l3，分別實現 2px 和 3px 的實線分割線
+	Last Modify:	lushnis
+*/
 	hr.l { height: 1px; border: none; background: {COMMONBORDER}; color: {COMMONBORDER}; }
 		hr.l2 { height: 2px; }
 		hr.l3 { height: 3px; }
-	/* 虛線分隔線 <hr class="da" /> */
+/*
+	Name:			mod_hr_dashed
+	Level:			Global
+	Dependent:		mod_hr
+	Sample:			<hr class="da" />
+	Explain:		定義 1px 高度虛線樣式的 <hr /> 元素
+	Last Modify:	lushnis
+*/
 	hr.da { height: 0; border: none; border-top: 1px dashed {COMMONBORDER}; background: transparent; color: transparent; }
-	/* 空白分隔 blank by lushnis */
+	
+	/* [!]使用注意 */
 	hr.bk { margin-bottom: 10px !important; *margin-bottom: 2px !important; height: 0; border: none; border-top: 1px solid {WRAPBG}; background: transparent; color: transparent; }
 		.n .sd hr.bk { border-top-color: #F9F9F9; }
-	/* 清除Margin */	
-	hr.m0 { margin-left: 0px; margin-right: 0px; }	
+	/* 清除Margin */
+	hr.m0 { margin-left: 0; margin-right: 0; }
 
-/* 頁面標題、文章標題、粗體字 */
+/*
+	Name:			mod_page_header
+	Level:			Global
+	Sample:			<h1 class="ph">Text</h1>
+	Explain:		頁面中標題級別的文字 [!]此處須整合為一個單獨 class
+	Last Modify:	lushnis
+*/
 	/* .wx --> weight text 粗體字，通常用於大標題 */
 	.wx, .ph { font-family: "Microsoft YaHei", "Hiragino Sans GB", STHeiti, Tahoma, SimHei, sans-serif; font-weight: 100; }
 	/* Page header */ .ph { font-size: 20px; }
@@ -87,73 +171,195 @@ a { color: {LINK}; text-decoration: none; }
 /* 行內分割豎線 */ .pipe { margin: 0 5px; color: #CCC; }
 
 /* 文本屬性：字號、顏色、粗細 */
-	/* 字號 .xs --> text size 文字大小, 0=10px, 1=12px, 2=14px ,3=16px by Pony */
-	.xs0 { font-family: {SMFONT}; font-size: {SMFONTSIZE}; }
+/*
+	Name:			mod_text_size
+	Level:			Global
+	Sample:			class="xs*"
+	Explain:		文字字號，分為四個級別
+	Last Modify:	lushnis
+*/
+	.xs0 { font-family: {SMFONT}; font-size: {SMFONTSIZE}; -webkit-text-size-adjust: none; }
 	.xs1 { font-size: 12px !important; }
 	.xs2 { font-size: 14px !important; }
 	.xs3 { font-size: 16px !important; }
-	/* 顏色 .xg --> text gray level, 1=#999, 2=#666 */
+/*
+	Name:			mod_text_gray_level
+	Level:			Global
+	Dependent:		-
+	Sample:			class="xs[*]"
+	Explain:		文字字號，分為四個級別
+	Last Modify:	lushnis
+*/
 	.xg1, .xg1 a { color: {LIGHTTEXT} !important; }
 	.xg1 .xi2 { color: {HIGHLIGHTLINK} !important; }
 	.xg2 { color: {MIDTEXT}; }
-	/* 加亮顏色 .xi --> text important level, 1=#F60, 2\3=#369 */
+/*
+	Name:			mod_text_importance_level
+	Level:			Global
+	Sample:			class="xs[*]"
+	Explain:		文字提亮級別，分為兩級，默認模板中，1為橙色，2為藍色
+	Last Modify:	lushnis
+*/
 	.xi1, .onerror { color: {NOTICETEXT}; }
 	.xi2, .xi2 a, .xi3 a { color: {HIGHLIGHTLINK} ; }
-	/* 粗細 .xw --> text weight level, 0=normal, 1=bold by Pony */
+/*
+	Name:			mod_text_weight_level
+	Level:			Global
+	Sample:			class="xs[*]"
+	Explain:		文字字號，分為四個級別
+	Last Modify:	lushnis
+*/
 	.xw0 { font-weight: 400; }
 	.xw1 { font-weight: 700; }
-
-/* 邊框線 */
+/*
+	Name:			mod_border
+	Level:			Global
+	Dependent:		-
+	Sample:			class="bbda/bbs"
+	Explain:		邊框樣式，該模塊僅作用於元素的下邊框，分為虛線和實線兩種，寬度均為 1px
+	Last Modify:	lushnis
+*/
 	.bbda { border-bottom: 1px dashed {COMMONBORDER}; }
 	.bbs { border-bottom: 1px solid {COMMONBORDER} !important; }
+/*
+	Name:			mod_border_reset
+	Level:			Global
+	Sample:			class="bw0/bw0_all"
+	Explain:		去除邊框
+	Last Modify:	lushnis
+*/
 	.bw0 { border: none !important; }
 	.bw0_all, .bw0_all th, .bw0_all td { border: none !important; }
+/*
+	Name:			mod_background_reset
+	Level:			Global
+	Sample:			class="bg0_c/bg0_i/bg0_all"
+	Explain:		去除背景，bg0_c、bg0_i 和 bg0_all 分別為去除背景顏色、去除背景圖片和去除所有背景元素
+	Last Modify:	Pony
+*/
+	.bg0_c { background-color: transparent !important; }
+	.bg0_i { background-image: none !important; }
+	.bg0_all { background: none !important; }
 
-/* 圓角 */
+/*
+	Name:			mod_notice_line
+	Level:			Global
+	Sample:			<div class="ntc_l">
+	Explain:		黃色背景的提示條，一般用在單行醒目提示，不可用於多行塊級區域
+	Last Modify:	lushnis
+*/
+	.ntc_l { padding: 5px 10px; background: #FEFEE9; }
+		.ntc_l .d { width: 20px; height: 20px; background: url({IMGDIR}/op.png) no-repeat 0 0; line-height: 9999px; overflow: hidden; }
+			.ntc_l .d:hover { background-position: 0 -20px; }
+
+/* 圓角 [!]此處考慮棄用 */
 	.brs, .avt img { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 	.brm, .oshr { -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px; }
 	.brw { -moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;  }
-
-/* 外邊距 Margin，三組從窄到寬，級別分別為：n, m, w */
+/*
+	Name:			mod_margin
+	Level:			Global
+	Sample:			class="mtn/mtm/mtw/..."
+	Explain:		外邊距樣式，作用於元素的上下外邊距，上下各具有 n, m, w 三個級別
+	Last Modify:	lushnis
+*/
 	.mtn { margin-top: 5px !important; }
 	.mbn { margin-bottom: 5px !important; }
 	.mtm { margin-top: 10px !important; }
 	.mbm { margin-bottom: 10px !important; }
 	.mtw { margin-top: 20px !important; }
 	.mbw { margin-bottom: 20px !important; }
-	/* 請不要用這個選擇符，待刪 by lushnis */.mgh { margin-right: 15px; margin-left: 20px; }
-
-/* 內邊距 Padding，三組從窄到寬，級別分別為：n, m, w */
+/*
+	Name:			mod_padding
+	Level:			Global
+	Sample:			class="ptn/ptm/ptw/..."
+	Explain:		內邊距樣式，作用於元素的上下內邊距，上下各具有 n, m, w 三個級別
+	Last Modify:	lushnis
+*/
 	.ptn { padding-top: 5px !important; }
 	.pbn { padding-bottom: 5px !important; }
 	.ptm { padding-top: 10px !important; }
 	.pbm { padding-bottom: 10px !important; }
 	.ptw { padding-top: 20px !important; }
 	.pbw { padding-bottom: 20px !important; }
-
-/* 頭像 .avt --> Avatar */
+/*
+	Name:			mod_avatar
+	Level:			Global
+	Sample:			<div class="avt"><img src="avatar source" alt="username" /></div>
+	Explain:		標準尺寸頭像樣式，默認為 48px*48px，帶邊框
+	Last Modify:	lushnis
+*/
 	.avt img { padding: 2px; width: 48px; height: 48px; background: {WRAPBG}; border: 1px solid; border-color: {COMMONBG} {COMMONBORDER} {COMMONBORDER} {COMMONBG}; }
-		.avtm img { width: 120px; height: auto; }
-		.avts img { width: 24px; height: 24px; vertical-align: middle; }
+/*
+	Name:			mod_avatar_middle, mod_avatar_small
+	Level:			Global
+	Sample:			<div class="avtm/avts"><img src="avatar source" alt="username" /></div>
+	Explain:		中等尺寸和小尺寸頭像樣式，中等尺寸為寬度 120px，高度按比例；小尺寸為 24px*24px
+	Last Modify:	lushnis
+*/
+	.avtm img { width: 120px; height: auto; }
+	.avts img { width: 24px; height: 24px; vertical-align: middle; }
+/*
+	Name:			mod_emp
+	Level:			Global
+	Sample:			<p class="emp">暫無數據</p>
+	Explain:		頁面中無數據輸出時，用此樣式顯示相關提示，如無特殊必要，建議使用 <p> 而不是 <div>
+	Last Modify:	lushnis
+*/
+	.emp { padding: 20px 10px; }
+		.emp a { color: {HIGHLIGHTLINK}; text-decoration: underline !important; }
+/*
+	Name:			mod_align
+	Level:			Global
+	Sample:			class="vm/hm"
+	Explain:		縱向及橫向對齊方式
+	Last Modify:	lushnis
+*/
+	.vm { vertical-align: middle; }
+		.vm * { vertical-align: middle; }
+	.hm { text-align: center; }
+/*
+	Name:			mod_alt
+	Level:			Global
+	Sample:			class="{echo swapclass('alt');}"
+	Explain:		隔行換色時深色背景
+	Last Modify:	lushnis
+*/
+	.alt, .alt th, .alt td { background-color: {COMMONBG}; }
+/*
+	Name:			mod_notice
+	Level:			Global
+	Sample:			class="notice"
+	Explain:		類似統計中需注意的文字樣式 [!]此處須考慮名稱簡寫為 ntc
+	Last Modify:	lushnis
+*/
+	.notice { clear: both; margin: 5px 0; padding: 3px 5px 3px 20px; background: url({IMGDIR}/notice.gif) no-repeat 2px 6px; }
+/*
+	Name:			mod_ajax_wait_info
+	Level:			Global
+	Sample:			id="ajaxwaitid"
+	Explain:		相應頁面中 AJAX 請求時的狀態顯示
+	Last Modify:	lushnis
+*/
+	#ajaxwaitid { display: none; position: absolute; right: 0; top: 0; z-index: 1; padding: 0 5px; background: #D00; color: {LIGHTLINK}; }
+/*
+	Name:			mod_showmenu
+	Level:			Global
+	Sample:			class="showmenu"
+	Explain:		下拉菜單
+	Last Modify:	lushnis
+*/
+	.showmenu { padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; cursor: pointer; white-space: nowrap; }
+		#um .showmenu { margin-right: -5px; }
 
-/* 沒有數據時的提示信息樣式 .emp --> empty */ .emp { padding: 20px 10px; } .emp a { color: {HIGHLIGHTLINK}; text-decoration: underline !important; }
-
-/* 垂直居中 */ .vm { vertical-align: middle; }
-					.vm * { vertical-align: middle; }
-/* 水平居中 */ .hm { text-align: center; }
-
-/* 隔行換色中的深色背景，用法：class="{echo swapclass('alt');}" */ .alt, .alt th, .alt td { background-color: {COMMONBG}; }
-
-/* 類似統計中需注意的文字樣式 */ .notice { clear: both; margin: 5px 0; padding: 3px 5px 3px 20px; background: url({IMGDIR}/notice.gif) no-repeat 2px 6px; }
-
-#ajaxwaitid { display: none; position: absolute; right: 0; top: 0; z-index: 1; padding: 0 5px; background: #D00; color: {LIGHTLINK}; }
-
-.showmenu { padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; cursor: pointer; white-space: nowrap; }
-	#um .showmenu { margin-right: -5px; }
-
-/* 類似帖子評分部分的彈出框 */
-.crly { padding: 6px 8px; border: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 1.6em; }
-.mncr { overflow: hidden; float: left; margin-top: -1px; width: 50px; height: 6px; background: url({IMGDIR}/attinbg.gif) no-repeat -25px 0; }
+/*
+	Name:			mod_cursor
+	Level:			Global
+	Sample:			class="cur1"
+	Explain:		鼠標樣式，可以根據需要按序添加
+	Last Modify:	Pony
+*/
+	.cur1 { cursor: pointer; }
 
 /* 如果驗證碼有錯亂，可添加此樣式.sec（全局，修改時要小心，會涉及分享、快速回復和 feed日誌相冊中的評論等地方） by Pony */
 .ie6 .sec .p_pop { white-space: expression(this.offsetWidth >= 220 ? 'normal' : 'nowrap'); width: expression(this.offsetWidth >= 220 ? 200 : 'auto'); }
@@ -176,47 +382,92 @@ a { color: {LINK}; text-decoration: none; }
 
 /* 必填項 */ .rq { color: red; }
 
-/* 文本框 */
-	.px, .pt { padding: 2px 4px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; font-size: 14px; color: {MIDTEXT}; }
-		.px:focus, .pt:focus { border-color: #6FB1DF; color: {LINK}; -moz-box-shadow: 0 0 5px #6FB1DF; }
-		.px { height: 20px; }
-			.pns .px { height: 18px; line-height: 18px; }
-			.pxs { width: 30px !important; height: 16px !important; line-height: 16px; }
-			.pxn { height: 16px; }
-			.fdiy .tfm .px { width: auto; }
+/*
+	Name:			mod_input[text]_textarea_select
+	Level:			Global
+	Sample:			class="px/pt/ps"
+	Explain:		單行輸入框（px）、多行文本框（pt）和選擇框(ps/select)
+	Last Modify:	Pony
+*/
+	.px, .pt, .ps, select { border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; color: {TEXT}; }
+		.px, .pt { padding: 2px 4px; line-height: 17px; }
+		.px { height: 17px; }
+			.pxs { width: 30px !important; }
+			.fdiy .tfm .px, .fdiy .tfm .pt { width: auto; }
 			.p_fre { width: auto !important; }
-		.er { border-color: #F00; color: #F00; outline: 1px solid #F00; }
-
+			.er { border-color: #F66 #FFBDB9 #FFBDB9 #F66; background-color: #FDF4F4; background-image: url({IMGDIR}/px_e.png); }
 		.pt { overflow-y: auto; }
-		div.pt { height: 100px; line-height: 100px; }
+			div.pt { height: 100px; line-height: 100px; }
+		.ps, select { padding: 2px 2px 2px 1px; }
+			.ie8 .ps, .ie8 select { padding: 2px; }
 		/* 自動調整高度的 textarea by Pony */
 		.pts { vertical-align: top; overflow: hidden; }
 		.cmt .pts { width: 60%; }
 
-/* 按鈕 */
+/*
+	Name:			mod_button
+	Level:			Global
+	Sample:			<button class="pn">Submit</button>
+	Explain:		按鈕樣式
+	Last Modify:	Pony
+*/
 	button::-moz-focus-inner { border: 0; padding: 0; }
-	.pn { margin-right: 3px; _margin: 1px 3px 1px 0; _padding: 0; height: 26px; border: 1px solid; border-color: {SPECIALBORDER} {HIGHLIGHTLINK} {HIGHLIGHTLINK} {SPECIALBORDER}; background: {SPECIALBG}; z-index: 0; line-height: 26px; font-size: 14px; font-weight: 700; color: {HIGHLIGHTLINK}; vertical-align: middle; cursor: pointer; overflow: visible; }
-		.ie6 .pn { line-height: 20px; }
-		.ie7 .pn { line-height: 25px; }
-		.pn * { padding: 0 20px; }
-		.pn em { font-weight: 100; }
-		.pn strong { padding-right: 16px; letter-spacing: 4px; }
-		.pnc {}
-			.pnc * {}
-		.pns .pn { height: 24px; line-height: 24px; font-size: 12px; }
-			.ie6 .pns .pn { line-height: 18px; }
-			.ie7 .pns .pn { line-height: 20px; }
-		.pnn .pn * { padding: 0 10px; }
-		a.pn, .ie6 a.pn, .ie7 a.pn { height: 24px; line-height: 24px; }
-			.pns a.pn, .ie6 .pns a.pn, .ie7 .pns a.pn { height: 22px; line-height: 22px; }
+	.pn { vertical-align: middle; overflow: hidden; margin-right: 3px; padding: 0; height: 23px; border: 1px solid #999; background: #E5E5E5 url({IMGDIR}/pn.png) repeat-x 0 0; cursor: pointer; -moz-box-shadow: 0 1px 0 #E5E5E5; -webkit-box-shadow: 0 1px 0 #E5E5E5; box-shadow: 0 1px 0 #E5E5E5; }
+		.pn:active { background-position: 0 -23px; }
+		.ie6 .pn { overflow-x: visible; width: 0; }
 
-/* 單選按鈕及多選框 */ .pr, .pc { vertical-align: middle; margin-bottom: 1px; }
+		.pn em, .pn span, .pn strong { padding: 0 10px; line-height: 21px; }
+			.pn em, .pn strong  { font-weight: 700; }
+		.ie7 .pn em, .ie7 .pn span, .ie7 .pn strong { padding: 0 5px; line-height: 18px; }
 
-/* 模擬下拉菜單樣式 float_typeid --> ftid */
+	a.pn { height: 21px; line-height: 21px; color: {TABLETEXT} !important; }
+		a.pn:hover { text-decoration: none; }
+		.ie6 a.pn { width: auto; }
+		.ie6 a.pn em, .ie6 a.pn span, .ie6 a.pn strong { display: block; }
+		.ie7 a.pn em, .ie7 a.pn span, .ie7 a.pn strong { line-height: 21px; }
+
+	.pnc, a.pnc { border-color: #235994; background-color: #06C; background-position: 0 -48px; color: #FFF !important; }
+		.pnc:active { background-position: 0 -71px; }
+	
+	.pnpost .pn { height: 26px; }
+
+/*
+	Name:			mod_input[radio]_input[checkbox]_label
+	Level:			Global
+	Sample:			class="pr/pc/lb"
+	Explain:		單選按鈕(pr)、多選框(pc)和<label>(lb)
+	Last Modify:	Pony
+*/
+	.pr, .pc { vertical-align: middle; margin: 0 5px 1px 0; padding: 0; }
+		.ie6 .pr, .ie6 .pc, .ie7 .pr, .ie7 .pc { margin-right: 2px; }
+	.lb { margin-right: 20px; }
+
+
+/*
+	Name:			mod_narrow_input
+	Level:			Global
+	Sample:			<div class="pns"></div>
+	Explain:		小尺寸的輸入框和按鈕樣式。該樣式在模板中保留，目前樣式為空。
+	Last Modify:	Pony
+*/
+	.pns .px {}
+	.pns .pn {}
+
+/*
+	Name:			mod_float_typeid
+	Level:			Global
+	Sample:			<div class="ftid">
+						<select>
+							<option>Option</option>
+						</select>
+					</div>
+	Explain:		模擬下拉菜單樣式
+	Last Modify:	Pony
+*/
 .ftid { float: left; margin-right: 6px; }
-	.ftid select { float: left; height: 20px; }
-	.ftid a { display: block; overflow: hidden; padding: 0px 17px 0 4px; height: 20px; line-height:20px; text-decoration: none !important; font-size: 12px; font-weight: 400; color: {TABLETEXT} !important; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {WRAPBG} url({IMGDIR}/newarow.gif) no-repeat 100% 0; }
-		.ftid a:hover, .ftid a:focus { background-position: 100% -20px; }
+	.ftid select { float: left; height: 23px; }
+	.ftid a { display: block; overflow: hidden; padding: 0 17px 0 4px; height: 21px; line-height: 21px; text-decoration: none !important; font-size: 12px; font-weight: 400; color: {TABLETEXT} !important; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {WRAPBG} url({IMGDIR}/newarow.gif) no-repeat 100% 0; }
+		.ftid a:hover, .ftid a:focus { background-position: 100% -23px; }
 	/* ctrl 'select' width */
 	.ftid select { width: 94px; }
 	.sslt a { width: 54px; }
@@ -230,36 +481,55 @@ a { color: {LINK}; text-decoration: none; }
 /* 分享按鈕 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%;  }
 /* 收藏按鈕 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
 
-/* 通用的表單樣式 */
+
+/*
+	Name:			mod_form
+	Level:			Global
+	Sample:			<form>
+						<table cellspacing="0" cellpadding="0" class="tfm">
+							<tr>
+								<th>Label</th>
+								<td><input type="text" name="" id="" class="" /></td>
+							</tr>
+						</table>
+					</form>
+	Explain:		表單樣式
+	Last Modify:	Pony
+*/
 	.tfm { width: 100%; }
-		.tfm caption, .tfm th, .tfm td { padding: 10px 2px; }
+		.tfm caption, .tfm th, .tfm td { vertical-align: top; padding: 7px 0; }
 			.tfm caption h2 { font-size: 16px; }
 			.vt th, .vt td { vertical-align: top; }
-		.tfm th { width: 95px; font-weight: 700; }
+		.tfm th { padding-top: 9px; padding-right: 5px; width: 130px; }
 			.tfm th .rq { float: right; font-size: 14px; }
-			.tfm .pt, .tfm .px { margin-right: 3px; width: 282px; }
-		.tfm .c, .tfm .tedt, .m_c .tfm .tedt { width: 290px; }
+			.tfm .pt, .tfm .px { margin-right: 3px; width: 330px; }
+		.tfm .c, .tfm .tedt, .m_c .tfm .tedt { width: 338px; }
 		.tfm .d { clear: both; margin: 5px 0; color: {LIGHTTEXT}; }
 			.tfm .d em { margin-left: 5px; color: red; }
 			.tfm .d strong { margin-left: 5px; }
+			.tfm .d a { color: {HIGHLIGHTLINK}; }
 		.tfm .p { text-align: right; }
 		.tfm .pcl label { display: block; padding: 0 2px 5px; }
 			.tfm .pcl .pc { margin-right: 5px; padding: 0; }
 		.tfm .l th, .tfm .l td { padding-top: 0; padding-bottom: 0; }
 	.bn .tfm caption, .bn .tfm th, .bn .tfm td { padding-top: 5px; padding-bottom: 5px; }
-		.bn .tfm th { font-weight: 400; }
 
-/* 發帖標題欄 postbox title */
-.pbt { padding-bottom: 9px; }
-	.pbt .ftid a { *margin-top: 1px; height: 24px; line-height: 24px; background-position: 100% 2px; }
-		.pbt .ftid a:hover { background-position: 100% -18px; }
+/*
+	Name:			mod_postboxtitle
+	Level:			Function
+	Explain:		發帖頁面、彈窗等的標題欄
+	Last Modify:	Pony
+*/
+.pbt { margin-bottom: 10px; }
+	.ie6 .pbt .ftid a, .ie7 .pbt .ftid a { margin-top: 1px; }
+	#custominfo.mtn { margin-bottom: -5px; }
 
 /* 提示信息 alert_win － altw*/
 .altw { width: 350px; }
 	.altw .fltc { margin-bottom: 0; padding: 8px; }
 		.alert_right, .alert_error, .alert_info { padding: 6px 0 6px 58px; min-height: 40px; height: auto !important; height: 40px; line-height: 160%; background:url({IMGDIR}/right.gif) no-repeat 8px 8px; font-size: 14px; }
 		.alert_error { background-image: url({IMGDIR}/error.gif); }
-			.alert_error a{ font-weight:bold; color:{HIGHLIGHTLINK};}
+			.alert_error a { font-weight: 700; color: {HIGHLIGHTLINK}; }
 		.alert_info { background-image: url({IMGDIR}/info.gif); }
 		.alert_btnleft { margin-top: 8px; }
 		.alert_btn { margin-top: 20px; text-align: center; }
@@ -299,40 +569,54 @@ a { color: {LINK}; text-decoration: none; }
 /* 通用容器，定義頁面寬度 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
 
 /* 頁頭 */
-	#hd { margin-bottom: 10px; border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
+	#toptb { line-height: 24px; }
+		#toptb a { float: left; padding: 0 4px; height: 24px; }
+		#toptb a.showmenu { padding-right: 15px; }
+		#toptb a.hover { background-color: #FFF; }
+		#toptb .pipe { float: left; display: none; }
+	#hd { border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
 		#hd .wp { padding: 10px 0 0; }
-			#diy-tg { position: absolute; top: 0; right: 15px; z-index:100; }
-			/*.hdc { border-bottom: {HEADERBORDER} solid #005DC3; }*/
-			.hdc { position: relative; z-index: 3; min-height: 70px; background: {HEADERBGCOLOR}; }
+			#diy-tg { width: 55px; background: url({STATICURL}image/diy/panel-toggle.png) no-repeat 100% 1px; text-indent: -9999px; overflow: hidden; }
+
+			.hdc { min-height: 70px; }
 				.ie6 .hdc { height: 70px; }
 			#hd h2 { padding: 0 20px 8px 0; float: left; }
 				#space #hd h2 { margin-top: 0; }
-			#hd .fastlg { position: absolute; bottom: 8px; right: 0; }
-			#scbar { overflow: hidden; height: 36px; line-height: 36px; background: url({IMGDIR}/search.gif) repeat-x 0 0; }
-				#scbar table { background: url({IMGDIR}/search.gif) no-repeat 0 -36px; }
-					#scbar td { padding: 0 2px; white-space: nowrap; }
-				#scbar #srchtxt { margin-top: 2px\9; margin-right: 10px; margin-left: 35px; width: 250px; height: 18px; line-height: 18px; border: none; background: transparent; outline: none; }
-				#scbar label { margin-right: 8px; cursor: pointer; }
-				#scbar #search_submit { width: 51px; height: 36px; border: none; background: transparent url({IMGDIR}/search.gif) no-repeat 0 -77px; cursor: pointer; }
-				#scbar .hot { padding-left: 1em; }
-					.ie6 #scbar .hot { white-space: normal; }
-			#sc td { padding: 0 3px; }
-				#srchtxt { font-size: 12px; line-height: 22px; }
-					.ie6 #srchtxt { line-height: 20px; }
-				#sc #search_submit { width: 51px; height: 32px; border: none; background: transparent url({IMGDIR}/search.gif) no-repeat 0 -79px; cursor: pointer; }
-				#sctype_menu { width: 100px; }
-					#sctype_menu input { position: absolute; width: 0; height: 0; opacity: 0; }
-					#sctype_menu a { padding: 0; }
-					#sctype_menu label { display: block; padding: 3px 15px; line-height: 1.5; cursor: pointer; }
+			#hd .fastlg { float: right; padding-top: 10px; }
+
+			#scbar { height: 44px; border: solid {SPECIALBG}; border-width: 0 1px 1px; background: url({IMGDIR}/search.png) repeat-x 0 0; line-height: 44px; overflow: hidden; }
+				.scbar_icon_td { width: 50px; background: url({IMGDIR}/search.png) no-repeat 0 -74px; }
+				.scbar_txt_td, .scbar_type_td { background: url({IMGDIR}/search.png) repeat-x 0 -222px; }
+					#scbar_txt { width: 400px; border: 1px solid #FFF; outline: none; font-size: 14px; }
+				.scbar_btn_td { width: 67px; background: url({IMGDIR}/search.png) no-repeat 0 -296px; text-align: center; }
+					#scbar_btn { margin: 0; padding: 0; border: none; background: transparent none; }
+				.scbar_type_td { background: url({IMGDIR}/search.png) no-repeat 0 -370px; }
+					#scbar_type { display: block; padding-left: 5px; text-align: left; text-decoration: none; }
+						#scbar_type_menu { margin-top: -8px; }
+				#scbar_hot { padding-left: 8px; height: 45px; overflow: hidden; }
+					#scbar_hot strong, #scbar_hot a { float: left; margin-right: 8px; white-space: nowrap; }
+			
+			#sc { display: none; }
+				#sc_txt { margin-right: 0; width: 109px; border-right: none; outline: none; }
+				#sc_type_w { border-left: none; }
+				#sc_type { height: 17px !important; line-height: 17px; }
+					.ie8 #sc_type { line-height: 18px; }
+				#sc_btn { margin-right: 0; }
+				#sc_type_menu { margin: 2px 0 0 -5px; width: 100px; line-height: 1.5; }
+					#sc_type_menu a { float: none; }
+				#pt #sc { margin: 3px 0 0 0; }				
+
 			#nv { overflow: hidden; padding-left: 3px; height: 33px; {MENUBGCODE}; }
 				#nv li { float: left; padding-right: 1px; height: 33px; line-height: 33px; background: url({IMGDIR}/nv_a.png) no-repeat 100% 0; font-weight: 700; font-size: 14px; }
 					.ie_all #nv li { line-height: 36px; }
 					.ie6 #nv li { line-height: 33px; }
-					#nv a { float: left; padding: 0 20px; height: 33px; }
-						#nv a { color: {MENUTEXT}; }
+					#nv li a { float: left; padding: 0 20px; height: 33px; }
+						#nv li a { color: {MENUTEXT}; }
 						#nv li span { display: none; }
 					#nv li.a { margin-left: -1px; {MENUHOVERBGCODE}; }
 						#nv li.a a { color: {MENUHOVERTEXT}; }
+						#nv li a:hover { background: url({IMGDIR}/nv_a.png) no-repeat 50% -66px; }
+						#nv li.hover a:hover, #nv li.hover a { background: url({IMGDIR}/nv_a.png) no-repeat 50% -99px; }
 			#mu { position: relative; z-index: 1; }
 				.ie6 #mu, .ie7 #mu { line-height: 0; font-size: 0; }
 				#mu ul { background: url({IMGDIR}/mu_bg.png) no-repeat 0 100%; line-height: 22px; z-index: 2; font-size: 12px; }
@@ -340,39 +624,56 @@ a { color: {LINK}; text-decoration: none; }
 						#mu a { float: left; display: inline; margin: 5px 6px; padding: 0 10px; white-space: nowrap; }
 							#mu a:hover { margin: 4px 5px; border: 1px solid {SPECIALBORDER}; background: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 				.floatmu { position: absolute; left: 0; top: 0; }
-			#um { position: absolute; z-index: -1; bottom: 8px; right: 0; padding-right: 60px;_padding-right: 54px; line-height: 2.3; width: 90%}
+			#um { float: right; padding-top: 10px; padding-right: 60px; _padding-right: 54px; line-height: 2.3; }
 				#um, #um a { color: {HEADERTEXT}; }
 				#um p { text-align: right; }
 				#um .avt { display: inline; margin-right: -60px; }
 				.vwmy { padding-left: 16px; background: url({IMGDIR}/user_online.gif) no-repeat 0 2px; }
+					.vwmy.qq { background: url({IMGDIR}/connect_qq.gif) no-repeat scroll 0 0; padding-left: 20px; }
 				/* .topnav .new, .sch .new 分別為為個人中心和搜索頁面頭部新消息樣式 */
-				#um .new, .topnav .new, .sch .new { padding-left: 20px; background-repeat: no-repeat; background-position: 0 50%; color: {HIGHLIGHTLINK}; font-weight: 700; }
+				#um .new, .topnav .new, .sch .new, #toptb .new { padding-left: 20px; background-repeat: no-repeat; background-position: 0 50%; color: {HIGHLIGHTLINK}; font-weight: 700; }
 					#myprompt.new { background-image: url({IMGDIR}/notice.gif); background-position: 3px 50%; }
 					#pm_ntc.new { background-image: url({IMGDIR}/new_pm.gif); }
-					#task_ntc { background-image: url({IMGDIR}/new_task.gif); }
+					#task_ntc { background-image: url({STATICURL}image/feed/task.gif); }
 				#um .pipe { margin: 0 5px 0 0; }
 
-			#qmenu { float: right !important; margin: 3px 10px 0 0; display: inline; padding: 0 0 0 10px !important; width: 85px; height: 26px; background: url({IMGDIR}/qmenu.png) no-repeat 0 0; line-height: 26px; }
-				#qmenu_menu { margin: -8px 0 0 1px; width: 92px; }
-				#qmenu_menu ul a { padding-left: 26px; background: url({IMGDIR}/noicon.gif) no-repeat 6px 50%; }
-					#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
-				.reg_tip { padding: 10px; }
-					.p_pop .reg_tip a { padding: 0; background: none; white-space: normal; }
-						.p_pop .reg_tip a:hover { background: transparent none; text-shadow: none; color: {HIGHLIGHTLINK}; }
+				#extcreditmenu { margin-right: 2px !important; padding-top: 3px; padding-bottom: 3px; padding-left: 10px; }
+					#extcreditmenu.a { position: relative; z-index: 302; margin-right: 1px !important; border: 1px solid; border-color: {DROPMENUBORDER}; border-bottom: none; background-color: {WRAPBG}; }
+					#extcreditmenu_menu { margin-top: -1px; width: auto; }
+						#extcreditmenu_menu li { float: none; display: block; padding-left: 10px !important; padding-right: 3em !important; }
+
+				#qmenu { float: right; display: inline; margin: 3px 4px 0; padding: 0 12px 0 0; width: 83px; height: 26px; background: url({IMGDIR}/qmenu.png) no-repeat 0 0; line-height: 26px; text-align: center; color: {HIGHLIGHTLINK}; font-weight: 700; text-shadow: 0 1px 0 #FFF; overflow: hidden; }
+					#qmenu:hover { text-decoration: none; }
+					#qmenu.a { position: relative; z-index: 302; background-position: 0 -30px; }
+					.ie8 #qmenu { line-height: 30px; }
+				#qmenu_menu { margin-top: -1px; padding: 20px 5px 10px; width: 180px; border-color: #9A9A9A; }
+					.ie_all #qmenu_menu { margin-left: 1px; }
+						.ie9 #qmenu_menu { margin-left: 0; }
+					#qmenu_menu ul li { float: left; }
+					#qmenu_menu ul a { margin-bottom: 10px; padding: 47px 0 0; width: 60px; border: none; border-radius: 4px; background: url({IMGDIR}/noicon.gif) no-repeat 50% 5px; text-align: center; }
+						#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
 
 /* 頁面主區域 */
-	#ct { min-height: 400px; }
-		.ie6 #ct { height: 400px; }
+	#ct { min-height: 300px; }
+		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
 		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
 		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
 
-		.appl { float: left; overflow: hidden; margin-bottom: 10px; padding: 6px 10px; width: 115px; border: 1px solid {COMMONBORDER}; {SIDEBGCODE}; }
+		.appl { float: left; overflow: hidden; margin-bottom: 10px; padding: 6px 10px; width: 117px; }
 
+		.ct2_a, .ct3_a { border: 1px solid {WRAPBORDERCOLOR}; {SIDEBGCODE} }
+			.ct2_a_r { border: none; background-image: none; }
+			 .ct2_a h1.mt { display: none; }
+			 .ct2_a .tb { margin-top: 3px; }
 		.ct2_a .mn { float: right; width: 810px; }
+			.ct2_a .mn { display: inline; margin-right: 10px; padding-top: 10px; width: 800px; }
+				#nv_userapp .ct2_a .mn, .ct2_a_r .mn { margin-right: 0; width: 810px; }
 
-		.ct3_a .mn { float: right; width: 565px; }
-		.ct3_a .sd { float: right; margin-left: 15px; width: 220px; }
+		.ct3_a .mn { float: left; margin-left: 20px; width: 565px; }
+		.ct3_a .sd { float: right; width: 220px; }
+			#nv_home .ct3_a .sd .bm { margin-right: 10px; border: none; }
+				#nv_home .ct3_a .sd .bm_c { padding: 10px 0; }
 
 		.mw { width: 100%; float: none; }
 		.mnw { clear: both; border-top: 1px solid #CCC; }
@@ -381,6 +682,10 @@ a { color: {LINK}; text-decoration: none; }
 /* 頁尾 */
 	#ft { padding: 10px 0 50px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT}; }
 		#flk { text-align: right; }
+			#flk img { vertical-align: middle; }
+			#scrolltop { visibility: hidden; position: fixed; bottom: 100px; display: block; margin: -30px 0 0; width: 26px; height: 50px; background: url({IMGDIR}/scrolltop.png) no-repeat 50% 0; line-height: 999px; overflow: hidden; cursor: pointer; }
+		.ie6 #scrolltop { position: absolute; bottom: auto; }
+		#nv_home #ft, .pg_announcement #ft, .pg_modcp #ft, .pg_portalcp #ft, .pg_ranklist #ft, #nv_userapp #ft { border-top: none; }
 
 /* 通用的區域塊 */
 	/*
@@ -397,6 +702,7 @@ a { color: {LINK}; text-decoration: none; }
 		.bm_h .o { float: right; width: 30px; }
 			.bm_h .o img { float: right; margin-top: 11px; cursor: pointer; }
 		.bm_h .i { padding-left: 10px; }
+		.bm_h .pn { margin-top: 4px; }
 		.bm_h { padding: 0 10px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid {CONTENTSEPARATE}; background: {COMMONBG}; line-height: 31px; white-space: nowrap; overflow: hidden; }
 		.bmw { border: 1px solid {COMMONBORDER}; }
 			.bmw .bm_h { border-top-color: {WRAPBG}; border-right: 1px solid {WRAPBG}; border-bottom-color: {CONTENTSEPARATE}; border-left: 1px solid {WRAPBG}; background: {SPECIALBG}; }
@@ -415,12 +721,21 @@ a { color: {LINK}; text-decoration: none; }
 
 	/* 寬佈局下的通用塊 */.bw { padding: 0 15px; }
 
-/* 麵包屑導航 #pt --> Path */
-	#pt { margin-bottom: 10px; height: 32px; border: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 32px; }
-		#pt a, #pt em { float: left; height: 32px; }
-		#pt em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 30% 0; line-height: 200px; overflow: hidden; }
-		.nvhm { width: 24px; background: url({IMGDIR}/pt_icn.png) no-repeat 7px 8px; line-height: 200px; overflow: hidden; }
-
+/*
+	Name:			mod_path
+	Level:			Global
+	Sample:			<div id="pt"><div class="z">Path here</div></div>
+	Explain:		麵包屑導航
+	Last Modify:	lushnis
+*/
+	#pt { margin: 2px 0; height: 29px; border:none; background: transparent; line-height: 29px; }
+		#pt .z { padding-right: 10px; }
+		#pt .z a, #pt .z em, #pt .z span { float: left; height: 29px; }
+		#pt .z em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 3px 10px; line-height: 200px; overflow: hidden; }
+		.nvhm { width: 16px; background: url({IMGDIR}/search.png) no-repeat -8px -119px; line-height: 200px; overflow: hidden; }
+			/* XP 或 Windows 7，IE 最高版本為 8 或 9，這幾種組合情況對字體的渲染存在差異，所以需要對背景進行微調，以適應更多情況 by Pony 11050511 */
+			.ie_all #pt .z em { background-position: 3px 9px; }
+			.ie_all .nvhm { background-position: -8px -120px; }
 /* 統計數據 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
@@ -429,26 +744,6 @@ a { color: {LINK}; text-decoration: none; }
 		.tns th { border-right: 1px solid #CCC; }
 		.tns th p, .tns td p { font-size: 14px; margin: 0; }
 
-/* 主區域頭部 .ch --> Containter Header */
-.ch { height: 49px; line-height: 49px; border-bottom: 1px solid {COMMONBORDER}; background: #F0F0F0 url({IMGDIR}/thead.png) repeat-x 0 100%; }
-	.ch label { float: left; margin-right: 10px; padding: 0 18px 0 12px; height: 49px; font-size: 20px; color: {MIDTEXT}; text-shadow: 1px 1px 1px {WRAPBG}; }
-		.ch label a { color: {LINK}; text-decoration: none; }
-		.mn .ch label a, .w .ch label a { color: {LIGHTLINK}; text-decoration: none; }
-	.mn .ch label, .w .ch label { background: url({IMGDIR}/th-lb.png) no-repeat 100% 0; color: {LINK}; letter-spacing: 3px; text-shadow: 1px 1px 2px {WRAPBG}; }
-		#nv_forum .mn .ch label, #nv_forum.pg_viewthread .ch label { background-position: 100% -150px; color: {LIGHTLINK}; text-shadow: 1px 1px 2px #004FB5; }
-		#nv_group .mn .ch label, #nv_group.pg_viewthread .ch label { background-position: 100% -200px; color: {LIGHTLINK}; text-shadow: 1px 1px 2px #609; }
-		#nv_home .mn .ch label, #nv_home .w .ch label, #nv_forum .mn .ch label.home, #nv_userapp .mn .ch label, #nv_userapp .w .ch label { background-position: 100% -100px; color: {LIGHTLINK}; text-shadow: 1px 1px 2px #F30; }
-		#nv_portal .mn .ch label, #nv_forum .mn .ch label.portal { background-position: 100% -50px; color: {LIGHTLINK}; text-shadow: 1px 1px 2px #A00; }
-	.mn .ch { display: none; }
-	#nv_home h1.wx, #nv_userapp h1.wx { font-size: 16px; }
-	.mn .ch { margin-right: 1px; }
-	.sd .ch { margin-left: 1px; background: transparent none; }
-	.sd .ch label{padding:0 38px 0 12px;}
-	.ch .px { display: inline; float: right; margin: 8px 5px 0 0; }
-
-	.pg_modcp .mn .ch label{ background-position: 100% 0 !important;color: {LINK} !important; letter-spacing: 3px !important; text-shadow: 1px 1px 2px {WRAPBORDERCOLOR} !important;}
-	.pg_modcp .mn .ch label a{ color: {LINK};}
-
 /* 帶圖標頁面頭部 ih. --> icon header */
 	.ih .icn { float: left; width: 60px; }
 	.ih dl { margin-left: 60px; }
@@ -456,27 +751,41 @@ a { color: {LINK}; text-decoration: none; }
 		.ih dd { padding-bottom: 1em; }
 			.ih dd strong { margin: 0 2em 0 4px; color: #C00; }
 
-/* .tb --> Tab標籤頁 */
+/*
+	Name:			mod_tab
+	Level:			Global
+	Dependent:		mod_clearfix
+	Sample:			<ul class="tb cl">
+						<li class="a"><a href="#">Active Tab Item</a></li>
+						<li><a href="#">Tab Item</a></li>
+					</ul>
+	Explain:		標籤樣式
+	Last Modify:	lushnis
+*/
 .tb { margin-top: 10px; padding-left: 5px; line-height: 30px; border-bottom: 1px solid {COMMONBORDER}; }
 	.tb li { float: left; margin: 0 3px -1px 0; }
-		* html .tb .a { position: relative; }
+		.ie6 .tb .a, .ie6 .tb .current { position: relative; }
 	.tb a { display: block; padding: 0 10px; border: 1px solid {COMMONBORDER}; background: {SPECIALBG}; }
-		.tb .a a { border-bottom-color: {WRAPBG}; background: {WRAPBG}; font-weight: 700;}
+		.tb .a a, .tb .current a { border-bottom-color: {WRAPBG}; background: {WRAPBG}; font-weight: 700;}
+		.tb a:hover { text-decoration: none; }
 	.tb .y { float: right; margin-right: 0; }
 		.tb .y a { border: none; background: transparent; }
-	.tb .o { margin: 1px 4px 0 2px; padding-left: 20px; }
-	.tb .o, .tb .o a { height: 26px; line-height: 25px; background: url({IMGDIR}/pnp2.png) no-repeat 0 0; }
-		.tb .o a { padding-right: 15px; background-position: 100% 0; color: {LIGHTLINK}; border: none; -moz-border-radius: 0; -webkit-border-radius: 0; }
-		* html .tb .o a { float: left; }
+	.tb .o { margin: 1px 4px 0 2px; border: 1px solid #235994; }
+	.tb .o, .tb .o a { height: 23px; line-height: 23px; background: url({IMGDIR}/pn.png) repeat-x 0 -48px; }
+		.tb .o a { padding: 0 15px; border: none; font-weight: 700; color: #FFF; }
+		.ie6 .tb .o a { float: left; }
 	.tb_h { margin: 0; padding: 0; background-color: {SPECIALBG}; }
 		.tb_h li { margin-right: 0; }
 		.tb_h a { border-top: none; border-left: none; }
+	.tb_s { margin-top: 0; line-height: 26px; }
+		
 	/* 類似menu的Tab */
 .tbmu { padding: 10px; border-bottom: 1px dashed {COMMONBORDER}; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
 	/* tab的強調信息提示 */
-.tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 12px; }	
+.tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 50%; }
+.tbms_r { background-image: url({IMGDIR}/data_valid.gif); }
 	/* 極簡 Tab */
 .tbx { margin: 10px 0; }
 	.tbx span { margin-right: 10px; cursor: pointer; }
@@ -488,7 +797,7 @@ a { color: {LINK}; text-decoration: none; }
 
 /* 廣告 */
 	/* 頁頭廣告 */ .a_h { padding-top: 5px; }
-	/* 二級導航廣告 */ .a_mu { margin-bottom: 15px; }
+	/* 二級導航廣告 */ .a_mu { border: solid {COMMONBORDER}; border-width: 0 1px 1px; background: {COMMONBG}; }
 	/* 頁尾廣告 */ .a_f { margin: 5px auto; }
 	/* 日誌內容廣告 */ .a_b { float: right; margin: 0 0 5px 5px; }
 	/* 格子廣告 */ .a_t { margin-bottom: 10px; }
@@ -503,6 +812,9 @@ a { color: {LINK}; text-decoration: none; }
 	/* 對聯廣告 */ .a_cb { top: 20px }
 		* html .a_cb { top: expression(offsetParent.scrollTop+20); }
 	/* 文章漂浮廣告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
+	/* 右下角廣告 */ .a_cn { position: fixed; right: 10px; bottom: 10px; z-index: 300; }
+		* html .a_cn { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
+		.a_cn .close { text-align: right; }
 
 	.a_h, .a_mu, .a_c, .a_p, .a_f, .a_t { text-align: center; }
 
@@ -534,12 +846,12 @@ a { color: {LINK}; text-decoration: none; }
 	.xld dd { margin-bottom: 8px; }
 		/* text with thumbnail image ( must with the additional class .cl ) */
 		.xld .m { float: left; margin: 8px 8px 10px 0; }
-		.xld .atc { float: right; margin-left: 5px; max-width /*\**/: 82px\9; }
+		.xld .atc { float: right; margin-left: 20px; }
 			.xld .atc img { padding: 2px; max-width: 80px; max-height: 80px; border: 1px solid #CCC; background: {WRAPBG}; }
-			* html .xld .atc img { width: expression(this.width > 80 && this.width>=this.height ? 80 : true); height: expression(this.height > 80 && this.width<=this.height ? 80 : true); }
-		.xld a.d, .xl a.d, .attc a.d, .c a.d, .imgf a.d, .sinf a.d { float: right; width: 20px; height: 20px; overflow: hidden; line-height: 100px; background: url({IMGDIR}/op.png) no-repeat 0 -2px; }
+				.ie6 .xld .atc img { width: expression(this.width > 80 && this.width>=this.height ? 80 : true); height: expression(this.height > 80 && this.width<=this.height ? 80 : true); }
+		.xld a.d, .xl a.d, .attc a.d, .c a.d, .sinf a.d { float: right; width: 20px; height: 20px; overflow: hidden; line-height: 100px; background: url({IMGDIR}/op.png) no-repeat 0 -2px; }
 			.attc a.d { float: left; }
-		.xld a.d:hover, .xl a.d:hover, .attc a.d:hover, .c a.d:hover, .imgf a.d:hover, .sinf a.d:hover { background-position: 0 -22px; }
+		.xld a.d:hover, .xl a.d:hover, .attc a.d:hover, .c a.d:hover, .sinf a.d:hover { background-position: 0 -22px; }
 		.xld a.b { background-position: 0 -40px; }
 			.xld a.b:hover { background-position: 0 -60px; }
 	.xlda dl { padding-left: 65px; }
@@ -557,6 +869,7 @@ a { color: {LINK}; text-decoration: none; }
 		.ml p, .ml span { display: block; width: 100%; height: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 		.ml span, .ml span a { color: {LIGHTTEXT}; }
 	.mls li { padding: 0 0 5px; width: 66px; }
+		.mls .avt { display: block; margin: 0 auto; width: 54px; }
 		.mls img { width: 48px; height: 48px; }
 		.mls p { margin-top: 5px; }
 	.mlm li { padding: 0 0 5px; width: 150px; }
@@ -573,13 +886,13 @@ a { color: {LINK}; text-decoration: none; }
 		* html .mlp img { width: expression(this.width > 120 && this.width>=this.height ? 120 : true); height: expression(this.height > 120 && this.width<=this.height ? 120 : true); }
 
 /* 用戶頭像列表時，各種狀態圖標。.gm -> 管理員; .gs -> 明星會員 ; .gol -> 在線會員; */
-.gm, .gs, .gol { float: left; display: block; margin: -3px auto 0; *margin: -3px 0 0 -37px; width: 74px; height: 18px; background: url({IMGDIR}/gst.gif) no-repeat 5px 0; position: absolute; overflow: hidden; }
-.gs { background-position: 8px -18px; }
-.gol { background-position: 8px -36px; }
+.gm, .gs, .gol { position: absolute; overflow: hidden; margin: -3px 0 0 -3px; width: 60px; height: 18px; background: url({IMGDIR}/gst.gif) no-repeat 0 0; display: block;/* ie6 */ }
+.gs { background-position: 0 -18px; }
+.gol { background-position: 0 -36px; }
 
 /* 應用列表*/
 	.appl ul { margin: 3px 0; }
-	.appl li { height: 28px; line-height: 28px; white-space: nowrap; font-size: 14px; text-overflow: ellipsis; overflow: hidden; }
+	.appl li { display: block; height: 28px; line-height: 28px; white-space: nowrap; word-wrap: normal; font-size: 14px; text-overflow: ellipsis; overflow: hidden; }
 	.appl li a { text-decoration: none !important; }
 	.appl img { margin: 5px 5px -3px 0; }
 	.appl span { float: right; font-size: 12px; }
@@ -590,17 +903,27 @@ a { color: {LINK}; text-decoration: none; }
 	.myo img { margin-bottom: -1px; }
 	.myo a { color: {HIGHLIGHTLINK}; }
 	/* 側邊管理列表 */
-	.tbn { margin: -7px -10px; }
+	.tbn { margin: -6px -10px 0; }
 		.tbn ul { margin: 0; }
 			.tbn li { margin: 0 10px; height: 33px; border-bottom: 1px dashed #CCC; }
-			.tbn li.a { margin: -1px 0 0; padding: 0 10px; border-top: 1px solid #CCC; border-bottom-style: solid; background: #CCC url({IMGDIR}/tbn.png) repeat-x 0 0; }
+			.tbn li.a { margin: -1px 0 0; padding: 0 10px 0 9px; border-top: 1px solid {COMMONBORDER}; border-bottom-style: solid; background: {WRAPBG}; }
 		.tbn ul a { display: block; height: 33px; line-height: 33px; }
 		.tbn .mt { padding: 10px; }
 
 /* 道具 magic */
 .mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; } 
 
-/* 友情鏈接 */
+/*
+	Name:			mod_link
+	Level:			Global
+	Dependent:		
+	Sample:			<ul class="tb cl">
+						<li class="a"><a href="#">Active Tab Item</a></li>
+						<li><a href="#">Tab Item</a></li>
+					</ul>
+	Explain:		友情鏈接
+	Last Modify:	lushnis
+*/
 	.lk img { float: left; margin-right: 5px; margin-bottom: 5px; width: 88px; height: 31px; }
 	.lk p { color: {MIDTEXT}; }
 	.lk .m li { clear: left; padding: 0 0 10px 98px; }
@@ -611,7 +934,7 @@ a { color: {LINK}; text-decoration: none; }
 /* ------------------------------------------------------------------------ 其他特定功能塊 */
 /* 簡易編輯器 Tiny Editor */
 	.tedt { width: 98%; border: 1px solid; border-color: #999 #CCC #CCC #999; }
-		.tedt .bar { padding: 0 10px 0 0; height: 25px; border-bottom: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 28px; }
+		.tedt .bar { padding: 0 10px 0 0; height: 25px; line-height: 25px; border-bottom: 1px solid {COMMONBORDER}; background: {COMMONBG}; }
 			.fpd a { float: left; margin: 2px 5px 0 0; width: 20px; height: 20px; background: url({STATICURL}image/editor/editor.gif) no-repeat; text-indent: -9999px; line-height: 20px; overflow: hidden; }
 			.fpd a.fbld { background-position: 0 0; }
 			.fpd a.fclr { background-position: -60px 0; }
@@ -621,58 +944,50 @@ a { color: {LINK}; text-decoration: none; }
 			.fpd a.fcd { background-position: -120px -20px; }
 			.fpd a.fsml { background-position: -20px -20px; }
 		.tedt .area { padding: 4px; background: {WRAPBG}; zoom: 1; }
-		.tedt .pt { width: 100%; padding: 0 !important; border: none; background: {WRAPBG} none; }
+		.tedt .pt { width: 100%; margin-right: 0; padding: 0 !important; border: none; background: {WRAPBG} none; }
 			.tedt .pt:focus { outline: none; -moz-box-shadow: none; }
 	.m_c .tedt { width: 600px; }
 
 /* 表情 */
-.sllt { padding: 10px; border: 1px solid #CCC; background: {WRAPBG}; }
+.sllt { padding: 10px 5px 5px !important; }
 	.sllt td { padding: 8px; border: none; cursor: pointer; }
 	.sllt_p { *float: left; text-align: right; }
 		.sllt_p a { margin-right: 5px; color: #069; text-decoration: underline; }
 	.sl_pv { margin-top: 5px; padding: 8px; background: #FAFAFA; border: 1px solid #CCC; }
+	.ie6 .slg, .ie7 .slg { width: expression(this.parentNode.offsetWidth); }
 
-	.slg { height: 33px; *height:34px; overflow: hidden; width: expression(this.parentNode.offsetWidth); }
-		.slg ul, .imguptype { margin: 6px 0; padding: 0 0 26px 8px; border-bottom: 1px solid {COMMONBORDER}; }
-			.slg li, .imguptype li { display: inline; }
-			* html .slg li, * html .imguptype li { line-height: 18px; }
-				.slg li a, .imguptype li a { float: left; margin: 2px 6px 0 0; padding: 2px 10px; height: 19px; border: 1px solid {COMMONBORDER}; color: 069; text-decoration: none; }
-					.slg li a:focus, .imguptype li a:focus { outline: none; }
-					.slg li a.current, .imguptype li a.current { border-bottom-color: {WRAPBG}; font-weight: 700; color: #069; }
-
-/* 風格選擇 */
-.sslct { padding: 5px 10px; border-top: 1px dashed {COMMONBORDER}; }
-	 .sslct_btn { float: left; margin: 4px 4px 0 0; width: 12px; height: 12px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
-		.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
-
-/* 寬版切換 by Pony */
-.wslct { border-top: 1px dashed {COMMONBORDER}; }
-	.wslct a { padding-left: 10px !important; background-image: none !important; }
-		.wslct a:hover { background-image: none !important; }
+/*
+	Name:			mod_style_selector
+	Level:			Fuction
+	Dependent:		mod_popupmenu
+	Explain:		風格切換菜單
+	Last Modify:	lushnis
+*/
+	#toptb a#sslct { width: 10px; background: url({IMGDIR}/style_switch.png) no-repeat 50% 50%; text-indent: -9999px; overflow: hidden; }
+	#sslct_menu { padding: 6px 10px 10px; }
+		 .sslct_btn { float: left; margin: 4px 4px 0 0; width: 12px; height: 12px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
+			.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
 
 /* 彈出菜單、彈出層及彈出窗口 */
-	.p_pop, .p_pof { padding: 5px 0; border: 1px solid; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE} }
+	.p_pop, .p_pof, .sllt { padding: 4px; border: 1px solid; min-width: 60px; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE}; box-shadow: 1px 2px 2px rgba(0,0,0,0.3); }
+		.ie6 .p_pop { width: 100px; }
+		.ie_all .p_pop, .ie_all .p_pof, .ie_all .sllt { filter: progid:DXImageTransform.Microsoft.Shadow(color=#999999,direction=135,strength=1); }
 		.p_pof { width: 500px; }
 		.p_opt { padding: 10px; }
 		.p_pop li { display: inline; }
-		.p_pop a { position: relative; display: block; padding: 3px 15px; white-space: nowrap; }
+		.p_pop a { position: relative; display: block; padding: 3px 5px; border-bottom: 1px solid {SPECIALBG}; white-space: nowrap; }
+			.p_pop li:last-child a { border: none; }
 			.ie6 .p_pop a { position: relative; }
-			.p_pop a:hover, #sctype_menu .sca { background: #0093E2 url({IMGDIR}/pope_bg.png) repeat-x 0 0; color: #FFF; text-shadow: -1px -1px 0 #0081B0; text-decoration: none; }
+			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 		/* .blk -> block 內容較為複雜的彈出層使用 .blk 的 class，內部的 a 標籤重新定義 */
 		.blk a, .inlinelist a { display: inline; padding: 0; border: none; }
 			.blk a:hover { background: none; color: {LINK}; text-shadow: none; text-decoration: underline; }
 		.inlinelist { padding: 5px; }
 			.inlinelist a { float: left; width: 5em; height: 2em; overflow: hidden; text-align: center; line-height: 2em; }
+	.h_pop { min-width: 120px; border-top: none; }
 /* .txt 和 .textarea 屬於舊的命名規範，待整理 by lushnis */.p_opt .txt, .p_opt .txtarea { margin: 5px 0; }
 
 	.p_pop .flbc, .p_pof .flbc{margin-right: 8px;margin-top: 4px;}
-
-	/* 用戶組升級提示 by Pony */
-	.g_up { margin-left: -5px; }
-		.ie6 .g_up, .ie7 .g_up { width: 280px; }
-		.g_up .crly { border: 1px solid {NOTICETEXT}; background: #FFF4DD; }
-		.g_up .mncr { background: url({IMGDIR}/ratbg.gif) no-repeat 5px 0; }
-	#g_upmine_menu .mncr { float: right; width: 30px; }
 
 /* 彈出層 以下 class 都可以分開寫，單獨定義，以便個性化 */
 	/* 四條邊、四個角的公用樣式 */
@@ -710,7 +1025,7 @@ a { color: {LINK}; text-decoration: none; }
 		.flb span { float: right; color: {LIGHTTEXT}; }
 			.flb span a, .flb strong { float: left; text-decoration: none; margin-left: 8px; font-weight: 400; color: {LINK}; }
 				.flb span a:hover { color: {LIGHTTEXT}; }
-			.flbc { float: left; width: 20px; height: 20px; overflow: hidden; text-indent: -9999px; background: url({IMGDIR}/cls.gif) no-repeat 0 0; }
+			.flbc { float: left; width: 20px; height: 20px; overflow: hidden; text-indent: -9999px; background: url({IMGDIR}/cls.gif) no-repeat 0 0; cursor: pointer; }
 				.flbc:hover { background-position: 0 -20px; }
 
 			.floatwrap { overflow: auto; overflow-x: hidden; margin-bottom: 10px; height: 280px; }
@@ -727,29 +1042,28 @@ a { color: {LINK}; text-decoration: none; }
 
 /* 彈窗未開啟時 nofloat */
 .nfl { height: auto !important; height: 320px; min-height: 320px; }
-	.nfl .f_c { margin: 120px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
+	.nfl .f_c { margin: 60px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
 	.nfl .loginform { height: auto; }
 	.nfl .clause { width: auto; height: auto; }
 
 /* dropdownbtn 下拉菜單 */
 .hasd {}
-	.hasd input { float: left; width: 129px; }
+	.hasd input { float: left; width: 121px; }
 		.hasd input.crl { padding: 0; width: 20px; height: 20px; background: none; border-style: solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; border-width: 1px 0 1px 1px; }
 	.hasd .spmediuminput { width: 115px; }
-	.dpbtn { float: left; overflow: hidden; text-indent: -9999px; width: 20px; height: 20px; border-width: 1px 1px 1px 0; border-style: solid; border-color: #666 #CCC #CCC #666; background: {WRAPBG} url({IMGDIR}/newarow.gif) no-repeat 0 0; }
-		.dpbtn:hover { background-position: 0 -20px; }
-	.hasd label { float: left; margin-right: 4px; }
+	.dpbtn { float: left; overflow: hidden; text-indent: -9999px; width: 21px; height: 21px; border-width: 1px 1px 1px 0; border-style: solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {WRAPBG} url({IMGDIR}/newarow.gif) no-repeat 100% 0; }
+		.dpbtn:hover { background-position: 100% -23px; }
+	.hasd label { float: left; }
 		.tpclg h4 a.dpbtn { float: right; border-width: 1px; }
 		.tpclg h4 { font-weight: 400; }
 		.tpclg .pt { margin: 5px 0; width: 212px; overflow: hidden; }
-		.tpclg .pt, .tpcl .pt { background: {WRAPBG}; }
 		/* 下面兩行為評分時用到的 */
 		.mark .dt, .mark .tpclg h4 { width: 270px; }
 		.mark .tpclg .pt { width: 260px; }
 	#postbox dd.hasd input { width: 99px; margin-right: 0; }
 
 /*彈窗 編輯器 顏色框 colorbox*/
-.colorbox{ width: 130px; }
+.colorbox{ width: 130px !important; }
 .colorbox input { float: left; margin: 2px; padding: 0; width: 12px; height: 12px; border: 0; cursor: pointer; }
 
 /* 短消息對話框 .pm -> personal_message (window) by Pony */
@@ -808,17 +1122,41 @@ a { color: {LINK}; text-decoration: none; }
 				.pmfl strong { color: #000; }
 
 /* 登錄和註冊 */
+
+.rfm { margin: 0 auto; width: 760px; border-bottom: 1px dotted {COMMONBORDER}; }
+		.rfm a { color: {HIGHLIGHTLINK}; }
+		.rfm .rq {  }
+		.rfm th, .rfm td { padding: 10px 2px; vertical-align: top; line-height: 24px; }
+		.rfm th { padding-right: 10px; width: 10em; text-align: right; }
+		.rfm .px { width: 220px; }
+			.rfm .px:focus { border-color: {HIGHLIGHTLINK}; background: #FFF; }
+		.rfm .p_tip { position: absolute; z-index: 2; display: none; padding-left: 10px; width: 390px; background: {WRAPBG}; color: {MIDTEXT}; font-style: normal; }
+		.rfm .p_chk { position: absolute; z-index: 1; padding-left: 10px; width: 390px; color: red; font-weight: 700; font-family: {FONT}; }
+		.rfm #emailmore { position: absolute; }
+		.p_right { background: url({IMGDIR}/check_right.gif) no-repeat 10px 12px; width: 30px; }
+		#returnmessage4 { display: none; padding: 10px 0; border-bottom: 1px solid {COMMONBORDER}; background: #FFE; text-align: center; font-weight: 700; }
+		#returnmessage4.onerror { display: block; }
+		.rfm .l { margin: 0; }
+	.blr .c { padding: 0 10px 10px; }
+	.login_slct a { margin-right: -8px; padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; }
+	.fwin .rfm, .nfl .f_c .rfm { width: 500px; }
+	.fwin .rfm th, .fwin .rfm td, .nfl .f_c .rfm th, .nfl .f_c .rfm td { padding: 6px 2px; }
+	.fwin .loginb button { margin-left: 11.3em; }
+	.nfl .f_c .loginb button { margin-left: 12em; }
+
+
+
 .blr { width: 580px; margin: 20px auto 30px; }
 	.m_c .blr { margin: 0 auto; }
 .lgfm { font: {FONTSIZE} {FONT}; float: left; margin-bottom: 10px; *margin-bottom: -10px; padding: 20px 0; width: 280px; border-right: 1px solid #CCC; }
 	.rgs { margin-bottom: 10px; }
-	.lgfm label, .lgfm p, .reginfo { clear: both; overflow: hidden; display: block; margin: 0 0 10px; line-height: 22px; }
+	.lgfm label, .lgfm p, .reginfo { clear: both; overflow: hidden; display: block; margin-bottom: 10px; line-height: 22px; }
 		/* 自定義的註冊信息 */
 		.reginfo label { display: inline; }
 		.reg_c { float: left; width: 200px; }
-	.lgfm .txt, .lgfm .px { padding: 2px 4px; height: 16px; border: 1px solid; border-color: #CCC #EEE #EEE #CCC; }
+	.lgfm .txt, .lgfm .px { padding: 2px 4px; height: 16px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background-image: none; }
 		.lgfm .txt, .lgfm .px, .lgfm .pt { width: 170px; }
-	.lgfm .ftid a, .lgfm .ftid a:hover { border-color: {WRAPBG}; }
+	.lgfm .ftid a, .lgfm .ftid a:hover { height: 20px; background-position: 100% -1px; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; }
 	.fsb { clear: both; margin-top: 8px; padding: 10px; }
 		.fsb .z { padding-top: 5px; }
 	.m_c .fsb { background: {COMMONBG}; border-top: 1px solid #CCC; }
@@ -827,12 +1165,13 @@ a { color: {LINK}; text-decoration: none; }
 			.fsb .pnr { *margin-top: 4px; }
 .nlf .txt{ width: 230px; }
 .brls { overflow: auto; margin-bottom: 10px; width: 470px; height: 240px; }
-.sipt { float: none; margin: 0 0 10px; width: 234px; height: 20px; background-color: {WRAPBG}; border: 1px solid; border-color: #CCC #EEE #EEE #CCC; clear: left; }
+.sipt { float: none; margin: 0 0 10px; width: 234px; height: 20px; background-color: {WRAPBG}; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; clear: left; }
 	.sipt a { float: left; width: 54px; border: none; }
 		.sipt a:hover, .sipt a:focus { border: none; }
 	.sipt .txt { float: left; width: 154px; border: none; outline: none; background: {WRAPBG}; }
 .sltp { float: none; margin: 10px 0; clear: both; }
-	.sltp a, .sltp a:hover, .sltp a:focus { background-color: transparent; border-color: #EEE; color: #069 !important; }
+	.sltp a, .sltp a:hover, .sltp a:focus { height: 20px; line-height: 20px; border-color: #EEE; background-color: transparent; background-position: 100% -1px; color: #069 !important; }
+		.sltp a:hover, .sltp a:focus { background-position: 100% -24px; }
 .lpsw label { float: left; padding-left: 4px; width: 61px; line-height: 150%; }
 .clck, .sipt .clck { background: {WRAPBG} url({IMGDIR}/clck.gif) no-repeat 98% 50%; }
 
@@ -840,22 +1179,34 @@ a { color: {LINK}; text-decoration: none; }
 	.lgf h4 { margin-bottom: 10px; font-weight: 400; font-size: 14px; }
 	.lgf a { color: {HIGHLIGHTLINK}; }
 	.minf { margin-top: 23px; }
-#activation_user { font-size: 14px; }
 
-/* 快速登錄 by Pony */
+/*
+	Name:			mod_messagelogin
+	Level:			Global
+	Explain:		showmessage 處的登錄框
+	Last Modify:	lushnis
+*/
+#messagelogin { margin-top: 5px; border-top: 1px solid {COMMONBORDER}; }
+	#messagelogin .flb { padding-left: 0; }
+	#messagelogin .blr { margin: 0; }
+	#messagelogin .lgfm  { padding-top: 0; }
+	#messagelogin .minf { margin-top: 0; }
+	#messagelogin .fsb { padding: 0; }
+
+/*
+	Name:			mod_fast_login
+	Level:			Global
+	Explain:		頁面頭部的快速登錄
+	Last Modify:	Pony
+*/
 .fastlg { width: 60%; line-height: 24px; }
-	.fastlg p { padding-bottom: 2px; }
+	.fastlg td { padding: 2px 0 2px 4px; }
 	.fastlg_fm { margin-right: 5px; padding-right: 5px; border-right: 1px solid {COMMONBORDER}; }
-	.fastlg .px, #ls_more .px { height: 16px; line-height: 16px; font-size: 12px; }
-	.fastlg .pn { height: 22px; line-height: 22px; *line-height: 18px; }
-	.fastlg .ftid { vertical-align: middle; }
-	#ls_fastloginfield_ctrl { vertical-align: middle; border: none; background-color: transparent; }
-	.psw_w { padding-left: 5px; width: 67px; }
-	#ls_more { overflow: hidden; z-index: 300; padding: 10px; width: 152px; line-height: 1.5; border: 1px solid; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE} }
-		#ls_more .ftid .px { width: 144px; }
-		#ls_more .c .px { margin-top: 0; width: 50px !important; }
-		#ls_more .d img { margin-top: 5px; max-width: 150px; width: expression(this.width > 150 ? 150 : true); }
-		#ls_more .d embed { margin-top: 5px; max-width: 150px; width: expression(this.width > 150 ? 150 : true); }
+	#ls_fastloginfield_ctrl { line-height: 20px; border: none; background-color: transparent; background-position: 100% -1px; }
+		#ls_fastloginfield_ctrl:hover { background-position: 100% -24px; }
+	.psw_w { padding-left: 5px; }
+	
+	.fastlg_l { padding-right: 4px !important; border-right: 1px solid {SPECIALBG}; }
 
 /* 打招呼 by Pony */
 	.poke { margin-bottom: 10px; }
@@ -867,7 +1218,6 @@ a { color: {LINK}; text-decoration: none; }
 	.dt th { background: {COMMONBG}; }
 	.dt td, .dt th { padding: 7px 4px; border-bottom: 1px solid {COMMONBORDER}; }
 	.dt .c { width: 50px; }
-	.dt .px { height: 16px !important; font-size: 12px; }
 
 	/* 用來展示數據的表格 */
 .tdat { width: 100%; border: 1px solid {COMMONBORDER}; }
@@ -898,7 +1248,7 @@ a { color: {LINK}; text-decoration: none; }
 	.pgs #newspecial, .pgs #newspecialtmp, .pgs #post_reply, .pgs #post_replytmp { float: left; margin-right: 5px; }
 	.pg { float: right; }
 	.pg, .pgb { line-height: 26px; }
-		.pg a, .pg strong, .pgb a { float: left; display: inline; margin-left: 4px; padding: 0 8px; height: 26px; border: 1px solid; border-color: {SPECIALBORDER}; background-repeat: no-repeat; color: {LINK}; overflow: hidden; text-decoration: none; }
+		.pg a, .pg strong, .pgb a { float: left; display: inline; margin-left: 4px; padding: 0 8px; height: 26px; border: 1px solid; border-color: {SPECIALBORDER}; background-color: {WRAPBG}; background-repeat: no-repeat; color: {LINK}; overflow: hidden; text-decoration: none; }
 			.pg a.nxt, .pgb a { padding: 0 10px; }
 			.pg a:hover, .pgb a:hover { border-color: {HIGHLIGHTLINK}; color: {HIGHLIGHTLINK}; }
 			.pg a.nxt { padding-right: 25px; background-image: url({IMGDIR}/arw_r.gif); background-position: 90% 50%; }
@@ -936,7 +1286,6 @@ a { color: {LINK}; text-decoration: none; }
 			#fjump_menu li.current a { background-color: {COMMONBG}; }
 
 /* 可用道具列表 by lushnis */
-.mgc { padding: 0; }
 	.mgcmn { width: 100px; }
 		.mgcmn a { padding-left: 25px; line-height: 16px !important; }
 			.mgcmn img { position: absolute; margin-left: -20px; }
@@ -947,18 +1296,42 @@ a { color: {LINK}; text-decoration: none; }
 
 
 /* 熱點：站長推薦內容，在頁面右下角彈出 */
-.focus { position: fixed; right: 10px; bottom: 10px; z-index: 300; overflow: hidden; width: 270px; border: 1px solid; border-color: #CCC #999 #999 #CCC; background: {WRAPBG}; }
+.focus { position: fixed; right: 10px; bottom: 10px; z-index: 300; overflow: hidden; width: 270px; background: {WRAPBG}; }
 	* html .focus { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
-	.focus .flb { margin: 0; padding: 6px 10px; background: url({IMGDIR}/thead.png) repeat-x 0 0; }
-		.focus .flb em { font-size: 12px; color: {LINK}; }
-	.focus .detail { padding: 10px; text-align: left; }
-		.focus .detail h4 { margin-bottom: 5px; }
-		.focus .detail img { float: left; margin-right: 8px; width: 58px; }
-		.focus .detail a { color: #06C; }
-	.focus .moreinfo { float: right; display: inline; margin-right: 10px; padding: 6px 15px 6px 0; background: url({IMGDIR}/arw_r.gif) no-repeat 100% 50%; }
+	.focus .m img { width: 60px; height: 60px; }
 
 /* 分享的驗證碼（全局） by Pony */
 .m_c .sec .secq { display: block; margin: 5px 0 10px; }
+
+/*
+	Name:			mod_reason_select
+	Level:			Global
+	Explain:		類似評分窗口中的評分原因選擇的樣式
+	Last Modify:	Pony
+*/
+.reason_slct {}
+	.reason_slct .reasonselect { height: 4.3em; overflow: scroll !important; overflow-x: auto !important; }
+		.reason_slct .reasonselect li { white-space: nowrap; }
+	.reason_slct .pt, .reason_slct .px { width: 25.2em !important; }
+	.reasonarea { height: 5.8em; }
+
+/*
+	Name:			mod_filebtn
+	Level:			Global
+	Sample:			<div class="filebtn">
+						<input type="file" class="pf cur1" size="1" />
+						<button type="button" class="pn pnc"><strong>{lang}</strong></button>
+					</div>
+	Explain:		模擬 <input type="file" />，注意不要讓 button 太寬
+	Last Modify:	Pony
+*/
+.filebtn { position: relative; margin: 0 auto; width: 60px; overflow: hidden; }
+	.filebtn .pf { position: absolute; right: 0; height: 23px; opacity: 0; filter:alpha(opacity=0); }
+
+/* 上傳彈出層 */
+.upfile { width: 220px; }
+	#uploadform { border: 1px dashed {SPECIALBORDER}; background: {SPECIALBG}; }
+
 
 /* ------------------------------------------------------------------------ 拖拽及頁面 DIY */
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
@@ -1024,7 +1397,7 @@ a { color: {LINK}; text-decoration: none; }
 		.bx .frame-2-1 { background: transparent url({IMGDIR}/vline.png) repeat-y 645px 0; }
 
 /* 拖動生成的頁面元素 by lushnis */
-.drag .block .title { margin-bottom: 0px; padding-left: 0; font-size: 14px; font-weight: 700; }
+.drag .block .title { margin-bottom: 0; padding-left: 0; font-size: 14px; font-weight: 700; }
 
 /* 重定義 block */
 #ct .sd .block { margin: 0; }
@@ -1063,42 +1436,42 @@ a { color: {LINK}; text-decoration: none; }
 .xbs { background: no-repeat 0 100%; }
 	.xbs .title { padding-left: 0; padding-right: 10px; background: no-repeat 100% 0; }
 		.xbs .titletext { float: left; padding-left: 10px; background: no-repeat 0 0; }
-	.xbs .content { padding-bottom: 6px; background: transparent no-repeat 100% 100%; }
+	.xbs .dxb_bc { padding-bottom: 6px; background: transparent no-repeat 100% 100%; }
 	.xbs .module, .xbs .portal_block_summary { padding: 10px 10px 4px; border-style: solid; border-width: 0 1px; }
 .xbs_1 { border: 1px solid #CCC; }
 	.xbs_1 .title { padding: 0 10px; height: 31px; border-bottom: 1px solid #CCC; background: url({IMGDIR}/thead.png) repeat-x 0 0; line-height: 31px; }
 		.xbs_1 .title, .xbs_1 .title a { color: #666 !important; }
-	.xbs_1 .content { padding: 9px 10px; }
+	.xbs_1 .dxb_bc { padding: 9px 10px; }
 .xbs_2 { background-image: url({STATICURL}image/diy/bs_2_ft.png); }
 	.xbs_2 .title, .xbs_2 .titletext { background-image: url({STATICURL}image/diy/bs_2_hd.png); }
 		.xbs_2 .title, .xbs_2 .title a { color: #F60 !important; }
-	.xbs_2 .content { background-image: url({STATICURL}image/diy/bs_2_ft_r.png); }
+	.xbs_2 .dxb_bc { background-image: url({STATICURL}image/diy/bs_2_ft_r.png); }
 	.xbs_2 .module, .xbs_2 .portal_block_summary { border-color: #E0E0E0; }
 .xbs_3 { background-image: url({STATICURL}image/diy/bs_3_ft.png); }
 	.xbs_3 .title, .xbs_3 .titletext { background-image: url({STATICURL}image/diy/bs_3_hd.png); }
 		.xbs_3 .title, .xbs_3 .title a { color: #FFF !important; }
-	.xbs_3 .content { background-image: url({STATICURL}image/diy/bs_3_ft_r.png); }
+	.xbs_3 .dxb_bc { background-image: url({STATICURL}image/diy/bs_3_ft_r.png); }
 	.xbs_3 .module, .xbs_3 .portal_block_summary { border-color: #B2B2B2; background-color: #F1F1F1; }
 .xbs_4 { background-image: url({STATICURL}image/diy/bs_4_ft.png); }
 	.xbs_4 .title, .xbs_4 .titletext { background-image: url({STATICURL}image/diy/bs_4_hd.png); }
 		.xbs_4 .title, .xbs_4 .title a { color: #FFF !important; }
-	.xbs_4 .content { background-image: url({STATICURL}image/diy/bs_4_ft_r.png); }
+	.xbs_4 .dxb_bc { background-image: url({STATICURL}image/diy/bs_4_ft_r.png); }
 	.xbs_4 .module, .xbs_4 .portal_block_summary { border-color: #B2B2B2; }
 .xbs_5 { background-image: url({STATICURL}image/diy/bs_5_ft.png); }
 	.xbs_5 .title { padding: 0 10px; height: 30px; border: 1px solid; border-color: #F08C3B #F08C3B #DDD; background: url({STATICURL}image/diy/bs_5_hd.png) repeat-x 0 0; line-height: 30px; }
 		.xbs_5 .title, .xbs_5 .title a { color: #BC4A2D !important; }
-	.xbs_5 .content { padding-bottom: 10px; background-image: url({STATICURL}image/diy/bs_5_ft_r.png); }
-	.xbs_5 .module, .xbs_5 .portal_block_summary { padding: 10px 10px 0px; border-color: #F08C3B; }
+	.xbs_5 .dxb_bc { padding-bottom: 10px; background-image: url({STATICURL}image/diy/bs_5_ft_r.png); }
+	.xbs_5 .module, .xbs_5 .portal_block_summary { padding: 10px 10px 0; border-color: #F08C3B; }
 .xbs_6 { background-image: url({STATICURL}image/diy/bs_6_ft.png); }
 	.xbs_6 .title, .xbs_6 .titletext { background-image: url({STATICURL}image/diy/bs_6_hd.png); line-height: 24px; }
 		.xbs_6 .titletext { height: 32px; }
 		.xbs_6 .title, .xbs_6 .title a { color: #FFF !important; }
-	.xbs_6 .content { background-image: url({STATICURL}image/diy/bs_6_ft_r.png); }
+	.xbs_6 .dxb_bc { background-image: url({STATICURL}image/diy/bs_6_ft_r.png); }
 	.xbs_6 .module, .xbs_6 .portal_block_summary { border-color: #4B85A0; }
 .xbs_7 { background-image: url({STATICURL}image/diy/bs_7_ft.png); }
 	.xbs_7 .title, .xbs_7 .titletext { background-image: url({STATICURL}image/diy/bs_7_hd.png); }
 		.xbs_7 .title, .xbs_7 .title a { color: #444 !important; }
-	.xbs_7 .content { background-image: url({STATICURL}image/diy/bs_7_ft_r.png); }
+	.xbs_7 .dxb_bc { background-image: url({STATICURL}image/diy/bs_7_ft_r.png); }
 	.xbs_7 .module, .xbs_7 .portal_block_summary { border-color: #E5E5E5; }
 
 .fcs { font-size: 12px; }
@@ -1110,9 +1483,16 @@ a { color: {LINK}; text-decoration: none; }
 .slideblock { position: relative; }
 	.slideshow { clear: both; }
 		.slideshow li { position: relative; overflow: hidden; }
-			.slideshow span.title { position: absolute; bottom: 0; left: 0; margin-bottom: 0; width: 100%; height: 32px; background: {FLOATMASKBGCOLOR}; color: {LIGHTLINK} !important; line-height: 32px; font-size: 14px; text-indent: 10px; opacity: 0.5; filter: alpha(opacity=50); overflow: hidden; }
-			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; background: {FLOATMASKBGCOLOR}; line-height: 20px; text-align: center; font-size: 10px; color: {LIGHTLINK}; overflow: hidden; opacity: 0.5; filter: alpha(opacity=50); cursor: pointer; }
-				.slidebar li.on { background: {WRAPBG}; color: #000; font-weight: 700; opacity: 0.8; filter: alpha(opacity=80); }
+			.slideshow span.title { position: absolute; bottom: 0; left: 0; margin-bottom: 0; width: 100%; height: 32px; line-height: 32px; font-size: 14px; text-indent: 10px; }
+			.slideshow span.title, .slidebar li { background: rgba(0, 0, 0, 0.3); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #30000000, endColorstr = #30000000); color: {LIGHTLINK}; overflow: hidden; }
+			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 10px; cursor: pointer; }
+				.slidebar li.on { background: rgba(255, 255, 255, 0.5); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #50FFFFFF, endColorstr = #50FFFFFF); color: #000; font-weight: 700; }
+
+/* 清除DIY產生的多餘樣式使用的公共樣式 */
+.cl_frame_bm { margin: 0 !important; border: 0 !important;}
+.cl_block_bm { margin: 0 !important; border: 0 !important;}
+.cl_block_bm .dxb_bc { margin: 0 !important;}
+
 /* 側邊調用 */
 	/* 投票 */
 	.b_poll dt { padding-left: 20px; background: url({IMGDIR}/pollsmall.gif) no-repeat 0 9px; }
@@ -1124,8 +1504,8 @@ a { color: {LINK}; text-decoration: none; }
 		.b_debate .chart strong { position: absolute; top: 25px; width: 80px; font-size: 14px; text-align: center; }
 			.b_debate .chart .debater2 { right: 0; }
 		.b_debate .chart1, .b_debate .chart2 { position: absolute; left: 80px; bottom: 0; width: 40px; background: url({IMGDIR}/p_debate_chart.png) no-repeat 0 -78px; }
-			.b_debate .chart2 { left: auto; right: 80px; background-position: 100% -78px; }
-		.b_debate p { height: 1.5em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+			.b_debate .chart2 { left: 159px; background-position: 100% -78px; }
+		.b_debate p { height: 1.5em; overflow: hidden; }
 	.b_hstab td { padding: 5px 0; border-bottom: 1px solid {COMMONBORDER}; }
 
 /* 主題分類 菜單 */
@@ -1135,40 +1515,67 @@ a { color: {LINK}; text-decoration: none; }
 	.tsm li { float: left; margin-right: 6px; white-space: nowrap; }
 	.tsm .a a { padding: 0 2px; background: #C00; color: {LIGHTLINK}; }
 
-/*氣泡信息 by dfox */
-.prmm { margin-left: -27px; padding-top: 10px; width: 250px; background: transparent url({IMGDIR}/pm_ntc.gif) no-repeat 0 0; text-align: left; opacity: 0.98; }
-	.prmc { padding-bottom: 10px; background: transparent url({IMGDIR}/pm_ntc.gif) no-repeat -250px 100%; }
-		.prmm ul { padding: 0 10px; border: solid #91C8E2; border-width: 0 2px; background: {DROPMENUBGCOLOR}; }
-			.prmm li { border-bottom: 1px solid #F4F4F4; line-height: 29px; display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; -webkit-text-overflow: ellipsis; -moz-text-overflow: ellipsis; -o-text-overflow: ellipsis; }
-				.prmm a:hover { text-decoration: none; color: {HIGHLIGHTLINK}; }
-.up { padding-top: 0; padding-bottom: 10px; width: 150px; background-position: -500px 100%; }
-	.up .prmc { padding-top: 5px; padding-bottom: 0; background-position: -650px 0; }
-		.up li { border-bottom: none; line-height: 160%; }
-/*推薦商品 by dfox*/
+/*
+	Name:			mod_tip
+	Level:			Global
+	Explain:		彈出的氣泡信息，1、2、3、4 分別指氣泡尖角從左上到左小順時針方向的位置
+	Last Modify:	lushnis
+*/
+.tip { position: absolute; padding: 10px; width: 260px; border: 1px solid #B1B1B1; background: #FEFEE9; }
+	.tip_1, .tip_2 { margin-top: 8px; }
+	.tip_3, .tip_4 { margin-top: -8px; }
+	.tip_horn { position: absolute; width: 11px; height: 6px; overflow: hidden; }
+		.tip_1 .tip_horn { left: 5px; top: -6px; background: url({IMGDIR}/tip_top.png); }
+		.tip_2 .tip_horn { right: 5px; top: -6px; background: url({IMGDIR}/tip_top.png); }
+		.tip_3 .tip_horn { right: 5px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
+		.tip_4 .tip_horn { left: 5px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
+		.tip_js .tip_horn { right: 61px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
+	.aimg_tip { margin-top: 0; }
+
+/* 推薦商品 by dfox */
 em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overflow: hidden; background: url({IMGDIR}/hot.png) no-repeat 0 0; }
 
-/*板塊、群組、空間主區域/側邊搜索 by dfox */
+/* 板塊、群組、空間主區域/側邊搜索 by dfox */
 .gsh { text-align: center; }
 	.gsh h1 { margin: 1em 0 0.5em -60px; font-size: 16px; font-weight: 100; }
 	.gsh .px { width: 272px; }
 	.gsh .pns .px { margin-right: 3px; width: 190px; }
 
-/*名片*/
-.card { padding: 0; width: 295px; border-color: {SPECIALBORDER}; background: #FDFEFF; }
-	.card .p_opt { padding: 10px 0 0; }
-	.card .avt { float: left; display: inline; margin: 0 0 5px 10px; width: 70px; }
-	.card .c { float:left; width: 200px; }
-	.card a { padding: 0; display: inline !important; white-space: normal; }
-		.card a:hover { background: none; color: {TABLETEXT}; text-shadow: none; }
+/* 名片 */
+.card { padding: 0; width: 295px !important; border-color: {SPECIALBORDER}; background: #FDFEFF; }
+	.card .p_opt { padding: 0; }
+	.card .avt { position: absolute; display: inline; margin-left: -70px; width: 70px; }
+	.card_mn, .card_info { padding: 10px 10px 10px 80px; }
+		.card_mn { min-height: 56px; }
+			.ie6 .card_mn { height: 56px; }
+		.card_info { border: dashed {COMMONBORDER}; border-width: 1px 0; }
+		.card_msg { width: 95%; height: 4em; }
+	.card a { padding: 0; display: inline !important; white-space: normal; border-bottom: none; }
+		.card a:hover { background-color: transparent !important; color: {TABLETEXT}; text-shadow: none; }
 	.card .o { clear: both; padding: 5px 10px; }
 		.card .o a { float: left; margin: 3px 5px 3px 0; padding: 2px 0; width: 5em; border: 1px solid {SPECIALBORDER}; background: {SPECIALBG} url({IMGDIR}/card_btn.png) repeat-x 0 100%; line-height: 14px; text-align: center; }
 		.ie_all .card .o a { padding: 3px 0 0; }
-	.card .mgc { padding: 0 10px 5px; }
-	.card .f { padding: 5px 10px; border-top: 1px solid {SPECIALBORDER}; background: #EDF5FB; }
+	.card .mgc, .card .f { padding: 0 10px 5px; }
 		.card .f li { display: block; }
-	.card_msg { width: 190px; height: 4em; }
 
-/*模塊中編輯單條數據BIU、顏色選擇器*/
-.ss em { background: #eee; width: 16px; line-height: 18px; display: block; float: left; margin: 2px; cursor: pointer; padding-left: 7px;}
-	.ss em.a { background: #09f; color: #FFF;}
-.colorwd { margin-left: 2px; width: 22px; height: 22px; border: 1px solid; border-color: #DDD #999 #999 #DDD; vertical-align: middle; }
+/*
+	Name:			mod_BIUC
+	Level:			Global
+	Explain:		模塊中編輯單條數據BIU、顏色選擇器其中 colorwd 要配合 pn 使用（不要合併 colorwd 的 background，因為其他配色會受影響）
+	Last Modify:	Pony
+*/
+.ss em { display: block; float: left; margin-right: 2px; padding-left: 7px; width: 16px; line-height: 23px; background: #EEE; cursor: pointer; }
+	.ss em.a { background: #09F; color: #FFF; }
+.dopt a { float: left; margin-right: 3px; width: 21px !important; height: 21px; line-height: 21px; text-align: center; }
+	.dopt_b, .dopt_i, .dopt_l { border: 1px solid #F1F5FA; outline: none; }
+	.dopt .cnt { border: 1px solid #999; background-color: {WRAPBG}; }
+.colorwd { margin-left: 3px; width: 23px !important; background-color: {MIDTEXT}; background-image: url({IMGDIR}/pn_color.png) !important; background-repeat: no-repeat; background-position: 0 0; }
+	.colorwd:active { background-position: 0 0; }
+	.ie6 .colorwd, .ie7 .colorwd { background-position: -1px -1px; }
+	.ie6 a.colorwd, .ie7 a.colorwd { background-position: 0 0; }
+.colorpx { margin: 0 -3px 0 3px; border-right: none; }
+
+/*
+DIY圖片幻燈片未加載時隱藏
+*/
+.slidebox {display: none; }

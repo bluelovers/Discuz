@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: js.php 16144 2010-09-01 01:49:08Z zhouguoqiang $
+ *      $Id: js.php 22320 2011-04-29 09:42:11Z monkey $
  */
+
+define('IN_API', true);
+define('CURSCRIPT', 'api');
 
 require_once('../../source/class/class_core.php');
 require_once('../../source/function/function_home.php');
@@ -191,7 +194,7 @@ class Search {
 		global $_G;
 
 		$leftHtmlCode = '<div id="navs-wraper-v2" class="v2" onmouseover="document.getElementById(\'navs-menu\').style.display=\'block\'" onmouseout="document.getElementById(\'navs-menu\').style.display=\'none\'">';
-		$leftHtmlCode .= '<p id="return-homepage"><a href="home.php?mod=space&do=home">' . lang('home/template', 'return_homepage') . '</a></p>' . "\n";
+		$leftHtmlCode .= '<p id="return-homepage"><a href="'.(!empty($_G['setting']['defaultindex']) ? $_G['setting']['defaultindex'] : 'forum.php').'">' . lang('home/template', 'return_homepage') . '</a></p>' . "\n";
 		$leftHtmlCode .= "<ul id=\"navs-menu\">\n";
 		foreach($_G['setting']['navs'] as $navsid => $nav) {
 			$nav['nav'] = '<li ' . $nav['nav'] . '></li>';
@@ -242,9 +245,8 @@ class Search {
 			$rightHtmlCode .= "\t<span class=\"pipe\">|</span><a href=\"member.php?mod=logging&action=login\">".lang('template', 'login')."</a>\n";
 		}
 		$rightHtmlCode .= "\t</p>\n";
-		$siteurl = dirname(dirname($_G['siteurl']));
-		$leftHtmlCode = urlcovert($leftHtmlCode, $siteurl);
-		$rightHtmlCode = urlcovert($rightHtmlCode, $siteurl);
+		$leftHtmlCode = urlcovert($leftHtmlCode, $_G['siteurl']);
+		$rightHtmlCode = urlcovert($rightHtmlCode, $_G['siteurl']);
 		if(strtolower($_G['config']['output']['charset']) != 'utf-8') {
 			require_once libfile('class/chinese');
 			$chinese = new Chinese($_G['config']['output']['charset'], 'utf-8', true);
@@ -261,7 +263,7 @@ function urlcovert($html, $siteurl) {
 	if(preg_match_all("/\s+href=\"(.+?)\"/is", $html, $match)) {
 		foreach($match[1] as $key => $val) {
 			if(preg_match('/^http:\/\//is', $val) || $val == 'javascript:;' || $val{0} == '#') continue;
-			$html = str_replace($match[0][$key], ' href="'.$siteurl.'/'.$val.'"', $html);
+			$html = str_replace($match[0][$key], ' href="'.$siteurl.$val.'"', $html);
 		}
 	}
 	return $html;

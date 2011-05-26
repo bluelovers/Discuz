@@ -4,17 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_portalcp.php 16674 2010-09-13 02:41:44Z zhangguosheng $
+ *      $Id: lang_portalcp.php 22248 2011-04-26 10:11:23Z monkey $
  */
 
 $lang = array(
 	'block_diy_nopreview' => '<p>此模塊內容包含js代碼，不能立即預覽，請點擊保存後查看</p>',
+	'block_diy_summary_html_tag' => '自定義內容錯誤，HTML標籤：',
+	'block_diy_summary_not_closed' => ' 不匹配',
 	'block_all_category' => '全部分類',
 	'block_first_category' => '頂級分類',
 	'block_all_forum' => '全部版塊',
 	'block_all_group' => '全部用戶組',
 	'block_all_type' => '全部分類',
-	'file_size_limit' => '文件不能大於 {size} kb，請返回．',
+	'file_size_limit' => '文件不能大於 {size} KB，請返回．',
 	'set_to_conver' => '設為封面',
 	'insert_small_image' => '插入小圖',
 	'insert_large_image' => '插入大圖',
@@ -26,12 +28,12 @@ $lang = array(
 	'article_noallowed' => '你沒有權限對指定的文章進行操作',
 	'article_publish_noallowed' => '你沒有權限進行文章發佈操作',
 	'article_publish' => '發佈文章',
-	'article_manage' => '管理文章',
+	'article_manage' => '文章管理',
 	'article_tag' => '標籤',
 	'select_category' => '選擇分類',
 	'blockstyle_diy' => '自定義模板',
 
-	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文內容由 {author} 提供</a></i><center></p>',
+	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文內容由 {author} 提供</a></i></center></p>',
 
 	'diytemplate_name_null' => '[未填寫]',
 	'portal/index' => '門戶首頁',
@@ -76,5 +78,12 @@ $lang = array(
 	'ranklist/thread' => '帖子排行榜頁',
 	'ranklist/member' => '用戶排行榜頁',
 	'other_page' => '非DIY模塊',
+	'upload' => '上傳',
+	'remote' => '遠程',
+	'portal_index' => '門戶首頁',
+	'portal_topic_blue' => '藍色調專題',
+	'portal_topic_green' => '綠色調專題',
+	'portal_topic_grey' => '灰色調專題',
+	'portal_topic_red' => '紅色調專題',
 
 );

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_templates.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: admincp_templates.php 22547 2011-05-12 04:28:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,11 +23,14 @@ if($operation == 'admin') {
 		$templates = '';
 		$query = DB::query("SELECT * FROM ".DB::table('common_template')."");
 		while($tpl = DB::fetch($query)) {
+			$basedir = basename($tpl[directory]);
 			$templates .= showtablerow('', array('class="td25"', '', 'class="td29"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" ".($tpl['templateid'] == 1 ? 'disabled ' : '')."value=\"$tpl[templateid]\">",
 				"<input type=\"text\" class=\"txt\" size=\"8\" name=\"namenew[$tpl[templateid]]\" value=\"$tpl[name]\">",
 				"<input type=\"text\" class=\"txt\" size=\"20\" name=\"directorynew[$tpl[templateid]]\" value=\"$tpl[directory]\">",
-				!empty($tpl['copyright']) ? $tpl['copyright'] : "<input type=\"text\" class=\"txt\" size=\"8\" name=\"copyrightnew[$tpl[templateid]]\" value=>"
+				!empty($tpl['copyright']) ?
+					($basedir != 'default' ? '<a href="http://addons.discuz.com/?tid='.urlencode($basedir).'" target="_blank">'.$tpl['copyright'].'</a>' : $tpl['copyright']) :
+					"<input type=\"text\" class=\"txt\" size=\"8\" name=\"copyrightnew[$tpl[templateid]]\" value=>"
 			), TRUE);
 		}
 

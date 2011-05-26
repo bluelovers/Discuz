@@ -22,7 +22,7 @@
 				<li class="y doodle"><a id="a_doodle" class="y" href="home.php?mod=magic&mid=doodle&showid=album_doodle&target=album_message&from=album" onclick="showWindow(this.id, this.href, 'get', '0')">{$_G[setting][magics][doodle]}</a></li>
 				<!--{/if}-->
 			</ul>
-			
+
 			<!--{if $haveattachsize}-->
 			<div class="tbmu">
 				{lang hava_attach_size} <strong>$haveattachsize</strong> (<a href="home.php?mod=spacecp&ac=upload&op=recount">{lang recount}</a>)
@@ -44,7 +44,7 @@
 						<tr>
 							<td>
 								<form method="post" autocomplete="off" id="upload" action="home.php?mod=spacecp&ac=upload" enctype="multipart/form-data" target="uploadframe">
-									<input type="file" name="attach" size="0" class="pf" style="height: 26px;" />
+									<input type="file" name="attach" class="pf" size="0" />
 									<span id="localfile"></span>
 									<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
 									<input type="hidden" name="albumid" id="albumid" value="0" />
@@ -87,7 +87,8 @@
 				<div class="mtn ptw pbw bm bmn">
 					<!--{if $albums}-->
 					<p class="hm pbw xs2 xw1">
-						<label for="albumop_selectalbum"><input type="radio" id="albumop_selectalbum" name="albumop" class="pr" value="selectalbum" checked="checked" onclick="album_op(this.value);" /> {lang add_to_existing_album}</label><span class="pipe">|</span><label for="albumop_creatalbum"><input type="radio" id="albumop_creatalbum" name="albumop" class="pr" value="creatalbum" onclick="album_op(this.value);" /> {lang create_new_album}</label>
+						<label for="albumop_selectalbum" class="lb"><input type="radio" name="albumop" id="albumop_selectalbum" class="pr" value="selectalbum" checked="checked" onclick="album_op(this.value);" />{lang add_to_existing_album}</label>
+						<label for="albumop_creatalbum" class="lb"><input type="radio" name="albumop" id="albumop_creatalbum" class="pr" value="creatalbum" onclick="album_op(this.value);" />{lang create_new_album}</label>
 					</p>
 					<div id="selectalbum" class="hm">
 						{lang select_album}
@@ -110,14 +111,18 @@
 						<table cellspacing="0" cellpadding="0" class="tfm">
 							<tr>
 								<th>{lang album_name}</th>
-								<td><input type="text" class="px" size="20" id="albumname" name="albumname" value="{lang my_album}" /></td>
+								<td><input type="text" name="albumname" id="albumname" class="px" size="20" value="{lang my_album}" /></td>
+							</tr>
+							<tr>
+								<th>{lang album_depict}</th>
+								<td><textarea name="depict" class="pt" cols="40" rows="3"></textarea></td>
 							</tr>
 							<!--{if $_G['setting']['albumcategorystat'] && $categoryselect}-->
 							<tr>
 								<th>{lang site_categories}</th>
 								<td>
 									$categoryselect
-									({lang select_site_album_categories})
+									<p class="d">{lang select_site_album_categories}</p>
 								</td>
 							</tr>
 							<!--{/if}-->
@@ -136,18 +141,18 @@
 							<tbody id="span_password" style="display:none;">
 								<tr>
 									<th>{lang password}</th>
-									<td><input type="text" id="uploadpassword" name="password" value="" size="10" class="px" /></td>
+									<td><input type="text" name="password" id="uploadpassword" class="px" value="" size="10" /></td>
 								</tr>
 							</tbody>
 							<tbody id="tb_selectgroup" style="display:none;">
 								<tr>
 									<th>{lang specified_friends}</th>
 									<td>
-										<select name="selectgroup" onchange="getgroup(this.value);">
-										<option value="">{lang from_friends_group}</option>
-										<!--{loop $groups $key $value}-->
-										<option value="$key">$value</option>
-										<!--{/loop}-->
+										<select name="selectgroup" class="ps" onchange="getgroup(this.value);">
+											<option value="">{lang from_friends_group}</option>
+											<!--{loop $groups $key $value}-->
+											<option value="$key">$value</option>
+											<!--{/loop}-->
 										</select>
 										<p class="d">{lang choices_following_friends_list}</p>
 									</td>
@@ -155,8 +160,8 @@
 								<tr>
 									<th>&nbsp;</th>
 									<td>
-										<textarea name="target_names" id="target_names" rows="3" class="pt"></textarea>
-										<p class="d">{lang friend_name_space}
+										<textarea name="target_names" id="target_names" class="pt" rows="3"></textarea>
+										<p class="d">{lang friend_name_space}</p>
 									</td>
 								</tr>
 							</tbody>
@@ -165,7 +170,7 @@
 				</div>
 				<div class="mtm hm">
 					<input type="hidden" name="albumsubmit" id="albumsubmit" value="true" />
-					<button type="submit" name="uploadsubmit" id="btnupload" value="true"{if $_G['setting']['albumcategoryrequired']} onclick="return validate(this);"{/if} class="pn"><strong>{lang upload_start}</strong></button>
+					<button type="submit" name="uploadsubmit" id="btnupload" class="pn pnc" value="true"{if $_G['setting']['albumcategoryrequired']} onclick="return validate(this);"{/if}><strong>{lang upload_start}</strong></button>
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
 				</div>
 			</form>

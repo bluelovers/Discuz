@@ -2,47 +2,20 @@
 <div style="width:370px;">
 	<h4 class="mtm mbn">{lang visit_method}</h4>
 	<ul class="poke cl">
-		<li>
-			<input id="way_visit" type="radio" name="visitway" class="pr" value="visit" checked="checked" onclick="$('visitmsgs').style.display='none';$('visitpokes').style.display='none';" />
-			<label for="way_visit">{lang visit_space}</label>
-		</li>
-		<li>
-			<input id="way_poke" type="radio" name="visitway" class="pr" value="poke" onclick="$('visitmsgs').style.display='none';$('visitpokes').style.display='';" />
-			<label for="way_poke">{lang say_hi}</label>
-		</li>
-		<li>
-			<input id="way_comment" type="radio" name="visitway" class="pr" value="comment" onclick="$('visitmsgs').style.display='';$('visitpokes').style.display='none';" />
-			<label for="way_comment">{lang space_message}</label>
-		</li>
+		<li><label for="way_visit"><input type="radio" name="visitway" id="way_visit" class="pr" value="visit" checked="checked" onclick="$('visitmsgs').style.display='none';$('visitpokes').style.display='none';" />{lang visit_space}</label></li>
+		<li><label for="way_poke"><input type="radio" name="visitway" id="way_poke" class="pr" value="poke" onclick="$('visitmsgs').style.display='none';$('visitpokes').style.display='';" />{lang say_hi}</label></li>
+		<li><label for="way_comment"><input type="radio" name="visitway" id="way_comment" class="pr" value="comment" onclick="$('visitmsgs').style.display='';$('visitpokes').style.display='none';" />{lang space_message}</label></li>
 	</ul>
 
 	<div id="visitmsgs" style="display:none;">
 		<p>{lang select_one_message}</p>
 		<ul class="mtm poke cl">
-			<li>
-				<input id="visitmsg_1" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_1}" checked="checked" />
-				<label for="visitmsg_1">{lang visitmsg_1}</label>
-			</li>
-			<li>
-				<input id="visitmsg_2" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_2}" />
-				<label for="visitmsg_2">{lang visitmsg_2}</label>
-			</li>
-			<li>
-				<input id="visitmsg_3" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_3}" />
-				<label for="visitmsg_3">{lang visitmsg_3}</label>
-			</li>
-			<li>
-				<input id="visitmsg_4" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_4}" />
-				<label for="visitmsg_4">{lang visitmsg_4}</label>
-			</li>
-			<li>
-				<input id="visitmsg_5" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_5}" />
-				<label for="visitmsg_5">{lang visitmsg_5}</label>
-			</li>
-			<li>
-				<input id="visitmsg_6" type="radio" name="visitmsg" class="pr" value="{lang visitmsg_6}" />
-				<label for="visitmsg_6">{lang visitmsg_6}</label>
-			</li>
+			<li><label for="visitmsg_1"><input type="radio" name="visitmsg" id="visitmsg_1" class="pr" value="{lang visitmsg_1}" checked="checked" />{lang visitmsg_1}</label></li>
+			<li><label for="visitmsg_2"><input type="radio" name="visitmsg" id="visitmsg_2" class="pr" value="{lang visitmsg_2}" />{lang visitmsg_2}</label></li>
+			<li><label for="visitmsg_3"><input type="radio" name="visitmsg" id="visitmsg_3" class="pr" value="{lang visitmsg_3}" />{lang visitmsg_3}</label></li>
+			<li><label for="visitmsg_4"><input type="radio" name="visitmsg" id="visitmsg_4" class="pr" value="{lang visitmsg_4}" />{lang visitmsg_4}</label></li>
+			<li><label for="visitmsg_5"><input type="radio" name="visitmsg" id="visitmsg_5" class="pr" value="{lang visitmsg_5}" />{lang visitmsg_5}</label></li>
+			<li><label for="visitmsg_6"><input type="radio" name="visitmsg" id="visitmsg_6" class="pr" value="{lang visitmsg_6}" />{lang visitmsg_6}</label></li>
 		</ul>
 	</div>
 	{eval
@@ -66,10 +39,7 @@
 		<p>{lang select_a_poke}</p>
 		<ul class="mtm poke cl">
 			<!--{loop $icons $key $value}-->
-			<li>
-				<input id="visitpoke_$key" type="radio" name="visitpoke" value="$key"{if $key==1} checked="checked"{/if}>
-				<label for="visitpoke_$key">$value</label>
-			</li>
+			<li><label for="visitpoke_$key"><input id="visitpoke_$key" type="radio" name="visitpoke" value="$key"{if $key==1} checked="checked"{/if}>$value</label></li>
 			<!--{/loop}-->
 		</ul>
 	</div>

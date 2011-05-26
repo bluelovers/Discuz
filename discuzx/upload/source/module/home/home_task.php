@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_task.php 16614 2010-09-10 06:26:06Z monkey $
+ *      $Id: home_task.php 21217 2011-03-18 10:01:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,7 @@ if(!$_G['setting']['taskon'] && $_G['adminid']  != 1) {
 require_once libfile('class/task');
 $tasklib = & task::instance();
 
+$_G['mnid'] = 'mn_common';
 $id = intval($_G['gp_id']);
 $do = empty($_GET['do']) ? '' : $_GET['do'];
 
@@ -67,6 +68,11 @@ if(empty($do)) {
 		showmessage('task_applied', 'home.php?mod=task&do=view&id='.$id);
 	}
 
+} elseif($do == 'delete' && $id) {
+
+	$result = $tasklib->delete($id);
+	showmessage('task_deleted', 'home.php?mod=task&item=doing');
+
 } elseif($do == 'draw' && $id) {
 
 	if(!$_G['uid']) {
@@ -97,9 +103,7 @@ if(empty($do)) {
 	dexit();
 
 } else {
-
-	showmessage('undefined_action', NULL);
-
+	showmessage('undefined_action');
 }
 
 include template('home/space_task');

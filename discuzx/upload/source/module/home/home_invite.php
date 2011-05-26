@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_invite.php 17065 2010-09-20 03:04:57Z zhengqingpeng $
+ *      $Id: home_invite.php 20808 2011-03-04 07:03:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

@@ -139,7 +139,7 @@ class discuz_panel {
 		if($isnew) {
 			DB::insert($this->table, $this->session, false, true);
 		} else {
-			DB::update($this->table, $this->session, array('uid'=>$this->uid, panel=>$this->panel));
+			DB::update($this->table, $this->session, array('uid'=>$this->uid, 'panel'=>$this->panel));
 		}
 	}
 

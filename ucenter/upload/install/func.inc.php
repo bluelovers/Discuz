@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: forum.func.php 14122 2008-08-20 06:06:33Z cnteacher $
@@ -483,7 +483,7 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2010 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
 	</div>
 </div>
 </body>
@@ -576,10 +576,10 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// éš¨æ©Ÿå¯†é‘°é•·åº¦ å–å€¼ 0-32;
-				// åŠ å…¥éš¨æ©Ÿå¯†é‘°ï¼Œå¯ä»¥ä»¤å¯†æ–‡ç„¡ä»»ä½•è¦å¾‹ï¼Œå³ä¾¿æ˜¯åŸæ–‡å’Œå¯†é‘°å®Œå…¨ç›¸åŒï¼ŒåŠ å¯†çµæœä¹Ÿæœƒæ¯æ¬¡ä¸åŒï¼Œå¢å¤§ç ´è§£é›£åº¦ã€‚
-				// å–å€¼è¶Šå¤§ï¼Œå¯†æ–‡è®Šå‹•è¦å¾‹è¶Šå¤§ï¼Œå¯†æ–‡è®ŠåŒ– = 16 çš„ $ckey_length æ¬¡æ–¹
-				// ç•¶æ­¤å€¼ç‚º 0 æ™‚ï¼Œå‰‡ä¸ç”¢ç”Ÿéš¨æ©Ÿå¯†é‘°
+	$ckey_length = 4;	// Ëæ»úÃÜÔ¿³¤¶È È¡Öµ 0-32;
+				// ¼ÓÈëËæ»úÃÜÔ¿£¬¿ÉÒÔÁîÃÜÎÄÎŞÈÎºÎ¹æÂÉ£¬¼´±ãÊÇÔ­ÎÄºÍÃÜÔ¿ÍêÈ«ÏàÍ¬£¬¼ÓÃÜ½á¹ûÒ²»áÃ¿´Î²»Í¬£¬Ôö´óÆÆ½âÄÑ¶È¡£
+				// È¡ÖµÔ½´ó£¬ÃÜÎÄ±ä¶¯¹æÂÉÔ½´ó£¬ÃÜÎÄ±ä»¯ = 16 µÄ $ckey_length ´Î·½
+				// µ±´ËÖµÎª 0 Ê±£¬Ôò²»²úÉúËæ»úÃÜÔ¿
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
@@ -653,7 +653,7 @@ function initinput() {
 	<div class="main">
 		<div class="btnbox"><textarea name="notice" style="width: 80%;"  readonly="readonly" id="notice"></textarea></div>
 		<div class="btnbox marginbot">
-	<input type="button" name="submit" value="<?=lang('install_in_processed')?>" disabled style="height: 25" id="laststep" onclick="initinput()">
+	<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled style="height: 25" id="laststep" onclick="initinput()">
 	</div>
 <?php
 }
@@ -706,7 +706,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// æ’å…¥åˆ°æœ€å¾Œä¸€è¡Œ
+		// ²åÈëµ½×îºóÒ»ĞĞ
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -973,13 +973,13 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : ç”¨æˆ¶åä¸åˆæ³•
-	-2 : åŒ…å«ä¸å…è¨±è¨»å†Šçš„è©èª
-	-3 : ç”¨æˆ¶åå·²ç¶“å­˜åœ¨
-	-4 : email æ ¼å¼æœ‰èª¤
-	-5 : email ä¸å…è¨±è¨»å†Š
-	-6 : è©² email å·²ç¶“è¢«è¨»å†Š
-	>1 : è¡¨ç¤ºæˆåŠŸï¼Œæ•¸å€¼ç‚º UID
+	-1 : ÓÃ»§Ãû²»ºÏ·¨
+	-2 : °üº¬²»ÔÊĞí×¢²áµÄ´ÊÓï
+	-3 : ÓÃ»§ÃûÒÑ¾­´æÔÚ
+	-4 : email ¸ñÊ½ÓĞÎó
+	-5 : email ²»ÔÊĞí×¢²á
+	-6 : ¸Ã email ÒÑ¾­±»×¢²á
+	>1 : ±íÊ¾³É¹¦£¬ÊıÖµÎª UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

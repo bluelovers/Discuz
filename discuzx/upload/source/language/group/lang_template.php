@@ -4,13 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16522 2010-09-08 02:52:27Z monkey $
+ *      $Id: lang_template.php 21925 2011-04-18 02:58:25Z monkey $
  *
  *      This file is automatically generate
  */
 
 $lang = array (
-
   'credits' => '積分',
   'favorite' => '收藏',
   'group_admin' => '管理{$_G[setting][navs][3][navname]}',
@@ -25,27 +24,24 @@ $lang = array (
   'group_level' => '{$_G[setting][navs][3][navname]}等級',
   'group_member_list' => '成員列表',
   'group_moderator_title' => '群主',
+  'group_perm_all_user' => '所有人',
   'group_perm_member_only' => '僅成員',
   'group_perm_visit' => '瀏覽權限',
   'group_push_to_forum' => '推薦到版塊',
   'home' => '首頁',
   'my_buddylist_invite' => '邀請好友',
-
   'close' => '關閉',
   'confirms' => '確定',
   'max_can_select' => '最多可以選擇',
   'select_focus_group' => '選擇關注的{$_G[setting][navs][3][navname]}',
-
   'choose_please' => '請選擇',
   'create' => '創建',
   'group_category' => '所屬分類',
   'group_create_new' => '創建新{$_G[setting][navs][3][navname]}',
-  'group_create_notice' => '註：除{$_G[setting][navs][3][navname]}名稱和分類暫時不能修改外，其它項目在創建完成後仍可修改。',
+  'group_create_selete_categroy' => '請選擇{$_G[setting][navs][3][navname]}分類',
   'group_description' => '{$_G[setting][navs][3][navname]}簡介',
   'group_name' => '{$_G[setting][navs][3][navname]}名稱',
-  'group_perm_all_user' => '所有人',
   'option_required' => '必選項',
-
   'anonymous' => '匿名',
   'author' => '作者',
   'click_to_readmore' => '點擊查看更多話題',
@@ -70,11 +66,9 @@ $lang = array (
   'thread_reward' => '懸賞',
   'thread_trade' => '商品',
   'view_all_threads' => '查看所有主題',
-
   'finished' => '完成',
   'group_choose_friend_to_invite' => '請選擇你要邀請的好友',
   'group_invite_list' => '邀請列表',
-
   'attach_img' => '圖片附件',
   'attachment' => '附件',
   'forum_viewall' => '全部',
@@ -89,7 +83,6 @@ $lang = array (
   'thread_moved' => '移動',
   'thread_recommend' => '評價指數',
   'time' => '時間',
-
   'delete' => '刪除',
   'displayorder' => '順序',
   'enable' => '啟用',
@@ -105,8 +98,7 @@ $lang = array (
   'group_icon' => '{$_G[setting][navs][3][navname]}圖標',
   'group_icon_resize' => '自動縮略成 48 X 48 像素大小的圖片',
   'group_image' => '{$_G[setting][navs][3][navname]}頂部圖片',
-  'group_image_filesize_limit' => '文件小於 $_G[setting][group_imgsizelimit] kb',
-  'group_image_resize' => '自動縮略成 720 X 168 像素大小的圖片',
+  'group_image_filesize_limit' => '文件小於 $_G[setting][group_imgsizelimit] KB',
   'group_input_password' => '請輸入登錄密碼',
   'group_level_cannot_do' => '目前你的{$_G[setting][navs][3][navname]}等級不能使用此功能。',
   'group_member_management' => '成員管理',
@@ -144,9 +136,8 @@ $lang = array (
   'threadtype_required_force' => '是否強制用戶發表新主題時必須選擇分類',
   'threadtype_turn_on' => '啟用主題分類',
   'threadtype_turn_on_comment' => '設置是否啟用主題分類功能，你需要同時設定相應的分類選項，才能啟用本功能',
-  'transfer_group_to' => '將群組轉讓給',
+  'transfer_group_to' => '將{$_G[setting][navs][3][navname]}轉讓給',
   'yes' => '是',
-
   'all' => '全部',
   'all_group' => '所有{$_G[setting][navs][3][navname]}',
   'attention_group' => '關注{$_G[setting][navs][3][navname]}',
@@ -167,9 +158,7 @@ $lang = array (
   'no_group_join' => '你還沒有加入任何{$_G[setting][navs][3][navname]}，<a href="group.php?mod=index">找喜歡的{$_G[setting][navs][3][navname]}</a>。',
   'no_related_posts' => '還沒有相關的帖子。',
   'somebody_group' => '的{$_G[setting][navs][3][navname]}',
-
   'group_do_not_push' => '不推薦',
-
   'copy' => '複製',
   'create_on' => '創建於',
   'group_digest_recommend' => '精華推薦',
@@ -181,12 +170,11 @@ $lang = array (
   'group_member_new' => '新加入',
   'group_member_rank' => '排名',
   'group_url' => '{$_G[setting][navs][3][navname]}地址',
-  'group_url_copy_finished' => '{$_G[setting][navs][3][navname]}地址已經複製到剪貼板',
+  'group_url_copy_finished' => '{$_G[setting][navs][3][navname]}地址複製成功',
   'group_visited' => '瀏覽過的{$_G[setting][navs][3][navname]}',
   'group_you_have' => '你已有 {$groupnum} 個{$_G[setting][navs][3][navname]}，還能創建 {$allowbuildgroup} 個。',
   'input_search_key_words' => '請輸入搜索關鍵字',
   'posts' => '帖子',
-
   'create_group_message1' => '創建自己的地盤',
   'create_group_message2' => '精心打造{$_G[setting][navs][3][navname]}空間',
   'create_group_message3' => '邀請好友加入我的{$_G[setting][navs][3][navname]}',
@@ -200,7 +188,6 @@ $lang = array (
   'my_group' => '我的{$_G[setting][navs][3][navname]}',
   'personality_setting' => '個性設置',
   'recommend_group' => '推薦{$_G[setting][navs][3][navname]}',
-
   'group_activities' => '活躍度',
   'group_category_no_groups' => '該分類下暫時沒有{$_G[setting][navs][3][navname]}',
   'group_category_no_groups_detail' => '返回上級分類重新選擇，或者[<b><a href="forum.php?mod=group&action=create&fupid={$curtype[fup]}&groupid=$sgid">創建一個新的{$_G[setting][navs][3][navname]}</a></b>]',

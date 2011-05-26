@@ -20,7 +20,7 @@
 		<tr>
 			<th>&nbsp;</th>
 			<td colspan="2">
-				<button type="submit" name="verifysubmit" value="true" class="pn pnp" /><strong>{lang validator_submit}</strong></button>
+				<button type="submit" name="verifysubmit" value="true" class="pn pnc" /><strong>{lang validator_submit}</strong></button>
 			</td>
 		</tr>
 		</table>
@@ -30,14 +30,16 @@
 	</div>
 	<!--{else}-->
 		<!--{if $operation == 'password'}-->
-			<p class="tbmu mbm">{lang old_password_comment}</p>
-			<form action="home.php?mod=spacecp&ac=profile" method="post" autocomplete="off" onsubmit="return profilecheck()">
+			<p class="bbda pbm mbm"><!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->{lang old_password_comment}<!--{else}-->{lang connect_config_newpassword_comment}<!--{/if}--></p>
+			<form action="home.php?mod=spacecp&ac=profile" method="post" autocomplete="off">
 				<input type="hidden" value="{FORMHASH}" name="formhash" />
 				<table summary="{lang memcp_profile}" cellspacing="0" cellpadding="0" class="tfm">
-					<tr>
-						<th><strong class="rq" title="{lang required}">*</strong>{lang old_password}</th>
-						<td><input type="password" name="oldpassword" id="oldpassword" class="px" /></td>
-					</tr>
+					<!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->
+						<tr>
+							<th><span class="rq" title="{lang required}">*</span>{lang old_password}</th>
+							<td><input type="password" name="oldpassword" id="oldpassword" class="px" /></td>
+						</tr>
+					<!--{/if}-->
 					<tr>
 						<th>{lang new_password}</th>
 						<td>
@@ -52,15 +54,15 @@
 							<p class="d">{lang memcp_profile_passwd_comment}</p>
 						</td>
 					</tr>
-					<tr id="contact"{if $_G[gp_from] == 'contact'} style="background-color: {SPECIALBG};"{/if}>
+					<tr id="contact"{if $_G[gp_from] == 'contact'} style="background-color: {$_G['style']['specialbg']};"{/if}>
 						<th>{lang email}</th>
 						<td>
 							<input type="text" name="emailnew" id="emailnew" value="$space[email]" class="px" />
 							<p class="d">
-								<!--{if $space['emailstatus']}-->
+								<!--{if empty($space['newemail'])}-->
 									{lang email_been_active}
 								<!--{else}-->
-									{lang email_acitve_message}
+									$acitvemessage
 								<!--{/if}-->
 							</p>
 							<!--{if $_G['setting']['regverify'] == 1 && (($_G['group']['grouptype'] == 'member' && $_G['adminid'] == 0) || $_G['groupid'] == 8)}--><p class="d">{lang memcp_profile_email_comment}</p><!--{/if}-->
@@ -94,11 +96,11 @@
 					</tr>
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{eval $sectpl = '<tr><th><sec></th><td><sec><p class="d"><sec></p></td>';}-->
-					<!--{template common/seccheck}-->
+					<!--{subtemplate common/seccheck}-->
 					<!--{/if}-->
 					<tr>
 						<th>&nbsp;</th>
-						<td><button type="submit" name="pwdsubmit" value="true" class="pn pnp" /><strong>{lang save}</strong></button></td>
+						<td><button type="submit" name="pwdsubmit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
 					</tr>
 				</table>
 				<input type="hidden" name="passwordsubmit" value="true" />
@@ -107,24 +109,24 @@
 			<!--{hook/spacecp_profile_top}-->
 			<!--{subtemplate home/spacecp_profile_nav}-->
 				<!--{if $vid}-->
-				<p class="tbms mtm"><!--{if $showbtn}-->{lang spacecp_profile_message1}<!--{else}-->{lang spacecp_profile_message2}<!--{/if}--></p>
+				<p class="tbms mtm {if !$showbtn}tbms_r{/if}"><!--{if $showbtn}-->{lang spacecp_profile_message1}<!--{else}-->{lang spacecp_profile_message2}<!--{/if}--></p>
 				<!--{/if}-->
 			<iframe id="frame_profile" name="frame_profile" style="display: none"></iframe>
-			<form action="{if $operation != 'plugin'}home.php?mod=spacecp&ac=profile&op=$operation{else}home.php?mod=spacecp&ac=plugin&op=profile&id=$_G[gp_id]{/if}" method="post" enctype="multipart/form-data" autocomplete="off"{if $operation != 'plugin'} target="frame_profile"{/if}>
+			<form action="{if $operation != 'plugin'}home.php?mod=spacecp&ac=profile&op=$operation{else}home.php?mod=spacecp&ac=plugin&op=profile&id=$_G[gp_id]{/if}" method="post" enctype="multipart/form-data" autocomplete="off"{if $operation != 'plugin'} target="frame_profile"{/if} onsubmit="clearErrorInfo();">
 				<input type="hidden" value="{FORMHASH}" name="formhash" />
 				<!--{if $_G[gp_vid]}-->
 				<input type="hidden" value="$_G[gp_vid]" name="vid" />
 				<!--{/if}-->
-				<table cellspacing="0" cellpadding="0" class="tfm">
+				<table cellspacing="0" cellpadding="0" class="tfm" id="profilelist">
 					<tr>
 						<th>{lang username}</th>
-						<td>$_G[username]</td>
+						<td>$_G[member][username]</td>
 						<td>&nbsp;</td>
-					</tr>					
+					</tr>
 				<!--{loop $settings $key $value}-->
 				<!--{if $value[available]}-->
-					<tr>
-						<th id="th_$key"><!--{if $value[required]}--><strong class="rq" title="{lang required}">*</strong><!--{/if}-->$value[title]</th>
+					<tr id="tr_$key">
+						<th id="th_$key"><!--{if $value[required]}--><span class="rq" title="{lang required}">*</span><!--{/if}-->$value[title]</th>
 						<td id="td_$key">
 							$htmls[$key]
 						</td>
@@ -142,15 +144,17 @@
 					</tr>
 				<!--{/if}-->
 				<!--{/loop}-->
-				<!--{if $operation == 'bbs'}-->
-				<!--{if $allowcstatus}-->
+				<!--{if $allowcstatus && in_array('customstatus', $allowitems)}-->
 				<tr>
 					<th id="th_customstatus">{lang permission_basic_status}</th>
-					<td id="td_customstatus"><input type="text" value="$space[customstatus]" name="customstatus" id="customstatus" class="px" /></td>
+					<td id="td_customstatus">
+						<input type="text" value="$space[customstatus]" name="customstatus" id="customstatus" class="px" />
+						<div class="rq mtn" id="showerror_customstatus"></div>
+					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<!--{/if}-->
-				<!--{if $_G['group']['maxsigsize']}-->
+				<!--{if $_G['group']['maxsigsize'] && in_array('sightml', $allowitems)}-->
 				<tr>
 					<th id="th_sightml">{lang personal_signature}</th>
 					<td id="td_sightml">
@@ -171,12 +175,14 @@
 							</div>
 						</div>
 						<div id="signhtmlpreview"></div>
+						<div id="showerror_sightml" class="rq mtn"></div>
 						<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
 						<script type="text/javascript">var forumallowhtml = 0,allowhtml = 0,allowsmilies = 0,allowbbcode = parseInt('{$_G[group][allowsigbbcode]}'),allowimgcode = parseInt('{$_G[group][allowsigimgcode]}');var DISCUZCODE = [];DISCUZCODE['num'] = '-1';DISCUZCODE['html'] = [];</script>
 					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<!--{/if}-->
+				<!--{if in_array('timeoffset', $allowitems)}-->
 				<tr>
 					<th id="th_timeoffset">{lang time_zone}</th>
 					<td id="td_timeoffset">
@@ -191,7 +197,9 @@
 					</td>
 					<td>&nbsp;</td>
 				</tr>
-				<!--{elseif $operation == 'contact'}-->
+				<!--{/if}-->
+
+				<!--{if $operation == 'contact'}-->
 				<tr>
 					<th id="th_sightml">Email</th>
 					<td id="td_sightml">$space[email]&nbsp;(<a href="home.php?mod=spacecp&ac=profile&op=password&from=contact#contact">{lang modify}</a>)</td>
@@ -202,13 +210,14 @@
 				<!--{if $operation == 'plugin'}-->
 					<!--{eval include(template($_G['gp_id']));}-->
 				<!--{/if}-->
+				<!--{hook/spacecp_profile_extra}-->
 				<!--{if $showbtn}-->
 				<tr>
 					<th>&nbsp;</th>
 					<td colspan="2">
 						<input type="hidden" name="profilesubmit" value="true" />
-						<button type="submit" name="profilesubmitbtn" id="profilesubmitbtn" value="true" class="pn pnp" /><strong>{lang save}</strong></button>
-						<span id="submit_result" class="rq"></span>						
+						<button type="submit" name="profilesubmitbtn" id="profilesubmitbtn" value="true" class="pn pnc" /><strong>{lang save}</strong></button>
+						<span id="submit_result" class="rq"></span>
 					</td>
 				</tr>
 				<!--{/if}-->
@@ -222,14 +231,27 @@
 						elem.className = "rq";
 						fieldname = elem.innerHTML;
 						extrainfo = (typeof extrainfo == "string") ? extrainfo : "";
-						$('submit_result').innerHTML = " {lang check_date_item} " + fieldname + extrainfo;
+						$('showerror_'+fieldid).innerHTML = "{lang check_date_item} " + extrainfo;
+						$(fieldid).focus();
 					}
 				}
-				function show_success() {
-					showDialog('{lang update_date_success}', 'notice', '{lang reminder}', null, 0);
-					setTimeout(function(){
+				function show_success(message) {
+					message = message == '' ? '{lang update_date_success}' : message;
+					showDialog(message, 'right', '{lang reminder}', function(){
 						top.window.location.href = top.window.location.href;
-					}, 3000);
+					}, 0, null, '', '', '', '', 3);
+				}
+				function clearErrorInfo() {
+					var spanObj = $('profilelist').getElementsByTagName("div");
+					for(var i in spanObj) {
+						if(typeof spanObj[i].id != "undefined" && spanObj[i].id.indexOf("_")) {
+							var ids = explode('_', spanObj[i].id);
+							if(ids[0] == "showerror") {
+								spanObj[i].innerHTML = '';
+								$('th_'+ids[1]).className = '';
+							}
+						}
+					}
 				}
 			</script>
 		<!--{/if}-->

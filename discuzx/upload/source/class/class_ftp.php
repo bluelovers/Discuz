@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_ftp.php 11108 2010-05-24 04:00:08Z monkey $
+ *      $Id: class_ftp.php 18742 2010-12-02 05:41:21Z monkey $
  */
 
 if(!defined('FTP_ERR_SERVER_DISABLED')) {
@@ -161,7 +161,7 @@ class discuz_ftp
 
 	function set_option($cmd, $value) {
 		if(function_exists('ftp_set_option')) {
-			return @ftp_set_option($$this->connectid, $cmd, $value);
+			return @ftp_set_option($this->connectid, $cmd, $value);
 		}
 	}
 

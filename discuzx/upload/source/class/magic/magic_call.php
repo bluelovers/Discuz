@@ -52,7 +52,7 @@ class magic_call {
 			showmessage('magicuse_has_no_valid_friend');
 		}
 		DB::query('INSERT INTO '.DB::table('home_notification').'(uid, type, new, authorid, author, note, dateline) VALUES '.implode(',',$note_inserts));
-		DB::query('UPDATE '.DB::table('common_member_status').' SET notifications = notifications + 1 WHERE uid IN ('.dimplode($ids).')');
+		DB::query('UPDATE '.DB::table('common_member').' SET newprompt = newprompt + 1 WHERE uid IN ('.dimplode($ids).')');
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', '0', $idtype, $id);

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_uploadpic.js 15155 2010-08-19 08:16:19Z monkey $
+	$Id: home_uploadpic.js 17964 2010-11-09 01:11:24Z monkey $
 */
 
 var attachexts = new Array();
@@ -86,7 +86,7 @@ function insertAttach(id) {
 	}
 	inhtml += '<td><strong>' + localfile +'</strong>';
 	inhtml += '</td><td class="d">圖片描述<br/><textarea name="pic_title" cols="40" rows="2" class="pt"></textarea>';
-	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ')" class="xi2">[刪除]</a></span>';
+	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ');return false;" class="xi2">[刪除]</a></span>';
 	inhtml += '</td></tr></table>';
 
 	$('localfile_' + id).innerHTML = inhtml;
@@ -179,6 +179,7 @@ function upload() {
 			$('opalbumid').value = isNaN(albumidcheck)? 0 : albumid;
 			if(!successState) return false;
 		}
+		window.onbeforeunload = null;
 		mainForm.submit();
 	}
 	nowid = nid;

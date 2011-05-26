@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_magic.php 16358 2010-09-06 01:32:35Z monkey $
+ *      $Id: spacecp_magic.php 20078 2011-02-12 07:23:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,7 +75,7 @@ if($op == 'cancelflicker') {
 	if(!empty($info['left'])) {
 		$info['receiver'] = is_array($info['receiver']) ? $info['receiver'] : array();
 		if(in_array($_G['uid'], $info['receiver'])) {
-			showmessage("haved_red_bag");
+			showmessage('haved_red_bag');
 		}
 		$percredit = min($info['left'], $info['percredit']);
 		$info['receiver'][] = $_G['uid'];
@@ -91,7 +91,7 @@ if($op == 'cancelflicker') {
 			updatemembercount($_G['uid'], array($extcredits => $percredit), 1, 'AGC', $info['magicid']);
 			$credittype = $_G['setting']['extcredits'][$extcredits]['title'];
 		}
-		showmessage("haved_red_bag_gain", dreferer(), array('percredit' => $percredit, 'credittype' => $credittype), array('showdialog' => 1, 'locationtime' => true));
+		showmessage('haved_red_bag_gain', dreferer(), array('percredit' => $percredit, 'credittype' => $credittype), array('showdialog' => 1, 'locationtime' => true));
 	}
 	showmessage('space_no_red_bag', dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
 
@@ -114,7 +114,7 @@ if($op == 'cancelflicker') {
 		if(preg_match('/^extcredits[1-8]$/', $info['credittype'])) {
 			updatemembercount($_G['uid'], array($extcredits => $leftcredit), 1, 'RGC', $info['magicid']);
 		}
-		showmessage("return_red_bag", dreferer(), array('leftcredit' => $leftcredit, 'credittype' => $credittype), array('showdialog' => 1, 'locationtime' => true));
+		showmessage('return_red_bag', dreferer(), array('leftcredit' => $leftcredit, 'credittype' => $credittype), array('showdialog' => 1, 'locationtime' => true));
 	}
 }
 

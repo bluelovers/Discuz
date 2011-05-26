@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 17366 2010-10-12 08:29:38Z cnteacher $
+ *      $Id: cache_styles.php 21575 2011-04-01 02:01:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,11 +15,7 @@ function build_cache_styles() {
 	global $_G;
 
 	$stylevars = $styledata = array();
-	$defaultstyleid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey = 'styleid'");
-	$zoomstatus = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey = 'zoomstatus'");
-	list(, $imagemaxwidth) = explode("\t", $zoomstatus);
-	$imagemaxwidth = $imagemaxwidth ? $imagemaxwidth : 600;
-	$imagemaxwidthint = intval($imagemaxwidth);
+	$defaultstyleid = $_G['setting']['styleid'];
 	$query = DB::query("SELECT sv.* FROM ".DB::table('common_stylevar')." sv LEFT JOIN ".DB::table('common_style')." s ON s.styleid = sv.styleid AND (s.available=1 OR s.styleid='$defaultstyleid')");
 	while($var = DB::fetch($query)) {
 		$stylevars[$var['styleid']][$var['variable']] = $var['substitute'];
@@ -49,19 +45,6 @@ function build_cache_styles() {
 		$data['bold'] = $data['nobold'] ? 'normal' : 'bold';
 		$contentwidthint = intval($data['contentwidth']);
 		$contentwidthint = $contentwidthint ? $contentwidthint : 600;
-		if(substr(trim($data['contentwidth']), -1, 1) != '%') {
-			if(substr(trim($_G['setting']['imagemaxwidth']), -1, 1) != '%') {
-				$data['imagemaxwidth'] = $imagemaxwidthint > $contentwidthint ? $contentwidthint : $imagemaxwidthint;
-			} else {
-				$data['imagemaxwidth'] = intval($contentwidthint * $imagemaxwidthint / 100);
-			}
-		} else {
-			if(substr(trim($_G['setting']['imagemaxwidth']), -1, 1) != '%') {
-				$data['imagemaxwidth'] = '%'.$imagemaxwidthint;
-			} else {
-				$data['imagemaxwidth'] = ($imagemaxwidthint > $contentwidthint ? $contentwidthint : $imagemaxwidthint).'%';
-			}
-		}
 		if($data['extstyle']) {
 			list($data['extstyle'], $data['defaultextstyle']) = explode('|', $data['extstyle']);
 			$extstyle = explode("\t", $data['extstyle']);
@@ -144,7 +127,7 @@ function writetocsscache($data) {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
 			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
-			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry.'', 'w')) {
+			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry, 'w')) {
 				fwrite($fp, $cssdata);
 				fclose($fp);
 			} else {

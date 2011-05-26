@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_magic.php 16845 2010-09-15 09:41:41Z monkey $
+ *      $Id: function_magic.php 19561 2011-01-10 02:28:57Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,7 +42,7 @@ function getmagicweight($uid, $magicarray) {
 function getpostinfo($id, $type, $colsarray = '') {
 	global $_G;
 	$sql = $comma = '';
-	$type = in_array($type, array('tid', 'pid')) && !empty($type) ? $type : 'tid';
+	$type = in_array($type, array('tid', 'pid', 'blogid')) && !empty($type) ? $type : 'tid';
 	$cols = '*';
 
 	if(!empty($colsarray) && is_array($colsarray)) {
@@ -61,14 +61,17 @@ function getpostinfo($id, $type, $colsarray = '') {
 			$posttable = getposttablebytid($_G['tid']);
 			$sql = "SELECT $cols FROM ".DB::table($posttable)." p, ".DB::table('forum_thread')." t WHERE p.pid='$id' AND p.invisible='0' AND t.tid=p.tid";
 			break;
+		case 'blogid':
+			$sql = "SELECT $cols FROM ".DB::table('home_blog')." WHERE blogid='$id' AND status='0'";
+			break;
 	}
 
 	if($sql) {
-		$post = DB::fetch_first($sql);
-		if(!$post) {
+		$info = DB::fetch_first($sql);
+		if(!$info) {
 			showmessage('magics_target_nonexistence');
 		} else {
-			return daddslashes($post, 1);
+			return daddslashes($info, 1);
 		}
 	}
 }
@@ -146,12 +149,12 @@ function magicshowsetting($setname, $varname, $value, $type = 'radio', $width = 
 	echo '<p class="mtm mbn">'.$setname.'</p>';
 	if($type == 'radio') {
 		$value ? $check['true'] = 'checked="checked"' : $check['false'] = 'checked="checked"';
-		echo "<input type=\"radio\" name=\"$varname\" value=\"1\" class=\"radio\" $check[true] /> ".lang('core', 'yes')." &nbsp; &nbsp; \n".
-			"<input type=\"radio\" name=\"$varname\" value=\"0\" class=\"radio\" $check[false] /> ".lang('core', 'no')."\n";
+		echo "<input type=\"radio\" name=\"$varname\" class=\"pr\" value=\"1\" $check[true] /> ".lang('core', 'yes')." &nbsp; &nbsp; \n".
+			"<input type=\"radio\" name=\"$varname\" class=\"pr\" value=\"0\" $check[false] /> ".lang('core', 'no')."\n";
 	} elseif($type == 'text') {
-		echo "<input type=\"text\" size=\"12\" name=\"$varname\" autocomplete=\"off\" value=\"".dhtmlspecialchars($value)."\" class=\"px pxn p_fre\"/>\n";
+		echo "<input type=\"text\" name=\"$varname\" class=\"px p_fre\" value=\"".dhtmlspecialchars($value)."\" size=\"12\" autocomplete=\"off\" />\n";
 	} elseif($type == 'hidden') {
-		echo "<input type=\"hidden\" name=\"$varname\" value=\"".dhtmlspecialchars($value)."\"/>\n";
+		echo "<input type=\"hidden\" name=\"$varname\" value=\"".dhtmlspecialchars($value)."\" />\n";
 	} else {
 		echo $type;
 	}

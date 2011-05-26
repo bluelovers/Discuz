@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_smilies_js.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: cache_smilies_js.php 21292 2011-03-22 08:19:48Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ function build_cache_smilies_js() {
 		$squery = DB::query("SELECT id, code, url FROM ".DB::table('common_smiley')." WHERE type='smiley' AND code<>'' AND typeid='$type[typeid]' ORDER BY displayorder");
 		if(DB::num_rows($squery)) {
 			$i = 0;$j = 1;$pre = '';
-			$return_type .= 'smilies_type['.$type['typeid'].'] = [\''.str_replace('\'', '\\\'', $type['name']).'\', \''.str_replace('\'', '\\\'', $type['directory']).'\'];';
+			$return_type .= 'smilies_type[\'_'.$type['typeid'].'\'] = [\''.str_replace('\'', '\\\'', $type['name']).'\', \''.str_replace('\'', '\\\'', $type['directory']).'\'];';
 			$return_datakey .= 'smilies_array['.$type['typeid'].'] = new Array();';
 			while($smiley = DB::fetch($squery)) {
 				if($i >= $spp) {
@@ -43,7 +43,7 @@ function build_cache_smilies_js() {
 					$smiley['lw'] = $l['w'];
 					unset($smiley['id'], $smiley['directory']);
 					$return_data[$j] .= $pre.'[\''.$smileyid.'\', \''.$smiley['code'].'\',\''.str_replace('\'', '\\\'', $smiley['url']).'\',\''.$smiley['w'].'\',\''.$smiley['h'].'\',\''.$smiley['lw'].'\']';
-					if(in_array($smileyid, $fastsmiley[$type['typeid']])) {
+					if(is_array($fastsmiley[$type['typeid']]) && in_array($smileyid, $fastsmiley[$type['typeid']])) {
 						$return_fast .= $fpre.'[\''.$type['typeid'].'\',\''.$j.'\',\''.$i.'\']';
 						$fpre = ',';
 					}

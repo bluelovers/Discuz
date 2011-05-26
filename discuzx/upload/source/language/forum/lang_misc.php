@@ -4,14 +4,16 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 17334 2010-10-09 08:34:23Z liulanbo $
+ *      $Id: lang_misc.php 20740 2011-03-02 09:55:01Z liulanbo $
  */
 
 $lang = array
 (
 	'discuz_lang' => 'misc',
-
+	'contact' => '聯繫方式:',
 	'anonymous' => '匿名',
+	'anonymoususer' => '匿名者',
+	'guestuser' => '遊客',
 	'has_expired' => '該信息已經過期',
 	'click_view' => '點擊查看',
 	'never_expired' => '永不過期',
@@ -41,7 +43,7 @@ $lang = array
 	'post_trade_name' => '商品名稱',
 	'post_trade_price' => '商品價格',
 	'post_trade_quality' => '商品成色',
-	'post_trade_locus' => '商品所在地',
+	'post_trade_locus' => '所在地點',
 	'post_trade_transport_type' => '物流方式',
 	'post_trade_transport_seller' => '賣家承擔運費',
 	'post_trade_transport_buyer' => '買家承擔運費',
@@ -55,7 +57,7 @@ $lang = array
 	'post_trade_pm_buynum' => '購買數量',
 	'post_trade_pm_wishprice' => '我期望的價格是',
 	'post_trade_pm_reason' => '我議價的理由是',
-
+	'post_deleted' => '無效樓層，該帖已經被刪除',
 	'postappend_content' => '補充內容',
 	'payment_unit' => '元',
 
@@ -112,10 +114,15 @@ $lang = array
 	'credit_forum_payment' => '論壇積分充值',
 	'credit_forum_royalty' => '交易手續費',
 
+	'invite_payment' => '購買邀請碼',
+	'invite_forum_payment' => '購買邀請碼',
+	'invite_forum_payment_unit' => '個',
+	'invite_forum_royalty' => '交易手續費',
+
 	'formulaperm_regdate' => '註冊時間',
 	'formulaperm_regday' => '註冊天數',
-	'formulaperm_regip' => '註冊IP',
-	'formulaperm_lastip' => '最後登錄IP',
+	'formulaperm_regip' => '註冊 IP',
+	'formulaperm_lastip' => '最後登錄 IP',
 	'formulaperm_buyercredit' => '買家信用評價',
 	'formulaperm_sellercredit' => '賣家信用評價',
 	'formulaperm_digestposts' => '精華帖數',
@@ -151,7 +158,7 @@ $lang = array
 	'modcp_logs_action_login' => '登錄',
 
 	'uch_selectalbum' => '請選擇相冊',
-	'uch_noalbum' => '你還沒有相冊，',
+	'uch_noalbum' => '抱歉，您還沒有相冊，',
 	'click_here' => '點擊這裡',
 	'uch_createalbum' => '創建自己的相冊吧！',
 
@@ -159,7 +166,7 @@ $lang = array
 	'pm_to' => '收件人',
 	'pm_date' => '日期',
 
-	'share_message' => '你好！我在 {$_G[setting][bbname]} 看到了這篇帖子，認為很有價值，特推薦給你。\\n\\n$thread[subject]\\n地址 [url={$threadurl}]{$threadurl}[/url]\\n\\n希望你能喜歡。',
+	'share_message' => '您好！我在 {$_G[setting][bbname]} 看到了這篇帖子，認為很有價值，特推薦給您。\\n\\n$thread[subject]\\n地址 [url={$threadurl}]{$threadurl}[/url]\\n\\n希望您能喜歡',
 
 	'week_0' => '星期日',
 	'week_1' => '星期一',
@@ -194,7 +201,9 @@ $lang = array
 	'perms_allowbiobbcode' => '自我介紹中使用編輯器代碼',
 	'perms_allowbioimgcode' => '自我介紹中使用 [img] 代碼',
 	'perms_allowgetattach' => '下載附件',
-	'perms_allowpostattach' => '發佈附件',
+	'perms_allowgetimage' => '查看圖片',
+	'perms_allowpostattach' => '上傳附件',
+	'perms_allowpostimage' => '上傳圖片',
 	'perms_allowsetattachperm' => '允許設置附件權限',
 	'perms_maxspacesize' => '空間大小',
 	'perms_maxattachsize' => '單個最大附件尺寸',
@@ -254,6 +263,10 @@ $lang = array
 	'perms_allowstatdata' => '查看統計數據報表',
 	'perms_allowstat' => '允許查看趨勢統計',
 	'perms_allowpostarticle' => '發表文章',
+	'perms_raterange' => '允許參與評分',
+	'perms_allowsendpm' => '允許發短消息',
+	'perms_maximagesize' => '單張圖片最大尺寸',
+	'perms_allowmediacode' => '允許使用多媒體代碼',
 
 	'join_topic' => '參與話題',
 	'join_poll' => '參與投票',
@@ -264,6 +277,8 @@ $lang = array
 
 	'lower' => '低於',
 	'higher' => '高於',
+	'report_msg_your' => '您的 ',
+	'report_noreward' => '不獎懲',
 );
 
 ?>

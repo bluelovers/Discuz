@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadsplit.php 16983 2010-09-18 05:00:13Z cnteacher $
+ *      $Id: admincp_threadsplit.php 21121 2011-03-16 03:26:35Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -55,6 +55,9 @@ if($operation == 'manage') {
 		showsubtitle(array('threadsplit_manage_tablename', 'threadsplit_manage_dislayname', 'threadsplit_manage_threadcount', 'threadsplit_manage_datalength', 'threadsplit_manage_indexlength', 'threadsplit_manage_table_createtime', 'threadsplit_manage_table_memo', ''));
 
 		foreach($threadtableids as $tableid) {
+			if(!$tableid) {
+				continue;
+			}
 			$tablename = "forum_thread_$tableid";
 			$table_info = gettablestatus(DB::table($tablename));
 			showtablerow('', array(), array($table_info['Name'], "<input type=\"text\" class=\"txt\" name=\"displayname[$tableid]\" value=\"{$threadtable_info[$tableid]['displayname']}\" />", $table_info['Rows'], $table_info['Data_length'], $table_info['Index_length'], $table_info['Create_time'], "<input type=\"text\" class=\"txt\" name=\"memo[$tableid]\" value=\"{$threadtable_info[$tableid]['memo']}\" />", "<a href=\"?action=threadsplit&operation=droptable&tableid=$tableid\">{$lang['delete']}</a>"));
@@ -129,10 +132,10 @@ if($operation == 'manage') {
 	}
 
 	require_once libfile('function/forumlist');
-	$tableselect = '<select name="sourcetableid"><option value="0">'.DB::table('forum_thread').'</option>';
+	$tableselect = '<select name="sourcetableid">';
 	foreach($threadtableids as $tableid) {
 		$selected = $_G['gp_sourcetableid'] == $tableid ? 'selected="selected"' : '';
-		$tableselect .= "<option value=\"$tableid\" $selected>".DB::table("forum_thread_$tableid")."</option>";
+		$tableselect .= "<option value=\"$tableid\" $selected>".DB::table("forum_thread".($tableid ? "_$tableid" : ''))."</option>";
 	}
 	$tableselect .= '</select>';
 
@@ -318,10 +321,12 @@ EOT;
 
 				showtablerow('', array('class="td25"'), array("<input class=\"radio\" ".($_G['gp_sourcetableid'] == '0' ? 'disabled="disabled"' : '')." type=\"radio\" name=\"tableid\" value=\"0\" />", $threadtable_orig['Name'], $threadtable_orig['Rows'], $threadtable_orig['Data_length'], $threadtable_orig['Index_length'], $threadtable_orig['Create_time'], $threadtable_info[0]['memo']));
 				foreach($threadtableids as $tableid) {
-					$tablename = "forum_thread_$tableid";
-					$tablestatus = gettablestatus(DB::table($tablename));
+					if($tableid) {
+						$tablename = "forum_thread_$tableid";
+						$tablestatus = gettablestatus(DB::table($tablename));
 
-					showtablerow('', array(), array("<input class=\"radio\" ".($_G['gp_sourcetableid'] == $tableid ? 'disabled="disabled"' : '')." type=\"radio\" name=\"tableid\" value=\"$tableid\" />", $tablestatus['Name'].($threadtable_info[$tableid]['displayname'] ? " (".htmlspecialchars($threadtable_info[$tableid]['displayname']).")" : ''), $tablestatus['Rows'], $tablestatus['Data_length'], $tablestatus['Index_length'], $tablestatus['Create_time'], $threadtable_info[$tableid]['memo']));
+						showtablerow('', array(), array("<input class=\"radio\" ".($_G['gp_sourcetableid'] == $tableid ? 'disabled="disabled"' : '')." type=\"radio\" name=\"tableid\" value=\"$tableid\" />", $tablestatus['Name'].($threadtable_info[$tableid]['displayname'] ? " (".htmlspecialchars($threadtable_info[$tableid]['displayname']).")" : ''), $tablestatus['Rows'], $tablestatus['Data_length'], $tablestatus['Index_length'], $tablestatus['Create_time'], $threadtable_info[$tableid]['memo']));
+					}
 				}
 
 				if($_G['gp_detail']) {
@@ -397,7 +402,8 @@ EOT;
 	if($continue) {
 		$threadtableid = $threadtableids[$step];
 		DB::update('forum_forum_threadtable', array('threads' => '0', 'posts' => '0'), "threadtableid='$threadtableid'");
-		$query = DB::query("SELECT fid, COUNT(*) AS threads, SUM(replies)+COUNT(*) AS posts FROM ".DB::table("forum_thread_$threadtableid")." GROUP BY fid");
+		$threadtable = $threadtableid ? "forum_thread_$threadtableid" : 'forum_thread';
+		$query = DB::query("SELECT fid, COUNT(*) AS threads, SUM(replies)+COUNT(*) AS posts FROM ".DB::table($threadtable)." GROUP BY fid");
 		while($row = DB::fetch($query)) {
 			DB::insert('forum_forum_threadtable', array(
 				'fid' => $row['fid'],
@@ -412,7 +418,7 @@ EOT;
 			}
 		}
 		$nextstep = $step + 1;
-		cpmsg("threadsplit_manage_forum_processing", "action=threadsplit&operation=forumarchive&step=$nextstep", 'loading', array('table' => DB::table("forum_thread_$threadtableid")));
+		cpmsg('threadsplit_manage_forum_processing', "action=threadsplit&operation=forumarchive&step=$nextstep", 'loading', array('table' => DB::table($threadtable)));
 	} else {
 		DB::delete('forum_forum_threadtable', "threads='0'");
 		$fids = array('0');
@@ -469,9 +475,12 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 	if($conditions['sticky'] == 1) {
 		$sql .= " AND t.displayorder>'0'";
 		$searchurladd[] = "sticky=1";
-	} else {
+	} elseif($conditions['sticky'] == 2) {
 		$sql .= " AND t.displayorder='0'";
 		$searchurladd[] = "sticky=2";
+	} else {
+		$sql .= " AND t.displayorder>='0'";
+		$searchurladd[] = "sticky=0";
 	}
 
 	if($conditions['noreplydays'] != '') {
@@ -591,7 +600,7 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 	$threadlist = array();
 	$threadtable = $conditions['sourcetableid'] ? "forum_thread_{$conditions['sourcetableid']}" : 'forum_thread';
 	if($sql || $conditions['sourcetableid']) {
-		$sql = "t.isgroup='0' AND t.displayorder>='0' $sql";
+		$sql = "t.isgroup='0' $sql";
 		$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table($threadtable)." t WHERE $sql");
 		if(isset($offset) && isset($length)) {
 			$sql .= " LIMIT $offset, $length";
@@ -614,7 +623,7 @@ function threadsplit_search_threads($conditions, $offset = null, $length = null,
 }
 
 function update_threadtableids() {
-	$threadtableids = array();
+	$threadtableids = array('0' => 0);
 	$db = DB::object();
 	$query = $db->query("SHOW TABLES LIKE '".str_replace('_', '\_', DB::table('forum_thread').'_%')."'");
 	while($table = $db->fetch_array($query, MYSQL_NUM)) {

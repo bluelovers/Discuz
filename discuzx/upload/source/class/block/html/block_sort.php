@@ -183,8 +183,9 @@ class block_sort extends commonblock_html {
 			$sql .= " AND t.dateline>'$heatdateline' AND t.heats>'0'";
 		}
 		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
+		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
 		if($recommend) {
-			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=t.tid";
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=t.tid";
 		}
 
 		$html = '';

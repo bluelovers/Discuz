@@ -4,61 +4,23 @@
 	$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=blog&id=$blog[blogid]\">{lang view_blog}</a>";
 	$friendsname = array(1 => '{lang friendname_1}',2 => '{lang friendname_2}',3 => '{lang friendname_3}',4 => '{lang friendname_4}');
 }
-<!--{if empty($diymode)}-->
-<!--{template common/header}-->
 
-<div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
-	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
-		<a href="home.php?mod=space&do=blog">{lang blog}</a>
-		<em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me">{$space[username]}{lang somebody_blog}</a>
-	</div>
-</div>
-
-<style id="diy_style" type="text/css"></style>
-<div class="wp">
-	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
-</div>
-
-<div id="ct" class="ct2_a wp cl">
-	<div class="mn">
-		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
-		<div class="bm bw0">
-		<!--{if $space[self]}-->
-			<h1 class="mt"><img alt="blog" src="{STATICURL}image/feed/blog.gif" class="vm" /> {lang blog}</h1>
-			<ul class="tb cl mbm">
-				<li$actives[we]><a href="home.php?mod=space&uid=$space[uid]&do=blog&view=we">{lang friend_blog}</a></li>
-				<li$actives[me]><a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me">{lang my_blog}</a></li>
-				<li$actives[all]><a href="home.php?mod=space&uid=$space[uid]&do=blog&view=all">{lang view_all}</a></li>
-				<li class="o"><a href="home.php?mod=spacecp&ac=blog">{lang post_new_blog}</a></li>
-			<!--{if $_G[referer]}-->
-				<li class="y"><a href="$_G[referer]">&laquo; {lang previous_page}</a></li>
-			<!--{/if}-->
-			</ul>
-		<!--{else}-->
-			<!--{template home/space_menu}-->
-		<!--{/if}-->
-
-
-<!--{else}-->
 <!--{template home/space_header}-->
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<div class="bm">
 				<div class="bm_h cl">
-					<h1 class="mt"><span class="z">{lang blog}</span> <!--{if $space[self]}--><span class="xs1 xw0 y"> <a href="home.php?mod=spacecp&ac=blog">{lang post_new_blog}</a> </span><!--{/if}--></h1>
+					<!--{if $space[self]}--><span class="xi2 y"><a href="home.php?mod=spacecp&ac=blog" class="addnew">{lang post_new_blog}</a></span><!--{/if}-->
+					<h1 class="mt">{lang blog}</h1>
 				</div>
 				<div class="bm_c">
-<!--{/if}-->
 
 			<div class="vw mbm">
 				<div class="h pbm">
-					<h1 class="ph{if $blog[magiccolor]} magiccolor$blog[magiccolor]{/if}">
+					<h1 class="ph" {if $blog[magiccolor]} style="color: {$_G[colorarray][$blog[magiccolor]]}"{/if}>
 						$blog[subject]
 						<!--{if $blog[status] == 1}-->
-							({lang pending})
+							<span class="xi1">({lang pending})</span>
 						<!--{/if}-->
 					</h1>
 					<p class="xg2">
@@ -74,7 +36,16 @@
 
 					<!--{if $classarr[classname]}--><span class="pipe">|</span><span class="xg1">{lang personal_category}:<a href="home.php?mod=space&uid=$blog[uid]&do=blog&classid=$blog[classid]&view=me">{$classarr[classname]}</a></span><!--{/if}-->
 					<!--{if $blog[catname]}--><span class="pipe">|</span><span class="xg1">{lang system_cat}:<a href="home.php?mod=space&do=blog&view=all&catid=$blog[catid]">$blog[catname]</a></span><!--{/if}-->
-					<!--{if $blog[tag]}--><span class="pipe">|</span><span class="xg1">{lang keywords}:$blog[tag]</span><!--{/if}-->
+					<!--{if $blog[tag]}-->
+						<span class="pipe">|</span>
+						<span class="ptg xg1">
+							<!--{eval $tagi = 0;}-->
+							<!--{loop $blog[tag] $var}-->
+								<!--{if $tagi}-->, <!--{/if}--><a href="misc.php?mod=tag&id=$var[0]" target="_blank">$var[1]</a>
+								<!--{eval $tagi++;}-->
+							<!--{/loop}-->
+						</span>
+					<!--{/if}-->
 
 					</p>
 					<!--{hook/space_blog_title}-->
@@ -84,13 +55,15 @@
 					<!--{ad/blog/a_b}-->
 					$blog[message]
 				</div>
+				<!--{if $blog[friend] != 3 && !$blog[noreply]}-->
 				<div id="click_div">
 					<!--{template home/space_click}-->
 				</div>
+				<!--{/if}-->
 				<div class="o cl">
 					<a href="home.php?mod=spacecp&ac=favorite&type=blog&id=$blog[blogid]&spaceuid=$blog[uid]&handlekey=favoritebloghk_{$blog[blogid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr ofav">{lang favorite}</a>
 					<a href="home.php?mod=spacecp&ac=share&type=blog&id=$blog[blogid]&handlekey=sharebloghk_{$blog[blogid]}" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr">{lang share}</a>
-					<!--{if ($_G[uid] == $blog[uid]) && $_G[setting][magicstatus] && ($_G[setting][magics][call] || $_G[setting][magics][updateline] || $_G[setting][magics][downdateline] || $_G[setting][magics][hot])}-->
+					<!--{if ($_G[uid] == $blog[uid]) && $_G[setting][magicstatus] && ($_G[setting][magics][call] || $_G[setting][magics][updateline] || $_G[setting][magics][downdateline] || $_G[setting][magics][hot] || $_G[setting][magics][highlight])}-->
 						<a href="javascript:;" id="usemagic" onmouseover="showMenu(this.id);">{lang use_magic_tools}</a>
 						<span class="pipe">|</span>
 						<ul id="usemagic_menu" class="p_pop mgcmn" style="display:none;">
@@ -106,6 +79,9 @@
 							<!--{if $_G[setting][magics][hot]}-->
 							<li><a href="home.php?mod=magic&mid=hot&idtype=blogid&id=$blog[blogid]" id="a_magic_hot" onclick="showWindow('magics', this.href, 'get', 0);"><img src="{STATICURL}image/magic/hot.small.gif" alt="hot" class="vm" /> {$_G[setting][magics][hot]}</a></li>
 							<!--{/if}-->
+							<!--{if $_G[setting][magics][highlight]}-->
+							<li><a href="home.php?mod=magic&mid=highlight&idtype=blogid&id=$blog[blogid]" id="a_magic_highlight" onclick="showWindow('magics', this.href, 'get', 0);"><img src="{STATICURL}image/magic/highlight.small.gif" alt="hot" class="vm" /> {$_G[setting][magics][highlight]}</a></li>
+							<!--{/if}-->
 						</ul>
 					<!--{/if}-->
 
@@ -120,11 +96,11 @@
 					<a href="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]&op=edithot&handlekey=bloghothk_{$blog[blogid]}" id="blog_hot_$blog[blogid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang hot}</a><span class="pipe">|</span>
 					<!--{/if}-->
 
-					<!--{if !$blog['friend'] && !$blog['pushedaid'] && ($_G['group']['allowauthorizedarticle'] || $_G['group']['allowmanagearticle'])}-->
+					<!--{if !$blog['friend'] && !$blog['pushedaid'] && (getstatus($_G['member']['allowadmincp'], 2) || $_G['group']['allowmanagearticle'])}-->
 					<a href="portal.php?mod=portalcp&ac=index&op=push&idtype=blogid&id=$blog[blogid]" onclick="showWindow('push', this.href, 'get', 0)">{lang article_push}</a><span class="pipe">|</span>
 					<!--{/if}-->
 
-					<!--{if $_G['group']['allowdiy'] || $_G['group']['allowauthorizedblock']}-->
+					<!--{if $_G['group']['allowdiy'] || getstatus($_G['member']['allowadmincp'], 4) || getstatus($_G['member']['allowadmincp'], 5)}-->
 						<a href="portal.php?mod=portalcp&ac=portalblock&op=recommend&idtype=blogid&id=$blog[blogid]" onclick="showWindow('recommend', this.href, 'get', 0)">{lang blockdata_recommend}</a><span class="pipe">|</span>
 					<!--{/if}-->
 					<!--{if $_G['uid'] != $blog['uid']}-->
@@ -162,7 +138,7 @@
 				<div id="div_main_content" class="mbm">
 					<h3 class="ptn pbn bbs">
 						<!--{if !empty($list)}-->
-						<a href="home.php?mod=space&uid=$blog[uid]&do=$do&id=$id#quickcommentform_{$id}" class="y xi2 xw0">{lang publish_comment}</a>
+						<a href="home.php?mod=space&uid=$blog[uid]&do=$do&id=$id#quickcommentform_{$id}" onclick="if($('comment_message')){$('comment_message').focus();return false;}" class="y xi2 xw0">{lang publish_comment}</a>
 						<!--{/if}-->
 						{lang comment} (<span id="comment_replynum">$blog[replynum]</span> {lang blog_replay})
 					</h3>
@@ -182,7 +158,7 @@
 			<!--{if !$blog[noreply]}-->
 			<form id="quickcommentform_{$id}" action="home.php?mod=spacecp&ac=comment" method="post" autocomplete="off" onsubmit="ajaxpost('quickcommentform_{$id}', 'return_qcblog_$id');doane(event);">
 				<p>
-					<span id="comment_face" title="{lang insert_emoticons}" onclick="showFace(this.id, 'comment_message');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
+					<span id="comment_face" title="{lang insert_emoticons}" onclick="showFace(this.id, 'comment_message');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 					<!--{hook/space_blog_face_extra}-->
 					<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
 						<a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target=comment_message" onclick="showWindow(this.id, this.href, 'get', 0)"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" class="vm" /> {$_G[setting][magics][doodle]}</a>
@@ -193,7 +169,7 @@
 						<!--{if $_G['uid']}-->
 							<textarea id="comment_message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');" name="message" rows="3" class="pt"></textarea>
 						<!--{else}-->
-							<div class="pt hm">{lang login_to_comment} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" onclick="showWindow('register', this.href)" class="xi2">$_G['setting']['reglinkname']</a></div>
+							<div class="pt hm">{lang login_to_comment} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a></div>
 						<!--{/if}-->
 					</div>
 				</div>
@@ -208,7 +184,7 @@
 					<input type="hidden" name="handlekey" value="qcblog_{$id}" />
 					<input type="hidden" name="commentsubmit" value="true" />
 					<input type="hidden" name="quickcomment" value="true" />
-					<button {if !$guestpost}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if} name="commentsubmit_btn"value="true" id="commentsubmit_btn" class="pn"{if !$_G[uid]} onclick="showWindow(this.id, this.form.action);return false;"{/if}><strong>{lang comment}</strong></button>
+					<button type="submit" name="commentsubmit_btn"value="true" id="commentsubmit_btn" class="pn"{if !$_G[uid]} onclick="showWindow(this.id, this.form.action);return false;"{/if}><strong>{lang comment}</strong></button>
 					<span id="return_qcblog_{$id}"></span>
 				</p>
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -237,9 +213,9 @@
 				var el = $('friendinput');
 				if(!el || el.value == "")	return;
 				var s = '<input type="checkbox" name="fusername[]" class="pc" value="'+el.value+'" id="'+el.value+'" checked="checked">';
-				s += ' <label for="'+el.value+'">'+el.value+'</label>';
+				s += '<label for="'+el.value+'">'+el.value+'</label>';
 				s += '<br />';
-				$('friends').innerHTML += s;
+				$('friendscall').innerHTML += s;
 				el.value = '';
 			}
 			resizeImg('div_main_content','450');
@@ -253,22 +229,7 @@
 			</div>
 		</div>
 			
-<!--{if empty($diymode)}-->
-		</div>
-		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
-	</div>
-	<div class="appl">
-		<!--{subtemplate common/userabout}-->
 
-		<!--{hook/space_blog_side_bottom}-->
-	</div>
-</div>
-
-<div class="wp mtn">
-	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
-</div>
-
-<!--{else}-->
 			</div>
 		</div>
 	</div>
@@ -276,5 +237,20 @@
 		<!--{subtemplate home/space_userabout}-->
 	</div>
 </div>
+
+
+<!--{if $_G['relatedlinks']}-->
+	<script type="text/javascript">
+		var relatedlink = [];
+		<!--{loop $_G['relatedlinks'] $key $link}-->
+		relatedlink[$key] = {'sname':'$link[name]', 'surl':'$link[url]'};
+		<!--{/loop}-->
+		relatedlinks('blog_article');
+	</script>
 <!--{/if}-->
+
+<!--{if !empty($_G['cookie']['clearUserdata']) && $_G['cookie']['clearUserdata'] == 'home'}-->
+	<script type="text/javascript">saveUserdata('home', '')</script>
+<!--{/if}-->
+
 <!--{template common/footer}-->

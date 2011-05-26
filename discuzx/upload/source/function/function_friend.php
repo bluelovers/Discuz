@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_friend.php 16154 2010-09-01 03:11:58Z zhengqingpeng $
+ *      $Id: function_friend.php 20203 2011-02-17 07:14:41Z zhengqingpeng $
  */
 
 function friend_list($uid, $limit, $start=0) {
@@ -44,25 +44,37 @@ function friend_group_list() {
 	return $groups;
 }
 
-function friend_check($touids) {
+function friend_check($touids, $isfull = 0) {
 	global $_G;
 
 	if(empty($_G['uid'])) return false;
 	if(is_array($touids)) {
-		$query = DB::query("SELECT fuid FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid IN (".dimplode($touids).")");
+		$query = DB::query("SELECT fuid, note FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid IN (".dimplode($touids).")");
 		while($value = DB::fetch($query)) {
 			$touid = $value['fuid'];
 			$var = "home_friend_{$_G['uid']}_{$touid}";
 			$fvar = "home_friend_{$touid}_{$_G['uid']}";
 			$_G[$var] = $_G[$fvar] = true;
+			if($isfull) {
+				$fvarinfo = "home_friend_info_{$touid}_{$_G['uid']}";
+				$_G[$fvarinfo] = $value;
+			}
 		}
 	} else {
 		$touid = $touids;
 		$var = "home_friend_{$_G['uid']}_{$touid}";
 		$fvar = "home_friend_{$touid}_{$_G['uid']}";
 		if(!isset($_G[$var])) {
-			$friend = DB::fetch_first("SELECT fuid FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$touid'");
-			$_G[$var] = $_G[$fvar] = $friend?true:false;
+			$friend = DB::fetch_first("SELECT fuid, note FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$touid'");
+			if($friend) {
+				$_G[$var] = $_G[$fvar] = true;
+				if($isfull) {
+					$fvarinfo = "home_friend_info_{$touid}_{$_G['uid']}";
+					$_G[$fvarinfo] = $friend;
+				}
+			} else {
+				$_G[$var] = $_G[$fvar] = false;
+			}
 		}
 		return $_G[$var];
 	}
@@ -86,6 +98,7 @@ function friend_add($touid, $gid=0, $note='') {
 	if($touid == $_G['uid']) return -2;
 	if(friend_check($touid)) return -2;
 
+	include_once libfile('function/stat');
 	$freind_request = DB::fetch_first("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]' AND fuid='$touid'");
 	if($freind_request) {
 		$setarr = array(
@@ -112,7 +125,7 @@ function friend_add($touid, $gid=0, $note='') {
 
 		addfriendlog($_G['uid'], $touid);
 		friend_cache($touid);
-
+		updatestat('friend');
 	} else {
 
 		$to_freind_request = DB::fetch_first("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$touid' AND fuid='$_G[uid]'");
@@ -129,8 +142,7 @@ function friend_add($touid, $gid=0, $note='') {
 			'dateline' => $_G['timestamp']
 		);
 		DB::insert('home_friend_request', $setarr);
-		DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends=pendingfriends+1 WHERE uid='$touid'");
-		DB::query("UPDATE ".DB::table('common_member')." SET newprompt=newprompt+1 WHERE uid='$touid'");
+		updatestat('addfriend');
 	}
 
 	return 1;
@@ -145,13 +157,11 @@ function friend_make($touid, $tousername, $checkrequest=true) {
 		$to_freind_request = DB::fetch_first("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$touid' AND fuid='$_G[uid]'");
 		if($to_freind_request) {
 			DB::query("DELETE FROM ".DB::table('home_friend_request')." WHERE uid='$touid' AND fuid='$_G[uid]'");
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends=pendingfriends-1 WHERE uid='$touid'");
 		}
 
 		$to_freind_request = DB::fetch_first("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]' AND fuid='$touid'");
 		if($to_freind_request) {
 			DB::query("DELETE FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]' AND fuid='$touid'");
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends=pendingfriends-1 WHERE uid='$_G[uid]'");
 		}
 	}
 
@@ -160,6 +170,8 @@ function friend_make($touid, $tousername, $checkrequest=true) {
 			('$_G[uid]', '$touid', '$tousername', '$_G[timestamp]')");
 
 	addfriendlog($_G['uid'], $touid);
+	include_once libfile('function/stat');
+	updatestat('friend');
 	friend_cache($touid);
 	friend_cache($_G['uid']);
 }
@@ -225,12 +237,7 @@ function friend_request_delete($touid) {
 
 	DB::delete('home_friend_request', array('uid'=>$_G['uid'], 'fuid'=>$touid));
 
-	if(DB::affected_rows()) {
-		DB::query("UPDATE ".DB::table('common_member_status')." SET pendingfriends=pendingfriends-'1' WHERE uid='$_G[uid]'");
-		DB::query("UPDATE ".DB::table('common_member')." SET newprompt=newprompt-'1' WHERE uid='$_G[uid]'");
-		return true;
-	}
-	return false;
+	return DB::affected_rows() ? true : false;
 }
 
 function friend_delete($touid) {

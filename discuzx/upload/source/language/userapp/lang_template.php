@@ -4,16 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 17047 2010-09-19 23:44:22Z monkey $
+ *      $Id: lang_template.php 21925 2011-04-18 02:58:25Z monkey $
  *
  *      This file is automatically generate
  */
 
 $lang = array (
-
   'no_maxthon2_message' => '本頁面暫時不支持遨遊2瀏覽器, 請你使用IE或Firefox, 我們對由此給你帶來的不便深表歉意',
   'page_loading' => '頁面加載中...',
-
   'add_app' => '添加新$_G[setting][navs][5][navname]',
   'app_index' => '應用首頁',
   'boy_like' => '男孩喜歡',
@@ -26,7 +24,6 @@ $lang = array (
   'today_active_app' => '今日活躍$_G[setting][navs][5][navname]',
   'what_everybody_playing' => '大家在玩什麼',
   'what_friend_playing' => '好友在玩什麼',
-
   'all' => '全部',
   'app_add' => '添加$_G[setting][navs][5][navname]',
   'app_management' => '管理$_G[setting][navs][5][navname]',
@@ -47,7 +44,6 @@ $lang = array (
 								<li>你可以管理你已經添加的應用，可以設置某個應用的權限、移除某個應用；</li>
 								<li>如果你要管理你的空間、日誌、相冊等隱私，請到你的空間隱私設置；</li>
 								<li>默認應用只能進行相關設置與移除，但移除後仍然會顯示在你的右側菜單中。</li></ol>',
-
   'open' => '展開',
 );
 

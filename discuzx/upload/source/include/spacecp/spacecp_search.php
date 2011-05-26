@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_search.php 15134 2010-08-19 06:44:45Z zhengqingpeng $
+ *      $Id: spacecp_search.php 20818 2011-03-04 08:21:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,10 +32,11 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wherearr[] = "s.username='$searchkey'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	} else {
 		foreach (array('uid','username','videophotostatus','avatarstatus') as $value) {
 			if($_GET[$value]) {
-				if($value == 'username') {
+				if($value == 'username' && empty($_GET['precision'])) {
 					$_GET[$value] = stripsearchkey($_GET[$value]);
 					$wherearr[] = "s.$value LIKE '%{$_GET[$value]}%'";
 				} else {
@@ -140,7 +141,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 	foreach ($fields as $fkey => $fvalue) {
 		if(empty($fvalue['choices'])) {
-			$fvalue['html'] = '<input type="text" name="field_'.$fkey.'" value="" class="px" />';
+			$fvalue['html'] = '<input type="text" name="field_'.$fkey.'" class="px" value="" />';
 		} else {
 			$fvalue['html'] = "<select name=\"field_$fkey\"><option value=\"\">---</option>";
 			$optionarr = explode("\n", $fvalue['choices']);
@@ -158,7 +159,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 $navtitle = lang('core', 'title_search_friend');
 
-$actives = array($op=>' class="a"');
+$actives = array($op=>' class="a"', 'search'=>' class="a"');
 include template('home/spacecp_search');
 
 ?>

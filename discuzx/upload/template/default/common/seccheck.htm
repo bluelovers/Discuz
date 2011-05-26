@@ -1,5 +1,6 @@
 {eval
-	$sechash = 'S'.random(4);
+	$_G['sechashi'] = !empty($_G['cookie']['sechashi']) ? $_G['sechash'] + 1 : 0;
+	$sechash = 'S'.($_G['inajax'] ? 'A' : '').$_G['sid'].$_G['sechashi'];
 	$sectpl = !empty($sectpl) ? explode("<sec>", $sectpl) : array('<br />',': ','<br />','');
 	$sectpldefault = $sectpl;
 	$sectplqaa = str_replace('<hash>', 'qaa'.$sechash, $sectpldefault);
@@ -19,7 +20,7 @@
 		$sectplqaa[3]
 	<!--{/if}-->
 	<!--{if $seccodecheck}-->
-		{$sectplcode[0]}{lang seccode}{$sectplcode[1]}<input name="seccodeverify" id="seccodeverify_$sechash" type="text" autocomplete="off" style="width:100px" class="txt px vm" onblur="checksec('code', '$sechash')" tabindex="$sectabindex" />
+		{$sectplcode[0]}{lang seccode}{$sectplcode[1]}<input name="seccodeverify" id="seccodeverify_$sechash" type="text" autocomplete="off" style="{if $_G[setting][seccodedata][type] != 1}ime-mode:disabled;{/if}width:100px" class="txt px vm" onblur="checksec('code', '$sechash')" tabindex="$sectabindex" />
 		<a href="javascript:;" onclick="updateseccode('$sechash');doane(event);" class="xi2">{lang seccode_change}</a>
 		<span id="checkseccodeverify_$sechash"><img src="{STATICURL}image/common/none.gif" width="16" height="16" class="vm" /></span>
 		{$sectplcode[2]}<span id="seccode_$sechash"></span>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_article.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: admincp_article.php 20616 2011-03-01 01:05:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -22,17 +22,17 @@ $searchctrl = '';
 if($operation == 'list') {
 
 	$searchctrl = '<span style="float: right; padding-right: 40px;">'
-			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show">'.cplang('show_search').'</a>'
-			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide" style="display:none">'.cplang('hide_search').'</a>'
+			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show" style="display:none">'.cplang('show_search').'</a>'
+			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 			.'</span>';
 }
 $catid = intval($_GET['catid']);
 showsubmenu('article',  array(
-		array('list', 'article&catid='.$catid, $operation == 'list'),
-		array('article_trash', 'article&operation=trash&catid='.$catid, $operation == 'trash'),
-		array('article_tag', 'article&operation=tag', $operation == 'tag'),
-		array('article_add', 'portal.php?mod=portalcp&ac=index', false, 1, 1)
-	), $searchctrl);
+	array('list', 'article&catid='.$catid, $operation == 'list'),
+	array('article_trash', 'article&operation=trash&catid='.$catid, $operation == 'trash'),
+	array('article_tag', 'article&operation=tag', $operation == 'tag'),
+	array('article_add', 'portal.php?mod=portalcp&ac=article', false, 1, 1)
+), $searchctrl);
 
 if($operation == 'tag') {
 
@@ -57,8 +57,9 @@ if($operation == 'tag') {
 
 } elseif($operation == 'trash') {
 
-	if(submitcheck('batchsubmit')) {
-		if(empty($_POST['ids'])) {
+	if(submitcheck('batchsubmit', true)) {
+		$_POST['optype'] = empty($_POST['optype']) ? $_GET['optype'] : $_POST['optype'];
+		if(empty($_POST['ids']) && $_POST['optype'] != 'clear') {
 			cpmsg('article_choose_at_least_one_article', 'action=article&operation=trash', 'error');
 		}
 
@@ -71,11 +72,11 @@ if($operation == 'tag') {
 				$article = unserialize($value['content']);
 				$catids[] = intval($article['catid']);
 				$article = daddslashes($article);
-				$inserts[] = "('$article[aid]', '$article[uid]', '$article[username]', '$article[title]', '$article[url]', '$article[pic]', '$article[prename]', '$article[preurl]', '$article[id]', '$article[idtype]', '$article[contents]', '$article[dateline]', '$article[catid]')";
+				$inserts[] = "('$article[aid]', '$article[uid]', '$article[username]', '$article[title]', '$article[url]', '$article[pic]', '$article[id]', '$article[idtype]', '$article[contents]', '$article[dateline]', '$article[catid]')";
 			}
 
 			if($inserts) {
-				DB::query('REPLACE INTO '.DB::table('portal_article_title')."(aid, uid, username, title, url, pic, prename, preurl, id, idtype, contents, dateline, catid) VALUES ".implode(',',$inserts));
+				DB::query('REPLACE INTO '.DB::table('portal_article_title')."(aid, uid, username, title, url, pic, id, idtype, contents, dateline, catid) VALUES ".implode(',',$inserts));
 				DB::query('DELETE FROM '.DB::table('portal_article_trash')." WHERE aid IN (".dimplode($ids).")");
 			}
 
@@ -93,6 +94,20 @@ if($operation == 'tag') {
 			require_once libfile('function/delete');
 			deletetrasharticle($_POST['ids']);
 			cpmsg('article_trash_delete_succeed', 'action=article&operation=trash', 'succeed');
+
+		} elseif($_POST['optype'] == 'clear') {
+			$query = DB::query('SELECT aid FROM '.DB::table('portal_article_trash')." LIMIT 50");
+			$aids = array();
+			while($value = DB::fetch($query)) {
+				$aids[$value['aid']] = $value['aid'];
+			}
+			if(!empty($aids)) {
+				require_once libfile('function/delete');
+				deletetrasharticle($aids);
+				cpmsg('article_trash_is_clearing', 'action=article&operation=trash&optype=clear&batchsubmit=yes&formhash='.FORMHASH);
+			} else {
+				cpmsg('article_trash_is_empty', 'action=article');
+			}
 		} else {
 			cpmsg('article_choose_at_least_one_operation', 'action=article&operation=trash', 'error');
 		}
@@ -131,7 +146,10 @@ if($operation == 'tag') {
 
 		$batchradio = '<input type="radio" name="optype" value="recover" id="op_recover" class="radio" /><label for="op_recover">'.cplang('article_trash_recover').'</label>&nbsp;&nbsp;';
 		$batchradio .= '<input type="radio" name="optype" value="delete" id="op_delete" class="radio" /><label for="op_delete">'.cplang('article_trash_delete').'</label>&nbsp;&nbsp;';
-		showsubmit('', '', '', '<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ids\')" /><label for="chkall">'.cplang('select_all').'</label>&nbsp;&nbsp;'.$batchradio.'<input type="submit" class="btn" name="batchsubmit" value="'.cplang('submit').'" />', $multipage);
+		$batchradio .= '<input type="radio" name="optype" value="clear" id="op_clear" class="radio" style="display:none;"/><input type="hidden" name="batchsubmit" value="yes" />';
+		showsubmit('', '', '', '<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'ids\')" /><label for="chkall">'.cplang('select_all').'</label>&nbsp;&nbsp;'
+					.$batchradio.'<input type="submit" class="btn" name="batchbutton" value="'.cplang('submit').'" />
+					<input type="button" class="btn" name="clearbutton" value="'.cplang('article_clear_trash').'" onclick="if(confirm(\''.cplang('article_clear_trash_confirm').'?\')){this.form.optype[2].checked=\'checked\';this.form.submit();}"/>', $multipage);
 		showtablefooter();
 		showformfooter();
 	}
@@ -238,7 +256,7 @@ if($operation == 'tag') {
 
 		$adminscript = ADMINSCRIPT;
 		echo <<<SEARCH
-		<form method="get" autocomplete="off" action="$adminscript" id="tb_search" style="display:none;">
+		<form method="get" autocomplete="off" action="$adminscript" id="tb_search">
 			<div style="margin-top:8px;">
 				<table cellspacing="3" cellpadding="3">
 					<tr>

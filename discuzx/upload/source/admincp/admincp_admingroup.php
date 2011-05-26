@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_admingroup.php 16799 2010-09-15 03:00:48Z monkey $
+ *      $Id: admincp_admingroup.php 22488 2011-05-10 05:20:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -60,18 +60,17 @@ if(!$operation) {
 			$adminidselect .= '</select>';
 
 			showtablerow('', array('', '', 'class="td23 lightfont"', 'class="td25"', '', 'class="td25"'), array(
-				$group['type'] == 'system' ? '' : "<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$group[groupid]\">",
-				$group['grouptitle'],
+				$group['type'] == 'system' ? '<input type="checkbox" class="checkbox" disabled="disabled" />' : "<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$group[groupid]\">",
+				'<span style="color:'.$group[color].'">'.$group['grouptitle'].'</span>',
 				"(groupid:$group[groupid])",
 				$group['type'] == 'system' ? cplang('inbuilt') : cplang('custom'),
 				$group['type'] == 'system' ? $lang['usergroups_system_'.$group['radminid']] : $adminidselect,
 				"<input type=\"text\" class=\"txt\" size=\"2\"name=\"group_stars[$group[groupid]]\" value=\"$group[stars]\">",
-				"<input type=\"text\" class=\"txt\" size=\"6\"name=\"group_color[$group[groupid]]\" value=\"$group[color]\">",
-				"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gbmember\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=usergroups&operation=edit&id={$group[admingid]}&return=admin\" class=\"act\">$lang[admingroup_setting_user]</a>",
+				"<input type=\"text\" id=\"group_color_$group[groupid]_v\" class=\"left txt\" size=\"6\" name=\"group_color[$group[groupid]]\" value=\"$group[color]\" onchange=\"updatecolorpreview('group_color_$group[groupid]')\"><input type=\"button\" id=\"group_color_$group[groupid]\"  class=\"colorwd\" onclick=\"group_color_$group[groupid]_frame.location='static/image/admincp/getcolor.htm?group_color_$group[groupid]|group_color_$group[groupid]_v';showMenu({'ctrlid':'group_color_$group[groupid]'})\" /><span id=\"group_color_$group[groupid]_menu\" style=\"display: none\"><iframe name=\"group_color_$group[groupid]_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe></span>",
+				"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gbmember\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=usergroups&operation=edit&id={$group[admingid]}\" class=\"act\">$lang[admingroup_setting_user]</a>",
 				"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gpmember\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=admingroup&operation=edit&id=$group[admingid]\" class=\"act\">$lang[admingroup_setting_admin]</a>"
 			));
 		}
-
 		showtablerow('', array('class="td25"', '', '', '', 'colspan="6"'), array(
 			cplang('add_new'),
 			'<input type="text" class="txt" size="12" name="grouptitlenew">',
@@ -258,12 +257,14 @@ if(!$operation) {
 		showsetting('admingroup_edit_bump_thread', 'allowbumpthreadnew', $group['allowbumpthread'], 'radio');
 		showsetting('admingroup_edit_highlight_thread', 'allowhighlightthreadnew', $group['allowhighlightthread'], 'radio');
 		showsetting('admingroup_edit_recommend_thread', 'allowrecommendthreadnew', $group['allowrecommendthread'], 'radio');
+		showmultititle();
 		showsetting('admingroup_edit_stamp_thread', 'allowstampthreadnew', $group['allowstampthread'], 'radio');
 		showsetting('admingroup_edit_stamp_list', 'allowstamplistnew', $group['allowstamplist'], 'radio');
 		showsetting('admingroup_edit_close_thread', 'allowclosethreadnew', $group['allowclosethread'], 'radio');
 		showsetting('admingroup_edit_move_thread', 'allowmovethreadnew', $group['allowmovethread'], 'radio');
 		showsetting('admingroup_edit_edittype_thread', 'allowedittypethreadnew', $group['allowedittypethread'], 'radio');
 		showsetting('admingroup_edit_copy_thread', 'allowcopythreadnew', $group['allowcopythread'], 'radio');
+		showmultititle();
 		showsetting('admingroup_edit_merge_thread', 'allowmergethreadnew', $group['allowmergethread'], 'radio');
 		showsetting('admingroup_edit_split_thread', 'allowsplitthreadnew', $group['allowsplitthread'], 'radio');
 		showsetting('admingroup_edit_repair_thread', 'allowrepairthreadnew', $group['allowrepairthread'], 'radio');
@@ -281,6 +282,7 @@ if(!$operation) {
 		showsetting('admingroup_edit_ban_post', 'allowbanpostnew', $group['allowbanpost'], 'radio');
 		showsetting('admingroup_edit_del_post', 'allowdelpostnew', $group['allowdelpost'], 'radio');
 		showsetting('admingroup_edit_stick_post', 'allowstickreplynew', $group['allowstickreply'], 'radio');
+		showsetting('admingroup_edit_manage_tag', 'allowmanagetagnew', $group['allowmanagetag'], 'radio');
 		showtagfooter('tbody');
 
 		showtagheader('tbody', 'modcpperm', $_G['gp_anchor'] == 'modcpperm');
@@ -288,8 +290,10 @@ if(!$operation) {
 		showsetting('admingroup_edit_mod_post', 'allowmodpostnew', $group['allowmodpost'], 'radio');
 		showsetting('admingroup_edit_mod_user', 'allowmodusernew', $group['allowmoduser'], 'radio');
 		showsetting('admingroup_edit_ban_user', 'allowbanusernew', $group['allowbanuser'], 'radio');
+		showsetting('admingroup_edit_ban_user_visit', 'allowbanvisitusernew', $group['allowbanvisituser'], 'radio');
 		showsetting('admingroup_edit_ban_ip', 'allowbanipnew', $group['allowbanip'], 'radio');
 		showsetting('admingroup_edit_edit_user', 'alloweditusernew', $group['allowedituser'], 'radio');
+		showmultititle();
 		showsetting('admingroup_edit_mass_prune', 'allowmassprunenew', $group['allowmassprune'], 'radio');
 		showsetting('admingroup_edit_edit_forum', 'alloweditforumnew', $group['alloweditforum'], 'radio');
 		showsetting('admingroup_edit_post_announce', 'allowpostannouncenew', $group['allowpostannounce'], 'radio');
@@ -305,6 +309,7 @@ if(!$operation) {
 		showsetting('admingroup_edit_manage_blog', 'manageblognew', $group['manageblog'], 'radio');
 		showsetting('admingroup_edit_manage_album', 'managealbumnew', $group['managealbum'], 'radio');
 		showsetting('admingroup_edit_manage_comment', 'managecommentnew', $group['managecomment'], 'radio');
+		showmultititle();
 		showsetting('admingroup_edit_manage_magiclog', 'managemagiclognew', $group['managemagiclog'], 'radio');
 		showsetting('admingroup_edit_manage_report', 'managereportnew', $group['managereport'], 'radio');
 		showsetting('admingroup_edit_manage_hotuser', 'managehotusernew', $group['managehotuser'], 'radio');
@@ -324,19 +329,12 @@ if(!$operation) {
 		showtableheader();
 		showtagheader('tbody', '', true);
 		showtitle('admingroup_edit_portalperm');
-		showsetting('admingroup_edit_manage_article', array('allowmanagearticlenew', array(
-					array(1, cplang('yes'), array('authorized_article' => 'none')),
-					array(0, cplang('no'), array('authorized_article' => ''))
-				), TRUE), $group['allowmanagearticle'], 'mradio');
-		showtagfooter('tbody');
-		showtagheader('tbody', 'authorized_article', !$group['allowmanagearticle']);
-		showsetting('admingroup_edit_authorized_article', 'allowauthorizedarticlenew', $group['allowauthorizedarticle'], 'radio');
+		showsetting('admingroup_edit_manage_article', 'allowmanagearticlenew', $group['allowmanagearticle'], 'radio');
 		showtagfooter('tbody');
 		showtagheader('tbody', '', true);
 		showsetting('admingroup_edit_add_topic', 'allowaddtopicnew', $group['allowaddtopic'], 'radio');
 		showsetting('admingroup_edit_manage_topic', 'allowmanagetopicnew', $group['allowmanagetopic'], 'radio');
 		showsetting('admingroup_edit_diy', 'allowdiynew', $group['allowdiy'], 'radio');
-		showsetting('admingroup_edit_authorized_block', 'allowauthorizedblocknew', $group['allowauthorizedblock'], 'radio');
 		showtagfooter('tbody');
 		showtablefooter();
 		showtagfooter('div');
@@ -383,6 +381,7 @@ if(!$operation) {
 			'allowbanip' => $_G['gp_allowbanipnew'],
 			'allowedituser' => $_G['gp_alloweditusernew'],
 			'allowbanuser' => $_G['gp_allowbanusernew'],
+			'allowbanvisituser' => $_G['gp_allowbanvisitusernew'],
 			'allowmoduser' => $_G['gp_allowmodusernew'],
 			'allowpostannounce' => $_G['gp_allowpostannouncenew'],
 			'allowclearrecycle' => $_G['gp_allowclearrecyclenew'],
@@ -403,12 +402,11 @@ if(!$operation) {
 			'alloweditforum' => $_G['gp_alloweditforumnew'],
 			'allowviewlog' => $_G['gp_allowviewlognew'],
 			'allowmanagearticle' => $_G['gp_allowmanagearticlenew'],
-			'allowauthorizedblock' => $_G['gp_allowauthorizedblocknew'],
-			'allowauthorizedarticle' => $_G['gp_allowauthorizedarticlenew'],
 			'allowaddtopic' => $_G['gp_allowaddtopicnew'],
 			'allowmanagetopic' => $_G['gp_allowmanagetopicnew'],
 			'allowdiy' => $_G['gp_allowdiynew'],
 			'allowstickreply' => $_G['gp_allowstickreplynew'],
+			'allowmanagetag' => $_G['gp_allowmanagetagnew'],
 			'managefeed' => $_G['gp_managefeednew'],
 			'managedoing' => $_G['gp_managedoingnew'],
 			'manageshare' => $_G['gp_managesharenew'],

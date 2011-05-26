@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 17074 2010-09-20 07:44:23Z liulanbo $
+ *      $Id: forum_post.php 22677 2011-05-17 07:08:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,9 +27,12 @@ $postinfo = array('subject' => '');
 $thread = array('readperm' => '', 'pricedisplay' => '', 'hiddenreplies' => '');
 
 $_G['forum_dtype'] = $_G['forum_checkoption'] = $_G['forum_optionlist'] = $tagarray = $_G['forum_typetemplate'] = array();
+
+
 if($sortid) {
-	require_once libfile('function/threadsort');
+	require_once libfile('post/threadsorts', 'include');
 	threadsort_checkoption($sortid);
+	$forum_optionlist = getsortedoptionlist();
 }
 
 if($_G['forum']['status'] == 3) {
@@ -49,40 +52,15 @@ if($_G['forum']['status'] == 3) {
 		} else {
 			showmessage('forum_group_not_groupmember_guest', "", array('fid' => $_G['fid']), array('showmsg' => 1, 'login' => 1));
 		}
+	} elseif($status == 5) {
+		showmessage('forum_group_moderated', "", array('fid' => $_G['fid']), array('showmsg' => 1));
 	}
 }
 
 if(empty($_G['gp_action'])) {
 	showmessage('undefined_action', NULL);
-} elseif($_G['gp_action'] == 'threadsorts') {
-	require_once libfile('function/threadsort');
-	loadcache(array('threadsort_option_'.$_G['gp_sortid'], 'threadsort_template_'.$_G['gp_sortid']));
-	threadsort_optiondata($_G['gp_pid'], $_G['gp_sortid'], $_G['cache']['threadsort_option_'.$_G['gp_sortid']], $_G['cache']['threadsort_template_'.$_G['gp_sortid']]);
-	$template = intval($_G['gp_operate']) ? 'forum/search_sortoption' : 'forum/post_sortoption';
-	include template($template);
-	exit;
 } elseif($_G['gp_action'] == 'albumphoto') {
-	include_once libfile('function/home');
-	$perpage = 8;
-	$page = max(1, $_G['gp_page']);
-	$start_limit = ($page - 1) * $perpage;
-	$aid = intval($_G['gp_aid']);
-	$photolist = array();
-	$count= DB::result_first("SELECT picnum FROM ".DB::table('home_album')." WHERE albumid='$aid' AND uid='$_G[uid]'");
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE albumid='$aid' ORDER BY dateline DESC LIMIT $start_limit,$perpage");
-	while($value = DB::fetch($query)) {
-		$value['bigpic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote'], 0);
-		$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
-		$value['count'] = $count;
-		$value['url'] = (substr(strtolower($value['bigpic']), 0, 7) == 'http://' ? '' : $_G['siteurl']).$value['bigpic'];
-		$value['thumburl'] = (substr(strtolower($value['pic']), 0, 7) == 'http://' ? '' : $_G['siteurl']).$value['pic'];
-		$photolist[] = $value;
-	}
-	$_G['gp_ajaxtarget'] = 'albumphoto';
-	$multi = multi($count, $perpage, $page, "forum.php?mod=post&action=albumphoto&aid=$aid");
-	include template('forum/ajax_albumlist');
-	exit;
-
+	require libfile('post/albumphoto', 'include');
 } elseif(($_G['forum']['simple'] & 1) || $_G['forum']['redirect']) {
 	showmessage('forum_disablepost');
 }
@@ -123,21 +101,33 @@ if($_G['gp_action'] == 'edit' || $_G['gp_action'] == 'reply') {
 	if($_G['gp_action'] == 'reply' && ($thread['closed'] == 1) && !$_G['forum']['ismoderator']) {
 		showmessage('post_thread_closed');
 	}
-
 }
 
 if($_G['forum']['status'] == 3) {
 	$returnurl = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_G['gp_extra']) ? '&action=list&'.preg_replace("/^(&)*/", '', $_G['gp_extra']) : '').'#groupnav';
-	$navigation = ' <em>&rsaquo;</em> <a href="group.php">'.$_G['setting']['navs'][3]['navname'].'</a> '.get_groupnav($_G['forum']);
+	$nav = get_groupnav($_G['forum']);
+	$navigation = ' <em>&rsaquo;</em> <a href="group.php">'.$_G['setting']['navs'][3]['navname'].'</a> '.$nav['nav'];
 } else {
+	loadcache('forums');
 	$returnurl = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_G['gp_extra']) ? '&'.preg_replace("/^(&)*/", '', $_G['gp_extra']) : '');
-	$navigation = '<em>&rsaquo;</em> <a href="'.$returnurl.'">'.$_G['forum']['name'].'</a> '.$navigation;
+	$navigation = ' <em>&rsaquo;</em> <a href="forum.php">'.$_G['setting']['navs'][2]['navname'].'</a>';
 
 	if($_G['forum']['type'] == 'sub') {
-		$fup = DB::fetch_first("SELECT name, fid FROM ".DB::table('forum_forum')." WHERE fid='".$_G['forum']['fup']."'");
-		$navigation = '<em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$fup['fid'].'">'.$fup['name'].'</a> '.$navigation;
+		$fup = $_G['cache']['forums'][$_G['forum']['fup']]['fup'];
+		$t_link = $_G['cache']['forums'][$fup]['type'] == 'group' ? 'forum.php?gid='.$fup : 'forum.php?mod=forumdisplay&fid='.$fup;
+		$navigation .= ' <em>&rsaquo;</em> <a href="'.$t_link.'">'.strip_tags($_G['cache']['forums'][$fup]['name']).'</a>';
 	}
-	$navigation = ' <em>&rsaquo;</em> <a href="forum.php">'.$_G['setting']['navs'][2]['navname'].'</a> '.$navigation;
+
+	if($_G['forum']['fup']) {
+		$fup = $_G['forum']['fup'];
+		$t_link = $_G['cache']['forums'][$fup]['type'] == 'group' ? 'forum.php?gid='.$fup : 'forum.php?mod=forumdisplay&fid='.$fup;
+		$navigation .= ' <em>&rsaquo;</em> <a href="'.$t_link.'">'.strip_tags($_G['cache']['forums'][$fup]['name']).'</a>';
+	}
+
+	$t_link = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].($_G['gp_extra'] && !IS_ROBOT ? '&'.$_G['gp_extra'] : '');
+	$navigation .= ' <em>&rsaquo;</em> <a href="'.$t_link.'">'.strip_tags($_G['forum']['name']).'</a>';
+
+	unset($t_link, $t_name);
 }
 
 periodscheck('postbanperiods');
@@ -158,10 +148,8 @@ if(empty($_G['forum']['allowview'])) {
 
 formulaperm($_G['forum']['formulaperm']);
 
-if(!$_G['adminid'] && $_G['setting']['newbiespan'] && (!getuserprofile('lastpost') || TIMESTAMP - getuserprofile('lastpost') < $_G['setting']['newbiespan'] * 60)) {
-	if(TIMESTAMP - (DB::result_first("SELECT regdate FROM ".DB::table('common_member')." WHERE uid='$_G[uid]'")) < $_G['setting']['newbiespan'] * 60) {
-		showmessage('post_newbie_span', '', array('newbiespan' => $_G['setting']['newbiespan']));
-	}
+if(!$_G['adminid'] && $_G['setting']['newbiespan'] && (!getuserprofile('lastpost') || TIMESTAMP - getuserprofile('lastpost') < $_G['setting']['newbiespan'] * 60) && TIMESTAMP - $_G['member']['regdate'] < $_G['setting']['newbiespan'] * 60) {
+	showmessage('post_newbie_span', '', array('newbiespan' => $_G['setting']['newbiespan']));
 }
 
 $special = $special > 0 && $special < 7 || $special == 127 ? intval($special) : 0;
@@ -178,26 +166,27 @@ if($_G['group']['attachextensions']) {
 } else {
 	$imgexts = 'jpg, jpeg, gif, png, bmp';
 }
-$allowuploadnum = TRUE;
+$allowuploadnum = $allowuploadtoday = TRUE;
 if($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) {
 	if($_G['group']['maxattachnum']) {
-		$allowuploadnum = $_G['group']['maxattachnum'] - DB::result_first("SELECT count(*) FROM ".DB::table('forum_attachment')." WHERE uid='$_G[uid]' AND pid>'0' AND dateline>'$_G[timestamp]'-86400");
+		$allowuploadnum = $_G['group']['maxattachnum'] - getuserprofile('todayattachs');
 		$allowuploadnum = $allowuploadnum < 0 ? 0 : $allowuploadnum;
+		if(!$allowuploadnum) {
+			$allowuploadtoday = false;
+		}
 	}
 	if($_G['group']['maxsizeperday']) {
-		$allowuploadsize = $_G['group']['maxsizeperday'] - intval(DB::result_first("SELECT SUM(filesize) FROM ".DB::table('forum_attachment')." WHERE uid='$_G[uid]' AND dateline>'$_G[timestamp]'-86400"));
+		$allowuploadsize = $_G['group']['maxsizeperday'] - getuserprofile('todayattachsize');
 		$allowuploadsize = $allowuploadsize < 0 ? 0 : $allowuploadsize;
+		if(!$allowuploadsize) {
+			$allowuploadtoday = false;
+		}
 		$allowuploadsize = $allowuploadsize / 1048576 >= 1 ? round(($allowuploadsize / 1048576), 1).'MB' : round(($allowuploadsize / 1024)).'KB';
 	}
 }
 $allowpostimg = $_G['group']['allowpostimage'] && $imgexts;
 $enctype = ($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) ? 'enctype="multipart/form-data"' : '';
 $maxattachsize_mb = $_G['group']['maxattachsize'] / 1048576 >= 1 ? round(($_G['group']['maxattachsize'] / 1048576), 1).'MB' : round(($_G['group']['maxattachsize'] / 1024)).'KB';
-
-$postcredits = $_G['forum']['postcredits'] ? $_G['forum']['postcredits'] : $_G['setting']['creditspolicy']['post'];
-$replycredits = $_G['forum']['replycredits'] ? $_G['forum']['replycredits'] : $_G['setting']['creditspolicy']['reply'];
-$digestcredits = $_G['forum']['digestcredits'] ? $_G['forum']['digestcredits'] : $_G['setting']['creditspolicy']['digest'];
-$postattachcredits = $_G['forum']['postattachcredits'] ? $_G['forum']['postattachcredits'] : $_G['setting']['creditspolicy']['postattach'];
 
 $_G['group']['maxprice'] = isset($_G['setting']['extcredits'][$_G['setting']['creditstrans']]) ? $_G['group']['maxprice'] : 0;
 
@@ -212,9 +201,8 @@ $message = isset($_G['gp_message']) ? censor($_G['gp_message']) : '';
 $polloptions = isset($polloptions) ? censor(trim($polloptions)) : '';
 $readperm = isset($_G['gp_readperm']) ? intval($_G['gp_readperm']) : 0;
 $price = isset($_G['gp_price']) ? intval($_G['gp_price']) : 0;
-$_G['setting']['tagstatus'] = $_G['setting']['tagstatus'] && $_G['forum']['allowtag'] ? ($_G['setting']['tagstatus'] == 2 ? 2 : $_G['forum']['allowtag']) : 0;
 
-if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && preg_match("/\[hide=?\d*\].+?\[\/hide\]/is", preg_replace("/(\[code\](.+?)\[\/code\])/is", ' ', $message))) {
+if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && preg_match("/\[hide=?\d*\].*?\[\/hide\]/is", preg_replace("/(\[code\](.+?)\[\/code\])/is", ' ', $message))) {
 	showmessage('post_hide_nopermission');
 }
 
@@ -242,24 +230,12 @@ if(!empty($_G['gp_attachnew'])) {
 
 if($_G['forum']['status'] == 3) {
 	$modnewthreads = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 1 || $censormod ? 1 : 0;
-	$modnewposts = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 2 || $censormod ? 1 : 0;
+	$modnewreplies = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 2 || $censormod ? 1 : 0;
 }
-$allowposturl = $_G['forum']['status'] != 3 ? $_G['group']['allowposturl'] : $_G['group']['allowgroupposturl'];
-if($allowposturl < 3 && $message) {
-	$urllist = get_url_list($message);
-	if(is_array($urllist[1])) foreach($urllist[1] as $key => $val) {
-		if(!$val = trim($val)) continue;
-		if(!iswhitelist($val)) {
-			if($allowposturl == 0) {
-				showmessage('post_url_nopermission');
-			} elseif($allowposturl == 1) {
-				$modnewthreads = $modnewreplies = 1;
-				break;
-			} elseif($allowposturl == 2) {
-				$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
-				$message = preg_replace("@\[url={$urllist[0][$key]}\](.*?)\[/url\]@i", '\\1', $message);
-			}
-		}
+$_G['group']['allowposturl'] = $_G['forum']['status'] != 3 ? $_G['group']['allowposturl'] : $_G['group']['allowgroupposturl'];
+if($_G['group']['allowposturl'] == 1 && $message) {
+	if(censormod($message)) {
+		$modnewthreads = $modnewreplies = 1;
 	}
 }
 
@@ -276,6 +252,7 @@ $_G['group']['allowpostdebate'] = $_G['group']['allowpost'] && $_G['group']['all
 $usesigcheck = $_G['uid'] && $_G['group']['maxsigsize'] ? 'checked="checked"' : '';
 $ordertypecheck = !empty($thread['tid']) && getstatus($thread['status'], 4) ? 'checked="checked"' : '';
 $specialextra = !empty($_G['gp_specialextra']) ? $_G['gp_specialextra'] : '';
+$_G['forum']['threadplugin'] = unserialize($_G['forum']['threadplugin']);
 
 if($specialextra && $_G['group']['allowpost'] && $_G['setting']['threadplugins'] &&
 	(!array_key_exists($specialextra, $_G['setting']['threadplugins']) ||
@@ -297,7 +274,7 @@ if($_G['gp_action'] == 'newthread' && $_G['forum']['allowspecialonly'] && !$spec
 		$special = 4;
 	} elseif($_G['group']['allowpostdebate']) {
 		$special = 5;
-	} elseif($_G['group']['allowpost'] && $_G['setting']['threadplugins'] && $_G['group']['allowthreadplugin'] && ($_G['forum']['threadplugin'] = unserialize($_G['forum']['threadplugin']))) {
+	} elseif($_G['group']['allowpost'] && $_G['setting']['threadplugins'] && $_G['group']['allowthreadplugin']) {
 		$threadpluginary = array_intersect($_G['forum']['threadplugin'], $_G['group']['allowthreadplugin']);
 		$specialextra = $threadpluginary[0] ? $threadpluginary[0] : '';
 	}
@@ -307,21 +284,26 @@ if($_G['gp_action'] == 'newthread' && $_G['forum']['allowspecialonly'] && !$spec
 	}
 }
 
+if(!$sortid && !$specialextra) {
+	$postspecialcheck[$special] = ' class="a"';
+}
+
 $editorid = 'e';
-$_G['setting']['editoroptions'] = str_pad(decbin($_G['setting']['editoroptions']), 2, 0, STR_PAD_LEFT);
+$_G['setting']['editoroptions'] = str_pad(decbin($_G['setting']['editoroptions']), 3, 0, STR_PAD_LEFT);
 $editormode = $_G['setting']['editoroptions']{0};
 $allowswitcheditor = $_G['setting']['editoroptions']{1};
 $editor = array(
 	'editormode' => $editormode,
 	'allowswitcheditor' => $allowswitcheditor,
-	'allowhtml' => $_G['group']['allowhtml'],
 	'allowhtml' => $_G['forum']['allowhtml'],
 	'allowsmilies' => $_G['forum']['allowsmilies'],
 	'allowbbcode' => $_G['forum']['allowbbcode'],
 	'allowimgcode' => $_G['forum']['allowimgcode'],
 	'allowresize' => 1,
+	'allowchecklength' => 1,
+	'allowtopicreset' => 1,
 	'textarea' => 'message',
-	'simplemode' => !isset($_G['cookie']['editormode_'.$editorid]) ? 1 : $_G['cookie']['editormode_'.$editorid],
+	'simplemode' => !isset($_G['cookie']['editormode_'.$editorid]) ? !$_G['setting']['editoroptions']{2} : $_G['cookie']['editormode_'.$editorid],
 );
 if($specialextra) {
 	$special = 127;
@@ -339,7 +321,7 @@ if($policykey) {
 }
 
 $albumlist = array();
-if($_G['uid']) {
+if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && $_G['uid']) {
 	$query = DB::query("SELECT albumid, albumname, picnum FROM ".DB::table('home_album')." WHERE uid='$_G[uid]' ORDER BY updatetime DESC");
 	while($value = DB::fetch($query)) {
 		if($value['picnum']) {
@@ -361,26 +343,6 @@ if($_G['gp_action'] == 'reply') {
 	check_allow_action('allowreply');
 } else {
 	check_allow_action('allowpost');
-}
-
-if($_G['gp_action'] == 'newthread') {
-	$savethreads = array();
-	$savethreadothers = array();
-	$query = DB::query("SELECT dateline, fid, tid, pid, subject FROM ".DB::table('forum_post')." WHERE authorid='$_G[uid]' AND invisible='-3' AND first='1'");
-	while($savethread = DB::fetch($query)) {
-		$savethread['dateline'] = dgmdate($savethread['dateline'], 'u');
-		if($_G['fid'] == $savethread['fid']) {
-			$savethreads[] = $savethread;
-		} else {
-			$savethreadothers[] = $savethread;
-		}
-	}
-	$savethreadcount = count($savethreads);
-	$savethreadothercount = count($savethreadothers);
-	if($savethreadothercount) {
-		loadcache('forums');
-	}
-	unset($savethread);
 }
 
 if($special == 4) {
@@ -410,6 +372,22 @@ function check_allow_action($action = 'allowpost') {
 	if(isset($_G['forum'][$action]) && $_G['forum'][$action] == -1) {
 		showmessage('forum_access_disallow');
 	}
+}
+function recent_use_tag() {
+	$tagarray = $stringarray = array();
+	$string = '';
+	$i = 0;
+	$query = DB::query("SELECT tagid, tagname FROM ".DB::table('common_tagitem')." WHERE idtype='tid' ORDER BY itemid DESC LIMIT 10");
+	while($result = DB::fetch($query)) {
+		if($i > 4) {
+			break;
+		}
+		if($tagarray[$result['tagid']] == '') {
+			$i++;
+		}
+		$tagarray[$result['tagid']] = $result['tagname'];
+	}
+	return $tagarray;
 }
 
 ?>

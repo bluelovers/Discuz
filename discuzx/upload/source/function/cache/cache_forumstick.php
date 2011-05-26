@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_forumstick.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_forumstick.php 18046 2010-11-10 09:38:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,12 +20,7 @@ function build_cache_forumstick() {
 	if($forumstickthreads) {
 		foreach($forumstickthreads as $forumstickthread) {
 			foreach($forumstickthread['forums'] as $fid) {
-				$forumstickcached[$fid][] = $forumstickthread;
-			}
-		}
-		foreach($forumstickcached as $fid => $threadlist) {
-			foreach($forumstickcached[$fid] as $k => $v) {
-				unset($forumstickcached[$fid][$k]['forums']);
+				$forumstickcached[$fid][] = $forumstickthread['tid'];
 			}
 		}
 		$data = $forumstickcached;

@@ -4,13 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 16968 2010-09-17 08:50:35Z monkey $
+ *      $Id: lang_template.php 21925 2011-04-18 02:58:25Z monkey $
  *
  *      This file is automatically generate
  */
 
 $lang = array (
-
   'all' => '全部',
   'have' => '已有',
   'homepage' => '首頁',
@@ -30,7 +29,6 @@ $lang = array (
   'ranklist_today' => '今日',
   'ranklist_update' => '排行榜數據已被緩存，上次於 $lastupdate 被更新，下次將於 $nextupdate 進行更新',
   'ranklist_week' => '本周',
-
   'blog_ranklist' => '日誌排行',
   'comment' => '評論',
   'comment_ranklist' => '評論排行',
@@ -39,7 +37,6 @@ $lang = array (
   'ranklist_thread_view' => '查看',
   'views' => '人氣:',
   'visit_ranklist' => '查看排行',
-
   'forum' => '版塊',
   'ranklist_forum' => '版塊排行',
   'ranklist_forum_day_post' => '最近 24 小時發帖',
@@ -50,7 +47,6 @@ $lang = array (
   'ranklist_post_month' => '最近 30 天發帖排行',
   'ranklist_reply' => '回復排行',
   'reply' => '回復',
-
   'credit_num' => '積分數',
   'credit_ranking' => '積分排行',
   'group' => '群組',
@@ -58,7 +54,6 @@ $lang = array (
   'ranklist_group' => '群組排行',
   'ranklist_group_credit' => '群組積分數排行',
   'ranklist_member_num' => '成員數排行',
-
   'auction_ranking' => '競價排行',
   'close_ranking_note' => '管理員已關閉競價,暫時無法繼續上榜',
   'credit_is_not_number' => '你所填寫的{$extcredits[$creditid][title]}不是一個合法數值',
@@ -86,7 +81,9 @@ $lang = array (
   'ranklist_beauty' => '美女排行',
   'ranklist_blog' => '日誌數排行',
   'ranklist_handsome' => '帥哥排行',
+  'ranklist_invite' => '邀請排行',
   'ranklist_member' => '用戶排行',
+  'ranklist_onlinetime' => '在線時間排行',
   'ranklist_post_num' => '發帖數排行',
   'reminder' => '提示信息',
   'self_current_credit' => '你當前的',
@@ -96,17 +93,19 @@ $lang = array (
   'unitprice_is_not_number' => '您所填寫的單價不是一個合法數值',
   'unitprice_title_error' => '您所填寫的單價不能小於1',
   'your_current_bid' => '自己當前的競價單價',
-
   'add_friend' => '加為好友',
   'blogs_num' => '日誌數',
   'day_post_num' => '最近24小時發帖數',
   'digest_num' => '精華數',
   'friends_num' => '好友數',
+  'invite_num' => '邀請數',
   'last_activity' => '最後活躍',
+  'minute' => '分鐘',
   'modify' => '修改',
   'month_post_num' => '最近30天發帖數',
   'no_members_of' => '沒有相關成員。',
   'online' => '在線',
+  'online_time' => '在線時間',
   'order' => '排序：',
   'post_num' => '發帖數',
   'posts_num' => '帖子數',
@@ -115,27 +114,23 @@ $lang = array (
   'show_credit' => '剩餘競價',
   'show_credit_note' => '競價宣言',
   'visit_friend' => '去串個門',
-
   'hot_pic_ranklist' => '熱圖排行',
   'ranklist_picture' => '圖片排行',
-
   'people_join' => '人參與',
   'ranklist_poll' => '投票排行',
   'to_poll' => '去投票',
-
   'bidding_rank' => '競價排名',
   'i_want_rank' => '我要上榜',
   'more' => '更多',
   'ranklist_thread' => '帖子排行',
-
   'activity' => '活動',
   'blogs' => '日誌',
   'pics' => '圖片',
   'poll' => '投票',
   'posts' => '帖子',
   'user' => '用戶',
-
   'author' => '作者',
+  'ranklist_thread_heat' => '熱度',
   'ranklist_thread_reply' => '回復',
   'thread' => '主題',
 );

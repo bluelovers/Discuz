@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_forumaccess.php 7421 2010-04-07 07:16:34Z monkey $
+ *      $Id: modcp_forumaccess.php 17939 2010-11-08 06:09:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -21,7 +21,7 @@ $new_user = isset($_G['gp_new_user']) ? trim($_G['gp_new_user']) : '';
 
 if($_G['fid'] && $_G['forum']['ismoderator'] && $new_user != '' && submitcheck('addsubmit')) {
 	$deleteaccess = isset($_G['gp_deleteaccess']) ? 1 : 0;
-	foreach (array('view', 'post', 'reply', 'getattach', 'postattach', 'postimage') as $key) {
+	foreach (array('view', 'post', 'reply', 'getattach', 'getimage', 'postattach', 'postimage') as $key) {
 		${'new_'.$key} = isset($_G['gp_new_'.$key]) ? intval($_G['gp_new_'.$key]) : '';
 	}
 
@@ -47,15 +47,16 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $new_user != '' && submitcheck('
 					$access && delete_access($uid, $_G['fid']);
 				}
 
-			} elseif($new_view || $new_post || $new_reply || $new_getattach || $new_postattach || $new_postimage) {
+			} elseif($new_view || $new_post || $new_reply || $new_getattach || $new_getimage || $new_postattach || $new_postimage) {
 
 				if($new_view == -1) {
-					$new_view = $new_post = $new_reply = $new_getattach = $new_postattach = $new_postimage = -1;
+					$new_view = $new_post = $new_reply = $new_getattach = $new_getimage = $new_postattach = $new_postimage = -1;
 				} else {
 					$new_view = 0;
 					$new_post = $new_post ? -1 : 0;
 					$new_reply = $new_reply ? -1 : 0;
 					$new_getattach = $new_getattach ? -1 : 0;
+					$new_getimage = $new_getimage ? -1 : 0;
 					$new_postattach = $new_postattach ? -1 : 0;
 					$new_postimage = $new_postimage ? -1 : 0;
 				}
@@ -64,7 +65,9 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $new_user != '' && submitcheck('
 					$successed = true;
 					DB::query("INSERT INTO ".DB::table('forum_access')." SET
 						uid='$uid', fid='$_G[fid]', allowview='$new_view', allowpost='$new_post', allowreply='$new_reply',
-						allowpostattach='$new_postattach', allowgetattach='$new_getattach', allowpostimage='$new_postimage', adminuser='$_G[uid]', dateline='$_G[timestamp]'");
+						allowgetattach='$new_getattach', allowgetimage='$new_getimage',
+						allowpostattach='$new_postattach', allowpostimage='$new_postimage',
+						adminuser='$_G[uid]', dateline='$_G[timestamp]'");
 					DB::query("UPDATE ".DB::table('common_member')." SET accessmasks='1' WHERE uid='$uid'", 'UNBUFFERED');
 
 				} elseif($new_view == -1 && $access['allowview'] == 1 && $_G['adminid'] != 1) {
@@ -75,14 +78,16 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $new_user != '' && submitcheck('
 						$new_post = $access['allowpost'] == 1 ? 1 : $new_post;
 						$new_reply = $access['allowreply'] == 1 ? 1 : $new_reply;
 						$new_getattach = $access['allowgetattach'] == 1 ? 1 : $new_getattach;
+						$new_getimage = $access['allowgetimage'] == 1 ? 1 : $new_getimage;
 						$new_postattach = $access['postattach'] == 1 ? 1 : $new_postattach;
 						$new_postimage = $access['postimage'] == 1 ? 1 : $new_postimage;
 					}
 					$successed = true;
 					DB::query("UPDATE ".DB::table('forum_access')." SET
 						allowview='$new_view', allowpost='$new_post', allowreply='$new_reply',
-						allowpostattach='$new_postattach', allowgetattach='$new_getattach',
-						allowpostimage='$new_postimage', adminuser='$_G[uid]', dateline='$_G[timestamp]' WHERE uid='$uid' AND fid='$_G[fid]'");
+						allowgetattach='$new_getattach', allowgetimage='$new_getimage',
+						allowpostattach='$new_postattach', allowpostimage='$new_postimage',
+						adminuser='$_G[uid]', dateline='$_G[timestamp]' WHERE uid='$uid' AND fid='$_G[fid]'");
 					DB::query("UPDATE ".DB::table('common_member')." SET accessmasks='1' WHERE uid='$uid'", 'UNBUFFERED');
 
 				}
@@ -125,6 +130,7 @@ if($num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_access')." W
 		$access['allowreply'] = accessimg($access['allowreply']);
 		$access['allowpostattach'] = accessimg($access['allowpostattach']);
 		$access['allowgetattach'] = accessimg($access['allowgetattach']);
+		$access['allowgetimage'] = accessimg($access['allowgetimage']);
 		$access['allowpostimage'] = accessimg($access['allowpostimage']);
 		$access['dateline'] = dgmdate($access['dateline'], 'd');
 		$access['forum'] = '<a href="forum.php?mod=forumdisplay&fid='.$access['fid'].'" target="_blank">'.strip_tags($_G['cache']['forums'][$access['fid']]['name']).'</a>';
@@ -155,7 +161,7 @@ function accessimg($access) {
 
 function inwhitelist($access) {
 	$return = false;
-	foreach (array('allowview', 'allowpost', 'allowreply', 'allowpostattach', 'allowgetattach') as $key) {
+	foreach (array('allowview', 'allowpost', 'allowreply', 'allowpostattach', 'allowgetattach', 'allowgetimage') as $key) {
 		if($access[$key] == 1) {
 			$return = true;
 			break;

@@ -23,7 +23,7 @@
 			{lang magics_operation_use}{lang magic}
 		<!--{/if}-->
 		</em>
-		<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]')" title="{lang close}">{lang close}</a><!--{/if}--></span>
+		<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}--></span>
 	</h3>
 	<div class="c" id="hkey_$_G[gp_handlekey]">
 		<div id="return_$_G[gp_handlekey]"></div>
@@ -41,7 +41,7 @@
 					<tr>
 						<th>{lang magics_target_present}</th>
 						<td class="hasd cl">
-							<input type="text" id="selectedusername" name="tousername" size="12" autocomplete="off" value="" class="px pxn p_fre" style="margin-right: 0;" />
+							<input type="text" id="selectedusername" name="tousername" size="12" autocomplete="off" value="" class="px p_fre" style="margin-right: 0;" />
 							<!--{if $buddyarray}-->
 							<a href="javascript:;" class="dpbtn" onclick="showselect(this, 'selectedusername', 'selectusername')">&nabla;</a>
 							<ul id="selectusername" style="display:none">
@@ -55,7 +55,7 @@
 					<!--{/if}-->
 					<tr>
 						<th>{lang magics_num}</th>
-						<td><input name="magicnum" type="text" size="12" autocomplete="off" value="1" class="px pxn p_fre" /></td>
+						<td><input name="magicnum" type="text" size="12" autocomplete="off" value="1" class="px p_fre" /></td>
 					</tr>
 					<tr>
 						<th>{lang magics_present_message}</th>
@@ -148,6 +148,9 @@
 	}
 	function succeedhandle_$_G[gp_handlekey](url, msg) {
 		hideWindow('$_G[gp_handlekey]');
+		if(arguments[2] && arguments[2]['avatar']) {
+			msg += ' <ul class="ml mls cl"><li><a class="avt" target="_blank" href="home.php?mod=space&amp;uid='+arguments[2]['uid']+'"><em class=""></em><img src="{$_G[setting][ucenterurl]}/avatar.php?uid='+arguments[2]['uid']+'&size=small" /></a><p><a title="admin" href="home.php?mod=space&amp;uid='+arguments[2]['uid']+'" target="_blank"><b>'+arguments[2]['username']+'</b></a></p></li></ul>';
+		}
 		<!--{if !$location}-->
 			showDialog(msg, 'notice', null, function () { location.href=url; }, 0);
 		<!--{else}-->

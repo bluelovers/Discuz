@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_threadlist.php 16009 2010-08-31 00:18:31Z monkey $
+ *      $Id: lang_threadlist.php 21128 2011-03-16 05:52:27Z zhangguosheng $
  */
 
 $lang = array
@@ -27,6 +27,8 @@ $lang = array
 	'threadlist_tids_comment' => '設置要指定顯示的主題 tid ，多個 tid 請用半角逗號「,」隔開。注意: 留空為不進行任何過濾',
 	'threadlist_keyword' => '標題關鍵字',
 	'threadlist_keyword_comment' => '設置標題包含的關鍵字。注意: 留空為不進行任何過濾； 關鍵字中可使用通配符 *； 匹配多個關鍵字全部，可用空格或 AND 連接。如 win32 AND unix； 匹配多個關鍵字其中部分，可用 | 或 OR 連接。如 win32 OR unix',
+	'threadlist_tagkeyword' => 'TAG標籤',
+	'threadlist_tagkeyword_comment' => 'TAG標籤關鍵字。注意: 留空為不進行任何過濾； 關鍵字中可使用通配符 *； 匹配多個關鍵字其中部分，可用 | 或 OR 連接。如 win32 OR unix',
 	'threadlist_typeids' => '主題分類ID',
 	'threadlist_typeids_comment' => '輸入主題分類ID，多個 ID 之間用半角逗號「,」隔開。',
 	'threadlist_typeids_all' => '全部的主題分類',
@@ -81,6 +83,12 @@ $lang = array
 	'threadlist_orderby_weekhots' => '按本周累計售出數倒序排序',
 	'threadlist_orderby_monthhots' => '按當月累計售出數倒序排序',
 	'threadlist_lastpost' => '最後更新時間',
+	'threadlist_postdateline' => '主題發佈時間',
+	'threadlist_postdateline_nolimit' => '不限制',
+	'threadlist_postdateline_hour' => '1小時內',
+	'threadlist_postdateline_day' => '24小時內',
+	'threadlist_postdateline_week' => '7天內',
+	'threadlist_postdateline_month' => '1個月內',
 	'threadlist_lastpost_nolimit' => '不限制',
 	'threadlist_lastpost_hour' => '1小時內',
 	'threadlist_lastpost_day' => '24小時內',
@@ -97,6 +105,7 @@ $lang = array
 	'threadlist_orderby_monthstart' => '按一月內活動開始時間排序',
 	'threadlist_orderby_weekexp' => '按一周內報名截止時間排序',
 	'threadlist_orderby_monthexp' => '按一月內報名截止時間排序',
+	'threadlist_highlight' => '獲得高亮值',
 );
 
 ?>

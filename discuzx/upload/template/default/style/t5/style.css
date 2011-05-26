@@ -5,6 +5,7 @@ Powered by Discuz! X
 */
 
 body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
-#nv { background-color: #0053B9; background-image: url(nv.png); }
+#nv { background-image: url(nv.png); }
 	#nv li { background-image: url(nv_a.png) !important; }
-	#nv li.a { background: #0075DB url(nv_a.png) no-repeat 0 100%; }
+	#nv li.a { padding-right: 4px; background: #FFF url(nv_a.png) no-repeat 100% 100%; }
+		#nv li.a a, #nv li.a a:hover { background: #EEE url(nv_a.png) no-repeat 0 -33px; color: #369 !important; }

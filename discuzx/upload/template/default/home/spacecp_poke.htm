@@ -22,7 +22,7 @@
 			</h3>
 		<!--{/if}-->
 			<form method="post" autocomplete="off" id="pokeform_{$tospace[uid]}" name="pokeform_{$tospace[uid]}" action="home.php?mod=spacecp&ac=poke&op=$op&uid=$tospace[uid]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="pokesubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />
@@ -38,7 +38,7 @@
 					</div>
 					<ul class="poke cl">
 						<!--{loop $icons $k $v}-->
-						<li><input type="radio" name="iconid" id="poke_$k" value="{$k}" /> <label for="poke_$k">{$v}</label></li>
+						<li><label for="poke_$k"><input type="radio" name="iconid" id="poke_$k" value="{$k}" {if $k==3}checked="checked"{/if} />{$v}</label></li>
 						<!--{/loop}-->
 					</ul>
 					<input type="text" name="note" id="note" value="" size="30" onkeydown="ctrlEnter(event, 'pokesubmit_btn', 1);" class="px" style="width: 337px;" />
@@ -51,27 +51,12 @@
 			<script type="text/javascript">
 				function succeedhandle_{$_G[gp_handlekey]}(url, msg, values) {
 					if(values['from'] == 'notice') {
-						getNewPokeQuery(values['uid']);
+						deleteQueryNotice(values['uid'], 'pokeQuery');
 					}
 					showCreditPrompt();
 				}
 			</script>
-<!--{elseif $op == 'getpoke'}-->
-			<dd class="m avt"><a href="home.php?mod=space&uid=$pokequery[fromuid]" c="1"><!--{avatar($pokequery[fromuid],small)}--></a></dd>
-			<dt id="pokeQuery_$pokequery[fromuid]">
-				<p class="mbm">
-					<a href="home.php?mod=space&uid=$pokequery[fromuid]" class="xi2">{$pokequery[fromusername]}</a>:
-					<span class="xw0">
-						<!--{if $pokequery[iconid]}-->{$icons[$pokequery[iconid]]}<!--{else}-->{lang say_hi}<!--{/if}-->
-						<!--{if $pokequery[note]}-->, {lang say}: $pokequery[note]<!--{/if}-->
-						&nbsp; <span class="xg1"><!--{date($pokequery[dateline], 'n-j H:i')}--></span>
-					</span>
-				</p>
-				<div class="pbn ptm xg1 xw0 cl">
-					<a href="home.php?mod=spacecp&ac=poke&op=reply&uid=$pokequery[fromuid]&from=notice" id="a_p_r_$pokequery[fromuid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang back_to_say_hello}</a><span class="pipe">|</span>
-					<a href="home.php?mod=spacecp&ac=poke&op=ignore&uid=$pokequery[fromuid]&from=notice" id="a_p_i_$pokequery[fromuid]" onclick="showWindow('pokeignore', this.href, 'get', 0);">{lang ignore}</a>
-				</div>
-			</dt>
+
 <!--{elseif $op == 'view'}-->
 			<!--{loop $list $key $subvalue}-->
 			<p class="pbm mbm bbda">
@@ -94,7 +79,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="friendform_{$uid}" name="friendform_{$uid}" action="home.php?mod=spacecp&ac=poke&op=ignore&uid=$uid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="ignoresubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />
@@ -135,6 +120,9 @@
 			function view_poke(uid) {
 				ajaxget('home.php?mod=spacecp&ac=poke&op=view&uid='+uid, 'poke_td_'+uid);
 			}
+			<!--{if $_G[gp_fuid]}-->
+				view_poke($_G[gp_fuid]);
+			<!--{/if}-->
 			</script>
 			<!--{else}-->
 				<div class="emp">{lang no_new_poke}</div>

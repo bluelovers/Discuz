@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_announcement.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: modcp_announcement.php 20630 2011-03-01 02:45:58Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {

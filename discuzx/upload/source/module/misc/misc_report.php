@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_report.php 16152 2010-09-01 02:57:52Z monkey $
+ *      $Id: misc_report.php 19833 2011-01-19 07:57:13Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,10 +14,12 @@ if(empty($_G['uid'])) {
 	showmessage('not_loggedin', null, array(), array('login' => 1));
 }
 $rtype = $_G['gp_rtype'];
-$rid = $_G['gp_rid'];
+$rid = intval($_G['gp_rid']);
+$tid = intval($_G['gp_tid']);
+$fid = intval($_G['gp_fid']);
 $default_url = array(
 	'user' => 'home.php?mod=space&uid=',
-	'post' => 'forum.php?mod=redirect&goto=findpost&pid=',
+	'post' => 'forum.php?mod=redirect&goto=findpost&ptid='.$tid.'&pid=',
 	'thread' => 'forum.php?mod=viewthread&tid=',
 	'group' => 'forum.php?mod=group&fid=',
 	'album' => 'home.php?mod=space&do=album&id=',
@@ -41,11 +43,24 @@ if(submitcheck('reportsubmit')) {
 	if($reportid = DB::result_first("SELECT id FROM ".DB::table('common_report')." WHERE urlkey='$urlkey' AND opuid='0'")) {
 		DB::query("UPDATE ".DB::table('common_report')." SET message=CONCAT_WS('<br>', message, '$message'), num=num+1 WHERE id='$reportid'");
 	} else {
-		DB::query("INSERT INTO ".DB::table('common_report')."(url, urlkey, uid, username, message, dateline) VALUES ('$url', '$urlkey', '$_G[uid]', '$_G[username]', '$message', '".TIMESTAMP."')");
-		if($_G['setting']['report_receive']) {
-			$report_receive = explode(',', $_G['setting']['report_receive']);
-			foreach($report_receive as $touid) {
+		DB::query("INSERT INTO ".DB::table('common_report')."(url, urlkey, uid, username, message, dateline".($fid ? ', fid' : '').") VALUES ('$url', '$urlkey', '$_G[uid]', '$_G[username]', '$message', '".TIMESTAMP."'".($fid ? ", '$fid'" : '').")");
+		$report_receive = unserialize($_G['setting']['report_receive']);
+		$moderators = array();
+		if($report_receive['adminuser']) {
+			foreach($report_receive['adminuser'] as $touid) {
 				notification_add($touid, 'report', 'new_report', array('from_id' => 1, 'from_idtype' => 'newreport'), 1);
+			}
+		}
+		if($fid && $rtype == 'post') {
+			$query = DB::query("SELECT uid FROM ".DB::table('forum_moderator')." WHERE fid='$fid'");
+			while($row = DB::fetch($query)) {
+				$moderators[] = $row['uid'];
+			}
+			if($report_receive['supmoderator']) {
+				$moderators = array_unique(array_merge($moderators, $report_receive['supmoderator']));
+			}
+			foreach($moderators as $touid) {
+				$touid != $_G['uid'] && !in_array($touid, $report_receive) && notification_add($touid, 'report', 'new_post_report', array('fid' => $fid, 'from_id' => 1, 'from_idtype' => 'newreport'), 1);
 			}
 		}
 	}

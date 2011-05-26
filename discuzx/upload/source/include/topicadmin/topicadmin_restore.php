@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_restore.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_restore.php 22042 2011-04-20 08:52:21Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,14 +12,12 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if($_G['adminid'] != '1') {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_restore');
 }
-
+$archiveid = intval($_G['gp_archiveid']);
 if(!submitcheck('modsubmit')) {
-	$archiveid = intval($_G['gp_archiveid']);
 	include template('forum/topicadmin_action');
 } else {
-	$archiveid = $_G['gp_archiveid'];
 	if(!in_array($archiveid, $threadtableids)) {
 		$archiveid = 0;
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_index.php 17004 2010-09-19 02:22:16Z zhangguosheng $
+ *      $Id: group_index.php 20714 2011-03-02 07:02:17Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,15 +61,18 @@ if(empty($curtype)) {
 	$curtype = array();
 
 } else {
+	$nav = get_groupnav($curtype);
+	$groupnav = $nav['nav'];
 	$_G['grouptypeid'] = $curtype['fid'];
-	$navtitle .= $curtype['name'].lang('core', 'title_goruptype').' - ';
-	$groupnav = get_groupnav($curtype);
 	$perpage = 10;
 	if($curtype['forumcolumns'] > 1) {
 		$curtype['forumcolwidth'] = floor(99 / $curtype['forumcolumns']).'%';
 		$perpage = $curtype['forumcolumns'] * 10;
 	}
 }
+$seodata = array('first' => $nav['first']['name'], 'second' => $nav['second']['name']);
+list($navtitle, $metadescription, $metakeywords) = get_seosetting('group', $seodata);
+
 
 $data = $randgrouplist = $randgroupdata = $grouptop = $newgrouplist = array();
 $topgrouplist = $_G['cache']['groupindex']['topgrouplist'];
@@ -119,20 +122,21 @@ if(empty($sgid) && empty($gid)) {
 			$first[$key]['secondlist'] = array_slice($val['secondlist'], 0, 8);
 		}
 	}
-	$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['group']);
-	$nobbname = true;
 }
 
 if(!$navtitle || !empty($sgid) || !empty($gid)) {
-	$navtitle .= $_G['setting']['navs'][3]['navname'];
+	if(!$navtitle) {
+		$navtitle = !empty($gid) ? $nav['first']['name'] : (!empty($sgid) ? $nav['second']['name'] : '');
+	}
+	$navtitle = (!empty($sgid) || !empty($gid) ? get_title_page($navtitle, $_G['page']).' - ' : '').$_G['setting']['navs'][3]['navname'];
 	$nobbname = false;
+} else {
+	$nobbname = true;
 }
 
-$metakeywords = $_G['setting']['seokeywords']['group'];
 if(!$metakeywords) {
 	$metakeywords = $_G['setting']['navs'][3]['navname'];
 }
-$metadescription = $_G['setting']['seodescription']['group'];
 if(!$metadescription) {
 	$metadescription = $_G['setting']['navs'][3]['navname'];
 }

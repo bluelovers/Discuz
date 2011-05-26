@@ -96,7 +96,7 @@ class block_announcement {
 			$list[] = array(
 				'id' => $data['id'],
 				'idtype' => 'announcementid',
-				'title' => cutstr(str_replace('\\\'', '&#39;', $data['subject']), $titlelength, ''),
+				'title' => cutstr(str_replace('\\\'', '&#39;', strip_tags($data['subject'])), $titlelength, ''),
 				'url' => $data['type']=='1' ? $data['message'] : 'forum.php?mod=announcement&id='.$data['id'],
 				'pic' => '',
 				'picflag' => '',

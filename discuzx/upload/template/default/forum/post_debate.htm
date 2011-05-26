@@ -1,9 +1,9 @@
 <div class="exfm cl">
 	<div class="sinf sppoll z">
 		<dl>
-			<dt><strong class="rq">*</strong><label for="affirmpoint">{lang debate_square_point}:</label></dt>
+			<dt><span class="rq">*</span><label for="affirmpoint">{lang debate_square_point}:</label></dt>
 			<dd><textarea name="affirmpoint" id="affirmpoint" class="pt" tabindex="1" style="width:210px;">$debate[affirmpoint]</textarea></dd>
-			<dt><strong class="rq">*</strong><label for="negapoint">{lang debate_opponent_point}:</label></dt>
+			<dt><span class="rq">*</span><label for="negapoint">{lang debate_opponent_point}:</label></dt>
 			<dd><textarea name="negapoint" id="negapoint" class="pt" tabindex="1" style="width:210px;">$debate[negapoint]</textarea></dd>
 		</dl>
 	</div>
@@ -19,6 +19,7 @@
 				<p><input type="text" name="umpire" id="umpire" class="px" onblur="checkuserexists(this.value, 'checkuserinfo')" value="$debate[umpire]" tabindex="1" /></p>
 				<span id="checkuserinfo"></span>
 			</dd>
+			<!--{hook/post_debate_extra}-->
 		</dl>
 	</div>
 </div>
@@ -36,6 +37,8 @@ function checkuserexists(username, objname) {
 		obj.innerHTML = s;
 	});
 }
+
+EXTRAFUNC['validator']['special'] = 'validateextra';
 function validateextra() {
 	if($('postform').affirmpoint.value == '') {
 		showDialog('{lang post_debate_message_1}', 'alert', '', function () { $('postform').affirmpoint.focus() });

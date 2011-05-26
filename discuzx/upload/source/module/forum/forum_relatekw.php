@@ -4,15 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_relatekw.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: forum_relatekw.php 20885 2011-03-07 07:36:57Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
-}
-
-if(!$_G['setting']['tagstatus']) {
-	exit;
 }
 
 if($tid = @intval($_GET['tid'])) {
@@ -64,7 +60,7 @@ if($data) {
 	if(!$tid) {
 		$_G['inajax'] = 1;
 		include template('forum/relatekw');
-	} elseif($_G['setting']['tagstatus'] && $kws) {
+	} elseif($kws) {
 		loadcache('censor');
 		$posttable = getposttablebytid($_G['tid']);
 		DB::query("UPDATE ".DB::table($posttable)." SET tags='".implode(',', $kws)."' WHERE pid='$pid'");

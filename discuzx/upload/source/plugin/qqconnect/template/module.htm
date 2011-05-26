@@ -1,0 +1,499 @@
+{eval
+function tpl_global_login_extra() {
+global $_G;
+}
+<!--{block return}-->
+	<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+		<p><a href="$_G[connect][login_url]&statfrom=login_simple"><img src="{IMGDIR}/qq_login.gif" class="vm" alt="{lang qqconnect:connect_header_login}" /></a></p>
+		<p class="hm xg1" style="padding-top: 2px;">{lang qqconnect:connect_header_login_tip}</p>
+	</div>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_global_usernav_extra1() {
+}
+<!--{block return}-->
+	<span class="pipe">|</span><a href="connect.php?mod=config" target="_blank"><img src="{IMGDIR}/qq_bind_small.gif" class="vm qq_bind" alt="{lang qqconnect:connect_config}" /></a>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_login_bar() {
+global $_G;
+}
+<!--{block return}-->
+	<a href="$_G[connect][login_url]&statfrom=login" target="_top" rel="nofollow"><img src="{IMGDIR}/qq_login.gif" class="vm" /></a>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_index_status_extra() {
+global $_G;
+}
+<!--{block return}-->
+	<!--{if $_G['setting']['connect']['turl_allow'] || $_G['setting']['connect']['like_allow']}-->
+		<iframe id="connectlike" allowtransparency="true" scrolling="no" border="0" width="280" height="25" frameborder="0"></iframe>
+		<script type="text/javascript">_attachEvent(window, 'load', function () { $('connectlike').src = 'api/connect/like.php';}, document);</script>
+	<!--{/if}-->
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_sync_method($allowconnectfeed, $allowconnectt, $cssextra = '') {
+global $_G;
+}
+<!--{block return}-->
+	<!--{if $allowconnectfeed || $allowconnectt}-->
+		<script type="text/javascript">
+		var _allow_qq = {if $allowconnectfeed}true{else}false{/if};
+		var _allow_t = {if $allowconnectt}true{else}false{/if};
+		var _syn_qq = {if $_G['member']['conisbind'] && $_G['member']['conispublishfeed']}true{else}false{/if};
+		var _syn_t = {if $_G['member']['conisbind'] && $_G['member']['conispublisht']}true{else}false{/if};
+		var _is_oauth_user = {if $_G['member']['conisbind']}true{else}false{/if};
+		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
+		function connect_post_init() {
+			if (_is_feed_auth && _allow_qq && _syn_qq) {
+				$('connectPost_synQQ').className = 'syn_qq_check';
+				$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone1}';
+				$('connect_publish_feed').value = 1;
+			}
+			if (_is_feed_auth && _allow_t && _syn_t) {
+				$('connectPost_synT').className = 'syn_tqq_check';
+				$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t1}';
+				$('connect_publish_t').value = 1;
+			}
+			if (_allow_qq) {
+				$('connectPost_synQQ').onclick = function () {
+					connect_syn_option_toggle(this);
+				}
+			}
+			if (_allow_t) {
+				$('connectPost_synT').onclick = function () {
+					connect_syn_option_toggle(this);
+				}
+			}
+			if (getcookie('connect_synpost_tip')) {
+				connect_post_tip();
+			}
+		}
+		function connect_syn_option_toggle(opt) {
+			if (_is_feed_auth) {
+				if ($(opt.getAttribute('rel')).value == 1) {
+					opt.className = opt.className.replace('_check', '');
+					opt.title = opt.title.replace('{lang qqconnect:connect_post_sync_yes}', '{lang qqconnect:connect_post_sync_no}');
+					$(opt.getAttribute('rel')).value = 0;
+				} else {
+					$(opt.getAttribute('rel')).value = 1;
+					opt.className += '_check';
+					opt.title = opt.title.replace('{lang qqconnect:connect_post_sync_no}', '{lang qqconnect:connect_post_sync_yes}');
+				}
+			} else {
+				var _auth_text = '{lang qqconnect:connect_post_sync_unauthorized_desc}';
+				if (!_is_oauth_user) {
+					_auth_text = '{lang qqconnect:connect_post_sync_not_bind_desc}';
+				}
+				showDialog(_auth_text, 'notice', '{lang qqconnect:connect_post_sync_unauthorized_title}', 'connect_goto_setting()', 0, null, null, '{lang qqconnect:connect_modify_authorization_button}');
+			}
+		}
+		function connect_post_tip() {
+			if ($('fastpostform')) {
+				return;
+			}
+			var r = document.getElementById('rstnotice');
+			var c = document.createElement('div');
+			c.setAttribute('id', 'synnotice');
+			c.setAttribute('class', 'ntc_l bbs');
+			if(BROWSER.ie) {
+				c.id = 'synnotice';
+				c.className = 'ntc_l bbs';
+			}
+			c.style.display = 'block';
+			r.parentNode.insertBefore(c, r.nextSibling);
+			c.innerHTML = '<a href="javascript:void(0);" title="{lang qqconnect:connect_post_sync_tip_close}" class="d y" onclick="connect_syn_tip_hide();">close</a>{lang qqconnect:connect_post_sync_tip}&nbsp;&nbsp;<a class="xi2" href="javascript:void(0);" onclick="connect_syn_cancel();" title="{lang qqconnect:connect_post_sync_cancel_tip}"><strong>{lang qqconnect:connect_post_sync_cancel}</strong></a>';
+		}
+		function connect_syn_tip_hide() {
+			setcookie('connect_synpost_tip', '', '-1');
+			$('synnotice').style.display = 'none';
+		}
+		function connect_syn_cancel() {
+			ajaxget('{$_G['siteurl']}connect.php?mod=config&op=synconfig', '');
+			$('connectPost_synQQ').className = 'syn_qq';
+			$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
+			$('connect_publish_feed').value = 0;
+			$('connectPost_synT').className = 'syn_tqq';
+			$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t2}';
+			$('connect_publish_t').value = 0;
+			$('synnotice').style.display = 'none';
+		}
+		function connect_goto_setting() {
+			var _url = "{$_G['siteurl']}home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp";
+			hideMenu('fwin_dialog', 'dialog')
+			var _newWindow = window.open(_url, 'newWindow');
+			_newWindow.focus();
+		}
+		_attachEvent(window, 'load', function(){
+			connect_post_init();
+		});
+		</script>
+		<!--{if $allowconnectfeed}-->
+			<a title="{lang qqconnect:connect_post_sync_qzone2}" class="syn_qq" href="javascript:void(0);" id="connectPost_synQQ" rel="connect_publish_feed">{lang qqconnect:connect_viewthread_share_to_qzone}</a>
+			<input type="hidden" name="connect_publish_feed" id="connect_publish_feed" value="0" />
+		<!--{/if}-->
+		<!--{if $allowconnectt}-->
+			<a title="{lang qqconnect:connect_post_sync_t2}" class="syn_tqq" href="javascript:void(0);" id="connectPost_synT" rel="connect_publish_t">{lang qqconnect:connect_viewthread_share_to_t}</a>
+			<input type="hidden" name="connect_publish_t" id="connect_publish_t" value="0" />
+		<!--{/if}-->
+	<!--{/if}-->
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_viewthread_share_method() {
+global $_G;
+}
+<!--{block return}-->
+	<!--{if $_G['member']['conisbind']}-->
+		<a href="javascript:void(0);" ref="{$_G[connect][qzone_share_url]}" id="k_qqshare" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
+		<a href="javascript:void(0);" ref="{$_G[connect][weibo_share_url]}" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
+		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
+		<script type="text/javascript">
+		var _is_oauth_user = {if $_G['member']['conuinsecret']}true{else}false{/if};
+		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
+		_is_feed_auth = true;
+		var _share_buttons = ['k_qqshare', 'k_weiboshare', 'k_pengyoushare'];
+		function connect_share_init() {
+			for (var i = 0; i < _share_buttons.length; i++) {
+				$(_share_buttons[i]).onclick = function () {
+					connect_share_form(this);
+					return false;
+				}
+			}
+		}
+		function connect_share_form(obj) {
+			if (_is_oauth_user && _is_feed_auth) {
+				var _url = obj.getAttribute('ref');
+				showWindow(obj.id, _url, 'get', 1);
+			} else {
+				if (!_is_oauth_user) {
+					var _text = '{lang qqconnect:connect_share_unbind}';
+					var _button = '{lang qqconnect:connect_share_unbind_know_button}';
+					showDialog(_text, 'notice', null, 'connect_goto_setting()', 0, null, null, _button);
+				} else if (!_is_feed_auth) {
+					var _title = '{lang qqconnect:connect_post_sync_unauthorized_title}';
+					var _text = '{lang qqconnect:connect_share_unauthorized}';
+					var _button = '{lang qqconnect:connect_modify_authorization_button}';
+					showDialog(_text, 'notice', _title, 'connect_goto_setting()', 0, null, null, _button);
+				}
+			}
+		}
+		function connect_goto_setting() {
+			if (_is_oauth_user) {
+				var _url = "{$_G['siteurl']}home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp";
+				hideMenu('fwin_dialog', 'dialog');
+				var _newWindow = window.open(_url, 'newWindow');
+				_newWindow.focus();
+			} else {
+				hideMenu('fwin_dialog', 'dialog');
+			}
+		}
+		_attachEvent(window, 'load', function(){
+			connect_share_init();
+		});
+		</script>
+	<!--{else}-->
+		<a href="javascript:void(0);" id="k_qqshare" onclick="window.open('{$_G[connect][qzone_public_share_url]}?url='+encodeURIComponent(document.location.href));return false;" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
+		<a href="javascript:void(0)" onclick="postToWb();" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
+		<a href="javascript:void(0);" onclick="window.open('{$_G[connect][qzone_public_share_url]}?to=pengyou&url='+encodeURIComponent(document.location.href));return false;" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
+		<script type="text/javascript">
+		function postToWb(){
+			var _t = encodeURI(document.title);
+			var _url = encodeURIComponent(document.location);
+			var _appkey = encodeURI("{$_G['connect']['weibo_appkey']}");
+			var _pic = "{$_G['connect']['share_images']}";
+			var _site = '';
+			var _u = 'http://v.t.qq.com/share/share.php?url='+_url+'&appkey='+_appkey+'&site='+_site+'&pic='+_pic+'&title='+_t;
+			window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+		}
+		</script>
+	<!--{/if}-->
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_viewthread_bottom() {
+global $_G;
+}
+<!--{block return}-->
+	<script type="text/javascript">
+		var connect_qzone_share_url = '{$_G[connect][qzone_share_url]}';
+		var connect_weibo_share_url = '{$_G[connect][weibo_share_url]}';
+		var connect_thread_info = {
+			thread_url: '{$_G['siteurl']}{$GLOBALS['canonical']}',
+			thread_id: '{$_G[tid]}',
+			post_id: '{$_G[connect][first_post][pid]}',
+			forum_id: '{$_G[fid]}',
+			author_id: '{$_G[connect][first_post][authorid]}',
+			author: '{$_G[connect][first_post][author]}'
+		};
+
+		connect_autoshare = '{$_G[gp_connect_autoshare]}';
+		connect_isbind = '{$_G[member][conisbind]}';
+		if(connect_autoshare == 1 && connect_isbind) {
+			_attachEvent(window, 'load', function(){
+				connect_share(connect_weibo_share_url, connect_openid);
+			});
+		}
+	</script>
+	<!--{if $_G['member']['conisbind']}-->
+		<div id="connect_share_unbind" style="display: none;">
+			<div class="c hm">
+				<div style="font-size:14px; margin:10px 0;">{lang qqconnect:connect_post_unbind}</div>
+				<div><a href="connect.php?mod=config&connect_autoshare=1" target="_blank"><img src="{IMGDIR}/qq_bind.gif" align="absmiddle" style="margin-top:5px;" /></a></div>
+			</div>
+			<input type="hidden" id="connect_thread_title" name="connect_thread_title" value="$_G[forum_thread][subject]" />
+		</div>
+	<!--{/if}-->
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_register_input() {
+global $_G;
+
+$connect_app_id = $_G['qc']['connect_app_id'];
+$connect_openid = $_G['qc']['connect_openid'];
+}
+<!--{block return}-->
+	<!--{if $_G['qc']['connect_is_user_info']}-->
+	<div class="rfm">
+		<table>
+			<tr>
+				<th>{lang qqconnect:connect_register_avatar}:</th>
+				<td>
+					<img src="{$_G[connect][avatar_url]}/$connect_app_id/$connect_openid" width="48" height="48" />
+					<p><label for="use_qzone_avatar"><input type="checkbox" name="use_qzone_avatar" id="use_qzone_avatar" class="pc" value="1" checked="checked" tabindex="1" /> {lang qqconnect:connect_register_use_qzone_avatar}</label></p>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!--{/if}-->
+	<input type="hidden" id="auth_hash" name="auth_hash" value="{$_G['qc']['connect_auth_hash']}" />
+	<input type="hidden" id="is_notify" name="is_notify" value="{$_G['qc']['connect_is_notify']}" />
+	<input type="hidden" id="is_feed" name="is_feed" value="{$_G['qc']['connect_is_feed']}" />
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_register_bottom() {
+global $_G;
+
+$loginhash = 'L'.random(4);
+}
+<!--{block js1}-->
+	<!--{if $_G['qc']['usernames']}-->
+		<div class="mtn">
+			{lang qqconnect:connect_register_used_usernames}:
+			<a href="javascript:;" onclick="display('used_usernames_div')" class="xi2">$_G['qc']['available_username_count'] {lang qqconnect:connect_register_available_usernames_count}</a>
+			<div id="used_usernames_div" class="pbm" style="display:none;">
+				<!--{loop $_G['qc']['usernames'] $key $val}-->
+					<div>
+					<!--{if $val[available]}-->
+						<label for="username_{$key}" style="margin-bottom:1px;" onclick="connect_use_available($('username_{$key}').value)">
+						<em>&nbsp;</em><input type="radio" id="username_{$key}" name="used_username" class="pr" value="{$val[username]}"{if $_G['qc']['first_available_username'] == $val[username]} checked="checked"{/if} />
+						{$val[username]}
+						</label>
+					<!--{else}-->
+						<label for="username_{$key}" style="margin-bottom:1px;">
+						<em>&nbsp;</em><input type="radio" id="username_{$key}" name="used_username" disabled="disabled" class="pr" value="{$val[username]}" />
+						<strike>{$val[username]}</strike>
+						</label>
+					<!--{/if}-->
+					</div>
+				<!--{/loop}-->
+			</div>
+		</div>
+	<!--{/if}-->
+<!--{/block}-->
+{eval
+$js1 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js1);
+$change_qq_url = $_G['connect']['discuz_change_qq_url'];
+$qq_nick = $_G['qc']['qq_nick'];
+}
+<!--{block js2}-->
+	<div class="tb cl">
+		<ul style="padding-left: 100px;">
+			<li id="connect_tab_1" class="a"><a href="javascript:;" onclick="connect_switch(1);this.blur();" tabindex="900">{lang qqconnect:connect_register_profile}</a></li>
+			<li id="connect_tab_2"><a onclick="connect_switch(2);this.blur();" href="javascript:;" tabindex="900">{lang qqconnect:connect_register_has_id} {lang qqconnect:connect_register_bind}</a></li>
+		</ul>
+	</div>
+	<div class="rfm" id="connect_member_register_tip" style="display:block;">
+		<table>
+			<tr>
+				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
+				<td>{lang qqconnect:connect_member_register_tip}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="rfm" id="connect_member_loginbind_tip" style="display:none;">
+		<table>
+			<tr>
+				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
+				<td>{lang qqconnect:connect_member_loginbind_tip}</td>
+			</tr>
+		</table>
+	</div>
+<!--{/block}-->
+{eval
+$js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
+$first_available_username = str_replace("'", "\'", $_G['qc']['first_available_username']);
+$connect_email = str_replace("'", "\'", $_G['qc']['connect_email']);
+}
+<!--{block return}-->
+	<div class="b1lr">
+		<form method="post" autocomplete="off" name="login" id="loginform_$loginhash" class="cl"{if $_G['setting']['regconnect']} style="display:none"{/if} onsubmit="ajaxpost('loginform_$loginhash', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="member.php?mod=connect&action=login&loginsubmit=yes{if !empty($_G['gp_handlekey'])}&handlekey=$_G[gp_handlekey]{/if}&loginhash=$loginhash">
+			<div class="c cl bm_c">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="referer" value="{$_G['qc']['dreferer']}" />
+				<input type="hidden" id="auth_hash" name="auth_hash" value="{$_G['qc']['connect_auth_hash']}" />
+				<input type="hidden" id="is_notify" name="is_notify" value="{$_G['qc']['connect_is_notify']}" />
+				<input type="hidden" id="is_feed" name="is_feed" value="{$_G['qc']['connect_is_feed']}" />
+				<!--{if $_G['qc']['uinlimit']}-->
+				<!--<div class="bm xi1 xw1"><div class="bm_c"><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="vm" />&nbsp;{lang qqconnect:connect_uin_limit}</div></div>-->
+				<div class="rfm">
+					<table>
+						<tr>
+							<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
+							<td>
+								{lang qqconnect:connect_uin_limit}
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!--{/if}-->
+				<div class="rfm">
+					<table>
+						<tr>
+							<th>
+							<!--{if $_G['setting']['autoidselect']}-->
+								<label for="username">{lang login_id}:</label>
+							<!--{else}-->
+								<span class="login_slct">
+									<select name="loginfield" style="float: left;" width="45" id="loginfield_$loginhash">
+										<option value="username">{lang username}</option>
+										<option value="uid">{lang uid}</option>
+										<option value="email">{lang email}</option>
+									</select>
+								</span>
+							<!--{/if}-->
+							</th>
+							<td><input type="text" name="username" id="username_$loginhash" autocomplete="off" size="36" class="txt" tabindex="1" value="$username" /></td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="rfm">
+					<table>
+						<tr>
+							<th><label for="password3_$loginhash">{lang login_password}:</label></th>
+							<td><input type="password" id="password3_$loginhash" name="password" size="36" class="txt" tabindex="1" /></td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="rfm">
+					<table>
+						<tr>
+							<th>{lang security_q}:</th>
+							<td><select id="loginquestionid_$loginhash" width="213" name="questionid" onchange="if($('loginquestionid_$loginhash').value > 0) $('loginanswer_row_$loginhash').style.display=''; else $('loginanswer_row_$loginhash').style.display='none'">
+								<option value="0">{lang security_question}</option>
+								<option value="1">{lang security_question_1}</option>
+								<option value="2">{lang security_question_2}</option>
+								<option value="3">{lang security_question_3}</option>
+								<option value="4">{lang security_question_4}</option>
+								<option value="5">{lang security_question_5}</option>
+								<option value="6">{lang security_question_6}</option>
+								<option value="7">{lang security_question_7}</option>
+							</select></td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="rfm" id="loginanswer_row_$loginhash" style="display:none">
+					<table>
+						<tr>
+							<th>{lang security_a}:</th>
+							<td><input type="text" name="answer" id="loginanswer_$loginhash" autocomplete="off" size="36" class="txt" tabindex="1" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="rfm mbw bw0">
+				<table>
+					<tr>
+						<th>&nbsp;</th>
+						<td><button class="pn pnc" type="submit" name="loginsubmit" value="true" tabindex="1"><strong>{lang qqconnect:connect_register_bind_window_button}</strong></button></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		<!--{if $_G['setting']['regconnect']}-->
+			$('reginfo_a').parentNode.className = '';
+			$('{$_G['setting']['reginput']['password']}').parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
+			$('{$_G['setting']['reginput']['password']}').outerHTML += '$js1';
+			$('{$_G['setting']['reginput']['password']}').required = 0;
+			$('{$_G['setting']['reginput']['password2']}').parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
+			$('{$_G['setting']['reginput']['password2']}').required = 0;
+			$('main_hnav').outerHTML = '$js2';
+			function connect_switch(op) {
+				$('returnmessage4').className='';
+				$('returnmessage4').innerHTML='';
+				if(op == 1) {
+					$('loginform_$loginhash').style.display='none';$('registerform').style.display='block';$('connect_member_register_tip').style.display='block';$('connect_member_loginbind_tip').style.display='none';<!--{if $_G['setting']['regconnect']}-->$('connect_tab_1').className='a';$('connect_tab_2').className='';<!--{/if}-->
+				} else {
+					$('loginform_$loginhash').style.display='block';$('registerform').style.display='none';$('connect_member_register_tip').style.display='none';$('connect_member_loginbind_tip').style.display='block';<!--{if $_G['setting']['regconnect']}-->$('connect_tab_1').className='';$('connect_tab_2').className='a';<!--{/if}-->
+				}
+			}
+			function connect_use_available(value) {
+				$('{$_G['setting']['reginput']['username']}').value = value;
+				checkusername(value);
+			}
+			<!--{if !$_G['setting']['regconnect']}-->
+				_attachEvent(window, 'load', function () { connect_switch(2); }, document);
+			<!--{/if}-->
+			<!--{if $_G['qc']['uinlimit']}-->
+				$('registerformsubmit').disabled = true;
+			<!--{/if}-->
+			<!--{if $first_available_username}-->
+				$('{$_G['setting']['reginput']['username']}').value = '$first_available_username';
+			<!--{/if}-->
+			$('{$_G['setting']['reginput']['email']}').value = '$connect_email';
+			<!--{if $_G[gp_action] != 'activation'}-->
+				$('registerformsubmit').innerHTML = '<span>{lang qqconnect:connect_register_finish}</span>';
+			<!--{/if}-->
+		<!--{else}-->
+			$('layer_reginfo_t').innerHTML = '{lang qqconnect:connect_register_bind}';
+		<!--{/if}-->
+		<!--{if $_G[gp_action] != 'activation'}-->
+			<!--{if !$_G['setting']['autoidselect']}-->
+				simulateSelect('loginfield_$loginhash');
+			<!--{/if}-->
+		<!--{/if}-->
+	</script>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+}

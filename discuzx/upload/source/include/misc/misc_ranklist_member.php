@@ -11,22 +11,15 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if(!$ranklist_setting[$type]['available']) {
-	showmessage('ranklist_this_status_off');
-}
-$cache_time = $ranklist_setting[$type]['cache_time'];
-$cache_num =  $ranklist_setting[$type]['show_num'];
-if($cache_time <= 0 ) $cache_time = 5;
-$cache_time = $cache_time * 3600;
-if($cache_num <= 0 ) $cache_num = 20;
-
-$multi = '';
+$multi = $gettype = '';
 $list = array();
 $cachetip = TRUE;
 $perpage = 20;
-$page = empty($_GET['page'])?1:intval($_GET['page']);
-if($page<1) $page=1;
-$start = ($page-1)*$perpage;
+$page = empty($_GET['page']) ? 1 : intval($_GET['page']);
+if($page < 1) {
+	$page = 1;
+}
+$start = ($page - 1) * $perpage;
 
 require_once libfile('function/home');
 ckstart($start, $perpage);
@@ -37,21 +30,17 @@ $count = 0;
 $now_pos = 0;
 $now_choose = '';
 
-if ($_GET['view'] == 'credit') {
+if ($_G['gp_view'] == 'credit') {
 
+	$gettype = 'credit';
 	$creditsrank_change = 1;
 	$extcredits = $_G['setting']['extcredits'];
 	$now_choose = $_G['gp_orderby'] && $extcredits[$_G['gp_orderby']] ? $_G['gp_orderby'] : 'all';
-	$list = getranklistcache_credits();
-
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_credit').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_credit');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_credit');
-
+	if(!$_G['gp_orderby'] || !$extcredits[$_G['gp_orderby']]) {
+		$_G['gp_orderby'] = 'all';
+	}
 	if($_G['uid']) {
-		$mycredits = $now_choose == 'all' ? $_G['member']['credits'] : $_G['member']['extcredits'.$now_choose];
-
+		$mycredits = $now_choose == 'all' ? $_G['member']['credits'] : getuserprofile('extcredits'.$now_choose);
 		$cookie_name = 'space_top_credit_'.$_G['uid'].'_'.$now_choose;
 		if($_G['cookie'][$cookie_name]) {
 			$now_pos = $_G['cookie'][$cookie_name];
@@ -68,23 +57,20 @@ if ($_GET['view'] == 'credit') {
 	} else {
 		$now_pos = -1;
 	}
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
-} elseif ($_GET['view'] == 'friendnum') {
+} elseif ($_G['gp_view'] == 'friendnum') {
 
-	$list = getranklistcache_friendnum();
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_friend').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_friend');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_friend');
-
+	$gettype = 'friend';
 	if($_G['uid']) {
 		$space = $_G['member'];
 		space_merge($space, 'count');
-		$cookie_name = 'space_top_'.$_GET['view'].'_'.$_G['uid'];
+		$cookie_name = 'space_top_'.$_G['gp_view'].'_'.$_G['uid'];
 		if($_G['cookie'][$cookie_name]) {
 			$now_pos = $_G['cookie'][$cookie_name];
 		} else {
-			space_merge($space, 'count');
 			$pos_sql = "SELECT COUNT(*) FROM ".DB::table('common_member_count')." s WHERE s.friends>'$space[friends]'";
 			$now_pos = DB::result(DB::query($pos_sql), 0);
 			$now_pos++;
@@ -93,41 +79,60 @@ if ($_GET['view'] == 'credit') {
 	} else {
 		$now_pos = -1;
 	}
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
-} elseif($_GET['view'] == 'blog') {
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_blog').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_blog');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_blog');
+} elseif ($_G['gp_view'] == 'invite') {
 
-	$list = getranklistcache_blogs();
+	$gettype = 'invite';
 	$now_pos = -1;
+	$inviterank_change = 1;
+	$now_choose = 'thisweek';
+	switch($_G['gp_orderby']) {
+		case 'thismonth':
+			$now_choose = 'thismonth';
+			break;
+		case 'today':
+			$now_choose = 'today';
+			break;
+		case 'thisweek':
+			$now_choose = 'thisweek';
+			break;
+		default :
+			$now_choose = 'all';
+	}
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
-} elseif($_GET['view'] == 'beauty') {
+} elseif($_G['gp_view'] == 'blog') {
 
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_girl').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_girl');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_girl');
-	$list = getranklistcache_beauty();
+	$gettype = 'blog';
 	$now_pos = -1;
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
-} elseif($_GET['view'] == 'handsome') {
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_boy').' - '. $navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_boy');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_boy');
+} elseif($_G['gp_view'] == 'beauty') {
 
-	$list = getranklistcache_handsome();
+	$gettype = 'girl';
 	$now_pos = -1;
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
-} elseif($_GET['view'] == 'post') {
+} elseif($_G['gp_view'] == 'handsome') {
 
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_post').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_post');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_post');
+	$gettype = 'boy';
+	$now_pos = -1;
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
+} elseif($_G['gp_view'] == 'post') {
+
+	$gettype = 'post';
 	$postsrank_change = 1;
 	$now_pos = -1;
 	$now_choose = 'posts';
@@ -142,15 +147,35 @@ if ($_GET['view'] == 'credit') {
 			$now_choose = 'today';
 			break;
 	}
-	$list = getranklistcache_posts();
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
+
+} elseif($_G['gp_view'] == 'onlinetime') {
+
+	$gettype = 'onlinetime';
+	$onlinetimerank_change = 1;
+	$now_pos = -1;
+	$now_choose = 'thismonth';
+	switch($_G['gp_orderby']) {
+		case 'thismonth':
+			$now_choose = 'thismonth';
+			break;
+		case 'all':
+			$now_choose = 'all';
+			break;
+		default :
+			$_G['gp_orderby'] = 'thismonth';
+	}
+
+	$view = $_G['gp_view'];
+	$orderby = $_G['gp_orderby'];
+	$list = getranklistdata($type, $view, $orderby);
 
 } else {
-	$navname = $_G['setting']['navs'][8]['navname'];
-	$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_bid').' - '.$navname;
-	$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_bid');
-	$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_bid');
+	$gettype = 'bid';
 	$cachetip = FALSE;
-	$_GET['view'] = 'show';
+	$_G['gp_view'] = 'show';
 	$creditid = 0;
 	if($_G['setting']['creditstransextra'][6]) {
 		$creditid = intval($_G['setting']['creditstransextra'][6]);
@@ -184,14 +209,13 @@ if ($_GET['view'] == 'credit') {
 		if($deluser) {
 			DB::query("DELETE FROM ".DB::table('home_show')." WHERE credit<1");
 		}
-		$multi = multi($count, $perpage, $page, "misc.php?mod=ranklist&type=member&view=$_GET[view]");
+		$multi = multi($count, $perpage, $page, "misc.php?mod=ranklist&type=member&view=$_G[gp_view]");
 	}
 }
 
 if($cachetip) {
-	$lastupdate = $list['lastupdate'];
-	$nextupdate = $list['nextupdate'];
-	unset($list['lastupdated'], $list['lastupdate'], $list['nextupdate']);
+	$lastupdate = $_G['lastupdate'];
+	$nextupdate = $_G['nextupdate'];
 }
 
 $myfuids =array();
@@ -212,139 +236,24 @@ foreach($list as $key => $value) {
 }
 
 $ols = array();
-if($fuids && $_GET['view'] != 'online') {
+if($fuids) {
 	$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($fuids).")");
 	while ($value = DB::fetch($query)) {
-		if(!$value['magichidden']) {
+		if(!$value['magichidden'] && !$value['invisible']) {
 			$ols[$value['uid']] = $value['lastactivity'];
-		} elseif ($_GET['view'] == 'online' && $list[$value['uid']]) {
+		} elseif ($_G['gp_view'] == 'online' && $list[$value['uid']]) {
 			unset($list[$value['uid']]);
 		}
 	}
 }
 
-$a_actives = array($_GET['view'] => ' class="a"');
+$a_actives = array($_G['gp_view'] => ' class="a"');
+
+$navname = $_G['setting']['navs'][8]['navname'];
+$navtitle = lang('ranklist/navtitle', 'ranklist_title_member_'.$gettype).' - '.$navname;
+$metakeywords = lang('ranklist/navtitle', 'ranklist_title_member_'.$gettype);
+$metadescription = lang('ranklist/navtitle', 'ranklist_title_member_'.$gettype);
 
 include template('diy:ranklist/member');
-
-function getranklistcache_credits() {
-	global $_G, $cache_time, $cache_num, $now_choose;
-	$ranklistvars = array();
-	loadcache('ranklist_member_credit');
-	$ranklistvars = & $_G['cache']['ranklist_member_credit'][$now_choose];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_credits($now_choose, $cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_credit'][$now_choose] = $ranklistvars;
-	save_syscache('ranklist_member_credit', $_G['cache']['ranklist_member_credit']);
-	return $ranklistvars;
-}
-
-function getranklistcache_friendnum() {
-	global $_G, $cache_time, $cache_num;
-	$ranklistvars = array();
-	loadcache('ranklist_member_friendnum');
-	$ranklistvars = & $_G['cache']['ranklist_member_friendnum'];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_friendnum($cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_friendnum'] = $ranklistvars;
-	save_syscache('ranklist_member_friendnum', $_G['cache']['ranklist_member_friendnum']);
-	return $ranklistvars;
-}
-
-function getranklistcache_blogs() {
-	global $_G, $cache_time, $cache_num;
-	$ranklistvars = array();
-	loadcache('ranklist_member_blog');
-	$ranklistvars = & $_G['cache']['ranklist_member_blog'];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_blogs($cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_blog'] = $ranklistvars;
-	save_syscache('ranklist_member_blog', $_G['cache']['ranklist_member_blog']);
-	return $ranklistvars;
-}
-
-function getranklistcache_beauty() {
-	global $_G, $cache_time, $cache_num;
-	$ranklistvars = array();
-	loadcache('ranklist_member_beauty');
-	$ranklistvars = & $_G['cache']['ranklist_member_beauty'];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_beauty($cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_beauty'] = $ranklistvars;
-	save_syscache('ranklist_member_beauty', $_G['cache']['ranklist_member_beauty']);
-	return $ranklistvars;
-}
-
-function getranklistcache_handsome() {
-	global $_G, $cache_time, $cache_num;
-	$ranklistvars = array();
-	loadcache('ranklist_member_handsome');
-	$ranklistvars = & $_G['cache']['ranklist_member_handsome'];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_handsome($cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_handsome'] = $ranklistvars;
-	save_syscache('ranklist_member_handsome', $_G['cache']['ranklist_member_handsome']);
-	return $ranklistvars;
-}
-
-function getranklistcache_posts() {
-	global $_G, $cache_time, $cache_num, $now_choose;
-	$ranklistvars = array();
-	loadcache('ranklist_member_post');
-	$ranklistvars = & $_G['cache']['ranklist_member_post'][$now_choose];
-
-	if(!empty($ranklistvars['lastupdated']) && TIMESTAMP - $ranklistvars['lastupdated'] < $cache_time) {
-		return $ranklistvars;
-	}
-
-	$ranklistvars = getranklist_member_posts($now_choose, $cache_num);
-
-	$ranklistvars['lastupdated'] = TIMESTAMP;
-	$ranklistvars['lastupdate'] = dgmdate(TIMESTAMP);
-	$ranklistvars['nextupdate'] = dgmdate(TIMESTAMP + $cache_time);
-	$_G['cache']['ranklist_member_post'][$now_choose] = $ranklistvars;
-	save_syscache('ranklist_member_post', $_G['cache']['ranklist_member_post']);
-	return $ranklistvars;
-}
 
 ?>

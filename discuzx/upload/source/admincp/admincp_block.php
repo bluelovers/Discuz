@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_block.php 15321 2010-08-23 06:20:40Z xupeng $
+ *      $Id: admincp_block.php 21678 2011-04-08 02:51:13Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -20,6 +20,7 @@ loadcache('blockclass');
 if($operation=='perm') {
 	$bid = intval($_G['gp_bid']);
 	if(!submitcheck('permsubmit')) {
+		loadcache('diytemplatename');
 		$block = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE bid='$bid'");
 		shownav('portal', 'block', 'block_perm');
 		showsubmenu(cplang('block_perm_edit').' - '.($block['name'] ? $block['name'] : cplang('block_name_null')));
@@ -32,18 +33,35 @@ if($operation=='perm') {
 		showsubtitle(array('', 'username',
 		'<input class="checkbox" type="checkbox" name="chkallmanage" onclick="checkAll(\'prefix\', this.form, \'allowmanage\', \'chkallmanage\')" id="chkallmanage" /><label for="chkallmanage">'.cplang('block_perm_manage').'</label>',
 		'<input class="checkbox" type="checkbox" name="chkallrecommend" onclick="checkAll(\'prefix\', this.form, \'allowrecommend\', \'chkallrecommend\')" id="chkallrecommend" /><label for="chkallrecommend">'.cplang('block_perm_recommend').'</label>',
-		'<input class="checkbox" type="checkbox" name="chkallneedverify" onclick="checkAll(\'prefix\', this.form, \'needverify\', \'chkallneedverify\')" id="chkallneedverify" /><label for="chkallneedverify">'.cplang('block_perm_needverify').'</label>'
+		'<input class="checkbox" type="checkbox" name="chkallneedverify" onclick="checkAll(\'prefix\', this.form, \'needverify\', \'chkallneedverify\')" id="chkallneedverify" /><label for="chkallneedverify">'.cplang('block_perm_needverify').'</label>',
+		'block_perm_inherited'
 		));
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_member')." m ,".DB::table('common_block_permission')." cp WHERE cp.bid='$bid' AND cp.uid=m.uid");
+		$query = DB::query("SELECT m.username, cp.* FROM ".DB::table('common_member')." m ,".DB::table('common_block_permission')." cp WHERE cp.bid='$bid' AND cp.uid=m.uid ORDER BY inheritedtplname");
+		$line = '&minus;';
 		while($value = DB::fetch($query)) {
-			showtablerow('', array('class="td25"'), array(
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" /><input type=\"hidden\" name=\"perm[$value[uid]]\" value=\"$value[bid]\" />",
-				"$value[username]",
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$value[uid]]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$value[uid]]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
-			));
+			if(!empty($value['inheritedtplname'])) {
+				showtablerow('', array('class="td25"'), array(
+					"",
+					"$value[username]",
+					$value['allowmanage'] ? '&radic;' : $line,
+					$value['allowrecommend'] ? '&radic;' : $line,
+					$value['needverify'] ? '&radic;' : $line,
+					'<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname='.$value['inheritedtplname'].'">'.$_G['cache']['diytemplatename'][$value['inheritedtplname']].'</a>',
+				));
+			} else {
+				showtablerow('', array('class="td25"'), array(
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowmanage]\" value=\"$value[allowmanage]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowrecommend]\" value=\"$value[allowrecommend]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][needverify]\" value=\"$value[needverify]\" />",
+					"$value[username]",
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$value[uid]]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$value[uid]]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
+					$line,
+				));
+			}
 		}
 		showtablerow('', array('class="td25"'), array(
 			cplang('add_new'),
@@ -51,6 +69,7 @@ if($operation=='perm') {
 			'<input type="checkbox" class="checkbox" name="newallowmanage" value="1" />',
 			'<input type="checkbox" class="checkbox" name="newallowrecommend" value="1" />',
 			'<input type="checkbox" class="checkbox" name="newneedverify" value="1" />',
+			'',
 		));
 
 		showsubmit('permsubmit', 'submit', 'del');
@@ -58,38 +77,59 @@ if($operation=='perm') {
 		showformfooter();
 	} else {
 
-		if(!empty($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_block_permission')." WHERE bid='$bid' AND uid IN(".dimplode($_G['gp_delete']).")");
+		$block = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE bid='".$bid."'");
+		if(empty($block)) {
+			cpmsg('block_not_exists');
 		}
 
-		$perms = array();
+		$users = array();
 		if(is_array($_G['gp_perm'])) {
 			foreach($_G['gp_perm'] as $uid => $value) {
+				$user = array();
 				if(empty($_G['gp_delete']) || !in_array($uid, $_G['gp_delete'])) {
-					$uid = intval($uid);
-					$allowmanage = $_G['gp_allowmanage'][$uid] ? 1 : 0;
-					$allowrecommend = $_G['gp_allowrecommend'][$uid] ? 1 : 0;
-					$needverify = $_G['gp_needverify'][$uid] ? 1 : 0;
-					$perms[$uid] = "('$bid', '$uid', '$allowmanage', '$allowrecommend', '$needverify')";
+					$user = array();
+					$user['allowmanage'] = $_G['gp_allowmanage'][$uid] ? 1 : 0;
+					$user['allowrecommend'] = $_G['gp_allowrecommend'][$uid] ? 1 : 0;
+					$user['needverify'] = $_G['gp_needverify'][$uid] ? 1 : 0;
+					if($value['allowmanage'] != $user['allowmanage'] || $value['allowrecommend'] != $user['allowrecommend']	|| $value['needverify'] != $user['needverify'] ) {
+						$user['uid'] = intval($uid);
+						$users[] = $user;
+					}
 				}
 			}
 		}
 		if(!empty($_G['gp_newuser'])) {
-			$value = DB::fetch_first("SELECT cag.allowauthorizedblock,cm.uid FROM ".DB::table('common_admingroup')." cag LEFT JOIN ".DB::table('common_member')." cm ON cm.groupid=cag.admingid WHERE cm.username='$_G[gp_newuser]' AND cag.allowauthorizedblock='1'");
+			$value = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_newuser]'");
 			if($value) {
-				$allowmanage = $_G['gp_newallowmanage'] ? 1 : 0;
-				$allowrecommend = $_G['gp_newallowrecommend'] ? 1 : 0;
-				$needverify = $_G['gp_newneedverify'] ? 1 : 0;
-				$perms[$value['uid']] = "('$bid', '$value[uid]', '$allowmanage', '$allowrecommend', '$needverify')";
+				$user['uid'] = $value['uid'];
+				$user['allowmanage'] = $_G['gp_newallowmanage'] ? 1 : 0;
+				$user['allowrecommend'] = $_G['gp_newallowrecommend'] ? 1 : 0;
+				$user['needverify'] = $_G['gp_newneedverify'] ? 1 : 0;
+				$users[$user['uid']] = $user;
 			} else {
 				cpmsg_error($_G['gp_newuser'].cplang('block_has_no_allowauthorizedblock'));
 			}
 		}
-		if(!empty($perms)) {
-			DB::query("REPLACE INTO ".DB::table('common_block_permission')." (`bid`, `uid`, `allowmanage`, `allowrecommend`, `needverify`) VALUES ".implode(',', $perms));
+
+		require_once libfile('class/blockpermission');
+		$blockpermsission = & block_permission::instance();
+		if(!empty($users)) {
+			$blockpermsission->add_users_perm($bid, $users);
 		}
 
-		DB::update('common_block', array('notinherited'=>(!$_POST['inheritance'] ? '1' : '0')), array('bid'=>$bid));
+		if(!empty($_G['gp_delete'])) {
+			$blockpermsission->delete_users_perm($bid, $_G['gp_delete']);
+		}
+
+		$notinherited = !$_POST['inheritance'] ? '1' : '0';
+		if($notinherited != $block['notinherited']) {
+			if($notinherited) {
+				$blockpermsission->delete_inherited_perm_by_bid($bid);
+			} else {
+				$blockpermsission->remake_inherited_perm($bid);
+			}
+			DB::update('common_block', array('notinherited'=>$notinherited), array('bid'=>$bid));
+		}
 
 		cpmsg('block_perm_update_succeed', "action=block&operation=perm&bid=$bid", 'succeed');
 	}
@@ -122,15 +162,15 @@ if($operation=='perm') {
 			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 			.'</span>';
 		showsubmenu('block',  array(
-				array('block_list', 'block', $operation=='list'),
-				array('block_jscall', 'block&operation=jscall', $operation=='jscall')
-			), $searchctrl);
+			array('block_list', 'block', $operation=='list'),
+			array('block_jscall', 'block&operation=jscall', $operation=='jscall')
+		), $searchctrl);
 
 		$mpurl = ADMINSCRIPT.'?action=block&operation='.$operation;
 
 		$intkeys = array('bid');
 		$strkeys = array('blockclass');
-		if($operation!='jscall') $strkeys[] = 'targettplname';
+		$strkeys[] = 'targettplname';
 		$randkeys = array();
 		$likekeys = array('name');
 		$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys);
@@ -141,6 +181,23 @@ if($operation=='perm') {
 		$mpurl .= '&'.implode('&', $results['urls']);
 
 		$wherearr[] = $operation=='jscall' ? "blocktype='1'" : "blocktype='0'";
+		if($_GET['permname']) {
+			$bids = '';
+			$uid = DB::result_first('SELECT uid FROM '.DB::table('common_member')." WHERE username='$_GET[permname]'");
+			if($uid) {
+				$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$uid' GROUP BY bid");
+				while($v = DB::fetch($query)) {
+					$bids[] = $v['bid'];
+				}
+				$bids = dimplode($bids);
+			}
+			if($bids) {
+				$wherearr[] = 'bid IN ('.$bids.')';
+			} else {
+				cpmsg_error(stripslashes($_GET['permname']).cplang('block_the_username_has_not_block'));
+			}
+			$mpurl .= '&permname='.$_GET['permname'];
+		}
 
 		$wheresql = empty($wherearr)?'1':implode(' AND ', $wherearr);
 		$wheresql = str_replace(array('bid', 'blockclass', ' name', 'blocktype', 'targettplname'), array('b.bid', 'b.blockclass', ' b.name', 'b.blocktype', 'tb.targettplname'), $wheresql);
@@ -158,7 +215,7 @@ if($operation=='perm') {
 
 		$searchlang = array();
 		$keys = array('search', 'likesupport', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100',
-		'block_dateline', 'block_id', 'block_name', 'block_blockclass', 'block_add_jscall', 'block_choose_blockclass_to_add_jscall', 'block_diytemplate');
+		'block_dateline', 'block_id', 'block_name', 'block_blockclass', 'block_add_jscall', 'block_choose_blockclass_to_add_jscall', 'block_diytemplate', 'block_permname', 'block_permname_tips');
 		foreach ($keys as $key) {
 			$searchlang[$key] = cplang($key);
 		}
@@ -179,7 +236,7 @@ if($operation=='perm') {
 		}
 		$blockclass_sel .= '</select>';
 		$addjscall = $operation == 'jscall' ? '<input type="button" class="btn" onclick="addjscall()" value="'.$searchlang['block_add_jscall'].'" />' : '';
-		$firstrow = $operation == 'jscall' ? "<th>$searchlang[block_blockclass]</th><td colspan=\"3\">$blockclass_sel $addjscall</td>" : "<th>$searchlang[block_diytemplate]</th><td>$diytemplatename_sel</td><th>$searchlang[block_blockclass]</th><td colspan=\"2\">$blockclass_sel $addjscall</td>";
+		$firstrow = "<th>$searchlang[block_diytemplate]</th><td>$diytemplatename_sel</td><th>$searchlang[block_blockclass]</th><td colspan=\"2\">$blockclass_sel $addjscall</td>";
 		$adminscript = ADMINSCRIPT;
 		echo <<<SEARCH
 			<script>disallowfloat = '{$_G[setting][disallowfloat]}';</script>
@@ -197,7 +254,7 @@ if($operation=='perm') {
 						</tr>
 						<tr>
 							<th>$searchlang[resultsort]</th>
-							<td colspan="3">
+							<td>
 								<select name="orderby">
 								<option value="">$searchlang[defaultsort]</option>
 								<option value="dateline"$orderby[dateline]>$searchlang[block_dateline]</option>
@@ -214,8 +271,9 @@ if($operation=='perm') {
 								</select>
 								<input type="hidden" name="action" value="block">
 								<input type="hidden" name="operation" value="$operation">
-								<input type="submit" name="searchsubmit" value="$searchlang[search]" class="btn">
 							</td>
+							<th>$searchlang[block_permname]</th><td><input type="text" class="txt" name="permname" value="$_GET[permname]">$searchlang[block_permname_tips]
+								<input type="submit" name="searchsubmit" value="$searchlang[search]" class="btn"></td>
 						</tr>
 					</table>
 				</div>
@@ -237,26 +295,41 @@ SEARCH;
 		showformheader('block&operation='.$operation);
 		showtableheader('block_list');
 
+		$list = $diypage = array();
 		include_once libfile('function/block');
 		if($operation=='jscall') {
-			showsubtitle(array('', 'block_name', 'block_script', 'block_style', 'block_dateline', 'operation'));
+			showsubtitle(array('', 'block_name', 'block_script', 'block_style', 'block_dateline', 'block_page', 'operation'));
 			$multipage = '';
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_block')." b WHERE $wheresql"), 0);
+			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON tb.bid=b.bid WHERE $wheresql"), 0);
 			if($count) {
-				$query = DB::query("SELECT * FROM ".DB::table('common_block')." b WHERE $wheresql $ordersql LIMIT $start,$perpage");
+				$query = DB::query("SELECT b.*, tb.targettplname FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql $ordersql LIMIT $start,$perpage");
 				while($value = DB::fetch($query)) {
-					$theclass = block_getclass($value['blockclass'], true);
-					showtablerow('', array('class="td25"'), array(
-						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[bid]\">",
-						!empty($value['name']) ? $value['name'] : cplang('block_name_null'),
-						$theclass['script'][$value['script']],
-						$value['styleid'] ? $theclass['style'][$value['styleid']]['name'] : lang('portalcp', 'blockstyle_diy'),
-						!empty($value['dateline']) ? dgmdate($value['dateline']) : cplang('block_dateline_null'),
-						"<a href=\"portal.php?mod=portalcp&ac=block&op=block&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_setting')."</a> &nbsp;&nbsp".
-						"<a href=\"portal.php?mod=portalcp&ac=block&op=data&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_data')."</a> &nbsp;&nbsp".
-						"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_message')."', '<!--{block/$value[bid]}-->')\">".cplang('block_copycode_inner')."</a> &nbsp;&nbsp".
-						"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_jsmessage')."', '&lt;script type=&quot;text/javascript&quot; src=&quot;$_G[siteurl]api.php?mod=js&bid=$value[bid]&quot;&gt;&lt;/script&gt;')\">".cplang('block_copycode_outer')."</a>&nbsp;&nbsp;<a href=\"".ADMINSCRIPT."?action=block&operation=perm&bid=$value[bid]\">".cplang('portalcategory_perm').'</a>'
-					));
+					if($value['targettplname']) {
+						$diyurl = block_getdiyurl($value['targettplname']);
+						$diyurl = $diyurl['url'];
+						$tplname = isset($_G['cache']['diytemplatename'][$value['targettplname']]) ? $_G['cache']['diytemplatename'][$value['targettplname']] : $value['targettplname'];
+						$diypage[$value['bid']][$value['targettplname']] = $diyurl ? '<a href="'.$diyurl.'" target="_blank">'.$tplname.'</a>' : $tplname;
+					}
+					$list[$value['bid']] = $value;
+				}
+				if($list) {
+					foreach($list as $bid => $value) {
+						$inpage = empty($diypage[$bid]) ? cplang('block_page_nopage') : implode('<br/>' ,$diypage[$bid]);
+						$theclass = block_getclass($value['blockclass'], true);
+						showtablerow('', array('class="td25"'), array(
+							"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[bid]\">",
+							!empty($value['name']) ? $value['name'] : cplang('block_name_null'),
+							$theclass['script'][$value['script']],
+							$value['styleid'] ? $theclass['style'][$value['styleid']]['name'] : lang('portalcp', 'blockstyle_diy'),
+							!empty($value['dateline']) ? dgmdate($value['dateline']) : cplang('block_dateline_null'),
+							$inpage,
+							"<a href=\"portal.php?mod=portalcp&ac=block&op=block&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_setting')."</a> &nbsp;&nbsp".
+							"<a href=\"portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid=$value[bid]&from=cp\" onclick=\"ajaxget(this.href,'','','','',function(){location.reload();});return false;\">".cplang('block_update')."</a> &nbsp;&nbsp".
+							"<a href=\"portal.php?mod=portalcp&ac=block&op=data&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_data')."</a> &nbsp;&nbsp".
+							"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_message')."', '<!--{block/$value[bid]}-->')\">".cplang('block_copycode_inner')."</a> &nbsp;&nbsp".
+							"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_jsmessage')."', '&lt;script type=&quot;text/javascript&quot; src=&quot;$_G[siteurl]api.php?mod=js&bid=$value[bid]&quot;&gt;&lt;/script&gt;')\">".cplang('block_copycode_outer')."</a>&nbsp;&nbsp;<a href=\"".ADMINSCRIPT."?action=block&operation=perm&bid=$value[bid]\">".cplang('portalcategory_perm').'</a>'
+						));
+					}
 				}
 				$multipage = multi($count, $perpage, $page, $mpurl);
 			}
@@ -273,27 +346,30 @@ SEARCH;
 			if($count) {
 				$query = DB::query("SELECT b.*, tb.targettplname FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql $ordersql LIMIT $start,$perpage");
 				while($value = DB::fetch($query)) {
-					$theclass = block_getclass($value['blockclass'], true);
-					$diyurl = block_getdiyurl($value['targettplname']);
-					$diypage = '';
-					if ($diyurl['flag'] == 0) {
-						$diypage = "<a href=\"$diyurl[url]\" target=\"_blank\">".$_G['cache']['diytemplatename'][$value['targettplname']]."</a>";
-					} elseif ($diyurl['flag'] == 1) {
-						$diypage = cplang('block_page_pub');
-					} elseif ($diyurl['flag'] == 2) {
-						$diypage = cplang('block_page_unused');
+					if($value['targettplname']) {
+						$diyurl = block_getdiyurl($value['targettplname']);
+						$diyurl = $diyurl['url'];
+						$tplname = isset($_G['cache']['diytemplatename'][$value['targettplname']]) ? $_G['cache']['diytemplatename'][$value['targettplname']] : $value['targettplname'];
+						$diypage[$value['bid']][$value['targettplname']] = $diyurl ? '<a href="'.$diyurl.'" target="_blank">'.$tplname.'</a>' : $tplname;
 					}
-					showtablerow('', '', array(
-						$value['name'] ? $value['name'] : cplang('block_name_null'),
-						$theclass['script'][$value['script']],
-						$value['styleid'] ? $theclass['style'][$value['styleid']]['name'] : lang('portalcp', 'blockstyle_diy'),
-						!empty($value['dateline']) ? dgmdate($value['dateline']) : cplang('block_dateline_null'),
-						$diypage,
-						 "<a href=\"portal.php?mod=portalcp&ac=block&op=block&bid=$value[bid]&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_setting')."</a> &nbsp;&nbsp"
-						 ."<a href=\"portal.php?mod=portalcp&ac=block&op=data&bid=$value[bid]&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_data')."</a> &nbsp;&nbsp"
-						.$diyop."&nbsp;&nbsp;<a href=\""
-						.ADMINSCRIPT."?action=block&operation=perm&bid=$value[bid]\">".cplang('portalcategory_perm').'</a>'
-					));
+					$list[$value['bid']] = $value;
+				}
+				if($list) {
+					foreach($list as $bid => $value) {
+						$inpage = empty($diypage[$bid]) ? cplang('block_page_unused') : implode('<br/>' ,$diypage[$bid]);
+						$theclass = block_getclass($value['blockclass'], true);
+						showtablerow('', '', array(
+							$value['name'] ? $value['name'] : cplang('block_name_null'),
+							$theclass['script'][$value['script']],
+							$value['styleid'] ? $theclass['style'][$value['styleid']]['name'] : lang('portalcp', 'blockstyle_diy'),
+							!empty($value['dateline']) ? dgmdate($value['dateline']) : cplang('block_dateline_null'),
+							$inpage,
+							 "<a href=\"portal.php?mod=portalcp&ac=block&op=block&bid=$value[bid]&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_setting')."</a> &nbsp;&nbsp"
+							 ."<a href=\"portal.php?mod=portalcp&ac=block&op=data&bid=$value[bid]&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_data')."</a> &nbsp;&nbsp"
+							.$diyop."&nbsp;&nbsp;<a href=\""
+							.ADMINSCRIPT."?action=block&operation=perm&bid=$value[bid]\">".cplang('portalcategory_perm').'</a>'
+						));
+					}
 				}
 				$multipage = multi($count, $perpage, $page, $mpurl);
 			}

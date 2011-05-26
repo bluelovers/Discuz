@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_bbcode.php 15972 2010-08-30 07:54:04Z zhengqingpeng $
+ *      $Id: class_bbcode.php 20281 2011-02-21 04:36:29Z zhengqingpeng $
  */
 
 class bbcode {
@@ -34,13 +34,14 @@ class bbcode {
 			$this->search_exp = array(
 				"/\s*\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s*/is",
 				"/\[url\]\s*(https?:\/\/|ftp:\/\/|gopher:\/\/|news:\/\/|telnet:\/\/|rtsp:\/\/|mms:\/\/|callto:\/\/|ed2k:\/\/){1}([^\[\"']+?)\s*\[\/url\]/i",
-				"/\[em:(.+?):\]/i",
+				"/\[em:([0-9]+):\]/i",
 			);
 			$this->replace_exp = array(
 				"<div class=\"quote\"><blockquote>\\1</blockquote></div>",
 				"<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>",
 				" <img src=\"".STATICURL."image/smiley/comcom/\\1.gif\" class=\"vm\"> "
 			);
+			$this->replace_exp[] = '$this->bb_img(\'\\1\')';
 			$this->search_str = array('[b]', '[/b]','[i]', '[/i]', '[u]', '[/u]');
 			$this->replace_str = array('<b>', '</b>', '<i>','</i>', '<u>', '</u>');
 		}
@@ -91,6 +92,11 @@ class bbcode {
 	}
 
 	function bb_img($url) {
+		global $_G;
+
+		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://'))) {
+			$url = isset($_G['siteurl']) && !empty($_G['siteurl']) ? $_G['siteurl'].$url : 'http://'.$url;
+		}
 		$url = addslashes($url);
 		return "<img src=\"$url\" class=\"vm\">";
 	}

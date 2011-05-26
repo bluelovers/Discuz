@@ -1,5 +1,6 @@
 <!--{subtemplate common/header}-->
 <!--{subtemplate home/spacecp_header}-->
+			<!--{hook/spacecp_privacy_top}-->
 			<ul class="tb cl">
 				<li$opactives[base]><a href="home.php?mod=spacecp&ac=privacy&op=base">{lang personal_privacy_settings}</a></li>
 				<li$opactives[feed]><a href="home.php?mod=spacecp&ac=privacy&op=feed">{lang personal_feed_settings}</a></li>
@@ -113,50 +114,11 @@
 							</select>
 						</td>
 					</tr>
-					<tr>
-						<th>{lang for_friends_to_me}</th>
-						<td>
-							<select name="privacy[view][videofriend]">
-								<option value="0"$sels[view][videofriend][0]>{lang site_default_setting}</option>
-								<option value="1"$sels[view][videofriend][1]>{lang allow}</option>
-								<option value="2"$sels[view][videofriend][2]>{lang ban}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>{lang say_hi_to_me}</th>
-						<td>
-							<select name="privacy[view][videopoke]">
-								<option value="0"$sels[view][videopoke][0]>{lang site_default_setting}</option>
-								<option value="1"$sels[view][videopoke][1]>{lang allow}</option>
-								<option value="2"$sels[view][videopoke][2]>{lang ban}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>{lang connect_me}</th>
-						<td>
-							<select name="privacy[view][videowall]">
-								<option value="0"$sels[view][videowall][0]>{lang site_default_setting}</option>
-								<option value="1"$sels[view][videowall][1]>{lang allow}</option>
-								<option value="2"$sels[view][videowall][2]>{lang ban}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>{lang comment_my_information}</th>
-						<td>
-							<select name="privacy[view][videocomment]">
-								<option value="0"$sels[view][videocomment][0]>{lang site_default_setting}</option>
-								<option value="1"$sels[view][videocomment][1]>{lang allow}</option>
-								<option value="2"$sels[view][videocomment][2]>{lang ban}</option>
-							</select>
-						</td>
-					</tr>
 					<!--{/if}-->
+					<!--{hook/spacecp_privacy_base_extra}-->
 					<tr>
 						<th>&nbsp;</th>
-						<td><button type="submit" name="privacysubmit" value="true" class="pn pnp" /><strong>{lang save}</strong></button></td>
+						<td><button type="submit" name="privacysubmit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
 					</tr>
 				</table>
 
@@ -182,9 +144,10 @@
 							<label><input type="checkbox" class="pc" name="privacy[feed][newreply]" value="1"$sels[feed][newreply] />{lang forum_reply}</label>
 						</td>
 					</tr>
+					<!--{hook/spacecp_privacy_feed_extra}-->
 					<tr>
 						<th>&nbsp;</th>
-						<td><button type="submit" name="privacysubmit" value="true" class="pn pnp" /><strong>{lang save}</strong></button></td>
+						<td><button type="submit" name="privacysubmit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
 					</tr>
 				</table>
 
@@ -223,7 +186,7 @@
 
 				<table cellspacing="0" cellpadding="0" class="tfm bbda">
 					<caption>
-						<h2 class="wx xw1">{lang filtering_rules_title_1}</h2>
+						<h2 class="ptw pbn xs2">{lang filtering_rules_title_1}</h2>
 						<p class="xg1">{lang filtering_rules_message_1}</p>
 					</caption>
 					<tr>
@@ -237,7 +200,7 @@
 					<tr>
 						<th>&nbsp;</th>
 						<td>
-							<button type="submit" name="privacy2submit" value="true" class="pn pnp" /><strong>{lang save}</strong></button>
+							<button type="submit" name="privacy2submit" value="true" class="pn pnc" /><strong>{lang save}</strong></button>
 							<p class="d">{lang list_change_friend_name}</span>
 						</td>
 					</tr>
@@ -245,7 +208,7 @@
 
 				<table cellspacing="0" cellpadding="0" class="tfm bbda">
 					<caption>
-						<h2 class="wx xw1">{lang filtering_rules_title_2}</h2>
+						<h2 class="ptw pbn xs2">{lang filtering_rules_title_2}</h2>
 						<p class="xg1">{lang filtering_rules_message_2}</p>
 					</caption>
 					<!--{if $icons}-->
@@ -268,7 +231,7 @@
 					</tr>
 					<tr>
 						<th>&nbsp;</th>
-						<td><button type="submit" name="privacy2submit" value="true" class="pn pnp" /><strong>{lang save}</strong></button></td>
+						<td><button type="submit" name="privacy2submit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
 					</tr>
 					<!--{else}-->
 					<tr>
@@ -280,7 +243,7 @@
 
 				<table cellspacing="0" cellpadding="0" class="tfm">
 					<caption>
-						<h2 class="wx xw1">{lang filtering_rules_title_3}</h2>
+						<h2 class="ptw pbn xs2">{lang filtering_rules_title_3}</h2>
 						<p class="xg1">{lang filtering_rules_message_3}</p>
 					</caption>
 					<!--{if $types}-->
@@ -298,7 +261,7 @@
 					</tr>
 					<tr>
 						<th>&nbsp;</th>
-						<td><button type="submit" name="privacy2submit" value="true" class="pn pnp" /><strong>{lang save}</strong></button></td>
+						<td><button type="submit" name="privacy2submit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
 					</tr>
 					<!--{else}-->
 					<tr>
@@ -309,6 +272,7 @@
 				</table>
 			<!--{/if}-->
 			</form>
+			<!--{hook/spacecp_privacy_bottom}-->
 		</div>
 	</div>
 	<div class="appl">

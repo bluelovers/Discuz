@@ -36,7 +36,7 @@ class magic_hot {
 		$blog = magic_check_idtype($id, $idtype);
 
 		if(DB::result(DB::query('SELECT COUNT(*) FROM '.DB::table('common_magiclog')." WHERE action='2' AND uid = '$_G[uid]' AND targetid = '$id' AND idtype = '$idtype' AND magicid = '{$this->magic[magicid]}'"), 0)) {
-			showmessage("magicuse_object_once_limit");
+			showmessage('magicuse_object_once_limit');
 		}
 
 		$num = !empty($_G['setting']['feedhotmin']) ? intval($_G['setting']['feedhotmin']) : 3;
@@ -54,7 +54,7 @@ class magic_hot {
 		$idtype = $_GET['idtype'];
 		$blog = magic_check_idtype($id, $idtype);
 		if(DB::result(DB::query('SELECT COUNT(*) FROM '.DB::table('common_magiclog')." WHERE action='2' AND uid = '$_G[uid]' AND targetid = '$id' AND idtype = '$idtype' AND magicid = '{$this->magic[magicid]}'"), 0)) {
-			showmessage("magicuse_object_once_limit");
+			showmessage('magicuse_object_once_limit');
 		}
 
 		$num = !empty($_G['setting']['feedhotmin']) ? intval($_G['setting']['feedhotmin']) : 3;

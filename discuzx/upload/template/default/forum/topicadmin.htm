@@ -117,7 +117,7 @@
 					<li id="itemcp_highlight">
 						<table cellspacing="0" cellpadding="5">
 							<tr>
-								<td width="15"><input type="checkbox" name="operations[]" onclick="if(this.checked) switchitemcp('itemcp_highlight')" value="highlight" $defaultcheck[highlight] /></td>
+								<td width="15"><input type="checkbox" name="operations[]" class="pc" onclick="if(this.checked) switchitemcp('itemcp_highlight')" value="highlight" $defaultcheck[highlight] /></td>
 								<td class="hasd">
 									<!--{eval $_G['forum_colorarray'] = array(1=>'#EE1B2E', 2=>'#EE5023', 3=>'#996600', 4=>'#3C9D40', 5=>'#2897C5', 6=>'#2B65B7', 7=>'#8F2A90', 8=>'#EC1282');}-->
 									<label onclick="switchitemcp('itemcp_highlight')" class="labeltxt">{lang thread_highlight}</label>
@@ -127,8 +127,7 @@
 											<input type="hidden" id="highlight_style_1" name="highlight_style[1]" value="$stylecheck[1]" />
 											<input type="hidden" id="highlight_style_2" name="highlight_style[2]" value="$stylecheck[2]" />
 											<input type="hidden" id="highlight_style_3" name="highlight_style[3]" value="$stylecheck[3]" />
-											<input id="highlight_color_show" type="text" class="crl" readonly="readonly" {if $colorcheck}style="background: $_G[colorarray][$colorcheck]" {/if}/>
-											<a href="javascript:;" id="highlight_color_ctrl" onclick="showHighLightColor('highlight_color')" class="dpbtn">^</a>
+											<a href="javascript:;" id="highlight_color_ctrl" onclick="showHighLightColor('highlight_color')" class="pn colorwd"{if $colorcheck} style="background-: $_G[forum_colorarray][$colorcheck]"{/if} /></a>
 										</span>
 										<a href="javascript:;" id="highlight_op_1" onclick="switchhl(this, 1)" class="dopt_b{if $stylecheck[1]} cnt{/if}" style="text-indent:0;text-decoration:none;font-weight:700;" title="{lang e_bold}">B</a>
 										<a href="javascript:;" id="highlight_op_2" onclick="switchhl(this, 2)" class="dopt_i{if $stylecheck[2]} cnt{/if}" style="text-indent:0;text-decoration:none;font-style:italic;" title="{lang e_italic}">I</a>
@@ -154,12 +153,12 @@
 					<li id="itemcp_recommend">
 						<table cellspacing="0" cellpadding="5">
 							<tr>
-								<td width="15"><input name="operations[]" onclick="if(this.checked) switchitemcp('itemcp_recommend')" type="checkbox" value="recommend" $defaultcheck[recommend] /></td>
+								<td width="15"><input type="checkbox" name="operations[]" class="pc" onclick="if(this.checked) switchitemcp('itemcp_recommend')" value="recommend" $defaultcheck[recommend] /></td>
 								<td>
 									<label onclick="switchitemcp('itemcp_recommend')" class="labeltxt">{lang recommend}</label>
 									<div class="dopt">
-										<label><input type="radio" name="isrecommend" class="pr" value="1" checked="checked" /> {lang recommend}</label>
-										<label><input type="radio" name="isrecommend" class="pr" value="0" /> {lang admin_unrecommend}</label>
+										<label class="lb"><input type="radio" name="isrecommend" class="pr" value="1" checked="checked" />{lang recommend}</label>
+										<label><input type="radio" name="isrecommend" class="pr" value="0" />{lang admin_unrecommend}</label>
 									</div>
 								</td>
 							</tr>
@@ -179,7 +178,7 @@
 									<td>&nbsp;</td>
 									<td>
 										<label for="reducetitle" class="labeltxt">{lang forum_recommend_reducetitle}</label>
-										<input type="text" name="reducetitle" id="reducetitle" class="px" style="width: 125px" value="$thread[subject]" tabindex="2" />
+										<input type="text" name="reducetitle" id="reducetitle" class="px" style="width: 122px" value="$thread[subject]" tabindex="2" />
 									</td>
 								</tr>
 								<!--{if $imgattach}-->
@@ -187,7 +186,7 @@
 										<td>&nbsp;</td>
 										<td>
 											<label class="labeltxt">{lang forum_recommend_image}</label>
-											<select name="selectattach" onchange="updateimginfo(this.value)" class="ps" style="width: 125px">
+											<select name="selectattach" onchange="updateimginfo(this.value)" class="ps" style="width: 132px">
 												<option value="">{lang forum_recommend_noimage}</option>
 												<!--{loop $imgattach $imginfo}-->
 													<option value="$imginfo[aid]"{if $selectattach == $imginfo[aid]} selected="selected"{/if}>$imginfo[filename]</option>
@@ -203,7 +202,7 @@
 											<script type="text/javascript" reload="1">
 											var imgk = new Array();
 											<!--{loop $imgattach $imginfo}-->
-												<!--{eval $a = '\"\'\t\\""\\\''."\\\\";$k = $imginfo['aid'].'&size=120x80&key='.rawurlencode(authcode($imginfo['aid']."\t120\t80", 'ENCODE', $_G['config']['security']['authkey'])).'&nocache=yes';}-->
+												<!--{eval $a = '\"\'\t\\""\\\''."\\\\";$k = $imginfo['aid'].'&size=120x80&key='.rawurlencode(md5($imginfo['aid'].'|120|80')).'&nocache=yes';}-->
 												imgk[{$imginfo[aid]}] = '$k';
 											<!--{/loop}-->
 											function updateimginfo(aid) {
@@ -236,8 +235,8 @@
 							{lang admin_targettype}: <span id="threadtypes"><select name="threadtypeid" class="ps vm"><option value="0" /></option></select></span>
 						</p>
 						<ul class="llst" id="moveext" style="display:none;margin:5px 0;">
-							<li class="wide"><label><input type="radio" name="type" class="pr" value="normal" checked="checked" /> {lang admin_move}</label></li>
-							<li class="wide"><label><input type="radio" name="type" class="pr" value="redirect" /> {lang admin_move_hold}</label></li>
+							<li class="wide"><label><input type="radio" name="type" class="pr" value="normal" checked="checked" />{lang admin_move}</label></li>
+							<li class="wide"><label><input type="radio" name="type" class="pr" value="redirect" />{lang admin_move_hold}</label></li>
 						</ul>
 					<!--{else}-->
 						<!--{if $typeselect}-->
@@ -261,8 +260,8 @@
 						<!--{/if}-->
 						</li>
 					<!--{elseif $operation == 'down' || $operation='bump'}-->
-						<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="bump" checked="checked"/> {lang admin_bump}</label></li>
-						<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="down" /> {lang admin_down}</label></li>
+						<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="bump" checked="checked"/>{lang admin_bump}</label></li>
+						<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="down" />{lang admin_down}</label></li>
 					<!--{/if}-->
 				</ul>
 				</div>
@@ -310,8 +309,8 @@
 		</div>
 		<!--{if empty($hiddensubmit)}-->
 			<p class="o pns">
+				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
 				<button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="{lang confirms}"><span>{lang confirms}</span></button>
-				<input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} /> <label for="sendreasonpm" />{lang admin_pm}</label>
 			</p>
 		<!--{/if}-->
 	</form>
@@ -352,7 +351,7 @@ function switchhl(obj, v) {
 	}
 }
 function showHighLightColor(hlid) {
-	var showid = hlid + '_show';
+	var showid = hlid + '_ctrl';
 	if(!$(showid + '_menu')) {
 		var str = '';
 		var coloroptions = {'0' : '#000', '1' : '#EE1B2E', '2' : '#EE5023', '3' : '#996600', '4' : '#3C9D40', '5' : '#2897C5', '6' : '#2B65B7', '7' : '#8F2A90', '8' : '#EC1282'};

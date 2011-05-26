@@ -6,7 +6,7 @@
 	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form id="resendform_{$id}" name="resendform_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=invite&op=resend&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="resendsubmit" value="true" />
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -28,7 +28,7 @@
 	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form id="deleteform_{$id}" name="deleteform_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=invite&op=delete&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="deletesubmit" value="true" />
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -47,8 +47,8 @@
 <!--{elseif $_GET['op'] == 'showinvite'}-->
 	<!--{loop $list $key $url}-->
 	<tr>
-		<td class="bbda"><a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
-		<td class="bbda"><a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
+		<td class="bbda"><a href="$url" onclick="setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
+		<td class="bbda"><a href="javascript:;" onclick="setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
 	</tr>
 	<!--{/loop}-->
 <!--{else}-->
@@ -56,23 +56,19 @@
 
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
-	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> {lang friends}</div>
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="home.php?mod=space&do=friend">{lang friends}</a> <em>&rsaquo;</em>
+		{lang invite_friend}
+	</div>
 </div>
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
-			<h1 class="mt"><img alt="friend" src="{STATICURL}image/feed/friend.gif" class="vm" /> {lang friends}</h1>
-			<ul class="tb cl">
-				<li><a href="home.php?mod=space&uid=$space[uid]&do=friend">{lang friend_list}</a></li>
-				<li><a href="home.php?mod=spacecp&ac=search">{lang search_friend}</a></li>
-				<li><a href="home.php?mod=spacecp&ac=friend&op=find">{lang people_might_know}</a></li>
-				<li class="a"><a href="home.php?mod=spacecp&ac=invite">{lang invite_friend}</a></li>
-				<li><a href="home.php?mod=spacecp&ac=friend&op=request">{lang friend_request}</a></li>
-			</ul>
+			<h1 class="mt"><img alt="friend" src="{STATICURL}image/feed/friend.gif" class="vm" /> {lang invite_friend}</h1>
 
-
-<!--{if $allowinvite}-->
+			<!--{if $allowinvite}-->
 			<form method="post" id="newinvite" autocomplete="off" action="home.php?mod=spacecp&ac=invite&appid=$appid&ref" onsubmit="ajaxpost(this.id, 'return_newinvite');doane(event);">
 				<!--{if $config[inviteaddcredit] || $config[invitedaddcredit]}-->
 				<p class="tbmu">
@@ -114,7 +110,7 @@
 							<li id="sendmail_$value[id]_li">
 								<em>
 									<a href="home.php?mod=spacecp&ac=invite&op=resend&id=$value[id]&handlekey=resendinvitehk_{$value[id]}" id="mail_invite_$value[id]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang resend}">{lang resend}</a>
-									<a href="javascript:;" title="{lang link}" onclick="javascript:setCopy('$value[url]', '{lang copy_invite_link}');return false;">{lang link}</a>
+									<a href="javascript:;" title="{lang link}" onclick="setCopy('$value[url]', '{lang copy_invite_link}');return false;">{lang link}</a>
 									<a href="home.php?mod=spacecp&ac=invite&op=delete&id=$value[id]&handlekey=deleteinvitehk_{$value[id]}" id="del_invite_$value[id]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang delete}">{lang delete}</a>
 								</em>
 								$value[email]
@@ -134,7 +130,6 @@
 						<p class="mtn mbn">{lang friend_invite_message}</p>
 						<!--{if $creditnum && $list}--><p>{lang click_link_copy}</p><!--{/if}-->
 					</caption>
-					<!--{if $creditnum}-->
 							<tr>
 								<td class="bbda"><strong>{lang invite_link}</strong></td>
 								<td class="bbda"><strong>{lang invite_code}</strong></td>
@@ -143,8 +138,8 @@
 								<!--{if $list}-->
 									<!--{loop $list $key $url}-->
 									<tr>
-										<td class="bbda"><a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="javascript:setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
-										<td class="bbda"><a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="javascript:setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
+										<td class="bbda"><a href="$url" onclick="setCopy('$url', '{lang copy_invite_link}');return false;">$url</a> &nbsp;<a href="$url" onclick="setCopy('$url', '{lang copy_invite_link}');return false;" class="xi2">[{lang copy}]</a></td>
+										<td class="bbda"><a href="javascript:;" onclick="setCopy('$key', '{lang copy_invite_code}');return false;">$key</a> &nbsp;<a href="javascript:;" onclick="setCopy('$key', '{lang copy_invite_code}');return false;" class="xi2">[{lang copy}]</a></td>
 									</tr>
 									<!--{/loop}-->
 								<!--{else}-->
@@ -156,7 +151,7 @@
 					
 						<tr>
 							<td colspan="2">
-								<p class="mtm">{lang invitation_code_spend}{$extcredits[title]} <strong class="xi1">$creditnum</strong> $extcredits[unit] ( {lang you_have}$extcredits[title] <strong id="haveallcredit">{$space[$creditkey]}</strong> $extcredits[unit] )</p>
+								<p class="mtm">{lang invitation_code_spend}{$extcredits[title]} <strong class="xi1">$creditnum</strong> $extcredits[unit] ( {lang you_have}$extcredits[title] <strong id="haveallcredit">{$space[$creditkey]}</strong> $extcredits[unit] )<!--{if $space[$creditkey] < $creditnum}--><span><a href="home.php?mod=spacecp&ac=credit" target="_blank" class="xi2">{lang credit_recharge}</a></span><!--{/if}--></p>
 								<!--{if $_G['group']['maxinviteday']}-->
 								<p class="d">{lang max_invite_day_message}</p>
 								<!--{/if}-->
@@ -178,10 +173,10 @@
 								</script>
 							</td>
 						</tr>
-					<!--{else}-->
+					<!--{if !$creditnum}-->
 						<tr>
 							<td>
-								<a onclick="javascript:setCopy('$inviteurl', '{lang copy_invite_link}');return false;" href="$inviteurl" class="xw1">$inviteurl</a> &nbsp;<a onclick="javascript:setCopy('$inviteurl', '{lang copy_invite_link}');return false;" href="$inviteurl" class="xw1 xi2">[{lang copy}]</a>
+								{lang copy_invite_manage}: <a onclick="setCopy('$inviteurl', '{lang copy_invite_link}');return false;" href="$inviteurl" class="xw1">$inviteurl</a> &nbsp;<a onclick="setCopy('$inviteurl', '{lang copy_invite_link}');return false;" href="$inviteurl" class="xw1 xi2">[{lang copy}]</a>
 							</td>
 						</tr>
 					<!--{/if}-->
@@ -216,7 +211,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><button type="submit" name="emailinvite" value="true" class="pn pnp"><strong>{lang invite}</strong></button></td>
+							<td><button type="submit" name="emailinvite" value="true" class="pn pnc"><strong>{lang invite}</strong></button></td>
 						</tr>
 					</table>
 				</div>
@@ -252,7 +247,7 @@
 	</div>
 
 	<div class="appl">
-		<!--{subtemplate common/userabout}-->
+		<!--{subtemplate home/space_friend_nav}-->
 	</div>
 </div>
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 17255 2010-09-28 01:46:40Z monkey $
+ *      $Id: admincp_counter.php 22559 2011-05-12 07:04:17Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -121,7 +121,16 @@ if(submitcheck('forumsubmit', 1)) {
 	}
 	while($mem = DB::fetch($queryt)) {
 		$processed = 1;
-		$postcount = getcountofposts(DB::table('forum_post'), "authorid='{$mem['uid']}' AND invisible='0'");
+		$postcount = 0;
+		loadcache('posttable_info');
+		if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
+			foreach($_G['cache']['posttable_info'] as $key => $value) {
+				$postcount += DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable($key))." WHERE authorid='$mem[uid]' AND invisible='0'");
+			}
+		} else {
+			$postcount += DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable())." WHERE authorid='$mem[uid]' AND invisible='0'");
+		}
+		$postcount += DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_postcomment')." WHERE authorid='$mem[uid]'");
 		$threadcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE authorid='$mem[uid]'");
 		foreach($threadtableids as $tableid) {
 			if(!$tableid) {
@@ -144,7 +153,7 @@ if(submitcheck('forumsubmit', 1)) {
 	$nextlink = "action=counter&current=$next&pertask=$pertask&threadsubmit=yes";
 	$processed = 0;
 
-	$queryt = DB::query("SELECT tid, replies, lastpost, lastposter FROM ".DB::table('forum_thread')." WHERE displayorder>='0' LIMIT $current, $pertask");
+	$queryt = DB::query("SELECT tid, replies, lastpost, lastposter, author FROM ".DB::table('forum_thread')." WHERE displayorder>='0' LIMIT $current, $pertask");
 	while($threads = DB::fetch($queryt)) {
 		$processed = 1;
 		$posttable = getposttablebytid($threads['tid']);
@@ -152,6 +161,9 @@ if(submitcheck('forumsubmit', 1)) {
 		$replynum--;
 		$lastpost = DB::fetch_first("SELECT author, dateline FROM ".DB::table($posttable)." WHERE tid='$threads[tid]' AND invisible='0' ORDER BY dateline DESC LIMIT 1");
 		if($threads['replies'] != $replynum || $threads['lastpost'] != $lastpost['dateline'] || $threads['lastposter'] != $lastpost['author']) {
+			if(empty($threads['author'])) {
+				$lastpost['author'] = '';
+			}
 			DB::query("UPDATE LOW_PRIORITY ".DB::table('forum_thread')." SET replies='$replynum', lastpost='$lastpost[dateline]', lastposter='".addslashes($lastpost['author'])."' WHERE tid='$threads[tid]'", 'UNBUFFERED');
 		}
 	}
@@ -245,10 +257,12 @@ if(submitcheck('forumsubmit', 1)) {
 		foreach($optionids[$sortid] as $optionid => $identifier) {
 			if(!$tables[$identifier] && (in_array($options[$identifier], array('radio', 'select', 'number')) || $search[$optionid])) {
 				$fieldname = $identifier;
-				if(in_array($options[$identifier], array('radio', 'select'))) {
+				if(in_array($options[$identifier], array('radio'))) {
 					$fieldtype = 'smallint(6) UNSIGNED NOT NULL DEFAULT \'0\'';
 				} elseif(in_array($options[$identifier], array('number', 'range'))) {
 					$fieldtype = 'int(10) UNSIGNED NOT NULL DEFAULT \'0\'';
+				} elseif($options[$identifier] == 'select') {
+					$fieldtype = 'varchar(50) NOT NULL \'0\'';
 				} else {
 					$fieldtype = 'mediumtext NOT NULL';
 				}
@@ -298,7 +312,16 @@ if(submitcheck('forumsubmit', 1)) {
 	$queryt = DB::query("SELECT uid FROM ".DB::table('common_member')." LIMIT $current, $pertask");
 	while($mem = DB::fetch($queryt)) {
 		$processed = 1;
-		$postcount = getcountofposts(DB::table('forum_post'), "authorid='$mem[uid]' AND invisible='0'");
+		$postcount = 0;
+		loadcache('posttable_info');
+		if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
+			foreach($_G['cache']['posttable_info'] as $key => $value) {
+				$postcount += DB::query("SELECT COUNT(*) FROM ".DB::table(getposttable($key))." WHERE authorid='$mem[uid]' AND invisible='0'");
+			}
+		} else {
+			$postcount += DB::query("SELECT COUNT(*) FROM ".DB::table(getposttable()), "authorid='$mem[uid]' AND invisible='0'");
+		}
+		$postcount += DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_postcomment')." WHERE authorid='$mem[uid]'");
 		$query_threads = DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE authorid='$mem[uid]'");
 		DB::query("UPDATE ".DB::table('common_member_count')." SET posts='".$postcount."', threads='".DB::result($query_threads, 0)."' WHERE uid='$mem[uid]'");
 	}
@@ -335,17 +358,17 @@ if(submitcheck('forumsubmit', 1)) {
 	while($group = DB::fetch($queryf)) {
 		$processed = 1;
 
-		$mreplies_tmp = getfieldsofposts("COUNT(*) as num, authorid", "fid='$group[fid]' AND first='0' GROUP BY authorid");
 		$mreplies_array = array();
-		foreach($mreplies_tmp as $mreplies) {
-			if(empty($mreplies_array[$mreplies['authorid']])) {
-				$mreplies_array[$mreplies['authorid']] = $mreplies['num'];
-			} else {
-				$mreplies_array[$mreplies['authorid']] = $mreplies['num'];
+		loadcache('posttableids');
+		$posttables = empty($_G['cache']['posttableids']) ? array(0) : $_G['cache']['posttableids'];
+		foreach($posttables as $posttableid) {
+			$query = DB::query('SELECT COUNT(*) as num, authorid FROM '.DB::table(getposttable($posttableid))." WHERE fid='$group[fid]' AND first='0' GROUP BY authorid");
+			while($mreplies = DB::fetch($query)) {
+				$mreplies_array[$mreplies['authorid']] = $mreplies_array[$mreplies['authorid']] + $mreplies['num'];
 			}
 		}
-		foreach($mreplies_array as $mreplies) {
-			DB::query("UPDATE ".DB::table('forum_groupuser')." SET replies = '$mreplies[num]' WHERE fid='$group[fid]' AND uid='$mreplies[authorid]'");
+		foreach($mreplies_array as $authorid => $num) {
+			DB::query("UPDATE ".DB::table('forum_groupuser')." SET replies = '$num' WHERE fid='$group[fid]' AND uid='$authorid'");
 		}
 		$queryt = DB::query("SELECT COUNT(*) as num, authorid FROM ".DB::table('forum_thread')." WHERE fid='$group[fid]' GROUP BY authorid");
 		while($mthreads = DB::fetch($queryt)) {
@@ -407,6 +430,42 @@ if(submitcheck('forumsubmit', 1)) {
 	} else {
 		cpmsg('counter_album_picnum_succeed', 'action=counter', 'succeed');
 	}
+} elseif(submitcheck('setthreadcover', 1)) {
+	$fid = intval($_G['gp_fid']);
+	$allthread = intval($_G['gp_allthread']);
+	if(empty($fid)) {
+		cpmsg('counter_thread_cover_fiderror', 'action=counter', 'error');
+	}
+	$nextlink = "action=counter&current=$next&pertask=$pertask&setthreadcover=yes&fid=$fid&allthread=$allthread";
+	$processed = 0;
+	$forumpicstyle = DB::result_first("SELECT picstyle FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
+
+	if(empty($forumpicstyle)) {
+		cpmsg('counter_thread_cover_fidnopicstyle', 'action=counter', 'error');
+	}
+	if($_G['setting']['forumpicstyle']) {
+		$_G['setting']['forumpicstyle'] = unserialize($_G['setting']['forumpicstyle']);
+		empty($_G['setting']['forumpicstyle']['thumbwidth']) && $_G['setting']['forumpicstyle']['thumbwidth'] = 214;
+		empty($_G['setting']['forumpicstyle']['thumbheight']) && $_G['setting']['forumpicstyle']['thumbheight'] = 160;
+	} else {
+		$_G['setting']['forumpicstyle'] = array('thumbwidth' => 214, 'thumbheight' => 160);
+	}
+	require_once libfile('function/post');
+	$coversql = empty($allthread) ? 'AND cover=\'0\'' : '';
+	$queryt = DB::query("SELECT tid, cover FROM ".DB::table('forum_thread')." WHERE fid='$fid' AND displayorder>='0' $coversql LIMIT $current, $pertask");
+	$_G['forum']['ismoderator'] = 1;
+	while($threads = DB::fetch($queryt)) {
+		$processed = 1;
+		$posttable = getposttablebytid($threads['tid']);
+		$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$threads[tid]' AND invisible='0' AND first='1'");
+		setthreadcover($pid);
+	}
+
+	if($processed) {
+		cpmsg("$lang[counter_thread_cover]: ".cplang('counter_processing', array('current' => $current, 'next' => $next)), $nextlink, 'loading');
+	} else {
+		cpmsg('counter_thread_cover_succeed', 'action=counter', 'succeed');
+	}
 } else {
 
 	shownav('tools', 'nav_updatecounters');
@@ -463,6 +522,10 @@ if(submitcheck('forumsubmit', 1)) {
 	showtablerow('', array('class="td21"'), array(
 		"$lang[counter_album_picnum]:",
 		'<input name="pertask13" type="text" class="txt" value="100" /><input type="submit" class="btn" name="albumpicnum" onclick="this.form.pertask.value=this.form.pertask13.value" value="'.$lang['submit'].'" />'
+	));
+	showtablerow('', array('class="td21"'), array(
+		"$lang[counter_thread_cover]:",
+		'<input name="pertask14" type="text" class="txt" value="100" /> '.$lang['counter_forumid'].': <input type="text" class="txt" name="fid" value="" size="10">&nbsp;<input type="checkbox" value="1" name="allthread">'.$lang['counter_have_cover'].'&nbsp;&nbsp;<input type="submit" class="btn" name="setthreadcover" onclick="this.form.pertask.value=this.form.pertask14.value" value="'.$lang['submit'].'" />'
 	));
 	showtablefooter();
 	showformfooter();

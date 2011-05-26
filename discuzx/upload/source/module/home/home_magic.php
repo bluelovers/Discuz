@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc111.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_magic.php 15881 2010-08-27 09:38:26Z monkey $
+	$Id: home_magic.php 21217 2011-03-18 10:01:16Z monkey $
 */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,7 @@ if(!$_G['setting']['creditstransextra'][3]) {
 require_once libfile('function/magic');
 loadcache('magics');
 
+$_G['mnid'] = 'mn_common';
 $magiclist = array();
 $_G['tpp'] = 14;
 $page = max(1, intval($_G['gp_page']));
@@ -43,6 +44,7 @@ if(!$_G['group']['allowmagics']) {
 }
 
 $totalweight = getmagicweight($_G['uid'], $magicarray);
+$allowweight = $_G['group']['maxmagicsweight'] - $totalweight;
 $location = 0;
 
 if(empty($action) && !empty($_G['gp_mid'])) {
@@ -171,8 +173,8 @@ if($action == 'shop') {
 			updatemagiclog($magic['magicid'], '1', $magicnum, $magic['price'].'|'.$magic['credit'], $_G['uid']);
 
 			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+(-'$magicnum'), salevolume=salevolume+'$magicnum' WHERE magicid='$magic[magicid]'");
-			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice));
-			showmessage('magics_buy_succeed', 'home.php?mod=magic&action=mybox', array('magicname' => $magic['name'], 'num' => $magicnum, 'credit' => $_G['setting']['extcredits'][$magic['credit']]['title'].' '.$totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit']));
+			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice), true, 'BMC', $magic['magicid']);
+			showmessage('magics_buy_succeed', 'home.php?mod=magic&action=mybox', array('magicname' => $magic['name'], 'num' => $magicnum, 'credit' => $totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit'].$_G['setting']['extcredits'][$magic['credit']]['title']));
 
 		}
 
@@ -222,13 +224,13 @@ if($action == 'shop') {
 			$givemessage = dhtmlspecialchars(trim($_G['gp_givemessage']));
 			givemagic($toname, $magic['magicid'], $magicnum, $magic['num'], $totalprice, $givemessage, $magicarray);
 			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+(-'$magicnum'), salevolume=salevolume+'$magicnum' WHERE magicid='$magicid'");
-			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice));
+			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice), true, 'BMC', $magicid);
 			showmessage('magics_buygive_succeed', 'home.php?mod=magic&action=shop', array('magicname' => $magic['name'], 'toname' => $toname, 'num' => $magicnum, 'credit' => $_G['setting']['extcredits'][$magic['credit']]['title'].' '.$totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit']), array('locationtime' => true));
 
 		}
 
 	} else {
-		showmessage('undefined_action', NULL, 'HALTED');
+		showmessage('undefined_action');
 	}
 
 } elseif($action == 'mybox') {
@@ -321,7 +323,7 @@ if($action == 'shop') {
 				updatemagiclog($magic['magicid'], '2', $magicnum, '0', 0, 'sell');
 				$totalprice = $discountprice * $magicnum;
 				updatemembercount($_G['uid'], array($magic['credit'] => $totalprice));
-				showmessage('magics_sell_succeed', 'home.php?mod=magic&action=mybox', array('magicname' => $magic['name'], 'num' => $magicnum, 'credit' => $_G['setting']['extcredits'][$magic['credit']]['title'].' '.$totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit']));
+				showmessage('magics_sell_succeed', 'home.php?mod=magic&action=mybox', array('magicname' => $magic['name'], 'num' => $magicnum, 'credit' => $totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit'].$_G['setting']['extcredits'][$magic['credit']]['title']));
 			}
 
 		} elseif($operation == 'drop') {
@@ -372,7 +374,7 @@ if($action == 'shop') {
 			}
 
 		} else {
-			showmessage('undefined_action', NULL, 'HALTED');
+			showmessage('undefined_action');
 		}
 
 	}
@@ -441,7 +443,7 @@ if($action == 'shop') {
 	$navtitle = lang('core', 'title_magics_log');
 
 } else {
-	showmessage('undefined_action', NULL, 'HALTED');
+	showmessage('undefined_action');
 }
 
 include template('home/space_magic');

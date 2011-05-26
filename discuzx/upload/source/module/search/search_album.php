@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_album.php 16050 2010-08-31 04:54:54Z wangjinbo $
+ *      $Id: search_album.php 22166 2011-04-25 02:03:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,8 +30,6 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '', 'trade' => '', 'threadsort' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 
 $srchtxt = $_G['gp_srchtxt'];
@@ -123,8 +121,8 @@ if(!submitcheck('searchsubmit', 1)) {
 
 			$num = $ids = 0;
 			$_G['setting']['search']['album']['maxsearchresults'] = $_G['setting']['search']['album']['maxsearchresults'] ? intval($_G['setting']['search']['album']['maxsearchresults']) : 500;
-			$srchtxtsql = addcslashes($srchtxt, '%_');
-			$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE albumname LIKE '%$srchtxtsql%' ORDER BY albumid DESC LIMIT ".$_G['setting']['search']['album']['maxsearchresults']);
+			list($srchtxt, $srchtxtsql) = searchkey($keyword, "albumname LIKE '%{text}%'", true);
+			$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE 1 $srchtxtsql ORDER BY albumid DESC LIMIT ".$_G['setting']['search']['album']['maxsearchresults']);
 			while($album = DB::fetch($query)) {
 				$ids .= ','.$album['albumid'];
 				$num++;
@@ -141,7 +139,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=album&searchid=$searchid&searchsubmit=yes");
+		dheader("location: search.php?mod=album&searchid=$searchid&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

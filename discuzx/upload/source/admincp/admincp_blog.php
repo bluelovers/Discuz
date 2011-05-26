@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 16948 2010-09-17 06:39:14Z zhengqingpeng $
+ *      $Id: admincp_blog.php 20638 2011-03-01 03:26:36Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -30,6 +30,35 @@ $starttime = $_G['gp_starttime'];
 $endtime = $_G['gp_endtime'];
 $searchsubmit = $_G['gp_searchsubmit'];
 $blogids = $_G['gp_blogids'];
+$friend = $_G['gp_friend'];
+$ip = $_G['gp_ip'];
+$orderby = $_G['gp_orderby'];
+$ordersc = $_G['gp_ordersc'];
+
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
+$muticondition = '';
+$muticondition .= $uid ? '&uid='.$uid : '';
+$muticondition .= $blogid ? '&blogid='.$blogid : '';
+$muticondition .= $users ? '&users='.$users : '';
+$muticondition .= $keywords ? '&keywords='.$keywords : '';
+$muticondition .= $lengthlimit ? '&lengthlimit='.$lengthlimit : '';
+$muticondition .= $viewnum1 ? '&viewnum1='.$viewnum1 : '';
+$muticondition .= $viewnum2 ? '&viewnum2='.$viewnum2 : '';
+$muticondition .= $replynum1 ? '&replynum1='.$replynum1 : '';
+$muticondition .= $replynum2 ? '&replynum2='.$replynum2 : '';
+$muticondition .= $hot1 ? '&hot1='.$hot1 : '';
+$muticondition .= $hot2 ? '&hot2='.$hot2 : '';
+$muticondition .= $starttime ? '&starttime='.$starttime : '';
+$muticondition .= $endtime ? '&endtime='.$endtime : '';
+$muticondition .= $friend ? '&friend='.$friend : '';
+$muticondition .= $ip ? '&ip='.$ip : '';
+$muticondition .= $orderby ? '&orderby='.$orderby : '';
+$muticondition .= $ordersc ? '&ordersc='.$ordersc : '';
+$muticondition .= $fromumanage ? '&fromumanage='.$fromumanage : '';
+$muticondition .= $searchsubmit ? '&searchsubmit='.$searchsubmit : '';
+$muticondition .= $_G['gp_search'] ? '&search='.$_G['gp_search'] : '';
+$muticondition .= $detail ? '&detail='.$detail : '';
 
 if(!submitcheck('blogsubmit')) {
 	if(empty($_G['gp_search'])) {
@@ -38,8 +67,13 @@ if(!submitcheck('blogsubmit')) {
 		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
 
-	$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
-	$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	if($fromumanage) {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? '' : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? '' : $endtime;
+	} else {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	}
 
 	shownav('topic', 'nav_blog');
 	showsubmenu('nav_blog', array(
@@ -50,7 +84,9 @@ if(!submitcheck('blogsubmit')) {
 		array('blog_search', !$searchsubmit),
 		array('nav_blog', $searchsubmit)
 	));
-	showtips('blog_tips');
+	if($muticondition) {
+		showtips('blog_tips');
+	}
 	echo <<<EOT
 <script type="text/javascript" src="static/js/calendar.js"></script>
 <script type="text/JavaScript">
@@ -66,15 +102,20 @@ EOT;
 	showtableheader();
 	showsetting('blog_search_detail', 'detail', $detail, 'radio');
 	showsetting('blog_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[forums_edit_extend_order_starttime]</option><option value='viewnum'>$lang[blog_search_view]</option><option value='replynum'>$lang[blog_search_reply]</option><option value='hot'>$lang[blog_search_hot]</option></select> ");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
 	showsetting('blog_search_uid', 'uid', $uid, 'text');
 	showsetting('blog_search_blogid', 'blogid', $blogid, 'text');
 	showsetting('blog_search_user', 'users', $users, 'text');
 	showsetting('blog_search_keyword', 'keywords', $keywords, 'text');
+	showsetting('blog_search_friend', '', $friend, "<select name='friend'><option value='0'>$lang[setting_home_privacy_alluser]</option><option value='1'>$lang[setting_home_privacy_friend]</option><option value='2'>$lang[setting_home_privacy_specified_friend]</option><option value='3'>$lang[setting_home_privacy_self]</option><option value='4'>$lang[setting_home_privacy_password]</option></select>");
+	showsetting('blog_search_ip', 'ip', $ip, 'text');
 	showsetting('blog_search_lengthlimit', 'lengthlimit', $lengthlimit, 'text');
 	showsetting('blog_search_view', array('viewnum1', 'viewnum2'), array('', ''), 'range');
 	showsetting('blog_search_reply', array('replynum1', 'replynum2'), array('', ''), 'range');
 	showsetting('blog_search_hot', array('hot1', 'hot2'), array('', ''), 'range');
 	showsetting('blog_search_time', array('starttime', 'endtime'), array($starttime, $endtime), 'daterange');
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsubmit('searchsubmit');
 	showtablefooter();
 	showformfooter();
@@ -123,7 +164,7 @@ EOT;
 		}
 	}
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('blogforum').searchsubmit.click();</script>
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('blogforum').searchsubmit.click();</script>
 <?php
 
 }
@@ -153,13 +194,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		$sql .= " AND b.uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')";
 	}
 
-	if($starttime != '0') {
+	if($starttime != '') {
 		$starttime = strtotime($starttime);
 		$sql .= " AND b.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
-		if($endtime != '0') {
+		if($endtime != '') {
 			$endtime = strtotime($endtime);
 			$sql .= " AND b.dateline<'$endtime'";
 		}
@@ -174,6 +215,11 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	$sql .= $viewnum2 ? " AND b.viewnum <= '$viewnum2'" : '';
 	$sql .= $replynum1 ? " AND b.replynum >= '$replynum1'" : '';
 	$sql .= $replynum2 ? " AND b.replynum <= '$replynum2'" : '';
+	$sql .= $friend ? " AND b.friend = '$friend'" : '';
+	$ip = str_replace('*', '', $ip);
+	$sql .= $ip ? " AND bf.postip LIKE '%$ip%'" : '';
+	$orderby = $orderby ? "b.$orderby" : 'b.dateline';
+	$ordersc = $ordersc ? "$ordersc" : 'DESC';
 
 	if($keywords != '') {
 		$sqlkeywords = '';
@@ -207,14 +253,34 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
 			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
 			do{
-				$query = DB::query("SELECT b.hot, b.replynum, b.viewnum, b.blogid, b.uid, b.username, b.dateline, bf.message, b.subject FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) " .
-						"WHERE 1 $sql ORDER BY b.dateline DESC LIMIT ".(($pagetmp - 1) * $perpage).",{$perpage}");
+				$query = DB::query("SELECT b.hot, b.replynum, b.viewnum, b.blogid, b.uid, b.username, b.dateline, bf.message, b.subject, b.friend FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) " .
+						"WHERE 1 $sql ORDER BY $orderby $ordersc LIMIT ".(($pagetmp - 1) * $perpage).",{$perpage}");
 				$pagetmp--;
 			} while(!DB::num_rows($query) && $pagetmp);
 			$blogs = '';
 			while($blog = DB::fetch($query)) {
 				$blog['dateline'] = dgmdate($blog['dateline']);
 				$blog['subject'] = cutstr($blog['subject'], 30);
+				switch ($blog['friend']) {
+					case '0':
+						$privacy_name = $lang[setting_home_privacy_alluser];
+						break;
+					case '1':
+						$privacy_name = $lang[setting_home_privacy_friend];
+						break;
+					case '2':
+						$privacy_name = $lang[setting_home_privacy_specified_friend];
+						break;
+					case '3':
+						$privacy_name = $lang[setting_home_privacy_self];
+						break;
+					case '4':
+						$privacy_name = $lang[setting_home_privacy_password];
+						break;
+					default:
+						$privacy_name = $lang[setting_home_privacy_alluser];
+				}
+				$blog['friend'] = $blog['friend'] ? " <a href=\"".ADMINSCRIPT."?action=blog&friend=$blog[friend]\">$privacy_name</a>" : $privacy_name;
 				$blogs .= showtablerow('', '', array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"ids[]\" value=\"$blog[blogid]\" />",
 					$blog['blogid'],
@@ -223,13 +289,12 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$blog['viewnum'],
 					$blog['replynum'],
 					$blog['hot'],
-					$blog['dateline']
+					$blog['dateline'],
+					$blog['friend']
 				), TRUE);
 			}
 			$blogcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");
-			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog");
-			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=blog&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
-			$multi = str_replace("window.location='".ADMINSCRIPT."?action=blog&amp;page='+this.value", "page(this.value)", $multi);
+			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog$muticondition");
 		} else {
 			$blogcount = 0;
 			$query = DB::query("SELECT b.blogid FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");
@@ -247,13 +312,17 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	showtagheader('div', 'postlist', $searchsubmit || $newlist);
 	showformheader('blog&frame=no', 'target="blogframe"');
-	showtableheader(cplang('blog_result').' '.$blogcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'blogforum\').pp.value=\'\';$(\'blogforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	if(!$muticondition) {
+		showtableheader(cplang('blog_new_result').' '.$blogcount, 'fixpadding');
+	} else {
+		showtableheader(cplang('blog_result').' '.$blogcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'blogforum\').pp.value=\'\';$(\'blogforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	}
 
 	if($error) {
 		echo "<tr><td class=\"lineheight\" colspan=\"15\">$lang[$error]</td></tr>";
 	} else {
 		if($detail) {
-			showsubtitle(array('', 'blogid', 'author', 'subject', 'view', 'reply', 'hot', 'time'));
+			showsubtitle(array('', 'blogid', 'author', 'subject', 'view', 'reply', 'hot', 'time', 'privacy'));
 			echo $blogs;
 			$optypehtml = ''
 			.'<input type="radio" name="optype" id="optype_delete" value="delete" class="radio" /><label for="optype_delete">'.cplang('delete').'</label>&nbsp;&nbsp;'

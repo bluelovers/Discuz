@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_modcp.php 16956 2010-09-17 07:36:01Z monkey $
+ *      $Id: forum_modcp.php 22329 2011-05-03 01:43:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,12 +89,8 @@ switch ($_G['gp_action']) {
 
 	case 'member':
 		$op == 'edit' && $_G['group']['allowedituser'] && $script = 'member';
-		$op == 'ban' && $_G['group']['allowbanuser'] && $script = 'member';
+		$op == 'ban' && ($_G['group']['allowbanuser'] || $_G['group']['allowbanvisituser']) && $script = 'member';
 		$op == 'ipban' && $_G['group']['allowbanip'] && $script = 'member';
-		break;
-
-	case 'report':
-		$_G['group']['allowviewreport'] && $script = 'report';
 		break;
 
 	case 'moderate':
@@ -127,8 +123,16 @@ switch ($_G['gp_action']) {
 		$script = 'recyclebin';
 		break;
 
+	case 'recyclebinpost':
+		$script = 'recyclebinpost';
+		break;
+
 	case 'plugin':
 		$script = 'plugin';
+		break;
+
+	case 'report':
+		$script = 'report';
 		break;
 
 	default:
@@ -152,10 +156,19 @@ require DISCUZ_ROOT.'./source/include/modcp/modcp_'.$script.'.php';
 
 $reportnum = $modpostnum = $modthreadnum = $modforumnum = 0;
 $modforumnum = count($modforums['list']);
+$modnum = '';
 if($modforumnum) {
-	$modnum = ($_G['group']['allowmodpost'] ? (getcountofposts(DB::table('forum_post'), "invisible='-2' AND first='0' and fid IN($modforums[fids])") +
-		DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE fid IN($modforums[fids]) AND displayorder='-2'")) : 0) +
-		($_G['group']['allowmoduser'] ? DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'") : 0);
+	if($_G['group']['allowmodpost']) {
+		$modnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
+			INNER JOIN ".DB::table('forum_thread')." t ON t.tid=m.id AND t.fid IN($modforums[fids])
+			WHERE m.idtype='tid' AND m.status='0'");
+		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
+			INNER JOIN ".DB::table('forum_post')." p ON p.pid=m.id AND p.fid IN($modforums[fids])
+			WHERE m.idtype='pid' AND m.status='0'");
+	}
+	if($_G['group']['allowmoduser']) {
+		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
+	}
 }
 
 switch($_G['adminid']) {
@@ -166,5 +179,21 @@ switch($_G['adminid']) {
 $notenum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_adminnote')." WHERE access IN ($access)");
 
 include template('forum/modcp');
+
+function getposttableselect() {
+	global $_G;
+
+	loadcache('posttable_info');
+	if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
+		$posttableselect = '<select name="posttableid" id="posttableid" class="ps">';
+		foreach($_G['cache']['posttable_info'] as $posttableid => $data) {
+			$posttableselect .= '<option value="'.$posttableid.'"'.($_G['gp_posttableid'] == $posttableid ? ' selected="selected"' : '').'>'.($data['memo'] ? $data['memo'] : 'post_'.$posttableid).'</option>';
+		}
+		$posttableselect .= '</select>';
+	} else {
+		$posttableselect = '';
+	}
+	return $posttableselect;
+}
 
 ?>

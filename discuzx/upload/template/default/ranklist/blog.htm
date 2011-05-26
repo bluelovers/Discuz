@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -18,22 +17,22 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang blog_ranklist}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_orderby] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=heats&before=$_G['gp_before']">{lang hot_ranklist}</a></li>
-				<li{if $_G[gp_orderby] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=replies&before=$_G['gp_before']">{lang comment_ranklist}</a></li>
-				<li{if $_G[gp_orderby] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=views&before=$_G['gp_before']">{lang visit_ranklist}</a></li>
-				<li{if $_G[gp_orderby] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=sharetimes&before=$_G['gp_before']">{lang ranklist_share}</a></li>
-				<li{if $_G[gp_orderby] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=favtimes&before=$_G['gp_before']">{lang ranklist_favorite}</a></li>
+				<li{if $_G[gp_view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=heats&orderby=$_G['gp_orderby']">{lang hot_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=replies&orderby=$_G['gp_orderby']">{lang comment_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=views&orderby=$_G['gp_orderby']">{lang visit_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=sharetimes&orderby=$_G['gp_orderby']">{lang ranklist_share}</a></li>
+				<li{if $_G[gp_view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=favtimes&orderby=$_G['gp_orderby']">{lang ranklist_favorite}</a></li>
 				<!--{if $clicks}-->
 				<!--{loop $clicks $key $value}-->
-				<li{if $_G[gp_orderby] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&orderby=$key&before=$_G['gp_before']">$value[name]{lang ranklist}</a></li>
+				<li{if $_G[gp_view] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=blog&view=$key&orderby=$_G['gp_orderby']">$value[name]{lang ranklist}</a></li>
 				<!--{/loop}-->
 				<!--{/if}-->
 			</ul>
 			<p id="before" class="tbmu">
-				<a href="misc.php?mod=ranklist&type=blog&orderby=$_G[gp_orderby]&before=thisweek" id="604800" {if $_G['gp_before'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=blog&orderby=$_G[gp_orderby]&before=thismonth" id="2592000" {if $_G['gp_before'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=blog&orderby=$_G[gp_orderby]&before=today" id="86400" {if $_G['gp_before'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=blog&orderby=$_G[gp_orderby]&before=all" id="all" {if $_G['gp_before'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=blog&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $_G['gp_orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=blog&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $_G['gp_orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=blog&view=$_G[gp_view]&orderby=today" id="86400" {if $_G['gp_orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=blog&view=$_G[gp_view]&orderby=all" id="all" {if $_G['gp_orderby'] == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $bloglist}-->
 				<div class="xld xlda hasrank">
@@ -56,12 +55,12 @@
 							$blog[message]
 						</dd>
 						<dd class="xg1">
-							<!--{if $_G[gp_orderby] == 'heats'}-->{lang views} $blog[hot]
-							<!--{elseif $_G[gp_orderby] == 'replies'}--><a href="home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]#comment" target="_blank">{lang comment} $blog[replynum]</a>
-							<!--{elseif $_G[gp_orderby] == 'views'}-->{lang ranklist_thread_view} $blog[viewnum]
-							<!--{elseif $_G[gp_orderby] == 'sharetimes'}-->{lang ranklist_thread_share} $blog[sharetimes]
-							<!--{elseif $_G[gp_orderby] == 'favtimes'}-->{lang ranklist_thread_favorite} $blog[favtimes]
-							<!--{else}-->$clicks[$_G[gp_orderby]][name] $blog['click'.$_G[gp_orderby]]<!--{/if}-->
+							<!--{if $_G[gp_view] == 'heats'}-->{lang views} $blog[hot]
+							<!--{elseif $_G[gp_view] == 'replies'}--><a href="home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]#comment" target="_blank">{lang comment} $blog[replynum]</a>
+							<!--{elseif $_G[gp_view] == 'views'}-->{lang ranklist_thread_view} $blog[viewnum]
+							<!--{elseif $_G[gp_view] == 'sharetimes'}-->{lang ranklist_thread_share} $blog[sharetimes]
+							<!--{elseif $_G[gp_view] == 'favtimes'}-->{lang ranklist_thread_favorite} $blog[favtimes]
+							<!--{else}-->$clicks[$_G[gp_view]][name] $blog['click'.$_G[gp_view]]<!--{/if}-->
 						</dd>
 					</dl>
 				<!--{/loop}-->

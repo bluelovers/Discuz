@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_portalcp.php 14676 2010-08-13 05:53:20Z zhangguosheng $
+ *      $Id: portal_portalcp.php 22551 2011-05-12 05:25:26Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,12 @@ if(!defined('IN_DISCUZ')) {
 
 $ac = in_array($_GET['ac'], array('comment', 'article', 'related', 'block', 'portalblock', 'blockdata', 'topic', 'diy', 'upload', 'category', 'plugin', 'logout'))?$_GET['ac']:'index';
 
-if (!$_G['inajax'] && in_array($ac, array('index', 'portalblock', 'blockdata', 'category')) && ($_G['group']['allowmanagearticle'] || $_G['group']['allowauthorizedarticle'] || $_G['group']['allowauthorizedblock'] || $_G['group']['allowdiy'])) {
+$admincp2 = getstatus($_G['member']['allowadmincp'], 2);
+$admincp3 = getstatus($_G['member']['allowadmincp'], 3);
+$admincp4 = getstatus($_G['member']['allowadmincp'], 4);
+$admincp5 = getstatus($_G['member']['allowadmincp'], 5);
+
+if (!$_G['inajax'] && in_array($ac, array('index', 'portalblock', 'blockdata', 'category', 'plugin')) && ($_G['group']['allowdiy'] || $_G['group']['allowmanagearticle'] || $admincp2 || $admincp3 || $admincp4)) {
 	require_once libfile('class/panel');
 	$modsession = new discuz_panel(PORTALCP_PANEL);
 	if(getgpc('login_panel') && getgpc('cppwd') && submitcheck('submit')) {

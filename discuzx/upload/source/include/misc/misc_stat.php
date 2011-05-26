@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_stat.php 17086 2010-09-20 10:10:58Z zhengqingpeng $
+ *      $Id: misc_stat.php 20792 2011-03-04 02:20:22Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,22 +15,22 @@ if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
 
-if($_GET['hash']) {
-	dsetcookie('stat_hash', $_GET['hash']);
-	showmessage('do_success', 'misc.php?mod=stat&op=trend&quickforward=1');
-}
+$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+$stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
 
-$stat_hash = md5($_G['setting']['sitekey']."\t".substr($_G['timestamp'], 0, 6));
-if(!checkperm('allowstatdata') && $_G['cookie']['stat_hash'] != $stat_hash) {
-	showmessage('no_privilege');
+if(!checkperm('allowstatdata') && $_G['gp_hash'] != $stat_hash) {
+	showmessage('no_privilege_statdata');
 }
 
 $cols = array();
-$cols['login'] = array('login','register','invite','appinvite');
+$cols['login'] = array('login','mobilelogin','connectlogin','register','invite','appinvite');
+if(!$_G['setting']['connect']['allow']) {
+	unset($cols['login'][2]);
+}
 $cols['forum'] = array('thread', 'poll', 'activity', 'reward', 'debate', 'trade', 'post');
 $cols['tgroup'] = array('group', 'groupthread', 'grouppost');
 $cols['home'] = array('doing', 'docomment', 'blog', 'blogcomment', 'pic', 'piccomment', 'share', 'sharecomment');
-$cols['space'] = array('wall','poke', 'click');
+$cols['space'] = array('wall', 'poke', 'click', 'sendpm', 'addfriend', 'friend');
 
 $type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
 
@@ -48,11 +48,14 @@ if(!empty($_GET['xml'])) {
 	$xaxis = '';
 	$graph = array();
 	$count = 1;
-	$begin = str_replace('-', '', $primarybegin);
-	$end = str_replace('-', '', $primaryend);
+	$begin = dgmdate($beginunixstr, 'Ymd');
+	$end = dgmdate($endunixstr, 'Ymd');
 	$field = '*';
 	if(!empty($_GET['merge'])) {
-		$field = 'daytime,'.implode('+', $_GET['types']).' AS statistic';
+		if(empty($_GET['types'])) {
+			$_GET['types'] = array_merge($cols['login'], $cols['forum'], $cols['tgroup'], $cols['home'], $cols['space']);
+		}
+		$field = 'daytime,`'.implode('`+`', $_GET['types']).'` AS statistic';
 		$type = 'statistic';
 	}
 	$query = DB::query("SELECT $field FROM ".DB::table('common_stat')." WHERE daytime>='$begin' AND daytime<='$end' ORDER BY daytime");
@@ -114,7 +117,7 @@ foreach($_GET['types'] as $value) {
 	$types .= '&types[]='.$value;
 	$actives[$value] = ' class="a"';
 }
-$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type&primarybegin=$primarybegin&primaryend=$primaryend{$types}{$merge}");
+$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type&primarybegin=$primarybegin&primaryend=$primaryend{$types}{$merge}&hash=$stat_hash");
 
 include template('home/misc_stat');
 ?>

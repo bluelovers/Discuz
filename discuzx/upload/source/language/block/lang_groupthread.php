@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_groupthread.php 17284 2010-09-28 09:58:16Z zhangguosheng $
+ *      $Id: lang_groupthread.php 21128 2011-03-16 05:52:27Z zhangguosheng $
  */
 
 $lang = array
@@ -15,6 +15,8 @@ $lang = array
 	'groupthread_gtids_comment' => '選擇群組分類',
 	'groupthread_uids' => '樓主UID',
 	'groupthread_uids_comment' => '指定主題作者ID，多個ID之間用 , 分割',
+	'groupthread_keyword' => '標題關鍵字',
+	'groupthread_keyword_comment' => '設置標題包含的關鍵字。注意: 留空為不進行任何過濾； 關鍵字中可使用通配符 *； 匹配多個關鍵字全部，可用空格或 AND 連接。如 win32 AND unix； 匹配多個關鍵字其中部分，可用 | 或 OR 連接。如 win32 OR unix',
 	'groupthread_startrow' => '起始數據行數',
 	'groupthread_startrow_comment' => '如需設定起始的數據行數，請輸入具體數值，0 為從第一行開始，以此類推',
 	'groupthread_items' => '顯示數據條數',
@@ -84,6 +86,12 @@ $lang = array
 	'groupthread_orderby_todayviews' => '按當天瀏覽次數倒序排序',
 	'groupthread_orderby_weekviews' => '按本周瀏覽次數倒序排序',
 	'groupthread_orderby_monthviews' => '按當月瀏覽次數倒序排序',
+	'groupthread_postdateline' => '主題發佈時間',
+	'groupthread_postdateline_nolimit' => '不限制',
+	'groupthread_postdateline_hour' => '1小時內',
+	'groupthread_postdateline_day' => '24小時內',
+	'groupthread_postdateline_week' => '7天內',
+	'groupthread_postdateline_month' => '1個月內',
 	'groupthread_lastpost' => '最後更新時間',
 	'groupthread_lastpost_nolimit' => '不限制',
 	'groupthread_lastpost_hour' => '1小時內',
@@ -92,8 +100,10 @@ $lang = array
 	'groupthread_lastpost_month' => '1個月內',
 	'groupthread_orderby_displayorder' => '按默認順序',
 	'groupthread_gviewperm' => '群組瀏覽權限',
+	'groupthread_gviewperm_nolimit' => '不限制',
 	'groupthread_gviewperm_only_member' => '僅成員',
-	'groupthread_gviewperm_all_member' => '所有人'
+	'groupthread_gviewperm_all_member' => '所有人',
+	'groupthread_highlight' => '獲得高亮值',
 );
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: forum.func.php 14122 2008-08-20 06:06:33Z cnteacher $
@@ -12,8 +12,15 @@ if(!defined('IN_COMSENZ')) {
 }
 
 define('SOFT_NAME', 'UCenter');
-define('SOFT_VERSION', '1.5.2');
-define('SOFT_RELEASE', '20101001');
+
+if(defined('UC_SERVER_VERSION')) {
+	define('SOFT_VERSION', UC_SERVER_VERSION);
+	define('SOFT_RELEASE', UC_SERVER_RELEASE);
+} else {
+	define('SOFT_VERSION', '0.0.0');
+	define('SOFT_RELEASE', '19700101');
+}
+
 define('INSTALL_LANG', 'SC_GBK');
 
 define('CONFIG', ROOT_PATH.'./data/config.inc.php');

@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_domain.php 16088 2010-08-31 07:32:03Z chenchunshao $
+ *      $Id: admincp_domain.php 21344 2011-03-23 08:43:11Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,20 +15,20 @@ $current = array($operation => 1);
 
 shownav('global', 'setting_domain');
 showsubmenu('setting_domain', array(
-		array('setting_domain_base', 'domain', $current['global']),
-		array('setting_domain_app', 'domain&operation=app', $current['app']),
-		array('setting_domain_root', 'domain&operation=root', $current['root']),
-	));
+	array('setting_domain_base', 'domain', $current['global']),
+	array('setting_domain_app', 'domain&operation=app', $current['app']),
+	array('setting_domain_root', 'domain&operation=root', $current['root']),
+));
 $navs = $_G['setting']['navs'];
 if($operation == 'app') {
 
 	if(!submitcheck('submit')) {
-
 		$appkeyarr = array(
 			'portal' => $navs[1]['navname'],
 			'forum' => $navs[2]['navname'],
 			'group' => $navs[3]['navname'],
 			'home' => $navs[4]['navname'],
+			'mobile' => $lang['mobile'],
 			'default' => $lang['default']
 		);
 		showtips('setting_domain_app_tips');
@@ -40,7 +40,7 @@ if($operation == 'app') {
 		foreach($appkeyarr as $key => $desc) {
 			showtablerow('', array('class="td25"', ''), array(
 					$desc,
-					"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"appnew[$key]\" value=\"".$_G['setting']['domain']['app'][$key]."\">"
+					"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"appnew[$key]\" value=\"".$_G['setting']['domain']['app'][$key]."\">".($key == 'mobile' ? cplang('setting_domain_app_mobile_tips') : '')
 				));
 		}
 		showsubmit('submit');
@@ -58,6 +58,11 @@ if($operation == 'app') {
 			}
 			$_G['setting']['domain']['app'][$appkey] = $domain;
 		}
+
+		if($_G['gp_appnew']['mobile'] != $olddomain['mobile']) {
+			DB::update('common_nav', array('url' => (!$_G['gp_appnew']['mobile'] ? 'forum.php?mobile=yes' : 'http://'.$_G['gp_appnew']['mobile'])), array('identifier' => 'mobile'));
+		}
+
 		DB::insert('common_setting', array('skey' => 'domain', 'svalue' => addslashes(serialize($_G['setting']['domain']))), false, true);
 		updatecache('setting');
 		cpmsg('setting_update_succeed', 'action=domain&operation=app', 'succeed');
@@ -66,9 +71,9 @@ if($operation == 'app') {
 } elseif($operation == 'root') {
 
 	$roottype = array(
-		'home' => $navs[4]['navname'],
+		'home' => $lang['domain_home'],
 		'group' => $navs[3]['navname'],
-		'forum' => $navs[2]['navname'],
+		'forum' => $lang['domain_forum'],
 		'topic' => $lang['domain_topic'],
 		'channel' => $lang['channel'],
 	);

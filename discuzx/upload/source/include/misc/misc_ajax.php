@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ajax.php 13315 2010-07-26 02:09:58Z monkey $
+ *      $Id: misc_ajax.php 20189 2011-02-17 03:29:17Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -146,23 +146,28 @@ if($op == 'comment') {
 } elseif($op == 'deluserapp') {
 
 	if(empty($_G['uid'])) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_guest');
 	}
 	$hash = trim($_GET['hash']);
 	$query = DB::query("SELECT * FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
 	if($value = DB::fetch($query)) {
 		DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
 
-		$myinvitenum = getcount('common_myinvite', array('touid'=>$_G['uid']));
-
-		space_merge($space, 'status');
-		$changenum = $myinvitenum - $space['myinvitations'];
-		member_status_update($_G['uid'], array('myinvitations'=>$changenum));
-
 		showmessage('do_success');
 	} else {
-		showmessage('no_privilege');
+		showmessage('no_privilege_deluserapp');
 	}
+} elseif($op == 'delnotice') {
+
+	if(empty($_G['uid'])) {
+		showmessage('no_privilege_guest');
+	}
+	$id = intval($_G['gp_id']);
+	if($id) {
+		DB::query("DELETE FROM ".DB::table('home_notification')." WHERE id='$id' AND uid='$_G[uid]'");
+	}
+	showmessage('do_success');
+
 } elseif($op == 'getreward') {
 	$reward = '';
 	if($_G['cookie']['reward_log']) {
@@ -179,14 +184,69 @@ if($op == 'comment') {
 	}
 
 } elseif($op == 'district') {
+	$container = $_GET['container'];
 	$showlevel = intval($_GET['level']);
 	$showlevel = $showlevel >= 1 && $showlevel <= 4 ? $showlevel : 4;
 	$values = array(intval($_GET['pid']), intval($_GET['cid']), intval($_GET['did']), intval($_GET['coid']));
+	$level = 1;
+	if($values[0]) {
+		$level++;
+	} else if($_G['uid'] && !empty($_GET['showdefault'])) {
+
+		space_merge($_G['member'], 'profile');
+		$containertype = substr($container, 0, 5);
+		$district = array();
+		if($containertype == 'birth') {
+			if(!empty($_G['member']['birthprovince'])) {
+				$district[] = $_G['member']['birthprovince'];
+				if(!empty($_G['member']['birthcity'])) {
+					$district[] = $_G['member']['birthcity'];
+				}
+				if(!empty($_G['member']['birthdist'])) {
+					$district[] = $_G['member']['birthdist'];
+				}
+				if(!empty($_G['member']['birthcommunity'])) {
+					$district[] = $_G['member']['birthcommunity'];
+				}
+			}
+		} else {
+			if(!empty($_G['member']['resideprovince'])) {
+				$district[] = $_G['member']['resideprovince'];
+				if(!empty($_G['member']['residecity'])) {
+					$district[] = $_G['member']['residecity'];
+				}
+				if(!empty($_G['member']['residedist'])) {
+					$district[] = $_G['member']['residedist'];
+				}
+				if(!empty($_G['member']['residecommunity'])) {
+					$district[] = $_G['member']['residecommunity'];
+				}
+			}
+		}
+		if(!empty($district)) {
+			$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE name IN (".dimplode(daddslashes($district)).')');
+			while($value = DB::fetch($query)) {
+				$key = $value['level'] - 1;
+				$values[$key] = $value['id'];
+			}
+			$level++;
+		}
+	}
+	if($values[1]) {
+		$level++;
+	}
+	if($values[2]) {
+		$level++;
+	}
+	if($values[3]) {
+		$level++;
+	}
+	$showlevel = $level;
 	$elems = array();
 	if($_GET['province']) {
 		$elems = array($_GET['province'], $_GET['city'], $_GET['district'], $_GET['community']);
 	}
-	$container = $_GET['container'];
+
 	include_once libfile('function/profile');
 	$html = showdistrict($values, $elems, $container, $showlevel);
 }

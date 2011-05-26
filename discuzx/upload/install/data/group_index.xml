@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
-	<item id="spacecss"><![CDATA[#portal_block_68 .content {margin-left:0px !important;}#portal_block_69 .content {font-size:14px !important;margin-left:10px !important;}]]></item>
+	<item id="spacecss"><![CDATA[#portal_block_68 .dxb_bc {margin-left:0px !important;}#portal_block_69 .dxb_bc {font-size:14px !important;margin-left:10px !important;}]]></item>
 	<item id="layoutdata">
 		<item id="diy1"><![CDATA[]]></item>
 		<item id="diycontenttop"><![CDATA[]]></item>

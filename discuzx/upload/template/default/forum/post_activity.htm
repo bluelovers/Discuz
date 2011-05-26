@@ -1,7 +1,7 @@
 <div class="exfm cl">
 	<div class="sinf sppoll z">
 		<dl>
-			<dt><strong class="rq">*</strong><label for="starttime">{lang post_event_time}:</label></dt>
+			<dt><span class="rq">*</span>{lang post_event_time}:</dt>
 			<dd>
 				<div id="certainstarttime" {if $activity['starttimeto']}style="display: none"{/if}>
 					<input type="text" name="starttimefrom[0]" id="starttimefrom_0" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$activity[starttimefrom]" tabindex="1" />
@@ -10,10 +10,10 @@
 					<input type="text" name="starttimefrom[1]" id="starttimefrom_1" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$activity[starttimefrom]" tabindex="1" /><span> ~ </span><input onclick="showcalendar(event, this, true)" type="text" autocomplete="off" id="starttimeto" name="starttimeto" class="px" value="{if $activity['starttimeto']}$activity[starttimeto]{/if}" tabindex="1" />
 				</div>
 				<div class="spmf cl">
-					<label for="activitytime"><input type="checkbox" id="activitytime" name="activitytime" class="pc" onclick="if(this.checked) {$('certainstarttime').style.display='none';$('uncertainstarttime').style.display='';} else {$('certainstarttime').style.display='';$('uncertainstarttime').style.display='none';}" value="1" {if $activity['starttimeto']}checked{/if} tabindex="1" /> {lang activity_starttime_endtime}</label>
+					<label for="activitytime"><input type="checkbox" id="activitytime" name="activitytime" class="pc" onclick="if(this.checked) {$('certainstarttime').style.display='none';$('uncertainstarttime').style.display='';} else {$('certainstarttime').style.display='';$('uncertainstarttime').style.display='none';}" value="1" {if $activity['starttimeto']}checked{/if} tabindex="1" />{lang activity_starttime_endtime}</label>
 				</div>
 			</dd>
-			<dt><strong class="rq">*</strong><label for="activityplace">{lang activity_space}:</label></dt>
+			<dt><span class="rq">*</span><label for="activityplace">{lang activity_space}:</label></dt>
 			<dd>
 				<input type="text" name="activityplace" id="activityplace" class="px oinf" value="$activity[place]" tabindex="1" />
 			</dd>
@@ -21,7 +21,7 @@
 			<dt><label for="activitycity">{lang activity_city}:</label></dt>
 			<dd><input name="activitycity" id="activitycity" class="px" type="text" tabindex="1" /></dd>
 			<!--{/if}-->
-			<dt><strong class="rq">*</strong>{lang activiy_sort}:</dt>
+			<dt><span class="rq">*</span><label for="activityclass">{lang activiy_sort}:</label></dt>
 			<dd class="hasd cl">
 				<!--{if $activitytypelist}-->
 					<ul id="activitytypelist" style="display: none">
@@ -52,15 +52,15 @@
 			<dd>
 				<ul class="xl2 cl">
 				<!--{loop $_G['setting']['activityfield'] $key $val}-->
-				<li><input type="checkbox" name="userfield[]" id="userfield_$key" class="pc" value="$key"{if $activity['ufield']['userfield'] && in_array($key, $activity['ufield']['userfield'])} checked="checked"{/if} /><label for="userfield_$key">$val</label></li>
+				<li><label for="userfield_$key"><input type="checkbox" name="userfield[]" id="userfield_$key" class="pc" value="$key"{if $activity['ufield']['userfield'] && in_array($key, $activity['ufield']['userfield'])} checked="checked"{/if} />$val</label></li>
 				<!--{/loop}-->
 				</ul>
 			</dd>
 			<!--{/if}-->
 			<!--{if $_G['setting']['activityextnum']}-->
-			<dt>{lang other_data}:</dt>
+			<dt><label for="extfield">{lang other_data}:</label></dt>
 			<dd>
-				<textarea name="extfield" class="pt" cols="50" style="width: 270px;"><!--{if $activity['ufield']['extfield']}-->$activity[ufield][extfield]<!--{/if}--></textarea><br />{lang post_activity_message} $_G['setting']['activityextnum'] {lang post_option}
+				<textarea name="extfield" id="extfield" class="pt" cols="50" style="width: 270px;"><!--{if $activity['ufield']['extfield']}-->$activity[ufield][extfield]<!--{/if}--></textarea><br />{lang post_activity_message} $_G['setting']['activityextnum'] {lang post_option}
 			</dd>
 			<!--{/if}-->
 		</dl>
@@ -89,8 +89,9 @@
 			<!--{if $allowpostimg}-->
 				<dt>{lang post_topic_image}:</dt>
 				<dd class="pns">
-					<p><button type="button" class="pn" onclick="uploadWindow(function (aid, url){updateactivityattach(aid, url, '{$_G['setting']['attachurl']}forum')})"><span><!--{if $activityattach[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button></p>
-					<input type="hidden" name="activityaid" id="activityaid" {if $activityattach[attachment]}value="$activityattach[aid]" {/if}tabindex="1" />
+					<p><button type="button" class="pn" onclick="uploadWindow(function (aid, url){activityaid_upload(aid, url)})"><span><!--{if $activityattach[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button></p>
+					<input type="hidden" name="activityaid" id="activityaid" {if $activityattach[attachment]}value="$activityattach[aid]" {/if}/>
+					<input type="hidden" name="activityaid_url" id="activityaid_url" />
 					<span class="xg1">
 					<!--{if $activityattach[attachment]}-->
 						{lang post_click_message_1}
@@ -100,11 +101,12 @@
 					</span>
 					<div id="activityattach_image">
 					<!--{if $activityattach[attachment]}-->
-						<a href="$activityattach[url]/$activityattach[attachment]" target="_blank"><img class="spimg" src="$activityattach[url]/$activityattach[attachment]{if $activityattach['thumb']}.thumb.jpg{/if}" alt="" /></a>
+						<a href="$activityattach[url]/$activityattach[attachment]" target="_blank"><img class="spimg" src="$activityattach[url]/{if $activityattach['thumb']}{eval echo getimgthumbname($activityattach['attachment']);}{else}$activityattach[attachment]{/if}" alt="" /></a>
 					<!--{/if}-->
 					</div>
 				</dd>
 			<!--{/if}-->
+			<!--{hook/post_activity_extra}-->
 		</dl>
 	</div>
 </div>
@@ -117,6 +119,8 @@ function checkvalue(value, message){
 		$(message).innerHTML = '<b>{lang input_invalid}</b>';
 	}
 }
+
+EXTRAFUNC['validator']['special'] = 'validateextra';
 function validateextra() {
 	if($('postform').starttimefrom_0.value == '' && $('postform').starttimefrom_1.value == '') {
 		showDialog('{lang post_error_message_1}', 'alert', '', function () { if($('activitytime').checked) {$('postform').starttimefrom_1.focus();} else {$('postform').starttimefrom_0.focus();} });
@@ -131,5 +135,9 @@ function validateextra() {
 		return false;
 	}
 	return true;
+}
+function activityaid_upload(aid, url) {
+	$('activityaid_url').value = url;
+	updateactivityattach(aid, url, '{$_G['setting']['attachurl']}forum');
 }
 </script>

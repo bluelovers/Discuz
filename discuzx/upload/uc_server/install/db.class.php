@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 976 2009-12-03 03:02:44Z zhaoxiongfei $
+	$Id: db.class.php 1059 2011-03-01 07:25:09Z monkey $
 */
 
 if(!defined('IN_COMSENZ')) {

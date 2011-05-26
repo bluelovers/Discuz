@@ -14,7 +14,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="favoriteform_{$favid}" name="favoriteform_{$favid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=favorite&op=delete&favid=$favid&type=$_GET[type]" {if $_G[inajax] && $_GET[gp_type]!='view'} onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="deletesubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
@@ -27,7 +27,6 @@
 	<script type="text/javascript">
 		function succeedhandle_$_G[gp_handlekey](url, msg, values) {
 			hideWindow('$_G[gp_handlekey]');
-			favorite_delete(values['favid']);
 		}
 	</script>
 	<!--{/if}-->
@@ -38,7 +37,7 @@
 	</h3>
 	<form method="post" autocomplete="off" id="favoriteform_{$id}" name="favoriteform_{$id}" action="home.php?mod=spacecp&ac=favorite&type=$type&id=$id&spaceuid=$spaceuid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]'{if $type == 'thread'}, null, null, null, 'favoriteupdate()'{/if});"{/if}>
 		<input type="hidden" name="favoritesubmit" value="true" />
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<div class="c">
@@ -50,6 +49,13 @@
 			<button type="submit" name="favoritesubmit_btn" id="favoritesubmit_btn" class="pn pnc" value="true"><strong>{lang determine}</strong></button>
 		</p>
 	</form>
+	<!--{if $_G[inajax]}-->
+	<script type="text/javascript">
+		function succeedhandle_$_G[gp_handlekey](url, msg, values) {
+			hideWindow('$_G[gp_handlekey]');
+		}
+	</script>
+	<!--{/if}-->
 <!--{/if}-->
 
 <!--{if !$_G[inajax]}-->

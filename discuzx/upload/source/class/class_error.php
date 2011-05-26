@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_error.php 17283 2010-09-28 09:14:58Z cnteacher $
+ *      $Id: class_error.php 21027 2011-03-10 07:47:41Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,11 @@ class discuz_error
 		}
 
 		if($show) {
-			discuz_error::show_error('system', "<li>$message</li>", $showtrace, 0);
+			if(!defined('IN_MOBILE')) {
+				discuz_error::show_error('system', "<li>$message</li>", $showtrace, 0);
+			} else {
+				discuz_error::mobile_show_error('system', "<li>$message</li>", $showtrace, 0);
+			}
 		}
 
 		if($halt) {
@@ -189,7 +193,7 @@ EOT;
 		$endmsg = lang('error', 'error_end_message', array('host'=>$host));
 		echo <<<EOT
 <tr>
-	<td class="help"><br><br>$endmsg</td>
+	<td class="help"><br /><br />$endmsg</td>
 </tr>
 </table>
 </body>
@@ -197,6 +201,76 @@ EOT;
 EOT;
 		$exit && exit();
 
+	}
+
+	function mobile_show_error($type, $errormsg, $phpmsg) {
+		global $_G;
+
+		ob_end_clean();
+		ob_start();
+
+		$host = $_SERVER['HTTP_HOST'];
+		$phpmsg = trim($phpmsg);
+		$title = 'Mobile '.($type == 'db' ? 'Database' : 'System');
+		echo <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head>
+	<title>$host - $title Error</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
+	<style type="text/css">
+	<!--
+	body { background-color: white; color: black; }
+	UL, LI { margin: 0; padding: 2px; list-style: none; }
+	#message   { color: black; background-color: #FFFFCC; }
+	#bodytitle { font: 11pt/13pt verdana, arial, sans-serif; height: 20px; vertical-align: top; }
+	.bodytext  { font: 8pt/11pt verdana, arial, sans-serif; }
+	.help  { font: 12px verdana, arial, sans-serif; color: red;}
+	.red  {color: red;}
+	a:link     { font: 8pt/11pt verdana, arial, sans-serif; color: red; }
+	a:visited  { font: 8pt/11pt verdana, arial, sans-serif; color: #4e4e4e; }
+	-->
+	</style>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" id="container">
+<tr>
+	<td id="bodytitle" width="100%">Discuz! $title Error </td>
+</tr>
+EOT;
+
+		echo <<<EOT
+<tr><td><hr size="1"/></td></tr>
+<tr><td class="bodytext">Error messages: </td></tr>
+<tr>
+	<td class="bodytext" id="message">
+		<ul> $errormsg</ul>
+	</td>
+</tr>
+EOT;
+		if(!empty($phpmsg)  && $type == 'db') {
+			echo <<<EOT
+<tr><td class="bodytext">&nbsp;</td></tr>
+<tr><td class="bodytext">Program messages: </td></tr>
+<tr>
+	<td class="bodytext">
+		<ul> $phpmsg </ul>
+	</td>
+</tr>
+EOT;
+		}
+		$endmsg = lang('error', 'mobile_error_end_message', array('host'=>$host));
+		echo <<<EOT
+<tr>
+	<td class="help"><br />$endmsg</td>
+</tr>
+</table>
+</body>
+</html>
+EOT;
+		$exit && exit();
 	}
 
 	function clear($message) {

@@ -4,19 +4,22 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_anonymouspost.php 8055 2010-04-16 01:39:07Z monkey $
+ *      $Id: lang_anonymouspost.php 18824 2010-12-07 02:39:28Z liulanbo $
  */
 
 $lang = array
 (
-	'anonymouspost_name' => '帖子匿名卡',
-	'anonymouspost_desc' => '可以將自己的帖子匿名，隱藏身份',
+	'anonymouspost_name' => '匿名卡',
+	'anonymouspost_desc' => '在指定的地方，讓自己的名字顯示為匿名。',
+	'anonymouspost_num' => '擁有個數: {magicnum}',
 	'anonymouspost_forum' => '允許使用本道具的版塊',
 	'anonymouspost_info' => '將自己的帖子設置為匿名身份，請輸入帖子的 ID',
 	'anonymouspost_info_nonexistence' => '請指定要匿名的帖子',
-	'anonymouspost_succeed' => '你操作的帖子已設置為匿名',
+	'anonymouspost_succeed' => '成功設置為匿名',
+	'anonymouspost_use_error' => '參數錯誤，不能在此處使用本道具。',
 	'anonymouspost_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
 	'anonymouspost_info_user_noperm' => '對不起，你不能對此人使用本道具',
+	'anonymouspost_once_limit' => '已經是匿名狀態了，不能重複使用本道具。',
 );
 
 ?>

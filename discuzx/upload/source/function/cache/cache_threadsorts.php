@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_threadsorts.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_threadsorts.php 19677 2011-01-13 08:40:56Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -62,6 +62,9 @@ function build_cache_threadsorts() {
 			}
 			if(in_array($data['type'], array('text', 'textarea'))) {
 				$sortlist[$sortid][$optionid]['defaultvalue'] = $data['rules']['defaultvalue'];
+			}
+			if($data['type'] == 'text') {
+				$sortlist[$sortid][$optionid]['profile'] = $data['rules']['profile'];
 			}
 		} elseif($data['type'] == 'image') {
 			$sortlist[$sortid][$optionid]['maxwidth'] = intval($data['rules']['maxwidth']);

@@ -1,9 +1,9 @@
-<p class="tbmu{if $loglist} bw0{/if}">
-	<a $subactives[uselog]href="home.php?mod=magic&action=log&operation=uselog">{lang magics_log_use}</a><span class="pipe">|</span>
-	<a $subactives[buylog]href="home.php?mod=magic&action=log&operation=buylog">{lang magics_log_buy}</a><span class="pipe">|</span>
-	<a $subactives[givelog]href="home.php?mod=magic&action=log&operation=givelog">{lang magics_log_present}</a><span class="pipe">|</span>
-	<a $subactives[receivelog]href="home.php?mod=magic&action=log&operation=receivelog">{lang magics_log_receive}</a>
-</p>
+<ul class="mbm tb cl">
+	<li $subactives[uselog]><a href="home.php?mod=magic&action=log&operation=uselog">{lang magics_log_use}</a></li>
+	<li $subactives[buylog]><a href="home.php?mod=magic&action=log&operation=buylog">{lang magics_log_buy}</a></li>
+	<li $subactives[givelog]><a href="home.php?mod=magic&action=log&operation=givelog">{lang magics_log_present}</a></li>
+	<li $subactives[receivelog]><a href="home.php?mod=magic&action=log&operation=receivelog">{lang magics_log_receive}</a></li>
+</ul>
 <!--{if $operation == 'uselog'}-->
 	<!--{if $loglist}-->
 		<table summary="{lang magics_log_use}" cellspacing="0" cellpadding="0" class="dt">
@@ -21,6 +21,8 @@
 						<a href="home.php?mod=space&uid=$log[targetid]" target="_blank">{lang magics_target}</a>
 					<!--{elseif $log[idtype] == 'tid'}-->
 						<a href="forum.php?mod=viewthread&tid=$log[targetid]" target="_blank">{lang magics_target}</a>
+					<!--{elseif $log[idtype] == 'pid'}-->
+						<a href="forum.php?mod=redirect&pid=$log[targetid]&goto=findpost" target="_blank">{lang magics_target}</a>
 					<!--{elseif $log[idtype] == 'sell'}-->
 						{lang magics_operation_sell}
 					<!--{elseif $log[idtype] == 'drop'}-->
@@ -92,7 +94,7 @@
 					<td><a href="home.php?mod=magic&action=index&operation=buy&magicid=$log[magicid]" target="_blank">$log[name]</a></td>
 					<td>$log[dateline]</td>
 					<td>$log[amount]</td>
-					<td><a href="home.php?mod=space&uid=$log[targetuid]" target="_blank">$log[username]</a></td>
+					<td><a href="home.php?mod=space&uid=$log[uid]" target="_blank">$log[username]</a></td>
 				</tr>
 			<!--{/loop}-->
 		</table>

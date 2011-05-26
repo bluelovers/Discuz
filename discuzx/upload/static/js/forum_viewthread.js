@@ -2,12 +2,22 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 17126 2010-09-21 09:34:16Z monkey $
+	$Id: forum_viewthread.js 22776 2011-05-20 06:37:48Z monkey $
 */
 
-var replyreload = '';
+var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
 
-function attachimgshow(pid) {
+function attachimggroup(pid) {
+	if(!zoomgroupinit[pid]) {
+		for(i = 0;i < aimgcount[pid].length;i++) {
+			zoomgroup['aimg_' + aimgcount[pid][i]] = pid;
+		}
+		zoomgroupinit[pid] = true;
+	}
+}
+
+function attachimgshow(pid, onlyinpost) {
+	onlyinpost = !onlyinpost ? false : onlyinpost;
 	aimgs = aimgcount[pid];
 	aimgcomplete = 0;
 	loadingcount = 0;
@@ -17,29 +27,74 @@ function attachimgshow(pid) {
 			aimgcomplete++;
 			continue;
 		}
-		if(!obj.status) {
-			obj.status = 1;
-			if(obj.getAttribute('file')) obj.src = obj.getAttribute('file');
-			loadingcount++;
-		} else if(obj.status == 1) {
-			if(obj.complete) {
-				obj.status = 2;
-			} else {
+		if(onlyinpost && obj.getAttribute('inpost') || !onlyinpost) {
+			if(!obj.status) {
+				obj.status = 1;
+				if(obj.getAttribute('file')) obj.src = obj.getAttribute('file');
 				loadingcount++;
+			} else if(obj.status == 1) {
+				if(obj.complete) {
+					obj.status = 2;
+				} else {
+					loadingcount++;
+				}
+			} else if(obj.status == 2) {
+				aimgcomplete++;
+				if(obj.getAttribute('thumbImg')) {
+					thumbImg(obj);
+				}
 			}
-		} else if(obj.status == 2) {
-			aimgcomplete++;
-			if(obj.getAttribute('thumbImg')) {
-				thumbImg(obj);
+			if(loadingcount >= 10) {
+				break;
 			}
-		}
-		if(loadingcount >= 10) {
-			break;
 		}
 	}
 	if(aimgcomplete < aimgs.length) {
-		setTimeout("attachimgshow('" + pid + "')", 100);
+		setTimeout(function () {
+			attachimgshow(pid, onlyinpost);
+		}, 100);
 	}
+}
+
+function attachimglstshow(pid, islazy) {
+	var aimgs = aimgcount[pid];
+	if(typeof aimgcount == 'object' && $('imagelistthumb_' + pid)) {
+		for(pid in aimgcount) {
+			var imagelist = '';
+			for(i = 0;i < aimgcount[pid].length;i++) {
+				if(!$('aimg_' + aimgcount[pid][i]) || $('aimg_' + aimgcount[pid][i]).getAttribute('inpost')) {
+					continue;
+				}
+				imagelist += '<div class="pattimg">' +
+					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="點擊放大">點擊放大</a>' +
+					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
+			}
+			if($('imagelistthumb_' + pid)) {
+				$('imagelistthumb_' + pid).innerHTML = imagelist;
+			}
+		}
+	}
+}
+
+function attachimggetsrc(img) {
+	return $(img).getAttribute('zoomfile') ? $(img).getAttribute('zoomfile') : $(img).getAttribute('file');
+}
+
+function attachimglst(pid, op, islazy) {
+	if(!op) {
+		$('imagelist_' + pid).style.display = 'none';
+		$('imagelistthumb_' + pid).style.display = '';
+	} else {
+		$('imagelistthumb_' + pid).style.display = 'none';
+		$('imagelist_' + pid).style.display = '';
+		if(islazy) {
+			o = new lazyload();
+			o.showImage();
+		} else {
+			attachimgshow(pid);
+		}
+	}
+	doane();
 }
 
 function attachimginfo(obj, infoobj, show, event) {
@@ -147,7 +202,11 @@ function fastpostappendreply() {
 	div.className = '';
 	$('postlistreply').appendChild(div);
 	$('fastpostsubmit').disabled = false;
-	$('fastpostmessage').value = '';
+	if($('fastpostmessage')) {
+		$('fastpostmessage').value = '';
+	} else {
+		editdoc.body.innerHTML = BROWSER.firefox ? '<br />' : '';
+	}
 	if($('secanswer3')) {
 		$('checksecanswer3').innerHTML = '<img src="' + STATICURL + 'image/common/none.gif" width="17" height="17">';
 		$('secanswer3').value = '';
@@ -184,6 +243,12 @@ function succeedhandle_fastpost(locationhref, message, param) {
 	if(param['sechash']) {
 		updatesecqaa(param['sechash']);
 		updateseccode(param['sechash']);
+	}
+	if($('attach_tblheader')) {
+		$('attach_tblheader').style.display = 'none';
+	}
+	if($('attachlist')) {
+		$('attachlist').innerHTML = '';
 	}
 }
 
@@ -245,10 +310,6 @@ function appendreply() {
 	showCreditPrompt();
 }
 
-function creditconfirm(v) {
-	return confirm('下載需要消耗' + v + '，您是否要下載？');
-}
-
 function poll_checkbox(obj) {
 	if(obj.checked) {
 		p++;
@@ -297,7 +358,7 @@ function itemset(i) {
 }
 
 function checkmgcmn(id) {
-	if(!$('mgc_' + id + '_menu').getElementsByTagName('li').length) {
+	if($('mgc_' + id) && !$('mgc_' + id + '_menu').getElementsByTagName('li').length) {
 		$('mgc_' + id).innerHTML = '';
 		$('mgc_' + id).style.display = 'none';
 	}
@@ -315,16 +376,113 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	}
 }
 
-function showPostWin(action, href) {
-	if(BROWSER.ie && BROWSER.ie < 7) {
-		window.open(href);
-		doane(event);
+function copyThreadUrl(obj) {
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', '帖子地址已經複製到剪貼板');
+	return false;
+}
+
+function replyNotice() {
+	var newurl = 'forum.php?mod=misc&action=replynotice&tid=' + tid + '&op=';
+	var replynotice = $('replynotice');
+	var status = replynotice.getAttribute("status");
+	if(status == 1) {
+		replynotice.href = newurl + 'receive';
+		replynotice.innerHTML = '接收回復通知';
+		replynotice.setAttribute("status", 0);
 	} else {
-		showWindow(action, href, 'get', 0);
+		replynotice.href = newurl + 'ignore';
+		replynotice.innerHTML = '取消回復通知';
+		replynotice.setAttribute("status", 1);
 	}
 }
 
-function copyThreadUrl(obj) {
-	setCopy($('thread_subject').innerHTML + '\n' + obj.href + '\n', '帖子地址已經複製到剪貼板');
-	return false;
+var connect_share_loaded = 0;
+function connect_share(connect_share_url, connect_uin) {
+	if(parseInt(discuz_uid) <= 0) {
+		return true;
+	} else {
+		if(connect_uin) {
+			setTimeout(function () {
+				if(!connect_share_loaded) {
+					showDialog('分享服務連接失敗，請稍後再試。', 'notice');
+					$('append_parent').removeChild($('connect_load_js'));
+				}
+			}, 5000);
+			connect_load(connect_share_url);
+		} else {
+			showDialog($('connect_share_unbind').innerHTML, 'info', '請先綁定QQ賬號');
+		}
+		return false;
+	}
+}
+
+function connect_load(src) {
+	var e = document.createElement('script');
+	e.type = "text/javascript";
+	e.id = 'connect_load_js';
+	e.src = src + '&_r=' + Math.random();
+	e.async = true;
+	$('append_parent').appendChild(e);
+}
+
+function connect_show_dialog(title, html, type) {
+	var type = type ? type : 'info';
+	showDialog(html, type, title, null, 0);
+}
+
+function connect_get_thread() {
+	connect_thread_info.subject = $('connect_thread_title').value;
+	if ($('postmessage_' + connect_thread_info.post_id)) {
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['本帖最後由 .*? 於 .*? 編輯','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">複製代碼</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+	}
+	return connect_thread_info;
+}
+
+function lazyload(className) {
+	var obj = this;
+	lazyload.className = className;
+	this.getOffset = function (el, isLeft) {
+		var  retValue  = 0 ;
+		while  (el != null ) {
+			retValue  +=  el["offset" + (isLeft ? "Left" : "Top" )];
+			el = el.offsetParent;
+		}
+		return  retValue;
+	};
+	this.initImages = function (ele) {
+		lazyload.imgs = [];
+		var eles = lazyload.className ? $C(lazyload.className, ele) : [document.body];
+		for (var i = 0; i < eles.length; i++) {
+			var imgs = eles[i].getElementsByTagName('IMG');
+			for(var j = 0; j < imgs.length; j++) {
+				if(imgs[j].getAttribute('file') && !imgs[j].getAttribute('lazyloaded')) {
+					if(this.getOffset(imgs[j]) > document.documentElement.clientHeight) {
+						lazyload.imgs.push(imgs[j]);
+					} else if(this.getOffset(imgs[j]) > 0) {
+						imgs[j].setAttribute('src', imgs[j].getAttribute('file'));
+					}
+				}
+			}
+		}
+	};
+	this.showImage = function() {
+		this.initImages();
+		if(!lazyload.imgs.length) return false;
+		var imgs = [];
+		var scrollTop = Math.max(document.documentElement.scrollTop , document.body.scrollTop);
+		for (var i=0; i<lazyload.imgs.length; i++) {
+			var img = lazyload.imgs[i];
+			var offsetTop = this.getOffset(img);
+			if (offsetTop > document.documentElement.clientHeight && (offsetTop  - scrollTop < document.documentElement.clientHeight)) {
+				img.setAttribute('src', img.getAttribute('file') ? img.getAttribute('file') : img.getAttribute('src'));
+				img.setAttribute('lazyloaded', true);
+			} else {
+				imgs.push(img);
+			}
+		}
+		lazyload.imgs = imgs;
+		return true;
+	};
+	this.initImages();
+	_attachEvent(window, 'scroll', function(){obj.showImage();});
 }

@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: common_myapp.php 17147 2010-09-25 03:36:17Z zhengqingpeng $
+ * $Id: common_myapp.php 18808 2010-12-06 08:18:37Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);
@@ -34,6 +34,7 @@ while ($app = $db_source->fetch_array($query)) {
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." appid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 } else {
+	$db_target->query("TRUNCATE ".$db_target->table('common_myapp_count'));
 	$db_target->query('INSERT INTO '.$db_target->table('common_myapp_count').' (appid) SELECT appid FROM '.$db_target->table('common_myapp'));
 }
 

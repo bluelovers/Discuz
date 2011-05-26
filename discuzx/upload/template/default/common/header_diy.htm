@@ -1,4 +1,17 @@
-<div id="button_more_menu" class="p_pop" style="display: none; margin-left: 17px;">
+<style type="text/css">
+/* DIY MODE CSS STYLE */
+.hide { display: none; }
+.frame,.tab,.block { position: relative; zoom:1; min-height: 20px; }
+.edit { position: absolute; top: 0; right: 0; z-index: 199; padding: 0 5px; background: red; line-height: 26px; color: #FFF; cursor: pointer; }
+.block .edit { background: #369; }
+.edit-menu { position: absolute; z-index: 300; border-style: solid; border-width: 0 1px 1px 1px; border-color: #DDD #999 #999 #CCC; background: #FFF; }
+	.mitem { padding: 4px 4px 4px 14px; width: 36px; border-top: 1px solid #DDD; cursor: pointer; }
+		.mitem:hover { background: #F2F2F2; color: #06C; }
+.subtitle { margin: 0 4px; }
+	.frame-tab .title .move-span { float: left; margin: 0 3px 0 0; padding: 0; width: 100px; border-bottom: none; cursor: pointer; }
+	#samplepanel { background: #FFF; }
+</style>
+<div id="button_more_menu" class="p_pop" style="display: none;">
 	<ul>
 		<li><a href="javascript:;" onclick="spaceDiy.recover();return false;" title="{lang header_restore_backup_desc}">{lang header_restore_backup}</a></li>
 		<li><a href="javascript:;" onclick="drag.frameExport();return false;" title="{lang header_export_desc}">{lang header_export}</a></li>
@@ -7,7 +20,7 @@
 		<li><a href="javascript:;" onclick="drag.clearAll();$('button_more_menu').style.display='none';return false;" title="{lang header_clearall_desc}">{lang header_clearall}</a></li>
 	</ul>
 </div>
-<div id="controlpanel" class="cl">
+<div id="controlpanel" class="cl hide">
 	<div id="controlheader" class="cl">
 		<p class="y">
 			<span id="navcancel"><a href="javascript:;" id="diycancel" onclick="spaceDiy.cancel();return false;">{lang close}</a></span>
@@ -27,6 +40,10 @@
 			<li id="navdiy"><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');this.blur();return false;">{lang header_diy}</a></li>
 			<!--{/if}-->
 		</ul>
+		<div id="diy_backup_tip" class="tip tip_2" style="display: none;">
+			<div class="tip_horn"></div>
+			<div class="tip_c">{lang header_diy_backup_tip} &nbsp; <a href="javascript:;" class="xi2" onclick="drag.saveViewTip('diy_backup_tip');return false;">{lang header_diy_i_know}</a></div>
+		</div>
 	</div>
 	<div id="controlcontent" class="cl">
 		<ul id="contentstart" class="content">
@@ -50,6 +67,10 @@
 		<div id="contentblockclass" class="content"></div>
 	</div>
 	<div id="cpfooter"><table cellpadding="0" cellspacing="0" width="100%"><tr><td class="l">&nbsp;</td><td class="c">&nbsp;</td><td class="r">&nbsp;</td></tr></table></div>
+</div>
+<div id="samplepanel" class="hide ptm pbm bbda hm">
+	<span class="y"><a href="javascript:;" onclick="spaceDiy.cancel();return false;" class="xi2">{lang close}</a>&nbsp;&nbsp;</span>
+	{lang header_diy_sample_mode}
 </div>
 
 <form method="post" autocomplete="off" name="diyform" id="diyform" action="$_G[siteurl]portal.php?mod=portalcp&ac=diy">

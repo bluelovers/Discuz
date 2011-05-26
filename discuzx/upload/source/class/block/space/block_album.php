@@ -129,7 +129,7 @@ class block_album {
 		if($uids) {
 			$wheres[] = 'uid IN ('.dimplode($uids).')';
 		}
-		if($catid) {
+		if($catid && !in_array('0', $catid)) {
 			$wheres[] = 'catid IN ('.dimplode($catid).')';
 		}
 		$wheres[] = "friend = '0'";

@@ -60,9 +60,9 @@ function backupContent(sHTML) {
 			var el = obj.elements[i];
 			if(el.name != '' && (el.tagName == 'TEXTAREA' || el.tagName == 'INPUT' && (el.type == 'text' || el.type == 'checkbox' || el.type == 'radio')) && el.name.substr(0, 6) != 'attach') {
 				var elvalue = el.value;
-				if(el.name == 'subject') {
+				if(el.name == 'subject' || el.name == 'title') {
 					subject = trim(elvalue);
-				} else if(el.name == 'message') {
+				} else if(el.name == 'message' || el.name == 'content') {
 					message = trim(elvalue);
 				}
 				if((el.type == 'checkbox' || el.type == 'radio') && !el.checked) {
@@ -77,7 +77,7 @@ function backupContent(sHTML) {
 		if(!subject && !message) {
 			return;
 		}
-		saveUserdata('UCHome', data);
+		saveUserdata('home', data);
 	}
 }
 

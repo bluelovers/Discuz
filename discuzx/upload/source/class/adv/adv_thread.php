@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_thread.php 16473 2010-09-07 06:09:07Z monkey $
+ *      $Id: adv_thread.php 20389 2011-02-23 02:57:06Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,16 +48,6 @@ class adv_thread {
 				'type' => 'mselect',
 				'value' => array(
 					array(0, 'thread_pnumber_all'),
-					array(1, '> #1'),
-					array(2, '> #2'),
-					array(3, '> #3'),
-					array(4, '> #4'),
-					array(5, '> #5'),
-					array(6, '> #6'),
-					array(7, '> #7'),
-					array(8, '> #8'),
-					array(9, '> #9'),
-					array(10, '> #10'),
 				),
 				'default' => array(0),
 			),
@@ -75,6 +65,9 @@ class adv_thread {
 					$settings['groups']['value'][] = array($sgid, str_repeat('&nbsp;', 4).$_G['cache']['grouptype']['second'][$sgid]['name']);
 				}
 			}
+		}
+		for($i = 1;$i <= $_G['ppp'];$i++) {
+			$settings['pnumber']['value'][$i] = array($i, '> #'.$i);
 		}
 
 		return $settings;
@@ -110,7 +103,7 @@ class adv_thread {
 				$adid = $adids[array_rand($adids)];
 				if($parameters[$adid][\'position\'] == 3) {
 					$_G[\'thread\'][\'contentmr\'] = $parameters[$adid][\'width\'] ? $parameters[$adid][\'width\'] : 120;
-					$extra = \'style="width:\'.$_G[\'thread\'][\'contentmr\'].\'px"\';
+					$extra = \'style="margin-left:10px;width:\'.$_G[\'thread\'][\'contentmr\'].\'px"\';
 				}
 				$adcode = $codes[$adid];
 			',

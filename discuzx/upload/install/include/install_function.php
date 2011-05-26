@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 17202 2010-09-26 07:37:33Z cnteacher $
+ *      $Id: install_function.php 22365 2011-05-04 09:19:56Z congyushuai $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -362,6 +362,8 @@ function show_form(&$form_items, $error_msg) {
 				$value = $uc_info_transfer['ucapi'];
 			} elseif($k == 'ucpw' && isset($uc_info_transfer['ucfounderpw'])) {
 				$value = $uc_info_transfer['ucfounderpw'];
+			} elseif($k == 'ucip') {
+				$value = '';
 			}
 
 			show_setting($k, $key.'['.$k.']', $value, $v['type'], isset($error_msg[$key][$k]) ? $key.'_'.$k.'_invalid' : '');
@@ -374,7 +376,7 @@ function show_form(&$form_items, $error_msg) {
 	echo '</table>';
 	echo '</div>';
 	echo '<table class="tb2">';
-	show_setting('', 'submitname', 'new_step', 'submit');
+	show_setting('', 'submitname', 'new_step', ($step == 2 ? 'submit|oldbtn' : 'submit' ));
 	show_setting('end');
 	show_footer();
 }
@@ -512,7 +514,7 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2010 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
 	</div>
 </div>
 </body>
@@ -680,8 +682,8 @@ function initinput() {
 </script>
 	<div class="main">
 		<div class="btnbox"><div id="notice"></div></div>
-		<div class="btnbox marginbot">
-	<input type="button" name="submit" value="<?=lang('install_in_processed')?>" disabled style="height: 25" id="laststep" onclick="initinput()">
+		<div class="btnbox margintop marginbot">
+	<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled style="height: 25" id="laststep" onclick="initinput()">
 	</div>
 <?php
 }
@@ -965,11 +967,14 @@ function show_setting($setname, $varname = '', $value = '', $type = 'text|passwo
 		return;
 	}
 
-	echo "\n".'<tr><th class="tbopt'.($error ? ' red' : '').'">&nbsp;'.(empty($setname) ? '' : lang($setname).':')."</th>\n<td>";
+	echo "\n".'<tr><th class="tbopt'.($error ? ' red' : '').'" align="left">&nbsp;'.(empty($setname) ? '' : lang($setname).':')."</th>\n<td>";
 	if($type == 'text' || $type == 'password') {
 		$value = htmlspecialchars($value);
 		echo "<input type=\"$type\" name=\"$varname\" value=\"$value\" size=\"35\" class=\"txt\">";
-	} elseif($type == 'submit') {
+	} elseif(strpos($type, 'submit') !== FALSE) {
+		if(strpos($type, 'oldbtn') !== FALSE) {
+			echo "<input type=\"submit\" name=\"oldbtn\" value=\"".lang('old_step')."\" class=\"btn\" onclick=\"javascript:back();\">\n";
+		}
 		$value = empty($value) ? 'next_step' : $value;
 		echo "<input type=\"submit\" name=\"$varname\" value=\"".lang($value)."\" class=\"btn\">\n";
 	} elseif($type == 'checkbox') {
@@ -980,7 +985,7 @@ function show_setting($setname, $varname = '', $value = '', $type = 'text|passwo
 		echo $value;
 	}
 
-	echo "</td>\n<td>&nbsp;";
+	echo "</td>\n<td>";
 	if($error) {
 		$comment = '<span class="red">'.(is_string($error) ? lang($error) : lang($setname.'_error')).'</span>';
 	} else {
@@ -997,6 +1002,10 @@ function show_step($step) {
 	$laststep = 4;
 	$title = lang('step_'.$method.'_title');
 	$comment = lang('step_'.$method.'_desc');
+	$step_title_1 = lang('step_title_1');
+	$step_title_2 = lang('step_title_2');
+	$step_title_3 = lang('step_title_3');
+	$step_title_4 = lang('step_title_4');
 
 	$stepclass = array();
 	for($i = 1; $i <= $laststep; $i++) {
@@ -1011,10 +1020,10 @@ function show_step($step) {
 	</div>
 	<div class="stepstat">
 		<ul>
-			<li class="$stepclass[1]">1</li>
-			<li class="$stepclass[2]">2</li>
-			<li class="$stepclass[3]">3</li>
-			<li class="$stepclass[4]">4</li>
+			<li class="$stepclass[1]">$step_title_1</li>
+			<li class="$stepclass[2]">$step_title_2</li>
+			<li class="$stepclass[3]">$step_title_3</li>
+			<li class="$stepclass[4]">$step_title_4</li>
 		</ul>
 		<div class="stepstatbg stepstat1"></div>
 	</div>
@@ -1228,14 +1237,6 @@ function install_testdata($username, $uid) {
 	global $_G, $db, $tablepre;
 	showjsmessage(lang('install_test_data')." ... ".lang('succeed'));
 
-	$arr = array(
-			0=> array('importfile'=>'./data/portal_index.xml','primaltplname'=>'portal/index', 'targettplname'=>'portal/index'),
-	);
-	$_G = array('db'=>$db,'tablepre'=>$tablepre, 'uid'=>$uid, 'username'=>$username);
-	foreach ($arr as $v) {
-		import_diy($v['importfile'], $v['primaltplname'], $v['targettplname']);
-	}
-
 	$sqlfile = ROOT_PATH.'./install/data/common_district_{#id}.sql';
 	for($i = 1; $i < 4; $i++) {
 		$sqlfileid = str_replace('{#id}', $i, $sqlfile);
@@ -1290,76 +1291,6 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 		}
 	}
 	return $return;
-}
-
-function upg_comsenz_stats() {
-	global $db, $tablepre;
-	static $is_run = false;
-	if($is_run) return;
-	if(getgpc('addfounder_contact','P')) {
-		$email = strip_tags(getgpc('email', 'P'));
-		$msn = strip_tags(getgpc('msn', 'P'));
-		$qq = strip_tags(getgpc('qq', 'P'));
-		if(!preg_match("/^[\d]+$/", $qq)) $qq = '';
-		if(strlen($email) < 6 || !preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $email)) $email = '';
-		if(strlen($msn) < 6 || !preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $msn)) $msn = '';
-
-		$contact = serialize(array('qq' => $qq, 'msn' => $msn, 'email' => $email));
-		$db->query("REPLACE {$tablepre}common_setting (skey, svalue) VALUES ('founder_contact', '$contact')");
-		$is_run = ture;
-		echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_succeed').'\';</script><iframe src="../" style="display:none"></iframe>'."\r\n";
-		show_header();
-		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
-		echo '<li><a href="../">'.lang('install_succeed').'</a><br>';
-		echo '<script>setTimeout(function(){window.location=\'../\'}, 2000);</script>'.lang('auto_redirect').'</li>';
-		echo '</ul></div>';
-		show_footer();
-	} else {
-
-		show_header();
-		$contact = array();
-		$contact = unserialize($db->result($db->query("SELECT svalue FROM {$tablepre}common_setting WHERE skey='founder_contact'"),0));
-		$founder_contact = lang('founder_contact');
-		$founder_contact = str_replace(array("\n","\t"), array('<br>','&nbsp;&nbsp;&nbsp;&nbsp;'), $founder_contact);
-			echo '</div><div class="main" style="margin-top: -123px;">';
-			echo $founder_contact;
-			echo '<form action="'.$url_forward.'" method="post" id="postform">';
-			echo	"<br><table width=\"360\" cellspacing=\"1\" border=\"0\" align=\"center\">".
-		 		"<tr height=\"30\"><td align=\"right\" >QQ:</td><td>&nbsp;&nbsp;<input  class=\"txt\" type=\"text\" value=\"$contact[qq]\" name=\"qq\" ></td></tr>
-		 		<tr height=\"30\"><td align=\"right\">MSN:</td><td>&nbsp;&nbsp;<input  class=\"txt\" type=\"text\" value=\"$contact[msn]\" name=\"msn\" ></td></tr>
-		 		<tr height=\"30\"><td align=\"right\">E-mail:</td><td>&nbsp;&nbsp;<input  class=\"txt\" type=\"text\" value=\"$contact[email]\" name=\"email\" ></td></tr>
-		 		<tr align=\"center\" height=\"30\"><td colspan=\"2\"><input type=\"submit\" style=\"padding: 2px;\" name=\"addfounder_contact\" value=\"".lang('install_submit')."\"></td></tr></table>";
-			echo '</form>';
-			echo '<p style="text-align:right"><input type="button" style="padding: 2px;" onclick="window.location=\'index.php?method=ext_info&skip=1\'" value="'.lang('skip_current').'" /></center></p>';
-			echo '</div>';
-		show_footer();
-	}
-}
-
-
-function getstatinfo() {
-	if($siteid && $key) {
-		return;
-	}
-	$version = '7.2';
-	$onlineip = '';
-	if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
-		$onlineip = getenv('HTTP_CLIENT_IP');
-	} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-		$onlineip = getenv('HTTP_X_FORWARDED_FOR');
-	} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
-		$onlineip = getenv('REMOTE_ADDR');
-	} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
-		$onlineip = $_SERVER['REMOTE_ADDR'];
-	}
-	$funcurl = 'http://stat'.'.disc'.'uz.co'.'m/stat_ins.php';
-	$PHP_SELF = htmlspecialchars($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);
-	$url = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api|archiver|wap)?\/*$/i", '', substr($PHP_SELF, 0, strrpos($PHP_SELF, '/'))));
-	$url = substr($url, 0, -8);
-	$hash = md5("$url\$version{$onlineip}");
-	$q = "url=$url&version=$version&ip=$onlineip&time=".time()."&hash=$hash";
-	$q=rawurlencode(base64_encode($q));
-	dfopen($funcurl."?action=newinstall&q=$q");
 }
 
 function save_diy_data($primaltplname, $targettplname, $data, $database = false) {
@@ -1621,7 +1552,7 @@ function import_diy($importfile, $primaltplname, $targettplname) {
 		$mapping = array();
 		if (!empty($diycontent['blockdata'])) {
 			$mapping = block_import($diycontent['blockdata']);
-			unset($diycontent['bockdata']);
+			unset($diycontent['blockdata']);
 		}
 
 		$oldbids = $newbids = array();

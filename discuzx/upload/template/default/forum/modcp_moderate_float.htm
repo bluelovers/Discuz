@@ -11,12 +11,17 @@
 		</span>
 	</h3>
 
-	<form id="moderateform" method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&modsubmit=yes&infloat=yes" onsubmit="ajaxpost('moderateform', 'return_mods', 'return_mods', 'onerror');return false;">
+	<form id="moderateform" method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&infloat=yes" onsubmit="ajaxpost('moderateform', 'return_mods', 'return_mods', 'onerror');return false;">
 		<div class="c">
 		<!--{if $list}-->
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="filter" value="$filter" />
 			<input type="hidden" name="modact" value="$modact" />
+			<input type="hidden" name="modsubmit" value="1" />
+			<!--{if $op == 'replies'}-->
+			<!--{eval $_G['gp_posttableid'] = intval($_G['gp_posttableid']);}-->
+			<input type="hidden" name="posttableid" value="$_G['gp_posttableid']" />
+			<!--{/if}-->
 			<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 			<!--{loop $list $id}-->
 				<input type="hidden" name="moderate[]" value="$id" />
@@ -29,7 +34,7 @@
 		</div>
 		<p class="o">
 			<button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="true" tabindex="2"><strong>{lang submit}</strong></button>
-			<!--{if $op=='members'}--> <input type="checkbox" name="sendemail" id="sendemail" class="pc" value="1" /> <label for="sendemail">{lang mod_moderate_member_sendemail}</label><!--{/if}-->
+			<!--{if $op=='members'}--><label for="sendemail"><input type="checkbox" name="sendemail" id="sendemail" class="pc" value="1" />{lang mod_moderate_member_sendemail}</label><!--{/if}-->
 		</p>
 	</form>
 </div>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_index.php 16973 2010-09-17 09:28:06Z monkey $
+ *      $Id: forum_index.php 22619 2011-05-16 03:01:34Z lifangming $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ require_once libfile('function/forumlist');
 $gid = intval(getgpc('gid'));
 $showoldetails = get_index_online_details();
 
-if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !$_G['gp_archiver']) {
+if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
 	get_index_page_guest_cache();
 }
 
@@ -29,17 +29,16 @@ $postdata = $_G['cache']['historyposts'] ? explode("\t", $_G['cache']['historypo
 $postdata[0] = intval($postdata[0]);
 $postdata[1] = intval($postdata[1]);
 
-$navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
+list($navtitle, $metadescription, $metakeywords) = get_seosetting('forum');
 if(!$navtitle) {
 	$navtitle = $_G['setting']['navs'][2]['navname'];
+	$nobbname = false;
 } else {
 	$nobbname = true;
 }
-$metadescription = $_G['setting']['seodescription']['forum'];
 if(!$metadescription) {
 	$metadescription = $navtitle;
 }
-$metakeywords = $_G['setting']['seokeywords']['forum'];
 if(!$metakeywords) {
 	$metakeywords = $navtitle;
 }
@@ -48,15 +47,18 @@ if($_G['setting']['indexhot']['status'] && $_G['cache']['heats']['expiration'] <
 	require_once libfile('function/cache');
 	updatecache('heats');
 }
+if(defined('IN_MOBILE')) {
+	@include DISCUZ_ROOT.'./source/module/forum/forum_index_mobile.php';
+}
 
 if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails)) {
 	extract(get_index_memory_by_groupid($_G['member']['groupid']));
 	if(defined('FORUM_INDEX_PAGE_MEMORY') && FORUM_INDEX_PAGE_MEMORY) {
 		categorycollapse();
-		if($_G['gp_archiver']) {
-			include loadarchiver('forum/discuz');
-		} else {
+		if(!defined('IN_ARCHIVER')) {
 			include template('diy:forum/discuz');
+		} else {
+			include loadarchiver('forum/discuz');
 		}
 		dexit();
 	}
@@ -222,7 +224,8 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 	}
 
 	if(defined('FORUM_INDEX_PAGE_MEMORY') && !FORUM_INDEX_PAGE_MEMORY) {
-		memory('set', 'forum_index_page_'.$_G['member']['groupid'], array(
+		$key = !IS_ROBOT ? $_G['member']['groupid'] : 'for_robot';
+		memory('set', 'forum_index_page_'.$key, array(
 			'catlist' => $catlist,
 			'forumlist' => $forumlist,
 			'sublist' => $sublist,
@@ -244,12 +247,30 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 
 $lastvisit = $lastvisit ? dgmdate($lastvisit, 'u') : 0;
 
-if($_G['gp_archiver']) {
+if(defined('IN_ARCHIVER')) {
 	include loadarchiver('forum/discuz');
 	exit();
 }
-
 categorycollapse();
+
+if($gid && !empty($catlist)) {
+	$_G['category'] = $catlist[$gid];
+	$forumseoset = array(
+		'seotitle' => $catlist[$gid]['seotitle'],
+		'seokeywords' => $catlist[$gid]['keywords'],
+		'seodescription' => $catlist[$gid]['seodescription']
+	);
+	$seodata = array('fgroup' => $catlist[$gid]['name']);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('threadlist', $seodata, $forumseoset);
+	if(empty($navtitle)) {
+		$navtitle = $navtitle_g;
+		$nobbname = false;
+	} else {
+		$nobbname = true;
+	}
+	$_G['fid'] = $gid;
+}
+
 include template('diy:forum/discuz:'.$gid);
 
 function get_index_announcements() {
@@ -258,13 +279,13 @@ function get_index_announcements() {
 	if($_G['cache']['announcements']) {
 		$readapmids = !empty($_G['cookie']['readapmid']) ? explode('D', $_G['cookie']['readapmid']) : array();
 		foreach($_G['cache']['announcements'] as $announcement) {
-			if(empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups'])) {
+			if($announcement['endtime'] > TIMESTAMP && (empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups']))) {
 				if(empty($announcement['type'])) {
-					$announcements .= '<li><a href="forum.php?mod=announcement&id='.$announcement['id'].'" target="_blank">'.$announcement['subject'].
-						'<em>('.dgmdate($announcement['starttime'], 'd').')</em></a></li>';
+					$announcements .= '<li><span><a href="forum.php?mod=announcement&id='.$announcement['id'].'" target="_blank" class="xi2">'.$announcement['subject'].
+						'</a></span><em>('.dgmdate($announcement['starttime'], 'd').')</em></li>';
 				} elseif($announcement['type'] == 1) {
-					$announcements .= '<li><a href="'.$announcement['message'].'" target="_blank">'.$announcement['subject'].
-						'<em>('.dgmdate($announcement['starttime'], 'd').')</em></a></li>';
+					$announcements .= '<li><span><a href="'.$announcement['message'].'" target="_blank" class="xi2">'.$announcement['subject'].
+						'</a></span><em>('.dgmdate($announcement['starttime'], 'd').')</em></li>';
 				}
 			}
 		}
@@ -291,10 +312,13 @@ function get_index_page_guest_cache() {
 	}
 }
 
-function get_index_memory_by_groupid($groupid) {
+function get_index_memory_by_groupid($key) {
 	$enable = getglobal('setting/memory/forumindex/enable');
 	if($enable && memory('check')) {
-		$ret = memory('get', 'forum_index_page_'.$groupid);
+		if(IS_ROBOT) {
+			$key = 'for_robot';
+		}
+		$ret = memory('get', 'forum_index_page_'.$key);
 		define('FORUM_INDEX_PAGE_MEMORY', $ret ? 1 : 0);
 		if($ret) {
 			return $ret;

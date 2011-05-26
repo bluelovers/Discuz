@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_doing.php 16271 2010-09-02 08:59:17Z liulanbo $
+ *      $Id: admincp_doing.php 19991 2011-01-27 02:08:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -21,6 +21,8 @@ $endtime = $_G['gp_endtime'];
 $searchsubmit = $_G['gp_searchsubmit'];
 $doids = $_G['gp_doids'];
 
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
 cpheader();
 
 if(!submitcheck('doingsubmit')) {
@@ -29,8 +31,14 @@ if(!submitcheck('doingsubmit')) {
 		$detail = 1;
 		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
-	$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
-	$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+
+	if($fromumanage) {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? '' : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? '' : $endtime;
+	} else {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	}
 
 	shownav('topic', 'nav_doing');
 	showsubmenu('nav_doing', array(
@@ -41,7 +49,10 @@ if(!submitcheck('doingsubmit')) {
 		array('doing_search', !$searchsubmit),
 		array('nav_doing', $searchsubmit)
 	));
-	showtips('doing_tips');
+	if(empty($newlist)) {
+		$search_tips = 1;
+		showtips('doing_tips');
+	}
 	echo <<<EOT
 <script type="text/javascript" src="static/js/calendar.js"></script>
 <script type="text/JavaScript">
@@ -62,6 +73,7 @@ EOT;
 	showsetting('doing_search_keyword', 'keywords', $keywords, 'text');
 	showsetting('doing_search_lengthlimit', 'lengthlimit', $lengthlimit, 'text');
 	showsetting('doing_search_time', array('starttime', 'endtime'), array($starttime, $endtime), 'daterange');
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsubmit('searchsubmit');
 	showtablefooter();
 	showformfooter();
@@ -76,7 +88,7 @@ EOT;
 	$cpmsg = cplang('doing_succeed', array('deletecount' => $deletecount));
 
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('doingforum').searchsubmit.click();</script>
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('doingforum').searchsubmit.click();</script>
 <?php
 
 }
@@ -122,13 +134,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		$sql .= " AND LENGTH(d.message) < $lengthlimit";
 	}
 
-	if($starttime != '0') {
+	if($starttime != '') {
 		$starttime = strtotime($starttime);
 		$sql .= " AND d.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
-		if($endtime != '0') {
+		if($endtime != '') {
 			$endtime = strtotime($endtime);
 			$sql .= " AND d.dateline<'$endtime'";
 		}
@@ -179,7 +191,11 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	showtagheader('div', 'postlist', $searchsubmit || $newlist);
 	showformheader('doing&frame=no', 'target="doingframe"');
 	showhiddenfields(array('doids' => authcode($doids, 'ENCODE')));
-	showtableheader(cplang('doing_result').' '.$doingcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'doingforum\').pp.value=\'\';$(\'doingforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	if(!$search_tips) {
+		showtableheader(cplang('doing_new_result').' '.$doingcount, 'fixpadding');
+	} else {
+		showtableheader(cplang('doing_result').' '.$doingcount.(empty($newlist) ? ' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'doingforum\').pp.value=\'\';$(\'doingforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>' : ''), 'fixpadding');
+	}
 
 	if($error) {
 		echo "<tr><td class=\"lineheight\" colspan=\"15\">$lang[$error]</td></tr>";

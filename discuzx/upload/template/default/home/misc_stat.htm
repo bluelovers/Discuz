@@ -17,7 +17,7 @@
 			<form method="get" action="misc.php?mod=stat&op=trend">
 			<table cellspacing="0" cellpadding="0" class="dt bm mbw">
 				<caption>
-					<h2 class="ptm">{lang stat_classification}</h2>
+					<h2>{lang stat_classification}</h2>
 					<p class="pbm xg1">{lang stat_message}</p>
 				</caption>
 				<tr class="tbmu">
@@ -25,7 +25,7 @@
 					<td>
 						<a href="misc.php?mod=stat&op=trend"$actives[all]>{lang comprehensive_overview}</a> &nbsp;
 						<!--{loop $cols['login'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -33,7 +33,7 @@
 					<th>$_G[setting][navs][2][navname]:</th>
 					<td>
 						<!--{loop $cols['forum'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -41,7 +41,7 @@
 					<th>$_G[setting][navs][3][navname]:</th>
 					<td>
 						<!--{loop $cols['tgroup'] $value}-->
-						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -49,16 +49,16 @@
 					<th>$_G[setting][navs][4][navname]:</th>
 					<td>
 						<!--{loop $cols['home'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
-				
+
 				<!--tr class="tbmu">
 					<th>{lang info_interactive}:</th>
 					<td>
 						<!--{loop $cols['comment'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr-->
@@ -66,7 +66,7 @@
 					<th>{lang member_interactive}:</th>
 					<td>
 						<!--{loop $cols['space'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /> <!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -75,8 +75,8 @@
 					<td>
 						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 						<input type="text" name="primarybegin" class="px" value="$primarybegin" onclick="showcalendar(event, this, false)"/> - <input type="text" name="primaryend" class="px" value="$primaryend" onclick="showcalendar(event, this, false)" />
-						<label><input type="checkbox" name="merge" value="1" class="pc" {if !empty($merge)} checked="checked"{/if} /> {lang stat_merge_statistic}</label>
-						<button type="submit" class="pn pnp"><strong>{lang show}</strong></button>
+						<label><input type="checkbox" name="merge" value="1" class="pc" {if !empty($merge)} checked="checked"{/if} />{lang stat_merge_statistic}</label>
+						<button type="submit" class="pn pnc"><strong>{lang show}</strong></button>
 					</td>
 				</tr>
 			</table>

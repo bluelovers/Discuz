@@ -4,12 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 17469 2010-10-19 08:20:46Z monkey $
+ *      $Id: class_core.php 22775 2011-05-20 05:43:23Z monkey $
  */
 
 define('IN_DISCUZ', true);
 error_reporting(0);
-
 
 class discuz_core {
 
@@ -31,6 +30,7 @@ class discuz_core {
 	var $init_cron = true;
 	var $init_misc = true;
 	var $init_memory = true;
+	var $init_mobile = true;
 
 	var $initated = false;
 
@@ -67,6 +67,7 @@ class discuz_core {
 			$this->_init_user();
 			$this->_init_session();
 			$this->_init_setting();
+			$this->_init_mobile();
 			$this->_init_cron();
 			$this->_init_misc();
 		}
@@ -76,7 +77,7 @@ class discuz_core {
 	function _init_env() {
 
 		error_reporting(E_ERROR);
-		if(phpversion() < '5.3.0') {
+		if(PHP_VERSION < '5.3.0') {
 			set_magic_quotes_runtime(0);
 		}
 
@@ -128,6 +129,7 @@ class discuz_core {
 			'PHP_SELF' => '',
 			'siteurl' => '',
 			'siteroot' => '',
+			'siteport' => '',
 
 			'config' => array(),
 			'setting' => array(),
@@ -144,6 +146,7 @@ class discuz_core {
 			'fid' => 0,
 			'tid' => 0,
 			'forum' => array(),
+			'thread' => array(),
 			'rssauth' => '',
 
 			'home' => array(),
@@ -156,17 +159,31 @@ class discuz_core {
 				'action' => APPTYPEID,
 				'fid' => 0,
 				'tid' => 0,
-			)
+			),
+
+			'mobile' => '',
+
 		);
 		$_G['PHP_SELF'] = htmlspecialchars($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['PHP_SELF']);
 		$_G['basescript'] = CURSCRIPT;
 		$_G['basefilename'] = basename($_G['PHP_SELF']);
-		$_G['siteurl'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api)?\/*$/i", '', substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'))).'/');
-		$_G['siteroot'] = substr($_G['PHP_SELF'], 0, -strlen($_G['basefilename']));
+		$sitepath = substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'));
+		if(defined('IN_API')) {
+			$sitepath = preg_replace("/\/api\/?.*?$/i", '', $sitepath);
+		} elseif(defined('IN_ARCHIVER')) {
+			$sitepath = preg_replace("/\/archiver/i", '', $sitepath);
+		}
+		$_G['siteurl'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].$sitepath.'/');
+
+		$url = parse_url($_G['siteurl']);
+		$_G['siteroot'] = isset($url['path']) ? $url['path'] : '';
+		$_G['siteport'] = empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
+
 		if(defined('SUB_DIR')) {
 			$_G['siteurl'] = str_replace(SUB_DIR, '/', $_G['siteurl']);
 			$_G['siteroot'] = str_replace(SUB_DIR, '/', $_G['siteroot']);
 		}
+
 		$this->var = & $_G;
 
 	}
@@ -174,20 +191,6 @@ class discuz_core {
 	function _init_input() {
 		if (isset($_GET['GLOBALS']) ||isset($_POST['GLOBALS']) ||  isset($_COOKIE['GLOBALS']) || isset($_FILES['GLOBALS'])) {
 			system_error('request_tainting');
-		}
-
-		if(!empty($_GET['rewrite'])) {
-			$query_string = '?mod=';
-			$param = explode('-', $_GET['rewrite']);
-			$query_string .= $_GET['mod'] = $param[0];
-			array_shift($param);
-			$paramc = count($param);
-			for($i = 0;$i < $paramc;$i+=2) {
-				$_REQUEST[$param[$i]] = $_GET[$param[$i]] = $param[$i + 1];
-				$query_string .= '&'.$param[$i].'='.$param[$i + 1];
-			}
-			$_SERVER['QUERY_STRING'] = $query_string;
-			unset($param, $paramc, $query_string);
 		}
 
 		if(!MAGIC_QUOTES_GPC) {
@@ -205,11 +208,18 @@ class discuz_core {
 		}
 
 
-		$_GET['diy'] = empty($_GET['diy']) ? '' : $_GET['diy'];
+		if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
+			$_GET = array_merge($_GET, $_POST);
+		}
 
-		foreach(array_merge($_POST, $_GET) as $k => $v) {
+		if(isset($_GET['diy'])) {
+			$_GET['diy'] = empty($_GET['diy']) ? '' : $_GET['diy'];
+		}
+
+		foreach($_GET as $k => $v) {
 			$this->var['gp_'.$k] = $v;
 		}
+
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
@@ -262,25 +272,15 @@ class discuz_core {
 	function _init_output() {
 
 		if($this->config['security']['urlxssdefend'] && $_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_SERVER['REQUEST_URI'])) {
-			$temp = urldecode($_SERVER['REQUEST_URI']);
-			if(strpos($temp, '<') !== false || strpos($temp, '"') !== false) {
-				system_error('request_tainting');
-			}
+			$this->_xss_check();
 		}
 
-
-		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || CURSCRIPT != 'misc' || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
-			if(is_string($this->config['security']['attackevasive'])) {
-				$attackevasive_tmp = explode('|', $this->config['security']['attackevasive']);
-				$attackevasive = 0;
-				foreach($attackevasive_tmp AS $key => $value) {
-					$attackevasive += intval($value);
-				}
-				unset($attackevasive_tmp);
-			} else {
-				$attackevasive = $this->config['security']['attackevasive'];
-			}
+		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
 			require_once libfile('misc/security', 'include');
+		}
+
+		if(!empty($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === false) {
+			$this->config['output']['gzip'] = false;
 		}
 
 		$allowgzip = $this->config['output']['gzip'] && empty($this->var['inajax']) && $this->var['mod'] != 'attachment' && EXT_OBGZIP;
@@ -301,6 +301,14 @@ class discuz_core {
 		}
 	}
 
+	function _xss_check() {
+		$temp = strtoupper(urldecode(urldecode($_SERVER['REQUEST_URI'])));
+		if(strpos($temp, '<') !== false || strpos($temp, '"') !== false || strpos($temp, 'CONTENT-TRANSFER-ENCODING') !== false) {
+			system_error('request_tainting');
+		}
+		return true;
+	}
+
 	function _get_client_ip() {
 		$ip = $_SERVER['REMOTE_ADDR'];
 		if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
@@ -317,17 +325,20 @@ class discuz_core {
 	}
 
 	function _init_db() {
-		$this->db = & DB::object();
+		$class = 'db_mysql';
+		if(count(getglobal('config/db/slave'))) {
+			require_once libfile('class/mysql_slave');
+			$class = 'db_mysql_slave';
+		}
+		$this->db = & DB::object($class);
 		$this->db->set_config($this->config['db']);
 		$this->db->connect();
 	}
 
 	function _init_session() {
-
 		$this->session = new discuz_session();
 
-		if($this->init_session)
-		{
+		if($this->init_session)	{
 			$this->session->init($this->var['cookie']['sid'], $this->var['clientip'], $this->var['uid']);
 			$this->var['sid'] = $this->session->sid;
 			$this->var['session'] = $this->session->var;
@@ -347,11 +358,8 @@ class discuz_core {
 				sysmessage('user_banned');
 			}
 
-
 			if($this->var['uid'] && ($this->session->isnew || ($this->session->get('lastactivity') + 600) < TIMESTAMP)) {
-
 				$this->session->set('lastactivity', TIMESTAMP);
-
 				if($this->session->isnew) {
 					DB::update('common_member_status', array('lastip' => $this->var['clientip'], 'lastvisit' => TIMESTAMP), "uid='".$this->var['uid']."'");
 				}
@@ -361,7 +369,6 @@ class discuz_core {
 	}
 
 	function _init_user() {
-
 		if($this->init_user) {
 			if($auth = getglobal('auth', 'cookie')) {
 				$auth = daddslashes(explode("\t", authcode($auth, 'DECODE')));
@@ -409,15 +416,16 @@ class discuz_core {
 	}
 
 	function _init_cron() {
-		if($this->init_cron && $this->init_setting) {
+		$ext = empty($this->config['remote']['on']) || empty($this->config['remote']['cron']) || APPTYPEID == 200;
+		if($this->init_cron && $this->init_setting && $ext) {
 			if($this->var['cache']['cronnextrun'] <= TIMESTAMP) {
+				require_once libfile('class/cron');
 				discuz_cron::run();
 			}
 		}
 	}
 
 	function _init_misc() {
-
 		if(!$this->init_misc) {
 			return false;
 		}
@@ -443,7 +451,7 @@ class discuz_core {
 			if($this->var['group'] && isset($this->var['group']['allowvisit']) && !$this->var['group']['allowvisit']) {
 				if($this->var['uid']) {
 					sysmessage('user_banned', null);
-				} elseif((!defined('ALLOWGUEST') || !ALLOWGUEST) && !in_array(CURSCRIPT, array('member', 'misc', 'api')) && !$this->var['inajax']) {
+				} elseif((!defined('ALLOWGUEST') || !ALLOWGUEST) && !in_array(CURSCRIPT, array('member', 'api')) && !$this->var['inajax']) {
 					dheader('location: member.php?mod=logging&action=login&referer='.rawurlencode($_SERVER['REQUEST_URI']));
 				}
 			}
@@ -458,11 +466,11 @@ class discuz_core {
 
 		if($this->var['setting']['bbclosed']) {
 			if($this->var['uid'] && ($this->var['group']['allowvisit'] == 2 || $this->var['groupid'] == 1)) {
-			} elseif(in_array(CURSCRIPT, array('admin', 'member', 'misc', 'api')) && !defined('CLOSEBANNED')) {
+			} elseif(in_array(CURSCRIPT, array('admin', 'member', 'api')) || defined('ALLOWGUEST') && ALLOWGUEST) {
 			} else {
 				$closedreason = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='closedreason'");
 				$closedreason = str_replace(':', '&#58;', $closedreason);
-				showmessage($closedreason ? $closedreason : 'board_closed', NULL, array(), array('login' => 1));
+				showmessage($closedreason ? $closedreason : 'board_closed', NULL, array('adminemail' => $this->var['setting']['adminemail']), array('login' => 1));
 			}
 		}
 
@@ -470,8 +478,13 @@ class discuz_core {
 			periodscheck('visitbanperiods');
 		}
 
-		$this->var['tpp'] = $this->var['setting']['topicperpage'] ? intval($this->var['setting']['topicperpage']) : 20;
-		$this->var['ppp'] = $this->var['setting']['postperpage'] ? intval($this->var['setting']['postperpage']) : 10;
+		if(defined('IN_MOBILE')) {
+			$this->var['tpp'] = $this->var['setting']['mobile']['mobiletopicperpage'] ? intval($this->var['setting']['mobile']['mobiletopicperpage']) : 20;
+			$this->var['ppp'] = $this->var['setting']['mobile']['mobilepostperpage'] ? intval($this->var['setting']['mobile']['mobilepostperpage']) : 5;
+		} else {
+			$this->var['tpp'] = $this->var['setting']['topicperpage'] ? intval($this->var['setting']['topicperpage']) : 20;
+			$this->var['ppp'] = $this->var['setting']['postperpage'] ? intval($this->var['setting']['postperpage']) : 10;
+		}
 
 		if($this->var['setting']['nocacheheaders']) {
 			@header("Expires: -1");
@@ -484,6 +497,15 @@ class discuz_core {
 
 			include_once libfile('function/stat');
 			updatestat('login', 1);
+			if(defined('IN_MOBILE')) {
+				updatestat('mobilelogin', 1);
+			}
+			if($this->var['setting']['connect']['allow'] && $this->var['member']['conisbind']) {
+				updatestat('connectlogin', 1);
+			}
+		}
+		if($this->var['member']['conisbind'] && $this->var['setting']['connect']['newbiespan'] !== '') {
+			$this->var['setting']['newbiespan'] = $this->var['setting']['connect']['newbiespan'];
 		}
 
 		$lastact = TIMESTAMP."\t".htmlspecialchars(basename($this->var['PHP_SELF']))."\t".htmlspecialchars($this->var['mod']);
@@ -506,7 +528,6 @@ class discuz_core {
 	}
 
 	function _init_setting() {
-
 		if($this->init_setting) {
 			if(empty($this->var['setting'])) {
 				$this->cachelist[] = 'setting';
@@ -527,21 +548,21 @@ class discuz_core {
 			$this->var['setting'] = array();
 		}
 
-		if(!$this->var['uid']) {
-			loadcache('usergroup_'.$this->var['setting']['newusergroupid']);
-		}
-
 		if($this->var['member'] && $this->var['group']['radminid'] == 0 && $this->var['member']['adminid'] > 0 && $this->var['member']['groupid'] != $this->var['member']['adminid'] && !empty($this->var['cache']['admingroup_'.$this->var['member']['adminid']])) {
 			$this->var['group'] = array_merge($this->var['group'], $this->var['cache']['admingroup_'.$this->var['member']['adminid']]);
 		}
-
 	}
 
 	function _init_style() {
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
 		if(intval(!empty($this->var['forum']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
+		} elseif(intval(!empty($this->var['category']['styleid']))) {
+			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
 		}
+
+		$styleid = intval($styleid);
+
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
@@ -549,14 +570,11 @@ class discuz_core {
 			}
 		}
 
-		if(is_array($this->var['style'])) {
-			foreach ($this->var['style'] as $key => $val) {
-				$key = strtoupper($key);
-				if(!defined($key) && !is_array($val)) {
-					define($key, $val);
-				}
-			}
-		}
+		define('IMGDIR', $this->var['style']['imgdir']);
+		define('STYLEID', $this->var['style']['styleid']);
+		define('VERHASH', $this->var['style']['verhash']);
+		define('TPLDIR', $this->var['style']['tpldir']);
+		define('TEMPLATEID', $this->var['style']['templateid']);
 	}
 
 	function _init_memory() {
@@ -567,12 +585,118 @@ class discuz_core {
 		$this->var['memory'] = $this->mem->type;
 	}
 
+	function _init_mobile() {
+		if(!$this->var['setting'] || !$this->init_mobile || !$this->var['setting']['mobile']['allowmobile'] || !is_array($this->var['setting']['mobile']) || IS_ROBOT) {
+			$nomobile = true;
+			$unallowmobile = true;
+		}
+
+		if($_GET['mobile'] === 'no') {
+			dsetcookie('mobile', 'no', 3600);
+			$nomobile = true;
+		} elseif($this->var['cookie']['mobile'] == 'no' && $_GET['mobile'] === 'yes') {
+			dsetcookie('mobile', '');
+		} elseif($this->var['cookie']['mobile'] == 'no') {
+			$nomobile = true;
+		}
+
+		if(!checkmobile()) {
+			$nomobile = true;
+		}
+
+		if($this->var['setting']['mobile']['mobilepreview'] && !$this->var['mobile'] && !$unallowmobile) {
+			if($_GET['mobile'] === 'yes') {
+				dheader("Location:misc.php?mod=mobile");
+			}
+		}
+
+		if($nomobile || (!$this->var['setting']['mobile']['mobileforward'] && $_GET['mobile'] !== 'yes')) {
+			if($_SERVER['HTTP_HOST'] == $this->var['setting']['domain']['app']['mobile'] && $this->var['setting']['domain']['app']['default']) {
+				dheader("Location:http://".$this->var['setting']['domain']['app']['default'].$_SERVER['REQUEST_URI']);
+			} else {
+				return;
+			}
+		}
+
+		if(strpos($this->var['setting']['domain']['defaultindex'], CURSCRIPT) === false && CURSCRIPT != 'forum' && !$_GET['mod']) {
+			if($this->var['setting']['domain']['app']['mobile']) {
+				$mobileurl = 'http://'.$this->var['setting']['domain']['app']['mobile'];
+			} else {
+				if($this->var['setting']['domain']['app']['forum']) {
+					$mobileurl = 'http://'.$this->var['setting']['domain']['app']['forum'].'?mobile=yes';
+				} else {
+					$mobileurl = $this->var['siteurl'].'forum.php?mobile=yes';
+				}
+			}
+			dheader("location:$mobileurl");
+		}
+		define('IN_MOBILE', true);
+		setglobal('gzipcompress', 0);
+
+		$arr = array(strstr($_SERVER['QUERY_STRING'], '&simpletype'), strstr($_SERVER['QUERY_STRING'], 'simpletype'), '&mobile=yes', 'mobile=yes');
+		$query_sting_tmp = str_replace($arr, '', $_SERVER['QUERY_STRING']);
+		$this->var['setting']['mobile']['nomobileurl'] = ($this->var['setting']['domain']['app']['forum'] ? 'http://'.$this->var['setting']['domain']['app']['forum'].'/' : $this->var['siteurl']).$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
+
+		$this->var['setting']['lazyload'] = 0;
+
+		if('utf-8' != CHARSET) {
+			if(strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
+				foreach($_POST AS $pk => $pv) {
+					if(!is_numeric($pv)) {
+						$this->var['gp_'.$pk] = $_GET[$pk] = $_POST[$pk] = $this->mobile_iconv_recurrence($pv);
+					}
+				}
+			}
+		}
+
+		if($_GET['simpletype']) {
+			if($_GET['simpletype'] == 'yes') {
+				$this->var['setting']['mobile']['mobilesimpletype'] = 1;
+				dsetcookie('simpletype', 1, 86400);
+			} else {
+				$this->var['setting']['mobile']['mobilesimpletype'] = 0;
+				dsetcookie('simpletype', 0, 86400);
+			}
+		} elseif($this->var['cookie']['simpletype']) {
+			$this->var['setting']['mobile']['mobilesimpletype'] = $this->var['cookie']['simpletype'] == 1 ? 1 : 0 ;
+		}
+
+		if(!$this->var['setting']['mobile']['mobilesimpletype']) {
+			$this->var['setting']['imagemaxwidth'] = 224;
+		}
+
+		$this->var['setting']['regstatus'] = $this->var['setting']['mobile']['mobileregister'] ? $this->var['setting']['regstatus'] : 0 ;
+		if(!$this->var['setting']['mobile']['mobileseccode']) {
+			$this->var['setting']['seccodestatus'] = 0;
+		}
+
+		$this->var['setting']['seccodedata']['type'] = 99;
+		$this->var['setting']['thumbquality'] = 50;
+
+
+		$this->var['setting']['mobile']['simpletypeurl'] = array();
+		$this->var['setting']['mobile']['simpletypeurl'][0] = $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=no';
+		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=yes';
+		unset($query_sting_tmp);
+		ob_start();
+	}
+
 	function timezone_set($timeoffset = 0) {
 		if(function_exists('date_default_timezone_set')) {
 			@date_default_timezone_set('Etc/GMT'.($timeoffset > 0 ? '-' : '+').(abs($timeoffset)));
 		}
 	}
 
+	function mobile_iconv_recurrence($value) {
+		if(is_array($value)) {
+			foreach($value AS $key => $val) {
+				$value[$key] = $this->mobile_iconv_recurrence($val);
+			}
+		} else {
+			$value = addslashes(diconv(stripslashes($value), 'utf-8', CHARSET));
+		}
+		return $value;
+	}
 }
 
 class db_mysql
@@ -580,6 +704,7 @@ class db_mysql
 	var $tablepre;
 	var $version = '';
 	var $querynum = 0;
+	var $slaveid = 0;
 	var $curlink;
 	var $link = array();
 	var $config = array();
@@ -864,9 +989,9 @@ class DB
 		return $res;
 	}
 
-	function &object() {
+	function &object($dbclass = 'db_mysql') {
 		static $db;
-		if(empty($db)) $db = new db_mysql();
+		if(empty($db)) $db = new $dbclass();
 		return $db;
 	}
 
@@ -1039,6 +1164,7 @@ class discuz_session {
 		$this->set('sid', random(6));
 		$this->set('uid', $uid);
 		$this->set('ip', $ip);
+		$uid && $this->set('invisible', getuserprofile('invisible'));
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
@@ -1062,6 +1188,7 @@ class discuz_session {
 	}
 
 	function update() {
+		global $_G;
 		if($this->sid !== null) {
 
 			$data = daddslashes($this->var);
@@ -1071,6 +1198,7 @@ class discuz_session {
 			} else {
 				DB::update('common_session', $data, "sid='$data[sid]'");
 			}
+			$_G['session'] = $data;
 			dsetcookie('sid', $this->sid, 86400);
 		}
 	}
@@ -1080,161 +1208,6 @@ class discuz_session {
 		return DB::result_first("SELECT count(*) FROM ".DB::table('common_session').$condition);
 	}
 
-}
-
-class discuz_cron
-{
-
-	function run($cronid = 0) {
-
-		global $_G;
-		$timestamp = TIMESTAMP;
-		$cron = DB::fetch_first("SELECT * FROM ".DB::table('common_cron')."
-				WHERE ".($cronid ? "cronid='$cronid'" : "available>'0' AND nextrun<='$timestamp'")."
-				ORDER BY nextrun LIMIT 1");
-
-		$processname ='DZ_CRON_'.(empty($cron) ? 'CHECKER' : $cron['cronid']);
-
-		if($cronid && !empty($cron)) {
-			discuz_process::unlock($processname);
-		}
-
-		if(discuz_process::islocked($processname, 600)) {
-			return false;
-		}
-
-		if($cron) {
-
-			$cron['filename'] = str_replace(array('..', '/', '\\'), '', $cron['filename']);
-			$cronfile = DISCUZ_ROOT.'./source/include/cron/'.$cron['filename'];
-
-			$cron['minute'] = explode("\t", $cron['minute']);
-			discuz_cron::setnextime($cron);
-
-			@set_time_limit(1000);
-			@ignore_user_abort(TRUE);
-
-			if(!@include $cronfile) {
-				return false;
-			}
-		}
-
-		discuz_cron::nextcron();
-		discuz_process::unlock($processname);
-		return true;
-	}
-
-	function nextcron() {
-		$nextrun = DB::result_first("SELECT nextrun FROM ".DB::table('common_cron')." WHERE available>'0' ORDER BY nextrun LIMIT 1");
-		if($nextrun !== FALSE) {
-			save_syscache('cronnextrun', $nextrun);
-		} else {
-			save_syscache('cronnextrun', TIMESTAMP + 86400 * 365);
-		}
-		return true;
-	}
-
-	function setnextime($cron) {
-
-		global $_G;
-
-		if(empty($cron)) return FALSE;
-
-		list($yearnow, $monthnow, $daynow, $weekdaynow, $hournow, $minutenow) = explode('-', gmdate('Y-m-d-w-H-i', TIMESTAMP + $_G['setting']['timeoffset'] * 3600));
-
-		if($cron['weekday'] == -1) {
-			if($cron['day'] == -1) {
-				$firstday = $daynow;
-				$secondday = $daynow + 1;
-			} else {
-				$firstday = $cron['day'];
-				$secondday = $cron['day'] + gmdate('t', TIMESTAMP + $_G['setting']['timeoffset'] * 3600);
-			}
-		} else {
-			$firstday = $daynow + ($cron['weekday'] - $weekdaynow);
-			$secondday = $firstday + 7;
-		}
-
-		if($firstday < $daynow) {
-			$firstday = $secondday;
-		}
-
-		if($firstday == $daynow) {
-			$todaytime = discuz_cron::todaynextrun($cron);
-			if($todaytime['hour'] == -1 && $todaytime['minute'] == -1) {
-				$cron['day'] = $secondday;
-				$nexttime = discuz_cron::todaynextrun($cron, 0, -1);
-				$cron['hour'] = $nexttime['hour'];
-				$cron['minute'] = $nexttime['minute'];
-			} else {
-				$cron['day'] = $firstday;
-				$cron['hour'] = $todaytime['hour'];
-				$cron['minute'] = $todaytime['minute'];
-			}
-		} else {
-			$cron['day'] = $firstday;
-			$nexttime = discuz_cron::todaynextrun($cron, 0, -1);
-			$cron['hour'] = $nexttime['hour'];
-			$cron['minute'] = $nexttime['minute'];
-		}
-
-		$nextrun = @gmmktime($cron['hour'], $cron['minute'] > 0 ? $cron['minute'] : 0, 0, $monthnow, $cron['day'], $yearnow) - $_G['setting']['timeoffset'] * 3600;
-
-		$availableadd = $nextrun > TIMESTAMP ? '' : ', available=\'0\'';
-		DB::query("UPDATE ".DB::table('common_cron')." SET lastrun='$_G[timestamp]', nextrun='$nextrun' $availableadd WHERE cronid='$cron[cronid]'");
-
-		return true;
-	}
-
-	function todaynextrun($cron, $hour = -2, $minute = -2) {
-		global $_G;
-
-		$hour = $hour == -2 ? gmdate('H', TIMESTAMP + $_G['setting']['timeoffset'] * 3600) : $hour;
-		$minute = $minute == -2 ? gmdate('i', TIMESTAMP + $_G['setting']['timeoffset'] * 3600) : $minute;
-
-		$nexttime = array();
-		if($cron['hour'] == -1 && !$cron['minute']) {
-			$nexttime['hour'] = $hour;
-			$nexttime['minute'] = $minute + 1;
-		} elseif($cron['hour'] == -1 && $cron['minute'] != '') {
-			$nexttime['hour'] = $hour;
-			if(($nextminute = discuz_cron::nextminute($cron['minute'], $minute)) === false) {
-				++$nexttime['hour'];
-				$nextminute = $cron['minute'][0];
-			}
-			$nexttime['minute'] = $nextminute;
-		} elseif($cron['hour'] != -1 && $cron['minute'] == '') {
-			if($cron['hour'] < $hour) {
-				$nexttime['hour'] = $nexttime['minute'] = -1;
-			} elseif($cron['hour'] == $hour) {
-				$nexttime['hour'] = $cron['hour'];
-				$nexttime['minute'] = $minute + 1;
-			} else {
-				$nexttime['hour'] = $cron['hour'];
-				$nexttime['minute'] = 0;
-			}
-		} elseif($cron['hour'] != -1 && $cron['minute'] != '') {
-			$nextminute = discuz_cron::nextminute($cron['minute'], $minute);
-			if($cron['hour'] < $hour || ($cron['hour'] == $hour && $nextminute === false)) {
-				$nexttime['hour'] = -1;
-				$nexttime['minute'] = -1;
-			} else {
-				$nexttime['hour'] = $cron['hour'];
-				$nexttime['minute'] = $nextminute;
-			}
-		}
-
-		return $nexttime;
-	}
-
-	function nextminute($nextminutes, $minutenow) {
-		foreach($nextminutes as $nextminute) {
-			if($nextminute > $minutenow) {
-				return $nextminute;
-			}
-		}
-		return false;
-	}
 }
 
 
@@ -1327,6 +1300,7 @@ class discuz_memory
 
 	function discuz_memory() {
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
+		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');
 		$this->extension['memcache'] = extension_loaded('memcache');
 	}
@@ -1355,6 +1329,12 @@ class discuz_memory
 		if(!is_object($this->memory) && $this->extension['xcache'] && $this->config['xcache']) {
 			require_once libfile('class/xcache');
 			$this->memory = new discuz_xcache();
+			$this->memory->init(null);
+		}
+
+		if(!is_object($this->memory) && $this->extension['apc'] && $this->config['apc']) {
+			require_once libfile('class/apc');
+			$this->memory = new discuz_apc();
 			$this->memory->init(null);
 		}
 
@@ -1409,9 +1389,13 @@ class discuz_memory
 
 	function clear() {
 		if($this->enable && is_array($this->keys)) {
-			$this->keys['memory_system_keys'] = true;
-			foreach ($this->keys as $k => $v) {
-				$this->memory->rm($this->_key($k));
+			if(method_exists($this->memory, 'clear')) {
+				$this->memory->clear();
+			} else {
+				$this->keys['memory_system_keys'] = true;
+				foreach ($this->keys as $k => $v) {
+					$this->memory->rm($this->_key($k));
+				}
 			}
 		}
 		$this->keys = array();

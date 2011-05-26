@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_announcement.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: forum_announcement.php 20511 2011-02-25 02:59:51Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ while($announce = DB::fetch($query)) {
 	$announce['authorenc'] = rawurlencode($announce['author']);
 	$tmp = explode('.', dgmdate($announce['starttime'], 'Y.m'));
 	$months[$tmp[0].$tmp[1]] = $tmp;
-	if(!empty($m) && $m != dgmdate($announce['starttime'], 'Ym')) {
+	if(!empty($_GET['m']) && $_GET['m'] != dgmdate($announce['starttime'], 'Ym')) {
 		continue;
 	}
 	$announce['starttime'] = dgmdate($announce['starttime'], 'd');
@@ -33,7 +33,6 @@ while($announce = DB::fetch($query)) {
 	$announce['message'] = nl2br(discuzcode($announce['message'], 0, 0, 1, 1, 1, 1, 1));
 	$announcelist[] = $announce;
 }
-
 $annid = isset($_G['gp_id']) ? intval($_G['gp_id']) : 0;
 
 include template('forum/announcement');

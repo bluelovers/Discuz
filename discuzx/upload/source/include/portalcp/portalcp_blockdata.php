@@ -12,14 +12,15 @@ if(!defined('IN_DISCUZ')) {
 
 $op = in_array($_GET['op'], array('verify')) ? $_GET['op'] : 'verify';
 
-if(!checkperm('allowdiy') && !checkperm('allowauthorizedblock')) {
+$allowdiy = checkperm('allowdiy');
+if(!$allowdiy && !$admincp4) {
 	showmessage('portal_nopermission', dreferer());
 }
 
 loadcache('diytemplatename');
 $blocks = $bids = $tpls = array();
 $diytemplate = array();
-if(checkperm('allowdiy')) {
+if($allowdiy) {
 	$tpls = array_keys($_G['cache']['diytemplatename']);
 } else {
 	$permissions = getallowdiytemplate($_G['uid']);
@@ -29,45 +30,41 @@ if(checkperm('allowdiy')) {
 		}
 	}
 }
-if($tpls) {
-	$query = DB::query('SELECT bid FROM '.DB::table('common_template_block')." WHERE targettplname IN (".dimplode($tpls).")");
+if(!$allowdiy) {
+	$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND (allowmanage='1' OR (allowrecommend='1' AND needverify='0'))");
 	while(($value=DB::fetch($query))) {
-		$bids[] = intval($value['bid']);
+		$bids[$value['bid']] = intval($value['bid']);
 	}
 }
-if(!$_G['group']['allowdiy']) {
-	$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND allowmanage='1' OR (allowrecommend='1' AND needverify='0')");
-	while(($value=DB::fetch($query))) {
-		$bids[] = intval($value['bid']);
-	}
-}
-$bids = array_unique($bids);
 
 if(submitcheck('batchsubmit')) {
 
-	$tourl = dreferer();
 	if(!in_array($_POST['optype'], array('pass', 'delete'))) {
-		showmessage('select_a_option', $tourl);
+		showmessage('select_a_option', dreferer());
 	}
-	$ids = array();
+	$ids = $updatebids = array();
 	if($_POST['ids']) {
 		$query = DB::query('SELECT dataid, bid FROM '.DB::table('common_block_item_data')." WHERE dataid IN (".dimplode($_POST['ids']).')');
 		while(($value=DB::fetch($query))) {
-			if(in_array($value['bid'], $bids)) {
-				$ids[] = intval($value['dataid']);
+			if($allowdiy || in_array($value['bid'], $bids)) {
+				$ids[$value['dataid']] = intval($value['dataid']);
+				$updatebids[$value['bid']] = $value['bid'];
 			}
 		}
 	}
 	if(empty($ids)) {
-		showmessage('select_a_moderate_data', $tourl);
+		showmessage('select_a_moderate_data', dreferer());
 	}
 
 	if($_POST['optype']=='pass') {
 		DB::query('UPDATE '.DB::table('common_block_item_data')." SET isverified='1', verifiedtime='$_G[timestamp]' WHERE dataid IN (".dimplode($ids).")");
+		if($updatebids) {
+			DB::query('UPDATE '.DB::table('common_block').' SET dateline=dateline-cachetime-1000 WHERE bid IN ('.dimplode($updatebids).') AND cachetime>0');
+		}
 	} elseif($_POST['optype']=='delete') {
 		DB::query('DELETE FROM '.DB::table('common_block_item_data')." WHERE dataid IN (".dimplode($ids).")");
 	}
-	showmessage('operation_done', $tourl);
+	showmessage('operation_done', dreferer());
 }
 
 $theurl = 'portal.php?mod=portalcp&ac=blockdata';
@@ -80,38 +77,48 @@ if($_GET['searchkey']) {
 	$_GET['searchkey'] = trim($_GET['searchkey']);
 	if (preg_match('/^[#]?(\d+)$/', $_GET['searchkey'],$match)) {
 		$bid = intval($match[1]);
-		$bids = in_array($bid, $bids) ? array($bid) : array();
-	} elseif($bids) {
+		$bids = $allowdiy || isset($bids[$bid]) ? array($bid) : array(0);
+	} else {
 		$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
-		$query = DB::query('SELECT bid FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).") AND name LIKE '%$_GET[searchkey]%'");
-		$bids = array();
-		while(($value=DB::fetch($query))) {
-			$bids[] = intval($value['bid']);
+		if(!empty($bids)) {
+			$where =  "bid IN (".dimplode($bids).") AND";
 		}
+		$query = DB::query('SELECT bid FROM '.DB::table('common_block')." WHERE $where name LIKE '%$_GET[searchkey]%'");
+		$searchbids = array();
+		while(($value=DB::fetch($query))) {
+			if($allowdiy) {
+				$searchbids[$value['bid']] = intval($value['bid']);
+			} elseif(isset($bids[$value['bid']])) {
+				$searchbids[$value['bid']] = $value['bid'];
+			}
+		}
+		$bids = $searchbids;
 	}
+	$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
+}
+$datalist = $ids = array();
+$multi = $where = '';
+if($bids) {
+	$where =  "bid IN (".dimplode($bids).") AND";
+}
+$count = DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_block_item_data')." WHERE $where isverified='0'");
+if($count) {
+	$query = DB::query('SELECT * FROM '.DB::table('common_block_item_data')." WHERE $where isverified='0' LIMIT $start, $perpage");
+	while(($value=DB::fetch($query))) {
+		$datalist[] = $value;
+		$ids[$value['bid']] = $value['bid'];
+	}
+	$multi = multi($count, $perpage, $page, $theurl);
 }
 
-$datalist = $ids = array();
-$multi = '';
-if($bids) {
-	$count = DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_block_item_data')." WHERE bid IN (".dimplode($bids).") AND isverified='0'");
-	if($count) {
-		$query = DB::query('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid IN (".dimplode($bids).") AND isverified='0' LIMIT $start, $perpage");
-		while(($value=DB::fetch($query))) {
-			$datalist[] = $value;
-			$ids[] = $value['bid'];
-		}
-		$multi = multi($count, $perpage, $page, $theurl);
-	}
-}
 if($ids) {
 	include_once libfile('function/block');
-	$ids = array_unique($ids);
 	$query = DB::query('SELECT b.bid, b.name as blockname, tb.targettplname FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid IN (".dimplode($ids).")");
 	while(($value=DB::fetch($query))) {
 		$diyurl = block_getdiyurl($value['targettplname']);
 		$value['diyurl'] = $diyurl['url'];
 		$value['tplname'] = isset($_G['cache']['diytemplatename'][$value['targettplname']]) ? $_G['cache']['diytemplatename'][$value['targettplname']] : $value['targettplname'];
+		$value['blockname'] = !empty($value['blockname']) ? $value['blockname'] : '#'.$value['bid'];
 		$blocks[$value['bid']] = $value;
 	}
 }

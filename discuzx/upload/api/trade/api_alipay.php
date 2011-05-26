@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: api_alipay.php 16461 2010-09-07 04:13:44Z wangjinbo $
+ *      $Id: api_alipay.php 22425 2011-05-06 10:36:52Z zhengqingpeng $
  */
+
+define('IN_API', true);
+define('CURSCRIPT', 'api');
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -33,6 +36,37 @@ function credit_payurl($price, &$orderid) {
 		'partner' 		=> DISCUZ_PARTNER,
 		'notify_url' 		=> $_G['siteurl'].'api/trade/notify_credit.php',
 		'return_url' 		=> $_G['siteurl'].'api/trade/notify_credit.php',
+		'show_url'		=> $_G['siteurl'],
+		'_input_charset' 	=> CHARSET,
+		'out_trade_no' 		=> $orderid,
+		'price' 		=> $price,
+		'quantity' 		=> 1,
+		'seller_email' 		=> $_G['setting']['ec_account'],
+	);
+	if(DISCUZ_DIRECTPAY) {
+		$args['service'] = 'create_direct_pay_by_user';
+		$args['payment_type'] = '1';
+	} else {
+		$args['logistics_type'] = 'EXPRESS';
+		$args['logistics_fee'] = 0;
+		$args['logistics_payment'] = 'SELLER_PAY';
+		$args['payment_type'] = 1;
+	}
+	return trade_returnurl($args);
+}
+
+function invite_payurl($amount, $price, &$orderid) {
+	global $_G;
+
+	$orderid = dgmdate(TIMESTAMP, 'YmdHis').random(18);
+
+	$args = array(
+		'subject' 		=> $_G['setting']['bbname'].' - '.lang('forum/misc', 'invite_payment'),
+		'body' 			=> lang('forum/misc', 'invite_forum_payment').'_'.intval($amount).'_'.lang('forum/misc', 'invite_forum_payment_unit').'_('.$_G['clientip'].')',
+		'service' 		=> 'trade_create_by_buyer',
+		'partner' 		=> DISCUZ_PARTNER,
+		'notify_url' 		=> $_G['siteurl'].'api/trade/notify_invite.php',
+		'return_url' 		=> $_G['siteurl'].'api/trade/notify_invite.php',
 		'show_url'		=> $_G['siteurl'],
 		'_input_charset' 	=> CHARSET,
 		'out_trade_no' 		=> $orderid,
@@ -114,6 +148,7 @@ function trade_notifycheck($type) {
 	}
 	unset($notify['diy']);
 	if(dfsockopen("http://notify.alipay.com/trade/notify_query.do?partner=".DISCUZ_PARTNER."&notify_id=".$notify['notify_id'], 60) !== 'true') {
+		exit('Access Denied');
 	}
 
 	if($type == 'trade') {
@@ -126,14 +161,15 @@ function trade_notifycheck($type) {
 		ksort($notify);
 		$sign = '';
 		foreach($notify as $key => $val) {
-			if($key != 'sign' and $key != 'sign_type') $sign .= "&$key=$val";
+			$val = stripslashes($val);
+			if($key != 'sign' && $key != 'sign_type') $sign .= "&$key=$val";
 		}
-
 		if($notify['sign'] != md5(substr($sign,1).DISCUZ_SECURITYCODE)) {
+			exit('Access Denied');
 		}
 	}
 
-	if($type == 'credit' && (!DISCUZ_DIRECTPAY && $notify['notify_type'] == 'trade_status_sync' && ($notify['trade_status'] == 'WAIT_SELLER_SEND_GOODS' || $notify['trade_status'] == 'TRADE_FINISHED') || DISCUZ_DIRECTPAY && $notify['trade_status'] == 'TRADE_FINISHED')
+	if(($type == 'credit' || $type == 'invite') && (!DISCUZ_DIRECTPAY && $notify['notify_type'] == 'trade_status_sync' && ($notify['trade_status'] == 'WAIT_SELLER_SEND_GOODS' || $notify['trade_status'] == 'TRADE_FINISHED') || DISCUZ_DIRECTPAY && ($notify['trade_status'] == 'TRADE_FINISHED' || $notify['trade_status'] == 'TRADE_SUCCESS'))
 		|| $type == 'trade' && $notify['notify_type'] == 'trade_status_sync') {
 		return array(
 			'validator'	=> TRUE,

@@ -11,14 +11,19 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+if(!$_G['setting']['portalstatus']) {
+	dheader('location:portal.php?mod=portalcp&ac=portalblock');
+}
 $op = $_GET['op'] == 'push' ? 'push' : 'list';
 
-if($op == 'list' && !checkperm('allowmanagearticle') && !checkperm('allowauthorizedarticle')) {
-	if(!checkperm('allowdiy') && !checkperm('allowauthorizedblock')) {
-		showmessage('portal_nopermission', dreferer());
+if($op == 'list' && !checkperm('allowmanagearticle') && !checkperm('allowpostarticle') && !$admincp2 && !$admincp3) {
+	if(!checkperm('allowdiy') && !$admincp4) {
+		showmessage('portal_nopermission', 'portal.php');
 	} else {
 		dheader('location:portal.php?mod=portalcp&ac=portalblock');
 	}
+} elseif(checkperm('allowpostarticle') || !$admincp2 && $admincp3) {
+	dheader('location:portal.php?mod=portalcp&ac=category');
 }
 
 require_once libfile('function/portalcp');
@@ -28,7 +33,7 @@ $permissioncategory = $permission = array();
 
 if (checkperm('allowmanagearticle')) {
 	$permissioncategory = $category;
-} elseif (checkperm('allowauthorizedarticle')) {
+} elseif ($admincp2) {
 	$permission = getallowcategory($_G['uid']);
 	if(!empty($permission)) {
 		$permissioncategory = getpermissioncategory($category,array_keys($permission));
@@ -83,16 +88,19 @@ function showcategoryrow($key, $level = 0, $last = '') {
 	$value = $category[$key];
 	$return = '';
 
-	$op = '';
+	$op = $addarticle = $artilcemanage = '';
 	$value['articles'] = category_get_num('portal', $key);
 	if (checkperm('allowmanagearticle') || checkperm('allowmanage') || $permission[$key]['allowmanage']) {
-		$op .= '<a href="portal.php?mod=portalcp&ac=category&catid='.$key.'" class="y">'.lang('portalcp', 'article_manage').'</a>';
+		$addarticle .= '<a href="portal.php?mod=portalcp&ac=category&catid='.$key.'" class="y">'.lang('portalcp', 'article_manage').'</a>';
 	}
-	if ((checkperm('allowmanagearticle') || checkperm('allpublish') || $permission[$key]['allowpublish']) && empty($value['disallowpublish'])) {
-		if($op) $op .= '<span class="pipe y">|</span>';
-		$op .= '<a href="portal.php?mod=portalcp&ac=article&catid='.$value['catid'].'" target="_blank" class="y">'.lang('portalcp', 'article_publish').'</a>';
+	if ((checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $permission[$key]['allowmanage'] || $permission[$key]['allowpublish']) && empty($value['disallowpublish'])) {
+		$artilcemanage .= '<a href="portal.php?mod=portalcp&ac=article&catid='.$value['catid'].'" target="_blank" class="y">'.lang('portalcp', 'article_publish').'</a>';
 	}
-
+	if($addarticle && $artilcemanage) {
+		$op = $addarticle.'<span class="pipe y">|</span>'.$artilcemanage;
+	} else {
+		$op = $addarticle ? $addarticle : $artilcemanage;
+	}
 	if($level == 2) {
 		$class = $last ? 'lastchildcat' : 'childcat';
 		$return = '<tr class="hover"><td><div class="'.$class.'"><a href="portal.php?mod=portalcp&ac=category&catid='.$key.'">'.$value['catname'].'</a>'.
@@ -124,7 +132,7 @@ function showcategoryrowpush($key, $level = 0, $last = '') {
 	$return = '';
 
 	$op = '';
-	if (checkperm('allowmanagearticle') || checkperm('allpublish') || $permission[$key]['allowpublish'] || checkperm('allowmanage') || $permission[$key]['allowmanage']) {
+	if (checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $permission[$key]['allowpublish'] || $permission[$key]['allowmanage']) {
 		if(empty($value['disallowpublish'])){
 			$value['pushurl'] = '<a href="portal.php?mod=portalcp&ac=article&catid='.$key.'&from_idtype='.$_GET['idtype'].'&from_id='.$_GET['id'].'" target="_blank" onclick="hideWindow(\''.$_G[gp_handlekey].'\')">'.$value['catname'].'</a>';
 		} else {

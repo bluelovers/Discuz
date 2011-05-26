@@ -1,11 +1,11 @@
 <!--{subtemplate common/header}-->
 	<!--{subtemplate home/spacecp_header}-->
+			<!--{hook/spacecp_avatar_top}-->
 			<script type="text/javascript">
 				function updateavatar() {
 					window.location.reload();
 				}
 			</script>
-			<hr class="l m0" />
 			<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=avatar&ref">
 				<table cellspacing="0" cellpadding="0" class="tfm">
 					<caption>
@@ -32,6 +32,7 @@
 				</table>
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 			</form>
+			<!--{hook/spacecp_avatar_bottom}-->
 		</div>
 	</div>
 	<div class="appl">

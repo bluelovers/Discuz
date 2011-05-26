@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member.php 16388 2010-09-06 04:08:21Z liulanbo $
+ *      $Id: member.php 20112 2011-02-15 07:10:53Z monkey $
  */
 
 define('APPTYPEID', 0);
@@ -15,32 +15,25 @@ require './source/class/class_core.php';
 $discuz = & discuz_core::instance();
 
 $modarray = array('activate', 'clearcookies', 'emailverify', 'getpasswd',
-					'groupexpiry', 'logging', 'lostpasswd',
-					'register', 'regverify', 'switchstatus');
+	'groupexpiry', 'logging', 'lostpasswd',
+	'register', 'regverify', 'switchstatus', 'connect');
 
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'register' : $discuz->var['mod'];
 
 define('CURMODULE', $mod);
 
-$modcachelist = array('register' => array('modreasons', 'stamptypeid', 'fields_required', 'fields_optional', 'fields_register', 'ipctrl'));
-
-$cachelist = array();
-if(isset($modcachelist[CURMODULE])) {
-	$cachelist = $modcachelist[CURMODULE];
-}
-
-$discuz->cachelist = $cachelist;
 $discuz->init();
-if($mod == 'register' && $discuz->var['mod'] != $_G['setting']['regname']) {
+if($mod == 'register' && $discuz->var['mod'] != $_G['setting']['regname'] && !defined('IN_CONNECT')) {
 	showmessage('undefined_action');
 }
 
 
+require libfile('function/member');
+require libfile('class/member');
 runhooks();
 
-require libfile('function/member');
-require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
 
+require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
 
 ?>

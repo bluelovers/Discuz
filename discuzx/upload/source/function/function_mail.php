@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_mail.php 17265 2010-09-28 02:26:48Z zhengqingpeng $
+ *      $Id: function_mail.php 19339 2010-12-28 06:56:27Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,7 +80,7 @@ EOT;
 
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != '220') {
-			runlog('SMTP', "$_G[setting][mail][server]:$_G[setting][mail][port] CONNECT - $lastmessage", 0);
+			runlog('SMTP', "{$_G[setting][mail][server]}:{$_G[setting][mail][port]} CONNECT - $lastmessage", 0);
 			return false;
 		}
 

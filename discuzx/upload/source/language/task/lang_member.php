@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_member.php 16614 2010-09-10 06:26:06Z monkey $
+ *      $Id: lang_member.php 20567 2011-02-28 02:30:15Z congyushuai $
  */
 
 $lang = array
 (
 	'member_name' => '會員類任務',
-	'member_desc' => '收藏主題、使用道具，此類任務用來鼓勵和引導會員使用論壇的某個功能，活躍論壇的氛圍。',
+	'member_desc' => '收藏主題、使用道具，此類任務用來鼓勵和引導會員使用論壇的某個功能，活躍論壇的氛圍',
 	'member_complete_var_act' => '動作',
 	'member_complete_var_act_favorite' => '收藏主題',
 	'member_complete_var_act_magic' => '使用道具',
@@ -21,8 +21,8 @@ $lang = array
 
 	'task_complete_time_start' => '從申請任務開始計時，',
 	'task_complete_time_limit' => '{value} 小時內，',
-	'task_complete_act_favorite' => '收藏 {value} 個主題。',
-	'task_complete_act_magic' => '使用 {value} 次道具。<br />你可以在帖子頁面、日誌頁面、圖片頁面等使用道具',
+	'task_complete_act_favorite' => '收藏 {value} 個主題',
+	'task_complete_act_magic' => '使用 {value} 次道具。<br />您可以在帖子頁面、日誌頁面、圖片頁面等使用道具',
 );
 
 ?>

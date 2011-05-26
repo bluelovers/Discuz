@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_block.php 7212 2010-03-30 13:05:47Z xupeng $
+ *      $Id: admincp_district.php 19363 2010-12-29 02:35:55Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,7 +14,6 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 shownav('global', 'district');
-
 $values = array(intval($_GET['pid']), intval($_GET['cid']), intval($_GET['did']));
 $elems = array($_GET['province'], $_GET['city'], $_GET['district']);
 $level = 1;
@@ -38,10 +37,18 @@ if(submitcheck('editsubmit')) {
 	$delids = array();
 	$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid ='$theid'");
 	while($value = DB::fetch($query)) {
+		$usetype = 0;
+		if($_POST['birthcity'][$value['id']] && $_POST['residecity'][$value['id']]) {
+			$usetype = 3;
+		} elseif($_POST['birthcity'][$value['id']]) {
+			$usetype = 1;
+		} elseif($_POST['residecity'][$value['id']]) {
+			$usetype = 2;
+		}
 		if(!isset($_POST['district'][$value['id']])) {
 			$delids[] = $value['id'];
-		} elseif($_POST['district'][$value['id']] != $value['name']) {
-			DB::update('common_district', array('name'=>$_POST['district'][$value['id']]), array('id'=>$value['id']));
+		} elseif($_POST['district'][$value['id']] != $value['name'] || $_POST['displayorder'][$value['id']] != $value['displayorder'] || $usetype != $value['usetype']) {
+			DB::update('common_district', array('name'=>$_POST['district'][$value['id']], 'displayorder'=>$_POST['displayorder'][$value['id']], 'usetype'=>$usetype), array('id'=>$value['id']));
 		}
 	}
 	if($delids) {
@@ -62,14 +69,16 @@ if(submitcheck('editsubmit')) {
 	}
 	if(!empty($_POST['districtnew'])) {
 		$inserts = array();
-		foreach($_POST['districtnew'] as $value) {
+		$displayorder = '';
+		foreach($_POST['districtnew'] as $key => $value) {
+			$displayorder = trim($_POST['districtnew_order'][$key]);
 			$value = trim($value);
 			if(!empty($value)) {
-				$inserts[] = "('$value', '$level',  '$theid')";
+				$inserts[] = "('$value', '$level',  '$theid', '$displayorder')";
 			}
 		}
 		if($inserts) {
-			DB::query('INSERT INTO '.DB::table('common_district')."(`name`, level, upid) VALUES ".implode(',',$inserts));
+			DB::query('INSERT INTO '.DB::table('common_district')."(`name`, level, upid, displayorder) VALUES ".implode(',',$inserts));
 		}
 	}
 	cpmsg('setting_district_edit_success', 'action=district&pid='.$values[0].'&cid='.$values[1].'&did='.$values[2], 'succeed');
@@ -83,11 +92,11 @@ if(submitcheck('editsubmit')) {
 
 	$options = array(1=>array(), 2=>array(), 3=>array());
 	$thevalues = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($upids).')');
+	$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($upids).') ORDER BY displayorder');
 	while($value = DB::fetch($query)) {
 		$options[$value['level']][] = array($value['id'], $value['name']);
 		if($value['upid'] == $theid) {
-			$thevalues[] = array($value['id'], $value['name']);
+			$thevalues[] = array($value['id'], $value['name'], $value['displayorder'], $value['usetype']);
 		}
 	}
 
@@ -98,7 +107,7 @@ if(submitcheck('editsubmit')) {
 	$html = '';
 	for($i=0;$i<3;$i++) {
 		$l = $i+1;
-		$jscall = "refreshdistrict('$elems[0]', '$elems[1]', '$elems[2]')";
+		$jscall = ($i == 0 ? 'this.form.city.value=\'\';this.form.district.value=\'\';' : '')."refreshdistrict('$elems[0]', '$elems[1]', '$elems[2]')";
 		$html .= '<select name="'.$elems[$i].'" id="'.$elems[$i].'" onchange="'.$jscall.'">';
 		$html .= '<option value="">'.lang('spacecp', 'district_level_'.$l).'</option>';
 		foreach($options[$l] as $option) {
@@ -107,16 +116,19 @@ if(submitcheck('editsubmit')) {
 		}
 		$html .= '</select>&nbsp;&nbsp;';
 	}
-	showtablerow('id="districtbox"', array('colspan=2'), array(cplang('district_choose').' &nbsp; '.$html));
+	echo cplang('district_choose').' &nbsp; '.$html;
+	showsubtitle($values[0] ? array('', 'display_order', 'name', 'operation') : array('', 'display_order', 'name', 'district_birthcity', 'district_residecity', 'operation'));
 	foreach($thevalues as $value) {
-		showtablerow('id="td_'.$value[0].'"', array('', ''), array(
-			'<p id="p_'.$value[0].'">'
-			.'<input type="text" id="input_'.$value[0].'" class="txt" name="district['.$value[0].']" value="'.$value[1].'" style="display: none;" />'
-			.'<span id="span_'.$value[0].'">'.$value[1].'</span>'
-			.'</p>',
-			'<a href="javascript:;" onclick="editdistrict('.$value[0].');return false;">'.cplang('edit').'</a>&nbsp;&nbsp;'
-			.'<a href="javascript:;" onclick="deletedistrict('.$value[0].');return false;">'.cplang('delete').'</a>'
-		));
+		$valarr = array();
+		$valarr[] = '';
+		$valarr[] = '<input type="text" id="displayorder_'.$value[0].'" class="txt" name="displayorder['.$value[0].']" value="'.$value[2].'"/>';
+		$valarr[] = '<p id="p_'.$value[0].'"><input type="text" id="input_'.$value[0].'" class="txt" name="district['.$value[0].']" value="'.$value[1].'"/></p>';
+		if(!$values[0]) {
+			$valarr[] = '<input type="checkbox" name="birthcity['.$value[0].']" value="1" class="checkbox"'.($value[3] && in_array($value[3], array(1,3)) ? ' checked="checked" ':'').' />';
+			$valarr[] = '<input type="checkbox" name="residecity['.$value[0].']" value="1" class="checkbox"'.($value[3] && in_array($value[3], array(2,3)) ? ' checked="checked" ':'').' />';
+		}
+		$valarr[] = '<a href="javascript:;" onclick="deletedistrict('.$value[0].');return false;">'.cplang('delete').'</a>';
+		showtablerow('id="td_'.$value[0].'"', array('', 'class="td25"','','','',''), $valarr);
 	}
 	showtablerow('', array('colspan=2'), array(
 			'<div><a href="javascript:;" onclick="addrow(this, 0, 1);return false;" class="addtr">'.cplang('add').'</a></div>'
@@ -126,7 +138,7 @@ if(submitcheck('editsubmit')) {
 echo <<<SCRIPT
 <script type="text/javascript">
 var rowtypedata = [
-	[[2,'<input type="text" class="txt" name="districtnew[]" value="" />', '']],
+	[[1,'', ''],[1,'<input type="text" class="txt" name="districtnew_order[]" value="0" />', 'td25'],[2,'<input type="text" class="txt" name="districtnew[]" value="" />', '']],
 ];
 
 function refreshdistrict(province, city, district) {

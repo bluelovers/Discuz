@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 17278 2010-09-28 07:51:50Z zhengqingpeng $
+ *      $Id: class_credit.php 21612 2011-04-02 06:09:15Z congyushuai $
  */
 
 class credit {
@@ -43,6 +43,8 @@ class credit {
 
 		if($enabled) {
 			$rulelog = array();
+			$fids = $rule['fids'] ? explode(',', $rule['fids']) : array();
+			$fid = in_array($fid, $fids) ? $fid : 0;
 			$rulelog = $this->getrulelog($rule['rid'], $uid, $fid);
 			if($rulelog && $rule['norepeat']) {
 				$rulelog = array_merge($rulelog, $this->getchecklogbyclid($rulelog['clid'], $uid));
@@ -105,10 +107,10 @@ class credit {
 									$coef = $remain;
 								}
 							}
-							$cyclenunm = $newcycle ? $coef : 'cyclenum+'.$coef;
+							$cyclenunm = $newcycle ? $coef : "cyclenum+'$coef'";
 							$logarr = array(
 								'cyclenum' => "cyclenum=$cyclenunm",
-								'total' => 'total=total+'.$coef,
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'"
 							);
 							$updatecredit = true;
@@ -141,8 +143,8 @@ class credit {
 							}
 							$cyclenunm = 'cyclenum+'.$coef;
 							$logarr = array(
-								'cyclenum' => "cyclenum=cyclenum+$cyclenunm",
-								'total' => 'total=total+'.$coef,
+								'cyclenum' => "cyclenum=cyclenum+'$cyclenunm'",
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'"
 							);
 							$updatecredit = true;
@@ -150,7 +152,7 @@ class credit {
 							$newcycle = true;
 							$logarr = array(
 								'cyclenum' => "cyclenum=$coef",
-								'total' => 'total=total+'.$coef,
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'",
 								'starttime' => "starttime='$_G[timestamp]'",
 							);
@@ -235,7 +237,7 @@ class credit {
 		if($uids && ($creditarr || $this->extrasql)) {
 			if($this->extrasql) $creditarr = array_merge($creditarr, $this->extrasql);
 			$sql = array();
-			$allowkey = array('extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8', 'friends', 'posts', 'threads', 'oltime', 'digestposts', 'doings', 'blogs', 'albums', 'sharings', 'attachsize', 'views');
+			$allowkey = array('extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8', 'friends', 'posts', 'threads', 'oltime', 'digestposts', 'doings', 'blogs', 'albums', 'sharings', 'attachsize', 'views', 'todayattachs', 'todayattachsize');
 			$creditnotice = $_G['setting']['creditnotice'] && $_G['uid'] && $uids == array($_G['uid']);
 			if($creditnotice) {
 				if(!isset($_G['cookiecredits'])) {
@@ -314,6 +316,7 @@ class credit {
 			$updatearray['credits'] = $credits;
 			$member['credits'] = $credits;
 		}
+		$member['credits'] = $member['credits'] == '' ? 0 : $member['credits'] ;
 		$sendnotify = false;
 		if(empty($group) || $group['type'] == 'member' && !($member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower'])) {
 			$newgroup = DB::fetch_first("SELECT grouptitle, groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $member[credits]>=creditshigher AND $member[credits]<creditslower LIMIT 1");

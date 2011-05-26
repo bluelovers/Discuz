@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_trade.php 15993 2010-08-30 09:49:39Z monkey $
+ *      $Id: thread_trade.php 19369 2010-12-29 04:29:52Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -53,11 +53,11 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 	unset($trade);
 
 	if($tradespids) {
-		$query = DB::query("SELECT * FROM ".DB::table('forum_attachment')." WHERE pid IN ($tradespids)");
+		$query = DB::query("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE pid IN ($tradespids)");
 		while($attach = DB::fetch($query)) {
 			if($attach['isimage'] && is_array($tradesaids) && in_array($attach['aid'], $tradesaids)) {
 				$trades[$attach['pid']]['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
-				$trades[$attach['pid']]['thumb'] = $trades[$attach['pid']]['attachurl'].($attach['thumb'] ? '.thumb.jpg' : '');
+				$trades[$attach['pid']]['thumb'] = $attach['thumb'] ? getimgthumbname($trades[$attach['pid']]['attachurl']) : $trades[$attach['pid']]['attachurl'];
 				$trades[$attach['pid']]['width'] = $attach['thumb'] && $_G['setting']['thumbwidth'] < $attach['width'] ? $_G['setting']['thumbwidth'] : $attach['width'];
 			}
 		}
@@ -88,7 +88,7 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 		if(!$_G['inajax']) {
 			$limit = 6;
 			$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-				LEFT JOIN ".DB::table('forum_attachment')." a ON t.aid=a.aid
+				LEFT JOIN ".DB::table(getattachtablebytid($_G['tid']))." a ON t.aid=a.aid
 				WHERE t.sellerid='".$_G['forum_thread']['authorid']."' AND t.tid='$_G[tid]' ORDER BY t.displayorder DESC LIMIT ".($limit + 1));
 			$usertradecount = 0;
 			while($usertrade = DB::fetch($query)) {

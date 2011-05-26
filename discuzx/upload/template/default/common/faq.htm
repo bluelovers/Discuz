@@ -22,7 +22,7 @@
 				<button type="submit" name="searchsubmit" class="pn vm"><em>{lang search}</em></button>
 			</form>
 			<!--{if empty($_G[gp_action])}-->
-				<h1 class="mt mbm">{lang faq}</h1>
+				<h1 class="mt mbm">{lang all}{lang faq}</h1>
 				<div class="lum">
 					<!--{loop $faqparent $fpid $parent}-->
 						<h2 class="blocktitle"><a href="misc.php?mod=faq&action=faq&id=$fpid">$parent[title]</a></h2>
@@ -61,6 +61,7 @@
 	</div>
 	<div class="appl">
 		<div class="tbn">
+			<h2 class="mt bbda">{lang faq}</h2>
 			<ul>
 				<li class="cl{if empty($_G[gp_action])} a{/if}"><a href="misc.php?mod=faq">{lang all}</a></li>
 				<!--{loop $faqparent $fpid $parent}-->

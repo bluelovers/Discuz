@@ -5,7 +5,7 @@
 <!--{loop $photolist $photo}-->
 	<!--{eval $i++;}-->
 	<td valign="bottom" width="25%">
-		<a href="javascript:;"><img src="$photo[thumburl]" title="$photo[filename]" onclick="wysiwyg ? insertText('<img src=\'$photo[url]\' border=0 style=\'max-width:400px\'/>', false) : insertText('[img]$photo[url][/img]', <!--{echo strlen($photo[url]) + 11}-->, 0);" onload="thumbImg(this, 1)" width="110" _width="110" _height="110"></a>
+		<a href="javascript:;"><img src="$photo[thumburl]" title="$photo[filename]" onclick="wysiwyg ? insertText('<img src=\'$photo[url]\' border=0 style=\'max-width:400px\'/>', false) : insertText('[img]$photo[url][/img]', <!--{echo strlen($photo[url]) + 11}-->, 0);doane(event);" onload="thumbImg(this, 1)" width="110" style="height:auto" _width="110" _height="110"></a>
 	</td>
 	<!--{if $i % 4 == 0 && isset($photolist[$i])}--></tr><tr><!--{/if}-->
 <!--{/loop}-->

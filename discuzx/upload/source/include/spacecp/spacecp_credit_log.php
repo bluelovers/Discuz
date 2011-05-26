@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit_log.php 16218 2010-09-02 02:43:22Z zhengqingpeng $
+ *      $Id: spacecp_credit_log.php 21696 2011-04-09 02:07:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,121 +20,33 @@ $gets = array(
 	'mod' => 'spacecp',
 	'op' => $_G['gp_op'],
 	'ac' => 'credit',
-	'suboperation' => $_G['gp_suboperation']
+	'suboperation' => $_G['gp_suboperation'],
+	'exttype' => $_G['gp_exttype'],
+	'income' => $_G['gp_income'],
+	'starttime' => $_G['gp_starttime'],
+	'endtime' => $_G['gp_endtime'],
+	'optype' => $_G['gp_optype']
 );
 $theurl = 'home.php?'.url_implode($gets);
 $multi = '';
 
-if($_G['gp_suboperation'] == 'paymentlog') {
+$_G['gp_income'] = intval($_G['gp_income']);
+$incomeactives = array($_G['gp_income'] => ' selected="selected"');
+$optypes = array('TRC','RTC','RAC','MRC','BGC','RGC','AGC','TFR','RCV','CEC','ECU','SAC','BAC','PRC','RSC','STC','BTC','AFD','UGP','RPC','ACC','RCT','RCA','RCB','BMC','CDC','RKC');
+$endunixstr = $beginunixstr = 0;
+if($_G['gp_starttime']) {
+	$beginunixstr = strtotime($_G['gp_starttime']);
+	$_G['gp_starttime'] = dgmdate($beginunixstr, 'Y-m-d');
+}
+if($_G['gp_endtime']) {
+	$endunixstr = strtotime($_G['gp_endtime'].' 23:59:59');
+	$_G['gp_endtime'] = dgmdate($endunixstr, 'Y-m-d');
+}
+if($beginunixstr && $endunixstr && $endunixstr < $beginunixstr) {
+	showmessage('start_time_is_greater_than_end_time');
+}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='BTC'"), 0);
-	$loglist = array();
-	if($count) {
-		$query = DB::query("SELECT l.*,f.fid, f.name, t.tid, t.subject, t.dateline AS tdateline FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=l.relatedid
-			LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
-			WHERE l.uid='$_G[uid]' AND l.operation='BTC' ORDER BY l.dateline DESC
-			LIMIT $start,$perpage");
-
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['tdateline'] = dgmdate($log['tdateline'], 'u');
-			$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation'] == 'incomelog') {
-
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='STC'"), 0);
-	$loglist = array();
-
-	if($count) {
-
-		$query = DB::query("SELECT l.*,t.tid,t.subject,t.dateline AS tdateline FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=l.relatedid
-			WHERE l.operation='STC' AND l.uid='$_G[uid]' ORDER BY l.dateline DESC LIMIT $start, $perpage");
-
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['tdateline'] = dgmdate($log['tdateline'], 'u');
-			$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation'] == 'attachpaymentlog') {
-
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='BAC'"), 0);
-	$loglist = array();
-	if($count) {
-		$query = DB::query("SELECT l.*, a.filename, a.pid, a.dateline as adateline, t.subject, t.tid, t.author, t.authorid
-			FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_attachment')." a ON a.aid=l.relatedid
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=a.tid
-			WHERE l.uid='$_G[uid]' AND l.operation='BAC' ORDER BY l.dateline DESC
-			LIMIT $start, $perpage");
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['adateline'] = dgmdate($log['adateline'], 'u');
-			$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation']== 'attachincomelog') {
-
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='SAC'"), 0);
-	if($count) {
-
-		$query = DB::query("SELECT l.*,a.filename, a.pid, a.tid, a.dateline AS adateline, t.subject, t.tid
-			FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_attachment')." a ON a.aid=l.relatedid
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=a.tid
-			WHERE l.operation='SAC' AND l.uid='$_G[uid]' ORDER BY l.dateline DESC LIMIT $start, $perpage");
-
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['adateline'] = dgmdate($log['adateline'], 'u');
-			$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation'] == 'rewardpaylog') {
-
-	$loglist = array();
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='RTC'"), 0);
-	if($count) {
-
-		$query = DB::query("SELECT l.*, f.fid, f.name, t.tid, t.subject, t.price
-			FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=l.relatedid
-			LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
-			WHERE l.uid='$_G[uid]' AND l.operation='RTC' ORDER BY l.dateline DESC LIMIT $start, $perpage");
-
-		while($log = DB::fetch($query)) {
-				$log['dateline'] = dgmdate($log['dateline'], 'u');
-				$log['price'] = abs($log['price']);
-				$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation'] == 'rewardincomelog') {
-
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation='RAC'"), 0);
-	if($count) {
-		$loglist = array();
-		$query = DB::query("SELECT l.*, f.fid, f.name, t.tid, t.subject, t.price
-			FROM ".DB::table('common_credit_log')." l
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=l.relatedid
-			LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
-			WHERE l.uid='$_G[uid]' AND l.operation='RAC' ORDER BY l.dateline DESC
-			LIMIT $start,$perpage");
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['price'] = abs($log['price']);
-			$loglist[] = $log;
-		}
-	}
-
-} elseif($_G['gp_suboperation'] == 'creditrulelog') {
+if($_G['gp_suboperation'] == 'creditrulelog') {
 
 	$count = DB::result(DB::query("SELECT count(*) FROM ".DB::table('common_credit_rule_log')." WHERE uid='$_G[uid]'"), 0);
 	if($count) {
@@ -143,26 +55,91 @@ if($_G['gp_suboperation'] == 'paymentlog') {
 			$list[] = $value;
 		}
 	}
+
 } else {
 
 	loadcache('usergroups');
 	$suboperation = 'creditslog';
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' AND operation IN('TFR', 'RCV', 'CEC', 'ECU', 'AFD', 'UGP', 'TRC', 'MRC', 'BGC', 'RGC', 'AGC')"), 0);
+	$where[] = "uid='$_G[uid]'";
+	if($_G['gp_optype'] && in_array($_G['gp_optype'], $optypes)) {
+		$where[] = "operation='$_G[gp_optype]'";
+	}
+	if($beginunixstr) {
+		$where[] = "dateline>='$beginunixstr'";
+	}
+	if($endunixstr) {
+		$where[] = "dateline<='$endunixstr'";
+	}
+	$exttype = intval($_G['gp_exttype']);
+
+	if($exttype && $_G['setting']['extcredits'][$exttype]) {
+		$where[] = "extcredits{$exttype}!='0'";
+	}
+	$income = intval($_G['gp_income']);
+	if($income) {
+		$incomestr = $income < 0 ? '<' : '>';
+		$incomearr = array();
+		foreach($_G['setting']['extcredits'] as $id => $arr) {
+			$incomearr[] = 'extcredits'.$id.$incomestr."'0'";
+		}
+		$where[] = '('.implode(' OR ', $incomearr).')';
+	}
+	$sql = $where ? ' WHERE '.implode(' AND ', $where) : '';
+	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log').$sql);
 	if($count) {
-		$loglist = array();
-		$query = DB::query("SELECT l.*, m.uid AS mid, m.username FROM ".DB::table('common_credit_log')." l
-							LEFT JOIN ".DB::table('common_member')." m ON m.uid=l.relatedid
-							WHERE l.uid='$_G[uid]' AND l.operation IN('TFR', 'RCV', 'CEC', 'ECU', 'AFD', 'UGP', 'TRC', 'MRC', 'BGC', 'RGC', 'AGC')
-							ORDER BY l.dateline DESC LIMIT $start,$perpage");
+		$aids = $pids = $tids = $taskids = $uids = $loglist = array();
+		loadcache(array('magics'));
+		$query = DB::query("SELECT * FROM ".DB::table('common_credit_log')." $sql ORDER BY dateline DESC LIMIT $start,$perpage");
 		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
+			$credits = array();
+			$havecredit = false;
+			$maxid = $minid = 0;
+			foreach($_G['setting']['extcredits'] as $id => $credit) {
+				if($log['extcredits'.$id]) {
+					$havecredit = true;
+					$credits[] = $credit['title'].' <span class="'.($log['extcredits'.$id] > 0 ? 'xi1' : 'xg1').'">'.($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].'</span>';
+					if($log['operation'] == 'CEC' && !empty($log['extcredits'.$id])) {
+						if($log['extcredits'.$id] > 0) {
+							$log['maxid'] = $id;
+						} elseif($log['extcredits'.$id] < 0) {
+							$log['minid'] = $id;
+						}
+					}
+
+				}
+			}
+			if(!$havecredit) {
+				continue;
+			}
+			$log['credit'] = implode('<br/>', $credits);
+			if(in_array($log['operation'], array('RTC', 'RAC', 'STC', 'BTC', 'ACC', 'RCT', 'RCA', 'RCB'))) {
+				$tids[$log['relatedid']] = $log['relatedid'];
+			} elseif(in_array($log['operation'], array('SAC', 'BAC'))) {
+				$aids[$log['relatedid']] = $log['relatedid'];
+			} elseif(in_array($log['operation'], array('PRC', 'RSC'))) {
+				$pids[$log['relatedid']] = $log['relatedid'];
+			} elseif(in_array($log['operation'], array('TFR', 'RCV'))) {
+				$uids[$log['relatedid']] = $log['relatedid'];
+			} elseif($log['operation'] == 'TRC') {
+				$taskids[$log['relatedid']] = $log['relatedid'];
+			}
 			$loglist[] = $log;
 		}
+		$otherinfo = getotherinfo($aids, $pids, $tids, $taskids, $uids);
 	}
+
+
 }
 
 if($count) {
 	$multi = multi($count, $perpage, $page, $theurl);
 }
+
+$optypehtml = '<select id="optype" name="optype" class="ps" width="168">';
+$optypehtml .= '<option value="">'.lang('spacecp', 'logs_select_operation').'</option>';
+foreach($optypes as $type) {
+	$optypehtml .= '<option value="'.$type.'"'.($type == $_G['gp_optype'] ? ' selected="selected"' : '').'>'.lang('spacecp', 'logs_credit_update_'.$type).'</option>';
+}
+$optypehtml .= '</select>';
 include template('home/spacecp_credit_log');
 ?>

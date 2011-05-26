@@ -1,26 +1,27 @@
-<h1 class="mt"><img alt="trade" src="{STATICURL}image/feed/task.gif" alt="task" class="vm" /> {lang task}</h1>
-<ul class="tb cl">
-	<li$actives[new]><a href="home.php?mod=task&item=new">{lang task_new}</a></li>
-	<li$actives[doing]><a href="home.php?mod=task&item=doing">{lang task_doing}</a></li>
-	<li$actives[done]><a href="home.php?mod=task&item=done">{lang task_done}</a></li>
-	<li$actives[failed]><a href="home.php?mod=task&item=failed">{lang task_failed}</a></li>
-</ul>
-<div class="ptm tl">
+<h1 class="mt">
+	<img src="{STATICURL}image/feed/task.gif" alt="{lang task}" class="vm" />
+	<!--{if $_G['gp_item'] == "doing"}-->{lang task_doing}
+	<!--{elseif $_G['gp_item'] == "done"}-->{lang task_done}
+	<!--{elseif $_G['gp_item'] == "failed"}-->{lang task_failed}
+	<!--{else}-->{lang task_new}<!--{/if}-->
+</h1>
+<div class="ptm">
 	<!--{if $tasklist}-->
-		<table cellspacing="0" cellpadding="0">
+		<table cellspacing="0" cellpadding="0" width="100%">
 			<!--{loop $tasklist $task}-->
 				<tr>
-					<td width="70"><img src="$task[icon]" width="64" height="64" alt="Icon" /></td>
-					<td>
-						<p><strong><a href="home.php?mod=task&do=view&id=$task[taskid]">$task[name]</a></strong>&nbsp;&nbsp;&nbsp;({lang task_applies}: <a href="home.php?mod=task&do=view&id=$task[taskid]#parter">$task[applicants]</a> )</p>
+					<td width="80" class="bbda"><img src="$task[icon]" width="64" height="64" alt="$task[name]" /></td>
+					<td class="bbda ptm pbm">
+						<h3 class="xs2 xi2"><a href="home.php?mod=task&do=view&id=$task[taskid]">$task[name]</a> <span class="xs1 xg2 xw0">({lang task_applies}: <a href="home.php?mod=task&do=view&id=$task[taskid]#parter">$task[applicants]</a> )</span></h3>
+						<p class="xg2">$task[description]</p>
 						<!--{if $_G['gp_item'] == 'doing'}-->
 						<div class="pbg mtm mbm">
-							<div class="pbr" style="width: {if $task[csc]}$task[csc]%{else}8px{/if}; background-color: #5AAF4A;"></div>
+							<div class="pbr" style="width: {if $task[csc]}$task[csc]%{else}8px{/if};"></div>
 							<div class="xs0">{lang task_complete} <span id="csc_$task[taskid]">$task[csc]</span>%</div>
 						</div>
 						<!--{/if}-->
 					</td>
-					<td class="xi1" width="200">
+					<td class="xi1 bbda hm" width="200">
 						<!--{if $task['reward'] == 'credit'}-->
 							{lang credits} $_G['setting']['extcredits'][$task[prize]][title] $task[bonus] $_G['setting']['extcredits'][$task[prize]][unit]
 						<!--{elseif $task['reward'] == 'magic'}-->
@@ -33,7 +34,7 @@
 							{lang usergroup} $listdata[$task[prize]] <!--{if $task['bonus']}--> $task[bonus] {lang days} <!--{/if}-->
 						<!--{/if}-->
 					</td>
-					<td width="200">
+					<td width="120" class="bbda">
 						<!--{if $_G['gp_item'] == 'new'}-->
 							<!--{if $task['noperm']}-->
 								<a href="javascript:;" onclick="doane(event);showDialog('{lang task_group_nopermission}')"><img src="{STATICURL}image/task/disallow.gif" title="{lang task_group_nopermission}" alt="disallow" /></a>

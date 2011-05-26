@@ -16,7 +16,7 @@ a{ color:#2366A8; text-decoration:none; }
 		.menu li a{ display:block; margin-right:2px; padding:3px 0 2px 30px; *padding:4px 0 2px 30px; border:1px solid #F2F9FD; background:url(images/bg_repno.gif) no-repeat 10px -40px; color:#666; }
 			.menu li a:hover{ text-decoration:none; margin-right:0; border:1px solid #B5CFD9; border-right:1px solid #FFF; background:#FFF; }
 		.menu li a.tabon{ text-decoration:none; margin-right:0; border:1px solid #B5CFD9; border-right:1px solid #FFF; background:#FFF url(images/bg_repy.gif) repeat-y; color:#2366A8; }
-.footer{ position:absolute; z-index:10; right:13px; bottom:0; padding:5px 0; line-height:150%; background:url(images/bg_repx.gif) 0 -199px repeat-x; font-family:Arial, sans-serif; font-size:10px; }
+.footer{ position:absolute; z-index:10; right:13px; bottom:0; padding:5px 0; line-height:150%; background:url(images/bg_repx.gif) 0 -199px repeat-x; font-family:Arial, sans-serif; font-size:10px; -webkit-text-size-adjust: none; }
 </style>
 <meta content="Comsenz Inc." name="Copyright" />
 </head>
@@ -40,7 +40,7 @@ a{ color:#2366A8; text-decoration:none; }
 		<!--{if $user['isfounder']}--><li><a href="admin.php?m=plugin&a=filecheck" target="main">{lang plugin}</a></li><!--{/if}-->
 	</ul>
 </div>
-<div class="footer">Powered by UCenter {UC_SERVER_VERSION}<br />&copy; 2001 - 2010 <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</div>
+<div class="footer">Powered by UCenter {UC_SERVER_VERSION}<br />&copy; 2001 - 2011 <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</div>
 <script type="text/javascript">
 	function cleartabon() {
 		if(lastmenu) {

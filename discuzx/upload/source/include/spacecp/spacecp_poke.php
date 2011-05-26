@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_poke.php 16279 2010-09-02 09:33:15Z zhengqingpeng $
+ *      $Id: spacecp_poke.php 20203 2011-02-17 07:14:41Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,10 +20,8 @@ if($uid == $_G['uid']) {
 if($op == 'send' || $op == 'reply') {
 
 	if(!checkperm('allowpoke')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_poke');
 	}
-
-	ckrealname('poke');
 
 	cknewuser();
 
@@ -35,10 +33,6 @@ if($op == 'send' || $op == 'reply') {
 		$tospace = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_POST[username]' LIMIT 1");
 	}
 
-	if($tospace['videophotostatus']) {
-		ckvideophoto('poke', $tospace);
-	}
-
 	if($tospace && isblacklist($tospace['uid'])) {
 		showmessage('is_blacklist');
 	}
@@ -47,8 +41,6 @@ if($op == 'send' || $op == 'reply') {
 		if(empty($tospace)) {
 			showmessage('space_does_not_exist');
 		}
-
-		$oldpoke = getcount('home_poke', array('uid'=>$uid, 'fromuid'=>$_G['uid']));
 
 		$notetext = getstr($_POST['note'], 150, 1, 1);
 		$notetext = censor($notetext);
@@ -73,20 +65,34 @@ if($op == 'send' || $op == 'reply') {
 
 		DB::insert('home_poke', $setarr, 0, true);
 
-		if(!$oldpoke) {
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pokes=pokes+1 WHERE uid='$uid'");
-			DB::query("UPDATE ".DB::table('common_member')." SET newprompt=newprompt+1 WHERE uid='$uid'");
-		}
-
 		require_once libfile('function/friend');
 		friend_addnum($tospace['uid']);
 
 		if($op == 'reply') {
 			DB::query("DELETE FROM ".DB::table('home_poke')." WHERE uid='$_G[uid]' AND fromuid='$uid'");
-			DB::query("UPDATE ".DB::table('common_member_status')." SET pokes=pokes-'1' WHERE uid='$_G[uid]'");
 			DB::query("UPDATE ".DB::table('common_member')." SET newprompt=newprompt-'1' WHERE uid='$_G[uid]'");
 		}
 		updatecreditbyaction('poke', 0, array(), $uid);
+
+		if($setarr['iconid']) {
+			require_once libfile('function/spacecp');
+			$pokemsg = makepokeaction($setarr['iconid']);
+		} else {
+			$pokemsg = lang('home/template', 'say_hi');
+		}
+		if(!empty($setarr['note'])) {
+			$pokemsg .= ', '.lang('home/template', 'say').':'.$setarr['note'];
+		}
+
+		$note = array(
+				'fromurl' => 'home.php?mod=space&uid='.$_G['uid'],
+				'fromusername' => $_G['username'],
+				'fromuid' => $_G['uid'],
+				'from_id' => $_G['uid'],
+				'from_idtype' => 'pokequery',
+				'pokemsg' => $pokemsg
+			);
+		notification_add($uid, 'poke', 'poke_request', $note);
 
 		include_once libfile('function/stat');
 		updatestat('poke');
@@ -100,12 +106,6 @@ if($op == 'send' || $op == 'reply') {
 		$where = empty($uid)?'':"AND fromuid='$uid'";
 		DB::query("DELETE FROM ".DB::table('home_poke')." WHERE uid='$_G[uid]' $where");
 
-		$pokenum = getcount('home_poke', array('uid'=>$_G['uid']));
-		space_merge($space, 'status');
-		if($pokenum != $space['pokes']) {
-			$changenum = $pokenum - $space['pokes'];
-			member_status_update($space['uid'], array('pokes' => $changenum));
-		}
 		showmessage('has_been_hailed_overlooked', '', array('uid' => $uid, 'from' => $_G['gp_from']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => 0));
 	}
 
@@ -131,8 +131,6 @@ if($op == 'send' || $op == 'reply') {
 
 	}
 
-} elseif($op == 'getpoke') {
-	$pokequery = DB::fetch_first("SELECT * FROM ".DB::table('home_poke')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 1, 1");
 } else {
 
 	$perpage = 20;
@@ -167,13 +165,6 @@ if($op == 'send' || $op == 'reply') {
 		}
 	}
 	$multi = multi($count, $perpage, $page, "home.php?mod=spacecp&ac=poke");
-
-	$pokenum = getcount('home_poke', array('uid'=>$space['uid']));
-	space_merge($space, 'status');
-	if($pokenum != $space['pokes']) {
-		$changenum = $pokenum - $space['pokes'];
-		member_status_update($space['uid'], array('pokes' => $changenum));
-	}
 
 }
 

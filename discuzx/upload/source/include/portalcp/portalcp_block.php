@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 17505 2010-10-20 05:42:15Z zhangguosheng $
+ *      $Id: portalcp_block.php 22707 2011-05-18 02:35:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,8 +14,9 @@ if(!defined('IN_DISCUZ')) {
 include_once libfile('function/block');
 $oparr = array('block', 'data', 'style', 'itemdata', 'setting', 'remove', 'item', 'blockclass',
 				'getblock', 'thumbsetting', 'push', 'recommend', 'verifydata', 'managedata',
-				'saveblockclassname', 'saveblocktitle', 'convert');
+				'saveblockclassname', 'saveblocktitle', 'convert', 'favorite', 'banids');
 $op = in_array($_GET['op'], $oparr) ? $_GET['op'] : 'block';
+$_GET['from'] = $_GET['from'] == 'cp' ? 'cp' : null;
 $allowmanage = $allowdata = 0;
 
 $block = array();
@@ -65,6 +66,7 @@ if($op == 'data' && $is_htmlblock) {
 	$op = 'block';
 	$showhtmltip = true;
 }
+$block['blockclass'] = empty($block['blockclass']) ? $_GET['classname'] : $block['blockclass'];
 $is_recommendable = block_isrecommendable($block);
 
 if($op == 'block') {
@@ -88,20 +90,27 @@ if($op == 'block') {
 		$_POST['shownum'] = intval($_POST['shownum']);
 		$_POST['picwidth'] = $_POST['picwidth'] ? intval($_POST['picwidth']) : 0;
 		$_POST['picheight'] = $_POST['picheight'] ? intval($_POST['picheight']) : 0;
-		$_POST['script'] = isset($theclass['script'][$_POST['script']]) ?
-							$_POST['script'] : key($theclass['script']);
+		$_POST['script'] = isset($theclass['script'][$_POST['script']]) ? $_POST['script'] : key($theclass['script']);
 		$_POST['a_target'] = in_array($_POST['a_target'], array('blank', 'top', 'self')) ? $_POST['a_target'] : 'blank';
 		$_POST['dateformat'] = in_array($_POST['dateformat'], array('Y-m-d', 'm-d', 'H:i', 'Y-m-d H:i')) ? $_POST['dateformat'] : 'Y-m-d';
+		$_POST['isblank'] = intval($_POST['isblank']);
+		$summary = getstr($_POST['summary'], '', 1, 1, 0, 1);
+		if($summary) {
+			$tag = block_ckeck_summary($summary);
+			if($tag != $summary) {
+				$msg = lang('portalcp', 'block_diy_summary_html_tag').$tag.lang('portalcp', 'block_diy_summary_not_closed');
+				showmessage($msg);
+			}
+		}
 
 		$_POST['shownum'] = $_POST['shownum'] > 0 ? $_POST['shownum'] : 10;
 		$_POST['parameter']['items'] = $_POST['shownum'];
 		include_once libfile('function/home');
 		$setarr = array(
 			'name' => getstr($_POST['name'], 255, 1, 1, 0, 0),
-			'summary' => getstr($_POST['summary'], '', 1, 1, 0, 1),
+			'summary' => $summary,
 			'styleid' => $_POST['styleid'],
 			'script' => $_POST['script'],
-			'param' => addslashes(serialize($_POST['parameter'])),
 			'cachetime' => intval($_POST['cachetime']),
 			'punctualupdate' => !empty($_POST['punctualupdate']) ? '1' : '0',
 			'shownum' => $_POST['shownum'],
@@ -111,8 +120,25 @@ if($op == 'block') {
 			'dateuformat' => !empty($_POST['dateuformat']) ? '1' : '0',
 			'dateformat' => $_POST['dateformat'],
 			'hidedisplay' => $_POST['hidedisplay'] ? '1' : '0',
-			'dateline' => TIMESTAMP
+			'dateline' => TIMESTAMP,
+			'isblank' => $_POST['isblank']
 		);
+
+		$picdata = array();
+		if(!empty($_FILES)) {
+			foreach($_FILES as $varname => $file) {
+				if($file['tmp_name']) {
+					$result = pic_upload($file, 'portal');
+					$pic = 'portal/'.$result['pic'];
+					$strbid = $bid ? $bid : '{bid}';
+					$picdata[] = "('$strbid', '$pic', '$result[remote]', '1')";
+					$pic = $result['remote'] ? $_G['setting']['ftp']['attachurl'].$pic : $_G['setting']['attachurl'].$pic;
+					$_POST['parameter'][$varname] = $pic;
+				}
+			}
+		}
+		$setarr['param'] = addslashes(serialize($_POST['parameter']));
+
 		if($bid) {
 			DB::update('common_block', $setarr, array('bid'=>$bid));
 		} else {
@@ -125,6 +151,13 @@ if($op == 'block') {
 			}
 			$bid = DB::insert('common_block', $setarr, true);
 		}
+
+		if(!empty($picdata)) {
+			$str = implode(',', $picdata);
+			$str = str_replace('{bid}', $bid, $str);
+			DB::query('INSERT INTO '.DB::table('common_block_pic')." (bid, pic, picflag, `type`) VALUES $str");
+		}
+
 		$_G['block'][$bid] = DB::fetch_first("SELECT * FROM ".DB::table('common_block')." WHERE bid='$bid'");
 		block_updatecache($bid, true);
 		showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=block&bid='.$bid, array('bid'=>$bid, 'eleid'=> $_GET['eleid']));
@@ -152,17 +185,30 @@ if($op == 'block') {
 	}
 	$blockclassname = empty($blockclassname) ? $blockclass : $blockclassname;
 
+} elseif($op == 'banids') {
+	if(!$bid || (!$allowmanage && !$allowdata)) {
+		showmessage('block_edit_nopermission');
+	}
+
+	if(isset($_G['gp_bannedids']) && $block['param']['bannedids'] != $_G['gp_bannedids']) {
+		$arr = explode(',', $_G['gp_bannedids']);
+		$arr = array_map('intval', $arr);
+		$arr = array_filter($arr);
+		$_G['gp_bannedids'] = implode(',', $arr);
+		$block['param']['bannedids'] = $_G['gp_bannedids'];
+		DB::update('common_block', array('param'=>addslashes(serialize($block['param']))), array('bid'=>$bid));
+		$_G['block'][$bid] = $block;
+		block_updatecache($bid, true);
+	}
+
+	showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=data&bid='.$bid, array('bid'=>$bid, 'eleid'=> $_GET['eleid']));
+
 } elseif($op == 'data') {
 	if(!$bid || (!$allowmanage && !$allowdata)) {
 		showmessage('block_edit_nopermission');
 	}
 
 	if(submitcheck('updatesubmit')) {
-		if(isset($_POST['bannedids']) && $block['param']['bannedids'] != $_POST['bannedids']) {
-			$block['param']['bannedids'] = $_POST['bannedids'];
-			DB::update('common_block', array('param'=>addslashes(serialize($block['param']))), array('bid'=>$bid));
-			$_G['block'][$bid] = $block;
-		}
 		if($_POST['displayorder']) {
 			asort($_POST['displayorder']);
 			$orders = $ids = array();
@@ -179,13 +225,12 @@ if($op == 'block') {
 				$items[$value['itemid']] = $value;
 			}
 			foreach($items as $key=>$value) {
-				$itemtype = !empty($_POST['locked'][$key]) ? '1' : '2';
+				$itemtype = !empty($_POST['locked'][$key]) ? '1' : '0';
 				if($orders[$key] != $value['displayorder'] || $itemtype != $value['itemtype']) {
 					DB::update('common_block_item', array('displayorder'=>$orders[$key], 'itemtype'=>$itemtype), array('itemid'=>$key));
 				}
 			}
 		}
-		block_updatecache($bid, true);
 		showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=data&bid='.$bid, array('bid'=>$bid, 'eleid'=> $_GET['eleid']));
 	}
 
@@ -295,7 +340,7 @@ if($op == 'block') {
 	}
 
 	$datalist = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' ORDER BY stickgrade DESC, verifiedtime DESC LIMIT $start, $perpage");
+	$query = DB::query('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND isverified='1' ORDER BY stickgrade DESC, verifiedtime DESC LIMIT $start, $perpage");
 	while(($value=DB::fetch($query))) {
 		$value['verifiedtime'] = dgmdate($value['verifiedtime']);
 		$datalist[$value['dataid']] = $value;
@@ -375,7 +420,7 @@ if($op == 'block') {
 		}
 	} elseif($op == 'push') {
 
-		$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
+		$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype']);
 		if($itemid) {
 			$item['itemid'] = $itemid;
 		}
@@ -386,7 +431,8 @@ if($op == 'block') {
 		}
 
 		$isrepeatrecommend = false;
-		$item = DB::fetch_first('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND id='$_GET[id]' AND idtype='$_GET[idtype]'");
+		$idtype = $_GET['idtype'] == 'gtid' ? 'tid' : $_GET['idtype'];
+		$item = DB::fetch_first('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND id='$_GET[id]' AND idtype='$idtype'");
 		if($item) {
 			$item['fields'] = unserialize($item['fields']);
 			$isrepeatrecommend = true;
@@ -397,10 +443,10 @@ if($op == 'block') {
 
 		} else {
 			if(in_array($_GET['idtype'],array('tid', 'gtid', 'aid', 'picid', 'blogid'))) {
-				$_GET['idtype'] = $_GET['idtype'].'s';
+				$_GET['idtype'] = $_GET['idtype'] == 'gtid' ? 'tids' : $_GET['idtype'].'s';
 			}
 			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
-			if(empty($item)) showmessage('block_data_type_invalid');
+			if(empty($item)) showmessage('block_data_type_invalid', null, null, array('msgtype'=>3));
 		}
 	} elseif($op=='verifydata' || $op=='managedata') {
 		if(!$allowmanage && !$allowdata) {
@@ -416,18 +462,18 @@ if($op == 'block') {
 		showmessage('block_edit_nopermission');
 	}
 
+	$item['oldpic'] = $item['pic'];
 	if($item['picflag'] == '1') {
 		$item['pic'] = $item['pic'] ? $_G['setting']['attachurl'].$item['pic'] : '';
 	} elseif($item['picflag'] == '2') {
 		$item['pic'] = $item['pic'] ? $_G['setting']['ftp']['attachurl'].$item['pic'] : '';
 	}
-	$item['picflag'] = '0';
 
 	$item['startdate'] = $item['startdate'] ? dgmdate($item['startdate']) : dgmdate(TIMESTAMP);
 	$item['enddate'] = $item['enddate'] ? dgmdate($item['enddate']) : '';
 	$orders = range(1, $block['shownum']);
 	$orderarr[$item['displayorder']] = ' selected="selected"';
-	$item['showstyle'] = !empty($item['showstyle']) ? (array)(unserialize($item['showstyle'])) : array();
+	$item['showstyle'] = !empty($item['showstyle']) ? (array)(unserialize($item['showstyle'])) : (!empty($item['fields']['showstyle']) ? $item['fields']['showstyle'] : array());
 	$showstylearr = array();
 	foreach(array('title_b', 'title_i', 'title_u', 'title_c', 'summary_b', 'summary_i', 'summary_u', 'title_c') as $value) {
 		if(!empty($item['showstyle'][$value])) {
@@ -480,13 +526,24 @@ if($op == 'block') {
 			$item['pic'] = 'portal/'.$result['pic'];
 			$item['picflag'] = $result['remote'] ? '2' : '1';
 			$item['makethumb'] = 0;
+			$item['thumbpath'] = '';
+			$thumbdata = array('bid' => $block['bid'], 'itemid' => $item['itemid'], 'pic' => $item['pic'], 'picflag' => $result['remote'], 'type' => '1');
+			DB::insert('common_block_pic', $thumbdata);
 		} elseif($_POST['pic']) {
-			$item['pic'] = $_POST['pic'];
-			$item['picflag'] = intval($_POST['picflag']);
+			$pic = htmlspecialchars($_POST['pic']);
+			$urls = parse_url($pic);
+			if(!empty($urls['scheme']) && !empty($urls['host'])) {
+				$item['picflag'] = '0';
+				$item['thumbpath'] = '';
+			} else {
+				$item['picflag'] = intval($_POST['picflag']);
+			}
+			$item['pic'] = $pic;
 			$item['makethumb'] = 0;
 		}
-		$item['showstyle'] = $_POST['showstyle'] ? dstripslashes($_POST['showstyle']) : array();
-		$item['showstyle'] = daddslashes(serialize($item['showstyle']));
+		unset($item['oldpic']);
+		$item['showstyle'] = $_POST['showstyle']['title_b'] || $_POST['showstyle']['title_i'] || $_POST['showstyle']['title_u'] || $_POST['showstyle']['title_c'] ? dstripslashes($_POST['showstyle']) : array();
+		$item['showstyle'] = empty($item['showstyle']) ? '' : daddslashes(serialize($item['showstyle']));
 
 		foreach($theclass['fields'] as $key=>$value) {
 			if(!isset($item[$key]) && isset($_POST[$key])) {
@@ -499,6 +556,9 @@ if($op == 'block') {
 				}
 				$item['fields'][$key] = $_POST[$key];
 			}
+		}
+		if(isset($item['fields']['fulltitle'])) {
+			$item['fields']['fulltitle'] = $item['title'];
 		}
 		$item['fields']	= addslashes(serialize($item['fields']));
 
@@ -522,7 +582,9 @@ if($op == 'block') {
 			showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=data&bid='.$block['bid'], array('bid'=>$bid));
 
 		} elseif(submitcheck('recommendsubmit')) {
+			include_once libfile('function/home');
 			unset($item['itemid']);
+			unset($item['thumbpath']);
 			$item['itemtype'] = '0';
 			$item['uid'] = $_G['uid'];
 			$item['username'] = $_G['username'];
@@ -531,9 +593,47 @@ if($op == 'block') {
 			$item['verifiedtime'] = TIMESTAMP;
 
 			DB::insert('common_block_item_data', $item, false, true);
-			showmessage('do_success', dreferer('portal.php'), array(), array('showdialog' => true, 'closetime' => true));
-
+			if($_G['gp_showrecommendtip'] && ($_G['gp_idtype'] == 'tid' || $_G['gp_idtype'] == 'gtid')) {
+				$modarr = array(
+					'tid' => $item['id'],
+					'uid' => $item['uid'],
+					'username' => $item['username'],
+					'dateline' => TIMESTAMP,
+					'action' => 'REB',
+					'status' => '1',
+					'stamp' => '',
+					'reason' => getstr($_G['gp_recommendto'], 20, 1, 1, 0, 0),
+				);
+				DB::insert('forum_threadmod', $modarr);
+				$stampsql = '';
+				loadcache('stamptypeid');
+				if(array_key_exists(4, $_G['cache']['stamptypeid'])) {
+					$stampsql = ", stamp='".$_G['cache']['stamptypeid']['4']."'";
+				}
+				DB::query("UPDATE ".DB::table('forum_thread')." SET moderated='1' $stampsql WHERE tid='$item[id]'");
+			}
+			if(!empty($_POST['updateblock'])) {
+				block_updatecache($bid, true);
+			}
+			$showrecommendrate = '';
+			if($_G['group']['raterange'] && ($_G['gp_idtype'] == 'tid' || $_G['gp_idtype'] == 'gtid')) {
+				$showrecommendrate = 1;
+			}
+			if($showrecommendrate) {
+				showmessage('do_success', dreferer('portal.php'), array(), array('showdialog' => true, 'closetime' => 0.01, 'extrajs' =>
+					'<script type="text/javascript" reload="1">
+					showWindow("rate", "forum.php?mod=misc&action=rate&tid='.$item[id].'&pid='.$_G[gp_recommend_thread_pid].'&showratetip=1", "get", -1);
+					</script>'));
+			} elseif($_G['gp_showrecommendtip']) {
+				showmessage('do_success', dreferer('portal.php'), array(), array('showdialog' => true, 'closetime' => true, 'extrajs' =>
+					'<script type="text/javascript" reload="1">
+					window.location.reload();
+					</script>'));
+			} else {
+				showmessage('do_success', dreferer('portal.php'), array(), array('showdialog' => true, 'closetime' => true));
+			}
 		} elseif(submitcheck('verifydatasubmit')) {
+			unset($item['thumbpath']);
 			$item['isverified'] = '1';
 			$item['verifiedtime'] = TIMESTAMP;
 			DB::update('common_block_item_data', $item, array('dataid'=>$dataid));
@@ -542,6 +642,7 @@ if($op == 'block') {
 			}
 			showmessage('do_success', dreferer('portal.php?mod=portalcp&ac=blockdata&op=manage&bid='.$bid));
 		} elseif(submitcheck('managedatasubmit')) {
+			unset($item['thumbpath']);
 			$item['stickgrade'] = intval($_POST['stickgrade']);
 			DB::update('common_block_item_data', $item, array('dataid'=>$dataid));
 			showmessage('do_success', dreferer('portal.php?mod=portalcp&ac=block&op=itemdata&bid='.$bid));
@@ -555,7 +656,7 @@ if($op == 'block') {
 	}
 
 	block_get_batch($bid);
-	block_updatecache($bid, !empty($_GET['forceupdate']));
+	if(!empty($_GET['forceupdate'])) block_updatecache($bid, !empty($_GET['forceupdate']));
 	if(strexists($block['summary'], '<script')) {
 		$block['summary'] = lang('portalcp', 'block_diy_nopreview');
 		$_G['block'][$bid] = $block;
@@ -571,7 +672,7 @@ if($op == 'block') {
 	}
 
 	if (submitcheck('saveclassnamesubmit')) {
-		$setarr = array('classname'=>$_POST['classname']);
+		$setarr = array('classname'=>getstr($_POST['classname'], 100, 0, 0, 0, -1));
 		DB::update('common_block',$setarr,array('bid'=>$bid));
 	}
 	block_memory_clear($bid);
@@ -584,6 +685,7 @@ if($op == 'block') {
 	}
 
 	if (submitcheck('savetitlesubmit')) {
+		$_POST['title'] = preg_replace('/\<script|\<iframe|\<\/iframe\>/is', '', $_POST['title']);
 		$title = dstripslashes($_POST['title']);
 		$title = preg_replace('/url\([\'"](.*?)[\'"]\)/','url($1)',$title);
 
@@ -603,6 +705,23 @@ if($op == 'block') {
 		showmessage('block_edit_nopermission');
 	}
 	block_convert($bid, $_G['gp_toblockclass']);
+} elseif ($op == 'favorite') {
+	$perm = getblockperm($bid);
+	if(!$perm['allowmanage'] && !$perm['allowrecommend']) {
+		showmessage('block_no_right_recommend');
+	}
+	$favoriteop = '';
+	if(!block_check_favorite($_G['uid'], $bid)) {
+		$setarr = array(
+			'uid' => $_G['uid'],
+			'bid' => $bid,
+		);
+		block_add_favorite($setarr);
+		$favoriteop = 'add';
+	} else {
+		block_delete_favorite($_G['uid'], $bid);
+		$favoriteop = 'del';
+	}
 }
 
 include_once template("portal/portalcp_block");
@@ -652,16 +771,30 @@ function block_ban_item($block, $item) {
 	DB::update('common_block', array('param'=>$parameters), array('bid'=>intval($block['bid'])));
 }
 
-function get_push_item($blockstyle, $id, $idtype, $blockclass, $script) {
+function get_push_item($blockstyle, $id, $idtype, $blockclass = '', $script = '') {
 	$item = array();
 	$obj = null;
-	list($blockclass) = explode('_', $blockclass);
-	$obj = block_script($blockclass, $script);
+	if(empty($blockclass) || empty($script)) {
+		if($idtype == 'tids') {
+			$obj = block_script('forum', 'thread');
+		} elseif($idtype == 'gtids') {
+			$obj = block_script('group', 'groupthread');
+		} elseif($idtype == 'aids') {
+			$obj = block_script('portal', 'article');
+		} elseif($idtype == 'picids') {
+			$obj = block_script('space', 'pic');
+		} elseif($idtype == 'blogids') {
+			$obj = block_script('space', 'blog');
+		}
+	} else {
+		list($blockclass) = explode('_', $blockclass);
+		$obj = block_script($blockclass, $script);
+	}
 	if($obj && is_object($obj)) {
 		$paramter = array($idtype => intval($id));
 		$return = $obj->getData($blockstyle, $paramter);
 		if($return['data']) {
-			$item = $return['data'][0];
+			$item = array_shift($return['data']);
 		}
 	}
 	return $item;
@@ -712,10 +845,57 @@ function block_convert($bid, $toblockclass) {
 				$block['script'] = $convertrule['script'];
 				$block['blockclass'] = $toblockclass;
 				$block['blockstyle'] = serialize($blockstyle);
-				DB::update('common_block', $block, array('bid'=>$bid));
+				DB::update('common_block', daddslashes($block), array('bid'=>$bid));
 			}
 		}
 
 	}
+}
+
+function block_check_favorite($uid, $bid){
+	$uid = intval($uid);
+	$bid = intval($bid);
+	if($uid && $bid) {
+		return DB::result_first('SELECT count(*) FROM '.DB::table('common_block_favorite')." WHERE uid='$uid' AND bid='$bid'");
+	} else {
+		return false;
+	}
+}
+
+function block_add_favorite($setarr){
+	$arr = array(
+		'uid' => intval($setarr['uid']),
+		'bid' => intval($setarr['bid']),
+		'dateline' => TIMESTAMP
+	);
+	return DB::insert('common_block_favorite', $arr, true);
+}
+
+function block_delete_favorite($uid, $bid){
+	$uid = intval($uid);
+	$bid = intval($bid);
+	if($uid && $bid) {
+		return DB::delete('common_block_favorite', " uid='$uid' AND bid='$bid'");
+	} else {
+		return false;
+	}
+
+}
+
+function block_ckeck_summary($summary){
+	if($summary) {
+		$tags = array('div', 'table', 'tbody', 'tr', 'td', 'th');
+		foreach($tags as $tag) {
+			preg_match_all('/(<'.$tag.')|(<\/'.$tag.'>)/i', $summary, $all);
+			if(!empty($all[1]) && !empty($all[2])) {
+				$all[1] = array_filter($all[1]);
+				$all[2] = array_filter($all[2]);
+				if(count($all[1]) !== count($all[2])) {
+					return $tag;
+				}
+			}
+		}
+	}
+	return $summary;
 }
 ?>

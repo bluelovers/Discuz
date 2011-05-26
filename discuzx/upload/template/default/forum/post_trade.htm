@@ -3,9 +3,9 @@
 <div class="exfm cl">
 	<div class="sinf sppoll z">
 		<dl>
-			<dt><strong class="rq">*</strong><label for="item_name">{lang post_trade_name}:</label></dt>
+			<dt><span class="rq">*</span><label for="item_name">{lang post_trade_name}:</label></dt>
 			<dd><input type="text" name="item_name" id="item_name" class="px oinf" value="$trade[subject]" tabindex="1" /></dd>
-			<dt><strong class="rq">*</strong><label for="item_number">{lang post_trade_number}:</label></dt>
+			<dt><span class="rq">*</span><label for="item_number">{lang post_trade_number}:</label></dt>
 			<dd>
 				<div class="spmf">
 					<em>
@@ -29,10 +29,11 @@
 						<option value="seller" {if $trade['transport'] == 1}selected="selected"{/if}>{lang post_trade_transport_seller}</option>
 						<option value="buyer" {if $trade['transport'] == 2}selected="selected"{/if}>{lang post_trade_transport_buyer}</option>
 						<option value="logistics" {if $trade['transport'] == 4}selected="selected"{/if}>{lang trade_type_transport_physical}</option>
+						<option value="offline" {if $trade['transport'] == 0}selected="selected"{/if}>{lang post_trade_transport_offline}</option>
 					</select>
 				</span>
 			</dd>
-			<dt><strong class="rq">*</strong>{lang post_trade_price}:</dt>
+			<dt><span class="rq">*</span>{lang post_trade_price}:</dt>
 			<dd>
 				<div class="spmf mbm">
 					<em>
@@ -82,7 +83,7 @@
 			</dd>
 		</dl>
 		<dl id="tenpayseller" style="{if !$trade[tenpayaccount]}display:none{/if}">
-			<dt><label for="tenpay_seller">{lang post_trade_tenpay_seller}:</label></dt>
+			<dt><label for="tenpay_account">{lang post_trade_tenpay_seller}:</label></dt>
 			<dd><input type="text" name="tenpay_account" id="tenpay_account" class="px" value="$trade[tenpayaccount]" tabindex="2" /></dd>
 		</dl>
 	</div>
@@ -98,15 +99,17 @@
 			<!--{if $allowpostimg}-->
 				<dt>{lang post_trade_picture}:</dt>
 				<dd class="pns">
-					<button type="button" class="pn" onclick="uploadWindow(function (aid, url){updatetradeattach(aid, url, '{$_G['setting']['attachurl']}forum')})"><span><!--{if $tradeattach[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button>
-					<input type="hidden" name="tradeaid" id="tradeaid" {if $tradeattach[attachment]}value="$tradeattach[aid]" {/if}tabindex="1" />
+					<button type="button" class="pn" onclick="uploadWindow(function (aid, url){tradeaid_upload(aid, url)})"><span><!--{if $tradeattach[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button>
+					<input type="hidden" name="tradeaid" id="tradeaid" {if $tradeattach[attachment]}value="$tradeattach[aid]" {/if}/>
+					<input type="hidden" name="tradeaid_url" id="tradeaid_url" />
 					<div id="tradeattach_image" class="ptn">
 					<!--{if $tradeattach[attachment]}-->
-						<a href="$tradeattach[url]/$tradeattach[attachment]" target="_blank"><img class="spimg" src="$tradeattach[url]/$tradeattach[attachment]{if $tradeattach['thumb']}.thumb.jpg{/if}" alt="" /></a>
+						<a href="$tradeattach[url]/$tradeattach[attachment]" target="_blank"><img class="spimg" src="$tradeattach[url]/{if $tradeattach['thumb']}{eval echo getimgthumbname($tradeattach['attachment']);}{else}$tradeattach[attachment]{/if}" alt="" /></a>
 					<!--{/if}-->
 					</div>
 				</dd>
 			<!--{/if}-->
+			<!--{hook/post_trade_extra}-->
 		</dl>
 	</div>
 </div>
@@ -115,6 +118,8 @@
 simulateSelect('item_quality');
 simulateSelect('paymethod');
 simulateSelect('transport');
+
+EXTRAFUNC['validator']['special'] = 'validateextra';
 function validateextra() {
 	if($('postform').item_name.value == '') {
 		showDialog('{lang post_goods_error_message_1}', 'alert', '', function () { $('postform').item_name.focus() });
@@ -129,5 +134,9 @@ function validateextra() {
 		return false;
 	}
 	return true;
+}
+function tradeaid_upload(aid, url) {
+	$('tradeaid_url').value = url;
+	updatetradeattach(aid, url, '{$_G['setting']['attachurl']}forum');
 }
 </script>

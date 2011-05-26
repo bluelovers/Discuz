@@ -24,13 +24,7 @@
 		<!--{if $op == 'editforum'}-->
 			<script type="text/javascript">
 				var allowbbcode = allowimgcode = 1;
-				var allowhtml = forumallowhtml = allowsmilies = 0;
-				function parseurl(str, mode) {
-					str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, mode == 'html' ? '$1<img src="$2" border="0">' : '$1[img]$2[/img]');
-					str = str.replace(/([^>=\]"'\/@]|^)((((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k):\/\/)|www\.)([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
-					str = str.replace(/([^\w>=\]:"'\.\/]|^)(([\-\.\w]+@[\.\-\w]+(\.\w+)+))/ig, mode == 'html' ? '$1<a href="mailto:$2">$2</a>' : '$1[email]$2[/email]');
-					return str;
-				}
+				var allowhtml = forumallowhtml = allowsmilies = 0;				
 			</script>
 			<div class="exfm">
 				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
@@ -109,7 +103,7 @@
 							</tr>
 						<!--{/loop}-->
 						<tr class="bw0_all">
-							<td><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form)" /> <label for="chkall">{lang delete_check}</label></td>
+							<td><label for="chkall" onclick="checkall(this.form)"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang delete_check}</label></td>
 							<td colspan="6">
 								<!--{if !empty($reportlist[pagelink])}-->$reportlist[pagelink]<!--{/if}-->
 								<button type="submit" name="editsubmit" class="pn" value="yes"><strong>{lang mod_forum_recommend_list}</strong></button>

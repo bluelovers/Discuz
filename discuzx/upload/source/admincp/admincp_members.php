@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 17380 2010-10-15 06:07:11Z zhangguosheng $
+ *      $Id: admincp_members.php 22702 2011-05-18 01:38:39Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -40,8 +40,18 @@ if($operation == 'search') {
 			array('nav_repeat', 'members&operation=repeat', 0),
 		));
 		showtips('members_admin_tips');
+		if(!empty($_G['gp_vid']) && ($_G['gp_vid'] > 0 && $_G['gp_vid'] < 8)) {
+			$_G['gp_verify'] = array('verify'.intval($_G['gp_vid']));
+		}
 		showsearchform('search');
+		if($_G['gp_more']) {
+			print <<<EOF
+		<script type="text/javascript">
+			$('btn_more').click();
+		</script>
 
+EOF;
+		}
 	} else {
 
 		$membernum = countmembers($search_condition, $urladd);
@@ -64,7 +74,7 @@ if($operation == 'search') {
 			if($uids) {
 				$conditions = 'm.uid IN ('.dimplode($uids).')';
 
-				$query = DB::query("SELECT m.uid AS uid, m.username AS username, m.adminid AS adminid, m.groupid AS groupid, m.credits AS credits,
+				$query = DB::query("SELECT m.uid AS uid, m.username AS username, m.adminid AS adminid, m.groupid AS groupid, m.credits AS credits, m.conisbind, m.status,
 					mc.extcredits1 AS extcredits1, mc.extcredits2 AS extcredits2, mc.extcredits3 AS extcredits3, mc.extcredits4 AS extcredits4,
 					mc.extcredits5 AS extcredits5, mc.extcredits6 AS extcredits6, mc.extcredits7 AS extcredits7, mc.extcredits8 AS extcredits8,
 					mc.posts FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_count')." mc ON m.uid=mc.uid
@@ -77,13 +87,14 @@ if($operation == 'search') {
 							$memberextcredits[] = $_G['setting']['extcredits'][$id]['title'].': '.$member['extcredits'.$id].' ';
 						}
 					}
+					$lockshow = $member['status'] == '-1' ? '<em class="lightnum">['.cplang('lock').']</em>' : '';
 					$members .= showtablerow('', array('class="td25"', '', 'title="'.implode("\n", $memberextcredits).'"'), array(
 						"<input type=\"checkbox\" name=\"uidarray[]\" value=\"$member[uid]\"".($member['adminid'] == 1 ? 'disabled' : '')." class=\"checkbox\">",
-						"<a href=\"home.php?mod=space&uid=$member[uid]\" target=\"_blank\">$member[username]</a>",
+						($member['conisbind'] ? '<img class="vmiddle" src="static/image/common/connect_qq.gif" /> ' : '')."<a href=\"home.php?mod=space&uid=$member[uid]\" target=\"_blank\">$member[username]</a>",
 						$member['credits'],
 						$member['posts'],
 						$usergroups[$member['adminid']]['grouptitle'],
-						$usergroups[$member['groupid']]['grouptitle'],
+						$usergroups[$member['groupid']]['grouptitle'].$lockshow,
 						"<a href=\"".ADMINSCRIPT."?action=members&operation=group&uid=$member[uid]\" class=\"act\">$lang[usergroup]</a><a href=\"".ADMINSCRIPT."?action=members&operation=access&uid=$member[uid]\" class=\"act\">$lang[members_access]</a>".
 						($_G['setting']['extcredits'] ? "<a href=\"".ADMINSCRIPT."?action=members&operation=credit&uid=$member[uid]\" class=\"act\">$lang[credits]</a>" : "<span disabled>$lang[edit]</span>").
 						"<a href=\"".ADMINSCRIPT."?action=members&operation=medal&uid=$member[uid]\" class=\"act\">$lang[medals]</a>".
@@ -99,10 +110,16 @@ if($operation == 'search') {
 		showsubmenu('nav_members');
 		showtips('members_export_tips');
 		showformheader("members&operation=clean");
-		showtableheader(cplang('members_search_result', array('membernum' => $membernum)).'<a href="admin.php?action=members&operation=search" class="act lightlink normal">'.cplang('research').'</a>');
-		showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
-		echo $members;
+		showtableheader(cplang('members_search_result', array('membernum' => $membernum)).'<a href="'.ADMINSCRIPT.'?action=members&operation=search" class="act lightlink normal">'.cplang('research').'</a>');
 		foreach($search_condition as $k => $v) {
+			if($k == 'username') {
+				$v = explode(',', $v);
+				$tmpv = array();
+				foreach($v as $subvalue) {
+					$tmpv[] = rawurlencode($subvalue);
+				}
+				$v = implode(',', $tmpv);
+			}
 			if(is_array($v)) {
 				foreach($v as $value ) {
 					$condition_str .= '&'.$k.'[]='.$value;
@@ -112,7 +129,11 @@ if($operation == 'search') {
 			}
 		}
 
-		showsubmit('submit', 'submit', '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\')" class="checkbox">'.cplang('del'), '<a href='.ADMINSCRIPT.'?action=members&operation=export'.$condition_str.'>'.$lang['members_search_export'].'</a>', $multipage);
+		if($membernum) {
+			showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
+			echo $members;
+			showsubmit('submit', 'submit', '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\')" class="checkbox">'.cplang('del'), '<a href='.ADMINSCRIPT.'?action=members&operation=export'.$condition_str.'>'.$lang['members_search_export'].'</a>', $multipage);
+		}
 		showtablefooter();
 		showformfooter();
 
@@ -155,7 +176,10 @@ if($operation == 'search') {
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
-	echo diconv($detail, $_G['charset'], 'UCS-2LE');
+	if($_G['charset'] != 'gbk') {
+		$detail = diconv($detail, $_G['charset'], 'GBK');
+	}
+	echo $detail;
 	exit();
 
 } elseif($operation == 'repeat') {
@@ -296,6 +320,10 @@ if($operation == 'search') {
 
 	} else {
 
+		if(!$search_condition) {
+			cpmsg('members_no_find_deluser', '', 'error');
+		}
+
 		$membernum = countmembers($search_condition, $urladd);
 
 		$uids = 0;
@@ -304,22 +332,22 @@ if($operation == 'search') {
 		$uids = searchmembers($search_condition);
 		$conditions = $uids ? 'm.uid IN ('.dimplode($uids).')' : '0';
 
-		if(empty($_G['gp_uidarray'])) {
-			$query = DB::query("SELECT uid, groupid, adminid FROM ".DB::table('common_member')." m WHERE $conditions AND adminid<>1 AND groupid<>1");
-		} else {
+		if(!empty($_G['gp_uidarray'])) {
 			$uids = is_array($_G['gp_uidarray']) ? '\''.implode('\', \'', $_G['gp_uidarray']).'\'' : '0';
 			$query = DB::query("SELECT uid, groupid, adminid FROM ".DB::table('common_member')." WHERE uid IN($uids) AND adminid<>1 AND groupid<>1");
-		}
 
-		$membernum = DB::num_rows($query);
-
-		$uids = $comma = '';
-		while($member = DB::fetch($query)) {
-			if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
-				$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
+			$membernum = DB::num_rows($query);
+			$uids = array();
+			while($member = DB::fetch($query)) {
+				if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
+					$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
+				}
+				$uids[] = $member['uid'];
 			}
-			$uids .= $comma.$member['uid'];
-			$comma = ',';
+		} else {
+			foreach($uids as $uid) {
+				$extra .= '<input type="hidden" name="uidarray[]" value="'.$uid.'" />';
+			}
 		}
 
 		if((empty($membernum) || empty($uids))) {
@@ -332,84 +360,175 @@ if($operation == 'search') {
 
 		} else {
 
-			if($isfounder && !empty($_G['gp_includeuc'])) {
-				loaducenter();
-				uc_user_delete($_G['gp_uidarray']);
-			}
-
 			if(empty($_G['gp_includepost'])) {
 
 				require_once libfile('function/delete');
 				$numdeleted = deletemember($uids, 0);
+
+				if($isfounder && !empty($_G['gp_includeuc'])) {
+					loaducenter();
+					uc_user_delete($_G['gp_uidarray']);
+				}
+
 				cpmsg('members_delete_succeed', '', 'succeed', array('numdeleted' => $numdeleted));
 
 			} else {
 
+				if(empty($uids)) {
+					cpmsg('members_no_find_deluser', '', 'error');
+				}
+
 				$numdeleted = $numdeleted ? $numdeleted : count($_G['gp_uidarray']);
 				$pertask = 1000;
 				$current = $_G['gp_current'] ? intval($_G['gp_current']) : 0;
+				$deleteitem = $_G['gp_deleteitem'] ? trim($_G['gp_deleteitem']) : 'post';
+				$nextdeleteitem = $deleteitem;
 
 				$next = $current + $pertask;
-				$threads = $fids = $threadsarray = array();
 
-				$query = DB::query("SELECT f.fid, t.tid FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE t.authorid IN ($uids) ORDER BY f.fid LIMIT $pertask");
-				while($thread = DB::fetch($query)) {
-					$threads[$thread['fid']] .= ($threads[$thread['fid']] ? ',' : '').$thread['tid'];
+				if($deleteitem == 'post') {
+					$threads = $fids = $threadsarray = array();
+					$query = DB::query("SELECT f.fid, t.tid FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE t.authorid IN (".dimplode($uids).") ORDER BY f.fid LIMIT $pertask");
+					while($thread = DB::fetch($query)) {
+						$threads[$thread['fid']][] = $thread['tid'];
+					}
+
+					if($threads) {
+						require_once libfile('function/post');
+						foreach($threads as $fid => $tids) {
+							deletethread($tids);
+							updateforumcount($fid);
+						}
+						if($_G['setting']['globalstick']) {
+							require_once libfile('function/cache');
+							updatecache('globalstick');
+						}
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'blog';
+					}
 				}
 
-				$nextlink = "action=members&operation=clean&confirmed=yes&submit=yes&includepost=yes&current=$next&pertask=$pertask&lastprocess=$processed".$urladd;
-				if($threads) {
-					foreach($threads as $fid => $tids) {
-						$query = DB::query("SELECT attachment, thumb, remote FROM ".DB::table('forum_attachment')." WHERE tid IN ($tids)");
-						while($attach = DB::fetch($query)) {
-							dunlink($attach);
-						}
-
-						foreach(array('forum_thread', 'forum_threadmod', 'forum_relatedthread', 'forum_post', 'forum_poll',
-							'forum_polloption', 'forum_trade', 'forum_activity', 'forum_activityapply', 'forum_debate',
-							'forum_debatepost', 'forum_attachment', 'forum_typeoptionvar', 'forum_forumrecommend', 'forum_postposition') as $value) {
-							if($value == 'forum_post') {
-								deletepost("tid IN ($tids)");
-								continue;
-							}
-							DB::query("DELETE FROM ".DB::table($value)." WHERE tid IN ($tids)", 'UNBUFFERED');
-						}
-
-						require_once libfile('function/post');
-						updateforumcount($fid);
-					}
-					if($_G['setting']['globalstick']) {
-						require_once libfile('function/cache');
-						updatecache('globalstick');
+				if($deleteitem == 'blog') {
+					$blogs = array();
+					$query = DB::query("SELECT blogid FROM ".DB::table('home_blog')." WHERE uid IN (".dimplode($uids).") LIMIT $pertask");
+					while($blog = DB::fetch($query)) {
+						$blogs[] = $blog['blogid'];
 					}
 
-					cpmsg(cplang('members_delete_processing', array('current' => $current, 'next' => $next)), $nextlink, 'loadingform', array(), $extra);
+					if($blogs) {
+						deleteblogs($blogs);
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'pic';
+					}
+				}
 
-				} elseif($uids) {
+				if($deleteitem == 'pic') {
+					$pics = array();
+					$query = DB::query("SELECT picid FROM ".DB::table('home_pic')." WHERE uid IN (".dimplode($uids).") LIMIT $pertask");
+					while($pic = DB::fetch($query)) {
+						$pics[] = $pic['picid'];
+					}
 
+					if($pics) {
+						deletepics($pics);
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'doing';
+					}
+				}
+
+				if($deleteitem == 'doing') {
+					$doings = array();
+					$query = DB::query("SELECT doid FROM ".DB::table('home_doing')." WHERE uid IN (".dimplode($uids).") LIMIT $pertask");
+					while($doing = DB::fetch($query)) {
+						$doings[] = $doing['doid'];
+					}
+
+					if($doings) {
+						deletedoings($doings);
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'share';
+					}
+				}
+
+				if($deleteitem == 'share') {
+					$shares = array();
+					$query = DB::query("SELECT sid FROM ".DB::table('home_share')." WHERE uid IN (".dimplode($uids).") LIMIT $pertask");
+					while($share = DB::fetch($query)) {
+						$shares[] = $share['sid'];
+					}
+
+					if($shares) {
+						deleteshares($shares);
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'comment';
+					}
+				}
+
+				if($deleteitem == 'comment') {
+					$comments = array();
+					$query = DB::query("SELECT cid FROM ".DB::table('home_comment')." WHERE uid IN (".dimplode($uids).") OR authorid IN (".dimplode($uids).") OR (id IN (".dimplode($uids).") AND idtype='uid') LIMIT $pertask");
+					while($comment = DB::fetch($query)) {
+						$comments[] = $comment['cid'];
+					}
+
+					if($comments) {
+						deletecomments($comments);
+					} else {
+						$next = 0;
+						$nextdeleteitem = 'allitem';
+					}
+				}
+
+				if($deleteitem == 'allitem') {
 					require_once libfile('function/delete');
 					$numdeleted = deletemember($uids);
+
+					if($isfounder && !empty($_G['gp_includeuc'])) {
+						loaducenter();
+						uc_user_delete($_G['gp_uidarray']);
+					}
+
 					cpmsg('members_delete_succeed', '', 'succeed', array('numdeleted' => $numdeleted));
+				}
 
+				if($nextdeleteitem != $deleteitem) {
+					$nextlink = "action=members&operation=clean&confirmed=yes&submit=yes&includepost=yes".(!empty($_G['gp_includeuc']) ? '&includeuc=yes' : '')."&current=$next&pertask=$pertask&lastprocess=$processed".$urladd."&deleteitem=$nextdeleteitem";
+					cpmsg(cplang('members_delete_processing_next', array('item' => cplang('members_delete_'.$deleteitem), 'nextitem' => cplang('members_delete_'.$nextdeleteitem))), $nextlink, 'loadingform', array(), $extra);
 				} else {
-
-					cpmsg('members_no_find_deluser', '', 'error');
-
+					$nextlink = "action=members&operation=clean&confirmed=yes&submit=yes&includepost=yes".(!empty($_G['gp_includeuc']) ? '&includeuc=yes' : '')."&current=$next&pertask=$pertask&lastprocess=$processed".$urladd."&deleteitem=$deleteitem";
+					cpmsg(cplang('members_delete_processing', array('item' => cplang('members_delete_'.$deleteitem), 'current' => $current, 'next' => $next)), $nextlink, 'loadingform', array(), $extra);
 				}
 			}
-
 		}
 	}
 
 } elseif($operation == 'newsletter') {
 
 	if(!submitcheck('newslettersubmit', 1)) {
+		loadcache('newsletter_detail');
+        $newletter_detail = get_newsletter('newsletter_detail');
+		$newletter_detail = unserialize($newletter_detail);
+		if($newletter_detail && $newletter_detail['uid'] == $_G['uid']) {
+			if($_G['gp_goon'] == 'yes') {
+				cpmsg("$lang[members_newsletter_send]: ".cplang('members_newsletter_processing', array('current' => $newletter_detail['current'], 'next' => $newletter_detail['next'], 'search_condition' => $newletter_detail['search_condition'])), $newletter_detail['action'], 'loadingform');
+			} elseif($_G['gp_goon'] == 'no') {
+				del_newsletter('newsletter_detail');
+			} else {
+				cpmsg('members_edit_continue', '', '', '', '<input type="button" class="btn" value="'.$lang[ok].'" onclick="location.href=\''.ADMINSCRIPT.'?action=members&operation=newsletter&goon=yes\'">&nbsp;&nbsp;<input type="button" class="btn" value="'.$lang[cancel].'" onclick="location.href=\''.ADMINSCRIPT.'?action=members&operation=newsletter&goon=no\';">');
+				exit;
+			}
+		}
 
 		shownav('user', 'nav_members_newsletter');
 		showsubmenusteps('nav_members_newsletter', array(
 			array('nav_members_select', !$_G['gp_submit']),
 			array('nav_members_notify', $_G['gp_submit']),
-		));
+		), array(), array(array('members_grouppmlist', 'members&operation=grouppmlist', 0)));
 
 		showsearchform('newsletter');
 
@@ -429,10 +548,9 @@ if($operation == 'search') {
 					cplang('members_newsletter_members'),
 					cplang('members_search_result', array('membernum' => $membernum))."<a href=\"###\" onclick=\"$('searchmembers').style.display='';$('newsletter').style.display='none';$('step1').className='current';$('step2').className='';\" class=\"act\">$lang[research]</a>"
 				));
+				showtablefooter();
 
-				showtagheader('tbody', 'messagebody', TRUE);
 				shownewsletter();
-				showtagfooter('tbody');
 
 				$search_condition = serialize($search_condition);
 				showsubmit('newslettersubmit', 'submit', 'td', '<input type="hidden" name="conditions" value=\''.$search_condition.'\' />');
@@ -451,6 +569,84 @@ if($operation == 'search') {
 		$membernum = countmembers($search_condition, $urladd);
 		notifymembers('newsletter', 'newsletter');
 
+	}
+
+} elseif($operation == 'grouppmlist') {
+
+	if(!empty($_G['gp_delete']) && ($isfounder || DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_grouppm')." WHERE id='$_G[gp_delete]' AND authorid='$_G[uid]'"))) {
+		if(!empty($_G['gp_confirm'])) {
+			DB::delete('common_grouppm', "id='$_G[gp_delete]'");
+			DB::delete('common_member_grouppm', "gpmid='$_G[gp_delete]'");
+		} else {
+			cpmsg('members_grouppm_delete_confirm', 'action=members&operation=grouppmlist&delete='.intval($_G['gp_delete']).'&confirm=yes', 'form');
+		}
+	}
+	shownav('user', 'nav_members_newsletter');
+	showsubmenu('nav_members_newsletter', array(
+		array('members_grouppmlist_newsletter', 'members&operation=newsletter', 0),
+		array('members_grouppmlist', 'members&operation=grouppmlist', 1)
+	));
+	$sqladd = empty($do) ? '' : " AND id='$do'";
+	$sqladd .= $isfounder ? '' : " AND authorid='$_G[uid]'";
+	if($do) {
+		$unreads = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_grouppm')." WHERE gpmid='$do' AND dateline='0'");
+	}
+
+	showtableheader();
+	$query = DB::query("SELECT gp.*,m.username FROM ".DB::table('common_grouppm')." gp LEFT JOIN ".DB::table('common_member')." m ON m.uid=gp.authorid WHERE 1 $sqladd ORDER BY gp.id DESC");
+	if(DB::num_rows($query)) {
+		while($grouppm = DB::fetch($query)) {
+			showtablerow('', array('valign="top" class="td25"', 'valign="top"'), array(
+			    '<a href="home.php?mod=space&uid='.$grouppm['authorid'].'" target="_blank">'.avatar($grouppm['authorid'], 'small').'</a>',
+			    '<a href="home.php?mod=space&uid='.$grouppm['authorid'].'" target="_blank"><b>'.$grouppm['username'].'</b></a> ('.dgmdate($grouppm['dateline']).'):<br />'.
+			    $grouppm['message'].'<br /><br />'.
+			    (!$do ?
+				'<a href="'.ADMINSCRIPT.'?action=members&operation=grouppmlist&do='.$grouppm['id'].'">'.cplang('members_grouppmlist_view', array('number' => $grouppm['numbers'])).'</a>' :
+				'<a href="'.ADMINSCRIPT.'?action=members&operation=grouppmlist&do='.$grouppm['id'].'">'.cplang('members_grouppmlist_view_all').'</a>('.$grouppm['numbers'].') &nbsp; '.
+				'<a href="'.ADMINSCRIPT.'?action=members&operation=grouppmlist&do='.$grouppm['id'].'&filter=unread">'.cplang('members_grouppmlist_view_unread').'</a>('.$unreads.') &nbsp; '.
+				'<a href="'.ADMINSCRIPT.'?action=members&operation=grouppmlist&do='.$grouppm['id'].'&filter=read">'.cplang('members_grouppmlist_view_read').'</a>('.($grouppm['numbers'] - $unreads).')'),
+				'<a href="'.ADMINSCRIPT.'?action=members&operation=grouppmlist&delete='.$grouppm['id'].'">'.cplang('delete').'</a>'
+			));
+		}
+	} else {
+		showtablerow('', '', cplang('members_newsletter_empty'));
+	}
+	showtablefooter();
+	if($do) {
+		$sqladd = $filteradd = '';
+		if(!empty($_G['gp_filter'])) {
+			if($_G['gp_filter'] == 'read') {
+				$sqladd = " AND mgp.dateline>'0'";
+				$filteradd = '&filter=read';
+			} elseif($_G['gp_filter'] == 'unread') {
+				$sqladd = " AND mgp.dateline='0'";
+				$filteradd = '&filter=unread';
+			}
+		} else {
+			$_G['gp_filter'] = '';
+		}
+		$ppp = 100;
+		$start_limit = ($page - 1) * $ppp;
+		if($_G['gp_filter'] != 'unread') {
+			$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_grouppm')." mgp WHERE mgp.gpmid='$do'".$sqladd);
+		} else {
+			$count = $unreads;
+		}
+		$multipage = multi($count, $ppp, $page, ADMINSCRIPT."?action=members&operation=grouppmlist&do=$do".$filteradd);
+		$query = DB::query("SELECT mgp.*,m.username FROM ".DB::table('common_member_grouppm')." mgp LEFT JOIN ".DB::table('common_member')." m USING(uid) WHERE mgp.gpmid='$do' $sqladd LIMIT $start_limit, $ppp");
+		while($gpmuser = DB::fetch($query)) {
+			echo '<div style="margin-bottom:5px;float:left;width:24%"><b><a href="home.php?mod=space&uid='.$gpmuser['uid'].'" target="_blank">'.$gpmuser['username'].'</a></b><br />&nbsp;';
+			if($gpmuser['status'] == 0) {
+				echo '<span class="lightfont">'.cplang('members_grouppmlist_status_0').'</span>';
+			} else {
+				echo dgmdate($gpmuser['dateline'], 'u').' '.cplang('members_grouppmlist_status_1');
+				if($gpmuser['status'] == -1) {
+					echo ', <span class="error">'.cplang('members_grouppmlist_status_-1').'</span>';
+				}
+			}
+			echo '</div>';
+		}
+		echo $multipage;
 	}
 
 } elseif($operation == 'reward') {
@@ -500,10 +696,11 @@ if($operation == 'search') {
 				showtablerow('', array('class="td23"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), $creditsvalue);
 				showtablerow('', array('class="td23"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), $resetcredits);
 				showtablefooter();
-				echo '</td></tr>';
-				showtagheader('tbody', 'messagebody');
+				showtablefooter();
+
+				showtagheader('div', 'messagebody');
 				shownewsletter();
-				showtagfooter('tbody');
+				showtagfooter('div');
 				showsubmit('rewardsubmit', 'submit', 'td', '<input class="checkbox" type="checkbox" name="notifymember" value="1" onclick="$(\'messagebody\').style.display = this.checked ? \'\' : \'none\'" id="credits_notify" /><label for="credits_notify">'.cplang('members_reward_notify').'</label>');
 
 			}
@@ -539,10 +736,14 @@ if($operation == 'search') {
 
 	if(!submitcheck('confermedalsubmit', 1)) {
 
-		shownav('user', 'nav_members_confermedal');
+		shownav('extended', 'nav_medals', 'nav_members_confermedal');
 		showsubmenusteps('nav_members_confermedal', array(
 			array('nav_members_select', !$_G['gp_submit']),
 			array('nav_members_confermedal', $_G['gp_submit']),
+		), array(
+			array('admin', 'medals', 0),
+			array('nav_medals_confer', 'members&operation=confermedal', 1),
+			array('nav_medals_mod', 'medals&operation=mod', 0)
 		));
 
 		showsearchform('confermedal');
@@ -570,11 +771,11 @@ if($operation == 'search') {
 				showsubtitle(array('medals_grant', 'medals_image', 'name'));
 				echo $medals;
 				showtablefooter();
-				echo '</td></tr>';
+				showtablefooter();
 
-				showtagheader('tbody', 'messagebody');
+				showtagheader('div', 'messagebody');
 				shownewsletter();
-				showtagfooter('tbody');
+				showtagfooter('div');
 				showsubmit('confermedalsubmit', 'submit', 'td', '<input class="checkbox" type="checkbox" name="notifymember" value="1" onclick="$(\'messagebody\').style.display = this.checked ? \'\' : \'none\'" id="grant_notify"/><label for="grant_notify">'.cplang('medals_grant_notify').'</label>');
 
 			}
@@ -591,7 +792,79 @@ if($operation == 'search') {
 		notifymembers('confermedal', 'medalletter');
 
 	}
+} elseif($operation == 'confermagic') {
 
+	$magics = '';
+	$query = DB::query("SELECT * FROM ".DB::table('common_magic')." WHERE available='1' ORDER BY displayorder");
+	while($magic = DB::fetch($query)) {
+		$magics .= showtablerow('', array('class="td25"', 'class="td23"', 'class="td25"', ''), array(
+			"<input class=\"checkbox\" type=\"checkbox\" name=\"magic[]\" value=\"$magic[magicid]\" />",
+			"<img src=\"static/image/magic/$magic[identifier].gif\" />",
+			$magic['name'],
+			'<input class="txt" type="text" name="magicnum['.$magic['magicid'].']" value="1" size="3">'
+		), TRUE);
+	}
+
+	if(!$magics) {
+		cpmsg('members_edit_magics_nonexistence', 'action=magics', 'error');
+	}
+
+	if(!submitcheck('confermagicsubmit', 1)) {
+
+		shownav('extended', 'nav_magics', 'nav_members_confermagic');
+		showsubmenusteps('nav_members_confermagic', array(
+			array('nav_members_select', !$_G['gp_submit']),
+			array('nav_members_confermagic', $_G['gp_submit']),
+		), array(
+			array('admin', 'magics&operation=admin', 0),
+			array('nav_magics_confer', 'members&operation=confermagic', 1)
+		));
+
+		showsearchform('confermagic');
+
+		if(submitcheck('submit', 1)) {
+
+			$membernum = countmembers($search_condition, $urladd);
+
+			showtagheader('div', 'confermedal', TRUE);
+			showformheader('members&operation=confermagic'.$urladd);
+			echo '<table class="tb tb1">';
+
+			if(!$membernum) {
+				showtablerow('', 'class="lineheight"', $lang['members_search_nonexistence']);
+				showtablefooter();
+			} else {
+
+				showtablerow('class="first"', array('class="th11"'), array(
+					cplang('members_confermagic_members'),
+					cplang('members_search_result', array('membernum' => $membernum))."<a href=\"###\" onclick=\"$('searchmembers').style.display='';$('confermedal').style.display='none';$('step1').className='current';$('step2').className='';\" class=\"act\">$lang[research]</a>"
+				));
+
+				echo '<tr><td class="th12">'.cplang('members_confermagic').'</td><td>';
+				showtableheader('', 'noborder');
+				showsubtitle(array('nav_magics_confer', 'nav_magics_image', 'nav_magics_name', 'nav_magics_num'));
+				echo $magics;
+				showtablefooter();
+				showtablefooter();
+
+				showtagheader('div', 'messagebody');
+				shownewsletter();
+				showtagfooter('div');
+				showsubmit('confermagicsubmit', 'submit', 'td', '<input class="checkbox" type="checkbox" name="notifymember" value="1" onclick="$(\'messagebody\').style.display = this.checked ? \'\' : \'none\'" id="grant_notify"/><label for="grant_notify">'.cplang('magics_grant_notify').'</label>');
+
+			}
+
+			showtablefooter();
+			showformfooter();
+			showtagfooter('div');
+
+		}
+
+	} else {
+		if(!empty($_POST['conditions'])) $search_condition = unserialize(stripslashes($_POST['conditions']));
+		$membernum = countmembers($search_condition, $urladd);
+		notifymembers('confermagic', 'magicletter');
+	}
 } elseif($operation == 'add') {
 
 	if(!submitcheck('addsubmit', 1)) {
@@ -657,8 +930,6 @@ if($operation == 'search') {
 				cpmsg('members_email_domain_illegal', '', 'error');
 			} elseif($uid == -6) {
 				cpmsg('members_email_duplicate', '', 'error');
-			} else {
-				cpmsg('undefined_action', '', 'error');
 			}
 		}
 
@@ -834,6 +1105,10 @@ if($operation == 'search') {
 			cpmsg('members_edit_groups_toomany', '', 'error');
 		}
 
+		if($member['groupid'] != $_G['gp_groupidnew'] && isfounder($member)) {
+			cpmsg('members_edit_groups_isfounder', '', 'error');
+		}
+
 		$_G['gp_adminidnew'] = $_G['gp_adminidnew'][$_G['gp_groupidnew']];
 		switch($group['type']) {
 			case 'member':
@@ -943,7 +1218,7 @@ if($operation == 'search') {
 		}
 
 		$creditscols = array('members_credit_ranges', 'credits');
-		$creditsvalue = array($member['type'] == 'member' ? "$member[creditshigher]~$member[creditslower]" : 'N/A', '<input type="text" class="txt" name="jscredits" id="jscredits" value="'.$membercredit.'" size="3" disabled>');
+		$creditsvalue = array($member['type'] == 'member' ? "$member[creditshigher]~$member[creditslower]" : 'N/A', '<input type="text" class="txt" name="jscredits" id="jscredits" value="'.$membercredit.'" size="6" disabled style="padding:0;width:6em;border:none; background-color:transparent">');
 		for($i = 1; $i <= 8; $i++) {
 			$jscreditsformula = str_replace('extcredits'.$i, "extcredits[$i]", $jscreditsformula);
 			$creditscols[] = isset($_G['setting']['extcredits'][$i]) ? $_G['setting']['extcredits'][$i]['title'] : 'extcredits'.$i;
@@ -971,7 +1246,7 @@ EOT;
 		showsubmenu('members_credit');
 		showtips('members_credit_tips');
 		showformheader("members&operation=credit&uid={$_G['gp_uid']}");
-		showtableheader(cplang('members_credit').' - '.$member['username']."($member[grouptitle])", 'nobottom');
+		showtableheader('<em class="right"><a href="'.ADMINSCRIPT.'?action=logs&operation=credit&srch_uid='.$_G['gp_uid'].'&frame=yes" target="_blank">'.cplang('members_credit_logs').'</a></em>'.cplang('members_credit').' - '.$member['username'].'('.$member['grouptitle'].')', 'nobottom');
 		showsubtitle($creditscols);
 		showtablerow('', array('', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), $creditsvalue);
 		showtablefooter();
@@ -997,10 +1272,6 @@ EOT;
 		}
 
 		if($diffarray) {
-			if(empty($_G['gp_reason'])) {
-				cpmsg('members_edit_reason_invalid', '', 'error');
-			}
-
 			foreach($diffarray as $id => $diff) {
 				$logs[] = dhtmlspecialchars("$_G[timestamp]\t{$_G[member][username]}\t$_G[adminid]\t$member[username]\t$id\t$diff\t0\t\t{$_G['gp_reason']}");
 			}
@@ -1168,18 +1439,35 @@ EOT;
 			showtablerow('', 'class="td27" colspan="2"', cplang('members_edit_current_status').'<span class="normal">: '.($member['groupid'] == 4 ? $lang['members_ban_post'] : ($member['groupid'] == 5 ? $lang['members_ban_visit'] : ($member['status'] == -1 ? $lang['members_ban_status'] : $lang['members_ban_none']))).'</span>');
 		}
 		showsetting('members_ban_type', array('bannew', array(
-			array('', $lang['members_ban_none']),
-			array('post', $lang['members_ban_post']),
-			array('visit', $lang['members_ban_visit']),
-			array('status', $lang['members_ban_status'])
+			array('', $lang['members_ban_none'], array('validity' => 'none')),
+			array('post', $lang['members_ban_post'], array('validity' => '')),
+			array('visit', $lang['members_ban_visit'], array('validity' => '')),
+			array('status', $lang['members_ban_status'], array('validity' => 'none'))
 		)), '', 'mradio');
+		showtagheader('tbody', 'validity', false, 'sub');
 		showsetting('members_ban_validity', '', '', selectday('banexpirynew', array(0, 1, 3, 5, 7, 14, 30, 60, 90, 180, 365)));
-		showsetting('members_ban_delpost', 'delpost', '', 'radio');
-		showsetting('members_ban_deldoing', 'deldoing', '', 'radio');
-		showsetting('members_ban_delblog', 'delblog', '', 'radio');
-		showsetting('members_ban_delalbum', 'delalbum', '', 'radio');
-		showsetting('members_ban_delshare', 'delshare', '', 'radio');
-		showsetting('members_ban_delcomment', 'delcomment', '', 'radio');
+		showtagfooter('tbody');
+		print <<<EOF
+			<tr>
+				<td class="td27" colspan="2">$lang[members_ban_clear_content]:</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<ul class="dblist" onmouseover="altStyle(this);">
+						<li style="width: 100%;"><input type="checkbox" name="chkall" onclick="checkAll('prefix', this.form, 'clear')" class="checkbox">&nbsp;$lang[select_all]</li>
+						<li style="width: 8%;"><input type="checkbox" value="post" name="clear[post]" class="checkbox">&nbsp;$lang[members_ban_delpost]</li>
+						<li style="width: 8%;"><input type="checkbox" value="postcomment" name="clear[postcomment]" class="checkbox">&nbsp;$lang[members_ban_postcomment]</li>
+						<li style="width: 8%;"><input type="checkbox" value="doing" name="clear[doing]" class="checkbox">&nbsp;$lang[members_ban_deldoing]</li>
+						<li style="width: 8%;"><input type="checkbox" value="blog" name="clear[blog]" class="checkbox">&nbsp;$lang[members_ban_delblog]</li>
+						<li style="width: 8%;"><input type="checkbox" value="album" name="clear[album]" class="checkbox">&nbsp;$lang[members_ban_delalbum]</li>
+						<li style="width: 8%;"><input type="checkbox" value="share" name="clear[share]" class="checkbox">&nbsp;$lang[members_ban_delshare]</li>
+						<li style="width: 8%;"><input type="checkbox" value="avatar" name="clear[avatar]" class="checkbox">&nbsp;$lang[members_ban_delavatar]</li>
+						<li style="width: 8%;"><input type="checkbox" value="comment" name="clear[comment]" class="checkbox">&nbsp;$lang[members_ban_delcomment]</li>
+					</ul>
+				</td>
+			</tr>
+EOF;
+
 		showsetting('members_ban_reason', 'reason', '', 'textarea');
 		showsubmit('bansubmit');
 		showtablefooter();
@@ -1196,7 +1484,18 @@ EOT;
 		if(!$reason && ($_G['group']['reasonpm'] == 1 || $_G['group']['reasonpm'] == 3)) {
 			cpmsg('members_edit_reason_invalid', '', 'error');
 		}
-
+		$my_data = array();
+		$mylogtype = '';
+		if(in_array($_G['gp_bannew'], array('post', 'visit', 'status'))) {
+			$my_data = array('uid' => $member['uid']);
+			if($_G['gp_delpost']) {
+				$my_data['otherid'] = 1;
+			}
+			$mylogtype = 'banuser';
+		} elseif($member['groupid'] == 4 || $member['groupid'] == 5 || $member['status'] == '-1') {
+			$my_data = array('uid' => $member['uid']);
+			$mylogtype = 'unbanuser';
+		}
 		if($_G['gp_bannew'] == 'post' || $_G['gp_bannew'] == 'visit') {
 			$groupidnew = $_G['gp_bannew'] == 'post' ? 4 : 5;
 			$_G['gp_banexpirynew'] = !empty($_G['gp_banexpirynew']) ? TIMESTAMP + $_G['gp_banexpirynew'] * 86400 : 0;
@@ -1209,13 +1508,9 @@ EOT;
 				$sql .= ', groupexpiry=0';
 			}
 			$adminidnew = -1;
-			$my_data = array('uid' => $member['uid'], 'expiry' => groupexpiry($member['groupterms']));
-			if($_G['gp_delpost']) {
-				$my_data['otherid'] = 1;
-			}
-			my_thread_log('banuser', $my_data);
+			$my_data['expiry'] = groupexpiry($member['groupterms']);
+			DB::delete('forum_postcomment', "authorid='$member[uid]' AND rpid>'0'");
 		} elseif($member['groupid'] == 4 || $member['groupid'] == 5) {
-			my_thread_log('unbanuser', array('uid' => $member['uid']));
 			if(!empty($member['groupterms']['main']['groupid'])) {
 				$groupidnew = $member['groupterms']['main']['groupid'];
 				$adminidnew = $member['groupterms']['main']['adminid'];
@@ -1229,6 +1524,14 @@ EOT;
 			$update = false;
 			$groupidnew = $member['groupid'];
 			$adminidnew = $member['adminid'];
+			if(in_array('avatar', $_G['gp_clear'])) {
+				$sql .= ', avatarstatus=\'0\'';
+				loaducenter();
+				uc_user_deleteavatar($member['uid']);
+			}
+		}
+		if(!empty($my_data) && !empty($mylogtype)) {
+			my_thread_log($mylogtype, $my_data);
 		}
 
 		$sql .= ", adminid='$adminidnew', groupid='$groupidnew', status='".($_G['gp_bannew'] == 'status' ? -1 : 0)."'";
@@ -1240,30 +1543,30 @@ EOT;
 
 		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".($member['groupterms'] ? addslashes(serialize($member['groupterms'])) : '')."' WHERE uid='$member[uid]'");
 
-		if($_G['gp_bannew'] && $_G['adminid'] == 1) {
+		if($_G['adminid'] == 1 && !empty($_G['gp_clear']) && is_array($_G['gp_clear'])) {
 			require_once libfile('function/delete');
-			if($_G['gp_delpost']) {
-				$query = DB::query("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE uid='$member[uid]'");
-				while($attach = DB::fetch($query)) {
-					dunlink($attach);
-				}
-
+			$membercount = array();
+			if(in_array('post', $_G['gp_clear'])) {
 				if($member['uid']) {
 					require_once libfile('function/post');
 
-					$pidsdelete = $tidsdelete = '0';
-					$postarray = getfieldsofposts('pid, fid, tid, first', "authorid='{$member['uid']}'");
-					foreach($postarray as $post) {
-						$prune['forums'][] = $post['fid'];
-						$prune['thread'][$post['tid']]++;
-						if($post['first']) {
-							$tidsdelete .= ",$post[tid]";
+					$tidsdelete = array();
+					loadcache('posttableids');
+					$posttables = empty($_G['cache']['posttableids']) ? array(0) : $_G['cache']['posttableids'];
+					foreach($posttables as $posttableid) {
+						$pidsdelete = array();
+						$query = DB::query('SELECT pid, fid, tid, first FROM '.DB::table(getposttable($posttableid))." WHERE authorid='{$member['uid']}'");
+						while($post = DB::fetch($query)) {
+							$prune['forums'][] = $post['fid'];
+							$prune['thread'][$post['tid']]++;
+							if($post['first']) {
+								$tidsdelete[] = $post['tid'];
+							}
+							$pidsdelete[] = $post['pid'];
 						}
-						$pidsdelete .= ",$post[pid]";
+						deletepost($pidsdelete, 'pid', false, $posttableid);
 					}
-					deletepost("pid IN ($pidsdelete)");
-					deletepost("tid IN ($tidsdelete)");
-					deletethread("tid IN ($tidsdelete)");
+					deletethread($tidsdelete);
 
 					if(!empty($prune)) {
 						foreach($prune['thread'] as $tid => $decrease) {
@@ -1278,13 +1581,15 @@ EOT;
 						updatecache('globalstick');
 					}
 				}
+				$membercount['posts'] = 0;
 			}
-			if($_G['gp_delblog']) {
+			if(in_array('blog', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='blogid'");
+				$membercount['blogs'] = 0;
 			}
-			if($_G['gp_delalbum']) {
+			if(in_array('album', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid='$member[uid]'");
 				$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				while ($value = DB::fetch($query)) {
@@ -1293,13 +1598,15 @@ EOT;
 
 				DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='albumid'");
+				$membercount['albums'] = 0;
 			}
-			if($_G['gp_delshare']) {
+			if(in_array('share', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='sid'");
+				$membercount['sharings'] = 0;
 			}
 
-			if($_G['gp_deldoing']) {
+			if(in_array('doing', $_G['gp_clear'])) {
 				$doids = array();
 				$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE uid='$member[uid]'");
 				while ($value = DB::fetch($query)) {
@@ -1307,14 +1614,24 @@ EOT;
 				}
 
 				DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid='$member[uid]'");
+				DB::update('common_member_field_home', array('recentnote' => '', 'spacenote' => ''), "uid='$member[uid]'");
 
 				$delsql = !empty($doids) ? "doid IN (".dimplode($doids).") OR " : "";
 				DB::query("DELETE FROM ".DB::table('home_docomment')." WHERE $delsql uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='doid'");
+				$membercount['doings'] = 0;
 			}
-			if($_G['gp_delcomment']) {
+			if(in_array('comment', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
 			}
+			if(in_array('postcomment', $_G['gp_clear'])) {
+				DB::query("DELETE FROM ".DB::table('forum_postcomment')." WHERE authorid='$member[uid]'");
+			}
+
+			if($membercount) {
+				DB::update('common_member_count', $membercount, "uid='$member[uid]'");
+			}
+
 		}
 
 		cpmsg('members_edit_succeed', 'action=members&operation=ban', 'succeed');
@@ -1331,7 +1648,7 @@ EOT;
 
 	$member = DB::fetch_first("SELECT username, adminid, groupid FROM ".DB::table('common_member')." WHERE $condition");
 	if(!$member) {
-		cpmsg('undefined_action', '', 'error');
+		cpmsg('members_not_found', '', 'error');
 	}
 
 	require_once libfile('function/forumlist');
@@ -1345,7 +1662,7 @@ EOT;
 		showsubmenu('members_access_edit');
 		showtips('members_access_tips');
 		showtableheader(cplang('members_access_now').' - '.$member['username'], 'nobottom fixpadding');
-		showsubtitle(array('forum', 'members_access_view', 'members_access_post', 'members_access_reply', 'members_access_getattach', 'members_access_postattach', 'members_access_postimage', 'members_access_adminuser', 'members_access_dateline'));
+		showsubtitle(array('forum', 'members_access_view', 'members_access_post', 'members_access_reply', 'members_access_getattach', 'members_access_getimage', 'members_access_postattach', 'members_access_postimage', 'members_access_adminuser', 'members_access_dateline'));
 
 		$accessmasks = array();
 		$query = DB::query("SELECT a.*, m.username as adminusername FROM ".DB::table('forum_access')." a LEFT JOIN ".DB::table('common_member')." m ON a.adminuser=m.uid WHERE a.uid='$_G[gp_uid]'");
@@ -1362,6 +1679,7 @@ EOT;
 					accessimg($access['allowpost']),
 					accessimg($access['allowreply']),
 					accessimg($access['allowgetattach']),
+					accessimg($access['allowgetimage']),
 					accessimg($access['allowpostattach']),
 					accessimg($access['allowpostimage']),
 					$access['adminusername'],
@@ -1380,6 +1698,7 @@ EOT;
 					'-',
 					'-',
 					'-',
+					'-',
 			));
 		}
 
@@ -1387,7 +1706,7 @@ EOT;
 		showformheader("members&operation=access&uid={$_G['gp_uid']}");
 		showtableheader(cplang('members_access_add'), 'notop fixpadding');
 		showsetting('members_access_add_forum', '', '', $forumlist);
-		foreach(array('view', 'post', 'reply', 'getattach', 'postattach', 'postimage') as $perm) {
+		foreach(array('view', 'post', 'reply', 'getattach', 'getimage', 'postattach', 'postimage') as $perm) {
 			showsetting('members_access_add_'.$perm, array('allow'.$perm.'new', array(
 				array(0, cplang('default')),
 				array(1, cplang('members_access_allowed')),
@@ -1406,16 +1725,17 @@ EOT;
 			$allowpostnew = !$_G['gp_allowpostnew'] ? 0 : ($_G['gp_allowpostnew'] > 0 ? 1 : -1);
 			$allowreplynew = !$_G['gp_allowreplynew'] ? 0 : ($_G['gp_allowreplynew'] > 0 ? 1 : -1);
 			$allowgetattachnew = !$_G['gp_allowgetattachnew'] ? 0 : ($_G['gp_allowgetattachnew'] > 0 ? 1 : -1);
+			$allowgetimagenew = !$_G['gp_allowgetimagenew'] ? 0 : ($_G['gp_allowgetimagenew'] > 0 ? 1 : -1);
 			$allowpostattachnew = !$_G['gp_allowpostattachnew'] ? 0 : ($_G['gp_allowpostattachnew'] > 0 ? 1 : -1);
 			$allowpostimagenew = !$_G['gp_allowpostimagenew'] ? 0 : ($_G['gp_allowpostimagenew'] > 0 ? 1 : -1);
 
 			if($allowviewnew == -1) {
-				$allowpostnew = $allowreplynew = $allowgetattachnew = $allowpostattachnew = $allowpostimagenew = -1;
-			} elseif($allowpostnew == 1 || $allowreplynew == 1 || $allowgetattachnew == 1 || $allowpostattachnew == 1 || $allowpostimagenew == 1) {
+				$allowpostnew = $allowreplynew = $allowgetattachnew = $allowgetimagenew = $allowpostattachnew = $allowpostimagenew = -1;
+			} elseif($allowpostnew == 1 || $allowreplynew == 1 || $allowgetattachnew == 1 || $allowgetimagenew == 1 || $allowpostattachnew == 1 || $allowpostimagenew == 1) {
 				$allowviewnew = 1;
 			}
 
-			if(!$allowviewnew && !$allowpostnew && !$allowreplynew && !$allowgetattachnew && !$allowpostattachnew && !$allowpostimagenew) {
+			if(!$allowviewnew && !$allowpostnew && !$allowreplynew && !$allowgetattachnew && !$allowgetimagenew && !$allowpostattachnew && !$allowpostimagenew) {
 				DB::query("DELETE FROM ".DB::table('forum_access')." WHERE uid='{$_G['gp_uid']}' AND fid='$addfid'");
 				if(!DB::result_first("SELECT count(*) FROM ".DB::table('forum_access')." WHERE uid='$_G[gp_uid]'")) {
 					DB::query("UPDATE ".DB::table('common_member')." SET accessmasks='0' WHERE uid='$_G[gp_uid]'");
@@ -1423,7 +1743,7 @@ EOT;
 			} else {
 				DB::query("REPLACE INTO ".DB::table('forum_access')." SET
 					uid='{$_G['gp_uid']}', fid='$addfid', allowview='$allowviewnew',
-					allowpost='$allowpostnew', allowreply='$allowreplynew', allowgetattach='$allowgetattachnew',
+					allowpost='$allowpostnew', allowreply='$allowreplynew', allowgetattach='$allowgetattachnew', allowgetimage='$allowgetimagenew',
 					allowpostattach='$allowpostattachnew', allowpostimage='$allowpostimagenew', adminuser='$_G[uid]', dateline='$_G[timestamp]'");
 				DB::query("UPDATE ".DB::table('common_member')." SET accessmasks='1' WHERE uid='{$_G['gp_uid']}'");
 			}
@@ -1442,8 +1762,48 @@ EOT;
 		$condition = !empty($_G['gp_uid']) ? "m.uid='{$_G['gp_uid']}'" : "m.username='{$_G['gp_username']}'";
 	}
 
-	$member = DB::fetch_first("SELECT m.*, mf.*, mc.*, mh.*, ms.*, mp.*, m.uid AS muid, u.type, uf.allowsigbbcode, uf.allowsigimgcode
-		FROM ".DB::table('common_member')." m
+	if(!empty($_G['setting']['connect']['allow']) && $do == 'bindlog') {
+		$member = DB::fetch_first("SELECT m.uid, m.username, mqc.conuin
+			FROM ".DB::table('common_member')." m
+			LEFT JOIN ".DB::table('common_member_connect')." mqc USING(uid)
+			WHERE $condition");
+		showsubmenu("$lang[members_edit] - $member[username]", array(
+			array('connect_member_info', 'members&operation=edit&uid='.$member['uid'],  0),
+			array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['uid'],  1),
+		));
+		if($member['conuin']) {
+			$query = DB::query("SELECT cml.*, m.username FROM ".DB::table('connect_memberbindlog')." cml
+				LEFT JOIN ".DB::table('common_member')." m ON m.uid=cml.uid
+				WHERE cml.uin='$member[conuin]' ORDER BY cml.dateline DESC");
+			showtableheader();
+			showtitle('connect_member_bindlog_uin');
+			showsubtitle(array('connect_member_bindlog_username', 'connect_member_bindlog_date', 'connect_member_bindlog_type'));
+			while($bindlog = DB::fetch($query)) {
+				showtablerow('', array(), array(
+					$bindlog['username'],
+					dgmdate($bindlog['dateline']),
+					cplang('connect_member_bindlog_type_'.$bindlog['type']),
+				));
+			}
+			showtablefooter();
+		}
+
+		$query = DB::query("SELECT * FROM ".DB::table('connect_memberbindlog')." WHERE uid='$member[uid]' ORDER BY dateline DESC");
+		showtableheader();
+		showtitle('connect_member_bindlog_uid');
+		showsubtitle(array('connect_member_bindlog_date', 'connect_member_bindlog_type'));
+		while($bindlog = DB::fetch($query)) {
+			showtablerow('', array(), array(
+				dgmdate($bindlog['dateline']),
+				cplang('connect_member_bindlog_type_'.$bindlog['type']),
+			));
+		}
+		showtablefooter();
+		exit;
+	}
+	$member = DB::fetch_first("SELECT m.*, mf.*, mc.*, mh.*, ms.*, mp.*,".(!empty($_G['setting']['connect']['allow']) ? " mqc.*," : '')." m.uid AS muid, u.type, uf.allowsigbbcode, uf.allowsigimgcode ".
+		(!empty($_G['setting']['connect']['allow']) ? ", cub.uin AS uinblack " : '').
+		"FROM ".DB::table('common_member')." m
 		LEFT JOIN ".DB::table('common_member_field_forum')." mf ON mf.uid=m.uid
 		LEFT JOIN ".DB::table('common_member_field_home')." mh ON mh.uid=m.uid
 		LEFT JOIN ".DB::table('common_usergroup')." u ON u.groupid=m.groupid
@@ -1451,7 +1811,9 @@ EOT;
 		LEFT JOIN ".DB::table('common_member_count')." mc ON mc.uid=m.uid
 		LEFT JOIN ".DB::table('common_member_status')." ms ON ms.uid=m.uid
 		LEFT JOIN ".DB::table('common_member_profile')." mp ON mp.uid=m.uid
-		WHERE $condition");
+		".(!empty($_G['setting']['connect']['allow']) ? "LEFT JOIN ".DB::table('common_uin_black')." cub ON cub.uid=m.uid
+		LEFT JOIN ".DB::table('common_member_connect')." mqc ON mqc.uid=m.uid " : '').
+		"WHERE $condition");
 
 	if(!$member) {
 		cpmsg('members_edit_nonexistence', '', 'error');
@@ -1489,19 +1851,28 @@ EOT;
 		$member['signature'] = html2bbcode($member['sightml']);
 
 		shownav('user', 'members_edit');
-		showsubmenu("$lang[members_edit] - $member[username]");
+		showsubmenu("$lang[members_edit] - $member[username]", array(
+			array('connect_member_info', 'members&operation=edit&uid='.$member['muid'],  1),
+			!empty($_G['setting']['connect']['allow']) ? array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['muid'],  0) : array(),
+		));
 		showformheader("members&operation=edit&uid=$uid", 'enctype');
 		showtableheader();
 		$status = array($member['status'] => ' checked');
-		showsetting('members_edit_username', '', '', ' '.$member['username']);
-		showsetting('members_edit_avatar', '', '', ' '.avatar($uid).'<br /><br /><input name="clearavatar" class="checkbox" type="checkbox" value="1" /> '.$lang['members_edit_avatar_clear']);
+		showsetting('members_edit_username', '', '', ($member['conisbind'] ? ' <img class="vmiddle" src="static/image/common/connect_qq.gif" />' : '').' '.$member['username']);
+		showsetting('members_edit_avatar', '', '', ' <img src="'.avatar($uid, 'middle', true, false, true).'?random='.random(2).'" onerror="this.onerror=null;this.src=\''.$_G['setting']['ucenterurl'].'/images/noavatar_middle.gif\'" /><br /><br /><input name="clearavatar" class="checkbox" type="checkbox" value="1" /> '.$lang['members_edit_avatar_clear']);
 		showsetting('members_edit_statistics', '', '', "<a href=\"".ADMINSCRIPT."?action=prune&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[posts]($member[posts])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=doing&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[doings]($member[doings])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=blog&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[blogs]($member[blogs])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=album&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[albums]($member[albums])</a>".
 				"<a href=\"".ADMINSCRIPT."?action=share&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[shares]($member[sharings])</a> <br>&nbsp;$lang[setting_styles_viewthread_userinfo_oltime]: $member[oltime]$lang[hourtime]");
 		showsetting('members_edit_password', 'passwordnew', '', 'text');
-		showsetting('members_edit_clearquestion', 'clearquestion', !$member['secques'], 'radio');
+		if(!empty($_G['setting']['connect']['allow'])) {
+			if($member['conisbind'] && !$member['conisregister']) {
+				showsetting('members_edit_unbind', 'connectunbind', 0, 'radio');
+			}
+			showsetting('members_edit_uinblack', 'uinblack', $member['uinblack'], 'radio', '', 0, cplang('members_edit_uinblack_comment').($member['conisregister'] ? cplang('members_edit_uinblack_notice') : ''));
+		}
+		showsetting('members_edit_clearquestion', 'clearquestion', 0, 'radio');
 		showsetting('members_edit_status', 'statusnew', $member['status'], 'radio');
 		showsetting('members_edit_email', 'emailnew', $member['email'], 'text');
 		showsetting('members_edit_email_emailstatus', 'emailstatusnew', $member['emailstatus'], 'radio');
@@ -1543,8 +1914,18 @@ EOT;
 
 		$questionid = $_G['gp_clearquestion'] ? 0 : '';
 		$ucresult = uc_user_edit($member['username'], $_G['gp_passwordnew'], $_G['gp_passwordnew'], $_G['gp_emailnew'], 1, $questionid);
+		if($ucresult < 0) {
+			if($ucresult == -4) {
+				cpmsg('members_email_illegal', '', 'error');
+			} elseif($ucresult == -5) {
+				cpmsg('members_email_domain_illegal', '', 'error');
+			} elseif($ucresult == -6) {
+				cpmsg('members_email_duplicate', '', 'error');
+			}
+		}
 
 		if($_G['gp_clearavatar']) {
+			DB::query("UPDATE ".DB::table('common_member')." SET avatarstatus='0' WHERE uid='{$_G['gp_uid']}'");
 			uc_user_deleteavatar($member['uid']);
 		}
 
@@ -1565,14 +1946,16 @@ EOT;
 		$fieldarr = array();
 		include_once libfile('function/profile');
 		foreach($_POST as $field_key=>$field_val) {
-			if(isset($fields[$field_key]) && profile_check($field_key, $field_val)) {
+			if(isset($fields[$field_key]) && (profile_check($field_key, $field_val) || $_G['adminid'] == 1)) {
 				$fieldarr[$field_key] = "$field_key='".$field_val."'";
 			}
 		}
 		if($_G['gp_deletefile'] && is_array($_G['gp_deletefile'])) {
 			foreach($_G['gp_deletefile'] as $key => $value) {
-				@unlink(getglobal('setting/attachdir').'./profile/'.$member[$key]);
-				$fieldarr[$key] = "$key=''";
+				if(isset($fields[$key])) {
+					@unlink(getglobal('setting/attachdir').'./profile/'.$member[$key]);
+					$fieldarr[$key] = "$key=''";
+				}
 			}
 
 		}
@@ -1581,30 +1964,45 @@ EOT;
 			$upload = new discuz_upload();
 
 			foreach($_FILES as $key => $file) {
-				$upload->init($file, 'profile');
-				$attach = $upload->attach;
+				if(isset($fields[$key])) {
+					$upload->init($file, 'profile');
+					$attach = $upload->attach;
 
-				if(!$upload->error()) {
-					$upload->save();
+					if(!$upload->error()) {
+						$upload->save();
 
-					if(!$upload->get_image_info($attach['target'])) {
-						@unlink($attach['target']);
-						continue;
+						if(!$upload->get_image_info($attach['target'])) {
+							@unlink($attach['target']);
+							continue;
+						}
+						$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
+						@unlink(getglobal('setting/attachdir').'./profile/'.$member[$key]);
+						$fieldarr[$key] = "$key='".$attach['attachment']."'";
 					}
-					$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
-					@unlink(getglobal('setting/attachdir').'./profile/'.$member[$key]);
-					$fieldarr[$key] = "$key='".$attach['attachment']."'";
 				}
 			}
 		}
 
 		$emailadd = $ucresult < 0 ? '' : "email='$_G[gp_emailnew]', ";
-		$passwordadd = $ucresult < 0 ? '' : ", password='".md5(random(10))."'";
+		$passwordadd = ($ucresult < 0 || empty($_G['gp_passwordnew'])) ? '' : ", password='".md5(random(10))."'";
 
 		$addsize = intval($_G['gp_addsizenew']);
 		$addfriend = intval($_G['gp_addfriendnew']);
 		$status = intval($_G['gp_statusnew']) ? -1 : 0;
 		$emailstatusnew = intval($_G['gp_emailstatusnew']);
+		if(!empty($_G['setting']['connect']['allow'])) {
+			if($member['uinblack'] && empty($_G['gp_uinblack'])) {
+				DB::delete('common_uin_black', "uin='$member[uinblack]'");
+				updatecache('connect_blacklist');
+			} elseif(!$member['uinblack'] && !empty($_G['gp_uinblack'])) {
+				connectunbind($member);
+				DB::insert('common_uin_black', array('uin' => $member['conuin'], 'uid' => $uid, 'dateline' => TIMESTAMP), false, true);
+				updatecache('connect_blacklist');
+			}
+			if($member['conisbind'] && !$member['conisregister'] && !empty($_G['gp_connectunbind'])) {
+				connectunbind($member);
+			}
+		}
 		DB::query("UPDATE ".DB::table('common_member')." SET $emailadd regdate='$regdatenew', emailstatus='$emailstatusnew', status='$status', timeoffset='{$_G['gp_timeoffsetnew']}' $passwordadd WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_field_home')." SET addsize='$addsize', addfriend='$addfriend' WHERE uid='{$_G['gp_uid']}'");
 		DB::query("UPDATE ".DB::table('common_member_count')." SET posts='{$_G['gp_postsnew']}', digestposts='{$_G['gp_digestpostsnew']}' WHERE uid='{$_G['gp_uid']}'");
@@ -1638,8 +2036,8 @@ EOT;
 				}
 			}
 			$disabled = $_G['adminid'] != 1 && $banned['admin'] != $_G['member']['username'] ? 'disabled' : '';
-			$banned['dateline'] = dgmdate($banned['dateline'], 'd');
-			$banned['expiration'] = dgmdate($banned['expiration'], 'd');
+			$banned['dateline'] = dgmdate($banned['dateline'], 'Y-m-d');
+			$banned['expiration'] = dgmdate($banned['expiration'], 'Y-m-d');
 			$theip = "$banned[ip1].$banned[ip2].$banned[ip3].$banned[ip4]";
 			$ipbanned .= showtablerow('', array('class="td25"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[$banned[id]]\" value=\"$banned[id]\" $disabled />",
@@ -1748,12 +2146,19 @@ EOT;
 		$field['isfixed1'] = in_array($fieldid, $fixedfields1);
 		$field['isfixed2'] = $field['isfixed1'] || in_array($fieldid, $fixedfields2);
 		$field['customable'] = preg_match('/^field[1-8]$/i', $fieldid);
-
+		$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='profilegroup'");
+		if(!empty($result['svalue'])) {
+			$profilegroup = unserialize($result['svalue']);
+		}
 		$profilevalidate = array();
 		include libfile('spacecp/profilevalidate', 'include');
 		$field['validate'] = $field['validate'] ? $field['validate'] : ($profilevalidate[$fieldid] ? $profilevalidate[$fieldid] : '');
 		if(!submitcheck('editsubmit')) {
-			showsubmenu("$lang[members_profile_edit] - $field[title]");
+			showsubmenu($lang['members_profile'].'-'.$field['title'], array(
+				array('members_profile_list', 'members&operation=profile', 0),
+				array($lang['edit'], 'members&operation=profile&fieldid='.$_G['gp_fieldid'], 1)
+			));
+
 			showformheader('members&operation=profile&fieldid='.$fieldid);
 			showtableheader();
 			if($field['customable']) {
@@ -1791,7 +2196,6 @@ EOT;
 				showsetting('members_profile_edit_needverify', 'needverify', $field['needverify'], 'radio');
 				showsetting('members_profile_edit_required', 'required', $field['required'], 'radio');
 			}
-			showsetting('members_profile_edit_showinregister', 'showinregister', $field['showinregister'], 'radio');
 			showsetting('members_profile_edit_invisible', 'invisible', $field['invisible'], 'radio');
 			$privacyselect = array(
 				array('0', cplang('members_profile_edit_privacy_public')),
@@ -1800,8 +2204,38 @@ EOT;
 			);
 			showsetting('members_profile_edit_default_privacy', array('privacy', $privacyselect), $_G['setting']['privacy']['profile'][$fieldid], 'select');
 			showsetting('members_profile_edit_showincard', 'showincard', $field['showincard'], 'radio');
-			showsetting('members_profile_edit_showinthread', 'showinthread', $field['showinthread'], 'radio');
+			showsetting('members_profile_edit_showinregister', 'showinregister', $field['showinregister'], 'radio');
 			showsetting('members_profile_edit_allowsearch', 'allowsearch', $field['allowsearch'], 'radio');
+			if(!empty($profilegroup)) {
+				$groupstr = '';
+				foreach($profilegroup as $key => $value) {
+					if($value['available']) {
+						if(in_array($fieldid, $value['field'])) {
+							$checked = ' checked="checked" ';
+							$class = ' class="checked" ';
+						} else {
+							$class = $checked = '';
+						}
+						$groupstr .= "<li $class style=\"float: left; width: 10%;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]</li>";
+					}
+				}
+				if(!empty($groupstr)) {
+					print <<<EOF
+						<tr>
+							<td class="td27" colspan="2">$lang[setting_profile_group]:</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<ul class="dblist" onmouseover="altStyle(this);">
+									<li style="width: 100%;"><input type="checkbox" name="chkall" onclick="checkAll('prefix', this.form, 'profilegroup')" class="checkbox">&nbsp;$lang[select_all]</li>
+									$groupstr
+								</ul>
+							</td>
+						</tr>
+EOF;
+				}
+			}
+
 			showsetting('members_profile_edit_display_order', 'displayorder', $field['displayorder'], 'text');
 			showsubmit('editsubmit');
 			showtablefooter();
@@ -1812,7 +2246,6 @@ EOT;
 			$setarr = array(
 				'invisible' => intval($_POST['invisible']),
 				'showincard' => intval($_POST['showincard']),
-				'showinthread' => intval($_POST['showinthread']),
 				'showinregister' => intval($_POST['showinregister']),
 				'allowsearch' => intval($_POST['allowsearch']),
 				'displayorder' => intval($_POST['displayorder'])
@@ -1856,63 +2289,116 @@ EOT;
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthyear'));
 			} elseif($_GET['fieldid'] == 'birthcity') {
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthprovince'));
+				$setarr['required'] = 0;
+				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthdist'));
+				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthcommunity'));
 			} elseif($_GET['fieldid'] == 'residecity') {
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'resideprovince'));
 				$setarr['required'] = 0;
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'residedist'));
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'residecommunity'));
+			} elseif($_GET['fieldid'] == 'idcard') {
+				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'idcardtype'));
+			}
+			if(!empty($_G['gp_profilegroup']) && is_array($_G['gp_profilegroup'])) {
+				foreach($profilegroup as $type => $pgroup) {
+					if(in_array($type, $_G['gp_profilegroup'])) {
+						$profilegroup[$type]['field'][$fieldid] = $fieldid;
+					} else {
+						unset($profilegroup[$type]['field'][$fieldid]);
+					}
+				}
+				DB::insert('common_setting', array('skey'=>'profilegroup', 'svalue'=> addslashes(serialize($profilegroup))), false, true);
 			}
 			require_once libfile('function/cache');
-			updatecache(array('profilesetting','fields_required', 'fields_optional', 'fields_register'));
 			if(!isset($_G['setting']['privacy']['profile']) || $_G['setting']['privacy']['profile'][$fieldid] != $_POST['privacy']) {
 				$_G['setting']['privacy']['profile'][$fieldid] = $_POST['privacy'];
 				DB::insert('common_setting', array('skey'=>'privacy', 'svalue'=> addslashes(serialize($_G['setting']['privacy']))), false, true);
-				updatecache('setting');
 			}
+			updatecache(array('profilesetting','fields_required', 'fields_optional', 'fields_register', 'setting'));
+			include_once libfile('function/block');
+			loadcache('profilesetting', true);
+			blockclass_cache();
 			cpmsg('members_profile_edit_succeed', 'action=members&operation=profile', 'succeed');
 		}
 	} else {
 
-		$query = DB::query("SELECT title, fieldid, description, available, formtype, displayorder FROM ".DB::table('common_member_profile_setting')." ORDER BY available DESC, displayorder");
+		$query = DB::query("SELECT title, displayorder, available, invisible, showincard, showinregister, fieldid FROM ".DB::table('common_member_profile_setting')." ORDER BY available DESC, displayorder");
 		$list = array();
 		while($value = DB::fetch($query)) {
-			$list[$value['fieldid']] = $value;
+			$fieldid = $value['fieldid'];
+			unset($value['fieldid']);
+			$list[$fieldid] = $value;
 		}
 
 		unset($list['birthyear']);
 		unset($list['birthmonth']);
-		unset($list['resideprovince']);
 		unset($list['birthprovince']);
+		unset($list['birthdist']);
+		unset($list['birthcommunity']);
+		unset($list['resideprovince']);
 		unset($list['residedist']);
 		unset($list['residecommunity']);
+		unset($list['idcardtype']);
 
 		if(!submitcheck('ordersubmit')) {
-			showsubmenu("$lang[members_profile_edit]");
+			$_G['gp_anchor'] = in_array($_G['gp_action'], array('members', 'setting')) ? $_G['gp_action'] : 'members';
+			$current = array($_G['gp_anchor'] => 1);
+			$profilenav = array(
+					array('members_profile_list', 'members&operation=profile', $current['members']),
+					array('members_profile_group', 'setting&operation=profile', $current['setting'])
+				);
+			showsubmenu($lang['members_profile'], $profilenav);
 			showtips('members_profile_tips');
 			showformheader('members&operation=profile');
 			showtableheader('members_profile', 'nobottom', 'id="porfiletable"');
-			echo '<tr><th>'.$lang['members_profile_edit_name'].'</th><th>'.$lang['members_profile_edit_field'].'</th><th>'.$lang['members_profile_edit_field_desc'].'</th><th>'.$lang['members_profile_edit_available'].'</th><th>'.$lang['members_profile_edit_field_type'].'</th><th>'.$lang['members_profile_edit_display_order'].'</th></tr>';
-			foreach($list as $key => $value) {
-				$value['available'] = $value['available'] ? $lang['yes'] : $lang['no'];
-				$value['formtype'] = $lang['members_profile_edit_'.$value['formtype']];
-				$value['displayorder'] = '<input type="text" name="displayorder['.$value['fieldid'].']" value="'.$value['displayorder'].'" size="5">';
-				$value['edit'] = '<a href="'.ADMINSCRIPT.'?action=members&operation=profile&fieldid='.$value['fieldid'].'" title="" class="act">'.$lang[edit].'</a>';
+			showsubtitle(array('members_profile_edit_name', 'members_profile_edit_display_order', 'members_profile_edit_available', 'members_profile_edit_profile_view', 'members_profile_edit_card_view', 'members_profile_edit_reg_view', ''));
+			foreach($list as $fieldid => $value) {
+				$value['available'] = '<input type="checkbox" class="checkbox" name="available['.$fieldid.']" '.($value['available'] ? 'checked="checked" ' : '').'value="1">';
+				$value['invisible'] = '<input type="checkbox" class="checkbox" name="invisible['.$fieldid.']" '.(!$value['invisible'] ? 'checked="checked" ' : '').'value="1">';
+				$value['showincard'] = '<input type="checkbox" class="checkbox" name="showincard['.$fieldid.']" '.($value['showincard'] ? 'checked="checked" ' : '').'value="1">';
+				$value['showinregister'] = '<input type="checkbox" class="checkbox" name="showinregister['.$fieldid.']" '.($value['showinregister'] ? 'checked="checked" ' : '').'value="1">';
+				$value['displayorder'] = '<input type="text" name="displayorder['.$fieldid.']" value="'.$value['displayorder'].'" size="5">';
+				$value['edit'] = '<a href="'.ADMINSCRIPT.'?action=members&operation=profile&fieldid='.$fieldid.'" title="" class="act">'.$lang[edit].'</a>';
 				showtablerow('', array('width="40" class="td22"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"', 'class="td28"'), $value);
 			}
 			showsubmit('ordersubmit');
 			showtablefooter();
 			showformfooter();
 		} else {
-			if(!empty($_G['gp_displayorder'])) {
-				foreach ($_G['gp_displayorder'] as $fieldid => $value) {
-					$orders = $list[$fieldid]['displayorder'];
-					if($orders != $value) {
-						DB::update('common_member_profile_setting', array('displayorder'=>intval($value)), array('fieldid'=>$fieldid));
-					}
+			foreach($_G['gp_displayorder'] as $fieldid => $value) {
+				$setarr = array(
+					'displayorder' => intval($value),
+					'invisible' => intval($_G['gp_invisible'][$fieldid]) ? 0 : 1,
+					'available' => intval($_G['gp_available'][$fieldid]),
+					'showincard' => intval($_G['gp_showincard'][$fieldid]),
+					'showinregister' => intval($_G['gp_showinregister'][$fieldid]),
+				);
+				DB::update('common_member_profile_setting', $setarr, array('fieldid' => $fieldid));
+
+				if($fieldid == 'birthday') {
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthmonth'));
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthyear'));
+				} elseif($fieldid == 'birthcity') {
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthprovince'));
+					$setarr['required'] = 0;
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthdist'));
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'birthcommunity'));
+				} elseif($fieldid == 'residecity') {
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'resideprovince'));
+					$setarr['required'] = 0;
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'residedist'));
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'residecommunity'));
+				} elseif($fieldid == 'idcard') {
+					DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'idcardtype'));
 				}
+
 			}
 			require_once libfile('function/cache');
-			updatecache(array('profilesetting','fields_required', 'fields_optional'));
+			updatecache(array('profilesetting', 'fields_required', 'fields_optional', 'fields_register', 'setting'));
+			include_once libfile('function/block');
+			loadcache('profilesetting', true);
+			blockclass_cache();
 			cpmsg('members_profile_edit_succeed', 'action=members&operation=profile', 'succeed');
 		}
 	}
@@ -2018,8 +2504,8 @@ EOT;
 			}
 
 			showtablefooter();
-			$optype_html = '<input type="radio" name="optype" id="optype_option" value="option" /><label for="optype_option">'.cplang('members_stat_update_option').'</label>&nbsp;&nbsp;'
-					.'<input type="radio" name="optype" id="optype_data" value="data" /><label for="optype_data">'.cplang('members_stat_update_data').'</label>';
+			$optype_html = '<input type="radio" class="radio" name="optype" id="optype_option" value="option" /><label for="optype_option">'.cplang('members_stat_update_option').'</label>&nbsp;&nbsp;'
+					.'<input type="radio" class="radio" name="optype" id="optype_data" value="data" /><label for="optype_data">'.cplang('members_stat_update_data').'</label>';
 			showsubmit('statsubmit', 'submit', $optype_html);
 			showformfooter();
 
@@ -2101,13 +2587,43 @@ function showsearchform($operation = '') {
 
 	showtagheader('div', 'searchmembers', !$_G['gp_submit']);
 	echo '<script src="static/js/calendar.js" type="text/javascript"></script>';
+	echo '<style type="text/css">#residedistrictbox select, #birthdistrictbox select{width: auto;}</style>';
 	showformheader("members&operation=$operation", "onSubmit=\"if($('updatecredittype1') && $('updatecredittype1').checked && !window.confirm('$lang[members_reward_clean_alarm]')){return false;} else {return true;}\"");
 	showtableheader();
 	showsetting('members_search_user', 'username', $_G['gp_username'], 'text');
 	showsetting('members_search_uid', 'uid', $_G['gp_uid'], 'text');
-	showsetting('members_search_group', '', '', '<select name="groupid[]" multiple="multiple" size="10"><option value="all"'.(in_array('all', $usergroupid) ? ' selected' : '').'>'.cplang('unlimited').'</option>'.$groupselect.'</select>');
+	showsetting('members_search_group', '', '', '<select name="groupid[]" multiple="multiple" size="10">'.$groupselect.'</select>');
+	showtablefooter();
 
+	showtableheader();
+	$_G['showsetting_multirow'] = 1;
 	showtagheader('tbody', 'advanceoption');
+	if(!empty($_G['setting']['connect']['allow'])) {
+		showsetting('members_search_conisbind', array('conisbind', array(
+			array(1, $lang['yes']),
+			array(0, $lang['no']),
+		), 1), $_G['gp_conisbind'], 'mradio');
+		showsetting('members_search_uinblacklist', array('uin_low', array(
+			array(1, $lang['yes']),
+			array(0, $lang['no']),
+		), 1), $_G['gp_uin_low'], 'mradio');
+	}
+	showsetting('members_search_online', array('sid_noempty', array(
+		array(1, $lang['yes']),
+		array(0, $lang['no']),
+	), 1), $_G['gp_online'], 'mradio');
+	showsetting('members_search_lockstatus', array('status', array(
+		array(-1, $lang['yes']),
+		array(0, $lang['no']),
+	), 1), $_G['gp_status'], 'mradio');
+	showsetting('members_search_emailstatus', array('emailstatus', array(
+		array(1, $lang['yes']),
+		array(0, $lang['no']),
+	), 1), $_G['gp_emailstatus'], 'mradio');
+	showsetting('members_search_avatarstatus', array('avatarstatus', array(
+		array(1, $lang['yes']),
+		array(0, $lang['no']),
+	), 1), $_G['gp_avatarstatus'], 'mradio');
 	showsetting('members_search_email', 'email', $_G['gp_email'], 'text');
 	showsetting("$lang[credits] $lang[members_search_between]", array("credits_low", "credits_high"), array($_G['gp_credits_low'], $_G['gp_credtis_high']), 'range');
 
@@ -2117,28 +2633,25 @@ function showsearchform($operation = '') {
 		}
 	}
 
-	showsetting('members_search_postsrange', array('posts_low', 'posts_high'), array($_G['gp_posts_high'], $_G['gp_posts_low']), 'range');
+	showsetting('members_search_friendsrange', array('friends_low', 'friends_high'), array($_G['gp_friends_low'], $_G['gp_friends_high']), 'range');
+	showsetting('members_search_postsrange', array('posts_low', 'posts_high'), array($_G['gp_posts_low'], $_G['gp_posts_high']), 'range');
 	showsetting('members_search_regip', 'regip', $_G['gp_regip'], 'text');
 	showsetting('members_search_lastip', 'lastip', $_G['gp_lastip'], 'text');
 	showsetting('members_search_regdaterange', array('regdate_after', 'regdate_before'), array($_G['gp_regdate_after'], $_G['gp_regdate_before']), 'daterange');
 	showsetting('members_search_lastvisitrange', array('lastvisit_after', 'lastvisit_before'), array($_G['gp_lastvisit_after'], $_G['gp_lastvisit_before']), 'daterange');
 	showsetting('members_search_lastpostrange', array('lastpost_after', 'lastpost_before'), array($_G['gp_lastpost_after'], $_G['gp_lastpost_before']), 'daterange');
-	showsetting('members_search_lockstatus', array('status', array(
-		array(-1, $lang['yes']),
-		array(0, $lang['no']),
-	)), $_G['gp_status'], 'mradio');
-	showsetting('members_search_emailstatus', array('emailstatus', array(
-		array(1, $lang['yes']),
-		array(0, $lang['no']),
-	)), $_G['gp_emailstatus'], 'mradio');
-	showsetting('members_search_avatarstatus', array('avatarstatus', array(
-		array(1, $lang['yes']),
-		array(0, $lang['no']),
-	)), $_G['gp_avatarstatus'], 'mradio');
-	showsetting('members_search_videostatus', array('videophotostatus', array(
-		array(1, $lang['yes']),
-		array(0, $lang['no']),
-	)), $_G['gp_videophotostatus'], 'mradio');
+	showsetting('members_search_group_fid', 'fid', $_G['gp_fid'], 'text');
+	if($_G['setting']['verify']) {
+		$verifydata = array();
+		foreach($_G['setting']['verify'] as $key => $value) {
+			if($value['available']) {
+				$verifydata[] = array('verify'.$key, $value['title']);
+			}
+		}
+		if(!empty($verifydata)) {
+			showsetting('members_search_verify', array('verify', $verifydata), $_G['gp_verify'], 'mcheckbox');
+		}
+	}
 	$yearselect = $monthselect = $dayselect = "<option value=\"\">".cplang('nolimit')."</option>\n";
 	$yy=dgmdate(TIMESTAMP, 'Y');
 	for($y=$yy; $y>=$yy-100; $y--) {
@@ -2160,13 +2673,23 @@ function showsearchform($operation = '') {
 	unset($_G['cache']['profilesetting']['birthyear']);
 	unset($_G['cache']['profilesetting']['birthmonth']);
 	unset($_G['cache']['profilesetting']['birthday']);
+	require_once libfile('function/profile');
 	foreach($_G['cache']['profilesetting'] as $fieldid=>$value) {
+		if(!$value['available'] || in_array($fieldid, array('birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
+			continue;
+		}
 		if($fieldid == 'gender') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			$select .= "<option value=\"0\">".cplang('members_edit_gender_secret')."</option>\n";
 			$select .= "<option value=\"1\">".cplang('members_edit_gender_male')."</option>\n";
 			$select .= "<option value=\"2\">".cplang('members_edit_gender_female')."</option>\n";
 			showsetting($value['title'], '', '', '<select class="txt" name="gender">'.$select.'</select>');
+		} elseif($fieldid == 'birthcity') {
+			$elems = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
+			showsetting($value['title'], '', '', '<div id="birthdistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'birthdistrictbox', 1).'</div>');
+		} elseif($fieldid == 'residecity') {
+			$elems = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
+			showsetting($value['title'], '', '', '<div id="residedistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'residedistrictbox', 1).'</div>');
 		} elseif($fieldid == 'constellation') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			for($i=1; $i<=12; $i++) {
@@ -2194,6 +2717,7 @@ function showsearchform($operation = '') {
 		}
 	}
 	showtagfooter('tbody');
+	$_G['showsetting_multirow'] = 0;
 	showsubmit('submit', $operation == 'clean' ? 'members_delete' : 'search', '', 'more_options');
 	showtablefooter();
 	showformfooter();
@@ -2232,18 +2756,25 @@ function countmembers($condition, &$urladd) {
 function shownewsletter() {
 	global $lang;
 
-	showtablerow('', array('class="th11"', 'class="longtxt"'), array(
-		$lang['members_newsletter_subject'],
-		'<input type="text" class="txt" name="subject" size="80" value="" />'
-	));
-	showtablerow('', array('class="th12"', ''), array(
-		$lang['members_newsletter_message'],
-		'<textarea name="message" class="tarea" cols="80" rows="10"></textarea>'
-	));
-	showtablerow('', array('', 'class="td12"'), array(
-		'',
-		'<ul><li><input class="radio" type="radio" value="email" name="notifymembers" id="viaemail" /><label for="viaemail"> '.$lang['email'].'</label></li><li><input class="radio" type="radio" value="pm" checked="checked" name="notifymembers" id="viapm" /><label for="viapm"> '.$lang['notice'].'</label></li><li><span class="diffcolor2">'.$lang['members_newsletter_num'].'</span><input type="text" class="txt" name="pertask" value="100" size="10"></li></ul>'
-	));
+	showtableheader();
+	showsetting('members_newsletter_subject', 'subject', '', 'text');
+	showsetting('members_newsletter_message', 'message', '', 'textarea');
+	showsetting('members_newsletter_method', array('notifymembers', array(
+	    array('email', $lang['email'], array('pmextra' => 'none', 'posttype' => '')),
+	    array('notice', $lang['notice'], array('pmextra' => 'none', 'posttype' => 'none')),
+	    array('pm', $lang['grouppm'], array('pmextra' => '', 'posttype' => 'none')),
+	)), 'pm', 'mradio');
+	showtagheader('tbody', 'posttype', '', 'sub');
+	showsetting('members_newsletter_posttype', array('posttype', array(
+			array(0, cplang('members_newsletter_posttype_text')),
+			array(1, cplang('members_newsletter_posttype_html')),
+		), TRUE), '0', 'mradio');
+	showtagfooter('tbody');
+	showtagheader('tbody', 'pmextra', true, 'sub');
+	showsetting('members_newsletter_system', 'system', 0, 'radio');
+	showtagfooter('tbody');
+	showsetting('members_newsletter_num', 'pertask', 100, 'text');
+	showtablefooter();
 
 }
 
@@ -2266,6 +2797,8 @@ function notifymembers($operation, $variable) {
 		$message = $_G['gp_message'];
 		$subject = trim($subject);
 		$message = trim(str_replace("\t", ' ', $message));
+		$message = stripslashes($message);
+		$addmsg = '';
 		if(($_G['gp_notifymembers'] && $_G['gp_notifymember']) && !($subject && $message)) {
 			cpmsg('members_newsletter_sm_invalid', '', 'error');
 		}
@@ -2279,6 +2812,7 @@ function notifymembers($operation, $variable) {
 						$value = intval($value);
 						if(isset($_G['setting']['extcredits'][$key]) && !empty($value)) {
 							$updatesql .= ", extcredits{$key}=extcredits{$key}+($value)";
+							$addmsg .= $_G['setting']['extcredits'][$key]['title'].": ".($value > 0 ? '<em class="xi1">+' : '<em class="xg1">')."$value</em> ".$_G['setting']['extcredits'][$key]['unit'].' &nbsp; ';
 						}
 					}
 				}
@@ -2288,9 +2822,13 @@ function notifymembers($operation, $variable) {
 						$value = intval($value);
 						if(isset($_G['setting']['extcredits'][$key]) && !empty($value)) {
 							$updatesql .= ", extcredits{$key}=0";
+							$addmsg .= $_G['setting']['extcredits'][$key]['title'].': <em class="xg1">'.cplang('members_reward_clean').'</em> &nbsp; ';
 						}
 					}
 				}
+			}
+			if($addmsg) {
+				$addmsg  = ' &nbsp; <br /><br /><b>'.cplang('members_reward_affect').':</b><br \>'.$addmsg;
 			}
 
 			if(!empty($updatesql)) {
@@ -2322,7 +2860,7 @@ function notifymembers($operation, $variable) {
 			$medals = $_G['gp_medals'];
 			if(!empty($medals)) {
 				$medalids = $comma = '';
-				foreach($medals as $key=> $medalid) {
+				foreach($medals as $key => $medalid) {
 					$medalids .= "$comma'$key'";
 					$comma = ',';
 				}
@@ -2344,13 +2882,18 @@ function notifymembers($operation, $variable) {
 				if($uids) {
 					$query = DB::query("SELECT uid, medals FROM ".DB::table('common_member_field_forum')." WHERE uid IN (".dimplode($uids).")");
 					while($medalnew = DB::fetch($query)) {
-
+						$usermedal = array();
 						$addmedalnew = '';
 						if(empty($medalnew['medals'])) {
 							$addmedalnew = $medalsnew;
 						} else {
 							foreach($medalidarray as $medalid) {
-								if(!in_array($medalid, explode("\t", $medalnew['medals']))){
+								$usermedal_arr = explode("\t", $medalnew['medals']);
+								foreach($usermedal_arr AS $key => $medalval) {
+									list($usermedalid,) = explode("|", $medalval);
+									$usermedal[] = $usermedalid;
+								}
+								if(!in_array($medalid, $usermedal)){
 									$addmedalnew .= $medalid."\t";
 								}
 							}
@@ -2376,7 +2919,46 @@ function notifymembers($operation, $variable) {
 			if(!$_G['gp_notifymembers']) {
 				cpmsg('members_confermedal_succeed', '', 'succeed');
 			}
+		} elseif ($operation == 'confermagic') {
+			$magics = $_G['gp_magic'];
+			$magicnum = $_G['gp_magicnum'];
+			if($magics) {
+				require_once libfile('function/magic');
+				$limit = 200;
+				set_time_limit(0);
+				for($i=0; $i > -1; $i++) {
+					$uids = searchmembers($search_condition, $limit, $i*$limit);
+					$conditions = $uids ? 'uid IN ('.dimplode($uids).')' : '0';
 
+					foreach($magics as $magicid) {
+						$uparray = $insarray = array();
+						if(empty($magicnum[$magicid])) {
+							continue;
+						}
+						$query = DB::query("SELECT uid, magicid FROM ".DB::table('common_member_magic')." WHERE $conditions AND magicid='$magicid'");
+						while($row = DB::fetch($query)) {
+							$uparray[] = $row['uid'];
+						}
+						if($uparray) {
+							DB::query("UPDATE ".DB::table('common_member_magic')." SET num=num+$magicnum[$magicid] WHERE uid IN (".dimplode($uparray).") AND magicid='$magicid'");
+						}
+						$insarray = array_diff($uids, $uparray);
+						if($insarray) {
+							$sqls = array();
+							$sql = "INSERT INTO ".DB::table('common_member_magic')." (uid, magicid, num) VALUES ";
+							foreach($insarray as $uid) {
+								$sqls[] = "('$uid', '$magicid', '$magicnum[$magicid]')";
+							}
+							$sql .= implode(',', $sqls);
+							DB::query($sql);
+						}
+						foreach($uids as $uid) {
+							updatemagiclog($magicid, '3', $magicnum[$magicid], '', $uid);
+						}
+					}
+					if(count($uids) < $limit) break;
+				}
+			}
 		}
 
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('$variable', '".
@@ -2391,26 +2973,67 @@ function notifymembers($operation, $variable) {
 		include libfile('function/mail');
 	}
 
-	if($_G['gp_notifymember'] && in_array($_G['gp_notifymembers'], array('pm', 'email'))) {
-
+	if($_G['gp_notifymember'] && in_array($_G['gp_notifymembers'], array('pm', 'notice', 'email'))) {
 		$uids = searchmembers($search_condition, $pertask, $current);
 		$conditions = $uids ? 'uid IN ('.dimplode($uids).')' : '0';
 
 		require_once libfile('function/discuzcode');
-		$message = discuzcode($message, 1, 0);
-		$query = DB::query("SELECT uid, username, groupid, email FROM ".DB::table('common_member')." m WHERE $conditions");
+		$message = $_G['gp_notifymembers'] == 'email' && $_G['gp_posttype'] ? discuzcode($message, 1, 0, 1, '', '' ,'' ,1) : discuzcode($message, 1, 0);
+		$pmuids = array();
+		if($_G['gp_notifymembers'] == 'pm') {
+			$membernum = countmembers($search_condition, $urladd);
+			$gpmid = empty($_G['gp_gpmid']) ? DB::insert('common_grouppm', array(
+				'authorid' => $_G['uid'],
+				'author' => !$_G['gp_system'] ? $_G['member']['username'] : '',
+				'dateline' => TIMESTAMP,
+				'message' => ($subject ? '<b>'.$subject.'</b><br /> &nbsp; ' : '').$message.$addmsg,
+				'numbers' => $membernum
+			), true) : $_G['gp_gpmid'];
+			$urladd .= '&gpmid='.$gpmid;
+		}
+		$query = DB::query("SELECT uid, username, groupid, email, newpm FROM ".DB::table('common_member')." m WHERE $conditions");
 		while($member = DB::fetch($query)) {
-			$_G['gp_notifymembers'] == 'pm' ? notification_add($member['uid'], 'system', 'system_notice', array('subject' => $subject, 'message' => $message), 1) : sendmail("$member[username] <$member[email]>", $subject, $message);
+			if($_G['gp_notifymembers'] == 'pm') {
+				DB::insert('common_member_grouppm', array(
+					'uid' => $member['uid'],
+					'gpmid' => $gpmid,
+					'status' => 0
+				), false, true);
+				$newpm = setstatus(2, 1, $member['newpm']);
+				DB::query("UPDATE ".DB::table('common_member')." SET newpm='$newpm' WHERE uid='$member[uid]'");
+			} elseif($_G['gp_notifymembers'] == 'notice') {
+				notification_add($member['uid'], 'system', 'system_notice', array('subject' => $subject, 'message' => $message.$addmsg), 1);
+			} elseif($_G['gp_notifymembers'] == 'email') {
+				sendmail("$member[username] <$member[email]>", $subject, $message.$addmsg);
+			}
 			$continue = TRUE;
+		}
+		if($pmuids) {
+
 		}
 	}
 
+	$newsletter_detail = array();
 	if($continue) {
-
 		$next = $current + $pertask;
+		$newsletter_detail = array(
+			'uid' => $_G['uid'],
+			'current' => $current,
+			'next' => $next,
+			'search_condition' => serialize($search_condition),
+			'action' => "action=members&operation=$operation&{$operation}submit=yes&current=$next&pertask=$pertask&notifymember={$_G['gp_notifymember']}&notifymembers=".rawurlencode($_G['gp_notifymembers']).$urladd
+		);
+		save_newsletter('newsletter_detail', $newsletter_detail);
 		cpmsg("$lang[members_newsletter_send]: ".cplang('members_newsletter_processing', array('current' => $current, 'next' => $next, 'search_condition' => serialize($search_condition))), "action=members&operation=$operation&{$operation}submit=yes&current=$next&pertask=$pertask&notifymember={$_G['gp_notifymember']}&notifymembers=".rawurlencode($_G['gp_notifymembers']).$urladd, 'loadingform');
 	} else {
-		cpmsg('members'.($operation ? '_'.$operation : '').'_notify_succeed', '', 'succeed');
+		del_newsletter('newsletter_detail');
+
+		if($operation == 'reward' && $_G['gp_notifymembers'] == 'pm') {
+			$message = '';
+		} else {
+			$message = '_notify';
+		}
+		cpmsg('members'.($operation ? '_'.$operation : '').$message.'_succeed', '', 'succeed');
 	}
 
 }
@@ -2440,5 +3063,34 @@ function accessimg($access) {
 		($access == 1 ? '<img src="static/image/common/access_allow.gif" />' : '<img src="static/image/common/access_normal.gif" />');
 }
 
+function connectunbind($member) {
+	global $_G;
+	if(!$member['conuin']) {
+		return;
+	}
+	require_once libfile('function/connect');
+	connect_user_unbind($member['conuin'], 1);
+
+	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$member[uid]', '$member[conuin]', '2', '$_G[timestamp]')");
+	DB::update('common_member', array('conisbind' => '0'), "uid='$member[uid]'");
+	DB::delete('common_member_connect', "uid='$member[uid]'");
+}
+
+function save_newsletter($cachename, $data) {
+	$data = addslashes(serialize($data));
+	DB::query("REPLACE INTO ".DB::table('common_cache')." (cachekey, cachevalue, dateline) VALUES ('$cachename', '$data', '".TIMESTAMP."')");
+}
+
+function del_newsletter($cachename) {
+	DB::query('DELETE FROM '.DB::table('common_cache')." WHERE cachekey='$cachename'");
+}
+
+function get_newsletter($cachename) {
+	$query = DB::query("SELECT cachevalue FROM ".DB::table('common_cache'." WHERE cachekey='$cachename'"));
+	while($result = DB::fetch($query)) {
+		$data = $result['cachevalue'];
+	}
+	return $data;
+}
 
 ?>

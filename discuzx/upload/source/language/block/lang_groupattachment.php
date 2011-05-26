@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_groupattachment.php 17284 2010-09-28 09:58:16Z zhangguosheng $
+ *      $Id: lang_groupattachment.php 22411 2011-05-06 06:09:35Z zhangguosheng $
  */
 
 $lang = array
@@ -25,11 +25,6 @@ $lang = array
 	'groupattachment_titlelength_comment' => '設置當附件名稱/帖子標題顯示的最大長度',
 	'groupattachment_summarylength' => '內容長度',
 	'groupattachment_summarylength_comment' => '設置附件介紹/帖子內容顯示的最大長度',
-	'groupattachment_isimage' => '附件類型',
-	'groupattachment_isimage_comment' => '設置調用的附件類型',
-	'groupattachment_isimage_0' => '全部附件',
-	'groupattachment_isimage_1' => '圖片附件',
-	'groupattachment_isimage_2' => '普通附件',
 	'groupattachment_maxwidth' => '圖片最大寬度(像素)',
 	'groupattachment_maxwidth_comment' => '設置是否自動縮小或放大圖片的尺寸到本設定的寬度，0 為不自動縮放',
 	'groupattachment_maxheight' => '圖片最大高度(像素)',
@@ -55,14 +50,6 @@ $lang = array
 	'groupattachment_special_reward_0' => '全部',
 	'groupattachment_special_reward_1' => '已解決',
 	'groupattachment_special_reward_2' => '未解決',
-	'groupattachment_orderby' => '附件排序方式',
-	'groupattachment_orderby_comment' => '設置以哪一字段或方式對附件進行排序',
-	'groupattachment_orderby_dateline' => '按最後更新日期排序',
-	'groupattachment_orderby_downloads' => '按下載次數倒序排序',
-	'groupattachment_orderby_hourdownloads' => '按小時下載次數倒序排序',
-	'groupattachment_orderby_todaydownloads' => '按當天下載次數倒序排序',
-	'groupattachment_orderby_weekdownloads' => '按本周下載次數倒序排序',
-	'groupattachment_orderby_monthdownloads' => '按當月下載次數倒序排序',
 	'groupattachment_dateline' => '附件上傳時間',
 	'groupattachment_dateline_nolimit' => '不限制',
 	'groupattachment_dateline_hour' => '最近1小時',
@@ -70,8 +57,10 @@ $lang = array
 	'groupattachment_dateline_week' => '最近1周',
 	'groupattachment_dateline_month' => '最近1月',
 	'groupattachment_gviewperm' => '群組瀏覽權限',
+	'groupattachment_gviewperm_nolimit' => '不限制',
 	'groupattachment_gviewperm_only_member' => '僅成員',
 	'groupattachment_gviewperm_all_member' => '所有人',
+	'groupattachment_highlight' => '獲得高亮值',
 );
 
 ?>

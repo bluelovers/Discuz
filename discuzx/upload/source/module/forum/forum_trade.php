@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_trade.php 10053 2010-05-06 07:43:40Z wangjinbo $
+ *      $Id: forum_trade.php 20095 2011-02-14 09:32:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,7 +41,7 @@ if(!empty($orderid)) {
 
 	$limit = 6;
 	$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-		LEFT JOIN ".DB::table('forum_attachment')." a ON t.aid=a.aid
+		LEFT JOIN ".DB::table(getattachtablebytid($tradelog['tid']))." a ON t.aid=a.aid
 		WHERE t.sellerid='$tradelog[sellerid]' ORDER BY t.displayorder DESC LIMIT $limit");
 	$usertrades = array();
 	$usertradecount = 0;
@@ -91,7 +91,7 @@ if(!empty($orderid)) {
 		if($tmp['uid'] <= 0) {
 			showmessage('trade_password_error', 'forum.php?mod=trade&orderid='.$orderid);
 		}
-		if($_G['gp_offlinestatus'] == STATUS_SELLER_SEND) {
+		if($_G['gp_offlinestatus'] == 4) {
 			if($_G['setting']['creditstransextra'][5] != -1 && $tradelog['credit']) {
 				if($tradelog['credit'] > getuserprofile('extcredits'.$_G['setting']['creditstransextra'][5])) {
 					showmessage('trade_credit_lack');
@@ -105,14 +105,14 @@ if(!empty($orderid)) {
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == STATUS_WAIT_BUYER) {
+		} elseif($_G['gp_offlinestatus'] == 5) {
 			notification_add($tradelog['buyerid'], 'goods', 'trade_buyer_confirm', array(
 				'sellerid' => $tradelog['sellerid'],
 				'seller' => $tradelog['seller'],
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == STATUS_TRADE_SUCCESS) {
+		} elseif($_G['gp_offlinestatus'] == 7) {
 			if($_G['setting']['creditstransextra'][5] != -1 && $tradelog['basecredit']) {
 				$netcredit = round($tradelog['number'] * $tradelog['basecredit'] * (1 - $_G['setting']['creditstax']));
 				updatemembercount($tradelog['sellerid'], array($_G['setting']['creditstransextra'][5] => $netcredit));
@@ -128,7 +128,7 @@ if(!empty($orderid)) {
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == STATUS_REFUND_CLOSE) {
+		} elseif($_G['gp_offlinestatus'] == 17) {
 			DB::query("UPDATE ".DB::table('forum_trade')." SET amount=amount+'$tradelog[number]' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
 			notification_add($tradelog['sellerid'], 'goods', 'trade_fefund_success', array(
 				'orderid' => $orderid,
@@ -267,7 +267,7 @@ if(!empty($orderid)) {
 	}
 	$trade = DB::fetch_first("SELECT * FROM ".DB::table('forum_trade')." WHERE tid='$_G[tid]' AND pid='$pid'");
 	if(empty($trade)) {
-		showmessage('undefined_action', NULL);
+		showmessage('trade_not_found');
 	}
 	$fromcode = false;
 
@@ -284,7 +284,7 @@ if(!empty($orderid)) {
 
 	$limit = 6;
 	$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-		LEFT JOIN ".DB::table('forum_attachment')." a ON t.aid=a.aid
+		LEFT JOIN ".DB::table(getattachtablebytid($_G['tid']))." a ON t.aid=a.aid
 		WHERE t.sellerid='$trade[sellerid]' ORDER BY t.displayorder DESC LIMIT $limit");
 	$usertrades = array();
 	$usertradecount = 0;

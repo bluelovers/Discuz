@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_manyou.php 17426 2010-10-19 02:39:34Z zhengqingpeng $
+ *      $Id: function_manyou.php 18436 2010-11-23 08:12:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ function manyou_getuserapp($panel = 0) {
 	if($_G['uid'] && $_G['setting']['my_app_status']) {
 		space_merge($_G['member'], 'field_home');
 		if($_G['member']['menunum'] < 3) $_G['member']['menunum'] = 10;
-		$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' ORDER BY ua.menuorder DESC");
+		$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea, my.appstatus FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' ORDER BY ua.menuorder DESC");
 		while($value = DB::fetch($query)) {
 			$value['icon'] = getmyappiconpath($value['appid'], $value['iconstatus']);
 			if($value['iconstatus']=='0' && empty($_G['myapp_icon_downloaded'])) {
@@ -46,6 +46,10 @@ function manyou_getuserapp($panel = 0) {
 							$_G['my_menu_more'] = 1;
 						}
 					}
+				}
+			} elseif (!$value['allowsidenav']) {
+				if(isset($_G['cache']['userapp'][$value['appid']])) {
+					unset($_G['cache']['userapp'][$value['appid']]);
 				}
 			}
 

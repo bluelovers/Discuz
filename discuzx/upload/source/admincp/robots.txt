@@ -17,18 +17,11 @@ Disallow: {path}search.php
 Disallow: {path}member.php
 Disallow: {path}api.php
 Disallow: {path}misc.php
+Disallow: {path}connect.php
 Disallow: {path}forum.php?mod=redirect*
 Disallow: {path}forum.php?mod=post*
 Disallow: {path}home.php?mod=spacecp*
 Disallow: {path}userapp.php?mod=app&*
 Disallow: {path}*?mod=misc*
 Disallow: {path}*?mod=attachment*
-{rewrite}
-Disallow: {path}member-*
-Disallow: {path}forum-redirect-*
-Disallow: {path}forum-post-*
-Disallow: {path}home-spacecp-*
-Disallow: {path}userapp-app-*
-Disallow: {path}*-misc-*
-Disallow: {path}*-attachment-*
-{/rewrite}
+Disallow: {path}*mobile=yes*

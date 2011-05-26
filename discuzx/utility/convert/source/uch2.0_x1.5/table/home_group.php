@@ -2,7 +2,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_group.php 15720 2010-08-25 23:56:08Z monkey $
+ * $Id: home_group.php 19554 2011-01-07 04:26:02Z zhengqingpeng $
  */
 
 $curprg = basename(__FILE__);
@@ -55,7 +55,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 			'first' => $post['isthread'] ? 1 : 0,
 			'author' => $post['username'],
 			'authorid' => $post['uid'],
-			'subject' => $post['subject'],
+			'subject' => $post['isthread'] ? $value['subject'] : $post['subject'],
 			'dateline' => $post['dateline'],
 			'message' => $post['message'],
 			'useip' => $post['ip']

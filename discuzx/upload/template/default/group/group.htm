@@ -1,6 +1,5 @@
 <!--{template common/header}-->
 	<div id="pt" class="bm cl">
-		<!--{subtemplate common/simplesearchform}-->
 		<div class="z">
 			<a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="group.php">$_G[setting][navs][3][navname]</a><!--{if $groupnav}-->$groupnav<!--{elseif $action == 'create'}--><em>&rsaquo;</em>{lang group_create}<!--{/if}-->
 		</div>
@@ -19,7 +18,7 @@
 			<!--{if $action != 'create'}-->
 				<!--{if $_G['forum']['banner']}-->
 					<div id="gh">
-						<img src="$_G[forum][banner]" width="100%" alt="" />
+						<img src="$_G[forum][banner]" alt="" />
 						<div class="bm bmw bw0">
 							<div class="bm_h bw0 cl">
 								<h1 class="xs2">$_G[forum][name]</h1>
@@ -30,7 +29,7 @@
 									<a href="home.php?mod=spacecp&ac=favorite&type=group&id={$_G[forum][fid]}&handlekey=sharealbumhk_{$_G[forum][fid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang favorite}" class="fa_fav">{lang favorite}</a><span class="pipe">|</span><!--{if $_G[setting][rssstatus] && !$_G['gp_archiveid']}--><a href="forum.php?mod=rss&fid=$_G[fid]&auth=$rssauth" target="_blank" title="RSS" class="fa_rss">RSS</a><!--{/if}--><!--{if $status == 'isgroupuser'}--><span class="pipe">|</span><a href="javascript:;" onclick="showWindow('invite','misc.php?mod=invite&action=group&id=$_G[fid]')" class="fa_ivt"><strong class="xi2">{lang my_buddylist_invite}</strong></a><!--{/if}-->
 									<span class="pipe">|</span><!--{if $_G['current_grouplevel']['icon']}--><img src="$_G[current_grouplevel][icon]" title="{lang group_level}: $_G[current_grouplevel][leveltitle]" class="vm"> <!--{/if}-->{lang credits}: $_G[forum][commoncredits]<span class="pipe">|</span>{lang group_moderator_title}: <!--{eval $i = 1;}--><!--{loop $groupmanagers $manage}--><!--{if $i <= 0}-->, <!--{/if}--><!--{eval $i--;}--><a href="home.php?mod=space&uid=$manage[uid]" target="_blank" class="xi2">$manage[username]</a><!--{/loop}-->
 								</div>
-								<!--{if $status != 2 && $status != 3}-->
+								<!--{if $status != 2 && $status != 3 && $status != 5}-->
 									<!--{if $status != 'isgroupuser'}-->
 									<div class="ptm pbn">
 										<button type="button" class="pn" onclick="location.href='forum.php?mod=group&action=join&fid=$_G[fid]'"><em>{lang group_join_group}</em></button>
@@ -39,7 +38,7 @@
 									<!--{if CURMODULE == 'group'}--><!--{hook/group_navlink}--><!--{else}--><!--{hook/forumdisplay_navlink}--><!--{/if}-->
 								<!--{/if}-->
 
-								<!--{if $action == 'index' && ($status == 2 || $status == 3)}-->
+								<!--{if $action == 'index' && ($status == 2 || $status == 3 || $status == 5)}-->
 									<p class="mtm">
 										{lang group_join_type}: 
 										<!--{if $_G['forum']['jointype'] == 1}-->
@@ -49,10 +48,10 @@
 										<!--{else}-->
 											<strong>{lang group_join_type_free}</strong>
 										<!--{/if}-->
-										{lang group_perm_visit}: <strong>{lang group_perm_member_only}</strong>
+										{lang group_perm_visit}: <strong><!--{if $_G['forum']['gviewperm'] == 0}-->{lang group_perm_member_only}<!--{else}-->{lang group_perm_all_user}<!--{/if}--></strong>
 									</p>
 									<p class="mtm xi1">
-									<!--{if $status == 3}-->
+									<!--{if $status == 3 || $status == 5}-->
 										{lang group_has_joined}
 									<!--{else}-->
 										<button type="button" class="pn" onclick="location.href='forum.php?mod=group&action=join&fid=$_G[fid]'"><em>{lang group_join_group}</em></button>
@@ -73,7 +72,7 @@
 									<span class="y"><a href="home.php?mod=spacecp&ac=favorite&type=group&id={$_G[forum][fid]}&handlekey=sharealbumhk_{$_G[forum][fid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang favorite}" class="fa_fav">{lang favorite}</a><span class="pipe">|</span><!--{if $_G[setting][rssstatus] && !$_G['gp_archiveid']}--><a href="forum.php?mod=rss&fid=$_G[fid]&auth=$rssauth" target="_blank" title="RSS" class="fa_rss">RSS</a><!--{/if}--><!--{if $status == 'isgroupuser'}--><span class="pipe">|</span><a href="javascript:;" onclick="showWindow('invite','misc.php?mod=invite&action=group&id=$_G[fid]')" class="fa_ivt"><strong class="xi2">{lang my_buddylist_invite}</strong></a><!--{/if}--></span>
 									<!--{if $_G['current_grouplevel']['icon']}--><img src="$_G[current_grouplevel][icon]" title="{lang group_level}: $_G[current_grouplevel][leveltitle]" class="vm"> <!--{/if}-->{lang credits}: $_G[forum][commoncredits]<span class="pipe">|</span>{lang group_moderator_title}: <!--{eval $i = 1;}--><!--{loop $groupmanagers $manage}--><!--{if $i <= 0}-->, <!--{/if}--><!--{eval $i--;}--><a href="home.php?mod=space&uid=$manage[uid]" target="_blank" class="xi2">$manage[username]</a> <!--{/loop}-->
 								</dd>
-								<!--{if $action == 'index' && ($status == 2 || $status == 3)}-->
+								<!--{if $action == 'index' && ($status == 2 || $status == 3 || $status == 5)}-->
 								<dd>
 									{lang group_join_type}: 
 									<!--{if $_G['forum']['jointype'] == 1}-->
@@ -83,10 +82,10 @@
 									<!--{else}-->
 										<strong>{lang group_join_type_free}</strong>
 									<!--{/if}-->
-									{lang group_perm_visit}: <strong>{lang group_perm_member_only}</strong>
+									{lang group_perm_visit}: <strong><!--{if $_G['forum']['gviewperm'] == 0}-->{lang group_perm_member_only}<!--{else}-->{lang group_perm_all_user}<!--{/if}--></strong>
 								</dd>
 								<dd class="xi1">
-									<!--{if $status == 3}-->
+									<!--{if $status == 3 || $status == 5}-->
 										{lang group_has_joined}
 									<!--{else}-->
 										<button type="button" class="pn" onclick="location.href='forum.php?mod=group&action=join&fid=$_G[fid]'"><em>{lang group_join_group}</em></button>
@@ -94,7 +93,7 @@
 								</dd>
 								<!--{/if}-->
 							</dl>
-							<!--{if $status != 2 && $status != 3}-->
+							<!--{if $status != 2 && $status != 3 && $status != 5}-->
 								<!--{if $status != 'isgroupuser'}-->
 								<div class="ptm pbm">
 									<button type="button" class="pn" onclick="location.href='forum.php?mod=group&action=join&fid=$_G[fid]'"><em>{lang group_join_group}</em></button>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_magic_daily.php 7949 2010-04-15 04:22:24Z monkey $
+ *      $Id: cron_magic_daily.php 19669 2011-01-13 06:48:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,7 @@ if(!empty($_G['setting']['magicstatus'])) {
 		}
 
 		if(!empty($autosupply)) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+'$magic[supplynum]' WHERE magicid='$id'");
+			DB::query("UPDATE ".DB::table('common_magic')." SET num='$magic[supplynum]' WHERE magicid='$id'");
 		}
 	}
 }

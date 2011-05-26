@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X1.5]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[myrepeats/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[2.2]]></item>
+			<item id="version"><![CDATA[2.3]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[memcp]]></item>
@@ -40,7 +40,7 @@
 				</item>
 			</item>
 		</item>
-		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="version"><![CDATA[X2]]></item>
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[0]]></item>
@@ -56,16 +56,16 @@
 		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="login_strike"><![CDATA[密碼錯誤次數過多，請重新設置馬甲賬戶信息並在 15 分鐘後再嘗試切換。]]></item>
+				<item id="login_strike"><![CDATA[密碼錯誤次數過多，請重新設置馬甲賬號信息並在 15 分鐘後再嘗試切換。]]></item>
 				<item id="login_succeed"><![CDATA[您已切換到 {user} {comment}帳號，現在將轉入切換前頁面。]]></item>
 				<item id="login_succeed_rsnonexistence"><![CDATA[您已切換到 {user} {comment}帳號，但是此賬號尚未設置 {olduser} 為馬甲。<br /><a href="home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp&username={olduserenc}" target="_blank">[ 設置 {olduser} 為本賬號的馬甲 ]</a><br /><a href="{referer}">[ 轉入切換前頁面 ]</a>]]></item>
-				<item id="login_activation"><![CDATA[{user} 賬戶未在本論壇激活，現在將轉入帳號激活頁面。]]></item>
-				<item id="login_invalid"><![CDATA[賬戶切換失敗，請重新設置帳號信息，您還可以嘗試 {loginperm} 次。]]></item>
-				<item id="login_question_empty"><![CDATA[請重新設置賬戶的安全提問以及正確的答案。]]></item>
+				<item id="login_activation"><![CDATA[{user} 賬號未在本論壇激活，現在將轉入帳號激活頁面。]]></item>
+				<item id="login_invalid"><![CDATA[賬號切換失敗，請重新設置帳號信息，您還可以嘗試 {loginperm} 次。]]></item>
+				<item id="login_question_empty"><![CDATA[請重新設置賬號的安全提問以及正確的答案。]]></item>
 				<item id="login_question_invalid"><![CDATA[安全提問選擇錯誤，請重新設置。]]></item>
-				<item id="user_nonexistence"><![CDATA[無效的馬甲賬戶信息，請重新設置。]]></item>
-				<item id="user_locked"><![CDATA[此馬甲賬戶被管理員鎖定，您無法切換到 {user}，請與管理員聯繫。]]></item>
-				<item id="switch"><![CDATA[切換馬甲]]></item>
+				<item id="user_nonexistence"><![CDATA[無效的馬甲賬號信息，請重新設置。]]></item>
+				<item id="user_locked"><![CDATA[此馬甲賬號被管理員鎖定，您無法切換到 {user}，請與管理員聯繫。]]></item>
+				<item id="switch"><![CDATA[馬甲]]></item>
 				<item id="memcp"><![CDATA[設置馬甲]]></item>
 				<item id="usergroup_disabled"><![CDATA[您所在用戶組無法使用本功能]]></item>
 				<item id="normal"><![CDATA[正常]]></item>
@@ -104,6 +104,10 @@
 				<item id="security_question_7"><![CDATA[駕駛執照的最後四位數字]]></item>
 				<item id="security_answer"><![CDATA[回答]]></item>
 				<item id="delete_check"><![CDATA[刪?]]></item>
+				<item id="switch_title"><![CDATA[請輸入密碼]]></item>
+				<item id="switch_tips"><![CDATA[你是首次切換到此帳號，請輸入密碼]]></item>
+				<item id="confirm"><![CDATA[確定]]></item>
+				<item id="select_rrepeats"><![CDATA[選擇馬甲]]></item>				
 			</item>
 		</item>
 	</item>

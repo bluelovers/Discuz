@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_share.php 16271 2010-09-02 08:59:17Z liulanbo $
+ *      $Id: admincp_share.php 20811 2011-03-04 07:35:59Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,6 +23,8 @@ $endtime = $_G['gp_endtime'];
 $searchsubmit = $_G['gp_searchsubmit'];
 $sids = $_G['gp_sids'];
 
+$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+
 cpheader();
 
 if(!submitcheck('sharesubmit')) {
@@ -32,8 +34,13 @@ if(!submitcheck('sharesubmit')) {
 		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
 
-	$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
-	$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	if($fromumanage) {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? '' : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? '' : $endtime;
+	} else {
+		$starttime = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $starttime) ? dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j') : $starttime;
+		$endtime = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", $endtime) ? dgmdate(TIMESTAMP, 'Y-n-j') : $endtime;
+	}
 
 	shownav('topic', 'nav_share');
 	showsubmenu('nav_share', array(
@@ -70,6 +77,7 @@ EOT;
 	showsetting('share_search_sid', 'sid', $sid, 'text');
 	showsetting('share_search_hot', array('hot1', 'hot2'), array('', ''), 'range');
 	showsetting('share_search_time', array('starttime', 'endtime'), array($starttime, $endtime), 'daterange');
+	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
 	showsubmit('searchsubmit');
 	showtablefooter();
 	showformfooter();
@@ -83,7 +91,7 @@ EOT;
 	$cpmsg = cplang('share_succeed', array('deletecount' => $deletecount));
 
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('shareforum').searchsubmit.click();</script>
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('shareforum').searchsubmit.click();</script>
 <?php
 
 }
@@ -110,13 +118,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		$sql .= " AND s.type='$type'";
 	}
 
-	if($starttime != '0') {
+	if($starttime != '') {
 		$starttime = strtotime($starttime);
 		$sql .= " AND s.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
-		if($endtime != '0') {
+		if($endtime != '') {
 			$endtime = strtotime($endtime);
 			$sql .= " AND s.dateline<'$endtime'";
 		}
@@ -160,12 +168,11 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 			while($share = DB::fetch($query)) {
 				$share['dateline'] = dgmdate($share['dateline']);
 				$share = mkshare($share);
-				$shares .= showtablerow('', '', array(
+				$shares .= showtablerow('', array('', 'style="width:80px;"', 'style="width:150px;"', 'style="width:500px;"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$share[sid]\" />",
 					"<a href=\"home.php?mod=space&uid=$share[uid]\" target=\"_blank\">".$share['username']."</a>",
 					$share['title_template'],
 					$share['body_template'],
-					$share['type'],
 					$share['dateline']
 				), TRUE);
 			}
@@ -197,7 +204,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		echo "<tr><td class=\"lineheight\" colspan=\"15\">$lang[$error]</td></tr>";
 	} else {
 		if($detail) {
-			showsubtitle(array('', 'author', 'share_title', 'share_body', 'share_type', 'time'));
+			showsubtitle(array('', 'author', 'share_title', 'share_body', 'time'));
 			echo $shares;
 		}
 	}

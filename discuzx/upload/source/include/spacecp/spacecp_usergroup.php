@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 17230 2010-09-27 03:50:59Z zhengqingpeng $
+ *      $Id: spacecp_usergroup.php 22538 2011-05-12 01:52:18Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,9 +25,9 @@ if(in_array($do, array('buy', 'exit'))) {
 
 	$group = DB::fetch_first("SELECT groupid, type, system, grouptitle FROM ".DB::table('common_usergroup')." WHERE groupid='$groupid' AND type='special' AND system<>'private' AND radminid='0'");
 	if(empty($group)) {
-		showmessage('undefined_action');
+		showmessage('usergroup_not_found');
 	}
-	$join = !in_array($group['groupid'], $extgroupids);
+	$join = $do == 'buy' ? 1 : 0;
 	$group['dailyprice'] = $group['minspan'] = 0;
 
 	if($group['system'] != 'private') {
@@ -65,13 +65,12 @@ if(in_array($do, array('buy', 'exit'))) {
 					showmessage('credits_balance_insufficient', '', array('title'=> $_G['setting']['extcredits'][$creditstrans]['title'],'minbalance' => $minbalance));
 				}
 
-				$groupexpirynew = TIMESTAMP + $days * 86400;
-				$groupterms['ext'][$groupid] = $groupexpirynew;
+				$groupterms['ext'][$groupid] = ($groupterms['ext'][$groupid] > TIMESTAMP ? $groupterms['ext'][$groupid] : TIMESTAMP) + $days * 86400;
 
 				$groupexpirynew = groupexpiry($groupterms);
 
 				DB::query("UPDATE ".DB::table('common_member')." SET groupexpiry='$groupexpirynew', extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
-				updatemembercount($_G['uid'], array('extcredits'.$creditstrans => "-$amount"));
+				updatemembercount($_G['uid'], array($creditstrans => "-$amount"), true, 'UGP', $extgroupidsnew);
 
 				DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".addslashes(serialize($groupterms))."' WHERE uid='$_G[uid]'");
 
@@ -79,7 +78,7 @@ if(in_array($do, array('buy', 'exit'))) {
 				DB::query("UPDATE ".DB::table('common_member')." SET extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
 			}
 
-			showmessage('usergroups_join_succeed', "home.php?mod=spacecp&ac=usergroup&perms=$_G[gp_perms]&tab=$_G[gp_tab]", array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
+			showmessage('usergroups_join_succeed', "home.php?mod=spacecp&ac=usergroup".($_G['gp_gid'] ? "&gid=$_G[gp_gid]" : '&do=expiry'), array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
 
 		} else {
 
@@ -102,7 +101,7 @@ if(in_array($do, array('buy', 'exit'))) {
 			$extgroupidsnew = implode("\t", array_unique($extgroupidsarray));
 			DB::query("UPDATE ".DB::table('common_member')." SET groupexpiry='$groupexpirynew', extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
 
-			showmessage('usergroups_exit_succeed', "home.php?mod=spacecp&ac=usergroup&perms=$_G[gp_perms]&tab=$_G[gp_tab]", array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
+			showmessage('usergroups_exit_succeed', "home.php?mod=spacecp&ac=usergroup".($_G['gp_gid'] ? "&gid=$_G[gp_gid]" : '&do=expiry'), array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
 
 		}
 
@@ -112,19 +111,21 @@ if(in_array($do, array('buy', 'exit'))) {
 
 	$groupid = intval($_G['gp_groupid']);
 	if(!in_array($groupid, $extgroupids)) {
-		showmessage('undefined_action', NULL, 'HALTED');
+		showmessage('usergroup_not_found');
 	}
 	$group = DB::fetch_first("SELECT * FROM ".DB::table('common_usergroup')." WHERE groupid='$groupid'");
 	if(submitcheck('groupsubmit')) {
+		$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'"));
 		$extgroupidsnew = $_G['groupid'];
+		$groupexpirynew = $groupterms['ext'][$extgroupidsnew];
 		foreach($extgroupids as $extgroupid) {
 			if($extgroupid && $extgroupid != $groupid) {
 				$extgroupidsnew .= "\t".$extgroupid;
 			}
 		}
 
-		DB::query("UPDATE ".DB::table('common_member')." SET groupid='$groupid', adminid='$group[radminid]', extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
-		showmessage('usergroups_switch_succeed', "home.php?mod=spacecp&ac=usergroup&perms=$_G[gp_perms]&tab=$_G[gp_tab]", array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
+		DB::query("UPDATE ".DB::table('common_member')." SET groupid='$groupid', adminid='$group[radminid]', groupexpiry='$groupexpirynew', extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
+		showmessage('usergroups_switch_succeed', "home.php?mod=spacecp&ac=usergroup".($_G['gp_gid'] ? "&gid=$_G[gp_gid]" : '&do=expiry'), array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
 	}
 
 } elseif($do == 'forum') {
@@ -177,10 +178,6 @@ if(in_array($do, array('buy', 'exit'))) {
 
 } elseif($do == 'expiry') {
 
-	if(!$_G['member']['groupexpiry']) {
-		showmessage('group_expiry_disabled');
-	}
-
 	$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'"));
 
 	$expgrouparray = $expirylist = $termsarray = array();
@@ -208,13 +205,31 @@ if(in_array($do, array('buy', 'exit'))) {
 		$expirylist[$_G['groupid']] = array('time' => dgmdate($groupterms['main']['time'], 'd'), 'type' => 'main');
 	}
 
-	if($expirylist) {
-		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup')." WHERE groupid IN (".dimplode(array_keys($expirylist)).")");
+	$groupids = array();
+	foreach($_G['cache']['usergroups'] as $groupid => $usergroup) {
+		if(!empty($usergroup['pubtype'])) {
+			$groupids[] = $groupid;
+		}
+	}
+	$expiryids = array_keys($expirylist);
+	if(!$expiryids && $_G['member']['groupexpiry']) {
+		DB::query("UPDATE ".DB::table('common_member')." SET groupexpiry='0' WHERE uid='$_G[uid]'");
+	}
+	$groupids = array_merge($extgroupids, $expiryids, $groupids);
+	$usermoney = $space['extcredits'.$_G['setting']['creditstrans']];
+	if($groupids) {
+		$query = DB::query("SELECT groupid, grouptitle, type, system, radminid FROM ".DB::table('common_usergroup')." WHERE groupid IN (".dimplode($groupids).")");
 		while($group = DB::fetch($query)) {
+			if($_G['cache']['usergroups'][$group['groupid']]['pubtype'] == 'buy') {
+				list($dailyprice) = explode("\t", $group['system']);
+				$expirylist[$group['groupid']]['dailyprice'] = $dailyprice;
+				$expirylist[$group['groupid']]['usermaxdays'] = $dailyprice > 0 ? round($usermoney / $dailyprice) : 0;
+			} else {
+				$expirylist[$group['groupid']]['usermaxdays'] = 0;
+			}
+			$expirylist[$group['groupid']]['maingroup'] = $group['type'] != 'special' || $group['system'] == 'private' || $group['radminid'] > 0;
 			$expirylist[$group['groupid']]['grouptitle'] = in_array($group['groupid'], $expgrouparray) ? '<s>'.$group['grouptitle'].'</s>' : $group['grouptitle'];
 		}
-	} else {
-		DB::query("UPDATE ".DB::table('common_member')." SET groupexpiry='0' WHERE uid='$_G[uid]'");
 	}
 
 	if($expgrouparray) {
@@ -260,6 +275,7 @@ if(in_array($do, array('buy', 'exit'))) {
 } else {
 
 	$language = lang('forum/misc');
+	require_once libfile('function/forumlist');
 	$permlang = $language;
 	unset($language);
 	$maingroup = $_G['group'];
@@ -311,16 +327,19 @@ if(in_array($do, array('buy', 'exit'))) {
 		$activegs['my'] = ' a';
 	}
 
-	$bperms = array('allowvisit','readaccess','allowinvisible','allowsearch','allowcstatus','disablepostctrl');
-	$pperms = array('allowpost','allowreply','allowpostpoll','allowvote','allowpostreward','allowpostactivity','allowpostdebate','allowposttrade','maxsigsize','allowsigbbcode','allowsigimgcode','allowrecommend');
-	$aperms = array('allowgetattach', 'allowpostattach', 'allowsetattachperm', 'maxattachsize', 'maxsizeperday', 'maxattachnum', 'attachextensions');
-	$sperms = array('maxspacesize', 'allowblog', 'allowdoing', 'allowupload', 'allowshare', 'allowpoke', 'allowfriend', 'allowclick', 'allowmyop', 'allowcomment', 'allowstatdata', 'allowpostarticle');
+	$bperms = array('allowvisit','readaccess','allowinvisible','allowsearch','allowcstatus','disablepostctrl', 'allowsendpm', 'allowfriend', 'allowstatdata', 'allowmyop');
+	if($_G['setting']['portalstatus']) {
+		$bperms[] = 'allowpostarticle';
+	}
+	$pperms = array('allowpost','allowreply','allowpostpoll','allowvote','allowpostreward','allowpostactivity','allowpostdebate','allowposttrade','maxsigsize','allowsigbbcode','allowsigimgcode','allowrecommend', 'raterange', 'allowmediacode');
+	$aperms = array('allowgetattach', 'allowgetimage', 'allowpostattach', 'allowpostimage', 'allowsetattachperm', 'maxattachsize', 'maxsizeperday', 'maxattachnum', 'attachextensions');
+	$sperms = $_G['setting']['homestatus'] ? array('allowblog', 'allowdoing', 'allowupload', 'allowshare', 'allowpoke', 'allowclick', 'allowcomment', 'maxspacesize', 'maximagesize') : array();
 
 	$allperms = array();
 	$allkey = array_merge($bperms, $pperms, $aperms, $sperms);
 	if($sidegroup) {
 		foreach($allkey as $pkey) {
-			if(in_array($pkey, array('maxattachsize', 'maxsizeperday', 'maxspacesize'))) {
+			if(in_array($pkey, array('maxattachsize', 'maxsizeperday', 'maxspacesize', 'maximagesize'))) {
 				$sidegroup[$pkey] = $sidegroup[$pkey] ? sizecount($sidegroup[$pkey]) : 0;
 			}
 			$allperms[$pkey][$sidegroup['groupid']] = $sidegroup[$pkey];
@@ -328,7 +347,7 @@ if(in_array($do, array('buy', 'exit'))) {
 	}
 
 	foreach($maingroup as $pkey => $v) {
-		if(in_array($pkey, array('maxattachsize', 'maxsizeperday', 'maxspacesize'))) {
+		if(in_array($pkey, array('maxattachsize', 'maxsizeperday', 'maxspacesize', 'maximagesize'))) {
 			$maingroup[$pkey] = $maingroup[$pkey] ? sizecount($maingroup[$pkey]) : 0;
 		}
 	}

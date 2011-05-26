@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_search.php 11212 2010-05-26 06:46:38Z monkey $
+ *      $Id: admincp_search.php 22381 2011-05-05 03:05:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,11 +15,10 @@ cpheader();
 
 lang('admincp_searchindex');
 
-$searchindex = $_G['lang']['admincp_searchindex'];
-$anchorindex = $_G['lang']['admincp_searchindex']['_anchorindex'];
+$searchindex = & $_G['lang']['admincp_searchindex'];
 
 if(!$searchindex) {
-	cpmsg('undefined_action', '', 'error');
+	cpmsg('searchindex_not_found', '', 'error');
 }
 
 $keywords = trim($_G['gp_keywords']);
@@ -27,59 +26,44 @@ $kws = explode(' ', $keywords);
 $kws = array_map('trim', $kws);
 $keywords = implode(' ', $kws);
 
-$result = array();
+$result = $html = array();
 
 if($_G['gp_searchsubmit'] && $keywords) {
-	foreach($searchindex as $script => $index) {
-		foreach($index as $key => $value) {
-			$matched = TRUE;
-			foreach($kws as $kw) {
-				if(strpos(strtolower($value), strtolower($kw)) === FALSE) {
-					$matched = FALSE;
-					break;
+	foreach($searchindex as $skey => $items) {
+		foreach($kws as $kw) {
+			foreach($items['text'] as $k => $text) {
+				if(strpos(strtolower($text), strtolower($kw)) !== FALSE) {
+					$result[$skey][] = $k;
 				}
-			}
-			if($matched) {
-				$result[] = array($script, $value, $key);
 			}
 		}
 	}
 	if($result) {
-		require './source/admincp/admincp_menu.php';
-		$is = $results = $iss = array();
-		$count = '';
-		foreach($menu as $items) {
-			foreach($items as $item) {
-				list($ac, $op) = explode('_', $item[1]);
-				if(!file_exists('./source/admincp/admincp_'.$ac.'.php')) {
-					continue;
+		$totalcount = 0;
+		foreach($result as $skey => $tkeys) {
+			$tmp = array();
+			foreach($searchindex[$skey]['index'] as $title => $url) {
+				if($title{0} != '_') {
+					$tmp[] = '<a href="'.ADMINSCRIPT.'?'.$url.'&highlight='.rawurlencode($keywords).'"  target="_blank">'.$title.'</a>';
 				}
-				$preurl = ADMINSCRIPT.'?frames=yes&action='.$ac;
-				if($op) {
-					$preurl .= '&operation='.$op;
-				}
-				$is[$ac][] = array($item[0], $preurl.'&highlight='.rawurlencode($keywords));
-				$iss[] = $item[1];
 			}
-		}
-		foreach($result as $item) {
-			if($is[$item[0]]) {
-				list($ac, $op) = explode('_', $item[2]);
-				if(!file_exists('./source/admincp/admincp_'.$ac.'.php')) {
-					continue;
+			$texts = array();
+			$tkeys = array_unique($tkeys);
+			foreach($tkeys as $tkey) {
+				if(isset($lang[$searchindex[$skey]['text'][$tkey]])) {
+					$texts[] = '<li><span s="1">'.strip_tags($lang[$searchindex[$skey]['text'][$tkey]]).'</span><span class="lightfont">('.$searchindex[$skey]['text'][$tkey].')</span></li>';
+				} else {
+					$texts[] = '<li><span s="1">'.$searchindex[$skey]['text'][$tkey].'</span></li>';
 				}
-				$preurl = ADMINSCRIPT.'?frames=yes&action='.$ac;
-				if($op) {
-					$preurl .= '&operation='.$op;
-				}
-				$anchor = !empty($anchorindex[$ac][$item[2]]) ? '&anchor='.$anchorindex[$ac][$item[2]] : '';
-				$results[$item[0]] .= '<div class="news"><a href="'.$preurl.'&highlight='.rawurlencode($keywords).$anchor.'"  target="_blank">'.$item[1].'</a></div>';
-				$count++;
 			}
+			$texts = array_unique($texts);
+			$texts = implode('', $texts);
+			$totalcount += $count = count($tkeys);
+			$html[] = '<div class="news"><span class="right">'.cplang('search_result_item', array('number' => $count)).'</span><b>'.implode(' &raquo; ', $tmp).'</b></div><ul class="tipsblock">'.$texts.'</ul>';
 		}
-		if($count) {
-			showsubmenu('search_result', array(), cplang('search_result_find').' '.$count.' '.cplang('search_result_num'));
-			echo implode('<br />', $results);
+		if($totalcount) {
+			showsubmenu('search_result', array(), '<span class="right">'.cplang('search_result_find', array('number' => $totalcount)).'</span>');
+			echo implode('<br />', $html);
 			hlkws($kws);
 		} else {
 			cpmsg('search_result_noexists', '', 'error');
@@ -94,12 +78,12 @@ if($_G['gp_searchsubmit'] && $keywords) {
 function hlkws($kws) {
 echo <<<EOF
 <script type="text/JavaScript">
-document.body.onload = function () {
+_attachEvent(window, 'load', function () {
 EOF;
 foreach($kws as $kw) {
 	echo 'parsetag(\''.$kw.'\');';
 }
-echo '}</script>';
+echo '}, document)</script>';
 }
 
 ?>

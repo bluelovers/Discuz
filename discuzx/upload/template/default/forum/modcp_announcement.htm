@@ -113,7 +113,7 @@
 						</tr>
 					<!--{/loop}-->
 					<tr class="bw0_all">
-						<td><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form)" /> <label for="chkall">{lang delete_check}</label></td>
+						<td><label for="chkall" onclick="checkall(this.form)"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang delete_check}</label></td>
 						<td colspan="7">
 							<button type="submit" name="submit" id="submit" class="pn" value="true"><strong>{lang submit}</strong></button>
 							<!--{if !empty($delids)}-->

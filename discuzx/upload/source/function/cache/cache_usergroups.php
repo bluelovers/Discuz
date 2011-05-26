@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_usergroups.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_usergroups.php 19929 2011-01-24 09:41:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,10 +15,17 @@ function build_cache_usergroups() {
 	global $_G;
 
 	$data = array();
-	$query = DB::query("SELECT u.groupid, u.type, u.grouptitle, u.creditshigher, u.creditslower, u.stars, u.color, u.icon, uf.readaccess, uf.allowgetattach FROM ".DB::table('common_usergroup')." u
+	$query = DB::query("SELECT u.groupid, u.type, u.grouptitle, u.creditshigher, u.creditslower, u.stars, u.color, u.icon, uf.readaccess, u.system, uf.allowgetattach, uf.allowgetimage, uf.allowmediacode FROM ".DB::table('common_usergroup')." u
 		LEFT JOIN ".DB::table('common_usergroup_field')." uf ON u.groupid=uf.groupid ORDER BY u.creditslower");
 
 	while($group = DB::fetch($query)) {
+		if($group['type'] == 'special') {
+			if($group['system'] != 'private') {
+				list($dailyprice) = explode("\t", $group['system']);
+				$group['pubtype'] = $dailyprice > 0 ? 'buy' : 'free';
+			}
+		}
+		unset($group['system']);
 		$groupid = $group['groupid'];
 		$group['grouptitle'] = $group['color'] ? '<font color="'.$group['color'].'">'.$group['grouptitle'].'</font>' : $group['grouptitle'];
 		if($_G['setting']['userstatusby'] == 1) {
@@ -58,7 +65,7 @@ function build_cache_usergroups_single() {
 		if($data['raterange']) {
 			foreach(explode("\n", $data['raterange']) as $rating) {
 				$rating = explode("\t", $rating);
-				$ratearray[$rating[0]] = array('min' => $rating[1], 'max' => $rating[2], 'mrpd' => $rating[3]);
+				$ratearray[$rating[0]] = array('isself' => $rating[1], 'min' => $rating[2], 'max' => $rating[3], 'mrpd' => $rating[4]);
 			}
 		}
 		$data['raterange'] = $ratearray;

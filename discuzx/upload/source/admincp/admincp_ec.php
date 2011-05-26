@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_ec.php 16917 2010-09-17 01:49:50Z wangjinbo $
+ *      $Id: admincp_ec.php 22488 2011-05-10 05:20:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -70,19 +70,16 @@ if($operation == 'alipay') {
 
 	if(!submitcheck('alipaysubmit')) {
 
-
-		if($_G['gp_from'] == 'creditwizard') {
-		} else {
-			shownav('extended', 'nav_ec');
-			showsubmenu('nav_ec', array(
-				array('nav_ec_config', 'setting&operation=ec&mod=forum', 0),
-				array('nav_ec_tenpay', 'ec&operation=tenpay&mod=forum', 0),
-				array('nav_ec_alipay', 'ec&operation=alipay&mod=forum', 1),
-				array('nav_ec_credit', 'ec&operation=credit&mod=forum', 0),
-				array('nav_ec_orders', 'ec&operation=orders&mod=forum', 0),
-				array('nav_ec_tradelog', 'tradelog&mod=forum', 0)
-			));
-		}
+		shownav('extended', 'nav_ec');
+		showsubmenu('nav_ec', array(
+			array('nav_ec_config', 'setting&operation=ec', 0),
+			array('nav_ec_tenpay', 'ec&operation=tenpay', 0),
+			array('nav_ec_alipay', 'ec&operation=alipay', 1),
+			array('nav_ec_credit', 'ec&operation=credit', 0),
+			array('nav_ec_orders', 'ec&operation=orders', 0),
+			array('nav_ec_tradelog', 'tradelog', 0),
+			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 0)
+		));
 
 		showtips('ec_alipay_tips');
 		showformheader('ec&operation=alipay');
@@ -111,7 +108,7 @@ if($operation == 'alipay') {
 			$settingsnew['ec_contract'] = 1;
 		}
 		if($settingsnew['ec_account'] && !$settingsnew['ec_contract']) {
-		 	cpmsg('alipay_not_contract', 'action=ec&operation=alipay', 'error');
+			cpmsg('alipay_not_contract', 'action=ec&operation=alipay', 'error');
 		}
 		$settingsnew['ec_account'] = trim($settingsnew['ec_account']);
 		$settingsnew['ec_securitycode'] = trim($settingsnew['ec_securitycode']);
@@ -177,18 +174,16 @@ if($operation == 'alipay') {
 
 	if(!submitcheck('tenpaysubmit')) {
 
-		if($_G['gp_from'] == 'creditwizard') {
-		} else {
-			shownav('extended', 'nav_ec');
-			showsubmenu('nav_ec', array(
-				array('nav_ec_config', 'setting&operation=ec&mod=forum', 0),
-				array('nav_ec_tenpay', 'ec&operation=tenpay&mod=forum', 1),
-				array('nav_ec_alipay', 'ec&operation=alipay&mod=forum', 0),
-				array('nav_ec_credit', 'ec&operation=credit&mod=forum', 0),
-				array('nav_ec_orders', 'ec&operation=orders&mod=forum', 0),
-				array('nav_ec_tradelog', 'tradelog&mod=forum', 0)
-			));
-		}
+		shownav('extended', 'nav_ec');
+		showsubmenu('nav_ec', array(
+			array('nav_ec_config', 'setting&operation=ec', 0),
+			array('nav_ec_tenpay', 'ec&operation=tenpay', 1),
+			array('nav_ec_alipay', 'ec&operation=alipay', 0),
+			array('nav_ec_credit', 'ec&operation=credit', 0),
+			array('nav_ec_orders', 'ec&operation=orders', 0),
+			array('nav_ec_tradelog', 'tradelog', 0),
+			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 0)
+		));
 
 		showtips('ec_tenpay_tips');
 		showformheader('ec&operation=tenpay');
@@ -271,12 +266,13 @@ if($operation == 'alipay') {
 		echo '<script type="text/javascript" src="static/js/calendar.js"></script>';
 		shownav('extended', 'nav_ec');
 		showsubmenu('nav_ec', array(
-			array('nav_ec_config', 'setting&operation=ec&mod=forum', 0),
-			array('nav_ec_tenpay', 'ec&operation=tenpay&mod=forum', 0),
-			array('nav_ec_alipay', 'ec&operation=alipay&mod=forum', 0),
-			array('nav_ec_credit', 'ec&operation=credit&mod=forum', 0),
-			array('nav_ec_orders', 'ec&operation=orders&mod=forum', 1),
-			array('nav_ec_tradelog', 'tradelog&mod=forum', 0)
+			array('nav_ec_config', 'setting&operation=ec', 0),
+			array('nav_ec_tenpay', 'ec&operation=tenpay', 0),
+			array('nav_ec_alipay', 'ec&operation=alipay', 0),
+			array('nav_ec_credit', 'ec&operation=credit', 0),
+			array('nav_ec_orders', 'ec&operation=orders', 1),
+			array('nav_ec_tradelog', 'tradelog', 0),
+			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 0)
 		));
 		showtips('ec_orders_tips');
 		showtagheader('div', 'ordersearch', !submitcheck('searchsubmit', 1));
@@ -416,12 +412,13 @@ if($operation == 'alipay') {
 
 		shownav('extended', 'nav_ec');
 		showsubmenu('nav_ec', array(
-			array('nav_ec_config', 'setting&operation=ec&mod=forum', 0),
-			array('nav_ec_tenpay', 'ec&operation=tenpay&mod=forum', 0),
-			array('nav_ec_alipay', 'ec&operation=alipay&mod=forum', 0),
-			array('nav_ec_credit', 'ec&operation=ec_credit&mod=forum', 1),
-			array('nav_ec_orders', 'ec&operation=orders&mod=forum', 0),
-			array('nav_ec_tradelog', 'tradelog&mod=forum', 0)
+			array('nav_ec_config', 'setting&operation=ec', 0),
+			array('nav_ec_tenpay', 'ec&operation=tenpay', 0),
+			array('nav_ec_alipay', 'ec&operation=alipay', 0),
+			array('nav_ec_credit', 'ec&operation=credit', 1),
+			array('nav_ec_orders', 'ec&operation=orders', 0),
+			array('nav_ec_tradelog', 'tradelog', 0),
+			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 0)
 		));
 
 		showtips('ec_credit_tips');
@@ -468,6 +465,88 @@ if($operation == 'alipay') {
 
 		cpmsg('ec_credit_succeed', 'action=ec&operation=credit', 'succeed');
 
+	}
+} elseif($operation == 'inviteorders') {
+	if(!submitcheck('ordersubmit')) {
+		$start_limit = ($page - 1) * $_G['tpp'];
+		$sql = '';
+		$sql .= $_G['gp_orderstatus'] != ''	? " AND status='{$_G['gp_orderstatus']}'" : '';
+		$sql .= $_G['gp_orderid'] != ''		? " AND orderid='{$_G['gp_orderid']}'" : '';
+		$sql .= $_G['gp_email'] != ''		? " AND email='{$_G['gp_email']}'" : '';
+		$orderurl = array(
+			'alipay' => 'https://www.alipay.com/trade/query_trade_detail.htm?trade_no=',
+			'tenpay' => 'https://www.tenpay.com/med/tradeDetail.shtml?trans_id=',
+		);
+		shownav('extended', 'nav_ec');
+		showsubmenu('nav_ec', array(
+			array('nav_ec_config', 'setting&operation=ec', 0),
+			array('nav_ec_tenpay', 'ec&operation=tenpay', 0),
+			array('nav_ec_alipay', 'ec&operation=alipay', 0),
+			array('nav_ec_credit', 'ec&operation=credit', 0),
+			array('nav_ec_orders', 'ec&operation=orders', 0),
+			array('nav_ec_tradelog', 'tradelog', 0),
+			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 1)
+		));
+
+		$ordercount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." WHERE uid='0' $sql");
+		$multipage = multi($ordercount, $_G['tpp'], $page, ADMINSCRIPT."?action=ec&operation=inviteorders&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&email={$_G['gp_email']}");
+
+		showtagheader('div', 'orderlist', TRUE);
+		showformheader('ec&operation=inviteorders');
+		showtableheader('ec_inviteorders_search');
+		$_G['showsetting_multirow'] = 1;
+		showsetting('ec_orders_search_status', array('orderstatus', array(
+			array('', $lang['ec_orders_search_status_all']),
+			array(1, $lang['ec_orders_search_status_pending']),
+			array(2, $lang['ec_orders_search_status_auto_finished'])
+		)), intval($_G['gp_orderstatus']), 'select');
+		showsetting('ec_orders_search_id', 'orderid', $_G['gp_orderid'], 'text');
+		showsetting('ec_orders_search_email', 'email', $_G['gp_email'], 'text');
+		showsubmit('searchsubmit', 'submit');
+		showtablefooter();
+		showtableheader('result');
+		showsubtitle(array('', 'ec_orders_id', 'ec_inviteorders_status', 'ec_inviteorders_buyer', 'ec_orders_amount', 'ec_orders_price', 'ec_orders_submitdate', 'ec_orders_confirmdate'));
+
+		$query = DB::query("SELECT *
+			FROM ".DB::table('forum_order')." WHERE uid='0' $sql ORDER BY submitdate DESC
+			LIMIT $start_limit, $_G[tpp]");
+
+		while($order = DB::fetch($query)) {
+			switch($order['status']) {
+				case 1: $order['orderstatus'] = $lang['ec_orders_search_status_pending']; break;
+				case 2: $order['orderstatus'] = '<b>'.$lang['ec_orders_search_status_auto_finished'].'</b>'; break;
+				case 3: $order['orderstatus'] = '<b>'.$lang['ec_orders_search_status_manual_finished'].'</b><br />(<a href="home.php?mod=space&username='.rawurlencode($order['admin']).'" target="_blank">'.$order['admin'].'</a>)'; break;
+			}
+			$order['submitdate'] = dgmdate($order['submitdate']);
+			$order['confirmdate'] = $order['confirmdate'] ? dgmdate($order['confirmdate']) : 'N/A';
+
+			list($orderid, $apitype) = explode("\t", $order['buyer']);
+			$apitype = $apitype ? $apitype : 'alipay';
+			$orderid = '<a href="'.$orderurl[$apitype].$orderid.'" target="_blank">'.$orderid.'</a>';
+			showtablerow('', '', array(
+				"<input class=\"checkbox\" type=\"checkbox\" name=\"validate[]\" value=\"$order[orderid]\" ".($order['status'] != 1 ? 'disabled' : '').">",
+				"$order[orderid]<br />$orderid",
+				$order['orderstatus'],
+				"$order[email]<br>$order[ip]",
+				$order['amount'],
+				"$lang[rmb] $order[price] $lang[rmb_yuan]",
+				$order['submitdate'],
+				$order['confirmdate']
+			));
+		}
+		showtablerow('', array('colspan="7"'), array($multipage));
+		showsubmit('ordersubmit', 'ec_orders_validate', '<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'validate\')" />');
+		showtablefooter();
+		showformfooter();
+		showtagfooter('div');
+	} else {
+		if($_G['gp_validate']) {
+			$query = DB::query("SELECT * FROM ".DB::table('forum_order')." WHERE orderid IN (".dimplode($_G['gp_validate']).") AND status='1'");
+			if($numvalidate = DB::num_rows($query)) {
+				DB::query("UPDATE ".DB::table('forum_order')." SET status='3', admin='$_G[username]', confirmdate='$_G[timestamp]' WHERE orderid IN (".dimplode($_G['gp_validate']).")");
+			}
+		}
+		cpmsg('orders_validate_succeed', "action=ec&operation=inviteorders&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&email={$_G['gp_email']}", 'succeed');
 	}
 }
 

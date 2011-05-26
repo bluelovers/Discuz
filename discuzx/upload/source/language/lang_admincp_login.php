@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_login.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_admincp_login.php 21985 2011-04-19 06:57:34Z liguode $
  */
 
 $lang = array
@@ -26,7 +26,7 @@ $lang = array
 	'security_question_6' => '你最喜歡的餐館名稱',
 	'security_question_7' => '駕駛執照最後四位數字',
 
-	'login_tips' => 'Discuz! 是一個採用 PHP 和 MySQL 等多種數據庫構建的高效建站解決方案, 是眾多社區網站首選技術品牌!',
+	'login_tips' => 'Discuz! 是 <a href="http://www.tencent.com" target="_blank">騰訊</a> 旗下 <a href="http://www.comsenz.com" target="_blank">Comsenz</a> 公司推出的以社區為基礎的專業建站平台，幫助網站實現一站式服務。',
 	'login_nosecques' => '你還沒有使用安全登錄，請在個人中心設置你的安全提問後，再訪問管理中心。你可以 <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">點擊這裡</a> 進入安全提問的設置。',
 
 	'login_cplock' => '你的管理面板已經鎖定! <br>請在<b> {ltime} </b>秒以後重新訪問管理中心',

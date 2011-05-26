@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_group.php 17256 2010-09-28 01:48:27Z monkey $
+ *      $Id: search_group.php 22166 2011-04-25 02:03:44Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,8 +34,6 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '', 'trade' => '', 'threadsort' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 
 $srchtxt = $_G['gp_srchtxt'];
@@ -71,19 +69,21 @@ if(!submitcheck('searchsubmit', 1)) {
 		$index['ids'] = unserialize($index['ids']);
 		$searchstring = explode('|', $index['searchstring']);
 		$srchfid = $searchstring[2];
-		$threadlist = $grouplist = array();
+		$threadlist = $grouplist = $posttables = array();
 		if($index['ids']['thread'] && ($searchstring[2] || empty($viewgroup))) {
 			require_once libfile('function/misc');
 			$query = DB::query("SELECT t.*, f.name AS forumname FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE t.tid IN ({$index[ids][thread]}) AND t.displayorder>='0' ORDER BY $orderby $ascdesc LIMIT $start_limit, $_G[tpp]");
 			while($thread = DB::fetch($query)) {
 				$thread['subject'] = bat_highlight($thread['subject'], $keyword);
 				$threadlist[$thread['tid']] = procthread($thread);
+				$posttables[$thread['posttableid']][] = $thread['tid'];
 			}
 			if($threadlist) {
-				$tids = implode(',', array_keys($threadlist));
-				$query = DB::query("SELECT tid, message FROM ".DB::table('forum_post')." WHERE tid IN ($tids) AND first='1'");
-				while($post = DB::fetch($query)) {
-					$threadlist[$post['tid']]['message'] = bat_highlight(messagecutstr($post['message'], 200), $keyword);
+				foreach($posttables as $tableid => $tids) {
+					$query = DB::query("SELECT tid, message FROM ".DB::table(getposttable($tableid))." WHERE tid IN (".dimplode($tids).") AND first='1'");
+					while($post = DB::fetch($query)) {
+						$threadlist[$post['tid']]['message'] = bat_highlight(messagecutstr($post['message'], 200), $keyword);
+					}
 				}
 			}
 		}
@@ -154,17 +154,20 @@ if(!submitcheck('searchsubmit', 1)) {
 
 			$num = $ids = $tnum = $tids = 0;
 			$_G['setting']['search']['group']['maxsearchresults'] = $_G['setting']['search']['group']['maxsearchresults'] ? intval($_G['setting']['search']['group']['maxsearchresults']) : 500;
-			$srchtxtsql = addcslashes($srchtxt, '%_');
+			list($srchtxt, $srchtxtsql) = searchkey($keyword, "subject LIKE '%{text}%'", true);
 
-			$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE ".($srchfid ? "fid='$srchfid' AND ": '')."isgroup='1' AND subject LIKE '%$srchtxtsql%' ORDER BY tid DESC LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
+			$query = DB::query("SELECT t.tid, f.status FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE ".($srchfid ? "t.fid='$srchfid' AND ": '')."t.isgroup='1' $srchtxtsql ORDER BY tid DESC LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
 			while($thread = DB::fetch($query)) {
-				$tids .= ','.$thread['tid'];
-				$tnum++;
+				if($thread['status'] == 3) {
+					$tids .= ','.$thread['tid'];
+					$tnum++;
+				}
 			}
 			DB::free_result($query);
 
 			if(!$srchfid) {
-				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE `type`='sub' AND status='3' AND name LIKE '%$srchtxtsql%' LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
+				$srchtxtsql = str_replace('subject LIKE', 'name LIKE', $srchtxtsql);
+				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE `type`='sub' AND status='3' $srchtxtsql LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
 				while($group = DB::fetch($query)) {
 					$ids .= ','.$group['fid'];
 					$num++;
@@ -181,7 +184,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=group&searchid=$searchid&searchsubmit=yes");
+		dheader("location: search.php?mod=group&searchid=$searchid&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

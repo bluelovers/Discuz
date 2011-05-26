@@ -5,11 +5,13 @@ if(!defined('IN_DISCUZ')) {
 ?>
 <br />
 <center>
-	<div style="font-size: 11px;">
-		Powered by <strong><a target="_blank" href="http://www.discuz.net">Discuz! <?php echo $_G['setting']['version']; ?> Archiver</a></strong> &nbsp; &copy 2001-2010 <a target="_blank" href="http://www.comsenz.com">Comsenz Inc.</a>
+	<?php echo adshow('footerbanner//1').adshow('footerbanner//2').adshow('footerbanner//3'); ?>
+	<div id="footer">
+		Powered by <strong><a target="_blank" href="http://www.discuz.net">Discuz! <?php echo $_G['setting']['version']; ?> Archiver</a></strong> &nbsp; &copy 2001-2011 <a target="_blank" href="http://www.comsenz.com">Comsenz Inc.</a>
 		<br />
 		<br />
 	</div>
 </center>
 </body>
 </html>
+<?php output(); ?>

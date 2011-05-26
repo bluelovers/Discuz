@@ -29,19 +29,15 @@ function ctlent(event) {
 </script>
 
 <div class="ucnav">
-<a <!--{if $folder == 'inbox' && !$filter}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox">{lang pm_inbox}<!--{if $pmnum[1]}--><strong>[{$pmnum[1]}]</strong><!--{/if}--></a>
-<!--{if $pmnum[4] || $filter == 'announcepm'}-->
-<a <!--{if $filter == 'announcepm'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox&filter=announcepm">{lang pm_annbox}[{$pmnum[4]}]</a>
-<!--{/if}-->
-<a <!--{if $folder == 'savebox' || $folder == 'send' && $a == 'savebox'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=savebox">{lang pm_savebox}</a>
+<a <!--{if $filter == 'newpm'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&filter=newpm">{lang new_pm}<!--{if $unreadpmnum}--><strong>[{$unreadpmnum}]</strong><!--{/if}--></a>
+<a <!--{if $filter == 'privatepm'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&filter=privatepm">{lang private_pm}<!--{if $pmnum_private}--><strong>[{$pmnum_private}]</strong><!--{/if}--></a>
 <a <!--{if $folder == 'blackls'}-->class="ucontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=blackls">{lang pm_ignorelist}</a>
-<a <!--{if $type == '' && $folder == 'send' && $a != 'savebox'}-->class="ucontype sendpmontype" <!--{else}--> class="sendpm" <!--{/if}-->href="index.php?m=pm_client&a=send">{lang pm_send}</a>
+<a <!--{if $folder == 'send'}-->class="ucontype sendpmontype" <!--{else}--> class="sendpm" <!--{/if}-->href="index.php?m=pm_client&a=send&folder=send">{lang pm_send}</a>
 
-<!--{if $unreadpmnum || $pmnum[3] || $folder == 'newbox' || $filter == 'systempm'}-->
+<!--{if $unreadpmnum}-->
 	<span class="navinfo">
 		<img src="images/default/newpm.gif" />
-		<!--{if $unreadpmnum || $folder == 'newbox'}--><strong>$unreadpmnum</strong> <a <!--{if $folder == 'newbox'}-->class="ontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=newbox">{lang pm_unread}</a><!--{/if}-->
-		<!--{if $pmnum[3] || $filter == 'systempm'}--><strong>$pmnum[3]</strong> <a <!--{if $filter == 'systempm'}-->class="ontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&folder=inbox&filter=systempm">{lang pm_sysbox}</a><!--{/if}-->
+		<!--{if $unreadpmnum}--><strong>$unreadpmnum</strong> <a <!--{if $filter == 'newpm'}-->class="ontype" <!--{/if}-->href="index.php?m=pm_client&a=ls&filter=newpm">{lang pm_unread}</a><!--{/if}-->
 	</span>
 <!--{/if}-->
 </div>

@@ -4,18 +4,17 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc_stat.php 17333 2010-10-09 07:53:59Z monkey $
+	$Id: misc_stat.php 21574 2011-04-01 01:51:36Z congyushuai $
 */
-
-if(!$_G['group']['allowstatdata']) {
-	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
-}
 
 define('CACHE_TIME', 18000);
 
 $op = $_G['gp_op'];
 if(!in_array($op, array('basic', 'threadsrank', 'postsrank', 'forumsrank', 'creditsrank', 'trade', 'onlinetime', 'team', 'trend', 'modworks', 'memberlist', 'forumstat', 'trend'))) {
 	$op = 'basic';
+}
+if(!$_G['group']['allowstatdata'] && $op != 'trend') {
+	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 }
 
 $navtitle = lang('core', 'title_stats_'.$op).' - '.lang('core', 'title_stats');
@@ -82,37 +81,17 @@ function getstatvars($type) {
 
 	switch($type) {
 		case 'basic':
-			$statvars = getstatvars_basic();
-			break;
 		case 'forumsrank':
-			$statvars = getstatvars_forumsrank();
-			break;
 		case 'threadsrank':
-			$statvars = getstatvars_threadsrank();
-			break;
 		case 'postsrank':
-			$statvars = getstatvars_postsrank();
-			break;
 		case 'creditsrank':
-			$statvars = getstatvars_creditsrank();
-			break;
 		case 'trade':
-			$statvars = getstatvars_trade();
-			break;
 		case 'onlinetime':
-			$statvars = getstatvars_onlinetime();
-			break;
 		case 'team':
-			$statvars = getstatvars_team();
-			break;
 		case 'modworks':
-			$statvars = getstatvars_modworks();
-			break;
 		case 'memberlist':
-			$statvars = getstatvars_memberlist();
-			break;
 		case 'forumstat':
-			$statvars = getstatvars_forumstat($_G['gp_fid']);
+			$statvars = call_user_func('getstatvars_'.$type, ($type == 'forumstat' ? $_G['gp_fid'] : ''));//getstatvars_forumstat($_G['gp_fid']);
 			break;
 	}
 	return $statvars;
@@ -132,10 +111,10 @@ function getstatvars_basic() {
 	$statvars['lastmember'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE regdate>'".(TIMESTAMP - 86400)."'");
 	$statvars['mempostpercent'] = number_format((double)$statvars['mempost'] / $statvars['members'] * 100, 2);
 
-	$bestmember = DB::fetch_first("SELECT author, COUNT(*) AS posts FROM ".DB::table('forum_post')." WHERE dateline>='$_G[timestamp]'-86400 AND invisible='0' AND authorid>'0' GROUP BY author ORDER BY posts DESC LIMIT 1");
+	$bestmember = DB::fetch_first("SELECT author, COUNT(*) AS posts FROM ".DB::table(getposttable())." WHERE dateline>='$_G[timestamp]'-86400 AND invisible='0' AND authorid>'0' GROUP BY author ORDER BY posts DESC LIMIT 1");
 	$statvars['bestmem'] = $bestmember['author'];
 	$statvars['bestmemposts'] = $bestmember['posts'];
-	$postsinfo = DB::fetch_first("SELECT COUNT(*) AS posts, (MAX(dateline)-MIN(dateline))/86400 AS runtime FROM ".DB::table('forum_post'));
+	$postsinfo = DB::fetch_first("SELECT COUNT(*) AS posts, (MAX(dateline)-MIN(dateline))/86400 AS runtime FROM ".DB::table(getposttable()));
 	$statvars['posts'] = $postsinfo['posts'];
 	$runtime= $postsinfo['runtime'];
 
@@ -149,7 +128,7 @@ function getstatvars_basic() {
 
 	$statvars['threads'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread'));
 
-	$statvars['postsaddtoday'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_post')." WHERE dateline>='".(TIMESTAMP - 86400)."' AND invisible='0'");
+	$statvars['postsaddtoday'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable())." WHERE dateline>='".(TIMESTAMP - 86400)."' AND invisible='0'");
 
 	@$statvars['threadreplyavg'] = sprintf ("%01.2f", ($statvars['posts'] - $statvars['threads']) / $statvars['threads']);
 
@@ -166,6 +145,26 @@ function getstatvars_basic() {
 	return $statvars;
 }
 
+function gettimelimit_rank($type, $timelimit, $limit = 0) {
+	$data = array();
+	$limit = intval($limit);
+	if($type == 'forums') {
+		$query = DB::query("SELECT DISTINCT(p.fid) AS fid, f.name, COUNT(pid) AS posts FROM ".DB::table(getposttable())." p
+			LEFT JOIN ".DB::table('forum_forum')." f USING (fid)
+			WHERE dateline>='$timelimit' AND invisible='0' AND authorid>'0'
+			GROUP BY p.fid ORDER BY posts DESC LIMIT 0, $limit");
+	} elseif($type == 'member') {
+		$query = DB::query("SELECT DISTINCT(author) AS username, COUNT(pid) AS posts
+			FROM ".DB::table(getposttable())." WHERE dateline>='$timelimit' AND invisible='0' AND authorid>'0'
+			GROUP BY author
+			ORDER BY posts DESC
+			LIMIT 0, 20");
+	}
+	while($row = DB::fetch($query)) {
+		$data[] = $row;
+	}
+	return $data;
+}
 function getstatvars_forumsrank() {
 	global $_G;
 
@@ -182,23 +181,8 @@ function getstatvars_forumsrank() {
 	while($forum = DB::fetch($query)) {
 		$posts[] = $forum;
 	}
-
-	$query = DB::query("SELECT DISTINCT(p.fid) AS fid, f.name, COUNT(pid) AS posts FROM ".DB::table('forum_post')." p
-		LEFT JOIN ".DB::table('forum_forum')." f USING (fid)
-		WHERE dateline>='$_G[timestamp]'-86400*30 AND invisible='0' AND authorid>'0'
-		GROUP BY p.fid ORDER BY posts DESC LIMIT 0, $statvars[forums]");
-
-	while($forum = DB::fetch($query)) {
-		$thismonth[] = $forum;
-	}
-	$query = DB::query("SELECT DISTINCT(p.fid) AS fid, f.name, COUNT(pid) AS posts FROM ".DB::table('forum_post')." p
-		LEFT JOIN ".DB::table('forum_forum')." f USING (fid)
-		WHERE dateline>='$_G[timestamp]'-86400 AND invisible='0' AND authorid>'0'
-		GROUP BY p.fid ORDER BY posts DESC LIMIT 0, $statvars[forums]");
-
-	while($forum = DB::fetch($query)) {
-		$today[] = $forum;
-	}
+	$thismonth = gettimelimit_rank('forums', $_G['timestamp'] - 86400 * 30, $statvars['forums']);
+	$today = gettimelimit_rank('forums', $_G['timestamp'] - 86400, $statvars['forums']);
 
 	for($i = 0; $i < $statvars['forums']; $i++) {
 		$bgclass = $i % 2 ? ' class="alt"' : '';
@@ -277,26 +261,8 @@ function getstatvars_postsrank() {
 	while($member = DB::fetch($query)) {
 		$digestposts[] = $member;
 	}
-
-	$query = DB::query("SELECT DISTINCT(author) AS username, COUNT(pid) AS posts
-		FROM ".DB::table('forum_post')." WHERE dateline>='$_G[timestamp]'-86400*30 AND invisible='0' AND authorid>'0'
-		GROUP BY author
-		ORDER BY posts DESC
-		LIMIT 0, 20");
-
-	while($member = DB::fetch($query)) {
-		$thismonth[] = $member;
-	}
-
-	$query = DB::query("SELECT DISTINCT(author) AS username, COUNT(pid) AS posts
-		FROM ".DB::table('forum_post')." WHERE dateline >='$_G[timestamp]'-86400 AND invisible='0' AND authorid>'0'
-		GROUP BY author
-		ORDER BY posts DESC
-		LIMIT 0, 20");
-
-	while($member = DB::fetch($query)) {
-		$today[] = $member;
-	}
+	$thismonth = gettimelimit_rank('member', $_G['timestamp'] - 86400 * 30);
+	$today = gettimelimit_rank('member', $_G['timestamp'] - 86400);
 
 	for($i = 0; $i < 20; $i++) {
 		$bgclass = $i % 2 ? ' class="alt"' : '';
@@ -504,7 +470,7 @@ function getstatvars_team() {
 	}
 
 	$totalthismonthposts = 0;
-	$query = DB::query("SELECT authorid, COUNT(*) AS posts FROM ".DB::table('forum_post')."
+	$query = DB::query("SELECT authorid, COUNT(*) AS posts FROM ".DB::table(getposttable())."
 		WHERE dateline>=$_G[timestamp]-86400*30 AND authorid IN ($uids) AND invisible='0' GROUP BY authorid");
 	while($post = DB::fetch($query)) {
 		$members[$post['authorid']]['thismonthposts'] = $post['posts'];
@@ -566,6 +532,7 @@ function getstatvars_team() {
 		'avgmodactions' => @($totalmodactions / count($members)),
 	);
 
+	loadcache('usergroups');
 	if(is_array($team)) {
 		foreach($team['members'] as $uid => $member) {
 			@$member['thismonthposts'] = intval($member['thismonthposts']);
@@ -576,6 +543,7 @@ function getstatvars_team() {
 			@$team['members'][$uid]['totalol'] = $member['totalol'] < $team['avgtotalol'] / 2 ? '<b><i>'.$member['totalol'].'</i></b>' : $member['totalol'];
 			@$team['members'][$uid]['modposts'] = $member['modposts'] < $team['avgmodposts'] / 2 ? '<b><i>'.intval($member['modposts']).'</i></b>' : intval($member['modposts']);
 			@$team['members'][$uid]['modactions'] = $member['modactions'] < $team['avgmodactions'] / 2 ? '<b><i>'.intval($member['modactions']).'</i></b>' : intval($member['modactions']);
+			@$team['members'][$uid]['grouptitle'] = $_G['cache']['usergroups'][$member[adminid]]['grouptitle'];
 		}
 	}
 
@@ -628,7 +596,7 @@ function getstatvars_modworks() {
 		$uid = $_G['gp_uid'];
 		$member = DB::fetch_first("SELECT username FROM ".DB::table('common_member')." WHERE uid='$uid' AND adminid>'0'");
 		if(!$member) {
-			showmessage('undefined_action');
+			showmessage('member_not_found');
 		}
 
 		$modactions = $totalactions = array();
@@ -768,7 +736,7 @@ function getstatvars_forumstat($fid) {
 	$statvars = array();
 	$monthdays = array('31', '28', '31', '30', '31', '30', '31', '31', '30', '31', '30', '31');
 	if(!$fid) {
-		$query = DB::query("SELECT fid, name, posts FROM ".DB::table('forum_forum')." WHERE status<>'3' AND type<>'group'");
+		$query = DB::query("SELECT fid, type, name, posts FROM ".DB::table('forum_forum')." WHERE status<>'3' AND type<>'group'");
 		$forums = array();
 		while($forum = DB::fetch($query)) {
 			$forums[] = $forum;

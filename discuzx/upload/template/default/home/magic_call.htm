@@ -1,12 +1,11 @@
 <!--{if $op=='use'}-->
 	<h4 class="mtm mbn">{lang add_friend_max_10}</h4>
-	<p class="pns">
+	<p>
 		<input type="hidden" name="id" value="'.$id.'" />
 		<input type="hidden" name="idtype" value="'.$idtype.'" />
-		<input type="text" id="friendinput" class="px vm" />
-		<input type="button" class="pn vm" value="{lang add}" onclick="addFriendCall();" />
+		<input type="text" id="friendinput" class="px vm" />&nbsp;<button type="button" class="pn vm" onclick="addFriendCall();"><span>{lang add}</span></button>
 	</p>
-	<div id="friends" class="mtm"></div>
+	<div id="friendscall" class="mtn"></div>
 <!--{elseif $op=='show'}-->
 	<!--{template common/header}-->
 	<script type="text/javascript">

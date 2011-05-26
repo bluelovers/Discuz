@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_trade.php 14561 2010-08-12 08:00:36Z zhengqingpeng $
+ *      $Id: space_trade.php 20981 2011-03-09 09:55:55Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,7 @@ $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $page = empty($_G['gp_page'])?1:intval($_G['gp_page']);
 if($page<1) $page=1;
 $id = empty($_G['gp_id'])?0:intval($_G['gp_id']);
+$opactives['trade'] = 'class="a"';
 
 if(empty($_GET['view'])) $_GET['view'] = 'we';
 
@@ -50,12 +51,14 @@ $need_count = true;
 
 if($_GET['view'] == 'all') {
 
+	$start = 0;
+	$perpage = 100;
 	if($_G['gp_order'] == 'hot') {
 		$wheresql .= " AND t.tradesum>='$minhot'";
 	}
-	$ordertype = in_array($_G['gp_order'], array('new', 'hot')) ? $_G['gp_order'] : 'new';
+	$alltype = $ordertype = in_array($_G['gp_order'], array('new', 'hot')) ? $_G['gp_order'] : 'new';
 	$orderactives = array($ordertype => ' class="a"');
-
+	loadcache('space_trade');
 } elseif($_GET['view'] == 'me') {
 	$viewtype = in_array($_G['gp_type'], array('sell', 'buylog')) ? $_G['gp_type'] : 'sell';
 	if(!in_array($_G['gp_status'], array('attention'))) {
@@ -130,7 +133,6 @@ if($_GET['view'] == 'all') {
 			$typestatus = 'unstarttrades'; break;
 		default:
 			$typestatus = 'tradingtrades';
-			$filter = '';
 			break;
 	}
 	require_once libfile('function/trade');
@@ -238,6 +240,10 @@ if($_GET['view'] == 'all') {
 	@$buyerpercent = $caches['buyercredit']['all']['total'] ? sprintf('%0.2f', $caches['buyercredit']['all']['good'] * 100 / $caches['buyercredit']['all']['total']) : 0;
 	@$sellerpercent = $caches['sellercredit']['all']['total'] ? sprintf('%0.2f', $caches['sellercredit']['all']['good'] * 100 / $caches['sellercredit']['all']['total']) : 0;
 	$need_count = false;
+
+	include template('home/space_eccredit');
+	exit;
+
 } elseif($_GET['view'] == 'onlyuser') {
 	$uid = !empty($_G['gp_uid']) ? intval($_G['gp_uid']) : $_G['uid'];
 	$wheresql = "t.sellerid = '$uid'";
@@ -275,29 +281,58 @@ if($need_count) {
 	if($searchkey = stripsearchkey($_G['gp_searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
 	}
+	$havecache = false;
+	if($_G['gp_view'] == 'all') {
+		$cachetime = $_G['gp_order'] == 'hot' ? 43200 : 3000;
+		if(!empty($_G['cache']['space_trade'][$alltype]) && is_array($_G['cache']['space_trade'][$alltype])) {
+			$cachearr = $_G['cache']['space_trade'][$alltype];
+			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
+				$list = $cachearr['data'];
+				$hiddennum = $threadarr['hiddennum'];
+				$havecache = true;
+			}
+		}
+	}
+	if(!$havecache) {
+		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_trade')." t WHERE $wheresql"),0);
+		if($count) {
+			$query = DB::query("SELECT t.* FROM ".DB::table('forum_trade')." t
+				INNER JOIN ".DB::table('forum_thread')." th ON t.tid=th.tid AND th.displayorder>='0'
+				WHERE $wheresql
+				ORDER BY $ordersql LIMIT $start,$perpage");
+			$pids = $aids = $thidden = array();
+			while ($value = DB::fetch($query)) {
+				$aids[$value['aid']] = $value['aid'];
+				$value['dateline'] = dgmdate($value['dateline']);
+				$pids[] = (float)$value['pid'];
+				$list[$value['pid']] = $value;
+			}
+			if($_G['gp_view'] == 'all') {
+				$_G['cache']['space_trade'][$alltype] = array(
+					'dateline' => $_G['timestamp'],
+					'hiddennum' => $hiddennum,
+					'data' => $list
+				);
+				save_syscache('space_trade', $_G['cache']['space_trade']);
+			}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_trade')." t WHERE $wheresql"),0);
-	if($count) {
-		$query = DB::query("SELECT t.* FROM ".DB::table('forum_trade')." t
-			WHERE $wheresql
-			ORDER BY $ordersql LIMIT $start,$perpage");
+			if($_G['gp_view'] != 'all') {
+				$multi = multi($count, $perpage, $page, $theurl);
+			}
+
+		}
+	} else {
+		$count = count($list);
 	}
 }
 
 if($count) {
-	$aids = array();
-	while ($value = DB::fetch($query)) {
-		$aids[$value['aid']] = $value['aid'];
-		$value['dateline'] = dgmdate($value['dateline']);
-		$list[] = $value;
-	}
 	$emptyli = array();
 	if(count($list) % 5 != 0) {
 		for($i = 0; $i < 5 - count($list) % 5; $i++) {
 			$emptyli[] = $i;
 		}
 	}
-	$multi = multi($count, $perpage, $page, $theurl);
 }
 
 if($_G['uid']) {

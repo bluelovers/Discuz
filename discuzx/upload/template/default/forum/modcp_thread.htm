@@ -5,6 +5,7 @@
 		<li class="a"><a href="{$cpscript}?mod=modcp&action=thread&op=thread{$forcefid}" hidefocus="true">{lang mod_option_subject_forum}</a></li>
 		<li><a href="{$cpscript}?mod=modcp&action=thread&op=post{$forcefid}" hidefocus="true">{lang mod_option_subject_delete}</a></li>
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebin{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebin}</a></li>
+		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
 	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
@@ -118,12 +119,12 @@
 							</td>
 							<th class="$thread[folder]">
 								<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" $thread['highlight']>$thread[subject]</a></span>
-								<!--{if $thread['readperm']}--> - [{lang readperm} <span class="bold">$thread[readperm]</span>]<!--{/if}-->
+								<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 								<!--{if $thread['price'] > 0}-->
 									<!--{if $thread['special'] == '3'}-->
-										- <span style="color: #C60">[{lang thread_reward}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]} <span class="bold">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}]</span>
+										- <span style="color: #C60">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 									<!--{else}-->
-										- [{lang price} {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]} <span class="bold">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}]
+										- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
 									<!--{/if}-->
 								<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
 										- <span style="color: #269F11">[{lang reward_solved}]</span>
@@ -167,7 +168,7 @@
 				<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
 				<!--{template forum/topicadmin_modlayer}-->
 			</form>
-		</div>
+		</div><br /><br /><br />
 		<!--{/if}-->
 	<!--{else}-->
 		<div class="xi1">{lang modcp_forum_select_msg}</div>

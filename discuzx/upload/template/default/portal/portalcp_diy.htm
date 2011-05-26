@@ -58,7 +58,7 @@
 			</div>
 			<span id="uploadmsg" class="z"></span>
 		</div>
-		{lang diy_editing}: 
+		{lang diy_editing}:
 		<a id="diy_tag_body" href="javascript:;" onclick="spaceDiy.setCurrentDiy('body');return false;">{lang background}</a>
 		<span class="pipe">|</span><a id="diy_tag_blocktitle" href="javascript:;" onclick="spaceDiy.setCurrentDiy('blocktitle');return false;">{lang title_bar}</a></span>
 		<span class="pipe">|</span><a id="diy_tag_ct" href="javascript:;" onclick="spaceDiy.setCurrentDiy('ct');return false;">{lang content_area}</a>
@@ -70,7 +70,7 @@
 		<div class="photo_list cl">
 			<div id="currentimgdiv" class="z" style="width:446px;">
 				<center><ul><li class="thumb" style="border:1px solid #ccc; padding:2px;"><img id="currentimg" alt="" src=""/></li></ul>
-				<div class="z" style="cursor:pointer" onclick="spaceDiy.changeBgImgDiv();">{lang diy_change}</div></center>
+				<div class="z cur1" onclick="spaceDiy.changeBgImgDiv();">{lang diy_change}</div></center>
 			</div>
 			<div id="diyimages" class="z" style="width: 446px; display: none">
 				<div id="diyimg_prev" class="z">$multi</div>
@@ -86,7 +86,7 @@
 					<tr>
 						<td><label for="repeat_mode">{lang image_repeat_mode}:</label></td>
 						<td>
-							<select id="repeat_mode" name="repeat_mode" onclick="spaceDiy.setBgRepeat(this.value);">
+							<select id="repeat_mode" name="repeat_mode" class="ps" onclick="spaceDiy.setBgRepeat(this.value);">
 								<option value="0" selected="selected">{lang image_repeat}</option>
 								<option value="1">{lang image_repeat_direct}</option>
 								<option value="2">{lang image_repeat_horizontal}</option>
@@ -129,8 +129,8 @@
 					</tr>
 					<tr>
 						<td>{lang background_color}:</td>
-						<td><input type="text" id="colorValue" value="" size="6" onchange="window.parent.spaceDiy.setBgColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('bpb', 'colorValue', 'white');}-->
+						<td><input type="text" id="colorValue" value="" size="6" onchange="spaceDiy.setBgColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
+						<input id="cbpb" onclick="createPalette('bpb', 'colorValue', 'spaceDiy.setBgColor');" type="button" class="pn colorwd" value="" />
 						</td>
 					</tr>
 				</table>
@@ -139,14 +139,14 @@
 				<table cellpadding="0" cellspacing="0">
 					<tr>
 						<td>{lang text_color}:</td>
-						<td><input type="text" id="textColorValue" value="" size="6" onchange="window.parent.spaceDiy.setTextColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('tpb', 'textColorValue', 'white');}-->
+						<td><input type="text" id="textColorValue" value="" size="6" onchange="spaceDiy.setTextColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
+						<input id="ctpb" onclick="createPalette('tpb', 'textColorValue', 'spaceDiy.setTextColor');" type="button" class="pn colorwd" value="" />
 						</td>
 					</tr>
 					<tr>
 						<td>{lang link_color}:</td>
-						<td><input type="text" id="linkColorValue" value="" size="6" onchange="window.parent.spaceDiy.setLinkColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
-						<!--{eval echo getcolorpalette('lpb', 'linkColorValue', 'white');}-->
+						<td><input type="text" id="linkColorValue" value="" size="6" onchange="spaceDiy.setLinkColor(this.value);" class="px vm" style="font-size: 12px; padding: 2px;" />
+						<input id="clpb" onclick="createPalette('lpb', 'linkColorValue', 'spaceDiy.setLinkColor');" type="button" class="colorwd" value="" style="background: #fff;" />
 						</td>
 					</tr>
 				</table>
@@ -160,10 +160,27 @@
 		<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
 	</span>
 </h3>
+<ul class="tb cl">
+	<li{if empty($_G['gp_type'])} class="a"{/if} id="li_import_upload"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=0&tpl=$_GET['tpl']">{lang diy_uploadfile}</a></li>
+	<li{if $_G['gp_type'] == 1} class="a"{/if} id="li_import_system"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=1&tpl=$_GET['tpl']">{lang diy_systemfile}</a></li>
+</ul>
 
 <form name="frameimport" id="frameimport" enctype="multipart/form-data" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=diy&op=import" onsubmit="ajaxpost('frameimport','return_$_G[gp_handlekey]','','onerror',$('frameimportbutton'));">
-	  <div class="c" style="width:420px;line-height:100px; overflow-y: auto; ">
-		{lang import_text_file_from} <input type="file" id="importfile" name="importfile" style="margin: 5px;">
+	<div class="c" style="width:420px;line-height:100px; overflow-y: auto; ">
+	<!--{if $_G['gp_type'] == 1}-->
+		<!--{if $xmlarr}-->
+		{lang import_select_file}:
+		<select id="importfilename" name="importfilename" class="">
+			<!--{loop $xmlarr $key $value}-->
+			<option value="$key">$value</option>
+			<!--{/loop}-->
+		</select>
+		<!--{else}-->
+		<center>{lang import_system_file_no_exists}</center>
+		<!--{/if}-->
+	<!--{else}-->
+		{lang import_text_file_from}: <input type="file" id="importfile" name="importfile" style="margin: 5px;">
+	<!--{/if}-->
 	</div>
 	<div class="o pns">
 		<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
@@ -177,12 +194,12 @@
 function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 	if (values['status'] == '1') {
 		if (values['css']) spaceDiy.initDiyStyle(values['css']);
-		
+
 		var areaArr = values['html'];
 		var dom = document.createElement("div");
 		for (var i in areaArr) {
 			var html = areaArr[i].replace(/\[script/g, '<script').replace(/\[\/script\]/g, '<\/script>');
-			var area = $(i) ? $(i) : $(drag.moveableArea[0]);
+			var area = $(i) ? $(i) : drag.moveableArea[0];
 			dom.innerHTML = html;
 			var arr = [];
 			for (var i=0, l=dom.childNodes.length; i < l; i++) {

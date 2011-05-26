@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_medals.php 13907 2010-08-03 03:04:12Z zhengqingpeng $
+ *      $Id: admincp_medals.php 19745 2011-01-18 05:39:21Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -42,7 +42,7 @@ if(!$operation) {
 		]
 	];
 </script>
-<?
+<?php
 		$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." ORDER BY displayorder");
 		while($medal = DB::fetch($query)) {
 			$checkavailable = $medal['available'] ? 'checked' : '';
@@ -212,9 +212,23 @@ if(!$operation) {
 
 		$medal = DB::fetch_first("SELECT * FROM ".DB::table('forum_medal')." WHERE medalid='$medalid'");
 
-		$medal['permission'] = unserialize($medal['permission']);$medal['permission'] = $medal['permission'][0];
+		$medal['permission'] = unserialize($medal['permission']);
+		$medal['usergroupallow'] = $medal['permission']['usergroupallow'];
+		$medal['usergroups'] = (array)$medal['permission']['usergroups'];
+		$medal['permission'] = $medal['permission'][0];
 
 		$checkmedaltype = array($medal['type'] => 'checked');
+
+		$query = DB::query("SELECT type, groupid, grouptitle, radminid FROM ".DB::table('common_usergroup')." ORDER BY (creditshigher<>'0' || creditslower<>'0'), creditslower, groupid");
+		$groupselect = array();
+		while($group = DB::fetch($query)) {
+			$groupselect[$group['type']] .= '<option value="'.$group['groupid'].'"'.(@in_array($group['groupid'], $medal['usergroups']) ? ' selected' : '').'>'.$group['grouptitle'].'</option>';
+		}
+		$usergroups = '<select name="usergroupsnew[]" size="10" multiple="multiple">'.
+			'<optgroup label="'.$lang['usergroups_member'].'">'.$groupselect['member'].'</optgroup>'.
+			($groupselect['special'] ? '<optgroup label="'.$lang['usergroups_special'].'">'.$groupselect['special'].'</optgroup>' : '').
+			($groupselect['specialadmin'] ? '<optgroup label="'.$lang['usergroups_specialadmin'].'">'.$groupselect['specialadmin'].'</optgroup>' : '').
+			'<optgroup label="'.$lang['usergroups_system'].'">'.$groupselect['system'].'</optgroup></select>';
 
 		shownav('extended', 'nav_medals', 'admin');
 		showsubmenu('nav_medals', array(
@@ -231,6 +245,9 @@ if(!$operation) {
 			<li'.($checkmedaltype[1] ? ' class="checked"' : '').'><input name="typenew" type="radio" class="radio" value="1" '.$checkmedaltype[1].'>&nbsp;'.$lang['medals_apply_auto'].'</li>
 			<li'.($checkmedaltype[2] ? ' class="checked"' : '').'><input name="typenew" type="radio" class="radio" value="2" '.$checkmedaltype[2].'>&nbsp;'.$lang['medals_apply_noauto'].'</li></ul>'
 		);
+		showsetting('medals_usergroups_allow', 'usergroupallow', $medal['usergroupallow'], 'radio', 0, 1);
+		showsetting('medals_usergroups', '', '', $usergroups);
+		showtagfooter('tbody');
 		showsetting('medals_expr1', 'expirationnew', $medal['expiration'], 'text');
 		showsetting('medals_memo', 'descriptionnew', $medal['description'], 'text');
 		showtablefooter();
@@ -269,10 +286,10 @@ if(!$operation) {
 	}
 
 	var formulafind = new Array('digestposts', 'posts', 'threads');
-	var formulareplace = new Array(<?=$formulareplace?>);
+	var formulareplace = new Array(<?php echo $formulareplace;?>);
 	function formulaexp() {
 		var result = $('formulapermnew').value;
-<?
+<?php
 
 		$extcreditsbtn = '';
 		for($i = 1; $i <= 8; $i++) {
@@ -281,6 +298,12 @@ if(!$operation) {
 			$extcreditsbtn .= '<a href="###" onclick="insertunit(\'extcredits'.$i.'\')">'.$extcredittitle.'</a> &nbsp;';
 		}
 
+		echo 'result = result.replace(/regdate/g, \'<u>'.cplang('forums_edit_perm_formula_regdate').'</u>\');';
+		echo 'result = result.replace(/regday/g, \'<u>'.cplang('forums_edit_perm_formula_regday').'</u>\');';
+		echo 'result = result.replace(/regip/g, \'<u>'.cplang('forums_edit_perm_formula_regip').'</u>\');';
+		echo 'result = result.replace(/lastip/g, \'<u>'.cplang('forums_edit_perm_formula_lastip').'</u>\');';
+		echo 'result = result.replace(/buyercredit/g, \'<u>'.cplang('forums_edit_perm_formula_buyercredit').'</u>\');';
+		echo 'result = result.replace(/sellercredit/g, \'<u>'.cplang('forums_edit_perm_formula_sellercredit').'</u>\');';
 		echo 'result = result.replace(/digestposts/g, \'<u>'.$lang['setting_credits_formula_digestposts'].'</u>\');';
 		echo 'result = result.replace(/posts/g, \'<u>'.$lang['setting_credits_formula_posts'].'</u>\');';
 		echo 'result = result.replace(/threads/g, \'<u>'.$lang['setting_credits_formula_threads'].'</u>\');';
@@ -295,11 +318,17 @@ if(!$operation) {
 	}
 </script>
 <tr><td colspan="2"><div class="extcredits">
-<?=$extcreditsbtn?><br />
-<a href="###" onclick="insertunit(' digestposts ')"><?=$lang['setting_credits_formula_digestposts']?></a>&nbsp;
-<a href="###" onclick="insertunit(' posts ')"><?=$lang['setting_credits_formula_posts']?></a>&nbsp;
-<a href="###" onclick="insertunit(' threads ')"><?=$lang['setting_credits_formula_threads']?></a>&nbsp;
-<a href="###" onclick="insertunit(' oltime ')"><?=$lang['setting_credits_formula_oltime']?></a>&nbsp;
+<?php echo $extcreditsbtn;?>
+<a href="###" onclick="insertunit(' regdate ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regdate')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' regday ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regday')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' regip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_regip')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' lastip ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_lastip')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' buyercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_buyercredit')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' sellercredit ')">&nbsp;<?php echo cplang('forums_edit_perm_formula_sellercredit')?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' digestposts ')"><?php echo $lang['setting_credits_formula_digestposts'];?></a>&nbsp;
+<a href="###" onclick="insertunit(' posts ')"><?php echo $lang['setting_credits_formula_posts'];?></a>&nbsp;
+<a href="###" onclick="insertunit(' threads ')"><?php echo $lang['setting_credits_formula_threads'];?></a>&nbsp;
+<a href="###" onclick="insertunit(' oltime ')"><?php echo $lang['setting_credits_formula_oltime'];?></a>&nbsp;
 <a href="###" onclick="insertunit(' + ')">&nbsp;+&nbsp;</a>&nbsp;
 <a href="###" onclick="insertunit(' - ')">&nbsp;-&nbsp;</a>&nbsp;
 <a href="###" onclick="insertunit(' * ')">&nbsp;*&nbsp;</a>&nbsp;
@@ -310,15 +339,15 @@ if(!$operation) {
 <a href="###" onclick="insertunit(' <= ')">&nbsp;<=&nbsp;</a>&nbsp;
 <a href="###" onclick="insertunit(' = ')">&nbsp;=&nbsp;</a>&nbsp;
 <a href="###" onclick="insertunit(' (', ') ')">&nbsp;(&nbsp;)&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' and ')">&nbsp;<?=$lang['setting_credits_formulaperm_and']?>&nbsp;</a>&nbsp;
-<a href="###" onclick="insertunit(' or ')">&nbsp;<?=$lang['setting_credits_formulaperm_or']?>&nbsp;</a>&nbsp;<br />
-</div><div id="formulapermexp" class="marginbot diffcolor2"><?=$formulapermexp?></div>
-<textarea name="formulapermnew" id="formulapermnew" style="width: 80%" rows="3" onkeyup="formulaexp()"><?=dhtmlspecialchars($medal['permission'])?></textarea>
-<br /><span class="smalltxt"><?=$lang['medals_permformula']?></span>
-<br /><?=$lang['creditwizard_current_formula_notice']?>
+<a href="###" onclick="insertunit(' and ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_and'];?>&nbsp;</a>&nbsp;
+<a href="###" onclick="insertunit(' or ')">&nbsp;<?php echo $lang['setting_credits_formulaperm_or'];?>&nbsp;</a>&nbsp;<br />
+</div><div id="formulapermexp" class="marginbot diffcolor2"><?php echo $formulapermexp;?></div>
+<textarea name="formulapermnew" id="formulapermnew" style="width: 80%" rows="3" onkeyup="formulaexp()"><?php echo dhtmlspecialchars($medal['permission']);?></textarea>
+<br /><span class="smalltxt"><?php echo $lang['medals_permformula'];?></span>
+<br /><?php echo $lang['creditwizard_current_formula_notice'];?>
 <script type="text/JavaScript">formulaexp()</script>
 </td></tr>
-<?
+<?php
 			showsubmit('medaleditsubmit');
 			showtablefooter();
 			showformfooter();
@@ -329,7 +358,12 @@ if(!$operation) {
 		}
 
 		$formulapermary[0] = $_G['gp_formulapermnew'];
-		$formulapermary[1] = preg_replace("/(digestposts|posts|threads|oltime|extcredits[1-8])/", "getuserprofile('\\1')", $_G['gp_formulapermnew']);
+		$formulapermary[1] = preg_replace(
+				array("/(digestposts|posts|threads|oltime|extcredits[1-8])/", "/(regdate|regday|regip|lastip|buyercredit|sellercredit|field\d+)/"),
+				array("getuserprofile('\\1')", "\$memberformula['\\1']"),
+				$_G['gp_formulapermnew']);
+		$formulapermary['usergroupallow'] = $_G['gp_usergroupallow'];
+		$formulapermary['usergroups'] = (array)$_G['gp_usergroupsnew'];
 		$formulapermnew = addslashes(serialize($formulapermary));
 
 		DB::update('forum_medal', array(

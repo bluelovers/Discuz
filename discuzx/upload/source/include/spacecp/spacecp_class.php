@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_class.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: spacecp_class.php 18487 2010-11-24 09:07:11Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ if ($op == 'edit') {
 			showmessage('enter_the_correct_class_name');
 		}
 		DB::update('home_class', array('classname'=>$_POST['classname']), array('classid'=>$classid));
-		showmessage('do_success', dreferer(),array('classid'=>$classid), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
+		showmessage('do_success', dreferer(),array('classid'=>$classid, 'classname' => $_POST['classname']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 	}
 
 } elseif ($op == 'delete') {

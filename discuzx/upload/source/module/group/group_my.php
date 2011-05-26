@@ -128,6 +128,7 @@ if($view == 'groupthread' || $view == 'mythread') {
 	}
 } elseif($view == 'manager' || $view == 'join') {
 	$perpage = 40;
+	$start = ($page - 1) * $perpage;
 	$ismanager = $view == 'manager' ? 1 : 2;
 	$num = mygrouplist($_G['uid'], 'lastupdate', array('f.name', 'ff.icon'), 0, 0, $ismanager, 1);
 	$multipage = multi($num, $perpage, $page, 'group.php?mod=my&view='.$view);

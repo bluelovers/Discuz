@@ -44,6 +44,7 @@ $language = array(
 	'cancel' => '&nbsp;取&nbsp;消&nbsp;',
 	'return' => '請返回',
 	'tips' => '技巧提示',
+	'tips_pconnect' => '注意：如果源數據庫與目標數據庫在同一服務器，該項必須設置為0，否則設置為1',
 
 	'mysql_config_error' => '配置不能為空',
 	'mysql_connect_error' => '連接失敗',

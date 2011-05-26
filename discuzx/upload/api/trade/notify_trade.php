@@ -4,8 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: notify_trade.php 14722 2010-08-13 08:37:58Z monkey $
+ *      $Id: notify_trade.php 22319 2011-04-29 09:40:43Z monkey $
  */
+
+define('IN_API', true);
+define('CURSCRIPT', 'api');
 
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
@@ -102,7 +105,7 @@ if($notifydata['validator']) {
 }
 
 if($notifydata['location']) {
-	header('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed&orderid='.$orderid);
+	dheader('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed&orderid='.$orderid);
 } else {
 	exit($notifydata['notify']);
 }

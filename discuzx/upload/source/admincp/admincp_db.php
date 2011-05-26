@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 17365 2010-10-12 08:10:26Z monkey $
+ *      $Id: admincp_db.php 22570 2011-05-12 08:59:24Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -60,6 +60,23 @@ if($operation == 'export') {
 
 		$defaultfilename = date('ymd').'_'.random(8);
 
+		include DISCUZ_ROOT.'./config/config_ucenter.php';
+		$uc_tablepre = explode('.', UC_DBTABLEPRE);
+		$uc_tablepre = $uc_tablepre[1] ? $uc_tablepre[1] : $uc_tablepre[0];
+		$uc_tablepre = substr($uc_tablepre, '0', '-8');
+		if(UC_CONNECT == 'mysql' && UC_DBHOST == $_G['config']['db'][1]['dbhost'] && UC_DBNAME == $_G['config']['db'][1]['dbname'] && $uc_tablepre == $tablepre) {
+			$db_export = 'db_export_discuz_uc';
+			$db_export_key = 'discuz_uc';
+			$db_export_tips = cplang('db_export_tips_uc', array('uc_backup_url' => $uc_backup_url)).cplang('db_export_tips');
+			$db_export_discuz_table = cplang('db_export_discuz_table_uc');
+		} else {
+			$db_export = 'db_export_discuz';
+			$db_export_key = 'discuz';
+			$uc_backup_url = UC_API.'/admin.php?m=db&a=ls&iframe=1';
+			$db_export_tips = cplang('db_export_tips_nouc', array('uc_backup_url' => $uc_backup_url)).cplang('db_export_tips');
+			$db_export_discuz_table = cplang('db_export_discuz_table');
+		}
+
 		shownav('founder', 'nav_db', 'nav_db_export');
 		showsubmenu('nav_db', array(
 			array('nav_db_export', 'db&operation=export', 1),
@@ -67,19 +84,17 @@ if($operation == 'export') {
 			array('nav_db_runquery', 'db&operation=runquery', 0),
 			array('nav_db_optimize', 'db&operation=optimize', 0),
 			array('nav_db_dbcheck', 'db&operation=dbcheck', 0)
-
 		));
-		showtips('db_export_tips');
+		showtips($db_export_tips);
 		showformheader('db&operation=export&setup=1');
 		showtableheader();
 		showsetting('db_export_type', array('type', array(
-			array('discuz', $lang['db_export_discuz'], array('showtables' => 'none')),
+			array($db_export_key, $lang[$db_export], array('showtables' => 'none')),
 			array('custom', $lang['db_export_custom'], array('showtables' => ''))
-		)), 'discuz', 'mradio');
-
+		)), $db_export_key, 'mradio');
 
 		showtagheader('tbody', 'showtables');
-		showtablerow('', '', '<input class="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'customtables\', \'chkall\', true)" checked="checked" type="checkbox" id="chkalltables" /><label for="chkalltables"> '.cplang('db_export_custom_select_all').' - '.cplang('db_export_discuz_table')).'</label>';
+		showtablerow('', '', '<input class="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'customtables\', \'chkall\', true)" checked="checked" type="checkbox" id="chkalltables" /><label for="chkalltables"> '.cplang('db_export_custom_select_all').' - '.$db_export_discuz_table ).'</label>';
 		showtablerow('', 'colspan="2"', mcheckbox('customtables', $dztables));
 		showtagfooter('tbody');
 
@@ -121,7 +136,7 @@ if($operation == 'export') {
 		}
 
 		$time = dgmdate(TIMESTAMP);
-		if($_G['gp_type'] == 'discuz') {
+		if($_G['gp_type'] == 'discuz' || $_G['gp_type'] == 'discuz_uc') {
 			$tables = arraykeys2(fetchtablelist($tablepre), 'Name');
 		} elseif($_G['gp_type'] == 'custom') {
 			$tables = array();
@@ -146,7 +161,7 @@ if($operation == 'export') {
 		}
 
 		$volume = intval($_G['gp_volume']) + 1;
-		$idstring = '# Identify: '.base64_encode("$_G[timestamp],".$_G['setting']['version'].",{$_G['gp_type']},{$_G['gp_method']},{$volume}")."\n";
+		$idstring = '# Identify: '.base64_encode("$_G[timestamp],".$_G['setting']['version'].",{$_G['gp_type']},{$_G['gp_method']},{$volume},{$tablepre},{$dbcharset}")."\n";
 
 
 		$dumpcharset = $_G['gp_sqlcharset'] ? $_G['gp_sqlcharset'] : str_replace('-', '', $_G['charset']);
@@ -162,7 +177,7 @@ if($operation == 'export') {
 			}
 		}
 
-		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.'), '', $_G['gp_filename']);
+		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.', "'"), '', $_G['gp_filename']);
 
 		if($_G['gp_usezip']) {
 			require_once './source/class/class_zip.php';
@@ -174,11 +189,12 @@ if($operation == 'export') {
 			$tableid = intval($_G['gp_tableid']);
 			$startfrom = intval($_G['gp_startfrom']);
 
-			if(!$tableid) {
+			if(!$tableid && $volume == 1) {
 				foreach($tables as $table) {
 					$sqldump .= sqldumptablestruct($table);
 				}
 			}
+
 			$complete = TRUE;
 			for(; $complete && $tableid < count($tables) && strlen($sqldump) + 500 < $_G['gp_sizelimit'] * 1000; $tableid++) {
 				$sqldump .= sqldumptable($tables[$tableid], $startfrom, strlen($sqldump));
@@ -191,7 +207,7 @@ if($operation == 'export') {
 			!$complete && $tableid--;
 			if(trim($sqldump)) {
 				$sqldump = "$idstring".
-					"# <?exit();?>\n".
+					"# <?php exit();?>\n".
 					"# Discuz! Multi-Volume Data Dump Vol.$volume\n".
 					"# Version: Discuz! {$_G[setting][version]}\n".
 					"# Time: $time\n".
@@ -295,7 +311,7 @@ if($operation == 'export') {
 					$fp = fopen($dumpfile, "r");
 					$content = @fread($fp, filesize($dumpfile));
 					fclose($fp);
-					$zip->addFile($idstring."# <?exit();?>\n ".$setnames."\n #".$content, basename($dumpfile));
+					$zip->addFile($idstring."# <?php exit();?>\n ".$setnames."\n #".$content, basename($dumpfile));
 					$fp = fopen($zipfilename, 'w');
 					@fwrite($fp, $zip->file());
 					fclose($fp);
@@ -307,7 +323,7 @@ if($operation == 'export') {
 				} else {
 					if(@is_writeable($dumpfile)) {
 						$fp = fopen($dumpfile, 'rb+');
-						@fwrite($fp, $idstring."# <?exit();?>\n ".$setnames."\n #");
+						@fwrite($fp, $idstring."# <?php exit();?>\n ".$setnames."\n #");
 						fclose($fp);
 					}
 					@touch('./data/'.$backupdir.'/index.htm');
@@ -324,71 +340,11 @@ if($operation == 'export') {
 		}
 	}
 
-} elseif($operation == 'importzip') {
-
-	if(empty($_G['gp_datafile_server'])) {
-		cpmsg('database_import_file_illegal', '', 'error');
-	} else {
-		$datafile_server = DISCUZ_ROOT.'./data/'.$backupdir.'/'.basename($_G['gp_datafile_server']);
-		if(!@file_exists($datafile_server)) {
-			cpmsg('database_import_file_illegal', '', 'error');
-		}
-	}
-
-	require_once libfile('class/zip');
-	$unzip = new SimpleUnzip();
-	$unzip->ReadFile($datafile_server);
-
-	if($unzip->Count() == 0 || $unzip->GetError(0) != 0 || !preg_match("/\.sql$/i", $importfile = $unzip->GetName(0))) {
-		cpmsg('database_import_file_illegal', '', 'error');
-	}
-
-	$identify = explode(',', base64_decode(preg_replace("/^# Identify:\s*(\w+).*/s", "\\1", substr($unzip->GetData(0), 0, 256))));
-	$confirm = !empty($_G['gp_confirm']) ? 1 : 0;
-	if(!$confirm && $identify[1] != $_G['setting']['version']) {
-		cpmsg('database_import_confirm', 'action=db&operation=importzip&datafile_server=$datafile_server&importsubmit=yes&confirm=yes', 'form');
-	}
-
-	$sqlfilecount = 0;
-	foreach($unzip->Entries as $entry) {
-		if(preg_match("/\.sql$/i", $entry->Name)) {
-			$fp = fopen('./data/'.$backupdir.'/'.$entry->Name, 'w');
-			fwrite($fp, $entry->Data);
-			fclose($fp);
-			$sqlfilecount++;
-		}
-	}
-
-	if(!$sqlfilecount) {
-		cpmsg('database_import_file_illegal', '', 'error');
-	}
-
-	$info = basename($datafile_server).'<br />'.$lang['version'].': '.$identify[1].'<br />'.$lang['type'].': '.$lang['db_export_'.$identify[2]].'<br />'.$lang['db_method'].': '.($identify[3] == 'multivol' ? $lang['db_multivol'] : $lang['db_shell']).'<br />';
-
-	if(isset($multivol)) {
-		$multivol++;
-		$datafile_server = preg_replace("/-(\d+)(\..+)$/", "-$multivol\\2", $datafile_server);
-		if(file_exists($datafile_server)) {
-			cpmsg('database_import_multivol_unzip_redirect', 'action=db&operation=importzip&multivol='.$multivol.'&datafile_vol1='.$datafile_vol1.'&datafile_server='.$datafile_server.'&importsubmit=yes&confirm=yes', 'loading', array('multivol' => $multivol));
-		} else {
-			cpmsg('database_import_multivol_confirm', 'action=db&operation=import&from=server&datafile_server='.$datafile_vol1.'&importsubmit=yes&delunzip=yes', 'form');
-		}
-	}
-
-	if($identify[3] == 'multivol' && $identify[4] == 1 && preg_match("/-1(\..+)$/", $datafile_server)) {
-		$datafile_vol1 = $datafile_server;
-		$datafile_server = preg_replace("/-1(\..+)$/", "-2\\1", $datafile_server);
-		if(file_exists($datafile_server)) {
-			cpmsg('database_import_multivol_unzip', 'action=db&operation=importzip&multivol=1&datafile_vol1=./data/'.$backupdir.'/'.$importfile.'&datafile_server='.$datafile_server.'&importsubmit=yes&confirm=yes', 'form', array('info' => $info));
-		}
-	}
-
-	cpmsg('database_import_unzip', 'action=db&operation=import&from=server&datafile_server=./data/'.$backupdir.'/'.$importfile.'&importsubmit=yes&delunzip=yes', 'form', array('info' => $info));
-
 } elseif($operation == 'import') {
 
 	checkpermission('dbimport');
-	if(!submitcheck('importsubmit', 1) && !submitcheck('deletesubmit')) {
+
+	if(!submitcheck('deletesubmit')) {
 
 		$exportlog = $exportsize = $exportziplog = array();
 		if(is_dir(DISCUZ_ROOT.'./data/'.$backupdir)) {
@@ -428,6 +384,8 @@ if($operation == 'export') {
 			cpmsg('database_export_dest_invalid', '', 'error');
 		}
 
+		$restore_url = $_G['siteurl'].'data/restore.php';
+
 		shownav('founder', 'nav_db', 'nav_db_import');
 		showsubmenu('nav_db', array(
 			array('nav_db_export', 'db&operation=export', 0),
@@ -435,25 +393,16 @@ if($operation == 'export') {
 			array('nav_db_runquery', 'db&operation=runquery', 0),
 			array('nav_db_optimize', 'db&operation=optimize', 0),
 			array('nav_db_dbcheck', 'db&operation=dbcheck', 0)
-
 		));
 		showtips('db_import_tips');
 		showtableheader('db_import');
-		showformheader('db&operation=import', 'enctype');
-		showtablerow('', array('colspan="2" class="rowform"', 'colspan="7" class="rowform"'), array(
-			'<input class="radio" type="radio" name="from" value="server" checked="checked" onclick="this.form.datafile_server.disabled=!this.checked;this.form.datafile.disabled=this.checked" />'.$lang[db_import_from_server],
-			'<input type="text" class="txt" name="datafile_server" value="./data/'.$backupdir.'/" style="width:245px;" />'
-		));
-		showtablerow('', array('colspan="2" class="rowform"', 'colspan="8" class="rowform"'), array(
-			'<input class="radio" type="radio" name="from" value="local" onclick="this.form.datafile_server.disabled=this.checked;this.form.datafile.disabled=!this.checked" />'.$lang[db_import_from_local],
-			'<input type="file" name="datafile" size="29" disabled="disabled" class="uploadbtn marginbot" />'
-		));
-		showsubmit('importsubmit');
-		showformfooter();
+		showtablerow('', array('colspan="9" class="tipsblock"'), array(cplang('do_import_option', array('restore_url' => $restore_url))));
 
 		showformheader('db&operation=import');
 		showtitle('db_export_file');
 		showsubtitle(array('', 'filename', 'version', 'time', 'type', 'size', 'db_method', 'db_volume', ''));
+
+		$datasiteurl = $_G['siteurl'].'data/';
 
 		foreach($exportlog as $key => $val) {
 			$info = $val[1];
@@ -461,6 +410,7 @@ if($operation == 'export') {
 			$info['size'] = sizecount($exportsize[$key]);
 			$info['volume'] = count($val);
 			$info['method'] = $info['type'] != 'zip' ? ($info['method'] == 'multivol' ? $lang['db_multivol'] : $lang['db_shell']) : '';
+			$datafile_server = '.'.$info['filename'];
 			showtablerow('', '', array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"".$key."\">",
 				"<a href=\"javascript:;\" onclick=\"display('exportlog_$key')\">".$key."</a>",
@@ -470,7 +420,7 @@ if($operation == 'export') {
 				$info['size'],
 				$info['method'],
 				$info['volume'],
-				$info['type'] == 'zip' ? "<a href=\"".ADMINSCRIPT."?action=db&operation=importzip&datafile_server=$info[filename]&importsubmit=yes\" class=\"act\">$lang[db_import_unzip]</a>" : "<a class=\"act\" href=\"".ADMINSCRIPT."?action=db&operation=import&from=server&datafile_server=$info[filename]&importsubmit=yes\"".($info['version'] != $_G['setting']['version'] ? " onclick=\"return confirm('$lang[db_import_confirm]');\"" : '')." class=\"act\">$lang[import]</a>"
+				$info['type'] == 'zip' ? "<a href=\"".$datasiteurl."restore.php?operation=importzip&datafile_server=$datafile_server&importsubmit=yes\"  onclick=\"return confirm('$lang[db_import_confirm_zip]');\" class=\"act\" target=\"_blank\">$lang[db_import_unzip]</a>" : "<a class=\"act\" href=\"".$datasiteurl."restore.php?operation=import&from=server&datafile_server=$datafile_server&importsubmit=yes\"".($info['version'] != $_G['setting']['version'] ? " onclick=\"return confirm('$lang[db_import_confirm]');\"" : " onclick=\"return confirm('$lang[db_import_confirm_sql]');\"")." class=\"act\" target=\"_blank\">$lang[import]</a>"
 			));
 			echo '<tbody id="exportlog_'.$key.'" style="display:none">';
 			foreach($val as $info) {
@@ -495,6 +445,7 @@ if($operation == 'export') {
 			$info['dateline'] = is_int($info['dateline']) ? dgmdate($info['dateline']) : $lang['unknown'];
 			$info['size'] = sizecount($info['size']);
 			$info['method'] = $info['method'] == 'multivol' ? $lang['db_multivol'] : $lang['db_zip'];
+			$datafile_server = '.'.$info['filename'];
 			showtablerow('', '', array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"".basename($info['filename'])."\">",
 				"<a href=\"$info[filename]\">".substr(strrchr($info['filename'], "/"), 1)."</a>",
@@ -504,7 +455,7 @@ if($operation == 'export') {
 				$info['size'],
 				$info['method'],
 				'',
-				"<a href=\"".ADMINSCRIPT."?action=db&operation=importzip&datafile_server=$info[filename]&importsubmit=yes\" class=\"act\">$lang[db_import_unzip]</a>"
+				"<a href=\"".$datasiteurl."restore.php?operation=importzip&datafile_server=$datafile_server&importsubmit=yes\"  onclick=\"return confirm('$lang[db_import_confirm_zip]');\" class=\"act\" target=\"_blank\">$lang[db_import_unzip]</a>"
 			));
 		}
 
@@ -513,87 +464,7 @@ if($operation == 'export') {
 
 		showtablefooter();
 
-	} elseif(submitcheck('importsubmit', 1)) {
-
-		$readerror = 0;
-		$datafile = '';
-		if($_G['gp_from'] == 'server') {
-			$datafile = DISCUZ_ROOT.'./'.$_G['gp_datafile_server'];
-		}
-
-		elseif($_G['gp_from'] == 'local') {
-			$datafile = $_FILES['datafile']['tmp_name'];
-		}
-		$datafile = urldecode($datafile);
-		if(@$fp = fopen($datafile, 'rb')) {
-			$sqldump = fgets($fp, 256);
-			$identify = explode(',', base64_decode(preg_replace("/^# Identify:\s*(\w+).*/s", "\\1", $sqldump)));
-			$dumpinfo = array('method' => $identify[3], 'volume' => intval($identify[4]));
-			if($dumpinfo['method'] == 'multivol') {
-				$sqldump .= fread($fp, filesize($datafile));
-			}
-			fclose($fp);
-		} else {
-			if($_G['gp_autoimport']) {
-				updatecache();
-				cpmsg('database_import_multivol_succeed', '', 'succeed');
-			} else {
-				cpmsg('database_import_file_illegal', '', 'error');
-			}
-		}
-		if($dumpinfo['method'] == 'multivol') {
-			$sqlquery = splitsql($sqldump);
-			unset($sqldump);
-
-			foreach($sqlquery as $sql) {
-
-				$sql = syntablestruct(trim($sql), $db->version() > '4.1', $dbcharset);
-
-				if($sql != '') {
-					DB::query($sql, 'SILENT');
-					if(($sqlerror = DB::error()) && DB::errno() != 1062) {
-						$db->halt('MySQL Query Error', $sql);
-					}
-				}
-			}
-
-			if($_G['gp_delunzip']) {
-				@unlink($_G['gp_datafile_server']);
-			}
-
-			if($_G['gp_from'] == 'local') {
-				cpmsg('database_import_file_succeed', 'action=db&operation=import', 'succeed');
-			}
-			$datafile_next = preg_replace("/-($dumpinfo[volume])(\..+)$/", "-".($dumpinfo['volume'] + 1)."\\2", $_G['gp_datafile_server']);
-			$datafile_next = urlencode($datafile_next);
-			if($dumpinfo['volume'] == 1) {
-				cpmsg('database_import_multivol_prompt',
-					"action=db&operation=import&from=server&datafile_server=$datafile_next&autoimport=yes&importsubmit=yes".(!empty($_G['gp_delunzip']) ? '&delunzip=yes' : ''),
-					'form');
-			} elseif($_G['gp_autoimport']) {
-				cpmsg('database_import_multivol_redirect', "action=db&operation=import&from=server&datafile_server=$datafile_next&autoimport=yes&importsubmit=yes".(!empty($_G['gp_delunzip']) ? '&delunzip=yes' : ''), 'loading', array('volume' => $dumpinfo['volume']));
-			} else {
-				updatecache();
-				cpmsg('database_import_succeed', '', 'succeed');
-			}
-		} elseif($dumpinfo['method'] == 'shell') {
-			require './config/config_global.php';
-			list($dbhost, $dbport) = explode(':', $dbhost);
-
-			$query = DB::query("SHOW VARIABLES LIKE 'basedir'");
-			list(, $mysql_base) = DB::fetch($query, MYSQL_NUM);
-
-			$mysqlbin = $mysql_base == '/' ? '' : addslashes($mysql_base).'bin/';
-			shell_exec($mysqlbin.'mysql -h"'.$dbhost.($dbport ? (is_numeric($dbport) ? ' -P'.$dbport : ' -S"'.$dbport.'"') : '').
-				'" -u"'.$dbuser.'" -p"'.$dbpw.'" "'.$dbname.'" < '.$_G['gp_datafile']);
-
-			updatecache();
-			cpmsg('database_import_succeed', '', 'succeed');
-		} else {
-			cpmsg('database_import_format_illegal', '', 'error');
-		}
-
-	} elseif(submitcheck('deletesubmit')) {
+	} else {
 		if(is_array($_G['gp_delete'])) {
 			foreach($_G['gp_delete'] as $filename) {
 				$file_path = './data/'.$backupdir.'/'.str_replace(array('/', '\\'), '', $filename);
@@ -617,6 +488,9 @@ if($operation == 'export') {
 			cpmsg('database_file_delete_invalid', '', 'error');
 		}
 	}
+
+
+
 
 } elseif($operation == 'runquery') {
 
@@ -648,7 +522,6 @@ if($operation == 'export') {
 			array('nav_db_runquery', 'db&operation=runquery', 1),
 			array('nav_db_optimize', 'db&operation=optimize', 0),
 			array('nav_db_dbcheck', 'db&operation=dbcheck', 0)
-
 		));
 		showtips('db_runquery_tips');
 		showtableheader();
@@ -708,7 +581,6 @@ if($operation == 'export') {
 		array('nav_db_runquery', 'db&operation=runquery', 0),
 		array('nav_db_optimize', 'db&operation=optimize', 1),
 		array('nav_db_dbcheck', 'db&operation=dbcheck', 0)
-
 	));
 	showtips('db_optimize_tips');
 	showformheader('db&operation=optimize');
@@ -955,10 +827,12 @@ if($operation == 'export') {
 			$addlist = $modifylist = $dellist = array();
 			if($fields != $discuzdbnew[$dbtable]) {
 				foreach($discuzdb[$dbtable] as $key => $value) {
+					$tempvalue = str_replace('mediumtext', 'text', $value);
+					$discuzdbnew[$dbtable][$key] = str_replace('mediumtext', 'text', $discuzdbnew[$dbtable][$key]);
 					if(is_array($missingtables) && in_array($tablepre.$dbtable, $missingtables)) {
 					} elseif(!isset($discuzdbnew[$dbtable][$key])) {
 						$dellist[] = $value;
-					} elseif($value != $discuzdbnew[$dbtable][$key]) {
+					} elseif($tempvalue != $discuzdbnew[$dbtable][$key]) {
 						$modifylist[] = $value;
 					}
 				}
@@ -1048,7 +922,6 @@ if($operation == 'export') {
 		array('nav_db_runquery', 'db&operation=runquery', 0),
 		array('nav_db_optimize', 'db&operation=optimize', 0),
 		array('nav_db_dbcheck', 'db&operation=dbcheck', 1)
-
 	));
 	showsubmenusteps('', array(
 		array('nav_filecheck_confirm', $step == 1),
@@ -1057,7 +930,7 @@ if($operation == 'export') {
 	));
 
 	if($step == 1) {
-		cpmsg($lang[dbcheck_tips_step1], 'action=db&operation=dbcheck&step=2', 'button', '', FALSE);
+		cpmsg(cplang('dbcheck_tips_step1'), 'action=db&operation=dbcheck&step=2', 'button', '', FALSE);
 	} elseif($step == 2) {
 		cpmsg(cplang('dbcheck_verifying'), "action=db&operation=dbcheck&step=3", 'loading', '', FALSE);
 	} elseif($step == 3) {
@@ -1157,7 +1030,11 @@ function syntablestruct($sql, $version, $dbcharset) {
 }
 
 function sqldumptablestruct($table) {
-	global $_G, $db;
+	global $_G, $db, $excepttables;
+
+	if(in_array($table, $excepttables)) {
+		return;
+	}
 
 	$createtable = DB::query("SHOW CREATE TABLE $table", 'SILENT');
 
@@ -1224,7 +1101,7 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 		if($_G['gp_extendins'] == '0') {
 			while($currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000 && $numrows == $offset) {
 				if($firstfield['Extra'] == 'auto_increment') {
-					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom LIMIT $offset";
+					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom ORDER BY $firstfield[Field] LIMIT $offset";
 				} else {
 					$selectsql = "SELECT * FROM $table LIMIT $startfrom, $offset";
 				}

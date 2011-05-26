@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_editor.php 16401 2010-09-06 06:22:07Z monkey $
+ *      $Id: function_editor.php 19947 2011-01-25 06:37:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -359,7 +359,7 @@ function smileycode($smileyid) {
 	global $_G;
 
 	if(!is_array($_G['cache']['smileycodes'])) {
-		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'icons', 'domainwhitelist'));
+		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist'));
 	}
 	foreach($_G['cache']['smileycodes'] as $id => $code) {
 		if($smileyid == $id) {

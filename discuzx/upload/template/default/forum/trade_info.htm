@@ -67,7 +67,7 @@
 			<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid'])) && !$post['first'] || $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->
 				<p class="ptm pbm">
 					<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}--><span class="y"><a href="javascript:;" onclick="modaction('delpost', $_G[gp_pid])">{lang delete}</a>&nbsp;&nbsp;</span><!--{/if}-->
-					<a class="editp" style="padding-left: 20px; " href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page">{lang edit_trade}</a>
+					<a class="editp xi1 xw1" style="padding-left: 20px; " href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page">{lang edit_trade}</a>
 				</p>
 			<!--{/if}-->
 		<!--{/if}-->
@@ -87,6 +87,7 @@
 			</dd>
 			<dt>{lang trade_transport}:</dt>
 			<dd>
+				<!--{if $trade['transport'] == 0}-->{lang post_trade_transport_offline}<!--{/if}-->
 				<!--{if $trade['transport'] == 1}-->{lang post_trade_transport_seller}<!--{/if}-->
 				<!--{if $trade['transport'] == 2 || $trade['transport'] == 4}-->
 					<!--{if $trade['transport'] == 4}-->{lang post_trade_transport_physical}<!--{/if}-->
@@ -105,7 +106,9 @@
 			<!--{if $trade[closed]}-->
 				<em>{lang trade_timeout}</em>
 			<!--{elseif $trade[expiration] > 0}-->
-				{$trade[expiration]}{lang days}{$trade[expirationhour]}{lang trade_hour}
+				{$trade[expiration]} {lang days} {$trade[expirationhour]} {lang trade_hour}
+			<!--{elseif $trade[expiration] == 0}-->
+				{$trade[expirationhour]} {lang trade_hour}
 			<!--{elseif $trade[expiration] == -1}-->
 				<em>{lang trade_timeout}</em>
 			<!--{else}-->
@@ -139,7 +142,9 @@
 					<!--{/if}-->
 				</dd>
 			<!--{/if}-->
+			<!--{hook/viewthread_tradeinfo_extra}-->
 		</dl>
+		
 		<!--{if $post['authorid'] != $_G['uid'] && empty($thread['closed']) && $trade[expiration] > -1}-->
 			<p class="pns mbm">
 			<!--{if $trade[amount]}-->
@@ -164,10 +169,10 @@
 		<!--{elseif $post['imagelist'] || $post['attachlist']}-->
 			<div class="pattl">
 				<!--{if $post['imagelist']}-->
-					$post['imagelist']
+					 <!--{echo showattach($post, 1)}-->
 				<!--{/if}-->
 				<!--{if $post['attachlist']}-->
-					$post[attachlist]
+					 <!--{echo showattach($post)}-->
 				<!--{/if}-->
 			</div>
 		<!--{/if}-->
@@ -178,8 +183,15 @@
 </td></tr>
 </td></tr></table></div>
 
-<!--{if $aimgs[$post[pid]]}-->
-<script type="text/javascript" reload="1">var aimgcount = new Array();aimgcount[{$_G[gp_pid]}] = [<!--{echo implode(',', $aimgs[{$_G[gp_pid]}]);}-->];attachimgshow({$_G[gp_pid]});</script>
+<!--{if !empty($aimgs[$post[pid]])}-->
+<script type="text/javascript" reload="1">
+	var aimgcount = new Array();
+	aimgcount[{$post[pid]}] = [<!--{echo dimplode($aimgs[$post[pid]]);}-->];
+	attachimggroup($post['pid']);
+	<!--{if empty($_G['setting']['lazyload'])}-->
+		attachimgshow($post[pid]);
+	<!--{/if}-->	
+</script>
 <!--{/if}-->
 <!--{if !$_G[inajax] && $post[comment]}-->
 <script type="text/javascript" reload="1">ajaxget('forum.php?mod=misc&action=commentmore&tid=$post[tid]&pid=$post[pid]', 'comment_$post[pid]');</script>
@@ -246,5 +258,11 @@
 		<!--{/if}-->
 	</div>
 	</div>
+
+	<!--{if !IS_ROBOT && !empty($_G[setting][lazyload])}-->
+		<script type="text/javascript">
+		new lazyload();
+		</script>
+	<!--{/if}-->
 <!--{/if}-->
 <!--{template common/footer}-->

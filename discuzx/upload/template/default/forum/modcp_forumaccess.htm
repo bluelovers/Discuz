@@ -12,6 +12,8 @@
 				= $('new_postattach').disabled
 				= $('new_getattach').checked
 				= $('new_getattach').disabled
+				= $('new_getimage').checked
+				= $('new_getimage').disabled
 				= $('new_postimage').disabled
 				= obj.checked;
 		}
@@ -23,6 +25,7 @@
 				= $('new_reply').checked
 				= $('new_postattach').checked
 				= $('new_getattach').checked
+				= $('new_getimage').checked
 				= $('new_postimage').disabled
 				= false;
 			$('customaccess').disabled
@@ -33,6 +36,7 @@
 				= $('new_reply').disabled
 				= $('new_postattach').disabled
 				= $('new_getattach').disabled
+				= $('new_getimage').disabled
 				= $('new_postimage').disabled
 				= obj.checked;
 		}
@@ -82,14 +86,15 @@
 					<tr>
 						<th>{lang mod_access_change}:</th>
 						<td>
-							<input type="checkbox" value="1" name="deleteaccess" id="deleteaccess" onclick="disallaccess(this)" class="pc" /> <label for="deleteaccess">{lang mod_access_recover}</label>&nbsp;
+							<label for="deleteaccess" class="lb"><input type="checkbox" value="1" name="deleteaccess" id="deleteaccess" onclick="disallaccess(this)" class="pc" />{lang mod_access_recover}</label>
 							<span id="customaccess">
-								<input type="checkbox" value="-1" name="new_view" id="new_view" onclick="chkallaccess(this)" class="pc" /> <label for="new_view">{lang mod_access_ban_viewthread}</label>&nbsp;
-								<input type="checkbox" value="-1" name="new_post" id="new_post" class="pc" /> <label for="new_post">{lang mod_access_ban_postthread}</label>&nbsp;
-								<input type="checkbox" value="-1" name="new_reply" id="new_reply" class="pc" /> <label for="new_reply">{lang mod_access_ban_postreply}</label>&nbsp;
-								<input type="checkbox" value="-1" name="new_getattach" id="new_getattach" class="pc" /> <label for="new_getattach">{lang mod_access_ban_download}</label>&nbsp;
-								<input type="checkbox" value="-1" name="new_postattach" id="new_postattach" class="pc" /> <label for="new_postattach">{lang mod_access_ban_upload}</label>&nbsp;
-								<input type="checkbox" value="-1" name="new_postimage" id="new_postimage" class="pc" /> <label for="new_postimage">{lang mod_access_ban_uploadimage}</label>
+								<label for="new_view" class="lb"><input type="checkbox" value="-1" name="new_view" id="new_view" onclick="chkallaccess(this)" class="pc" />{lang mod_access_ban_viewthread}</label>
+								<label for="new_post" class="lb"><input type="checkbox" value="-1" name="new_post" id="new_post" class="pc" />{lang mod_access_ban_postthread}</label>
+								<label for="new_reply" class="lb"><input type="checkbox" value="-1" name="new_reply" id="new_reply" class="pc" />{lang mod_access_ban_postreply}</label>
+								<label for="new_getattach" class="lb"><input type="checkbox" value="-1" name="new_getattach" id="new_getattach" class="pc" />{lang mod_access_ban_download}</label>
+								<label for="new_getimage" class="lb"><input type="checkbox" value="-1" name="new_getimage" id="new_getimage" class="pc" />{lang mod_access_ban_getimage}</label>
+								<label for="new_postattach" class="lb"><input type="checkbox" value="-1" name="new_postattach" id="new_postattach" class="pc" />{lang mod_access_ban_upload}</label>
+								<label for="new_postimage" class="lb"><input type="checkbox" value="-1" name="new_postimage" id="new_postimage" class="pc" />{lang mod_access_ban_uploadimage}</label>
 							</span>
 						</td>
 					</tr>
@@ -136,6 +141,7 @@
 				<th>{lang mod_access_postthread}</th>
 				<th>{lang mod_access_postreply}</th>
 				<th>{lang mod_access_download}</th>
+				<th>{lang mod_access_getimage}</th>
 				<th>{lang mod_access_upload}</th>
 				<th>{lang mod_access_uploadimage}</th>
 				<th>{lang mod_access_optime}</th>
@@ -151,6 +157,7 @@
 					<td>$access['allowpost']</td>
 					<td>$access['allowreply']</td>
 					<td>$access['allowgetattach']</td>
+					<td>$access['allowgetimage']</td>
 					<td>$access['allowpostattach']</td>
 					<td>$access['allowpostimage']</td>
 					<td>$access[dateline]</td>
@@ -158,7 +165,7 @@
 				</tr>
 			<!--{/loop}-->
 		<!--{else}-->
-			<tr><td colspan="10"><p class="emp">{lang mod_message_access_nonexistence}</p></td></tr>
+			<tr><td colspan="11"><p class="emp">{lang mod_message_access_nonexistence}</p></td></tr>
 		<!--{/if}-->
 	</table>
 	<!--{if !empty($list[pagelink])}--><div class="pgs cl mtm">$list[pagelink]</div><!--{/if}-->

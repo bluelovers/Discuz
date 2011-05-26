@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 17288 2010-09-29 02:20:24Z cnteacher $
+ *      $Id: index.php 22348 2011-05-04 01:16:02Z monkey $
  */
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -38,9 +38,7 @@ if(empty($method)) {
 	show_msg('method_undefined', $method, 0);
 }
 
-if(!ini_get('short_open_tag')) {
-	show_msg('short_open_tag_invalid', '', 0);
-} elseif(file_exists($lockfile) && $method != 'ext_info') {
+if(file_exists($lockfile) && $method != 'ext_info') {
 	show_msg('install_locked', '', 0);
 } elseif(!class_exists('dbstuff')) {
 	show_msg('database_nonexistence', '', 0);
@@ -271,7 +269,8 @@ if($method == 'show_license') {
 		if(empty($dbname)) {
 			show_msg('dbname_invalid', $dbname, 0);
 		} else {
-			if(!$link = @mysql_connect($dbhost, $dbuser, $dbpw)) {
+			$link = @mysql_connect($dbhost, $dbuser, $dbpw);
+			if(!$link) {
 				$errno = mysql_errno($link);
 				$error = mysql_error($link);
 				if($errno == 1045) {
@@ -389,6 +388,18 @@ if($method == 'show_license') {
 		if($testdata) {
 			install_testdata($username, $uid);
 		}
+
+		if(!$portalstatus) {
+			$db->query("REPLACE INTO {$tablepre}common_setting (skey, svalue) VALUES ('portalstatus', '0')");
+		}
+
+		if(!$groupstatus) {
+			$db->query("REPLACE INTO {$tablepre}common_setting (skey, svalue) VALUES ('groupstatus', '0')");
+		}
+
+		if(!$homestatus) {
+			$db->query("REPLACE INTO {$tablepre}common_setting (skey, svalue) VALUES ('homestatus', '0')");
+		}
 		$yearmonth = date('Ym_', time());
 		loginit($yearmonth.'ratelog');
 		loginit($yearmonth.'illegallog');
@@ -415,12 +426,11 @@ if($method == 'show_license') {
 		$data = addslashes(serialize($userstats));
 		$db->query("REPLACE INTO {$tablepre}common_syscache (cname, ctype, dateline, data) VALUES ('userstats', '$ctype', '".time()."', '$data')");
 
-
 		touch($lockfile);
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_founder_contact').'\';</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 3000);</script><iframe src="../misc.php?mod=initsys" style="display:none;"></iframe>'."\r\n";
+			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
 			show_footer();
 		}
 
@@ -435,14 +445,6 @@ if($method == 'show_license') {
 	}
 
 } elseif($method == 'ext_info') {
-	include ROOT_PATH.CONFIG;
-	$db = new dbstuff;
-	$db->connect($_config['db']['1']['dbhost'], $_config['db']['1']['dbuser'], $_config['db']['1']['dbpw'], $_config['db']['1']['dbname'], $_config['db']['1']['dbcharset']);
-	$skip = getgpc('skip');
-	$tablepre = $_config['db']['1']['tablepre'];
-	if(empty($skip)) {
-		upg_comsenz_stats();
-	}
 	@touch($lockfile);
 	if(VIEW_OFF) {
 		show_msg('ext_info_succ');

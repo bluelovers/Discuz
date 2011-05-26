@@ -2,16 +2,18 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 16857 2010-09-16 02:57:07Z monkey $
+	$Id: forum_post.js 22765 2011-05-20 03:06:12Z zhengqingpeng $
 */
 
 var postSubmited = false;
-var AID = 1;
+var AID = {0:1,1:1};
 var UPLOADSTATUS = -1;
-var UPLOADFAILED = UPLOADCOMPLETE = AUTOPOST =  0;
+var UPLOADFAILED = UPLOADCOMPLETE = AUTOPOST = 0;
 var CURRENTATTACH = '0';
 var FAILEDATTACHS = '';
 var UPLOADWINRECALL = null;
+var imgexts = typeof imgexts == 'undefined' ? 'jpg, jpeg, gif, png, bmp' : imgexts;
+var ATTACHORIMAGE = '0';
 var STATUSMSG = {
 	'-1' : '內部服務器錯誤',
 	'0' : '上傳成功',
@@ -20,12 +22,15 @@ var STATUSMSG = {
 	'3' : '用戶組限制無法上傳那麼大的附件',
 	'4' : '不支持此類擴展名',
 	'5' : '文件類型限制無法上傳那麼大的附件',
-	'6' : '本日已無法上傳更多的附件',
-	'7' : '圖片附件不合法',
+	'6' : '今日你已無法上傳更多的附件',
+	'7' : '請選擇圖片文件(' + imgexts + ')',
 	'8' : '附件文件無法保存',
 	'9' : '沒有合法的文件被上傳',
-	'10' : '非法操作'
+	'10' : '非法操作',
+	'11' : '今日你已無法上傳那麼大的附件'
 };
+
+EXTRAFUNC['validator'] = [];
 
 function checkFocus() {
 	var obj = wysiwyg ? editwin : textobj;
@@ -61,31 +66,37 @@ if(!tradepost) {
 function validate(theform) {
 	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
-		showDialog('請完成標題或內容欄');
+		showError('抱歉，您尚未輸入標題或內容');
 		return false;
 	} else if(mb_strlen(theform.subject.value) > 80) {
-		showDialog('您的標題超過 80 個字符的限制');
+		showError('您的標題超過 80 個字符的限制');
+		return false;
+	}
+	if(ispicstyleforum == 1 && ATTACHORIMAGE == 0 && isfirstpost) {
+		showError('帖圖版塊至少應上傳一張圖片作為封面');
 		return false;
 	}
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {
-			showDialog('請選擇主題對應的分類');
+			showError('請選擇主題對應的分類');
 			return false;
 		}
 		if(theform.sortid && (theform.sortid.options && theform.sortid.options[theform.sortid.selectedIndex].value == 0) && sortrequired) {
-			showDialog('請選擇主題對應的分類信息');
+			showError('請選擇主題對應的分類信息');
 			return false;
 		}
 	}
-	if(typeof validateextra == 'function') {
-		var v = validateextra();
-		if(!v) {
-			return false;
-		}
+	for(i in EXTRAFUNC['validator']) {
+		try {
+			eval('var v = ' + EXTRAFUNC['validator'][i] + '()');
+			if(!v) {
+				return false;
+			}
+		} catch(e) {}
 	}
 
 	if(!disablepostctrl && !sortid && !special && ((postminchars != 0 && mb_strlen(message) < postminchars) || (postmaxchars != 0 && mb_strlen(message) > postmaxchars))) {
-		showDialog('您的帖子長度不符合要求。\n\n當前長度: ' + mb_strlen(message) + ' 字節\n系統限制: ' + postminchars + ' 到 ' + postmaxchars + ' 字節');
+		showError('您的帖子長度不符合要求。\n\n當前長度: ' + mb_strlen(message) + ' 字節\n系統限制: ' + postminchars + ' 到 ' + postmaxchars + ' 字節');
 		return false;
 	}
 	if(UPLOADSTATUS == 0) {
@@ -115,20 +126,20 @@ function validate(theform) {
 			if(secqaacheck) {
 				chkv = $('checksecqaaverify_' + theform.sechash.value).innerHTML;
 				if(chkv.indexOf('loading') != -1) {
-					showDialog('驗證問答校驗中，請稍後');
+					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
 				} else if(chkv.indexOf('check_right') == -1) {
-					showDialog('驗證問答錯誤，請重新填寫');
+					showError('驗證問答錯誤，請重新填寫');
 					chk = 0;
 				}
 			}
 			if(seccodecheck) {
 				chkv = $('checkseccodeverify_' + theform.sechash.value).innerHTML;
-				if(chkv.indexOf('loading') != -1) {
-					showDialog('驗證碼校驗中，請稍後');
+				if(chkv.indexOf('loading') !== -1) {
+					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
-				} else if(chkv.indexOf('check_right') == -1) {
-					showDialog('驗證碼錯誤，請重新填寫');
+				} else if(chkv.indexOf('check_right') === -1) {
+					showError('驗證碼錯誤，請重新填寫');
 					chk = 0;
 				}
 			}
@@ -147,72 +158,21 @@ function postsubmit(theform) {
 	theform.submit();
 }
 
-function loadData(quiet) {
-	var data = '';
-	data = loadUserdata('forum');
-
-	if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-		if(!quiet) {
-			showDialog('沒有可以恢復的數據！');
-		}
-		return;
+function relatekw(subject, message) {
+	if(isUndefined(subject) || subject == -1) {
+		subject = $('subject').value;
+		subject = subject.replace(/<\/?[^>]+>|\[\/?.+?\]|"/ig, "");
+		subject = subject.replace(/\s{2,}/ig, ' ');
 	}
-
-	if(!quiet && !confirm('此操作將覆蓋當前帖子內容，確定要恢複數據嗎？')) {
-		return;
+	if(isUndefined(message) || message == -1) {
+		message = getEditorContents();
+		message = message.replace(/<\/?[^>]+>|\[\/?.+?\]|"/ig, "");
+		message = message.replace(/\s{2,}/ig, ' ');
 	}
-
-	var data = data.split(/\x09\x09/);
-	for(var i = 0; i < $('postform').elements.length; i++) {
-		var el = $('postform').elements[i];
-		if(el.name != '' && (el.tagName == 'TEXTAREA' || el.tagName == 'INPUT' && (el.type == 'text' || el.type == 'checkbox' || el.type == 'radio'))) {
-			for(var j = 0; j < data.length; j++) {
-				var ele = data[j].split(/\x09/);
-				if(ele[0] == el.name) {
-					elvalue = !isUndefined(ele[3]) ? ele[3] : '';
-					if(ele[1] == 'INPUT') {
-						if(ele[2] == 'text') {
-							el.value = elvalue;
-						} else if((ele[2] == 'checkbox' || ele[2] == 'radio') && ele[3] == el.value) {
-							el.checked = true;
-							evalevent(el);
-						}
-					} else if(ele[1] == 'TEXTAREA') {
-						if(ele[0] == 'message') {
-							if(!wysiwyg) {
-								textobj.value = elvalue;
-							} else {
-								editdoc.body.innerHTML = bbcode2html(elvalue);
-							}
-						} else {
-							el.value = elvalue;
-						}
-					}
-					break
-				}
-			}
-		}
-	}
-}
-
-function evalevent(obj) {
-	var script = obj.parentNode.innerHTML;
-	var re = /onclick="(.+?)["|>]/ig;
-	var matches = re.exec(script);
-	if(matches != null) {
-		matches[1] = matches[1].replace(/this\./ig, 'obj.');
-		eval(matches[1]);
-	}
-}
-
-function relatekw(subject, message, recall) {
-	if(isUndefined(recall)) recall = '';
-	if(isUndefined(subject) || subject == -1) subject = $('subject').value;
-	if(isUndefined(message) || message == -1) message = getEditorContents();
 	subject = (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(subject) : subject);
 	message = (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(message) : message);
 	message = message.replace(/&/ig, '', message).substr(0, 500);
-	ajaxget('forum.php?mod=relatekw&subjectenc=' + subject + '&messageenc=' + message, 'tagselect', '', '', '', recall);
+	ajaxget('forum.php?mod=relatekw&subjectenc=' + subject + '&messageenc=' + message, 'tagselect');
 }
 
 function switchicon(iconid, obj) {
@@ -234,13 +194,21 @@ function uploadNextAttach() {
 	if(str == '') return;
 	var arr = str.split('|');
 	var att = CURRENTATTACH.split('|');
-	uploadAttach(parseInt(att[0]), arr[0] == 'DISCUZUPLOAD' ? parseInt(arr[1]) : -1, att[1]);
+	var sizelimit = '';
+	if(arr[4] == 'ban') {
+		sizelimit = '(附件類型被禁止)';
+	} else if(arr[4] == 'perday') {
+		sizelimit = '(不能超過 ' + arr[5] + ' 字節)';
+	} else if(arr[4] > 0) {
+		sizelimit = '(不能超過 ' + arr[4] + ' 字節)';
+	}
+	uploadAttach(parseInt(att[0]), arr[0] == 'DISCUZUPLOAD' ? parseInt(arr[1]) : -1, att[1], sizelimit);
 }
 
-function uploadAttach(curId, statusid, prefix) {
+function uploadAttach(curId, statusid, prefix, sizelimit) {
 	prefix = isUndefined(prefix) ? '' : prefix;
 	var nextId = 0;
-	for(var i = 0; i < AID - 1; i++) {
+	for(var i = 0; i < AID[prefix ? 1 : 0] - 1; i++) {
 		if($(prefix + 'attachform_' + i)) {
 			nextId = i;
 			if(curId == 0) {
@@ -260,19 +228,22 @@ function uploadAttach(curId, statusid, prefix) {
 		if(statusid == 0) {
 			UPLOADCOMPLETE++;
 		} else {
-			FAILEDATTACHS += '<br />' + mb_cutstr($(prefix + 'attachnew_' + curId).value.substr($(prefix + 'attachnew_' + curId).value.replace(/\\/g, '/').lastIndexOf('/') + 1), 25) + ': ' + STATUSMSG[statusid];
+			FAILEDATTACHS += '<br />' + mb_cutstr($(prefix + 'attachnew_' + curId).value.substr($(prefix + 'attachnew_' + curId).value.replace(/\\/g, '/').lastIndexOf('/') + 1), 25) + ': ' + STATUSMSG[statusid] + sizelimit;
 			UPLOADFAILED++;
 		}
 		$(prefix + 'cpdel_' + curId).innerHTML = '<img src="' + IMGDIR + '/check_' + (statusid == 0 ? 'right' : 'error') + '.gif" alt="' + STATUSMSG[statusid] + '" />';
 		if(nextId == curId || in_array(statusid, [6, 8])) {
-			if(prefix == 'img') updateImageList();
-			else updateAttachList();
+			if(prefix == 'img') {
+				updateImageList();
+			} else {
+				updateAttachList();
+			}
 			if(UPLOADFAILED > 0) {
 				showDialog('附件上傳完成！成功 ' + UPLOADCOMPLETE + ' 個，失敗 ' + UPLOADFAILED + ' 個:' + FAILEDATTACHS);
 				FAILEDATTACHS = '';
 			}
 			UPLOADSTATUS = 2;
-			for(var i = 0; i < AID - 1; i++) {
+			for(var i = 0; i < AID[prefix ? 1 : 0] - 1; i++) {
 				if($(prefix + 'attachform_' + i)) {
 					reAddAttach(prefix, i)
 				}
@@ -283,7 +254,7 @@ function uploadAttach(curId, statusid, prefix) {
 				hideMenu();
 				validate($('postform'));
 			} else if(UPLOADFAILED == 0 && (prefix == 'img' || prefix == '')) {
-				showDialog('附件上傳完成！', 'notice');
+				showDialog('附件上傳完成！', 'right', null, null, 0, null, null, null, null, 3);
 			}
 			UPLOADFAILED = UPLOADCOMPLETE = 0;
 			CURRENTATTACH = '0';
@@ -300,7 +271,7 @@ function uploadAttach(curId, statusid, prefix) {
 }
 
 function addAttach(prefix) {
-	var id = AID;
+	var id = AID[prefix ? 1 : 0];
 	var tags, newnode, i;
 	prefix = isUndefined(prefix) ? '' : prefix;
 	newnode = $(prefix + 'attachbtnhidden').firstChild.cloneNode(true);
@@ -336,7 +307,7 @@ function addAttach(prefix) {
 			tags[i].id = prefix + 'deschidden_' + id;
 		}
 	}
-	AID++;
+	AID[prefix ? 1 : 0]++;
 	newnode.style.display = 'none';
 	$(prefix + 'attachbody').appendChild(newnode);
 }
@@ -355,12 +326,12 @@ function insertAttach(prefix, id) {
 	}
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
 		reAddAttach(prefix, id);
-		showDialog('對不起，不支持上傳此類擴展名的附件。');
+		showError('對不起，不支持上傳此類擴展名的附件。');
 		return;
 	}
 	if(prefix == 'img' && imgexts.indexOf(ext) == -1) {
 		reAddAttach(prefix, id);
-		showDialog('請選擇圖片文件(' + imgexts + ')');
+		showError('請選擇圖片文件(' + imgexts + ')');
 		return;
 	}
 
@@ -382,27 +353,54 @@ function reAddAttach(prefix, id) {
 }
 
 function delAttach(id, type) {
-	appendAttachDel(id);
-	$('attach_' + id).style.display = 'none';
-	ATTACHNUM['attach' + (type ? 'un' : '') + 'used']--;
-	updateattachnum('attach');
+	var ids = {};
+	if(typeof id == 'number') {
+		ids[id] = id;
+	} else {
+		ids = id;
+	}
+	for(id in ids) {
+		if($('attach_' + id)) {
+			$('attach_' + id).style.display = 'none';
+			ATTACHNUM['attach' + (type ? 'un' : '') + 'used']--;
+			updateattachnum('attach');
+		}
+	}
+	appendAttachDel(ids);
 }
 
 function delImgAttach(id, type) {
-	appendAttachDel(id);
-	$('image_td_' + id).className = 'imgdeleted';
-	$('image_' + id).onclick = null;
-	$('image_desc_' + id).disabled = true;
-	ATTACHNUM['image' + (type ? 'un' : '') + 'used']--;
-	updateattachnum('image');
+	var ids = {};
+	if(typeof id == 'number') {
+		ids[id] = id;
+	} else {
+		ids = id;
+	}
+	for(id in ids) {
+		if($('image_td_' + id)) {
+			$('image_td_' + id).className = 'imgdeleted';
+			$('image_' + id).onclick = null;
+			$('image_desc_' + id).disabled = true;
+			ATTACHNUM['image' + (type ? 'un' : '') + 'used']--;
+			updateattachnum('image');
+		}
+	}
+	appendAttachDel(ids);
 }
 
-function appendAttachDel(id) {
-	var input = document.createElement('input');
-	input.name = 'attachdel[]';
-	input.value = id;
-	input.type = 'hidden';
-	$('postbox').appendChild(input);
+function appendAttachDel(ids) {
+	if(!ids) {
+		return;
+	}
+	var aids = '';
+	for(id in ids) {
+		aids += '&aids[]=' + id;
+	}
+	var x = new Ajax();
+	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + tid + '&pid=' + pid + aids, function() {});
+	if($('delattachop')) {
+		$('delattachop').value = 1;
+	}
 }
 
 function updateAttach(aid) {
@@ -428,6 +426,7 @@ function updateattachnum(type) {
 		if($(editorid + '_' + type + 'n')) {
 			$(editorid + '_' + type + 'n').style.display = '';
 		}
+		ATTACHORIMAGE = 1;
 	} else {
 		if($(editorid + '_' + type)) {
 			$(editorid + '_' + type).title = type == 'image' ? '圖片' : '附件';
@@ -438,134 +437,111 @@ function updateattachnum(type) {
 	}
 }
 
-function unusedoption(op, aid) {
-	if(!op) {
-		if($('unusedimgattachlist')) {
-			$('unusedimgattachlist').parentNode.removeChild($('unusedimgattachlist'));
-		}
-		if($('unusedattachlist')) {
-			$('unusedattachlist').parentNode.removeChild($('unusedattachlist'));
-		}
-		ATTACHNUM['imageunused'] = 0;
-		ATTACHNUM['attachunused'] = 0;
-	} else if(op == 1) {
-		for(var i = 0; i < $('unusedform').elements.length; i++) {
-			var e = $('unusedform').elements[i];
-			if(e.name.match('unused')) {
-				if(!e.checked) {
-					if($('image_td_' + e.value)) {
-						$('image_td_' + e.value).parentNode.removeChild($('image_td_' + e.value));
-						ATTACHNUM['imageunused']--;
-					}
-					if($('attach_' + e.value)) {
-						$('attach_' + e.value).parentNode.removeChild($('attach_' + e.value));
-						ATTACHNUM['attachunused']--;
-					}
-				}
-			}
-		}
-	} else if(op == 2) {
-		delAttach(aid, 1);
-	} else if(op == 3) {
-		delImgAttach(aid, 1);
-	}
-	if(op < 2) {
-		hideMenu('fwin_dialog', 'dialog');
-		updateattachnum('image');
-		updateattachnum('attach');
-	} else {
-		$('unusedrow' + aid).outerHTML = '';
-		if(!ATTACHNUM['imageunused'] && !ATTACHNUM['attachunused']) {
-			hideMenu('fwin_dialog', 'dialog');
-		}
-	}
-}
-
 function swfHandler(action, type) {
 	if(action == 2) {
 		if(type == 'image') {
-			updateImageList(action);
+			updateImageList();
 		} else {
-			updateAttachList(action);
+			updateAttachList();
 		}
 	}
 }
 
-function updateAttachList(action) {
-	ajaxget('forum.php?mod=ajax&action=attachlist&posttime=' + $('posttime').value + (!fid ? '' : '&fid=' + fid), 'attachlist');
+function updateAttachList(action, aids) {
+	ajaxget('forum.php?mod=ajax&action=attachlist' + (!action ? '&posttime=' + $('posttime').value : (!aids ? '' : '&aids=' + aids)) + (!fid ? '' : '&fid=' + fid), 'attachlist');
 	switchAttachbutton('attachlist');$('attach_tblheader').style.display = $('attach_notice').style.display = '';
 }
 
-function updateImageList(action) {
-	ajaxget('forum.php?mod=ajax&action=imagelist&pid=' + pid + '&posttime=' + $('posttime').value + (!fid ? '' : '&fid=' + fid), 'imgattachlist');
+function updateImageList(action, aids) {
+	ajaxget('forum.php?mod=ajax&action=imagelist' + (!action ? '&pid=' + pid + '&posttime=' + $('posttime').value : (!aids ? '' : '&aids=' + aids)) + (!fid ? '' : '&fid=' + fid), 'imgattachlist');
 	switchImagebutton('imgattachlist');$('imgattach_notice').style.display = '';
 }
 
-function switchButton(btn, btns) {
-	if(!$(editorid + '_btn_' + btn) || !$(editorid + '_' + btn)) {
+function updateDownImageList(msg) {
+	if(msg == '') {
+		showError('抱歉，暫無遠程附件');
+	} else {
+		ajaxget('forum.php?mod=ajax&action=imagelist&pid=' + pid + '&posttime=' + $('posttime').value + (!fid ? '' : '&fid=' + fid), 'imgattachlist', null, null, null, function(){if(wysiwyg) {editdoc.body.innerHTML = msg;switchEditor(0);switchEditor(1)} else {textobj.value = msg;}});
+		switchImagebutton('imgattachlist');$('imgattach_notice').style.display = '';
+		showDialog('遠程附件下載完成!', 'right', null, null, 0, null, null, null, null, 3);
+	}
+}
+
+function switchButton(btn, type) {
+	var btnpre = editorid + '_btn_';
+	if(!$(btnpre + btn) || !$(editorid + '_' + btn)) {
 		return;
 	}
-	$(editorid + '_btn_' + btn).style.display = '';
+	var tabs = $(editorid + '_' + type + '_ctrl').getElementsByTagName('LI');
+	$(btnpre + btn).style.display = '';
 	$(editorid + '_' + btn).style.display = '';
-	$(editorid + '_btn_' + btn).className = 'current';
-	for(i = 0;i < btns.length;i++) {
-		if(btns[i] != btn) {
-			if(!$(editorid + '_' + btns[i]) || !$(editorid + '_btn_' + btns[i])) {
+	$(btnpre + btn).className = 'current';
+	var btni = '';
+	for(i = 0;i < tabs.length;i++) {
+		if(tabs[i].id.indexOf(btnpre) !== -1) {
+			btni = tabs[i].id.substr(btnpre.length);
+		}
+		if(btni != btn) {
+			if(!$(editorid + '_' + btni) || !$(editorid + '_btn_' + btni)) {
 				continue;
 			}
-			$(editorid + '_' + btns[i]).style.display = 'none';
-			$(editorid + '_btn_' + btns[i]).className = '';
+			$(editorid + '_' + btni).style.display = 'none';
+			$(editorid + '_btn_' + btni).className = '';
 		}
 	}
 }
 
 function uploadWindowstart() {
 	$('uploadwindowing').style.visibility = 'visible';
-	$('uploadsubmit').disabled = true;
 }
 
 function uploadWindowload() {
 	$('uploadwindowing').style.visibility = 'hidden';
-	$('uploadsubmit').disabled = false;
 	var str = $('uploadattachframe').contentWindow.document.body.innerHTML;
 	if(str == '') return;
 	var arr = str.split('|');
 	if(arr[0] == 'DISCUZUPLOAD' && arr[2] == 0) {
 		UPLOADWINRECALL(arr[3], arr[5], arr[6]);
-		hideWindow('upload');
+		hideWindow('upload', 0);
 	} else {
 		var sizelimit = '';
 		if(arr[7] == 'ban') {
 			sizelimit = '(附件類型被禁止)';
 		} else if(arr[7] == 'perday') {
-			sizelimit = '(不能超過' + arr[8] + '字節)';
+			sizelimit = '(不能超過 ' + arr[8] + ' 字節)';
 		} else if(arr[7] > 0) {
-			sizelimit = '(不能超過' + arr[7] + '字節)';
+			sizelimit = '(不能超過 ' + arr[7] + ' 字節)';
 		}
-		showDialog('上傳失敗:' + STATUSMSG[arr[2]] + sizelimit);
+		showError(STATUSMSG[arr[2]] + sizelimit);
+	}
+	if($('attachlimitnotice')) {
+		ajaxget('forum.php?mod=ajax&action=updateattachlimit&fid=' + fid, 'attachlimitnotice');
 	}
 }
 
 function uploadWindow(recall, type) {
 	var type = isUndefined(type) ? 'image' : type;
 	UPLOADWINRECALL = recall;
-	showWindow('upload', 'forum.php?mod=misc&action=upload&fid=' + fid + '&type=' + type, 'get', 0, {'cover':1});
+	showWindow('upload', 'forum.php?mod=misc&action=upload&fid=' + fid + '&type=' + type, 'get', 0, {'zindex':601});
 }
 
 function updatetradeattach(aid, url, attachurl) {
 	$('tradeaid').value = aid;
 	$('tradeattach_image').innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
+	ATTACHORIMAGE = 1;
 }
 
 function updateactivityattach(aid, url, attachurl) {
 	$('activityaid').value = aid;
 	$('activityattach_image').innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
+	ATTACHORIMAGE = 1;
 }
 
 function updatesortattach(aid, url, attachurl, identifier) {
 	$('sortaid_' + identifier).value = aid;
 	$('sortattachurl_' + identifier).value = attachurl + '/' + url;
 	$('sortattach_image_' + identifier).innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
+	ATTACHORIMAGE = 1;
 }
 
 function switchpollm(swt) {
@@ -573,11 +549,13 @@ function switchpollm(swt) {
 	var v = '';
 	for(var i = 0; i < $('postform').elements.length; i++) {
 		var e = $('postform').elements[i];
-		if(e.name.match('^polloption')) {
-			if(t == 2 && e.tagName == 'INPUT') {
-				v += e.value + '\n';
-			} else if(t == 1 && e.tagName == 'TEXTAREA') {
-				v += e.value;
+		if(!isUndefined(e.name)) {
+			if(e.name.match('^polloption')) {
+				if(t == 2 && e.tagName == 'INPUT') {
+					v += e.value + '\n';
+				} else if(t == 1 && e.tagName == 'TEXTAREA') {
+					v += e.value;
+				}
 			}
 		}
 	}
@@ -586,9 +564,11 @@ function switchpollm(swt) {
 		var pcount = 0;
 		for(var i = 0; i < $('postform').elements.length; i++) {
 			var e = $('postform').elements[i];
-			if(e.name.match('^polloption')) {
-				pcount++;
-				if(e.tagName == 'INPUT') e.value = '';
+			if(!isUndefined(e.name)) {
+				if(e.name.match('^polloption')) {
+					pcount++;
+					if(e.tagName == 'INPUT') e.value = '';
+				}
 			}
 		}
 		for(var i = 0; i < a.length - pcount + 2; i++) {
@@ -597,8 +577,10 @@ function switchpollm(swt) {
 		var ii = 0;
 		for(var i = 0; i < $('postform').elements.length; i++) {
 			var e = $('postform').elements[i];
-			if(e.name.match('^polloption') && e.tagName == 'INPUT' && a[ii]) {
-				e.value = a[ii++];
+			if(!isUndefined(e.name)) {
+				if(e.name.match('^polloption') && e.tagName == 'INPUT' && a[ii]) {
+					e.value = a[ii++];
+				}
 			}
 		}
 	} else if(t == 2) {
@@ -616,6 +598,8 @@ function addpolloption() {
 	if(curoptions < maxoptions) {
 		$('polloption_new').outerHTML = '<p>' + $('polloption_hidden').innerHTML + '</p>' + $('polloption_new').outerHTML;
 		curoptions++;
+	} else {
+		$('polloption_new').outerHTML = '<span>已達到最大投票數'+maxoptions+'</span>';
 	}
 }
 
@@ -629,4 +613,191 @@ function insertsave(pid) {
 	x.get('forum.php?mod=misc&action=loadsave&inajax=yes&pid=' + pid + '&type=' + wysiwyg, function(str, x) {
 		insertText(str, str.length, 0);
 	});
+}
+
+function userdataoption(op) {
+	if(!op) {
+		saveUserdata('forum', '');
+		display('rstnotice');
+	} else {
+		loadData();
+		checkFocus();
+	}
+	doane();
+}
+
+function attachoption(type, op) {
+	if(!op) {
+		if(type == 'attach') {
+			delAttach(ATTACHUNUSEDAID, 1);
+			ATTACHNUM['attachunused'] = 0;
+			display('attachnotice_attach');
+		} else {
+			delImgAttach(IMGUNUSEDAID, 1);
+			ATTACHNUM['imageunused'] = 0;
+			display('attachnotice_img');
+		}
+	} else if(op == 1) {
+		var obj = $('unusedwin') ? $('unusedwin') : $('unusedlist_' + type);
+		list = obj.getElementsByTagName('INPUT'), aids = '';
+		for(i = 0;i < list.length;i++) {
+			if(list[i].name.match('unused') && list[i].checked) {
+				aids += '|' + list[i].value;
+			}
+		}
+		if(aids) {
+			if(type == 'attach') {
+				updateAttachList(1, aids);
+			} else {
+				updateImageList(1, aids);
+			}
+		}
+		display('attachnotice_' + type);
+	} else if(op == 2) {
+		showDialog('<div id="unusedwin" class="c altw" style="overflow:auto;height:100px;">' + $('unusedlist_' + type).innerHTML + '</div>' +
+			'<p class="o pns"><span class="z xg1"><label for="unusedwinchkall"><input id="unusedwinchkall" type="checkbox" onclick="attachoption(\'' + type + '\', 3)" checked="checked" />全選</label></span>' +
+			'<button onclick="attachoption(\'' + type + '\', 1);hideMenu(\'fwin_dialog\', \'dialog\')" class="pn pnc"><strong>確定</strong></button></p>', 'info', '未使用的' + (type == 'attach' ? '附件' : '圖片'));
+	} else if(op == 3) {
+		list = $('unusedwin').getElementsByTagName('INPUT');
+		for(i = 0;i < list.length;i++) {
+			if(list[i].name.match('unused')) {
+				list[i].checked = $('unusedwinchkall').checked;
+			}
+		}
+		return;
+	}
+	doane();
+}
+
+function insertAttachTag(aid) {
+	var txt = '[attach]' + aid + '[/attach]';
+	seditor_insertunit('fastpost', txt);
+}
+function insertAttachimgTag(aid) {
+	var txt = '[attachimg]' + aid + '[/attachimg]';
+	seditor_insertunit('fastpost', txt);
+}
+function insertText(str) {
+	seditor_insertunit('fastpost', str);
+}
+
+function insertAllAttachTag() {
+	var attachListObj = $('e_attachlist').getElementsByTagName("tbody");
+	for(var i in attachListObj) {
+		if(typeof attachListObj[i] == "object") {
+			var attach = attachListObj[i];
+			var ids = attach.id.split('_');
+			if(ids[0] == 'attach') {
+				if($('attachname'+ids[1])) {
+					if(parseInt($('attachname'+ids[1]).getAttribute('isimage'))) {
+						insertAttachimgTag(ids[1]);
+					} else {
+						insertAttachTag(ids[1]);
+					}
+					var txt = wysiwyg ? '\r\n<br/><br/>\r\n' : '\r\n\r\n';
+					insertText(txt, strlen(txt), 0);
+				}
+			}
+		}
+	}
+	doane();
+}
+
+function selectAllSaveImg(state) {
+	var inputListObj = $('imgattachlist').getElementsByTagName("input");
+	for(i in inputListObj) {
+		if(typeof inputListObj[i] == "object" && inputListObj[i].id) {
+			var inputObj = inputListObj[i];
+			var ids = inputObj.id.split('_');
+			if(ids[0] == 'albumaidchk' && $('image_td_' + ids[1]).className != 'imgdeleted' && inputObj.checked != state) {
+				inputObj.click();
+			}
+		}
+	}
+}
+
+function showExtra(id) {
+	if ($(id+'_c').style.display == 'block') {
+		$(id+'_b').className = 'pn z';
+		$(id+'_c').style.display = 'none';
+	} else {
+		var extraButton = $('post_extra_tb').getElementsByTagName('label');
+		var extraForm = $('post_extra_c').getElementsByTagName('div');
+
+		for (i=0;i<extraButton.length;i++) {
+			extraButton[i].className = '';
+		}
+
+		for (i=0;i<extraForm.length;i++) {
+			if(hasClass(extraForm[i],'exfm')) {
+				extraForm[i].style.display = 'none';
+			}
+		}
+
+		for (i=0;i<extraForm.length;i++) {
+			if(hasClass(extraForm[i],'exfm')) {
+				extraForm[i].style.display = 'none';
+			}
+		}
+		$(id+'_b').className = 'a';
+		$(id+'_c').style.display = 'block';
+	}
+}
+
+function extraCheck(op) {
+	if(!op && $('extra_replycredit_chk')) {
+		$('extra_replycredit_chk').className = $('replycredit_extcredits').value > 0 && $('replycredit_times').value > 0 ? 'a' : '';
+	} else if(op == 1 && $('readperm')) {
+		$('extra_readperm_chk').className = $('readperm').value !== '' ? 'a' : '';
+	} else if(op == 2 && $('price')) {
+		$('extra_price_chk').className = $('price').value > 0 ? 'a' : '';
+	} else if(op == 3 && $('rushreply')) {
+		$('extra_rushreplyset_chk').className = $('rushreply').checked ? 'a' : '';
+	} else if(op == 4 && $('tags')) {
+		$('extra_tag_chk').className = $('tags').value !== '' ? 'a' : '';
+	}
+}
+
+function getreplycredit() {
+	var replycredit_extcredits = $('replycredit_extcredits');
+	var replycredit_times = $('replycredit_times');
+	var credit_once = parseInt(replycredit_extcredits.value) > 0 ? parseInt(replycredit_extcredits.value) : 0;
+	var times = parseInt(replycredit_times.value) > 0 ? parseInt(replycredit_times.value) : 0;
+	if(parseInt(credit_once * times) - have_replycredit > 0) {
+		var real_reply_credit = Math.ceil(parseInt(credit_once * times) - have_replycredit + ((parseInt(credit_once * times) - have_replycredit) * creditstax));
+	} else {
+		var real_reply_credit = Math.ceil(parseInt(credit_once * times) - have_replycredit);
+	}
+
+	var reply_credits_sum = Math.ceil(parseInt(credit_once * times));
+
+	if(real_reply_credit > userextcredit) {
+		$('replycredit').innerHTML = '<b class="xi1">回帖獎勵積分總額過大('+real_reply_credit+')</b>';
+	} else {
+		if(have_replycredit > 0 && real_reply_credit < 0) {
+			$('replycredit').innerHTML = "<font class='xi1'>返還"+Math.abs(real_reply_credit)+"</font>";
+		} else {
+			$('replycredit').innerHTML = replycredit_result_lang + (real_reply_credit > 0 ? real_reply_credit : 0 );
+		}
+		$('replycredit_sum').innerHTML = reply_credits_sum > 0 ? reply_credits_sum : 0 ;
+	}
+}
+
+function extraCheckall() {
+	for(i = 0;i < 5;i++) {
+		extraCheck(i);
+	}
+}
+
+function deleteThread() {
+	if(confirm('確定要刪除該帖子嗎？') != 0){
+		$('delete').value = '1';
+		$('postform').submit();
+	}
+}
+
+function hideAttachMenu(id) {
+	if($(editorid + '_' + id + '_menu')) {
+		$(editorid + '_' + id + '_menu').style.visibility = 'hidden';
+	}
 }

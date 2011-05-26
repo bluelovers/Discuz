@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_emailcheck.php 12632 2010-07-12 07:18:49Z zhengqingpeng $
+ *      $Id: misc_emailcheck.php 17754 2010-11-01 01:55:58Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,17 +15,13 @@ $uid = 0;
 $email = '';
 $_G['gp_hash'] = empty($_G['gp_hash']) ? '' : $_G['gp_hash'];
 if($_G['gp_hash']) {
-	list($uid, $email) = explode("\t", authcode($_G['gp_hash'], 'DECODE', md5(substr(md5($_G['config']['security']['authkey']), 0, 16))));
+	list($uid, $email, $time) = explode("\t", authcode($_G['gp_hash'], 'DECODE', md5(substr(md5($_G['config']['security']['authkey']), 0, 16))));
 	$uid = intval($uid);
 }
 
-if($uid && isemail($email)) {
+if($uid && isemail($email) && $time > TIMESTAMP - 86400) {
 	$memberarr = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$uid'");
 	$setarr = array('email'=>addslashes($email), 'emailstatus'=>'1');
-	if($_G['setting']['regverify'] == 1 && $memberarr['groupid'] == 8) {
-		$groupid = DB::result(DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $memberarr[credits]>=creditshigher AND $memberarr[credits]<creditslower LIMIT 1"), 0);
-		$setarr['groupid'] = $groupid;
-	}
 	updatecreditbyaction('realemail', $uid);
 	DB::update('common_member', $setarr, array('uid' => $uid));
 

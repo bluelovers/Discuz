@@ -3,7 +3,7 @@
 			<form action="home.php?mod=spacecp&ac=sendmail" method="post" autocomplete="off">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="setsendemailsubmit" value="true" />
-				<input type="hidden" name="referer" value="$_G[referer]" />
+				<input type="hidden" name="referer" value="{echo dreferer()}" />
 			<!--{if empty($space['emailstatus']) }-->
 				<div class="bm bml">
 					<div class="bm_h cl">
@@ -20,45 +20,52 @@
 			<!--{else}-->
 				{eval
 					$mailtype = array(
-						'wall' => '{lang message}',
-						'piccomment' => '{lang pic_comment}',
-						'blogcomment' => '{lang blog_comment}',
-						'sharecomment' => '{lang share_comment}',
-						'magic' => '{lang magics_title}',
-						'sharenotice' => '{lang share_notification}',
-						'clickblog' => '{lang blog_position}',
-						'clickpic' => '{lang pic_position}',
-						'credit' => '{lang credits}',
-						'doing' => '{lang doing}',
-						'pcomment' => '{lang topic_comment}',
-						'post' => '{lang topic_reply}',
-						'show' => '{lang friend_top}',
-						'task' => '{lang task}',
-						'goods' => '{lang trade}',
-						'group' => $_G[setting][navs][3][navname],
-						'thread' => '{lang theme}',
-						'system' => '{lang system}',
-						'friend' => '{lang friends}',
-						'debate' => '{lang debate}',
-						'album' => '{lang album}',
-						'blog' => '{lang blog}',
-						'poll' => '{lang poll}',
-						'activity' => '{lang activity}',
-						'reward' => '{lang reward}',
-						'share' => '{lang share}',
-						'profile' => '{lang update_presonal_profile}'
+						'mail_my' => array(
+							'piccomment' => '{lang mail_piccomment}',
+							'clickpic' => '{lang mail_clickpic}',
+							'blogcomment' => '{lang mail_blogcomment}',
+							'clickblog' => '{lang mail_clickblog}',
+							'doing' => '{lang mail_doing}',
+							'sharecomment' => '{lang mail_sharecomment}',
+							'pcomment' => '{lang mail_pcomment}',
+							'post' => '{lang mail_post}',
+							'sharenotice' => '{lang mail_sharenotice}',
+							'reward' => '{lang mail_reward}',
+							'pusearticle' => '{lang mail_pusearticle}',
+							'wall' => '{lang mail_wall}',
+						),
+	
+						'mail_system' => array(
+							
+							'verify' => '{lang mail_system_verify}',
+							'magic' => '{lang mail_system_magic}',
+							'credit' => '{lang mail_system_credit}',
+							'goods' => '{lang mail_system_goods}',
+							'activity' => '{lang mail_system_activity}',
+							'report' => '{lang mail_system_report}',
+							'group' => '{lang mail_system_group}',
+							'task' => '{lang mail_system_task}',
+							'pmreport' => '{lang mail_system_pmreport}',
+							'myapp' => '{lang mail_system_myapp}',
+							'mod_member' => '{lang mail_system_mod_member}',
+							'friend' => '{lang mail_system_friend}',
+							'show' => '{lang mail_system_show}',
+							'system' => '{lang mail_system_insys}',
+						)
 					);
 				}
-				<p>{lang reminder_mail_message_1}$_G[setting][sendmailday]{lang reminder_mail_message_2}:</p>
+				<p class="bbda pbm mbm">{lang reminder_mail_message_1}$_G[setting][sendmailday]{lang reminder_mail_message_2}</p>
 				<table cellspacing="0" cellpadding="0" class="tfm">
-					<tr>
-						<th>{lang mail_type}</th>
-						<td class="pcl">
-							<!--{loop $mailtype $key $desc}-->
-								<label><input type="checkbox" class="pc" name="sendmail[$key]" value="1" {if $sendmail[$key]} checked="checked"{/if} />&nbsp;$desc</label>
-							<!--{/loop}-->
-						</td>
-					</tr>
+					<!--{loop $mailtype $group $types}-->
+						<tr>
+							<th><!--{eval echo lang('spacecp', $group)}--></th>
+							<td class="pcl">
+								<!--{loop $types $key $desc}-->
+									<label><input type="checkbox" name="sendmail[$key]" class="pc" value="1" {if $sendmail[$key]} checked="checked"{/if} />$desc</label>
+								<!--{/loop}-->
+							</td>
+						</tr>
+					<!--{/loop}-->
 
 					<tr>
 						<th>{lang mail_frequency}</th>
@@ -76,7 +83,7 @@
 					<tr>
 						<th>&nbsp;</th>
 						<td>
-							<button type="submit" name="setsendemail" class="pn pnp"><em>{lang save}</em></button>
+							<button type="submit" name="setsendemail" class="pn pnc"><em>{lang save}</em></button>
 						</td>
 					</tr>
 				</table>

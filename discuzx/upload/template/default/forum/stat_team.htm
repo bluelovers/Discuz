@@ -21,6 +21,7 @@
 				<table summary="{lang stats_team_admins}" id="team_admins" class="dt bm mbw">
 					<tr>
 						<th>{lang username}</th>
+						<th>{lang admin_usergroup_title}</th>
 						<th>{lang admin_status}</th>
 						<th>{lang lastvisit}</th>
 						<th>{lang stats_team_offdays}</th>
@@ -36,6 +37,7 @@
 					<!--{loop $team['admins'] $uid}-->
 						<tr class="{echo swapclass('alt')}">
 							<td><a target="_blank" href="home.php?mod=space&uid=$uid">$team[members][$uid][username]</a></td>
+							<td>$team[members][$uid][grouptitle]</td>
 							<td><!--{if $team['members'][$uid]['adminid'] == 1}-->{lang admin}<!--{elseif $team['members'][$uid]['adminid'] == 2}-->{lang supermod}<!--{elseif $team['members'][$uid]['adminid'] == 3}-->{lang moderator}<!--{/if}--></td>
 							<td>$team[members][$uid][lastactivity]</td>
 							<td>$team[members][$uid][offdays]</td>
@@ -65,6 +67,7 @@
 					<tr>
 						<th>{lang forum}</th>
 						<th>{lang username}</th>
+						<th>{lang admin_usergroup_title}</th>
 						<th>{lang admin_status}</th>
 						<th>{lang lastvisit}</th>
 						<th>{lang stats_team_offdays}</th>
@@ -83,6 +86,7 @@
 							<tr class="{echo swapclass('alt')}">
 							<!--{if $key == 0}--><td rowspan="$forum[moderators]"><!--{if $forum[type] == 'group'}--><a href="forum.php?gid=$fid"><!--{else}--><a href="forum.php?mod=forumdisplay&fid=$fid"><!--{/if}-->$forum[name]</a></td><!--{/if}-->
 							<td><a href="home.php?mod=space&uid=$uid"><!--{if $forum['inheritedmod']}--><b>$team[members][$uid][username]</b><!--{else}-->$team[members][$uid][username]<!--{/if}--></a></td>
+							<td>$team[members][$uid][grouptitle]</td>
 							<td><!--{if $team['members'][$uid]['adminid'] == 1}-->{lang admin}<!--{elseif $team['members'][$uid]['adminid'] == 2}-->{lang supermod}<!--{elseif $team['members'][$uid]['adminid'] == 3}-->{lang moderator}<!--{/if}--></td>
 							<td>$team[members][$uid][lastactivity]</td>
 							<td>$team[members][$uid][offdays]</td>

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17464 2010-10-19 08:00:34Z zhangguosheng $
+	$Id: common.js 22634 2011-05-16 05:52:08Z monkey $
 */
 
 var BROWSER = {};
@@ -15,10 +15,12 @@ BROWSER.opera = BROWSER.opera ? opera.version() : 0;
 
 HTMLNODE = document.getElementsByTagName('head')[0].parentNode;
 if(BROWSER.ie) {
-	HTMLNODE.className = 'ie_all ie' + parseInt(BROWSER.ie);
+	BROWSER.iemode = parseInt(typeof document.documentMode != 'undefined' ? document.documentMode : BROWSER.ie);
+	HTMLNODE.className = 'ie_all ie' + BROWSER.iemode;
 }
 
 var CSSLOADED = [];
+var JSLOADED = [];
 var JSMENU = [];
 JSMENU['active'] = [];
 JSMENU['timer'] = [];
@@ -34,6 +36,8 @@ var discuz_uid = isUndefined(discuz_uid) ? 0 : discuz_uid;
 var creditnotice = isUndefined(creditnotice) ? '' : creditnotice;
 var cookiedomain = isUndefined(cookiedomain) ? '' : cookiedomain;
 var cookiepath = isUndefined(cookiepath) ? '' : cookiepath;
+var EXTRAFUNC = [], EXTRASTR = '';
+EXTRAFUNC['showmenu'] = [];
 
 var DISCUZCODE = [];
 DISCUZCODE['num'] = '-1';
@@ -220,7 +224,12 @@ function htmlspecialchars(str) {
 }
 
 function display(id) {
-	$(id).style.display = $(id).style.display == '' ? 'none' : '';
+	var obj = $(id);
+	if(obj.style.visibility) {
+		obj.style.visibility = obj.style.visibility == 'visible' ? 'hidden' : 'visible';
+	} else {
+		obj.style.display = obj.style.display == '' ? 'none' : '';
+	}
 }
 
 function checkall(form, prefix, checkall) {
@@ -397,7 +406,7 @@ function getHost(url) {
 	if(typeof url == "undefined"|| null == url) {
 		url = window.location.href;
 	}
-	var regex = /.*\:\/\/([^\/]*).*/;
+	var regex = /^\w+\:\/\/([^\/]*).*/;
 	var match = url.match(regex);
 	if(typeof match != "undefined" && null != match) {
 		host = match[1];
@@ -444,9 +453,86 @@ function evalscript(s) {
 	return s;
 }
 
+var safescripts = {}, evalscripts = [];
+function safescript(id, call, seconds, times, timeoutcall, endcall, index) {
+	seconds = seconds || 1000;
+	times = times || 0;
+	var checked = true;
+	try {
+		if(typeof call == 'function') {
+			call();
+		} else {
+			eval(call);
+		}
+	} catch(e) {
+		checked = false;
+	}
+	if(!checked) {
+		if(!safescripts[id] || !index) {
+			safescripts[id] = safescripts[id] || [];
+			safescripts[id].push({
+				'times':0,
+				'si':setInterval(function () {
+					safescript(id, call, seconds, times, timeoutcall, endcall, safescripts[id].length);
+				}, seconds)
+			});
+		} else {
+			index = (index || 1) - 1;
+			safescripts[id][index]['times']++;
+			if(safescripts[id][index]['times'] >= times) {
+				clearInterval(safescripts[id][index]['si']);
+				if(typeof timeoutcall == 'function') {
+					timeoutcall();
+				} else {
+					eval(timeoutcall);
+				}
+			}
+		}
+	} else {
+		try {
+			index = (index || 1) - 1;
+			if(safescripts[id][index]['si']) {
+				clearInterval(safescripts[id][index]['si']);
+			}
+			if(typeof endcall == 'function') {
+				endcall();
+			} else {
+				eval(endcall);
+			}
+		} catch(e) {}
+	}
+}
+
+function $F(func, args, script) {
+	var run = function () {
+		var argc = args.length, s = '';
+		for(i = 0;i < argc;i++) {
+			s += ',args[' + i + ']';
+		}
+		eval('var check = typeof ' + func + ' == \'function\'');
+		if(check) {
+			eval(func + '(' + s.substr(1) + ')');
+		} else {
+			setTimeout(function () { checkrun(); }, 50);
+		}
+	};
+	var checkrun = function () {
+		if(JSLOADED[src]) {
+			run();
+		} else {
+			setTimeout(function () { checkrun(); }, 50);
+		}
+	};
+	script = script || 'common_extra';
+	src = JSPATH + script + '.js?' + VERHASH;
+	if(!JSLOADED[src]) {
+		appendscript(src);
+	}
+	checkrun();
+}
+
 function appendscript(src, text, reload, charset) {
 	var id = hash(src + text);
-	var evalscripts = [];
 	if(!reload && in_array(id, evalscripts)) return;
 	if(reload && $(id)) {
 		$(id).parentNode.removeChild($(id));
@@ -460,10 +546,21 @@ function appendscript(src, text, reload, charset) {
 	try {
 		if(src) {
 			scriptNode.src = src;
+			scriptNode.onloadDone = false;
+			scriptNode.onload = function () {
+				scriptNode.onloadDone = true;
+				JSLOADED[src] = 1;
+			};
+			scriptNode.onreadystatechange = function () {
+				if((scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') && !scriptNode.onloadDone) {
+					scriptNode.onloadDone = true;
+					JSLOADED[src] = 1;
+				}
+			};
 		} else if(text){
 			scriptNode.text = text;
 		}
-		$('append_parent').appendChild(scriptNode);
+		document.getElementsByTagName('head')[0].appendChild(scriptNode);
 	} catch(e) {}
 }
 
@@ -502,7 +599,6 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	x.setWaitId(waitid);
 	x.display = typeof display == 'undefined' || display == null ? '' : display;
 	x.showId = $(showid);
-	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;
 
 	if(url.substr(strlen(url) - 1) == '#') {
 		url = url.substr(0, strlen(url) - 1);
@@ -518,9 +614,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		}
 		if(!evaled && (typeof ajaxerror == 'undefined' || !ajaxerror)) {
 			if(x.showId) {
-				x.showId.style.display = x.showId.orgdisplay;
 				x.showId.style.display = x.display;
-				x.showId.orgdisplay = x.showId.style.display;
 				ajaxinnerhtml(x.showId, s);
 				ajaxupdateevents(x.showId);
 				if(x.autogoto) scroll(0, x.showId.offsetTop);
@@ -528,9 +622,9 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		}
 
 		ajaxerror = null;
-		if(typeof recall == 'function') {
+		if(recall && typeof recall == 'function') {
 			recall();
-		} else {
+		} else if(recall) {
 			eval(recall);
 		}
 		if(!evaled) evalscript(s);
@@ -550,25 +644,29 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 
 		showloading('none');
 		try {
-			if(BROWSER.ie) {
-				s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
-			} else {
-				if(BROWSER.safari > 0) {
-					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
-				} else {
+			s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
+		} catch(e) {
+			try {
+				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
+			} catch(e) {
+				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				} catch(e) {
+					s = '內部錯誤，無法顯示此內容';
 				}
 			}
-		} catch(e) {
-			s = '內部錯誤，無法顯示此內容';
 		}
-
 		if(s != '' && s.indexOf('ajaxerror') != -1) {
 			evalscript(s);
 			evaled = true;
 		}
 		if(showidclass) {
-			$(showid).className = showidclass;
+			if(showidclass != 'onerror') {
+				$(showid).className = showidclass;
+			} else {
+				showError(s);
+				ajaxerror = true;
+			}
 		}
 		if(submitbtn) {
 			submitbtn.disabled = false;
@@ -612,7 +710,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	return false;
 }
 
-function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall, idclass) {
+function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall, idclass, contentclass) {
 	if(!ctrlObj.getAttribute('mid')) {
 		var ctrlid = ctrlObj.id;
 		if(!ctrlid) {
@@ -631,6 +729,7 @@ function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall, idclass) {
 	if(isUndefined(pos)) pos = '43';
 	if(isUndefined(duration)) duration = timeout > 0 ? 0 : 3;
 	if(isUndefined(idclass)) idclass = 'p_pop';
+	if(isUndefined(contentclass)) contentclass = 'p_opt';
 	var func = function() {
 		showMenu({'ctrlid':ctrlObj.id,'menuid':menuid,'duration':duration,'timeout':timeout,'pos':pos,'cache':cache,'layer':2});
 		if(typeof recall == 'function') {
@@ -651,7 +750,7 @@ function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall, idclass) {
 		menu.id = menuid;
 		menu.style.display = 'none';
 		menu.className = idclass;
-		menu.innerHTML = '<div class="p_opt" id="' + menuid + '_content"></div>';
+		menu.innerHTML = '<div class="' + contentclass + '" id="' + menuid + '_content"></div>';
 		$('append_parent').appendChild(menu);
 		var url = (!isUndefined(ctrlObj.href) ? ctrlObj.href : ctrlObj.attributes['href'].value);
 		url += (url.indexOf('?') != -1 ? '&' :'?') + 'ajaxmenu=1';
@@ -687,6 +786,13 @@ function stringxor(s1, s2) {
 	return s;
 }
 
+function showPreview(val, id) {
+	var showObj = $(id);
+	if(showObj) {
+		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
+	}
+}
+
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
 	var waiting = waiting ? waiting : '請稍候...';
@@ -719,16 +825,31 @@ function ajaxinnerhtml(showid, s) {
 	}
 }
 
-function doane(event) {
+function doane(event, preventDefault, stopPropagation) {
+	var preventDefault = isUndefined(preventDefault) ? 1 : preventDefault;
+	var stopPropagation = isUndefined(stopPropagation) ? 1 : stopPropagation;
 	e = event ? event : window.event;
-	if(!e) e = getEvent();
-	if(e && BROWSER.ie) {
-		e.returnValue = false;
-		e.cancelBubble = true;
-	} else if(e) {
-		e.stopPropagation();
-		e.preventDefault();
+	if(!e) {
+		e = getEvent();
 	}
+	if(!e) {
+		return null;
+	}
+	if(preventDefault) {
+		if(e.preventDefault) {
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+	}
+	if(stopPropagation) {
+		if(e.stopPropagation) {
+			e.stopPropagation();
+		} else {
+			e.cancelBubble = true;
+		}
+	}
+	return e;
 }
 
 function loadcss(cssname) {
@@ -768,10 +889,17 @@ function showMenu(v) {
 	var fade = isUndefined(v['fade']) ? 0 : v['fade'];
 	var cover = isUndefined(v['cover']) ? 0 : v['cover'];
 	var zindex = isUndefined(v['zindex']) ? JSMENU['zIndex']['menu'] : v['zindex'];
+	var ctrlclass = isUndefined(v['ctrlclass']) ? '' : v['ctrlclass'];
 	var winhandlekey = isUndefined(v['win']) ? '' : v['win'];
-	zindex = cover ? zindex + 200 : zindex;
+	zindex = cover ? zindex + 500 : zindex;
 	if(typeof JSMENU['active'][layer] == 'undefined') {
 		JSMENU['active'][layer] = [];
+	}
+
+	for(i in EXTRAFUNC['showmenu']) {
+		try {
+			eval(EXTRAFUNC['showmenu'][i] + '()');
+		} catch(e) {}
 	}
 
 	if(evt == 'click' && in_array(menuid, JSMENU['active'][layer]) && mtype != 'win') {
@@ -783,14 +911,18 @@ function showMenu(v) {
 	}
 
 	if(ctrlObj) {
-		if(!ctrlObj.initialized) {
-			ctrlObj.initialized = true;
+		if(!ctrlObj.getAttribute('initialized')) {
+			ctrlObj.setAttribute('initialized', true);
 			ctrlObj.unselectable = true;
 
 			ctrlObj.outfunc = typeof ctrlObj.onmouseout == 'function' ? ctrlObj.onmouseout : null;
 			ctrlObj.onmouseout = function() {
 				if(this.outfunc) this.outfunc();
-				if(duration < 3 && !JSMENU['timer'][menuid]) JSMENU['timer'][menuid] = setTimeout('hideMenu(\'' + menuid + '\', \'' + mtype + '\')', timeout);
+				if(duration < 3 && !JSMENU['timer'][menuid]) {
+					JSMENU['timer'][menuid] = setTimeout(function () {
+						hideMenu(menuid, mtype);
+					}, timeout);
+				}
 			};
 
 			ctrlObj.overfunc = typeof ctrlObj.onmouseover == 'function' ? ctrlObj.onmouseover : null;
@@ -812,32 +944,8 @@ function showMenu(v) {
 		}
 	}
 
-	var dragMenu = function(menuObj, e, op) {
-		e = e ? e : window.event;
-		if(op == 1) {
-			if(in_array(BROWSER.ie ? e.srcElement.tagName : e.target.tagName, ['TEXTAREA', 'INPUT', 'BUTTON', 'SELECT'])) {
-				return;
-			}
-			JSMENU['drag'] = [e.clientX, e.clientY];
-			JSMENU['drag'][2] = parseInt(menuObj.style.left);
-			JSMENU['drag'][3] = parseInt(menuObj.style.top);
-			document.onmousemove = function(e) {try{dragMenu(menuObj, e, 2);}catch(err){}};
-			document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
-			doane(e);
-		}else if(op == 2 && JSMENU['drag'][0]) {
-			var menudragnow = [e.clientX, e.clientY];
-			menuObj.style.left = (JSMENU['drag'][2] + menudragnow[0] - JSMENU['drag'][0]) + 'px';
-			menuObj.style.top = (JSMENU['drag'][3] + menudragnow[1] - JSMENU['drag'][1]) + 'px';
-			doane(e);
-		}else if(op == 3) {
-			JSMENU['drag'] = [];
-			document.onmousemove = null;
-			document.onmouseup = null;
-		}
-	};
-
-	if(!menuObj.initialized) {
-		menuObj.initialized = true;
+	if(!menuObj.getAttribute('initialized')) {
+		menuObj.setAttribute('initialized', true);
 		menuObj.ctrlkey = ctrlid;
 		menuObj.mtype = mtype;
 		menuObj.layer = layer;
@@ -846,13 +954,7 @@ function showMenu(v) {
 		menuObj.style.position = 'absolute';
 		menuObj.style.zIndex = zindex + layer;
 		menuObj.onclick = function(e) {
-			if(!e || BROWSER.ie) {
-				window.event.cancelBubble = true;
-				return window.event;
-			} else {
-				e.stopPropagation();
-				return e;
-			}
+			return doane(e, 0, 1);
 		};
 		if(duration < 3) {
 			if(duration > 1) {
@@ -863,7 +965,9 @@ function showMenu(v) {
 			}
 			if(duration != 1) {
 				menuObj.onmouseout = function() {
-					JSMENU['timer'][menuid] = setTimeout('hideMenu(\'' + menuid + '\', \'' + mtype + '\')', timeout);
+					JSMENU['timer'][menuid] = setTimeout(function () {
+						hideMenu(menuid, mtype);
+					}, timeout);
 				};
 			}
 		}
@@ -874,13 +978,14 @@ function showMenu(v) {
 			coverObj.style.zIndex = menuObj.style.zIndex - 1;
 			coverObj.style.left = coverObj.style.top = '0px';
 			coverObj.style.width = '100%';
-			coverObj.style.height = document.body.offsetHeight + 'px';
+			coverObj.style.height = Math.max(document.documentElement.clientHeight, document.body.offsetHeight) + 'px';
 			coverObj.style.backgroundColor = '#000';
 			coverObj.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=50)';
 			coverObj.style.opacity = 0.5;
+			coverObj.onclick = function () { hideMenu(); };
 			$('append_parent').appendChild(coverObj);
 			_attachEvent(window, 'load', function () {
-				coverObj.style.height = document.body.offsetHeight + 'px';
+				coverObj.style.height = Math.max(document.documentElement.clientHeight, document.body.offsetHeight) + 'px';
 			}, document);
 		}
 	}
@@ -888,26 +993,32 @@ function showMenu(v) {
 		dragobj.style.cursor = 'move';
 		dragobj.onmousedown = function(event) {try{dragMenu(menuObj, event, 1);}catch(e){}};
 	}
-	menuObj.style.display = '';
+
 	if(cover) $(menuid + '_cover').style.display = '';
 	if(fade) {
 		var O = 0;
 		var fadeIn = function(O) {
-			if(O == 100) {
+			if(O > 100) {
 				clearTimeout(fadeInTimer);
 				return;
 			}
 			menuObj.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + O + ')';
 			menuObj.style.opacity = O / 100;
-			O += 10;
+			O += 20;
 			var fadeInTimer = setTimeout(function () {
 				fadeIn(O);
-			}, 50);
+			}, 40);
 		};
 		fadeIn(O);
 		menuObj.fade = true;
 	} else {
 		menuObj.fade = false;
+	}
+	menuObj.style.display = '';
+	if(ctrlObj && ctrlclass) {
+		ctrlObj.className += ' ' + ctrlclass;
+		menuObj.setAttribute('ctrlid', ctrlid);
+		menuObj.setAttribute('ctrlclass', ctrlclass);
 	}
 	if(pos != '*') {
 		setMenuPosition(showid, menuid, pos);
@@ -935,13 +1046,57 @@ function showMenu(v) {
 		JSMENU['layer'] = layer;
 	}
 }
+var delayShowST = null;
+function delayShow(ctrlObj, call, time) {
+	if(typeof ctrlObj == 'object') {
+		var ctrlid = ctrlObj.id;
+		call = call || function () { showMenu(ctrlid); };
+	}
+	var time = isUndefined(time) ? 500 : time;
+	delayShowST = setTimeout(function () {
+		if(typeof call == 'function') {
+			call();
+		} else {
+			eval(call);
+		}
+	}, time);
+	if(!ctrlObj.delayinit) {
+		_attachEvent(ctrlObj, 'mouseout', function() {clearTimeout(delayShowST);});
+		ctrlObj.delayinit = 1;
+	}
+}
 
+var dragMenuDisabled = false;
+function dragMenu(menuObj, e, op) {
+	e = e ? e : window.event;
+	if(op == 1) {
+		if(dragMenuDisabled || in_array(e.target ? e.target.tagName : e.srcElement.tagName, ['TEXTAREA', 'INPUT', 'BUTTON', 'SELECT'])) {
+			return;
+		}
+		JSMENU['drag'] = [e.clientX, e.clientY];
+		JSMENU['drag'][2] = parseInt(menuObj.style.left);
+		JSMENU['drag'][3] = parseInt(menuObj.style.top);
+		document.onmousemove = function(e) {try{dragMenu(menuObj, e, 2);}catch(err){}};
+		document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
+		doane(e);
+	}else if(op == 2 && JSMENU['drag'][0]) {
+		var menudragnow = [e.clientX, e.clientY];
+		menuObj.style.left = (JSMENU['drag'][2] + menudragnow[0] - JSMENU['drag'][0]) + 'px';
+		menuObj.style.top = (JSMENU['drag'][3] + menudragnow[1] - JSMENU['drag'][1]) + 'px';
+		doane(e);
+	}else if(op == 3) {
+		JSMENU['drag'] = [];
+		document.onmousemove = null;
+		document.onmouseup = null;
+	}
+}
 function setMenuPosition(showid, menuid, pos) {
 	var showObj = $(showid);
 	var menuObj = menuid ? $(menuid) : $(showid + '_menu');
-	if(isUndefined(pos)) pos = '43';
+	if(isUndefined(pos) || !pos) pos = '43';
 	var basePoint = parseInt(pos.substr(0, 1));
 	var direction = parseInt(pos.substr(1, 1));
+	var important = pos.indexOf('!') != -1 ? 1 : 0;
 	var sxy = 0, sx = 0, sy = 0, sw = 0, sh = 0, ml = 0, mt = 0, mw = 0, mcw = 0, mh = 0, mch = 0, bpl = 0, bpt = 0;
 
 	if(!menuObj || (basePoint > 0 && !showObj)) return;
@@ -999,21 +1154,27 @@ function setMenuPosition(showid, menuid, pos) {
 	}
 	var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
 	var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
-	if(in_array(direction, [1, 4]) && ml < 0) {
-		ml = bpl;
-		if(in_array(basePoint, [1, 4])) ml += sw;
-	} else if(ml + mw > scrollLeft + document.body.clientWidth && sx >= mw) {
-		ml = bpl - mw;
-		if(in_array(basePoint, [2, 3])) ml -= sw;
+	if(!important) {
+		if(in_array(direction, [1, 4]) && ml < 0) {
+			ml = bpl;
+			if(in_array(basePoint, [1, 4])) ml += sw;
+		} else if(ml + mw > scrollLeft + document.body.clientWidth && sx >= mw) {
+			ml = bpl - mw;
+			if(in_array(basePoint, [2, 3])) {
+				ml -= sw;
+			} else if(basePoint == 4) {
+				ml += sw;
+			}
+		}
+		if(in_array(direction, [1, 2]) && mt < 0) {
+			mt = bpt;
+			if(in_array(basePoint, [1, 2])) mt += sh;
+		} else if(mt + mh > scrollTop + document.documentElement.clientHeight && sy >= mh) {
+			mt = bpt - mh;
+			if(in_array(basePoint, [3, 4])) mt -= sh;
+		}
 	}
-	if(in_array(direction, [1, 2]) && mt < 0) {
-		mt = bpt;
-		if(in_array(basePoint, [1, 2])) mt += sh;
-	} else if(mt + mh > scrollTop + document.documentElement.clientHeight && sy >= mh) {
-		mt = bpt - mh;
-		if(in_array(basePoint, [3, 4])) mt -= sh;
-	}
-	if(pos == '210') {
+	if(pos.substr(0, 3) == '210') {
 		ml += 69 - sw / 2;
 		mt -= 5;
 		if(showObj.tagName == 'TEXTAREA') {
@@ -1056,11 +1217,18 @@ function hideMenu(attr, mtype) {
 	}else if(typeof attr == 'string') {
 		var menuObj = $(attr);
 		if(!menuObj || (mtype && menuObj.mtype != mtype)) return;
+		var ctrlObj = '', ctrlclass = '';
+		if((ctrlObj = $(menuObj.getAttribute('ctrlid'))) && (ctrlclass = menuObj.getAttribute('ctrlclass'))) {
+			var reg = new RegExp(' ' + ctrlclass);
+			ctrlObj.className = ctrlObj.className.replace(reg, '');
+		}
 		clearTimeout(JSMENU['timer'][attr]);
 		var hide = function() {
 			if(menuObj.cache) {
-				menuObj.style.display = 'none';
-				if(menuObj.cover) $(attr + '_cover').style.display = 'none';
+				if(menuObj.style.visibility != 'hidden') {
+					menuObj.style.display = 'none';
+					if(menuObj.cover) $(attr + '_cover').style.display = 'none';
+				}
 			}else {
 				menuObj.parentNode.removeChild(menuObj);
 				if(menuObj.cover) $(attr + '_cover').parentNode.removeChild($(attr + '_cover'));
@@ -1081,10 +1249,10 @@ function hideMenu(attr, mtype) {
 				}
 				menuObj.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + O + ')';
 				menuObj.style.opacity = O / 100;
-				O -= 10;
+				O -= 20;
 				var fadeOutTimer = setTimeout(function () {
 					fadeOut(O);
-				}, 50);
+				}, 40);
 			};
 			fadeOut(O);
 		} else {
@@ -1141,122 +1309,43 @@ function fetchOffset(obj, mode) {
 }
 
 function showTip(ctrlobj) {
-	if(!ctrlobj.id) {
-		ctrlobj.id = 'tip_' + Math.random();
-	}
-	menuid = ctrlobj.id + '_menu';
-	if(!$(menuid)) {
-		var div = document.createElement('div');
-		div.id = ctrlobj.id + '_menu';
-		div.className = 'prmm up';
-		div.style.display = 'none';
-		div.innerHTML = '<div class="prmc"><ul><li>' + ctrlobj.getAttribute('tip') + '</li></ul></div>';
-		$('append_parent').appendChild(div);
-	}
-	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'210','duration':2,'timeout':250,'zindex':JSMENU['zIndex']['prompt']});
+	$F('_showTip', arguments);
 }
 
 function showPrompt(ctrlid, evt, msg, timeout) {
-	var menuid = ctrlid ? ctrlid + '_pmenu' : 'ntcwin';
-	var duration = timeout ? 0 : 3;
-	if($(menuid)) {
-		$(menuid).parentNode.removeChild($(menuid));
-	}
-	var div = document.createElement('div');
-	div.id = menuid;
-	div.className = ctrlid ? 'prmm up' : 'ntcwin';
-	div.style.display = 'none';
-	$('append_parent').appendChild(div);
-	if(ctrlid) {
-		msg = '<div id="' + ctrlid + '_prompt" class="prmc"><ul><li>' + msg + '</li></ul></div>';
-	} else {
-		msg = '<table cellspacing="0" cellpadding="0" class="popupcredit"><tr><td class="pc_l">&nbsp;</td><td class="pc_c"><div class="pc_inner">' + msg +
-			'</td><td class="pc_r">&nbsp;</td></tr></table>';
-	}
-	div.innerHTML = msg;
-	if(ctrlid) {
-		if($(ctrlid).evt !== false) {
-			var prompting = function() {
-				showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210'});
-			};
-			if(evt == 'click') {
-				$(ctrlid).onclick = prompting;
-			} else {
-				$(ctrlid).onmouseover = prompting;
-			}
-		}
-		showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
-		$(ctrlid).unselectable = false;
-	} else {
-		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
-		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
-	}
+	$F('_showPrompt', arguments);
 }
 
 function showCreditPrompt() {
-	var notice = getcookie('creditnotice').split('D');
-	var basev = getcookie('creditbase').split('D');
-	var creditrule = decodeURI(getcookie('creditrule', 1)).replace(String.fromCharCode(9), ' ');
-	if(!discuz_uid || notice.length < 2 || notice[9] != discuz_uid) {
-		setcookie('creditnotice', '');
-		setcookie('creditrule', '');
-		return;
-	}
-	var creditnames = creditnotice.split(',');
-	var creditinfo = [];
-	var e;
-	for(var i in creditnames) {
-		e = creditnames[i].split('|');
-		creditinfo[e[0]] = [e[1], e[2]];
-	}
-	creditShow(creditinfo, notice, basev, 0, 1, creditrule);
-}
-function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
-	var s = '', check = 0;
-	for(i = 1; i <= 8; i++) {
-		v = parseInt(Math.abs(parseInt(notice[i])) / 5) + 1;
-		if(notice[i] !== '0' && creditinfo[i]) {
-			s += '<span>' + creditinfo[i][0] + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
-		}
-		if(notice[i] > 0) {
-			notice[i] = parseInt(notice[i]) - v;
-			basev[i] = parseInt(basev[i]) + v;
-		} else if(notice[i] < 0) {
-			notice[i] = parseInt(notice[i]) + v;
-			basev[i] = parseInt(basev[i]) - v;
-		}
-		if($('hcredit_' + i)) {
-			$('hcredit_' + i).innerHTML = basev[i];
-		}
-	}
-	for(i = 1; i <= 8; i++) {
-		if(notice[i] != 0) {
-			check = 1;
-		}
-	}
-	if(!s || first) {
-		setcookie('creditnotice', '');
-		setcookie('creditbase', '');
-		setcookie('creditrule', '');
-		if(!s) {
-			return;
-		}
-	}
-	if(!$('creditpromptdiv')) {
-		showPrompt(null, null, '<div id="creditpromptdiv">' + (creditrule ? '<i>' + creditrule + '</i> ' : '') + s + '</div>', 0);
-	} else {
-		$('creditpromptdiv').innerHTML = s;
-	}
-	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+	$F('_showCreditPrompt', []);
 }
 
-function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, canceltxt) {
+var showDialogST = null;
+function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, canceltxt, closetime, locationtime) {
+	clearTimeout(showDialogST);
 	cover = isUndefined(cover) ? (mode == 'info' ? 0 : 1) : cover;
 	leftmsg = isUndefined(leftmsg) ? '' : leftmsg;
-	mode = in_array(mode, ['confirm', 'notice', 'info']) ? mode : 'alert';
+	mode = in_array(mode, ['confirm', 'notice', 'info', 'right']) ? mode : 'alert';
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
-	confirmtxt = confirmtxt ? confirmtxt : '確定';
+	confirmtxtdefault = '確定';
+	closetime = isUndefined(closetime) ? '' : closetime;
+	closefunc = function () {
+		if(typeof func == 'function') func();
+		else eval(func);
+		hideMenu(menuid, 'dialog');
+	};
+	if(closetime) {
+		leftmsg = closetime + ' 秒後窗口關閉';
+		showDialogST = setTimeout(closefunc, closetime * 1000);
+	}
+	locationtime = isUndefined(locationtime) ? '' : locationtime;
+	if(locationtime) {
+		leftmsg = locationtime + ' 秒後頁面跳轉';
+		showDialogST = setTimeout(closefunc, locationtime * 1000);
+		confirmtxtdefault = '立即跳轉';
+	}
+	confirmtxt = confirmtxt ? confirmtxt : confirmtxtdefault;
 	canceltxt = canceltxt ? canceltxt : '取消';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
@@ -1265,13 +1354,17 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	menuObj.className = 'fwinmask';
 	menuObj.id = menuid;
 	$('append_parent').appendChild(menuObj);
-	var s = '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
+	var hidedom = '';
+	if(!BROWSER.ie) {
+		hidedom = '<style type="text/css">object{visibility:hidden;}</style>';
+	}
+	var s = hidedom + '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
 	s += t ? t : '提示信息';
 	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="關閉">關閉</a></span></h3>';
 	if(mode == 'info') {
 		s += msg ? msg : '';
 	} else {
-		s += '<div class="c altw"><div class="' + (mode == 'alert' ? 'alert_error' : 'alert_info') + '"><p>' + msg + '</p></div></div>';
+		s += '<div class="c altw"><div class="' + (mode == 'alert' ? 'alert_error' : (mode == 'right' ? 'alert_right' : 'alert_info')) + '"><p>' + msg + '</p></div></div>';
 		s += '<p class="o pns">' + (leftmsg ? '<span class="z xg1">' + leftmsg + '</span>' : '') + '<button id="fwin_dialog_submit" value="true" class="pn pnc"><strong>'+confirmtxt+'</strong></button>';
 		s += mode == 'confirm' ? '<button id="fwin_dialog_cancel" value="true" class="pn" onclick="hideMenu(\'' + menuid + '\', \'dialog\')"><strong>'+canceltxt+'</strong></button>' : '';
 		s += '</p>';
@@ -1292,6 +1385,9 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		$('fwin_dialog_close').onclick = $('fwin_dialog_cancel').onclick;
 	}
 	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover});
+	try {
+		if($('fwin_dialog_submit')) $('fwin_dialog_submit').focus();
+	} catch(e) {}
 }
 
 function showWindow(k, url, mode, cache, menuv) {
@@ -1301,6 +1397,7 @@ function showWindow(k, url, mode, cache, menuv) {
 	var menuObj = $(menuid);
 	var drag = null;
 	var loadingst = null;
+	var hidedom = '';
 
 	if(disallowfloat && disallowfloat.indexOf(k) != -1) {
 		if(BROWSER.ie) url += (url.indexOf('?') != -1 ?  '&' : '?') + 'referer=' + escape(location.href);
@@ -1353,9 +1450,13 @@ function showWindow(k, url, mode, cache, menuv) {
 		menuObj.className = 'fwinmask';
 		menuObj.style.display = 'none';
 		$('append_parent').appendChild(menuObj);
-		menuObj.innerHTML = '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c" ondblclick="hideWindow(\'' + k + '\')"></td><td class="t_r"></td></tr><tr><td class="m_l" ondblclick="hideWindow(\'' + k + '\')">&nbsp;&nbsp;</td><td class="m_c" id="fwin_content_' + k + '">'
-			+ '</td><td class="m_r" ondblclick="hideWindow(\'' + k + '\')"></td></tr><tr><td class="b_l"></td><td class="b_c" ondblclick="hideWindow(\'' + k + '\')"></td><td class="b_r"></td></tr></table>';
-		if (mode == 'html') {
+		evt = ' style="cursor:move" onmousedown="dragMenu($(\'' + menuid + '\'), event, 1)" ondblclick="hideWindow(\'' + k + '\')"';
+		if(!BROWSER.ie) {
+			hidedom = '<style type="text/css">object{visibility:hidden;}</style>';
+		}
+		menuObj.innerHTML = hidedom + '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"' + evt + '></td><td class="t_r"></td></tr><tr><td class="m_l"' + evt + ')">&nbsp;&nbsp;</td><td class="m_c" id="fwin_content_' + k + '">'
+			+ '</td><td class="m_r"' + evt + '"></td></tr><tr><td class="b_l"></td><td class="b_c"' + evt + '></td><td class="b_r"></td></tr></table>';
+		if(mode == 'html') {
 			$('fwin_content_' + k).innerHTML = url;
 			initMenu();
 			show();
@@ -1369,6 +1470,15 @@ function showWindow(k, url, mode, cache, menuv) {
 	}
 	doane();
 }
+
+function showError(msg) {
+	var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
+	msg = msg.replace(p, '');
+	if(msg !== '') {
+		showDialog(msg, 'alert', '錯誤信息', null, true, null, '', '', '', 3);
+	}
+}
+
 function hideWindow(k, all, clear) {
 	all = isUndefined(all) ? 1 : all;
 	clear = isUndefined(clear) ? 1 : clear;
@@ -1383,30 +1493,27 @@ function hideWindow(k, all, clear) {
 
 function AC_FL_RunContent() {
 	var str = '';
-	if(AC_DetectFlashVer(9,0,124)) {
-		var ret = AC_GetArgs(arguments, "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000", "application/x-shockwave-flash");
-		if(BROWSER.ie && !BROWSER.opera) {
-			str += '<object ';
-			for (var i in ret.objAttrs) {
-				str += i + '="' + ret.objAttrs[i] + '" ';
-			}
-			str += '>';
-			for (var i in ret.params) {
-				str += '<param name="' + i + '" value="' + ret.params[i] + '" /> ';
-			}
-			str += '</object>';
-		} else {
-			str += '<embed ';
-			for (var i in ret.embedAttrs) {
-				str += i + '="' + ret.embedAttrs[i] + '" ';
-			}
-			str += '></embed>';
+	var ret = AC_GetArgs(arguments, "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000", "application/x-shockwave-flash");
+	if(BROWSER.ie && !BROWSER.opera) {
+		str += '<object ';
+		for (var i in ret.objAttrs) {
+			str += i + '="' + ret.objAttrs[i] + '" ';
 		}
+		str += '>';
+		for (var i in ret.params) {
+			str += '<param name="' + i + '" value="' + ret.params[i] + '" /> ';
+		}
+		str += '</object>';
 	} else {
-		str = '此內容需要 Adobe Flash Player 9.0.124 或更高版本<br /><a href="http://www.adobe.com/go/getflashplayer/" target="_blank"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="下載 Flash Player" /></a>';
+		str += '<embed ';
+		for (var i in ret.embedAttrs) {
+			str += i + '="' + ret.embedAttrs[i] + '" ';
+		}
+		str += '></embed>';
 	}
 	return str;
 }
+
 function AC_GetArgs(args, classid, mimeType) {
 	var ret = new Object();
 	ret.embedAttrs = new Object();
@@ -1435,50 +1542,6 @@ function AC_GetArgs(args, classid, mimeType) {
 		ret.embedAttrs["type"] = mimeType;
 	}
 	return ret;
-}
-function AC_DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
-	var versionStr = -1;
-	if(navigator.plugins != null && navigator.plugins.length > 0 && (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"])) {
-		var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
-		var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
-		var descArray = flashDescription.split(" ");
-		var tempArrayMajor = descArray[2].split(".");
-		var versionMajor = tempArrayMajor[0];
-		var versionMinor = tempArrayMajor[1];
-		var versionRevision = descArray[3];
-		if(versionRevision == "") {
-			versionRevision = descArray[4];
-		}
-		if(versionRevision[0] == "d") {
-			versionRevision = versionRevision.substring(1);
-		} else if(versionRevision[0] == "r") {
-			versionRevision = versionRevision.substring(1);
-			if(versionRevision.indexOf("d") > 0) {
-				versionRevision = versionRevision.substring(0, versionRevision.indexOf("d"));
-			}
-		}
-		versionStr = versionMajor + "." + versionMinor + "." + versionRevision;
-	} else if(BROWSER.ie && !BROWSER.opera) {
-		try {
-			var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
-			versionStr = axo.GetVariable("$version");
-		} catch (e) {}
-	}
-	if(versionStr == -1 ) {
-		return false;
-	} else if(versionStr != 0) {
-		if(BROWSER.ie && !BROWSER.opera) {
-			tempArray = versionStr.split(" ");
-			tempString = tempArray[1];
-			versionArray = tempString.split(",");
-		} else {
-			versionArray = versionStr.split(".");
-		}
-		var versionMajor = versionArray[0];
-		var versionMinor = versionArray[1];
-		var versionRevision = versionArray[2];
-		return versionMajor > parseFloat(reqMajorVer) || (versionMajor == parseFloat(reqMajorVer)) && (versionMinor > parseFloat(reqMinorVer) || versionMinor == parseFloat(reqMinorVer) && versionRevision >= parseFloat(reqRevision));
-	}
 }
 
 function simulateSelect(selectId, widthvalue) {
@@ -1586,84 +1649,12 @@ function simulateSelect(selectId, widthvalue) {
 	};
 }
 
-function detectCapsLock(e, obj) {
-	var valueCapsLock = e.keyCode ? e.keyCode : e.which;
-	var valueShift = e.shiftKey ? e.shiftKey : (valueCapsLock == 16 ? true : false);
-	this.clearDetect = function () {
-		obj.className = 'txt';
-	};
-
-	obj.className = (valueCapsLock >= 65 && valueCapsLock <= 90 && !valueShift || valueCapsLock >= 97 && valueCapsLock <= 122 && valueShift) ? 'clck txt' : 'txt';
-
-	if(BROWSER.ie) {
-		event.srcElement.onblur = this.clearDetect;
-	} else {
-		e.target.onblur = this.clearDetect;
-	}
-}
-
 function switchTab(prefix, current, total, activeclass) {
-	activeclass = !activeclass ? 'a' : activeclass;
-	for(var i = 1; i <= total;i++) {
-		var classname = ' '+$(prefix + '_' + i).className+' ';
-		$(prefix + '_' + i).className = classname.replace(' '+activeclass+' ','').substr(1);
-		$(prefix + '_c_' + i).style.display = 'none';
-	}
-	$(prefix + '_' + current).className = $(prefix + '_' + current).className + ' '+activeclass;
-	$(prefix + '_c_' + current).style.display = '';
+	$F('_switchTab', arguments);
 }
 
 function imageRotate(imgid, direct) {
-	var image = $(imgid);
-	if(!image.getAttribute('deg')) {
-		var deg = 0;
-		image.setAttribute('ow', image.width);
-		image.setAttribute('oh', image.height);
-		if(BROWSER.ie) {
-			image.setAttribute('om', parseInt(image.currentStyle.marginBottom));
-		}
-	} else {
-		var deg = parseInt(image.getAttribute('deg'));
-	}
-	var ow = image.getAttribute('ow');
-	var oh = image.getAttribute('oh');
-	deg = direct == 1 ? deg - 90 : deg + 90;
-	if(deg > 270) {
-		deg = 0;
-	} else if(deg < 0) {
-		deg = 270;
-	}
-	image.setAttribute('deg', deg);
-	if(BROWSER.ie) {
-		image.style.marginBottom = (image.getAttribute('om') + (BROWSER.ie < 8 ? 0 : (deg == 90 || deg == 270 ? Math.abs(ow - oh) : 0))) + 'px';
-		image.style.filter = 'progid:DXImageTransform.Microsoft.BasicImage(rotation=' + (deg / 90) + ')';
-	} else {
-	        switch(deg) {
-			case 90:var cow = oh, coh = ow, cx = 0, cy = -oh;break;
-			case 180:var cow = ow, coh = oh, cx = -ow, cy = -oh;break;
-			case 270:var cow = oh, coh = ow, cx = -ow, cy = 0;break;
-	        }
-		var canvas = $(image.getAttribute('canvasid'));
-		if(!canvas) {
-			var i = document.createElement("canvas");
-			i.id = 'canva_' + Math.random();
-			image.setAttribute('canvasid', i.id);
-			image.parentNode.insertBefore(i, image);
-			canvas = $(i.id);
-		}
-		if(deg) {
-			var canvasContext = canvas.getContext('2d');
-			canvas.setAttribute('width', cow);
-			canvas.setAttribute('height', coh);
-			canvasContext.rotate(deg * Math.PI / 180);
-			canvasContext.drawImage(image, cx, cy, ow, oh);
-			image.style.display = 'none';
-			canvas.style.display = '';
-		} else {
-			image.style.display = '';
-			canvas.style.display = 'none';
-		}
-	}
+	$F('_imageRotate', arguments);
 }
 
 function thumbImg(obj, method) {
@@ -1695,18 +1686,7 @@ function thumbImg(obj, method) {
 			zw = zh * zr;
 		}
 	} else {
-		var imagemaxwidth = isUndefined(imagemaxwidth) ? '600' : imagemaxwidth;
-		var widthary = imagemaxwidth.split('%');
-		if(widthary.length > 1) {
-			fixw = $('wrap').clientWidth - 200;
-			if(widthary[0]) {
-				fixw = fixw * widthary[0] / 100;
-			} else if(widthary[1]) {
-				fixw = fixw < widthary[1] ? fixw : widthary[1];
-			}
-		} else {
-			fixw = widthary[0];
-		}
+		fixw = typeof imagemaxwidth == 'undefined' ? '600' : imagemaxwidth;
 		if(zw > fixw) {
 			zw = fixw;
 			zh = zw / zr;
@@ -1722,409 +1702,19 @@ function thumbImg(obj, method) {
 	obj.height = zh;
 }
 
-var zoomclick = 0, zoomstatus = 1;
-function zoom(obj, zimg, nocover) {
-	zimg = !zimg ? obj.src : zimg;
-	nocover = !nocover ? 0 : nocover;
-	if(!zoomstatus) {
-		window.open(zimg, '', '');
-		return;
-	}
-	if(!obj.id) obj.id = 'img_' + Math.random();
-	var menuid = obj.id + '_zmenu';
-	var menu = $(menuid);
-	var imgid = menuid + '_img';
-	var zoomid = menuid + '_zimg';
-	var maxh = (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) - 70;
-
-	if(!menu) {
-		menu = document.createElement('div');
-		menu.id = menuid;
-		var objpos = fetchOffset(obj);
-		menu.innerHTML = '<div onclick="$(\'append_parent\').removeChild($(\'' + obj.id + '_zmenu\'))" style="z-index:600;filter:alpha(opacity=50);opacity:0.5;background:#FFF;position:absolute;width:' + obj.clientWidth + 'px;height:' + obj.clientHeight + 'px;left:' + objpos['left'] + 'px;top:' + objpos['top'] + 'px"><table width="100%" height="100%"><tr><td valign="middle" align="center"><img src="' + IMGDIR + '/loading.gif" /></td></tr></table></div>' +
-			'<div style="position:absolute;top:-100000px;display:none"><img id="' + imgid + '" src="' + zimg + '"></div>';
-		$('append_parent').appendChild(menu);
-		$(imgid).onload = function() {
-			$(imgid).parentNode.style.display = '';
-			var imgw = $(imgid).width;
-			var imgh = $(imgid).height;
-			var r = imgw / imgh;
-			var w = document.body.clientWidth * 0.95;
-			w = imgw > w ? w : imgw;
-			var h = w / r;
-			if(h > maxh) {
-				h = maxh;
-				w = h * r;
-			}
-			$('append_parent').removeChild(menu);
-			menu = document.createElement('div');
-			menu.id = menuid;
-			menu.style.overflow = 'visible';
-			menu.style.width = (w < 300 ? 300 : w) + 20 + 'px';
-			menu.style.height = h + 50 + 'px';
-			menu.innerHTML = !nocover ? '<div class="zoominner"><p id="' + menuid + '_ctrl"><span class="y"><a href="' + zimg + '" class="imglink" target="_blank" title="在新窗口打開">在新窗口打開</a><a href="javascipt:;" id="' + menuid + '_adjust" class="imgadjust" title="實際大小">實際大小</a><a href="javascript:;" onclick="hideMenu()" class="imgclose" title="關閉">關閉</a></span>鼠標滾輪縮放圖片</p><div align="center" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div></div>' :
-					'<div class="popupmenu_popup" style="width:auto" onmousedown="zoomclick=1" onmousemove="zoomclick=2" onmouseup="if(zoomclick==1) hideMenu()"><span class="right y"><a href="javascript:;" onclick="hideMenu()" class="flbc" style="width:20px;margin:0 0 2px 0">關閉</a></span>鼠標滾輪縮放圖片<img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '"></div>';
-			$('append_parent').appendChild(menu);
-			if(!nocover) {
-				$(menuid + '_adjust').onclick = function(e) {adjust(e, 1)};
-			}
-			if(BROWSER.ie || BROWSER.chrome){
-				menu.onmousewheel = adjust;
-			} else {
-				menu.addEventListener('DOMMouseScroll', adjust, false);
-			}
-			showMenu({'menuid':menuid,'duration':3,'pos':'00','cover':!nocover,'drag':menuid,'maxh':maxh+70});
-		};
-	} else {
-		showMenu({'menuid':menuid,'duration':3,'pos':'00','cover':!nocover,'drag':menuid,'maxh':menu.clientHeight});
-	}
-	if(BROWSER.ie) doane(event);
-	var adjust = function(e, a) {
-		var imgw = $(zoomid).getAttribute('w');
-		var imgh = $(zoomid).getAttribute('h');
-		var imgwstep = imgw / 10;
-		var imghstep = imgh / 10;
-		if(!a) {
-			if(!e) e = window.event;
-			if(e.altKey || e.shiftKey || e.ctrlKey) return;
-			if(e.wheelDelta <= 0 || e.detail > 0) {
-				if($(zoomid).width - imgwstep <= 200 || $(zoomid).height - imghstep <= 200) {
-					doane(e);return;
-				}
-				$(zoomid).width -= imgwstep;
-				$(zoomid).height -= imghstep;
-			} else {
-				if($(zoomid).width + imgwstep >= imgw) {
-					doane(e);return;
-				}
-				$(zoomid).width += imgwstep;
-				$(zoomid).height += imghstep;
-			}
-		} else {
-			$(zoomid).width = imgw;
-			$(zoomid).height = imgh;
-		}
-		menu.style.width = (parseInt($(zoomid).width < 300 ? 300 : parseInt($(zoomid).width)) + 20) + 'px';
-		menu.style.height = (parseInt($(zoomid).height) + 50) + 'px';
-		setMenuPosition('', menuid, '00');
-		doane(e);
-	};
+var zoomstatus = 1;
+function zoom(obj, zimg, nocover, pn) {
+	$F('_zoom', arguments);
 }
 
 function showselect(obj, inpid, t, rettype) {
-	if(!obj.id) {
-		var t = !t ? 0 : t;
-		var rettype = !rettype ? 0 : rettype;
-		obj.id = 'calendarexp_' + Math.random();
-		div = document.createElement('div');
-		div.id = obj.id + '_menu';
-		div.style.display = 'none';
-		div.className = 'p_pop';
-		$('append_parent').appendChild(div);
-		s = '';
-		if(!t) {
-			s += showselect_row(inpid, '一天', 1, 0, rettype);
-			s += showselect_row(inpid, '一周', 7, 0, rettype);
-			s += showselect_row(inpid, '一個月', 30, 0, rettype);
-			s += showselect_row(inpid, '三個月', 90, 0, rettype);
-			s += showselect_row(inpid, '自定義', -2);
-		} else {
-			if($(t)) {
-				var lis = $(t).getElementsByTagName('LI');
-				for(i = 0;i < lis.length;i++) {
-					s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML">' + lis[i].innerHTML + '</a>';
-				}
-				s += showselect_row(inpid, '自定義', -1);
-			} else {
-				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">永久</a>';
-				s += showselect_row(inpid, '7 天', 7, 1, rettype);
-				s += showselect_row(inpid, '14 天', 14, 1, rettype);
-				s += showselect_row(inpid, '一個月', 30, 1, rettype);
-				s += showselect_row(inpid, '三個月', 90, 1, rettype);
-				s += showselect_row(inpid, '半年', 182, 1, rettype);
-				s += showselect_row(inpid, '一年', 365, 1, rettype);
-				s += showselect_row(inpid, '自定義', -1);
-			}
-		}
-		$(div.id).innerHTML = s;
-	}
-	showMenu({'ctrlid':obj.id,'evt':'click'});
-	if(BROWSER.ie && BROWSER.ie < 7) {
-		doane(event);
-	}
+	$F('_showselect', arguments);
 }
 
-function showselect_row(inpid, s, v, notime, rettype) {
-	if(v >= 0) {
-		if(!rettype) {
-			var notime = !notime ? 0 : 1;
-			t = today.getTime();
-			t += 86400000 * v;
-			d = new Date();
-			d.setTime(t);
-			return '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'' + d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + (!notime ? ' ' + d.getHours() + ':' + d.getMinutes() : '') + '\'">' + s + '</a>';
-		} else {
-			return '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'' + v + '\'">' + s + '</a>';
-		}
-	} else if(v == -1) {
-		return '<a href="javascript:;" onclick="$(\'' + inpid + '\').focus()">' + s + '</a>';
-	} else if(v == -2) {
-		return '<a href="javascript:;" onclick="$(\'' + inpid + '\').onclick()">' + s + '</a>';
-	}
+function showColorBox(ctrlid, layer, k, bgcolor) {
+	$F('_showColorBox', arguments);
 }
 
-function showColorBox(ctrlid, layer, k) {
-	if(!$(ctrlid + '_menu')) {
-		var menu = document.createElement('div');
-		menu.id = ctrlid + '_menu';
-		menu.className = 'p_pop colorbox';
-		menu.unselectable = true;
-		menu.style.display = 'none';
-		var coloroptions = ['Black', 'Sienna', 'DarkOliveGreen', 'DarkGreen', 'DarkSlateBlue', 'Navy', 'Indigo', 'DarkSlateGray', 'DarkRed', 'DarkOrange', 'Olive', 'Green', 'Teal', 'Blue', 'SlateGray', 'DimGray', 'Red', 'SandyBrown', 'YellowGreen', 'SeaGreen', 'MediumTurquoise', 'RoyalBlue', 'Purple', 'Gray', 'Magenta', 'Orange', 'Yellow', 'Lime', 'Cyan', 'DeepSkyBlue', 'DarkOrchid', 'Silver', 'Pink', 'Wheat', 'LemonChiffon', 'PaleGreen', 'PaleTurquoise', 'LightBlue', 'Plum', 'White'];
-		var colortexts = ['黑色', '赭色', '暗橄欖綠色', '暗綠色', '暗灰藍色', '海軍色', '靛青色', '墨綠色', '暗紅色', '暗桔黃色', '橄欖色', '綠色', '水鴨色', '藍色', '灰石色', '暗灰色', '紅色', '沙褐色', '黃綠色', '海綠色', '間綠寶石', '皇家藍', '紫色', '灰色', '紅紫色', '橙色', '黃色', '酸橙色', '青色', '深天藍色', '暗紫色', '銀色', '粉色', '淺黃色', '檸檬綢色', '蒼綠色', '蒼寶石綠', '亮藍色', '洋李色', '白色'];
-		var str = '';
-		for(var i = 0; i < 40; i++) {
-			str += '<input type="button" style="background-color: ' + coloroptions[i] + '"' + (typeof setEditorTip == 'function' ? ' onmouseover="setEditorTip(\'' + colortexts[i] + '\')" onmouseout="setEditorTip(\'\')"' : '') + ' onclick="'
-			+ (typeof wysiwyg == 'undefined' ? 'seditor_insertunit(\'' + k + '\', \'[color=' + coloroptions[i] + ']\', \'[/color]\')' : (ctrlid == editorid + '_tbl_param_4' ? '$(\'' + ctrlid + '\').value=\'' + coloroptions[i] + '\';hideMenu(2)' : 'discuzcode(\'forecolor\', \'' + coloroptions[i] + '\')'))
-			+ '" title="' + colortexts[i] + '" />' + (i < 39 && (i + 1) % 8 == 0 ? '<br />' : '');
-		}
-		menu.innerHTML = str;
-		$('append_parent').appendChild(menu);
-	}
-	showMenu({'ctrlid':ctrlid,'evt':'click','layer':layer});
-}
-
-function smilies_show(id, smcols, seditorkey) {
-	if(seditorkey && !$(seditorkey + 'sml_menu')) {
-		var div = document.createElement("div");
-		div.id = seditorkey + 'sml_menu';
-		div.style.display = 'none';
-		div.className = 'sllt';
-		$('append_parent').appendChild(div);
-		var div = document.createElement("div");
-		div.id = id;
-		div.style.overflow = 'hidden';
-		$(seditorkey + 'sml_menu').appendChild(div);
-	}
-	if(typeof smilies_type == 'undefined') {
-		var scriptNode = document.createElement("script");
-		scriptNode.type = "text/javascript";
-		scriptNode.charset = charset ? charset : (BROWSER.firefox ? document.characterSet : document.charset);
-		scriptNode.src = 'data/cache/common_smilies_var.js?' + VERHASH;
-		$('append_parent').appendChild(scriptNode);
-		if(BROWSER.ie) {
-			scriptNode.onreadystatechange = function() {
-				smilies_onload(id, smcols, seditorkey);
-			};
-		} else {
-			scriptNode.onload = function() {
-				smilies_onload(id, smcols, seditorkey);
-			};
-		}
-	} else {
-		smilies_onload(id, smcols, seditorkey);
-	}
-}
-function smilies_onload(id, smcols, seditorkey) {
-	seditorkey = !seditorkey ? '' : seditorkey;
-	smile = getcookie('smile').split('D');
-	if(typeof smilies_type == 'object') {
-		if(smile[0] && smilies_array[smile[0]]) {
-			CURRENTSTYPE = smile[0];
-		} else {
-			for(i in smilies_array) {
-				CURRENTSTYPE = i;break;
-			}
-		}
-		smiliestype = '<div class="slg"><ul>';
-		for(i in smilies_type) {
-			if(smilies_type[i][0]) {
-				smiliestype += '<li><a href="javascript:;" hidefocus="true" ' + (CURRENTSTYPE == i ? 'class="current"' : '') + ' id="'+seditorkey+'stype_'+i+'" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', '+i+', 1, \'' + seditorkey + '\');if(CURRENTSTYPE) {$(\''+seditorkey+'stype_\'+CURRENTSTYPE).className=\'\';}this.className=\'current\';CURRENTSTYPE='+i+';doane(event);">'+smilies_type[i][0]+'</a></li>';
-			}
-		}
-		smiliestype += '</ul></div>';
-		$(id).innerHTML = smiliestype + '<div id="' + id + '_data"></div><div class="sllt_p" id="' + id + '_page"></div>';
-		smilies_switch(id, smcols, CURRENTSTYPE, smile[1], seditorkey);
-		smilies_fastdata = '';
-		if(seditorkey == 'fastpost' && $('fastsmilies') && smilies_fast) {
-			var j = 0;
-			for(i = 0;i < smilies_fast.length; i++) {
-				if(j == 0) {
-					smilies_fastdata += '<tr>';
-				}
-				j = ++j > 3 ? 0 : j;
-				s = smilies_array[smilies_fast[i][0]][smilies_fast[i][1]][smilies_fast[i][2]];
-				smilieimg = STATICURL + 'image/smiley/' + smilies_type[smilies_fast[i][0]][1] + '/' + s[2];
-				img[k] = new Image();
-				img[k].src = smilieimg;
-				smilies_fastdata += s ? '<td onmouseover="smilies_preview(\'' + seditorkey + '\', \'fastsmiliesdiv\', this, ' + s[5] + ')" onclick="' + (typeof wysiwyg != 'undefined' ? 'insertSmiley(' + s[0] + ')': 'seditor_insertunit(\'' + seditorkey + '\', \'' + s[1].replace(/'/, '\\\'') + '\')') +
-					'" id="' + seditorkey + 'smilie_' + s[0] + '_td"><img id="smilie_' + s[0] + '" width="' + s[3] +'" height="' + s[4] +'" src="' + smilieimg + '" alt="' + s[1] + '" />' : '<td>';
-			}
-			$('fastsmilies').innerHTML = '<table cellspacing="0" cellpadding="0"><tr>' + smilies_fastdata + '</tr></table>';
-		}
-	}
-}
-function smilies_switch(id, smcols, type, page, seditorkey) {
-	page = page ? page : 1;
-	if(!smilies_array[type] || !smilies_array[type][page]) return;
-	setcookie('smile', type + 'D' + page, 31536000);
-	smiliesdata = '<table id="' + id + '_table" cellpadding="0" cellspacing="0"><tr>';
-	j = k = 0;
-	img = [];
-	for(i in smilies_array[type][page]) {
-		if(j >= smcols) {
-			smiliesdata += '<tr>';
-			j = 0;
-		}
-		s = smilies_array[type][page][i];
-		smilieimg = STATICURL + 'image/smiley/' + smilies_type[type][1] + '/' + s[2];
-		img[k] = new Image();
-		img[k].src = smilieimg;
-		smiliesdata += s && s[0] ? '<td onmouseover="smilies_preview(\'' + seditorkey + '\', \'' + id + '\', this, ' + s[5] + ')" onclick="' + (typeof wysiwyg != 'undefined' ? 'insertSmiley(' + s[0] + ')': 'seditor_insertunit(\'' + seditorkey + '\', \'' + s[1].replace(/'/, '\\\'') + '\')') +
-			'" id="' + seditorkey + 'smilie_' + s[0] + '_td"><img id="smilie_' + s[0] + '" width="' + s[3] +'" height="' + s[4] +'" src="' + smilieimg + '" alt="' + s[1] + '" />' : '<td>';
-		j++;k++;
-	}
-	smiliesdata += '</table>';
-	smiliespage = '';
-	if(smilies_array[type].length > 2) {
-		prevpage = ((prevpage = parseInt(page) - 1) < 1) ? smilies_array[type].length - 1 : prevpage;
-		nextpage = ((nextpage = parseInt(page) + 1) == smilies_array[type].length) ? 1 : nextpage;
-		smiliespage = '<div class="z"><a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + prevpage + ', \'' + seditorkey + '\');doane(event);">上頁</a>' +
-			'<a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + nextpage + ', \'' + seditorkey + '\');doane(event);">下頁</a></div>' +
-			page + '/' + (smilies_array[type].length - 1);
-	}
-	$(id + '_data').innerHTML = smiliesdata;
-	$(id + '_page').innerHTML = smiliespage;
-}
-function smilies_preview(seditorkey, id, obj, w) {
-	var menu = $('smilies_preview');
-	if(!menu) {
-		menu = document.createElement('div');
-		menu.id = 'smilies_preview';
-		menu.className = 'sl_pv';
-		menu.style.display = 'none';
-		$('append_parent').appendChild(menu);
-	}
-	menu.innerHTML = '<img width="' + w + '" src="' + obj.childNodes[0].src + '" />';
-	mpos = fetchOffset($(id + '_data'));
-	spos = fetchOffset(obj);
-	pos = spos['left'] >= mpos['left'] + $(id + '_data').offsetWidth / 2 ? '13' : '24';
-	showMenu({'ctrlid':obj.id,'showid':id + '_data','menuid':menu.id,'pos':pos,'layer':3});
-}
-
-function seditor_showimgmenu(seditorkey) {
-	var imgurl = $(seditorkey + '_image_param_1').value;
-	var width = parseInt($(seditorkey + '_image_param_2').value);
-	var height = parseInt($(seditorkey + '_image_param_3').value);
-	var extparams = '';
-	if(width || height) {
-		extparams = '=' + width + ',' + height
-	}
-	seditor_insertunit(seditorkey, '[img' + extparams + ']' + imgurl, '[/img]', null, 1);
-	$(seditorkey + '_image_param_1').value = '';
-	hideMenu();
-}
-function seditor_menu(seditorkey, tag) {
-	var sel = false;
-	if(!isUndefined($(seditorkey + 'message').selectionStart)) {
-		sel = $(seditorkey + 'message').selectionEnd - $(seditorkey + 'message').selectionStart;
-	} else if(document.selection && document.selection.createRange) {
-		$(seditorkey + 'message').focus();
-		var sel = document.selection.createRange();
-		$(seditorkey + 'message').sel = sel;
-		sel = sel.text ? true : false;
-	}
-	if(sel) {
-		seditor_insertunit(seditorkey, '[' + tag + ']', '[/' + tag + ']');
-		return;
-	}
-	var ctrlid = seditorkey + tag;
-	var menuid = ctrlid + '_menu';
-	if(!$(menuid)) {
-		switch(tag) {
-			case 'url':
-				str = '請輸入鏈接地址:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
-					'<br />請輸入鏈接文字:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
-				submitstr = "$('" + ctrlid + "_param_2').value !== '' ? seditor_insertunit('" + seditorkey + "', '[url='+$('" + ctrlid + "_param_1').value+']'+$('" + ctrlid + "_param_2').value, '[/url]', null, 1) : seditor_insertunit('" + seditorkey + "', '[url]'+$('" + ctrlid + "_param_1').value, '[/url]', null, 1);hideMenu();";
-				break;
-			case 'code':
-			case 'quote':
-				var tagl = {'quote' : '請輸入要插入的引用', 'code' : '請輸入要插入的代碼'};
-					str = tagl[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>';
-				submitstr = "seditor_insertunit('" + seditorkey + "', '[" + tag + "]'+$('" + ctrlid + "_param_1').value, '[/" + tag + "]', null, 1);hideMenu();";
-				break;
-			case 'img':
-				str = '請輸入圖片地址:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
-					'<p class="mtm">寬(可選): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
-					'高(可選): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
-				submitstr = "seditor_insertunit('" + seditorkey + "', '[img' + ($('" + ctrlid + "_param_2').value !== '' && $('" + ctrlid + "_param_3').value !== '' ? '='+$('" + ctrlid + "_param_2').value+','+$('" + ctrlid + "_param_3').value : '')+']'+$('" + ctrlid + "_param_1').value, '[/img]', null, 1);hideMenu();";
-				break;
-		}
-		var menu = document.createElement('div');
-		menu.id = menuid;
-		menu.style.display = 'none';
-		menu.className = 'p_pof upf';
-		menu.style.width = '270px';
-		$('append_parent').appendChild(menu);
-		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">關閉</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>取消</em></button></div></form></div>';
-	}
-	showMenu({'ctrlid':ctrlid,'evt':'click','duration':3,'cache':0,'drag':1});
-
-}
-function seditor_insertunit(key, text, textend, moveend, selappend) {
-	$(key + 'message').focus();
-	textend = isUndefined(textend) ? '' : textend;
-	moveend = isUndefined(textend) ? 0 : moveend;
-	selappend = isUndefined(selappend) ? 1 : selappend;
-	startlen = strlen(text);
-	endlen = strlen(textend);
-	if(!isUndefined($(key + 'message').selectionStart)) {
-		if(selappend) {
-			var opn = $(key + 'message').selectionStart + 0;
-			if(textend != '') {
-				text = text + $(key + 'message').value.substring($(key + 'message').selectionStart, $(key + 'message').selectionEnd) + textend;
-			}
-			$(key + 'message').value = $(key + 'message').value.substr(0, $(key + 'message').selectionStart) + text + $(key + 'message').value.substr($(key + 'message').selectionEnd);
-			if(!moveend) {
-				$(key + 'message').selectionStart = opn + strlen(text) - endlen;
-				$(key + 'message').selectionEnd = opn + strlen(text) - endlen;
-			}
-		} else {
-			text = text + textend;
-			$(key + 'message').value = $(key + 'message').value.substr(0, $(key + 'message').selectionStart) + text + $(key + 'message').value.substr($(key + 'message').selectionEnd);
-		}
-	} else if(document.selection && document.selection.createRange) {
-		var sel = document.selection.createRange();
-		if(!sel.text.length && $(key + 'message').sel) {
-			sel = $(key + 'message').sel;
-			$(key + 'message').sel = null;
-		}
-		if(selappend) {
-			if(textend != '') {
-				text = text + sel.text + textend;
-			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
-			if(!moveend) {
-				sel.moveStart('character', -endlen);
-				sel.moveEnd('character', -endlen);
-			}
-			sel.select();
-		} else {
-			sel.text = text + textend;
-		}
-	} else {
-		$(key + 'message').value += text;
-	}
-	hideMenu(2);
-	if(BROWSER.ie) {
-		doane();
-	}
-}
-function seditor_ctlent(event, script) {
-	if(event.ctrlKey && event.keyCode == 13 || event.altKey && event.keyCode == 83) {
-		eval(script);
-	}
-}
 function ctrlEnter(event, btnId, onlyEnter) {
 	if(isUndefined(onlyEnter)) onlyEnter = 0;
 	if((event.ctrlKey || onlyEnter) && event.keyCode == 13) {
@@ -2133,27 +1723,12 @@ function ctrlEnter(event, btnId, onlyEnter) {
 	}
 	return true;
 }
-function loadimgsize(imgurl, editor, p) {
-	var editor = !editor ? editorid : editor;
-	var s = new Object();
-	var p = !p ? '_image' : p;
-	s.img = new Image();
-	s.img.src = imgurl;
-	s.loadCheck = function () {
-		if(s.img.complete) {
-			$(editor + p + '_param_2').value = s.img.width ? s.img.width : '';
-			$(editor + p + '_param_3').value = s.img.height ? s.img.height : '';
-		} else {
-			setTimeout(function () {s.loadCheck();}, 100);
-		}
-	};
-	s.loadCheck();
-}
+
 function parseurl(str, mode, parsecode) {
 	if(isUndefined(parsecode)) parsecode = true;
 	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
-	str = str.replace(/([^>=\]"'\/@]|^)((((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast):\/\/))([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
-	str = str.replace(/([^\w>=\]"'\/@]|^)((www\.)([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
+	str = str.replace(/([^>=\]"'\/@]|^)((((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|qqdl|synacast):\/\/))([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
+	str = str.replace(/([^\w>=\]"'\/@]|^)((www\.)([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
 	str = str.replace(/([^\w->=\]:"'\.\/]|^)(([\-\.\w]+@[\.\-\w]+(\.\w+)+))/ig, mode == 'html' ? '$1<a href="mailto:$2">$2</a>' : '$1[email]$2[/email]');
 	if(parsecode) {
 		for(var i = 0; i <= DISCUZCODE['num']; i++) {
@@ -2162,123 +1737,49 @@ function parseurl(str, mode, parsecode) {
 	}
 	return str;
 }
+
 function codetag(text) {
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
-function parsepmcode(theform) {
-	theform.message.value = parseurl(theform.message.value);
-}
 
 function saveUserdata(name, data) {
 	if(BROWSER.ie){
-		with(document.documentElement) {
-			setAttribute("value", data);
-			save('Discuz_' + name);
+		if(data.length < 54889) {
+			with(document.documentElement) {
+				setAttribute("value", data);
+				save('Discuz_' + name);
+			}
 		}
+	} else if(window.localStorage){
+		localStorage.setItem('Discuz_' + name, data);
 	} else if(window.sessionStorage){
 		sessionStorage.setItem('Discuz_' + name, data);
-		}
+	}
+	setcookie('clearUserdata', '', -1);
 }
 
 function loadUserdata(name) {
 	if(BROWSER.ie){
 		with(document.documentElement) {
-					load('Discuz_' + name);
+			load('Discuz_' + name);
 			return getAttribute("value");
-			}
+		}
+	} else if(window.localStorage){
+		return localStorage.getItem('Discuz_' + name);
 	} else if(window.sessionStorage){
 		return sessionStorage.getItem('Discuz_' + name);
-		}
+	}
 }
 
 function initTab(frameId, type) {
-	if (typeof document['diyform'] == 'object' || $(frameId).className.indexOf('tab') < 0) return false;
-	type = type || 'click';
-	var tabs = $(frameId+'_title').childNodes;
-	var arrTab = [];
-	for(var i in tabs) {
-		if (tabs[i]['nodeType'] == 1 && tabs[i]['className'].indexOf('move-span') > -1) {
-			arrTab.push(tabs[i]);
-		}
-	}
-	var counter = 0;
-	var tab = document.createElement('ul');
-	tab.className = 'tb cl';
-	var len = arrTab.length;
-	for(var i = 0;i < len; i++) {
-		var tabId = arrTab[i].id;
-		if (hasClass(arrTab[i],'frame') || hasClass(arrTab[i],'tab')) {
-			var arrColumn = [];
-			for (var j in arrTab[i].childNodes) {
-				if (typeof arrTab[i].childNodes[j] == 'object' && !hasClass(arrTab[i].childNodes[j],'title')) arrColumn.push(arrTab[i].childNodes[j]);
-			}
-			var frameContent = document.createElement('div');
-			frameContent.id = tabId+'_content';
-			frameContent.className = hasClass(arrTab[i],'frame') ? 'content cl '+arrTab[i].className.substr(arrTab[i].className.lastIndexOf(' ')+1) : 'content cl';
-			var colLen = arrColumn.length;
-			for (var k = 0; k < colLen; k++) {
-				frameContent.appendChild(arrColumn[k]);
-			}
-		} else {
-			var frameContent = $(tabId+'_content');
-			frameContent = frameContent || document.createElement('div');
-		}
-		frameContent.style.display = counter ? 'none' : '';
-		$(frameId+'_content').appendChild(frameContent);
-
-		var li = document.createElement('li');
-		li.id = tabId;
-		li.className = counter ? '' : 'a';
-		var reg = new RegExp('style=\"(.*?)\"', 'gi');
-		var matchs = '', style = '', imgs = '';
-		while((matchs = reg.exec(arrTab[i].innerHTML))) {
-			if(matchs[1].substr(matchs[1].length,1) != ';') {
-				matchs[1] += ';';
-			}
-			style += matchs[1];
-		}
-		style = style ? ' style="'+style+'"' : '';
-		reg = new RegExp('(<img.*?>)', 'gi');
-		while((matchs = reg.exec(arrTab[i].innerHTML))) {
-			imgs += matchs[1];
-		}
-		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
-		var a = arrTab[i].getElementsByTagName('a');
-		var href = a && a[0] ? a[0].href : 'javascript:;';
-		var onclick = type == 'click' ? ' onclick="return false;"' : '';
-		li.innerHTML = '<a href="' + href + '"' + onclick + ' onfocus="this.blur();" ' + style + '>' + imgs + li.innerHTML + '</a>';
-		_attachEvent(li, type, switchTabUl);
-		tab.appendChild(li);
-		$(frameId+'_title').removeChild(arrTab[i]);
-		counter++;
-	}
-	$(frameId+'_title').appendChild(tab);
+	$F('_initTab', arguments);
 }
 
 function openDiy(){
 	window.location.href = ((window.location.href + '').replace(/[\?\&]diy=yes/g, '').split('#')[0] + ( window.location.search && window.location.search.indexOf('?diy=yes') < 0 ? '&diy=yes' : '?diy=yes'));
-}
-
-function switchTabUl (e) {
-	e = e || window.event;
-	var aim = e.target || e.srcElement;
-	var tabId = aim.id;
-	var parent = aim.parentNode;
-	while(parent['nodeName'] != 'UL' && parent['nodeName'] != 'BODY') {
-		tabId = parent.id;
-		parent = parent.parentNode;
-	}
-	if(parent['nodeName'] == 'BODY') return false;
-	var tabs = parent.childNodes;
-	var len2 = tabs.length;
-	for(var j = 0; j < len2; j++) {
-		tabs[j].className = (tabs[j].id == tabId) ? 'a' : '';
-		var content = $(tabs[j].id+'_content');
-		if (content) content.style.display = tabs[j].id == tabId ? '' : 'none';
-	}
 }
 
 function hasClass(elem, className) {
@@ -2286,339 +1787,13 @@ function hasClass(elem, className) {
 }
 
 function runslideshow() {
-	var slideshows = $C('slidebox');
-	for(var i=0,L=slideshows.length; i<L; i++) {
-		new slideshow(slideshows[i]);
-	}
-}
-function slideshow(el) {
-	var obj = this;
-	if(!el.id) el.id = Math.random();
-	if(typeof slideshow.entities == 'undefined') {
-		slideshow.entities = {};
-	}
-	this.id = el.id;
-	if(slideshow.entities[this.id]) return false;
-	slideshow.entities[this.id] = this;
-
-	this.slideshows = [];
-	this.slidebar = [];
-	this.slideother = [];
-	this.slidebarup = '';
-	this.slidebardown = '';
-	this.slidenum = 0;
-	this.slidestep = 0;
-
-	this.container = el;
-	this.imgs = [];
-	this.imgLoad = [];
-	this.imgLoaded = 0;
-	this.imgWidth = 0;
-	this.imgHeight = 0;
-
-	this.getMEvent = function(ele, value) {
-		value = !value ? 'mouseover' : value;
-		var mevent = !ele ? '' : ele.getAttribute('mevent');
-		mevent = (mevent == 'click' || mevent == 'mouseover') ? mevent : value;
-		return mevent;
-	};
-	this.slideshows = $C('slideshow', el);
-	this.slideshows = this.slideshows.length>0 ? this.slideshows[0].childNodes : null;
-	this.slidebar = $C('slidebar', el);
-	this.slidebar = this.slidebar.length>0 ? this.slidebar[0] : null;
-	this.barmevent = this.getMEvent(this.slidebar);
-	this.slideother = $C('slideother', el);
-	this.slidebarup = $C('slidebarup', el);
-	this.slidebarup = this.slidebarup.length>0 ? this.slidebarup[0] : null;
-	this.barupmevent = this.getMEvent(this.slidebarup, 'click');
-	this.slidebardown = $C('slidebardown', el);
-	this.slidebardown = this.slidebardown.length>0 ? this.slidebardown[0] : null;
-	this.bardownmevent = this.getMEvent(this.slidebardown, 'click');
-	this.slidenum = parseInt(this.container.getAttribute('slidenum'));
-	this.slidestep = parseInt(this.container.getAttribute('slidestep'));
-	this.timestep = parseInt(this.container.getAttribute('timestep'));
-	this.timestep = !this.timestep ? 2500 : this.timestep;
-
-	this.index = this.length = 0;
-	if(!this.slideshows) {
-		var nodes = el.childNodes;
-		for(var i=0, L=nodes.length; i<L; i++) {
-			if (nodes[i].nodeType == 1) {
-				this.slideshows[this.length] = nodes[i];
-			}
-		}
-	}
-	for(i=0, L=this.slideshows.length; i<L; i++) {
-		if(this.slideshows[i].nodeType == 1) {
-			this.slideshows[i].style.display = "none";
-			this.length += 1;
-		}
-	}
-	for(i=0, L=this.slideother.length; i<L; i++) {
-		for(var j=0;j<this.slideother[i].childNodes.length;j++) {
-			if(this.slideother[i].childNodes[j].nodeType == 1) {
-				this.slideother[i].childNodes[j].style.display = "none";
-			}
-		}
-	}
-
-	if(!this.slidebar) {
-		if(!this.slidenum && !this.slidestep) {
-			this.container.parentNode.style.position = 'relative';
-			this.slidebar = document.createElement('div');
-			this.slidebar.className = 'slidebar';
-			this.slidebar.style.position = 'absolute';
-			this.slidebar.style.top = '5px';
-			this.slidebar.style.left = '4px';
-			this.slidebar.style.display = 'none';
-			var html = '<ul>';
-			for(var i=0; i<this.length; i++) {
-				html += '<li on'+this.barmevent+'="slideshow.entities[' + this.id + '].xactive(' + i + '); return false;">' + (i + 1).toString() + '</li>';
-			}
-			html += '</ul>';
-			this.slidebar.innerHTML = html;
-			this.container.parentNode.appendChild(this.slidebar);
-			this.controls = this.slidebar.getElementsByTagName('li');
-		}
-	} else {
-		this.controls = this.slidebar.childNodes;
-		for(i=0; i<this.controls.length; i++) {
-			if(this.slidebarup == this.controls[i] || this.slidebardown == this.controls[i]) continue;
-			_attachEvent(this.controls[i], this.barmevent, function(){slidexactive()});
-		}
-	}
-	if(this.slidebarup) {
-		_attachEvent(this.slidebarup, this.barupmevent, function(){slidexactive('up')});
-	}
-	if(this.slidebardown) {
-		_attachEvent(this.slidebardown, this.bardownmevent, function(){slidexactive('down')});
-	}
-	this.activeByStep = function(index) {
-		var showindex = 0,i = 0;
-		if(index == 'down') {
-			showindex = this.index + 1;
-			if(showindex >= this.length) {
-				this.runRoll();
-			} else {
-				for (i = 0; i < this.slidestep; i++) {
-					if(showindex >= this.length) showindex = 0;
-					this.index = this.index - this.slidenum + 1;
-					if(this.index < 0) this.index = this.length - Math.abs(this.index);
-					this.active(showindex);
-					showindex++;
-				}
-			}
-		} else if (index == 'up') {
-			var tempindex = this.index;
-			showindex = this.index - this.slidenum;
-			if(showindex < 0) return false;
-			for (i = 0; i < this.slidestep; i++) {
-				if(showindex < 0) showindex = this.length - Math.abs(showindex);
-				this.active(showindex);
-				this.index = tempindex = tempindex - 1;
-				if(this.index <0) this.index = this.length - 1;
-				showindex--;
-			}
-		}
-		return false;
-	};
-	this.active = function(index) {
-		this.slideshows[this.index].style.display = "none";
-		this.slideshows[index].style.display = "block";
-		if(this.controls.length > 0) {
-			this.controls[this.index].className = '';
-			this.controls[index].className = 'on';
-		}
-		for(var i=0,L=this.slideother.length; i<L; i++) {
-			this.slideother[i].childNodes[this.index].style.display = "none";
-			this.slideother[i].childNodes[index].style.display = "block";
-		}
-		this.index = index;
-	};
-	this.xactive = function(index) {
-		if(!this.slidenum && !this.slidestep) {
-			clearTimeout(this.timer);
-			if(index == 'down') index = this.index == this.length-1 ? 0 : this.index+1;
-			if(index == 'up') index = this.index == 0 ? this.length-1 : this.index-1;
-			this.active(index);
-			var ss = this;
-			this.timer = setTimeout(function(){
-				ss.run();
-			}, 8000);
-		} else {
-			this.activeByStep(index);
-		}
-	};
-	this.run = function() {
-		var index = this.index + 1 < this.length ? this.index + 1 : 0;
-		this.active(index);
-		var ss = this;
-		this.timer = setTimeout(function(){
-			ss.run();
-		}, this.timestep);
-	};
-
-	this.runRoll = function() {
-		for(var i = 0; i < this.slidenum; i++) {
-			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = "block";
-			for(var j=0,L=this.slideother.length; j<L; j++) {
-				this.slideother[j].childNodes[i].style.display = "block";
-			}
-		}
-		this.index = this.slidenum - 1;
-	};
-	var imgs = this.slideshows.length ? this.slideshows[0].parentNode.getElementsByTagName('img') : [];
-	for(i=0, L=imgs.length; i<L; i++) {
-		this.imgs.push(imgs[i]);
-		this.imgLoad.push(new Image());
-		this.imgLoad[i].src = this.imgs[i].src;
-		this.imgLoad[i].onerror = function (){obj.imgLoaded ++;};
-	}
-
-	this.getSize = function () {
-		if(this.imgs.length == 0) return false;
-		var img = this.imgs[0];
-		this.imgWidth = img.width ? parseInt(img.width) : 0;
-		this.imgHeight = img.height ? parseInt(img.height) : 0;
-		var ele = img.parentNode;
-		while ((!this.imgWidth || !this.imgHeight) && !hasClass(ele,'slideshow') && ele != document.body) {
-			this.imgWidth = ele.style.width ? parseInt(ele.style.width) : 0;
-			this.imgHeight = ele.style.height ? parseInt(ele.style.height) : 0;
-			ele = ele.parentNode;
-		}
-		return true;
-	};
-
-	this.getSize();
-
-	this.checkLoad = function () {
-		var obj = this;
-		for(i = 0;i < this.imgs.length;i++) {
-			if(this.imgLoad[i].complete && !this.imgLoad[i].status) {
-				this.imgLoaded++;
-				this.imgLoad[i].status = 1;
-			}
-		}
-		var percentEle = $(this.id+'_percent');
-		if(this.imgLoaded < this.imgs.length) {
-			if (!percentEle) {
-				var dom = document.createElement('div');
-				dom.id = this.id+"_percent";
-				dom.style.width = this.imgWidth ? this.imgWidth+'px' : '150px';
-				dom.style.height = this.imgHeight ? this.imgHeight+'px' : '150px';
-				dom.style.lineHeight = this.imgHeight ? this.imgHeight+'px' : '150px';
-				dom.style.backgroundColor = '#ccc';
-				dom.style.textAlign = 'center';
-				dom.style.top = '0';
-				dom.style.left = '0';
-				dom.style.marginLeft = 'auto';
-				dom.style.marginRight = 'auto';
-				this.slideshows[0].parentNode.appendChild(dom);
-				percentEle = dom;
-			}
-			el.parentNode.style.position = 'relative';
-			percentEle.innerHTML = (parseInt(this.imgLoaded / this.imgs.length * 100)) + '%';
-			setTimeout(function () {obj.checkLoad();}, 100)
-		} else {
-			if (percentEle) percentEle.parentNode.removeChild(percentEle);
-			this.container.style.display = 'block';
-			if(this.slidebar) this.slidebar.style.display = '';
-			this.index = this.length - 1 < 0 ? 0 : this.length - 1;
-			if(this.slideshows.length > 0) {
-				if(!this.slidenum || !this.slidestep) {
-					this.run();
-				} else {
-					this.runRoll();
-				}
-			}
-		}
-	};
-	this.checkLoad();
-}
-
-function slidexactive(step) {
-	var e = getEvent();
-	var aim = e.target || e.srcElement;
-	var parent = aim.parentNode;
-	var xactivei = null, slideboxid = null,currentslideele = null;
-	currentslideele = hasClass(parent, 'slidebar') ? aim : null;
-	while(parent && parent != document.body) {
-		if(!currentslideele && hasClass(parent.parentNode, 'slidebar')) {
-			currentslideele = parent;
-		}
-		if(hasClass(parent, 'slidebox')) {
-			slideboxid = parent.id;
-			break;
-		}
-		parent = parent.parentNode;
-	}
-	if(step && !currentslideele) {
-		while(aim != document.body) {
-			if(hasClass(aim, 'slidebarup') || hasClass(aim, 'slidebardown')) {
-				currentslideele = aim;
-				break;
-			}
-			aim = aim.parentNode;
-		}
-	}
-	var slidebar = $C('slidebar', parent);
-	var children = slidebar.length == 0 ? [] : slidebar[0].childNodes;
-	if(currentslideele && (hasClass(currentslideele, 'slidebarup') || hasClass(currentslideele, 'slidebardown'))) {
-		xactivei = step;
-	} else {
-		for(var j=0,i=0,L=children.length;i<L;i++){
-			if(currentslideele && children[i] == currentslideele) {
-				xactivei = j;
-				break;
-			}
-			if(!hasClass(children[i], 'slidebarup') && !hasClass(children[i], 'slidebardown')) j++;
-		}
-	}
-	if(slideboxid != null && xactivei != null) slideshow.entities[slideboxid].xactive(xactivei);
-}
-
-function showPreview(val, id) {
-	var showObj = $(id);
-	if(showObj) {
-		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
-	}
+	$F('_runslideshow', []);
 }
 
 function toggle_collapse(objname, noimg, complex, lang) {
-	var obj = $(objname);
-	if(obj) {
-		obj.style.display = obj.style.display == '' ? 'none' : '';
-		var collapsed = getcookie('collapse');
-		collapsed = updatestring(collapsed, objname, !obj.style.display);
-		setcookie('collapse', collapsed, (collapsed ? 2592000 : -2592000));
-	}
-	if(!noimg) {
-		var img = $(objname + '_img');
-		if(img.tagName != 'IMG') {
-			if(img.className.indexOf('_yes') == -1) {
-				img.className = img.className.replace(/_no/, '_yes');
-				if(lang) {
-					img.innerHTML = lang[0];
-				}
-			} else {
-				img.className = img.className.replace(/_yes/, '_no');
-				if(lang) {
-					img.innerHTML = lang[1];
-				}
-			}
-		} else {
-			img.src = img.src.indexOf('_yes.gif') == -1 ? img.src.replace(/_no\.gif/, '_yes\.gif') : img.src.replace(/_yes\.gif/, '_no\.gif');
-		}
-		img.blur();
-	}
-	if(complex) {
-		var objc = $(objname + '_c');
-		if(objc) {
-			objc.className = objc.className == 'umh' ? 'umh umn' : 'umh';
-		}
-	}
-
+	$F('_toggle_collapse', arguments);
 }
+
 function updatestring(str1, str2, clear) {
 	str2 = '_' + str2 + '_';
 	return clear ? str1.replace(str2, '') : (str1.indexOf(str2) == -1 ? str1 + str2 : str1);
@@ -2628,62 +1803,54 @@ function getClipboardData() {
 	window.document.clipboardswf.SetVariable('str', CLIPBOARDSWFDATA);
 }
 
-function setCopy(text, msg){
-	if(BROWSER.ie) {
-		clipboardData.setData('Text', text);
-		if(msg) {
-			showPrompt(null, null, '<span>' + msg + '</span>', 1500);
-		}
-	} else {
-		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">點此複製到剪貼板</div>' +
-		AC_FL_RunContent('id', 'clipboardswf', 'name', 'clipboardswf', 'devicefont', 'false', 'width', '200', 'height', '40', 'src', STATICURL + 'image/common/clipboard.swf', 'menu', 'false',  'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent', 'style' , 'margin-top:-20px') + '</div>';
-		showDialog(msg, 'info');
-		text = text.replace(/[\xA0]/g, ' ');
-		CLIPBOARDSWFDATA = text;
-	}
+function setCopy(text, msg) {
+	$F('_setCopy', arguments);
 }
 
 function copycode(obj) {
-	setCopy(BROWSER.ie ? obj.innerText.replace(/\r\n\r\n/g, '\r\n') : obj.textContent, '代碼已複製到剪貼板');
+	$F('_copycode', arguments);
 }
 
 function showdistrict(container, elems, totallevel, changelevel) {
-	var getdid = function(elem) {
-		var op = elem.options[elem.selectedIndex];
-		return op['did'] || op.getAttribute('did') || '0';
-	};
-	var pid = changelevel >= 1 && elems[0] && $(elems[0]) ? getdid($(elems[0])) : 0;
-	var cid = changelevel >= 2 && elems[1] && $(elems[1]) ? getdid($(elems[1])) : 0;
-	var did = changelevel >= 3 && elems[2] && $(elems[2]) ? getdid($(elems[2])) : 0;
-	var coid = changelevel >= 4 && elems[3] && $(elems[3]) ? getdid($(elems[3])) : 0;
-	var url = "home.php?mod=misc&ac=ajax&op=district&container="+container
-		+"&province="+elems[0]+"&city="+elems[1]+"&district="+elems[2]+"&community="+elems[3]
-		+"&pid="+pid + "&cid="+cid+"&did="+did+"&coid="+coid+'&level='+totallevel+'&handlekey='+container+'&inajax=1';
-	ajaxget(url, container, '');
+	$F('_showdistrict', arguments);
 }
 
 function setDoodle(fid, oid, url, tid, from) {
-	if(tid == null) {
-		hideWindow(fid);
-	} else {
-		$(tid).style.display = '';
-		$(fid).style.display = 'none';
+	$F('_setDoodle', arguments);
+}
+
+
+function initSearchmenu(searchform) {
+	var searchtxt = $(searchform + '_txt');
+	if(!searchtxt) {
+		searchtxt = $(searchform);
 	}
-	var doodleText = '[img]'+url+'[/img]';
-	if($(oid) != null) {
-		if(from == "editor") {
-			insertImage(url);
-		} else if(from == "fastpost") {
-			seditor_insertunit('fastpost', doodleText);
-		} else if(from == "forumeditor") {
-			if(wysiwyg) {
-				insertText('<img src="' + url + '" border="0" alt="" />', false);
-			} else {
-				insertText(doodleText, strlen(doodleText), 0);
-			}
-		} else {
-			insertContent(oid, doodleText);
+	var tclass = searchtxt.className;
+	searchtxt.className = tclass + ' xg1';
+	searchtxt.onfocus = function () {
+		if(searchtxt.value == '請輸入搜索內容') {
+			searchtxt.value = '';
+			searchtxt.className = tclass;
 		}
+	};
+	searchtxt.onblur = function () {
+		if(searchtxt.value == '' ) {
+			searchtxt.value = '請輸入搜索內容';
+			searchtxt.className = tclass + ' xg1';
+		}
+	};
+	if(!$(searchform + '_type_menu')) return false;
+	var o = $(searchform + '_type');
+	var a = $(searchform + '_type_menu').getElementsByTagName('a');
+	for(var i=0; i<a.length; i++){
+		if(a[i].className == 'curtype'){
+			o.innerHTML = a[i].innerHTML;
+			$(searchform + '_mod').value = a[i].rel;
+		}
+		a[i].onclick = function(){
+			o.innerHTML = this.innerHTML;
+			$(searchform + '_mod').value = this.rel;
+		};
 	}
 }
 
@@ -2692,185 +1859,40 @@ function searchFocus(obj) {
 		obj.value = '';
 	}
 }
-function searchBlur(obj) {
-	if(obj.value == '' ) {
-		obj.value = '請輸入搜索內容';
-	}
-}
-function initSearchmenu() {
-	if(!$('sctype') || !$('sctype_menu')) return false;
-	var o = $('sctype');
-	var s = o.getAttribute('href');
-	var a = $('sctype_menu').getElementsByTagName('label');
-	var r = $('sctype_menu').getElementsByTagName('input');
-	var attr = 'for';
-	if(BROWSER.ie && BROWSER.ie < 8) attr = 'htmlFor';
-	for(var i=0; i<a.length; i++){
-		a[i].onmouseover = function(){
-			this.className = 'sca';
-		};
-		a[i].onmouseout = function(){
-			this.className = '';
-		};
-		a[i].onclick = function(){
-			o.innerHTML = this.title;
-			o.setAttribute('href', s + '?mod=' + $(this.getAttribute(attr)).value);
-		};
-		r[i].onclick = function(){
-			$('sctype_menu').style.display = 'none';
-		};
-		if(r[i].checked) {
-			o.innerHTML = a[i].title;
-		}
-	}
-}
-
-function inituserabout() {
-	if(!$('pp')) {
-		return;
-	}
-	var sideArea = $('pp').parentNode;
-	if(sideArea.className == 'sd pph') {
-		$('ppc_menu').className = 'p_pop blk';
-		$('ppc').onmouseover = function() {getAppIcon();showMenu('ppc');}
-	} else {
-		getAppIcon();
-		$('ppc_menu').className = 'bbs';
-		$('ppc_menu').style.display = 'block';
-	}
-}
-function getAppIcon() {
-	var appIcons = $('ppc_menu').getElementsByTagName('img');
-	for(i=0;i<appIcons.length;i++) {
-		if(appIcons[i].className=='appicn'){
-			appIcons[i].src = 'http://appicon.manyou.com/icons/' + appIcons[i].name;
-		}
-	}
-}
-function showUser() {
-	$('newpmbox_menu').style.display = USERABOUT_BOX ? '' : 'none';
-	if(USERABOUT_BOX) {
-		var x = new Ajax();
-		x.get('home.php?mod=spacecp&ac=pm&op=getpmuser&inajax=1', function(s){
-			USERABOUT_FS.addDataSource(eval('('+s+')'), 1);
-		});
-	}
-	USERABOUT_BOX = !USERABOUT_BOX;
-}
 
 function extstyle(css) {
-	if(!$('css_extstyle')) {
-		loadcss('extstyle');
-	}
-	$('css_extstyle').href = css ? css + '/style.css' : STATICURL + 'image/common/extstyle_none.css';
-	currentextstyle = css;
-	setcookie('extstyle', css, 86400 * 30);
-	if($('css_widthauto') && !$('css_widthauto').disabled) {
-		CSSLOADED['widthauto'] = 0;
-		loadcss('widthauto');
-	}
+	$F('_extstyle', arguments);
 }
 
 function widthauto(obj) {
-	if($('css_widthauto')) {
-		CSSLOADED['widthauto'] = 1;
-	}
-	if(!CSSLOADED['widthauto'] || $('css_widthauto').disabled) {
-		if(!CSSLOADED['widthauto']) {
-			loadcss('widthauto');
-		} else {
-			$('css_widthauto').disabled = false;
-		}
-		HTMLNODE.className += ' widthauto';
-		setcookie('widthauto', 1, 86400 * 30);
-		obj.innerHTML = '切換到窄版';
-	} else {
-		$('css_widthauto').disabled = true;
-		HTMLNODE.className = HTMLNODE.className.replace(' widthauto', '');
-		setcookie('widthauto', 0, -1);
-		obj.innerHTML = '切換到寬版';
-	}
-	hideMenu();
+	$F('_widthauto', arguments);
 }
 
 var secST = new Array();
 function updatesecqaa(idhash) {
-	if($('secqaa_' + idhash)) {
-		$('secqaaverify_' + idhash).value = '';
-		if(secST['qaa_' + idhash]) {
-			clearTimeout(secST['qaa_' + idhash]);
-		}
-		$('checksecqaaverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
-		ajaxget('misc.php?mod=secqaa&action=update&idhash=' + idhash, 'secqaa_' + idhash, null, '', '', function() {
-			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updatesecqaa(\''+idhash+'\')">刷新驗證問答</span>';}, 180000);
-		});
-	}
+	$F('_updatesecqaa', arguments);
 }
 
 function updateseccode(idhash, play) {
-	if(isUndefined(play)) {
-		if($('seccode_' + idhash)) {
-			$('seccodeverify_' + idhash).value = '';
-			if(secST['code_' + idhash]) {
-				clearTimeout(secST['code_' + idhash]);
-			}
-			$('checkseccodeverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
-			ajaxget('misc.php?mod=seccode&action=update&idhash=' + idhash, 'seccode_' + idhash, null, '', '', function() {
-				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span style="cursor:pointer" class="xi2" onclick="updateseccode(\''+idhash+'\')">刷新驗證碼</span>';}, 180000);
-			});
-		}
-	} else {
-		eval('window.document.seccodeplayer_' + idhash + '.SetVariable("isPlay", "1")');
-	}
+	$F('_updateseccode', arguments);
 }
 
 function checksec(type, idhash, showmsg, recall) {
-	var showmsg = !showmsg ? 0 : showmsg;
-	var secverify = $('sec' + type + 'verify_' + idhash).value;
-	if(!secverify) {
-		return;
-	}
-	var x = new Ajax('XML', 'checksec' + type + 'verify_' + idhash);
-	x.loading = '';
-	$('checksec' + type + 'verify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" />';
-	x.get('misc.php?mod=sec' + type + '&action=check&inajax=1&&idhash=' + idhash + '&secverify=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(secverify) : secverify), function(s){
-		var obj = $('checksec' + type + 'verify_' + idhash);
-		obj.style.display = '';
-		if(s.substr(0, 7) == 'succeed') {
-			obj.innerHTML = '<img src="'+ IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';
-			if(showmsg) {
-				recall(1);
-			}
-		} else {
-			obj.innerHTML = '<img src="'+ IMGDIR + '/check_error.gif" width="16" height="16" class="vm" />';
-			if(showmsg) {
-				if(type == 'code') {
-					showDialog('驗證碼錯誤，請重新填寫');
-				} else if(type == 'qaa') {
-					showDialog('驗證問答錯誤，請重新填寫');
-				}
-				recall(0);
-			}
-		}
-	});
+	$F('_checksec', arguments);
 }
 
-function createPalette(colorid,id) {
-	var iframe = "<iframe name=\"c"+colorid+"_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe>";
-	if (!$("c"+colorid+"_menu")) {
-		var dom = document.createElement('span');
-		dom.id = "c"+colorid+"_menu";
-		dom.style.display = 'none';
-		dom.innerHTML = iframe;
-		$('append_parent').appendChild(dom);
-	}
-	var base = document.getElementsByTagName('base');
-	var baseurl = base ? base[0].getAttribute('href') : '';
-	window.frames["c"+colorid+"_frame"].location.href = baseurl+STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id;
-	showMenu({'ctrlid':'c'+colorid});
+function createPalette(colorid, id, func) {
+	$F('_createPalette', arguments);
 }
 
 function cardInit() {
+	var cardShow = function (obj) {
+		if(BROWSER.ie && BROWSER.ie < 7 && obj.href.indexOf('username') != -1) {
+			return;
+		}
+		pos = obj.getAttribute('c') == '1' ? '43' : obj.getAttribute('c');
+		USERCARDST = setTimeout(function() {ajaxmenu(obj, 500, 1, 2, pos, null, 'p_pop card');}, 250);
+	};
 	var a = document.body.getElementsByTagName('a');
 	for(var i = 0;i < a.length;i++){
 		if(a[i].getAttribute('c')) {
@@ -2878,61 +1900,6 @@ function cardInit() {
 			a[i].onmouseover = function() {cardShow(this)};
 			a[i].onmouseout = function() {clearTimeout(USERCARDST);};
 		}
-	}
-}
-function cardShow(obj) {
-	if(BROWSER.ie && BROWSER.ie < 7 && obj.href.indexOf('username') != -1) {
-		return;
-	}
-	pos = obj.getAttribute('c') == '1' ? '43' : obj.getAttribute('c');
-	USERCARDST = setTimeout(function() {ajaxmenu(obj, 500, 1, 2, pos, null, 'p_pop card');}, 250);
-}
-function cardUpdatedoing(scdoing, op) {
-	if($(scdoing)) {
-		if(!op) {
-			$('return_' + scdoing).style.display = 'none';
-			$(scdoing).style.display = '';
-		} else {
-			$('return_' + scdoing).style.display = '';
-			$(scdoing).style.display = 'none';
-		}
-	}
-}
-function cardSubmitdoing(scdoing) {
-	ajaxpost(scdoing, 'return_' + scdoing);
-	$('return_' + scdoing).style.display = '';
-	$(scdoing).style.display = 'none';
-}
-
-function lsShowmore() {
-	var objpos = fetchOffset($('ls_password'), 1);
-	var objh = $('ls_password').offsetHeight;
-	$('ls_more').style.position = 'absolute';
-	$('ls_more').style.left = objpos['left'] + 'px';
-	$('ls_more').style.top = (objpos['top'] + objh) + 'px';
-	$('ls_more').style.display = '';
-	if(ls_sechash && $('seccode_' + ls_sechash).innerHTML == '') {
-		updateseccode(ls_sechash);
-	}
-}
-function lsSubmit() {
-	if($('ls_username').value == '' || $('ls_password').value == '') {
-		showWindow('login', 'member.php?mod=logging&action=login');
-		hideWindow('register');
-	} else {
-		ajaxpost('lsform', 'return_ls', 'return_ls', 'onerror');
-	}
-	return false;
-}
-function errorhandle_ls(str) {
-	showDialog(str, 'notice');
-}
-function succeedhandle_ls(location, str, param) {
-	if(param['syn'] != 1) {
-		parent.location.href = location;
-	} else {
-		setTimeout('parent.location.href = location', 2000);
-		showDialog(str, 'notice', null, null, 0, null, '登錄中，請稍後...');
 	}
 }
 
@@ -2978,12 +1945,81 @@ function noticeTitle() {
 	}
 	setcookie('noticeTitle', 1, 600);
 }
+
 function noticeTitleFlash() {
 	if(NOTICETITLE.flashNumber < 5 || NOTICETITLE.flashNumber > 4 && !NOTICETITLE['State']) {
 		document.title = (NOTICETITLE['State'] ? '【　　　】' : '【新提醒】') + NOTICETITLE['oldTitle'];
 		NOTICETITLE['State'] = !NOTICETITLE['State'];
 	}
 	NOTICETITLE.flashNumber = NOTICETITLE.flashNumber < NOTICETITLE.sleep ? ++NOTICETITLE.flashNumber : 0;
+}
+
+function relatedlinks(rlinkmsgid) {
+	$F('_relatedlinks', arguments);
+}
+
+function con_handle_response(response) {
+	return response;
+}
+
+function showTopLink() {
+	if($('ft')){
+		var viewPortHeight = parseInt(document.documentElement.clientHeight);
+		var scrollHeight = parseInt(document.body.getBoundingClientRect().top);
+		var basew = parseInt($('ft').clientWidth);
+		var sw = $('scrolltop').clientWidth;
+		if (basew < 1000) {
+			var left = parseInt(fetchOffset($('ft'))['left']);
+			left = left < sw ? left * 2 - sw : left;
+			$('scrolltop').style.left = ( basew + left ) + 'px';
+		} else {
+			$('scrolltop').style.left = 'auto';
+			$('scrolltop').style.right = 0;
+		}
+
+		if (BROWSER.ie && BROWSER.ie < 7) {
+			$('scrolltop').style.top = viewPortHeight - scrollHeight - 150 + 'px';
+		}
+		if (scrollHeight < -100) {
+			$('scrolltop').style.visibility = 'visible';
+		} else {
+			$('scrolltop').style.visibility = 'hidden';
+		}
+	}
+}
+
+function showCreditmenu() {
+	$F('_showCreditmenu', []);
+}
+
+function showUpgradeinfo() {
+	showMenu({'ctrlid':'g_upmine', 'pos':'21'});
+}
+
+function addFavorite(url, title) {
+	try {
+		window.external.addFavorite(url, title);
+	} catch (e){
+		try {
+			window.sidebar.addPanel(title, url, '');
+        	} catch (e) {
+			showDialog("請按 Ctrl+D 鍵添加到收藏夾", 'notice');
+		}
+	}
+}
+
+function setHomepage(sURL) {
+	if(BROWSER.ie){
+		document.body.style.behavior = 'url(#default#homepage)';
+		document.body.setHomePage(sURL);
+	} else {
+		showDialog("非 IE 瀏覽器請手動將本站設為首頁", 'notice');
+		doane();
+	}
+}
+
+function smilies_show(id, smcols, seditorkey) {
+	$F('_smilies_show', arguments, 'smilies');
 }
 
 if(typeof IN_ADMINCP == 'undefined') {

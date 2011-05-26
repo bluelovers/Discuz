@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group.php 16832 2010-09-15 07:38:31Z wangjinbo $
+ *      $Id: group.php 21671 2011-04-07 06:21:13Z zhangguosheng $
  */
 
 define('APPTYPEID', 3);
@@ -15,7 +15,7 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('grouptype', 'groupindex');
+$cachelist = array('grouptype', 'groupindex', 'diytemplatenamegroup');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 

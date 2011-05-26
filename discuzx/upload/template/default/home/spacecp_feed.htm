@@ -10,7 +10,7 @@
 		</div>
 		<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
 		<form id="feedform_{$feedid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=feed&feedid=$feedid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-			<span id="face_{$feedid}" title="{lang insert_emoticons}" onclick="showFace(this.id, 'feedmessage_{$feedid}');return false;" style="cursor: pointer;"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
+			<span id="face_{$feedid}" title="{lang insert_emoticons}" onclick="showFace(this.id, 'feedmessage_{$feedid}');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
 			<span id="note_{$feedid}"></span>
 			<textarea id="feedmessage_{$feedid}" name="message" rows="2" class="pt"  onkeydown="return ctrlEnter(event, 'feedbutton');"></textarea>
 			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
@@ -50,7 +50,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form method="post" autocomplete="off" id="feedform_{$feedid}" name="feedform_{$feedid}" action="home.php?mod=spacecp&ac=feed&op=delete&feedid=$feedid&handlekey=$_G[gp_handlekey]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="feedsubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c altw">
@@ -71,14 +71,14 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form method="post" autocomplete="off" id="feedform_{$feedid}" name="feedform_{$feedid}" action="home.php?mod=spacecp&ac=feed&op=ignore&icon=$feed[icon]&feedid=$feedid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="feedignoresubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 		<div class="c altw">
 			<p>{lang next_visit_not_view_feed}</p>
-			<p class="ptn"><input type="radio" name="uid" id="uid1" value="$feed[uid]" checked="checked" /> <label for="uid1">{lang shield_this_friend}</label></p>
-			<p class="ptn"><input type="radio" name="uid" id="uid0" value="0" /> <label for="uid0">{lang shield_all_friend}</label></p>
+			<p class="ptn"><label for="uid1"><input type="radio" name="uid" id="uid1" value="$feed[uid]" checked="checked" />{lang shield_this_friend}</label></p>
+			<p class="ptn"><label for="uid0"><input type="radio" name="uid" id="uid0" value="0" />{lang shield_all_friend}</label></p>
 		</div>
 		<p class="o pns">
 			<button name="feedignoresubmitbtn" type="submit" class="pn pnc" value="true"><strong>{lang determine}</strong></button>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_focus.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_focus.php 17523 2010-10-21 00:58:00Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,7 @@ function build_cache_focus() {
 
 	$focus = unserialize($focus);
 	$data['title'] = $focus['title'];
+	$data['cookie'] = intval($focus['cookie']);
 	$data['data'] = array();
 	if(is_array($focus['data'])) foreach($focus['data'] as $k => $v) {
 		if($v['available']) {

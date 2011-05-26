@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_share.php 16856 2010-09-16 02:53:58Z wangjinbo $
+ *      $Id: space_share.php 22285 2011-04-28 03:28:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
-
+$_GET['type'] = in_array($_GET['type'], array('all', 'link', 'video', 'music', 'flash', 'blog', 'album', 'pic', 'poll', 'space', 'thread', 'article'))? $_GET['type'] : 'all';
 if($id) {
 
 	if(!IS_ROBOT) {

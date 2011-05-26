@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_repent.php 7933 2010-04-15 02:59:41Z monkey $
+ *      $Id: lang_repent.php 21648 2011-04-06 09:13:41Z liulanbo $
  */
 
 $lang = array
@@ -17,6 +17,7 @@ $lang = array
 	'repent_succeed' => '你操作的帖子已刪除',
 	'repent_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
 	'repent_info_user_noperm' => '對不起，你只能刪除自己的帖子',
+	'repent_do_not_rushreply' => '不能在搶樓帖中使用此道具',
 );
 
 ?>

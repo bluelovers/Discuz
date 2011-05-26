@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_sofa.php 17305 2010-09-29 13:18:28Z monkey $
+ *      $Id: magic_sofa.php 21792 2011-04-12 08:42:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,6 +64,7 @@ class magic_sofa {
 
 		$sofamessage = lang('magic/sofa', 'sofa_text', array('actor' => $_G['member']['username'], 'time' => dgmdate(TIMESTAMP), 'magicname' => $this->magic['name']));
 		$dateline = $thread['dateline'] + 1;
+		require_once libfile('function/forum');
 
 		insertpost(array(
 			'fid' => $thread['fid'],

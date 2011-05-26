@@ -1,6 +1,6 @@
 <!--{subtemplate search/header}-->
 <div id="ct" class="w">
-	<form class="searchform" method="post" autocomplete="off" action="search.php?mod=portal">
+	<form class="searchform" method="post" autocomplete="off" action="search.php?mod=portal" onsubmit="if($('scform_srchtxt')) searchFocus($('scform_srchtxt'));">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 
 		<!--{subtemplate search/pubsearch}-->

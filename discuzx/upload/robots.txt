@@ -1,5 +1,5 @@
 #
-# robots.txt for Discuz! X1.5
+# robots.txt for Discuz! X2
 #
 
 User-agent: *
@@ -17,16 +17,11 @@ Disallow: /search.php
 Disallow: /member.php
 Disallow: /api.php
 Disallow: /misc.php
+Disallow: /connect.php
 Disallow: /forum.php?mod=redirect*
 Disallow: /forum.php?mod=post*
 Disallow: /home.php?mod=spacecp*
 Disallow: /userapp.php?mod=app&*
 Disallow: /*?mod=misc*
 Disallow: /*?mod=attachment*
-Disallow: /member-*
-Disallow: /forum-redirect-*
-Disallow: /forum-post-*
-Disallow: /home-spacecp-*
-Disallow: /userapp-app-*
-Disallow: /*-misc-*
-Disallow: /*-attachment-*
+Disallow: /*mobile=yes*

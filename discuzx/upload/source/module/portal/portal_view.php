@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 17118 2010-09-21 08:16:14Z zhangguosheng $
+ *      $Id: portal_view.php 21605 2011-04-02 03:22:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,14 +13,14 @@ if(!defined('IN_DISCUZ')) {
 
 $aid = empty($_GET['aid'])?0:intval($_GET['aid']);
 if(empty($aid)) {
-	showmessage("view_no_article_id");
+	showmessage('view_no_article_id');
 }
 $article = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$aid'");
 require_once libfile('function/portalcp');
 $permission = getallowcategory($_G['uid']);
 
 if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] && !$_G['group']['allowmanagearticle'] && empty($permission[$article['catid']]['allowmanage']) && $_G['adminid'] != 1 && $_G['gp_modarticlekey'] != modauthkey($article['aid']))) {
-	showmessage("view_article_no_exist");
+	showmessage('view_article_no_exist');
 }
 
 $article_count = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_count')." WHERE aid='$aid'");
@@ -50,11 +50,21 @@ $page = intval($_GET['page']);
 if($page<1) $page = 1;
 $start = $page-1;
 
-$content = array();
+$content = $contents = array();
 $multi = '';
 
 $query = DB::query("SELECT * FROM ".DB::table('portal_article_content')." WHERE aid='$aid' ORDER BY pageorder LIMIT $start,1");
 $content = DB::fetch($query);
+
+if($article['contents'] && $article['showinnernav']) {
+	$query = DB::query("SELECT title FROM ".DB::table('portal_article_content')." WHERE aid='$aid' ORDER BY pageorder");
+	while ($value = DB::fetch($query)) {
+		$contents[] = $value;
+	}
+	if(empty($contents)) {
+		DB::update('portal_article_title', array('showinnernav' => '0'), "aid ='$aid'");
+	}
+}
 
 require_once libfile('function/blog');
 $content['content'] = blog_bbcode($content['content']);
@@ -62,21 +72,21 @@ $content['content'] = blog_bbcode($content['content']);
 $multi = multi($article['contents'], 1, $page, "portal.php?mod=view&aid=$aid");
 $org = array();
 if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
+	$thread = $firstpost = array();
 	require_once libfile('function/discuzcode');
-	$posttable = getposttablebytid($article['id']);
-	if($content['idtype']=='pid') {
-		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid, t.displayorder
-			FROM ".DB::table($posttable)." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.pid='$content[id]' AND p.tid='$article[id]'");
-	} else {
-		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid, t.displayorder
-			FROM ".DB::table($posttable)." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.tid='$article[id]' AND p.first='1'");
+	require_once libfile('function/forum');
+	$thread = get_thread_by_tid($article[id]);
+	if(!empty($thread)) {
+		$wherer = $content['idtype']=='pid' ? "p.pid='$content[id]' AND p.tid='$article[id]'" : "p.tid='$article[id]' AND p.first='1'";
+		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid FROM ".DB::table($thread['posttable'])." p WHERE $wherer");
 	}
-	if(!empty($firstpost) && $firstpost['displayorder'] != -1) {
+	if(!empty($firstpost) && !empty($thread) && $thread['displayorder'] != -1) {
+		$_G['tid'] = $article['id'];
 		$attachpids = -1;
 		$attachtags = $aimgs = array();
 		$firstpost['message'] = $content['content'];
 		if($firstpost['attachment']) {
-			if($_G['group']['allowgetattach']) {
+			if($_G['group']['allowgetattach'] || $_G['group']['allowgetimage']) {
 				$attachpids .= ",$firstpost[pid]";
 				if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
 					$attachtags[$firstpost['pid']] = $matchaids[1];
@@ -135,11 +145,13 @@ if($article['allowcomment']) {
 			$form_url = "home.php?mod=spacecp&ac=comment";
 
 			$article['commentnum'] = getcount('home_comment', array('id'=>$article['id'], 'idtype'=>'blogid'));
-			$query = DB::query("SELECT authorid AS uid, author AS username, dateline, message
-				FROM ".DB::table('home_comment')." WHERE id='$article[id]' AND idtype='blogid' ORDER BY dateline DESC LIMIT 0,20");
-			while ($value = DB::fetch($query)) {
-				if($value['status'] == 0 || $_G['adminid'] == 1 || $value['uid'] == $_G['uid']) {
-					$commentlist[] = $value;
+			if($article['commentnum']) {
+				$query = DB::query("SELECT authorid AS uid, author AS username, dateline, message
+					FROM ".DB::table('home_comment')." WHERE id='$article[id]' AND idtype='blogid' ORDER BY dateline DESC LIMIT 0,20");
+				while ($value = DB::fetch($query)) {
+					if($value['status'] == 0 || $_G['adminid'] == 1 || $value['uid'] == $_G['uid']) {
+						$commentlist[] = $value;
+					}
 				}
 			}
 
@@ -149,17 +161,18 @@ if($article['allowcomment']) {
 			$form_url = "forum.php?mod=post&action=reply&tid=$article[id]&replysubmit=yes&infloat=yes&handlekey=fastpost";
 
 			require_once libfile('function/discuzcode');
-			$posttable = getposttablebytid($article['id']);
+			$posttable = empty($thread['posttable']) ? getposttablebytid($article['id']) : $thread['posttable'];
+			$_G['tid'] = $article['id'];
 			$article['commentnum'] = getcount($posttable, array('tid'=>$article['id'], 'first'=>'0'));
 
-			if($article['allowcomment']) {
+			if($article['allowcomment'] && $article['commentnum']) {
 				$query = DB::query("SELECT pid, first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, status
-					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND first='0' ORDER BY dateline DESC LIMIT 0,20");
+					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND invisible='0' ORDER BY dateline DESC LIMIT 0,20");
 				$attachpids = -1;
 				$attachtags = array();
-				$_G['group']['allowgetattach'] = 1;
+				$_G['group']['allowgetattach'] = $_G['group']['allowgetimage'] = 1;
 				while ($value = DB::fetch($query)) {
-					if($value['status'] == '0') {
+					if(!($value['status'] & 1) && !$value['first']) {
 						$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
 						$value['cid'] = $value['pid'];
 						$commentlist[$value['pid']] = $value;
@@ -181,14 +194,17 @@ if($article['allowcomment']) {
 
 	} else {
 
-		$common_url = "portal.php?mod=comment&aid=$aid";
+		$common_url = "portal.php?mod=comment&id=$aid&idtype=aid";
 		$form_url = "portal.php?mod=portalcp&ac=comment";
 
-		$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE aid='$aid' ORDER BY cid DESC LIMIT 0,20");
+		$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE id='$aid' AND idtype='aid' ORDER BY dateline DESC LIMIT 0,20");
+		$pricount = 0;
 		while ($value = DB::fetch($query)) {
 			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 				$value['allowop'] = 1;
 				$commentlist[] = $value;
+			} else {
+				$pricount += 1;
 			}
 		}
 	}
@@ -220,11 +236,28 @@ while ($value = DB::fetch($query)) {
 
 $article['dateline'] = dgmdate($article['dateline']);
 
-$navtitle = $article['title'].($page>1?" ( $page )":'').' - '.$cat['catname'];
-$metakeywords = $article['title'];
-$metadescription = $article['summary'] ? $article['summary'] : $article['title'];
+foreach($cat['ups'] as $val) {
+	$cats[] = $val['catname'];
+}
+$seodata = array('firstcat' => $cats[0], 'secondcat' => $cats[1], 'curcat' => $cat['catname'], 'subject' => $article['title'], 'user' => $article['username'], 'summary' => $article['summary'], 'page' => intval($_G['gp_page']));
+list($navtitle, $metadescription, $metakeywords) = get_seosetting('article', $seodata);
+if(empty($navtitle)) {
+	$navtitle = get_title_page($article['title'], $_G['page']).' - '.$cat['catname'];
+	$nobbname = false;
+} else {
+	$nobbname = true;
+}
+if(empty($metakeywords)) {
+	$metakeywords = $article['title'];
+}
+if(empty($metadescription)) {
+	$metadescription = $article['summary'] ? $article['summary'] : $article['title'];
+}
+
 $seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
 $secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
-include_once template("diy:portal/view:{$article['catid']}");
 
+$catid = $article['catid'];
+$_G['relatedlinks'] = getrelatedlink('article');
+include_once template("diy:portal/view:{$catid}", NULL, NULL, NULL, $cat['articleprimaltplname']);
 ?>

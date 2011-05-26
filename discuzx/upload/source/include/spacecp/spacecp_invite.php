@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_invite.php 17090 2010-09-20 10:38:14Z liulanbo $
+ *      $Id: spacecp_invite.php 20818 2011-03-04 08:21:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -251,7 +251,7 @@ if($_GET['op'] == 'resend') {
 	$uri = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
 	$uri = substr($uri, 0, strrpos($uri, '/')+1);
 
-	$actives = array('invite'=>' class="active"');
+	$actives = array('invite'=>' class="a"');
 }
 
 $navtitle = lang('core', 'title_invite_friend');

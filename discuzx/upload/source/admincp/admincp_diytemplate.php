@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_diytemplate.php 17282 2010-09-28 09:04:15Z zhangguosheng $
+ *      $Id: admincp_diytemplate.php 21495 2011-03-28 09:23:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -22,8 +22,8 @@ if($operation == 'list') {
 					.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 					.'</span>';
 	showsubmenu('diytemplate',  array(
-			array('list', 'diytemplate', 1),
-		), $searchctrl);
+		array('list', 'diytemplate', 1),
+	), $searchctrl);
 
 	$intkeys = array('uid', 'closed');
 	$strkeys = array();
@@ -38,6 +38,25 @@ if($operation == 'list') {
 	$mpurl .= '&'.implode('&', $results['urls']);
 	$wherearr[] = " primaltplname NOT LIKE 'portal/list%' ";
 	$wherearr[] = " primaltplname NOT LIKE 'portal/portal_topic_content%' ";
+
+	if($_GET['permname']) {
+		$tpls = '';
+		$uid = DB::result_first('SELECT uid FROM '.DB::table('common_member')." WHERE username='$_GET[permname]'");
+		if($uid) {
+			$query = DB::query('SELECT targettplname FROM '.DB::table('common_template_permission')." WHERE uid='$uid' GROUP BY targettplname");
+			while($v = DB::fetch($query)) {
+				$tpls[] = $v['targettplname'];
+			}
+			$tpls = dimplode($tpls);
+		}
+		if($tpls) {
+			$wherearr[] = 'targettplname IN ('.$tpls.')';
+		} else {
+			cpmsg_error(stripslashes($_GET['permname']).cplang('diytemplate_the_username_has_not_template'));
+		}
+		$mpurl .= '&permname='.$_GET['permname'];
+	}
+
 	$wheresql = empty($wherearr)?'1':implode(' AND ', $wherearr);
 
 	$orders = getorders(array('dateline','targettplname'), 'dateline');
@@ -52,7 +71,8 @@ if($operation == 'list') {
 
 	$searchlang = array();
 	$keys = array('search', 'likesupport', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100',
-	'diytemplate_name', 'diytemplate_dateline', 'diytemplate_targettplname', 'diytemplate_primaltplname', 'diytemplate_uid', 'diytemplate_username', 'nolimit', 'no', 'yes');
+	'diytemplate_name', 'diytemplate_dateline', 'diytemplate_targettplname', 'diytemplate_primaltplname', 'diytemplate_uid', 'diytemplate_username',
+	'nolimit', 'no', 'yes', 'diytemplate_permname', 'diytemplate_permname_tips');
 	foreach ($keys as $key) {
 		$searchlang[$key] = cplang($key);
 	}
@@ -73,7 +93,7 @@ if($operation == 'list') {
 				</tr>
 				<tr>
 					<th>$searchlang[resultsort]</th>
-					<td colspan="4">
+					<td colspan="3">
 						<select name="orderby">
 						<option value="">$searchlang[defaultsort]</option>
 						<option value="dateline"$orderby[dateline]>$searchlang[diytemplate_dateline]</option>
@@ -90,8 +110,10 @@ if($operation == 'list') {
 						<option value="100"$perpages[100]>$searchlang[perpage_100]</option>
 						</select>
 						<input type="hidden" name="action" value="diytemplate">
-						<input type="submit" name="searchsubmit" value="$searchlang[search]" class="btn">
 					</td>
+					<th>$searchlang[diytemplate_permname]</th>
+					<td><input type="text" class="txt" name="permname" value="$_GET[permname]">$searchlang[diytemplate_permname_tips]
+						<input type="submit" name="searchsubmit" value="$searchlang[search]" class="btn"></td>
 				</tr>
 			</table>
 		</div>
@@ -185,18 +207,35 @@ SEARCH;
 		showsubtitle(array('', 'username',
 		'<input class="checkbox" type="checkbox" name="chkallmanage" onclick="checkAll(\'prefix\', this.form, \'allowmanage\', \'chkallmanage\')" id="chkallmanage" /><label for="chkallmanage">'.cplang('block_perm_manage').'</label>',
 		'<input class="checkbox" type="checkbox" name="chkallrecommend" onclick="checkAll(\'prefix\', this.form, \'allowrecommend\', \'chkallrecommend\')" id="chkallrecommend" /><label for="chkallrecommend">'.cplang('block_perm_recommend').'</label>',
-		'<input class="checkbox" type="checkbox" name="chkallneedverify" onclick="checkAll(\'prefix\', this.form, \'needverify\', \'chkallneedverify\')" id="chkallneedverify" /><label for="chkallneedverify">'.cplang('block_perm_needverify').'</label>'
+		'<input class="checkbox" type="checkbox" name="chkallneedverify" onclick="checkAll(\'prefix\', this.form, \'needverify\', \'chkallneedverify\')" id="chkallneedverify" /><label for="chkallneedverify">'.cplang('block_perm_needverify').'</label>',
+		'block_perm_inherited'
 		));
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_member')." m ,".DB::table('common_template_permission')." cp WHERE cp.targettplname='$targettplname' AND cp.uid=m.uid");
+		$query = DB::query("SELECT m.username, cp.* FROM ".DB::table('common_member')." m ,".DB::table('common_template_permission')." cp WHERE cp.targettplname='$targettplname' AND cp.uid=m.uid ORDER BY inheritedtplname");
+		$line = '&minus;';
 		while($value = DB::fetch($query)) {
-			showtablerow('', array('class="td25"'), array(
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" /><input type=\"hidden\" name=\"perm[$value[uid]]\" value=\"$value[bid]\" />",
-				"$value[username]",
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$value[uid]]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$value[uid]]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
-			));
+			if(!empty($value['inheritedtplname'])) {
+				showtablerow('', array('class="td25"'), array(
+					"",
+					"$value[username]",
+					$value['allowmanage'] ? '&radic;' : $line,
+					$value['allowrecommend'] ? '&radic;' : $line,
+					$value['needverify'] ? '&radic;' : $line,
+					'<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname='.$value['inheritedtplname'].'">'.$_G['cache']['diytemplatename'][$value['inheritedtplname']].'</a>',
+				));
+			} else {
+				showtablerow('', array('class="td25"'), array(
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowmanage]\" value=\"$value[allowmanage]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowrecommend]\" value=\"$value[allowrecommend]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][needverify]\" value=\"$value[needverify]\" />",
+					"$value[username]",
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$value[uid]]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$value[uid]]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
+					$line,
+				));
+			}
 		}
 
 		showtablerow('', array('class="td25"'), array(
@@ -205,6 +244,7 @@ SEARCH;
 			'<input type="checkbox" class="checkbox" name="newallowmanage" value="1" />',
 			'<input type="checkbox" class="checkbox" name="newallowrecommend" value="1" />',
 			'<input type="checkbox" class="checkbox" name="newneedverify" value="1" />',
+			'',
 		));
 
 		showsubmit('permsubmit', 'submit', 'del');
@@ -212,37 +252,45 @@ SEARCH;
 		showformfooter();
 	} else {
 
-		if(!empty($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_template_permission')." WHERE targettplname='$targettplname' AND uid IN(".dimplode($_G['gp_delete']).")");
-		}
-
-		$perms = array();
-		if(is_array($_G['gp_perm'])) {
-			foreach($_G['gp_perm'] as $uid => $value) {
-				if(empty($_G['gp_delete']) || !in_array($uid, $_G['gp_delete'])) {
-					$uid = intval($uid);
-					$allowmanage = $_G['gp_allowmanage'][$uid] ? 1 : 0;
-					$allowrecommend = $_G['gp_allowrecommend'][$uid] ? 1 : 0;
-					$needverify = $_G['gp_needverify'][$uid] ? 1 : 0;
-					$perms[$uid] = "('$targettplname', '$uid', '$allowmanage', '$allowrecommend', '$needverify')";
-				}
-			}
-		}
+		$users = array();
 		if(!empty($_G['gp_newuser'])) {
-			$value = DB::fetch_first("SELECT cag.allowauthorizedblock,cm.uid FROM ".DB::table('common_admingroup')." cag LEFT JOIN ".DB::table('common_member')." cm ON cm.groupid=cag.admingid WHERE cm.username='$_G[gp_newuser]' AND cag.allowauthorizedblock='1'");
+			$value = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_newuser]'");
 			if($value) {
-				$allowmanage = $_G['gp_newallowmanage'] ? 1 : 0;
-				$allowrecommend = $_G['gp_newallowrecommend'] ? 1 : 0;
-				$needverify = $_G['gp_newneedverify'] ? 1 : 0;
-				$perms[$value['uid']] = "('$targettplname', '$value[uid]', '$allowmanage', '$allowrecommend', '$needverify')";
+				$user = array();
+				$user['uid'] = $value['uid'];
+				$user['allowmanage'] = $_G['gp_newallowmanage'] ? 1 : 0;
+				$user['allowrecommend'] = $_G['gp_newallowrecommend'] ? 1 : 0;
+				$user['needverify'] = $_G['gp_newneedverify'] ? 1 : 0;
+				$users[] = $user;
 			} else {
 				cpmsg_error($_G['gp_newuser'].cplang('block_has_no_allowauthorizedblock'), dreferer());
 			}
 		}
-		if(!empty($perms)) {
-			DB::query("REPLACE INTO ".DB::table('common_template_permission')." (`targettplname`, `uid`, `allowmanage`, `allowrecommend`, `needverify`) VALUES ".implode(',', $perms));
+		if(is_array($_G['gp_perm'])) {
+			foreach($_G['gp_perm'] as $uid => $value) {
+				if(empty($_G['gp_delete']) || !in_array($uid, $_G['gp_delete'])) {
+					$user = array();
+					$user['allowmanage'] = $_G['gp_allowmanage'][$uid] ? 1 : 0;
+					$user['allowrecommend'] = $_G['gp_allowrecommend'][$uid] ? 1 : 0;
+					$user['needverify'] = $_G['gp_needverify'][$uid] ? 1 : 0;
+					if($value['allowmanage'] != $user['allowmanage'] || $value['allowrecommend'] != $user['allowrecommend']	|| $value['needverify'] != $user['needverify'] ) {
+						$user['uid'] = intval($uid);
+						$users[] = $user;
+					}
+				}
+			}
 		}
+		if(!empty($users) || $_G['gp_delete']) {
+			require_once libfile('class/blockpermission');
+			$tplpermsission = & template_permission::instance();
+			if($_G['gp_delete']) {
+				$tplpermsission->delete_users($targettplname ,$_G['gp_delete']);
+			}
 
+			if(!empty($users)) {
+				$tplpermsission->add_users($targettplname, $users);
+			}
+		}
 		cpmsg('diytemplate_perm_update_succeed', "action=diytemplate&operation=perm&targettplname=$targettplname", 'succeed');
 	}
 

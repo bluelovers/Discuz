@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_upload.js 15155 2010-08-19 08:16:19Z monkey $
+	$Id: portal_upload.js 18682 2010-12-01 03:35:10Z zhangguosheng $
 */
 
 var nowid = 0;
@@ -10,7 +10,7 @@ var nowid = 0;
 var extensions = '';
 
 function addAttach() {
-	newnode = $('upload').cloneNode(true);
+	var newnode = $('upload').cloneNode(true);
 	var id = nowid;
 	var tags;
 
@@ -20,7 +20,7 @@ function addAttach() {
 		if(tags[i].name == 'attach') {
 			tags[i].id = 'attach_' + id;
 			tags[i].name = 'attach';
-			tags[i].onchange = function() {insertAttach(id)};
+			tags[i].onchange = function() {this.form.action = this.form.action.replace(/catid\=\d/, 'catid='+$('catid').value);insertAttach(id)};
 			tags[i].unselectable = 'on';
 		}
 	}

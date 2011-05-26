@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 17392 2010-10-18 01:47:45Z monkey $
+ *      $Id: admincp_portalcategory.php 21674 2011-04-07 08:09:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -19,12 +19,17 @@ $portalcategory = $_G['cache']['portalcategory'];
 
 if($operation == 'list') {
 
+	if(empty($portalcategory) && DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_category'))) {
+		updatecache('portalcategory');
+		loadcache('portalcategory', true);
+		$portalcategory = $_G['cache']['portalcategory'];
+	}
 	if(!submitcheck('editsubmit')) {
 
 		shownav('portal', 'portalcategory');
 		showsubmenu('portalcategory',  array(
-					array('list', 'portalcategory', 1)
-				));
+			array('list', 'portalcategory', 1)
+		));
 
 		showformheader('portalcategory');
 		echo '<div style="height:30px;line-height:30px;"><a href="javascript:;" onclick="show_all()">'.cplang('show_all').'</a> | <a href="javascript:;" onclick="hide_all()">'.cplang('hide_all').'</a> <input type="text" id="srchforumipt" class="txt" /> <input type="submit" class="btn" value="'.cplang('search').'" onclick="return srchforum()" /></div>';
@@ -56,7 +61,7 @@ var rowtypedata = [
 SCRIPT;
 
 	} else {
-
+		$cachearr = array('portalcategory');
 		if($_POST['name']) {
 			$openarr = $closearr = array();
 			foreach($_POST['name'] as $key=>$value) {
@@ -71,15 +76,17 @@ SCRIPT;
 				if($sets) {
 					DB::query('UPDATE '.DB::table('portal_category')." SET ".implode(',',$sets)." WHERE catid = '$key'");
 					DB::update('common_diy_data',array('name'=>$value),array('targettplname'=>'portal/list_'.$key));
+					$cachearr[] = 'diytemplatename';
 				}
 			}
 		}
 
 		if($_G['gp_newsetindex']) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $portalcategory[$_G['gp_newsetindex']]['caturl']), 0, 1);
+			$cachearr[] = 'setting';
 		}
 		include_once libfile('function/cache');
-		updatecache(array('portalcategory','diytemplatename'));
+		updatecache($cachearr);
 
 		cpmsg('portalcategory_update_succeed', 'action=portalcategory', 'succeed');
 	}
@@ -101,23 +108,39 @@ SCRIPT;
 		if($portalcategory[$catid]['level'])showsubtitle(array('','<input class="checkbox" type="checkbox" name="inherited" value="1" '.$inherited_checked.'/>'.cplang('portalcategory_inheritance'),'',''));
 		showsubtitle(array('', 'username',
 		'<input class="checkbox" type="checkbox" name="chkallpublish" onclick="checkAll(\'prefix\', this.form, \'publish\', \'chkallpublish\')" id="chkallpublish" /><label for="chkallpublish">'.cplang('portalcategory_perm_publish').'</label>',
-		'<input class="checkbox" type="checkbox" name="chkallmanage" onclick="checkAll(\'prefix\', this.form, \'manage\', \'chkallmanage\')" id="chkallmanage" /><label for="chkallmanage">'.cplang('portalcategory_perm_manage').'</label>'
+		'<input class="checkbox" type="checkbox" name="chkallmanage" onclick="checkAll(\'prefix\', this.form, \'manage\', \'chkallmanage\')" id="chkallmanage" /><label for="chkallmanage">'.cplang('portalcategory_perm_manage').'</label>',
+		'block_perm_inherited'
 		));
 
+		$line = '&minus;';
 		$query = DB::query("SELECT m.*, cp.* FROM ".DB::table('common_member')." m ,".DB::table('portal_category_permission')." cp WHERE cp.catid='$catid' AND cp.uid=m.uid");
 		while($value = DB::fetch($query)) {
-			showtablerow('', array('class="td25"'), array(
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" /><input type=\"hidden\" name=\"perm[$value[uid]]\" value=\"$value[catid]\" />",
-				"$value[username]",
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowpublish[$value[uid]]\" value=\"1\" ".($value['allowpublish'] ? 'checked' : '').' />',
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
-			));
+			if(!empty($value['inheritedcatid'])) {
+				showtablerow('', array('class="td25"'), array(
+					"",
+					"$value[username]",
+					$value['allowpublish'] ? '&radic;' : $line,
+					$value['allowmanage'] ? '&radic;' : $line,
+					'<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['inheritedcatid'].'">'.$portalcategory[$value['inheritedcatid']]['catname'].'</a>',
+				));
+			} else {
+				showtablerow('', array('class="td25"'), array(
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" /><input type=\"hidden\" name=\"perm[$value[uid]]\" value=\"$value[catid]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowpublish]\" value=\"$value[allowpublish]\" />
+					<input type=\"hidden\" name=\"perm[$value[uid]][allowmanage]\" value=\"$value[allowmanage]\" />",
+					"$value[username]",
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowpublish[$value[uid]]\" value=\"1\" ".($value['allowpublish'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
+					$line,
+				));
+			}
 		}
 		showtablerow('', array('class="td25"'), array(
 			cplang('add_new'),
 			'<input type="text" class="txt" name="newuser" value="" size="20" />',
 			'<input type="checkbox" class="checkbox" name="newpublish" value="1" />',
 			'<input type="checkbox" class="checkbox" name="newmanage" value="1" />',
+			'',
 		));
 
 		showsubmit('permsubmit', 'submit', 'del');
@@ -125,37 +148,51 @@ SCRIPT;
 		showformfooter();
 	} else {
 
-		if(!empty($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('portal_category_permission')." WHERE catid='$catid' AND uid IN(".dimplode($_G['gp_delete']).")");
-		} else {
-
-		}
-		$perms = array();
+		$users = array();
 		if(is_array($_G['gp_perm'])) {
 			foreach($_G['gp_perm'] as $uid => $value) {
 				if(empty($_G['gp_delete']) || !in_array($uid, $_G['gp_delete'])) {
-					$uid = intval($uid);
-					$publish = $_G['gp_allowpublish'][$uid] ? 1 : 0;
-					$manage = $_G['gp_allowmanage'][$uid] ? 1 : 0;
-					$perms[] = "('$catid', '$uid', '$publish', '$manage')";
+					$user = array();
+					$user['allowpublish'] = $_G['gp_allowpublish'][$uid] ? 1 : 0;
+					$user['allowmanage'] = $_G['gp_allowmanage'][$uid] ? 1 : 0;
+					if($value['allowpublish'] != $user['allowpublish'] || $value['allowmanage'] != $user['allowmanage']) {
+						$user['uid'] = intval($uid);
+						$users[] = $user;
+					}
 				}
 			}
 		}
 		if(!empty($_G['gp_newuser'])) {
-			$value = DB::fetch_first("SELECT cag.allowauthorizedarticle,cm.uid FROM ".DB::table('common_admingroup')." cag LEFT JOIN ".DB::table('common_member')." cm ON cm.groupid=cag.admingid WHERE cm.username='$_G[gp_newuser]' AND cag.allowauthorizedarticle='1'");
+			$value = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_newuser]'");
 			if($value) {
-				$publish = $_G['gp_newpublish'] ? 1 : 0;
-				$manage = $_G['gp_newmanage'] ? 1 : 0;
-				$perms[] = "('$catid', '$value[uid]', '$publish', '$manage')";
+				$user['uid'] = $value['uid'];
+				$user['allowpublish'] = $_G['gp_newpublish'] ? 1 : 0;
+				$user['allowmanage'] = $_G['gp_newmanage'] ? 1 : 0;
+				$users[$user['uid']] = $user;
 			} else {
 				cpmsg_error($_G['gp_newuser'].cplang('portalcategory_has_no_allowauthorizedarticle'));
 			}
 		}
-		if(!empty($perms)) {
-			DB::query("REPLACE INTO ".DB::table('portal_category_permission')." (`catid`, `uid`, `allowpublish`, `allowmanage`) VALUES ".implode(',', $perms));
+
+		require_once libfile('class/portalcategory');
+		$categorypermsission = & portal_category::instance();
+		if(!empty($users)) {
+			$categorypermsission->add_users_perm($catid, $users);
 		}
 
-		DB::update('portal_category', array('notinheritedarticle'=>$_POST['inherited'] ? '0' : '1'), array('catid'=>$catid));
+		if(!empty($_G['gp_delete'])) {
+			$categorypermsission->delete_users_perm($catid, $_G['gp_delete']);
+		}
+
+		$notinherited = !$_POST['inherited'] ? '1' : '0';
+		if($notinherited != $portalcategory[$catid]['notinheritedarticle']) {
+			if($notinherited) {
+				$categorypermsission->delete_inherited_perm_by_catid($catid, $portalcategory[$catid]['upid']);
+			} else {
+				$categorypermsission->remake_inherited_perm($catid);
+			}
+			DB::update('portal_category', array('notinheritedarticle'=>$notinherited), array('catid'=>$catid));
+		}
 
 		include_once libfile('function/cache');
 		updatecache('portalcategory');
@@ -184,9 +221,9 @@ SCRIPT;
 
 		shownav('portal', 'portalcategory');
 		showsubmenu('portalcategory',  array(
-					array('list', 'portalcategory', 0),
-					array('delete', 'portalcategory&operation=delete&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'portalcategory', 0),
+			array('delete', 'portalcategory&operation=delete&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('portalcategory&operation=delete&catid='.$_GET['catid']);
 		showtableheader();
@@ -245,6 +282,12 @@ SCRIPT;
 					}
 				}
 				DB::query('UPDATE '.DB::table('portal_category')." SET upid = '$upid' WHERE catid IN (".dimplode($catechildren).')');
+				require_once libfile('class/blockpermission');
+				require_once libfile('class/portalcategory');
+				$tplpermission = & template_permission::instance();
+				$tplpermission->delete_perm_by_inheritedtpl('portal/list_'.$_GET['catid']);
+				$categorypermission = & portal_category::instance();
+				$categorypermission->delete_perm_by_inheritedcatid($_GET['catid']);
 
 			} else {
 				$delids = array_merge($delids, $catechildren);
@@ -301,9 +344,9 @@ SCRIPT;
 
 		shownav('portal', 'portalcategory');
 		showsubmenu('portalcategory',  array(
-					array('list', 'portalcategory', 0),
-					array('portalcategory_move', 'portalcategory&operation=move&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'portalcategory', 0),
+			array('portalcategory_move', 'portalcategory&operation=move&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('portalcategory&operation=move&catid='.$_GET['catid']);
 		showtableheader();
@@ -323,6 +366,7 @@ SCRIPT;
 		DB::update('portal_category', array('articles'=>0), array('catid'=>$_GET['catid']));
 		$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_article_title')." WHERE catid = '$_POST[tocatid]'");
 		DB::update('portal_category', array('articles'=>$num), array('catid'=>$_POST['tocatid']));
+		updatecache('portalcategory');
 
 		cpmsg('portalcategory_move_succeed', 'action=portalcategory', 'succeed');
 	}
@@ -351,9 +395,9 @@ SCRIPT;
 		shownav('portal', 'portalcategory');
 		$url = 'portalcategory&operation='.$operation.($operation == 'add' ? '&upid='.$_G['gp_upid'] : '&catid='.$_GET['catid']);
 		showsubmenu(cplang('portalcategory_detail').($cate['catname'] ? ' - '.$cate['catname'] : ''), array(
-					array('list', 'portalcategory', 0),
-					array('edit', $url, 1)
-				));
+			array('list', 'portalcategory', 0),
+			array('edit', $url, 1)
+		));
 
 		showformheader($url);
 		showtableheader();
@@ -366,44 +410,14 @@ SCRIPT;
 		showsetting('display_order', 'displayorder', $cate['displayorder'], 'text');
 		showsetting('portalcategory_foldername', 'foldername', $cate['foldername'], 'text');
 		showsetting('portalcategory_url', 'url', $cate['url'], 'text');
+		showsetting('portalcategory_perpage', 'perpage', $cate['perpage'] ? $cate['perpage'] : 15, 'text');
+		showsetting('portalcategory_maxpages', 'maxpages', $cate['maxpages'] ? $cate['maxpages'] : 1000, 'text');
 
-		$tpls = array('list'=>getprimaltplname('list.htm'));
-		if (($dh = opendir(DISCUZ_ROOT.'./template/default/portal'))) {
-			while(($file = readdir($dh)) !== false) {
-				$file = strtolower($file);
-				if (fileext($file) == 'htm' && substr($file, 0, 5) == 'list_') {
-					$tpls[str_replace('.htm','',$file)] = getprimaltplname($file);
-				}
-			}
-			closedir($dh);
-		}
-		asort($tpls);
-
-		$pritplvalue = '';
-		if(empty($cate['primaltplname'])) {
-			$pritplhide = '';
-			$cate['primaltplname'] = 'portal/list';
-			$pritplvalue = ' style="display:none;"';
-		} else {
-			$pritplhide = ' style="display:none;"';
-		}
-		$catetplselect = '<span id="pritplselect"'.$pritplhide.'><select name="primaltplname">';
-		foreach($tpls as $k => $v){
-			$selected = $cate['primaltplname'] == 'portal/'.$k ? ' selected' : '';
-			$catetplselect .= '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-		}
-		$pritplophide = !empty($cate['primaltplname']) ? '' : ' style="display:none;"';
-		$catetplselect .= '</select> <a href="javascript:;"'.$pritplophide.' onclick="$(\'pritplselect\').style.display=\'none\';$(\'pritplvalue\').style.display=\'\';">'.cplang('cancel').'</a></span>';
-
-		if(empty($cate['primaltplname'])) {
-			showsetting('portalcategory_primaltplname', '', '', $catetplselect);
-		} else {
-			$tplname = getprimaltplname(str_replace('portal/', '', $cate['primaltplname'].'.htm'));
-			$html = '<span id="pritplvalue" '.$pritplvalue.'> '.$tplname.'<a href="javascript:;" onclick="$(\'pritplselect\').style.display=\'\';$(\'pritplvalue\').style.display=\'none\';"> '.cplang('modify').'</a></span>';
-			showsetting('portalcategory_primaltplname', '', '', $catetplselect.$html);
-		}
+		showportalprimaltemplate($cate['primaltplname'], 'list');
+		showportalprimaltemplate($cate['articleprimaltplname'], 'view');
 
 		showsetting('portalcategory_allowpublish', 'allowpublish', $cate['disallowpublish'] ? 0 : 1, 'radio');
+		showsetting('portalcategory_notshowarticlesummay', 'notshowarticlesummay', $cate['notshowarticlesummay'] ? 0 : 1, 'radio');
 		showsetting('portalcategory_allowcomment', 'allowcomment', $cate['allowcomment'], 'radio');
 		if($cate['level']) {
 			showsetting('portalcategory_inheritancearticle', 'inheritancearticle', !$cate['notinheritedarticle'] ? '1' : '0', 'radio');
@@ -413,12 +427,19 @@ SCRIPT;
 		if($cate['level'] != 2) showsetting('portalcategory_shownav', 'shownav', $cate['shownav'], 'radio');
 		$setindex = !empty($_G['setting']['defaultindex']) && $_G['setting']['defaultindex'] == $cate['caturl'] ? 1 : 0;
 		showsetting('setindex', 'setindex', $setindex, 'radio');
-		if($cate['level'] == 0 && !empty($_G['setting']['domain']['root']['channel'])) {
-			showsetting('forums_edit_extend_domain', '', '', 'http://<input type="text" class="txt" name="domain" class="txt" value="'.$cate['domain'].'" style="width:100px; margin-right:0px;" >.'.$_G['setting']['domain']['root']['channel']);
+		if($cate['level'] == 0) {
+			if(!empty($_G['setting']['domain']['root']['channel'])) {
+				showsetting('forums_edit_extend_domain', '', '', 'http://<input type="text" class="txt" name="domain" class="txt" value="'.$cate['domain'].'" style="width:100px; margin-right:0px;" >.'.$_G['setting']['domain']['root']['channel']);
+			} else {
+				showsetting('forums_edit_extend_domain', 'domain', '', 'text', 'disabled');
+			}
 		}
-
+		showtablefooter();
+		showtips('setting_seo_portal_tips', 'tips', true, 'setseotips');
+		showtableheader();
+		showsetting('portalcategory_seotitle', 'seotitle', $cate['seotitle'], 'text');
+		showsetting('portalcategory_keyword', 'keyword', $cate['keyword'], 'text');
 		showsetting('portalcategory_summary', 'description', $cate['description'], 'textarea');
-		showsetting('portalcategory_keyword', 'keyword', $cate['keyword'], 'textarea');
 
 		showsubmit('detailsubmit');
 		if($operation == 'add') showsetting('', '', '', '<input type="hidden" name="level" value="'.$cate['level'].'" />');
@@ -432,6 +453,10 @@ SCRIPT;
 		$_G['gp_catname'] = trim($_G['gp_catname']);
 		$foldername = trim($_G['gp_foldername']);
 		$oldsetindex = !empty($_G['setting']['defaultindex']) && $_G['setting']['defaultindex'] == $cate['caturl'] ? 1 : 0;
+		$perpage = intval($_G['gp_perpage']);
+		$maxpages = intval($_G['gp_maxpages']);
+		$perpage = empty($perpage) ? 15 : $perpage;
+		$maxpages = empty($maxpages) ? 1000 : $maxpages;
 
 		if($_G['gp_catid'] && !empty($cate['domain'])) {
 			require_once libfile('function/delete');
@@ -449,30 +474,32 @@ SCRIPT;
 			'allowcomment'=>$_G['gp_allowcomment'],
 			'url' => $_G['gp_url'],
 			'closed' => $_G['gp_closed'],
+			'seotitle' => $_G['gp_seotitle'],
 			'keyword' => $_G['gp_keyword'],
 			'description' => $_G['gp_description'],
-			'keyword' => $_G['gp_keyword'],
 			'displayorder' => intval($_G['gp_displayorder']),
 			'notinheritedarticle' => $_G['gp_inheritancearticle'] ? '0' : '1',
 			'notinheritedblock' => $_G['gp_inheritanceblock'] ? '0' : '1',
 			'disallowpublish' => $_G['gp_allowpublish'] ? '0' : '1',
+			'notshowarticlesummay' => $_G['gp_notshowarticlesummay'] ? '0' : '1',
+			'perpage' => $perpage,
+			'maxpages' => $maxpages,
 		);
 
 		$dir = '';
 		if(!empty($foldername)) {
+			$oldfoldername = empty($_G['gp_catid']) ? '' : $portalcategory[$_GET['catid']]['foldername'];
 			preg_match_all('/[^\w\d\_]/',$foldername,$re);
 			if(!empty($re[0])) {
 				cpmsg(cplang('portalcategory_foldername_rename_error').','.cplang('return'), NULL, 'error');
 			}
 			$parentdir = getportalcategoryfulldir($cate['upid']);
 			if($parentdir === false) cpmsg(cplang('portalcategory_parentfoldername_empty').','.cplang('return'), NULL, 'error');
-			$isexists = DB::fetch_first("SELECT catid, upid FROM ".DB::table('portal_category')." WHERE foldername='$foldername'");
-			$_GET['upid'] = isset($_GET['upid']) ? $_GET['upid'] : $cate['upid'];
-			if($isexists && $isexists['upid'] == $_GET['upid']) {
+			if($foldername == $oldfoldername) {
+				$dir = $parentdir.$foldername;
+			} elseif(is_dir(DISCUZ_ROOT.'./'.$parentdir.$foldername)) {
 				cpmsg(cplang('portalcategory_foldername_duplicate').','.cplang('return'), NULL, 'error');
-			} elseif(!$isexists && is_dir(DISCUZ_ROOT.'./'.$parentdir.$foldername)) {
-				cpmsg(cplang('portalcategory_foldername_exists').','.cplang('return'), NULL, 'error');
-			} elseif (!$isexists && $portalcategory[$_GET['catid']]['foldername']) {
+			} elseif ($portalcategory[$_GET['catid']]['foldername']) {
 				$r = rename(DISCUZ_ROOT.'./'.$parentdir.$portalcategory[$_GET['catid']]['foldername'], DISCUZ_ROOT.'./'.$parentdir.$foldername);
 				if($r) {
 					$updatecategoryfile[] = $_GET['catid'];
@@ -480,24 +507,34 @@ SCRIPT;
 				} else {
 					cpmsg(cplang('portalcategory_foldername_rename_error').','.cplang('return'), NULL, 'error');
 				}
-			} elseif (!$isexists && empty($portalcategory[$_GET['catid']]['foldername'])) {
+			} elseif (empty($portalcategory[$_GET['catid']]['foldername'])) {
 				$dir = $parentdir.$foldername;
 				$editcat['foldername'] = $foldername;
-			} elseif ($isexists && $isexists['catid'] == $_GET['catid']) {
-				$dir = $parentdir.$foldername;
 			}
 		} elseif(empty($foldername) && $portalcategory[$_GET['catid']]['foldername']) {
 			delportalcategoryfolder($_GET['catid']);
 			$editcat['foldername'] = '';
 		}
-
-		$primaltplname = $_G['gp_primaltplname'];
-		if(!$primaltplname || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $primaltplname)) {
-			return 'portalcategory_filename_invalid';
+		$primaltplname = $viewprimaltplname = '';
+		if(!empty($_G['gp_listprimaltplname'])) {
+			$primaltplname = 'portal/'.$_G['gp_listprimaltplname'];
+			$checktpl = checkprimaltpl($primaltplname);
+			if($checktpl !== true) {
+				cpmsg(cplang($checktpl).','.cplang('return'), NULL, 'error');
+			}
 		}
-		$primaltplname = 'portal/'.str_replace(array('/', '\\', '.'), '', $primaltplname);
-		checkprimaltpl($primaltplname);
+
+		if(empty($_G['gp_viewprimaltplname'])) {
+			$_G['gp_viewprimaltplname'] = getparentviewprimaltplname($_G['gp_catid']);
+		}
+		$viewprimaltplname = 'portal/'.$_G['gp_viewprimaltplname'];
+		$checktpl = checkprimaltpl($viewprimaltplname);
+		if($checktpl !== true) {
+			cpmsg(cplang($checktpl).','.cplang('return'), NULL, 'error');
+		}
+
 		$editcat['primaltplname'] = $primaltplname;
+		$editcat['articleprimaltplname'] = $viewprimaltplname;
 
 		if($_G['gp_catid']) {
 			if($portalcategory[$_G['catid']]['level'] < 2) $editcat['shownav'] = intval($_G['gp_shownav']);
@@ -514,7 +551,7 @@ SCRIPT;
 				$editcat['domain'] = $domain;
 			}
 		}
-		$cachearr = array();
+		$cachearr = array('portalcategory');
 		if($_G['gp_catid']) {
 			DB::update('portal_category', $editcat, array('catid'=>$cate['catid']));
 			if($cate['catname'] != $_G['gp_catname']) {
@@ -532,48 +569,56 @@ SCRIPT;
 
 		if(!empty($domain)) {
 			DB::insert('common_domain', array('domain' => $domain, 'domainroot' => addslashes($_G['setting']['domain']['root']['channel']), 'id' => $_G['gp_catid'], 'idtype' => 'channel'));
+			$cachearr[] = 'setting';
 		}
-		if($_G['gp_primaltplname'] && (empty($cate['primaltplname']) || $cate['primaltplname'] != 'portal/'.$_G['gp_primaltplname'])) {
-			$targettplname = 'portal/list_'.$_G['gp_catid'];
-			$diydata = DB::fetch_first("SELECT diycontent FROM ".DB::table('common_diy_data')." WHERE targettplname='portal/list_{$_G['gp_catid']}'");
-			$diycontent = empty($diydata['diycontent']) ? '' : $diydata['diycontent'];
-			if($diydata) {
-				DB::update('common_diy_data',array('primaltplname'=>$primaltplname),array('targettplname'=>$targettplname));
-			} else {
-				$diycontent = '';
-				if($primaltplname == 'portal/list') {
-					$diydata = DB::fetch_first("SELECT diycontent FROM ".DB::table('common_diy_data')." WHERE targettplname='portal/list'");
-					$diycontent = empty($diydata['diycontent']) ? '' : $diydata['diycontent'];
-				}
-				$diyarr = array(
-					'primaltplname' => $primaltplname,
-					'targettplname' => $targettplname,
-					'diycontent' => addslashes($diycontent),
-					'name' => $_G['gp_catname'],
-					'uid' => $_G['uid'],
-					'username' => $_G['username'],
-					'dateline' => TIMESTAMP,
-					);
-				DB::insert('common_diy_data',$diyarr);
-			}
-			if(empty($diycontent)) {
-				$file = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/'.$primaltplname.'.htm';
-				if (!file_exists($file)) {
-					$file = './template/default/'.$primaltplname.'.htm';
-				}
-				$content = @file_get_contents(DISCUZ_ROOT.$file);
-				if(!$content) $content = '';
-				$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", '', $content);
-				file_put_contents(DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm', $content);
-			} else {
-				updatediytemplate($targettplname);
-			}
+		if($_G['gp_listprimaltplname'] && (empty($cate['primaltplname']) || $cate['primaltplname'] != $primaltplname)) {
+			remakediytemplate($primaltplname, 'portal/list_'.$_G['gp_catid'], stripslashes($_G['gp_catname']));
+		}
+
+		if($cate['articleprimaltplname'] != $viewprimaltplname) {
+			remakediytemplate($viewprimaltplname, 'portal/view_'.$_G['gp_catid'], stripslashes($_G['gp_catname']).'-'.cplang('portalcategory_viewpage'));
 		}
 
 		include_once libfile('function/cache');
 		updatecache('portalcategory');
 		loadcache('portalcategory',true);
 		$portalcategory = $_G['cache']['portalcategory'];
+
+		require libfile('class/blockpermission');
+		$tplpermsission = & template_permission::instance();
+		$tplpre = 'portal/list_';
+
+		require libfile('class/portalcategory');
+		$categorypermsission = & portal_category::instance();
+
+		if($operation == 'add') {
+			if($cate['upid'] && $_G['gp_catid']) {
+				if(!$editcat['notinheritedblock']) {
+					$tplpermsission->remake_inherited_perm($tplpre.$_G['gp_catid'], $tplpre.$cate['upid']);
+				}
+				if(!$editcat['notinheritedarticle']) {
+					$categorypermsission->remake_inherited_perm($_G['gp_catid']);
+				}
+			}
+		} elseif($operation == 'edit') {
+			if($editcat['notinheritedblock'] != $cate['notinheritedblock']) {
+				$tplname = $tplpre.$cate['catid'];
+				if($editcat['notinheritedblock']) {
+					$tplpermsission->delete_inherited_perm_by_tplname($tplname, $tplpre.$cate['upid']);
+				} else {
+					if($portalcategory[$cate['catid']]['upid']) {
+						$tplpermsission->remake_inherited_perm($tplname, $tplpre.$portalcategory[$cate['catid']]['upid']);
+					}
+				}
+			}
+			if($editcat['notinheritedarticle'] != $cate['notinheritedarticle']) {
+				if($editcat['notinheritedarticle']) {
+					$categorypermsission->delete_inherited_perm_by_catid($cate['catid'], $cate['upid']);
+				} else {
+					$categorypermsission->remake_inherited_perm($cate['catid']);
+				}
+			}
+		}
 
 		if(!empty($updatecategoryfile)) {
 			remakecategoryfile($updatecategoryfile);
@@ -638,6 +683,7 @@ SCRIPT;
 						}
 					}
 				}
+				$cachearr[] = 'setting';
 			} else {
 				if(!empty($nav)) {
 					DB::delete('common_nav', array('id'=>$nav['id']));
@@ -645,17 +691,20 @@ SCRIPT;
 						DB::delete('common_nav', array('parentid'=>$nav['id']));
 						DB::update('portal_category', array('shownav'=>'0'), ' catid IN ('.dimplode($portalcategory[$_G['gp_catid']]['children']).')');
 					}
+					$cachearr[] = 'setting';
 				}
 			}
 		}
 
 		if($_G['gp_setindex']) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $portalcategory[$_G['gp_catid']]['caturl']), 0, 1);
+			$cachearr[] = 'setting';
 		} elseif($oldsetindex) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => ''), 0, 1);
+			$cachearr[] = 'setting';
 		}
 
-		updatecache($cachearr);
+		updatecache(array_unique($cachearr));
 
 		cpmsg('portalcategory_edit_succeed', 'action=portalcategory#cat'.$_G['gp_catid'], 'succeed');
 	}
@@ -689,7 +738,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr>';
 	} elseif($level == 1) {
 		$return = '<tr class="hover" id="cat'.$value['catid'].'"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="board">'.
@@ -705,7 +754,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr>';
 		for($i=0,$L=count($value['children']); $i<$L; $i++) {
 			$return .= showcategoryrow($value['children'][$i], 2, $i==$L-1);
@@ -727,7 +776,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr></tbody>
 		<tbody id="group_'.$value['catid'].'"'.$toggle.'>';
 		for($i=0,$L=count($value['children']); $i<$L; $i++) {
@@ -748,6 +797,17 @@ function deleteportalcategory($ids) {
 	}
 	if(!is_array($ids)) $ids = array($ids);
 
+	require_once libfile('class/blockpermission');
+	require_once libfile('class/portalcategory');
+	$tplpermission = & template_permission::instance();
+	$templates = array();
+	foreach($ids as $id) {
+		$templates[] = 'portal/list_'.$id;
+	}
+	$tplpermission->delete_allperm_by_tplname($templates);
+	$categorypermission = & portal_category::instance();
+	$categorypermission->delete_allperm_by_catid($ids);
+
 	DB::delete('portal_category', "catid IN (".dimplode($ids).")");
 	DB::delete('common_nav', "`type`='4' AND identifier IN (".dimplode($ids).")");
 
@@ -762,13 +822,15 @@ function deleteportalcategory($ids) {
 	if(in_array($_G['setting']['defaultindex'], $defaultindex)) {
 		DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => ''), 0, 1);
 	}
-	DB::delete('common_diy_data', "targettplname IN (".dimplode($tpls).")");
+	$wheresql = "targettplname IN (".dimplode($tpls).")";
+	DB::delete('common_diy_data', $wheresql);
+	DB::delete('common_template_block', $wheresql);
 
 }
 
 function getprimaltplname($filename) {
-	global $lang;
-	$content = @file_get_contents(DISCUZ_ROOT.'./template/default/portal/'.$filename);
+	global $_G, $lang;
+	$content = @file_get_contents(DISCUZ_ROOT.($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/portal/'.$filename);
 	$name = $filename;
 	if($content) {
 		preg_match("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", trim($content), $mathes);
@@ -890,5 +952,109 @@ function remakecategoryfile($categorys) {
 			}
 		}
 	}
+}
+
+function showportalprimaltemplate($pritplname, $type) {
+	global $_G;
+	$tpls = array($type=>getprimaltplname($type.'.htm'));
+	if (($dh = opendir(DISCUZ_ROOT.($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/portal/'))) {
+		while(($file = readdir($dh)) !== false) {
+			$file = strtolower($file);
+			if (fileext($file) == 'htm' && substr($file, 0, strlen($type)+1) == $type.'_') {
+				$tpls[str_replace('.htm','',$file)] = getprimaltplname($file);
+			}
+		}
+		closedir($dh);
+	}
+	arsort($tpls);
+
+	$pritplvalue = '';
+	if(empty($pritplname)) {
+		$pritplhide = '';
+		$pritplvalue = ' style="display:none;"';
+	} else {
+		$pritplhide = ' style="display:none;"';
+	}
+	$catetplselect = '<span'.$pritplhide.'><select id="'.$type.'select" name="'.$type.'primaltplname">';
+	$selectedvalue = '';
+	if($type == 'view') {
+		$catetplselect .= '<option value="">'.cplang('portalcategory_inheritupsetting').'</option>';
+	}
+	foreach($tpls as $k => $v){
+		if($pritplname === 'portal/'.$k) {
+			$selectedvalue = $k;
+			$selected = ' selected';
+		} else {
+			$selected = '';
+		}
+		$catetplselect .= '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
+	}
+	$pritplophide = !empty($pritplname) ? '' : ' style="display:none;"';
+	$catetplselect .= '</select> <a href="javascript:;"'.$pritplophide.' onclick="$(\''.$type.'select\').value=\''.$selectedvalue.'\';$(\''.$type.'select\').parentNode.style.display=\'none\';$(\''.$type.'value\').style.display=\'\';">'.cplang('cancel').'</a></span>';
+
+	if(empty($pritplname)) {
+		showsetting('portalcategory_'.$type.'primaltplname', '', '', $catetplselect);
+	} else {
+		$tplname = getprimaltplname(str_replace('portal/', '', $pritplname.'.htm'));
+		$html = '<span id="'.$type.'value" '.$pritplvalue.'> '.$tplname.'<a href="javascript:;" onclick="$(\''.$type.'select\').parentNode.style.display=\'\';$(\''.$type.'value\').style.display=\'none\';"> '.cplang('modify').'</a></span>';
+		showsetting('portalcategory_'.$type.'primaltplname', '', '', $catetplselect.$html);
+	}
+}
+
+function remakediytemplate($primaltplname, $targettplname, $diytplname){
+	global $_G;
+	if(empty($targettplname)) return false;
+	$diydata = DB::fetch_first("SELECT diycontent FROM ".DB::table('common_diy_data')." WHERE targettplname='$targettplname'");
+	$diycontent = empty($diydata['diycontent']) ? '' : $diydata['diycontent'];
+	if($diydata) {
+		DB::update('common_diy_data',array('primaltplname'=>$primaltplname),array('targettplname'=>$targettplname));
+	} else {
+		$diycontent = '';
+		if(in_array($primaltplname, array('portal/list', 'portal/view'))) {
+			$diydata = DB::fetch_first("SELECT diycontent FROM ".DB::table('common_diy_data')." WHERE targettplname='$primaltplname'");
+			$diycontent = empty($diydata['diycontent']) ? '' : $diydata['diycontent'];
+		}
+		$diyarr = array(
+			'primaltplname' => $primaltplname,
+			'targettplname' => $targettplname,
+			'diycontent' => addslashes($diycontent),
+			'name' => addslashes($diytplname),
+			'uid' => $_G['uid'],
+			'username' => $_G['username'],
+			'dateline' => TIMESTAMP,
+			);
+		DB::insert('common_diy_data',$diyarr);
+	}
+	if(empty($diycontent)) {
+		$file = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/'.$primaltplname.'.htm';
+		if (!file_exists($file)) {
+			$file = './template/default/'.$primaltplname.'.htm';
+		}
+		$content = @file_get_contents(DISCUZ_ROOT.$file);
+		if(!$content) $content = '';
+		$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", '', $content);
+		file_put_contents(DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm', $content);
+	} else {
+		updatediytemplate($targettplname);
+	}
+	return true;
+}
+
+function getparentviewprimaltplname($catid) {
+	global $_G;
+	$tpl = 'view';
+	if(empty($catid)) {
+		return $tpl;
+	}
+	$cat = $_G['cache']['portalcategroy'][$catid];
+	if(!empty($cat['upid']['articleprimaltplname'])) {
+		$tpl = $cat['upid']['articleprimaltplname'];
+	} else {
+		$cat = $_G['cache']['portalcategroy'][$cat['upid']];
+		if($cat && $cat['articleprimaltplname']) {
+			$tpl = $cat['articleprimaltplname'];
+		}
+	}
+	return $tpl;
 }
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_main.php 15075 2010-08-18 10:02:01Z monkey $
+ *      $Id: admincp_main.php 22760 2011-05-20 01:03:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -30,8 +30,8 @@ echo <<<EOT
 <title>$title</title>
 <meta http-equiv="Content-Type" content="text/html; charset=$charset">
 <meta content="Comsenz Inc." name="Copyright" />
-<link rel="stylesheet" href="static/image/admincp/admincp.css" type="text/css" media="all" />
-<script src="static/js/common.js" type="text/javascript"></script>
+<link rel="stylesheet" href="static/image/admincp/admincp.css?{$_G[style][verhash]}" type="text/css" media="all" />
+<script src="static/js/common.js?{$_G[style][verhash]}" type="text/javascript"></script>
 </head>
 <body style="margin: 0px" scroll="no">
 <div id="append_parent"></div>
@@ -39,9 +39,9 @@ echo <<<EOT
 <tr>
 <td colspan="2" height="90">
 <div class="mainhd">
-<div class="logo">Discuz! Administrator's Control Panel</div>
+<a href="admin.php?action=index" class="logo">Discuz! Administrator's Control Panel</a>
 <div class="uinfo" id="frameuinfo">
-<p>$header_welcome, $cpadmingroup <em>{$_G['member']['username']}</em> [ <a href="$basescript?action=logout" target="_top">$header_logout</a> ]</p>
+<p>$header_welcome, $cpadmingroup <em>{$_G['member']['username']}</em> [<a href="$basescript?action=logout" target="_top">$header_logout</a>]</p>
 <p class="btnlink"><a href="index.php" target="_blank">$header_bbs</a></p>
 </div>
 <div class="navbg"></div>
@@ -106,12 +106,11 @@ echo <<<EOT
 </tr>
 </table>
 <div id="scrolllink" style="display: none">
-	<span onclick="menuScroll(1)"><img src="static/image/admincp/scrollu.gif" /></span>
-	<span onclick="menuScroll(2)"><img src="static/image/admincp/scrolld.gif" /></span>
+	<span onclick="menuScroll(1)"><img src="static/image/admincp/scrollu.gif" /></span><span onclick="menuScroll(2)"><img src="static/image/admincp/scrolld.gif" /></span>
 </div>
 <div class="copyright">
-	<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz! </a>{$_G['setting']['version']}</p>
-	<p>&copy; 2001-2010, <a href="http://www.comsenz.com/" target="_blank">Comsenz Inc.</a></p>
+	<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> {$_G['setting']['version']}</p>
+	<p>&copy; 2001-2011, <a href="http://www.comsenz.com/" target="_blank">Comsenz Inc.</a></p>
 </div>
 
 <div id="cpmap_menu" class="custom" style="display: none">
@@ -120,6 +119,7 @@ echo <<<EOT
 </div>
 
 <script type="text/JavaScript">
+	var cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}';
 	var headers = new Array($headers), admincpfilename = '$basescript', menukey = '';
 	function switchheader(key) {
 		if(!key || !$('header_' + key)) {
@@ -254,7 +254,13 @@ echo <<<EOT
 				if(lasttabon1) {
 					lasttabon1.className = '';
 				}
-				key = hrefs[i].parentNode.parentNode.id.substr(5);
+				if(hrefs[i].parentNode.parentNode.tagName == 'OL') {
+					hrefs[i].parentNode.parentNode.style.display = '';
+					hrefs[i].parentNode.parentNode.parentNode.className = 'lsub desc';
+					key = hrefs[i].parentNode.parentNode.parentNode.parentNode.parentNode.id.substr(5);
+				} else {
+					key = hrefs[i].parentNode.parentNode.id.substr(5);
+				}
 				hrefs[i].className = 'tabon';
 				lasttabon1 = hrefs[i];
 			}
@@ -262,7 +268,21 @@ echo <<<EOT
 				if(menuContainerid != 'custommenu') {
 					var lis = $(menuContainerid).getElementsByTagName('li');
 					for(var k = 0; k < lis.length; k++) {
-						if(lis[k].firstChild && lis[k].firstChild.className != 'menulink') lis[k].firstChild.className = '';
+						if(lis[k].firstChild && lis[k].firstChild.className != 'menulink') {
+							if(lis[k].firstChild.tagName != 'DIV') {
+								lis[k].firstChild.className = '';
+							} else {
+								var subid = lis[k].firstChild.getAttribute('sid');
+								if(subid) {
+									var sublis = $(subid).getElementsByTagName('li');
+									for(var ki = 0; ki < sublis.length; ki++) {
+										if(sublis[ki].firstChild && sublis[ki].firstChild.className != 'menulink') {
+											sublis[ki].firstChild.className = '';
+										}
+									}
+								}
+							}
+						}
 					}
 					if(this.className == '') this.className = menuContainerid == 'leftmenu' ? 'tabon' : '';
 				}
@@ -270,12 +290,20 @@ echo <<<EOT
 					var hk, currentkey;
 					var leftmenus = $('leftmenu').getElementsByTagName('a');
 					for(var j = 0; j < leftmenus.length; j++) {
-						hk = leftmenus[j].parentNode.parentNode.id.substr(5);
+						if(leftmenus[j].parentNode.parentNode.tagName == 'OL') {
+							hk = leftmenus[j].parentNode.parentNode.parentNode.parentNode.parentNode.id.substr(5);
+						} else {
+							hk = leftmenus[j].parentNode.parentNode.id.substr(5);
+						}
 						if(this.href.indexOf(leftmenus[j].href) != -1) {
 							if(lasttabon2) {
 								lasttabon2.className = '';
 							}
 							leftmenus[j].className = 'tabon';
+							if(leftmenus[j].parentNode.parentNode.tagName == 'OL') {
+								leftmenus[j].parentNode.parentNode.style.display = '';
+								leftmenus[j].parentNode.parentNode.parentNode.className = 'lsub desc';
+							}
 							lasttabon2 = leftmenus[j];
 							if(hk != 'index') currentkey = hk;
 						} else {
@@ -288,6 +316,16 @@ echo <<<EOT
 			}
 		}
 		return key;
+	}
+	function lsub(id, obj) {
+		display(id);
+		obj.className = obj.className != 'lsub' ? 'lsub' : 'lsub desc';
+		if(obj.className != 'lsub') {
+			setcookie('cpmenu_' + id, '');
+		} else {
+			setcookie('cpmenu_' + id, 1, 31536000);
+		}
+		setMenuScroll();
 	}
 	var header_key = initCpMenus('leftmenu');
 	toggleMenu(header_key ? header_key : 'index');

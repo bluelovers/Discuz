@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_banpost.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_banpost.php 20099 2011-02-15 01:55:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowbanpost']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_banpost');
 }
 
 $topiclist = $_G['gp_topiclist'];
@@ -20,7 +20,7 @@ $modpostsnum = count($topiclist);
 if(!($banpids = dimplode($topiclist))) {
 	showmessage('admin_banpost_invalid');
 } elseif(!$_G['group']['allowbanpost'] || !$_G['tid']) {
-	showmessage('admin_nopermission', NULL);
+	showmessage('admin_nopermission');
 }
 
 $posts = array();
@@ -54,6 +54,7 @@ if(!submitcheck('modsubmit')) {
 	foreach($posts as $k => $post) {
 		if($banned) {
 			my_post_log('ban', array('pid' => $post['pid'], 'uid' => $post['authorid']));
+			DB::delete('forum_postcomment', "rpid='$post[pid]'");
 			DB::query("UPDATE ".DB::table($posttable)." SET status=status|1 WHERE pid='$post[pid]'", 'UNBUFFERED');
 		} else {
 			my_post_log('unban', array('pid' => $post['pid'], 'uid' => $post['authorid']));
@@ -70,8 +71,6 @@ if(!submitcheck('modsubmit')) {
 	'modtids'	=> 0,
 	'modlog'	=> $thread
 	);
-
-	procreportlog('', $pids);
 
 }
 

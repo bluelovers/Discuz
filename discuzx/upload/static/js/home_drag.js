@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_drag.js 17317 2010-10-08 05:09:22Z zhangguosheng $
+	$Id: home_drag.js 17522 2010-10-20 13:57:03Z monkey $
 */
 
 var Drags       = [];
@@ -325,7 +325,7 @@ function init_drag2(){
 	if(Drags[0]){
 		var cObj = $('applistcontent');
 		dragHelper = document.createElement('div');
-		dragHelper.style.cssName = "apps dragable"
+		dragHelper.style.cssName = "apps dragable";
 		dragHelper.style.cssText = 'position:absolute;display:none;width:374px;';
 		cObj.parentNode.insertBefore(dragHelper, cObj);
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 17326 2010-10-09 01:50:49Z monkey $
+ *      $Id: forum_rss.php 19039 2010-12-14 08:40:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -112,6 +112,10 @@ echo 	"  </channel>\n".
 
 function updatersscache($num) {
 	global $_G;
+	$processname = 'forum_rss_cache';
+	if(discuz_process::islocked($processname, 600)) {
+		return false;
+	}
 	DB::query("DELETE FROM ".DB::table('forum_rsscache')."");
 	require_once libfile('function/post');
 	foreach($_G['cache']['forums'] as $fid => $forum) {
@@ -128,7 +132,7 @@ function updatersscache($num) {
 				$post = DB::fetch_first("SELECT pid, attachment, message, status FROM ".DB::table($posttable)." WHERE tid='{$thread['tid']}' AND first='1'");
 				$attachdata = '';
 				if($post['attachment'] == 2) {
-					$attach = DB::fetch_first("SELECT remote, attachment, filesize FROM ".DB::table('forum_attachment')." WHERE pid='{$post['pid']}' AND isimage='1' ORDER BY dateline LIMIT 1");
+					$attach = DB::fetch_first("SELECT remote, attachment, filesize FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE pid='{$post['pid']}' AND isimage='1' ORDER BY dateline LIMIT 1");
 					$attachdata = "\t".$attach['remote']."\t".$attach['attachment']."\t".$attach['filesize'];
 				}
 				$thread['message'] = $post['message'];
@@ -139,6 +143,8 @@ function updatersscache($num) {
 			}
 		}
 	}
+	discuz_process::unlock($processname);
+	return true;
 }
 
 ?>

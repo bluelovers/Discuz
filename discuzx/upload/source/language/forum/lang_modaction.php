@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_modaction.php 15449 2010-08-24 05:16:36Z monkey $
+ *      $Id: lang_modaction.php 19194 2010-12-21 10:05:33Z shanzongjun $
  */
 
 $lang = array
@@ -80,6 +80,8 @@ $lang = array
 	'PTA' => '生成文章',
 
 	'MAG' => '道具',
+
+	'REB' => '推送',
 
 );
 

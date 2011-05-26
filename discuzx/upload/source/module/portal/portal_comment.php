@@ -4,26 +4,34 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_comment.php 14960 2010-08-17 08:43:45Z zhengqingpeng $
+ *      $Id: portal_comment.php 20078 2011-02-12 07:23:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$aid = empty($_GET['aid'])?0:intval($_GET['aid']);
-if(empty($aid)) {
-	showmessage("comment_no_article_id");
+$id = empty($_GET['id']) ? 0 : intval($_GET['id']);
+$idtype = in_array($_GET['idtype'], array('aid', 'topicid')) ? $_GET['idtype'] : 'aid';
+$url = '';
+if(empty($id)) {
+	showmessage('comment_no_'.$idtype.'_id');
 }
-$article = DB::fetch_first("SELECT a.*, ac.*
-	FROM ".DB::table('portal_article_title')." a
-	LEFT JOIN ".DB::table('portal_article_count')." ac
-	ON ac.aid=a.aid
-	WHERE a.aid='$aid'");
-if(empty($article)) {
-	showmessage("comment_article_no_exist");
-} elseif(empty($article['allowcomment'])) {
-	showmessage('article_comment_is_forbidden');
+if($idtype == 'aid') {
+	$csubject = DB::fetch_first("SELECT a.title, a.allowcomment, ac.commentnum
+		FROM ".DB::table('portal_article_title')." a
+		LEFT JOIN ".DB::table('portal_article_count')." ac
+		ON ac.aid=a.aid
+		WHERE a.aid='$id'");
+	$url = 'portal.php?mod=view&aid='.$id;
+} elseif($idtype == 'topicid') {
+	$csubject = DB::fetch_first("SELECT title, allowcomment, commentnum	FROM ".DB::table('portal_topic')." WHERE topicid='$id'");
+	$url = 'portal.php?mod=topic&topicid='.$id;
+}
+if(empty($csubject)) {
+	showmessage('comment_'.$idtype.'_no_exist');
+} elseif(empty($csubject['allowcomment'])) {
+	showmessage($idtype.'_comment_is_forbidden');
 }
 
 $perpage = 25;
@@ -34,10 +42,9 @@ $start = ($page-1)*$perpage;
 $commentlist = array();
 $multi = '';
 
-if($article['commentnum']) {
-	$sqladd = '';
+if($csubject['commentnum']) {
 	$pricount = 0;
-	$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE aid='$aid' $sqladd ORDER BY cid DESC LIMIT $start,$perpage");
+	$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE id='$id' AND idtype='$idtype' ORDER BY dateline DESC LIMIT $start,$perpage");
 	while ($value = DB::fetch($query)) {
 		if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 			$value['allowop'] = 1;
@@ -48,7 +55,7 @@ if($article['commentnum']) {
 	}
 }
 
-$multi = multi($article['commentnum'], $perpage, $page, "portal.php?mod=comment&aid=$aid");
+$multi = multi($csubject['commentnum'], $perpage, $page, "portal.php?mod=comment&id=$id&idtype=$idtype");
 $seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 0;
 $secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
 include_once template("diy:portal/comment");

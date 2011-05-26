@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 17384 2010-10-15 08:58:39Z monkey $
+ *      $Id: admincp_checktools.php 22399 2011-05-06 00:16:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -25,7 +25,7 @@ if($operation == 'filecheck') {
 		array('nav_filecheck_completed', $step == 3)
 	));
 	if($step == 1) {
-		cpmsg($lang[filecheck_tips_step1], 'action=checktools&operation=filecheck&step=2', 'button', '', FALSE);
+		cpmsg(cplang('filecheck_tips_step1'), 'action=checktools&operation=filecheck&step=2', 'button', '', FALSE);
 	} elseif($step == 2) {
 		cpmsg(cplang('filecheck_verifying'), "action=checktools&operation=filecheck&step=3", 'loading', '', FALSE);
 	} elseif($step == 3) {
@@ -48,6 +48,7 @@ if($operation == 'filecheck') {
 		checkfiles('api/', '');
 		checkfiles('source/', '', 1, 'discuzfiles.md5');
 		checkfiles('static/', '');
+		checkfiles('archiver/', '');
 		checkfiles('uc_client/', '\.php|\.htm', 0);
 		checkfiles('uc_client/data/', '\.htm');
 		checkfiles('uc_client/control/', '\.php|\.htm');
@@ -244,7 +245,7 @@ if($operation == 'filecheck') {
 		$alertmsg = $lang['setting_mail_check_error'].$alertmsg;
 	}
 
-	echo '<script language="javascript">alert(\''.str_replace(array('\'', "\n", "\r"), array('\\\'', '\n', ''), $alertmsg).'\');parent.$(\'cpform\').action=\''.ADMINSCRIPT.'?action=setting&edit=yes\';parent.$(\'cpform\').target=\'_self\'</script>';
+	echo '<script language="javascript">alert(\''.str_replace(array('\'', "\n", "\r"), array('\\\'', '\n', ''), $alertmsg).'\');parent.$(\'cpform\').action=\''.ADMINSCRIPT.'?action=setting&edit=yes\';parent.$(\'cpform\').target=\'_self\';parent.$(\'cpform\').operation.value=\'mail\';</script>';
 
 } elseif($operation == 'imagepreview') {
 
@@ -309,14 +310,22 @@ if($operation == 'filecheck') {
 
 	$rule = array();
 	$rewritedata = rewritedata();
+	$rule['{apache1}'] = $rule['{apache2}'] = $rule['{iis}'] = $rule['{iis7}'] = $rule['{zeus}'] = $rule['{nginx}'] = '';
 	foreach($rewritedata['rulesearch'] as $k => $v) {
+		if(!in_array($k, $_G['setting']['rewritestatus'])) {
+			continue;
+		}
 		$v = !$_G['setting']['rewriterule'][$k] ? $v : $_G['setting']['rewriterule'][$k];
 		$pvmaxv = count($rewritedata['rulevars'][$k]) + 2;
 		$vkeys = array_keys($rewritedata['rulevars'][$k]);
 		$rewritedata['rulereplace'][$k] = pvsort($vkeys, $v, $rewritedata['rulereplace'][$k]);
 		$v = str_replace($vkeys, $rewritedata['rulevars'][$k], addcslashes($v, '?*+^$.[]()|'));
 		$rule['{apache1}'] .= "\t".'RewriteCond %{QUERY_STRING} ^(.*)$'."\n\t".'RewriteRule ^(.*)/'.$v.'$ $1/'.pvadd($rewritedata['rulereplace'][$k])."&%1\n";
-		$rule['{apache2}'] .= 'RewriteCond %{QUERY_STRING} ^(.*)$'."\n".'RewriteRule ^'.$v.'$ '.$rewritedata['rulereplace'][$k]."&%1\n";
+		if($k != 'forum_archiver') {
+			$rule['{apache2}'] .= 'RewriteCond %{QUERY_STRING} ^(.*)$'."\n".'RewriteRule ^'.$v.'$ '.$rewritedata['rulereplace'][$k]."&%1\n";
+		} else {
+			$rule['{apache2}'] .= 'RewriteCond %{QUERY_STRING} ^(.*)$'."\n".'RewriteRule ^archiver/'.$v.'$ archiver/'.$rewritedata['rulereplace'][$k]."&%1\n";
+		}
 		$rule['{iis}'] .= 'RewriteRule ^(.*)/'.$v.'(\?(.*))*$ $1/'.addcslashes(pvadd($rewritedata['rulereplace'][$k]).'&$'.($pvmaxv + 1), '.?')."\n";
 		$rule['{iis7}'] .= "\t\t".'&lt;rule name="'.$k.'"&gt;'."\n\t\t\t".'&lt;match url="^(.*/)*'.str_replace('\.', '.', $v).'\?*(.*)$" /&gt;'."\n\t\t\t".'&lt;action type="Rewrite" url="{R:1}/'.str_replace(array('&', 'page\%3D'), array('&amp;amp;', 'page%3D'), addcslashes(pvadd($rewritedata['rulereplace'][$k], 1).'&{R:'.$pvmaxv.'}', '?')).'" /&gt;'."\n\t\t".'&lt;/rule&gt;'."\n";
 		$rule['{zeus}'] .= 'match URL into $ with ^(.*)/'.$v.'\?*(.*)$'."\n".'if matched then'."\n\t".'set URL = $1/'.pvadd($rewritedata['rulereplace'][$k]).'&$'.$pvmaxv."\nendif\n";
@@ -331,12 +340,6 @@ if($operation == 'filecheck') {
 		$robots = implode('', file(DISCUZ_ROOT.'./source/admincp/robots.txt'));
 		$robots = str_replace('{path}', $_G['siteroot'], $robots);
 		$robots = str_replace('{ver}', $_G['setting']['version'], $robots);
-		if(@in_array('all_script', $_G['setting']['rewritestatus'])) {
-			$robots = preg_replace("/\s+\{rewrite\}/s", '', $robots);
-			$robots = preg_replace("/\s+\{\/rewrite\}/s", '', $robots);
-		} else {
-			$robots = preg_replace("/\{rewrite\}.+?\{\/rewrite\}/s", '', $robots);
-		}
 		ob_end_clean();
 		dheader('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		dheader('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -350,7 +353,7 @@ if($operation == 'filecheck') {
 		define('FOOTERDISABLED' , 1);
 		exit();
 	}
-	cpmsg('robots_output', 'action=checktools&operation=robots&do=output&frame=no', 'download');
+	cpmsg('robots_output', 'action=checktools&operation=robots&do=output&frame=no', 'download', array('siteurl' => $_G['siteurl']));
 
 }
 

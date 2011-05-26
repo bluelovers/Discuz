@@ -57,7 +57,7 @@ if($op == 'manual') {
 	if($searchkey) {
 		$wherearr[] = "title LIKE '%$searchkey%'";
 	}
-	$searchcate = dhtmlspecialchars($searchcate);
+	$searchkey = dhtmlspecialchars($searchkey);
 	if($searchcate) {
 		$wherearr[] = "catid IN  (".dimplode($catids).")";
 	}

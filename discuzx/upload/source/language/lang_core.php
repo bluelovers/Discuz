@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_core.php 17316 2010-10-08 04:01:44Z monkey $
+ *      $Id: lang_core.php 22638 2011-05-16 06:29:59Z svn_project_zhangjie $
  */
 
 $lang = array
@@ -39,10 +39,11 @@ $lang = array
 	'end' => '末尾',
 
 	'seccode_image_tips' => '輸入下圖中的字符<br />',
-	'seccode_image_ani_tips' => '輸入下面動畫圖片中最大的字符<br />',
+	'seccode_image_ani_tips' => '請輸入下面動畫圖片中的字符<br />',
 	'seccode_sound_tips' => '輸入你聽到的字符<br />',
 	'secqaa_tips' => '輸入下面問題的答案<br />',
 
+	'fullblankspace' => '　',
 
 	'title_goruptype' => '類',
 	'title_of' => '的',
@@ -159,6 +160,7 @@ $lang = array
 	'title_memcp_videophoto' => '視頻認證',
 	'title_memcp_comment' => '評論',
 	'title_memcp_eccredit' => '信用評價',
+	'title_memcp_promotion' => '訪問推廣',
 	'title_task' => '任務',
 	'title_login' => '登錄',
 	'title_ranklist_picture' => '圖片排行',
@@ -169,6 +171,7 @@ $lang = array
 	'title_ranklist_activity' => '活動排行',
 	'title_ranklist_forum' => '版塊排行',
 	'title_ranklist_group' => '群組排行',
+	'title_ranklist_app' => '應用排行',
 	'title_ranklist_index' => '全部排行',
 	'title_ranklist_index' => '排行榜',
 	'title_search' => '搜索',
@@ -198,6 +201,7 @@ $lang = array
 	'title_userapp_manage' => '{userapp}管理',
 	'faq' => '幫助',
 	'search' => '搜索',
+	'page' => '第{page}頁',
 );
 
 ?>

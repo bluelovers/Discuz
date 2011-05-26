@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_blog.php 16856 2010-09-16 02:53:58Z wangjinbo $
+ *      $Id: space_blog.php 21922 2011-04-18 02:41:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,7 @@ $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
+$_G['colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 
 if($id) {
 	$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid WHERE b.blogid='$id' AND b.uid='$space[uid]'");
@@ -31,7 +32,7 @@ if($id) {
 		require_once libfile('space/profile', 'include');
 		include template('home/space_privacy');
 		exit();
-	} elseif(!$space['self'] && $blog['friend'] == 4) {
+	} elseif(!$space['self'] && $blog['friend'] == 4 && $_G['adminid'] != 1) {
 		$cookiename = "view_pwd_blog_$blog[blogid]";
 		$cookievalue = empty($_G['cookie'][$cookiename])?'':$_G['cookie'][$cookiename];
 		if($cookievalue != md5(md5($blog['password']))) {
@@ -103,7 +104,7 @@ if($id) {
 
 	$multi = multi($count, $perpage, $page, "home.php?mod=space&uid=$blog[uid]&do=$do&id=$id#comment");
 
-	if(!$space['self'] && $_G['cookie']['view_blogid'] != $blog['blogid']) {
+	if(!$_G['setting']['preventrefresh'] || (!$space['self'] && $_G['cookie']['view_blogid'] != $blog['blogid'])) {
 		DB::query("UPDATE ".DB::table('home_blog')." SET viewnum=viewnum+1 WHERE blogid='$blog[blogid]'");
 		dsetcookie('view_blogid', $blog['blogid']);
 	}
@@ -136,9 +137,38 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $blog['subject'].' - '.lang('space', 'sb_blog', array('who' => $blog['username']));
-	$metakeywords = $blog['tag'] ? $blog['tag'] : $blog['subject'];
-	$metadescription = cutstr(strip_tags($blog['message']), 140);
+	$tagarray_all = $array_temp = $blogtag_array = $blogmetatag_array = array();
+	$blogmeta_tag = '';
+	$tagarray_all = explode("\t", $blog['tag']);
+	if($tagarray_all) {
+		foreach($tagarray_all as $var) {
+			if($var) {
+				$array_temp = explode(',', $var);
+				$blogtag_array[] = $array_temp;
+				$blogmetatag_array[] = $array_temp['1'];
+			}
+		}
+	}
+	$blog['tag'] = $blogtag_array;
+	$blogmeta_tag = implode(',', $blogmetatag_array);
+
+	$summary = cutstr(strip_tags($blog['message']), 140);
+	$seodata = array('subject' => $blog['subject'], 'user' => $blog['username'], 'summary' => $summary, 'tags' => $blogmeta_tag);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('blog', $seodata);
+	if(empty($navtitle)) {
+		$navtitle = $blog['subject'].' - '.lang('space', 'sb_blog', array('who' => $blog['username']));
+		$nobbname = false;
+	} else {
+		$nobbname = true;
+	}
+	if(empty($metakeywords)) {
+		$metakeywords = $blogmeta_tag ? $blogmeta_tag : $blog['subject'];
+	}
+	if(empty($metadescription)) {
+		$metadescription = $summary;
+	}
+
+	$_G['relatedlinks'] = getrelatedlink('blog');
 
 	include_once template("diy:home/space_blog_view");
 
@@ -159,6 +189,7 @@ if($id) {
 	$classarr = array();
 	$list = array();
 	$userlist = array();
+	$stickblogs = array();
 	$count = $pricount = 0;
 
 	$gets = array(
@@ -194,6 +225,9 @@ if($id) {
 
 	} elseif($_GET['view'] == 'me') {
 
+		space_merge($space, 'field_home');
+		$stickblogs = explode(',', $space['stickblogs']);
+		$stickblogs = array_filter($stickblogs);
 		$wheresql .= " AND b.uid='$space[uid]'";
 
 		$classid = empty($_GET['classid'])?0:intval($_GET['classid']);
@@ -245,6 +279,7 @@ if($id) {
 	if($need_count) {
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
 			$wheresql .= " AND b.subject LIKE '%$searchkey%'";
+			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);
@@ -265,6 +300,9 @@ if($id) {
 	if($count) {
 		while ($value = DB::fetch($query)) {
 			if(ckfriend($value['uid'], $value['friend'], $value['target_ids']) && ($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1)) {
+				if(!empty($stickblogs) && in_array($value['blogid'], $stickblogs)) {
+					continue;
+				}
 				if($value['friend'] == 4) {
 					$value['message'] = $value['pic'] = '';
 				} else {
@@ -280,6 +318,9 @@ if($id) {
 		}
 
 		$multi = multi($count, $perpage, $page, $theurl);
+		if(!empty($stickblogs)) {
+			$list = array_merge(blog_get_stick($space['uid'], $stickblogs, $summarylen), $list);
+		}
 	}
 
 	dsetcookie('home_diymode', $diymode);
@@ -305,10 +346,29 @@ if($id) {
 	}
 	$metakeywords = $navtitle;
 	$metadescription = $navtitle;
+	$navtitle = get_title_page($navtitle, $_G['page']);
 
 	space_merge($space, 'field_home');
 	include_once template("diy:home/space_blog_list");
 
 }
 
+function blog_get_stick($uid, $stickblogs, $summarylen) {
+	$list = array_flip($stickblogs);
+	$stickblogs = dimplode($stickblogs);
+	if($stickblogs) {
+		$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b $f_index
+			LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
+			WHERE b.blogid IN ($stickblogs)");
+		while ($value = DB::fetch($query)) {
+			$value['message'] = getstr($value['message'], $summarylen, 0, 0, 0, -1);
+			$value['message'] = preg_replace("/&[a-z]+\;/i", '', $value['message']);
+			if($value['pic']) $value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
+			$value['dateline'] = dgmdate($value['dateline']);
+			$value['stickflag'] = true;
+			$list[$value['blogid']] = $value;
+		}
+	}
+	return $list;
+}
 ?>

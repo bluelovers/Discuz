@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_copy.php 17451 2010-10-19 05:48:45Z congyushuai $
+ *      $Id: topicadmin_copy.php 20730 2011-03-02 08:30:41Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowcopythread'] || !$thread) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_copythread');
 }
 
 if(!submitcheck('modsubmit')) {
@@ -44,6 +44,8 @@ if(!submitcheck('modsubmit')) {
 		while ($result = DB::fetch($query)) {
 			$typeoptionvar[] = $result;
 		}
+	} else {
+		$thread['sortid'] = '';
 	}
 
 	unset($thread['tid']);
@@ -52,9 +54,9 @@ if(!submitcheck('modsubmit')) {
 	$thread['lastposter'] = $thread['author'];
 	$thread['views'] = $thread['replies'] = $thread['highlight'] = $thread['digest'] = 0;
 	$thread['rate'] = $thread['displayorder'] = $thread['attachment'] = 0;
+	$thread['typeid'] = $_G['gp_threadtypeid'];
 
-	$posttableid = getposttableid('p');
-	$thread['posttableid'] = $posttableid;
+	$thread['posttableid'] = 0;
 	$threadid = DB::insert('forum_thread', $thread, true);
 	$posttable = getposttablebytid($_G['tid']);
 	if($post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND first=1 LIMIT 1")) {

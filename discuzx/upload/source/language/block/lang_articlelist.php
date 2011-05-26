@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_articlelist.php 13911 2010-08-03 03:56:13Z xupeng $
+ *      $Id: lang_articlelist.php 19786 2011-01-18 10:05:49Z zhangguosheng $
  */
 
 $lang = array
@@ -34,6 +34,15 @@ $lang = array
 	'articlelist_orderby_dateline' => '按發佈時間倒序',
 	'articlelist_orderby_viewnum' => '按查看數倒序',
 	'articlelist_orderby_commentnum' => '按評論數倒序',
+	'articlelist_orderby_click' => '按表態 {clickname} 數倒序',
+	'articlelist_publishdateline' => '文章發佈時間',
+	'articlelist_publishdateline_nolimit' => '不限制',
+	'articlelist_publishdateline_hour' => '1小時內',
+	'articlelist_publishdateline_day' => '24小時內',
+	'articlelist_publishdateline_week' => '7天內',
+	'articlelist_publishdateline_month' => '1個月內',
+	'articlelist_keyword' => '標題關鍵字',
+	'articlelist_keyword_comment' => '設置標題包含的關鍵字。注意: 留空為不進行任何過濾； 關鍵字中可使用通配符 *； 匹配多個關鍵字全部，可用空格或 AND 連接。如 win32 AND unix； 匹配多個關鍵字其中部分，可用 | 或 OR 連接。如 win32 OR unix',
 );
 
 ?>

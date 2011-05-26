@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_heats.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_heats.php 22047 2011-04-20 09:38:28Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_heats() {
 	global $_G;
-
+	$addsql = '';
 	$data = array();
 	if($_G['setting']['indexhot']['status']) {
 
@@ -27,17 +27,21 @@ function build_cache_heats() {
 		);
 
 		$heatdateline = TIMESTAMP - 86400 * $_G['setting']['indexhot']['days'];
-
+		if(!$_G['setting']['groupstatus']) {
+			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
+			$addsql = " AND f.status IN ('0', '1') ";
+		}
 		$query = DB::query("SELECT t.tid,t.posttableid,t.views,t.dateline,t.replies,t.author,t.authorid,t.subject,t.price
-			FROM ".DB::table('forum_thread')." t
-			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
+			FROM ".DB::table('forum_thread')." t $addtablesql
+			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' $addsql ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
 
 		$messageitems = 2;
+		$limit = $_G['setting']['indexhot']['limit'];
 		while($heat = DB::fetch($query)) {
 			$posttable = $heat['posttableid'] ? "forum_post_{$heat['posttableid']}" : 'forum_post';
 			$post = DB::fetch_first("SELECT p.pid, p.message FROM ".DB::table($posttable)." p WHERE p.tid='{$heat['tid']}' AND p.first='1'");
 			$heat = array_merge($heat, (array)$post);
-			if($_G['setting']['indexhot']['limit'] == 0) {
+			if($limit == 0) {
 				break;
 			}
 			if($messageitems > 0) {
@@ -48,7 +52,7 @@ function build_cache_heats() {
 				$data['subject'][$heat['tid']] = $heat;
 			}
 			$messageitems--;
-			$_G['setting']['indexhot']['limit']--;
+			$limit--;
 		}
 		$data['expiration'] = TIMESTAMP + $_G['setting']['indexhot']['expiration'];
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_group.php 12434 2010-07-07 06:24:37Z lifangming $
+ *      $Id: function_group.php 21655 2011-04-07 01:48:39Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,11 +33,14 @@ function groupperm(&$forum, $uid, $action = '', $isgroupuser = '') {
 	if(!$forum['gviewperm'] && !$isgroupuser) {
 		return 2;
 	}
-	if($forum['jointype'] == 2 && !empty($isgroupuser['uid']) && $isgroupuser['level'] == 0) {
+	if($forum['jointype'] == 2 && !$forum['gviewperm'] && !empty($isgroupuser['uid']) && $isgroupuser['level'] == 0) {
 		return 3;
 	}
 	if($action == 'post' && !$isgroupuser) {
 		return 4;
+	}
+	if(is_array($isgroupuser) && $isgroupuser['level'] == 0) {
+		return 5;
 	}
 	return $isgroupuser ? 'isgroupuser' : '';
 }
@@ -247,7 +250,7 @@ function get_groupnav($forum) {
 		$mod_action = $_G['gp_mod'] == 'forumdisplay' || $_G['gp_mod'] == 'viewthread' ? 'mod=forumdisplay&action=list' : 'mod=group';
 		$groupnav .= ($groupnav ? ' <em>&rsaquo;</em> ' : '').'<a href="forum.php?'.$mod_action.'&fid='.$forum['fid'].'">'.$forum['name'].'</a>';
 	}
-	return $groupnav;
+	return array('nav' => $groupnav, 'first' => $firsttype, 'second' => $secondtype);
 }
 
 function get_viewedgroup() {
@@ -277,6 +280,7 @@ function getgroupthread($fid, $type, $timestamp = 0, $num = 10, $privacy = 0) {
 		$sqladd = $type == 'digest' ? "AND digest>'0' ORDER BY dateline DESC" : "ORDER BY $type DESC";
 		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid='$fid' AND displayorder>='0' $sqltimeadd $sqladd LIMIT 0, $num");
 		while($thread = DB::fetch($query)) {
+			$groupthreadlist[$thread['tid']]['tid'] = $thread['tid'];
 			$groupthreadlist[$thread['tid']]['subject'] = $thread['subject'];
 			$groupthreadlist[$thread['tid']]['special'] = $thread['special'];
 			$groupthreadlist[$thread['tid']]['closed'] = $thread['closed'];
@@ -306,7 +310,7 @@ function getgroupcache($fid, $typearray = array(), $timestamp = 0, $num = 10, $p
 		}
 	}
 
-	$cachetimearray = array('replies' => 3600, 'views' => 3600, 'dateline' => 0, 'lastpost' => 3600, 'digest' => 86400, 'ranking' => 86400, 'activityuser' => 3600);
+	$cachetimearray = array('replies' => 3600, 'views' => 3600, 'dateline' => 900, 'lastpost' => 3600, 'digest' => 86400, 'ranking' => 86400, 'activityuser' => 3600);
 	$userdataarray = array('activityuser' => 'lastupdate', 'newuserlist' => 'joindateline');
 	foreach($typearray as $type) {
 		if(empty($groupcache[$type]) || (!empty($cachetimearray[$type]) && TIMESTAMP - $groupcache[$type]['dateline'] > $cachetimearray[$type])) {
@@ -426,6 +430,7 @@ function update_groupmoderators($fid) {
 }
 
 function update_usergroups($uids) {
+	global $_G;
 	if(empty($uids)) return '';
 	if(!is_array($uids)) $uids = array($uids);
 	foreach($uids as $uid) {
@@ -445,9 +450,24 @@ function update_usergroups($uids) {
 			$usergroups = array('groups' => $groups, 'grouptype' => $grouptype);
 			if(!empty($usergroups)) {
 				DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='".addslashes(serialize($usergroups))."' WHERE uid='$uid'");
+				$attentiongroups = DB::result_first("SELECT attentiongroup FROM ".DB::table('common_member_field_forum')." WHERE uid='$uid'");
+				if($attentiongroups) {
+					$attentiongroups = explode(',', $attentiongroups);
+					$updateattention = 0;
+					foreach($attentiongroups as $key => $val) {
+						if(empty($usergroups['groups'][$val])) {
+							unset($attentiongroups[$key]);
+							$updateattention = 1;
+						}
+					}
+					if($updateattention) {
+						DB::query("UPDATE ".DB::table('common_member_field_forum')." SET attentiongroup='".implode(',', $attentiongroups)."' WHERE uid='$uid'");
+						$_G['member']['attentiongroup'] = implode(',', $attentiongroups);
+					}
+				}
 			}
 		} else {
-			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='' WHERE uid='$uid'");
+			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='', attentiongroup='' WHERE uid='$uid'");
 		}
 	}
 	return $usergroups;

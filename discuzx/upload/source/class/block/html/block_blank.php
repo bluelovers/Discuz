@@ -26,7 +26,7 @@ class block_blank extends commonblock_html {
 		$settings = array(
 			'content' => array(
 				'title' => 'blank_content',
-				'type' => 'textarea'
+				'type' => 'mtextarea'
 			)
 		);
 		return $settings;

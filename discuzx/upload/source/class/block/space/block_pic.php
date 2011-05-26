@@ -93,23 +93,6 @@ class block_pic {
 			);
 	}
 
-	function fieldsconvert() {
-		return array(
-				'forum_attachment' => array(
-					'name' => lang('blockclass', 'blockclass_forum_attachment'),
-					'script' => 'attachment',
-					'searchkeys' => array('username', 'uid', 'viewnum'),
-					'replacekeys' => array('author', 'authorid', 'downloads'),
-				),
-				'group_attachment' => array(
-					'name' => lang('blockclass', 'blockclass_group_attachment'),
-					'script' => 'groupattachment',
-					'searchkeys' => array('username', 'uid', 'viewnum'),
-					'replacekeys' => array('author', 'authorid', 'downloads'),
-				),
-			);
-	}
-
 	function getsetting() {
 		global $_G;
 		$settings = $this->setting;

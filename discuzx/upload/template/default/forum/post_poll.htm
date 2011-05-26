@@ -42,7 +42,7 @@
 			<input type="text" name="maxchoices" id="maxchoices" class="px pxs" value="{if $_G[gp_action] == 'edit' && $poll[maxchoices]}$poll[maxchoices]{else}1{/if}" tabindex="1" /> {lang post_option}
 		</p>
 		<p class="mbn">
-			<label for="expirationchecked">{lang post_poll_expiration}</label>
+			<label for="polldatas">{lang post_poll_expiration}</label>
 			<input type="text" name="expiration" id="polldatas" class="px pxs" value="{if $_G[gp_action] == 'edit'}{if !$poll[expiration]}0{elseif $poll[expiration] < 0}{lang poll_close}{elseif $poll[expiration] < TIMESTAMP}{lang poll_finish}{else}{echo (round(($poll[expiration] - TIMESTAMP) / 86400))}{/if}{/if}" tabindex="1" /> {lang days}
 		</p>
 		<p class="mbn">
@@ -53,6 +53,7 @@
 			<input type="checkbox" name="overt" id="overt" class="pc" value="1"{if $_G[gp_action] == 'edit' && $poll[overt]} checked{/if} tabindex="1" />
 			<label for="overt">{lang post_poll_overt}</label>
 		</p>
+		<!--{hook/post_poll_extra}-->
 	</div>
 </div>
 

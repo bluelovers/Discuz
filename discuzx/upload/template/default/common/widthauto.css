@@ -17,17 +17,18 @@ Created & Modified by Pony.
 .ct2 #chart, .ct2 #an { margin-right: -235px; }
 	.ie6 .ct2 #chart, .ie6 .ct2 #an { position: relative; }
 
-.ct2_a { margin-left: 150px; }
-	.ct2_a .appl { margin-left: -150px; }
+.ct2_a { margin-left: 150px; background-image: none; }
+	.ct2_a .appl { margin-left: -150px; {SIDEBGCODE}; }
 		.ie6 .ct2_a .appl { position: relative; }
 	.ct2_a .mn { width: 100%; }
 
-#hd .wp { width: 100%; }
-	.hdc { margin: 0 auto; width: 98%; }
+#nv, #mu { border-left: 1px solid {COMMONBORDER}; border-right: 1px solid {COMMONBORDER}; }
 
 #nv { background-repeat: repeat-x; background-position: 0 -33px; }
 
 #mu ul { border-bottom: 1px solid {COMMONBORDER}; background-image: none; background-color: {COMMONBG}; }
 
 .pg_post .ct2_a { margin-left: 0; margin-right: 150px; }
-	.pg_post .ct2_a .appl { margin-left: 0; margin-right: -150px; }
+	.pg_post .ct2_a .appl { margin-left: 0; margin-right: -150px; background: none; }
+.pg_modcp .ct2_a, .pg_announcement .ct2_a { border: none; }
+	.pg_modcp .ct2_a .mn, .pg_announcement .ct2_a .mn { margin-right: 0; padding-top: 0; }

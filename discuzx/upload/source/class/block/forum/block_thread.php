@@ -27,6 +27,10 @@ class block_thread {
 				'title' => 'threadlist_keyword',
 				'type' => 'text'
 			),
+			'tagkeyword' => array(
+				'title' => 'threadlist_tagkeyword',
+				'type' => 'text'
+			),
 			'fids'	=> array(
 				'title' => 'threadlist_fids',
 				'type' => 'mselect',
@@ -110,6 +114,18 @@ class block_thread {
 				),
 				'default' => 'lastpost'
 			),
+			'postdateline' => array(
+				'title' => 'threadlist_postdateline',
+				'type'=> 'mradio',
+				'value' => array(
+					array('0', 'threadlist_postdateline_nolimit'),
+					array('3600', 'threadlist_postdateline_hour'),
+					array('86400', 'threadlist_postdateline_day'),
+					array('604800', 'threadlist_postdateline_week'),
+					array('2592000', 'threadlist_postdateline_month'),
+				),
+				'default' => '0'
+			),
 			'lastpost' => array(
 				'title' => 'threadlist_lastpost',
 				'type'=> 'mradio',
@@ -121,6 +137,11 @@ class block_thread {
 					array('2592000', 'threadlist_lastpost_month'),
 				),
 				'default' => '0'
+			),
+			'highlight' => array(
+				'title' => 'threadlist_highlight',
+				'type' => 'radio',
+				'default' => 0,
 			),
 			'titlelength' => array(
 				'title' => 'threadlist_titlelength',
@@ -157,6 +178,7 @@ class block_thread {
 					'author' => array('name' => lang('blockclass', 'blockclass_thread_field_author'), 'formtype' => 'text', 'datatype' => 'string'),
 					'authorid' => array('name' => lang('blockclass', 'blockclass_thread_field_authorid'), 'formtype' => 'text', 'datatype' => 'int'),
 					'avatar' => array('name' => lang('blockclass', 'blockclass_thread_field_avatar'), 'formtype' => 'text', 'datatype' => 'string'),
+					'avatar_middle' => array('name' => lang('blockclass', 'blockclass_thread_field_avatar_middle'), 'formtype' => 'text', 'datatype' => 'string'),
 					'avatar_big' => array('name' => lang('blockclass', 'blockclass_thread_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 					'icon' => array('name' => lang('blockclass', 'blockclass_thread_field_icon'), 'formtype' => 'text', 'datatype' => 'string'),
 					'forumurl' => array('name' => lang('blockclass', 'blockclass_thread_field_forumurl'), 'formtype' => 'text', 'datatype' => 'string'),
@@ -240,16 +262,19 @@ class block_thread {
 		$stick		= isset($parameter['stick']) ? $parameter['stick'] : 0;
 		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('lastpost','dateline','replies','views','heats','recommends')) ? $parameter['orderby'] : 'lastpost') : 'lastpost';
 		$lastpost	= isset($parameter['lastpost']) ? intval($parameter['lastpost']) : 0;
+		$postdateline	= isset($parameter['postdateline']) ? intval($parameter['postdateline']) : 0;
 		$titlelength	= !empty($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
+		$tagkeyword	= !empty($parameter['tagkeyword']) ? $parameter['tagkeyword'] : '';
 		$typeids	= !empty($parameter['typeids']) ? explode(',',$parameter['typeids']) : array();
 		$sortids	= !empty($parameter['sortids']) && !in_array(0, (array)$parameter['sortids']) ? $parameter['sortids'] : array();
 		$special	= !empty($parameter['special']) ? $parameter['special'] : array();
 		$rewardstatus	= !empty($parameter['rewardstatus']) ? intval($parameter['rewardstatus']) : 0;
 		$picrequired	= !empty($parameter['picrequired']) ? 1 : 0;
 		$viewmod	= !empty($parameter['viewmod']) ? 1 : 0;
+		$highlight = !empty($parameter['highlight']) ? 1 : 0;
 
 		$fids = array();
 		if(!empty($parameter['fids'])) {
@@ -262,31 +287,12 @@ class block_thread {
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		require_once libfile('function/post');
+		require_once libfile('function/search');
 
-		$datalist = $list = array();
+		$datalist = $list = $listtids = $pictids = $pics = $threadtids = array();
 		$threadtypeids = array();
-		if($keyword) {
-			if(preg_match("(AND|\+|&|\s)", $keyword) && !preg_match("(OR|\|)", $keyword)) {
-				$andor = ' AND ';
-				$keywordsrch = '1';
-				$keyword = preg_replace("/( AND |&| )/is", "+", $keyword);
-			} else {
-				$andor = ' OR ';
-				$keywordsrch = '0';
-				$keyword = preg_replace("/( OR |\|)/is", "+", $keyword);
-			}
-			$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
-			foreach(explode('+', $keyword) as $text) {
-				$text = trim($text);
-				if($text) {
-					$keywordsrch .= $andor;
-					$keywordsrch .= "t.subject LIKE '%$text%'";
-				}
-			}
-			$keyword = " AND ($keywordsrch)";
-		} else {
-			$keyword = '';
-		}
+		$keyword = $keyword ? searchkey($keyword, "t.subject LIKE '%{text}%'") : '';
+		$tagkeyword = $tagkeyword ? searchkey($tagkeyword, "ti.tagname LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($uids ? ' AND t.authorid IN ('.dimplode($uids).')' : '')
@@ -296,25 +302,39 @@ class block_thread {
 			.((in_array(3, $special) && $rewardstatus) ? ($rewardstatus == 1 ? ' AND t.price < 0' : ' AND t.price > 0') : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
-			.($picrequired ? ' AND t.attachment = 2' : '')
 			.($bannedids ? ' AND t.tid NOT IN ('.dimplode($bannedids).')' : '')
 			.$keyword
+			.$tagkeyword
 			." AND t.isgroup='0'";
 
+		if($postdateline) {
+			$time = TIMESTAMP - $postdateline;
+			$sql .= " AND t.dateline >= '$time'";
+		}
 		if($lastpost) {
 			$time = TIMESTAMP - $lastpost;
 			$sql .= " AND t.lastpost >= '$time'";
 		}
 		if($orderby == 'heats') {
-			$_G['setting']['indexhot']['days'] = !empty($_G['setting']['indexhot']['days']) ? intval($_G['setting']['indexhot']['days']) : 8;
-			$heatdateline = TIMESTAMP - 86400 * $_G['setting']['indexhot']['days'];
-			$sql .= " AND t.dateline>'$heatdateline' AND t.heats>'0'";
+			$sql .= " AND t.heats>'0'";
 		}
 		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
-		if($recommend) {
-			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=t.tid";
+
+		$sqlfield = '';
+		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
+		if($style['getpic'] || $picrequired) {
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_threadimage')."` ti ON t.tid=ti.tid AND ti.tid>0";
+			$sqlfield = ', ti.attachment as attachmenturl, ti.remote';
 		}
-		$query = DB::query("SELECT t.*
+		if($recommend) {
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=t.tid";
+		}
+
+		if($tagkeyword) {
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('common_tagitem')."` ti ON ti.itemid=t.tid AND ti.idtype='tid'";
+		}
+
+		$query = DB::query("SELECT DISTINCT t.*$sqlfield
 			$sqlfrom WHERE t.readperm='0'
 			$sql
 			AND t.displayorder>='0'
@@ -323,12 +343,7 @@ class block_thread {
 			);
 		$threadsorts = $threadtypes = null;
 		while($data = DB::fetch($query)) {
-			$_G['thread'][$data['tid']] = $data;
-			if($style['getpic'] && $data['attachment']=='2') {
-				$pic = $this->getpic($data['tid']);
-				$data['attachment'] = $pic['attachment'];
-				$data['remote'] = $pic['remote'];
-			}
+			$_G['block_thread'][$data['tid']] = $data;
 			if($data['sortid'] && null===$threadsorts) {
 				$threadsorts = array();
 				$querytmp = DB::query("SELECT typeid, name, special FROM ".DB::table('forum_threadtype')." WHERE special>'0'");
@@ -343,21 +358,25 @@ class block_thread {
 					$threadtypes[$value['typeid']] = $value;
 				}
 			}
-			$list[] = array(
+			if($style['getsummary']) {
+				$threadtids[$data['posttableid']][] = $data['tid'];
+			}
+			$listtids[] = $data['tid'];
+			$list[$data['tid']] = array(
 				'id' => $data['tid'],
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'].($viewmod ? '&from=portal' : ''),
-				'pic' => $data['attachment'] ? 'forum/'.$data['attachment'] : STATICURL.'image/common/nophoto.gif',
-				'picflag' => $data['attachment'] ? ($data['remote'] ? '2' : '1') : '0',
-				'summary' => $style['getsummary'] ? $this->getthread($data['tid'], $summarylength) : '',
+				'pic' => $data['attachmenturl'] ? 'forum/'.$data['attachmenturl'] : STATICURL.'image/common/nophoto.gif',
+				'picflag' => $data['attachmenturl'] ? ($data['remote'] ? '2' : '1') : '0',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
 					'threads' => $data['threads'],
-					'author' => $data['author'] ? $data['author'] : 'Anonymous',
+					'author' => $data['author'] ? $data['author'] : $_G['setting']['anonymoustext'],
 					'authorid' => $data['author'] ? $data['authorid'] : 0,
-					'avatar' => avatar(($data['author'] ? $data['authorid'] : 0), 'small', true),
-					'avatar_big' => avatar(($data['author'] ? $data['authorid'] : 0), 'middle', true),
+					'avatar' => avatar(($data['author'] ? $data['authorid'] : 0), 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar(($data['author'] ? $data['authorid'] : 0), 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar(($data['author'] ? $data['authorid'] : 0), 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'posts' => $data['posts'],
 					'todayposts' => $data['todayposts'],
 					'lastpost' => $data['lastpost'],
@@ -380,70 +399,107 @@ class block_thread {
 					'monthviews' => $data['views']
 				)
 			);
+			if($highlight && $data['highlight']) {
+				$list[$data['tid']]['fields']['showstyle'] = $this->getthreadstyle($data['highlight']);
+			}
 		}
-		$returndata['data'] = $list;
+
+		if($listtids) {
+			$threads = $this->getthread($threadtids, $summarylength);
+			if($threads) {
+				foreach($threads as $tid => $var) {
+					$list[$tid]['summary'] = $var;
+				}
+			}
+
+			foreach($listtids as $key => $value) {
+				$datalist[] = $list[$value];
+			}
+		}
+
+		$returndata['data'] = $datalist;
 		return $returndata;
 	}
 
-	function getthread($tid, $messagelength = 80, $nospecial=false) {
+	function getthread($tidarray, $messagelength = 80, $nospecial = false) {
 		global $_G;
-		if(!$tid) {
+		if(!$tidarray) {
 			return '';
 		}
-		require_once libfile('function/post');
-		if(empty($_G['thread'][$tid])) {
-			$thread = DB::fetch_first("SELECT subject, fid, special, price, posttableid FROM ".DB::table('forum_thread')." WHERE tid='$tid'");
-			$_G['thread'][$tid] = $thread;
-		} else {
-			$thread = $_G['thread'][$tid];
-		}
-		if($thread['posttableid'] == 0) {
-			$posttable = 'forum_post';
-		} else {
-			$posttable = "forum_post_{$thread['posttableid']}";
-		}
-		$fid = $thread['fid'];
-		if($nospecial) {
-			$thread['special'] = 0;
-		}
-		if($thread['special'] == 1) {
-			$multiple = DB::result_first("SELECT multiple FROM ".DB::table('forum_poll')." WHERE tid='$tid'");
-			$optiontype = $multiple ? 'checkbox' : 'radio';
-			$query = DB::query("SELECT polloptionid, polloption FROM ".DB::table('forum_polloption')." WHERE tid='$tid' ORDER BY displayorder");
-			while($polloption = DB::fetch($query)) {
-				$polloption['polloption'] = preg_replace("/\[url=(https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i",
-					"<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $polloption['polloption']);
-				$polloptions[] = $polloption;
+		$notexists = $messagearr = $returnarr = array();
+		foreach($tidarray as $var) {
+			foreach($var as $v) {
+				if(empty($_G['block_thread'][$v])) {
+					$notexists[] = $v;
+				}
 			}
-		} elseif($thread['special'] == 2) {
-			$trade = DB::fetch_first("SELECT subject, price, credit, aid, pid FROM ".DB::table('forum_trade')." WHERE tid='$tid' ORDER BY displayorder DESC LIMIT 1");
-			$trade['aid'] = $trade['aid'] ? getforumimg($trade['aid']) : '';
-			$trades[] = $trade;
-		} elseif($thread['special'] == 3) {
-			$extcredits = $_G['settings']['extcredits'];
-			$creditstransextra = $_G['settings']['creditstransextra'];
-			$rewardend = $thread['price'] < 0;
-			$rewardprice = abs($thread['price']);
-			$message = messagecutstr(DB::result_first("SELECT message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first=1"), $messagelength);
-		} elseif($thread['special'] == 4) {
-			$message = messagecutstr(DB::result_first("SELECT message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first=1"), $messagelength);
-			$activity = DB::fetch_first("SELECT aid, number, applynumber FROM ".DB::table('forum_activity')." WHERE tid='$tid'");
-			$activity['aid'] = $activity['aid'] ? getforumimg($activity['aid']) : '';
-			$activity['aboutmember'] = $activity['number'] - $activity['applynumber'];
-		} elseif($thread['special'] == 5) {
-			$message = messagecutstr(DB::result_first("SELECT message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first=1"), $messagelength);
-			$debate = DB::fetch_first("SELECT affirmdebaters, negadebaters, affirmvotes, negavotes, affirmpoint, negapoint FROM ".DB::table('forum_debate')." WHERE tid='$tid'");
-			$debate['affirmvoteswidth'] = $debate['affirmvotes']  ? intval(80 * (($debate['affirmvotes'] + 1) / ($debate['affirmvotes'] + $debate['negavotes'] + 1))) : 1;
-			$debate['negavoteswidth'] = $debate['negavotes']  ? intval(80 * (($debate['negavotes'] + 1) / ($debate['affirmvotes'] + $debate['negavotes'] + 1))) : 1;
-			@require_once libfile('function/discuzcode');
-			$debate['affirmpoint'] = discuzcode($debate['affirmpoint'], 0, 0, 0, 1, 1, 0, 0, 0, 0, 0);
-			$debate['negapoint'] = discuzcode($debate['negapoint'], 0, 0, 0, 1, 1, 0, 0, 0, 0, 0);
-		} else {
-			$message = messagecutstr(DB::result_first("SELECT message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first=1"), $messagelength);
+		}
+		if($notexists) {
+			$query = DB::query("SELECT tid, fid, subject, posttableid, price, special FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($notexists).")");
+			while($result = DB::fetch($query)) {
+				$_G['block_thread'][$result['tid']] = $result;
+			}
+		}
+		foreach($tidarray as $key => $var) {
+			if($key == 0) {
+				$posttable = 'forum_post';
+			} else {
+				$posttable = "forum_post_{$key}";
+			}
+			$query = DB::query("SELECT tid, message FROM ".DB::table($posttable)." WHERE tid IN  (".dimplode($var).") AND first=1");
+			while($result = DB::fetch($query)) {
+				$messagearr[$result['tid']] = $result['message'];
+			}
+		}
+		require_once libfile('function/post');
+		require_once libfile('function/discuzcode');
+		if($messagearr) {
+			foreach($messagearr as $tid => $var) {
+				$thread = $_G['block_thread'][$tid];
+				if($nospecial) {
+					$thread['special'] = 0;
+				}
+				if($thread['special'] == 1) {
+					$polloptions = array();
+					$multiple = DB::result_first("SELECT multiple FROM ".DB::table('forum_poll')." WHERE tid='$tid'");
+					$optiontype = $multiple ? 'checkbox' : 'radio';
+					$query = DB::query("SELECT polloptionid, polloption FROM ".DB::table('forum_polloption')." WHERE tid='$tid' ORDER BY displayorder");
+					while($polloption = DB::fetch($query)) {
+						$polloption['polloption'] = preg_replace("/\[url=(https?){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i",
+							"<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $polloption['polloption']);
+						$polloptions[] = $polloption;
+					}
+				} elseif($thread['special'] == 2) {
+					$trade = DB::fetch_first("SELECT subject, price, credit, aid, pid FROM ".DB::table('forum_trade')." WHERE tid='$tid' ORDER BY displayorder DESC LIMIT 1");
+					$trade['aid'] = $trade['aid'] ? getforumimg($trade['aid']) : '';
+					$trades[] = $trade;
+				} elseif($thread['special'] == 3) {
+					$extcredits = $_G['settings']['extcredits'];
+					$creditstransextra = $_G['settings']['creditstransextra'];
+					$rewardend = $thread['price'] < 0;
+					$rewardprice = abs($thread['price']);
+					$message = messagecutstr($var, $messagelength);
+				} elseif($thread['special'] == 4) {
+					$message = messagecutstr($var, $messagelength);
+					$activity = DB::fetch_first("SELECT aid, number, applynumber FROM ".DB::table('forum_activity')." WHERE tid='$tid'");
+					$activity['aid'] = $activity['aid'] ? getforumimg($activity['aid']) : '';
+					$activity['aboutmember'] = $activity['number'] - $activity['applynumber'];
+				} elseif($thread['special'] == 5) {
+					$message = messagecutstr($var, $messagelength);
+					$debate = DB::fetch_first("SELECT affirmdebaters, negadebaters, affirmvotes, negavotes, affirmpoint, negapoint FROM ".DB::table('forum_debate')." WHERE tid='$tid'");
+					$debate['affirmvoteswidth'] = $debate['affirmvotes']  ? intval(80 * (($debate['affirmvotes'] + 1) / ($debate['affirmvotes'] + $debate['negavotes'] + 1))) : 1;
+					$debate['negavoteswidth'] = $debate['negavotes']  ? intval(80 * (($debate['negavotes'] + 1) / ($debate['affirmvotes'] + $debate['negavotes'] + 1))) : 1;
+					$debate['affirmpoint'] = discuzcode($debate['affirmpoint'], 0, 0, 0, 1, 1, 0, 0, 0, 0, 0);
+					$debate['negapoint'] = discuzcode($debate['negapoint'], 0, 0, 0, 1, 1, 0, 0, 0, 0, 0);
+				} else {
+					$message = messagecutstr($var, $messagelength);
+				}
+				include template('common/block_thread');
+				$returnarr[$tid] = $return;
+			}
 		}
 
-		include template('common/block_thread');
-		return $return;
+		return $returnarr;
 	}
 
 	function getpic($tid) {
@@ -451,20 +507,38 @@ class block_thread {
 		if(!$tid) {
 			return '';
 		}
-		require_once libfile('function/post');
-		if(empty($_G['thread'][$tid])) {
-			$thread = DB::fetch_first("SELECT subject, fid, special, price, posttableid FROM ".DB::table('forum_thread')." WHERE tid='$tid'");
-			$_G['thread'][$tid] = $thread;
-		} else {
-			$thread = $_G['thread'][$tid];
-		}
-		if($thread['posttableid'] == 0) {
-			$posttable = 'forum_post';
-		} else {
-			$posttable = "forum_post_{$thread['posttableid']}";
-		}
-		$pic = DB::fetch_first("SELECT fa.attachment, fa.remote FROM ".DB::table($posttable)." fp LEFT JOIN ".DB::table('forum_attachment')." fa ON fp.tid=fa.tid AND fp.pid=fa.pid WHERE fp.tid='$tid' AND fp.first=1 AND fa.isimage IN (1, -1) LIMIT 0,1");
+		$pic = DB::fetch_first("SELECT attachment, remote FROM ".DB::table(getattachtablebytid($tid))." WHERE tid='$tid' AND isimage IN (1, -1) ORDER BY dateline DESC LIMIT 0,1");
 		return $pic;
+	}
+
+	function getpics($tids) {
+		$data = array();
+		$tids = !empty($tids) && is_array($tids) ? $tids : array($tids);
+		$tids = array_map('intval', $tids);
+		$tids = array_filter($tids);
+		if(!empty($tids)) {
+			$query = DB::query('SELECT * FROM '.DB::table('forum_threadimage').' WHERE tid IN ('.dimplode($tids).')');
+			while($value = DB::fetch($query)) {
+				$data[$value['tid']] = $value;
+			}
+		}
+		return $data;
+	}
+
+	function getthreadstyle($highlight) {
+		$rt = array();
+		if($highlight) {
+			$color = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
+			$string = sprintf('%02d', $highlight);
+			$stylestr = sprintf('%03b', $string[0]);
+			$rt = array(
+				'title_b' => $stylestr[0] ? '1' : '',
+				'title_i' => $stylestr[1] ? '1' : '',
+				'title_u' => $stylestr[2] ? '1' : '',
+				'title_c' => $string[1] ? $color[$string[1]] : '',
+				);
+		}
+		return $rt;
 	}
 }
 

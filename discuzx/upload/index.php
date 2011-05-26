@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 17443 2010-10-19 05:24:58Z zhangguosheng $
+ *      $Id: index.php 22081 2011-04-21 07:12:18Z zhengqingpeng $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -25,6 +25,12 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 		$_ENV['domainroot'] = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
 		if(!empty($_ENV['domain']['app']) && is_array($_ENV['domain']['app']) && in_array($_SERVER['HTTP_HOST'], $_ENV['domain']['app'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
+			if($_ENV['curapp'] == 'mobile') {
+				$_ENV['curapp'] = 'forum';
+				if(@$_GET['mobile'] != 'no') {
+					@$_GET['mobile'] = 'yes';
+				}
+			}
 			if($_ENV['curapp'] == 'default' || !isset($_ENV['defaultapp'][$_ENV['curapp'].'.php'])) {
 				$_ENV['curapp'] = '';
 			}
@@ -34,9 +40,6 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			$list = $_ENV['domain']['list'];
 			if(isset($list[$_SERVER['HTTP_HOST']])) {
 				$domain = $list[$_SERVER['HTTP_HOST']];
-				$apphost = $_ENV['domain']['app'][$domain['idtype']] ? $_ENV['domain']['app'][$domain['idtype']] : $_ENV['domain']['app']['default'];
-				$apphost = $apphost ? $apphost.'/' : '';
-				$domainroot = $apphost ? 'http://'.$apphost : '';
 				$id = intval($domain['id']);
 				switch($domain['idtype']) {
 					case 'subarea':
@@ -93,8 +96,9 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 						break;
 				}
 			}
+		} else {
+			$jump = true;
 		}
-
 		if(empty($url) && empty($_ENV['curapp'])) {
 			if(!empty($_ENV['domain']['defaultindex']) && !$jump) {
 				if($_ENV['defaultapp'][$_ENV['domain']['defaultindex']]) {
@@ -103,12 +107,22 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 					$url = $_ENV['domain']['defaultindex'];
 				}
 			} else {
-				$jump ? $url = 'forum.php' : $_ENV['curapp'] = 'forum';
+				if($jump) {
+					$url = empty($_ENV['domain']['app']['default']) ? (!empty($_ENV['domain']['defaultindex']) ? $_ENV['domain']['defaultindex'] : 'forum.php') : 'http://'.$_ENV['domain']['app']['default'];
+				} else {
+					$_ENV['curapp'] = 'forum';
+				}
 			}
 		}
 	}
 }
 if(!empty($url)) {
+	$delimiter = strrpos($url, '?') ? '&' : '?';
+	if($_GET['fromuid']) {
+		$url .= $delimiter.'fromuid='.$_GET['fromuid'];
+	} elseif($_GET['fromuser']) {
+		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
+	}
 	header("HTTP/1.1 301 Moved Permanently");
 	header("location: $url");
 } else {

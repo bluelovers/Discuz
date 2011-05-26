@@ -1,12 +1,12 @@
 /*
 Offical Style for UCenter
-(C) 2001-2009 Comsenz Inc.
+(C) 2001-2099 Comsenz Inc.
 */
 
 /* common */
 *{ word-wrap:break-word; outline:none; }
 body{ background:#FFF; text-align:center; }
-body, td, input, textarea, select, button{ color:#666; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif; }
+body, td, input, textarea, select, button{ color:#666; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, 'Simsun', sans-serif; }
 body, ul, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset { margin:0; padding:0; }
 h1, h2, h3, h4, h5, h6{ font-size:12px; }
 a{ color:#2366A8; text-decoration:none; }
@@ -47,7 +47,7 @@ input.txt:hover, input.txt:focus, textarea:hover, textarea:focus{ border-color:#
 #header_menu { text-align: right; padding-right: 20px; cursor:pointer; }
 
 /* box */
-.container{ padding:20px; text-align:left; background:url(bg_repx_hb.gif) repeat-x; }
+.container{ padding:20px; text-align:left; }
 .note{ margin:5px 0; padding:10px; width:580px; border:1px solid #B5CFD9; background:#F5F9FD; }
 	.i{ padding-left:22px; line-height:19px; background:url(bg_repno.gif) no-repeat -275px -100px; }
 		.i a{ text-decoration:underline; }
@@ -56,7 +56,7 @@ input.txt:hover, input.txt:focus, textarea:hover, textarea:focus{ border-color:#
 .opt{ clear:both; overflow:hidden; }
 	.opt th{ padding:5px 0; font-weight:700; text-align:left; }
 	.opt td{ padding-bottom:10px; }
-	.opt .txt, .opt textarea{ vertical-align:middle; margin-right:10px; width:180px; }
+	.opt .txt, .opt textarea{ vertical-align:middle; margin-right:10px; width:250px; }
 	.opt select{ vertical-align:middle; margin-right:10px; }
 	.opt .area{ height:80px; }
 	.opt .bigarea { width: 500px; height: 80px; }
@@ -116,7 +116,9 @@ input.txt:hover, input.txt:focus, textarea:hover, textarea:focus{ border-color:#
 .hastabmenu{ position:relative; height:90px; width: 580px; }
 	.tabmenu{ position:absolute; z-index:80; list-style:none; }
 		.tabmenu li{ float:left; margin-right:5px; }
-		.tabmenu li a, .tabmenu .tabcurrent a{ display:block; padding:3px 7px; border:1px solid #CCC; border-bottom:1px solid #B5CFD9; color:#666; }
+		.tabmenu li a, .tabmenu .tabcurrent a{ display:block; padding: 0 7px; height: 21px; line-height: 21px; border:1px solid #CCC; border-bottom:1px solid #B5CFD9; color:#666; }
+		* html .tabmenu li a { float: left; height: 20px; line-height: 20px; }
+		*+html .tabmenu li a { height: 20px; line-height: 20px; }
 		.tabmenu li a:hover{ text-decoration:none; }
 		.tabmenu .tabcurrent a{ border:1px solid #B5CFD9; border-bottom:1px solid #F2F9FD; background:#F2F9FD; }
 	.tabcontent, .tabcontentcur{ position:absolute; top:22px; *top:21px; z-index:70; padding:10px; width:580px; border:1px solid #CCC; }
