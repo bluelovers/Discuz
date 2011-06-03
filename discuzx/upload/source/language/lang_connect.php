@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_connect.php 22580 2011-05-13 03:43:00Z fengning $
+ *      $Id: lang_connect.php 22869 2011-05-27 09:27:31Z fengning $
  */
 
 $lang = array
@@ -35,6 +35,11 @@ $lang = array
 	'weibo_reason_is_long' => '微博內容超過了長度限制',
 	'weibo_account_not_signup' => '抱歉，您還未開通微博賬號，無法分享內容，<a href=http://t.qq.com/reg/index.php target=_blank>點擊這裡馬上開通</a>。',
 	'user_unauthorized' => '抱歉，您未授權分享主題到QQ空間、騰訊微博和騰訊朋友。',
+
+	'connect_errlog_server_no_response' => '服務器無響應',
+	'connect_errlog_access_token_incomplete' => '接口返回的AccessToken數據不完整',
+	'connect_errlog_request_token_not_authorized' => '用戶TmpToken未授權或返回的數據不完整',
+	'connect_errlog_sig_incorrect' => 'URL簽名不正確',
 );
 
 ?>

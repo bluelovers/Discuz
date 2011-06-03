@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_warn.php 20099 2011-02-15 01:55:29Z monkey $
+ *      $Id: topicadmin_warn.php 22857 2011-05-26 08:50:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,11 +75,17 @@ if(!submitcheck('modsubmit')) {
 			DB::query("INSERT INTO ".DB::table('forum_warning')." (pid, operatorid, operator, authorid, author, dateline, reason) VALUES ('$post[pid]', '$_G[uid]', '$_G[username]', '$post[authorid]', '".addslashes($post['author'])."', '$_G[timestamp]', '$reason')", 'UNBUFFERED');
 			$authorwarnings = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_warning')." WHERE authorid='$post[authorid]' AND dateline>=$_G[timestamp]-".$_G[setting][warningexpiration]*86400);
 			if($authorwarnings >= $_G['setting']['warninglimit']) {
-				$member = DB::fetch_first("SELECT adminid, groupid FROM ".DB::table('common_member')." WHERE uid='$post[authorid]'");
+				$member = DB::fetch_first("SELECT adminid, groupid, extgroupids FROM ".DB::table('common_member')." WHERE uid='$post[authorid]'");
+				$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$post[authorid]'"));
 				if($member && $member['groupid'] != 4) {
+					$extgroupidsarray = array();
+					foreach(array_unique(array_merge($member['extgroupids'], array(4))) as $extgroupid) {
+						if($extgroupid) {
+							$extgroupidsarray[] = $extgroupid;
+						}
+					}
+					$extgroupidsnew = implode("\t", $extgroupidsarray);
 					$banexpiry = TIMESTAMP + $_G['setting']['warningexpiration'] * 86400;
-					$groupterms = array();
-					$groupterms['main'] = array('time' => $banexpiry, 'adminid' => $member['adminid'], 'groupid' => $member['groupid']);
 					$groupterms['ext'][4] = $banexpiry;
 					DB::query("UPDATE ".DB::table('common_member')." SET groupid='4', groupexpiry='".groupexpiry($groupterms)."' WHERE uid='$post[authorid]'");
 					DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".addslashes(serialize($groupterms))."' WHERE uid='$post[authorid]'");

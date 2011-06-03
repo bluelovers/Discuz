@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_globalstick.php 21167 2011-03-17 06:59:33Z monkey $
+ *      $Id: cache_globalstick.php 22908 2011-05-31 02:49:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,7 +40,7 @@ function build_cache_globalstick() {
 	foreach(array_unique($fuparray) as $gid) {
 		if(!empty($threadarray[$gid])) {
 			$data['categories'][$gid] = array(
-				'tids'	=> implode(',', $threadarray[$gid]),
+				'tids'	=> dimplode($threadarray[$gid]),
 				'count'	=> intval(@count($threadarray[$gid]))
 			);
 		}

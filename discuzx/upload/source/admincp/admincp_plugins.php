@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms'
  *
- *      $Id: admincp_plugins.php 22771 2011-05-20 03:44:07Z monkey $
+ *      $Id: admincp_plugins.php 22904 2011-05-31 00:47:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -61,24 +61,25 @@ if(!$operation) {
 				}
 			}
 			$intro = '';
-			if($plugin['description'] || $plugin['modules']['extra']['intro']) {
-				$intro = '<div id="pluginmore'.$plugin['pluginid'].'" style="display:none;margin:5px 5px 5px 55px">'.(!empty($plugin['modules']['extra']['intro']) ? $plugin['modules']['extra']['intro'].'<br />' : '').nl2br($plugin['description']).'</div>';
+			if($plugin['description'] || $plugin['modules']['extra']['intro'] || $plugin['copyright']) {
+				$intro = '<div id="pluginmore'.$plugin['pluginid'].'" style="display:none;margin:5px"'.(!$plugin['available'] ? ' class="light"' : '').'>'.
+					$lang['copyright'].': '.($plugin['copyright'] ? '<a href="http://addons.discuz.com/?id='.$plugin['identifier'].'" target="_blank" class="'.(!$plugin['available'] ? 'light' : 'normalfont').'">'.dhtmlspecialchars($plugin['copyright']).'</a>' : '').'<br />'.
+					(!empty($plugin['modules']['extra']['intro']) ? ($plugin['copyright'] ? '<br />' : '').$plugin['modules']['extra']['intro'].'<br />' : '').nl2br($plugin['description']).
+				'</div>';
 			}
 			$outputsubmit = $hookexists !== FALSE && $plugin['available'] || $outputsubmit;
 			showtablerow('class="hover"', array(''), array(
 				'<img src="http://addons.discuz.com/logo/'.$plugin['identifier'].'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';" width="40" height="40" align="left" style="margin-right:5px" />'.
-				($plugin['copyright'] ? '<div class="right"><a href="http://addons.discuz.com/?id='.$plugin['identifier'].'" target="_blank">'.dhtmlspecialchars($plugin['copyright']).'</a></div>' : '').
-				(!$plugin['available'] ? '<span class="light">' : '').dhtmlspecialchars($plugin['name']).' '.dhtmlspecialchars($plugin['version']).'<br />'.
-				'<span class="sml">'.$plugin['directory'].'</span>'.(!$plugin['available'] ? '</span>' : '').
-				'<div style="margin-left:50px">'.
+				($hookexists !== FALSE && $plugin['available'] ? '<div class="right">'.$lang['display_order'].": <input class=\"txt num\" type=\"text\" id=\"displayorder_$plugin[pluginid]\" name=\"displayordernew[$plugin[pluginid]][$hookexists]\" value=\"$hookorder\" />" : '').'</div>'.
+				(!$plugin['available'] ? '<span class="light">' : '<span class="bold">').dhtmlspecialchars($plugin['name']).' '.dhtmlspecialchars($plugin['version']).'<br /><span class="sml">'.$plugin['identifier'].'</span></span>'.
+				'<div style="clear:both;padding:2px">'.
 				'<div class="right">'.
-					($hookexists !== FALSE && $plugin['available'] ? $lang['display_order'].": <input class=\"txt num\" type=\"text\" id=\"displayorder_$plugin[pluginid]\" name=\"displayordernew[$plugin[pluginid]][$hookexists]\" value=\"$hookorder\" />" : '').
 					($plugin['modules']['system'] != 2 ? (!$plugin['available'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=enable&pluginid=$plugin[pluginid]\" class=\"bold act\">$lang[enable]</a>&nbsp;" : "<a href=\"".ADMINSCRIPT."?action=plugins&operation=disable&pluginid=$plugin[pluginid]\" class=\"act\">$lang[closed]</a>&nbsp;") : '').
 					"<a href=\"".ADMINSCRIPT."?action=plugins&operation=upgrade&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_config_upgrade]</a>&nbsp;".
 					(!$plugin['modules']['system'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=delete&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_config_uninstall]</a>&nbsp;" : '').
 					($isplugindeveloper && !$plugin['modules']['system'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=edit&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_editlink]</a>&nbsp;" : '').
 				'</div>'.
-				($intro ? '<a href="javascript:;" onclick="display(\'pluginmore'.$plugin['pluginid'].'\')" class="act">'.$lang['plugins_home'].'</a>&nbsp;' : '').
+				($intro ? '<a href="javascript:;" onclick="display(\'pluginmore'.$plugin['pluginid'].'\')" class="act'.(!$plugin['available'] ? ' light' : '').'">'.$lang['plugins_home'].'</a>&nbsp;' : '').
 				(isset($_G['cache']['plugin'][$plugin['identifier']]) ? '<a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$plugin['pluginid'].'" class="act">'.$lang['config'].'</a>&nbsp;' : '').
 				implode('&nbsp;', $submenuitem).'&nbsp;&nbsp;'.
 				'</div>'.
@@ -460,6 +461,32 @@ if(!$operation) {
 			$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
 			$upgrade = $newver > $plugin['version'] ? true : false;
 		}
+		$entrydir = DISCUZ_ROOT.'./source/plugin/'.$dir;
+		$upgradestr = '';
+		if(file_exists($entrydir)) {
+			$d = dir($entrydir);
+			while($f = $d->read()) {
+				if(preg_match('/^discuz\_plugin\_'.$plugin['identifier'].'(\_\w+)?\.xml$/', $f, $a)) {
+					$extratxt = $extra = substr($a[1], 1);
+					if(preg_match('/^SC\_GBK$/i', $extra)) {
+						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
+					} elseif(preg_match('/^SC\_UTF8$/i', $extra)) {
+						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
+					} elseif(preg_match('/^TC\_BIG5$/i', $extra)) {
+						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#29256;';
+					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
+						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
+					}
+					if($modules['extra']['installtype'] == $extratxt) {
+						continue;
+					}
+					$importtxt = @implode('', file($entrydir.'/'.$f));
+					$pluginarray = getimportdata('Discuz! Plugin');
+					$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
+					$upgradestr .= $newverother > $plugin['version'] ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extratxt).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
+				}
+			}
+		}
 		if(!empty($pluginarray['checkfile']) && preg_match('/^[\w\.]+$/', $pluginarray['checkfile'])) {
 			$filename = DISCUZ_ROOT.'./source/plugin/'.$plugin['identifier'].'/'.$pluginarray['checkfile'];
 			if(file_exists($filename)) {
@@ -473,6 +500,11 @@ if(!$operation) {
 
 			cpmsg('plugins_config_upgrade_confirm', 'action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirm=yes', 'form', array('pluginname' => $plugin['name'], 'version' => $plugin['version'], 'toversion' => $newver));
 
+		} elseif($upgradestr) {
+
+			echo '<h3>'.cplang('discuz_message').'</h3><div class="infobox"><h4 class="marginbot normal">'.cplang('plugins_config_upgrade_other', array('pluginname' => $plugin['name'], 'version' => $plugin['version'])).'</h4><br /><p class="margintop">'.$upgradestr.
+				'<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins\'" type="button" value="'.$lang['cancel'].'"/></div></div>';
+
 		} else {
 
 			cpmsg('plugins_config_upgrade_missed');
@@ -481,7 +513,8 @@ if(!$operation) {
 
 	} else {
 
-		$importfile = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($modules['extra']['installtype'] ? '_'.$modules['extra']['installtype'] : '').'.xml';
+		$installtype = !isset($_G['gp_installtype']) ? $modules['extra']['installtype'] : (preg_match('/^\w+$/', $_G['gp_installtype']) ? $_G['gp_installtype'] : '');
+		$importfile = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($installtype ? '_'.$installtype : '').'.xml';
 		if(!file_exists($importfile)) {
 			cpmsg('plugin_file_error', '', 'error');
 		}
@@ -511,7 +544,7 @@ if(!$operation) {
 			}
 		}
 
-		pluginupgrade($pluginarray);
+		pluginupgrade($pluginarray, $installtype);
 
 		if(!empty($plugin['directory']) && !empty($pluginarray['upgradefile']) && preg_match('/^[\w\.]+$/', $pluginarray['upgradefile'])) {
 			dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=pluginupgrade&dir='.$dir.'&installtype='.$modules['extra']['installtype'].'&fromversion='.$plugin['version']);
@@ -546,10 +579,15 @@ if(!$operation) {
 		$pluginvars[$var['variable']] = $var;
 	}
 
-	$submenuitem[] = array('config', "plugins&operation=config&do=$pluginid", !$_G['gp_pmod']);
+	if($pluginvars) {
+		$submenuitem[] = array('config', "plugins&operation=config&do=$pluginid", !$_G['gp_pmod']);
+	}
 	if(is_array($plugin['modules'])) {
 		foreach($plugin['modules'] as $module) {
 			if($module['type'] == 3) {
+				if(!$pluginvars && empty($_G['gp_pmod'])) {
+					$_G['gp_pmod'] = $module['name'];
+				}
 				$submenuitem[] = array($module['menu'], "plugins&operation=config&do=$pluginid&identifier=$plugin[identifier]&pmod=$module[name]", $_G['gp_pmod'] == $module['name'], !$_G['gp_pmod'] ? 1 : 0);
 			}
 		}
@@ -1302,12 +1340,44 @@ if(!$operation) {
 			$modules = unserialize($row['modules']);
 
 			$file = DISCUZ_ROOT.'./source/plugin/'.$row['identifier'].'/discuz_plugin_'.$row['identifier'].($modules['extra']['installtype'] ? '_'.$modules['extra']['installtype'] : '').'.xml';
+			$upgrade = false;
 			if(file_exists($file)) {
 				$importtxt = @implode('', file($file));
 				$pluginarray = getimportdata('Discuz! Plugin');
 				$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
 				if($newver > $row['version']) {
+					$upgrade = true;
 					$nowarray[] = '<a href="'.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$row['pluginid'].'">'.$plugins[$row['identifier']].' -> '.$newver.'</a>';
+				}
+			}
+			if(!$upgrade) {
+				$entrydir = DISCUZ_ROOT.'./source/plugin/'.$row['identifier'];
+				$upgradestr = '';
+				if(file_exists($entrydir)) {
+					$d = dir($entrydir);
+					while($f = $d->read()) {
+						if(preg_match('/^discuz\_plugin\_'.$row['identifier'].'(\_\w+)?\.xml$/', $f, $a)) {
+							$extratxt = $extra = substr($a[1], 1);
+							if(preg_match('/^SC\_GBK$/i', $extra)) {
+								$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
+							} elseif(preg_match('/^SC\_UTF8$/i', $extra)) {
+								$extratxt = '&#31616;&#20307;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
+							} elseif(preg_match('/^TC\_BIG5$/i', $extra)) {
+								$extratxt = '&#32321;&#39636;&#20013;&#25991;&#29256;';
+							} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
+								$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
+							}
+							if($modules['extra']['installtype'] == $extratxt) {
+								continue;
+							}
+							$importtxt = @implode('', file($entrydir.'/'.$f));
+							$pluginarray = getimportdata('Discuz! Plugin');
+							$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
+							if($newverother > $row['version']) {
+								$nowarray[] = '<a href="'.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$row['pluginid'].'&confirmed=yes&installtype='.rawurlencode($extratxt).'">'.$plugins[$row['identifier']].' -> '.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'</a>';
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1320,7 +1390,7 @@ if(!$operation) {
 			$newarray[] = '<a href="//addons.discuz.com?id='.$id.'" target="_blank">'.$plugins[$id].($row['newver'] ? ' -> '.$row['newver'] : '').'</a>';
 		}
 	}
-	if(!$newarray && !$errarray) {
+	if(!$nowarray && !$newarray && !$errarray) {
 		cpmsg('plugins_validator_noupdate', '', 'error');
 	} else {
 		cpmsg(

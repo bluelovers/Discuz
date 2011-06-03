@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 22716 2011-05-18 05:09:45Z congyushuai $
+ *      $Id: lang_message.php 22889 2011-05-30 07:31:11Z monkey $
  *
  *      This file is automatically generate
  */
@@ -78,7 +78,7 @@ $lang = array (
   'search_id_invalid' => '抱歉，您指定的搜索不存在或已過期',
   'search_ctrl' => '抱歉，您在 {searchctrl} 秒內只能進行一次搜索',
   'search_toomany' => '抱歉，站點設置每分鐘系統最多響應搜索請求 {maxspm} 次，請稍候再試',
-  'no_privilege_myop' => '抱歉，您目前沒有權限使用此應用，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_myop' => '抱歉，您目前沒有權限使用此應用，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'do_success' => '操作成功 ',
   'no_privilege_guest' => '抱歉，遊客沒有權限進行此操作',
   'forum_nonexistence' => '抱歉，指定的版塊不存在',
@@ -137,7 +137,7 @@ $lang = array (
   'album_does_not_exist' => '抱歉，指定的相冊不存在',
   'operating_too_fast' => '抱歉，兩次發佈操作太快，請等待 {waittime} 秒再試',
   'content_is_too_short' => '抱歉，輸入的內容不能少於 2 個字符',
-  'no_privilege_comment' => '抱歉，您目前沒有權限進行評論，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_comment' => '抱歉，您目前沒有權限進行評論，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'action_closed' => '抱歉，站點尚未開啟此功能或此功能已被管理員禁止',
   'credits_addfunds_order_invalid' => '抱歉，當前訂單號無效，請重新提交',
   'credits_transaction_amount_invalid' => '抱歉，您要轉賬或兌換的積分數量輸入有誤',
@@ -149,7 +149,7 @@ $lang = array (
   'eccredit_nofound' => '指定的評價不存在或已被刪除',
   'non_normal_operation' => '非正常操作',
   'you_have_friends' => '你們已成為好友',
-  'no_privilege_addfriend' => '抱歉，您目前沒有權限添加好友，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_addfriend' => '抱歉，您目前沒有權限添加好友，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'enough_of_the_number_of_friends_with_magic' => '抱歉，您當前的好友數目達到系統限制，<a id="a_magic_friendnum2" href="magic.php?mid=friendnum" onclick="ajaxmenu(event, this.id, 1)">請使用好友增容卡增容</a>',
   'enough_of_the_number_of_friends' => '抱歉，您當前的好友數目達到系統限制，請先刪除部分好友',
   'specified_user_is_not_your_friend' => '抱歉，指定的用戶還不是您的好友',
@@ -166,7 +166,7 @@ $lang = array (
   'message_can_not_send_2' => '兩次發送短消息太快，請稍候再發送',
   'message_can_not_send_9' => '收件人為空或對方屏蔽了您的短消息',
   'pm_report_error_nopm' => '抱歉，您指定的短消息不存在',
-  'no_privilege_sendpm' => '抱歉，您目前沒有權限發短消息，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_sendpm' => '抱歉，您目前沒有權限發短消息，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'profile_email_illegal' => 'Email 地址無效',
   'profile_email_domain_illegal' => '抱歉，Email 包含不可使用的郵箱域名',
   'profile_email_duplicate' => '該 Email 地址已被註冊',
@@ -276,8 +276,8 @@ $lang = array (
   'attachment_yetpay' => '您已購買過此附件，無需重複購買，現在將開始附件下載',
   'attachment_buyall' => '本帖所有附件購買成功 ',
   'attachment_buy' => '附件購買成功，開始下載「{filename}」',
-  'no_privilege_postimage' => '抱歉，您目前沒有權限上傳圖片，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
-  'no_privilege_postattach' => '抱歉，您目前沒有權限上傳附件，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_postimage' => '抱歉，您目前沒有權限上傳圖片，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
+  'no_privilege_postattach' => '抱歉，您目前沒有權限上傳附件，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'thread_closed' => '該帖子已被關閉，不能評論！',
   'postcomment_error' => '抱歉，您不能點評此帖或帖子尚未找到',
   'postappend_only_yourself' => '只能在自己的帖子後補充內容',
@@ -339,7 +339,7 @@ $lang = array (
   'debate_umpire_nofound_winner' => '抱歉，您沒有填寫獲勝方',
   'debate_umpire_nofound_point' => '抱歉，您沒填寫您的觀點',
   'debate_umpire_comment_succeed' => '評判成功 ',
-  'no_privilege_recommend' => '抱歉，您目前沒有權限評價此主題，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_recommend' => '抱歉，您目前沒有權限評價此主題，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'recommend_self_disallow' => '評價指數 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您不能評價自己的帖子',
   'recommend_duplicate' => '評價指數 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您已評價過本主題',
   'recommend_outoftimes' => '評價指數 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />今日評價機會已用完',
@@ -489,7 +489,7 @@ $lang = array (
   'password_is_not_passed' => '抱歉，您輸入的網站登錄密碼不正確',
 
   'not_open_updatestat' => '站點尚未開啟趨勢統計功能',
-  'no_privilege_statdata' => '抱歉，您目前沒有權限查看統計數據報表，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_statdata' => '抱歉，您目前沒有權限查看統計數據報表，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'start_time_end_time_is_equal_to' => '開始日期不能等於結束日期',
 
   'modcp_ann_nofound' => '抱歉，該公告已刪除或您沒有權限編輯它',
@@ -607,7 +607,7 @@ $lang = array (
 
   'no_authority_to_add_log' => '您目前沒有權限添加日誌',
   'no_authority_operation_of_the_log' => '抱歉，您沒有權限操作該日誌',
-  'no_privilege_blog' => '抱歉，您目前沒有權限發表日誌，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_blog' => '抱歉，您目前沒有權限發表日誌，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'blog_choose_system_category' => '抱歉，請選擇系統分類',
   'that_should_at_least_write_things' => '至少應該寫一點東西',
   'failed_to_delete_operation' => '抱歉，刪除失敗，請檢查操作',
@@ -619,7 +619,7 @@ $lang = array (
 
   'click_error' => '抱歉，您尚未進行正常的表態操作',
   'click_item_error' => '要表態的對象不存在',
-  'no_privilege_click' => '抱歉，您目前沒有權限進行表態，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_click' => '抱歉，您目前沒有權限進行表態，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'click_no_self' => '您不能給自己表態',
   'click_have' => '您已表過態',
   'click_success' => '表態成功 ',
@@ -650,8 +650,8 @@ $lang = array (
   'credits_exchange_balance_insufficient' => '抱歉，兌換後{title}不足 {minbalance}',
   'credits_transaction_succeed' => '積分操作成功 ',
 
-  'no_privilege_doing' => '抱歉，您目前沒有權限發表記錄，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
-  'no_privilege_doing_comment' => '抱歉，您目前沒有權限評論記錄，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_doing' => '抱歉，您目前沒有權限發表記錄，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
+  'no_privilege_doing_comment' => '抱歉，您目前沒有權限評論記錄，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'docomment_error' => '抱歉，請正確指定要評論的記錄',
 
   'no_privilege_spacedomain' => '抱歉，您沒有權限設置空間域名',
@@ -665,7 +665,7 @@ $lang = array (
 
   'favorite_delete_succeed' => '收藏刪除成功 ',
   'favorite_does_not_exist' => '抱歉，您指定的收藏不存在',
-  'no_privilege' => '抱歉，您目前沒有權限進行此操作<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege' => '抱歉，您目前沒有權限進行此操作，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'favorite_cannot_favorite' => '抱歉，您指定的信息無法收藏',
   'favorite_repeat' => '抱歉，您已收藏，請勿重複收藏',
   'favorite_do_success' => '信息收藏成功 ',
@@ -730,10 +730,11 @@ $lang = array (
   'pm_emport_banned_export' => '抱歉，沒有用於導出的短消息記錄',
 
   'not_to_their_own_greeted' => '不能向自己打招呼',
-  'no_privilege_poke' => '抱歉，您目前沒有權限打招呼，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_poke' => '抱歉，您目前沒有權限打招呼，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'poke_success' => '已發送，{username}下次訪問時會收到通知',
   'has_been_hailed_overlooked' => '招呼已忽略',
 
+  'profile_passwd_empty' => '請設置新密碼',
   'profile_passwd_wrong' => '原密碼不正確，您不能修改密碼或 Email 或安全提問',
   'profile_email_verify' => '確認 Email 已發送，請用郵件中提供的方法激活您的帳號。如果您尚未收到我們發送的系統郵件，請點擊密碼安全中的「重新接收驗證郵件」，或嘗試更換另外一個地址',
   'profile_succeed' => '個人資料保存成功 ',
@@ -744,7 +745,7 @@ $lang = array (
   'email_input' => '抱歉，您尚未設置郵箱，請在<a href="home.php?mod=spacecp&ac=profile&op=password">聯繫方式</a>中準確填寫您的郵箱',
 
   'no_privilege_edithot_share' => '抱歉，您沒有權限調整此分享的熱度',
-  'no_privilege_share' => '抱歉，您目前沒有權限發佈分享，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_share' => '抱歉，您目前沒有權限發佈分享，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'blog_does_not_exist' => '抱歉，指定的日誌不存在',
   'moderate_blog_not_share' => '抱歉，您不能分享尚未通過審核的日誌',
   'logs_can_not_share' => '抱歉，指定的日誌因隱私設置不能夠被分享',
@@ -764,11 +765,12 @@ $lang = array (
   'showcredit_do_success' => '上榜積分增加成功，趕快查看自己的最新排名吧',
 
   'upload_images_completed' => '圖片上傳成功 ',
-  'no_privilege_upload' => '抱歉，您目前沒有權限上傳圖片，<a href="home.php?mod=spacecp&ac=usergroup">點擊這裡查看權限</a>',
+  'no_privilege_upload' => '抱歉，您目前沒有權限上傳圖片，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
 
   'usergroups_span_invalid' => '抱歉，您至少需要支付 {minspan} 天的積分價格',
   'usergroups_join_succeed' => '您已加入用戶組 {group}',
   'usergroups_exit_succeed' => '您已退出用戶組 {group}',
+  'usergroup_switch_not_allow' => '您當前的用戶組未到期，無法切換到其他用戶組',
   'usergroups_switch_succeed' => '您已切換到用戶組 {group}',
 
   'no_privilege_banpost' => '抱歉，您沒有權限屏蔽主題',

@@ -14,7 +14,7 @@ $activity[class]: $thread[subject]
 <!--{echo "\n";}-->
 {lang activity_already}: $applynumbers {lang activity_member_unit}
 <!--{echo "\n\n";}-->
-{lang activity_content}: $activity[message]
+{lang activity_content}: "$activity[message]"
 <!--{echo "\n\n";}-->
 {lang activity_join_members},{lang leaveword},<!--{if $activity['cost']}-->{lang activity_payment},<!--{/if}-->{lang activity_jointime},{lang status}$ufield
 <!--{echo "\n";}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22717 2011-05-18 05:12:59Z monkey $
+ *      $Id: lang_template.php 22854 2011-05-26 07:10:43Z monkey $
  *
  *      This file is automatically generate
  */
@@ -105,6 +105,7 @@ $lang = array (
   'header_update_desc' => '更新當前頁面所有模塊的數據',
   'save' => '保存',
   'style' => '風格',
+  'find' => '查找',
   'invite' => '邀請',
   'invite_all_friend' => '全部好友',
   'invite_friend' => '邀請好友',
@@ -322,7 +323,6 @@ $lang = array (
   'forgotpw' => '找回密碼',
   'image' => '圖片',
   'remote' => '遠程',
-  'find' => '查找',
   'credit_ranking' => '積分排行',
   'auction_ranking' => '競價排行',
   'close_ranking_note' => '管理員已關閉競價,暫時無法繼續上榜',

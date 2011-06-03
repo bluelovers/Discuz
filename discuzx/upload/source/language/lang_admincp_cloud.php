@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 22759 2011-05-19 12:18:33Z yexinhao $
+ *	  $Id: lang_admincp_cloud.php 22900 2011-05-30 11:04:15Z yexinhao $
  */
 
 $extend_lang = array
@@ -17,6 +17,7 @@ $extend_lang = array
 	'menu_cloud_upgrade' => '開通Discuz!雲平台',
 	'menu_cloud_applist' => '平台首頁',
 	'menu_cloud_siteinfo' => '站點信息',
+	'menu_cloud_doctor' => '診斷工具',
 
 	'menu_setting_manyou' => '漫遊應用設置',
 	'menu_setting_qqconnect' => 'QQ互聯設置',
@@ -35,18 +36,15 @@ $extend_lang = array
 	'message_title' => '提示信息',
 	'jump_to_cloud' => '您即將轉向Discuz!雲平台（http://cp.discuz.qq.com）完成開通流程',
 
-	'cloud_status_error' => '出了點小錯，可能由於站點信息丟失導致Discuz!雲平台服務出現異常，如果有疑問請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
+	'cloud_status_error' => '出了點小錯，由於站點ID/通信KEY等關鍵信息丟失導致Discuz!雲平台服務出現異常，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測站點ID和KEY，如有疑問請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
 
 	'cloud_introduction' => '查看介紹',
 	'cloud_confirm_open' => '確認開通',
 	'cloud_confirm_upgrade' => '確認升級',
 	'cloud_page_loading' => '頁面加載中...',
-	'cloud_time_out' => '您無法訪問Discuz!雲平台，請嘗試<a href="javascript:;" onclick="location.reload()">刷新</a>。',
-	'cloud_unknown_dns' => '您的站點目前無法連接Discuz!雲平台，請檢查您服務器網絡設置，<a href="http://cp.discuz.qq.com/faq?fId=1305690058" target="_blank">查看幫助</a>。如果有疑問，請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>求助',
-	'cloud_open' => '開通Discuz!雲平台',
-	'cloud_upgrade' => '開通Discuz!雲平台',
-	'cloud_applist' => 'Discuz!雲平台',
-	'cloud_siteinfo' => '站點信息',
+	'cloud_time_out' => '您無法訪問Discuz!雲平台，請嘗試<a href="javascript:;" onClick="location.reload()">刷新</a>。',
+	'cloud_unknown_dns' => '您的站點目前無法連接Discuz!雲平台，請檢查您服務器網絡設置，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測DNS解析和接口連通性。<a href="http://cp.discuz.qq.com/faq?fId=1305690058&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>，如有疑問請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>求助',
+
 	'cloud_category' => '設置站點分類',
 	'cloud_site_name' => '站點名稱',
 	'cloud_site_url' => '站點URL',
@@ -60,23 +58,90 @@ $extend_lang = array
 	'cloud_select_category' => '請選擇站點分類',
 	'cloud_select_sub_category' => '請選擇二級分類',
 	'cloud_select_return' => '請選擇站點分類，返回',
-	'cloud_open_success' => 'Discuz!雲平台開通成功',
-	'cloud_upgrade_success' => 'Discuz!雲平台升級成功',
+	'cloud_open_success' => 'Discuz!雲平台開通成功 ',
+	'cloud_upgrade_success' => 'Discuz!雲平台升級成功 ',
 	'cloud_network_busy' => '網絡繁忙，稍後請重新操作，原因：<br />{errMessage} (ERRCODE:{errCode})',
 	'cloud_turnto_applist' => '您的站點已開通Discuz!雲平台，現跳轉到平台首頁',
 	'cloud_site_id' => '站點ID',
 	'cloud_api_ip_btn' => '設置雲平台接口IP',
 	'cloud_api_ip' => '雲平台接口IP',
-	'cloud_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到雲平台接口，請填寫api.discuz.qq.com的IP地址，<a href="http://cp.discuz.qq.com/faq?fId=1304068911" target="_blank">查看幫助</a>',
-	'cloud_ipsetting_success' => '雲平台接口IP設置成功',
+	'cloud_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到雲平台接口，請填寫api.discuz.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://cp.discuz.qq.com/faq?fId=1304068911&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>',
+	'cloud_manyou_ip' => '漫遊接口IP',
+	'cloud_manyou_ip_comment' => '若站點服務器由於DNS解析問題無法連接到漫遊接口，請填寫api.manyou.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://faq.comsenz.com/viewnews-400" target="_blank">查看幫助</a>',
+	'cloud_ipsetting_success' => '雲平台接口IP設置成功 ',
 	'cloud_open_first' => '請先開通Discuz!雲平台',
 	'cloud_sync' => '同步站點信息',
-	'cloud_sync_success' => '站點信息同步成功',
+	'cloud_sync_success' => '站點信息同步成功 ',
 	'cloud_sync_failure' => '站點信息同步失敗，原因：<br />{errMessage} (ERRCODE:{errCode})<br /><br />如有疑問，請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
-	'cloud_resetkey' => '更換站點Key',
-	'cloud_reset_success' => '站點Key更換成功',
+	'cloud_resetkey' => '更換站點KEY',
+	'cloud_reset_success' => '站點KEY更換成功 ',
 
-	'cloud_siteinfo_tips' => '<li>如果站點名稱或者站點URL有變動，請點擊「同步站點信息」按鈕。</li><li>站點Key是站點與雲平台通信的驗證密鑰，若近期有危險操作洩漏站點Key等信息，請點擊「更換站點Key」按鈕。<span style="color:red;">請謹慎使用此功能。</span></li>',
+	'cloud_siteinfo_tips' => '<li>如果站點名稱或者站點URL有變動，請點擊「同步站點信息」按鈕。</li><li>站點KEY是站點與雲平台通信的驗證密鑰，若近期有危險操作洩漏站點KEY等信息，請點擊「更換站點KEY」按鈕。<span style="color:red;">請謹慎使用此功能。</span></li>',
+
+	'cloud_doctor_tips' => '<li>Discuz!雲平台診斷工具是幫助您分析站點上的狀況，是否能與雲平台正常通信等功能。</li>
+		<li>站點ID是您的站點在雲平台的唯一標識，請勿和其他站點共用一套站點ID和站點通信KEY</li>',
+
+	'cloud_doctor_setidkey' => '修改Discuz!上的站點ID和KEY',
+	'cloud_doctor_setidkey_tips' => '<li style="color:red">修改Discuz!上的站點ID和KEY，可能會導致通信錯誤、簽名錯誤以及其他的故障，請勿在沒有官方人員指導的情況下修改。</li>
+		<li style="color:red">修改ID、KEY和狀態前，請先備份論壇的common_setting表。</li>',
+	'cloud_site_key' => '站點通信KEY',
+	'cloud_site_key_safetips' => '(出於安全考慮，部分隱藏)',
+	'cloud_site_key_comment' => '站點通信KEY請勿對外公佈',
+	'cloud_site_status' => '狀態',
+	'cloud_idkeysetting_success' => '站點ID/KEY狀態設置成功 ',
+	'cloud_idkeysetting_siteid_failure' => '站點ID必須為純數字，請勿隨意修改。如有必要，請在客服人員協助下修改。',
+	'cloud_idkeysetting_sitekey_failure' => '站點通信KEY必須為32位，請勿隨意修改。如有必要，請在客服人員協助下修改。',
+
+	'cloud_doctor_result_success' => '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" />',
+	'cloud_doctor_result_failure' => '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> ',
+
+	'cloud_doctor_api_test_other' => '測試雲平台其他接口IP',
+	'cloud_doctor_manyou_test_other' => '測試漫遊其他接口IP',
+	'cloud_doctor_api_test_success' => '%s 請求接口 %s 成功，耗時 %01.3f 秒 %s',
+	'cloud_doctor_api_test_failure' => '%s 請求接口 %s 失敗，請咨詢空間商 %s',
+	'cloud_doctor_status_0' => '尚未開通雲平台',
+	'cloud_doctor_status_1' => '已開通雲平台',
+	'cloud_doctor_status_2' => '註冊雲平台，等待完成',
+
+	'cloud_doctor_title_status' => '系統狀態',
+	'cloud_doctor_modify_siteidkey' => '手動修改站點ID/KEY',
+	'cloud_doctor_close_yes' => '是 (前台Connect將不顯示)',
+
+	'cloud_site_version' => '產品版本',
+	'cloud_site_release' => '產品發佈日期',
+
+	'cloud_doctor_title_result' => '檢測結果(<a href="#" onClick="self.location.reload();">重新檢測</a>)',
+
+	'cloud_doctor_php_ini_separator' => 'URL分隔符',
+	'cloud_doctor_php_ini_separator_true' => '空或&',
+	'cloud_doctor_php_ini_separator_false' => 'php.ini 的 arg_separator.output 設置成非&值 或 ini_get 函數被禁用，請聯繫空間商',
+
+	'cloud_doctor_fsockopen_function' => 'fsockopen函數',
+	'cloud_doctor_gethostbyname_function' => 'DNS解析函數',
+	'cloud_doctor_function_disable' => '函數被禁用，請聯繫空間商',
+
+	'cloud_doctor_dns_api' => '雲平台域名解析',
+	'cloud_doctor_dns_api_test' => '雲平台主接口測試',
+	'cloud_doctor_other_api_test' => '雲平台其他接口測試',
+	'cloud_doctor_dns_manyou' => '漫遊域名解析',
+	'cloud_doctor_dns_manyou_test' => '漫遊主接口測試',
+	'cloud_doctor_other_manyou_test' => '漫遊其他接口測試',
+
+	'cloud_doctor_setting_ip' => '手動設置的IP：',
+
+	'cloud_doctor_dns_success' => '%s DNS解析的IP：%s %s <a href="javascript:;" onClick="showWindow(\'cloudApiIpWin\', \'%s?action=cloud&operation=siteinfo&anchor=cloud_ip&callback=doctor\'); return false;">設置接口IP</a>',
+	'cloud_doctor_dns_failure' => '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> %s DNS解析失敗 %s <a href="javascript:;" onClick="showWindow(\'cloudApiIpWin\', \'%s?action=cloud&operation=siteinfo&anchor=cloud_ip&callback=doctor\'); return false;">設置接口IP</a>',
+
+	'cloud_doctor_title_plugin' => '系統插件檢測',
+	'cloud_doctor_system_plugin_status' => '系統插件狀態',
+	'cloud_doctor_system_plugin_list' => '<a href="admin.php?action=plugins">查看插件列表和版本</a>',
+	'cloud_doctor_system_plugin_status_false' => ' 系統插件未初始化 (左側菜單不顯示) <a href="misc.php?mod=initsys" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">點擊修復</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
+	'cloud_doctor_plugin_module_error' => 'common_plugin表modules字段值不正確',
+
+	'cloud_doctor_title_connect' => 'QQ互聯檢測',
+	'cloud_doctor_connect_app_id' => 'QQ互聯appid',
+	'cloud_doctor_connect_app_key' => 'QQ互聯appkey',
+	'cloud_doctor_connect_reopen' => '當前站點appid/appkey丟失，請<a href="admin.php?action=cloud&operation=applist">重新開通</a>QQ互聯',
 
 	'cloud_application_close' => '您的站點未開啟此項雲服務，請到Discuz!後台雲平台標籤下開啟',
 	'cloud_application_disable' => '您的站點已被禁止使用此項雲服務，如果有疑問請訪問<a href="http://www.discuz.net/forum.php?gid=3923" target="_blank">官方論壇</a>尋求幫助',
@@ -84,7 +149,7 @@ $extend_lang = array
 	'cloud_search_tips' => '<li>開啟漫遊搜索功能後，用戶可以使用基於漫遊的搜索功能。</li>',
 
 	'cloud_stats' => '騰訊分析',
-	'cloud_stats_tips' => '<li>騰訊分析—最專業的社區分析，為您的社區發展提供數據支持。</li><li>開通騰訊分析後，次日可以查看到前一日的數據。</li><li><a href="http://stats.discuz.qq.com/" target="_blank"><font color="blue">查看詳細數據</font></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cp.discuz.qq.com/faq?fcId=4" target="_blank"><font color="blue">瞭解騰訊分析</font></a></li>',
+	'cloud_stats_tips' => '<li>騰訊分析—最專業的社區分析，為您的社區發展提供數據支持。</li><li>開通騰訊分析後，次日可以查看到前一日的數據。</li><li><a href="http://stats.discuz.qq.com/" target="_blank"><span color="blue">查看詳細數據</span></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cp.discuz.qq.com/faq?fcId=106&ADTAG=CP.CLOUD.FAQ.FCID" target="_blank"><span color="blue">瞭解騰訊分析</span></a></li>',
 	'cloud_stats_status' => '啟用騰訊分析',
 	'cloud_stats_icon_set' => '選擇樣式（圖標或文字將顯示在論壇右下角）',
 	'cloud_stats_icon_none' => '不顯示圖標和文字',
@@ -165,7 +230,7 @@ $extend_lang = array
 
 	'qqgroup_msg_deficiency' => '請至少推送一條頭條主題和一條列表主題',
 	'qqgroup_msg_save_succeed' => '恭喜，信息成功推送到QQ群',
-	'qqgroup_msg_upload_succeed' => '圖片上傳成功',
+	'qqgroup_msg_upload_succeed' => '圖片上傳成功 ',
 	'qqgroup_msg_upload_failure' => '圖片上傳失敗，請選擇長寬為75*75的圖片，支持JPG、GIF、PNG格式，文件小於5M，並檢查服務器是否開啟GD庫',
 	'qqgroup_msg_remote_exception' => '抱歉，出了點小錯。錯誤原因：{errmsg} 錯誤代號：{errno}',
 	'qqgroup_msg_unknown_dns' => '抱歉，出現未知錯誤，請檢查您的服務器與Discuz!雲平台連接',

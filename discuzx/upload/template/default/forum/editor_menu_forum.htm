@@ -315,7 +315,7 @@
 	<!--{/if}-->
 	setCaretAtEnd();
 	if(BROWSER.ie >= 5 || BROWSER.firefox >= '2') {
-		_attachEvent(window, 'beforeunload', saveData);
+		_attachEvent(window, 'beforeunload', unloadAutoSave);
 	}
 	<!--{if !empty($_G['gp_cedit']) && $_G['gp_cedit'] == 'yes'}-->
 		loadData(1);

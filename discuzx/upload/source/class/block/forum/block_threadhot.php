@@ -64,7 +64,19 @@ class block_threadhot extends block_thread {
 					array('heats', 'threadlist_orderby_heats'),
 					array('recommends', 'threadlist_orderby_recommends'),
 				),
-				'default' => 'lastpost'
+				'default' => 'heats'
+			),
+			'postdateline' => array(
+				'title' => 'threadlist_postdateline',
+				'type'=> 'mradio',
+				'value' => array(
+					array('0', 'threadlist_postdateline_nolimit'),
+					array('3600', 'threadlist_postdateline_hour'),
+					array('86400', 'threadlist_postdateline_day'),
+					array('604800', 'threadlist_postdateline_week'),
+					array('2592000', 'threadlist_postdateline_month'),
+				),
+				'default' => '0'
 			),
 			'lastpost' => array(
 				'title' => 'threadlist_lastpost',

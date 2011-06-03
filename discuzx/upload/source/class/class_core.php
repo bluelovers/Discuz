@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 22775 2011-05-20 05:43:23Z monkey $
+ *      $Id: class_core.php 22913 2011-05-31 03:22:12Z monkey $
  */
 
 define('IN_DISCUZ', true);
@@ -512,12 +512,6 @@ class discuz_core {
 		dsetcookie('lastact', $lastact, 86400);
 		setglobal('currenturl_encode', base64_encode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']));
 
-		if($this->var['setting']['magicstatus'] && !$this->var['group']['allowmagics']) {
-			$this->var['setting']['magicstatus'] = false;
-			$this->var['setting']['magics'] = array();
-			unset($this->var['setting']['spacenavs']['magic']);
-		}
-
 		if((!empty($this->var['gp_fromuid']) || !empty($this->var['gp_fromuser'])) && ($this->var['setting']['creditspolicy']['promotion_visit'] || $this->var['setting']['creditspolicy']['promotion_register'])) {
 			require_once libfile('misc/promotion', 'include');
 		}
@@ -618,7 +612,7 @@ class discuz_core {
 			}
 		}
 
-		if(strpos($this->var['setting']['domain']['defaultindex'], CURSCRIPT) === false && CURSCRIPT != 'forum' && !$_GET['mod']) {
+		if(strpos($this->var['setting']['domain']['defaultindex'], CURSCRIPT) !== false && CURSCRIPT != 'forum' && !$_GET['mod']) {
 			if($this->var['setting']['domain']['app']['mobile']) {
 				$mobileurl = 'http://'.$this->var['setting']['domain']['app']['mobile'];
 			} else {

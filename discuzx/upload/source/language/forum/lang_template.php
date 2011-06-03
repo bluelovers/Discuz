@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22717 2011-05-18 05:12:59Z monkey $
+ *      $Id: lang_template.php 22790 2011-05-23 00:35:11Z monkey $
  *
  *      This file is automatically generate
  */
@@ -624,6 +624,7 @@ $lang = array (
   'post_reward_error_message' => '抱歉，請輸入懸賞價格',
   'post_reward_message' => '天後如果您仍未設置最佳答案，版主有權代為您選擇',
   'post_reward_resolved' => '已解決的懸賞',
+  'reward_cant_fall' => '不能降低懸賞積分',
   'reward_price' => '懸賞價格',
   'reward_price_bound' => '售價超出範圍',
   'reward_price_max' => '不能高於',

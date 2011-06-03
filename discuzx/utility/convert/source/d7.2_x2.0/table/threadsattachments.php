@@ -40,7 +40,6 @@ while ($row = $db_source->fetch_array($query)) {
 	$tid = (string)$row['tid'];
 	$tableid = $tid{strlen($tid)-1};
 	$table_target_attachment_tableid = $db_target->tablepre.'forum_attachment_'.$tableid;
-	$db_target->query("UPDATE $table_target SET tableid='$tableid' WHERE aid='$row[aid]'");
 	$db_target->query("REPLACE INTO $table_target SET aid='$row[aid]', tid='$row[tid]', pid='$row[pid]', uid='$row[uid]', tableid='$tableid', downloads='$row[downloads]'");
 	$db_target->query("REPLACE INTO $table_target_attachment_tableid SET
 						aid='$row[aid]',
@@ -60,15 +59,17 @@ while ($row = $db_source->fetch_array($query)) {
 						thumb='$row[thumb]',
 						picid='$row[picid]'");
 	if(($row['isimage'] == '1' || $row['isimage'] == '-1') && $row['attachment']) {
-		$query = $db_target->query("SELECT * from $table_target_forum_thread WHERE tid='$row[tid]'");
-		while ($rownew = $db_target->fetch_array($query)) {
+		$querythread = $db_target->query("SELECT * from $table_target_forum_thread WHERE tid='$row[tid]'");
+		while ($rownew = $db_target->fetch_array($querythread)) {
 			$tid_attachment = $rownew['attachment'];
 			$tid_posttableid = $rownew['posttableid'];
 			$tid_dateline = $rownew['dateline'];
 		}
 		$dateline = time() - 86400 * 10 * 30;
 		if($tid_attachment == '2' && $tid_posttableid == '0' && $tid_dateline > $dateline) {
-			$db_target->query("REPLACE INTO $table_target_forum_threadimage VALUES ('$row[tid]','$row[attachment]','$row[remote]')");
+			if(!$db_target->result_first("SELECT COUNT(*) FROM $table_target_forum_threadimage WHERE tid='$row[tid]'")) {
+				$db_target->query("INSERT INTO $table_target_forum_threadimage VALUES ('$row[tid]','$row[attachment]','$row[remote]')");
+			}
 		}
 	}
 

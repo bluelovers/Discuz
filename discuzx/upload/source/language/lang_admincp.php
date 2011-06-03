@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 22760 2011-05-20 01:03:11Z monkey $
+ *      $Id: lang_admincp.php 22849 2011-05-26 01:57:02Z monkey $
  */
 
 
@@ -2090,7 +2090,7 @@ $lang = array
 	'forums_edit_comment' => '編輯本版塊設置',
 	'forums_edit_inherited' => '繼承上級版塊設置',
 	'forums_edit_newinherited' => '繼承指定版塊設置',
-	'forums_edit_tips' => '<li>以下設置沒有繼承性，即僅對當前版塊有效，不會對下級子版塊產生影響。</li><li>策略中積分項設置為 <strong>「0」</strong> 時，代表該條策略在該版塊中不加分</li>',
+	'forums_edit_tips' => '<li>以下設置沒有繼承性，即僅對當前版塊有效，不會對下級子版塊產生影響。</li>',
 	'forums_edit_switch' => '切換版塊 / 批量編輯',
 	'forums_multiedit' => '批量編輯所選版塊',
 
@@ -2493,6 +2493,7 @@ $lang = array
 
 	'misc_customnav_icon' => '導航圖標',
 	'misc_customnav_icon_comment' => '圖標大小 16x16。URL 中可用「{STATICURL}」代表站點靜態文件 static/ 目錄，可在 config/config_global.php 中修改',
+	'misc_mynav_icon_comment' => '圖標大小 40x40。URL 中可用「{STATICURL}」代表站點靜態文件 static/ 目錄，可在 config/config_global.php 中修改',
 	'misc_customnav_allowsub' => '顯示副導航',
 	'misc_customnav_subname' => '副導航名稱',
 	'misc_customnav_suburl' => '副導航鏈接',
@@ -4448,6 +4449,7 @@ $lang = array
 	'plugins_config_uninstall' => '卸載',
 	'plugins_config_upgrade' => '升級',
 	'plugins_config_delete' => '卸載',
+	'plugins_config_upgrade_other' => '你確定要把 {pluginname} {version} 插件升級到以下版本嗎？',
 	'plugins_config_uninstallplugin' => '卸載此插件',
 	'plugins_edit' => '設計插件',
 	'plugins_edit_available' => ' (插件已啟用)',

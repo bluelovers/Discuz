@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 22630 2011-05-16 05:23:07Z monkey $
+ *      $Id: class_member.php 22794 2011-05-23 01:09:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -84,6 +84,9 @@ class logging_ctl {
 			}
 			$_G['uid'] = $_G['member']['uid'] = 0;
 			$_G['username'] = $_G['member']['username'] = $_G['member']['password'] = '';
+			if(!$_G['gp_password'] || $_G['gp_password'] != addslashes($_G['gp_password'])) {
+				showmessage('profile_passwd_illegal');
+			}
 			$result = userlogin($_G['gp_username'], $_G['gp_password'], $_G['gp_questionid'], $_G['gp_answer'], $this->setting['autoidselect'] ? 'auto' : $_G['gp_loginfield']);
 			$uid = $result['ucresult']['uid'];
 
@@ -468,6 +471,8 @@ class register_ctl {
 						showmessage('profile_passwd_illegal');
 					}
 					$password = $_G['gp_password'];
+				} else {
+					$password = md5(random(10));
 				}
 			}
 

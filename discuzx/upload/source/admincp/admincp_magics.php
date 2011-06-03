@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_magics.php 22741 2011-05-19 02:52:26Z monkey $
+ *      $Id: admincp_magics.php 22793 2011-05-23 01:00:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -101,9 +101,9 @@ if($operation == 'admin') {
 
 		if(is_array($_G['gp_name'])) {
 			foreach($_G['gp_name'] as $id => $val) {
-				if(!is_array($_G['gp_available']) || !is_array($_G['gp_identifier']) ||
+				if(!is_array($_G['gp_identifier']) ||
 					!is_array($_G['gp_displayorder']) || !is_array($_G['gp_credit']) ||
-					!is_array($_G['gp_price'][$id]) || !is_array($_G['gp_num'][$id]) ||
+					!is_array($_G['gp_price']) || !is_array($_G['gp_num']) ||
 					!is_array($_G['gp_weight']) || !preg_match('/^\w+$/', $_G['gp_identifier'][$id])) {
 					continue;
 				}

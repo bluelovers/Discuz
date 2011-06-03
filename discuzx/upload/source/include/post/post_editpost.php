@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 22677 2011-05-17 07:08:03Z monkey $
+ *      $Id: post_editpost.php 22852 2011-05-26 04:15:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -225,10 +225,6 @@ if(!submitcheck('editsubmit')) {
 
 	if($sortid) {
 		require_once libfile('post/threadsorts', 'include');
-		threadsort_checkoption($sortid);
-		$forum_optionlist = getsortedoptionlist();
-		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
-		threadsort_optiondata($pid, $sortid, $_G['cache']['threadsort_option_'.$sortid], $_G['cache']['threadsort_template_'.$sortid]);
 		foreach($_G['forum_optionlist'] as $option) {
 			if($option['type'] == 'image') {
 				foreach($imgattachs['used'] as $k => $sortattach) {

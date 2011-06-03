@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 22733 2011-05-18 09:31:35Z monkey $
+ *      $Id: lang_admincp_msg.php 22879 2011-05-29 06:49:24Z monkey $
  *
  *      This file is automatically generate
  */
@@ -356,7 +356,7 @@ $lang = array (
 
   'plugins_validator_enable_confirm' => '<h4 class="infotitle3">此插件不是原版插件你確定要開啟嗎？</h4>',
   'plugins_enable_succeed' => '插件已啟用',
-  'plugins_conflict' => '插件已啟用</h4><br />友情提示：您剛剛啟用的插件與某些插件存在共用嵌入點，如遇到運行不正常的情況請及時聯繫插件作者。<a href="javascript:;" onclick="display(\'conflict\')">[點擊查看]</a><br /><div id="conflict" style="display:none"><br />{plugins}<br /></div><br />',
+  'plugins_conflict' => '插件已啟用</h4><br />友情提示：您剛啟用的插件與某些插件存在共用的嵌入點。雖然共用嵌入點屬於正常情況，但是如果您遇到插件運行不正常的情況請及時聯繫插件作者。<a href="javascript:;" onclick="display(\'conflict\')">[點擊查看]</a><br /><div id="conflict" style="display:none"><br />{plugins}<br /></div><br />',
   'plugins_disable_succeed' => '插件已關閉',
   'plugins_import_var_invalid' => '插件的鉤子名稱不合法，無法導入',
   'plugins_import_identifier_duplicated' => '您要導入的插件({plugin_name})已經安裝',

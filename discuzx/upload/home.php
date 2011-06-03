@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home.php 21671 2011-04-07 06:21:13Z zhangguosheng $
+ *      $Id: home.php 22839 2011-05-25 08:05:18Z monkey $
  */
 
 define('APPTYPEID', 1);
@@ -29,6 +29,10 @@ $mod = getgpc('mod');
 if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'invite', 'task', 'medal', 'rss'))) {
 	$mod = 'space';
 	$_GET['do'] = 'home';
+}
+
+if($mod == 'space' && ((empty($_GET['do']) || $_GET['do'] == 'index') && ($_G['inajax'] || !$_G['setting']['homestatus']))) {
+	$_GET['do'] = 'profile';
 }
 
 define('CURMODULE', $mod);

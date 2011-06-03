@@ -42,7 +42,7 @@ if ($pluginop == 'config') {
 		}
 	}
 
-	$_G['connect']['loginbind_url'] = $_G['siteurl'].'connect.php?mod=login&op=init&type=loginbind&referer='.rawurlencode($_G['connect']['referer'] ? $_G['connect']['referer'] : 'index.php');
+	$_G['connect']['loginbind_url'] = $_G['siteurl'].'connect.php?mod=login&op=init&type=loginbind&referer='.urlencode($_G['connect']['referer'] ? $_G['connect']['referer'] : 'index.php');
 
 } elseif ($pluginop == 'share') {
 
@@ -76,9 +76,9 @@ if ($pluginop == 'config') {
 	connect_merge_member();
 
 	$api_url = $_G['connect']['api_url'] . '/connect/share/new';
-	$extra = array(
-		'oauth_token' => $_G['member']['conuin'],
-	);
+
+	$extra = array();
+	$extra['oauth_token'] = $_G['member']['conuin'];
 	$sig_params = connect_get_oauth_signature_params($extra);
 	$oauth_token_secret = $_G['member']['conuinsecret'];
 	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
@@ -98,9 +98,10 @@ if ($pluginop == 'config') {
 	$params['attach_images'] = $_G['gp_attach_image'];
 	$params = array_merge($sig_params, $params);
 
-	$response = connect_output_php($api_url . '?', http_build_query($params));
+	$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
 	if(!isset($response['status'])) {
 		$code = 100;
+		connect_errlog($code, lang('connect', 'connect_errlog_server_no_response'));
 		$message = lang('connect', 'server_busy');
 	} else {
 		if ($response['status'] == 0) {
@@ -115,6 +116,7 @@ if ($pluginop == 'config') {
 			$code = $response['status'];
 			if ($response['status'] == 6022 || $response['status'] == 6023 || $response['status'] == 6029) {
 				$message = $response['result'];
+				connect_errlog($code, $message);
 			} elseif ($response['status'] == 20000) {
 				$message = lang('connect', 'user_unauthorized');
 			} elseif ($response['status'] == 30000) {

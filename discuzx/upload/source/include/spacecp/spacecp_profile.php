@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 22376 2011-05-05 02:45:12Z monkey $
+ *      $Id: spacecp_profile.php 22889 2011-05-30 07:31:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -277,6 +277,9 @@ if(submitcheck('profilesubmit')) {
 	if($_G['setting']['connect']['allow'] && DB::result_first("SELECT conisregister FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'")) {
 		$_G['gp_oldpassword'] = '';
 		$ignorepassword = 1;
+		if(empty($_G['gp_newpassword'])) {
+			showmessage('profile_passwd_empty');
+		}
 	}
 
 	if($_G['gp_questionidnew'] === '') {

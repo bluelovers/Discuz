@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 22702 2011-05-18 01:38:39Z svn_project_zhangjie $
+ *      $Id: admincp_members.php 22895 2011-05-30 08:59:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1926,7 +1926,7 @@ EOF;
 
 		if($_G['gp_clearavatar']) {
 			DB::query("UPDATE ".DB::table('common_member')." SET avatarstatus='0' WHERE uid='{$_G['gp_uid']}'");
-			uc_user_deleteavatar($member['uid']);
+			uc_user_deleteavatar($member['muid']);
 		}
 
 		$creditsnew = intval($creditsnew);
@@ -3007,9 +3007,6 @@ function notifymembers($operation, $variable) {
 				sendmail("$member[username] <$member[email]>", $subject, $message.$addmsg);
 			}
 			$continue = TRUE;
-		}
-		if($pmuids) {
-
 		}
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloudstat.class.php 22784 2011-05-20 10:22:53Z wangwumin $
+ *      $Id: cloudstat.class.php 22909 2011-05-31 02:49:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,11 +27,11 @@ class plugin_cloudstat {
 	function _makejs() {
 		global $_G;
 		$dzjs = $this->_makedzjs();
-		if (!$_G['inajax']) {
-			$return = '&nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" reload="1">appendscript(\'http://tcss.qq.com/ping.js\', \''.VERHASH.'\', \'1\', \'utf-8\');safescript(\'cloudstatjs\', function () {pgvMain('.$dzjs.')}, 1000, 5);</script>';
-		} else {
-			$return = '<script type="text/javascript" reload="1">safescript(\'cloudstatjs\', function () {pgvMain('.$dzjs.')}, 1000, 5);</script>';
+		$return = '';
+		if(!$_G['inajax']) {
+			$return = '&nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" src="http://tcss.qq.com/ping.js?'.VERHASH.'" charset="utf-8"></script>';
 		}
+		$return .= '<script type="text/javascript" reload="1">pgvMain('.$dzjs.');</script>';
 		return $return;
 	}
 
@@ -75,16 +75,29 @@ class plugin_cloudstat {
 		$cloudstatpost = explode('D', $cloudstatpost);
 		if($cloudstatpost[0] == 'thread') {
 			$this->discuzParams['nt'] = 1;
-			$this->discuzParams['ti'] = $cloudstatpost[1];
+			$this->discuzParams['ui'] = $cloudstatpost[1];
+			$this->discuzParams['fi'] = $cloudstatpost[2];
+			$this->discuzParams['ti'] = $cloudstatpost[3];
 			$subject = $_G['forum_thread']['subject'];
-			if ('GBK' != strtoupper($_G['charset'])) {
-				$subject = diconv($subject, $_G['charset'], 'GBK');
+			$charset = $_G['charset'];
+			if(empty($charset)) {
+				foreach ($_G['config']['db'] as $key => $cfg) {
+					if ($cfg['dbcharset']) {
+						$charset = $cfg['dbcharset'];
+						break;
+					}
+				}
+			}
+			if('GBK' != strtoupper($charset) && !empty($charset)) {
+				$subject = diconv($subject, $charset, 'GBK');
 			}
 			$this->extraParams[] = "tn=" . urlencode($subject);
 		} elseif($cloudstatpost[0] == 'post') {
 			$this->discuzParams['nt'] = 2;
-			$this->discuzParams['ti'] = $cloudstatpost[1];
-			$this->discuzParams['pi'] = $cloudstatpost[2];
+			$this->discuzParams['ui'] = $cloudstatpost[1];
+			$this->discuzParams['fi'] = $cloudstatpost[2];
+			$this->discuzParams['ti'] = $cloudstatpost[3];
+			$this->discuzParams['pi'] = $cloudstatpost[4];
 		}
 
 		$cloudstaticon = intval($_G['setting']['cloud_staticon']);
@@ -147,21 +160,17 @@ class plugin_cloudstat {
 		return $value;
 	}
 
-}
-
-class plugin_cloudstat_forum extends plugin_cloudstat {
-
-	function post_cloudstat_message($param) {
+	function _post_cloudstat_message($param) {
 		global $_G;
 		$param = $param['param'];
 		if(in_array($param[0], array('post_newthread_succeed', 'post_newthread_mod_succeed'))) {
-			dsetcookie('cloudstatpost', 'threadD'.$param[2]['tid'], 300);
+			dsetcookie('cloudstatpost', 'threadD'.$_G['uid'].'D'.$param[2]['fid'].'D'.$param[2]['tid'], 86400);
 		} elseif(in_array($param[0], array('post_reply_succeed', 'post_reply_mod_succeed'))) {
-			dsetcookie('cloudstatpost', 'postD'.$param[2]['tid'].'D'.$param[2]['pid'], 300);
+			dsetcookie('cloudstatpost', 'postD'.$_G['uid'].'D'.$param[2]['fid'].'D'.$param[2]['tid'].'D'.$param[2]['pid'], 86400);
 		}
 	}
 
-	function viewthread_postbottom_output() {
+	function _viewthread_postbottom_output() {
 		global $_G;
 		$cloudstatjs = array();
 		if($_G['inajax'] && !empty($_G['gp_viewpid'])) {
@@ -169,6 +178,31 @@ class plugin_cloudstat_forum extends plugin_cloudstat {
 		}
 		return $cloudstatjs;
 	}
+
+}
+
+class plugin_cloudstat_forum extends plugin_cloudstat {
+
+	function post_cloudstat_message($param) {
+		return $this->_post_cloudstat_message($param);
+	}
+
+	function viewthread_postbottom_output() {
+		return $this->_viewthread_postbottom_output();
+	}
+
+}
+
+class plugin_cloudstat_group extends plugin_cloudstat {
+
+	function post_cloudstat_message($param) {
+		return $this->_post_cloudstat_message($param);
+	}
+
+	function viewthread_postbottom_output() {
+		return $this->_viewthread_postbottom_output();
+	}
+
 }
 
 ?>

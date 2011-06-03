@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 22727 2011-05-18 09:04:39Z svn_project_zhangjie $
+ *      $Id: forum_forumdisplay.php 22868 2011-05-27 07:09:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -321,7 +321,7 @@ if($recommendgroups) {
 	}
 }
 if(!$simplestyle || !$_G['forum']['allowside'] && $page == 1) {
-	if($_G['cache']['announcements_forum'] && $_G['cache']['announcements_forum']['endtime'] > TIMESTAMP) {
+	if($_G['cache']['announcements_forum'] && (!$_G['cache']['announcements_forum']['endtime'] || $_G['cache']['announcements_forum']['endtime'] > TIMESTAMP)) {
 		$announcement = $_G['cache']['announcements_forum'];
 		$announcement['starttime'] = dgmdate($announcement['starttime'], 'd');
 	} else {

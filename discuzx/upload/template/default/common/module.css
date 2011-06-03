@@ -740,8 +740,14 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.showhide { border: 1px dashed #FF9A9A; margin: 8px 0; padding: 10px; }
 		.showhide h4 { margin-bottom: 10px; color: #F66; font-size: 12px; text-align: center; }
 
-/* 代碼/引用等樣式 by lushnis */
-	.pl .quote, .pl .blockcode { margin: 10px 0; padding: 10px 10px 10px 65px; }
+	/*
+		Name:			mod_thread_code_quote
+		Level:			Function
+		Explain:		帖子代碼/引用等樣式
+		Author:			lushnis
+		Last Modify:	Pony 11053010
+	*/
+	.pl .quote, .pl .blockcode { margin: 10px 0; padding: 10px 10px 10px 65px; zoom: 1; }
 	.pl .quote { padding-bottom: 5px; background: #F9F9F9 url({IMGDIR}/icon_quote_s.gif) no-repeat 20px 6px; }
 		.pl .quote blockquote { margin: 0; padding: 0 65px 5px 0; background: url({IMGDIR}/icon_quote_e.gif) no-repeat 100% 100%; line-height: 1.6; zoom: 1; }
 
@@ -778,8 +784,14 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.voterlist .ps { max-width: 495px; }
 	.voterl li { padding: 0 5px 5px 0; width: 90px; text-align: left; }
 
-/* 活動 spvimg,spi 為活動、商品公用部分 by dfox */
-	.act { }
+	/*
+		Name:			mod_thread_trade_activity
+		Level:			Function
+		Explain:		spvimg,spi 為活動、商品公用部分
+		Author:			dfox
+		Last Modify:	Pony 11053010
+	*/
+	.act {}
 		.act .c { line-height: 28px; font-size: 14px; }
 		.spvimg { float: left; position: relative; width: 300px; background: #FAFAFA; text-align: center; border: 1px solid {COMMONBORDER}; }
 		.spvimg em.hot { width: 120px; height: 102px; background-position: 0 -104px; }
@@ -794,7 +806,8 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.actl { table-layout: fixed; margin: 10px 0; width: 320px; border-top: 3px solid {COMMONBORDER}; }
 			.actl th, .actl td { padding: 8px 2px; border-top: 1px dashed {COMMONBORDER}; }
 			.actl th { width: 60px; }
-		.actl_pop { overflow: auto; max-width: 200px; max-height: 300px; _width: 200px; height: expression(this.offsetHeight > 300 ? 300 : 'auto'); }
+		.actl_pop { overflow: auto; max-width: 200px; max-height: 300px; }
+			.ie6 .actl_pop { width: 200px !important; height: expression(this.offsetHeight > 300 ? 300 : 'auto'); }
 			.actl_pop li { display: block; padding: 3px 0; border-bottom: 1px dashed {COMMONBORDER}; }
 
 /* 懸賞 by dfox */
@@ -1626,7 +1639,7 @@ body { background: #FFF none !important; }
 .picrank { position: absolute; margin: 14px 0 0 8px !important; }
 
 /* 競價排名 by Pony */
-.bid { margin: 4px 0 0 4px; }
+.bid { margin: 2px -4px -2px 2px; zoom: 1; }
 .biduser { width: 780px; background: url({IMGDIR}/avatar_blank.gif); }
 	.biduser li { float: left; margin: 0 4px 4px 0; }
 	.biduser a { display: block; }

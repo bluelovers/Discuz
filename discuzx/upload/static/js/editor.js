@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 22686 2011-05-17 08:27:15Z monkey $
+	$Id: editor.js 22848 2011-05-26 01:36:50Z monkey $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
@@ -130,6 +130,12 @@ function setAutosave() {
 	setEditorTip(autosave ? '數據自動保存已開啟' : '數據自動保存已關閉');
 	setcookie('editorautosave_' + editorid, autosave ? 1 : -1, 2592000);
 	savedataTime();
+}
+
+function unloadAutoSave() {
+	if(autosave) {
+		saveData();
+	}
 }
 
 function seteditorcontrolpos() {

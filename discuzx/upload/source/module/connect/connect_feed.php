@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: connect_feed.php 22278 2011-04-27 07:52:14Z fengning $
+ *	  $Id: connect_feed.php 22869 2011-05-27 09:27:31Z fengning $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,6 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 require_once libfile('function/connect');
+require_once libfile('function/cloud');
 
 $params = $_GET;
 $op = !empty($_G['gp_op']) ? $_G['gp_op'] : '';
@@ -69,7 +70,7 @@ if ($op == 'new') {
 	}
 
 	$params = array_merge($sig_params, $params);
-	$response = connect_output_php($api_url . '?', http_build_query($params));
+	$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
 	if(!isset($response['status']) || $response['status'] != 0) {
 		if(in_array($response['status'], array('4019', '4021'))) {
 			dsetcookie('connect_js_name', 'feed_resend');
@@ -90,15 +91,14 @@ if ($op == 'new') {
 	if ($feedlog) {
 		$feedmember = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$feedlog[uid]'");
 		if (empty($feedmember) || empty($feedmember['conuin']) || empty($feedmember['conuinsecret'])) {
-			connect_js_ouput_message('', lang('connect', 'deletethread_sync_failed'), $response['status']);
+			connect_js_ouput_message('', lang('connect', 'deletethread_sync_failed'), '104');
 		}
 	} else {
-		connect_js_ouput_message('', lang('connect', 'deletethread_sync_failed'), $response['status']);
+		connect_js_ouput_message('', lang('connect', 'deletethread_sync_failed'), $response['status'], '105');
 	}
 
-	$extra = array(
-		'oauth_token' => $feedmember['conuin']
-	);
+	$extra = array();
+	$extra['oauth_token'] = $feedmember['conuin'];
 	$sig_params = connect_get_oauth_signature_params($extra);
 	$oauth_token_secret = $feedmember['conuinsecret'];
 	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
@@ -108,8 +108,9 @@ if ($op == 'new') {
 	);
 	$params = array_merge($sig_params, $params);
 
-	$response = connect_output_php($api_url . '?', http_build_query($params));
+	$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
 	if (!isset($response['status']) || $response['status'] != 0) {
+		connect_errlog($response['status'], $response['result']);
 		connect_js_ouput_message('', $response['result'], $response['status']);
 	} else {
 		connect_js_ouput_message(lang('connect', 'deletethread_sync_success'), '', 0);

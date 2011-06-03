@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 22000 2011-04-19 14:35:46Z svn_project_zhangjie $
+ *      $Id: spacecp_friend.php 22841 2011-05-25 08:40:43Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -469,8 +469,9 @@ if($op == 'add') {
 	}
 } elseif($op == 'getinviteuser') {
 
+	require_once libfile('function/search');
 	$perpage = 20;
-
+	$username = empty($_G['gp_username'])?'':searchkey($_G['gp_username'], "f.fusername LIKE '{text}%'");
 	$page = empty($_G['gp_page'])?0:intval($_G['gp_page']);
 	$gid = isset($_G['gp_gid']) ? intval($_G['gp_gid']) : -1;
 	if($page<1) $page = 1;
@@ -478,7 +479,10 @@ if($op == 'add') {
 	$json = array();
 	$wheresql = '';
 	if($gid > -1) {
-		$wheresql = " AND f.gid='$gid'";
+		$wheresql .= " AND f.gid='$gid'";
+	}
+	if(!empty($username)) {
+		$wheresql .= $username;
 	}
 	$singlenum = 0;
 	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_friend')." f WHERE f.uid='$_G[uid]' $wheresql");

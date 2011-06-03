@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 22495 2011-05-10 06:17:09Z liulanbo $
+ *      $Id: admincp_forums.php 22792 2011-05-23 00:46:23Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1410,6 +1410,7 @@ EOT;
 			$forumcolumnsnew = $_G['gp_forumcolumnsnew'] > 1 ? intval($_G['gp_forumcolumnsnew']) : 0;
 			$threadcachesnew = max(0, min(100, intval($_G['gp_threadcachesnew'])));
 			$subforumsindexnew = $_G['gp_subforumsindexnew'] == -1 ? 0 : ($_G['gp_subforumsindexnew'] == 0 ? 2 : 1);
+			$_G['gp_simplenew'] = isset($_G['gp_simplenew']) ? $_G['gp_simplenew'] : 0;
 			$simplenew = bindec(sprintf('%02d', decbin($_G['gp_defaultorderfieldnew'])).$_G['gp_defaultordernew'].sprintf('%02d', decbin($subforumsindexnew)).'00'.$_G['gp_simplenew']);
 			$allowglobalsticknew = $_G['gp_allowglobalsticknew'] ? 1 : 0;
 

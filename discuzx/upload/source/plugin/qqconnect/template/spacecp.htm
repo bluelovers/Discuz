@@ -26,7 +26,7 @@
 			<input type="text" name="share_subject" id="share_subject" class="txt" style="padding:0;margin:0;width:450px;height:20px;font-size:12px;border-width:1px;border-style:solid;border-color:#707070 #CECECE #CECECE #707070;" />
 		</div>
 		<div class="ec cl">
-			<div id="connect_subject_tip" style="display:none;"></div>
+			<div id="connect_subject_tip" style="padding-left:15px;display:none;"></div>
 		</div>
 
 		<div class="c" style="padding: 5px 15px;">
@@ -36,7 +36,7 @@
 			<textarea name="reason" id="reason" class="pt mtn" style="padding:0;margin:0;width:450px;height:80px;font-size:12px;"></textarea>
 		</div>
 		<div class="ec cl">
-			<div id="connect_reason_tip" style="padding-left:12px;display:none;"></div>
+			<div id="connect_reason_tip" style="padding-left:15px;display:none;"></div>
 		</div>
 
 		<!--{if $_G['gp_share_images']}-->
@@ -468,10 +468,10 @@
 			var str = $('reason').value;
 			var sl = connect_smart_length(str);
 			var l = 140 - sl;
-			if (l <= 0) {
+			if (l < 0) {
 				connect_error_tip('connect_reason_tip', '{lang qqconnect:connect_spacecp_weibo_reason_is_long}');
 				return false;
-			} else if (l > 140) {
+			} else if (l >= 140) {
 				connect_error_tip('connect_reason_tip', '{lang qqconnect:connect_spacecp_weibo_reason_is_short}');
 				return false;
 			} else {

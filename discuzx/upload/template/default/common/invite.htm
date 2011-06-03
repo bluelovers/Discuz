@@ -22,7 +22,7 @@
 				<ul class="cl">
 					<li>
 						<p>{lang invite_orderby_name}</p>
-						<p class="mtn"><input type="text" name="username" size="25" id="username" class="px" value="" autocomplete="off" /></p>
+						<p class="mtn"><input type="text" name="username" size="25" id="username" class="px" value="" autocomplete="off" /> <button class="pn pnc" onclick="clearlist=1;getUser();"><span>{lang find}</span></button></p>
 						<script type="text/javascript">
 							var invitefs;
 							var clearlist = 0;
@@ -48,16 +48,18 @@
 				</div>
 			</div>
 			<ul class="usl cl{if empty($_G['inajax'])} usl2{/if}" id="friends"></ul>
-			<script type="text/javascript">				
+			<script type="text/javascript" reload="1">
 				var page = 1;
 				var gid = -1;
 				var showNum = 0;
 				var haveFriend = true;
+				var username = '';
 				function getUser(pageId, gid) {
 					page = parseInt(pageId);
 					gid = isUndefined(gid) ? -1 : parseInt(gid);
+					username = $('username').value;
 					var x = new Ajax();
-					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&' + Math.random(), function(s) {
+					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&username='+ username + '&' + Math.random(), function(s) {
 						var data = eval('('+s+')');
 						var singlenum = parseInt(data['singlenum']);
 						var maxfriendnum = parseInt(data['maxfriendnum']);
@@ -88,19 +90,24 @@
 					}
 					getUser(page);
 				}
-				var scriptNode = document.createElement("script");
-				scriptNode.type = "text/javascript";
-				scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
-				if(BROWSER.ie) {
-					scriptNode.onreadystatechange = function () {
-						if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {
-							selector();
-						}
-					}
+				if($('friendselector_js')) {
+					selector();
 				} else {
-					scriptNode.onload = selector;
+					var scriptNode = document.createElement("script");
+					scriptNode.id = 'friendselector_js';
+					scriptNode.type = "text/javascript";
+					scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
+					if(BROWSER.ie) {
+						scriptNode.onreadystatechange = function () {
+							if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {
+								selector();
+							}
+						}
+					} else {
+						scriptNode.onload = selector;
+					}
+					$('append_parent').appendChild(scriptNode);
 				}
-				$('append_parent').appendChild(scriptNode);
 			</script>
 			<form method="post" autocomplete="off" name="invite" id="inviteform" action="misc.php?mod=invite&action=$_G[gp_action]&id=$_G[gp_id]">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />

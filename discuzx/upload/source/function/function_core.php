@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 22775 2011-05-20 05:43:23Z monkey $
+ *      $Id: function_core.php 22912 2011-05-31 03:08:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1150,7 +1150,7 @@ function output_replace($content) {
 	}
 	if(!empty($_G['setting']['output']['preg']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl']), $_G['setting']['output']['preg']['search']);
+			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
 			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
 		}
 
@@ -1642,8 +1642,16 @@ function censor($message, $modword = NULL, $return = FALSE) {
 				} elseif($_G['group']['allowposturl'] == 2) {
 					$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
 					$message = preg_replace(
-						array("@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i", "@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i"),
-						array('\\1', ''),
+						array(
+							"@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i",
+							"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i",
+							"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@i",
+						),
+						array(
+							'\\1',
+							'',
+							'\\1',
+						),
 						$message);
 				}
 			}

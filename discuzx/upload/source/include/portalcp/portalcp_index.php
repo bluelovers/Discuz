@@ -15,15 +15,16 @@ if(!$_G['setting']['portalstatus']) {
 	dheader('location:portal.php?mod=portalcp&ac=portalblock');
 }
 $op = $_GET['op'] == 'push' ? 'push' : 'list';
-
-if($op == 'list' && !checkperm('allowmanagearticle') && !checkperm('allowpostarticle') && !$admincp2 && !$admincp3) {
-	if(!checkperm('allowdiy') && !$admincp4) {
-		showmessage('portal_nopermission', 'portal.php');
-	} else {
+$allowpostarticle = checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $admincp2 || $admincp3;
+if($op == 'list') {
+	if(checkperm('allowdiy') || $admincp4) {
+	} elseif(!checkperm('allowmanagearticle') && checkperm('allowpostarticle') && !$admincp2 || (!$admincp2 && $admincp3)) {
+		dheader('location:portal.php?mod=portalcp&ac=category');
+	} elseif($_G['member']['allowadmincp'] == 8) {
 		dheader('location:portal.php?mod=portalcp&ac=portalblock');
 	}
-} elseif(checkperm('allowpostarticle') || !$admincp2 && $admincp3) {
-	dheader('location:portal.php?mod=portalcp&ac=category');
+} elseif($op == 'push' && !$allowpostarticle) {
+	showmessage('portal_nopermission');
 }
 
 require_once libfile('function/portalcp');

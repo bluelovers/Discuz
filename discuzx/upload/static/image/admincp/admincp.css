@@ -396,7 +396,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .nobdb{ border-bottom:none; }
 .nobdt{ border-top:none; }
 .noborder, .noborder td{border-bottom:0; border-top:0; }
-	.noborder td:hover { color: #000; }
+	.noborder td:hover, .normalfont { color: #000; }
 .vtop{ vertical-align:top; }
 .lineheight{ line-height:150%; }
 .left{ float:left; }

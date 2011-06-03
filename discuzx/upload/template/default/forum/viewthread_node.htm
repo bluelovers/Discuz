@@ -70,7 +70,7 @@
 			<!--{hook/viewthread_avatar $postcount}-->
 			<!--{if $post[groupicon]}--><p>$post[groupicon]</p><!--{/if}-->
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
-			<!--{if $post['customstatus'] && $_G['group']['allowcstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
+			<!--{if $post['customstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
 			</div>
 			<p{if $post['upgradecredit'] !== false} id="g_up$post[pid]" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12!'});"{/if}><!--{eval showstars($post['stars']);}--></p>
 			<!--{if $post['upgradecredit'] !== false}-->
@@ -185,7 +185,7 @@
 						<!--{/if}-->
 					<!--{/if}-->
 				<!--{elseif $post['authorid'] && $post['username'] && $post['anonymous'] || !$post['authorid'] && !$post['username']}-->
-					$_G[setting][anonymoustext]
+					$_G[setting][anonymoustext]&nbsp;
 					<em id="authorposton$post[pid]">{lang poston} $post[dateline]</em>
 				<!--{/if}-->
 				<!--{if !IS_ROBOT && !$_G['forum_thread']['archiveid'] && $post['first'] }-->

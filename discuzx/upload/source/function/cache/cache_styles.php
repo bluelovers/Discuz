@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 21575 2011-04-01 02:01:45Z monkey $
+ *      $Id: cache_styles.php 22806 2011-05-24 01:19:54Z congyushuai $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -84,7 +84,7 @@ function setcssbackground(&$data, $code) {
 					$css .= strtoupper($codes[$i]).' ';
 					$codevalue = strtoupper($codes[$i]);
 				} elseif(preg_match('/^http:\/\//i', $codes[$i])) {
-					$css .= 'url(\"'.$codes[$i].'\") ';
+					$css .= 'url("'.$codes[$i].'") ';
 				} else {
 					$css .= 'url("'.$data['styleimgdir'].'/'.$codes[$i].'") ';
 				}

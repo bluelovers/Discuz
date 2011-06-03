@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_redirect.php 22266 2011-04-27 05:44:42Z zhengqingpeng $
+ *      $Id: forum_redirect.php 22917 2011-05-31 05:04:49Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,7 +75,7 @@ if($_G['gp_goto'] == 'findpost') {
 	}
 
 	$ordertype = !isset($_GET['ordertype']) && getstatus($thread['status'], 4) ? 1 : $ordertype;
-	$curpostnum = DB::result_first("SELECT count(*) FROM ".DB::table($thread['posttable'])." WHERE tid='$tid' AND dateline<='$post[dateline]'");
+	$curpostnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($thread['posttable'])." WHERE tid='$tid' AND invisible='0' AND dateline<='$post[dateline]'");
 
 	if($ordertype != 1) {
 		$page = ceil($curpostnum / $_G['ppp']);

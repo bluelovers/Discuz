@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: member_connect_register.php 22667 2011-05-17 04:37:23Z fengning $
+ *	  $Id: member_connect_register.php 22893 2011-05-30 08:40:09Z fengning $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,13 @@ if(empty($_POST)) {
 
 	$params = $_GET;
 	connect_params($params, $connect_params);
+
+	if(!$connect_params['is_user_info']) {
+		$connect_params['x_usernames'] = '';
+		$connect_params['x_nick'] = '';
+		$connect_params['x_email'] = '';
+		$connect_params['x_sex'] = 0;
+	}
 
 	$connect_usernames = base64_decode($connect_params['x_usernames']);
 	$connect_nick = connect_filter_username(base64_decode($connect_params['x_nick']));
@@ -78,16 +85,7 @@ if(empty($_POST)) {
 		$_G['qc']['first_available_username'] = $connect_nick;
 	}
 
-	switch($connect_params['x_sex']) {
-		case 'male':
-			$connectdefault['gender'] = 1;
-			break;
-		case 'female':
-			$connectdefault['gender'] = 2;
-			break;
-		default:
-			$connectdefault['gender'] = 0;
-	}
+	$connectdefault['gender'] = $connect_params['x_sex'];
 
 	list($connectdefault['birthyear'], $connectdefault['birthmonth'], $connectdefault['birthday']) = explode('-', $connect_params['x_birthday']);
 	foreach($_G['cache']['fields_register'] as $field) {
@@ -158,8 +156,9 @@ if(empty($_POST)) {
 	}
 
 	if($_G['setting']['connect']['register_addcredit']) {
-		updatemembercount($uid, array($_G['setting']['connect']['register_rewardcredit'] => $_G['setting']['connect']['register_addcredit']));
+		$init_arr[$_G['setting']['connect']['register_rewardcredit']] += $_G['setting']['connect']['register_addcredit'];
 	}
+
 }
 
 function connect_filter_username($username) {

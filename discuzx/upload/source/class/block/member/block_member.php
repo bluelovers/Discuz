@@ -152,7 +152,7 @@ class block_member {
 				'reason' => array('name' => lang('blockclass', 'blockclass_member_field_reason'), 'formtype' => 'text', 'datatype' => 'string'),
 				'unitprice' => array('name' => lang('blockclass', 'blockclass_member_field_unitprice'), 'formtype' => 'text', 'datatype' => 'int'),
 				'showcredit' => array('name' => lang('blockclass', 'blockclass_member_field_showcredit'), 'formtype' => 'text', 'datatype' => 'int'),
-				'shwonote' => array('name' => lang('blockclass', 'blockclass_member_field_shwonote'), 'formtype' => 'text', 'datatype' => 'string'),
+				'shownote' => array('name' => lang('blockclass', 'blockclass_member_field_shownote'), 'formtype' => 'text', 'datatype' => 'string'),
 				);
 		foreach($_G['setting']['extcredits'] as $key=>$value) {
 			$fields['extcredits'.$key] = array('name'=>$value['title'], 'formtype'=>'text', 'datatype'=>'int');
@@ -289,7 +289,7 @@ class block_member {
 				$sqlorderby = " ORDER BY mc.$orderby DESC";
 				break;
 			case 'show':
-				$show = ', s.unitprice, s.credit as showcredit, s.note as shwonote';
+				$show = ', s.unitprice, s.credit as showcredit, s.note as shownote';
 				$tables[] = DB::table('home_show')." s";
 				$wheres[] = 's.uid=m.uid';
 				$sqlorderby = ' ORDER BY s.unitprice DESC, s.credit DESC';
@@ -354,7 +354,7 @@ class block_member {
 					'reason' => isset($data['reason']) ? $data['reason'] : '',
 					'unitprice' => isset($data['unitprice']) ? $data['unitprice'] : '',
 					'showcredit' => isset($data['showcredit']) ? $data['showcredit'] : '',
-					'shwonote' => isset($data['shwonote']) ? $data['shwonote'] : '',
+					'shownote' => isset($data['shownote']) ? $data['shownote'] : '',
 				)
 			);
 		}

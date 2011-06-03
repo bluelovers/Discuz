@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 22780 2011-05-20 08:39:00Z monkey $
+ *      $Id: update.php 22789 2011-05-23 00:28:27Z monkey $
  */
 
 include_once('../source/class/class_core.php');
@@ -990,8 +990,8 @@ if($_GET['step'] == 'start') {
 				$sql = implode("\r\n", $data);
 				runquery($sql);
 			}
-			DB::query("UPDATE  `pre_common_block_style` SET name = replace(`name`, 'X1.5', '內置')");
-			DB::query("UPDATE  `pre_common_block_style` SET name = replace(`name`, 'X2.0', '內置')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X1.5', '內置')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X2.0', '內置')");
 		}
 		show_msg("模塊模板升級完畢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'block_script') {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_announce.php 21972 2011-04-19 02:51:52Z monkey $
+ *      $Id: admincp_announce.php 22868 2011-05-27 07:09:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -109,7 +109,7 @@ if(empty($operation)) {
 
 		$newstarttime = $_G['gp_newstarttime'] ? strtotime($_G['gp_newstarttime']) : 0;
 		$newendtime = $_G['gp_newendtime'] ? strtotime($_G['gp_newendtime']) : 0;
-		if($newstarttime > $newendtime) {
+		if($newendtime && $newstarttime > $newendtime) {
 			cpmsg('announce_time_invalid', '', 'error');
 		}
 		$newsubject = trim($_G['gp_newsubject']);
@@ -207,7 +207,7 @@ if(empty($operation)) {
 		}
 		$subjectnew = trim($_G['gp_newsubject']);
 		$messagenew = trim($_G['gp_messagenew']);
-		if(!$starttimenew || ($endtimenew && $endtimenew <= TIMESTAMP) || $starttimenew > $endtimenew) {
+		if(!$starttimenew || ($endtimenew && $endtimenew <= TIMESTAMP) || $endtimenew && $starttimenew > $endtimenew) {
 			cpmsg('announce_time_invalid', '', 'error');
 		} elseif(!$subjectnew || !$messagenew) {
 			cpmsg('announce_invalid', '', 'error');

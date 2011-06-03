@@ -236,7 +236,7 @@
 
 				<!--{if $page<2 && $op != 'addpage'}-->
 				<div class="exfm">
-					<h2>{lang article_related} <a id="related_article" href="portal.php?mod=portalcp&ac=related&catid=$catid&aid=$aid" class="xi2" style="text-decoration: underline;" onclick="showWindow(this.id, this.href, 'get', 0)">{lang select}</a></h2>
+					<h2>{lang article_related} <a id="related_article" href="portal.php?mod=portalcp&ac=related&aid=$aid" class="xi2" style="text-decoration: underline;" onclick="showWindow(this.id, this.href+'&catid='+$('catid').value, 'get', 0);return false;">{lang select}</a></h2>
 					<ul id="raid_div" class="xl">
 						<!--{if $article[related]}-->
 							<!--{loop $article[related] $ra}-->

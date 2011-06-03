@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 22538 2011-05-12 01:52:18Z monkey $
+ *      $Id: spacecp_usergroup.php 22854 2011-05-26 07:10:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -112,6 +112,9 @@ if(in_array($do, array('buy', 'exit'))) {
 	$groupid = intval($_G['gp_groupid']);
 	if(!in_array($groupid, $extgroupids)) {
 		showmessage('usergroup_not_found');
+	}
+	if($_G['groupid'] == 4 && $_G['member']['groupexpiry'] > 0 && $_G['member']['groupexpiry'] > TIMESTAMP) {
+		showmessage('usergroup_switch_not_allow');
 	}
 	$group = DB::fetch_first("SELECT * FROM ".DB::table('common_usergroup')." WHERE groupid='$groupid'");
 	if(submitcheck('groupsubmit')) {

@@ -3,16 +3,9 @@
 	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
 	<item id="Data">
-		<item id="0"><![CDATA[connect.php]]></item>
-		<item id="1"><![CDATA[source/module/member/member_connect.php]]></item>
-		<item id="2"><![CDATA[source/module/member/member_connect_logging.php]]></item>
-		<item id="3"><![CDATA[source/module/member/member_connect_register.php]]></item>
-		<item id="4"><![CDATA[source/module/connect/connect_config.php]]></item>
-		<item id="5"><![CDATA[source/module/connect/connect_login.php]]></item>
-		<item id="6"><![CDATA[source/function/function_connect.php]]></item>
-		<item id="7"><![CDATA[source/plugin/qqconnect/connect.class.php]]></item>
-		<item id="8"><![CDATA[source/plugin/qqconnect/spacecp.inc.php]]></item>
-		<item id="9"><![CDATA[source/plugin/qqconnect/template/module.htm]]></item>
-		<item id="10"><![CDATA[source/plugin/qqconnect/template/spacecp.htm]]></item>
+		<item id="0"><![CDATA[source/plugin/qqconnect/connect.class.php]]></item>
+		<item id="1"><![CDATA[source/plugin/qqconnect/spacecp.inc.php]]></item>
+		<item id="2"><![CDATA[source/plugin/qqconnect/template/module.htm]]></item>
+		<item id="3"><![CDATA[source/plugin/qqconnect/template/spacecp.htm]]></item>
 	</item>
 </root>

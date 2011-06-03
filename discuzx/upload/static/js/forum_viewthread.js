@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 22776 2011-05-20 06:37:48Z monkey $
+	$Id: forum_viewthread.js 22866 2011-05-27 06:23:56Z zhangguosheng $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -458,7 +458,7 @@ function lazyload(className) {
 				if(imgs[j].getAttribute('file') && !imgs[j].getAttribute('lazyloaded')) {
 					if(this.getOffset(imgs[j]) > document.documentElement.clientHeight) {
 						lazyload.imgs.push(imgs[j]);
-					} else if(this.getOffset(imgs[j]) > 0) {
+					} else {
 						imgs[j].setAttribute('src', imgs[j].getAttribute('file'));
 					}
 				}

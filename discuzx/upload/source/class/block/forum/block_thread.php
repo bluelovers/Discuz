@@ -292,7 +292,7 @@ class block_thread {
 		$datalist = $list = $listtids = $pictids = $pics = $threadtids = array();
 		$threadtypeids = array();
 		$keyword = $keyword ? searchkey($keyword, "t.subject LIKE '%{text}%'") : '';
-		$tagkeyword = $tagkeyword ? searchkey($tagkeyword, "ti.tagname LIKE '%{text}%'") : '';
+		$tagkeyword = $tagkeyword ? searchkey($tagkeyword, "tim.tagname LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($uids ? ' AND t.authorid IN ('.dimplode($uids).')' : '')
@@ -331,7 +331,7 @@ class block_thread {
 		}
 
 		if($tagkeyword) {
-			$sqlfrom .= " $joinmethod JOIN `".DB::table('common_tagitem')."` ti ON ti.itemid=t.tid AND ti.idtype='tid'";
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('common_tagitem')."` tim ON tim.itemid=t.tid AND tim.idtype='tid'";
 		}
 
 		$query = DB::query("SELECT DISTINCT t.*$sqlfield

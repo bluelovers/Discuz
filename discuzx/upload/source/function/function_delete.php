@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 22740 2011-05-19 02:28:12Z monkey $
+ *      $Id: function_delete.php 22847 2011-05-26 00:41:18Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -87,7 +87,7 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletepost');
 	}
 	if(!$ids || !in_array($idtype, array('authorid', 'tid', 'pid'))) {
-		return;
+		return 0;
 	}
 
 	loadcache('posttableids');
@@ -209,7 +209,7 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletethread');
 	}
 	if(!$tids) {
-		return;
+		return 0;
 	}
 	require_once libfile('function/forum');
 	foreach($tids as $tid) {

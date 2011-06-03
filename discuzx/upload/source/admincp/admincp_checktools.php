@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 22399 2011-05-06 00:16:46Z monkey $
+ *      $Id: admincp_checktools.php 22881 2011-05-30 02:09:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -46,7 +46,7 @@ if($operation == 'filecheck') {
 		checkfiles('data/threadcache/', '\.htm', 0);
 		checkfiles('template/', '');
 		checkfiles('api/', '');
-		checkfiles('source/', '', 1, 'discuzfiles.md5');
+		checkfiles('source/', '', 1, 'discuzfiles.md5,plugin');
 		checkfiles('static/', '');
 		checkfiles('archiver/', '');
 		checkfiles('uc_client/', '\.php|\.htm', 0);

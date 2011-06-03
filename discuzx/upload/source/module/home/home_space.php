@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 20942 2011-03-09 02:37:26Z monkey $
+ *      $Id: home_space.php 22839 2011-05-25 08:05:18Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,9 +26,6 @@ $dos = array('index', 'doing', 'blog', 'album', 'friend', 'wall',
 	'thread', 'trade', 'poll', 'activity', 'debate', 'reward', 'profile', 'plugin');
 
 $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
-if($do == 'index' && ($_G['inajax'] || !$_G['setting']['homestatus'])) {
-	$do = 'profile';
-}
 
 if(in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
 	if(!$_G['setting']['homestatus']) {

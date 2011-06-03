@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 22747 2011-05-19 04:11:31Z yexinhao $
+ *	  $Id: admincp_cloud.php 22897 2011-05-30 09:19:11Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,7 +23,9 @@ if(empty($admincp) || !is_object($admincp) || !$admincp->isfounder) {
 $adminscript = ADMINSCRIPT;
 
 $cloudDomain = 'http://cp.discuz.qq.com';
-$cloudstatus = checkcloudstatus();
+if($operation != 'doctor') {
+	$cloudstatus = checkcloudstatus();
+}
 $forceOpen = $_GET['force_open'] == 1 ? true : false;
 
 if(!$operation || $operation == 'open') {
@@ -43,11 +45,11 @@ if(!$operation || $operation == 'open') {
 		if($step == 1) {
 
 			if($cloudstatus == 'upgrade' || ($cloudstatus == 'cloud' &&  $forceOpen)) {
-				shownav('navcloud', 'cloud_upgrade');
-				$itemtitle = cplang('cloud_upgrade');
+				shownav('navcloud', 'menu_cloud_upgrade');
+				$itemtitle = cplang('menu_cloud_upgrade');
 			} else {
-				shownav('navcloud', 'cloud_open');
-				$itemtitle = cplang('cloud_open');
+				shownav('navcloud', 'menu_cloud_open');
+				$itemtitle = cplang('menu_cloud_open');
 			}
 
 			echo '
@@ -204,100 +206,13 @@ EOT;
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
 
-	shownav('navcloud', 'cloud_applist');
-
 	$signParams = array('refer' => $_G['siteurl'], 'ADTAG' => 'CP.DISCUZ.APPLIST');
 	$signUrl = generateSiteSignUrl($signParams);
 	headerLocation($cloudDomain.'/cloud/appList/?'.$signUrl);
 
-} elseif($operation == 'siteinfo') {
-	if($cloudstatus != 'cloud') {
-		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
-	}
+} elseif(in_array($operation, array('siteinfo', 'doctor'))) {
 
-	require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
-	$cloudClient = new Discuz_Cloud_Client();
-	if(submitcheck('syncsubmit')) {
-
-		if ($_G['setting']['my_app_status']) {
-			manyouSync();
-		}
-
-		$res = $cloudClient->sync();
-
-		if(!$res) {
-			cpmsg('cloud_sync_failure', '', 'error', array('errCode' => $cloudClient->errno, 'errMessage' => $cloudClient->errmsg));
-		} else {
-			cpmsg('cloud_sync_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
-		}
-	} elseif(submitcheck('resetsubmit')) {
-		$res = $cloudClient->resetKey();
-
-		if(!$res) {
-			cpmsg($cloudClient->errmsg, '', 'error');
-		} else {
-			$sId = $res['sId'];
-			$sKey = $res['sKey'];
-
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
-						VALUES ('my_siteid', '$sId'), ('my_sitekey', '$sKey'), ('cloud_status', '1')");
-			updatecache('setting');
-
-			cpmsg('cloud_reset_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
-		}
-	} elseif(submitcheck('ipsubmit')) {
-
-		if($_G['setting']['cloud_api_ip'] != $_G['gp_cloud_api_ip']) {
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
-						VALUES ('cloud_api_ip', '{$_G['gp_cloud_api_ip']}'), ('cloud_status', '1')");
-			updatecache('setting');
-		}
-
-		cpmsg('cloud_ipsetting_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
-
-	} elseif ($_G['gp_anchor'] == 'cloud_ip') {
-		include template('common/header');
-		echo '
-			<h3 class="flb" id="fctrl_showblock" style="cursor: move;">
-				<em id="return_showblock" fwin="showblock">'.$lang['cloud_api_ip_btn'].'</em>
-				<span><a title="'.$lang['close'].'" onclick="hideWindow(\'cloudApiIpWin\');return false;" class="flbc" href="javascript:;">'.$lang['close'].'</a></span>
-			</h3>
-			';
-		echo '<div style="margin: 0 10px; width: 700px;">';
-		showformheader('cloud&edit=yes');
-		showhiddenfields(array('operation' => $operation));
-		showtableheader();
-		showsetting('cloud_api_ip', 'cloud_api_ip', $_G['setting']['cloud_api_ip'], 'text');
-		showsubmit('ipsubmit');
-		showtablefooter();
-		showformfooter();
-		echo '</div>';
-		include template('common/footer');
-	} else {
-		shownav('navcloud', 'cloud_siteinfo');
-		showsubmenu('cloud_siteinfo');
-		showtips('cloud_siteinfo_tips');
-		echo '<script type="text/javascript">var disallowfloat = "";</script>';
-		showformheader('cloud&edit=yes');
-		showhiddenfields(array('operation' => $operation));
-		showtableheader();
-		showtitle('cloud_siteinfo');
-		showtablerow('', array('class="td24"'), array(
-			'<strong>'.cplang('cloud_site_name').'</strong>',
-			$_G['setting']['bbname']
-		));
-		showtablerow('', array('class="td24"'), array(
-			'<strong>'.cplang('cloud_site_url').'</strong>',
-			$_G['siteurl']
-		));
-		showtablerow('', array('class="td24"'), array(
-			'<strong>'.cplang('cloud_site_id').'</strong>',
-			$_G['setting']['my_siteid']
-		));
-		showsubmit('syncsubmit', 'cloud_sync', '', '<input type="submit" class="btn" id="submit_resetsubmit" name="resetsubmit" value="'.$lang['cloud_resetkey'].'" />&nbsp; <input type="button" class="btn" onClick="showWindow(\'cloudApiIpWin\', \''.ADMINSCRIPT.'?action=cloud&operation=siteinfo&anchor=cloud_ip\'); return false;" value="'.$lang['cloud_api_ip_btn'].'" />');
-		showtablefooter();
-		showformfooter();
-	}
+	require libfile("cloud/$operation", 'admincp');
 
 } elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search', 'smilies', 'qqgroup', 'union'))) {
 	if($cloudstatus != 'cloud') {
@@ -337,8 +252,6 @@ function manyouSync() {
 	$productType = 'DISCUZX';
 	$siteRealNameEnable = '';
 	$siteRealAvatarEnable = '';
-	$siteEnableSearch = intval($setting['my_search_status']);
-	$siteSearchInvitationCode = $setting['my_search_invite'];
 	$siteEnableApp = intval($setting['my_app_status']);
 
 	$key = $mySiteId . $siteName . $siteUrl . $ucUrl . $siteCharset . $siteTimeZone . $siteRealNameEnable . $mySiteKey . $siteKey;
@@ -347,7 +260,7 @@ function manyouSync() {
 	$siteName = urlencode($siteName);
 
 	$register = false;
-	$postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableSearch=%s&siteSearchInvitationCode=%s&siteEnableApp=%s', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableSearch, $siteSearchInvitationCode, $siteEnableApp);
+    $postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
 
 	$response = @dfsockopen($my_url, 0, $postString, '', false, $setting['my_ip']);
 	$res = unserialize($response);

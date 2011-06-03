@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 22681 2011-05-17 07:44:49Z monkey $
+ *      $Id: moderate_reply.php 22851 2011-05-26 03:02:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -176,7 +176,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			$sqlwhere .= " AND t.isgroup='1'";
 		}
 		if(!empty($_G['gp_dateline']) && $_G['gp_dateline'] != 'all') {
-			$sqlwhere .= " AND p.dateline>'{$_G['gp_dateline']}";
+			$sqlwhere .= " AND p.dateline>'{$_G['gp_dateline']}'";
 		}
 		if(!empty($_G['gp_username'])) {
 			$sqlwhere .= " AND p.author='{$_G['gp_username']}'";
@@ -233,6 +233,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			require_once libfile('function/delete');
 			$deletes = deletepost($pids, 'pid', false, $posttable);
 		}
+		$deletes += count($recyclebinpids);
 		updatemodworks('DLP', count($moderation['delete']));
 		updatemoderate('pid', $moderation['delete'], 2);
 	}

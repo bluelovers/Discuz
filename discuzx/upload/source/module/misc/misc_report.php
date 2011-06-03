@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_report.php 19833 2011-01-19 07:57:13Z liulanbo $
+ *      $Id: misc_report.php 22830 2011-05-25 01:38:56Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,14 +17,15 @@ $rtype = $_G['gp_rtype'];
 $rid = intval($_G['gp_rid']);
 $tid = intval($_G['gp_tid']);
 $fid = intval($_G['gp_fid']);
+$uid = intval($_G['gp_uid']);
 $default_url = array(
 	'user' => 'home.php?mod=space&uid=',
 	'post' => 'forum.php?mod=redirect&goto=findpost&ptid='.$tid.'&pid=',
 	'thread' => 'forum.php?mod=viewthread&tid=',
 	'group' => 'forum.php?mod=group&fid=',
-	'album' => 'home.php?mod=space&do=album&id=',
-	'blog' => 'home.php?mod=space&do=blog&id=',
-	'pic' => 'home.php?mod=space&do=album&picid='
+	'album' => 'home.php?mod=space&do=album&uid='.$uid.'&id=',
+	'blog' => 'home.php?mod=space&do=blog&uid='.$uid.'&id=',
+	'pic' => 'home.php?mod=space&do=album&uid='.$uid.'&picid='
 );
 $url = '';
 if($rid && !empty($default_url[$rtype])) {

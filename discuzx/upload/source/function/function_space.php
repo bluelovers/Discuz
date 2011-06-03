@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 22489 2011-05-10 05:20:26Z zhangguosheng $
+ *      $Id: function_space.php 22814 2011-05-24 05:42:54Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -569,7 +569,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 					$_G['cache']['smilies']['loaded'] = 1;
 				}
-				$parameters['content'] = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], censor(trim($parameters['content'])));
+				$parameters['content'] = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], trim($parameters['content']));
 			}
 			if ($_G['space_group']['allowspacediybbcode'] || $_G['space_group']['allowspacediyimgcode'] || $_G['space_group']['allowspacediyhtml'] ){
 				$parameters['content'] = discuzcode($parameters['content'], 1, 0, 1, 0, $_G['space_group']['allowspacediybbcode'], $_G['space_group']['allowspacediyimgcode'], $_G['space_group']['allowspacediyhtml']);

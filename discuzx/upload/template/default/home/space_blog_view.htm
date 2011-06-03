@@ -104,7 +104,7 @@
 						<a href="portal.php?mod=portalcp&ac=portalblock&op=recommend&idtype=blogid&id=$blog[blogid]" onclick="showWindow('recommend', this.href, 'get', 0)">{lang blockdata_recommend}</a><span class="pipe">|</span>
 					<!--{/if}-->
 					<!--{if $_G['uid'] != $blog['uid']}-->
-					<a href="javascript:;" onclick="showWindow('miscreport$blog[blogid]', 'misc.php?mod=report&rtype=blog&rid=$blog[blogid]', 'get', -1);return false;">{lang report}</a>
+					<a href="javascript:;" onclick="showWindow('miscreport$blog[blogid]', 'misc.php?mod=report&rtype=blog&uid=$blog[uid]&rid=$blog[blogid]', 'get', -1);return false;">{lang report}</a>
 					<!--{/if}-->
 				</div>
 

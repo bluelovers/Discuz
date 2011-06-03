@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 22693 2011-05-17 09:50:29Z fengning $
+ *      $Id: connect_config.php 22869 2011-05-27 09:27:31Z fengning $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -53,6 +53,11 @@ if(submitcheck('connectsubmit')) {
 
 			$response = connect_user_unbind();
 			if (!isset($response['status']) || $response['status'] !== 0) {
+				if(!isset($response['status'])) {
+					connect_errlog('100', lang('connect', 'connect_errlog_server_no_response'));
+				} else {
+					connect_errlog($response['status'], $response['result']);
+				}
 				showmessage('qqconnect:connect_config_unbind_busy', $referer);
 			}
 

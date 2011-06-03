@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 22677 2011-05-17 07:08:03Z monkey $
+ *      $Id: forum_post.php 22852 2011-05-26 04:15:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,8 +31,6 @@ $_G['forum_dtype'] = $_G['forum_checkoption'] = $_G['forum_optionlist'] = $tagar
 
 if($sortid) {
 	require_once libfile('post/threadsorts', 'include');
-	threadsort_checkoption($sortid);
-	$forum_optionlist = getsortedoptionlist();
 }
 
 if($_G['forum']['status'] == 3) {

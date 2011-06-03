@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 22718 2011-05-18 05:16:05Z monkey $
+ *      $Id: Manyou.php 22890 2011-05-30 07:35:33Z yexinhao $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -44,7 +44,10 @@ class Manyou {
 		} else {
 			$response = $this->_processServerRequest();
 		}
+		@ob_end_clean();
+		@ob_start();
 		echo serialize($this->_formatLocalResponse($response));
+		exit;
 	}
 
 	function checkRequest() {
@@ -269,6 +272,10 @@ EOT;
 	}
 
 	function onUsersGetExtraInfo($uIds) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onUsersGetFormHash($uId, $userAgent) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -1114,6 +1121,7 @@ class SearchHelper {
 
 	function allowSearchForum() {
 		$query = DB::query("UPDATE " . DB::table('common_usergroup_field') .  " SET allowsearch = allowsearch | 2 WHERE groupid < 20 AND groupid NOT IN (5, 6)");
+		require_once libfile('function/cache');
 		updatecache('usergroups');
 	}
 
@@ -1178,6 +1186,7 @@ class ManyouHelper {
 				'NewsFeed.get' => '64',
 				'VideoAuth.setAuthStatus' => '65',
 				'VideoAuth.auth' => '66',
+				'Users.getFormHash' => '67',
 
 				'Credit.get' => '70',
 				'Credit.update' => '71',
@@ -1317,7 +1326,7 @@ class Cloud_Client {
 	function register($sName, $sSiteKey, $sUrl, $sCharset,
 					  $sTimeZone, $sUCenterUrl, $sLanguage,
 					  $sProductType, $sProductVersion,
-					  $sTimestamp, $sApiVersion, $sSiteUid) {
+					  $sTimestamp, $sApiVersion, $sSiteUid, $sProductRelease) {
 
 		return $this->_callMethod('site.register', array('sName' => $sName,
 														 'sSiteKey' => $sSiteKey,
@@ -1330,7 +1339,8 @@ class Cloud_Client {
 														 'sProductVersion' => $sProductVersion,
 														 'sTimestamp' => $sTimestamp,
 														 'sApiVersion' => $sApiVersion,
-														 'sSiteUid' => $sSiteUid
+														 'sSiteUid' => $sSiteUid,
+														 'sProductRelease' => $sProductRelease
 												   )
 								  );
 	}
@@ -1338,7 +1348,7 @@ class Cloud_Client {
 	function sync($sName, $sSiteKey, $sUrl, $sCharset,
 				  $sTimeZone, $sUCenterUrl, $sLanguage,
 				  $sProductType, $sProductVersion,
-				  $sTimestamp, $sApiVersion, $sSiteUid) {
+				  $sTimestamp, $sApiVersion, $sSiteUid, $sProductRelease) {
 
 		return $this->_callMethod('site.sync', array('sId' => $this->sId,
 													 'sName' => $sName,
@@ -1352,7 +1362,8 @@ class Cloud_Client {
 													 'sProductVersion' => $sProductVersion,
 													 'sTimestamp' => $sTimestamp,
 													 'sApiVersion' => $sApiVersion,
-													 'sSiteUid' => $sSiteUid
+													 'sSiteUid' => $sSiteUid,
+													 'sProductRelease' => $sProductRelease
 													 )
 								  );
 	}
@@ -1409,6 +1420,7 @@ class Discuz_Cloud_Client {
 	var $language = '';
 	var $productType = '';
 	var $productVersion = '';
+	var $productRelease = '';
 	var $timestamp = 0;
 	var $apiVersion = '';
 	var $siteUid = 0;
@@ -1420,6 +1432,8 @@ class Discuz_Cloud_Client {
 		}
 
 		global $_G;
+
+		require_once DISCUZ_ROOT.'./source/discuz_version.php';
 
 		$this->my_status = !empty($_G['setting']['my_app_status']) ? $_G['setting']['my_app_status'] : '';
 		$this->cloud_status = !empty($_G['setting']['cloud_status']) ? $_G['setting']['cloud_status'] : '';
@@ -1434,7 +1448,8 @@ class Discuz_Cloud_Client {
 		$this->UCenterUrl = !empty($_G['setting']['ucenterurl']) ? $_G['setting']['ucenterurl'] : '';
 		$this->language = $_G['config']['output']['language'] ? $_G['config']['output']['language'] : 'zh_CN';
 		$this->productType = 'DISCUZX';
-		$this->productVersion = !empty($_G['setting']['version']) ? $_G['setting']['version'] : '';
+		$this->productVersion = !defined(DISCUZ_VERSION) ? DISCUZ_VERSION : '';
+		$this->productRelease = !defined(DISCUZ_RELEASE) ? DISCUZ_RELEASE : '';
 		$this->timestamp = TIMESTAMP;
 		$this->apiVersion = '0.3';
 		$this->siteUid = $_G['uid'];
@@ -1457,7 +1472,7 @@ class Discuz_Cloud_Client {
 		$data = $this->Client->register($this->siteName, $this->uniqueId, $this->siteUrl, $this->charset,
 										$this->timeZone, $this->UCenterUrl, $this->language,
 										$this->productType, $this->productVersion,
-										$this->timestamp, $this->apiVersion, $this->siteUid);
+										$this->timestamp, $this->apiVersion, $this->siteUid, $this->productRelease);
 
 		$this->errno = $this->Client->errno;
 		$this->errmsg = $this->Client->errmsg;
@@ -1470,7 +1485,7 @@ class Discuz_Cloud_Client {
 		$data = $this->Client->sync($this->siteName, $this->uniqueId, $this->siteUrl, $this->charset,
 									$this->timeZone, $this->UCenterUrl, $this->language,
 									$this->productType, $this->productVersion,
-									$this->timestamp, $this->apiVersion, $this->siteUid);
+									$this->timestamp, $this->apiVersion, $this->siteUid, $this->productRelease);
 
 		$this->errno = $this->Client->errno;
 		$this->errmsg = $this->Client->errmsg;

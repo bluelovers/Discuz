@@ -167,7 +167,7 @@
 								<span class="pipe">|</span><a href="portal.php?mod=portalcp&ac=portalblock&op=recommend&idtype=picid&id=$pic[picid]" onclick="showWindow('recommend', this.href, 'get', 0)">{lang blockdata_recommend}</a>
 								<!--{/if}-->
 								<!--{if $pic[uid] != $_G['uid']}-->
-								<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('miscreport$pic[picid]', 'misc.php?mod=report&rtype=pic&rid=$pic[picid]', 'get', -1);return false;">{lang report}</a>
+								<span class="pipe">|</span><a href="javascript:;" onclick="showWindow('miscreport$pic[picid]', 'misc.php?mod=report&rtype=pic&uid=$pic[uid]&rid=$pic[picid]', 'get', -1);return false;">{lang report}</a>
 								<!--{/if}-->
 								<!--{hook/space_album_pic_bottom}-->
 							</span>

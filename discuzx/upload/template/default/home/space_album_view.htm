@@ -23,7 +23,7 @@
 						<a href="home.php?mod=spacecp&ac=album&op=delete&albumid=$album[albumid]&uid=$album[uid]&handlekey=delalbumhk_{$album[albumid]}" id="album_delete_$album[albumid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a><span class="pipe">|</span>
 					<!--{/if}-->
 					<!--{if $_G[uid] != $album[uid]}-->
-					<a href="javascript:;" onclick="showWindow('miscreport$album[albumid]', 'misc.php?mod=report&rtype=album&rid=$album[albumid]', 'get', -1);return false;">{lang report}</a><span class="pipe">|</span>
+					<a href="javascript:;" onclick="showWindow('miscreport$album[albumid]', 'misc.php?mod=report&rtype=album&uid=$album[uid]&rid=$album[albumid]', 'get', -1);return false;">{lang report}</a><span class="pipe">|</span>
 					<!--{/if}-->
 				</div>
 				<!--{if $album['catname']}-->

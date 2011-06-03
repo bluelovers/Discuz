@@ -39,11 +39,11 @@
 					<th>{lang modcp_posts_author}:</th>
 					<td><input type="text" name="users" class="px" size="20" value="$result[users]" style="width: 180px"/></td>
 					<th>{lang modcp_posts_dateline_range}:</th>
-					<td><input type="text" name="starttime" class="px" size="10" value="$result[starttime]" onclick="showcalendar(event, this)"/> {lang modcp_posts_to} 
+					<td><input type="text" name="starttime" class="px" size="10" value="$result[starttime]" onclick="showcalendar(event, this)"/> {lang modcp_posts_to}
 						<!--{if $_G['adminid'] == 1}-->
 							<input type="text" name="endtime" class="px" size="10" value="$result[endtime]" onclick="showcalendar(event, this)"/>
 						<!--{else}-->
-							<input type="text" name="endtime" class="px" size="10" value="$result[endtime]" readonly="readonly" disabled="disabled" /> 
+							<input type="text" name="endtime" class="px" size="10" value="$result[endtime]" readonly="readonly" disabled="disabled" />
 							<!--{if $_G['adminid'] == 2}-->
 								<br />{lang modcp_posts_week_2}
 							<!--{elseif $_G['adminid'] == 3}-->
@@ -102,7 +102,7 @@
 					<tr>
 						<!--{if $_G['group']['allowmassprune']}--><td><input type="checkbox" name="delete[]" class="pc" value="$post[pid]" /></td><!--{/if}-->
 						<th>
-							{lang modcp_posts_thread}: &nbsp;<a target="_blank" href="forum.php?mod=redirect&goto=findpost&pid=$post[pid]&ptid=$post[tid]&modthreadkey=$post[modthreadkey]">$post[tsubject]</a><br />
+							{lang modcp_posts_thread}: &nbsp;<a target="_blank" href="forum.php?mod=redirect&goto=findpost&pid=$post[pid]&ptid=$post[tid]{if $post[invisible] == -2}&modthreadkey=$post[modthreadkey]{/if}">$post[tsubject]</a><br />
 							<span class="xg1">$post[message]</span>
 						</th>
 						<td class="frm">
@@ -125,8 +125,8 @@
 						<td colspan="{if $_G['group']['allowmassprune']}4{else}3{/if}" class="ptm">
 							<!--{if $multipage}-->$multipage<!--{/if}-->
 							<!--{if $postlist && $_G['group']['allowmassprune']}-->
-								<label for="chkall"><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form, 'delete')" />{lang delete_check}</label> 
-								<button type="submit" name="deletesubmit" id="deletesubmit" class="pn" value="true"><strong>{lang delete}</strong></button> 
+								<label for="chkall"><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form, 'delete')" />{lang delete_check}</label>
+								<button type="submit" name="deletesubmit" id="deletesubmit" class="pn" value="true"><strong>{lang delete}</strong></button>
 								<label for="nocredit"><input type="checkbox" name="nocredit" id="nocredit" class="pc" value="1" checked="checked" />{lang modcp_posts_member_credits}</label>
 							<!--{/if}-->
 						</td>

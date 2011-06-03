@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 22650 2011-05-16 09:42:10Z monkey $
+ *      $Id: post_newthread.php 22852 2011-05-26 04:15:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -70,9 +70,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		$tmp = array_keys($_G['forum']['threadsorts']['types']);
 		$sortid = $tmp[0];
 
-		require_once libfile('function/threadsort');
-		threadsort_checkoption($sortid);
-		$forum_optionlist = getsortedoptionlist();
+		require_once libfile('post/threadsorts', 'include');
 	}
 
 	if($special == 2 && $_G['group']['allowposttrade']) {

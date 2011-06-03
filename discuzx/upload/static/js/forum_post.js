@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 22765 2011-05-20 03:06:12Z zhengqingpeng $
+	$Id: forum_post.js 22843 2011-05-25 09:39:50Z monkey $
 */
 
 var postSubmited = false;
@@ -397,7 +397,7 @@ function appendAttachDel(ids) {
 		aids += '&aids[]=' + id;
 	}
 	var x = new Ajax();
-	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + tid + '&pid=' + pid + aids, function() {});
+	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + (typeof tid == 'undefined' ? 0 : tid) + '&pid=' + (typeof pid == 'undefined' ? 0 : pid) + aids, function() {});
 	if($('delattachop')) {
 		$('delattachop').value = 1;
 	}

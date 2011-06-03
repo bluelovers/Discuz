@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_index.php 22619 2011-05-16 03:01:34Z lifangming $
+ *      $Id: forum_index.php 22868 2011-05-27 07:09:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -279,7 +279,7 @@ function get_index_announcements() {
 	if($_G['cache']['announcements']) {
 		$readapmids = !empty($_G['cookie']['readapmid']) ? explode('D', $_G['cookie']['readapmid']) : array();
 		foreach($_G['cache']['announcements'] as $announcement) {
-			if($announcement['endtime'] > TIMESTAMP && (empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups']))) {
+			if(!$announcement['endtime'] || $announcement['endtime'] > TIMESTAMP && (empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups']))) {
 				if(empty($announcement['type'])) {
 					$announcements .= '<li><span><a href="forum.php?mod=announcement&id='.$announcement['id'].'" target="_blank" class="xi2">'.$announcement['subject'].
 						'</a></span><em>('.dgmdate($announcement['starttime'], 'd').')</em></li>';

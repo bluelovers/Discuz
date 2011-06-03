@@ -56,7 +56,8 @@
 		<!--{if $_G['uid'] && $_G['group']['allowinvisible']}-->
 		<script type="text/javascript">
 		var invisiblestatus = '<!--{if $_G['session']['invisible']}-->{lang login_invisible_mode}<!--{else}-->{lang login_normal_mode}<!--{/if}-->';
-		$('loginstatusid').innerHTML = invisiblestatus;
+		var loginstatusobj = $('loginstatusid');
+		if(loginstatusobj != undefined && loginstatusobj != null) loginstatusobj.innerHTML = invisiblestatus;
 		<!--{/if}-->
 		</script>
 	</div>

@@ -81,7 +81,7 @@
 				</tr>
 				<tr>
 					<td>{lang memcp_usergroups_main_new}</td><td>$group[grouptitle]</td>
-				</tr>				
+				</tr>
 			</table>
 		</div>
 		<p class="o pns">
@@ -115,7 +115,7 @@
 								<!--{/if}-->
 								&nbsp;$verifyperm[$fid][$perm]
 							<!--{else}-->
-								<!--{if $forumperm[$fid][$perm]}--><img src="{IMGDIR}/data_valid.gif" alt="data_valid" /><!--{else}--><img src="{IMGDIR}/data_invalid.gif" alt="data_invalid" /><!--{/if}-->																						
+								<!--{if $forumperm[$fid][$perm]}--><img src="{IMGDIR}/data_valid.gif" alt="data_valid" /><!--{else}--><img src="{IMGDIR}/data_invalid.gif" alt="data_invalid" /><!--{/if}-->
 							<!--{/if}-->
 						</td>
 					<!--{/loop}-->
@@ -204,7 +204,7 @@
 	<!--{subtemplate home/spacecp_header}-->
 			<!--{hook/spacecp_usergroup_top}-->
 			<!--{subtemplate home/spacecp_usergroup_header}-->
-			<!--{eval 
+			<!--{eval
 				$permtype = array(0 => '{lang permission_menu_normaloptions}', 1 => '{lang permission_modoptions_name}');
 			}-->
 			<div class="tdats">
@@ -233,7 +233,7 @@
 					<!--{if $_G['setting']['homestatus']}-->
 					<tr class="alt h">
 						<th>{lang about_space}</th>
-					</tr>					
+					</tr>
 					<tbody class="cc">
 						<!--{loop $sperms $key $perm}-->
 						<tr {if $key%2==0}class="alt"{/if}>
@@ -309,7 +309,7 @@
 			<div id="gmy_menu" class="p_pop" style="display:none">$usergroups[my]</div>
 			<div id="gupgrade_menu" class="p_pop" style="display:none">$usergroups[upgrade]</div>
 			<div id="guser_menu" class="p_pop" style="display:none">$usergroups[user]</div>
-			<div id="gadmin_menu" class="p_pop" style="display:none">$usergroups[admin]</div>			
+			<div id="gadmin_menu" class="p_pop" style="display:none">$usergroups[admin]</div>
 		</div>
 		<!--{hook/spacecp_usergroup_bottom}-->
 	</div>

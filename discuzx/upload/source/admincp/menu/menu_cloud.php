@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: menu_cloud.php 21848 2011-04-14 03:03:23Z monkey $
+ *      $Id: menu_cloud.php 22886 2011-05-30 04:15:02Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,7 +20,8 @@ if($isfounder) {
 	if ($cloudstatus == 'cloud') {
 		$menu['cloud'] = array(
 			array('menu_cloud_applist', 'cloud_applist'),
-			array('menu_cloud_siteinfo', 'cloud_siteinfo')
+			array('menu_cloud_siteinfo', 'cloud_siteinfo'),
+			array('menu_cloud_doctor', 'cloud_doctor')
 		);
 		$apps = unserialize($_G['setting']['cloud_apps']);
 		if(is_array($apps) && $apps) {
@@ -39,7 +40,8 @@ if($isfounder) {
 		}
 
 		$menu['cloud'] = array(
-			array($menuitem, 'cloud_open')
+			array($menuitem, 'cloud_open'),
+			array('menu_cloud_doctor', 'cloud_doctor')
 		);
 	}
 }

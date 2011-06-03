@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_threadsorts.php 22677 2011-05-17 07:08:03Z monkey $
+ *      $Id: post_threadsorts.php 22852 2011-05-26 04:15:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,6 +12,10 @@ if(!defined('IN_DISCUZ')) {
 }
 
 require_once libfile('function/threadsort');
+
+threadsort_checkoption($sortid);
+$forum_optionlist = getsortedoptionlist();
+
 loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
 $sqlarr = array();
 foreach($_G['cache']['threadsort_option_'.$sortid] AS $key => $val) {
@@ -25,5 +29,7 @@ if($sqlarr) {
 	unset($member_profile_sql);
 }
 threadsort_optiondata($pid, $sortid, $_G['cache']['threadsort_option_'.$sortid], $_G['cache']['threadsort_template_'.$sortid]);
+
+
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_plugin.php 22623 2011-05-16 03:15:39Z monkey $
+ *      $Id: function_plugin.php 22837 2011-05-25 06:58:35Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,7 +75,7 @@ function plugininstall($pluginarray, $installtype = '') {
 	return true;
 }
 
-function pluginupgrade($pluginarray) {
+function pluginupgrade($pluginarray, $installtype) {
 	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
 		return false;
 	}
@@ -123,6 +123,7 @@ function pluginupgrade($pluginarray) {
 	if(!empty($plugin['modules']['system'])) {
 		$pluginarray['plugin']['modules']['system'] = $plugin['modules']['system'];
 	}
+	$plugin['modules']['extra']['installtype'] = $installtype;
 	$pluginarray['plugin']['modules']['extra'] = $plugin['modules']['extra'];
 	if(!empty($pluginarray['intro']) || $langexists) {
 		if(!empty($pluginarray['intro'])) {
