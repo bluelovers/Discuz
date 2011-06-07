@@ -1,2 +1,23 @@
 
+/discuzx/upload/config/config_global.php
+/discuzx/upload/config/config_ucenter.php
+
+*.lock
+*.bak
+
+/discuzx/upload/data/*.php
+/discuzx/upload/data/*.js
+/discuzx/upload/data/*.css
+/discuzx/upload/data/*.gz
+
+/discuzx/upload/data/attachment/*.*
+/discuzx/upload/data/avatar/*.*
+/discuzx/upload/data/cache/*.*
+/discuzx/upload/data/cache/diy/*.*
+
+/discuzx/utility/convert/data/config.inc.php
+/discuzx/upload/convert
 #/discuzx/upload/uc_server
+/discuzx/upload/.htaccess
+
+/discuzx/upload/uc_client/data/cache/*.php
