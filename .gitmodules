@@ -1,3 +1,6 @@
 [submodule "discuzx/upload/uc_server"]
 	path = discuzx/upload/uc_server
 	url = git@github.com:bluelovers/ucenter-uc_server.git
+[submodule "ucenter"]
+	path = ucenter
+	url = git@github.com:bluelovers/ucenter.git
