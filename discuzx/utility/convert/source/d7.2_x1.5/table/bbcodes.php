@@ -11,6 +11,7 @@ $curprg = basename(__FILE__);
 $table_source_usergroup = $db_source->tablepre.'usergroups';
 $table_source = $db_source->tablepre.'bbcodes';
 $table_target = $db_target->tablepre.'forum_bbcode';
+$table_target_usergroup_field = $db_target->tablepre.'common_usergroup_field';
 
 $limit = 2000;
 $nextid = 0;
@@ -47,5 +48,16 @@ while ($row = $db_source->fetch_array($query)) {
 
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." id > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+} else {
+	$allowcusbbcodes = array();
+	$query = $db_target->query("SELECT * FROM $table_target_usergroup_field");
+	while ($row = $db_target->fetch_array($query)) {
+		if($row['allowcusbbcode']) {
+			$allowcusbbcodes[] = $row['groupid'];
+		}
+	}
+	if($allowcusbbcodes) {
+		$db_target->query("UPDATE $table_target SET perm='".implode("\t", $allowcusbbcodes)."' WHERE perm=''");
+	}
 }
 ?>
