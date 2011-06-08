@@ -78,13 +78,7 @@ if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." fid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
-$fids = array();
-$db_source->query("SELECT fid FROM $table_sourceforum WHERE status='2'");
-while($value = $db_source->fetch_array($query)) {
-	$fids[] = $value['fid'];
-}
-if($fids) {
-	$db_target->query("UPDATE $table_target SET hidemenu='1' WHERE fid IN ('".implode("','", $fids)."')");
-}
+$db_target->query("UPDATE $table_sourceforum SET status='1' WHERE status='2'");
+$db_target->query("UPDATE $table_target SET seodescription=description WHERE membernum='0'");
 
 ?>
