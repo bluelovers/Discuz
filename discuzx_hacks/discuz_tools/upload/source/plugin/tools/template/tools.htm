@@ -1,0 +1,17 @@
+{template tools:header}
+<div id="pt" class="wp">
+	<a href="index.php">$_G[setting][bbname]</a> &rsaquo; Tools
+</div>
+
+<div id="ct" class="wp cl">
+	<div class="mn">
+		<div class="ch">
+			<label class="wx">$title</label>
+		</div>
+		<!--{if $action!= NULL}-->
+			<!--{eval include template('tools:'.$action);}-->
+		<!--{/if}-->
+	</div>
+	{template tools:sidebar}
+</div>
+{template tools:footer}

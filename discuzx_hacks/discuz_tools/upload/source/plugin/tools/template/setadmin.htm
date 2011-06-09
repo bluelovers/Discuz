@@ -1,0 +1,40 @@
+<div id="toolsh">
+	<div class="bm">
+		$des
+	</div>
+	<div class="bm">
+	<form action="$_G['basescript'].php?action=$action" method="post">
+	<table class="tb">
+		<tbody>
+			<tr>
+			<th width="170px">$tools_nowfounder</th>
+			<td><span class="red">$foundernames</span></td>
+			</tr>
+			
+			<tr>
+			<th width="170px">$tools_nowadminer</th>
+			<td><span class="red">$adminmember</span></td>
+			</tr>
+			<tr>
+				<th width="30%"><input type="radio" checked="" value="username" name="loginfield" class="radio">$tools_username&nbsp;&nbsp;&nbsp;<input type="radio" value="uid" name="loginfield" class="radio">UID</th>
+				<td width="70%"><input type="text" maxlength="40" size="25" name="where" class="textinput"></td>
+			</tr>
+			<tr>
+				<th width="30%">$tools_passwordtip</th>
+				<td width="70%"><input type="text" size="25" name="password" class="textinput"></td>
+			</tr>
+			<tr>
+				<th width="30%">$tools_issecquesreset</th>
+				<td width="70%"><input type="radio" checked="checked" value="1" name="issecques" class="radio">$tools_yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" class="radio" value="" name="issecques">$tools_no</td>
+			</tr>
+			<tr>
+				<td><button class="pn" value="true" name="submit" type="submit"><em>$tools_submit</em></button></td>
+			</tr>
+		</tbody>
+	</table>
+    	
+	</form>
+	</div>
+	
+	
+</div>
