@@ -25,17 +25,28 @@ if($start == 0) {
 	$db_target->query("TRUNCATE $table_thread_target");
 }
 
-$query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagname LIMIT $start, $limit");
+$//query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagname LIMIT $start, $limit");
+$query = $db_source->query("SELECT  * FROM $table_source WHERE 1 ORDER BY tagid LIMIT $start, $limit");
 while ($row = $db_source->fetch_array($query)) {
 
-	$nextid = $start + $limit;
+//	$nextid = $start + $limit;
+	$nextid = $row['tagid'];
 
 	$row['status'] = $row['closed'];
 	unset($row['closed'], $row['total']);
 
-	$row  = daddslashes($row, 1);
+	$row['tagname'] = trim(str_replace(array('　', "\t", '  '),' ',$row['tagname']));
 
-	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
+	$row  = daddslashes($row, 1);
+	if (
+		empty($row['tagname'])
+		|| !$row['tagname']
+	) continue;
+
+	$newrow  = daddslashes($row, 1);
+
+//	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
+	$data = implode_field_value($newrow, ',', db_table_fields($db_target, $table_target));
 
 	$db_target->query("INSERT INTO $table_target SET $data");
 	$tagid = $db_target->insert_id();
@@ -49,7 +60,8 @@ while ($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." tag > $nextid ", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+//	showmessage("繼續轉換數據表 ".$table_source." tag > $nextid ", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("繼續轉換數據表 ".$table_source." tagid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

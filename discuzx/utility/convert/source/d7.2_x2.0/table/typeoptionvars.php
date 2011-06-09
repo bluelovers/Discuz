@@ -19,7 +19,8 @@ if($start == 0) {
 	$db_target->query("TRUNCATE $table_target");
 }
 
-$query = $db_source->query("SELECT * FROM $table_source ORDER BY tid LIMIT $start, $limit");
+//$query = $db_source->query("SELECT * FROM $table_source ORDER BY tid LIMIT $start, $limit");
+$query = $db_source->query("SELECT tov.*, t.fid, t.sortid FROM $table_source as tov JOIN {$db_source->tablepre}threads t USING(tid) ORDER BY tid LIMIT $start, $limit");
 while ($data = $db_source->fetch_array($query)) {
 
 	$next = TRUE;

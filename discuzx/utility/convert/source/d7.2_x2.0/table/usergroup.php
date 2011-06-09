@@ -3,7 +3,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: usergroup.php 17485 2010-10-19 09:52:20Z monkey $
+ * $Id: usergroup.php 21738 2011-04-11 07:06:36Z svn_project_zhangjie $
  */
 
 $curprg = basename(__FILE__);
@@ -17,18 +17,26 @@ $nextid = 0;
 
 $start = getgpc('start');
 if($start == 0) {
-	$db_target->query("TRUNCATE $table_target");
-	$db_target->query("TRUNCATE $table_target_field");
+//	$db_target->query("TRUNCATE $table_target");
+//	$db_target->query("TRUNCATE $table_target_field");
 }
 
 $usergroup = array('groupid', 'radminid', 'type', 'system', 'grouptitle', 'creditshigher', 'creditslower', 'stars', 'color', 'allowvisit', 'allowsendpm', 'allowinvite', 'allowmailinvite', 'maxinvitenum', 'inviteprice', 'maxinviteday');
 $usergroup_field = array('groupid', 'readaccess', 'allowpost', 'allowreply', 'allowpostpoll', 'allowpostreward', 'allowposttrade', 'allowpostactivity', 'allowdirectpost', 'allowgetattach', 'allowpostattach', 'allowvote', 'allowsearch', 'allowcstatus', 'allowinvisible', 'allowtransfer', 'allowsetreadperm', 'allowsetattachperm', 'allowhidecode', 'allowhtml', 'allowhidecode', 'allowhtml', 'allowanonymous', 'allowsigbbcode', 'allowsigimgcode', 'disableperiodctrl', 'reasonpm', 'maxprice', 'maxsigsize', 'maxattachsize', 'maxsizeperday', 'maxpostsperhour', 'attachextensions', 'raterange', 'mintradeprice', 'maxtradeprice', 'allowhidecode', 'allowhtml', 'allowanonymous', 'allowsigbbcode', 'allowsigimgcode', 'disableperiodctrl', 'reasonpm', 'maxprice', 'maxsigsize', 'maxattachsize', 'maxsizeperday', 'maxpostsperhour', 'attachextensions', 'raterange', 'mintradeprice', 'maxtradeprice', 'minrewardprice', 'maxrewardprice', 'magicsdiscount', 'maxmagicsweight', 'allowpostdebate', 'tradestick', 'exempt', 'maxattachnum', 'allowposturl', 'allowrecommend', 'edittimelimit', 'allowpostrushreply');
+
+// bluelovers
+$fixgroupid = array();
+// bluelovers
 
 $userdata = $userfielddata = array();
 $query = $db_source->query("SELECT * FROM $table_source WHERE groupid>'$start' ORDER BY groupid LIMIT $limit");
 while ($data = $db_source->fetch_array($query)) {
 
 	$nextid = $data['groupid'];
+
+	// bluelovers
+	$fixgroupid[] = $nextid;
+	// bluelovers
 
 	$data  = daddslashes($data, 1);
 
@@ -59,14 +67,46 @@ while ($data = $db_source->fetch_array($query)) {
 	$userdatalist = implode_field_value($userdata, ',', db_table_fields($db_target, $table_target));
 	$userfielddatalist = implode_field_value($userfielddata, ',', db_table_fields($db_target, $table_target_field));
 
-	$db_target->query("INSERT INTO $table_target SET $userdatalist");
-	$db_target->query("INSERT INTO $table_target_field SET $userfielddatalist");
+//	$db_target->query("INSERT INTO $table_target SET $userdatalist");
+//	$db_target->query("INSERT INTO $table_target_field SET $userfielddatalist");
+
+	// bluelovers
+	if (!$chk = $db_target->result_first("SELECT groupid FROM $table_target WHERE groupid = '$nextid'")) {
+		$db_target->query("REPLACE INTO $table_target SET $userdatalist");
+		$db_target->query("REPLACE INTO $table_target_field SET $userfielddatalist");
+	} else {
+		$db_target->query("UPDATE $table_target SET $userdatalist WHERE groupid = '$nextid'");
+		$db_target->query("UPDATE $table_target_field SET $userfielddatalist WHERE groupid = '$nextid'");
+	}
+	// bluelovers
 }
+
+// bluelovers
+if ($fixgroupid = implode(',', (array)$fixgroupid)) {
+
+	$sqlfix = "groupid>'$start' AND groupid NOT IN($fixgroupid)";
+	if ($nextid) {
+		$sqlfix .= " AND groupid<'$nextid'";
+	}
+
+	$db_target->query("DELETE FROM $table_target WHERE $sqlfix ORDER BY groupid");
+	$db_target->query("DELETE FROM $table_target_field WHERE $sqlfix ORDER BY groupid");
+}
+// bluelovers
 
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." groupid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 } else {
 	$db_target->query("UPDATE $table_target SET allowvisit='2' WHERE groupid='1'");
+
+// bluelovers
+	$count = $db_target->result_first("SELECT count(*) FROM $table_source");
+	$count += 1;
+
+	$db_target->query("ALTER TABLE $table_target AUTO_INCREMENT =$count");
+	$db_target->query("ALTER TABLE $table_target_field AUTO_INCREMENT =$count");
+// bluelovers
+
 }
 
 ?>
