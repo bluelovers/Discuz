@@ -29,6 +29,10 @@ while ($rs = $db_source->fetch_array($query)) {
 
 	$done = false;
 
+	// bluelovers
+	$rs['note'] = s_trim($rs['note'], "\\/");
+	// bluelovers
+
 	$rs  = daddslashes($rs, 1);
 
 	if($rs['status']) {

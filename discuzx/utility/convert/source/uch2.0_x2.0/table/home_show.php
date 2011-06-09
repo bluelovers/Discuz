@@ -24,6 +24,10 @@ while ($show = $db_source->fetch_array($query)) {
 
 	$nextid = intval($show['showid']);
 
+	// bluelovers
+	$show['note'] = s_trim($show['note'], "\\/");
+	// bluelovers
+
 	$show  = daddslashes($show, 1);
 
 	$data = implode_field_value($show, ',', db_table_fields($db_target, $table_target));

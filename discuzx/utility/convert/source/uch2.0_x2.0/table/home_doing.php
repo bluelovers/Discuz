@@ -26,6 +26,11 @@ while ($doing = $db_source->fetch_array($query)) {
 	$doing['message'] = str_replace($str, '', $doing[message]);
 	$nextid = $doing['doid'];
 
+	// bluelovers
+	$doing['message'] = s_trim($doing['message']);
+	$doing['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $doing['message']);
+	// bluelovers
+
 	$doing  = daddslashes($doing, 1);
 
 	$data = implode_field_value($doing, ',', db_table_fields($db_target, $table_target));
@@ -36,5 +41,9 @@ while ($doing = $db_source->fetch_array($query)) {
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." doid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
+
+// bluelovers
+$db_target->query("UPDATE $table_target SET message =  replace( message, 'image/face/', 'static/image/smiley/comcom/'  ) ");
+// bluelovers
 
 ?>

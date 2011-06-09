@@ -53,6 +53,11 @@ $query = $db_source->query("SELECT * FROM $table_source");
 while ($value = $db_source->fetch_array($query)) {
 	$val = addslashes($value['datavalue']);
 	$key = $value['var'];
+
+	// bluelovers
+	if ($key == 'feedday') continue;
+	// bluelovers
+
 	if(in_array($key, $validityconfig)) {
 		if($key == 'my_status') {
 			$val = 0;

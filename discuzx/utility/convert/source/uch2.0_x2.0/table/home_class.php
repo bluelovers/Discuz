@@ -24,6 +24,10 @@ while ($class = $db_source->fetch_array($query)) {
 
 	$nextid = $class['classid'];
 
+	// bluelovers
+	$class['classname'] = s_trim($class['classname'], "\\/");
+	// bluelovers
+
 	$class  = daddslashes($class, 1);
 
 	$data = implode_field_value($class, ',', db_table_fields($db_target, $table_target));
