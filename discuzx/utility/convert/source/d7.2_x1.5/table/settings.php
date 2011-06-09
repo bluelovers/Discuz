@@ -37,28 +37,21 @@ while ($row = $db_source->fetch_array($query)) {
 					1 => 'png',
 					2 => 'text',
 				);
-				$rownew['svalue']['portal'] = $watermarktype_map[$row['value']];
 				$rownew['svalue']['forum'] = $watermarktype_map[$row['value']];
-				$rownew['svalue']['album'] = $watermarktype_map[$row['value']];
 			} elseif($row['variable'] == 'watermarktext') {
 				$dataold = (array)unserialize($row['value']);
 				foreach($dataold as $data_k => $data_v) {
-					$rownew['svalue'][$data_k]['portal'] = $data_v;
 					$rownew['svalue'][$data_k]['forum'] = $data_v;
-					$rownew['svalue'][$data_k]['album'] = $data_v;
 				}
 			} else {
 				$dataold = $row['value'];
-				$rownew['svalue']['portal'] = $dataold;
 				$rownew['svalue']['forum'] = $dataold;
-				$rownew['svalue']['album'] = $dataold;
 			}
 			$rownew['svalue'] = serialize($rownew['svalue']);
 		} elseif(in_array($row['variable'], array('seotitle', 'seodescription', 'seokeywords'))) {
 			$rownew['skey'] = $row['variable'];
 			$rownew['svalue'] = array();
 			$rownew['svalue']['forum'] = $row['value'];
-			$rownew['svalue'] = serialize($rownew['svalue']);
 		} else {
 			$rownew['skey'] = $row['variable'];
 

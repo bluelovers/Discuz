@@ -34,7 +34,6 @@ while ($row = $db_source->fetch_array($query)) {
 		$adminrow = array('uid' => $row['uid'], 'cpgroupid' => '0', 'customperm' => '');
 		$data = implode_field_value($adminrow);
 		$db_target->query("INSERT INTO {$table_target_admincp} SET $data");
-		$row['allowadmincp'] = 1;
 	}
 
 	$rowfield = $db_source->fetch_first("SELECT * FROM ".$db_source->tablepre."memberfields WHERE uid='$row[uid]'");
@@ -155,8 +154,6 @@ while ($row = $db_source->fetch_array($query)) {
 
 if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." uid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
-} else {
-	$db_target->query("UPDATE $table_target SET newpm='0'");
 }
 
 ?>
