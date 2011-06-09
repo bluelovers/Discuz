@@ -25,8 +25,8 @@ if($start == 0) {
 	$db_target->query("TRUNCATE $table_thread_target");
 }
 
-$//query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagname LIMIT $start, $limit");
-$query = $db_source->query("SELECT  * FROM $table_source WHERE 1 ORDER BY tagid LIMIT $start, $limit");
+//$query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagname LIMIT $start, $limit");
+$query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagid LIMIT $start, $limit");
 while ($row = $db_source->fetch_array($query)) {
 
 //	$nextid = $start + $limit;
