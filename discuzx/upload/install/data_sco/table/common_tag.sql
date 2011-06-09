@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS `pre_common_tag`;
 CREATE TABLE IF NOT EXISTS `pre_common_tag` (
-#  `tagid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tagid` smallint(6)  unsigned NOT NULL AUTO_INCREMENT,
+  `tagid` int(10) unsigned NOT NULL AUTO_INCREMENT,
 #  `tagname` char(30) NOT NULL,
   `tagname` varchar(30) NOT NULL,
 
@@ -27,22 +26,21 @@ CREATE TABLE IF NOT EXISTS `pre_common_tag` (
   `last_dateline` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`tagid`),
   UNIQUE KEY `tagname` (`tagname`),
+
   KEY `total` (`total`),
+  KEY `closed` (`closed`),
 
-  KEY `status` (`status`,tagid),
-
-  KEY `closed` (`closed`)
+  KEY `status` (`status`,tagid)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pre_common_tag_data`;
 CREATE TABLE IF NOT EXISTS `pre_common_tag_data` (
-  `keyid` int(10) unsigned NOT NULL,
+  `itemid` int(10) unsigned NOT NULL,
   `tagid` int(10) unsigned NOT NULL,
   `tagname` varchar(30) NOT NULL,
 
-  `keytype` varchar(20) NOT NULL,
+  `idtype` varchar(20) NOT NULL DEFAULT '',
 
-  KEY `tagid` (`tagid`),
-  KEY `keyid` (`keyid`),
-  KEY `keytype` (`keytype`)
+  KEY tagid (tagid,idtype),
+  KEY idtype (idtype,itemid)
 ) ENGINE=MyISAM;
