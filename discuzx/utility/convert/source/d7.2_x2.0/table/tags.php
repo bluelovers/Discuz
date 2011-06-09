@@ -36,6 +36,12 @@ if($start == 0) {
 
 	// 使原本就含有 tagid 的資料庫可以相容
 	$_tagid_exists = -1;
+
+	/*
+	 * 初始化所有主題的TAG
+	 * 修正因為重複執行TAG造成TAG重複
+	 */
+	$db_target->query("UPDATE $table_post_target SET tags='' WHERE first='1'");
 }
 
 $query = $db_source->query("SELECT  * FROM $table_source ORDER BY tagname LIMIT $start, $limit");
