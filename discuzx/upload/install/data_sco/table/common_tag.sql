@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `pre_common_tag` (
   `tagid` smallint(6)  unsigned NOT NULL AUTO_INCREMENT,
 #  `tagname` char(30) NOT NULL,
   `tagname` varchar(30) NOT NULL,
-  
+
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'DX2 新增',
 
   `closed` tinyint(1) NOT NULL DEFAULT '0',
@@ -28,19 +28,10 @@ CREATE TABLE IF NOT EXISTS `pre_common_tag` (
   PRIMARY KEY (`tagid`),
   UNIQUE KEY `tagname` (`tagname`),
   KEY `total` (`total`),
-  
-  KEY `status` (`status`,tagid),
-  
-  KEY `closed` (`closed`)
-) ENGINE=MyISAM;
 
-DROP TABLE IF EXISTS `pre_common_tag_thread`;
-CREATE TABLE IF NOT EXISTS `pre_common_tag_thread` (
-  `keyid` int(10) unsigned NOT NULL,
-  `tagid` int(10) unsigned NOT NULL,
-  `tagname` varchar(30) NOT NULL,
-  KEY `tagid` (`tagid`),
-  KEY `keyid` (`keyid`)
+  KEY `status` (`status`,tagid),
+
+  KEY `closed` (`closed`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pre_common_tag_data`;
