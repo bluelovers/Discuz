@@ -100,12 +100,28 @@ function getoptionvalue($option, $text) {
 	return isset($matches[3]) ? trim($matches[3]) : '';
 }
 
-function html2bbcode($text) {
+function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
+
+	// bluelovers
+	$strip && $text = stripslashes($text);
+//	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+	if ($htmlspecialchars_decode) {
+		$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;', '&#039;');
+		$strreplace = array(' ', '<', '>', '&', '\'');
+		$text = str_replace($strfind, $strreplace, $text);
+
+		while(strpos($text, '&amp;amp;amp;') !== false) {
+			$text = str_replace('&amp;amp;amp;', '&amp;amp;', $text);
+		}
+	}
+	$text = preg_replace(array('/\r+(\n)/', '/(\n)\r+/', '/[　 \t]+(\n)/iSu'), '\\1', $text);
+	// bluelovers
+
 	$text = strip_tags($text, '<table><tr><td><b><strong><i><em><u><a><div><span><p><strike><blockquote><ol><ul><li><font><img><br><br/><h1><h2><h3><h4><h5><h6><script>');
 
-	if(ismozilla()) {
-		$text = preg_replace("/(?<!<br>|<br \/>|\r)(\r\n|\n|\r)/", ' ', $text);
-	}
+//	if(ismozilla()) {
+//		$text = preg_replace("/(?<!<br>|<br \/>|\r)(\r\n|\n|\r)/", ' ', $text);
+//	}
 
 	$pregfind = array(
 		"/<script.*>.*<\/script>/siU",
@@ -165,16 +181,71 @@ function html2bbcode($text) {
 	$text = recursion('span', $text, 'spantag');
 	$text = recursion('p', $text, 'ptag');
 
+	// bluelovers
+	$text = recursion('s', $text, 'simpletag', 's');
+	// bluelvoers
+
 	$pregfind = array("/(?<!\r|\n|^)\[(\/list|list|\*)\]/", "/<li>(.*)((?=<li>)|<\/li>)/iU", "/<p.*>/iU", "/<p><\/p>/i", "/(<a>|<\/a>|<\/li>)/is", "/<\/?(A|LI|FONT|DIV|SPAN)>/siU", "/\[url[^\]]*\]\[\/url\]/i", "/\[url=javascript:[^\]]*\](.+?)\[\/url\]/is");
 	$pregreplace = array("\n[\\1]", "\\1\n", "\n", '', '', '', '', "\\1");
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
-	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
-	$strreplace = array(' ', '<', '>', '&');
-	$text = str_replace($strfind, $strreplace, $text);
+//	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
+//	$strreplace = array(' ', '<', '>', '&');
+//	$text = str_replace($strfind, $strreplace, $text);
 
-	return htmlspecialchars(trim($text));
+//	return htmlspecialchars(trim($text));
+
+	// bluelovers
+	$text = s_trim($text);
+
+	if ($htmlspecialchars_decode) {
+		$strfind = array('&nbsp;', '&lt;', '&gt;', '&#039;', '&amp;amp;', '&amp;');
+		$strreplace = array(' ', '<', '>', '\'', '&amp;', '&');
+		$text = str_replace($strfind, $strreplace, $text);
+	}
+
+	$text = bbcode_fix($text);
+
+//	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+
+//	$text = dhtmlspecialchars(trim($text));
+	$text = dhtmlspecialchars(trim($text), null, $htmlspecialchars_decode, ENT_QUOTES);
+	$strip && $text = addslashes($text);
+	return $text;
+	// bluelovers
 }
+
+// bluelovers
+function bbcode_fix($text) {
+	for ($i=0; $i<10; $i++) {
+		$text = preg_replace(array(
+			'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
+			, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+			, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+		), '\\2', $text);
+
+		$text = preg_replace(array(
+			'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+			, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
+			, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
+			, '/(?:\[(italic)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+		), array(
+			'[\\1\\2]\\3\\4\\5[/\\1]'
+			, '[\\1\\2]\\4[/\\1]'
+			, '\\4'
+			, '[i\\2]\\3[/i]'
+		), $text);
+
+		$text = preg_replace(array(
+			'/^(\[[a-z0-9]+(?:=[^\[\]\n]+)?\])\n+|\n+(\[\/[a-z0-9]+\])/isSU'
+		), '\\1\\2', $text);
+	}
+
+	$text = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $text);
+
+	return $text;
+}
+// bluelovers
 
 function imgtag($attributes) {
 	$value = array('src' => '', 'width' => '', 'height' => '');
