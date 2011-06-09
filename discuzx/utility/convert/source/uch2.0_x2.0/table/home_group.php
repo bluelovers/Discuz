@@ -2,7 +2,7 @@
 /**
  * DiscuzX Convert
  *
- * $Id: home_group.php 19554 2011-01-07 04:26:02Z zhengqingpeng $
+ * $Id: home_group.php 15720 2010-08-25 23:56:08Z monkey $
  */
 
 $curprg = basename(__FILE__);
@@ -47,7 +47,15 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
-		$post['message'] = html2bbcode($post['message']);
+		$post['message'] = html2bbcode($post['message'], 0, 1);
+
+		// bluelovers
+		if ($post['isthread']) {
+			$post['subject'] = $value['subject'];
+			$post['dateline'] = $value['dateline'];
+		}
+		// bluelovers
+
 		$post = daddslashes($post);
 		$postarr = array(
 			'fid' => $sid,
@@ -55,7 +63,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 			'first' => $post['isthread'] ? 1 : 0,
 			'author' => $post['username'],
 			'authorid' => $post['uid'],
-			'subject' => $post['isthread'] ? $value['subject'] : $post['subject'],
+			'subject' => $post['subject'],
 			'dateline' => $post['dateline'],
 			'message' => $post['message'],
 			'useip' => $post['ip']
@@ -78,7 +86,8 @@ while($value = $db_source->fetch_array($threadquery)) {
 	$db_target->insert('common_member_count', array('uid' => $value['uid']), 0, false, true);
 	$db_target->query("UPDATE ".$db_target->table('common_member_count')." SET threads=threads+1 WHERE uid='$value[uid]'", 'UNBUFFERED');
 	$db_target->query("UPDATE ".$db_target->table('forum_groupuser')." SET threads=threads+1 WHERE fid='$sid' AND uid='$value[uid]'", 'UNBUFFERED');
-	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum] WHERE fid='$sid'", 'UNBUFFERED');
+//	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum] WHERE fid='$sid'", 'UNBUFFERED');
+	$db_target->query("UPDATE ".$db_target->table('forum_forum')." SET lastpost='$lastpost[lastpost]', threads=threads+1, posts=posts+$value[replynum], commoncredits=(commoncredits+1+$value[replynum]) WHERE fid='$sid'", 'UNBUFFERED');
 
 }
 $force = false;
@@ -160,15 +169,21 @@ function getmtag($start) {
 	$sid = $db_target->insert('forum_forum', $forumarr, true);
 	$forumfieldarr = array(
 			'fid' => $sid,
-			'description' => daddslashes(html2bbcode($mtag['announcement'])),
+			'description' => daddslashes(html2bbcode($mtag['announcement'], 0, 1)),
 			'jointype' => $mtag['joinperm'] ? ($mtag['joinperm'] == 1 ? 2 : 1) : 0,
 			'gviewperm' => $mtag['viewperm'] ? 0 : 1,
 			'dateline' => TIMESTAMP,
 			'founderuid' => $founder['founderuid'],
 			'foundername' => $founder['foundername'],
+
+			// bluelovers
+			'icon' => daddslashes($mtag['pic']),
+			// bluelovers
+
 			'membernum' => $mtag['membernum']
 		);
-	$db_target->insert('forum_forumfield', $forumfieldarr);
+//	$db_target->insert('forum_forumfield', $forumfieldarr);
+	$db_target->insert('forum_forumfield', $forumfieldarr, 0, 1);
 	$db_target->query("UPDATE ".$db_target->table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$fid'");
 
 	foreach($groupuser as $uid => $user) {
@@ -195,7 +210,8 @@ function getprofield($start) {
 
 	if(!$gid) {
 		$gid = $db_target->insert('forum_forum', array('type' => 'group', 'name' => '空間群組', 'status' => 3), 1);
-		$db_target->insert('forum_forumfield', array('fid' => $gid));
+//		$db_target->insert('forum_forumfield', array('fid' => $gid));
+		$db_target->insert('forum_forumfield', array('fid' => $gid), 0, 1);
 	}
 
 	$profield = $db_source->fetch_first("SELECT * FROM ".$db_source->table('profield')." WHERE fieldid>'$start' ORDER BY fieldid LIMIT 1");
@@ -235,7 +251,8 @@ function getprofield($start) {
 			$data[$field] = $forumfields[$field];
 		}
 	}
-	$db_target->insert('forum_forumfield', $data);
+//	$db_target->insert('forum_forumfield', $data);
+	$db_target->insert('forum_forumfield', $data, 0, 1);
 
 	return true;
 }

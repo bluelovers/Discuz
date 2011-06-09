@@ -17,13 +17,15 @@ $start = intval(getgpc('start'));
 $home = load_process('home');
 $fid = intval(getgpc('fid')) ? intval(getgpc('fid')) : intval($home['forum']['poll']) ? intval($home['forum']['poll']) : 0;
 if(!$fid) {
+	$board_name = 'UCHome數據';
 	$forumname = 'UCHome投票數據';
 
 	$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='forum' AND `name`='$forumname'");
 	if(!empty($value)) {
 		$fid = intval($value['fid']);
 	} else {
-		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='group' AND `name`='$forumname'");
+//		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='group' AND `name`='$forumname'");
+		$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE type='group' AND status='1' AND `name`='$board_name'");
 		if($value) {
 			$fup = intval($value['fid']);
 		} else {
@@ -57,8 +59,8 @@ while($value = $db_source->fetch_array($pollquery)) {
 	$optionuser = array();
 	$postnum = 1;
 	$nextid = $value['pid'];
-	$value['summary'] = !empty($value['summary']) ? html2bbcode($value['summary']) : '';
-	$value['message'] = html2bbcode($value['message']);
+	$value['summary'] = !empty($value['summary']) ? html2bbcode($value['summary'], 0, 1) : '';
+	$value['message'] = html2bbcode($value['message'], 0, 1);
 	$pollpreview = $value['option'] = unserialize($value['option']);
 	$value = daddslashes($value);
 	$threadarr = array(
@@ -166,7 +168,7 @@ while($value = $db_source->fetch_array($pollquery)) {
 	$lastpost = array();
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('comment')." WHERE id='$value[pid]' AND idtype='pid' ORDER BY dateline");
 	while($comment = $db_source->fetch_array($query)) {
-		$comment['message'] = html2bbcode($comment['message']);
+		$comment['message'] = html2bbcode($comment['message'], 0, 1);
 		$comment = daddslashes($comment);
 		$postarr = array(
 			'fid' => $fid,
