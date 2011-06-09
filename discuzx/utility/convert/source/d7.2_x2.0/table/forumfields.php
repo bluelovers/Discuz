@@ -25,6 +25,13 @@ if($start == 0) {
 $rules = $ruleaction = array();
 $query = $db_target->query("SELECT * FROM $table_targetcreditrule WHERE action IN('reply', 'post', 'digest', 'postattach', 'getattach')");
 while($value = $db_target->fetch_array($query)) {
+
+	// bluelovers
+//	for($i=1; $i<=8; $i++) {
+//		unset($value['extcredits'.$i]);
+//	}
+	// bluelovers
+
 	$rules[$value['rid']] = $value;
 	$ruleaction[$value['action']] = $value['rid'];
 }
@@ -41,13 +48,36 @@ while ($row = $db_source->fetch_array($query)) {
 	$credits['postattach'] = unserialize($row['postattachcredits']);
 	$credits['digest'] = unserialize($row['digestcredits']);
 	$row['creditspolicy'] = array();
-	foreach($credits as $caction => $credits) {
-		if($credits) {
+//	foreach($credits as $caction => $credits) {
+//	}
+	foreach($credits as $caction => $credit) {
+//		if($credits) {
+//		}
+
+		// bluelovers
+		if(is_array($credit)) {
+		// bluelovers
+
 			$rid = $ruleaction[$caction];
-			$row['creditspolicy'] = $rules[$rid];
-			foreach($credits as $i => $v) {
-				$row['creditspolicy']['extcredits'.$i] = $v;
+//			$row['creditspolicy'] = $rules[$rid];
+//			foreach($credits as $i => $v) {
+//				$row['creditspolicy']['extcredits'.$i] = $v;
+//			}
+
+			// bluelovers
+			$row['creditspolicy'][$caction] = $rules[$rid];
+			$c = 0;
+			foreach($credit as $i => $v) {
+				if ($v != '') {
+					$row['creditspolicy'][$caction]['extcredits'.$i] = $v;
+
+					$c = 1;
+				}
 			}
+			// bluelovers
+
+//			showmessage('<pre>'.$nextid.var_export($row['creditspolicy'], true).var_export($credit2, true).'</pre>');
+
 			$rules[$rid]['fids'] = $db_target->result_first("SELECT fids FROM $table_targetcreditrule WHERE rid='".$rid."'");
 			$cpfids = explode(',', $rules[$rid]['fids']);
 			$cpfidsnew = array();
@@ -59,19 +89,42 @@ while ($row = $db_source->fetch_array($query)) {
 					$cpfidsnew[] = $cpfid;
 				}
 			}
-			$cpfidsnew[] = $row['fid'];
+//			$cpfidsnew[] = $row['fid'];
+			$c && $cpfidsnew[] = $row['fid'];
 			$db_target->query("UPDATE $table_targetcreditrule SET fids='".implode(',', $cpfidsnew)."' WHERE rid='".$rid."'");
 		}
 	}
+
+//	$row['creditspolicy'] && showmessage('<pre>'.$nextid.var_export($row['creditspolicy'], true).'</pre>');
+
 	$row['creditspolicy'] = $row['creditspolicy'] ? serialize($row['creditspolicy']) : '';
 
 	unset($row['tradetypes'], $row['typemodels'], $row['postcredits'], $row['replycredits'], $row['getattachcredits'], $row['postattachcredits'], $row['digestcredits']);
+
+	// bluelovers
+	$row['extra'] = $row['extra'] ? unserialize($row['extra']) : array();
+
+	foreach (array('post_readperm', 'post_maxpostsperdayreply') as $_k_) {
+		if (isset($row[$_k_]) && $row[$_k_]) {
+			$row['extra'][$_k_] = $row[$_k_];
+
+			unset($row[$_k_]);
+		}
+	}
+
+	$row['extra'] = $row['extra'] ? serialize($row['extra']) : '';
+
+	$row['description'] = s_trim($row['description']);
+	$row['rules'] = s_trim($row['rules']);
+	$row['article'] = s_trim($row['article']);
+	// bluelovers
 
 	$row  = daddslashes($row, 1);
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
 
-	$db_target->query("INSERT INTO $table_target SET $data");
+//	$db_target->query("INSERT INTO $table_target SET $data");
+	$db_target->query("REPLACE INTO $table_target SET $data");
 }
 
 if($nextid) {

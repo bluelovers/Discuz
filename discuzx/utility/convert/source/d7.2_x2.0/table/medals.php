@@ -24,6 +24,10 @@ while ($row = $db_source->fetch_array($query)) {
 
 	$nextid = $row['medalid'];
 
+	// bluelovers
+	$row['image'] = str_replace(array('\\', '../medal/'), array('/', '../plus/medal/'), $row['image']);
+	// bluelovers
+
 	$row  = daddslashes($row, 1);
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
