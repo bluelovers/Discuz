@@ -17,6 +17,8 @@ $curprg = basename(__FILE__);
 $table_source = $db_source->tablepre.'threadtags';
 $table_target = $db_target->tablepre.'common_tag_thread';
 
+$table_target_tag = $db_target->tablepre.'common_tag';
+
 $limit = 1000;
 $nextid = 0;
 
@@ -37,7 +39,7 @@ while ($row = $db_source->fetch_array($query)) {
 	if (!$tagcache[$tagname]) {
 		$_query_ = $_tag_ = null;
 
-		$_query_ = $db_target->query("SELECT * FROM ".$db_target->tablepre."common_tags WHERE tagname='".daddslashes($tagname,1)."' LIMIT 1");
+		$_query_ = $db_target->query("SELECT * FROM ".$table_target_tag." WHERE tagname='".daddslashes($tagname,1)."' LIMIT 1");
 		if ($_tag_ = $db_target->fetch_array($_query_)) {
 			$row['tagid'] = $_tag_['tagid'];
 			$row['tagname'] = $_tag_['tagname'];
