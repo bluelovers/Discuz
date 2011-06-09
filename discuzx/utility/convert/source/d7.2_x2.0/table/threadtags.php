@@ -15,7 +15,7 @@
 $curprg = basename(__FILE__);
 
 $table_source = $db_source->tablepre.'threadtags';
-$table_target = $db_target->tablepre.'common_tags_thread';
+$table_target = $db_target->tablepre.'common_tag_thread';
 
 $limit = 1000;
 $nextid = 0;
