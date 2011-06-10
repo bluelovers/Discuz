@@ -37,7 +37,7 @@ while($row = $db_source->fetch_array($query)) {
 		$name = strip_tags($name);
 
 		$name = str_replace(array('&nbsp;', '&nbsp'), ' ', $name);
-		if ($name = s_trim($name, null, 1)) {
+		if (!$name = s_trim($name, null, 1)) {
 			continue;
 		}
 		$newtypeid = $db_target->insert('forum_threadclass', array('fid' => $nextid, 'name' => addslashes($name)), 1);
