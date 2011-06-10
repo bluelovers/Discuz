@@ -9,6 +9,29 @@
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+/*
+ * misc.php?mod=mobile
+ *
+ * 當 手機版訪問設置 > 開啟電腦訪問手機版預覽功能時 允許在電腦上直接瀏覽手機頁面
+ * $GLOBALS['setting']['mobile']['allowmobile'] = 1
+ * $GLOBALS['setting']['mobile']['mobilepreview'] = 1
+ */
+if (
+	!defined('IN_MOBILE')
+
+	&& $GLOBALS['setting']['mobile']['allowmobile']
+	&& $GLOBALS['_G']['setting']['mobile']['mobilepreview']
+
+	/*
+	 * misc.php?mod=mobile&view=true
+	 */
+	&& $mod == 'mobile'
+	&& $_GET['view'] == true
+) {
+	define('IN_MOBILE', true);
+}
+
 if($mod == 'mobile' && defined('IN_MOBILE')) {
 	if($_G['setting']['domain']['app']['mobile']) {
 		dheader("Location:http://".$_G['setting']['domain']['app']['mobile']);

@@ -351,7 +351,25 @@ function checkmobile() {
 		return true;
 	}
 	$brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
-	if(dstrpos($useragent, $brower)) return false;
+//	if(dstrpos($useragent, $brower)) return false;
+
+	/*
+	 * 當 手機版訪問設置 > 開啟電腦訪問手機版預覽功能時 允許在電腦上直接瀏覽手機頁面
+	 * $GLOBALS['setting']['mobile']['allowmobile'] = 1
+	 * $GLOBALS['setting']['mobile']['mobilepreview'] = 1
+	 */
+	if(($v = dstrpos($useragent, $brower, true))) {
+		if (
+			$GLOBALS['setting']['mobile']['allowmobile']
+			&& $GLOBALS['setting']['mobile']['mobilepreview']
+			&& $_GET['mobile'] === 'yes'
+		) {
+			$_G['mobile'] = $v;
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	$_G['mobile'] = 'unknown';
 	if($_GET['mobile'] === 'yes') {
