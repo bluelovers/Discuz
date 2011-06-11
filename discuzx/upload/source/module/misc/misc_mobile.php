@@ -20,7 +20,7 @@ if(!defined('IN_DISCUZ')) {
 if (
 	!defined('IN_MOBILE')
 
-	&& $GLOBALS['setting']['mobile']['allowmobile']
+	&& $GLOBALS['_G']['setting']['mobile']['allowmobile']
 	&& $GLOBALS['_G']['setting']['mobile']['mobilepreview']
 
 	/*

@@ -360,8 +360,8 @@ function checkmobile() {
 	 */
 	if(($v = dstrpos($useragent, $brower, true))) {
 		if (
-			$GLOBALS['setting']['mobile']['allowmobile']
-			&& $GLOBALS['setting']['mobile']['mobilepreview']
+			$GLOBALS['_G']['setting']['mobile']['allowmobile']
+			&& $GLOBALS['_G']['setting']['mobile']['mobilepreview']
 			&& $_GET['mobile'] === 'yes'
 		) {
 			$_G['mobile'] = $v;
