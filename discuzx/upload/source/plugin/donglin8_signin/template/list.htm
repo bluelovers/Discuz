@@ -1,0 +1,51 @@
+<!--{block return}-->
+<style type="text/css">
+	.datalist p { font-weight: bold; margin-bottom: 15px; font-size: 14px; }
+	.datalist table { text-align: left; width: 98%; margin: 0 auto; margin-bottom: 25px;}
+	.datalist td {padding: 6px 10px; text-align: left;}
+	.datalist td.no {color: #666; text-align: center;}
+	.datalist td.ext {text-align: right;}
+	.datalist td.ext span {color: #FF0000;}
+	.datalist td.dateline {color: #009900;}
+	.datalist thead td {font-weight: bold;}
+</style>
+<div style="margin:0 auto; width: 100%; text-align: center; padding-top: 15px;">
+
+    <a href="plugin.php?id=donglin8_signin:submit&tid={$_G['tid']}"><img src="{$imgurl}signin_reply.gif" alt="回复帖子抢楼后，点这领取 {$config[donglin8_bonus]} {$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}" border="0" /></a>
+
+    <div style="color:#666; padding: 20px 0;">
+    	感谢大家对论坛支持决定举办每日抢楼活动。<br /><br /><font color="red">活动规则：</font><br /><br />
+    	1、所有会员均可抢楼和抢楼。<br /><br />
+		2、抢到楼主自动奖 {$config['donglin8_bonus_1st']} {$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}<br /><br />
+		3、没抢到楼主的，在来抢楼也有奖：前10名抢楼回复者奖励 {$config[donglin8_bonus_top10]} {$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}。别忘了点上面的按钮领{$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}！<br /><br />
+		4、10楼以后的会员，只要在每天中午 {$config['donglin8_begin']}:00 - {$config[donglin8_end]}:00 来回复抢楼贴就可以领取 {$config[donglin8_bonus]} {$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}，过时没有！<br /><br />
+		<!--{if $config[donglin8_link]}--><a href="{$config['donglin8_link']}" target="_blank">温馨提醒：“抢楼必看秘籍”点击这里查看秘籍贴！</a><!--{/if}-->
+                <FONT color=#ff0000 size=4><STRONG>回复抢楼帖后，记得点击上面的按钮领取奖励，不点得不到奖励</STRONG></FONT>
+    </div>
+
+    <!--{if $bonuslist}-->
+        <div class="datalist">
+            <p>今日抢楼并领取奖金的会员列表 (前 {$config[donglin8_list_tpp]} 名)</p>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <thead class="colplural">
+                <tr>
+                    <td width="30">NO.</td>
+                    <td width="180">用户名</td>
+                    <td width="160">抢楼时间</td>
+                    <td class="ext">获得奖金</td>
+                </tr>
+                </thead>
+            <!--{loop $bonuslist $key $blist}-->
+                <tr>
+                    <td class="no">{$key}</td>
+                    <td><a href="home.php?mod=space&uid={$blist[authorid]}" target="_blank">$blist[author]</a></td>
+                    <td class="dateline">{$blist[dateline]}</td>
+                    <td class="ext"><span>+ {$blist[bonused]} {$_G['setting']['extcredits'][$config['donglin8_extcreditx']]['title']}</span></td>
+                </tr>
+            <!--{/loop}-->
+            </table>
+        </div>
+    <!--{/if}-->
+
+</div>
+<!--{/block}-->

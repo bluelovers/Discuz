@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-5-30 03:18]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://bbs.wz2006.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[Ã¿ÈÕÇÀÂ¥Ç©µ½]]></item>
+			<item id="identifier"><![CDATA[donglin8_signin]]></item>
+			<item id="description"><![CDATA[ÅóÓÑÎÑ¶¨ÖÆ²å¼þ£¬http://bbs.wz2006.com/Éý¼¶ÖÁÖ§³ÖDiscuz X2]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[donglin8_signin/]]></item>
+			<item id="copyright"><![CDATA[Donglin8.Com 2011.05]]></item>
+			<item id="version"><![CDATA[V1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[submit]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[15]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[donglin8_signin]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[12]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Ã¿Ìì¼¸µã¿ªÊ¼ÇÀÂ¥]]></item>
+				<item id="description"><![CDATA[24Ð¡Ê±ÖÆ]]></item>
+				<item id="variable"><![CDATA[donglin8_begin]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[Ã¿Ìì¼¸µã½áÊøÇÀÂ¥]]></item>
+				<item id="description"><![CDATA[24Ð¡Ê±ÖÆ]]></item>
+				<item id="variable"><![CDATA[donglin8_end]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[19]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[½±Àø»ý·ÖÖÖÀà]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_extcreditx]]></item>
+				<item id="type"><![CDATA[extcredit]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[ÇÀµ½Â¥Ö÷½±Àø¶àÉÙ·Ö]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_bonus_1st]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[30]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[Ç°10Ãû½±Àø¶àÉÙ·Ö]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_bonus_top10]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[µÚ10ÃûÒÔºó½±Àø¶àÉÙ·Ö]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_bonus]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[5]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[Ãûµ¥ÖÐÏÔÊ¾Ç°¼¸ÃûÁì½±½ðÕß]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_list_tpp]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[15]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[ÇÀÂ¥ËµÃ÷Á´½Ó]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[donglin8_link]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[http://www.wz2006.com]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>
