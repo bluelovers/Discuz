@@ -1,0 +1,101 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" href="source/plugin/ddu_dev_dzx/img/style_1_forum_forumdisplay.css" />
+<div id="pt" class="bm cl"><div class="z">
+<a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=ddu_dev_dzx:dev">{lang ddu_dev_dzx:nav}</a>
+<!--{if in_array($_G[uid],$adminid)}--><em>&rsaquo;</em><a href="plugin.php?id=ddu_dev_dzx:dev_admin"><img src="source/plugin/ddu_dev_dzx/img/ico.gif" />{lang ddu_dev_dzx:admincp}</a><!--{/if}-->
+</div> 
+</div>
+<div id="ct" class="wp cl" style="background-image:none;">
+<div class="mn"> 
+			<div class="mn mw">
+			<div class="bm bml">
+			<div class="bm_h cl">
+			<h1 class="xs2">{lang ddu_dev_dzx:dev}</h1>
+			</div>
+			<div class="bm_c cl">
+			<div id="forum_rules">
+			<div class="pbm xg2">$note</div>
+			</div>
+			</div>
+			</div>
+			</div>
+			
+			<div id="threadlist" class="tl bm bmw">
+			<div class="th">
+			<table cellspacing="0" cellpadding="0" class="th">
+				<tr>
+					<td class="icn">&nbsp;</td>
+					<th><b>{lang ddu_dev_dzx:wedoing}</b></th>
+					<td style="width:150px">{lang ddu_dev_dzx:stat}</td>
+					<td style="width:130px">{lang ddu_dev_dzx:lastupdate}</td>
+				</tr>
+			</table>
+			</div>
+        	<div class="bm_c">
+			<table summary="forum_1" cellspacing="0" cellpadding="0">
+			<!--{if $nmrcs}-->
+			<!--{loop $nmrcs $nmrc}-->
+			<tbody id="">
+				<tr>
+					<td class="icn"><img src="source/plugin/ddu_dev_dzx/img/no.gif" /></td>
+					<th>
+						<!--{if $nmrc[url]}-->
+							<a href="{$nmrc[url]}" target="_blank">$nmrc[task]</a>
+						<!--{else}-->
+							$nmrc[task]
+						<!--{/if}-->
+					</th>
+					<td style="width:150px">{if $nmrc[stat]=='FP'}{lang ddu_dev_dzx:yfp}{else}$nmrc[stat]{/if}(<a href="plugin.php?id=ddu_dev_dzx:dev&user={$nmrc[user]}">$nmrc[user]</a>)</td>
+					<td style="width:130px">$nmrc[last]</td>
+				</tr>
+			</tbody>
+			<!--{/loop}-->
+			<!--{else}-->
+				<tbody id="">
+					<tr><td colspan="4"><center>{lang ddu_dev_dzx:nocx}</center></td></tr>
+				</tbody>
+			<!--{/if}-->
+			</table>
+        	</div> 
+			
+			<div class="th">
+			<table cellspacing="0" cellpadding="0" class="th">
+				<tr>
+					<td class="icn">&nbsp;</td>
+					<th><b>{lang ddu_dev_dzx:weok}</b></th>
+					<td style="width:150px">{lang ddu_dev_dzx:stat}</td>
+					<td style="width:130px">{lang ddu_dev_dzx:lastupdate}</td>
+				</tr>
+			</table>
+			</div>
+        	<div class="bm_c">
+			<table summary="forum_1" cellspacing="0" cellpadding="0">
+			<!--{if $mrcs}-->
+			<!--{loop $mrcs $mrc}-->
+			<tbody id="">
+				<tr>
+					<td class="icn"><img src="source/plugin/ddu_dev_dzx/img/yes.gif" /></td>
+					<th>
+						<!--{if $mrc[url]}-->
+							<a href="{$mrc[url]}" target="_blank">$mrc[task]</a>
+						<!--{else}-->
+							$mrc[task]
+						<!--{/if}-->
+					</th>
+					<td style="width:150px">{lang ddu_dev_dzx:ok}(<a href="plugin.php?id=ddu_dev_dzx:dev&user={$mrc[user]}">$mrc[user]</a>)</td>
+					<td style="width:130px">$mrc[last]</td>
+				</tr>
+			</tbody>
+			<!--{/loop}-->
+			<!--{else}-->
+				<tbody id="">
+					<tr><td colspan="4"><center>{lang ddu_dev_dzx:nocx}</center></td></tr>
+				</tbody>
+			<!--{/if}-->
+			</table>
+        	</div> 
+			</div>
+</div> 
+</div> 
+<center><p><b><font size="-3">Powered by [<a href="http://www.xddu.net" title="{lang ddu_dev_dzx:ddu}" target="_blank">DDU</a>]Dev Center Ver 3.0 {lang ddu_dev:jdb}</font></b></p></center>
+{subtemplate common/footer}

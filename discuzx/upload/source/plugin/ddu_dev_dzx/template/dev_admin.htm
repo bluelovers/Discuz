@@ -1,0 +1,199 @@
+{subtemplate common/header}
+<style type="text/css"> 
+.datalist { zoom: 1; }
+.datalist table { margin-bottom: 30px; width: 100%; border: 1px solid #E6E7E1; }
+.datalist th, .datalist td { padding: 4px 5px; border: 1px solid #E6E7E1; font-weight: 400; }
+.datalist th img { vertical-align: top; }
+.datalist table .stat_subject { border-right: none; }
+.datalist table .stat_num { padding-right: 15px; text-align: right; border-left: none; }
+ 
+.datalist .datatable { margin-bottom: 10px; }
+.datalist .datatable, .datalist .datatable th, .datalist .datatable td { border-width: 1px 0; }
+.datalist .fixtable { table-layout: fixed; }
+.colplural, .colplural th, .colplural td, th.highlight, td.highlight { background-color: {COMMONBG}; }
+</style> 
+<div id="pt" class="bm cl"><div class="z">
+<a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=ddu_dev_dzx:dev">{lang ddu_dev_dzx:nav}</a>
+<!--{if in_array($_G[uid],$adminid)}--><em>&rsaquo;</em><a href="plugin.php?id=ddu_dev_dzx:dev_admin">Admin CP</a><!--{/if}-->
+</div> 
+</div>
+<div id="ct" class="ct2 wp cl">
+<div class="mn"> 
+			<ul class="tb cl"> 
+				<li {if $_G['gp_mode'] == ''}class="a"{/if}><a href="plugin.php?id=ddu_dev_dzx:dev_admin">{lang ddu_dev_dzx:all_dev}</a></li> 
+				<li {if $_G['gp_mode'] == 'add'}class="a"{/if}><a href="plugin.php?id=ddu_dev_dzx:dev_admin&mode=add">{lang ddu_dev_dzx:add_dev}</a></li>
+				<li {if $_G['gp_mode'] == 'edit'}class="a"{/if}><a href="plugin.php?id=ddu_dev_dzx:dev_admin">{lang ddu_dev_dzx:edit_dev}</a></li>
+				<li {if $_G['gp_mode'] == 'del'}class="a"{/if}><a href="plugin.php?id=ddu_dev_dzx:dev_admin">{lang ddu_dev_dzx:del_dev}</a></li>
+              </ul> <br>
+			<!--{if $_G[gp_mode]==''}-->
+			<div class="datalist">
+				<table cellspacing="0" cellpadding="0" summary="phb" class="datatable" style="margin-bottom:30px;">
+					<tr class="colplural">
+						<th>ID</th>
+						<th>{lang ddu_dev_dzx:dev_name}</th>
+						<th>{lang ddu_dev_dzx:dev_stat}</th>
+						<th>{lang ddu_dev_dzx:dev_user}</th>
+						<th>{lang ddu_dev_dzx:dev_last}</th>
+						<th>{lang ddu_dev_dzx:dev_cz}</th>
+					</tr>
+					<!--{if $mrcs}-->
+						<!--{loop $mrcs $mrc}-->
+							<tr>
+								<td>{$mrc[id]}</td>
+								<td>
+									<!--{if $mrc[url]}-->
+										<a href="{$mrc[url]}" target="_blank">{$mrc[task]}</a>
+									<!--{else}-->
+										{$mrc[task]}
+									<!--{/if}-->
+								</td>
+								<td>
+									<!--{if $mrc[stat]=='OK'}-->
+										{lang ddu_dev_dzx:ok}
+									<!--{elseif $mrc[stat]=='FP'}-->
+										{lang ddu_dev_dzx:yfp}
+									<!--{else}-->
+										$mrc[stat]
+									<!--{/if}-->
+								</td>
+								<td>{$mrc[user]}</td>
+								<td>{$mrc[last]}</td>
+								<td>
+									<!--{if $mrc[stat]=='ok'}-->
+									<a href="plugin.php?id=ddu_dev_dzx:dev_admin&mode=edit&eid={$mrc[id]}&etask={$mrc[task]}&estat={lang ddu_dev:ok}&eurl={$mrc[url]}&euser={$mrc[user]}&elast={$mrc[last]}">{lang ddu_dev:edit}</a>
+									<!--{elseif $mrc[stat]=='FP'}-->
+									<a href="plugin.php?id=ddu_dev_dzx:dev_admin&mode=edit&eid={$mrc[id]}&etask={$mrc[task]}&estat={lang ddu_dev:yfp}&eurl={$mrc[url]}&euser={$mrc[user]}&elast={$mrc[last]}">{lang ddu_dev:edit}</a>
+									<!--{else}-->
+									<a href="plugin.php?id=ddu_dev_dzx:dev_admin&mode=edit&eid={$mrc[id]}&etask={$mrc[task]}&estat={$mrc[stat]}&eurl={$mrc[url]}&euser={$mrc[user]}&elast={$mrc[last]}">{lang ddu_dev:edit}</a>
+									<!--{/if}-->
+									|
+									<a href="plugin.php?id=ddu_dev_dzx:dev_admin&mode=del&did={$mrc[id]}">{lang ddu_dev:del}</a>
+								</td>
+							</tr>
+						<!--{/loop}-->
+					<!--{else}-->
+						<tr><td colspan="6">{lang ddu_dev_dzx:nocx}</td></tr>
+					<!--{/if}-->
+				</table>
+			</div>
+			<!--{elseif $_G[gp_mode]=='add'}-->
+			<form action="plugin.php?id=ddu_dev_dzx:dev_admin&mode=add&ok=1" method="post" name="regnow">
+<table cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_name}</th>
+						<td>
+							<input type="text" name="task" value="" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_stat}</th>
+						<td>
+							<select name="stat">
+							  <option value="OK">{lang ddu_dev_dzx:ok}</option>
+							  <option value="FP">{lang ddu_dev_dzx:yfp}</option>
+							  <option value="B">{lang ddu_dev_dzx:fs}</option>
+							</select>
+							<input type="text" name="statb" value="" style="font-family: Verdana; font-size: 9pt; width: 65px" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:stat_sm}
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_url}</th>
+						<td>
+							<input type="text" name="url" value="" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:url_sm}
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_user}</th>
+						<td>
+							<input type="text" name="user" value="" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;
+						</td>
+					</tr>
+
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_last}</th>
+						<td>
+							<input type="text" name="last" value="" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:last_sm}
+						</td>
+					</tr>
+
+<tr>
+<th>&nbsp;</th>
+<td colspan="2">
+<input type="hidden" name="profilesubmit" value="true" />
+<button type="submit" name="profilesubmitbtn" id="profilesubmitbtn" value="true" class="pn pnp" /><strong>{lang ddu_dev_dzx:add}</strong></button>
+<span id="submit_result" class="rq"></span>
+</td>
+</tr>
+</table>
+</form>
+			<!--{elseif $_G[gp_mode]=='edit'}-->
+			<form action="plugin.php?id=ddu_dev_dzx:dev_admin&mode=edit&eid={$_G[gp_eid]}&ok=1" method="post" name="regnow">
+<table cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_name}</th>
+						<td>
+							<input type="text" name="task" value="{$_G[gp_etask]}" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_stat}</th>
+						<td>
+							<select name="stat">
+							  <option value="OK"{if $_G[gp_estat]=='OK'} disabled="disabled"{/if}>{lang ddu_dev_dzx:ok}</option>
+							  <option value="FP"{if $_G[gp_estat]=='FP'} disabled="disabled"{/if}>{lang ddu_dev_dzx:yfp}</option>
+							  <option value="B"{if !$_G[gp_estat]=='OK' && !$_G[gp_estat]=='FP'} disabled="disabled"{/if}>{lang ddu_dev_dzx:fs}</option>
+							</select>
+							<input type="text" name="statb" value="{if !$_G[gp_estat]=='OK' && !$_G[gp_estat]=='FP'}{$_G[gp_estat]}{/if}" style="font-family: Verdana; font-size: 9pt; width: 65px" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:stat_sm}
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_url}</th>
+						<td>
+							<input type="text" name="url" value="{$_G[gp_eurl]}" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:url_sm}
+						</td>
+					</tr>
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_user}</th>
+						<td>
+							<input type="text" name="user" value="{$_G[gp_euser]}" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;
+						</td>
+					</tr>
+
+					<tr>
+						<th>{lang ddu_dev_dzx:dev_last}</th>
+						<td>
+							<input type="text" name="last" value="{$_G[gp_elast]}" style="font-family: Verdana; font-size: 9pt" class="px">&nbsp;&nbsp;{lang ddu_dev_dzx:last_sm}
+						</td>
+					</tr>
+
+<tr>
+<th>&nbsp;</th>
+<td colspan="2">
+<input type="hidden" name="profilesubmit" value="true" />
+<button type="submit" name="submitbtn" id="submitbtn" value="true" class="pn pnp" /><strong>{lang ddu_dev_dzx:edit}</strong></button>
+<span id="submit_result" class="rq"></span>
+</td>
+</tr>
+</table>
+</form>
+			<!--{/if}-->
+</div> 
+<div class="sd"> 
+<!--{if in_array($_G[uid],$adminid)}-->
+		<div class="bm">
+		<div class="bm_h cl"><h3>{lang ddu_dev_dzx:admincp}</h3></div> 
+        <div class="bm_c">
+        <p><a href="plugin.php?id=ddu_dev:dev">{lang ddu_dev_dzx:goback}</a></p> 
+        </div> 
+		</div>
+<!--{/if}-->
+		
+        <div class="bm">
+		<div class="bm_h cl"><h3>{lang ddu_dev_dzx:copy}</h3></div> 
+        <div class="bm_c">
+        <p><a href="http://www.xddu.net" title="{lang ddu_dev_dzx:ddu}" target="_blank"><span style="font: bold 14px Arial; color: #fbb040;">[DDU]</span><span style="font: bold 15px Verdana; color: #f15a29;">Dev Center</span></a><span style="font: normal 9px Verdana; display:block;">Ver 3.0 {lang ddu_dev_dzx:jdb}</span></p> 
+        </div> 
+		</div>
+</div> 
+</div> 
+{subtemplate common/footer}

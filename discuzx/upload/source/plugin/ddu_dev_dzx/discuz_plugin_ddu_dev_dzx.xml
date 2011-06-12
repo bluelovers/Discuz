@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-12 13:03]]></item>
+	<item id="From"><![CDATA[DDU¿ª·¢ÕßÕ¾ (http://dev.xddu.net/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[[DDU]¶¯Ì¬ÖÐÐÄ]]></item>
+			<item id="identifier"><![CDATA[ddu_dev_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[ddu_dev_dzx/]]></item>
+			<item id="copyright"><![CDATA[newcxs@DDU Team]]></item>
+			<item id="version"><![CDATA[3.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[dev]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[dev]]></item>
+					<item id="menu"><![CDATA[¶¯Ì¬ÖÐÐÄ]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[1]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[¹ÜÀíÔ±UID]]></item>
+				<item id="description"><![CDATA[ÓÃ°ë½Ç×´Ì¬ÏÂµÄ,·Ö¸ô]]></item>
+				<item id="variable"><![CDATA[adminid]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[ÏÔÊ¾ÐÅÏ¢]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[note]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[ÕâÀï£¬ÁÐ³öµÄÊÇÎÒÃÇµÄ²å¼þ¿ª·¢¶¯Ì¬¡£
+±Ë°¶Ìì¿Õ²å¼þÖØµãÓÅ»¯Ï¸½Ú£¬µ÷Õû½çÃæ£¬Ôö¼ÓÕ¾³¤×îÐèÒªµÄ¹¦ÄÜ£¬ÖÂÁ¦ÓÚ´òÔìÎÈ¶¨¡¢¸ßÐ§¡¢ÊµÓÃµÄDiscuz²å¼þ¡£
+Õ¾³¤¿ÉÒÔÍ¨¹ýÕâ¸ö´°¿Ú£¬¹Ø×¢¸ú×ÙÎÒÃÇµÄÑÐ·¢½øÕ¹£¬²¢ÁË½â×Ô¼ºµÄ½¨Õ¾ÐèÇóÊÇ·ñÒÑ¾­±»ÑÐ·¢ÍÅ¶Ó²ÉÄÉ²¢ÓèÒÔÊµÏÖ¡£
+
+Èç¹û¸÷Î»Õ¾³¤ÓÐºÃµÄ½¨Òé£¬ÇëÃèÊöÇå³þ£¬²¢µ½¡¶´´ÐÂË¼Î¬·ÖÏí¡··¢ÌûÌá³ö£º
+<a href="http://www.xddu.net/forum-51-1.html" target="_blank">http://www.xddu.net/forum-51-1.html</a>]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="aom"><![CDATA[Ìí¼Ó³É¹¦!]]></item>
+				<item id="anom"><![CDATA[Ìí¼ÓÊ§°Ü!]]></item>
+				<item id="eom"><![CDATA[±à¼­³É¹¦!]]></item>
+				<item id="enom"><![CDATA[±à¼­Ê§°Ü!]]></item>
+				<item id="dom"><![CDATA[É¾³ý³É¹¦!]]></item>
+				<item id="dnom"><![CDATA[É¾³ýÊ§°Ü!]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="nav"><![CDATA[[DDU]¶¯Ì¬ÖÐÐÄ]]></item>
+				<item id="dev"><![CDATA[¶¯Ì¬ÖÐÐÄ]]></item>
+				<item id="copy"><![CDATA[°æÈ¨ÐÅÏ¢]]></item>
+				<item id="ddu"><![CDATA[Discuz!ÇøÓòÁªÃË]]></item>
+				<item id="wedoing"><![CDATA[ÎÒÃÇµ±Ç°ÕýÔÚ½ôÕÅ½øÐÐµÄÏîÄ¿ÁÐ±í(ÊµÊ±¸üÐÂ)]]></item>
+				<item id="weok"><![CDATA[ÎÒÃÇÄ¿Ç°ÒÑ¾­Íê³ÉµÄÏîÄ¿ÁÐ±í(ÊµÊ±¸üÐÂ)]]></item>
+				<item id="stat"><![CDATA[×´Ì¬]]></item>
+				<item id="lastupdate"><![CDATA[×îºó¸üÐÂ]]></item>
+				<item id="nocx"><![CDATA[Ã»ÓÐ²éÑ¯µ½Êý¾Ý!]]></item>
+				<item id="add"><![CDATA[Ìí¼Ó]]></item>
+				<item id="del"><![CDATA[É¾³ý]]></item>
+				<item id="edit"><![CDATA[±à¼­]]></item>
+				<item id="all_dev"><![CDATA[¶¯Ì¬ÁÐ±í]]></item>
+				<item id="add_dev"><![CDATA[Ìí¼Ó¶¯Ì¬]]></item>
+				<item id="edit_dev"><![CDATA[±à¼­¶¯Ì¬]]></item>
+				<item id="del_dev"><![CDATA[É¾³ý¶¯Ì¬]]></item>
+				<item id="admincp"><![CDATA[¹ÜÀíÔ±Ãæ°å]]></item>
+				<item id="goback"><![CDATA[·µ»Ø¶¯Ì¬ÖÐÐÄ]]></item>
+				<item id="dev_name"><![CDATA[¶¯Ì¬Ãû³Æ]]></item>
+				<item id="dev_stat"><![CDATA[¶¯Ì¬×´Ì¬]]></item>
+				<item id="dev_url"><![CDATA[Á´½ÓµØÖ·]]></item>
+				<item id="dev_user"><![CDATA[¸ºÔðÓÃ»§]]></item>
+				<item id="dev_last"><![CDATA[×îºó¸üÐÂ]]></item>
+				<item id="dev_cz"><![CDATA[¹ÜÀí²Ù×÷]]></item>
+				<item id="stat_sm"><![CDATA[Èç¹ûÑ¡Ôñ°Ù·ÖÊý,ÇëÌîÐ´ºóÃæµÄÎÄ±¾¿ò,Èç: 10%]]></item>
+				<item id="url_sm"><![CDATA[¿ÉÑ¡,Áô¿Õ²»×÷Îª³¬Á´½ÓÊä³ö]]></item>
+				<item id="last_sm"><![CDATA[Áô¿ÕÎªµ±Ç°ÈÕÆÚ,¸ñÊ½ 2008-08-08]]></item>
+				<item id="ok"><![CDATA[ÒÑÍê³É]]></item>
+				<item id="yfp"><![CDATA[ÒÑ·ÖÅÉ]]></item>
+				<item id="jdb"><![CDATA[¾­µä°æ]]></item>
+				<item id="fs"><![CDATA[°Ù·ÖÊý]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+	</item>
+</root>
