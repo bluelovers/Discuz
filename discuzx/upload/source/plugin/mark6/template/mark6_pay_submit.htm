@@ -1,0 +1,39 @@
+{template mark6:header}
+         <div class="bm">
+         <ul class="tb cl">
+         <li {if !$_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6">六合彩系統</a></li>
+         <li {if $_G['gp_action'] == 'ranklist'}class="a"{/if}><a href="plugin.php?id=mark6&action=ranklist">排行</a></li>
+         {if $_G['adminid'] == 1}<li {if $_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6&action=admin">後台</a></li>{/if}
+         </ul>
+
+<form method="post" action="plugin.php?id=mark6">
+<input type="hidden" name="username" value="$username">
+<input type="hidden" name="number[]" value="$number[]">
+<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+<tr><td bgcolor="{BORDERCOLOR}">
+<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%">
+<tr class="header">
+<td colspan="2">投注確認</td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang member}:</td>
+<td bgcolor="{ALTBG2}">$_G['username']  <span class="smalltxt">[<a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>][<a href="home.php?mod=space&do=profile&username=$_G[username]" target="_blank">Profile</a>]</span></td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">下住號碼:</td>
+<td bgcolor="{ALTBG2}">$buy</td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">現金結餘:</td>
+<td bgcolor="{ALTBG2}">(持有現金:$usermoney - 費用支付:$duzhu ) = $moneyleft</td>
+</tr>
+</table>
+</td></tr></table><br>
+<input type="hidden" name="buy" value="$buy">
+<input type="hidden" name="duzhu" value="$duzhu">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<center><input type="submit" name="paysubmit" value="{lang submit}"></center>
+</form>
+
+
+{template mark6:footer}

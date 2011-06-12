@@ -1,0 +1,54 @@
+{template mark6:header}
+<div class="mn">
+         <div class="bm bw0">
+         <ul class="tb cl">
+         <li {if !$_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6">{lang mark6:header_pname}</a></li>
+         <li {if $_G['gp_action'] == 'ranklist'}class="a"{/if}><a href="plugin.php?id=mark6&action=ranklist">{lang mark6:header_rank}</a></li>
+         {if $_G['adminid'] == 1}<li {if $_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6&action=admin">{lang mark6:header_cp}</a></li>{/if}
+         </ul>
+		 </div>
+		 <div class="tl bm bmw">
+		 <div class="bm_h cl"><h2>{lang mark6:mark6rank}</h2></div>
+
+         <div class="th">
+<table class="th" width="100%">
+<tr align="center">
+<td width="11%" rowspan="2">{lang mark6:mark6rank_no}</td>
+<td width="10%" rowspan="2">{lang member}</td>
+<td colspan="4">{lang mark6:mark6rank_wintimes}</td>
+<td rowspan="2">{lang mark6:mark6rank_wintotal}</td>
+<td rowspan="2">{lang mark6:mark6rank_winonly}</td>
+</tr>
+
+<tr align="center">
+<td>{lang mark6:mark6rank_firstprice}</td>
+<td>{lang mark6:mark6rank_secondprice}</td>
+<td>{lang mark6:mark6rank_thirdprice}</td>
+<td>{lang mark6:mark6rank_all}</td>
+</tr>
+
+</table>
+</div>
+<div class="bm_c">
+<table width="100%">
+<!--{if !$userlist}-->
+<tr><td colspan="8" align="center">{lang mark6:mark6_currentlist_nodata}</td></tr>
+<!--{else}-->
+<!--{loop $userlist $user}-->
+<tr align="center">
+<td height="26">$user[num]</td>
+<td height="26"><a href="home.php?mod=space&do=profile&username=$user[username]" target="_blank">$user[username]</a></td>
+<td height="26">$user[win1]</td>
+<td height="26">$user[win2]</td>
+<td height="26">$user[win3]</td>
+<td height="26">$user[totalwin]</td>
+<td height="26">$user[totalmoney]</td>
+<td height="26">$user[winonly]</td>
+</tr>
+<!--{/loop}-->
+<!--{/if}-->
+</table>
+</div>
+</div>
+</div>
+{template mark6:footer}

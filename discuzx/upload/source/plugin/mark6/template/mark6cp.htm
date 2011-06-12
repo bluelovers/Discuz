@@ -1,0 +1,44 @@
+{template mark6:header}
+<div class="mn">
+         <div class="bm bw0">
+         <ul class="tb cl">
+         <li {if !$_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6">{lang mark6:header_pname}</a></li>
+         {if $_G['adminid'] == 1}<li {if $_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6&action=admin">{lang mark6:header_cp}</a></li>{/if}
+         </ul>
+		 </div>
+		 <div class="bm">
+		 <div class="bm_h cl"><h2>{lang mark6:header_cp}</h2></div>
+		 <div class="bm_c">
+<form name="form1" action="plugin.php?id=mark6&action=admin" method="post">
+<input type="hidden" name="Submit2" value="Submit2">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+
+<table class="tl bm" width="100%">
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:times}:</td>
+<td bgcolor="{ALTBG2}">{lang mark6:de}<span class="smalltxt">$id</span>{lang mark6:time}</td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang member}{lang mark6:number}:</td>
+<td bgcolor="{ALTBG2}">
+<!--{loop $userslist $user}-->$user[username] : $user[number]<br>
+<!--{/loop}--></td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:mark6cp_firstprice}:</td>
+<td bgcolor="{ALTBG2}"><!--{if !$jackpot}-->$basejackpot<!--{else}-->$jackpot<!--{/if}--></td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:action}:</td>
+<td bgcolor="{ALTBG2}"><button type="submit" name="submit2" value="true" onclick="$('form1').submit();" class="pn"><span>{lang mark6:mark6cp_submit}</span></button></td>
+</tr>
+
+</table>
+
+<input type="hidden" name="gameid" value="$gameid">
+<input type="hidden" name="username" value="$username">
+</form>
+</div>
+</div>
+</div>
+{template mark6:footer}

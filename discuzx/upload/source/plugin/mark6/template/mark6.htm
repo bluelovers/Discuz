@@ -1,0 +1,207 @@
+{template mark6:header}
+<div class="mn">
+         <div class="bm bw0">
+         <ul class="tb cl">
+         <li {if !$_G['gp_action']}class="a"{/if}><a href="plugin.php?id=mark6">{lang mark6:header_pname}</a></li>
+         <li {if $_G['gp_action'] == 'ranklist'}class="a"{/if}><a href="plugin.php?id=mark6&action=ranklist">{lang mark6:header_rank}</a></li>
+         {if $_G['adminid'] == 1}<li {if $_G['gp_action'] == 'admin'}class="a"{/if}><a href="plugin.php?id=mark6&action=admin">{lang mark6:header_cp}</a></li>{/if}
+         </ul>
+		 </div>
+		 
+         <div class="bm">
+		 <div class="bm_h cl"><h2>{lang mark6:header_pname} <span style="color: #800080; font-weight: bold;">{lang mark6:mark6_everyday}</span></h2></div>
+<table class="tl bm" width="100%" align="center">
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:mark6_mycredit}:</td>
+<td bgcolor="{ALTBG2}">$usermoney</td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:times}:</td>
+<td bgcolor="{ALTBG2}">{lang mark6:de}<span class="smalltxt">$gameid</span>{lang mark6:time}</td>
+</tr>
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:mark6_price}:</td>
+<td bgcolor="{ALTBG2}">{lang mark6:mark6_price_details}</td>
+</tr>
+
+<form name="form1" action="plugin.php?id=mark6&action=pay" method="post">
+<input type="hidden" name="Submit" value="$Submit" />
+<input type="hidden" name="duzhu" value="$duzhu" />
+<input type="hidden" name="usernum[]" value="$usernum" />
+<input type="hidden" name="gameid" value="$gameid" />
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<tr>
+<td bgcolor="{ALTBG1}" width="21%"><span style="color: #0000FF; font-weight: bold;">{lang mark6:mark6_choose}</span>:</td>
+<td bgcolor="{ALTBG2}" id="show_result">
+<script> 
+function controlInt_onkeypress()
+{
+ var code=String.fromCharCode(window.event.keyCode);
+ code=code.replace(/[^\d]/g,'');
+ window.event.keyCode=code.charCodeAt(0);
+ var control=window.event.srcElement;
+ control.style.imeMode = "disabled";
+}
+function controlInt_onbeforepaste()
+{
+ clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''));
+}
+function controlRestrictInt(control)
+{
+ control.attachEvent('onbeforepaste',controlInt_onbeforepaste);
+ control.attachEvent('onkeypress',controlInt_onkeypress);
+ control.attachEvent('onbeforeeditfocus',control_imeMode_disabled);
+}</script> 
+
+<input name="usernum[0]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[1]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[2]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[3]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[4]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[5]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[6]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[7]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[8]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[9]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[10]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+<input name="usernum[11]" type="text" size="1" maxlength="40" onKeyDown="javascript: controlRestrictInt(this);" />
+&nbsp; 
+<button type="submit" name="Submit" value="true" class="pn"><span>{lang submit}</span></button><br/> {lang mark6:mark6_choose_tips}</td> </tr><form>
+</form>
+<form name="form2" id="form23" action="plugin.php?id=mark6&action=compay" method="post">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<input type="hidden" name="gameid" value="$gameid" />
+<input type="hidden" name="comsubmit" value="1" />
+<tr>
+<td bgcolor="{ALTBG1}" width="21%"><span style="color: #800000">{lang mark6:mark6_autochoose} :</span></td>
+<td bgcolor="{ALTBG2}">
+<button type="submit" class="pn" onclick="$('form23').submit();"><span>{lang mark6:mark6_autochoose_submit}</span></button></td>
+</tr></form>
+
+<tr>
+<td bgcolor="{ALTBG1}" width="21%">{lang mark6:mark6_cost}:</td>
+<td bgcolor="{ALTBG2}"><span style="color: #0000FF">{lang mark6:mark6_choose_cost}</span>
+<span style="color: #800000; font-weight: bold;">{lang mark6:mark6_autochoose_cost}</span></td>
+</tr>
+</table>
+</div>
+<div class="tl bm bmw">
+<div class="bm_h cl"><h2>{lang mark6:mark6_currentlist}</h2></div>
+<div class="th">
+<table width="100%" class="th">
+<tr align="center">
+<td width="21%" align="center">{lang member}</td>
+<td align="center">{lang mark6:number}</td>
+</tr>
+</table>
+</div>
+<div class="bm_c">
+<table width="100%">
+<!--{if $num == 1}-->
+<tr>
+<td colspan="4" align="center">{lang mark6:mark6_currentlist_nodata}</td>
+</tr>
+<!--{else}-->
+<!--{loop $userlist $users}-->
+<tr align="center">
+<td bgcolor="{ALTBG1}" width="21%" align="center"><a href="home.php?mod=space&do=profile&username=$users[username]" target="_blank">$users[username]</a></td>
+<td bgcolor="{ALTBG2}" align="center">$users[number]&nbsp; <!--{if $users[duzhu] == '0'}-->
+<span style="color: #FF0000; font-weight: bold;">(Free)</span><!--{else}--><span style="font-weight: bold;">({lang mark6:mark6_cost}¡G $users[duzhu])</span><!--{/if}--></td>
+</tr>
+<!--{/loop}-->
+<!--{/if}-->
+<!--{if $multipage1}-->
+<tr><td colspan="2">$multipage1</td></tr>
+<!--{/if}-->
+</table>
+
+</div>
+</div>
+
+<div class="tl bm bmw">
+<div class="bm_h cl"><h2>{lang mark6:mark6_previouslist}</h2></div>
+<div class="th">
+<table width="100%" class="th">
+<tr>
+<td bgcolor="{ALTBG1}" width="21%" align="center">{lang mark6:times}</td>
+<td bgcolor="{ALTBG2}" align="center">{lang mark6:mark6_previouslist_result}</td>
+</tr>
+</table>
+</div>
+<div class="bm_c">
+<table width="100%">
+<!--{if $count == 1}-->
+<tr>
+<td bgcolor="{ALTBG2}" height="26" colspan="4" align="center">{lang mark6:mark6_currentlist_nodata}</td>
+</tr>
+<!--{else}-->
+<!--{loop $shownumberlist $shownumber}-->
+<tr align="center">
+<td bgcolor="{ALTBG1}" width="21%" align="center">{lang mark6:de}{$shownumber[id]}{lang mark6:time}</td>
+<td bgcolor="{ALTBG2}" align="center">$shownumber[shownumber]</td>
+</tr>
+<!--{/loop}-->
+<!--{/if}-->
+</table>
+</div>
+</div>
+
+<div class="tl bm bmw">
+<div class="bm_h cl"><h2>{lang mark6:mark6_prevprice}</h2></div>
+<div class="th">
+<table width="100%" class="th">
+<tr align="center">
+<td>{lang member}</td>
+<td>{lang mark6:number}</td>
+</tr>
+</table>
+</div>
+<div class="bm_c">
+<table width="100%">
+<!--{if $memcounts == 1}-->
+<tr>
+<td align="center" height="26" colspan="4">{lang mark6:mark6_currentlist_nodata}</td>
+</tr>
+<!--{else}-->
+<!--{loop $memnumberlist $memnumber}-->
+<tr align="center">
+<td>$memnumber[username]</td>
+<td>$memnumber[number]({lang mark6:match}{$memnumber['correct']}{lang mark6:words})&nbsp;
+</td>
+</tr>
+<!--{/loop}-->
+<!--{/if}-->
+
+</table>
+</div>
+</div>
+
+
+<div class="tl bm bmw">
+<div class="bm_h cl"><h2>{lang mark6:mark6_myinfo}</h2></div>
+<div class="th">
+<table width="100%" class="th">
+<tr align="center">
+<td>{lang mark6:times}</td>
+<td>{lang mark6:number}</td>
+</tr>
+</table>
+</div>
+<div class="bm_c">
+<table width="100%">
+<!--{if $counts == 1}-->
+<tr>
+<td align="center" height="26" colspan="4">{lang mark6:mark6_myinfo_nodata}</td>
+</tr>
+<!--{else}-->
+<!--{loop $mynumberlist $mynumber}-->
+<tr align="center">
+<td>{lang mark6:de}{$mynumber['gameid']}{lang mark6:time}</td>
+<td>$mynumber[number] <!--{if $mynumber[gameid]==$gameid}-->{lang mark6:mark6_myinfo_notyet}<!--{else}--><span style="color: #0000FF; font-weight: bold;"> ({lang mark6:match}{$mynumber['correct']}{lang mark6:words})</span></td><!--{/if}-->
+</tr>
+<!--{/loop}-->
+<!--{/if}-->
+</table>
+</div>
+</div>
+{template mark6:footer}

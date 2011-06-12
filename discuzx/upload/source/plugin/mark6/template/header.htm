@@ -1,0 +1,37 @@
+{template common/header}
+<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_forum_forumdisplay.css?{VERHASH}" />
+<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<!--{if !$_G['inajax']}-->
+<div id="pt" class="wp"><div class="z"><a href="index.php" class="nvhm" id="fjump">{$_G[setting][bbname]}</a>  <em>&rsaquo;</em> {lang mark6:header_pname}</div></div>
+<div id="ct" class="ct2 wp cl">
+
+	<div class="sd">
+			  <div class="bm">
+			   <div class="bm_h cl">
+               <h2>{lang mark6:header_credits}</h2>
+			   </div>
+			   <div class="bm_c">
+			   <ul>
+				<li>{lang mark6:header_member}: {if $_G[username]}<a href="home.php?mod=space&uid={$_G[uid]}">{$_G['username']}</a>{else}{lang plugin_platfom:visitor}{/if}</li>
+			    <li>{lang mark6:header_ugroup}: $_G['cache']['usergroups'][$_G['groupid']]['grouptitle'] <img src="{STATICURL}image/common/online_{if $_G[adminid]==1}admin{elseif $_G[adminid]==2}supermod{elseif $_G[adminid]==3}moderator{elseif $_G[groupid]==7}guest{else}member{/if}.gif" alt="" /></li>
+			    <li> {lang credits}: $_G[member][credits]</li>
+		       </ul>
+			   </div>
+		</div>
+	    <div class="bm">
+			   <div class="bm_h cl">
+                <h2>{lang mark6:header_copyright}</h2>
+			   </div>
+			   <div class="bm_c">
+        	    <ul>
+                 <li>{lang mark6:header_copyright_author}: 1224</li>
+                 <li>{lang mark6:header_copyright_update}: winghong1309</li>				
+                 <li>{lang mark6:header_copyright_version}: X1.5 Final</li>
+				 <li>{lang mark6:header_copyright_contact}: <a href="http://www.favoururl.com" target='_blank'>Website</a></li>
+           	    </ul>
+               </div>
+	    </div>
+	</div>
+
+<!--{/if}-->

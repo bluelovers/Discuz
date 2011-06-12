@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X1.5]]></item>
+	<item id="Time"><![CDATA[2010-08-30 16:53]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/discuz/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[0]]></item>
+			<item id="name"><![CDATA[六合彩中心]]></item>
+			<item id="identifier"><![CDATA[mark6]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[mark6/]]></item>
+			<item id="copyright"><![CDATA[written by 1224 , updated by winghong1309@favoururl.com]]></item>
+			<item id="version"><![CDATA[1.02]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[mark6]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[mark6]]></item>
+					<item id="menu"><![CDATA[六合彩]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[5]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[11個自選號碼下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[eleven]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[6000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[號碼大小上限]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[maxnum]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[49]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[回帖得到免費隨機下注機率]]></item>
+				<item id="description"><![CDATA[%]]></item>
+				<item id="variable"><![CDATA[replyrand]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[9個自選號碼下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[nine]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[2000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[10個自選號碼下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[ten]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[4000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[12個自選號碼下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[twelve]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[12000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[電腦隨機下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[comrandom]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[500]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[發帖得到免費隨機下注機率]]></item>
+				<item id="description"><![CDATA[%]]></item>
+				<item id="variable"><![CDATA[postrand]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[二獎]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[second]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[80000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[多寶獎金基本金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[jackpot]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[500000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[8個或以下自選號碼下注金額]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[eight]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[1400]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[三獎]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[third]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[3000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+		    <item id="scriptlang">
+			   <item id="mark6cp_pmtitle_secondprice"><![CDATA[★恭喜你中了六合彩的二獎★]]></item>
+			   <item id="mark6cp_pmcontent_secondprice"><![CDATA[恭喜你中了六合彩的二獎! 你所得獎金是{money}論壇幣]]></item>
+			   <item id="mark6cp_pmtitle_firstprice"><![CDATA[★恭喜你中了六合彩的頭獎★]]></item>
+			   <item id="mark6cp_pmcontent_firstprice"><![CDATA[恭喜你中了六合彩的頭獎! 你所得獎金是{jackpot}論壇幣]]></item>
+			   <item id="mark6cp_success"><![CDATA[已成功派彩]]></item>
+			   <item id="mark6"><![CDATA[六合彩]]></item>
+			   <item id="mark6class_yougetone"><![CDATA[恭喜你得到 1 注免費六合彩. 請留意六合彩系統攪注時間及中獎詳情]]></item>
+			   <item id="mark6_nomoney"><![CDATA[你沒有足夠的現金，請重新投注！]]></item>
+			   <item id="mark6_ae"><![CDATA[你早前已投注成功，請不要刷新瀏覽器！]]></item>
+			   <item id="mark6_success"><![CDATA[已成功下注]]></item>
+			   <item id="mark6_nonum"><![CDATA[請下注]]></item>
+			   <item id="mark6_restriction"><![CDATA[請不要超出下注號碼範圍(1~{maxnum})]]></item>
+			   <item id="mark6_norepeat"><![CDATA[不能重復下注號碼啊！]]></item>
+			   <item id="mark6_notenough"><![CDATA[你只下注了{check}個號碼，是{buy}，但您最少要下注8個號碼啊！]]></item>
+		    </item>
+			<item id="templatelang">
+			   <item id="header_credits"><![CDATA[積分概況]]></item>
+			   <item id="header_member"><![CDATA[會員]]></item>
+			   <item id="header_ugroup"><![CDATA[用戶組]]></item>
+			   <item id="header_pname"><![CDATA[六合彩系統]]></item>
+			   <item id="header_copyright"><![CDATA[插件版權]]></item>
+			     <item id="header_copyright_author"><![CDATA[作者]]></item>
+				 <item id="header_copyright_update"><![CDATA[升級]]></item>
+				 <item id="header_copyright_version"><![CDATA[版本]]></item>
+				 <item id="header_copyright_contact"><![CDATA[連絡]]></item>
+			   <item id="header_rank"><![CDATA[排行]]></item>
+			   <item id="header_cp"><![CDATA[後台]]></item>
+			   <item id="mark6_everyday"><![CDATA[(每日開獎)]]></item>
+			   <item id="mark6_mycredit"><![CDATA[持有現金]]></item>
+			   <item id="times"><![CDATA[期數]]></item>
+			   <item id="de"><![CDATA[第]]></item>
+			   <item id="time"><![CDATA[期]]></item>
+			   <item id="mark6_price"><![CDATA[獎金]]></item>
+			   <item id="mark6_price_details"><![CDATA[<span style="color: #FF0000">頭獎 (中 6 個字)</span><span style="color: #FF0000; font-weight: bold;"> $jackpotnew 論壇幣</span>; 
+二獎 (中 5 個字) $second 論壇幣; 安慰獎 (中 4 個字) $third 論壇幣]]></item>
+               <item id="mark6_choose"><![CDATA[自選號碼 [可選 1- $maxnum]]]></item>
+			   <item id="mark6_choose_tips"><![CDATA[(注意: 選擇越多號碼, 下注金額會越多)]]></item>
+			   <item id="mark6_autochoose"><![CDATA[電腦隨機下注]]></item>
+			   <item id="mark6_autochoose_submit"><![CDATA[隨機下注，數目及號碼由電腦決定]]></item>
+			   <item id="mark6_cost"><![CDATA[下注金額 (論壇幣) ]]></item>
+			   <item id="mark6_choose_cost"><![CDATA[自選號碼: 8個 ( $eight ); 9個 ( $nine ); 10個 ( $ten ); 11個 ( $eleven ); 12個 ( $twelve );]]></item>
+			   <item id="mark6_autochoose_cost"><![CDATA[隨機下注: ( $comrandom )  有機會抽中 8 至 12 個字]]></item>
+			   <item id="mark6_currentlist"><![CDATA[今期會員投注列表(只顯示5筆記錄)]]></item>
+			   <item id="number"><![CDATA[下注號碼]]></item>
+			   <item id="mark6_currentlist_nodata"><![CDATA[還沒有人投注！]]></item>
+			   <item id="mark6_previouslist"><![CDATA[過去5期結果]]></item>
+			   <item id="mark6_previouslist_result"><![CDATA[攪珠結果]]></item>
+			   <item id="mark6_prevprice"><![CDATA[上期會員中獎情況]]></item>
+			   <item id="match"><![CDATA[中]]></item>
+			   <item id="words"><![CDATA[個字]]></item>
+			   <item id="mark6_myinfo"><![CDATA[上期你的投注及中獎情況]]></item>
+			   <item id="mark6_myinfo_nodata"><![CDATA[你沒有投注！]]></item>
+			   <item id="mark6_myinfo_notyet"><![CDATA[(未開獎)]]></item>
+			   <item id="mark6cp_firstprice"><![CDATA[頭獎]]></item>
+			   <item id="action"><![CDATA[操作]]></item>
+			   <item id="mark6cp_submit"><![CDATA[按此公佈結果及派彩]]></item>
+			   
+			   <item id="mark6rank"><![CDATA[六合彩排行榜]]></item>
+			   <item id="mark6rank_no"><![CDATA[名次]]></item>
+			   <item id="mark6rank_wintimes"><![CDATA[中獎次數]]></item>
+			   <item id="mark6rank_wintotal"><![CDATA[共贏獎金]]></item>
+			   <item id="mark6rank_winonly"><![CDATA[淨贏獎金]]></item>
+			   <item id="mark6rank_firstprice"><![CDATA[頭獎]]></item>
+			   <item id="mark6rank_secondprice"><![CDATA[二獎]]></item>
+			   <item id="mark6rank_thirdprice"><![CDATA[三獎]]></item>
+			   <item id="mark6rank_all"><![CDATA[全部]]></item>
+			</item>
+		</item>
+                <item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+                <item id="installfile"><![CDATA[install.php]]></item>
+	</item>
+</root>
