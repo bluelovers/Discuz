@@ -1,0 +1,99 @@
+{subtemplate common/header}
+<style type="text/css">
+	#ct{background:url(static/image/common/vline.png) #FFF repeat-y scroll 760px 0;}
+	#ct a{color:#2366A8;}
+	#sd{width:190px;}
+	.ct2_a { background: none; border: none; }
+	.ct2_a .mn { margin-right: 0px; padding-top: 0px; }
+	.appl { background: #E7F0F7; border: 1px solid #CDCDCD; }
+	.mn{width:760px;float:right;}
+	.mn p{margin:10px;}
+	.datalist #ttt{border:1px solid #E6E7E1;margin-bottom:30px;width:100%;border-collapse:collapse;empty-cells:show;}
+	.datalist #ttt th, .datalist #ttt td{padding:4px 10px;border:1px solid #E6E7E1;font-weight:400;}
+	.ntcwin .popupcredit th,.ntcwin .popupcredit td{padding:0px;border:0;}
+	.colplural{background-color:#F5F5F5;}
+	.pn{margin:10px;padding:0 10px;}
+	#exc_ane{padding:0 0;margin:;}
+	.l {margin: 5px 0;}
+	.lic{font-size:12px;font:Consolas,Tahoma,Helvetica,sans-serif}
+	.tbn li {font-size:12px;}
+	.notice{border:5px #E6E7E1 double;}
+</style>
+<div id="pt" class="wp cl">
+	<div class="z">
+		<a href="index.php" class="nvhm">$_G['setting']['bbname']</a><em>&rsaquo;</em><a href="plugin.php?id=bank_ane:bank">{lang bank_ane:bank}</a><!--{if $bankid>0}--><em> &rsaquo; </em>$bankinfo[bankname]<!--{/if}-->
+	</div>
+</div>
+
+<script type="text/javascript">
+function validate(theform) {
+	theform.banksubmit.disabled = true;
+	return true;
+}
+
+function validatew(theform) {
+	if(confirm("$banktmplang[confirm_msg]")) {
+		theform.banksubmit.disabled = true;
+		return true;
+	} else {
+		return false;
+	}
+}
+</script>
+
+<div id="wp_auc" class="wp cl">
+	<div class="ct2_a wp cl">
+	<div class="mn" style="width:740px;">
+		<div class="content">
+			<div class="datalist">
+			<!--{if $_G['gp_mode']=='setup'}-->
+				{eval include template('bank_ane:bank_setup');}
+			<!--{elseif $_G['gp_mode']=='admin'}-->
+				{eval include template('bank_ane:bank_admin');}
+			<!--{elseif $_G['gp_mode']=='other'}-->
+				{eval include template('bank_ane:bank_other');}
+			<!--{else}-->
+				{eval include template('bank_ane:bank_basic');}
+			<!--{/if}-->
+			</div>
+		</div>
+	</div>
+
+	<div id="sd" class="appl cl">
+		<div class="tbn">
+		<h2 class="mt bbda">{lang bank_ane:memcp_info}</h2>
+		<ul>
+			<li><span>{$_G[member][username]}</span>{lang bank_ane:username}:</li>
+			<li><span>$_G[group][grouptitle]</span>{lang bank_ane:usergroup}:</li>
+			<li> <span>{$_G[member][credits]}</span>{lang credits}:</li>
+			<!--{loop $extcredits $id $credit}-->
+			<li> 
+				<!--{if $id==$moneycreditsnum}-->
+				<span><b>$user_extcredits[extcredits.$id]  $credit[unit]</b> ($banktmplang[money_unit]) </span><font color="red">$credit[title]:</font> 
+				<!--{else}-->
+					<span style="font-weight: bold;">$user_extcredits[extcredits.$id] $credit[unit]</span>   $credit[title]: 
+				<!--{/if}-->
+			</li>
+			<!--{/loop}-->
+		</ul>
+		<hr class="l" />
+		<h2 class="mt bbda">$banktmplang[bank_left_menu]</h2>
+		<ul>
+			<!--{if $hackVars[onlybankid]==0 || $issupbankadmin}-->
+			<li class="cl{if $_G['gp_mode']!='setup'&&$_G['gp_mode']!='admin'&&$_G['gp_mode']!='other'} a{/if}"><a href="plugin.php?id=bank_ane:bank">$banktmplang[bank_list]</a></li>
+			<!--{/if}-->
+			<li class="cl{if $_G['gp_mode']=='other'&&!$_G['gp_action']} a{/if}"><a href="plugin.php?id=bank_ane:bank&mode=other">$banktmplang[bank_left_menu_show]</a></li>
+			<li class="cl{if $_G[gp_mode]=='other'&&$_G['gp_action']==''} a{/if}"><a href="plugin.php?id=bank_ane:bank&mode=other&action=buy">$banktmplang[bank_left_menu_buy]</a></li>
+			<li class="cl{if $_G[gp_action]=='list' && $_G['gp_mode']=='other'} a{/if}"><a href="plugin.php?id=bank_ane:bank&mode=other&action=list">$banktmplang[bank_left_menu_list]</a></li>
+		</ul>
+		<hr class="l" />
+		<h2 class="mt bbda">$banktmplang[bank_copyright]</h2>
+		<ul class="lic">
+			<li> Version: $hackVersion</li><li> Non hai trovato</li><li> $banktmplang[upgradetodzx]</li>
+		</ul>
+		</div>
+		
+	</div>
+	</div>
+</div>
+{subtemplate common/footer}

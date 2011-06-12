@@ -1,0 +1,139 @@
+<div class="mainbox">
+<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+<thead class="colplural">
+<tr>
+	<td align="center"><h2>$banktmplang[admin_menu]</h2></td>
+</tr>
+</thead>
+<tr><td>
+		<a href="plugin.php?id=bank_ane:bank"><em  class="xw0 xi1">$banktmplang[bank_list]</em></a>&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&mode=setup&action=add"<em  class="xw0 xi1">$banktmplang[supadmin_menu_add]</em></a>&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&mode=setup&action=off"><em  class="xw0 xi1">$banktmplang[supadmin_menu_off]</em></a>&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&mode=setup"><em  class="xw0 xi1">$banktmplang[supadmin_menu_view]</em></a>
+</td></tr>
+</table id="ttt">
+</div>
+<!--{if $action=='add'}-->
+	<div class="mainbox">
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="mode" value="setup">
+	<input type="hidden" name="action" value="doadd">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center" colspan="2"><h2>$banktmplang[supadmin_menu_add]</h2></td>
+	</tr>
+	</thead>
+	<tr>
+	<td width="50%"><span style="font-weight: bold;">$banktmplang[bank_info_name]</span><br />$banktmplang[bank_info_name_msg]</td>
+	<td width="50%"><input type="text" class="pt" name="var_bankname" size="35" value="" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_creator]</span><br />$banktmplang[bank_info_creator_msg]</td>
+	<td><input type="text" class="pt" name="var_creator" size="35" value="" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_investment]</span><br />$banktmplang[bank_info_investment_msg]</td>
+	<td><input type="text" class="pt" name="var_investment" size="35" value="10000" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_poundage]</span><br />$banktmplang[bank_info_poundage_msg]</td>
+	<td><input type="text" class="pt" name="poundage" size="35" value="0" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[loginpass]</span><br />$banktmplang[bank_info_loginpass_msg]</td>
+	<td><input type="password" class="pt" name="loginpass" size="25" value="" /></td>
+	</tr>
+	<tr><td colspan="2">$banktmplang[bank_info_addinfo]</td></tr>
+	<tr><td colspan="2" align="center"><button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button></td></tr>
+	</table id="ttt"></form>
+	</div>
+<!--{elseif $action=='off'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[supadmin_menu_off]</h2></td>
+	</tr>
+	</thead>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[off_changep]</td></tr>
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="mode" value="setup" />
+	<input type="hidden" name="action" value="dochange" />
+	<p>$banktmplang[bank_info_name]: <select name="bankid">
+	<option value="0">$banktmplang[select_bank]</option>
+	$banklist
+	</select></p>
+	<p>$banktmplang[new_bankcreator]: <input type="text" class="pt" size="15" name="newcreator" /></p>
+	<p>$banktmplang[loginpass]: <input type="password" class="pt" name="loginpass" size="15" /></p>
+	<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+	</form>
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[off_delbank]</td></tr>
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="mode" value="setup" />
+	<input type="hidden" name="action" value="dodelbank" />
+	<p>$banktmplang[bank_info_name]: <select name="bankid">
+	<option value="0">$banktmplang[select_bank]</option>
+	$banklist
+	</select></p>
+	<p>$banktmplang[loginpass]: <input type="password" class="pt" name="loginpass" size="15" /></p> <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[off_delbank]</strong></button>
+	</form>
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+	<tr><td><p>$banktmplang[off_notice]</p></td></tr>
+	</table id="ttt">
+	</div>
+<!--{else}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[supadmin_menu_view]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<a href="plugin.php?id=bank_ane:bank&mode=setup"><em  class="xw0 xi1">$banktmplang[supadmin_menu_view]</em></a>&nbsp;|&nbsp;
+			<a href="plugin.php?id=bank_ane:bank&mode=setup&bserachtype=1"><em  class="xw0 xi1">$banktmplang[bank_left_menu_buylog]</em></a>
+	</td></tr>
+	<tr><td>
+		<div class="box" style="padding: 5px">
+			<form action="plugin.php?id=bank_ane:bank"  name="name" method="post" onSubmit="return validate(this)">
+			<input type="hidden" name="mode" value="setup" />
+			<input type="hidden" name="bserachtype" value="$bserachtype" />
+			{lang bank_ane:keyword}: <input type="text" class="pt" size="20" name="bsearchkey" value="$bsearchkey" />
+			&nbsp;<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+			</form>
+		</div>
+		<table id="ttt" cellspacing="0" cellpadding="3" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td><span style="font-weight: bold;">Info:</span> $datashow[remark]</td>
+		<td width="140"><span style="font-weight: bold;">Time:</span> $datashow[optimeshow]</td>
+		<td width="120"><span style="font-weight: bold;">Ip:</span> $datashow[opip]</td>
+		</tr>
+		<!--{/loop}-->
+		<tr><td colspan="3">$multipage</td></tr>
+		<!--{else}-->
+		<tr><td>
+		<br /><br /><center>$banktmplang[no_datalist]</center><br /><br /><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	<tr><td>
+		<!--{if $datanum && $page==1 && $bsearchkey==''}-->
+		<div class="box" style="padding: 5px">
+			<form action="plugin.php?id=bank_ane:bank"  name="name" method="post" onSubmit="return validatew(this)">
+			<input type="hidden" name="mode" value="setup" />
+			<input type="hidden" name="action" value="dodellog" />
+			<input type="hidden" name="isdelbuylog" value="$bserachtype" />
+			{lang delete} <input type="text" class="pt" size="10" name="dellogday" value="30" /> $banktmplang[daybefore]
+			&nbsp;$banktmplang[loginpass]:<input type="password" class="pt" name="loginpass" size="15" />&nbsp;<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+			</form>
+		</div>
+		<!--{/if}-->
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{/if}-->

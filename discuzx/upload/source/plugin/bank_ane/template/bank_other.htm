@@ -1,0 +1,255 @@
+<!--{if $action=='buy'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[bank_left_menu_buy]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<a href="plugin.php?id=bank_ane:bank&mode=other&action=buy"><em  class="xw0 xi1">$banktmplang[bank_left_menu_buy]</em></a>&nbsp;|&nbsp;
+			<a href="plugin.php?id=bank_ane:bank&mode=other&action=buylog"><em  class="xw0 xi1">$banktmplang[bank_left_menu_buylog]</em></a>
+	</td></tr>
+	<tr><td>
+		<p>$banktmplang[buy_showinfo]</p>
+		<!--{loop $buycredits $key $datashow}-->
+		<!--{if $datashow[sell]>0 || $datashow[buy]>0}-->
+		<p><span style="font-weight: bold;">$extcredits[$key][title]: </span>
+			<!--{if $datashow[sell]>0}-->$banktmplang[buy_sellprice] $datashow[sell] $moneyname $moneytype/$extcredits[$key][unit]<!--{else}-->$banktmplang[buy_sellclose]<!--{/if}-->, 
+			<!--{if $datashow[buy]>0}-->$banktmplang[buy_buyprice] $datashow[buy] $moneyname $moneytype/$extcredits[$key][unit]<!--{else}-->$banktmplang[buy_buyclose]<!--{/if}-->
+			</p>
+		<!--{/if}-->
+		<!--{/loop}-->
+	</td></tr>
+	<tr><td>
+	<!--{if $buycreditsnum==0}-->
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="mode" value="other" />
+		<input type="hidden" name="action" value="buy" />
+		<p>$banktmplang[buy_choice]: </p>
+		<!--{loop $buycredits $key $datashow}-->
+		<!--{if $datashow[sell]>0 || $datashow[buy]>0}-->
+		<p><input type="radio" name="buycreditsnum" value="$key" />
+			<span style="font-weight: bold;">$extcredits[$key][title]: </span>
+			<!--{if $datashow[sell]>0}-->$banktmplang[buy_sellprice] $datashow[sell] $moneyname $moneytype/$extcredits[$key][unit]<!--{else}-->$banktmplang[buy_sellclose]<!--{/if}-->, 
+			<!--{if $datashow[buy]>0}-->$banktmplang[buy_buyprice] $datashow[buy] $moneyname $moneytype/$extcredits[$key][unit]<!--{else}-->$banktmplang[buy_buyclose]<!--{/if}--> ($banktmplang[buy_showmy] $_G['member']['extcredits'.$key] $extcredits[$key][unit])
+			</p>
+		<!--{/if}-->
+		<!--{/loop}-->
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+	<!--{else}-->
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+		<input type="hidden" name="mode" value="other" />
+		<input type="hidden" name="action" value="buy" />
+		<input type="hidden" name="buycreditsnum" value="$buycreditsnum" />
+		<p>$banktmplang[buy_choice]: <span style="font-weight: bold;">$extcredits[$buycreditsnum][title]</span>($banktmplang[buy_showmy] {$_G['member'][$docredit]} $extcredits[$buycreditsnum][unit])</p>
+		<p>$banktmplang[type]: 
+		<input type="radio" name="op" value="sell"<!--{if $buycredits[$buycreditsnum][sell]==0}--> disabled="disabled"<!--{/if}--> />$banktmplang[buy_sell]<!--{if $buycredits[$buycreditsnum][sell]>0}-->($buycredits[$buycreditsnum][sell] $moneyname $moneytype/$extcredits[$buycreditsnum][unit])<!--{/if}-->
+		<input type="radio" name="op" value="buy"<!--{if $buycredits[$buycreditsnum][buy]==0}--> disabled="disabled"<!--{/if}--> />$banktmplang[buy_buy]<!--{if $buycredits[$buycreditsnum][buy]>0}-->($buycredits[$buycreditsnum][buy] $moneyname $moneytype/$extcredits[$buycreditsnum][unit])<!--{/if}--></p>
+		<p>$banktmplang[num]: <input type="text" class="pt" name="banknum" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+	<!--{/if}-->
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+	<tr><td><p>$banktmplang[buy_notice]</p></td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='buylog'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[bank_left_menu_buy]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<a href="plugin.php?id=bank_ane:bank&mode=other&action=buy"><em  class="xw0 xi1">$banktmplang[bank_left_menu_buy]</em></a>&nbsp;|&nbsp;
+			<a href="plugin.php?id=bank_ane:bank&mode=other&action=buylog"><em  class="xw0 xi1">$banktmplang[bank_left_menu_buylog]</em></a>
+	</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td><span style="font-weight: bold;">Info:</span> $datashow[remark]</td>
+		<td width="140"><span style="font-weight: bold;">Time:</span> $datashow[optimeshow]</td>
+		<td width="120"><span style="font-weight: bold;">Ip:</span> $datashow[opip]</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{if $multipage}--><tr><td colspan="3">$multipage</td></tr><!--{/if}-->
+		<!--{else}-->
+		<tr><td>
+		<br /><br /><center>$banktmplang[no_datalist]</center><br /><br /><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='list'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center" colspan="3"><h2>$banktmplang[bank_left_menu_list]</h2></td>
+	</tr>
+	</thead>
+	<tr>
+	<td valign="top">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<tr><td colspan="2" class="footoperation" style="font-weight: bold;" align="center">$banktmplang[list_cash]</td></tr>
+		<tr><td align="center">{lang bank_ane:username}</td><td align="center">$banktmplang[money_numshow]</td></tr>
+		<!--{if !empty($cashlist)}-->
+		<!--{loop $cashlist $datashow}-->
+		<tr>
+			<td><a href="home.php?mod=space&uid=$datashow[uid]" target="_blank"><em  class="xw0 xi1">$datashow[username]</em></a></td><td align="right">$datashow[$moneycredits] $moneyname</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+		</table id="ttt">
+	</td>
+	<!--{if $depositcredits!='none'||1}-->
+	<td valign="top">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<tr><td colspan="2" class="footoperation" style="font-weight: bold;" align="center">$banktmplang[list_fund]</td></tr>
+		<tr><td align="center">{lang bank_ane:username}</td><td align="center">$banktmplang[money_numshow]</td></tr>
+		<!--{if !empty($fundlist)}-->
+		<!--{loop $fundlist $datashow}-->
+		<tr>
+			<td><a href="home.php?mod=space&uid=$datashow[uid]" target="_blank"><em  class="xw0 xi1">$datashow[username]</em></a></td><td align="right">$datashow[$depositcredits] $moneyname</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+		</table id="ttt">
+	</td>
+	<td valign="top">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<tr><td colspan="2" class="footoperation" style="font-weight: bold;" align="center">$banktmplang[list_allmoney]</td></tr>
+		<tr><td align="center">{lang bank_ane:username}</td><td align="center">$banktmplang[money_numshow]</td></tr>
+		<!--{if !empty($moneylist)}-->
+		<!--{loop $moneylist $datashow}-->
+		<tr>
+			<td><a href="home.php?mod=space&uid=$datashow[uid]" target="_blank"><em  class="xw0 xi1">$datashow[username]</em></a></td><td align="right">$datashow[allmoney] $moneyname</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+		</table id="ttt">
+	</td>
+	<!--{/if}-->
+	</tr>
+	</table id="ttt">
+	<!--{if $hackVars['onlybankid']==0}-->
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+	<td valign="top">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<tr><td colspan="2" class="footoperation" style="font-weight: bold;" align="center">$banktmplang[list_bankmoney]</td></tr>
+		<tr><td align="center">$banktmplang[bank_info_name]</td><td align="center">$banktmplang[money_numshow]</td></tr>
+		<!--{if !empty($bankmoneylist)}-->
+		<!--{loop $bankmoneylist $datashow}-->
+		<tr>
+			<td><a href="plugin.php?id=bank_ane:bank&bankid=$datashow[id]" target="_blank"><em  class="xw0 xi1">$datashow[bankname]</em></a></td><td align="right">$datashow[allmoney] $moneyname</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+		</table id="ttt">
+	</td>
+	<td valign="top">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<tr><td colspan="2" class="footoperation" style="font-weight: bold;" align="center">$banktmplang[list_bankpeople]</td></tr>
+		<tr><td align="center">$banktmplang[bank_info_name]</td><td align="center">$banktmplang[bank_info_usernum]</td></tr>
+		<!--{if !empty($bankuserlist)}-->
+		<!--{loop $bankuserlist $datashow}-->
+		<tr>
+			<td><a href="plugin.php?id=bank_ane:bank&bankid=$datashow[id]" target="_blank"><em  class="xw0 xi1">$datashow[bankname]</em></a></td><td align="right">$datashow[usernum]</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+		</table id="ttt">
+	</td>
+	</tr>
+	</table id="ttt">
+	<!--{/if}-->
+	</div>
+<!--{else}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[bank_left_menu_show]</h2></td>
+	</tr>
+	</thead>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_cur]</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if !empty($buercurinfo)}-->
+		<!--{loop $buercurinfo $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>
+			$banktmplang[bank_info_name]: <a href="plugin.php?id=bank_ane:bank&bankid=$datashow[bankid]"><em  class="xw0 xi1">$datashow[bankname]</em></a>&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[mybank_opentime]: $datashow[endtimeshow]
+		</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr><td><br /><center>$banktmplang[no_datalist]</center><br /></td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_fix]</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if !empty($buerfixinfo)}-->
+		<!--{loop $buerfixinfo $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>
+			$banktmplang[bank_info_name]: <a href="plugin.php?id=bank_ane:bank&bankid=$datashow[bankid]"><em  class="xw0 xi1">$datashow[bankname]</em></a>&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_fixacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[timeend]: $datashow[endtimeshow]
+		</td>
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr><td><br /><center>$banktmplang[no_datalist]</center><br /></td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_lend]</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if !empty($buerleninfo)}-->
+		<!--{loop $buerleninfo $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<!--{if $datashow[opstatus]==1}-->
+		<td>
+			$banktmplang[bank_info_name]: <a href="plugin.php?id=bank_ane:bank&bankid=$datashow[bankid]"><em  class="xw0 xi1">$datashow[bankname]</em></a>&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[timeend]: $datashow[endtimeshow]
+		</td>
+		<!--{else}-->
+		<td>
+		<span style="font-weight: bold;">[{$banktmplang[len_try]}]</span>&nbsp;
+		$banktmplang[bank_info_name]: <a href="plugin.php?id=bank_ane:bank&bankid=$datashow[bankid]"><em  class="xw0 xi1">$datashow[bankname]</em></a>&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[daynum]: $datashow[endtime]
+		</td>
+		<!--{/if}-->
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr><td><br /><center>$banktmplang[no_datalist]</center><br /></td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{/if}-->

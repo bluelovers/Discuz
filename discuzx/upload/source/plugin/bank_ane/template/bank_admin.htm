@@ -1,0 +1,410 @@
+<div class="mainbox">
+<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu]</h2></td>
+	</tr>
+	</thead>
+<tr><td>
+		<a href="plugin.php?id=bank_ane:bank&bankid=$bankid"><em  class="xw0 xi1">$banktmplang[bank_menu_home]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=acc"><em  class="xw0 xi1">$banktmplang[admin_menu_accounts]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lok"><em  class="xw0 xi1">$banktmplang[admin_menu_lendok]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lof"><em  class="xw0 xi1">$banktmplang[admin_menu_lendoff]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=fin"><em  class="xw0 xi1">$banktmplang[admin_menu_financing]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=var"><em  class="xw0 xi1">$banktmplang[admin_menu_varset]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=log"><em  class="xw0 xi1">$banktmplang[admin_menu_log]</em></a>
+</td></tr>
+</table id="ttt">
+</div>
+<!--{if $action=='acc'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_accounts]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+	<input type="hidden" name="bankid" value="$bankid" />
+	<input type="hidden" name="mode" value="admin" />
+	<input type="hidden" name="action" value="showacc" />
+	{lang bank_ane:username}: <input type="text" name="buser" class="px" size="15" /> <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+	</form>
+	</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>
+		{lang bank_ane:username}: $datashow[username]&nbsp;&nbsp;
+		$banktmplang[mybank_opentime]: $datashow[opentimeshow]&nbsp;&nbsp;
+		$banktmplang[mybank_status]: $datashow[status]
+		</td>
+		<td width="100" align="center">[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=showacc&buser=$datashow[username]"><em  class="xw0 xi1">$banktmplang[view_more]</em></a>]</td>
+		</tr>
+		<!--{/loop}-->
+		<tr><td colspan="2">$multipage</td></tr>
+		<!--{else}-->
+		<tr><td>
+		<br /><br /><center>$banktmplang[no_datalist]</center><br /><br /><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='showacc'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$buser $banktmplang[admin_menu_accounts]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<!--{if $buserstatus==2}--><a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=douser&op=cgs&buser=$buser&s=0"><em  class="xw0 xi1">$banktmplang[douer_changes2]</em></a><!--{else}--><a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=douser&op=cgs&buser=$buser&s=1"><em  class="xw0 xi1">$banktmplang[douer_changes1]</em></a><!--{/if}-->&nbsp;|&nbsp;
+			<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=douser&op=cgp&buser=$buser"><em  class="xw0 xi1">$banktmplang[douer_password]</em></a>&nbsp;|&nbsp;
+			<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=log&bsearchkey=$buser"><em  class="xw0 xi1">$banktmplang[douer_viewlog]</em></a>
+	</td></tr>
+	<tr><td>
+		[<span style="font-weight: bold;">$buser</span> {$banktmplang[mybank_info]}]&nbsp;$banktmplang[mybank_opentime]: $buercurinfo[endtimeshow], $banktmplang[mybank_status]: <!--{if $buserstatus==1}-->$banktmplang[mybank_status_yes]<!--{else}--><span style="color:red">$banktmplang[mybank_status_no]</span><!--{/if}-->
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_cur]</td></tr>
+	<tr><td>
+		$banktmplang[money_num]: $buercurinfo[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $buercurinfo[begintimeshow]
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_fix]</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if !empty($buerfixinfo)}-->
+		<!--{loop $buerfixinfo $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_fixacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[timeend]: $datashow[endtimeshow]
+		</td>
+		<!--{if $isdelaylen==1}-->
+		<td width="100" align="center">[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=douser&buser=$buser&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[douer_tocur]</em></a>]
+		</td>
+		<!--{/if}-->
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr><td><br /><center>$banktmplang[no_datalist]</center><br /></td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_menu_lend]</td></tr>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if !empty($buerleninfo)}-->
+		<!--{loop $buerleninfo $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<!--{if $datashow[opstatus]==1}-->
+		<td>$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[timeend]: $datashow[endtimeshow]
+		</td>
+		<!--{else}-->
+		<td><span style="font-weight: bold;">[{$banktmplang[len_try]}]</span>&nbsp;$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[daynum]: $datashow[endtime]
+		</td>
+		<!--{/if}-->
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr><td><br /><center>$banktmplang[no_datalist]</center><br /></td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='lok'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_lendok]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>
+			{lang bank_ane:username}: <a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=showacc&buser=$datashow[username]" target="_blank"><em  class="xw0 xi1">$datashow[username]</EM></a>(UID:$datashow[uid])&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[daynum]: $datashow[endtime]
+		</td>
+		<td width="100" align="center">
+			[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lok&op=y&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[len_yes]</em></a>]&nbsp;
+			[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lok&op=n&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[len_no]</em></a>]
+		</td>
+		</tr>
+		<!--{/loop}-->
+		<tr><td colspan="2">$multipage</td></tr>
+		<!--{else}-->
+		<tr><td>
+		<br /><center>$banktmplang[no_datalist]</center><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='lof'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_lendoff]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td>
+			{lang bank_ane:username}: <a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=showacc&buser=$datashow[username]" target="_blank"><em  class="xw0 xi1">$datashow[username]</em></a>(UID:$datashow[uid])&nbsp;&nbsp;
+		$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+		$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+		$banktmplang[len_accrual]: $datashow[accrual]{$moneyname}<br />
+		$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+		$banktmplang[timeend]: $datashow[endtimeshow]
+		</td>
+		<td width="150" align="center">
+			[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lof&op=ok&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[lof_ok]</em></a>]
+			&nbsp;[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lof&op=up&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[lof_up]</em></a>]
+		<!--{if $issupbankadmin==1}-->
+		&nbsp;[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=lma&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[lof_do]</em></a>]<!--{/if}-->
+		</td>
+		</tr>
+		<!--{/loop}-->
+		<tr><td colspan="2">$multipage</td></tr>
+		<!--{else}-->
+		<tr><td>
+		<br /><center>$banktmplang[no_datalist]</center><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='lma'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_lendoff]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			{lang bank_ane:username}: <a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin&action=showacc&buser=$buleninfo[username]" target="_blank"><em  class="xw0 xi1">$buleninfo[username]</em></a>(UID:$buserid)&nbsp;
+	$banktmplang[money_num]: $banknum{$moneyname}&nbsp;
+	$banktmplang[bank_info_lenacc]: $buleninfo[rate]{$banktmplang[thousand_sign]}&nbsp;
+	$banktmplang[len_accrual]: $lenaccnum{$moneyname}&nbsp;
+	$banktmplang[timebegin]: $buleninfo[begintimeshow]&nbsp;
+	$banktmplang[timeend]: $buleninfo[endtimeshow]
+	</td></tr>
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="bankid" value="$bankid" />
+	<input type="hidden" name="mode" value="admin" />
+	<input type="hidden" name="noid" value="$noid" />
+	<input type="hidden" name="action" value="lma" />
+	<input type="hidden" name="op" value="do" />
+	$creditsshow
+	<p>$banktmplang[lof_do]: <input type="radio" class="radio" name="gb" value="0" checked="checked" />$banktmplang[lof_do_none]
+	 <input type="radio" class="radio" name="gb" value="1" />$banktmplang[lof_do_only]
+	 <input type="radio" class="radio" name="gb" value="2" />$banktmplang[lof_do_all]</p>
+	 $banktmplang[loginpass]: <input type="password" class="px" name="loginpass" size="15"/> <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+	</form>
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='fin'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_financing]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+	<span style="font-weight: bold;">$banktmplang[bank_info_investment]</span>: $bankinfo[investment] $moneyname
+	&nbsp;&nbsp;<span style="font-weight: bold;">$banktmplang[bank_info_bankroll]</span>: $bankinfo[bankroll] $moneyname
+	</td></tr>
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="bankid" value="$bankid" />
+	<input type="hidden" name="mode" value="admin" />
+	<input type="hidden" name="action" value="dofin" />
+	$banktmplang[fin_give] <input type="text" class="px" name="banknum" size="7" /> $moneyname ($banktmplang[frommoney]) $banktmplang[loginpass]:<input type="password" class="px" name="loginpass" size="15" /> <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+	</form>
+	</td></tr>
+	<!--{if $isbankadmin==2}-->
+	<tr><td>
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validatew(this)">
+	<input type="hidden" name="bankid" value="$bankid" />
+	<input type="hidden" name="mode" value="admin" />
+	<input type="hidden" name="action" value="dogetfin" />
+	$banktmplang[fin_get] <input type="text" class="px" name="banknum" size="7" /> $moneyname{$banktmplang[fin_gettouser]} <input type="text" class="px" name="touser" size="15" /> $banktmplang[loginpass]:<input type="password" class="px" name="loginpass" size="15" /> <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+	</form>
+	</td></tr>
+	<!--{/if}-->
+	</table id="ttt">
+	</div>
+<!--{elseif $action=='var'}-->
+	<div class="mainbox">
+	<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+	<input type="hidden" name="bankid" value="$bankid" />
+	<input type="hidden" name="mode" value="admin" />
+	<input type="hidden" name="action" value="dovar" />
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center" colspan="2"><h2>$banktmplang[admin_menu_varset]</h2></td>
+	</tr>
+	</thead>
+	<!--{if $issupbankadmin==1}-->
+	<tr>
+	<td width="50%"><span style="font-weight: bold;">$banktmplang[bank_info_name]</span><br />$banktmplang[bank_info_name_msg]</td>
+	<td width="50%"><input type="text" class="px" name="var_bankname" size="35" value="$bankinfo[bankname]" /></td>
+	</tr>
+	<!--{/if}-->
+	<tr>
+	<td width="50%"><span style="font-weight: bold;">$banktmplang[bank_info_logo]</span><br />$banktmplang[bank_info_logo_msg]</td>
+	<td width="50%"><input type="text" class="px" name="var_banklogo" size="35" value="$bankinfo[banklogo]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_isclose]</span><br />$banktmplang[bank_info_isclose_msg]</td>
+	<td>
+		<input type="radio" name="var_bankstatus" value="1" class="radio"<!--{if $bankinfo[bankstatus]==1}--> checked="checked"<!--{/if}--> />{lang bank_ane:yes}
+		&nbsp;&nbsp;<input type="radio" name="var_bankstatus" value="0" class="radio"<!--{if $bankinfo[bankstatus]==0}--> checked="checked"<!--{/if}--> />{lang bank_ane:no}
+	</td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_admin]</span><br />$banktmplang[bank_info_admin_msg]</td>
+	<td><input type="text" class="px" name="var_bankadmin" size="35" value="$bankinfo[bankadmin]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_notice]</span><br />$banktmplang[bank_info_notice_msg]</td>
+	<td><textarea name="var_notice" class="pt" rows="5" cols="35">$bankinfo[notice]</textarea></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_open]</span><br />$banktmplang[bank_info_open_msg]</td>
+	<td><input type="text" class="px" name="var_opencost" size="25" value="$bankinfo[opencost]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_curacc]</span><br />$banktmplang[bank_info_curacc_msg]</td>
+	<td><textarea name="var_currentrate" class="pt" rows="3" cols="25">$bankinfo[currentrateset]</textarea></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_fixacc]</span><br />$banktmplang[bank_info_fixacc_msg]</td>
+	<td><input type="text" class="px" name="var_fixedrate" size="25" value="$bankinfo[fixedrate]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_lenacc]</span><br />$banktmplang[bank_info_lenacc_msg]</td>
+	<td><input type="text" class="px" name="var_lendingrate" size="25" value="$bankinfo[lendingrate]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[bank_info_chgacc]</span><br />$banktmplang[bank_info_chgacc_msg]</td>
+	<td><input type="text" class="px" name="var_changetax" size="25" value="$bankinfo[changetax]" /></td>
+	</tr>
+	<tr>
+	<td><span style="font-weight: bold;">$banktmplang[loginpass]</span><br />$banktmplang[bank_info_loginpass_msg]</td>
+	<td><input type="password" class="px" name="loginpass" size="25" value="" /></td>
+	</tr>
+	<tr><td colspan="2" align="center"><button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button></td></tr>
+	</table id="ttt">
+	</form>
+	</div>
+<!--{elseif $action=='log'}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu_log]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+		<div class="box" style="padding: 5px">
+			<form action="plugin.php?id=bank_ane:bank"  name="name" method="post" onSubmit="return validate(this)">
+			<input type="hidden" name="bankid" value="$bankid" />
+			<input type="hidden" name="mode" value="admin" />
+			<input type="hidden" name="action" value="log" />
+			{lang bank_ane:keyword}:<input type="text" class="px" size="20" name="bsearchkey" value="$bsearchkey" />
+			&nbsp;$banktmplang[search_minmoney]:<input type="text" class="px" size="4" name="bserachnum" value="$bserachnum" />$moneyname
+			&nbsp;<input type="checkbox" name="bserachtype" value="1" class="checkbox"<!--{if $bserachtype==1}--> checked="checked"<!--{/if}--> />$banktmplang[search_onlysys]
+			&nbsp;<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+			</form>
+		</div>
+		<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+		<!--{if $datanum}-->
+		<!--{loop $datalist $datashow}-->
+		<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+		<td><span style="font-weight: bold;">Info:</span> $datashow[remark]</td>
+		<td width="140"><span style="font-weight: bold;">Time:</span> $datashow[optimeshow]</td>
+		<td width="120"><span style="font-weight: bold;">Ip:</span> $datashow[opip]</td>
+		</tr>
+		<!--{/loop}-->
+		<tr><td colspan="3">$multipage</td></tr>
+		<!--{else}-->
+		<tr><td>
+		<br /><br /><center>$banktmplang[no_datalist]</center><br /><br /><br />
+		</td></tr>
+		<!--{/if}-->
+		</table id="ttt">
+	</td></tr>
+<tr><td>
+	<!--{if $datanum && $page==1 && $bsearchkey=='' && $bserachnum==0 && $bserachtype!=1}-->
+	<div class="box" style="padding: 5px">
+		<form action="plugin.php?id=bank_ane:bank"  name="name" method="post" onSubmit="return validatew(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="mode" value="admin" />
+		<input type="hidden" name="action" value="dodellog" />
+		{lang delete} <input type="text" class="px" size="10" name="dellogday" value="30" /> $banktmplang[daybefore]
+		<!--{if $isbankadmin==2}-->
+		&nbsp;<input type="checkbox" class="checkbox" name="isdeladmlog" value="1" />$banktmplang[deladminlog]
+		<!--{/if}-->
+		&nbsp;$banktmplang[loginpass]:<input type="password" class="px" name="loginpass" size="15" />&nbsp;<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+	</div>
+	<!--{/if}-->
+</td></tr>
+	</table id="ttt">
+	</div>
+
+<!--{else}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[bank_menu_adm]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<p><span style="font-weight: bold;">$banktmplang[bank_info_investment]</span>: $bankinfo[investment] $moneyname</p>
+			<p><span style="font-weight: bold;">$banktmplang[bank_info_bankroll]</span>: $bankinfo[bankroll] $moneyname</p>
+			<p><span style="font-weight: bold;">$banktmplang[bank_info_deposit]</span>: $bankinfo[deposit] $moneyname</p>
+			<p><span style="font-weight: bold;">$banktmplang[bank_info_usernum]</span>: $bankinfo[usernum]</p>
+
+			<p><span style="font-weight: bold;">$banktmplang[system_currentacc]</span>: $hackVars[currentaccrual]</p>
+			<p><span style="font-weight: bold;">$banktmplang[system_fixedacc]</span>: $hackVars[fixedaccrual]</p>
+		<hr size="1" />
+		<p>$banktmplang[admin_welcome]</p>
+	</td></tr>
+	</table id="ttt">
+	</div>
+<!--{/if}-->

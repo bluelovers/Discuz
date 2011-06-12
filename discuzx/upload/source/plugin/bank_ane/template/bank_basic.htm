@@ -1,0 +1,383 @@
+<!--{if $bankid>0}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[admin_menu]</h2></td>
+	</tr>
+	</thead>
+	<tr><td>
+			<a href="plugin.php?id=bank_ane:bank&bankid=$bankid"><em  class="xw0 xi1">$banktmplang[bank_menu_home]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=cur"><em  class="xw0 xi1">$banktmplang[bank_menu_cur]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=fix"><em  class="xw0 xi1">$banktmplang[bank_menu_fix]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=chg"><em  class="xw0 xi1">$banktmplang[bank_menu_chg]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=len"><em  class="xw0 xi1">$banktmplang[bank_menu_lend]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=pas"><em  class="xw0 xi1">$banktmplang[bank_menu_pass]</em></a>
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=log"><em  class="xw0 xi1">$banktmplang[bank_menu_log]</em></a>
+		<!--{if $isbankadmin>0}-->
+		&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&mode=admin"><span style="color: red">$banktmplang[bank_menu_adm]</span></a>
+		<!--{/if}-->
+	</td></tr>
+	</table id="ttt">
+	</div>
+	<!--{if $action=='cur'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_cur]</h2></td>
+		</tr>
+		</thead>
+		<tr><td class="footoperation"> $banktmplang[cur_myshow]</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="cur" />
+		<p>$banktmplang[money_num]: <input type="text" class="pt" name="banknum" size="15" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpaste="return false"/> <input type="radio" class="radio" name="op" value="in" checked="checked" />$banktmplang[cur_in] <input type="radio" class="radio" name="op" value="out" />$banktmplang[cur_out]</p>
+		<p>$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+		</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="cur" />
+		<input type="hidden" name="op" value="ok" />
+		<p>$banktmplang[cur_accrual]&nbsp;<span style="font-weight: bold;">$mycurratenum[all]</span>&nbsp;$moneyname <button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[cur_accrualok]</strong></button></p>
+		</form>
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+		<tr><td><p>$banktmplang[cur_notice]</p></td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='fix' && $op=='out'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_fix]</h2></td>
+		</tr>
+		</thead>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="fix" />
+		<input type="hidden" name="op" value="out" />
+		<input type="hidden" name="noid" value="$noid" />
+		<p align="center"><br />$banktmplang[fix_outform]<br /><br />
+		$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" />&nbsp;&nbsp;
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button><br /><br /></p>
+		</form>
+		</td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='fix'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_fix]</h2></td>
+		</tr>
+		</thead>
+		<tr><td class="footoperation">$banktmplang[fix_myshow]</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="fix" />
+		<input type="hidden" name="op" value="in" />
+		<p>$banktmplang[money_num]: <input type="text" class="pt" name="banknum" size="15" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpaste="return false"/></p>
+		<p>$banktmplang[daynum]: <input type="text" class="pt" name="daynum" size="4" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpaste="return false"/></p>
+		<p>$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[fix_myfix]</td></tr>
+		<tr><td>
+			<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+			<!--{if $datanum}-->
+			<!--{loop $datalist $datashow}-->
+			<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+			<td>$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+			$banktmplang[bank_info_fixacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+			$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+			$banktmplang[timeend]: $datashow[endtimeshow]&nbsp;&nbsp;
+			$banktmplang[cur_accrual]: $datashow[accrual][all]{$moneyname}
+			</td>
+			<td width="40" align="center">[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=fix&op=out&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[fix_out]</em></a>]</td>
+			</tr>
+			<!--{/loop}-->
+			<tr><td colspan="2">$multipage</td></tr>
+			<!--{else}-->
+			<tr><td>
+			<br /><center>$banktmplang[no_datalist]</center><br />
+			</td></tr>
+			<!--{/if}-->
+			</table id="ttt">
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+		<tr><td>$banktmplang[fix_notice]</td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='chg'}-->
+		<script type="text/javascript">
+		<!--
+		function checkchgtax() {
+			moneyvalue = document.chgform.banknum.value;
+			var a = moneyvalue.match(/^\d+$/);
+			if(a == null) {
+				alert("$bankmsglang[banknum_error]");
+			} else {
+				showinfo = Math.ceil(moneyvalue*{$bankinfo[changetax]});
+				alert("$banktmplang[chg_taxinfo]"+showinfo+"$moneyname");
+			}
+		}
+		//-->
+		</script>
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_chg]</h2></td>
+		</tr>
+		</thead>
+		<tr><td class="footoperation">$banktmplang[chg_myshow]</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="chgform" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="chg" />
+		<input type="hidden" name="op" value="ok" />
+		<p>$banktmplang[money_num]: <input type="text" class="pt" name="banknum" size="15" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onpaste="return false"/>&nbsp;&nbsp;
+		<button type="button" name="taxcheck" value="true" class="pn" onclick="javascript:checkchgtax()"><strong>$banktmplang[chg_taxcheck]</strong></button><br />
+		$banktmplang[touser]: <input type="text" class="pt" name="touser" size="15" /><br />
+		$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" />&nbsp;&nbsp;
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button></p>
+		</form>
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+		<tr><td><p>$banktmplang[chg_notice]</p></td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='len'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_lend]</h2></td>
+		</tr>
+		</thead>
+		<tr><td>$banktmplang[len_myshow]</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[len_try]</td></tr>
+		<tr><td>
+
+		<form action="plugin.php?id=bank_ane:bank" name="chgform" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="len" />
+		<input type="hidden" name="op" value="try" />
+		<p>$banktmplang[money_num]: <input type="text" class="pt" name="banknum" size="15" /></p>
+		<p>$banktmplang[daynum]: <input type="text" class="pt" name="daynum" size="4" /></p>
+		<p>$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[len_mylist]</td></tr>
+		<tr><td>
+			<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+			<!--{if !empty($datalist)}-->
+			<!--{loop $datalist $datashow}-->
+			<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+			<!--{if $datashow[opstatus]==1}-->
+			<td>$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+			$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+			$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+			$banktmplang[timeend]: $datashow[endtimeshow]&nbsp;&nbsp;
+			$banktmplang[len_accrual]: $datashow[accrual]{$moneyname}
+			</td>
+			<td width="40" align="center">[<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=len&op=gb&noid=$datashow[id]"><em  class="xw0 xi1">$banktmplang[len_gb]</em></a>]</td>
+			<!--{else}-->
+			<td><span style="font-weight: bold;">[{$banktmplang[len_try]}]</span>&nbsp;$banktmplang[money_num]: $datashow[opnum]{$moneyname}&nbsp;&nbsp;
+			$banktmplang[bank_info_lenacc]: $datashow[rate]{$banktmplang[thousand_sign]}&nbsp;&nbsp;
+			$banktmplang[timebegin]: $datashow[begintimeshow]&nbsp;&nbsp;
+			$banktmplang[daynum]: $datashow[endtime]
+			</td>
+			<td width="40" align="center">[<em  class="xw0 xi1"><a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=len&op=gu&noid=$datashow[id]">$banktmplang[len_gu]</a></em>]</td>
+			<!--{/if}-->
+			</tr>
+			<!--{/loop}-->
+			<!--{else}-->
+			<tr><td>
+			<br /><center>$banktmplang[no_datalist]</center><br />
+			</td></tr>
+			<!--{/if}-->
+			</table id="ttt">
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+		<tr><td><p>$banktmplang[len_notice]</p></td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='pas'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_pass]</h2></td>
+		</tr>
+		</thead>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[pas_changepass]</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="chgform" method="post" onSubmit="return validate(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="pas" />
+		<input type="hidden" name="op" value="cg" />
+		<p>$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" /></p>
+		<p>$banktmplang[pas_newpass]: <input type="password" class="pt" name="newbankpass" size="15" /></p>
+		<p>$banktmplang[pas_newpass2]: <input type="password" class="pt" name="newbankpass2" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[input_submit]</strong></button>
+		</form>
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[pas_close]</td></tr>
+		<tr><td>
+		<form action="plugin.php?id=bank_ane:bank" name="chgform" method="post" onSubmit="return validatew(this)">
+		<input type="hidden" name="bankid" value="$bankid" />
+		<input type="hidden" name="action" value="pas" />
+		<input type="hidden" name="op" value="cl" />
+		<p>$banktmplang[mybank_pass]: <input type="password" class="pt" name="bankpass" size="15" /></p>
+		<button type="submit" name="banksubmit" value="true" class="pn"><strong>$banktmplang[pas_close]</strong></button>
+		</form>
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[notice_title]</td></tr>
+		<tr><td><p>$banktmplang[pas_notice]</p></td></tr>
+		</table id="ttt">
+		</div>
+	<!--{elseif $action=='log'}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_menu_log]</h2></td>
+		</tr>
+		</thead>
+		<tr><td>
+				<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=log"><em  class="xw0 xi1">$banktmplang[bank_menu_log_my]</em></a>
+				&nbsp;|&nbsp;<a href="plugin.php?id=bank_ane:bank&bankid=$bankid&action=log&show=1"><em  class="xw0 xi1">$banktmplang[bank_menu_log_tome]</em></a>
+		</td></tr>
+		<tr><td>
+			<table id="ttt" cellspacing="0" cellpadding="4" border="0" width="100%">
+			<!--{if $datanum}-->
+			<!--{loop $datalist $datashow}-->
+			<!--{if $datashow[tr]%2==0}--><tr><!--{else}--><tr><!--{/if}-->
+			<td><span style="font-weight: bold;">Info:</span> $datashow[remark]</td>
+			<td width="140"><span style="font-weight: bold;">Time:</span> $datashow[optimeshow]</td>
+			<td width="120"><span style="font-weight: bold;">Ip:</span> $datashow[opip]</td>
+			</tr>
+			<!--{/loop}-->
+			<tr><td colspan="3">$multipage</td></tr>
+			<!--{else}-->
+			<tr><td>
+			<br /><br /><center>$banktmplang[no_datalist]</center><br /><br /><br />
+			</td></tr>
+			<!--{/if}-->
+			</table id="ttt">
+		</td></tr>
+		</table id="ttt">
+		</div>
+	<!--{else}-->
+		<div class="mainbox">
+		<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+		<thead class="colplural">
+		<tr>
+			<td align="center"><h2>$banktmplang[bank_welcome] $bankinfo[bankname]</h2></td>
+		</tr>
+		</thead>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_info_notice]</td></tr>
+		<tr><td><p>$bankinfo[noticeshow]</p></td></tr>
+		<tr><td>
+			<!--{if $bankinfo[banklogo]!=''}--><img src="$bankinfo[banklogo]" style="float: left" alt="$bankinfo[bankname]" height="50"/>
+			<div style="float:left;padding:0 0 0 50px;"><!--{/if}--><span style="font-weight: bold;">$banktmplang[bank_info_creator]</span>: $bankinfo[creator], $banktmplang[bank_info_time] $bankinfo[opentimeshow]<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info_admin]</span>: $bankinfo[creator],$bankinfo[bankadmin]<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info]</span>: $banktmplang[bank_info_bankroll] <span style="font-weight: bold;">$bankinfo[bankroll]</span> $moneyname,$banktmplang[bank_info_deposit] <span style="font-weight: bold;">$bankinfo[deposit]</span> $moneyname,$banktmplang[bank_info_usernum] <span style="font-weight: bold;">$bankinfo[usernum]</span><!--{if $bankinfo[banklogo]!=''}--></div><!--{/if}-->
+		</td></tr>
+		<tr><td class="footoperation" style="font-weight: bold;">$banktmplang[bank_info_opintro]</td></tr>
+		<tr><td><p>
+			<span style="font-weight: bold;">$banktmplang[bank_info_open]</span>: $bankinfo[opencost] $moneyname<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info_curacc]</span>: $bankinfo[currentrateshow]<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info_fixacc]</span>: $bankinfo[fixedrateshow]{$banktmplang[thousand_sign]}<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info_lenacc]</span>: $bankinfo[lendingrateshow]{$banktmplang[thousand_sign]}<br />
+			<span style="font-weight: bold;">$banktmplang[bank_info_chgacc]</span>: $bankinfo[changetaxshow]{$banktmplang[thousand_sign]}
+		</p></td></tr>
+		</table id="ttt">
+		</div>
+
+		<!--{if $mybankstatus==0}-->
+		<div class="box" style="padding: 5px">
+			<form action="plugin.php?id=bank_ane:bank" name="name" method="post" onSubmit="return validate(this)">
+			<input type="hidden" name="bankid" value="$bankid" />
+			<input type="hidden" name="action" value="open" />
+			<span class="bold">$banktmplang[mybank_pass]</span> <input type="password" class="pt" name="bankpass" /><br />
+			<span class="bold">{lang bank_ane:password_confirm}</span> <input type="password" class="pt" name="bankpass2" /><br />
+			<button type="submit" name="banksubmit" class="pn" value="true"><strong>$banktmplang[input_open]($banktmplang[bank_info_open]:{$bankinfo[opencost]}$moneyname)</strong></button>
+			</form>
+		</div>
+		<!--{else}-->
+		<div class="notice">
+			<span style="font-weight: bold;">$banktmplang[mybank_info]</span>: $banktmplang[mybank_opentime]: $mybankinfo[opentimeshow], $banktmplang[mybank_status]: <!--{if $mybankstatus==1}-->$banktmplang[mybank_status_yes]<!--{else}--><span style="color:red">$banktmplang[mybank_status_no]</span><!--{/if}-->
+		</div>
+		<!--{/if}-->
+	<!--{/if}-->
+<!--{else}-->
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center"><h2>$banktmplang[supbank_notice]</h2></td>
+	</tr>
+	</thead>
+	<tr><td><p>$hackVars[notice]</p></td></tr>
+	<tr><td>
+		<p><span style="font-weight: bold;">$banktmplang[supbank_admin]</span>: $hackVars[bankadmin] 
+		<!--{if $hackVars[adminisbankadm]==1}-->$banktmplang[supbank_admininfo]<!--{/if}--></p>
+	</td></tr>
+	<!--{if $issupbankadmin}-->
+	<tr><td class="footoperation">
+		<p><span style="font-weight: bold;">$banktmplang[admin_menu]</span>: 
+		<a href="plugin.php?id=bank_ane:bank&mode=setup&action=add"><em  class="xw0 xi1">$banktmplang[supadmin_menu_add]</em></a>&nbsp;|&nbsp;
+		<a href="plugin.php?id=bank_ane:bank&mode=setup&action=off"><em  class="xw0 xi1">$banktmplang[supadmin_menu_off]</em></a>&nbsp;|&nbsp;
+		<a href="plugin.php?id=bank_ane:bank&mode=setup"><em  class="xw0 xi1">$banktmplang[supadmin_menu_view]</em></a></a>
+	</td></tr>
+	<!--{/if}-->
+	</table id="ttt">
+	</div>
+
+	<div class="mainbox">
+	<table id="ttt" cellspacing="0" cellpadding="0" width="100%">
+	<thead class="colplural">
+	<tr>
+		<td align="center" colspan="3"><h2>$banktmplang[bank_list]</h2></td>
+	</tr>
+	</thead>
+	<!--{if empty($banklist)}-->
+		<tr><td align="center" colspan="3">$banktmplang[no_banklist]</td></tr>
+	<!--{else}-->
+		<!--{loop $banklist $bankdata}-->
+		<tr>
+			<!--{if $bankdata[banklogo]!=''}--><td align="center"><img src="$bankdata[banklogo]" alt="$banktmplang[bank_info_name]" /><br /></td><!--{else}--><td style="text-align:center;">nologo</td>
+		<!--{/if}-->
+		<td>
+		<span style="font-weight: bold;">$banktmplang[bank_info_name]</span>: <span style="font-weight: bold;">$bankdata[bankname]</span><br />
+		<span style="font-weight: bold;">$banktmplang[bank_info_admin]</span>: <span style="font-weight: bold;">$bankdata[creator]</span>,$bankdata[bankadmin]<br />
+		<span style="font-weight: bold;">$banktmplang[bank_info]</span>: $banktmplang[bank_info_time] $bankdata[opentimeshow],$banktmplang[bank_info_allmoney] <span style="font-weight: bold;">$bankdata[allmoneynum]</span> $moneyname,$banktmplang[bank_info_usernum] <span style="font-weight: bold;">$bankdata[usernum]</span>
+		</td>
+		<td width="100" align="center">
+			<a href="plugin.php?id=bank_ane:bank&bankid=$bankdata[id]"><em  class="xw0 xi1">$banktmplang[bank_enter]</em></a>
+			<!--{if $bankdata[bankstatus]==1}-->
+			<br /><span style="color: #888888">($banktmplang[bank_isclose])</span>
+			<!--{elseif $bankdata[endtime]>0}-->
+			<br /><span style="color: red;">($banktmplang[bank_isopen])</span>
+			<!--{/if}-->
+		</td>
+		</tr>
+		<!--{/loop}-->
+	<!--{/if}-->
+	</table id="ttt">
+	</div>
+<!--{/if}-->
