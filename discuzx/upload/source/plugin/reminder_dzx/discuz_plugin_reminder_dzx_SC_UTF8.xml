@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-12 18:34]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://d.z/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[提醒者]]></item>
+			<item id="identifier"><![CDATA[reminder_dzx]]></item>
+			<item id="description"><![CDATA[在信息爆炸的时代，信息的不及时或不对等是可怕的。你在身为论坛普通会员或者身为论坛站点的管理者时，会为论坛上不能及时得到关于你或者提及你消息而烦恼的话，次及时通提醒者插件可以为解决此问题。]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[reminder_dzx/]]></item>
+			<item id="copyright"><![CDATA[CrazyHook]]></item>
+			<item id="version"><![CDATA[1.1]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[reminder_dzx]]></item>
+					<item id="menu"><![CDATA[我的提醒]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[7]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[reminder_dzx]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[开启主动请求模式]]></item>
+				<item id="description"><![CDATA[开启主动请求模式，你不用刷新页面，程序会每隔一段时间查看是否有新提醒或消息。如果您的服务器资源非常紧张，不建议你开启该模式。]]></item>
+				<item id="variable"><![CDATA[active]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[允许使用用户组]]></item>
+				<item id="description"><![CDATA[允许使用本插件的用户组，空为所有用户都可以使用。]]></item>
+				<item id="variable"><![CDATA[group]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[主动查询是否有新短消息]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[checkpm]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[允许使用用户]]></item>
+				<item id="description"><![CDATA[除了以上所设置的用户组，还可以单独设置某几个用户可以使用。可以使用本插件的用户组uid，用逗号(,)隔开，如 1,2,3]]></item>
+				<item id="variable"><![CDATA[uids]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[1,2,3]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[默认弹出设置]]></item>
+				<item id="description"><![CDATA[设置有使用权限用户，未进行提醒设置前默认是否弹出提示。]]></item>
+				<item id="variable"><![CDATA[ispop]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[2]]></item>
+				<item id="extra"><![CDATA[0=不弹出窗口
+1=弹出窗口提醒，弹过后即标记为已读，不再提醒
+2=弹出窗口提醒，本程序不标记已读，直到看过该提醒
+3=弹出窗口提醒，只在手动关闭窗口后才标记为已读]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="permissions_invalid"><![CDATA[对不起，您所在的用户组暂时不能使用此功能。]]></item>
+				<item id="close"><![CDATA[关闭]]></item>
+				<item id="reminder_title"><![CDATA[您有新的提醒，请注意查收]]></item>
+				<item id="pop_setting"><![CDATA[修改弹出提醒设置]]></item>
+				<item id="success"><![CDATA[操作成功。]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="reminder_setting"><![CDATA[我的提醒设置]]></item>
+				<item id="global_setting"><![CDATA[全局设置]]></item>
+				<item id="setting_comment"><![CDATA[您可以完全控制哪些信息需要弹出窗口提醒或者不提醒以及提醒方式]]></item>
+				<item id="ispop"><![CDATA[开启提醒]]></item>
+				<item id="ispop_comment"><![CDATA[开启提醒仅表示开启以下方式的提醒。]]></item>
+				<item id="yes"><![CDATA[是]]></item>
+				<item id="no"><![CDATA[否]]></item>
+				<item id="type_notify"><![CDATA[提醒类]]></item>
+				<item id="type_notify_comment"><![CDATA[可以进入 <a href="home.php?mod=space&do=notice&isread=1">已读提醒</a> 列表，点击一下列表右面的屏蔽标志，就可以屏蔽指定好友指定类型的通知了。]]></item>
+				<item id="type_pm"><![CDATA[短消息类]]></item>
+				<item id="type_pm_comment"><![CDATA[当您有新消息的时候，可以让您快速的知道。]]></item>
+				<item id="type_forum"><![CDATA[版块新帖类]]></item>
+				<item id="type_forum_comment"><![CDATA[设置本项设置后，当您在版块或帖子页面浏览帖时，如果您所浏览版块有新回复帖将会提示您。]]></item>
+				<item id="type_0"><![CDATA[不弹出窗口]]></item>
+				<item id="type_1"><![CDATA[弹出窗口提醒，弹过后即标记为已读，不再提醒]]></item>
+				<item id="type_2"><![CDATA[弹出窗口提醒，本程序不标记已读，直到看过该提醒]]></item>
+				<item id="type_3"><![CDATA[弹出窗口提醒，只在手动关闭窗口后才标记为已读]]></item>
+				<item id="type_forum_1"><![CDATA[弹出窗口提醒]]></item>
+				<item id="update_date_success"><![CDATA[设置成功。]]></item>
+				<item id="message_title"><![CDATA[提示信息]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>

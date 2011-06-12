@@ -1,0 +1,79 @@
+	<div id="remindset">
+		<!--{if $_G['gp_infloat']}-->
+		<div class="bm_h">
+			<h3 class="flb">
+				<em id="return_$_G[gp_handlekey]">{lang reminder_dzx:reminder_setting}</em>
+				<span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
+			</h3>
+		</div>
+		<!--{/if}-->
+		<div{if $_G['gp_infloat']} style="margin-left: 10px;margin-right: 10px;padding-top: 10px;width: 460px;"{/if}>
+		<!--{if !$_G['gp_infloat']}-->
+			<ul class="tb cl">
+				<li class="a"><a href="home.php?mod=spacecp&ac=plugin&id=reminder_dzx:reminder_dzx">{lang reminder_dzx:global_setting}</a></li>
+			</ul>
+		<!--{/if}-->
+			<iframe id="frame_info" name="frame_info" style="display: none"></iframe>
+			<form method="post" autocomplete="off" target="frame_info" action="home.php?mod=spacecp&ac=plugin&id=reminder_dzx:reminder_dzx">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<p class="tbmu mbm">{lang reminder_dzx:setting_comment}</p>
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>{lang reminder_dzx:ispop}</th>
+						<td>
+							<input class="radio" type="radio" name="remind" value="1"$remind[1]>&nbsp;{lang reminder_dzx:yes}<input class="radio" type="radio" name="remind" value="0"$remind[0]>&nbsp;{lang reminder_dzx:no}
+							<p class="d">{lang reminder_dzx:ispop_comment}</p>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang reminder_dzx:type_notify}</th>
+						<td>
+							<select name="readtype[newprompt]">
+								<option value="0"$readtype[newprompt][0]>{lang reminder_dzx:type_0}</option>
+								<option value="1"$readtype[newprompt][1]>{lang reminder_dzx:type_1}</option>
+								<option value="2"$readtype[newprompt][2]>{lang reminder_dzx:type_2}</option>
+								<option value="3"$readtype[newprompt][3]>{lang reminder_dzx:type_3}</option>
+							</select>
+							<p class="d">{lang reminder_dzx:type_notify_comment}</p>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang reminder_dzx:type_pm}</th>
+						<td>
+							<select name="readtype[newpm]">
+								<option value="0"$readtype[newpm][0]>{lang reminder_dzx:type_0}</option>
+								<option value="1"$readtype[newpm][1]>{lang reminder_dzx:type_1}</option>
+								<option value="2"$readtype[newpm][2]>{lang reminder_dzx:type_2}</option>
+								<option value="3"$readtype[newpm][3]>{lang reminder_dzx:type_3}</option>
+							</select>
+							<p class="d">{lang reminder_dzx:type_pm_comment}</p>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang reminder_dzx:type_forum}</th>
+						<td>
+							<select name="readtype[newthread]">
+								<option value="0"$readtype[newthread][0]>{lang reminder_dzx:type_0}</option>
+								<option value="1"$readtype[newthread][1]>{lang reminder_dzx:type_forum_1}</option>
+							</select>
+							<p class="d">{lang reminder_dzx:type_forum_comment}</p>
+						</td>
+					</tr>
+
+
+					<tr>
+						<th>&nbsp;</th>
+						<td><button type="submit" name="settingsubmit" value="true" class="pn pnc" /><strong>{lang save}</strong></button></td>
+					</tr>
+				</table>
+				<script type="text/javascript">
+					function show_success(message, locationhref) {
+						message = message == '' ? '{lang reminder_dzx:update_date_success}' : message;
+						showDialog(message, 'right', '{lang reminder_dzx:message_title}', function(){
+							top.window.location.href = locationhref ? locationhref : top.window.location.href;
+						}, 0, null, '', '', '', '', 3);
+					}
+				</script>
+			</form>
+		</div>
+	</div>
