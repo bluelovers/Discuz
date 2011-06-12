@@ -1,0 +1,187 @@
+<!--{block return}-->
+
+<style type="text/css">
+	<!--{if $_G['gp_action'] == 'edit'}-->
+	#auc_op input,#auc_type_ctrl,#auc_type1__ctrl{background-color:#efefef;}
+	<!--{/if}-->
+	.specialpost b{color:#F26C4F;}
+</style>
+
+<div class="exfm cl" id="auc_op">
+	<!--left-->
+	<input type="hidden" name="attachnew" value="1" />
+	<div class="sinf sppoll z">
+		<dl>
+			<dt><span class="rq">*</span><label for="auc_name">{lang auction:auc_name}:</label></dt>
+			<dd>
+			<span class="ftid"><input name="auc_name" id="auc_name" tabindex="2" type="text" class="px oinf" {if $auction['name']}value="{$auction['name']}"{/if} onkeyup="showtypeoption();" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/></span>
+			</dd>
+			<dt><span class="rq">*</span><label for="auc_starttimefrom">{lang auction:auc_time}:</label></dt>
+			<dd><span class="ftid">
+				<input type="text" name="auc_starttimefrom" id="auc_starttimefrom" tabindex="2" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$auction[starttimefrom]" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/><span> ~ </span><input onclick="showcalendar(event, this, true)" type="text" autocomplete="off" id="auc_starttimeto" name="auc_starttimeto" tabindex="2" class="px" value="{if $auction['starttimeto']}$auction[starttimeto]{/if}" {if $_G['gp_action'] == 'edit'}style="background-color:#FFF;" {/if}/>
+			</span>
+			</dd>
+
+			<dt><span class="rq">*</span><label for="auc_number">{lang auction:auc_number}:</label></dt>
+			<dd><span class="ftid">
+				<input name="auc_number" id="auc_number" tabindex="2" type="text" class="px" value="$auction['number']" onkeyup="checkvalue(this.value, 'auc_number_message')" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if} /><span id="auc_number_message"></span>
+			</span>
+			</dd>
+
+			<dt><span class="rq">*</span><label for="auc_real_price">{lang auction:auc_real_price}:</label></dt>
+			<dd><span class="ftid">
+				<input name="auc_real_price" id="auc_real_price" tabindex="2" type="text" class="px" {if $auction['real_price']}value="{$auction['real_price']}"{/if}  onkeyup="checkvalue(this.value, 'auc_real_price_message')" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/> {lang auction:auc_yuan} <span id="auc_real_price_message"></span>
+			</span>
+			
+			</dd>
+			<dt><span class="rq">*</span><label for="auc_type">{lang auction:auc_type}:</label></dt>
+			<dd>
+				<span class="ftid">
+					<select name="auc_type" id="auc_type" width="50" class="ps" selecti="0" style="display: none;">
+						<!--{if $_G['gp_action'] == 'newthread'}-->
+						<!--{if $_G['cache']['plugin']['auction']['auc_type1']}--><option value="1" {if $auction['typeid'] == 1}selected="selected"{/if}>{lang auction:auc_type1}</option><!--{/if}-->
+						<!--{if $_G['cache']['plugin']['auction']['auc_type2']}--><option value="2" {if $auction['typeid'] == 2}selected="selected"{/if}>{lang auction:auc_type2}</option><!--{/if}-->
+						<!--{elseif $_G['gp_action'] == 'edit'}-->
+						<option value="{$auction[typeid]}" {if $auction['typeid'] == 1}selected="selected"{/if}><!--{if $auction[typeid] ==1}-->{lang auction:auc_type1}<!--{elseif $auction[typeid] == 2}-->{lang  auction:auc_type2}<!--{/if}--></option>
+						<!--{/if}-->
+					</select>
+				</span>
+			</dd>
+			<span id="auc_type_option_1" style="display:none">
+				<dt><span class="rq">*</span><label for="auc_type1_">{lang auction:auc_type1_}:</label></dt>
+				<dd>
+				<span class="ftid">
+					<select name="auc_type1_" id="auc_type1_" width="50" class="ps" selecti="0" style="display: none;">
+						<!--{if $_G['gp_action'] == 'newthread'}-->
+						<option value="0">{lang auction:auc_type1_0}</option>
+						<option value="1">{lang auction:auc_type1_1}</option>
+						<!--{elseif $_G['gp_action'] == 'edit'}-->
+						<option value="{$auction[extra]}" selected="selected"><!--{if $auction[extra] ==0}-->{lang auction:auc_type1_0}<!--{elseif $auction[extra] == 1}-->{lang auction:auc_type1_1}<!--{/if}--></option>
+						<!--{/if}-->
+					</select>
+				</span>
+				</dd>
+				<dt><span class="rq">*</span><label for="auc_ext_price">{lang auction:auc_ext_price}:</label></dt>
+				<dd><span class="ftid">
+					<input name="auc_ext_price" id="auc_ext_price" tabindex="2" type="text" class="px" value="{$auction['ext_price']}" onkeyup="checkvalue(this.value, 'auc_ext_price_message')" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/> <em class="xi1">{$_G['setting']['extcredits'][$_G['cache']['plugin']['auction']['auc_extcredit']]['title']}</em> <span id="auc_ext_price_message"></span>
+				</span>
+				</dd>
+		
+			</span>
+			<span id="auc_type_option_2" style="display:none">
+				<dt><span class="rq">*</span><label for="auc_base_price">{lang auction:auc_base_price}:</label></dt>
+				<dd><span class="ftid">
+					<input name="auc_base_price" id="auc_base_price" tabindex="2" type="text" class="px" {if $auction['base_price']}value="{$auction['base_price']}"{/if} onkeyup="checkvalue(this.value, 'auc_base_price_message')" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/>  <em class="xi1">{$_G['setting']['extcredits'][$_G['cache']['plugin']['auction']['auc_extcredit']]['title']}</em> <span id="auc_base_price_message"></span>
+				</span>
+			
+				</dd>
+				<dt><span class="rq">*</span><label for="auc_delta_price">{lang auction:auc_delta_price}:</label></dt>
+				<dd><span class="ftid">
+					<input name="auc_delta_price" id="auc_delta_price" tabindex="2" type="text" class="px" {if $auction['delta_price']}value="{$auction['delta_price']}"{/if} onkeyup="checkvalue(this.value, 'auc_delta_price_message')" {if $_G['gp_action'] == 'edit'}disabled="disabled"{/if}/>  <em class="xi1">{$_G['setting']['extcredits'][$_G['cache']['plugin']['auction']['auc_extcredit']]['title']}</em> <span id="auc_delta_price_message"></span>
+				</span>
+			
+				</dd>
+			</span>
+
+		</dl>
+	</div>
+	<!--right-->
+	<div class="sadd z">
+		<dl>
+			<dt>
+				<span class="rq"></span><label for="auc_real_price">{lang auction:auc_cover}:</label></dt>
+			</dt>
+			<dd><p><button type="button" class="pn" onclick="uploadWindow(function (aid, url){auctionaid_upload(aid, url);ATTACHORIMAGE = 1;})"><span><!--{if $auctionatt[attachment]}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></span></button></p>
+			<input type="hidden" name="auctionaid" id="auctionaid" {if $auction[aid]}value="$auction[aid]" {/if}/>
+			<input type="hidden" name="auctionaid_url" id="auctionaid_url" />
+			<div id="auctionattach_image">
+				<span class="xg1">
+					<!--{if $auctionatt[attachment]}-->{lang auction:auc_cover_update}<!--{else}-->{lang auction:auc_cover_tips}<!--{/if}-->
+				</span>
+				<!--{if $auctionatt[attachment]}-->
+				<a href="$auctionatt[attachment]" target="_blank"><img class="spimg" src="$auctionatt[attachment]" alt="" /></a>
+				<!--{/if}-->
+			</div>
+			</dd>
+		</dl>
+	</div>
+</div>
+<script type="text/javascript" reload="1">
+	simulateSelect('auc_type');
+	simulateSelect('auc_type1_');
+</script>
+<script type="text/javascript" reload="1">
+function getid_auc(id) {
+	return document.getElementById(id);
+}
+function checkvalue(value, message){
+	if(!value.search(/^\d+$/)) {
+		getid_auc(message).innerHTML = '';
+	} else {
+		getid_auc(message).innerHTML = '<b>{lang auction:input_invalid}</b>';
+	}
+}
+
+function showtypeoption() {
+	if(getid_auc('auc_type').value == 1) {
+		getid_auc('auc_type_option_1').style.display = 'block';
+		getid_auc('auc_type_option_2').style.display = 'none';
+	} else if(getid_auc('auc_type').value == 2) {
+		getid_auc('auc_type_option_1').style.display = 'none';
+		getid_auc('auc_type_option_2').style.display = 'block';
+	}
+	setTimeout("showtypeoption()", 1000);
+}
+
+//EXTRAFUNC['validator']['special'] = 'validateextra';
+var validateextra = 'function';
+function validateextra() {
+	if(getid_auc('postform').auc_name.value == '') {
+		showDialog('{lang auction:auc_post_error_name}', 'alert', '', function () { getid_auc('postform').auc_name.focus(); });
+		return false;
+	}
+	if(getid_auc('postform').auc_starttimefrom.value == '') {
+		showDialog('{lang auction:auc_post_error_starttimefrom}', 'alert', '', function () { getid_auc('postform').auc_starttimefrom.focus() });
+		return false;
+	}
+	if(getid_auc('postform').auc_starttimeto.value == '') {
+		showDialog('{lang auction:auc_post_error_starttimeto}', 'alert', '', function () { getid_auc('postform').auc_starttimeto.focus() });
+		return false;
+	}
+	if(getid_auc('auc_type').value == 1 && (getid_auc('postform').auc_ext_price.value == '' || getid_auc('postform').auc_ext_price.value.search(/^\d+$/))) {
+		showDialog('{lang auction:auc_post_error_ext_price}', 'alert', '', function () { getid_auc('postform').auc_ext_price.focus() });
+		return false;
+	}
+	if((getid_auc('postform').auc_number.value == '' || getid_auc('postform').auc_number.value.search(/^\d+$/))) {
+		showDialog('{lang auction:auc_post_error_number}', 'alert', '', function () { getid_auc('postform').auc_number.focus() });
+		return false;
+	}
+	if(getid_auc('postform').auc_real_price.value == '') {
+		showDialog('{lang auction:auc_post_error_real_price}', 'alert', '', function () { getid_auc('postform').auc_real_price.focus() });
+		return false;
+	}
+
+	if(getid_auc('auc_type').value == 2 && (getid_auc('postform').auc_base_price.value == '' || getid_auc('postform').auc_base_price.value.search(/^\d+$/))) {
+		showDialog('{lang auction:auc_post_error_base_price}', 'alert', '', function () { getid_auc('postform').auc_base_price.focus() });
+		return false;
+	}
+	if(getid_auc('auc_type').value == 2 && (getid_auc('postform').auc_delta_price.value == '' || getid_auc('postform').auc_delta_price.value.search(/^\d+$/))) {
+		showDialog('{lang auction:auc_post_error_delta_price}', 'alert', '', function () { getid_auc('postform').auc_delta_price.focus() });
+		return false;
+	}
+	return true;
+}
+function auctionaid_upload(aid, url) {
+	getid_auc('auctionaid_url').value = url;
+	updateauctionattach(aid, url, '{$_G['setting']['attachurl']}forum');
+}
+function updateauctionattach(aid, url, attachurl) {
+	getid_auc('auctionaid').value = aid;
+	getid_auc('auctionattach_image').innerHTML = '<img src="' + attachurl + '/' + url + '" class="spimg" />';
+}
+showtypeoption();
+
+
+
+</script>
+<!--{/block}-->

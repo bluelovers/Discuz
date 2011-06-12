@@ -1,0 +1,198 @@
+<!--{block return}-->
+<style type="text/css">
+	.aucimg {border:1px solid #E3E3E3;background-color:#E3E3E3;padding:2px;width:250px;float:left;color:#1C1C1C;cursor:pointer;}
+	.aucdetail {margin:0 0 0 265px;padding:0 0 0 5px;color:#1C1C1C;padding:0 5px;font-size:12px;}
+	.aucdetail a{color:#5A5A96;}
+	.aucdetail li{list-style:none; border-bottom:1px dashed #CDCDCD;height:26px;line-height:26px;padding-left:10px;}
+	.aucdetail li span{float:left;width:70px;}
+	.aucdetail em{margin-left:10px;}
+	.aucdetail img{vertical-align:middle;cursor:pointer;}
+	.aucdetail .auc_title{color:#F26C4F;font-weight:700;}
+
+	#auctips_menu {border:1px double #E3E3E3;background-color:#E5EDF2;padding:5px 10px;width:200px;line-height:22px;}
+	#auc_involve{margin:10px 0 0 90px;margin:10px 0 0 70px\9;}
+
+
+	#auc_pg .pg {line-height:15px;float;left;margin-top:5px;}
+#auc_pg .pg a, #auc_pg .pg strong, #auc_pg .pgb a {
+  background-repeat: no-repeat;
+  color: #333333;
+  display: inline;
+  float:left;
+  font-size: 10px;
+  height: 16px;
+  margin-left: 4px;
+  overflow: hidden;
+  padding: 0 4px;
+  text-decoration: none;
+}
+#auc_pg .pg a.nxt{background:none;}
+
+.list_tb {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #BACFDD #E3E5E7 #E3E5E7;
+    border-right: 1px solid #E3E5E7;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 10px;
+    text-align: left;
+}
+.list_tb span {
+    background: url("source/plugin/auction/images/icon03.gif") no-repeat scroll left center transparent;
+    color: #333333;
+    font-weight: bold;
+    margin: 5px;
+    padding: 0 0 0 20px;
+    text-align: left;
+    width:auto;
+    float:left;
+    font-weight:700;
+}
+.list_lt {
+    background: none repeat scroll 0 0 #FCFCFC;
+    border-top: 1px solid #E3ECF2;
+    color: #666666;
+    font-size: 12px;
+    height: 25px;
+    padding-left: 10px;
+    vertical-align: middle;
+    width:auto;
+}
+
+
+	.list_bt {background: url("source/plugin/auction/images/list_bg.gif") repeat scroll center top transparent; height: 25px; vertical-align: bottom;}
+	.list_lt{}
+	.list_tb .gray{background:none;padding:0;}
+	.list_tb .gray a{color:#999;}
+	.auction_price .auc_title{color:#F26C4F;}
+	.auction_price {margin:10px;}
+	.auction_price a{color:#1B7FC6;}
+</style>
+
+
+<div class="auc pbm cl">
+	<div class="aucimg">
+		<!--{if $auctionatt[attachment]}-->
+		<img src="{$auctionatt[attachment]}" width="250" <!--{if $_G[uid]}-->zoomfile="forum.php?mod=attachment&aid={$auctionatt[encodeaid]}&nothumb=yes" onclick="zoom(this, this.getAttribute('zoomfile'))"<!--{/if}-->/>
+		<!--{else}-->
+		<img src="static/image/common/nophoto.gif" width="250">
+		<!--{/if}-->
+	</div>
+	<div class="aucdetail">
+		<dl>
+			<li><span>{lang auction:auc_type}:</span><em class="auc_title"><!--{if $auction[typeid]==1}-->{lang auction:auc_type1}<!--{else}-->{lang auction:auc_type2}<!--{/if}--></em><em style="margin-left:80px;"><img src="source/plugin/auction/images/rules.gif" id="auctips" onmouseover="showMenu(this.id);"/></em></li>
+			<li><span>{lang auction:auc_name}:</span><em class="">{$auction['name']}</em></li>
+			<li><span>{lang auction:auc_number}:</span><em class="">{lang auction:total} <font color="#F26C4F">{$auction['number']}</font> {lang auction:unit}</em></li>
+			<li><span>{lang auction:auc_starttimefrom}:</span><em>{$auction['starttimefrom']}</em></li>
+			<li><span>{lang auction:auc_starttimeto}:</span><em>{$auction['starttimeto']}</em></li>
+			<li<!--{if $notstart}--> style="display:none;"<!--{/if}-->><span>{lang auction:auc_timeleft}:</span><em id="timeleft" class="auc_title"></em></li>
+
+			<!--{if $auction['typeid'] == 1}-->
+			<li><span>{lang auction:auc_type1}:</span><em class="auc_title">{$auction['ext_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
+			<li><span>{lang auction:auc_type1_}:</span><em>
+				<!--{if $auction['extra']}-->{lang auction:auc_type1_1}<!--{else}-->{lang auction:auc_type1_0}<!--{/if}--></em></li>
+			<!--{elseif $auction['typeid'] == 2}-->
+			<li><span>{lang auction:auc_base_price}:</span><em class="auc_title">{$auction['base_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
+			<li><span>{lang auction:auc_delta_price}:</span><em class="auc_title">{$auction['delta_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
+			<!--{/if}-->
+			<li><span>{lang auction:auc_real_price}:</span><em class="auc_title">{$auction['real_price']}</em><em>{lang auction:auc_yuan}</em></li>
+			<li><span>{lang auction:auc_type1_hot}:</span><em class="auc_title">{$thread['views']}</em></li>
+			
+
+			
+		</dl>
+		<dd><p class="pns" id="auc_involve">
+			<!--{if $_G['uid']}-->
+			<!--{if $_G['uid'] == $auction['uid'] && $auction['starttimeto_0'] <= $_G['timestamp']}-->
+			<button class="pn" value="true" name="ijoin" id="ijoin" onclick="showWindow('confirm', 'plugin.php?id=auction:involve&operation=finish&tid={$tid}', 'get', 0);doane(event);"><span style="width:80px;float:none;">{lang auction:finish}</span></button>
+			<!--{else}-->
+			<button class="pn" value="true" name="ijoin" id="ijoin" onclick="showWindow('confirm', 'plugin.php?id=auction:involve&operation=join&tid={$tid}', 'get', 0);doane(event);"><span style="width:80px;float:none;"><!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}--></span></button>
+			<!--{/if}-->
+			<!--{else}-->
+			<button class="pn" value="true" name="ijoin" id="ijoin" onclick="showWindow('confirm', 'member.php?mod=logging&action=login', 'get', 0);doane(event);" onmouseover="$('joinword').innerHTML='{lang auction:login}';" onmouseout="$('joinword').innerHTML='<!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}-->';"><span id="joinword" style="width:80px;float:none;"><!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}--></span></button>
+			<!--{/if}-->
+			<!--{if $_G['cache']['plugin']['auction']['auc_intro']}--><span class="gray" style="width:80px;float:none;"><a href="{$_G[cache][plugin][auction][auc_intro]}" target="_blank" style="color:#1B7FC6;padding-left:20px;vertical-align: middle;">{lang auction:view_tips}</a></span><!--{/if}-->
+			</p></dd>
+	</div>
+</div>
+<div  id="auc_list_tmp" style="display:none;">
+<div class="auc pbm cl">
+	<table class="list_tb" style="border-bottom:none;">
+		<tr>
+			<td class="list_bt" colspan="<!--{if $showmobile}-->5<!--{else}-->4<!--{/if}-->"><span class=""><a href="javascript:;" onclick="ajaxget('plugin.php?id=auction:involve&operation=view&tid={$thread[tid]}&page=1', 'list_ajax');$('list_002').style.color='#cdcdcd';$('list_001').style.color='#333';" id="list_001">{lang auction:list}</a></span><!--{if $auction[status]}--><span class="gray"><a href="javascript:;" onclick="ajaxget('plugin.php?id=auction:involve&operation=view&tid={$thread[tid]}&top=1', 'list_ajax');$('list_002').style.color='#333';$('list_001').style.color='#cdcdcd';" id="list_002">{lang auction:getlist}</a></span><!--{/if}--></td>
+		</tr>
+		<tr>
+
+			<th class="list_lt" width="20%">{lang auction:username}</th>
+			<th class="list_lt" width="40%">{lang auction:dateline}</th>
+			<th class="list_lt" width="<!--{if $showmobile}-->10%<!--{else}-->20%<!--{/if}-->">{lang auction:price} ({$_G[setting][extcredits][$auction['extid']][title]})</th>
+			<th class="list_lt" width="<!--{if $showmobile}-->10%<!--{else}-->20%<!--{/if}-->">{lang auction:status}</th>
+			<!--{if $showmobile}-->
+			<th class="list_lt" width="20%">{lang auction:contact}</td>
+			<!--{/if}-->
+		</tr>
+	</table>
+	<div id="list_ajax">
+	<img src="static/image/common/loading.gif" />
+	</div>
+</div></div>
+<div id="auctips_menu" style="display:none"><!--{if $auction['typeid'] == 1}--><!--{if $auction['extra']}-->{$_G[cache][plugin][auction][auc_type1_tips_2]}<!--{else}-->{$_G[cache][plugin][auction][auc_type1_tips_1]}<!--{/if}--><!--{else}-->{$_G[cache][plugin][auction][auc_type2_tips]}<!--{/if}--></div>
+<div id="confirm" style="display:none;"></div>
+
+<script language="javascript" type="text/javascript">
+	var now= Date.parse('{$auction[js_timeto]}');
+	var startTime = Date.parse('{$auction[js_timefrom]}');
+	var future=  {$auction[js_timenow]}*1000;
+	
+	function showTimeLimit(){
+
+	future+=1000;
+
+	days = (now-future) / 1000 / 60 / 60 / 24;
+	if(startTime-future >0) {
+		document.getElementById('ijoin').innerHTML = '<span>{lang auction:not_start_yet}</span>';
+		return;
+	}
+        dayNum = Math.floor(days);
+        hours = (now-future) / 1000 / 60 / 60 - (24 * dayNum);
+        houNum = Math.floor(hours);
+	if(houNum < 10 && houNum > 0){
+            houNum = "0" + houNum;
+        }
+        minutes = (now-future) / 1000 / 60 - (24 * 60 * dayNum) - (60 * houNum);
+        minNum = Math.floor(minutes);
+        if(minNum < 10){
+            minNum = "0" + minNum;
+        }
+        seconds = (now-future) / 1000 - (24 * 60 * 60 * dayNum) - (60 * 60 * houNum) - (60 * minNum);
+        secNum = Math.floor(seconds);
+        if(secNum < 10){
+            secNum = "0" + secNum;
+        }
+        millisec=(now-future)-(24*60*60*1000*dayNum)-(60*60*1000*houNum)-(60*1000*minNum)-(secNum*1000);
+        milli=Math.floor(millisec/10);
+        if(milli<10){
+            milli="0"+milli;
+	}
+	if(dayNum < 0 || houNum < 0 || minNum < 0 || secNum < 0) {
+		if({$auction[uid]} == {$_G[uid]} && !{$auction['status']} && {$auction[starttimeto_0]} <= {$_G[timestamp]}) {
+			document.getElementById('timeleft').innerHTML = '{lang auction:deadline}';
+			document.getElementById('ijoin').innerHTML = '<span>{lang auction:finish}</span>';
+		} else {
+			document.getElementById('timeleft').innerHTML = '{lang auction:deadline}';
+			document.getElementById('ijoin').onclick = 'javascript:void(0);';
+			document.getElementById('ijoin').innerHTML = '<span>{lang auction:deadline}</span>';
+		}
+		clearInterval("showTimeLimit()");
+		return;
+	}
+	document.getElementById('timeleft').innerHTML = (dayNum?dayNum+" {lang auction:day} ":'')+ (houNum > 0 ?houNum + " {lang auction:hour} ":'') + (minNum?minNum + " {lang auction:min} ":'')+ secNum + " {lang auction:sec}";
+    }
+setInterval("showTimeLimit()", 1000);
+</script>
+
+<!--{/block}-->

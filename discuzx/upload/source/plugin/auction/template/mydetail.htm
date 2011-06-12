@@ -1,0 +1,14 @@
+<!--{template common/header}-->
+<div class="cl">
+	<p class="avatar"><!--{avatar($_G[uid],small)}--></p>
+	<p class="a_hl">{lang auction:hello}{$_G[username]}</p>
+	<p class="a_hl"><!--{if $mwait}--><a href="plugin.php?id=auction&action=my&filter=wait">{lang auction:waitline}</a>{lang auction:maohao}<em>{$mwait}</em><!--{/if}--></p>
+</div>
+<div id="user_details">
+<p class="my_p"><a href="plugin.php?id=auction&action=my&filter=start">{lang auction:md_start}</a>{lang auction:maohao}<em>{$mstart}</em></p>
+<p class="my_p"><a href="plugin.php?id=auction&action=my&filter=join">{lang auction:md_join}</a>{lang auction:maohao}<em>{$mjoin}</em></p>
+<p class="my_p"><a href="plugin.php?id=auction&action=my&filter=got">{lang auction:md_got}</a>{lang auction:maohao}<em>{$mgot}</em></p>
+<p class="my_p"><a href="home.php?mod=spacecp&ac=credit">{lang auction:md_left}</a>{lang auction:maohao}<em>{$mleft}</em></p>
+<p class="my_p" style="width:100%;text-align:center;height:32px;"><a href="home.php?mod=spacecp&ac=credit&op=buy"><img src="source/plugin/auction/images/charge.png" /></a></p>
+</div>
+<!--{template common/footer}-->

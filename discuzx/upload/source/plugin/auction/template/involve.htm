@@ -1,0 +1,64 @@
+<!--{template common/header}-->
+<style type="text/css">.auction_price{margin:10px;}.modprice{margin:0 5px;cursor:pointer;color:#666;}</style>
+<form id="auctionform" action="plugin.php?id=auction:involve&tid={$auction[tid]}&operation=join" method="post" name="auctionform" onsubmit="return mobilecheck();">
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<div id="main_messaqge" style="width:400px;">
+	<h3 class="flb">
+		<em id="returnmessage"><!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}--></em>
+		<span>
+			<!--{if $_G['inajax']}--><a href="javascript:;" class="flbc" onclick="hideWindow('confirm')" title="{lang close}">{lang close}</a><!--{/if}-->
+		</span>
+	</h3>
+<!--{if empty($m_insufficient)}-->
+<!--{if $auction['typeid'] == 1}--><!--{if $_G['uid']}--><p class="auction_price">{$m_type1_tips_p}</p><!--{/if}--><!--{/if}-->
+<!--{if $auction['typeid'] == 2}-->
+<p class="auction_price">{$m_type2_tips_p_pre} <input type="text" name="price" id="price" class="px" value="{if $the_last_one}{echo $the_last_one[cur_price] + $auction[delta_price];}{else}{echo $auction[base_price]}{/if}" style="width:50px;" /> <a href="javascript:;" class="modprice" title="{lang auction:add}" onclick="modprice(1);">[+]</a><a href="javascript:;" class="modprice" title="{lang auction:cut}" onclick="modprice(0);">[-]</a>{$m_type2_tips_p_beh}</p>
+<!--{/if}-->
+<!--{if $_G['cache']['plugin']['auction']['auc_mobile'] && !$mobile}--><p class="auction_price" style="padding-top:5px;">{lang auction:mobile_tips}</p><p class="auction_price">{lang auction:contact}: <input type="text" name="mobile" id="mobile" class="px" style="width:100px" value="$mobile" /><span id="mb_check"></span></p><!--{/if}-->
+
+<p class="o pns"><span class="z xg1">{lang auction:ext_notice}</span><button id="confirmsubmit" name="confirmsubmit" value="true" class="pn pnc" type="submit"><strong>{lang auction:confirm}</strong></button></p>
+</div>
+</form>
+<script>
+function modprice(para) {
+	var each = {$auction[delta_price]};
+	var now_price = $('price').value - 0;
+	var base = {if $the_last_one}{echo $the_last_one[cur_price] + $auction[delta_price];}{else}{echo $auction[top_price]}{/if};
+	if(para == 1) {
+		if(now_price < base){
+			$('price').value = base;
+		} else {
+			$('price').value = now_price + each;
+		}
+	}
+	if(para == 0) {
+		if((now_price - each) < base) {
+			$('price').value = base;
+		} else {
+			$('price').value = now_price - each;
+		}
+	}
+}
+function mobilecheck() {
+	var mobile = $('mobile').value;
+	var reg = /^(\+)?(86)?0?1\d{10}$/;
+	if(mobile) {
+		var checked = mobile.search(reg);
+		if(checked >= 0) {
+			return true;
+		} else {
+			$('mb_check').innerHTML = ' <img src="{IMGDIR}/check_error.gif" width="16" height="16" class="vm" />';
+			return false;
+		}
+	} else {
+		return true;
+	}
+}
+</script>
+<!--{else}-->
+<p class="auction_price">
+$m_insufficient</p>
+<p class="o pns"><span class="z xg1">&nbsp;</span><button id="confirmsubmit" name="confirmsubmit" value="true" class="pn pnc" type="submit" onclick="hideWindow('confirm')"><strong>{lang auction:confirm}</strong></button></p>
+</form>
+<!--{/if}-->
+<!--{template common/footer}-->

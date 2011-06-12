@@ -1,0 +1,241 @@
+<!--{subtemplate common/header}-->
+<link href="source/plugin/auction/template/style_auction.css" type="text/css" rel="stylesheet">
+<div id="pt" class="wp cl">
+
+<div class="z">
+	<a href="index.php" class="nvhm">$_G['setting']['bbname']</a><em>&rsaquo;</em><a href="plugin.php?id=auction">{lang auction:auction}</a>
+	
+	<!--{if $action != 'index'}--><em>&rsaquo;</em><!--{/if}-->
+	<!--{if $action == 1}-->{lang auction:auc_type1}
+	<!--{elseif $action == 2}-->{lang auction:auc_type2}
+	<!--{elseif $action == 'search'}-->{lang auction:auc_search}
+	<!--{/if}-->
+
+
+</div>
+</div>
+<div id="wp_auc" class="wp cl">
+	<div class="right">
+		<div class="intro"><a href="{$_G[cache][plugin][auction][auc_intro]}" target="_blank" title="{lang auction:about}"><img src="source/plugin/auction/images/intro.gif"></a></div>
+		<!--{if $_G['uid']}-->
+		<div id="userinfo" class="mod_wrap cl">
+
+<script type="text/javascript">
+function lalala(){
+	ajaxget('plugin.php?id=auction&action=mydetail', 'userinfo');
+}
+setTimeout('lalala()', 1000);
+</script>
+		
+		</div>
+		<!--{else}-->
+		<div id="userinfo" class="mod_wrap login" style="height:60px;">
+			<p id="login"><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);return false;">{lang member}{lang login}</a></p>
+			<p>{lang auction:login_tips}</p>
+		</div>
+		<!--{/if}-->
+		<div id="" class="mod_wrap tops" style="padding:0;width:auto;">
+			<h3>{lang auction:hots}</h3>
+			<!--{if $tops}-->
+			<div style="padding-bottom:10px;">
+				<!--{loop $tops $no $top}-->
+				<ul<!--{if $no+1 >= count($tops)}--> style="border-bottom:none;padding-bottom:0;"<!--{/if}-->>
+					<p class="y"><a href="forum.php?mod=viewthread&tid={$top[tid]}" target="_blank"><img src="$top[imgthumb]" /></a><em><!--{if $top['typeid'] == 1}-->{lang auction:auc_type1}<!--{elseif $top['typeid'] == 2}-->{lang auction:auc_type2_}<!--{/if}--></em></p>
+				<p class="a_hl" style="">{echo $no+1;}. <a href="forum.php?mod=viewthread&tid={$top[tid]}" target="_blank">{$top[name]}</a></p>
+				<p class="a_hl">{lang auction:auc_type1_hot}{lang auction:maohao}<em>{$top['hot']}</em></p>
+				<p class="a_hl">{lang auction:auc_price}{lang auction:maohao}<em><!--{if $top['typeid'] == 1}-->{$top['ext_price']}<!--{elseif $top['typeid'] == 2}--><!--{if $top[top_price]}-->$top[top_price]<!--{else}-->$top[base_price]<!--{/if}--><!--{/if}--></em> {$_G[setting][extcredits][$top['extid']][title]}</p></ul>
+				<!--{/loop}-->
+			</div>
+			<!--{/if}-->
+		</div>
+	</div>
+	<!--{if $action != 'index'}-->
+	<div style="padding-bottom:10px;">
+	<form action="plugin.php?id=auction&action=search" onsubmit="searchFocus($('srchtxt'))" autocomplete="off" method="post" id="scform" target="_self">
+	<input type="hidden" value="auction" name="id" />
+	<input type="hidden" value="search" name="action" />
+	<input type="hidden" value="{if $srchtxt}{$srchtxt}{else}{/if}" name="sctxt" id="sctxt" />
+	<table cellspacing="0" cellpadding="0">
+		<tr>
+		
+			<td><input type="text" autocomplete="off" value="{if $srchtxt}{$srchtxt}{else}{lang enter_content}{/if}" class="px z ausc" id="srctxt" name="srctxt" onchange="$('sctxt').value=this.value;"/></td>
+			<td>
+				<span class="ftid">
+					<select name="sctype" id="sctype" width="60" class="ps" selecti="0" style="display: none;">
+						<option value="0" {if $sctype == 0}selected="selected"{/if}>{lang auction:auc_type_all}</option>
+						<option value="1" {if $sctype == 1}selected="selected"{/if}>{lang auction:auc_type1}</option>
+						<option value="2" {if $sctype == 2}selected="selected"{/if}>{lang auction:auc_type2}</option>
+					</select>
+				</span>
+			</td>
+			<td>
+				<span class="ftid">
+					<select name="sctime" id="sctime" width="60" class="ps" selecti="0" style="display: none;">
+						<option value="0" {if $sctime == 0}selected="selected"{/if}>{lang auction:sc_time_all}</option>
+						<option value="1" {if $sctime == 1}selected="selected"{/if}>{lang auction:sc_time_being}</option>
+						<option value="2" {if $sctime == 2}selected="selected"{/if}>{lang auction:sc_time_will}</option>
+						<option value="3" {if $sctime == 3}selected="selected"{/if}>{lang auction:sc_time_been}</option>
+					</select>
+				</span>			
+			</td>
+			<td><button value="true" class="pn pnc" id="search_submit" name="searchsubmit" type="submit"><strong>{lang search}</strong></button></td>
+		</tr>
+	</table>
+	<div style="display: none" class="p_pop cl" id="sctype_menu">
+		<ul>
+			<li><input type="radio" value="1" name="sctype" class="pr" id="sc_type1"><label title="{lang auction:search_type1}" for="sc_type1">{lang auction:search_type1}</label></li>
+			<li><input type="radio" value="2" name="sctype" class="pr" id="sc_type2"><label title="{lang auction:search_type2}" for="sc_type2">{lang auction:search_type2}</label></li>
+		</ul>
+	</div>
+	<div style="display: none" class="p_pop cl" id="sctime_menu">
+		<ul>
+			<li><input type="radio" value="being" name="sctime" class="pr" id="sc_time_being"><label title="{lang auction:search_time_being}" for="sc_time_being">{lang auction:search_type1}</label></li>
+			<li><input type="radio" value="will" name="sctime" class="pr" id="sc_time_will"><label title="{lang auction:search_time_will}" for="sc_time_will">{lang auction:search_type2}</label></li>
+			<li><input type="radio" value="been" name="sctime" class="pr" id="sc_time_been"><label title="{lang auction:search_time_been}" for="sc_time_been">{lang auction:search_type2}</label></li>
+		</ul>
+	</div>
+	<input type="hidden" value="{FORMHASH}" name="formhash" />
+</form>
+<script type="text/javascript">
+initSearchmenu('srctxt');
+simulateSelect('sctype');
+simulateSelect('sctime');
+$('scbar').style.display = 'none';
+</script>
+		</div>
+		<!--{/if}-->
+	<div class="left" id="left">
+		<!--{if $action == 'index'}-->
+		<div style="padding-bottom:10px;"><img src="./source/plugin/auction/images/nav.png"></div>
+		<div class="mod_wrap aucd cl">
+			<h2><span class="y"><a href="plugin.php?id=auction&action=search&sctime=1">{lang more}</a></span>{lang auction:auc_being}</h2>
+			<!--{if $type1}-->
+			<!--{loop $type1 $auc}-->
+			<div class="aucdd">
+				<p class="a_n"><a href="forum.php?mod=viewthread&tid={$auc[tid]}">$auc['name']</a></p>
+				<!--{if $auc['starttimefrom'] < $_G['timestamp']}--><input type="hidden" id="$auc[tid]" value="$auc[starttimeto]"/><!--{/if}-->
+				<div class="pic" style="height:146px;"><!--{if $auc[typeid] == 1 && $auc[extra]}--><div class="number" title="{lang auction:auc_type1_1}">{lang auction:auc_type1_1}</div><!--{/if}-->
+					<a href="forum.php?mod=viewthread&tid={$auc[tid]}" title="{$auc[name]}"><img src="{$auc[att]}"></a></div>
+				<div class="pic">
+					<p id="time_{$auc[tid]}" class="timeline a_ct"><!--{if $auc['starttimefrom'] < $_G['timestamp']}-->--:--:--<!--{else}-->{lang auction:not_start_yet}<!--{/if}--></p>
+					<p class="a_lt"><span>{lang auction:auc_no_price}{lang auction:maohao}</span><del>$auc['real_price']</del></p>
+					<p class="a_lt"><span>{if $auc['typeid'] == 1}{lang auction:auc_type1}{else}{lang auction:auc_type2_price}{/if}{lang auction:maohao}</span><em><!--{if $auc['typeid'] == 1}-->{$auc['ext_price']}<!--{elseif $auc['typeid'] == 2}--><!--{if $auc[top_price]}-->$auc[top_price]<!--{else}-->$auc[base_price]<!--{/if}--><!--{/if}--></em> {$_G[setting][extcredits][$auc['extid']][title]}</p>
+					<p class="a_ct" id="vd_{$auc[tid]}"><a href="forum.php?mod=viewthread&tid={$auc[tid]}" target="_blank">{lang auction:view_detail}</a></p>
+				</div>
+			</div>
+			<!--{/loop}-->
+			<!--{/if}-->
+		</div>
+		<div class="mod_wrap aucd cl">
+			<h2><span class="y"><a href="plugin.php?id=auction&action=search&sctime=3">{lang more}</a></span>{lang auction:auc_been}</h2>
+			<!--{if $type2}-->
+			<!--{loop $type2 $auc}-->
+			<div class="aucdd">
+				<p class="a_n"><a href="forum.php?mod=viewthread&tid={$auc[tid]}">$auc['name']</a></p>
+				<!--{if $auc['starttimefrom'] < $_G['timestamp']}--><input type="hidden" id="$auc[tid]" value="$auc[starttimeto]"/><!--{/if}-->
+				<div class="pic" style="height:146px;">
+					<a href="forum.php?mod=viewthread&tid={$auc[tid]}" title="{$auc[name]}"><img src="{$auc[att]}"></a></div>
+				<div class="pic">
+					<p id="time_{$auc[tid]}" class="timeline a_ct"><!--{if $auc['starttimefrom'] < $_G['timestamp']}-->--:--:--<!--{else}-->{lang auction:not_start_yet}<!--{/if}--></p>
+					<p class="a_lt"><span>{lang auction:auc_no_price}{lang auction:maohao}</span><del>$auc['real_price']</del></p>
+					<p class="a_lt"><span>{if $auc['typeid'] == 1}{lang auction:auc_type1}{else}{lang auction:auc_type2_price}{/if}{lang auction:maohao}</span><em><!--{if $auc['typeid'] == 1}-->{$auc['ext_price']}<!--{elseif $auc['typeid'] == 2}--><!--{if $auc[top_price]}-->$auc[top_price]<!--{else}-->$auc[base_price]<!--{/if}--><!--{/if}--></em> {$_G[setting][extcredits][$auc['extid']][title]}</p>
+					<p class="a_ct" id="vd_{$auc[tid]}"><a href="forum.php?mod=viewthread&tid={$auc[tid]}" target="_blank">{lang auction:view_detail}</a></p>
+				</div>
+			</div>
+			<!--{/loop}-->
+			<!--{/if}-->		
+		</div>
+		<!--{else}-->
+		
+		<div>
+			<h3>
+				<em class="sc_h_l"><img src="source/plugin/auction/images/h_l.gif"></em>
+				<em class="sc_h_r"><img src="source/plugin/auction/images/h_r.gif"></em>
+				<span class="y"><a href="plugin.php?id=auction">{lang auction:get_back}</a></span>
+				{lang auction:auc_search}
+			</h3>
+			<div class="sc_cnt cl">
+			<!--{if $aucs}-->
+			<!--{loop $aucs $no $auc}-->
+			<div class="auc_ls cl"<!--{if $no+1>=count($aucs)}--> style="border-bottom:none;"<!--{/if}-->>
+				<!--{if $auc['starttimefrom'] < $_G['timestamp']}--><input type="hidden" id="$auc[tid]" value="$auc[starttimeto]"/><!--{/if}-->
+				<div class="ls_p">
+					<a href="forum.php?mod=viewthread&tid={$auc[tid]}" title="{$auc[name]}"><img src="{$auc[att]}"></a>
+				</div>
+				<div class="ls_d">
+					<p><a href="forum.php?mod=viewthread&tid={$auc[tid]}" title="{$auc[name]}">$auc['name']</a></p>
+					<p class="a_lt"><div class="ls_dd"><span>{lang auction:auc_no_price}{lang auction:maohao}</span><del>$auc['real_price']</del></div>
+					<span>{lang auction:auc_type2_top}{lang auction:maohao}</span><em><!--{if $auc['typeid'] == 1}-->{$auc['ext_price']}<!--{elseif $auc['typeid'] == 2}--><!--{if $auc[top_price]}-->$auc[top_price]<!--{else}-->$auc[base_price]<!--{/if}--><!--{/if}--></em> {$_G[setting][extcredits][$auc['extid']][title]}</p>
+					<p class="a_lt"><span>{lang auction:auc_own}{lang auction:maohao}$auc['username']</span></p>
+				</div>
+				<div class="pic">
+					<p class="a_ct" id="vd_{$auc[tid]}"><a href="forum.php?mod=viewthread&tid={$auc[tid]}" target="_blank">{lang auction:view_detail}</a></p>
+				</div>
+				<p id="time_{$auc[tid]}" class="timeline a_ct"<!--{if $action == 'my' && $_G['gp_filter'] == 'join'}--> style="width:150px;"<!--{/if}-->><!--{if $auc['starttimefrom'] < $_G['timestamp']}-->--:--:--<!--{else}-->{lang auction:not_start_yet}<!--{/if}--></p>
+				<!--{if $action == 'my' && $_G['gp_filter'] == 'join' && $auc['typeid'] == 2}-->
+				<p class="timeline a_ct" style="font-size:12px;font-weight:400;padding-left:30px;">
+				<!--{if $auc['starttimeto'] >= $_G['timestamp']}--><!--{if $auc['aastatus'] > 0}-->{lang auction:status_2_yes}</p><!--{else}-->{lang auction:status_2_no}<!--{/if}--><!--{/if}-->
+				<!--{if $auc['starttimeto'] < $_G['timestamp']}--><!--{if $auc['aastatus'] > 0}-->{lang auction:status_2_final}</p><!--{else}-->{lang auction:status_2_no}<!--{/if}--><!--{/if}-->
+				<!--{/if}-->
+
+			</div>
+			<!--{/loop}-->
+			<!--{/if}-->
+			</div>
+			<!--{if $multi}--><div class="cl" style="padding:4px 0 4px ;">$multi</div><!--{/if}-->
+		</div>
+		<!--{/if}-->
+	</div>
+
+</div>
+<script type="text/javascript">
+	var future=  {$_G[timestamp]}*1000;
+	function ok_lets_go() {
+
+		var timelines = $('left').getElementsByTagName('input');
+		for(var i=0;i<timelines.length;i++) {
+			you_go(timelines[i].id, (timelines[i].value*1000));
+			timelines[i].value --;
+		
+		}
+		setTimeout("ok_lets_go()", 1000);
+	}
+
+	function you_go(id, now){
+
+		days = (now-future) / 1000 / 60 / 60 / 24;
+
+		if(now-future < 0){
+			document.getElementById('time_'+id).innerHTML = '{lang auction:deadline}';
+			$('vd_'+id).className="a_lt";
+			return;
+		}
+
+	        dayNum = Math.floor(days);
+	        hours = (now-future) / 1000 / 60 / 60 - (24 * dayNum);
+	        houNum = Math.floor(hours);
+	        if(houNum < 10){
+	            houNum = "0" + houNum;
+	        }
+	        minutes = (now-future) / 1000 / 60 - (24 * 60 * dayNum) - (60 * houNum);
+	        minNum = Math.floor(minutes);
+	        if(minNum < 10){
+	            minNum = "0" + minNum;
+	        }
+	        seconds = (now-future) / 1000 - (24 * 60 * 60 * dayNum) - (60 * 60 * houNum) - (60 * minNum);
+	        secNum = Math.floor(seconds);
+	        if(secNum < 10){
+	            secNum = "0" + secNum;
+	        }
+	        millisec=(now-future)-(24*60*60*1000*dayNum)-(60*60*1000*houNum)-(60*1000*minNum)-(secNum*1000);
+	        milli=Math.floor(millisec/10);
+	        if(milli<10){
+	            milli="0"+milli;
+		}
+		document.getElementById('time_'+id).innerHTML = dayNum ? (dayNum+" {lang auction:day} "+houNum + ":" + minNum) : (houNum + ":") + (minNum + ":")+ secNum ;
+		//(dayNum?dayNum+" {lang auction:day} ":'')+ (houNum + ":") + (minNum + ":")+ secNum;
+	}
+
+ok_lets_go();
+</script>
+<!--{subtemplate common/footer}-->
