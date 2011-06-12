@@ -278,7 +278,7 @@ if(!$operation) {
 								 * @author bluelovers
 								 * @example 积分竞拍 (EUC-CN)
 								 **/
-								$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, EUC-TW, UTF-8');
+								$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, BIG-5, UTF-8');
 								if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
 								$entrytitle .= ' ('.$_detect.')';
 								// bluelovers
@@ -319,8 +319,15 @@ if(!$operation) {
 				 *
 				 * SC_GBK = GBK
 				 * TC_BIG5 = BIG5
+				 *
+				 * @example admin.php?action=plugins&operation=import&dir=auction&validator=yes
 				 **/
 				if(preg_match('/^discuz\_plugin_'.$_G['gp_dir'].'(\_\w+)?\.xml$/', $f, $a)) {
+
+					// bluelovers
+					$_importtxt = $_detect = $_entryadd = '';
+					// bluelovers
+
 					$extratxt = $extra = substr($a[1], 1);
 					if(preg_match('/^(?:SC\_)?GBK$/i', $extra)) {
 						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
@@ -331,8 +338,24 @@ if(!$operation) {
 					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
 					}
+
+					// bluelovers
+					/**
+					 * 追加嘗試判斷各xml的編碼類型
+					 *
+					 * 嘗試後發現
+					 *
+					 * EUC-CN 比 GBK 好 - GBK 會錯誤的把其他編碼也認為是GBK
+					 * EUC-TW 則無法正確判斷所以使用 BIG-5 比較好
+					 **/
+					$_importtxt = @implode('', file($pdir.'/discuz_plugin_'.$_G['gp_dir'].$a[1].'.xml'));
+					$_detect = mb_detect_encoding($_importtxt, 'EUC-CN, BIG-5, UTF-8');
+					$_detect = $_detect ? $_detect : mb_detect_encoding($_importtxt);
+					$_entryadd = ' ('.$_detect.')';
+					// bluelovers
+
 					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.$extra.(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
-					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).'">&nbsp;';
+					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).$_entryadd.'">&nbsp;';
 					$count++;
 				}
 			}
