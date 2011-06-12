@@ -1,0 +1,103 @@
+{subtemplate common/header}
+
+<div id="pt" class="bm cl">
+  <div class="z"> <a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><span class="wp"> <em>&rsaquo;</em> 活动</span></div>
+</div>
+<div class="wp">
+<link href="source/plugin/active/act.css" rel="stylesheet" type="text/css" />
+<div id="wrapper">
+<!--主体开始-->
+    <div id="zhuti">
+    
+    	<!--左边开始-->
+        	<div id="zhutileft">
+	<div id="zt-a">
+  
+                
+                	<!--火爆活动聚焦开始-->
+                    	<div id="zt-a-2">
+                        	<p>火爆活动聚焦</p>
+                        	
+                            <ul>
+<!--{if $manylist}-->
+{loop $manylist $o}
+		{if $o[end]<$_G[timestamp]}<li class="x cl">{else}<li class="s cl">{/if}
+		<a href="$o[url]" target="_blank"><img src="source/plugin/active/images/{$o[id]}.jpg" width="300" /></a><strong><a href="$o[url]" target="_blank">$o[title]</a></strong><br /><font>时间：</font> {echo date('Y-m-d H:i',$o[begin]);}—{echo date('Y-m-d H:i',$o[end]);} 
+<br /><font>地点：</font> {$o[place]}<br />
+<font>简介：</font> {$o[info]}
+		</li> 
+		
+{/loop}
+<!--{else}-->
+<li class="cl">没有找到相应的活动</li>
+<!--{/if}-->
+                            </ul>
+							
+							
+                            
+                            <div class="cl"><center>$pagenav</center></div>  
+                            
+                            
+                            
+                    	</div>
+                    <!--火爆活动聚焦结束-->
+                
+                
+              </div>
+            
+            </div>
+        <!--左边结束-->
+    
+    
+    	<!--右边开始-->
+        	<div id="zhutiright">
+        		<!--搜索开始-->
+                	<div id="search">
+                      <form action="" method="post" name="FORM">
+                        <input class="text keyword" type="text" value="" name="stitle" onfocus="this.value=''" />
+                        <button type="submit">搜索</button>
+                      </form>
+                    </div>
+                <!--搜索结束-->
+                
+                
+                <!--所有分类开始-->
+                	<div id="list">
+                		<p><a href="$appurl" style="color:#fff">所有分类</a> ($allactivenum) </p>
+                        <ul>
+{loop $activeclass $k $v}
+		<li><a href="$appurl&c=$k">$v({echo classnum($k)})</a></li>
+{/loop}
+</ul>
+                	</div>
+                <!--所有分类结束-->
+                
+                
+                <!--活动存档开始-->
+                	<div id="list">
+                		<p>活动存档</p>
+                        <ul>
+							{loop $montharray $i $d}
+                        	<li><a href="$appurl&m=$i">{echo date('Y年m月',$d)}({echo monthnum($i)}) </a></li>
+							{/loop}
+
+	<li><a href="plugin.php?id=active:index&m=-1">以前所有( {echo monthnum(-1);} )</a></li>
+                        </ul>
+                	</div>
+                <!--活动存档结束-->
+                
+                <!--广告开始-->
+                <div><!--<img src="http://act.hualongxiang.com/images/gg.jpg" />--></div>
+                
+                <!--广告结束-->
+                
+        	</div>
+        <!--右边结束-->
+        
+        
+    
+    </div><div style="clear:both"></div>
+    <!--主体结束-->
+</div>
+
+{subtemplate common/footer}

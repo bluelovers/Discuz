@@ -1,0 +1,31 @@
+{template active:admin_header}
+
+<table  cellpadding="5" border="1">
+  <tr>
+    <td>顺序</td>
+    <td>分类</td>
+    <td>标题</td>
+    <td>内容</td>
+    <td>时间</td>
+    <td>地点</td>
+    <td>操作</td>
+  </tr>
+  {loop $manylist $key $o}
+  <tr valign="top">
+    <td>{echo $key+1+$begin}</td>
+    <td>{$activeclass[$o[cid]]}</td>
+    <td><a href="$o[url]" target="_blank">$o[title]</a>
+	<p><img src="source/plugin/active/images/{$o[id]}.jpg?time=$_G[timestamp]" width="200" /></p>	</td>
+    <td>$o[info]</td>
+    <td>开始：{echo date('Y-m-d H:i',$o[begin]);}
+	<br />结束：{echo date('Y-m-d H:i',$o[end]);}
+	<br />录入：{echo date('Y-m-d H:i',$o[dateline]);}	</td>
+    <td>$o[place]</td>
+    <td><a href="$appurl&amp;p=edit&amp;id=$o[id]">编辑</a> <a href="$appurl&amp;p=del&amp;id=$o[id]" onclick="return confirm('您确认要删除吗？这将不可恢复！')">删除</a></td>
+  </tr>
+  {/loop}
+</table>
+
+<p>&nbsp;</p>
+
+<p>$pagenav</p>

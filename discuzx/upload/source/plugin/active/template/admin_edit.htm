@@ -1,0 +1,60 @@
+{template active:admin_header}
+<script src="static/js/forum_calendar.js?J56" type="text/javascript"></script>
+<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
+  <table cellpadding="10" border="1">
+    <tr>
+      <td>活动分类</td>
+      <td><label>
+        <select name="acid" id="acid">
+		{loop $activeclass $k $v}
+          
+        <option value="$k" {if $k==$active[cid]}selected="selected"{/if}>$v</option>
+		 {/loop}
+        
+        </select>
+      </label></td>
+    </tr>
+    <tr>
+      <td>活动标题</td>
+      <td><label>
+        <input name="atitle" type="text" id="atitle" value="$active[title]" size="80" />
+      </label></td>
+    </tr>
+    <tr>
+      <td>活动链接</td>
+      <td><input name="aurl" type="text" id="aurl" value="$active[url]" size="80" /></td>
+    </tr>
+    <tr>
+      <td>活动图片</td>
+      <td><label>
+        <input type="file" name="file" />
+      </label></td>
+    </tr>
+    <tr>
+      <td>活动时间</td>
+      <td><label>
+        <input name="abegin" type="text" id="abegin" onclick="showcalendar(event, this, true)" value="{echo date('Y-m-d H:i',$active[begin])}" autocomplete="off"  />
+      - 
+      <input name="aend" type="text" id="aend"  onclick="showcalendar(event, this, true)" value="{echo date('Y-m-d H:i',$active[end])}" autocomplete="off"  />
+      </label></td>
+    </tr>
+    <tr>
+      <td>活动地点</td>
+      <td><label>
+        <input name="aplace" type="text" id="aplace" value="$active[place]" size="50" />
+      </label></td>
+    </tr>
+    <tr>
+      <td>活动简介</td>
+      <td><label>
+        <textarea name="ainfo" cols="80" rows="5" id="ainfo">$active[info]</textarea>
+      </label></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td align="center"><label>
+        <input type="submit" name="Submit" value="提交" />
+      </label></td>
+    </tr>
+  </table>
+</form>
