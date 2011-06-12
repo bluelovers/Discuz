@@ -271,6 +271,12 @@ if(!$operation) {
 							$pluginarray = getimportdata('Discuz! Plugin', 1, 1);
 							if(!empty($pluginarray['plugin']['name'])) {
 								$entrytitle = dhtmlspecialchars($pluginarray['plugin']['name']);
+
+								$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, EUC-TW, UTF-8');
+								if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
+
+								$entrytitle .= ' ('.$_detect.')';
+
 								$entryversion = dhtmlspecialchars($pluginarray['plugin']['version']);
 								$entrycopyright = dhtmlspecialchars($pluginarray['plugin']['copyright']);
 							}
@@ -304,11 +310,11 @@ if(!$operation) {
 			while($f = $d->read()) {
 				if(preg_match('/^discuz\_plugin_'.$_G['gp_dir'].'(\_\w+)?\.xml$/', $f, $a)) {
 					$extratxt = $extra = substr($a[1], 1);
-					if(preg_match('/^SC\_GBK$/i', $extra)) {
+					if(preg_match('/^(?:SC\_)?GBK$/i', $extra)) {
 						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
 					} elseif(preg_match('/^SC\_UTF8$/i', $extra)) {
 						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
-					} elseif(preg_match('/^TC\_BIG5$/i', $extra)) {
+					} elseif(preg_match('/^(?:TC\_)?BIG5$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#29256;';
 					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
