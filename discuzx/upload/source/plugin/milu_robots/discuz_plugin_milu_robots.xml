@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-11 09:49]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/Discuz_X2_SC_UTF8/upload/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[0]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[网络爬虫监控]]></item>
+			<item id="identifier"><![CDATA[milu_robots]]></item>
+			<item id="description"><![CDATA[插件作者:Milu
+       
+作品简介:
+
+监控网络爬虫的活动信息，内置各种丰富的图表，帮助站长更好的了解爬虫的规律，
+       
+发布地址:http://www.56php.com/thread-842-1-1.html
+       
+]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[milu_robots/]]></item>
+			<item id="copyright"><![CDATA[Milu]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[robotsLog]]></item>
+					<item id="menu"><![CDATA[今日记录]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[robots]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
+					<item id="name"><![CDATA[daycount]]></item>
+					<item id="menu"><![CDATA[今日统计]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="3">
+					<item id="name"><![CDATA[robotsCount]]></item>
+					<item id="menu"><![CDATA[本月统计]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[搜索引擎机器人]]></item>
+				<item id="description"><![CDATA[选择你要监控的爬虫，搜狗是一只勤奋但是不给力的狗，不建议对其监控]]></item>
+				<item id="variable"><![CDATA[robotsType]]></item>
+				<item id="type"><![CDATA[selects]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[googlebot = 谷歌
+msnbot = MSN
+slurp = Yahoo
+baiduspider = 百度
+sohu-search = 搜狐
+lycos = lycos
+robozilla = Robozilla
+Soso = 搜搜
+sogou = 搜狗]]></item>
+			</item>
+		</item>
+	</item>
+</root>

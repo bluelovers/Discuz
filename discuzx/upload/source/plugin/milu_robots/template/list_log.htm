@@ -1,0 +1,33 @@
+﻿
+<form id="cpform" action="" autocomplete="off" method="post" name="cpform"><input type="hidden" value="2c9ef6d0" name="formhash"><input type="hidden" value="" name="scrolltop" id="formscrolltop"><input type="hidden" value="" name="anchor">
+<table class="tb tb2 ">
+<tbody><tr>
+    <th class="partition" colspan="13">过滤</th></tr>
+<tr class="hover">
+    <td width="60">显示</td><td>
+    <select name="q" id="q">
+     <option <!--{if $q == 'all'}-->selected="selected"<!--{/if}--> value="all">全部</option>
+    <!--{loop $robots_arr $key $value}-->
+    <option  <!--{if $q == $key}-->selected="selected"<!--{/if}--> value="$key">$value</option>
+    <!--{/loop}-->
+    </select>   
+    &nbsp; &nbsp; <input type="submit" value="搜索" class="btn">
+    &nbsp; 只显示出当天的记录</td></tr></tbody></table>
+<table class="tb tb2 ">
+<tbody><tr class="header">
+        <th width="150">访问时间</th>
+        <th width="100">爬虫名称</th>
+        <th>访问页面</th></tr>
+        <!--{if $list_data}-->
+        <!--{loop $list_data $rs}-->
+<tr class="hover" style="height:20px"><td width="150">$rs['time']</td>
+<td width="100" class="td23">$rs['robots_name']</td>
+<td>$rs['view_url']</td></tr>
+		<!--{/loop}-->
+         <!--{else}-->
+        <tr class="hover" style="height:20px">
+            <td colspan="3" align="left">目前暂无记录</td></tr>
+         <!--{/if}-->    
+<tr><td colspan="12"><div class="fixsel"><input type="submit" value="提交" title="按 Enter 键可随时提交你的修改" name="submit" id="submit_submit" class="btn"></div></td></tr><script type="text/JavaScript">_attachEvent(document.documentElement, 'keydown', function (e) { entersubmit(e, 'submit'); });</script></tbody></table>
+</form>
+
