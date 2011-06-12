@@ -1,0 +1,142 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<!--{if empty($section)}-->
+<table class="tb tb2">
+	<tr>
+		<th colspan="3" class="partition">管理选项</th>
+	</tr>
+	<tr>
+		<td width="70">[<b><a>委托记录</a></b>]</td>
+		<td>[<a href="?$baseScript&mod=trusts&section=tran">成交记录</a>]</td>
+	</tr>
+</table>
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">技巧提示</th>
+	</tr>
+	<tr>
+		<td>
+			<ul>
+				<li>系统仅保留 30 天的成交记录。</li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<form name="trusts" action="?$baseScript&mod=trusts&section=deldeals" method="post">
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">委托记录</th>
+	</tr>
+	<tr class="header">
+		<th>选择</th>
+		<th>序号</th>
+		<th>股票代码</th>
+		<th>方向</th>
+		<th>委托价</th>
+		<th>数量</th>
+		<th>挂单人</th>
+		<th>买入时间</th>
+		<th>卖出时间</th>
+		<th>状态</th>
+		
+	</tr>
+<!--{loop $ddb $v}-->
+	<tr class="hover">
+		<td><input type="checkbox" name="did[]" value="$v[did]" /></td>
+		<td>$v[no]</td>
+		<td><a href="?$baseScript&mod=stockset&section=editstock&sid=$v[sid]">$v[sid]</a></td>
+		<td>$v[direction]</td>
+		<td>$v[price_deal]</td>
+		<td>$v[quant_deal]</td>
+		<td><a href="?$baseScript&mod=userset&section=edituser&uid=$v[uid]">$v[username]</a></td>
+		<td>$v[time_deal]</td>
+		<td>$v[time_tran]</td>
+		<td>$v[ok]</td>
+	</tr>
+<!--{/loop}-->
+	<tr>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)" /><label for="chkall">全选</label></td>
+		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.trusts.submit();return true;}return false;}" value="删除" class="btn" /></td>
+	</tr>
+</table>
+</form>
+<!--{elseif $section=='tran'}-->
+<table class="tb tb2">
+	<tr>
+		<th colspan="3" class="partition">管理选项</th>
+	</tr>
+	<tr>
+		<td width="70">[<a href="?$baseScript&mod=trusts">委托记录</a>]</td>
+		<td>[<b><a>成交记录</a></b>]</td>
+	</tr>
+</table>
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">技巧提示</th>
+	</tr>
+	<tr>
+		<td>
+			<ul>
+				<li>系统仅保留 30 天的成交记录。</li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<form name="trusts" action="?$baseScript&mod=trusts&section=deltrans" method="post">
+<table class="tb tb2">
+	<tr>
+		<th colspan="8" class="partition">成交记录</th>
+	</tr>
+	<tr class="header">
+		<th>选择</th>
+		<th>序号</th>
+		<th>股票代码</th>
+		<th>方向</th>
+		<th>委托价</th>
+		<th>数量</th>
+		<th>挂单人</th>
+		<th>成交时间</th>
+	</tr>
+<!--{loop $tdb $v}-->
+	<tr class="hover">
+		<td><input type="checkbox" name="tid[]" value="$v[tid]" /></td>
+		<td>$v[no]</td>
+		<td><a href="?$baseScript&mod=stockset&section=editstock&sid=$v[sid]">$v[sid]</a></td>
+		<td>$v[direction]</td>
+		<td>$v[price]</td>
+		<td>$v[quant]</td>
+		<td><a href="?$baseScript&mod=userset&section=edituser&uid=$v[uid]">$v[username]</a></td>
+		<td>$v[ttime]</td>
+	</tr>
+<!--{/loop}-->
+	<tr>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)" /><label for="chkall">全选</label></td>
+		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.trusts.submit();return true;}return false;}" value="删除" class="btn" /></td>
+	</tr>
+</table>
+</form>
+<!--{/if}-->
+<script language="javascript">
+function checkall(form)
+{
+	for ( var i=0; i<form.elements.length; i++ )
+	{
+		var e = form.elements[i];
+		if ( e.name != 'chkall' )
+		{
+			e.checked = form.chkall.checked;
+		}
+	}
+}
+</script>

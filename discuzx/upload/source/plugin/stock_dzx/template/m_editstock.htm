@@ -1,0 +1,128 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li class="current"><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<script language="javascript" src ="source/plugin/stock_dzx/image/stockins.js"></script>
+<script language="JavaScript">chkd = foxajax();</script>
+<form method="post" action="?$baseScript&mod=stockset&section=editstock" name="form1">
+<input type="hidden" name="step" value="2" />
+<input type="hidden" name="stnameold" value="$v[stockname]" />
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">编辑 {$v['sid']} 号股票 - {$v['stockname']}</th>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">股票代号：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" readonly name="sid" value="$v[sid]" style="background-color:#EEEEEE" class="txt"></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">股票名称：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="stname" value="$v[stockname]" class="txt" onkeyup="this.value=this.value.replace(/\d|_/g,'');if(this.value.length>1&&this.value.length<14){checkdata(0)};" /></td>
+		<td class="vtop tips2"><span id="dispmsg" class="mr10"></span></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">开盘价（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="openprice" value="$v[openprice]" class="txt" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">当前价（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="currprice" value="$v[currprice]" class="txt" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">最低价（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="lowprice" value="$v[lowprice]" class="txt" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">最高价（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="highprice" value="$v[highprice]" class="txt" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">发行数量（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="issuenum" value="$v[issuenum]" class="txt" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">今日买入（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="todaybuynum" value="$v[todaybuynum]" class="txt" onkeyup="this.value=this.value.replace(/\D/g,'');" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">今日卖出（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="todaysellnum" value="$v[todaysellnum]" class="txt" onkeyup="this.value=this.value.replace(/\D/g,'');" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">今日成交（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="todaytradenum" value="$v[todaytradenum]" class="txt" onkeyup="this.value=this.value.replace(/\D/g,'');" /></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">公司照片(150px*190px)：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform">
+			<select name="comphoto">
+				{$cas}
+			</select>
+		</td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">上市公司简介：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><textarea name="comintro" rows="5" class="txt">$v[comintro]</textarea></td>
+		<td class="vtop tips2">长度不能超过 $introducemax 字节</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">是否停牌：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform">
+			<input type="radio" name="locked" value="1" id="enlock" <!--{if $v['state']=='1'}-->checked<!--{/if}-->><label for="enlock">是</label>
+			<input type="radio" name="locked" value="0" id="unlock" <!--{if $v['state']<>'1'}-->checked<!--{/if}-->><label for="unlock">否</label>
+		</td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="reset" name="reset" value="重填" class="btn"/>
+			<input type="submit" name="submit" value="提交" class="btn"/>
+		</td>
+	</tr>
+</table>
+</form>

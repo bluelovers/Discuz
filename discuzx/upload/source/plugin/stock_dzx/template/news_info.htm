@@ -1,0 +1,44 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> <a href="$baseScript&mod=news&act=shownewslist">新闻中心</a>
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">新闻阅读</h2>
+			</caption>
+			<div class="bm_c">
+				<div class="mbn">
+					<div class="ph gsh">$news[subject]</div>
+				</div>
+				<div class="mbn">
+					<div class="gsh">$news[addtime] <span class="xg1">$news[author]</span></div>
+				</div>
+				<div class="mbn ptm">
+					<div class="xs2">$news[content]</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li class="a"><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

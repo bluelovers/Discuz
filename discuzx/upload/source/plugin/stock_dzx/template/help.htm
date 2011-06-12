@@ -1,0 +1,102 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 股市助手
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li class="a"><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">帮助选项</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm"><a href="$baseScript&mod=system&act=help&htype=main">关于虚拟股市</a></li>
+				<li class="ptm"><a href="$baseScript&mod=system&act=help&htype=knowledge">股票基本知识</a></li>
+				<li class="ptm"><a href="$baseScript&mod=system&act=help&htype=edict">股票交易规则</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="mn ptm">
+		<div class="bm bw0">
+<!--{if !$htype || $htype=='main'}-->
+			<caption>
+				<h2 class="mbm xs2">关于虚拟股市</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">本股市所用软件为 <a href="http://www.kilofox.net" target="_blank">StockIns</a> 。所有数据皆为虚拟，与现实中的股市无关。</li>
+				<li class="ptm">插件名称：Kilofox StockIns</li>
+				<li class="ptm">当前版本：$kfsclass->version</li>
+				<li class="ptm">创建日期：$kfsclass->build_date</li>
+				<li class="ptm">适用环境：Discuz! X2</li>
+				<li class="ptm">研发团队：<a href="http://www.kilofox.net" target="_blank">Kilofox Software R&D Group</a><br />
+				<li class="ptm">主持开发：<a href="http://www.phpwind.net/u-htm-action-show-uid-128264.html" target="_blank">main88</a> <a href="http://www.discuz.net/home.php?mod=space&uid=432225" target="_blank">kilofox</a><br />
+				<li class="ptm">官方网站：$kfsclass->website</li>
+				<li class="ptm"><a href="http://www.kilofox.net" target="_blank">千狐网站</a> 版权所有</li>
+			</ul>
+<!--{elseif $htype=='knowledge'}-->
+			<caption>
+				<h2 class="mbm xs2">股票基本知识</h2>
+			</caption>
+			<div class="mbn">
+				<div class="ph">1、股票</div>
+				<div class="xs2">股票是股份公司发给股东（出资者）证明其投资入股的凭证，也是股份公司对出资者表示股东权力的证书。股票的拥有者即是股东，是股份公司的所有者。但是，真正有权支配公司的所有者实际上是掌握较多股票份额的大股东。股票的拥有者一般不能向股份公司退股，抽回自己的投资。但是，股票是一种有价凭证，股票可以转让，可以买卖或作为抵押品。股票本身没有价值，它之所以可以买卖并有价格，原因在于股票的拥有者可以凭借股票定期向该股份公司获取分红。</div>
+			</div>
+			<div class="mbn">
+				<div class="ph">2、市值</div>
+				<div class="xs2">市值即为股票的市场价值，亦可以说是股票的市场价格，它包括股票的发行价格和交易买卖价格。股票的市场价格是由市场决定的。股票的面值和市值往往事不一致的。股票价格可以高于面值，也可以低于面值，但股票第一次发行的价格一般不低于面值。股票价格主要取决于股票市场的供求关系。<br />股票市场是一个波动的市场，股票市场价格亦是不断波动的。</div>
+			</div>
+			<div class="mbn">
+				<div class="ph">3、分红</div>
+				<div class="xs2">分红是股份公司按股票份额的一定比例支付给投资者的红利。</div>
+			<div class="mbn">
+				<div class="ph">4、股权</div>
+				<div class="xs2">股权即股票持有者所具有的与其拥有的股票比例相应的权益及承担一定责任的权力。股东根据所持股票份额的大小，享用参与公司经营的不同权力；股东有公司利润的分配权，股东可以根据所持股票份额的大小，获得一定的分红；股东具有公司剩余财产的索偿权，即公司解散或破产时，股东可以根据所持股份要求赔偿，但股东按其所持股份对债权人承担有限责任。</div>
+			</div>
+<!--{elseif $htype=='edict'}-->
+			<caption>
+				<h2 class="mbm xs2">股票交易规则</h2>
+			</caption>
+			<div class="mbn">
+				<div class="xs2">1、本股市每日零点收盘，随后即时开盘。但受交易时间的限制。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">2、股票价格每日最大涨幅为 <span class="xi1">+{$db_wavemax}%</span> ，最大跌幅为 <span class="xi1">-{$db_wavemax}%</span> 。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">3、每笔交易最少交易量为 <span class="xi1">{$db_tradenummin}</span> 股。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">4、股票交易成功后，须按照规定缴纳股票交易印花税。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">5、股票交易印花税是专门针对股票交易发生额征收的一种税，是投资者从事证券买卖所强制交纳的一笔费用。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">6、股票交易印花税是宏观调控股市的一项直接政策工具。此举是为了遏制股市泡沫，进一步促进证券市场健康发展。</div>
+			</div>
+			<div class="mbn">
+				<div class="xs2">7、经 <span class="xi2">{$_G[setting][bbname]}</span> 批准，<span class="xi2">{$db_smname}</span>将股票交易印花税税率定为 <span class="xi1">{$db_dutyrate}%</span> ，单笔交易税额不足 <span class="xi1">{$db_dutymin}</span> 元时，以 <span class="xi1">{$db_dutymin}</span> 元计算。</div>
+			</div>
+<!--{/if}-->
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

@@ -1,0 +1,129 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 公司分红
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li class="a"><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">股民帐户</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">帐户名称：$user[username]</li>
+				<li class="ptm">今日买入：$user[todaybuy] 股</li>
+				<li class="ptm">今日卖出：$user[todaysell] 股</li>
+				<li class="ptm">持股总量：$user[stocknum] 股</li>
+				<li class="ptm">持股市值：$user[stockvalue] 元</li>
+				<li class="ptm">股票成本：$user[stockcost] 元</li>
+				<li class="ptm">盈亏情况：$user[profit] 元</li>
+				<li class="ptm">可用资金：$user[capital_ava] 元</li>
+				<li class="ptm">资产合计：$user[asset] 元</li>
+			</ul>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">上市公司 - {$rs[stockname]} - 分红系统</h2>
+				</caption>
+				<tr>
+					<td width="20%">股票代码</td>
+					<td>{$rs[sid]}</td>
+				</tr>
+				<tr>
+					<td>股东数量</td>
+					<td><span class="s3">{$cs[usernum]}</span> 人</td>
+				</tr>
+				<tr>
+					<td>发售股票</td>
+					<td><span class="s3">{$cs[stocknum]}</span> 股，其中您拥有 <span class="s3">{$sn['stocknum']}</span> 股</td>
+				</tr>
+				<form name="formcam" action="$baseScript&mod=member&act=cutamelon" method="post" onsubmit="return melonFormCheck({$cs[stocknum]},{$mystocknum},{$user[capital]});">
+				<tr>
+					<td>分红方式</td>
+					<td><input type="radio" name="cuttype" value="1" onClick="selectCutType(1)" />分红现金 &nbsp; <input type="radio" name="cuttype" value="2" onClick="selectCutType(2)">分红股票</td>
+				</tr>
+				<tr>
+					<td>分红方案</td>
+					<td>
+						<div id="cut_type1" style="display:none">分红现金，每 100 股派送 <input type="text" name="cutnum1" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');cutCheck1({$cs[stocknum]},{$user[capital]});" /> 元</div>
+						<div id="cut_type2" style="display:none">分红股票，每 100 股派送 <input type="text" name="cutnum2" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');cutCheck2({$cs[stocknum]},{$mystocknum});" /> 股</div>
+					</td>
+				</tr>
+				<tr>
+					<td>提示信息</td>
+					<td><span id="show_msgs"></span></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hm">
+						<input type="hidden" name="section" value="docut" />
+						<input type="hidden" name="sid" value="$rs[sid]" />
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>提交</em></button>
+					</td>
+				</tr>
+				</form>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">股东列表</h2>
+				</caption>
+				<tr>
+					<th>股东</td>
+					<th>持股数量</th>
+					<th>持股比例</th>
+					<th>持股价格</th>
+					<th>当前价格</th>
+					<th>持股成本</th>
+					<th>持股现值</th>
+					<th>总盈亏</th>
+					<th>盈亏率</th>
+				</tr>
+				<tbody>
+<!--{loop $holders $v}-->
+				<tr style="color:$v[color]">
+					<td><a href="$baseScript&mod=member&act=showinfo&uid=$v[cid]">$v[username]</a></td>
+					<td>$v[stocknum]</td>
+					<td>$v[possessratio] %</td>
+					<td>$v[averageprice]</td>
+					<td>$v[currentprice]</td>
+					<td>$v[stockcost]</td>
+					<td>$v[stockvalue]</td>
+					<td>$v[totalprofit]</td>
+					<td>$v[profit_p] %</td>
+				</tr>
+<!--{/loop}-->
+<!--{if $cnt > $readperpage}-->
+				<tr>
+					<td colspan="9">$pages</td>
+				</tr>
+<!--{/if}-->
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script language="JavaScript" src="{$hkimg}/stockins.js"></script>
+<!--{template common/footer}-->

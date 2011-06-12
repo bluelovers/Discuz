@@ -1,0 +1,192 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 股票交易
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li class="a"><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">五档盘口</h2>
+				</caption>
+				<tr>
+					<th>盘口</th>
+					<th>委托价</th>
+					<th>数量</th>
+				</tr>
+<!--{loop $dsdb $v}-->
+				<tr>
+					<td>$v[i]</td>
+					<td style="color:#{$v[color]}">$v[price_deal]</td>
+					<td>$v[num]</td>
+				</tr>
+<!--{/loop}-->
+				<tr>
+					<td>当前价</td>
+					<td style="color:#{$v[color]}">$currprice</td>
+					<td></td>
+				</tr>
+<!--{loop $dbdb $v}-->
+				<tr>
+					<td>$v[i]</td>
+					<td style="color:#{$v[color]}">$v[price_deal]</td>
+					<td>$v[num]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+		<div class="bm bw0 ptm">
+			<caption>
+				<h2 class="mbm xs2">股民帐户</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">帐户名称：$user[username]</li>
+				<li class="ptm">今日买入：$user[todaybuy] 股</li>
+				<li class="ptm">今日卖出：$user[todaysell] 股</li>
+				<li class="ptm">持股总量：$user[stocknum] 股</li>
+				<li class="ptm">持股市值：$user[stockvalue] 元</li>
+				<li class="ptm">股票成本：$user[stockcost] 元</li>
+				<li class="ptm">盈亏情况：$user[profit] 元</li>
+				<li class="ptm">可用资金：$user[capital_ava] 元</li>
+				<li class="ptm">资产合计：$user[asset] 元</li>
+			</ul>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">最近 24 小时价格走势</h2>
+				</caption>
+				<tr>
+					<td valign="bottom" height="100%" width="100%">
+						<img src="source/plugin/stock/data/k_{$stock_id}.png" border="0">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<script language="JavaScript" src="{$hkimg}stockins.js"></script>
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">委托买入</h2>
+				</caption>
+				<tr>
+					<td>股票代码：</td>
+					<td>$rs[sid]</td>
+				</tr>
+				<tr>
+					<td>股票名称：</td>
+					<td>$rs[stockname]</td>
+				</tr>
+				<form name="formbuy" method="post" action="$baseScript&mod=member&act=trustsmng" enctype="multipart/form-data" onsubmit="javascript:return tradeFormCheck(document.formbuy, {$priceLow}, {$priceHigh}, {$buyMin}, {$buyMax}, 'b');">
+				<tr>
+					<td>买入价格：</td>
+					<td><input type="text" id="price_buy" name="price_buy" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};" /> 元
+						<br/><span class="s1">$priceLow</span> 元 - <span class="s1">$priceHigh</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td>买入数量：</td>
+					<td><input type="text" id="num_buy" name="num_buy" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesBuy({$dutyRate}, {$dutyMin}, {$user[capital_ava]}, {$buyMax});" /> 股
+						<br/><span class="s1">$buyMin</span> 股 - <span class="s1">$buyMax</span> 股
+					</td>
+				</tr>
+				<tr>
+					<td>印花税税率：</td>
+					<td>$dutyRate %
+						<br/>印花税最低 <span class="s3">$dutyMin</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td>所需费用：</td>
+					<td id="feesNeedBuy">股票金额 <span class="s3">0.00</span> 元
+						<br />印花税金 <span class="s3">0.00</span> 元<br />买后帐户结余 <span class="s3">{$user['capital_ava']}</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hm">
+						<input type="hidden" name="section" value="trade" />
+						<input type="hidden" name="tradetype" value="b" />
+						<input type="hidden" name="sid" value="{$rs[sid]}" />
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc" $btn_buy><em>买入</em></button>
+					</td>
+				</tr>
+				</form>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">委托卖出</h2>
+				</caption>
+				<tr>
+					<td>股票代码：</td>
+					<td>$rs[sid]</td>
+				</tr>
+				<tr>
+					<td>股票名称：</td>
+					<td>$rs[stockname]</td>
+				</tr>
+				<form name="formsell" method="post" action="$baseScript&mod=member&act=trustsmng" enctype="multipart/form-data" onsubmit="javascript:return tradeFormCheck(document.formsell, {$priceLow}, {$priceHigh}, {$sellMin}, {$sellMax}, 's');">
+				<tr>
+					<td>卖出价格：</td>
+					<td>
+						<input type="text" id="price_sell" name="price_sell" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};" /> 元
+						<br/><span class="s1">$priceLow</span> 元 - <span class="s1">$priceHigh</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td>卖出数量：</td>
+					<td>
+						<input type="text" id="num_sell" name="num_sell" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesSell({$dutyRate}, {$dutyMin}, {$user[capital_ava]}, {$sellMax});" /> 股
+						<br/><span class="s1">$sellMin</span> 股 - <span class="s1">$sellMax</span> 股
+					</td>
+				</tr>
+				<tr>
+					<td>印花税税率：</td>
+					<td>$dutyRate %
+						<br/>印花税最低 <span class="s3">$dutyMin</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td>所需费用：</td>
+					<td id="feesNeedSell">印花税金 <span class="s3">0.00</span> 元
+						<br />卖后帐户结余 <span class="s3">$user[capital_ava]</span> 元
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hm">
+						<input type="hidden" name="section" value="trade" />
+						<input type="hidden" name="tradetype" value="s" />
+						<input type="hidden" name="sid" value="{$rs[sid]}" />
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
+						<button type="submit" name="btnSell" value="true" class="pn pnc" $btn_sell><em>卖出</em></button>
+					</td>
+				</tr>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

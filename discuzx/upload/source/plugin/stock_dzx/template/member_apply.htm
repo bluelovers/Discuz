@@ -1,0 +1,151 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 公司上市
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd ptm">
+		<div class="bm bw0">
+<!--{if $user[id]}-->
+			<caption>
+				<h2 class="mbm xs2">股民帐户</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">帐户名称：$user[username]</li>
+				<li class="ptm">今日买入：$user[todaybuy] 股</li>
+				<li class="ptm">今日卖出：$user[todaysell] 股</li>
+				<li class="ptm">持股总量：$user[stocknum] 股</li>
+				<li class="ptm">持股市值：$user[stockvalue] 元</li>
+				<li class="ptm">股票成本：$user[stockcost] 元</li>
+				<li class="ptm">盈亏情况：$user[profit] 元</li>
+				<li class="ptm">可用资金：$user[capital_ava] 元</li>
+				<li class="ptm">资产合计：$user[asset] 元</li>
+			</ul>
+<!--{/if}-->
+		</div>
+	</div>
+	<div class="mn">
+<!--{if empty($_G['gp_section'])}-->
+		<div class="bm bw0">
+			<ul class="tb cl">
+				<li class="a"><a href="javascript:return(0);">上市一览</a></li>
+				<li><a href="$baseScript&mod=member&act=apply&section=apply">申请上市</a></li>
+			</ul>
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">公司上市申请一览表</h2>
+				</caption>
+				<tr>
+					<th>ID</th>
+					<th>股票名称</th>
+					<th>股票价格</th>
+					<th>股票数量</th>
+					<th>申请人</th>
+					<th>申请时间</th>
+					<th>状态</th>
+				</tr>
+				<tbody>
+	<!--{loop $applys $v}-->
+				<tr>
+					<td rowspan="2">$v[i]</td>
+					<td>$v[stockname]</td>
+					<td>$v[stockprice]</td>
+					<td>$v[stocknum]</td>
+					<td><a href="$baseScript&mod=member&act=showinfo&uid=$v[userid]">$v[username]</a></td>
+					<td>$v[applytime]</td>
+					<td>$v[state]</td>
+				</tr>
+				<tr>
+					<td colspan="8">公司简介：$v[comintro]</td>
+				</tr>
+	<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+	<!--{if $cnt > $readperpage}-->
+		<div id="pgt" class="bm bw0 pgs cl">$pages</div>
+	<!--{/if}-->
+<!--{elseif $_G['gp_section']=='apply'}-->
+		<div class="bm bw0">
+			<ul class="tb cl">
+				<li><a href="$baseScript&mod=member&act=apply">上市一览</a></li>
+				<li class="a"><a href="javascript:return(0);">申请上市</a></li>
+			</ul>
+	<!--{if $applyAllow}-->
+			<script language="JavaScript" src="{$hkimg}stockins.js"></script>
+			<script language="JavaScript">chkd = foxajax();</script>
+			<form name="form1" method="post" action="$baseScript&mod=member&act=apply" onsubmit="return applyFormCheck(document.form1, $db_esnamemin, $db_esnamemax, $db_esminnum, $db_introducemax);">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">公司上市申请</h2>
+				</caption>
+				<tr>
+					<td width="20%">申请人</td>
+					<td>{$user[username]}</td>
+				</tr>
+				<tr>
+					<td>股票名称</td>
+					<td><input type="text" name="stname" value="" class="px" onkeyup="this.value=this.value.replace(/\d|_/g,'');if(this.value.length>({$db_esnamemin}-2)&&this.value.length<({$db_esnamemax}+2)){checkdata(1)};"/><br/><span id="dispmsg"></span></td>
+				</tr>
+				<tr>
+					<td>股票发行单价</td>
+					<td><input type="text" name="stprice" value="$rndPrice" class="px" onkeyup="this.value=this.value.replace(/\D|^0*|\d{2,}/g,'');"/> 元
+					</td>
+				</tr>
+				<tr>
+					<td>股票发行数量</td>
+					<td><input type="text" name="stnum" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');showTotalNum(this.value,$db_esminnum);"/> 组<br/>即 <span id="totalnum" class="xi1">0</span> 股</td>
+				</tr>
+				<tr>
+					<td>公司简介</td>
+					<td><textarea name="comintro" class="pt" rows="3" cols="40"></textarea><br/>请对上市公司作简要的介绍，这对于申请的成功率会有影响。<br/>长度不能超过 <span class="xi1">$db_introducemax</span> 字节。</td>
+				</tr>
+				<tr>
+					<td>注意事项</td>
+					<td><ol><li>提交后，<span class="xi1">上市资金</span>将被冻结。<span class="xi1">上市资金</span>为股票发行单价与股票发行数量的乘积。</li>
+					<li>如果通过审批，公司上市成功，您将控股股票发行数量的 50% 。</li>
+					<li>如果不能通过审批，公司上市失败，系统将退还全部<span class="xi1">上市资金</span>。</li>
+					<li>请确保您的账户中有足够的<span class="xi1">可用资金</span>！</li></ol></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hm">
+						<input type="hidden" name="section" value="save"/>
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>重填</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>提交</em></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+	<!--{else}-->
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">公司上市申请</h2>
+				</caption>
+				<tr>
+					<td>$msg</td>
+				</tr>
+			</table>
+	<!--{/if}-->
+		</div>
+<!--{/if}-->
+	</div>
+</div>
+<!--{template common/footer}-->

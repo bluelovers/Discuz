@@ -1,0 +1,129 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 营业大厅
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li class="a"><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd">
+		<div class="bm bw0 mtm">
+			<caption>
+				<h2 class="mbm xs2">股市信息</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm" id="foxsmtime"><script language="JavaScript" src="{$hkimg}stockins.js"></script><script language="JavaScript">foxTime();</script></li>
+				<li class="ptm"><em>综合指数：</em>{$sminfo[foxain]}</li>
+				<li class="ptm"><em>成交总量：</em>{$sminfo[bargainnum]} 股</li>
+				<li class="ptm"><em>成交金额：</em>{$sminfo[bargainmoney]} 元</li>
+<!--{if $_G['adminid'] == 1}-->
+				<li class="ptm"><em>印花收入：</em>{$sminfo[stampduty]} 元</li>
+<!--{/if}-->
+			</ul>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">涨幅前五</h2>
+				</caption>
+				<tr>
+					<th>代码</th>
+					<th>名称</th>
+					<th>最新价</td>
+					<th>涨幅</th>
+				</tr>
+<!--{loop $rtdb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]">$v[sid]</a></td>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]">$v[stockname]</a></td>
+					<td>$v[currprice]</td>
+					<td style="color:#FF0000">$v[todaywave]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">跌幅前五</h2>
+				</caption>
+				<tr>
+					<th>代码</th>
+					<th>名称</th>
+					<th>最新价</th>
+					<th>跌幅</th>
+				</tr>
+<!--{loop $ftdb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]">$v[sid]</a></td>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]">$v[stockname]</a></td>
+					<td>$v[currprice]</td>
+					<td style="color:#008000">$v[todaywave]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">最新消息</h2>
+				</caption>
+				<tr>
+					<th colspan="2">新股上市：$nsinfo</th>
+				</tr>
+<!--{loop $newsList $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=news&act=shownewsinfo&nid=$v[nid]" style="color:#{$v[color]}">$v[subject]</a></td>
+					<td style="width:100px">$v[addtime]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">新股申购</h2>
+				</caption>
+				<tr>
+					<th>股票代码</th>
+					<th>股票名称</th>
+					<th>发行日期</th>
+					<th>上市日期</th>
+					<th>发行数量</th>
+					<th>发行价格</th>
+					<th>剩余数量</th>
+				</tr>
+<!--{loop $nsdb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=member&act=subscribe&sid=$v[sid]">$v[sid]</a></td>
+					<td><a href="$baseScript&mod=member&act=subscribe&sid=$v[sid]">$v[stockname]</a></td>
+					<td>$v[applytime]</td>
+					<td>$v[issuetime]</td>
+					<td>$v[stocknum]</td>
+					<td>$v[stockprice]</td>
+					<td class="xi1">$v[surplusnum]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

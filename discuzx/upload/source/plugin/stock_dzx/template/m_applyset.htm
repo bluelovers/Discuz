@@ -1,0 +1,43 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<table class="tb tb2">
+	<tr>
+		<th colspan="8" class="partition">公司上市申请一览表</th>
+	</tr>
+	<tr class="header">
+		<td>序号</td>
+		<td>股票名称</td>
+		<td>发行价格</td>
+		<td>发行数量</td>
+		<td>申请人</td>
+		<td>申请时间</td>
+		<td>状态</td>
+		<td>操作</td>
+	</tr>
+<!--{loop $applyList $v}-->
+	<tr class="hover">
+		<td rowspan="2">$v[order]</td>
+		<td>$v[stockname]</td>
+		<td>$v[stockprice]</td>
+		<td>$v[stocknum]</td>
+		<td><a href="?$baseScript&mod=userset&section=edituser&uid=$v[userid]">$v[username]</a></td>
+		<td>$v[applytime]</td>
+		<td>$v[state]</td>
+		<td>$v[operate] <a href="?$baseScript&mod=usmng&ops=del&aid=$v[aid]" onclick="if(confirm('您确定要执行删除操作吗？')){return true;}else{return false;}">删除</a></td>
+	</tr>
+	<tr>
+		<td colspan="8">公司简介：$v[comintro]</td>
+	</tr>
+<!--{/loop}-->
+</table>

@@ -1,0 +1,124 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 股票资料
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">上市公司 - $rs[stockname] - 资料</h2>
+				</caption>
+				<tr>
+					<th colspan="3">$state_show</th>
+				</tr>
+				<tr>
+					<td rowspan="2" class="hm">
+						<img border="0" src="source/plugin/stock/image/ca/$rs[comphoto]"></a><br/><br/>
+						<form name="form1" action="$baseScript&mod=member&act=trustsmng" method="post">
+							<input type="hidden" name="section" value="trade" />
+							<input type="hidden" name="sid" value="$rs[sid]" />
+							<button type="submit" name="submit" value="true" class="pn pnc" $btn_disabled><em>买卖股票</em></button>
+						</form>
+					</td>
+					<td>
+						<ul>
+							<li>股票代号：$rs[sid]</li>
+							<li>上市时间：$rs[issuetime]</li>
+							<li>法人代表：$issuer</li>
+							<li>控股股东：$holder</li>
+							<li>发行数量：$rs[issuenum] 股</li>
+							<li>今日成交：$rs[todaytradenum] 股</li>
+							<li>今日买入：$rs[todaybuynum] 股</li>
+							<li>今日卖出：$rs[todaysellnum] 股</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>开盘价格：$rs[openprice] 元</li>
+							<li>当前价格：$rs[currprice] 元</li>
+							<li>最高价格：$rs[highprice] 元</li>
+							<li>最低价格：$rs[lowprice] 元</li>
+							<li>今涨跌值：$rs[todaypoint] 元</li>
+							<li>总涨跌值：$rs[totalpoint] 元</li>
+							<li>今涨跌幅：$rs[todaywave] %</li>
+							<li>总涨跌幅：$rs[totalwave] %</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">$rs[comintro]</td>
+				</tr>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">大股东持股比例</h2>
+				</caption>
+<!--{loop $topdb $v}-->
+				<tr>
+					<td>$v[username]</td>
+					<td><img src="source/plugin/stock/image/baru.gif" height="10" width="$v[imgwidth]" title="持股数量：$v[stocknum] 股"> {$v['percent']} %</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">股东列表</h2>
+				</caption>
+				<tr>
+					<th>股东</th>
+					<th>持股数量</th>
+					<th>持股比例</th>
+					<th>持股价格</th>
+					<th>当前价格</th>
+					<th>持股成本</th>
+					<th>持股现值</th>
+					<th>总盈亏</th>
+					<th>盈亏率</th>
+				</tr>
+				<tbody>
+<!--{loop $rsusdb $v}-->
+				<tr style="color:$v[color]">
+					<td><a href="$baseScript&mod=member&act=showinfo&uid=$v[cid]">$v[username]</a></td>
+					<td>$v[stocknum]</td>
+					<td>$v[possessratio] %</td>
+					<td>$v[averageprice]</td>
+					<td>$v[currentprice]</td>
+					<td>$v[stockcost]</td>
+					<td>$v[stockvalue]</td>
+					<td>$v[totalprofit]</td>
+					<td>$v[profit_p] %</td>
+				</tr>
+<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+<!--{if $cnt > $readperpage}-->
+		<div id="pgt" class="bm bw0 pgs cl">$pages</div>
+<!--{/if}-->
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li class="a"><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

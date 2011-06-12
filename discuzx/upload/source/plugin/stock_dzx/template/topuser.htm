@@ -1,0 +1,63 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock_dzx:index">$db_smname</a> <em>&rsaquo;</em> 资产排行
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">资产排行</h2>
+				</caption>
+				<tr>
+					<th>序号</th>
+					<th>股民</th>
+					<th>总资产</th>
+					<th>股票种类</th>
+					<th>股票数量</th>
+					<th>今日买入</th>
+					<th>今日卖出</th>
+					<th>开户时间</th>
+				</tr>
+				<tbody>
+<!--{loop $topdb $v}-->
+				<tr style="color:$v[color]">
+					<td>$v[i]</td>
+					<td><font color="$v[color]">$v[username]</font></td>
+					<td>$v[asset]</td>
+					<td>$v[stocksort]</td>
+					<td>$v[stocknum]</td>
+					<td>$v[todaybuy]</td>
+					<td>$v[todaysell]</td>
+					<td>$v[regtime]</td>
+				</tr>
+<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+<!--{if $cnt > $readperpage}-->
+		<div id="pgt" class="bm bw0 pgs cl">$pages</div>
+<!--{/if}-->
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li class="a"><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

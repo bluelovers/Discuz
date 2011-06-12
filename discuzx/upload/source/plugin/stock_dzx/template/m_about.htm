@@ -1,0 +1,59 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li class="current"><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">股市信息报告</th>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">新公司上市申请</td>
+		<td class="lineheight smallfont team"><a href="?$baseScript&mod=esset">{$newApplyNum} 个</a></td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">印花税总收入</td>
+		<td class="lineheight smallfont team">{$sminfo['stampduty']} 元</td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">成交情况</td>
+		<td class="lineheight smallfont team">成交总量 {$sminfo['bargainnum']} 股，成交总额 {$sminfo['bargainmoney']} 元</td>
+	</tr>
+</table>
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">软件信息</th>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">插件名称</td>
+		<td class="lineheight smallfont team">Kilofox StockIns</td>
+	</tr>
+	<tr class="tr1 vt">
+		<td class="vtop td24 lineheight">当前版本</td>
+		<td class="lineheight smallfont"><span id="cv">{$kfsclass->version}</span></td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">适用环境</td>
+		<td class="lineheight smallfont">Discuz! X2</td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">作者</td>
+		<td class="lineheight smallfont team"><a href="http://www.discuz.net/home.php?mod=space&uid=432225" target="_blank" class="lightlink2 smallfont">kilofox</a> <a href="http://www.phpwind.net/u-htm-action-show-uid-128264.html" target="_blank" class="lightlink2 smallfont">main88</a></td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">官方网站</td>
+		<td class="lineheight smallfont"><a href="http://www.kilofox.net" target="_blank" class="lightlink2 smallfont">www.Kilofox.Net</a></td>
+	</tr>
+	<tr>
+		<td class="vtop td24 lineheight">版权所有</td>
+		<td class="lineheight smallfont"><a href="http://www.kilofox.net" target="_blank" class="lightlink2 smallfont">千狐服务工作室</a></td>
+	</tr>
+</table>

@@ -1,0 +1,63 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<table class="tb tb2">
+	<tr>
+		<th colspan="3" class="partition">搜索用户</th>
+	</tr>
+	<form name="m_user" method="post" action="?$baseScript&mod=userset&search=1">
+	<tr>
+		<td width="220">请输入股民名字：<input type="text" name="username" value="" class="txt" />
+		<td width="100"><input type="checkbox" name="usernamechk" value="1" id="namechk" checked class="checkbox"/><label for="namechk">名字完全匹配</label></td>
+		<td><input type="submit" name="submit" value="查询" class="btn"/></td>
+	</tr>
+	</form>
+</table>
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">用户管理</th>
+	</tr>
+	<tr class="header">
+		<th>ID</th>
+		<th>名字</th>
+		<th>帐户资金</th>
+		<th>可用资金</th>
+		<th>总资产</th>
+		<th>持股种类</th>
+		<th>今日买入</th>
+		<th>今日卖出</th>
+		<th>状态</th>
+		<th>管理</th>
+	</tr>
+<!--{if $cnt > 0}-->
+	<!--{loop $userdb $v}-->
+	<tr class="hover">
+		<td>$v[uid]</td>
+		<td>$v[username]</td>
+		<td>$v[capital]</td>
+		<td>$v[capital_ava]</td>
+		<td>$v[asset]</td>
+		<td>$v[stocksort]</td>
+		<td>$v[todaybuy]</td>
+		<td>$v[todaysell]</td>
+		<td>$v[locked]</td>
+		<td><a href="?$baseScript&mod=userset&section=edituser&uid=$v[uid]">编辑</a> <a href="?$baseScript&mod=userset&section=deluser&uid=$v[uid]">删除</a></td>
+	</tr>
+	<!--{/loop}-->
+	<!--{if $cnt > $readperpage}-->
+	<tr>
+		<td colspan="9">$pages</td>
+	</tr>
+	<!--{/if}-->
+<!--{/if}-->
+</table>

@@ -1,0 +1,49 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock_dzx/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li class="current"><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<h3 class="h1">提示信息</h3>
+<div class="admin_table mb10">
+<table width="100%">
+	<tr class="tr1 vt">
+		<td class="td2">1、“抛出股票”后，该股所有持股人的股票将按最新价折合成资金，转入到股民帐户中。<br />
+			2、“注销股票”后，该股所有持股人的股票将被直接删除，持股人不会得到资金。<br />
+			3、如果使用了“发布信息”功能，系统将发布即时消息，以便通知股民。</td>
+	</tr>
+</table>
+<br />
+<h2 class="h1">股票管理 - 删除股票 $v[stockname]</h2>
+<form method="post" action="?$baseScript&mod=stockset&section=delstock">
+<input type="hidden" name="sid" value="$v[sid]" />
+<input type="hidden" name="step" value="2" />
+<table width="100%">
+	<tr class="tr1 vt">
+		<td class="td1">操作理由 *</td>
+		<td class="td2"><input type="text" name="logtxt" value="" size="80" class="input input_wb" /></td>
+	</tr>
+	<tr class="tr1 vt">
+		<td class="td1">资金流向</td>
+		<td class="td2"><input type="radio" name="capital" value="1" checked /> 抛出股票（推荐）<br />
+			<input type="radio" name="capital" value="0" /> 注销股票
+		</td>
+	</tr>
+	<tr class="tr1 vt">
+		<td class="td1">发布信息</td>
+		<td class="td2"><input type="text" name="messagetxt" value="公司 $v[stockname] 已经倒闭" size="80" class="input input_wb" /> <input type="checkbox" name="use" value="1" /> 使用</td>
+	</tr>
+</table>
+</div>
+<div class="mb10 tac">
+	<span class="bt"><span><button type="reset" name="reset">重 填</button></span></span>
+	<span class="btn"><span><button type="submit" name="submit">提 交</button></span></span>
+</div>
+</form>
