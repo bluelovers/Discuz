@@ -1,0 +1,355 @@
+/*
+Master Style Sheet for Ucenter Home
+CopyRight: 2001-2007 Comsenz Inc.
+URL: http://www.comsenz.com
+*/
+
+* { word-break: break-all; word-wrap: break-word; }
+body { background: #FFF; color: #000; text-align: center; line-height: 1.5em; }
+	body, h1, h2, h3, h4, h5, p, ul, dl, ol, form, fieldset { margin: 0; padding: 0; }
+	body, td, input, textarea, select, button { font-size: 12px; font-family: Verdana,Arial,Helvetica,sans-serif; }
+ul { list-style: none; }
+cite { font-style: normal; }
+a { color: #46498E; text-decoration: none; }
+	a:hover { text-decoration: underline; }
+	a img { border: none; }
+
+/*布局*/
+#wrap { margin: 0 auto; padding: 0 2px; width: 1000px; text-align: left; }
+#header { position: relative; height: 80px; border-bottom: 5px solid #B7C6F5; }
+	#header h2, #topmenu, #menu { position: absolute; }
+		#header h2 { left: 0; bottom: 10px; }
+		#header h2 img { width:135px; height:65px; }
+		#topmenu { right: 1em; bottom: 3.5em; }
+		#menu { right: 1em; bottom: -5px; line-height: 28px; }
+			#menu li { float: left; padding: 2px 1em; }
+				#menu li.active { padding-top: 0; border: solid #B7C6F5; border-width: 2px 1px 0; background: #FFF; }
+.mainarea { float: right; width: 100%; margin-left: -150px; }
+	.maininner { margin-left: 170px; }
+.side { float: left; width: 150px; }
+
+#content { margin: 1em 0;}
+
+/*分页*/
+.pages { height:35px; overflow:hidden; padding:2px 0 1px 0; text-align:center; font-family:Verdana,Helvetica,Arial,sans-serif; color:#CCC; vertical-align:top; clear:both; }
+	.pages div { float:right; padding-right:12px; }
+	.pages a, .pages strong { float:left; height:18px; overflow:hidden; margin:0 1px; padding:2px 6px 1px; border:1px solid #E4E4E4; color:#046CB5; text-decoration:none !important; line-height:18px;}
+	.pages strong  { border:1px solid #046CB5; background:#046CB5; color:#FFF; font-weight:700; }
+	.pages a:hover{ border:1px solid #046CB5; }
+	.pages .prev { padding:2px 0 1px 16px; background:url(arrow_left.gif) no-repeat 29% 50%; }
+	.pages .next { padding:2px 16px 1px 5px; background:url(arrow_right.gif) no-repeat 93% 50%; *background-position:93% 45%; font-size:simsun; *line-height:21px; }
+
+
+/*细线边框区域*/
+.bdrcontent { padding: 1em; border: 2px solid #B7C6F5; zoom: 1; }
+
+/*粗边框区域*/
+.block { margin-bottom: 10px; padding: 0.5em 1em; border: 2px solid #EFF5F8; }
+	.block h2 { margin: 0.5em 0; color: #363636; font-size: 1.17em; }
+	.block p { margin: 0.5em 0; }
+	.side .block li { margin: 0.2em 0; }
+	.side h2 a { display:block; width:122px; }
+	.side h2 a span{ display:inline; float:right; margin:3px 0 0 0; }
+	.side .admin_open { width:11px; height:11px; overflow:hidden; background:url(zoomout.gif) no-repeat;}
+	.side .admin_close {width:11px; height:11px; overflow:hidden; background:url(zoomin.gif) no-repeat;}
+				
+/*多列的列表*/
+.listcol { overflow: hidden; zoom: 1; }
+	.list2col li { float: left; width: 49.9%; }
+	.list3col li { float: left; width: 33.3%; }
+	.list4col li { float: left; width: 24.9%; }
+	.list5col li { float: left; width: 19.9%; }
+	.list6col li { float: left; width: 16.6%; }
+					
+/*标签页*/
+.tabs { height: 30px; line-height: 29px; }
+	.tabs li { float: left; margin-right: 2px; padding: 0 1em; background: ; }
+		.tabs li.active { line-height: 30px; }
+		.tabs li h1 { font-size: 1em; font-weight: normal; }
+		
+/*按钮*/
+.topactions { margin-bottom: 10px; padding-top: 0.4em; padding-bottom: 0.2em; border-bottom: 2px solid #B7C6F5; }
+	.topactions a { font-size: 14px; font-weight:bold; }
+
+.footactions { margin: 0 0 1em; padding: 0.5em; border: 2px solid #B7C6F5; border-top: 0px; }
+	/*\*/ * html .footactions { height: 1%; } /**/ * > .footactions { overflow: hidden; }
+	
+.submit { padding: 0.2em 1em 0; width: 1px; overflow: visible; border: 1px solid; border-color: #A1E5FE #5DAFD2 #5DAFD2 #A1E5FE; background: #EFF5F5; color: #46498E; cursor: pointer; }
+	* > .submit { width: auto; padding: 0.3em 1em; }
+	
+/*标题右浮动 Digg 按钮*/
+.titlel { float: left; margin-right: 0.83em; margin-top: 0.5em; }
+.titler { position: absolute; right: 1em; top: 0.5em; z-index: 1; }
+
+/*各种区域样式*/
+.style1 { border-color: #CDE39C; }
+.style2 { border-color: #EAF6D2; }
+.style3 { border-color: #EDEDED; }
+.style3 { border-color: #CDE39C; }
+.style4 { border: none; background: #EFF5F8; zoom: 1; border: 1px solid #CDCDCD; }
+.style5 { padding: 10px; border: 1px solid #CDCDCD; background:#EAF6D2; }
+.style6 { border: none; background: #DDF3FD; }
+
+.gray { color: #999; font-weight: normal; }
+.sfont { font-size: 10px; }
+.underline { text-decoration: underline; }
+.noline { text-decoration: none !important; border: none; }
+	.noline a { text-decoration: none !important; border: none; }
+.footmargin { margin-bottom: 10px; }
+
+/*用于表单的表格*/
+.formtable { width: 100%; table-layout: fixed; }
+	.formtable th { text-align: left; font-weight: bold; color: #333333; }
+	.formtable th, .formtable td { padding: 0.5em 0; border-bottom: 1px solid #F2F2F2; vertical-align: top; line-height:1.5em; }
+		.formtable td th, .formtable td td { border: none; }
+
+.title { margin-bottom: 10px; padding-bottom: 0.5em; border-bottom: 1px solid #B7C6F5;}
+	.title h1, .title h3 { padding: 0.6em 0 0.2em 0; font-size: 1.17em; }
+
+#footer { clear: both; padding: 1em 0; color: #939393; text-align: center; }
+	#footer p { font-size: 0.83em; }
+	#footer .menu a { padding: 0 1em; }
+
+/*目录列表*/
+.folder li { padding-left: 1em; }
+	.folder .active { font-weight:bold; padding-left: 1em; }
+
+
+/*帮助信息*/
+.helptable li { padding-left: 14px; background-image: url(arrow.gif); background-repeat: no-repeat; background-position: 2px 10px; }
+
+/*页面标题*/
+#pagehead { background: url(page_head.gif) repeat-x 0 0; margin-bottom: 25px; }
+	#pagehead tr { background: url(page_head.gif) no-repeat 100% -80px;}
+		h1 { background: url(page_head.gif) no-repeat 0 -40px; color: #6774A8; line-height: 40px; font-size: 14px; padding-left: 18px; margin: 0; }
+
+	.actions { text-align: right; padding-right: 10px; padding-top: 9px; }
+		#pagehead .actions tr { background-image: none; }
+		.actions td { text-align: center; padding: 0 10px; line-height: 30px; height: 30px; }
+			.actions td.active { background: #FFF; border: solid #86B9D6; border-width: 1px 1px 0; }
+				.actions a.add { background: url(action_icon_add.gif) no-repeat; padding-left: 17px; }
+
+
+
+
+/*帮助信息*/
+.helptable { width: 100%; background: #FDFFF5 url(help_info.gif) no-repeat 0 0; border: 1px solid #D5D8C7; margin-bottom: 20px; }
+	.helptable td { padding: 15px 15px 15px 10px; line-height: 1.5em; }
+		.helptable ul { padding: 0; margin: 0 0 0 2em; }
+.helptable2{ background:url(help_info2.gif) no-repeat left top; margin:160px auto 0 auto; border:1px solid #DBDBDB; border-top:3px solid #DBDBDB; width:400px;padding:60px 10px 10px 10px; }
+	.helptable2 p{border-bottom:1px dotted #DBDBDB; padding-bottom:40px; text-align:center;line-height:22px;  font-size:14px; font-weight:bold; color:#458A00; }
+	.helptable2 strong{font-size:14px; font-weight:bold; color:#000; padding-right:6px;}
+
+/*列表表格*/
+.listtable { width: 100%; border-collapse: collapse; border: solid; border-color: #86B9D6 #D8DDE5 #D8DDE5; border-width: 1px 1px 1px; }
+	.listtable th { background: #F3F7FF; color: #6774A8; border-bottom: 1px solid #86B9D6; padding: 6px; }
+	.listtable td { border: 1px solid #D8DDE5; padding: 6px; font-family: Georgia, "Times New Roman", Times, serif; }
+
+	.darkrow2 { color: #808080; text-decoration: line-through; }
+
+	.darkrow td { background: #FAFCFF; }
+
+	.rowblocked td { background: #F1F1F1; color: #666; }
+		.rowblocked a { color: #666; }
+
+.listtable p.cate {
+	margin: 0;
+}
+.listtable p.cate, .listtable p.cate a {
+	color: #003195;
+}
+
+.listtable .dateline {
+	float: right;
+}
+
+.listtable .relativetags {
+	margin: 0.1em;
+}
+
+
+.explain td {
+	width: 125px;
+	height: 27px;
+	background: url(action.gif) no-repeat center;
+	text-align: center;
+}
+
+.maininner h2 { margin: 20px 0 0; line-height: 35px; font-size: 14px; color: #6774A8; background: url(action_icon_default.gif) no-repeat -4px 10px; padding-left: 15px; }
+
+/*表单元素*/
+form { padding: 0; margin: 0; }
+	input, textarea { padding: 3px 2px; background: #FDFFF5; }
+	/*按钮样式*/
+	.buttons { clear: both; padding: 10px; text-align: center; }
+		.buttons input { padding: 5px 5px 2px; color: #6774A8; background: #F9F9F9; border: solid #CBCBCB; border-width: 1px 1px 4px; cursor: pointer; width: 0; overflow: visible; }
+			.buttons>input { width: auto; }
+			.buttons input.submit { padding: 5px 5px 2px; background: #C3D9FF; border-color: #86B9D6; font-weight: bold; }
+button.warningbtn { margin-left:5px;background: #EFEAD3; color: #808080; border: 1px solid; border-color: #FFF #A1A1A1 #A1A1A1 #FFF; height: 32px;}
+
+/*普通表格样式*/
+.maintable { width: 100%; border-collapse: collapse; border: solid; border-color: #86B9D6 #D8DDE5 #D8DDE5; border-width: 2px 1px 1px; }
+	.maintable th, .maintable td { border: 1px solid #D8DDE5; padding: 5px; }
+		.maintable th { background: #F3F7FF; width: 210px; text-align: left; color: #0D58A5; font-weight: normal; }
+	
+	/*为嵌套的表格移除边框*/
+	.maintable td th, .maintable td td { border: none; }
+
+	.maintable th p { margin: 0; color: #909DC6; }
+
+/*-----------------------------------*/
+
+.edittable {
+	border: 1px solid #698CC3;
+	width: 100%;
+}
+.edittable th {
+	background: #EDEDED;
+	border: 1px solid #EDEDED;
+	padding: 0.3em;
+	text-align: left;
+}
+
+
+/*水印位置选择*/
+table.watermark { border-collapse: collapse; border: 3px solid #D8DDE5; }
+	table.watermark td { border: 1px solid #D8DDE5; }
+
+/*表格顶部样式-一般为搜索区*/
+.toptable { width: 100%; }
+	.toptable td { text-align: right; padding: 7px 0; }
+		.toptable td * { vertical-align: middle; }
+
+
+/*表格底部样式-一般为操作区*/
+	.btmtable { width: 100%; border-collapse: collapse; border: solid; border-color: #86B9D6 #D8DDE5 #D8DDE5; border-width: 3px 1px 1px; }
+		.btmtable td, .btmtable th { padding: 10px 5px;  border: 1px solid #D8DDE5; }
+		.btmtable td { padding: 5px; }
+		.btmtable th { background: #F3F7FF; font-weight: normal; text-align: left; }
+
+
+/*清除所有继承样式的表格*/
+.freetable { border-collapse: collapse; width: auto; border: none; word-wrap: break-word; }
+	.freetable td, .freetable th { border: none; padding: 5px; }
+	.freetable .subject { margin-top: 0.5em; }
+
+
+/* 分页 */
+.listpage { width: 100%; margin-top: 5px; }
+	.xspace-page { float: right; }
+		.xspace-page a, .xspace-page span { float: left; display: inline; margin-right: 3px; line-height: 20px; padding: 0 5px; border: 1px solid; border-color: #CEE3EA #90AAB4 #90AAB4 #CEE3EA; background: #F5FBFF; }
+			span.xspace-totlerecord, span.xspace-totlepages { color: #090; }
+				span.xspace-totlerecord { margin-right: 0; border-right: none; }
+			span.xspace-current { background: #F90; border-color: #0A0 #060 #060 #0A0; color: #FFF; font-weight: bold; }
+
+
+/*采集*/
+.progress { margin:0.5em 0; padding: 0.5em; background: #D6E0EF; color: #F40914; font-weight: bold; border: 1px solid #698CC3; }
+
+
+
+/*SecMenu*/
+#secmenu {
+	background: #FCFFEF;
+	border-top: 1px solid #698CC3;
+	border-bottom: 1px solid #698CC3;
+	margin-bottom: 1em;
+	padding: 0.5em 1em;
+}
+#secmenu .firsttd {
+	background: url(submenu_side.gif) no-repeat 0 0;
+	width: 20px;
+}
+#secmenu .lasttd {
+	background: url(submenu_side.gif) no-repeat right bottom;
+	width: 20px;
+}
+#secmenu td a {
+	background: url(icon_arrow.gif) no-repeat 0 0.1em;
+	padding-left: 1em;
+}
+
+
+#listtab { height: 30px; border-bottom: 2px solid #86B9D6; margin-bottom: 10px; padding-left: 10px; }
+	.listtab { float: left; }
+		.listtab a { background: #F3F7FF; float: left; padding: 6px 10px; margin: 0 0 0 5px; }
+		.listtab a.active { background: #FFF; border: 2px solid #86B9D6; border-bottom: none; }
+
+
+#newslisttab {height:26px;border-bottom: 2px solid #86B9D6; margin-bottom: 10px;}
+	#newslisttab ul{position: relative; list-style:none;}
+	#newslisttab li{position:relative;float:left;padding:0 10px; line-height:26px; height:26px; margin-right:8px;margin-bottom:-2px;}
+	*html #newslisttab li{padding-top:6px;height:20px;}
+	#newslisttab li a{margin-top:10px;}
+	#newslisttab .active { background: #fff; border: 2px solid #86B9D6; border-bottom: none;}
+	
+/*图片管理列表 */
+table.imglisttable {
+	width: 100%;
+	border-collapse: collapse;
+}
+table.imglisttable th {
+	background: #698CC3;
+	padding: 0.2em 0.5em;
+	text-align: left;
+}
+table.imglisttable th * {
+	vertical-align: text-bottom;
+}
+table.imglisttable th, table.imglisttable td {
+	border: 1px solid #698CC3;
+}
+table.imglisttable td td {
+	border: none;
+}
+
+td.imginfo {
+	width: 180px;
+	border-right: 1px solid #698CC3 !important;
+	vertical-align: top;
+}
+td.imginfo ul {
+	margin: 0.5em;
+	padding: 0;
+	list-style: none;
+}
+td.imginfo li {
+	padding: 0.3em 0;
+	border-bottom: 1px solid #EEE;
+}
+
+.smallfont {
+	font-size: 10px;
+}
+
+table.imglist td {
+	background: #F2F2F2;
+	text-align: center;
+	vertical-align: bottom;
+}
+p.subject {
+	height: 22px;
+	line-height: 22px;
+	margin: 0;
+	margin-top: 0.5em;
+	border-top: 2px solid #FFF;
+	background: #698CC3;
+}
+
+/* 后台附件选项卡 */
+#uploadbox { width: 500px; }
+#uploadbox table { border: 1px solid #CCC; border-top: none; background:#FCFFEF; width: 100%; }
+	#uploadbox th { background: transparent; width: 60px; }
+	.upbtntd button { padding: 5px 20px 2px 20px; background: #C3D9FF; border-color: #86B9D6; border-style: solid; border-width: 1px 1px 3px; cursor: pointer; color: #6774A8; font-weight: bold; }
+
+#uploadbox .tabs { height:27px; border-bottom: 1px solid #CCC; padding-left: 5px; }
+	#uploadbox  .tabs a { float: left; padding: 0 5px; border: 1px solid #CCC;  margin-right: 5px; text-decoration: none; height: 26px; line-height: 26px; background: #FFF; }
+		#uploadbox  .tabs a.current { font-weight: bold; cursor: default; border-bottom: 1px solid #FFF; background: #FCFFEF; }
+			#uploadbox  .tabs a:hover { color: #333; background: #FCFFEF; }
+
+#batchpreview { background: #FFF; width: 473px; height: 300px; border: 1px solid #EEE; overflow: auto; }
+	.picspace { border-bottom: 1px solid #CCC; margin: 3px; }
+		.picspace img { margin: 3px 6px 3px 0; border: 3px solid #EEE; max-width: 60px; max-height: 60px; width: expression(this.width > 60 ? 60: true);; height: expression(this.width > 40 ? 40: true);; }
+
+
+.lock_width { width:590px; overflow:hidden;}

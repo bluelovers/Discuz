@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[source/plugin/robots/admin_robotmessages.php]]></item>
+		<item id="1"><![CDATA[source/plugin/robots/admin_robots.php]]></item>
+		<item id="2"><![CDATA[source/plugin/robots/check.php]]></item>
+		<item id="3"><![CDATA[source/plugin/robots/check_robots.php]]></item>
+		<item id="4"><![CDATA[source/plugin/robots/cx_robotcleardblog_cron.php]]></item>
+		<item id="5"><![CDATA[source/plugin/robots/discuz_plugin_robots.xml]]></item>
+		<item id="6"><![CDATA[source/plugin/robots/html.func.php]]></item>
+		<item id="7"><![CDATA[source/plugin/robots/image/infoajax-big.js]]></item>
+		<item id="8"><![CDATA[source/plugin/robots/image/infoajax-gbk.js]]></item>
+		<item id="9"><![CDATA[source/plugin/robots/image/infoajax-sutf.js]]></item>
+		<item id="10"><![CDATA[source/plugin/robots/image/infoajax-tutf.js]]></item>
+		<item id="11"><![CDATA[source/plugin/robots/image/infoajax.js]]></item>
+		<item id="12"><![CDATA[source/plugin/robots/image/selectdate-big.js]]></item>
+		<item id="13"><![CDATA[source/plugin/robots/image/selectdate-gbk.js]]></item>
+		<item id="14"><![CDATA[source/plugin/robots/image/selectdate-sutf.js]]></item>
+		<item id="15"><![CDATA[source/plugin/robots/image/selectdate-tutf.js]]></item>
+		<item id="16"><![CDATA[source/plugin/robots/image/style.css]]></item>
+		<item id="17"><![CDATA[source/plugin/robots/install.php]]></item>
+		<item id="18"><![CDATA[source/plugin/robots/robotmessages.inc.php]]></item>
+		<item id="19"><![CDATA[source/plugin/robots/robots.func.php]]></item>
+		<item id="20"><![CDATA[source/plugin/robots/robots.inc.php]]></item>
+		<item id="21"><![CDATA[source/plugin/robots/robots_add.inc.php]]></item>
+		<item id="22"><![CDATA[source/plugin/robots/uninstall.php]]></item>
+		<item id="23"><![CDATA[source/plugin/robots/upgrade.php]]></item>
+		<item id="24"><![CDATA[source/plugin/robots/upload.func.php]]></item>
+	</item>
+</root>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-04-26 10:22]]></item>
+	<item id="From"><![CDATA[創新應用 (http://www.cxapp.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[【CX】採集器免費版]]></item>
+			<item id="identifier"><![CDATA[robots]]></item>
+			<item id="description"><![CDATA[【CX】採集器 From cxapp.com]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[robots/]]></item>
+			<item id="copyright"><![CDATA[www.cxapp.com]]></item>
+			<item id="version"><![CDATA[2.6]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[robots_add]]></item>
+					<item id="menu"><![CDATA[添加機器人]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[1]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[robots]]></item>
+					<item id="menu"><![CDATA[採集器]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
+					<item id="name"><![CDATA[robotmessages]]></item>
+					<item id="menu"><![CDATA[採集文章管理]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[3]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[採集器列表每頁顯示個數]]></item>
+				<item id="description"><![CDATA[採集器列表一頁顯示多個機器人]]></item>
+				<item id="variable"><![CDATA[robot_perpage]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[20]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[文章列表每頁顯示個數]]></item>
+				<item id="description"><![CDATA[文章列表一頁顯示多少篇文章]]></item>
+				<item id="variable"><![CDATA[message_perpage]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[20]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[發表主題添加的積分項]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[thread_credittype]]></item>
+				<item id="type"><![CDATA[extcredit]]></item>
+				<item id="value"><![CDATA[2]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[發表主題添加的積分數]]></item>
+				<item id="description"><![CDATA[請填固定數值]]></item>
+				<item id="variable"><![CDATA[thread_creditadd]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[2]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[發表回復增加的積分項]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[post_credittype]]></item>
+				<item id="type"><![CDATA[extcredit]]></item>
+				<item id="value"><![CDATA[2]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[發表回復增加的積分數]]></item>
+				<item id="description"><![CDATA[請填固定數值]]></item>
+				<item id="variable"><![CDATA[post_creditadd]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[瀏覽數設置]]></item>
+				<item id="description"><![CDATA[可以填固定數值，如：10
+隨機數填法rand(minnum,maxnum) ，如：rand(10,50)]]></item>
+				<item id="variable"><![CDATA[views_addnum]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[rand(10,50)]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[標題及URL記錄保存天數]]></item>
+				<item id="description"><![CDATA[為0，為不限制。清理多少天前的標題及URL記錄。需要添加計劃任務，過多的記錄增加服務器負擔。]]></item>
+				<item id="variable"><![CDATA[repeatolog_keepday]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[3]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[添加相關文章條數]]></item>
+				<item id="description"><![CDATA[0為不添加相關文章。設置自動添加同一欄目下的最新文章為相關文章的個數.]]></item>
+				<item id="variable"><![CDATA[portal_article_related_num]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[8]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[15]]></item>
+				<item id="title"><![CDATA[默認發帖用戶UID]]></item>
+				<item id="description"><![CDATA[當規則裡沒有設置發帖用戶uid的規則,或者查詢到的用戶為空時,使用此設置用戶. 當此設置為空時,調用uid為1的用戶.]]></item>
+				<item id="variable"><![CDATA[post_uid]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="checkfile"><![CDATA[check.php]]></item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>		
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="license"><![CDATA[[list]
+[*]本插件版權歸屬插件作者,及創新應用www.cxapp.com所有.
+[*][b]未經插件作者許可,任何人不得以任何形式在任何地方發佈/轉發原版以及其衍生的修改版。[/b]
+[*][b]插件作者:[/b]ec1022(東海)
+[*][b]作品簡介:[/b]本插件從從SupeSite 7.5 版發展過來，在後台插件添加一個採集面板，在這裡你可以進行文章數據採集。這是免費版不收取任何費用.
+[*][b]發佈及更新地址:[/b][url]http://www.cxapp.com/thread-1-1-1.html[/url]
+[*][b]旗艦版更新地址:[/b][url]http://www.cxapp.com/thread-29-1-1.html[/url]
+[*]如有任何關於使用上的疑問,請至[url]http://www.cxapp.com/forum-39-1.html[/url]提出.
+[*]獲取、安裝或使用本插件表示遵守本協議。[url]http://www.cxapp.com/agreement.html[/url]
+[*]最後,感謝您使用我們的插件,也希望您能夠給我們創新應用團隊提供更好的意見([url=http://www.cxapp.com/]請點擊這裡進入創新應用官方站點[/url]).
+[/list]]]></item>
+		<item id="intro"><![CDATA[[list]
+[CX]採集器
+   [b]插件作者:[/b]ec1022(東海)
+   [b]作品簡介:[/b]本插件在後台插件添加一個採集面板，在這裡你可以隨時隨地進行自定義數據採集。
+   [b]更新地址:[/b][url]http://www.cxapp.com/thread-1-1-1.html[/url]
+   [b]旗艦版演示地址:[/b][url]http://www.cxapp.com/thread-20-1-1.html[/url]
+   如有任何關於[b]使用[/b]上的想法或疑問,請至[url]http://www.cxapp.com/forum-39-1.html[/url]交流.
+   最後,感謝您使用我們的插件,也希望您能夠給我們創新應用提供更好的意見([url=http://www.cxapp.com/]請點擊這裡進入創新應用官方站點[/url]).
+			
+[/list]]]></item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="portal_name"><![CDATA[門戶]]></item>
+				<item id="group_name"><![CDATA[群組]]></item>
+				<item id="bbs_name"><![CDATA[論壇]]></item>
+				<item id="robot_cattip00"><![CDATA[（總分類，決定附件存放位置，若要保存附件到本地，此項必選）]]></item>
+				<item id="robot_cattip12"><![CDATA[（請選擇欄目--不選不自動導入）]]></item>
+				<item id="robot_cattipnull"><![CDATA[（不可選）]]></item>
+				<item id="robot_cattip22"><![CDATA[（請選擇版塊--不選不自動導入）]]></item>
+				<item id="robot_cattip23"><![CDATA[（請選擇分類）]]></item>
+				<item id="robot_cattip32"><![CDATA[（請選擇群組分類）]]></item>
+				<item id="robot_cattip33"><![CDATA[（請選擇群組--不選不自動導入）]]></item>
+				<item id="robot_cattip34"><![CDATA[（請選擇話題分類）]]></item>
+				<item id="robot_matchmode"><![CDATA[匹配模式：<p>請注意：字符串模式下，「識別規則」不支持通配符「*」，其他類型規則按照說明所示。</p>]]></item>
+				<item id="robot_matchmode_0"><![CDATA[正則表達式]]></item>
+				<item id="robot_matchmode_1"><![CDATA[字符串]]></item>
+				<item id="cron_tip1"><![CDATA[為保證計劃任務正常工作，添加後請執行一次。]]></item>
+				<item id="cron_tip2"><![CDATA[名稱可以自行修改，任務腳本請不要隨便修改，以免插件工作不正常]]></item>
+				<item id="cron_tip3"><![CDATA[採集是很耗資源的，請注意每次採集的總數]]></item>
+				<item id="cron_tip4"><![CDATA[自動採集是在用戶瀏覽或蜘蛛爬時觸發服務器端運行。觸發後，就算關閉頁面，也不影響正常採集。]]></item>
+				<item id="crons_succeed"><![CDATA[計劃任務成功更新。]]></item>
+				<item id="cron_clearlog"><![CDATA[清理超期的標題及URL的記錄]]></item>
+				<item id="replace_success"><![CDATA[成功更新替換詞表]]></item>
+				<item id="replace_batchimport"><![CDATA[批量導入(只支持ANSI編碼文本)：]]></item>
+				<item id="replace_eachsymbol"><![CDATA[互換分隔符：]]></item>
+				<item id="replace_ssymbol"><![CDATA[單向分隔符：]]></item>
+				<item id="relace_filenotexs"><![CDATA[文件不存在！]]></item>
+				<item id="relace_importsuccess"><![CDATA[成功導入]]></item>
+				<item id="relace_importsuccessend"><![CDATA[條同義詞！]]></item>
+				<item id="relace_addnewword"><![CDATA[新增一組詞：]]></item>
+				<item id="relace_each"><![CDATA[互換]]></item>
+				<item id="relace_addw"><![CDATA[新增]]></item>
+				<item id="relace_findrep"><![CDATA[查找詞替換：]]></item>
+				<item id="relace_findword"><![CDATA[查找詞]]></item>
+				<item id="relace_repword"><![CDATA[替換詞]]></item>
+				<item id="relace_eachchange"><![CDATA[互換]]></item>
+				<item id="relace_del"><![CDATA[刪除？]]></item>
+				<item id="return"><![CDATA[返回]]></item>
+				<item id="space_add_tag"><![CDATA[添加]]></item>
+				<item id="common_submit"><![CDATA[提交]]></item>
+				<item id="common_reset"><![CDATA[重置]]></item>
+				<item id="space_edit"><![CDATA[編輯]]></item>
+				<item id="space_select_all"><![CDATA[全選]]></item>
+				<item id="space_batch_op"><![CDATA[批量操作]]></item>
+				<item id="delete_all_note"><![CDATA[注意：本操作不能恢復，一旦刪除後，數據將丟失，請謹慎操作！]]></item>
+				<item id="add_a_new_link"><![CDATA[增加新的列表頁面鏈接]]></item>
+				<item id="for_example"><![CDATA[例如]]></item>
+				<item id="robot_from"><![CDATA[從]]></item>
+				<item id="robot_to"><![CDATA[到]]></item>
+				<item id="wildcard_length"><![CDATA[通配符長度]]></item>
+				<item id="wildcard_length_note"><![CDATA[說明: 長度不足時，前面補0]]></item>
+				<item id="robot_urlallowmon"><![CDATA[開啟URL監控模式<p><strong style="color:red">監控每次採集的文章的URL地址，如果跟歷史記錄有重複就不採集。開啟此項後可以不開啟重複標題檢測，減少佔用的資源。</strong></p>]]></item>
+				<item id="robot_urlallowmon_0"><![CDATA[不檢測]]></item>
+				<item id="robot_urlallowmon_1"><![CDATA[檢測過濾]]></item>
+				<item id="robot_listpagestartauto"><![CDATA[自動調整採集總數和列表地址<p>採集後自動調整採集總個數或採集列表開始地址。</p>]]></item>
+				<item id="robot_listpageurlnum"><![CDATA[ 列表頁面包含的鏈接數：]]></item>
+				<item id="robot_listpageurlnumtip"><![CDATA[(開啟後:若列表url設置為自動增長,則根據頁面的鏈接數自動調整採集總數和列表的開始地址;若為手動添加,則倍增採集總數.]]></item>
+				<item id="robot_name"><![CDATA[機器人名]]></item>
+				<item id="robot_listurltype"><![CDATA[索引頁面URL地址方式]]></item>
+				<item id="robot_allnum"><![CDATA[一次採集總數<p>採集一次的總個數</p>]]></item>
+				<item id="robot_pernum"><![CDATA[分批採集數<p>頁面跳轉一次採集的個數，視網速而定，建議設置小一些，以免超時。</p>]]></item>
+				<item id="robot_encode"><![CDATA[列表頁面編碼<p>請輸入要採集的列表頁面的編碼。比如：gbk、utf-8、big5。為空則不進行編碼轉換</p>]]></item>
+				<item id="robot_savepic"><![CDATA[保存內容中的圖片到本地<p>注:門戶的封面功能要求用本地附件圖片。</p>]]></item>
+				<item id="robot_saveflash"><![CDATA[保存內容中的FLASH到本地]]></item>
+				<item id="robot_list"><![CDATA[列表頁面採集設置]]></item>
+				<item id="robot_subjecturlrule"><![CDATA[列表區域識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[list]" disabled="disabled" /></p><p>如&lt;td&gt;文章列表&lt;/td&gt;<p>規則就是&lt;td&gt;[list]&lt;/td&gt;</p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_subjecturlitemrule"><![CDATA[列表區域文章標題識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[subject]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p><p>注:此處識別可能有所誤差,若要在此處識別,請留空下面的標題識別規則,並填好此項</p>]]></item>
+				<item id="robot_subjecturllinkrule"><![CDATA[文章鏈接URL識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[url]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_subjecturllinkpre"><![CDATA[文章鏈接URL補充前綴]]></item>
+				<item id="robot_contentencode"><![CDATA[內容頁的編碼設置<p>請輸入要採集的內容頁面的編碼。比如：gbk、utf-8、big5。為空則按列表頁面編碼的設置進行轉換</p>]]></item>
+				<item id="robot_subjectrule"><![CDATA[文章標題識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[subject]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_subjectfilter"><![CDATA[文章標題過濾規則<p>用 * 來代替任意字符、換行、回車</p><p>多個規則之間用 | 隔開</p>]]></item>
+				<item id="robot_subjectreplace_title"><![CDATA[文章標題文字替換]]></item>
+				<item id="robot_subjectkey"><![CDATA[文章標題包含關鍵字<p>設置該選項後，則只採集標題包含關鍵字的文章</p><p>多個關鍵字之間用 | 隔開</p>]]></item>
+				<item id="robot_subjectkeycancel"><![CDATA[文章標題關鍵字剔除過濾<p>設置該選項後，不會採集標題包含關鍵字的文章</p><p>多個關鍵字之間用 | 隔開</p>]]></item>
+				<item id="robot_messagekey"><![CDATA[文章內容包含關鍵字<p>設置該選項後，則只採集文章內容包含關鍵字的文章</p><p>多個關鍵字之間用 | 隔開</p>]]></item>
+				<item id="robot_messagekeycancel"><![CDATA[文章內容關鍵字剔除過濾<p>設置該選項後，不會採集文章內容包含關鍵字的文章</p><p>多個關鍵字之間用 | 隔開</p>]]></item>
+				<item id="robot_message"><![CDATA[內容頁面採集設置]]></item>
+				<item id="robot_fromrule"><![CDATA[信息來源識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[from]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_authorrule"><![CDATA[作者識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[author]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車. 也可以指定多個作者,採集結果在入庫時隨機抽取其中的一個.多個作者之間用 | 隔開,在指定多個作者時,不能出現標記符([author]).</p>]]></item>
+				<item id="robot_summaryrule"><![CDATA[摘要識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[summary]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_messagerule"><![CDATA[文章內容識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[message]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_messagefilter"><![CDATA[文章內容過濾規則<p>用 * 來代替任意字符、換行、回車</p><p>多個規則之間用 | 隔開</p>]]></item>
+				<item id="robot_messagepagetype"><![CDATA[文章內容分頁模式<p>若要識別分頁,請配置好下面兩項.</p>]]></item>
+				<item id="robot_messagepagerule"><![CDATA[文章內容分頁區域識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[pagearea]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_messagepageurlrule"><![CDATA[文章內容分頁鏈接識別規則<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[page]" disabled="disabled" /></p><p>用 * 來代替任意字符、換行、回車</p>]]></item>
+				<item id="robot_messagereplace_title"><![CDATA[文章內容文字替換]]></item>
+				<item id="robot_picurllinkpre"><![CDATA[圖片/FLASH鏈接的URL補充前綴]]></item>
+				<item id="robot_messagepageurllinkpre"><![CDATA[文章內容分頁鏈接URL補充前綴]]></item>
+				<item id="robot_subjectallowrepeat"><![CDATA[文章標題重複檢測<p>(<strong style="color:red">如果啟用自動入庫再啟用此項文章標題重複檢測將加重數據庫的負載.</strong>)</p>]]></item>
+				<item id="robot_import_title"><![CDATA[導入機器人]]></item>
+				<item id="robot_import_file"><![CDATA[請選擇規則文件<p>選擇後,下面可以留空.</p><p>導入後請編輯一下</p>]]></item>
+				<item id="robot_import_text"><![CDATA[配置文件內容<p>請將導出的文件內容粘貼到文本框</p><br/><p>導入後請編輯,部分規則可能已經過期,請自行更新.</p>]]></item>
+				<item id="robot_import_ignoreversion"><![CDATA[允許導入不同版本<p>導入後請編輯,以適應新版本.</p>]]></item>
+				<item id="robot_main"><![CDATA[基本設置]]></item>
+				<item id="robot_importcatid"><![CDATA[自動導入到<p>可以直接將採集到的文章導入到站點。請按提示進行操作。</p>]]></item>
+				<item id="robot_autostrreplace"><![CDATA[替換同義詞<p>使用同義詞庫自動替換同義詞</p>]]></item>
+				<item id="robot_makewatermark"><![CDATA[圖片是否加水印<p>採用DZ自帶接口</p>]]></item>
+				<item id="robot_makethumb"><![CDATA[圖片生成縮略圖<p>包括論壇的封面,要生成圖片附件縮略圖還要在後台開啟.</p>]]></item>
+				<item id="robot_auto_title"><![CDATA[<font color=red title="自動導入">[導]</font>]]></item>
+				<item id="robot_savepic_title"><![CDATA[<font color=red title="保存內容中的圖片">[圖]</font>]]></item>
+				<item id="robot_allowrepeat_title"><![CDATA[<font color=red title="允許文章標題重複">[重]</font>]]></item>
+				<item id="robot_allowmon_url"><![CDATA[<font color=red title="允許監控URL地址">[監]</font>]]></item>
+				<item id="robot_saveflash_title"><![CDATA[<font color=red title="保存內容中的FLASH">[閃]</font>]]></item>
+				<item id="robot_dateline"><![CDATA[發佈時間<p>截取的地方加上<input type="input" name="tmp[]" size="10" value="[date]" disabled="disabled" /></p><p>或者點右邊的圖標選固定時間。</p><p>留空為導入時的時間</p>]]></item>
+				<item id="robotmessage_title_author"><![CDATA[作者]]></item>
+				<item id="robotmessage_title_itemfrom"><![CDATA[來源]]></item>
+				<item id="robotmessage_title_dateline"><![CDATA[發佈時間]]></item>
+				<item id="robotmessage_title_message"><![CDATA[內容]]></item>
+				<item id="robotmessage_title_picurls"><![CDATA[包含圖片]]></item>
+				<item id="robotmessage_title_flashurls"><![CDATA[包含FLASH]]></item>
+				<item id="robotmessage_title_isimport"><![CDATA[是否採用]]></item>
+				<item id="robotmessage_import_category"><![CDATA[選擇分類]]></item>
+				<item id="robotmessage_import_delete"><![CDATA[導入後刪除]]></item>
+				<item id="robot_robot_author"><![CDATA[作者]]></item>
+				<item id="rototmessage_title"><![CDATA[採集文章信息]]></item>
+				<item id="robotmessage_view_list_0"><![CDATA[未導入文章]]></item>
+				<item id="robotmessage_view_list_1"><![CDATA[已導入文章]]></item>
+				<item id="robotmessage_import"><![CDATA[導入]]></item>
+				<item id="robotmessage_delete"><![CDATA[刪除]]></item>
+				<item id="robotmessage_import_delete_0"><![CDATA[不刪除]]></item>
+				<item id="robotmessage_import_delete_1"><![CDATA[刪除]]></item>
+				<item id="into_a_one_time"><![CDATA[一次性全部導入]]></item>
+				<item id="only_selected_items"><![CDATA[僅選中項]]></item>
+				<item id="robotmessage_select"><![CDATA[選擇]]></item>
+				<item id="robotmessage_subject"><![CDATA[標題]]></item>
+				<item id="robotmessage_catid"><![CDATA[分類]]></item>
+				<item id="robotmessage_robotid"><![CDATA[採集機器人]]></item>
+				<item id="robotmessage_robottime"><![CDATA[採集時間]]></item>
+				<item id="robotmessage_author"><![CDATA[作者]]></item>
+				<item id="into_a_one_off"><![CDATA[一次性導入]]></item>
+				<item id="robot_title"><![CDATA[採集器]]></item>
+				<item id="robot_defaultdateline_delete"><![CDATA[清空]]></item>
+				<item id="robot_view_list"><![CDATA[瀏覽機器人]]></item>
+				<item id="robot_add"><![CDATA[添加新機器人]]></item>
+				<item id="robot_robot_import"><![CDATA[導入機器人]]></item>
+				<item id="robot_progress"><![CDATA[採集過程]]></item>
+				<item id="robot_progress_stop"><![CDATA[中止採集]]></item>
+				<item id="robot_robot_start"><![CDATA[採集中...請等待]]></item>
+				<item id="robot_robot_deal"><![CDATA[處理]]></item>
+				<item id="robot_robot_list"><![CDATA[索引列表頁面]]></item>
+				<item id="robot_robot_begin"><![CDATA[開始]]></item>
+				<item id="robot_robot_end"><![CDATA[結束]]></item>
+				<item id="robot_robot_text"><![CDATA[內容]]></item>
+				<item id="robot_robot_url"><![CDATA[鏈接]]></item>
+				<item id="robot_robot_area"><![CDATA[區域]]></item>
+				<item id="robot_robot_success"><![CDATA[完成]]></item>
+				<item id="robot_robot_next_list"><![CDATA[當前索引頁面文章採集完畢，進入下一個索引頁面]]></item>
+				<item id="robot_progress_next_list"><![CDATA[正在採集下一個文章列表...]]></item>
+				<item id="robot_robot_message_page"><![CDATA[文章分頁頁面]]></item>
+				<item id="robot_robot_message"><![CDATA[內容]]></item>
+				<item id="robot_robot_all_max"><![CDATA[採集文章總數目已經達到最大限制]]></item>
+				<item id="robot_robot_failed"><![CDATA[失敗]]></item>
+				<item id="robot_robot_next_message"><![CDATA[分頁採集完成，進入下一個採集操作]]></item>
+				<item id="robot_robot_url_error"><![CDATA[無法鏈接到指定的URL地址]]></item>
+				<item id="robot_robot_autoimport_result"><![CDATA[採集完成，並自動導入，點擊此處查看採集結果]]></item>
+				<item id="robot_robot_result"><![CDATA[採集完成，點擊此處查看採集結果]]></item>
+				<item id="exportmessage_begin"><![CDATA[開始將數據寫入文件]]></item>
+				<item id="exportmessage_success"><![CDATA[成功寫入文件]]></item>
+				<item id="exportmessage_end"><![CDATA[結束將數據寫入文件]]></item>
+				<item id="exportmessage_download"><![CDATA[點擊鼠標右鍵，選擇目標另存為，下載到本地]]></item>
+				<item id="robot_robot_name"><![CDATA[採集名]]></item>
+				<item id="robot_robot_robot_time"><![CDATA[採集時間]]></item>
+				<item id="robot_robot_num"><![CDATA[採集次數]]></item>
+				<item id="robot_robot_op_select"><![CDATA[選擇操作]]></item>
+				<item id="robot_robot_op_start"><![CDATA[開始採集]]></item>
+				<item id="robot_robot_op_edit"><![CDATA[編輯規則]]></item>
+				<item id="robot_robot_op_copy"><![CDATA[複製規則]]></item>
+				<item id="robot_robot_op_export"><![CDATA[導出規則]]></item>
+				<item id="robot_robot_op_export_tips"><![CDATA[請點擊右鍵，選目標另存為]]></item>
+				<item id="robot_robot_op_result"><![CDATA[查看結果]]></item>
+				<item id="robot_robot_op_export_message"><![CDATA[導出文章]]></item>
+				<item id="robot_robot_op_clear"><![CDATA[清空文章]]></item>
+				<item id="robot_robot_op_delete"><![CDATA[刪除規則]]></item>
+				<item id="robot_listurltype_manual"><![CDATA[手工輸入]]></item>
+				<item id="robot_listurltype_auto"><![CDATA[自動增長]]></item>
+				<item id="robot_savepic_0"><![CDATA[否]]></item>
+				<item id="robot_savepic_1"><![CDATA[是]]></item>
+				<item id="robot_saveflash_0"><![CDATA[否]]></item>
+				<item id="robot_saveflash_1"><![CDATA[是]]></item>
+				<item id="robot_messagepagetype_page"><![CDATA[頁碼導航]]></item>
+				<item id="robot_messagepagetype_next"><![CDATA[上下頁或頁碼不全導航]]></item>
+				<item id="robot_subjectreplace"><![CDATA[替換前的字符]]></item>
+				<item id="robot_subjectreplace_exp"><![CDATA[(多個關鍵字用 | 隔開，用*代替任意符號。多條替換規則請點擊"添加"按鈕來創建多條替換規則)]]></item>
+				<item id="robot_subjectreplaceto"><![CDATA[替換後的字符]]></item>
+				<item id="robot_subjectreplaceto_exp"><![CDATA[可以用[string]來表示替換前的字符]]></item>
+				<item id="robot_messagereplace"><![CDATA[替換前的字符]]></item>
+				<item id="robot_import_ignoreversion_0"><![CDATA[否]]></item>
+				<item id="robot_import_ignoreversion_1"><![CDATA[是]]></item>
+				<item id="common_submit_import"><![CDATA[導入配置]]></item>
+				<item id="robot_robot_subject_no_key"><![CDATA[標題不包含關鍵字，跳過]]></item>
+				<item id="robot_robot_subject_key_cancel"><![CDATA[標題包含關鍵字，跳過]]></item>
+				<item id="robot_robot_subject_null"><![CDATA[標題經處理後為空，跳過]]></item>
+				<item id="robot_robot_subject_exists"><![CDATA[文章已經存在，跳過]]></item>
+				<item id="robot_robot_message_no_key"><![CDATA[內容不包含關鍵字，跳過]]></item>
+				<item id="robot_robot_message_key_cancel"><![CDATA[內容包含關鍵字，跳過]]></item>
+				<item id="robot_robot_subject"><![CDATA[標題]]></item>
+				<item id="robot_robot_itemfrom"><![CDATA[文章來源]]></item>
+				<item id="robot_robot_summary"><![CDATA[摘要]]></item>
+				<item id="robot_robot_picarr"><![CDATA[圖片鏈接]]></item>
+				<item id="robot_robot_flasharr"><![CDATA[FLASH鏈接]]></item>
+				<item id="robot_robot_pagearr"><![CDATA[分頁鏈接]]></item>
+				<item id="robot_robot_cache_read"><![CDATA[列表緩存文件成功讀取]]></item>
+				<item id="robot_robot_cache_write_failed"><![CDATA[列表緩存文件無法寫入]]></item>
+				<item id="robot_robot_cache_write_success"><![CDATA[列表緩存文件成功寫入]]></item>
+				<item id="intelligent_config"><![CDATA[智能採集型]]></item>
+				<item id="robot_debug_no_process"><![CDATA[未指定進程]]></item>
+				<item id="robot_debug_no_link"><![CDATA[無鏈接]]></item>
+				<item id="robot_debug_link_list"><![CDATA[鏈接列表]]></item>
+				<item id="robot_debug_excessive_list"><![CDATA[由於鏈接列表大於1000條,程序調試程序只顯示頭1000條數據.]]></item>
+				<item id="robot_debug_connecting_success"><![CDATA[連接成功]]></item>
+				<item id="robot_debug_unable_to_connect"><![CDATA[無法連接]]></item>
+				<item id="robot_debug_unable_to_read"><![CDATA[無法讀取]]></item>
+				<item id="robot_debug_pages_encode"><![CDATA[被採集頁面的編碼]]></item>
+				<item id="robot_debug_no_recognition"><![CDATA[沒有識別出頁面編碼,請進行人工識別.]]></item>
+				<item id="robot_debug_encode_the_same"><![CDATA[如果兩個編碼相同無需進行設置]]></item>
+				<item id="robot_debug_web_site_encode"><![CDATA[您的網站編碼為:]]></item>
+				<item id="robot_debug_encode_not_set"><![CDATA[採集頁面編碼未設置,系統不進行轉碼工作.如果調試區域為亂碼時,請您設置"採集頁面編碼".]]></item>
+				<item id="robot_debug_regional_list_not_set"><![CDATA[列表區域識別規則未設置,程序將自動識別"列表區域",此種方法會產生一定誤差.]]></item>
+				<item id="robot_debug_regional_list_not_set_2"><![CDATA[沒識別出任何內容,請檢查"列表區域識別規則"]]></item>
+				<item id="robot_debug_subject_url_not_set"><![CDATA[文章鏈接URL識別規則未設置,程序將自動識別"列表區域"所有鏈接,此種方法會產生一定誤差.]]></item>
+				<item id="robot_debug_subject_url_not_set_2"><![CDATA[文章鏈接URL識別規則未設置,程序將自動識別"列表區域"所有鏈接,此種方法會產生一定誤差.]]></item>
+				<item id="robot_debug_subject_url_cancel_0"><![CDATA[文章鏈接URL剔除"前"為]]></item>
+				<item id="robot_debug_subject_url_cancel_1"><![CDATA[文章鏈接URL剔除"後"鏈接為]]></item>
+				<item id="robot_debug_regular"><![CDATA[正則表達式]]></item>
+				<item id="robot_debug_url_cancel_no_link"><![CDATA[文章鏈接URL剔除後沒鏈接]]></item>
+				<item id="robot_debug_subject_url_filter_0"><![CDATA[文章鏈接URL過濾"前"為]]></item>
+				<item id="robot_debug_subject_url_filter_1"><![CDATA[文章鏈接URL過濾"後"鏈接為]]></item>
+				<item id="robot_debug_subject_url_filter_no_link"><![CDATA[文章鏈接URL過濾後沒鏈接]]></item>
+				<item id="robot_debug_subjecturllinkpre_0"><![CDATA[文章鏈接URL補充前綴"前"為]]></item>
+				<item id="robot_debug_subjecturllinkpre_1"><![CDATA[文章鏈接URL補充前綴"後"鏈接為]]></item>
+				<item id="robot_debug_subjecturllinkpf_0"><![CDATA[文章鏈接URL補充後綴"前"為]]></item>
+				<item id="robot_debug_subjecturllinkpf_1"><![CDATA[文章鏈接URL補充後綴"後"鏈接為]]></item>
+				<item id="robot_debug_subjectrule_no_set_0"><![CDATA[文章標題識別規則未設置]]></item>
+				<item id="robot_debug_subjectrule_no_set_1"><![CDATA[沒識別出任何內容,請檢查"文章標題識別規則"]]></item>
+				<item id="robot_debug_subjectfilter_0"><![CDATA[文章標題過濾後為]]></item>
+				<item id="robot_debug_subjectfilter_1"><![CDATA[文章標題過濾後沒有內容]]></item>
+				<item id="robot_debug_subjectreplace_0"><![CDATA[文章標題文字替換"前"為]]></item>
+				<item id="robot_debug_subjectreplace_1"><![CDATA[文章標題文字替換"後"為]]></item>
+				<item id="robot_debug_subject"><![CDATA[文章標題]]></item>
+				<item id="robot_debug_subjectkey_0"><![CDATA[文章標題不包含指定關鍵詞,不會被採集.]]></item>
+				<item id="robot_debug_subjectkey_1"><![CDATA[文章標題包含指定關鍵詞,將被採集.]]></item>
+				<item id="robot_debug_subjectkeycancel_0"><![CDATA[文章標題不包含指定關鍵詞,將被採集.]]></item>
+				<item id="robot_debug_subjectkeycancel_1"><![CDATA[文章標題包含指定關鍵詞,不會被採集.]]></item>
+				<item id="robot_debug_messagerule_0"><![CDATA[文章內容識別規則未設置,程序將自動識別"文章內容",此種方法會產生一定誤差.]]></item>
+				<item id="robot_debug_messagerule_1"><![CDATA[沒識別出任何文章內容,請檢查"文章內容識別規則"]]></item>
+				<item id="robot_debug_messagefilter_0"><![CDATA[文章內容過濾"前"為]]></item>
+				<item id="robot_debug_messagefilter_1"><![CDATA[文章內容過濾"後"為]]></item>
+				<item id="robot_debug_messagefilter_2"><![CDATA[文章內容過濾後沒有內容.]]></item>
+				<item id="robot_debug_messagereplace_0"><![CDATA[文章內容文字替換"前"為]]></item>
+				<item id="robot_debug_messagereplace_1"><![CDATA[文章內容文字替換"後"為]]></item>
+				<item id="robot_debug_message"><![CDATA[文章內容]]></item>
+				<item id="robot_debug_messagekey_0"><![CDATA[文章內容不包含指定關鍵詞,不會被採集.]]></item>
+				<item id="robot_debug_messagekey_1"><![CDATA[文章內容包含指定關鍵詞,將被採集.]]></item>
+				<item id="robot_debug_messagekeycancel_0"><![CDATA[文章內容不包含指定關鍵詞,將被採集.]]></item>
+				<item id="robot_debug_messagekeycancel_1"><![CDATA[文章內容包含指定關鍵詞,不會被採集.]]></item>
+				<item id="robot_debug_messageformat_0"><![CDATA[文章內容格式化前為]]></item>
+				<item id="robot_debug_messageformat_1"><![CDATA[文章內容格式化後為]]></item>
+				<item id="robot_debug_messagepageurllinkpre_0"><![CDATA[文章內容分頁鏈接URL補充前綴"前"為]]></item>
+				<item id="robot_debug_messagepageurllinkpre_1"><![CDATA[文章內容分頁鏈接URL補充前綴"後"鏈接為]]></item>
+				<item id="robot_debug_messagepageurllinkpf_0"><![CDATA[文章內容分頁鏈接URL補充後綴"前"為]]></item>
+				<item id="robot_debug_messagepageurllinkpf_1"><![CDATA[文章內容分頁鏈接URL補充後綴"後"鏈接為]]></item>
+				<item id="robot_debug_fromrule_0"><![CDATA[信息來源識別規則未設置]]></item>
+				<item id="robot_debug_fromrule_1"><![CDATA[信息來源固定值]]></item>
+				<item id="robot_debug_authorrule_0"><![CDATA[作者識別規則未設置]]></item>
+				<item id="robot_debug_authorrule_1"><![CDATA[作者固定值]]></item>
+				<item id="robot_debug_summaryrule_0"><![CDATA[摘要識別規則未設置]]></item>
+				<item id="robot_debug_daterule_0"><![CDATA[按導入的實時時間]]></item>
+				<item id="robot_debug_daterule_1"><![CDATA[發佈時間固定值]]></item>
+				<item id="robot_debug_summaryrule_1"><![CDATA[摘要固定值]]></item>
+				<item id="robot_debug_uidrule_0"><![CDATA[發佈者UID未設置]]></item>
+				<item id="robot_debug_uidrule_1"><![CDATA[發佈者UID隨機抽取值]]></item>
+				<item id="robot_delete"><![CDATA[刪除]]></item>
+				<item id="robot_debugframe"><![CDATA[調試窗口<p>Debug URL: <br />(例如:http://www.xxx.com/abc.htm)]]></item>
+				<item id="robot_allowurlnull_0"><![CDATA[每次調試清空Debug URL]]></item>
+				<item id="robot_allowurlnull_1"><![CDATA[清空URL]]></item>
+				<item id="robot_debugframe_info"><![CDATA[Debug URL作用: 不受採集鏈接的影響,方便採集規則的調試.<br />Debug URL不清空帶來的麻煩: 因為不同的測試針對的網址會略有不同,當URL框中有值時程序會跳過正常的URL.</p>]]></item>
+				<item id="robot_debugframe_close"><![CDATA[關閉]]></item>
+				<item id="robot_debug"><![CDATA[測試]]></item>
+				<item id="robot_debug_auto_recognition"><![CDATA[自動識別]]></item>
+				<item id="robot_debug_add"><![CDATA[添加]]></item>
+				<item id="robot_debug_showlisturl"><![CDATA[測試:顯示鏈接]]></item>
+				<item id="robot_debug_pinglisturl"><![CDATA[測試:嘗試連接]]></item>
+				<item id="robot_debug_auxiliary"><![CDATA[程序輔助識別]]></item>
+				<item id="robot_debug_auto_subjecturlrule"><![CDATA[("列表區域識別規則"為空時，程序自動識別"列表區域")]]></item>
+				<item id="robot_debug_auto_subjecturllinkrule"><![CDATA[("文章鏈接URL識別規則"為空時，程序自動識別"列表區域"所有鏈接)]]></item>
+				<item id="robot_debug_auto_subjecturllinkpre"><![CDATA[("文章鏈接URL補充前綴"為空時，程序自動補充前綴)]]></item>
+				<item id="robot_debug_auto_messagerule"><![CDATA[("文章內容識別規則"為空時，程序自動識別"文章內容")]]></item>
+				<item id="robot_debug_auto_messagepageurllinkpre"><![CDATA[("文章內容分頁鏈接URL補充前綴"為空時，程序自動補充前綴)]]></item>
+				<item id="robot_debug_auto_picurllinkpre"><![CDATA[("圖片/FLASH鏈接的URL補充前綴"為空時，程序自動補充前綴)]]></item>
+				<item id="robot_debug_info_subjecturllinkcancel"><![CDATA[文章鏈接URL剔除規則<p>功能:凡符合規則的鏈接不進行採集,區分大小寫.用 * 來代替任意字符、換行、回車</p><p>多個規則之間用 | 隔開</p>]]></item>
+				<item id="robot_debug_info_subjecturllinkfilter"><![CDATA[文章鏈接URL過濾規則<p>功能:過濾掉鏈接中的字符串,可以用來整理鏈接,區分大小寫.用 * 來代替任意字符、換行、回車</p><p>多個規則之間用 | 隔開</p>]]></item>
+				<item id="robot_subjecturllinkpf"><![CDATA[文章鏈接URL補充後綴]]></item>
+				<item id="robot_messageformat"><![CDATA[文章內容格式化<p>此操作將去除網頁多餘代碼,並將文章內容按原有段落分段.格式化的過程為程序自動分析,會存在一些誤差.</p>]]></item>
+				<item id="robot_messageformat_1"><![CDATA[格式化]]></item>
+				<item id="robot_messageformat_0"><![CDATA[不格式化]]></item>
+				<item id="robot_messagepageurllinkpf"><![CDATA[文章內容分頁鏈接URL補充後綴]]></item>
+				<item id="robot_fromrule_info"><![CDATA[當規則中不出現"標記符([from])"時,此值為"固定值"]]></item>
+				<item id="robot_authorrule_info"><![CDATA[當規則中不出現"標記符([author])"時,此值為"固定值"]]></item>
+				<item id="robot_uidrule"><![CDATA[發佈者UID，只能填其中一種<p>1,指定多個發佈者UID,UID之間用 | 隔開。如:</p><input type="input" name="tmp[]" size="10" value="1|5|6" disabled="disabled" /><p>2,若要隨機發佈者UID,填寫<input type="input" name="tmp[]" size="10" value="rand(all)" disabled="disabled" /></p><p>3,若指定範圍內的隨機發佈者UID,填寫rand(beginid,endid)。如:<input type="input" name="tmp[]" size="10" value="rand(2,100)" disabled="disabled" /></p><p>4,指定用戶組id的隨機發佈者,用戶組id之間用 , 隔開。如:<input type="input" name="tmp[]" size="10" value="group(1,2,3)" disabled="disabled" /></p>]]></item>
+				<item id="robot_debug_regional_source"><![CDATA[識別後有內容,區域源碼]]></item>
+				<item id="robot_debug_not_content"><![CDATA[沒識別出任何內容,請檢查識別規則]]></item>
+				<item id="robot_debug_url"><![CDATA[測試網頁地址]]></item>
+				<item id="robot_debug_source_code"><![CDATA[網頁源碼]]></item>
+				<item id="robot_reverseorder"><![CDATA[文章倒序採集<p>設為此項後列表中的文章將從最後面的開始採集</p>]]></item>
+				<item id="robotmessage_op_success"><![CDATA[操作成功完成]]></item>
+				<item id="robotmessage_none_exists"><![CDATA[指定的採集文章信息不存在]]></item>
+				<item id="robot_import_data_invalid"><![CDATA[機器人配置信息不正確]]></item>
+				<item id="robot_import_version_invalid"><![CDATA[機器人配置信息的版本與系統版本不符]]></item>
+				<item id="robot_import_success"><![CDATA[機器人成功導入]]></item>
+				<item id="robot_add_success"><![CDATA[採集機器人成功添加]]></item>
+				<item id="robot_edit_success"><![CDATA[指定的採集機器人成功更新]]></item>
+				<item id="robot_robotid_no_exists"><![CDATA[指定的採集機器人不存在]]></item>
+				<item id="robot_delete_success"><![CDATA[指定的採集機器人成功刪除]]></item>
+				<item id="robot_clearcache_success"><![CDATA[指定的索引緩存成功刪除]]></item>
+				<item id="robot_clear_success"><![CDATA[採集到文章全部清空]]></item>
+				<item id="robot_exportmessage_fopen_error"><![CDATA[寫入文件出錯，請檢查robot導出目錄(data/robot)是否存在並可寫]]></item>
+			</item>
+		</item>
+	</item>
+</root>
