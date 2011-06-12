@@ -272,10 +272,16 @@ if(!$operation) {
 							if(!empty($pluginarray['plugin']['name'])) {
 								$entrytitle = dhtmlspecialchars($pluginarray['plugin']['name']);
 
+								// bluelovers
+								/**
+								 * 嘗試判定插件名稱編碼使其正確顯示名稱
+								 * @author bluelovers
+								 * @example 积分竞拍 (EUC-CN)
+								 **/
 								$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, EUC-TW, UTF-8');
 								if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
-
 								$entrytitle .= ' ('.$_detect.')';
+								// bluelovers
 
 								$entryversion = dhtmlspecialchars($pluginarray['plugin']['version']);
 								$entrycopyright = dhtmlspecialchars($pluginarray['plugin']['copyright']);
@@ -308,6 +314,12 @@ if(!$operation) {
 			$xmls = '';$count = 0;
 			$referer = dreferer();
 			while($f = $d->read()) {
+				/**
+				 * 改良插件xml編碼名稱的相容性。
+				 *
+				 * SC_GBK = GBK
+				 * TC_BIG5 = BIG5
+				 **/
 				if(preg_match('/^discuz\_plugin_'.$_G['gp_dir'].'(\_\w+)?\.xml$/', $f, $a)) {
 					$extratxt = $extra = substr($a[1], 1);
 					if(preg_match('/^(?:SC\_)?GBK$/i', $extra)) {
