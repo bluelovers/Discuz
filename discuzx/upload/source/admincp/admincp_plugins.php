@@ -278,9 +278,11 @@ if(!$operation) {
 								 * @author bluelovers
 								 * @example 积分竞拍 (EUC-CN)
 								 **/
-								$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, BIG-5, UTF-8');
-								if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
-								$entrytitle .= ' ('.$_detect.')';
+								if (@extension_loaded('mbstring')) {
+									$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, BIG-5, UTF-8');
+									if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
+									$entrytitle .= ' ('.$_detect.')';
+								}
 								// bluelovers
 
 								$entryversion = dhtmlspecialchars($pluginarray['plugin']['version']);
@@ -348,10 +350,12 @@ if(!$operation) {
 					 * EUC-CN 比 GBK 好 - GBK 會錯誤的把其他編碼也認為是GBK
 					 * EUC-TW 則無法正確判斷所以使用 BIG-5 比較好
 					 **/
-					$_importtxt = @implode('', file($pdir.'/discuz_plugin_'.$_G['gp_dir'].$a[1].'.xml'));
-					$_detect = mb_detect_encoding($_importtxt, 'EUC-CN, BIG-5, UTF-8');
-					$_detect = $_detect ? $_detect : mb_detect_encoding($_importtxt);
-					$_entryadd = ' ('.$_detect.')';
+					if (@extension_loaded('mbstring')) {
+						$_importtxt = @implode('', file($pdir.'/discuz_plugin_'.$_G['gp_dir'].$a[1].'.xml'));
+						$_detect = mb_detect_encoding($_importtxt, 'EUC-CN, BIG-5, UTF-8');
+						$_detect = $_detect ? $_detect : mb_detect_encoding($_importtxt);
+						$_entryadd = ' ('.$_detect.')';
+					}
 					// bluelovers
 
 					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.$extra.(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
