@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-06 20:16]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://localhost/x2/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[發帖際遇]]></item>
+			<item id="identifier"><![CDATA[luckypost]]></item>
+			<item id="description"><![CDATA[發帖時會根據後台設定的概率產生一些際遇，對發帖者進行積分的獎懲。]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[luckypost/]]></item>
+			<item id="copyright"><![CDATA[Comsenz Support Team]]></item>
+			<item id="version"><![CDATA[2.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[luckypost]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[luckypost]]></item>
+					<item id="menu"><![CDATA[際遇]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[24]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[我的發帖際遇]]></item>
+					<item id="navicon"><![CDATA[bgpic.gif]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
+					<item id="name"><![CDATA[show]]></item>
+					<item id="menu"><![CDATA[發帖際遇]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[5]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[產生際遇的版塊]]></item>
+				<item id="description"><![CDATA[僅在選中版帖發帖時產生際遇]]></item>
+				<item id="variable"><![CDATA[luckfids]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[產生際遇的概率]]></item>
+				<item id="description"><![CDATA[發帖時按此設置的概率產生際遇，填寫 0 到 1 之間的小數。如填 0.3 ，即為發帖時30%的機率產生際遇。填 1， 為 100% 產生際遇。]]></item>
+				<item id="variable"><![CDATA[probability]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[0.25]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[產生獎勵事件的概率]]></item>
+				<item id="description"><![CDATA[填寫 0 到 1 之間的小數。當發帖產生際遇時，按此設置的概率產生獎勵際遇，如填 0.3 ，即為產生際遇時有30%的機率產生獎勵事件，70% 的機率產生懲罰事件。如填 0.5，即為 50%的機率產生獎勵，50% 的機率產生懲罰。填 1， 為 100% 產生獎勵事件，不產生懲罰事件。]]></item>
+				<item id="variable"><![CDATA[rprobability]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[0.55]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[僅對發表主題產生際遇]]></item>
+				<item id="description"><![CDATA[選「是」為僅發表主題產生際遇，選「否」為發表主題和回復主題都有可能產生際遇。]]></item>
+				<item id="variable"><![CDATA[threadonly]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[是否開啟發帖際遇]]></item>
+				<item id="description"><![CDATA[是否開啟插件]]></item>
+				<item id="variable"><![CDATA[isopen]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[獎勵事件]]></item>
+				<item id="description"><![CDATA[此處設置隨機事件，參數必須以 「|」 隔開，如：
+2|1,5|一袋金幣砸在了 {username} 頭上，{username} 賺了 {credit} {extcredits}. 
+以上例子中第一個參數 2 為積分id 表示 extcredits2
+以上例子中第二個參數 1,5 為積分最小值與積分最大值以「,」隔開]]></item>
+				<item id="variable"><![CDATA[rewardevent]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[2|1,5|一個袋子砸在了 {username} 頭上，{username} 賺了 {credit} {extcredits}. 
+2|1,5|{username} 發帖時在路邊撿到 {credit} {extcredits}，偷偷放進了口袋.
+3|1,10|{username} 樂於助人，獎勵 {credit} {extcredits}. ]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[懲罰事件]]></item>
+				<item id="description"><![CDATA[以上例子中第三個參數為事件詳細，用戶名用{username}表示 ，積分數量用{credit}表示， 積分名用{extcredits}表示]]></item>
+				<item id="variable"><![CDATA[punishevent]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[2|1,5|{username} 在論壇發帖時沒有注意，被小偷偷去了 {credit} {extcredits}.
+1|1,3|{username} 撿了錢沒交公 {extcredits} 降了 {credit} .
+2|1,5|{username} 被錢袋砸中進醫院，看病花了 {credit} {extcredits}.
+2|1,10|{username} 在網吧通宵，花了 {credit} {extcredits}.]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[產生際遇的用戶組]]></item>
+				<item id="description"><![CDATA[僅對選中用戶組發帖時產生際遇]]></item>
+				<item id="variable"><![CDATA[luckgroups]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="luckyshow"><![CDATA[<div style="text-align:center;width:100%;line-height:25px;background-color:#E3EDF5;" class="exfm">[<a href="plugin.php?id=luckypost" target="_blank" title="查看所有際遇">發帖際遇</a>]：{$luckyevent}</div>]]></item>
+				<item id="creditlog"><![CDATA[ ( {$extcredit} {$credit} )]]></item>
+				<item id="myfortune"><![CDATA[<b>我的際遇統計</b>：[<font color="red"><b>{$goodtimes}</b></font> 次獎勵] - [<font color="green"><b>{$badtimes}</b></font> 次懲罰]]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="luckypost"><![CDATA[發帖際遇]]></item>
+				<item id="lucky_all_event"><![CDATA[所有際遇]]></item>
+				<item id="lucky_my_event"><![CDATA[我的際遇]]></item>
+				<item id="lucky_rank"><![CDATA[運氣排行榜]]></item>
+				<item id="lucky_person"><![CDATA[人物]]></item>
+				<item id="lucky_event"><![CDATA[際遇事件]]></item>
+				<item id="lucky_time"><![CDATA[發生時間]]></item>
+				<item id="lucky_scene"><![CDATA[觸發地]]></item>
+				<item id="lucky_click"><![CDATA[點擊查看]]></item>
+				<item id="lucky_goodrank"><![CDATA[幸運榜]]></item>
+				<item id="lucky_badrank"><![CDATA[衰神榜]]></item>
+				<item id="lucky_good"><![CDATA[幸運之星]]></item>
+				<item id="lucky_bad"><![CDATA[杯具之星]]></item>
+				<item id="lucky_times"><![CDATA[次數]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>

@@ -1,0 +1,76 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=luckypost">{lang luckypost:luckypost}</a> <em>&rsaquo;</em>
+		<!--{if $opactives[list]}-->{lang luckypost:lucky_all_event}<!--{elseif $opactives[my]}-->{lang luckypost:lucky_my_event}<!--{elseif $opactives[stat]}-->{lang luckypost:lucky_rank}<!--{/if}-->
+	</div>
+</div>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<h1 class="mt">{lang luckypost:luckypost}</h1>
+			<ul class="tb cl">
+				<li $opactives[list]><a href="plugin.php?id=luckypost">{lang luckypost:lucky_all_event}</a></li>
+				<li $opactives[my]><a href="plugin.php?id=luckypost&op=my">{lang luckypost:lucky_my_event}</a></li>
+				<li $opactives[stat]><a href="plugin.php?id=luckypost&ac=stat">{lang luckypost:lucky_rank}</a></li>
+			</ul>
+			<div class="tbmu bw0">
+				<p>$myfortune</p>
+			</div>
+			<!--{if $action != 'stat'}-->
+			<table cellspacing="0" cellpadding="0" class="dt valt">
+				<tr>
+					<th>{lang luckypost:lucky_person}</th>
+					<th>{lang luckypost:lucky_event}</th>
+					<th>{lang luckypost:lucky_time}</th>
+					<th>{lang luckypost:lucky_scene}</th>
+				</tr>
+				<!--{eval $ckey = 1;}-->
+				<!--{loop $list $key $value}-->
+				<tr {if $ckey++%2==0}class="bmn"{/if}>
+					<td><a href="home.php?mod=space&uid=$value['uid']" c="1">$value[username]</a></td>
+					<td>$value[event]</td>
+					<td><!--{date($value['dateline'], 'Y-n-j H:i:s')}--></td>
+					<td><a href="forum.php?mod=redirect&goto=findpost&ptid=$value['tid']&pid=$value['pid']" target="_blank">{lang luckypost:lucky_click}</a></td>
+				</tr>
+				<!--{/loop}-->
+				<tr><td colspan="4">$multipage</td></tr>
+			</table>
+			<!--{else}-->
+
+			<!--{if !empty($lucklist)}-->
+			<!--{eval $ckey = $key = 0;}-->
+			<!--{loop $lucklist $llists}-->
+			<div style="float:left;margin-right:10px;">
+			<table cellpadding="0" cellspacing="0" class="tdat ftb mtm mbm" style="width:390px;">
+				<tr>
+					<th class="xw1" colspan="2" style="text-align:center;"><!--{if $key == 0}-->{lang luckypost:lucky_goodrank}<!--{else}-->{lang luckypost:lucky_badrank}<!--{/if}--></th>
+				</tr>
+				<tr class="alt">
+					<th class="xw1"><!--{if $key == 0}-->{lang luckypost:lucky_good}<!--{else}-->{lang luckypost:lucky_bad}<!--{/if}--></th>
+					<td class="xw1">{lang luckypost:lucky_times}</td>
+				</tr>
+				<!--{if !empty($llists)}-->
+				<!--{loop $llists $llist}-->
+				<tr {if $ckey++%2==0}class="bmn"{/if}>
+					<th class="pstyle"><a href="home.php?mod=space&uid=$llist[uid]" c='1'><!--{avatar($llist[uid],small)}--> $llist[username]</th>
+					<td>$llist[times]</td>
+				</tr>
+				<!--{/loop}-->
+				<!--{/if}-->
+			</table>
+			</div>
+			<!--{eval $key++;}-->
+			<!--{/loop}-->
+			<!--{/if}-->
+
+			<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate common/userabout}-->
+	</div>
+</div>
+<!--{subtemplate common/footer}-->

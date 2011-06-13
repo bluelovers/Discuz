@@ -1,0 +1,11 @@
+/** plugin::luckypost **/
+.pstyle img {
+background-color: white;
+border: 1px solid #CCC;
+float: left;
+height: 25px;
+margin: 3px 3px 0px 0px;
+padding: 2px;
+width: 25px;
+}
+/** end **/
