@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X1.5]]></item>
+	<item id="Time"><![CDATA[2010-06-22 23:23]]></item>
+	<item id="From"><![CDATA[unknown]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[活动]]></item>
+			<item id="identifier"><![CDATA[active]]></item>
+			<item id="description"><![CDATA[仿化龙巷活动插件]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[active/]]></item>
+			<item id="copyright"><![CDATA[unknown]]></item>
+			<item id="version"><![CDATA[1]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[admin]]></item>
+					<item id="menu"><![CDATA[活动管理]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[index]]></item>
+					<item id="menu"><![CDATA[活动]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[1]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[活动分类]]></item>
+				<item id="description"><![CDATA[ID=分类名称 一行一个配置。]]></item>
+				<item id="variable"><![CDATA[activeclass]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[1=房产频道相关活动
+2=汽车频道相关活动
+3=电影频道相关活动
+4=美食频道相关活动
+5=公益活动
+6=家装频道相关活动]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[后台列表分页数]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[adminpagenum]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[前台列表分页数]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[indexpagenum]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[归档过去几月列表]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[lastmonthnum]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[10]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+	</item>
+</root>
