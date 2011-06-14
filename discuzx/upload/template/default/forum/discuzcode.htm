@@ -109,6 +109,7 @@ $aidencode = packaids($attach);
 $widthcode = attachwidth($attach['width']);
 $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archiveid=".$_G[forum_thread][archiveid] : '';
 $attachthumb = getimgthumbname($attach['attachment']);
+$exifinfo = function_exists('get_image_exif') ? get_image_exif($attach) : '';
 }
 <!--{block return}-->
 	<!--{if $attach['attachimg'] && $_G['setting']['showimages'] && ($_G['group']['allowgetimage'] || $_G['uid'] == $attach['uid'])}-->
@@ -152,6 +153,7 @@ $attachthumb = getimgthumbname($attach['attachment']);
 							<img id="aimg_$attach[aid]" src="{STATICURL}image/common/none.gif" zoomfile="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes&nothumb=yes{else}{$attach[url]}$attach[attachment]{/if}" file="{if $attach[refcheck]}forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes{else}{$attach[url]}$attach[attachment]{/if}" $widthcode id="aimg_$attach[aid]" alt="$attach[imgalt]" title="$attach[imgalt]" w="$attach[width]" />
 						<!--{/if}-->
 						</p>
+$exifinfo
 					<!--{/if}-->
 				</dd>
 			</dl>

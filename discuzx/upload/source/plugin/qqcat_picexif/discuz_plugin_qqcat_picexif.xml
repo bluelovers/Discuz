@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-02 16:21]]></item>
+	<item id="From"><![CDATA[ÈÝÃ×²¿Âä (http://www.rmbl.cn/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[[QQCAT] EXIFÏÔÊ¾]]></item>
+			<item id="identifier"><![CDATA[qqcat_picexif]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[qqcat_picexif/]]></item>
+			<item id="copyright"><![CDATA[(C) QQCAT 2009-2011]]></item>
+			<item id="version"><![CDATA[2.0.2]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[hooks]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[bug]]></item>
+					<item id="menu"><![CDATA[BUG»ò½¨Òé±¨¸æ]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[ÏÔÊ¾Ä£°å]]></item>
+				<item id="description"><![CDATA[ÏÔÊ¾Ä£°å, Ö§³Ö html
+Ö§³Ö±äÁ¿£º{aid},{Ïà»úÐÍºÅ},{ÆØ¹âÊ±¼ä},{¹âÈ¦},{ÆØ¹â²¹³¥},{ÆØ¹âÄ£Ê½},{°×Æ½ºâ},{ISO},{½¹¾à},{ÅÄÉãÊ±¼ä},{·Ö±æÂÊ}]]></item>
+				<item id="variable"><![CDATA[content]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[Ä£Ê½]]></item>
+				<item id="description"><![CDATA[¶ÁÈ¡EXIFÐÅÏ¢µÄÄ£Ê½
+PHP¶ÁÈ¡Ä£Ê½Ò»(¿ì)£º´úÂëÖ±½Ó¶ÁÈ¡
+DLL¶ÁÈ¡Ä£Ê½(×î¿ì)£ºÐèphp_exif.dllÖ§³Ö
+PHP¶ÁÈ¡Ä£Ê½¶þ(Âý)£º´úÂëÖ±½Ó¶ÁÈ¡]]></item>
+				<item id="variable"><![CDATA[mode]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[1=PHP¶ÁÈ¡Ä£Ê½Ò»(¿ì)
+2=DLL¶ÁÈ¡Ä£Ê½(×î¿ì)
+3=PHP¶ÁÈ¡Ä£Ê½¶þ(Âý)]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[ÏÔÊ¾EXIFÐÅÏ¢µÄ°å¿é]]></item>
+				<item id="description"><![CDATA[ÔÚÉèÖÃµÄ°å¿éÖÐÍ¼Æ¬¸½¼þÏÂ²Å»áÏÔÊ¾EXIFÐÅÏ¢¡£]]></item>
+				<item id="variable"><![CDATA[forums]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[Ä£°åÑ¡Ôñ]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[contentid]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[5]]></item>
+				<item id="extra"><![CDATA[1=×Ô¶¨Òå
+2=Ä£°å1
+3=Ä£°å2
+4=Ä£°å3
+5=Ä£°å4]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+	</item>
+</root>
