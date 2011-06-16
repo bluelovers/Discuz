@@ -54,7 +54,11 @@ $conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] 
 
 if(submitcheck('profilesubmit')) {
 
+	/*
+	 * 既然不對 sightml 做處理
+	 * 也沒有其他欄位用到 discuzcode 所以註解掉
 	require_once libfile('function/discuzcode');
+	*/
 
 	$forum = $setarr = $verifyarr = $errorarr = array();
 	$forumfield = array('customstatus', 'sightml');
@@ -361,8 +365,10 @@ if($operation == 'password') {
 	space_merge($space, 'field_home');
 	space_merge($space, 'field_forum');
 
-	require_once libfile('function/editor');
 	/*
+	 * 既然不對 sightml 做處理
+	 * 也沒有其他欄位用到 html2bbcode 所以註解掉
+	require_once libfile('function/editor');
 	$space['sightml'] = html2bbcode($space['sightml']);
 	*/
 
