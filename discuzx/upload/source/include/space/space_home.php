@@ -396,6 +396,20 @@ if($space['self'] && empty($start)) {
 			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*7, 'n-j'));
 			if($e_month == $s_month) {
 				$wheresql = "sf.birthmonth='$s_month' AND sf.birthday>='$s_day' AND sf.birthday<='$e_day'";
+
+			// bluelovers
+			} elseif ($e_month < $s_month) {
+				// 修正跨月跨年的問題
+
+				$wheresql = "(
+						(sf.birthmonth='$s_month' AND sf.birthday>='$s_day')
+						OR (sf.birthmonth>'$s_month')
+						OR (sf.birthmonth<='$e_month' AND sf.birthday<='$e_day')
+						OR (sf.birthmonth>=1 AND sf.birthmonth<'$e_month')
+					) AND sf.birthday > 0";
+
+			// bluelovers
+
 			} else {
 				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
 			}
