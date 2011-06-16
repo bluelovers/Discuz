@@ -414,6 +414,10 @@ if($space['self'] && empty($start)) {
 				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
 			}
 
+			// bluelovers
+			$birthlist_nextyear = array();
+			// bluelovers
+
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
 				FROM ".DB::table('common_member_profile')." sf
 				LEFT JOIN ".DB::table('common_member')." s USING(uid)
@@ -429,9 +433,27 @@ if($space['self'] && empty($start)) {
 					$value['istoday'] = 1;
 				}
 				$key = sprintf("%02d", $value['birthmonth']).sprintf("%02d", $value['birthday']);
+				/*
 				$birthlist[$key][] = $value;
 				ksort($birthlist);
+				*/
+
+				// bluelovers
+				if ($value['birthmonth'] >= $n_month) {
+					$birthlist[$key][] = $value;
+				} else {
+					$birthlist_nextyear[$key][] = $value;
+				}
+				// bluelovers
 			}
+
+			// bluelovers
+			ksort($birthlist_nextyear);
+			ksort($birthlist);
+			$birthlist = array_merge($birthlist, $birthlist_nextyear);
+
+			unset($birthlist_nextyear);
+			// bluelovers
 
 			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'birthday', '".addslashes(serialize($birthlist))."', '".getexpiration()."')");
 		} else {
