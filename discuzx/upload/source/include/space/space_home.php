@@ -391,9 +391,15 @@ if($space['self'] && empty($start)) {
 	if($space['feedfriend']) {
 		$birthdaycache = DB::fetch_first("SELECT variable, value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='birthday'");
 		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
+			/*
 			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*3, 'n-j'));
+			*/
+			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*7, 'n-j'));
 			list($n_month, $n_day) = explode('-', dgmdate($_G['timestamp'], 'n-j'));
+			/*
 			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*7, 'n-j'));
+			*/
+			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*45, 'n-j'));
 			if($e_month == $s_month) {
 				$wheresql = "sf.birthmonth='$s_month' AND sf.birthday>='$s_day' AND sf.birthday<='$e_day'";
 
