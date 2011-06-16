@@ -417,7 +417,12 @@ if($space['self'] && empty($start)) {
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
 				FROM ".DB::table('common_member_profile')." sf
 				LEFT JOIN ".DB::table('common_member')." s USING(uid)
-				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)");
+				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)"
+
+				// 修正排序判斷並且支援跨月跨年
+				."ORDER BY (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username"
+
+				);
 			while ($value = DB::fetch($query)) {
 				$value['istoday'] = 0;
 				if($value['birthmonth'] == $n_month && $value['birthday'] == $n_day) {
