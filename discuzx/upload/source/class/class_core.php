@@ -442,6 +442,10 @@ class discuz_core {
 			'time' => dgmdate(TIMESTAMP),
 
 			// bluelovers
+			'year' => date('Y', TIMESTAMP + 3600 * $timeoffset),
+			'month' => date('n', TIMESTAMP + 3600 * $timeoffset),
+			'date' => date('j', TIMESTAMP + 3600 * $timeoffset),
+
 			'todayzero' => dmktime(date('Y-n-j', TIMESTAMP + 3600 * $timeoffset)) - 3600 * $timeoffset,
 			// bluelovers
 
