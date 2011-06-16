@@ -52,7 +52,8 @@ $start = ($page-1)*$perpage;
 
 ckstart($start, $perpage);
 
-$_G['home_today'] = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+//$_G['home_today'] = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+$_G['home_today'] = $_G['timenow']['todayzero'];
 
 $gets = array(
 	'mod' => 'space',
