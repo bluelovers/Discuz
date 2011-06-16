@@ -1,0 +1,78 @@
+<!--{if $_GET[inajax]}-->
+{eval 
+ob_end_clean();
+ob_start();
+@header("Expires: -1");
+@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
+@header("Pragma: no-cache");
+@header("Content-type: text/xml; charset=".CHARSET);
+echo '<?xml version="1.0" encoding="'.CHARSET.'"?>'."\r\n";
+}
+<root><![CDATA[
+<!--{/if}-->
+<!--{if !empty($clicks)}-->
+<table cellpadding="0" cellspacing="0" class="atd" style="width: 50%;">
+	<tr>
+	<!--{eval $clicknum = 0;}-->
+	<!--{loop $clicks $key $value}-->
+	<!--{eval $clicknum = $clicknum + $value['clicknum'];}-->
+	<!--{eval $value['height'] = $maxclicknum?intval($value['clicknum']*50/$maxclicknum):0;}-->
+		<td>
+			<a href="plugin.php?id=threadclick&op=add&clickid=$key&idtype=tid&tid=$tid&hash=$hash&handlekey=clickhandle" id="click_{$idtype}_{$tid}_{$key}" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow(this.id, this.href);{/if}doane(event);">
+				<!--{if $value[clicknum]}-->
+				<div class="atdc">
+					<div class="ac{$value[classid]}" style="height:{$value[height]}px;">
+						<em>{$value[clicknum]}</em>
+					</div>
+				</div>
+				<!--{/if}-->
+				<img src="{STATICURL}image/click/$value[icon]" alt="" /><br />$value[name]
+			</a>
+		</td>
+	<!--{/loop}-->
+	</tr>
+</table>
+<script type="text/javascript">
+	function errorhandle_clickhandle(message, values) {
+		if(values['tid']) {
+			showCreditPrompt();
+			show_click(values['idtype'], values['tid'], values['clickid']);
+		}
+	}
+
+	function show_click(idtype, id, clickid) {
+		ajaxget('plugin.php?id=threadclick&op=show&clickid='+clickid+'&idtype='+idtype+'&tid='+id, 'click_div');
+		showCreditPrompt();
+	}
+</script>
+
+<!--{if $clickuserlist}-->
+<h3 class="mbm xs1">
+	{lang threadclick:position_member} (<a href="javascript:;" onclick="show_click('$idtype', '$tid', '$key')">$clicknum {lang threadclick:person}</a>)
+	<!--{if $_G[magic][anonymous]}-->
+	<img src="{STATICURL}image/magic/anonymous.small.gif" alt="anonymous" class="vm" />
+	<a id="a_magic_anonymous" href="home.php?mod=magic&mid=anonymous&idtype=$idtype&id=$id" onclick="ajaxmenu(event,this.id, 1)" class="xg1">{$_G[magic][anonymous]}</a>
+	<!--{/if}-->
+</h3>
+<div id="trace_div" class="xs1">
+	<ul id="trace_ul" class="ml mls cl">
+	<!--{loop $clickuserlist $value}-->
+		<li>
+			<!--{if $value[username]}-->
+			<div class="avt"><a href="home.php?mod=space&uid=$value[uid]" target="_blank" title="$value[clickname]"><!--{avatar($value[uid], 'small')}--></a></div>
+			<p><a href="home.php?mod=space&uid=$value[uid]"  title="$value[username]" target="_blank">$value[username]</a></p>
+			<!--{else}-->
+			<div class="avt"><img src="{STATICURL}image/magic/hidden.gif" alt="$value[clickname]" /></div>
+			<p>{lang threadclick:anonymity}</p>
+			<!--{/if}-->
+		</li>
+	<!--{/loop}-->
+	</ul>
+</div>
+<!--{/if}-->
+
+<!--{if $click_multi}--><div class="pgs cl mtm">$click_multi</div><!--{/if}-->
+<!--{/if}-->
+<!--{if $_GET[inajax]}-->
+<!--{echo output_ajax()}-->]]></root><!--{eval exit;}-->
+<!--{/if}-->

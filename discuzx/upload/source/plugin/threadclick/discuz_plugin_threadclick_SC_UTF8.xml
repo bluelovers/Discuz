@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-05 00:47]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://localhost/upload/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[帖内表态]]></item>
+			<item id="identifier"><![CDATA[threadclick]]></item>
+			<item id="description"><![CDATA[论坛版块帖子是核心，我们需要更多的因素增加互动，活动会员]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[threadclick/]]></item>
+			<item id="copyright"><![CDATA[CrazyHook]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[tcadmin]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[threadclick]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="note"><![CDATA[{actor} 对您的帖子 <a href="{url}" target="_blank">{subject}</a> 做了表态]]></item>
+				<item id="click_edit_tid"><![CDATA[帖子表态]]></item>
+				<item id="click_edit_tips"><![CDATA[<li>本功能用于设置帖子内表态动作，动作图片中请填写图片文件名，并将相应图片文件上传到 static/image/click/ 目录中。</li><li><strong>警告：站点运营一段时间后，中途改变各表情的顺序将会影响之前的表态结果</strong></li><li>每个类型最多启用8个动作</li>]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="position_member"><![CDATA[刚表态过的会员]]></item>
+				<item id="person"><![CDATA[人]]></item>
+				<item id="anonymity"><![CDATA[匿名]]></item>
+			</item>
+			<item id="installlang">
+				<item id="passby"><![CDATA[路过]]></item>
+				<item id="shock"><![CDATA[雷人]]></item>
+				<item id="shakehand"><![CDATA[握手]]></item>
+				<item id="flower"><![CDATA[鲜花]]></item>
+				<item id="egg"><![CDATA[鸡蛋]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>
