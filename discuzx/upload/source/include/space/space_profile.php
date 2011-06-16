@@ -163,6 +163,12 @@ if($space['videophotostatus'] > 0 && $_G['uid'] != $space['uid'] && !ckvideophot
 	$showvideophoto = false;
 }
 
+// bluelovers
+// 以 bbcode 格式分析 sightml
+require_once libfile('function/discuzcode');
+$space['sightml'] && $space['sightml'] = discuzcode($space['sightml']);
+// bluelovers
+
 if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");
