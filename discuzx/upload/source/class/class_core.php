@@ -440,6 +440,11 @@ class discuz_core {
 		$timeoffset = $this->init_setting ? $this->var['member']['timeoffset'] : $this->var['setting']['timeoffset'];
 		$this->var['timenow'] = array(
 			'time' => dgmdate(TIMESTAMP),
+
+			// bluelovers
+			'todayzero' => dmktime(date('Y-n-j', TIMESTAMP + 3600 * $timeoffset)) - 3600 * $timeoffset,
+			// bluelovers
+
 			'offset' => $timeoffset >= 0 ? ($timeoffset == 0 ? '' : '+'.$timeoffset) : $timeoffset
 		);
 		$this->timezone_set($timeoffset);
