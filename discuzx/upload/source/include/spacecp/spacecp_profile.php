@@ -359,7 +359,9 @@ if($operation == 'password') {
 	space_merge($space, 'field_forum');
 
 	require_once libfile('function/editor');
+	/*
 	$space['sightml'] = html2bbcode($space['sightml']);
+	*/
 
 	$vid = $_G['gp_vid'] ? intval($_G['gp_vid']) : 0;
 
