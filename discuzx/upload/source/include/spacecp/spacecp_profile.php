@@ -103,6 +103,7 @@ if(submitcheck('profilesubmit')) {
 		}
 		if(in_array($key, $forumfield)) {
 			if($key == 'sightml') {
+				/*
 				loadcache(array('smilies', 'smileytypes'));
 				$value = cutstr($value, $_G['group']['maxsigsize'], '');
 				foreach($_G['cache']['smilies']['replacearray'] AS $skey => $smiley) {
@@ -110,6 +111,8 @@ if(submitcheck('profilesubmit')) {
 				}
 				$value = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], trim($value));
 				$forum[$key] = addslashes(discuzcode(stripslashes($value), 1, 0, 0, 0, $_G['group']['allowsigbbcode'], $_G['group']['allowsigimgcode'], 0, 0, 1));
+				*/
+				$forum[$key] = dhtmlspecialchars(trim($value));
 			} elseif($key=='customstatus' && $allowcstatus) {
 				$forum[$key] = dhtmlspecialchars(trim($value));
 			}
