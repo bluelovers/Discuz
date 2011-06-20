@@ -424,18 +424,79 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		$staticavatar = $_G['setting']['avatarmethod'];
 	}
 
+	$ext = '';
+	$random = '';
+
+	if (is_array($size)) {
+		$class = isset($size['class']) ? $size['class'] : $size[0];
+		$style = $style.(isset($size['style']) ? $size['style'] : $size[1]);
+
+		if (isset($size['class'])) {
+			unset($size['class']);
+		} else {
+			unset($size[0]);
+		}
+		if (isset($size['style'])) {
+			unset($size['style']);
+		} else {
+			unset($size[1]);
+		}
+		if (isset($size['random'])) {
+			$random = getglobal('timestamp');
+			unset($size['random']);
+		} elseif (isset($size[2])) {
+			$random = getglobal('timestamp');
+			unset($size[2]);
+		}
+
+		if (is_array($size) && count($size)) {
+			foreach ($size as $k => $v) {
+				$ext .= ' '.$k.'="'.$v.'"';
+			}
+		}
+
+		$size = $class;
+	} else {
+		$class = $size;
+	}
+	$size = explode('_', $size);
+	$size = $size[0];
+
 	$ucenterurl = empty($ucenterurl) ? $_G['setting']['ucenterurl'] : $ucenterurl;
 	$size = in_array($size, array('big', 'middle', 'small')) ? $size : 'middle';
 	$uid = abs(intval($uid));
-	if(!$staticavatar && !$static) {
-		return $returnsrc ? $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size : '<img src="'.$ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').'" />';
+
+	$class = empty($class) ? $size : $class;
+
+	$url_ext = $ext2 = '';
+
+	if ($random) $url_ext .= '&random='.$random;
+
+	if($uid > 0) {
+		$ext2 .= ' onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'"';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+		$ext2 .= '" lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
+		$ext = $ext2 . ' ' . $ext;
+
+		if(!$staticavatar && !$static) {
+			$file = $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').$url_ext;
+			return $returnsrc ? $file : '<img src="'.$file.'"'.$ext.' />';
+		} else {
+			$uid = sprintf("%09d", $uid);
+			$dir1 = substr($uid, 0, 3);
+			$dir2 = substr($uid, 3, 2);
+			$dir3 = substr($uid, 5, 2);
+			$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
+
+			if ($url_ext) $file .= '?'.$url_ext;
+			return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
+		}
 	} else {
-		$uid = sprintf("%09d", $uid);
-		$dir1 = substr($uid, 0, 3);
-		$dir2 = substr($uid, 3, 2);
-		$dir3 = substr($uid, 5, 2);
-		$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
-		return $returnsrc ? $file : '<img src="'.$file.'" onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'" />';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+		$ext = $ext2 . ' ' . $ext;
+
+		$file = (!preg_match('/^http:\/\//i', IMGDIR) ? $GLOBALS['boardurl'] : '').IMGDIR.'/syspm.gif';
+		return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
 	}
 }
 
