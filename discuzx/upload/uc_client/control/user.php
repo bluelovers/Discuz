@@ -39,6 +39,7 @@ class usercontrol extends base {
 				foreach($this->cache['apps'] as $appid => $app) {
 					if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
 						// bluelovers
+						// 增加傳送 md5 編碼後的 HTTP_USER_AGENT
 						$urladd = '&agent='.md5($_SERVER['HTTP_USER_AGENT']);
 
 						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time.$urladd, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
