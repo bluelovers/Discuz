@@ -89,6 +89,7 @@ function setloginstatus($member, $cookietime) {
 	$discuz = & discuz_core::instance();
 	$discuz->session->isnew = true;
 
+	// 登入時會儲存瀏覽器訊息 setloginstatus
 	dsetcookie('auth', authcode(implode(array(
 		$member['password'], $member['uid'],
 		$_G['clientip'], TIMESTAMP, md5($_SERVER['HTTP_USER_AGENT']),
