@@ -199,7 +199,14 @@ class uc_note {
 		$uid = intval($get['uid']);
 		$query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid'");
 		if($member = DB::fetch($query)) {
-			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+			/*
+			 * 變更 uc 同步登入 synclogin 相關代碼(同步登入時會傳送瀏覽器訊息)
+			 * 變更 cookies 內的 auth 儲存的值
+			 */
+			dsetcookie('auth', authcode(implode(array(
+				$member['password'], $member['uid'],
+				$_G['clientip'], TIMESTAMP, $get['agent'],
+			), "\t"), 'ENCODE'), $cookietime);
 		}
 	}
 
