@@ -475,7 +475,7 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 	if($uid > 0) {
 		$ext2 .= ' onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'"';
 		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
-		$ext2 .= ' lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
+//		$ext2 .= ' lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
 		$ext = $ext2 . ' ' . $ext;
 
 		if(!$staticavatar && !$static) {
