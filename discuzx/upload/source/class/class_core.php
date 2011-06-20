@@ -375,6 +375,27 @@ class discuz_core {
 			}
 			list($discuz_pw, $discuz_uid) = empty($auth) || count($auth) < 2 ? array('', '') : $auth;
 
+			// bluelovers
+			if ($discuz_uid) {
+				/**
+				 * 參考對應 function_member.php ; setloginstatus
+				 * 修改為要求瀏覽器訊息 必須要符合 否則視同無效
+				 *
+				 * $auth
+				 * 		0 => discuz_pw
+				 * 		1 => discuz_uid
+				 * 		2 => clientip
+				 * 		3 => TIMESTAMP
+				 * 		4 => md5(agent)
+				 *
+				 **/
+				if ($auth[4] != md5($_SERVER['HTTP_USER_AGENT'])) {
+					unset($discuz_pw, $discuz_uid);
+				}
+			}
+//			dexit(array($discuz_pw, $discuz_uid, $auth));
+			// bluelovers
+
 			if($discuz_uid) {
 				$user = getuserbyuid($discuz_uid);
 			}
