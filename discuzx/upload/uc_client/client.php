@@ -578,4 +578,18 @@ function uc_check_version() {
 	return is_array($data) ? $data : $return;
 }
 
+// bluelovers
+function uc_api_call($module, $action, $arg = array()) {
+	$return = call_user_func(UC_API_FUNC, $module, $action, $arg);
+
+	if (UC_CONNECT != 'mysql' && strpos($return, '<?xml') !== FALSE) {
+		$return2 = null;
+		$return2 = @uc_unserialize($return);
+		$return = $return2 === null ? $return : $return2;
+	}
+
+	return $return;
+}
+// bluelovers
+
 ?>
