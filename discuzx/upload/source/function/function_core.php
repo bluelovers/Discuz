@@ -250,7 +250,11 @@ function dhtmlspecialchars($string) {
 }
 
 function dexit($message = '') {
-	echo $message;
+	if (is_array($message)) {
+		print_r($message);
+	} else {
+		echo $message;
+	}
 	output();
 	exit();
 }
