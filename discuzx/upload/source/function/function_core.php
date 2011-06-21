@@ -958,12 +958,12 @@ function libfile($libname, $folder = '', $source = 'source') {
 	$libpath = DISCUZ_ROOT.'/'.(is_array($source) ? implode('/', $source) : $source).'/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
-		$ret = realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
+		$ret = "{$libpath}/{$pre}/{$pre}_{$name}.php";
 	} else {
-		$ret = realpath("{$libpath}/{$libname}.php");
+		$ret = "{$libpath}/{$libname}.php";
 	}
 
-	return $ret;
+	return realpath($ret);
 }
 
 function dstrlen($str) {
