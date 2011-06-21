@@ -82,8 +82,9 @@ class discuz_core {
 
 		$_func = create_function('$array', '
 			if(is_array($array)) {
+				$_func = __FUNCTION__;
 				foreach($array as $k => $v) {
-					$array[$k] = __FUNCTION__($v);
+					$array[$k] = $_func($v);
 				}
 			} else {
 				$array = sre_replace("\r\n", "\n", $array);
