@@ -80,6 +80,20 @@ class discuz_core {
 	 **/
 	function _int_extensions() {
 
+		$_func = create_function('$array', '
+			if(is_array($array)) {
+				foreach($array as $k => $v) {
+					$array[$k] = __FUNCTION__($v);
+				}
+			} else {
+				$array = sre_replace("\r\n", "\n", $array);
+			}
+			return $array;
+		');
+
+		$_GET = $_func($_GET);
+		$_POST = $_func($_POST);
+
 	}
 	// bluelovers
 
