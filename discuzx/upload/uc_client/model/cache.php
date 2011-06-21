@@ -41,22 +41,22 @@ class cachemodel {
 	function updatedata($cachefile = '') {
 		if($cachefile) {
 			foreach((array)$this->map[$cachefile] as $modules) {
-				$s = "<?php\r\n";
+				$s = "<?php\n";
 				foreach((array)$modules as $m) {
 					$method = "_get_$m";
-					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\r\n";
+					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\n";
 				}
-				$s .= "\r\n?>";
+				$s .= "\n?>";
 				@file_put_contents(UC_DATADIR."./cache/$cachefile.php", $s);
 			}
 		} else {
 			foreach((array)$this->map as $file => $modules) {
-				$s = "<?php\r\n";
+				$s = "<?php\n";
 				foreach($modules as $m) {
 					$method = "_get_$m";
-					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\r\n";
+					$s .= '$_CACHE[\''.$m.'\'] = '.var_export($this->$method(), TRUE).";\n";
 				}
-				$s .= "\r\n?>";
+				$s .= "\n?>";
 				@file_put_contents(UC_DATADIR."./cache/$file.php", $s);
 			}
 		}
