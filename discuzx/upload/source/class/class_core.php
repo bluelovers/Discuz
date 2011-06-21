@@ -74,6 +74,15 @@ class discuz_core {
 		$this->initated = true;
 	}
 
+	// bluelovers
+	/**
+	 * 提供掛載各種 lib , plugin...
+	 **/
+	function _int_extensions() {
+
+	}
+	// bluelovers
+
 	function _init_env() {
 
 		error_reporting(E_ERROR);
@@ -93,6 +102,10 @@ class discuz_core {
 		if(!defined('DISCUZ_CORE_FUNCTION') && !@include(DISCUZ_ROOT.'./source/function/function_core.php')) {
 			exit('function_core.php is missing');
 		}
+
+		// bluelovers
+		$this->_int_extensions();
+		// bluelovers
 
 		if(function_exists('ini_get')) {
 			$memorylimit = @ini_get('memory_limit');
