@@ -955,7 +955,7 @@ function dimplode($array) {
 }
 
 function libfile($libname, $folder = '', $source = 'source') {
-	$libpath = DISCUZ_ROOT.'/source/'.$folder;
+	$libpath = DISCUZ_ROOT.'/'.(is_array($source) ? implode('/', $source) : $source).'/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
 		return realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
