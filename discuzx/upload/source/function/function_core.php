@@ -2191,7 +2191,7 @@ function memory($cmd, $key='', $value='', $ttl = 0) {
 }
 
 function ipaccess($ip, $accesslist) {
-	return preg_match("/^(".str_replace(array("\r\n", ' '), array('|', ''), preg_quote($accesslist, '/')).")/", $ip);
+	return preg_match("/^(".str_replace(array("\r\n", ' ', "\n"), array('|', '', '|'), preg_quote($accesslist, '/')).")/", $ip);
 }
 
 function ipbanned($onlineip) {
