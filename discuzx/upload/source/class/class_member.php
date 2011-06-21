@@ -476,7 +476,7 @@ class register_ctl {
 				}
 			}
 
-			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
+			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' ', "\n"), array('.*', '|', '', '|'), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
 
 			if($this->setting['censoruser'] && @preg_match($censorexp, $username)) {
 				showmessage('profile_username_protect');
