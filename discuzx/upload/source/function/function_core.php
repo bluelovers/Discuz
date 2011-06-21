@@ -954,7 +954,7 @@ function dimplode($array) {
 	}
 }
 
-function libfile($libname, $folder = '') {
+function libfile($libname, $folder = '', $source = 'source') {
 	$libpath = DISCUZ_ROOT.'/source/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
