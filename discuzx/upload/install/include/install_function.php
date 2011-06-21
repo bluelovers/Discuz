@@ -591,9 +591,6 @@ function save_config_file($filename, $config, $default) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
-	/*
-	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
-	*/
 	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	file_put_contents($filename, $content);
 }
@@ -1141,7 +1138,7 @@ function uc_write_config($config, $file, $password) {
 	$ucmykey = _generate_key();
 	$salt = substr(_generate_key(), 0, 6);
 	$pw = md5(md5($password).$salt);
-	$config = "<?php \r\ndefine('UC_DBHOST', '$ucdbhost');\n";
+	$config = "<?php \ndefine('UC_DBHOST', '$ucdbhost');\n";
 	$config .= "define('UC_DBUSER', '$ucdbuser');\n";
 	$config .= "define('UC_DBPW', '$ucdbpw');\n";
 	$config .= "define('UC_DBNAME', '$ucdbname');\n";
@@ -1285,7 +1282,7 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	foreach ($array as $key => $val) {
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\n";
+			$return .= "\n// $newline //\n";
 			if($key == 'admincp') {
 				$newline = str_pad(' Founders: $_config[\'admincp\'][\'founder\'] = \'1,2,3\'; ', 70, '-', STR_PAD_BOTH);
 				$return .= "// $newline //\n";
