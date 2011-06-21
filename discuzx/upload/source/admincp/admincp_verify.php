@@ -459,7 +459,7 @@ EOF;
 		showtablefooter();
 		showformfooter();
 	} else {
-		$userlist = daddslashes(explode("\r\n", dstripslashes($_G['gp_users'])));
+		$userlist = daddslashes(explode("\n", str_replace("\r\n", "\n", dstripslashes($_G['gp_users']))));
 		$query = DB::query("SELECT m.username, m.uid as muid, v.* FROM ".DB::table('common_member')." m	LEFT JOIN ".DB::table('common_member_verify')." v USING(uid) WHERE m.username IN(".dimplode($userlist).")");
 		$insert = array();
 		$haveuser = false;
