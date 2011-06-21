@@ -590,7 +590,7 @@ function getdefaultdoing() {
 
 	$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='defaultdoing'");
 	if(!empty($result['svalue'])) {
-		$_G['setting']['defaultdoing'] = explode("\r\n", $result['svalue']);
+		$_G['setting']['defaultdoing'] = explode("\n", str_replace("\r\n", "\n", $result['svalue']));
 		$key = rand(0, count($_G['setting']['defaultdoing'])-1);
 	} else {
 		$_G['setting']['defaultdoing'] = array(lang('space', 'doing_you_can'));

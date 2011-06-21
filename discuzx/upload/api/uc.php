@@ -252,8 +252,8 @@ class uc_note {
 		}
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/badwords.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -269,8 +269,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/hosts.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -292,8 +292,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/apps.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -320,8 +320,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/settings.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -413,8 +413,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/creditsettings.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'creditsettings\'] = '.var_export($outextcredits, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'creditsettings\'] = '.var_export($outextcredits, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 

@@ -694,7 +694,7 @@ function insertAllAttachTag() {
 					} else {
 						insertAttachTag(ids[1]);
 					}
-					var txt = wysiwyg ? '\r\n<br/><br/>\r\n' : '\r\n\r\n';
+					var txt = wysiwyg ? '\n<br/><br/>\n' : '\n\n';
 					insertText(txt, strlen(txt), 0);
 				}
 			}

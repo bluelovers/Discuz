@@ -2193,7 +2193,7 @@ function memory($cmd, $key='', $value='', $ttl = 0) {
 }
 
 function ipaccess($ip, $accesslist) {
-	return preg_match("/^(".str_replace(array("\r\n", ' '), array('|', ''), preg_quote($accesslist, '/')).")/", $ip);
+	return preg_match("/^(".str_replace(array("\r\n", ' ', "\n"), array('|', '', '|'), preg_quote($accesslist, '/')).")/", $ip);
 }
 
 function ipbanned($onlineip) {
@@ -2278,10 +2278,10 @@ function periodscheck($periods, $showmessage = 1) {
 
 	if(!$_G['group']['disableperiodctrl'] && $_G['setting'][$periods]) {
 		$now = dgmdate(TIMESTAMP, 'G.i');
-		foreach(explode("\r\n", str_replace(':', '.', $_G['setting'][$periods])) as $period) {
+		foreach(explode("\n", str_replace(array("\r\n", ':'), array("\n", '.'), $_G['setting'][$periods])) as $period) {
 			list($periodbegin, $periodend) = explode('-', $period);
 			if(($periodbegin > $periodend && ($now >= $periodbegin || $now < $periodend)) || ($periodbegin < $periodend && $now >= $periodbegin && $now < $periodend)) {
-				$banperiods = str_replace("\r\n", ', ', $_G['setting'][$periods]);
+				$banperiods = str_replace(array("\r\n", "\n"), ', ', $_G['setting'][$periods]);
 				if($showmessage) {
 					showmessage('period_nopermission', NULL, array('banperiods' => $banperiods), array('login' => 1));
 				} else {
