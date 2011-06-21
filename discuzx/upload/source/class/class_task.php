@@ -51,6 +51,12 @@ class task {
 				break;
 		}
 
+		/**
+		 * 載入 discuzcode
+		 * 以 bbcode 顯示 task 敘述
+		 **/
+		require_once libfile('function/discuzcode');
+
 		$updated = FALSE;
 		$num = 0;
 		$query = DB::query("SELECT t.*, mt.csc, mt.dateline FROM ".DB::table('common_task')." t
@@ -112,6 +118,13 @@ class task {
 			$task['icon'] = $task['icon'] ? $task['icon'] : 'task.gif';
 			$task['icon'] = strtolower(substr($task['icon'], 0, 7)) == 'http://' ? $task['icon'] : "static/image/task/$task[icon]";
 			$task['dateline'] = $task['dateline'] ? dgmdate($task['dateline'], 'u') : '';
+
+			/**
+			 * 以 bbcode 顯示 task 敘述
+			 * home.php?mod=task
+			 **/
+			$task['description'] = discuzcode($task['description'], 0, 0);
+
 			$tasklist[] = $task;
 		}
 
@@ -166,7 +179,13 @@ class task {
 		$this->task['icon'] = $this->task['icon'] ? $this->task['icon'] : 'task.gif';
 		$this->task['icon'] = strtolower(substr($this->task['icon'], 0, 7)) == 'http://' ? $this->task['icon'] : 'static/image/task/'.$this->task['icon'];
 		$this->task['endtime'] = $this->task['endtime'] ? dgmdate($this->task['endtime'], 'u') : '';
-		$this->task['description'] = nl2br($this->task['description']);
+
+		/**
+		 * 以 bbcode 顯示 task 敘述
+		 * home.php?mod=task&do=view&id=4
+		 **/
+		require_once libfile('function/discuzcode');
+		$this->task['description'] = discuzcode($this->task['description'], 0, 0);
 
 		$this->taskvars = array();
 		$query = DB::query("SELECT sort, name, description, variable, value FROM ".DB::table('common_taskvar')." WHERE taskid='$id'");
