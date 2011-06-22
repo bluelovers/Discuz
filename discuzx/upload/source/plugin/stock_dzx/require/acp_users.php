@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-05-21
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -35,7 +35,7 @@ class Users
 		{
 			$sql = '';
 		}
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_user $sql");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_user')." $sql");
 		$readperpage = 30;
 		if ( $cnt > 0 )
 		{
@@ -53,7 +53,7 @@ class Users
 			$start = ( $page - 1 ) * $readperpage;
 			$pages = foxpage($page, $numofpage, "$baseScript&mod=userset&");
 			$userdb = array();
-			$query = DB::query("SELECT * FROM kfsm_user $sql LIMIT $start,$readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_user')." $sql LIMIT $start,$readperpage");
 			while ( $rs = DB::fetch($query) )
 			{
 				if ( $rs['locked'] == 0 )
@@ -70,7 +70,7 @@ class Users
 	public function editUser($uid)
 	{
 		global $baseScript;
-		$rs = DB::fetch_first("SELECT * FROM kfsm_user WHERE uid='$uid'");
+		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
 		{
 			$baseScript .= '&mod=userset';
@@ -107,7 +107,7 @@ class Users
 		$capital	= str_replace(',','',$capital);
 		$capital_ava= str_replace(',','',$capital_ava);
 		$asset		= str_replace(',','',$asset);
-		$rs = DB::fetch_first("SELECT username FROM kfsm_user WHERE uid='$uid'");
+		$rs = DB::fetch_first("SELECT username FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
 			cpmsg('没有找到指定的股民', '', 'error');
 		if ( $capital == '' || !is_numeric($capital) )
@@ -122,14 +122,14 @@ class Users
 			cpmsg('今日买入必须是一个非负数', '', 'error');
 		if ( $todaysell == '' || !is_numeric($todaysell) || $todaysell < 0 )
 			cpmsg('今日卖出必须是一个非负数', '', 'error');
-		DB::query("UPDATE kfsm_user SET capital='$capital', capital_ava='$capital_ava', asset='$asset', stocksort='$stocksort', todaybuy='$todaybuy', todaysell='$todaysell', locked='$userstate' WHERE uid='$uid'");
-		DB::query("INSERT INTO kfsm_smlog (type, username1, username2, descrip, timestamp, ip) VALUES('用户管理', '$username', '{$_G[username]}', '编辑股民 {$rs['username']} 信息', '$_G[timestamp]', '$_G[clientip]')");
+		DB::query("UPDATE ".DB::table('kfsm_user')." SET capital='$capital', capital_ava='$capital_ava', asset='$asset', stocksort='$stocksort', todaybuy='$todaybuy', todaysell='$todaysell', locked='$userstate' WHERE uid='$uid'");
+		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('用户管理', '$username', '{$_G[username]}', '编辑股民 {$rs['username']} 信息', '$_G[timestamp]', '$_G[clientip]')");
 		$baseScript .= "&mod=userset&section=edituser&uid=$uid";
 		cpmsg('股民信息修改完毕', $baseScript, 'succeed');
 	}
 	public function deleteUser($uid)
 	{
-		$rs = DB::fetch_first("SELECT * FROM kfsm_user WHERE uid='$uid'");
+		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
 			cpmsg('没有找到指定的用户', '', 'error');
 		else
@@ -141,7 +141,7 @@ class Users
 		$uid		= $_G['gp_uid'];
 		$reason		= $_G['gp_reason'];
 		$baseScript .= '&mod=userset';
-		$rs = DB::fetch_first("SELECT username FROM kfsm_user WHERE uid='$uid'");
+		$rs = DB::fetch_first("SELECT username FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
 		{
 			cpmsg('未找到您要删除的用户', $baseScript, 'error');
@@ -150,9 +150,9 @@ class Users
 		{
 			if ( empty($reason) || strlen($reason) > 250 )
 				cpmsg('操作理由不能为空，且长度不能大于 250 字节', '', 'error');
-			DB::query("DELETE FROM kfsm_user WHERE uid='$uid'");
-			DB::query("DELETE FROM kfsm_customer WHERE cid='$uid'");
-			DB::query("INSERT INTO kfsm_smlog (type, username1, username2, descrip, timestamp, ip) VALUES('用户管理', '$rs[username]', '{$_G[username]}', '$reason', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("DELETE FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
+			DB::query("DELETE FROM ".DB::table('kfsm_customer')." WHERE cid='$uid'");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('用户管理', '$rs[username]', '{$_G[username]}', '$reason', '$_G[timestamp]', '$_G[clientip]')");
 			$baseScript = 'act=userset';
 			cpmsg('删除用户成功', $baseScript, 'succeed');
 		}

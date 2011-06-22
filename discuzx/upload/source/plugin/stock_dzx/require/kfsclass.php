@@ -3,25 +3,25 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-11
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
  */
 class kfsclass
 {
-	public $version	= '9.4.2';
-	public $build_date = '2011-06-10';
+	public $version	= '9.4.3';
+	public $build_date = '2011-06-18';
 	public $website = '<a href="http://www.kilofox.net" target="_blank">www.Kilofox.Net</a>';
 	public function auto_run()
 	{
 		global $_G;
 		if ( $_G['adminid'] <> '1' )
 			$this->checkMarketState();
-		$td			= DB::fetch_first("SELECT todaydate FROM kfsm_sminfo");
+		$td			= DB::fetch_first("SELECT todaydate FROM ".DB::table('kfsm_sminfo'));
 		$lastDay	= dgmdate($td['todaydate'], 'd');
 		$currDay	= dgmdate($_G['timestamp'], 'd');
-		$lastDay <> $currDay && $this->kfsm_reset();
+		$lastDay <> $currDay && $this->kfsm_reset();$this->calculatefund(1);
 	}
 	private function checkMarketState()
 	{
@@ -58,9 +58,9 @@ class kfsclass
 		if ( is_numeric($user_id) )
 		{
 			if ( $user_id > 0 )
-				$query = DB::query("SELECT uid FROM kfsm_user WHERE uid='$user_id' ORDER BY uid");
+				$query = DB::query("SELECT uid FROM ".DB::table('kfsm_user')." WHERE uid='$user_id'");
 			else
-				$query = DB::query("SELECT uid FROM kfsm_user ORDER BY uid");
+				$query = DB::query("SELECT uid FROM ".DB::table('kfsm_user')." ORDER BY uid");
 			while ( $rsuser = DB::fetch($query) )
 			{
 				$mystnum	= 0;
@@ -68,21 +68,20 @@ class kfsclass
 				$mystvalue	= 0;
 				$totalfund	= 0;
 				$stockkinds	= 0;
-				$query = DB::query("SELECT c.*,s.currprice FROM kfsm_customer c INNER JOIN kfsm_stock s ON c.sid=s.sid WHERE c.cid='$rsuser[uid]'");
+				$query = DB::query("SELECT c.*,s.currprice FROM ".DB::table('kfsm_customer')." c INNER JOIN ".DB::table('kfsm_stock')." s ON c.sid=s.sid WHERE c.cid='$rsuser[uid]'");
 				while ( $rsst = DB::fetch($query) )
 				{
-					$mystnum	= $mystnum + $rsst['stocknum'];
-					$mystcost	= $mystcost + $rsst['stocknum'] * $rsst['averageprice'];
-					$mystvalue	= $mystvalue + $rsst['stocknum'] * $rsst['currprice'];
-					$totalfund	= $totalfund + $rsst['stocknum'] * $rsst['currprice'];
+					$mystnum	+= $rsst['stocknum'];
+					$mystcost	+= $rsst['stocknum'] * $rsst['averageprice'];
+					$mystvalue	+= $rsst['stocknum'] * $rsst['currprice'];
 					$stockkinds++;
 				}
-				DB::query("UPDATE kfsm_user SET asset=capital+{$totalfund}, stocksort='{$stockkinds}', stocknum='{$mystnum}', stockcost='{$mystcost}', stockvalue='{$mystvalue}' WHERE uid='$rsuser[uid]'");
+				DB::query("UPDATE ".DB::table('kfsm_user')." SET asset=capital+{$mystvalue}, stocksort='{$stockkinds}', stocknum='{$mystnum}', stockcost='{$mystcost}', stockvalue='{$mystvalue}' WHERE uid='$rsuser[uid]'");
 			}
 		}
 		if ( $stock_id )
 		{
-			$rsst = DB::fetch_first("SELECT currprice, lowprice, highprice FROM kfsm_stock WHERE sid='$stock_id'");
+			$rsst = DB::fetch_first("SELECT currprice, lowprice, highprice FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 			if ( $rsst )
 			{
 				if ( $rsst['currprice'] > $rsst['highprice'] )
@@ -93,7 +92,7 @@ class kfsclass
 					$newstockpriceb = 'lowprice=currprice';
 				else
 					$newstockpriceb = 'lowprice=lowprice';
-				DB::query("UPDATE kfsm_stock SET $newstockpricea, $newstockpriceb WHERE sid='$stock_id'");
+				DB::query("UPDATE ".DB::table('kfsm_stock')." SET $newstockpricea, $newstockpriceb WHERE sid='$stock_id'");
 			}
 		}
 	}
@@ -104,32 +103,32 @@ class kfsclass
 		$db_trustlog	= $_G['cache']['plugin']['stock_dzx']['trustlog'];
 		$db_tradecharge	= $_G['cache']['plugin']['stock_dzx']['tradecharge'];
 		$db_stampduty	= $_G['cache']['plugin']['stock_dzx']['stampduty'];
-		DB::query("UPDATE kfsm_user SET todaybuy='0', todaysell='0'");
-		$query = DB::query("SELECT * FROM kfsm_deal WHERE ok='0' OR ok='2'");
+		DB::query("UPDATE ".DB::table('kfsm_user')." SET todaybuy='0', todaysell='0'");
+		$query = DB::query("SELECT * FROM ".DB::table('kfsm_deal')." WHERE ok='0' OR ok='2'");
 		while ( $tbrs = DB::fetch($query) )
 		{
 			if ( $tbrs['direction'] == 1 )
 			{
 				if ( $tbrs['ok'] == 0 )
 				{
-					DB::query("UPDATE kfsm_user SET capital_ava=capital WHERE uid='$tbrs[uid]'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital_ava=capital WHERE uid='$tbrs[uid]'");
 				}
 				else if ( $tbrs['ok'] == 2 )
 				{
 					$refundNum = $tbrs['price_deal'] * $tbrs['quant_deal'];
-					DB::query("UPDATE kfsm_user SET capital_ava=capital_ava+{$refundNum} WHERE uid='$tbrs[uid]'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital_ava=capital_ava+{$refundNum} WHERE uid='$tbrs[uid]'");
 				}
 			}
 		}
-		DB::query("UPDATE kfsm_deal SET ok='4', hide='1' WHERE hide='0'");
+		DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='4', hide='1' WHERE hide='0'");
 		$trustLogNum = is_numeric($db_trustlog) && $db_trustlog > 0 ? $db_trustlog*86400 : 2592000;
-		DB::query("DELETE FROM kfsm_deal WHERE time_deal < $trustLogNum");
-		DB::query("DELETE FROM kfsm_transaction WHERE ttime < $trustLogNum");
-		DB::query("DELETE FROM kfsm_customer WHERE stocknum='0'");
-		DB::query("UPDATE kfsm_sminfo SET todaybuy='0', todaysell='0', todaytotal='0', todaydate='$_G[timestamp]', ain_y=ain_t");
-		DB::query("UPDATE kfsm_stock SET state='1' WHERE openprice<=1");
-		DB::query("UPDATE kfsm_stock SET state='0' WHERE state='2' OR state='3'");
-		DB::query("UPDATE kfsm_stock SET openprice=currprice, todaytradenum='0', todaybuynum='0', todaysellnum='0', todaywave='0' WHERE todaytradenum>0");
+		DB::query("DELETE FROM ".DB::table('kfsm_deal')." WHERE time_deal < $trustLogNum");
+		DB::query("DELETE FROM ".DB::table('kfsm_transaction')." WHERE ttime < $trustLogNum");
+		DB::query("DELETE FROM ".DB::table('kfsm_customer')." WHERE stocknum='0'");
+		DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy='0', todaysell='0', todaytotal='0', todaydate='$_G[timestamp]', ain_y=ain_t");
+		DB::query("UPDATE ".DB::table('kfsm_stock')." SET state='1' WHERE openprice<=1");
+		DB::query("UPDATE ".DB::table('kfsm_stock')." SET state='0' WHERE state='2' OR state='3'");
+		DB::query("UPDATE ".DB::table('kfsm_stock')." SET openprice=currprice, todaytradenum='0', todaybuynum='0', todaysellnum='0', todaywave='0' WHERE todaytradenum>0");
 		$this->checkNewStock();
 	}
 	private function checkNewStock()
@@ -137,7 +136,7 @@ class kfsclass
 		global $baseScript, $_G;
 		loadcache('plugin');
 		$db_issuedays	= $_G['cache']['plugin']['stock_dzx']['issuedays'];
-		$query = DB::query("SELECT aid, sid, stockname, userid, stockprice, stocknum, surplusnum, capitalisation, issuetime FROM kfsm_apply WHERE state='1'");
+		$query = DB::query("SELECT aid, sid, stockname, userid, stockprice, stocknum, surplusnum, capitalisation, issuetime FROM ".DB::table('kfsm_apply')." WHERE state='1'");
 		while ( $aprs = DB::fetch($query) )
 		{
 			if ( $_G['timestamp'] > $aprs['issuetime'] )
@@ -151,12 +150,12 @@ class kfsclass
 				}
 				while ( $i < 23 );
 				$issue_price = round($aprs['capitalisation'] / $aprs['stocknum'], 2);
-				DB::query("UPDATE kfsm_stock SET openprice='$issue_price', currprice='$issue_price', lowprice='$issue_price', highprice='$issue_price', issueprice='$issue_price', issuetime='$_G[timestamp]', pricedata='$pricedata', state='0' WHERE sid='{$aprs[sid]}'");
-				DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$aprs[surplusnum]}, buytime='{$_G[timestamp]}' WHERE cid='{$aprs[userid]}' AND sid='{$aprs[sid]}'");
+				DB::query("UPDATE ".DB::table('kfsm_stock')." SET openprice='$issue_price', currprice='$issue_price', lowprice='$issue_price', highprice='$issue_price', issueprice='$issue_price', issuetime='$_G[timestamp]', pricedata='$pricedata', state='0' WHERE sid='{$aprs[sid]}'");
+				DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$aprs[surplusnum]}, buytime='{$_G[timestamp]}' WHERE cid='{$aprs[userid]}' AND sid='{$aprs[sid]}'");
 				$subject = "新股 $aprs[stockname] 今日正式上市";
-				$content = "今天是 [url=plugin.php?id=stock:index&mod=stock&act=showinfo&sid=$aprs[sid]]{$aprs['stockname']}[/url] 正式上市的第一天，所有股民均可按照股市规则自由交易。";
-				DB::query("INSERT INTO kfsm_news (subject, content, color, author, addtime) VALUES('$subject', '$content', '', 'StockIns', '{$_G[timestamp]}')");
-				DB::query("UPDATE kfsm_apply SET state='3' WHERE aid='$aprs[aid]'");
+				$content = "今天是 [url=plugin.php?id=stock_dzx:index&mod=stock&act=showinfo&sid=$aprs[sid]]{$aprs['stockname']}[/url] 正式上市的第一天，所有股民均可按照股市规则自由交易。";
+				DB::query("INSERT INTO ".DB::table('kfsm_news')." (subject, content, color, author, addtime) VALUES('$subject', '$content', '', 'StockIns', '{$_G[timestamp]}')");
+				DB::query("UPDATE ".DB::table('kfsm_apply')." SET state='3' WHERE aid='$aprs[aid]'");
 				$s = explode('|', $pricedata);
 				$stock_id = $aprs['sid'];
 				include_once 'chart.php';
@@ -167,11 +166,11 @@ class kfsclass
 	}
 	public function resetcid()
 	{
-		$query = DB::query("SELECT sid FROM kfsm_stock ORDER BY sid");
+		$query = DB::query("SELECT sid FROM ".DB::table('kfsm_stock')." ORDER BY sid");
 		$cid = 1;
 		while ( $rs = DB::fetch($query) )
 		{
-			DB::query("UPDATE kfsm_stock SET cid='$cid' WHERE sid='$rs[sid]'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET cid='$cid' WHERE sid='$rs[sid]'");
 			$cid++;
 		}
 	}

@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-06
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -14,7 +14,7 @@ class Trusts
 	{
 		global $db;
 		$i = 0;
-		$qd = DB::query("SELECT d.*, u.uid, u.username FROM kfsm_deal d LEFT JOIN kfsm_user u ON d.uid=u.uid ORDER BY d.did DESC");
+		$qd = DB::query("SELECT d.*, u.uid, u.username FROM ".DB::table('kfsm_deal')." d LEFT JOIN ".DB::table('kfsm_user')." u ON d.uid=u.uid ORDER BY d.did DESC");
 		while ( $rsd = DB::fetch($qd) )
 		{
 			$i++;
@@ -53,7 +53,7 @@ class Trusts
 	{
 		global $db;
 		$i = 0;
-		$qt = DB::query("SELECT t.*, u.uid, u.username FROM kfsm_transaction t LEFT JOIN kfsm_user u ON t.uid=u.uid ORDER BY t.tid DESC");
+		$qt = DB::query("SELECT t.*, u.uid, u.username FROM ".DB::table('kfsm_transaction')." t LEFT JOIN ".DB::table('kfsm_user')." u ON t.uid=u.uid ORDER BY t.tid DESC");
 		while ( $rst = DB::fetch($qt) )
 		{
 			$i++;
@@ -86,8 +86,8 @@ class Trusts
 				$delid .= $value.',';
 			}
 			$delid && $delid = substr($delid,0,-1);
-			DB::query("DELETE FROM kfsm_deal WHERE did IN ($delid)");
-			DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('委托记录管理', '{$_G[username]}', '删除委托记录 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("DELETE FROM ".DB::table('kfsm_deal')." WHERE did IN ($delid)");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('委托记录管理', '{$_G[username]}', '删除委托记录 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=trusts';
 		cpmsg("已成功删除 {$ttlnum} 条委托记录！", $baseScript, 'succeed');
@@ -106,8 +106,8 @@ class Trusts
 				$delid .= $value.',';
 			}
 			$delid && $delid = substr($delid,0,-1);
-			DB::query("DELETE FROM kfsm_transaction WHERE tid IN ($delid)");
-			DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('成交记录管理', '{$_G[username]}', '删除成交记录 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("DELETE FROM ".DB::table('kfsm_transaction')." WHERE tid IN ($delid)");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('成交记录管理', '{$_G[username]}', '删除成交记录 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=trusts';
 		cpmsg("已成功删除 {$ttlnum} 条成交记录！", $baseScript, 'succeed');

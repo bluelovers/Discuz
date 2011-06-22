@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -65,7 +65,7 @@ class Member
 	private function authorise($forumuid=0)
 	{
 		global $_G;
-		$rs = DB::fetch_first("SELECT * FROM kfsm_user WHERE forumuid='$forumuid'");
+		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_user')." WHERE forumuid='$forumuid'");
 		if ( !$rs )
 		{
 			require_once 'class_register.php';
@@ -97,7 +97,7 @@ class Member
 			if ( $rs['ip'] <> $_G['clientip'] )
 			{
 				$this->member['ip'] = $_G['clientip'];
-				DB::query("UPDATE kfsm_user SET ip='$_G[clientip]' WHERE uid='{$rs[uid]}'");
+				DB::query("UPDATE ".DB::table('kfsm_user')." SET ip='$_G[clientip]' WHERE uid='{$rs[uid]}'");
 			}
 			else
 			{
@@ -115,7 +115,7 @@ class Member
 			$showAccount = false;
 		if ( $user_id > 0 )
 		{
-			$userData = DB::fetch_first("SELECT username FROM kfsm_user WHERE uid='$user_id'");
+			$userData = DB::fetch_first("SELECT username FROM ".DB::table('kfsm_user')." WHERE uid='$user_id'");
 			$username = $userData['username'];
 		}
 		else
@@ -123,7 +123,7 @@ class Member
 			$username = '-';
 		}
 		$usdb = array();
-		$query = DB::query("SELECT c.*, s.sid, s.stockname, s.currprice, s.holder_id, s.state FROM kfsm_customer c LEFT JOIN kfsm_stock s ON s.sid=c.sid WHERE c.cid='$user_id' ORDER BY c.stocknum DESC");
+		$query = DB::query("SELECT c.*, s.sid, s.stockname, s.currprice, s.holder_id, s.state FROM ".DB::table('kfsm_customer')." c LEFT JOIN ".DB::table('kfsm_stock')." s ON s.sid=c.sid WHERE c.cid='$user_id' ORDER BY c.stocknum DESC");
 		while ( $rs = DB::fetch($query) )
 		{
 			$averageprice	= $rs['averageprice'];
@@ -220,13 +220,13 @@ class Member
 					{
 						if ( $db_proportion > 0 && $db_charge >= 0 )
 						{
-							DB::query("UPDATE kfsm_user SET capital=capital+{$money_sm}-{$comm_charge}, capital_ava=capital_ava+{$money_sm}-{$comm_charge}, asset=asset+'$money_sm' WHERE uid='{$user[id]}'");
+							DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$money_sm}-{$comm_charge}, capital_ava=capital_ava+{$money_sm}-{$comm_charge}, asset=asset+'$money_sm' WHERE uid='{$user[id]}'");
 							if ( $db_credittype && $_G['setting']['extcredits'][$db_credittype] )
 								$creditid	= $db_credittype;
 							else
 								$creditid	= $_G['setting']['creditstrans'];
 							DB::query("UPDATE ".DB::table('common_member_count')." SET extcredits".$creditid."=extcredits".$creditid."-{$money_in} WHERE uid='{$_G['uid']}'");
-							DB::query("INSERT INTO kfsm_smlog (type, username2, field, descrip, timestamp, ip) VALUES('用户管理', '{$user[username]}', '资金流动', '用户 {$user[username]} 把论坛{$user['moneyTyp']} $money_in {$user['moneyUnit']}存入股市帐户，折合股市资金 ".number_format($money_sm,2)." 元，扣除手续费 ".number_format($comm_charge,2)." 元', '$_G[timestamp]', '$_G[clientip]')");
+							DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, field, descrip, timestamp, ip) VALUES('用户管理', '{$user[username]}', '资金流动', '用户 {$user[username]} 把论坛{$user['moneyTyp']} $money_in {$user['moneyUnit']}存入股市帐户，折合股市资金 ".number_format($money_sm,2)." 元，扣除手续费 ".number_format($comm_charge,2)." 元', '$_G[timestamp]', '$_G[clientip]')");
 							showmessage("您已经把论坛{$user[moneyType]} $money_in {$user[moneyUnit]}折合股市资金 ".number_format($money_sm,2)." 元存进了您的股市帐户，扣除手续费 ".number_format($comm_charge,2)." 元", "$baseScript&mod=member&act=fundsmng");
 						}
 						else
@@ -277,13 +277,13 @@ class Member
 							{
 								$comm_charge = $money_x * $db_charge/100;
 								$money_f = (int)($money_x / $db_proportion);	// 股市货币兑换成论坛货币
-								DB::query("UPDATE kfsm_user SET capital=capital-($money_x+$comm_charge), capital_ava=capital_ava-($money_x+$comm_charge), asset=asset-{$money_x}-{$comm_charge} WHERE uid='{$user[id]}'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-($money_x+$comm_charge), capital_ava=capital_ava-($money_x+$comm_charge), asset=asset-{$money_x}-{$comm_charge} WHERE uid='{$user[id]}'");
 								if ( $db_credittype && $_G['setting']['extcredits'][$db_credittype] )
 									$creditid	= $db_credittype;
 								else
 									$creditid	= $_G['setting']['creditstrans'];
 								DB::query("UPDATE ".DB::table('common_member_count')." SET extcredits".$creditid."=extcredits".$creditid."+{$money_f} WHERE uid='{$_G['uid']}'");
-								DB::query("INSERT INTO kfsm_smlog (type, username2, field, descrip, timestamp, ip) VALUES('用户管理', '{$user[username]}','资金流动','用户 {$user[username]} 把股市资金 ".number_format($money_x,2)." 元提取到论坛帐户，扣除手续费 ".number_format($comm_charge,2)." 元，折合论坛{$user[moneyType]} $money_f {$user[moneUnit]}', '$_G[timestamp]', '$_G[clientip]')");
+								DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, field, descrip, timestamp, ip) VALUES('用户管理', '{$user[username]}','资金流动','用户 {$user[username]} 把股市资金 ".number_format($money_x,2)." 元提取到论坛帐户，扣除手续费 ".number_format($comm_charge,2)." 元，折合论坛{$user[moneyType]} $money_f {$user[moneUnit]}', '$_G[timestamp]', '$_G[clientip]')");
 								showmessage("您已经把股市资金 ".number_format($money_x,2)." 元折合论坛{$user[moneyType]} $money_f {$user[moneyUnit]}存进了您的论坛帐户，扣除手续费 ".number_format($comm_charge,2)." 元", "$baseScript&mod=member&act=fundsmng");
 							}
 							else
@@ -331,7 +331,7 @@ class Member
 						showmessage('您不能把资金送给自己');
 					else
 					{
-						$rs = DB::fetch_first("SELECT uid, username, locked FROM kfsm_user WHERE username='$towho'");
+						$rs = DB::fetch_first("SELECT uid, username, locked FROM ".DB::table('kfsm_user')." WHERE username='$towho'");
 						if ( !$rs )
 							showmessage("收款人 $towho 未找到");
 						else
@@ -354,12 +354,12 @@ class Member
 									}
 									else
 									{
-										DB::query("UPDATE kfsm_user SET capital=capital-($money_t+$comm_charge), capital_ava=capital_ava-($money_t+$comm_charge), asset=asset-($money_t+$comm_charge) WHERE uid='{$user[id]}'");
-										DB::query("UPDATE kfsm_user SET capital=capital+{$money_t}, capital_ava=capital_ava+{$money_t}, asset=asset+{$money_t} WHERE uid='{$rs[uid]}'");
+										DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-($money_t+$comm_charge), capital_ava=capital_ava-($money_t+$comm_charge), asset=asset-($money_t+$comm_charge) WHERE uid='{$user[id]}'");
+										DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$money_t}, capital_ava=capital_ava+{$money_t}, asset=asset+{$money_t} WHERE uid='{$rs[uid]}'");
 										$subject = "股民 $user[username] 资金过户成功！";
 										$content = "股民 [url=$baseScript&act=showuser&uid={$user['id']}]{$user['username']}[/url] 将 ".number_format($money_t,2)." 元帐户资金过户给 [url=$baseScript&act=showuser&uid={$rs['uid']}]{$rs['username']}[/url] 。请 {$rs[username]} 注意查收。";
-										DB::query("INSERT INTO kfsm_news(subject, content, color, addtime) VALUES ('$subject', '$content', 'StockIns', '$_G[timestamp]')");
-										DB::query("INSERT INTO kfsm_smlog (type, username1, username2, field, descrip, timestamp, ip) VALUES('用户管理','$rs[username]','$user[username]','资金流动','用户 {$user[username]} 将 ".number_format($money_t,2)." 元转帐给 {$rs[username]} ，扣除手续费 $comm_charge 元', '$_G[timestamp]', '$_G[clientip]')");
+										DB::query("INSERT INTO ".DB::table('kfsm_news')."(subject, content, color, addtime) VALUES ('$subject', '$content', 'StockIns', '$_G[timestamp]')");
+										DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, field, descrip, timestamp, ip) VALUES('用户管理','$rs[username]','$user[username]','资金流动','用户 {$user[username]} 将 ".number_format($money_t,2)." 元转帐给 {$rs[username]} ，扣除手续费 $comm_charge 元', '$_G[timestamp]', '$_G[clientip]')");
 										showmessage("您已经把股市资金 ".number_format($money_t,2)." 元转给 {$rs[username]} ，扣除手续费 ".number_format($comm_charge,2)."元", "$baseScript&mod=member&act=fundsmng");
 									}
 								}
@@ -375,8 +375,8 @@ class Member
 		global $baseScript, $hkimg, $_G, $db_smname, $db_otherpp;
 		if ( $rs = $this->checkMelonCondition( $user, $stock_id ) )
 		{
-			$cs = DB::fetch_first("SELECT COUNT(*) AS usernum, SUM(stocknum) AS stocknum FROM kfsm_customer WHERE sid='$stock_id'");
-			$sn = DB::fetch_first("SELECT stocknum FROM kfsm_customer WHERE cid='$user[id]' AND sid='$stock_id'");
+			$cs = DB::fetch_first("SELECT COUNT(*) AS usernum, SUM(stocknum) AS stocknum FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
+			$sn = DB::fetch_first("SELECT stocknum FROM ".DB::table('kfsm_customer')." WHERE cid='$user[id]' AND sid='$stock_id'");
 	        require_once 'mod_stock.php';
 			$stock = new stock('call');
 			$cnt = $cs['usernum'];
@@ -410,7 +410,7 @@ class Member
 			$cutnum1	= $_G['gp_cutnum1'];
 			$cutnum2	= $_G['gp_cutnum2'];
 			$cutnum3	= $_G['gp_cutnum3'];
-			$tn			= DB::fetch_first("SELECT SUM(stocknum) AS stocknum FROM kfsm_customer WHERE sid='$stock_id'");
+			$tn			= DB::fetch_first("SELECT SUM(stocknum) AS stocknum FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
 			$totalNum	= $tn['stocknum'];
 			if ( $_G['gp_cuttype'] == '1' )
 			{
@@ -423,17 +423,20 @@ class Member
 					showmessage('您的帐户中没有足够的资金用来分红，请适当减少分红金额');
 				else
 				{
-					DB::query("UPDATE kfsm_user SET capital=capital-{$feesNeed}, capital_ava=capital_ava-{$feesNeed}, asset=asset-{$feesNeed} WHERE uid='$user[id]'");
-					$query = DB::query("SELECT * FROM kfsm_customer WHERE sid='$stock_id'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$feesNeed}, capital_ava=capital_ava-{$feesNeed}, asset=asset-{$feesNeed} WHERE uid='$user[id]'");
+					$query = DB::query("SELECT * FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
 					while ( $rc = DB::fetch($query) )
 					{
-						$addmoney = $cutnum1 * ceil($rc['stocknum']/100);
-						DB::query("UPDATE kfsm_user SET capital=capital+{$addmoney}, capital_ava=capital_ava+{$addmoney}, asset=asset+{$addmoney} WHERE uid='$rc[cid]'");
+						$addmoney = $cutnum1 * floor($rc['stocknum']/100);
+						if ( $addmoney > 0 )
+						{
+							DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$addmoney}, capital_ava=capital_ava+{$addmoney}, asset=asset+{$addmoney} WHERE uid='$rc[cid]'");
+						}
 					}
 					$subject = "上市公司 {$rs[stockname]} 向全体股东分配红利";
-					$content = "上市公司 <a href=\"hack.php?H_name=stock&mod=stock&act=showinfo&id=$stock_id\">{$rs[stockname]}</a> 大股东 <a href=\"hack.php?H_name=stock&mod=member&act=showinfo&id=$user[id]\">{$user[username]}</a> 向全体持有该公司股票的股东分配红利。\n分红方案为每 <span class=\"s3\">100</span> 股派送现金 <span class=\"s3\">$cutnum1</span> 元！";
-					DB::query("INSERT INTO kfsm_news (subject, content, color, author, addtime) VALUES('$subject', '$content', '008000', 'StockIns', '$_G[timestamp]')");
-					DB::query("INSERT INTO kfsm_smlog (type, username2, field, descrip, timestamp, ip) VALUES('分红管理', '{$user[username]}', '股票分红', '上市公司 {$rc[stockname]} 每 100 股现金派息 ".number_format($cutnum1,2)." 元', '$_G[timestamp]', '$_G[clientip]')");
+					$content = "上市公司 [url=plugin.php?id=stock_dzx:index&mod=stock&act=showinfo&sid=$stock_id]{$rs[stockname]}[/url] 大股东 [url=plugin.php?id=stock_dzx:index&mod=member&act=showinfo&uid=$user[id]]{$user[username]}[/url] 向全体持有该公司股票的股东分配红利。\n分红方案为每 100 股派送现金 $cutnum1 元！";
+					DB::query("INSERT INTO ".DB::table('kfsm_news')." (subject, content, color, author, addtime) VALUES('$subject', '$content', '008000', 'StockIns', '$_G[timestamp]')");
+					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, field, descrip, timestamp, ip) VALUES('分红管理', '{$user[username]}', '股票分红', '上市公司 {$rc[stockname]} 每 100 股现金派息 ".number_format($cutnum1,2)." 元', '$_G[timestamp]', '$_G[clientip]')");
 					showmessage('红利分配成功，每 100 股现金派息 '.number_format($cutnum1,2).' 元', $baseScript);
 				}
 			}
@@ -443,24 +446,26 @@ class Member
 					showmessage('请输入正确的送股数量');
 				else
 					$cutnum2 = (int)$cutnum2;
-				$stockPrice = DB::query("SELECT currprice FROM kfsm_stock WHERE sid='$stock_id'");
+				$stockPrice = DB::query("SELECT currprice FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 				$feesNeed = $stockPrice * $cutnum2 * ceil($totalNum/100);
 				if ( $user['capital_ava'] < $feesNeed )
 					showmessage('您的帐户中没有足够的资金用来分红，请适当减少分红股数');
 				else
 				{
-					DB::query("UPDATE kfsm_user SET capital=capital-{$feesNeed}, capital_ava=capital_ava-{$feesNeed}, asset=asset-{$feesNeed} WHERE uid='$user[id]'");
-					$query = DB::query("SELECT cid, sid, stocknum FROM kfsm_customer WHERE sid='$stock_id'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$feesNeed}, capital_ava=capital_ava-{$feesNeed}, asset=asset-{$feesNeed} WHERE uid='$user[id]'");
+					$query = DB::query("SELECT cid, sid, stocknum FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
 					while ( $rc = DB::fetch($query) )
 					{
-						$addnum = $cutnum2 * ceil($rc['stocknum']/100);
-						DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$addnum} WHERE cid='$rc[cid]' AND sid='$rc[sid]'");
-						$kfsclass->calculatefund($rc['cid'],0);
+						$addnum = $cutnum2 * floor($rc['stocknum']/100);
+						if ( $addnum > 0 )
+						{
+							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$addnum} WHERE cid='$rc[cid]' AND sid='$rc[sid]'");
+						}
 					}
 					$subject = "上市公司 {$rs[stockname]} 向全体股东分配红利";
-					$content = "上市公司 [url=plugin.php?id=stock:index&mod=stock&act=showinfo&sid=$stock_id]{$rs['stockname']}[/url] 大股东 [url=plugin.php?id=stock:index&mod=member&act=showinfo&uid={$user[id]}]{$user[username]}[/url] 向全体持有该公司股票的股东分配红利。\n分红方案为每 100 股派送股票 $cutnum2 股！";
-					DB::query("INSERT INTO kfsm_news (subject, content, color, author, addtime) VALUES('$subject', '$content', '008000', 'StockIns', '$_G[timestamp]')");
-					DB::query("INSERT INTO kfsm_smlog (type, username2, field, descrip, timestamp, ip) VALUES('分红管理', '{$user[username]}', '股票分红', '上市公司 {$rs[stockname]} 每 100 股派送股票 {$cutnum2} 股', '$_G[timestamp]', '$_G[clientip]')");
+					$content = "上市公司 [url=plugin.php?id=stock_dzx:index&mod=stock&act=showinfo&sid=$stock_id]{$rs['stockname']}[/url] 大股东 [url=plugin.php?id=stock_dzx:index&mod=member&act=showinfo&uid={$user[id]}]{$user[username]}[/url] 向全体持有该公司股票的股东分配红利。\n分红方案为每 100 股派送股票 $cutnum2 股！";
+					DB::query("INSERT INTO ".DB::table('kfsm_news')." (subject, content, color, author, addtime) VALUES('$subject', '$content', '008000', 'StockIns', '$_G[timestamp]')");
+					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, field, descrip, timestamp, ip) VALUES('分红管理', '{$user[username]}', '股票分红', '上市公司 {$rs[stockname]} 每 100 股派送股票 {$cutnum2} 股', '$_G[timestamp]', '$_G[clientip]')");
 					showmessage("红利分配成功，每 100 股派送股票 $cutnum2 股", $baseScript);
 				}
 			}
@@ -485,7 +490,7 @@ class Member
 			showmessage('股东分红功能已经关闭');
 		else
 		{
-			$rs = DB::fetch_first("SELECT sid, stockname, currprice, holder_id, state FROM kfsm_stock WHERE sid='$stock_id'");
+			$rs = DB::fetch_first("SELECT sid, stockname, currprice, holder_id, state FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 			if ( !$rs )
 				showmessage('没有找到指定的上市公司，可能该上市公司已经倒闭');
 			else
@@ -498,7 +503,7 @@ class Member
 						showmessage('您不是该股最大股东，不能进行分红操作');
 					else
 					{
-						$usernum = DB::result_first("SELECT COUNT(*) FROM kfsm_customer c LEFT JOIN kfsm_user u ON c.cid=u.uid WHERE u.ip<>'$user[ip]' AND c.sid='$stock_id'");
+						$usernum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_customer')." c LEFT JOIN ".DB::table('kfsm_user')." u ON c.cid=u.uid WHERE u.ip<>'$user[ip]' AND c.sid='$stock_id'");
 						if ( $usernum < 1 )
 							showmessage('该公司股东人数太少，不能分红');
 						else

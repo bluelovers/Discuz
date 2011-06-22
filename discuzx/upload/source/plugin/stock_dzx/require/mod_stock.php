@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -46,7 +46,7 @@ class Stock
 	{
 		global $baseScript, $_G, $db_smname, $db_marketpp;
 		$page = $_G['gp_page'];
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_stock WHERE state<>4");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_stock')." WHERE state<>4");
 		$cnt = $cnt<=0 ? 1 : $cnt;
 		$readperpage = is_numeric($db_marketpp) && $db_marketpp > 0 ? $db_marketpp : 20;
 		if ( $page <= 1 )
@@ -115,7 +115,7 @@ class Stock
 				$nextby = '_d';
 			break;
 		}
-		$query = DB::query("SELECT * FROM kfsm_stock WHERE state<>4 ORDER BY $by LIMIT $start, $readperpage");
+		$query = DB::query("SELECT * FROM ".DB::table('kfsm_stock')." WHERE state<>4 ORDER BY $by LIMIT $start, $readperpage");
 		$stocks = array();
 		while ( $rs = DB::fetch($query) )
 		{
@@ -151,7 +151,7 @@ class Stock
 	private function showStockInfo( $stock_id )
 	{
 		global $baseScript, $hkimg, $_G, $db_smname, $db_klcolor, $db_otherpp;
-		$rs = DB::fetch_first("SELECT * FROM kfsm_stock WHERE sid='$stock_id'");
+		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 		if ( !$rs )
 		{
 			showmessage('没有找到指定的上市公司，可能该上市公司已经倒闭');
@@ -165,7 +165,7 @@ class Stock
 				$user->processAction('subscribe');
 				exit;
 			}
-			$totalnum = DB::result_first("SELECT SUM(stocknum) FROM kfsm_customer WHERE sid='$stock_id'");
+			$totalnum = DB::result_first("SELECT SUM(stocknum) FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
 			if ( $rs['issuer_id'] )
 				$issuer = "<a href=\"$baseScript&mod=member&act=showinfo&uid={$rs['issuer_id']}\">{$rs['issuer_name']}</a>";
 			else
@@ -202,11 +202,11 @@ class Stock
 				$s = explode('|', $rs['pricedata']);
 				require_once 'chart.php';
 			}
-			$usernum = DB::result_first("SELECT COUNT(*) FROM kfsm_customer WHERE sid='$stock_id'");
+			$usernum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id'");
 			$topdb = array();
 			if ( $usernum > 0 )
 			{
-				$query = DB::query("SELECT cid, username, stocknum FROM kfsm_customer WHERE sid='$stock_id' ORDER BY stocknum DESC LIMIT 0,5");
+				$query = DB::query("SELECT cid, username, stocknum FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' ORDER BY stocknum DESC LIMIT 0,5");
 				while ( $rt = DB::fetch($query) )
 				{
 					$rt['proportion']	= round($rt['stocknum']/$totalnum,4);
@@ -244,7 +244,7 @@ class Stock
 		$shldb = array();
 		if ( $stock_id > 0 )
 		{
-			$query = DB::query("SELECT * FROM kfsm_customer WHERE sid='$stock_id' ORDER BY stocknum DESC LIMIT $start, $readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' ORDER BY stocknum DESC LIMIT $start, $readperpage");
 			while ( $rs = DB::fetch($query) )
 			{
 				$averageprice	= $rs['averageprice'];
@@ -274,15 +274,15 @@ class Stock
 		if ( $stock_id && $price )
 		{
 			$klcolor = $db_klcolor;
-			$pd = DB::fetch_first("SELECT pricedata FROM kfsm_stock WHERE sid='$stock_id'");
+			$pd = DB::fetch_first("SELECT pricedata FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 			$pricedata = $pd['pricedata'];
 			$pricedata = substr($pricedata, strpos($pricedata,'|') + 1) . '|' . round($price,2);
-			DB::query("UPDATE kfsm_stock SET uptime='$_G[timestamp]', pricedata='$pricedata' WHERE sid='$stock_id'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET uptime='$_G[timestamp]', pricedata='$pricedata' WHERE sid='$stock_id'");
 		}
 	}
 	public function getRisedTop($num=0)
 	{
-		$query = DB::query("SELECT sid, stockname, openprice, currprice, todaywave FROM kfsm_stock WHERE todaywave>=0 AND state<>4 ORDER BY todaywave DESC LIMIT 0,$num");
+		$query = DB::query("SELECT sid, stockname, openprice, currprice, todaywave FROM ".DB::table('kfsm_stock')." WHERE todaywave>=0 AND state<>4 ORDER BY todaywave DESC LIMIT 0,$num");
 		while ( $rs = DB::fetch($query) )
 		{
 			$rs['currprice'] = number_format($rs['currprice'],2);
@@ -293,7 +293,7 @@ class Stock
 	}
 	public function getFalledTop($num=0)
 	{
-		$query = DB::query("SELECT sid, stockname, openprice, currprice, todaywave FROM kfsm_stock WHERE todaywave<=0 AND state<>4 ORDER BY todaywave ASC LIMIT 0,$num");
+		$query = DB::query("SELECT sid, stockname, openprice, currprice, todaywave FROM ".DB::table('kfsm_stock')." WHERE todaywave<=0 AND state<>4 ORDER BY todaywave ASC LIMIT 0,$num");
 		while ( $rs = DB::fetch($query) )
 		{
 			$rs['currprice'] = number_format($rs['currprice'],2);
@@ -316,7 +316,7 @@ class Stock
 				$sql = "sid='$keyword'";
 			else
 				$sql = "stockname LIKE '%{$keyword}%'";
-			$rs = DB::fetch_first("SELECT sid FROM kfsm_stock WHERE $sql");
+			$rs = DB::fetch_first("SELECT sid FROM ".DB::table('kfsm_stock')." WHERE $sql");
 			if ( !$rs )
 				showmessage("没有找到指定的股票，可能该上市公司已经倒闭");
 			else

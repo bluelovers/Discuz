@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td rowspan="2" class="hm">
-						<img border="0" src="source/plugin/stock/image/ca/$rs[comphoto]"></a><br/><br/>
+						<img border="0" src="source/plugin/stock_dzx/image/ca/$rs[comphoto]"></a><br/><br/>
 						<form name="form1" action="$baseScript&mod=member&act=trustsmng" method="post">
 							<input type="hidden" name="section" value="trade" />
 							<input type="hidden" name="sid" value="$rs[sid]" />
@@ -62,7 +62,7 @@
 <!--{loop $topdb $v}-->
 				<tr>
 					<td>$v[username]</td>
-					<td><img src="source/plugin/stock/image/baru.gif" height="10" width="$v[imgwidth]" title="持股数量：$v[stocknum] 股"> {$v['percent']} %</td>
+					<td><img src="source/plugin/stock_dzx/image/baru.gif" height="10" width="$v[imgwidth]" title="持股数量：$v[stocknum] 股"> {$v['percent']} %</td>
 				</tr>
 <!--{/loop}-->
 			</table>

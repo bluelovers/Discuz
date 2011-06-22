@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-04-24
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -14,7 +14,7 @@ class News
 	{
 		global $db_otherpp, $baseScript;
 		$newsdb = array();
-		$query = DB::query("SELECT * FROM kfsm_news ORDER BY nid  DESC");
+		$query = DB::query("SELECT * FROM ".DB::table('kfsm_news')." ORDER BY nid  DESC");
 		$i = 0;
 		while ( $rt = DB::fetch($query) )
 		{
@@ -36,13 +36,13 @@ class News
 		{
 			cpmsg('新闻标题或新闻内容不能为空', '', 'error');
 		}
-		DB::query("INSERT INTO kfsm_news(subject, content, author, addtime) VALUES ('$newsubject', '$newcontent', '{$_G[username]}', '$_G[timestamp]')");
+		DB::query("INSERT INTO ".DB::table('kfsm_news')."(subject, content, author, addtime) VALUES ('$newsubject', '$newcontent', '{$_G[username]}', '$_G[timestamp]')");
 		$baseScript .= '&mod=news';
 		cpmsg('新闻添加成功', $baseScript, 'succeed');
 	}
 	public function getNewsInfo($nid)
 	{
-		$news = DB::fetch_first("SELECT * FROM kfsm_news WHERE nid='$nid'");
+		$news = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_news')." WHERE nid='$nid'");
 		return $news;
 	}
 	public function updateNews()
@@ -54,14 +54,14 @@ class News
 		{
 			cpmsg('新闻标题或新闻内容不能为空', '', 'error');
 		}
-		DB::query("UPDATE kfsm_news SET subject='$subject', content='$content' WHERE nid='{$_G[gp_nid]}'");
+		DB::query("UPDATE ".DB::table('kfsm_news')." SET subject='$subject', content='$content' WHERE nid='{$_G[gp_nid]}'");
 		$baseScript .= '&mod=news';
 		cpmsg('新闻更新成功', $baseScript, 'succeed');
 	}
 	public function deleteNews($nid)
 	{
 		global $baseScript;
-		DB::query("DELETE FROM kfsm_news WHERE nid='$nid'");
+		DB::query("DELETE FROM ".DB::table('kfsm_news')." WHERE nid='$nid'");
 		$baseScript .= '&mod=news';
 		cpmsg('新闻删除成功', $baseScript, 'succeed');
 	}

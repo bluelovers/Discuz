@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -13,7 +13,7 @@ class Topuser
 	public function showTopUser()
 	{
 		global $baseScript, $_G, $db_smname, $db_marketpp, $hkimg, $page;
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_user");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_user'));
 		if ( $cnt > 0 )
 		{
 			$readperpage = is_numeric($db_marketpp) && $db_marketpp > 0 ? $db_marketpp : 20;
@@ -39,7 +39,7 @@ class Topuser
 	{
 		global $baseScript;
 		$topdb = array();
-		$query = DB::query("SELECT uid, username, asset, stocknum, stockcost, stockvalue, stocksort, todaybuy, todaysell, regtime FROM kfsm_user WHERE locked<>'1' ORDER BY asset DESC LIMIT $start,$readperpage");
+		$query = DB::query("SELECT uid, username, asset, stocknum, stockcost, stockvalue, stocksort, todaybuy, todaysell, regtime FROM ".DB::table('kfsm_user')." WHERE locked<>'1' ORDER BY asset DESC LIMIT $start,$readperpage");
 		$i = 0;
 		while ( $rs = DB::fetch($query) )
 		{

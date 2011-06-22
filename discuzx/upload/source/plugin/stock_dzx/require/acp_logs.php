@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-05-21
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -14,7 +14,7 @@ class Logs
 	{
 		global $baseScript, $_G;
 		$page = $_G['gp_page'];
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_smlog");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_smlog'));
 		$readperpage = 30;
 		if ( $cnt > 0 )
 		{
@@ -32,7 +32,7 @@ class Logs
 			$start = ( $page - 1 ) * $readperpage;
 			$pages = foxpage($page,$numofpage,"?$baseScript&mod=logs&");
 			$logdb = array();
-			$query = DB::query("SELECT * FROM kfsm_smlog ORDER BY timestamp DESC LIMIT $start, $readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_smlog')." ORDER BY timestamp DESC LIMIT $start, $readperpage");
 			while ( $rslog = DB::fetch($query) )
 			{
 				$rslog['timestamp'] = dgmdate($rslog['timestamp']);
@@ -55,8 +55,8 @@ class Logs
 				$delid .= $value.',';
 			}
 			$delid && $delid = substr($delid,0,-1);
-			DB::query("DELETE FROM kfsm_smlog WHERE id IN ($delid)");
-			DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('日志管理', '{$_G[username]}', '删除系统日志 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("DELETE FROM ".DB::table('kfsm_smlog')." WHERE id IN ($delid)");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('日志管理', '{$_G[username]}', '删除系统日志 {$ttlnum} 条', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=logs';
 		cpmsg("已成功删除 {$ttlnum} 条系统日志！", $baseScript, 'succeed');

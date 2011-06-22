@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -12,10 +12,10 @@ if ( !defined('IN_DISCUZ') )
 {
 	exit('Access Denied');
 }
-$version = '9.4.2';
+$version = '9.4.3';
 $sql = <<<EOF
-DROP TABLE IF EXISTS kfsm_apply;
-CREATE TABLE kfsm_apply (
+DROP TABLE IF EXISTS pre_kfsm_apply;
+CREATE TABLE pre_kfsm_apply (
   aid smallint(6) NOT NULL AUTO_INCREMENT,
   sid smallint(6) unsigned zerofill NOT NULL DEFAULT '000000',
   stockname varchar(20) NOT NULL DEFAULT '',
@@ -34,8 +34,8 @@ CREATE TABLE kfsm_apply (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_customer;
-CREATE TABLE kfsm_customer (
+DROP TABLE IF EXISTS pre_kfsm_customer;
+CREATE TABLE pre_kfsm_customer (
   cid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(20) NOT NULL DEFAULT '',
   sid smallint(6) unsigned zerofill NOT NULL DEFAULT '000000',
@@ -48,8 +48,8 @@ CREATE TABLE kfsm_customer (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_deal;
-CREATE TABLE kfsm_deal (
+DROP TABLE IF EXISTS pre_kfsm_deal;
+CREATE TABLE pre_kfsm_deal (
   did smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   uid int(10) NOT NULL DEFAULT '0',
   username varchar(20) NOT NULL DEFAULT '',
@@ -67,8 +67,8 @@ CREATE TABLE kfsm_deal (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_news;
-CREATE TABLE kfsm_news (
+DROP TABLE IF EXISTS pre_kfsm_news;
+CREATE TABLE pre_kfsm_news (
   nid smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `subject` varchar(100) NOT NULL DEFAULT '',
   content mediumtext,
@@ -78,11 +78,11 @@ CREATE TABLE kfsm_news (
   PRIMARY KEY (nid)
 ) ENGINE=MyISAM;
 
-INSERT INTO kfsm_news (subject, content, color, author, addtime) VALUES ('欢迎使用 Kilofox StockIns V{$version} for Discuz! X2', '欢迎使用千狐 StockIns 虚拟股市系统！\nStockIns 是一款运用面向对象思想编写的 PHP 软件，是专为国内主流 PHP 论坛而开发的插件产品。该版本为 Discuz! 插件版。\n获得更多资讯，请您关注官方网站——[url=http://www.kilofox.net]Kilofox.Net[/url]', '', 'Kilofox.Net', '{$_G[timestamp]}');
+INSERT INTO pre_kfsm_news (subject, content, color, author, addtime) VALUES ('欢迎使用 Kilofox StockIns V{$version} for Discuz! X2', '欢迎使用千狐 StockIns 虚拟股市系统！\nStockIns 是一款运用面向对象思想编写的 PHP 软件，是专为国内主流 PHP 论坛而开发的插件产品。该版本为 Discuz! 插件版。\n获得更多资讯，请您关注官方网站——[url=http://www.kilofox.net]Kilofox.Net[/url]', '', 'Kilofox.Net', '{$_G[timestamp]}');
 
 
-DROP TABLE IF EXISTS kfsm_sminfo;
-CREATE TABLE kfsm_sminfo (
+DROP TABLE IF EXISTS pre_kfsm_sminfo;
+CREATE TABLE pre_kfsm_sminfo (
   id smallint(3) unsigned NOT NULL AUTO_INCREMENT,
   todaybuy int(20) unsigned NOT NULL DEFAULT '0',
   todaysell int(20) unsigned NOT NULL DEFAULT '0',
@@ -94,11 +94,11 @@ CREATE TABLE kfsm_sminfo (
   KEY id (id)
 ) ENGINE=MyISAM;
 
-INSERT INTO kfsm_sminfo (todaybuy, todaysell, todaytotal, todaydate, ain_y, ain_t, stampduty) VALUES(0, 0, 0, '{$_G[timestamp]}',1000, 1000, 0.000);
+INSERT INTO pre_kfsm_sminfo (todaybuy, todaysell, todaytotal, todaydate, ain_y, ain_t, stampduty) VALUES(0, 0, 0, '{$_G[timestamp]}',1000, 1000, 0.000);
 
 
-DROP TABLE IF EXISTS kfsm_smlog;
-CREATE TABLE kfsm_smlog (
+DROP TABLE IF EXISTS pre_kfsm_smlog;
+CREATE TABLE pre_kfsm_smlog (
   id int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT '',
   username1 varchar(20) NOT NULL DEFAULT '',
@@ -111,8 +111,8 @@ CREATE TABLE kfsm_smlog (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_stock;
-CREATE TABLE kfsm_stock (
+DROP TABLE IF EXISTS pre_kfsm_stock;
+CREATE TABLE pre_kfsm_stock (
   sid smallint(6) unsigned zerofill NOT NULL AUTO_INCREMENT,
   stockname varchar(20) NOT NULL DEFAULT '',
   openprice decimal(6,2) unsigned NOT NULL DEFAULT '0.00',
@@ -141,8 +141,8 @@ CREATE TABLE kfsm_stock (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_transaction;
-CREATE TABLE kfsm_transaction (
+DROP TABLE IF EXISTS pre_kfsm_transaction;
+CREATE TABLE pre_kfsm_transaction (
   tid int(10) unsigned NOT NULL AUTO_INCREMENT,
   sid int(6) unsigned zerofill NOT NULL DEFAULT '000000',
   stockname varchar(20) NOT NULL DEFAULT '',
@@ -157,8 +157,8 @@ CREATE TABLE kfsm_transaction (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS kfsm_user;
-CREATE TABLE kfsm_user (
+DROP TABLE IF EXISTS pre_kfsm_user;
+CREATE TABLE pre_kfsm_user (
   uid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   forumuid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(20) NOT NULL DEFAULT '',

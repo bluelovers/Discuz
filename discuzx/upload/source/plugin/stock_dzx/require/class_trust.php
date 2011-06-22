@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -61,7 +61,7 @@ class Trust
 				$buyMin		= $buyMax;
 				$buyMax		= $buyMinInit;
 			}
-			$possessnum	= DB::result_first("SELECT stocknum FROM kfsm_customer WHERE cid='{$user[id]}' AND sid='$stock_id'");
+			$possessnum	= DB::result_first("SELECT stocknum FROM ".DB::table('kfsm_customer')." WHERE cid='{$user[id]}' AND sid='$stock_id'");
 			$sellMin = $possessnum < $sellMin ? (int)$possessnum : $sellMin;
 			$sellMax = $possessnum > 0 ? $possessnum : 0;
 			if ( $sellMin > $sellMax )
@@ -107,7 +107,7 @@ class Trust
 	private function getDealSell($sid, $openprice)
 	{
 		$i = 1;
-		$qds = DB::query("SELECT price_deal, SUM(quant_deal-quant_tran) AS num FROM kfsm_deal WHERE sid='$sid' AND direction='2' AND ( ok='O' OR ok='2' ) AND hide='0' AND quant_deal-quant_tran>0 GROUP BY price_deal ORDER BY price_deal LIMIT 5");
+		$qds = DB::query("SELECT price_deal, SUM(quant_deal-quant_tran) AS num FROM ".DB::table('kfsm_deal')." WHERE sid='$sid' AND direction='2' AND ( ok='O' OR ok='2' ) AND hide='0' AND quant_deal-quant_tran>0 GROUP BY price_deal ORDER BY price_deal LIMIT 5");
 		while ( $rsds = DB::fetch($qds) )
 		{
 			if ( $i == 1 )
@@ -141,7 +141,7 @@ class Trust
 	private function getDealBuy($sid, $openprice)
 	{
 		$i = 1;
-		$qdb = DB::query("SELECT price_deal, SUM(quant_deal-quant_tran) AS num FROM kfsm_deal WHERE sid='$sid' AND direction='1' AND ( ok='O' OR ok='2' ) AND hide='0' AND quant_deal-quant_tran>0 GROUP BY price_deal ORDER BY price_deal DESC LIMIT 5");
+		$qdb = DB::query("SELECT price_deal, SUM(quant_deal-quant_tran) AS num FROM ".DB::table('kfsm_deal')." WHERE sid='$sid' AND direction='1' AND ( ok='O' OR ok='2' ) AND hide='0' AND quant_deal-quant_tran>0 GROUP BY price_deal ORDER BY price_deal DESC LIMIT 5");
 		while ( $rsdb = DB::fetch($qdb) )
 		{
 			if ( $i == 1 )
@@ -167,7 +167,7 @@ class Trust
 	}
 	private function checkStock( $stock_id=0 )
 	{
-		$rs = DB::fetch_first("SELECT sid, stockname, openprice, currprice, issueprice, issuenum, issuer_id, issuetime, state FROM kfsm_stock WHERE sid='$stock_id'");
+		$rs = DB::fetch_first("SELECT sid, stockname, openprice, currprice, issueprice, issuenum, issuer_id, issuetime, state FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 		if ( !$rs )
 		{
 			showmessage('没有找到指定的股票，可能该上市公司已经倒闭');
@@ -183,7 +183,7 @@ class Trust
 		global $baseScript, $_G, $kfsclass, $db_tradenummin, $db_wavemax, $db_dutyrate, $db_tradedelay, $db_dutymin, $db_iplimit;
 		if ( $rs = $this->checkStock($stock_id) )
 		{
-			$buytime = DB::result_first("SELECT MAX(time_deal) FROM kfsm_deal WHERE uid='{$user[id]}' AND sid='$stock_id' AND direction='1'");
+			$buytime = DB::result_first("SELECT MAX(time_deal) FROM ".DB::table('kfsm_deal')." WHERE uid='{$user[id]}' AND sid='$stock_id' AND direction='1'");
 			if ( is_numeric($db_tradedelay) && $db_tradedelay > 0 && $_G['timestamp'] - $buytime < $db_tradedelay * 60 )
 			{
 				$timedelay = ceil( $db_tradedelay - ($_G['timestamp']-$buytime)/60 );
@@ -191,7 +191,7 @@ class Trust
 			}
 			if ( is_numeric($db_iplimit) && $db_iplimit > 0 && $user['ip'] )
 			{
-				$ipq = "SELECT buytime, ip FROM kfsm_customer WHERE sid='$stock_id' AND buytime>{$_G['timestamp']}-$db_iplimit*60";
+				$ipq = "SELECT buytime, ip FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' AND buytime>{$_G['timestamp']}-$db_iplimit*60";
 				$sameIp = false;
 				while( $rsip = DB::query($ipq) )
 				{
@@ -215,10 +215,19 @@ class Trust
 				showmessage('您的帐户中没有足够的资金用来购买股票');
 			else
 			{
-				DB::query("UPDATE kfsm_user SET capital_ava=capital_ava-{$needMoney} WHERE uid='{$user[id]}'");
-				DB::query("INSERT INTO kfsm_deal(uid, username, sid, direction, quant_deal, price_deal, time_deal, ok) VALUES('$user[id]', '$user[username]', '$stock_id', '1', '$buyNum', '$buyPrice', '{$_G[timestamp]}', '0')");
-				$newdid = DB::result_first("SELECT MAX(did) FROM kfsm_deal");
-				$query = DB::query("SELECT * FROM kfsm_deal WHERE sid='$stock_id' AND direction='2' AND ( ok='0' OR ok='2' ) AND uid<>$user[id] AND hide='0' ORDER BY price_deal");
+				DB::query("UPDATE ".DB::table('kfsm_user')." SET capital_ava=capital_ava-{$needMoney} WHERE uid='{$user[id]}'");
+				$dealData = array(
+					'uid'		=> $user['id'],
+					'username'	=> $user['username'],
+					'sid'		=> $stock_id,
+					'direction'	=> '1',
+					'quant_deal'=> $buyNum,
+					'price_deal'=> $buyPrice,
+					'time_deal'	=> $_G['timestamp'],
+					'ok'		=> '0'
+				);
+				$newdid = DB::insert('kfsm_deal', $dealData, true);
+				$query = DB::query("SELECT * FROM ".DB::table('kfsm_deal')." WHERE sid='$stock_id' AND direction='2' AND ( ok='0' OR ok='2' ) AND uid<>$user[id] AND hide='0' ORDER BY price_deal");
 				while ( $dsrs = DB::fetch($query) )
 				{
 					$quant = $dsrs['quant_deal'] - $dsrs['quant_tran'];
@@ -230,39 +239,49 @@ class Trust
 							$stampduty	= $worth * $db_dutyrate / 100;
 							$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
 							// 买方股票数量增加
-							$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM kfsm_customer WHERE cid='{$user[id]}' AND sid='$stock_id'");
+							$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM ".DB::table('kfsm_customer')." WHERE cid='{$user[id]}' AND sid='$stock_id'");
 							if ( !$rsc )
 							{
 								$this->changeoptb($stock_id,$user['id'],$user['username'],$buyNum);
-								DB::query("INSERT INTO kfsm_customer (cid, username, sid, buyprice, averageprice, stocknum, buytime, ip) VALUES ('$user[id]', '$user[username]', '$stock_id', '{$dsrs['price_deal']}', '{$dsrs['price_deal']}', '$buyNum', '{$_G[timestamp]}', '{$user[ip]}')");
-								DB::query("UPDATE kfsm_user SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, stocksort=stocksort+1, todaybuy=todaybuy+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								$psData = array(
+									'cid'			=> $user['id'],
+									'username'		=> $user['username'],
+									'sid'			=> $stock_id,
+									'buyprice'		=> $dsrs['price_deal'],
+									'averageprice'	=> $dsrs['price_deal'],
+									'stocknum'		=> $buyNum,
+									'buytime'		=> $_G['timestamp'],
+									'ip'			=> $user['ip']
+								);
+								DB::insert('kfsm_customer', $psData);
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, stocksort=stocksort+1, todaybuy=todaybuy+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 							}
 							else
 							{
 								$leftNum = $rsc['stocknum'];
 								$this->changeoptb($stock_id, $user['id'], $user['username'], intval($buyNum+$leftNum));
 								$avgprice = round( ( $dsrs['price_deal'] * $buyNum + $rsc['averageprice'] * $leftNum ) / ( $buyNum + $leftNum), 2 );
-								DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$buyNum}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
-								DB::query("UPDATE kfsm_user SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, todaybuy=todaybuy+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$buyNum}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, todaybuy=todaybuy+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 							}
 							// 卖方资金、今日卖出更新
-							DB::query("UPDATE kfsm_user SET capital=capital+{$worth}, capital_ava=capital_ava+{$worth}, todaysell=todaysell+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
+							DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$worth}, capital_ava=capital_ava+{$worth}, todaysell=todaysell+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
 							// 卖方股票数量减少
-							DB::query("UPDATE kfsm_customer SET stocknum=stocknum-$buyNum, selltime='{$_G[timestamp]}' WHERE cid='{$dsrs[uid]}' AND sid='$stock_id'");
+							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum-$buyNum, selltime='{$_G[timestamp]}' WHERE cid='{$dsrs[uid]}' AND sid='$stock_id'");
 							$kfsclass->calculatefund($user['id'], $stock_id);
 							$kfsclass->calculatefund($dsrs['uid'], $stock_id);
 							// 卖方部分成交
-							DB::query("UPDATE kfsm_deal SET quant_tran=quant_tran+{$buyNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dsrs[did]'");
-							DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
+							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$buyNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dsrs[did]'");
+							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 买方完全成交
-							DB::query("UPDATE kfsm_deal SET quant_tran=quant_deal, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
-							DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
+							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
+							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 更新股票“成交价”
 							$this->computeNewPrice( $stock_id, $dsrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
 							// 更新股票“成交量”
-							DB::query("UPDATE kfsm_stock SET todaytradenum=todaytradenum+{$buyNum} WHERE sid='$stock_id'");
+							DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$buyNum} WHERE sid='$stock_id'");
 							// 更新股市信息
-							DB::query("UPDATE kfsm_sminfo SET todaybuy=todaybuy+{$buyNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
+							DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy=todaybuy+{$buyNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 							showmessage('股票买入成功！', "$baseScript&mod=member&act=trustsmng");
 						}
 						else
@@ -271,44 +290,54 @@ class Trust
 							$stampduty	= $worth * $db_dutyrate / 100;
 							$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
 							// 买方股票数量增加
-							$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM kfsm_customer WHERE cid='{$user[id]}' AND sid='$stock_id'");
+							$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM ".DB::table('kfsm_customer')." WHERE cid='{$user[id]}' AND sid='$stock_id'");
 							if ( !$rsc )
 							{
 								$this->changeoptb($stock_id, $user['id'], $user['username'], $quant);
-								DB::query("INSERT INTO kfsm_customer (cid, username, sid, buyprice, averageprice, stocknum, buytime, ip) VALUES ('$user[id]', '$user[username]', '$stock_id', '$dsrs[price]', '$dsrs[price]', '$quant', '{$_G[timestamp]}', '{$user[ip]}')");
-								DB::query("UPDATE kfsm_user SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, stocksort=stocksort+1, todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								$psData = array(
+									'cid'			=> $user['id'],
+									'username'		=> $user['username'],
+									'sid'			=> $stock_id,
+									'buyprice'		=> $dsrs['price_deal'],
+									'averageprice'	=> $dsrs['price_deal'],
+									'stocknum'		=> $quant,
+									'buytime'		=> $_G['timestamp'],
+									'ip'			=> $user['ip']
+								);
+								DB::insert('kfsm_customer', $psData);
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, stocksort=stocksort+1, todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 							}
 							else
 							{
 								$leftNum = $rsc['stocknum'];
 								$this->changeoptb($stock_id, $user['id'], $user['username'], intval($quant+$leftNum));
 								$avgprice = round( ($dsrs['price_deal'] * $quant + $rsc['averageprice'] * $leftNum ) / ( $quant + $leftNum ), 2 );
-								DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$quant}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
-								DB::query("UPDATE kfsm_user SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$quant}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital-{$worth}-{$stampduty}, capital_ava=capital_ava-{$worth}-{$stampduty}, todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 							}
 							// 卖方资金、今日卖出更新
-							DB::query("UPDATE kfsm_user SET capital=capital+{$worth}, capital_ava=capital_ava+{$worth}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
+							DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$worth}, capital_ava=capital_ava+{$worth}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
 							// 卖方股票数量减少
-							DB::query("UPDATE kfsm_customer SET stocknum=stocknum-$quant, selltime='{$_G[timestamp]}' WHERE cid='{$dsrs[uid]}' AND sid='$stock_id'");
+							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum-$quant, selltime='{$_G[timestamp]}' WHERE cid='{$dsrs[uid]}' AND sid='$stock_id'");
 							$kfsclass->calculatefund($user['id'],$stock_id);
 							$kfsclass->calculatefund($dsrs['uid'],$stock_id);
 							// 卖方完全成交
-							DB::query("UPDATE kfsm_deal SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dsrs[did]'");
-							DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
+							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dsrs[did]'");
+							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 买方部分成交，有可能完全成交
-							DB::query("UPDATE kfsm_deal SET quant_tran=quant_tran+{$quant}, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
-							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM kfsm_deal WHERE did='$newdid'");
+							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
+							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
 							if ( $tranState['quant_deal'] > $tranState['quant_tran'] )
-								DB::query("UPDATE kfsm_deal SET ok='2' WHERE did='$newdid'");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='2' WHERE did='$newdid'");
 							else
-								DB::query("UPDATE kfsm_deal SET ok='1' WHERE did='$newdid'");
-							DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
+							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 更新股票“成交价”
 							$this->computeNewPrice( $stock_id, $dsrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
 							// 更新股票“成交量”
-							DB::query("UPDATE kfsm_stock SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
+							DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
 							// 更新股市信息
-							DB::query("UPDATE kfsm_sminfo SET todaybuy=todaybuy+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
+							DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy=todaybuy+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 							$buyNum -= $quant;
 							continue;
 						}
@@ -323,12 +352,12 @@ class Trust
 		global $baseScript, $_G, $kfsclass, $db_wavemax, $db_tradenummin, $db_dutyrate, $db_dutymin, $db_tradedelay, $db_iplimit;
 		if ( $rs = $this->checkStock($stock_id) )
 		{
-			$rss = DB::fetch_first("SELECT stocknum FROM kfsm_customer WHERE cid='{$user[id]}' AND sid='$stock_id'");
+			$rss = DB::fetch_first("SELECT stocknum FROM ".DB::table('kfsm_customer')." WHERE cid='{$user[id]}' AND sid='$stock_id'");
 			if ( !$rss )
 				showmessage('您没有这只股票，无法进行卖出操作');
 			else
 			{
-				$selltime = DB::result_first("SELECT MAX(time_deal) FROM kfsm_deal WHERE uid='{$user[id]}' AND sid='$stock_id' AND direction='2'");
+				$selltime = DB::result_first("SELECT MAX(time_deal) FROM ".DB::table('kfsm_deal')." WHERE uid='{$user[id]}' AND sid='$stock_id' AND direction='2'");
 				if ( is_numeric($db_tradedelay) && $db_tradedelay > 0 && $_G['timestamp'] - $selltime < $db_tradedelay * 60 )
 				{
 					$timedelay = ceil( $db_tradedelay - ($_G['timestamp']-$selltime)/60 );
@@ -336,7 +365,7 @@ class Trust
 				}
 				if ( is_numeric($db_iplimit) && $db_iplimit > 0 && $user['ip'] )
 				{
-					$ipq = "SELECT selltime, ip FROM kfsm_customer WHERE sid='$stock_id' AND selltime>{$_G['timestamp']}-$db_iplimit*60";
+					$ipq = "SELECT selltime, ip FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' AND selltime>{$_G['timestamp']}-$db_iplimit*60";
 					$sameIp = false;
 					while( $rsip = DB::query($ipq) )
 					{
@@ -372,9 +401,18 @@ class Trust
 						if ( is_numeric($db_tradenummin) && $db_tradenummin > 0 && $sellNum < $db_tradenummin )
 							showmessage("本股市规定：每笔最少交易量为 $db_tradenummin 股！");
 					}
-					DB::query("INSERT INTO kfsm_deal(uid, username, sid, direction, quant_deal, price_deal, time_deal, ok) VALUES('$user[id]', '$user[username]', '$stock_id', '2', '$sellNum', '$sellPrice', '{$_G[timestamp]}', '0')");
-					$newdid = DB::result_first("SELECT MAX(did) FROM kfsm_deal");
-					$query = DB::query("SELECT * FROM kfsm_deal WHERE sid='$stock_id' AND direction='1' AND ( ok='0' OR ok='2' ) AND uid<>'$user[id]' AND hide='0' ORDER BY price_deal DESC");
+					$dealData = array(
+						'uid'		=> $user['id'],
+						'username'	=> $user['username'],
+						'sid'		=> $stock_id,
+						'direction'	=> '2',
+						'quant_deal'=> $sellNum,
+						'price_deal'=> $sellPrice,
+						'time_deal'	=> $_G['timestamp'],
+						'ok'		=> '0'
+					);
+					$newdid = DB::insert('kfsm_deal', $dealData, true);
+					$query = DB::query("SELECT * FROM ".DB::table('kfsm_deal')." WHERE sid='$stock_id' AND direction='1' AND ( ok='0' OR ok='2' ) AND uid<>'$user[id]' AND hide='0' ORDER BY price_deal DESC");
 					while ( $dbrs = DB::fetch($query) )
 					{
 						$quant = $dbrs['quant_deal'] - $dbrs['quant_tran'];
@@ -386,39 +424,48 @@ class Trust
 								$stampduty	= $worth * $db_dutyrate / 100;
 								$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
 								// 卖方资金、今日卖出更新
-								DB::query("UPDATE kfsm_user SET capital=capital+{$worth}-{$stampduty}, capital_ava=capital_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$worth}-{$stampduty}, capital_ava=capital_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 								// 卖方股票数量减少
-								DB::query("UPDATE kfsm_customer SET stocknum=stocknum-$sellNum, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum-$sellNum, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
 								// 买方股票数量增加
-								$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM kfsm_customer WHERE cid='{$dbrs[uid]}' AND sid='$stock_id'");
+								$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM ".DB::table('kfsm_customer')." WHERE cid='{$dbrs[uid]}' AND sid='$stock_id'");
 								if ( !$rsc )
 								{
 									$this->changeoptb($stock_id, $user['id'], $user['username'], $sellNum);
-									DB::query("INSERT INTO kfsm_customer (cid, username, sid, buyprice, averageprice, stocknum, buytime) VALUES ('$dbrs[uid]', '$dbrs[username]', '$stock_id', '{$dbrs['price_deal']}', '{$dbrs['price_deal']}', '$sellNum', '{$_G[timestamp]}')");
+									$psData = array(
+										'cid'			=> $dbrs['uid'],
+										'username'		=> $dbrs['username'],
+										'sid'			=> $stock_id,
+										'buyprice'		=> $dbrs['price_deal'],
+										'averageprice'	=> $dbrs['price_deal'],
+										'stocknum'		=> $sellNum,
+										'buytime'		=> $_G['timestamp']
+									);
+									DB::insert('kfsm_customer', $psData);
 								}
 								else
 								{
 									$haveNum = $rsc['stocknum'];
 									$this->changeoptb($stock_id, $user['id'], $user['username'], intval($sellNum+$haveNum));
 									$avgprice = round( ( $dbrs['price_deal'] * $sellNum + $rsc['averageprice'] * $haveNum ) / ( $sellNum + $haveNum ), 2 );
-									DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$sellNum}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
+									DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$sellNum}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
 								}
 								// 买方今日买入更新
-								DB::query("UPDATE kfsm_user SET todaybuy=todaybuy+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET todaybuy=todaybuy+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
 								$kfsclass->calculatefund($user['id'], $stock_id);
 								$kfsclass->calculatefund($dbrs['uid'], $stock_id);
 								// 买方部分成交
-								DB::query("UPDATE kfsm_deal SET quant_tran=quant_tran+{$sellNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dbrs[did]'");
-								DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$sellNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dbrs[did]'");
+								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 卖方完全成交
-								DB::query("UPDATE kfsm_deal SET quant_tran=quant_deal, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
-								DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
+								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 更新股票“成交价”
 								$this->computeNewPrice( $stock_id,  $dbrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
 								// 更新股票“成交量”
-								DB::query("UPDATE kfsm_stock SET todaytradenum=todaytradenum+{$sellNum} WHERE sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$sellNum} WHERE sid='$stock_id'");
 								// 更新股市信息
-								DB::query("UPDATE kfsm_sminfo SET todaysell=todaysell+{$sellNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
+								DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaysell=todaysell+{$sellNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 								showmessage('股票卖出成功！', "$baseScript&mod=member&act=trustsmng");
 							}
 							else
@@ -427,44 +474,53 @@ class Trust
 								$stampduty	= $worth * $db_dutyrate / 100;
 								$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
 								// 卖方资金、今日卖出更新
-								DB::query("UPDATE kfsm_user SET capital=capital+{$worth}-{$stampduty}, capital_ava=capital_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+{$worth}-{$stampduty}, capital_ava=capital_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user[id]}'");
 								// 卖方股票数量减少
-								DB::query("UPDATE kfsm_customer SET stocknum=stocknum-$quant, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum-$quant, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$user[id]}' AND sid='$stock_id'");
 								// 买方股票数量增加
-								$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM kfsm_customer WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
+								$rsc = DB::fetch_first("SELECT stocknum, averageprice FROM ".DB::table('kfsm_customer')." WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
 								if ( !$rsc )
 								{
 									$this->changeoptb($stock_id, $user['id'], $user['username'], $quant);
-									DB::query("INSERT INTO kfsm_customer (cid, username, sid, buyprice, averageprice, stocknum, buytime) VALUES ('$dbrs[uid]', '$dbrs[username]', '$stock_id', '{$dbrs['price_deal']}', '{$dbrs['price_deal']}', '{$quant}', '{$_G[timestamp]}')");
+									$bsData = array(
+										'cid'			=> $dbrs['uid'],
+										'username'		=> $dbrs['username'],
+										'sid'			=> $stock_id,
+										'buyprice'		=> $dbrs['price_deal'],
+										'averageprice'	=> $dbrs['price_deal'],
+										'stocknum'		=> $quant,
+										'buytime'		=> $_G['timestamp']
+									);
+									DB::insert('kfsm_customer', $bsData);
 								}
 								else
 								{
 									$haveNum = $rsc['stocknum'];
 									$this->changeoptb($stock_id, $user['id'], $user['username'], intval($quant+$haveNum));
 									$avgprice = round( ( $dbrs['price_deal'] * $quant + $rsc['averageprice'] * $haveNum ) / ( $quant + $haveNum ), 2 );
-									DB::query("UPDATE kfsm_customer SET stocknum=stocknum+{$quant}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
+									DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum=stocknum+{$quant}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='$dbrs[uid]' AND sid='$stock_id'");
 								}
 								// 买方今日买入更新
-								DB::query("UPDATE kfsm_user SET todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
+								DB::query("UPDATE ".DB::table('kfsm_user')." SET todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
 								$kfsclass->calculatefund($user['id'], $stock_id);
 								$kfsclass->calculatefund($dbrs['uid'], $stock_id);
 								// 买方完全成交
-								DB::query("UPDATE kfsm_deal SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dbrs[did]'");
-								DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dbrs[did]'");
+								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 卖方部分成交，有可能完全成交
-								DB::query("UPDATE kfsm_deal SET quant_tran=quant_tran+{$quant}, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
-								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM kfsm_deal WHERE did='$newdid'");
+								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
+								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
 								if ( $tranState['quant_deal'] > $tranState['quant_tran'] )
-									DB::query("UPDATE kfsm_deal SET ok='2' WHERE did='$newdid'");
+									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='2' WHERE did='$newdid'");
 								else
-									DB::query("UPDATE kfsm_deal SET ok='1' WHERE did='$newdid'");
-								DB::query("INSERT INTO kfsm_transaction(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
+									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
+								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 更新股票“成交价”
 								$this->computeNewPrice( $stock_id, $dbrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
 								// 更新股票“成交量”
-								DB::query("UPDATE kfsm_stock SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
+								DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
 								// 更新股市信息
-								DB::query("UPDATE kfsm_sminfo SET todaysell=todaysell+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
+								DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaysell=todaysell+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 								$sellNum -= $quant;
 								continue;
 							}
@@ -497,27 +553,27 @@ class Trust
 			$price		= $tradePrice;
 		}
 		$waved_t = round( ( $tradePrice - $issuePrice ) / $issuePrice * 100, 2 );
-		DB::query("UPDATE kfsm_stock SET currprice={$price}, todaywave={$waved_a}, totalwave={$waved_t} WHERE sid='$stock_id'");
-		DB::query("UPDATE kfsm_sminfo SET ain_t=ain_t+{$waved_a}");
+		DB::query("UPDATE ".DB::table('kfsm_stock')." SET currprice={$price}, todaywave={$waved_a}, totalwave={$waved_t} WHERE sid='$stock_id'");
+		DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET ain_t=ain_t+{$waved_a}");
 		$this->updateTSP($stock_id,$price);
 	}
 	private function changeoptb( $stock_id, $userid, $username, $totalnum )
 	{
 		$changeoptb = false;
-		$rsm = DB::fetch_first("SELECT holder_id FROM kfsm_stock WHERE sid='$stock_id'");
+		$rsm = DB::fetch_first("SELECT holder_id FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 		if ( $rsm['holder_id'] == 0 )
 		{
-			DB::query("UPDATE kfsm_stock SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'");
 			$changeoptb = true;
 		}
 		else if ( $rsm['holder_id'] <> $userid )
 		{
-			$rs = DB::fetch_first("SELECT stocknum, cid FROM kfsm_customer WHERE sid='$stock_id' AND cid<>'$userid' ORDER BY stocknum DESC");
+			$rs = DB::fetch_first("SELECT stocknum, cid FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' AND cid<>'$userid' ORDER BY stocknum DESC");
 			if ( $rs )
 			{
 				if ( $totalnum > $rs['stocknum'] )
 				{
-					DB::query("UPDATE kfsm_stock SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'");
+					DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'");
 					$changeoptb = true;
 				}
 			}
@@ -527,8 +583,8 @@ class Trust
 	private function changeopts( $stock_id, $userid, $username, $remnum )
 	{
 		$changeopts = '';
-		$rsm = DB::fetch_first("SELECT holder_id FROM kfsm_stock WHERE sid='$stock_id'");
-		$rs = DB::fetch_first("SELECT c.stocknum, c.username, c.cid FROM kfsm_customer c INNER JOIN kfsm_user u ON c.cid=u.uid WHERE c.sid='$stock_id' AND c.cid<>'$userid' ORDER BY c.stocknum DESC");
+		$rsm = DB::fetch_first("SELECT holder_id FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
+		$rs = DB::fetch_first("SELECT c.stocknum, c.username, c.cid FROM ".DB::table('kfsm_customer')." c INNER JOIN ".DB::table('kfsm_user')." u ON c.cid=u.uid WHERE c.sid='$stock_id' AND c.cid<>'$userid' ORDER BY c.stocknum DESC");
 		if ( $rs )
 		{
 			if ( $remnum > $rs['stocknum'] )
@@ -539,7 +595,7 @@ class Trust
 				}
 				else
 				{
-					DB::query("UPDATE kfsm_stock SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'"); 
+					DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id='$userid', holder_name='$username' WHERE sid='$stock_id'"); 
 					$changeopts = $username;
 				}
 			}
@@ -551,14 +607,14 @@ class Trust
 				}
 				else
 				{
-					DB::query("UPDATE kfsm_stock SET holder_id='$rs[cid]', holder_name='$rs[username]' WHERE sid='$stock_id'");
+					DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id='$rs[cid]', holder_name='$rs[username]' WHERE sid='$stock_id'");
 					$changeopts = $rs['username'];
 				}
 			}
 		}
 		else if ( $remnum <= 0 )
 		{
-			DB::query("UPDATE kfsm_stock SET holder_name='-', holder_id='0' WHERE sid='$stock_id'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_name='-', holder_id='0' WHERE sid='$stock_id'");
 		}
 		return $changeopts;
 	}
@@ -568,15 +624,15 @@ class Trust
 		if ( $stock_id && $price )
 		{
 			$klcolor = $db_klcolor;
-			$pricedata = DB::query("SELECT pricedata FROM kfsm_stock WHERE sid='$stock_id'");
+			$pricedata = DB::query("SELECT pricedata FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 			$pricedata = substr($pricedata,strpos($pricedata,'|')+1).'|'.round($price,2);
-			DB::query("UPDATE kfsm_stock SET uptime='{$_G[timestamp]}', pricedata='$pricedata' WHERE sid='$stock_id'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET uptime='{$_G[timestamp]}', pricedata='$pricedata' WHERE sid='$stock_id'");
 		}
 	}
 	private function showMyDeals( $user )
 	{
 		global $baseScript, $hkimg, $_G, $db_smname;
-		$qd = DB::query("SELECT d.*, s.stockname FROM kfsm_deal d LEFT JOIN kfsm_stock s ON d.sid=s.sid WHERE d.uid='{$user[id]}' ORDER BY d.did DESC");
+		$qd = DB::query("SELECT d.*, s.stockname FROM ".DB::table('kfsm_deal')." d LEFT JOIN ".DB::table('kfsm_stock')." s ON d.sid=s.sid WHERE d.uid='{$user[id]}' ORDER BY d.did DESC");
 		while ( $rsd = DB::fetch($qd) )
 		{
 			if ( $rsd['direction'] == 1 )
@@ -626,7 +682,7 @@ class Trust
 	private function showMyTrans( $user )
 	{
 		global $baseScript, $hkimg, $_G, $db_smname;
-		$qt = DB::query("SELECT t.*, s.stockname FROM kfsm_transaction t LEFT JOIN kfsm_stock s ON t.sid=s.sid WHERE t.uid='{$user[id]}' ORDER BY t.tid DESC");
+		$qt = DB::query("SELECT t.*, s.stockname FROM ".DB::table('kfsm_transaction')." t LEFT JOIN ".DB::table('kfsm_stock')." s ON t.sid=s.sid WHERE t.uid='{$user[id]}' ORDER BY t.tid DESC");
 		while ( $rst = DB::fetch($qt) )
 		{
 			if ( $rst['direction'] == 1 )
@@ -646,7 +702,7 @@ class Trust
 	private function cancelDeal( $user, $deal_id )
 	{
 		global $baseScript, $db_dutyrate, $db_dutymin, $kfsclass;
-		$qd = DB::fetch_first("SELECT * FROM kfsm_deal WHERE did='$deal_id' AND uid='{$user[id]}'");
+		$qd = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_deal')." WHERE did='$deal_id' AND uid='{$user[id]}'");
 		if ( $qd )
 		{
 			$quantLeft = $qd['quant_deal'] - $qd['quant_tran'];
@@ -668,14 +724,14 @@ class Trust
 				$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
 				if ( $qd['direction'] == 1 )
 				{
-					DB::query("UPDATE kfsm_user SET capital_ava=capital_ava+{$worth}+{$stampduty} WHERE uid='{$user[id]}'");
-					DB::query("UPDATE kfsm_deal SET ok='3' WHERE did='{$qd[did]}'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital_ava=capital_ava+{$worth}+{$stampduty} WHERE uid='{$user[id]}'");
+					DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='3' WHERE did='{$qd[did]}'");
 					$kfsclass->calculatefund($user['id']);
 					showmessage('委托买入股票撤销成功！', "$baseScript&mod=member&act=trustsmng");
 				}
 				else if ( $qd['direction'] == 2 )
 				{
-					DB::query("UPDATE kfsm_deal SET ok='3' WHERE did='{$qd[did]}'");
+					DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='3' WHERE did='{$qd[did]}'");
 					$kfsclass->calculatefund($user['id']);
 					showmessage('委托卖出股票撤销成功！', "$baseScript&mod=member&act=trustsmng");
 				}

@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -80,7 +80,7 @@ class Register
 			}
 			else
 			{
-				$userId = DB::result_first("SELECT uid FROM kfsm_user WHERE forumuid='$_G[uid]'");
+				$userId = DB::result_first("SELECT uid FROM ".DB::table('kfsm_user')." WHERE forumuid='$_G[uid]'");
 				if ( $userId )
 				{
 					showmessage('您在股市里已经开户，请勿重复注册！');
@@ -107,7 +107,7 @@ class Register
 					{
 						showmessage("本股市已限制了开户最少发帖数为 $db_minpost ，您不符合要求，暂时不能开户");
 					}
-					DB::query("INSERT INTO kfsm_user (forumuid, username, capital, capital_ava, asset, regtime, lasttradetime, locked) VALUES('$_G[uid]', '$_G[username]', '$db_initialmoney', '$db_initialmoney', '$db_initialmoney', '$_G[timestamp]', '$_G[timestamp]', '0')");
+					DB::query("INSERT INTO ".DB::table('kfsm_user')." (forumuid, username, capital, capital_ava, asset, regtime, lasttradetime, locked) VALUES('$_G[uid]', '$_G[username]', '$db_initialmoney', '$db_initialmoney', '$db_initialmoney', '$_G[timestamp]', '$_G[timestamp]', '0')");
 					showmessage("股市开户成功！<br /> ".$db_smname." 欢迎您的到来，特赠送给您 ".$db_initialmoney." 元股市资金！", "$baseScript");
 				}
 			}

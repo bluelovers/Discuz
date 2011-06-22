@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-11
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -37,7 +37,7 @@ class Stocks
 		{
 			$sql = '';
 		}
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_stock $sql");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_stock')." $sql");
 		$readperpage = 30;
 		if ( $cnt > 0 )
 		{
@@ -60,7 +60,7 @@ class Stocks
 			}
 			$start = ( $page - 1 ) * $readperpage;
 			$stockdb = array();
-			$query = DB::query("SELECT * FROM kfsm_stock $sql LIMIT $start,$readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_stock')." $sql LIMIT $start,$readperpage");
 			while ( $rs = DB::fetch($query) )
 			{
 				$rs['openprice']	= number_format($rs['openprice'],2);
@@ -83,7 +83,7 @@ class Stocks
 	public function getStockInfo($sid)
 	{
 		global $_G;
-		$rs = DB::fetch_first("SELECT * FROM kfsm_stock WHERE sid='$sid'");
+		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
 		{
 			cpmsg('没有找到指定的上市公司', '', 'error');
@@ -156,7 +156,7 @@ class Stocks
 		$db_esnamemin		= $_G['cache']['plugin']['stock_dzx']['esnamemin'];
 		$db_esnamemax		= $_G['cache']['plugin']['stock_dzx']['esnamemax'];
 		$db_introducemax 	= $_G['cache']['plugin']['stock_dzx']['introducemax'];
-		$rs = DB::result_first("SELECT * FROM kfsm_stock WHERE sid='$sid'");
+		$rs = DB::result_first("SELECT * FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
 			cpmsg('没有找到指定的上市公司', '', 'error');
 		if ( $stname == '' || strlen($stname) < $db_esnamemin || strlen($stname) > $db_esnamemax )
@@ -170,25 +170,25 @@ class Stocks
 		if ( $stname<>$stnameold )
 		{
 			$baseScript .= "&mod=stockset&section=editstock&sid=$sid";
-			$rs = DB::result_first("SELECT stockname FROM kfsm_stock WHERE stockname='$stname'");
+			$rs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE stockname='$stname'");
 			$rs && cpmsg('股票名称已被其它股票使用', $baseScript, 'error');
-			$rs = DB::result_first("SELECT stockname FROM kfsm_apply WHERE stockname='$stname' AND state<>2");
+			$rs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_apply')." WHERE stockname='$stname' AND state<>2");
 			$rs && cpmsg('股票名称已被其它股票使用', $baseScript, 'error');
 		}
 		$openprice	= str_replace(',', '', $openprice);
 		$currprice	= str_replace(',', '', $currprice);
-		DB::query("UPDATE kfsm_stock SET stockname='$stname', issuenum='$issuenum', openprice='$openprice', currprice='$currprice', lowprice='$lowprice', highprice='$highprice', todaybuynum='$todaybuynum', todaysellnum='$todaysellnum', todaytradenum='$todaytradenum', comphoto='$comphoto', comintro='$comintro', state='$locked' WHERE sid='$sid'");
+		DB::query("UPDATE ".DB::table('kfsm_stock')." SET stockname='$stname', issuenum='$issuenum', openprice='$openprice', currprice='$currprice', lowprice='$lowprice', highprice='$highprice', todaybuynum='$todaybuynum', todaysellnum='$todaysellnum', todaytradenum='$todaytradenum', comphoto='$comphoto', comintro='$comintro', state='$locked' WHERE sid='$sid'");
 		$logContent = "编辑股票（{$stnameold}）信息";
 		if ( $stname <> $stnameold )
 		{
 			$logContent .= "，名称修改为 $stname";
 		}
-		DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('股票管理', '{$_G[username]}', '$logContent', '$_G[timestamp]', '$_G[clientip]')");
+		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('股票管理', '{$_G[username]}', '$logContent', '$_G[timestamp]', '$_G[clientip]')");
 		cpmsg('股票信息修改完毕', $baseScript, 'succeed');
 	}
 	public function deleteStock($sid)
 	{
-		$rs = DB::fetch_first("SELECT sid,stockname FROM kfsm_stock WHERE sid='$sid'");
+		$rs = DB::fetch_first("SELECT sid,stockname FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
 			cpmsg('没有找到指定的股票记录', '' ,'error');
 		else
@@ -202,7 +202,7 @@ class Stocks
 		$messagetxt	= $_G['gp_messagetxt'];
 		$capital	= $_G['gp_capital'];
 		$use		= $_G['gp_use'];
-		$stockName	= DB::query("SELECT stockname FROM kfsm_stock WHERE sid='$sid'");
+		$stockName	= DB::query("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		$baseScript .= "&mod=stockset&section=delstock&sid=$sid";
 		if ( empty($stockName) )
 		{
@@ -226,14 +226,14 @@ class Stocks
 				cpmsg('您选择了使用信息发布功能，请填写信息内容，其长度控制在 250 字节以内', $baseScript, 'error');
 			if ( $capital == '1' )
 			{
-				$query = DB::query("SELECT cid, stocknum FROM kfsm_customer WHERE sid='$sid'");
+				$query = DB::query("SELECT cid, stocknum FROM ".DB::table('kfsm_customer')." WHERE sid='$sid'");
 				while ( $rc = DB::fetch($query) )
 				{
 					$mystnum		= 0;
 					$mystcost		= 0;
 					$mystvalue		= 0;
 					$totalfund		= 0;
-					$query = DB::query("SELECT c.*, s.currprice FROM kfsm_customer c INNER JOIN kfsm_stock s ON c.sid=s.sid WHERE c.cid={$rc[cid]} AND c.sid<>'$sid'");
+					$query = DB::query("SELECT c.*, s.currprice FROM ".DB::table('kfsm_customer')." c INNER JOIN ".DB::table('kfsm_stock')." s ON c.sid=s.sid WHERE c.cid={$rc[cid]} AND c.sid<>'$sid'");
 					while ( $rsst = DB::fetch($query) )
 					{
 						$mystnum	= $mystnum + $rsst['stocknum'];
@@ -242,14 +242,14 @@ class Stocks
 						$totalfund	= $totalfund + $rsst['stocknum'] * $rsst['currprice'];
 					}
 					$addmoney = round($rc['stocknum']*$rs['currprice'],3);
-					DB::query("UPDATE kfsm_user SET capital=capital+'$addmoney', asset=capital+".round($totalfund,3).", stocksort=stocksort-1, stocknum='$mystnum', stockcost='$mystcost', stockvalue='$mystvalue' WHERE uid='{$rc['cid']}'");
+					DB::query("UPDATE ".DB::table('kfsm_user')." SET capital=capital+'$addmoney', asset=capital+".round($totalfund,3).", stocksort=stocksort-1, stocknum='$mystnum', stockcost='$mystcost', stockvalue='$mystvalue' WHERE uid='{$rc['cid']}'");
 				}
 			}
-			DB::query("DELETE FROM kfsm_customer WHERE sid='$sid'");
-			DB::query("DELETE FROM kfsm_stock WHERE sid='$sid'");
+			DB::query("DELETE FROM ".DB::table('kfsm_customer')." WHERE sid='$sid'");
+			DB::query("DELETE FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 			if ( $use == '1' )
-				DB::query("INSERT INTO kfsm_news (content,color,addtime) VALUES('$messagetxt','#FF0000','$_G[timestamp]')");
-			DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('股票管理','{$_G[username]}','$logtxt','$_G[timestamp]','$_G[clientip]')");
+				DB::query("INSERT INTO ".DB::table('kfsm_news')." (content,color,addtime) VALUES('$messagetxt','#FF0000','$_G[timestamp]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('股票管理','{$_G[username]}','$logtxt','$_G[timestamp]','$_G[clientip]')");
 			$kfsclass = new kfsclass;
 			$kfsclass->resetcid();
 			$baseScript .= '&mod=stockset';
@@ -258,11 +258,11 @@ class Stocks
 	}
 	public function resetcid()
 	{
-		$query = DB::query("SELECT sid FROM kfsm_stock ORDER BY sid");
+		$query = DB::query("SELECT sid FROM ".DB::table('kfsm_stock')." ORDER BY sid");
 		$cid = 1;
 		while ( $rs = DB::fetch($query) )
 		{
-			DB::query("UPDATE kfsm_stock SET cid='$cid' WHERE sid='$rs[sid]'");
+			DB::query("UPDATE ".DB::table('kfsm_stock')." SET cid='$cid' WHERE sid='$rs[sid]'");
 			$cid++;
 		}
 	}

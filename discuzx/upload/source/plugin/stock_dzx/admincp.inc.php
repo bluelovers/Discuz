@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -33,7 +33,7 @@ switch ( $mod )
 		require_once 'require/acp_apply.php';
 		$apply = new Apply;
 		$newApplyNum	= $apply->getNewApplyNum();
-		$rs = DB::query("SELECT * FROM kfsm_sminfo");
+		$rs = DB::query("SELECT * FROM ".DB::table('kfsm_sminfo'));
 		$sminfo['bargainmoney']	= number_format($rs['todaytotal'],2);
 		$sminfo['bargainnum']	= $rs['todaybuy'] + $rs['todaysell'];
 		$sminfo['stampduty']	= number_format($rs['stampduty'],2);

@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -23,7 +23,7 @@ class Apply
 	{
 		global $baseScript, $_G, $db_smname, $db_marketpp, $page, $hkimg;
 		$apply_list = array();
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_apply");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_apply'));
 		if ( $cnt > 0 )
 		{
 			$readperpage = is_numeric($db_marketpp) && $db_marketpp > 0 ? $db_marketpp : 20;
@@ -42,7 +42,7 @@ class Apply
 			$start = ( $page - 1 ) * $readperpage;
 			$pages = foxpage($page,$numofpage,"$baseScript&mod=member&act=apply&");
 			$i = 0;
-			$query = DB::query("SELECT * FROM kfsm_apply ORDER BY aid DESC LIMIT $start, $readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_apply')." ORDER BY aid DESC LIMIT $start, $readperpage");
 			while ( $rs = DB::fetch($query) )
 			{
 				$i++;
@@ -120,14 +120,14 @@ class Apply
 				showmessage('您没有足够的资金，请适当调整股票发行单价与发行数量');
 			if ( empty($comintro) || strlen($comintro) < 10 || strlen($comintro) > $db_introducemax )
 				showmessage("公司简介长度请控制在 10 字节与 $db_introducemax 字节之间");
-			$rsName = DB::result_first("SELECT stockname FROM kfsm_stock WHERE stockname='$stname'");
+			$rsName = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE stockname='$stname'");
 			$rsName && showmessage('您输入的股票名称已经存在');
-			$rsaName = DB::result_first("SELECT stockname FROM kfsm_apply WHERE stockname='$stname' AND state<>2");
+			$rsaName = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_apply')." WHERE stockname='$stname' AND state<>2");
 			$rsaName && showmessage('您输入的股票名称已经存在');
 			$capitalisation = $stprice * $stnum;
-			DB::query("INSERT INTO kfsm_apply (userid, username, stockname, stockprice, stocknum, surplusnum, capitalisation, comintro, applytime, state) VALUES('$user[id]', '$user[username]', '$stname', $stprice, '$stnum', '$stnum', '$capitalisation', '$comintro', '$_G[timestamp]', '0')");
-			DB::query("UPDATE kfsm_user SET capital_ava=capital_ava-$capitalisation WHERE uid='$user[id]'");
-			DB::query("INSERT INTO kfsm_smlog (type, username2, descrip, timestamp, ip) VALUES('用户管理', '$user[username]', '公司 $stname 申请上市，单价 " . number_format($stprice,2) . " 元，数量 $stnum 股', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_apply')." (userid, username, stockname, stockprice, stocknum, surplusnum, capitalisation, comintro, applytime, state) VALUES('$user[id]', '$user[username]', '$stname', $stprice, '$stnum', '$stnum', '$capitalisation', '$comintro', '$_G[timestamp]', '0')");
+			DB::query("UPDATE ".DB::table('kfsm_user')." SET capital_ava=capital_ava-$capitalisation WHERE uid='$user[id]'");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('用户管理', '$user[username]', '公司 $stname 申请上市，单价 " . number_format($stprice,2) . " 元，数量 $stnum 股', '$_G[timestamp]', '$_G[clientip]')");
 			showmessage('您的公司上市申请资料已成功提交！请等待证监会的审批。', $baseScript);
 		}
 	}

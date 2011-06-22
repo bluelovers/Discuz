@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-10
+ * Last Updated: 2011-06-18
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -13,7 +13,7 @@ class News
 	public function showNewsList()
 	{
 		global $baseScript, $_G, $db_smname, $db_marketpp, $page, $hkimg;
-		$cnt = DB::result_first("SELECT COUNT(*) FROM kfsm_news");
+		$cnt = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_news'));
 		if ( $cnt > 0 )
 		{
 			$readperpage = is_numeric($db_marketpp) && $db_marketpp > 0 ? $db_marketpp : 20;
@@ -32,7 +32,7 @@ class News
 			$start = ( $page - 1 ) * $readperpage;
 			$pages = foxpage($page,$numofpage,"$baseScript&mod=news&act=shownewslist&");
 			$newsdb = array();
-			$query = DB::query("SELECT * FROM kfsm_news ORDER BY addtime DESC LIMIT $start, $readperpage");
+			$query = DB::query("SELECT * FROM ".DB::table('kfsm_news')." ORDER BY addtime DESC LIMIT $start, $readperpage");
 			$i = 0;
 			while ( $news = DB::fetch($query) )
 			{
@@ -49,7 +49,7 @@ class News
 	{
 		global $baseScript, $_G, $db_smname, $hkimg;
 		require libfile('function/discuzcode');
-		$news = DB::fetch_first("SELECT * FROM kfsm_news WHERE nid='$id'");
+		$news = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_news')." WHERE nid='$id'");
 		$news['content'] = discuzcode($news['content']);
 		$news['addtime'] = dgmdate($news['addtime']);
 		include template('stock_dzx:news_info');
@@ -58,7 +58,7 @@ class News
 	{
 		global $baseScript;
 		$newsList = array();
-		$query = DB::query("SELECT * FROM kfsm_news ORDER BY addtime DESC LIMIT 0,$num");
+		$query = DB::query("SELECT * FROM ".DB::table('kfsm_news')." ORDER BY addtime DESC LIMIT 0,$num");
 		while ( $rs = DB::fetch($query) )
 		{
 			$rs['addtime'] = dgmdate($rs['addtime']);
