@@ -37,7 +37,7 @@ function build_cache_fields_optional() {
 		if($field['selective']) {
 			$choices = array();
 			foreach(explode("\n", $field['choices']) as $item) {
-				list($index, $choice) = explode('=', $item);
+				list($index, $choice) = explode('=', $item, 2);
 				$choices[trim($index)] = trim($choice);
 			}
 			$field['choices'] = $choices;
