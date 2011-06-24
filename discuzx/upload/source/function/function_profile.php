@@ -279,7 +279,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {
-			if(in_array(stripslashes($op), $field['choices'])) {
+			// 以 array_key_exists 取代 in_array
+			if(array_key_exists(stripslashes($op), $field['choices'])) {
 				$arr[] = $op;
 			}
 		}
@@ -288,7 +289,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 			return false;
 		}
 	} elseif($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
-		if(!in_array(stripslashes($value), $field['choices'])){
+		// 以 array_key_exists 取代 in_array
+		if(!array_key_exists(stripslashes($value), $field['choices'])){
 			return false;
 		}
 	}
