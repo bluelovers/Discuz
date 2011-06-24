@@ -16,7 +16,6 @@ function build_cache_fields_required() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' AND required='1' ORDER BY displayorder");
 
 	while($field = DB::fetch($query)) {
-		$choices = array();
 		// bluelvoers
 		/**
 		 * 修正 $field['selective'] 不存在於 DX 1.5, DX 2.0
@@ -36,6 +35,7 @@ function build_cache_fields_required() {
 		$field['selective'] = !empty($field['choices']);
 		// bluelvoers
 		if($field['selective']) {
+			$choices = array();
 			foreach(explode("\n", $field['choices']) as $item) {
 				list($index, $choice) = explode('=', $item);
 				$choices[trim($index)] = trim($choice);

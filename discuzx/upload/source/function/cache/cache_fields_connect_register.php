@@ -27,8 +27,8 @@ function build_cache_fields_connect_register() {
 		$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE fieldid IN (".dimplode($fields).")");
 
 		while($field = DB::fetch($query)) {
-			$choices = array();
 			if($field['selective']) {
+				$choices = array();
 				foreach(explode("\n", $field['choices']) as $item) {
 					list($index, $choice) = explode('=', $item);
 					$choices[trim($index)] = trim($choice);
