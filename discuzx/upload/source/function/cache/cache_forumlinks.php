@@ -21,7 +21,7 @@ function build_cache_forumlinks() {
 		$tightlink_content = $tightlink_text = $tightlink_logo = $comma = '';
 
 		// bluelovers
-		$_onerror = ' onerror="this.onerror='';this.src=\"'.STATICURL.'image/logo/demo/logo_88_31.png\";" ';
+		$_onerror = ' onerror="this.onerror=\'\';this.src=\''.STATICURL.'image/logo/demo/logo_88_31.png\';" ';
 		// bluelovers
 
 		while($flink = DB::fetch($query)) {
