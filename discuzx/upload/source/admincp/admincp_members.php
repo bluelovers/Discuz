@@ -2706,7 +2706,7 @@ function showsearchform($operation = '') {
 			showsetting($value['title'], '', '', '<select class="txt" name="zodiac">'.$select.'</select>');
 		} elseif($value['formtype'] == 'select' || $value['formtype'] == 'list') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
-			// ¤ä´©¤w¸g³B²z¹LÅÜ¬° Array ªº $value['choices']
+			// æ”¯æ´å·²ç¶“è™•ç†éŽè®Šç‚º Array çš„ $value['choices']
 			$value['choices'] = is_array($value['choices']) ? $value['choices'] : explode("\n", $value['choices']);
 			foreach($value['choices'] as $option => $option_value) {
 				$option = trim($option);
