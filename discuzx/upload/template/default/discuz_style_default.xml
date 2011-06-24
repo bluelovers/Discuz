@@ -22,7 +22,7 @@
 			<item id="highlightlink"><![CDATA[#369]]></item>
 			<item id="noticetext"><![CDATA[#F26C4F]]></item>
 			<item id="bgcolor"><![CDATA[#FFF background.png repeat-x 0 0]]></item>
-			<item id="msgfontsize"><![CDATA[14px]]></item>
+			<item id="msgfontsize"><![CDATA[12px]]></item>
 			<item id="sidebgcolor"><![CDATA[ vlineb.png repeat-y 0 0]]></item>
 			<item id="headerborder"><![CDATA[0]]></item>
 			<item id="headerbgcolor"><![CDATA[]]></item>
