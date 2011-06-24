@@ -16,6 +16,11 @@ function build_cache_profilesetting() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY displayorder");
 
 	while($field = DB::fetch($query)) {
+		// bluelovers
+		if ($field['choices']) {
+			$field['choices'] = str_replace("\r\n", "\n", $field['choices']);
+		}
+		// bluelovers
 		$data[$field['fieldid']] = $field;
 	}
 
