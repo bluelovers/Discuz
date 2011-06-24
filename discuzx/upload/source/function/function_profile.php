@@ -318,6 +318,18 @@ function profile_show($fieldid, $space=array()) {
 				.(!empty($space['residecommunity']) ? '&nbsp;'.$space['residecommunity'] : '');
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
+
+		// bluelovers
+		// 追加安全過濾網址
+		$url = trim($url);
+		if(preg_match("/^((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\"']+/i", $url, $matches)) {
+			$url = $matches[0];
+			$url = (substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url);
+		} else {
+			$url = 'http://'.$url;
+		}
+		// bluelovers
+
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
 	} else {
 		return nl2br($space[$fieldid]);
