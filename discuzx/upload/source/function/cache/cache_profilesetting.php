@@ -19,6 +19,12 @@ function build_cache_profilesetting() {
 		// bluelovers
 		if ($field['choices']) {
 			$field['choices'] = str_replace("\r\n", "\n", $field['choices']);
+			$choices = array();
+			foreach(explode("\n", $field['choices']) as $item) {
+				$item = trim($item);
+				array_push($choices, $item);
+			}
+			$field['choices'] = join("\n", $choices);
 		}
 		// bluelovers
 		$data[$field['fieldid']] = $field;
