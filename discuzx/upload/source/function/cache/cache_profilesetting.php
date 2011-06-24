@@ -21,8 +21,11 @@ function build_cache_profilesetting() {
 			$field['choices'] = str_replace("\r\n", "\n", $field['choices']);
 			$choices = array();
 			foreach(explode("\n", $field['choices']) as $item) {
-				list($index, $choice) = explode('=', $item);
-				$choices[trim($index)] = trim($choice);
+				// 修正如果是以 DX 2.0 格式沒有包含 = 的時候會將 $choice 的值設為 $index
+				list($index, $choice) = explode('=', $item, 2);
+				$choice = trim($choice);
+				$index = trim($index);
+				$choices[$index] = ($choice === '' || $choice === null) ? $index : $choice;
 			}
 			$field['choices'] = $choices;
 		}
