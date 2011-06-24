@@ -21,10 +21,10 @@ function build_cache_profilesetting() {
 			$field['choices'] = str_replace("\r\n", "\n", $field['choices']);
 			$choices = array();
 			foreach(explode("\n", $field['choices']) as $item) {
-				$item = trim($item);
-				array_push($choices, $item);
+				list($index, $choice) = explode('=', $item);
+				$choices[trim($index)] = trim($choice);
 			}
-			$field['choices'] = join("\n", $choices);
+			$field['choices'] = $choices;
 		}
 		// bluelovers
 		$data[$field['fieldid']] = $field;
