@@ -29,7 +29,7 @@ if(empty($_GET['op'])) {
 <style type="text/css">
 body{margin:0;padding:0;}
 body, td, input, button, select, textarea {font: 12px/1.5em Tahoma, Arial, Helvetica, snas-serif;}
-textarea { resize: none; font-size: 14px; line-height: 1.8em; }
+textarea { resize: none; font-size: 12px; line-height: 1.8em; }
 .submit { padding: 0 10px; height: 22px; border: 1px solid; border-color: #DDD #264F6E #264F6E #DDD; background: #2782D6; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.dm{text-decoration:none}
 a.dm:hover{text-decoration:underline}
@@ -328,7 +328,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <meta http-equiv="Content-Type" content="text/html;charset=<?php echo $_GET['charset'];?>" />
 <title>New Document</title>
 <style>
-body { margin: 0; padding: 0; word-wrap: break-word; font-size:14px; line-height:1.8em; font-family: Tahoma, Arial, Helvetica, snas-serif; }
+body { margin: 0; padding: 0; word-wrap: break-word; font-size:12px; line-height:1.8em; font-family: Tahoma, Arial, Helvetica, snas-serif; }
 </style>
 <meta content="mshtml 6.00.2900.3132" name=generator>
 </head>
