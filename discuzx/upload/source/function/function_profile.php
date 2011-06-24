@@ -159,7 +159,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 //			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" class=\"ps\" tabindex=\"1\">";
 			foreach($field['choices'] as $op => $op_value) {
-				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
+				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op_value</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
@@ -167,7 +167,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 			$html = "<select name=\"{$fieldid}[]\" class=\"ps\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op => $op_value) {
-				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
+				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op_value</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
@@ -176,14 +176,14 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 					."<label class=\"lb\"><input type=\"checkbox\" name=\"{$fieldid}[]\" class=\"pc\" value=\"$op\" tabindex=\"1\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." />"
-					."$op</label>";
+					."$op_value</label>";
 			}
 		} elseif($field['formtype']=='radio') {
 //			$field['choices'] = explode("\n", $field['choices']);
 			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 						."<label class=\"lb\"><input type=\"radio\" name=\"{$fieldid}\" class=\"pr\" value=\"$op\" tabindex=\"1\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." />"
-						."$op</label>";
+						."$op_value</label>";
 			}
 		} elseif($field['formtype']=='file') {
 			$html = "<input type=\"file\" value=\"\" name=\"$fieldid\" tabindex=\"1\" class=\"pf\" style=\"height:26px;\" /><input type=\"hidden\" name=\"$fieldid\" value=\"$space[$fieldid]\" />";
