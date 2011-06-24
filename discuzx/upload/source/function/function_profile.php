@@ -48,6 +48,13 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		}
 	}
 
+	// bluelovers
+	// 支援已經處理過變為 Array 的 $field['choices']
+	if (isset($field['choices'])) {
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	}
+	// bluelovers
+
 	$html = '';
 	$field['unchangeable'] = !$ignoreunchangable && $field['unchangeable'] ? 1 : 0;
 	if($fieldid == 'birthday') {
@@ -149,14 +156,14 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		if($field['formtype']=='textarea') {
 			$html = "<textarea name=\"$fieldid\" id=\"$fieldid\" class=\"pt\" rows=\"3\" cols=\"40\" tabindex=\"1\">$space[$fieldid]</textarea>";
 		} elseif($field['formtype']=='select') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" class=\"ps\" tabindex=\"1\">";
 			foreach($field['choices'] as $op) {
 				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"{$fieldid}[]\" class=\"ps\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op) {
@@ -164,7 +171,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
 			foreach($field['choices'] as $op) {
 				$html .= ''
@@ -172,7 +179,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 					."$op</label>";
 			}
 		} elseif($field['formtype']=='radio') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			foreach($field['choices'] as $op) {
 				$html .= ''
 						."<label class=\"lb\"><input type=\"radio\" name=\"{$fieldid}\" class=\"pr\" value=\"$op\" tabindex=\"1\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." />"
@@ -256,7 +263,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 	}
 
 	if($field['choices']) {
-		$field['choices'] = explode("\n", $field['choices']);
+		// 支援已經處理過變為 Array 的 $field['choices']
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
 	}
 	if($field['formtype'] == 'text' || $field['formtype'] == 'textarea') {
 		$value = getstr($value, '', 1, 1);
