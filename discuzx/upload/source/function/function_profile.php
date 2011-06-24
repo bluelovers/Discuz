@@ -158,7 +158,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		} elseif($field['formtype']=='select') {
 //			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" class=\"ps\" tabindex=\"1\">";
-			foreach($field['choices'] as $op) {
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
 			}
 			$html .= '</select>';
@@ -166,21 +166,21 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 //			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"{$fieldid}[]\" class=\"ps\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
 //			$field['choices'] = explode("\n", $field['choices']);
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 					."<label class=\"lb\"><input type=\"checkbox\" name=\"{$fieldid}[]\" class=\"pc\" value=\"$op\" tabindex=\"1\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." />"
 					."$op</label>";
 			}
 		} elseif($field['formtype']=='radio') {
 //			$field['choices'] = explode("\n", $field['choices']);
-			foreach($field['choices'] as $op) {
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 						."<label class=\"lb\"><input type=\"radio\" name=\"{$fieldid}\" class=\"pr\" value=\"$op\" tabindex=\"1\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." />"
 						."$op</label>";
