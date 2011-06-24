@@ -126,7 +126,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 			if(parseInt(choicesarr[i]['scount']) >= (parseInt(choicesarr[sselectchoiceoptionid]['scount']) + parseInt(choicesarr[sselectchoiceoptionid]['slevel']))) {
 				break;
 			}
-			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">請選擇</option>';
+			selectoption += '</select>' + "\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">請選擇</option>';
 
 			lastcount = parseInt(choicesarr[i]['scount']);
 		}
@@ -137,14 +137,14 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 			isnext = '&raquo;';
 		}
 		if(selectchoiceoptionid.match(patrn1) != null || selectchoiceoptionid.match(patrn2) != null) {
-			selectoption += "\r\n" + '<option value="' + choicesarr[i]['soptionid'] + '" selected="selected">' + choicesarr[i]['scontent'] + isnext + '</option>';
+			selectoption += "\n" + '<option value="' + choicesarr[i]['soptionid'] + '" selected="selected">' + choicesarr[i]['scontent'] + isnext + '</option>';
 		} else {
-			selectoption += "\r\n" + '<option value="' + choicesarr[i]['soptionid'] + '">' + choicesarr[i]['scontent'] + isnext + '</option>';
+			selectoption += "\n" + '<option value="' + choicesarr[i]['soptionid'] + '">' + choicesarr[i]['scontent'] + isnext + '</option>';
 		}
 	}
 	selectoption += '</select>';
 	if(type == 'search') {
-		selectoption  += "\r\n" + '<input type="hidden" name="searchoption[' + optionid + '][type]" value="select">';
+		selectoption  += "\n" + '<input type="hidden" name="searchoption[' + optionid + '][type]" value="select">';
 	}
 	$('select_' + forum_optionlist[soptionid]['sidentifier']).innerHTML = selectoption;
 }

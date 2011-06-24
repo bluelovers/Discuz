@@ -129,7 +129,16 @@ class notemodel {
 			unset($uc_note);
 		} else {
 			$url = $this->get_url_code($note['operation'], $note['getdata'], $appid);
-			$note['postdata'] = str_replace(array("\n", "\r"), '', $note['postdata']);
+			/**
+			 * bugix
+			 *
+			 * try fix client settings didn't have any crlf
+			 * and made it all crlf to lf
+			 *
+			 * @example https://github.com/bluelovers/Discuz/issues/3
+			 * @see https://github.com/bluelovers/Discuz/issues/3
+			 **/
+			$note['postdata'] = str_replace("\r\n", "\n", $note['postdata']);
 			$response = trim($_ENV['misc']->dfopen2($url, 0, $note['postdata'], '', 1, $app['ip'], UC_NOTE_TIMEOUT, TRUE));
 		}
 
