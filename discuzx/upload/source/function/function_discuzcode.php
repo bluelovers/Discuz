@@ -423,8 +423,8 @@ function jammer() {
 	for($i = 0; $i < mt_rand(5, 15); $i++) {
 		$randomstr .= chr(mt_rand(32, 59)).' '.chr(mt_rand(63, 126));
 	}
-	return mt_rand(0, 1) ? '<font class="jammer">'.$randomstr.'</font>'."\r\n" :
-		"\r\n".'<span style="display:none">'.$randomstr.'</span>';
+	return mt_rand(0, 1) ? '<font class="jammer">'.$randomstr.'</font>'."\n" :
+		"\n".'<span style="display:none">'.$randomstr.'</span>';
 }
 
 function highlightword($text, $words, $prepend) {

@@ -470,7 +470,7 @@ EOT;
 			FROM ".DB::table('forum_typevar')." t, ".DB::table('forum_typeoption')." tt
 			WHERE t.sortid='{$_G['gp_sortid']}' AND t.optionid=tt.optionid ORDER BY t.displayorder");
 		while($option = DB::fetch($query)) {
-			$jsoptionids .= "optionids.push($option[optionid]);\r\n";
+			$jsoptionids .= "optionids.push($option[optionid]);\n";
 			$optiontitle[$option['identifier']] = $option['title'];
 			$showoption[$option['optionid']]['optionid'] = $option['optionid'];
 			$showoption[$option['optionid']]['title'] = $option['title'];
@@ -583,16 +583,16 @@ EOT;
 		if(selection && selection.createRange) {
 			var sel = selection.createRange();
 			if(location == 'post') {
-				sel.text = '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + '[' + text + 'tips] [' + text + 'description]</dd>\r\n';
+				sel.text = '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + '[' + text + 'tips] [' + text + 'description]</dd>\n';
 			} else {
-				sel.text = location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + ' </dd>\r\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
+				sel.text = location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + ' </dd>\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
 			}
 			sel.moveStart('character', -strlen(text));
 		} else {
 			if(location == 'post') {
-				$(focusarea).value += '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + ' [' + text + 'tips] [' + text + 'description]</dd>\r\n';
+				$(focusarea).value += '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + ' [' + text + 'tips] [' + text + 'description]</dd>\n';
 			} else {
-				$(focusarea).value += location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + '</dd>\r\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
+				$(focusarea).value += location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + '</dd>\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
 			}
 		}
 	}
@@ -691,13 +691,13 @@ EOT;
 						$identifier = $insertoptionid[$optionid]['identifier'];
 						if($identifier) {
 							if(in_array($insertoptionid[$optionid]['type'], array('radio'))) {
-								$create_tableoption_sql .= "$separator$identifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'\r\n";
+								$create_tableoption_sql .= "$separator$identifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'\n";
 							} elseif(in_array($insertoptionid[$optionid]['type'], array('number', 'range'))) {
-								$create_tableoption_sql .= "$separator$identifier int(10) UNSIGNED NOT NULL DEFAULT '0'\r\n";
+								$create_tableoption_sql .= "$separator$identifier int(10) UNSIGNED NOT NULL DEFAULT '0'\n";
 							} elseif($insertoptionid[$optionid]['type'] == 'select') {
-								$create_tableoption_sql .= "$separator$identifier varchar(50) NOT NULL\r\n";
+								$create_tableoption_sql .= "$separator$identifier varchar(50) NOT NULL\n";
 							} else {
-								$create_tableoption_sql .= "$separator$identifier mediumtext NOT NULL\r\n";
+								$create_tableoption_sql .= "$separator$identifier mediumtext NOT NULL\n";
 							}
 							$separator = ' ,';
 							if(in_array($insertoptionid[$optionid]['type'], array('radio', 'select', 'number'))) {
@@ -709,7 +709,7 @@ EOT;
 					$create_table_sql .= "KEY (fid), KEY(dateline)";
 					if($indexoption) {
 						foreach($indexoption as $index) {
-							$create_table_sql .= "$separator KEY $index ($index)\r\n";
+							$create_table_sql .= "$separator KEY $index ($index)\n";
 							$separator = ' ,';
 						}
 					}

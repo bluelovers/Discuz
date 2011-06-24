@@ -316,7 +316,7 @@ class register_ctl {
 					$whitearea = preg_quote(trim($this->setting['areaverifywhite']), '/');
 					$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
 					$whitearea = '.*'.$whitearea.'.*';
-					$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+					$whitearea = '/^('.str_replace(array("\r\n", ' ', "\n"), array('.*|.*', '', '.*|.*'), $whitearea).')$/i';
 					if(@preg_match($whitearea, $location)) {
 						$this->setting['regverify'] = 0;
 					}
@@ -342,7 +342,7 @@ class register_ctl {
 					$whitearea = preg_quote(trim($this->setting['inviteconfig']['inviteareawhite']), '/');
 					$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
 					$whitearea = '.*'.$whitearea.'.*';
-					$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+					$whitearea = '/^('.str_replace(array("\r\n", ' ', "\r\n"), array('.*|.*', '', '.*|.*'), $whitearea).')$/i';
 					if(@preg_match($whitearea, $location)) {
 						$invitestatus = true;
 					}
@@ -476,7 +476,7 @@ class register_ctl {
 				}
 			}
 
-			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
+			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' ', "\n"), array('.*', '|', '', '|'), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
 
 			if($this->setting['censoruser'] && @preg_match($censorexp, $username)) {
 				showmessage('profile_username_protect');

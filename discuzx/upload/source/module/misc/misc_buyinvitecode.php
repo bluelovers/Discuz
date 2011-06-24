@@ -61,7 +61,7 @@ if($_G['gp_action'] == 'paysucceed' && $_G['gp_orderid']) {
 	if(empty($codes)) {
 		showmessage('buyinvitecode_no_id');
 	}
-	$codetext = implode("\r\n", $codes);
+	$codetext = implode("\n", $codes);
 }
 
 if($_G['group']['maxinviteday']) {
