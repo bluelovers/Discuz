@@ -2708,9 +2708,9 @@ function showsearchform($operation = '') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			// 支援已經處理過變為 Array 的 $value['choices']
 			$value['choices'] = is_array($value['choices']) ? $value['choices'] : explode("\n", $value['choices']);
-			foreach($value['choices'] as $option) {
+			foreach($value['choices'] as $option => $option_value) {
 				$option = trim($option);
-				$select .= "<option value=\"$option\">$option</option>\n";
+				$select .= "<option value=\"$option\">$option_value</option>\n";
 			}
 			showsetting($value['title'], '', '', '<select class="txt" name="'.$fieldid.'">'.$select.'</select>');
 		} else {
