@@ -19,16 +19,21 @@ function build_cache_forumlinks() {
 
 	if($_G['setting']['forumlinkstatus']) {
 		$tightlink_content = $tightlink_text = $tightlink_logo = $comma = '';
+
+		// bluelovers
+		$_onerror = ' onerror="this.onerror=\'\';this.src=\''.STATICURL.'image/logo/demo/logo_88_31.png\';" ';
+		// bluelovers
+
 		while($flink = DB::fetch($query)) {
 			if($flink['description']) {
 				if($flink['logo']) {
-					$tightlink_content .= '<li class="lk_logo mbm bbda cl"><img src="'.$flink['logo'].'" border="0" alt="'.strip_tags($flink['name']).'" /><div class="lk_content z"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div>';
+					$tightlink_content .= '<li class="lk_logo mbm bbda cl"><img src="'.$flink['logo'].'"'.$_onerror.' border="0" alt="'.strip_tags($flink['name']).'" /><div class="lk_content z"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div>';
 				} else {
 					$tightlink_content .= '<li class="mbm bbda"><div class="lk_content"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div>';
 				}
 			} else {
 				if($flink['logo']) {
-					$tightlink_logo .= '<a href="'.$flink['url'].'" target="_blank"><img src="'.$flink['logo'].'" border="0" alt="'.strip_tags($flink['name']).'" /></a> ';
+					$tightlink_logo .= '<a href="'.$flink['url'].'" target="_blank"><img src="'.$flink['logo'].'"'.$_onerror.' border="0" alt="'.strip_tags($flink['name']).'" /></a> ';
 				} else {
 					$tightlink_text .= '<li><a href="'.$flink['url'].'" target="_blank" title="'.strip_tags($flink['name']).'">'.$flink['name'].'</a></li>';
 				}

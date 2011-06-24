@@ -58,7 +58,7 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"    <lastBuildDate>".gmdate('r', TIMESTAMP)."</lastBuildDate>\n".
 	"    <ttl>$ttl</ttl>\n".
 	"    <image>\n".
-	"      <url>{$_G[siteurl]}static/image/common/logo_88_31.gif</url>\n".
+	"      <url>{$_G[siteurl]}static/image/logo/logo_88_31.gif</url>\n".
 	"      <title>{$_G[setting][bbname]}</title>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";

@@ -56,7 +56,7 @@ INSERT INTO pre_common_cron VALUES ('13','1','system','清理過期動態','cron
 
 
 
-INSERT INTO pre_common_friendlink VALUES ('1','0','官方論壇','http://www.discuz.net','提供最新 Discuz! 產品新聞、軟件下載與技術交流','static/image/common/logo_88_31.gif','2');
+INSERT INTO pre_common_friendlink VALUES ('1','0','官方論壇','http://www.discuz.net','提供最新 Discuz! 產品新聞、軟件下載與技術交流','static/image/logo/discuz/logo_88_31.gif','2');
 INSERT INTO pre_common_friendlink VALUES ('2','4','我的領地','http://www.5d6d.com/','','','2');
 INSERT INTO pre_common_friendlink VALUES ('3','2','漫遊平台','http://www.manyou.com/','','','2');
 INSERT INTO pre_common_friendlink VALUES ('4','3','Yeswan','http://www.yeswan.com','','','2');
