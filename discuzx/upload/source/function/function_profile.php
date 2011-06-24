@@ -308,6 +308,12 @@ function profile_show($fieldid, $space=array()) {
 		return false;
 	}
 
+	// bluelovers
+	$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	// 目前的值
+	$value = $space[$fieldid];
+	// bluelovers
+
 	if($fieldid=='gender') {
 		return lang('space', 'gender_'.intval($space['gender']));
 	} elseif($fieldid=='birthday') {
@@ -329,6 +335,23 @@ function profile_show($fieldid, $space=array()) {
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
+
+	// bluelovers
+	// 追加欄位顯示判定
+	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
+		$arr = array();
+		foreach ($value as $op) {
+			if(array_key_exists($op, $field['choices'])) {
+				$arr[] = $field['choices'][$op];
+			}
+		}
+		$value = implode("\n", $arr);
+
+		return nl2br(trim($value, "\n"));
+	} elseif ($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
+		return isset($field['choices'][$value]) ? $field['choices'][$value] : false;
+	// bluelovers
+
 	} else {
 		return nl2br($space[$fieldid]);
 	}
