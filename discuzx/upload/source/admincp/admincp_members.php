@@ -2706,7 +2706,8 @@ function showsearchform($operation = '') {
 			showsetting($value['title'], '', '', '<select class="txt" name="zodiac">'.$select.'</select>');
 		} elseif($value['formtype'] == 'select' || $value['formtype'] == 'list') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
-			$value['choices'] = explode("\n",$value['choices']);
+			// 支援已經處理過變為 Array 的 $value['choices']
+			$value['choices'] = is_array($value['choices']) ? $value['choices'] : explode("\n", $value['choices']);
 			foreach($value['choices'] as $option) {
 				$option = trim($option);
 				$select .= "<option value=\"$option\">$option</option>\n";
