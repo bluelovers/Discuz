@@ -94,6 +94,12 @@ class discuz_core {
 		$_GET = $_func($_GET, $_func);
 		$_POST = $_func($_POST, $_func);
 
+		include_once libfile('Hook', 'Scorpio/libs/', 'extensions/libs/scophp/');
+		include_once libfile('Event', 'Scorpio/libs/', 'extensions/libs/scophp/');
+
+		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+
 	}
 	// bluelovers
 
