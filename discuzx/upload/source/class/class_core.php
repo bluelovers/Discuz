@@ -99,8 +99,8 @@ class discuz_core {
 		include_once libfile('Hook', 'Scorpio/libs/', 'extensions/libs/scophp/');
 		include_once libfile('Event', 'Scorpio/libs/', 'extensions/libs/scophp/');
 
-		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
-		if (!sclass_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
 
 	}
 	// bluelovers
