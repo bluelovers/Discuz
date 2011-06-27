@@ -1,6 +1,3 @@
-[submodule "discuzx/upload/uc_server"]
-	path = discuzx/upload/uc_server
-	url = git@github.com:bluelovers/ucenter-uc_server.git
 [submodule "discuzx/upload/extensions/libs/scophp"]
 	path = discuzx/upload/extensions/libs/scophp
 	url = git@github.com:bluelovers/Scophp.git
