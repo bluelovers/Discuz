@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_click.php 21247 2011-03-21 06:45:20Z zhengqingpeng $
+ *      $Id: spacecp_click.php 22942 2011-06-07 01:54:42Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -186,7 +186,6 @@ if($_GET['op'] == 'add') {
 		while ($value = DB::fetch($query)) {
 			$value['clickname'] = $clicks[$value['clickid']]['name'];
 			$clickuserlist[] = $value;
-			$count++;
 		}
 
 		$click_multi = multi($count, $perpage, $page, "home.php?mod=spacecp&ac=click&op=show&clickid=$clickid&idtype=$idtype&id=$id");
