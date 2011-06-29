@@ -18,22 +18,34 @@ if(!defined('IN_DISCUZ')) {
  *		版塊也可進行推薦
  *
 $data['forumrecommend'] = array (
-  55 =>
-  array (
-    0 =>
-    array (
-      'fid' => '221',
-      'name' => '断罪の楽園',
-      'icon' => 'static/image/common/groupicon.gif',
-    ),
-  ),
   75 =>
   array (
     0 =>
     array (
-      'fid' => '227',
-      'name' => 'fhgfh',
-      'icon' => 'data/attachment/group/70/group_227_icon.jpg',
+      'fid' => '219',
+      'name' => 'Demonic',
+      'threads' => '10',
+      'lastpost' => '',
+      'icon' => 'data/attachment/group/http://img3.imageshack.us/img3/8034/55066298.jpg',
+      'membernum' => '6',
+      'description' => '這裡是喜愛全民熙－符文之子系列的人(?)所創立的聯盟XDD
+不論是喜歡第一部的波里斯或是第二部的喬書亞等等人物
+歡迎您加入跟我們一同討論(笑',
+      'recommend' => '75',
+    ),
+    1 =>
+    array (
+      'fid' => '229',
+      'name' => '断罪の楽園',
+      'threads' => '12',
+      'lastpost' => '',
+      'icon' => 'data/attachment/group/http://img24.imageshack.us/img24/6299/c585225sample4s6768189.jpg',
+      'membernum' => '19',
+      'description' => '提供有心並且願意為 Bluelovers．風 付出貢獻的人
+討論並且提供各種資源管道、工具、權限...等等各種讓 Bluelovers．風 成為具有獨特特色的網站的建議或方法
+
+＊本區內皆為機密資料，，請勿外流',
+      'recommend' => '75',
     ),
   ),
 );
