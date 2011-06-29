@@ -1123,9 +1123,11 @@ function getrelateitem($tagarray, $tid = 0, $type = 'tid') {
 		}
 	}
 	if(!empty($relatearray)) {
-		$query = DB::query("SELECT tid,subject FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($relatearray).")");
+		$query = DB::query("SELECT tid,subject,displayorder FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($relatearray).")");
 		while($result = DB::fetch($query)) {
-			$relateitem[] = $result;
+			if($result['displayorder'] >= 0) {
+				$relateitem[] = $result;
+			}
 		}
 	}
 	return $relateitem;
