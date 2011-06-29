@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_stats.php 21767 2011-04-11 14:06:27Z yexinhao $
+ *      $Id: cloud_stats.php 22943 2011-06-07 01:54:53Z svn_project_zhangjie $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -58,6 +58,7 @@ if($_G['gp_anchor'] == 'base') {
 	} else {
 
 		$settingnew = $_G['gp_settingnew'];
+		$settingnew['cloud_staticon'] = intval($settingnew['cloud_staticon']);
 
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('cloud_staticon', '$settingnew[cloud_staticon]')");
 		updatecache('setting');
