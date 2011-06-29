@@ -50,6 +50,12 @@ function build_cache_forumrecommend() {
 //		require_once libfile('function/group');
 		$squery = DB::query("SELECT f.fid, f.name, f.threads, f.lastpost, ff.icon, ff.membernum, ff.description FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.recommend <> '' AND f.recommend <> '0'");
 		while($group = DB::fetch($squery)) {
+
+			// bluelovers
+			// 防止類似 0,0 這種狀況
+			if ($recommend = array_unique(explode(',', $group['recommend']))) {
+			// bluelovers
+
 			$group['icon'] = get_groupimg($group['icon'], 'icon');
 			$lastpost = array(0, 0, '', '');
 			$group['lastpost'] = is_string($group['lastpost']) ? explode("\t", $group['lastpost']) : $group['lastpost'];
@@ -65,6 +71,11 @@ function build_cache_forumrecommend() {
 				$group['lastpost'] = '';
 			}
 			$data[$row['fid']][] = $group;
+
+			// bluelovers
+			}
+			// bluelovers
+
 		}
 //	}
 
