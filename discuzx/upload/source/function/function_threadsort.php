@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 22709 2011-05-18 02:47:40Z svn_project_zhangjie $
+ *      $Id: function_threadsort.php 22937 2011-06-03 01:15:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ function gettypetemplate($option, $optionvalue, $optionid) {
 			$showoption[$option['identifier']]['value'] .= '</div>';
 
 		} else {
-			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="px" tabindex="1" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.$optionvalue['value'].'" '.$optionvalue['unchangeable'].' />';
+			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="px" tabindex="1" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.($optionvalue['value'] ? $optionvalue['value'] : $option['defaultvalue']).'" '.$optionvalue['unchangeable'].' />';
 		}
 	} elseif(in_array($option['type'], array('radio', 'checkbox', 'select'))) {
 		if($option['type'] == 'select') {
