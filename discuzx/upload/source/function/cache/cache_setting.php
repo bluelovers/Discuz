@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 22850 2011-05-26 03:00:18Z monkey $
+ *      $Id: cache_setting.php 23009 2011-06-14 02:23:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -769,8 +769,13 @@ function get_cachedata_footernav() {
 			if($nav['identifier'] == 'report') {
 				$nav['url'] = 'javascript:;';
 				$nav['extra'] = ' onclick="showWindow(\'miscreport\', \'misc.php?mod=report&url=\'+REPORTURL);return false;"';
-			} elseif($nav['identifier'] == 'archiver' && !$_G['setting']['archiver']) {
-				continue;
+			} elseif($nav['identifier'] == 'archiver') {
+				if(!$_G['setting']['archiver']) {
+					continue;
+				} else {
+					$domain = $_G['setting']['domain']['app']['forum'] ? $_G['setting']['domain']['app']['forum'] : ($_G['setting']['domain']['app']['default'] ? $_G['setting']['domain']['app']['default'] : '');
+					$nav['url'] = ($domain ? 'http://'.$domain.'/' : '').$nav['url'];
+				}
 			}
 		}
 		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';
