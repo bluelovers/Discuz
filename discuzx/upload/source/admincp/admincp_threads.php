@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 22409 2011-05-06 05:24:44Z monkey $
+ *      $Id: admincp_threads.php 22922 2011-06-01 02:38:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -150,7 +150,7 @@ EOT;
 		$sql = '';
 		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] != 'all' && $_G['gp_inforum'] != 'isgroup' ? " AND fid='{$_G['gp_inforum']}'" : '';
 		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] == 'isgroup' ? " AND isgroup='1'" : ' AND isgroup=\'0\'';
-		$sql .= $_G['gp_intype'] != '' ? " AND typeid='{$_G['gp_intype']}'" : '';
+		$sql .= $_G['gp_intype'] !== '' ? " AND typeid='{$_G['gp_intype']}'" : '';
 		$sql .= $_G['gp_insort'] != '' && $_G['gp_insort'] != 'all' ? " AND sortid='{$_G['gp_insort']}'" : '';
 		$sql .= $_G['gp_viewsless'] != '' ? " AND views<'{$_G['gp_viewsless']}'" : '';
 		$sql .= $_G['gp_viewsmore'] != '' ? " AND views>'{$_G['gp_viewsmore']}'" : '';
