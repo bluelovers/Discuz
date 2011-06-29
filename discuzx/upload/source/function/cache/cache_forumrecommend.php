@@ -66,6 +66,8 @@ function build_cache_forumrecommend() {
 			// bluelovers
 			// 防止類似 0,0 這種狀況
 			if ($recommend = array_unique(explode(',', $group['recommend']))) {
+
+				unset($group['recommend']);
 			// bluelovers
 
 			$group['icon'] = get_groupimg($group['icon'], 'icon');
