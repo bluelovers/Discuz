@@ -47,7 +47,7 @@ function build_cache_forumrecommend() {
 	$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type<>'group' AND status<>3");
 
 	while($row = DB::fetch($query)) {
-		require_once libfile('function/group');
+//		require_once libfile('function/group');
 		$squery = DB::query("SELECT f.fid, f.name, f.threads, f.lastpost, ff.icon, ff.membernum, ff.description FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE recommend='$row[fid]'");
 		while($group = DB::fetch($squery)) {
 			$group['icon'] = get_groupimg($group['icon'], 'icon');
