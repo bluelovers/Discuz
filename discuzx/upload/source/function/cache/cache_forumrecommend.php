@@ -39,6 +39,10 @@ $data['forumrecommend'] = array (
 );
 */
 function build_cache_forumrecommend() {
+	// bluelovers
+	require_once libfile('function/group');
+	// bluelovers
+
 	$data = array();
 	$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type<>'group' AND status<>3");
 
