@@ -1176,7 +1176,7 @@ function rushreply_rule () {
 				if(strlen($var) > 1) {
 					$var = str_replace('*', '[^,]?[\d]+', $var);
 				} else {
-					$var = str_replace('*', '[^,]?', $var);
+					$var = str_replace('*', '\d+', $var);
 				}
 				$preg[] = "(,$var,)";
 			}
