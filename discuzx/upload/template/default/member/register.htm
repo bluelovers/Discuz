@@ -43,44 +43,43 @@
 				<div id="reginfo_a">
 					<!--{hook/register_top}-->
 
-					<!--{if $_G[gp_action] != 'activation'}-->
-
-						<!--{if $invite}-->
-							<!--{if $invite['uid']}-->
-							<div class="rfm">
-								<table>
-									<tr>
-										<th>{lang register_from}:</th>
-										<td><a href="home.php?mod=space&uid=$invite[uid]" target="_blank">$invite[username]</a></td>
-									</tr>
-								</table>
-							</div>
-							<!--{else}-->
-							<div class="rfm">
-								<table>
-									<tr>
-										<th><label for="invitecode">{lang invite_code}:</label></th>
-										<td>$_G[gp_invitecode]<input type="hidden" id="invitecode" name="invitecode" value="$_G[gp_invitecode]" /></td>
-									</tr>
-								</table>
-							</div>
-							<!--{eval $invitecode = 1;}-->
-							<!--{/if}-->
-						<!--{/if}-->
-
-						<!--{if empty($invite) && $this->setting['regstatus'] == 2 && !$invitestatus}-->
+					<!--{if $invite}-->
+						<!--{if $invite['uid']}-->
 						<div class="rfm">
 							<table>
 								<tr>
-									<th><span class="rq">*</span><label for="invitecode">{lang invite_code}:</label></th>
-									<td><input type="text" id="invitecode" name="invitecode" autocomplete="off" size="25" onblur="checkinvite()" tabindex="1" class="px" required /><!--{if $this->setting['inviteconfig']['buyinvitecode'] && $this->setting['inviteconfig']['invitecodeprice'] && ($this->setting[ec_tenpay_bargainor] || $this->setting[ec_tenpay_opentrans_chnid] || $this->setting[ec_account])}--><p><a href="misc.php?mod=buyinvitecode" target="_blank" class="xi2">{lang register_buyinvitecode}</a></p><!--{/if}--></td>
-									<td class="tipcol"><i id="tip_invitecode" class="p_tip"><!--{if $this->setting['inviteconfig']['invitecodeprompt']}-->$this->setting[inviteconfig][invitecodeprompt]<!--{/if}--></i><kbd id="chk_invitecode" class="p_chk"></kbd></td>
+									<th>{lang register_from}:</th>
+									<td><a href="home.php?mod=space&uid=$invite[uid]" target="_blank">$invite[username]</a></td>
+								</tr>
+							</table>
+						</div>
+						<!--{else}-->
+						<div class="rfm">
+							<table>
+								<tr>
+									<th><label for="invitecode">{lang invite_code}:</label></th>
+									<td>$_G[gp_invitecode]<input type="hidden" id="invitecode" name="invitecode" value="$_G[gp_invitecode]" /></td>
 								</tr>
 							</table>
 						</div>
 						<!--{eval $invitecode = 1;}-->
 						<!--{/if}-->
+					<!--{/if}-->
 
+					<!--{if empty($invite) && $this->setting['regstatus'] == 2 && !$invitestatus}-->
+					<div class="rfm">
+						<table>
+							<tr>
+								<th><span class="rq">*</span><label for="invitecode">{lang invite_code}:</label></th>
+								<td><input type="text" id="invitecode" name="invitecode" autocomplete="off" size="25" onblur="checkinvite()" tabindex="1" class="px" required /><!--{if $this->setting['inviteconfig']['buyinvitecode'] && $this->setting['inviteconfig']['invitecodeprice'] && ($this->setting[ec_tenpay_bargainor] || $this->setting[ec_tenpay_opentrans_chnid] || $this->setting[ec_account])}--><p><a href="misc.php?mod=buyinvitecode" target="_blank" class="xi2">{lang register_buyinvitecode}</a></p><!--{/if}--></td>
+								<td class="tipcol"><i id="tip_invitecode" class="p_tip"><!--{if $this->setting['inviteconfig']['invitecodeprompt']}-->$this->setting[inviteconfig][invitecodeprompt]<!--{/if}--></i><kbd id="chk_invitecode" class="p_chk"></kbd></td>
+							</tr>
+						</table>
+					</div>
+					<!--{eval $invitecode = 1;}-->
+					<!--{/if}-->
+
+					<!--{if $_G[gp_action] != 'activation'}-->
 						<div class="rfm">
 							<table>
 								<tr>
