@@ -11,6 +11,33 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 各版塊的推薦群組
+ * hack:
+ *		單一群組可推薦多個版塊
+ *		版塊也可進行推薦
+ *
+$data['forumrecommend'] = array (
+  55 =>
+  array (
+    0 =>
+    array (
+      'fid' => '221',
+      'name' => '断罪の楽園',
+      'icon' => 'static/image/common/groupicon.gif',
+    ),
+  ),
+  75 =>
+  array (
+    0 =>
+    array (
+      'fid' => '227',
+      'name' => 'fhgfh',
+      'icon' => 'data/attachment/group/70/group_227_icon.jpg',
+    ),
+  ),
+);
+*/
 function build_cache_forumrecommend() {
 	$data = array();
 	$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type<>'group' AND status<>3");
