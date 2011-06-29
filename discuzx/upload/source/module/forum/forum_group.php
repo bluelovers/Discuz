@@ -680,7 +680,7 @@ if($action == 'index') {
 			$_G['gp_recommend'] = is_array($_G['gp_recommend']) ? dimplode(array_unique($_G['gp_recommend'])) : intval($_G['gp_recommend']);
 			// bluelovers
 
-			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".intval($_G['gp_recommend'])."' WHERE fid='$_G[fid]'");
+			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend=".$_G['gp_recommend']." WHERE fid='$_G[fid]'");
 			require_once libfile('function/cache');
 			updatecache('forumrecommend');
 		}
