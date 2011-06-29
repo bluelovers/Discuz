@@ -355,7 +355,7 @@ if(empty($_G['gp_viewpid'])) {
 	$ordertype = empty($_G['gp_ordertype']) && getstatus($_G['forum_thread']['status'], 4) ? 1 : $_G['gp_ordertype'];
 
 	$sticklist = array();
-	if($_G['forum_thread']['stickreply'] && $page == 1 && !$_G['gp_authorid'] && $ordertype != 1) {
+	if($_G['forum_thread']['stickreply'] && $page == 1 && !$_G['gp_authorid'] && !$ordertype) {
 		$query = DB::query("SELECT p.*, ps.position FROM ".DB::table('forum_poststick')." ps
 			LEFT JOIN ".DB::table($posttable)." p USING(pid)
 			WHERE ps.tid='$_G[tid]' ORDER BY ps.dateline DESC");
