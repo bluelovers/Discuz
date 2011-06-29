@@ -31,7 +31,6 @@ $data['forumrecommend'] = array (
       'description' => '這裡是喜愛全民熙－符文之子系列的人(?)所創立的聯盟XDD
 不論是喜歡第一部的波里斯或是第二部的喬書亞等等人物
 歡迎您加入跟我們一同討論(笑',
-      'recommend' => '75',
     ),
     1 =>
     array (
@@ -45,7 +44,6 @@ $data['forumrecommend'] = array (
 討論並且提供各種資源管道、工具、權限...等等各種讓 Bluelovers．風 成為具有獨特特色的網站的建議或方法
 
 ＊本區內皆為機密資料，，請勿外流',
-      'recommend' => '75',
     ),
   ),
 );
