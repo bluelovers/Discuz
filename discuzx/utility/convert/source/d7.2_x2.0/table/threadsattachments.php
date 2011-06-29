@@ -29,8 +29,8 @@ if(empty($start)) {
 }
 
 $query = $db_source->query("SELECT a.*,af.description FROM $table_source a
-				LEFT JOIN $table_source_field af USING(aid) WHERE aid>'$start'
-				ORDER BY aid LIMIT $limit");
+				LEFT JOIN $table_source_field af USING(aid) WHERE a.aid>'$start'
+				ORDER BY a.aid LIMIT $limit");
 while ($row = $db_source->fetch_array($query)) {
 
 	$nextid = $row['aid'];
