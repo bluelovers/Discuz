@@ -168,6 +168,8 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		$allowconnectfeed = $this->_allowconnectfeed();
 		$allowconnectt = $this->_allowconnectt();
 		if($_G['inajax'] && ($allowconnectfeed || $allowconnectt) && $_G['gp_action'] == 'newthread') {
+			require_once libfile('function/connect');
+			connect_merge_member();
 			return tpl_sync_method($allowconnectfeed, $allowconnectt, ' z');
 		}
 	}
@@ -369,7 +371,7 @@ class plugin_qqconnect_forum extends plugin_qqconnect {
 		if(!$this->allow) {
 			return;
 		}
-		if($_G['setting']['connect']['turl_allow'] || $_G['setting']['connect']['like_allow']) {
+		if($_G['setting']['connect']['like_allow'] && $_G['setting']['connect']['like_url'] || $_G['setting']['connect']['turl_allow'] && $_G['setting']['connect']['turl_code']) {
 			return tpl_index_status_extra();
 		}
 	}

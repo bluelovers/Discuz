@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 22319 2011-04-29 09:40:43Z monkey $
+ *      $Id: index.php 23108 2011-06-20 03:20:28Z zhangguosheng $
  */
 
 define('IN_API', true);
@@ -102,7 +102,7 @@ class discuz_remote {
 		foreach ($arg as $k => $v) {
 			$str .= $k . '=' . $v . '&';
 		}
-		return md5($str . getglobal('config/mserver/appkey'));
+		return md5($str . getglobal('config/remote/appkey'));
 	}
 
 }

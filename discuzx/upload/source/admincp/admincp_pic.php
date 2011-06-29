@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_pic.php 19991 2011-01-27 02:08:41Z monkey $
+ *      $Id: admincp_pic.php 22995 2011-06-13 03:15:57Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -51,7 +51,6 @@ if(!submitcheck('picsubmit')) {
 	if(empty($_G['gp_search'])) {
 		$newlist = 1;
 		$detail = 1;
-		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
 
 	if($fromumanage) {

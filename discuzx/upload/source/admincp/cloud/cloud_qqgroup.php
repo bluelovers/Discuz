@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_qqgroup.php 22747 2011-05-19 04:11:31Z yexinhao $
+ *      $Id: cloud_qqgroup.php 23162 2011-06-22 03:04:22Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$op = $_G['gp_op'];
+$op = trim($_G['gp_op']);
 
 $signUrl = generateSiteSignUrl();
 

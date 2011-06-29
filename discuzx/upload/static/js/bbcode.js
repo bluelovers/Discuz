@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 22651 2011-05-16 10:08:23Z monkey $
+	$Id: bbcode.js 22924 2011-06-01 07:41:29Z monkey $
 */
 
 var re, DISCUZCODE = [];
@@ -225,7 +225,7 @@ function ptag(options, text, tagname) {
 	}
 	align = in_array(align, ['left', 'center', 'right']) ? align : 'left';
 	style = getoptionvalue('style', options);
-
+	style = preg_replace(['line-height\\\s?:\\\s?(\\\d{1,3})px', 'text-indent\\\s?:\\\s?(\\\d{1,3})em', 'text-align\\\s?:\\\s?(left|center|right)'], '', style);
 	if(lineHeight === null && textIndent === null) {
 		return '[align=' + align + ']' + (style ? '<span style="' + style + '">' : '') + text + (style ? '</span>' : '') + '[/align]';
 	} else {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 22895 2011-05-30 08:59:34Z monkey $
+ *      $Id: admincp_members.php 23129 2011-06-21 02:15:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -145,8 +145,8 @@ EOF;
 	if($uids && is_array($uids)) {
 		$conditions = 'p.uid IN ('.dimplode($uids).')';
 		$query = DB::query("SELECT p.uid,m.username AS username,p.realname,p.gender,p.birthyear,p.birthmonth,p.birthday,p.constellation,
-				p.zodiac,p.telephone,p.mobile,p.idcardtype,p.idcard,p.address,p.zipcode,p.nationality,p.birthprovince,p.birthcity,
-				p.resideprovince,p.residecity,p.residedist,p.residecommunity,p.residesuite,p.graduateschool,p.education,p.company,
+				p.zodiac,p.telephone,p.mobile,p.idcardtype,p.idcard,p.address,p.zipcode,p.nationality,p.birthprovince,p.birthcity,p.birthdist,
+				p.birthcommunity,p.resideprovince,p.residecity,p.residedist,p.residecommunity,p.residesuite,p.graduateschool,p.education,p.company,
 				p.occupation,p.position,p.revenue,p.affectivestatus,p.lookingfor,p.bloodtype,p.height,p.weight,p.alipay,p.icq,p.qq,
 				p.yahoo,p.msn,p.taobao,p.site,p.bio,p.interest,p.field1,p.field2,p.field3,p.field4,p.field5,p.field6,p.field7,p.field8 FROM ".
 				DB::table('common_member_profile')." p LEFT JOIN ".DB::table('common_member')." m ON p.uid =m.uid WHERE ".$conditions);
@@ -159,13 +159,21 @@ EOF;
 			$detail = $detail."\n";
 		}
 	}
-	$query = DB::query("SELECT title FROM ".DB::table('common_member_profile_setting'));
+	$title = array('realname' => '', 'gender' => '', 'birthyear' => '', 'birthmonth' => '', 'birthday' => '', 'constellation' => '',
+		'zodiac' => '', 'telephone' => '', 'mobile' => '', 'idcardtype' => '', 'idcard' => '', 'address' => '', 'zipcode' => '','nationality' => '',
+		'birthprovince' => '', 'birthcity' => '', 'birthdist' => '', 'birthcommunity' => '', 'resideprovince' => '', 'residecity' => '', 'residedist' => '',
+		'residecommunity' => '', 'residesuite' => '', 'graduateschool' => '', 'education' => '', 'company' => '', 'occupation' => '',
+		'position' => '', 'revenue' => '', 'affectivestatus' => '', 'lookingfor' => '', 'bloodtype' => '', 'height' => '', 'weight' => '',
+		'alipay' => '', 'icq' => '', 'qq' => '', 'yahoo' => '', 'msn' => '', 'taobao' => '', 'site' => '', 'bio' => '', 'interest' => '',
+		'field1' => '', 'field2' => '', 'field3' => '', 'field4' => '', 'field5' => '', 'field6' => '', 'field7' => '', 'field8' => '');
+	$query = DB::query("SELECT fieldid, title FROM ".DB::table('common_member_profile_setting'));
 	while($value = DB::fetch($query)) {
-		$title[] = $value['title'];
+		if(isset($title[$value['fieldid']])) {
+			$title[$value['fieldid']] = $value['title'];
+		}
 	}
-
-	foreach($title as $v) {
-		$subject .= $v.",";
+	foreach($title as $k => $v) {
+		$subject .= ($v ? $v : $k).",";
 	}
 	$detail = "UID,".$lang['username'].",".$subject."\n".$detail;
 	$filename = date('Ymd', TIMESTAMP).'.csv';
@@ -1584,6 +1592,14 @@ EOF;
 				$membercount['posts'] = 0;
 			}
 			if(in_array('blog', $_G['gp_clear'])) {
+				$blogids = array();
+				$query = DB::query("SELECT blogid FROM ".DB::table('home_blog')." WHERE uid='$member[uid]'");
+				while ($value = DB::fetch($query)) {
+					$blogids[] = $value['blogid'];
+				}
+				if(!empty($blogids)) {
+					DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($blogids).") AND idtype='blogid'");
+				}
 				DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='blogid'");
@@ -1591,16 +1607,28 @@ EOF;
 			}
 			if(in_array('album', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid='$member[uid]'");
-				$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
+				$picids = array();
+				$query = DB::query("SELECT picid, filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				while ($value = DB::fetch($query)) {
+					$picids[] = $value['picid'];
 					deletepicfiles($value);
 				}
-
+				if(!empty($picids)) {
+					DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($picids).") AND idtype='picid'");
+				}
 				DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='albumid'");
 				$membercount['albums'] = 0;
 			}
 			if(in_array('share', $_G['gp_clear'])) {
+				$shareids = array();
+				$query = DB::query("SELECT sid FROM ".DB::table('home_share')." WHERE uid='$member[uid]'");
+				while ($value = DB::fetch($query)) {
+					$shareids[] = $value['sid'];
+				}
+				if(!empty($shareids)) {
+					DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($shareids).") AND idtype='sid'");
+				}
 				DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='sid'");
 				$membercount['sharings'] = 0;
@@ -1612,7 +1640,9 @@ EOF;
 				while ($value = DB::fetch($query)) {
 					$doids[$value['doid']] = $value['doid'];
 				}
-
+				if(!empty($doids)) {
+					DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($doids).") AND idtype='doid'");
+				}
 				DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid='$member[uid]'");
 				DB::update('common_member_field_home', array('recentnote' => '', 'spacenote' => ''), "uid='$member[uid]'");
 
@@ -1622,6 +1652,17 @@ EOF;
 				$membercount['doings'] = 0;
 			}
 			if(in_array('comment', $_G['gp_clear'])) {
+				$delcids = array();
+				$query = DB::query("SELECT cid, idtype FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
+				while($value = DB::fetch($query)) {
+					$key = $value['idtype'].'_cid';
+					$delcids[$key] = $value['cid'];
+				}
+				if(!empty($delcids)) {
+					foreach($delcids as $key => $ids) {
+						DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($ids).") AND idtype='$key'");
+					}
+				}
 				DB::query("DELETE FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
 			}
 			if(in_array('postcomment', $_G['gp_clear'])) {
@@ -1860,11 +1901,12 @@ EOF;
 		$status = array($member['status'] => ' checked');
 		showsetting('members_edit_username', '', '', ($member['conisbind'] ? ' <img class="vmiddle" src="static/image/common/connect_qq.gif" />' : '').' '.$member['username']);
 		showsetting('members_edit_avatar', '', '', ' <img src="'.avatar($uid, 'middle', true, false, true).'?random='.random(2).'" onerror="this.onerror=null;this.src=\''.$_G['setting']['ucenterurl'].'/images/noavatar_middle.gif\'" /><br /><br /><input name="clearavatar" class="checkbox" type="checkbox" value="1" /> '.$lang['members_edit_avatar_clear']);
-		showsetting('members_edit_statistics', '', '', "<a href=\"".ADMINSCRIPT."?action=prune&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[posts]($member[posts])</a>".
-				"<a href=\"".ADMINSCRIPT."?action=doing&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[doings]($member[doings])</a>".
-				"<a href=\"".ADMINSCRIPT."?action=blog&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[blogs]($member[blogs])</a>".
-				"<a href=\"".ADMINSCRIPT."?action=album&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[albums]($member[albums])</a>".
-				"<a href=\"".ADMINSCRIPT."?action=share&detail=1&users=$member[username]&searchsubmit=1&perpage=50\" class=\"act\">$lang[shares]($member[sharings])</a> <br>&nbsp;$lang[setting_styles_viewthread_userinfo_oltime]: $member[oltime]$lang[hourtime]");
+		$hrefext = "&detail=1&users=$member[username]&searchsubmit=1&perpage=50&fromumanage=1";
+		showsetting('members_edit_statistics', '', '', "<a href=\"".ADMINSCRIPT."?action=prune$hrefext\" class=\"act\">$lang[posts]($member[posts])</a>".
+				"<a href=\"".ADMINSCRIPT."?action=doing$hrefext\" class=\"act\">$lang[doings]($member[doings])</a>".
+				"<a href=\"".ADMINSCRIPT."?action=blog$hrefext\" class=\"act\">$lang[blogs]($member[blogs])</a>".
+				"<a href=\"".ADMINSCRIPT."?action=album$hrefext\" class=\"act\">$lang[albums]($member[albums])</a>".
+				"<a href=\"".ADMINSCRIPT."?action=share$hrefext\" class=\"act\">$lang[shares]($member[sharings])</a> <br>&nbsp;$lang[setting_styles_viewthread_userinfo_oltime]: $member[oltime]$lang[hourtime]");
 		showsetting('members_edit_password', 'passwordnew', '', 'text');
 		if(!empty($_G['setting']['connect']['allow'])) {
 			if($member['conisbind'] && !$member['conisregister']) {

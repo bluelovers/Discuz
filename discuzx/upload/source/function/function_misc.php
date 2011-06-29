@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 21331 2011-03-23 06:50:00Z liulanbo $
+ *      $Id: function_misc.php 23042 2011-06-15 03:30:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -391,7 +391,7 @@ function implodearray($array, $skip = array()) {
 	$return = '';
 	if(is_array($array) && !empty($array)) {
 		foreach ($array as $key => $value) {
-			if(empty($skip) || !in_array($key, $skip)) {
+			if(empty($skip) || !in_array($key, $skip, true)) {
 				if(is_array($value)) {
 					$return .= "$key={".implodearray($value, $skip)."}; ";
 				} else {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 22714 2011-05-18 05:00:05Z zhangguosheng $
+ *      $Id: function_block.php 22934 2011-06-02 06:17:44Z zhangguosheng $
  */
 
 function block_script($blockclass, $script) {
@@ -18,7 +18,7 @@ function block_script($blockclass, $script) {
 	$var = "blockscript_{$dirname}_{$script}";
 	$script = 'block_'.$script;
 	if(!isset($_G[$var]) || $xmlid) {
-		if(@include libfile($script, 'class/block/'.$dirname)) {
+		if(@include_once libfile($script, 'class/block/'.$dirname)) {
 			$_G[$var] = $xmlid ?  new $script($xmlid) : new $script();
 		} else {
 			$_G[$var] = false;

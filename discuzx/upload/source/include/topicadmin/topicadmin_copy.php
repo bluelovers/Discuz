@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_copy.php 20730 2011-03-02 08:30:41Z zhengqingpeng $
+ *      $Id: topicadmin_copy.php 23127 2011-06-21 01:23:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -55,6 +55,7 @@ if(!submitcheck('modsubmit')) {
 	$thread['views'] = $thread['replies'] = $thread['highlight'] = $thread['digest'] = 0;
 	$thread['rate'] = $thread['displayorder'] = $thread['attachment'] = 0;
 	$thread['typeid'] = $_G['gp_threadtypeid'];
+	$thread = daddslashes($thread);
 
 	$thread['posttableid'] = 0;
 	$threadid = DB::insert('forum_thread', $thread, true);
@@ -66,6 +67,7 @@ if(!submitcheck('modsubmit')) {
 		$post['dateline'] = TIMESTAMP;
 		$post['attachment'] = 0;
 		$post['invisible'] = $post['rate'] = $post['ratetimes'] = 0;
+		$post = daddslashes($post);
 		$pid = insertpost($post);
 	}
 

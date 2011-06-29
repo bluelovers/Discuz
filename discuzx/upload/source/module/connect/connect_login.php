@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 22869 2011-05-27 09:27:31Z fengning $
+ *      $Id: connect_login.php 22940 2011-06-03 07:08:55Z fengning $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -162,7 +162,7 @@ if($op == 'init') {
 			if($current_connect_member['conuinsecret'] && $current_connect_member['conuin'] != $conuin) {
 				showmessage('qqconnect:connect_register_bind_already', $referer);
 			}
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid'])) {
+			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
 			} else {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
@@ -190,7 +190,7 @@ if($op == 'init') {
 	} else {
 
 		if($connect_member) {
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid'])) {
+			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
 			} else {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");

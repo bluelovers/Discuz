@@ -19,3 +19,7 @@
 		.syn_tqq { background-position: 0 -22px; margin-left: 5px; }
 		.syn_tqq_check { background-position: -22px -22px; margin-left: 5px; }
 /** end **/
+
+/** member **/
+	.qqregtb { margin-top: 0; padding-top: 5px; background-color: {SPECIALBG}; }
+/** end **/

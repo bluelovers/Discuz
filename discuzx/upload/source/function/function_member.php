@@ -45,7 +45,6 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 	$return['ucresult'] = $tmp;
 	if($duplicate && $return['ucresult']['uid'] > 0) {
 		if($olduid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='".addslashes($return['ucresult']['username'])."'")) {
-			require_once libfile('function/membermerge');
 			if($olduid != $return['ucresult']['uid']) {
 				membermerge($olduid, $return['ucresult']['uid']);
 			}

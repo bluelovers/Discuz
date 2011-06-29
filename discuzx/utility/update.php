@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 22789 2011-05-23 00:28:27Z monkey $
+ *      $Id: update.php 22946 2011-06-08 01:21:08Z monkey $
  */
 
 include_once('../source/class/class_core.php');
@@ -74,11 +74,15 @@ if($_GET['step'] == 'start') {
 	include_once('../uc_client/client.php');
 	$version = uc_check_version();
 	$version = $version['db'];
+	if(!DB::result_first('SELECT svalue FROM '.DB::table('common_setting')." WHERE skey='bbclosed' LIMIT 1")) {
+		show_msg('請先關閉站點再執行此升級操作');
+	}
 	if(strcmp($version, '1.5.2') <= 0) {
 		show_msg('請先升級 UCenter 到 1.6.0 以上版本。<br>如果使用為Discuz! X自帶UCenter，請先下載 UCenter 1.6.0, 在 utilities 目錄下找到對應的升級程序，複製或上傳到 Discuz! X 的 uc_server 目錄下，運行該程序進行升級');
 	} else {
 		show_msg('說明：<br>本升級程序會參照最新的SQL文件，對數據庫進行同步升級。<br>
 			請確保當前目錄下 ./data/install.sql 文件為最新版本。<br><br>
+			升級完成後會關閉所有插件以確保正常運行，請站長逐個開啟每一個插件檢測是否兼容新版本。<br><br>
 			<a href="'.$theurl.'?step=prepare">準備完畢，升級開始</a>');
 	}
 
@@ -1419,6 +1423,7 @@ if($_GET['step'] == 'start') {
 		}
 		$configfile = DISCUZ_ROOT.'./config/config_global.php';
 		include $configfile;
+		DB::query("UPDATE ".DB::table('common_plugin')." SET available='0' WHERE identifier NOT IN ('qqconnect', 'cloudstat', 'soso_smilies')");
 		if(save_config_file($configfile, $_config, $default_config, $deletevar)) {
 			show_msg("數據處理完成", "$theurl?step=delete");
 		} else {

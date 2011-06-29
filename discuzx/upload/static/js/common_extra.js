@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 22557 2011-05-12 06:57:12Z zhangguosheng $
+	$Id: common_extra.js 22925 2011-06-01 10:23:08Z liulanbo $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -28,8 +28,11 @@ function _relatedlinks(rlinkmsgid) {
 		for(var j = 0; j > -1; j++) {
 			if(relatedlink[j] && !relatedid[j]) {
 				var ra = '<a href="'+relatedlink[j]['surl']+'" target="_blank" class="relatedlink">'+relatedlink[j]['sname']+'</a>';
+				var $rtmp = $3;
 				$3 = $3.replace(relatedlink[j]['sname'], ra);
-				relatedid[j] = 1;
+				if($3 != $rtmp) {
+					relatedid[j] = 1;
+				}
 			} else {
 				break;
 			}

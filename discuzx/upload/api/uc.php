@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 22575 2011-05-13 01:52:21Z zhengqingpeng $
+ *      $Id: uc.php 22959 2011-06-09 02:19:29Z svn_project_zhangjie $
  */
 
 error_reporting(0);
@@ -139,6 +139,7 @@ class uc_note {
 			'forum_activityapply' => array('id' => 'uid', 'name' => 'username'),
 			'forum_groupuser' => array('id' => 'uid', 'name' => 'username'),
 			'forum_pollvoter' => array('id' => 'uid', 'name' => 'username'),
+			'forum_post' => array('id' => 'authorid', 'name' => 'author'),
 			'forum_postcomment' => array('id' => 'authorid', 'name' => 'author'),
 			'forum_ratelog' => array('id' => 'uid', 'name' => 'username'),
 

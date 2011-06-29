@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 22912 2011-05-31 03:08:50Z monkey $
+ *      $Id: function_core.php 22982 2011-06-13 01:52:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -2015,7 +2015,7 @@ function notification_add($touid, $type, $note, $notevars = array(), $system = 0
 	$oldnote = array();
 	if($notevars['from_id'] && $notevars['from_idtype']) {
 		$oldnote = DB::fetch_first("SELECT * FROM ".DB::table('home_notification')."
-			WHERE uid='$touid' AND from_id='$notevars[from_id]' AND from_idtype='$notevars[from_idtype]'");
+			WHERE from_id='$notevars[from_id]' AND from_idtype='$notevars[from_idtype]' AND uid='$touid'");
 	}
 	if(empty($oldnote['from_num'])) $oldnote['from_num'] = 0;
 	$notevars['from_num'] = $notevars['from_num'] ? $notevars['from_num'] : 1;

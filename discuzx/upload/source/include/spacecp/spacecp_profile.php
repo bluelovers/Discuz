@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 22889 2011-05-30 07:31:11Z monkey $
+ *      $Id: spacecp_profile.php 23127 2011-06-21 01:23:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -288,6 +288,9 @@ if(submitcheck('profilesubmit')) {
 		$secquesnew = $_G['gp_questionidnew'] > 0 ? random(8) : '';
 	}
 
+	if(!empty($_G['gp_newpassword']) && $_G['gp_newpassword'] != addslashes($_G['gp_newpassword'])) {
+		showmessage('profile_passwd_illegal', '', array(), array('return' => true));
+	}
 	if(!empty($_G['gp_newpassword']) && $_G['gp_newpassword'] != $_G['gp_newpassword2']) {
 		showmessage('profile_passwd_notmatch', '', array(), array('return' => true));
 	}

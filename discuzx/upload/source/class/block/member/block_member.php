@@ -218,6 +218,7 @@ class block_member {
 		$list = $todayuids = $todayposts = array();
 		$tables = $wheres = array();
 		$sqlorderby = '';
+		$olditems = $items;
 		$tables[] = DB::table('common_member').' m';
 		if($groupid) {
 			$wheres[] = 'm.groupid IN ('.dimplode($groupid).')';
@@ -264,7 +265,7 @@ class block_member {
 			$wheres[] = 'su.uid=m.uid';
 			$reason = ', su.reason';
 		}
-		if($lastpost) {
+		if($lastpost && $orderby != 'todayposts') {
 			$time = TIMESTAMP - $lastpost;
 			$tables[] = DB::table('common_member_status')." ms";
 			$wheres[] = "ms.uid=m.uid";
@@ -300,8 +301,9 @@ class block_member {
 			case 'todayposts':
 				$todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
 				$inuids = $uids ? ' AND uid IN ('.dimplode($uids).')' : '';
+				$items = $items * 5;
 				$query = DB::query('SELECT uid, count(*) as sum FROM '.DB::table('common_member_action_log')."
-						WHERE dateline>=$todaytime AND action='".getuseraction('pid')."'$inuids GROUP BY uid ORDER BY sum DESC LIMIT 1000");
+						WHERE dateline>=$todaytime AND action='".getuseraction('pid')."'$inuids GROUP BY uid ORDER BY sum DESC LIMIT $items");
 				while($value = DB::fetch($query)) {
 					$todayposts[$value['uid']] = $value['sum'];
 					$todayuids[] = $value['uid'];
@@ -387,6 +389,9 @@ class block_member {
 							$datalist[] = $user;
 							break;
 						}
+					}
+					if(count($datalist) >= $olditems) {
+						break;
 					}
 				}
 				$list = $datalist;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_doctor.php 22887 2011-05-30 06:41:01Z yexinhao $
+ *      $Id: cloud_doctor.php 23162 2011-06-22 03:04:22Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -12,15 +12,16 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 @set_time_limit(0);
 
-$op = $_G['gp_op'];
+$op = trim($_G['gp_op']);
 
 if(submitcheck('setidkeysubmit')) {
 
-	$siteId = intval($_G['gp_my_siteid']);
-	if(strcmp($_G['gp_my_siteid'], $siteId) !== 0) {
+	$siteId = intval(trim($_G['gp_my_siteid']));
+	if($siteId && strcmp($_G['gp_my_siteid'], $siteId) !== 0) {
 		cpmsg('cloud_idkeysetting_siteid_failure', '', 'error');
 	}
 
+	$_G['gp_my_sitekey'] = trim($_G['gp_my_sitekey']);
 	if(empty($_G['gp_my_sitekey'])) {
 		$siteKey = '';
 	} elseif(strpos($_G['gp_my_sitekey'], '***')) {
@@ -38,7 +39,7 @@ if(submitcheck('setidkeysubmit')) {
 	}
 
 	if($_G['setting']['my_siteid'] != $siteId || $siteKeySQL || $_G['setting']['cloud_status'] != $_G['gp_cloud_status']) {
-		$_G['gp_cloud_status'] = intval($_G['gp_cloud_status']);
+		$_G['gp_cloud_status'] = intval(trim($_G['gp_cloud_status']));
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
 					VALUES ('my_siteid', '{$siteId}'), $siteKeySQL ('cloud_status', '{$_G['gp_cloud_status']}')");
 		updatecache('setting');
@@ -143,7 +144,7 @@ if(submitcheck('setidkeysubmit')) {
 
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_php_ini_separator').'</strong>',
-		cloudSeparatorOutputCheck() ? $lang['cloud_doctor_result_success'].$lang['cloud_doctor_php_ini_separator_true'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_php_ini_separator_false']
+		cloudSeparatorOutputCheck() ? $lang['cloud_doctor_result_success'].' '.$lang['cloud_doctor_php_ini_separator_true'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_php_ini_separator_false']
 	));
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_fsockopen_function').'</strong>',

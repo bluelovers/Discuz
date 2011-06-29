@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 22279 2011-04-27 09:22:59Z monkey $
+ *      $Id: moderate_thread.php 23091 2011-06-17 04:32:43Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -85,7 +85,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		foreach($tids as $posttableid => $tid) {
 			$query = DB::query("SELECT tid, pid, message, useip, attachment, htmlon, smileyoff, bbcodeoff FROM ".DB::table(getposttable($posttableid))." WHERE tid IN (".dimplode($tid).") AND first='1'");
 			while($post = DB::fetch($query)) {
-				$threadlist[$post['tid']] += $post;
+				$threadlist[$post['tid']] = array_merge($threadlist[$post['tid']], $post);
 			}
 		}
 	}
