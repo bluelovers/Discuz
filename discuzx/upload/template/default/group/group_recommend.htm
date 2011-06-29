@@ -10,7 +10,7 @@
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<div class="c" id="return_$_G[gp_handlekey]">
-		<select id="recommend" name="recommend" class="ps mtw mbw">
+		<select id="recommend" name="recommend" multiple="multiple" size="10" style="min-width: 15em;" class="ps mtw mbw">
 			<option value="0">{lang group_do_not_push}</option>
 			$forumselect
 		</select>
