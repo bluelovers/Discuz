@@ -48,7 +48,7 @@ function build_cache_forumrecommend() {
 //
 //	while($row = DB::fetch($query)) {
 //		require_once libfile('function/group');
-		$squery = DB::query("SELECT f.fid, f.name, f.threads, f.lastpost, ff.icon, ff.membernum, ff.description FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.recommend <> '' AND f.recommend <> '0'");
+		$squery = DB::query("SELECT f.fid, f.name, f.threads, f.lastpost, ff.icon, ff.membernum, ff.description, f.recommend FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.recommend <> '' AND f.recommend <> '0'");
 		while($group = DB::fetch($squery)) {
 
 			// bluelovers
