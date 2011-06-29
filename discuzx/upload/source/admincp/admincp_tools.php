@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tools.php 21799 2011-04-13 02:42:16Z monkey $
+ *      $Id: admincp_tools.php 23086 2011-06-17 02:52:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -82,16 +82,21 @@ if($operation == 'updatecache') {
 		$entryarray = array(
 			'data',
 			'data/attachment',
+			'data/attachment/album',
+			'data/attachment/category',
+			'data/attachment/common',
+			'data/attachment/forum',
+			'data/attachment/group',
+			'data/attachment/portal',
+			'data/attachment/profile',
+			'data/attachment/swfupload',
+			'data/attachment/temp',
 			'data/cache',
 			'data/log',
 			'data/template',
 			'data/threadcache',
 			'data/diy'
 		);
-
-		foreach(array('data/cache', 'data/log', 'data/template', 'data/attachment', 'data/diy') as $directory) {
-			getdirentry($directory);
-		}
 
 		$result = '';
 		foreach($entryarray as $entry) {
@@ -107,23 +112,6 @@ if($operation == 'updatecache') {
 		$result = $result ? $result : '<li>'.$lang['fileperms_check_ok'].'</li>';
 		echo '<div class="colorbox"><ul class="fileperms">'.$result.'</ul></div>';
 	}
-}
-
-function getdirentry($directory) {
-	global $entryarray;
-	if(!file_exists(DISCUZ_ROOT.'./'.$directory)) {
-		return;
-	}
-	$dir = dir(DISCUZ_ROOT.'./'.$directory);
-	while($entry = $dir->read()) {
-		if(!in_array($entry, array('.', '..', 'index.htm'))) {
-			if(is_dir(DISCUZ_ROOT.'./'.$directory.'/'.$entry)) {
-				getdirentry($directory."/".$entry);
-			}
-			$entryarray[] = $directory.'/'.$entry;
-		}
-	}
-	$dir->close();
 }
 
 function jsinsertunit() {
