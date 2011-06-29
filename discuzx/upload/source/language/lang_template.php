@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22854 2011-05-26 07:10:43Z monkey $
+ *      $Id: lang_template.php 23072 2011-06-16 10:45:46Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
@@ -198,6 +198,7 @@ $lang = array (
   'e_attach_del' => '刪除',
   'e_attach_mediacode' => '添加附件媒體播放代碼',
   'e_attach_url' => '添加附件地址',
+  'readperm' => '閱讀權限',
   'update' => '更新',
   'none_newthread' => '暫時沒有有新回復的主題',
   'author' => '作者',
