@@ -35,10 +35,8 @@ function tpl_index_status_extra() {
 global $_G;
 }
 <!--{block return}-->
-	<!--{if $_G['setting']['connect']['turl_allow'] || $_G['setting']['connect']['like_allow']}-->
-		<iframe id="connectlike" allowtransparency="true" scrolling="no" border="0" width="280" height="25" frameborder="0"></iframe>
-		<script type="text/javascript">_attachEvent(window, 'load', function () { $('connectlike').src = 'api/connect/like.php';}, document);</script>
-	<!--{/if}-->
+	<iframe id="connectlike" allowtransparency="true" scrolling="no" border="0" width="280" height="25" frameborder="0"></iframe>
+	<script type="text/javascript">_attachEvent(window, 'load', function () { $('connectlike').src = 'api/connect/like.php';}, document);</script>
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval
@@ -329,8 +327,8 @@ $change_qq_url = $_G['connect']['discuz_change_qq_url'];
 $qq_nick = $_G['qc']['qq_nick'];
 }
 <!--{block js2}-->
-	<div class="tb cl">
-		<ul style="padding-left: 100px;">
+	<div class="tb cl qqregtb">
+		<ul>
 			<li id="connect_tab_1" class="a"><a href="javascript:;" onclick="connect_switch(1);this.blur();" tabindex="900">{lang qqconnect:connect_register_profile}</a></li>
 			<li id="connect_tab_2"><a onclick="connect_switch(2);this.blur();" href="javascript:;" tabindex="900">{lang qqconnect:connect_register_has_id} {lang qqconnect:connect_register_bind}</a></li>
 		</ul>
