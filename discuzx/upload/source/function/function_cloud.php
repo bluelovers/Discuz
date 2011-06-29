@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloud.php 22886 2011-05-30 04:15:02Z yexinhao $
+ *      $Id: function_cloud.php 23076 2011-06-16 13:00:28Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -377,6 +377,10 @@ function cloud_http_build_query($data, $numeric_prefix='', $arg_separator='', $p
 		$render = '';
 	}
 	return $render;
+}
+
+function cloud_get_api_version() {
+	return '0.4';
 }
 
 ?>
