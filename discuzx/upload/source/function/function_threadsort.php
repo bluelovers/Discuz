@@ -626,6 +626,7 @@ function optionlistxml($input, $pre = '') {
 			if(is_bool($value)) {
 				$value = ($value == true) ? 'true' : 'false';
 			}
+			$value = str_replace("\r\n", '<br>', $value);
 			if(htmlspecialchars($value) != $value) {
 				$str .= "<$key><![CDATA[$value]]></$key>";
 			} else {
