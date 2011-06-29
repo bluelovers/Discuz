@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 22875 2011-05-28 06:54:37Z zhouguoqiang $
+ *      $Id: my.php 23076 2011-06-16 13:00:28Z zhouguoqiang $
  */
 
 define('IN_API', true);
@@ -569,27 +569,6 @@ class My extends Manyou {
 		return $result;
 	}
 
-	function onProfileSetMYML($uId, $appId, $markup, $actionMarkup) {
-		$fields = array('myml'	=> $markup,
-						'profileLink'	=> $actionMarkup);
-		$where = array('uid' => $uId,
-				'appid' => $appId
-				);
-		DB::update('home_userappfield', $fields, $where);
-		$result = DB::affected_rows();
-		return $result;
-	}
-
-	function onProfileSetActionLink($uId, $appId, $actionMarkup) {
-		$fields = array('profilelink'	=> $actionMarkup);
-		$where = array('uid' => $uId,
-				'appid' => $appId
-				);
-		DB::update('home_userappfield', $fields, $where);
-		$result = DB::affected_rows();
-		return $result;
-	}
-
 	function onCreditGet($uId) {
 		global $_G;
 
@@ -603,50 +582,6 @@ class My extends Manyou {
 		if(empty($_G['setting']['myapp_credit'])) {
 			return 0;
 		}
-
-		$query = DB::query('SELECT '.$_G['setting']['myapp_credit'].' AS credit FROM '
-					. DB::table('common_member_count') . ' WHERE uid =' . $uId);
-		$row = DB::fetch($query);
-		return $row['credit'];
-	}
-
-	function onCreditUpdate($uId, $credits, $appId, $note) {
-		global $_G;
-
-		$_G['setting']['myapp_credit'] = '';
-		if($_G['setting']['creditstransextra'][7]) {
-			$_G['setting']['myapp_credit'] = 'extcredits'.intval($_G['setting']['creditstransextra'][7]);
-		} elseif ($_G['setting']['creditstrans']) {
-			$_G['setting']['myapp_credit'] = 'extcredits'.intval($_G['setting']['creditstrans']);
-		}
-
-		$errCode = 0;
-		$errMessage = 'No Credits Allowed';
-		if(empty($_G['setting']['myapp_credit'])) return new ErrorResponse($errCode, $errMessage);
-
-		$where = '';
-		$type = 1;
-		if ($credits < 0) {
-			$where = ' AND ' . $_G['setting']['myapp_credit'] . ' >= ' . abs($credits);
-			$type = 0;
-		}
-		$sql = sprintf('UPDATE %s SET %s = %s + %d WHERE uid=%d %s', DB::table('common_member_count'), $_G['setting']['myapp_credit'], $_G['setting']['myapp_credit'], $credits, $uId, $where);
-		$result = DB::query($sql);
-
-		if (DB::affected_rows() < 1) {
-			$errCode = 180;
-			$errMessage = 'No Credits Enough';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		$fields = array('uid' => $uId,
-				'appid' => $appId,
-				'type' => $type,
-				'credit' => abs($credits),
-				'note' => $note,
-				'dateline' => time()
-				);
-		$result = DB::insert('home_appcreditlog', $fields, 1);
 
 		$query = DB::query('SELECT '.$_G['setting']['myapp_credit'].' AS credit FROM '
 					. DB::table('common_member_count') . ' WHERE uid =' . $uId);
@@ -774,420 +709,6 @@ class My extends Manyou {
 		$errCode = '300';
 		$errMessage = 'Video Auth Error';
 		return new ErrorResponse($errCode, $errMessage);
-	}
-
-	function onMiniBlogPost($uId, $message, $clientIdentify, $ip = '') {
-		$fields = array('uid' => $uId,
-				'message' => $message,
-				'from' => $clientIdentify,
-				'dateline' => time()
-				);
-		if ($ip) {
-			$fields['ip'] = $ip;
-		}
-		$result = DB::insert('home_doing', $fields, 1);
-		return $result;
-	}
-
-	function onMiniBlogGet($uId, $num, $beginDate = null, $orderType = 'DESC') {
-		$sql = 'SELECT * FROM %s WHERE uid = %d';
-		$sql = sprintf($sql, DB::table('home_doing'), $uId);
-		if ($beginDate) {
-			$sql .= sprintf(' AND dateline >= %s', $beginDate);
-		}
-		$sql .= sprintf(' ORDER BY dateline %s LIMIT %d', $orderType, $num);
-		$query = DB::query($sql);
-
-		$result = array();
-		while($doing = DB::fetch($query)) {
-			$result[] = array('created' => $doing['dateline'],
-					'message' => $doing['message'],
-					'ip' => $doing['ip'],
-					'clientIdentify' => $doing['from']
-					);
-		}
-		return $result;
-	}
-
-	function onPhotoCreateAlbum($uId, $name, $privacy, $passwd = null, $friendIds = null) {
-		require_once libfile('function/spacecp');
-
-		$res = $this->getUserSpace($uId);
-		if (!$res) {
-			return new ErrorResponse('1', "User($uId) Not Exists");
-		}
-
-		$privacy = $this->_convertPrivacy($privacy);
-		if ($friendIds && is_array($friendIds)) {
-			$friends = implode(',', $friendIds);
-		} else {
-			$friends = '';
-		}
-
-		$fields = array(
-					'albumname' => $name,
-					'friend' => $privacy,
-					'password' => $passwd,
-					'target_ids' => $friends
-					);
-		$result = album_creat($fields);
-		return $result;
-	}
-
-	function onPhotoUpdateAlbum($uId, $aId, $name = null, $privacy = null, $passwd = null, $friendIds = null, $coverId = null) {
-		$aId = intval($aId);
-		if ($aId < 1) {
-			$errCode = 120;
-			$errMessage = 'Invalid Album Id';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		$fields['updatetime'] = time();
-		if (is_string($name) && strlen($name) > 0) {
-			$fields['albumname'] = $name;
-		}
-
-		if ($privacy !== null) {
-			$fields['friend'] = $this->_convertPrivacy($privacy);
-		}
-
-		if ($passwd !== null) {
-			$fields['password'] = $passwd;
-		}
-
-		if ($coverId) {
-			$query = DB::query('SELECT filepath, remote FROM ' . DB::table('home_pic') . ' WHERE picid=' . $coverId . ' AND uid=' . $uId . ' AND albumid=' . $aId);
-			$coverInfo = DB::fetch($query);
-			if ($coverInfo && is_array($coverInfo)) {
-				$fields['pic'] = $coverInfo['filepath'];
-				$fields['picflag'] = $coverInfo['remote']?2:1;
-			} else {
-				$errCode = 121;
-				$errMessage = 'Invalid Picture Id';
-				return new ErrorResponse($errCode, $errMessage);
-			}
-		}
-
-		if ($friendIds && is_array($friendIds)) {
-			$fields['target_ids'] = implode(', ', $friendIds);
-		}
-
-		DB::update('home_album', $fields, array('uid' => $uId , 'albumid' => $aId));
-		$result = DB::affected_rows();
-		return $result;
-	}
-
-	function onPhotoRemoveAlbum($uId, $aId, $action = null , $targetAlbumId = null) {
-		$res = $this->getUserSpace($uId);
-		if (!$res) {
-			return new ErrorResponse('1', "User($uId) Not Exists");
-		}
-
-		$aId = intval($aId);
-		if ($aId < 1) {
-			$errCode = 120;
-			$errMessage = 'Invalid Album Id';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		if ($action == 'move') {
-			$targetAlbumId = intval($targetAlbumId);
-			if ($targetAlbumId < 1) {
-				$errCode = 120;
-				$errMessage = 'Invalid Target Album Id';
-				return new ErrorResponse($errCode, $errMessage);
-			}
-
-			$sql = 'SELECT picnum FROM ' . DB::table('home_album') . ' WHERE albumid=' . $aId . ' AND uid=' . $uId;
-			$query = DB::query($sql);
-			$albumInfo = DB::fetch($query);
-			if (!$albumInfo) {
-				$errCode = 120;
-				$errMessage = 'Invalid Album Id';
-				return new ErrorResponse($errCode, $errMessage);
-			}
-
-			if ($albumInfo['picnum'] > 0) {
-				$sql = sprintf('UPDATE %s SET picnum = picnum + %d, dateline=%d WHERE albumid =%d AND uid=%d',
-					DB::table('home_album'), $albumInfo['picnum'], time(), $targetAlbumId , $uId);
-				DB::query($sql);
-				$existsAlbum = DB::affected_rows();
-
-				if (!$existsAlbum) {
-					$errCode = 120;
-					$errMessage = 'Invalid Target Album Id';
-					return new ErrorResponse($errCode, $errMessage);
-				}
-				DB::update('home_pic',array('albumid' => $targetAlbumId), array('albumid' => $aId, 'uid' => $uId));
-			}
-		}
-
-		require_once libfile('function/delete');
-		$res = deletealbums(array($aId));
-		if ($res && is_array($res)) {
-			return true;
-		} else {
-			$errCode = 124;
-			$errMessage = 'Delete Album Failure';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-	}
-
-	function onPhotoGetAlbums($uId) {
-		$sql = 'SELECT * FROM ' . DB::table('home_album') . ' WHERE uid = ' . $uId;
-		$query = DB::query($sql);
-		$albums = array();
-		while($album = DB::fetch($query)) {
-			$albums[] = $this->_convertAlbum($album);
-		}
-		return $albums;
-	}
-
-	function onPhotoUpload($uId, $aId, $fileName, $fileType, $fileSize, $data, $caption = null) {
-		global $_G;
-
-		$res = $this->getUserSpace($uId);
-		if (!$res) {
-			return new ErrorResponse('1', "User($uId) Not Exists");
-		}
-
-		$aId = intval($aId);
-		if ($aId < 1) {
-			$errCode = 120;
-			$errMessage = 'Invalid Album Id';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		if (!is_string($data) || strlen($data) < 1) {
-			$errCode = 123;
-			$errMessage = 'Uploaded File Is Not A Valid Image';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		require_once libfile('function/spacecp');
-
-		global $_SC;
-		$attachDir = $_SC['attachdir'];
-		$_SC['attachdir'] = DISCUZ_ROOT . './' . $_G['setting']['attachdir'];
-		$stream = base64_decode($data);
-		$res = stream_save($stream, $aId, $fileType, $fileName, $caption);
-		$_SC['attachdir'] = $attachDir;
-
-		$picInfo = array();
-		if ($res && is_array($res)) {
-			$picInfo['pId'] = $res['picid'];
-			$picInfo['src'] = $res['filepath'];
-		} else if ($res == -1) {
-			$errCode = 122;
-			$errMessage = 'No Enough Space';
-		} else if ($res == -2) {
-			$errCode = 123;
-			$errMessage = 'Uploaded File Is Not A Valid Image';
-		} else {
-			$errCode = 1;
-			$errMessage = 'Unknown Error';
-		}
-
-		if ($picInfo) {
-			return $picInfo;
-		} else {
-			return new ErrorResponse($errCode, $errMessage);
-		}
-	}
-
-	function onPhotoGet($uId, $aId, $pIds = null) {
-		global $_G;
-		$aId = intval($aId);
-		if ($aId < 1) {
-			$errCode = 120;
-			$errMessage = 'Invalid Album Id';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		$sql = 'SELECT * FROM ' . DB::table('home_pic') . ' WHERE uid=' . $uId. ' AND albumid=' . $aId ;
-		if ($pIds && is_array($pIds)) {
-			$sql .= ' AND picid IN (' . implode(', ', $pIds) . ' )';
-		}
-		$query = DB::query($sql);
-		$result = array();
-		$k = 0;
-		$siteUrl = $this->_getUchomeUrl();
-		while ($picInfo = DB::fetch($query)) {
-
-			$r_src = pic_get($picInfo['filepath'], 'album', $picInfo['thumb'], $picInfo['remote'], 0);
-			if(!preg_match("/^(http\:\/\/|\/)/i", $r_src)) {
-				$r_src = $siteUrl.$r_src;
-			}
-
-			$result[$k]['pId'] = $picInfo['picid'];
-			$result[$k]['aId'] = $picInfo['albumid'];
-			$result[$k]['src'] = $r_src;
-			$result[$k]['caption'] = $picInfo['title'];
-			$result[$k]['created'] = $picInfo['dateline'];
-			$result[$k]['fileName'] = $picInfo['filename'];
-			$result[$k]['fileSize'] = $picInfo['size'];
-			$result[$k]['fileType'] = $picInfo['type'];
-			$k++;
-		}
-		return $result;
-	}
-
-	function onPhotoUpdate($uId, $pId, $aId, $fileName = null, $fileType = null, $fileSize = null, $caption = null, $data = null ) {
-		global $_G;
-
-		$res = $this->getUserSpace($uId);
-		if ($fileName !== null) {
-			$fields['filename'] = $fileName;
-		}
-
-		if (is_string($caption) && strlen($caption) > 0) {
-			$fields['title'] = $caption;
-		}
-
-		if (is_string($data) && strlen($data) > 0) {
-			$query = DB::query('SELECT size, title, filename FROM ' . DB::table('home_pic') . ' WHERE picid=' . $pId. ' AND albumid=' . $aId . ' AND uid=' . $uId);
-			$picInfo = DB::fetch($query);
-			if ($picInfo && is_array($picInfo)) {
-				require_once libfile('function/spacecp');
-
-				$attachDir = $_SC['attachdir'];
-				$_SC['attachdir'] = DISCUZ_ROOT . './' . $_G['setting']['attachdir'];
-				$title = $fields['title'] ? $caption : $picInfo['title'];
-				$name = $fields['filename'] ? $fileName : $picInfo['filename'];
-				$stream = base64_decode($data);
-				$pic = stream_save($stream, $aId, $fileType, $name, $title, $picInfo['size']);
-				$_SC['attachdir'] = $attachDir;
-
-				$newPic = array();
-				if ($pic && is_array($pic)) {
-					require_once libfile('function/delete');
-
-					deletepics(array($pId));
-					DB::update('home_pic', array('picid' => $pId), array('picid' => $pic['picid']));
-					$newPic['pId'] = $pId;
-					$newPic['src'] = $pic['filepat'];
-					return new APIResponse($newPic);
-				} else if ($res == -1) {
-					$errCode = 122;
-					$errMessage = 'No Enough Space';
-				} else if ($res == -2) {
-					$errCode = 123;
-					$errMessage = 'Uploaded File Is Not A Valid Image';
-				} else {
-					$errCode = 1;
-					$errMessage = 'Unknown Error';
-				}
-			} else {
-				$errCode = 121;
-				$errMessage = 'Invalid Picture Id';
-			}
-			return new ErrorResponse($errCode, $errMessage);
-		} else {
-			$where = array('uid' => $uId, 'albumid' => $aId, 'picid' => $pId);
-			DB::update('home_pic', $fields, $where);
-			$query = DB::query('SELECT * FROM ' . DB::table('home_pic') . ' WHERE picid=' . $pId . ' AND uid=' . $uId . ' AND albumid=' . $aId);
-			$picInfo = DB::fetch($query);
-			if($picInfo && is_array($picInfo)) {
-				$newPic['pId'] = $pId;
-				$newPic['src'] = pic_get($picInfo['filepath'], $picInfo['thumb'], $picInfo['remote'], 0);
-				if(!preg_match("/^(http\:\/\/|\/)/i", $newPic['src'])) {
-					$newPic['src'] = $this->_getUchomeUrl().$newPic['src'];
-				}
-				return $newPic;
-			} else {
-				$errCode = 121;
-				$errMessage = 'Invalid Picture Id';
-				return new ErrorResponse($errCode, $errMessage);
-			}
-		}
-	}
-
-	function onPhotoRemove($uId, $pIds) {
-		$result = false;
-		if (!$pIds && !is_array($pIds)) {
-			$errCode = 121;
-			$errMessage = 'Invalid Picture Id';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		require_once libfile('function/delete');
-		$picInfos = deletepics($pIds);
-		$result = array();
-		$deleteIds = array();
-		foreach ($picInfos as $picInfo) {
-			$deleteIds[] = $picInfo['picid'];
-			$result[] = array('pId' => $picInfo['picid'], 'status' => true);
-		}
-		$errorIds = array_diff($pIds, $deleteIds);
-		foreach($errorIds as $pId) {
-			$result[] = array('pId' => $pId, 'status' => false);
-		}
-		return $result;
-	}
-
-	function _convertAlbum($albumInfo) {
-		$siteUrl = $this->_getUchomeUrl();
-		if ($albumInfo && is_array($albumInfo)) {
-			$convAlbum = array();
-			$convAlbum['aId'] = $albumInfo['albumid'];
-			$convAlbum['name']= $albumInfo['albumname'];
-			$convAlbum['created'] = $albumInfo['dateline'];
-			$convAlbum['updated'] = $albumInfo['updatetime'];
-			$convAlbum['privacy'] = $this->_convertPrivacy($albumInfo['friend'], true);
-			$convAlbum['passwd'] = $albumInfo['passwd'];
-			$convAlbum['friendIds'] = ($albumInfo['target_ids']) ? explode(',', $albumInfo['target_ids']) : '';
-
-			if($albumInfo['pic']) {
-				$convAlbum['cover'] = pic_cover_get($albumInfo['pic'], $albumInfo['picflag']);
-				if(!preg_match("/^(http\:\/\/|\/)/i", $convAlbum['cover'])) {
-					$convAlbum['cover'] = $siteUrl.$struct['url'];
-				}
-			} else {
-				$convAlbum['cover'] = '';
-			}
-
-			$convAlbum['url'] = $siteUrl . 'space.php?uid=' . $albumInfo['uid'] . '&do=album&id=' . $albumInfo['albumid'];
-		} else {
-			$convAlbum = false;
-		}
-		return $convAlbum;
-	}
-
-	function _getUchomeUrl() {
-		global $_G;
-		return dirname(dirname($_G['siteurl'])) . '/';
-	}
-
-	function onNewsFeedGet($uId, $num) {
-		$result = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." WHERE uid='$uId' ORDER BY dateline DESC LIMIT 0,$num");
-		while($value = DB::fetch($query)) {
-			$result[] = array(
-				'appId' => $value['appid'],
-				'created' => $value['dateline'],
-				'type' => $value['icon'],
-				'titleTemplate' => $value['title_template'],
-				'titleData' => $value['title_data'],
-				'bodyTemplate' => $value['body_template'],
-				'bodyData' => $value['body_data'],
-				'bodyGeneral' => $value['body_general'],
-				'image1' => $value['image_1'],
-				'image1Link' => $value['image_1_link'],
-				'image2' => $value['image_2'],
-				'image2Link' => $value['image_2_link'],
-				'image3' => $value['image_3'],
-				'image3Link' => $value['image_3_link'],
-				'image4' => $value['image_4'],
-				'image4Link' => $value['image_4_link'],
-				'targetIds' => $value['target_ids'],
-				'privacy' => $value['friend']==0?'public':($value['friend']==1?'friends':'someFriends')
-			);
-		}
-		return $result;
-	}
-
-	function onImbotMsnSetBindStatus($uId, $op, $msn = null) {
-		return false;
 	}
 
 	function _convertPrivacy($privacy, $u2m = false) {
@@ -2039,35 +1560,6 @@ class My extends Manyou {
 		return true;
 	}
 
-	function onSearchRemovePosts($pIds) {
-		$tables = SearchHelper::getTables('post');
-
-		$posts = array();
-		foreach($tables as $table) {
-			$_posts = $this->_preGetPosts(DB::table($table), $pIds);
-			$posts[$table] = $_posts;
-		}
-		foreach($posts as $table => $rows) {
-			$tids = $pids = array();
-			foreach($rows as $row) {
-				if ($row['isThread']) {
-					$tids[] = $row['tId'];
-				} else {
-					$pids[] = $row['pId'];
-				}
-			}
-			if ($pids) {
-				$sql = sprintf('DELETE FROM %s WHERE pid IN (%s)' , DB::table($table), implode(',', $pids));
-				DB::query($sql);
-			}
-
-			if ($tids) {
-				$this->_removeThreads($tids);
-			}
-		}
-		return true;
-	}
-
 	function onSearchRecyclePosts($pIds) {
 		$tables = SearchHelper::getTables('post');
 
@@ -2613,25 +2105,6 @@ class My extends Manyou {
 		return true;
 	}
 
-	function onCommonSetConfig($data) {
-		$settings = array();
-		if (is_array($data) && $data) {
-			foreach($data as $key => $val) {
-				if (substr($key, 0, 3) != 'my_') {
-					continue;
-				}
-				$settings[] = "('$key', '$val')";
-			}
-			if ($settings) {
-				DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
-				require_once DISCUZ_ROOT . './source/function/function_cache.php';
-				updatecache('setting');
-				return true;
-			}
-		}
-		return false;
-	}
-
 	function onCommonGetConfig($keys) {
 		global $_G;
 		$confs = array();
@@ -2720,8 +2193,7 @@ class My extends Manyou {
 			$apps = array($appName => $apps[$appName]);
 		}
 
-		$apiVersion = '0.3';
-		$apps['apiVersion'] = $apiVersion;
+		$apps['apiVersion'] = cloud_get_api_version();
 
 		$apps['siteInfo'] = $this->_getBaseInfo();
 
@@ -2734,11 +2206,11 @@ class My extends Manyou {
 			return false;
 		}
 
-		$apiVersion = '0.3';
-		$res = array();
-		$res['apiVersion'] = $apiVersion;
-
 		require_once libfile('function/cloud');
+
+		$res = array();
+		$res['apiVersion'] = cloud_get_api_version();
+
 		foreach ($apps as $appName => $status) {
 			$res[$appName] = setcloudappstatus($appName, $status, false, false);
 		}

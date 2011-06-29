@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 22890 2011-05-30 07:35:33Z yexinhao $
+ *      $Id: Manyou.php 23076 2011-06-16 13:00:28Z zhouguoqiang $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -13,7 +13,6 @@ class Manyou {
 
 	var $siteId;
 	var $siteKey;
-	var $myVersion = '0.3';
 
 	var $timezone;
 	var $version;
@@ -186,8 +185,10 @@ EOT;
 	}
 
 	function _formatLocalResponse($data) {
+
+		require_once libfile('function/cloud');
 		$res = array(
-					 'my_version' => $this->myVersion,
+					 'my_version' => cloud_get_api_version(),
 					 'timezone' => $this->timezone,
 					 'version' => $this->version,
 					 'charset' => $this->charset,
@@ -347,14 +348,6 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
-	function onProfileSetMYML($uId, $appId, $markup, $actionMarkup) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onProfileSetActionLink($uId, $appId, $actionMarkup) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
 	function onCreditGet($uId) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
@@ -372,54 +365,6 @@ EOT;
 	}
 
 	function onVideoAuthAuth($uId, $picData, $picExt = 'jpg', $isReward = false) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onMiniBlogPost($uId, $message, $clientIdentify, $ip = '') {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onMiniBlogGet($uId, $num) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoCreateAlbum($uId, $name, $privacy, $passwd = null, $friendIds = null) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoUpdateAlbum($uId, $aId, $name = null, $privacy = null, $passwd = null, $friendIds = null, $coverId = null) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoRemoveAlbum($uId, $aId, $action = null , $targetAlbumId = null) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoGetAlbums($uId) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoUpload($uId, $aId, $fileName, $fileType, $fileSize, $data, $caption = null) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoGet($uId, $aId, $pIds = null) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoUpdate($uId, $pId, $aId, $fileName = null, $fileType = null, $fileSize = null, $caption = null, $data = null ) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onPhotoRemove($uId, $pIds) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onNewsFeedGet($uId, $num) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onImbotMsnSetBindStatus($uId, $op, $msn = null) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -444,10 +389,6 @@ EOT;
 	}
 
 	function onSearchGetAllPosts($num, $pId = 0, $orderType = 'ASC') {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onSearchRemovePosts($pIds) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -492,10 +433,6 @@ EOT;
 	}
 
 	function onSearchSetHotWords($hotWords = array()) {
-		return new ErrorResponse('2', 'Method not implemented.');
-	}
-
-	function onCommonSetConfig($data = array()) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -1451,7 +1388,10 @@ class Discuz_Cloud_Client {
 		$this->productVersion = !defined(DISCUZ_VERSION) ? DISCUZ_VERSION : '';
 		$this->productRelease = !defined(DISCUZ_RELEASE) ? DISCUZ_RELEASE : '';
 		$this->timestamp = TIMESTAMP;
-		$this->apiVersion = '0.3';
+
+		require_once libfile('function/cloud');
+		$this->apiVersion = cloud_get_api_version();
+
 		$this->siteUid = $_G['uid'];
 
 		$this->Client = new Cloud_Client($this->siteId, $this->siteKey);
