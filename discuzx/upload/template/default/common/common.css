@@ -582,7 +582,7 @@ CSS 寫作注意事項：
 				.ie6 .hdc { height: 70px; }
 			#hd h2 { padding: 0 20px 8px 0; float: left; }
 				#space #hd h2 { margin-top: 0; }
-			#hd .fastlg { float: right; padding-top: 10px; }
+			#hd .fastlg { padding-top: 10px; }
 
 			#scbar { height: 44px; border: solid {SPECIALBG}; border-width: 0 1px 1px; background: url({IMGDIR}/search.png) repeat-x 0 0; line-height: 44px; overflow: hidden; }
 				.scbar_icon_td { width: 50px; background: url({IMGDIR}/search.png) no-repeat 0 -74px; }
@@ -624,7 +624,7 @@ CSS 寫作注意事項：
 						#mu a { float: left; display: inline; margin: 5px 6px; padding: 0 10px; white-space: nowrap; }
 							#mu a:hover { margin: 4px 5px; border: 1px solid {SPECIALBORDER}; background: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 				.floatmu { position: absolute; left: 0; top: 0; }
-			#um { float: right; padding-top: 10px; padding-right: 60px; _padding-right: 54px; line-height: 2.3; }
+			#um { padding-top: 10px; padding-right: 60px; _padding-right: 54px; line-height: 2.3; zoom: 1; }
 				#um, #um a { color: {HEADERTEXT}; }
 				#um p { text-align: right; }
 				#um .avt { display: inline; margin-right: -60px; }
@@ -1197,9 +1197,9 @@ CSS 寫作注意事項：
 	Name:			mod_fast_login
 	Level:			Global
 	Explain:		頁面頭部的快速登錄
-	Last Modify:	Pony
+	Last Modify:	Pony 11061011
 */
-.fastlg { width: 60%; line-height: 24px; }
+.fastlg { line-height: 24px; }
 	.fastlg td { padding: 2px 0 2px 4px; }
 	.fastlg_fm { margin-right: 5px; padding-right: 5px; border-right: 1px solid {COMMONBORDER}; }
 	#ls_fastloginfield_ctrl { line-height: 20px; border: none; background-color: transparent; background-position: 100% -1px; }
