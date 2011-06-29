@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dbbak.php 22319 2011-04-29 09:40:43Z monkey $
+ *      $Id: dbbak.php 23143 2011-06-21 07:22:50Z svn_project_zhangjie $
  */
 
 @define('IN_API', true);
@@ -334,7 +334,7 @@ if($get['method'] == 'export') {
 	$get['tableid'] = isset($get['tableid']) ? intval($get['tableid']) : 0;
 	$get['startfrom'] = isset($get['startfrom']) ? intval($get['startfrom']) : 0;
 
-	if(!$get['tableid']) {
+	if(!$get['tableid'] && $get['volume'] == 1) {
 		foreach($tables as $table) {
 			$sqldump .= sqldumptablestruct($table);
 		}
