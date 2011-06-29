@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 22762 2011-05-20 01:25:54Z monkey $
+ *      $Id: function_post.php 22985 2011-06-13 02:33:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -317,7 +317,7 @@ function checkmaxpostsperhour() {
 
 		if($_G['group']['maxpostsperhour']) {
 			$timestamp = $_G['timestamp']-3600;
-			$userposts = DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_member_action_log')." WHERE dateline>$timestamp AND `action`='".getuseraction('pid')."' AND uid='$_G[uid]'");
+			$userposts = DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_member_action_log')." WHERE dateline>$timestamp AND (`action`='".getuseraction('tid')."' OR `action`='".getuseraction('pid')."') AND uid='$_G[uid]'");
 			$isflood = $userposts && ($userposts >= $_G['group']['maxpostsperhour']);
 			if($isflood) {
 				$morepostsperhour = true;
