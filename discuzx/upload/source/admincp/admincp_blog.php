@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 20638 2011-03-01 03:26:36Z congyushuai $
+ *      $Id: admincp_blog.php 22995 2011-06-13 03:15:57Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -64,7 +64,6 @@ if(!submitcheck('blogsubmit')) {
 	if(empty($_G['gp_search'])) {
 		$newlist = 1;
 		$detail = 1;
-		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
 	}
 
 	if($fromumanage) {
