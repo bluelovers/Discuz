@@ -70,7 +70,20 @@ function build_cache_forumrecommend() {
 			} else {
 				$group['lastpost'] = '';
 			}
+
+				// bluelovers
+				foreach($recommend as $fid) {
+					$row = array();
+					if ($fid = intval($fid)) {
+						$row['fid'] = $fid;
+				// bluelovers
+
 			$data[$row['fid']][] = $group;
+
+				// bluelovers
+					}
+				}
+				// bluelovers
 
 			// bluelovers
 			}
