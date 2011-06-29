@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_var.php 22671 2011-05-17 06:00:21Z monkey $
+ *      $Id: install_var.php 23087 2011-06-17 02:55:20Z zhangguosheng $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -84,8 +84,6 @@ $dirfile_items = array
 	'cache' => array('type' => 'dir', 'path' => './data/cache'),
 	'cache' => array('type' => 'dir', 'path' => './data/avatar'),
 	'plugindata' => array('type' => 'dir', 'path' => './data/plugindata'),
-	'sysdata' => array('type' => 'dir', 'path' => './data/sysdata'),
-	'request' => array('type' => 'dir', 'path' => './data/request'),
 	'ftemplates' => array('type' => 'dir', 'path' => './data/template'),
 	'threadcache' => array('type' => 'dir', 'path' => './data/threadcache'),
 	'attach' => array('type' => 'dir', 'path' => './data/attachment'),

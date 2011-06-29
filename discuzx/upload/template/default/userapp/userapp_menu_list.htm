@@ -25,7 +25,9 @@
 <!--{if checkperm('allowmyop')}-->
 	<ul class="myo mtm">
 		<li><a href="userapp.php?mod=manage&my_suffix=%2Fapp%2Flist%3Fsort%3Dtime"><img src="{IMGDIR}/app_add.gif" alt="app_add" />{lang app_add}</a></li>
+		<!--{if $_G['uid'] || !empty($_G['cache']['userapp'])}-->
 		<li><a href="userapp.php?mod=manage&ac=menu"><img src="{IMGDIR}/app_set.gif" alt="app_set" />{lang app_management}</a></li>
+		<!--{/if}-->
 	</ul>
 <!--{/if}-->
 <!--{hook/userapp_menu_bottom}-->

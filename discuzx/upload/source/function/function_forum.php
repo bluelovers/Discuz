@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 22677 2011-05-17 07:08:03Z monkey $
+ *      $Id: function_forum.php 23119 2011-06-20 08:06:15Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -266,6 +266,8 @@ function medalformulaperm($formula, $type) {
 		}
 
 		return $_G['forum_formulamessage'];
+	} elseif($formulaperm && $type == 1) {
+		return FALSE;
 	}
 	return TRUE;
 }

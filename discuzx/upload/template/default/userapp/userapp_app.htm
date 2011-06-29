@@ -59,7 +59,7 @@ function setTitle(x) {
 		<!--{hook/userapp_app_bottom}-->
 	</div>
 <!--{else}-->
-<div id="ct" class="{if $_G['uid'] || !empty($_G['cache']['userapp'])}ct2_a {/if}wp cl">
+<div id="ct" class="wp ct2_a cl">
 	<div class="mn">
 		<div id="mx2note" style="display: none; padding: 150px 0; text-align: center; background-color: #FFFFBF; color: #DB0000; letter-spacing: 1px;">
 			{lang no_maxthon2_message}
@@ -69,11 +69,9 @@ function setTitle(x) {
 		</div>
 		<iframe id="ifm0" frameborder="0" width="810" scrolling="no" height="810" style="position: absolute; top: -5000px; left: -5000px;" src="{$url}"></iframe>
 	</div>
-	<!--{if $_G['uid'] || !empty($_G['cache']['userapp'])}-->
 	<div class="appl">
 		<!--{subtemplate userapp/userapp_menu_list}-->
 	</div>
-	<!--{/if}-->
 <!--{/if}-->
 </div>
 <script type="text/javascript">

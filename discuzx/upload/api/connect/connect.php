@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect.php 22319 2011-04-29 09:40:43Z monkey $
+ *      $Id: connect.php 22929 2011-06-02 03:03:41Z congyushuai $
  */
 
 define('IN_API', true);
@@ -38,7 +38,7 @@ class connect extends server {
 		}
 
 		$users = array();
-		$query = DB::query("SELECT m.uid, m.email, m.username, m.conisqzoneavatar, m.conisregister, m.conuin, mp.gender, mp.birthyear, mp.birthmonth, mp.birthday, 0 AS showemail
+		$query = DB::query("SELECT m.uid, m.email, m.username, m.conisqzoneavatar, m.conisregister, m.conuin, mp.gender, mp.birthyear, mp.birthmonth, mp.birthday
 			FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_profile')." mp USING(uid) WHERE m.conuin IN (".dimplode($uins).")");
 		while($user = DB::fetch($query)) {

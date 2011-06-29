@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms'
  *
- *      $Id: admincp_plugins.php 22904 2011-05-31 00:47:16Z monkey $
+ *      $Id: admincp_plugins.php 22945 2011-06-08 00:45:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -62,18 +62,17 @@ if(!$operation) {
 			}
 			$intro = '';
 			if($plugin['description'] || $plugin['modules']['extra']['intro'] || $plugin['copyright']) {
-				$intro = '<div id="pluginmore'.$plugin['pluginid'].'" style="display:none;margin:5px"'.(!$plugin['available'] ? ' class="light"' : '').'>'.
+				$intro = '<div id="pluginmore'.$plugin['pluginid'].'" style="display:none;margin:0 5px 0 50px"'.(!$plugin['available'] ? ' class="light"' : '').'>'.
 					$lang['copyright'].': '.($plugin['copyright'] ? '<a href="http://addons.discuz.com/?id='.$plugin['identifier'].'" target="_blank" class="'.(!$plugin['available'] ? 'light' : 'normalfont').'">'.dhtmlspecialchars($plugin['copyright']).'</a>' : '').'<br />'.
 					(!empty($plugin['modules']['extra']['intro']) ? ($plugin['copyright'] ? '<br />' : '').$plugin['modules']['extra']['intro'].'<br />' : '').nl2br($plugin['description']).
-				'</div>';
+					'</div>';
 			}
 			$outputsubmit = $hookexists !== FALSE && $plugin['available'] || $outputsubmit;
-			showtablerow('class="hover"', array(''), array(
-				'<img src="http://addons.discuz.com/logo/'.$plugin['identifier'].'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';" width="40" height="40" align="left" style="margin-right:5px" />'.
+			showtablerow('class="hover"', array(), array(
+				'<img src="http://addons.discuz.com/logo/'.$plugin['identifier'].'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />'.
 				($hookexists !== FALSE && $plugin['available'] ? '<div class="right">'.$lang['display_order'].": <input class=\"txt num\" type=\"text\" id=\"displayorder_$plugin[pluginid]\" name=\"displayordernew[$plugin[pluginid]][$hookexists]\" value=\"$hookorder\" />" : '').'</div>'.
 				(!$plugin['available'] ? '<span class="light">' : '<span class="bold">').dhtmlspecialchars($plugin['name']).' '.dhtmlspecialchars($plugin['version']).'<br /><span class="sml">'.$plugin['identifier'].'</span></span>'.
-				'<div style="clear:both;padding:2px">'.
-				'<div class="right">'.
+				'<div><div class="right">'.
 					($plugin['modules']['system'] != 2 ? (!$plugin['available'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=enable&pluginid=$plugin[pluginid]\" class=\"bold act\">$lang[enable]</a>&nbsp;" : "<a href=\"".ADMINSCRIPT."?action=plugins&operation=disable&pluginid=$plugin[pluginid]\" class=\"act\">$lang[closed]</a>&nbsp;") : '').
 					"<a href=\"".ADMINSCRIPT."?action=plugins&operation=upgrade&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_config_upgrade]</a>&nbsp;".
 					(!$plugin['modules']['system'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=delete&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_config_uninstall]</a>&nbsp;" : '').
@@ -253,7 +252,7 @@ if(!$operation) {
 		}
 
 		showtableheader();
-		echo '<tr><td>'.$lang['plugins_newcomment'].'</td></tr>';
+		echo '<tr><td><div class="ofolder">source/plugin/</div></td><td></td></tr>';
 		$plugindir = DISCUZ_ROOT.'./source/plugin';
 		$pluginsdir = dir($plugindir);
 		$newplugins = array();
@@ -276,12 +275,12 @@ if(!$operation) {
 							}
 						}
 						$file = $entrydir.'/'.$f;
-						showtablerow('class="hover"', array(''), array(
-							'<img src="http://addons.discuz.com/logo/'.$entry.'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';" width="40" height="40" align="left" style="margin-right:5px" />'.
-							'<div class="right">'.$entrycopyright.'</div>'.
+						showtablerow('class="hover"', array('width="40%"', '', 'align="right"'), array(
+							'<img src="http://addons.discuz.com/logo/'.$entry.'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';this.onerror=null" width="40" height="40" align="left" style="margin:0 5px 0 30px" />'.
 							$entrytitle.' '.$entryversion.($filemtime > TIMESTAMP - 86400 ? ' <font color="red">New!</font>' : '').'<br />'.
-							'<div class="right"><br /><a href="'.ADMINSCRIPT.'?action=plugins&operation=import&dir='.$entry.'&validator=yes" class="bold act">'.$lang['plugins_config_install'].'</a></div>'.
-							'<span class="sml">'.$entry.'/</span></td></tr>'
+							'<span class="sml">'.$entry.'</span>',
+							$entrycopyright,
+							'<a href="'.ADMINSCRIPT.'?action=plugins&operation=import&dir='.$entry.'&validator=yes" class="bold act">'.$lang['plugins_config_install'].'</a>'
 						));
 						break;
 					}
@@ -313,7 +312,7 @@ if(!$operation) {
 					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
 					}
-					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.$extra.(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
+					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.rawurlencode($extra).(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
 					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).'">&nbsp;';
 					$count++;
 				}
@@ -483,7 +482,7 @@ if(!$operation) {
 					$importtxt = @implode('', file($entrydir.'/'.$f));
 					$pluginarray = getimportdata('Discuz! Plugin');
 					$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-					$upgradestr .= $newverother > $plugin['version'] ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extratxt).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
+					$upgradestr .= $newverother > $plugin['version'] ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
 				}
 			}
 		}
@@ -1374,7 +1373,7 @@ if(!$operation) {
 							$pluginarray = getimportdata('Discuz! Plugin');
 							$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
 							if($newverother > $row['version']) {
-								$nowarray[] = '<a href="'.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$row['pluginid'].'&confirmed=yes&installtype='.rawurlencode($extratxt).'">'.$plugins[$row['identifier']].' -> '.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'</a>';
+								$nowarray[] = '<a href="'.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$row['pluginid'].'&confirmed=yes&installtype='.rawurlencode($extra).'">'.$plugins[$row['identifier']].' -> '.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'</a>';
 							}
 						}
 					}

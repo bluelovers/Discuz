@@ -11,7 +11,6 @@ $curprg = basename(__FILE__);
 $table_source = $db_source->tablepre.'forumfields';
 $table_target = $db_target->tablepre.'forum_forumfield';
 $table_targetcreditrule = $db_target->tablepre.'common_credit_rule';
-$table_sourceforum = $db_source->tablepre.'forums';
 
 $limit = 1000;
 $nextid = 0;
@@ -78,7 +77,6 @@ if($nextid) {
 	showmessage("繼續轉換數據表 ".$table_source." fid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
-$db_target->query("UPDATE $table_sourceforum SET status='1' WHERE status='2'");
 $db_target->query("UPDATE $table_target SET seodescription=description WHERE membernum='0'");
 
 ?>

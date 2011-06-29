@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_thread.php 22480 2011-05-10 02:30:47Z monkey $
+ *      $Id: space_thread.php 23183 2011-06-23 06:03:32Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -319,7 +319,7 @@ if($need_count) {
 			}
 		}
 		foreach($list as $key => $val) {
-			if(!$forums[$val['fid']] || $val['closed'] > 0) {
+			if(!$forums[$val['fid']] || $val['closed'] > 1) {
 				unset($list[$key]);
 				$hiddennum++;
 			}

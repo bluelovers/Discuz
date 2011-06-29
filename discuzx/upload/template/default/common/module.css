@@ -732,12 +732,18 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/* 帖子左側用戶組升級提示細微調整 Last Modify Pony */
 	.pls .tip_4 { margin-left: -5px; }
 
-	.locked { margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; }
+	/*
+		Name:			mod_thread_attr
+		Level:			Function
+		Explain:		帖子中類似「遊客，如果您要查看本帖隱藏內容請」等地方的樣式
+		Last Modify:	Pony 11060209
+	*/
+	.locked { overflow: hidden; margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; zoom: 1; }
 		.locked:hover { background: #F7F7F7 url({IMGDIR}/locked.gif) no-repeat 6px 50%; }
 		.locked strong { color: {NOTICETEXT}; }
 		.locked a { color: {HIGHLIGHTLINK}; }
-	.viewpay { margin: 0 6px; padding: 1px 0 1px 24px; background: url({IMGDIR}/viewpay.gif) no-repeat 6px 60%; color: {HIGHLIGHTLINK}; font-weight: 700; }
-	.showhide { border: 1px dashed #FF9A9A; margin: 8px 0; padding: 10px; }
+	.viewpay { overflow: hidden; margin: 0 6px; padding: 1px 0 1px 24px; background: url({IMGDIR}/viewpay.gif) no-repeat 6px 60%; color: {HIGHLIGHTLINK}; font-weight: 700; zoom: 1; }
+	.showhide { overflow: hidden; border: 1px dashed #FF9A9A; margin: 8px 0; padding: 10px; zoom: 1; }
 		.showhide h4 { margin-bottom: 10px; color: #F66; font-size: 12px; text-align: center; }
 
 	/*
@@ -904,18 +910,23 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::space,forum::viewthread,forum::trade **/
-/* .trdl -> trade_list 商品列表 by Pony */
-	.tradl {}
-		.tradl li { padding: 12px; width: 138px; height: 235px; }
-		.bn .tradl li { padding: 0 8px 8px; height: 224px; }
-		.tradl .u { text-align: left; }
-		.tradl h4 { overflow: hidden; height: 38px; font-weight: 400; }
-		.tradl .tn { display: block; position: relative; margin: 5px auto; padding: 1px; width: 130px; height: 130px; border: 1px solid {COMMONBORDER}; }
-			.tradl .tn em.hot { width: 53px; height: 46px; background-position: 0 -48px; }
-			.tradl img { max-width: 130px; max-height: 130px; }
-				* html .tradl img { width: expression(this.width > 130 && this.width>=this.height ? 130 : true); height: expression(this.height > 130 && this.width<=this.height ? 130 : true); }
-		.tradl .p { font-family: Arial, sans-serif; font-size: 16px; color: {LIGHTTEXT}; }
-		.tradl .stat { background: url({IMGDIR}/closed.png); color: {LIGHTLINK}; }
+/*
+	Name:			mod_trade_list
+	Level:			Function
+	Explain:		帖子以及交易單中的商品列表
+	Last Modify:	Pony 11060710
+*/
+.tradl {}
+	.tradl li { padding: 10px; width: 138px; height: 235px; }
+		.pg_trade .tradl li { float: none; padding: 10px 0; width: auto; height: 224px; }
+	.tradl .u { text-align: left; }
+	.tradl h4 { overflow: hidden; height: 38px; font-weight: 400; }
+	.tradl .tn { display: block; position: relative; margin: 5px auto; padding: 1px; width: 130px; height: 130px; border: 1px solid {COMMONBORDER}; }
+		.tradl .tn em.hot { width: 53px; height: 46px; background-position: 0 -48px; }
+		.tradl img { max-width: 130px; max-height: 130px; }
+			* html .tradl img { width: expression(this.width > 130 && this.width>=this.height ? 130 : true); height: expression(this.height > 130 && this.width<=this.height ? 130 : true); }
+	.tradl .p { font-family: Arial, sans-serif; font-size: 16px; color: {LIGHTTEXT}; }
+	.tradl .stat { background: url({IMGDIR}/closed.png); color: {LIGHTLINK}; }
 /** end **/
 
 

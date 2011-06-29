@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 22798 2011-05-23 07:18:04Z monkey $
+ *      $Id: forum_ajax.php 22997 2011-06-13 05:22:39Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -433,6 +433,7 @@ if($_G['gp_action'] == 'checkusername') {
 	}
 	print <<<EOF
 		<script type="text/javascript">
+			parent.ATTACHORIMAGE = 1;
 			parent.updateDownImageList('$_G[gp_message]');
 		</script>
 EOF;

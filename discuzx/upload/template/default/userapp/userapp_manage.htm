@@ -29,12 +29,10 @@
 
 <!--{elseif $_GET['ac'] == 'menu'}-->
 
-<div id="ct" class="{if $_G['uid'] || !empty($_G['cache']['userapp'])}ct2_a {/if}wp cl">
-	<!--{if $_G['uid'] || !empty($_G['cache']['userapp'])}-->
+<div id="ct" class="wp ct2_a cl">
 	<div class="appl">
 		<!--{subtemplate userapp/userapp_menu_list}-->
 	</div>
-	<!--{/if}-->
 	<div class="mn">
 		<div class="bm bw0">
 			<h1 class="mt bbs"><img alt="app" src="static/image/common/appsetting.gif" alt="appsetting" class="vm" /> {lang app_management}</h1>
@@ -108,7 +106,7 @@
 	</div>
 </div>
 <!--{else}-->
-<div id="ct" class="{if $_G['uid'] || !empty($_G['cache']['userapp'])}ct2_a {/if}wp cl">
+<div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<script type="text/javascript" src="http://static.manyou.com/scripts/my_iframe.js"></script>
 		<script language="javascript">
@@ -157,11 +155,9 @@
 			<img src="{IMGDIR}/loading.gif" alt="loading..." class="vm" /> {lang page_loading}
 		</div>
 	</div>
-	<!--{if $_G['uid'] || !empty($_G['cache']['userapp'])}-->
 	<div class="appl">
 		<!--{subtemplate userapp/userapp_menu_list}-->
 	</div>
-	<!--{/if}-->
 </div>
 <!--{/if}-->
 <!--{template common/footer}-->

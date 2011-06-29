@@ -4,16 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 21614 2011-04-02 06:27:26Z monkey $
+ *      $Id: forum_attachment.php 23252 2011-06-28 09:34:48Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 define('NOROBOT', TRUE);
-@list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = explode('|', base64_decode($_G['gp_aid']));
+@list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = daddslashes(explode('|', base64_decode($_G['gp_aid'])));
 
-if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$_G[gp_aid]'"))) {
+$aid = intval($_G['gp_aid']);
+if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'"))) {
 	dheader('location: forum.php?mod=redirect&goto=findpost&pid='.$attach['pid'].'&ptid='.$attach['tid']);
 }
 
@@ -25,8 +26,6 @@ if($_G['gp_uid'] != $_G['uid'] && $_G['gp_uid']) {
 }
 
 $requestmode = !empty($_G['gp_request']) && empty($_G['gp_uid']);
-
-$aid = intval($_G['gp_aid']);
 
 $tableid = !empty($_G['gp_tableid']) ? getattachtableid($_G['gp_tableid']) : DB::result_first("SELECT tableid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'");
 if(!is_numeric($tableid)) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_siteinfo.php 22886 2011-05-30 04:15:02Z yexinhao $
+ *      $Id: cloud_siteinfo.php 23162 2011-06-22 03:04:22Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -46,6 +46,9 @@ if(submitcheck('syncsubmit')) {
 		cpmsg('cloud_reset_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
 	}
 } elseif(submitcheck('ipsubmit')) {
+
+	$_G['gp_cloud_api_ip'] = trim($_G['gp_cloud_api_ip']);
+	$_G['gp_my_ip'] = trim($_G['gp_my_ip']);
 
 	if($_G['setting']['cloud_api_ip'] != $_G['gp_cloud_api_ip'] || $_G['setting']['my_ip'] != $_G['gp_my_ip']) {
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)

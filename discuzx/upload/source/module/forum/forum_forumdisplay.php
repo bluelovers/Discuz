@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 22868 2011-05-27 07:09:50Z monkey $
+ *      $Id: forum_forumdisplay.php 22941 2011-06-07 01:17:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -333,7 +333,7 @@ $filteradd = $sortoptionurl = $sp = '';
 $sorturladdarray = $selectadd = array();
 $forumdisplayadd = array('orderby' => '');
 $specialtype = array('poll' => 1, 'trade' => 2, 'reward' => 3, 'activity' => 4, 'debate' => 5);
-$filterfield = array('digest', 'recommend', 'typeid', 'sortid', 'dateline', 'page', 'orderby', 'specialtype', 'author', 'view', 'reply', 'lastpost');
+$filterfield = array('digest', 'recommend', 'sortall', 'typeid', 'sortid', 'dateline', 'page', 'orderby', 'specialtype', 'author', 'view', 'reply', 'lastpost');
 
 foreach($filterfield as $v) {
 	$forumdisplayadd[$v] = '';
@@ -352,7 +352,9 @@ if($filter) {
 			foreach($filterfield as $option) {
 				foreach($geturl as $field => $value) {
 					if(in_array($field, $filterfield) && $option != $field && $field != 'page' && ($field != 'orderby' || !in_array($option, array('author', 'reply', 'view', 'lastpost', 'heat')))) {
-						$forumdisplayadd[$option] .= '&'.$field.'='.rawurlencode($value);
+						if(!(in_array($option, array('digest', 'recommend')) && in_array($field, array('digest', 'recommend')))) {
+							$forumdisplayadd[$option] .= '&'.$field.'='.rawurlencode($value);
+						}
 					}
 				}
 				if($issort) {
@@ -749,10 +751,6 @@ $_G['group']['allowpost'] = isset($_G['forum']['allowpost']) && $_G['forum']['al
 
 $_G['forum']['allowpostattach'] = isset($_G['forum']['allowpostattach']) ? $_G['forum']['allowpostattach'] : '';
 $allowpostattach = $fastpost && ($_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm']))));
-if(!$allowpostattach && $fastpost) {
-	$_G['forum']['allowpostimage'] = isset($_G['forum']['allowpostimage']) ? $_G['forum']['allowpostimage'] : '';
-	$allowpostattach = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostimage']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
-}
 
 if($fastpost) {
 	if(!$_G['adminid'] && (!cknewuser(1) || $_G['setting']['newbiespan'] && (!getuserprofile('lastpost') || TIMESTAMP - getuserprofile('lastpost') < $_G['setting']['newbiespan'] * 60) && TIMESTAMP - $_G['member']['regdate'] < $_G['setting']['newbiespan'] * 60)) {

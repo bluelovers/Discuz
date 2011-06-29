@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 22298 2011-04-28 10:08:13Z zhangguosheng $
+ *      $Id: config_global_default.php 23269 2011-06-29 04:25:55Z cnteacher $
  */
 
 $_config = array();
@@ -135,7 +135,7 @@ $_config['security']['attackevasive']		= 0;		// CC 攻擊防禦 1|2|4|8
 
 $_config['security']['querysafe']['status']	= 1;		// 是否開啟SQL安全檢測，可自動預防SQL注入攻擊
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
-$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select');
+$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 1;
