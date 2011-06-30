@@ -280,6 +280,27 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 		foreach($sortthreadlist as $tid => $option) {
 			$sortid = $option['sortid'];
 			$sortexpiration[$sortid][$tid] = $option['expiration'];
+
+			// bluelovers
+			/**
+			 * 分類信息相關修正
+			 * 修正沒有預設顯示模板的問題
+			 **/
+			if (empty($templatearray[$sortid])) {
+				unset($option['sortid']);
+				unset($option['expiration']);
+				$stemplate[$sortid][$tid] = '';
+
+				foreach ($option as $title => $value) {
+					if (!empty($value)) {
+						$stemplate[$sortid][$tid] .= '<em>'.$title.'</em>: '.$value.' ';
+					}
+				}
+
+				continue;
+			}
+			// bluelovers
+
 			$stemplate[$sortid][$tid] = preg_replace(
 							array("/\{sortname\}/i", "/\{author\}/i", "/\{subject\}/i", "/\[url\](.+?)\[\/url\]/i"),
 							array(
