@@ -33,7 +33,7 @@ function debugmessage() {
 	if ($_G['setting']['creditnotice']) {
 		$debug .= $_G['setting']['creditnames'];
 	}
-	$debug .= "', defaultstyle = '$_G[style][defaultextstyle]', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '$_G[setting][jspath]';</script>";
+	$debug .= "', defaultstyle = '{$_G[style][defaultextstyle]}', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '{$_G[setting][jspath]}';</script>";
 
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
