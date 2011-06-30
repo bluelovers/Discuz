@@ -21,7 +21,6 @@ function debugmessage() {
 
 	$debug = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>';
 	$debug .= "<base href=\"$_G[siteurl]\" />";
-	$debug .= "<script src='static/js/common.js'></script>";
 
 	/**
 	 * JSPATH is not defined
@@ -34,6 +33,8 @@ function debugmessage() {
 		$debug .= $_G['setting']['creditnames'];
 	}
 	$debug .= "', defaultstyle = '{$_G[style][defaultextstyle]}', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '{$_G[setting][jspath]}';</script>";
+
+	$debug .= "<script src='static/js/common.js'></script>";
 
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
