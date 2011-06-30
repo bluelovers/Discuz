@@ -97,7 +97,7 @@ EOF;
 	foreach (get_included_files() as $fn) {
 
 		// bluelovers
-		if (sclass_exists('Scorpio_File')) {
+		if (class_exists('Scorpio_File')) {
 			$fn = Scorpio_File::remove_root($fn, DISCUZ_ROOT);
 		} else {
 			$fn = str_replace(array('\\', '//'), '/', $fn);
