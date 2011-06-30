@@ -14,58 +14,67 @@ $table_target = $db_target->tablepre.'forum_optionvalue';
 $limit = 250;
 $nextid = 0;
 $start = intval(getgpc('start'));
-$_sorts = getgpc('_sorts');
-$_sortid = getgpc('_sortid');
 
+// 接收已經處理過 sortid 陣列
+$_sorts = getgpc('_sorts');
+
+// 初始化 sortid 陣列
 if(empty($_sorts)) {
 	$_sorts = array();
-
-	$query = $db_source->query("SHOW TABLES LIKE '$table_sourcee%'");
+	// 搜尋相關的 TABLE
+	$query = $db_source->query("SHOW TABLES LIKE '{$config[source][tablepre]}optionvalue%'");
 	while($row = $db_source->fetch_row($query)) {
 		$tabledump = '';
 		$sortid = 0;
-
-		$sortid = str_replace($table_source, '', $row);
+		// 檢查是否為正確想要搜尋的 TABLE
+		$sortid = str_replace($config[source][tablepre].'optionvalue', '', $row[0]);
 		if ($sortid && $sortid == intval($sortid)) {
-			if ($tabledump = _sqldumptablestruct($table_source.$sortid, $db_source)) {
+			// 複製來源 TABLE 結構
+			if ($tabledump = _sqldumptablestruct($config[source][tablepre].'optionvalue'.$sortid, $db_source)) {
+				// 刪除已存在的目標 TABLE
 				$db_target->query("DROP TABLE IF EXISTS ".$table_target.$sortid);
-
-				$tabledump = str_replace('CREATE TABLE '.$table_source.$sortid, 'CREATE TABLE '.$table_target.$sortid, $tabledump);
+				// 轉換 TABLE 表的建立語法 將來源 TABLE 名稱取代為目標 TABLE 名稱
+				$tabledump = str_replace('CREATE TABLE `'.$config[source][tablepre].'optionvalue'.$sortid.'`', 'CREATE TABLE `'.$config[target][tablepre].'forum_optionvalue'.$sortid.'`', $tabledump);
 				$db_target->query($tabledump);
 			}
-
 			$_sorts[] = $sortid;
 		}
 	}
-
+	
+	unset($sortid, $tabledump, $query );
 } else {
+	// 將接收的 $_sorts 轉換為 Array
 	$_sorts = explode(',', $_sorts);
 }
 
 $nextid = -1;
-
+// 取出陣列中第一個值作為目前要處理的 sortid
 $_sortid = $_sorts[0];
 
 $query = $db_source->query("SELECT * FROM $table_source$_sortid WHERE tid>'$start' ORDER BY tid LIMIT $limit");
 while ($row = $db_source->fetch_array($query)) {
-
 	$nextid = $row['tid'];
 
 	$row  = daddslashes($row, 1);
-	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target.$sortid));
-	$db_target->query("INSERT INTO $table_target$sortid SET $data");
+	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target.$_sortid));
+	$db_target->query("INSERT INTO $table_target$_sortid SET $data");
 }
-
+// 如果沒有查詢任何資料
 if($nextid < 0) {
-	if (!$_sortid = array_shift($_sorts)) {
+	// 取出陣列的第一個值
+	array_shift($_sorts);
+	// 判斷是否已經變為空陣列，如果是則代表以全部處理完成
+	if (count($_sorts) == 0) {
 		$nextid = 0;
 	}
 }
 
 if($nextid) {
+	// 重設 $nextid
 	if ($nextid < 0) $nextid = 0;
+	// 將陣列轉為文字陣列
 	$_sorts = implode(',', $_sorts);
-
+	// 傳遞 URL 參數
 	$urladd = http_build_query(array(
 		'_sorts' => $_sorts,
 	));
@@ -80,7 +89,7 @@ function _sqldumptablestruct($table, $db) {
 	$createtable = $db->query("SHOW CREATE TABLE $table", 'SILENT');
 
 	if(!$db->error()) {
-		$tabledump = "DROP TABLE IF EXISTS $table;\n";
+//		$tabledump = "DROP TABLE IF EXISTS $table;\n";
 	} else {
 		return '';
 	}
