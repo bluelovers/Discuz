@@ -49,9 +49,9 @@ EOF;
 			if(is_array($v) && $k != 'lang') {
 				$_GA .= "<li><a name=\"S_$k\"></a><br />['$k'] => ".nl2br(str_replace(' ','&nbsp;', htmlspecialchars(print_r($v, true)))).'</li>';
 			} elseif(is_object($v)) {
-				$_GA .= "<li><br />['$k'] => <i>object of ".get_class($v)."</i></li>";
+				$_GA .= "<li>['$k'] => <i>object of ".get_class($v)."</i></li>";
 			} else {
-				$_GS .= "<li><br />['$k'] => ".(is_array($v) ? nl2br(str_replace(' ','&nbsp;', htmlspecialchars(arrayeval($v)))) : htmlspecialchars($v))."</li>";
+				$_GS .= "<li>['$k'] => ".(is_array($v) ? nl2br(str_replace(' ','&nbsp;', htmlspecialchars(arrayeval($v)))) : htmlspecialchars($v))."</li>";
 			}
 		}
 	}
