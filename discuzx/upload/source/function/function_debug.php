@@ -106,13 +106,23 @@ EOF;
 	}
 	$debug .= '</ol></div><div id="__debug_c_2" style="display:none">'.PHP_OS.' &bull; PHP '.PHP_VERSION.'<br />'.$_G['clientip'].' &bull; '.$_SERVER['HTTP_USER_AGENT'].'<br /><script>for(BROWSERi in BROWSER) {var __s=BROWSERi+\':\'+BROWSER[BROWSERi]+\' \';$(\'__debug_b\').innerHTML+=BROWSER[BROWSERi]!==0?__s:\'\';document.write(__s);}</script></div>'.
 		'<div id="__debug_c_3" style="display:none">ModID: <b>'.$modid.'</b><ol>';
+
+	$__func = create_function('$fn, $base', '
+		$base = str_replace(array(\'\\\\\', \'//\'), \'/\', $base);
+		$fn = str_replace(array(\'\\\\\', \'//\'), \'/\', $fn);
+
+		if (stripos($fn, $base) === 0) return substr($fn, strlen($base));
+
+		return $fn;
+	');
+
 	foreach (get_included_files() as $fn) {
 
 		// bluelovers
 		if (class_exists('Scorpio_File')) {
 			$fn = Scorpio_File::remove_root($fn, DISCUZ_ROOT);
 		} else {
-			$fn = str_replace(array('\\', '//'), '/', $fn);
+			$fn = $__func($fn, DISCUZ_ROOT);
 		}
 		// bluelovers
 
