@@ -277,11 +277,11 @@ if($nextid) {
 
 // bluelovers
 
-	$db_target->query("REPLACE INTO `{$db_target->tablepre}common_setting` ( skey, svalue )
+	$db_target->query("REPLACE INTO {$db_target->tablepre}common_setting ( skey, svalue )
 		VALUES (
 		'lastmember', (
 			SELECT username
-			FROM `{$db_target->tablepre}common_member`
+			FROM {$db_target->tablepre}common_member
 			ORDER BY regdate DESC
 			LIMIT 1
 		)
