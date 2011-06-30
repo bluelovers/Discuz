@@ -23,6 +23,18 @@ function debugmessage() {
 	$debug .= "<base href=\"$_G[siteurl]\" />";
 	$debug .= "<script src='static/js/common.js'></script>";
 
+	/**
+	 * JSPATH is not defined
+	 *
+	 * [在這個錯誤中斷] src = JSPATH + script + '.js?' + VERHASH;
+	 * common.js（527 行）
+	 **/
+	$debug .= "<script type=\"text/javascript\">var STYLEID = '{STYLEID}', STATICURL = '{STATICURL}', IMGDIR = '{IMGDIR}', VERHASH = '{VERHASH}', charset = '{CHARSET}', discuz_uid = '$_G[uid]', cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}', showusercard = '{$_G[setting][showusercard]}', attackevasive = '{$_G[config][security][attackevasive]}', disallowfloat = '{$_G[setting][disallowfloat]}', creditnotice = '";
+	if ($_G['setting']['creditnotice']) {
+		$debug .= $_G['setting']['creditnames'];
+	}
+	$debug .= "', defaultstyle = '$_G[style][defaultextstyle]', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '$_G[setting][jspath]';</script>";
+
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
 var s = '<button style="position: fixed; width: 40px; right: 0; top: 30px; border: none; border:1px solid orange;background: yellow; color: red; cursor: pointer;" onclick="var pageHight = top.document.body.clientHeight;$(\'tempgrid\').style.height = pageHight + \'px\';$(\'tempgrid\').style.visibility = top.$(\'tempgrid\').style.visibility == \'hidden\'?\'\':\'hidden\';o.innerHTML = o.innerHTML == \'網格\'?\'關閉\':\'網格\';">網格</button>';
