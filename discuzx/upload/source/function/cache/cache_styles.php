@@ -108,6 +108,15 @@ function writetocsscache($data) {
 			$cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/'.$entry;
 			!file_exists($cssfile) && $cssfile = $dir.$entry;
 			$cssdata = @implode('', file($cssfile));
+
+			// bluelovers
+			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			} elseif($data['tpldir'] != 'default' && file_exists($cssfile = DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			}
+			// bluelovers
+
 			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/extend_'.$entry)) {
 				$cssdata .= @implode('', file($cssfile));
 			}
