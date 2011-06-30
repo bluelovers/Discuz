@@ -13,30 +13,33 @@ if(!defined('IN_DISCUZ')) {
 
 function debugmessage() {
 	global $_G;
-	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG) {
+	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || !empty($_G['inajax'])) {
 		return;
 	}
 
+	require_once libfile('function/cache');
+
 	$debug = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>';
-	$debug .= "<script src='../static/js/common.js'></script>";
+	$debug .= "<base href=\"$_G[siteurl]\" />";
+	$debug .= "<script src='static/js/common.js'></script>";
 
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
-var s = '<button style="position: fixed; width: 40px; right: 0; top: 30px; border: none; border:1px solid orange;background: yellow; color: red; cursor: pointer;" onclick="var pageHight = top.document.body.clientHeight;$(\'tempgrid\').style.height = pageHight + \'px\';$(\'tempgrid\').style.visibility = top.$(\'tempgrid\').style.visibility == \'hidden\'?\'\':\'hidden\';o.innerHTML = o.innerHTML == \'厙跡\'?\'壽敕\':\'厙跡\';">厙跡</button>';
+var s = '<button style="position: fixed; width: 40px; right: 0; top: 30px; border: none; border:1px solid orange;background: yellow; color: red; cursor: pointer;" onclick="var pageHight = top.document.body.clientHeight;$(\'tempgrid\').style.height = pageHight + \'px\';$(\'tempgrid\').style.visibility = top.$(\'tempgrid\').style.visibility == \'hidden\'?\'\':\'hidden\';o.innerHTML = o.innerHTML == \'網格\'?\'關閉\':\'網格\';">網格</button>';
 s += '<div id="tempgrid" style="position: absolute; top: 0px; left: 50%; margin-left: -500px; width: 1000px; height: 0; background: url(static/image/common/temp-grid.png); visibility :hidden;"></div>';
 top.$('_debug_div').innerHTML = s;
 </script>
 EOF;
 
 	$_GS = $_GA = '';
-	if($_G['adminid'] == 1) {
+	if(1 || $_G['adminid'] == 1) {
 		foreach($_G as $k => $v) {
 			if(is_array($v) && $k != 'lang') {
 				$_GA .= "<li><a name=\"S_$k\"></a><br />['$k'] => ".nl2br(str_replace(' ','&nbsp;', htmlspecialchars(print_r($v, true)))).'</li>';
 			} elseif(is_object($v)) {
 				$_GA .= "<li><br />['$k'] => <i>object of ".get_class($v)."</i></li>";
 			} else {
-				$_GS .= "<li><br />['$k'] => ".htmlspecialchars($v)."</li>";
+				$_GS .= "<li><br />['$k'] => ".(is_array($v) ? nl2br(str_replace(' ','&nbsp;', htmlspecialchars(arrayeval($v)))) : htmlspecialchars($v))."</li>";
 			}
 		}
 	}
@@ -60,7 +63,7 @@ EOF;
 		'<a id="__debug_2" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 2, 4)">[<b>EVENT:</b> php:'.PHP_VERSION.' <span id="__debug_b"></span>]</a>&nbsp;'.
 		'<a id="__debug_3" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 3, 4)">[<b>INCLUDE:</b> '.$modid.']</a>&nbsp;'.
 		'<a id="__debug_4" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 4, 4)">[<b>$_G</b>]</a>&nbsp;'.
-		($_G['adminid'] == 1 ? '&nbsp;&nbsp;<a href="../misc.php?mod=initsys" target="_debug_initframe">[<b>Update Cache</b>]</a>' : '').
+		($_G['adminid'] == 1 ? '&nbsp;&nbsp;<a href="misc.php?mod=initsys" target="_debug_initframe">[<b>Update Cache</b>]</a>' : '').
 		'</div>'.
 		'<div id="__debugbar__" style="clear:both">'.
 		'<div id="__debug_c_1" style="display:none">'.$queries.' queries'.'<ol>';
@@ -92,8 +95,17 @@ EOF;
 	$debug .= '</ol></div><div id="__debug_c_2" style="display:none">'.PHP_OS.' &bull; PHP '.PHP_VERSION.'<br />'.$_G['clientip'].' &bull; '.$_SERVER['HTTP_USER_AGENT'].'<br /><script>for(BROWSERi in BROWSER) {var __s=BROWSERi+\':\'+BROWSER[BROWSERi]+\' \';$(\'__debug_b\').innerHTML+=BROWSER[BROWSERi]!==0?__s:\'\';document.write(__s);}</script></div>'.
 		'<div id="__debug_c_3" style="display:none">ModID: <b>'.$modid.'</b><ol>';
 	foreach (get_included_files() as $fn) {
+
+		// bluelovers
+		if (sclass_exists('Scorpio_File')) {
+			$fn = Scorpio_File::remove_root($fn, DISCUZ_ROOT);
+		} else {
+			$fn = str_replace(array('\\', '//'), '/', $fn);
+		}
+		// bluelovers
+
 		$debug .= '<li>'.$fn.'</li>';
-	}	
+	}
 	$debug .= '</ol></div><div id="__debug_c_4" style="display:none">'.
 		'<div id="__debug_c_4_nav"><a href="#S_config">Nav:<br />
 			<a href="#top">#top</a></a><br />
@@ -105,10 +117,10 @@ EOF;
 			<a href="#S_style">$_G[\'style\']</a><br />
 			<a href="#S_cache">$_G[\'cache\']</a><br />
 			</div>'.
-		'<ol><a name="top"></a>'.$_GS.$_GA.'</ol></div></body></html><? @unlink(\'_debug.php\');?>';
+		'<ol><a name="top"></a>'.$_GS.$_GA.'</ol></div></body></html><? @unlink(\'_debug.php\'); ?>';
 	$fn = 'data/_debug.php';
 	file_put_contents(DISCUZ_ROOT.'./'.$fn, $debug);
-	echo '<iframe src="'.$fn.'" name="_debug_iframe" id="_debug_iframe" style="border-top:1px solid gray;overflow-x:hidden;overflow-y:auto" width="100%" height="40" frameborder="0"></iframe><div id="_debug_div"></div><iframe name="_debug_initframe" style="display:none" onload="if(this.contentWindow.document.body.innerHTML) location.href=location.href"></iframe></script>';
+	echo '<iframe src="'.$_G[siteurl].$fn.'" name="_debug_iframe" id="_debug_iframe" style="border-top:1px solid gray;overflow-x:hidden;overflow-y:auto" width="100%" height="40" frameborder="0"></iframe><div id="_debug_div"></div><iframe name="_debug_initframe" style="display:none" onload="if(this.contentWindow.document.body.innerHTML) location.href=location.href"></iframe></script>';
 }
 
 ?>
