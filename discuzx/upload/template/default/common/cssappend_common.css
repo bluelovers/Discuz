@@ -1,0 +1,7 @@
+
+/**
+ * 使排行列表的文字不會自動斷行到下一段
+ **/
+.xl ol li, ol.xl li {
+	overflow: hidden;
+}
