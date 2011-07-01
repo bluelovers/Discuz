@@ -82,7 +82,7 @@ function build_cache_forums() {
 
 function formatforumdata($forum, &$pluginvalue) {
 	static $keys = array('fid', 'type', 'name', 'fup', 'viewperm', 'postperm', 'orderby', 'ascdesc', 'users', 'status',
-		'extra', 'plugin', 'allowpostspecial', 'commentitem');
+		'extra', 'plugin', 'allowpostspecial', 'commentitem', 'description');
 	static $orders = array('lastpost', 'dateline', 'replies', 'views');
 
 	$data = array();
