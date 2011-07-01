@@ -120,6 +120,13 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 			}
 			$visible[$forum['fid']] = true;
 		} elseif(!$arrayformat && $forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
+
+			// bluelovers
+			if($forumcache2 && !in_array($forum['fid'], array_keys($forumcache2))) {
+				continue;
+			}
+			// bluelovers
+
 			$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.''.$_add.'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
 		}
 	}
