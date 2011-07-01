@@ -14,7 +14,7 @@ if (!discuz_core::instance()->plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Dz_module_group_index:Before_template', '_eDz_module_group_index_Before_template');
 
-function _eDz_module_group_index_Before_template($conf) {
+function _eDz_module_group_index_Before_template($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 	global $_G;
 
