@@ -84,6 +84,7 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 	$forumcache2 = array();
 	if (is_array($groupselectable)) {
 		list($groupselectable, $forumcache2) = $groupselectable;
+		$forumcache2 = array_keys($forumcache2);
 	}
 	// bluelovers
 
@@ -122,7 +123,7 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 		} elseif(!$arrayformat && $forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
 
 			// bluelovers
-			if($forumcache2 && !in_array($forum['fid'], array_keys($forumcache2))) {
+			if($forumcache2 && !in_array($forum['fid'], $forumcache2)) {
 				continue;
 			}
 			// bluelovers
