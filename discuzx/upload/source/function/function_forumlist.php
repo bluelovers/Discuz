@@ -76,6 +76,11 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 	if(!isset($_G['cache']['forums'])) {
 		loadcache('forums');
 	}
+
+	// bluelovers
+	$selectedfid = is_array($selectedfid) ? $selectedfid : explode(',', $selectedfid);
+	// bluelovers
+
 	$forumcache = &$_G['cache']['forums'];
 	$forumlist = $arrayformat ? array() : '<optgroup label="&nbsp;">';
 	foreach($forumcache as $forum) {
