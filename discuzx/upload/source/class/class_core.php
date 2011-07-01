@@ -79,6 +79,7 @@ class discuz_core {
 	 * 提供掛載各種 lib , plugin...
 	 **/
 	function _int_extensions() {
+		$this->plugin_support = array();
 
 		$_func = create_function('$array, $_func', '
 			if(is_array($array)) {
