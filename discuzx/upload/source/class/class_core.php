@@ -107,7 +107,7 @@ class discuz_core {
 		$this->plugin_support['Scorpio_Event'] = true;
 
 		// 檢查是否啟用 Scorpio_Event
-		if ($this->plugin_support['Scorpio_Hook']) {
+		if ($this->plugin_support['Scorpio_Event'] || $this->plugin_support['Scorpio_Hook']) {
 			// 掛載 extensions/hooks/hooks_core.php
 			@include_once libfile('hooks/core', '', 'extensions');
 			// 檢查是否存在 libfile 的 hook
