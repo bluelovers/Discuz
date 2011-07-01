@@ -6,7 +6,7 @@
 
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
-function _eFunc_libfile(&$ret, $root, $force = 0) {
+function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 //	$root	= Scorpio_File::path($root);
 //	$ret	= Scorpio_File::file($ret);
 //
