@@ -31,5 +31,5 @@ runhooks();
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['group']);
 
-require DISCUZ_ROOT.'./source/module/group/group_'.$mod.'.php';
+include libfile('group/'.$mod, 'module');
 ?>
