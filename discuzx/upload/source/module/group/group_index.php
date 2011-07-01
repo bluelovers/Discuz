@@ -142,7 +142,7 @@ if(!$metadescription) {
 }
 
 // bluelovers
-if (sclass_exists('Scorpio_Hook')) {
+if (discuz_core::instance()->plugin_support['Scorpio_Event']) {
 	Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_template', array(array(
 		'curtype' => &$curtype,
 	)));
