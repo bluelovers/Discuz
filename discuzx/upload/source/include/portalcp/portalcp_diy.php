@@ -175,6 +175,18 @@ if (submitcheck('uploadsubmit')) {
 if($op == 'blockclass') {
 
 	loadcache('blockclass');
+
+	// bluelovers
+	// 某些狀況下會因為沒有 blockclass 緩存而無法顯示 DIY 模塊
+	// 原因在於沒有 blockclass 的緩存時不會自動產生 blockclass
+	if (!$_G['cache']['blockclass']) {
+		require_once libfile('function/block');
+		blockclass_cache();
+
+		loadcache('blockclass', 1);
+	}
+	// bluelovers
+
 } elseif($op == 'style') {
 
 	if(!$_G['group']['allowmanagetopic'] && !$_G['group']['allowdiy'] && !$_G['group']['allowaddtopic']) {
