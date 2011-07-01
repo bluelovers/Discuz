@@ -42,7 +42,7 @@ if($modforums === null) {
 	if($_G['adminid'] == 3) {
 		$query = DB::query("SELECT m.fid, f.name, f.recyclebin
 			FROM ".DB::table('forum_moderator')." m, ".DB::table('forum_forum')." f
-			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group'");
+			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group' ORDER BY f.type, f.displayorder, f.name");
 		while($tforum = DB::fetch($query)) {
 			$modforums['fids'] .= $comma.$tforum['fid']; $comma = ',';
 			$modforums['recyclebins'][$tforum['fid']] = $tforum['recyclebin'];
@@ -57,6 +57,11 @@ if($modforums === null) {
 			: "SELECT f.fid, f.name, f.threads, f.recyclebin, ff.viewperm, ff.redirect FROM ".DB::table('forum_forum')." f
 				LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
 				WHERE f.status='1' AND f.type<>'group' AND ff.redirect=''";
+
+		// bluelovers
+		$sql .= ' ORDER BY f.type, f.displayorder, f.name';
+		// bluelovers
+
 		$query = DB::query($sql);
 		while ($tforum = DB::fetch($query)) {
 			$tforum['allowview'] = !isset($tforum['allowview']) ? '' : $tforum['allowview'];
@@ -76,8 +81,6 @@ require_once libfile('function/forumlist');
 
 $_tmp = $_G['gp_action'] == 'recyclebin' ? $modforums['recyclebins'] : $modforums['list'];
 $modforumselect = forumselect(($_tmp ? array(0, $_tmp) : 0), 0, $_G['fid']);
-
-//dexit(array($modforums, $modforumselect));
 // bluelovers
 
 if($_G['fid'] && $_G['forum']['ismoderator']) {
