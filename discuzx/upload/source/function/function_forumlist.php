@@ -80,6 +80,11 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 	// bluelovers
 	// 強制 $selectedfid 轉為陣列來支援 1,2,3 這種格式
 	$selectedfid = is_array($selectedfid) ? $selectedfid : explode(',', $selectedfid);
+
+	$forumcache2 = array();
+	if (is_array($groupselectable)) {
+		list($groupselectable, $forumcache2) = $groupselectable;
+	}
 	// bluelovers
 
 	$forumcache = &$_G['cache']['forums'];
