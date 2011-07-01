@@ -140,6 +140,15 @@ if(!$metakeywords) {
 if(!$metadescription) {
 	$metadescription = $_G['setting']['navs'][3]['navname'];
 }
+
+// bluelovers
+if (sclass_exists('Scorpio_Hook')) {
+	Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_template', array(array(
+		'curtype' => &$curtype,
+	)));
+}
+// bluelovers
+
 if(empty($curtype)) {
 
 	// bluelovers
