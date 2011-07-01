@@ -107,9 +107,12 @@ class discuz_core {
 		$this->plugin_support['Scorpio_Event'] = true;
 
 		if ($this->plugin_support['Scorpio_Hook']) {
-			// 執行 libfile 的相關 hook
-			foreach (get_included_files() as $fn) {
-				Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+			// 檢查是否存在 libfile 的 hook
+			if (Scorpio_Hook::exists('Func_'.'libfile'.'')) {
+				// 初始化執行 libfile 的相關 hook
+				foreach (get_included_files() as $fn) {
+					Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+				}
 			}
 		}
 	}
