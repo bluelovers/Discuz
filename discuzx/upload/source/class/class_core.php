@@ -103,6 +103,7 @@ class discuz_core {
 		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
 		if (!class_exists('Scorpio_Event')) eval("class Scorpio_Event extends Scorpio_Event_Core_ {}");
 
+		$this->plugin_support['Scorpio_Hook'] = true;
 		$this->plugin_support['Scorpio_Event'] = true;
 	}
 	// bluelovers
