@@ -79,6 +79,7 @@ class discuz_core {
 	 * 提供掛載各種 lib , plugin...
 	 **/
 	function _int_extensions() {
+		$this->plugin_support = array();
 
 		$_func = create_function('$array, $_func', '
 			if(is_array($array)) {
@@ -100,8 +101,9 @@ class discuz_core {
 		include_once libfile('Event', 'Scorpio/libs/', 'extensions/libs/scophp/');
 
 		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
-		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+		if (!class_exists('Scorpio_Event')) eval("class Scorpio_Event extends Scorpio_Event_Core_ {}");
 
+		$this->plugin_support['Scorpio_Event'] = true;
 	}
 	// bluelovers
 
