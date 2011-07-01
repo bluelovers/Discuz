@@ -39,10 +39,15 @@ $op = getgpc('op');
 if($modforums === null) {
 	$modforums = array('fids' => '', 'list' => array(), 'recyclebins' => array());
 	$comma = '';
+
+	// bluelovers
+	$_sql_add = ' ORDER BY f.type, f.displayorder, f.name ';
+	// bluelovers
+
 	if($_G['adminid'] == 3) {
 		$query = DB::query("SELECT m.fid, f.name, f.recyclebin
 			FROM ".DB::table('forum_moderator')." m, ".DB::table('forum_forum')." f
-			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group' ORDER BY f.type, f.displayorder, f.name");
+			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group' $_sql_add");
 		while($tforum = DB::fetch($query)) {
 			$modforums['fids'] .= $comma.$tforum['fid']; $comma = ',';
 			$modforums['recyclebins'][$tforum['fid']] = $tforum['recyclebin'];
@@ -59,7 +64,7 @@ if($modforums === null) {
 				WHERE f.status='1' AND f.type<>'group' AND ff.redirect=''";
 
 		// bluelovers
-		$sql .= ' ORDER BY f.type, f.displayorder, f.name';
+		$sql .= $_sql_add;
 		// bluelovers
 
 		$query = DB::query($sql);
