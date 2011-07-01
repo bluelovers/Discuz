@@ -179,7 +179,7 @@ function get_groupimg($imgname, $imgtype = '') {
 	global $_G;
 	// 群組圖片修正為可判斷是否為 url 圖片
 	if (!preg_match('/^https?:\/\//i', $imgname)) {
-	$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
+		$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
 	} else {
 		$imgpath = $imgname;
 	}
