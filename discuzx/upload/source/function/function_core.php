@@ -963,6 +963,17 @@ function libfile($libname, $folder = '', $source = 'source') {
 		$ret = "{$libpath}/{$libname}.php";
 	}
 
+	// bluelovers
+	if (sclass_exists('Scorpio_File')) {
+		$ret = Scorpio_File::file($ret);
+	} else {
+		$ret = str_replace(array('\\', '//'), '/', $ret);
+	}
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.'', array(&$ret, DISCUZ_ROOT));
+	}
+	// bluelovers
+
 	return realpath($ret);
 }
 
