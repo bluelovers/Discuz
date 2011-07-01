@@ -16,8 +16,8 @@
 		$('modlayercount').innerHTML = count;
 	}
 	function toggle_post(id) {
-		var obj = $('list_note_' + id); 
-		obj.style.display='block'; 
+		var obj = $('list_note_' + id);
+		obj.style.display='block';
 		obj.style.height = obj.style.height == '55px' ? 'auto' : '55px' ;
 	}
 	 function modthreads(operation) {
@@ -64,9 +64,14 @@
 								<span class="ftid">
 									<select name="fid" id="fid" width="124" class="ps">
 										<option value="0">{lang all}</option>
+										<!--{rem 美化板塊選擇樣式}-->
+										<!--{if $modforumselect}-->
+											$modforumselect
+										<!--{else}-->
 										<!--{loop $modforums[list] $id $name}-->
 										<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
 										<!--{/loop}-->
+										<!--{/if}-->
 									</select>
 								</span>
 							</th>
@@ -123,7 +128,7 @@
 							<a href="forum.php?mod=forumdisplay&fid={$post[fid]}" target="_blank" class="xi2 xw1">{$modforums[list][$post[fid]]}</a> &rsaquo; <span class="xw1">$post[tsubject]</span><!--{if $post[subject]}-->&rsaquo; <span class="xw1">$post[subject]</span><!--{/if}-->
 						</p>
 						<p class="pbn">
-							<span class="xi2">$post[author]</span> 
+							<span class="xi2">$post[author]</span>
 							<span class="xg1">{lang poston} $post[dateline]</span>
 							<div id="list_note_{$post[id]}" style="overflow: auto; overflow-x: hidden; height:55px; word-break: break-all;">
 								$post[message] $post[attach] $post[sortinfo]
@@ -133,7 +138,7 @@
 				<!--{/loop}-->
 				<!--{if !empty($multipage)}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
 				<div class="um bw0 cl">
-					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()" />{lang checkall}</label> 
+					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()" />{lang checkall}</label>
 					<button onclick="modthreads('validate'); return false;" class="pn"><strong>{lang validate}</strong></button>
 					<button onclick="modthreads('delete'); return false;" class="pn"><strong>{lang delete}</strong></button>
 					<button onclick="modthreads('ignore'); return false;" class="pn"><strong>{lang ignore}</strong></button>
@@ -209,7 +214,7 @@
 				</table>
 				<!--{if !empty($multipage)}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
 				<div class="um bw0 cl">
-					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()"/>{lang checkall}</label> 
+					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()"/>{lang checkall}</label>
 					<button onclick="modthreads('validate'); return false;" class="pn"><strong>{lang validate}</strong></button>
 					<button onclick="modthreads('delete'); return false;" class="pn"><strong>{lang delete}</strong></button>
 					<button onclick="modthreads('ignore'); return false;" class="pn"><strong>{lang invalidate}</strong></button>
