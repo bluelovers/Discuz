@@ -45,6 +45,10 @@ class discuz_core {
 		'_FILES' => 1,
 	);
 
+	// bluelovers
+	static $plugin_support = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
@@ -79,7 +83,7 @@ class discuz_core {
 	 * 提供掛載各種 lib , plugin...
 	 **/
 	function _int_extensions() {
-		$this->plugin_support = array();
+		$this->plugin_support = &discuz_core::$plugin_support;
 
 		$_func = create_function('$array, $_func', '
 			if(is_array($array)) {
