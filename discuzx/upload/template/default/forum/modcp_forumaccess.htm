@@ -74,9 +74,9 @@
 									<!--{if $modforumselect}-->
 										$modforumselect
 									<!--{else}-->
-									<!--{loop $modforums[list] $id $name}-->
-									<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
-									<!--{/loop}-->
+										<!--{loop $modforums[list] $id $name}-->
+										<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
+										<!--{/loop}-->
 									<!--{/if}-->
 								</select>
 							</span>
