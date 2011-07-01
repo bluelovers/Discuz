@@ -5,3 +5,8 @@
 .xl ol li, ol.xl li {
 	overflow: hidden;
 }
+
+/**
+ * 限制板塊選擇 MENU 的最大高度
+ **/
+div#fid_ctrl_menu { max-height: 20em; overflow-y: auto; }

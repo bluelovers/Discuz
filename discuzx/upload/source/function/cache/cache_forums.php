@@ -13,8 +13,13 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_forums() {
 	$data = array();
-	$query = DB::query("SELECT f.fid, f.type, f.name, f.fup, f.simple, f.status, f.allowpostspecial, ff.viewperm, ff.formulaperm, ff.viewperm, ff.postperm, ff.replyperm, ff.getattachperm, ff.postattachperm, ff.extra, ff.commentitem, a.uid FROM ".DB::table('forum_forum')." f
-		LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid LEFT JOIN ".DB::table('forum_access')." a ON a.fid=f.fid AND a.allowview>'0' WHERE f.status<>'3' ORDER BY f.type, f.displayorder");
+
+	// bluelovers
+	$_query_add = ', ff.description ';
+	// bluelovers
+
+	$query = DB::query("SELECT f.fid, f.type, f.name, f.fup, f.simple, f.status, f.allowpostspecial, ff.viewperm, ff.formulaperm, ff.viewperm, ff.postperm, ff.replyperm, ff.getattachperm, ff.postattachperm, ff.extra, ff.commentitem, a.uid {$_query_add} FROM ".DB::table('forum_forum')." f
+		LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid LEFT JOIN ".DB::table('forum_access')." a ON a.fid=f.fid AND a.allowview>'0' WHERE f.status<>'3' ORDER BY f.type, f.displayorder, f.name");
 
 	$pluginvalue = $forumlist = array();
 	$nopermdefault = array(
@@ -77,7 +82,7 @@ function build_cache_forums() {
 
 function formatforumdata($forum, &$pluginvalue) {
 	static $keys = array('fid', 'type', 'name', 'fup', 'viewperm', 'postperm', 'orderby', 'ascdesc', 'users', 'status',
-		'extra', 'plugin', 'allowpostspecial', 'commentitem');
+		'extra', 'plugin', 'allowpostspecial', 'commentitem', 'description');
 	static $orders = array('lastpost', 'dateline', 'replies', 'views');
 
 	$data = array();

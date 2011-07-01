@@ -15,6 +15,11 @@ if($_G['adminid'] != 1 && $_G['setting']) {
 	exit('Access Denied');
 }
 
+// bluelovers
+DB::query("TRUNCATE TABLE ".DB::table('common_syscache'));
+DB::query("TRUNCATE TABLE ".DB::table('common_admincp_session'));
+// bluelovers
+
 require_once libfile('function/cache');
 updatecache();
 
