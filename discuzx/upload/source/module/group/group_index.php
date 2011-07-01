@@ -143,8 +143,9 @@ if(!$metadescription) {
 
 // bluelovers
 if (discuz_core::instance()->plugin_support['Scorpio_Event']) {
-	Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_template')->run(array(array(
-		'curtype' => &$curtype,
+	Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_template')
+		->run(array(array(
+			'curtype' => &$curtype,
 	)));
 }
 // bluelovers
