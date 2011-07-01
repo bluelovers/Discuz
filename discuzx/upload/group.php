@@ -31,5 +31,6 @@ runhooks();
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['group']);
 
+// rewrite require => include libfile for hack hook
 include libfile('group/'.$mod, 'module');
 ?>
