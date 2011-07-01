@@ -71,6 +71,15 @@ if($modforums === null) {
 	$modsession->set('modforums', $modforums, true);
 }
 
+// bluelvoers
+require_once libfile('function/forumlist');
+
+$_tmp = $_G['gp_action'] == 'recyclebin' ? $modforums['recyclebins'] : $modforums['list'];
+$modforumselect = forumselect(($_tmp ? array(0, $_tmp) : 0), 0, $_G['fid']);
+
+//dexit(array($modforums, $modforumselect));
+// bluelovers
+
 if($_G['fid'] && $_G['forum']['ismoderator']) {
 	dsetcookie('modcpfid', $_G['fid']);
 	$forcefid = "&amp;fid=$_G[fid]";
