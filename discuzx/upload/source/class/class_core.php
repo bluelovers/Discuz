@@ -76,7 +76,7 @@ class discuz_core {
 
 	// bluelovers
 	/**
-	 * ´£¨Ñ±¾¸ü¦UºØ lib , plugin...
+	 * æä¾›æŽ›è¼‰å„ç¨® lib , plugin...
 	 **/
 	function _int_extensions() {
 		$this->plugin_support = array();
@@ -105,6 +105,13 @@ class discuz_core {
 
 		$this->plugin_support['Scorpio_Hook'] = true;
 		$this->plugin_support['Scorpio_Event'] = true;
+
+		if ($this->plugin_support['Scorpio_Hook']) {
+			// åŸ·è¡Œ libfile çš„ç›¸é—œ hook
+			foreach (get_included_files() as $fn) {
+				Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+			}
+		}
 	}
 	// bluelovers
 
@@ -416,8 +423,8 @@ class discuz_core {
 			// bluelovers
 			if ($discuz_uid) {
 				/**
-				 * °Ñ¦Ò¹ïÀ³ function_member.php ; setloginstatus
-				 * ­×§ï¬°­n¨DÂsÄý¾¹°T®§ ¥²¶·­n²Å¦X §_«hµø¦PµL®Ä
+				 * åƒè€ƒå°æ‡‰ function_member.php ; setloginstatus
+				 * ä¿®æ”¹ç‚ºè¦æ±‚ç€è¦½å™¨è¨Šæ¯ å¿…é ˆè¦ç¬¦åˆ å¦å‰‡è¦–åŒç„¡æ•ˆ
 				 *
 				 * $auth
 				 * 		0 => discuz_pw
