@@ -1,14 +1,8 @@
 <?php
 
-/*
-	Scorpio (C)2000-2010 Bluelovers Net.
-
-	$HeadURL: $
-	$Revision: $
-	$Author: bluelovers$
-	$Date: $
-	$Id: $
-*/
+/**
+ * @author bluelovers
+ */
 
 if (!discuz_core::instance()->plugin_support['Scorpio_Event']) return false;
 
@@ -19,6 +13,7 @@ function _eDz_module_group_index_Before_template($_EVENT, $conf) {
 	global $_G;
 
 	if(empty($curtype)) {
+		// 解決推薦群組不足的時候自動補充
 		$recommend_num = 8;
 		$group_recommend = unserialize($_G['setting']['group_recommend']);
 
