@@ -76,7 +76,7 @@ class discuz_core {
 
 	// bluelovers
 	/**
-	 * ´£¨Ñ±¾¸ü¦UºØ lib , plugin...
+	 * æä¾›æŽ›è¼‰å„ç¨® lib , plugin...
 	 **/
 	function _int_extensions() {
 		$this->plugin_support = array();
@@ -103,7 +103,21 @@ class discuz_core {
 		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
 		if (!class_exists('Scorpio_Event')) eval("class Scorpio_Event extends Scorpio_Event_Core_ {}");
 
+		$this->plugin_support['Scorpio_Hook'] = true;
 		$this->plugin_support['Scorpio_Event'] = true;
+
+		// æª¢æŸ¥æ˜¯å¦å•Ÿç”¨ Scorpio_Event
+		if ($this->plugin_support['Scorpio_Event'] || $this->plugin_support['Scorpio_Hook']) {
+			// æŽ›è¼‰ extensions/hooks/hooks_core.php
+			@include_once libfile('hooks/core', '', 'extensions');
+			// æª¢æŸ¥æ˜¯å¦å­˜åœ¨ libfile çš„ hook
+			if (Scorpio_Hook::exists('Func_'.'libfile'.'')) {
+				// åˆå§‹åŒ–åŸ·è¡Œ libfile çš„ç›¸é—œ hook
+				foreach (get_included_files() as $fn) {
+					Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+				}
+			}
+		}
 	}
 	// bluelovers
 
@@ -415,8 +429,8 @@ class discuz_core {
 			// bluelovers
 			if ($discuz_uid) {
 				/**
-				 * °Ñ¦Ò¹ïÀ³ function_member.php ; setloginstatus
-				 * ­×§ï¬°­n¨DÂsÄý¾¹°T®§ ¥²¶·­n²Å¦X §_«hµø¦PµL®Ä
+				 * åƒè€ƒå°æ‡‰ function_member.php ; setloginstatus
+				 * ä¿®æ”¹ç‚ºè¦æ±‚ç€è¦½å™¨è¨Šæ¯ å¿…é ˆè¦ç¬¦åˆ å¦å‰‡è¦–åŒç„¡æ•ˆ
 				 *
 				 * $auth
 				 * 		0 => discuz_pw
