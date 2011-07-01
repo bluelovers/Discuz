@@ -28,7 +28,12 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 			return $fn;
 		');
 	}
+
+	if (discuz_core::instance()->plugin_support['Scorpio_File']) {
 	$file = Scorpio_File::remove_root(&$ret, $root);
+	} else {
+		$file = $__func(&$ret, $root);
+	}
 
 	static $list;
 
