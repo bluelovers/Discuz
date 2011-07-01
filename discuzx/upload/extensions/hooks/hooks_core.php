@@ -16,6 +16,7 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 
 	static $__func;
 
+	// 檢查是否支援 Scorpio_File，如不支援時則產生替代函數
 	if (!discuz_core::instance()->plugin_support['Scorpio_File'] && class_exists('Scorpio_File')) {
 		discuz_core::instance()->plugin_support['Scorpio_File'] = true;
 	} elseif (!$__func) {
@@ -29,12 +30,14 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 		');
 	}
 
+	// 整理路徑
 	if (discuz_core::instance()->plugin_support['Scorpio_File']) {
 		$file = Scorpio_File::remove_root(&$ret, $root);
 	} else {
 		$file = $__func(&$ret, $root);
 	}
 
+	// 緩存是否執行過(每個檔案只執行一次)
 	static $list;
 
 	if ($force || !isset($list[$file])) {
