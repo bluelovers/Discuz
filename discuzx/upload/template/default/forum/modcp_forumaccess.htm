@@ -70,9 +70,14 @@
 						<td width="80%">
 							<span class="ftid">
 								<select name="fid" id="fid" class="ps" width="108">
+									<!--{rem 美化板塊選擇樣式}-->
+									<!--{if $modforumselect}-->
+										$modforumselect
+									<!--{else}-->
 									<!--{loop $modforums[list] $id $name}-->
 									<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
 									<!--{/loop}-->
+									<!--{/if}-->
 								</select>
 							</span>
 						</td>
