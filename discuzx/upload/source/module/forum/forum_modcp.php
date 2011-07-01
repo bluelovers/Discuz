@@ -86,6 +86,7 @@ require_once libfile('function/forumlist');
 
 $_tmp = $_G['gp_action'] == 'recyclebin' ? $modforums['recyclebins'] : $modforums['list'];
 $modforumselect = forumselect(($_tmp ? array(0, $_tmp) : 0), 0, $_G['fid']);
+unset($_tmp);
 // bluelovers
 
 if($_G['fid'] && $_G['forum']['ismoderator']) {
