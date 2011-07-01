@@ -4,6 +4,8 @@
  * @author bluelovers
  */
 
+if (!discuz_core::instance()->plugin_support['Scorpio_Event']) return false;
+
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
 function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
