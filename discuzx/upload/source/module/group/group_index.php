@@ -142,8 +142,11 @@ if(!$metadescription) {
 }
 
 // bluelovers
+// 檢查是否支援 Scorpio_Event
 if (discuz_core::instance()->plugin_support['Scorpio_Event']) {
+	// 初始化 Dz_module_group_index:Before_template 事件
 	Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_template')
+		// 執行事件並傳遞參數
 		->run(array(array(
 			'curtype' => &$curtype,
 	)));
