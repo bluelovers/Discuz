@@ -14,6 +14,20 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 //
 //	if (strpos($ret, $root) === 0) $file = substr($ret, strlen($root));
 
+	static $__func;
+
+	if (!discuz_core::instance()->plugin_support['Scorpio_File'] && class_exists('Scorpio_File')) {
+		discuz_core::instance()->plugin_support['Scorpio_File'] = true;
+	} elseif (!$__func) {
+		$__func = create_function('$fn, $base', '
+			$base = str_replace(array(\'\\\\\', \'//\'), \'/\', $base);
+			$fn = str_replace(array(\'\\\\\', \'//\'), \'/\', $fn);
+
+			if (stripos($fn, $base) === 0) return substr($fn, strlen($base));
+
+			return $fn;
+		');
+	}
 	$file = Scorpio_File::remove_root(&$ret, $root);
 
 	static $list;
