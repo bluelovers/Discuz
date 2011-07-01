@@ -9,11 +9,6 @@ if (!discuz_core::instance()->plugin_support['Scorpio_Event']) return false;
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
 
 function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
-//	$root	= Scorpio_File::path($root);
-//	$ret	= Scorpio_File::file($ret);
-//
-//	if (strpos($ret, $root) === 0) $file = substr($ret, strlen($root));
-
 	static $__func;
 
 	// 檢查是否支援 Scorpio_File，如不支援時則產生替代函數
