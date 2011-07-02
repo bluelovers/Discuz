@@ -389,6 +389,7 @@ if($space['self'] && empty($start)) {
 	}
 
 	if($space['feedfriend']) {
+		//BUG:此處的好友生日名單將無視用戶隱私設定
 		$birthdaycache = DB::fetch_first("SELECT variable, value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='birthday'");
 		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
 			/*
