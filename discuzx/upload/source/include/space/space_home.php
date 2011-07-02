@@ -500,6 +500,13 @@ if($space['self'] && empty($start)) {
 				$birthlist = $birthlist_new;
 				$birthlist_nextyear = array();
 				unset($birthlist_new);
+			} elseif ($_bn > 0 && ($_b + $_bn) > 4) {
+				/**
+				 * 當生日列表超過限定值時並且跨年時
+				 * 則 $birthlist_nextyear 只保留第一天，其餘刪除
+				 **/
+				reset($birthlist_nextyear);
+				$birthlist_nextyear = array(key($birthlist_nextyear) => reset($birthlist_last));
 			}
 
 			$birthlist = array_merge($birthlist_last, $birthlist, $birthlist_nextyear);
