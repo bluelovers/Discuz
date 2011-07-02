@@ -424,7 +424,7 @@ if($space['self'] && empty($start)) {
 			}
 
 			// bluelovers
-			$birthlist_nextyear = array();
+			$birthlist_nextyear = $birthlist_last = array();
 			// bluelovers
 
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
@@ -454,7 +454,7 @@ if($space['self'] && empty($start)) {
 				if ($value['birthmonth'] >= $n_month) {
 					$birthlist[$key][] = $value;
 				} elseif ($value['birthmonth'] >= $s_month && $value['birthmonth'] <= $n_month) {
-					$birthlist[$key][] = $value;
+					$birthlist_last[$key][] = $value;
 				} else {
 					$birthlist_nextyear[$key][] = $value;
 				}
