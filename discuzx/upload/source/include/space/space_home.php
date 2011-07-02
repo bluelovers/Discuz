@@ -435,7 +435,8 @@ if($space['self'] && empty($start)) {
 
 				// 修正排序判斷並且支援跨月跨年
 				." ORDER BY"
-				." (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username"
+				." (sf.birthmonth < '$s_month') ASC,"
+				." sf.birthmonth, sf.birthday, s.username"
 
 				);
 			while ($value = DB::fetch($query)) {
