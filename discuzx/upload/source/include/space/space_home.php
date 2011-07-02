@@ -473,6 +473,16 @@ if($space['self'] && empty($start)) {
 			ksort($birthlist_last);
 			ksort($birthlist);
 			ksort($birthlist_nextyear);
+
+			/**
+			 * 當生日列表超過限定值時
+			 * 則 $birthlist_last 除了最接近本日的資料以外，其餘刪除
+			 **/
+			if (($_b + $_bn) >= 4 && $_bl > 0) {
+				end($birthlist_last);
+				$birthlist_last = array(key($birthlist_last) => end($birthlist_last));
+			}
+
 			$birthlist = array_merge($birthlist_last, $birthlist, $birthlist_nextyear);
 
 			unset($birthlist_nextyear, $birthlist_last);
