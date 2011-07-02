@@ -434,7 +434,7 @@ if($space['self'] && empty($start)) {
 				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)"
 
 				// 修正排序判斷並且支援跨月跨年
-				."ORDER BY (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username"
+				." ORDER BY (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username"
 
 				);
 			while ($value = DB::fetch($query)) {
