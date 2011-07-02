@@ -481,6 +481,25 @@ if($space['self'] && empty($start)) {
 			if (($_b + $_bn) >= 4 && $_bl > 0) {
 				end($birthlist_last);
 				$birthlist_last = array(key($birthlist_last) => end($birthlist_last));
+
+				$_bl = 1;
+			}
+
+			/**
+			 * 當生日列表超過限定值時
+			 * 則 $birthlist 只保留今日以及未來三個天次
+			 * 並且清除 $birthlist_nextyear
+			 **/
+			if (($_b + $_bl) > 5 && count($birthlist) > 3) {
+				$birthlist_new = array();
+				$i = 0;
+				foreach ($birthlist as $k => $v) {
+					$birthlist_new[$k] = $v;
+					if (++$i > 3) break;
+				}
+				$birthlist = $birthlist_new;
+				$birthlist_nextyear = array();
+				unset($birthlist_new);
 			}
 
 			$birthlist = array_merge($birthlist_last, $birthlist, $birthlist_nextyear);
