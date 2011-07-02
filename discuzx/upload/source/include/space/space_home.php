@@ -419,6 +419,8 @@ if($space['self'] && empty($start)) {
 
 			} else {
 				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
+				// 修正少了 大於 起始月 並且小於 結束月 之間的生日
+				$wheresql .= " OR (sf.birthmonth>'$s_month' AND sf.birthmonth<'$e_month')";
 			}
 
 			// bluelovers
