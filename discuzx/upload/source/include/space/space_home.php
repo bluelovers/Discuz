@@ -440,6 +440,9 @@ if($space['self'] && empty($start)) {
 				." (sf.birthmonth < '$s_month') ASC,"
 				." sf.birthmonth, sf.birthday, s.username"
 
+				// 限制最大查詢數
+				." LIMIT 10"
+
 				);
 			while ($value = DB::fetch($query)) {
 				$value['istoday'] = 0;
