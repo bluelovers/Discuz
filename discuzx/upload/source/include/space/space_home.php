@@ -453,10 +453,13 @@ if($space['self'] && empty($start)) {
 				$value['birthday'] = sprintf("%02d", $value['birthday']);
 
 				if ($value['birthmonth'] >= $n_month) {
+					$_b++;
 					$birthlist[$key][] = $value;
 				} elseif ($value['birthmonth'] >= $s_month && $value['birthmonth'] <= $n_month) {
+					$_bl++;
 					$birthlist_last[$key][] = $value;
 				} else {
+					$_bn++;
 					$birthlist_nextyear[$key][] = $value;
 				}
 				// bluelovers
