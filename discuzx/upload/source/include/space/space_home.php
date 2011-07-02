@@ -465,9 +465,9 @@ if($space['self'] && empty($start)) {
 			ksort($birthlist_last);
 			ksort($birthlist);
 			ksort($birthlist_nextyear);
-			$birthlist = array_merge($birthlist, $birthlist_nextyear);
+			$birthlist = array_merge($birthlist_last, $birthlist, $birthlist_nextyear);
 
-			unset($birthlist_nextyear);
+			unset($birthlist_nextyear, $birthlist_last);
 			// bluelovers
 
 			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'birthday', '".addslashes(serialize($birthlist))."', '".getexpiration()."')");
