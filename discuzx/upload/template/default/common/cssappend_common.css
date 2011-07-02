@@ -17,3 +17,8 @@ div#fid_ctrl_menu { max-height: 20em; overflow-y: auto; }
 p.emp { color: red; }
 .emp { border: 1px dashed red; }
 .emp .emp { padding-top: 0px; border: 0px none #ffffff; }
+
+/**
+ * 導航列表字型尺寸由 14px 轉為網站預設尺寸
+ **/
+.appl li { font: {FONTSIZE} {FONT}; }
