@@ -435,6 +435,8 @@ if($space['self'] && empty($start)) {
 
 				// 修正排序判斷並且支援跨月跨年
 				." ORDER BY"
+				// 將小於這個月的排序推到後面
+				." (sf.birthmonth < '$n_month') ASC,"
 				." (sf.birthmonth < '$s_month') ASC,"
 				." sf.birthmonth, sf.birthday, s.username"
 
