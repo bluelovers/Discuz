@@ -462,7 +462,7 @@ if($space['self'] && empty($start)) {
 			}
 
 			// bluelovers
-			ksort($birthlist_nextyear);
+			ksort($birthlist_last);
 			ksort($birthlist);
 			$birthlist = array_merge($birthlist, $birthlist_nextyear);
 
