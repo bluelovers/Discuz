@@ -425,6 +425,7 @@ if($space['self'] && empty($start)) {
 
 			// bluelovers
 			$birthlist_nextyear = $birthlist_last = array();
+			$_b = $_bl = $_bn = 0;
 			// bluelovers
 
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
