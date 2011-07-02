@@ -389,6 +389,7 @@ if($space['self'] && empty($start)) {
 	}
 
 	if($space['feedfriend']) {
+		//BUG:此處的好友生日名單將無視用戶隱私設定
 		$birthdaycache = DB::fetch_first("SELECT variable, value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='birthday'");
 		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
 			/*
@@ -418,10 +419,13 @@ if($space['self'] && empty($start)) {
 
 			} else {
 				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
+				// 修正少了 大於 起始月 並且小於 結束月 之間的生日
+				$wheresql .= " OR (sf.birthmonth>'$s_month' AND sf.birthmonth<'$e_month')";
 			}
 
 			// bluelovers
-			$birthlist_nextyear = array();
+			$birthlist_nextyear = $birthlist_last = array();
+			$_b = $_bl = $_bn = 0;
 			// bluelovers
 
 			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
@@ -430,7 +434,14 @@ if($space['self'] && empty($start)) {
 				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)"
 
 				// 修正排序判斷並且支援跨月跨年
-				."ORDER BY (sf.birthmonth < '$s_month') ASC, sf.birthmonth, sf.birthday, s.username"
+				." ORDER BY"
+				// 將小於這個月的排序推到後面
+				." (sf.birthmonth < '$n_month') ASC,"
+				." (sf.birthmonth < '$s_month') ASC,"
+				." sf.birthmonth, sf.birthday, s.username"
+
+				// 限制最大查詢數
+				." LIMIT 10"
 
 				);
 			while ($value = DB::fetch($query)) {
@@ -445,20 +456,65 @@ if($space['self'] && empty($start)) {
 				*/
 
 				// bluelovers
+				$value['birthmonth'] = sprintf("%02d", $value['birthmonth']);
+				$value['birthday'] = sprintf("%02d", $value['birthday']);
+
 				if ($value['birthmonth'] >= $n_month) {
+					$_b++;
 					$birthlist[$key][] = $value;
+				} elseif ($value['birthmonth'] >= $s_month && $value['birthmonth'] <= $n_month) {
+					$_bl++;
+					$birthlist_last[$key][] = $value;
 				} else {
+					$_bn++;
 					$birthlist_nextyear[$key][] = $value;
 				}
 				// bluelovers
 			}
 
 			// bluelovers
-			ksort($birthlist_nextyear);
+			ksort($birthlist_last);
 			ksort($birthlist);
-			$birthlist = array_merge($birthlist, $birthlist_nextyear);
+			ksort($birthlist_nextyear);
 
-			unset($birthlist_nextyear);
+			/**
+			 * 當生日列表超過限定值時
+			 * 則 $birthlist_last 除了最接近本日的資料以外，其餘刪除
+			 **/
+			if (($_b + $_bn) >= 4 && $_bl > 0) {
+				end($birthlist_last);
+				$birthlist_last = array(key($birthlist_last) => end($birthlist_last));
+
+				$_bl = 1;
+			}
+
+			/**
+			 * 當生日列表超過限定值時
+			 * 則 $birthlist 只保留今日以及未來三個天次
+			 * 並且清除 $birthlist_nextyear
+			 **/
+			if (($_b + $_bl) > 5 && count($birthlist) > 3) {
+				$birthlist_new = array();
+				$i = 0;
+				foreach ($birthlist as $k => $v) {
+					$birthlist_new[$k] = $v;
+					if (++$i > 3) break;
+				}
+				$birthlist = $birthlist_new;
+				$birthlist_nextyear = array();
+				unset($birthlist_new);
+			} elseif ($_bn > 0 && ($_b + $_bn) > 4) {
+				/**
+				 * 當生日列表超過限定值時並且跨年時
+				 * 則 $birthlist_nextyear 只保留第一天，其餘刪除
+				 **/
+				reset($birthlist_nextyear);
+				$birthlist_nextyear = array(key($birthlist_nextyear) => reset($birthlist_last));
+			}
+
+			$birthlist = array_merge($birthlist_last, $birthlist, $birthlist_nextyear);
+
+			unset($birthlist_nextyear, $birthlist_last);
 			// bluelovers
 
 			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'birthday', '".addslashes(serialize($birthlist))."', '".getexpiration()."')");

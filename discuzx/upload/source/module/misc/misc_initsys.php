@@ -18,6 +18,8 @@ if($_G['adminid'] != 1 && $_G['setting']) {
 // bluelovers
 DB::query("TRUNCATE TABLE ".DB::table('common_syscache'));
 DB::query("TRUNCATE TABLE ".DB::table('common_admincp_session'));
+
+DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE `variable` = 'birthday'");
 // bluelovers
 
 require_once libfile('function/cache');
