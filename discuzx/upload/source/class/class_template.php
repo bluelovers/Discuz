@@ -109,6 +109,10 @@ class template {
 		// 擴充模板語法
 		$find = $replace = array();
 
+		// {rem 註解內容}
+		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
+		$replace[] = (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? "\$this->stripvtags(\"\n\".'<!--REM: \\1 //-->'.\"\n\")" : '';
+
 		if ($find && $replace) {
 			$template = preg_replace($find, $replace, $template);
 		}
