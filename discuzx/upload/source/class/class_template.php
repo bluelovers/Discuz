@@ -276,6 +276,11 @@ class template {
 		global $_G;
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
+
+		// bluelovers
+		$key_old = $key;
+		// bluelovers
+
 		$key = $key !== '' ? "[$key]" : '';
 
 		/**
@@ -294,19 +299,35 @@ class template {
 		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
 
-		// bluelovers
-		if (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
-			$dev = "?><?= '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';?><?";
-		}
-		// bluelovers
+		if(
+			(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2)
 
-		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
+			// bluelovers
+			|| (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG)
+			// bluelovers
+		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
+
+		// bluelovers
+		$d1 = $d2 = '';
+		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags:Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags:After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+
+		$d1 = 'if(discuz_core::$plugin_support[\'Scorpio_Hook\'])'.$d1;
+		$d2 = 'if(discuz_core::$plugin_support[\'Scorpio_Hook\'])'.$d2;
+
+		$dev .= $d1;
+		// bluelovers
+
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 
 		// bluelovers
-		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start-->".$this->replacecode['replace'][$i]."<!--Hook: $hookid - End-->";
+		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start-->"
+			.$this->replacecode['replace'][$i]
+			.'<?php '.$d2.' ?>'
+			."<!--Hook: $hookid - End-->"
+		;
 		// bluelovers
 
 		return $search;
