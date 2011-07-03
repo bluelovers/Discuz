@@ -276,6 +276,11 @@ class template {
 		global $_G;
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
+
+		// bluelovers
+		$key_old = $key;
+		// bluelovers
+
 		$key = $key !== '' ? "[$key]" : '';
 
 		/**
