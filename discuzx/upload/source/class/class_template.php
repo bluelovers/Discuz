@@ -428,6 +428,12 @@ class template {
 
 	function stripscriptamp($s, $extra) {
 		$extra = str_replace('\\"', '"', $extra);
+
+		// bluelovers
+		// 防止產生兩次 type="text/javascript"
+		$extra = str_replace('type="text/javascript"', '', $extra);
+		// bluelovers
+
 		$s = str_replace('&amp;', '&', $s);
 		return "<script src=\"$s\" type=\"text/javascript\"$extra></script>";
 	}
