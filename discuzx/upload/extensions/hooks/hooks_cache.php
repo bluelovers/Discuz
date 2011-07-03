@@ -63,7 +63,7 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	 * {js uri}
 	 **/
 	$find[] = "/[\n\r\t]*\{js(?:\:|\s+)(.+?)\}[\n\r\t]*/ies";
-	$replace[] = "template::stripvtags('<script src=\"<? echo \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
+	$replace[] = "template::stripvtags('<script src=\"<?= \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
 
 	/**
 	 * {變量:html}
