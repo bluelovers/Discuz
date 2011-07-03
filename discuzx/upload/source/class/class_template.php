@@ -296,7 +296,7 @@ class template {
 
 		// bluelovers
 		if (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
-			$dev = "?><?= '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';?><?";
+			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
 		// bluelovers
 
