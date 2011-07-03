@@ -454,7 +454,7 @@ class template {
 	}
 
 	// bluelovers
-	function _stripblock($var) {
+	function _stripblock($var, $stripslashes = 1) {
 		$var = trim(stripslashes($var));
 
 		return '$__'.md5($var);
