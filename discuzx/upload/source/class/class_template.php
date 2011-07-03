@@ -309,6 +309,9 @@ class template {
 		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags:Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
 		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags:After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
 
+		$d1 = 'if(discuz_core::$plugin_support[\'Scorpio_Hook\'])'.$d1;
+		$d2 = 'if(discuz_core::$plugin_support[\'Scorpio_Hook\'])'.$d2;
+
 		$dev .= $d1;
 		// bluelovers
 
