@@ -453,6 +453,14 @@ class template {
 	}
 
 	// bluelovers
+	function _stripblock($var) {
+		$var = trim(stripslashes($var));
+
+		return '$__'.md5($var);
+	}
+	// bluelovers
+
+	// bluelovers
 	function remove_bom($str, $mode = 0){
 		switch ($mode) {
 			case 1:
