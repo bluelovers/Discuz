@@ -441,7 +441,8 @@ class template {
 		foreach($constary[1] as $const) {
 			$constadd .= '$__'.$const.' = '.$const.';';
 		}
-		$s = preg_replace("/<\?=(.+?);?\s*\?>/", "{\$__\\1}", $s);
+		// hash ver name
+		$s = preg_replace("/<\?=(.+?);?\s*\?>/e", "\$this->_stripblock('\\1')", $s);
 		$s = str_replace('?>', "\n\$$var .= <<<EOF\n", $s);
 		$s = str_replace('<?', "\nEOF;\n", $s);
 		return "<?\n$constadd\$$var = <<<EOF\n".$s."\nEOF;\n?>";
