@@ -23,6 +23,11 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:default\s+([^\{\}].*?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->addquote('<?= ((!isset(\\1) || empty(\\1)) ? \\5 : \\1) ?>')";
 
+	// {$metakeywords:strip_tags() ''}
+	// <\?=($metakeywords ? strip_tags($metakeywords) :  ''); ?\>
+	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:(\S+?)\((.*?)\)(\s([^\{\}].*?))?\}[\n\r\t]*/ies";
+	$replace[] = "\$this->_tpl_func('\\5', '\\1', '\\6', '\\7')";
+
 	// {js uri}
 	$find[] = "/[\n\r\t]*\{js(?:\:|\s+)(.+?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->stripvtags('<script src=\"<? echo \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
