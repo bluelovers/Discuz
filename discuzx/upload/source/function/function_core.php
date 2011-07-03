@@ -561,7 +561,7 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 
 	if(empty($timecompare) || $tplrefresh == 1 || ($tplrefresh > 1 && !($timestamp % $tplrefresh))) {
 		if(empty($timecompare) || @filemtime(DISCUZ_ROOT.$subtpl) > $timecompare) {
-			require_once DISCUZ_ROOT.'/source/class/class_template.php';
+			include_once libfile('class/template');
 			$template = new template();
 			$template->parse_template($maintpl, $templateid, $tpldir, $file, $cachefile);
 			if($targettplname === null) {

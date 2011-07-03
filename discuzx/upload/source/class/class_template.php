@@ -109,9 +109,33 @@ class template {
 		// 擴充模板語法
 		$find = $replace = array();
 
+		// regex var
+		$var_regexp_ex = array();
+		$var_regexp_ex[0] = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
+
 		// {rem 註解內容}
 		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
 		$replace[] = (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? "\$this->stripvtags(\"\n\".'<!--REM: \\1 //-->'.\"\n\")" : '';
+
+		// bluelovers
+		// add Event 'Class_template::parse_template:Before_addon_tpl'
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':Before_addon_tpl')
+				->run(array(array(
+					'find'				=> $find
+					, 'replace'			=> $replace
+
+					, 'var_regexp_ex'	=> $var_regexp_ex
+					, 'var_regexp'		=> $var_regexp
+				)), array(
+					'find'				=> &$find
+					, 'replace'			=> &$replace
+
+					, 'var_regexp_ex'	=> $var_regexp_ex
+					, 'var_regexp'		=> $var_regexp
+			));
+		}
+		// bluelovers
 
 		if ($find && $replace) {
 			$template = preg_replace($find, $replace, $template);
@@ -171,7 +195,7 @@ class template {
 		fclose($fp);
 	}
 
-	function languagevar($var) {
+	function languagevar($var, $html = 0, $quote_style = 0) {
 		$vars = explode(':', $var);
 		$isplugin = count($vars) == 2;
 		if(!$isplugin) {
@@ -216,7 +240,8 @@ class template {
 			}
 		}
 		if(isset($langvar[$var])) {
-			return $langvar[$var];
+			// 支援 dhtmlspecialchars
+			return $html ? dhtmlspecialchars($langvar[$var], $quote_style) : $langvar[$var];
 		} else {
 			return '!'.$var.'!';
 		}
@@ -428,6 +453,14 @@ class template {
 
 	function stripscriptamp($s, $extra) {
 		$extra = str_replace('\\"', '"', $extra);
+
+		// bluelovers
+		// 防止產生兩次 type="text/javascript"
+		$extra = str_replace('type="text/javascript"', '', $extra);
+
+		$extra = ' '.trim($extra);
+		// bluelovers
+
 		$s = str_replace('&amp;', '&', $s);
 		return "<script src=\"$s\" type=\"text/javascript\"$extra></script>";
 	}
@@ -439,9 +472,11 @@ class template {
 		$constadd = '';
 		$constary[1] = array_unique($constary[1]);
 		foreach($constary[1] as $const) {
-			$constadd .= '$__'.$const.' = '.$const.';';
+			// hash var name
+			$constadd .= $this->_stripblock($const, 0).' = '.$const.';';
 		}
-		$s = preg_replace("/<\?=(.+?)\?>/", "{\$__\\1}", $s);
+		// hash var name
+		$s = preg_replace("/<\?=(.+?);?\s*\?>/e", "\$this->_stripblock('\\1')", $s);
 		$s = str_replace('?>', "\n\$$var .= <<<EOF\n", $s);
 		$s = str_replace('<?', "\nEOF;\n", $s);
 		return "<?\n$constadd\$$var = <<<EOF\n".$s."\nEOF;\n?>";
@@ -453,6 +488,21 @@ class template {
 	}
 
 	// bluelovers
+	function _tpl_func($func, $var, $arg = '', $def = '') {
+		$ret = (!empty($arg) ? "$func($var,$arg)" : "$func($var)");
+		if (!empty($def)) {
+			$ret = "($var ? $ret : $def)";
+		}
+
+		return $ret ? $this->stripvtags('<? echo '.$ret.'; ?>', '') : '';
+	}
+
+	function _stripblock($var, $stripslashes = 1) {
+		$var = trim($stripslashes ? stripslashes($var) : $var);
+
+		return '$__'.md5($var);
+	}
+
 	function remove_bom($str, $mode = 0){
 		switch ($mode) {
 			case 1:
