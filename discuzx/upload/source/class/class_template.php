@@ -116,6 +116,21 @@ class template {
 		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
 		$replace[] = (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? "\$this->stripvtags(\"\n\".'<!--REM: \\1 //-->'.\"\n\")" : '';
 
+		// bluelovers
+		// add Event 'Class_template::parse_template:Before_addon_tpl'
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':Before_addon_tpl')
+				->run(array(array(
+					'var'			=> $var
+					, 'find'		=> $find
+					, 'replace'		=> $replace
+				)), array(
+					'find'		=> &$find
+					, 'replace'		=> &$replace
+			));
+		}
+		// bluelovers
+
 		if ($find && $replace) {
 			$template = preg_replace($find, $replace, $template);
 		}
