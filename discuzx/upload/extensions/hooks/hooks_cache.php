@@ -46,13 +46,6 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "\$this->addquote('<?= ((!isset(\\1) || empty(\\1)) ? \\5 : \\1) ?>')";
 
 	/**
-	 * {$metakeywords:strip_tags() ''}
-	 * <\?=($metakeywords ? strip_tags($metakeywords) :  ''); ?\>
-	 **/
-	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:(\S+?)\((.*?)\)(\s([^\{\}].*?))?\}[\n\r\t]*/ies";
-	$replace[] = "\$this->_tpl_func('\\5', '\\1', '\\6', '\\7')";
-
-	/**
 	 * {變量:float 格式}
 	 *
 	 * 按照指定的格式顯示浮點數
@@ -68,6 +61,15 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	 **/
 	$find[] = "/[\n\r\t]*\{js(?:\:|\s+)(.+?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->stripvtags('<script src=\"<? echo \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
+
+	/**
+	 * {變量:userfunc(參數)}
+	 *
+	 * {$metakeywords:strip_tags() ''}
+	 * <\?=($metakeywords ? strip_tags($metakeywords) :  ''); ?\>
+	 **/
+	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:(\S+?)\((.*?)\)(\s([^\{\}].*?))?\}[\n\r\t]*/ies";
+	$replace[] = "\$this->_tpl_func('\\5', '\\1', '\\6', '\\7')";
 
 	return Scorpio_Hook::RET_SUCCESS;
 }
