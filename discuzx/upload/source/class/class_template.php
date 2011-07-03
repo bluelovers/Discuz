@@ -265,6 +265,13 @@ class template {
 		$key = $key !== '' ? "[$key]" : '';
 		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
+
+		// bluelovers
+		if (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
+			$dev = "?><?= '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';?><?";
+		}
+		// bluelovers
+
 		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
