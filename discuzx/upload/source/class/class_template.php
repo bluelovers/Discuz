@@ -111,10 +111,10 @@ class template {
 		// add Event 'Class_template::parse_template:Before_fwrite'
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
-				->run(array(
+				->run(array(array(
 					'template'			=> $template
 					, 'cachefile'		=> $cachefile
-				), array(
+				)), array(
 					'template'			=> &$template
 					, 'cachefile'		=> &$cachefile
 			));
