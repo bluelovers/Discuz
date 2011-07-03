@@ -295,7 +295,7 @@ class template {
 		$dev = '';
 
 		if(
-			isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2
+			(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2)
 		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 
