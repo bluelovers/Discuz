@@ -407,7 +407,7 @@ var rowtypedata = [
 		if($groupbanner) {
 			$groupbanner = '<input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupbanner.'?'.random(6).'" />';
 		}
-		showsetting('groups_editgroup_icon', 'iconnew', '', 'file', '', 0, $groupicon);
+		showsetting('groups_editgroup_icon', 'iconnew', $group['icon'], 'filetext', '', 0, $groupicon);
 		showsetting('groups_editgroup_banner', 'bannernew', '', 'file', '', 0, $groupbanner);
 		showsubmit('editsubmit');
 		showtablefooter();
