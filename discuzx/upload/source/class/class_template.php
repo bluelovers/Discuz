@@ -110,7 +110,8 @@ class template {
 		$find = $replace = array();
 
 		// regex var
-		$var_regexp_2 = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
+		$var_regexp_ex = array();
+		$var_regexp_ex[0] = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
 
 		// {rem 註解內容}
 		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
@@ -124,11 +125,14 @@ class template {
 					'find'				=> $find
 					, 'replace'			=> $replace
 
-					, 'var_regexp_2'	=> $var_regexp_2
+					, 'var_regexp_ex'	=> $var_regexp_ex
 					, 'var_regexp'		=> $var_regexp
 				)), array(
 					'find'				=> &$find
 					, 'replace'			=> &$replace
+
+					, 'var_regexp_ex'	=> $var_regexp_ex
+					, 'var_regexp'		=> $var_regexp
 			));
 		}
 		// bluelovers
