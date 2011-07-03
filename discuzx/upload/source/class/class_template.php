@@ -439,9 +439,10 @@ class template {
 		$constadd = '';
 		$constary[1] = array_unique($constary[1]);
 		foreach($constary[1] as $const) {
-			$constadd .= '$__'.$const.' = '.$const.';';
+			// hash var name
+			$constadd .= $this->_stripblock($const, 0).' = '.$const.';';
 		}
-		// hash ver name
+		// hash var name
 		$s = preg_replace("/<\?=(.+?);?\s*\?>/e", "\$this->_stripblock('\\1')", $s);
 		$s = str_replace('?>', "\n\$$var .= <<<EOF\n", $s);
 		$s = str_replace('<?', "\nEOF;\n", $s);
