@@ -12,6 +12,9 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 
 	$data = &$_EVENT['event.data'];
 
+	$find = &$data['find'];
+	$replace = &$data['replace'];
+
 	// replace #|javascript: => javascript:void(0)
 	$data['find'][] = "/\s+href=(\"|\')(?:(?:javascript\:;)|\#+)\\1/is";
 	$data['replace'][] = " href=\\1javascript:void(0);\\1";
