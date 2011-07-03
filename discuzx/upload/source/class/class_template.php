@@ -290,6 +290,11 @@ class template {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
+
+		// bluelovers
+		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start-->".$this->replacecode['replace'][$i]."<!--Hook: $hookid - End-->";
+		// bluelovers
+
 		return $search;
 	}
 
