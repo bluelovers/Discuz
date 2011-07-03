@@ -109,6 +109,9 @@ class template {
 		// 擴充模板語法
 		$find = $replace = array();
 
+		// regex var
+		$var = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
+
 		// {rem 註解內容}
 		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
 		$replace[] = (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? "\$this->stripvtags(\"\n\".'<!--REM: \\1 //-->'.\"\n\")" : '';
