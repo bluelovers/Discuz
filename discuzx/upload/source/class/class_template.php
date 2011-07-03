@@ -263,11 +263,38 @@ class template {
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
 		$key = $key !== '' ? "[$key]" : '';
+
+		/**
+		 * Discuz!X 中開啟嵌入點的方法
+		 *
+		 * 刪除 //for Developer
+		 * 留下 $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
+		 *
+		 * 然後更新緩存即可看到頁面中的所有嵌入點
+		 *
+		 * string xx 標識返回值是 string
+		 * array xx 表示返回值是 array
+		 *
+		 * 數組 key 的含義請參考相關模版
+		 **/
+		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
+
+		// bluelovers
+		if (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
+			$dev = "?><?= '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';?><?";
+		}
+		// bluelovers
+
 		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
+
+		// bluelovers
+		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start-->".$this->replacecode['replace'][$i]."<!--Hook: $hookid - End-->";
+		// bluelovers
+
 		return $search;
 	}
 
