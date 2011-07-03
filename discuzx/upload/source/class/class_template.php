@@ -152,6 +152,20 @@ class template {
 		$template = preg_replace("/\<\?(\s{1})/is", "<?php\\1", $template);
 		$template = preg_replace("/\<\?\=(.+?)\?\>/is", "<?php echo \\1;?>", $template);
 
+		// bluelovers
+		// add Event 'Class_template::parse_template:Before_fwrite'
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
+				->run(array(array(
+					'template'			=> $template
+					, 'cachefile'		=> $cachefile
+				)), array(
+					'template'			=> &$template
+					, 'cachefile'		=> &$cachefile
+			));
+		}
+		// bluelovers
+
 		flock($fp, 2);
 		fwrite($fp, $template);
 		fclose($fp);
@@ -333,6 +347,20 @@ class template {
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
 		if($this->csscurmodules) {
 			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);
+
+			// bluelovers
+			// add Event 'Class_template::loadcsstemplate:Before_fwrite'
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
+					->run(array(array(
+						'cssdata'			=> $this->csscurmodules
+						, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
+					)), array(
+						'cssdata'			=> &$this->csscurmodules
+				));
+			}
+			// bluelovers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_'.$_G['basescript'].'_'.CURMODULE.'.css', 'w')) {
 				fwrite($fp, $this->csscurmodules);
 				fclose($fp);
