@@ -233,6 +233,12 @@
 								</tr>
 							</tbody>
 						<!--{/loop}-->
+
+						<!--{if !$_G['forum_threadlist'] || $thread['displayorder'] > 0}-->
+							<!-- 檢測不包含置頂主題的情況下主題列表是否為空 -->
+							<tbody class="bw0_all"><tr><th colspan="{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}6{else}5{/if}"><p class="emp">{lang forum_nothreads}</p></th></tr></tbody>
+						<!--{/if}-->
+
 						</table><!-- end of table "forum_G[fid]" branch 1/3 -->
 					<!--{else}-->
 						</table><!-- end of table "forum_G[fid]" branch 2/3 -->
@@ -282,6 +288,12 @@
 							</li>
 							<!--{/loop}-->
 						</ul>
+
+						<!--{if !$_G['forum_threadlist'] || $thread['displayorder'] > 0}-->
+							<!-- 檢測不包含置頂主題的情況下主題列表是否為空 -->
+							<p class="emp">{lang forum_nothreads}</p>
+						<!--{/if}-->
+
 					<!--{/if}-->
 				<!--{else}-->
 						<tbody class="bw0_all"><tr><th colspan="{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}6{else}5{/if}"><p class="emp">{lang forum_nothreads}</p></th></tr></tbody>
