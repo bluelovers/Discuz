@@ -63,6 +63,12 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "\$this->stripvtags('<script src=\"<? echo \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
 
 	/**
+	 * {變量:html}
+	 **/
+	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:html\s*\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<?= dhtmlspecialchars(\\1);?>')";
+
+	/**
 	 * {變量:userfunc(參數)}
 	 *
 	 * {$metakeywords:strip_tags() ''}
