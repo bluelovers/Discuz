@@ -68,6 +68,9 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:html\s*\}[\n\r\t]*/ies";
 	$replace[] = "\$this->addquote('<?= dhtmlspecialchars(\\1);?>')";
 
+	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:html\s+(.+?)\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<?= dhtmlspecialchars(\\1, \\5);?>')";
+
 	/**
 	 * {變量:userfunc(參數)}
 	 *
