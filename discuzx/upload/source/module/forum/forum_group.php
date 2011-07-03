@@ -321,6 +321,9 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'manage'){
+	/**
+	 * 群組 > 管理群組
+	 **/
 	if(!$_G['forum']['ismoderator']) {
 		showmessage('group_admin_noallowed');
 	}
