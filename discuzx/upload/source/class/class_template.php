@@ -302,12 +302,6 @@ class template {
 			// bluelovers
 		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
-
-		// bluelovers
-		} elseif (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
-			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
-		// bluelovers
-
 		}
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 
