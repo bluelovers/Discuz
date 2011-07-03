@@ -19,6 +19,12 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$find[] = "/\s+href=(\"|\')(?:(?:javascript\:;)|\#+)\\1/is";
 	$replace[] = " href=\\1javascript:void(0);\\1";
 
+	/**
+	 * {for_option 數組變量 值鍵 值變量 選中的值}
+	 **/
+	$find[] = "/[\n\r\t]*\{for_option(:|\s+)(\S+?)\s+(\S+?)\s+(\S+?)\s+(\S+?)\}[\n\r\t]*(.+?)[\n\r\t]*\{\/for_option\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<? if(is_array(\\2)) foreach (\\2 as \$_k_ => \\4) { \$_s_ = ((\\4[\\3] == \\5 || @in_array(\\4[\\3], \\5)) ? \' selected class=\"tpl_select\"\':\'\'); ?>','\\6<? } ?>')";
+
 	// {變量:default 默認值}
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:default\s+([^\{\}].*?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->addquote('<?= ((!isset(\\1) || empty(\\1)) ? \\5 : \\1) ?>')";
