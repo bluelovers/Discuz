@@ -53,6 +53,17 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "\$this->_tpl_func('\\5', '\\1', '\\6', '\\7')";
 
 	/**
+	 * {變量:float 格式}
+	 *
+	 * 按照指定的格式顯示浮點數
+	 * 對於浮點數，本語法可以將變量按照格式所指定的位數設置進行顯示。
+	 * 格式寫法為「M.D」，M 代表整數位，D 代表小數位。
+	 * 格式允許用變量代替。
+	 **/
+	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:float\s+(.+?)\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<?= sprintf(\'%\\5f\', \\1);?>')";
+
+	/**
 	 * {js uri}
 	 **/
 	$find[] = "/[\n\r\t]*\{js(?:\:|\s+)(.+?)\}[\n\r\t]*/ies";
