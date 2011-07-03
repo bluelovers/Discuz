@@ -373,6 +373,21 @@ class template {
 		discuz_error::template_error($message, $tplname);
 	}
 
+	// bluelovers
+	function remove_bom($str, $mode = 0){
+		switch ($mode) {
+			case 1:
+				$str = str_replace("\xef\xbb\xbf", '', $str);
+			case 2:
+				$str = preg_replace("/^\xef\xbb\xbf/", '', $str);
+			default:
+				if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+					$str = substr($str, 3);
+				}
+		}
+		return $str;
+	}
+	// bluelovers
 }
 
 ?>
