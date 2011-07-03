@@ -15,7 +15,9 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$find = &$data['find'];
 	$replace = &$data['replace'];
 
-	// replace #|javascript: => javascript:void(0)
+	/**
+	 * replace #|javascript: => javascript:void(0)
+	 **/
 	$find[] = "/\s+href=(\"|\')(?:(?:javascript\:;)|\#+)\\1/is";
 	$replace[] = " href=\\1javascript:void(0);\\1";
 
@@ -25,16 +27,22 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$find[] = "/[\n\r\t]*\{for_option(:|\s+)(\S+?)\s+(\S+?)\s+(\S+?)\s+(\S+?)\}[\n\r\t]*(.+?)[\n\r\t]*\{\/for_option\}[\n\r\t]*/ies";
 	$replace[] = "\$this->addquote('<? if(is_array(\\2)) foreach (\\2 as \$_k_ => \\4) { \$_s_ = ((\\4[\\3] == \\5 || @in_array(\\4[\\3], \\5)) ? \' selected class=\"tpl_select\"\':\'\'); ?>','\\6<? } ?>')";
 
-	// {變量:default 默認值}
+	/**
+	 * {變量:default 默認值}
+	 **/
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:default\s+([^\{\}].*?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->addquote('<?= ((!isset(\\1) || empty(\\1)) ? \\5 : \\1) ?>')";
 
-	// {$metakeywords:strip_tags() ''}
-	// <\?=($metakeywords ? strip_tags($metakeywords) :  ''); ?\>
+	/**
+	 * {$metakeywords:strip_tags() ''}
+	 * <\?=($metakeywords ? strip_tags($metakeywords) :  ''); ?\>
+	 **/
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:(\S+?)\((.*?)\)(\s([^\{\}].*?))?\}[\n\r\t]*/ies";
 	$replace[] = "\$this->_tpl_func('\\5', '\\1', '\\6', '\\7')";
 
-	// {js uri}
+	/**
+	 * {js uri}
+	 **/
 	$find[] = "/[\n\r\t]*\{js(?:\:|\s+)(.+?)\}[\n\r\t]*/ies";
 	$replace[] = "\$this->stripvtags('<script src=\"<? echo \$_G[\'setting\'][\'jspath\']; ?>\\1?<?=VERHASH?>\" type=\"text/javascript\"></script>')";
 
