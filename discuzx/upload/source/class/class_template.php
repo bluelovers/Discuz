@@ -44,6 +44,15 @@ class template {
 		$headerexists = preg_match("/{(sub)?template\s+[\w\/]+?header\}/", $template);
 		$this->subtemplates = array();
 		for($i = 1; $i <= 3; $i++) {
+
+			// bluelovers
+			// 增加 subtpl 子模板
+			if(strexists($template, '{subtpl')) {
+				$template = preg_replace("/[\n\r\t]*\{subtpl\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->loadsubtemplate2('\\1')", $template);
+				if ($i >= 3) $i--;
+			}
+			// bluelovers
+
 			if(strexists($template, '{subtemplate')) {
 				$template = preg_replace("/[\n\r\t]*(\<\!\-\-)?\{subtemplate\s+([a-z0-9_:\/]+)\}(\-\-\>)?[\n\r\t]*/ies", "\$this->loadsubtemplate('\\2')", $template);
 			}
