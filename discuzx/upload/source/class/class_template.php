@@ -294,7 +294,9 @@ class template {
 		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
 
-		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
+		if(
+			isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2
+		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 
 		// bluelovers
