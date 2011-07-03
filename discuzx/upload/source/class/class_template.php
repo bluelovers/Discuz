@@ -268,12 +268,12 @@ class template {
 			// add Event 'Class_template::loadcsstemplate:Before_fwrite'
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
 				Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
-					->run(array(
+					->run(array(array(
 						'cssdata'			=> $this->csscurmodules
 						, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
-					), array(
+					)), array(array(
 						'cssdata'			=> &$this->csscurmodules
-				));
+				)));
 			}
 			// bluelovers
 
