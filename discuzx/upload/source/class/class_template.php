@@ -271,9 +271,9 @@ class template {
 					->run(array(array(
 						'cssdata'			=> $this->csscurmodules
 						, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
-					)), array(array(
+					)), array(
 						'cssdata'			=> &$this->csscurmodules
-				)));
+				));
 			}
 			// bluelovers
 
