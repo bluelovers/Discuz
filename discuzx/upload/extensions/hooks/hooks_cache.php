@@ -28,6 +28,12 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "\$this->addquote('<? if(is_array(\\2)) foreach (\\2 as \$_k_ => \\4) { \$_s_ = ((\\4[\\3] == \\5 || @in_array(\\4[\\3], \\5)) ? \' selected class=\"tpl_select\"\':\'\'); ?>','\\6<? } ?>')";
 
 	/**
+	 * {option 數組變量 選中的值}
+	 **/
+	$find[] = "/[\n\r\t]*\{option(:|\s+)(\S+?)\s+(\S+?)\}[\n\r\t]*(.+?)[\n\r\t]*\{\/option\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<? if(is_array(\\2)) foreach (\\2 as \$_k_ => \$_v_) { \$_s_ = ((\$_k_ == \\3 || @in_array(\$_k_, \\3)) ? \' selected class=\"tpl_select\"\':\'\'); ?>','\\4<? } ?>')";
+
+	/**
 	 * {變量:default 默認值}
 	 **/
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:default\s+([^\{\}].*?)\}[\n\r\t]*/ies";
