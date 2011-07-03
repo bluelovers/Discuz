@@ -57,7 +57,7 @@ class template {
 			// bluelovers
 
 			if(strexists($template, '{subtemplate')) {
-				$template = preg_replace("/[\n\r\t]*(\<\!\-\-)?\{subtemplate\s+([a-z0-9_:\/]+)\}(\-\-\>)?[\n\r\t]*/ies", "\$this->loadsubtemplate('\\2')", $template);
+				$template = preg_replace("/[\n\r\t]*\{subtemplate\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->loadsubtemplate('\\1')", $template);
 				// 忘記是做什麼的了
 				if ($i >= 3) $i--;
 			}
