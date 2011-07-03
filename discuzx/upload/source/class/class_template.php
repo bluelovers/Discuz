@@ -294,14 +294,14 @@ class template {
 		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
 
-		// bluelovers
-		if (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
-			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
-		}
-		// bluelovers
-
 		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
+
+		// bluelovers
+		} elseif (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
+			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
+		// bluelovers
+
 		}
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 
