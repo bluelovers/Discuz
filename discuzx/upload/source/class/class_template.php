@@ -494,7 +494,7 @@ class template {
 			$ret = "($var ? $ret : $def)";
 		}
 
-		return $ret ? $this->addquote('<?='.$ret.'; ?>', '') : '';
+		return $ret ? $this->stripvtags('<? echo '.$ret.'; ?>', '') : '';
 	}
 
 	function _stripblock($var, $stripslashes = 1) {
