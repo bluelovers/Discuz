@@ -303,6 +303,13 @@ class template {
 		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
 		}
+
+		// bluelovers
+		$d1 = $d2 = '';
+		$d1 = "Scorpio_Hook::execute('Tpl_Func_hooktags:Before', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		$d2 = "Scorpio_Hook::execute('Tpl_Func_hooktags:After', array(&\$_G['setting']['pluginhooks']['$hookid']$key, '$hookid', ".($key_old != '' ? $key_old : 'null')."), 1);";
+		// bluelovers
+
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 
 		// bluelovers
