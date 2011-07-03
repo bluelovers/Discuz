@@ -20,6 +20,10 @@ class template {
 	var $language = array();
 	var $file = '';
 
+	// bluelovers
+	var $subtemplates2 = array();
+	// bluelovers
+
 	function parse_template($tplfile, $templateid, $tpldir, $file, $cachefile) {
 		$basefile = basename(DISCUZ_ROOT.$tplfile, '.htm');
 		$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.CURMODULE;
@@ -40,8 +44,22 @@ class template {
 		$headerexists = preg_match("/{(sub)?template\s+[\w\/]+?header\}/", $template);
 		$this->subtemplates = array();
 		for($i = 1; $i <= 3; $i++) {
+
+			// bluelovers
+			// 修正部分可能產生 BUG 的情形
+			$template = preg_replace("/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $template);
+
+			// 增加 subtpl 子模板
+			if(strexists($template, '{subtpl')) {
+				$template = preg_replace("/[\n\r\t]*\{subtpl\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->loadsubtemplate2('\\1')", $template);
+				if ($i >= 3) $i--;
+			}
+			// bluelovers
+
 			if(strexists($template, '{subtemplate')) {
-				$template = preg_replace("/[\n\r\t]*(\<\!\-\-)?\{subtemplate\s+([a-z0-9_:\/]+)\}(\-\-\>)?[\n\r\t]*/ies", "\$this->loadsubtemplate('\\2')", $template);
+				$template = preg_replace("/[\n\r\t]*\{subtemplate\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->loadsubtemplate('\\1')", $template);
+				// 忘記是做什麼的了
+				if ($i >= 3) $i--;
 			}
 		}
 
@@ -71,10 +89,37 @@ class template {
 			$headeradd .= ';';
 		}
 
+		// bluelovers
+		// 記錄載入的 subtpl
+		if(!empty($this->subtemplates2)) {
+			$headeradd .= "\n/*\n";
+			foreach($this->subtemplates2 as $fname) {
+				$headeradd .= "subtpl_add: $fname\n";
+			}
+			$headeradd .= '*/;'."\n";
+		}
+		// bluelovers
+
 		if(!empty($this->blocks)) {
 			$headeradd .= "\n";
 			$headeradd .= "block_get('".implode(',', $this->blocks)."');";
 		}
+
+		// bluelovers
+		// 擴充模板語法
+		$find = $replace = array();
+
+		// {rem 註解內容}
+		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
+		$replace[] = (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) ? "\$this->stripvtags(\"\n\".'<!--REM: \\1 //-->'.\"\n\")" : '';
+
+		if ($find && $replace) {
+			$template = preg_replace($find, $replace, $template);
+		}
+
+		// 移除 utf8 的 bom 防止出現不該有的空白或造成頁面錯誤
+		$template = $this->remove_bom($template);
+		// bluelovers
 
 		$template = "<? if(!defined('IN_DISCUZ')) exit('Access Denied'); {$headeradd}?>\n$template";
 
@@ -241,6 +286,18 @@ class template {
 		}
 	}
 
+	// bluelovers
+	function loadsubtemplate2($file) {
+		$tplfile = template($file, 0, '', 1);
+		if($content = @implode('', file(DISCUZ_ROOT.$tplfile))) {
+			$this->subtemplates2[] = $tplfile;
+			return "\n{rem $file; - Start}\n".$content."\n{eval \$GLOBAL['_subtpl_']['$file'] = 1;}\n{rem $file; - End}\n";
+		} else {
+			return '<!-- Lost Tpl File: '.$file.' -->';
+		}
+	}
+	// bluelovers
+
 	function loadcsstemplate() {
 		global $_G;
 		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css?{VERHASH}" />';
@@ -319,6 +376,21 @@ class template {
 		discuz_error::template_error($message, $tplname);
 	}
 
+	// bluelovers
+	function remove_bom($str, $mode = 0){
+		switch ($mode) {
+			case 1:
+				$str = str_replace("\xef\xbb\xbf", '', $str);
+			case 2:
+				$str = preg_replace("/^\xef\xbb\xbf/", '', $str);
+			default:
+				if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+					$str = substr($str, 3);
+				}
+		}
+		return $str;
+	}
+	// bluelovers
 }
 
 ?>
