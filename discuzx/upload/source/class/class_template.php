@@ -89,6 +89,17 @@ class template {
 			$headeradd .= ';';
 		}
 
+		// bluelovers
+		// 記錄載入的 subtpl
+		if(!empty($this->subtemplates2)) {
+			$headeradd .= "\n/*\n";
+			foreach($this->subtemplates2 as $fname) {
+				$headeradd .= "subtpl_add: $fname\n";
+			}
+			$headeradd .= '*/;'."\n";
+		}
+		// bluelovers
+
 		if(!empty($this->blocks)) {
 			$headeradd .= "\n";
 			$headeradd .= "block_get('".implode(',', $this->blocks)."');";
