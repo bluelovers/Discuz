@@ -263,6 +263,7 @@ class template {
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
 		$key = $key !== '' ? "[$key]" : '';
+		//for Developer $dev = "echo '[".($key ? 'array' : 'string')." $hookid]';";
 		$dev = '';
 		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
