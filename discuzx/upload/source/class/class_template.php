@@ -464,6 +464,15 @@ class template {
 	}
 
 	// bluelovers
+	function _tpl_func($func, $var, $arg = '', $def = '') {
+		$ret = (!empty($arg) ? "$func($var,$arg)" : "$func($var)");
+		if (!empty($def)) {
+			$ret = "($var ? $ret : $def)";
+		}
+
+		return $ret ? $this->addquote('<?='.$ret.'; ?>', '') : '';
+	}
+
 	function _stripblock($var, $stripslashes = 1) {
 		$var = trim($stripslashes ? stripslashes($var) : $var);
 
