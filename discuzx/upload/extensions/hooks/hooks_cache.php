@@ -12,6 +12,9 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 
 	$data = &$_EVENT['event.data'];
 
+	$var = $ret['var'];
+	$var_regexp = $ret['var_regexp'];
+
 	$find = &$data['find'];
 	$replace = &$data['replace'];
 
