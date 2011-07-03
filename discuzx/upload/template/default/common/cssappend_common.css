@@ -9,7 +9,7 @@
 /**
  * 限制板塊選擇 MENU 的最大高度
  **/
-div#fid_ctrl_menu { max-height: 20em; overflow-y: auto; }
+div#fid_ctrl_menu, div#typeid_fast_ctrl_menu { max-height: 20em; overflow-y: auto; }
 
 /**
  * 強調當查詢為空時的樣式
