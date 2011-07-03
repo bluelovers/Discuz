@@ -216,7 +216,8 @@ class template {
 			}
 		}
 		if(isset($langvar[$var])) {
-			return $langvar[$var];
+			// 支援 dhtmlspecialchars
+			return $html ? dhtmlspecialchars($langvar[$var], $quote_style) : $langvar[$var];
 		} else {
 			return '!'.$var.'!';
 		}
