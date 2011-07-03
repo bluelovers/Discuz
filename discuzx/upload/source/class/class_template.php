@@ -110,7 +110,7 @@ class template {
 		$find = $replace = array();
 
 		// regex var
-		$var = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
+		$var_regexp_2 = '(\$[a-zA-Z_][a-zA-Z0-9_\->\.\[\]\$]*)';
 
 		// {rem 註解內容}
 		$find[] = "/[\n\r\t]*\{rem(?:\:|\s+)(.+?)\s*\}[\n\r\t]*/ies";
@@ -121,12 +121,14 @@ class template {
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':Before_addon_tpl')
 				->run(array(array(
-					'var'			=> $var
-					, 'find'		=> $find
-					, 'replace'		=> $replace
+					'find'				=> $find
+					, 'replace'			=> $replace
+
+					, 'var_regexp_2'	=> $var_regexp_2
+					, 'var_regexp'		=> $var_regexp
 				)), array(
-					'find'		=> &$find
-					, 'replace'		=> &$replace
+					'find'				=> &$find
+					, 'replace'			=> &$replace
 			));
 		}
 		// bluelovers
