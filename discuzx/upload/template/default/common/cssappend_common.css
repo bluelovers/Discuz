@@ -10,6 +10,9 @@
  * 限制板塊選擇 MENU 的最大高度
  **/
 div#fid_ctrl_menu
+/**
+ * 主題分類選單
+ **/
 , div#typeid_fast_ctrl_menu
 , div#typeid_ctrl_menu
 { max-height: 20em; overflow-y: auto; }
