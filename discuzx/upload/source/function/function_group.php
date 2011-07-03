@@ -74,7 +74,7 @@ function groupuserlist($fid, $orderby = '', $num = 0, $start = 0, $addwhere = ''
 		}
 	}
 
-	$orderbyarray = array('level_join' => 'level ASC, joindateline ASC', 'joindateline' => 'joindateline DESC', 'lastupdate' => 'lastupdate DESC', 'threads' => 'threads DESC', 'replies' => 'replies DESC');
+	$orderbyarray = array('level_join' => 'level ASC, joindateline ASC, lastupdate DESC, threads DESC, replies DESC', 'joindateline' => 'joindateline DESC, level ASC, threads DESC, replies DESC', 'lastupdate' => 'lastupdate DESC, threads DESC, replies DESC', 'threads' => 'threads DESC, lastupdate DESC, replies DESC', 'replies' => 'replies DESC, lastupdate DESC, threads DESC');
 	$orderby = !empty($orderbyarray[$orderby]) ? "ORDER BY $orderbyarray[$orderby]" : '';
 	$limitsql = $num ? "LIMIT ".($start ? intval($start) : 0).", $num" : '';
 
