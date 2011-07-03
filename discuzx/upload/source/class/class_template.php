@@ -20,6 +20,10 @@ class template {
 	var $language = array();
 	var $file = '';
 
+	// bluelovers
+	var $subtemplates2 = array();
+	// bluelovers
+
 	function parse_template($tplfile, $templateid, $tpldir, $file, $cachefile) {
 		$basefile = basename(DISCUZ_ROOT.$tplfile, '.htm');
 		$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.CURMODULE;
@@ -240,6 +244,18 @@ class template {
 			return '<!-- '.$file.' -->';
 		}
 	}
+
+	// bluelovers
+	function loadsubtemplate2($file) {
+		$tplfile = template($file, 0, '', 1);
+		if($content = @implode('', file(DISCUZ_ROOT.$tplfile))) {
+			$this->subtemplates2[] = $tplfile;
+			return "\n{rem $file; - Start}\n".$content."\n{eval \$GLOBAL['_subtpl_']['$file'] = 1;}\n{rem $file; - End}\n";
+		} else {
+			return '<!-- Lost Tpl File: '.$file.' -->';
+		}
+	}
+	// bluelovers
 
 	function loadcsstemplate() {
 		global $_G;
