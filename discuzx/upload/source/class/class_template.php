@@ -432,6 +432,8 @@ class template {
 		// bluelovers
 		// 防止產生兩次 type="text/javascript"
 		$extra = str_replace('type="text/javascript"', '', $extra);
+
+		$extra = ' '.trim($extra);
 		// bluelovers
 
 		$s = str_replace('&amp;', '&', $s);
