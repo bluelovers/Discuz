@@ -320,6 +320,7 @@ class template {
 		// bluelovers
 		$this->replacecode['replace'][$i] = "<!--Hook: $hookid - Start-->"
 			.$this->replacecode['replace'][$i]
+			.'<?php '.$d2.' ?>'
 			."<!--Hook: $hookid - End-->"
 		;
 		// bluelovers
