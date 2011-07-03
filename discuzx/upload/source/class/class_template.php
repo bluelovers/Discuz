@@ -105,6 +105,15 @@ class template {
 			$headeradd .= "block_get('".implode(',', $this->blocks)."');";
 		}
 
+		// bluelovers
+		// 擴充模板語法
+		$find = $replace = array();
+
+		if ($find && $replace) {
+			$template = preg_replace($find, $replace, $template);
+		}
+		// bluelovers
+
 		$template = "<? if(!defined('IN_DISCUZ')) exit('Access Denied'); {$headeradd}?>\n$template";
 
 		$template = preg_replace("/[\n\r\t]*\{template\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->stripvtags('<? include template(\'\\1\'); ?>')", $template);
