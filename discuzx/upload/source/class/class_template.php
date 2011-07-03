@@ -46,6 +46,9 @@ class template {
 		for($i = 1; $i <= 3; $i++) {
 
 			// bluelovers
+			// 修正部分可能產生 BUG 的情形
+			$template = preg_replace("/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $template);
+
 			// 增加 subtpl 子模板
 			if(strexists($template, '{subtpl')) {
 				$template = preg_replace("/[\n\r\t]*\{subtpl\s+([a-z0-9_:\/]+)\}[\n\r\t]*/ies", "\$this->loadsubtemplate2('\\1')", $template);
