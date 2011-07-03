@@ -65,6 +65,14 @@ if($_G['fid']) {
 	}
 	$_G['seokeywords'] = $_G['setting']['seokeywords']['group'];
 	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
+
+	// bluelovers
+	// 以 bbocde 解析 群組描述
+	if ($action != 'manage') {
+		require_once libfile('function/discuzcode');
+		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	}
+	// bluelovers
 }
 
 if(in_array($action, array('out', 'viewmember', 'manage', 'index', 'memberlist'))) {
@@ -321,6 +329,9 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'manage'){
+	/**
+	 * 群組 > 管理群組
+	 **/
 	if(!$_G['forum']['ismoderator']) {
 		showmessage('group_admin_noallowed');
 	}

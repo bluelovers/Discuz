@@ -64,6 +64,8 @@ if($operation == 'setting') {
 				}
 			}
 		}
+		/*
+		// 移除自動補充推薦群組
 		if(count($group_recommend) < $recommend_num) {
 			$query = DB::query("SELECT f.fid, f.name, ff.description, ff.icon FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status='3' AND f.type='sub'
 			ORDER BY f.commoncredits desc LIMIT $recommend_num");
@@ -76,6 +78,7 @@ if($operation == 'setting') {
 				}
 			}
 		}
+		*/
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('group_recommend', '".daddslashes(serialize($group_recommend))."')");
 		require_once libfile('function/discuzcode');
 		$skey_array = array('groupstatus','group_imgsizelimit','group_allowfeed');
@@ -407,8 +410,8 @@ var rowtypedata = [
 		if($groupbanner) {
 			$groupbanner = '<input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupbanner.'?'.random(6).'" />';
 		}
-		showsetting('groups_editgroup_icon', 'iconnew', '', 'file', '', 0, $groupicon);
-		showsetting('groups_editgroup_banner', 'bannernew', '', 'file', '', 0, $groupbanner);
+		showsetting('groups_editgroup_icon', 'iconnew', $group['icon'], 'filetext', '', 0, $groupicon);
+		showsetting('groups_editgroup_banner', 'bannernew', $group['banner'], 'filetext', '', 0, $groupbanner);
 		showsubmit('editsubmit');
 		showtablefooter();
 		showformfooter();

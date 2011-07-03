@@ -51,6 +51,8 @@ if($gid) {
 }
 
 if(empty($curtype)) {
+	/*
+	// 取消自動跳轉到我的群組
 	if($_G['uid'] && empty($_G['mod'])) {
 		$usergroups = getuserprofile('groups');
 		if(!empty($usergroups)) {
@@ -58,6 +60,7 @@ if(empty($curtype)) {
 			exit;
 		}
 	}
+	*/
 	$curtype = array();
 
 } else {
