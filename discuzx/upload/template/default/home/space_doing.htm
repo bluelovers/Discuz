@@ -80,6 +80,10 @@
 			<!--{loop $dolist $dv}-->
 			<!--{eval $doid = $dv[doid];}-->
 			<!--{eval $_G[gp_key] = $key = random(8);}-->
+
+			<!-- [home][doing] 將 message 改為可顯示分行 //-->
+			<!--{eval $dv[message] = nl2br($dv[message]);}-->
+
 				<dl id="{$key}dl{$doid}" class="pbn bbda cl">
 					<!--{if empty($diymode)}--><dd class="m avt"><a href="home.php?mod=space&uid=$dv[uid]" c="1"><!--{avatar($dv[uid],small)}--></a></dd><!--{/if}-->
 					<dd class="{if empty($diymode)}ptm{else}ptw{/if} xs2">
