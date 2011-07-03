@@ -458,9 +458,7 @@ class template {
 
 		return '$__'.md5($var);
 	}
-	// bluelovers
 
-	// bluelovers
 	function remove_bom($str, $mode = 0){
 		switch ($mode) {
 			case 1:
