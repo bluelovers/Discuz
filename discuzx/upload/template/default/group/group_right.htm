@@ -115,7 +115,9 @@
 <!--{if CURMODULE == 'group'}--><!--{hook/group_side_top}--><!--{else}--><!--{hook/forumdisplay_side_top}--><!--{/if}-->
 <!--{if $action == 'create'}-->
 	<div class="bm bmn">
-		<div class="bm_c xw1 xi1">{lang group_you_have}</div>
+		<div class="bm_c xw1 xi1">
+			{lang group_you_have}
+		</div>
 	</div>
 <!--{else}-->
 	<!--{if $action != 'index' && ($status != 2 || $status != 3)}-->
