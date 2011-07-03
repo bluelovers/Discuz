@@ -34,6 +34,12 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "\$this->addquote('<? if(is_array(\\2)) foreach (\\2 as \$_k_ => \$_v_) { \$_s_ = ((\$_k_ == \\3 || @in_array(\$_k_, \\3)) ? \' selected class=\"tpl_select\"\':\'\'); ?>','\\4<? } ?>')";
 
 	/**
+	 * {for 數組變量 鍵變量 值變量}
+	 **/
+	$find[] = "/[\n\r\t]*\{for(:|\s+)(\S+?)\s+(\S+?)\s+(\S+?)\}[\n\r\t]*(.+?)[\n\r\t]*\{\/for\}[\n\r\t]*/ies";
+	$replace[] = "\$this->addquote('<? for (\$_v_=\\2;\$_v_\\3;\$_v_\\4) { ?>','\\5<? } ?>')";
+
+	/**
 	 * {變量:default 默認值}
 	 **/
 	$find[] = "/[\n\r\t]*\{\<\?\=$var_regexp\?\>\:default\s+([^\{\}].*?)\}[\n\r\t]*/ies";
