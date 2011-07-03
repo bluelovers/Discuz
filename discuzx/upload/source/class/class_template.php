@@ -328,7 +328,7 @@ class template {
 			(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2)
 
 			// bluelovers
-			|| (defined('DISCUZ_DEBUG') && DISCUZ_DEBUG)
+			|| (0 && defined('DISCUZ_DEBUG') && DISCUZ_DEBUG)
 			// bluelovers
 		) {
 			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
