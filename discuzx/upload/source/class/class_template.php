@@ -107,6 +107,20 @@ class template {
 		$template = preg_replace("/\<\?(\s{1})/is", "<?php\\1", $template);
 		$template = preg_replace("/\<\?\=(.+?)\?\>/is", "<?php echo \\1;?>", $template);
 
+		// bluelovers
+		// add Event 'Class_template::parse_template:Before_fwrite'
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
+				->run(array(
+					'template'			=> $template
+					, 'cachefile'		=> $cachefile
+				), array(
+					'template'			=> &$template
+					, 'cachefile'		=> &$cachefile
+			));
+		}
+		// bluelovers
+
 		flock($fp, 2);
 		fwrite($fp, $template);
 		fclose($fp);
