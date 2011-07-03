@@ -171,7 +171,7 @@ class template {
 		fclose($fp);
 	}
 
-	function languagevar($var) {
+	function languagevar($var, $html = 0, $quote_style = 0) {
 		$vars = explode(':', $var);
 		$isplugin = count($vars) == 2;
 		if(!$isplugin) {
