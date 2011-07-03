@@ -22,4 +22,8 @@ p.emp { color: red; }
  * 導航列表字型尺寸由 14px 轉為網站預設尺寸
  **/
 .appl li
+/**
+ * 紀錄 doing 列表有使用到
+ **/
+, .xs2
 { font: {FONTSIZE} {FONT}; }
