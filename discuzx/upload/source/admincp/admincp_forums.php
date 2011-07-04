@@ -791,8 +791,8 @@ var rowtypedata = [
 				showsetting('forums_edit_basic_redirect', 'redirectnew', $forum['redirect'], 'text');
 				showmultititle();
 				// 以原始格式儲存 forum description, rules
-				showsetting('forums_edit_basic_description', 'descriptionnew', dhtmlspecialchars($forum['description']), 'textarea');
-				showsetting('forums_edit_basic_rules', 'rulesnew', dhtmlspecialchars($forum['rules']), 'textarea');
+				showsetting('forums_edit_basic_description', 'descriptionnew', $forum['description'], 'textarea');
+				showsetting('forums_edit_basic_rules', 'rulesnew', $forum['rules'], 'textarea');
 				showsetting('forums_edit_basic_keys', 'keysnew', $forumkeys[$fid], 'text');
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					$iname = $multiset ? "multinew[{$_G[showsetting_multi]}][domainnew]" : 'domainnew';
