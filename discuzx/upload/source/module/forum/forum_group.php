@@ -415,7 +415,7 @@ if($action == 'index') {
 			} else {
 				$iconnew = $_G['gp_iconnew'];
 			}
-			if ($_FILES['bannernew']) {
+			if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
 				$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
 			} else {
 				$bannernew = $_G['gp_bannernew'];
