@@ -390,7 +390,7 @@ class image {
 
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = ($this->param['thumbheight'] - $this->imginfo['height']) / 2;
-					imagecopymerge($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
+					$this->imagecopymerge_alpha($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
 
 					// temp debug code
 					@$imagefunc($dst_photo, $this->target.'.4.png');
