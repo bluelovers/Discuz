@@ -238,6 +238,10 @@ class image {
 		return $im;
 	}
 
+	// bluelovers
+	/**
+	 * @see http://www.php.net/manual/en/function.imagecopymerge.php#102844
+	 **/
 	function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct, $trans = NULL)
 		{
 		$dst_w = imagesx($dst_im);
@@ -280,6 +284,7 @@ class image {
 			}
 		return true;
 	}
+	// bluelovers
 
 	function Thumb_GD() {
 		global $_G;
