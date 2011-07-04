@@ -412,6 +412,7 @@ if($action == 'index') {
 			$deletebanner = $_G['gp_deletebanner'];
 
 			// bluelovers
+			// 設定只有管理員才能上傳圖片
 			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
 			// bluelovers
 				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
