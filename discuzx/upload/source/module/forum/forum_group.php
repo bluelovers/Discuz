@@ -419,6 +419,7 @@ if($action == 'index') {
 			} else {
 				$iconnew = $_G['gp_iconnew'];
 
+				// 簡易確認是否為圖片，如果不是則清除
 				if($iconnew) {
 					$_icon = $iconnew;
 
@@ -443,6 +444,7 @@ if($action == 'index') {
 			} else {
 				$bannernew = $_G['gp_bannernew'];
 
+				// 簡易確認是否為圖片，如果不是則清除
 				if($bannernew) {
 					$_icon = $bannernew;
 
