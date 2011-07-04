@@ -411,6 +411,9 @@ if($action == 'index') {
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
 
+			// 增加 deleteicon 來做為刪除 icon 的開關
+			$deleteicon = $_G['gp_deleteicon'];
+
 			// bluelovers
 			// 設定只有管理員才能上傳圖片
 			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
