@@ -35,3 +35,11 @@ p.emp { color: red; }
  **/
 .xs2
 { font: {FONTSIZE} {FONT} !important; }
+
+/* avatar */
+
+.avatar_small { max-height: 48px; max-width: 48px; }
+.avatar_small_19 { max-height: 19px; max-width: 19px; }
+.avatar_small_48 { max-height: 48px; max-width: 48px; }
+.avatar_middle { max-height: 120px; max-width: 120px; }
+.avatar_big { max-height: auto; max-width: auto; }
