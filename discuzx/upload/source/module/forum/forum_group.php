@@ -414,6 +414,18 @@ if($action == 'index') {
 				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
 			} else {
 				$iconnew = $_G['gp_iconnew'];
+
+				if($iconnew) {
+					$_valueparse = parse_url($iconnew);
+					if(!isset($_valueparse['host'])) {
+						$iconnew = $_G['setting']['attachurl'].'common/'.$iconnew;
+					}
+					$_info = array();
+					$_info = @getimagesize($iconnew);
+					if($info[0] <= 0 || $info[1] <= 0) {
+						$iconnew = '';
+					}
+				}
 			}
 			if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
 				$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
