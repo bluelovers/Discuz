@@ -383,6 +383,11 @@ class image {
 
 					$bgcolor = imagecolortransparent($thumb_photo, imagecolorallocatealpha($thumb_photo, 255, 255, 255, 127));
 					imagefill($thumb_photo, 0, 0, $bgcolor);
+
+					// bluelovers
+					imagefilledrectangle($thumb_photo, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $bg);
+					// bluelovers
+
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = ($this->param['thumbheight'] - $this->imginfo['height']) / 2;
 					imagecopymerge($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
