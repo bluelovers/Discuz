@@ -37,6 +37,34 @@
 					<input type="hidden" name="formhash" value="{FORMHASH}">
 					<input type="hidden" name="fid" value="$_G[fid]">
 					<table cellspacing="0" cellpadding="0">
+						<!-- add edit description -->
+						<caption>
+							<h4>{lang forum_description}</h4>
+							<div id="rulespreview"></div>
+						</caption>
+						<tr>
+							<td class="ptm">
+								<div class="tedt">
+									<div class="bar">
+										<div class="y"><a href="javascript:;" onclick="$('descriptionpreview').innerHTML = bbcode2html($('descriptionmessage').value)">{lang memcp_profile_preview}</a></div>
+										<!--{eval $seditor = array('rules', array('bold', 'color', 'img', 'link'));}-->
+										<!--{subtemplate common/seditor}-->
+									</div>
+									<div class="area">
+										<textarea id="descriptionmessage" name="descnew" class="pt" rows="8" {if !$alloweditrules}disabled="disabled" readonly="readonly"{/if}>$_G['forum']['description']</textarea>
+									</div>
+								</div>
+								<!--{if !$alloweditrules}-->
+								<div>{lang forum_not_allow}</div>
+								<!--{/if}-->
+							</td>
+							<td width="15%" valign="top" class="ptm">
+								<p>{lang discuzcode} {lang enabled}</p>
+								<p>{lang post_imgcode} {lang enabled}</p>
+								<p>{lang post_html} {lang disabled}</p>
+							</td>
+						</tr>
+						<!-- add edit description - end -->
 						<caption>
 							<h4>{lang forum_rules}</h4>
 							<div id="rulespreview"></div>
