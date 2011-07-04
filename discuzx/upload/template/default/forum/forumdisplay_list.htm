@@ -152,6 +152,7 @@
 									</td>
 									<!--{/if}-->
 									<th class="$thread[folder]">
+										<span>
 										<!--{hook/forumdisplay_thread $key}-->
 										<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 												<!--{eval $thread[tid]=$thread[closed];}-->
@@ -215,6 +216,7 @@
 												<span class="fromg xg1"> [{lang from}: <a href="forum.php?mod=forumdisplay&fid={$groupnames[$thread[tid]][fid]}" target="_blank" class="xg1">{$groupnames[$thread[tid]][name]}</a>]</span>
 											<!--{/if}-->
 										<!--{/if}-->
+										</span>
 									</th>
 									<td class="by">
 										<!--{hook/forumdisplay_author $key}-->
