@@ -12,8 +12,8 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	static $__func;
 
 	// 檢查是否支援 Scorpio_File，如不支援時則產生替代函數
-	if (!discuz_core::$plugin_support['Scorpio_File'] && class_exists('Scorpio_File')) {
-		discuz_core::$plugin_support['Scorpio_File'] = true;
+	if (!discuz_core::$plugin_support['scofile'] && class_exists('scofile')) {
+		discuz_core::$plugin_support['scofile'] = true;
 	} elseif (!$__func) {
 		$__func = create_function('$fn, $base', '
 			$base = str_replace(array(\'\\\\\', \'//\'), \'/\', $base);
@@ -26,8 +26,8 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	}
 
 	// 整理路徑
-	if (discuz_core::$plugin_support['Scorpio_File']) {
-		$file = Scorpio_File::remove_root(&$ret, $root);
+	if (discuz_core::$plugin_support['scofile']) {
+		$file = scofile::remove_root(&$ret, $root);
 	} else {
 		$file = $__func(&$ret, $root);
 	}

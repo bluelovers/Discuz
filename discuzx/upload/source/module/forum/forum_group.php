@@ -411,6 +411,9 @@ if($action == 'index') {
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
 
+			// 增加 deleteicon 來做為刪除 icon 的開關
+			$deleteicon = $_G['gp_deleteicon'];
+
 			// bluelovers
 			// 設定只有管理員才能上傳圖片
 			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
@@ -462,7 +465,8 @@ if($action == 'index') {
 			}
 			// bluelovers
 
-			if($iconnew) {
+			// 增加 deleteicon
+			if($iconnew && empty($deleteicon)) {
 				$iconsql .= ", icon='$iconnew'";
 				$group_recommend = unserialize($_G['setting']['group_recommend']);
 				if($group_recommend[$_G['fid']]) {
@@ -471,12 +475,25 @@ if($action == 'index') {
 					include libfile('function/cache');
 					updatecache('setting');
 				}
+			} elseif($deleteicon && discuz_core::$plugin_support['scofile']) {
+				$iconsql .= ", icon=''";
+				// 安全的刪除
+				$_path = scofile::file($_G['forum']['icon']);
+				$_root = scofile::path($_G['setting']['attachurl'].'group/');
+				if (strpos($_path, $_root) === 0) {
+					@scofile::unlink($_path);
+				}
 			}
 			if($bannernew && empty($deletebanner)) {
 				$iconsql .= ", banner='$bannernew'";
-			} elseif($deletebanner) {
+			} elseif($deletebanner && discuz_core::$plugin_support['scofile']) {
 				$iconsql .= ", banner=''";
-				@unlink($_G['forum']['banner']);
+				// 安全的刪除
+				$_path = scofile::file($_G['forum']['banner']);
+				$_root = scofile::path($_G['setting']['attachurl'].'group/');
+				if (strpos($_path, $_root) === 0) {
+					@scofile::unlink($_path);
+				}
 			}
 			$_G['gp_descriptionnew'] = censor(trim($_G['gp_descriptionnew']));
 			$censormod = censormod($_G['gp_descriptionnew']);
