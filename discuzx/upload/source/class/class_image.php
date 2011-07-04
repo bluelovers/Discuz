@@ -256,6 +256,9 @@ class image {
 		imagecopy($copy_photo, $attach_photo ,0, 0, 0, 0, $this->imginfo['width'], $this->imginfo['height']);
 		$attach_photo = $copy_photo;
 
+		// temp debug code
+		@$imagefunc($attach_photo, $this->target.'.1.png');
+
 		switch($this->param['thumbtype']) {
 			case 'fixnone':
 			case 1:
@@ -274,8 +277,15 @@ class image {
 					list($startx, $starty, $cutw, $cuth) = $this->sizevalue(1);
 					$dst_photo = imagecreatetruecolor($cutw, $cuth);
 					imagecopymerge($dst_photo, $attach_photo, 0, 0, $startx, $starty, $cutw, $cuth, 100);
+
+					// temp debug code
+					@$imagefunc($dst_photo, $this->target.'.2.png');
+
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 					imagecopyresampled($thumb_photo, $dst_photo ,0, 0, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $cutw, $cuth);
+
+					// temp debug code
+					@$imagefunc($dst_photo, $this->target.'.3.png');
 				} else {
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 					$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
@@ -283,6 +293,9 @@ class image {
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = ($this->param['thumbheight'] - $this->imginfo['height']) / 2;
 					imagecopymerge($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
+
+					// temp debug code
+					@$imagefunc($dst_photo, $this->target.'.4.png');
 				}
 				break;
 		}
