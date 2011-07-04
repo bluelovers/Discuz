@@ -288,7 +288,7 @@ class image {
 					$dst_photo = imagecreatetruecolor($cutw, $cuth);
 					imagecopymerge($dst_photo, $attach_photo, 0, 0, $startx, $starty, $cutw, $cuth, 100);
 
-					// temp debug code
+					// temp debug code - 此階段裁切為正方形(已失去透明)
 					@$imagefunc($dst_photo, $this->target.'.2.png');
 
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
