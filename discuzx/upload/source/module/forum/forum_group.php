@@ -494,7 +494,7 @@ if($action == 'index') {
 			$firstgid = $_G['cache']['grouptype']['second'][$_G['forum']['fup']]['fup'];
 			$groupselect = get_groupselect($firstgid, $_G['forum']['fup']);
 			$gviewpermselect = $jointypeselect = array('','','');
-			$_G['forum']['descriptionnew'] = str_replace("<br />", '', $_G['forum']['description']);
+			$_G['forum']['descriptionnew'] = $_G['forum']['description'];
 			$jointypeselect[$_G['forum']['jointype']] = 'checked="checked"';
 			$gviewpermselect[$_G['forum']['gviewperm']] = 'checked="checked"';
 			if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {
