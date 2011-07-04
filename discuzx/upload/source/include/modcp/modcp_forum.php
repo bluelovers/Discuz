@@ -35,16 +35,24 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 		// 以原始格式儲存 forum description, rules
 
 		if(!submitcheck('editsubmit')) {
-			$_G['forum']['rules'] = html2bbcode($_G['forum']['rules']);
+			$_G['forum']['rules'] = dhtmlspecialchars($_G['forum']['rules']);
 		} else {
 
 			require_once libfile('function/discuzcode');
 			$forumupdate = true;
+
+			if ($alloweditrules) {
+
 			$rulesnew = $alloweditrules ? addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(stripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1))) : addslashes($_G['forum']['rules']);
 			DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
 
 			$_G['forum']['description'] = html2bbcode(dstripslashes($descnew));
 			$_G['forum']['rules'] = html2bbcode(dstripslashes($rulesnew));
+
+			} else {
+				$_G['forum']['description'] = dhtmlspecialchars($_G['forum']['description']);
+				$_G['forum']['rules'] = dhtmlspecialchars($_G['forum']['rules']);
+			}
 
 		}
 
