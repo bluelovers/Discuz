@@ -329,9 +329,6 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'manage'){
-	/**
-	 * 群組 > 管理群組
-	 **/
 	if(!$_G['forum']['ismoderator']) {
 		showmessage('group_admin_noallowed');
 	}
@@ -347,6 +344,9 @@ if($action == 'index') {
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
+		/**
+		 * 群組 > 管理群組
+		 **/
 		$domainlength = checkperm('domainlength');
 		if(submitcheck('groupmanage')) {
 			$forumarr = array();
