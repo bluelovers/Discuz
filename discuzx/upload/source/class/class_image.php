@@ -375,6 +375,12 @@ class image {
 					@$imagefunc($thumb_photo, $this->target.'.3.png');
 				} else {
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
+
+					// bluelovers
+					imagealphablending($thumb_photo, false);
+					imagesavealpha($thumb_photo, true);
+					// bluelovers
+
 					$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
 					imagefill($thumb_photo, 0, 0, $bgcolor);
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
