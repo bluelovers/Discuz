@@ -420,12 +420,14 @@ if($action == 'index') {
 				$iconnew = $_G['gp_iconnew'];
 
 				if($iconnew) {
-					$_valueparse = parse_url($iconnew);
+					$_icon = $iconnew;
+
+					$_valueparse = parse_url($_icon);
 					if(!isset($_valueparse['host'])) {
-						$iconnew = $_G['setting']['attachurl'].'common/'.$iconnew;
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
 					}
 					$_info = array();
-					$_info = @getimagesize($iconnew);
+					$_info = @getimagesize($_icon);
 					if($_info[0] <= 0 || $_info[1] <= 0) {
 						$iconnew = '';
 					}
@@ -442,12 +444,14 @@ if($action == 'index') {
 				$bannernew = $_G['gp_bannernew'];
 
 				if($bannernew) {
-					$_valueparse = parse_url($bannernew);
+					$_icon = $bannernew;
+
+					$_valueparse = parse_url($_icon);
 					if(!isset($_valueparse['host'])) {
-						$bannernew = $_G['setting']['attachurl'].'common/'.$bannernew;
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
 					}
 					$_info = array();
-					$_info = @getimagesize($bannernew);
+					$_info = @getimagesize($_icon);
 					if($_info[0] <= 0 || $_info[1] <= 0) {
 						$bannernew = '';
 					}
