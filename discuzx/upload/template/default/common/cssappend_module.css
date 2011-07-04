@@ -1,5 +1,5 @@
 
-/** forum::forumdisplay,forum::viewthread,group::forumdisplay,group::viewthread **/
+/** forum::forumdisplay,forum::viewthread,forum::modcp,group,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat,misc::tag **/
 	.rate_credit_add { color: red; }
 	.rate_credit_reduce { color: green; }
 
