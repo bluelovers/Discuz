@@ -17,4 +17,5 @@
 	/* 圖片縮放的背景 */
 	.zoominner { overflow: hidden; }
 	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
+	.zoominner div.ptn.pbn { background: {WRAPBG}; }
 /** end **/
