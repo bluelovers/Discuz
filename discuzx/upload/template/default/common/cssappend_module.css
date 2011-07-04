@@ -10,7 +10,7 @@
 		font-family:Verdana;
 	}
 
-	.tl th * { vertical-align: middle; }
+	.tl th *, .tl td.icn *, .tl td.o * { vertical-align: middle; }
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
