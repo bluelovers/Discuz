@@ -32,6 +32,8 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 
 		$alloweditrules = $_G['adminid'] == 1 || $_G['forum']['alloweditrules'] ? true : false;
 
+		// 以原始格式儲存 forum description, rules
+
 		if(!submitcheck('editsubmit')) {
 			$_G['forum']['rules'] = html2bbcode($_G['forum']['rules']);
 		} else {
