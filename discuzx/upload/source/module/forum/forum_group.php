@@ -67,7 +67,7 @@ if($_G['fid']) {
 	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
 
 	// bluelovers
-	// 以 bbocde 解析 群組描述
+	// 以 bbcode 解析 群組描述
 	if ($action != 'manage') {
 		require_once libfile('function/discuzcode');
 		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
