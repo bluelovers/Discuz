@@ -410,8 +410,58 @@ if($action == 'index') {
 
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
-			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
-			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+
+			// bluelovers
+			// 設定只有管理員才能上傳圖片
+			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
+			// bluelovers
+				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+			// bluelovers
+			} else {
+				$iconnew = $_G['gp_iconnew'];
+
+				// 簡易確認是否為圖片，如果不是則清除
+				if($iconnew) {
+					$_icon = $iconnew;
+
+					$_valueparse = parse_url($_icon);
+					if(!isset($_valueparse['host'])) {
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+					}
+					$_info = array();
+					$_info = @getimagesize($_icon);
+					if($_info[0] <= 0 || $_info[1] <= 0) {
+						$iconnew = '';
+					}
+				}
+			}
+			// bluelovers
+
+			// bluelovers
+			if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
+			// bluelovers
+				$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+			// bluelovers
+			} else {
+				$bannernew = $_G['gp_bannernew'];
+
+				// 簡易確認是否為圖片，如果不是則清除
+				if($bannernew) {
+					$_icon = $bannernew;
+
+					$_valueparse = parse_url($_icon);
+					if(!isset($_valueparse['host'])) {
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+					}
+					$_info = array();
+					$_info = @getimagesize($_icon);
+					if($_info[0] <= 0 || $_info[1] <= 0) {
+						$bannernew = '';
+					}
+				}
+			}
+			// bluelovers
+
 			if($iconnew) {
 				$iconsql .= ", icon='$iconnew'";
 				$group_recommend = unserialize($_G['setting']['group_recommend']);

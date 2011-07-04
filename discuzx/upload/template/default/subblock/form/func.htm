@@ -1,0 +1,54 @@
+<!--{eval
+function tpl_showsetting($setname, $varname, $value, $type = 'radio', $disabled = '', $hidden = 0, $comment = '', $extra = '', $setid = '') {
+	global $_G;
+	$s = "\n";
+	$check = array();
+	$check['disabled'] = $disabled ? ($disabled == 'readonly' ? ' readonly' : ' disabled') : '';
+	$check['disabledaltstyle'] = $disabled ? ', 1' : '';
+
+	$nocomment = false;
+
+	if (!$type) {
+		$s .= $type;
+	} elseif ($type == 'text' || $type == 'password' || $type == 'number') {
+		}--><!--{block return}-->
+			<input name="$varname" value="$value" type="$type" class="px" {$check[disabled]} {$extra} />
+		<!--{/block}--><!--{eval
+	} elseif($type == 'filetext') {
+		$defaulttype = $value ? 1 : 0;
+		$id = 'file'.random(2);
+}--><!--{block return}-->
+
+<script>
+function _{$type}_{$id}(varname, id, id2){
+	jQuery('#'+id).attr('name', 'TMP' + varname).hide();
+	jQuery('#'+id2).attr('name', varname).show();
+
+	jQuery('#'+id+'a').css({
+		'font-weight':''
+	});
+	jQuery('#'+id2+'a').css({
+		'font-weight':'bold'
+	});
+}
+</script>
+
+<span class="btn_block">
+	<input type="file" class="pf" value="" name="TMP{$varname}" style="display:none" id="{$varname}_0" {$extra}>
+	<input type="text" class="px" value="$value" name="{$varname}" style="display:" id="{$varname}_1" {$extra}>
+</span>
+
+<span class="btn_block_switch">
+	<a onclick="_{$type}_{$id}('{$varname}', '{$varname}_1', '{$varname}_0')" href="javascript:;" style="" id="{$varname}_0a">上傳文件</a>
+	&nbsp;<a onclick="_{$type}_{$id}('{$varname}', '{$varname}_0', '{$varname}_1')" href="javascript:;" style="font-weight:bold" id="{$varname}_1a">輸入 URL</a>
+</span>
+
+<!--{/block}--><!--{eval
+	} else {
+		$s .= $type;
+	}
+}-->
+<!--{eval return $s.$return;}-->
+<!--{eval
+}
+}-->
