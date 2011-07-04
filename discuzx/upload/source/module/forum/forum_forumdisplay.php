@@ -120,6 +120,15 @@ if($_G['forum']['status'] == 3) {
 	$seodata['second'] = $nav['second']['name'];
 	$seodata['gdes'] = $_G['forum']['description'];
 	$forumseoset = array();
+
+	// bluelovers
+	// 以 bbcode 解析 群組描述
+	// forum.php?mod=forumdisplay&action=list&fid=229#groupnav
+	if ($_G['forum']['description']) {
+		require_once libfile('function/discuzcode');
+		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	}
+	// bluelovers
 }
 $_G['forum']['banner'] = get_forumimg($_G['forum']['banner']);
 

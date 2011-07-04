@@ -67,7 +67,7 @@ if($_G['fid']) {
 	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
 
 	// bluelovers
-	// 以 bbocde 解析 群組描述
+	// 以 bbcode 解析 群組描述
 	if ($action != 'manage') {
 		require_once libfile('function/discuzcode');
 		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
@@ -329,9 +329,6 @@ if($action == 'index') {
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'manage'){
-	/**
-	 * 群組 > 管理群組
-	 **/
 	if(!$_G['forum']['ismoderator']) {
 		showmessage('group_admin_noallowed');
 	}
@@ -347,6 +344,9 @@ if($action == 'index') {
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
+		/**
+		 * 群組 > 管理群組
+		 **/
 		$domainlength = checkperm('domainlength');
 		if(submitcheck('groupmanage')) {
 			$forumarr = array();
@@ -478,7 +478,7 @@ if($action == 'index') {
 				$iconsql .= ", banner=''";
 				@unlink($_G['forum']['banner']);
 			}
-			$_G['gp_descriptionnew'] = nl2br(dhtmlspecialchars(censor(trim($_G['gp_descriptionnew']))));
+			$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
 			$censormod = censormod($_G['gp_descriptionnew']);
 			if($censormod) {
 				showmessage('group_description_failed');
@@ -494,7 +494,7 @@ if($action == 'index') {
 			$firstgid = $_G['cache']['grouptype']['second'][$_G['forum']['fup']]['fup'];
 			$groupselect = get_groupselect($firstgid, $_G['forum']['fup']);
 			$gviewpermselect = $jointypeselect = array('','','');
-			$_G['forum']['descriptionnew'] = str_replace("<br />", '', $_G['forum']['description']);
+			$_G['forum']['descriptionnew'] = $_G['forum']['description'];
 			$jointypeselect[$_G['forum']['jointype']] = 'checked="checked"';
 			$gviewpermselect[$_G['forum']['gviewperm']] = 'checked="checked"';
 			if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {
@@ -726,6 +726,13 @@ if($action == 'index') {
 	} else {
 		showmessage('undefined_action');
 	}
+
+	// bluelovers
+	// 以 bbcode 解析 群組描述
+	require_once libfile('function/discuzcode');
+	$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	// bluelovers
+
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {
