@@ -347,8 +347,6 @@ class image {
 					$bg = imagecolortransparent($dst_photo, imagecolorallocatealpha($dst_photo, 255, 255, 255, 127));
 				    imagefill($dst_photo, 0, 0, $bg);
 				    imagefilledrectangle($dst_photo, 0, 0, $cutw, $cuth, $bg);
-
-					@$imagefunc($dst_photo, $this->target.'.2.1.png');
 					// bluelovers
 
 					/**
