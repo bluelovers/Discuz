@@ -726,6 +726,13 @@ if($action == 'index') {
 	} else {
 		showmessage('undefined_action');
 	}
+
+	// bluelovers
+	// 以 bbcode 解析 群組描述
+	require_once libfile('function/discuzcode');
+	$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	// bluelovers
+
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {
