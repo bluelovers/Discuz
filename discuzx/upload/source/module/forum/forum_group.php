@@ -415,7 +415,11 @@ if($action == 'index') {
 			} else {
 				$iconnew = $_G['gp_iconnew'];
 			}
+			if ($_FILES['bannernew']) {
 			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+			} else {
+				$bannernew = $_G['gp_bannernew'];
+			}
 			if($iconnew) {
 				$iconsql .= ", icon='$iconnew'";
 				$group_recommend = unserialize($_G['setting']['group_recommend']);
