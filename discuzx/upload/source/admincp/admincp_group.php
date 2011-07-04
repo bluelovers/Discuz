@@ -448,7 +448,30 @@ var rowtypedata = [
 		}
 		// bluelovers
 
-		$bannernew = upload_icon_banner($group, $_FILES['bannernew'], 'banner');
+		// bluelovers
+		if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
+		// bluelovers
+			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+		// bluelovers
+		} else {
+			$bannernew = $_G['gp_bannernew'];
+
+			if($bannernew) {
+				$_icon = $bannernew;
+
+				$_valueparse = parse_url($_icon);
+				if(!isset($_valueparse['host'])) {
+					$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+				}
+				$_info = array();
+				$_info = @getimagesize($_icon);
+				if($_info[0] <= 0 || $_info[1] <= 0) {
+					$bannernew = '';
+				}
+			}
+		}
+		// bluelovers
+
 		if($iconnew) {
 			$icondata['icon'] = $iconnew;
 		}
