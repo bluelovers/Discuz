@@ -260,13 +260,13 @@ class image {
 		imagealphablending($copy_photo, false);
 		imagesavealpha($copy_photo, true);
 
-		imagecolortransparent($copy_photo, imagecolorallocatealpha($thumb_photo, 0, 0, 0, 127));
+//		imagecolortransparent($copy_photo, imagecolorallocatealpha($copy_photo, 0, 0, 0, 127));
 		// bluelovers
 
 		imagecopy($copy_photo, $attach_photo ,0, 0, 0, 0, $this->imginfo['width'], $this->imginfo['height']);
 		$attach_photo = $copy_photo;
 
-		// temp debug code
+		// temp debug code - 此階段保有原尺寸以及透明
 		@$imagefunc($attach_photo, $this->target.'.1.png');
 
 		switch($this->param['thumbtype']) {
