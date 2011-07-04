@@ -28,13 +28,13 @@ function _{$type}_{$id}(varname, id, id2){
 </script>
 
 <span class="btn_block">
-	<input type="file" class="txt uploadbtn marginbot" value="" name="TMP{$varname}" style="display:none" id="file05_0">
-	<input type="text" class="txt marginbot" value="$value" name="{$varname}" style="display:" id="file05_1">
+	<input type="file" class="pf" value="" name="TMP{$varname}" style="display:none" id="{$varname}_0" size="25">
+	<input type="text" class="px" value="$value" name="{$varname}" style="display:" id="{$varname}_1" size="25">
 </span>
 
 <span class="btn_block_switch">
-	<a onclick="_{$type}_{$id}('{$varname}', 'file05_1', 'file05_0')" href="javascript:;" style="" id="file05_0a">上傳文件</a>
-	&nbsp;<a onclick="_{$type}_{$id}('{$varname}', 'file05_0', 'file05_1')" href="javascript:;" style="font-weight:bold" id="file05_1a">輸入 URL</a>
+	<a onclick="_{$type}_{$id}('{$varname}', '{$varname}_1', '{$varname}_0')" href="javascript:;" style="" id="{$varname}_0a">上傳文件</a>
+	&nbsp;<a onclick="_{$type}_{$id}('{$varname}', '{$varname}_0', '{$varname}_1')" href="javascript:;" style="font-weight:bold" id="{$varname}_1a">輸入 URL</a>
 </span>
 
 <!--{/block}--><!--{eval
