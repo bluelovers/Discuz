@@ -36,6 +36,10 @@ p.emp { color: red; }
 .xs2
 { font: {FONTSIZE} {FONT} !important; }
 
+/* 表情 */
+.sllt { max-width: 400px; }
+.slg { min-height:33px; }
+
 /* avatar */
 
 .avatar_small { max-height: 48px; max-width: 48px; }

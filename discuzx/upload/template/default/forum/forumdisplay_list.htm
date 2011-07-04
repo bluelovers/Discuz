@@ -152,28 +152,29 @@
 									</td>
 									<!--{/if}-->
 									<th class="$thread[folder]">
+										<span>
 										<!--{hook/forumdisplay_thread $key}-->
 										<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 												<!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
 										$thread[typehtml] $thread[sorthtml]
 										<!--{if $thread['moved']}-->
-											{lang thread_moved}:<!--{eval $thread[tid]=$thread[closed];}-->
+											<span>{lang thread_moved}:</span><!--{eval $thread[tid]=$thread[closed];}-->
 										<!--{/if}-->
 										<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} class="xst" >$thread[subject]</a>
 										<!--{if $thread[icon] >= 0}-->
 											<img src="{STATICURL}image/stamp/{$_G[cache][stamps][$thread[icon]][url]}" alt="{$_G[cache][stamps][$thread[icon]][text]}" align="absmiddle" />
 										<!--{/if}-->
 										<!--{if $stemplate && $sortid}-->$stemplate[$sortid][$thread[tid]]<!--{/if}-->
-										<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
+										<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
 										<!--{if $thread['price'] > 0}-->
 											<!--{if $thread['special'] == '3'}-->
 											- <span class="xi1">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 											<!--{else}-->
-											- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
+											- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
 											<!--{/if}-->
 										<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
-											- [{lang reward_solved}]
+											- <span>[{lang reward_solved}]</span>
 										<!--{/if}-->
 										<!--{if $thread['attachment'] == 2}-->
 											<img src="{STATICURL}image/filetype/image_s.gif" alt="attach_img" title="{lang attach_img}" align="absmiddle" />
@@ -192,10 +193,10 @@
 											<!--{/if}-->
 											<!--{if $thread['rate'] > 0}-->
 												<img src="{IMGDIR}/agree.gif" align="absmiddle" alt="agree" title="{lang rate_credit_add}" />
-												<!--{if $thread['rate'] > 1}--> [<span class="rate_credit_add">+{$thread[rate]}</span>]<!--{/if}-->
+											<!--{if $thread['rate'] > 1}--> <span>[<span class="rate_credit_add">+{$thread[rate]}</span>]</span><!--{/if}-->
 											<!--{elseif $thread['rate'] < 0}-->
 												<img src="{IMGDIR}/disagree.gif" align="absmiddle" alt="disagree" title="{lang posts_deducted}" />
-												<!--{if $thread['rate'] < -1}--> [<strong class="rate_credit_reduce">{$thread[rate]}</strong>]<!--{/if}-->
+											<!--{if $thread['rate'] < -1}--> <span>[<strong class="rate_credit_reduce">{$thread[rate]}</strong>]</span><!--{/if}-->
 											<!--{/if}-->
 										<!--{/if}-->
 										<!--{if $thread['replycredit'] > 0}-->
@@ -215,6 +216,7 @@
 												<span class="fromg xg1"> [{lang from}: <a href="forum.php?mod=forumdisplay&fid={$groupnames[$thread[tid]][fid]}" target="_blank" class="xg1">{$groupnames[$thread[tid]][name]}</a>]</span>
 											<!--{/if}-->
 										<!--{/if}-->
+										</span>
 									</th>
 									<td class="by">
 										<!--{hook/forumdisplay_author $key}-->
