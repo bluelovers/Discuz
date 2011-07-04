@@ -251,8 +251,18 @@ class image {
 			return $attach_photo;
 		}
 		$copy_photo = imagecreatetruecolor($this->imginfo['width'], $this->imginfo['height']);
+		/*
 		$bg = imagecolorallocate($copy_photo, 255, 255, 255);
 		imagefill($copy_photo, 0, 0, $bg);
+		*/
+
+		// bluelovers
+		imagealphablending($copy_photo, false);
+		imagesavealpha($copy_photo, true);
+
+		imagecolortransparent($copy_photo, imagecolorallocatealpha($thumb_photo, 0, 0, 0, 127));
+		// bluelovers
+
 		imagecopy($copy_photo, $attach_photo ,0, 0, 0, 0, $this->imginfo['width'], $this->imginfo['height']);
 		$attach_photo = $copy_photo;
 
