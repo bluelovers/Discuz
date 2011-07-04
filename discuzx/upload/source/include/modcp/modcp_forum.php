@@ -46,8 +46,8 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 				$rulesnew = $alloweditrules ? addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(stripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1))) : addslashes($_G['forum']['rules']);
 				DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
 
-				$_G['forum']['description'] = html2bbcode(dstripslashes($descnew));
-				$_G['forum']['rules'] = html2bbcode(dstripslashes($rulesnew));
+				$_G['forum']['description'] = dhtmlspecialchars(dstripslashes($descnew));
+				$_G['forum']['rules'] = dhtmlspecialchars(dstripslashes($rulesnew));
 
 			} else {
 				$_G['forum']['description'] = dhtmlspecialchars($_G['forum']['description']);
