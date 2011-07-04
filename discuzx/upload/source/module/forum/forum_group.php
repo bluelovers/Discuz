@@ -410,8 +410,12 @@ if($action == 'index') {
 
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
+
+			// bluelovers
 			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
+			// bluelovers
 				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+			// bluelovers
 			} else {
 				$iconnew = $_G['gp_iconnew'];
 
@@ -427,11 +431,30 @@ if($action == 'index') {
 					}
 				}
 			}
+			// bluelovers
+
+			// bluelovers
 			if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
+			// bluelovers
 				$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+			// bluelovers
 			} else {
 				$bannernew = $_G['gp_bannernew'];
+
+				if($bannernew) {
+					$_valueparse = parse_url($bannernew);
+					if(!isset($_valueparse['host'])) {
+						$bannernew = $_G['setting']['attachurl'].'common/'.$bannernew;
+					}
+					$_info = array();
+					$_info = @getimagesize($bannernew);
+					if($info[0] <= 0 || $info[1] <= 0) {
+						$bannernew = '';
+					}
+				}
 			}
+			// bluelovers
+
 			if($iconnew) {
 				$iconsql .= ", icon='$iconnew'";
 				$group_recommend = unserialize($_G['setting']['group_recommend']);
