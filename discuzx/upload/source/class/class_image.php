@@ -311,13 +311,8 @@ class image {
 //		imagecolortransparent($copy_photo, imagecolorallocatealpha($copy_photo, 0, 0, 0, 127));
 		// bluelovers
 
-		@$imagefunc($copy_photo, $this->target.'.1.1.png');
-
 		imagecopy($copy_photo, $attach_photo ,0, 0, 0, 0, $this->imginfo['width'], $this->imginfo['height']);
 		$attach_photo = $copy_photo;
-
-		// temp debug code - 此階段保有原尺寸以及透明
-		@$imagefunc($attach_photo, $this->target.'.1.png');
 
 		switch($this->param['thumbtype']) {
 			case 'fixnone':
@@ -347,9 +342,7 @@ class image {
 					// 加上此段代碼後可成功在 picasa 內正常顯示透明
 					imagealphablending($dst_photo, false);
 					imagesavealpha($dst_photo, true);
-					// bluelovers
 
-					// bluelovers
 					// 此段代碼搭配 imagecopymerge_alpha 則可成功合併為透明圖
 					$bg = imagecolortransparent($dst_photo, imagecolorallocatealpha($dst_photo, 255, 255, 255, 127));
 				    imagefill($dst_photo, 0, 0, $bg);
@@ -367,10 +360,6 @@ class image {
 					 * @see http://www.php.net/manual/en/function.imagecopymerge.php#102496
 					 **/
 					$this->imagecopymerge_alpha($dst_photo, $attach_photo, 0, 0, $startx, $starty, $cutw, $cuth, 100);
-
-					// temp debug code - 此階段裁切為正方形(成功透明)
-					@$imagefunc($dst_photo, $this->target.'.2.png');
-
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 
 					// bluelovers
@@ -381,9 +370,6 @@ class image {
 					// bluelovers
 
 					imagecopyresampled($thumb_photo, $dst_photo ,0, 0, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $cutw, $cuth);
-
-					// temp debug code - 進行縮圖(成功保持透明)
-					@$imagefunc($thumb_photo, $this->target.'.3.png');
 				} else {
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 
@@ -402,9 +388,6 @@ class image {
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = ($this->param['thumbheight'] - $this->imginfo['height']) / 2;
 					$this->imagecopymerge_alpha($thumb_photo, $attach_photo, $startx, $starty, 0, 0, $this->imginfo['width'], $this->imginfo['height'], 100);
-
-					// temp debug code
-					@$imagefunc($dst_photo, $this->target.'.4.png');
 				}
 				break;
 		}
