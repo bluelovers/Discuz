@@ -354,10 +354,18 @@ class image {
 					@$imagefunc($dst_photo, $this->target.'.2.png');
 
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
+
+					// bluelovers
+					imagealphablending($thumb_photo, false);
+					imagesavealpha($thumb_photo, true);
+
+					imagecolortransparent($thumb_photo, imagecolorallocatealpha($thumb_photo, 0, 0, 0, 127));
+					// bluelovers
+
 					imagecopyresampled($thumb_photo, $dst_photo ,0, 0, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $cutw, $cuth);
 
-					// temp debug code
-					@$imagefunc($dst_photo, $this->target.'.3.png');
+					// temp debug code - 進行縮圖(成功保持透明)
+					@$imagefunc($thumb_photo, $this->target.'.3.png');
 				} else {
 					$thumb_photo = imagecreatetruecolor($this->param['thumbwidth'], $this->param['thumbheight']);
 					$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
