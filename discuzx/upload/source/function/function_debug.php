@@ -120,8 +120,8 @@ EOF;
 	foreach (get_included_files() as $fn) {
 
 		// bluelovers
-		if (class_exists('Scorpio_File')) {
-			$fn = Scorpio_File::remove_root($fn, DISCUZ_ROOT);
+		if (class_exists('scofile')) {
+			$fn = scofile::remove_root($fn, DISCUZ_ROOT);
 		} else {
 			$fn = $__func($fn, DISCUZ_ROOT);
 		}
