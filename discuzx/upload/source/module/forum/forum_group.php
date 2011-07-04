@@ -301,7 +301,7 @@ if($action == 'index') {
 		if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE status='3' AND name='$name'"), 0)) {
 			showmessage('group_name_exist');
 		}
-		$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+		$descriptionnew = censor(trim($_G['gp_descriptionnew']));
 		$censormod = censormod($descriptionnew);
 		if($censormod) {
 			showmessage('group_description_failed');
@@ -478,7 +478,7 @@ if($action == 'index') {
 				$iconsql .= ", banner=''";
 				@unlink($_G['forum']['banner']);
 			}
-			$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+			$_G['gp_descriptionnew'] = censor(trim($_G['gp_descriptionnew']));
 			$censormod = censormod($_G['gp_descriptionnew']);
 			if($censormod) {
 				showmessage('group_description_failed');
@@ -494,7 +494,7 @@ if($action == 'index') {
 			$firstgid = $_G['cache']['grouptype']['second'][$_G['forum']['fup']]['fup'];
 			$groupselect = get_groupselect($firstgid, $_G['forum']['fup']);
 			$gviewpermselect = $jointypeselect = array('','','');
-			$_G['forum']['descriptionnew'] = $_G['forum']['description'];
+			$_G['forum']['descriptionnew'] = dhtmlspecialchars($_G['forum']['description']);
 			$jointypeselect[$_G['forum']['jointype']] = 'checked="checked"';
 			$gviewpermselect[$_G['forum']['gviewperm']] = 'checked="checked"';
 			if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {

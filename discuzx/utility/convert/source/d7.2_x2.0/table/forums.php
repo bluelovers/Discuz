@@ -19,10 +19,19 @@ if($start == 0) {
 	$db_target->query("TRUNCATE $table_target");
 }
 
+// bluelovers
+require_once DISCUZ_ROOT.'./include/editor.func.php';
+// bluelovers
+
 $query = $db_source->query("SELECT * FROM $table_source WHERE fid>'$start' ORDER BY fid LIMIT $limit");
 while ($row = $db_source->fetch_array($query)) {
 
 	$nextid = $row['fid'];
+
+	// bluelovers
+	$row['description'] = html2bbcode($row['description'], 0, 1);
+	$row['rules'] = html2bbcode($row['rules'], 0, 1);
+	// bluelovers
 
 	$row  = daddslashes($row, 1);
 
