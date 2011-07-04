@@ -84,7 +84,7 @@
 						<th>{lang group_image}</th>
 						<td>
 							<!--input type="file" name="bannernew" id="bannernew" class="pf" size="25" /-->
-							<!--{echo tpl_showsetting('', 'bannernew', '', $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
+							<!--{echo tpl_showsetting('', 'bannernew', $_G['forum']['banner'], $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
 
 				<!--{if $_G['forum']['banner']}-->
 							<label><input type="checkbox" name="deletebanner" class="pc" value="1" />{lang group_no_image}</label>
@@ -107,7 +107,7 @@
 						<th>{lang group_icon}</th>
 						<td>
 							<!--input type="file" id="iconnew" class="pf vm" size="25" name="iconnew" /-->
-							<!--{echo tpl_showsetting('', 'iconnew', '', $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
+							<!--{echo tpl_showsetting('', 'iconnew', $_G['forum']['icon'], $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
 							<p class="d">
 								{lang group_icon_resize} &nbsp;
 								<!--{if $_G[setting][group_imgsizelimit]}-->
