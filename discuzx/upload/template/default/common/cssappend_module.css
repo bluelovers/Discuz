@@ -10,3 +10,8 @@
 		font-family:Verdana;
 	}
 /** end **/
+
+/** forum::viewthread,group::viewthread,forum::trade,portal::view **/
+	/* 圖片縮放的背景 */
+	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
+/** end **/
