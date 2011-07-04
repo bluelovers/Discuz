@@ -8,7 +8,13 @@ function tpl_showsetting($setname, $varname, $value, $type = 'radio', $disabled 
 
 	$nocomment = false;
 
-	if($type == 'filetext') {
+	if (!$type) {
+		$s .= $type;
+	} elseif ($type == 'text' || $type == 'password' || $type == 'number') {
+		}--><!--{block return}-->
+			<input name="$varname" value="$value" type="$type" class="px" {$check[disabled]} {$extra} />
+		<!--{/block}--><!--{eval
+	} elseif($type == 'filetext') {
 		$defaulttype = $value ? 1 : 0;
 		$id = 'file'.random(2);
 }--><!--{block return}-->
@@ -28,8 +34,8 @@ function _{$type}_{$id}(varname, id, id2){
 </script>
 
 <span class="btn_block">
-	<input type="file" class="pf" value="" name="TMP{$varname}" style="display:none" id="{$varname}_0" size="25">
-	<input type="text" class="px" value="$value" name="{$varname}" style="display:" id="{$varname}_1" size="25">
+	<input type="file" class="pf" value="" name="TMP{$varname}" style="display:none" id="{$varname}_0" {$extra}>
+	<input type="text" class="px" value="$value" name="{$varname}" style="display:" id="{$varname}_1" {$extra}>
 </span>
 
 <span class="btn_block_switch">
@@ -38,9 +44,11 @@ function _{$type}_{$id}(varname, id, id2){
 </span>
 
 <!--{/block}--><!--{eval
+	} else {
+		$s .= $type;
 	}
 }-->
-<!--{eval return $return;}-->
+<!--{eval return $s.$return;}-->
 <!--{eval
 }
 }-->
