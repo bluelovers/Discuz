@@ -301,7 +301,7 @@ if($action == 'index') {
 		if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE status='3' AND name='$name'"), 0)) {
 			showmessage('group_name_exist');
 		}
-		$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+		$descriptionnew = censor(trim($_G['gp_descriptionnew']));
 		$censormod = censormod($descriptionnew);
 		if($censormod) {
 			showmessage('group_description_failed');
@@ -478,7 +478,7 @@ if($action == 'index') {
 				$iconsql .= ", banner=''";
 				@unlink($_G['forum']['banner']);
 			}
-			$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+			$_G['gp_descriptionnew'] = censor(trim($_G['gp_descriptionnew']));
 			$censormod = censormod($_G['gp_descriptionnew']);
 			if($censormod) {
 				showmessage('group_description_failed');
