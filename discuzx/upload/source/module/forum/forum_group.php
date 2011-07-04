@@ -411,7 +411,7 @@ if($action == 'index') {
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
 			if ($_FILES['iconnew']) {
-			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
 			}
 			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
 			if($iconnew) {
