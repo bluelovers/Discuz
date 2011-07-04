@@ -9,6 +9,8 @@
 		font-size:10px;
 		font-family:Verdana;
 	}
+
+	.tl th * { vertical-align: middle; }
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
