@@ -333,6 +333,13 @@ class image {
 					$dst_photo = imagecreatetruecolor($cutw, $cuth);
 
 					// bluelovers
+					// 加上此段代碼後可成功在 picasa 內正常顯示透明
+					imagealphablending($dst_photo, false);
+					imagesavealpha($dst_photo, true);
+					// bluelovers
+
+					// bluelovers
+					// 此段代碼搭配 imagecopymerge_alpha 則可成功合併為透明圖
 					$bg = imagecolortransparent($dst_photo, imagecolorallocatealpha($dst_photo, 255, 255, 255, 127));
 				    imagefill($dst_photo, 0, 0, $bg);
 				    imagefilledrectangle($dst_photo, 0, 0, $cutw, $cuth, $bg);
