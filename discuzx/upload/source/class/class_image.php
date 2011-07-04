@@ -381,7 +381,7 @@ class image {
 					imagesavealpha($thumb_photo, true);
 					// bluelovers
 
-					$bgcolor = imagecolorallocate($thumb_photo, 255, 255, 255);
+					$bgcolor = imagecolortransparent($thumb_photo, imagecolorallocatealpha($thumb_photo, 255, 255, 255, 127));
 					imagefill($thumb_photo, 0, 0, $bgcolor);
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = ($this->param['thumbheight'] - $this->imginfo['height']) / 2;
