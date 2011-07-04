@@ -1,8 +1,45 @@
 <!--{eval
 function tpl_showsetting($setname, $varname, $value, $type = 'radio', $disabled = '', $hidden = 0, $comment = '', $extra = '', $setid = '') {
-global $_G;
+	global $_G;
+	$s = "\n";
+	$check = array();
+	$check['disabled'] = $disabled ? ($disabled == 'readonly' ? ' readonly' : ' disabled') : '';
+	$check['disabledaltstyle'] = $disabled ? ', 1' : '';
+
+	$nocomment = false;
+
+	if($type == 'filetext') {
+		$defaulttype = $value ? 1 : 0;
+		$id = 'file'.random(2);
+}--><!--{block return}-->
+
+<script>
+function _{$type}_{$id}(varname, id, id2){
+	jQuery('#'+id).attr('name', 'TMP' + varname).hide();
+	jQuery('#'+id2).attr('name', varname).show();
+
+	jQuery('#'+id+'a').css({
+		'font-weight':''
+	});
+	jQuery('#'+id2+'a').css({
+		'font-weight':'bold'
+	});
+}
+</script>
+
+<span class="btn_block">
+	<input type="file" class="txt uploadbtn marginbot" value="" name="TMP{$varname}" style="display:none" id="file05_0">
+	<input type="text" class="txt marginbot" value="$value" name="{$varname}" style="display:" id="file05_1">
+</span>
+
+<span class="btn_block_switch">
+	<a onclick="_{$type}_{$id}('{$varname}', 'file05_1', 'file05_0')" href="javascript:;" style="" id="file05_0a">上傳文件</a>
+	&nbsp;<a onclick="_{$type}_{$id}('{$varname}', 'file05_0', 'file05_1')" href="javascript:;" style="font-weight:bold" id="file05_1a">輸入 URL</a>
+</span>
+
+<!--{/block}--><!--{eval
+	}
 }-->
-<!--{block return}--><!--{/block}-->
 <!--{eval return $return;}-->
 <!--{eval
 }
