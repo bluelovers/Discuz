@@ -426,7 +426,7 @@ if($action == 'index') {
 					}
 					$_info = array();
 					$_info = @getimagesize($iconnew);
-					if($info[0] <= 0 || $info[1] <= 0) {
+					if($_info[0] <= 0 || $_info[1] <= 0) {
 						$iconnew = '';
 					}
 				}
@@ -448,7 +448,7 @@ if($action == 'index') {
 					}
 					$_info = array();
 					$_info = @getimagesize($bannernew);
-					if($info[0] <= 0 || $info[1] <= 0) {
+					if($_info[0] <= 0 || $_info[1] <= 0) {
 						$bannernew = '';
 					}
 				}
