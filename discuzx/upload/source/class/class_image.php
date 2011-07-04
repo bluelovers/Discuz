@@ -328,6 +328,12 @@ class image {
 					$cx = $this->imginfo['width'];
 					$cy = $this->imginfo['height'];
 					$thumb_photo = imagecreatetruecolor($thumb['width'], $thumb['height']);
+
+					// bluelovers
+					imagealphablending($thumb_photo, false);
+					imagesavealpha($thumb_photo, true);
+					// bluelovers
+
 					imagecopyresampled($thumb_photo, $attach_photo ,0, 0, 0, 0, $thumb['width'], $thumb['height'], $cx, $cy);
 				}
 				break;
@@ -390,7 +396,7 @@ class image {
 					imagefill($thumb_photo, 0, 0, $bgcolor);
 
 					// bluelovers
-					imagefilledrectangle($thumb_photo, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $bg);
+					imagefilledrectangle($thumb_photo, 0, 0, $this->param['thumbwidth'], $this->param['thumbheight'], $bgcolor);
 					// bluelovers
 
 					$startx = ($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
