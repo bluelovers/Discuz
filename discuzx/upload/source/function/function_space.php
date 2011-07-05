@@ -184,6 +184,19 @@ function getblockhtml($blockname,$parameters = array()) {
 			break;
 		case 'statistic':
 			space_merge($space, 'count');
+
+			// bluelovers
+			// 如果在 界面 > 導航設置 > 家園導航 內設置為隱藏時則一併封鎖在個人空間內隱藏連結
+			foreach($_G['setting']['spacenavs'] as $_k => $_v) {
+				if (!empty($_v)
+					&& $_v['available'] == 0
+					&& $_v['level'] == 0
+				) {
+					$parameters['ban'.$_k.'s'] = 1;
+				}
+			}
+			// bluelovers
+
 			$html .= '<p class="mbm xw1">';
 			if(empty($parameters['banviews'])) $html .= lang('space', 'space_views', array('views' => $space['views'] ? $space['views'] : '--'));
 			$html .= '</p><ul class="xl xl2 cl">';
