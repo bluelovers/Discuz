@@ -74,7 +74,7 @@
 		// fixed for IE9, see #8346
 		rupper = /([A-Z]|^ms)/g,
 		rnumpx = /^-?\d+(?:px)?$/i,
-		rnum = /^-?\d/,
+		rnum = /^[+\-]?\d+$/,
 		rrelNum = /^[+\-]=/,
 		rrelNumFilter = /[^+\-\.\de]+/g,
 
@@ -101,6 +101,8 @@
 
 	        if (!y) return;
 
+	        if (rnum.test(x)) x += 'px';
+
 	        $element.css('background-position', get_position([x, y]));
 	    }
 	};
@@ -122,6 +124,8 @@
 	        var x = get_coordinate(1, $element);
 
 	        if (!x) return;
+
+	        if (rnum.test(y)) y += 'px';
 
 	        $element.css('background-position', get_position([x, y]));
 	    }
