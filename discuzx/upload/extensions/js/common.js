@@ -140,3 +140,53 @@
 	}
 
 })(jQuery);
+
+(function($, undefined){
+	$(window).load(function(){
+		function _body_css() {
+			var _not_loaded = true;
+			try {
+				if (_elem.css('background-position-y') != (jQuery("body").css('background-position-y') + h)) {
+					_not_loaded = false;
+
+					jQuery("body").css('background-position-y', '+=' + h);
+				}
+			} catch(e) {
+				error_i++;
+			}
+
+			if (_not_loaded && error_i < 30) {
+				setTimeout(function(){_body_css()}, 100);
+				return;
+			}
+		}
+
+		var _elem = $('<div />');
+
+		var h = $('#controlpanel').outerHeight() - ($('#controlpanel').outerHeight() - $('#controlpanel').height()) - 3;
+
+		if (h > 0) {
+			jQuery("body").css('background-position-y', '+=' + h);
+		}
+
+		var error_i = 0;
+		var spaceDiy = window.spaceDiy ? window.spaceDiy : undefined;
+
+		if (jQuery('#controlpanel').size() > 0 && spaceDiy && spaceDiy != undefined) {
+			spaceDiy._changeStyle = spaceDiy.changeStyle;
+
+			spaceDiy.changeStyle = function (t) {
+				error_i = 0;
+
+				jQuery("body").css('background-position', '');
+
+				_elem.css('background-position-y', jQuery("body").css('background-position-y'));
+
+				spaceDiy._changeStyle(t);
+
+				setTimeout(function(){_body_css()}, 500);
+			};
+		}
+	});
+
+})(jQuery);
