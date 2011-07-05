@@ -88,6 +88,16 @@ EOF
 */
 
 		$hook_data .= $ss;
+	} elseif ($hookid == 'global_header_javascript') {
+		$ss = <<<EOF
+<script type="text/javascript" src="{$path}extensions/js/common.js"></script>
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
 	}
 }
 
