@@ -3,6 +3,7 @@
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
 	<title><!--{if !empty($navtitle)}-->$navtitle - <!--{/if}--><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> Powered by Discuz!</title>
+	<!--{hook/global_header_seohead}-->
 	$_G['setting']['seohead']
 
 	<meta name="keywords" content="{if !empty($metakeywords)}{echo htmlspecialchars($metakeywords)}{/if}" />
