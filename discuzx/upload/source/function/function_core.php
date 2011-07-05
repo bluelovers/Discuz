@@ -1211,7 +1211,7 @@ function output() {
 		// event: 'Func_output:Before_rewrite_content_echo'
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
-				->run(array(&$content, &$in_ajax));
+				->run(array(&$content));
 		}
 		// bluelovers
 
