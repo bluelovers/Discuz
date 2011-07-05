@@ -21,7 +21,7 @@
 			<!--{if empty($personalnv['banitems']['blog'])}-->
 			<li><a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me&from=space"><!--{if !empty($personalnv['items']['blog'])}-->$personalnv['items']['blog']<!--{else}-->{lang blog}<!--{/if}--></a></li>
 			<!--{/if}-->
-			<!--{if empty($personalnv['banitems']['album'])}-->
+			<!--{if empty($personalnv['banitems']['album']) && (isset($_G['setting']['spacenavs'][album]) && $_G['setting']['spacenavs'][album]['available'] > 0)}-->
 			<li><a href="home.php?mod=space&uid=$space[uid]&do=album&view=me&from=space"><!--{if !empty($personalnv['items']['album'])}-->$personalnv['items']['album']<!--{else}-->{lang album}<!--{/if}--></a></li>
 			<!--{/if}-->
 			<!--{if $_G['setting']['allowviewuserthread'] !== false && (empty($personalnv['banitems']['topic']))}-->
