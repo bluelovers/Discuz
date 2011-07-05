@@ -72,4 +72,23 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	}
 }
 
+Scorpio_Hook::add('Tpl_Func_hooktags:Before', '_eTpl_Func_hooktags_Before');
+
+function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
+	global $_G;
+
+	if ($hookid == 'global_header_seohead') {
+		$ss = <<<EOF
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
+	}
+}
+
 ?>
