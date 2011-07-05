@@ -69,8 +69,24 @@
 	var var_name_x = $.camelCase('background-position-x');
 	var var_name_y = $.camelCase('background-position-y');
 
+	var ralpha = /alpha\([^)]*\)/i,
+		ropacity = /opacity=([^)]*)/,
+		// fixed for IE9, see #8346
+		rupper = /([A-Z]|^ms)/g,
+		rnumpx = /^-?\d+(?:px)?$/i,
+		rnum = /^-?\d/,
+		rrelNum = /^[+\-]=/,
+		rrelNumFilter = /[^+\-\.\de]+/g,
+
+		cssShow = { position: "absolute", visibility: "hidden", display: "block" },
+		cssWidth = [ "Left", "Right" ],
+		cssHeight = [ "Top", "Bottom" ],
+		_u;
+
 	$.cssHooks[var_name_x] = {
 	    get: function (element, computed, extra) {
+	    	var $element = $(element);
+
 	        var x = get_coordinate(1, $element);
 
 	        if (!x) return;
@@ -91,6 +107,8 @@
 
 	$.cssHooks[var_name_y] = {
 	    get: function (element, computed, extra) {
+	    	var $element = $(element);
+
 	        var y = get_coordinate(2, $element);
 
 	        if (!y) return;
