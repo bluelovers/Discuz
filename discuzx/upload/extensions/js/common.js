@@ -28,7 +28,10 @@
 	 * @author Kuchumov Nikolay
 	 * @email kuchumovn@gmail.com
 	 * @github kuchumovn
-	 */
+	 * @see http://forum.jquery.com/topic/jquery-css-background-position-firefox-opera-bug
+	 *
+	 * @author bluelovers
+	 **/
 	function get_background_position($element) {
 	    var position = $element.css('background-position')
 
@@ -63,7 +66,10 @@
 	    return coordinates[index - 1]
 	}
 
-	$.cssHooks['background_position_x'] = {
+	var var_name_x = $.camelCase('background-position-x');
+	var var_name_y = $.camelCase('background-position-y');
+
+	$.cssHooks[var_name_x] = {
 	    get: function (element, computed, extra) {
 	        var x = get_coordinate(1, $element)
 
@@ -83,7 +89,7 @@
 	    }
 	}
 
-	$.cssHooks['background_position_y'] = {
+	$.cssHooks[var_name_y] = {
 	    get: function (element, computed, extra) {
 	        var y = get_coordinate(2, $element)
 
@@ -101,12 +107,12 @@
 	    }
 	}
 
-	$.fx.step['background_position_x'] = function (fx) {
-	    $.cssHooks['background_position_x'].set(fx.elem, fx.now + fx.unit);
+	$.fx.step[var_name_x] = function (fx) {
+	    $.cssHooks[var_name_x].set(fx.elem, fx.now + fx.unit);
 	}
 
-	$.fx.step['background_position_y'] = function (fx) {
-	    $.cssHooks['background_position_y'].set(fx.elem, fx.now + fx.unit);
+	$.fx.step[var_name_y] = function (fx) {
+	    $.cssHooks[var_name_y].set(fx.elem, fx.now + fx.unit);
 	}
 
 })(jQuery);
