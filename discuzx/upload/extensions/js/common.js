@@ -112,6 +112,8 @@
 	        var y = get_coordinate(2, $element);
 
 	        if (!y) return;
+
+	        return y;
 	    },
 
 	    set: function (element, y) {
