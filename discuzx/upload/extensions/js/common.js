@@ -33,37 +33,37 @@
 	 * @author bluelovers
 	 **/
 	function get_background_position($element) {
-	    var position = $element.css('background-position')
+	    var position = $element.css('background-position');
 
-	    if (!position) position = 'auto'
+	    if (!position) position = 'auto';
 
-	    return position
+	    return position;
 	}
 
 	function get_coordinates(position) {
-	    var coordinates = position.split(' ')
+	    var coordinates = position.split(' ');
 
-	    if (coordinates.length != 2) return
+	    if (coordinates.length != 2) return;
 
-	    return coordinates
+	    return coordinates;
 	}
 
 	function get_position(coordinates) {
-	    return coordinates.join(' ')
+	    return coordinates.join(' ');
 	}
 
 	function get_coordinate(index, $element) {
-	    var position = get_background_position($element)
+	    var position = get_background_position($element);
 
 	    if (position === 'auto') {
-	        return 'auto'
+	        return 'auto';
 	    }
 
-	    var coordinates = get_coordinates(position)
+	    var coordinates = get_coordinates(position);
 
-	    if (!coordinates) return
+	    if (!coordinates) return;
 
-	    return coordinates[index - 1]
+	    return coordinates[index - 1];
 	}
 
 	var var_name_x = $.camelCase('background-position-x');
@@ -71,41 +71,41 @@
 
 	$.cssHooks[var_name_x] = {
 	    get: function (element, computed, extra) {
-	        var x = get_coordinate(1, $element)
+	        var x = get_coordinate(1, $element);
 
-	        if (!x) return
+	        if (!x) return;
 
-	        return x
+	        return x;
 	    },
 
 	    set: function (element, x) {
-	        var $element = $(element)
+	        var $element = $(element);
 
-	        var y = get_coordinate(2, $element)
+	        var y = get_coordinate(2, $element);
 
-	        if (!y) return
+	        if (!y) return;
 
-	        $element.css('background-position', get_position([x, y]))
+	        $element.css('background-position', get_position([x, y]));
 	    }
-	}
+	};
 
 	$.cssHooks[var_name_y] = {
 	    get: function (element, computed, extra) {
-	        var y = get_coordinate(2, $element)
+	        var y = get_coordinate(2, $element);
 
-	        if (!y) return
+	        if (!y) return;
 	    },
 
 	    set: function (element, y) {
-	        var $element = $(element)
+	        var $element = $(element);
 
-	        var x = get_coordinate(1, $element)
+	        var x = get_coordinate(1, $element);
 
-	        if (!x) return
+	        if (!x) return;
 
-	        $element.css('background-position', get_position([x, y]))
+	        $element.css('background-position', get_position([x, y]));
 	    }
-	}
+	};
 
 	$.fx.step[var_name_x] = function (fx) {
 	    $.cssHooks[var_name_x].set(fx.elem, fx.now + fx.unit);
