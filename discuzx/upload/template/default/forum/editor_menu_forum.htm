@@ -4,7 +4,9 @@
 	<ul class="tb tb_s cl" id="{$editorid}_image_ctrl" style="margin-top: 0">
 		<li class="y"><span class="flbc" onclick="hideAttachMenu('image')">{lang close}</span></li>
 		<li class="current" id="{$editorid}_btn_www"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('www');">{lang e_img_www}</a></li>
-		<!--{if $_G['setting']['homestatus']}--><li id="{$editorid}_btn_albumlist"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('albumlist');">{lang e_img_albumlist}</a></li><!--{/if}-->
+		<!--{if $_G['setting']['homestatus']}-->
+			<li id="{$editorid}_btn_albumlist"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('albumlist');">{lang e_img_albumlist}</a></li>
+		<!--{/if}-->
 		<!--{if $allowpostimg}-->
 			<li id="{$editorid}_btn_imgattachlist"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('imgattachlist');">{lang e_img_attach}</a></li>
 			<!--{if $_G['setting']['swfupload'] != 1 && $allowuploadtoday}--><li id="{$editorid}_btn_local"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('local');">{lang normal_upload}</a></li><!--{/if}-->
