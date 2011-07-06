@@ -353,6 +353,29 @@ if($method == 'show_license') {
 		$sql = str_replace("\r\n", "\n", $sql);
 		runquery($sql);
 
+		// bluelovers
+		function _loop_glob($path, $mask = '*', $array = array()) {
+			$path = rtrim(str_replace('/./', '/', $path), '/').'/';
+			foreach (glob($path.$mask) as $f) {
+				$f = str_replace('/./', '/', $f);
+				if (is_dir($f)) {
+					_loop_glob($f, $mask, &$array);
+				} else {
+					$array[$f] = $f;
+				}
+			}
+			return $array;
+		}
+
+		// 增加額外安裝 SQL
+		$data_sco = _loop_glob('./data_sco', '*.sql');
+		foreach ($data_sco as $_f) {
+			$sql = file_get_contents(ROOT_PATH.'./install/'.$_f);
+			$sql = str_replace("\r\n", "\n", $sql);
+			runquery($sql);
+		}
+		// bluelovers
+
 		$onlineip = $_SERVER['REMOTE_ADDR'];
 		$timestamp = time();
 		$backupdir = substr(md5($_SERVER['SERVER_ADDR'].$_SERVER['HTTP_USER_AGENT'].substr($timestamp, 0, 4)), 8, 6);
