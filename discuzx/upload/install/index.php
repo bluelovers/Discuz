@@ -339,6 +339,20 @@ if($method == 'show_license') {
 			show_install();
 		}
 
+		// bluelovers
+		// DROP TABLES ALL
+		if ($step == 4 && $forceinstall) {
+			showjsmessage('DROP TABLES ... ');
+
+			$query = $db->query("SHOW TABLES");
+			while($_table = $db->fetch_row($query)) {
+				$db->query("DROP TABLES $_table[0]");
+			}
+
+			showjsmessage('DROP TABLES ... '.lang('succeed'));
+		}
+		// bluelovers
+
 		if(DZUCFULL) {
 			install_uc_server();
 		}
