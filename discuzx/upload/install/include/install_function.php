@@ -716,7 +716,7 @@ function runquery($sql) {
 		if($query) {
 
 			if(substr($query, 0, 12) == 'CREATE TABLE') {
-				$name = preg_replace("/CREATE TABLE ([a-z0-9_]+) .*/is", "\\1", $query);
+				$name = preg_replace("/CREATE TABLE (`?)([a-z0-9_]+)\\1 .*/is", "\\2", $query);
 				showjsmessage(lang('create_table').' '.$name.' ... '.lang('succeed'));
 				$db->query(createtable($query));
 			} else {
