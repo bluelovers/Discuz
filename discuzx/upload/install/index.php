@@ -356,6 +356,14 @@ if($method == 'show_license') {
 		// bluelovers
 		function _loop_glob($path, $mask = '*', $array = array()) {
 			$path = rtrim(str_replace('/./', '/', $path), '/').'/';
+
+			if ($mask != '*') {
+				foreach (glob($path.'*', GLOB_ONLYDIR) as $f) {
+					$f = str_replace('/./', '/', $f);
+					_loop_glob($f, $mask, &$array);
+				}
+			}
+
 			foreach (glob($path.$mask) as $f) {
 				$f = str_replace('/./', '/', $f);
 				if (is_dir($f)) {
@@ -370,6 +378,7 @@ if($method == 'show_license') {
 		// 增加額外安裝 SQL
 		$data_sco = _loop_glob('./data_sco', '*.sql');
 		foreach ($data_sco as $_f) {
+			showjsmessage('Load'.' '.$_f.' ... '.lang('succeed'));
 			$sql = file_get_contents(ROOT_PATH.'./install/'.$_f);
 			$sql = str_replace("\r\n", "\n", $sql);
 			runquery($sql);
