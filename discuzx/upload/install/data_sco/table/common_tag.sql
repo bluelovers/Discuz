@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `pre_common_tag`;
-CREATE TABLE IF NOT EXISTS `pre_common_tag` (
+CREATE TABLE `pre_common_tag` (
   `tagid` int(10) unsigned NOT NULL AUTO_INCREMENT,
 #  `tagname` char(30) NOT NULL,
   `tagname` varchar(30) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `pre_common_tag` (
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `pre_common_tag_data`;
-CREATE TABLE IF NOT EXISTS `pre_common_tag_data` (
+CREATE TABLE `pre_common_tag_data` (
   `itemid` int(10) unsigned NOT NULL,
   `tagid` int(10) unsigned NOT NULL,
   `tagname` varchar(30) NOT NULL,

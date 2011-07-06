@@ -339,6 +339,20 @@ if($method == 'show_license') {
 			show_install();
 		}
 
+		// bluelovers
+		// DROP TABLES ALL
+		if ($step == 4 && $forceinstall) {
+			showjsmessage('DROP TABLES ... ');
+
+			$query = $db->query("SHOW TABLES");
+			while($_table = $db->fetch_row($query)) {
+				$db->query("DROP TABLES $_table[0]");
+			}
+
+			showjsmessage('DROP TABLES ... '.lang('succeed'));
+		}
+		// bluelovers
+
 		if(DZUCFULL) {
 			install_uc_server();
 		}
@@ -352,6 +366,38 @@ if($method == 'show_license') {
 		$sql = file_get_contents(ROOT_PATH.'./install/data/install_data.sql');
 		$sql = str_replace("\r\n", "\n", $sql);
 		runquery($sql);
+
+		// bluelovers
+		function _loop_glob($path, $mask = '*', $array = array()) {
+			$path = rtrim(str_replace('/./', '/', $path), '/').'/';
+
+			if ($mask != '*') {
+				foreach (glob($path.'*', GLOB_ONLYDIR) as $f) {
+					$f = str_replace('/./', '/', $f);
+					_loop_glob($f, $mask, &$array);
+				}
+			}
+
+			foreach (glob($path.$mask) as $f) {
+				$f = str_replace('/./', '/', $f);
+				if (is_dir($f)) {
+					_loop_glob($f, $mask, &$array);
+				} else {
+					$array[$f] = $f;
+				}
+			}
+			return $array;
+		}
+
+		// 增加額外安裝 SQL
+		$data_sco = _loop_glob('./data_sco', '*.sql');
+		foreach ($data_sco as $_f) {
+			showjsmessage('Load'.' '.$_f.' ... '.lang('succeed'));
+			$sql = file_get_contents(ROOT_PATH.'./install/'.$_f);
+			$sql = str_replace("\r\n", "\n", $sql);
+			runquery($sql);
+		}
+		// bluelovers
 
 		$onlineip = $_SERVER['REMOTE_ADDR'];
 		$timestamp = time();
