@@ -487,7 +487,11 @@ function loadsetting($folder) {
 	return $ret;
 }
 
-function loadconfig($file = 'config.inc.php') {
+function loadconfig($file = null) {
+	// bluelovers
+	// 更改為可依照不同的升級來讀取設定
+	!$file && $file = 'config.inc.php'.'.'.$GLOBALS['source'].'.php';
+	// bluelovers
 	$_config = array();
 	@include DISCUZ_ROOT.'./data/'.$file;
 	return $_config;
