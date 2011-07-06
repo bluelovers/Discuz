@@ -10,7 +10,8 @@ if(!defined('DISCUZ_ROOT')) {
 	exit('Access error');
 }
 
-$configfile = DISCUZ_ROOT.'./data/config.inc.php';
+// 更改為可依照不同的升級來儲存設定
+$configfile = DISCUZ_ROOT.'./data/config.inc.php'.'.'.$source.'.php';
 $configfile_default = DISCUZ_ROOT.'./data/config.default.php';
 
 @touch($configfile);
@@ -45,7 +46,7 @@ if(submitcheck()) {
 }
 
 showtips('如果無法顯示設置項目，請刪除文件 data/config.inc.php');
-$config = loadconfig('config.inc.php');
+$config = loadconfig();
 if(empty($config)) {
 	$config = $config_default;
 }
