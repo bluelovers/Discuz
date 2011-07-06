@@ -35,6 +35,10 @@ while($value = $db_target->fetch_array($query)) {
 	$ruleaction[$value['action']] = $value['rid'];
 }
 
+// bluelovers
+require_once DISCUZ_ROOT.'./include/editor.func.php';
+// bluelovers
+
 $query = $db_source->query("SELECT  * FROM $table_source WHERE fid>'$start' ORDER BY fid LIMIT $limit");
 while ($row = $db_source->fetch_array($query)) {
 
@@ -112,6 +116,9 @@ while ($row = $db_source->fetch_array($query)) {
 	}
 
 	$row['extra'] = $row['extra'] ? serialize($row['extra']) : '';
+
+	$row['description'] = html2bbcode($row['description'], 0, 1);
+	$row['rules'] = html2bbcode($row['rules'], 0, 1);
 
 	$row['description'] = s_trim($row['description']);
 	$row['rules'] = s_trim($row['rules']);
