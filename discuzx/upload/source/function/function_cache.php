@@ -76,9 +76,10 @@ function writetocache($script, $cachedata, $prefix = 'cache_') {
 
 		// bluelovers
 		// 附加 cache 檔的註解
-		//BUG: 不知明原因無法寫入 Date
+		static $_timeoffset;
+		($_timeoffset === null) && $_timeoffset = getglobal('setting/timeoffset');
 		$_now = time();
-		$_head_add = "\n//Date: ".date('Y-m-d\TH:i:sO', $_now). ' ('.dgmdate($_now, 'Y-m-d h:i:s').')';
+		$_head_add = "\n//Date: ".date('Y-m-d\TH:i:sO', $_now). ' ('.dgmdate($_now, 'Y-m-d h:i:s', $_timeoffset).')';
 		// bluelvoers
 
 		fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($prefix.$script.'.php'.$cachedata.$_G['config']['security']['authkey']).$_head_add."\n\n$cachedata?>");
