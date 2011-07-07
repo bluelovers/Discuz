@@ -761,6 +761,7 @@ function loadcache($cachenames, $force = false) {
 }
 
 function cachedata($cachenames) {
+	//BUG: 當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存
 	global $_G;
 	static $isfilecache, $allowmem;
 
