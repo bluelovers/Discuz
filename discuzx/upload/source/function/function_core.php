@@ -830,6 +830,18 @@ function cachedata($cachenames) {
 	// bluelovers
 	// 比對 $cachenames 與 $lostcaches 的差異，找出在 common_syscache 中缺少的 cache
 	$lostcaches = array_diff($cachenames, $lostcaches);
+
+	// Event: Func_cachedata:After
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':After')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'lostcaches'	=> &$lostcaches,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
 	// bluelovers
 
 	foreach($cachenames as $name) {
