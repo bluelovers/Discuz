@@ -30,7 +30,7 @@ function updatecache($cachename = '') {
 				// bluelovers
 				if (function_exists('build_cache_'.$entryr[1])) {
 				// bluelovers
-				call_user_func('build_cache_'.$entryr[1]);
+					call_user_func('build_cache_'.$entryr[1]);
 				// bluelovers
 				} else {
 					$lostcaches[] = $entryr[1];
