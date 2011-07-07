@@ -890,10 +890,6 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		// bluelovers
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
-	// bluelovers
-	// 當使用者的 $offset == 9999 時，使用網站預設時區，修正部分情形下造成時間錯誤
-	$timeoffset = $timeoffset == 9999 ? $offset_site : $timeoffset;
-	// bluelovers
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
 	if($format == 'u') {
