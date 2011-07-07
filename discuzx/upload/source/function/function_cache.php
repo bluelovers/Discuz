@@ -53,6 +53,16 @@ function updatecache($cachename = '') {
 		}
 	}
 
+	// bluelovers
+	// 處理缺漏的 cache script
+	if ($lostcaches && discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':After_lostcaches')
+			->run(array(array(
+				'cachenames'	=> &$lostcaches,
+		)));
+	}
+	// bluelovers
+
 }
 
 function writetocache($script, $cachedata, $prefix = 'cache_') {
