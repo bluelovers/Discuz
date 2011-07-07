@@ -143,4 +143,18 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	}
 }
 
+Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
+
+/**
+ * 如果在 ./data/cache 中沒有緩存的項目，則自動更新 SQL 快取
+ * 達到只要刪除 ./data/cache 中的緩存就能夠更新緩存的效果
+ **/
+function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	if($isfilecache) {
+		updatecache($cachenames);
+	}
+}
+
 ?>
