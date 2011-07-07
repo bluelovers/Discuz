@@ -882,6 +882,11 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		// bluelovers
 		// 追加讀取網站預設時區
 		$offset_site = getglobal('setting/timeoffset');
+
+		// 當使用者的 $offset == 9999 時，使用網站預設時區，修正部分情形下造成時間錯誤
+		if ($offset > 12 || $offset < -12) {
+			$offset = $offset_site;
+		}
 		// bluelovers
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
