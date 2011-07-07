@@ -804,6 +804,18 @@ function cachedata($cachenames) {
 	}
 
 	// bluelovers
+
+	// Event: Func_cachedata:Before_get_syscache
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_get_syscache')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
+
 	// 初始化 $lostcaches
 	$lostcaches = array();
 	// bluelvoers
