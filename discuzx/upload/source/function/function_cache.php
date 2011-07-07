@@ -76,10 +76,12 @@ function writetocache($script, $cachedata, $prefix = 'cache_') {
 
 		// bluelovers
 		// 附加 cache 檔的註解
-		$_head_add = "\n//Date: ".date('Y-m-d\TH:i:sO');
+		//BUG: 不知明原因無法寫入 Date
+		$_now = time();
+		$_head_add = "\n//Date: ".date('Y-m-d\TH:i:sO', $_now). ' ('.dgmdate($_now, 'Y-m-d h:i:s').')';
 		// bluelvoers
 
-		fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($prefix.$script.'.php'.$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
+		fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($prefix.$script.'.php'.$cachedata.$_G['config']['security']['authkey']).$_head_add."\n\n$cachedata?>");
 		fclose($fp);
 	} else {
 		exit('Can not write to cache files, please check directory ./data/ and ./data/cache/ .');
