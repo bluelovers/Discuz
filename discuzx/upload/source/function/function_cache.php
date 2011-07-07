@@ -73,6 +73,12 @@ function writetocache($script, $cachedata, $prefix = 'cache_') {
 		@mkdir($dir, 0777);
 	}
 	if($fp = @fopen("$dir$prefix$script.php", 'wb')) {
+
+		// bluelovers
+		// 附加 cache 檔的註解
+		$_head_add = "\n//Date: ".date('Y-m-d\TH:i:sO');
+		// bluelvoers
+
 		fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($prefix.$script.'.php'.$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
 		fclose($fp);
 	} else {
