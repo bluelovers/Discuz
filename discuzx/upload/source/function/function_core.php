@@ -801,6 +801,12 @@ function cachedata($cachenames) {
 		$cachenames = $lostcaches;
 		unset($lostcaches);
 	}
+
+	// bluelovers
+	// 初始化 $lostcaches
+	$lostcaches = array();
+	// bluelvoers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
@@ -812,7 +818,17 @@ function cachedata($cachenames) {
 				fclose($fp);
 			}
 		}
+
+		// bluelovers
+		// 緩存從 common_syscache 取得的 cache 清單
+		$lostcaches[] = $syscache['cname'];
+		// bluelovers
 	}
+
+	// bluelovers
+	// 比對 $cachenames 與 $lostcaches 的差異，找出在 common_syscache 中缺少的 cache
+	$lostcaches = array_diff($cachenames, $lostcaches);
+	// bluelovers
 
 	foreach($cachenames as $name) {
 		if($data[$name] === null) {
