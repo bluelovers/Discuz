@@ -818,8 +818,6 @@ function cachedata($cachenames) {
 
 	// 初始化 $lostcaches
 	$lostcaches = array();
-
-	@include_once libfile('function/cache');
 	// bluelvoers
 
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
@@ -831,15 +829,18 @@ function cachedata($cachenames) {
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 
 			// bluelovers
-			// 將寫入 cache 的行為交給 writetocache
-			writetocache($syscache['cname'], $cachedata);
+			// 判斷如果已經載入 libfile('function/cache') 則使用 writetocache 來寫入 cache
+			if (function_exists('writetocache')) {
+				writetocache($syscache['cname'], $cachedata);
+			} else {
 			// bluelovers
-			/*
-			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
-				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
-				fclose($fp);
+				if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
+					fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
+					fclose($fp);
+				}
+			// bluelovers
 			}
-			*/
+			// bluelovers
 		}
 
 		// bluelovers
