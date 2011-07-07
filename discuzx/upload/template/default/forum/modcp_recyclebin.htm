@@ -115,13 +115,14 @@
 								</td>
 								<td class="o"><input class="pc" type="checkbox" name="moderate[]" value="$thread[tid]" /></td>
 								<th class="$thread[folder]">
+									<span>
 									<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$thread[tid]&modthreadkey=$thread[modthreadkey]" target="_blank" $thread['highlight']>$thread[subject]</a></span>
-									<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
+								<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
 									<!--{if $thread['price'] > 0}-->
 										<!--{if $thread['special'] == '3'}-->
 											- <span style="color: #C60">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 										<!--{else}-->
-											- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
+											- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
 										<!--{/if}-->
 									<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
 											- <span style="color: #269F11">[{lang reward_solved}]</span>
@@ -140,6 +141,7 @@
 									<!--{elseif $thread['attachment'] == 1}-->
 											<img src="{STATICURL}image/filetype/common.gif" alt="{lang attachment}" align="absmiddle" />
 									<!--{/if}-->
+									</span>
 								</th>
 								<td class="by">
 									<cite>
