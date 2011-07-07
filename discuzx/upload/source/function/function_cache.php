@@ -41,7 +41,15 @@ function updatecache($cachename = '') {
 	} else {
 		foreach($updatelist as $entry) {
 			@include_once libfile('cache/'.$entry, 'function');
+			// bluelovers
+			if (function_exists('build_cache_'.$entry)) {
+			// bluelovers
 			call_user_func('build_cache_'.$entry);
+			// bluelovers
+			} else {
+				$lostcaches[] = $entry;
+			}
+			// bluelovers
 		}
 	}
 
