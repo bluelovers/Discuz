@@ -105,6 +105,9 @@ EOF
 
 Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
 
+/**
+ * 修正當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存的 BUG
+ **/
 function _eFunc_cachedata_After($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
