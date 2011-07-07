@@ -15,6 +15,10 @@ function updatecache($cachename = '') {
 
 	$updatelist = empty($cachename) ? array() : (is_array($cachename) ? $cachename : array($cachename));
 
+	// bluelovers
+	$lostcaches = array();
+	// bluelovers
+
 	if(!$updatelist) {
 		@include_once libfile('cache/setting', 'function');
 		build_cache_setting();
@@ -23,7 +27,15 @@ function updatecache($cachename = '') {
 		while($entry = $cachedirhandle->read()) {
 			if(!in_array($entry, array('.', '..')) && preg_match("/^cache\_([\_\w]+)\.php$/", $entry, $entryr) && $entryr[1] != 'setting' && substr($entry, -4) == '.php' && is_file($cachedir.'/'.$entry)) {
 				@include_once libfile('cache/'.$entryr[1], 'function');
+				// bluelovers
+				if (function_exists('build_cache_'.$entryr[1])) {
+				// bluelovers
 				call_user_func('build_cache_'.$entryr[1]);
+				// bluelovers
+				} else {
+					$lostcaches[] = $entryr[1];
+				}
+				// bluelovers
 			}
 		}
 	} else {
