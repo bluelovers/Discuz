@@ -19,3 +19,8 @@
 	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
 	.zoominner div.ptn.pbn { background: {WRAPBG}; }
 /** end **/
+
+/** forum::viewthread,portal::view,portal::comment,home::space **/
+	/* 日誌 */
+	.vw .d { font: {FONTSIZE} {FONT}; }
+/** end **/
