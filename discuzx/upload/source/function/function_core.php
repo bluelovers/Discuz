@@ -791,6 +791,7 @@ function cachedata($cachenames) {
 	if($isfilecache) {
 		$lostcaches = array();
 		foreach($cachenames as $cachename) {
+			// 找出在 ./data/cache 中沒有緩存的項目
 			if(!@include_once(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php')) {
 				$lostcaches[] = $cachename;
 			}
