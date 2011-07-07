@@ -152,9 +152,12 @@ Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before
 function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
-	if($isfilecache) {
+	if($isfilecache && $cachenames) {
+		/*
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
+		*/
+		DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')")
 	}
 }
 
