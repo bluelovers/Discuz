@@ -870,12 +870,19 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	global $_G;
 	$format == 'u' && !$_G['setting']['dateconvert'] && $format = 'dt';
 	static $dformat, $tformat, $dtformat, $offset, $lang;
+	// bluelovers
+	static $offset_site;
+	// bluelovers
 	if($dformat === null) {
 		$dformat = getglobal('setting/dateformat');
 		$tformat = getglobal('setting/timeformat');
 		$dtformat = $dformat.' '.$tformat;
 		$offset = getglobal('member/timeoffset');
 		$lang = lang('core', 'date');
+		// bluelovers
+		// 追加讀取網站預設時區
+		$offset_site = getglobal('setting/timeoffset');
+		// bluelovers
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
