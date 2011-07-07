@@ -103,4 +103,58 @@ EOF
 	}
 }
 
+Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
+
+/**
+ * 修正當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存的 BUG
+ **/
+function _eFunc_cachedata_After($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	static $loadedcache = array();
+	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+	$caches = array();
+	foreach ($cachenames as $k) {
+		if(!isset($loadedcache[$k])) {
+			$k2 = $k;
+
+			if (preg_match('/^usergroup_\d+$/', $k)) {
+				$k2 = 'usergroups';
+			} elseif ($k == 'style_default') {
+				$k2 = 'styles';
+			}
+
+			$caches[] = $k2;
+			$caches_load[] = $k;
+			$loadedcache[$k] = true;
+		}
+	}
+
+	if(!empty($caches)) {
+		@include_once libfile('function/cache');
+
+		updatecache($caches);
+		loadcache($caches_load, true);
+
+		$cachedata = cachedata($caches_load);
+		foreach($cachedata as $_k => $_v) {
+			$data[$_k] = $_v;
+		}
+	}
+}
+
+Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
+
+/**
+ * 如果在 ./data/cache 中沒有緩存的項目，則自動更新 SQL 快取
+ * 達到只要刪除 ./data/cache 中的緩存就能夠更新緩存的效果
+ **/
+function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	if($isfilecache) {
+		updatecache($cachenames);
+	}
+}
+
 ?>

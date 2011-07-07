@@ -761,6 +761,7 @@ function loadcache($cachenames, $force = false) {
 }
 
 function cachedata($cachenames) {
+	//BUG: 當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存
 	global $_G;
 	static $isfilecache, $allowmem;
 
@@ -790,6 +791,7 @@ function cachedata($cachenames) {
 	if($isfilecache) {
 		$lostcaches = array();
 		foreach($cachenames as $cachename) {
+			// 找出在 ./data/cache 中沒有緩存的項目
 			if(!@include_once(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php')) {
 				$lostcaches[] = $cachename;
 			}
@@ -800,18 +802,59 @@ function cachedata($cachenames) {
 		$cachenames = $lostcaches;
 		unset($lostcaches);
 	}
+
+	// bluelovers
+
+	// Event: Func_cachedata:Before_get_syscache
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_get_syscache')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
+
+	// 初始化 $lostcaches
+	$lostcaches = array();
+	// bluelvoers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
 		if($isfilecache) {
+			// 將從 common_syscache 中找到的緩存寫入 ./data/cache
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
 				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
 				fclose($fp);
 			}
 		}
+
+		// bluelovers
+		// 緩存從 common_syscache 取得的 cache 清單
+		$lostcaches[] = $syscache['cname'];
+		// bluelovers
 	}
+
+	// bluelovers
+	// 比對 $cachenames 與 $lostcaches 的差異，找出在 common_syscache 中缺少的 cache
+	$lostcaches = array_diff($cachenames, $lostcaches);
+
+	// Event: Func_cachedata:After
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':After')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'lostcaches'	=> &$lostcaches,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
+	// bluelovers
 
 	foreach($cachenames as $name) {
 		if($data[$name] === null) {
