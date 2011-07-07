@@ -76,7 +76,6 @@ function writetocache($script, $cachedata, $prefix = 'cache_') {
 
 		// bluelovers
 		// 附加 cache 檔的註解
-		//BUG: 不知明原因無法寫入 Date
 		static $_timeoffset;
 		($_timeoffset === null) && $_timeoffset = getglobal('setting/timeoffset');
 		$_now = time();
