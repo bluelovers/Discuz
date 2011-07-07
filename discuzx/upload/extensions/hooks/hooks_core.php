@@ -153,6 +153,7 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
 	if($isfilecache) {
+		@include_once libfile('function/cache');
 		updatecache($cachenames);
 	}
 }
