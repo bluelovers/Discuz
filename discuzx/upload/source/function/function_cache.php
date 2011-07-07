@@ -44,7 +44,7 @@ function updatecache($cachename = '') {
 			// bluelovers
 			if (function_exists('build_cache_'.$entry)) {
 			// bluelovers
-			call_user_func('build_cache_'.$entry);
+				call_user_func('build_cache_'.$entry);
 			// bluelovers
 			} else {
 				$lostcaches[] = $entry;
