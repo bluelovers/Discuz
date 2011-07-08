@@ -344,6 +344,7 @@ if($action == 'index') {
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
+		//TODO:增加可設定發表/回文權限...
 		/**
 		 * 群組 > 管理群組
 		 **/
