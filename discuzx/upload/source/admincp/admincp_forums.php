@@ -699,6 +699,7 @@ var rowtypedata = [
 						$forum['threadsorts'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
 					}
 
+					//TODO:增加啟用但是隱藏的主題分類
 					$typeselect = $sortselect = '';
 
 					$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
@@ -1553,7 +1554,8 @@ EOT;
 						$threadtypesnew = '';
 					}
 					if($threadtypesnew && $typeids) {
-						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder");
+						// threadclass 主題分類排序依照 displayorder, name
+						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder, name");
 						while($type = DB::fetch($query)) {
 							if($threadtypesnew['options']['enable'][$type['typeid']]) {
 								$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
@@ -2025,17 +2027,24 @@ function fetch_table_struct($tablename, $result = 'FIELD') {
 	return $datas;
 }
 
+/**
+ * 取得主題分類的設定表單
+ **/
 function getthreadclasses_html($fid) {
+	// 取得已啟用的 threadtypes
 	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
 	$threadtypes = unserialize($threadtypes);
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder");
+	// threadclass 主題分類排序依照 displayorder, name
+	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder, name");
 	while($type = DB::fetch($query)) {
 		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
+		// 檢查是否已啟用目前的 threadclass = threadtypes
 		if(isset($threadtypes['types'][$type['typeid']])) {
 			$enablechecked = ' checked="checked"';
 		}
+		// 檢查是否為管理者專用
 		if($type['moderators']) {
 			$moderatorschecked = ' checked="checked"';
 		}
@@ -2070,6 +2079,9 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+/**
+ * 取得所有的子版
+ **/
 function get_subfids($fid) {
 	global $subfids, $_G;
 	$subfids[] = $fid;
@@ -2080,6 +2092,9 @@ function get_subfids($fid) {
 	}
 }
 
+/**
+ * 複製主題分類
+ **/
 function copy_threadclasses($threadtypes, $fid) {
 	global $_G;
 	if($threadtypes) {

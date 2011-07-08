@@ -31,6 +31,7 @@ $second = &$_G['cache']['grouptype']['second'];
 $rssauth = $_G['rssauth'];
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].' - '.$navtitle.'" href="'.$_G['siteurl'].'forum.php?mod=rss&fid='.$_G['fid'].'&amp;auth='.$rssauth."\" />\n") : '';
 if($_G['fid']) {
+	//TODO:將介面改為可同時顯示群組圖標與看板圖
 	if($_G['forum']['status'] != 3) {
 		showmessage('forum_not_group', 'group.php');
 	} elseif($_G['forum']['jointype'] < 0 && !$_G['forum']['ismoderator']) {
@@ -110,6 +111,7 @@ if(in_array($action, array('index')) && $status != 2) {
 }
 
 $showpoll = $showtrade = $showreward = $showactivity = $showdebate = 0;
+// 取得是否允許發表特殊主題
 if($_G['forum']['allowpostspecial']) {
 	$showpoll = $_G['forum']['allowpostspecial'] & 1;
 	$showtrade = $_G['forum']['allowpostspecial'] & 2;
@@ -118,6 +120,7 @@ if($_G['forum']['allowpostspecial']) {
 	$showdebate = $_G['forum']['allowpostspecial'] & 16;
 }
 
+// 取得用戶主是否允許發表目前群組所允許發表的特殊主題
 if($_G['group']['allowpost']) {
 	$_G['group']['allowpostpoll'] = $_G['group']['allowpostpoll'] && $showpoll;
 	$_G['group']['allowposttrade'] = $_G['group']['allowposttrade'] && $showtrade;
@@ -127,6 +130,7 @@ if($_G['group']['allowpost']) {
 }
 
 if($action == 'index') {
+	//TODO:將首頁的主題列表改為跟討論區的主題列表一樣可顯示主題分類
 
 	$newthreadlist = array();
 	if($status != 2) {
@@ -344,6 +348,7 @@ if($action == 'index') {
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
+		//TODO:增加可設定發表/回文權限...
 		/**
 		 * 群組 > 管理群組
 		 **/
@@ -609,6 +614,7 @@ if($action == 'index') {
 			}
 		}
 	} elseif($_G['gp_op'] == 'threadtype') {
+		//TODO:將此處的主題分類設定補充回可設定圖標與管理者專用
 		if(empty($specialswitch['allowthreadtype'])) {
 			showmessage('group_level_cannot_do');
 		}
@@ -663,6 +669,7 @@ if($action == 'index') {
 				$newname = array();
 			}
 			if($threadtypesnew['status']) {
+				//TODO:類別前綴選項補回只顯示圖標
 				if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 
 					if(!empty($threadtypesnew['options']['enable'])) {
