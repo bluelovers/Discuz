@@ -1,12 +1,7 @@
 <!--{template common/header}-->
 
 <!--{if $_GET['op'] == 'start'}-->
-<ul id="contentstart" class="content">
-	<li><a href="javascript:;" onclick="spaceDiy.getdiy('layout');return false;"><img src="{STATICURL}image/diy/layout.png" />{lang diy_layout_1}</a></li>
-	<li><a href="javascript:;" onclick="spaceDiy.getdiy('style');return false;"><img src="{STATICURL}image/diy/style.png" />{lang diy_style}</a></li>
-	<li><a href="javascript:;" onclick="spaceDiy.getdiy('block');return false;"><img src="{STATICURL}image/diy/module.png" />{lang diy_add_block}</a></li>
-	<!--li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang do_it_yourself}</a></li-->
-</ul>
+	<!--{subtpl subblock/home/space_diy_start}-->
 <!--{elseif $_GET['op'] == 'layout'}-->
 <ul id="contentframe" class="content selector">
 	<!--{loop $layoutarr $key $value}-->
