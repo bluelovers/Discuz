@@ -247,7 +247,7 @@ class discuz_core {
 		$this->var = & $_G;
 
 		// bluelovers
-		// Event: discuz_core::_init_env:After
+		// Event: Class_discuz_core::_init_env:After
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':After')
 				->run(array(
@@ -295,7 +295,7 @@ class discuz_core {
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 
 		// bluelovers
-		// Event: discuz_core::_init_input:After
+		// Event: Class_discuz_core::_init_input:After
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':After')
 				->run(array(
@@ -346,7 +346,7 @@ class discuz_core {
 		$this->var['authkey'] = md5($_config['security']['authkey'].$_SERVER['HTTP_USER_AGENT']);
 
 		// bluelovers
-		// Event: discuz_core::_init_config:After
+		// Event: Class_discuz_core::_init_config:After
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':After')
 				->run(array(
@@ -381,7 +381,7 @@ class discuz_core {
 		}
 
 		// bluelovers
-		// Event: discuz_core::_init_output:After
+		// Event: Class_discuz_core::_init_output:After
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':After')
 				->run(array(
