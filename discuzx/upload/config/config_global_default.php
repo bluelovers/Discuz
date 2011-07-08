@@ -172,6 +172,8 @@ $_config['remote']['cron'] = 0;
  *
  * 1=開啟
  * 2=開啟(並且開啟顯示模板的 <hook> 嵌入點)
+ *
+ * @see http://dev.discuz.org/wiki/index.php?title=%E6%8F%92%E4%BB%B6%E6%8E%A5%E5%8F%A3%E6%A6%82%E8%BF%B0
  **/
 $_config['plugindeveloper'] = 0;
 // bluelovers
