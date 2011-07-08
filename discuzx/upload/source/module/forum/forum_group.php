@@ -665,6 +665,7 @@ if($action == 'index') {
 				$newname = array();
 			}
 			if($threadtypesnew['status']) {
+				//TODO:類別前綴選項補回只顯示圖標
 				if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 
 					if(!empty($threadtypesnew['options']['enable'])) {
