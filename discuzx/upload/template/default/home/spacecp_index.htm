@@ -5,7 +5,7 @@
 	<li><a href="javascript:;" onclick="spaceDiy.getdiy('layout');return false;"><img src="{STATICURL}image/diy/layout.png" />{lang diy_layout_1}</a></li>
 	<li><a href="javascript:;" onclick="spaceDiy.getdiy('style');return false;"><img src="{STATICURL}image/diy/style.png" />{lang diy_style}</a></li>
 	<li><a href="javascript:;" onclick="spaceDiy.getdiy('block');return false;"><img src="{STATICURL}image/diy/module.png" />{lang diy_add_block}</a></li>
-	<li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang do_it_yourself}</a></li>
+	<!--li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang do_it_yourself}</a></li-->
 </ul>
 <!--{elseif $_GET['op'] == 'layout'}-->
 <ul id="contentframe" class="content selector">
@@ -62,7 +62,7 @@
 				<option value="$album[albumid]" {eval echo $album[albumid] == $albumid ? 'selected' : '';} >$album[albumname] - ($album[picnum] {lang magics_unit})</option>
 				<!--{/loop}-->
 			</select>
-		</span> 
+		</span>
 		<span>{lang editing}:</span>
 		<a id="diy_tag_body" href="javascript:;" onclick="spaceDiy.setCurrentDiy('body');return false;">{lang background}</a>
 		<span class="pipe">|</span><a id="diy_tag_hd" href="javascript:;" onclick="spaceDiy.setCurrentDiy('hd');return false;">{lang header}</a>
@@ -303,7 +303,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 								<label><input type="radio" name="avatar" value="small"{if $para[banavatar] == 'small'} checked="checked"{/if}>{lang small}</label>
 							</td>
 						</tr>
-						
+
 						<!--{elseif ($blockname == 'statistic')}-->
 						<tr>
 							<th>{lang showcountcontent}</th>
@@ -344,14 +344,14 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 							</td>
 						</tr>
 						<!--{elseif in_array($blockname, array('personalinfo'))}-->
-						
+
 						<!--{else}-->
 						<tr>
 							<th>{lang show_num_of}</th>
 							<td><input type="text" name="shownum" value="$para[shownum]" class="px" /></td>
 						</tr>
 						<!--{/if}-->
-						
+
 						<!--{if $blockname == 'blog'}-->
 						<tr>
 							<th>{lang show_message}</th>
@@ -455,7 +455,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 			</div>
 		</form>
 	</div>
-	
+
 	<div id="musicadd_content" style="display:$addshow;">
 		<script type="text/javascript">
 			function addMenu() {
