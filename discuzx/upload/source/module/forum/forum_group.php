@@ -110,6 +110,7 @@ if(in_array($action, array('index')) && $status != 2) {
 }
 
 $showpoll = $showtrade = $showreward = $showactivity = $showdebate = 0;
+// 取得是否允許發表特殊主題
 if($_G['forum']['allowpostspecial']) {
 	$showpoll = $_G['forum']['allowpostspecial'] & 1;
 	$showtrade = $_G['forum']['allowpostspecial'] & 2;
@@ -118,6 +119,7 @@ if($_G['forum']['allowpostspecial']) {
 	$showdebate = $_G['forum']['allowpostspecial'] & 16;
 }
 
+// 取得用戶主是否允許發表目前群組所允許發表的特殊主題
 if($_G['group']['allowpost']) {
 	$_G['group']['allowpostpoll'] = $_G['group']['allowpostpoll'] && $showpoll;
 	$_G['group']['allowposttrade'] = $_G['group']['allowposttrade'] && $showtrade;
