@@ -1553,7 +1553,8 @@ EOT;
 						$threadtypesnew = '';
 					}
 					if($threadtypesnew && $typeids) {
-						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder");
+						// threadclass 主題分類排序依照 displayorder, name
+						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder, name");
 						while($type = DB::fetch($query)) {
 							if($threadtypesnew['options']['enable'][$type['typeid']]) {
 								$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
