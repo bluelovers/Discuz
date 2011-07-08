@@ -51,7 +51,8 @@ if($_G['gp_searchsubmit'] && $keywords) {
 			$tkeys = array_unique($tkeys);
 			foreach($tkeys as $tkey) {
 				if(isset($lang[$searchindex[$skey]['text'][$tkey]])) {
-					$texts[] = '<li><span s="1">'.strip_tags($lang[$searchindex[$skey]['text'][$tkey]]).'</span><span class="lightfont">('.$searchindex[$skey]['text'][$tkey].')</span></li>';
+					// 利用 s="1" 來對語言包的 index 來執行 parsetag
+					$texts[] = '<li><span s="1">'.strip_tags($lang[$searchindex[$skey]['text'][$tkey]]).'</span><span class="lightfont" s="1">('.$searchindex[$skey]['text'][$tkey].')</span></li>';
 				} else {
 					$texts[] = '<li><span s="1">'.$searchindex[$skey]['text'][$tkey].'</span></li>';
 				}

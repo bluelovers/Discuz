@@ -618,8 +618,9 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			'<a id="'.$id.'_0a" style="'.(!$defaulttype ? 'font-weight:bold' : '').'" href="javascript:;" onclick="$(\''.$id.'_1a\').style.fontWeight = \'\';this.style.fontWeight = \'bold\';$(\''.$id.'_1\').name = \'TMP'.$varname.'\';$(\''.$id.'_0\').name = \''.$varname.'\';$(\''.$id.'_0\').style.display = \'\';$(\''.$id.'_1\').style.display = \'none\'">'.cplang('switch_upload').'</a>&nbsp;'.
 			'<a id="'.$id.'_1a" style="'.($defaulttype ? 'font-weight:bold' : '').'" href="javascript:;" onclick="$(\''.$id.'_0a\').style.fontWeight = \'\';this.style.fontWeight = \'bold\';$(\''.$id.'_0\').name = \'TMP'.$varname.'\';$(\''.$id.'_1\').name = \''.$varname.'\';$(\''.$id.'_1\').style.display = \'\';$(\''.$id.'_0\').style.display = \'none\'">'.cplang('switch_url').'</a>';
 	} elseif($type == 'textarea') {
+		// textarea 增加當取得焦點時，執行 onkeyup(); 調整高度
 		$readonly = $disabled ? 'readonly' : '';
-		$s .= "<textarea $readonly rows=\"6\" ".(!isset($_G['showsetting_multi']) ? "ondblclick=\"textareasize(this, 1)\"" : '')." onkeyup=\"textareasize(this, 0)\" name=\"$varname\" id=\"$varname\" cols=\"50\" class=\"tarea\" '.$extra.'>".dhtmlspecialchars($value)."</textarea>";
+		$s .= "<textarea $readonly rows=\"6\" ".(!isset($_G['showsetting_multi']) ? "ondblclick=\"textareasize(this, 1)\"" : '')." onkeyup=\"textareasize(this, 0)\" onfocus=\"this.onkeyup();\" name=\"$varname\" id=\"$varname\" cols=\"50\" class=\"tarea\" '.$extra.'>".dhtmlspecialchars($value)."</textarea>";
 	} elseif($type == 'select') {
 		$s .= '<select name="'.$varname[0].'" '.$extra.'>';
 		foreach($varname[1] as $option) {
@@ -647,7 +648,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 						}
 					}
 					$onclick && $onclick = ' onclick="'.$onclick.'"';
-					$s .= '<li'.($radiocheck[$varary[0]] ? ' class="checked"' : '').$addstyle.'><input class="radio" type="radio"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'" value="'.$varary[0].'"'.$radiocheck[$varary[0]].$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+
+					// bluelovers
+					// 顯示語言包的 index 名稱
+					$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+					// bluelovers
+
+					$s .= '<li'.($radiocheck[$varary[0]] ? ' class="checked"' : '').$addstyle.'><input class="radio" type="radio"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'" value="'.$varary[0].'"'.$radiocheck[$varary[0]].$check['disabled'].$onclick.'>&nbsp;'.$varary[1].$_s_add.'</li>';
 				}
 			}
 			$s .= '</ul>';
@@ -661,7 +668,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			if(is_array($varary) && !empty($varary)) {
 				$onclick = !isset($_G['showsetting_multi']) && !empty($varary[2]) ? ' onclick="$(\''.$varary[2].'\').style.display = $(\''.$varary[2].'\').style.display == \'none\' ? \'\' : \'none\';"' : '';
 				$checked = is_array($value) && in_array($varary[0], $value) ? ' checked' : '';
-				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
+				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -670,7 +683,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$value = sprintf('%0'.$checkboxs.'b', $value);$i = 1;
 		$s .= '<ul class="nofloat" onmouseover="altStyle(this'.$check['disabledaltstyle'].');">';
 		foreach($varname[1] as $key => $var) {
-			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.'</li>';
+
+			// bluelovers
+			// 顯示語言包的 index 名稱
+			$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( {$varname[0]}[{$i}] )</span>";
+			// bluelovers
+
+			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.$_s_add.'</li>';
 			$i++;
 		}
 		$s .= '</ul>';
@@ -682,7 +701,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		foreach($varname[1] as $varary) {
 			if(is_array($varary) && !empty($varary)) {
 				$checked = is_array($value) && $value[$varary[0]] ? ' checked' : '';
-				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].'</li>';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
+				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -749,7 +774,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!isset($_G['showsetting_multi'])) {
 		$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
-		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
+
+		// bluelovers
+		// 顯示語言包的 index 名稱
+		$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname) ? " title=\"$varname\"" : "")."> ( $setname )</span>";
+		// bluelovers
+
+		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.$_s_add.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
 			$_G['setting_JS'] .= 'var ss = new Array();';

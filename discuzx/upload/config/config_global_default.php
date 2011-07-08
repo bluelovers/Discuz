@@ -27,13 +27,13 @@ $_config = array();
  * ...
  *
  */
-$_config['db'][1]['dbhost']  		= 'localhost';		
-$_config['db'][1]['dbuser']  		= 'root';		
-$_config['db'][1]['dbpw'] 	 	= 'root';		
-$_config['db'][1]['dbcharset'] 		= 'utf8';		
-$_config['db'][1]['pconnect'] 		= 0;			
-$_config['db'][1]['dbname']  		= 'ultrax';		
-$_config['db'][1]['tablepre'] 		= 'pre_';		
+$_config['db'][1]['dbhost']  		= 'localhost';
+$_config['db'][1]['dbuser']  		= 'root';
+$_config['db'][1]['dbpw'] 	 	= 'root';
+$_config['db'][1]['dbcharset'] 		= 'utf8';
+$_config['db'][1]['pconnect'] 		= 0;
+$_config['db'][1]['dbname']  		= 'ultrax';
+$_config['db'][1]['tablepre'] 		= 'pre_';
 
 /**
  * 數據庫從服務器設置( slave, 只讀 ), 支持多組服務器設置, 當設置多組服務器時, 系統每次隨機使用
@@ -48,7 +48,7 @@ $_config['db'][1]['tablepre'] 		= 'pre_';
  *
  * $_config['db']['slave']['2']['dbhost'] = 'localhost';
  * ...
- * 
+ *
  */
 $_config['db']['slave'] = array();
 
@@ -99,16 +99,16 @@ $_config['memory']['memcache']['timeout'] = 1;			// memcache 服務器連接超�
 $_config['server']['id']		= 1;			// 服務器編號，多webserver的時候，用於標識當前服務器的ID
 
 // 附件下載相關
-// 
+//
 // 本地文件讀取模式; 模式2為最節省內存方式，但不支持多線程下載
 // 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
-$_config['download']['readmod'] = 2;				
+$_config['download']['readmod'] = 2;
 
 // 是否啟用 X-Sendfile 功能（需要服務器支持）0=close 1=nginx 2=lighttpd 3=apache
 $_config['download']['xsendfile']['type'] = 0;
 
 // 啟用 nginx X-sendfile 時，論壇附件目錄的虛擬映射路徑，請使用 / 結尾
-$_config['download']['xsendfile']['dir'] = '/down/';		
+$_config['download']['xsendfile']['dir'] = '/down/';
 
 //  CONFIG CACHE
 $_config['cache']['type'] 			= 'sql';	// 緩存類型 file=文件緩存, sql=數據庫緩存
@@ -163,5 +163,19 @@ $_config['remote']['appkey'] = md5($_config['security']['authkey']);
 
 // 遠程調用: 開啟外部 cron 任務. 系統內部不再執行cron, cron任務由外部程序激活
 $_config['remote']['cron'] = 0;
+
+// bluelovers
+// Discuz 隱藏設定
+
+/**
+ * 插件開發者模式
+ *
+ * 1=開啟
+ * 2=開啟(並且開啟顯示模板的 <hook> 嵌入點)
+ *
+ * @see http://dev.discuz.org/wiki/index.php?title=%E6%8F%92%E4%BB%B6%E6%8E%A5%E5%8F%A3%E6%A6%82%E8%BF%B0
+ **/
+$_config['plugindeveloper'] = 0;
+// bluelovers
 
 ?>
