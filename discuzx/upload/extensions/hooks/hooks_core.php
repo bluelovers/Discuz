@@ -161,6 +161,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 		*/
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
+				// bugfix 修正造成插件語言包無法緩存的問題
+				&& substr($k, 0, 6) != 'plugin'
 			) {
 				$_del_cache[$k] = true;
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
