@@ -31,6 +31,7 @@ $second = &$_G['cache']['grouptype']['second'];
 $rssauth = $_G['rssauth'];
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].' - '.$navtitle.'" href="'.$_G['siteurl'].'forum.php?mod=rss&fid='.$_G['fid'].'&amp;auth='.$rssauth."\" />\n") : '';
 if($_G['fid']) {
+	//TODO:將介面改為可同時顯示群組圖標與看板圖
 	if($_G['forum']['status'] != 3) {
 		showmessage('forum_not_group', 'group.php');
 	} elseif($_G['forum']['jointype'] < 0 && !$_G['forum']['ismoderator']) {
