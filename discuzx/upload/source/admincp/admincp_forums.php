@@ -2030,7 +2030,8 @@ function getthreadclasses_html($fid) {
 	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
 	$threadtypes = unserialize($threadtypes);
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder");
+	// threadclass 主題分類排序依照 displayorder, name
+	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder, name");
 	while($type = DB::fetch($query)) {
 		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
