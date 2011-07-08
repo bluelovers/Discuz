@@ -380,6 +380,16 @@ class discuz_core {
 			@header('Content-Type: text/html; charset='.CHARSET);
 		}
 
+		// bluelovers
+		// Event: discuz_core::_init_output:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
+
 	}
 
 	function reject_robot() {
