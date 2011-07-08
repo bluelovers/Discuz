@@ -2079,6 +2079,9 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+/**
+ * 取得所有的子版
+ **/
 function get_subfids($fid) {
 	global $subfids, $_G;
 	$subfids[] = $fid;
@@ -2089,6 +2092,9 @@ function get_subfids($fid) {
 	}
 }
 
+/**
+ * 複製主題分類
+ **/
 function copy_threadclasses($threadtypes, $fid) {
 	global $_G;
 	if($threadtypes) {
