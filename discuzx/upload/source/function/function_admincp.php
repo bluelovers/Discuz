@@ -674,7 +674,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
 				// bluelovers
 
-				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -689,7 +689,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( {$varname[0]}[{$i}] )</span>";
 			// bluelovers
 
-			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.'</li>';
+			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.$_s_add.'</li>';
 			$i++;
 		}
 		$s .= '</ul>';
@@ -707,7 +707,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
 				// bluelovers
 
-				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].'</li>';
+				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -780,7 +780,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname) ? " title=\"$varname\"" : "")."> ( $setname )</span>";
 		// bluelovers
 
-		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
+		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.$_s_add.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
 			$_G['setting_JS'] .= 'var ss = new Array();';
