@@ -45,7 +45,7 @@ var rowtypedata = [
 
 		$query = DB::query("SELECT f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.inheritedmod, ff.moderators, ff.password, ff.redirect
 			FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status<>'3'
-			ORDER BY f.type<>'group', f.displayorder");
+			ORDER BY f.type<>'group', f.displayorder, f.name");
 
 		$groups = $forums = $subs = $fids = $showed = array();
 		while($forum = DB::fetch($query)) {
