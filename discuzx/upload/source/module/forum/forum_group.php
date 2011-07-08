@@ -127,6 +127,7 @@ if($_G['group']['allowpost']) {
 }
 
 if($action == 'index') {
+	//TODO:將首頁的主題列表改為跟討論區的主題列表一樣可顯示主題分類
 
 	$newthreadlist = array();
 	if($status != 2) {
