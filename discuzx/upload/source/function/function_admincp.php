@@ -668,6 +668,12 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			if(is_array($varary) && !empty($varary)) {
 				$onclick = !isset($_G['showsetting_multi']) && !empty($varary[2]) ? ' onclick="$(\''.$varary[2].'\').style.display = $(\''.$varary[2].'\').style.display == \'none\' ? \'\' : \'none\';"' : '';
 				$checked = is_array($value) && in_array($varary[0], $value) ? ' checked' : '';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
 				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
 			}
 		}
@@ -677,6 +683,12 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$value = sprintf('%0'.$checkboxs.'b', $value);$i = 1;
 		$s .= '<ul class="nofloat" onmouseover="altStyle(this'.$check['disabledaltstyle'].');">';
 		foreach($varname[1] as $key => $var) {
+
+			// bluelovers
+			// 顯示語言包的 index 名稱
+			$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( {$varname[0]}[{$i}] )</span>";
+			// bluelovers
+
 			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.'</li>';
 			$i++;
 		}
@@ -689,6 +701,12 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		foreach($varname[1] as $varary) {
 			if(is_array($varary) && !empty($varary)) {
 				$checked = is_array($value) && $value[$varary[0]] ? ' checked' : '';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
 				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].'</li>';
 			}
 		}
@@ -756,6 +774,12 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!isset($_G['showsetting_multi'])) {
 		$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
+
+		// bluelovers
+		// 顯示語言包的 index 名稱
+		$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname) ? " title=\"$varname\"" : "")."> ( $setname )</span>";
+		// bluelovers
+
 		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
