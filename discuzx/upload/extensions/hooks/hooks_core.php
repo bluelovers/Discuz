@@ -160,7 +160,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 		updatecache($cachenames);
 		*/
 		foreach ($cachenames as $k) {
-			if(!isset($_del_cache[$k])) {
+			if(!isset($_del_cache[$k])
+			) {
 				$_del_cache[$k] = true;
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
 			}
