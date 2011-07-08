@@ -898,7 +898,8 @@ if(!$operation) {
 		showsetting('plugins_edit_version', 'versionnew', $plugin['version'], 'text');
 		// 增加允許修改版權訊息
 		if($isplugindeveloper || !$plugin['copyright']) {
-			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'text');
+			// 修改 copyright 為 textarea 方便輸入
+			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'textarea');
 		}
 		showsetting('plugins_edit_identifier', 'identifiernew', $plugin['identifier'], 'text');
 		showsetting('plugins_edit_directory', 'directorynew', $plugin['directory'], 'text');
