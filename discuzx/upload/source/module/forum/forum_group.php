@@ -609,6 +609,7 @@ if($action == 'index') {
 			}
 		}
 	} elseif($_G['gp_op'] == 'threadtype') {
+		//TODO:將此處的主題分類設定補充回可設定圖標與管理者專用
 		if(empty($specialswitch['allowthreadtype'])) {
 			showmessage('group_level_cannot_do');
 		}
