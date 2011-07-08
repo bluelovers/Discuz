@@ -345,6 +345,15 @@ class discuz_core {
 		$this->var['config']['cookie']['cookiepre'] = $this->var['config']['cookie']['cookiepre'].substr(md5($this->var['config']['cookie']['cookiepath'].'|'.$this->var['config']['cookie']['cookiedomain']), 0, 4).'_';
 		$this->var['authkey'] = md5($_config['security']['authkey'].$_SERVER['HTTP_USER_AGENT']);
 
+		// bluelovers
+		// Event: discuz_core::_init_config:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_output() {
