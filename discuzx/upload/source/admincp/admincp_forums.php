@@ -2027,6 +2027,9 @@ function fetch_table_struct($tablename, $result = 'FIELD') {
 	return $datas;
 }
 
+/**
+ * 取得主題分類的設定表單
+ **/
 function getthreadclasses_html($fid) {
 	// 取得已啟用的 threadtypes
 	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
