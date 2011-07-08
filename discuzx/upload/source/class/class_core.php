@@ -246,6 +246,15 @@ class discuz_core {
 
 		$this->var = & $_G;
 
+		// bluelovers
+		// Event: discuz_core::_init_env:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_input() {
