@@ -168,4 +168,22 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 	}
 }
 
+Scorpio_Hook::add('Class_discuz_core::_init_input:After', '_eClass_discuz_core__init_input_After');
+
+function _eClass_discuz_core__init_input_After($_EVENT, $discuz) {
+	/**
+	 * 如果 mod=post&action=albumphoto 則 inajax = 1
+	 *
+	 * @example
+	 * forum.php?mod=post&action=albumphoto&aid=1&inajax=1&ajaxtarget=albumphoto
+	 * forum.php?mod=post&action=albumphoto&aid=1&ajaxtarget=albumphoto
+	 **/
+	if (!$discuz->var['inajax']
+		&& $discuz->var['gp_mod'] == 'post'
+		&& $discuz->var['gp_action'] == 'albumphoto'
+	) {
+		$discuz->var['inajax'] = 1;
+	}
+}
+
 ?>
