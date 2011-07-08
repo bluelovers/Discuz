@@ -2027,6 +2027,7 @@ function fetch_table_struct($tablename, $result = 'FIELD') {
 }
 
 function getthreadclasses_html($fid) {
+	// 取得已啟用的 threadtypes
 	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
 	$threadtypes = unserialize($threadtypes);
 
@@ -2035,9 +2036,11 @@ function getthreadclasses_html($fid) {
 	while($type = DB::fetch($query)) {
 		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
+		// 檢查是否已啟用目前的 threadclass = threadtypes
 		if(isset($threadtypes['types'][$type['typeid']])) {
 			$enablechecked = ' checked="checked"';
 		}
+		// 檢查是否為管理者專用
 		if($type['moderators']) {
 			$moderatorschecked = ' checked="checked"';
 		}
