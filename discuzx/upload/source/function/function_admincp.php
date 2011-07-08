@@ -648,6 +648,12 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 						}
 					}
 					$onclick && $onclick = ' onclick="'.$onclick.'"';
+
+					// bluelovers
+					// 顯示語言包的 index 名稱
+					$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+					// bluelovers
+
 					$s .= '<li'.($radiocheck[$varary[0]] ? ' class="checked"' : '').$addstyle.'><input class="radio" type="radio"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'" value="'.$varary[0].'"'.$radiocheck[$varary[0]].$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
 				}
 			}
