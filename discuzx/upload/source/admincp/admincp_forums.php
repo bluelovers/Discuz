@@ -699,6 +699,7 @@ var rowtypedata = [
 						$forum['threadsorts'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
 					}
 
+					//TODO:增加啟用但是隱藏的主題分類
 					$typeselect = $sortselect = '';
 
 					$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
