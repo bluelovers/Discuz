@@ -1703,6 +1703,19 @@ EOT;
 				'widthauto' => $_G['gp_widthautonew'],
 			));
 			if(!$multiset) {
+
+				// bluelovers
+				/**
+				 * 過濾 relatedgroup 並且可接收將分行轉為 ,
+				 * 將 relatedgroup 改為可接收陣列或文字，然後統一處理為文字陣列
+				 **/
+				$_relatedgroupnew = $_G['gp_relatedgroupnew'];
+				if (!is_array($_relatedgroupnew)) {
+					$_relatedgroupnew = explode(',', str_replace(array("\r\n", "\n"), ',', $_relatedgroupnew));
+				}
+				$_relatedgroupnew = array_unique(array_filter(array_map('intval', $_relatedgroupnew)));
+				// bluelovers
+
 				$forumfielddata = array_merge($forumfielddata, array(
 					'viewperm' => $_G['gp_viewpermnew'],
 					'postperm' => $_G['gp_postpermnew'],
