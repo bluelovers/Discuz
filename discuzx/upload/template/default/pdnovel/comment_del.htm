@@ -1,0 +1,18 @@
+<!--{template common/header}-->
+
+	<h3 class="flb">
+		<em id="return_$_G[gp_handlekey]">{lang comment_delete}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	</h3>
+	<form id="commentform_{$cid}" name="commentform_{$cid}" method="post" autocomplete="off" action="novel.php?mod=home&do=comment&ac=del&cid=$cid">
+		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="postsubmit" value="true" />
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<div class="c">{lang comment_delete_confirm}</div>
+		<p class="o pns">
+			<button type="submit" name="postsubmitbtn" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
+		</p>
+	</form>
+
+<!--{template common/footer}-->

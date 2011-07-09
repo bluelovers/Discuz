@@ -1,0 +1,118 @@
+<!--{subtemplate common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<link rel="stylesheet" type="text/css" href="template/default/pdnovel/css/view.css" />
+
+<div id="pdmodule">
+	<!--{ad/pdnovel/mb hm/1}-->
+	<div class="pdbox">
+		<div class="pdmaincont" id="post_$post[pid]">
+			<!--{ad/pdnovel/mb hm/4}-->
+			<div class="pdcomment pdmaintab">
+				<div class="title">
+					<span class="titletext">{$novel['name']}{lang view_comment}</span>
+					<ul><li class="a"><a name="comment">{lang view_newcomment}</a></li></ul>			 
+				</div>
+				<div class="showcomment">
+					<!--{loop $commentlist $key $comment}-->
+					<span id="cid$comment['cid']">
+					<dl class="ptm pbm bbda cl">
+						<dt class="mbm">
+							<span class="y xw0 xi2">
+								<a href="javascript:;" onclick="novel_comment_requote($comment[cid]);">{lang quote}</a>
+								<!--{if ($_G['group']['allowmanagenovel'] || $_G['uid'] == $comment['uid']) && $_G['groupid'] != 7}-->
+								<a href="novel.php?mod=home&do=comment&ac=edit&cid=$comment[cid]" id="c_$comment[cid]_edit" onclick="showWindow(this.id, this.href, 'get', 0);">{lang edit}</a>
+								<a href="novel.php?mod=home&do=comment&ac=del&cid=$comment[cid]" id="c_$comment[cid]_delete" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+								<!--{/if}-->
+							</span>
+							<a href="home.php?mod=space&uid={$comment['uid']}" class="xi2 xw1">$comment['username']</a>
+							<span class="xg1 xw0">$comment['dateline']</span>
+						</dt>
+						<dd>$comment['message']</dd>
+					</dl>
+					</span>
+					<!--{/loop}-->
+					$multi
+					<form name="cform" action="novel.php?mod=novelcp&ac=comment" method="post" autocomplete="off">
+						<div class="tedt">
+							<div class="area">
+								<textarea name="message" cols="60" rows="5" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+							</div>
+						</div>
+						<input type="hidden" name="novelid" value="$novelid">
+						<input type="hidden" name="formhash" value="{FORMHASH}">
+						<p class="ptn"><button type="submit" name="commentsubmit" value="true" class="pn"><strong>{lang comment}</strong></button></p>
+					</form>
+				</div>
+			</div>
+			<!--{ad/pdnovel/mb hm/5}-->
+			<!--[diy=diypdmain]--><div id="diypdmain" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel/mb hm/6}-->
+        </div>
+		<div class="pdsidecont">
+			<div class="commentzppx pdside">
+				<div class="title"><span class="titletext">{lang comment_bookinfo}</span></div>
+				<div class="content">
+					<div class="pic">
+						<a href="novel.php?mod=view&novelid=$novelid" title="{$novel['name']}"><img height="80" width="64" alt="{$novel['name']}" src="data/attachment/pdnovel/cover/{$novel['cover']}"></a>
+					</div>
+					<div class="cont">
+						<a href="novel.php?mod=view&novelid={$novelid}" title="{$novel['name']}"><b>$novel['name']</b></a><br>
+						{lang view_thzp_author}<a href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes" title="{$novel['author']}" target="_blank">{$novel['author']}</a><br>
+						{lang view_thzp_cat}<a href="novel.php?mod=list&catid={$novel['catid']}">$catname</a><br>
+						{lang comment_status}<a href="novel.php?mod=list&full=2">$novel['full']</a>
+					</div>
+					<div class="quick_way">
+						<a href="novel.php?mod=chapter&novelid={$novelid}">{lang view_chapter}</a>
+						<a href="novel.php?mod=download&novelid=$novel['novelid']" class="btright">{lang view_txtdownload}</a>
+						<a href="novel.php?mod=misc&ac=mark&novelid=$novelid" onclick="{if $_G['uid']}ajaxmenu(this);return false;{else}showWindow('login', this.href){/if}">{lang view_mark}</a>
+						<a href="novel.php?mod=view&novelid={$novelid}" class="btright">{lang chapter_novelview}</a>
+					</div>
+				</div>
+    		</div>
+			<!--{ad/pdnovel/mb hm/7}-->
+			<!--[diy=diypdside]--><div id="diypdside" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel/mb hm/8}-->
+		</div>
+	</div>
+	<!--{ad/pdnovel/mb hm/2}-->
+	<div class="pdbox" style="margin-top:0">
+		<!--[diy=diypdall]--><div id="diypdall" class="area"></div><!--[/diy]-->
+	</div>
+	<!--{ad/pdnovel/mb hm/3}-->
+</div>
+
+<div class="wp">
+	<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+<script>
+function GoPage() {
+	var page = $("pageindex2").value.trim();
+	var initPageCount = $("pageindex1").value.trim();
+	if (page.length === 0) { alert("请您输入页码"); return false; };
+	var strNum = '1234567890';
+	var isNum = true;
+	for (var i = 0; i < page.length; i += 1) {
+		var c = page.charAt(i);
+		if (strNum.indexOf(c) < 0) { isNum = false; break; };
+	};
+	if (isNum) {
+		if (parseInt(page) > parseInt(initPageCount)) { alert("您输入的页数超过总页数，请重新输入！"); return false; };
+		window.location = '$mpurl' + '&page=' + page;
+	} else alert('您输入的信息有误，请重新输入！');
+};
+
+function novel_comment_requote(cid) {
+	var x = new Ajax();
+	x.get('novel.php?mod=novelcp&ac=comment&op=requote&cid='+cid+'&inajax=1', function(s){
+		$('message').focus();
+		ajaxinnerhtml($('message'), s);
+	});
+}
+</script>
+<!--{subtemplate common/footer}-->

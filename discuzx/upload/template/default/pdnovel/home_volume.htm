@@ -1,0 +1,151 @@
+<!--{template common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<style type="text/css">
+.postbox{display:inline-table; margin-top:10px;}
+.postbox .boxcontent {float: left; width:500px;}
+.postbox .boxcontent .pn {vertical-align:top; margin:0}
+.postbox .boxcontent dl { verflow: hidden; }
+.postbox .boxcontent dl dt {float: left; padding-top: 3px\9; width: 75px; clear: left; }
+.postbox .boxcontent dl dd {margin-bottom: 10px; overflow: hidden;}
+.postbox .boxcontent dl .red {color:#FF0000}
+.postbox .boxcontent .postinput {width:298px; margin-right:5px; padding:2px 0px; height:20px; border: 1px solid #CCC;}
+</style>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+			<!--{if $ac == 'add'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 增加分卷</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="novel.php?mod=home&do=volume&ac=add&novelid=$novelid">分卷信息</a></li><li><a href="novel.php?mod=home&do=manage&novelid=$novelid">章节管理</a></li>
+			</ul>
+            <div class="tl">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=volume&ac=add&novelid=$novelid">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="postsubmit" value="true" />
+				<div class="postbox">
+					<div class="boxcontent">
+						<dl>
+							<dt>分卷名称</dt>
+							<dd><input type="text" name="volumename" id="volumename" value="" size="50" class="postinput" /><button name="postsubmit" class="pn" id="postsubmit" type="button" onclick="validate(this);"><strong>{lang post_submit}</strong></button></dd>
+						</dl>
+					</div>
+				</div>
+			</form>
+			</div>
+			<!--{elseif $ac == 'edit'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 编辑分卷</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="novel.php?mod=home&do=volume&ac=edit&volumeid=$volumeid&novelid=$novelid">分卷信息</a></li><li><a href="novel.php?mod=home&do=manage&novelid=$novelid">章节管理</a></li>
+			</ul>
+            <div class="tl">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=volume&ac=edit&volumeid=$volumeid&novelid=$novelid">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="postsubmit" value="true" />
+				<div class="postbox">
+					<div class="boxcontent">
+						<dl>
+							<dt>分卷名称</dt>
+							<dd><input type="text" name="volumename" id="volumename" value="$volume[volumename]" size="50" class="postinput" /><button name="postsubmit" class="pn" id="postsubmit" type="button" onclick="validate(this);"><strong>{lang post_submit}</strong></button></dd>
+						</dl>
+					</div>
+				</div>
+			</form>
+			</div>
+			<!--{elseif $ac == 'del'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 删除分卷</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="novel.php?mod=home&do=volume&ac=edit&volumeid=$volumeid&novelid=$novelid">分卷信息</a></li><li><a href="novel.php?mod=home&do=manage&novelid=$novelid">章节管理</a></li>
+			</ul>
+            <div class="tl" style="background:#F8F8F8; border:1px solid #DDD; padding:30px; margin-top:20px; text-align:center; font-size:14px; font-weight:700;">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=volume&ac=del&volumeid=$volumeid&novelid=$novelid">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="postsubmit" value="true" />
+				你确定要删除分卷《$volume[volumename]》及该分卷下的所有章节？<br><br>
+				<button name="submit" class="pn" id="submit" type="submit"><strong>确定</strong></button>
+				<button name="submit" class="pn" id="submit" type="reset" onclick="history.go(-1)"><strong>取消</strong></button>
+			</form>
+			</div>
+			<!--{/if}-->
+
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+
+	<div class="appl">
+		<!--{subtemplate pdnovel/home_user}-->
+
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<script>
+function validate(obj) {
+	var volumename = $("volumename");
+	if(!volumename.value) {
+		alert("分卷名称不能为空");
+		volumename.focus();
+		return false;
+	}
+	obj.form.submit();
+	return false;
+}
+function authorplay(){
+	document.getElementById("zuozhe").style.display = '';
+}
+function authordisplay(){
+	document.getElementById("zuozhe").style.display = 'none';
+}
+function uploadWindowstart() {
+	$('uploadwindowing').style.visibility = 'visible';
+	$('uploadsubmit').disabled = true;
+}
+function uploadWindowload() {
+	$('uploadwindowing').style.visibility = 'hidden';
+	$('uploadsubmit').disabled = false;
+	var str = $('uploadattachframe').contentWindow.document.body.innerHTML;
+	if(str == '') {
+		return;
+	}else{
+		hideWindow('upload');
+		document.getElementById("cover_body").src = str; 
+		document.getElementById("cover").value = str; 
+	}
+}
+function uploadWindow() {
+	showWindow('upload', 'novel.php?mod=misc&ac=upload', 'get', 0);
+}
+function checkAll(type, form, value, checkall, changestyle) {
+	var checkall = checkall ? checkall : 'chkall';
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(type == 'option' && e.type == 'radio' && e.value == value && e.disabled != true) {
+			e.checked = true;
+		} else if(type == 'value' && e.type == 'checkbox' && e.getAttribute('chkvalue') == value) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle) {
+				multiupdate(e);
+			}
+		} else if(type == 'prefix' && e.name && e.name != checkall && (!value || (value && e.name.match(value)))) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle && e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
+				e.parentNode.className = e.checked ? 'checked' : '';
+			}
+		}
+	}
+}
+</script>
+<!--{template common/footer}-->

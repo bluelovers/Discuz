@@ -1,0 +1,113 @@
+<!--{template common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<style type="text/css">
+.tl a {color:#004D00}
+.tl a.gray {color:gray}
+.tl a.blue {color:blue}
+.tl table {table-layout:fixed;width:100%; margin-top:10px; }
+.tl tr td {overflow:hidden}
+.tl .tbody2 {height:28px; line-height:28px; padding-left:10px;}
+.tl .tbody1 {height:28px; line-height:28px; padding-left:10px; background-color:#f2f2f2}
+.tl .thead {height:32px; line-height:32px;background:none repeat scroll 0 0 #F2F2F2;border-bottom:1px solid #DDD;border-top:1px solid #DDD;}
+.pdchapter {clear:both; width:810px; display:block; display:inline-block; margin:8px 0 0 0;}
+.pdchapter .contenttitle {float:left; width:100%; height:30px; margin:20px 0; background-color:#f0f0f0; border-top:1px solid #c0c0c0}
+.pdchapter .contenttitle h2 {font-size:14px;line-height:30px;text-indent:0;}
+.pdchapter .contenttitle h3 {font-size:12px; font-weight:normal; line-height:30px; padding-right:10px;}
+.pdchapter .contenttitle h3 a {color:#FF6600;}
+.pdchapter .contenttitle h2 span {color:#FFFFFF;float:left;font-size:16px;text-align:center;width:26px;background:url(template/default/pdnovel/img/title.png) no-repeat;}
+.pdchapter .contentlist {float:left; width:100%; margin-bottom:10px}
+.pdchapter .contentlist ul {margin:0;padding:0;list-style-type:none}
+.pdchapter .contentlist ul li {float:left;width:25%;line-height:22px; height:22px;overflow:hidden;text-indent:12px;margin-top:5px;border-bottom:1px dashed #999;}
+.pdchapter .left{float:left}
+.pdchapter .right{float:right}
+.pdchapter .contentlist ul li .right a {color:#FFFFFF}
+.pdchapter .contentlist ul li:hover .right a {color:#FF6600;}
+.pdchapter .add{background: url(template/default/pdnovel/img/add.gif) no-repeat scroll 0 1px transparent;color: #FF6600;line-height: 25px;padding-left: 17px;}
+.pdchapter .contentlist ul li:hover {background:url(template/default/pdnovel/img/novel_bg.png);}
+.pdchapter .showbottom { padding: 0 10px; clear:both; height: 31px; border-bottom: 1px solid #FFF; border-left: 1px solid #FFF; border-right: 1px solid #FFF; border-top: 1px solid #c0c0c0; background-color:#f0f0f0; line-height: 31px; color:#004e00;}
+</style>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_manage.gif" class="vm" /> <!--{if $novelid}-->章节管理 —— $novel[name]<!--{else}-->管理小说<!--{/if}--></h1>
+			<ul class="tb cl">
+				<!--{if $novelid}--><li class="a"><a href="novel.php?mod=home&do=manage&novelid=$novelid">全部章节</a></li><li><a href="novel.php?mod=home&do=novel&ac=edit&novelid=$novelid">编辑小说</a></li><li><a href="novel.php?mod=view&novelid=$novelid" target="_blank">查看小说</a></li><!--{else}--><li class="a"><a href="novel.php?mod=home&do=manage">我的小说</a></li><!--{/if}-->
+			</ul>
+            <div class="tl">
+			<!--{if $novelid}-->
+			<div class="pdchapter">$volumechapter</div><div class="pdchapter"><a href="novel.php?mod=home&do=volume&ac=add&novelid=$novelid" class="add">增加分卷</a></div>
+			<!--{else}-->
+			<form method="post" autocomplete="off" name="delemark" id="delemark" action="novel.php?mod=home&do=novel&ac=bdel" onsubmit="javascript:if(confirm('你确定要删除这些小说？删除后不可恢复！')) return true; else return false;">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<table cellspacing="0" cellpadding="0">
+						<tr class="thead">
+                        	<td width="20px">&nbsp;</td>
+                            <td width="460px">&nbsp;&nbsp;{lang mark_zuixin}</td>
+							<td width="120px">{lang mark_gengxin}</td>
+                            <td width="80px">{lang mark_zhuangtai}</td>
+							<td width="120px">操作</td>
+                        </tr>
+                        <!--{loop $managelist $key $manage}-->
+                        <tr class="tbody<!--{if $key%2==0}-->2<!--{else}-->1<!--{/if}-->">
+                        	<td><input class="checkbox" type="checkbox" name="nidarr[]" value="$manage[novelid]"/></td>
+                        	<td>[<a href="novel.php?mod=list&catid={$manage['upid']}" class="gray" target="_blank">{$manage['upname']}</a>/<a href="novel.php?mod=list&catid={$manage['catid']}" class="gray" target="_blank">{$manage['catname']}</a>] <a href="novel.php?mod=view&novelid=$manage['novelid']" target="_blank">{$manage['name']}</a> <a href="novel.php?mod=read&novelid=$manage['novelid']&chapterid=$manage['lastchapterid']" class="gray" target="_blank">$manage['lastchapter']</a></td>
+                            <td>{$manage['lastupdate']}</td>
+                            <td>{$manage['full']}</td>
+							<td><a href="novel.php?mod=home&do=novel&ac=edit&novelid=$manage['novelid']">编辑</a> <a href="novel.php?mod=home&do=novel&ac=del&novelid=$manage['novelid']">删除</a> <a href="novel.php?mod=home&do=manage&novelid=$manage['novelid']">章节</a></td>
+                        </tr>
+                        <!--{/loop}-->
+                        <tr class="thead" style="background:none">
+                        	<td><input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll('prefix', this.form, 'nidarr', 'chkall')" /></td>
+                            <td>{lang mark_quanxuan}&nbsp;<input type="submit" name="submit" id="submit" value="{lang mark_shanchu}"></td>
+                            <td colspan="3"><!--{if $multi}-->$multi<!--{/if}--></td>
+                        </tr>
+					</table>
+				</form>
+				<!--{/if}-->
+			</div>
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+
+	<div class="appl">
+		<!--{subtemplate pdnovel/home_user}-->
+
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<script>
+function checkAll(type, form, value, checkall, changestyle) {
+	var checkall = checkall ? checkall : 'chkall';
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(type == 'option' && e.type == 'radio' && e.value == value && e.disabled != true) {
+			e.checked = true;
+		} else if(type == 'value' && e.type == 'checkbox' && e.getAttribute('chkvalue') == value) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle) {
+				multiupdate(e);
+			}
+		} else if(type == 'prefix' && e.name && e.name != checkall && (!value || (value && e.name.match(value)))) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle && e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
+				e.parentNode.className = e.checked ? 'checked' : '';
+			}
+		}
+	}
+}
+</script>
+<!--{template common/footer}-->

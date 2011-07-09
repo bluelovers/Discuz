@@ -1,0 +1,26 @@
+本小说模块原由剖度科技开发，由于目前原创作者蒸发，程序无法得到更新，现自行开发，同时对外发布以及授权，降低开发成本！未经授权也可使用本小说系统，但在功能上有部分限制，不影响做原创文学的使用.
+
+
+一、全新安装方法：
+1、将压缩包目录下的所有文件上传到已经装好Discuz!X的根目录下，个别文件提示覆盖，请放心覆盖，不会影响你原有的功能。
+2、在浏览器里面访问http://你的网站地址/pdnovelinstall/index.php按照提示进行安装。
+3、安装完请务必删除pdnovelinstall目录。
+4、进入后台——界面——导航，查看是否已经存在人才招聘模块的导航项目。
+5、进入后台——工具——更新缓存（请务必勾选DIY模块分类缓存）。
+6、安装完成。
+
+二、卸载方法：
+1、将压缩包目录下的pdnovelinstall目录上传到已经装好Discuz!X的根目录下。
+2、在浏览器里面访问http://你的网站地址/pdnovelinstall/uninstall.php按照提示进行安装。
+3、卸载完请务必删除pdnovelinstall目录。
+4、删除对应的文件（可选）。
+5、卸载完成。
+四、DIY布局：
+用具有DIY权限的帐号进入模块DIY-导入template\default\pdnovel 下的XML文件
+
+可以对列表页、信息页、评论页进行DIY
+pdnovel.php?mod=list 导入 template/default/pdnovel/pdnovel_list.xml
+pdnovel.php?mod=view 导入 template/default/pdnovel/pdnovel_view.xml
+pdnovel.php?mod=comment 导入 template/default/pdnovel/pdnovel_comment.xml
+
+

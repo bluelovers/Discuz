@@ -1,0 +1,276 @@
+<!--{subtemplate common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<link rel="stylesheet" type="text/css" href="template/default/pdnovel/css/view.css" />
+<script src="template/default/pdnovel/js/view_top.js" type="text/javascript"></script>
+
+<div id="pdmodule">
+	<!--{ad/pdnovel/mb hm/1}-->
+	<div class="pdbox">
+		<div class="pdmaincont" id="post_$post[pid]">
+			<!--{ad/pdnovel/mb hm/4}-->
+			<div class="pdviewshow pdmain">
+				<div class="title">
+					<span class="titletext"><a href="/">$_G['setting']['bbname']</a> &gt; <a href="novel.php">{lang common_novel}</a> &gt; <a href="novel.php?mod=list&catid={$novel['upid']}">$upname</a> &gt; <a href="novel.php?mod=list&catid={$novel['catid']}">{$catname}</a> &gt; <a href="novel.php?mod=view&novelid={$novel['novelid']}">$novel['name']</a></span>
+					<span class="subtitle"><i>({lang view_num}$novel['novelid'])</i> <a href="novel.php?mod=view&novelid={$novel['novelid']}" onclick="window.external.addFavorite(this.href,this.title);return false;" title='{$novel['name']}-{$novel['author']}-$_G['setting']['bbname']' rel="sidebar">{lang view_browser}</a></span>
+				</div>
+				<div class="showpic">
+					<div class="pic_box"><img src="<!--{if $novel['cover']}-->data/attachment/pdnovel/cover/$novel['cover']<!--{else}-->template/default/novel/image/nocover.jpg<!--{/if}-->" /></div>
+					<div class="opt">
+						<ul> 
+							<li><a href="novel.php?mod=chapter&novelid={$novel['novelid']}" title="{lang view_chapter}" class="active">{lang view_chapter}</a></li>
+							<li><a href="novel.php?mod=download&novelid=$novel['novelid']" title="{lang view_txtdownload}" id="download">{lang view_txtdownload}</a></li> 
+            	<li><a href="novel.php?mod=misc&ac=mark&novelid=$novelid" onclick="{if $_G['uid']}ajaxmenu(this, 3000, 1, 0, '43', 'markajax()');return false;{else}showWindow('login', this.href){/if}">{lang view_mark}</a></li>
+            	<li><a href="novel.php?mod=misc&ac=vote&novelid=$novelid" onclick="{if $_G['uid']}ajaxmenu(this, 3000, 1, 0, '43', 'voteajax($findvote)');return false;{else}showWindow('login', this.href){/if}">{lang view_vote}</a></li>
+          		<li><a href="javascript:;" onclick="showWindow('rate', 'novel.php?mod=misc&ac=rate&novelid=$novelid', 'get', -1);return false;" title="{lang view_rate}" class="active">{lang view_rate}</a></li>
+          	</ul>
+          </div>
+        </div>
+        <div class="showinfo">
+        	<div class="name"><h1>$novel['name']</h1><b>{lang view_author}</b><a href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes" target="_blank">$novel['author']</a></div>
+						<div class="tabs">
+							<ul>
+								<li><a onclick="Switch2('pdcontent','pdinfo')" id="pdcontentHead" class="active">{lang view_content}</a></li>
+								<li><a onclick="Switch2('pdinfo','pdcontent')" id="pdinfoHead" class="noactive">{lang view_intro}</a></li>
+            	</ul>
+            <div class="right">{lang view_dateline}$novel['lastupdate']</div>
+					</div>
+					<div class="cont" id="pdcontent">
+						<div class="intro">
+							<div class="data">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td><b>{lang view_allvisit}</b>$novel['allvisit']</td>
+										<td><b>{lang view_allvote}</b><span id="allvotes">$novel['allvote']</span></td>
+										<td><b>{lang view_allmark}</b><span id="allmarks">$novel['allmark']</span></td>
+										<td><b>{lang view_allwords}</b>$novel['words']</td>
+										<td><b>{lang view_full}</b><strong>$novel['full']</strong></td>
+									</tr>
+								</table>
+							</div>
+							<div class="txt">$novel['intro']</div>
+						</div>
+					</div>
+					<div class="cont" id="pdinfo" style="display:none">
+						<div class="intro">
+							<div class="infobox">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td><b>{lang view_allvisit}</b>$novel['allvisit']</td>
+										<td><b>{lang view_monthvisit}</b>$novel['monthvisit']</td>
+										<td><b>{lang view_weekvisit}</b>$novel['weekvisit']</td>
+										<td><b>{lang view_dayvisit}</b>$novel['dayvisit']</td>
+									</tr>
+									<tr>
+										<td><b>{lang view_allvote}</b><span id="allvote">$novel['allvote']</span></td>
+										<td><b>{lang view_monthvote}</b><span id="monthvote">$novel['monthvote']</span></td>
+										<td><b>{lang view_weekvote}</b><span id="weekvote">$novel['weekvote']</span></td>
+										<td><b>{lang view_dayvote}</b><span id="dayvote">$novel['dayvote']</span></td>
+									</tr>
+									<tr>
+										<td><b>{lang view_allwords}</b>$novel['words']</td>
+										<td><b>{lang view_allmark}</b><span id="allmark">$novel['allmark']</span></td>
+										<td><b>{lang view_bigcategory}</b><a href="novel.php?mod=list&catid={$novel['upid']}">$upname</a></td>
+										<td><b>{lang view_smallcategory}</b><a href="novel.php?mod=list&catid={$novel['catid']}">$catname</a></td>
+									</tr>
+									<tr>
+										<td><b>{lang view_permission}</b>$novel['permission']</td>
+										<td><b>{lang view_vip}</b>$novel['vip']</td>
+										<td><b>{lang view_first}</b>$novel['first']</td>
+										<td><b>{lang view_full}</b><strong>$novel['full']</strong></td>
+									</tr>
+								</table>
+							 </div>
+							<div class="txt">
+								<h3>作者的话</h3>
+								<!--{if $novel['notice']}-->$novel['notice']<!--{else}-->该作者暂未发表公告<!--{/if}-->
+							</div>
+						</div>
+					</div>
+					<div class="other">
+						<b>{lang view_keywords}</b>$novel['keyword']
+					</div>
+				</div>
+				<div class="shownotice">
+				</div>
+			</div>
+			<!--{ad/pdnovel/mb hm/5}-->
+			<!--[diy=diypdmain]--><div id="diypdmain" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel/mb hm/6}-->
+			<div class="pdupdate pdmaintab">
+				<div class="title">
+					<span class="titletext">{$novel['name']}{lang view_lastchapter}</span>
+					<ul><li class="a"><a name="lastchapter">{lang view_newchapter}</a></li></ul>
+				</div>
+				<div class="showupdate">
+					<div class="name">
+						<h3><a href="novel.php?mod=read&novelid=$novelid&chapterid=$novel['lastchapterid']" rel="nofollow" target="_blank">$novel['lastchapter']</a>					
+						</h3>
+						<div class="updatetime">{lang view_updatetime}{$novel['lastupdate']}</div>
+					</div>
+					<div class="cont">
+						<a href="novel.php?mod=read&novelid=$novelid&chapterid=$novel['lastchapterid']" target="_blank">$novel['lastchaptercontent']</a>
+					</div>
+				</div>
+			</div>
+			<div class="pdcomment pdmaintab">
+				<div class="title">
+					<span class="titletext">{$novel['name']}{lang view_comment}</span>
+					<ul><li class="a"><a name="comment">{lang view_newcomment}</a></li></ul>			 
+				</div>
+				<div class="showcomment">
+					<!--{loop $commentlist $key $comment}-->
+					<dl class="ptm pbm bbda cl" id="comment_{$comment['cid']}_li">
+						<dt class="mbm">
+							<span class="y xw0 xi2">
+								<a href="javascript:;" onclick="novel_comment_requote($comment[cid]);">{lang quote}</a>
+								<!--{if ($_G['group']['allowmanagenovel'] || $_G['uid'] == $comment['uid']) && $_G['groupid'] != 7}-->
+								<a href="novel.php?mod=home&do=comment&ac=edit&cid=$comment[cid]" id="c_$comment[cid]_edit" onclick="showWindow(this.id, this.href, 'get', 0);">{lang edit}</a>
+								<a href="novel.php?mod=home&do=comment&ac=del&cid=$comment[cid]" id="c_$comment[cid]_delete" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+								<!--{/if}-->
+							</span>
+							<a href="home.php?mod=space&uid={$comment['uid']}" class="xi2 xw1">$comment['username']</a>
+							<span class="xg1 xw0">$comment['dateline']</span>
+						</dt>
+						<dd>$comment['message']</dd>
+					</dl>
+					<!--{/loop}-->
+					<p class="ptm pbm"><a href="novel.php?mod=comment&novelid=$novelid" class="xi2">{lang view_viwcomment}({$novel['comments']})</a></p>
+					<form name="cform" action="novel.php?mod=novelcp&ac=comment" method="post" autocomplete="off">
+						<div class="tedt">
+							<div class="area">
+								<textarea name="message" cols="60" rows="5" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+							</div>
+						</div>
+						<input type="hidden" name="novelid" value="$novelid">
+						<input type="hidden" name="formhash" value="{FORMHASH}">
+						<p class="ptn"><button type="submit" name="commentsubmit" value="true" class="pn"><strong>{lang comment}</strong></button></p>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="pdsidecont pdview">
+			<div class="pdvaluation">
+				<div class="showvaluation" id="star_ajax">
+					<div class="score_select">
+						<div class="star_rating">
+							<div id="current_rating" class="current_rating" style="width:{$current_rating}px"></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=1&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(1)" title="{lang view_star1}" class="one-star"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=2&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(2)" title="{lang view_star2}" class="two-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=3&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(3)" title="{lang view_star3}" class="three-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=4&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(4)" title="{lang view_star4}" class="four-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=5&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(5)" title="{lang view_star5}" class="five-stars"></a></div>
+						</div>
+						<div class="red" id="span_point">{lang view_ratestar}</div>
+					</div>
+					<div class="score_rect">{lang view_ratescore}{$current_text[$current_i]}</div>
+					<div class="score_pic">
+						<div class="box" title="{lang view_star1}">
+							<span class="start"><i style="width: 65px;"></i></span><span class="percentage" style="width:{$width[5]}px;"></span>{$percentage[5]}%
+						</div>
+						<div class="box" title="{lang view_star2}">
+							<span class="start"><i style="width: 52px;"></i></span><span class="percentage" style="width:{$width[4]}px;"></span>{$percentage[4]}%
+						</div>
+						<div class="box" title="{lang view_star3}">
+							<span class="start"><i style="width: 39px;"></i></span><span class="percentage" style="width:{$width[3]}px;"></span>{$percentage[3]}%
+						</div>
+						<div class="box" title="{lang view_star4}">
+							<span class="start"><i style="width: 26px;"></i></span><span class="percentage" style="width:{$width[2]}px;"></span>{$percentage[2]}%
+						</div>
+						<div class="box" title="{lang view_star5}">
+							<span class="start"><i style="width: 13px;"></i></span><span class="percentage" style="width:{$width[1]}px;"></span>{$percentage[1]}%
+						</div>
+					</div>
+					<div class="score_txt">评价人数:{$novel[click]}人&nbsp;&nbsp;&nbsp;&nbsp;<a href="novel.php?mod=list&orderby=11" target="_blank">热门评价</a></div>
+				</div>
+				<div class="showrate">
+					<h3>{lang view_newaward}</h3>
+					<div class="news_table">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<!--{if $rateloglist}-->
+							<!--{loop $rateloglist $uid $ratelog}-->
+							<!--{if $ratenum < 8}-->
+							<tr>
+								<td><a href="home.php?mod=space&uid=$ratelog[uid]" target="_blank">$ratelog[username]</a></td><td><font color="#CC0000">{lang view_award}{$ratelog['credits']}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}</font></td><td>$ratelog['dateline']</td>
+							</tr>
+							<!--{/if}-->
+							<!--{/loop}-->
+						<!--{/if}-->
+						</table>
+					</div>
+					<div class="news_last">
+					<!--{if $sum_credits}-->
+						{lang view_allaward}<span class="news_score">$sum_credits</span>&nbsp;{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}&nbsp;&nbsp;&nbsp;&nbsp;<a href="">查看全部</a>
+					<!--{else}-->
+						{lang view_noaward}
+					<!--{/if}-->
+					</div>
+				</div>
+			</div>
+			<!--{ad/pdnovel/mb hm/7}-->
+			<!--[diy=diypdside]--><div id="diypdside" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel/mb hm/8}-->
+		</div>
+	</div>
+	<!--{ad/pdnovel/mb hm/2}-->
+	<div class="pdbox" style="margin-top:0">
+		<!--[diy=diypdall]--><div id="diypdall" class="area"></div><!--[/diy]-->
+	</div>
+	<!--{ad/pdnovel/mb hm/3}-->
+</div>
+
+<div class="wp">
+	<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+<script>
+var DivEstimate = {
+	Point : 0 ,
+	changeStar : function(point){ 
+		Point = point;
+		var text=new Array('{lang view_star1}', '{lang view_star2}', '{lang view_star3}', '{lang view_star4}', '{lang view_star5}'); 
+		document.getElementById('current_rating').style.width= (Point * 20) +'px';
+		document.getElementById('span_point').innerHTML = text[point-1];
+	}
+}
+function Switch2(showid, hidden1) {
+	$(hidden1).style.display = 'none';
+	$(showid).style.display = '';
+	$(hidden1 + 'Head').className = 'noactive';
+	$(showid + 'Head').className = 'active';
+}
+function novel_comment_requote(cid) {
+	var x = new Ajax();
+	x.get('novel.php?mod=novelcp&ac=comment&op=requote&cid='+cid+'&inajax=1', function(s){
+		$('message').focus();
+		ajaxinnerhtml($('message'), s);
+	});
+}
+function errorhandle_clickhandle(message) {
+	ajaxget('novel.php?mod=misc&ac=star&op=show&novelid=$novelid', 'star_ajax');
+}
+setcookie('novelvote', 1);
+setcookie('novelmark', 1);
+function voteajax(n) {
+	if(n==0 && getcookie('novelvote')){
+		$('allvotes').innerHTML = parseInt($('allvotes').innerHTML) + 1;
+		$('dayvote').innerHTML = parseInt($('dayvote').innerHTML) + 1;
+		$('weekvote').innerHTML = parseInt($('weekvote').innerHTML) + 1;
+		$('monthvote').innerHTML = parseInt($('monthvote').innerHTML) + 1;
+		$('allvote').innerHTML = parseInt($('allvote').innerHTML) + 1;
+		setcookie('novelvote', '');
+	}
+}
+function markajax() {
+	if(getcookie('novelmark')){
+		$('allmarks').innerHTML = parseInt($('allmarks').innerHTML) + 1;
+		$('allmark').innerHTML = parseInt($('allmark').innerHTML) + 1;
+		setcookie('novelmark', '');
+	}
+}
+</script>
+<!--{subtemplate common/footer}-->

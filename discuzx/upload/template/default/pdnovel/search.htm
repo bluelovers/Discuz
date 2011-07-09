@@ -1,0 +1,106 @@
+<!--{subtemplate search/header}-->
+<link rel="stylesheet" type="text/css" href="template/default/pdnovel/css/search.css" />
+<div id="ct" class="w">
+	<form class="searchform" method="post" autocomplete="off" action="novel.php?mod=search&ac=$ac">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<!--{if submitcheck('searchsubmit', 1) && $srchtxt}-->
+        <table id="tpsch" class="mbm" cellspacing="0" cellpadding="0">
+            <tr>
+                <td><h1><a href="./" title="$_G['setting']['bbname']">{BOARDLOGO}</a></h1></td>
+                <td>
+                    <ul class="tb cl">
+                        <!--{block slist[name]}--><li{if $ac == 'name'} class="a"{/if}><a href="novel.php?mod=search&ac=name{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang name}</a></li><!--{/block}-->
+                        <!--{block slist[author]}--><li{if $ac == 'author'} class="a"{/if}><a href="novel.php?mod=search&ac=author{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang author}</a></li><!--{/block}-->
+                        <!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><li><a href="search.php?mod=portal{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang portal}</a></li><!--{/block}--><!--{/if}-->
+                        <!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><li><a href="search.php?mod=forum{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a></li><!--{/block}--><!--{/if}-->
+                        <!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><li><a href="search.php?mod=blog{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang blog}</a></li><!--{/block}--><!--{/if}-->
+                        <!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><li><a href="search.php?mod=album{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang album}</a></li><!--{/block}--><!--{/if}-->
+                        <!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><li><a href="search.php?mod=group{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a></li><!--{/block}--><!--{/if}-->
+                        <!--{block slist[user]}--><li><a href="search.php?mod=user{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang users}</a></li><!--{/block}-->
+                        <!--{echo implode("", $slist);}-->					
+                    </ul>
+                    <table id="tps_form" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <input type="text" id="srchtxt" name="srchtxt" class="schtxt" size="45" maxlength="40" value="$srchtxt" tabindex="1" />
+                                <script type="text/javascript">$('srchtxt').focus();</script>
+                            </td>
+                            <td>
+                                <input type="hidden" name="searchsubmit" value="yes" />
+                                <button type="submit" id="tps_btn" class="schbtn"><strong>{lang search}</strong></button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="tl">
+            <div class="sttl mbn">
+                <h2>{lang search_result_keyword}</h2>
+            </div>
+            <!--{if empty($novellist)}-->
+                <p class="emp xg2 xs2">{lang search_nomatch}</p>
+            <!--{else}-->
+            <div class="pdsearch">
+                <div class="showlist">
+                    <ul>
+                        <!--{loop $novellist $novel}-->
+                        <li>
+                            <a class="novelpic" href="novel.php?mod=view&novelid=$novel['novelid']" target="_blank"><img src="<!--{if $novel['cover']}-->$coverpath$novel['cover']<!--{else}-->template/default/pdnovel/img/nocover.jpg<!--{/if}-->" /><span class="bg">$novel['full']&nbsp;</span></a>
+                            <h3>
+                                <a href="novel.php?mod=view&novelid=$novel['novelid']" target="_blank"><span>$novel['name']</span></a> <span><a href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes" style="color:red">$novel['author']</a></span>
+                            </h3>
+                            <ul>
+                            	<li><b>{lang search_category}:</b><a href="novel.php?mod=list&catid=$novel['catid']" target="_blank">$novel['catname']</a></li>
+                                <li><b>{lang search_words}:</b>$novel['words']</li>
+                                <li><b>{lang search_chapter}:</b><a href="novel.php?mod=read&novelid=$novel['novelid']&chapterid=$novel['lastchapterid']" target="_blank">$novel['lastchapter']</a></li>
+                                <li><b>{lang search_update}:</b>$novel['lastupdate']</li>				
+                                <li class="more"><a href="novel.php?mod=chapter&novelid=$novel['novelid']" class="play" target="_blank">{lang search_read}</a> | <a href="novel.php?mod=download&novelid=$novel['novelid']" target="_blank">{lang search_download}</a> | <a href="novel.php?mod=misc&ac=mark&novelid=$novel['novelid']" class="btn04" onclick="{if $_G['uid']}ajaxmenu(this);return false;{else}showWindow('login', this.href){/if}">{lang search_mark}</a> | <a href="novel.php?mod=comment&novelid=$novel['novelid']" target="_blank">{lang search_comment}</a> | <a href="novel.php?mod=view&novelid=$novel['novelid']" target="_blank">{lang search_info}</a></li>
+                            </ul>
+                        </li>
+                        <!--{/loop}-->
+                    </ul>
+                    <!--{if $multi}--><div class="pgs cl mbm showpage">$multi</div><!--{/if}-->
+                </div>
+            </div>
+            <!--{/if}-->
+        </div>
+    	<!--{else}-->
+        <table id="tpsch" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+            <tr>
+                <td class="hm mtw ptw pbw"><h1 class="mtw ptw"><a href="./" title="$_G['setting']['bbname']">{BOARDLOGO}</h1></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hm xs2 pbm" width="400">
+                    <!--{block slist[name]}--><!--{if $ac == 'name'}--><strong>{lang name}</strong><!--{else}--><a href="novel.php?mod=search&ac=name{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang name}</a><!--{/if}--><!--{/block}-->
+                    <!--{block slist[author]}--><!--{if $ac == 'author'}--><strong>{lang author}</strong><!--{else}--><a href="novel.php?mod=search&ac=author{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang author}</a><!--{/if}--><!--{/block}-->
+                    <!--{if $_G['setting']['search']['portal']['status'] && ($_G['group']['allowsearch'] & 1 || $_G['adminid'] == 1)}--><!--{block slist[portal]}--><a href="search.php?mod=portal{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang portal}</a><!--{/block}--><!--{/if}-->
+                    <!--{if $_G['setting']['search']['forum']['status'] && ($_G['group']['allowsearch'] & 2 || $_G['adminid'] == 1)}--><!--{block slist[forum]}--><a href="search.php?mod=forum{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][2]['navname']</a><!--{/block}--><!--{/if}-->
+                    <!--{if $_G['setting']['search']['blog']['status'] && ($_G['group']['allowsearch'] & 4 || $_G['adminid'] == 1)}--><!--{block slist[blog]}--><a href="search.php?mod=blog{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang blog}</a><!--{/block}--><!--{/if}-->
+                    <!--{if $_G['setting']['search']['album']['status'] && ($_G['group']['allowsearch'] & 8 || $_G['adminid'] == 1)}--><!--{block slist[album]}--><a href="search.php?mod=album{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang album}</a><!--{/block}--><!--{/if}-->
+                    <!--{if $_G['setting']['groupstatus'] && $_G['setting']['search']['group']['status'] && ($_G['group']['allowsearch'] & 16 || $_G['adminid'] == 1)}--><!--{block slist[group]}--><a href="search.php?mod=group{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">$_G['setting']['navs'][3]['navname']</a><!--{/block}--><!--{/if}-->
+                    <!--{echo implode("<span class=\"pipe\">|</span>", $slist);}-->
+                    <span class="pipe">|</span>
+                    <a href="search.php?mod=user{if $keyword}&srchtxt=$keyword&searchsubmit=yes{/if}">{lang user}</a>
+                </td>
+                <td></td>
+            </tr>
+            <tr id="tps_form">
+                <td>
+                    <input type="text" id="srchtxt" name="srchtxt" size="65" maxlength="40" value="$srchtxt" class="schtxt" tabindex="1" />
+                    <script type="text/javascript">$('srchtxt').focus();</script>
+                </td>
+                <td>
+                    <input type="hidden" name="searchsubmit" value="yes" />
+                    <button type="submit" id="tps_btn" value="true" class="schbtn"><strong>{lang search}</strong></button>
+                </td>
+    
+                <td style="padding-left: 10px; width: 50px; background: #FFF; text-align: left;">
+                </td>
+            </tr>
+        </table>
+    	<!--{/if}-->
+    </form>
+</div>
+<!--{subtemplate search/footer}-->

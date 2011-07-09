@@ -1,0 +1,49 @@
+<!--{subtemplate common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<link rel="stylesheet" type="text/css" href="template/default/pdnovel/css/view.css" />
+
+<div id="pdmudule">
+	<!--{ad/pdnovel/mb hm/1}-->
+	<div class="pdbox">
+		<div class="pdchapter pdall">
+			<div class="title">
+				<span class="titletext"><a href="/">$_G['setting']['bbname']</a> &gt; <a href="novel.php">{lang common_novel}</a> &gt; <a href="novel.php?mod=list&catid={$novel['upid']}">$upname</a> &gt; <a href="novel.php?mod=list&catid={$novel['catid']}">{$catname}</a> &gt; <a href="novel.php?mod=view&novelid={$novel['novelid']}">$novel['name']</a></span>
+				<span class="subtitle"><i>({lang view_num}$novel['novelid'])</i> <a href="novel.php?mod=view&novelid={$novel['novelid']}" onclick="window.external.addFavorite(this.href,this.title);return false;" title='{$novel['name']}-{$novel['author']}-$_G['setting']['bbname']' rel="sidebar">{lang view_browser}</a></span>
+			</div>
+			<div class="showhead">
+				<h1 class="headname">$novel['name']</h1>
+				<span class="headinfo">{lang chapter_author}<a href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes" target="_blank">$novel['author']</a><span class="pipe">|</span>{lang chapter_update}$novel['lastupdate']<span class="pipe">|</span>{lang chapter_lastchapter}<a href="novel.php?mod=read&novelid={$novelid}&chapterid={$novel['lastchapterid']}">$novel['lastchapter']</a>
+				</span>
+			</div>
+			<!--{ad/pdnovel_chapter/mb hm/1}-->
+			<!--[diy=diyshowhead]--><div id="diyshowhead" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel_chapter/mb hm/2}-->
+			<div class="showcontent">
+				{$volumechapter}
+			</div>
+			<!--{ad/pdnovel_chapter/mb hm/3}-->
+			<!--[diy=diyshowcontent]--><div id="diyshowcontent" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel_chapter/mb hm/4}-->
+			<div class="showbottom">
+				<span class="z"><a href="novel.php?mod=download&novelid=$novel['novelid']" id="download" title="{lang view_txtdownload}">{lang view_txtdownload}</a> | <a href="novel.php?mod=comment&novelid=$novel['novelid']">{lang chapter_viewcomment}</a></span></a></span>
+				<span class="y"><a href="novel.php?mod=misc&ac=mark&novelid=$novelid" onclick="{if $_G['uid']}ajaxmenu(this);return false;{else}showWindow('login', this.href){/if}">{lang view_mark}</a> | <a href="novel.php?mod=misc&ac=vote&novelid=$novelid" onclick="{if $_G['uid']}ajaxmenu(this, 3000, 1, 0, '43', 'voteajax($findvote)');return false;{else}showWindow('login', this.href){/if}">{lang view_vote}</a> | <a href="novel.php?mod=view&novelid=$novelid">{lang chapter_novelview}</a> | <a href="javascript:;" onclick="scrollTo(0,0);">{lang chapter_top}</a></span>
+			</div>
+		</div>
+	</div>
+	<!--{ad/pdnovel/mb hm/2}-->
+	<div class="pdbox">
+		<!--[diy=diypdall]--><div id="diypdall" class="area"></div><!--[/diy]-->
+	</div>
+	<!--{ad/pdnovel/mb hm/3}-->
+</div>
+
+<div class="wp">
+	<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+<!--{subtemplate common/footer}-->

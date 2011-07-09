@@ -1,0 +1,63 @@
+<style type="text/css">
+
+.scbar_icon_td { width: 50px; background: url({IMGDIR}/search.png) no-repeat 0 -74px; }
+				.scbar_txt_td, .scbar_type_td { background: url({IMGDIR}/search.png) repeat-x 0 -222px; }
+					#scbar_txt { width: 400px; border: 1px solid #FFF; outline: none; font-size: 14px; }
+				.scbar_btn_td { width: 67px; background: url({IMGDIR}/search.png) no-repeat 0 -296px; text-align: center; }
+					#scbar_btn { margin: 0; padding: 0; border: none; background: transparent none; }
+				.scbar_type_td { background: url({IMGDIR}/search.png) no-repeat 0 -370px; }
+					#scbar_type { display: block; padding-left: 5px; text-align: left; text-decoration: none; }
+						#scbar_type_menu { margin-top: -8px; }
+				#scbar_hot { padding-left: 8px; height: 45px; overflow: hidden; }
+					#scbar_hot strong, #scbar_hot a { float: left; margin-right: 8px; white-space: nowrap; }
+
+.pdcopyright {text-align:right}
+.pdcopyright a {color:#999}
+
+#pdmenu {align:right; display: block; text-indent:10px; width: 95px; height: 26px; background: url(template/default/pdnovel/img/author.png) no-repeat 0 0; line-height: 26px; }
+.pdmenu a {color:#ffffff; font-weight:bold;}
+
+#pdmenu_menu { margin: -3px 0 0 0px; width: 93px; }
+#pdmenu_menu ul a { padding-left:26px; background: url(http://www.dke8.com/static/image/common/noicon.gif) no-repeat 6px 50%; }
+#pdmenu_menu ul a:hover { background-color: #E5EDF2; color: #336699; text-shadow: none; }
+
+</style>
+<!--{eval $slist = array();}-->
+<!--{block slist[name]}--><li><a href="javascript:;" rel="name" class="curtype">{lang name}</a></li><!--{/block}-->
+<!--{block slist[author]}--><li><a href="javascript:;" rel="author">{lang author}</a></li><!--{/block}-->
+
+<!--{if $slist}-->
+	<div id="scbar" class="cl">
+		<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="novel.php?mod=search&searchsubmit=yes" target="_blank">
+		<input type="hidden" name="ac" id="scbar_mod" value="search" />
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<input type="hidden" name="srchtype" value="title" />
+		<input type="hidden" name="srhfid" value="$_G[fid]" />
+		<input type="hidden" name="srhlocality" value="$_G['basescript']::{CURMODULE}" />
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+				<td class="scbar_icon_td"></td>
+				<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="{lang enter_content}" autocomplete="off" /></td>
+				<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="showmenu xg1 xs2" onclick="showMenu(this.id)" hidefocus="true">{lang search}</a></td>
+				<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" class="pn pnc" value="true"><strong class="xi2 xs2">{lang search}</strong></button></td>
+				<td width="30%"> </td>
+				<td><div class="pdmenu"><a href="novel.php?mod=home" id="pdmenu" onmouseover="showMenu(this.id)">小说中心</a></div></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><!--{echo implode('', $slist);}--></ul>
+<script type="text/javascript">
+	initSearchmenu('scbar');
+</script>
+<!--{/if}-->
+
+<div style="display: none;" class="p_pop" id="pdmenu_menu">
+	<ul>
+		<li><a href="novel.php?mod=home&do=mark" style="background-image:url(template/default/pdnovel/img/home_mark.gif)!important">我的书架</a></li>
+		<li><a href="novel.php?mod=home&do=novel&ac=add" style="background-image:url(template/default/pdnovel/img/home_post.gif)!important">发布小说</a></li>
+		<li><a href="novel.php?mod=home&do=manage" style="background-image:url(template/default/pdnovel/img/home_manage.gif)!important">管理小说</a></li>
+		<li><a href="novel.php?mod=home&do=comment" style="background-image:url(template/default/pdnovel/img/home_comment.gif)!important">我的书评</a></li>
+		<li><a href="novel.php?mod=home&do=topic" style="background-image:url(template/default/pdnovel/img/home_topic.gif)!important">我的专题</a></li>
+	</ul>
+</div>

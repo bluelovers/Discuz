@@ -1,0 +1,47 @@
+a{color:#369;}
+body,#hd{background:#FFF none !important;}
+#hd .cl{padding:5px 10px;}
+#ct{margin:0 20px;}
+#tpsch{margin:10px 0;}
+#tpsch h1{margin-right:20px;}
+#tpsch .tb{border:none;line-height:22px;}
+#tpsch .tb a{border-color:#F5F5F5;background-color:#FFF;}
+#tpsch .a a{background-color:#F5F5F5;}
+#tps_form{background:#F5F5F5;}
+#srchtxt{margin:3px;padding:5px 2px 0;width:400px;height:25px !important;border:1px solid;border-color:#999 #CCC #CCC #999;background:#FFF;line-height:20px !important;}
+#tps_btn{margin-right:3px;height:32px;width:80px;border:1px solid;border-color:#BBB #666 #666 #BBB;background:#E5EDF2;}
+.sttl{margin:10px 0;padding:5px;border-bottom:1px solid #CCC;background:#F5F5F5;}
+.slst{width:760px;}
+.slst a{color:#00C;text-decoration:underline;font-weight:400;}
+.slst a:visited{color:#800080;}
+.slst a strong{font-weight:400;}
+.slst p span{color:#3A8000;}
+.slst p span a,.slst p span a:visited{color:#666;}
+.pbw strong{font-weight:400;}
+.pbw p{color:#000;line-height:22px;}
+.p_pop span{display:none;}
+#ft{margin:20px;}
+.pg{float:none;}
+
+.pdsearch {width:100%; display:block; display:inline-block; overflow:hidden; font:12px/20px Arial,Verdana,Lucida,Helvetica,simsun,sans-serif; color:#000}
+.pdsearch a {color:#004e00;text-decoration:none;}
+.pdsearch a:hover {color:#c00;position:relative;top:1px;left:1px;}
+
+.pdsearch .showlist ul { position:relative; line-height:20px; }
+.pdsearch .showlist li { position:relative; width:300px; display:inline; float:left; height:127px; margin:0 ; padding:10px 0 10px 123px; overflow:hidden; word-break:break-all; }
+.pdsearch .showlist li .novelpic { width:92px; height:131px; position:absolute; top:10px; left:10px;}
+.pdsearch .showlist li .novelpic img { width:100px; height:125px; padding:2px; border:1px solid #EAE4D1;}
+.pdsearch .showlist li .novelpic img:hover {position:relative;top:1px;left:1px;}
+.pdsearch .showlist li .novelpic span { position:absolute; top:113px; left:3px; width:100px; text-align:right; color:#fff; line-height:15px; height:15px;}
+.pdsearch .showlist li .novelpic span.bg {background:url(../img/coverbg.png) no-repeat 0 0; _background:none; _filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#00000000, endColorStr=#99000000, gradientType='1');}
+.pdsearch .showlist li h3 { font-size:14px; line-height:23px; height:23px; overflow:hidden; font-weight:normal; }
+.pdsearch .showlist li h3 span {font-size:12px; font-weight:normal; }
+.pdsearch .showlist li h3 a span { font-size:14px; font-weight:normal; margin: 0pt; color:#0066FF}
+.pdsearch .showlist li h3 a b {font-weight:normal; }
+.pdsearch .showlist li li { padding:0; margin:0 5px 0 0; height:21px; overflow:hidden; float:left; clear:both;}
+.pdsearch .showlist li li b { color:#5F5F5F; font-weight:normal; padding-right:5px;}
+.pdsearch .showlist li .more {color:#ccdff2;margin-top:3px;}
+.pdsearch .showlist li .more a {margin:auto 2px;}
+.pdsearch .showlist li .more .play {float:left;display:block;width:41px;height:18px;text-indent:-9999px;overflow:hidden;margin:0 2px 0 0; background:url(../img/play.png) no-repeat scroll 0 0 transparent}
+.pdsearch .showpage {padding-top:10px; clear:both}
+.pdsearch .showpage a:hover {position:static;}

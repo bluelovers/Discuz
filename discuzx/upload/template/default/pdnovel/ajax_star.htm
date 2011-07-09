@@ -1,0 +1,30 @@
+					<div class="score_select">
+						<div class="star_rating">
+							<div id="current_rating" class="current_rating" style="width:{$current_rating}px"></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=1&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(1)" title="{lang view_star1}" class="one-star"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=2&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(2)" title="{lang view_star2}" class="two-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=3&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(3)" title="{lang view_star3}" class="three-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=4&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(4)" title="{lang view_star4}" class="four-stars"></a></div>
+							<div class="rating"><a href="novel.php?mod=misc&ac=star&op=add&novelid=$novelid&clickid=5&handlekey=clickhandle" onclick="{if $_G[uid]}ajaxmenu(this);{else}showWindow('login', this.href);{/if}doane(event);" onmouseover="DivEstimate.changeStar(5)" title="{lang view_star5}" class="five-stars"></a></div>
+						</div>
+						<div class="red" id="span_point">{lang view_ratestar}</div>
+					</div>
+					<div class="score_rect">{lang view_ratescore}{$current_text[$current_i]}</div>
+					<div class="score_pic">
+						<div class="box" title="{lang view_star1}">
+							<span class="start"><i style="width: 65px;"></i></span><span class="percentage" style="width:{$width[5]}px;"></span>{$percentage[5]}%
+						</div>
+						<div class="box" title="{lang view_star2}">
+							<span class="start"><i style="width: 52px;"></i></span><span class="percentage" style="width:{$width[4]}px;"></span>{$percentage[4]}%
+						</div>
+						<div class="box" title="{lang view_star3}">
+							<span class="start"><i style="width: 39px;"></i></span><span class="percentage" style="width:{$width[3]}px;"></span>{$percentage[3]}%
+						</div>
+						<div class="box" title="{lang view_star4}">
+							<span class="start"><i style="width: 26px;"></i></span><span class="percentage" style="width:{$width[2]}px;"></span>{$percentage[2]}%
+						</div>
+						<div class="box" title="{lang view_star5}">
+							<span class="start"><i style="width: 13px;"></i></span><span class="percentage" style="width:{$width[1]}px;"></span>{$percentage[1]}%
+						</div>
+					</div>
+					<div class="score_txt">评价人数:{$novel[click]}人&nbsp;&nbsp;&nbsp;&nbsp;<a href="novel.php?mod=list&orderby=11" target="_blank">热门评价</a></div>

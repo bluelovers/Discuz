@@ -1,0 +1,320 @@
+<!--{template common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<style type="text/css">
+.postbox{display:inline-table; margin-top:10px;}
+.postbox .boxcontent {float: left; width:395px;}
+.postbox .boxcontent .pn {vertical-align:top; margin:0}
+.postbox .boxcontent dl { verflow: hidden; }
+.postbox .boxcontent dl dt {float: left; padding-top: 3px\9; width: 75px; clear: left; }
+.postbox .boxcontent dl dd {margin-bottom: 10px; overflow: hidden; width: 300px; }
+.postbox .boxcontent dl .red {color:#FF0000}
+.postbox .boxcontent img {width:120px; height:150px;}
+.postbox .boxcontent .postselect {width:300px; padding:1px 0px; height:26px; border: 1px solid #CCC;}
+.postbox .boxcontent .postinput {width:298px; padding:2px 0px; height:20px; border: 1px solid #CCC;}
+.postbox .boxcontent .postcover {width:210px; margin-right:5px; height:20px; padding:2px 0; border: 1px solid #CCC;}
+.postintro {width:100%}
+.postintro textarea {width:803px; height:200px; margin:5px 0px; border: 1px solid #CCC;}
+</style>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+			<!--{if $ac == 'add'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 发布小说</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="home.php?mod=space&uid=$space[uid]&do=favorite&view=me&type=all">小说信息</a></li>
+			</ul>
+            <div class="tl">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=novel&ac=add">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<div class="postbox">
+					<div class="boxcontent" style="border-right:1px dashed #ccc; margin-right:15px;">
+						<dl>
+							<dt class="red">{lang post_name}</dt>
+							<dd><input type="text" name="name" id="name" value="" size="50" class="postinput" /></dd>
+						</dl>
+						<dl>
+							<dt>小说类型</dt>
+							<dd>
+								<select name="type" id="type" class="postselect">
+									<option value="0" onclick="authordisplay()">原创小说</option>
+									<option value="1" onclick="authorplay()">转载小说</option>
+								</select>
+							</dd>
+						</dl>
+						<dl id="zuozhe" style="display:none">
+							<dt class="red">{lang post_author}</dt>
+							<dd><input type="text" name="author" id="author" value="" size="50" class="postinput" /></dd>
+						</dl>
+						<dl>
+							<dt class="red">{lang post_category}</dt>
+							<dd>
+								<select name="catid" id="catid" class="postselect">
+									$selectcat
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_status}</dt>
+							<dd>
+								<select name="permission" id="permission" class="postselect">
+									<option value="0">{lang post_status0}</option>
+									<option value="1">{lang post_status1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_xingzhi}</dt>
+							<dd>
+								<select name="vip" id="vip" class="postselect">
+									<option value="0">{lang post_pub}</option>
+									<option value="1">{lang post_vip}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_first}</dt>
+							<dd>
+								<select name="first" id="first" class="postselect">
+									<option value="0">{lang post_first0}</option>
+									<option value="1">{lang post_first1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_full}</dt>
+							<dd>
+								<select name="full" id="full" class="postselect">
+									<option value="0">{lang post_full0}</option>
+									<option value="1">{lang post_full1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_keyword}</dt>
+							<dd style="margin-bottom:1px"><input type="text" name="keyword" id="keywords" value="" size="50" class="postinput" /></dd>
+						</dl>
+					</div>
+					<div class="boxcontent">
+						<dl>
+							<dt>{lang post_cover}</dt>
+							<dd><input name="cover" id="cover" value="" class="postcover" /><button type="button" class="pn" onclick="uploadWindow()"><span>{lang upload}</span></button>
+							</dd>
+						</dl>
+						<dl><dt>&nbsp;</dt><dd><img id="cover_body" src="template/default/pdnovel/img/nocover.jpg" /></dd>
+						</dl>
+						<dl style="background:#F8F8F8; border:1px solid #ccc; line-height:18px; padding:5px; margin-top:-5px; color:#5B5B5B">1. 红色标记为必填字段，封面大小最好是120px*150px<br>2. 我们拒绝任何反动、政治、色情类小说，一经发现，即作删除！</dl>						
+					</div>
+				</div>
+				<div class="postintro">
+					<dl>
+						<dt>{lang post_intro}</dt>
+						<dd><textarea name="intro" id="intro"></textarea></dd>
+					</dl>
+					<input type="hidden" name="postsubmit" value="true" />
+					<dl><button name="postsubmit" class="pn" id="postsubmit" type="button" onclick="validate(this);"><strong>{lang post_submit}</strong></button></dl>
+				</div>
+			</form>
+			</div>
+			<!--{elseif $ac == 'edit'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 编辑小说</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="novel.php?mod=home&do=novel&ac=edit&novelid=$novelid">小说信息</a></li>
+				<li><a href="novel.php?mod=home&do=manage&novelid=$novelid">章节管理</a></li>
+			</ul>
+            <div class="tl">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=novel&ac=edit&novelid=$novelid">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<div class="postbox">
+					<div class="boxcontent" style="border-right:1px dashed #ccc; margin-right:15px;">
+						<dl>
+							<dt class="red">{lang post_name}</dt>
+							<dd><input type="text" name="name" id="name" value="$novel[name]" size="50" class="postinput" /></dd>
+						</dl>
+						<dl>
+							<dt>小说类型</dt>
+							<dd>
+								<select name="type" id="type" class="postselect">
+									<option value="0" onclick="authordisplay()" {if $novel[type]==0} selected="selected"{/if}>原创小说</option>
+									<option value="1" onclick="authorplay()" {if $novel[type]==1} selected="selected"{/if}>转载小说</option>
+								</select>
+							</dd>
+						</dl>
+						<dl id="zuozhe" {if $novel[type]==0}style="display:none"{/if}>
+							<dt class="red">{lang post_author}</dt>
+							<dd><input type="text" name="author" id="author" value="$novel[author]" size="50" class="postinput" /></dd>
+						</dl>
+						<dl>
+							<dt class="red">{lang post_category}</dt>
+							<dd>
+								<select name="catid" id="catid" class="postselect">
+									$selectcat
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_status}</dt>
+							<dd>
+								<select name="permission" id="permission" class="postselect">
+									<option value="0"{if $novel[permission]==0} selected="selected"{/if}>{lang post_status0}</option>
+									<option value="1"{if $novel[permission]==1} selected="selected"{/if}>{lang post_status1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_xingzhi}</dt>
+							<dd>
+								<select name="vip" id="vip" class="postselect">
+									<option value="0"{if $novel[vip]==0} selected="selected"{/if}>{lang post_pub}</option>
+									<option value="1"{if $novel[vip]==1} selected="selected"{/if}>{lang post_vip}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_first}</dt>
+							<dd>
+								<select name="first" id="first" class="postselect">
+									<option value="0"{if $novel[first]==0} selected="selected"{/if}>{lang post_first0}</option>
+									<option value="1"{if $novel[first]==1} selected="selected"{/if}>{lang post_first1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_full}</dt>
+							<dd>
+								<select name="full" id="full" class="postselect">
+									<option value="0"{if $novel[full]==0} selected="selected"{/if}>{lang post_full0}</option>
+									<option value="1"{if $novel[full]==1} selected="selected"{/if}>{lang post_full1}</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt>{lang post_keyword}</dt>
+							<dd style="margin-bottom:1px"><input type="text" name="keyword" id="keywords" value="$novel[keyword]" size="50" class="postinput" /></dd>
+						</dl>
+					</div>
+					<div class="boxcontent">
+						<dl>
+							<dt>{lang post_cover}</dt>
+							<dd><input name="cover" id="cover" value="$novel[cover]" class="postcover" /><button type="button" class="pn" onclick="uploadWindow()"><span>{lang upload}</span></button>
+							</dd>
+						</dl>
+						<dl><dt>&nbsp;</dt><dd><img id="cover_body" src="{if $novel[cover]}{$coverpath}{$novel[cover]}{else}template/default/pdnovel/img/nocover.jpg{/if}" /></dd>
+						<input type="hidden" name="oldcover" value="$novel[cover]" />
+						</dl>
+						<dl style="background:#F8F8F8; border:1px solid #ccc; line-height:18px; padding:5px; margin-top:-5px; color:#5B5B5B">1. 红色标记为必填字段，封面大小最好是120px*150px<br>2. 我们拒绝任何反动、政治、色情类小说，一经发现，即作删除！</dl>						
+					</div>
+				</div>
+				<div class="postintro">
+					<dl>
+						<dt>{lang post_intro}</dt>
+						<dd><textarea name="intro" id="intro">$novel[intro]</textarea></dd>
+					</dl>
+					<input type="hidden" name="postsubmit" value="true" />
+					<dl><button name="postsubmit" class="pn" id="postsubmit" type="button" onclick="validate(this);"><strong>{lang post_submit}</strong></button></dl>
+				</div>
+			</form>
+			</div>
+			<!--{elseif $ac == 'del'}-->
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/home_post.gif" class="vm" /> 删除小说</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="novel.php?mod=home&do=novel&ac=edit&novelid=$novelid">小说信息</a></li>
+				<li><a href="novel.php?mod=home&do=manage&novelid=$novelid">章节管理</a></li>
+			</ul>
+            <div class="tl" style="background:#F8F8F8; border:1px solid #DDD; padding:30px; margin-top:20px; text-align:center; font-size:14px; font-weight:700;">
+			<form method="post" autocomplete="off" id="postform" name="postform" action="novel.php?mod=home&do=novel&ac=del&novelid=$novelid">
+				<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="postsubmit" value="true" />
+				你确定要删除小说《$novel[name]》及该小说下所有的分卷和章节？<br><br>
+				<button name="submit" class="pn" id="submit" type="submit"><strong>确定</strong></button>
+				<button name="submit" class="pn" id="submit" type="reset" onclick="history.go(-1)"><strong>取消</strong></button>
+			</form>
+			</div>
+			<!--{/if}-->
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+
+	<div class="appl">
+		<!--{subtemplate pdnovel/home_user}-->
+
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<script>
+function validate(obj) {
+	var name = $("name");
+	if(!name.value) {
+		alert("{lang post_emptyname}");
+		name.focus();
+		return false;
+	}
+	var catid = $("catid");
+	if(!catid.value) {
+		alert("{lang post_emptycategory}");
+		catid.focus();
+		return false;
+	}
+	obj.form.submit();
+	return false;
+}
+function authorplay(){
+	document.getElementById("zuozhe").style.display = '';
+}
+function authordisplay(){
+	document.getElementById("zuozhe").style.display = 'none';
+}
+function uploadWindowstart() {
+	$('uploadwindowing').style.visibility = 'visible';
+	$('uploadsubmit').disabled = true;
+}
+function uploadWindowload() {
+	$('uploadwindowing').style.visibility = 'hidden';
+	$('uploadsubmit').disabled = false;
+	var str = $('uploadattachframe').contentWindow.document.body.innerHTML;
+	if(str == '') {
+		return;
+	}else{
+		hideWindow('upload');
+		document.getElementById("cover_body").src = str; 
+		document.getElementById("cover").value = str; 
+	}
+}
+function uploadWindow() {
+	showWindow('upload', 'novel.php?mod=misc&ac=upload', 'get', 0);
+}
+function checkAll(type, form, value, checkall, changestyle) {
+	var checkall = checkall ? checkall : 'chkall';
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(type == 'option' && e.type == 'radio' && e.value == value && e.disabled != true) {
+			e.checked = true;
+		} else if(type == 'value' && e.type == 'checkbox' && e.getAttribute('chkvalue') == value) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle) {
+				multiupdate(e);
+			}
+		} else if(type == 'prefix' && e.name && e.name != checkall && (!value || (value && e.name.match(value)))) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle && e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
+				e.parentNode.className = e.checked ? 'checked' : '';
+			}
+		}
+	}
+}
+</script>
+<!--{template common/footer}-->

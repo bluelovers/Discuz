@@ -1,0 +1,95 @@
+<!--{template common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<style type="text/css">
+.tl a {color:#004D00}
+.tl a.gray {color:gray}
+.tl a.blue {color:blue}
+.tl table {table-layout:fixed;width:100%; margin-top:10px; }
+.tl .tbody2 {height:28px; line-height:28px; padding-left:10px;}
+.tl .tbody1 {height:28px; line-height:28px; padding-left:10px; background-color:#f2f2f2}
+.tl .thead {height:32px; line-height:32px;background:none repeat scroll 0 0 #F2F2F2;border-bottom:1px solid #DDD;border-top:1px solid #DDD;}
+
+</style>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+			<h1 class="mt"><img alt="favorite" src="template/default/pdnovel/img/novelmark.gif" class="vm" /> 我的书架</h1>
+			<ul class="tb cl">
+				<li class="a"><a href="home.php?mod=space&uid=$space[uid]&do=favorite&view=me&type=all">书架管理</a></li>
+			</ul>
+            <div class="tl">
+			<form method="post" autocomplete="off" name="delemark" id="delemark" action="novel.php?mod=home&do=mark&ac=bdel" onsubmit="javascript:if(confirm('{lang mark_queding}')) return true; else return false;">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<table cellspacing="0" cellpadding="0">
+						<tr class="thead">
+                        	<td width="20px">&nbsp;</td>
+                            <td width="480px">&nbsp;&nbsp;{lang mark_zuixin}</td>
+							<td width="80px">{lang mark_gengxin}</td>
+							<td width="60px">书签</td>
+                            <td width="80px">{lang mark_zuozhe}</td>
+                            <td width="80px">{lang mark_zhuangtai}</td>
+                        </tr>
+                        <!--{loop $marklist $key $mark}-->
+                        <tr class="tbody<!--{if $key%2==0}-->2<!--{else}-->1<!--{/if}-->">
+                        	<td><input class="checkbox" type="checkbox" name="nidarr[]" value="$mark[novelid]"/></td>
+                        	<td>[<a href="novel.php?mod=list&catid={$mark['upid']}" target="_blank">{$mark['upname']}</a>] <a href="novel.php?mod=view&novelid=$mark['novelid']" target="_blank">{$mark['name']}</a> <a href="novel.php?mod=read&novelid=$mark['novelid']&chapterid=$mark['lastchapterid']" class="gray" target="_blank">$mark['lastchapter']</a></td>
+                            <td>{$mark['lastupdate']}</td>
+							<td><!--{if $mark['lastchapterid']>$mark['chapterid']}--><a href="novel.php?mod=read&novelid=$mark['novelid']&chapterid=$mark['chapterid']" class="blue" target="_blank">有更新</a><!--{else}--><a href="novel.php?mod=read&novelid=$mark['novelid']&chapterid=$mark['chapterid']" class="gray" target="_blank">无更新</a><!--{/if}--></td>
+							<td><a href="novel.php?mod=search&ac=name&srchtxt=$mark['author']&searchsubmit=yes" target="_blank">$mark['author']</a></td>
+                            <td>{$mark['full']}</td>
+                        </tr>
+                        <!--{/loop}-->
+                        <tr class="thead" style="background:none">
+                        	<td><input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll('prefix', this.form, 'nidarr', 'chkall')" /></td>
+                            <td>{lang mark_quanxuan}&nbsp;<input type="submit" name="submit" id="submit" value="{lang mark_shanchu}"></td>
+                            <td colspan="4">$multi</td>
+                        </tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+
+	<div class="appl">
+		<!--{subtemplate pdnovel/home_user}-->
+
+		<div class="drag">
+			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+		</div>
+
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<script>
+function checkAll(type, form, value, checkall, changestyle) {
+	var checkall = checkall ? checkall : 'chkall';
+	for(var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		if(type == 'option' && e.type == 'radio' && e.value == value && e.disabled != true) {
+			e.checked = true;
+		} else if(type == 'value' && e.type == 'checkbox' && e.getAttribute('chkvalue') == value) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle) {
+				multiupdate(e);
+			}
+		} else if(type == 'prefix' && e.name && e.name != checkall && (!value || (value && e.name.match(value)))) {
+			e.checked = form.elements[checkall].checked;
+			if(changestyle && e.parentNode && e.parentNode.tagName.toLowerCase() == 'li') {
+				e.parentNode.className = e.checked ? 'checked' : '';
+			}
+		}
+	}
+}
+</script>
+<!--{template common/footer}-->

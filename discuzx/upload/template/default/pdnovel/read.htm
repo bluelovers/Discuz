@@ -1,0 +1,95 @@
+<!--{subtemplate common/header}-->
+<!--{subtemplate pdnovel/search_pub}-->
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<link rel="stylesheet" type="text/css" href="template/default/pdnovel/css/view.css" />
+<SCRIPT language=javascript>
+document.onkeydown = pageEvent;
+var prevpage="$prepage";
+var nextpage="$nextpage";
+var indexpage = "novel.php?mod=chapter&novelid=$novel[novelid]";
+function pageEvent(evt){
+	evt = evt ||window.event;
+	var key=evt.which||evt.keyCode;
+	if (key == 37) location = prevpage
+	if (key == 39) location = nextpage
+	if (key == 13) location = indexpage;
+};
+</SCRIPT> 
+
+<div id="pt" class="bm cl">
+	
+
+
+	<div class="z" style="width:550px; height:32px; overflow:hidden">
+		<a href="./" class="nvhm" title="{$_G['setting']['bbname']}">{$_G['setting']['bbname']}</a> <em>&rsaquo;</em> <a href="novel.php">{lang common_novel}</a> <em>&rsaquo;</em> <a href="novel.php?mod=list&catid={$novel['upid']}">{$upname}</a> <em>&rsaquo;</em> <a href="novel.php?mod=list&catid={$novel['catid']}">{$catname}</a> <em>&rsaquo;</em> <a href="novel.php?mod=view&novelid={$novel['novelid']}">$novel['name']</a> <em>&rsaquo;</em>$read['chaptername']
+	</div>
+</div>
+<div id="saveread">
+
+<tr><script src="template/default/pdnovel/js/read_top.js" type="text/javascript"></script>
+</tr>
+</div>
+<div id="pdmodule">
+
+	<!--{ad/pdnovel/mb hm/1}-->
+
+	<div class="pdbox">
+
+		<div class="pdread" id="readcontent">
+
+			<div class="showhead">
+				<h1 class="headtitle">$read['chaptername']</h1>
+				<span class="headinfo">
+					{lang read_novel}：<a href="novel.php?mod=view&novelid={$novel['novelid']}" target="_blank">{$novel['name']}</a><span class="pipe">|</span>
+					{lang read_author}：<a href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes" target="_blank">{$novel['author']}</a><span class="pipe">|</span>
+					{lang read_update}：<font color="#000000">{$read['lastupdate']}</font><span class="pipe">|</span>
+					{lang read_words}：<font color="#000000">{$read['chapterwords']}</font><span class="pipe">|</span>
+					<a href="novel.php?mod=misc&ac=mark&novelid=$novelid&chapterid=$chapterid" onclick="{if $_G['uid']}ajaxmenu(this);return false;{else}showWindow('login', this.href){/if}" class="red">加入书签</a>
+				</span>
+			</div>
+			<!--{ad/pdnovel_chapter/mb hm/1}-->
+			<!--[diy=diyshowhead]--><div id="diyshowhead" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel_chapter/mb hm/2}-->
+
+
+<div class="showbottom"> 
+				({lang read_quick}←)[<a href="$prepage">{lang read_pre}</a>]&nbsp;&nbsp;[<a href="novel.php?mod=chapter&novelid={$novel['novelid']}">{lang read_chapter}</a>]&nbsp;&nbsp;[<a href="novel.php?mod=view&novelid={$novel['novelid']}">{lang read_info}</a>]&nbsp;&nbsp;[<a href="$nextpage">{lang read_next}</a>]({lang read_quick}→)
+			</div>
+			<div class="showcontent">
+				 <!--{if $read['chaptercontent']}-->
+					<script src='data/attachment/pdnovel/chapter/$read['chaptercontent']'></script>
+				 <!--{else}-->
+					<!--{if $read['chaptertype']==1}-->
+						{lang read_volume}
+					<!--{else}-->
+						{lang read_lost}
+					<!--{/if}-->
+				 <!--{/if}-->
+			</div>
+			<!--{ad/pdnovel_chapter/mb hm/3}-->
+			<!--[diy=diyshowcontent]--><div id="diyshowcontent" class="area"></div><!--[/diy]-->
+			<!--{ad/pdnovel_chapter/mb hm/4}-->
+
+
+			<div class="showbottom"> 
+				({lang read_quick}←)[<a href="$prepage">{lang read_pre}</a>]&nbsp;&nbsp;[<a href="novel.php?mod=chapter&novelid={$novel['novelid']}">{lang read_chapter}</a>]&nbsp;&nbsp;[<a href="novel.php?mod=misc&ac=mark&novelid=$novelid&chapterid=$chapterid" onclick="{if $_G['uid']}ajaxmenu(this);return false;{else}showWindow('login', this.href){/if}" class="red"><strong>加入书签</strong></a>]&nbsp;&nbsp;[<a href="novel.php?mod=view&novelid={$novel['novelid']}">{lang read_info}</a>]&nbsp;&nbsp;[<a href="$nextpage">{lang read_next}</a>]({lang read_quick}→)
+			</div>
+		</div>
+	</div>
+	<!--{ad/pdnovel/mb hm/2}-->
+	<div class="pdbox">
+		<!--[diy=diypdall]--><div id="diypdall" class="area"></div><!--[/diy]-->
+	</div>
+	<!--{ad/pdnovel/mb hm/3}-->
+</div>
+<script src="template/default/pdnovel/js/read_bottom.js" type="text/javascript"></script>
+
+<div class="wp">
+	<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+<!--{subtemplate common/footer}-->

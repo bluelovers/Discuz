@@ -1,0 +1,36 @@
+	<div class="rectbox">
+		<div class="bookpic"><a href="novel.php?mod=view&novelid=$novelid" title="$novel[name]" target="_blank"><img alt="$novel[name]" src="$novel[cover]"></a></div>
+		<div class="bookintro">
+			<div class="booktitle"><b><a target="_blank" title="$novel[name]" href="novel.php?mod=view&novelid=$novelid" class="bookname">《$novel[name]》</a></b> 作者：<a title="$novel[author]" target="_blank" href="novel.php?mod=search&ac=author&srchtxt=$novel['author']&searchsubmit=yes">$novel[author]</a></div>
+			<div class="bookpj">
+				<div class="score_rect" title="0">好评指数: <b>$novel[score]</b> 分 <span>— $startext[$stari]</span></div>
+					<div class="score_pic">
+						<div class="box" title="{lang view_star1}">
+							<span class="start"><i style="width: 65px;"></i></span><span class="percentage" style="width:{$width[5]}px;"></span>{$percentage[5]}%
+						</div>
+						<div class="box" title="{lang view_star2}">
+							<span class="start"><i style="width: 52px;"></i></span><span class="percentage" style="width:{$width[4]}px;"></span>{$percentage[4]}%
+						</div>
+						<div class="box" title="{lang view_star3}">
+							<span class="start"><i style="width: 39px;"></i></span><span class="percentage" style="width:{$width[3]}px;"></span>{$percentage[3]}%
+						</div>
+						<div class="box" title="{lang view_star4}">
+							<span class="start"><i style="width: 26px;"></i></span><span class="percentage" style="width:{$width[2]}px;"></span>{$percentage[2]}%
+						</div>
+						<div class="box" title="{lang view_star5}">
+							<span class="start"><i style="width: 13px;"></i></span><span class="percentage" style="width:{$width[1]}px;"></span>{$percentage[1]}%
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	<div class="try_reader">
+		<div class="try_title">
+			<div class="left"><b>最新章节试阅</b></div>
+			<div class="right"><a href="novel.php?mod=read&novelid=$novelid&chapterid=$novel[lastchapterid]" class="red" title="阅读《{$novel[name]}》$novel[lastchapter]" target="_blank">[点击阅读]</a> <a target="_blank" href="novel.php?mod=comment&novelid=$novelid">[查看评论]</a></div>
+		</div>
+		<div class="try_cont">
+			<b><a href="novel.php?mod=read&novelid=$novelid&chapterid=$novel[lastchapterid]" target="_blank" title="$novel[lastupdate] $novel[lastchapter]">$novel[lastchapter]</a></b><br>
+			<a target="_blank" title="$novel[lastupdate] $novel[lastchapter]" href="novel.php?mod=read&novelid=$novelid&chapterid=$novel[lastchapterid]" class="gray">$novel[lastchaptercontent]</a>
+		</div>
+	</div>

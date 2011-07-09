@@ -1,0 +1,2059 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="spacecss"><![CDATA[]]></item>
+	<item id="layoutdata">
+		<item id="diy1"><![CDATA[]]></item>
+		<item id="diypdeyebox">
+			<item id="frame`frameIT3I1b">
+				<item id="attr">
+					<item id="name"><![CDATA[frameIT3I1b]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frameIT3I1b_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frameIT3I1b_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_68">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_68]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="diytxtbox1">
+			<item id="frame`frames5df71">
+				<item id="attr">
+					<item id="name"><![CDATA[frames5df71]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frames5df71_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frames5df71_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_69">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_69]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="diytxtbox2">
+			<item id="frame`frameWAeT8S">
+				<item id="attr">
+					<item id="name"><![CDATA[frameWAeT8S]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frameWAeT8S_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frameWAeT8S_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_70">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_70]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="diypdmain">
+			<item id="frame`frameQFCfBf">
+				<item id="attr">
+					<item id="name"><![CDATA[frameQFCfBf]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdmain1 frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frameQFCfBf_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frameQFCfBf_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_71">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_71]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[封面展示]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="tab`tabAu1TVH">
+				<item id="attr">
+					<item id="name"><![CDATA[tabAu1TVH]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdmaintab2 frame-tab move-span cl]]></item>
+					<item id="titles">
+						<item id="className">
+							<item id="0"><![CDATA[tab-title title column cl]]></item>
+						</item>
+						<item id="style"><![CDATA[]]></item>
+						<item id="switchType">
+							<item id="0"><![CDATA[click]]></item>
+						</item>
+						<item id="first">
+							<item id="text"><![CDATA[小说排行秀]]></item>
+							<item id="href"><![CDATA[]]></item>
+							<item id="color"><![CDATA[]]></item>
+							<item id="float"><![CDATA[]]></item>
+							<item id="margin"><![CDATA[]]></item>
+							<item id="font-size"><![CDATA[]]></item>
+							<item id="className"><![CDATA[titletext]]></item>
+							<item id="src"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+				<item id="column`tabAu1TVH_title">
+					<item id="attr">
+						<item id="name"><![CDATA[tabAu1TVH_title]]></item>
+						<item id="className"><![CDATA[tab-title title column cl]]></item>
+					</item>
+					<item id="block`portal_block_74">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_74]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[收藏排行]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_73">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_73]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[推荐排行]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="frame`frame5u045V">
+				<item id="attr">
+					<item id="name"><![CDATA[frame5u045V]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdmain1 frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frame5u045V_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frame5u045V_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_75">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_75]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[小说更新列表]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="diypdside">
+			<item id="tab`tabmq5084">
+				<item id="attr">
+					<item id="name"><![CDATA[tabmq5084]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdsidetab2 frame-tab move-span cl]]></item>
+					<item id="titles">
+						<item id="className">
+							<item id="0"><![CDATA[tab-title title column cl]]></item>
+						</item>
+						<item id="style"><![CDATA[]]></item>
+						<item id="switchType">
+							<item id="0"><![CDATA[click]]></item>
+						</item>
+					</item>
+				</item>
+				<item id="column`tabmq5084_title">
+					<item id="attr">
+						<item id="name"><![CDATA[tabmq5084_title]]></item>
+						<item id="className"><![CDATA[tab-title title column cl]]></item>
+					</item>
+					<item id="block`portal_block_76">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_76]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[本周推荐]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_72">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_72]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[上周推荐]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="tab`tabBFfosy">
+				<item id="attr">
+					<item id="name"><![CDATA[tabBFfosy]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdsidetab3 frame-tab move-span cl]]></item>
+					<item id="titles">
+						<item id="className">
+							<item id="0"><![CDATA[tab-title title column cl]]></item>
+						</item>
+						<item id="style"><![CDATA[]]></item>
+						<item id="switchType">
+							<item id="0"><![CDATA[click]]></item>
+						</item>
+						<item id="first">
+							<item id="text"><![CDATA[会员点击榜]]></item>
+							<item id="href"><![CDATA[]]></item>
+							<item id="color"><![CDATA[]]></item>
+							<item id="float"><![CDATA[]]></item>
+							<item id="margin"><![CDATA[]]></item>
+							<item id="font-size"><![CDATA[]]></item>
+							<item id="className"><![CDATA[titletext]]></item>
+							<item id="src"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+				<item id="column`tabBFfosy_title">
+					<item id="attr">
+						<item id="name"><![CDATA[tabBFfosy_title]]></item>
+						<item id="className"><![CDATA[tab-title title column cl]]></item>
+					</item>
+					<item id="block`portal_block_79">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_79]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[周]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_78">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_78]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[月]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_77">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_77]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[总]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="tab`tabx62Z5x">
+				<item id="attr">
+					<item id="name"><![CDATA[tabx62Z5x]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdsidetab3 frame-tab move-span cl]]></item>
+					<item id="titles">
+						<item id="className">
+							<item id="0"><![CDATA[tab-title title column cl]]></item>
+						</item>
+						<item id="style"><![CDATA[]]></item>
+						<item id="switchType">
+							<item id="0"><![CDATA[click]]></item>
+						</item>
+						<item id="first">
+							<item id="text"><![CDATA[会员推荐榜]]></item>
+							<item id="href"><![CDATA[]]></item>
+							<item id="color"><![CDATA[]]></item>
+							<item id="float"><![CDATA[]]></item>
+							<item id="margin"><![CDATA[]]></item>
+							<item id="font-size"><![CDATA[]]></item>
+							<item id="className"><![CDATA[titletext]]></item>
+							<item id="src"><![CDATA[]]></item>
+						</item>
+					</item>
+				</item>
+				<item id="column`tabx62Z5x_title">
+					<item id="attr">
+						<item id="name"><![CDATA[tabx62Z5x_title]]></item>
+						<item id="className"><![CDATA[tab-title title column cl]]></item>
+					</item>
+					<item id="block`portal_block_82">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_82]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[周]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_81">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_81]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[月]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+					<item id="block`portal_block_80">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_80]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[总]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="frame`framess8qvv">
+				<item id="attr">
+					<item id="name"><![CDATA[framess8qvv]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdside1 frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`framess8qvv_left">
+					<item id="attr">
+						<item id="name"><![CDATA[framess8qvv_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_83">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_83]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[小说字数排行榜]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+			<item id="frame`frameQ7CYI7">
+				<item id="attr">
+					<item id="name"><![CDATA[frameQ7CYI7]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdside1 frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frameQ7CYI7_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frameQ7CYI7_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_84">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_84]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[小说收藏排行榜]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="diypdall">
+			<item id="frame`frameAP81KV">
+				<item id="attr">
+					<item id="name"><![CDATA[frameAP81KV]]></item>
+					<item id="moveable"><![CDATA[true]]></item>
+					<item id="className"><![CDATA[pdall1 frame move-span cl frame-1]]></item>
+					<item id="titles"><![CDATA[]]></item>
+				</item>
+				<item id="column`frameAP81KV_left">
+					<item id="attr">
+						<item id="name"><![CDATA[frameAP81KV_left]]></item>
+						<item id="className"><![CDATA[column frame-1-c]]></item>
+					</item>
+					<item id="block`portal_block_85">
+						<item id="attr">
+							<item id="name"><![CDATA[portal_block_85]]></item>
+							<item id="className"><![CDATA[block move-span]]></item>
+							<item id="titles">
+								<item id="className">
+									<item id="0"><![CDATA[blocktitle title]]></item>
+								</item>
+								<item id="style"><![CDATA[]]></item>
+								<item id="first">
+									<item id="text"><![CDATA[经典典藏]]></item>
+									<item id="href"><![CDATA[]]></item>
+									<item id="color"><![CDATA[]]></item>
+									<item id="float"><![CDATA[]]></item>
+									<item id="margin"><![CDATA[]]></item>
+									<item id="font-size"><![CDATA[]]></item>
+									<item id="className"><![CDATA[titletext]]></item>
+									<item id="src"><![CDATA[]]></item>
+								</item>
+							</item>
+						</item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="di2"><![CDATA[]]></item>
+	</item>
+	<item id="blockdata">
+		<item id="block">
+			<item id="68">
+				<item id="bid"><![CDATA[68]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏幻灯展示]]></item>
+				<item id="title"><![CDATA[]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[106]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="catid">
+						<item id="0"><![CDATA[0]]></item>
+					</item>
+					<item id="picrequired"><![CDATA[1]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[dayvisit]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[120]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[4]]></item>
+				</item>
+				<item id="shownum"><![CDATA[4]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562484]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="69">
+				<item id="bid"><![CDATA[69]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏小说推荐]]></item>
+				<item id="title"><![CDATA[]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[107]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[11]]></item>
+				</item>
+				<item id="shownum"><![CDATA[11]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562473]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="70">
+				<item id="bid"><![CDATA[70]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏新书推荐]]></item>
+				<item id="title"><![CDATA[]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[108]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[lastupdate]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[10]]></item>
+				</item>
+				<item id="shownum"><![CDATA[10]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562465]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="71">
+				<item id="bid"><![CDATA[71]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏封面展示]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">封面展示</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[109]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="catid">
+						<item id="0"><![CDATA[0]]></item>
+					</item>
+					<item id="picrequired"><![CDATA[1]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[lastupdate]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[6]]></item>
+				</item>
+				<item id="shownum"><![CDATA[6]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562454]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="72">
+				<item id="bid"><![CDATA[72]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏上周推荐]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">上周推荐</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[105]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[monthvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[15]]></item>
+				</item>
+				<item id="shownum"><![CDATA[15]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562437]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="73">
+				<item id="bid"><![CDATA[73]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏推荐排行]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">推荐排行</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[110]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="catid">
+						<item id="0"><![CDATA[0]]></item>
+					</item>
+					<item id="picrequired"><![CDATA[1]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[10]]></item>
+				</item>
+				<item id="shownum"><![CDATA[10]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303520852]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="74">
+				<item id="bid"><![CDATA[74]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏收藏排行]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="" class="titletext">收藏排行</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[111]]></item>
+				<item id="blockstyle">
+					<item id="name"><![CDATA[[pdnovel]频道页左栏打赏排行]]></item>
+					<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+					<item id="makethumb"><![CDATA[0]]></item>
+					<item id="getpic"><![CDATA[0]]></item>
+					<item id="getsummary"><![CDATA[0]]></item>
+					<item id="settarget"><![CDATA[0]]></item>
+					<item id="fields">
+						<item id="0"><![CDATA[currentorder]]></item>
+						<item id="1"><![CDATA[caturl]]></item>
+						<item id="2"><![CDATA[upname]]></item>
+						<item id="3"><![CDATA[url]]></item>
+						<item id="4"><![CDATA[title]]></item>
+						<item id="5"><![CDATA[allvote]]></item>
+					</item>
+					<item id="template">
+						<item id="raw"><![CDATA[<div class="catmainxsph">
+<div class="book" id="pdbookshow">
+</div>
+<div class="rank">
+<div class="list">
+<div class="listtitle"><div class="bookpm">排名</div><div class="booktype">类别</div><div class="bookname">书名</div><div class="bookamout">总打赏</div></div>
+[loop]
+<div class="listrow" id="row{currentorder}" pdtag="{currentorder}" onMouseOver="pdranklisthover({currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allvote}</span></div>
+</div>
+[/loop]
+<div class="more"><a href="pdnovel.php?mod=list&orderby=8" target="_blank">更多>></a></div>
+</div>
+</div>
+</div>
+<script>
+function pdranklisthover(order) {
+	var id = $("row"+order).attributes['pdtag'].value;
+	var x = new Ajax();
+	x.get('pdnovel.php?mod=ajax&novelid='+id, function(s){
+		$('pdbookshow').focus();
+		ajaxinnerhtml($('pdbookshow'), s);
+	});
+	for (var i = 1; i < 11; i++) {
+		if(i==order){
+			$("row"+i).className = "listrow hover";
+		}else{
+			$("row"+i).className = "listrow";
+		}
+	}
+};
+pdranklisthover(1);
+</script>]]></item>
+						<item id="footer"><![CDATA[]]></item>
+						<item id="header"><![CDATA[]]></item>
+						<item id="indexplus"><![CDATA[
+						]]></item>
+						<item id="index"><![CDATA[
+						]]></item>
+						<item id="orderplus"><![CDATA[
+						]]></item>
+						<item id="order"><![CDATA[
+						]]></item>
+						<item id="loopplus"><![CDATA[
+						]]></item>
+						<item id="loop"><![CDATA[<div class="listrow" id="row{currentorder}" pdtag="{currentorder}" onMouseOver="pdranklisthover({currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allvote}</span></div>
+</div>]]></item>
+					</item>
+					<item id="hash"><![CDATA[dc99f67c]]></item>
+				</item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="catid">
+						<item id="0"><![CDATA[0]]></item>
+					</item>
+					<item id="picrequired"><![CDATA[1]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allmark]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[10]]></item>
+				</item>
+				<item id="shownum"><![CDATA[10]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562419]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="75">
+				<item id="bid"><![CDATA[75]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页左栏小说更新]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">小说更新列表</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[112]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[lastupdate]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[50]]></item>
+				</item>
+				<item id="shownum"><![CDATA[50]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303540041]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="76">
+				<item id="bid"><![CDATA[76]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏本周推荐]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">本周推荐</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[105]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[weekvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[15]]></item>
+				</item>
+				<item id="shownum"><![CDATA[15]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562393]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="77">
+				<item id="bid"><![CDATA[77]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏总点击榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">总</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[113]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allvisit]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[14]]></item>
+				</item>
+				<item id="shownum"><![CDATA[14]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303513695]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="78">
+				<item id="bid"><![CDATA[78]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏月点击榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">月</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[114]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[monthvisit]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[14]]></item>
+				</item>
+				<item id="shownum"><![CDATA[14]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303513650]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="79">
+				<item id="bid"><![CDATA[79]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏周点击榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">周</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[115]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[weekvisit]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[14]]></item>
+				</item>
+				<item id="shownum"><![CDATA[14]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303513523]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="80">
+				<item id="bid"><![CDATA[80]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏总推荐榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">总</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[116]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[17]]></item>
+				</item>
+				<item id="shownum"><![CDATA[17]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303521124]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="81">
+				<item id="bid"><![CDATA[81]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏月推荐榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">月</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[117]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[monthvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[17]]></item>
+				</item>
+				<item id="shownum"><![CDATA[17]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303521114]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="82">
+				<item id="bid"><![CDATA[82]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏周推荐榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">周</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[118]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[weekvote]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[17]]></item>
+				</item>
+				<item id="shownum"><![CDATA[17]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562358]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="83">
+				<item id="bid"><![CDATA[83]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏字数榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">小说字数排行榜</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[119]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[words]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[20]]></item>
+				</item>
+				<item id="shownum"><![CDATA[20]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562350]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="84">
+				<item id="bid"><![CDATA[84]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页边栏收藏榜]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">小说收藏排行榜</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[120]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="picrequired"><![CDATA[0]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allmark]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[25]]></item>
+				</item>
+				<item id="shownum"><![CDATA[25]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562344]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+			<item id="85">
+				<item id="bid"><![CDATA[85]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="blocktype"><![CDATA[0]]></item>
+				<item id="name"><![CDATA[[pdnovel]频道页总栏典藏列表]]></item>
+				<item id="title"><![CDATA[<div class="blocktitle title"><span style="float:;margin-left:px;font-size:;color:;" class="titletext">经典典藏</span></div>]]></item>
+				<item id="classname"><![CDATA[]]></item>
+				<item id="summary"><![CDATA[]]></item>
+				<item id="uid"><![CDATA[1]]></item>
+				<item id="username"><![CDATA[benwil]]></item>
+				<item id="styleid"><![CDATA[121]]></item>
+				<item id="blockstyle"><![CDATA[]]></item>
+				<item id="picwidth"><![CDATA[0]]></item>
+				<item id="picheight"><![CDATA[0]]></item>
+				<item id="target"><![CDATA[blank]]></item>
+				<item id="dateformat"><![CDATA[Y-m-d]]></item>
+				<item id="dateuformat"><![CDATA[0]]></item>
+				<item id="script"><![CDATA[pdnovel]]></item>
+				<item id="param">
+					<item id="novelids"><![CDATA[]]></item>
+					<item id="authorids"><![CDATA[]]></item>
+					<item id="catid">
+						<item id="0"><![CDATA[0]]></item>
+					</item>
+					<item id="picrequired"><![CDATA[1]]></item>
+					<item id="starttime"><![CDATA[]]></item>
+					<item id="endtime"><![CDATA[]]></item>
+					<item id="orderby"><![CDATA[allmark]]></item>
+					<item id="titlelength"><![CDATA[20]]></item>
+					<item id="summarylength"><![CDATA[80]]></item>
+					<item id="startrow"><![CDATA[0]]></item>
+					<item id="items"><![CDATA[8]]></item>
+				</item>
+				<item id="shownum"><![CDATA[8]]></item>
+				<item id="cachetime"><![CDATA[0]]></item>
+				<item id="punctualupdate"><![CDATA[0]]></item>
+				<item id="hidedisplay"><![CDATA[0]]></item>
+				<item id="dateline"><![CDATA[1303562334]]></item>
+				<item id="notinherited"><![CDATA[0]]></item>
+			</item>
+		</item>
+		<item id="style">
+			<item id="105">
+				<item id="styleid"><![CDATA[105]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏小说列表]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><a href="{upurl}" class="gray" target="_blank">[{upname}]</a> <a href="{url}" title="{title}" target="_blank">{title}</a></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><a href="{upurl}" class="gray" target="_blank">[{upname}]</a> <a href="{url}" title="{title}" target="_blank">{title}</a></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[ad755410]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[upurl]]></item>
+					<item id="1"><![CDATA[upname]]></item>
+					<item id="2"><![CDATA[url]]></item>
+					<item id="3"><![CDATA[title]]></item>
+				</item>
+			</item>
+			<item id="106">
+				<item id="styleid"><![CDATA[106]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏幻灯展示]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="slidebox">
+<div  class="slideshow">
+[loop]
+<div class="divNewsPic">
+	<div class="picshow">
+		<a href="{url}" title="{title}" target="_blank"><img src="{pic}" width="245" height="290" alt="{title}"></a>
+	</div>
+	<div class="txtshow">
+		<h3><a href="{url}" title="{title}" target="_blank">{title}</a> <span class="author">作者：<a target="_blank" href="{authorurl}">{author}</a></span></h3>
+		<p><a href="{url}" class="gray" title="阅读《{title}》" target="_blank">{summary}</a> <a href="{url}" class="red" title="阅读《{title}》" target="_blank">[点击阅读]</a></p>
+	</div>
+</div>
+[/loop]
+</div>
+<div class="pics">
+	<ul class="slidebar">
+ 	[loop1]
+		<li><a href="{url}" class="active" title="{title}" target="_blank"><img src="{pic}" width="56" height="63" alt="{title}"></a></li>
+	[/loop1]
+	</ul>
+</div>
+</div>
+<script type="text/javascript">
+runslideshow();
+</script>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+						<item id="1"><![CDATA[<li><a href="{url}" class="active" title="{title}" target="_blank"><img src="{pic}" width="56" height="63" alt="{title}"></a></li>]]></item>
+					</item>
+					<item id="loop"><![CDATA[<div class="divNewsPic">
+	<div class="picshow">
+		<a href="{url}" title="{title}" target="_blank"><img src="{pic}" width="245" height="290" alt="{title}"></a>
+	</div>
+	<div class="txtshow">
+		<h3><a href="{url}" title="{title}" target="_blank">{title}</a> <span class="author">作者：<a target="_blank" href="{authorurl}">{author}</a></span></h3>
+		<p><a href="{url}" class="gray" title="阅读《{title}》" target="_blank">{summary}</a> <a href="{url}" class="red" title="阅读《{title}》" target="_blank">[点击阅读]</a></p>
+	</div>
+</div>]]></item>
+				</item>
+				<item id="hash"><![CDATA[710db185]]></item>
+				<item id="getpic"><![CDATA[1]]></item>
+				<item id="getsummary"><![CDATA[1]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[pic]]></item>
+					<item id="3"><![CDATA[authorurl]]></item>
+					<item id="4"><![CDATA[author]]></item>
+					<item id="5"><![CDATA[summary]]></item>
+				</item>
+			</item>
+			<item id="107">
+				<item id="styleid"><![CDATA[107]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏小说推荐]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[[order=1]
+<div class="txt"><h3><a href="{url}" title="{title}"  target="_blank">{author}：{title}</a></h3></div>
+[/order]
+<ul>
+[loop]
+<li class="listrow{currentorder}"><a href="{upurl}" class="gray" title="一级分类:{upname}" target="_blank">[{upname}]</a> <a href="{url}" title="书名:{title}" target="_blank">{author}：{title}</a></li>
+[/loop]
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order">
+						<item id="1"><![CDATA[<div class="txt"><h3><a href="{url}" title="{title}"  target="_blank">{author}：{title}</a></h3></div>]]></item>
+					</item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="listrow{currentorder}"><a href="{upurl}" class="gray" title="一级分类:{upname}" target="_blank">[{upname}]</a> <a href="{url}" title="书名:{title}" target="_blank">{author}：{title}</a></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[c047a31e]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[author]]></item>
+					<item id="3"><![CDATA[currentorder]]></item>
+					<item id="4"><![CDATA[upurl]]></item>
+					<item id="5"><![CDATA[upname]]></item>
+				</item>
+			</item>
+			<item id="108">
+				<item id="styleid"><![CDATA[108]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏新书推荐]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li><a href="{upurl}" class="gray" title="一级分类:{upname}" target="_blank">[{upname}]</a> <a href="{url}" title="书名:{title}" target="_blank">{author}：{title}</a></li>
+[/loop]
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li><a href="{upurl}" class="gray" title="一级分类:{upname}" target="_blank">[{upname}]</a> <a href="{url}" title="书名:{title}" target="_blank">{author}：{title}</a></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[c79fd608]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[upurl]]></item>
+					<item id="1"><![CDATA[upname]]></item>
+					<item id="2"><![CDATA[url]]></item>
+					<item id="3"><![CDATA[title]]></item>
+					<item id="4"><![CDATA[author]]></item>
+				</item>
+			</item>
+			<item id="109">
+				<item id="styleid"><![CDATA[109]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏封面展示]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="catmainfmzs">
+<div class="piclist">
+[loop]
+<div class="box">
+<div class="pic"><a href="{url}" target="_blank" title="{title}"><img src="{pic}" width="100" height="125" alt="{title}"></a></div>
+<div class="txt"><h3><a href="{url}" title="{title}" target="_blank">{title}</a></h3><p><a href="{authorurl}" target="_blank">{author}</a> 著<br><a href="{url}" class="gray" title="{title}" target="_blank">{summary}</a></p></div>
+</div>
+[/loop]
+</div>
+</div>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<div class="box">
+<div class="pic"><a href="{url}" target="_blank" title="{title}"><img src="{pic}" width="100" height="125" alt="{title}"></a></div>
+<div class="txt"><h3><a href="{url}" title="{title}" target="_blank">{title}</a></h3><p><a href="{authorurl}" target="_blank">{author}</a> 著<br><a href="{url}" class="gray" title="{title}" target="_blank">{summary}</a></p></div>
+</div>]]></item>
+				</item>
+				<item id="hash"><![CDATA[950352f6]]></item>
+				<item id="getpic"><![CDATA[1]]></item>
+				<item id="getsummary"><![CDATA[1]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[pic]]></item>
+					<item id="3"><![CDATA[authorurl]]></item>
+					<item id="4"><![CDATA[author]]></item>
+					<item id="5"><![CDATA[summary]]></item>
+				</item>
+			</item>
+			<item id="110">
+				<item id="styleid"><![CDATA[110]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏推荐排行]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="catmainxsph">
+<div class="book" id="1pdbookshow">
+</div>
+<div class="rank">
+<div class="list">
+<div class="listtitle"><div class="bookpm">排名</div><div class="booktype">类别</div><div class="bookname">书名</div><div class="bookamout">总推荐</div></div>
+[loop]
+<div class="listrow" id="1row{currentorder}" pdtag="{currentorder}" onMouseOver="catmainxsphhover(1,{currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allvote}</span></div>
+</div>
+[/loop]
+<div class="more"><a href="pdnovel.php?mod=list&orderby=8" target="_blank">更多>></a></div>
+</div>
+</div>
+</div>
+<script>catmainxsphhover(1,1);</script>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<div class="listrow" id="1row{currentorder}" pdtag="{currentorder}" onMouseOver="catmainxsphhover(1,{currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allvote}</span></div>
+</div>]]></item>
+				</item>
+				<item id="hash"><![CDATA[af98473a]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[currentorder]]></item>
+					<item id="1"><![CDATA[caturl]]></item>
+					<item id="2"><![CDATA[upname]]></item>
+					<item id="3"><![CDATA[url]]></item>
+					<item id="4"><![CDATA[title]]></item>
+					<item id="5"><![CDATA[allvote]]></item>
+				</item>
+			</item>
+			<item id="111">
+				<item id="styleid"><![CDATA[111]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏收藏排行]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="catmainxsph">
+<div class="book" id="2pdbookshow">
+</div>
+<div class="rank">
+<div class="list">
+<div class="listtitle"><div class="bookpm">排名</div><div class="booktype">类别</div><div class="bookname">书名</div><div class="bookamout">总收藏</div></div>
+[loop]
+<div class="listrow" id="2row{currentorder}" pdtag="{currentorder}" onMouseOver="catmainxsphhover(2,{currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allmark}</span></div>
+</div>
+[/loop]
+<div class="more"><a href="pdnovel.php?mod=list&orderby=8" target="_blank">更多>></a></div>
+</div>
+</div>
+</div>
+<script>catmainxsphhover(2,1);</script>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<div class="listrow" id="2row{currentorder}" pdtag="{currentorder}" onMouseOver="catmainxsphhover(2,{currentorder})">
+<div class="bookpm"><span class="no{currentorder}">{currentorder}</span></div><div class="booktype"><a href="{caturl}" target="_blank">[{upname}]</a></div><div class="bookname"><a href="{url}" title="{title}" target="_blank">{title}</a></div><div class="bookamout"><span class="amout">{allmark}</span></div>
+</div>]]></item>
+				</item>
+				<item id="hash"><![CDATA[fdae377d]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[currentorder]]></item>
+					<item id="1"><![CDATA[caturl]]></item>
+					<item id="2"><![CDATA[upname]]></item>
+					<item id="3"><![CDATA[url]]></item>
+					<item id="4"><![CDATA[title]]></item>
+					<item id="5"><![CDATA[allmark]]></item>
+				</item>
+			</item>
+			<item id="112">
+				<item id="styleid"><![CDATA[112]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]左栏小说更新]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="catmainxsgx">
+<table width="100%" cellspacing="0" cellpadding="0">
+<thead><tr><td align="center">类别</td><td>小说书名/小说章节</td><td align="left">作者</td><td align="left">总字数</td><td align="left">更新时间</td></tr></thead>
+<tbody>
+[loop]
+<tr class="row{parity}"><td height="28" align="center"><a href="{upurl}" class="type" target="_blank">[{upname}]</a></td><td align="left"><a href="{url}" title="{title}" class="name" target="_blank">{title}</a> <a href="{lastchapterurl}" title="{lastchapter}" class="part" target="_blank">{lastchapter}</a> </td><td><a href="{authorurl}" title="{author}" target="_blank">{author}</a></td><td>{words}</td><td>{lastupdate}</td></tr>
+[/loop]
+</tbody>
+</table>
+<div class="more"><a target="_blank" href="pdnovel.php?mod=list">更多>></a></div>
+</div>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<tr class="row{parity}"><td height="28" align="center"><a href="{upurl}" class="type" target="_blank">[{upname}]</a></td><td align="left"><a href="{url}" title="{title}" class="name" target="_blank">{title}</a> <a href="{lastchapterurl}" title="{lastchapter}" class="part" target="_blank">{lastchapter}</a> </td><td><a href="{authorurl}" title="{author}" target="_blank">{author}</a></td><td>{words}</td><td>{lastupdate}</td></tr>]]></item>
+				</item>
+				<item id="hash"><![CDATA[9679a11e]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[parity]]></item>
+					<item id="1"><![CDATA[upurl]]></item>
+					<item id="2"><![CDATA[upname]]></item>
+					<item id="3"><![CDATA[url]]></item>
+					<item id="4"><![CDATA[title]]></item>
+					<item id="5"><![CDATA[lastchapterurl]]></item>
+					<item id="6"><![CDATA[lastchapter]]></item>
+					<item id="7"><![CDATA[authorurl]]></item>
+					<item id="8"><![CDATA[author]]></item>
+					<item id="9"><![CDATA[words]]></item>
+					<item id="10"><![CDATA[lastupdate]]></item>
+				</item>
+			</item>
+			<item id="113">
+				<item id="styleid"><![CDATA[113]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏总点击榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allvisit}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=4" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allvisit}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[a267da19]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[allvisit]]></item>
+				</item>
+			</item>
+			<item id="114">
+				<item id="styleid"><![CDATA[114]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏月点击榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{monthvisit}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=3" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{monthvisit}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[02ff3306]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[monthvisit]]></item>
+				</item>
+			</item>
+			<item id="115">
+				<item id="styleid"><![CDATA[115]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏周点击榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{weekvisit}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=2" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{weekvisit}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[be6d04f5]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[weekvisit]]></item>
+				</item>
+			</item>
+			<item id="116">
+				<item id="styleid"><![CDATA[116]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏总推荐榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allvote}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=8" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allvote}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[cfc1390d]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[allvote]]></item>
+				</item>
+			</item>
+			<item id="117">
+				<item id="styleid"><![CDATA[117]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏月推荐榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{monthvote}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=7" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{monthvote}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[2468c1e1]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[monthvote]]></item>
+				</item>
+			</item>
+			<item id="118">
+				<item id="styleid"><![CDATA[118]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏周推荐榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{weekvote}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=6" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{weekvote}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[7eb00cf7]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[weekvote]]></item>
+				</item>
+			</item>
+			<item id="119">
+				<item id="styleid"><![CDATA[119]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏字数榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{words}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=9" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus"><![CDATA[
+					]]></item>
+					<item id="index"><![CDATA[
+					]]></item>
+					<item id="orderplus"><![CDATA[
+					]]></item>
+					<item id="order"><![CDATA[
+					]]></item>
+					<item id="loopplus"><![CDATA[
+					]]></item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{words}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[9f15ce10]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[words]]></item>
+				</item>
+			</item>
+			<item id="120">
+				<item id="styleid"><![CDATA[120]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]边栏收藏榜]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<ul>
+[loop]
+<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allmark}</span></li>
+[/loop]
+<li class="listmore"><a href="pdnovel.php?mod=list&orderby=10" target="_blank">更多>></a></li>
+</ul>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<li class="liststyle"><span class="left"><a href="{url}" title="{title}" target="_blank">{title}</a></span><span class="right">{allmark}</span></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[61e157b0]]></item>
+				<item id="getpic"><![CDATA[0]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[allmark]]></item>
+				</item>
+			</item>
+			<item id="121">
+				<item id="styleid"><![CDATA[121]]></item>
+				<item id="blockclass"><![CDATA[pdnovel_pdnovel]]></item>
+				<item id="name"><![CDATA[[pdnovel]通栏典藏列表]]></item>
+				<item id="template">
+					<item id="raw"><![CDATA[<div class="catalldclb">
+<ul>
+[loop]
+<li><a href="{url}" title="{title}" target="_blank"><img src="{pic}" width="80" height="100" alt="{title}">{title}</a></li>
+[/loop]
+</ul>
+</div>]]></item>
+					<item id="footer"><![CDATA[]]></item>
+					<item id="header"><![CDATA[]]></item>
+					<item id="indexplus">
+					</item>
+					<item id="index">
+					</item>
+					<item id="orderplus">
+					</item>
+					<item id="order">
+					</item>
+					<item id="loopplus">
+					</item>
+					<item id="loop"><![CDATA[<li><a href="{url}" title="{title}" target="_blank"><img src="{pic}" width="80" height="100" alt="{title}">{title}</a></li>]]></item>
+				</item>
+				<item id="hash"><![CDATA[8a83d817]]></item>
+				<item id="getpic"><![CDATA[1]]></item>
+				<item id="getsummary"><![CDATA[0]]></item>
+				<item id="makethumb"><![CDATA[0]]></item>
+				<item id="settarget"><![CDATA[0]]></item>
+				<item id="fields">
+					<item id="0"><![CDATA[url]]></item>
+					<item id="1"><![CDATA[title]]></item>
+					<item id="2"><![CDATA[pic]]></item>
+				</item>
+			</item>
+		</item>
+	</item>
+</root>
