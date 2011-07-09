@@ -39,7 +39,7 @@ if($op == 'edit') {
 
 			if($_G['gp_signaturenew']) {
 				$signaturenew = censor($_G['gp_signaturenew']);
-				$sightmlnew = addslashes(discuzcode(dstripslashes($signaturenew), 1, 0, 0, 0, $member['allowsigbbcode'], $member['allowsigimgcode'], 0, 0, 1));
+				$sightmlnew = $signaturenew;
 			} else {
 				$sightmlnew = $signaturenew = '';
 			}
@@ -58,7 +58,7 @@ if($op == 'edit') {
 		$bio = explode("\t\t\t", $member['bio']);
 		$member['bio'] = html2bbcode($bio[0]);
 		$member['biotrade'] = !empty($bio[1]) ? html2bbcode($bio[1]) : '';
-		$member['signature'] = html2bbcode($member['sightml']);
+		$member['signature'] = $member['sightml'];
 		$username = !empty($_G['gp_username']) ? $member['username'] : '';
 
 	}

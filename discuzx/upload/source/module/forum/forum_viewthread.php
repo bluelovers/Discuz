@@ -957,7 +957,28 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		($post['first'] && $_G['setting']['commentfirstpost'] && in_array($_G['group']['allowcommentpost'], array(1, 3)) ||
 		(!$post['first'] && in_array($_G['group']['allowcommentpost'], array(2, 3))));
 	$_G['forum']['allowbbcode'] = $_G['forum']['allowbbcode'] ? -$post['groupid'] : 0;
-	$post['signature'] = $post['usesig'] ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
+
+	// bluelovers
+	// 緩存簽名
+	static $signatures;
+
+	// 檢查緩存中是否處理過此用戶的簽名
+	if (!isset($signatures[$post['authorid']])) {
+	// bluelovers
+
+		// 忽略帖子的 usesig 啟用簽名設定
+		$post['signature'] = (1 || $post['usesig']) ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
+
+	// bluelovers
+		// 以 discuzcode 處理 $post['signature']
+		$post['signature'] = discuzcode($post['signature']);
+
+		$signatures[$post['authorid']] = $post['signature'];
+	} else {
+		$post['signature'] = '';
+	}
+	// bluelovers
+
 	if(!defined('IN_ARCHIVER')) {
 		$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], ($_G['forum']['allowimgcode'] && $_G['setting']['showimages'] ? 1 : 0), $_G['forum']['allowhtml'], ($_G['forum']['jammer'] && $post['authorid'] != $_G['uid'] ? 1 : 0), 0, $post['authorid'], $_G['cache']['usergroups'][$post['groupid']]['allowmediacode'] && $_G['forum']['allowmediacode'], $post['pid'], $_G['setting']['lazyload']);
 		if($post['first']) {

@@ -1889,7 +1889,7 @@ EOF;
 		$member['lastvisit'] = dgmdate($member['lastvisit'], 'Y-n-j h:i A');
 
 		$member['bio'] = html2bbcode($member['bio']);
-		$member['signature'] = html2bbcode($member['sightml']);
+		$member['signature'] = $member['sightml'];
 
 		shownav('user', 'members_edit');
 		showsubmenu("$lang[members_edit] - $member[username]", array(
@@ -1980,7 +1980,7 @@ EOF;
 
 		$signaturenew = censor($_G['gp_signaturenew']);
 		$sigstatusnew = $signaturenew ? 1 : 0;
-		$sightmlnew = addslashes(discuzcode(dstripslashes($signaturenew), 1, 0, 0, 0, ($member['allowsigbbcode'] ? ($member['allowcusbbcode'] ? 2 : 1) : 0), $member['allowsigimgcode'], 0));
+		$sightmlnew = $signaturenew;
 
 		$oltimenew = round($_G['gp_totalnew'] / 60);
 
