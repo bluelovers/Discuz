@@ -745,6 +745,12 @@ function update_threadpartake($tid) {
 	}
 }
 
+/**
+ * 取得主題封面
+ *
+ * @param $cover = 1 封面儲存在本地
+ * @param $cover = -1 封面儲存在遠端 FTP
+ **/
 function getthreadcover($tid, $cover = 0, $getfilename = 0) {
 	global $_G;
 	if(empty($tid)) {
