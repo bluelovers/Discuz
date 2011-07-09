@@ -1723,7 +1723,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
-					'relatedgroup' => $_G['gp_relatedgroupnew'],
+					'relatedgroup' => $_relatedgroupnew,
 					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
 				));
 			}
