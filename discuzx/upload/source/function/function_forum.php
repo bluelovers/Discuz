@@ -752,6 +752,7 @@ function update_threadpartake($tid) {
  * @param $cover = -1 封面儲存在遠端 FTP
  **/
 function getthreadcover($tid, $cover = 0, $getfilename = 0) {
+	//TODO:增加可設定一般網址圖片作為封面
 	global $_G;
 	if(empty($tid)) {
 		return '';
