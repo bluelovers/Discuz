@@ -850,7 +850,8 @@ var rowtypedata = [
 					array(1, cplang('forums_edit_extend_order_asc'))
 				)), $forum['defaultorder'], 'mradio');
 				showsetting('forums_edit_extend_threadcache', 'threadcachesnew', $forum['threadcaches'], 'text');
-				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'text');
+				// 將 relatedgroupnew 由 text 改為 textarea
+				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'textarea');
 				showsetting('forums_edit_extend_edit_rules', 'alloweditrulesnew', $forum['alloweditrules'], 'radio');
 				showmultititle();
 				showsetting('forums_edit_extend_recommend', 'modrecommendnew[open]', $forum['modrecommend']['open'], 'radio', '', 1);
@@ -1707,6 +1708,21 @@ EOT;
 				'widthauto' => $_G['gp_widthautonew'],
 			));
 			if(!$multiset) {
+
+				// bluelovers
+				/**
+				 * 過濾 relatedgroup 並且可接收將分行轉為 ,
+				 * 將 relatedgroup 改為可接收陣列或文字，然後統一處理為文字陣列
+				 **/
+				$_relatedgroupnew = $_G['gp_relatedgroupnew'];
+				if (!is_array($_relatedgroupnew)) {
+					$_relatedgroupnew = explode(',', str_replace(array("\r\n", "\n"), ',', $_relatedgroupnew));
+				}
+				$_relatedgroupnew = array_unique(array_filter(array_map('intval', $_relatedgroupnew)));
+
+				$_relatedgroupnew = implode(',', $_relatedgroupnew);
+				// bluelovers
+
 				$forumfielddata = array_merge($forumfielddata, array(
 					'viewperm' => $_G['gp_viewpermnew'],
 					'postperm' => $_G['gp_postpermnew'],
@@ -1714,7 +1730,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
-					'relatedgroup' => $_G['gp_relatedgroupnew'],
+					'relatedgroup' => $_relatedgroupnew,
 					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
 				));
 			}

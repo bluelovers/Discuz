@@ -722,6 +722,22 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			}
 		}
 		$s .= '</select>';
+
+	// bluelovers
+	} elseif($type == 'forum' || $type == 'forums') {
+		/**
+		 * @example showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'forums');
+		 **/
+		if ($type == 'forums') {
+			$s .= '<select name="'.$varname.'[]" multiple="multiple" size="10" '.$extra.'>';
+		} else {
+			$s .= '<select name="'.$varname.'" '.$extra.'>';
+		}
+		$s .= "<option value=\"\">".cplang('none')."</option>";
+		$s .= forumselect(FALSE, 0, $value, TRUE);
+		$s .= '</select>';
+	// bluelovers
+
 	} elseif($type == 'color') {
 		global $stylestuff;
 		$preview_varname = str_replace('[', '_', str_replace(']', '', $varname));
