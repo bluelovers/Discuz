@@ -25,6 +25,7 @@ $query = $db_source->query("SELECT s.*, sf.*
 	WHERE s.uid>'$start' ORDER BY s.uid
 	LIMIT $limit");
 while ($space = $db_source->fetch_array($query)) {
+	//TODO:增加轉換使用者自訂風格 spacefield's theme, css
 
 	// bluelovers
 	// 只匯入已經存在於目標資料庫內的用戶
