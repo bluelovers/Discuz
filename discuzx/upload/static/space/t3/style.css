@@ -17,7 +17,7 @@ body { background: #E6FDFE url(images/body_bg.png) repeat-x 0 25px; }
 #ct, .n, .w { background: #FFF url(images/ct-top.png) no-repeat 0 0 !important; }
 
 /*每個模塊的標題區背景*/
-.block .title { background: #E5FBFD; }
+.block .title { background: transparent url(images/title.gif) no-repeat left center; }
 
 /*頁腳的背景(可由此製造下方圓角的效果)*/
 #ft { padding-top: 20px; background: url(images/ct-bottom.png) no-repeat 0 0; }
