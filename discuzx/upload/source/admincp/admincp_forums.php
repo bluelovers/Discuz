@@ -1714,6 +1714,8 @@ EOT;
 					$_relatedgroupnew = explode(',', str_replace(array("\r\n", "\n"), ',', $_relatedgroupnew));
 				}
 				$_relatedgroupnew = array_unique(array_filter(array_map('intval', $_relatedgroupnew)));
+
+				$_relatedgroupnew = implode(',', $_relatedgroupnew);
 				// bluelovers
 
 				$forumfielddata = array_merge($forumfielddata, array(
