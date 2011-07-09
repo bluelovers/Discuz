@@ -970,8 +970,8 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 	if (!isset($signatures[$post['authorid']])) {
 	// bluelovers
 
-	// 忽略帖子的 usesig 啟用簽名設定
-	$post['signature'] = (1 || $post['usesig']) ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
+		// 忽略帖子的 usesig 啟用簽名設定
+		$post['signature'] = (1 || $post['usesig']) ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
 
 	// bluelovers
 		$signatures[$post['authorid']] = $post['signature'];
