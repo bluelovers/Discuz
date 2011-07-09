@@ -850,7 +850,8 @@ var rowtypedata = [
 					array(1, cplang('forums_edit_extend_order_asc'))
 				)), $forum['defaultorder'], 'mradio');
 				showsetting('forums_edit_extend_threadcache', 'threadcachesnew', $forum['threadcaches'], 'text');
-				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'text');
+				// 將 relatedgroupnew 由 text 改為 textarea
+				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'textarea');
 				showsetting('forums_edit_extend_edit_rules', 'alloweditrulesnew', $forum['alloweditrules'], 'radio');
 				showmultititle();
 				showsetting('forums_edit_extend_recommend', 'modrecommendnew[open]', $forum['modrecommend']['open'], 'radio', '', 1);
