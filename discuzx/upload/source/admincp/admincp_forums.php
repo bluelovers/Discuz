@@ -1629,8 +1629,13 @@ EOT;
 			$modrecommendnew['imagewidth'] = $modrecommendnew['imagewidth'] ? intval($modrecommendnew['imagewidth']) : 300;
 			$modrecommendnew['imageheight'] = $modrecommendnew['imageheight'] ? intval($modrecommendnew['imageheight']): 250;
 			$modrecommendnew = $modrecommendnew && is_array($modrecommendnew) ? addslashes(serialize($modrecommendnew)) : '';
+			/*
 			$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descriptionnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
 			$rulesnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+			*/
+			// 以原始格式儲存 description, rules
+			$descriptionnew = $_G['gp_descriptionnew'];
+			$rulesnew = $_G['gp_rulesnew'];
 			$extranew = is_array($_G['gp_extranew']) ? $_G['gp_extranew'] : array();
 			$forum['extra'] = unserialize($forum['extra']);
 			$forum['extra']['namecolor'] = $extranew['namecolor'];
