@@ -11,3 +11,5 @@ INDEX ( `theme_fup_id` )
 
 ALTER TABLE `pre_home_theme_diy` ADD `theme_authorid` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0',
 ADD INDEX ( `theme_authorid` ) ;
+
+ALTER TABLE `pre_home_theme_diy` ADD `theme_baseon` VARCHAR( 30 ) NOT NULL DEFAULT '' COMMENT '基於哪一個空間風格';
