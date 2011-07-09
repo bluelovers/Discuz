@@ -974,6 +974,9 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		$post['signature'] = (1 || $post['usesig']) ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
 
 	// bluelovers
+		// 以 discuzcode 處理 $post['signature']
+		$post['signature'] = discuzcode($post['signature']);
+
 		$signatures[$post['authorid']] = $post['signature'];
 	} else {
 		$post['signature'] = '';
