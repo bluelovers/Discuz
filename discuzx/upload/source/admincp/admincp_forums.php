@@ -1710,8 +1710,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
-					// 將 relatedgroup 改為可接收陣列或文字，然後統一處理為文字陣列
-					'relatedgroup' => is_array($_G['gp_relatedgroupnew']) ? implode(',', $_G['gp_relatedgroupnew']) : $_G['gp_relatedgroupnew'],
+					'relatedgroup' => $_G['gp_relatedgroupnew'],
 					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
 				));
 			}
