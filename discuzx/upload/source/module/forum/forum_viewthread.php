@@ -845,6 +845,17 @@ function viewthread_updateviews($threadtable) {
 		} elseif($adminid == 1) {
 			showmessage('view_log_invalid', '', array('logfile' => $_G['forum_logfile']));
 		}
+
+	// bluelovers
+	} elseif (
+		// 如果主題發表者 = 目前的使用者
+		$_G['forum_thread']['authorid'] == $_G['uid']
+		// 如果主題最後回覆者 = 目前的使用者
+		|| $_G['forum_thread']['lastposter'] == $_G['username']
+	) {
+		// 不更新 views
+	// bluelovers
+
 	} else {
 
 		DB::query("UPDATE LOW_PRIORITY ".DB::table($threadtable)." SET views=views+1 WHERE tid='$_G[tid]'", 'UNBUFFERED');
