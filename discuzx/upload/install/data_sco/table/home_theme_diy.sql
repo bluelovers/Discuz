@@ -8,3 +8,6 @@ CREATE TABLE `pre_home_theme_diy` (
 PRIMARY KEY ( `theme_id` ) ,
 INDEX ( `theme_fup_id` )
 ) ENGINE = MYISAM COMMENT = '自定義風格';
+
+ALTER TABLE `pre_home_theme_diy` ADD `theme_authorid` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0',
+ADD INDEX ( `theme_authorid` ) ;
