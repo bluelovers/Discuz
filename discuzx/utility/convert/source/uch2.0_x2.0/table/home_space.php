@@ -246,6 +246,21 @@ if($nextid) {
 	showmessage("繼續轉換數據表 {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
+// bluelovers
+/**
+ * get css style name
+ **/
+function _getcssname($css) {
+	if($css) {
+		preg_match("/\[name\](.+?)\[\/name\]/i", trim($css), $mathes);
+		if(!empty($mathes[1])) $name = dhtmlspecialchars($mathes[1]);
+	} else {
+		$name = 'No name';
+	}
+	return $name;
+}
+// bluelovers
+
 function getupdatesql($setarr) {
 	$updatearr = array();
 	foreach ($setarr as $key => $value) {
