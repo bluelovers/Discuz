@@ -144,6 +144,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// domain 由 setting 控制
 			} elseif ($k == 'domain') {
 				$k2 = 'setting';
+
+			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
+			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
+				$k2 = 'split';
 			}
 
 			$caches[] = $k2;
