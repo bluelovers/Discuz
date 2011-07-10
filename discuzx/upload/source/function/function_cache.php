@@ -25,6 +25,7 @@ function updatecache($cachename = '') {
 		$cachedir = DISCUZ_ROOT.'./source/function/cache';
 		$cachedirhandle = dir($cachedir);
 		while($entry = $cachedirhandle->read()) {
+			// 尋找 $cachedir 下所有的 cache script 但是略過 setting
 			if(!in_array($entry, array('.', '..')) && preg_match("/^cache\_([\_\w]+)\.php$/", $entry, $entryr) && $entryr[1] != 'setting' && substr($entry, -4) == '.php' && is_file($cachedir.'/'.$entry)) {
 				// 簡化重複代碼
 				$updatelist[] = $entryr[1];
