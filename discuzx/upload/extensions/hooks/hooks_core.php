@@ -140,6 +140,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// pluginsetting 由 plugin 控制
 			} elseif ($k == 'pluginsetting') {
 				$k2 = 'plugin';
+
+			// domain 由 setting 控制
+			} elseif ($k == 'domain') {
+				$k2 = 'setting';
 			}
 
 			$caches[] = $k2;
