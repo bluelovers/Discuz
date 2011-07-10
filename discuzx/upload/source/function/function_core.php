@@ -733,6 +733,23 @@ function loadcache($cachenames, $force = false) {
 	global $_G;
 	static $loadedcache = array();
 	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+
+	// bluelovers
+	/**
+	 * 將 setting 推送到最前面
+	 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+	 **/
+	if (in_array('setting', $cachenames) && count($cachenames) > 1) {
+		// 分割 $cachenames 先執行 loadcache('setting')
+		$_tmp = array('setting');
+		loadcache($_tmp, $force);
+
+		// 之後再執行剩下的 $cachenames
+		$cachenames = array_diff($cachenames, $_tmp);
+		return loadcache($cachenames, $force);
+	}
+	// bluelovers
+
 	$caches = array();
 	foreach ($cachenames as $k) {
 		if(!isset($loadedcache[$k]) || $force) {
@@ -762,6 +779,7 @@ function loadcache($cachenames, $force = false) {
 
 function cachedata($cachenames) {
 	//BUG: 當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存
+	// 已經可利用 hook 處理此問題
 	global $_G;
 	static $isfilecache, $allowmem;
 

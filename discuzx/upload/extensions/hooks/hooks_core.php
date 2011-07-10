@@ -109,13 +109,17 @@ Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
  * 修正當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存的 BUG
  **/
 function _eFunc_cachedata_After($_EVENT, $conf) {
+
+	// 停止呼叫事件
+	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->stop();
+
 	extract($conf, EXTR_REFS);
 
-	static $loadedcache = array();
+	static $_loadedcache = array();
 	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
 	$caches = array();
 	foreach ($cachenames as $k) {
-		if(!isset($loadedcache[$k])) {
+		if(!isset($_loadedcache[$k])) {
 			$k2 = $k;
 
 			// 防止造成無法取得緩存
@@ -143,7 +147,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 			$caches[] = $k2;
 			$caches_load[] = $k;
-			$loadedcache[$k] = true;
+			$_loadedcache[$k] = true;
 		}
 	}
 
@@ -162,6 +166,9 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			$data[$_k] = $_v;
 		}
 	}
+
+	// 啟用呼叫事件
+	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
 }
 
 Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
