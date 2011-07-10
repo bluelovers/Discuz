@@ -20,6 +20,12 @@ function updatecache($cachename = '') {
 	// bluelovers
 
 	if(!$updatelist) {
+
+		// bluelovers
+		// 初始化 $updatelist
+		$updatelist = array();
+		// bluelovers
+
 		// 獨立執行 setting
 		@include_once libfile('cache/setting', 'function');
 		build_cache_setting();
