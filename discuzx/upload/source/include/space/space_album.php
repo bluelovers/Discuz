@@ -315,7 +315,7 @@ if($id) {
 		// 如果有好友則預設顯示 we 不然則顯示 all
 		if ($space['friends'] > 0) {
 		// bluelovers
-		$_GET['view'] = 'we';
+			$_GET['view'] = 'we';
 		// bluelovers
 		} else {
 			$_GET['view'] = 'all';
