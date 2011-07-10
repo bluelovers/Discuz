@@ -122,6 +122,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'usergroups';
 			} elseif ($k == 'style_default') {
 				$k2 = 'styles';
+
+			// 防止分類信息無法取得緩存的 BUG
+			} elseif (preg_match('/^threadsort_/', $k)) {
+				$k2 = 'threadsorts';
 			}
 
 			$caches[] = $k2;
