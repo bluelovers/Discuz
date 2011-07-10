@@ -18,6 +18,9 @@ function build_cache_forumlinks() {
 	$query = DB::query("SELECT * FROM ".DB::table('common_friendlink')." ORDER BY displayorder");
 
 	//BUG:搭配 cachedata 的 hook 即時更新緩存時會造成讀取不到 $_G['setting']
+	/**
+	 * 原因在於更新 forumlinks 時，setting 尚未載入
+	 **/
 	if($_G['setting']['forumlinkstatus']) {
 		$tightlink_content = $tightlink_text = $tightlink_logo = $comma = '';
 
