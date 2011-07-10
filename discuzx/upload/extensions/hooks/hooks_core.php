@@ -122,6 +122,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'usergroups';
 			} elseif ($k == 'style_default') {
 				$k2 = 'styles';
+
+			// 防止分類信息無法取得緩存的 BUG
+			} elseif (preg_match('/^threadsort_/', $k)) {
+				$k2 = 'threadsorts';
 			}
 
 			$caches[] = $k2;
@@ -129,6 +133,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			$loadedcache[$k] = true;
 		}
 	}
+
+	// 整理過濾處理過的 Array
+	$caches = array_unique($caches);
+	$caches_load = array_unique($caches_load);
 
 	if(!empty($caches)) {
 		@include_once libfile('function/cache');
@@ -163,6 +171,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 			if(!isset($_del_cache[$k])
 				// bugfix 修正造成插件語言包無法緩存的問題
 				&& substr($k, 0, 6) != 'plugin'
+				// 防止分類信息無法取得緩存的 BUG
+				&& substr($k, 0, strlen('threadsort')) != 'threadsort'
 			) {
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
 			}

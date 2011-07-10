@@ -11,6 +11,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
+// 此處的 admincp_threadtypes 實際上為分類信息 threadsorts
 cpheader();
 
 $classoptionmenu = array();
@@ -37,12 +38,19 @@ if(!$operation) {
 			$forum[$changetype] = unserialize($forum[$changetype]);
 			if(is_array($forum[$changetype]['types'])) {
 				foreach($forum[$changetype]['types'] as $typeid => $name) {
-					$forumsarray[$typeid][] = '<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'&anchor=threadtypes">'.$forum['name'].'</a>';
+					/**
+					 * 此處因該正確連結到 threadsorts
+					 *
+					 * threadtypes = 主題分類
+					 * threadsorts = 分類信息
+					 **/
+					$forumsarray[$typeid][] = '<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'&anchor=threadsorts">'.$forum['name'].'</a>';
 					$fidsarray[$typeid][] = $forum['fid'];
 				}
 			}
 		}
 
+		// 此處的 forum_threadtype 實際上為分類信息 threadsorts
 		$threadtypes = '';
 		$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
 		while($type = DB::fetch($query)) {
