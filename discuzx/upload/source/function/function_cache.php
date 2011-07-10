@@ -20,6 +20,7 @@ function updatecache($cachename = '') {
 	// bluelovers
 
 	if(!$updatelist) {
+		// 獨立執行 setting
 		@include_once libfile('cache/setting', 'function');
 		build_cache_setting();
 		$cachedir = DISCUZ_ROOT.'./source/function/cache';
