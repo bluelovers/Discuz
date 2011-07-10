@@ -17,7 +17,10 @@ if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $opactives['debate'] = 'class="a"';
 
-if(empty($_GET['view'])) $_GET['view'] = 'we';
+if(empty($_GET['view'])) {
+	$_GET['view'] = 'we';
+}
+
 $_GET['order'] = empty($_GET['order']) ? 'dateline' : $_GET['order'];
 $perpage = 20;
 $perpage = mob_perpage($perpage);
