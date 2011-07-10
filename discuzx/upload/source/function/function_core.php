@@ -740,9 +740,11 @@ function loadcache($cachenames, $force = false) {
 	 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
 	 **/
 	if (in_array('setting', $cachenames) && count($cachenames) > 1) {
+		// 分割 $cachenames 先執行 loadcache('setting')
 		$_tmp = array('setting');
 		loadcache($_tmp, $force);
 
+		// 之後再執行剩下的 $cachenames
 		$cachenames = array_diff($cachenames, $_tmp);
 		return loadcache($cachenames, $force);
 	}
