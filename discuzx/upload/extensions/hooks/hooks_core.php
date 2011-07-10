@@ -109,6 +109,11 @@ Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
  * 修正當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存的 BUG
  **/
 function _eFunc_cachedata_After($_EVENT, $conf) {
+
+	// 停止呼叫事件
+	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->stop();
+	Scorpio_Event::instance($_EVENT['event.name'])->stop();
+
 	extract($conf, EXTR_REFS);
 
 	static $_loadedcache = array();
@@ -162,6 +167,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			$data[$_k] = $_v;
 		}
 	}
+
+	// 啟用呼叫事件
+	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
+	Scorpio_Event::instance($_EVENT['event.name'])->play();
 }
 
 Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
