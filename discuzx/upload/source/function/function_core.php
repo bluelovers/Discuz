@@ -733,6 +733,21 @@ function loadcache($cachenames, $force = false) {
 	global $_G;
 	static $loadedcache = array();
 	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+
+	// bluelovers
+	/**
+	 * 將 setting 推送到最前面
+	 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+	 **/
+	if (in_array('setting', $cachenames) && count($cachenames) > 1) {
+		$_tmp = array('setting');
+		loadcache($_tmp, $force);
+
+		$cachenames = array_diff($cachenames, $_tmp);
+		return loadcache($cachenames, $force);
+	}
+	// bluelovers
+
 	$caches = array();
 	foreach ($cachenames as $k) {
 		if(!isset($loadedcache[$k]) || $force) {
