@@ -136,6 +136,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// modreasons, userreasons 皆由 modreasons 控制
 			} elseif ($k == 'modreasons' || $k == 'userreasons') {
 				$k2 = 'modreasons';
+
+			// pluginsetting 由 plugin 控制
+			} elseif ($k == 'pluginsetting') {
+				$k2 = 'plugin';
 			}
 
 			$caches[] = $k2;
