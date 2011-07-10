@@ -19,6 +19,9 @@
 	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
 	.zoominner div.ptn.pbn { background: {WRAPBG}; }
 
+	/* 附件圖 */
+	.attm .mbn img.zoom, ignore_js_op img.zoom { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
+
 	/* spvimg,spi 為活動、商品公用部分 */
 	.spvimg { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
 	.spi dl { font: {FONTSIZE} {FONT}; font-family: inherit; }
