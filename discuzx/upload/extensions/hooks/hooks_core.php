@@ -118,14 +118,27 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		if(!isset($loadedcache[$k])) {
 			$k2 = $k;
 
-			if (preg_match('/^usergroup_\d+$/', $k)) {
-				$k2 = 'usergroups';
-			} elseif ($k == 'style_default') {
-				$k2 = 'styles';
+			// 防止造成無法取得緩存
+			if (preg_match('/^(usergroup|threadsort|admingroup|style)_/', $k, $m)) {
+				$k2 = $m[1].'s';
+			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
+				$k2 = $m[1];
 
-			// 防止分類信息無法取得緩存的 BUG
-			} elseif (preg_match('/^threadsort_/', $k)) {
-				$k2 = 'threadsorts';
+			// modreasons, userreasons 皆由 modreasons 控制
+			} elseif ($k == 'modreasons' || $k == 'userreasons') {
+				$k2 = 'modreasons';
+
+			// pluginsetting 由 plugin 控制
+			} elseif ($k == 'pluginsetting') {
+				$k2 = 'plugin';
+
+			// domain 由 setting 控制
+			} elseif ($k == 'domain') {
+				$k2 = 'setting';
+
+			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
+			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
+				$k2 = 'split';
 			}
 
 			$caches[] = $k2;
@@ -167,12 +180,38 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
 		*/
+
+		// 略過不清除的緩存
+		static $_skips;
+		if (!isset($_skips)) {
+			$_skips = array(
+				'founder',
+
+				'plugin', 'pluginsetting',
+
+				'threadsort',
+
+				'usergroup', 'admingroup',
+
+				'threadsort',
+				'style',
+
+				'diytemplatename',
+
+				'modreasons', 'userreasons', 'modreasons',
+
+				'domain',
+
+				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
+			);
+
+			$_skips = implode('|', $_skips);
+			$_skips = '/^('.$_skips.')/';
+		}
+
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
-				// bugfix 修正造成插件語言包無法緩存的問題
-				&& substr($k, 0, 6) != 'plugin'
-				// 防止分類信息無法取得緩存的 BUG
-				&& substr($k, 0, strlen('threadsort')) != 'threadsort'
+				&& !preg_match($_skips, $k)
 			) {
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
 			}
