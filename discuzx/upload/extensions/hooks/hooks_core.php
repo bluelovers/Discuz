@@ -189,14 +189,38 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
 		*/
+
+		// 略過不清除的緩存
+		static $_skips;
+		if (!isset($_skips)) {
+			$_skips = array(
+				'founder',
+
+				'plugin', 'pluginsetting',
+
+				'threadsort',
+
+				'usergroup', 'admingroup',
+
+				'threadsort',
+				'style',
+
+				'diytemplatename',
+
+				'modreasons', 'userreasons', 'modreasons',
+
+				'domain',
+
+				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
+			);
+
+			$_skips = implode('|', $_skips);
+			$_skips = '/^('.$_skips.')/';
+		}
+
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
-				// bugfix 修正造成插件語言包無法緩存的問題
-				&& substr($k, 0, 6) != 'plugin'
-				// 防止分類信息無法取得緩存的 BUG
-				&& substr($k, 0, strlen('threadsort')) != 'threadsort'
-				// founder 沒有 file 緩存
-				&& $k != 'founder'
+				&& !preg_match($_skips, $k)
 			) {
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
 			}
