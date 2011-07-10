@@ -125,6 +125,12 @@ while ($row = $db_source->fetch_array($query)) {
 	$row['article'] = s_trim($row['article']);
 	// bluelovers
 
+	// bluelovers
+	// 多此一舉但是仍然有用處，可過濾不正確的 threadsorts
+	$row['threadsorts'] = $row['threadsorts'] ? unserialize($row['threadsorts']) : '';
+	$row['threadsorts'] = $row['threadsorts'] ? serialize($row['threadsorts']) : '';
+	// bluelovers
+
 	$row  = daddslashes($row, 1);
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
