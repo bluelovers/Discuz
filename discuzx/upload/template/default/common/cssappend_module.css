@@ -28,3 +28,8 @@
 	/* 日誌 */
 	.vw .d { font: {FONTSIZE} {FONT}; font-family: inherit; }
 /** end **/
+
+/* ----------------------------------------------------------------------- 空間相關樣式 */
+/** home::space,misc::ranklist **/
+	.pic .c { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
+/** end **/
