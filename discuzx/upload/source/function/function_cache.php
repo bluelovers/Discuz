@@ -20,25 +20,39 @@ function updatecache($cachename = '') {
 	// bluelovers
 
 	if(!$updatelist) {
+
+		// bluelovers
+		// 初始化 $updatelist
+		$updatelist = array();
+		// bluelovers
+
+		// 獨立執行 setting
 		@include_once libfile('cache/setting', 'function');
 		build_cache_setting();
 		$cachedir = DISCUZ_ROOT.'./source/function/cache';
 		$cachedirhandle = dir($cachedir);
 		while($entry = $cachedirhandle->read()) {
+			// 尋找 $cachedir 下所有的 cache script 但是略過 setting
 			if(!in_array($entry, array('.', '..')) && preg_match("/^cache\_([\_\w]+)\.php$/", $entry, $entryr) && $entryr[1] != 'setting' && substr($entry, -4) == '.php' && is_file($cachedir.'/'.$entry)) {
-				@include_once libfile('cache/'.$entryr[1], 'function');
-				// bluelovers
-				if (function_exists('build_cache_'.$entryr[1])) {
-				// bluelovers
-					call_user_func('build_cache_'.$entryr[1]);
-				// bluelovers
-				} else {
-					$lostcaches[] = $entryr[1];
-				}
-				// bluelovers
+				// 簡化重複代碼
+				$updatelist[] = $entryr[1];
 			}
 		}
-	} else {
+	}
+
+	if ($updatelist) {
+
+		// bluelovers
+		/**
+		 * 將 setting 推送到最前面
+		 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+		 **/
+		if (in_array('setting', $updatelist) && count($updatelist) > 1) {
+			$updatelist = array_diff($updatelist, array('setting'));
+			array_unshift($updatelist, 'setting');
+		}
+		// bluelovers
+
 		foreach($updatelist as $entry) {
 			@include_once libfile('cache/'.$entry, 'function');
 			// bluelovers
