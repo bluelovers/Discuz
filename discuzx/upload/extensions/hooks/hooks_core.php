@@ -179,6 +179,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 				&& substr($k, 0, 6) != 'plugin'
 				// 防止分類信息無法取得緩存的 BUG
 				&& substr($k, 0, strlen('threadsort')) != 'threadsort'
+				// founder 沒有 file 緩存
+				&& $k != 'founder'
 			) {
 				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
 			}
