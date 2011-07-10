@@ -130,6 +130,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// 防止造成無法取得緩存
 			} elseif (preg_match('/^(admingroup)_/', $k, $m)) {
 				$k2 = $m[1].'s';
+			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
+				$k2 = $m[1];
 			}
 
 			$caches[] = $k2;
