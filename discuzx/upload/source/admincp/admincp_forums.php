@@ -716,7 +716,6 @@ var rowtypedata = [
 
 						$showtype = TRUE;
 
-						//BUG:分類信息無效的原因可能在此
 						loadcache('threadsort_option_'.$type['typeid']);
 						if($type['special'] && !$_G['cache']['threadsort_option_'.$type['typeid']]) {
 							$showtype = FALSE;
