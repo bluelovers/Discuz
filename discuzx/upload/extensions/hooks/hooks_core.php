@@ -111,11 +111,11 @@ Scorpio_Hook::add('Func_cachedata:After', '_eFunc_cachedata_After');
 function _eFunc_cachedata_After($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
-	static $loadedcache = array();
+	static $_loadedcache = array();
 	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
 	$caches = array();
 	foreach ($cachenames as $k) {
-		if(!isset($loadedcache[$k])) {
+		if(!isset($_loadedcache[$k])) {
 			$k2 = $k;
 
 			// 防止造成無法取得緩存
@@ -143,7 +143,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 			$caches[] = $k2;
 			$caches_load[] = $k;
-			$loadedcache[$k] = true;
+			$_loadedcache[$k] = true;
 		}
 	}
 
