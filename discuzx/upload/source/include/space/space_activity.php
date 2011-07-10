@@ -17,7 +17,19 @@ if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $opactives['activity'] = 'class="a"';
 
-if(empty($_GET['view'])) $_GET['view'] = 'we';
+if(empty($_GET['view'])) {
+	/*
+	$_GET['view'] = 'we';
+	*/
+	// 更改當 view 為空時的預設判定
+	space_merge($space, 'count');
+
+	if($space['friends'] > 0) {
+		$_GET['view'] = $_G['gp_view'] = 'we';
+	} else {
+		$_GET['view'] = $_G['gp_view'] = 'all';
+	}
+}
 $_GET['order'] = empty($_GET['order']) ? 'dateline' : $_GET['order'];
 
 $perpage = 20;

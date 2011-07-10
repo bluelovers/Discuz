@@ -309,7 +309,18 @@ if($id) {
 	$picmode = 0;
 
 	if(empty($_GET['view'])) {
-		$_GET['view'] = 'we';
+		// bluelovers
+		// 取得 common_member_count
+		space_merge($space, 'count');
+		// 如果有好友則預設顯示 we 不然則顯示 all
+		if ($space['friends'] > 0) {
+		// bluelovers
+			$_GET['view'] = $_G['gp_view'] = 'we';
+		// bluelovers
+		} else {
+			$_GET['view'] = $_G['gp_view'] = 'all';
+		}
+		// bluelovers
 	}
 
 	$gets = array(
