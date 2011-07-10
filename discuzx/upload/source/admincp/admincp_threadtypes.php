@@ -11,6 +11,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
+// 此處的 admincp_threadtypes 實際上為分類信息 threadsorts
 cpheader();
 
 $classoptionmenu = array();
@@ -49,6 +50,7 @@ if(!$operation) {
 			}
 		}
 
+		// 此處的 forum_threadtype 實際上為分類信息 threadsorts
 		$threadtypes = '';
 		$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
 		while($type = DB::fetch($query)) {
