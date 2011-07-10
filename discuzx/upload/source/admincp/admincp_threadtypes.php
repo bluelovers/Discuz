@@ -37,7 +37,13 @@ if(!$operation) {
 			$forum[$changetype] = unserialize($forum[$changetype]);
 			if(is_array($forum[$changetype]['types'])) {
 				foreach($forum[$changetype]['types'] as $typeid => $name) {
-					$forumsarray[$typeid][] = '<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'&anchor=threadtypes">'.$forum['name'].'</a>';
+					/**
+					 * 此處因該正確連結到 threadsorts
+					 *
+					 * threadtypes = 主題分類
+					 * threadsorts = 分類信息
+					 **/
+					$forumsarray[$typeid][] = '<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'&anchor=threadsorts">'.$forum['name'].'</a>';
 					$fidsarray[$typeid][] = $forum['fid'];
 				}
 			}
