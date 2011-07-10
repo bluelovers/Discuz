@@ -112,7 +112,6 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 	// 停止呼叫事件
 	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->stop();
-	Scorpio_Event::instance($_EVENT['event.name'])->stop();
 
 	extract($conf, EXTR_REFS);
 
@@ -170,7 +169,6 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 	// 啟用呼叫事件
 	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
-	Scorpio_Event::instance($_EVENT['event.name'])->play();
 }
 
 Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
