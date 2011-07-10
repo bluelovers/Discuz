@@ -33,6 +33,18 @@ function updatecache($cachename = '') {
 	}
 
 	if ($updatelist) {
+
+		// bluelovers
+		/**
+		 * 將 setting 推送到最前面
+		 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+		 **/
+		if (in_array('setting', $updatelist) && count($updatelist) > 1) {
+			$updatelist = array_diff($updatelist, array('setting'));
+			array_unshift($updatelist, 'setting');
+		}
+		// bluelovers
+
 		foreach($updatelist as $entry) {
 			@include_once libfile('cache/'.$entry, 'function');
 			// bluelovers
