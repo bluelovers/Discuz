@@ -18,6 +18,9 @@
 	.zoominner { overflow: hidden; }
 	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
 	.zoominner div.ptn.pbn { background: {WRAPBG}; }
+
+	/* spvimg,spi 為活動、商品公用部分 */
+	.spi dl { font: {FONTSIZE} {FONT}; font-family: inherit; }
 /** end **/
 
 /** forum::viewthread,portal::view,portal::comment,home::space **/
