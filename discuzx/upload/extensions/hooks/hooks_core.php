@@ -132,6 +132,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = $m[1].'s';
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
+
+			// modreasons, userreasons 皆由 modreasons 控制
+			} elseif ($k == 'modreasons' || $k == 'userreasons') {
+				$k2 = 'modreasons';
 			}
 
 			$caches[] = $k2;
