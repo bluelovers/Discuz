@@ -25,5 +25,5 @@
 
 /** forum::viewthread,portal::view,portal::comment,home::space **/
 	/* 日誌 */
-	.vw .d { font: {FONTSIZE} {FONT}; }
+	.vw .d { font: {FONTSIZE} {FONT}; font-family: inherit; }
 /** end **/
