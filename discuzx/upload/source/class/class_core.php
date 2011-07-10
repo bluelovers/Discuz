@@ -651,7 +651,11 @@ class discuz_core {
 	function _init_setting() {
 		if($this->init_setting) {
 			if(empty($this->var['setting'])) {
-				$this->cachelist[] = 'setting';
+				/**
+				 * 將 setting 推送到最前面
+				 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+				 **/
+				array_unshift($this->cachelist, 'setting');
 			}
 
 			if(empty($this->var['style'])) {
