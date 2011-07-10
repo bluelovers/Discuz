@@ -692,7 +692,6 @@ var rowtypedata = [
 						$forum['threadtypes'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
 					}
 
-					//BUG:於某次提交後，分類信息無效了
 					if($forum['threadsorts']) {
 						$forum['threadsorts'] = unserialize($forum['threadsorts']);
 						$forum['threadsorts']['status'] = 1;
@@ -716,7 +715,6 @@ var rowtypedata = [
 
 						$showtype = TRUE;
 
-						//BUG:分類信息無效的原因可能在此
 						loadcache('threadsort_option_'.$type['typeid']);
 						if($type['special'] && !$_G['cache']['threadsort_option_'.$type['typeid']]) {
 							$showtype = FALSE;
