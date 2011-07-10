@@ -118,17 +118,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		if(!isset($loadedcache[$k])) {
 			$k2 = $k;
 
-			if (preg_match('/^usergroup_\d+$/', $k)) {
-				$k2 = 'usergroups';
-			} elseif ($k == 'style_default') {
-				$k2 = 'styles';
-
-			// 防止分類信息無法取得緩存的 BUG
-			} elseif (preg_match('/^threadsort_/', $k)) {
-				$k2 = 'threadsorts';
-
 			// 防止造成無法取得緩存
-			} elseif (preg_match('/^(admingroup|style)_/', $k, $m)) {
+			} elseif (preg_match('/^(usergroup|threadsort|admingroup|style)_/', $k, $m)) {
 				$k2 = $m[1].'s';
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
