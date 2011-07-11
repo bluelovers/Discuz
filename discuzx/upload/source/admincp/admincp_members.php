@@ -2203,7 +2203,8 @@ EOF;
 
 			showformheader('members&operation=profile&fieldid='.$fieldid);
 			showtableheader();
-			if($field['customable']) {
+			// 強制可編輯用戶欄目名稱與介紹
+			if(1 || $field['customable']) {
 				showsetting('members_profile_edit_name', 'title', $field['title'], 'text');
 				showsetting('members_profile_edit_desc', 'description', $field['description'], 'text');
 			} else {
