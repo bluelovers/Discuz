@@ -119,6 +119,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 	$row['description'] = html2bbcode($row['description'], 0, 1);
 	$row['rules'] = html2bbcode($row['rules'], 0, 1);
+	$row['article'] = html2bbcode($row['article'], 0, 1);
 
 	$row['description'] = s_trim($row['description']);
 	$row['rules'] = s_trim($row['rules']);
