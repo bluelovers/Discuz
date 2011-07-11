@@ -3,25 +3,27 @@
 <div class="bm_c">
 	<form action="forum.php?mod=group&fid={$_G[forum][fid]}&groupfriend=true&" method="post" target="_self">
 		<input name="friendid" type="hidden" value="$_G[forum][fid]" />
-	    <div class="bn">
-	        <h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:addgroupname}</h2>
-	        <div class="cl">
-		       <div class="z inlinelist"><img src="$_G[forum][icon]" /></div>
-		       <div class="z inlinelist">{$_G[forum][description]}</div>
-	        </div>
-	    </div>
-	    <div class="bn">
-	        <h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:selectgroup}</h2>
-	        <ul class="inlinelist cl" style="width:326px;">
-	            <!--{loop $mygrouplist $group}-->
-	                <li style="float:left; width:160px;" class="xs2"><label><input name="groupids[]" type="checkbox" value="{$group['fid']}" class="vm" <!--{if $theforumfriends[$group[fid]]}-->checked<!--{/if}-->/> {$group[name]}</label></li>
-	            <!--{/loop}-->
-	        </ul>
-	    </div>
-	    <div class="bn cl">
-	    	<input type="hidden" name="formhash" value="{FORMHASH}" />
-	    	<button name="groupfriendsubmit" type="submit" id="addgroupsubmit" class="pn pnc z vm" value="yes" /><strong>�ύ</strong></button>
-	    </div>
+		<div class="bn">
+			<h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:addgroupname}</h2>
+			<div class="cl">
+			   <div class="z inlinelist"><img src="$_G[forum][icon]" /></div>
+			   <div class="z inlinelist">{$_G[forum][description]}</div>
+			</div>
+		</div>
+		<div class="bn">
+			<h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:selectgroup}</h2>
+			<ul class="inlinelist cl" style="width:326px;">
+				<!--{loop $mygrouplist $group}-->
+					<!--{if $_G[forum][fid] != $group[fid]}-->
+						<li style="float:left; width:160px;" class="xs2"><label><input name="groupids[]" type="checkbox" value="{$group['fid']}" class="vm" <!--{if $theforumfriends[$group[fid]]}-->checked<!--{/if}-->/> {$group[name]}</label></li>
+					<!--{/if}-->
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="bn cl">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<button name="groupfriendsubmit" type="submit" id="addgroupsubmit" class="pn pnc z vm" value="yes" /><strong>提交</strong></button>
+		</div>
 	</form>
 </div>
 <!--{subtemplate common/footer_ajax}-->
