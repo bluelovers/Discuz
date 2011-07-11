@@ -1286,6 +1286,14 @@ function output() {
 		$content = ob_get_contents();
 		$content = output_replace($content);
 
+	// bluelovers
+	// 即使沒有開啟 rewritestatus 一樣可以執行 Event
+	} else {
+		$content = ob_get_contents();
+	}
+
+	if (1) {
+	// bluelovers
 
 		ob_end_clean();
 		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
