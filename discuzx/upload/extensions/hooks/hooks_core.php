@@ -303,6 +303,7 @@ Array
 
 				$_user['uid'][$_uid] = $user;
 				$_user['username'][$user['username']] = $_uid;
+				if ($user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
 			} else {
 				// 失敗時緩存為 0
 				$_user['uid'][$m['uid']] = 0;
