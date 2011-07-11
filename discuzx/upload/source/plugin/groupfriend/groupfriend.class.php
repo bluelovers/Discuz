@@ -62,7 +62,7 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 						foreach($_POST['groupids'] AS $key => $val) {
 							$addgrouplist[] = "[b][url={$_G['siteurl']}forum.php?mod=group&fid={$mygrouplist[$val]['fid']}]".$mygrouplist[$val]['name']."[/url][/b]";
 						}
-						$addgrouplist_str = implode("¡¢", $addgrouplist);
+						$addgrouplist_str = implode("ï¹œ", $addgrouplist);
 						loaducenter();
 
 						uc_pm_send(0, $_G['forum']['founderuid'], lang('plugin/groupfriend', 'groupfriendaddpm_title'), $_G['forum']['name'].lang('plugin/groupfriend', 'groupfriendaddpm_message', array('username' => $_G['member']['username'], 'addgrouplist' => $addgrouplist_str)));
@@ -85,7 +85,7 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 				$btn_str = '';
 			}
 
-			//ÒÑÌí¼ÓµÄÓÑÇéÈº×é
+			//å·²æ·»åŠ çš„å‹æƒ…ç¾¤çµ„
 			include_once libfile('function/group');
 			$query = DB::query("SELECT f.*, ff.icon FROM ".DB::table('plugin_groupfriend')." gf LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = gf.friendid LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid = gf.friendid WHERE gf.groupid = '{$_G['forum']['fid']}' ORDER BY gf.dateline DESC LIMIT {$var['numberlimit']}");
 			while($value = DB::fetch($query)) {
@@ -101,7 +101,7 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 	}
 }
 
-//ÓÑÇéÈº×éµÄ¸¸Àà
+//å‹æƒ…ç¾¤çµ„çš„çˆ¶é¡
 class plugin_groupfriend {
 
 }
