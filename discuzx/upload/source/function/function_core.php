@@ -1286,6 +1286,14 @@ function output() {
 		$content = ob_get_contents();
 		$content = output_replace($content);
 
+	// bluelovers
+	// 即使沒有開啟 rewritestatus 一樣可以執行 Event
+	} else {
+		$content = ob_get_contents();
+	}
+
+	if (1) {
+	// bluelovers
 
 		ob_end_clean();
 		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
@@ -1294,7 +1302,9 @@ function output() {
 		// event: 'Func_output:Before_rewrite_content_echo'
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
-				->run(array(&$content));
+				->run(array(array(
+					'content'	=> &$content,
+				)));
 		}
 		// bluelovers
 
@@ -1355,6 +1365,17 @@ function output_ajax() {
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
         $s = output_replace($s);
 	}
+
+	// bluelovers
+	// event: 'Func_output_ajax:Before_rewrite_content_echo'
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+			->run(array(array(
+				'content'	=> &$s,
+			)));
+	}
+	// bluelovers
+
 	return $s;
 }
 
