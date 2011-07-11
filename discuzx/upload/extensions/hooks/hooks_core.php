@@ -313,10 +313,12 @@ Array
 			$user['showname'] = dhtmlspecialchars($user['showname'], ENT_QUOTES);
 
 			// 如果一個以上的人使用相同名稱
+			/*
 			if (!empty($user['showname'])) {
 				$_user['counter'][$user['showname']] += 1;
-				if ($_user['counter'][$user['showname']] > 1) $user['showname'] .= ($user['username'] != $user['showname']) ? '@'.$user['username'] : '#'.$_user['counter'][$user['showname']];
+				//if ($_user['counter'][$user['showname']] > 1) $user['showname'] .= ($user['username'] != $user['showname']) ? '@'.$user['username'] : '#'.$_user['counter'][$user['showname']];
 			}
+			*/
 
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
@@ -345,6 +347,7 @@ Array
 
 		if (!empty($user)) {
 			$s .= $user;
+			//if ($_user['counter'][$user] > 1) $s .= '@'.$m['showname'];
 		} else {
 			$s .= $m['showname'];
 		}
