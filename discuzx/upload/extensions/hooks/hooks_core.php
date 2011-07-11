@@ -254,6 +254,14 @@ Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Befo
 function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	extract($_conf, EXTR_REFS);
 
+	$_func = __FUNCTION__.'_callback';
+
+	$regex_showname = '[^<\>\'"]+';
+
+	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&]+?)))"(?<extra>[^\>]*)\>(?<showname>'.$regex_showname.')<\/a/', $_func, $content);
+}
+
+function _eFunc_output_Before_rewrite_content_echo_callback($m) {
 /*
 Array
 (
@@ -268,75 +276,69 @@ Array
 )
 */
 
-	$_func = function($m){
-		// 緩存資訊
-		static $_user;
+	// 緩存資訊
+	static $_user;
 
-		// 初始化 $_uid
-		$_uid = 0;
+	// 初始化 $_uid
+	$_uid = 0;
 
-		// 將 href 內的 username 解碼
-		$m['username'] = daddslashes(rawurldecode($m['username']));
-		$m['uid'] = intval($m['uid']);
+	// 將 href 內的 username 解碼
+	$m['username'] = daddslashes(rawurldecode($m['username']));
+	$m['uid'] = intval($m['uid']);
 
-		// 判斷是否分析過 $m['username']
-		if (isset($_user['username'][$m['username']])) {
-			$_uid = $_user['username'][$m['username']];
-		// 判斷是否分析過 $m['uid']
-		} elseif (isset($_user['uid'][$m['uid']])) {
-			$_uid = $m['uid'];
+	// 判斷是否分析過 $m['username']
+	if (isset($_user['username'][$m['username']])) {
+		$_uid = $_user['username'][$m['username']];
+	// 判斷是否分析過 $m['uid']
+	} elseif (isset($_user['uid'][$m['uid']])) {
+		$_uid = $m['uid'];
 
-		// 如果存在 $m['uid']
-		} elseif ($m['uid'] || !empty($m['username'])) {
+	// 如果存在 $m['uid']
+	} elseif ($m['uid'] || !empty($m['username'])) {
 
-			$_sql = $m['uid'] ? "uid='".$m['uid']."'" : "username='".$m['username']."'";
+		$_sql = $m['uid'] ? "uid='".$m['uid']."'" : "username='".$m['username']."'";
 
-			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.{$_sql} LIMIT 1");
+		$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.{$_sql} LIMIT 1");
 
-			if ($_uid = $user['uid']) {
+		if ($_uid = $user['uid']) {
 
-				// 預先處理要顯示的名稱
-				$user['showname'] = $user['showname'] ? $user['showname'] : (
-					$user['nickname'] ? $user['nickname'] : ''
-				);
-				$user['showname'] = dhtmlspecialchars($user['showname']);
+			// 預先處理要顯示的名稱
+			$user['showname'] = $user['showname'] ? $user['showname'] : (
+				$user['nickname'] ? $user['nickname'] : ''
+			);
+			$user['showname'] = dhtmlspecialchars($user['showname']);
 
-				$_user['uid'][$_uid] = $user;
-				$_user['username'][$user['username']] = $_uid;
-				if ($user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
-			} else {
-				// 失敗時緩存為 0
-				$_user['uid'][$m['uid']] = 0;
-				$_user['username'][$m['username']] = 0;
-			}
-		}
-
-		// 如果成功查詢到 $_uid
-		if ($_uid) {
-			// 取得緩存
-			$user = $_user['uid'][$_uid];
-
-			$s = '';
-			$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
-
-			if (!empty($user['showname'])) {
-				$s .= $user['showname'];
-			} else {
-				$s .= $m['showname'];
-			}
-
-			$s .= '</a';
+			$_user['uid'][$_uid] = $user;
+			$_user['username'][$user['username']] = $_uid;
+			if ($user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
 		} else {
-			// 失敗時回傳原有字串
-			$s = $m[0];
+			// 失敗時緩存為 0
+			$_user['uid'][$m['uid']] = 0;
+			$_user['username'][$m['username']] = 0;
+		}
+	}
+
+	// 如果成功查詢到 $_uid
+	if ($_uid) {
+		// 取得緩存
+		$user = $_user['uid'][$_uid];
+
+		$s = '';
+		$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
+
+		if (!empty($user['showname'])) {
+			$s .= $user['showname'];
+		} else {
+			$s .= $m['showname'];
 		}
 
-		return $s;
-	};
+		$s .= '</a';
+	} else {
+		// 失敗時回傳原有字串
+		$s = $m[0];
+	}
 
-	$regex_showname = '[^<\>\'"]+';
-
-	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&]+?)))"(?<extra>[^\>]*)\>(?<showname>'.$regex_showname.')<\/a/', $_func, $content);
+	return $s;
 }
 
 ?>
