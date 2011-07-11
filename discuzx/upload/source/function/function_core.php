@@ -1365,6 +1365,17 @@ function output_ajax() {
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
         $s = output_replace($s);
 	}
+
+	// bluelovers
+	// event: 'Func_output_ajax:Before_rewrite_content_echo'
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+			->run(array(array(
+				'content'	=> &$s,
+			)));
+	}
+	// bluelovers
+
 	return $s;
 }
 
