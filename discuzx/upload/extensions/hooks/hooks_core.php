@@ -246,4 +246,90 @@ function _eClass_discuz_core__init_input_After($_EVENT, $discuz) {
 	}
 }
 
+Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
+
+/**
+ * 輸出時將帳號名稱轉為暱稱
+ **/
+function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+/*
+Array
+(
+    [0] => <a href="home.php?mod=space&amp;uid=1">
+    [1] =>
+    [uid] => 1
+    [2] => 1
+    [username] =>
+    [3] =>
+    [extra] =>
+    [4] =>
+)
+*/
+
+	$_func = function($m){
+		// 緩存資訊
+		static $_user;
+
+		// 初始化 $_uid
+		$_uid = 0;
+
+		// 將 href 內的 username 解碼
+		$m['username'] = rawurldecode($m['username']);
+
+		// 判斷是否分析過 $m['username']
+		if (isset($_user['username'][$m['username']])) {
+			$_uid = $_user['username'][$m['username']];
+		// 判斷是否分析過 $m['uid']
+		} elseif (isset($_user['uid'][$m['uid']])) {
+			$_uid = $m['uid'];
+
+		// 如果存在 $m['uid']
+		} elseif ($m['uid']) {
+			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.uid='".$m['uid']."' LIMIT 1");
+
+			if ($_uid = $user['uid']) {
+				$_user['uid'][$_uid] = $user;
+				$_user['username'][$user['username']] = $_uid;
+			} else {
+				// 失敗時緩存為 0
+				$_user['uid'][$m['uid']] = 0;
+			}
+
+		} elseif (!$m['uid'] && !empty($m['username']) && !isset($_user['username'][$m['username']])) {
+			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.username='".$m['username']."' LIMIT 1");
+
+			if ($_uid = $user['uid']) {
+				$_user['uid'][$_uid] = $user;
+				$_user['username'][$user['username']] = $_uid;
+			} else {
+				// 失敗時緩存為 0
+				$_user['username'][$m['username']] = 0;
+			}
+		}
+
+		// 如果成功查詢到 $_uid
+		if ($_uid) {
+			// 取得緩存
+			$user = $_user['uid'][$_uid];
+
+			$s = '';
+			$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
+
+			// nickname > username
+			$s .= $user['nickname'] ? $user['nickname'] : $user['username'];
+
+			$s .= '</a';
+		} else {
+			// 失敗時回傳原有字串
+			$s = $m[0];
+		}
+
+		return $s;
+	};
+
+	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&]+?)))"(?<extra>[^\>]*)\>(?<showname>[^<\>]+)<\/a/', $_func, $content);
+}
+
 ?>
