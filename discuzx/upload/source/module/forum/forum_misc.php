@@ -178,6 +178,16 @@ if($_G['gp_action'] == 'paysucceed') {
 	$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_session'), 0);
 	showmessage($num);
 
+/**
+ * 顯示簡易上傳表單
+ *
+ * @param mod = misc
+ * @param action = upload
+ * @param type = image | file
+ *
+ * @link forum.php?mod=misc&action=upload&fid=232&type=image&infloat=yes&handlekey=upload&inajax=1&ajaxtarget=fwin_content_upload
+ * @link misc.php?mod=swfupload&operation=upload&type=image&inajax=yes&infloat=yes&simple=2
+ **/
 } elseif($_G['gp_action'] == 'upload') {
 
 	$type = !empty($_G['gp_type']) ? $_G['gp_type'] : 'image';
