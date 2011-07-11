@@ -192,6 +192,7 @@ if($_G['gp_action'] == 'paysucceed') {
  **/
 } elseif($_G['gp_action'] == 'upload') {
 
+	//BUG:此處沒有明確限制 type 的值
 	$type = !empty($_G['gp_type']) ? $_G['gp_type'] : 'image';
 	$attachexts = $imgexts = '';
 	$_G['group']['allowpostattach'] = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
