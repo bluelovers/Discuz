@@ -276,10 +276,8 @@ Array
 		$_uid = 0;
 
 		// 將 href 內的 username 解碼
-		$m['username'] = rawurldecode($m['username']);
+		$m['username'] = daddslashes(rawurldecode($m['username']));
 		$m['uid'] = intval($m['uid']);
-
-		$m = daddslashes($m);
 
 		// 判斷是否分析過 $m['username']
 		if (isset($_user['username'][$m['username']])) {
@@ -296,6 +294,13 @@ Array
 			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.{$_sql} LIMIT 1");
 
 			if ($_uid = $user['uid']) {
+
+				// 預先處理要顯示的名稱
+				$user['showname'] = $user['showname'] ? $user['showname'] : (
+					$user['nickname'] ? $user['nickname'] : ''
+				);
+				$user['showname'] = dhtmlspecialchars($user['showname']);
+
 				$_user['uid'][$_uid] = $user;
 				$_user['username'][$user['username']] = $_uid;
 			} else {
@@ -314,7 +319,11 @@ Array
 			$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
 
 			// nickname > username
-			$s .= $user['nickname'] ? $user['nickname'] : $user['username'];
+			if (!empty($user['showname'])) {
+				$s .= $user['showname'];
+			} else {
+				$s .= $m['showname'];
+			}
 
 			$s .= '</a';
 		} else {
