@@ -2203,7 +2203,8 @@ EOF;
 
 			showformheader('members&operation=profile&fieldid='.$fieldid);
 			showtableheader();
-			if($field['customable']) {
+			// 強制可編輯用戶欄目名稱與介紹
+			if(1 || $field['customable']) {
 				showsetting('members_profile_edit_name', 'title', $field['title'], 'text');
 				showsetting('members_profile_edit_desc', 'description', $field['description'], 'text');
 			} else {
@@ -2258,7 +2259,12 @@ EOF;
 						} else {
 							$class = $checked = '';
 						}
-						$groupstr .= "<li $class style=\"float: left; width: 10%;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]</li>";
+
+						// bluelovers
+						$_s_add = "<span class=\"lightfont\" title=\"$key\"> ( $key )</span>";
+						// bluelovers
+
+						$groupstr .= "<li $class style=\"float: left; width: auto;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]{$_s_add}</li>";
 					}
 				}
 				if(!empty($groupstr)) {
@@ -2396,6 +2402,11 @@ EOF;
 			showtableheader('members_profile', 'nobottom', 'id="porfiletable"');
 			showsubtitle(array('members_profile_edit_name', 'members_profile_edit_display_order', 'members_profile_edit_available', 'members_profile_edit_profile_view', 'members_profile_edit_card_view', 'members_profile_edit_reg_view', ''));
 			foreach($list as $fieldid => $value) {
+
+				// bluelovers
+				$value['title'] .= "<span class=\"lightfont\" title=\"$fieldid\"> ( $fieldid )</span>";
+				// bluelovers
+
 				$value['available'] = '<input type="checkbox" class="checkbox" name="available['.$fieldid.']" '.($value['available'] ? 'checked="checked" ' : '').'value="1">';
 				$value['invisible'] = '<input type="checkbox" class="checkbox" name="invisible['.$fieldid.']" '.(!$value['invisible'] ? 'checked="checked" ' : '').'value="1">';
 				$value['showincard'] = '<input type="checkbox" class="checkbox" name="showincard['.$fieldid.']" '.($value['showincard'] ? 'checked="checked" ' : '').'value="1">';
