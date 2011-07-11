@@ -186,6 +186,8 @@ if($_G['gp_action'] == 'paysucceed') {
  * @param type = image | file
  *
  * @link forum.php?mod=misc&action=upload&fid=232&type=image&infloat=yes&handlekey=upload&inajax=1&ajaxtarget=fwin_content_upload
+ *
+ * @link source/include/misc/misc_swfupload.php
  * @link misc.php?mod=swfupload&operation=upload&type=image&inajax=yes&infloat=yes&simple=2
  **/
 } elseif($_G['gp_action'] == 'upload') {
