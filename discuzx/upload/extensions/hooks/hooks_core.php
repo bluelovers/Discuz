@@ -329,7 +329,9 @@ Array
 		return $s;
 	};
 
-	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&]+?)))"(?<extra>[^\>]*)\>(?<showname>[^<\>]+)<\/a/', $_func, $content);
+	$regex_showname = '[^<\>\'"]+';
+
+	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&]+?)))"(?<extra>[^\>]*)\>(?<showname>'.$regex_showname.')<\/a/', $_func, $content);
 }
 
 ?>
