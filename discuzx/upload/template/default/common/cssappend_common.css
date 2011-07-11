@@ -40,6 +40,9 @@ p.emp { color: red; }
 .sllt { max-width: 400px; }
 .slg { min-height:33px; }
 
+/* doing 內的表情 */
+.face { vertical-align: middle; }
+
 /* avatar */
 
 .avatar_small { max-height: 48px; max-width: 48px; }
