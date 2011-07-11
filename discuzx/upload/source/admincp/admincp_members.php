@@ -2263,7 +2263,7 @@ EOF;
 						$_s_add = "<span class=\"lightfont\" title=\"$key\"> ( $key )</span>";
 						// bluelovers
 
-						$groupstr .= "<li $class style=\"float: left; width: 10%;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]{$_s_add}</li>";
+						$groupstr .= "<li $class style=\"float: left; width: auto;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]{$_s_add}</li>";
 					}
 				}
 				if(!empty($groupstr)) {
