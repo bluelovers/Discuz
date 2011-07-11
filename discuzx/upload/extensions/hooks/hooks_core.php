@@ -306,7 +306,7 @@ Array
 			$user['showname'] = $user['showname'] ? $user['showname'] : (
 				$user['nickname'] ? $user['nickname'] : ''
 			);
-			$user['showname'] = dhtmlspecialchars($user['showname']);
+			$user['showname'] = dhtmlspecialchars($user['showname'], ENT_QUOTES);
 
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
