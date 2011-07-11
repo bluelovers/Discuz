@@ -20,7 +20,8 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 		$var['timelimit'] = $var['timelimit'] > 0 ? intval($var['timelimit']) : 1 ;
 		$var['numberlimit'] = $var['numberlimit'] > 0 ? $var['numberlimit'] : 8 ;
 		if($_G['gp_groupfriend']) {
-			if($_G['forum']['founderuid'] == $_G['uid']) {
+			// 允許在自己建立的群組之間使用友情群組
+			if(0 && $_G['forum']['founderuid'] == $_G['uid']) {
 				return;
 			}
 			$query = DB::query("SELECT f.*, ff.founderuid FROM ".DB::table('forum_forumfield')." ff LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = ff.fid WHERE ff.founderuid = '{$_G['uid']}' ORDER BY ff.fid DESC");
@@ -28,7 +29,8 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 				$mygroupids[] = $value['fid'];
 				$mygrouplist[$value['fid']] = $value;
 			}
-			if($mygrouplist[$_G['forum']['fid']]) {
+			// 允許在自己建立的群組之間使用友情群組
+			if(0 && $mygrouplist[$_G['forum']['fid']]) {
 				showmessage(lang('plugin/groupfriend', 'selfgroup'));
 			}
 			$query = DB::query("SELECT * FROM ".DB::table('plugin_groupfriend')." WHERE friendid = '{$_G['forum']['fid']}'");
@@ -76,9 +78,11 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 			include_once template('groupfriend:groupfriend_box');
 			exit;
 		} else {
-			if($_G['forum']['founderuid'] != $_G['uid']) {
+			// 允許在自己建立的群組之間使用友情群組
+			if(1 || $_G['forum']['founderuid'] != $_G['uid']) {
 				$groups_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forumfield')." WHERE founderuid = '{$_G['uid']}' LIMIT 1");
-				if($groups_count > 0 && $_G['forum']['founderuid'] != $_G['uid']) {
+				// 允許在自己建立的群組之間使用友情群組
+				if($groups_count > 0 && (1 || $_G['forum']['founderuid'] != $_G['uid'])) {
 					$btn_str = "<div class='hm bn'><button class=\"pn vm\" type=\"submit\" onclick=\"showWindow('groupfriend', 'forum.php?mod=group&fid={$_G['forum']['fid']}&groupfriend=true');\"><strong>".lang('plugin/groupfriend', 'addgroupfriend')."</strong></button></div>";
 				}
 			} else {
