@@ -286,8 +286,11 @@ Array
 			$_uid = $m['uid'];
 
 		// 如果存在 $m['uid']
-		} elseif ($m['uid']) {
-			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.uid='".$m['uid']."' LIMIT 1");
+		} elseif ($m['uid'] || !empty($m['username'])) {
+
+			$_sql = $m['uid'] ? "uid='".$m['uid']."'" : "username='".$m['username']."'";
+
+			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.{$_sql} LIMIT 1");
 
 			if ($_uid = $user['uid']) {
 				$_user['uid'][$_uid] = $user;
@@ -295,16 +298,6 @@ Array
 			} else {
 				// 失敗時緩存為 0
 				$_user['uid'][$m['uid']] = 0;
-			}
-
-		} elseif (!$m['uid'] && !empty($m['username']) && !isset($_user['username'][$m['username']])) {
-			$user = DB::fetch_first("SELECT mp.uid, mp.realname, mp.nickname, m.username FROM ".DB::table('common_member_profile')." mp, ".DB::table('common_member')." m WHERE mp.uid=m.uid AND m.username='".$m['username']."' LIMIT 1");
-
-			if ($_uid = $user['uid']) {
-				$_user['uid'][$_uid] = $user;
-				$_user['username'][$user['username']] = $_uid;
-			} else {
-				// 失敗時緩存為 0
 				$_user['username'][$m['username']] = 0;
 			}
 		}
