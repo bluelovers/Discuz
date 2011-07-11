@@ -318,7 +318,6 @@ Array
 			$s = '';
 			$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
 
-			// nickname > username
 			if (!empty($user['showname'])) {
 				$s .= $user['showname'];
 			} else {
