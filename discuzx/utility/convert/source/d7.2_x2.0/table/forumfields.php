@@ -122,7 +122,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 	$row['description'] = s_trim($row['description']);
 	$row['rules'] = s_trim($row['rules']);
-	$row['article'] = s_trim($row['article']);
+	$row['agreement'] = $row['article'] = s_trim($row['article']);
 	// bluelovers
 
 	// bluelovers
