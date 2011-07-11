@@ -1,0 +1,27 @@
+<!--{subtemplate common/header_ajax}-->
+<h3 class="flb" style="background: {COMMONBG};"><em>{lang groupfriend:mygrouplist}</em><!--{if $_G[inajax]}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']');" title="{lang close}">{lang close}</a></span><!--{/if}--></h3>
+<div class="bm_c">
+	<form action="forum.php?mod=group&fid={$_G[forum][fid]}&groupfriend=true&" method="post" target="_self">
+		<input name="friendid" type="hidden" value="$_G[forum][fid]" />
+	    <div class="bn">
+	        <h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:addgroupname}</h2>
+	        <div class="cl">
+		       <div class="z inlinelist"><img src="$_G[forum][icon]" /></div>
+		       <div class="z inlinelist">{$_G[forum][description]}</div>
+	        </div>
+	    </div>
+	    <div class="bn">
+	        <h2 class="xs2 xg2 mbn pbn bbda">{lang groupfriend:selectgroup}</h2>
+	        <ul class="inlinelist cl" style="width:326px;">
+	            <!--{loop $mygrouplist $group}-->
+	                <li style="float:left; width:160px;" class="xs2"><label><input name="groupids[]" type="checkbox" value="{$group['fid']}" class="vm" <!--{if $theforumfriends[$group[fid]]}-->checked<!--{/if}-->/> {$group[name]}</label></li>
+	            <!--{/loop}-->
+	        </ul>
+	    </div>
+	    <div class="bn cl">
+	    	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	    	<button name="groupfriendsubmit" type="submit" id="addgroupsubmit" class="pn pnc z vm" value="yes" /><strong>Ã·Ωª</strong></button>
+	    </div>
+	</form>
+</div>
+<!--{subtemplate common/footer_ajax}-->

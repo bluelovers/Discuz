@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X1.5]]></item>
+	<item id="Time"><![CDATA[2010-09-19 11:07]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://www.discuz.net/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[ÓÑÇéÈº×é]]></item>
+			<item id="identifier"><![CDATA[groupfriend]]></item>
+			<item id="description"><![CDATA[ÈÃÈº×é´´½¨Õß¿ÉÒÔÌí¼ÓÆäËûÈºÎªÓÑÇéÈº×é]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[groupfriend/]]></item>
+			<item id="copyright"><![CDATA[Comsenz Inc. And CongYuShuai(Max.Cong)]]></item>
+			<item id="version"><![CDATA[1.5]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[groupfriend]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[ÓÑÇéÈº×é×î¶àÏÔÊ¾¸öÊý]]></item>
+				<item id="description"><![CDATA[Èº×éÓÒ²à±ßÀ¸×î¶àÏÔÊ¾ÓÑÇéÈº×éÊý]]></item>
+				<item id="variable"><![CDATA[numberlimit]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[12]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[ÓÃ»§²Ù×÷ÓÑÇéÈº×éÊ±¼ä¼ä¸ô]]></item>
+				<item id="description"><![CDATA[Ìí¼ÓÓÑÇéÈº×éµÄÊ±ºò£¬¶¼»á·¢²¼Ò»¸ö¶ÌÏûÏ¢¸æÖª¶Ô·½ÈºÖ÷¼ÓÎªÓÑÇéÈº×é¡£ Õâ¸öÊ±¼ä¼ä¸ôÊÇ·ÀÖ¹ÓÃ»§·´¸´Ìí¼ÓºÍÈ¡ÏûÓÑÇéÈº×é£¬²¢·ÀÖ¹·´¸´·¢ËÍ¶ÌÏûÏ¢Ôì³ÉÉ§ÈÅ£¬¶øÉèÖÃµÄÊ±¼ä¼ä¸ô£¬ÍÆ¼öÎª60·ÖÖÓ¡£Ä¬ÈÏÖµ60¡£]]></item>
+				<item id="variable"><![CDATA[timelimit]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[ÊÇ·ñ·¢ËÍÓÑÇéÈº×é¶ÌÏûÏ¢]]></item>
+				<item id="description"><![CDATA[Èç¹ûÔÊÐí£¬ÏµÍ³½«Ö±½ÓÔÚÌí¼ÓÓÑÇéÈº×éÊ±£¬¸ø±»¼ÓÎªÓÑÇéÈº×éµÄÈº×é´´Ê¼ÈË·¢Ò»¸ö¶ÌÏûÏ¢£¬¶ÌÏûÏ¢ÄÚÈÝÊÇÓÐÄÄÐ©Èº×éÌí¼ÓÆäÎªÓÑÇéÈº×é¡£]]></item>
+				<item id="variable"><![CDATA[allowpm]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="nonegroups"><![CDATA[ÄúÃ»ÓÐ´´½¨×Ô¼ºµÄÈº×é]]></item>
+				<item id="addgroupfriend"><![CDATA[ÓÑÇéÈº×éÌí¼ÓÉ¾³ý]]></item>
+				<item id="selfgroup"><![CDATA[²»ÄÜÌí¼Ó×Ô¼ºµÄÈº×éÎªÓÑÇéÈº×é£¬Çë·µ»Ø]]></item>
+				<item id="groupfrienddone"><![CDATA[ÓÑÇéÈº×é²Ù×÷³É¹¦£¡]]></item>
+				<item id="timelimit"><![CDATA[ÄúµÄÓÑÇéÈº×é²Ù×÷Ì«Æµ·±ÇëÉÔºóÔÙÊÔ¡£]]></item>
+				<item id="groupfriendaddpm_title"><![CDATA[ÄúµÄÈº×éÒÑ¾­±»Ìí¼ÓÁËÓÑÇéÈº×é]]></item>
+				<item id="groupfriendaddpm_message"><![CDATA[Èº×éµÄ´´Ê¼ÈËÄúºÃ£¬ÄúµÄÈº×éÒÑ¾­±» {username} ¼ÓÎªÓÑÇéÈº×é£¬Ìí¼ÓµÄÈº×éÁÐ±íÓÐ£º{addgrouplist}]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="groupfriendtitle"><![CDATA[ÓÑÇéÈº×é]]></item>
+				<item id="mygrouplist"><![CDATA[ÎÒµÄÈº×é]]></item>
+				<item id="addgroupname"><![CDATA[ÄúÏÖÔÚÒª½«¡°{$_G[forum][name]}¡±Èº×é¼ÓÎª×Ô¼ºµÄÓÑÇéÈº×é]]></item>
+				<item id="selectgroup"><![CDATA[ÇëÑ¡ÔñÄúµÄÈº×é]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>
