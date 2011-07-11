@@ -308,7 +308,7 @@ Array
 			);
 			$user['showname'] = dhtmlspecialchars($user['showname']);
 
-			$_user['uid'][$_uid] = $user;
+			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
 			if ($user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
 		} else {
@@ -326,8 +326,8 @@ Array
 		$s = '';
 		$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
 
-		if (!empty($user['showname'])) {
-			$s .= $user['showname'];
+		if (!empty($user)) {
+			$s .= $user;
 		} else {
 			$s .= $m['showname'];
 		}
