@@ -326,7 +326,8 @@ Array
 		$user = $_user['uid'][$_uid];
 
 		$s = '';
-		$s .= '<a href="'.$m['href'].'"'.$m['extra'].'>';
+		$s .= '<a href="'.$m['href'].'"';
+		$s .= ''.$m['extra'].'>';
 
 		if (!empty($user)) {
 			$s .= $user;
