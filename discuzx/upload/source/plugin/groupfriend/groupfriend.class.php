@@ -41,7 +41,7 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 				}
 				$theforumfriends[$value['groupid']] = $value;
 			}
-			
+
 			if($_G['timestamp'] - $lastdateline < ($var['timelimit'] * 10)) {
 				showmessage(lang('plugin/groupfriend', 'timelimit'));
 			}
@@ -62,7 +62,7 @@ class plugin_groupfriend_group extends plugin_groupfriend {
 						foreach($_POST['groupids'] AS $key => $val) {
 							$addgrouplist[] = "[b][url={$_G['siteurl']}forum.php?mod=group&fid={$mygrouplist[$val]['fid']}]".$mygrouplist[$val]['name']."[/url][/b]";
 						}
-						$addgrouplist_str = implode("﹜", $addgrouplist);
+						$addgrouplist_str = implode("、", $addgrouplist);
 						loaducenter();
 
 						uc_pm_send(0, $_G['forum']['founderuid'], lang('plugin/groupfriend', 'groupfriendaddpm_title'), $_G['forum']['name'].lang('plugin/groupfriend', 'groupfriendaddpm_message', array('username' => $_G['member']['username'], 'addgrouplist' => $addgrouplist_str)));
