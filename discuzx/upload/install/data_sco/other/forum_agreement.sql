@@ -1,3 +1,3 @@
 
 # 版塊資料
-ALTER TABLE `pre_forum_forumfield` ADD `article` TEXT NOT NULL COMMENT '約束條款';
+ALTER TABLE `pre_forum_forumfield` ADD `agreement` TEXT NOT NULL COMMENT '約束條款';
