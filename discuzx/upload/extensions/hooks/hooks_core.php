@@ -286,12 +286,13 @@ Array
 	$m['username'] = daddslashes(rawurldecode($m['username']));
 	$m['uid'] = intval($m['uid']);
 
-	// 判斷是否分析過 $m['username']
-	if (isset($_user['username'][$m['username']])) {
-		$_uid = $_user['username'][$m['username']];
 	// 判斷是否分析過 $m['uid']
-	} elseif (isset($_user['uid'][$m['uid']])) {
+	if ($m['uid'] && isset($_user['uid'][$m['uid']])) {
 		$_uid = $m['uid'];
+
+	// 判斷是否分析過 $m['username']
+	} elseif (!empty($m['username']) && isset($_user['username'][$m['username']])) {
+		$_uid = $_user['username'][$m['username']];
 
 	// 如果存在 $m['uid']
 	} elseif ($m['uid'] || !empty($m['username'])) {
@@ -310,11 +311,11 @@ Array
 
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
-			if ($user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
 		} else {
 			// 失敗時緩存為 0
-			$_user['uid'][$m['uid']] = 0;
-			$_user['username'][$m['username']] = 0;
+			if ($m['uid']) $_user['uid'][$m['uid']] = '';
+			if (!empty($m['username'])) $_user['username'][$m['username']] = 0;
 		}
 	}
 
