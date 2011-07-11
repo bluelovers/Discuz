@@ -253,6 +253,8 @@ Scorpio_Hook::add('Func_output_ajax:Before_rewrite_content_echo', '_eFunc_output
  * 輸出時將帳號名稱轉為暱稱
  **/
 function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
+	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return;
+
 	extract($_conf, EXTR_REFS);
 
 	$_func = __FUNCTION__.'_callback';
@@ -313,7 +315,7 @@ Array
 			// 如果一個以上的人使用相同名稱
 			if (!empty($user['showname'])) {
 				$_user['counter'][$user['showname']] += 1;
-				if ($_user['counter'][$user['showname']] > 1) $user['showname'] .= '#'.$_user['counter'][$user['showname']];
+				if ($_user['counter'][$user['showname']] > 1) $user['showname'] .= ($user['username'] != $user['showname']) ? '@'.$user['username'] : '#'.$_user['counter'][$user['showname']];
 			}
 
 			$_user['uid'][$_uid] = $user['showname'];
