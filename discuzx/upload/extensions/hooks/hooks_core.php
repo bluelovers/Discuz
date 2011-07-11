@@ -310,6 +310,12 @@ Array
 			);
 			$user['showname'] = dhtmlspecialchars($user['showname'], ENT_QUOTES);
 
+			// 如果一個以上的人使用相同名稱
+			if (!empty($user['showname'])) {
+				$_user['counter'][$user['showname']] += 1;
+				if ($_user['counter'][$user['showname']] > 1) $user['showname'] .= '#'.$_user['counter'][$user['showname']];
+			}
+
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
 			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
