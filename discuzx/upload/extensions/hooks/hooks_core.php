@@ -327,6 +327,12 @@ Array
 
 		$s = '';
 		$s .= '<a href="'.$m['href'].'"';
+
+		if (!empty($user)) {
+			// 提示帳號名稱
+			$s .= ' title="'.strip_tags($m['showname']).' ( '.strip_tags($user).' )"';
+		}
+
 		$s .= ''.$m['extra'].'>';
 
 		if (!empty($user)) {
