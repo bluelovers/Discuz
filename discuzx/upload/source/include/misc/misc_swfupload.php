@@ -11,6 +11,15 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 上傳附件時
+ * misc.php?mod=swfupload&operation=upload&simple=1
+ *
+ * 上傳圖片/封面時
+ * misc.php?mod=swfupload&operation=upload&simple=1&type=image
+ *
+ * operation, type 沒有被解析
+ **/
 require_once libfile('function/spacecp');
 
 $op = empty($_GET['op'])?'':$_GET['op'];
