@@ -194,6 +194,12 @@ if($_G['gp_action'] == 'paysucceed') {
 
 	//BUG:此處沒有明確限制 type 的值
 	$type = !empty($_G['gp_type']) ? $_G['gp_type'] : 'image';
+
+	// bluelovers
+	// 簡易過濾(雖然不知道 DX 設計下的 type 有哪些值，可能會產生 BUG)
+	$type = preg_match('/^[a-z0-9_]$/i', $type) ? $type : 'file';
+	// bluelovers
+
 	$attachexts = $imgexts = '';
 	$_G['group']['allowpostattach'] = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
 	$_G['group']['allowpostimage'] = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
