@@ -277,6 +277,9 @@ Array
 
 		// 將 href 內的 username 解碼
 		$m['username'] = rawurldecode($m['username']);
+		$m['uid'] = intval($m['uid']);
+
+		$m = daddslashes($m);
 
 		// 判斷是否分析過 $m['username']
 		if (isset($_user['username'][$m['username']])) {
