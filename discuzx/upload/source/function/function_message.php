@@ -110,6 +110,22 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 
 	$navtitle = lang('core', 'title_board_message');
 
+	// bluelovers
+	// Event: Func_dshowmessage:Before_custom
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_custom')
+			->run(array(array(
+				'message' => &$message,
+				'url_forward' => &$url_forward,
+				'values' => &$values,
+				'extraparam' => &$extraparam,
+				'custom' => &$custom,
+				'param' => &$param,
+				'navtitle' => &$navtitle,
+		)));
+	}
+	// bluelovers
+
 	if($custom) {
 		$alerttype = 'alert_info';
 		$show_message = $message;
