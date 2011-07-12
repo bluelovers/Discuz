@@ -104,6 +104,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		}
 	}
 
+	// 取得提示信息停留時間(秒)
 	$timedefault = intval($param['refreshtime'] === null ? $_G['setting']['msgforward']['refreshtime'] : $param['refreshtime']);
 	if($param['timeout'] !== null) {
 		$refreshsecond = !empty($timedefault) ? $timedefault : 3;
