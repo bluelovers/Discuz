@@ -361,4 +361,54 @@ Array
 	return $s;
 }
 
+Scorpio_Hook::add('Class_discuz_core::_init_env:After', '_eClass_discuz_core__init_env_After');
+
+function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
+	if (defined('SUB_DIR')) return Scorpio_Hook::RET_SUCCESS;
+
+	static $__func;
+
+	if (!discuz_core::$plugin_support['scofile'] && class_exists('scofile')) {
+		discuz_core::$plugin_support['scofile'] = true;
+	} elseif (!discuz_core::$plugin_support['scofile']) {
+		return Scorpio_Hook::RET_SUCCESS;
+	}
+
+	$_G = &$discuz->var;
+
+	$doc_root = scofile::path($_SERVER["DOCUMENT_ROOT"]);
+	$base = scofile::path(DISCUZ_ROOT);
+
+	$root = scofile::path('/'.scofile::remove_root($base, $doc_root));
+
+	$sub_path = scofile::path(scofile::remove_root($_G['siteroot'], $root));
+
+	if ($root && $sub_path
+		&& $_G['siteroot'] = $root.$sub_path
+	) {
+		$urlbase = preg_replace('/'.preg_quote($_G['siteroot'], '/').'$/', '', $_G['siteurl']);
+
+		$_G['siteurl'] = $urlbase.$root;
+		$_G['siteroot'] = $root;
+	}
+
+/*
+	echo '<pre>';
+	print_r(array(
+		$base,
+		$doc_root,
+		$_G['siteurl'],
+		$_G['siteroot'],
+		$root,
+		$sub_path,
+		$urlbase,
+		$root.$sub_path,
+		($_G['siteroot'] == $root.$sub_path) ? 1 : 0,
+		'/'.preg_quote($_G['siteroot'], '/').'$/',
+	));
+
+	exit();
+*/
+}
+
 ?>
