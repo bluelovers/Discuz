@@ -21,7 +21,7 @@ function _eFunc_mkshare_Before($_EVENT, $share = array()) {
 
 Scorpio_Hook::add('Func_mkshare:After', '_eFunc_mkshare_After');
 
-function _eFunc_mkshare_After(&$share, &$searchs, &$replaces) {
+function _eFunc_mkshare_After($_EVENT, &$share, &$searchs, &$replaces) {
 	$share['title_template'] = str_replace($searchs, $replaces, $share['title_template']);
 }
 
