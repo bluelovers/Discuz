@@ -384,14 +384,13 @@ function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
 	$sub_path = scofile::path(scofile::remove_root($_G['siteroot'], $root));
 
 	if ($root && $sub_path
-		&& $_G['siteroot'] = $root.$sub_path
+		&& ($_G['siteroot'] == $root.$sub_path)
 	) {
 		$urlbase = preg_replace('/'.preg_quote($_G['siteroot'], '/').'$/', '', $_G['siteurl']);
 
 		$_G['siteurl'] = $urlbase.$root;
 		$_G['siteroot'] = $root;
 	}
-
 /*
 	echo '<pre>';
 	print_r(array(
