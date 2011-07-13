@@ -154,6 +154,14 @@ function mkfeed($feed, $actors=array()) {
 		$feed['magic_class'] = 'magicthunder';
 	}
 
+	// bluelovers
+	// Event: Func_mkfeed:Before_body_template
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_body_template')
+			->run(array(&$feed, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$feed['body_template'] = str_replace($searchs, $replaces, $feed['body_template']);
 	$feed['body_template'] = feed_mktarget($feed['body_template']);
 
