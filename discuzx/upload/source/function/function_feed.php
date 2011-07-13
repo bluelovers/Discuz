@@ -95,7 +95,8 @@ function mkfeed($feed, $actors=array()) {
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$feed));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')
+			->run(array(&$feed));
 	}
 	// bluelovers
 
