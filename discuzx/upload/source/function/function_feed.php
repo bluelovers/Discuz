@@ -126,6 +126,15 @@ function mkfeed($feed, $actors=array()) {
 	$searchs[] = '{actor}';
 	// 減少多餘的新視窗 target=\"_blank\"
 	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+
+	// bluelovers
+	// Event: Func_mkfeed:Before_title_template
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_title_template')
+			->run(array(&$feed, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
