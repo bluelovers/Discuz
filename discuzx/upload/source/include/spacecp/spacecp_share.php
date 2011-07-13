@@ -241,6 +241,14 @@ if($_GET['op'] == 'delete') {
 			$actives = array('share' => ' class="active"');
 
 			$thread = DB::fetch(DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid='$id'"));
+
+			// bluelovers
+			// 不允許分享自己的主題
+			if($thread['authorid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($thread['displayorder'], array(-2, -3))) {
 				showmessage('moderate_thread_not_share');
 			}
