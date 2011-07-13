@@ -49,4 +49,12 @@ function _eFunc_mkfeed_Before(&$feed) {
 //	dexit($feed);
 }
 
+/* spacecp_share.php */
+
+Scorpio_Hook::add('Dz_module_spacecp_share:Before_share', '_eDz_module_spacecp_share_Before_share');
+
+function _eDz_module_spacecp_share_Before_share($conf) {
+	$conf['arr'] = _share_add($conf['arr']);
+}
+
 ?>
