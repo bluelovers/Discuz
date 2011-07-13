@@ -82,7 +82,33 @@ if(submitcheck('addsubmit')) {
 			'id' => $newdoid,
 			'idtype' => 'doid'
 		);
+		/*
 		DB::insert('home_feed', $feedarr);
+		*/
+
+		// bluelovers
+		feed_add(
+			$feedarr['icon'],
+
+			$feedarr['title_template'],
+			$feedarr['title_data'],
+
+			$feedarr['body_template'],
+			$feedarr['body_data'],
+
+			'', '', '',
+
+			'', '',
+
+			$feedarr['appid'],
+			0,
+
+			$feedarr['id'],
+			$feedarr['idtype'],
+			$feedarr['uid'],
+			$feedarr['username']
+		);
+		// bluelovers
 	}
 	if($doing_status == '1') {
 		updatemoderate('doid', $newdoid);
