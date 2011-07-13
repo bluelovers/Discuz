@@ -52,10 +52,11 @@ function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 Scorpio_Hook::add('Func_mkfeed:Before_title_template', '_eFunc_mkfeed_Before_title_template');
 
 function _eFunc_mkfeed_Before_title_template($_EVENT, &$feed, &$searchs, &$replaces) {
-	if($feed['body_data'] && is_array($feed['body_data'])) {
-		foreach (array_keys($feed['body_data']) as $key) {
-			$searchs[] = '{body_data:'.$key.'}';
-			$replaces[] = $feed['body_data'][$key];
+	$_k = 'body_data';
+	if($feed[$_k] && is_array($feed[$_k])) {
+		foreach (array_keys($feed[$_k]) as $key) {
+			$searchs[] = '{'.$_k.':'.$key.'}';
+			$replaces[] = $feed[$_k][$key];
 		}
 	}
 }
