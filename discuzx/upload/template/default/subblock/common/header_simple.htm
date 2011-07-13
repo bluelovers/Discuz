@@ -1,0 +1,63 @@
+<!--{subtemplate common/header_common}-->
+	<meta name="application-name" content="$_G['setting']['bbname']" />
+	<meta name="msapplication-tooltip" content="$_G['setting']['bbname']" />
+	<!--{if $_G['setting']['portalstatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][1]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['portal']) ? 'http://'.$_G['setting']['domain']['app']['portal'] : $_G[siteurl].'portal.php'};icon-uri={$_G[siteurl]}{IMGDIR}/portal.ico" /><!--{/if}-->
+	<meta name="msapplication-task" content="name=$_G['setting']['navs'][2]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['forum']) ? 'http://'.$_G['setting']['domain']['app']['forum'] : $_G[siteurl].'forum.php'};icon-uri={$_G[siteurl]}{IMGDIR}/bbs.ico" />
+	<!--{if $_G['setting']['groupstatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][3]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['group']) ? 'http://'.$_G['setting']['domain']['app']['group'] : $_G[siteurl].'group.php'};icon-uri={$_G[siteurl]}{IMGDIR}/group.ico" /><!--{/if}-->
+	<!--{if $_G['setting']['homestatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][4]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['home']) ? 'http://'.$_G['setting']['domain']['app']['home'] : $_G[siteurl].'home.php'};icon-uri={$_G[siteurl]}{IMGDIR}/home.ico" /><!--{/if}-->
+	<!--{if $_G['basescript'] == 'forum' && $_G['setting']['archiver']}-->
+		<link rel="archives" title="$_G['setting']['bbname']" href="{$_G[siteurl]}archiver/" />
+	<!--{/if}-->
+	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
+	<!--{if $_G['basescript'] == 'forum' || $_G['basescript'] == 'group'}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
+	<!--{elseif $_G['basescript'] == 'home' || $_G['basescript'] == 'userapp'}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+	<!--{elseif $_G['basescript'] == 'portal'}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+	<!--{/if}-->
+</head>
+
+<body id="nv_{$_G[basescript]}" class="pg_{CURMODULE}" onkeydown="if(event.keyCode==27) return false;">
+	<div id="append_parent"></div><div id="ajaxwaitid"></div>
+
+	<!--{if empty($topic) || $topic['useheader']}-->
+		<!--{if $_G['setting']['mobile']['allowmobile'] && (!$_G['setting']['cachethreadon'] || $_G['uid']) && ($_GET['diy'] != 'yes' || !$_GET['inajax']) && ($_G['mobile'] != '' && $_G['cookie']['mobile'] == '' && $_GET['mobile'] != 'no')}-->
+			<div class="xi1 bm bm_c">
+			    {lang your_mobile_browser}<a href="{$_G['siteurl']}forum.php?mobile=yes">{lang go_to_mobile}</a> <span class="xg1">|</span> <a href="$_G['setting']['mobile']['nomobileurl']">{lang to_be_continue}</a>
+			</div>
+		<!--{/if}-->
+
+		<div id="toptb" class="cl">
+			<div class="wp">
+				<div class="z">
+					<!--{loop $_G['setting']['topnavs'][0] $nav}-->
+						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}-->$nav[code]<!--{/if}-->
+					<!--{/loop}-->
+					<!--{hook/global_cpnav_extra1}-->
+				</div>
+				<div class="y">
+					<!--{hook/global_cpnav_extra2}-->
+					<!--{loop $_G['setting']['topnavs'][1] $nav}-->
+						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}-->$nav[code]<!--{/if}-->
+					<!--{/loop}-->
+					<!--{if $_G['uid'] && !empty($_G['style']['extstyle'])}--><a id="sslct" href="javascript:;" onmouseover="delayShow(this, function() {showMenu({'ctrlid':'sslct','pos':'34!'})});">{lang changestyle}</a><!--{/if}-->
+				</div>
+			</div>
+		</div>
+
+		<!--{if !IS_ROBOT}-->
+			<!--{if $_G['uid'] && !empty($_G['style']['extstyle'])}-->
+				<div id="sslct_menu" class="cl p_pop" style="display: none;">
+					<!--{if !$_G[style][defaultextstyle]}--><span class="sslct_btn" onclick="extstyle('')" title="{lang default}"><i></i></span><!--{/if}-->
+					<!--{loop $_G['style']['extstyle'] $extstyle}-->
+						<span class="sslct_btn" onclick="extstyle('$extstyle[0]')" title="$extstyle[1]"><i style='background:$extstyle[2]'></i></span>
+					<!--{/loop}-->
+				</div>
+			<!--{/if}-->
+		<!--{/if}-->
+
+		<!--{hook/global_header}-->
+	<!--{/if}-->
+
+	<div id="wp" class="wp">

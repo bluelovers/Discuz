@@ -1692,6 +1692,15 @@ function adshow($parameter) {
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 }
 
+/**
+ * 顯示提示信息
+ *
+ * @param $message - 提示信息，可中文也可以是 lang_message.php 中的數組 key 值
+ * @param $url_forward - 提示後跳轉的 url
+ * @param $values - 提示信息中可替換的變量值 array(key => value ...) 形式
+ * @param $extraparam - 擴展參數 array(key => value ...) 形式
+ * @param $custom - 0 | 1
+ **/
 function showmessage($message, $url_forward = '', $values = array(), $extraparam = array(), $custom = 0) {
 	require_once libfile('function/message');
 	return dshowmessage($message, $url_forward, $values, $extraparam, $custom);
