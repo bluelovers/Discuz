@@ -117,7 +117,7 @@ function _eDz_module_spacecp_share_Before_notification($_EVENT, $conf) {
 
 Scorpio_Hook::add('Dz_module_spacecp_share:Before_feed', '_eDz_module_spacecp_share_Before_feed');
 
-function _eDz_module_spacecp_share_Before_feed($conf) {
+function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
 	if ($_body_data = $arr['body_data']) {
