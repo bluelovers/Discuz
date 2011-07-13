@@ -438,6 +438,20 @@ function feed_add_by_feedarr($feedarr, $returnid = 0, $is_update = 0, $feedid = 
 	if (!empty($images)) $feedarr['images'] = $images;
 	if (!empty($image_links)) $feedarr['image_links'] = $image_links;
 
+	foreach(array(
+		'title_template',
+		'title_data',
+		'body_data',
+	) as $_k) {
+		$_v = $feedarr[$_k];
+
+		if (!empty($_v) && is_string($_v)) {
+			$_v = unserialize(dstripslashes($_v));
+
+			if (count(array_keys($_v)) > 0) $feedarr[$_k] = $_v;
+		}
+	}
+
 	return feed_add(
 		$feedarr['icon'],
 
