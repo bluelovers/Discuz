@@ -511,7 +511,10 @@ if($_GET['op'] == 'delete') {
 			// bluelovers
 
 			feed_add('share',
+				/*
 				'{actor} '.$arr['title_template'],
+				*/
+				$arr['title_template'],
 				array('hash_data' => $feed_hash_data),
 				$arr['body_template'],
 				$arr['body_data'],
