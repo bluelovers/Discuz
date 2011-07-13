@@ -421,7 +421,7 @@ function mb_str_split( $string ) {
  *
  * @link feed_add
  **/
-function feed_add_by_feedarr($feedarr, $returnid = 0, $is_update = 0, $feedid = 0) {
+function feed_add_by_feedarr($feedarr, $returnid = 0, $feedid = 0, $is_update = 0) {
 
 	$images = array();
 	$image_links = array();
