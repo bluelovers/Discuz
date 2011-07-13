@@ -94,7 +94,7 @@ function mkfeed($feed, $actors=array()) {
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
 	// bluelovers
-	if (sclass_exists('Scorpio_Hook')) {
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$feed));
 	}
 	// bluelovers
