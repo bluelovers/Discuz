@@ -94,6 +94,7 @@ function mkfeed($feed, $actors=array()) {
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
 	// bluelovers
+	// Event: Func_mkfeed:Before
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')
 			->run(array(&$feed));
