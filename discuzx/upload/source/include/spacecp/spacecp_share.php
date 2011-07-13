@@ -535,7 +535,7 @@ if($_GET['op'] == 'delete') {
 		}
 
 		// bluelovers
-		if (sclass_exists('Scorpio_Hook')) {
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_notification', array(array(
 				'arr' => &$arr,
 				'setarr' => &$setarr,
