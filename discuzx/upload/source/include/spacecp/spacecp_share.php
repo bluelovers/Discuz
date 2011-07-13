@@ -480,6 +480,10 @@ if($_GET['op'] == 'delete') {
 		$arr['username'] = $_G['username'];
 		$arr['dateline'] = $_G['timestamp'];
 
+		// bluelovers
+		// 初始化 $_feedid
+		$_feedid = 0;
+		// bluelovers
 
 		if($arr['status'] == 0 && ckprivacy('share', 'feed')) {
 			require_once libfile('function/feed');
