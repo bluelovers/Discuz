@@ -64,6 +64,13 @@ if($_GET['op'] == 'delete') {
 
 			$feed_hash_data = "uid{$id}";
 
+			// bluelovers
+			// 不允許分享自己的空間
+			if($id == $space['uid']) {
+				showmessage('share_space_not_self');
+			}
+			// bluelovers
+
 			$tospace = getspace($id);
 			if(empty($tospace)) {
 				showmessage('space_does_not_exist');
