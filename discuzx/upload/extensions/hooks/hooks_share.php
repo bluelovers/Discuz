@@ -29,7 +29,7 @@ function _eFunc_mkshare_After($_EVENT, &$share, &$searchs, &$replaces) {
 
 Scorpio_Hook::add('Func_mkfeed:Before', '_eFunc_mkfeed_Before');
 
-function _eFunc_mkfeed_Before(&$feed) {
+function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 
 	$_lang_template = empty($feed['lang_template']) ? array() : unserialize($feed['lang_template']);
 	if (is_array($_lang_template)) {
