@@ -12,7 +12,7 @@ function mkshare($share) {
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before', array(&$share));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')->run(array(&$share));
 	}
 	// bluelovers
 
@@ -26,7 +26,7 @@ function mkshare($share) {
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Event::instance('Func_'.__FUNCTION__.':After', array(&$share, &$searchs, &$replaces));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After')->run(array(&$share, &$searchs, &$replaces));
 	}
 	// bluelovers
 
