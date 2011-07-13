@@ -289,6 +289,17 @@ function feed_publish($id, $idtype, $add=0) {
 		$setarr['title_data']['hash_data'] = "{$idtype}{$id}";
 		$setarr['title_data'] = serialize($setarr['title_data']);
 		$setarr['body_data'] = serialize($setarr['body_data']);
+
+		// bluelovers
+		// Event: Func_feed_publish:Before_feedarr_addslashes
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_feedarr_addslashes')
+				->run(array(array(
+				'feedarr' => &$setarr,
+			)));
+		}
+		// bluelovers
+
 		$setarr = daddslashes($setarr);
 
 		$feedid = 0;
