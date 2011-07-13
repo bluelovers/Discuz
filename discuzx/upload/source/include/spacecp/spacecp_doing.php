@@ -76,7 +76,10 @@ if(submitcheck('addsubmit')) {
 			'username' => $_G['username'],
 			'dateline' => $_G['timestamp'],
 			'title_template' => array('feed', 'feed_doing_title'),
+			/*
 			'title_data' => daddslashes(serialize(dstripslashes(array('message'=>$message)))),
+			*/
+			'title_data' => array('message'=>$message),
 			'body_template' => '',
 			'body_data' => '',
 			'id' => $newdoid,
