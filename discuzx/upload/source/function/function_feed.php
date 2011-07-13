@@ -93,6 +93,11 @@ function mkfeed($feed, $actors=array()) {
 	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@unserialize($feed['body_data']));
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
+	// bluelovers
+	// 整理名單避免出現重複名稱
+	$actors && $actors = array_unique($actors);
+	// bluelovers
+
 	// title
 	$searchs = $replaces = array();
 	if($feed['title_data']) {
