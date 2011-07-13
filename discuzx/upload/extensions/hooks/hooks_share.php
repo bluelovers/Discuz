@@ -6,6 +6,8 @@
 
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
+/* function_share.php */
+
 Scorpio_Hook::add('Func_mkshare:Before', '_eFunc_mkshare_Before');
 
 function _eFunc_mkshare_Before($share = array()) {
