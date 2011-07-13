@@ -10,6 +10,12 @@
 function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);
 
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$share));
+	}
+	// bluelovers
+
 	$searchs = $replaces = array();
 	if($share['body_data']) {
 		foreach (array_keys($share['body_data']) as $key) {
