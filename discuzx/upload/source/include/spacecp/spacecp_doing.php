@@ -115,6 +115,7 @@ if(submitcheck('addsubmit')) {
 		manage_addnotify('verifydoing');
 	}
 
+	// 統計
 	require_once libfile('function/stat');
 	updatestat('doing');
 	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
