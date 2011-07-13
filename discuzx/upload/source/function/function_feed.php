@@ -48,6 +48,15 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['title_data'] = serialize(dstripslashes($title_data));
 	$feedarr['body_data'] = serialize(dstripslashes($body_data));
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_feedarr_addslashes', array(array(
+			'feedarr' => &$feedarr,
+		)));
+	}
+	// bluelovers
+
 	$feedarr = daddslashes($feedarr);
 
 	if(is_numeric($icon)) {
