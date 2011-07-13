@@ -342,6 +342,11 @@ if($_GET['op'] == 'delete') {
 
 			$link_text = sub_url($link, 45);
 
+			// bluelovers
+			// 儲存原始的網址
+			$arr['data_index'] = $link;
+			// bluelovers
+
 			$arr['body_data'] = array('link'=>"<a href=\"$link\" target=\"_blank\">$link_text</a>", 'data'=>$link);
 			$parseLink = parse_url($link);
 			require_once libfile('function/discuzcode');
