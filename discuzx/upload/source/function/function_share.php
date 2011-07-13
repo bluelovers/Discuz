@@ -11,6 +11,7 @@ function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);
 
 	// bluelovers
+	// Event: Func_mkshare:Before
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')
 			->run(array(&$share));
