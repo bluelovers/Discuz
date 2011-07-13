@@ -87,6 +87,9 @@ if(submitcheck('addsubmit')) {
 		*/
 
 		// bluelovers
+		// Fatal error: Call to undefined function feed_add() in source\include\spacecp\spacecp_doing.php on line 90
+		require_once libfile('function/feed');
+
 		feed_add(
 			$feedarr['icon'],
 
