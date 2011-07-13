@@ -75,7 +75,7 @@ function _eFunc_feed_add_Before_feedarr_addslashes($_EVENT, $conf) {
 
 Scorpio_Hook::add('Dz_module_spacecp_share:Before_share', '_eDz_module_spacecp_share_Before_share');
 
-function _eDz_module_spacecp_share_Before_share($conf) {
+function _eDz_module_spacecp_share_Before_share($_EVENT, $conf) {
 	$conf['arr'] = _share_add($conf['arr']);
 }
 
