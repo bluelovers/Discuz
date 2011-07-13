@@ -14,9 +14,12 @@ if(!defined('IN_DISCUZ')) {
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
 	global $_G;
 
+	// for lang_template
+	/*
 	$title_template = $title_template?lang('feed', $title_template):'';
 	$body_template = $body_template?lang('feed', $body_template):'';
 	$body_general = $body_general?lang('feed', $body_general):'';
+	*/
 	if(empty($uid) || empty($username)) {
 		$uid = $username = '';
 	}
