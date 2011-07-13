@@ -309,6 +309,19 @@ function feed_publish($id, $idtype, $add=0) {
 		}
 		if($status == 0) {
 			if($feedid) {
+
+				// bluelovers
+				// Event: Func_feed_publish:Before_update
+				if (discuz_core::$plugin_support['Scorpio_Event']) {
+					Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_update')
+						->run(array(array(
+						'feedarr' => &$setarr,
+
+						'feedid' => &$feedid,
+					)));
+				}
+				// bluelovers
+
 				DB::update('home_feed', $setarr, array('feedid'=>$feedid));
 			} else {
 				//TODO:change to use feed_add
