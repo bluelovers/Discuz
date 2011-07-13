@@ -481,7 +481,7 @@ if($_GET['op'] == 'delete') {
 		$arr['dateline'] = $_G['timestamp'];
 
 		// bluelovers
-		if (sclass_exists('Scorpio_Hook')) {
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_feed', array(array(
 				'arr' => &$arr,
 				'parseLink' => &$parseLink,
