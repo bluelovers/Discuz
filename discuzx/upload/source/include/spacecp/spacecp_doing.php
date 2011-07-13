@@ -132,6 +132,7 @@ if(submitcheck('addsubmit')) {
 	}
 	cknewuser();
 
+	// 判斷是否操作太快
 	$waittime = interval_check('post');
 	if($waittime > 0) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
@@ -157,6 +158,7 @@ if(submitcheck('addsubmit')) {
 	if(empty($updo)) {
 		showmessage('docomment_error');
 	} else {
+		// 黑名單
 		if(isblacklist($updo['uid'])) {
 			showmessage('is_blacklist');
 		}
@@ -182,6 +184,7 @@ if(submitcheck('addsubmit')) {
 
 	$newid = DB::insert('home_docomment', $setarr, 1);
 
+	// 更新回複數
 	DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum+1 WHERE doid='$updo[doid]'");
 
 	if($updo['uid'] != $_G['uid']) {
@@ -189,6 +192,7 @@ if(submitcheck('addsubmit')) {
 			'url'=>"home.php?mod=space&uid=$updo[uid]&do=doing&doid=$updo[doid]&highlight=$newid",
 			'from_id'=>$updo['doid'],
 			'from_idtype'=>'doid'));
+		// 獎勵積分
 		updatecreditbyaction('comment', 0, array(), 'doing'.$updo['doid']);
 	}
 
@@ -198,6 +202,7 @@ if(submitcheck('addsubmit')) {
 	showmessage('do_success', dreferer(), array('doid' => $updo['doid']));
 }
 
+// 刪除
 if($_GET['op'] == 'delete') {
 
 	if(submitcheck('deletesubmit')) {
@@ -206,8 +211,10 @@ if($_GET['op'] == 'delete') {
 			$query = DB::query("SELECT dc.*, d.uid as duid FROM ".DB::table('home_docomment')." dc, ".DB::table('home_doing')." d WHERE dc.id='$id' AND dc.doid=d.doid");
 			if($value = DB::fetch($query)) {
 				if($allowmanage || $value['uid'] == $_G['uid'] || $value['duid'] == $_G['uid'] ) {
+					// 更新內容
 					DB::update('home_docomment', array('uid'=>0, 'username'=>'', 'message'=>''), "id='$id'");
 					if($value['uid'] != $_G['uid'] && $value['duid'] != $_G['uid']) {
+						// 扣除積分
 						batchupdatecredit('comment', $value['uid'], array(), -1);
 					}
 					DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum-'1' WHERE doid='$doid'");
