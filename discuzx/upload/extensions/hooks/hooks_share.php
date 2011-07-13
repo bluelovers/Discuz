@@ -100,21 +100,6 @@ function _eDz_module_spacecp_share_Before_notification($_EVENT, $conf) {
 	}
 }
 
-Scorpio_Hook::add('Dz_module_spacecp_share:Before_notification', '_eDz_module_spacecp_share_Before_notification');
-
-function _eDz_module_spacecp_share_Before_notification($_EVENT, $conf) {
-	extract($conf, EXTR_REFS);
-
-	if ($feedid) {
-		$sid = DB::update('home_feed', array(
-			'id' => $sid,
-			'idtype' => 'sid',
-		), array(
-			'feedid' => $feedid,
-		));
-	}
-}
-
 Scorpio_Hook::add('Dz_module_spacecp_share:Before_feed', '_eDz_module_spacecp_share_Before_feed');
 
 function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
