@@ -535,6 +535,7 @@ if($_GET['op'] == 'delete') {
 		}
 
 		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_notification
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_notification')
 				->run(array(array(
