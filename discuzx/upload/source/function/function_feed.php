@@ -50,6 +50,7 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
 
 	// bluelovers
+	// Event: Func_feed_add:Before_feedarr_addslashes
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_feedarr_addslashes')
 			->run(array(array(
