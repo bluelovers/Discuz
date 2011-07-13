@@ -51,6 +51,9 @@ function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 
 Scorpio_Hook::add('Func_mkfeed:Before_title_template', '_eFunc_mkfeed_Before_title_template');
 
+/**
+ * 可從 title_template 取得 body_data 的資料，減少儲存重複資料
+ **/
 function _eFunc_mkfeed_Before_title_template($_EVENT, &$feed, &$searchs, &$replaces) {
 	$_k = 'body_data';
 	if($feed[$_k] && is_array($feed[$_k])) {
@@ -63,6 +66,9 @@ function _eFunc_mkfeed_Before_title_template($_EVENT, &$feed, &$searchs, &$repla
 
 Scorpio_Hook::add('Func_mkfeed:Before_body_template', '_eFunc_mkfeed_Before_body_template');
 
+/**
+ * 可從 body_template 取得 title_data 的資料，減少儲存重複資料
+ **/
 function _eFunc_mkfeed_Before_body_template($_EVENT, &$feed, &$searchs, &$replaces) {
 	$_k = 'title_data';
 	if($feed[$_k] && is_array($feed[$_k])) {
