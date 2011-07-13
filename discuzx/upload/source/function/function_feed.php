@@ -12,6 +12,9 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username=''
+// bluelovers
+, $dateline = 0
+// bluelovers
 ) {
 	global $_G;
 
