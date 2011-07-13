@@ -11,8 +11,8 @@ function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);
 
 	// bluelovers
-	if (sclass_exists('Scorpio_Hook')) {
-		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$share));
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before', array(&$share));
 	}
 	// bluelovers
 
@@ -25,8 +25,8 @@ function mkshare($share) {
 	}
 
 	// bluelovers
-	if (sclass_exists('Scorpio_Hook')) {
-		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array(&$share, &$searchs, &$replaces));
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After', array(&$share, &$searchs, &$replaces));
 	}
 	// bluelovers
 
