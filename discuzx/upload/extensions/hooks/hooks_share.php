@@ -25,6 +25,8 @@ function _eFunc_mkshare_After(&$share, &$searchs, &$replaces) {
 	$share['title_template'] = str_replace($searchs, $replaces, $share['title_template']);
 }
 
+/* function_feed.php */
+
 Scorpio_Hook::add('Func_mkfeed:Before', '_eFunc_mkfeed_Before');
 
 function _eFunc_mkfeed_Before(&$feed) {
