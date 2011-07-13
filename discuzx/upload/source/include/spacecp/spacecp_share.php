@@ -483,6 +483,12 @@ if($_GET['op'] == 'delete') {
 
 		if($arr['status'] == 0 && ckprivacy('share', 'feed')) {
 			require_once libfile('function/feed');
+
+			// bluelovers
+			// get feed_add return $returnid
+			$_feedid =
+			// bluelovers
+
 			feed_add('share',
 				'{actor} '.$arr['title_template'],
 				array('hash_data' => $feed_hash_data),
