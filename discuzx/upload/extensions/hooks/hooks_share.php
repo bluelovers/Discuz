@@ -10,7 +10,7 @@ if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Func_mkshare:Before', '_eFunc_mkshare_Before');
 
-function _eFunc_mkshare_Before($share = array()) {
+function _eFunc_mkshare_Before($_EVENT, $share = array()) {
 	$_lang_template = empty($share['lang_template']) ? array() : unserialize($share['lang_template']);
 	if (is_array($_lang_template)) {
 		foreach ($_lang_template as $_k_ => $_v_) {
