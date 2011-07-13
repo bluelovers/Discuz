@@ -49,6 +49,17 @@ function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 //	dexit($feed);
 }
 
+Scorpio_Hook::add('Func_mkfeed:Before_title_template', '_eFunc_mkfeed_Before_title_template');
+
+function _eFunc_mkfeed_Before_title_template($_EVENT, &$feed, &$searchs, &$replaces) {
+	if($feed['body_data'] && is_array($feed['body_data'])) {
+		foreach (array_keys($feed['body_data']) as $key) {
+			$searchs[] = '{body_data:'.$key.'}';
+			$replaces[] = $feed['body_data'][$key];
+		}
+	}
+}
+
 Scorpio_Hook::add('Func_feed_add:Before_feedarr_addslashes', '_eFunc_feed_add_Before_feedarr_addslashes');
 Scorpio_Hook::add('Func_feed_publish:Before_feedarr_addslashes', '_eFunc_feed_add_Before_feedarr_addslashes');
 
