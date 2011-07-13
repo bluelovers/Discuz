@@ -231,7 +231,7 @@ if($_GET['op'] == 'delete') {
 
 } elseif ($_GET['op'] == 'getcomment') {
 
-	include_once(DISCUZ_ROOT.'./source/class/class_tree.php');
+	include_once libfile('class/tree');
 	$tree = new tree();
 
 	$list = array();
