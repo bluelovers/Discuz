@@ -116,7 +116,7 @@ function mkfeed($feed, $actors=array()) {
 	}
 
 	$searchs[] = '{actor}';
-	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
