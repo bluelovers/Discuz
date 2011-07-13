@@ -499,8 +499,9 @@ if($_GET['op'] == 'delete') {
 		$setarr = daddslashes($arr);
 
 		// bluelovers
-		if (sclass_exists('Scorpio_Hook')) {
-			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_share_insert', array(array(
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_share_insert')
+				->run(array(array(
 				'setarr' => &$setarr,
 			)));
 		}
