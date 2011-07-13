@@ -33,7 +33,8 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 		'icon' => $icon,
 		'uid' => $uid ? intval($uid) : $_G['uid'],
 		'username' => $username ? $username : $_G['username'],
-		'dateline' => $_G['timestamp'],
+		// 新增允許自訂 dateline
+		'dateline' => $dateline > 0 ? $dateline : $_G['timestamp'],
 		'title_template' => $title_template,
 		'body_template' => $body_template,
 		'body_general' => $body_general,
