@@ -289,6 +289,12 @@ function feed_publish($id, $idtype, $add=0) {
 		*/
 
 		$setarr['title_data']['hash_data'] = "{$idtype}{$id}";
+
+		// bluelovers
+		// fix hash_data
+		$setarr['hash_data'] = empty($setarr['title_data']['hash_data']) ? '' : $setarr['title_data']['hash_data'];
+		// bluelovers
+
 		$setarr['title_data'] = serialize($setarr['title_data']);
 		$setarr['body_data'] = serialize($setarr['body_data']);
 
