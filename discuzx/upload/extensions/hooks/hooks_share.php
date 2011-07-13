@@ -49,6 +49,28 @@ function _eFunc_mkfeed_Before(&$feed) {
 //	dexit($feed);
 }
 
+Scorpio_Hook::add('Func_feed_add:Before_feedarr_addslashes', '_eFunc_feed_add_Before_feedarr_addslashes');
+
+function _eFunc_feed_add_Before_feedarr_addslashes($conf) {
+	extract($conf, EXTR_REFS);
+
+	$_lang_template = array();
+
+	list($feedarr['title_template'], $_lang_template['title_template']) = _feed_add($feedarr['title_template'], $feedarr['icon']);
+	list($feedarr['body_template'], $_lang_template['body_template']) = _feed_add($feedarr['body_template'], $feedarr['icon']);
+	list($feedarr['body_general'], $_lang_template['body_general']) = _feed_add($feedarr['body_general'], $feedarr['icon']);
+
+	if ($_lang_template = array_filter($_lang_template)) {
+		$feedarr['lang_template'] = $_lang_template ? serialize($_lang_template) : '';
+	}
+
+	if (empty($feedarr['image_1']) && $_body_data = $feedarr['body_data']) {
+		$_body_data = is_array($_body_data) ? $_body_data : empty($_body_data) ? array() : unserialize($_body_data);
+
+		if (!empty($_body_data['imgurl'])) $feedarr['image_1'] = $_body_data['imgurl'];
+	}
+}
+
 /* spacecp_share.php */
 
 Scorpio_Hook::add('Dz_module_spacecp_share:Before_share', '_eDz_module_spacecp_share_Before_share');
