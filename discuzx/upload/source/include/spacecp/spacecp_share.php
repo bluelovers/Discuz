@@ -153,6 +153,14 @@ if($_GET['op'] == 'delete') {
 			if(!$album = DB::fetch($query)) {
 				showmessage('album_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的相簿
+			if($album['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if($album['friend']) {
 				showmessage('album_can_not_share');
 			}
