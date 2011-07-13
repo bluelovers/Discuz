@@ -27,6 +27,7 @@ function mkshare($share) {
 	}
 
 	// bluelovers
+	// Event: Func_mkshare:After
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':After')
 			->run(array(&$share, &$searchs, &$replaces));
