@@ -282,9 +282,11 @@ function feed_publish($id, $idtype, $add=0) {
 	}
 
 	if($setarr['icon']) {
+		/*
 		$setarr['title_template'] = $setarr['title_template']?lang('feed', $setarr['title_template']):'';
 		$setarr['body_template'] = $setarr['body_template']?lang('feed', $setarr['body_template']):'';
 		$setarr['body_general'] = $setarr['body_general']?lang('feed', $setarr['body_general']):'';
+		*/
 
 		$setarr['title_data']['hash_data'] = "{$idtype}{$id}";
 		$setarr['title_data'] = serialize($setarr['title_data']);
