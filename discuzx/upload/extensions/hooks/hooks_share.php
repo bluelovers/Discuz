@@ -106,6 +106,19 @@ function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
 	if ($_body_data = $arr['body_data']) {
+
+		// Fatal error: Class 'scotext' not found in extensions\hooks\hooks_share.php on line 126
+		if (!isset(discuz_core::$plugin_support['scotext'])) {
+			discuz_core::$plugin_support['scotext'] = false;
+
+			if (class_exists('scotext')) {
+				discuz_core::$plugin_support['scotext'] = true;
+			} elseif (include_once(libfile('text', 'Scorpio/libs/helper/', 'extensions/libs/scophp/'))) {
+				if (!class_exists('scotext')) eval("class scotext extends Scorpio_helper_text_Core {}");
+				discuz_core::$plugin_support['scotext'] = true;
+			}
+		}
+
 //		dexit($arr);
 
 		$_body_data = is_array($_body_data) ? $_body_data : (empty($_body_data) ? array() : unserialize($_body_data));
