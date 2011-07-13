@@ -491,6 +491,11 @@ if($_GET['op'] == 'delete') {
 				$arr['body_general'],
 				array($arr['image']),
 				array($arr['image_link'])
+
+				// bluelovers
+				// , $target_ids='', $friend='', $appid='', $returnid=0
+				, '', '', '', 1
+				// bluelvoers
 			);
 		}
 
