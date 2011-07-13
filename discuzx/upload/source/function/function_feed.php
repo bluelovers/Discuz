@@ -50,7 +50,7 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
 
 	// bluelovers
-	if (sclass_exists('Scorpio_Hook')) {
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_feedarr_addslashes', array(array(
 			'feedarr' => &$feedarr,
 		)));
