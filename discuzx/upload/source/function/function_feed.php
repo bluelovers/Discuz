@@ -301,7 +301,10 @@ function feed_publish($id, $idtype, $add=0) {
 				DB::update('home_feed', $setarr, array('feedid'=>$feedid));
 			} else {
 				//TODO:change to use feed_add
+				/*
 				DB::insert('home_feed', $setarr);
+				*/
+				return feed_add_by_feedarr($setarr, 1);
 			}
 		}
 	}
