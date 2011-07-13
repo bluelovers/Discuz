@@ -51,7 +51,8 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_feedarr_addslashes', array(array(
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_feedarr_addslashes')
+			->run(array(array(
 			'feedarr' => &$feedarr,
 		)));
 	}
