@@ -57,4 +57,21 @@ function _eDz_module_spacecp_share_Before_share($conf) {
 	$conf['arr'] = _share_add($conf['arr']);
 }
 
+/* func */
+
+function _share_add($share) {
+	$_lang_template = array();
+	list($share['title_template'], $_lang_template['title_template']) = _mkshare($share['title_template']);
+	list($share['body_template'], $_lang_template['body_template']) = _mkshare($share['body_template']);
+	list($share['body_general'], $_lang_template['body_general']) = _mkshare($share['body_general']);
+
+	if ($_lang_template = array_filter($_lang_template)) {
+		$share['lang_template'] = $_lang_template ? serialize($_lang_template) : '';
+	}
+
+	$share['image'] = !empty($share['image_1']) ? $share['image_1'] : (is_array($share['image']) ? $share['image'][0] : $share['image']);
+
+	return $share;
+}
+
 ?>
