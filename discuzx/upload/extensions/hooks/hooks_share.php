@@ -415,4 +415,33 @@ function mb_str_split( $string ) {
 }
 */
 
+/**
+ * same as feed_add
+ *
+ * @link feed_add
+ **/
+function feed_add_by_feedarr($feedarr, $returnid = 0) {
+	return feed_add(
+		$feedarr['icon'],
+
+		$feedarr['title_template'],
+		$feedarr['title_data'],
+
+		$feedarr['body_template'],
+		$feedarr['body_data'],
+
+		$feedarr['body_general'], $feedarr['images'], $feedarr['image_links'],
+
+		$feedarr['target_ids'], $feedarr['friend'],
+
+		$feedarr['appid'],
+		$returnid,
+
+		$feedarr['id'],
+		$feedarr['idtype'],
+		$feedarr['uid'],
+		$feedarr['username']
+	);
+}
+
 ?>
