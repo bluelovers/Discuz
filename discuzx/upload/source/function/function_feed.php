@@ -94,6 +94,12 @@ function mkfeed($feed, $actors=array()) {
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
 	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before', array(&$feed));
+	}
+	// bluelovers
+
+	// bluelovers
 	// 整理名單避免出現重複名稱
 	$actors && $actors = array_unique($actors);
 	// bluelovers
