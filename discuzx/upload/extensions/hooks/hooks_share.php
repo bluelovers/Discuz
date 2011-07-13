@@ -373,6 +373,25 @@ function _feed_add($langkey, $icon = '') {
 	return array($langkey, $_lang_template);
 }
 
+function _mkshare($langkey) {
+	$_lang_template = '';
+
+	if (is_array($langkey) && count($langkey) >= 2) {
+		if (lang($langkey[0], $langkey[1], null, null, true)) {
+			$_lang_template = $langkey;
+		}
+		$langkey = call_user_func_array('lang', $langkey);
+	} else {
+		if (lang('feed', $langkey, null, null, true)) {
+			$_lang_template = $langkey;
+
+			$langkey = $langkey ? lang('feed', $langkey) : '';
+		}
+	}
+
+	return array($langkey, $_lang_template);
+}
+
 /*
 function mb_str_split( $string ) {
     # Split at all position not after the start: ^
