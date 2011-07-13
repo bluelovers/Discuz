@@ -497,10 +497,12 @@ if($_GET['op'] == 'delete') {
 		$arr['body_data'] = serialize($arr['body_data']);
 
 		// bluelovers
-		if (sclass_exists('Scorpio_Hook')) {
-			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_share', array(array(
-				'arr' => &$arr,
-				'setarr' => &$setarr,
+		// Event: Dz_module_spacecp_share:Before_share
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_share')
+				->run(array(array(
+					'arr' => &$arr,
+					'setarr' => &$setarr,
 			)));
 		}
 		// bluelovers
