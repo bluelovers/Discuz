@@ -534,6 +534,17 @@ if($_GET['op'] == 'delete') {
 			updatestat('share');
 		}
 
+		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_notification', array(array(
+				'arr' => &$arr,
+				'setarr' => &$setarr,
+				'sid' => $sid,
+				'feedid' => $_feedid,
+			)));
+		}
+		// bluelovers
+
 		if($note_uid && $note_uid != $_G['uid']) {
 			notification_add($note_uid, 'sharenotice', $note_message, $note_values);
 		}
