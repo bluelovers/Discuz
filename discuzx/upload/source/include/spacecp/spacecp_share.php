@@ -481,6 +481,16 @@ if($_GET['op'] == 'delete') {
 		$arr['dateline'] = $_G['timestamp'];
 
 		// bluelovers
+		if (sclass_exists('Scorpio_Hook')) {
+			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_feed', array(array(
+				'arr' => &$arr,
+				'parseLink' => &$parseLink,
+				'flashvar' => &$flashvar,
+			)));
+		}
+		// bluelovers
+
+		// bluelovers
 		// 初始化 $_feedid
 		$_feedid = 0;
 		// bluelovers
