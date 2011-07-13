@@ -51,7 +51,7 @@ function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 
 Scorpio_Hook::add('Func_feed_add:Before_feedarr_addslashes', '_eFunc_feed_add_Before_feedarr_addslashes');
 
-function _eFunc_feed_add_Before_feedarr_addslashes($conf) {
+function _eFunc_feed_add_Before_feedarr_addslashes($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
 	$_lang_template = array();
