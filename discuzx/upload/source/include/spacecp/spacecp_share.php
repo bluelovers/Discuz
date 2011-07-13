@@ -195,6 +195,14 @@ if($_GET['op'] == 'delete') {
 			if(!$pic = DB::fetch($query)) {
 				showmessage('image_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的圖片
+			if($pic['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($pic['status'], array(1, 2))) {
 				showmessage('moderate_pic_not_share');
 			}
