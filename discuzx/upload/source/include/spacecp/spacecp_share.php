@@ -481,12 +481,13 @@ if($_GET['op'] == 'delete') {
 		$arr['dateline'] = $_G['timestamp'];
 
 		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_feed
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_feed')
 				->run(array(array(
-				'arr' => &$arr,
-				'parseLink' => &$parseLink,
-				'flashvar' => &$flashvar,
+					'arr' => &$arr,
+					'parseLink' => &$parseLink,
+					'flashvar' => &$flashvar,
 			)));
 		}
 		// bluelovers
