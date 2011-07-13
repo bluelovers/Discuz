@@ -366,4 +366,12 @@ function _share_add($share) {
 	return $share;
 }
 
+/*
+function mb_str_split( $string ) {
+    # Split at all position not after the start: ^
+    # and not before the end: $
+    return preg_split('/(?<!^)(?!$)/u', $string );
+}
+*/
+
 ?>
