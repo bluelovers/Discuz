@@ -136,7 +136,8 @@ function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 
 		$_body_data['imgurl'] = $arr['image_1'] ? $arr['image_1'] : (is_array($arr['image']) ? $arr['image'][0] : $arr['image']);
 
-		$_parse_url = scotext::parse_url($arr['data_index']);
+		// Fatal error: Call to undefined method scotext::parse_url() in extensions\hooks\hooks_share.php on line 139
+		$_parse_url = scotext::parse_uri($arr['data_index']);
 //		$_body_data['headers'] = _url_exists($arr['data_index'], 1, &$_url);
 		$_url = $arr['data_index'];
 
