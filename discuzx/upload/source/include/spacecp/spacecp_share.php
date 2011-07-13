@@ -81,7 +81,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $id;
-			$arr['title_template'] = lang('spacecp', 'share_space');
+			$arr['title_template'] = array('spacecp', 'share_space');
 			$arr['body_template'] = '<b>{username}</b><br>{reside}<br>{spacenote}';
 			$arr['body_data'] = array(
 			'username' => "<a href=\"home.php?mod=space&uid=$id\">".$tospace['username']."</a>",
@@ -127,7 +127,7 @@ if($_GET['op'] == 'delete') {
 			}
 			$arr['fromuid'] = $blog['uid'];
 			$arr['itemid'] = $id;
-			$arr['title_template'] = lang('spacecp', 'share_blog');
+			$arr['title_template'] = array('spacecp', 'share_blog');
 			$arr['body_template'] = '<b>{subject}</b><br>{username}<br>{message}';
 			$arr['body_data'] = array(
 			'subject' => "<a href=\"home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]\">$blog[subject]</a>",
@@ -170,7 +170,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $album['uid'];
-			$arr['title_template'] =  lang('spacecp', 'share_album');
+			$arr['title_template'] =  array('spacecp', 'share_album');
 			$arr['body_template'] = '<b>{albumname}</b><br>{username}';
 			$arr['body_data'] = array(
 				'albumname' => "<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\">$album[albumname]</a>",
@@ -217,7 +217,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $pic['uid'];
-			$arr['title_template'] = lang('spacecp', 'share_image');
+			$arr['title_template'] = array('spacecp', 'share_image');
 			$arr['body_template'] = lang('spacecp', 'album').': <b>{albumname}</b><br>{username}<br>{title}';
 			$arr['body_data'] = array(
 			'albumname' => "<a href=\"home.php?mod=space&uid=$pic[uid]&do=album&id=$pic[albumid]\">$pic[albumname]</a>",
@@ -255,7 +255,7 @@ if($_GET['op'] == 'delete') {
 			$posttable = getposttable();
 			$post = DB::fetch(DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid='$id' AND first='1'"));
 
-			$arr['title_template'] = lang('spacecp', 'share_thread');
+			$arr['title_template'] = array('spacecp', 'share_thread');
 			$arr['body_template'] = '<b>{subject}</b><br>{author}<br>{message}';
 			$attachment = !preg_match("/\[hide=?\d*\](.*?)\[\/hide\]/is", $post['message'], $a) && preg_match("/\[attach\]\d+\[\/attach\]/i", $a[1]);
 
@@ -291,7 +291,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $article['uid'];
-			$arr['title_template'] = lang('spacecp', 'share_article');
+			$arr['title_template'] = array('spacecp', 'share_article');
 			$arr['body_template'] = '<b>{title}</b><br>{username}<br>{summary}';
 			$arr['body_data'] = array(
 			'title' => "<a href=\"portal.php?mod=view&aid=$article[aid]\">$article[title]</a>",
@@ -337,7 +337,7 @@ if($_GET['op'] == 'delete') {
 			}
 			$arr['itemid'] = '0';
 			$arr['fromuid'] = '0';
-			$arr['title_template'] = lang('spacecp', 'share_link');
+			$arr['title_template'] = array('spacecp', 'share_link');
 			$arr['body_template'] = '{link}';
 
 			$link_text = sub_url($link, 45);
@@ -358,19 +358,19 @@ if($_GET['op'] == 'delete') {
 				);
 			}
 			if(!empty($flashvar)) {
-				$arr['title_template'] = lang('spacecp', 'share_video');
+				$arr['title_template'] = array('spacecp', 'share_video');
 				$type = 'video';
 				$arr['body_data']['flashvar'] = $flashvar['flv'];
 				$arr['body_data']['host'] = 'flash';
 				$arr['body_data']['imgurl'] = $flashvar['imgurl'];
 			}
 			if(preg_match("/\.(mp3|wma)$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_music');
+				$arr['title_template'] = array('spacecp', 'share_music');
 				$arr['body_data']['musicvar'] = $link;
 				$type = 'music';
 			}
 			if(preg_match("/\.swf$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_flash');
+				$arr['title_template'] = array('spacecp', 'share_flash');
 				$arr['body_data']['flashaddr'] = $link;
 				$type = 'flash';
 			}
