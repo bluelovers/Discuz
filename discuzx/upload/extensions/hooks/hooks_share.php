@@ -63,6 +63,21 @@ function _eDz_module_spacecp_share_Before_share_insert($conf) {
 	$conf['setarr'] = DB::table_field_value('home_share', $conf['setarr']);
 }
 
+Scorpio_Hook::add('Dz_module_spacecp_share:Before_notification', '_eDz_module_spacecp_share_Before_notification');
+
+function _eDz_module_spacecp_share_Before_notification($conf) {
+	extract($conf, EXTR_REFS);
+
+	if ($feedid) {
+		$sid = DB::update('home_feed', array(
+			'id' => $sid,
+			'idtype' => 'sid',
+		), array(
+			'feedid' => $feedid,
+		));
+	}
+}
+
 /* func */
 
 function _share_add($share) {
