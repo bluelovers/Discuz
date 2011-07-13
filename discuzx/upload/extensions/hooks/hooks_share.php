@@ -81,7 +81,7 @@ function _eDz_module_spacecp_share_Before_share($_EVENT, $conf) {
 
 Scorpio_Hook::add('Dz_module_spacecp_share:Before_share_insert', '_eDz_module_spacecp_share_Before_share_insert');
 
-function _eDz_module_spacecp_share_Before_share_insert($conf) {
+function _eDz_module_spacecp_share_Before_share_insert($_EVENT, $conf) {
 	$conf['setarr'] = DB::table_field_value('home_share', $conf['setarr']);
 }
 
