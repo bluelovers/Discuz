@@ -71,6 +71,9 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	}
 }
 
+/**
+ * 整理feed
+ **/
 function mkfeed($feed, $actors=array()) {
 	global $_G;
 
@@ -79,6 +82,7 @@ function mkfeed($feed, $actors=array()) {
 	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@unserialize($feed['body_data']));
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
+	// title
 	$searchs = $replaces = array();
 	if($feed['title_data']) {
 		foreach (array_keys($feed['title_data']) as $key) {
@@ -92,6 +96,7 @@ function mkfeed($feed, $actors=array()) {
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
+	// body
 	$searchs = $replaces = array();
 	$searchs[] = '{actor}';
 	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
@@ -112,6 +117,7 @@ function mkfeed($feed, $actors=array()) {
 
 	$feed['body_general'] = feed_mktarget($feed['body_general']);
 
+	// icon
 	if(is_numeric($feed['icon'])) {
 		$feed['icon_image'] = "http://appicon.manyou.com/icons/{$feed['icon']}";
 	} else {
@@ -136,7 +142,9 @@ function feed_mktarget($html) {
 	return $html;
 }
 
-
+/**
+ * 產生動態
+ **/
 function feed_publish($id, $idtype, $add=0) {
 	global $_G;
 
