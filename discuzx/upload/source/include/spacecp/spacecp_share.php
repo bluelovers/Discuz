@@ -482,7 +482,8 @@ if($_GET['op'] == 'delete') {
 
 		// bluelovers
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
-			Scorpio_Hook::execute('Dz_module_'.basename(__FILE__, '.php').':Before_feed', array(array(
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_feed')
+				->run(array(array(
 				'arr' => &$arr,
 				'parseLink' => &$parseLink,
 				'flashvar' => &$flashvar,
