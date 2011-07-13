@@ -417,10 +417,27 @@ function mb_str_split( $string ) {
 
 /**
  * same as feed_add
+ * 用於處理 feed_add 的統一性
  *
  * @link feed_add
  **/
 function feed_add_by_feedarr($feedarr, $returnid = 0) {
+
+	$images = array();
+	$image_links = array();
+	for ($i = 0; $i<4; $i++) {
+		$k = $i + 1;
+		if (!empty($feedarr['image_'.$k])) {
+			$images[$i] = $feedarr['image_'.$k];
+		}
+
+		if (!empty($feedarr['image_'.$k.'_link'])) {
+			$image_links[$i] = $feedarr['image_'.$k.'_link'];
+		}
+	}
+	if (!empty($images)) $feedarr['images'] = $images;
+	if (!empty($image_links)) $feedarr['image_links'] = $image_links;
+
 	return feed_add(
 		$feedarr['icon'],
 
@@ -440,7 +457,9 @@ function feed_add_by_feedarr($feedarr, $returnid = 0) {
 		$feedarr['id'],
 		$feedarr['idtype'],
 		$feedarr['uid'],
-		$feedarr['username']
+		$feedarr['username'],
+
+		$feedarr['dateline']
 	);
 }
 
