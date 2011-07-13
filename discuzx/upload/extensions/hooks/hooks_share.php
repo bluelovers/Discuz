@@ -366,6 +366,28 @@ function _share_add($share) {
 	return $share;
 }
 
+function _feed_add($langkey, $icon = '') {
+	$_lang_template = '';
+
+	if (is_array($langkey) && count($langkey) >= 2) {
+		if (lang($langkey[0], $langkey[1], null, true)) {
+			$_lang_template = $langkey;
+		}
+		$langkey = call_user_func_array('lang', $langkey);
+	} else {
+		if ($langkey && lang('feed', $langkey, null, true)) {
+			$_lang_template = $langkey;
+		}
+		$langkey = $langkey ? lang('feed', $langkey) : '';
+	}
+
+	if ($icon == 'share' && $_lang_template && $langkey && !strexists($langkey, '{actor}')) {
+		$langkey = '{actor} '.$langkey;
+	}
+
+	return array($langkey, $_lang_template);
+}
+
 /*
 function mb_str_split( $string ) {
     # Split at all position not after the start: ^
