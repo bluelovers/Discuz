@@ -108,6 +108,14 @@ if($_GET['op'] == 'delete') {
 			if(!$blog = DB::fetch($query)) {
 				showmessage('blog_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的 blog
+			if($blog['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($blog['status'], array(1, 2))) {
 				showmessage('moderate_blog_not_share');
 			}
