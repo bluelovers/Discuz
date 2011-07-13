@@ -295,6 +295,7 @@ function feed_publish($id, $idtype, $add=0) {
 			if($feedid) {
 				DB::update('home_feed', $setarr, array('feedid'=>$feedid));
 			} else {
+				//TODO:change to use feed_add
 				DB::insert('home_feed', $setarr);
 			}
 		}
