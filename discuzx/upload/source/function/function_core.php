@@ -511,11 +511,25 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 	if($path != 'plugin') {
 		$key = $path == '' ? $file : $path.'_'.$file;
 		if(!isset($_G['lang'][$key])) {
+			/*
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
+			*/
+			// bluelovers
+			$_lang = loadlang($file, $path);
+			$lang = $_lang['lang'];
+			// bluelovers
+
 			$_G['lang'][$key] = $lang;
 		}
 		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+			/*
 			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
+			*/
+			// bluelovers
+			$_lang = loadlang('template', 'mobile');
+			$lang = $_lang['lang'];
+			// bluelovers
+
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
 		}
 		$returnvalue = &$_G['lang'];
