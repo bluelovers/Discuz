@@ -502,21 +502,40 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 
 function lang($file, $langvar = null, $vars = array(), $default = null) {
 	global $_G;
+	/*
 	list($path, $file) = explode('/', $file);
 	if(!$file) {
 		$file = $path;
 		$path = '';
 	}
+	*/
+	// bluelovers
+	$path = explode('/', $file);
+	$file = array_pop($path);
+	$path = implode('/', $path);
+	// bluelovers
 
 	if($path != 'plugin') {
 		$key = $path == '' ? $file : $path.'_'.$file;
 		if(!isset($_G['lang'][$key])) {
+			/*
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
 			$_G['lang'][$key] = $lang;
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array($file, $path));
+			// bluelovers
 		}
 		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+			/*
 			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array('template', 'mobile'));
+			// bluelovers
 		}
 		$returnvalue = &$_G['lang'];
 	} else {

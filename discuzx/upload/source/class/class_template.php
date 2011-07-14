@@ -208,22 +208,42 @@ class template {
 		}
 		if(!isset($langvar[$var])) {
 			$lang = array();
+			/*
 			@include DISCUZ_ROOT.'./source/language/lang_template.php';
 			$this->language['inner'] = $lang;
+			*/
+
+			// bluelovers
+			lang_merge($this->language['inner'], array('template'));
+			// bluelovers
+
 			if(!$isplugin) {
 
+				// 取得模板檔案的第一個路徑作為語言包識別
 				if(defined('IN_MOBILE')) {
 					list($path) = explode('/', str_replace('mobile/', '', $this->file));
 				} else {
 					list($path) = explode('/', $this->file);
 				}
 
+				/*
 				@include DISCUZ_ROOT.'./source/language/'.$path.'/lang_template.php';
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
+				*/
+
+				// bluelovers
+				lang_merge($this->language['inner'], array('template', $path));
+				// bluelovers
 
 				if(defined('IN_MOBILE')) {
+					/*
 					@include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 					$this->language['inner'] = array_merge($this->language['inner'], $lang);
+					*/
+
+					// bluelovers
+					lang_merge($this->language['inner'], array('template', 'mobile'));
+					// bluelovers
 				}
 			} else {
 				global $_G;
