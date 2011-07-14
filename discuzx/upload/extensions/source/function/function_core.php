@@ -24,6 +24,8 @@ function loadlang($file, $path = '', $source = 'source/language') {
 	$ret .= 'lang_'.$file.'.php';
 
 	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true);
+
+	return $_lang;
 }
 
 /**
