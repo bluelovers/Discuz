@@ -524,6 +524,7 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			// bluelovers
 			$_lang = loadlang($file, $path);
 			$lang = $_lang['lang'];
+			unset($_lang);
 			// bluelovers
 
 			$_G['lang'][$key] = $lang;
@@ -535,6 +536,7 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			// bluelovers
 			$_lang = loadlang('template', 'mobile');
 			$lang = $_lang['lang'];
+			unset($_lang);
 			// bluelovers
 
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
