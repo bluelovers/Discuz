@@ -208,7 +208,14 @@ class template {
 		}
 		if(!isset($langvar[$var])) {
 			$lang = array();
+			/*
 			@include DISCUZ_ROOT.'./source/language/lang_template.php';
+			*/
+			// bluelovers
+			$_lang = loadlang('template');
+			$lang = $_lang['lang'];
+			// bluelovers
+
 			$this->language['inner'] = $lang;
 			if(!$isplugin) {
 
