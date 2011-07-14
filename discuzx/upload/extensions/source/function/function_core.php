@@ -5,6 +5,28 @@
  **/
 
 /**
+ * load language file
+ **/
+function loadlang($file, $path = '', $source = 'source/language') {
+	if (!is_array($path)) {
+		$path = explode('/', $path);
+	}
+
+	array_push_array($path, explode('/', $file));
+	$file = array_pop($path);
+
+	$source = (is_array($source) ? implode('/', $source) : $source);
+	$path = (is_array($path) ? implode('/', $path) : $path);
+
+	$ret = '';
+	if ($source) $ret .= $source.'/';
+	if ($path) $ret .= $path.'/';
+	$ret .= 'lang_'.$file.'.php';
+
+	include DISCUZ_ROOT.'./'.$ret;
+}
+
+/**
  * Push one or more array onto the end of array
  *
  * @param &$array
