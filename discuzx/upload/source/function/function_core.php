@@ -521,6 +521,7 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			/*
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
 			*/
+			/*
 			// bluelovers
 			$_lang = loadlang($file, $path);
 			$lang = $_lang['lang'];
@@ -528,11 +529,17 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			// bluelovers
 
 			$_G['lang'][$key] = $lang;
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array($file, $path));
+			// bluelovers
 		}
 		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
 			/*
 			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 			*/
+			/*
 			// bluelovers
 			$_lang = loadlang('template', 'mobile');
 			$lang = $_lang['lang'];
@@ -540,6 +547,11 @@ function lang($file, $langvar = null, $vars = array(), $default = null) {
 			// bluelovers
 
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array('template', 'mobile'));
+			// bluelovers
 		}
 		$returnvalue = &$_G['lang'];
 	} else {
