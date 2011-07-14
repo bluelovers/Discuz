@@ -8,6 +8,7 @@
  * load language file
  **/
 function loadlang($file = 'template', $path = '', $source = 'source/language') {
+	//TODO:add i18n switch
 	if (!is_array($path)) {
 		$path = explode('/', $path);
 	}
