@@ -64,4 +64,25 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
 	return $varList;
 }
 
+/**
+ * statement includes and evaluates the specified file.
+ *
+ * @param $filename
+ * @param bool - return runtime_defined_vars
+ *
+ * @return array
+ */
+function include_file() {
+	if (is_file(func_get_arg(0))) {
+		include func_get_arg(0);
+		if (true === func_get_arg(1)) {
+			return get_runtime_defined_vars(get_defined_vars());
+		}
+	} else {
+		throw new Scorpio_Exception_PHP('PHP Warning: scophp::include_file(): Filename cannot be empty or not exists!!');
+	}
+
+	return array();
+}
+
 ?>
