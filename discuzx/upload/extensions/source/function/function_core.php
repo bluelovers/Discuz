@@ -29,6 +29,9 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	return $_lang;
 }
 
+/**
+ * merge lang array with load language file
+ **/
 function lang_merge(&$lang, $loadlang, $index = 'lang') {
 	$lang = empty($lang) ? array() : $lang;
 	$loadlang = is_array($loadlang) ? $loadlang : array($loadlang);
