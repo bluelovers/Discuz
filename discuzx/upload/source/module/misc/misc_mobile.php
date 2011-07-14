@@ -44,6 +44,7 @@ if($mod == 'mobile' && defined('IN_MOBILE')) {
 /*
 include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 */
+/*
 // bluelovers
 $_lang = loadlang('template', 'mobile');
 $lang = $_lang['lang'];
@@ -51,6 +52,12 @@ unset($_lang);
 // bluelovers
 
 $_G['lang'] = array_merge($_G['lang'], $lang);
+*/
+
+// bluelovers
+lang_merge($_G['lang'], array('template', 'mobile'));
+// bluelovers
+
 $navtitle = $_G['lang']['misc_mobile_title'];
 if($_GET['view'] == true) {
 	include libfile('forum/forum_index_mobile', 'module');
