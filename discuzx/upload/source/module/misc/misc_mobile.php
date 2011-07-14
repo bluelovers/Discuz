@@ -43,14 +43,6 @@ if($mod == 'mobile' && defined('IN_MOBILE')) {
 }
 /*
 include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
-*/
-/*
-// bluelovers
-$_lang = loadlang('template', 'mobile');
-$lang = $_lang['lang'];
-unset($_lang);
-// bluelovers
-
 $_G['lang'] = array_merge($_G['lang'], $lang);
 */
 
