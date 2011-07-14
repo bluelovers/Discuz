@@ -79,7 +79,7 @@ function include_file() {
 			return get_runtime_defined_vars(get_defined_vars());
 		}
 	} else {
-		throw new Scorpio_Exception_PHP('PHP Warning: scophp::include_file(): Filename cannot be empty or not exists!!');
+		throw new Exception('PHP Warning: scophp::include_file(): Filename cannot be empty or not exists!!');
 	}
 
 	return array();
