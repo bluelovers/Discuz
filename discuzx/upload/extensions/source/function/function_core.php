@@ -54,7 +54,7 @@ function array_push_array(&$array, $args) {
  * @param $excludeList
  * @example get_runtime_defined_vars(get_defined_vars(), array('b'));
  * @example get_runtime_defined_vars(get_defined_vars());
- */
+ **/
 function get_runtime_defined_vars(array $varList, $excludeList = array()) {
 	if ($varList) {
 		$excludeList = array_merge((array )$excludeList, array('GLOBALS', '_FILES',
@@ -71,7 +71,7 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
  * @param bool - return runtime_defined_vars
  *
  * @return array
- */
+ **/
 function include_file() {
 	if (is_file(func_get_arg(0))) {
 		include func_get_arg(0);
