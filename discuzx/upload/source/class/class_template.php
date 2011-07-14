@@ -219,6 +219,7 @@ class template {
 			$this->language['inner'] = $lang;
 			if(!$isplugin) {
 
+				// 取得模板檔案的第一個路徑作為語言包識別
 				if(defined('IN_MOBILE')) {
 					list($path) = explode('/', str_replace('mobile/', '', $this->file));
 				} else {
