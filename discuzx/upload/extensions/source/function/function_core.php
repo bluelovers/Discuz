@@ -15,8 +15,8 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	array_push_array($path, explode('/', $file));
 	$file = array_pop($path);
 
-	$source = (is_array($source) ? implode('/', $source) : $source);
-	$path = (is_array($path) ? implode('/', $path) : $path);
+	$source = rtrim(is_array($source) ? implode('/', $source) : $source, '/');
+	$path = rtrim(is_array($path) ? implode('/', $path) : $path, '/');
 
 	$ret = '';
 	if ($source) $ret .= $source.'/';
