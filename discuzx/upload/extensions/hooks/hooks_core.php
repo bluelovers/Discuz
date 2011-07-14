@@ -64,6 +64,9 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 			case 'source/module/group/group_index.php':
 				@include_once libfile('hooks/group', '', 'extensions/');
 				break;
+			case 'source/function/function_core.php':
+				@include_once libfile('function/core', 'source', 'extensions/');
+				break;
 			default:
 //				dexit($file);
 
