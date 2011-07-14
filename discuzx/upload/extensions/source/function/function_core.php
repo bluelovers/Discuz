@@ -7,7 +7,7 @@
 /**
  * load language file
  **/
-function loadlang($file, $path = '', $source = 'source/language') {
+function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	if (!is_array($path)) {
 		$path = explode('/', $path);
 	}
