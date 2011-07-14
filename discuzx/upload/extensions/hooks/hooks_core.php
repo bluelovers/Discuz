@@ -14,7 +14,7 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	// 檢查是否支援 Scorpio_File，如不支援時則產生替代函數
 	if (!discuz_core::$plugin_support['scofile'] && class_exists('scofile')) {
 		discuz_core::$plugin_support['scofile'] = true;
-	} elseif (!$__func) {
+	} elseif (!discuz_core::$plugin_support['scofile'] && !$__func) {
 		$__func = create_function('$fn, $base', '
 			$base = str_replace(array(\'\\\\\', \'//\'), \'/\', $base);
 			$fn = str_replace(array(\'\\\\\', \'//\'), \'/\', $fn);
