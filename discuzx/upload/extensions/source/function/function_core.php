@@ -47,4 +47,21 @@ function array_push_array(&$array, $args) {
 	}
 }
 
+/**
+ * Returns an array of all runtime defined variables
+ *
+ * @param $varList
+ * @param $excludeList
+ * @example get_runtime_defined_vars(get_defined_vars(), array('b'));
+ * @example get_runtime_defined_vars(get_defined_vars());
+ */
+function get_runtime_defined_vars(array $varList, $excludeList = array()) {
+	if ($varList) {
+		$excludeList = array_merge((array )$excludeList, array('GLOBALS', '_FILES',
+			'_COOKIE', '_POST', '_GET', '_SERVER'));
+		$varList = array_diff_key((array )$varList, array_flip($excludeList));
+	}
+	return $varList;
+}
+
 ?>
