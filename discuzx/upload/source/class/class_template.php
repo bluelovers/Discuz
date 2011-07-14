@@ -214,6 +214,7 @@ class template {
 			// bluelovers
 			$_lang = loadlang('template');
 			$lang = $_lang['lang'];
+			unset($_lang);
 			// bluelovers
 
 			$this->language['inner'] = $lang;
@@ -232,6 +233,7 @@ class template {
 				// bluelovers
 				$_lang = loadlang('template', $path);
 				$lang = $_lang['lang'];
+				unset($_lang);
 				// bluelovers
 
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
@@ -243,6 +245,7 @@ class template {
 					// bluelovers
 					$_lang = loadlang('template', 'mobile');
 					$lang = $_lang['lang'];
+					unset($_lang);
 					// bluelovers
 
 					$this->language['inner'] = array_merge($this->language['inner'], $lang);
