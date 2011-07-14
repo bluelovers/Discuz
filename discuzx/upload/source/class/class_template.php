@@ -210,14 +210,6 @@ class template {
 			$lang = array();
 			/*
 			@include DISCUZ_ROOT.'./source/language/lang_template.php';
-			*/
-			/*
-			// bluelovers
-			$_lang = loadlang('template');
-			$lang = $_lang['lang'];
-			unset($_lang);
-			// bluelovers
-
 			$this->language['inner'] = $lang;
 			*/
 
@@ -236,14 +228,6 @@ class template {
 
 				/*
 				@include DISCUZ_ROOT.'./source/language/'.$path.'/lang_template.php';
-				*/
-				/*
-				// bluelovers
-				$_lang = loadlang('template', $path);
-				$lang = $_lang['lang'];
-				unset($_lang);
-				// bluelovers
-
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
 				*/
 
@@ -254,14 +238,6 @@ class template {
 				if(defined('IN_MOBILE')) {
 					/*
 					@include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
-					*/
-					/*
-					// bluelovers
-					$_lang = loadlang('template', 'mobile');
-					$lang = $_lang['lang'];
-					unset($_lang);
-					// bluelovers
-
 					$this->language['inner'] = array_merge($this->language['inner'], $lang);
 					*/
 
