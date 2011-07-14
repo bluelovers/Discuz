@@ -225,7 +225,14 @@ class template {
 					list($path) = explode('/', $this->file);
 				}
 
+				/*
 				@include DISCUZ_ROOT.'./source/language/'.$path.'/lang_template.php';
+				*/
+				// bluelovers
+				$_lang = loadlang('template', $path);
+				$lang = $_lang['lang'];
+				// bluelovers
+
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
 
 				if(defined('IN_MOBILE')) {
