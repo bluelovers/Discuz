@@ -229,7 +229,14 @@ class template {
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
 
 				if(defined('IN_MOBILE')) {
+					/*
 					@include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
+					*/
+					// bluelovers
+					$_lang = loadlang('template', 'mobile');
+					$lang = $_lang['lang'];
+					// bluelovers
+
 					$this->language['inner'] = array_merge($this->language['inner'], $lang);
 				}
 			} else {
