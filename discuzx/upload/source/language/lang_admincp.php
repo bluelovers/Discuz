@@ -6188,6 +6188,7 @@ RepeatLimit 32
 $adminextend = array();
 if(file_exists($adminextendfile = DISCUZ_ROOT.'./data/cache/cache_adminextend.php')) {
 	@include $adminextendfile;
+	// 載入額外的語言包
 	foreach($adminextend as $extend) {
 		$extend_lang = array();
 		@include DISCUZ_ROOT.'./source/language/lang_admincp_'.$extend;
