@@ -211,6 +211,7 @@ class template {
 			/*
 			@include DISCUZ_ROOT.'./source/language/lang_template.php';
 			*/
+			/*
 			// bluelovers
 			$_lang = loadlang('template');
 			$lang = $_lang['lang'];
@@ -218,6 +219,12 @@ class template {
 			// bluelovers
 
 			$this->language['inner'] = $lang;
+			*/
+
+			// bluelovers
+			lang_merge($this->language['inner'], array('template'));
+			// bluelovers
+
 			if(!$isplugin) {
 
 				// 取得模板檔案的第一個路徑作為語言包識別
@@ -230,6 +237,7 @@ class template {
 				/*
 				@include DISCUZ_ROOT.'./source/language/'.$path.'/lang_template.php';
 				*/
+				/*
 				// bluelovers
 				$_lang = loadlang('template', $path);
 				$lang = $_lang['lang'];
@@ -237,11 +245,17 @@ class template {
 				// bluelovers
 
 				$this->language['inner'] = array_merge($this->language['inner'], $lang);
+				*/
+
+				// bluelovers
+				lang_merge($this->language['inner'], array('template', $path));
+				// bluelovers
 
 				if(defined('IN_MOBILE')) {
 					/*
 					@include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 					*/
+					/*
 					// bluelovers
 					$_lang = loadlang('template', 'mobile');
 					$lang = $_lang['lang'];
@@ -249,6 +263,11 @@ class template {
 					// bluelovers
 
 					$this->language['inner'] = array_merge($this->language['inner'], $lang);
+					*/
+
+					// bluelovers
+					lang_merge($this->language['inner'], array('template', 'mobile'));
+					// bluelovers
 				}
 			} else {
 				global $_G;
