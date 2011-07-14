@@ -502,11 +502,18 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 
 function lang($file, $langvar = null, $vars = array(), $default = null) {
 	global $_G;
+	/*
 	list($path, $file) = explode('/', $file);
 	if(!$file) {
 		$file = $path;
 		$path = '';
 	}
+	*/
+	// bluelovers
+	$path = explode('/', $file);
+	$file = array_pop($path);
+	$path = implode('/', $path);
+	// bluelovers
 
 	if($path != 'plugin') {
 		$key = $path == '' ? $file : $path.'_'.$file;
