@@ -29,6 +29,16 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	return $_lang;
 }
 
+function lang_merge(&$lang, $loadlang, $index = 'lang') {
+	$lang = empty($lang) ? array() : $lang;
+	$loadlang = is_array($loadlang) ? $loadlang : array($loadlang);
+
+	$_lang = call_user_func_array('loadlang', $loadlang);
+	$lang = array_merge($lang, $_lang[$index]);
+
+	return $lang;
+}
+
 /**
  * Push one or more array onto the end of array
  *
