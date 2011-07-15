@@ -473,6 +473,7 @@ if($_GET['op'] == 'delete') {
 		}
 
 		$arr['body_general'] = getstr($_POST['general'], 150, 1, 1, 1);
+		// 詞語過濾
 		$arr['body_general'] = censor($arr['body_general']);
 		if(censormod($arr['body_general']) || $_G['group']['allowsharemod']) {
 			$arr['status'] = 1;
