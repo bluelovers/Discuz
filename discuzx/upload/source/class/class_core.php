@@ -1366,6 +1366,7 @@ class discuz_session {
 	}
 
 	function delete() {
+		//BUG:無法解決產生與自己相同 IP 的訪客 BUG
 
 		global $_G;
 		$onlinehold = $_G['setting']['onlinehold'];
