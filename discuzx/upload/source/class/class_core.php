@@ -1398,6 +1398,14 @@ class discuz_session {
 		}
 	}
 
+	/**
+	 * 取得線上人數
+	 *
+	 * @param $type = 0 | 1 | 2
+	 * @param $type = 0 - 所有線上人數
+	 * @param $type = 1 - 所有線上使用者人數
+	 * @param $type = 2 - 所有線上隱身人數
+	 **/
 	function onlinecount($type = 0) {
 		$condition = $type == 1 ? ' WHERE uid>0 ' : ($type == 2 ? ' WHERE invisible=1 ' : '');
 		return DB::result_first("SELECT count(*) FROM ".DB::table('common_session').$condition);
