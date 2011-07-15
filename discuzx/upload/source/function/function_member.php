@@ -24,6 +24,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 		$isuid = 0;
 	}
 
+	// 檢測是否已經載入 uc_client
 	if(!function_exists('uc_user_login')) {
 		loaducenter();
 	}
