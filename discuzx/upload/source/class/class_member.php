@@ -152,6 +152,7 @@ class logging_ctl {
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
 
 				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
+				// 同步登入其他 uc client
 				$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
 				if($invite['id']) {
