@@ -58,6 +58,7 @@
 		</h3>
 	<!--{/if}-->
 	<!--TODO:新增可設定分享的標題/選擇封面圖-->
+	<!--TODO:將分享的表單切割到額外的子模板-->
 	<form id="shareform" name="shareform" action="home.php?mod=spacecp&ac=share&type=link" method="post" autocomplete="off" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
 		<input type="hidden" name="refer" value="home.php?mod=space&uid=$space[uid]&do=share&view=me" />
 		<input type="hidden" name="topicid" value="$_GET[topicid]" />
