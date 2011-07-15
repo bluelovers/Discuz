@@ -1084,8 +1084,16 @@ class DB
 	function implode_field_value($array, $glue = ',', $fields = array()) {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
+			// copy from convert
+			if(empty($fields) || isset($fields[$k])) {
+			// copy from convert
+
 			$sql .= $comma."`$k`='$v'";
 			$comma = $glue;
+
+			// copy from convert
+			}
+			// copy from convert
 		}
 		return $sql;
 	}
