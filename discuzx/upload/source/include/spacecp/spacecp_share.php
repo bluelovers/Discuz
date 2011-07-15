@@ -472,6 +472,7 @@ if($_GET['op'] == 'delete') {
 			$magvalues['type'] = $commentcable[$type];
 		}
 
+		// 描述
 		$arr['body_general'] = getstr($_POST['general'], 150, 1, 1, 1);
 		// 詞語過濾
 		$arr['body_general'] = censor($arr['body_general']);
