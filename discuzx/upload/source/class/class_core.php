@@ -1111,6 +1111,15 @@ class DB
 		return DB::_execute('fetch_first', $sql);
 	}
 
+	// bluelovers
+	/**
+	 * same as fetch_first
+	 **/
+	function query_first($sql) {
+		return DB::fetch_first($sql);
+	}
+	// bluelovers
+
 	function result($resourceid, $row = 0) {
 		return DB::_execute('result', $resourceid, $row);
 	}
