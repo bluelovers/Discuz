@@ -1051,6 +1051,36 @@ class DB
 		return $res;
 	}
 
+	// bluelovers
+	function table_fields($table) {
+		static $tables = array();
+//		$table = str_replace($db->tablepre, '', $table);
+		if(!isset($tables[$table])) {
+			$tables[$table] = array();
+			if(DB::_execute('version') > '4.1') {
+				$query = DB::query("SHOW FULL COLUMNS FROM ".DB::table($table), 'SILENT');
+			} else {
+				$query = DB::query("SHOW COLUMNS FROM ".DB::table($table), 'SILENT');
+			}
+			while($field = DB::fetch($query)) {
+				$tables[$table][$field['Field']] = $field;
+			}
+		}
+		return $tables[$table];
+	}
+
+	function table_field_value($table, $array) {
+		$fields = DB::table_fields($table);
+		$ret = array();
+		foreach ($array as $k => $v) {
+			if(empty($fields) || isset($fields[$k])) {
+				$ret[$k] = $v;
+			}
+		}
+		return $ret;
+	}
+	// bluelovers
+
 	function implode_field_value($array, $glue = ',') {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
