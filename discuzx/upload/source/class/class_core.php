@@ -1274,6 +1274,11 @@ class DB
 
 }
 
+/**
+ * @example
+ * $discuz = & discuz_core::instance();
+ * $discuz->session;
+ **/
 class discuz_session {
 
 	var $sid = null;
