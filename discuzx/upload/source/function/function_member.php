@@ -11,6 +11,9 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 使用者登入驗證
+ **/
 function userlogin($username, $password, $questionid, $answer, $loginfield = 'username') {
 	$return = array();
 
@@ -24,6 +27,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 		$isuid = 0;
 	}
 
+	// 檢測是否已經載入 uc_client
 	if(!function_exists('uc_user_login')) {
 		loaducenter();
 	}
@@ -75,6 +79,9 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 	return $return;
 }
 
+/**
+ * 設定登入狀態
+ **/
 function setloginstatus($member, $cookietime) {
 	global $_G;
 	$_G['uid'] = $member['uid'];

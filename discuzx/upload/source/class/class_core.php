@@ -292,7 +292,8 @@ class discuz_core {
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
-		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+		// 將 isset 改為 !empty 避免多餘的 htmlspecialchars
+		$this->var['sid'] = $this->var['cookie']['sid'] = !empty($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 
 		// bluelovers
 		// Event: Class_discuz_core::_init_input:After
@@ -1286,7 +1287,16 @@ class discuz_session {
 	var $isnew = false;
 	var $newguest = array('sid' => 0, 'ip1' => 0, 'ip2' => 0, 'ip3' => 0, 'ip4' => 0,
 	'uid' => 0, 'username' => '', 'groupid' => 7, 'invisible' => 0, 'action' => 0,
-	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0);
+	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0,
+
+	// bluelovers
+	// 性別
+	'gender' => 0,
+	// 語言
+	'session_lang' => '',
+	// bluelovers
+
+	);
 
 	var $old =  array('sid' =>  '', 'ip' =>  '', 'uid' =>  0);
 
@@ -1345,10 +1355,19 @@ class discuz_session {
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
+		// bluelovers
+		// 建立時取得使用者的性別
+		if ($uid > 0) {
+			$profile = getuserprofile('gender');
+			$this->set('gender', $profile);
+		}
+		// bluelvoers
+
 		return $this->var;
 	}
 
 	function delete() {
+		//BUG:無法解決產生與自己相同 IP 的訪客 BUG
 
 		global $_G;
 		$onlinehold = $_G['setting']['onlinehold'];
@@ -1380,6 +1399,14 @@ class discuz_session {
 		}
 	}
 
+	/**
+	 * 取得線上人數
+	 *
+	 * @param $type = 0 | 1 | 2
+	 * @param $type = 0 - 所有線上人數
+	 * @param $type = 1 - 所有線上使用者人數
+	 * @param $type = 2 - 所有線上隱身人數
+	 **/
 	function onlinecount($type = 0) {
 		$condition = $type == 1 ? ' WHERE uid>0 ' : ($type == 2 ? ' WHERE invisible=1 ' : '');
 		return DB::result_first("SELECT count(*) FROM ".DB::table('common_session').$condition);
