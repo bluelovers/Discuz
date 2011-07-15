@@ -10,6 +10,14 @@
 function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);
 
+	// bluelovers
+	// Event: Func_mkshare:Before
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')
+			->run(array(&$share));
+	}
+	// bluelovers
+
 	$searchs = $replaces = array();
 	if($share['body_data']) {
 		foreach (array_keys($share['body_data']) as $key) {
@@ -17,6 +25,15 @@ function mkshare($share) {
 			$replaces[] = $share['body_data'][$key];
 		}
 	}
+
+	// bluelovers
+	// Event: Func_mkshare:After
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After')
+			->run(array(&$share, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$share['body_template'] = str_replace($searchs, $replaces, $share['body_template']);
 
 	return $share;

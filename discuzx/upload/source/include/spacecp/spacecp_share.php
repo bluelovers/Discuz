@@ -64,6 +64,13 @@ if($_GET['op'] == 'delete') {
 
 			$feed_hash_data = "uid{$id}";
 
+			// bluelovers
+			// 不允許分享自己的空間
+			if($id == $space['uid']) {
+				showmessage('share_space_not_self');
+			}
+			// bluelovers
+
 			$tospace = getspace($id);
 			if(empty($tospace)) {
 				showmessage('space_does_not_exist');
@@ -74,7 +81,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $id;
-			$arr['title_template'] = lang('spacecp', 'share_space');
+			$arr['title_template'] = array('spacecp', 'share_space');
 			$arr['body_template'] = '<b>{username}</b><br>{reside}<br>{spacenote}';
 			$arr['body_data'] = array(
 			'username' => "<a href=\"home.php?mod=space&uid=$id\">".$tospace['username']."</a>",
@@ -101,6 +108,14 @@ if($_GET['op'] == 'delete') {
 			if(!$blog = DB::fetch($query)) {
 				showmessage('blog_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的 blog
+			if($blog['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($blog['status'], array(1, 2))) {
 				showmessage('moderate_blog_not_share');
 			}
@@ -112,7 +127,7 @@ if($_GET['op'] == 'delete') {
 			}
 			$arr['fromuid'] = $blog['uid'];
 			$arr['itemid'] = $id;
-			$arr['title_template'] = lang('spacecp', 'share_blog');
+			$arr['title_template'] = array('spacecp', 'share_blog');
 			$arr['body_template'] = '<b>{subject}</b><br>{username}<br>{message}';
 			$arr['body_data'] = array(
 			'subject' => "<a href=\"home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]\">$blog[subject]</a>",
@@ -138,6 +153,14 @@ if($_GET['op'] == 'delete') {
 			if(!$album = DB::fetch($query)) {
 				showmessage('album_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的相簿
+			if($album['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if($album['friend']) {
 				showmessage('album_can_not_share');
 			}
@@ -147,7 +170,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $album['uid'];
-			$arr['title_template'] =  lang('spacecp', 'share_album');
+			$arr['title_template'] =  array('spacecp', 'share_album');
 			$arr['body_template'] = '<b>{albumname}</b><br>{username}';
 			$arr['body_data'] = array(
 				'albumname' => "<a href=\"home.php?mod=space&uid=$album[uid]&do=album&id=$album[albumid]\">$album[albumname]</a>",
@@ -172,6 +195,14 @@ if($_GET['op'] == 'delete') {
 			if(!$pic = DB::fetch($query)) {
 				showmessage('image_does_not_exist');
 			}
+
+			// bluelovers
+			// 不允許分享自己的圖片
+			if($pic['uid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($pic['status'], array(1, 2))) {
 				showmessage('moderate_pic_not_share');
 			}
@@ -186,7 +217,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $pic['uid'];
-			$arr['title_template'] = lang('spacecp', 'share_image');
+			$arr['title_template'] = array('spacecp', 'share_image');
 			$arr['body_template'] = lang('spacecp', 'album').': <b>{albumname}</b><br>{username}<br>{title}';
 			$arr['body_data'] = array(
 			'albumname' => "<a href=\"home.php?mod=space&uid=$pic[uid]&do=album&id=$pic[albumid]\">$pic[albumname]</a>",
@@ -210,13 +241,21 @@ if($_GET['op'] == 'delete') {
 			$actives = array('share' => ' class="active"');
 
 			$thread = DB::fetch(DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid='$id'"));
+
+			// bluelovers
+			// 不允許分享自己的主題
+			if($thread['authorid'] == $space['uid']) {
+				showmessage('share_not_self');
+			}
+			// bluelovers
+
 			if(in_array($thread['displayorder'], array(-2, -3))) {
 				showmessage('moderate_thread_not_share');
 			}
 			$posttable = getposttable();
 			$post = DB::fetch(DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid='$id' AND first='1'"));
 
-			$arr['title_template'] = lang('spacecp', 'share_thread');
+			$arr['title_template'] = array('spacecp', 'share_thread');
 			$arr['body_template'] = '<b>{subject}</b><br>{author}<br>{message}';
 			$attachment = !preg_match("/\[hide=?\d*\](.*?)\[\/hide\]/is", $post['message'], $a) && preg_match("/\[attach\]\d+\[\/attach\]/i", $a[1]);
 
@@ -252,7 +291,7 @@ if($_GET['op'] == 'delete') {
 
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $article['uid'];
-			$arr['title_template'] = lang('spacecp', 'share_article');
+			$arr['title_template'] = array('spacecp', 'share_article');
 			$arr['body_template'] = '<b>{title}</b><br>{username}<br>{summary}';
 			$arr['body_data'] = array(
 			'title' => "<a href=\"portal.php?mod=view&aid=$article[aid]\">$article[title]</a>",
@@ -298,10 +337,15 @@ if($_GET['op'] == 'delete') {
 			}
 			$arr['itemid'] = '0';
 			$arr['fromuid'] = '0';
-			$arr['title_template'] = lang('spacecp', 'share_link');
+			$arr['title_template'] = array('spacecp', 'share_link');
 			$arr['body_template'] = '{link}';
 
 			$link_text = sub_url($link, 45);
+
+			// bluelovers
+			// 儲存原始的網址
+			$arr['data_index'] = $link;
+			// bluelovers
 
 			$arr['body_data'] = array('link'=>"<a href=\"$link\" target=\"_blank\">$link_text</a>", 'data'=>$link);
 			$parseLink = parse_url($link);
@@ -314,19 +358,19 @@ if($_GET['op'] == 'delete') {
 				);
 			}
 			if(!empty($flashvar)) {
-				$arr['title_template'] = lang('spacecp', 'share_video');
+				$arr['title_template'] = array('spacecp', 'share_video');
 				$type = 'video';
 				$arr['body_data']['flashvar'] = $flashvar['flv'];
 				$arr['body_data']['host'] = 'flash';
 				$arr['body_data']['imgurl'] = $flashvar['imgurl'];
 			}
 			if(preg_match("/\.(mp3|wma)$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_music');
+				$arr['title_template'] = array('spacecp', 'share_music');
 				$arr['body_data']['musicvar'] = $link;
 				$type = 'music';
 			}
 			if(preg_match("/\.swf$/i", $link)) {
-				$arr['title_template'] = lang('spacecp', 'share_flash');
+				$arr['title_template'] = array('spacecp', 'share_flash');
 				$arr['body_data']['flashaddr'] = $link;
 				$type = 'flash';
 			}
@@ -441,23 +485,75 @@ if($_GET['op'] == 'delete') {
 		$arr['username'] = $_G['username'];
 		$arr['dateline'] = $_G['timestamp'];
 
+		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_feed
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_feed')
+				->run(array(array(
+					'arr' => &$arr,
+					'parseLink' => &$parseLink,
+					'flashvar' => &$flashvar,
+			)));
+		}
+		// bluelovers
+
+		// bluelovers
+		// 初始化 $_feedid
+		$_feedid = 0;
+		// bluelovers
 
 		if($arr['status'] == 0 && ckprivacy('share', 'feed')) {
 			require_once libfile('function/feed');
+
+			// bluelovers
+			// get feed_add return $returnid
+			$_feedid =
+			// bluelovers
+
 			feed_add('share',
+				/*
 				'{actor} '.$arr['title_template'],
+				*/
+				$arr['title_template'],
 				array('hash_data' => $feed_hash_data),
 				$arr['body_template'],
 				$arr['body_data'],
 				$arr['body_general'],
 				array($arr['image']),
 				array($arr['image_link'])
+
+				// bluelovers
+				// , $target_ids='', $friend='', $appid='', $returnid=0
+				, '', '', '', 1
+				// bluelvoers
 			);
 		}
 
 		$arr['body_data'] = serialize($arr['body_data']);
 
+		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_share
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_share')
+				->run(array(array(
+					'arr' => &$arr,
+					'setarr' => &$setarr,
+			)));
+		}
+		// bluelovers
+
 		$setarr = daddslashes($arr);
+
+		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_share_insert
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_share_insert')
+				->run(array(array(
+					'setarr' => &$setarr,
+			)));
+		}
+		// bluelovers
+
 		$sid = DB::insert('home_share', $setarr, 1);
 
 		switch($type) {
@@ -494,6 +590,19 @@ if($_GET['op'] == 'delete') {
 			include_once libfile('function/stat');
 			updatestat('share');
 		}
+
+		// bluelovers
+		// Event: Dz_module_spacecp_share:Before_notification
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_notification')
+				->run(array(array(
+					'arr' => &$arr,
+					'setarr' => &$setarr,
+					'sid' => $sid,
+					'feedid' => $_feedid,
+			)));
+		}
+		// bluelovers
 
 		if($note_uid && $note_uid != $_G['uid']) {
 			notification_add($note_uid, 'sharenotice', $note_message, $note_values);

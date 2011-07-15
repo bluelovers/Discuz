@@ -75,20 +75,53 @@ if(submitcheck('addsubmit')) {
 			'uid' => $_G['uid'],
 			'username' => $_G['username'],
 			'dateline' => $_G['timestamp'],
-			'title_template' => lang('feed', 'feed_doing_title'),
+			'title_template' => array('feed', 'feed_doing_title'),
+			/*
 			'title_data' => daddslashes(serialize(dstripslashes(array('message'=>$message)))),
+			*/
+			'title_data' => array('message'=>$message),
 			'body_template' => '',
 			'body_data' => '',
 			'id' => $newdoid,
 			'idtype' => 'doid'
 		);
+		/*
 		DB::insert('home_feed', $feedarr);
+		*/
+
+		// bluelovers
+		// Fatal error: Call to undefined function feed_add() in source\include\spacecp\spacecp_doing.php on line 90
+		require_once libfile('function/feed');
+
+		feed_add(
+			$feedarr['icon'],
+
+			$feedarr['title_template'],
+			$feedarr['title_data'],
+
+			$feedarr['body_template'],
+			$feedarr['body_data'],
+
+			'', '', '',
+
+			'', '',
+
+			$feedarr['appid'],
+			0,
+
+			$feedarr['id'],
+			$feedarr['idtype'],
+			$feedarr['uid'],
+			$feedarr['username']
+		);
+		// bluelovers
 	}
 	if($doing_status == '1') {
 		updatemoderate('doid', $newdoid);
 		manage_addnotify('verifydoing');
 	}
 
+	// 統計
 	require_once libfile('function/stat');
 	updatestat('doing');
 	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
@@ -105,6 +138,7 @@ if(submitcheck('addsubmit')) {
 	}
 	cknewuser();
 
+	// 判斷是否操作太快
 	$waittime = interval_check('post');
 	if($waittime > 0) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
@@ -130,6 +164,7 @@ if(submitcheck('addsubmit')) {
 	if(empty($updo)) {
 		showmessage('docomment_error');
 	} else {
+		// 黑名單
 		if(isblacklist($updo['uid'])) {
 			showmessage('is_blacklist');
 		}
@@ -155,6 +190,7 @@ if(submitcheck('addsubmit')) {
 
 	$newid = DB::insert('home_docomment', $setarr, 1);
 
+	// 更新回複數
 	DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum+1 WHERE doid='$updo[doid]'");
 
 	if($updo['uid'] != $_G['uid']) {
@@ -162,6 +198,7 @@ if(submitcheck('addsubmit')) {
 			'url'=>"home.php?mod=space&uid=$updo[uid]&do=doing&doid=$updo[doid]&highlight=$newid",
 			'from_id'=>$updo['doid'],
 			'from_idtype'=>'doid'));
+		// 獎勵積分
 		updatecreditbyaction('comment', 0, array(), 'doing'.$updo['doid']);
 	}
 
@@ -171,6 +208,7 @@ if(submitcheck('addsubmit')) {
 	showmessage('do_success', dreferer(), array('doid' => $updo['doid']));
 }
 
+// 刪除
 if($_GET['op'] == 'delete') {
 
 	if(submitcheck('deletesubmit')) {
@@ -179,8 +217,10 @@ if($_GET['op'] == 'delete') {
 			$query = DB::query("SELECT dc.*, d.uid as duid FROM ".DB::table('home_docomment')." dc, ".DB::table('home_doing')." d WHERE dc.id='$id' AND dc.doid=d.doid");
 			if($value = DB::fetch($query)) {
 				if($allowmanage || $value['uid'] == $_G['uid'] || $value['duid'] == $_G['uid'] ) {
+					// 更新內容
 					DB::update('home_docomment', array('uid'=>0, 'username'=>'', 'message'=>''), "id='$id'");
 					if($value['uid'] != $_G['uid'] && $value['duid'] != $_G['uid']) {
+						// 扣除積分
 						batchupdatecredit('comment', $value['uid'], array(), -1);
 					}
 					DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum-'1' WHERE doid='$doid'");
@@ -197,7 +237,7 @@ if($_GET['op'] == 'delete') {
 
 } elseif ($_GET['op'] == 'getcomment') {
 
-	include_once(DISCUZ_ROOT.'./source/class/class_tree.php');
+	include_once libfile('class/tree');
 	$tree = new tree();
 
 	$list = array();

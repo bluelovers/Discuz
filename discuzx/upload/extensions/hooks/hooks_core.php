@@ -413,4 +413,42 @@ function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
 */
 }
 
+/* func */
+
+function &htmldom($content) {
+	//TODO:simple_html_dom
+	@include_once libfile('simple_html_dom', 'libs/simple_html_dom', 'extensions/');
+
+	$dom = new simple_html_dom;
+	$dom->load($content, true);
+
+	return $dom;
+}
+
+function curl($url) {
+	//TODO:Scorpio cURL
+	include_once libfile('Curl', 'libs/scophp/Scorpio/libs/Helper/', 'extensions/');
+	if (!class_exists('scocurl')) eval("class scocurl extends Scorpio_Helper_Curl_Core {}");
+
+//	scocurl::instance($url)->setopt(CURLOPT_FOLLOWLOCATION, true)->setopt(CURLOPT_HEADER, true)->setopt(CURLOPT_COOKIEJAR, true)->exec();
+//	$c = scocurl::_self()->getExec(true);
+//	scocurl::_self()->close();
+
+//echo $url;
+
+	scocurl::instance($url)->setopt(array(
+//		CURLOPT_FOLLOWLOCATION => true,
+//		CURLOPT_HEADER => true,
+//		CURLOPT_COOKIEJAR => true,
+	))->exec();
+	$c = scocurl::_self()->close()->getExec(1);
+
+//	echo '<pre>';
+//	print_r($c);
+//
+//	dexit();
+
+	return $c;
+}
+
 ?>

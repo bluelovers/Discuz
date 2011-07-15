@@ -1051,11 +1051,49 @@ class DB
 		return $res;
 	}
 
-	function implode_field_value($array, $glue = ',') {
+	// bluelovers
+	function table_fields($table) {
+		static $tables = array();
+//		$table = str_replace($db->tablepre, '', $table);
+		if(!isset($tables[$table])) {
+			$tables[$table] = array();
+			if(DB::_execute('version') > '4.1') {
+				$query = DB::query("SHOW FULL COLUMNS FROM ".DB::table($table), 'SILENT');
+			} else {
+				$query = DB::query("SHOW COLUMNS FROM ".DB::table($table), 'SILENT');
+			}
+			while($field = DB::fetch($query)) {
+				$tables[$table][$field['Field']] = $field;
+			}
+		}
+		return $tables[$table];
+	}
+
+	function table_field_value($table, $array) {
+		$fields = DB::table_fields($table);
+		$ret = array();
+		foreach ($array as $k => $v) {
+			if(empty($fields) || isset($fields[$k])) {
+				$ret[$k] = $v;
+			}
+		}
+		return $ret;
+	}
+	// bluelovers
+
+	function implode_field_value($array, $glue = ',', $fields = array()) {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
-			$sql .= $comma."`$k`='$v'";
-			$comma = $glue;
+			// copy from convert
+			if(empty($fields) || isset($fields[$k])) {
+			// copy from convert
+
+				$sql .= $comma."`$k`='$v'";
+				$comma = $glue;
+
+			// copy from convert
+			}
+			// copy from convert
 		}
 		return $sql;
 	}
@@ -1072,6 +1110,15 @@ class DB
 		DB::checkquery($sql);
 		return DB::_execute('fetch_first', $sql);
 	}
+
+	// bluelovers
+	/**
+	 * same as fetch_first
+	 **/
+	function query_first($sql) {
+		return DB::fetch_first($sql);
+	}
+	// bluelovers
 
 	function result($resourceid, $row = 0) {
 		return DB::_execute('result', $resourceid, $row);
@@ -1227,6 +1274,11 @@ class DB
 
 }
 
+/**
+ * @example
+ * $discuz = & discuz_core::instance();
+ * $discuz->session;
+ **/
 class discuz_session {
 
 	var $sid = null;
@@ -1424,6 +1476,7 @@ class discuz_memory
 	var $enable = false;
 
 	function discuz_memory() {
+		// 只有 eaccelerator 版本 eaccelerator-0.9.5.3 有 eaccelerator_get
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
 		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');
