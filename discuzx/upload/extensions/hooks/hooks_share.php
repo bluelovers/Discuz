@@ -177,9 +177,9 @@ function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 //		$_url = 'http://www.discuz.net/';
 
 		//TODO:Fatal error: Call to undefined function curl() in extensions\hooks\hooks_share.php on line 148
-		$curl_ret = curl($_url);
+		0 && $curl_ret = curl($_url);
 
-		if ($htmldom = htmldom($curl_ret['exec'])) {
+		if (0 && $htmldom = htmldom($curl_ret['exec'])) {
 			$code1 = $htmldom->find('meta[http-equiv=Content-Type]', 0)->content;
 			$code1 = preg_replace('/^.*\bcharset\=([^;].+)\b;?.*$/i', '\\1', $code1);
 
