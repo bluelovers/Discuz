@@ -292,7 +292,8 @@ class discuz_core {
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
-		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+		// 將 isset 改為 !empty 避免多餘的 htmlspecialchars
+		$this->var['sid'] = $this->var['cookie']['sid'] = !empty($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 
 		// bluelovers
 		// Event: Class_discuz_core::_init_input:After
