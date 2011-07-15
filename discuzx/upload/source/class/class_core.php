@@ -1476,6 +1476,7 @@ class discuz_memory
 	var $enable = false;
 
 	function discuz_memory() {
+		// 只有 eaccelerator 版本 eaccelerator-0.9.5.3 有 eaccelerator_get
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
 		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');
