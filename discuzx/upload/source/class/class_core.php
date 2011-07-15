@@ -1081,7 +1081,7 @@ class DB
 	}
 	// bluelovers
 
-	function implode_field_value($array, $glue = ',') {
+	function implode_field_value($array, $glue = ',', $fields = array()) {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
 			$sql .= $comma."`$k`='$v'";
