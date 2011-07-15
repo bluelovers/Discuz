@@ -1287,6 +1287,14 @@ class discuz_session {
 	var $newguest = array('sid' => 0, 'ip1' => 0, 'ip2' => 0, 'ip3' => 0, 'ip4' => 0,
 	'uid' => 0, 'username' => '', 'groupid' => 7, 'invisible' => 0, 'action' => 0,
 	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0,
+
+	// bluelovers
+	// 性別
+	'gender' => 0,
+	// 語言
+	'session_lang' => '',
+	// bluelovers
+
 	);
 
 	var $old =  array('sid' =>  '', 'ip' =>  '', 'uid' =>  0);
