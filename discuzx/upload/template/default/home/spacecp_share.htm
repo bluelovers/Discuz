@@ -57,6 +57,7 @@
 			<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 		</h3>
 	<!--{/if}-->
+	<!--TODO:新增可設定分享的標題/選擇封面圖-->
 	<form id="shareform" name="shareform" action="home.php?mod=spacecp&ac=share&type=link" method="post" autocomplete="off" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
 		<input type="hidden" name="refer" value="home.php?mod=space&uid=$space[uid]&do=share&view=me" />
 		<input type="hidden" name="topicid" value="$_GET[topicid]" />

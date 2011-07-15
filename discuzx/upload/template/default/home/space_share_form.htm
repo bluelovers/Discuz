@@ -1,4 +1,5 @@
 <form id="shareform" name="shareform" action="home.php?mod=spacecp&ac=share&type=link&view=$_GET[view]&from=$_GET[from]" method="post" autocomplete="off" class="sfm" {if $_G[gp_view] == 'me'}onsubmit="ajaxpost(this.id, 'return_shareadd')"{/if}>
+	<!--TODO:新增可設定分享的標題/選擇封面圖-->
 	<p class="mbn c cl"><span id="return_shareadd" class="y xi1"></span>{lang share_web_music_flash}</p>
 	<p>
 		<input type="text" name="link" id="share_link" class="px vm" tabindex="1" onfocus="javascript:if('http://'==this.value)this.value='';$('share_desc').style.display='block';" onblur="javascript:if(''==this.value)this.value='http://';" value="http://" />&nbsp;
