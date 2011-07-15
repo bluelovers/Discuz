@@ -1354,6 +1354,14 @@ class discuz_session {
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
+		// bluelovers
+		// 建立時取得使用者的性別
+		if ($uid > 0) {
+			$profile = getuserprofile('gender');
+			$this->set('gender', $profile);
+		}
+		// bluelvoers
+
 		return $this->var;
 	}
 
