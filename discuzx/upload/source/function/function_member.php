@@ -11,6 +11,9 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 使用者登入驗證
+ **/
 function userlogin($username, $password, $questionid, $answer, $loginfield = 'username') {
 	$return = array();
 
@@ -76,6 +79,9 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 	return $return;
 }
 
+/**
+ * 設定登入狀態
+ **/
 function setloginstatus($member, $cookietime) {
 	global $_G;
 	$_G['uid'] = $member['uid'];
