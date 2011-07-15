@@ -1088,8 +1088,8 @@ class DB
 			if(empty($fields) || isset($fields[$k])) {
 			// copy from convert
 
-			$sql .= $comma."`$k`='$v'";
-			$comma = $glue;
+				$sql .= $comma."`$k`='$v'";
+				$comma = $glue;
 
 			// copy from convert
 			}
