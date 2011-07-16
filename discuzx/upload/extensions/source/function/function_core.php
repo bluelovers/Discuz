@@ -24,7 +24,7 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	if ($path) $ret .= $path.'/';
 	$ret .= 'lang_'.$file.'.php';
 
-	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true);
+	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1);
 
 	return $_lang;
 }
