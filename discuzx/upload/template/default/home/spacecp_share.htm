@@ -11,6 +11,7 @@
 			<div class="bm bw0">
 <!--{/if}-->
 <!--{if $_GET['op'] == 'delete'}-->
+	<!--刪除分享-->
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang delete_share}</em>
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
@@ -33,6 +34,13 @@
 	</script>
 	<!--{/if}-->
 <!--{elseif $_GET['op'] == 'edithot'}-->
+	<!--{rem
+編輯熱度
+home.php?mod=spacecp&ac=share&sid=129&op=edithot&handlekey=hotsharehk_129
+
+要點選分享之後 才看的到熱度
+home.php?mod=space&uid=9202&do=share&id=129
+}-->
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang adjust_hot}</em>
 		<!--{if !empty($_G['gp_inajax'])}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
@@ -47,6 +55,7 @@
 		</p>
 	</form>
 <!--{elseif $_GET['op']=='link'}-->
+	<!--新增分享-->
 	<!--{if !$_G[inajax]}-->
 		<h1 class="mt">
 			<img src="static/image/feed/share.gif" class="vm" alt="share"> {lang share}
@@ -66,6 +75,7 @@
 	</script>
 	<!--{/if}-->
 <!--{else}-->
+	<!--目前不明-->
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang share}</em>
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
