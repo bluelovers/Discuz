@@ -79,6 +79,11 @@ if($_GET['op'] == 'delete') {
 				showmessage('is_blacklist');
 			}
 
+			// bluelovers
+			// bugfix: fix miss spacenote
+			space_merge($tospace, 'field_home');
+			// bluelovers
+
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $id;
 			$arr['title_template'] = array('spacecp', 'share_space');
