@@ -39,7 +39,7 @@ function lang_merge(&$lang, $loadlang, $index = 'lang') {
 	$_lang = call_user_func_array('loadlang', $loadlang);
  	// 修正 array_merge($lang, null) 會強制為空的問題
 	if (!empty($_lang) && !empty($_lang[$index]))
-	$lang = array_merge($lang, $_lang[$index]);
+		$lang = array_merge($lang, $_lang[$index]);
 
 	return $lang;
 }
