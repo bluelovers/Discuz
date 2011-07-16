@@ -1,9 +1,14 @@
 <form id="shareform" name="shareform"
-	action="home.php?mod=spacecp&ac=share&type=link&view=$_GET[view]&from=$_GET[from]"
+	action="home.php?mod=spacecp&ac=share&type=link{if $mod != 'spacecp'}&view=$_GET[view]&from=$_GET[from]{/if}"
 	method="post"
 	autocomplete="off"
-	class="sfm"
-	{if $_G[gp_view] == 'me'}onsubmit="ajaxpost(this.id, 'return_shareadd')"{/if}
+
+	{if $mod == 'spacecp'}
+		{if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}
+	{else}
+		class="sfm"
+		{if $_G[gp_view] == 'me'}onsubmit="ajaxpost(this.id, 'return_shareadd')"{/if}
+	{/if}
 >
 	<!--TODO:新增可設定分享的標題/選擇封面圖-->
 	<!--TODO:將分享的表單切割到額外的子模板-->
