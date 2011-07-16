@@ -98,6 +98,7 @@ function include_file() {
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
 			return get_runtime_defined_vars(get_defined_vars());
 		}
+	// 追加忽略找不到檔案時的錯誤訊息開關
 	} elseif (!func_get_arg(2)) {
 		throw new Exception('PHP Warning: include_file(): Filename cannot be empty or not exists!!');
 	}
