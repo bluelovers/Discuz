@@ -27,3 +27,13 @@
 	/* 日誌 */
 	.vw .d { font: {FONTSIZE} {FONT}; font-family: inherit; }
 /** end **/
+
+/**  forum::forumdisplay,forum::viewthread,group::viewthread,home::space,home::spacecp,home::invite,portal::view,portal::comment,forum::post,group::post **/
+		.quote blockquote {
+			/* 跨瀏覽器的 inline-block */
+			display: -moz-inline-stack;
+			display: inline-block;
+			zoom: 1;
+			*display: inline;
+		}
+/** end **/
