@@ -13,6 +13,27 @@
 	<!--TODO:新增可設定分享的標題/選擇封面圖-->
 	<!--TODO:將分享的表單切割到額外的子模板-->
 <!--{if $mod == 'spacecp'}-->
+	<input type="hidden" name="refer" value="home.php?mod=space&uid=$space[uid]&do=share&view=me" />
+	<input type="hidden" name="topicid" value="$_GET[topicid]" />
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<input type="hidden" name="sharesubmit" value="true" />
+	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+	<div class="c tfm">
+		<p>{lang share_web_music_flash}:</p>
+		<p class="mtn mbm"><input type="text" size="30" class="px" name="link" onfocus="javascript:if('http://'==this.value)this.value='';" onblur="javascript:if(''==this.value)this.value='http://'" id="share_link" value="$linkdefault" /></p>
+		<p>{lang description}:</p>
+		<p class="mtn mbm"><textarea id="share_general" name="general" cols="30" rows="3" class="pt" onkeydown="ctrlEnter(event, 'sharesubmit_btn')">$generaldefault</textarea></p>
+		<!--{if $type == 'thread'}-->
+			<p><a href="javascript:;" onclick="setCopy($('share_general').value + '\n ' + $('share_link').value, '{lang share_copylink}')" />{lang share_im}</a></p>
+		<!--{/if}-->
+		<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+			<!--{block sectpl}--><sec> <span id="sec<hash>" class="secq" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+			<div class="sec"><!--{subtemplate common/seccheck}--></div>
+		<!--{/if}-->
+	</div>
+	<p class="o pns">
+		<button type="submit" name="sharesubmit_btn" id="sharesubmit_btn" value="true" class="pn pnc"><strong>{lang share}</strong></button>
+	</p>
 <!--{else}-->
 	<p class="mbn c cl"><span id="return_shareadd" class="y xi1"></span>{lang share_web_music_flash}</p>
 	<p>
