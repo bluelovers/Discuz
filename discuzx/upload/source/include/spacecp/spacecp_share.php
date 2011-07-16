@@ -80,6 +80,8 @@ if($_GET['op'] == 'delete') {
 			}
 
 			// bluelovers
+			// bugfix: fix miss resideprovince, residecity
+			space_merge($tospace, 'profile');
 			// bugfix: fix miss spacenote
 			space_merge($tospace, 'field_home');
 			// bluelovers
