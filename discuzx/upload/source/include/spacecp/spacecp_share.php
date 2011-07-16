@@ -93,6 +93,7 @@ if($_GET['op'] == 'delete') {
 			$arr['body_data'] = array(
 			'username' => "<a href=\"home.php?mod=space&uid=$id\">".$tospace['username']."</a>",
 			'reside' => $tospace['resideprovince'].$tospace['residecity'],
+			//TODO:修改為可自動更新被分享的用戶的狀態訊息
 			'spacenote' => $tospace['spacenote']
 			);
 
