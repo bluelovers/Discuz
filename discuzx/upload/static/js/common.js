@@ -789,7 +789,10 @@ function stringxor(s1, s2) {
 function showPreview(val, id) {
 	var showObj = $(id);
 	if(showObj) {
+		/*
 		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
+		*/
+		showObj.innerHTML = val.replace(/\n/ig, "<br />");
 	}
 }
 
