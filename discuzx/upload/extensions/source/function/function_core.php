@@ -85,6 +85,7 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
  *
  * @param $filename
  * @param bool - return runtime_defined_vars
+ * @param bool - show error
  *
  * @return array
  **/
@@ -94,7 +95,7 @@ function include_file() {
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
 			return get_runtime_defined_vars(get_defined_vars());
 		}
-	} else {
+	} elseif (!func_get_arg(2)) {
 		throw new Exception('PHP Warning: include_file(): Filename cannot be empty or not exists!!');
 	}
 
