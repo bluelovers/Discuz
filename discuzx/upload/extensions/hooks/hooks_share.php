@@ -89,7 +89,8 @@ function _eFunc_feed_add_Before_feedarr_addslashes($_EVENT, $conf) {
 
 	list($feedarr['title_template'], $_lang_template['title_template']) = _feed_add($feedarr['title_template'], $feedarr['icon']);
 	list($feedarr['body_template'], $_lang_template['body_template']) = _feed_add($feedarr['body_template'], $feedarr['icon']);
-	list($feedarr['body_general'], $_lang_template['body_general']) = _feed_add($feedarr['body_general'], $feedarr['icon']);
+	// 不自動在 body_general 添加 {actor}
+	list($feedarr['body_general'], $_lang_template['body_general']) = _feed_add($feedarr['body_general'], $feedarr['icon'], 1);
 
 	if ($_lang_template = array_filter($_lang_template)) {
 		$feedarr['lang_template'] = $_lang_template ? serialize($_lang_template) : '';
@@ -397,7 +398,7 @@ function _share_add($share) {
 	return $share;
 }
 
-function _feed_add($langkey, $icon = '') {
+function _feed_add($langkey, $icon = '', $noactor = 0) {
 	$_lang_template = '';
 
 	if (is_array($langkey) && count($langkey) >= 2) {

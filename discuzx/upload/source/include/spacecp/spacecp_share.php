@@ -79,6 +79,13 @@ if($_GET['op'] == 'delete') {
 				showmessage('is_blacklist');
 			}
 
+			// bluelovers
+			// bugfix: fix miss resideprovince, residecity
+			space_merge($tospace, 'profile');
+			// bugfix: fix miss spacenote
+			space_merge($tospace, 'field_home');
+			// bluelovers
+
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $id;
 			$arr['title_template'] = array('spacecp', 'share_space');
@@ -86,6 +93,7 @@ if($_GET['op'] == 'delete') {
 			$arr['body_data'] = array(
 			'username' => "<a href=\"home.php?mod=space&uid=$id\">".$tospace['username']."</a>",
 			'reside' => $tospace['resideprovince'].$tospace['residecity'],
+			//TODO:修改為可自動更新被分享的用戶的狀態訊息
 			'spacenote' => $tospace['spacenote']
 			);
 
@@ -472,7 +480,9 @@ if($_GET['op'] == 'delete') {
 			$magvalues['type'] = $commentcable[$type];
 		}
 
-		$arr['body_general'] = getstr($_POST['general'], 150, 1, 1, 1);
+		// 描述
+		$arr['body_general'] = getstr($_POST['general'], 300, 1, 1, 1);
+		// 詞語過濾
 		$arr['body_general'] = censor($arr['body_general']);
 		if(censormod($arr['body_general']) || $_G['group']['allowsharemod']) {
 			$arr['status'] = 1;

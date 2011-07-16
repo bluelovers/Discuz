@@ -27,3 +27,23 @@
 	/* 日誌 */
 	.vw .d { font: {FONTSIZE} {FONT}; font-family: inherit; }
 /** end **/
+
+/**  forum::forumdisplay,forum::viewthread,group::viewthread,home::space,home::spacecp,home::invite,portal::view,portal::comment,forum::post,group::post **/
+	/* 修正於彈出窗內的 引用 寬度及高度 */
+	.fwinmask .quote {
+		width: auto;
+	}
+		.fwinmask .quote blockquote {
+			overflow-y: scroll;
+			max-height: 6em;
+			max-width: 240px;
+		}
+
+		.quote blockquote {
+			/* 跨瀏覽器的 inline-block */
+			display: -moz-inline-stack;
+			display: inline-block;
+			zoom: 1;
+			*display: inline;
+		}
+/** end **/
