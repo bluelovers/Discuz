@@ -12,6 +12,8 @@
 >
 	<!--TODO:新增可設定分享的標題/選擇封面圖-->
 	<!--TODO:將分享的表單切割到額外的子模板-->
+<!--{if $mod == 'spacecp'}-->
+<!--{else}-->
 	<p class="mbn c cl"><span id="return_shareadd" class="y xi1"></span>{lang share_web_music_flash}</p>
 	<p>
 		<input type="text" name="link" id="share_link" class="px vm" tabindex="1" onfocus="javascript:if('http://'==this.value)this.value='';$('share_desc').style.display='block';" onblur="javascript:if(''==this.value)this.value='http://';" value="http://" />&nbsp;
@@ -32,4 +34,5 @@
 	<!--{if $_G[gp_view] == 'me'}-->
 	<input type="hidden" name="handlekey" value="shareadd" />
 	<!--{/if}-->
+<!--{/if}-->
 </form>
