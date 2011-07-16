@@ -37,7 +37,8 @@
 		<!--{elseif $value['type'] == 'flash'}-->
 			<img src="{IMGDIR}/flash.gif" alt="{lang click_view}" onclick="javascript:showFlash('flash', '{$value['body_data']['flashaddr']}', this, '{$value['sid']}');" class="tn" />
 		<!--{/if}-->
-		<!--{if $value[body_general]}-->
+		<!--{rem 修正新增分享時 描述的 onkeyup="showPreview(this.value, 'quote_{$id}')" 無效的問題 }-->
+		<!--{if $value[body_general] || ($mod == 'spacecp' && $ac == 'share')}-->
 		<div class="quote{if $value['image']} z{/if}"><blockquote id="quote_{$id}">$value[body_general]</blockquote></div>
 		<!--{/if}-->
 	</div>
