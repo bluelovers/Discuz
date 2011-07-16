@@ -24,7 +24,8 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	if ($path) $ret .= $path.'/';
 	$ret .= 'lang_'.$file.'.php';
 
-	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true);
+	// 忽略找不到檔案時的錯誤
+	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1);
 
 	return $_lang;
 }
@@ -37,7 +38,9 @@ function lang_merge(&$lang, $loadlang, $index = 'lang') {
 	$loadlang = is_array($loadlang) ? $loadlang : array($loadlang);
 
 	$_lang = call_user_func_array('loadlang', $loadlang);
-	$lang = array_merge($lang, $_lang[$index]);
+ 	// 修正 array_merge($lang, null) 會強制為空的問題
+	if (!empty($_lang) && !empty($_lang[$index]))
+		$lang = array_merge($lang, $_lang[$index]);
 
 	return $lang;
 }
@@ -85,6 +88,7 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
  *
  * @param $filename
  * @param bool - return runtime_defined_vars
+ * @param bool - show error
  *
  * @return array
  **/
@@ -94,7 +98,8 @@ function include_file() {
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
 			return get_runtime_defined_vars(get_defined_vars());
 		}
-	} else {
+	// 追加忽略找不到檔案時的錯誤訊息開關
+	} elseif (!func_get_arg(2)) {
 		throw new Exception('PHP Warning: include_file(): Filename cannot be empty or not exists!!');
 	}
 
