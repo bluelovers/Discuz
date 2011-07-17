@@ -189,7 +189,10 @@ EOF;
 					$rule['fid'] = $fid;
 					$rule['rulename'] = $ruleinfo['rulename'];
 					$rule['action'] = $ruleinfo['action'];
+
+					//TODO:fixhere
 					$policy[$ruleinfo['action']] = $rule;
+
 					if(!in_array($fid, $fids)) {
 						$fids[] = $fid;
 					}
