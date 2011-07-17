@@ -193,6 +193,15 @@ function showheader($key, $url) {
 	echo '<li><em><a href="'.ADMINSCRIPT.'?action='.$url.'" id="header_'.$key.'" hidefocus="true" onmouseover="previewheader(\''.$key.'\')" onmouseout="previewheader()" onclick="toggleMenu(\''.$key.'\', \''.$url.'\');doane(event);">'.cplang('header_'.$key).'</a></em></li>';
 }
 
+/**
+ * 面包屑導航欄顯示及二級導航欄標題
+ *
+ * @param $header - 導航起點
+ * @param $menu - 子導航標題
+ * @param $nav - 面包屑導航第三層
+ *
+ * @example shownav('extended', 'nav_ec', 'nav_ec_config');
+ **/
 function shownav($header = '', $menu = '', $nav = '') {
 	global $action, $operation;
 
