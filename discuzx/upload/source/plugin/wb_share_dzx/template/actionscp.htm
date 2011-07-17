@@ -1,0 +1,113 @@
+<p class="tbmu">{lang wb_share_dzx:title}</p>
+<script>
+    function weibocheck(){
+maxnum=140-document.weiboform.msg.value.length;
+if(maxnum==0){
+document.weiboform.msg.blur();
+}
+document.getElementById("maxweibo").innerHTML=maxnum;
+}
+    </script>
+<link href="source/plugin/wb_share_dzx/style/css.css" rel="stylesheet" type="text/css" />
+<div class="weibo_box">
+  <div class="weibo_title">{lang wb_share_dzx:t1}</div>
+  <form action="plugin.php?id=wb_share_dzx:cp&action=sendmsg" method="post" enctype="multipart/form-data"  name="weiboform" id="weiboform">
+    <div class="weibo_input">
+      <div class="wb_tl"></div>
+      <div class="wb_tr"></div>
+      <div class="wb_bl"></div>
+      <div class="wb_br"></div>
+      <textarea name="msg" id="msg" onkeydown="weibocheck()" cols="45" rows="5"></textarea>
+    </div>
+    <!--/weibo_input-->
+    <input class="weibo_button" name="button3" type="submit" id="button3" value=" " />
+<div class="weibo_cl"></div>
+    <div class="weibo_upload">
+      <div class="weibo_uploadc"> <span class="weibo_sy">{lang wb_share_dzx:uploadmsg}
+        <input style="display:inline;" name="pic" type="file" id="pic" size="6" />
+      </div>
+      <div class="wb_bl2"></div>
+      <div class="wb_br2"></div>
+    </div>
+    <!--/weibo_upload-->
+    <div class="weibo_doing">
+    <input name="doing" type="checkbox" id="doing" value="true" />
+    <label for="doing">{lang wb_share_dzx:updatedoing}</label>
+    </div>
+    <div class="weibo_sm">{lang wb_share_dzx:sm1} </div>
+  </form>
+</div>
+<!--/weibo_box-->
+
+<div class="weibo_box">
+  <div class="weibo_title">{lang wb_share_dzx:t2}</div>
+  <div class="weibo_bind">
+    <div class="weibo_bindfl">
+      <div class="weibo_icon wb_sina"></div>
+      <div class="weibo_bindt">{lang wb_share_dzx:sina}</div>
+      <!--{if in_array('Sina',$apis)}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sina" class="weibo_bindbtn wb_delbtn"></a> 
+      <!--{else}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=sina" class="weibo_bindbtn"></a> 
+      <!--{/if}--> 
+    </div>
+    <div class="weibo_bindfl">
+      <div class="weibo_icon wb_qq"></div>
+      <div class="weibo_bindt">{lang wb_share_dzx:qq}</div>
+      <!--{if in_array('Qq',$apis)}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=qq" class="weibo_bindbtn wb_delbtn"></a> 
+      <!--{else}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=qq" class="weibo_bindbtn"></a> 
+      <!--{/if}--> 
+       </div>
+    <div class="weibo_bindfl">
+      <div class="weibo_icon wb_t163"></div>
+      <div class="weibo_bindt">{lang wb_share_dzx:t163}</div>
+      <!--{if in_array('T163',$apis)}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=t163" class="weibo_bindbtn wb_delbtn"></a> 
+      <!--{else}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=t163" class="weibo_bindbtn"></a> 
+      <!--{/if}--> 
+      
+      </div>
+    <div class="weibo_bindfl">
+      <div class="weibo_icon wb_sohu"></div>
+      <div class="weibo_bindt">{lang wb_share_dzx:sohu}</div>
+      <!--{if in_array('Sohu',$apis)}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sohu" class="weibo_bindbtn wb_delbtn"></a> 
+      <!--{else}--> 
+      <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=sohu" class="weibo_bindbtn"></a> 
+      <!--{/if}--> 
+      
+      </div>
+    <div class="weibo_cl"></div>
+  </div>
+  <!--/weibo_bind-->
+  <div class="weibo_sm"> {lang wb_share_dzx:sm2} </div>
+</div>
+<!--/weibo_box-->
+
+<div class="weibo_box" style="border:none;">
+  <div class="weibo_title">{lang wb_share_dzx:t3}</div>
+  <form method="post" class="weibo_setting"  action="plugin.php?id=wb_share_dzx:cp&action=actionsave">
+    <input name="actions[]" type="checkbox" id="actions[]" value="topicsubmit"  $actions['topicsubmit']  />
+    <label for="actions[]"></label>
+    {lang wb_share_dzx:ac1}
+    <input name="actions[]" type="checkbox" id="actions[]" value="replysubmit" $actions['replysubmit']  />
+    <label for="actions[]"></label>
+    {lang wb_share_dzx:ac2}
+    <input name="actions[]" type="checkbox" id="actions[]" value="addsubmit" $actions['addsubmit']  />
+    <label for="actions[]"></label>
+    {lang wb_share_dzx:ac3}
+    <input name="actions[]" type="checkbox" id="actions[]" value="viewAlbumid" $actions['viewAlbumid'] />
+    <label for="actions[]"></label>
+    {lang wb_share_dzx:ac4}
+    <input name="actions[]" type="checkbox" id="actions[]" value="blogsubmit" $actions['blogsubmit'] />
+    <label for="actions[]"></label>
+    {lang wb_share_dzx:ac5} <br />
+    <br />
+    <input type="submit" name="button" id="button" value="{lang wb_share_dzx:save}" />
+  </form>
+  <div class="weibo_sm"> {lang wb_share_dzx:sm3}</div>
+</div>
+<!--/weibo_box-->

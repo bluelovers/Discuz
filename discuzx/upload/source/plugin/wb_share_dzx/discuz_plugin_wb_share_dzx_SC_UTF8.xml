@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-16 21:29]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://www.3g4k.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[微博控]]></item>
+			<item id="identifier"><![CDATA[wb_share_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[wb_share_dzx/]]></item>
+			<item id="copyright"><![CDATA[www.3g4k.com]]></item>
+			<item id="version"><![CDATA[2]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[checkenv]]></item>
+					<item id="menu"><![CDATA[环境检测]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[actionscp]]></item>
+					<item id="menu"><![CDATA[微博控]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[7]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
+					<item id="name"><![CDATA[wb_share_dzx]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[是否开启日志]]></item>
+				<item id="description"><![CDATA[开启日志后，如果发送微博失败等错误会记录在data/WeiboLog目录下。一般情况下关闭。]]></item>
+				<item id="variable"><![CDATA[iflog]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[搜狐微博SECRET]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[sohu_secret]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[UZyypHIWzEc#oH5L=GZeyr*N*MoApf8my^vMQi5V]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[搜狐微博KEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[sohu_key]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[TwHBZEDgn5c56LXEg8GJ]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[网易微博SECRET]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[t163_secret]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[FDO1Id8RzQNZur47izCGvkuZC7oRtiED]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[网易微博KEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[t163_key]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[1PqrynhOaoHSKsQp]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[腾讯微博SKEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[qq_skey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[cda80a1fc920c97c2011071a73c58f9b]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[腾讯微博AKEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[qq_akey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[44512cc875f7444496d4b18b0d8a3d49]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[新浪微博AKEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[sina_akey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[4122844297]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[新浪微博SKEY]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[sina_skey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[db366c1d7a58683d22dce18965698a2a]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="uploadmsg"><![CDATA[我上传了新图片，赶紧来看看吧]]></item>
+				<item id="deletesuccess"><![CDATA[解除成功]]></item>
+				<item id="bindingsuccess"><![CDATA[连接成功，正在为你跳转]]></item>
+				<item id="bindingerror"><![CDATA[连接失败，请重试]]></item>
+				<item id="savesuccess"><![CDATA[保存成功]]></item>
+				<item id="paramserror"><![CDATA[参数有误]]></item>
+				<item id="sendsuccess"><![CDATA[发布成功]]></item>
+				<item id="notbinding"><![CDATA[您还没有绑定任何微博，请先绑定]]></item>
+				<item id="createerror"><![CDATA[无法获得认证地址]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="title"><![CDATA[微博控：多个微博一起搞定]]></item>
+				<item id="t1"><![CDATA[微博发布机]]></item>
+				<item id="t2"><![CDATA[绑定微博]]></item>
+				<item id="t3"><![CDATA[分享设置]]></item>
+				<item id="uploadmsg"><![CDATA[你最多还可以输入<font color="#cc0000" id="maxweibo">140</font>字</span>　上传图片：]]></item>
+				<item id="sm1"><![CDATA[说明： 使用"微博发布机"可批量向已绑定的微博发布信息，使用前请先绑定微博。]]></item>
+				<item id="sm2"><![CDATA[说明： 绑定以后，无需微博登录也能发表微博。]]></item>
+				<item id="sm3"><![CDATA[说明： 被勾选的操作，会自动发布微博。]]></item>
+				<item id="sina"><![CDATA[新浪微博]]></item>
+				<item id="qq"><![CDATA[腾讯微博]]></item>
+				<item id="t163"><![CDATA[网易微博]]></item>
+				<item id="sohu"><![CDATA[搜狐微博]]></item>
+				<item id="ac1"><![CDATA[论坛发帖]]></item>
+				<item id="ac2"><![CDATA[论坛回帖]]></item>
+				<item id="ac3"><![CDATA[更新记录]]></item>
+				<item id="ac4"><![CDATA[相册上传]]></item>
+				<item id="ac5"><![CDATA[日志发布]]></item>
+				<item id="save"><![CDATA[保存]]></item>
+				<item id="updatedoing"><![CDATA[同时更新到记录]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>
