@@ -1567,6 +1567,15 @@ function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0
 	return _checklowerlimit($action, $uid, $coef, $fid, $returnonly);
 }
 
+/**
+ * 批量执行某一条策略规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uids: 操作用户可以为单个uid或uid数组
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param Integer $coef: 积分放大倍数，当为负数时为反转操作
+ * @param Integer $fid: 版块ID
+ */
 function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
