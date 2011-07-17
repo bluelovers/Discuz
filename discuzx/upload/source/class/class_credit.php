@@ -479,6 +479,9 @@ class credit {
 			foreach ($rule_now as $_k => $_v) {
 				$rule_new[$_k] = $_v;
 			}
+
+			// 從 credit::getrule 中複製代碼片段
+			$rule_new['rulenameuni'] = $rulenameuni;
 		}
 
 		return $rule_new;
