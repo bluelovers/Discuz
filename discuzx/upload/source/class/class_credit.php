@@ -486,6 +486,7 @@ class credit {
 			// 使用 intval 整理值避免意外的錯誤
 			for($i = 1; $i <= 8; $i++) {
 				if(empty($_G['setting']['extcredits'][$i])) {
+					// 清除不存在的積分
 					unset($rule_new['extcredits'.$i]);
 					continue;
 				}
