@@ -919,9 +919,6 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	static $dformat, $tformat, $dtformat, $offset, $lang;
 	// bluelovers
 	static $offset_site;
-	// bluelovers
-
-	// bluelovers
 	// 緩存預設的 $uformat
 	static $uformat_default;
 	// bluelovers
