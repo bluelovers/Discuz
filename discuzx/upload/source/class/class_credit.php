@@ -468,6 +468,9 @@ class credit {
 		if (empty($byaction)) {
 		} else {
 			// 處理單一的積分策略
+
+			// 從 credit::getrule 中複製代碼片段
+			$rulenameuni = $rule_default['rulenameuni'];
 		}
 
 		return $rule_new;
