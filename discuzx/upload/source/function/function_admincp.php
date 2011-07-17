@@ -193,6 +193,15 @@ function showheader($key, $url) {
 	echo '<li><em><a href="'.ADMINSCRIPT.'?action='.$url.'" id="header_'.$key.'" hidefocus="true" onmouseover="previewheader(\''.$key.'\')" onmouseout="previewheader()" onclick="toggleMenu(\''.$key.'\', \''.$url.'\');doane(event);">'.cplang('header_'.$key).'</a></em></li>';
 }
 
+/**
+ * 面包屑導航欄顯示及二級導航欄標題
+ *
+ * @param $header - 導航起點
+ * @param $menu - 子導航標題
+ * @param $nav - 面包屑導航第三層
+ *
+ * @example shownav('extended', 'nav_ec', 'nav_ec_config');
+ **/
 function shownav($header = '', $menu = '', $nav = '') {
 	global $action, $operation;
 
@@ -260,6 +269,16 @@ function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
 	return cpmsg($message, $url, 'error', array(), $extra, $halt);
 }
 
+/**
+ * 提示消息
+ *
+ * @param $message - lang_admincp_msg.php 語言包中需要輸出的key
+ * @param $url - 提示信息後跳轉的頁面，留空則返回上一頁
+ * @param $type - 特殊提示信息時指定頁面的提示樣式，可選參數：succeed、error、download、loadingform
+ * @param $values - 為語言包中的變量關鍵詞指定值，以數組形式輸入
+ * @param $extra - 消息文字擴展
+ * @param $halt - 是否輸出「Discuz! 提示」標題
+ **/
 function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
 	global $_G;
 	$vars = explode(':', $message);
@@ -363,6 +382,12 @@ EOT;
 	}
 }
 
+/**
+ * 二級導航欄顯示
+ *
+ * @param $title - 二級導航的當前欄標題
+ * @param $menus <array> - 多個子導航
+ **/
 function showsubmenu($title, $menus = array(), $right = '', $replace = array()) {
 	if(empty($menus)) {
 		$s = '<div class="itemtitle">'.$right.'<h3>'.cplang($title, $replace).'</h3></div>';
@@ -467,6 +492,14 @@ function showtips($tips, $id = 'tips', $display = TRUE, $title = '') {
 	showtablefooter();
 }
 
+/**
+ * 創建表單頭
+ *
+ * @param $action - 表單action的一部分，程序會自動添加 admincp.php?action= 這些內容
+ * @param $extra - 表單附加屬性，可以是樣式等
+ * @param $name - 表單的name和id
+ * @param $method - 表單提交方式
+ **/
 function showformheader($action, $extra = '', $name = 'cpform', $method = 'post') {
 	global $_G;
 	$anchor = isset($_G['gp_anchor']) ? htmlspecialchars($_G['gp_anchor']) : '';
@@ -476,6 +509,11 @@ function showformheader($action, $extra = '', $name = 'cpform', $method = 'post'
 		'<input type="hidden" name="anchor" value="'.$anchor.'" />';
 }
 
+/**
+ * 創建隱藏表單域
+ *
+ * @param $hiddenfields <array> 以數組形式傳入，循環輸出隱藏表單域
+ **/
 function showhiddenfields($hiddenfields = array()) {
 	if(is_array($hiddenfields)) {
 		foreach($hiddenfields as $key => $val) {
@@ -485,6 +523,16 @@ function showhiddenfields($hiddenfields = array()) {
 	}
 }
 
+/**
+ * 創建表格頭
+ *
+ * @param $title - 如果輸入title則顯示標題，class為header，否則僅顯示一個table頭
+ * @param $classname - 定義此輸出表格的CSS樣式
+ * @param $extra - 表格擴展屬性
+ * @param $titlespan - 表格列數
+ *
+ * @example showtableheader('forums_edit_posts', 'nobottom');
+ **/
 function showtableheader($title = '', $classname = '', $extra = '', $titlespan = 15) {
 	global $_G;
 	$classname = str_replace(array('nobottom', 'notop'), array('nobdb', 'nobdt'), $classname);
@@ -546,6 +594,16 @@ function showsubtitle($title = array(), $rowclass='header') {
 	}
 }
 
+/**
+ * 創建列表式頁面的行
+ *
+ * 此函數多用於循環中，用來逐行創建一個有規律的數據列表如：論壇版塊列表等
+ *
+ * @param $trstyle - 此行 tr 標籤的格式定義，如 class="partition"
+ * @param $tdstyle <array> - TD 標籤的格式定義，如 class，colspan 等
+ * @param $tdtext <array> - TD內顯示的內容
+ * @param $return 是否返回值
+ **/
 function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $return = FALSE) {
 	$rowswapclass = '';
 	if(!preg_match('/class\s*=\s*[\'"]([^\'"<>]+)[\'"]/i', $trstyle, $matches)) {
@@ -573,6 +631,41 @@ function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $ret
 	echo $cells;
 }
 
+/**
+ * 表单显示
+ *
+ * @param $setname - 指定輸出標題，如:setting_basic_bbname, 自動匹配描述文字
+ * 為：setting_basic_bbname_comment，comment 形式文字
+ * 可以在./source/language/lang_admincp.php語言包中添加
+ *
+ * @param $varname - 指定表單的name值，如settingnew[bbname]
+ * @param $value - 指定表單默認值\變量
+ * @param $type - 表單樣式
+ *
+ * 		radio單選
+ * 		text文本、password密碼、number數字
+ * 		file上傳文件
+ * 		filetext 上傳文件或在線文件切換型表單
+ * 		textarea 多行文本
+ * 		select 選擇框
+ * 		mradio 高級單選模式
+ * 		mcheckbox 高級多選模式
+ * 		binmcheckbox 二進制數值多選模式
+ * 		mselect 高級選擇框模式
+ * 		color 顏色選擇
+ * 		calendar 日期選擇
+ * 		multiply 多表單型
+ * 		daterange時間範圍
+ *
+ * 		其他未在上述樣式中出現的$type均獨立輸出
+ * @param $disabled - 是否不可修改
+ * @param $hidden - 是否隱藏
+ * @param $comment - 強制描述文字
+ * @param $extra - 表單擴展屬性
+ * @param $setid - 用於拼接表單外層Div的id
+ *
+ * @see http://dev.discuz.org/wiki/index.php?title=%E5%B8%B8%E7%94%A8%E5%90%8E%E5%8F%B0%E5%87%BD%E6%95%B0#showsetting.28.29.E8.A1.A8.E5.8D.95.E6.98.BE.E7.A4.BA
+ **/
 function showsetting($setname, $varname, $value, $type = 'radio', $disabled = '', $hidden = 0, $comment = '', $extra = '', $setid = '') {
 
 	global $_G;
@@ -867,6 +960,16 @@ function mcheckbox($name, $items = array(), $checked = array()) {
 	return $list;
 }
 
+/**
+ * 創建提交按鈕
+ *
+ * @param $name - 定義提交按鈕的name值
+ * @param $value - 定義按鈕的文字值
+ * @param $before - 根據此按鈕之前的屬性來輸出樣式
+ * @param $after - 根據此按鈕之後的屬性來輸出樣式
+ * @param $floatright - 是否有浮動
+ * @param $entersubmit - 是否使用回車定義按鈕提交動作
+ **/
 function showsubmit($name = '', $value = 'submit', $before = '', $after = '', $floatright = '', $entersubmit = true) {
 	global $_G;
 	if(!empty($_G['showsetting_multi'])) {
