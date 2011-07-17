@@ -423,6 +423,7 @@ class credit {
 				$fid = intval($fid);
 				$fids = explode(',', $rule['fids']);
 				if(in_array($fid, $fids)) {
+					// 以板塊設定的積分策略來取代目前的積分策略
 					$policy = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'"));
 					if(isset($policy[$action])) {
 						$rule = $policy[$action];
