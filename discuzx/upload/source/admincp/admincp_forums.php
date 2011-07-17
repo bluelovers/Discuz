@@ -1473,7 +1473,16 @@ EOT;
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
 							// 處理積分策略的值
+							/*
 							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
+							*/
+							// bluelovers
+							if (is_numeric($v)) {
+								$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = intval($v);
+							} else {
+								unset($creditspolicynew[$rules[$rid]['action']]['extcredits'.$i]);
+							}
+							// bluelovers
 						}
 					}
 
