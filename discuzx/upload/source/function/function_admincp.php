@@ -940,6 +940,16 @@ function mcheckbox($name, $items = array(), $checked = array()) {
 	return $list;
 }
 
+/**
+ * 創建提交按鈕
+ *
+ * @param $name - 定義提交按鈕的name值
+ * @param $value - 定義按鈕的文字值
+ * @param $before - 根據此按鈕之前的屬性來輸出樣式
+ * @param $after - 根據此按鈕之後的屬性來輸出樣式
+ * @param $floatright - 是否有浮動
+ * @param $entersubmit - 是否使用回車定義按鈕提交動作
+ **/
 function showsubmit($name = '', $value = 'submit', $before = '', $after = '', $floatright = '', $entersubmit = true) {
 	global $_G;
 	if(!empty($_G['showsetting_multi'])) {
