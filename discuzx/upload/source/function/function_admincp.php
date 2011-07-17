@@ -321,6 +321,16 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 				// 移動代碼
 				$timeout = $type != 'loading' ? 10000 : 0;
 
+				// bluelovers
+				$_msg_add = '';
+				if ($timeout) {
+					$refreshsecond = $timeout / 1000;
+
+					//TODO:將此處改為語言包
+					$_msg_add = "即將於 {$refreshsecond} 秒後自動跳轉<br>";
+				}
+				// bluelovers
+
 				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
 				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", $timeout);</script>";
 			}
