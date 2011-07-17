@@ -456,6 +456,39 @@ class credit {
 	 * @param $rule_now - 目前的積分策略
 	 * @param $byaction - 如果有設定時代表為單一的積分策略
 	 * @param $rule_default - 作為基準的積分策略
+	 *
+	 * @example
+
+		// 非完整範例的片段
+
+		// bluelovers
+		$list_old = $list;
+		// bluelovers
+
+		$_G['gp_fid'] = intval($_G['gp_fid']);
+		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
+		foreach($flist as $action => $value) {
+			$list[$value['action']] = $value;
+		}
+
+		$_action = 'digest';
+		$_credit = &credit::instance();
+		$_rule = $_credit->getrule($_action, $_G['gp_fid']);
+
+		$_credit2 = credit::getrule_merge($flist, '', $list_old);
+
+		echo '<style>*{font-size:12px}</style><pre>';
+		print_r(array(
+			'fid'				=> $_G['gp_fid'],
+			'rule action'		=> $_action,
+			'$list_old'			=> $list_old[$_action],
+			'credit::getrule'	=> $_rule,
+			'$flist'			=> $flist[$_action],
+			'$list'				=> $list[$_action],
+			'credit::getrule_merge'		=> $_credit2[$_action],
+		));
+		dexit();
+
 	 **/
 	function getrule_merge($rule_now, $byaction = '', $rule_default = null) {
 		global $_G;
