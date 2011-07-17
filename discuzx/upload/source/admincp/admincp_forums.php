@@ -1477,6 +1477,7 @@ EOT;
 							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
 							*/
 							// bluelovers
+							// 當設定的積分策略為空時 不自動設定為 0
 							if (is_numeric($v)) {
 								$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = intval($v);
 							} else {
