@@ -279,6 +279,7 @@ if($_G['gp_op'] == 'base') {
 		$wheresql = " AND rid='$rid'";
 	}
 	require_once libfile('function/forumlist');
+	// 取得板塊清單
 	$select = forumselect(false, 0, $_G['gp_fid']);
 	$keys = array_keys($_G['setting']['extcredits']);
 	if(!$_G['setting']['homestatus']) {
