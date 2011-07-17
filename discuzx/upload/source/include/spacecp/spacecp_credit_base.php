@@ -306,7 +306,7 @@ if($_G['gp_op'] == 'base') {
 		}
 		*/
 		// bluelovers
-		if (!class_exists('credit')) include_once libfile('class/credit');
+		if (!class_exists('credit')) include libfile('class/credit');
 		// 使用 credit::getrule_merge 來統一處理
 		$list = credit::getrule_merge($flist, '', $list);
 		// bluelovers
