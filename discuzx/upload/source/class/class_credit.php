@@ -471,6 +471,9 @@ class credit {
 
 			// 從 credit::getrule 中複製代碼片段
 			$rulenameuni = $rule_default['rulenameuni'];
+
+			// 初始化回傳的 $rule_new 預設值為 $rule_default
+			$rule_new = $rule_default;
 		}
 
 		return $rule_new;
