@@ -318,8 +318,27 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 			if($type == 'button') {
 				$message = "<br />$message<br /><p class=\"margintop\"><input type=\"submit\" class=\"btn\" name=\"submit\" value=\"".cplang('start')."\" onclick=\"location.href='$url'\" />";
 			} else {
-				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
-				$timeout = $type != 'loading' ? 10000 : 0;
+				// bluelovers
+				// DX 預設為 10 秒
+				$refreshsecond = 5;
+				// bluelovers
+
+				// 移動代碼
+				$timeout = $type != 'loading' ? $refreshsecond * 1000 : 0;
+
+				// bluelovers
+				$_msg_add = '';
+				if ($timeout) {
+					$refreshsecond = $timeout / 1000;
+
+					//TODO:將此處改為語言包
+					$_msg_add = "即將於 {$refreshsecond} 秒後自動跳轉<br>";
+				} else {
+					$_msg_add = "請稍後...正在執行中...<br>";
+				}
+				// bluelovers
+
+				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.$_msg_add.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
 				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", $timeout);</script>";
 			}
 		} elseif($type != 'succeed') {
