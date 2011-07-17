@@ -1586,7 +1586,16 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 	return $credit->updatecreditbyrule($action, $uids, $coef, $fid);
 }
 
-
+/**
+ * 添加积分
+ *
+ * @param Integer $uids: 用户uid或者uid数组
+ * @param String $dataarr: member count相关操作数组，例: array('threads' => 1, 'doings' => -1)
+ * @param Boolean $checkgroup: 是否检查用户组 true or false
+ * @param String $operation: 操作类型
+ * @param Integer $relatedid:
+ * @param String $ruletxt: 积分规则文本
+ **/
 function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
 	if(!empty($uids) && (is_array($dataarr) && $dataarr)) {
 		require_once libfile('function/credit');
