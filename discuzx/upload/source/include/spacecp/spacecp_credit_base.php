@@ -284,6 +284,7 @@ if($_G['gp_op'] == 'base') {
 	// 取得積分 key
 	$keys = array_keys($_G['setting']['extcredits']);
 	if(!$_G['setting']['homestatus']) {
+		// 如果沒有啟用 家園 功能 則不顯示相關的積分策略
 		foreach (array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit') AS $val) {
 			$wheresql .= " AND action <> '{$val}'";
 		}
