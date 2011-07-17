@@ -481,6 +481,11 @@ class credit {
 			$rule_new = $rule_default;
 
 			// 將 $rule_now 的值取代 $rule_new 的值
+
+			for ($i = 1; $i <= 8; $i++) {
+
+			}
+
 			foreach ($rule_now as $_k => $_v) {
 				$rule_new[$_k] = $_v;
 			}
