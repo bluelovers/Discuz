@@ -459,6 +459,11 @@ class credit {
 		global $_G;
 		$rule_new = array();
 
+		// 如果沒有設定 $rule_default 則從 $_G['cache']['creditrule'] 中取得
+		if ($rule_default === null) {
+			$rule_default = empty($byaction) ? $_G['cache']['creditrule'] : $_G['cache']['creditrule'][$byaction];
+		}
+
 		return $rule_new;
 	}
 	// bluelovers
