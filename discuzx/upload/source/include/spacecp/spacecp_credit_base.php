@@ -193,6 +193,7 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } elseif ($_G['gp_op'] == 'exchange') {
+	// 兌換
 
 	if(!$_G['setting']['exchangestatus']) {
 		showmessage('action_closed', NULL);
