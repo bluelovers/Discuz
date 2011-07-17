@@ -477,6 +477,14 @@ function showtips($tips, $id = 'tips', $display = TRUE, $title = '') {
 	showtablefooter();
 }
 
+/**
+ * 創建表單頭
+ *
+ * @param $action - 表單action的一部分，程序會自動添加 admincp.php?action= 這些內容
+ * @param $extra - 表單附加屬性，可以是樣式等
+ * @param $name - 表單的name和id
+ * @param $method - 表單提交方式
+ **/
 function showformheader($action, $extra = '', $name = 'cpform', $method = 'post') {
 	global $_G;
 	$anchor = isset($_G['gp_anchor']) ? htmlspecialchars($_G['gp_anchor']) : '';
