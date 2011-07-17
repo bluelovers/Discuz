@@ -1479,7 +1479,8 @@ EOT;
 
 	} elseif($operation == 'datetime') {
 
-		$checktimeformat = array($setting['timeformat'] == 'H:i' ? 24 : 12 => 'checked');
+		// 判斷是否為 24H 制
+		$checktimeformat = array(($setting['timeformat'] == 'H:i' || $setting['timeformat'] == 'H:i:s') ? 24 : 12 => 'checked');
 
 		$setting['userdateformat'] = dateformat($setting['userdateformat']);
 		$setting['dateformat'] = dateformat($setting['dateformat']);
@@ -2451,7 +2452,8 @@ EOT;
 	}
 
 	if(isset($settingnew['timeformat'])) {
-		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i' : 'h:i A';
+		// 增加顯示秒數
+		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i:s' : 'h:i:s A';
 	}
 
 	if(isset($settingnew['dateformat'])) {

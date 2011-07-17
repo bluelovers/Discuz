@@ -913,13 +913,24 @@ function cachedata($cachenames) {
 	return $data;
 }
 
+/**
+ * 格式化时间
+ *
+ * @param $timestamp - 时间戳
+ * @param $format - dt=日期时间 d=日期 t=时间 u=个性化 其他=自定义
+ * @param $timeoffset - 时区
+ * @return string
+ **/
 function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = '') {
 	global $_G;
 	$format == 'u' && !$_G['setting']['dateconvert'] && $format = 'dt';
 	static $dformat, $tformat, $dtformat, $offset, $lang;
 	// bluelovers
 	static $offset_site;
+	// 緩存預設的 $uformat
+	static $uformat_default;
 	// bluelovers
+
 	if($dformat === null) {
 		$dformat = getglobal('setting/dateformat');
 		$tformat = getglobal('setting/timeformat');
@@ -934,14 +945,19 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		if ($offset > 12 || $offset < -12) {
 			$offset = $offset_site;
 		}
+
+		// 預先處理預設的 $uformat
+		$uformat_default = strpos($dtformat, ':s') === false ? str_replace(":i", ":i:s", $dtformat) : $dtformat;
 		// bluelovers
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
 	if($format == 'u') {
+		//TODO:搭配 js 動態顯示時間
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
-		$s = gmdate(!$uformat ? str_replace(":i", ":i:s", $dtformat) : $uformat, $timestamp);
+		//FIX:搭配 timeformat 增加顯示秒數後 此處會產生多餘的 :s 的 BUG
+		$s = gmdate(!$uformat ? $uformat_default : $uformat, $timestamp);
 		$time = TIMESTAMP + $timeoffset * 3600 - $timestamp;
 		if($timestamp >= $todaytimestamp) {
 			if($time > 3600) {
