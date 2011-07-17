@@ -920,6 +920,12 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	// bluelovers
 	static $offset_site;
 	// bluelovers
+
+	// bluelovers
+	// 緩存預設的 $uformat
+	static $uformat_default;
+	// bluelovers
+
 	if($dformat === null) {
 		$dformat = getglobal('setting/dateformat');
 		$tformat = getglobal('setting/timeformat');
