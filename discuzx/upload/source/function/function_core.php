@@ -913,6 +913,14 @@ function cachedata($cachenames) {
 	return $data;
 }
 
+/**
+ * 格式化时间
+ *
+ * @param $timestamp - 时间戳
+ * @param $format - dt=日期时间 d=日期 t=时间 u=个性化 其他=自定义
+ * @param $timeoffset - 时区
+ * @return string
+ **/
 function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = '') {
 	global $_G;
 	$format == 'u' && !$_G['setting']['dateconvert'] && $format = 'dt';
