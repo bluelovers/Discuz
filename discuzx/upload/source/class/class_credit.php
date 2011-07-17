@@ -426,7 +426,15 @@ class credit {
 					// 以板塊設定的積分策略來取代目前的積分策略
 					$policy = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'"));
 					if(isset($policy[$action])) {
+						/*
 						$rule = $policy[$action];
+						*/
+						// bluelovers
+						// 允許板塊積分策略如果沒設定的積分會使用預設的積分
+						foreach ($policy[$action] as $_k => $_v) {
+							$rule[$_k] = $_v;
+						}
+						// bluelovers
 						$rule['rulenameuni'] = $rulenameuni;
 					}
 				}
