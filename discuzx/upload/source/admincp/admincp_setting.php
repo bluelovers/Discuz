@@ -2452,6 +2452,7 @@ EOT;
 	}
 
 	if(isset($settingnew['timeformat'])) {
+		// 增加顯示秒數
 		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i' : 'h:i A';
 	}
 
