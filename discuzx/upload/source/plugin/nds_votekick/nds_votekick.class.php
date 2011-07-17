@@ -1,6 +1,6 @@
 <?php
 /*  Plugin FOR Discuz! X1.5 
-	Copyright (c) 2009-2012 WWW.NWDS.CN | NDSÎ÷ÓòÊýÂë¹¤×÷ÊÒ
+	Copyright (c) 2009-2012 WWW.NWDS.CN | NDSè¥¿åŸŸæ•°ç å·¥ä½œå®¤
 	$Id: nds_votekick.class.php V1.6 20110401 SINGCEE $
  */
 

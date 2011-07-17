@@ -1,6 +1,6 @@
 <?php
 /*  Plugin FOR Discuz! X1.5 
-	Copyright (c) 2009-2012 WWW.NWDS.CN | NDS.Î÷ÓòÊýÂë¹¤×÷ÊÒ
+	Copyright (c) 2009-2012 WWW.NWDS.CN | NDS.è¥¿åŸŸæ•°ç å·¥ä½œå®¤
 	$Id: nds_votekick.inc.php V1.6 20110401 SINGCEE $
  */
 
@@ -74,7 +74,7 @@ $vkscp = DB::fetch_first("SELECT votes,uids FROM ".DB::table('nds_votekick')." W
       showmessage('nds_votekick:norep');
    }
  
-   //Ìá½»´¦Àí
+   //æäº¤å¤„ç†
 if(submitcheck('votekicksubmit')) {   
   if ($votes) {
     DB::query("UPDATE ".DB::table('nds_votekick')." SET votes = votes + 1,uids = CONCAT(uids,'\t','".$_G['uid']."')  WHERE tid='".$tid."'"); 
