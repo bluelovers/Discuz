@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-10 10:16]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://www.thread8.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[图片投票]]></item>
+			<item id="identifier"><![CDATA[imgpoll]]></item>
+			<item id="description"><![CDATA[在Discuz原有投票主题基础之上增加了图片选项。]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[imgpoll/]]></item>
+			<item id="copyright"><![CDATA[star6710]]></item>
+			<item id="version"><![CDATA[v1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[imgpoll]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[12]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[forumconfig]]></item>
+					<item id="menu"><![CDATA[版块权限设置]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[1]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="2">
+					<item id="name"><![CDATA[userconfig]]></item>
+					<item id="menu"><![CDATA[用户权限设置]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="3">
+					<item id="name"><![CDATA[clean]]></item>
+					<item id="menu"><![CDATA[冗余图片清理]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[3]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="language">
+			<item id="templatelang">
+				<item id="post_imgpoll_options"><![CDATA[选项]]></item>
+				<item id="post_imgpoll_comment"><![CDATA[最多可填写 {$_G[setting][maxpolloptions]} 个选项]]></item>
+				<item id="post_imgpoll_upload"><![CDATA[上传图片]]></item>
+				<item id="post_imgpoll_add"><![CDATA[增加一项]]></item>
+				<item id="post_imgpoll_allowmultiple"><![CDATA[最多可选]]></item>
+				<item id="post_option"><![CDATA[项]]></item>
+				<item id="post_imgpoll_expiration"><![CDATA[投票天数]]></item>
+				<item id="days"><![CDATA[天]]></item>
+				<item id="poll_after_result"><![CDATA[投票后结果可见]]></item>
+				<item id="post_poll_overt"><![CDATA[公开投票参与人]]></item>
+				<item id="edit_imgpoll_update"><![CDATA[更新图片]]></item>
+				<item id="imgpoll_multiple"><![CDATA[多选投票]]></item>
+				<item id="imgpoll_single"><![CDATA[单选投票]]></item>
+				<item id="poll_more_than"><![CDATA[最多可选 $maxchoices 项]]></item>
+				<item id="poll_voterscount"><![CDATA[共有 $voterscount 人参与投票]]></item>
+				<item id="poll_view_voters"><![CDATA[查看投票参与人]]></item>
+				<item id="poll_count_down"><![CDATA[距结束还有]]></item>
+				<item id="hour"><![CDATA[小时]]></item>
+				<item id="minute"><![CDATA[分钟]]></item>
+				<item id="imgpoll_end"><![CDATA[投票已经结束]]></item>
+				<item id="poll_close"><![CDATA[关闭投票]]></item>
+				<item id="poll_finish"><![CDATA[已结束]]></item>
+				<item id="poll_msg_overt"><![CDATA[此为公开投票，其他人可看到你的投票项目]]></item>
+				<item id="poll_msg_allwvoteusergroup"><![CDATA[你所在的用户组没有投票权限]]></item>
+				<item id="poll_msg_allowvotepolled"><![CDATA[你已经投过票，谢谢你的参与]]></item>
+				<item id="poll_msg_allowvotethread"><![CDATA[该投票已经关闭或者过期，不能投票]]></item>
+				<item id="imgpoll_voters"><![CDATA[投票参与人]]></item>
+				<item id="none"><![CDATA[无]]></item>
+			</item>
+		</item>
+		<item id="license"><![CDATA[[list]
+			插件名称: 图片投票 1.0
+			适用版本: Discuz! X2.0
+			语言编码: GBK简体
+			插件作者: star6710
+			版权所属: www.thread8.com
+			支持网站: Discuz特殊主题站 [url]http://www.thread8.com/[/url]
+			插件简介: 在Discuz原有投票主题基础之上增加了图片选项。
+
+			[color=Red]未经插件作者同意，严禁在其他网站发布、转贴此插件及增加功能后发布[/color]
+		[/list]]]></item>
+		<item id="intro"><![CDATA[[list]
+感谢贵站站长支持 star6710所编写的插件
+
+支持网站: Discuz特殊主题站 [url]http://www.thread8.com/[/url]
+[color=Red]未经插件作者同意，严禁在其他网站发布、转贴此插件及增加功能后发布[/color]
+		[/list]]]></item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>

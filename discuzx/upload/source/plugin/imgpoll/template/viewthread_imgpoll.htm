@@ -1,0 +1,136 @@
+<!--{block return}-->
+<script language="JavaScript">
+<!--{if $optiontype=='checkbox'}-->
+	var max_obj = $maxchoices;
+	var p = 0;
+<!--{/if}-->
+function correctPNG() // correctly handle PNG transparency in Win IE 5.5 & 6. 
+{ 
+    var arVersion = navigator.appVersion.split("MSIE") 
+    var version = parseFloat(arVersion[1]) 
+    if ((version >= 5.5) && (document.body.filters)) 
+    { 
+       for(var j=0; j<document.images.length; j++) 
+       { 
+          var img = document.images[j] 
+          var imgName = img.src.toUpperCase() 
+          if (imgName.substring(imgName.length-3, imgName.length) == "PNG") 
+          { 
+             var imgID = (img.id) ? "id='" + img.id + "' " : "" 
+             var imgClass = (img.className) ? "class='" + img.className + "' " : "" 
+             var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' " 
+             var imgStyle = "display:inline-block;" + img.style.cssText 
+             if (img.align == "left") imgStyle = "float:left;" + imgStyle 
+             if (img.align == "right") imgStyle = "float:right;" + imgStyle 
+             if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle 
+             var strNewHTML = "<span " + imgID + imgClass + imgTitle 
+             + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";" 
+             + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader" 
+             + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>" 
+             img.outerHTML = strNewHTML 
+             j = j-1 
+          } 
+       } 
+    }     
+} 
+window.attachEvent("onload", correctPNG); 
+</script>
+<style type="text/css">
+
+.list {
+	OVERFLOW: hidden; WIDTH: 760px; POSITION: relative
+}
+.list .list-item {
+	float:left;PADDING-RIGHT: 9px; BORDER-TOP: #e5e5e5 1px solid; PADDING-LEFT: 9px; PADDING-BOTTOM: 10px; display:inline; MARGIN: -1px 0px 0px; VERTICAL-ALIGN: top; OVERFLOW: hidden; WIDTH: 232px; PADDING-TOP: 10px; ZOOM: 1; HEIGHT: auto
+}
+.list .list-item .pic {
+	POSITION: relative; BORDER-RIGHT: #ddd 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #ddd 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #ddd 1px solid; PADDING-TOP: 5px; BORDER-BOTTOM: #ddd 1px solid; 
+}
+.list .list-item .pic IMG {
+	DISPLAY: inline
+}
+.list .list-item .title { padding: 0px; height: 24px; font-size: 12px; font-weight: 600; line-height: 24px; width:230px;text-overflow:ellipsis; white-space:nowrap;}
+</style>
+
+<form id="poll" name="poll" method="post" autocomplete="off" action="plugin.php?id=imgpoll:votepoll&fid=$_G[fid]&tid=$_G[tid]&pollsubmit=yes&quickforward=yes" onsubmit="ajaxpost('poll', 'post_$post[pid]', 'post_$post[pid]');return false">
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<div class="pinf">
+		<!--{if $multiple}-->
+			<strong>{lang imgpoll:imgpoll_multiple}</strong>
+			<!--{if $maxchoices}-->: ( {lang imgpoll:poll_more_than} )
+			<!--{/if}--><!--{else}--><strong>{lang imgpoll:imgpoll_single}</strong>
+		<!--{/if}-->
+		<!--{if $visiblepoll && $_G['group']['allowvote']}--> , {lang imgpoll:poll_after_result}<!--{/if}-->, {lang imgpoll:poll_voterscount}
+		<!--{if !$visiblepoll && ($overt || $_G['adminid'] == 1 || $thread['authorid'] == $_G['uid']) && $post['invisible'] == 0}-->
+			<a href="plugin.php?id=imgpoll:viewvoter&tid=$_G[tid]" onclick="showWindow('viewvote', this.href)">{lang imgpoll:poll_view_voters}</a>
+		<!--{/if}-->
+	</div>
+	<!--{if $_G[forum_thread][remaintime]}-->
+	<p class="ptmr">
+		{lang imgpoll:poll_count_down}:
+		<strong>
+		<!--{if $_G[forum_thread][remaintime][0]}-->$_G[forum_thread][remaintime][0] {lang imgpoll:days}<!--{/if}-->
+		<!--{if $_G[forum_thread][remaintime][1]}--> $_G[forum_thread][remaintime][1] {lang imgpoll:hour}<!--{/if}-->
+		$_G[forum_thread][remaintime][2] {lang imgpoll:minute}
+		</strong>
+	</p>
+	<!--{elseif $expiration && $expirations < TIMESTAMP}-->
+	<p class="ptmr"><strong>{lang imgpoll:imgpoll_end}</strong></p>
+	<!--{/if}-->
+		<div>
+			<ul class="list">
+				<!--{loop $polloptions $key $option}-->
+				<li class="list-item">
+				<div class="pic">
+					<!--{if $option['attachment']}--><a href="javascript:;"><img src="$option['attachment']" onclick="zoom(this, '$option[attachurl]')" title="$option[polloption]{if $option[polloptiondesc]!=''}\n$option[polloptiondesc]{/if}"/></a><!--{else}--><img src="{IMGDIR}/nophoto.gif" width="220" height="220" /><!--{/if}-->
+					<!--{if $_G['inajax']==1}-->
+						<!--{if $option['voted']}-->
+							<div style="position:absolute;top:202px;left:195px;"><img onLoad="correctPNG()" src="source/plugin/imgpoll/voted.png" /></div>
+						<!--{/if}-->
+					<!--{else}-->
+						<!--{if $option['voted']}-->
+							<div style="position:absolute;top:202px;left:195px;"><img src="source/plugin/imgpoll/voted.png" /></div>
+						<!--{/if}-->
+					<!--{/if}-->
+				</div>
+				
+				<div class="title" style="color:#$option[color]">
+				<!--{if $_G['group']['allowvote'] && $optiontype=='checkbox'}-->
+					<span class="selector"><input class="checkbox" type="checkbox" id="option_$key" name="pollanswers[]" value="$option[polloptionid]" {if $_G['forum_thread']['is_archived']}disabled="disabled"{/if} {if $optiontype=='checkbox'}onclick="poll_checkbox(this)"{else}onclick="$('pollsubmit').disabled = false"{/if}  /></span>
+				<!--{/if}-->
+				$option[polloption]</div>
+				<div>
+					<div class="pbg"><div class="pbr" style="width: $option[width]; background-color:#$option[color]"></div></div>
+				</div>
+				<div style="text-align:right">$option[percent]% <em style="color:#$option[color]">($option[votes])</em></div>
+				<!--{if $_G['group']['allowvote'] && $optiontype!='checkbox'}--><center><button class="pn votebutton" type="submit" name="pollsubmit" id="pollsubmit" value="true"{if $post['invisible'] < 0} disabled="disabled"{/if} onclick="javascript:$('optionid').value='$option[polloptionid]';" style="background:url(source/plugin/imgpoll/btn_vote.jpg); border:0px;  width:74px; height:27px;"></button></center><!--{/if}-->
+				</li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<table cellspacing="0" cellpadding="0">
+			<tr>
+				<td colspan="3" align="center" <!--{if !$_G['group']['allowvote']}-->class="imgpoll_msg"<!--{/if}-->>
+					<!--{if $_G['group']['allowvote'] && !$_G['forum_thread']['is_archived']}-->
+						<!--{if $optiontype=='checkbox'}-->
+							<button class="pn votebutton" type="submit" name="pollsubmit" id="pollsubmit" value="true"{if $post['invisible'] < 0} disabled="disabled"{/if} onclick="javascript:$('optionid').value='$option[polloptionid]';" style="background:url(source/plugin/imgpoll/btn_vote.jpg); border:0px;  width:74px; height:27px;"></button>
+						<!--{else}-->
+							<input type="hidden" id="optionid" name="pollanswers[]" value="">
+							<input type="hidden" id="pollsubmit" name="pollsubmit" value="true">
+						<!--{/if}-->
+						<!--{if $overt}-->
+							<span><br>({lang imgpoll:poll_msg_overt})</span>
+						<!--{/if}-->		
+					<!--{elseif !$allwvoteusergroup}-->
+						{lang imgpoll:poll_msg_allwvoteusergroup}
+					<!--{elseif !$allowvotepolled}-->
+						{lang imgpoll:poll_msg_allowvotepolled}
+					<!--{elseif !$allowvotethread}-->
+						{lang imgpoll:poll_msg_allowvotethread}
+					<!--{/if}-->
+				</td>
+			</tr>
+		</table>
+</form>
+
+<!--{/block}-->

@@ -1,0 +1,108 @@
+<!--{block return}-->
+<style type="text/css">
+.star{ height:50px;}
+</style>
+<script type="text/javascript">
+var curobj = '';
+function updateimgpolloptionattach(aid, url, attachurl) {
+	var curObj = curobj.parentNode.childNodes;
+	for(var i = 0; i < curObj.length; i++) {
+		if (curObj[i].id == 'imgpolloptionaid') {
+			curObj[i].value = aid;
+		}
+		if (curObj[i].id == 'imgpolloptionattach_image') {
+			curObj[i].innerHTML = '<img style="width:110px;height:80px;" src="' + attachurl + '/' + url + '" />';
+		}
+		ATTACHORIMAGE = 1;
+	}
+	curobj = ''
+}
+function setimgpolloptionattach(obj) {
+	curobj = obj;
+}
+
+function cleartextarea(obj) {
+	if (obj.style.color == '#ccc') {
+		obj.style.color = '#000';
+		obj.innerHTML = '';
+	}
+}
+</script>
+<input type="hidden" name="imgpolls" value="yes" />
+<div class="exfm cl">
+	<div class="sinf sppoll z" style="width:510px">
+		<input type="hidden" name="fid" value="$_G[fid]" />
+		<!--{if $_G[gp_action] == 'newthread'}-->
+			<div class="cl">
+				<h4><em>{lang imgpoll:post_imgpoll_options}:</em>{lang imgpoll:post_imgpoll_comment}</h4>
+			</div>
+			<div class="mbm">
+				<span id="polloption_new"></span>
+				<p id="polloption_hidden" style="display: none">
+					<a href="javascript:;" class="d" style="margin-top:5px;" onclick="delpolloption(this)">del</a>
+					<input type="text" name="imgpolloption[]" class="px" autocomplete="off" style="width:360px;" tabindex="1" />
+					<button type="button" class="pn" style="margin-top:-7px" onclick="setimgpolloptionattach(this);uploadWindow(function (aid, url){updateimgpolloptionattach(aid, url, '{$_G['setting']['attachurl']}forum')})"><span>{lang imgpoll:post_imgpoll_upload}</span></button>
+					<input type="hidden" name="imgpolloptionaid[]" id="imgpolloptionaid" value="" tabindex="1" />
+					<textarea name="imgpolloptiondesc[]" style="color:#CCC;margin-top:5px;" tabindex="2"></textarea>
+					<span id="imgpolloptionattach_image"></span>
+				</p>
+				<p><a href="javascript:;" onclick="addpolloption()">+{lang imgpoll:post_imgpoll_add}</a></p>
+			</div>
+		<!--{else}-->
+			<!--{loop $polloptions $key $option}-->
+				<p style="height:115px;">
+					<input type="hidden" name="imgpolloptionid[$key]" value="$option[polloptionid]" />
+					<input type="text" name="imgpolloption[$key]" class="px" autocomplete="off" style="width:360px;" value="$option[polloption]" tabindex="1" />
+					<button type="button" class="pn" style="margin-top:-7px" onclick="setimgpolloptionattach(this);uploadWindow(function (aid, url){updateimgpolloptionattach(aid, url, 'data/attachment/forum')})"><span>{lang imgpoll:edit_imgpoll_update}</span></button>
+					<input type="hidden" name="imgpolloptionaid[$key]" id="imgpolloptionaid" value="$option[aid]" tabindex="1" />
+					<textarea name="imgpolloptiondesc[$key]" style="color:#CCC;margin-top:5px;" tabindex="2">$option[polloptiondesc]</textarea>
+					<span id="imgpolloptionattach_image"><img style="width:110px;height:80px;" src="$option[attachment]" /></span>
+				</p>
+			<!--{/loop}-->
+				<span id="polloption_new"></span>
+				<p id="polloption_hidden" style="display: none">
+					<a href="javascript:;" class="d" style="margin-top:5px;" onclick="delpolloption(this)">del</a>
+					<input type="text" name="imgpolloption[]" class="px" autocomplete="off" style="width:360px;" tabindex="1" />
+					<button type="button" class="pn" style="margin-top:-7px" onclick="setimgpolloptionattach(this);uploadWindow(function (aid, url){updateimgpolloptionattach(aid, url, 'data/attachment/forum')})"><span>{lang imgpoll:post_imgpoll_upload}</span></button>
+					<input type="hidden" name="imgpolloptionaid[]" id="imgpolloptionaid" value="" tabindex="1" />
+					<textarea name="imgpolloptiondesc[]" style="color:#CCC;margin-top:5px;" tabindex="2"></textarea>
+					<span id="imgpolloptionattach_image"></span>
+				</p>
+				<p><a href="javascript:;" onclick="addpolloption()">+{lang imgpoll:post_imgpoll_add}</a></p>
+		<!--{/if}-->
+	</div>
+	<div class="sadd z" style="width:160px">
+		<p class="mbn">
+			<label for="maxchoices">{lang imgpoll:post_imgpoll_allowmultiple}</label>
+			<input type="text" name="maxchoices" id="maxchoices" class="px pxs" value="{if $_G[gp_action] == 'edit' && $maxchoices}$maxchoices{else}1{/if}" tabindex="1" /> {lang imgpoll:post_option}
+		</p>
+		<p class="mbn">
+			<label for="expirationchecked">{lang imgpoll:post_imgpoll_expiration}</label>
+			<input type="text" name="expiration" id="polldatas" class="px pxs" value="{if $_G[gp_action] == 'edit'}{if !$expiration}0{elseif $expiration < 0}{lang imgpoll:poll_close}{elseif $expiration < TIMESTAMP}{lang imgpoll:poll_finish}{else}$expirationdays{/if}{/if}" tabindex="1"  /> {lang imgpoll:days}
+		</p>
+		<p class="mbn">
+			<input type="checkbox" name="visibilitypoll" id="visibilitypoll" class="pc" value="1"{if $_G[gp_action] == 'edit' && !$visible} checked{/if} tabindex="1" />
+			<label for="visibilitypoll">{lang imgpoll:poll_after_result}</label>
+		</p>
+		<p class="mbn">
+			<input type="checkbox" name="overt" id="overt" class="pc" value="1"{if $_G[gp_action] == 'edit' && $overt} checked{/if} tabindex="1" />
+			<label for="overt">{lang imgpoll:post_poll_overt}</label>
+		</p>
+	</div>
+</div>
+
+
+<script type="text/javascript" reload="1">
+function addpolloption() {
+	$('polloption_new').outerHTML = '<p style="height:115px;">' + $('polloption_hidden').innerHTML + '</p>' + $('polloption_new').outerHTML
+}
+var maxoptions = parseInt('$_G[setting][maxpolloptions]');
+<!--{if $_G[gp_action] == 'newthread'}-->
+	var curoptions = 0;
+	addpolloption();
+	addpolloption();
+<!--{else}-->
+	var curoptions = parseInt($opts);
+<!--{/if}-->
+</script>
+<!--{/block}-->
