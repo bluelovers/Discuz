@@ -430,11 +430,6 @@ class credit {
 						$rule = $policy[$action];
 						*/
 						// bluelovers
-						// 允許板塊積分策略如果沒設定的積分會使用預設的積分
-						foreach ($policy[$action] as $_k => $_v) {
-							$rule[$_k] = $_v;
-						}
-
 						// 使用 credit::getrule_merge 來統一處理
 						$rule = credit::getrule_merge($policy[$action], $action, $rule);
 						// bluelovers
