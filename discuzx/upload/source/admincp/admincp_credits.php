@@ -174,9 +174,9 @@ EOF;
 			if(!$fid) {
 			// bluelovers
 
-			foreach($rule as $key => $val) {
-				$rule[$key] = intval($val);
-			}
+				foreach($rule as $key => $val) {
+					$rule[$key] = intval($val);
+				}
 
 			// bluelovers
 			}
