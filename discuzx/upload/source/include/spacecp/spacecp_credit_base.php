@@ -15,6 +15,7 @@ if(in_array($_G['gp_op'], array('transfer', 'exchange'))) {
 	$taxpercent = sprintf('%1.2f', $_G['setting']['creditstax'] * 100).'%';
 }
 if($_G['gp_op'] == 'base') {
+	// 我的積分
 	$loglist = $extcredits_exchange = array();
 	if(!empty($_G['setting']['extcredits'])) {
 		foreach($_G['setting']['extcredits'] as $key => $value) {
