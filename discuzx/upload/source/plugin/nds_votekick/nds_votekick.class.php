@@ -1,5 +1,6 @@
 <?php
-/*  Plugin FOR Discuz! X1.5 
+/*
+	Plugin FOR Discuz! X1.5
 	Copyright (c) 2009-2012 WWW.NWDS.CN | NDS西域数码工作室
 	$Id: nds_votekick.class.php V1.6 20110401 SINGCEE $
  */
@@ -24,19 +25,19 @@ class plugin_nds_votekick {
            if(in_array($_G['fid'], $this->voteforums))	return;
            if( $this->vtexpired > 0 && ($_G['timestamp'] - $_G['forum_thread']['dateline']) > $this->vtexpired *24*60*60) return;
              $votemax = $this->lvotes;
-           $vks = DB::fetch_first("SELECT votes,uids FROM ".DB::table('nds_votekick')." WHERE tid = '$_G[tid]' "); 
-           if ($vks['votes'])  { 
+           $vks = DB::fetch_first("SELECT votes,uids FROM ".DB::table('nds_votekick')." WHERE tid = '$_G[tid]' ");
+           if ($vks['votes'])  {
 		      $votes = $vks['votes'];
 		   }else {
 			  $votes = 0;
 			  //$vkusers = lang('plugin:nds_votekick', 'novtuserlist');
 		    }
-		$votemargin =  $this->lvotes - $votes ;   
+		$votemargin =  $this->lvotes - $votes ;
         $ndsvtreturn = '';
 		include template('nds_votekick:votekick');
-		return $ndsvtreturn;   
-		   
+		return $ndsvtreturn;
+
          }
- }         
-  
+ }
+
 ?>
