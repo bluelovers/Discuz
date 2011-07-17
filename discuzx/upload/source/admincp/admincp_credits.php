@@ -154,6 +154,7 @@ EOF;
 		showtablefooter();
 		showformfooter();
 	} else {
+		//TODO:使用 credit::getrule_merge 來統一處理
 		$rid = $_G['gp_rid'];
 		$rule = $_G['gp_rule'];
 		if($rid) {
