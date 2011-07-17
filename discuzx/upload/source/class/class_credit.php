@@ -434,6 +434,9 @@ class credit {
 						foreach ($policy[$action] as $_k => $_v) {
 							$rule[$_k] = $_v;
 						}
+
+						// 使用 credit::getrule_merge 來統一處理
+						$rule = credit::getrule_merge($policy[$action], $action, $rule);
 						// bluelovers
 						$rule['rulenameuni'] = $rulenameuni;
 					}
