@@ -151,6 +151,7 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } elseif ($_G['gp_op'] == 'transfer') {
+	// 轉帳
 
 	if(!($_G['setting']['transferstatus'] && $_G['group']['allowtransfer'])) {
 		showmessage('action_closed', NULL);
