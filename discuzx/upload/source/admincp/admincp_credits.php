@@ -225,7 +225,16 @@ EOF;
 			DB::insert('common_setting', $setting, 0, true);
 			updatecache(array('setting', 'creditrule'));
 		}
+
+		// bluelovers
+		if ($rid) {
+
+		} else {
+		// bluelovers
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
+		// bluelovers
+		}
+		// bluelovers
 	}
 }
 ?>
