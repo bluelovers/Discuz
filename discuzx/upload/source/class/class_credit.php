@@ -468,7 +468,8 @@ class credit {
 		if (empty($byaction)) {
 			// 以 $rule_default 的 key 為基準
 			foreach ($rule_default as $action => $rule) {
-				$rule_new[$action] = $rule_now[$action];
+				// 將 $rule_new[$action] 的值回傳給 credit::getrule_merge 處理
+				$rule_new[$action] = credit::getrule_merge((array)$rule_now[$action], $action, (array)$rule);
 			}
 		} else {
 			// 處理單一的積分策略
