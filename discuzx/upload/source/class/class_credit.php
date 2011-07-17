@@ -482,6 +482,15 @@ class credit {
 
 			// 從 credit::getrule 中複製代碼片段
 			$rule_new['rulenameuni'] = $rulenameuni;
+
+			// 使用 intval 整理值避免意外的錯誤
+			for($i = 1; $i <= 8; $i++) {
+				if(empty($_G['setting']['extcredits'][$i])) {
+					unset($rule_new['extcredits'.$i]);
+					continue;
+				}
+				$rule_new['extcredits'.$i] = intval($rule_new['extcredits'.$i]);
+			}
 		}
 
 		return $rule_new;
