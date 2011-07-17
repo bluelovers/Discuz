@@ -333,6 +333,8 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 
 					//TODO:將此處改為語言包
 					$_msg_add = "即將於 {$refreshsecond} 秒後自動跳轉<br>";
+				} else {
+					$_msg_add = "請稍後...正在執行中...<br>";
 				}
 				// bluelovers
 
