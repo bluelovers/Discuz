@@ -452,6 +452,10 @@ class credit {
 	// bluelovers
 	/**
 	 * 獨立的積分合併方法
+	 *
+	 * @param $rule_now - 目前的積分策略
+	 * @param $byaction - 如果有設定時代表為單一的積分策略
+	 * @param $rule_default - 作為基準的積分策略
 	 **/
 	function getrule_merge($rule_now, $byaction = '', $rule_default = null) {
 		global $_G;
