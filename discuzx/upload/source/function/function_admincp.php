@@ -503,6 +503,16 @@ function showhiddenfields($hiddenfields = array()) {
 	}
 }
 
+/**
+ * 創建表格頭
+ *
+ * @param $title - 如果輸入title則顯示標題，class為header，否則僅顯示一個table頭
+ * @param $classname - 定義此輸出表格的CSS樣式
+ * @param $extra - 表格擴展屬性
+ * @param $titlespan - 表格列數
+ *
+ * @example showtableheader('forums_edit_posts', 'nobottom');
+ **/
 function showtableheader($title = '', $classname = '', $extra = '', $titlespan = 15) {
 	global $_G;
 	$classname = str_replace(array('nobottom', 'notop'), array('nobdb', 'nobdt'), $classname);
