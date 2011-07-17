@@ -466,6 +466,8 @@ class credit {
 
 		// 沒有設定 $byaction 時則代表為積分策略的集合
 		if (empty($byaction)) {
+		} else {
+			// 處理單一的積分策略
 		}
 
 		return $rule_new;
