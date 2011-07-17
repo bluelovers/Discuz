@@ -574,6 +574,16 @@ function showsubtitle($title = array(), $rowclass='header') {
 	}
 }
 
+/**
+ * 創建列表式頁面的行
+ *
+ * 此函數多用於循環中，用來逐行創建一個有規律的數據列表如：論壇版塊列表等
+ *
+ * @param $trstyle - 此行 tr 標籤的格式定義，如 class="partition"
+ * @param $tdstyle <array> - TD 標籤的格式定義，如 class，colspan 等
+ * @param $tdtext <array> - TD內顯示的內容
+ * @param $return 是否返回值
+ **/
 function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $return = FALSE) {
 	$rowswapclass = '';
 	if(!preg_match('/class\s*=\s*[\'"]([^\'"<>]+)[\'"]/i', $trstyle, $matches)) {
