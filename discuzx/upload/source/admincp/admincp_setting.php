@@ -1479,7 +1479,7 @@ EOT;
 
 	} elseif($operation == 'datetime') {
 
-		$checktimeformat = array($setting['timeformat'] == 'H:i' ? 24 : 12 => 'checked');
+		$checktimeformat = array(($setting['timeformat'] == 'H:i' || $setting['timeformat'] == 'H:i:s') ? 24 : 12 => 'checked');
 
 		$setting['userdateformat'] = dateformat($setting['userdateformat']);
 		$setting['dateformat'] = dateformat($setting['dateformat']);
