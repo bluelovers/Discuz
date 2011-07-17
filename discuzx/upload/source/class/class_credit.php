@@ -451,6 +451,14 @@ class credit {
 		return $rule;
 	}
 
+	// bluelovers
+	/**
+	 * 獨立的積分合併方法
+	 **/
+	function getrule_merge($rule_now, $byaction = '', $rule_default = null) {
+	}
+	// bluelovers
+
 	function getrulelog($rid, $uid = 0, $fid = 0) {
 		global $_G;
 
