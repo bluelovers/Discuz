@@ -1479,6 +1479,7 @@ EOT;
 
 	} elseif($operation == 'datetime') {
 
+		// 判斷是否為 24H 制
 		$checktimeformat = array(($setting['timeformat'] == 'H:i' || $setting['timeformat'] == 'H:i:s') ? 24 : 12 => 'checked');
 
 		$setting['userdateformat'] = dateformat($setting['userdateformat']);
