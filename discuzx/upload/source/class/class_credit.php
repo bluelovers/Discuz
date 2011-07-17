@@ -529,9 +529,9 @@ class credit {
 				unset($rule_now[$_k]);
 			}
 
-			foreach ($rule_now as $_k => $_v) {
-				$rule_new[$_k] = $_v;
-			}
+				foreach ($rule_now as $_k => $_v) {
+					$rule_new[$_k] = $_v;
+				}
 
 			}
 
