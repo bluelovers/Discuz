@@ -320,7 +320,7 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 			} else {
 				// bluelovers
 				// DX 預設為 10 秒
-				$refreshsecond = 10;
+				$refreshsecond = 5;
 				// bluelovers
 
 				// 移動代碼
