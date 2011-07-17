@@ -573,6 +573,41 @@ function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $ret
 	echo $cells;
 }
 
+/**
+ * 表单显示
+ *
+ * @param $setname - 指定輸出標題，如:setting_basic_bbname, 自動匹配描述文字
+ * 為：setting_basic_bbname_comment，comment 形式文字
+ * 可以在./source/language/lang_admincp.php語言包中添加
+ *
+ * @param $varname - 指定表單的name值，如settingnew[bbname]
+ * @param $value - 指定表單默認值\變量
+ * @param $type - 表單樣式
+ *
+ * 		radio單選
+ * 		text文本、password密碼、number數字
+ * 		file上傳文件
+ * 		filetext 上傳文件或在線文件切換型表單
+ * 		textarea 多行文本
+ * 		select 選擇框
+ * 		mradio 高級單選模式
+ * 		mcheckbox 高級多選模式
+ * 		binmcheckbox 二進制數值多選模式
+ * 		mselect 高級選擇框模式
+ * 		color 顏色選擇
+ * 		calendar 日期選擇
+ * 		multiply 多表單型
+ * 		daterange時間範圍
+ *
+ * 		其他未在上述樣式中出現的$type均獨立輸出
+ * @param $disabled - 是否不可修改
+ * @param $hidden - 是否隱藏
+ * @param $comment - 強制描述文字
+ * @param $extra - 表單擴展屬性
+ * @param $setid - 用於拼接表單外層Div的id
+ *
+ * @see http://dev.discuz.org/wiki/index.php?title=%E5%B8%B8%E7%94%A8%E5%90%8E%E5%8F%B0%E5%87%BD%E6%95%B0#showsetting.28.29.E8.A1.A8.E5.8D.95.E6.98.BE.E7.A4.BA
+ **/
 function showsetting($setname, $varname, $value, $type = 'radio', $disabled = '', $hidden = 0, $comment = '', $extra = '', $setid = '') {
 
 	global $_G;
