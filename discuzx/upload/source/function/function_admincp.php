@@ -318,6 +318,11 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 			if($type == 'button') {
 				$message = "<br />$message<br /><p class=\"margintop\"><input type=\"submit\" class=\"btn\" name=\"submit\" value=\"".cplang('start')."\" onclick=\"location.href='$url'\" />";
 			} else {
+				// bluelovers
+				// DX 預設為 10 秒
+				$refreshsecond = 10;
+				// bluelovers
+
 				// 移動代碼
 				$timeout = $type != 'loading' ? 10000 : 0;
 
