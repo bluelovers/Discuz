@@ -953,7 +953,7 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	if($format == 'u') {
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
 		//BUG:搭配 timeformat 增加顯示秒數後 此處會產生多餘的 :s 的 BUG
-		$s = gmdate(!$uformat ? str_replace(":i", ":i:s", $dtformat) : $uformat, $timestamp);
+		$s = gmdate(!$uformat ? $uformat_default : $uformat, $timestamp);
 		$time = TIMESTAMP + $timeoffset * 3600 - $timestamp;
 		if($timestamp >= $todaytimestamp) {
 			if($time > 3600) {
