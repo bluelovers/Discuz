@@ -270,6 +270,8 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } else  {
+	// 積分規則
+
 	$wheresql = '';
 	$list = array();
 	if($_G['gp_rid']) {
