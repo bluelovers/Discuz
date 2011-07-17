@@ -1530,6 +1530,20 @@ function pluginmodule($pluginid, $type) {
 	}
 	return DISCUZ_ROOT.$modfile;
 }
+
+/**
+ * 依照 action 执行积分规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uid: 操作用户
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param String $needle: 防重字符串
+ * @param Integer $coef: 积分放大倍数
+ * @param Integer $update: 是否执行更新操作
+ * @param Integer $fid: 版块ID
+ *
+ * @return 返回积分策略
+ **/
 function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = '', $coef = 1, $update = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
