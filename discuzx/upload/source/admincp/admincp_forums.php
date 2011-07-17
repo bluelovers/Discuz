@@ -931,6 +931,7 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				if(!$multiset) {
+					// 擴展積分增減策略
 					showtagheader('div', 'credits', $anchor == 'credits');
 					showtableheader('forums_edit_credits_policy', 'fixpadding');
 					echo '<tr class="header"><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th><th class="td25">'.cplang('custom').'</th>';
