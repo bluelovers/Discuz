@@ -1467,6 +1467,7 @@ EOT;
 				$creditspolicy = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
 				foreach($_G['gp_creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
+					// 如果 $usedefault = false 代表使用板塊內自訂的積分
 					$usedefault = $_G['gp_usecustom'][$rid] ? false : true;
 
 					if(!$usedefault) {
