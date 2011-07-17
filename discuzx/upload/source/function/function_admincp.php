@@ -494,6 +494,11 @@ function showformheader($action, $extra = '', $name = 'cpform', $method = 'post'
 		'<input type="hidden" name="anchor" value="'.$anchor.'" />';
 }
 
+/**
+ * 創建隱藏表單域
+ *
+ * @param $hiddenfields <array> 以數組形式傳入，循環輸出隱藏表單域
+ **/
 function showhiddenfields($hiddenfields = array()) {
 	if(is_array($hiddenfields)) {
 		foreach($hiddenfields as $key => $val) {
