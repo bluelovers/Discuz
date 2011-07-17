@@ -331,7 +331,7 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 				}
 				// bluelovers
 
-				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
+				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.$_msg_add.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
 				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", $timeout);</script>";
 			}
 		} elseif($type != 'succeed') {
