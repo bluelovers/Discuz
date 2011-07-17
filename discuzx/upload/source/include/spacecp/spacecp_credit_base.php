@@ -300,9 +300,16 @@ if($_G['gp_op'] == 'base') {
 	if(!empty($_G['gp_fid'])) {
 		$_G['gp_fid'] = intval($_G['gp_fid']);
 		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
+		/*
 		foreach($flist as $action => $value) {
 			$list[$value['action']] = $value;
 		}
+		*/
+		// bluelovers
+		include_once libfile('class/credit');
+		// 使用 credit::getrule_merge 來統一處理
+		$list = credit::getrule_merge($flist, '', $list);
+		// bluelovers
 	}
 }
 include_once template("home/spacecp_credit_base");
