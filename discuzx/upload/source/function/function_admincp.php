@@ -324,7 +324,7 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 				// bluelovers
 
 				// 移動代碼
-				$timeout = $type != 'loading' ? 10000 : 0;
+				$timeout = $type != 'loading' ? $refreshsecond * 1000 : 0;
 
 				// bluelovers
 				$_msg_add = '';
