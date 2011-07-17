@@ -536,6 +536,7 @@ class credit {
 			}
 
 			// 從 credit::getrule 中複製代碼片段
+			unset($rule_new['rulenameuni']);
 			$rule_new['rulenameuni'] = $rulenameuni;
 
 			// 使用 intval 整理值避免意外的錯誤
