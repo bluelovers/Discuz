@@ -474,6 +474,11 @@ class credit {
 
 			// 初始化回傳的 $rule_new 預設值為 $rule_default
 			$rule_new = $rule_default;
+
+			// 將 $rule_now 的值取代 $rule_new 的值
+			foreach ($rule_now as $_k => $_v) {
+				$rule_new[$_k] = $_v;
+			}
 		}
 
 		return $rule_new;
