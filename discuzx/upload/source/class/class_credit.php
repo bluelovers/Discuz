@@ -518,16 +518,16 @@ class credit {
 			// 優化代碼
 			if (!empty($rule_now)) {
 
-			// 將 $rule_now 的值取代 $rule_new 的值
+				// 將 $rule_now 的值取代 $rule_new 的值
 
-			for ($i = 1; $i <= 8; $i++) {
+				for ($i = 1; $i <= 8; $i++) {
 					$_k = 'extcredits'.$i;
 					// 強化安全性過濾
 					if (isset($rule_now[$_k]) && is_numeric($rule_now[$_k])) {
 						$rule_new[$_k] = $rule_now[$_k];
 					}
 					unset($rule_now[$_k]);
-			}
+				}
 
 				foreach ($rule_now as $_k => $_v) {
 					$rule_new[$_k] = $_v;
