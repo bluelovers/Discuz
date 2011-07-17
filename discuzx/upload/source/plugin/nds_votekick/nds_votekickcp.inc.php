@@ -76,6 +76,7 @@ if (!in_array($vk2user['groupid'], $suspectedgroups)) {
 if ($votes >= $lvotes) {
 	showmessage('nds_votekick:vtout');
 }
+// 每人只能踢一次！
 $uids = explode("\t", $vkscp['uids']);
 if (in_array($_G['uid'], $uids)) {
 	showmessage('nds_votekick:norep');
