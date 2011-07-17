@@ -1472,6 +1472,7 @@ EOT;
 
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
+							// 處理積分策略的值
 							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
 						}
 					}
