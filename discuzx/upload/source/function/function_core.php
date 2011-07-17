@@ -937,9 +937,7 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		if ($offset > 12 || $offset < -12) {
 			$offset = $offset_site;
 		}
-		// bluelovers
 
-		// bluelovers
 		// 預先處理預設的 $uformat
 		$uformat_default = strpos($dtformat, ':s') === false ? str_replace(":i", ":i:s", $dtformat) : $dtformat;
 		// bluelovers
