@@ -1,0 +1,186 @@
+<?php
+
+/**
+ * @author Lampcn工作室
+ * @link http://www.lampcn.net
+ */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+$return = <<<EOT
+<style type="text/css">
+.lnp_taskbar{border:1px solid #C2D5E3;background:#E5EDF2;height:25px;line-height:25px;}
+#lnp_taskbar{position:fixed;bottom:0px;z-index:9999999;_position:absolute;_bottom:auto;left:10px;right:10px;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)));margin: 0 auto;font: 12px/1.5 Tahoma,'Microsoft Yahei','Simsun';}
+#lnp_taskbar a{text-decoration:none;}
+#lnp_taskbar img{border:none;}
+#lnp_taskbar ul, #lnp_taskbar li{list-style-image:none;list-style-type:none;padding:0;margin:0;}
+#lnp_open{}
+#lnp_close{float: right;}
+#lnp_leftbar{float:left;}
+#lnp_rightbar {float:right;}
+#lnp_task .floattop{font-weight:bold;color:#336699;}
+.lnp_lrtoggle{width:14px;cursor:pointer;text-align: center;}
+.lnp_toplist{{$toplist_h}overflow:auto;}
+#lnp_taskbar .havenew{color:#336699;font-weight:bold;}
+.lnp_leftitem{float:left;border-right:1px solid #C2D5E3;position:relative;}
+.lnp_leftitem a, .lnp_rightitem a{display:block;padding:0 5px;}
+.lnp_leftitem a:hover, .lnp_rightitem a:hover{background:#FFF;text-decoration:none;}
+.lnp_leftitem a img,.lnp_rightitem a img{vertical-align:middle;margin:4px 0 5px 0;}
+.lnp_rightitem{float:left;border-left:1px solid #C2D5E3;position:relative;}
+#lnp_taskbar .lnp_titlebar{background:#e5edf2;padding:0 5px;font-weight:bold;height:22px;line-height:22px;}
+#lnp_myapp{left:0px;width:150px;}
+.lnp_outbox{z-index:99999;position:absolute;bottom:24px;background:#fff;border:1px solid #C2D5E3;margin-bottom: -1px;}
+.lnp_outbox ul{margin-top:2px;}
+#lnp_taskbar .myop{border-top:1px dashed #CDCDCD;padding:3px 0;}
+.lnp_toplist li{height:26px;overflow:hidden;line-height:26px;display:block;}
+.lnp_toplist li a{display:block;}
+.lnp_toplist li a:hover{background-color:#E5EDF2;display: block;}
+.lnp_toplist li a img{margin:5px;}
+#lnp_middlebar{float:left;padding: 0 10px;}
+#lnp_mcontent{padding: 0 10px;}
+#lnp_olfriends{width:150px;right:0px;}
+#lnp_olfriends .lnp_olicon{float:right;margin:4px;}
+.lnp_newmsg{position:absolute;bottom:18px;background-image:url(static/image/common/new_pm_2.png);background-repeat: no-repeat;
+background-position:center bottom;width: 16px;height: 14px;right: 2px;z-index: 3;}
+</style>
+<div id="lnp_taskbar" >
+  <div id="lnp_open" class="lnp_taskbar" {$disopen}><div id="lnp_leftbar">
+      <div class="lnp_leftitem lnp_lrtoggle" title="收起工具栏" onclick="lnp_oc(-1);">››</div>
+EOT;
+
+if(!$lnpdata['close_myapp'] && $_G['setting']['my_app_status']){
+$return .= <<<EOT
+<div class="lnp_leftitem" id="lnp_myappitem"><a href="userapp.php"><img src="{$staticurl}image/feed/userapp.gif" />我的应用</a>
+      <div id="lnp_myapp" class="lnp_outbox" style="display:none;">
+        <div class="lnp_titlebar">我的应用</div>
+        <div class="lnp_toplist">
+		<ul id="lnp_defaultapp">
+		{$defaultapp}
+        </ul>
+        <hr class="da">
+        <ul id="lnp_userapp">
+		{$myuserapp}
+        </ul>
+		</div><!-- end lnp_toplist --> 
+        <div class="myop" style="clear:both;"><a href="userapp.php?mod=manage&amp;my_suffix=%2Fapp%2Flist%3Fsort%3Dtime" style="float:left;"><img src="{$staticurl}image/common/app_add.gif">添加应用</a> <a href="userapp.php?mod=manage&amp;ac=menu" style="float:right;"><img src="{$staticurl}image/common/app_set.gif">管理应用</a></div>
+      </div>
+      <!-- end lnp_myapp --> 
+    </div>
+EOT;
+}
+
+if($_G['setting']['homestatus']){
+	if(!$lnpdata['close_blog']) {
+		$return .= '<div class="lnp_leftitem"><a href="home.php?mod=space&amp;do=blog"><img src="'.$staticurl.'image/feed/blog.gif" />日志</a></div>';
+	}
+    if(!$lnpdata['close_album']) {
+		$return .= '<div class="lnp_leftitem"><a href="home.php?mod=space&amp;do=album"><img src="'.$staticurl.'image/feed/album.gif" />相册</a></div>';
+	}
+    if(!$lnpdata['close_share']) {
+		$return .= '<div class="lnp_leftitem"><a href="home.php?mod=space&amp;do=share"><img src="'.$staticurl.'image/feed/share.gif" />分享</a></div>';
+	}
+    if(!$lnpdata['close_doing']) {
+		$return .= '<div class="lnp_leftitem"><a href="home.php?mod=space&amp;do=doing"><img src="'.$staticurl.'image/feed/doing.gif" />记录</a></div>';
+	}
+
+}
+
+if($_G['setting']['groupstatus'] && !$lnpdata['close_group']){
+	$return .= '<div class="lnp_leftitem"><a href="group.php"><img src="'.$staticurl.'image/feed/group.gif" />群组</a></div>';
+}
+
+$return .= $lnpdata['custom_leftbar'].'</div><!-- end lnp_leftbar --><div id="lnp_rightbar">'.$lnpdata['custom_rightbar'];
+
+if($_G['uid'] > 0) {
+ if(!$lnpdata['close_oluser']) {
+ $return .= <<<EOT
+     <div class="lnp_rightitem" id="lnp_olitem"><a href="home.php?mod=space&amp;do=friend"><img alt="ol" src="{$staticurl}/image/feed/discuz.gif" />在线好友({$olnum})</a>
+      <div id="lnp_olfriends" class="lnp_outbox" style="display:none;">
+        <div class="lnp_titlebar">在线好友</div>
+        <div class="lnp_toplist">
+		<ul id="lnp_olmember">
+          {$olliststr}
+		</ul>
+		</div>
+        <div class="myop" style="clear:both;"><a style="float:left;" href="home.php?mod=spacecp&amp;ac=search"><img alt="" src="{$staticurl}image/common/user_add.gif" style="float:left;">查找好友</a> <a style="float:right;" href="home.php?mod=space&amp;do=friend"><img alt="" src="{$staticurl}image/feed/friend.gif">好友管理</a></div>
+      </div>
+    </div>
+EOT;
+}
+if(!$lnpdata['close_notice']) {
+ $return .= <<<EOT
+    <div class="lnp_rightitem"><a class="{$notenew}" href="home.php?mod=space&do=notice"><img src="{$staticurl}image/feed/notice.gif" />提醒{$notenum}</a>{$notenewicon}</div>
+
+EOT;
+}
+if(!$lnpdata['close_pm']) {
+ $return .= <<<EOT
+    <div class="lnp_rightitem"><a class="{$pmnew}" href="home.php?mod=space&do=pm"><img src="{$staticurl}image/feed/pm.gif" />消息</a>{$pmnewicon}</div>
+EOT;
+}
+} else {
+	$return .= <<<EOT
+	<div class="lnp_rightitem"><a href="member.php?mod=logging&amp;action=login&amp;referer=http%3A%2F%2F127.0.0.1%2Fxx%2Fdiscuz%2Fdx%2Fforum.php" onclick="showWindow('login', this.href);return false;" class="xi2">登录</a></div>
+EOT;
+}
+	$return .= <<<EOT
+    <div class="lnp_rightitem"><a href="#" onclick="window.scrollTo('0','0'); return false;"><img src="{$staticurl}image/common/fj_btn.png" />回顶部</a></div>
+  </div><!-- end lnp_rightbar -->
+  <div id="lnp_middlebar">{$lnpdata['custom_mcontent']}</div><!-- end lnp_middlebar -->
+  </div><!-- end lnp_open -->
+  <div id="lnp_close" class="lnp_taskbar" {$disclose}>
+    <div class="lnp_lrtoggle lnp_rightitem" onclick="lnp_oc(1);" title="展开我的工具栏">‹‹</div>
+    <div class="lnp_rightitem" style="padding:0 5px;">我的工具栏</div>
+  </div>
+</div>
+<!-- end lnp_taskbar -->
+<script type="text/javascript">
+function lnp_oc(on) {
+	var open = 'none', close = '';
+	if(on == 1) {
+		open = '';
+		close = 'none';
+	}
+	$('lnp_open').style.display=open;
+	$('lnp_close').style.display=close;
+	setcookie('lnp_topen', on, 2592000);
+};
+var lnpmsgdis = '';
+function lnpmsg() {
+	var lnpnewmsg = \$C('lnp_newmsg');
+	if(lnpnewmsg.length > 0) {
+		
+		for(var mi=0; mi<lnpnewmsg.length; mi++) {
+			lnpnewmsg[mi].style.display=lnpnewmsg[mi].style.display == '' ? 'none' : '';
+		}
+	}
+}
+//setInterval('lnpmsg()', 1000);
+{$flashpm}
+//lnp_oc(getcookie('lnp_topen'));
+
+var lnp_myappitem = $('lnp_myappitem');
+var lnp_myapp = $('lnp_myapp');
+if(lnp_myappitem){
+	lnp_myappitem.onmouseover = function() {
+		lnp_myapp.style.display = '';
+	}
+	lnp_myappitem.onmouseout = function() {
+		lnp_myapp.style.display = 'none';
+	}
+}
+
+var lnp_olitem = $('lnp_olitem');
+var lnp_olfriends = $('lnp_olfriends');
+if(lnp_olitem){
+	lnp_olitem.onmouseover = function() {
+		lnp_olfriends.style.display = '';
+	}
+	lnp_olitem.onmouseout = function() {
+		lnp_olfriends.style.display = 'none';
+	}
+}
+</script>
+EOT;
+?>

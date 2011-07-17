@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-15 15:30]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://www.tburl.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[0]]></item>
+			<item id="name"><![CDATA[Taskbar 任务栏]]></item>
+			<item id="identifier"><![CDATA[lnp_taskbar_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[lnp_taskbar_dzx/]]></item>
+			<item id="copyright"><![CDATA[Lampcn工作室]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[lnp_taskbar]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[禁用我的应用]]></item>
+				<item id="description"><![CDATA[是否禁用 我的应用 导航]]></item>
+				<item id="variable"><![CDATA[close_myapp]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[禁用日志]]></item>
+				<item id="description"><![CDATA[是否禁用 日志 导航, 如果站点关闭了家园功能, 那日志,相册,分享,记录导航无论选择 是 或 否 均为禁用状态.]]></item>
+				<item id="variable"><![CDATA[close_blog]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[禁用相册]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[close_album]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[禁用分享]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[close_share]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[禁用记录]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[close_doing]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[禁用群组]]></item>
+				<item id="description"><![CDATA[是否禁用 群组 导航, 启用的话也要站点的群组功能开放]]></item>
+				<item id="variable"><![CDATA[close_group]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[13]]></item>
+				<item id="title"><![CDATA[禁用在线好友]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[close_oluser]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[15]]></item>
+				<item id="title"><![CDATA[禁用消息]]></item>
+				<item id="description"><![CDATA[是否禁用 消息/提醒 功能, 可能有部分站长觉得会和头部的 消息/提醒 重复了, 则你可在此处进行不显示设置]]></item>
+				<item id="variable"><![CDATA[close_pm]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[17]]></item>
+				<item id="title"><![CDATA[禁用提醒]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[close_notice]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[-1]]></item>
+				<item id="title"><![CDATA[工具栏默认展开?]]></item>
+				<item id="description"><![CDATA[用户首次访问站点时工具栏的状态是展开还是收缩. 是 默认展开, 否 默认收缩. 当用户再次访问时会系统会根据用户最后一次的操作展开/收缩.]]></item>
+				<item id="variable"><![CDATA[open_bar]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[21]]></item>
+				<item id="title"><![CDATA[自定义左栏导航内容 ...]]></item>
+				<item id="description"><![CDATA[觉得导航内容不适合本站点? 那就在此处输入你的导航代码吧, 支持HTML. 具体可参考通过浏览器查看源代码里的代码.]]></item>
+				<item id="variable"><![CDATA[custom_leftbar]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[23]]></item>
+				<item id="title"><![CDATA[自定义中间栏目内容 ...]]></item>
+				<item id="description"><![CDATA[自定义中间空白处的显示代码, 您可输入自己的广告代码, 公告代码等]]></item>
+				<item id="variable"><![CDATA[custom_mcontent]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[<a href="http://www.tburl.com/" target="_blank">网购精品导航</a>]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[弹出的列表内容高度 ...]]></item>
+				<item id="description"><![CDATA[有时弹出的应用列表或好友列表等可以太长而走出浏览器窗口高度, 导航有部分内容隐藏掉, 这时你可以定义自己认为适合的高度, 这样超出部分就会要以通过滚动条来显示了. 留空或为0则表示不限制 ... ...]]></item>
+				<item id="variable"><![CDATA[toplist_h]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[350]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="13">
+				<item id="displayorder"><![CDATA[19]]></item>
+				<item id="title"><![CDATA[新提醒/消息闪动浮动图标 ...]]></item>
+				<item id="description"><![CDATA[在 消息/提醒 功能启用时, 在有新消息/提醒状态是否闪动新消息图标, 不闪动则图标只是突出显示状态]]></item>
+				<item id="variable"><![CDATA[flash_pm]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="14">
+				<item id="displayorder"><![CDATA[25]]></item>
+				<item id="title"><![CDATA[自定义右栏导航内容 ...]]></item>
+				<item id="description"><![CDATA[与代码显示内容将显示在 在线好友 的左边]]></item>
+				<item id="variable"><![CDATA[custom_rightbar]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+	</item>
+</root>
