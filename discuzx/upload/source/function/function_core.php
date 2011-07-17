@@ -1554,6 +1554,14 @@ function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = 
 	return $credit->execrule($action, $uid, $needle, $coef, $update, $fid);
 }
 
+/**
+ * 检查积分下限
+ *
+ * @param string $action: 策略动作Action或者需要检测的操作积分值使如extcredits1积分进行减1操作检测array('extcredits1' => -1)
+ * @param Integer $uid: 用户UID
+ * @param Integer $coef: 积分放大倍数/负数为减分操作
+ * @param Integer $returnonly: 只要返回结果，不用中断程序运行
+ **/
 function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0) {
 	require_once libfile('function/credit');
 	return _checklowerlimit($action, $uid, $coef, $fid, $returnonly);
