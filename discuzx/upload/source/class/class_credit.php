@@ -466,6 +466,10 @@ class credit {
 
 		// 沒有設定 $byaction 時則代表為積分策略的集合
 		if (empty($byaction)) {
+			// 以 $rule_default 的 key 為基準
+			foreach ($rule_default as $action => $rule) {
+
+			}
 		} else {
 			// 處理單一的積分策略
 
