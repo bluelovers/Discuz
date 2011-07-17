@@ -1503,6 +1503,7 @@ EOT;
 						$rules[$rid]['fids'] = implode(',', $cpfidsnew);
 						unset($creditspolicynew[$rules[$rid]['action']]);
 					}
+					// 紀錄使用到自訂積分策略的板塊
 					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids']), array('rid' => $rid));
 				}
 				$forumfielddata = array();
