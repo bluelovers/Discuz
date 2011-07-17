@@ -281,6 +281,7 @@ if($_G['gp_op'] == 'base') {
 	require_once libfile('function/forumlist');
 	// 取得板塊清單
 	$select = forumselect(false, 0, $_G['gp_fid']);
+	// 取得積分 key
 	$keys = array_keys($_G['setting']['extcredits']);
 	if(!$_G['setting']['homestatus']) {
 		foreach (array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit') AS $val) {
