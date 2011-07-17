@@ -168,9 +168,20 @@ EOF;
 					$rule['extcredits'.$i] = 0;
 				}
 			}
+
+			// bluelovers
+			// 當有 fid 時跳過此段處理
+			if(!$fid) {
+			// bluelovers
+
 			foreach($rule as $key => $val) {
 				$rule[$key] = intval($val);
 			}
+
+			// bluelovers
+			}
+			// bluelovers
+
 			if($fid) {
 				$fids = $globalrule['fids'] ? explode(',', $globalrule['fids']) : array();
 				if($havecredit) {
