@@ -464,6 +464,10 @@ class credit {
 			$rule_default = empty($byaction) ? $_G['cache']['creditrule'] : $_G['cache']['creditrule'][$byaction];
 		}
 
+		// 沒有設定 $byaction 時則代表為積分策略的集合
+		if (empty($byaction)) {
+		}
+
 		return $rule_new;
 	}
 	// bluelovers
