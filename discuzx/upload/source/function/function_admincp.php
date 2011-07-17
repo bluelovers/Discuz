@@ -373,6 +373,12 @@ EOT;
 	}
 }
 
+/**
+ * 二級導航欄顯示
+ *
+ * @param $title - 二級導航的當前欄標題
+ * @param $menus <array> - 多個子導航
+ **/
 function showsubmenu($title, $menus = array(), $right = '', $replace = array()) {
 	if(empty($menus)) {
 		$s = '<div class="itemtitle">'.$right.'<h3>'.cplang($title, $replace).'</h3></div>';
