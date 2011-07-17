@@ -1575,7 +1575,7 @@ function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0
  * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
  * @param Integer $coef: 积分放大倍数，当为负数时为反转操作
  * @param Integer $fid: 版块ID
- */
+ **/
 function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
