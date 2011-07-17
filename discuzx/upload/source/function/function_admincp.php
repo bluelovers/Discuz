@@ -260,6 +260,16 @@ function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
 	return cpmsg($message, $url, 'error', array(), $extra, $halt);
 }
 
+/**
+ * 提示消息
+ *
+ * @param $message - lang_admincp_msg.php 語言包中需要輸出的key
+ * @param $url - 提示信息後跳轉的頁面，留空則返回上一頁
+ * @param $type - 特殊提示信息時指定頁面的提示樣式，可選參數：succeed、error、download、loadingform
+ * @param $values - 為語言包中的變量關鍵詞指定值，以數組形式輸入
+ * @param $extra - 消息文字擴展
+ * @param $halt - 是否輸出「Discuz! 提示」標題
+ **/
 function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
 	global $_G;
 	$vars = explode(':', $message);
