@@ -1,0 +1,10 @@
+<!--{block ndsvtreturn}-->
+<a href="plugin.php?id=nds_votekick:nds_votekickcp&tid={$_G[tid]}" id="k_votekickt" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title ='{lang nds_votekick:vttitle1}{$votemargin}{lang nds_votekick:vttitle2}'"> <i><img src="static/image/common/recyclebin.gif" alt="{lang nds_votekick:vtmemnu}" />{lang nds_votekick:vtmemnu}<span id="votes" >{$votes}</span>&frasl;<span id="votemax">{$votemax}</span> </i></a>
+<script type="text/javascript">
+function votekickupdate() {
+	var obj = $('votes');
+	obj.innerHTML = parseInt(obj.innerHTML) + 1;
+}
+</script>
+ <!--{/block}-->
+	       

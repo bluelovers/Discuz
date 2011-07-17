@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2.0]]></item>
+	<item id="Time"><![CDATA[2011-06-01 17:05]]></item>
+	<item id="From"><![CDATA[NDS.西域数码工作室 (http://www.nwds.cn/dx/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[投票踢垃圾广告]]></item>
+			<item id="identifier"><![CDATA[nds_votekick]]></item>
+			<item id="description"><![CDATA[本插件可以实现通过用户投票方式剔除论坛中的广告帖和垃圾贴，利用群众的力量彻底杜绝网站垃圾广告。]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[nds_votekick/]]></item>
+			<item id="copyright"><![CDATA[NDS.西域数码工作室]]></item>
+			<item id="version"><![CDATA[2.1]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[nds_votekick]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+            <item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item> 
+		<item id="license"><![CDATA[[list]感谢你选择使用本插件。安装本插件之前，请仔细阅读以下所有内容
+
+[b]安装注意事项[/b]
+[1]本插件为Discuz! X 新内核插件，绿色安装及绿色使用，仅适用于Discuz! X2.0站点
+[2]是否更改Discuz!原有数据库：否
+[3]是否新增数据表：是 增加数据表名：nds_votekick
+[4]是否需要手动修改Discuz!文件：否
+
+[b]授权协议[/b]
+[1]本插件由NDS.西域数码工作室（WWW.NWDS.CN)设计开发，插件作者是singcee。
+[2]本插件采用: 署名-非商业性使用-相同方式共享 2.5 中国大陆许可协议 。
+[3]本插件为免费公开发布，严禁修改任何版权说明、进行任何二次开发、转载后不保留原版权、进行出租/出售/抵押或发放许可证。
+[4]您必须按照作者或者许可人指定的方式对作品进行署名。 
+[5]非商业性使用 — 您不得将本作品用于商业目的。 
+[6]相同方式共享 — 如果您改变、转换本作品或者以本作品为基础进行创作，您只能采用与本协议相同的许可协议发布基于本作品的演绎作品。 
+[/list]]]></item> 
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[有发布垃圾贴嫌疑的用户组]]></item>
+				<item id="description"><![CDATA[在此选择有可能发布垃圾贴的用户组，没有选择的用户组将不受该投票程序的影响。]]></item>
+				<item id="variable"><![CDATA[suspectedgroups]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[10]]></item>
+				</item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[投票通过后通知发布者]]></item>
+				<item id="description"><![CDATA[投票数达到限定值，并且对帖子进行处理后会自动给发布者发送告知信息。]]></item>
+				<item id="variable"><![CDATA[mistoauthor]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[关闭该插件功能的板块]]></item>
+				<item id="description"><![CDATA[选中的版面不能进行投票踢出垃圾贴的操作。]]></item>
+				<item id="variable"><![CDATA[voteforums]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[每次投票都通知发布者]]></item>
+				<item id="description"><![CDATA[每次有投票时都会提示发布者。]]></item>
+				<item id="variable"><![CDATA[votetoauthor]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[进行处理的最低投票数]]></item>
+				<item id="description"><![CDATA[投票数大于此限制 程序将自动对发布者或所发布的垃圾贴进行处理。]]></item>
+				<item id="variable"><![CDATA[lvotes]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[3]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[处理方式]]></item>
+				<item id="description"><![CDATA[你可以选择一种对通过票选的垃圾贴和垃圾贴发布者以及其发布的其它帖子要进行的处理方式。]]></item>
+				<item id="variable"><![CDATA[treatmod]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[1 =  帖子审核
+2 =  帖子删除(回收站)
+3 =  帖子审核并ID永久禁言
+4 =  帖子删除并ID永久禁言
+5 =  帖子审核并ID永久禁访
+6 =  帖子删除并ID永久禁访
+7 =  审核全部帖子并ID永久禁访
+8 =  删除全部帖子并ID永久禁访]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[可投票用户组]]></item>
+				<item id="description"><![CDATA[选择可以使用投票踢除垃圾信息的用户组，建议设定为有一定威望的用户组。]]></item>
+				<item id="variable"><![CDATA[votegroups]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[12]]></item>
+					<item id="1"><![CDATA[13]]></item>
+					<item id="2"><![CDATA[14]]></item>
+					<item id="3"><![CDATA[15]]></item>
+					<item id="4"><![CDATA[16]]></item>
+					<item id="5"><![CDATA[17]]></item>
+					<item id="6"><![CDATA[18]]></item>
+					<item id="7"><![CDATA[19]]></item>
+					<item id="8"><![CDATA[1]]></item>
+					<item id="9"><![CDATA[2]]></item>
+					<item id="10"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[投票通过后通知管理员]]></item>
+				<item id="description"><![CDATA[投票数达到限定值，并且对帖子进行处理后会自动给管理员发送提示信息。]]></item>
+				<item id="variable"><![CDATA[mistoadmin]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[每次投票都通知管理员]]></item>
+				<item id="description"><![CDATA[每次有投票时都会通知管理员。]]></item>
+				<item id="variable"><![CDATA[votetoadmin]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[10]]></item>
+				<item id="title"><![CDATA[指定管理员ID]]></item>
+				<item id="description"><![CDATA[可以指定一个专门负责处理VOTEKICK的管理用户，替代管理员接收信息和处理。]]></item>
+				<item id="variable"><![CDATA[votekickadminid]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[帖子可投票时间范围（天数） ...]]></item>
+				<item id="description"><![CDATA[如设置30 则30天内发布的帖子都可以进行踢垃圾投票鉴定操作，超过这个时间段的帖子将不能进行此项操作。0 为不限时间。]]></item>
+				<item id="variable"><![CDATA[vtexpired]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[5]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="nologin"><![CDATA[请登录后再进行操作！]]></item>
+				<item id="nopw"><![CDATA[你所在用户组无此操作权限！]]></item>
+				<item id="nofid"><![CDATA[踢帖失败，该帖所在版面不能进行此操作！]]></item>
+				<item id="notid"><![CDATA[你所踢的帖子不存在或已经被删除！]]></item>
+				<item id="nopw2"><![CDATA[你无权对帖子发布者所在用户组进行踢帖操作！]]></item>
+				<item id="vtout"><![CDATA[踢帖失败，帖子已经通过审核或正在被审核！]]></item>
+				<item id="norep"><![CDATA[每人只能踢一次！]]></item>
+				<item id="vtexpired"><![CDATA[该贴发帖日期已超过可操作期限！]]></item>
+				<item id="vkok"><![CDATA[踢帖成功！]]></item>
+				<item id="vkop1"><![CDATA[帖子审核]]></item>
+				<item id="vkop2"><![CDATA[帖子删除(回收站)]]></item>
+				<item id="vkop3"><![CDATA[帖子审核并ID永久禁言]]></item>
+				<item id="vkop4"><![CDATA[帖子删除并ID永久禁言]]></item>
+				<item id="vkop5"><![CDATA[帖子审核并ID永久禁访]]></item>
+				<item id="vkop6"><![CDATA[帖子删除并ID永久禁访]]></item>
+				<item id="vkop8"><![CDATA[ 删除全部帖子并ID永久禁访]]></item>
+				<item id="notice1"><![CDATA[该信息由用户投票踢垃圾广告贴插件自动发送，你发布的标题为：<a href="{url1}" target="_blank">{subject1}</a>的帖子得到一张垃圾广告贴鉴定投票，鉴定投票人是{vkuser}。如有问题请向管理员或版主反映。<div class="quote"><blockquote>鉴定理由：{reason}</blockquote></div>]]></item>
+				<item id="notice2"><![CDATA[该信息由用户投票踢垃圾广告贴插件自动发送，标题为：<a href="{url1}" target="_blank">{subject1}</a>的帖子得到一张垃圾广告贴鉴定投票，鉴定投票人是{vkuser}。<div class="quote"><blockquote>鉴定理由：{reason}</blockquote></div>]]></item>
+				<item id="notice3"><![CDATA[该信息由用户投票踢垃圾广告贴插件自动发送，你发布的标题为：<a href="{url1}" target="_blank">{subject1}</a>的帖子总计得到{vkcount}个投票，被鉴定为垃圾广告贴。系统已对该贴进行处理，处理方式为：{opmod}，如有问题请向管理员或版主反映。]]></item>
+				<item id="notice4"><![CDATA[该信息由用户投票踢垃圾广告贴插件自动发送，标题为：<a href="{url1}" target="_blank">{subject1}</a>的帖子总计得到{vkcount}个投票，被鉴定为垃圾广告贴。系统已对该贴进行处理，处理方式为：{opmod}]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="votekickwindows"><![CDATA[鉴定广告垃圾贴]]></item>
+				<item id="truevotekick"><![CDATA[你确认要<b>鉴定该贴为广告垃圾贴</b>吗？]]></item>
+				<item id="votekickcount"><![CDATA[已经鉴定该贴为广告垃圾贴的人数：]]></item>
+				<item id="votekickdescription"><![CDATA[鉴定理由]]></item>
+				<item id="votekickdetermine"><![CDATA[确定]]></item>
+				<item id="vttitle1"><![CDATA[还差]]></item>
+				<item id="vttitle2"><![CDATA[票]]></item>
+				<item id="vtmemnu"><![CDATA[踢垃圾帖]]></item>
+				<item id="vtuserlist"><![CDATA[已参与踢帖的用户]]></item>
+			</item>
+		</item>
+	</item>
+</root>

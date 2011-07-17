@@ -1,0 +1,38 @@
+<!--{template common/header}-->
+
+<!--{if !$_G[inajax]}-->
+	<div id="ct" class="ct2_a wp cl">
+		<div class="mn">
+			<div class="bm">
+<!--{/if}-->
+
+	<h3 class="flb">
+		<em id="return_$_G[gp_handlekey]">{lang nds_votekick:votekickwindows}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	</h3>
+	<form method="post" autocomplete="off" id="votekick_{$tid}" name="votekick_{$tid}" action="plugin.php?id=nds_votekick:nds_votekickcp&tid={$tid}"  {if $_G[inajax]} onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]', null, null, null, 'votekickupdate()');"{/if}>
+		<input type="hidden" name="votekicksubmit" value="true" />
+		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<div class="c">
+			<p>{lang nds_votekick:truevotekick}</p>
+            
+            <p>{lang nds_votekick:votekickcount} <b>{$votes}</b></p>
+            <p> {$vkusers}</p>
+           <p>{lang nds_votekick:votekickdescription}:</p>
+			<textarea id="general_{$tid}" name="description" cols="30" rows="3" class="pt mtn" style="width: 300px;" onkeydown="ctrlEnter(event, 'votekicksubmit_btn')">$description</textarea>
+		</div>
+		<p class="o pns">
+			<button type="submit" name="votekicksubmit_btn" id="votekicksubmit_btn" class="pn pnc" value="true"><strong>{lang  nds_votekick:votekickdetermine}</strong></button>
+		</p>
+	</form>
+
+
+<!--{if !$_G[inajax]}-->
+		</div>
+	</div>
+	<div class="appl"><!--{subtemplate common/userabout}--></div>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->
