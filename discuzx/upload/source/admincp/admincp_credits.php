@@ -189,8 +189,6 @@ EOF;
 					$rule['fid'] = $fid;
 					$rule['rulename'] = $ruleinfo['rulename'];
 					$rule['action'] = $ruleinfo['action'];
-
-					//TODO:fixhere
 					$policy[$ruleinfo['action']] = $rule;
 
 					// bluelovers
