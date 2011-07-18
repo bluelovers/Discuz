@@ -66,9 +66,14 @@
 	right:0;
 	top:0;
 	z-index:100;
+	/*
 	position: absolute;
+	*/
 
 	line-height: 34px;
+
+	position: relative;
+	margin-bottom: -34px;
 }
 
 /*
