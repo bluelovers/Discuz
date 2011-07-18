@@ -78,6 +78,8 @@ while ($feed = $db_source->fetch_array($query)) {
 		if ($tmp['message']) {
 			$tmp['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $tmp['message']);
 			$tmp['message'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $tmp['message']);
+
+			$tmp['message'] = preg_replace($searcharray, $replacearray, $tmp['message']);
 		}
 
 		foreach ($fix_array[0] as $_k) {
