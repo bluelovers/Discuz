@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Style]]></item>
-	<item id="Version"><![CDATA[X1]]></item>
-	<item id="Time"><![CDATA[2010-07-21 05:39]]></item>
-	<item id="From"><![CDATA[Bluelovers．風 (http://192.168.1.25/bbs/discuz_x1/)]]></item>
+	<item id="Version"><![CDATA[X1 [SC]]]></item>
+	<item id="Time"><![CDATA[2011-07-19 04:27]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.local/bbs/discuz_x1/)]]></item>
 	<item id="Data">
 		<item id="name"><![CDATA[goodnight]]></item>
 		<item id="templateid"><![CDATA[11]]></item>
@@ -14,7 +14,7 @@
 			<item id="inputbg"><![CDATA[#FFF]]></item>
 			<item id="inputborderdarkcolor"><![CDATA[#707070]]></item>
 			<item id="stypeid"><![CDATA[1]]></item>
-			<item id="headerbgcolor"><![CDATA[#00A2D2 header.gif repeat-x 0 100%]]></item>
+			<item id="headerbgcolor"><![CDATA[#070707 bg.png repeat-x 0 34px]]></item>
 			<item id="sidebgcolor"><![CDATA[#FFF sidebg.gif repeat-y 100% 0]]></item>
 			<item id="headerborder"><![CDATA[1px]]></item>
 			<item id="bgcolor"><![CDATA[#EBEBEB]]></item>
@@ -29,7 +29,7 @@
 			<item id="smfont"><![CDATA[Verdana, Helvetica, Arial, sans-serif, '細明體']]></item>
 			<item id="fontsize"><![CDATA[12px]]></item>
 			<item id="font"><![CDATA[Helvetica,Arial,sans-serif, '細明體']]></item>
-			<item id="boardimg"><![CDATA[logo.png]]></item>
+			<item id="boardimg"><![CDATA[mnsv.swf,898,116]]></item>
 			<item id="imgdir"><![CDATA[]]></item>
 			<item id="styleimgdir"><![CDATA[template/goodnight/images]]></item>
 			<item id="headertext"><![CDATA[#97F2FF]]></item>
@@ -56,6 +56,6 @@
 			<item id="commonborder"><![CDATA[#E6E7E1]]></item>
 			<item id="commonbg"><![CDATA[#F5F5F5]]></item>
 		</item>
-		<item id="version"><![CDATA[X1]]></item>
+		<item id="version"><![CDATA[X1 [SC]]]></item>
 	</item>
 </root>
