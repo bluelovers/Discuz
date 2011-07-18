@@ -978,7 +978,8 @@ var rowtypedata = [
 							for(key in inputsObj) {
 								var obj = inputsObj[key];
 								if(typeof obj == 'object' && obj.type != 'checkbox') {
-									obj.value = '';
+									// 取消清空 value
+									//obj.value = '';
 									obj.readOnly = custom.checked ? false : true;
 									obj.style.display = obj.readOnly ? 'none' : '';
 								}
