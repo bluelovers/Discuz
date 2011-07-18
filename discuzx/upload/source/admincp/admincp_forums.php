@@ -931,6 +931,7 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				if(!$multiset) {
+					// 擴展積分增減策略
 					showtagheader('div', 'credits', $anchor == 'credits');
 					showtableheader('forums_edit_credits_policy', 'fixpadding');
 					echo '<tr class="header"><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th><th class="td25">'.cplang('custom').'</th>';
@@ -977,7 +978,8 @@ var rowtypedata = [
 							for(key in inputsObj) {
 								var obj = inputsObj[key];
 								if(typeof obj == 'object' && obj.type != 'checkbox') {
-									obj.value = '';
+									// 取消清空 value
+									//obj.value = '';
 									obj.readOnly = custom.checked ? false : true;
 									obj.style.display = obj.readOnly ? 'none' : '';
 								}
@@ -1466,11 +1468,23 @@ EOT;
 				$creditspolicy = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
 				foreach($_G['gp_creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
+					// 如果 $usedefault = false 代表使用板塊內自訂的積分
 					$usedefault = $_G['gp_usecustom'][$rid] ? false : true;
 
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
+							// 處理積分策略的值
+							/*
 							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
+							*/
+							// bluelovers
+							// 當設定的積分策略為空時 不自動設定為 0
+							if (is_numeric($v)) {
+								$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = intval($v);
+							} else {
+								unset($creditspolicynew[$rules[$rid]['action']]['extcredits'.$i]);
+							}
+							// bluelovers
 						}
 					}
 
@@ -1491,6 +1505,7 @@ EOT;
 						$rules[$rid]['fids'] = implode(',', $cpfidsnew);
 						unset($creditspolicynew[$rules[$rid]['action']]);
 					}
+					// 紀錄使用到自訂積分策略的板塊
 					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids']), array('rid' => $rid));
 				}
 				$forumfielddata = array();

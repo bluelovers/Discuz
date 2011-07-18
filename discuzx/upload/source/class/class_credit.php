@@ -423,9 +423,16 @@ class credit {
 				$fid = intval($fid);
 				$fids = explode(',', $rule['fids']);
 				if(in_array($fid, $fids)) {
+					// 以板塊設定的積分策略來取代目前的積分策略
 					$policy = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'"));
 					if(isset($policy[$action])) {
+						/*
 						$rule = $policy[$action];
+						*/
+						// bluelovers
+						// 使用 credit::getrule_merge 來統一處理
+						$rule = credit::getrule_merge($policy[$action], $action, $rule);
+						// bluelovers
 						$rule['rulenameuni'] = $rulenameuni;
 					}
 				}
@@ -441,6 +448,111 @@ class credit {
 		}
 		return $rule;
 	}
+
+	// bluelovers
+	/**
+	 * 獨立的積分合併方法
+	 *
+	 * @param $rule_now - 目前的積分策略
+	 * @param $byaction - 如果有設定時代表為單一的積分策略
+	 * @param $rule_default - 作為基準的積分策略
+	 *
+	 * @example
+
+		// 非完整範例的片段
+
+		// bluelovers
+		$list_old = $list;
+		// bluelovers
+
+		$_G['gp_fid'] = intval($_G['gp_fid']);
+		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
+		foreach($flist as $action => $value) {
+			$list[$value['action']] = $value;
+		}
+
+		$_action = 'digest';
+		$_credit = &credit::instance();
+		$_rule = $_credit->getrule($_action, $_G['gp_fid']);
+
+		$_credit2 = credit::getrule_merge($flist, '', $list_old);
+
+		echo '<style>*{font-size:12px}</style><pre>';
+		print_r(array(
+			'fid'				=> $_G['gp_fid'],
+			'rule action'		=> $_action,
+			'$list_old'			=> $list_old[$_action],
+			'credit::getrule'	=> $_rule,
+			'$flist'			=> $flist[$_action],
+			'$list'				=> $list[$_action],
+			'credit::getrule_merge'		=> $_credit2[$_action],
+		));
+		dexit();
+
+	 **/
+	function getrule_merge($rule_now, $byaction = '', $rule_default = null) {
+		global $_G;
+		$rule_new = array();
+
+		// 如果沒有設定 $rule_default 則從 $_G['cache']['creditrule'] 中取得
+		if ($rule_default === null) {
+			$rule_default = empty($byaction) ? $_G['cache']['creditrule'] : $_G['cache']['creditrule'][$byaction];
+		}
+
+		// 沒有設定 $byaction 時則代表為積分策略的集合
+		if (empty($byaction)) {
+			// 以 $rule_default 的 key 為基準
+			foreach ($rule_default as $action => $rule) {
+				// 將 $rule_new[$action] 的值回傳給 credit::getrule_merge 處理
+				$rule_new[$action] = credit::getrule_merge((array)$rule_now[$action], $action, (array)$rule);
+			}
+		} else {
+			// 處理單一的積分策略
+
+			// 從 credit::getrule 中複製代碼片段
+			$rulenameuni = $rule_default['rulenameuni'];
+
+			// 初始化回傳的 $rule_new 預設值為 $rule_default
+			$rule_new = $rule_default;
+
+			// 優化代碼
+			if (!empty($rule_now)) {
+
+				// 將 $rule_now 的值取代 $rule_new 的值
+
+				for ($i = 1; $i <= 8; $i++) {
+					$_k = 'extcredits'.$i;
+					// 強化安全性過濾
+					if (isset($rule_now[$_k]) && is_numeric($rule_now[$_k])) {
+						$rule_new[$_k] = $rule_now[$_k];
+					}
+					unset($rule_now[$_k]);
+				}
+
+				foreach ($rule_now as $_k => $_v) {
+					$rule_new[$_k] = $_v;
+				}
+
+			}
+
+			// 使用 intval 整理值避免意外的錯誤
+			for($i = 1; $i <= 8; $i++) {
+				if(empty($_G['setting']['extcredits'][$i])) {
+					// 清除不存在的積分
+					unset($rule_new['extcredits'.$i]);
+					continue;
+				}
+				$rule_new['extcredits'.$i] = intval($rule_new['extcredits'.$i]);
+			}
+
+			// 從 credit::getrule 中複製代碼片段
+			unset($rule_new['rulenameuni']);
+			$rule_new['rulenameuni'] = $rulenameuni;
+		}
+
+		return $rule_new;
+	}
+	// bluelovers
 
 	function getrulelog($rid, $uid = 0, $fid = 0) {
 		global $_G;

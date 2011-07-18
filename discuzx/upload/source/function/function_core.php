@@ -1530,6 +1530,20 @@ function pluginmodule($pluginid, $type) {
 	}
 	return DISCUZ_ROOT.$modfile;
 }
+
+/**
+ * 依照 action 执行积分规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uid: 操作用户
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param String $needle: 防重字符串
+ * @param Integer $coef: 积分放大倍数
+ * @param Integer $update: 是否执行更新操作
+ * @param Integer $fid: 版块ID
+ *
+ * @return 返回积分策略
+ **/
 function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = '', $coef = 1, $update = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
@@ -1540,11 +1554,28 @@ function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = 
 	return $credit->execrule($action, $uid, $needle, $coef, $update, $fid);
 }
 
+/**
+ * 检查积分下限
+ *
+ * @param string $action: 策略动作Action或者需要检测的操作积分值使如extcredits1积分进行减1操作检测array('extcredits1' => -1)
+ * @param Integer $uid: 用户UID
+ * @param Integer $coef: 积分放大倍数/负数为减分操作
+ * @param Integer $returnonly: 只要返回结果，不用中断程序运行
+ **/
 function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0) {
 	require_once libfile('function/credit');
 	return _checklowerlimit($action, $uid, $coef, $fid, $returnonly);
 }
 
+/**
+ * 批量执行某一条策略规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uids: 操作用户可以为单个uid或uid数组
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param Integer $coef: 积分放大倍数，当为负数时为反转操作
+ * @param Integer $fid: 版块ID
+ **/
 function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
@@ -1555,7 +1586,16 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 	return $credit->updatecreditbyrule($action, $uids, $coef, $fid);
 }
 
-
+/**
+ * 添加积分
+ *
+ * @param Integer $uids: 用户uid或者uid数组
+ * @param String $dataarr: member count相关操作数组，例: array('threads' => 1, 'doings' => -1)
+ * @param Boolean $checkgroup: 是否检查用户组 true or false
+ * @param String $operation: 操作类型
+ * @param Integer $relatedid:
+ * @param String $ruletxt: 积分规则文本
+ **/
 function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
 	if(!empty($uids) && (is_array($dataarr) && $dataarr)) {
 		require_once libfile('function/credit');

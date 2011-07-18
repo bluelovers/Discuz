@@ -15,6 +15,7 @@ if(in_array($_G['gp_op'], array('transfer', 'exchange'))) {
 	$taxpercent = sprintf('%1.2f', $_G['setting']['creditstax'] * 100).'%';
 }
 if($_G['gp_op'] == 'base') {
+	// 我的積分
 	$loglist = $extcredits_exchange = array();
 	if(!empty($_G['setting']['extcredits'])) {
 		foreach($_G['setting']['extcredits'] as $key => $value) {
@@ -150,6 +151,7 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } elseif ($_G['gp_op'] == 'transfer') {
+	// 轉帳
 
 	if(!($_G['setting']['transferstatus'] && $_G['group']['allowtransfer'])) {
 		showmessage('action_closed', NULL);
@@ -191,6 +193,7 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } elseif ($_G['gp_op'] == 'exchange') {
+	// 兌換
 
 	if(!$_G['setting']['exchangestatus']) {
 		showmessage('action_closed', NULL);
@@ -267,6 +270,8 @@ if($_G['gp_op'] == 'base') {
 	}
 
 } else  {
+	// 積分規則
+
 	$wheresql = '';
 	$list = array();
 	if($_G['gp_rid']) {
@@ -274,9 +279,12 @@ if($_G['gp_op'] == 'base') {
 		$wheresql = " AND rid='$rid'";
 	}
 	require_once libfile('function/forumlist');
+	// 取得板塊清單
 	$select = forumselect(false, 0, $_G['gp_fid']);
+	// 取得積分 key
 	$keys = array_keys($_G['setting']['extcredits']);
 	if(!$_G['setting']['homestatus']) {
+		// 如果沒有啟用 家園 功能 則不顯示相關的積分策略
 		foreach (array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit') AS $val) {
 			$wheresql .= " AND action <> '{$val}'";
 		}
@@ -292,9 +300,16 @@ if($_G['gp_op'] == 'base') {
 	if(!empty($_G['gp_fid'])) {
 		$_G['gp_fid'] = intval($_G['gp_fid']);
 		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
+		/*
 		foreach($flist as $action => $value) {
 			$list[$value['action']] = $value;
 		}
+		*/
+		// bluelovers
+		if (!class_exists('credit')) include libfile('class/credit');
+		// 使用 credit::getrule_merge 來統一處理
+		$list = credit::getrule_merge($flist, '', $list);
+		// bluelovers
 	}
 }
 include_once template("home/spacecp_credit_base");
