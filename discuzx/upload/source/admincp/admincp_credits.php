@@ -193,6 +193,18 @@ EOF;
 					//TODO:fixhere
 					$policy[$ruleinfo['action']] = $rule;
 
+					// bluelovers
+					for($i = 1; $i <= 8; $i++) {
+						$rule['extcredits'.$i] = intval($rule['extcredits'.$i]);
+
+						if (isset($policy['extcredits'.$i]) && is_numeric($policy['extcredits'.$i])) {
+							$policy['extcredits'.$i] = $rule['extcredits'.$i];
+						} else {
+							unset($policy['extcredits'.$i]);
+						}
+					}
+					// bluelovers
+
 					if(!in_array($fid, $fids)) {
 						$fids[] = $fid;
 					}
