@@ -198,7 +198,7 @@ EOF;
 						$rule['extcredits'.$i] = intval($rule['extcredits'.$i]);
 
 						if (isset($policy['extcredits'.$i]) && is_numeric($policy['extcredits'.$i])) {
-							$policy['extcredits'.$i] = $rule['extcredits'.$i];
+							$policy['extcredits'.$i] = intval($policy['extcredits'.$i]);
 						} else {
 							unset($policy['extcredits'.$i]);
 						}
