@@ -237,15 +237,7 @@ EOF;
 			updatecache(array('setting', 'creditrule'));
 		}
 
-		// bluelovers
-		if ($rid) {
-			cpmsg('credits_update_succeed', 'action=credits&operation='.$operation.'&rid='.$rid.'&fid='.$fid, 'succeed');
-		} else {
-		// bluelovers
-			cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
-		// bluelovers
-		}
-		// bluelovers
+		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}
 }
 ?>
