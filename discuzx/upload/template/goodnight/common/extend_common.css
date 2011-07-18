@@ -186,6 +186,17 @@ padding:22px 0 0;
 	left:1px !important;
 }
 
+/* 修正使用者選單的位置 */
+#hd .wp .hdc {
+	height: 116px;
+	overflow: hidden;
+}
+
+#hd .wp .hdc #um {
+	margin-top: -100px;
+    position: relative;
+}
+
 /*
 .fl .h {
 	background:url({STYLEIMGDIR}/header_bg.png) repeat-x scroll 0 0 #408BDA;
