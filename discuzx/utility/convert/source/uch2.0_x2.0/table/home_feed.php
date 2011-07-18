@@ -104,6 +104,11 @@ while ($feed = $db_source->fetch_array($query)) {
 			}
 		}
 
+		// blog 的內容文字部分
+		if ($tmp['summary']) {
+			$tmp['summary'] = preg_replace($searcharray, $replacearray, $tmp['summary']);
+		}
+
 		$feed['body_data'] = serialize((array)$tmp);
 	}
 	// bluelovers
