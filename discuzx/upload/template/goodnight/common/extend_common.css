@@ -1,0 +1,195 @@
+
+#wp {
+	width:994px;
+}
+
+#wp #ct, #ct.w {
+	padding-left:13px;
+	padding-right:13px;
+	border:0px none transparent;
+
+/*
+	background-image:url({STYLEIMGDIR}/cbg.png);
+	background-color:{BGCOLOR};
+	background-position: 0 0;
+	background-repeat:repeat-y;
+*/
+
+
+	background:url({STYLEIMGDIR}/cbg.png) repeat-y scroll 0 0 {BGCOLOR};
+
+
+	/*width:994px;*/
+}
+
+.page_showmessage #wp #ct, .page_showmessage #ct.w
+, .pg_viewthread  #wp #ct, .pg_viewthread #ct.w
+, .pg_register  #wp #ct, .pg_register #ct.w
+, .pg_logging  #wp #ct, .pg_logging #ct.w
+, #nv_forum  #wp #ct, #nv_forum #ct.w
+, #ct.n
+ {
+	background:url({STYLEIMGDIR}/cbg.png) repeat-y scroll 0 0 {BGCOLOR} !important;
+}
+
+#ct_header {
+	background:url({STYLEIMGDIR}/bg_areabar.png) no-repeat scroll center bottom transparent;
+	min-height:19px;
+	border:0px none transparent;
+	width:994px;
+	height:19px;
+}
+
+#ct_footer {
+	background:url({STYLEIMGDIR}/bg_bottom.png) no-repeat scroll 0 0 {BGCOLOR};
+	min-height:51px;
+	border:0px none transparent;
+	width:994px;
+	height:51px;
+}
+
+#wp #ct_header, #wp #ct_footer {
+	width: auto;
+}
+
+#wp .wp.mtn { margin-top: 0px; margin-top: 0px !important; }
+
+.um_warp {
+	background:url({STYLEIMGDIR}/tbg.png) repeat scroll center top #000000;
+
+	top: 0pt;
+	width: 100%;
+	height: 34px;
+	overflow: hidden;
+
+	position:fixed;
+	right:0;
+	top:0;
+	z-index:100;
+	position: absolute;
+}
+
+/*
+.p_pop {
+	z-index:2001;
+}
+*/
+
+.um_warp a {
+color:#999999;
+}
+
+.um_warp a:hover {
+color:#ffffff;
+/*text-shadow:1px 1px 1px #C0C0C0;*/
+}
+
+.um_warp #um {
+	background: none no-repeat scroll center top transparent;
+	margin:0 auto;
+	padding:3px 10px;
+	min-width:940px;
+
+	line-height: 25px;
+	height:34px;
+}
+
+#hd {
+	background-position:0 34px;
+	padding-top:34px;
+	display:block;
+	float:none;
+}
+
+#hd #nv {
+	background:url({STYLEIMGDIR}/bg_cat.png) no-repeat scroll 0 0 transparent;
+	height:58px;
+	padding-left:76px;
+
+	overflow:hidden;
+padding-left:180px;
+}
+
+#hd h2 {
+	height: 116px;
+	display: block;
+	float: none;
+	padding:0;
+}
+
+#hd #nv ul {
+	display: block;
+	float: none;
+}
+
+.hdc, #hd .wp {
+	background: none no-repeat scroll center top transparent;
+	padding:0px;
+}
+
+#hd #nv li.current {
+	background:url({STYLEIMGDIR}/menu_h_bg.png) no-repeat scroll 0 0 transparent;
+	color:#333333;
+	font-weight:bold;
+	height:36px;
+}
+#hd #nv li.current a, #hd #nv li.current a:hover {
+	color:#333333;
+	font-weight:bold;
+}
+#hd #nv li{
+background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
+border:0 none;
+color:#FFFFFF;
+float:left;
+height:36px;
+line-height:45px;
+overflow:hidden;
+padding:0;
+text-align:center;
+width:88px;
+}
+#hd #nv li a {
+	color:#FFFFFF;
+	font-size:12px;
+	font-weight:normal;
+	width:100%;
+	display:block;
+}
+#hd #nv li a:hover {
+	color:#333333;
+}
+
+#hd #nv ul{bottom:0;
+height:36px;
+padding:22px 0 0;
+}
+
+#hd #sc {
+	margin-top:13px;
+
+	margin-top:-40px;
+	position:relative;
+	z-index:50;
+}
+
+#hd #sc .p_pop {
+	/*position:relative !important;*/
+	top:32px !important;
+	left:1px !important;
+}
+
+/*
+.fl .h {
+	background:url({STYLEIMGDIR}/header_bg.png) repeat-x scroll 0 0 #408BDA;
+color:#FFFFFF ;
+line-height:31px ;
+padding-left:1em ;
+}
+
+.fl h2 {
+	background:none;
+}
+*/
+
+.mls .avt img:hover { border-color: {LINK}; }
