@@ -55,6 +55,17 @@ $fix_array[1] = array(
 	'image_1_link', 'image_2_link', 'image_3_link', 'image_4_link',
 	'image_1', 'image_2', 'image_3', 'image_4',
 );
+
+$searcharray = array
+	(
+		"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+	);
+$replacearray = array
+	(
+		"&#\\1;",
+		"&#\\1;",
+	);
 // bluelovers
 
 $query = $db_source->query("SELECT  * FROM $table_source WHERE feedid>'$start' ORDER BY feedid LIMIT $limit");
@@ -67,6 +78,8 @@ while ($feed = $db_source->fetch_array($query)) {
 		if ($tmp['message']) {
 			$tmp['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $tmp['message']);
 			$tmp['message'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $tmp['message']);
+
+			$tmp['message'] = preg_replace($searcharray, $replacearray, $tmp['message']);
 		}
 
 		foreach ($fix_array[0] as $_k) {
@@ -75,13 +88,16 @@ while ($feed = $db_source->fetch_array($query)) {
 			}
 		}
 
-		$feed['title_data'] = serialize((array)$tmp);
+		$feed['title_data'] = empty($tmp) ? '' : serialize((array)$tmp);
 	}
 
 	if ($tmp = unserialize($feed['body_data'])) {
+
 		if ($tmp['message']) {
 			$tmp['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $tmp['message']);
 			$tmp['message'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $tmp['message']);
+
+			$tmp['message'] = preg_replace($searcharray, $replacearray, $tmp['message']);
 		}
 
 		foreach ($fix_array[0] as $_k) {
@@ -90,7 +106,12 @@ while ($feed = $db_source->fetch_array($query)) {
 			}
 		}
 
-		$feed['body_data'] = serialize((array)$tmp);
+		// blog 的內容文字部分
+		if ($tmp['summary']) {
+			$tmp['summary'] = preg_replace($searcharray, $replacearray, $tmp['summary']);
+		}
+
+		$feed['body_data'] = empty($tmp) ? '' : serialize((array)$tmp);
 	}
 	// bluelovers
 
