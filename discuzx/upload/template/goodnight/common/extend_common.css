@@ -67,6 +67,8 @@
 	top:0;
 	z-index:100;
 	position: absolute;
+
+	line-height: 34px;
 }
 
 /*
@@ -75,16 +77,16 @@
 }
 */
 
-.um_warp a {
+#toptb a {
 color:#999999;
 }
 
-.um_warp a:hover {
+#toptb a:hover {
 color:#ffffff;
 /*text-shadow:1px 1px 1px #C0C0C0;*/
 }
 
-.um_warp #um {
+#toptb #um {
 	background: none no-repeat scroll center top transparent;
 	margin:0 auto;
 	padding:3px 10px;
