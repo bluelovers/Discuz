@@ -54,7 +54,7 @@
 
 #wp .wp.mtn { margin-top: 0px; margin-top: 0px !important; }
 
-.um_warp {
+#toptb {
 	background:url({STYLEIMGDIR}/tbg.png) repeat scroll center top #000000;
 
 	top: 0pt;
