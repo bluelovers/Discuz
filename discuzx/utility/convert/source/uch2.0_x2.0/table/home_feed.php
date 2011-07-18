@@ -79,9 +79,23 @@ while ($feed = $db_source->fetch_array($query)) {
 	}
 
 	if ($tmp = unserialize($feed['body_data'])) {
+
+		$searcharray = array
+			(
+				"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+				"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+			);
+		$replacearray = array
+			(
+				"&#\\1;",
+				"&#\\1;",
+			);
+
 		if ($tmp['message']) {
 			$tmp['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $tmp['message']);
 			$tmp['message'] = preg_replace('/image\/face\/(\d+)/', 'static/image/smiley/comcom/$1', $tmp['message']);
+
+			$tmp['message'] = preg_replace($searcharray, $replacearray, $tmp['message']);
 		}
 
 		foreach ($fix_array[0] as $_k) {
