@@ -192,10 +192,10 @@ EOF;
 
 					// bluelovers
 					for($i = 1; $i <= 8; $i++) {
-						if (isset($policy['extcredits'.$i]) && is_numeric($policy['extcredits'.$i])) {
-							$policy['extcredits'.$i] = intval($policy['extcredits'.$i]);
+						if (isset($rule['extcredits'.$i]) && is_numeric($rule['extcredits'.$i])) {
+							$rule['extcredits'.$i] = intval($rule['extcredits'.$i]);
 						} else {
-							unset($policy['extcredits'.$i]);
+							unset($rule['extcredits'.$i]);
 						}
 					}
 					// bluelovers
