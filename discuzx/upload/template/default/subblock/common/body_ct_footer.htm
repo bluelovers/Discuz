@@ -1,6 +1,8 @@
 <!--提供給風格使用的頁面主區下方區塊-->
 
-<!--{if $GLOBALS[_G][gp_mod] != 'space'}-->
+<!--{if $GLOBALS[_G][gp_mod] != 'space'
+|| ($GLOBALS[_G][gp_mod] == 'space' && empty($diymode))
+}-->
 <!--非個人空間的頁面-->
 <div id="ct_footer" class="wp"></div>
 <!--{/if}-->
