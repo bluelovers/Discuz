@@ -134,6 +134,12 @@ padding-left:180px;
 	padding:0px;
 }
 
+#hd #nv ul{
+	bottom:0;
+	height:36px;
+	padding:22px 0 0;
+}
+
 #hd #nv li{
 	background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
 	border:0 none;
@@ -169,12 +175,6 @@ padding-left:180px;
 #hd #nv li.current a, #hd #nv li.current a:hover {
 	color:#333333;
 	font-weight:bold;
-}
-
-#hd #nv ul{
-	bottom:0;
-	height:36px;
-	padding:22px 0 0;
 }
 
 #hd #sc {
