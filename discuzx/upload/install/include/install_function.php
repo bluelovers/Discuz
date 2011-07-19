@@ -695,6 +695,9 @@ function runquery($sql) {
 
 	// bluelovers
 	$sql = str_replace("\r\n", "\n", $sql);
+
+	// 必須確認 sql 中的所有 serialize 中不包含 \r\n 才可使用此代碼
+	$sql = str_replace('\r\n', '\n', $sql);
 	// bluelovers
 
 	$sql = str_replace("\r", "\n", str_replace(' '.ORIG_TABLEPRE, ' '.$tablepre, $sql));
