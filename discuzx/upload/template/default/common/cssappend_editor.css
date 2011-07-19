@@ -1,0 +1,7 @@
+
+/* 有下拉選單的編輯器按鈕 */
+.edt .b2r a.dp {
+	/* 修正選單內文字的垂直對齊 */
+	line-height: 20px;
+	vertical-align: middle;
+}
