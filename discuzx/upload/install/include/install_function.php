@@ -694,6 +694,9 @@ function runquery($sql) {
 	if(!isset($sql) || empty($sql)) return;
 
 	// bluelovers
+	$sql = str_replace("\r\n", "\n", $sql);
+
+	// 必須確認 sql 中的所有 serialize 中不包含 \r\n 才可使用此代碼
 	$sql = str_replace('\r\n', '\n', $sql);
 	// bluelovers
 
@@ -1512,6 +1515,18 @@ function block_import($data) {
 			$block['param'] = dstripslashes($block['param']);
 			$block['param'] = addslashes(serialize($block['param']));
 		}
+
+		// bluelovers
+		/**
+		 * [bugfix] INSERT INTO pre_common_block - Error:Duplicate entry '0' for key 'PRIMARY'
+		 *
+		 * 	SQL:INSERT INTO pre_common_block SET `bid`='',`blockclass`='group_thread',`blocktype`='0',`name`='',`title`='',`classname`='',`summary`='',`uid`='1',`username`='admin',`styleid`='24',`blockstyle`='',`picwidth`='0',`picheight`='0',`target`='blank',`dateformat`='Y-m-d',`dateuformat`='0',`script`='groupthreadspecial',`param`='a:6:{s:5:\"gtids\";a:1:{i:0;s:1:\"0\";}s:12:\"rewardstatus\";s:1:\"0\";s:11:\"picrequired\";s:1:\"0\";s:11:\"titlelength\";s:2:\"40\";s:13:\"summarylength\";s:2:\"80\";s:5:\"items\";s:2:\"10\";}',`shownum`='10',`cachetime`='3600',`punctualupdate`='0',`hidedisplay`='0',`dateline`='0',`notinherited`='0',`isblank`='0'
+			Error:Duplicate entry '0' for key 'PRIMARY'
+			Errno:1062
+		 **/
+		if (empty($block['bid'])) unset($block['bid']);
+		// bluelovers
+
 		$sql = implode_field_value($block);
 		$_G['db']->query('INSERT INTO '.$_G['tablepre'].'common_block SET '.$sql);
 		$newid = $_G['db']->insert_id();
