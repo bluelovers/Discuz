@@ -232,3 +232,6 @@ padding-left:1em ;
 */
 
 .mls .avt img:hover { border-color: {LINK}; }
+
+/* 暫時性隱藏頁首廣告 */
+body > .wp.a_h { display: none; }
