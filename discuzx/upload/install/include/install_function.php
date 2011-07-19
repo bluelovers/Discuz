@@ -476,7 +476,7 @@ function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 		// bluelovers
 		if (!$noindex) {
 		// bluelovers
-		@touch($dir.'/index.htm');
+			@touch($dir.'/index.htm');
 		// bluelovers
 		}
 		// bluelovers
