@@ -1,8 +1,10 @@
 <!--提供給風格使用的頁面主區下方區塊-->
 
 <!--{if
-($GLOBALS[_G][gp_mod] == 'space' && !empty($diymode))
-|| CURSCRIPT == 'portal'
+!$GLOBALS[_G]['inshowmessage'] && (
+	($GLOBALS[_G][gp_mod] == 'space' && !empty($diymode))
+	|| CURSCRIPT == 'portal'
+)
 }-->
 <!--{else}-->
 <!--非個人空間的頁面-->
