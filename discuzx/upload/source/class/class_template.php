@@ -286,6 +286,7 @@ class template {
 	}
 
 	function adtags($parameter, $varname = '') {
+		//TODO:增加模板風格可以額外設定是否關閉某些廣告
 		$parameter = stripslashes($parameter);
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--AD_TAG_$i-->";
