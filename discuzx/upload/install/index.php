@@ -460,6 +460,12 @@ if($method == 'show_license') {
 		dir_clear(ROOT_PATH.'./uc_client/data');
 		dir_clear(ROOT_PATH.'./uc_client/data/cache');
 
+		// bluelovers
+		// 清除 diy 緩存
+		dir_clear(ROOT_PATH.'./data/diy', 1, 1);
+		@touch(ROOT_PATH.'./data/diy'.'/index.htm');
+		// bluelovers
+
 		foreach($serialize_sql_setting as $k => $v) {
 			$v = addslashes(serialize($v));
 			$db->query("REPLACE INTO {$tablepre}common_setting VALUES ('$k', '$v')");
