@@ -4,13 +4,16 @@
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=friend">{lang friends}</a> <em>&rsaquo;</em>
-		{lang search_friend}		
+		{lang search_friend}
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
-			<h1 class="mt"><img alt="friend" src="{STATICURL}image/feed/friend.gif" class="vm" /> {lang search_friend}</h1>		
+			<h1 class="mt"><img alt="friend" src="{STATICURL}image/feed/friend.gif" class="vm" /> {lang search_friend}</h1>
 			<ul class="tb cl">
 				<li{if $_GET['op'] == 'sex'} class="a"{/if}><a href="home.php?mod=spacecp&ac=search&op=sex">{lang seek_bgfriend}</a></li>
 				<li{if $_GET['op'] == 'reside'} class="a"{/if}><a href="home.php?mod=spacecp&ac=search&op=reside">{lang seek_same_city}</a></li>

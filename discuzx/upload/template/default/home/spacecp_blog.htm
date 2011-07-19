@@ -82,6 +82,8 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0 cl">
@@ -106,7 +108,7 @@
 				</table>
 				<!--{hook/spacecp_blog_middle}-->
 				<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
-				
+
 					<!--{if $_G['setting']['blogcategorystat'] && $categoryselect}-->
 					<tr>
 						<th>{lang site_categories}</th>
@@ -116,7 +118,7 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-					
+
 					<tr>
 						<th>{lang personal_category}</th>
 						<td>
@@ -236,7 +238,7 @@
 							}
 						}
 					}
-					
+
 					if($('seccode')) {
 						var code = $('seccode').value;
 						var x = new Ajax();
