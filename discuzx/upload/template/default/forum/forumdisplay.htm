@@ -16,6 +16,8 @@
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
 <div class="boardnav">
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="wp cl{if $_G['forum']['allowside']} ct2{/if}"{if $leftside} style="margin-left:{$_G['leftsidewidth_mwidth']}px"{/if}>
 		<!--{if $leftside}-->
 			<div id="sd_bdl" class="bdl" onmouseover="showMenu({'ctrlid':this.id, 'pos':'dz'});" style="width:{$_G['setting']['leftsidewidth']}px;margin-left:-{$_G['leftsidewidth_mwidth']}px">
