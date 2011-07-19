@@ -6,7 +6,7 @@
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=thread">{lang post}</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&uid=$space[uid]&do=poll&view=me">{lang poll}</a>
 	</div>
@@ -16,6 +16,8 @@
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
@@ -120,7 +122,7 @@
 		<div class="drag">
 			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
 		</div>
-		
+
 	</div>
 </div>
 
@@ -134,5 +136,5 @@ function fuidgoto(fuid) {
 	window.location.href = 'home.php?mod=space&do=poll&view=we'+parameter;
 }
 </script>
-	
+
 <!--{template common/footer}-->
