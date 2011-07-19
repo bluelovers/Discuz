@@ -461,7 +461,7 @@ function dir_writeable($dir) {
 	return $writeable;
 }
 
-function dir_clear($dir) {
+function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 	global $lang;
 	showjsmessage($lang['clear_dir'].' '.str_replace(ROOT_PATH, '', $dir));
 	if($directory = @dir($dir)) {
