@@ -1719,6 +1719,7 @@ function check_secqaa($value, $idhash) {
 }
 
 function adshow($parameter) {
+	//TODO:增加模板風格可以額外設定是否關閉某些廣告
 	global $_G;
 	if($_G['inajax']) {
 		return;
