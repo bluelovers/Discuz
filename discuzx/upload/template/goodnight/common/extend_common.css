@@ -163,6 +163,8 @@ padding-left:180px;
 
 #hd #nv li a:hover {
 	color:#333333;
+
+	background-image: none;
 }
 
 #hd #nv li.current, #hd #nv li.a {
