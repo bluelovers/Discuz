@@ -12,6 +12,8 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<!--{if $op == 'add' || $op == 'edit'}-->
@@ -44,7 +46,7 @@
 								<p class="d">{lang topic_domain_comment}</p>
 							</td>
 						</tr>
-						
+
 						<tr>
 							<th>{lang topic_description}</th>
 							<td><textarea name="summary" rows="4" cols="60" class="pt">$topic[summary]</textarea>

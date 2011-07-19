@@ -112,6 +112,8 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a ct2_a_r wp cl">
 	<div class="mn" style="float: left;">
 		<div class="bm bw0">
@@ -343,7 +345,7 @@ function raid_delete(aid) {
 	var p;
 	if(p = node.parentNode) {
 		p.removeChild(node);
-	}   
+	}
 }
 function switchhl(obj, v) {
 	if(parseInt($('highlight_style_' + v).value)) {
