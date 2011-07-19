@@ -153,6 +153,10 @@ padding-left:180px;
 	width:88px;
 }
 
+#hd #nv li * {
+	vertical-align: middle;
+}
+
 #hd #nv li a {
 	color:#FFFFFF;
 	font-size:12px;
