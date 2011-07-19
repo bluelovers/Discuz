@@ -1,6 +1,9 @@
 <!--{eval $_G['home_tpl_titles'] = array($tpl_title, '{lang share}');}-->
 
 	<!--{template home/space_header}-->
+
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="ct2 wp n cl">
 		<div class="mn">
 			<div class="bm">
@@ -118,7 +121,7 @@
 		</script>
 		<!--{/if}-->
 <script type="text/javascript">
-var elems = selector('div[class~=magicflicker]'); 
+var elems = selector('div[class~=magicflicker]');
 for(var i=0; i<elems.length; i++){
 	magicColor(elems[i]);
 }

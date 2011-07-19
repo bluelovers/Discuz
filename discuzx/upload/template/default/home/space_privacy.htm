@@ -1,6 +1,6 @@
 <!--{eval $_G['home_tpl_titles'] = array('{lang remind}');}-->
 <!--{template common/header}-->
-{eval 
+{eval
 	$space['isfriend'] = $space['self'];
 	if(in_array($_G['uid'], (array)$space['friends'])) $space['isfriend'] = 1;
 	space_merge($space, 'count');
@@ -11,10 +11,13 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
+		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		{lang privacy_prompt}
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="wp cl">
 	<div class="nfl">
 		<div class="f_c mtw mbw">
@@ -62,7 +65,7 @@
 								<li>{lang last_activity_time}: $space[lastactivity]</li>
 								<li>{lang last_post_time}: $space[lastpost]</li>
 								<li>{lang last_send_email}: $space[lastsendmail]</li>
-								<li>{lang time_offset}: 
+								<li>{lang time_offset}:
 									<!--{eval $timeoffset = array({lang timezone});}-->
 									$timeoffset[$space[timeoffset]]
 								</li>

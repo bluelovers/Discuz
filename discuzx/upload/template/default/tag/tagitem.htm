@@ -17,6 +17,9 @@
 		<!--{/if}-->
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="wp cl">
 	<h1 class="mt"><img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $tagname</h1>
 	<!--{if empty($showtype) || $showtype == 'thread'}-->
@@ -169,6 +172,9 @@
 		</div>
 	<!--{/if}-->
 <!--{else}-->
+
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="wp cl">
 		<h1 class="mt"><img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $searchtagname</h1>
 		<div class="bm">

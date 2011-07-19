@@ -10,6 +10,8 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -180,7 +182,7 @@
 							<!--{/if}-->
 						</td>
 					</tr>
-					
+
 					<!--{/if}-->
 					<tbody id="tbody_thumbsetting">
 						<!--{subtemplate portal/portalcp_block_thumbsetting}-->
@@ -295,7 +297,7 @@
 			_attachEvent(inputs[i], 'blur', formcheckvalue);
 		}
 	}
-	
+
 	function formcheckvalue(){
 		var modifiedids = [];
 		var enabled = false;
@@ -350,7 +352,7 @@
 		<li id="li_style"{if $op=="style"} class="a"{/if}><a href="portal.php?mod=portalcp&ac=block&bid=$bid&op=style{if $_GET[from]}&from=$_GET[from]{/if}" onclick="showWindow('$_G[gp_handlekey]', this.getAttribute('href'));">{lang block_template}</a></li>
 		<!--{/if}-->
 	</ul>
-	<!--{/if}-->	
+	<!--{/if}-->
 	<form id="blockstyleform" name="blockformdata" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=block&op=style&classname=$_GET[classname]&bid=$block[bid]&eleid=$_GET['eleid']&tpl=$_GET[tpl]{if $_GET[from]}&from=$_GET[from]{/if}"{if $_G[inajax]} onsubmit="ajaxpost('blockstyleform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');"{/if}>
 		<div class="c"{if $_G[inajax]} style="width:420px; {if $_GET[from]=='cp'}max-height:260px;{else}max-height:380px;{/if}height:auto !important; height:320px; _padding-right: 0; _margin-right: 17px; overflow-y: auto;"{/if}>
 			<!--{if $block[hidedisplay]}-->

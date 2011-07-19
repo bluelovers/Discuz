@@ -1,0 +1,271 @@
+
+.site_pg #wp {
+	width:994px;
+}
+
+.site_pg #wp #ct, .site_pg #ct.w {
+	padding-left:13px;
+	padding-right:13px;
+	border:0px none transparent;
+
+/*
+	background-image:url({STYLEIMGDIR}/cbg.png);
+	background-color:{BGCOLOR};
+	background-position: 0 0;
+	background-repeat:repeat-y;
+*/
+
+
+	background:url({STYLEIMGDIR}/cbg.png) repeat-y scroll 0 0 {BGCOLOR};
+
+
+	/*width:994px;*/
+}
+
+.site_pg .page_showmessage #wp #ct, .site_pg .page_showmessage #ct.w
+, .site_pg .pg_viewthread  #wp #ct, .site_pg .pg_viewthread #ct.w
+, .site_pg .pg_register  #wp #ct, .site_pg .pg_register #ct.w
+, .site_pg .pg_logging  #wp #ct, .site_pg .pg_logging #ct.w
+, .site_pg #nv_forum  #wp #ct, .site_pg #nv_forum #ct.w
+, .site_pg #ct.n
+ {
+	background:url({STYLEIMGDIR}/cbg.png) repeat-y scroll 0 0 {BGCOLOR} !important;
+}
+
+.site_pg #ct_header {
+	background:url({STYLEIMGDIR}/bg_areabar.png) no-repeat scroll center bottom transparent;
+	min-height:19px;
+	border:0px none transparent;
+	width:994px;
+	height:19px;
+}
+
+.site_pg #ct_footer {
+	background:url({STYLEIMGDIR}/bg_bottom.png) no-repeat scroll 0 0 {BGCOLOR};
+	min-height:51px;
+	border:0px none transparent;
+	width:994px;
+	height:51px;
+}
+
+.site_pg #chart {
+	/* 修正左右不貼邊 */
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.site_pg #wp #ct_header, .site_pg #wp #ct_footer {
+	width: auto;
+}
+
+.site_pg #wp .wp.mtn { margin-top: 0px; margin-top: 0px !important; }
+
+.site_pg #toptb {
+	background:url({STYLEIMGDIR}/tbg.png) repeat scroll center top #000000;
+
+	top: 0pt;
+	width: 100%;
+	height: 34px;
+	overflow: hidden;
+
+	position:fixed;
+	right:0;
+	top:0;
+	z-index:100;
+	/*
+	position: absolute;
+	*/
+
+	line-height: 34px;
+
+	position: relative;
+	margin-bottom: -34px;
+}
+
+/*
+.site_pg .p_pop {
+	z-index:2001;
+}
+*/
+
+.site_pg #toptb a {
+	color:#999999;
+}
+
+.site_pg #toptb a:hover {
+	color:#ffffff;
+	/*text-shadow:1px 1px 1px #C0C0C0;*/
+}
+
+.site_pg #toptb #um {
+	background: none no-repeat scroll center top transparent;
+	margin:0 auto;
+	padding:3px 10px;
+	min-width:940px;
+
+	line-height: 25px;
+	height:34px;
+}
+
+/* 頁頭文字顏色 */
+.site_pg #um a:hover { color: #97F2FF; }
+
+.site_pg #hd {
+	background-position:0 34px;
+	padding-top:34px;
+	display:block;
+	float:none;
+}
+
+.site_pg #hd #nv {
+	background:url({STYLEIMGDIR}/bg_cat.png) no-repeat scroll 0 0 transparent;
+	height:58px;
+	padding-left:76px;
+
+	overflow:hidden;
+padding-left:180px;
+}
+
+.site_pg #hd h2 {
+	height: 116px;
+	display: block;
+	float: none;
+	padding:0;
+}
+
+.site_pg #hd #nv ul {
+	display: block;
+	float: none;
+}
+
+.site_pg .hdc, #hd .wp {
+	background: none no-repeat scroll center top transparent;
+	padding:0px;
+}
+
+.site_pg #hd #nv ul{
+	bottom:0;
+	height:36px;
+	padding:22px 0 0;
+}
+
+.site_pg #hd #nv li{
+	background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
+	border:0 none;
+	color:#FFFFFF;
+	float:left;
+	height:36px;
+	line-height:45px;
+	overflow:hidden;
+	padding:0;
+	text-align:center;
+	width:88px;
+}
+
+.site_pg #hd #nv li * {
+	vertical-align: middle;
+}
+
+.site_pg #hd #nv li a {
+	color:#FFFFFF;
+	font-size:12px;
+	font-weight:normal;
+	width:100%;
+	display:block;
+
+	padding: 0;
+}
+
+.site_pg #hd #nv li a:hover {
+	color:#333333;
+
+	background-image: none;
+}
+
+.site_pg #hd #nv li.current, .site_pg #hd #nv li.a {
+	background:url({STYLEIMGDIR}/menu_h_bg.png) no-repeat scroll 0 0 transparent;
+	color:#333333;
+	font-weight:bold;
+	height:36px;
+}
+
+.site_pg #hd #nv li.current a, .site_pg #hd #nv li.current a:hover
+, .site_pg #hd #nv li.a a, .site_pg #hd #nv li.a a:hover
+ {
+	color:#333333;
+	font-weight:bold;
+}
+
+.site_pg #hd #nv li.current a, .site_pg #hd #nv li.current a:hover
+, .site_pg #hd #nv li.a, , .site_pg #hd #nv li.a a:hover
+ {
+	background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
+}
+
+.site_pg #hd #sc {
+	margin-top:13px;
+
+	margin-top:-40px;
+	position:relative;
+	z-index:50;
+}
+
+.site_pg #hd #sc .p_pop {
+	/*position:relative !important;*/
+	top:32px !important;
+	left:1px !important;
+}
+
+/* 修正使用者選單的位置 */
+.site_pg #hd .wp .hdc {
+	height: 116px;
+	overflow: hidden;
+}
+
+.site_pg #hd .wp .hdc #um {
+	margin-top: -100px;
+    position: relative;
+}
+
+/*
+.fl .h {
+	background:url({STYLEIMGDIR}/header_bg.png) repeat-x scroll 0 0 #408BDA;
+color:#FFFFFF ;
+line-height:31px ;
+padding-left:1em ;
+}
+
+.fl h2 {
+	background:none;
+}
+*/
+
+/* 醒目分區標題 */
+.site_pg .bmw .bm_h {
+	background:url({STYLEIMGDIR}/header_bg.png) repeat-x scroll 0 0 #408BDA;
+	color:#FFFFFF ;
+	line-height:31px ;
+	padding-left:1em ;
+}
+
+.site_pg .bmw .bm_h a {
+	color:#FFFFFF ;
+}
+
+/* 醒目分區標題的右側收縮按鈕及版主顯示區 */
+.site_pg .bmw .bm_h .y, .site_pg .bmw .bm_h .y * {
+	color: #68DFF4;
+}
+
+.site_pg .bmw .bm_h .y a:hover {
+	color: #FFFFFF;
+}
+
+.site_pg .mls .avt img:hover { border-color: {LINK}; }
+
+/* 暫時性隱藏頁首廣告 */
+.site_pg .wp.a_h { display: none; }
+
+.appl span {
+	line-height: 28px;
+}

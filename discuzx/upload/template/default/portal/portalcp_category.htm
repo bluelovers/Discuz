@@ -2,13 +2,15 @@
 
 <div id="pt" class="bm cl">
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="portal.php">{lang portal}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp">{lang portal_manage}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp&ac=index">{lang category_management}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp&ac=category&catid=$cate[catid]">$cate[catname]</a>
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
@@ -91,8 +93,8 @@
 					<!--{if $showflag}-->
 						<tr>
 							<td colspan="5">
-								<label for="chkall" onclick="checkall(this.form, 'aids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label> 
-								<label for="op_trash"><input type="radio" id="op_trash" class="pr" value="trash" name="optype">{lang article_delete_recyclebin}</label> 
+								<label for="chkall" onclick="checkall(this.form, 'aids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label>
+								<label for="op_trash"><input type="radio" id="op_trash" class="pr" value="trash" name="optype">{lang article_delete_recyclebin}</label>
 								<label for="op_delete"><input type="radio" id="op_delete" class="pr" value="delete" name="optype">{lang article_delete_direct}</label>
 								<label for="op_move"><input type="radio" id="op_move" class="pr" value="move" name="optype">{lang article_category_move}</label>
 								$categoryselect

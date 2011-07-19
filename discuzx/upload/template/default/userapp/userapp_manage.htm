@@ -1,4 +1,4 @@
-<!--{eval 
+<!--{eval
 	$_G[home_tpl_titles] = array(lang('userapp/template', 'app_management'));
 }-->
 <!--{template common/header}-->
@@ -28,6 +28,8 @@
 	</form>
 
 <!--{elseif $_GET['ac'] == 'menu'}-->
+
+<!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="wp ct2_a cl">
 	<div class="appl">
@@ -106,6 +108,9 @@
 	</div>
 </div>
 <!--{else}-->
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<script type="text/javascript" src="http://static.manyou.com/scripts/my_iframe.js"></script>

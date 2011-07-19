@@ -5,6 +5,9 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -81,7 +84,7 @@
 			<!--{/if}-->
 		</div>
 		<p class="o pns">
-			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
+			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
 			<button name="ratesubmit" type="submit" value="true" class="pn pnc"><span>{lang confirms}</span></button>
 		</p>
 	</form>
@@ -96,7 +99,7 @@
 			<span>
 				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('rate')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
-		</h3>	
+		</h3>
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="tid" value="$_G[tid]">
 		<input type="hidden" name="pid" value="$_G[gp_pid]">
@@ -126,8 +129,8 @@
 		</div>
 	</div>
 	<div class="o pns">
-		<label class="z" onclick="checkall(this.form, 'logid')"><input class="pc" type="checkbox" name="chkall" />{lang checkall}</label> 
-		<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
+		<label class="z" onclick="checkall(this.form, 'logid')"><input class="pc" type="checkbox" name="chkall" />{lang checkall}</label>
+		<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
 		{lang admin_operation_explain}: <input name="reason" class="px vm" />
 		<button class="pn pnc vm" type="submit" value="true" name="ratesubmit"><span>{lang submit}</span></button>
 	</div>

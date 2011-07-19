@@ -14,6 +14,8 @@
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -329,7 +331,7 @@
 								<!--{/if}-->
 							</dd>
 							<dd class="ptm">
-								<!--{if $grouppm['author']}-->{lang sendmultipmwho}<!--{else}-->{lang sendmultipmsystem}<!--{/if}-->&nbsp; 
+								<!--{if $grouppm['author']}-->{lang sendmultipmwho}<!--{else}-->{lang sendmultipmsystem}<!--{/if}-->&nbsp;
 								<span class="xg1"><!--{date($grouppm[dateline], 'u')}--></span>
 							</dd>
 							<dd>
@@ -407,8 +409,8 @@
 											<!--{if $grouppm[author]}-->
 												<a href="home.php?mod=space&uid=$grouppm[authorid]" target="_blank">$grouppm[author]</a> {lang say} :
 											<!--{/if}-->
-											<span id="p_gpmid_$grouppm[id]">$grouppm[message]</span> &nbsp; 
-											<span class="xg1"><!--{date($grouppm[dateline], 'u')}--></span>&nbsp; 
+											<span id="p_gpmid_$grouppm[id]">$grouppm[message]</span> &nbsp;
+											<span class="xg1"><!--{date($grouppm[dateline], 'u')}--></span>&nbsp;
 											<a href="home.php?mod=space&do=pm&subop=viewg&pmid=$grouppm[id]" id="gpmlist_$grouppm[id]_a">{lang show}</a>
 										</dd>
 									</dl>
@@ -460,8 +462,8 @@
 											<!--{else}-->
 												<a href="home.php?mod=space&uid=$value[touid]" target="_blank">{$value[tousername]}</a> {lang you_to} <span class="xi2">{lang you}</span> {lang say} :
 											<!--{/if}-->
-											$value[lastsummary] &nbsp; 
-											<span class="xg1"><!--{date($value[lastdateline], 'u')}--></span> &nbsp; 
+											$value[lastsummary] &nbsp;
+											<span class="xg1"><!--{date($value[lastdateline], 'u')}--></span> &nbsp;
 											<a href="home.php?mod=space&do=pm&subop=view&touid=$value[touid]#last" id="pmlist_$value[plid]_a">{lang reply}</a>
 										<!--{elseif $value['pmtype'] == 2}-->
 											<table>
@@ -472,8 +474,8 @@
 														<!--{if $value[lastauthorid]}-->
 															<p class="mbn">{lang dots}</p>
 															<p>
-																<a href="home.php?mod=space&uid=$value[lastauthorid]" target="_blank">$value[lastauthor]</a> : 
-																$value[lastsummary] &nbsp; 
+																<a href="home.php?mod=space&uid=$value[lastauthorid]" target="_blank">$value[lastauthor]</a> :
+																$value[lastsummary] &nbsp;
 																<span class="xg1"><!--{date($value[lastdateline], 'u')}--></span>
 																<a href="home.php?mod=space&do=pm&subop=view&plid=$value[plid]&type=1&daterange=$value[daterange]#last">{lang reply}</a>
 															</p>
@@ -489,7 +491,7 @@
 						<div class="pgs pbm cl pm_op">
 							<!--{if $multi}-->$multi<!--{/if}-->
 							<!--{if $count || $grouppms}-->
-								<label for="delete_all" onclick="checkall(this.form, 'deletepm_');"><input type="checkbox" name="chkall" id="delete_all" class="pc" />{lang select_all}</label> &nbsp; 
+								<label for="delete_all" onclick="checkall(this.form, 'deletepm_');"><input type="checkbox" name="chkall" id="delete_all" class="pc" />{lang select_all}</label> &nbsp;
 								<button class="pn" type="submit" name="deletepmsubmit_btn" value="true"><strong>{lang delete}</strong></button>
 								<button class="pn" type="button" name="markreadpm_btn" value="true" onclick="setpmstatus(this.form);"><strong>{lang change_old_pm}</strong></button>
 							<!--{/if}-->
