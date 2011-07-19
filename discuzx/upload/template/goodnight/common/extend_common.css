@@ -243,6 +243,15 @@ padding-left:1em ;
 	color:#FFFFFF ;
 }
 
+/* 醒目分區標題的右側收縮按鈕及版主顯示區 */
+.bmw .bm_h .y, .bmw .bm_h .y * {
+	color: #68DFF4;
+}
+
+.bmw .bm_h .y a:hover {
+	color: #FFFFFF;
+}
+
 .mls .avt img:hover { border-color: {LINK}; }
 
 /* 暫時性隱藏頁首廣告 */
