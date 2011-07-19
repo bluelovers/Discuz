@@ -469,6 +469,16 @@ function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 			$filename = $dir.'/'.$entry;
 			if(is_file($filename)) {
 				@unlink($filename);
+
+			// bluelovers
+			// 允許處理子目錄
+			} elseif ($includesubdir
+				&& !($entry == '.' || $entry == '..')
+				&& is_dir($filename)
+			) {
+				dir_clear($filename, $noindex, $includesubdir);
+			// bluelovers
+
 			}
 		}
 		$directory->close();
