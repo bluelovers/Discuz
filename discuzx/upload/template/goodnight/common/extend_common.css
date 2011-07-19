@@ -83,12 +83,12 @@
 */
 
 #toptb a {
-color:#999999;
+	color:#999999;
 }
 
 #toptb a:hover {
-color:#ffffff;
-/*text-shadow:1px 1px 1px #C0C0C0;*/
+	color:#ffffff;
+	/*text-shadow:1px 1px 1px #C0C0C0;*/
 }
 
 #toptb #um {
@@ -145,16 +145,16 @@ padding-left:180px;
 	font-weight:bold;
 }
 #hd #nv li{
-background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
-border:0 none;
-color:#FFFFFF;
-float:left;
-height:36px;
-line-height:45px;
-overflow:hidden;
-padding:0;
-text-align:center;
-width:88px;
+	background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
+	border:0 none;
+	color:#FFFFFF;
+	float:left;
+	height:36px;
+	line-height:45px;
+	overflow:hidden;
+	padding:0;
+	text-align:center;
+	width:88px;
 }
 #hd #nv li a {
 	color:#FFFFFF;
@@ -167,9 +167,10 @@ width:88px;
 	color:#333333;
 }
 
-#hd #nv ul{bottom:0;
-height:36px;
-padding:22px 0 0;
+#hd #nv ul{
+	bottom:0;
+	height:36px;
+	padding:22px 0 0;
 }
 
 #hd #sc {
