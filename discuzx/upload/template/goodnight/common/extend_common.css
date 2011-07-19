@@ -231,6 +231,18 @@ padding-left:1em ;
 }
 */
 
+/* 醒目分區標題 */
+.bmw .bm_h {
+	background:url({STYLEIMGDIR}/header_bg.png) repeat-x scroll 0 0 #408BDA;
+	color:#FFFFFF ;
+	line-height:31px ;
+	padding-left:1em ;
+}
+
+.bmw .bm_h a {
+	color:#FFFFFF ;
+}
+
 .mls .avt img:hover { border-color: {LINK}; }
 
 /* 暫時性隱藏頁首廣告 */
