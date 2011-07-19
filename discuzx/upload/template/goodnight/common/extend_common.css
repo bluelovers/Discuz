@@ -48,6 +48,12 @@
 	height:51px;
 }
 
+#chart {
+	/* 修正左右不貼邊 */
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
 #wp #ct_header, #wp #ct_footer {
 	width: auto;
 }
