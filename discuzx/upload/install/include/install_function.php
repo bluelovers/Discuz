@@ -472,7 +472,14 @@ function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 			}
 		}
 		$directory->close();
+
+		// bluelovers
+		if (!$noindex) {
+		// bluelovers
 		@touch($dir.'/index.htm');
+		// bluelovers
+		}
+		// bluelovers
 	}
 }
 
