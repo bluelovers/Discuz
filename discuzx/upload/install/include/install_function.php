@@ -694,7 +694,7 @@ function runquery($sql) {
 	if(!isset($sql) || empty($sql)) return;
 
 	// bluelovers
-	$sql = str_replace('\r\n', '\n', $sql);
+	$sql = str_replace("\r\n", "\n", $sql);
 	// bluelovers
 
 	$sql = str_replace("\r", "\n", str_replace(' '.ORIG_TABLEPRE, ' '.$tablepre, $sql));
