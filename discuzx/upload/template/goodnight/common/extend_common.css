@@ -165,16 +165,24 @@ padding-left:180px;
 	color:#333333;
 }
 
-#hd #nv li.current {
+#hd #nv li.current, #hd #nv li.a {
 	background:url({STYLEIMGDIR}/menu_h_bg.png) no-repeat scroll 0 0 transparent;
 	color:#333333;
 	font-weight:bold;
 	height:36px;
 }
 
-#hd #nv li.current a, #hd #nv li.current a:hover {
+#hd #nv li.current a, #hd #nv li.current a:hover
+, #hd #nv li.a, , #hd #nv li.a a:hover
+ {
 	color:#333333;
 	font-weight:bold;
+}
+
+#hd #nv li.current a, #hd #nv li.current a:hover
+, #hd #nv li.a, , #hd #nv li.a a:hover
+ {
+	background:url({STYLEIMGDIR}/menu_bg.png) no-repeat scroll 0 0 transparent;
 }
 
 #hd #sc {
