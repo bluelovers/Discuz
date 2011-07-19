@@ -12,6 +12,8 @@
 		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 	</div>
 
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
@@ -40,7 +42,7 @@
 
 								<!--{if $action == 'index' && ($status == 2 || $status == 3 || $status == 5)}-->
 									<p class="mtm">
-										{lang group_join_type}: 
+										{lang group_join_type}:
 										<!--{if $_G['forum']['jointype'] == 1}-->
 											<strong>{lang group_join_type_invite}</strong>
 										<!--{elseif $_G['forum']['jointype'] == 2}-->
@@ -74,7 +76,7 @@
 								</dd>
 								<!--{if $action == 'index' && ($status == 2 || $status == 3 || $status == 5)}-->
 								<dd>
-									{lang group_join_type}: 
+									{lang group_join_type}:
 									<!--{if $_G['forum']['jointype'] == 1}-->
 										<strong>{lang group_join_type_invite}</strong>
 									<!--{elseif $_G['forum']['jointype'] == 2}-->
