@@ -265,3 +265,7 @@ padding-left:1em ;
 
 /* 暫時性隱藏頁首廣告 */
 .site_pg .wp.a_h { display: none; }
+
+.appl span {
+	line-height: 28px;
+}
