@@ -3,6 +3,9 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> {lang trade_order}</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2 wp cl">
 	<h1 class="mt">2.{lang trade_order}</h1>
 	<div class="mn">
@@ -133,7 +136,7 @@
 								<!--{if $tradelog['transport'] == 4}-->{lang post_trade_transport_physical}<!--{/if}-->
 								<!--{if $tradelog['transport']}-->
 									&nbsp;{lang trade_transportfee}
-									<!--{if $tradelog[status] == 0 && $tradelog[sellerid] == $_G['uid']}--><span><input type="text" name="newfee" value="$tradelog['transportfee']" class="px" style="width:100px" /></span>&nbsp;<!--{else}-->$tradelog[transportfee]&nbsp;<!--{/if}-->								
+									<!--{if $tradelog[status] == 0 && $tradelog[sellerid] == $_G['uid']}--><span><input type="text" name="newfee" value="$tradelog['transportfee']" class="px" style="width:100px" /></span>&nbsp;<!--{else}-->$tradelog[transportfee]&nbsp;<!--{/if}-->
 									{lang payment_unit}
 								<!--{/if}-->
 							</dd>

@@ -79,6 +79,8 @@
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation$actionsubject <em>&rsaquo;</em> $actiontitle</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <!--{eval $adveditor = $isfirstpost && $special || $special == 2 && ($_G['gp_action'] == 'newthread' || $_G['gp_action'] == 'reply' && !empty($_G['gp_addtrade']) || $_G['gp_action'] == 'edit' && $thread['special'] == 2);}-->
 <!--{eval $advmore = !$showthreadsorts && !$special || $_G['gp_action'] == 'reply' && empty($_G['gp_addtrade']) || $_G['gp_action'] == 'edit' && !$isfirstpost && ($thread['special'] == 2 && !$special || $thread['special'] != 2);}-->
 <form method="post" autocomplete="off" id="postform"
