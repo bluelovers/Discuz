@@ -5,6 +5,8 @@
 		<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_space.css?{VERHASH}" />
 		<link id="style_css" rel="stylesheet" type="text/css" href="{STATICURL}space/{if $space[theme]}$space[theme]{else}t1{/if}/style.css?{VERHASH}">
 		<style id="diy_style">$space[spacecss]</style>
+
+		<!--{hook/global_header_javascript_before_body}-->
 	</head>
 
 	<body id="space" onkeydown="if(event.keyCode==27) return false;">
