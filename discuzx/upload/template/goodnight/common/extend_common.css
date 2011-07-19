@@ -101,6 +101,9 @@
 	height:34px;
 }
 
+/* 頁頭文字顏色 */
+#um a:hover { color: #97F2FF; }
+
 #hd {
 	background-position:0 34px;
 	padding-top:34px;
