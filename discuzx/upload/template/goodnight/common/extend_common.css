@@ -159,6 +159,8 @@ padding-left:180px;
 	font-weight:normal;
 	width:100%;
 	display:block;
+
+	padding: 0;
 }
 
 #hd #nv li a:hover {
