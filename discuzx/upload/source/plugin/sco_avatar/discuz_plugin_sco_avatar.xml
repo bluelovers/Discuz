@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-20 13:30]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://user-bluelovers.local/bbs/discuz_x2/discuz/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[0]]></item>
+			<item id="adminid"><![CDATA[0]]></item>
+			<item id="name"><![CDATA[Scorpio Avatar]]></item>
+			<item id="identifier"><![CDATA[sco_avatar]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[sco_avatar/]]></item>
+			<item id="copyright"><![CDATA[]]></item>
+			<item id="modules"><![CDATA[b:0;]]></item>
+			<item id="version"><![CDATA[]]></item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>
