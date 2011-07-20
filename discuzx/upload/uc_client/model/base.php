@@ -134,6 +134,11 @@ class base {
 		return "'".implode("','", (array)$arr)."'";
 	}
 
+	/**
+	 * 加載緩存文件, 如果不存在,則重新生成
+	 *
+	 * @param string $cachefile
+	 */
 	function &cache($cachefile) {
 		static $_CACHE = array();
 		if(!isset($_CACHE[$cachefile])) {
