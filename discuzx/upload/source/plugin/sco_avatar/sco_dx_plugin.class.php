@@ -3,11 +3,16 @@
 class _sco_dx_plugin {
 
 	var $identifier = null;
+
+	var $module		= null;
+
 	var $attr = array();
 
 	function _init($identifier) {
 		$this->identifier = $identifier;
 		$this->attr['identifier'] = &$this->identifier;
+
+		$this->attr['module'] = &$this->module;
 
 		$this->attr['directory'] = 'source/plugin/'.$this->identifier.'/';
 
