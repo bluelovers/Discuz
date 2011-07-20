@@ -116,7 +116,7 @@ function getglobal($key, $group = null) {
  * 		'GP'	= $_GET & $_POST
  *
  * @param $default - default value if not isset
- * @param $empty - default value if not empty
+ * @param $empty - use default value if not empty
  *
  * @example $_GET['odaboy'] = getgpc('odaboy','G')
  * @example $_POST['odaboy'] = getgpc('odaboy','P')
