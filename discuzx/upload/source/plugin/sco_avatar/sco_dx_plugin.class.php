@@ -40,8 +40,8 @@ class _sco_dx_plugin {
 
 			// 載入語言包
 			foreach(array('script', 'template', 'install') as $type) {
-				!isset($_G['pluginlanguage_'.$type]) && loadcache('pluginlanguage_'.$type);
-				$identifier->attr['lang'][$type] = &$_G['pluginlanguage_'.$type][$identifier->identifier];
+				!isset($_G['cache']['pluginlanguage_'.$type]) && loadcache('pluginlanguage_'.$type);
+				$identifier->attr['lang'][$type] = &$_G['cache']['pluginlanguage_'.$type][$identifier->identifier];
 			}
 
 			return true;
