@@ -2,11 +2,11 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-07-20 13:30]]></item>
+	<item id="Time"><![CDATA[2011-07-21 01:23]]></item>
 	<item id="From"><![CDATA[Discuz! Board (http://user-bluelovers.local/bbs/discuz_x2/discuz/)]]></item>
 	<item id="Data">
 		<item id="plugin">
-			<item id="available"><![CDATA[0]]></item>
+			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[0]]></item>
 			<item id="name"><![CDATA[Scorpio Avatar]]></item>
 			<item id="identifier"><![CDATA[sco_avatar]]></item>
@@ -14,8 +14,33 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[sco_avatar/]]></item>
 			<item id="copyright"><![CDATA[]]></item>
-			<item id="modules"><![CDATA[b:0;]]></item>
 			<item id="version"><![CDATA[]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[sco_avatar]]></item>
+					<item id="menu"><![CDATA[頭像中心]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[sco_avatar]]></item>
+					<item id="menu"><![CDATA[Avatar!]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[5]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
 		</item>
 		<item id="version"><![CDATA[X2]]></item>
 	</item>
