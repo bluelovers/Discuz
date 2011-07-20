@@ -52,7 +52,7 @@ class _sco_dx_plugin {
 		return false;
 	}
 
-	function template($file) {
+	function _template($file) {
 		$args = func_get_args();
 
 		if (is_array($file)) {
@@ -63,6 +63,7 @@ class _sco_dx_plugin {
 
 		return call_user_func_array('template', $args);
 	}
+
 }
 
 ?>
