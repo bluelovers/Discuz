@@ -22,7 +22,7 @@ class _sco_dx_plugin {
 	function &_instance($identifier, $module = null) {
 		eval('$obj = new plugin_'.$identifier.'();');
 
-		if (!empty($module)) $obj->$module = $module;
+		if (!empty($module)) $obj->module = $module;
 
 		return $obj;
 	}
