@@ -219,6 +219,10 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 			$_skips = '/^('.$_skips.')/';
 		}
 
+		// 只刪除指定時間以前的緩存
+		$cache_dateline = 24;
+		$cache_dateline = TIMESTAMP - $cache_dateline * 3600;
+
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
 				&& !preg_match($_skips, $k)
