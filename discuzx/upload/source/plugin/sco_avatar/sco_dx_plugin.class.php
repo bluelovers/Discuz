@@ -36,6 +36,10 @@ class _sco_dx_plugin {
 		}
 	}
 
+	function _lang_push($k) {
+		array_push(discuz_core::$langplus, $k);
+	}
+
 	/**
 	 * get identifier from __CLASS__
 	 **/
