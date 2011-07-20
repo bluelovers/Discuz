@@ -263,6 +263,18 @@ class base {
 		return $ret;
 	}
 
+	function array_inarray_value($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (in_array($key, $arr1)) $ret[$key] = $key;
+			}
+		}
+
+		return $ret;
+	}
+
 	// bluelovers
 }
 
