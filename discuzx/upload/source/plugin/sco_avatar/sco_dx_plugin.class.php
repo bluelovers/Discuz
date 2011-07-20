@@ -18,6 +18,14 @@ class _sco_dx_plugin {
 		$this->attr['setting_source'] = &$_G['cache']['plugin'][$this->identifier];
 		$this->attr['setting'] = $this->attr['setting_source'];
 	}
+
+	/**
+	 * get identifier from __CLASS__
+	 **/
+	function _get_identifier($method) {
+		$a = explode('::', $method);
+		return array_pop($a);
+	}
 }
 
 ?>
