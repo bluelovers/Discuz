@@ -478,6 +478,8 @@ if($method == 'show_license') {
 		$data = addslashes(serialize($userstats));
 		$db->query("REPLACE INTO {$tablepre}common_syscache (cname, ctype, dateline, data) VALUES ('userstats', '$ctype', '".time()."', '$data')");
 
+		//BUG:未知 BUG 全新安裝後 必須要更新緩存才能顯示管理中心的連結
+
 		touch($lockfile);
 		VIEW_OFF && show_msg('initdbresult_succ');
 
