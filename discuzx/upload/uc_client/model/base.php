@@ -275,6 +275,14 @@ class base {
 		return $ret;
 	}
 
+	function implodeids($array, $prefix = '') {
+		if(!empty($array)) {
+			return "'{$prefix}".implode("','{$prefix}", is_array($array) ? $array : array($array))."'";
+		} else {
+			return '';
+		}
+	}
+
 	// bluelovers
 }
 
