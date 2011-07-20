@@ -38,6 +38,12 @@ class _sco_dx_plugin {
 			$identifier->attr['setting_source'] = &$_G['cache']['plugin'][$identifier->identifier];
 			$identifier->attr['setting'] = $identifier->attr['setting_source'];
 
+			// 載入語言包
+			foreach(array('script', 'template', 'install') as $type) {
+				loadcache('pluginlanguage_'.$type);
+				$identifier->attr['lang'][$type] = &$_G['pluginlanguage_'.$type][$identifier->identifier];
+			}
+
 			return true;
 		} elseif (isset($_G['cache']['plugin'][$identifier])) {
 			return $_G['cache']['plugin'][$identifier];
