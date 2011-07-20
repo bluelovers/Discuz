@@ -105,6 +105,19 @@ function getglobal($key, $group = null) {
 	return null;
 }
 
+/**
+ * 獲取URL參數，表單數據和COOKIE值的函數
+ *
+ * @param string $k - index key for request
+ * @param string $type
+ * 		'G'		= $_GET
+ * 		'P'		= $_POST
+ * 		'C'		= $_COOKIE
+ * 		'GP'	= $_GET & $_POST
+ *
+ * @example $_GET['odaboy'] = getgpc('odaboy','G')
+ * @example $_POST['odaboy'] = getgpc('odaboy','P')
+ **/
 function getgpc($k, $type='GP') {
 	$type = strtoupper($type);
 	switch($type) {
@@ -120,6 +133,7 @@ function getgpc($k, $type='GP') {
 			break;
 	}
 
+	// 注意這裡沒有設置的時候返回的是NULL
 	return isset($var[$k]) ? $var[$k] : NULL;
 
 }
