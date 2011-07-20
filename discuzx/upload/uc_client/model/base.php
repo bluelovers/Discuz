@@ -173,6 +173,7 @@ class base {
 	}
 
 	function init_cache() {
+		//note 全局設置
 		$this->settings = $this->cache('settings');
 		$this->cache['apps'] = $this->cache('apps');
 
