@@ -11,6 +11,15 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+// bluelovers
+// 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
+if ($_G['gp_op'] == 'install') {
+	updatecache('founder');
+	echo 1;
+	exit();
+}
+// bluelovers
+
 if($_G['adminid'] != 1 && $_G['setting']) {
 	exit('Access Denied');
 }
