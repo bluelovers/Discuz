@@ -1,3 +1,8 @@
 <!--{loop $_loop_avatar $a}-->
-	<img src="$a"/>
+	<div style="height: 120px; width: 120px;display: inline-block;" class="vm">
+		<label style="display: block;height: 100%;width: 100%;text-align: center;" class="vm">
+			<img src="$a" class="vm avatar avatar_middle"/>
+			<input type="radio" name="a_file" value="$a" style="display: block;" />
+		</label>
+	</div>
 <!--{/loop}-->
