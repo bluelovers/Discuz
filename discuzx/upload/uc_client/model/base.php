@@ -110,6 +110,14 @@ class base {
 		return gmdate(implode(' ', $format), $time + $this->settings['timeoffset']);
 	}
 
+	/**
+	 * 對翻頁的起始位置進行判斷和調整
+	 *
+	 * @param int $page 頁碼
+	 * @param int $ppp 每頁大小
+	 * @param int $totalnum 總紀錄數
+	 * @return unknown
+	 */
 	function page_get_start($page, $ppp, $totalnum) {
 		$totalpage = ceil($totalnum / $ppp);
 		$page =  max(1, min($totalpage,intval($page)));
