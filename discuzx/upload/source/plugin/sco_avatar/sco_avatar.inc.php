@@ -15,6 +15,19 @@ include $plugin_self->_template('avatar');
 
 echo '<pre>';
 
+loaducenter();
+$member_uc = uc_api_call('sc', 'set_user_fields', array(
+	'uid' => $_G['uid'],
+	'fields'=> array(
+		'avatar' => array_shift($_loop_avatar),
+	),
+));
+
+var_dump(array(
+	$member_uc,
+	array_shift($_loop_avatar)
+));
+
 var_dump(array(
 	$identifier, $module,
 	$plugin_self,
