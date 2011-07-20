@@ -19,13 +19,20 @@ loaducenter();
 $member_uc = uc_api_call('sc', 'set_user_fields', array(
 	'uid' => $_G['uid'],
 	'fields'=> array(
-		'avatar' => array_shift($_loop_avatar),
+		'avatar' => $_G['siteurl'].array_shift($_loop_avatar),
+	),
+));
+
+$member_uc2 = uc_api_call('sc', 'get_user_fields', array(
+	'uid' => $_G['uid'],
+	'fields'=> array(
+		'avatar',
 	),
 ));
 
 var_dump(array(
 	$member_uc,
-	array_shift($_loop_avatar)
+	$member_uc2
 ));
 
 var_dump(array(
