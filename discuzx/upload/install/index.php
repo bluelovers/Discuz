@@ -482,7 +482,14 @@ if($method == 'show_license') {
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
+			echo '<script type="text/javascript">'
+				.'function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}'
+				.'</script>'
+				.'<script type="text/javascript">'
+				.'setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);'
+				.'</script>'
+				.'<iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'
+				."\r\n";
 			show_footer();
 		}
 
