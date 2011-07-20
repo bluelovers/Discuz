@@ -294,6 +294,102 @@ class base {
 		return $string;
 	}
 
+	// bluelovers
+
+	function array_inarray_key($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (array_key_exists($key, $arr1)) $ret[$key] = $arr1[$key];
+			}
+		}
+
+		return $ret;
+	}
+
+	function array_inarray_value($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (in_array($key, $arr1)) $ret[$key] = $key;
+			}
+		}
+
+		return $ret;
+	}
+
+	function implodeids($array, $prefix = '') {
+		if(!empty($array)) {
+			return "'{$prefix}".implode("','{$prefix}", is_array($array) ? $array : array($array))."'";
+		} else {
+			return '';
+		}
+	}
+
+	function implode_mode ($pieces, $mode = 'mysql', $ret = '') {
+		$ret = is_array($ret) ? $ret : array();
+		$array = array();
+
+		switch ($mode) {
+			case 'mysql_0':
+				$c = '';
+				$ret[2] = '';
+
+				foreach ($pieces as $key => $value) {
+					$ret[2] .= $c.'`'.$key.'`=\''.$value.'\'';
+					$c = ',';
+				}
+
+				break;
+			case 'mysql_1':
+				$c = '';
+				$ret[0] = $ret[1] = '';
+
+				$ret[0] = '`'.$this->implode_by_key(null, $pieces, '`,`').'`';
+				$ret[1] = $this->implodeids($pieces);
+
+				break;
+			case 'mysql_2':
+				$c = '';
+				$ret[0] = $ret[1] = $ret[2] = '';
+
+				$ret = $this->implode_mode($pieces, 'mysql_1', $ret);
+				$ret = $this->implode_mode($pieces, 'mysql_0', $ret);
+
+				break;
+			case 'mysql':
+			default:
+				foreach ($pieces as $key) {
+					$array[] = $this->implodeids($key);
+				}
+
+				$ret = array('`'.$this->implode_by_key(null, $key, '`,`').'`', '('.implode("),\n(", $array).')');
+
+				break;
+		}
+
+		return $ret;
+	}
+
+	function implode_by_key ($key, $pieces, $glue = ',', $doids = false, $prefix = '') {
+		$array = array();
+
+		if ($key === null) {
+			$array = array_keys($pieces);
+		} else {
+			foreach ($pieces as $value) {
+				$array[] = $value[$key];
+			}
+		}
+
+		$array = is_array($array) ? $array : array($array);
+
+		return $doids ? "'{$prefix}".implode("'{$glue}'{$prefix}", $array)."'" : implode($glue.$prefix, $array);
+	}
+
+	// bluelovers
 }
 
 ?>
