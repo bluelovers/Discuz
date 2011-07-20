@@ -18,14 +18,18 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 	 * @link home.php?mod=spacecp&ac=avatar
 	 **/
 	function spacecp_avatar() {
+		/*
 		echo '<pre>';
 
 		echo $this->identifier."\n";
 		print_r($this);
+		*/
 
-		$op = $this->_getgp('op');
+		global $_G;
+		$op = getgpc('op');
 
-		dexit();
+		include $this->_template('spacecp_avatar');
+		exit();
 	}
 }
 
