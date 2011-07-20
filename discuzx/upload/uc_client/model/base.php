@@ -78,6 +78,13 @@ class base {
 		$this->db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, '', UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
 	}
 
+	/**
+	 * 加載相應的 Model, 存入 $_ENV 超級全局變量
+	 *
+	 * @param string $model 模塊名稱
+	 * @param 該模塊相對的基類 $base 預設為該基類
+	 * @return 此處不需要返回
+	 */
 	function load($model, $base = NULL) {
 		$base = $base ? $base : $this;
 		if(empty($_ENV[$model])) {
