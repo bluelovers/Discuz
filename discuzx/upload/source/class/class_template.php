@@ -232,6 +232,18 @@ class template {
 				*/
 
 				// bluelovers
+				// 可額外設定需要載入的語言包
+				if (discuz_core::$langplus) {
+					foreach(discuz_core::$langplus as $_v) {
+						if (!empty($_v) && $_v != $path) {
+							if (!is_array($_v)) {
+								$_v = array('template', $_v);
+							}
+							lang_merge($this->language['inner'], $_v);
+						}
+					}
+				}
+
 				lang_merge($this->language['inner'], array('template', $path));
 				// bluelovers
 

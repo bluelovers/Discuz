@@ -49,6 +49,10 @@ class discuz_core {
 	static $plugin_support = array();
 	// bluelovers
 
+	// bluelovers
+	static $langplus = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
