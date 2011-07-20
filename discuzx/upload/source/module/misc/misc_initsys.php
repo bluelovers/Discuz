@@ -15,6 +15,10 @@ if(!defined('IN_DISCUZ')) {
 // 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
 if ($_G['gp_op'] == 'install') {
 	updatecache('founder');
+
+	// 初始化預設安裝的插件
+	_______initsys_plugins();
+
 	echo 1;
 	exit();
 }
