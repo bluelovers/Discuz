@@ -64,6 +64,10 @@ class _sco_dx_plugin {
 		return call_user_func_array('template', $args);
 	}
 
+	function _getgp($key) {
+		global $_G;
+		return $_G['gp_'.$key];
+	}
 }
 
 ?>
