@@ -185,7 +185,7 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 	static $_del_cache = array();
 
-	if($isfilecache && $cachenames) {
+	if(!empty($GLOBALS['_G']['setting']) && $isfilecache && $cachenames) {
 		/*
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
@@ -212,6 +212,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 				'domain',
 
+				'setting',
+
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
 
@@ -219,11 +221,15 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 			$_skips = '/^('.$_skips.')/';
 		}
 
+		// 只刪除指定時間以前的緩存
+		$cache_dateline = 24;
+		$cache_dateline = TIMESTAMP - $cache_dateline * 3600;
+
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
 				&& !preg_match($_skips, $k)
 			) {
-				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
+				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' AND dateline < {$cache_dateline} LIMIT 1");
 			}
 
 			$_del_cache[$k] = true;

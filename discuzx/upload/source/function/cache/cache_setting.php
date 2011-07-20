@@ -422,6 +422,11 @@ function build_cache_setting() {
 
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
+
+	// bluelovers
+	// 避免緩存 BUG
+	loadcache('setting', 1);
+	// bluelovers
 }
 
 function get_cachedata_setting_creditspolicy() {
