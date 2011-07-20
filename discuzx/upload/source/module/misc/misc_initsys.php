@@ -15,6 +15,12 @@ if(!defined('IN_DISCUZ')) {
 // 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
 if ($_G['gp_op'] == 'install') {
 	updatecache('founder');
+
+	_______initsys_cache();
+
+	// 初始化預設安裝的插件
+	_______initsys_plugins();
+
 	echo 1;
 	exit();
 }
@@ -29,6 +35,11 @@ DB::query("TRUNCATE TABLE ".DB::table('common_syscache'));
 DB::query("TRUNCATE TABLE ".DB::table('common_admincp_session'));
 
 DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE `variable` = 'birthday'");
+
+_______initsys_cache();
+
+function _______initsys_cache() {
+	global $_G;
 // bluelovers
 
 require_once libfile('function/cache');
@@ -47,6 +58,11 @@ if($_G['config']['output']['tplrefresh']) {
 	$tpl->close();
 }
 
+// bluelovers
+}
+
+function _______initsys_plugins() {
+// bluelovers
 $plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
 
 require_once libfile('function/plugin');
@@ -79,5 +95,8 @@ foreach($plugins as $pluginid) {
 		}
 	}
 }
+// bluelovers
+}
+// bluelovers
 
 ?>
