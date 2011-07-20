@@ -16,6 +16,8 @@ if(!defined('IN_DISCUZ')) {
 if ($_G['gp_op'] == 'install') {
 	updatecache('founder');
 
+	_______initsys_cache();
+
 	// 初始化預設安裝的插件
 	_______initsys_plugins();
 
@@ -36,6 +38,9 @@ DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE `variable` = 'bir
 // bluelovers
 
 // bluelovers
+
+_______initsys_cache();
+
 function _______initsys_cache() {
 	global $_G;
 // bluelovers
