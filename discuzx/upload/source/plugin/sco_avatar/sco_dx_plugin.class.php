@@ -64,6 +64,27 @@ class _sco_dx_plugin {
 		return call_user_func_array('template', $args);
 	}
 
+	function _loop_glob($path, $mask = '*', $array = array()) {
+		$path = rtrim(str_replace('/./', '/', $path), '/').'/';
+
+		if ($mask != '*') {
+			foreach (glob($path.'*', GLOB_ONLYDIR) as $f) {
+				$f = str_replace('/./', '/', $f);
+				self::_loop_glob($f, $mask, &$array);
+			}
+		}
+
+		foreach (glob($path.$mask) as $f) {
+			$f = str_replace('/./', '/', $f);
+			if (is_dir($f)) {
+				self::_loop_glob($f, $mask, &$array);
+			} else {
+				$array[$f] = $f;
+			}
+		}
+		return $array;
+	}
+
 }
 
 ?>
