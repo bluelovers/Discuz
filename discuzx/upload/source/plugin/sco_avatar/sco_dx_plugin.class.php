@@ -56,6 +56,8 @@ class _sco_dx_plugin {
 	}
 
 	function _get_pluginmodule() {
+		global $_G;
+
 		$this->attr['pluginmodule'] =
 			isset($_G['setting']['pluginlinks'][$this->identifier][$this->module]) ?
 				$_G['setting']['pluginlinks'][$this->identifier][$this->module]
@@ -83,14 +85,6 @@ class _sco_dx_plugin {
 			foreach(array('script', 'template', 'install') as $type) {
 				!isset($_G['cache']['pluginlanguage_'.$type]) && loadcache('pluginlanguage_'.$type);
 				$identifier->attr['lang'][$type] = &$_G['cache']['pluginlanguage_'.$type][$identifier->identifier];
-			}
-
-			// 導入指定的緩存
-			foreach(array(
-				'pluginlinks',
-				'script',
-			) as $type) {
-				$identifier->attr[$type] = &$_G['setting'][$type][$identifier->identifier];
 			}
 
 			return true;
