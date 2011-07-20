@@ -17,7 +17,14 @@ class _sco_dx_plugin {
 	 **/
 	function _get_identifier($method) {
 		$a = explode('::', $method);
-		return array_pop($a);
+		$k = array_pop($a);
+
+		// remove plugin_ from identifier
+		if (strpos($k, 'plugin_') === 0) {
+			$k = substr($k, strlen('plugin_'));
+		}
+
+		return $k;
 	}
 
 	function _get_setting($identifier) {
