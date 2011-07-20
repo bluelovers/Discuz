@@ -51,6 +51,16 @@ class _sco_dx_plugin {
 
 		return false;
 	}
+
+	function template($file) {
+		$args = func_get_args();
+
+		if (strpos($file, ':') === false) {
+			$args[0] = $this->identifier.':'.$file;
+		}
+
+		return call_user_func_array('template', $args);
+	}
 }
 
 ?>
