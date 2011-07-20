@@ -278,6 +278,12 @@ function dhtmlspecialchars($string) {
 function dexit($message = '') {
 	if (is_array($message)) {
 		print_r($message);
+
+	// bluelovers
+	} elseif ($message && !is_string($message)) {
+		var_dump($message);
+	// bluelovers
+
 	} else {
 		echo $message;
 	}
