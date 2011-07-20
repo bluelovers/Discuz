@@ -68,6 +68,10 @@ class base {
 
 	}
 
+	/**
+	 * 實例化數據庫類
+	 *
+	 */
 	function init_db() {
 		require_once UC_ROOT.'lib/db.class.php';
 		$this->db = new ucclient_db();
