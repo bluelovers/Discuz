@@ -89,6 +89,9 @@ class _sco_dx_plugin {
 				$identifier->attr['lang'][$type] = &$_G['cache']['pluginlanguage_'.$type][$identifier->identifier];
 			}
 
+			// 所有的 plugins jsmenu
+			$identifier->attr['plugins']['jsmenu'] = &$_G['setting']['plugins']['jsmenu'];
+
 			return true;
 		} elseif (isset($_G['cache']['plugin'][$identifier])) {
 			return $_G['cache']['plugin'][$identifier];
