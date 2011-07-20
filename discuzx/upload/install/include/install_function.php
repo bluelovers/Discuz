@@ -461,7 +461,7 @@ function dir_writeable($dir) {
 	return $writeable;
 }
 
-function dir_clear($dir) {
+function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 	global $lang;
 	showjsmessage($lang['clear_dir'].' '.str_replace(ROOT_PATH, '', $dir));
 	if($directory = @dir($dir)) {
@@ -469,10 +469,27 @@ function dir_clear($dir) {
 			$filename = $dir.'/'.$entry;
 			if(is_file($filename)) {
 				@unlink($filename);
+
+			// bluelovers
+			// 允許處理子目錄
+			} elseif ($includesubdir
+				&& !($entry == '.' || $entry == '..')
+				&& is_dir($filename)
+			) {
+				dir_clear($filename, $noindex, $includesubdir);
+			// bluelovers
+
 			}
 		}
 		$directory->close();
-		@touch($dir.'/index.htm');
+
+		// bluelovers
+		if (!$noindex) {
+		// bluelovers
+			@touch($dir.'/index.htm');
+		// bluelovers
+		}
+		// bluelovers
 	}
 }
 
