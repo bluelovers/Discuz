@@ -153,6 +153,13 @@ class base {
 		return $_CACHE[$cachefile];
 	}
 
+	/**
+	 * 得到設置的值
+	 *
+	 * @param string $k 設置的項
+	 * @param string $decode 是否進行反序列化，一般為數組時，需要指定為TRUE
+	 * @return string/array 設置的值
+	 */
 	function get_setting($k = array(), $decode = FALSE) {
 		$return = array();
 		$sqladd = $k ? "WHERE k IN (".$this->implode($k).")" : '';
