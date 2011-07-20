@@ -35,9 +35,6 @@ DB::query("TRUNCATE TABLE ".DB::table('common_syscache'));
 DB::query("TRUNCATE TABLE ".DB::table('common_admincp_session'));
 
 DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE `variable` = 'birthday'");
-// bluelovers
-
-// bluelovers
 
 _______initsys_cache();
 
