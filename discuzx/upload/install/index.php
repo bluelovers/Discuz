@@ -488,7 +488,7 @@ if($method == 'show_license') {
 				.'<script type="text/javascript">'
 				.'setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);'
 				.'</script>'
-				.'<iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'
+				.'<iframe src="../misc.php?mod=initsys&op=install" style="display:none;" onload="setlaststep()"></iframe>'
 				."\r\n";
 			show_footer();
 		}
