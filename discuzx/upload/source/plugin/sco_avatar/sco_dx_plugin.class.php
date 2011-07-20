@@ -57,6 +57,10 @@ class _sco_dx_plugin {
 		return $k;
 	}
 
+	function _makeid($module = null) {
+		return $this->identifier.':'.(empty($module) ? $this->module : $module);
+	}
+
 	function _get_pluginmodule() {
 		global $_G;
 
