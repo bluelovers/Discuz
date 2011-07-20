@@ -9,6 +9,14 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 }
 
 class plugin_sco_avatar_home extends plugin_sco_avatar {
+	/**
+	 * 在瀏覽 修改頭像 時執行
+	 *
+	 * 此時尚未執行 require_once libfile('home/'.$mod, 'module');
+	 *
+	 * @see home.php
+	 * @link home.php?mod=spacecp&ac=avatar
+	 **/
 	function spacecp_avatar() {
 		echo $this->identifier;
 		dexit();
