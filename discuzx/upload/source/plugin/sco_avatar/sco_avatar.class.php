@@ -27,6 +27,8 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		global $_G;
 
+		//------------------------------------------------------
+
 		$_G['mnid'] = 'mn_common';
 
 		$ac = getgpc('ac');
@@ -62,6 +64,10 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		}
 
 		array_push(discuz_core::$langplus, 'home');
+
+		//------------------------------------------------------
+
+		$actives = array('avatar' =>' class="a"');
 
 		include $this->_template('spacecp_avatar');
 		exit();
