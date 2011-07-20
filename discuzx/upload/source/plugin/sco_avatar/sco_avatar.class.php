@@ -23,6 +23,8 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		echo $this->identifier."\n";
 		print_r($this);
 
+		$op = $this->_getgp('op');
+
 		dexit();
 	}
 }
