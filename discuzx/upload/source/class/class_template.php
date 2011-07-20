@@ -243,9 +243,7 @@ class template {
 						}
 					}
 				}
-				// bluelovers
 
-				// bluelovers
 				lang_merge($this->language['inner'], array('template', $path));
 				// bluelovers
 
