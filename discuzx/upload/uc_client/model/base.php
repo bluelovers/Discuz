@@ -94,6 +94,13 @@ class base {
 		return $_ENV[$model];
 	}
 
+	/**
+	 * 日期格式化 預設為格式化到分鐘
+	 *
+	 * @param int $time
+	 * @param int $type 	1：只顯示時間 2：只顯示日期 3：日期時間均顯示
+	 * @return string
+	 */
 	function date($time, $type = 3) {
 		if(!$this->settings) {
 			$this->settings = $this->cache('settings');
