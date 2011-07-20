@@ -212,6 +212,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 				'domain',
 
+				'setting',
+
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
 
@@ -227,7 +229,7 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 			if(!isset($_del_cache[$k])
 				&& !preg_match($_skips, $k)
 			) {
-				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
+				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' AND dateline < {$cache_dateline} LIMIT 1");
 			}
 
 			$_del_cache[$k] = true;
