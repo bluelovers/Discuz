@@ -28,7 +28,7 @@ class _sco_dx_plugin {
 	}
 
 	function _set($k, $v) {
-		if ($k = 'module') {
+		if ($k == 'module') {
 			$this->module = $v;
 			$this->attr['global']['mnid'] = 'plugin_'.$this->identifier.'_'.$this->module;
 
