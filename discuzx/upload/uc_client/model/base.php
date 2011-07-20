@@ -249,6 +249,9 @@ class base {
 		return $string;
 	}
 
+	// bluelovers
+
+	// bluelovers
 }
 
 ?>
