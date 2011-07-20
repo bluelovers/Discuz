@@ -26,6 +26,25 @@ class _sco_dx_plugin {
 		$a = explode('::', $method);
 		return array_pop($a);
 	}
+
+	function _get_setting($identifier) {
+		global $_G;
+
+		if(!isset($_G['cache']['plugin'])) {
+			loadcache('plugin');
+		}
+
+		if (is_object($identifier) && is_a($identifier, '_sco_dx_plugin')) {
+			$identifier->attr['setting_source'] = &$_G['cache']['plugin'][$identifier->identifier];
+			$identifier->attr['setting'] = $identifier->attr['setting_source'];
+
+			return true;
+		} elseif (isset($_G['cache']['plugin'][$identifier])) {
+			return $_G['cache']['plugin'][$identifier];
+		}
+
+		return false;
+	}
 }
 
 ?>
