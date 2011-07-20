@@ -124,6 +124,12 @@ class base {
 		return ($page - 1) * $ppp;
 	}
 
+	/**
+	 * 對字符或者數組加逗號連接, 用來
+	 *
+	 * @param string/array $arr 可以傳入數字或者字串
+	 * @return string 這樣的格式: '1','2','3'
+	 */
 	function implode($arr) {
 		return "'".implode("','", (array)$arr)."'";
 	}
