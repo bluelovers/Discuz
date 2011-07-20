@@ -22,9 +22,18 @@ class _sco_dx_plugin {
 	function &_instance($identifier, $module = null) {
 		eval('$obj = new plugin_'.$identifier.'();');
 
-		if (!empty($module)) $obj->module = $module;
+		if (!empty($module)) $obj->_set('module', $module);
 
 		return $obj;
+	}
+
+	function _set($k, $v) {
+		if ($k = 'module') {
+			$this->module = $v;
+			$this->attr['global']['mnid'] = 'plugin_'.$this->identifier.'_'.$this->module;
+		} else {
+			$this->$k = $v;
+		}
 	}
 
 	/**
