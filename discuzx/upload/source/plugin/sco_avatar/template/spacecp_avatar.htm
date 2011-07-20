@@ -1,0 +1,46 @@
+<!--{subtemplate common/header}-->
+	<!--{subtemplate home/spacecp_header}-->
+			<!--{hook/spacecp_avatar_top}-->
+			<script type="text/javascript">
+				function updateavatar() {
+					window.location.reload();
+				}
+			</script>
+			<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=avatar&ref">
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<caption>
+						<h2 class="xs2">{lang current_my_space}</h2>
+						<p>{lang setting_avatar_message}</p>
+					</caption>
+					<tr>
+						<td>
+							<!--{avatar($space[uid],array('big','',1))}-->
+							&nbsp;
+							<!--{avatar($space[uid],array('middle','',1))}-->
+							&nbsp;
+							<!--{avatar($space[uid],array('small','',1))}-->
+						</td>
+					</tr>
+				</table>
+
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<caption>
+						<h2 class="xs2">{lang setting_my_new_avatar}</h2>
+						<p>{lang setting_my_new_avatar_message}</p>
+					</caption>
+					<tr>
+						<td>
+
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+			</form>
+			<!--{hook/spacecp_avatar_bottom}-->
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate home/spacecp_footer}-->
+	</div>
+</div>
+<!--{subtemplate common/footer}-->
