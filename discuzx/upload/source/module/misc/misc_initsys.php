@@ -35,6 +35,11 @@ DB::query("TRUNCATE TABLE ".DB::table('common_admincp_session'));
 DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE `variable` = 'birthday'");
 // bluelovers
 
+// bluelovers
+function _______initsys_cache() {
+	global $_G;
+// bluelovers
+
 require_once libfile('function/cache');
 updatecache();
 
@@ -50,6 +55,10 @@ if($_G['config']['output']['tplrefresh']) {
 	}
 	$tpl->close();
 }
+
+// bluelovers
+}
+// bluelovers
 
 // bluelovers
 function _______initsys_plugins() {
