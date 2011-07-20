@@ -143,7 +143,7 @@ function getgpc($k, $type='GP', $default = null, $empty = null) {
 			($empty && empty($var[$k])) ?
 				$default
 				:
-		$var[$k]
+				$var[$k]
 		)
 		:
 		$default;
