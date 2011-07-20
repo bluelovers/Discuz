@@ -63,9 +63,7 @@ if($_G['config']['output']['tplrefresh']) {
 
 // bluelovers
 }
-// bluelovers
 
-// bluelovers
 function _______initsys_plugins() {
 // bluelovers
 $plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
