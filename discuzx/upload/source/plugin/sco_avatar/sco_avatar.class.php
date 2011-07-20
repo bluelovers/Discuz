@@ -69,6 +69,8 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		$actives = array('avatar' =>' class="a"');
 
+		$_loop_avatar = $this->_loop_glob($this->attr['directory'].'image/avatar/default', '*');
+
 		include $this->_template('spacecp_avatar');
 		exit();
 	}
