@@ -64,6 +64,17 @@ class _sco_dx_plugin {
 		return call_user_func_array('template', $args);
 	}
 
+	/**
+	 *
+	 * @example
+		$data_sco = _loop_glob('./data_sco', '*.sql');
+		foreach ($data_sco as $_f) {
+			showjsmessage('Load'.' '.$_f.' ... '.lang('succeed'));
+			$sql = file_get_contents(ROOT_PATH.'./install/'.$_f);
+			$sql = str_replace("\r\n", "\n", $sql);
+			runquery($sql);
+		}
+	 **/
 	function _loop_glob($path, $mask = '*', $array = array()) {
 		$path = rtrim(str_replace('/./', '/', $path), '/').'/';
 
