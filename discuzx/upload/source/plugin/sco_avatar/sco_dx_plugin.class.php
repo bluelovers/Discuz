@@ -55,6 +55,19 @@ class _sco_dx_plugin {
 		return $k;
 	}
 
+	function _get_pluginmodule() {
+		$this->attr['pluginmodule'] =
+			isset($_G['setting']['pluginlinks'][$this->identifier][$this->module]) ?
+				$_G['setting']['pluginlinks'][$this->identifier][$this->module]
+				: (isset($_G['setting']['plugins']['script'][$this->identifier][$this->module]) ?
+					$_G['setting']['plugins']['script'][$this->identifier][$this->module]
+					: array(
+						'adminid' => 0,
+						'directory' => preg_match("/^[a-z]+[a-z0-9_]*$/i", $this->identifier) ? $this->identifier.'/' : '')
+				)
+		;
+	}
+
 	function _get_setting($identifier) {
 		global $_G;
 
@@ -75,6 +88,7 @@ class _sco_dx_plugin {
 			// 導入指定的緩存
 			foreach(array(
 				'pluginlinks',
+				'script',
 			) as $type) {
 				$identifier->attr[$type] = &$_G['setting'][$type][$identifier->identifier];
 			}
