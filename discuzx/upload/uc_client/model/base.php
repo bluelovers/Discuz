@@ -328,6 +328,22 @@ class base {
 		return $ret;
 	}
 
+	function implode_by_key ($key, $pieces, $glue = ',', $doids = false, $prefix = '') {
+		$array = array();
+
+		if ($key === null) {
+			$array = array_keys($pieces);
+		} else {
+			foreach ($pieces as $value) {
+				$array[] = $value[$key];
+			}
+		}
+
+		$array = is_array($array) ? $array : array($array);
+
+		return $doids ? "'{$prefix}".implode("'{$glue}'{$prefix}", $array)."'" : implode($glue.$prefix, $array);
+	}
+
 	// bluelovers
 }
 
