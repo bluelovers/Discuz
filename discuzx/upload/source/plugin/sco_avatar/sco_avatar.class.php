@@ -5,6 +5,9 @@ include_once 'sco_dx_plugin.class.php';
 class plugin_sco_avatar extends _sco_dx_plugin {
 	function plugin_sco_avatar() {
 		$this->_init($this->_get_identifier(__METHOD__));
+
+		// 追加的基準語言包
+		$this->_lang_push('home');
 	}
 }
 
@@ -62,8 +65,6 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		if(lang('core', 'title_memcp_'.$ac)) {
 			$navtitle = lang('core', 'title_memcp_'.$ac);
 		}
-
-		array_push(discuz_core::$langplus, 'home');
 
 		//------------------------------------------------------
 
