@@ -138,7 +138,13 @@ function getgpc($k, $type='GP', $default = null, $empty = null) {
 
 	// 注意這裡沒有設置的時候返回的是NULL
 	return isset($var[$k]) ?
+		(
+		// 增加檢查 empty
+			($empty && empty($var[$k])) ?
+				$default
+				:
 		$var[$k]
+		)
 		:
 		$default;
 
