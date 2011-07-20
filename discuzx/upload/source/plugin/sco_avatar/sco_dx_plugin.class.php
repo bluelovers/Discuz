@@ -55,7 +55,9 @@ class _sco_dx_plugin {
 	function template($file) {
 		$args = func_get_args();
 
-		if (strpos($file, ':') === false) {
+		if (is_array($file)) {
+			$args[0] = implode(':', $file);
+		} elseif (strpos($file, ':') === false) {
 			$args[0] = $this->identifier.':'.$file;
 		}
 
