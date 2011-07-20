@@ -488,6 +488,7 @@ if($method == 'show_license') {
 				.'<script type="text/javascript">'
 				.'setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);'
 				.'</script>'
+				// 修改為 &op=install 來忽略權限檢查
 				.'<iframe src="../misc.php?mod=initsys&op=install" style="display:none;" onload="setlaststep()"></iframe>'
 				."\r\n";
 			show_footer();
