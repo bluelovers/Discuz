@@ -14,6 +14,11 @@ class _sco_dx_plugin {
 		$this->_get_setting($this);
 	}
 
+	function &_instance($identifier) {
+		eval('$obj = new plugin_'.$identifier.'();');
+		return $obj;
+	}
+
 	/**
 	 * get identifier from __CLASS__
 	 **/
