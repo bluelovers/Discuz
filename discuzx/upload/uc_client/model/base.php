@@ -283,6 +283,51 @@ class base {
 		}
 	}
 
+	function implode_mode ($pieces, $mode = 'mysql', $ret = '') {
+		$ret = is_array($ret) ? $ret : array();
+		$array = array();
+
+		switch ($mode) {
+			case 'mysql_0':
+				$c = '';
+				$ret[2] = '';
+
+				foreach ($pieces as $key => $value) {
+					$ret[2] .= $c.'`'.$key.'`=\''.$value.'\'';
+					$c = ',';
+				}
+
+				break;
+			case 'mysql_1':
+				$c = '';
+				$ret[0] = $ret[1] = '';
+
+				$ret[0] = '`'.$this->implode_by_key(null, $pieces, '`,`').'`';
+				$ret[1] = $this->implodeids($pieces);
+
+				break;
+			case 'mysql_2':
+				$c = '';
+				$ret[0] = $ret[1] = $ret[2] = '';
+
+				$ret = $this->implode_mode($pieces, 'mysql_1', $ret);
+				$ret = $this->implode_mode($pieces, 'mysql_0', $ret);
+
+				break;
+			case 'mysql':
+			default:
+				foreach ($pieces as $key) {
+					$array[] = $this->implodeids($key);
+				}
+
+				$ret = array('`'.$this->implode_by_key(null, $key, '`,`').'`', '('.implode("),\n(", $array).')');
+
+				break;
+		}
+
+		return $ret;
+	}
+
 	// bluelovers
 }
 
