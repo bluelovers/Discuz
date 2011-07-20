@@ -185,7 +185,7 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 	static $_del_cache = array();
 
-	if($isfilecache && $cachenames) {
+	if(!empty($GLOBALS['_G']['setting']) && $isfilecache && $cachenames) {
 		/*
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
