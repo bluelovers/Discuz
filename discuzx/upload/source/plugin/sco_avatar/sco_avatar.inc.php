@@ -36,7 +36,6 @@ var_dump(array(
 ));
 
 var_dump(array(
-	$identifier, $module,
 	$plugin_self,
 ));
 
