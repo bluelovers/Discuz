@@ -43,6 +43,22 @@ class _sco_dx_plugin {
 	}
 
 	/**
+	 * 載入插件語言包
+	 */
+	function _lang_load_plugin($k = 'script') {
+		global $_G;
+		$lang_type = array('script', 'template', 'install');
+
+		$k = in_array($k, $lang_type) ? $k : 'script';
+
+		// 載入語言包
+		!isset($_G['cache']['pluginlanguage_'.$k]) && loadcache('pluginlanguage_'.$k);
+		$this->attr['lang'][$k] = &$_G['cache']['pluginlanguage_'.$k][$this->identifier];
+
+		return $this;
+	}
+
+	/**
 	 * get identifier from __CLASS__
 	 **/
 	function _get_identifier($method) {
