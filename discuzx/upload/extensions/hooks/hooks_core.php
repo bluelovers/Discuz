@@ -143,6 +143,11 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			} elseif ($k == 'domain') {
 				$k2 = 'setting';
 
+				// 如果執行過 setting 直接跳過處理 domain
+				if (isset($_loadedcache[$k2])) {
+					continue;
+				}
+
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
 			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
 				$k2 = 'split';
