@@ -168,6 +168,10 @@ class _sco_dx_plugin {
 
 		return $this;
 	}
+
+	function _uc_call($module, $action, $arg = array()) {
+		return uc_api_call($module, $action, $arg);
+	}
 }
 
 ?>
