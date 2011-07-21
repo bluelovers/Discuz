@@ -158,6 +158,16 @@ class _sco_dx_plugin {
 	function _table($tablename) {
 		return DB::table('plugin_'.$this->identifier.'_'.$tablename);
 	}
+
+	function _uc_init() {
+		static $loaded;
+		if (!isset($loaded)) {
+			$loaded = true;
+			loaducenter();
+		}
+
+		return $this;
+	}
 }
 
 ?>
