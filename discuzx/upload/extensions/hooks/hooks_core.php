@@ -141,6 +141,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 			// domain 由 setting 控制
 			} elseif ($k == 'domain'
+		 		|| $k == 'adminmenu'
 			) {
 				$k2 = 'setting';
 
