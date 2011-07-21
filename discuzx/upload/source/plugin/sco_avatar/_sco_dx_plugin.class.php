@@ -152,6 +152,12 @@ class _sco_dx_plugin {
 		return $array;
 	}
 
+	/**
+	 * @return {tablepre}plugin_{$this->identifier}_{$tablename}
+	 */
+	function _table($tablename) {
+		return DB::table('plugin_'.$this->identifier.'_'.$tablename);
+	}
 }
 
 ?>
