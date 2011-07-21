@@ -747,6 +747,10 @@ function modauthkey($id) {
 	return md5($_G['username'].$_G['uid'].$_G['authkey'].substr(TIMESTAMP, 0, -7).$id);
 }
 
+/**
+ * 取得主導覽的 mnid
+ * 如果 $_G['mnid'] 存在則使用此值
+ */
 function getcurrentnav() {
 	global $_G;
 	if(!empty($_G['mnid'])) {
@@ -754,6 +758,35 @@ function getcurrentnav() {
 	}
 	$mnid = '';
 	$_G['basefilename'] = $_G['basefilename'] == $_G['basescript'] ? $_G['basefilename'] : $_G['basescript'].'.php';
+	/*
+	    [navmns] => Array
+        (
+            [misc.php] => Array
+                (
+                    [0] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => faq
+                                )
+
+                            [1] => mn_N0a2c
+                        )
+
+                    [1] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => ranklist
+                                )
+
+                            [1] => mn_N12a7
+                        )
+
+                )
+
+        )
+	*/
 	if(isset($_G['setting']['navmns'][$_G['basefilename']])) {
 		foreach($_G['setting']['navmns'][$_G['basefilename']] as $navmn) {
 			if($navmn[0] == array_intersect_assoc($navmn[0], $_GET)) {
