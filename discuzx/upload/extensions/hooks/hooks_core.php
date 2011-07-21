@@ -140,7 +140,9 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'plugin';
 
 			// domain 由 setting 控制
-			} elseif ($k == 'domain') {
+			} elseif ($k == 'domain'
+		 		|| $k == 'adminmenu'
+			) {
 				$k2 = 'setting';
 
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
@@ -148,10 +150,25 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'split';
 			}
 
+			// 如果執行過 $k2 直接跳過處理
+			if (0 && isset($_loadedcache[$k2])) {
+				continue;
+			}
+
 			$caches[] = $k2;
 			$caches_load[] = $k;
 			$_loadedcache[$k] = true;
+
+			$_loadedcache[$k2] = true;
 		}
+	}
+
+	/**
+	 * 預先載入 $_G['setting']
+	 * 防止 $_G['setting'] 為空
+	 */
+	if (empty($GLOBALS['_G']['setting'])) {
+		$GLOBALS['_G']['setting'] = $data['setting'];
 	}
 
 	// 整理過濾處理過的 Array

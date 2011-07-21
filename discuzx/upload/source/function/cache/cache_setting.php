@@ -30,6 +30,12 @@ function build_cache_setting() {
 	$data = array();
 	$query = DB::query("SELECT * FROM ".DB::table($table)." WHERE skey NOT IN(".dimplode($skipkeys).')');
 
+	// bluelovers
+	// 將進行中的 cache 儲存到 discuz_core::$_cache_data['setting'] 提供隨時存取
+	unset(discuz_core::$_cache_data['setting']);
+	discuz_core::$_cache_data['setting'] = &$data;
+	// bluelovers
+
 	while($setting = DB::fetch($query)) {
 		if($setting['skey'] == 'extcredits') {
 			if(is_array($setting['svalue'] = unserialize($setting['svalue']))) {
@@ -422,11 +428,6 @@ function build_cache_setting() {
 
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
-
-	// bluelovers
-	// 避免緩存 BUG
-	loadcache('setting', 1);
-	// bluelovers
 }
 
 function get_cachedata_setting_creditspolicy() {
@@ -663,6 +664,102 @@ function get_cachedata_setting_plugin($method = '') {
 
 function get_cachedata_mainnav() {
 	global $_G;
+	// bluelovers
+	if (0) {
+		$s = '<style>*{font-size:12px;vertical-align: top;} pre { white-space: pre-wrap;word-wrap: break-word;max-width: 500px; }</style>';
+		$s .= '<table>';
+		$vvv = array_merge($_G[setting], (array)discuz_core::$_cache_data[setting]);
+		foreach(array(
+			'homestatus',
+			'plugins',
+		) as $k) {
+			$v1 = array();
+			$v2 = array();
+
+			$v1[] = '$_G[setting]['.$k.']';
+			$v2[] = var_export($_G[setting][$k], 1);
+
+			$v1[] = 'discuz_core::$_cache_data[setting]['.$k.']';
+			$v2[] = var_export(discuz_core::$_cache_data[setting][$k], 1);
+
+			$v1[] = '$vvv['.$k.']';
+			$v2[] = var_export($vvv[$k], 1);
+
+			$s .= '<tr>';
+			$s .= '<th><pre>';
+			$s .= implode('</th><th><pre>', $v1);
+			$s .= '</pre></th>';
+			$s .= '</tr>';
+			$s .= '<tr>';
+			$s .= '<td><pre>';
+			$s .= implode('</td><td><pre>', $v2);
+			$s .= '</pre></td>';
+			$s .= '</tr>';
+		}
+		$s .= '</table></pre>';
+		if (empty($_G['setting']['plugins']['jsmenu'])
+			|| empty(discuz_core::$_cache_data[setting][homestatus])
+		) {
+			echo 'discuz_core::$_cache_data[setting_count] = '.discuz_core::$_cache_data['setting_count'];
+			echo '<br>discuz_core::$_cache_data[setting_end] = '.discuz_core::$_cache_data['setting_end'];
+			echo '<br>discuz_core::$_cache_data[setting_end2] = '.discuz_core::$_cache_data['setting_end2'];
+
+			echo $s;
+
+			/*
+			echo '<table style="width:100%">';
+			echo '<td width="33%" style="width:33%">';
+			var_dump($_G[setting]);
+			echo '<td width="33%" style="width:33%">';
+			var_dump(discuz_core::$_cache_data[setting]);
+			echo '<td width="33%" style="width:33%">';
+
+			echo '</table>';
+			*/
+
+			/*
+			echo '<hr>';
+			echo '<pre style="width: auto; max-width: 100%">';
+			debug_print_backtrace();
+			echo '</pre>';
+			echo '<hr>';
+			*/
+
+			$s = '';
+			$s .= '<table>';
+
+			foreach ($vvv as $k => $v) {
+				if ($_G[setting][$k] !== discuz_core::$_cache_data[setting][$k]) {
+					$v1 = array();
+					$v2 = array();
+
+					$v1[] = '$_G[setting]['.$k.']';
+					$v2[] = var_export($_G[setting][$k], 1);
+
+					$v1[] = 'discuz_core::$_cache_data[setting]['.$k.']';
+					$v2[] = var_export(discuz_core::$_cache_data[setting][$k], 1);
+
+					$s .= '<tr>';
+					$s .= '<th><pre>';
+					$s .= implode('</th><th><pre>', $v1);
+					$s .= '</pre></th>';
+					$s .= '</tr>';
+					$s .= '<tr>';
+					$s .= '<td><pre>';
+					$s .= implode('</td><td><pre>', $v2);
+					$s .= '</pre></td>';
+					$s .= '</tr>';
+				}
+			}
+
+			$s .= '</table>';
+
+			echo $s;
+
+			dexit();
+		}
+	}
+	// bluelovers
 
 	$data['navs'] = $data['subnavs'] = $data['menunavs'] = $data['navmns'] = $data['navmn'] = $data['navdms'] = array();
 	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND (available='1' OR type='0') AND parentid='0' ORDER BY displayorder");

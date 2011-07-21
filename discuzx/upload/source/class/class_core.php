@@ -53,6 +53,11 @@ class discuz_core {
 	static $langplus = array();
 	// bluelovers
 
+	// bluelovers
+	// 緩存正在進行中的 cache
+	static $_cache_data = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
