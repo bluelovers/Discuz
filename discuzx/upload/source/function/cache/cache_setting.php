@@ -30,6 +30,12 @@ function build_cache_setting() {
 	$data = array();
 	$query = DB::query("SELECT * FROM ".DB::table($table)." WHERE skey NOT IN(".dimplode($skipkeys).')');
 
+	// bluelovers
+	// 將進行中的 cache 儲存到 discuz_core::$_cache_data['setting'] 提供隨時存取
+	unset(discuz_core::$_cache_data['setting']);
+	discuz_core::$_cache_data['setting'] = &$data;
+	// bluelovers
+
 	while($setting = DB::fetch($query)) {
 		if($setting['skey'] == 'extcredits') {
 			if(is_array($setting['svalue'] = unserialize($setting['svalue']))) {
