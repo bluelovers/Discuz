@@ -665,6 +665,7 @@ function get_cachedata_setting_plugin($method = '') {
 function get_cachedata_mainnav() {
 	global $_G;
 	// bluelovers
+	if (0) {
 	$s = '<style>*{font-size:12px;vertical-align: top;} pre { white-space: pre-wrap;word-wrap: break-word;max-width: 500px; }</style>';
 	$s .= '<table>';
 	$vvv = array_merge($_G[setting], (array)discuz_core::$_cache_data[setting]);
@@ -756,6 +757,7 @@ function get_cachedata_mainnav() {
 		echo $s;
 
 		dexit();
+	}
 	}
 	// bluelovers
 
