@@ -1,6 +1,6 @@
 <?php
 
-include_once 'sco_dx_plugin.class.php';
+include_once '_sco_dx_plugin.class.php';
 
 class plugin_sco_avatar extends _sco_dx_plugin {
 	function plugin_sco_avatar() {
