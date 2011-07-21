@@ -170,7 +170,6 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	if (empty($GLOBALS['_G']['setting'])) {
 		$GLOBALS['_G']['setting'] = $data['setting'];
 	}
-	//
 
 	// 整理過濾處理過的 Array
 	$caches = array_unique($caches);
