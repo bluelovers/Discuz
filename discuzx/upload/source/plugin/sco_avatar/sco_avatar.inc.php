@@ -18,19 +18,19 @@ echo '<pre>';
 $plugin_self
 	->_uc_init()
 	->_uc_call('sc', 'set_user_fields', array(
-	'uid' => $_G['uid'],
-	'fields'=> array(
-		'avatar' => $_G['siteurl'].array_shift($_loop_avatar),
-	),
+		'uid' => $_G['uid'],
+		'fields'=> array(
+			'avatar' => $_G['siteurl'].array_shift($_loop_avatar),
+		),
 ));
 
 $plugin_self
 	->_uc_init()
 	->_uc_call('sc', 'get_user_fields', array(
-	'uid' => $_G['uid'],
-	'fields'=> array(
-		'avatar',
-	),
+		'uid' => $_G['uid'],
+		'fields'=> array(
+			'avatar',
+		),
 ));
 
 var_dump(array(
