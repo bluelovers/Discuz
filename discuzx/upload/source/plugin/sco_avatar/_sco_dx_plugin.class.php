@@ -107,11 +107,7 @@ class _sco_dx_plugin {
 			$identifier->attr['setting_source'] = &$_G['cache']['plugin'][$identifier->identifier];
 			$identifier->attr['setting'] = $identifier->attr['setting_source'];
 
-			// 載入語言包
-			foreach(array('script', 'template', 'install') as $type) {
-				!isset($_G['cache']['pluginlanguage_'.$type]) && loadcache('pluginlanguage_'.$type);
-				$identifier->attr['lang'][$type] = &$_G['cache']['pluginlanguage_'.$type][$identifier->identifier];
-			}
+			$identifier->_lang_load_plugin();
 
 			// 所有的 plugins jsmenu
 			$identifier->attr['plugins']['jsmenu'] = &$_G['setting']['plugins']['jsmenu'];
