@@ -151,7 +151,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			}
 
 			// 如果執行過 $k2 直接跳過處理
-			if (isset($_loadedcache[$k2])) {
+			if (0 && isset($_loadedcache[$k2])) {
 				continue;
 			}
 
