@@ -819,6 +819,11 @@ function get_cachedata_mainnav() {
 		if($nav['identifier'] == 6 && $nav['type'] == 0) {
 			if(!empty($_G['setting']['plugins']['jsmenu'])) {
 				$onmouseover .= "showMenu({'ctrlid':this.id,'ctrlclass':'hover','menuid':'plugin_menu'})";
+
+				// bluelovers
+				// 補充 plugin.php 的 mnid
+				$data['navmn']['plugin.php'] = $navid;
+				// bluelovers
 			} else {
 				$data['navs'][$id]['available'] = 0;
 				continue;
