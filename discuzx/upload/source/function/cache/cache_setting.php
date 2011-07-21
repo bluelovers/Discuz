@@ -676,9 +676,9 @@ function get_cachedata_mainnav() {
 	global $_G;
 	// bluelovers
 	// 將現在的 $_G 與 新的 discuz_core::$_cache_data['setting'] 合併
-	$s = '<style>*{font-size:12px}</style>';
+	$s = '<style>*{font-size:12px} pre { white-space: pre-wrap;word-wrap: break-word;max-width: 500px; }</style>';
 	$s .= '<table>';
-	$vvv = array_merge($_G[setting], discuz_core::$_cache_data[setting]);
+	$vvv = array_merge($_G[setting], (array)discuz_core::$_cache_data[setting]);
 	foreach(array(
 		'homestatus',
 		'plugins',
@@ -713,7 +713,17 @@ function get_cachedata_mainnav() {
 		echo 'discuz_core::$_cache_data[setting_count] = '.discuz_core::$_cache_data['setting_count'];
 		echo '<br>discuz_core::$_cache_data[setting_end] = '.discuz_core::$_cache_data['setting_end'];
 		echo '<br>discuz_core::$_cache_data[setting_end2] = '.discuz_core::$_cache_data['setting_end2'];
-		dexit($s);
+
+		echo $s;
+
+		echo '<table>';
+		echo '<td width="50%">';
+		var_dump($_G);
+		echo '<td width="50%">';
+		var_dump(discuz_core::$_cache_data[setting]);
+		echo '</table>';
+
+		dexit();
 	}
 	// bluelovers
 
