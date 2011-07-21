@@ -433,6 +433,11 @@ function build_cache_setting() {
 	// 避免緩存 BUG
 	loadcache('setting', 1);
 	// bluelovers
+
+	// bluelovers
+	// 釋放緩存
+	unset(discuz_core::$_cache_data['setting']);
+	// bluelovers
 }
 
 function get_cachedata_setting_creditspolicy() {
