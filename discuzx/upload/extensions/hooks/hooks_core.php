@@ -163,6 +163,15 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		}
 	}
 
+	/**
+	 * 預先載入 $_G['setting']
+	 * 防止 $_G['setting'] 為空
+	 */
+	if (empty($GLOBALS['_G']['setting'])) {
+		$GLOBALS['_G']['setting'] = $data['setting'];
+	}
+	//
+
 	// 整理過濾處理過的 Array
 	$caches = array_unique($caches);
 	$caches_load = array_unique($caches_load);
