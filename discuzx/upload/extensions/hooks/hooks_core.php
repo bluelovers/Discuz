@@ -153,9 +153,16 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'split';
 			}
 
+			// 如果執行過 $k2 直接跳過處理
+			if (isset($_loadedcache[$k2])) {
+				continue;
+			}
+
 			$caches[] = $k2;
 			$caches_load[] = $k;
 			$_loadedcache[$k] = true;
+
+			$_loadedcache[$k2] = true;
 		}
 	}
 
