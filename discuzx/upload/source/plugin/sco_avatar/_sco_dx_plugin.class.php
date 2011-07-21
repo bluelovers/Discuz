@@ -100,6 +100,11 @@ class _sco_dx_plugin {
 			// 所有的 plugins jsmenu
 			$identifier->attr['plugins']['jsmenu'] = &$_G['setting']['plugins']['jsmenu'];
 
+			// 補充 plugin.php 的 mnid
+			if (!isset($_G['setting']['navmn']['plugin.php'])) {
+				$_G['setting']['navmn']['plugin.php'] = $_G['setting']['navs'][6]['navid'];
+			}
+
 			return true;
 		} elseif (isset($_G['cache']['plugin'][$identifier])) {
 			return $_G['cache']['plugin'][$identifier];
