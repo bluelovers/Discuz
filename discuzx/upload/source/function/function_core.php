@@ -802,6 +802,16 @@ function getcurrentnav() {
 			}
 		}
 	}
+	/*
+    [navmn] => Array
+        (
+            [portal.php] => mn_portal
+            [forum.php] => mn_forum
+            [group.php] => mn_group
+            [home.php] => mn_home
+            [userapp.php] => mn_userapp
+        )
+	*/
 	if(!$mnid && isset($_G['setting']['navmn'][$_G['basefilename']])) {
 		$mnid = $_G['setting']['navmn'][$_G['basefilename']];
 	}
