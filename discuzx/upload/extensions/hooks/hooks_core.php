@@ -140,7 +140,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'plugin';
 
 			// domain 由 setting 控制
-			} elseif ($k == 'domain') {
+			} elseif ($k == 'domain'
+			) {
 				$k2 = 'setting';
 
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
