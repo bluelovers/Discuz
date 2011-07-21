@@ -674,6 +674,48 @@ function get_cachedata_setting_plugin($method = '') {
 
 function get_cachedata_mainnav() {
 	global $_G;
+	// bluelovers
+	// 將現在的 $_G 與 新的 discuz_core::$_cache_data['setting'] 合併
+	$s = '<style>*{font-size:12px}</style>';
+	$s .= '<table>';
+	$vvv = array_merge($_G[setting], discuz_core::$_cache_data[setting]);
+	foreach(array(
+		'homestatus',
+		'plugins',
+	) as $k) {
+		$v1 = array();
+		$v2 = array();
+
+		$v1[] = '$_G[setting]['.$k.']';
+		$v2[] = var_export($_G[setting][$k], 1);
+
+		$v1[] = 'discuz_core::$_cache_data[setting]['.$k.']';
+		$v2[] = var_export(discuz_core::$_cache_data[setting][$k], 1);
+
+		$v1[] = '$vvv['.$k.']';
+		$v2[] = var_export($vvv[$k], 1);
+
+		$s .= '<tr>';
+		$s .= '<td><pre>';
+		$s .= implode('</td><td><pre>', $v1);
+		$s .= '</pre></td>';
+		$s .= '</tr>';
+		$s .= '<tr>';
+		$s .= '<td><pre>';
+		$s .= implode('</td><td><pre>', $v2);
+		$s .= '</pre></td>';
+		$s .= '</tr>';
+	}
+	$s .= '</table></pre>';
+	if (empty($_G['setting']['plugins']['jsmenu'])
+		|| empty(discuz_core::$_cache_data[setting][homestatus])
+	) {
+		echo 'discuz_core::$_cache_data[setting_count] = '.discuz_core::$_cache_data['setting_count'];
+		echo '<br>discuz_core::$_cache_data[setting_end] = '.discuz_core::$_cache_data['setting_end'];
+		echo '<br>discuz_core::$_cache_data[setting_end2] = '.discuz_core::$_cache_data['setting_end2'];
+		dexit($s);
+	}
+	// bluelovers
 
 	$data['navs'] = $data['subnavs'] = $data['menunavs'] = $data['navmns'] = $data['navmn'] = $data['navdms'] = array();
 	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND (available='1' OR type='0') AND parentid='0' ORDER BY displayorder");
