@@ -49,10 +49,13 @@ class _sco_dx_plugin {
 		}
 	}
 
+	/**
+	 * @return _sco_dx_plugin
+	 */
 	function _setglobal($key , $value, $group = 'global') {
 		$_G = &$this->attr;
 
-		$k = explode('/', $group === null ? $key : $group.'/'.$key);
+		$k = explode('/', ($group === null || $group === '') ? $key : $group.'/'.$key);
 		switch (count($k)) {
 			case 1: $_G[$k[0]] = $value; break;
 			case 2: $_G[$k[0]][$k[1]] = $value; break;
@@ -60,13 +63,13 @@ class _sco_dx_plugin {
 			case 4: $_G[$k[0]][$k[1]][$k[2]][$k[3]] = $value; break;
 			case 5: $_G[$k[0]][$k[1]][$k[2]][$k[3]][$k[4]] =$value; break;
 		}
-		return true;
+		return $this;
 	}
 
-	function _getglobal($k, $group = 'global') {
+	function _getglobal($key, $group = 'global') {
 		$_G = &$this->attr;
 
-		$k = explode('/', $group === null ? $key : $group.'/'.$key);
+		$k = explode('/', ($group === null || $group === '') ? $key : $group.'/'.$key);
 		switch (count($k)) {
 			case 1: return isset($_G[$k[0]]) ? $_G[$k[0]] : null; break;
 			case 2: return isset($_G[$k[0]][$k[1]]) ? $_G[$k[0]][$k[1]] : null; break;
