@@ -9,6 +9,8 @@ $avatar_base_path = $plugin_self->attr['directory'].'image/avatar/';
 
 $plugin_self->_my_avatar_types_list();
 
+$plugin_self->_my_avatar_view_path(getgpc('avatar_view_path'));
+
 $plugin_self->_my_avatar_pics();
 
 extract($plugin_self->attr['global']);
