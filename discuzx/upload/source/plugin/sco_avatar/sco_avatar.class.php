@@ -8,6 +8,9 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 		// 追加的基準語言包
 		$this->_lang_push('home');
+
+		// set instance = $this
+		$this->_this($this);
 	}
 }
 

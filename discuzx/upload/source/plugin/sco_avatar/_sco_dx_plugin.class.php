@@ -8,6 +8,8 @@ class _sco_dx_plugin {
 
 	var $attr = array();
 
+	static $instance = null;
+
 	function _init($identifier) {
 		$this->identifier = $identifier;
 		$this->attr['identifier'] = &$this->identifier;
@@ -25,6 +27,15 @@ class _sco_dx_plugin {
 		if (!empty($module)) $obj->_set('module', $module);
 
 		return $obj;
+	}
+
+	/**
+	 * @return _sco_dx_plugin
+	 */
+	function _this($_this = null) {
+		if ($_this) self::$instance = &$_this;
+
+		return self::$instance;
 	}
 
 	function _set($k, $v) {
