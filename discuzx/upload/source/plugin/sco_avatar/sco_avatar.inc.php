@@ -11,6 +11,7 @@ $plugin_self->_my_avatar_pics(
 	$plugin_self->_my_avatar_view_path(getgpc('avatar_view_path'))
 );
 
+// 取出值給模板使用
 extract($plugin_self->attr['global']);
 
 include $plugin_self->_template('spacecp_avatar');
