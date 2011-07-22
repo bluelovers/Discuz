@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 所有衍生的 plugin class 的 method 盡量以 _my_ 作為開頭
+ */
 class _sco_dx_plugin {
 
 	var $identifier = null;
@@ -21,6 +24,9 @@ class _sco_dx_plugin {
 		$this->_init_setting($this);
 	}
 
+	/**
+	 * @example $plugin_self = _sco_dx_plugin::_instance($identifier, $module);
+	 */
 	function &_instance($identifier, $module = null) {
 		eval('$obj = new plugin_'.$identifier.'();');
 
