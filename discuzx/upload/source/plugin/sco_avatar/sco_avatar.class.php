@@ -128,6 +128,8 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		return $this
 			// 最後一次使用的檔案清單
 			->_setglobal('avatar_pics', $avatar_pics)
+			// 儲存目前的類別目錄名稱
+			->_setglobal('avatar_pics_view', $view)
 			// 依照類別來儲存檔案清單
 			->_setglobal('avatar_pics_all/'.$view, $avatar_pics)
 			->_getglobal('avatar_pics')
