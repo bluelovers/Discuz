@@ -49,8 +49,8 @@ class _sco_dx_plugin {
 		}
 	}
 
-	function _setglobal($key , $value, $group = null) {
-		$_G = &$this->attr['global'];
+	function _setglobal($key , $value, $group = 'global') {
+		$_G = &$this->attr;
 
 		$k = explode('/', $group === null ? $key : $group.'/'.$key);
 		switch (count($k)) {
@@ -63,8 +63,8 @@ class _sco_dx_plugin {
 		return true;
 	}
 
-	function _getglobal($k, $group = null) {
-		$_G = &$this->attr['global'];
+	function _getglobal($k, $group = 'global') {
+		$_G = &$this->attr;
 
 		$k = explode('/', $group === null ? $key : $group.'/'.$key);
 		switch (count($k)) {
