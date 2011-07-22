@@ -1883,15 +1883,18 @@ function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 			)
 		) {
 			if(checkperm('seccode')) {
+				// 安全問題
 				if($secqaacheck && !check_secqaa($_G['gp_secanswer'], $_G['gp_sechash'])) {
 					showmessage('submit_secqaa_invalid');
 				}
+				// 驗證碼
 				if($seccodecheck && !check_seccode($_G['gp_seccodeverify'], $_G['gp_sechash'])) {
 					showmessage('submit_seccode_invalid');
 				}
 			}
 			return TRUE;
 		} else {
+			// 'submit_invalid' => '抱歉，您的請求來路不正確或表單驗證串不符，無法提交',
 			showmessage('submit_invalid');
 		}
 	}
