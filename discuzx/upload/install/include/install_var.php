@@ -339,6 +339,11 @@ $serialize_sql_setting = array (
       'field' =>
       array (
         'realname' => 'realname',
+
+        // bluelovers
+        'nickname' => 'nickname',
+        // bluelovers
+
         'gender' => 'gender',
         'birthday' => 'birthday',
         'birthcity' => 'birthcity',
