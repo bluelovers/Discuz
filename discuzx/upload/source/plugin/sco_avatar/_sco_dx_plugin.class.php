@@ -127,10 +127,12 @@ class _sco_dx_plugin {
 	}
 
 	function _make_id($module = null) {
-		return $this->identifier.':'.(empty($module) ? $this->module : $module);
+		return $this->identifier.':'.(empty($module) ? (empty($this->module) ? $this->identifier : $this->module) : $module);
 	}
 
-	function _make_url($module = null, $hscript = 'plugin') {
+	function _make_url($module = null, $hscript = 'plugin', $query = array()) {
+		$url = '';
+
 		if ($hscript != 'plugin') {
 			global $_G;
 
@@ -144,10 +146,12 @@ class _sco_dx_plugin {
 				}
 			}
 
-			return $_G['basescript'].'.php?mod='.CURMODULE.(!empty($q) ? http_build_query($q) : '');
+			$url = $_G['basescript'].'.php?mod='.CURMODULE.(!empty($q) ? '&'.http_build_query($q) : '');
+		} else {
+			$url = 'plugin.php?id='.$this->_make_id($module);
 		}
 
-		return 'plugin.php?id='.$this->_make_id($module);
+		return $url.(!empty($query) ? '&'.http_build_query($query) : '');
 	}
 
 	function _init_pluginmodule() {
