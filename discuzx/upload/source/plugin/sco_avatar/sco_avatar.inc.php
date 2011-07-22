@@ -18,16 +18,22 @@ include $plugin_self->_template('spacecp_avatar');
 
 echo '<pre>';
 
-$a_file = getgpc('a_file');
+if (submitcheck('reset_'.$plugin_self->identifier)) {
 
-if (empty($a_file) || empty($avatar_pics[$a_file])) {
-	unset($a_file);
-} else {
-	$a_file = $avatar_pics[$a_file];
-}
+} elseif (submitcheck('submit_'.$plugin_self->identifier)) {
 
-if (!empty($a_file)) {
-	$member_uc = $plugin_self->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
+	$a_file = getgpc('a_file');
+
+	if (empty($a_file) || empty($avatar_pics[$a_file])) {
+		unset($a_file);
+	} else {
+		$a_file = $avatar_pics[$a_file];
+	}
+
+	if (!empty($a_file)) {
+		$member_uc = $plugin_self->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
+	}
+
 }
 
 $member_uc2 = $plugin_self->_my_avatar_user_get($_G['uid']);
