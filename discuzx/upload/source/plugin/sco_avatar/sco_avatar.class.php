@@ -22,6 +22,8 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 	/**
 	 * 儲存 avatar
+	 *
+	 * @example $member_uc = $plugin_self->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
 	 */
 	function _my_avatar_user_save($uid, $url) {
 		if ($uid <= 0) return false;
@@ -38,6 +40,8 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 	/**
 	 * 取得 avatar
+	 *
+	 * @example $member_uc2 = $plugin_self->_my_avatar_user_get($_G['uid']);
 	 */
 	function _my_avatar_user_get($uid) {
 		if ($uid <= 0) return false;
@@ -77,6 +81,8 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 	/**
 	 * 設定查看的 avatar 類別目錄
+	 *
+	 * @example $plugin_self->_my_avatar_view_path(getgpc('avatar_view_path'))
 	 */
 	function _my_avatar_view_path($avatar_view_path = 'default') {
 		$avatar_types = $this->_getglobal('avatar_types');
@@ -91,6 +97,10 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 	/**
 	 * 取得 view 類別目錄下的 avatar 圖檔
+	 *
+	 * @example $plugin_self->_my_avatar_pics(
+	$plugin_self->_my_avatar_view_path(getgpc('avatar_view_path'))
+);
 	 */
 	function _my_avatar_pics($view = null) {
 
