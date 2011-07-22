@@ -153,6 +153,12 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		$actives = array('avatar' =>' class="a"');
 
 		include $this->_template('spacecp_avatar');
+
+		var_dump(array(
+			$_G['basescript'],
+			$this->_make_url(null, $_G['basescript']),
+		));
+
 		exit();
 	}
 }
