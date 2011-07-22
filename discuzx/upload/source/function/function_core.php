@@ -1871,8 +1871,11 @@ function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 		if($allowget
 			|| (
 				$_SERVER['REQUEST_METHOD'] == 'POST'
+
+				// 如果是 POST 時要求必須要有 formhash
 				&& !empty($_G['gp_formhash'])
 				&& $_G['gp_formhash'] == formhash()
+
 				&& empty($_SERVER['HTTP_X_FLASH_VERSION'])
 				&& (
 					empty($_SERVER['HTTP_REFERER'])
