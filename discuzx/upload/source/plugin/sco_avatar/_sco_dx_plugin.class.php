@@ -49,6 +49,34 @@ class _sco_dx_plugin {
 		}
 	}
 
+	function _setglobal($key , $value, $group = null) {
+		$_G = &$this->attr['global'];
+
+		$k = explode('/', $group === null ? $key : $group.'/'.$key);
+		switch (count($k)) {
+			case 1: $_G[$k[0]] = $value; break;
+			case 2: $_G[$k[0]][$k[1]] = $value; break;
+			case 3: $_G[$k[0]][$k[1]][$k[2]] = $value; break;
+			case 4: $_G[$k[0]][$k[1]][$k[2]][$k[3]] = $value; break;
+			case 5: $_G[$k[0]][$k[1]][$k[2]][$k[3]][$k[4]] =$value; break;
+		}
+		return true;
+	}
+
+	function _getglobal($k, $group = null) {
+		$_G = &$this->attr['global'];
+
+		$k = explode('/', $group === null ? $key : $group.'/'.$key);
+		switch (count($k)) {
+			case 1: return isset($_G[$k[0]]) ? $_G[$k[0]] : null; break;
+			case 2: return isset($_G[$k[0]][$k[1]]) ? $_G[$k[0]][$k[1]] : null; break;
+			case 3: return isset($_G[$k[0]][$k[1]][$k[2]]) ? $_G[$k[0]][$k[1]][$k[2]] : null; break;
+			case 4: return isset($_G[$k[0]][$k[1]][$k[2]][$k[3]]) ? $_G[$k[0]][$k[1]][$k[2]][$k[3]] : null; break;
+			case 5: return isset($_G[$k[0]][$k[1]][$k[2]][$k[3]][$k[4]]) ? $_G[$k[0]][$k[1]][$k[2]][$k[3]][$k[4]] : null; break;
+		}
+		return null;
+	}
+
 	function _lang_push($k) {
 		array_push(discuz_core::$langplus, $k);
 	}
