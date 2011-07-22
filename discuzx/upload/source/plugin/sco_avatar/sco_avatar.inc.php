@@ -41,6 +41,8 @@ $member_uc2 = $plugin_self->_my_avatar_user_get($_G['uid']);
 var_dump(array(
 	$a_file,
 
+	$plugin_self->_make_url(null, $_G['basescript']),
+
 	$member_uc,
 	$member_uc2,
 ));
