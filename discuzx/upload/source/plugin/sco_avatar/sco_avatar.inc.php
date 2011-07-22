@@ -7,33 +7,11 @@ $plugin_self = _sco_dx_plugin::_instance($identifier, $module);
 
 $avatar_base_path = $plugin_self->attr['directory'].'image/avatar/';
 
-// 取得所有 avatar 目錄
-$avatar_types = array();
+$plugin_self->_my_avatar_types_list();
 
-$avatar_types['default'] = 'default';
+$plugin_self->_my_avatar_pics();
 
-$d = dir($avatar_base_path);
-while (false !== ($entry = $d->read())) {
-	if ($entry == '.' || $entry == '..' || $entry == 'default') continue;
-
-	$avatar_types[$entry] = $entry;
-}
-
-// 取得目前瀏覽的 avatar 目錄
-$avatar_view_path = getgpc('avatar_view_path', null,'default', 1);
-$avatar_view_path = in_array($avatar_view_path, $avatar_types) ? $avatar_view_path : 'default';
-
-$imgexts = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
-
-$avatar_pics = array();
-$d = dir($avatar_base_path.$avatar_view_path);
-while (false !== ($entry = $d->read())) {
-	if ($entry == '.' || $entry == '..'
-		|| !in_array(fileext($entry), $imgexts)
-	) continue;
-
-	$avatar_pics[$entry] = $avatar_base_path.$avatar_view_path.'/'.$entry;
-}
+extract($plugin_self->attr['global']);
 
 include $plugin_self->_template('spacecp_avatar');
 

@@ -10,7 +10,60 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		$this->_lang_push('home');
 
 		// set instance = $this
-		$this->_this($this);
+		$this->_this(&$this);
+
+		$this
+			->_setglobal('imgexts', array('jpg', 'jpeg', 'gif', 'png', 'bmp'))
+			->_setglobal('avatar_base_path', $this->attr['directory'].'image/avatar/')
+		;
+	}
+
+	function _my_avatar_types_list() {
+		$avatar_base_path = $this->_getglobal('avatar_base_path');
+
+		$avatar_types = array();
+
+		$avatar_types['default'] = 'default';
+
+		$d = dir(DISCUZ_ROOT.'./'.$avatar_base_path);
+		while (false !== ($entry = $d->read())) {
+			if ($entry == '.' || $entry == '..' || $entry == 'default') continue;
+
+			$avatar_types[$entry] = $entry;
+		}
+
+		return $this
+			->_setglobal('avatar_types', $avatar_types)
+			->_getglobal('avatar_types')
+		;
+	}
+
+	function _my_avatar_pics() {
+		$avatar_types = $this->_getglobal('avatar_types');
+
+		// 取得目前瀏覽的 avatar 目錄
+		$avatar_view_path = getgpc('avatar_view_path', null,'default', 1);
+		$avatar_view_path = in_array($avatar_view_path, $avatar_types) ? $avatar_view_path : 'default';
+
+		$this->_setglobal('avatar_view_path', $avatar_view_path);
+
+		$avatar_base_path = $this->_getglobal('avatar_base_path');
+		$imgexts = $this->_getglobal('imgexts');
+
+		$avatar_pics = array();
+		$d = dir($avatar_base_path.$avatar_view_path);
+		while (false !== ($entry = $d->read())) {
+			if ($entry == '.' || $entry == '..'
+				|| !in_array(fileext($entry), $imgexts)
+			) continue;
+
+			$avatar_pics[$entry] = $avatar_base_path.$avatar_view_path.'/'.$entry;
+		}
+
+		return $this
+			->_setglobal('avatar_pics', $avatar_pics)
+			->_getglobal('avatar_pics')
+		;
 	}
 }
 
