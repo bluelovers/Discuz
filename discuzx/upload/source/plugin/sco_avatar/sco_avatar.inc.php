@@ -5,8 +5,6 @@ include_once 'sco_avatar.class.php';
 // 建立 class plugin_$identifier
 $plugin_self = _sco_dx_plugin::_instance($identifier, $module);
 
-$avatar_base_path = $plugin_self->attr['directory'].'image/avatar/';
-
 $plugin_self->_my_avatar_types_list();
 
 $plugin_self->_my_avatar_pics(
