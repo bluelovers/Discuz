@@ -5,11 +5,23 @@ include_once 'sco_avatar.class.php';
 // 建立 class plugin_$identifier
 $plugin_self = _sco_dx_plugin::_instance($identifier, $module);
 
+// 取得目前瀏覽的 avatar 目錄
 $avatar_path = getgpc('avatar_path', null,'default', 1);
 
 $_loop_avatar = $plugin_self->_loop_glob($plugin_self->attr['directory'].'image/avatar/'.$avatar_path, '*');
 
 include template('common/header');
+
+// 取得所有 avatar 目錄
+$_avatar_types = array();
+$d = dir($plugin_self->attr['directory'].'image/avatar/');
+while (false !== ($entry = $d->read())) {
+	if ($entry == '.' || $entry == '..') continue;
+
+	array_push($_avatar_types, $entry);
+}
+
+var_dump($_avatar_types);
 
 include $plugin_self->_template('avatar');
 
