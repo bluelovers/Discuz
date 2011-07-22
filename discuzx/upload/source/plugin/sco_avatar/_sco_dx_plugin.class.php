@@ -53,7 +53,12 @@ class _sco_dx_plugin {
 
 		// 載入語言包
 		!isset($_G['cache']['pluginlanguage_'.$k]) && loadcache('pluginlanguage_'.$k);
-		$this->attr['lang'][$k] = &$_G['cache']['pluginlanguage_'.$k][$this->identifier];
+
+		foreach ($lang_type as $k) {
+			if (isset($_G['cache']['pluginlanguage_'.$k])) {
+				$this->attr['lang'][$k] = &$_G['cache']['pluginlanguage_'.$k][$this->identifier];
+			}
+		}
 
 		return $this;
 	}
