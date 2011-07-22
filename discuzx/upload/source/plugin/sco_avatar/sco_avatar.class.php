@@ -18,7 +18,7 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		;
 	}
 
-	function _my_avatar_save($uid, $url) {
+	function _my_avatar_user_save($uid, $url) {
 		if ($uid <= 0) return false;
 
 		return $member_uc = $this
@@ -27,6 +27,19 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 				'uid' => $uid,
 				'fields'=> array(
 					'avatar' => $url,
+				),
+		));
+	}
+
+	function _my_avatar_user_get($uid) {
+		if ($uid <= 0) return false;
+
+		return $member_uc = $this
+			->_uc_init()
+			->_uc_call('sc', 'get_user_fields', array(
+				'uid' => $uid,
+				'fields'=> array(
+					'avatar',
 				),
 		));
 	}
@@ -85,6 +98,7 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 		return $this
 			->_setglobal('avatar_pics', $avatar_pics)
+			->_setglobal('avatar_pics_all/'.$view, $avatar_pics)
 			->_getglobal('avatar_pics')
 		;
 	}
