@@ -15,7 +15,7 @@ include $plugin_self->_template('avatar');
 
 echo '<pre>';
 
-$plugin_self
+$member_uc = $plugin_self
 	->_uc_init()
 	->_uc_call('sc', 'set_user_fields', array(
 		'uid' => $_G['uid'],
@@ -24,7 +24,7 @@ $plugin_self
 		),
 ));
 
-$plugin_self
+$member_uc2 = $plugin_self
 	->_uc_init()
 	->_uc_call('sc', 'get_user_fields', array(
 		'uid' => $_G['uid'],
