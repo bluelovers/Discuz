@@ -1,15 +1,32 @@
-<!--{loop $_loop_avatar $a}-->
+
+<form method="get" action="{echo $plugin_self->_make_url()}">
+<input type="hidden" name="id" value="{echo $plugin_self->_make_id()}"/>
+<select name="avatar_view_path" id="avatar_view_path">
+<!--{option $avatar_types $avatar_view_path}-->
+	<option $_s_ value="$_v_">$_v_</option>
+<!--{/option}-->
+</select>
+<input type="submit" name="formsubmit" value="更換頭像目錄"/>
+</form>
+
+<form method="post" action="{echo $plugin_self->_make_url()}">
+<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
+<input type="hidden" name="m" value="edit" />
+<input type="hidden" name="avatar_view_path" value="$avatar_view_path" />
+<input type="submit" name="formsubmit" value="設定頭像"/>
+<!--{loop $avatar_pics $_k_ $_v_}-->
 	<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
 		<label>
 			<div style="display: block;height: 120px; width: 120px;text-align: center;" class="vm">
-				<img src="$a" class="vm avatar avatar_middle"/>
+				<img src="{$_v_}" class="vm avatar avatar_middle"/>
 			</div>
 			<center style="background-color: #8CBCB2;">
 				<p class="vm">
-					<input type="radio" name="a_file" value="$a" />
-					<!--{echo basename($a)}-->
+					<input type="radio" name="a_file" value="{$_k_}" />
+					{$_k_}
 				</p>
 			</center>
 		</label>
 	</div>
 <!--{/loop}-->
+</form>
