@@ -13,11 +13,16 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		$this->_this(&$this);
 
 		$this
+			// 設定允許的圖檔類型
 			->_setglobal('imgexts', array('jpg', 'jpeg', 'gif', 'png', 'bmp'))
+			// 設定 avatar 基礎目錄
 			->_setglobal('avatar_base_path', $this->attr['directory'].'image/avatar/')
 		;
 	}
 
+	/**
+	 * 儲存 avatar
+	 */
 	function _my_avatar_user_save($uid, $url) {
 		if ($uid <= 0) return false;
 
@@ -31,6 +36,9 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		));
 	}
 
+	/**
+	 * 取得 avatar
+	 */
 	function _my_avatar_user_get($uid) {
 		if ($uid <= 0) return false;
 
@@ -44,6 +52,9 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		));
 	}
 
+	/**
+	 * 取得 avatar 目錄作為類型
+	 */
 	function _my_avatar_types_list() {
 		$avatar_base_path = $this->_getglobal('avatar_base_path');
 
@@ -64,6 +75,9 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		;
 	}
 
+	/**
+	 * 設定查看的 avatar 類別目錄
+	 */
 	function _my_avatar_view_path($avatar_view_path = 'default') {
 		$avatar_types = $this->_getglobal('avatar_types');
 
@@ -75,14 +89,19 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		;
 	}
 
+	/**
+	 * 取得 view 類別目錄下的 avatar 圖檔
+	 */
 	function _my_avatar_pics($view = null) {
 
 		if (!$view) {
+			// 如果沒有指定 view 則使用預設值
 			$view = $this->_getglobal('avatar_view_path');
 		}
 
 		$imgexts = $this->_getglobal('imgexts');
 
+		// 取得要瀏覽的檔案目錄
 		$path = $this->_getglobal('avatar_base_path')
 			.$view;
 
@@ -97,7 +116,9 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		}
 
 		return $this
+			// 最後一次使用的檔案清單
 			->_setglobal('avatar_pics', $avatar_pics)
+			// 依照類別來儲存檔案清單
 			->_setglobal('avatar_pics_all/'.$view, $avatar_pics)
 			->_getglobal('avatar_pics')
 		;
