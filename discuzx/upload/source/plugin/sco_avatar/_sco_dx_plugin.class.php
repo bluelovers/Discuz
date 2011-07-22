@@ -130,7 +130,22 @@ class _sco_dx_plugin {
 		return $this->identifier.':'.(empty($module) ? $this->module : $module);
 	}
 
-	function _make_url($module = null) {
+	function _make_url($module = null, $hscript = 'plugin') {
+		if ($hscript != 'plugin') {
+
+			$q = array();
+			foreach (array(
+				'ac',
+				'do',
+			) as $k) {
+				if ($v = getgpc($k)) {
+					$q[$k] = $v;
+				}
+			}
+
+			return $_G['basescript'].'.php?mod='.CURMODULE.(!empty($q) ? http_build_query($q) : '');
+		}
+
 		return 'plugin.php?id='.$this->_make_id($module);
 	}
 
