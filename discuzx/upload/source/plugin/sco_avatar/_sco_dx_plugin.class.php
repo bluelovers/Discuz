@@ -18,7 +18,7 @@ class _sco_dx_plugin {
 
 		$this->attr['directory'] = 'source/plugin/'.$this->identifier.'/';
 
-		$this->_get_setting($this);
+		$this->_init_setting($this);
 	}
 
 	function &_instance($identifier, $module = null) {
@@ -143,7 +143,7 @@ class _sco_dx_plugin {
 		;
 	}
 
-	function _get_setting($identifier) {
+	function _init_setting($identifier) {
 		global $_G;
 
 		if(!isset($_G['cache']['plugin'])) {
