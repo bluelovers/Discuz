@@ -49,7 +49,7 @@ class _sco_dx_plugin {
 			$this->module = $v;
 			$this->attr['global']['mnid'] = 'plugin_'.$this->identifier.'_'.$this->module;
 
-			$this->_get_pluginmodule();
+			$this->_init_pluginmodule();
 		} else {
 			$this->$k = $v;
 		}
@@ -134,7 +134,7 @@ class _sco_dx_plugin {
 		return 'plugin.php?id='.$this->_make_id($module);
 	}
 
-	function _get_pluginmodule() {
+	function _init_pluginmodule() {
 		global $_G;
 
 		$this->attr['pluginmodule'] =
