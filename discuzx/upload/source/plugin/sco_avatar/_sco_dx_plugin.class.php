@@ -132,6 +132,7 @@ class _sco_dx_plugin {
 
 	function _make_url($module = null, $hscript = 'plugin') {
 		if ($hscript != 'plugin') {
+			global $_G;
 
 			$q = array();
 			foreach (array(
