@@ -2,7 +2,7 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-06-18 16:49]]></item>
+	<item id="Time"><![CDATA[2011-07-20 20:39]]></item>
 	<item id="From"><![CDATA[Discuz! Board (http://localhost/newsvn/forum/)]]></item>
 	<item id="Data">
 		<item id="plugin">
@@ -24,7 +24,7 @@ D) 兼容论坛风格，前、后台皮肤风格全部继承自 Discuz! X2 标�
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[stock_dzx/]]></item>
 			<item id="copyright"><![CDATA[Kilofox.Net]]></item>
-			<item id="version"><![CDATA[9.4.3]]></item>
+			<item id="version"><![CDATA[9.4.4]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[admincp]]></item>
