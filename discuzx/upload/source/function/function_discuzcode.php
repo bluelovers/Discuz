@@ -537,24 +537,28 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	$message = $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
 
 	// bluelovers
-	Scorpio_Hook::execute('Func_'.__FUNCTION__.':After_nl2br', array(array(
-			'message'			=> &$message
-			, 'smileyoff'		=> &$smileyoff
-			, 'bbcodeoff'		=> &$bbcodeoff
-			, 'htmlon'			=> &$htmlon
-			, 'allowsmilies'	=> &$allowsmilies
-			, 'allowbbcode'		=> &$allowbbcode
-			, 'allowimgcode'	=> &$allowimgcode
-			, 'allowhtml'		=> &$allowhtml
-			, 'jammer'			=> &$jammer
-			, 'parsetype'		=> &$parsetype
-			, 'authorid'		=> &$authorid
-			, 'allowmediacode'	=> &$allowmediacode
-			, 'pid'				=> &$pid
-			, 'msglower'		=> &$msglower
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:After_nl2br
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After_nl2br')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
 
-			, 'authorreplyexist' => &$authorreplyexist
-	)));
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
 	// bluelovers
 
 	// split code for hack
