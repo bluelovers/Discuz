@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-18
+ * Last Updated: 2011-07-20
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -44,7 +44,8 @@ CREATE TABLE pre_kfsm_customer (
   averageprice decimal(14,2) unsigned NOT NULL DEFAULT '0.00',
   buytime int(10) unsigned NOT NULL DEFAULT '0',
   selltime int(10) unsigned NOT NULL DEFAULT '0',
-  ip VARCHAR( 20 ) NOT NULL DEFAULT ''
+  ip VARCHAR( 20 ) NOT NULL DEFAULT '',
+  KEY cid (cid,sid)
 ) ENGINE=MyISAM;
 
 
