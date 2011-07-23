@@ -160,8 +160,8 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		$_v = $this->_parse_method(__METHOD__);
 
-		$this->_setglobal('mod', $_v[1]);
-		$this->_setglobal('ac', $_v[2]);
+		$this->_setglobal('mod', $_v[2]);
+		$this->_setglobal('ac', $_v[3]);
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (submitcheck('reset_'.$this->identifier)) {
