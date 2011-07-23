@@ -12,6 +12,16 @@ class _bbcode_ {
 		$_G['forum_discuzcode']['codecount']++;
 		return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
 	}
+
+	/**
+	 * windows = \r\n
+	 * unix = \n
+	 * mac = \r
+	 */
+	function nl2code($string, $r=0, $s = '[br][/br]') {
+		$string = str_replace($r ? $s : array("\r\n", "\n"), $r ? "\n" : $s, $string);
+		return $string;
+	}
 }
 
 ?>
