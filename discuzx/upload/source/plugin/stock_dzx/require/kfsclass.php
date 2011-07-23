@@ -3,15 +3,15 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-18
+ * Last Updated: 2011-07-20
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
  */
 class kfsclass
 {
-	public $version	= '9.4.3';
-	public $build_date = '2011-06-18';
+	public $version	= '9.4.4';
+	public $build_date = '2011-07-20';
 	public $website = '<a href="http://www.kilofox.net" target="_blank">www.Kilofox.Net</a>';
 	public function auto_run()
 	{
