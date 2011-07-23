@@ -6,21 +6,27 @@ class _bbcode_ {
 	function codedisp($code, $brush = 'plain') {
 		global $_G;
 		$_G['forum_discuzcode']['pcodecount']++;
+		/*
 		$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
 		$code = str_replace("\n", "<li>", $code);
+		*/
+		$code = str_replace(
+			array(
+				"\t",
+				"\n",
+				'\\"',
+				'\\"'
+			), array(
+				'[tab][/tab]',
+				'[br][/br]',
+				'"',
+				'"'
+			)
+			, $code);
+
 		$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
 		$_G['forum_discuzcode']['codecount']++;
 		return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
-	}
-
-	/**
-	 * windows = \r\n
-	 * unix = \n
-	 * mac = \r
-	 */
-	function nl2code($string, $r=0, $s = '[br][/br]') {
-		$string = str_replace($r ? $s : array("\r\n", "\n"), $r ? "\n" : $s, $string);
-		return $string;
 	}
 }
 
