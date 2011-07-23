@@ -334,6 +334,14 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		if($parsetype != 1 && $allowbbcode < 0 && isset($_G['cache']['bbcodes'][-$allowbbcode])) {
 			$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], $_G['cache']['bbcodes'][-$allowbbcode]['replacearray'], $message);
 		}
+
+		//BUG:部分文章經過以下處理後 會變為空白
+		/**
+		 * 加入 U 之後 似乎就修正此問題
+		 *
+		 * @link http://discuz.bluelovers.net/thread-22224.html
+		 * @link http://in-here.us/thread/22224/1/1.html
+		 */
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
 			if(strpos($msglower, '[hide]') !== FALSE) {
 				if($authorreplyexist === null) {
