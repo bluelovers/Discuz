@@ -480,8 +480,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" />')",
 				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
 			) : array(
-				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
-				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
+				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
+				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
 			), $message);
 		}
 	}
