@@ -177,11 +177,13 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (submitcheck('reset_'.$this->identifier)) {
+				$this->_uc_init();
+
 				$member_uc = $this->_my_avatar_user_save($_G['uid'], '');
 
 				if ($member_uc == 1) {
 					// 一併刪除上傳的頭像
-					uc_user_deleteavata($_G['uid']);
+					uc_user_deleteavatar($_G['uid']);
 
 					showmessage('成功重設頭像到預設', $this->_make_url(null, $_G['basescript']));
 				} else {
