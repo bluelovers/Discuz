@@ -226,15 +226,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		/*
 		var_dump(array(
-			__FUNCTION__,
-			__METHOD__
-		));
-
-		$this->_parse_method(__METHOD__);
-
-		var_dump(array(
-			$_G['basescript'],
-			$this->_make_url(null, $_G['basescript']),
+			$this
 		));
 		*/
 
