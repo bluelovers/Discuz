@@ -175,7 +175,8 @@ if(!$operation) {
 
 			$smileynum = 1;
 			$smilies = '';
-			$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder LIMIT $start_limit, $smiliesperpage");
+			// 增加第二排序條件 id
+			$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder, id LIMIT $start_limit, $smiliesperpage");
 			while($smiley =	DB::fetch($query)) {
 				$smilies .= showtablerow('', array('class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td23"', 'class="td23"', 'class="td24"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$smiley[id]\">",
