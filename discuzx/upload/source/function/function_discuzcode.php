@@ -79,7 +79,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_code', array(array(
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_code')
+			->run(array(array(
 			'message'			=> &$message
 			, 'smileyoff'		=> &$smileyoff
 			, 'bbcodeoff'		=> &$bbcodeoff
