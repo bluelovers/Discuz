@@ -103,6 +103,17 @@ EOF
 */
 
 		$hook_data .= $ss;
+	} elseif (
+		(
+			// 帖子底部
+			$hookid == 'viewthread_bottom'
+			// AJAX 時
+			|| ($hookid == 'viewthread_endline' && (!empty($_G['gp_viewpid']) || $_G['inajax']))
+		)
+	) {
+		$ss = '';
+
+		$hook_data .= $ss;
 	}
 }
 
