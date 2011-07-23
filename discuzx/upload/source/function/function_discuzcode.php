@@ -49,7 +49,9 @@ function codedisp($code, $brush = 'plain') {
 	/*
 	$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
 	$code = str_replace("\n", "<li>", $code);
+	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
 	*/
+	// bluelovers
 	$code = str_replace(
 		array(
 			"\t",
@@ -64,10 +66,6 @@ function codedisp($code, $brush = 'plain') {
 		)
 		, $code);
 
-	/*
-	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
-	*/
-	// bluelovers
 	$brush = empty($brush) ? 'plain' : $brush;
 
 	discuz_core::$plugin_support['SyntaxHighlighter'][$brush] = $brush;
