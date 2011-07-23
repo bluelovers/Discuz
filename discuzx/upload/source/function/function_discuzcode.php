@@ -103,7 +103,11 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	// bluelovers
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
+		/*
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
+		*/
+		$_regexval = '(?:[^\[]|\[(?!\/\\1\])).*';
+		$message = preg_replace("/\s*\[(code)(?:=([\w,]+))?\](".$_regexval.")\[\/\\1\]\s*/iesU", "codedisp('\\3', '\\2')", $message);
 	}
 
 	$msglower = strtolower($message);
