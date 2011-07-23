@@ -63,6 +63,15 @@ function codedisp($code, $brush = 'plain') {
 			'"'
 		)
 		, $code);
+
+	// bluelovers
+	$brush = empty($brush) ? 'plain' : $brush;
+
+	discuz_core::$plugin_support['SyntaxHighlighter'][$brush] = $brush;
+
+	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
+	// bluelovers
+
 	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
 	$_G['forum_discuzcode']['codecount']++;
 	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
