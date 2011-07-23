@@ -185,7 +185,9 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 					showmessage('成功重設頭像到預設', $this->_make_url(null, $_G['basescript']));
 				} else {
-					showmessage('發生錯誤! 請稍後再嘗試提交');
+					showmessage('發生錯誤! 請稍後再嘗試提交', null, null, array(
+						'return' => 1,
+					));
 				}
 			} elseif (submitcheck('submit_'.$this->identifier)) {
 
@@ -201,6 +203,10 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 					$member_uc = $this->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
 
 					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
+				} else {
+					showmessage('沒有選擇頭像或者錯誤的頭像請求', null, null, array(
+						'return' => 1,
+					));
 				}
 
 			}
