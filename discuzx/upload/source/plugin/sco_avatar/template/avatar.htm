@@ -13,6 +13,8 @@
 		<button type="submit" name="submit_{$plugin_self->identifier}" value="true" class="pn pnc"><span>更換頭像目錄</span></button>
 	</form>
 
+	<br /><br />
+
 	<form method="post" action="{echo $plugin_self->_make_url(null, $GLOBALS['_G']['basescript'])}">
 		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
 
@@ -25,6 +27,8 @@
 		<input type="hidden" name="avatar_view_path" value="$avatar_view_path" />
 		<button type="submit" name="submit_{$plugin_self->identifier}" value="true" class="pn pnc"><span>設定頭像</span></button>
 		<button type="submit" name="reset_{$plugin_self->identifier}" value="true" class="pn"><span>重設頭像</span></button>
+
+		<br /><br />
 	<!--{loop $avatar_pics $_k_ $_v_}-->
 		<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
 			<label>
