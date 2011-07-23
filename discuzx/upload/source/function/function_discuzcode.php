@@ -848,6 +848,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	} elseif(strpos($lowerurl, 'www.youtube.com/watch?') !== FALSE) {
+		// 改良支援 youtu.be 簡短網址
 		if(preg_match("/http:\/\/(?:www.youtube.com\/watch\?v=|youtu\.be\/)([^\/&]+)&?/i", $url, $matches)) {
 			/*
 			$flv = 'http://www.youtube.com/v/'.$matches[1].'&hl=zh_CN&fs=1';
