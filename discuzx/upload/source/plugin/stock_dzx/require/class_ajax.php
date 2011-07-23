@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-20
+ * Last Updated: 2011-07-20
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -22,7 +22,7 @@ class Ajax
 		$msg = '';
 		if ( empty($stname) )
 		{
-			$msg .= '请输入股票名称';
+			$msg .= "请输入股票名称";
 		}
 		else
 		{
