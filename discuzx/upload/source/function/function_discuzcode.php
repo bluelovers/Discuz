@@ -81,23 +81,23 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_code')
 			->run(array(array(
-			'message'			=> &$message
-			, 'smileyoff'		=> &$smileyoff
-			, 'bbcodeoff'		=> &$bbcodeoff
-			, 'htmlon'			=> &$htmlon
-			, 'allowsmilies'	=> &$allowsmilies
-			, 'allowbbcode'		=> &$allowbbcode
-			, 'allowimgcode'	=> &$allowimgcode
-			, 'allowhtml'		=> &$allowhtml
-			, 'jammer'			=> &$jammer
-			, 'parsetype'		=> &$parsetype
-			, 'authorid'		=> &$authorid
-			, 'allowmediacode'	=> &$allowmediacode
-			, 'pid'				=> &$pid
-			, 'msglower'		=> &$msglower
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
 
-			, 'authorreplyexist' => &$authorreplyexist
-	)));
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
 	}
 	// bluelovers
 
