@@ -124,6 +124,27 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'discuzcode'), 'discuzcode');
 	}
 
+	// bluelovers
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_smile', array(array(
+			'message'			=> &$message
+			, 'smileyoff'		=> &$smileyoff
+			, 'bbcodeoff'		=> &$bbcodeoff
+			, 'htmlon'			=> &$htmlon
+			, 'allowsmilies'	=> &$allowsmilies
+			, 'allowbbcode'		=> &$allowbbcode
+			, 'allowimgcode'	=> &$allowimgcode
+			, 'allowhtml'		=> &$allowhtml
+			, 'jammer'			=> &$jammer
+			, 'parsetype'		=> &$parsetype
+			, 'authorid'		=> &$authorid
+			, 'allowmediacode'	=> &$allowmediacode
+			, 'pid'				=> &$pid
+			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
+	)));
+	// bluelovers
+
 	if(!$smileyoff && $allowsmilies) {
 		$message = parsesmiles($message);
 	}
