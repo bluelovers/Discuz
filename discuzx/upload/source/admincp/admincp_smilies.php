@@ -299,9 +299,22 @@ EOT;
 				while($img = DB::fetch($query)) {
 					$imgfilter[] = $img[url];
 				}
+
+				// bluelovers
+				$_pic_files = array();
+				// bluelovers
+
 				$smiliesdir = dir($smdir);
 				while($entry = $smiliesdir->read()) {
 					if(in_array(strtolower(fileext($entry)), $imgextarray) && !in_array($entry, $imgfilter) && preg_match("/^[\w\-\.\[\]\(\)\<\> &]+$/", substr($entry, 0, strrpos($entry, '.'))) && strlen($entry) < 30 && is_file($smdir.'/'.$entry)) {
+				// bluelvoers
+						array_push($_pic_files, $entry);
+					}
+				}
+
+				foreach ($_pic_files as $entry) {
+					if (1) {
+				// bluelovers
 						$newimages .= showtablerow('', array('class="td25"', 'class="td28 td24"', 'class="td23"'), array(
 							"<input class=\"checkbox\" type=\"checkbox\" name=\"smilies[$newid][available]\" value=\"1\" checked=\"checked\">",
 							"<input type=\"text\" class=\"txt\" size=\"2\" name=\"smilies[$newid][displayorder]\" value=\"0\">",
