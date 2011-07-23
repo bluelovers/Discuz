@@ -435,6 +435,27 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 	}
 
+	// bluelovers
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_highlight', array(array(
+			'message'			=> &$message
+			, 'smileyoff'		=> &$smileyoff
+			, 'bbcodeoff'		=> &$bbcodeoff
+			, 'htmlon'			=> &$htmlon
+			, 'allowsmilies'	=> &$allowsmilies
+			, 'allowbbcode'		=> &$allowbbcode
+			, 'allowimgcode'	=> &$allowimgcode
+			, 'allowhtml'		=> &$allowhtml
+			, 'jammer'			=> &$jammer
+			, 'parsetype'		=> &$parsetype
+			, 'authorid'		=> &$authorid
+			, 'allowmediacode'	=> &$allowmediacode
+			, 'pid'				=> &$pid
+			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
+	)));
+	// bluelovers
+
 	if(!empty($_G['gp_highlight'])) {
 		$highlightarray = explode('+', $_G['gp_highlight']);
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
