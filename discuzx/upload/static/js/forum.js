@@ -366,6 +366,7 @@ function loadData(quiet, formobj) {
 	extraCheckall();
 }
 
+// 控制檢查版塊的主題變化的時間間隔
 var checkForumcount = 0, checkForumtimeout = 30000, checkForumnew_handle;
 function checkForumnew(fid, lasttime) {
 	// ajax 顯示板塊是否有新的主題變化
