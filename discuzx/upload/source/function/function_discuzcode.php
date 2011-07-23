@@ -634,7 +634,10 @@ function parseed2k($url) {
 		$ed2kid = 'ed2k_'.random(3);
 		return '<a id="'.$ed2kid.'" href="'.$url.'" target="_blank"></a><script language="javascript">$(\''.$ed2kid.'\').innerHTML=htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\')))+\' ('.sizecount($size).')\';</script>';
 	} else {
+		/*
 		return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+		*/
+		return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_ed2k">'.$url.'</a>';
 	}
 }
 
