@@ -50,3 +50,15 @@ p.emp { color: red; }
 .avatar_small_48 { max-height: 48px; max-width: 48px; }
 .avatar_middle { max-height: 120px; max-width: 120px; }
 .avatar_big { max-height: auto; max-width: auto; }
+
+/* 使 pre, code 可以斷行 */
+.syntaxhighlighter pre, .syntaxhighlighter code {
+	width:inherit;
+	word-break: break-all;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	*white-space: pre;           /* IE */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
