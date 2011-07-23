@@ -69,6 +69,11 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 
 	static $authorreplyexist;
 
+	// bluelovers
+	// 轉換所有分行為 lf
+	$message = str_replace(array("\r\n"), "\n", $message);
+	// bluelovers
+
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
 	}
