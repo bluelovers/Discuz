@@ -68,7 +68,7 @@ function codedisp($code, $brush = 'plain') {
 
 	$brush = empty($brush) ? 'plain' : $brush;
 
-	discuz_core::$plugin_support['SyntaxHighlighter'][$brush] = $brush;
+	discuz_core::$plugin_support['SyntaxHighlighter']['brush'][$brush] = $brush;
 
 	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
 
