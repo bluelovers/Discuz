@@ -67,7 +67,7 @@ function karmaimg($rate, $ratetimes) {
 	return $karmaimg;
 }
 
-function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0) {
+function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0) {
 	global $_G;
 
 	static $authorreplyexist;
