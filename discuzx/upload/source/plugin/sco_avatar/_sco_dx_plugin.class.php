@@ -262,6 +262,19 @@ class _sco_dx_plugin {
 	function _uc_call($module, $action, $arg = array()) {
 		return uc_api_call($module, $action, $arg);
 	}
+
+	/**
+	 * @example $_v = $this->_parse_method(__METHOD__);
+	 */
+	function _parse_method($method) {
+		if (preg_match('/^plugin_'
+			.'(?:'.(preg_quote($this->identifier, '/')).')'
+			.'(?:_(.+)\:\:([^\_]+)_(.*))?$'
+			.'/', $method, $m)) {
+
+			return $m;
+		}
+	}
 }
 
 ?>
