@@ -863,6 +863,11 @@ function parseflv($url, $width = 0, $height = 0) {
 					$imgurl = $url.$filename;
 				}
 			}
+
+			// bluelovers
+			// 提供分析使用
+			$url = 'http://www.youtube.com/watch?v='.$matches[1];
+			// bluelovers
 		}
 	} elseif(strpos($lowerurl, 'tv.mofile.com/') !== FALSE) {
 		if(preg_match("/http:\/\/tv.mofile.com\/([^\/]+)/i", $url, $matches)) {
