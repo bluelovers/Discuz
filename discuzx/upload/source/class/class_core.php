@@ -1171,6 +1171,9 @@ class DB
 		return $res;
 	}
 
+	/**
+	 * @return db_mysql
+	 */
 	function &object($dbclass = 'db_mysql') {
 		static $db;
 		if(empty($db)) $db = new $dbclass();
