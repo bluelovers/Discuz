@@ -202,6 +202,9 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 				}
 
 				if (!empty($a_file)) {
+					// 先進行一次刪除頭像
+					uc_user_deleteavatar($_G['uid']);
+
 					$member_uc = $this->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
 
 					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
