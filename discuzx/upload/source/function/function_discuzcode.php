@@ -435,10 +435,6 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 	}
 
-	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
-		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
-	}
-
 	if(!empty($_G['gp_highlight'])) {
 		$highlightarray = explode('+', $_G['gp_highlight']);
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
@@ -450,6 +446,11 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		if($sppos !== FALSE) {
 			$message = $message.chr(0).chr(0).chr(0).$specialextra;
 		}
+	}
+
+	// 移動代碼使 highlight 在此代碼之前執行
+	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
+		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
 	}
 
 	unset($msglower);
