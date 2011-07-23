@@ -366,8 +366,9 @@ function loadData(quiet, formobj) {
 	extraCheckall();
 }
 
-// 控制檢查版塊的主題變化的時間間隔
+// 已執行檢查的次數
 var checkForumcount = 0
+	// 控制檢查版塊的主題變化的時間間隔
 	, checkForumtimeout = 30000
 	, checkForumnew_handle;
 function checkForumnew(fid, lasttime) {
