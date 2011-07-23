@@ -648,9 +648,15 @@ function parseemail($email, $text) {
 	$text = str_replace('\"', '"', $text);
 	if(!$email && preg_match("/\s*([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+)\s*/i", $text, $matches)) {
 		$email = trim($matches[0]);
+		/*
 		return '<a href="mailto:'.$email.'">'.$email.'</a>';
+		*/
+		return '<a href="mailto:'.$email.'" class="bbocde_link bbocde_link_email">'.$email.'</a>';
 	} else {
+		/*
 		return '<a href="mailto:'.substr($email, 1).'">'.$text.'</a>';
+		*/
+		return '<a href="mailto:'.substr($email, 1).'" class="bbocde_link bbocde_link_email">'.$text.'</a>';
 	}
 }
 
