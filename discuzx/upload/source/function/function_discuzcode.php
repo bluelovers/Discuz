@@ -935,6 +935,20 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	}
+
+	// bluelovers
+	if (sclass_exists('Scorpio_Hook')) {
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':After', array(array(
+			'url' => &$url,
+			'imgurl' => &$imgurl,
+			'imagearray' => &$imagearray,
+			'flv' => &$flv,
+			'width' => &$width,
+			'height' => &$height,
+		)));
+	}
+	// bluelovers
+
 	if($flv) {
 		if(!$width && !$height) {
 			return array('flv' => $flv, 'imgurl' => $imgurl);
