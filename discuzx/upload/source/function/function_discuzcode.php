@@ -849,7 +849,11 @@ function parseflv($url, $width = 0, $height = 0) {
 		}
 	} elseif(strpos($lowerurl, 'www.youtube.com/watch?') !== FALSE) {
 		if(preg_match("/http:\/\/www.youtube.com\/watch\?v=([^\/&]+)&?/i", $url, $matches)) {
+			/*
 			$flv = 'http://www.youtube.com/v/'.$matches[1].'&hl=zh_CN&fs=1';
+			*/
+			// 修正 youtube 語言
+			$flv = 'http://www.youtube.com/v/'.$matches[1].'&fs=1';
 			if(!$width && !$height) {
 				$str = file_get_contents($url);
 				if(!empty($str) && preg_match("/'VIDEO_HQ_THUMB':\s'(.+?)'/i", $str, $image)) {
