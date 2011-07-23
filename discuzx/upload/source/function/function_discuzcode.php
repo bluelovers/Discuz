@@ -374,14 +374,23 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 					$authorreplyexist = !$_G['forum']['ismoderator'] ? DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND ".($_G['uid'] ? "authorid='$_G[uid]'" : "authorid=0 AND useip='$_G[clientip]'")." LIMIT 1") : TRUE;
 				}
 				if($authorreplyexist) {
+					/*
 					$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
+					*/
+					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/isU", tpl_hide_reply(), $message);
 				} else {
+					/*
 					$message = preg_replace("/\[hide\](.*?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
+					*/
+					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/isU", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
 			if(strpos($msglower, '[hide=') !== FALSE) {
+				/*
 				$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
+				*/
+				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/iesU", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
 
