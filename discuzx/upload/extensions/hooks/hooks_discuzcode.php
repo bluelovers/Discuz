@@ -3,7 +3,7 @@
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 class _bbcode_ {
-	function codedisp($code) {
+	function codedisp($code, $brush = 'plain') {
 		global $_G;
 		$_G['forum_discuzcode']['pcodecount']++;
 		$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
