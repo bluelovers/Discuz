@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-18
+ * Last Updated: 2011-06-26
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -193,7 +193,7 @@ class Trust
 			{
 				$ipq = "SELECT buytime, ip FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' AND buytime>{$_G['timestamp']}-$db_iplimit*60";
 				$sameIp = false;
-				while( $rsip = DB::query($ipq) )
+				while( $rsip = DB::fetch($ipq) )
 				{
 					$rsip['ip'] == $user['ip'] && $sameIp = true;
 				}
@@ -326,10 +326,8 @@ class Trust
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 买方部分成交，有可能完全成交
 							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
-							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
-							if ( $tranState['quant_deal'] > $tranState['quant_tran'] )
-								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='2' WHERE did='$newdid'");
-							else
+							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
+							if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							// 更新股票“成交价”
@@ -367,7 +365,7 @@ class Trust
 				{
 					$ipq = "SELECT selltime, ip FROM ".DB::table('kfsm_customer')." WHERE sid='$stock_id' AND selltime>{$_G['timestamp']}-$db_iplimit*60";
 					$sameIp = false;
-					while( $rsip = DB::query($ipq) )
+					while( $rsip = DB::fetch($ipq) )
 					{
 						$rsip['ip'] == $user['ip'] && $sameIp = true;
 					}
@@ -509,10 +507,8 @@ class Trust
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 卖方部分成交，有可能完全成交
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
-								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran, ok FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
-								if ( $tranState['quant_deal'] > $tranState['quant_tran'] )
-									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='2' WHERE did='$newdid'");
-								else
+								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
+								if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user[id]}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								// 更新股票“成交价”
