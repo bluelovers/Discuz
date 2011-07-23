@@ -152,22 +152,37 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		$_G['mnid'] = 'mn_common';
 		$actives = array('avatar' =>' class="a"');
 
+		$_v = $this->_parse_method(__METHOD__);
+
+		$this->_setglobal('mod', $_v[2]);
+		$this->_setglobal('ac', $_v[3]);
+
+		// 檢查使用者是否登入
+		if(empty($_G['uid'])) {
+			extract($this->attr['global']);
+
+			if($_SERVER['REQUEST_METHOD'] == 'GET') {
+				dsetcookie('_refer', rawurlencode($_SERVER['REQUEST_URI']));
+			} else {
+				dsetcookie('_refer', rawurlencode('home.php?mod=spacecp&ac='.$ac));
+			}
+			showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
+		}
+
 		$this->_my_avatar_types_list();
 
 		$this->_my_avatar_pics(
 			$this->_my_avatar_view_path(getgpc('avatar_view_path'))
 		);
 
-		$_v = $this->_parse_method(__METHOD__);
-
-		$this->_setglobal('mod', $_v[2]);
-		$this->_setglobal('ac', $_v[3]);
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if (submitcheck('reset_'.$this->identifier)) {
 				$member_uc = $this->_my_avatar_user_save($_G['uid'], '');
 
 				if ($member_uc == 1) {
+					// 一併刪除上傳的頭像
+					uc_user_deleteavata($_G['uid']);
+
 					showmessage('成功重設頭像到預設', $this->_make_url(null, $_G['basescript']));
 				} else {
 					showmessage('發生錯誤! 請稍後再嘗試提交');
