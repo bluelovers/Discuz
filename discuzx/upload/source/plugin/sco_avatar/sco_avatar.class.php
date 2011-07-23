@@ -192,6 +192,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 					));
 				}
 			} elseif (submitcheck('submit_'.$this->identifier)) {
+				//TODO:增加可設定站外頭像
 
 				$a_file = getgpc('a_file');
 
