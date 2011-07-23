@@ -44,6 +44,7 @@ function creditshide($creditsrequire, $message, $pid) {
 }
 
 function codedisp($code) {
+	/*
 	global $_G;
 	$_G['forum_discuzcode']['pcodecount']++;
 	$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
@@ -51,6 +52,8 @@ function codedisp($code) {
 	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
 	$_G['forum_discuzcode']['codecount']++;
 	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
+	*/
+	return _bbcode_::codedisp($code, $brush);
 }
 
 function karmaimg($rate, $ratetimes) {
