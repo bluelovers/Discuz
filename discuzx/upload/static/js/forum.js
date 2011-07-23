@@ -368,6 +368,7 @@ function loadData(quiet, formobj) {
 
 var checkForumcount = 0, checkForumtimeout = 30000, checkForumnew_handle;
 function checkForumnew(fid, lasttime) {
+	// ajax 顯示板塊是否有新的主題變化
 	var timeout = checkForumtimeout;
 	var x = new Ajax();
 	x.get('forum.php?mod=ajax&action=forumchecknew&fid=' + fid + '&time=' + lasttime + '&inajax=yes', function(s){
