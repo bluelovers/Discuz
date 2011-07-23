@@ -335,6 +335,27 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], $_G['cache']['bbcodes'][-$allowbbcode]['replacearray'], $message);
 		}
 
+		// bluelovers
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_hide', array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+		// bluelovers
+
 		//BUG:部分文章經過以下處理後 會變為空白
 		/**
 		 * 加入 U 之後 似乎就修正此問題
