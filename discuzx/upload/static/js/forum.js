@@ -376,6 +376,7 @@ function checkForumnew(fid, lasttime) {
 	var timeout = checkForumtimeout;
 	var x = new Ajax();
 	x.get('forum.php?mod=ajax&action=forumchecknew&fid=' + fid + '&time=' + lasttime + '&inajax=yes', function(s){
+		// s > 0 代表有找到新變化
 		if(s > 0) {
 			if($('separatorline')) {
 				var table = $('separatorline').parentNode;
@@ -390,10 +391,12 @@ function checkForumnew(fid, lasttime) {
 			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">有新回復的主題，點擊查看', 'colspan': colspan }}};
 			addtbodyrow(table, ['tbody'], ['forumnewshow'], 'separatorline', checknew);
 		} else {
+			// 預設最多只執行 50 次
 			if(checkForumcount < 50) {
 				if(checkForumcount > 0) {
 					var multiple =  Math.ceil(50 / checkForumcount);
 					if(multiple < 5) {
+						// 延長檢查時間
 						timeout = checkForumtimeout * (5 - multiple + 1);
 					}
 				}
