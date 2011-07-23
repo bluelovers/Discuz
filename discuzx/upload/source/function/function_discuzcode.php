@@ -756,7 +756,10 @@ function parsemedia($params, $url) {
 			case 'mov':
 				return '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$width.'" height="'.$height.'"><param name="autostart" value="false" /><param name="src" value="'.$url.'" /><embed src="'.$url.'" autostart="false" type="video/quicktime" controller="true" width="'.$width.'" height="'.$height.'"></embed></object>';
 			default:
+				/*
 				return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+				*/
+				return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_media">'.$url.'</a>';
 		}
 	}
 	return;
