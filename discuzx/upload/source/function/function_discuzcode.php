@@ -679,6 +679,7 @@ function parsetable($width, $bgcolor, $message) {
 			($width == '' ? NULL : 'style="width:'.$width.'"').
 			($bgcolor ? ' bgcolor="'.$bgcolor.'">' : '>').
 			str_replace('\\"', '"', preg_replace(array(
+					//TODO:改良 regex 去除多餘空白
 					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
 					"/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
 					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
