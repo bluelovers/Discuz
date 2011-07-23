@@ -1,5 +1,7 @@
 <?php
 
+//TODO:增加可出售用戶的創意頭像
+//TODO:增加可評分頭像
 include_once '_sco_dx_plugin.class.php';
 
 class plugin_sco_avatar extends _sco_dx_plugin {
@@ -217,6 +219,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 			}
 		} elseif ($_G['adminid'] == 1) {
+			//TODO:增加可上傳的用戶組
 			// 如果是管理員額外允許使用原始的上傳頭像
 			$this->_uc_init();
 			$uc_avatarflash = uc_avatar($_G['uid'], 'virtual', 0);
