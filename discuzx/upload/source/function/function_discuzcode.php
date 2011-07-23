@@ -953,7 +953,13 @@ function parseflv($url, $width = 0, $height = 0) {
 
 	if($flv) {
 		if(!$width && !$height) {
+			/*
 			return array('flv' => $flv, 'imgurl' => $imgurl);
+			*/
+			return array('flv' => $flv, 'imgurl' => $imgurl
+				, 'url' => $url
+				, 'imagearray' => $imagearray
+			);
 		} else {
 			$width = addslashes($width);
 			$height = addslashes($height);
