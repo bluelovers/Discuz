@@ -312,6 +312,9 @@ EOT;
 					}
 				}
 
+				// 搜索出的表情依照數字排序
+				sort($_pic_files, SORT_NUMERIC);
+
 				foreach ($_pic_files as $entry) {
 					if (1) {
 				// bluelovers
