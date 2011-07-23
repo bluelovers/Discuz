@@ -191,6 +191,8 @@ if(!$operation) {
 				$smileynum ++;
 			}
 
+			//BUG:自然排序時以 10 為開頭
+
 			echo <<<EOT
 <script type="text/JavaScript">
 	function addsmileycodes(smiliesnum, pre) {
