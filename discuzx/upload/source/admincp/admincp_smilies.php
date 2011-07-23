@@ -202,7 +202,7 @@ if(!$operation) {
 				var prefix = trim($(pre + 'prefix').value);
 				var suffix = trim($(pre + 'suffix').value);
 				var page = parseInt('$page');
-				var middle = $(pre + 'middle').value == 1 ? $(pre + 'url_' + i).value.substr(0,$(pre + 'url_' + i).value.lastIndexOf('.')) : ($(pre + 'middle').value == 2 ? i + page * 10 : $(pre + 'code_'+ i).attributes['smileyid'].nodeValue);
+				var middle = $(pre + 'middle').value == 1 ? $(pre + 'url_' + i).value.substr(0,$(pre + 'url_' + i).value.lastIndexOf('.')) : ($(pre + 'middle').value == 2 ? i + (page > 0 ? page - 1 : 0) * 10 : $(pre + 'code_'+ i).attributes['smileyid'].nodeValue);
 				if(!prefix || prefix == '$lang[smilies_prefix]' || !suffix || suffix == '$lang[smilies_suffix]') {
 					alert('$lang[smilies_prefix_tips]');
 					return;
