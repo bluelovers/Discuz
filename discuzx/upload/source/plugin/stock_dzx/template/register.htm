@@ -75,6 +75,7 @@
 			<div class="hm ptm">
 <!--{if $this->passed}-->
 				<form name="form" method="post" action="$baseScript&mod=system&act=register">
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
 					<button type="submit" name="submit" value="true" class="pn pnc"><em>开户</em></button>
 				</form>
 <!--{else}-->

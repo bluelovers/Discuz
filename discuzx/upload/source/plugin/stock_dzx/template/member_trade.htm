@@ -128,6 +128,7 @@
 						<input type="hidden" name="section" value="trade" />
 						<input type="hidden" name="tradetype" value="b" />
 						<input type="hidden" name="sid" value="{$rs[sid]}" />
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
 						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
 						<button type="submit" name="submit" value="true" class="pn pnc" $btn_buy><em>买入</em></button>
 					</td>
@@ -180,6 +181,7 @@
 						<input type="hidden" name="section" value="trade" />
 						<input type="hidden" name="tradetype" value="s" />
 						<input type="hidden" name="sid" value="{$rs[sid]}" />
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
 						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
 						<button type="submit" name="btnSell" value="true" class="pn pnc" $btn_sell><em>卖出</em></button>
 					</td>

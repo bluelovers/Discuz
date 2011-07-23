@@ -12,7 +12,8 @@
 			<div class="mtm bbda cl">
 				<form method="post" name="myform" action="$baseScript&mod=stock&act=search">
 				<div class="bn">股票查询：<input type="text" name="keyword" value="" maxlength="24" class="px">
-						<button type="submit" name="submit" value="true" class="pn pnc"><em>搜索</em></button> （支持股票代码或者股票名称）
+					<input type="hidden" name="formhash" value="{FORMHASH}" />
+					<button type="submit" name="submit" value="true" class="pn pnc"><em>搜索</em></button> （支持股票代码或者股票名称）
 				</div>
 				</form>
 			</div>
