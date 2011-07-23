@@ -368,8 +368,8 @@ function loadData(quiet, formobj) {
 
 // 已執行檢查的次數
 var checkForumcount = 0
-	// 控制檢查版塊的主題變化的時間間隔
-	, checkForumtimeout = 30000
+	// 控制檢查版塊的主題變化的時間間隔(預設為 30秒)
+	, checkForumtimeout = 60000
 	, checkForumnew_handle;
 function checkForumnew(fid, lasttime) {
 	// ajax 顯示板塊是否有新的主題變化
