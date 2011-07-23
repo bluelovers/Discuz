@@ -848,7 +848,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	} elseif(strpos($lowerurl, 'www.youtube.com/watch?') !== FALSE) {
-		if(preg_match("/http:\/\/www.youtube.com\/watch\?v=([^\/&]+)&?/i", $url, $matches)) {
+		if(preg_match("/http:\/\/(?:www.youtube.com\/watch\?v=|youtu\.be\/)([^\/&]+)&?/i", $url, $matches)) {
 			/*
 			$flv = 'http://www.youtube.com/v/'.$matches[1].'&hl=zh_CN&fs=1';
 			*/
