@@ -304,10 +304,14 @@
 	<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, <!--{if $page > 1}-->1<!--{else}-->0<!--{/if}-->, <!--{if $page < $_G['setting']['threadmaxpages'] && $page < $_G['page_next']}-->1<!--{else}-->0<!--{/if}-->, 'forum.php?mod=forumdisplay&fid={$_G[fid]}&filter={$filter}&orderby={$_G[gp_orderby]}{$forumdisplayadd[page]}&{$multipage_archive}', $page);}</script>
 <!--{/if}-->
 
+<!--增加限制只有用戶登入時才檢查主題變化-->
+<!--{if $_G[uid] > 0}-->
 <!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && empty($_G['gp_filter']) }-->
 	<!--ajax 顯示板塊是否有新的主題變化-->
 	<script type="text/javascript">checkForumnew_handle = setTimeout(function () {checkForumnew($_G[fid], lasttime);}, checkForumtimeout);</script>
 <!--{/if}-->
+<!--{/if}-->
+<!--增加限制只有用戶登入時才檢查主題變化 - End-->
 
 <div class="wp mtn">
 	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
