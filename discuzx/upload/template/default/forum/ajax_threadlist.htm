@@ -1,5 +1,6 @@
 <!--{template common/header_ajax}-->
 	<script type="text/javascript">
+		// 如果存在 checkForumnew_handle 則清除 checkForumnew_handle
 		if(!isUndefined(checkForumnew_handle)) {
 			clearTimeout(checkForumnew_handle);
 		}
@@ -29,6 +30,7 @@
 		<!--{elseif !$threadlist && $_GET['uncheck'] == 2}-->
 			showDialog('{lang none_newthread}', 'notice', null, null, 0, null, null, null, null, 3);
 		<!--{/if}-->
+		// 重新啟動 checkForumnew_handle
 		checkForumnew_handle = setTimeout(function () {checkForumnew('{$fid}', '{$_G[timestamp]}');}, checkForumtimeout);
 	</script>
 <!--{template common/footer_ajax}-->
