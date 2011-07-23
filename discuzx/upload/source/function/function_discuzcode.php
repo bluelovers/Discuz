@@ -474,24 +474,28 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	}
 
 	// bluelovers
-	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_code2', array(array(
-			'message'			=> &$message
-			, 'smileyoff'		=> &$smileyoff
-			, 'bbcodeoff'		=> &$bbcodeoff
-			, 'htmlon'			=> &$htmlon
-			, 'allowsmilies'	=> &$allowsmilies
-			, 'allowbbcode'		=> &$allowbbcode
-			, 'allowimgcode'	=> &$allowimgcode
-			, 'allowhtml'		=> &$allowhtml
-			, 'jammer'			=> &$jammer
-			, 'parsetype'		=> &$parsetype
-			, 'authorid'		=> &$authorid
-			, 'allowmediacode'	=> &$allowmediacode
-			, 'pid'				=> &$pid
-			, 'msglower'		=> &$msglower
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_code2
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_code2')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
 
-			, 'authorreplyexist' => &$authorreplyexist
-	)));
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
 	// bluelovers
 
 	// 移動代碼使 highlight 在此代碼之前執行
