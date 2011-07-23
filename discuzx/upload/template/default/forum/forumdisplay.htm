@@ -305,6 +305,7 @@
 <!--{/if}-->
 
 <!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && empty($_G['gp_filter']) }-->
+	<!--ajax 顯示板塊是否有新的主題變化-->
 	<script type="text/javascript">checkForumnew_handle = setTimeout(function () {checkForumnew($_G[fid], lasttime);}, checkForumtimeout);</script>
 <!--{/if}-->
 
