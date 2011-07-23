@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-18
+ * Last Updated: 2011-07-20
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -18,15 +18,8 @@ class Stock
 	{
 		global $kfsclass, $_G;
 		$actArray = array('call', 'showinfo', 'quote', 'search');
-		try
-		{
-			if ( empty($action) || !in_array($action, $actArray) )
-				throw new Exception('Invalid action');
-		}
-		catch ( Exception $e )
-		{
-			showmessage('Messages from Kilofox StockIns ：' . $e->getMessage());
-		}
+		if ( empty($action) || !in_array($action, $actArray) )
+			showmessage('Messages from Kilofox StockIns: Invalid action');
 		switch ( $action )
 		{
 			case 'quote':

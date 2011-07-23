@@ -3,7 +3,7 @@
  * Kilofox Services
  * StockIns v9.4
  * Plug-in for Discuz!
- * Last Updated: 2011-06-12
+ * Last Updated: 2011-07-20
  * Author: Glacier
  * Copyright (C) 2005 - 2011 Kilofox Services Studio
  * www.Kilofox.Net
@@ -68,15 +68,7 @@ $kfsclass->auto_run();
 $hkimg = 'source/plugin/stock_dzx/image/';
 $mod = empty($_G['gp_mod']) ? 'index' : $_G['gp_mod'];
 $modArray = array('index', 'stock', 'member', 'notice', 'news', 'ajax', 'system');
-try
-{
-	if ( !in_array($mod, $modArray) )
-		throw new Exception ('非法操作');
-}
-catch ( Exception $e )
-{
-	showmessage('Messages from Kilofox StockIns: '.$e->getMessage());
-}
+!in_array($mod, $modArray) && showmessage('Messages from Kilofox StockIns: 非法操作');
 switch ( $mod )
 {
 	case 'index':
