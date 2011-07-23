@@ -307,24 +307,28 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 
 		// bluelovers
-		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_bbcodes_cache', array(array(
-				'message'			=> &$message
-				, 'smileyoff'		=> &$smileyoff
-				, 'bbcodeoff'		=> &$bbcodeoff
-				, 'htmlon'			=> &$htmlon
-				, 'allowsmilies'	=> &$allowsmilies
-				, 'allowbbcode'		=> &$allowbbcode
-				, 'allowimgcode'	=> &$allowimgcode
-				, 'allowhtml'		=> &$allowhtml
-				, 'jammer'			=> &$jammer
-				, 'parsetype'		=> &$parsetype
-				, 'authorid'		=> &$authorid
-				, 'allowmediacode'	=> &$allowmediacode
-				, 'pid'				=> &$pid
-				, 'msglower'		=> &$msglower
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_bbcodes_cach
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_bbcodes_cache')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
 
-				, 'authorreplyexist' => &$authorreplyexist
-		)));
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
 		// bluelovers
 
 		if($parsetype != 1 && $allowbbcode < 0 && isset($_G['cache']['bbcodes'][-$allowbbcode])) {
