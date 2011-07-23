@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Smilies]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-23 12:25]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.local/bbs/discuz_x2/discuz/)]]></item>
+	<item id="Data">
+		<item id="name"><![CDATA[米滷蛋]]></item>
+		<item id="directory"><![CDATA[sam]]></item>
+		<item id="smilies">
+			<item id="0">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:336:sm:]]></item>
+				<item id="url"><![CDATA[sam01.jpg]]></item>
+			</item>
+			<item id="1">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:337:sm:]]></item>
+				<item id="url"><![CDATA[sam02.jpg]]></item>
+			</item>
+			<item id="2">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:338:sm:]]></item>
+				<item id="url"><![CDATA[sam03.jpg]]></item>
+			</item>
+			<item id="3">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:339:sm:]]></item>
+				<item id="url"><![CDATA[sam04.gif]]></item>
+			</item>
+			<item id="4">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:340:sm:]]></item>
+				<item id="url"><![CDATA[sam05.gif]]></item>
+			</item>
+			<item id="5">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:341:sm:]]></item>
+				<item id="url"><![CDATA[sam06.gif]]></item>
+			</item>
+			<item id="6">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:342:sm:]]></item>
+				<item id="url"><![CDATA[sam07.gif]]></item>
+			</item>
+			<item id="7">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:343:sm:]]></item>
+				<item id="url"><![CDATA[sam08.gif]]></item>
+			</item>
+			<item id="8">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:344:sm:]]></item>
+				<item id="url"><![CDATA[sam09.gif]]></item>
+			</item>
+			<item id="9">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:345:sm:]]></item>
+				<item id="url"><![CDATA[sam10.gif]]></item>
+			</item>
+			<item id="10">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:346:sm:]]></item>
+				<item id="url"><![CDATA[sam11.gif]]></item>
+			</item>
+			<item id="11">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:347:sm:]]></item>
+				<item id="url"><![CDATA[sam12.gif]]></item>
+			</item>
+			<item id="12">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:348:sm:]]></item>
+				<item id="url"><![CDATA[sam13.gif]]></item>
+			</item>
+			<item id="13">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:349:sm:]]></item>
+				<item id="url"><![CDATA[sam14.gif]]></item>
+			</item>
+			<item id="14">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:350:sm:]]></item>
+				<item id="url"><![CDATA[sam15.gif]]></item>
+			</item>
+			<item id="15">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:351:sm:]]></item>
+				<item id="url"><![CDATA[sam16.gif]]></item>
+			</item>
+			<item id="16">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:352:sm:]]></item>
+				<item id="url"><![CDATA[sam17.gif]]></item>
+			</item>
+			<item id="17">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:353:sm:]]></item>
+				<item id="url"><![CDATA[sam18.gif]]></item>
+			</item>
+			<item id="18">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:354:sm:]]></item>
+				<item id="url"><![CDATA[sam19.gif]]></item>
+			</item>
+			<item id="19">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:355:sm:]]></item>
+				<item id="url"><![CDATA[sam20.gif]]></item>
+			</item>
+			<item id="20">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:356:sm:]]></item>
+				<item id="url"><![CDATA[sam21.gif]]></item>
+			</item>
+			<item id="21">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:357:sm:]]></item>
+				<item id="url"><![CDATA[sam22.gif]]></item>
+			</item>
+			<item id="22">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:358:sm:]]></item>
+				<item id="url"><![CDATA[sam23.gif]]></item>
+			</item>
+			<item id="23">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:359:sm:]]></item>
+				<item id="url"><![CDATA[sam24.gif]]></item>
+			</item>
+			<item id="24">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:360:sm:]]></item>
+				<item id="url"><![CDATA[sam25.gif]]></item>
+			</item>
+			<item id="25">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:361:sm:]]></item>
+				<item id="url"><![CDATA[sam26.gif]]></item>
+			</item>
+			<item id="26">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:362:sm:]]></item>
+				<item id="url"><![CDATA[sam27.gif]]></item>
+			</item>
+			<item id="27">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:363:sm:]]></item>
+				<item id="url"><![CDATA[sam28.gif]]></item>
+			</item>
+			<item id="28">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:364:sm:]]></item>
+				<item id="url"><![CDATA[sam29.gif]]></item>
+			</item>
+			<item id="29">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:365:sm:]]></item>
+				<item id="url"><![CDATA[sam30.gif]]></item>
+			</item>
+			<item id="30">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:366:sm:]]></item>
+				<item id="url"><![CDATA[sam31.gif]]></item>
+			</item>
+			<item id="31">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:367:sm:]]></item>
+				<item id="url"><![CDATA[sam32.gif]]></item>
+			</item>
+			<item id="32">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:368:sm:]]></item>
+				<item id="url"><![CDATA[sam33.gif]]></item>
+			</item>
+			<item id="33">
+				<item id="typeid"><![CDATA[7]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:369:sm:]]></item>
+				<item id="url"><![CDATA[sam34.gif]]></item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>
