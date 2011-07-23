@@ -513,13 +513,17 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 	if(!empty($_G['gp_highlight'])) {
 		$highlightarray = explode('+', $_G['gp_highlight']);
+
+		// 判斷是否存在特殊主題的資訊
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
 		if($sppos !== FALSE) {
+			// 取出特殊主題的資訊
 			$specialextra = substr($message, $sppos + 3);
 			$message = substr($message, 0, $sppos);
 		}
 		$message = preg_replace(array("/(^|>)([^<]+)(?=<|$)/sUe", "/<highlight>(.*)<\/highlight>/siU"), array("highlightword('\\2', \$highlightarray, '\\1')", "<strong><font color=\"#FF0000\">\\1</font></strong>"), $message);
 		if($sppos !== FALSE) {
+			// 回存特殊主題的資訊
 			$message = $message.chr(0).chr(0).chr(0).$specialextra;
 		}
 	}
