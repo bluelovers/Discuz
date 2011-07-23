@@ -601,14 +601,20 @@ function parseurl($url, $text, $scheme) {
 		if(strlen($url) > $length) {
 			$text = substr($url, 0, intval($length * 0.5)).' ... '.substr($url, - intval($length * 0.3));
 		}
+		/*
 		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank">'.$text.'</a>';
+		*/
+		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank" class="bbocde_link">'.$text.'</a>';
 	} else {
 		$url = substr($url, 1);
 		if(substr(strtolower($url), 0, 4) == 'www.') {
 			$url = 'http://'.$url;
 		}
 		$url = !$scheme ? $_G['siteurl'].$url : $url;
+		/*
 		return '<a href="'.$url.'" target="_blank">'.$text.'</a>';
+		*/
+		return '<a href="'.$url.'" target="_blank" target="_blank" class="bbocde_link">'.$text.'</a>';
 	}
 }
 
