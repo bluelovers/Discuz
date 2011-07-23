@@ -503,6 +503,27 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
 	}
 
+	// bluelovers
+	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_jammer', array(array(
+			'message'			=> &$message
+			, 'smileyoff'		=> &$smileyoff
+			, 'bbcodeoff'		=> &$bbcodeoff
+			, 'htmlon'			=> &$htmlon
+			, 'allowsmilies'	=> &$allowsmilies
+			, 'allowbbcode'		=> &$allowbbcode
+			, 'allowimgcode'	=> &$allowimgcode
+			, 'allowhtml'		=> &$allowhtml
+			, 'jammer'			=> &$jammer
+			, 'parsetype'		=> &$parsetype
+			, 'authorid'		=> &$authorid
+			, 'allowmediacode'	=> &$allowmediacode
+			, 'pid'				=> &$pid
+			, 'msglower'		=> &$msglower
+
+			, 'authorreplyexist' => &$authorreplyexist
+	)));
+	// bluelovers
+
 	unset($msglower);
 
 	if($jammer) {
