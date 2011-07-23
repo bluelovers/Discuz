@@ -216,6 +216,10 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 				}
 
 			}
+		} elseif ($_G['adminid'] == 1) {
+			// 如果是管理員額外允許使用原始的上傳頭像
+			$this->_uc_init();
+			$uc_avatarflash = uc_avatar($_G['uid'], 'virtual', 0);
 		}
 
 		// 取出值給模板使用
