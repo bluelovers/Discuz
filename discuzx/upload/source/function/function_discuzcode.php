@@ -275,11 +275,19 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			"/\[size=(\d{1,2}?)\]/i",
 			"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
 			"/\[font=([^\[\<]+?)\]/i",
+			/*
 			"/\[align=(left|center|right)\]/i",
 			"/\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/i",
 			"/\[float=left\]/i",
 			"/\[float=right\]/i"
-
+			*/
+			// bluelovers
+			// 去除多餘空白
+			"/\n?\[align=(left|center|right)\]/i",
+			"/\n?\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/i",
+			"/\n?\[float=left\]/i",
+			"/\n?\[float=right\]/i"
+			// bluelovers
 			), array(
 
 			// bluelovers
