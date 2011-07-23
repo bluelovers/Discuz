@@ -337,7 +337,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 		// bluelovers
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
-			// Event: Func_discuzcode:Before_bbcodes_hide
+			// Event: Func_discuzcode:Before_hide
 			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_hide')
 				->run(array(array(
 					'message'			=> &$message
