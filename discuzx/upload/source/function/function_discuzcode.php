@@ -78,6 +78,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	// bluelovers
 
 	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
 	Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_code', array(array(
 			'message'			=> &$message
 			, 'smileyoff'		=> &$smileyoff
@@ -96,6 +97,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 			, 'authorreplyexist' => &$authorreplyexist
 	)));
+	}
 	// bluelovers
 
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
