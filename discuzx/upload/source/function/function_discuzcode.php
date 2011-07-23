@@ -164,6 +164,28 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	}
 
 	if(!$bbcodeoff && $allowbbcode) {
+
+		// bluelovers
+		Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_link', array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+		// bluelovers
+
 		if(strpos($msglower, '[/url]') !== FALSE) {
 			$message = preg_replace("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.|mailto:)?([^\r\n\[\"']+?))?\](.+?)\[\/url\]/ies", "parseurl('\\1', '\\5', '\\2')", $message);
 		}
