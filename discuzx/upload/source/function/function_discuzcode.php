@@ -262,6 +262,12 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			'</i>', '<u>', '</u>', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
 			'<ul type="A" class="litype_3">', '<li>', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 			), preg_replace(array(
+
+			// bluelovers
+			// 去除多餘空白
+			"/\s*\[\*\]/i", '/\[list=A\]\s*/i', '/\[list\]\s*/i', '/\[list=1\]\s*/i', '/\[list=a\]\s*/i',
+			// bluelovers
+
 			"/\[color=([#\w]+?)\]/i",
 			"/\[color=(rgb\([\d\s,]+?\))\]/i",
 			"/\[backcolor=([#\w]+?)\]/i",
@@ -275,6 +281,11 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			"/\[float=right\]/i"
 
 			), array(
+
+			// bluelovers
+			"<li>", '<ul type="A" class="litype_3">', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
+			// bluelovers
+
 			"<font color=\"\\1\">",
 			"<font style=\"color:\\1\">",
 			"<font style=\"background-color:\\1\">",
