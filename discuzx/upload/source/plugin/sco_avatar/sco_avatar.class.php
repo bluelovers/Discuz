@@ -152,12 +152,62 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		$_G['mnid'] = 'mn_common';
 		$actives = array('avatar' =>' class="a"');
 
+		$this->_my_avatar_types_list();
+
+		$this->_my_avatar_pics(
+			$this->_my_avatar_view_path(getgpc('avatar_view_path'))
+		);
+
+		$_v = $this->_parse_method(__METHOD__);
+
+		$this->_setglobal('mod', $_v[1]);
+		$this->_setglobal('ac', $_v[2]);
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			if (submitcheck('reset_'.$this->identifier)) {
+				$member_uc = $this->_my_avatar_user_save($_G['uid'], '');
+
+				if ($member_uc == 1) {
+					showmessage('成功重設頭像到預設', $this->_make_url(null, $_G['basescript']));
+				} else {
+					showmessage('發生錯誤! 請稍後再嘗試提交');
+				}
+			} elseif (submitcheck('submit_'.$this->identifier)) {
+
+				$a_file = getgpc('a_file');
+
+				if (empty($a_file) || empty($avatar_pics[$a_file])) {
+					unset($a_file);
+				} else {
+					$a_file = $avatar_pics[$a_file];
+				}
+
+				if (!empty($a_file)) {
+					$member_uc = $this->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
+				}
+
+			}
+		}
+
+		// 取出值給模板使用
+		extract($this->attr['global']);
+		$plugin_self = &$this;
+
 		include $this->_template('spacecp_avatar');
 
+		var_dump(array(
+			__FUNCTION__,
+			__METHOD__
+		));
+
+		$this->_parse_method(__METHOD__);
+
+		/*
 		var_dump(array(
 			$_G['basescript'],
 			$this->_make_url(null, $_G['basescript']),
 		));
+		*/
 
 		exit();
 	}
