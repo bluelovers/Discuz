@@ -1,0 +1,154 @@
+<!--{subtemplate common/header}-->
+<link rel="stylesheet" type="text/css" href="{$path}/static/style.css" />
+<div class="bk-css">
+<script language="javascript">
+function tag(type, cancle_type, tobold, canclebold){
+	var type = document.getElementById(type);
+	var cancle_type = document.getElementById(cancle_type);
+	var tobold = document.getElementById(tobold);
+	var canclebold = document.getElementById(canclebold);
+	type.style.display = '';
+	cancle_type.style.display = 'none';
+	cancle_type.value = '';
+	tobold.style.fontWeight = 'bold';
+	canclebold.style.fontWeight = 'lighter';
+}
+function checkall(name,id){
+	var checkbox = document.getElementsByName(name);
+	var checkbtn = document.getElementById(id);
+	if(checkbtn.checked==false){
+		for(var i = 0; i < checkbox.length; i++){
+				checkbox[i].checked = false;	
+		}
+	}else{
+		for(var i = 0; i < checkbox.length; i++){
+				checkbox[i].checked = true;	
+		}
+	}
+}
+</script>
+<div id="pt" class="bm cl">
+    <div class="z">
+    <a href="./" class="nvhm" title="首页">$_G['setting']['bbname']</a> <em>&nbsp;</em> <a href="$self">背景商店</a>
+    </div>
+</div>
+
+<div class="box">
+	<div class="left">
+		<ul>
+        	<li {if $_G['gp_mod']==''}class="a"{/if}><a href="$self">商店首页</a></li>
+            <li {if $_G['gp_mod']=='mine'}class="a"{/if}><a href="$self&amp;mod=mine">我的背景</a></li>
+            <!--{if $isadmin}-->
+            <li {if $_G['gp_mod']=='admin'}class="a"{/if}><a href="$self&amp;mod=admin">管理面板</a></li>
+            <!--{/if}-->
+        </ul>
+    </div>
+    <div class="right">
+    	<div class="m5">
+        <!--{if $_G['gp_mod']==''}-->
+        	<div class="notice mb10">温馨提示&#65306;您可以点击预览图放大哦&#65281;亲~</div>
+            
+            <!--{loop $shop $val}-->
+            <div class="item">
+            	<div class="pic"><img src="$val['background']" zoomfile="$val['background']" onclick="zoom(this, this.src)" />
+<cite><!--{eval echo limitstr($val['name'],18);}--></cite></div>
+                <div class="info">
+                	<span class="y"><a href="javascript:" onclick="showWindow('bk','$self&amp;mod=buy&bid={$val['id']}')"><img src="$path/static/buying.png" border="0" /></a></span>
+                	<span class="name">{$val['price']}<!--{eval getcreditname($val['credit'])}-->/天</span>
+                </div>
+            </div>
+            <!--{/loop}-->
+            
+            <div class="clear"></div>
+            <!--{if $shoppage}-->$shoppage<!--{/if}-->
+        <!--{elseif $_G['gp_mod']=='mine'}-->
+        <div class="config">
+        <div class="title mb10">选择背景</div>
+        <form action="$self&amp;handle=config" method="post">
+            <!--{loop $mine $v}-->
+            <!--{eval $val = fetch($v['bid']);}-->
+            <div class="item">
+            	<div class="pic"><img src="$val['background']" /><cite><!--{eval echo limitstr($val['name'],18);}--></cite></div>
+                <div class="info">
+                	<span class="y"><input type="radio" {if $uconfig['used']==$v['bid']}checked="checked"{/if} name="used" value="$v['bid']" /></span>
+                	<span class="name" style="color:#f00"><!--{eval echo date("Y/m/d H:i", ($v['date'] + ($v['days']*86400)));}--> 到期</span>
+                </div>
+            </div>
+            <!--{/loop}-->
+        <div class="clear"></div>
+            
+        <div class="title">参数设置</div>
+        	<div class="m10 switch">
+        	<!--{eval config($uconfig['switch'], $uconfig['repeat'], $uconfig['level'], $uconfig['vertical']);}-->
+            <p><button type="submit" class="pn"><em>确定</em></button></p>
+            </div>
+        </form>
+        </div>
+        <!--{elseif $_G['gp_mod']=='admin' && $isadmin}-->
+        <ul class="tb cl">
+        <li {if $_G['gp_mod']=='admin'&&$_G['gp_type']==''||$_G['gp_type']=='edit'}class="a"{/if}><a href="$self&amp;mod=admin">背景管理</a></li>
+        <li {if $_G['gp_mod']=='admin'&&$_G['gp_type']=='new'}class="a"{/if}><a href="$self&amp;mod=admin&type=new">上市背景</a></li>
+        </ul>
+        <div class="clear"></div>
+            <!--{if $_G['gp_type']==''}-->
+            <form action="$self&amp;handle=delete" method="post">
+            <table cellpadding="0" cellspacing="0" border="0" class="data m10" width="100%" style="border-top:1px solid #e5e5e5;">
+            <tr bgcolor="#f9f9f9" style="font-weight:bold; color:#888;">
+            	<td width="5%"><input type="checkbox" id="checkbtn" onclick="checkall('delete[]',this.id)" title="删除?" /></td>
+                <td width="50%">背景名称</td>
+                <td width="35%">背景售价</td>
+                <td width="10%">操作</td>
+            </tr>
+            <!--{loop $bkadmindata $k $v}-->
+            <tr>
+            	<td><input type="checkbox" name="delete[]" value="$v['id']" /></td>
+                <td>$v['name']</td>
+                <td><strong>$v['price']</strong> <!--{eval getcreditname($v['credit'])}-->/天</td>
+                <td><a href="$self&amp;mod=admin&amp;type=edit&amp;eid={$v['id']}">编辑</a></td>
+            </tr>
+            <!--{/loop}-->
+            </table>
+            <div class="m10">
+            	<!--{if !empty($bkadminpage)}--><span class="y">$bkadminpage</span><!--{/if}-->
+            	<button type="submit" class="pn"><em>确定</em></button>
+            </div>
+            </form>
+            <!--{elseif $_G['gp_type']=='new'}-->
+            <form action="$self&amp;handle=new" method="post" enctype="multipart/form-data">
+            <table cellpadding="0" cellspacing="0" border="0" class="data m10" width="100%">
+            <tr><th>背景名称</th><td><input type="text" name="name" class="px px2" /></td></tr>
+            <tr><th>背景售价</th><td><input type="text" name="price" class="px px2" /> <select name="credit"><!--{eval echo credit();}--></select></td></tr>
+            <tr><th valign="top">上传背景</th>
+            <td><input id="file" type="file" name="background" /> <input id="text" class="px px2" type="text" name="background" style="display:none" /> 
+            	<p class="m5"><a href="javascript:" id="k1" onclick="tag('file','text','k1','k2')" style="font-weight:bold;">上传文件</a> | <a href="javascript:" id="k2" onclick="tag('text','file','k2','k1')">输入地址</a></p>
+            </td>
+            </tr>
+            </table>
+            <div class="m10"><button type="submit" class="pn"><em>发布背景</em></button></div>
+            </form>
+            <!--{elseif $_G['gp_type']=='edit'}-->
+            <form action="$self&amp;handle=edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="eid" value="$edit['id']" />
+            <table cellpadding="0" cellspacing="0" border="0" class="data m10" width="100%">
+            <tr><th>背景名称</th><td><input type="text" value="$edit['name']" name="name" class="px px2" /></td></tr>
+            <tr><th>背景售价</th><td><input type="text" value="$edit['price']" name="price" class="px px2" /> <select name="credit"><!--{eval echo credit($edit['credit']);}--></select></td></tr>
+            <tr><th valign="top">上传背景</th>
+            <td><input id="file" type="file" name="background" style="display:none" /> <input value="$edit['background']" id="text" class="px px2" type="text" name="background" /> 
+            	<p class="m5"><a href="javascript:" id="k1" onclick="tag('file','text','k1','k2')">上传文件</a> | <a href="javascript:" id="k2" onclick="tag('text','file','k2','k1')"  style="font-weight:bold;">输入地址</a></p>
+            </td>
+            </tr>
+            </table>
+            <div class="m10"><button type="submit" class="pn"><em>提交修改</em></button></div>
+            </form>
+            <!--{/if}-->
+        <!--{else}-->
+        	<div class="error">未定义操作或者无权限访问！</div>
+        <!--{/if}-->    
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+</div>
+<!--{subtemplate common/footer}-->

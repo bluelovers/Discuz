@@ -1,0 +1,41 @@
+<!--{subtemplate common/header}-->
+<script language="javascript">
+function total(){
+	var days = document.getElementById('days').value;
+	var price = document.getElementById('price').value;
+	var total = days * price;
+	document.getElementById('total').innerHTML = total;
+}
+function check(){
+	var days = document.getElementById('days');
+	if(days.value==''||days.value<1){
+		alert('购买天数必须大于1天');
+		return false;
+	}else{
+		return true;
+	}
+}
+</script>
+<div class="bk-css" style="width:420px;">
+<form action="$self&amp;handle=buying" method="post" onsubmit="return check()">
+    <div class="buytitle"><h2>购买“<!--{eval echo limitstr($info['name'],36);}-->”</h2></div>
+    <div class="m10">
+    	<input type="hidden" name="bid" value="$info['id']" />
+        <input type="hidden" name="credit" value="$info['credit']" />
+        <input type="hidden" id="price" value="$info['price']" />
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+            <td>购买 <input type="text" name="days" onfocus="this.value=''" maxlength="3" class="px" style="width:50px;" id="days" onkeyup="value=value.replace(/[^\d]/g,'');total()" /> 天</td>
+            <td class="pricexm">合计：<span id="total">0</span><!--{eval getcreditname($info['credit'])}--></td>
+            </tr>
+        </table>
+    </div>
+    <div class="confirmbox">
+    <p class="y">
+    <button type="submit" class="pn pnc"><strong>确定</strong></button><button type="button" onclick="hideWindow('bk')" class="pn"><em>取消</em></button>
+    </p>
+    <div class="clear"></div>
+    </div>
+</form>
+</div>
+<!--{subtemplate common/footer_ajax}-->

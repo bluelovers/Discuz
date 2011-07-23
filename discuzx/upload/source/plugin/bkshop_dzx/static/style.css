@@ -1,0 +1,38 @@
+/* 背景商店插件参赛版 For Discuz X2.0
+   $Id:style.css 2011-07-20 Rufey_Lau
+ */
+
+.bk-css .clear{clear:both;}
+.bk-css .buytitle{padding:5px; border-bottom:1px dashed #ccc; background:#f5f5f5;}
+.bk-css .buytitle h2{color:#888;}
+.bk-css .pricexm{font-size:14px; text-align:right; font-weight:bold; color:#F30}
+.bk-css .confirmbox{background:#f5f5f5; border-top:1px solid #e5e5e5; padding:5px;}
+.bk-css .config .title{border-bottom:1px dashed #ccc; color:#888;}
+.bk-css .config .switch p{margin-bottom:5px;}
+
+.bk-css .box{width:960px; border-top:4px solid #cbd7ec;}
+.bk-css .box .left{width:200px; height:570px; overflow:hidden; background:#f5fafe; border-right:1px solid #cbd7ec; padding-top:10px; padding-bottom:10px; float:left;}
+.bk-css .box .left li{margin-bottom:5px;}
+.bk-css .box .left li a{color:#888;background:url('system.png') 0% 0% no-repeat; width:145px; height:32px; margin:auto; line-height:32px; padding-left:35px; font-size:14px; display:block;}
+.bk-css .box .left .a a{color:#5d85ca;background:url('system.png') 0% -32px no-repeat; width:145px; height:32px; margin:auto; line-height:32px; padding-left:35px; font-weight:bold; font-size:14px; display:block;}
+
+.bk-css .box .right{width:750px; float:right; height:570px; overflow:hidden;}
+.bk-css .error{color:#999; font-size:14px; margin:8px; padding:10px; border:1px dashed #e5e5e5; background:#fffff0}
+.bk-css .data{border-collapse:collapse;}
+.bk-css .data tr{border-bottom:1px solid #e5e5e5;}
+.bk-css .data th{padding:5px; width:80px; color:#888;}
+.bk-css .data td{padding:5px;}
+.bk-css .data .px2{width:200px;}
+	
+.bk-css .m5{margin:5px;}
+.bk-css .m10{margin:10px;}
+.bk-css .mb10{margin-bottom:10px;}
+.bk-css .notice{background:#fffff0 url('notice.gif') 8px 50% no-repeat; padding:4px; padding-left:28px; border:1px dashed #e2e2e2;}
+.bk-css .item{width:175px; height:auto; float:left; margin-right:10px; margin-bottom:15px; overflow:hidden;}
+.bk-css .item .pic{background:url('system.png') 0% -64px no-repeat; width:175px; height:125px; position:relative; display:block;}
+.bk-css .item .pic img{width:157px; height:107px; padding:9px; padding-bottom:0px;}
+.bk-css .item .pic cite{position:absolute; bottom:9px; left:9px; background:#000; width:145px; padding:2px; filter:alpha(opacity=55); opacity:.55; color:#fff; border-top:1px solid #ccc; padding-left:10px;}
+.bk-css .item .info{width:163px; margin:auto; margin-top:3px;}
+.bk-css .item .info .name a{color:#1692ad;}
+
+#ft{border:none; border-top:1px solid #cbd7ec;}
