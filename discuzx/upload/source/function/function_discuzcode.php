@@ -794,6 +794,12 @@ function parseflv($url, $width = 0, $height = 0) {
 	$lowerurl = strtolower($url);
 	$flv = '';
 	$imgurl = '';
+
+	// bluelovers
+	// 提供回傳使用
+	$imagearray = array();
+	// bluelovers
+
 	if($lowerurl != str_replace(array('player.youku.com/player.php/sid/','tudou.com/v/','player.ku6.com/refer/'), '', $lowerurl)) {
 		$flv = $url;
 	} elseif(strpos($lowerurl, 'v.youku.com/v_show/') !== FALSE) {
