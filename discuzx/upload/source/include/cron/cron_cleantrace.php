@@ -16,6 +16,7 @@ $deltime = $_G['timestamp'] - $maxday*3600*24;
 
 DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE dateline < '$deltime'");
 
+// 清除空間訪客
 DB::query("DELETE FROM ".DB::table('home_visitor')." WHERE dateline < '$deltime'");
 
 ?>
