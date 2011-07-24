@@ -377,6 +377,9 @@ var rowtypedata = [
 			// bluelovers
 			// 可用
 			showsetting('available', 'availablenew', $bbcode['available'], 'radio');
+
+			// 顯示
+			showsetting('display', 'displaynew', $bbcode['available'] == 2, 'radio');
 			// bluelvoers
 
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
