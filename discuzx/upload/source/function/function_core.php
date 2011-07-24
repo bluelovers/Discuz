@@ -1737,6 +1737,11 @@ function debuginfo() {
 		if($db->slaveid) {
 			$_G['debuginfo']['queries'] = 'Total '.$db->querynum.', Slave '.$db->slavequery;
 		}
+
+		// bluelovers
+		$_G['debuginfo']['ios'] = function_exists('get_included_files') ? count(get_included_files()) : 0;
+		// bluelovers
+
 		return TRUE;
 	} else {
 		return FALSE;
