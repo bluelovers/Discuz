@@ -616,6 +616,19 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 	}
 	// bluelovers
 
+	// bluelovers
+	// 將 tab, lf 轉換回來
+	$message = str_replace(
+		array(
+			'[tab][/tab]',
+			'[br][/br]',
+		), array(
+			"\t",
+			"\n",
+		)
+		, $message);
+	// bluelovers
+
 	// split code for hack
 	return $message;
 }
