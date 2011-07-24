@@ -65,6 +65,7 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_memberlist');
 } elseif($op == 'forumstat') {
+	// 版塊統計
 	$statvars = getstatvars('forumstat');
 	extract($statvars);
 	include template('forum/stat_misc');
