@@ -408,7 +408,19 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
+			/*
 			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
+			*/
+			DB::update('forum_bbcode', array(
+				'tag' => $tagnew,
+				'replacement' => $replacementnew,
+				'example' => $examplenew,
+				'explanation' => $explanationnew,
+				'params' => $paramsnew,
+				'prompt' => $promptnew,
+				'nest' => $nestnew,
+				'perm' => $permnew,
+			), array('id' => $edit));
 
 			updatecache(array('bbcodes', 'bbcodes_display'));
 			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode', 'succeed');
