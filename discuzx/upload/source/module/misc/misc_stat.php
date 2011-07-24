@@ -22,6 +22,7 @@ $navtitle = lang('core', 'title_stats_'.$op).' - '.lang('core', 'title_stats');
 loadcache('statvars');
 
 if($op == 'basic') {
+	// 基本概況
 	$statvars = getstatvars('basic');
 	extract($statvars);
 	include template('forum/stat_main');
