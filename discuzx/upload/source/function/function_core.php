@@ -1725,6 +1725,16 @@ function debug($var = null, $vardump = false) {
 	exit();
 }
 
+/**
+ * show debug info
+ *
+ * @return $_G['debuginfo']
+ * 		'time'
+ * 		'queries'
+ * 		'memory'
+ * 		'ios'
+ * 		'umem'
+ */
 function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
@@ -1737,6 +1747,12 @@ function debuginfo() {
 		if($db->slaveid) {
 			$_G['debuginfo']['queries'] = 'Total '.$db->querynum.', Slave '.$db->slavequery;
 		}
+
+		// bluelovers
+		$_G['debuginfo']['ios'] = function_exists('get_included_files') ? count(get_included_files()) : 0;
+		$_G['debuginfo']['umem'] = function_exists('memory_get_usage') ? strtolower(sizecount(memory_get_usage(), 1)) : 0;
+		// bluelovers
+
 		return TRUE;
 	} else {
 		return FALSE;
