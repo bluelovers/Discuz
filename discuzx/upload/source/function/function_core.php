@@ -1725,6 +1725,16 @@ function debug($var = null, $vardump = false) {
 	exit();
 }
 
+/**
+ * show debug info
+ *
+ * @return $_G['debuginfo']
+ * 		'time'
+ * 		'queries'
+ * 		'memory'
+ * 		'ios'
+ * 		'umem'
+ */
 function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
