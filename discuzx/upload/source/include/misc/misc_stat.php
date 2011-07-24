@@ -7,6 +7,11 @@
  *      $Id: misc_stat.php 20792 2011-03-04 02:20:22Z monkey $
  */
 
+/**
+ * 趨勢統計
+ *
+ * @link misc.php?mod=stat&op=trend
+ */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
