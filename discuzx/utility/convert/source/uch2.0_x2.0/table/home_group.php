@@ -21,6 +21,19 @@ $sid = intval(getgpc('sid'));
 $limit = $setting['limit']['mtag'] ? $setting['limit']['mtag'] : 100;
 $nextid = 0;
 
+// bluelovers
+$searcharray = array
+	(
+		"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+	);
+$replacearray = array
+	(
+		"&#\\1;",
+		"&#\\1;",
+	);
+// bluelovers
+
 $threadquery = $db_source->query("SELECT * FROM ".$db_source->table('thread')." WHERE tid > '$start' AND tagid='$tagid' ORDER BY tid LIMIT $limit");
 while($value = $db_source->fetch_array($threadquery)) {
 
@@ -48,6 +61,11 @@ while($value = $db_source->fetch_array($threadquery)) {
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
 		$post['message'] = html2bbcode($post['message'], 0, 1);
+
+		// bluelovers
+		// 再一次轉換編碼
+		$post['message'] = preg_replace($searcharray, $replacearray, $post['message']);
+		// bluelovers
 
 		// bluelovers
 		if ($post['isthread']) {
