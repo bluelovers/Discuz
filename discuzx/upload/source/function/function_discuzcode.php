@@ -66,7 +66,8 @@ function codedisp($code, $brush = 'plain') {
 		)
 		, $code);
 
-	$brush = empty($brush) ? 'plain' : $brush;
+	// 增加安全過濾
+	$brush = (empty($brush) || preg_match('/[^a-z0-9_\-\+]/i', $brush)) ? 'plain' : $brush;
 
 	discuz_core::$plugin_support['SyntaxHighlighter'][$brush] = $brush;
 
