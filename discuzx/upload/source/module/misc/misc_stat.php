@@ -656,6 +656,7 @@ function getstatvars_modworks() {
 		}
 
 		if(!empty($before)) {
+			// 如果沒有 $before 則清除 $expiretime 以前的管理紀錄
 			DB::query("DELETE FROM ".DB::table('forum_modwork')." WHERE dateline<'{$expiretime}-01'", 'UNBUFFERED');
 		} else {
 			$members['thismonth'] = $starttime;
