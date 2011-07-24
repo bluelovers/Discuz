@@ -43,11 +43,7 @@
 			</p>
 			<p class="xs0">
 				{lang time_now}
-				<span id="debuginfo">
-				<!--{if debuginfo()}-->, Processed in $_G[debuginfo][time] second(s), $_G[debuginfo][queries] queries
-					<!--{if $_G['gzipcompress']}-->, Gzip On<!--{/if}--><!--{if $_G['memory']}-->, <!--{echo ucwords($_G['memory'])}--> On<!--{/if}-->.
-				<!--{/if}-->
-				</span>
+				<!--{subtpl subblock/common/footer_debuginfo}-->
 			</p>
 		</div>
 		<div id="frt">
