@@ -286,6 +286,12 @@
 <!--{if $modmenu['thread']}-->
 	<div class="xi2 mbm pbm bbs">
 	<script type="text/javascript">
+		/**
+		 * 錯誤訊息
+		 *
+		 * $("modmenu").lastChild.style is undefined
+		 * $('modmenu').lastChild = <TextNode textContent="\n">
+		 */
 		$('modmenu').lastChild.style.visibility = 'hidden';
 		document.write($('modmenu').innerHTML);
 	</script>
