@@ -57,6 +57,11 @@ if($delaids) {
 }
 
 $uids = $members = array();
+/**
+ * groupid 4 = 禁止發言
+ * groupid 5 = 禁止訪問
+ */
+// 處理用戶組過期(禁止發言, 禁止訪問)
 $query = DB::query("SELECT uid, groupid, credits FROM ".DB::table('common_member')." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$_G[timestamp]'");
 while($row = DB::fetch($query)) {
 	$uids[] = $row['uid'];
