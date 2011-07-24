@@ -254,6 +254,7 @@ var rowtypedata = [
 	}
 
 } elseif($operation == 'bbcode') {
+	// bbcode
 
 	$edit = $_G['gp_edit'];
 	if(!submitcheck('bbcodessubmit') && !$edit) {
@@ -373,12 +374,38 @@ var rowtypedata = [
 			showformheader("misc&operation=bbcode&edit=$edit");
 			showtableheader();
 			showsetting('misc_bbcode_edit_tag', 'tagnew', $bbcode['tag'], 'text');
+
+			// bluelovers
+			// 可用
+			showsetting('available', 'availablenew', $bbcode['available'], 'radio');
+
+			// 顯示
+			showsetting('display', 'displaynew', $bbcode['available'] == 2, 'radio');
+
+			// 顯示順序
+			showsetting('display_order', 'displayordernew', $bbcode['displayorder'], 'number');
+
+			// icon
+			showsetting('misc_bbcode_icon', 'iconnew', $bbcode['icon'], 'textarea');
+			// bluelvoers
+
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
-			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'text');
+			/*
+			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'number');
+			*/
+			// bluelovers
+			// params 的值只有 1 ~ 3
+			showsetting('misc_bbcode_edit_params', array('paramsnew', array(
+				array(1, '[tag]{1}[/tag]'),
+				array(2, '[tag={1}]{2}[/tag]'),
+				array(3, '[tag={1},{2}]{3}[/tag]'),
+			)), $bbcode['params'], 'select');
+			// bluelovers
+
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
-			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'text');
+			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'number');
 			showsetting('misc_bbcode_edit_usergroup', '', '', $select);
 			showsubmit('editsubmit');
 			showtablefooter();
@@ -402,7 +429,32 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
+			/*
 			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
+			*/
+			DB::update('forum_bbcode', array(
+				'tag' => $tagnew,
+				'replacement' => $replacementnew,
+				'example' => $examplenew,
+				'explanation' => $explanationnew,
+				'params' => $paramsnew,
+				'prompt' => $promptnew,
+				'nest' => $nestnew,
+				'perm' => $permnew,
+
+				// 可用(當 display 時 available = 2)
+				'available' => (empty($_G['gp_availablenew']) ? 0 : (
+					// 當 display 時 available = 2
+					empty($_G['gp_displaynew']) ? 1 : 2
+				)),
+
+				// 顯示順序
+				'displayorder' => intval($_G['gp_displayordernew']),
+
+				// icon
+				'icon' => $_G['gp_iconnew'],
+
+			), array('id' => $edit));
 
 			updatecache(array('bbcodes', 'bbcodes_display'));
 			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode', 'succeed');
