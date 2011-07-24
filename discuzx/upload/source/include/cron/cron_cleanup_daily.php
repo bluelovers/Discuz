@@ -31,6 +31,7 @@ if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']
 
 DB::query("UPDATE ".DB::table('common_member_count')." SET todayattachs='0',todayattachsize='0'");
 
+// 處理交易紀錄
 DB::query("UPDATE ".DB::table('forum_trade')." SET closed='1' WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_tradelog')." WHERE buyerid>0 AND status=0 AND lastupdate<'$_G[timestamp]'-432000", 'UNBUFFERED');
 DB::query("UPDATE ".DB::table('forum_tradelog')." SET status='7' WHERE buyerid>'0' AND status='5' AND lastupdate<'$_G[timestamp]'-604800 AND transport='3' AND offline='1'");
