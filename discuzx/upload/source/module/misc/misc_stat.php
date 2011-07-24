@@ -22,6 +22,7 @@ $navtitle = lang('core', 'title_stats_'.$op).' - '.lang('core', 'title_stats');
 loadcache('statvars');
 
 if($op == 'basic') {
+	// 基本概況
 	$statvars = getstatvars('basic');
 	extract($statvars);
 	include template('forum/stat_main');
@@ -50,22 +51,27 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_onlinetime');
 } elseif($op == 'team') {
+	// 管理團隊
 	$statvars = getstatvars('team');
 	extract($statvars);
 	include template('forum/stat_team');
 } elseif($op == 'modworks' && $_G['setting']['modworkstatus']) {
+	// 管理統計
 	$statvars = getstatvars('modworks');
 	extract($statvars);
 	include template('forum/stat_misc');
 } elseif($op == 'memberlist' && $_G['setting']['memliststatus']) {
+	// 會員列表
 	$statvars = getstatvars('memberlist');
 	extract($statvars);
 	include template('forum/stat_memberlist');
 } elseif($op == 'forumstat') {
+	// 版塊統計
 	$statvars = getstatvars('forumstat');
 	extract($statvars);
 	include template('forum/stat_misc');
 } elseif($op == 'trend') {
+	// 趨勢統計
 	include libfile('misc/stat', 'include');
 } else {
 	showmessage('undefined_action');
@@ -97,6 +103,9 @@ function getstatvars($type) {
 	return $statvars;
 }
 
+/**
+ * 基本概況
+ */
 function getstatvars_basic() {
 	global $_G;
 
@@ -416,6 +425,9 @@ function getstatvars_onlinetime() {
 	return $statvars;
 }
 
+/**
+ * 管理團隊
+ */
 function getstatvars_team() {
 	global $_G;
 
@@ -558,11 +570,15 @@ function getstatvars_team() {
 	return $statvars;
 }
 
+/**
+ * 管理統計
+ */
 function getstatvars_modworks() {
 	global $_G;
 	$statvars = array();
 
 	$before = $_G['gp_before'];
+	// 只接受查詢 maxmodworksmonths 管理記錄保留時間(月) 以內的統計
 	$before = (isset($before) && $before > 0 && $before <=  $_G['setting']['maxmodworksmonths']) ? intval($before) : 0 ;
 
 	list($now['year'], $now['month'], $now['day']) = explode("-", dgmdate(TIMESTAMP, 'Y-n-j'));
@@ -650,6 +666,7 @@ function getstatvars_modworks() {
 		}
 
 		if(!empty($before)) {
+			// 如果沒有 $before 則清除 $expiretime 以前的管理紀錄
 			DB::query("DELETE FROM ".DB::table('forum_modwork')." WHERE dateline<'{$expiretime}-01'", 'UNBUFFERED');
 		} else {
 			$members['thismonth'] = $starttime;
@@ -675,6 +692,9 @@ function getstatvars_modworks() {
 	return $statvars;
 }
 
+/**
+ * 會員列表
+ */
 function getstatvars_memberlist() {
 	global $_G;
 	$statvars = array();
@@ -730,6 +750,9 @@ function getstatvars_memberlist() {
 	return $statvars;
 }
 
+/**
+ * 版塊統計
+ */
 function getstatvars_forumstat($fid) {
 	global $_G;
 	$xml = "<chart>\n";
