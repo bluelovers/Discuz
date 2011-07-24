@@ -392,7 +392,18 @@ var rowtypedata = [
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
+			/*
 			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'number');
+			*/
+			// bluelovers
+			// params 的值只有 1 ~ 3
+			showsetting('misc_bbcode_edit_params', array('paramsnew', array(
+				array(1, '[tag]{1}[/tag]'),
+				array(2, '[tag={1}]{2}[/tag]'),
+				array(3, '[tag={1},{2}]{3}[/tag]'),
+			)), $bbcode['params'], 'select');
+			// bluelovers
+
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
 			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'number');
 			showsetting('misc_bbcode_edit_usergroup', '', '', $select);
