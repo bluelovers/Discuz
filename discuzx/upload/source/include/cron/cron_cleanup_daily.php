@@ -17,6 +17,7 @@ DB::query("UPDATE ".DB::table('common_advertisement')." SET available='0' WHERE 
 if(DB::affected_rows()) {
 	updatecache(array('setting', 'advs'));
 }
+// 清除搜尋
 DB::query("TRUNCATE ".DB::table('common_searchindex'));
 DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid>0 AND dateline<'$_G[timestamp]'-31536000", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
