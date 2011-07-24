@@ -383,6 +383,9 @@ var rowtypedata = [
 
 			// 顯示順序
 			showsetting('display_order', 'displayordernew', $bbcode['displayorder'], 'number');
+
+			// icon
+			showsetting('misc_bbcode_icon', 'iconnew', $bbcode['icon'], 'textarea');
 			// bluelvoers
 
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
@@ -435,6 +438,9 @@ var rowtypedata = [
 
 				// 顯示順序
 				'displayorder' => intval($_G['gp_displayordernew']),
+
+				// icon
+				'icon' => $_G['gp_iconnew'],
 
 			), array('id' => $edit));
 
