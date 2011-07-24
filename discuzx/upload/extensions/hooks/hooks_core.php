@@ -103,6 +103,91 @@ EOF
 */
 
 		$hook_data .= $ss;
+	} elseif (
+		(
+			// 帖子底部
+			$hookid == 'viewthread_bottom'
+			// AJAX 時
+			|| ($hookid == 'viewthread_endline' && (!empty($_G['gp_viewpid']) || $_G['inajax']))
+		)
+		&& discuz_core::$plugin_support['SyntaxHighlighter']['brush']
+	) {
+		$ss = '';
+
+		discuz_core::$plugin_support['SyntaxHighlighter']['brush'] = null;
+
+		$path = $_G['siteurl'].'extensions/js/SyntaxHighlighter/';
+
+		$ss = <<<EOF
+<!-- Include required JS files -->
+<script src="{$path}src/shCore.js" type="text/javascript" _reload="1"></script>
+<script src="{$path}src/shAutoloader.js" type="text/javascript" _reload="1"></script>
+
+<script type="text/javascript" reload="1">
+SyntaxHighlighter.autoloader.apply(null, [
+	'applescript			{$path}scripts/shBrushAppleScript.js',
+	'actionscript3 as3		{$path}scripts/shBrushAS3.js',
+	'bash shell				{$path}scripts/shBrushBash.js',
+	'coldfusion cf			{$path}scripts/shBrushColdFusion.js',
+	'cpp c					{$path}scripts/shBrushCpp.js',
+	'c# c-sharp csharp		{$path}scripts/shBrushCSharp.js',
+	'css					{$path}scripts/shBrushCss.js',
+	'delphi pascal			{$path}scripts/shBrushDelphi.js',
+	'diff patch pas			{$path}scripts/shBrushDiff.js',
+	'erl erlang				{$path}scripts/shBrushErlang.js',
+	'groovy					{$path}scripts/shBrushGroovy.js',
+	'java					{$path}scripts/shBrushJava.js',
+	'jfx javafx				{$path}scripts/shBrushJavaFX.js',
+	'js jscript javascript	{$path}scripts/shBrushJScript.js',
+	'perl pl				{$path}scripts/shBrushPerl.js',
+	'php php5 php3 php4		{$path}scripts/shBrushPhp.js',
+	'text plain txt			{$path}scripts/shBrushPlain.js',
+	'py python				{$path}scripts/shBrushPython.js',
+	'ruby rails ror rb		{$path}scripts/shBrushRuby.js',
+	'sass scss				{$path}scripts/shBrushSass.js',
+	'scala					{$path}scripts/shBrushScala.js',
+	'sql mysql				{$path}scripts/shBrushSql.js',
+	'vb vbnet				{$path}scripts/shBrushVb.js',
+	'xml xhtml xslt html	{$path}scripts/shBrushXml.js',
+]);
+
+//SyntaxHighlighter.config.clipboardSwf = '{$path}/scripts/clipboard.swf';
+//SyntaxHighlighter.defaults['gutter'] = false;
+SyntaxHighlighter.defaults['smart-tabs'] = true;
+//SyntaxHighlighter.defaults['collapse'] = true;
+//SyntaxHighlighter.defaults['highlight'] = true;
+SyntaxHighlighter.defaults['toolbar'] = false;
+
+SyntaxHighlighter.all();
+//SyntaxHighlighter.highlight();
+</script>
+
+<!-- Include *at least* the core style and default theme -->
+<!--link href="{$path}styles/shCore.css" rel="stylesheet" type="text/css" /-->
+<link href="{$path}styles/shCoreMidnight.css" rel="stylesheet" type="text/css" />
+<!--link href="{$path}styles/shThemeMidnight.css" rel="stylesheet" type="text/css" /-->
+
+<style>
+/* 使 pre, code 可以斷行 */
+.syntaxhighlighter pre, .syntaxhighlighter code {
+	width:inherit;
+	word-break: break-all;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	*white-space: pre;           /* IE */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
 	}
 }
 
