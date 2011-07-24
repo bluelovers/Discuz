@@ -20,6 +20,8 @@ if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
 
+//BUG:沒有顯示任何趨勢統計內容(只有在網址上增加 &xml=1 時才能輸出統計)
+
 $siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
 $stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
 
