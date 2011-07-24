@@ -54,6 +54,7 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_team');
 } elseif($op == 'modworks' && $_G['setting']['modworkstatus']) {
+	// 管理統計
 	$statvars = getstatvars('modworks');
 	extract($statvars);
 	include template('forum/stat_misc');
