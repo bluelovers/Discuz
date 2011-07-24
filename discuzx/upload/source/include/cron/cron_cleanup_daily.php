@@ -13,6 +13,7 @@ if(!defined('IN_DISCUZ')) {
 require_once libfile('function/cache');
 updatecache('forumrecommend');
 
+// 更新廣告過期
 DB::query("UPDATE ".DB::table('common_advertisement')." SET available='0' WHERE endtime>'0' AND endtime<='$_G[timestamp]'", 'UNBUFFERED');
 if(DB::affected_rows()) {
 	updatecache(array('setting', 'advs'));
