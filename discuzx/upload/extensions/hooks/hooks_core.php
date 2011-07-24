@@ -83,8 +83,15 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 	$_varhash = VERHASH;
 
 	if ($hookid == 'global_header_seohead') {
+
+		if (!DISCUZ_DEBUG) {
+			$_add = '.pack';
+		} else {
+			$_add = '';
+		}
+
 		$ss = <<<EOF
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest{$_add}.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOF
 ;
