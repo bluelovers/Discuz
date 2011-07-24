@@ -254,6 +254,7 @@ var rowtypedata = [
 	}
 
 } elseif($operation == 'bbcode') {
+	// bbcode
 
 	$edit = $_G['gp_edit'];
 	if(!submitcheck('bbcodessubmit') && !$edit) {
