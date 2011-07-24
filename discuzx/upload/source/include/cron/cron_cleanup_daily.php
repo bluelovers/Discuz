@@ -44,6 +44,7 @@ removedir($_G['setting']['attachdir'].'image', TRUE);
 @touch($_G['setting']['attachdir'].'image/index.htm');
 
 require_once libfile('function/forum');
+// 處理未使用的附件
 $delaids = array();
 $query = DB::query("SELECT aid, attachment, thumb FROM ".DB::table('forum_attachment_unused')." WHERE dateline<'$_G[timestamp]'-86400");
 while($attach = DB::fetch($query)) {
