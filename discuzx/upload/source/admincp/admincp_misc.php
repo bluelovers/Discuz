@@ -425,7 +425,10 @@ var rowtypedata = [
 				'perm' => $permnew,
 
 				// 可用(當 display 時 available = 2)
-				'available' => (empty($_G['gp_availablenew']) ? 0 : (empty($_G['gp_displaynew']) ? 1 : 2)),
+				'available' => (empty($_G['gp_availablenew']) ? 0 : (
+					// 當 display 時 available = 2
+					empty($_G['gp_displaynew']) ? 1 : 2
+				)),
 
 			), array('id' => $edit));
 
