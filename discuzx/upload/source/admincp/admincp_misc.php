@@ -380,6 +380,9 @@ var rowtypedata = [
 
 			// 顯示
 			showsetting('display', 'displaynew', $bbcode['available'] == 2, 'radio');
+
+			// 顯示順序
+			showsetting('display_order', 'displayordernew', $bbcode['displayorder'], 'number');
 			// bluelvoers
 
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
@@ -429,6 +432,9 @@ var rowtypedata = [
 					// 當 display 時 available = 2
 					empty($_G['gp_displaynew']) ? 1 : 2
 				)),
+
+				// 顯示順序
+				'displayorder' => intval($_G['gp_displayordernew']),
 
 			), array('id' => $edit));
 
