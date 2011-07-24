@@ -69,7 +69,7 @@ function codedisp($code, $brush = 'plain') {
 	// 增加安全過濾
 	$brush = (empty($brush) || preg_match('/[^a-z0-9_\-\+]/i', $brush)) ? 'plain' : $brush;
 
-	discuz_core::$plugin_support['SyntaxHighlighter'][$brush] = $brush;
+	discuz_core::$plugin_support['SyntaxHighlighter']['brush'][$brush] = $brush;
 
 	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
 
@@ -615,6 +615,19 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				, 'authorreplyexist' => &$authorreplyexist
 		)));
 	}
+	// bluelovers
+
+	// bluelovers
+	// 將 tab, lf 轉換回來
+	$message = str_replace(
+		array(
+			'[tab][/tab]',
+			'[br][/br]',
+		), array(
+			"\t",
+			"\n",
+		)
+		, $message);
 	// bluelovers
 
 	// split code for hack
