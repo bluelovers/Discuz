@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ')) {
 $maxday = 90;
 $deltime = $_G['timestamp'] - $maxday*3600*24;
 
+// 清除空間點擊
 DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE dateline < '$deltime'");
 
 // 清除空間訪客
