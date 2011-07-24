@@ -17,6 +17,7 @@ $notifytime = $_G['timestamp'] - 30*3600*24;
 DB::query("DELETE FROM ".DB::table('home_notification')." WHERE new='0' AND dateline < '$deltime'");
 DB::query("DELETE FROM ".DB::table('home_notification')." WHERE new='1' AND dateline < '$notifytime'");
 
+// 處理招呼
 $deltime = $_G['timestamp'] - 7*3600*24;
 DB::query("DELETE FROM ".DB::table('home_pokearchive')." WHERE dateline < '$deltime'");
 
