@@ -43,7 +43,7 @@ function creditshide($creditsrequire, $message, $pid) {
 	}
 }
 
-function codedisp($code, $brush = 'plain') {
+function codedisp($code, $brush = null) {
 	global $_G;
 	$_G['forum_discuzcode']['pcodecount']++;
 	/*
