@@ -117,7 +117,7 @@ if(!empty($_G['setting']['advexpiration']['allow'])) {
 	}
 }
 
-
+// 處理充值卡
 $count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card')." WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");
 if($count) {
 	DB::query("UPDATE ".DB::table('common_card')." SET status = 9 WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");
