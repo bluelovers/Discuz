@@ -373,6 +373,12 @@ var rowtypedata = [
 			showformheader("misc&operation=bbcode&edit=$edit");
 			showtableheader();
 			showsetting('misc_bbcode_edit_tag', 'tagnew', $bbcode['tag'], 'text');
+
+			// bluelovers
+			// 可用
+			showsetting('available', 'availablenew', $bbcode['available'], 'radio');
+			// bluelvoers
+
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
