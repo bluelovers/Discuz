@@ -58,6 +58,7 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_misc');
 } elseif($op == 'memberlist' && $_G['setting']['memliststatus']) {
+	// 會員列表
 	$statvars = getstatvars('memberlist');
 	extract($statvars);
 	include template('forum/stat_memberlist');
