@@ -293,6 +293,7 @@
 		 * $("modmenu").lastChild.style is undefined
 		 * $('modmenu').lastChild = <TextNode textContent="\n">
 		 */
+		if ($('modmenu').lastChild && $('modmenu').lastChild.style)
 		$('modmenu').lastChild.style.visibility = 'hidden';
 		document.write($('modmenu').innerHTML);
 	</script>
