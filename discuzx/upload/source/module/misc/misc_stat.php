@@ -66,6 +66,7 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_misc');
 } elseif($op == 'trend') {
+	// 趨勢統計
 	include libfile('misc/stat', 'include');
 } else {
 	showmessage('undefined_action');
