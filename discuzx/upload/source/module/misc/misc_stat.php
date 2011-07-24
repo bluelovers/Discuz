@@ -569,6 +569,7 @@ function getstatvars_modworks() {
 	$statvars = array();
 
 	$before = $_G['gp_before'];
+	// 只接受查詢 maxmodworksmonths 管理記錄保留時間(月) 以內的統計
 	$before = (isset($before) && $before > 0 && $before <=  $_G['setting']['maxmodworksmonths']) ? intval($before) : 0 ;
 
 	list($now['year'], $now['month'], $now['day']) = explode("-", dgmdate(TIMESTAMP, 'Y-n-j'));
