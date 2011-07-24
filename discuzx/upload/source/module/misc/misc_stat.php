@@ -103,6 +103,9 @@ function getstatvars($type) {
 	return $statvars;
 }
 
+/**
+ * 基本概況
+ */
 function getstatvars_basic() {
 	global $_G;
 
@@ -422,6 +425,9 @@ function getstatvars_onlinetime() {
 	return $statvars;
 }
 
+/**
+ * 管理團隊
+ */
 function getstatvars_team() {
 	global $_G;
 
@@ -564,6 +570,9 @@ function getstatvars_team() {
 	return $statvars;
 }
 
+/**
+ * 管理統計
+ */
 function getstatvars_modworks() {
 	global $_G;
 	$statvars = array();
@@ -683,6 +692,9 @@ function getstatvars_modworks() {
 	return $statvars;
 }
 
+/**
+ * 會員列表
+ */
 function getstatvars_memberlist() {
 	global $_G;
 	$statvars = array();
@@ -738,6 +750,9 @@ function getstatvars_memberlist() {
 	return $statvars;
 }
 
+/**
+ * 版塊統計
+ */
 function getstatvars_forumstat($fid) {
 	global $_G;
 	$xml = "<chart>\n";
