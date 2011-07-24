@@ -50,6 +50,7 @@ if($op == 'basic') {
 	extract($statvars);
 	include template('forum/stat_onlinetime');
 } elseif($op == 'team') {
+	// 管理團隊
 	$statvars = getstatvars('team');
 	extract($statvars);
 	include template('forum/stat_team');
