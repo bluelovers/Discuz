@@ -420,6 +420,10 @@ var rowtypedata = [
 				'prompt' => $promptnew,
 				'nest' => $nestnew,
 				'perm' => $permnew,
+
+				// 可用
+				'available' => (empty($_G['gp_availablenew']) ? 0 : 1),
+
 			), array('id' => $edit));
 
 			updatecache(array('bbcodes', 'bbcodes_display'));
