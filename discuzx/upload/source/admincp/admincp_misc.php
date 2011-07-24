@@ -392,9 +392,9 @@ var rowtypedata = [
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
-			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'text');
+			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'number');
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
-			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'text');
+			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'number');
 			showsetting('misc_bbcode_edit_usergroup', '', '', $select);
 			showsubmit('editsubmit');
 			showtablefooter();
