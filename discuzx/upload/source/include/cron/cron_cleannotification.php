@@ -11,6 +11,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+// 處理提醒
 $deltime = $_G['timestamp'] - 2*3600*24;
 $notifytime = $_G['timestamp'] - 30*3600*24;
 DB::query("DELETE FROM ".DB::table('home_notification')." WHERE new='0' AND dateline < '$deltime'");
