@@ -39,9 +39,9 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 
 	//TODO:使用 discuz_core::$_cache_data['bbcodes']['regexp_base']
 	if (!empty(discuz_core::$_cache_data['bbcodes']['regexp_ex'])) {
-
+		$search = str_replace('{bbtag}', $bbcode['tag'], discuz_core::$_cache_data['bbcodes']['regexp_base'][$bbcode['params']]);
 	} else {
-	$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
+		$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
 	}
 	// 追加清除 \t
 	$bbcode['replacement'] = preg_replace("/([\t\r\n])/", '', $bbcode['replacement']);
