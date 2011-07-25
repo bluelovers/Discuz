@@ -21,8 +21,13 @@ function build_cache_bbcodes() {
 	);
 
 	// bluelovers
-	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_init_regexp', array(array('regexp' => &$regexp,
-				)));
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Func_build_cache_bbcodes:Before_init_regexp
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_init_regexp')
+			->run(array(array(
+				'regexp' => &$regexp,
+		)));
+	}
 	// bluelovers
 
 	while($bbcode = DB::fetch($query)) {
