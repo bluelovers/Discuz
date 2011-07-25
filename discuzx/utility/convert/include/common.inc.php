@@ -39,12 +39,18 @@ $_REQUEST = array_merge($_POST, $_GET);
 $_REQUEST['method'] = strtolower($_SERVER['REQUEST_METHOD']);
 $_REQUEST['script'] = basename($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);
 
+// bluelovers
+// 修正 CONFIG_EMPTY 的問題
+$source = getgpc('source') ? getgpc('source') : getgpc('s');
+$_configfile = '.'.$source.'.php';
+// bluelovers
+
 $_config = array();
-if(!file_exists(DISCUZ_ROOT.'./data/config.inc.php')) {
+if(!file_exists(DISCUZ_ROOT.'./data/config.inc.php'.$_configfile)) {
 	define('CONFIG_EMPTY', true);
 	include DISCUZ_ROOT.'./data/config.default.php';
 } else {
-	include DISCUZ_ROOT.'./data/config.inc.php';
+	include DISCUZ_ROOT.'./data/config.inc.php'.$_configfile;
 }
 
 if(!defined('CONFIG_EMPTY')) {
