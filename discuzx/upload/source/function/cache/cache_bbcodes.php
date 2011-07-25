@@ -84,6 +84,13 @@ function build_cache_bbcodes() {
 		$switchstop = 0;
 
 		//TODO:Event: Func_build_cache_bbcodes:Before_switch
+		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_switch', array(array('regexp' => &$regexp,
+					'bbcode' => &$bbcode,
+					'search' => &$search,
+					'switchstop' => &$switchstop,
+					'replace' => &$replace,
+					'data' => &$data,
+					)));
 
 		if (!$switchstop) {
 		// bluelovers
