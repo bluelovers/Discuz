@@ -31,6 +31,7 @@ Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define1', '_eFunc_build_cache
 function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 	extract($conf, EXTR_REFS);
 
+	//TODO:使用 discuz_core::$_cache_data['bbcodes']['regexp_base']
 	$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
 	// 追加清除 \t
 	$bbcode['replacement'] = preg_replace("/([\t\r\n])/", '', $bbcode['replacement']);
