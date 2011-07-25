@@ -269,6 +269,7 @@ var rowtypedata = [
 		showformheader('misc&operation=bbcode');
 		showtableheader('', 'fixpadding');
 		showsubtitle(array('', 'misc_bbcode_tag', 'available', 'display', 'display_order', 'misc_bbcode_icon', 'misc_bbcode_icon_file', ''));
+		// 修改排序條件 , available DESC, tag
 		$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." ORDER BY displayorder, available DESC, tag");
 		while($bbcode = DB::fetch($query)) {
 			showtablerow('', array('class="td25"', 'class="td21"', 'class="td25"', 'class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td21"'), array(
