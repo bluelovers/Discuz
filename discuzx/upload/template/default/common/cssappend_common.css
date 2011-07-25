@@ -50,3 +50,64 @@ p.emp { color: red; }
 .avatar_small_48 { max-height: 48px; max-width: 48px; }
 .avatar_middle { max-height: 120px; max-width: 120px; }
 .avatar_big { max-height: auto; max-width: auto; }
+
+/* for box style */
+
+.t_msg_plus {
+	margin; 10px 10px;
+}
+
+.t_msg_plus table {
+	border-collapse: collapse;
+}
+
+.t_msg_plus td, .t_msg_plus tr {
+	padding: 0;
+	border: 0px none {BORDERCOLOR};
+}
+
+.i-l	{ background-repeat: no-repeat; background-position-x: right; background-position-y: medium; background-position: right medium; }
+.i-m	{ background-repeat: repeat-x; background-position-x: right; background-position-y: medium; background-position: right medium; }
+.i-r	{ background-repeat: no-repeat; background-position-x: left; background-position-y: medium; background-position: left medium; }
+
+.i-box { border-collapse: collapse }
+
+.i-tl {
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+.i-tm {
+	background-repeat: repeat-x;
+	background-position: left bottom;
+	background-position-y: bottom;
+}
+.i-tr	{
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+.i-ml	{
+	background-repeat: repeat-y;
+	background-position-x: 100%;
+	background-position: right top;
+	padding: 0 0 0 0;
+}
+.i-mm {  }
+.i-mr	{
+	background-repeat: repeat-y;
+	background-position-x: left;
+}
+
+.i-bl	{
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+.i-bm	{
+	background-repeat: repeat-x;
+	background-position: right top;
+	background-position-y: top;
+}
+.i-br	{
+	background-repeat: no-repeat;
+	background-position: left top;
+}
