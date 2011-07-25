@@ -20,6 +20,11 @@ function build_cache_bbcodes() {
 		3 => "/\[{bbtag}=(['\"]?)([^\"\[]+?)(['\"]?),(['\"]?)([^\"\[]+?)(['\"]?)\]([^\"\[]+?)\[\/{bbtag}\]/is"
 	);
 
+	// bluelovers
+	Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_init_regexp', array(array('regexp' => &$regexp,
+				)));
+	// bluelovers
+
 	while($bbcode = DB::fetch($query)) {
 		$bbcode['perm'] = explode("\t", $bbcode['perm']);
 		if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
