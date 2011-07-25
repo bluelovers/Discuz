@@ -99,6 +99,7 @@ function build_cache_bbcodes() {
 		if (!$switchstop) {
 		// bluelovers
 
+			// 依照 參數個數 來做個別處理
 			switch($bbcode['params']) {
 				case 2:
 					$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
