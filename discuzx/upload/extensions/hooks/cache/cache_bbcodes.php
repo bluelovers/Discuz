@@ -33,6 +33,8 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 
 	$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
 	$bbcode['replacement'] = preg_replace("/([\r\n])/", '', $bbcode['replacement']);
+
+	$switchstop = 1;
 }
 
 Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define3', '_eFunc_build_cache_bbcodes_Before_define3');
