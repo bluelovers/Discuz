@@ -32,6 +32,7 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 	extract($conf, EXTR_REFS);
 
 	$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
+	// 追加清除 \t
 	$bbcode['replacement'] = preg_replace("/([\t\r\n])/", '', $bbcode['replacement']);
 
 	$switchstop = 1;
