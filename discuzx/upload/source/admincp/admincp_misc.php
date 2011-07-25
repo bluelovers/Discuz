@@ -404,6 +404,11 @@ var rowtypedata = [
 			)), $bbcode['params'], 'select');
 			// bluelovers
 
+			// bluelovers
+			// 設定參數類型
+			if (!is_array($bbcode['pattern'])) $bbcode['pattern'] = $bbcode['pattern'] ? split("\t", $bbcode['pattern']) : array(0, 0, 0);
+			// bluelovers
+
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
 			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'number');
 			showsetting('misc_bbcode_edit_usergroup', '', '', $select);
