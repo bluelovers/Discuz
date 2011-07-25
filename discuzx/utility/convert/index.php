@@ -25,17 +25,17 @@ $action = empty($action) || empty($source) ? 'source' : $action;
 showheader($action, $setting);
 
 if($action == 'source') {
-	require DISCUZ_ROOT.'./include/do_source.inc.php';
+	include DISCUZ_ROOT.'./include/do_source.inc.php';
 } elseif($action == 'config' || CONFIG_EMPTY) {
-	require DISCUZ_ROOT.'./include/do_config.inc.php';
+	include DISCUZ_ROOT.'./include/do_config.inc.php';
 } elseif($action == 'setting') {
-	require DISCUZ_ROOT.'./include/do_setting.inc.php';
+	include DISCUZ_ROOT.'./include/do_setting.inc.php';
 } elseif($action == 'select') {
-	require DISCUZ_ROOT.'./include/do_select.inc.php';
+	include DISCUZ_ROOT.'./include/do_select.inc.php';
 } elseif($action == 'convert') {
-	require DISCUZ_ROOT.'./include/do_convert.inc.php';
+	include DISCUZ_ROOT.'./include/do_convert.inc.php';
 } elseif($action == 'finish') {
-	require DISCUZ_ROOT.'./include/do_finish.inc.php';
+	include DISCUZ_ROOT.'./include/do_finish.inc.php';
 } else {
 	showmessage('非法請求');
 }
