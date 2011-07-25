@@ -176,6 +176,11 @@ function build_cache_setting() {
 	include_once DISCUZ_ROOT.'./source/discuz_version.php';
 	$_G['setting']['version'] = $data['version'] = DISCUZ_VERSION;
 
+	// bluelovers
+	// cache version release
+	$_G['setting']['release'] = $data['release'] = DISCUZ_RELEASE;
+	// bluelovers
+
 	$data['sitemessage']['time'] = !empty($data['sitemessage']['time']) ? $data['sitemessage']['time'] * 1000 : 0;
 	foreach (array('register', 'login', 'newthread', 'reply') as $type) {
 		$data['sitemessage'][$type] = !empty($data['sitemessage'][$type]) ? explode("\n", $data['sitemessage'][$type]) : array();
