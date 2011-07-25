@@ -56,8 +56,8 @@ function build_cache_bbcodes_display() {
 		if (!$switchstop) {
 		// bluelovers
 
-		$bbcode['explanation'] = dhtmlspecialchars(trim($bbcode['explanation']));
-		$bbcode['prompt'] = addcslashes($bbcode['prompt'], '\\\'');
+			$bbcode['explanation'] = dhtmlspecialchars(trim($bbcode['explanation']));
+			$bbcode['prompt'] = addcslashes($bbcode['prompt'], '\\\'');
 
 		// bluelovers
 		}
