@@ -376,6 +376,8 @@ function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
 
 	$_G = &$discuz->var;
 
+	if ($_G['siteroot'] == '/') return Scorpio_Hook::RET_SUCCESS;
+
 	$doc_root = scofile::path($_SERVER["DOCUMENT_ROOT"]);
 	$base = scofile::path(DISCUZ_ROOT);
 
