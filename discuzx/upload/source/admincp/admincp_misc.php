@@ -463,6 +463,16 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
+			// bluelovers
+			$patternnew = $bbcode['pattern'];
+			if (!empty($_G['gp_patternnew']) && is_array($_G['gp_patternnew'])) {
+				$patternnew = $_G['gp_patternnew'];
+
+				$patternnew = implode("\t", $patternnew);
+			}
+			$patternnew = daddslashes($patternnew);
+			// bluelovers
+
 			/*
 			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
 			*/
@@ -487,6 +497,9 @@ var rowtypedata = [
 
 				// icon
 				'icon' => $_G['gp_iconnew'],
+
+				// pattern
+				'pattern' => $patternnew,
 
 			), array('id' => $edit));
 
