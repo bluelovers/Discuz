@@ -35,6 +35,8 @@ function build_cache_bbcodes() {
 		// bluelovers
 		$switchstop = 0;
 
+		//TODO:Event: Func_build_cache_bbcodes:Before_perm
+
 		if (!$switchstop) {
 		// bluelovers
 
@@ -48,6 +50,8 @@ function build_cache_bbcodes() {
 
 		$switchstop = 0;
 
+		//TODO:Event: Func_build_cache_bbcodes:Before_define1
+
 		if (!$switchstop) {
 		// bluelovers
 
@@ -58,6 +62,8 @@ function build_cache_bbcodes() {
 		}
 
 		$switchstop = 0;
+
+		//TODO:Event: Func_build_cache_bbcodes:Before_switch
 
 		if (!$switchstop) {
 		// bluelovers
@@ -82,6 +88,8 @@ function build_cache_bbcodes() {
 
 		$switchstop = 0;
 
+		//TODO:Event: Func_build_cache_bbcodes:Before_define2
+
 		if (!$switchstop) {
 		// bluelovers
 
@@ -96,6 +104,8 @@ function build_cache_bbcodes() {
 		}
 
 		$switchstop = 0;
+
+		//TODO:Event: Func_build_cache_bbcodes:Before_define3
 
 		if (!$switchstop) {
 		// bluelovers
