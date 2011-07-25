@@ -278,6 +278,8 @@ var rowtypedata = [
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"displaynew[$bbcode[id]]\" value=\"1\" ".($bbcode['available'] == '2' ? 'checked="checked"' : NULL).">",
 				"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$bbcode[id]]\" value=\"$bbcode[displayorder]\">",
 				$bbcode['icon']
+				// 用來避免 icon 不是圖片時
+				&& (strpos($bbcode['icon'], '<') === false)
 				?
 					"<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>"
 					: ' '
