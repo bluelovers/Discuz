@@ -284,6 +284,13 @@ var rowtypedata = [
 					"<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>"
 					: ' '
 				,
+				// bluelovers
+				(strpos($bbcode['icon'], '<') !== false)
+				&& ($bbcode['icon'] = dhtmlspecialchars($bbcode['icon']))
+				?
+				''
+				:
+				// bluelovers
 				"<input type=\"text\" class=\"txt\" size=\"25\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">"
 				,
 				"<a href=\"".ADMINSCRIPT."?action=misc&operation=bbcode&edit=$bbcode[id]\" class=\"act\">$lang[detail]</a>"
