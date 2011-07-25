@@ -407,6 +407,13 @@ var rowtypedata = [
 			// bluelovers
 			// 設定參數類型
 			if (!is_array($bbcode['pattern'])) $bbcode['pattern'] = $bbcode['pattern'] ? split("\t", $bbcode['pattern']) : array(0, 0, 0);
+
+			for ($i=0; $i < 3; $i++) {
+				$j = $i + 1;
+
+				showsetting('{'.$j.'}', array('patternnew['.$i.']',
+				), $bbcode['pattern'][$i], 'mradio');
+			}
 			// bluelovers
 
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
