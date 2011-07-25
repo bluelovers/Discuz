@@ -94,15 +94,19 @@ function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
 		// 由於是經過 admincp 設定的所以不做嚴格的檢查
 		$_icon_isurl = strpos($bbcode['icon'], 'http://') === 0;
 
+		$setdefault = true;
+
 		if (!$_icon_isurl && file_exists(DISCUZ_ROOT.'./static/'.$_def_path.$bbcode['icon'])) {
+			$setdefault = false;
 		} elseif ($_icon_isurl) {
 			$bbcode['icon_url'] = $bbcode['icon'];
-			unset($bbcode['icon']);
 		} elseif (strpos($bbcode['icon'], '<')) {
 			// 簡易檢查是否為 HTML
 			$bbcode['icon_html'] = $bbcode['icon'];
-			unset($bbcode['icon']);
-		} else {
+		}
+
+		// 改良支援沒有做過修改的模板
+		if ($setdefault) {
 			// image/plus/bbcode/bb_default.gif
 			$bbcode['icon'] = $_sco_path_ref.'bb_default.gif';
 		}
