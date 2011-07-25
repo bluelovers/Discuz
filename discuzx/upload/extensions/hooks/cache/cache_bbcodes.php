@@ -80,4 +80,12 @@ function _eFunc_build_cache_bbcodes_Before_define3($_EVENT, $_conf) {
 	$bbcode['replacement'] = str_replace('{bbtag}', $bbcode['tag'], $bbcode['replacement']);
 }
 
+Scorpio_Hook::add('Func_build_cache_bbcodes_display:Before_fixvalue', '_eFunc_build_cache_bbcodes_display_Before_fixvalue');
+
+function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+
+}
+
 ?>
