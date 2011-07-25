@@ -61,7 +61,7 @@ function build_cache_bbcodes_display() {
 
 	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		//Event: Func_build_cache_bbcodes:Before_save_syscache
+		//Event: Func_build_cache_bbcodes_display:Before_save_syscache
 		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_save_syscache')
 			->run(array(array(
 				'data' => &$data,
