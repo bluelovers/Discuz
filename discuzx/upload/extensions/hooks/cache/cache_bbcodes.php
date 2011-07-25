@@ -8,7 +8,7 @@ if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Func_build_cache_bbcodes:Before_init_regexp', '_eFunc_build_cache_bbcodes_Before_init_regexp');
 
-function _eFunc_build_cache_bbcodes_Before_init_regexp(&$conf) {
+function _eFunc_build_cache_bbcodes_Before_init_regexp($_EVENT, $_conf) {
 	// 供 discuz_core::$_cache_data['bbcodes']['regexp_ex'] 替換參數用的原始字串
 	discuz_core::$_cache_data['bbcodes']['regexp_base'] = array(
 		1 => "/\[{bbtag}\]{1}\[\/{bbtag}\]/is",
@@ -34,7 +34,7 @@ function _eFunc_build_cache_bbcodes_Before_init_regexp(&$conf) {
 
 Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define1', '_eFunc_build_cache_bbcodes_Before_define1');
 
-function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
+function _eFunc_build_cache_bbcodes_Before_define1($_EVENT, $_conf) {
 	extract($conf, EXTR_REFS);
 
 	//TODO:使用 discuz_core::$_cache_data['bbcodes']['regexp_base']
@@ -74,7 +74,7 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 
 Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define3', '_eFunc_build_cache_bbcodes_Before_define3');
 
-function _eFunc_build_cache_bbcodes_Before_define3(&$conf) {
+function _eFunc_build_cache_bbcodes_Before_define3($_EVENT, $_conf) {
 	extract($conf, EXTR_REFS);
 
 	$bbcode['replacement'] = str_replace('{bbtag}', $bbcode['tag'], $bbcode['replacement']);
