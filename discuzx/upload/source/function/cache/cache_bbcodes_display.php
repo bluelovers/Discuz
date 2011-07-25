@@ -32,6 +32,17 @@ function build_cache_bbcodes_display() {
 		}
 	}
 
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Func_build_cache_bbcodes:Before_save_syscache
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_save_syscache')
+			->run(array(array(
+				'data' => &$data,
+				'i' => &$i,
+		)));
+	}
+	// bluelovers
+
 	save_syscache('bbcodes_display', $data);
 }
 
