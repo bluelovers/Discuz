@@ -98,6 +98,10 @@ function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
 		} elseif ($_icon_isurl) {
 			$bbcode['icon_url'] = $bbcode['icon'];
 			unset($bbcode['icon']);
+		} elseif (strpos($bbcode['icon'], '<')) {
+			// 簡易檢查是否為 HTML
+			$bbcode['icon_html'] = $bbcode['icon'];
+			unset($bbcode['icon']);
 		} else {
 			// image/plus/bbcode/bb_default.gif
 			$bbcode['icon'] = $_sco_path_ref.'bb_default.gif';
