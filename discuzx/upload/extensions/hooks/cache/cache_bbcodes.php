@@ -85,7 +85,24 @@ Scorpio_Hook::add('Func_build_cache_bbcodes_display:Before_fixvalue', '_eFunc_bu
 function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
 	extract($_conf, EXTR_REFS);
 
+	if ($bbcode['icon']) {
+		//STATICURL
+		//DISCUZ_ROOT
+		$_def_path = 'image/common/';
+		$_sco_path_ref = '../plus/bbcode/';
 
+		// 由於是經過 admincp 設定的所以不做嚴格的檢查
+		$_icon_isurl = strpos($bbcode['icon'], 'http://') === 0;
+
+		if (!$_icon_isurl && file_exists(DISCUZ_ROOT.'./static/'.$_def_path.$bbcode['icon'])) {
+		} elseif ($_icon_isurl) {
+			$bbcode['icon_url'] = $bbcode['icon'];
+			unset($bbcode['icon']);
+		} else {
+			// image/plus/bbcode/bb_default.gif
+			$bbcode['icon'] = $_sco_path_ref.'bb_default.gif';
+		}
+	}
 }
 
 ?>
