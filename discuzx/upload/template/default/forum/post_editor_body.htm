@@ -91,7 +91,11 @@
 				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
 					<!--{if $bbcode['i'] % 2 != 0}-->
 						<a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]">
+							<!--{if $bbcode[icon_url]}-->
+								<img src="$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" />
+							<!--{else}-->
 							<img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" />
+							<!--{/if}-->
 						</a>
 					<!--{/if}-->
 				<!--{/loop}-->
@@ -100,7 +104,11 @@
 				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
 					<!--{if $bbcode['i'] % 2 == 0}-->
 						<a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]">
+							<!--{if $bbcode[icon_url]}-->
+								<img src="$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" />
+							<!--{else}-->
 							<img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" />
+							<!--{/if}-->
 						</a>
 					<!--{/if}-->
 				<!--{/loop}-->
