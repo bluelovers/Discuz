@@ -44,6 +44,7 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 		for ($_i = 0; $_i < $bbcode['params']; $_i++) {
 			$_j = $_i + 1;
 
+			//TODO:增加可設定使用哪一個設定值
 			$_k = 0;
 
 			$search = str_replace('{'.$_j.'}', discuz_core::$_cache_data['bbcodes']['regexp_ex'][$_k], $search);
