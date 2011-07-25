@@ -31,12 +31,37 @@ function build_cache_bbcodes() {
 	// bluelovers
 
 	while($bbcode = DB::fetch($query)) {
+
+		// bluelovers
+		$switchstop = 0;
+
+		if (!$switchstop) {
+		// bluelovers
+
 		$bbcode['perm'] = explode("\t", $bbcode['perm']);
 		if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
 			continue;
 		}
+
+		// bluelovers
+		}
+
+		$switchstop = 0;
+
+		if (!$switchstop) {
+		// bluelovers
+
 		$search = str_replace('{bbtag}', $bbcode['tag'], $regexp[$bbcode['params']]);
 		$bbcode['replacement'] = preg_replace("/([\r\n])/", '', $bbcode['replacement']);
+
+		// bluelovers
+		}
+
+		$switchstop = 0;
+
+		if (!$switchstop) {
+		// bluelovers
+
 		switch($bbcode['params']) {
 			case 2:
 				$bbcode['replacement'] = str_replace('{1}', '\\2', $bbcode['replacement']);
@@ -51,6 +76,15 @@ function build_cache_bbcodes() {
 				$bbcode['replacement'] = str_replace('{1}', '\\1', $bbcode['replacement']);
 				break;
 		}
+
+		// bluelovers
+		}
+
+		$switchstop = 0;
+
+		if (!$switchstop) {
+		// bluelovers
+
 		if(preg_match("/\{(RANDOM|MD5)\}/", $bbcode['replacement'])) {
 			$search = str_replace('is', 'ies', $search);
 			$replace = '\''.str_replace('{RANDOM}', '_\'.random(6).\'', str_replace('{MD5}', '_\'.md5(\'\\1\').\'', $bbcode['replacement'])).'\'';
@@ -58,12 +92,24 @@ function build_cache_bbcodes() {
 			$replace = $bbcode['replacement'];
 		}
 
+		// bluelovers
+		}
+
+		$switchstop = 0;
+
+		if (!$switchstop) {
+		// bluelovers
+
 		foreach($bbcode['perm'] as $groupid) {
 			for($i = 0; $i < $bbcode['nest']; $i++) {
 				$data[$groupid]['searcharray'][] = $search;
 				$data[$groupid]['replacearray'][] = $replace;
 			}
 		}
+
+		// bluelovers
+		}
+		// bluelovers
 	}
 
 	save_syscache('bbcodes', $data);
