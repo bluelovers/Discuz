@@ -50,6 +50,7 @@ function build_cache_bbcodes() {
 		if (!$switchstop) {
 		// bluelovers
 
+			// 允許使用此代碼的用戶組
 			$bbcode['perm'] = explode("\t", $bbcode['perm']);
 			if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
 				continue;
