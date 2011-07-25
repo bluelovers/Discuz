@@ -26,6 +26,14 @@ function _eFunc_build_cache_bbcodes_Before_init_regexp(&$conf) {
 	);
 }
 
+Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define1', '_eFunc_build_cache_bbcodes_Before_define1');
+
+function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
+	extract($conf, EXTR_REFS);
+
+
+}
+
 Scorpio_Hook::add('Func_build_cache_bbcodes:Before_define3', '_eFunc_build_cache_bbcodes_Before_define3');
 
 function _eFunc_build_cache_bbcodes_Before_define3(&$conf) {
