@@ -80,4 +80,54 @@ function _eFunc_build_cache_bbcodes_Before_define3($_EVENT, $_conf) {
 	$bbcode['replacement'] = str_replace('{bbtag}', $bbcode['tag'], $bbcode['replacement']);
 }
 
+Scorpio_Hook::add('Func_build_cache_bbcodes_display:Before_fixvalue', '_eFunc_build_cache_bbcodes_display_Before_fixvalue');
+
+function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+	if ($bbcode['icon']) {
+		//STATICURL
+		//DISCUZ_ROOT
+		$_def_path = 'image/common/';
+		$_sco_path_ref = '../plus/bbcode/';
+
+		// 由於是經過 admincp 設定的所以不做嚴格的檢查
+		$_icon_isurl = strpos($bbcode['icon'], 'http://') === 0;
+
+		$setdefault = true;
+
+		if (!$_icon_isurl && file_exists(DISCUZ_ROOT.'./static/'.$_def_path.$bbcode['icon'])) {
+			$setdefault = false;
+		} elseif ($_icon_isurl) {
+			$bbcode['icon_url'] = $bbcode['icon'];
+		} elseif (strpos($bbcode['icon'], '<') !== false) {
+			// 簡易檢查是否為 HTML
+			$bbcode['icon_html'] = $bbcode['icon'];
+		} elseif (!$_icon_isurl && file_exists(DISCUZ_ROOT.'./static/'.$_def_path.$_sco_path_ref.$bbcode['icon'])) {
+			// 如果在 plus/bbcode/ 內找到圖檔則調整路徑
+			$setdefault = false;
+			$bbcode['icon'] = $_sco_path_ref.$bbcode['icon'];
+		}
+
+		// 改良支援沒有做過修改的模板
+		if ($setdefault) {
+			//$bbcode['icon_old'] = $bbcode['icon'];
+
+			// image/plus/bbcode/bb_default.gif
+			$bbcode['icon'] = $_sco_path_ref.'bb_default.gif';
+
+			/*
+			var_dump($bbcode, 1);
+			*/
+		}
+	}
+}
+
+/*
+Scorpio_Hook::add('Func_build_cache_bbcodes_display:Before_save_syscache', '_eFunc_build_cache_bbcodes_display_Before_save_syscache');
+
+function _eFunc_build_cache_bbcodes_display_Before_save_syscache($_EVENT, $_conf) {
+	exit();
+}
+*/
 ?>
