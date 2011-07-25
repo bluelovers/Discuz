@@ -51,11 +51,19 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 
 	// 處理參數設定依照 discuz_core::$_cache_data['bbcodes']['regexp_ex'] 內的定義
 	if (!empty(discuz_core::$_cache_data['bbcodes']['regexp_ex'])) {
+
+		$_pattern = explode("\t", $bbcode['pattern']);
+
 		for ($_i = 0; $_i < $bbcode['params']; $_i++) {
 			$_j = $_i + 1;
 
 			//TODO:增加可設定使用哪一個設定值
 			$_k = 0;
+
+			$_pattern[$_i] = intval($_pattern[$_i]);
+			if ($_pattern[$_i] > 0) {
+				$_k = $_pattern[$_i];
+			}
 
 			$search = str_replace('{'.$_j.'}', discuz_core::$_cache_data['bbcodes']['regexp_ex'][$_k], $search);
 		}
