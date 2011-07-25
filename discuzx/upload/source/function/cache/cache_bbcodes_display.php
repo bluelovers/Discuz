@@ -26,6 +26,20 @@ function build_cache_bbcodes_display() {
 		$bbcode['i'] = $i;
 		$bbcode['explanation'] = dhtmlspecialchars(trim($bbcode['explanation']));
 		$bbcode['prompt'] = addcslashes($bbcode['prompt'], '\\\'');
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			//Event: Func_build_cache_bbcodes:Before_save_perm_groupid
+			Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_save_perm_groupid')
+				->run(array(array(
+					'data' => &$data,
+					'i' => &$i,
+					'bbcode' => &$bbcode,
+					'tag' => &$tag,
+			)));
+		}
+		// bluelovers
+
 		unset($bbcode['tag']);
 		foreach($bbcode['perm'] as $groupid) {
 			$data[$groupid][$tag] = $bbcode;
