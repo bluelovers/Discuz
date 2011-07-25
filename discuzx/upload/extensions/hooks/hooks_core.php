@@ -175,6 +175,21 @@ SyntaxHighlighter.all();
 <!--link href="{$path}styles/shCore.css" rel="stylesheet" type="text/css" /-->
 <link href="{$path}styles/shCoreMidnight.css" rel="stylesheet" type="text/css" />
 <!--link href="{$path}styles/shThemeMidnight.css" rel="stylesheet" type="text/css" /-->
+
+<style>
+/* 使 pre, code 可以斷行 */
+.syntaxhighlighter pre, .syntaxhighlighter code {
+	width:inherit;
+	word-break: break-all;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	*white-space: pre;           /* IE */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+
 EOF
 ;
 /*
