@@ -135,6 +135,7 @@ function build_cache_bbcodes() {
 		if (!$switchstop) {
 		// bluelovers
 
+			// 處理 替換內容 的特殊關鍵字(RANDOM, MD5)
 			if(preg_match("/\{(RANDOM|MD5)\}/", $bbcode['replacement'])) {
 				$search = str_replace('is', 'ies', $search);
 				$replace = '\''.str_replace('{RANDOM}', '_\'.random(6).\'', str_replace('{MD5}', '_\'.md5(\'\\1\').\'', $bbcode['replacement'])).'\'';
