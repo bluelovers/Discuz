@@ -285,10 +285,12 @@ var rowtypedata = [
 					: ' '
 				,
 				// bluelovers
+				// 處理 icon 不是圖片時
 				(strpos($bbcode['icon'], '<') !== false)
 				&& ($bbcode['icon'] = dhtmlspecialchars($bbcode['icon']))
 				?
-				''
+				"<input type=\"hidden\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">"
+				.'NOT IMAGE'
 				:
 				// bluelovers
 				"<input type=\"text\" class=\"txt\" size=\"25\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">"
