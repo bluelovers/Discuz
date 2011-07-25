@@ -112,7 +112,9 @@ function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
 			// image/plus/bbcode/bb_default.gif
 			$bbcode['icon'] = $_sco_path_ref.'bb_default.gif';
 
+			/*
 			var_dump($bbcode, 1);
+			*/
 		}
 	}
 }
