@@ -103,6 +103,10 @@ function _eFunc_build_cache_bbcodes_display_Before_fixvalue($_EVENT, $_conf) {
 		} elseif (strpos($bbcode['icon'], '<') !== false) {
 			// 簡易檢查是否為 HTML
 			$bbcode['icon_html'] = $bbcode['icon'];
+		} elseif (!$_icon_isurl && file_exists(DISCUZ_ROOT.'./static/'.$_def_path.$_sco_path_ref.$bbcode['icon'])) {
+			// 如果在 plus/bbcode/ 內找到圖檔則調整路徑
+			$setdefault = false;
+			$bbcode['icon'] = $_sco_path_ref.$bbcode['icon'];
 		}
 
 		// 改良支援沒有做過修改的模板
