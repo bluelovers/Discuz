@@ -164,6 +164,7 @@ function build_cache_bbcodes() {
 		// bluelovers
 
 			foreach($bbcode['perm'] as $groupid) {
+				// 處理 嵌套次數
 				for($i = 0; $i < $bbcode['nest']; $i++) {
 					$data[$groupid]['searcharray'][] = $search;
 					$data[$groupid]['replacearray'][] = $replace;
