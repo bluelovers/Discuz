@@ -163,6 +163,7 @@ function build_cache_bbcodes() {
 		if (!$switchstop) {
 		// bluelovers
 
+			// 依照用戶組儲存
 			foreach($bbcode['perm'] as $groupid) {
 				// 處理 嵌套次數
 				for($i = 0; $i < $bbcode['nest']; $i++) {
