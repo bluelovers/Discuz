@@ -35,7 +35,7 @@
 	<p id="returnmessage4"></p>
 
 	<!--{if $this->showregisterform}-->
-	<form method="post" autocomplete="off" name="register" id="registerform" enctype="multipart/form-data" onsubmit="checksubmit();return false;" action="member.php?mod=$regname">
+	<form method="post" _autocomplete="off" name="register" id="registerform" enctype="multipart/form-data" onsubmit="checksubmit();return false;" action="member.php?mod=$regname">
 		<div id="layer_reg" class="bm_c">
 			<input type="hidden" name="regsubmit" value="yes" />
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -86,7 +86,7 @@
 							<table>
 								<tr>
 									<th><span class="rq">*</span><label for="{$this->setting['reginput']['username']}">{lang username}:</label></th>
-									<td><input type="text" id="{$this->setting['reginput']['username']}" name="" class="px" tabindex="1" autocomplete="off" size="25" maxlength="15" required /></td>
+									<td><input type="text" id="{$this->setting['reginput']['username']}" name="" class="px" tabindex="1" _autocomplete="off" size="25" maxlength="15" required /></td>
 									<td class="tipcol"><i id="tip_{$this->setting['reginput']['username']}" class="p_tip">{lang register_username_tips}</i><kbd id="chk_{$this->setting['reginput']['username']}" class="p_chk"></kbd></td>
 								</tr>
 							</table>
@@ -116,7 +116,7 @@
 							<table>
 								<tr>
 									<th><span class="rq">*</span><label for="{$this->setting['reginput']['email']}">{lang email}:</label></th>
-									<td><input type="text" id="{$this->setting['reginput']['email']}" name="" autocomplete="off" size="25" tabindex="1" class="px" required /><br /><em id="emailmore">&nbsp;</em></td>
+									<td><input type="text" id="{$this->setting['reginput']['email']}" name="" _autocomplete="off" size="25" tabindex="1" class="px" required /><br /><em id="emailmore">&nbsp;</em></td>
 									<td class="tipcol"><i id="tip_{$this->setting['reginput']['email']}" class="p_tip">{lang register_email_tips}</i><kbd id="chk_{$this->setting['reginput']['email']}" class="p_chk"></kbd></td>
 								</tr>
 							</table>
