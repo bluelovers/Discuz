@@ -408,10 +408,32 @@ var rowtypedata = [
 			// 設定參數類型
 			if (!is_array($bbcode['pattern'])) $bbcode['pattern'] = $bbcode['pattern'] ? split("\t", $bbcode['pattern']) : array(0, 0, 0);
 
+			$regexp_ex = array(
+				// dz 預設
+				0 => '([^\"\[]+?)',
+				// 英文+數字
+				1 => '(\w+)',
+				// 數字
+				2 => '(\d+)',
+				// 英文
+				3 => '([a-zA-Z]+)',
+				// 任何字
+				4 => '(.+?)',
+				// 任何字(非空)
+				5 => '(.+)',
+			);
+
+			$_pattern = array();
+			foreach ($regexp_ex as $k => $v) {
+				array_push($_pattern, array($k, $v));
+			}
+
 			for ($i=0; $i < 3; $i++) {
 				$j = $i + 1;
 
 				showsetting('{'.$j.'}', array('patternnew['.$i.']',
+					$_pattern,
+					1
 				), $bbcode['pattern'][$i], 'mradio');
 			}
 			// bluelovers
