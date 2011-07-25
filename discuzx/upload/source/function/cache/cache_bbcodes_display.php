@@ -17,6 +17,19 @@ function build_cache_bbcodes_display() {
 
 	$i = 0;
 	while($bbcode = DB::fetch($query)) {
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			//Event: Func_build_cache_bbcodes_display:Before_perm
+			Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_perm')
+				->run(array(array(
+					'data' => &$data,
+					'i' => &$i,
+					'bbcode' => &$bbcode,
+			)));
+		}
+		// bluelovers
+
 		$bbcode['perm'] = explode("\t", $bbcode['perm']);
 		if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
 			continue;
