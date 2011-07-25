@@ -42,7 +42,7 @@ function build_cache_bbcodes_display() {
 
 		// bluelovers
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
-			//Event: Func_build_cache_bbcodes:Before_save_perm_groupid
+			//Event: Func_build_cache_bbcodes_display:Before_save_perm_groupid
 			Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_save_perm_groupid')
 				->run(array(array(
 					'data' => &$data,
