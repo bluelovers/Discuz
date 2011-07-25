@@ -11,6 +11,13 @@ Scorpio_Hook::add('Func_build_cache_bbcodes:Before_init_regexp', '_eFunc_build_c
 function _eFunc_build_cache_bbcodes_Before_init_regexp(&$conf) {
 	extract($conf, EXTR_REFS);
 
+	// 供 discuz_core::$_cache_data['bbcodes']['regexp_ex'] 替換參數用的原始字串
+	discuz_core::$_cache_data['bbcodes']['regexp_base'] = array(
+		1 => "/\[{bbtag}\]{1}\[\/{bbtag}\]/is",
+		2 => "/\[{bbtag}=(['\"]?){1}(['\"]?)\]{2}\[\/{bbtag}\]/is",
+		3 => "/\[{bbtag}=(['\"]?){1}(['\"]?),(['\"]?){2}(['\"]?)\]{3}\[\/{bbtag}\]/is",
+	);
+
 	discuz_core::$_cache_data['bbcodes']['regexp_ex'] = array(
 		'([^\"\[]+?)'	// dz 預設
 		,'(\w+)'		// 英文+數字
