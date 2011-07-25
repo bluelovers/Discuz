@@ -32,6 +32,9 @@ function build_cache_bbcodes() {
 	// bluelovers
 
 	while($bbcode = DB::fetch($query)) {
+		// bluelovers
+		$search = $replace = '';
+		// bluelovers
 
 		// bluelovers
 		$switchstop = 0;
