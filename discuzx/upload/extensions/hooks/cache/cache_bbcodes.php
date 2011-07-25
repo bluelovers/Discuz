@@ -18,17 +18,17 @@ function _eFunc_build_cache_bbcodes_Before_init_regexp(&$conf) {
 
 	discuz_core::$_cache_data['bbcodes']['regexp_ex'] = array(
 		// dz 預設
-		'([^\"\[]+?)'
+		'([^\"\[]+?)',
 		// 英文+數字
-		,'(\w+)'
+		'(\w+)',
 		// 數字
-		,'(\d+)'
+		'(\d+)',
 		// 英文
-		, '([a-zA-Z]+)'
+		'([a-zA-Z]+)',
 		// 任何字
-		, '(.+?)'
+		'(.+?)',
 		// 任何字(非空)
-		, '(.+)'
+		'(.+)',
 	);
 }
 
