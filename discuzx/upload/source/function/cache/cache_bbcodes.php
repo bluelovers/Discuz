@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_bbcodes() {
 	$data = array();
 	$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." WHERE available>'0'");
+	// 定義 參數個數 取代類型
 	$regexp = array	(
 		1 => "/\[{bbtag}]([^\"\[]+?)\[\/{bbtag}\]/is",
 		2 => "/\[{bbtag}=(['\"]?)([^\"\[]+?)(['\"]?)\]([^\"\[]+?)\[\/{bbtag}\]/is",
