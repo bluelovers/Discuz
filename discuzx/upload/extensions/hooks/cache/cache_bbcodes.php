@@ -35,6 +35,9 @@ function _eFunc_build_cache_bbcodes_Before_define1(&$conf) {
 	// 追加清除 \t
 	$bbcode['replacement'] = preg_replace("/([\t\r\n])/", '', $bbcode['replacement']);
 
+	// 替換 {bbtag} 為 bbcode 名稱
+	$bbcode['replacement'] = str_replace('{bbtag}', $bbcode['tag'], $bbcode['replacement']);
+
 	$switchstop = 1;
 }
 
