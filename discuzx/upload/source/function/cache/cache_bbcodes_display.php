@@ -37,8 +37,33 @@ function build_cache_bbcodes_display() {
 		$i++;
 		$tag = $bbcode['tag'];
 		$bbcode['i'] = $i;
+
+		// bluelovers
+		$switchstop = 0;
+
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			//Event: Func_build_cache_bbcodes_display:Before_fixvalue
+			Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_fixvalue')
+				->run(array(array(
+					'data' => &$data,
+					'i' => &$i,
+					'bbcode' => &$bbcode,
+					'tag' => &$tag,
+					'switchstop' => &$switchstop,
+			)));
+		}
+
+		if (!$switchstop) {
+		// bluelovers
+
 		$bbcode['explanation'] = dhtmlspecialchars(trim($bbcode['explanation']));
 		$bbcode['prompt'] = addcslashes($bbcode['prompt'], '\\\'');
+
+		// bluelovers
+		}
+
+		$switchstop = 0;
+		// bluelovers
 
 		// bluelovers
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
