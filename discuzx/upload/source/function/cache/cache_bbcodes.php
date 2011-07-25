@@ -36,13 +36,16 @@ function build_cache_bbcodes() {
 		$switchstop = 0;
 
 		//TODO:Event: Func_build_cache_bbcodes:Before_perm
-		Scorpio_Hook::execute('Func_' . __FUNCTION__ . ':Before_perm', array(array('regexp' => &$regexp,
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_perm')
+				->run(array(array('regexp' => &$regexp,
 					'bbcode' => &$bbcode,
 					'search' => &$search,
 					'switchstop' => &$switchstop,
 					'replace' => &$replace,
 					'data' => &$data,
-					)));
+			)));
+		}
 
 		if (!$switchstop) {
 		// bluelovers
