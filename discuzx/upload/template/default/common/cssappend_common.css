@@ -72,6 +72,8 @@ p.emp { color: red; }
 /*	背景透明 */
 .transparent			{ background-color:transparent }
 
+.stable, .stable table td, .stable table td img { padding: 0; border-collapse: collapse; border: 0 none #ffffff; }
+
 .i-l	{ background-repeat: no-repeat; background-position-x: right; background-position-y: medium; background-position: right medium; }
 .i-m	{ background-repeat: repeat-x; background-position-x: right; background-position-y: medium; background-position: right medium; }
 .i-r	{ background-repeat: no-repeat; background-position-x: left; background-position-y: medium; background-position: left medium; }
