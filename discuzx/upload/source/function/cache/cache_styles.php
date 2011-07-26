@@ -146,10 +146,14 @@ function writetocsscache($data) {
 			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
 
 			// bluelovers
-			Scorpio_Hook::execute('Func_'.__FUNCTION__.':Before_fwrite', array(array(
-					'cssdata'			=> &$cssdata
-					, 'entry'		=> &$entry
-			)));
+			// Event: Func_writetocsscache:Before_fwrite
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
+					->run(array(array(
+						'cssdata'			=> &$cssdata
+						, 'entry'		=> &$entry
+				)));
+			}
 			// bluelvoers
 
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry, 'w')) {
