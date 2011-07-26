@@ -22,6 +22,26 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 
 	// 轉換分行
 	$cssdata = str_replace("\r\n", "\n", $cssdata);
+
+	// 壓縮 css
+	$cssdata = preg_replace(array(
+		// 清除多餘空白
+		'/[ \t]*([,;:\{\}]+|\n)[ \t]*/s',
+		'/\t+/',
+
+		// 清除多餘分行
+		'/(\n| ){2,}/s',
+
+		// 清除 BOM
+		'/^(\xef\xbb\xbf)?\s+|\s+$/sU',
+		'/(?!^)\xef\xbb\xbf/U',
+	), array(
+		'\\1',
+		' ',
+		'\\1',
+		'\\1',
+		'',
+	), $cssdata);
 }
 
 ?>
