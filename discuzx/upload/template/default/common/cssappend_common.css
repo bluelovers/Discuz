@@ -166,3 +166,9 @@ hook {
 	border: 1px dashed #CCCCCC;
 	padding: 1px;
 }
+
+/* 表單樣式 */
+
+.input_date {
+	background: url("{STATICURL}image/plus/pw/s_time.png") no-repeat scroll 97% 50% transparent;
+}
