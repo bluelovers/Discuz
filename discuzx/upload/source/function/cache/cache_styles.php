@@ -135,11 +135,34 @@ function writetocsscache($data) {
 					}
 				}
 			}
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetocsscache:Before_replace_var
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_var')
+					->run(array(array(
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
+						'switchstop'	=> &$switchstop,
+						'data'			=> &$data,
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
 			$cssdata = preg_replace("/\{([A-Z0-9]+)\}/e", '\$data[strtolower(\'\1\')]', $cssdata);
 			$cssdata = preg_replace("/<\?.+?\?>\s*/", '', $cssdata);
 			$cssdata = !preg_match('/^http:\/\//i', $data['styleimgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['styleimgdir'], '/')."/i", "url(\\1../../$data[styleimgdir]", $cssdata) : $cssdata;
 			$cssdata = !preg_match('/^http:\/\//i', $data['imgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['imgdir'], '/')."/i", "url(\\1../../$data[imgdir]", $cssdata) : $cssdata;
 			$cssdata = !preg_match('/^http:\/\//i', $data['staticurl']) ? preg_replace("/url\(([\"'])?".preg_quote($data['staticurl'], '/')."/i", "url(\\1../../$data[staticurl]", $cssdata) : $cssdata;
+
+			// bluelovers
+			}
+			// bluelovers
+
 			if($entry == 'module.css') {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
