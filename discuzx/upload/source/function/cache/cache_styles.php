@@ -172,8 +172,8 @@ function writetocsscache($data) {
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
 				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
 					->run(array(array(
-						'cssdata'			=> &$cssdata
-						, 'entry'		=> &$entry
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
 				)));
 			}
 			// bluelvoers
