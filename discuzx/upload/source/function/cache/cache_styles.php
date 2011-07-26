@@ -143,7 +143,29 @@ function writetocsscache($data) {
 			if($entry == 'module.css') {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetocsscache:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_minify')
+					->run(array(array(
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
+						'switchstop'	=> &$switchstop,
+						'data'			=> &$data,
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
 			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+
+			// bluelovers
+			}
+			// bluelovers
 
 			// bluelovers
 			// Event: Func_writetocsscache:Before_fwrite
