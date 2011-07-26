@@ -172,6 +172,7 @@ function writetocsscache($data) {
 					->run(array(array(
 						'cssdata'		=> &$cssdata,
 						'entry'			=> &$entry,
+						'data'			=> &$data,
 				)));
 			}
 			// bluelvoers
