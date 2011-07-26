@@ -97,6 +97,7 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 }
 
 Scorpio_Hook::add('Func_writetocsscache:Before_minify', '_eFunc_writetocsscache_Before_minify');
+Scorpio_Hook::add('Class_template::loadcsstemplate:Before_minify', '_eFunc_writetocsscache_Before_minify');
 
 function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
