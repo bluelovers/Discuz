@@ -115,6 +115,70 @@ p.emp { color: red; }
 	background-position: left top;
 }
 
+/* 排版用樣式 */
+
+.float_left {
+	float: left;
+	padding: 0px;
+}
+
+.float_center {
+	float: both;
+	padding: 0px;
+}
+
+.float_right {
+	float: right;
+	padding: 0px;
+}
+
+.float_none				{ float: none; }
+.float_both				{ float: both; }
+
+.align-left {
+	text-align: left;
+}
+.align-center {
+	text-align: center;
+}
+.align-right {
+	text-align: right;
+}
+
+.valign-top, .top {
+	vertical-align: top;
+}
+.valign-middle, .middle {
+	vertical-align: middle !important;
+}
+.valign-bottom, .bottom {
+	vertical-align: bottom;
+}
+
+.nowrap					{ word-break: keep-all; white-space: nowrap; }
+.wrap_def				{ word-break: normal }
+
+.wrap, .wrap_word, .wrap_xml {
+	word-break: break-all;
+	white-space: normal;
+}
+.wrap_word				{
+	word-wrap: break-word;
+}
+.wrap_xml				{
+	word-wrap: break-word;
+
+	-moz-binding: url('include/htc/wordwrap.xml#wordwrap');
+	display: block;
+    overflow: auto;
+}
+/*
+	keep-all(保持單字型態)
+	break-all(打散單字型態，每一個字母均為一個字元)
+	normal(依網頁預設)
+	style.word-wrap[break-word] ，但是其相對較麻煩，word-wrap:break-word; 只對所屬Object Width有作用
+*/
+
 @namespace url(http://www.w3.org/1999/xhtml);
 
 /* 顯示圖片錯誤 */
