@@ -126,3 +126,33 @@ p.emp { color: red; }
 /* 被選取時的顏色與背景 */
 ::selection { background-color: #DD0044; color: #FFFFFF; }
 ::-moz-selection { background-color: #DD0044; color: #FFFFFF; }
+
+/* Hides from IE-mac \*/
+
+.clearfix {display: inline-block;}
+
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+/* End hide from IE-mac */
