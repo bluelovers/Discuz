@@ -159,3 +159,10 @@ html[xmlns] .clearfix {
 }
 
 /* End hide from IE-mac */
+
+/* 強調顯示 hook */
+hook {
+	background: none repeat scroll 0 0 #F9D0FF;
+	border: 1px dashed #CCCCCC;
+	padding: 1px;
+}
