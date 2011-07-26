@@ -179,6 +179,20 @@ p.emp { color: red; }
 	style.word-wrap[break-word] ，但是其相對較麻煩，word-wrap:break-word; 只對所屬Object Width有作用
 */
 
+/* 書寫樣式 */
+.tb-rl					{ writing-mode: tb-rl }
+.tb-rl-2				{ -moz-column-width: 1em; writing-mode: tb-rl; word-break: keep-all }
+.lr-tb					{ writing-mode: lr-tb }
+/*	直式文書 */
+.dir_ltr				{ direction: ltr }
+.dir_rtl				{ direction: rtl }
+.dir_inherit			{ direction: inherit }
+/*
+	ltr :		預設值。文本從左到右流入
+	rtl :		文本從右到左流入
+	inherit :	文本流入方向由繼承獲得
+*/
+
 @namespace url(http://www.w3.org/1999/xhtml);
 
 /* 顯示圖片錯誤 */
