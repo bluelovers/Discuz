@@ -339,11 +339,27 @@ fieldset {
 .notice, .notice_warning, .notice_error {
 	font-size: {MSGFONTSIZE};
 	border: 1px solid #96DB52;
+	/*
 	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.5em;
 	padding: 0.5em 1em 0.3em 3em;
+	*/
+	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.4em;
+	padding: 0.3em 1em 0.3em 3em;
+
 	margin: 0.5em 0.5em 0.5em 0;
 	color: {NOTICETEXT};
 }
+
+/* 橘色 */
+.notice_orange {
+	color: #FF6600;
+}
+
+/* dx 2 default color*/
+.notice_dx2 {
+	color: #F26C4F;
+}
+
 .notice_warning, .notice_error {
 	border-color: #8F126F;
 	background: #FFE0FF url({IMGDIR}/check_error.gif) no-repeat 1em 0.4em;
@@ -353,7 +369,9 @@ fieldset {
 
 .notice_green {
 	border-color: #96DB52;
+	/*
 	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.4em;
 	padding: 0.3em 1em 0.3em 3em;
+	*/
 	color: #009900;
 }
