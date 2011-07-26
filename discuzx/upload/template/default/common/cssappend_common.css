@@ -1,4 +1,7 @@
 
+/* 避免否些狀況下網頁字形失效 */
+html { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
+
 /**
  * 使排行列表的文字不會自動斷行到下一段
  **/
