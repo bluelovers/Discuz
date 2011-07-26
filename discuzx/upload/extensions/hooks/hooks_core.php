@@ -43,6 +43,10 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
+			case 'source/function/cache/cache_styles.php':
+				@include_once libfile('cache/styles', 'hooks', 'extensions/');
+				@include_once libfile('hooks/cache', '', 'extensions/');
+				break;
 			case 'source/function/cache/cache_bbcodes.php':
 			case 'source/function/cache/cache_bbcodes_display.php':
 				@include_once libfile('cache/bbcodes', 'hooks', 'extensions/');
