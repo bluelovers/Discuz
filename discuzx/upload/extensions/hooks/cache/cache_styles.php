@@ -15,6 +15,10 @@ Scorpio_Hook::add('Func_writetocsscache:Before_minify', '_eFunc_writetocsscache_
 function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
+	if($entry != 'module.css') {
+		// 清除 css 註解
+		$cssdata = preg_replace('/\/\*((?:[^\*]*|\*(?!\/)).*)\*\//sU', "\n", $cssdata);
+	}
 }
 
 ?>
