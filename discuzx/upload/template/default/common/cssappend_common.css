@@ -196,6 +196,49 @@ p.emp { color: red; }
 /*	英文輸入 */
 .en						{ ime-mode: inactive }
 
+/* 滑鼠樣式 */
+
+.cur_auto				{ cursor: auto; }
+/*	自動改變樣式*/
+.cur_def				{ cursor: default; }
+/*	標準選擇*/
+.cur_help				{ cursor: help; }
+/*	選擇說明*/
+.cur_wait				{ cursor: wait; }
+/*	忙碌中*/
+.cur_crosshair			{ cursor: crosshair; }
+/*	選擇精確度 */
+.cur_text				{ cursor: text; }
+/*	選擇文字 */
+.cur_hand, .cur_hand:hover, .cur_hand img {
+	/*cursor: hand;*/
+	cursor: pointer;
+}
+/*	選擇連線 */
+.cur_pointer			{ cursor: pointer; }
+/*	選擇指示 */
+.cur_move				{ cursor: move; }
+/*	移動 */
+.cur_n-resize			{ cursor: n-resize; }
+/*	箭頭朝上方 */
+.cur_s-resize			{ cursor: s-resize; }
+/*	箭頭朝下方 */
+.cur_w-resize			{ cursor: w-resize; }
+/*	箭頭朝左方 */
+.cur_nw-resize			{ cursor: nw-resize; }
+/*	箭頭朝左上方 */
+.cur_sw-resize			{ cursor: sw-resize; }
+/*	箭頭朝左下方 */
+.cur_e-resize			{ cursor: e-resize; }
+/*	箭頭朝右方 */
+.cur_ne-resize			{ cursor: ne-resize; }
+/*	箭頭朝右上方 */
+.cur_se-resize			{ cursor: se-resize; }
+/*	箭頭朝右下方 */
+/*
+.cur_url				{ cursor: url("游標連結位置.cur"); }
+*/
+
 @namespace url(http://www.w3.org/1999/xhtml);
 
 /* 顯示圖片錯誤 */
