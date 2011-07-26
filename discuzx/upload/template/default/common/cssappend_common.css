@@ -138,6 +138,19 @@ p.emp { color: red; }
 .float_none				{ float: none; }
 .float_both				{ float: both; }
 
+.overflow_visible		{ overflow: visible; }
+/*	設定為可見 */
+.overflow_overflow-y	{ overflow-y: auto; }
+/*	自動隱藏捲動軸 */
+.overflow_hidden		{ overflow: hidden; }
+/*	去除捲動軸 */
+.overflow_scroll		{ overflow: scroll; }
+/*	顯示捲動軸 */
+.overflow_overflow-x	{ overflow-x: hidden; }
+/*	去除水平捲動軸 */
+.overflow_overflow-y	{ overflow-y: hidden; }
+/*	去除垂直捲動軸 */
+
 .align-left {
 	text-align: left;
 }
