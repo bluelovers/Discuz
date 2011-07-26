@@ -42,6 +42,12 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 		'\\1',
 		'',
 	), $cssdata);
+
+	// 清理
+	$cssdata = trim($cssdata);
+
+	// 跳過原有的處理
+	$switchstop = true;
 }
 
 ?>
