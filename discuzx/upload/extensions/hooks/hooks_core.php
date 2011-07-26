@@ -271,8 +271,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	}
 
 	// 整理過濾處理過的 Array
-	$caches = array_unique($caches);
-	$caches_load = array_unique($caches_load);
+	$caches = array_unique((array)$caches);
+	$caches_load = array_unique((array)$caches_load);
 
 	if(!empty($caches)) {
 		@include_once libfile('function/cache');
