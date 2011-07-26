@@ -431,10 +431,10 @@ class template {
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
 				Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
 					->run(array(array(
-						'cssdata'			=> $this->csscurmodules
-						, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
+						'cssdata'		=> $this->csscurmodules,
+						'entry'			=> $_G['basescript'].'_'.CURMODULE,
 					)), array(
-						'cssdata'			=> &$this->csscurmodules
+						'cssdata'		=> &$this->csscurmodules,
 				));
 			}
 			// bluelovers
