@@ -195,6 +195,12 @@ p.emp { color: red; }
 	style.word-wrap[break-word] ，但是其相對較麻煩，word-wrap:break-word; 只對所屬Object Width有作用
 */
 
+/* 字體 */
+.font_normal		{ font-weight: normal; }
+.font_bold, .bold	{ font-weight: bold; }
+.font_bolder		{ font-weight: bolder; }
+.font_lighter		{ font-weight: lighter; }
+
 /* 書寫樣式 */
 .tb-rl					{ writing-mode: tb-rl }
 .tb-rl-2				{ -moz-column-width: 1em; writing-mode: tb-rl; word-break: keep-all }
