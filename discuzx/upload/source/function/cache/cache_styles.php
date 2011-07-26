@@ -144,7 +144,7 @@ function writetocsscache($data) {
 			if (!$switchstop) {
 			// bluelvoers
 
-			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+				$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
 
 			// bluelovers
 			}
