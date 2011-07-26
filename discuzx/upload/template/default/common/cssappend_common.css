@@ -69,6 +69,9 @@ p.emp { color: red; }
 	border: 0px none {BORDERCOLOR};
 }
 
+/*	背景透明 */
+.transparent			{ background-color:transparent }
+
 .i-l	{ background-repeat: no-repeat; background-position-x: right; background-position-y: medium; background-position: right medium; }
 .i-m	{ background-repeat: repeat-x; background-position-x: right; background-position-y: medium; background-position: right medium; }
 .i-r	{ background-repeat: no-repeat; background-position-x: left; background-position-y: medium; background-position: left medium; }
