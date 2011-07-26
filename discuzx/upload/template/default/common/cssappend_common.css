@@ -140,6 +140,11 @@ p.emp { color: red; }
 .float_none				{ float: none; }
 .float_both				{ float: both; }
 
+.inline li	{ display: inline; }
+.inline_float_left li	{ display: inline; float: left; }
+.inline_float_right li	{ display: inline; float: right; }
+.inline_float_both li	{ display: inline; float: both; }
+
 .overflow_visible		{ overflow: visible; }
 /*	設定為可見 */
 .overflow_overflow-y	{ overflow-y: auto; }
