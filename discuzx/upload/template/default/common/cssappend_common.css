@@ -111,3 +111,14 @@ p.emp { color: red; }
 	background-repeat: no-repeat;
 	background-position: left top;
 }
+
+@namespace url(http://www.w3.org/1999/xhtml);
+
+/* 顯示圖片錯誤 */
+@-moz-document url-prefix(http), url-prefix(file) {
+	img:-moz-broken{
+		-moz-force-broken-image-icon:1;
+		min-width:24px;
+		min-height:24px;
+	}
+}
