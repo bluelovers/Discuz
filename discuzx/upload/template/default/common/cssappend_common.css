@@ -122,3 +122,7 @@ p.emp { color: red; }
 		min-height:24px;
 	}
 }
+
+/* 被選取時的顏色與背景 */
+::selection { background-color: #DD0044; color: #FFFFFF; }
+::-moz-selection { background-color: #DD0044; color: #FFFFFF; }
