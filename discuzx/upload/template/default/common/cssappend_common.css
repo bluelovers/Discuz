@@ -193,6 +193,9 @@ p.emp { color: red; }
 	inherit :	文本流入方向由繼承獲得
 */
 
+/*	英文輸入 */
+.en						{ ime-mode: inactive }
+
 @namespace url(http://www.w3.org/1999/xhtml);
 
 /* 顯示圖片錯誤 */
