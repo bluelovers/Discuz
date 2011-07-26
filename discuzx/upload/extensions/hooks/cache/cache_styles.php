@@ -43,6 +43,11 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 		'',
 	), $cssdata);
 
+	if (defined('DISCUZ_DEBUG') && !DISCUZ_DEBUG) {
+		// 如果不是 debug 模式時則清除分行
+		$cssdata = str_replace("\n", '', $cssdata);
+	}
+
 	// 清理
 	$cssdata = trim($cssdata);
 
