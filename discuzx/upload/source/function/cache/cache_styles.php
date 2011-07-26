@@ -148,9 +148,7 @@ function writetocsscache($data) {
 
 			// bluelovers
 			}
-			// bluelovers
 
-			// bluelovers
 			// Event: Func_writetocsscache:Before_fwrite
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
 				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
