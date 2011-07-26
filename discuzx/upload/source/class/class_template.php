@@ -424,7 +424,29 @@ class template {
 		$content = @implode('', file(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_module.css'));
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
 		if($this->csscurmodules) {
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Class_template::loadcsstemplate:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Class_'.__METHOD__.':Before_minify')
+					->run(array(array(
+						'cssdata'		=> &$this->csscurmodules,
+						'entry'			=> $_G['basescript'].'_'.CURMODULE,
+					)), array(
+						'cssdata'		=> &$this->csscurmodules,
+				));
+			}
+
+			if (!$switchstop) {
+			// bluelovers
+
 			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);
+
+			// bluelovers
+			}
+			// bluelovers
 
 			// bluelovers
 			// add Event 'Class_template::loadcsstemplate:Before_fwrite'
