@@ -19,6 +19,9 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 		// 清除 css 註解
 		$cssdata = preg_replace('/\/\*((?:[^\*]*|\*(?!\/)).*)\*\//sU', "\n", $cssdata);
 	}
+
+	// 轉換分行
+	$cssdata = str_replace("\r\n", "\n", $cssdata);
 }
 
 ?>
