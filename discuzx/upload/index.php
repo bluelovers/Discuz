@@ -14,6 +14,9 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 
 	$url = '';
 	$domain = $_ENV = array();
+	/**
+	 * 用來偵測是否使用 header 跳轉
+	 */
 	$jump = false;
 	// include_once => include - 防止意外的 bug
 	@include './data/cache/cache_domain.php';
