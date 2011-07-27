@@ -148,12 +148,15 @@ Scorpio_Hook::add('Class_template::loadcsstemplate:Before_fwrite', '_eFunc_write
 function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
-	if (discuz_core::$plugin_support['scofile']) return Scorpio_Hook::RET_SUCCESS;
+	if (!discuz_core::$plugin_support['scofile']) return Scorpio_Hook::RET_SUCCESS;
 
  	$ext = fileext($filename);
- 	$_newfilename = preg_replace('/'.preg_quote($ext).'$/', $ext.'.gz', $filename);
+ 	$_newfilename = preg_replace('/\.'.preg_quote($ext).'$/', '.'.$ext.'.gz', $filename);
 
- 	if (!empty($_newfilename) && $_newfilename != $filename) {
+ 	if (!empty($_newfilename)
+	 	&& $_newfilename != $filename
+	 	&& $filepath == 'data/cache/'
+	 ) {
  		// 寫入檔案的 gz 壓縮
  		scofile::write(DISCUZ_ROOT.'./'.$filepath.$_newfilename, $cssdata, 1);
  	}
