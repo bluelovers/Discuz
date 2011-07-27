@@ -64,6 +64,11 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 		$_ENV['defaultapp'] = array('portal.php' => 'portal', 'forum.php' => 'forum', 'group.php' => 'group', 'home.php' => 'home');
 		$_ENV['hostarr'] = explode('.', $_SERVER['HTTP_HOST']);
 		$_ENV['domainroot'] = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
+		/**
+		 * $_ENV['domain']['app'] = 域名設置 > 應用域名
+		 *
+		 * 如果符合 $_ENV['domain']['app'] 則網址不會產生變化(不會有 header 跳轉)
+		 */
 		if(!empty($_ENV['domain']['app']) && is_array($_ENV['domain']['app']) && in_array($_SERVER['HTTP_HOST'], $_ENV['domain']['app'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
 			if($_ENV['curapp'] == 'mobile') {
