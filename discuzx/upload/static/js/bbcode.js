@@ -356,6 +356,11 @@ function html2bbcode(str) {
 			'[/b]'
 		], str);
 
+		// bluelovers
+//		<h3 class="bbcode_headline">
+		str = str.replace(/\n{0,2}<h([1-6])(?:\s+class="bbcode_headline"|[^>]*)+>((?:[^<]*|<(?!\/h\1>))+)<\/h\1>\n{0,2}/ig, "\n\n[h$1]$2[/h$1]\n\n");
+		// bluelovers
+
 		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\\1>/ig, "[size=$1]$2[/size]\n\n");
 		str = str.replace(/<hr[^>]*>/ig, "[hr]");
 		str = str.replace(/<img[^>]+smilieid=(["']?)(\d+)(\1)[^>]*>/ig, function($1, $2, $3) {return smileycode($3);});
