@@ -1,0 +1,66 @@
+/*
+[name]绿意盎然[/name]
+[iconbgcolor]#A3BA0F[/iconbgcolor]
+Powered by Discuz! X1.5 &　Style by 兔子很疯狂 QQ：511127494
+*/
+
+body { background:#F8FCEC url(top.jpg) repeat-x center top; }
+.hd_img{background:none}
+#top{height:23px;border-bottom:1px solid #fff;background:url(topbar.png) 0 bottom repeat-x;_background:#f7f7f7;line-height:23px;overflow:hidden;}
+#um, #um A, #um A:hover, #um .xg1 A, #um .xg1 A:hover { color:#333 !important; }
+#um .pipe { color: #333; }
+			#nv { overflow: hidden; height: 32px; background:url(nv.png) left top  repeat-x}
+            #nv .nv_l {padding-left: 3px; background:url(fl_hd.png) left -40px no-repeat;}
+            #nv .nv_r {padding-left:10px;background:url(fl_hd.png) right -80px no-repeat;height:32px;}
+				#nv li { float: left; height: 33px; line-height: 33px;padding-left:2px;font-weight: 700; font-size: 14px; }
+					.ie_all #nv li { line-height: 32px; }
+					.ie6 #nv li { line-height: 33px; }
+					#nv a { float: left; padding: 0; height: 33px; }
+						#nv a {padding-right:15px;padding-left:14px; color: {MENUTEXT}; text-decoration:none}
+						#nv li span { display: none; }
+                        #nv li a:hover {color:#FFEA00}
+					#nv li.a {  {MENUHOVERBGCODE}; }
+                    #nv li:hover, #nv li:hover a {background:url(nav_ahover.png) no-repeat; }
+                    #nv li:hover {background-position:left 5px;}
+                     #nv li:hover a{background-position:right 5px;}
+						#nv li.a a {padding: 0 20px 0 0; color: {MENUHOVERTEXT};background:url(nv_a.png) right 2px no-repeat ;color:#566D02}
+                        #nv li.a a:hover {color: #566D02;}
+                        #nv li.a {padding-left:20px;background:url(nv_a.png) left 2px no-repeat}
+#qmenu { float: right !important; margin: 3px 10px 0 0; display: inline; padding: 0 0 0 10px !important; width: 102px; height: 26px; background: url(qmenu.png) no-repeat 0 0; line-height: 26px; }
+.bm { border-color: #C2D480;}
+.fl .bm_h { border-color: #C2D480; background: #C2D480;}
+.bmw .bm_h a { color: #566D02; }
+#pt { background: #F3F7E6; border-style: dashed;}
+#ct {height:100%; overflow: hidden; padding:15px;background:#fff;border:1px solid #dbe6b8;border-top:2px solid #aac642;}
+
+.online {color:#000}
+/* 重定义 {SPECIALBG} */
+
+.appl, .bmn, .bmw .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #F3F7E6; }
+.pn { color: #333;}
+.appl { border: 1px dashed #dcd9cc; }
+.bbda { border-bottom-style: solid;}
+{ border-bottom: 1px solid #C2D480;border-top: 1px solid #C2D480;}
+
+.oll { background: #FFF; }
+.lk { background: #FFF; }
+.tb a { background: #fffffe; }
+.tb .a a { background: #fffffe; border-bottom-color:#f8fdff;}
+
+/* 重定义 {SPECIALBORDER} */
+.bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #C5E6DF; }
+.pg strong { background-color: #C5E6DF; }
+.pn { border-color: #C5E6DF #666 #666 #C5E6DF; }
+
+.ttp .a a, .ttp a:hover  { border-color: #577a05; color: #577a05; }
+
+.tl td, .tl th {
+	border-bottom: 1px solid #dcd9cc;
+}
+.tl tr:hover th, .tl tr:hover td {
+	background: #f9f8f4;
+}
+.bm_h, .tl .th {border-bottom: 1px solid #C2D480;border-top: 1px solid #C2D480;background:#F3F7E6;color:#566D02}
+/*超链接字体颜色*/
+.xi2, .xi2 a, .xi3 a {color:#566D02}
+.ad .pls {background:#C2D480}

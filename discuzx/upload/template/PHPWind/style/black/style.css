@@ -1,0 +1,90 @@
+/*
+[name]黑色旋风[/name]
+[iconbgcolor]black[/iconbgcolor]
+Powered by Discuz! X1.5 &　Style by 兔子很疯狂 QQ：511127494
+*/
+
+body { background:#000 url(top.jpg) repeat-x center top; }
+.hd_img{background:url(coffee.png); width:214px; height:85px;}
+.top a, .top span {color:#999999}
+.pw_ulC{height:36px;overflow:hidden;color:#8A8A8A}/*forum infobox*/
+.pw_ulC li{float:left;border-right:1px solid #666;padding:0 15px;}
+.pw_ulC li em{display:block;color:#DDDDDD; font-family:Arial;-webkit-transition: all 0.2s ease-out;-o-transition: all 0.2s ease-out;}
+.pw_ulC li em a{color:#666;}
+.pw_ulC li em.b{font-weight:800}
+.pw_ulC li:hover em{-webkit-transform: scale(1.5);-o-transform: scale(1.5);}
+.pw_ulC li.none{border:0;}
+#top{height:23px;border-bottom:1px solid #fff;background:url(topbar.png) 0 bottom repeat-x;_background:#f7f7f7;line-height:23px;overflow:hidden;}
+#um, #um A, #um A:hover, #um .xg1 A, #um .xg1 A:hover { color:#E8E8E8 !important; }
+#um .pipe { color: #E8E8E8; }
+			#nv { overflow: hidden; height: 32px; background:url(nv.png) left top  repeat-x}
+            #nv .nv_l {padding-left: 3px; background:url(fl_hd.png) left -40px no-repeat;}
+            #nv .nv_r {padding-left:10px;background:url(fl_hd.png) right -80px no-repeat;height:32px;}
+				#nv li { float: left; height: 33px; line-height: 33px;padding-left:2px;font-weight: 700; font-size: 14px; }
+					.ie_all #nv li { line-height: 32px; }
+					.ie6 #nv li { line-height: 33px; }
+					#nv a { float: left; padding: 0; height: 33px; }
+						#nv a {padding-right:15px;padding-left:14px; color: {MENUTEXT}; text-decoration:none}
+						#nv li span { display: none; }
+                        #nv li a:hover {color:#FFEA00}
+					#nv li.a {  {MENUHOVERBGCODE}; }
+                    #nv li:hover, #nv li:hover a {background:url(nav_ahover.png) no-repeat; }
+                    #nv li:hover {background-position:left 5px;}
+                     #nv li:hover a{background-position:right 5px;}
+						#nv li.a a {padding: 0 20px 0 0; color: {MENUHOVERTEXT};background:url(nv_a.png) right 2px no-repeat ;color:#333333}
+                        #nv li.a a:hover {color: #333333;}
+                        #nv li.a {padding-left:20px;background:url(nv_a.png) left 2px no-repeat}
+#qmenu { float: right !important; margin: 3px 10px 0 0; display: inline; padding: 0 0 0 10px !important; width: 102px; height: 26px; background: url(qmenu.png) no-repeat 0 0; line-height: 26px; }
+.bm { border-color: #D9D9D9;}
+.fl .bm_h { border-color: #D9D9D9; background: #D9D9D9;}
+.bmw .bm_h a { color: #333333; }
+#pt { background: #F0F0F0; border-style: dashed;}
+#ct {height:100%; overflow: hidden; padding:15px;background:#fff;border-top:3px solid #888;}
+#scbar { overflow: hidden; height: 39px; line-height: 39px; background: url(search.gif) repeat-x 0 0; }
+#scbar table { background: url(search.gif) no-repeat 0 -39px; }
+#scbar .sc_r {background:url(search.gif) right -121px no-repeat;height:39px;}
+.navB,.navBbg{background:url(navB.png) right bottom repeat-x;}
+.navBbg{padding:3px 0;background-position:left bottom;margin-right:4px;}
+.online {color:#000}
+/* 重定义 {SPECIALBG} */
+.pgs #newspecial, .pgs #newspecialtmp { float: left; background: url(pn_post.png) no-repeat 0 0; }
+#post_reply, #post_replytmp { float: left; background: url(pn_reply.png) no-repeat 0 0; }
+	#newspecial img, #newspecialtmp img, #post_reply img, #post_replytmp img { opacity: 0; filter: alpha(opacity=0); }
+.moodfm_btn { background-image: url(mood_input_btn.png) !important; }
+#create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
+	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
+.tb .o, .tb .o a { background-image: url(pnp2.png); }
+.el .ec .hot { background-image: url(hotspot.gif); }
+.pll .s { background-image:url(polljoins.gif); }
+.appl, .bmn, .bmw .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #F0F0F0; }
+
+	#ft { padding: 10px 0 0px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: #ccc; }
+    #ft a {color:#ccc}
+		#flk { text-align: center; }
+
+.appl { border: 1px dashed #dcd9cc; }
+.bbda { border-bottom-style: solid;}
+{ border-bottom: 1px solid #D9D9D9;border-top: 1px solid #D9D9D9;}
+
+.oll { background: #FFF; }
+.lk { background: #FFF; }
+.tb a { background: #fffffe; }
+.tb .a a { background: #fffffe; border-bottom-color:#f8fdff;}
+
+/* 重定义 {SPECIALBORDER} */
+.bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #C5E6DF; }
+.pg strong { background-color: #C5E6DF; }
+.pn { border-color: #C5E6DF #666 #666 #C5E6DF; }
+
+.ttp .a a, .ttp a:hover  { border-color: #577a05; color: #577a05; }
+
+.tl td, .tl th {
+	border-bottom: 1px solid #dcd9cc;
+}
+.tl tr:hover th, .tl tr:hover td {
+	background: #f9f8f4;
+}
+.bm_h, .tl .th {border-bottom: 1px solid #D9D9D9;border-top: 1px solid #D9D9D9;background:#F0F0F0;color:#333333}
+/*超链接字体颜色*/
+.xi2, .xi2 a, .xi3 a {color:#1B72AF}
+.ad .pls {background:#333333}
