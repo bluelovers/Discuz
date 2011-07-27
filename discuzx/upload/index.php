@@ -140,6 +140,7 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				}
 			}
 		} else {
+			// $jump = true 時 以網址不變動為優先
 			$jump = true;
 		}
 		if(empty($url) && empty($_ENV['curapp'])) {
