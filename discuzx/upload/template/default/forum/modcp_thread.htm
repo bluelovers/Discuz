@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <div class="bm bw0 mdcp">
 	<h1 class="mt">{lang mod_option_subject}</h1>
 	<ul class="tb cl">
@@ -7,7 +7,7 @@
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebin{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebin}</a></li>
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
-	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
 		<input type="hidden" name="do" value="search">
 		<input type="hidden" name="formhash" value="{FORMHASH}">

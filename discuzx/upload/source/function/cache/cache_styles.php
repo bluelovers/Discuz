@@ -196,6 +196,9 @@ function writetocsscache($data) {
 						'cssdata'		=> &$cssdata,
 						'entry'			=> &$entry,
 						'data'			=> &$data,
+
+						'filename'		=> 'style_'.$data['styleid'].'_'.$entry,
+						'filepath'		=> 'data/cache/',
 				)));
 			}
 			// bluelvoers

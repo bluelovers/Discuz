@@ -118,7 +118,7 @@
 	<div class="mn" style="float: left;">
 		<div class="bm bw0">
 			<h1 class="mt"><!--{if !empty($aid)}-->{lang article_edit}<!--{else}-->{lang article_publish}<!--{/if}--></h1>
-			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 			<form method="post" autocomplete="off" id="articleform" action="portal.php?mod=portalcp&ac=article{if $_G[gp_modarticlekey]}&modarticlekey=$_G[gp_modarticlekey]{/if}" enctype="multipart/form-data">
 				<!--{hook/portalcp_top}-->
 				<div class="dopt cl">
@@ -283,7 +283,7 @@
 		</div>
 		<div id="attachbody" class="bn"></div>
 
-		<script src="{$_G[setting][jspath]}portal_upload.js?{VERHASH}" type="text/javascript"></script>
+		<script src="{$_G[setting][jspath]}portal_upload.js{$_G[varhash_gzip_js]}?{VERHASH}" type="text/javascript"></script>
 		<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
 		<div class="posta_c">
 			<div id="attach_image_body" class="bn">$article[attach_image]</div>

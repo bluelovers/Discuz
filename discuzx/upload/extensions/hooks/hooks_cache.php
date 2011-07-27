@@ -142,4 +142,29 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 	$switchstop = true;
 }
 
+Scorpio_Hook::add('Func_writetocsscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Class_template::loadcsstemplate:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Func_writetojscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+
+function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	if (!discuz_core::$plugin_support['scofile']) return Scorpio_Hook::RET_SUCCESS;
+
+ 	$ext = fileext($filename);
+ 	$_newfilename = preg_replace('/\.'.preg_quote($ext).'$/', '.'.$ext.'.gz', $filename);
+
+ 	if (!empty($_newfilename)
+	 	&& $_newfilename != $filename
+	 	&& $filepath == 'data/cache/'
+	 ) {
+
+	 	// 修正 writetocsscache 與 writetojscache 共用 hook 時的處理
+		$_write_data = isset($conf['cssdata']) ? $cssdata : $jsdata;
+
+ 		// 寫入檔案的 gz 壓縮
+ 		scofile::write(DISCUZ_ROOT.'./'.$filepath.$_newfilename, $_write_data, 1);
+ 	}
+}
+
 ?>
