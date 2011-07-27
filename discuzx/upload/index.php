@@ -56,6 +56,11 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 		// 如果沒有 $_ENV['domain'] 預設使用 forum
 		$_ENV['curapp'] = 'forum';
 	} else {
+		/**
+		 * 預設的應用對映表
+		 *
+		 * @name $_ENV['defaultapp']
+		 */
 		$_ENV['defaultapp'] = array('portal.php' => 'portal', 'forum.php' => 'forum', 'group.php' => 'group', 'home.php' => 'home');
 		$_ENV['hostarr'] = explode('.', $_SERVER['HTTP_HOST']);
 		$_ENV['domainroot'] = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
