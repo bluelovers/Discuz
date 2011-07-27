@@ -1057,9 +1057,6 @@ function writetojscache() {
 						'remove'		=> &$remove,
 
 						'switchstop'	=> &$switchstop,
-
-						'filename'		=> $entry,
-						'filepath'		=> './data/cache/',
 				)));
 			}
 
