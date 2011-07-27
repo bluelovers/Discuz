@@ -454,7 +454,9 @@ class template {
 					->run(array(array(
 						'cssdata'		=> &$this->csscurmodules,
 						'entry'			=> $_G['basescript'].'_'.CURMODULE,
+
 						'filename'		=> 'style_'.STYLEID.'_'.$_G['basescript'].'_'.CURMODULE.'.css',
+						'filepath'		=> 'data/cache/',
 					)), array(
 						'cssdata'		=> &$this->csscurmodules,
 				));
