@@ -370,6 +370,10 @@ function build_cache_setting() {
 	} elseif(!$data['jspath']) {
 		$data['jspath'] = 'static/js/';
 	}
+	// bluelovers
+	// 強制執行 writetojscache
+	if ($data['jspath'] != 'data/cache/') writetojscache();
+	// bluelovers
 
 	if($data['cacheindexlife']) {
 		$cachedir = DISCUZ_ROOT.'./'.$data['cachethreaddir'];
