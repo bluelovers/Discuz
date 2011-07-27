@@ -375,7 +375,7 @@ function _eClass_discuz_core__init_input_After($_EVENT, $discuz) {
 Scorpio_Hook::add('Class_discuz_core::_init_output:After', '_eClass_discuz_core__init_output_After');
 
 function _eClass_discuz_core__init_output_After($_EVENT, $discuz) {
-	if ($this->config['output']['gzip']) {
+	if ($discuz->config['output']['gzip']) {
 
 	}
 }
