@@ -943,7 +943,14 @@ function showEditorMenu(tag, params) {
 				showMenu({'ctrlid':ctrlid,'mtype':'win','evt':'click','pos':menupos,'timeout':250,'duration':3,'drag':ctrlid + '_ctrl'});
 			}
 		} else {
-			showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':1});
+			showMenu({
+				'ctrlid':ctrlid
+				,'evt':'click'
+				,'pos':menupos
+				,'timeout':250
+				,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3
+				,'drag':1
+			});
 		}
 
 
