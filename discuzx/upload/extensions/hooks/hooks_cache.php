@@ -142,4 +142,12 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 	$switchstop = true;
 }
 
+Scorpio_Hook::add('Func_writetocsscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Class_template::loadcsstemplate:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+
+function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+}
+
 ?>
