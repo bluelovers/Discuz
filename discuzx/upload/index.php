@@ -15,7 +15,7 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 	$url = '';
 	$domain = $_ENV = array();
 	$jump = false;
-	@include_once './data/cache/cache_domain.php';
+	@include './data/cache/cache_domain.php';
 
 	/*
 	$domain = array (
