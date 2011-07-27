@@ -10,11 +10,11 @@
 	<!--{/if}-->
 	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
 	<!--{if $_G['basescript'] == 'forum' || $_G['basescript'] == 'group'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js{$_G[varhash_gzip]}?{VERHASH}"></script>
 	<!--{elseif $_G['basescript'] == 'home' || $_G['basescript'] == 'userapp'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}home.js{$_G[varhash_gzip]}?{VERHASH}"></script>
 	<!--{elseif $_G['basescript'] == 'portal'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js{$_G[varhash_gzip]}?{VERHASH}"></script>
 	<!--{/if}-->
 
 	<!--{hook/global_header_javascript_before_body}-->
