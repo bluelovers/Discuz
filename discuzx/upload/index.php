@@ -53,6 +53,7 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 
 	$_ENV['domain'] = $domain;
 	if(empty($_ENV['domain'])) {
+		// 如果沒有 $_ENV['domain'] 預設使用 forum
 		$_ENV['curapp'] = 'forum';
 	} else {
 		$_ENV['defaultapp'] = array('portal.php' => 'portal', 'forum.php' => 'forum', 'group.php' => 'group', 'home.php' => 'home');
