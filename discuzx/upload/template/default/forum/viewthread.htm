@@ -2,10 +2,10 @@
 
 <script type="text/javascript">var fid = parseInt('$_G[fid]'), tid = parseInt('$_G[tid]');</script>
 <!--{if $modmenu['thread'] || $modmenu['post']}-->
-	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <!--{/if}-->
 
-<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']);var imagemaxwidth = '{$_G['setting']['imagemaxwidth']}';var aimgcount = new Array();</script>
 
 <style id="diy_style" type="text/css"></style>
