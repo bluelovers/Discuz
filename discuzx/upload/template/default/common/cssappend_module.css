@@ -49,6 +49,17 @@
 /** end **/
 
 /** forum,group **/
+
+	h1.ts #thread_subject, #share_ul h1.ph, .vw .ph, .pcb h1, .pcb h2 {
+		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
+		text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
+		font-weight: 800;
+	}
+
+	h1.ts #thread_subject, #share_ul h1.ph, .vw .ph {
+		font-size:32px;
+	}
+
 	/* 主題內標題字的樣式 */
 	h1.bbcode_headline, h2.bbcode_headline, h3.bbcode_headline, h4.bbcode_headline, h5.bbcode_headline, h6.bbcode_headline {
 		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
