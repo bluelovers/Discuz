@@ -364,6 +364,7 @@ function build_cache_setting() {
 	$data['homeshow'] = $data['uchomeurl'] && $data['uchome']['homeshow'] ? $data['uchome']['homeshow'] : '0';
 
 	unset($data['allowthreadplugin']);
+	// 如果 jspath = 'data/cache/' 則寫入 js cache
 	if($data['jspath'] == 'data/cache/') {
 		writetojscache();
 	} elseif(!$data['jspath']) {
