@@ -13,6 +13,36 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 } else {
 
 	$url = '';
+	/**
+	 * 取得 data/cache/cache_domain.php 的緩存資料
+	 *
+	 * @example <pre>
+ 	$domain = array (
+		'defaultindex' => 'forum.php',
+		'holddomain' => 'www|*blog*|*space*|x',
+		'list' =>
+			array (
+		),
+		'app' =>
+			array (
+				'portal' => '',
+				'forum' => 'user-bluelovers.test',
+				'group' => '',
+				'home' => '',
+				'mobile' => '',
+				'default' => '',
+		),
+		'root' =>
+			array (
+				'home' => '',
+				'group' => '',
+				'forum' => '',
+				'topic' => '',
+				'channel' => '',
+		),
+	);
+	</pre>
+	 */
 	$domain = $_ENV = array();
 	/**
 	 * 用來偵測是否使用 header 跳轉
