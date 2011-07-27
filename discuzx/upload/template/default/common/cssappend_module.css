@@ -50,6 +50,15 @@
 
 /** forum,group **/
 
+	/* 編輯器內的彈出選單 editor_menu */
+	.editortoolbar .p_pop {
+		min-width: 80px;
+		max-height: 300px;
+
+		overflow-y: auto;
+		overflow-x: visible;
+	}
+
 	h1.ts #thread_subject, #share_ul h1.ph, .vw .ph, .pcb h1, .pcb h2 {
 		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
 		text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
