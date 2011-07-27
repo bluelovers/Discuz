@@ -419,7 +419,8 @@ class template {
 
 	function loadcsstemplate() {
 		global $_G;
-		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css?{VERHASH}" />';
+		// 增加 {$_G[varhash_gzip]}
+		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css{$_G[varhash_gzip]}?{VERHASH}" />';
 		$content = $this->csscurmodules = '';
 		$content = @implode('', file(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_module.css'));
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
