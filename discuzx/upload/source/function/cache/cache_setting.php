@@ -1066,7 +1066,7 @@ function writetojscache() {
 			if (!$switchstop) {
 			// bluelvoers
 
-			$jsdata = preg_replace($remove, '', $jsdata);
+				$jsdata = preg_replace($remove, '', $jsdata);
 
 			// bluelovers
 			}
