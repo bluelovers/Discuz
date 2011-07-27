@@ -372,9 +372,9 @@ function _eClass_discuz_core__init_input_After($_EVENT, $discuz) {
 	}
 }
 
-Scorpio_Hook::add('Class_discuz_core::_init_output:After', '_eClass_discuz_core__init_output_After');
+Scorpio_Hook::add('Class_discuz_core::_init_setting:After', '_eClass_discuz_core__init_setting_After');
 
-function _eClass_discuz_core__init_output_After($_EVENT, $discuz) {
+function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 	$discuz->var['varhash_gzip'] = $discuz->var['varhash_gzip_js'] = '';
 
 	// 檢測使用者的瀏覽器是否支援 gzip 如果支援則 js, css 改為使用 js.gz, css.gz
