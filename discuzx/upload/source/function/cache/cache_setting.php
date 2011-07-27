@@ -1079,7 +1079,7 @@ function writetojscache() {
 						'entry'			=> &$entry,
 
 						'filename'		=> $entry,
-						'filepath'		=> './data/cache/',
+						'filepath'		=> 'data/cache/',
 				)));
 			}
 			// bluelvoers
