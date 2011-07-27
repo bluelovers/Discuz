@@ -1020,6 +1020,9 @@ function get_cachedata_topnav() {
 	return $data['topnavs'];
 }
 
+/**
+ * write js cache
+ */
 function writetojscache() {
 	$dir = DISCUZ_ROOT.'static/js/';
 	$dh = opendir($dir);
