@@ -376,7 +376,10 @@ Scorpio_Hook::add('Class_discuz_core::_init_output:After', '_eClass_discuz_core_
 
 function _eClass_discuz_core__init_output_After($_EVENT, $discuz) {
 	// 檢測使用者的瀏覽器是否支援 gzip 如果支援則 js, css 改為使用 js.gz, css.gz
-	if ($discuz->config['output']['gzip'] && getaccept_encoding_gzip()) {
+	if ($discuz->config['output']['gzip']
+		&& function_exists('getaccept_encoding_gzip')
+		&& getaccept_encoding_gzip()
+	) {
 		$discuz->var['varhash_gzip'] = '.gz';
 	} else {
 		$discuz->var['varhash_gzip'] = '';
