@@ -16,6 +16,34 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 	$domain = $_ENV = array();
 	$jump = false;
 	@include_once './data/cache/cache_domain.php';
+
+	/*
+	$domain = array (
+		'defaultindex' => 'forum.php',
+		'holddomain' => 'www|*blog*|*space*|x',
+		'list' =>
+			array (
+		),
+		'app' =>
+			array (
+				'portal' => '',
+				'forum' => 'user-bluelovers.test',
+				'group' => '',
+				'home' => '',
+				'mobile' => '',
+				'default' => '',
+		),
+		'root' =>
+			array (
+				'home' => '',
+				'group' => '',
+				'forum' => '',
+				'topic' => '',
+				'channel' => '',
+		),
+	);
+	*/
+
 	$_ENV['domain'] = $domain;
 	if(empty($_ENV['domain'])) {
 		$_ENV['curapp'] = 'forum';
