@@ -949,7 +949,7 @@ function showEditorMenu(tag, params) {
 				,'pos':menupos
 				,'timeout':250
 				,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3
-				,'drag':1
+				,'drag': in_array(tag, ['fontname', 'fontsize']) ? 0 : 1
 			});
 		}
 
