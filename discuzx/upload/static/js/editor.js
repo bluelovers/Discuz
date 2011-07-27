@@ -658,6 +658,27 @@ function discuzcode(cmd, arg) {
 	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
+
+	// bluelovers
+	// 標題字
+	} else if (in_array(cmd, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
+
+		var str = getSel();
+		if(str === false) {
+			return;
+		}
+
+		if (wysiwyg) {
+			opentag		= '<'+cmd+' class="bbcode_headline">';
+			closetag	= '</'+cmd+'>';
+		} else {
+			opentag		= '['+cmd+']';
+			closetag	= '[/'+cmd+']'+"\n";
+		}
+
+		return insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true);
+	// bluelovers
+
 	} else if(cmd.substr(0, 3) == 'cst') {
 		showEditorMenu(cmd.substr(5), cmd.substr(3, 1));
 		return;
