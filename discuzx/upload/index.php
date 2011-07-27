@@ -51,33 +51,6 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 	// include_once => include - 防止意外的 bug
 	@include './data/cache/cache_domain.php';
 
-	/*
-	$domain = array (
-		'defaultindex' => 'forum.php',
-		'holddomain' => 'www|*blog*|*space*|x',
-		'list' =>
-			array (
-		),
-		'app' =>
-			array (
-				'portal' => '',
-				'forum' => 'user-bluelovers.test',
-				'group' => '',
-				'home' => '',
-				'mobile' => '',
-				'default' => '',
-		),
-		'root' =>
-			array (
-				'home' => '',
-				'group' => '',
-				'forum' => '',
-				'topic' => '',
-				'channel' => '',
-		),
-	);
-	*/
-
 	$_ENV['domain'] = $domain;
 	if(empty($_ENV['domain'])) {
 		$_ENV['curapp'] = 'forum';
