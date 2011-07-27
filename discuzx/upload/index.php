@@ -167,7 +167,9 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			$jump = true;
 		}
 		if(empty($url) && empty($_ENV['curapp'])) {
+			// 存在 $_ENV['domain']['defaultindex'] 時 並且沒有 $jump 時
 			if(!empty($_ENV['domain']['defaultindex']) && !$jump) {
+				// 符合 預設的應用對映表 時
 				if($_ENV['defaultapp'][$_ENV['domain']['defaultindex']]) {
 					$_ENV['curapp'] = $_ENV['defaultapp'][$_ENV['domain']['defaultindex']];
 				} else {
