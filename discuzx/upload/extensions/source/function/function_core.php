@@ -110,4 +110,24 @@ function include_file() {
 	return array();
 }
 
+/**
+ * check user agent accept encoding gzip
+ */
+function getaccept_encoding_gzip() {
+	if (!defined('HTTP_USER_AGENT_GZIP')) {
+		$gzip_compress = false;
+		if (strstr($_SERVER['HTTP_USER_AGENT'], 'compatible')) {
+			if (extension_loaded('zlib')) {
+				$gzip_compress = true;
+			}
+		} elseif (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+			if (extension_loaded('zlib')) {
+				$gzip_compress = true;
+			}
+		}
+		define('HTTP_USER_AGENT_GZIP', $gzip_compress);
+	}
+	return HTTP_USER_AGENT_GZIP;
+}
+
 ?>
