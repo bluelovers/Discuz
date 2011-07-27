@@ -1037,6 +1037,20 @@ function writetojscache() {
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
 			$jsdata = preg_replace($remove, '', $jsdata);
+
+			// Event: Func_writetojscache:Before_fwrite
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
+					->run(array(array(
+						'jsdata'		=> &$jsdata,
+						'entry'			=> &$entry,
+
+						'filename'		=> $entry,
+						'filepath'		=> 'data/cache/',
+				)));
+			}
+			// bluelvoers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/'.$entry, 'w')) {
 				fwrite($fp, $jsdata);
 				fclose($fp);
