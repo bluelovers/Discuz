@@ -158,8 +158,12 @@ function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
 	 	&& $_newfilename != $filename
 	 	&& $filepath == 'data/cache/'
 	 ) {
+
+	 	// 修正 writetocsscache 與 writetojscache 共用 hook 時的處理
+		$_write_data = isset($conf['cssdata']) ? $cssdata : $jsdata;
+
  		// 寫入檔案的 gz 壓縮
- 		scofile::write(DISCUZ_ROOT.'./'.$filepath.$_newfilename, $cssdata, 1);
+ 		scofile::write(DISCUZ_ROOT.'./'.$filepath.$_newfilename, $_write_data, 1);
  	}
 }
 
