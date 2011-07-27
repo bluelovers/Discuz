@@ -26,7 +26,7 @@
 			<em id="return_$_G[gp_handlekey]">{lang push}</em>
 			<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 		</h3>
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 		<form id="recommendform" method="post" enctype="multipart/form-data" action="portal.php?mod=portalcp&ac=block&op=recommend&id=$_GET[id]&idtype=$_GET[idtype]" onsubmit="if(recommenditem_check()) { ajaxpost('recommendform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');} return false;">
 			<div class="c">
 				<p>
