@@ -151,6 +151,7 @@ if(!empty($url)) {
 	} elseif($_GET['fromuser']) {
 		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
 	}
+	// 取消 301 之後可以防止更改網站設定後 瀏覽器卻使用已經快取的 301 的問題
 	/*
 	header("HTTP/1.1 301 Moved Permanently");
 	*/
