@@ -148,6 +148,20 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 						break;
 				}
 			}
+
+		// bluelovers
+		} elseif (
+			// 當沒有設定預設應用域名時
+			empty($_ENV['domain']['app']['default'])
+			// 存在 $_ENV['domain']['defaultindex'] 時
+			&& !empty($_ENV['domain']['defaultindex'])
+			// 符合 預設的應用對映表 時
+			&& !empty($_ENV['defaultapp'][$_ENV['domain']['defaultindex']])
+		) {
+			// 則不使用 header 跳轉
+			$_ENV['curapp'] = $_ENV['defaultapp'][$_ENV['domain']['defaultindex']];
+		// bluelovers
+
 		} else {
 			// $jump = true 時 以網址變動為優先
 			$jump = true;
