@@ -81,12 +81,12 @@
 
 <!--{if $_GET['diy'] == 'yes'}-->
 	<!--{if (CURMODULE == 'topic' || $_G['group']['allowdiy']) && (empty($do) || $do != 'index') && !empty($_G['style']['tplfile'])}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<!--{/if}-->
 	<!--{if $space['self'] && CURMODULE == 'space' && $do == 'index'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
-		<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<!--{/if}-->
 <!--{/if}-->
 <!--{if $_G['member']['newprompt'] && (empty($_G['cookie']['promptstate_'.$_G[uid]]) || $_G['cookie']['promptstate_'.$_G[uid]] != $_G['member']['newprompt']) && $_G['gp_do'] != 'notice'}-->

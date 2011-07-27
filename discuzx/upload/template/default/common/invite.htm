@@ -99,7 +99,7 @@
 					var scriptNode = document.createElement("script");
 					scriptNode.id = 'friendselector_js';
 					scriptNode.type = "text/javascript";
-					scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
+					scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js{$_G[varhash_gzip_js]}?{VERHASH}';
 					if(BROWSER.ie) {
 						scriptNode.onreadystatechange = function () {
 							if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {
