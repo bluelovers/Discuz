@@ -1,4 +1,5 @@
 <!--{subtemplate mobile/common/header}-->
+
 <!--{hook/index_top_mobile}-->
 <!--{if $forum_favlist}--> 
 <div class="fl">
@@ -26,8 +27,21 @@
             <!--{loop $cat[forums] $forumid}-->
                 <div class="bm_c <!--{if $i%2 == 1}-->add<!--{else}-->even<!--{/if}-->">
                     <!--{eval $forum=$forumlist[$forumid];}-->
-                    <a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="xi1"{/if}>{$forum[name]}</a> <!--{if $forum[todayposts] > 0}--><font class="xg1">($forum[todayposts])</font><!--{/if}-->
+                    <a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="xi1"{/if}>{$forum[name]}</a> <!--{if $forum[todayposts] > 0}--><font class="xg1">($forum[todayposts])</font><!--{/if}--><!--{if $_G[gp_simpletype]!='yes' &&  empty($forum[redirect])}--><span class="xg2" style="font-size:10px">($forum[threads]{lang forum_threads}/$forum[posts]{lang forum_posts})</span><!--{/if}-->
+                    <!--{if $_G[gp_simpletype]!='yes' && $forum[description]}--><p class="xg2 cr180_f10"><!--{echo cutstr($forum[description], 80)}--></p><!--{/if}-->
+                    <!--{if $_G[gp_simpletype]!='yes'}-->
+                    <p class="cr180_f10">
+                    <!--{if $forum['redirect']}-->
+                    <a href="$forumurl" class="xi2 cr180_f10">{lang url_link}</a>
+                    <!--{elseif is_array($forum['lastpost'])}-->
+                    RE:<a href="forum.php?mod=viewthread&tid=$forum[lastpost][tid]" class="xi2 cr180_f10"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a>
+                    <!--{else}-->
+                    {lang never}
+                    <!--{/if}-->
+                    </p>
+                    <!--{/if}-->
                 </div>
+                
                 {eval $i++;}
             <!--{/loop}-->
         <!--{/if}-->

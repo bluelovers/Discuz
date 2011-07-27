@@ -31,11 +31,12 @@
     	<div class="bm">
         	<div class="bm_h">$_G['forum'][name] <!--{if $_G[gp_orderby] != 'dateline'}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}&filter=author&orderby=dateline">[{lang viewnewthread}]</a><!--{else}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">[{lang list_default_sort}]</a><!--{/if}--></div>
             <!--{if $_G['forum_threadcount']}-->
+            {eval $i=1;}
 				<!--{loop $_G['forum_threadlist'] $key $thread}-->
                 	<!--{if $thread['displayorder'] > 0 && !$displayorder_thread}-->
                 		{eval $displayorder_thread = 1;}
                     <!--{/if}-->
-                	<div class="bm_c<!--{if $thread['displayorder'] == 0 && $displayorder_thread == 1}--> bt{eval unset($displayorder_thread);}<!--{/if}-->">
+                	<div class="bm_c<!--{if $thread['displayorder'] == 0 && $displayorder_thread == 1}--> bt{eval unset($displayorder_thread);}<!--{/if}--> <!--{if $i%2 == 1}-->add<!--{else}-->even<!--{/if}-->">
                     <!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
                         <!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
                             <!--{eval $thread[tid]=$thread[closed];}-->
@@ -105,6 +106,7 @@
                         </span>
                     <!--{/if}-->
                     </div>
+                    {eval $i++;}
                 <!--{/loop}-->
             <!--{else}-->
             <div class="bm_c">{lang forum_nothreads}</div>

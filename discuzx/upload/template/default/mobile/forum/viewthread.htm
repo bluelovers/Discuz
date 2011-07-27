@@ -1,4 +1,5 @@
 <!--{subtemplate common/header}-->
+<div class="cr_pt">
 <!--{if $_G['forum']['type'] != 'sub'}-->
 	<div class="box"><a href="forum.php">{$_G['setting']['navs'][2]['navname']}</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid=$_G[fid]">{eval echo strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name'];}</a></div>
 <!--{else}-->
@@ -18,10 +19,11 @@
 <!--{/loop}-->
 <!--{/if}-->
 </div>
-
+</div>
 <!--{hook/viewthread_top_mobile}-->
 <div class="vt">
     <div class="bm">
+    <div class="cr_h">
         <div class="bm_h">
         	<!--{if $_G['forum_thread']['typeid'] && $_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}-->
                 <!--{if !IS_ROBOT && ($_G['forum']['threadtypes']['listable'] || $_G['forum']['status'] == 3)}-->
@@ -52,11 +54,13 @@
 			<font class="xg1">{lang forum_views}{$_G[forum_thread][views]}<span class="pipe">|</span>{lang forum_posts}$_G[forum_thread][replies]</font><span class="pipe">|</span><!--{if $_G[tid]}--><a href="home.php?mod=spacecp&ac=favorite&type=thread&id={$_G[tid]}">{lang favorite}</a><!--{/if}-->
 		  </div>
 	  <!--{/if}-->
+      </div>
         <!--{eval $postcount = 0;}-->
         <!--{loop $postlist $post}-->
+        <div class="cr_vt">
         	<!--{eval $needhiddenreply = ($hiddenreplies && $_G['uid'] != $post['authorid'] && $_G['uid'] != $_G['forum_thread']['authorid'] && !$post['first'] && !$_G['forum']['ismoderator']);}-->
         	<!--{hook/viewthread_posttop_mobile $postcount}-->
-            <div id="post_$post[pid]" class="bm_c bm_c_bg">
+            <div id="post_$post[pid]" class="bm_c_bg even">
             	<div class="bm_user">
                 	<!--{if !IS_ROBOT}-->
                         <!--{if !empty($postno[$post[number]])}-->$postno[$post[number]]<!--{else}--><em>{$post[number]}</em>{$postno[0]}<!--{/if}-->
@@ -212,6 +216,7 @@
           </div>
         <!--{hook/viewthread_postbottom_mobile $postcount}-->
         <!--{eval $postcount++;}-->
+        </div>
         <!--{/loop}-->
         $multipage
     </div>
