@@ -1043,7 +1043,33 @@ function writetojscache() {
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetojscache:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_minify')
+					->run(array(array(
+						'jsdata'		=> &$jsdata,
+						'entry'			=> &$entry,
+
+						'remove'		=> &$remove,
+
+						'switchstop'	=> &$switchstop,
+
+						'filename'		=> $entry,
+						'filepath'		=> './data/cache/',
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
 			$jsdata = preg_replace($remove, '', $jsdata);
+
+			// bluelovers
+			}
 
 			// Event: Func_writetojscache:Before_fwrite
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
