@@ -83,15 +83,18 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				$domain = $list[$_SERVER['HTTP_HOST']];
 				$id = intval($domain['id']);
 				switch($domain['idtype']) {
+					// 版區
 					case 'subarea':
 						$_ENV['curapp'] = 'forum';
 						$_GET['gid'] = $id;
 						break;
+					// 論壇
 					case 'forum':
 						$_ENV['curapp'] = 'forum';
 						$_GET['mod'] = 'forumdisplay';
 						$_GET['fid'] = $id;
 						break;
+					// 專題
 					case 'topic':
 						$_ENV['curapp'] = 'portal';
 						$_GET['mod'] = 'topic';
