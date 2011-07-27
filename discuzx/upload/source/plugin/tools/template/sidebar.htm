@@ -1,0 +1,9 @@
+<div id="sd" class="sd pph">
+	<div class="bn" style="display:block;">
+		<!--{if $action!='login'}-->
+		<!--{loop $menu $key $value}-->
+			<p class="ptn cl"><button class="pn vm" onclick="jumpurl('$_G['basescript'].php?action=$key')"><strong>$value</strong></button></p>
+		<!--{/loop}-->
+		<!--{/if}-->
+	</div>
+</div>

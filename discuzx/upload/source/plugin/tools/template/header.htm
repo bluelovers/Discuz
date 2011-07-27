@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+		<title>Tools - Powered by Discuz!</title>
+		<link rel="stylesheet" type="text/css" href="source/plugin/tools/template/common.css" />
+		<script type="text/javascript" src="static/js/common.js?{VERHASH}"></script>
+		<script type="text/javascript">
+			function jumpurl(url,nw){
+				if(BROWSER.ie) url += (url.indexOf('?') != -1 ?  '&' : '?') + 'referer=' + escape(location.href);
+				if(nw == 1){
+					window.open(url);	
+				} else {
+					location.href = url;
+				}
+				return false;
+			}
+		</script>
+		<style type="text/css">
+		<!--
+		#ct {background: url("./static/image/common/vline.png") repeat-y scroll 800px 0 #FFFFFF;}
+		.sd {width:160px;}
+		.mn {width:800px;}
+		.red {color: #F00;}
+		.green {color: #0c0;}
+		table {font-size:14px;}
+		.tb {line-height:35px;border-bottom:none;}
+		.vm strong {font-weight:normal;letter-spacing:1px;font-size:13px;}
+		.textinput {height:20px;padding:3px;}
+		.textarea {height:80px;width:400px;padding:3px;margin:5px;}
+		-->
+		</style>
+	</head>
+
+	<body class="pg_index" id="nv_forum">
+
+		<div id="append_parent"></div><div id="ajaxwaitid"></div>
+
+		<!--{if empty($topic) || ($topic[useheader])}-->
+		<div id="hd">
+			<div class="wp">
+				<div class="hdc cl">
+					<h2><a href="index.php" title="Tools"><img border="0" alt="Tools" src="source/plugin/tools/template/image/tools.png"></a></h2>
+				</div>
+			</div>
+		</div>
+		<!--{/if}-->
