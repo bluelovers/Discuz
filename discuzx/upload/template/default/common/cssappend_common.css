@@ -1,4 +1,13 @@
 
+/* 字型 */
+@font-face {
+	font-family: '04b08';
+	src:	local('04b03b'), local("04b08"),
+			url({STATICURL}image/seccode/font/en/04B_03B_.TTF);
+	/*font-weight: lighter;*/
+	/*font-style: normal;*/
+}
+
 /**
  * 使排行列表的文字不會自動斷行到下一段
  **/
