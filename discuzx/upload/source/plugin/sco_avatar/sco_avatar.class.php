@@ -190,7 +190,7 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 			// 不允許使用跟網站的網域相同的網址
 			|| $this->_my_parse_url_domain($_G['siteurl']) == $domain
 			// 檢查是否在允許使用的網站
-			|| !in_array($domain, $domain_allow)
+			|| !in_array($domain, (array)$domain_allow)
 		) {
 			$url = '';
 		}
