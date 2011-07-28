@@ -1,7 +1,7 @@
 /*
-[name]×ÏÉ«ÃÎ»Ã[/name]
+[name]ç´«è‰²æ¢¦å¹»[/name]
 [iconbgcolor]purple[/iconbgcolor]
-Powered by Discuz! X1.5 &¡¡Style by ÍÃ×ÓºÜ·è¿ñ QQ£º511127494
+Powered by Discuz! X1.5 &ã€€Style by å…”å­å¾ˆç–¯ç‹‚ QQï¼š511127494
 */
 
 body { background:#EFEEFA url(top.jpg) repeat-x center top; }
@@ -34,7 +34,7 @@ body { background:#EFEEFA url(top.jpg) repeat-x center top; }
 #ct {height:100%; overflow: hidden; padding:15px;background:#fff;border:1px solid #dccbed;border-top:2px solid #9167ba;}
 
 .online {color:#000}
-/* ÖØ¶¨Òå {SPECIALBG} */
+/* é‡å®šä¹‰ {SPECIALBG} */
 
 .appl, .bmn, .bmw .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #F3EFFA; }
 .pn { color: #333;}
@@ -47,7 +47,7 @@ body { background:#EFEEFA url(top.jpg) repeat-x center top; }
 .tb a { background: #fffffe; }
 .tb .a a { background: #fffffe; border-bottom-color:#f8fdff;}
 
-/* ÖØ¶¨Òå {SPECIALBORDER} */
+/* é‡å®šä¹‰ {SPECIALBORDER} */
 .bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #C5E6DF; }
 .pg strong { background-color: #C5E6DF; }
 .pn { border-color: #C5E6DF #666 #666 #C5E6DF; }
@@ -61,6 +61,6 @@ body { background:#EFEEFA url(top.jpg) repeat-x center top; }
 	background: #f9f8f4;
 }
 .bm_h, .tl .th {border-bottom: 1px solid #E3DCF2;border-top: 1px solid #E3DCF2;background:#F3EFFA;color:#5E4E9F}
-/*³¬Á´½Ó×ÖÌåÑÕÉ«*/
+/*è¶…é“¾æ¥å­—ä½“é¢œè‰²*/
 .xi2, .xi2 a, .xi3 a {color:#5E4E9F}
 .ad .pls {background:#E3DCF2}

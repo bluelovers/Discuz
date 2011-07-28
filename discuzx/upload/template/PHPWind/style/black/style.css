@@ -1,7 +1,7 @@
 /*
-[name]ºÚÉ«Ğı·ç[/name]
+[name]é»‘è‰²æ—‹é£[/name]
 [iconbgcolor]black[/iconbgcolor]
-Powered by Discuz! X1.5 &¡¡Style by ÍÃ×ÓºÜ·è¿ñ QQ£º511127494
+Powered by Discuz! X1.5 &ã€€Style by å…”å­å¾ˆç–¯ç‹‚ QQï¼š511127494
 */
 
 body { background:#000 url(top.jpg) repeat-x center top; }
@@ -46,7 +46,7 @@ body { background:#000 url(top.jpg) repeat-x center top; }
 .navB,.navBbg{background:url(navB.png) right bottom repeat-x;}
 .navBbg{padding:3px 0;background-position:left bottom;margin-right:4px;}
 .online {color:#000}
-/* ÖØ¶¨Òå {SPECIALBG} */
+/* é‡å®šä¹‰ {SPECIALBG} */
 .pgs #newspecial, .pgs #newspecialtmp { float: left; background: url(pn_post.png) no-repeat 0 0; }
 #post_reply, #post_replytmp { float: left; background: url(pn_reply.png) no-repeat 0 0; }
 	#newspecial img, #newspecialtmp img, #post_reply img, #post_replytmp img { opacity: 0; filter: alpha(opacity=0); }
@@ -71,7 +71,7 @@ body { background:#000 url(top.jpg) repeat-x center top; }
 .tb a { background: #fffffe; }
 .tb .a a { background: #fffffe; border-bottom-color:#f8fdff;}
 
-/* ÖØ¶¨Òå {SPECIALBORDER} */
+/* é‡å®šä¹‰ {SPECIALBORDER} */
 .bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #C5E6DF; }
 .pg strong { background-color: #C5E6DF; }
 .pn { border-color: #C5E6DF #666 #666 #C5E6DF; }
@@ -85,6 +85,6 @@ body { background:#000 url(top.jpg) repeat-x center top; }
 	background: #f9f8f4;
 }
 .bm_h, .tl .th {border-bottom: 1px solid #D9D9D9;border-top: 1px solid #D9D9D9;background:#F0F0F0;color:#333333}
-/*³¬Á´½Ó×ÖÌåÑÕÉ«*/
+/*è¶…é“¾æ¥å­—ä½“é¢œè‰²*/
 .xi2, .xi2 a, .xi3 a {color:#1B72AF}
 .ad .pls {background:#333333}

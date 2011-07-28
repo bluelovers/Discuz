@@ -23,13 +23,13 @@
 <div id="top">
 	<div class="top wp">
 		<ul>
-			<li><a href="search.php?mod=forum&searchid=298&orderby=lastpost&ascdesc=desc&searchsubmit=yes">�鿴����</a></li>
-            <li><a href="search.php">����</a></li>
-			<li><a href="faq.php">����</a></li>
+			<li><a href="search.php?mod=forum&searchid=298&orderby=lastpost&ascdesc=desc&searchsubmit=yes">查看新帖</a></li>
+            <li><a href="search.php">搜索</a></li>
+			<li><a href="faq.php">帮助</a></li>
         </ul>
     	<span class="fr">
-           <span style="cursor:pointer;" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('$_G[setting][siteurl]');">��Ϊ��ҳ</span>
-		<span style="cursor:pointer;" onclick="window.external.AddFavorite('$_G[setting][siteurl]','$_G[setting][sitename]');">�����ղ�</span>
+           <span style="cursor:pointer;" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('$_G[setting][siteurl]');">设为首页</span>
+		<span style="cursor:pointer;" onclick="window.external.AddFavorite('$_G[setting][siteurl]','$_G[setting][sitename]');">加入收藏</span>
         </span>
     </div>
 </div>
@@ -139,7 +139,7 @@
 			<div id="nv">
 				<div class="nv_l">
 				<div class="nv_r">
-				<a href="{if $_G['uid']}home.php{else}javascript:;{/if}" id="qmenu" onmouseover="showMenu(this.id)">�ҵĿ��ͨ��</a>
+				<a href="{if $_G['uid']}home.php{else}javascript:;{/if}" id="qmenu" onmouseover="showMenu(this.id)">我的快捷通道</a>
 				<ul>
 					<!--{eval $mnid = getcurrentnav();}-->
 					<!--{loop $_G['setting']['navs'] $nav}-->
@@ -152,11 +152,11 @@
 			<div class="navB" >
 			<div class="navBbg">
                 <ul>
-                    <li><a title="" href="home.php?mod=spacecp&ac=avatar"><span>�޸�ͷ��</span></a></li>
-					<li><a title="" href="home.php?mod=spacecp&ac=profile"><span>��������</span></a></li>
-					<li><a title="" href="home.php?mod=spacecp&ac=credit"><span>�ҵĻ���</span></a></li>
-					<li><a title="" href="home.php?mod=spacecp&ac=usergroup"><span>�û���</span></a></li>
-					<li><a title="" href="home.php?mod=spacecp&ac=profile&op=password"><span>���밲ȫ</span></a></li>
+                    <li><a title="" href="home.php?mod=spacecp&ac=avatar"><span>修改头像</span></a></li>
+					<li><a title="" href="home.php?mod=spacecp&ac=profile"><span>个人资料</span></a></li>
+					<li><a title="" href="home.php?mod=spacecp&ac=credit"><span>我的积分</span></a></li>
+					<li><a title="" href="home.php?mod=spacecp&ac=usergroup"><span>用户组</span></a></li>
+					<li><a title="" href="home.php?mod=spacecp&ac=profile&op=password"><span>密码安全</span></a></li>
                 </ul><div class="clear"></div>
 			</div>
             </div>
