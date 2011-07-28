@@ -19,6 +19,19 @@
 		color: #FF3399;
 	}
 
+	.fl_tb p {
+		margin-top: 1px;
+		margin-bottom: 1px;
+	}
+
+	.fl_tb .fl_i .xi2 {
+		color: #9933CC;
+	}
+
+	.fl_tb .fl_i .xg1 {
+		color: #0099FF !important;
+	}
+
 	/* 最後發表者 */
 	.fl_tb .fl_by div cite {
 		font-size: 8px;
@@ -33,6 +46,20 @@
 		font-size: 10px;
 		text-transform: uppercase;
 		font-family: Helvetica,Arial,sans-serif,'細明體';
+	}
+
+	.fl_tb h2 em.xi1 {
+		background: url({STATICURL}image/plus/common/new.gif) no-repeat scroll 5px 50% transparent;
+		padding-left: 20px;
+		line-height: 1.6em;
+		height: 11px;
+		font-size: 8px;
+
+		/* 跨瀏覽器的 inline-block */
+		display: -moz-inline-stack;
+		display: inline-block;
+		zoom: 1;
+		*display: inline;
 	}
 
 /** end **/
