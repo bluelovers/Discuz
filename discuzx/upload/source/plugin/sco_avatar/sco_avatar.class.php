@@ -141,6 +141,30 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 			->_getglobal('avatar_pics')
 		;
 	}
+
+	function _my_parse_url_domain($url) {
+		$_p = parse_url($url);
+		$_p_h = explode('.', $_p['host']);
+
+		$_1 = array_pop($_p_h);
+		$_0 = array_pop($_p_h);
+
+		return $_0.$_1;
+	}
+
+	function _my_fix_avatar_url($url) {
+		global $_G;
+
+		if (
+			0
+			|| preg_match('/\/\.+\//', $url)
+			|| $this->_my_parse_url_domain($_G['siteurl']) == $this->_my_parse_url_domain($url)
+		) {
+			$url = '';
+		}
+
+		return $url;
+	}
 }
 
 class plugin_sco_avatar_home extends plugin_sco_avatar {
@@ -230,8 +254,10 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 						|| strpos($a_file_url, 'http://') !== 0
 					) {
 						unset($a_file_url);
+					} elseif ($a_file_url = $this->_my_fix_avatar_url($a_file_url)) {
+						// 成功修正的 $a_file_url
 					} else {
-
+						unset($a_file_url);
 					}
 				}
 
