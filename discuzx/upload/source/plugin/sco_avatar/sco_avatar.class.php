@@ -45,10 +45,10 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 	 *
 	 * @example $member_uc2 = $plugin_self->_my_avatar_user_get($_G['uid']);
 	 */
-	function _my_avatar_user_get($uid) {
+	function _my_avatar_user_get($uid, $return = 0) {
 		if ($uid <= 0) return false;
 
-		return $member_uc = $this
+		$member_uc = $this
 			->_uc_init()
 			->_uc_call('sc', 'get_user_fields', array(
 				'uid' => $uid,
@@ -56,6 +56,10 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 					'avatar',
 				),
 		));
+
+		if ($return) return $member_uc[$uid]['avatar'];
+
+		return $member_uc;
 	}
 
 	/**
