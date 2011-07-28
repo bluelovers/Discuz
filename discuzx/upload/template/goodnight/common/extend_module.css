@@ -5,3 +5,18 @@
 #tpsch{}
 
 /** end **/
+
+/** forum,group **/
+
+	/* 版塊分區內的版塊標題 */
+	.fl_tb h2 a, .fl_tb .fl_g dl dt a {
+    	letter-spacing: 1px;
+    	text-shadow: 2px 2px 4px #AAAAAA;
+	}
+
+	/* 廣場首頁版塊分區內的版塊標題 */
+	.fl_tb h2 a {
+		color: #FF3399;
+	}
+
+/** end **/
