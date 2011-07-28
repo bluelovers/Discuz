@@ -1,0 +1,14 @@
+
+SetEnvIf User-Agent ^Baiduspider badrobot
+<Files *>
+	Order allow,deny
+	Allow from all
+	Deny from env=badrobot
+</Files>
+
+SetEnvIf User-Agent ^sogou sogourobot
+<Files *>
+	Order allow,deny
+	Allow from all
+	Deny from env=sogourobot
+</Files> 
