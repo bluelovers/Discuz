@@ -160,18 +160,20 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 	$jsdata = preg_replace($remove, '', $jsdata);
 
 	// 暫時沒有發現錯誤訊息
-	$jsdata = preg_replace(array(
+	$_s = array(
 		// 清除單行註解
 		'/(?:(\s)\/\/)(?:[^\/\n]+)(\n)/',
 		// 清除分行之間的空白
 		'/(^|\n)\s*/',
 		// 清除結尾空白
 		'/\s$/',
-	), array(
+	);
+	$_r = array(
 		'$1$2',
 		'$1',
 		'',
-	), $jsdata);
+	);
+	$jsdata = preg_replace($_s, $_r, $jsdata);
 
 	$switchstop = true;
 }
