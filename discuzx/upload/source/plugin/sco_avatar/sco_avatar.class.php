@@ -179,7 +179,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 		}
 
 		// 判定是否允許使用網路頭像
-		$this->_setglobal('allowurl', (
+		$this->_setglobal('user_avatar_allowurl', (
 			$_G['adminid'] == 1
 			|| (
 				$this->attr['setting']['allowurl']
@@ -221,7 +221,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 				}
 
 				// 設定網路頭像
-				if (empty($a_file) && $this->_getglobal('allowurl')) {
+				if (empty($a_file) && $this->_getglobal('user_avatar_allowurl')) {
 					$a_file_url = trim(getgpc('a_file_url'));
 
 					if (!empty($a_file_url)) {
