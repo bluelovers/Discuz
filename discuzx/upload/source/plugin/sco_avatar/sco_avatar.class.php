@@ -167,11 +167,15 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 			'hinet.net',
 
+			// 沒用過的空間
 			'hotimg.com',
 			'jnafo.com',
 
 			// picasa
 			'googleusercontent.com',
+
+			// 從糟糕圖中找到的網站
+			'megapix.com',
 		);
 
 		$domain = $this->_my_parse_url_domain($url);
