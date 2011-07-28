@@ -222,10 +222,12 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 				// 設定網路頭像
 				if (empty($a_file) && $this->_getglobal('user_avatar_allowurl')) {
+					unset($a_file);
+
 					$a_file_url = trim(getgpc('a_file_url'));
 
 					if (!empty($a_file_url)) {
-						unset($a_file);
+
 					} else {
 						unset($a_file_url);
 					}
