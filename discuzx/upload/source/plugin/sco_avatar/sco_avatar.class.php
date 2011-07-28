@@ -178,6 +178,15 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 			showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
 		}
 
+		// 判定是否允許使用網路頭像
+		$this->_setglobal('allowurl', (
+			$_G['adminid'] == 1
+			|| (
+				$this->attr['setting']['allowurl']
+				&& !in_array($_G['groupid'], (array)$this->attr['setting']['allowurl_not_usergroup'])
+			)
+		) ? 1 : 0);
+
 		$this->_my_avatar_types_list();
 
 		$avatar_pics = $this->_my_avatar_pics(
@@ -212,13 +221,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 				}
 
 				// 設定網路頭像
-				if (empty($a_file) && (
-					$_G['adminid'] == 1
-					|| (
-						$this->attr['setting']['allowurl']
-						&& !in_array($_G['groupid'], (array)$this->attr['setting']['allowurl_not_usergroup'])
-					)
-				)) {
+				if (empty($a_file) && $this->_getglobal('allowurl')) {
 					$a_file_url = trim(getgpc('a_file_url'));
 
 					if (!empty($a_file_url)) {
