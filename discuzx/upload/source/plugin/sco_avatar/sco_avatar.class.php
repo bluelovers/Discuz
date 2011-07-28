@@ -160,6 +160,9 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		$_v = $this->_parse_method(__METHOD__);
 
+		// 修正 setting 的內容
+		$this->_fix_plugin_setting();
+
 		$this->_setglobal('mod', $_v[2]);
 		$this->_setglobal('ac', $_v[3]);
 
