@@ -226,10 +226,12 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 					$a_file_url = trim(getgpc('a_file_url'));
 
-					if (!empty($a_file_url)) {
-
-					} else {
+					if (empty($a_file_url)
+						|| strpos($a_file_url, 'http://') !== 0
+					) {
 						unset($a_file_url);
+					} else {
+
 					}
 				}
 
@@ -242,6 +244,15 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 					$member_uc = $this->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
 
 					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
+
+				} elseif (!empty($a_file_url)) {
+					$this->_uc_init();
+					uc_user_deleteavatar($_G['uid']);
+
+					$member_uc = $this->_my_avatar_user_save($_G['uid'], $a_file_url);
+
+					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
+
 				} else {
 					showmessage('沒有選擇頭像或者錯誤的頭像請求', null, null, array(
 						'return' => 1,
