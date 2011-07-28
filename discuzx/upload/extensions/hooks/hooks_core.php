@@ -392,6 +392,7 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 Scorpio_Hook::add('Func_output_ajax:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
+Scorpio_Hook::add('Func_mobileoutput:Before_output_replace', '_eFunc_output_Before_rewrite_content_echo');
 
 /**
  * 輸出時將帳號名稱轉為暱稱
