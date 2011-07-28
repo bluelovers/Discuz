@@ -43,21 +43,21 @@
 		<!--{/if}-->
 			<tr>
 				<td>
-	<!--{loop $avatar_pics $_k_ $_v_}-->
-		<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
-			<label>
-				<div style="display: block;height: 120px; width: 120px;text-align: center;" class="vm">
-					<img src="{$_v_}" class="vm avatar avatar_middle"/>
-				</div>
-				<center style="background-color: #8CBCB2;">
-					<p class="vm">
-						<input type="radio" name="a_file" value="{$_k_}" />
-						{$_k_}
-					</p>
-				</center>
-			</label>
-		</div>
-	<!--{/loop}-->
+					<!--{loop $avatar_pics $_k_ $_v_}-->
+						<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
+							<label>
+								<div style="display: block;height: 120px; width: 120px;text-align: center;" class="vm">
+									<img src="{$_v_}" class="vm avatar avatar_middle"/>
+								</div>
+								<center style="background-color: #8CBCB2;">
+									<p class="vm">
+										<input type="radio" name="a_file" value="{$_k_}" />
+										{$_k_}
+									</p>
+								</center>
+							</label>
+						</div>
+					<!--{/loop}-->
 				</td>
 			</tr>
 		</table>
