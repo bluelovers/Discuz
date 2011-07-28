@@ -162,7 +162,7 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 	// 暫時沒有發現錯誤訊息
 	$_s = array(
 		// 清除單行註解
-		'/(?:(\s)\/\/)(?:[^\/\n]+)(\n)/',
+		'/(?:(\s|;\s*|\n)\/\/)(?:[^\/\n]+)(\n)/',
 		// 清除分行之間的空白
 		'/(^|\n)\s*/',
 		// 清除結尾空白
@@ -177,10 +177,13 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 	//BUG:如果增加移除分行 bbcode.js 會產生錯誤
 
 	// 暫時安全
-	$_s[] = '/([;])\n+/';
+	$_s[] = '/([;}])\n+/';
 	$_r[] = '$1';
 
-	$jsdata = preg_replace($_s, $_r, $jsdata);
+	// 多執行幾次(確保代碼能清除乾淨)
+	for ($_i = 0; $_i < 3; $_i++) {
+		$jsdata = preg_replace($_s, $_r, $jsdata);
+	}
 
 	$switchstop = true;
 }
