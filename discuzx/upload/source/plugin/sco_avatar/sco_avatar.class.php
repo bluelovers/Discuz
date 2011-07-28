@@ -209,6 +209,8 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 				}
 
 				if (!empty($a_file)) {
+					$this->_uc_init();
+
 					// 先進行一次刪除頭像
 					uc_user_deleteavatar($_G['uid']);
 
