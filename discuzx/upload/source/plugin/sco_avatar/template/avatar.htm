@@ -30,20 +30,19 @@
 
 		<br /><br />
 
-		<!--{if $user_avatar_allowurl}-->
 		<table cellspacing="0" cellpadding="0" class="tfm">
+		<!--{if $user_avatar_allowurl}-->
 			<tr>
 				<td>
 					<label>設定網路頭像:
-						<input type="text" name="a_file_url" value="" class="pt" readonly="true"/>
+						<input type="text" name="a_file_url" value="" class="pt" />
 					</label>
+					<br /><br />
 				</td>
 			</tr>
-		</table>
-
-		<br /><br />
 		<!--{/if}-->
-
+			<tr>
+				<td>
 	<!--{loop $avatar_pics $_k_ $_v_}-->
 		<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
 			<label>
@@ -59,5 +58,8 @@
 			</label>
 		</div>
 	<!--{/loop}-->
+				</td>
+			</tr>
+		</table>
 	</form>
 <!--{/if}-->
