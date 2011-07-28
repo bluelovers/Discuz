@@ -1,12 +1,10 @@
 <!--{if $_G['setting']['homestatus']}-->
 	<!--{eval $_G[cookie][extstyle] = false;}-->
 	<!--{subtemplate common/header_common}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}home.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
-		<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_space.css{$_G[varhash_gzip]}?{VERHASH}" />
+		<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+		<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_space.css?{VERHASH}" />
 		<link id="style_css" rel="stylesheet" type="text/css" href="{STATICURL}space/{if $space[theme]}$space[theme]{else}t1{/if}/style.css?{VERHASH}">
 		<style id="diy_style">$space[spacecss]</style>
-
-		<!--{hook/global_header_javascript_before_body}-->
 	</head>
 
 	<body id="space" onkeydown="if(event.keyCode==27) return false;">
@@ -14,7 +12,7 @@
 		<div id="ajaxwaitid"></div>
 
 		<!--{if $space['self'] && $_GET['diy'] == 'yes' && $do == 'index' }-->
-		<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_diy.css{$_G[varhash_gzip]}?{VERHASH}" />
+		<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_diy.css?{VERHASH}" />
 		<!--{subtemplate home/space_diy}-->
 		<!--{/if}-->
 

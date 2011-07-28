@@ -98,7 +98,7 @@
 				<th>{lang changeto}:</th>
 				<td>
 					<!--{if $member[groupid] == 4 || $member[groupid] == 5}-->
-						<label for="bannew_0" class="lb"><input type="radio" name="bannew" id="bannew_0" value="0" checked="checked" class="pr" />{lang modcp_members_status_normal}</label>
+						<label for="bannew_0" class="lb"><input type="radio" name="bannew" id="bannew_0" value="0" checked="checked" class="pr" />{lang modcp_members_status_normal}</label> 
 					<!--{/if}-->
 					<!--{if $member[groupid] != 4 && $_G[group][allowbanuser]}--><label for="bannew_4" class="lb"><input type="radio" name="bannew" id="bannew_4" class="pr" value="4" {if $member[groupid] != 4 && $member[groupid] != 5}checked="checked"{/if} />{lang modcp_members_status_banpost}</label><!--{/if}-->
 					<!--{if $member[groupid] != 5 && $_G[group][allowbanvisituser]}--><label for="bannew_5" class="lb"><input type="radio" name="bannew" id="bannew_5" class="pr" value="5" {if $member[groupid] != 4 && $member[groupid] != 5 && !$_G[group][allowbanuser]}checked="checked"{/if} />{lang modcp_members_status_banvisit}</label><!--{/if}-->
@@ -108,7 +108,7 @@
 				<th>{lang expiry}:</th>
 				<td>
 					<p class="hasd cl">
-						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 						<input type="text" id="banexpirynew" name="banexpirynew" autocomplete="off" value="" class="px" tabindex="1" style="margin-right: 0; width: 100px;" />
 						<a href="javascript:;" class="dpbtn" onclick="showselect(this, 'banexpirynew', 1, 1)">^</a>
 					</p>
@@ -146,7 +146,7 @@
 				<tr>
 					<th width="15%">{lang expiry}:</th>
 					<td width="85%" class="hasd cl">
-						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 						<input type="text" id="validitynew" name="validitynew" autocomplete="off" value="" class="px" tabindex="1" style="width: 100px;" />
 						<a href="javascript:;" class="dpbtn" onclick="showselect(this, 'validitynew', 0, 1)">^</a>
 					</td>

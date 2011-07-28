@@ -7,8 +7,6 @@
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&do=album">{lang album}</a><!--{if $album[albumname]}--> <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$album[uid]&do=album&id=$albumid">$album[albumname]</a><!--{/if}--> <em>&rsaquo;</em> {lang edit_album}</div>
 </div>
 
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="wp ct2_a cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -119,10 +117,10 @@
 					<!--{/loop}-->
 					<tr>
 						<td colspan="3">
-							<label for="chkall" onclick="checkAll(this.form, 'ids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label>
+							<label for="chkall" onclick="checkAll(this.form, 'ids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label> 
 							<button type="submit" name="editpicsubmit" value="true" class="pn" onclick="this.form.action+='&subop=update';"><strong>{lang update_explain}</strong></button>
 							<button type="submit" name="editpicsubmit" value="true" class="pn" onclick="this.form.action+='&subop=delete';return ischeck('theform', 'ids')"><strong>{lang delete}</strong></button>
-
+							
 							<!--{if $albumlist}-->
 							<button type="submit" name="editpicsubmit" value="true" class="pn" onclick="this.form.action+='&subop=move';return ischeck('theform', 'ids')"><strong>{lang move_to}</strong></button>
 							<select name="newalbumid" class="ps vm">
@@ -132,7 +130,7 @@
 							<!--{if $albumid>0}--><option value="0">{lang default_album}</option><!--{/if}-->
 							</select>
 							<!--{/if}-->
-
+							
 							<p class="d">{lang delete_pic_notice}</p>
 						</td>
 					</tr>

@@ -13,8 +13,6 @@
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
 
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
@@ -29,12 +27,9 @@
 				<!--{elseif $_G[gp_type] == "article"}-->{lang favorite_article}
 				<!--{else}-->{lang favorite_all}</a><!--{/if}-->
 			</h1>
-
+			
 <!--{else}-->
 <!--{template home/space_header}-->
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
 	<div id="ct" class="wp n cl">
 		<div class="mn">
 			<div class="bm">
@@ -69,7 +64,7 @@
 			<p class="emp">{lang no_favorite_yet}</p>
 			<!--{/if}-->
 <!--{if empty($diymode)}-->
-		</div>
+		</div>	
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 	</div>
 	<div class="appl">

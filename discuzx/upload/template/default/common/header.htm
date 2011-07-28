@@ -11,26 +11,24 @@
 	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
 	<!--{if $_G['basescript'] == 'forum' || $_G['basescript'] == 'group'}-->
 		<!--{if $_G['basescript'] == 'forum' && empty($_G['disabledwidthauto']) && $_G['forum_widthauto']}-->
-			<link rel="stylesheet" id="css_widthauto" type="text/css" href="data/cache/style_{STYLEID}_widthauto.css{$_G[varhash_gzip]}?{VERHASH}" />
+			<link rel="stylesheet" id="css_widthauto" type="text/css" href="data/cache/style_{STYLEID}_widthauto.css?{VERHASH}" />
 			<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>
 		<!--{/if}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
 	<!--{elseif $_G['basescript'] == 'home' || $_G['basescript'] == 'userapp'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}home.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
 	<!--{elseif $_G['basescript'] == 'portal'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
 	<!--{/if}-->
 	<!--{if $_G['basescript'] != 'portal' && $_GET['diy'] == 'yes' && (CURMODULE == 'topic' || $_G['group']['allowdiy']) && !empty($_G['style']['tplfile'])}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
 	<!--{/if}-->
 	<!--{if $_GET['diy'] == 'yes' && (CURMODULE == 'topic' || $_G['group']['allowdiy']) && !empty($_G['style']['tplfile'])}-->
-	<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_css_diy.css{$_G[varhash_gzip]}?{VERHASH}" />
+	<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_css_diy.css?{VERHASH}" />
 	<!--{/if}-->
-
-	<!--{hook/global_header_javascript_before_body}-->
 </head>
 
-<body id="nv_{$_G[basescript]}" class="pg_{CURMODULE} site_pg" onkeydown="if(event.keyCode==27) return false;">
+<body id="nv_{$_G[basescript]}" class="pg_{CURMODULE}" onkeydown="if(event.keyCode==27) return false;">
 	<div id="append_parent"></div><div id="ajaxwaitid"></div>
 	<!--{if $_GET['diy'] == 'yes' && (CURMODULE == 'topic' || $_G['group']['allowdiy']) && !empty($_G['style']['tplfile'])}-->
 		<!--{template common/header_diy}-->

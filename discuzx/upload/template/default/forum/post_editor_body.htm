@@ -88,7 +88,15 @@
 			</div>
 			<!--{if $_G['cache']['bbcodes_display'][$_G['groupid']]}-->
 			<div class="b2r nbl">
-				<!--{subtpl subblock/forum/post_editor_body_editorctrl}-->
+				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
+					<!--{if $bbcode['i'] % 2 != 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
+				<!--{/loop}-->
+				<!--{hook/post_editorctrl_top}-->
+				<br id="{$editorid}_adv_7" />
+				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
+					<!--{if $bbcode['i'] % 2 == 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
+				<!--{/loop}-->
+				<!--{hook/post_editorctrl_bottom}-->
 			</div>
 			<!--{/if}-->
 			<div class="b2r" id="{$editorid}_adv_9">

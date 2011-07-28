@@ -26,13 +26,13 @@
 </script>
 
 <!--{if $_G[gp_action] == 'edit'}--><!--{eval $editor[value] = $postinfo[message];}--><!--{else}--><!--{eval $editor[value] = $message;}--><!--{/if}-->
-<script type="text/javascript" src="{$_G['setting']['jspath']}forum_post.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_post.js?{VERHASH}"></script>
 
 <!--{if $isfirstpost && $sortid}-->
 	<script type="text/javascript">
 		var forum_optionlist = <!--{if $forum_optionlist}-->'$forum_optionlist'<!--{else}-->''<!--{/if}-->;
 	</script>
-	<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js?{VERHASH}"></script>
 <!--{/if}-->
 
 <!--{block actiontitle}-->
@@ -78,8 +78,6 @@
 <div id="pt" class="bm cl">
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation$actionsubject <em>&rsaquo;</em> $actiontitle</div>
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
 
 <!--{eval $adveditor = $isfirstpost && $special || $special == 2 && ($_G['gp_action'] == 'newthread' || $_G['gp_action'] == 'reply' && !empty($_G['gp_addtrade']) || $_G['gp_action'] == 'edit' && $thread['special'] == 2);}-->
 <!--{eval $advmore = !$showthreadsorts && !$special || $_G['gp_action'] == 'reply' && empty($_G['gp_addtrade']) || $_G['gp_action'] == 'edit' && !$isfirstpost && ($thread['special'] == 2 && !$special || $thread['special'] != 2);}-->
@@ -256,7 +254,7 @@
 </div>
 
 <!--{if $special || ($_G[gp_action] == 'newthread' && $_G['group']['allowpostrushreply'] && $special != 2) || ($_G[gp_action] == 'edit' && getstatus($thread['status'], 3))}-->
-	<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js?{VERHASH}"></script>
 <!--{/if}-->
 <script type="text/javascript">
 	var editorsubmit = $('postsubmit');

@@ -4,9 +4,6 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -45,7 +42,7 @@
 		<span>
 			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
-	</h3>
+	</h3>	
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 		<div class="c">
@@ -86,7 +83,7 @@
 				</tr>
 				<!--{/loop}-->
 			</table>
-		</div>
+		</div>	
 </div>
 <!--{if empty($_G['gp_infloat'])}--><div class="m_c"><!--{/if}-->
 <div class="o pns">

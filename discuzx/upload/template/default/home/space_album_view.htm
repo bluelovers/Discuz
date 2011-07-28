@@ -2,9 +2,6 @@
 <!--{eval $friendsname = array(1 => '{lang friendname_1}',2 => '{lang friendname_2}',3 => '{lang friendname_3}',4 => '{lang friendname_4}');}-->
 
 	<!--{template home/space_header}-->
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<div class="bm">
@@ -53,7 +50,7 @@
 			<!--{if !$pricount}--><p class="emp">{lang no_pics}</p><!--{/if}-->
 			<!--{if $pricount}--><p>{lang hide_pic}</p><!--{/if}-->
 		<!--{/if}-->
-
+		
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 		</div>
 	</div>
@@ -62,7 +59,7 @@
 		<div class="bm_h cl">
 			<!--{if $albumlist}-->
 			<div class="y mtn">
-					<a href="javascript:;" id="sabup" onclick="switchAlbum(0);this.blur();return false;" title="{lang previous_album}"><img src="{STATICURL}image/common/pic_nv_prev.gif" alt="{lang previous_album}"/></a>
+					<a href="javascript:;" id="sabup" onclick="switchAlbum(0);this.blur();return false;" title="{lang previous_album}"><img src="{STATICURL}image/common/pic_nv_prev.gif" alt="{lang previous_album}"/></a> 
 					<a href="javascript:;" id="sabdown" onclick="switchAlbum(1);this.blur();return false;" title="{lang next_album}"><img src="{STATICURL}image/common/pic_nv_next.gif" alt="{lang next_album}"/></a>
 			</div>
 			<!--{/if}-->
@@ -70,7 +67,7 @@
 		</div>
 		<div class="bm_c">
 			<div id="pnv" class="bn pns cl">
-				<!--{if $albumlist}-->
+				<!--{if $albumlist}-->	
 				<!--{loop $albumlist $key $ablums}-->
 				<ul id="albumbox_$key" class="ptm ml z" {if !isset($ablums[$id]) && !($key==0 && $id<0)} style="display: none;"{else}{eval $nowalbum=$key;}{/if}>
 					<!--{loop $ablums $akey $value}-->

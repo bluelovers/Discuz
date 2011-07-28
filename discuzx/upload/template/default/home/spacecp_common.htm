@@ -4,9 +4,6 @@
 		<!--{subtemplate common/simplesearchform}-->
 		<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a></div>
 	</div>
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
 	<div id="ct" class="ct2_a wp cl">
 		<div class="mn">
 			<div class="bm bw0">
@@ -32,7 +29,7 @@
 			<button type="submit" name="feedignoresubmit" value="true" class="pn pnc"><strong>{lang determine}</strong></button>
 		</p>
 	</form>
-
+	
 <!--{elseif $_GET['op'] == 'getuserapp'}-->
 
 	<!--{loop $my_userapp $value}-->
@@ -65,7 +62,7 @@
 			if(priceObj) {
 				priceObj.innerHTML = values['unitprice'];
 			}
-
+			
 		}
 	</script>
 <!--{/if}-->

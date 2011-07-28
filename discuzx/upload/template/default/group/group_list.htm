@@ -1,5 +1,5 @@
 <!--{if $_G['forum']['ismoderator']}-->
-	<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
 <!--{/if}-->
 <div id="pgt" class="bm bw0 pgs cl">
 	$multipage
@@ -76,23 +76,22 @@
 								</td>
 								<!--{/if}-->
 								<th>
-									<span>
 									<!--{hook/forumdisplay_thread $key}-->
 									<!--{if $thread['moved']}-->
 										<!--{if $_G['forum']['ismoderator']}-->
 											<a href="forum.php?mod=topicadmin&action=moderate&optgroup=3&operation=delete&tid=$thread[moved]" onclick="showWindow('mods', this.href);return false">{lang thread_moved}:</a>
 										<!--{else}-->
-											<span>{lang thread_moved}:</span>
+											{lang thread_moved}:
 										<!--{/if}-->
 									<!--{/if}-->
 									$thread[typehtml]
 									<span id="thread_$thread[tid]"><a href="forum.php?mod=viewthread&tid=$thread[tid]&extra=$extra"$thread[highlight] class="xst">$thread[subject]</a></span>
-									<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
+									<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 									<!--{if $thread['price'] > 0}-->
 										<!--{if $thread['special'] == '3'}-->
 										- <span style="color: #C60">[{lang thread_reward}<span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 										<!--{else}-->
-										- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
+										- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
 										<!--{/if}-->
 									<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
 										- <span style="color: #269F11">[{lang reward_solved}]</span>
@@ -119,7 +118,6 @@
 									<!--{if $thread[multipage]}-->
 										<span class="tps">$thread[multipage]</span>
 									<!--{/if}-->
-									</span>
 								</th>
 								<td class="by">
 									<cite>

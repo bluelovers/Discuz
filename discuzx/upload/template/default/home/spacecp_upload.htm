@@ -5,8 +5,6 @@
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&do=album">{lang album}</a> <em>&rsaquo;</em> {lang upload_pic}</div>
 </div>
 
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -81,7 +79,7 @@
 				}
 			</script>
 
-			<script src="{$_G[setting][jspath]}home_uploadpic.js{$_G[varhash_gzip_js]}?{VERHASH}" type="text/javascript"></script>
+			<script src="{$_G[setting][jspath]}home_uploadpic.js?{VERHASH}" type="text/javascript"></script>
 			<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
 
 			<form method="post" autocomplete="off" id="albumform" action="home.php?mod=spacecp&ac=upload" target="uploadframe" onsubmit="return validate(this);">

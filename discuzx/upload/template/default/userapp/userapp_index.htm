@@ -5,9 +5,6 @@
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>$_G[setting][navs][5][navname]
 	</div>
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="{if $_G['uid'] || !empty($_G['cache']['userapp'])}ct2_a {/if}wp cl">
 	<!--{if $_G['uid'] || !empty($_G['cache']['userapp'])}-->
 	<div class="appl">
@@ -45,7 +42,7 @@
 										<a class="t" href="userapp.php?icon=$value[icon]" title="{lang just_look_dynamic}">
 											<img width="16" height="16" {if $_G[cache][myapp][$value[icon]][icon]}src="$_G[cache][myapp][$value[icon]][icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[icon]'"{else} src="http://appicon.manyou.com/icons/$value[icon]"{/if} />
 										</a>
-										$value[title_template]
+										$value[title_template] 
 										<span class="xg1"><!--{date($value[dateline], 'n-j H:i')}--></span>
 
 										<div class="ec">

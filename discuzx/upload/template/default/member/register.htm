@@ -2,8 +2,6 @@
 
 <script type="text/javascript" src="{$this->setting[jspath]}register.js?{VERHASH}"></script>
 
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="ptm wp cl">
 	<div class="nfl" id="main_succeed" style="display: none">
 		<div class="f_c altw">
@@ -35,7 +33,7 @@
 	<p id="returnmessage4"></p>
 
 	<!--{if $this->showregisterform}-->
-	<form method="post" _autocomplete="off" name="register" id="registerform" enctype="multipart/form-data" onsubmit="checksubmit();return false;" action="member.php?mod=$regname">
+	<form method="post" autocomplete="off" name="register" id="registerform" enctype="multipart/form-data" onsubmit="checksubmit();return false;" action="member.php?mod=$regname">
 		<div id="layer_reg" class="bm_c">
 			<input type="hidden" name="regsubmit" value="yes" />
 			<input type="hidden" name="formhash" value="{FORMHASH}" />

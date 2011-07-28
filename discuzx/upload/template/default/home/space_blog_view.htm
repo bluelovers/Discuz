@@ -1,4 +1,4 @@
-{eval
+{eval 
 	$_G['home_tpl_titles'] = array($blog['subject'], '{lang blog}');
 	$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=$do&view=me\">{lang they_blog}</a>";
 	$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=blog&id=$blog[blogid]\">{lang view_blog}</a>";
@@ -6,9 +6,6 @@
 }
 
 <!--{template home/space_header}-->
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<div class="bm">
@@ -34,7 +31,7 @@
 						<!--{if $blog['friend']}-->
 						<span class="y"><a href="home.php?mod=space&uid=$space[uid]&do=$do&view=me&friend=$blog[friend]" class="xg1">{$friendsname[$value[friend]]}</a></span>
 						<!--{/if}-->
-						<!--{if $blog[viewnum]}--><span class="xg1">{lang have_read_blog}</span><!--{/if}-->
+						<!--{if $blog[viewnum]}--><span class="xg1">{lang have_read_blog}</span><!--{/if}--> 
 						<span class="xg1"><!--{date($blog[dateline])}--></span>
 
 					<!--{if $classarr[classname]}--><span class="pipe">|</span><span class="xg1">{lang personal_category}:<a href="home.php?mod=space&uid=$blog[uid]&do=blog&classid=$blog[classid]&view=me">{$classarr[classname]}</a></span><!--{/if}-->
@@ -231,7 +228,7 @@
 
 			</div>
 		</div>
-
+			
 
 			</div>
 		</div>

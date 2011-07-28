@@ -9,7 +9,7 @@
 		<td>
 			<!--{if in_array($option['type'], array('number', 'text', 'email', 'calendar', 'image', 'url', 'textarea'))}-->
 				<!--{if $option['type'] == 'calendar'}-->
-					<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+					<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js?{VERHASH}"></script>
 					<input type="text" name="searchoption[$optionid][value]" size="45" value="$option[value]" onclick="showcalendar(event, this, false)" />
 				<!--{elseif $option['type'] == 'number'}-->
 					<select name="searchoption[$optionid][condition]">

@@ -1,5 +1,5 @@
 /*
-[name]紅[/name]
+[name]红[/name]
 [iconbgcolor]#BA350F[/iconbgcolor]
 Powered by Discuz! X
 */
@@ -16,14 +16,14 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 .bm_h, .tl th, .tl td { border-bottom-color: #CDCDCD; }
 .fl .bm_h { border-color: #FCC; background: #FFECEC url(titlebg.png) repeat-x 0 0; }
 
-/* 重定義 {SPECIALBG} */
+/* 重定义 {SPECIALBG} */
 .bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #FFECEC; }
 
 .ct2_a, .ct3_a { background-image: url(vlineb.png); }
 .tbn li.a { background: #FAF6ED url(background.png); }
 	#nv_portal.pg_portalcp .ct2_a_r, #nv_forum.pg_post .ct2_a_r { background-image: none; }
 
-/* 重定義 {SPECIALBORDER} */
+/* 重定义 {SPECIALBORDER} */
 .bmn, .pg a, .pgb a, .pg strong, .card, .card .o, div.exfm  { border-color: #FCC; }
 .pg strong { background-color: #FCC; }
 .pn, .tb .o, .tb .o a { background-image: url(pn.png); }
@@ -34,12 +34,12 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 
 .ad td.pls { background-color: #FCC; }
 
-/* 重定義字體 */
+/* 重定义字体 */
 #qmenu, .fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #BA350F; }
 .pll .s a.go { color: #FFF; }
 .xi2, .xi2 a { color: #000; }
 
-/* 重定義按鈕 */
+/* 重定义按钮 */
 .pgs #newspecial, .pgs #newspecialtmp { float: left; background: url(pn_post.png) no-repeat 0 0; }
 #post_reply, #post_replytmp { float: left; background: url(pn_reply.png) no-repeat 0 0; }
 	#newspecial img, #newspecialtmp img, #post_reply img, #post_replytmp img { opacity: 0; filter: alpha(opacity=0); }
@@ -49,18 +49,18 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 .el .ec .hot { background-image: url(hotspot.gif); }
 .pll .s { background-image:url(polljoins.gif); }
 
-/* 重定義 Tab */
+/* 重定义 Tab */
 .tb .a a { border-bottom-color: #FAF6ED; background: url(background.png); }
 
-/* 重定義側邊導航 */
+/* 重定义侧边导航 */
 .bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #FCC; background-color: #FFF9F9; }
 	.bdl dt { background-image: url(titlebg_sd.png); }
 .bdl dd.bdl_a a { color: #BA350F; }
 
-/* 重定義下拉菜單 */
+/* 重定义下拉菜单 */
 .p_pop a { border-bottom-color: #FFECEC; }
 	.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #FFECEC; color: #BA350F; }
 	.blk a:hover { background-color: transparent; }
 
-/* 重定義好友列表 */
+/* 重定义好友列表 */
 #nv_home .buddy li { background-color: transparent; border: none; }

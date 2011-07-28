@@ -4,9 +4,6 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em> {lang invite}</div>
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -99,7 +96,7 @@
 					var scriptNode = document.createElement("script");
 					scriptNode.id = 'friendselector_js';
 					scriptNode.type = "text/javascript";
-					scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js{$_G[varhash_gzip_js]}?{VERHASH}';
+					scriptNode.src = '{$_G[setting][jspath]}home_friendselector.js?{VERHASH}';
 					if(BROWSER.ie) {
 						scriptNode.onreadystatechange = function () {
 							if(scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') {

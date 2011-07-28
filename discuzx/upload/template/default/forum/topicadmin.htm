@@ -4,9 +4,6 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -312,14 +309,14 @@
 		</div>
 		<!--{if empty($hiddensubmit)}-->
 			<p class="o pns">
-				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
+				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
 				<button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="{lang confirms}"><span>{lang confirms}</span></button>
 			</p>
 		<!--{/if}-->
 	</form>
 </div>
 
-<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}" reload="1"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}" reload="1"></script>
 
 <script type="text/javascript" reload="1">
 function succeedhandle_mods(locationhref) {

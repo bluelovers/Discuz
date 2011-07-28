@@ -12,9 +12,6 @@
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
-
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
@@ -83,9 +80,6 @@
 			<!--{/if}-->
 <!--{else}-->
 <!--{template home/space_header}-->
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<div class="bm">
@@ -187,10 +181,10 @@
 											</a>
 										</div>
 										<h4>
-											<a href="home.php?mod=space&uid=$value[uid]"{eval g_color($value[groupid]);}>$value[username]</a>
-											<!--{eval g_icon($value[groupid]);}-->
+											<a href="home.php?mod=space&uid=$value[uid]"{eval g_color($value[groupid]);}>$value[username]</a> 
+											<!--{eval g_icon($value[groupid]);}--> 
 											<!--{if $value['videostatus']}-->
-												<img src="{IMGDIR}/videophoto.gif" alt="videophoto" class="vm" />
+												<img src="{IMGDIR}/videophoto.gif" alt="videophoto" class="vm" /> 
 											<!--{/if}-->
 											<!--{if $space[self]}-->
 												<span id="friend_note_$value[uid]" class="note xw0" title="$value[note]">$value[note]</span>
@@ -309,7 +303,7 @@
 
 	<div class="appl">
 		<!--{subtemplate home/space_friend_nav}-->
-
+		
 		<div class="drag">
 			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
 		</div>

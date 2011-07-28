@@ -1,5 +1,3 @@
-<!--{subtpl subblock/common/body_ct_footer}-->
-
 	</div>
 <!--{if empty($topic) || ($topic[usefooter])}-->
 	<!--{eval $focusid = getfocus_rand($_G[basescript]);}-->
@@ -43,11 +41,16 @@
 			</p>
 			<p class="xs0">
 				{lang time_now}
-				<!--{subtpl subblock/common/footer_debuginfo}-->
+				<span id="debuginfo">
+				<!--{if debuginfo()}-->, Processed in $_G[debuginfo][time] second(s), $_G[debuginfo][queries] queries
+					<!--{if $_G['gzipcompress']}-->, Gzip On<!--{/if}--><!--{if $_G['memory']}-->, <!--{echo ucwords($_G['memory'])}--> On<!--{/if}-->.
+				<!--{/if}-->
+				</span>
 			</p>
 		</div>
 		<div id="frt">
-			<!--{subtpl subblock/common/footer_copyright}-->
+			<p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em>$_G['setting']['version']</em><!--{if !empty($_G['setting']['boardlicensed'])}--> <a href="http://license.comsenz.com/?pid=1&host=$_SERVER[HTTP_HOST]" target="_blank">Licensed</a><!--{/if}--></p>
+			<p class="xs0">&copy; 2001-2011 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
 		</div>
 		<!--{eval updatesession();}-->
 		<!--{if $_G['uid'] && $_G['group']['allowinvisible']}-->
@@ -81,12 +84,12 @@
 
 <!--{if $_GET['diy'] == 'yes'}-->
 	<!--{if (CURMODULE == 'topic' || $_G['group']['allowdiy']) && (empty($do) || $do != 'index') && !empty($_G['style']['tplfile'])}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
-		<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal_diy.js?{VERHASH}"></script>
 	<!--{/if}-->
 	<!--{if $space['self'] && CURMODULE == 'space' && $do == 'index'}-->
-		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
-		<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}common_diy.js?{VERHASH}"></script>
+		<script type="text/javascript" src="{$_G[setting][jspath]}space_diy.js?{VERHASH}"></script>
 	<!--{/if}-->
 <!--{/if}-->
 <!--{if $_G['member']['newprompt'] && (empty($_G['cookie']['promptstate_'.$_G[uid]]) || $_G['cookie']['promptstate_'.$_G[uid]] != $_G['member']['newprompt']) && $_G['gp_do'] != 'notice'}-->

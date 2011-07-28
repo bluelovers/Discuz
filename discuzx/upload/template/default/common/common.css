@@ -7,84 +7,84 @@ Created & Modified by Lushnis, Pony, Dfox & DragonLee.
 
 ----------------------------------
 
-結構目錄：
-	1. 重定義瀏覽器默認樣式
-	2. 全局常用 CSS 樣式
-	3. 表單及表單元素
-	4. 頁面佈局以及通用的區塊樣式
-	5. 列表樣式vwmy
-	6. 其他特定功能塊
-		1. 個人中心面板
-		2. 簡易編輯器
-		3. 彈出菜單、彈出層及彈出窗口
-		4. 聯繫人列表、短消息窗口
-		5. 登錄和註冊
+结构目录：
+	1. 重定义浏览器默认样式
+	2. 全局常用 CSS 样式
+	3. 表单及表单元素
+	4. 页面布局以及通用的区块样式
+	5. 列表样式vwmy
+	6. 其他特定功能块
+		1. 个人中心面板
+		2. 简易编辑器
+		3. 弹出菜单、弹出层及弹出窗口
+		4. 联系人列表、短消息窗口
+		5. 登录和注册
 		6. 其他
-	7. 拖拽及頁面 DIY
+	7. 拖拽及页面 DIY
 
-	*  其他頁面專用樣式參見 module.css
+	*  其他页面专用样式参见 module.css
 
 ----------------------------------
 
-常用變量說明：
+常用变量说明：
 
-	通用邊框顏色：		{COMMONBORDER}		#CDCDCD
+	通用边框颜色：		{COMMONBORDER}		#CDCDCD
 	通用背景填充色：		{COMMONBG}			#F2F2F2
-	特殊邊框顏色：		{SPECIALBORDER}		#D1D9DF
+	特殊边框颜色：		{SPECIALBORDER}		#D1D9DF
 	特殊背景填充色：		{SPECIALBG}			#E9F2F9
 
 ----------------------------------
 
-CSS 樣式模塊的格式示例：
+CSS 样式模块的格式示例：
 
-	Name:			模塊名稱
-	Level:			級別（Global, Channel, Function）
-	Dependent:		依賴關係，該模塊必須依賴於何種模塊
-	Sample:			用法示例，或指出改模塊所作用的直接頁面
-	Explain:		附加說明
-	Author:			創建者 日期(兩位數年月日時)
-	Last Modify:	最終修改者 日期(兩位數年月日時)
+	Name:			模块名称
+	Level:			级别（Global, Channel, Function）
+	Dependent:		依赖关系，该模块必须依赖于何种模块
+	Sample:			用法示例，或指出改模块所作用的直接页面
+	Explain:		附加说明
+	Author:			创建者 日期(两位数年月日时)
+	Last Modify:	最终修改者 日期(两位数年月日时)
 
 ----------------------------------
 
-CSS 寫作注意事項：
-	1. 屬性寫在一行內，屬性之間、屬性名和值之間以及屬性與「{}」之間須有空格，例如：.class { width: 400px; height: 300px; }
-	2. 屬性的書寫順序：
-		2.1. 按照元素模型由外及內，由整體到細節書寫，大致分為五組：
+CSS 写作注意事项：
+	1. 属性写在一行内，属性之间、属性名和值之间以及属性与“{}”之间须有空格，例如：.class { width: 400px; height: 300px; }
+	2. 属性的书写顺序：
+		2.1. 按照元素模型由外及内，由整体到细节书写，大致分为五组：
 			位置：position,left,right,float
-			盒模型屬性：display,margin,padding,width,height
-			邊框與背景：border,background
-			段落與文本：line-height,text-indent,font,color,text-decoration,...
-			其他屬性：overflow,cursor,visibility,...
-		2.2. 針對特殊瀏覽器的屬性，應寫在標準屬性之前，例如：-webkit-box-shadow:; -moz-box-shadow:; box-shaow:;
-	3. 謹慎添加新的選擇符規則，尤其不可濫用 id，盡可能繼承和復用已有樣式
-	4. 選擇符、屬性、值均用小寫（格式的顏色值除外），縮寫的選擇符名稱須說明縮寫前的全稱，例如 .cl -> Clearfix
-	5. 避免使用各種 CSS Hack，如需對 IE 進行特殊定義，請參閱下節「關於 CSS Hack 的說明」
-	6. 勿使用冗餘低效的 CSS 寫法，例如：
+			盒模型属性：display,margin,padding,width,height
+			边框与背景：border,background
+			段落与文本：line-height,text-indent,font,color,text-decoration,...
+			其他属性：overflow,cursor,visibility,...
+		2.2. 针对特殊浏览器的属性，应写在标准属性之前，例如：-webkit-box-shadow:; -moz-box-shadow:; box-shaow:;
+	3. 谨慎添加新的选择符规则，尤其不可滥用 id，尽可能继承和复用已有样式
+	4. 选择符、属性、值均用小写（格式的颜色值除外），缩写的选择符名称须说明缩写前的全称，例如 .cl -> Clearfix
+	5. 避免使用各种 CSS Hack，如需对 IE 进行特殊定义，请参阅下节“关于 CSS Hack 的说明”
+	6. 勿使用冗余低效的 CSS 写法，例如：
 		ul li a span { ... }
 	7. 慎用 !important
-	8. 建議使用在 class/id 名稱中的詞語
-		6.1. 表示狀態：a->active
-		6.2. 表示結構：h->header,c->content,f->footer
-		6.3. 表示區域：mn->main,sd->side,nv-navigation,mu->menu
-		6.4. 表示樣式：l-list,tab,p_pop
-	9. 開發過程中的未定事項，須用 [!] 標出，以便於後續討論整理
+	8. 建议使用在 class/id 名称中的词语
+		6.1. 表示状态：a->active
+		6.2. 表示结构：h->header,c->content,f->footer
+		6.3. 表示区域：mn->main,sd->side,nv-navigation,mu->menu
+		6.4. 表示样式：l-list,tab,p_pop
+	9. 开发过程中的未定事项，须用 [!] 标出，以便于后续讨论整理
 
 ----------------------------------
 
-關於 CSS Hack 的說明：
+关于 CSS Hack 的说明：
 
-	所有 IE瀏覽器適用：	.ie_all .foo { ... }
-	IE6 專用：			.ie6 .foo { ... }
-	IE7 專用：			.ie7 .foo { ... }
-	IE8 專用：			.ie8 .foo { ... }
+	所有 IE浏览器适用：	.ie_all .foo { ... }
+	IE6 专用：			.ie6 .foo { ... }
+	IE7 专用：			.ie7 .foo { ... }
+	IE8 专用：			.ie8 .foo { ... }
 
 ---------------------------------- */
 
 /*
 	Name:			mod_reset
 	Level:			Global
-	Explain:		重定義瀏覽器默認樣式
+	Explain:		重定义浏览器默认样式
 	Last Modify:	Pony
 */
 	* { word-wrap: break-word; }
@@ -105,7 +105,7 @@ CSS 寫作注意事項：
 	Name:			mod_float
 	Level:			Global
 	Sample:			class="z/y"
-	Explain:		.z/.y 浮動 left/right
+	Explain:		.z/.y 浮动 left/right
 	Last Modify:	lushnis
 */
 	.z { float: left; } .y { float: right; }
@@ -114,7 +114,7 @@ CSS 寫作注意事項：
 	Name:			mod_clearfix
 	Level:			Global
 	Sample:			class="cl"
-	Explain:		Clearfix,避免因子元素浮動而導致的父元素高度缺失能問題
+	Explain:		Clearfix,避免因子元素浮动而导致的父元素高度缺失能问题
 	Last Modify:	lushnis
 */
 	.cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
@@ -123,7 +123,7 @@ CSS 寫作注意事項：
 	Name:			mod_hr
 	Level:			Global
 	Sample:			<hr />
-	Explain:		重定義 <hr /> 元素的樣式，去除默認邊距
+	Explain:		重定义 <hr /> 元素的样式，去除默认边距
 	Last Modify:	lushnis
 */
 	hr { display: block; clear: both; *margin-top: -8px !important; *margin-bottom: -8px !important; }
@@ -134,7 +134,7 @@ CSS 寫作注意事項：
 	Level:			Global
 	Dependent:		mod_hr
 	Sample:			<hr class="l" />
-	Explain:		定義 1px 高度實線樣式的 <hr /> 元素，具有兩個個擴展樣式，.l2 和 .l3，分別實現 2px 和 3px 的實線分割線
+	Explain:		定义 1px 高度实线样式的 <hr /> 元素，具有两个个扩展样式，.l2 和 .l3，分别实现 2px 和 3px 的实线分割线
 	Last Modify:	lushnis
 */
 	hr.l { height: 1px; border: none; background: {COMMONBORDER}; color: {COMMONBORDER}; }
@@ -145,7 +145,7 @@ CSS 寫作注意事項：
 	Level:			Global
 	Dependent:		mod_hr
 	Sample:			<hr class="da" />
-	Explain:		定義 1px 高度虛線樣式的 <hr /> 元素
+	Explain:		定义 1px 高度虚线样式的 <hr /> 元素
 	Last Modify:	lushnis
 */
 	hr.da { height: 0; border: none; border-top: 1px dashed {COMMONBORDER}; background: transparent; color: transparent; }
@@ -160,22 +160,22 @@ CSS 寫作注意事項：
 	Name:			mod_page_header
 	Level:			Global
 	Sample:			<h1 class="ph">Text</h1>
-	Explain:		頁面中標題級別的文字 [!]此處須整合為一個單獨 class
+	Explain:		页面中标题级别的文字 [!]此处须整合为一个单独 class
 	Last Modify:	lushnis
 */
-	/* .wx --> weight text 粗體字，通常用於大標題 */
+	/* .wx --> weight text 粗体字，通常用于大标题 */
 	.wx, .ph { font-family: "Microsoft YaHei", "Hiragino Sans GB", STHeiti, Tahoma, SimHei, sans-serif; font-weight: 100; }
 	/* Page header */ .ph { font-size: 20px; }
 	/* Main title */ .mt { padding: 10px 0; font-size: 16px; }
 
-/* 行內分割豎線 */ .pipe { margin: 0 5px; color: #CCC; }
+/* 行内分割竖线 */ .pipe { margin: 0 5px; color: #CCC; }
 
-/* 文本屬性：字號、顏色、粗細 */
+/* 文本属性：字号、颜色、粗细 */
 /*
 	Name:			mod_text_size
 	Level:			Global
 	Sample:			class="xs*"
-	Explain:		文字字號，分為四個級別
+	Explain:		文字字号，分为四个级别
 	Last Modify:	lushnis
 */
 	.xs0 { font-family: {SMFONT}; font-size: {SMFONTSIZE}; -webkit-text-size-adjust: none; }
@@ -187,7 +187,7 @@ CSS 寫作注意事項：
 	Level:			Global
 	Dependent:		-
 	Sample:			class="xs[*]"
-	Explain:		文字字號，分為四個級別
+	Explain:		文字字号，分为四个级别
 	Last Modify:	lushnis
 */
 	.xg1, .xg1 a { color: {LIGHTTEXT} !important; }
@@ -197,7 +197,7 @@ CSS 寫作注意事項：
 	Name:			mod_text_importance_level
 	Level:			Global
 	Sample:			class="xs[*]"
-	Explain:		文字提亮級別，分為兩級，默認模板中，1為橙色，2為藍色
+	Explain:		文字提亮级别，分为两级，默认模板中，1为橙色，2为蓝色
 	Last Modify:	lushnis
 */
 	.xi1, .onerror { color: {NOTICETEXT}; }
@@ -206,7 +206,7 @@ CSS 寫作注意事項：
 	Name:			mod_text_weight_level
 	Level:			Global
 	Sample:			class="xs[*]"
-	Explain:		文字字號，分為四個級別
+	Explain:		文字字号，分为四个级别
 	Last Modify:	lushnis
 */
 	.xw0 { font-weight: 400; }
@@ -216,7 +216,7 @@ CSS 寫作注意事項：
 	Level:			Global
 	Dependent:		-
 	Sample:			class="bbda/bbs"
-	Explain:		邊框樣式，該模塊僅作用於元素的下邊框，分為虛線和實線兩種，寬度均為 1px
+	Explain:		边框样式，该模块仅作用于元素的下边框，分为虚线和实线两种，宽度均为 1px
 	Last Modify:	lushnis
 */
 	.bbda { border-bottom: 1px dashed {COMMONBORDER}; }
@@ -225,7 +225,7 @@ CSS 寫作注意事項：
 	Name:			mod_border_reset
 	Level:			Global
 	Sample:			class="bw0/bw0_all"
-	Explain:		去除邊框
+	Explain:		去除边框
 	Last Modify:	lushnis
 */
 	.bw0 { border: none !important; }
@@ -234,7 +234,7 @@ CSS 寫作注意事項：
 	Name:			mod_background_reset
 	Level:			Global
 	Sample:			class="bg0_c/bg0_i/bg0_all"
-	Explain:		去除背景，bg0_c、bg0_i 和 bg0_all 分別為去除背景顏色、去除背景圖片和去除所有背景元素
+	Explain:		去除背景，bg0_c、bg0_i 和 bg0_all 分别为去除背景颜色、去除背景图片和去除所有背景元素
 	Last Modify:	Pony
 */
 	.bg0_c { background-color: transparent !important; }
@@ -245,14 +245,14 @@ CSS 寫作注意事項：
 	Name:			mod_notice_line
 	Level:			Global
 	Sample:			<div class="ntc_l">
-	Explain:		黃色背景的提示條，一般用在單行醒目提示，不可用於多行塊級區域
+	Explain:		黄色背景的提示条，一般用在单行醒目提示，不可用于多行块级区域
 	Last Modify:	lushnis
 */
 	.ntc_l { padding: 5px 10px; background: #FEFEE9; }
 		.ntc_l .d { width: 20px; height: 20px; background: url({IMGDIR}/op.png) no-repeat 0 0; line-height: 9999px; overflow: hidden; }
 			.ntc_l .d:hover { background-position: 0 -20px; }
 
-/* 圓角 [!]此處考慮棄用 */
+/* 圆角 [!]此处考虑弃用 */
 	.brs, .avt img { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 	.brm, .oshr { -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px; }
 	.brw { -moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;  }
@@ -260,7 +260,7 @@ CSS 寫作注意事項：
 	Name:			mod_margin
 	Level:			Global
 	Sample:			class="mtn/mtm/mtw/..."
-	Explain:		外邊距樣式，作用於元素的上下外邊距，上下各具有 n, m, w 三個級別
+	Explain:		外边距样式，作用于元素的上下外边距，上下各具有 n, m, w 三个级别
 	Last Modify:	lushnis
 */
 	.mtn { margin-top: 5px !important; }
@@ -273,7 +273,7 @@ CSS 寫作注意事項：
 	Name:			mod_padding
 	Level:			Global
 	Sample:			class="ptn/ptm/ptw/..."
-	Explain:		內邊距樣式，作用於元素的上下內邊距，上下各具有 n, m, w 三個級別
+	Explain:		内边距样式，作用于元素的上下内边距，上下各具有 n, m, w 三个级别
 	Last Modify:	lushnis
 */
 	.ptn { padding-top: 5px !important; }
@@ -286,7 +286,7 @@ CSS 寫作注意事項：
 	Name:			mod_avatar
 	Level:			Global
 	Sample:			<div class="avt"><img src="avatar source" alt="username" /></div>
-	Explain:		標準尺寸頭像樣式，默認為 48px*48px，帶邊框
+	Explain:		标准尺寸头像样式，默认为 48px*48px，带边框
 	Last Modify:	lushnis
 */
 	.avt img { padding: 2px; width: 48px; height: 48px; background: {WRAPBG}; border: 1px solid; border-color: {COMMONBG} {COMMONBORDER} {COMMONBORDER} {COMMONBG}; }
@@ -294,7 +294,7 @@ CSS 寫作注意事項：
 	Name:			mod_avatar_middle, mod_avatar_small
 	Level:			Global
 	Sample:			<div class="avtm/avts"><img src="avatar source" alt="username" /></div>
-	Explain:		中等尺寸和小尺寸頭像樣式，中等尺寸為寬度 120px，高度按比例；小尺寸為 24px*24px
+	Explain:		中等尺寸和小尺寸头像样式，中等尺寸为宽度 120px，高度按比例；小尺寸为 24px*24px
 	Last Modify:	lushnis
 */
 	.avtm img { width: 120px; height: auto; }
@@ -302,8 +302,8 @@ CSS 寫作注意事項：
 /*
 	Name:			mod_emp
 	Level:			Global
-	Sample:			<p class="emp">暫無數據</p>
-	Explain:		頁面中無數據輸出時，用此樣式顯示相關提示，如無特殊必要，建議使用 <p> 而不是 <div>
+	Sample:			<p class="emp">暂无数据</p>
+	Explain:		页面中无数据输出时，用此样式显示相关提示，如无特殊必要，建议使用 <p> 而不是 <div>
 	Last Modify:	lushnis
 */
 	.emp { padding: 20px 10px; }
@@ -312,7 +312,7 @@ CSS 寫作注意事項：
 	Name:			mod_align
 	Level:			Global
 	Sample:			class="vm/hm"
-	Explain:		縱向及橫向對齊方式
+	Explain:		纵向及横向对齐方式
 	Last Modify:	lushnis
 */
 	.vm { vertical-align: middle; }
@@ -322,7 +322,7 @@ CSS 寫作注意事項：
 	Name:			mod_alt
 	Level:			Global
 	Sample:			class="{echo swapclass('alt');}"
-	Explain:		隔行換色時深色背景
+	Explain:		隔行换色时深色背景
 	Last Modify:	lushnis
 */
 	.alt, .alt th, .alt td { background-color: {COMMONBG}; }
@@ -330,7 +330,7 @@ CSS 寫作注意事項：
 	Name:			mod_notice
 	Level:			Global
 	Sample:			class="notice"
-	Explain:		類似統計中需注意的文字樣式 [!]此處須考慮名稱簡寫為 ntc
+	Explain:		类似统计中需注意的文字样式 [!]此处须考虑名称简写为 ntc
 	Last Modify:	lushnis
 */
 	.notice { clear: both; margin: 5px 0; padding: 3px 5px 3px 20px; background: url({IMGDIR}/notice.gif) no-repeat 2px 6px; }
@@ -338,7 +338,7 @@ CSS 寫作注意事項：
 	Name:			mod_ajax_wait_info
 	Level:			Global
 	Sample:			id="ajaxwaitid"
-	Explain:		相應頁面中 AJAX 請求時的狀態顯示
+	Explain:		相应页面中 AJAX 请求时的状态显示
 	Last Modify:	lushnis
 */
 	#ajaxwaitid { display: none; position: absolute; right: 0; top: 0; z-index: 1; padding: 0 5px; background: #D00; color: {LIGHTLINK}; }
@@ -346,7 +346,7 @@ CSS 寫作注意事項：
 	Name:			mod_showmenu
 	Level:			Global
 	Sample:			class="showmenu"
-	Explain:		下拉菜單
+	Explain:		下拉菜单
 	Last Modify:	lushnis
 */
 	.showmenu { padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; cursor: pointer; white-space: nowrap; }
@@ -356,16 +356,16 @@ CSS 寫作注意事項：
 	Name:			mod_cursor
 	Level:			Global
 	Sample:			class="cur1"
-	Explain:		鼠標樣式，可以根據需要按序添加
+	Explain:		鼠标样式，可以根据需要按序添加
 	Last Modify:	Pony
 */
 	.cur1 { cursor: pointer; }
 
-/* 如果驗證碼有錯亂，可添加此樣式.sec（全局，修改時要小心，會涉及分享、快速回復和 feed日誌相冊中的評論等地方） by Pony */
+/* 如果验证码有错乱，可添加此样式.sec（全局，修改时要小心，会涉及分享、快速回复和 feed日志相册中的评论等地方） by Pony */
 .ie6 .sec .p_pop { white-space: expression(this.offsetWidth >= 220 ? 'normal' : 'nowrap'); width: expression(this.offsetWidth >= 220 ? 200 : 'auto'); }
 
 
-/* ------------------------------------------------------------------------ 表單及表單元素 */
+/* ------------------------------------------------------------------------ 表单及表单元素 */
 		/*
 		.pn				button
 			.pnc		button with light color
@@ -380,13 +380,13 @@ CSS 寫作注意事項：
 		.ofav			fav button with oshr
 		*/
 
-/* 必填項 */ .rq { color: red; }
+/* 必填项 */ .rq { color: red; }
 
 /*
 	Name:			mod_input[text]_textarea_select
 	Level:			Global
 	Sample:			class="px/pt/ps"
-	Explain:		單行輸入框（px）、多行文本框（pt）和選擇框(ps/select)
+	Explain:		单行输入框（px）、多行文本框（pt）和选择框(ps/select)
 	Last Modify:	Pony
 */
 	.px, .pt, .ps, select { border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; color: {TEXT}; }
@@ -400,7 +400,7 @@ CSS 寫作注意事項：
 			div.pt { height: 100px; line-height: 100px; }
 		.ps, select { padding: 2px 2px 2px 1px; }
 			.ie8 .ps, .ie8 select { padding: 2px; }
-		/* 自動調整高度的 textarea by Pony */
+		/* 自动调整高度的 textarea by Pony */
 		.pts { vertical-align: top; overflow: hidden; }
 		.cmt .pts { width: 60%; }
 
@@ -408,7 +408,7 @@ CSS 寫作注意事項：
 	Name:			mod_button
 	Level:			Global
 	Sample:			<button class="pn">Submit</button>
-	Explain:		按鈕樣式
+	Explain:		按钮样式
 	Last Modify:	Pony
 */
 	button::-moz-focus-inner { border: 0; padding: 0; }
@@ -435,7 +435,7 @@ CSS 寫作注意事項：
 	Name:			mod_input[radio]_input[checkbox]_label
 	Level:			Global
 	Sample:			class="pr/pc/lb"
-	Explain:		單選按鈕(pr)、多選框(pc)和<label>(lb)
+	Explain:		单选按钮(pr)、多选框(pc)和<label>(lb)
 	Last Modify:	Pony
 */
 	.pr, .pc { vertical-align: middle; margin: 0 5px 1px 0; padding: 0; }
@@ -447,7 +447,7 @@ CSS 寫作注意事項：
 	Name:			mod_narrow_input
 	Level:			Global
 	Sample:			<div class="pns"></div>
-	Explain:		小尺寸的輸入框和按鈕樣式。該樣式在模板中保留，目前樣式為空。
+	Explain:		小尺寸的输入框和按钮样式。该样式在模板中保留，目前样式为空。
 	Last Modify:	Pony
 */
 	.pns .px {}
@@ -461,7 +461,7 @@ CSS 寫作注意事項：
 							<option>Option</option>
 						</select>
 					</div>
-	Explain:		模擬下拉菜單樣式
+	Explain:		模拟下拉菜单样式
 	Last Modify:	Pony
 */
 .ftid { float: left; margin-right: 6px; }
@@ -478,8 +478,8 @@ CSS 寫作注意事項：
 		.sltm li:hover { color: {HIGHLIGHTLINK}; }
 		.sltm li.current { color: {NOTICETEXT}; }
 
-/* 分享按鈕 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%;  }
-/* 收藏按鈕 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
+/* 分享按钮 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%;  }
+/* 收藏按钮 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
 
 
 /*
@@ -493,7 +493,7 @@ CSS 寫作注意事項：
 							</tr>
 						</table>
 					</form>
-	Explain:		表單樣式
+	Explain:		表单样式
 	Last Modify:	Pony
 */
 	.tfm { width: 100%; }
@@ -517,7 +517,7 @@ CSS 寫作注意事項：
 /*
 	Name:			mod_postboxtitle
 	Level:			Function
-	Explain:		發帖頁面、彈窗等的標題欄
+	Explain:		发帖页面、弹窗等的标题栏
 	Last Modify:	Pony
 */
 .pbt { margin-bottom: 10px; }
@@ -535,7 +535,7 @@ CSS 寫作注意事項：
 		.alert_btn { margin-top: 20px; text-align: center; }
 		.alert_act { margin-top: 20px; padding-left: 58px; }
 
-/* 發帖導航 by lushnis */
+/* 发帖导航 by lushnis */
 .pbnv { float: left; white-space: nowrap; overflow: hidden; width: 400px; padding: 7px 0; }
 .pbl { overflow: hidden; margin: 9px 0; width: 621px; border-width: 1px 0 1px 1px; border-style: solid; border-color: #CCC; background: {WRAPBG}; }
 	.pbl li { float: left; overflow-x: hidden; overflow-y: auto; padding: 5px; width: 196px; height: 300px; border-right: 1px solid #CCC; }
@@ -546,7 +546,7 @@ CSS 寫作注意事項：
 	.pbls a, .pbls a:hover { background-color: #EEE; color: {MIDTEXT}; font-weight: 700; }
 		.pbsb { background: url({IMGDIR}/arrow.gif) right -33px no-repeat; }
 
-/* ------------------------------------------------------------------------ 頁面佈局 */
+/* ------------------------------------------------------------------------ 页面布局 */
 		/*
 		#hd				Header
 			#nv			Navigation
@@ -566,9 +566,9 @@ CSS 寫作注意事項：
 		.pmfl			PM friend list (Window)
 		*/
 
-/* 通用容器，定義頁面寬度 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
+/* 通用容器，定义页面宽度 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
 
-/* 頁頭 */
+/* 页头 */
 	#toptb { line-height: 24px; }
 		#toptb a { float: left; padding: 0 4px; height: 24px; }
 		#toptb a.showmenu { padding-right: 15px; }
@@ -630,7 +630,7 @@ CSS 寫作注意事項：
 				#um .avt { display: inline; margin-right: -60px; }
 				.vwmy { padding-left: 16px; background: url({IMGDIR}/user_online.gif) no-repeat 0 2px; }
 					.vwmy.qq { background: url({IMGDIR}/connect_qq.gif) no-repeat scroll 0 0; padding-left: 20px; }
-				/* .topnav .new, .sch .new 分別為為個人中心和搜索頁面頭部新消息樣式 */
+				/* .topnav .new, .sch .new 分别为为个人中心和搜索页面头部新消息样式 */
 				#um .new, .topnav .new, .sch .new, #toptb .new { padding-left: 20px; background-repeat: no-repeat; background-position: 0 50%; color: {HIGHLIGHTLINK}; font-weight: 700; }
 					#myprompt.new { background-image: url({IMGDIR}/notice.gif); background-position: 3px 50%; }
 					#pm_ntc.new { background-image: url({IMGDIR}/new_pm.gif); }
@@ -653,7 +653,7 @@ CSS 寫作注意事項：
 					#qmenu_menu ul a { margin-bottom: 10px; padding: 47px 0 0; width: 60px; border: none; border-radius: 4px; background: url({IMGDIR}/noicon.gif) no-repeat 50% 5px; text-align: center; }
 						#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
 
-/* 頁面主區域 */
+/* 页面主区域 */
 	#ct { min-height: 300px; }
 		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
@@ -679,7 +679,7 @@ CSS 寫作注意事項：
 		.mnw { clear: both; border-top: 1px solid #CCC; }
 		.mnh { width: 643px; background: {COMMONBG}; margin-bottom: 0; }
 
-/* 頁尾 */
+/* 页尾 */
 	#ft { padding: 10px 0 50px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT}; }
 		#flk { text-align: right; }
 			#flk img { vertical-align: middle; }
@@ -687,13 +687,13 @@ CSS 寫作注意事項：
 		.ie6 #scrolltop { position: absolute; bottom: auto; }
 		#nv_home #ft, .pg_announcement #ft, .pg_modcp #ft, .pg_portalcp #ft, .pg_ranklist #ft, #nv_userapp #ft { border-top: none; }
 
-/* 通用的區域塊 */
+/* 通用的区域块 */
 	/*
-	.bm 是最常用的區塊元素，默認帶有 1px 的邊框和 10px 的下邊距。一般情況下，.bm 內應包括兩個子容器：.bm_h 和 .bm_c，前者代表區塊頭部，帶有灰色背景和下邊框；後者是容器主體，默認帶有 10px 的內邊距。
-	.bm 另有三種子樣式
-		.bmw	Weight		頭部為彩色背景
-		.bml	Lite		頭部無背景填充
-		.bmn	Notice		整體帶有彩色背景，常用於提示信息
+	.bm 是最常用的区块元素，默认带有 1px 的边框和 10px 的下边距。一般情况下，.bm 内应包括两个子容器：.bm_h 和 .bm_c，前者代表区块头部，带有灰色背景和下边框；后者是容器主体，默认带有 10px 的内边距。
+	.bm 另有三种子样式
+		.bmw	Weight		头部为彩色背景
+		.bml	Lite		头部无背景填充
+		.bmn	Notice		整体带有彩色背景，常用于提示信息
 	*/
 	.bm, .bn { margin-bottom: 10px; }
 		.bm { border: 1px solid {COMMONBORDER}; background: {WRAPBG}; }
@@ -719,13 +719,13 @@ CSS 寫作注意事項：
 		.bm2 .bm2_b_y { float: right; }
 	.bw0 { background: transparent; }
 
-	/* 寬佈局下的通用塊 */.bw { padding: 0 15px; }
+	/* 宽布局下的通用块 */.bw { padding: 0 15px; }
 
 /*
 	Name:			mod_path
 	Level:			Global
 	Sample:			<div id="pt"><div class="z">Path here</div></div>
-	Explain:		麵包屑導航
+	Explain:		面包屑导航
 	Last Modify:	lushnis
 */
 	#pt { margin: 2px 0; height: 29px; border:none; background: transparent; line-height: 29px; }
@@ -733,10 +733,10 @@ CSS 寫作注意事項：
 		#pt .z a, #pt .z em, #pt .z span { float: left; height: 29px; }
 		#pt .z em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 3px 10px; line-height: 200px; overflow: hidden; }
 		.nvhm { width: 16px; background: url({IMGDIR}/search.png) no-repeat -8px -119px; line-height: 200px; overflow: hidden; }
-			/* XP 或 Windows 7，IE 最高版本為 8 或 9，這幾種組合情況對字體的渲染存在差異，所以需要對背景進行微調，以適應更多情況 by Pony 11050511 */
+			/* XP 或 Windows 7，IE 最高版本为 8 或 9，这几种组合情况对字体的渲染存在差异，所以需要对背景进行微调，以适应更多情况 by Pony 11050511 */
 			.ie_all #pt .z em { background-position: 3px 9px; }
 			.ie_all .nvhm { background-position: -8px -120px; }
-/* 統計數據 */
+/* 统计数据 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
 		.tns th, .tns td { text-align: center; font-size: 12px; }
@@ -744,7 +744,7 @@ CSS 寫作注意事項：
 		.tns th { border-right: 1px solid #CCC; }
 		.tns th p, .tns td p { font-size: 14px; margin: 0; }
 
-/* 帶圖標頁面頭部 ih. --> icon header */
+/* 带图标页面头部 ih. --> icon header */
 	.ih .icn { float: left; width: 60px; }
 	.ih dl { margin-left: 60px; }
 		.ih dt { font-size: 14px; font-weight: 700; }
@@ -759,7 +759,7 @@ CSS 寫作注意事項：
 						<li class="a"><a href="#">Active Tab Item</a></li>
 						<li><a href="#">Tab Item</a></li>
 					</ul>
-	Explain:		標籤樣式
+	Explain:		标签样式
 	Last Modify:	lushnis
 */
 .tb { margin-top: 10px; padding-left: 5px; line-height: 30px; border-bottom: 1px solid {COMMONBORDER}; }
@@ -779,46 +779,46 @@ CSS 寫作注意事項：
 		.tb_h a { border-top: none; border-left: none; }
 	.tb_s { margin-top: 0; line-height: 26px; }
 		
-	/* 類似menu的Tab */
+	/* 类似menu的Tab */
 .tbmu { padding: 10px; border-bottom: 1px dashed {COMMONBORDER}; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
-	/* tab的強調信息提示 */
+	/* tab的强调信息提示 */
 .tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 50%; }
 .tbms_r { background-image: url({IMGDIR}/data_valid.gif); }
-	/* 極簡 Tab */
+	/* 极简 Tab */
 .tbx { margin: 10px 0; }
 	.tbx span { margin-right: 10px; cursor: pointer; }
 	.tbx .a { padding: 3px 5px; border: solid #999; border-width: 0 1px 1px 0; background: {COMMONBG} url({IMGDIR}/thead.png) repeat-x 0 -20px; }
 	.tbx strong { color: {NOTICETEXT}; }
-/* 類似相冊側邊切換頁面用的 */
+/* 类似相册侧边切换页面用的 */
 .obn { border-bottom: 1px solid {COMMONBORDER}; }
 	.obn select { width: 100%; margin-bottom: 5px; }
 
-/* 廣告 */
-	/* 頁頭廣告 */ .a_h { padding-top: 5px; }
-	/* 二級導航廣告 */ .a_mu { border: solid {COMMONBORDER}; border-width: 0 1px 1px; background: {COMMONBG}; }
-	/* 頁尾廣告 */ .a_f { margin: 5px auto; }
-	/* 日誌內容廣告 */ .a_b { float: right; margin: 0 0 5px 5px; }
-	/* 格子廣告 */ .a_t { margin-bottom: 10px; }
+/* 广告 */
+	/* 页头广告 */ .a_h { padding-top: 5px; }
+	/* 二级导航广告 */ .a_mu { border: solid {COMMONBORDER}; border-width: 0 1px 1px; background: {COMMONBG}; }
+	/* 页尾广告 */ .a_f { margin: 5px auto; }
+	/* 日志内容广告 */ .a_b { float: right; margin: 0 0 5px 5px; }
+	/* 格子广告 */ .a_t { margin-bottom: 10px; }
 		.a_t table { width: 100%; }
 		.a_t td { padding: 4px 15px; border: 1px solid {COMMONBORDER}; }
-	/* 帖內廣告 */ .a_pr { float: right; width: 120px; overflow: hidden; }
+	/* 帖内广告 */ .a_pr { float: right; width: 120px; overflow: hidden; }
 		.a_pt, .a_pb { background: url({IMGDIR}/ad.gif) no-repeat 0 50%; margin-bottom: 6px; padding-left: 20px; zoom: 1; }
-	/* 漂浮廣告 */ .a_fl, .a_fr { float: right; position: fixed; top: 350px; z-index: 100; }
+	/* 漂浮广告 */ .a_fl, .a_fr { float: right; position: fixed; top: 350px; z-index: 100; }
 		.a_fl { left: 0; }
 		.a_fr { right: 0; text-align: right; }
 		* html .a_fl, * html .a_fr { position: absolute; top: expression(offsetParent.scrollTop+350); }
-	/* 對聯廣告 */ .a_cb { top: 20px }
+	/* 对联广告 */ .a_cb { top: 20px }
 		* html .a_cb { top: expression(offsetParent.scrollTop+20); }
-	/* 文章漂浮廣告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
-	/* 右下角廣告 */ .a_cn { position: fixed; right: 10px; bottom: 10px; z-index: 300; }
+	/* 文章漂浮广告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
+	/* 右下角广告 */ .a_cn { position: fixed; right: 10px; bottom: 10px; z-index: 300; }
 		* html .a_cn { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
 		.a_cn .close { text-align: right; }
 
 	.a_h, .a_mu, .a_c, .a_p, .a_f, .a_t { text-align: center; }
 
-/* ------------------------------------------------------------------------ 列表樣式 */
+/* ------------------------------------------------------------------------ 列表样式 */
 		/*
 		.xl				Text list
 			.xl1		1 line list ( wrap text will be hidden );
@@ -862,7 +862,7 @@ CSS 寫作注意事項：
 		.xlda dd a { color: {HIGHLIGHTLINK}; }
 		.xlda dd .hot { color: {NOTICETEXT}; }
 
-/* 圖片列表 */
+/* 图片列表 */
 .ml {}
 	.ml li { float: left; padding: 0 5px 5px; text-align: center; overflow: hidden; }
 		.ml img { display: block; margin: 0 auto; }
@@ -885,12 +885,12 @@ CSS 寫作注意事項：
 		.mlp img { padding: 2px; max-width: 120px; max-height: 120px; border: 1px solid #CCC; background: {WRAPBG}; }
 		* html .mlp img { width: expression(this.width > 120 && this.width>=this.height ? 120 : true); height: expression(this.height > 120 && this.width<=this.height ? 120 : true); }
 
-/* 用戶頭像列表時，各種狀態圖標。.gm -> 管理員; .gs -> 明星會員 ; .gol -> 在線會員; */
+/* 用户头像列表时，各种状态图标。.gm -> 管理员; .gs -> 明星会员 ; .gol -> 在线会员; */
 .gm, .gs, .gol { position: absolute; overflow: hidden; margin: -3px 0 0 -3px; width: 60px; height: 18px; background: url({IMGDIR}/gst.gif) no-repeat 0 0; display: block;/* ie6 */ }
 .gs { background-position: 0 -18px; }
 .gol { background-position: 0 -36px; }
 
-/* 應用列表*/
+/* 应用列表*/
 	.appl ul { margin: 3px 0; }
 	.appl li { display: block; height: 28px; line-height: 28px; white-space: nowrap; word-wrap: normal; font-size: 14px; text-overflow: ellipsis; overflow: hidden; }
 	.appl li a { text-decoration: none !important; }
@@ -898,11 +898,11 @@ CSS 寫作注意事項：
 	.appl span { float: right; font-size: 12px; }
 		.appl span a { color: {LIGHTTEXT}; }
 			.appl span a:hover { color: {HIGHLIGHTLINK}; }
-	/* 應用側邊 by Pony */
+	/* 应用侧边 by Pony */
 	.myo li { height: auto; line-height: 1.5; }
 	.myo img { margin-bottom: -1px; }
 	.myo a { color: {HIGHLIGHTLINK}; }
-	/* 側邊管理列表 */
+	/* 侧边管理列表 */
 	.tbn { margin: -6px -10px 0; }
 		.tbn ul { margin: 0; }
 			.tbn li { margin: 0 10px; height: 33px; border-bottom: 1px dashed #CCC; }
@@ -921,7 +921,7 @@ CSS 寫作注意事項：
 						<li class="a"><a href="#">Active Tab Item</a></li>
 						<li><a href="#">Tab Item</a></li>
 					</ul>
-	Explain:		友情鏈接
+	Explain:		友情链接
 	Last Modify:	lushnis
 */
 	.lk img { float: left; margin-right: 5px; margin-bottom: 5px; width: 88px; height: 31px; }
@@ -931,8 +931,8 @@ CSS 寫作注意事項：
 	.lk .x li { float: left; margin-right: 5px; width: 88px; height: 1.5em; overflow: hidden; }
 	.lk_logo .lk_content { float: left; }
 
-/* ------------------------------------------------------------------------ 其他特定功能塊 */
-/* 簡易編輯器 Tiny Editor */
+/* ------------------------------------------------------------------------ 其他特定功能块 */
+/* 简易编辑器 Tiny Editor */
 	.tedt { width: 98%; border: 1px solid; border-color: #999 #CCC #CCC #999; }
 		.tedt .bar { padding: 0 10px 0 0; height: 25px; line-height: 25px; border-bottom: 1px solid {COMMONBORDER}; background: {COMMONBG}; }
 			.fpd a { float: left; margin: 2px 5px 0 0; width: 20px; height: 20px; background: url({STATICURL}image/editor/editor.gif) no-repeat; text-indent: -9999px; line-height: 20px; overflow: hidden; }
@@ -960,7 +960,7 @@ CSS 寫作注意事項：
 	Name:			mod_style_selector
 	Level:			Fuction
 	Dependent:		mod_popupmenu
-	Explain:		風格切換菜單
+	Explain:		风格切换菜单
 	Last Modify:	lushnis
 */
 	#toptb a#sslct { width: 10px; background: url({IMGDIR}/style_switch.png) no-repeat 50% 50%; text-indent: -9999px; overflow: hidden; }
@@ -968,7 +968,7 @@ CSS 寫作注意事項：
 		 .sslct_btn { float: left; margin: 4px 4px 0 0; width: 12px; height: 12px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
 			.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
 
-/* 彈出菜單、彈出層及彈出窗口 */
+/* 弹出菜单、弹出层及弹出窗口 */
 	.p_pop, .p_pof, .sllt { padding: 4px; border: 1px solid; min-width: 60px; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE}; box-shadow: 1px 2px 2px rgba(0,0,0,0.3); }
 		.ie6 .p_pop { width: 100px; }
 		.ie_all .p_pop, .ie_all .p_pof, .ie_all .sllt { filter: progid:DXImageTransform.Microsoft.Shadow(color=#999999,direction=135,strength=1); }
@@ -979,24 +979,24 @@ CSS 寫作注意事項：
 			.p_pop li:last-child a { border: none; }
 			.ie6 .p_pop a { position: relative; }
 			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
-		/* .blk -> block 內容較為複雜的彈出層使用 .blk 的 class，內部的 a 標籤重新定義 */
+		/* .blk -> block 内容较为复杂的弹出层使用 .blk 的 class，内部的 a 标签重新定义 */
 		.blk a, .inlinelist a { display: inline; padding: 0; border: none; }
 			.blk a:hover { background: none; color: {LINK}; text-shadow: none; text-decoration: underline; }
 		.inlinelist { padding: 5px; }
 			.inlinelist a { float: left; width: 5em; height: 2em; overflow: hidden; text-align: center; line-height: 2em; }
 	.h_pop { min-width: 120px; border-top: none; }
-/* .txt 和 .textarea 屬於舊的命名規範，待整理 by lushnis */.p_opt .txt, .p_opt .txtarea { margin: 5px 0; }
+/* .txt 和 .textarea 属于旧的命名规范，待整理 by lushnis */.p_opt .txt, .p_opt .txtarea { margin: 5px 0; }
 
 	.p_pop .flbc, .p_pof .flbc{margin-right: 8px;margin-top: 4px;}
 
-/* 彈出層 以下 class 都可以分開寫，單獨定義，以便個性化 */
-	/* 四條邊、四個角的公用樣式 */
+/* 弹出层 以下 class 都可以分开写，单独定义，以便个性化 */
+	/* 四条边、四个角的公用样式 */
 	.t_l, .t_c, .t_r, .m_l, .m_r, .b_l, .b_c, .b_r { overflow: hidden; {FLOATMASKBGCODE}; opacity: 0.2; filter: alpha(opacity=20); }
-	/* 四個角 */
+	/* 四个角 */
 	.t_l, .t_r, .b_l, .b_r { width: 8px; height: 8px; }
-	/* 上下兩條邊 */
+	/* 上下两条边 */
 	.t_c, .b_c { height: 8px; }
-	/* 左右兩條邊 */
+	/* 左右两条边 */
 	.m_l, .m_r { width: 8px; }
 
 	.t_l { -moz-border-radius: 8px 0 0 0; -webkit-border-radius: 8px 0 0 0; border-radius: 8px 0 0 0; }
@@ -1005,15 +1005,15 @@ CSS 寫作注意事項：
 	.b_r { -moz-border-radius: 0 0 8px 0; -webkit-border-radius: 0 0 8px 0; border-radius: 0 0 8px 0; }
 	.m_c { {FLOATBGCODE}; }
 
-/* 彈出層內容區 by Pony */
+/* 弹出层内容区 by Pony */
 	.m_c .tb { margin: 0 0 10px; padding: 0 10px; }
 	.m_c .c { padding: 0 10px 10px; }
 	.m_c .o { padding: 8px 10px; height: 26px; text-align: right; border-top: 1px solid #CCC; background: {COMMONBG}; }
-		/* 分享時會用到 */
+		/* 分享时会用到 */
 	.m_c .el { width: 420px; }
 		.m_c .el li { padding: 0; border: none; }
 
-/* .flb 彈出層header */
+/* .flb 弹出层header */
 	.flb { padding: 10px 10px 8px; height: 20px; line-height: 20px; }
 		.flb em { float: left; font-size: 14px; font-weight: 700; color: {HIGHLIGHTLINK}; }
 			.flb em a { text-decoration: none; }
@@ -1040,13 +1040,13 @@ CSS 寫作注意事項：
 				.f_c .th th, .f_c .th td { padding: 10px 0; }
 				.f_c .list th { background: none; }
 
-/* 彈窗未開啟時 nofloat */
+/* 弹窗未开启时 nofloat */
 .nfl { height: auto !important; height: 320px; min-height: 320px; }
 	.nfl .f_c { margin: 60px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
 	.nfl .loginform { height: auto; }
 	.nfl .clause { width: auto; height: auto; }
 
-/* dropdownbtn 下拉菜單 */
+/* dropdownbtn 下拉菜单 */
 .hasd {}
 	.hasd input { float: left; width: 121px; }
 		.hasd input.crl { padding: 0; width: 20px; height: 20px; background: none; border-style: solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; border-width: 1px 0 1px 1px; }
@@ -1057,16 +1057,16 @@ CSS 寫作注意事項：
 		.tpclg h4 a.dpbtn { float: right; border-width: 1px; }
 		.tpclg h4 { font-weight: 400; }
 		.tpclg .pt { margin: 5px 0; width: 212px; overflow: hidden; }
-		/* 下面兩行為評分時用到的 */
+		/* 下面两行为评分时用到的 */
 		.mark .dt, .mark .tpclg h4 { width: 270px; }
 		.mark .tpclg .pt { width: 260px; }
 	#postbox dd.hasd input { width: 99px; margin-right: 0; }
 
-/*彈窗 編輯器 顏色框 colorbox*/
+/*弹窗 编辑器 颜色框 colorbox*/
 .colorbox{ width: 130px !important; }
 .colorbox input { float: left; margin: 2px; padding: 0; width: 12px; height: 12px; border: 0; cursor: pointer; }
 
-/* 短消息對話框 .pm -> personal_message (window) by Pony */
+/* 短消息对话框 .pm -> personal_message (window) by Pony */
 	.pm { overflow: hidden; width: 400px; }
 		.pm .flb { margin-bottom: 0; padding: 1px 5px 4px; background: #CCC url({IMGDIR}/pm.png) repeat-x 0 -101px; }
 			* html .pm .flb { padding: 4px 5px 1px; }
@@ -1081,7 +1081,7 @@ CSS 寫作注意事項：
 					.pmd, .pmd img { max-width: 292px; }
 					* html .pmd { width: expression(this.offsetWidth > 292 ? 292+'px':'auto'); }
 						* html .pmd img { width: expression(this.width > 292 ? 292 : true); }
-					/* 短消息下的引用和代碼樣式 */
+					/* 短消息下的引用和代码样式 */
 					.pmd .quote { overflow: hidden; margin: 0; padding-left: 16px; background: url({IMGDIR}/qa.gif) no-repeat 0 0; color: {MIDTEXT}; }
 						.pmd .quote blockquote { display: inline; margin: 0; padding-right: 16px; background: url({IMGDIR}/qz.gif) no-repeat 100% 100%; }
 					.pmd .blockcode { overflow: hidden; margin: 0; padding: 0; background: transparent; color: {MIDTEXT}; }
@@ -1096,7 +1096,7 @@ CSS 寫作注意事項：
 			.pmfm .pn { float: right; }
 			.pma a { margin-right: 5px; }
 
-/* 短消息聯繫人列表 by Pony */
+/* 短消息联系人列表 by Pony */
 	.pmo { position: absolute; top: 8px; right: 10px; overflow: hidden; padding-left: 10px; width: 130px; height: 31px; line-height: 24px; line-height /*\**/: 26px\9; background: url({IMGDIR}/pn.png) repeat-x 0 -320px; text-shadow: 1px 1px 1px {WRAPBG}; }
 		.pmo em { display: block; padding: 3px 5px 4px 0; background: url({IMGDIR}/pn.png) no-repeat 100% -360px; }
 		.pmo a { overflow: hidden; white-space: nowrap; display: block; padding-right: 10px; background: url({IMGDIR}/pm.png) no-repeat 100% -222px; outline: none; }
@@ -1112,16 +1112,16 @@ CSS 寫作注意事項：
 			.pmfl li { padding: 5px; height: 24px; }
 			.pmfl .avt { float: left; width: 29px; height: 29px; }
 				.pmfl .avt img { padding: 0; width: 24px; height: 24px; border: none; }
-				/* 跳動的頭像樣式 by Pony */
+				/* 跳动的头像样式 by Pony */
 				.pmfl .newpm img { margin: 1px 0 0 1px; }
 			.pmfl p { overflow: hidden; white-space: nowrap; width: 78px; }
-				/* 當前交談的用戶 */
+				/* 当前交谈的用户 */
 				.pmfl p .a { color: red; }
-				/* 在線的用戶 */
+				/* 在线的用户 */
 				.pmfl p .ol { color: {LINK}; }
 				.pmfl strong { color: #000; }
 
-/* 登錄和註冊 */
+/* 登录和注册 */
 
 .rfm { margin: 0 auto; width: 760px; border-bottom: 1px dotted {COMMONBORDER}; }
 		.rfm a { color: {HIGHLIGHTLINK}; }
@@ -1151,7 +1151,7 @@ CSS 寫作注意事項：
 .lgfm { font: {FONTSIZE} {FONT}; float: left; margin-bottom: 10px; *margin-bottom: -10px; padding: 20px 0; width: 280px; border-right: 1px solid #CCC; }
 	.rgs { margin-bottom: 10px; }
 	.lgfm label, .lgfm p, .reginfo { clear: both; overflow: hidden; display: block; margin-bottom: 10px; line-height: 22px; }
-		/* 自定義的註冊信息 */
+		/* 自定义的注册信息 */
 		.reginfo label { display: inline; }
 		.reg_c { float: left; width: 200px; }
 	.lgfm .txt, .lgfm .px { padding: 2px 4px; height: 16px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background-image: none; }
@@ -1183,7 +1183,7 @@ CSS 寫作注意事項：
 /*
 	Name:			mod_messagelogin
 	Level:			Global
-	Explain:		showmessage 處的登錄框
+	Explain:		showmessage 处的登录框
 	Last Modify:	lushnis
 */
 #messagelogin { margin-top: 5px; border-top: 1px solid {COMMONBORDER}; }
@@ -1196,7 +1196,7 @@ CSS 寫作注意事項：
 /*
 	Name:			mod_fast_login
 	Level:			Global
-	Explain:		頁面頭部的快速登錄
+	Explain:		页面头部的快速登录
 	Last Modify:	Pony 11061011
 */
 .fastlg { line-height: 24px; }
@@ -1213,17 +1213,17 @@ CSS 寫作注意事項：
 		.poke li { float: left; margin: 0 1% 5px 0; width: 32%; height: 22px; }
 		.poke img { vertical-align: middle; }
 
-/* 普通數據列表 datatable by michael */
+/* 普通数据列表 datatable by michael */
 .dt { border-top: 1px solid {COMMONBORDER}; width: 100%; }
 	.dt th { background: {COMMONBG}; }
 	.dt td, .dt th { padding: 7px 4px; border-bottom: 1px solid {COMMONBORDER}; }
 	.dt .c { width: 50px; }
 
-	/* 用來展示數據的表格 */
+	/* 用来展示数据的表格 */
 .tdat { width: 100%; border: 1px solid {COMMONBORDER}; }
 	.tdat th, .tdat td { padding: 4px 5px; border: 1px solid {COMMONBORDER}; }
 
-/* ==  um 公告 幫助 message 通用列表  lum -- um list == */
+/* ==  um 公告 帮助 message 通用列表  lum -- um list == */
 .um { margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px dashed {COMMONBORDER}; clear: left; }
 	.umh { margin-bottom: 10px; overflow: hidden; }
 		.umh h2, .umh h3 { clear: left; font-size:  14px; float: left; background: {WRAPBG} url({IMGDIR}/arrow.gif) no-repeat right 6px;  padding-right: 14px; cursor: pointer; }
@@ -1243,7 +1243,7 @@ CSS 寫作注意事項：
 	.lum ul { padding: 1em 0 1em 2em; margin-bottom: 1em; border-bottom: 1px dashed {COMMONBORDER}; }
 		.lum ul li { padding: 0.2em 0; }
 
-/* pgs --> pages & postbutton 分頁、發帖按鈕, pgb -->返回首頁, nxt -->下一頁 */
+/* pgs --> pages & postbutton 分页、发帖按钮, pgb -->返回首页, nxt -->下一页 */
 .pgs {}
 	.pgs #newspecial, .pgs #newspecialtmp, .pgs #post_reply, .pgs #post_replytmp { float: left; margin-right: 5px; }
 	.pg { float: right; }
@@ -1256,13 +1256,13 @@ CSS 寫作注意事項：
 			.pg strong { background-color: {SPECIALBG}; }
 		.pgb a { padding-left: 25px; background-image: url({IMGDIR}/arw_l.gif); background-position: 10px 50%; }
 	#pgt .pg, #pgt .pgb { margin-top: 5px; }
-/* 用於行動的按鈕 button action */
+/* 用于行动的按钮 button action */
 .bac {margin: 0; padding: 0; width: 70px; height: 30px;line-height: 30px; color: {LINK}; overflow: hidden; text-decoration: none; background: url({IMGDIR}/pg_arw.png) no-repeat 0 0; text-align: center; text-indent: -7px; display: block;}
 
 #psd .bn .mbn input, #postbox input { margin-right: 4px; }
-#postbox .mbn, #psd .mbn { height: 1.6em; line-height: 1.6em; }
+#postbox .mbn, #psd .mbn { height: 2.5em; line-height: 1.6em; }
 
-/* 用於積分獎勵提示等彈出層提示 */
+/* 用于积分奖励提示等弹出层提示 */
 .popupcredit {}
 	.pc_l, .pc_c, .pc_inner, .pc_r { width: 29px; height: 56px; line-height: 56px; background: url({IMGDIR}/popupcredit_bg.gif) no-repeat 0 0; }
 	.pc_c { width: 200px; background-position: 0 -56px; background-repeat: repeat-x; }
@@ -1278,7 +1278,7 @@ CSS 寫作注意事項：
 				.pc_btn:hover img { opacity: 1; }
 	.pc_r { background-position: -30px 0; }
 
-/* 快速跳轉菜單 */
+/* 快速跳转菜单 */
 	#fjump_menu dl { width: 200px; }
 		#fjump_menu dt { font-weight: 700; }
 		#fjump_menu dd { text-indent: 1em; }
@@ -1295,18 +1295,18 @@ CSS 寫作注意事項：
 	.cmen a { overflow: hidden; float:left; width: 20px; height: 20px; }
 
 
-/* 熱點：站長推薦內容，在頁面右下角彈出 */
+/* 热点：站长推荐内容，在页面右下角弹出 */
 .focus { position: fixed; right: 10px; bottom: 10px; z-index: 300; overflow: hidden; width: 270px; background: {WRAPBG}; }
 	* html .focus { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
 	.focus .m img { width: 60px; height: 60px; }
 
-/* 分享的驗證碼（全局） by Pony */
+/* 分享的验证码（全局） by Pony */
 .m_c .sec .secq { display: block; margin: 5px 0 10px; }
 
 /*
 	Name:			mod_reason_select
 	Level:			Global
-	Explain:		類似評分窗口中的評分原因選擇的樣式
+	Explain:		类似评分窗口中的评分原因选择的样式
 	Last Modify:	Pony
 */
 .reason_slct {}
@@ -1322,23 +1322,23 @@ CSS 寫作注意事項：
 						<input type="file" class="pf cur1" size="1" />
 						<button type="button" class="pn pnc"><strong>{lang}</strong></button>
 					</div>
-	Explain:		模擬 <input type="file" />，注意不要讓 button 太寬
+	Explain:		模拟 <input type="file" />，注意不要让 button 太宽
 	Last Modify:	Pony
 */
 .filebtn { position: relative; margin: 0 auto; width: 60px; overflow: hidden; }
 	.filebtn .pf { position: absolute; right: 0; height: 23px; opacity: 0; filter:alpha(opacity=0); }
 
-/* 上傳彈出層 */
+/* 上传弹出层 */
 .upfile { width: 220px; }
 	#uploadform { border: 1px dashed {SPECIALBORDER}; background: {SPECIALBG}; }
 
 
-/* ------------------------------------------------------------------------ 拖拽及頁面 DIY */
+/* ------------------------------------------------------------------------ 拖拽及页面 DIY */
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
 	.title { padding: 0 10px; height: 32px; font-size: 14px; font-weight: 700; line-height: 32px; overflow: hidden; }
 		.frame-title, .frametitle, .tab-title { background: {COMMONBG} url({IMGDIR}/title.png) repeat-x 0 100%; }
 		
-	/* 新的框架結構 */
+	/* 新的框架结构 */
 	.frame-1-1-l, .frame-1-1-1-l, .frame-1-1-1-c, .frame-2-1-l, .frame-1-2-l, .frame-3-1-l, .frame-1-3-l { float: left; }
 	.frame-1-1-r, .frame-1-1-1-r, .frame-2-1-r, .frame-1-2-r, .frame-3-1-r, .frame-1-3-r { float: right; }
 	.frame-1-1-l, .frame-1-1-r { width: 49.9% }
@@ -1348,7 +1348,7 @@ CSS 寫作注意事項：
 	.frame-3-1-r, .frame-1-3-l { width: 24.9%; }
 	/* End */
 
-	/* X1 之前的框架結構 */
+	/* X1 之前的框架结构 */
 	.frame .mn { margin-bottom: 0; }
 	.frame .sd { min-height: 0; _height: auto; }
 
@@ -1390,16 +1390,16 @@ CSS 寫作注意事項：
 	.frame-1-2 .mn .block, .col-r .block, .frame-2-1 .sd .block, .frame-1-1-1 .col-c .block, .frame-1-3 .mn .block, .frame-3-1 .sd .block { margin-left: 10px; }
 	body#space .block { margin: 0 5px 10px; }
 .temp {margin:1px;}
-/* 重定義 frame */
+/* 重定义 frame */
 	#ct .frame { margin: 0; border: none; }
 	.bx { border: none; }
 		.bx .frame-1-1-1 { background: transparent url({IMGDIR}/vline2.png) repeat-y 320px 0; }
 		.bx .frame-2-1 { background: transparent url({IMGDIR}/vline.png) repeat-y 645px 0; }
 
-/* 拖動生成的頁面元素 by lushnis */
+/* 拖动生成的页面元素 by lushnis */
 .drag .block .title { margin-bottom: 0; padding-left: 0; font-size: 14px; font-weight: 700; }
 
-/* 重定義 block */
+/* 重定义 block */
 #ct .sd .block { margin: 0; }
 
 .block .xl1 ul li { padding-left: 10px; background: url({IMGDIR}/dot.gif) no-repeat 0 50%; }
@@ -1479,7 +1479,7 @@ CSS 寫作注意事項：
 	.fcs dt { font-size: 18px; font-weight: 100; }
 	.fcs dd, .fcs dd a { color: {MIDTEXT}; }
 
-/* 幻燈片 */
+/* 幻灯片 */
 .slideblock { position: relative; }
 	.slideshow { clear: both; }
 		.slideshow li { position: relative; overflow: hidden; }
@@ -1488,12 +1488,12 @@ CSS 寫作注意事項：
 			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 10px; cursor: pointer; }
 				.slidebar li.on { background: rgba(255, 255, 255, 0.5); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #50FFFFFF, endColorstr = #50FFFFFF); color: #000; font-weight: 700; }
 
-/* 清除DIY產生的多餘樣式使用的公共樣式 */
+/* 清除DIY产生的多余样式使用的公共样式 */
 .cl_frame_bm { margin: 0 !important; border: 0 !important;}
 .cl_block_bm { margin: 0 !important; border: 0 !important;}
 .cl_block_bm .dxb_bc { margin: 0 !important;}
 
-/* 側邊調用 */
+/* 侧边调用 */
 	/* 投票 */
 	.b_poll dt { padding-left: 20px; background: url({IMGDIR}/pollsmall.gif) no-repeat 0 9px; }
 	.b_poll dd li { padding: 0 0 4px 20px; }
@@ -1508,7 +1508,7 @@ CSS 寫作注意事項：
 		.b_debate p { height: 1.5em; overflow: hidden; }
 	.b_hstab td { padding: 5px 0; border-bottom: 1px solid {COMMONBORDER}; }
 
-/* 主題分類 菜單 */
+/* 主题分类 菜单 */
 .tsm { overflow: hidden; }
 	.tsm dt { float: left; padding: 2px 0; width: 64px; clear: left; }
 	.tsm dd { padding: 2px 0; overflow: hidden; }
@@ -1518,7 +1518,7 @@ CSS 寫作注意事項：
 /*
 	Name:			mod_tip
 	Level:			Global
-	Explain:		彈出的氣泡信息，1、2、3、4 分別指氣泡尖角從左上到左小順時針方向的位置
+	Explain:		弹出的气泡信息，1、2、3、4 分别指气泡尖角从左上到左小顺时针方向的位置
 	Last Modify:	lushnis
 */
 .tip { position: absolute; padding: 10px; width: 260px; border: 1px solid #B1B1B1; background: #FEFEE9; }
@@ -1532,10 +1532,10 @@ CSS 寫作注意事項：
 		.tip_js .tip_horn { right: 61px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
 	.aimg_tip { margin-top: 0; }
 
-/* 推薦商品 by dfox */
+/* 推荐商品 by dfox */
 em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overflow: hidden; background: url({IMGDIR}/hot.png) no-repeat 0 0; }
 
-/* 板塊、群組、空間主區域/側邊搜索 by dfox */
+/* 板块、群组、空间主区域/侧边搜索 by dfox */
 .gsh { text-align: center; }
 	.gsh h1 { margin: 1em 0 0.5em -60px; font-size: 16px; font-weight: 100; }
 	.gsh .px { width: 272px; }
@@ -1561,7 +1561,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 /*
 	Name:			mod_BIUC
 	Level:			Global
-	Explain:		模塊中編輯單條數據BIU、顏色選擇器其中 colorwd 要配合 pn 使用（不要合併 colorwd 的 background，因為其他配色會受影響）
+	Explain:		模块中编辑单条数据BIU、颜色选择器其中 colorwd 要配合 pn 使用（不要合并 colorwd 的 background，因为其他配色会受影响）
 	Last Modify:	Pony
 */
 .ss em { display: block; float: left; margin-right: 2px; padding-left: 7px; width: 16px; line-height: 23px; background: #EEE; cursor: pointer; }
@@ -1576,6 +1576,6 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 .colorpx { margin: 0 -3px 0 3px; border-right: none; }
 
 /*
-DIY圖片幻燈片未加載時隱藏
+DIY图片幻灯片未加载时隐藏
 */
 .slidebox {display: none; }

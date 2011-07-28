@@ -8,14 +8,9 @@
 			</span>
 			<span class="ftid">
 				<select name="fid" id="fid" width="150" class="ps" change="location.href='{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&fid='+$('fid').value">
-					<!--{rem 美化板塊選擇樣式}-->
-					<!--{if $modforumselect}-->
-						$modforumselect
-					<!--{else}-->
-						<!--{loop $modforums[list] $id $name}-->
-						<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
-						<!--{/loop}-->
-					<!--{/if}-->
+					<!--{loop $modforums[list] $id $name}-->
+					<option value="$id" {if $id == $_G[fid]}selected="selected"{/if}>$name</option>
+					<!--{/loop}-->
 				</select>
 			</span>
 			<!--{else}-->
@@ -29,48 +24,18 @@
 		<!--{if $op == 'editforum'}-->
 			<script type="text/javascript">
 				var allowbbcode = allowimgcode = 1;
-				var allowhtml = forumallowhtml = allowsmilies = 0;
+				var allowhtml = forumallowhtml = allowsmilies = 0;				
 			</script>
 			<div class="exfm">
-				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
 				<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
 					<input type="hidden" name="formhash" value="{FORMHASH}">
 					<input type="hidden" name="fid" value="$_G[fid]">
 					<table cellspacing="0" cellpadding="0">
-						<!-- add edit description -->
 						<caption>
-							<h4>{lang forum_description}</h4>
-							<div id="descriptionpreview"></div>
+							<h4>{lang forum_rules}</h4>
+							<div id="rulespreview"></div>
 						</caption>
-						<tr>
-							<td class="ptm">
-								<div class="tedt">
-									<div class="bar">
-										<div class="y"><a href="javascript:;" onclick="$('descriptionpreview').innerHTML = bbcode2html($('descriptionmessage').value)">{lang memcp_profile_preview}</a></div>
-										<!--{eval $seditor = array('rules', array('bold', 'color', 'img', 'link'));}-->
-										<!--{subtemplate common/seditor}-->
-									</div>
-									<div class="area">
-										<textarea id="descriptionmessage" name="descnew" class="pt" rows="8" {if !$alloweditrules}disabled="disabled" readonly="readonly"{/if}>$_G['forum']['description']</textarea>
-									</div>
-								</div>
-								<!--{if !$alloweditrules}-->
-								<div>{lang forum_not_allow}</div>
-								<!--{/if}-->
-							</td>
-							<td width="15%" valign="top" class="ptm">
-								<p>{lang discuzcode} {lang enabled}</p>
-								<p>{lang post_imgcode} {lang enabled}</p>
-								<p>{lang post_html} {lang disabled}</p>
-							</td>
-						</tr>
-						<!-- add edit description - end -->
-						<tr>
-								<td colspan="2">
-									<h4>{lang forum_rules}</h4>
-									<div id="rulespreview"></div>
-								</td>
-						</td>
 						<tr>
 							<td class="ptm">
 								<div class="tedt">
@@ -106,7 +71,7 @@
 			</div>
 
 		<!--{elseif $op == 'recommend'}-->
-			<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
 			<!--{if $threadlist}-->
 				<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&show=$show">
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -161,4 +126,4 @@
 		simulateSelect('fid');
 	}
 </script>
-<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>

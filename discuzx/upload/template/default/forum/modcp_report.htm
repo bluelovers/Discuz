@@ -11,14 +11,9 @@
 						<span class="ftid">
 							<select name="fid" id="fid" width="168" class="ps">
 								<option value="">{lang modcp_select_forum}</option>
-								<!--{rem 美化板塊選擇樣式}-->
-								<!--{if $modforumselect}-->
-									$modforumselect
-								<!--{else}-->
-									<!--{loop $modforums[list] $id $name}-->
-									<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
-									<!--{/loop}-->
-								<!--{/if}-->
+								<!--{loop $modforums[list] $id $name}-->
+								<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
+								<!--{/loop}-->
 							</select>
 						</span>
 					</td>

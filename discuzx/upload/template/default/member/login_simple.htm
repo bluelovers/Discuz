@@ -1,6 +1,6 @@
 <!--{if CURMODULE != 'logging'}-->
-	<script type="text/javascript" src="{$_G[setting][jspath]}logging.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
-	<form method="post" _autocomplete="off" id="lsform" action="member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&lssubmit=yes" onsubmit="return lsSubmit()">
+	<script type="text/javascript" src="{$_G[setting][jspath]}logging.js?{VERHASH}"></script>
+	<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&lssubmit=yes" onsubmit="return lsSubmit()">
 	<div class="fastlg cl">
 		<span id="return_ls" style="display:none"></span>
 		<div class="y pns">
@@ -17,7 +17,7 @@
 							</span>
 							<script type="text/javascript">simulateSelect('ls_fastloginfield')</script>
 						</td>
-						<td><input type="text" name="username" id="ls_username" _autocomplete="off" class="px vm" tabindex="901" /></td>
+						<td><input type="text" name="username" id="ls_username" autocomplete="off" class="px vm" tabindex="901" /></td>
 					<!--{else}-->
 						<td><label for="ls_username">{lang account}</label></td>
 						<td><input type="text" name="username" id="ls_username" class="px vm xg1" {if $_G['setting']['autoidselect']} value="UID/{lang username}/Email" onfocus="if(this.value == 'UID/{lang username}/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = 'UID/{lang username}/Email';this.className = 'px vm xg1';}"{/if} tabindex="901" /></td>

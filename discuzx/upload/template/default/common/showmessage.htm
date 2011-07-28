@@ -1,15 +1,5 @@
 <!--{if !$_G['inajax']}-->
-	<!--{template subblock/common/header_simple}-->
-
-	<!--修正 ct_header 錯位問題}-->
-	<style>
-		#wp { margin-top: 60px; }
-		.nfl { padding-top: 60px; }
-		.nfl .f_c { margin-top: 0; }
-	</style>
-
-	<!--{subtpl subblock/common/body_ct_header}-->
-
+	<!--{template common/header}-->
 	<div id="ct" class="wp cl w">
 		<!--{if !$param[login]}-->
 			<div class="nfl">
@@ -79,7 +69,7 @@
 <!--{if !$_G['inajax']}-->
 		</div>
 	</div>
-	<!--{template subblock/common/footer_simple}-->
+	<!--{template common/footer}-->
 <!--{else}-->
 	<!--{template common/footer_ajax}-->
 <!--{/if}-->

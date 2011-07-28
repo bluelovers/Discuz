@@ -95,7 +95,7 @@ http://www.comsenz.com
 	#e_switcher input{ margin-right: 4px; vertical-align: middle; }
 	#e_simple, #e_fullswitcher { padding: 0 2px; text-align: right; border: 1px solid {SPECIALBORDER}; background: url({IMGDIR}/card_btn.png) repeat-x 0 100%; }
 		#e_fullswitcher { margin-right: 3px; }
-/* 縮小編輯器演出菜單中輸入框的尺寸 */
+/* 缩小编辑器演出菜单中输入框的尺寸 */
 .popupfix .px { margin-bottom: 4px; }
 
 #e_body { display: block !important; }
@@ -104,7 +104,7 @@ http://www.comsenz.com
 /*
 	Name:			mod_editor_menu
 	Level:			Function
-	Explain:		編輯器彈層關閉按鈕在 IE8 下有問題
+	Explain:		编辑器弹层关闭按钮在 IE8 下有问题
 	Last Modify:	Pony
 */
 .ie8 .editortoolbar .flbc { position: relative; }
