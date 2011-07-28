@@ -142,6 +142,40 @@ function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
 	$switchstop = true;
 }
 
+Scorpio_Hook::add('Func_writetojscache:Before_minify', '_eFunc_writetojscache_Before_minify');
+
+function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	$remove = array(
+		'/(^|\r|\n)\/\*.+?\*\/(\r|\n)/is',
+		'/\/\/note.+?(\r|\n)/i',
+		'/\/\/debug.+?(\r|\n)/i',
+		/*
+		'/(^|\r|\n)(\s|\t)+/',
+		'/(\r|\n)/',
+		*/
+	);
+
+	$jsdata = preg_replace($remove, '', $jsdata);
+
+	// 暫時沒有發現錯誤訊息
+	$jsdata = preg_replace(array(
+		// 清除單行註解
+		'/(?:(\s)\/\/)(?:[^\/\n]+)(\n)/',
+		// 清除分行之間的空白
+		'/(^|\n)\s*/',
+		// 清除結尾空白
+		'/\s$/',
+	), array(
+		'$1$2',
+		'$1',
+		'',
+	), $jsdata);
+
+	$switchstop = true;
+}
+
 Scorpio_Hook::add('Func_writetocsscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
 Scorpio_Hook::add('Class_template::loadcsstemplate:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
 Scorpio_Hook::add('Func_writetojscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
