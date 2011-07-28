@@ -174,7 +174,7 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 		// 清除包含 * 的多行註解
 		'/\/\*(?:[^\*]+|\*(?!\/))*\*\//',
 		// 清除部分多餘空白
-		'/(\n(?:if|}|{|}|try|for|foreach))[ \t]+/',
+		'/(\n(?:}|{|}|try|for|foreach))[ \t]+/',
 	);
 	$_r = array(
 		'$1$2',
