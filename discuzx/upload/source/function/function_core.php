@@ -1351,6 +1351,16 @@ function mobileoutput() {
 		ob_end_clean();
 		$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
 
+		// bluelovers
+		// Event: Func_mobileoutput:Before_rewrite_content_echo
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+				->run(array(array(
+					'content'	=> &$content,
+				)));
+		}
+		// bluelovers
+
 		ob_start();
 		$content = '<?xml version="1.0" encoding="utf-8"?>'.$content;
 		if('utf-8' != CHARSET) {
