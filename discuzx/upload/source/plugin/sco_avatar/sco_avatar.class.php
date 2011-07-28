@@ -155,6 +155,8 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 	function _my_fix_avatar_url($url) {
 		global $_G;
 
+		//TODO:增加可於插件設置內來設定允許的網域
+
 		// 允許使用的網站
 		$domain_allow = array(
 			'imgur.com',
