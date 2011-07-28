@@ -148,7 +148,9 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 	extract($conf, EXTR_REFS);
 
 	$remove = array(
+		/*
 		'/(^|\r|\n)\/\*.+?\*\/(\r|\n)/is',
+		*/
 		'/\/\/note.+?(\r|\n)/i',
 		'/\/\/debug.+?(\r|\n)/i',
 		/*
@@ -167,23 +169,36 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 		'/(^|\n)\s*/',
 		// 清除結尾空白
 		'/\s$/',
+		// 清除部分多餘空白
+		'/[ \t]*([,{}])(\n)/',
+		// 清除包含 * 的多行註解
+		'/\/\*(?:[^\*]+|\*(?!\/))*\*\//',
+		// 清除部分多餘空白
+		'/(\n(?:if|}|{|}|try|else|for|foreach))[ \t]+/',
 	);
 	$_r = array(
 		'$1$2',
 		'$1',
 		'',
+		'$1$2',
+		'',
+		'$1',
 	);
 
 	//BUG:如果增加移除分行 bbcode.js 會產生錯誤
-
-	// 暫時安全
-	$_s[] = '/([;}])\n+/';
-	$_r[] = '$1';
 
 	// 多執行幾次(確保代碼能清除乾淨)
 	for ($_i = 0; $_i < 3; $_i++) {
 		$jsdata = preg_replace($_s, $_r, $jsdata);
 	}
+
+	// 暫時安全
+	$_s = $_r = array();
+
+	$_s[] = '/\n+/';
+	$_r[] = '';
+
+	$jsdata = preg_replace($_s, $_r, $jsdata);
 
 	$switchstop = true;
 }
