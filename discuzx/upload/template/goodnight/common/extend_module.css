@@ -67,3 +67,19 @@
 	}
 
 /** end **/
+
+/** forum::forumdisplay,group **/
+
+	.tl .num a.xi2 {
+		color: #0099FF;
+	}
+
+	.tl .num em {
+		color: #9933CC;
+	}
+
+	.tl th a:hover {
+		color: #0099FF;
+	}
+
+/** end **/
