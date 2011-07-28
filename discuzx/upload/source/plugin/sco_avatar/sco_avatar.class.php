@@ -208,6 +208,23 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 					$a_file = $avatar_pics[$a_file];
 				}
 
+				// 設定網路頭像
+				if (empty($a_file) && (
+					$_G['adminid'] == 1
+					|| (
+						$this->attr['setting']['allowurl']
+						&& !in_array($_G['groupid'], (array)$this->attr['setting']['allowurl_not_usergroup'])
+					)
+				)) {
+					$a_file_url = trim(getgpc('a_file_url'));
+
+					if (!empty($a_file_url)) {
+						unset($a_file);
+					} else {
+						unset($a_file_url);
+					}
+				}
+
 				if (!empty($a_file)) {
 					$this->_uc_init();
 
