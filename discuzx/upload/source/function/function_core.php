@@ -1365,7 +1365,7 @@ function mobileoutput() {
 		if (!$switchstop) {
 		// bluelovers
 
-		$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+			$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
 
 		// bluelovers
 		}
