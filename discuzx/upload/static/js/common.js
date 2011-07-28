@@ -282,7 +282,7 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
-	aj.loading = '請稍候...';
+	aj.loading = 'Please wait...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
 
@@ -347,7 +347,7 @@ function Ajax(recvType, waitId) {
 				aj.resultHandle(aj.XMLHttpRequest.responseText, aj);
 			} else if(aj.recvType == 'XML') {
 				if(!aj.XMLHttpRequest.responseXML || !aj.XMLHttpRequest.responseXML.lastChild || aj.XMLHttpRequest.responseXML.lastChild.localName == 'parsererror') {
-					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">內部錯誤，無法顯示此內容</a>' , aj);
+					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">Internal error，Unable to display this content</a>' , aj);
 				} else {
 					aj.resultHandle(aj.XMLHttpRequest.responseXML.lastChild.firstChild.nodeValue, aj);
 				}
@@ -652,7 +652,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
 				} catch(e) {
-					s = '內部錯誤，無法顯示此內容';
+					s = 'Internal error，Unable to display this content';
 				}
 			}
 		}
@@ -789,16 +789,13 @@ function stringxor(s1, s2) {
 function showPreview(val, id) {
 	var showObj = $(id);
 	if(showObj) {
-		/*
 		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
-		*/
-		showObj.innerHTML = val.replace(/\n/ig, "<br />");
 	}
 }
 
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
-	var waiting = waiting ? waiting : '請稍候...';
+	var waiting = waiting ? waiting : 'Please wait...';
 	$('ajaxwaitid').innerHTML = waiting;
 	$('ajaxwaitid').style.display = display;
 }
@@ -1331,7 +1328,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	mode = in_array(mode, ['confirm', 'notice', 'info', 'right']) ? mode : 'alert';
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
-	confirmtxtdefault = '確定';
+	confirmtxtdefault = 'confirm';
 	closetime = isUndefined(closetime) ? '' : closetime;
 	closefunc = function () {
 		if(typeof func == 'function') func();
@@ -1339,17 +1336,17 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hideMenu(menuid, 'dialog');
 	};
 	if(closetime) {
-		leftmsg = closetime + ' 秒後窗口關閉';
+		leftmsg = closetime + ' Seconds after the window closes';
 		showDialogST = setTimeout(closefunc, closetime * 1000);
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
 	if(locationtime) {
-		leftmsg = locationtime + ' 秒後頁面跳轉';
+		leftmsg = locationtime + ' Seconds after the page jump';
 		showDialogST = setTimeout(closefunc, locationtime * 1000);
-		confirmtxtdefault = '立即跳轉';
+		confirmtxtdefault = 'Immediately jump';
 	}
 	confirmtxt = confirmtxt ? confirmtxt : confirmtxtdefault;
-	canceltxt = canceltxt ? canceltxt : '取消';
+	canceltxt = canceltxt ? canceltxt : 'Cancel';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
 	menuObj = document.createElement('div');
@@ -1362,8 +1359,8 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hidedom = '<style type="text/css">object{visibility:hidden;}</style>';
 	}
 	var s = hidedom + '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
-	s += t ? t : '提示信息';
-	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="關閉">關閉</a></span></h3>';
+	s += t ? t : 'Message';
+	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="Close">Close</a></span></h3>';
 	if(mode == 'info') {
 		s += msg ? msg : '';
 	} else {
@@ -1420,7 +1417,7 @@ function showWindow(k, url, mode, cache, menuv) {
 			ajaxpost(url, 'fwin_content_' + k, '', '', '', function() {initMenu();show();});
 		}
 		if(parseInt(BROWSER.ie) != 6) {
-			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> 請稍候...')}, 500);
+			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> Please wait...')}, 500);
 		}
 	};
 	var initMenu = function() {
@@ -1478,7 +1475,7 @@ function showError(msg) {
 	var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
 	msg = msg.replace(p, '');
 	if(msg !== '') {
-		showDialog(msg, 'alert', '錯誤信息', null, true, null, '', '', '', 3);
+		showDialog(msg, 'alert', 'Error Message', null, true, null, '', '', '', 3);
 	}
 }
 
@@ -1831,14 +1828,14 @@ function initSearchmenu(searchform) {
 	var tclass = searchtxt.className;
 	searchtxt.className = tclass + ' xg1';
 	searchtxt.onfocus = function () {
-		if(searchtxt.value == '請輸入搜索內容') {
+		if(searchtxt.value == 'Please enter the search content') {
 			searchtxt.value = '';
 			searchtxt.className = tclass;
 		}
 	};
 	searchtxt.onblur = function () {
 		if(searchtxt.value == '' ) {
-			searchtxt.value = '請輸入搜索內容';
+			searchtxt.value = 'Please enter the search content';
 			searchtxt.className = tclass + ' xg1';
 		}
 	};
@@ -1858,7 +1855,7 @@ function initSearchmenu(searchform) {
 }
 
 function searchFocus(obj) {
-	if(obj.value == '請輸入搜索內容') {
+	if(obj.value == 'Please enter the search content') {
 		obj.value = '';
 	}
 }
@@ -1951,7 +1948,7 @@ function noticeTitle() {
 
 function noticeTitleFlash() {
 	if(NOTICETITLE.flashNumber < 5 || NOTICETITLE.flashNumber > 4 && !NOTICETITLE['State']) {
-		document.title = (NOTICETITLE['State'] ? '【　　　】' : '【新提醒】') + NOTICETITLE['oldTitle'];
+		document.title = (NOTICETITLE['State'] ? '[　　　]' : '[New remind]') + NOTICETITLE['oldTitle'];
 		NOTICETITLE['State'] = !NOTICETITLE['State'];
 	}
 	NOTICETITLE.flashNumber = NOTICETITLE.flashNumber < NOTICETITLE.sleep ? ++NOTICETITLE.flashNumber : 0;
@@ -2006,7 +2003,7 @@ function addFavorite(url, title) {
 		try {
 			window.sidebar.addPanel(title, url, '');
         	} catch (e) {
-			showDialog("請按 Ctrl+D 鍵添加到收藏夾", 'notice');
+			showDialog("Press Ctrl + D to Add to Favorites", 'notice');
 		}
 	}
 }
@@ -2016,7 +2013,7 @@ function setHomepage(sURL) {
 		document.body.style.behavior = 'url(#default#homepage)';
 		document.body.setHomePage(sURL);
 	} else {
-		showDialog("非 IE 瀏覽器請手動將本站設為首頁", 'notice');
+		showDialog("Non-IE browser manually Set Homepage", 'notice');
 		doane();
 	}
 }

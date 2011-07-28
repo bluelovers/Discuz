@@ -51,7 +51,7 @@ function blogAddOption(sid, aid) {
 		obj.value="new:" + newOption;
 		return true;
 	} else {
-		alert('分類名不能為空！');
+		alert('Category name can not be empty！');
 		return false;
 	}
 }
@@ -93,7 +93,7 @@ function resizeImg(id,size) {
 					zoomDiv.style.position = 'relative';
 					zoomDiv.style.cursor = 'pointer';
 
-					this.title = '點擊圖片，在新窗口顯示原始尺寸';
+					this.title = 'Click on the picture，Original size in a new window';
 
 					var zoom = document.createElement('img');
 					zoom.src = 'image/zoom.gif';
@@ -131,14 +131,14 @@ function ischeck(id, prefix) {
 	for(var i = 0; i < form.elements.length; i++) {
 		var e = form.elements[i];
 		if(e.name.match(prefix) && e.checked) {
-			if(confirm("您確定要執行本操作嗎？")) {
+			if(confirm("Are you sure you want to perform this operation？")) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 	}
-	alert('請選擇要操作的對象');
+	alert('Select the object to be operated');
 	return false;
 }
 
@@ -183,7 +183,7 @@ function insertWebImg(obj) {
 		insertImage(obj.value);
 		obj.value = 'http://';
 	} else {
-		alert('圖片地址不正確');
+		alert('Image incorrect address');
 	}
 }
 
@@ -286,7 +286,7 @@ function showFlash(host, flashvar, obj, shareid) {
 	var flashHtml = videoFlash;
 	var videoMp3 = true;
 	if('' == flashvar) {
-		alert('音樂地址錯誤，不能為空');
+		alert('sic address error，Can not be empty');
 		return false;
 	}
 	if('music' == host) {
@@ -327,7 +327,7 @@ function showFlash(host, flashvar, obj, shareid) {
 		obj.style.display = 'none';
 		var hideObj = document.createElement('div');
 		hideObj.id = 'flash_hide_' + shareid;
-		var nodetxt = document.createTextNode("收起");
+		var nodetxt = document.createTextNode("pack up");
 		hideObj.appendChild(nodetxt);
 		obj.parentNode.insertBefore(hideObj, obj);
 		hideObj.style.cursor = 'pointer';
@@ -350,7 +350,7 @@ function userapp_open() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'fold';
-		$('a_app_more').innerHTML = '收起';
+		$('a_app_more').innerHTML = 'fold';
 		$('a_app_more').onclick = function() {
 			userapp_close();
 		};
@@ -362,7 +362,7 @@ function userapp_close() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&subop=off&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'unfold';
-		$('a_app_more').innerHTML = '展開';
+		$('a_app_more').innerHTML = 'unfold';
 		$('a_app_more').onclick = function() {
 			userapp_open();
 		};
@@ -752,7 +752,7 @@ function poke_send(id, result) {
 }
 function myfriend_post(uid) {
 	if($('friend_'+uid)) {
-		$('friend_'+uid).innerHTML = '<p>你們現在是好友了，接下來，您還可以：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">給TA留言</a> ，或者 <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">打個招呼</a></p>';
+		$('friend_'+uid).innerHTML = '<p>You are now friends of，Next，You can also：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">Message to the TA</a> ，On <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">Say Hello</a></p>';
 	}
 	showCreditPrompt();
 }
@@ -797,7 +797,7 @@ function docomment_get(doid, key) {
 	$(showid).className = 'cmt brm';
 	ajaxget('home.php?mod=spacecp&ac=doing&op=getcomment&handlekey=msg_'+doid+'&doid='+doid+'&key='+key, showid);
 	if($(opid)) {
-		$(opid).innerHTML = '收起';
+		$(opid).innerHTML = 'pack up';
 		$(opid).onclick = function() {
 			docomment_colse(doid, key);
 		}
@@ -812,7 +812,7 @@ function docomment_colse(doid, key) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = '回復';
+	$(opid).innerHTML = 'Reply';
 	$(opid).onclick = function() {
 		docomment_get(doid, key);
 	}
@@ -841,7 +841,7 @@ function docomment_form_close(doid, id, key) {
 	if(!liObj.length) {
 		$(key+'_'+doid).style.display = 'none';
 		if($(opid)) {
-			$(opid).innerHTML = '回復';
+			$(opid).innerHTML = 'Reply';
 			$(opid).onclick = function () {
 				docomment_get(doid, key);
 			}
@@ -856,7 +856,7 @@ function feedcomment_get(feedid) {
 	$(showid).style.display = '';
 	ajaxget('home.php?mod=spacecp&ac=feed&op=getcomment&feedid='+feedid+'&handlekey=feedhk_'+feedid, showid);
 	if($(opid) != null) {
-		$(opid).innerHTML = '收起';
+		$(opid).innerHTML = 'Pack up';
 		$(opid).onclick = function() {
 			feedcomment_close(feedid);
 		}
@@ -885,7 +885,7 @@ function feedcomment_close(feedid) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = '評論';
+	$(opid).innerHTML = 'Comment';
 	$(opid).onclick = function() {
 		feedcomment_get(feedid);
 	}
@@ -904,7 +904,7 @@ function feed_more_show(feedid) {
 	$(showid).style.display = '';
 	$(showid).className = 'sub_doing';
 
-	$(opid).innerHTML = '&laquo; 收起列表';
+	$(opid).innerHTML = '&laquo; Put away the list';
 	$(opid).onclick = function() {
 		feed_more_close(feedid);
 	}
@@ -916,7 +916,7 @@ function feed_more_close(feedid) {
 
 	$(showid).style.display = 'none';
 
-	$(opid).innerHTML = '&raquo; 更多動態';
+	$(opid).innerHTML = '&raquo; More doing';
 	$(opid).onclick = function() {
 		feed_more_show(feedid);
 	}

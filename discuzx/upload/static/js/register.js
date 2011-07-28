@@ -50,7 +50,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			errormessage(formNode[stmp[1]].id, '請填寫密碼');
+			errormessage(formNode[stmp[1]].id, 'Please fill in the password');
 		}else{
 			errormessage(formNode[stmp[1]].id, 'succeed');
 		}
@@ -58,11 +58,10 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
-			errormessage(formNode[stmp[2]].id, '請再次輸入密碼');
+			errormessage(formNode[stmp[2]].id, 'Please fill in the password again');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
-	/*
 	formNode[stmp[3]].onclick = function (event) {
 		emailMenu(event, formNode[stmp[3]].id);
 	};
@@ -74,11 +73,10 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[3]].onblur = function () {
 		if(formNode[stmp[3]].value == '') {
-			errormessage(formNode[stmp[3]].id, '請輸入郵箱地址');
+			errormessage(formNode[stmp[3]].id, 'Please enter email address');
 		}
 		emailMenuOp(3, null, formNode[stmp[3]].id);
 	};
-	*/
 	stmp['email'] = formNode[stmp[3]].id;
 	try {
 		if(focus) {
@@ -105,7 +103,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('日', ''));
+	el.options.add(new Option('Day', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -234,12 +232,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, '用戶名包含敏感字符');
+		errormessage(id, 'User name contains forbidden characters');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? '用戶名小於 3 個字符' : '用戶名超過 15 個字符');
+		errormessage(id, unlen < 3 ? 'User name is less than 3 characters' : 'User name is longer than 15 characters');
 		return;
 	}
 	var x = new Ajax();
@@ -255,7 +253,7 @@ function checkpassword(id1, id2) {
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, '兩次輸入的密碼不一致');
+		errormessage(id2, 'The two password do not match. return.');
 	} else {
 		errormessage(id2, 'succeed');
 	}
@@ -270,7 +268,7 @@ function checkemail(id) {
 		lastemail = email;
 	}
 	if(email.match(/<|"/ig)) {
-		errormessage(id, 'Email 包含敏感字符');
+		errormessage(id, 'Email contains forbidden characters');
 		return;
 	}
 	var x = new Ajax();
@@ -289,7 +287,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', '邀請碼包含敏感字符');
+		errormessage('invitecode', 'invitecode contains forbidden characters');
 		return;
 	}
 	var x = new Ajax();

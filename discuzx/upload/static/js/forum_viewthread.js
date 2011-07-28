@@ -66,7 +66,7 @@ function attachimglstshow(pid, islazy) {
 					continue;
 				}
 				imagelist += '<div class="pattimg">' +
-					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="點擊放大">點擊放大</a>' +
+					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="Click to enlarge">Click to enlarge</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -162,7 +162,7 @@ function parsetag(pid) {
 }
 
 function setanswer(pid, from){
-	if(confirm('您確認要把該回復選為「最佳答案」嗎？')){
+	if(confirm('You should confirm that the response chosen“Best answer”？')){
 		if(BROWSER.ie) {
 			doane(event);
 		}
@@ -235,7 +235,7 @@ function succeedhandle_fastpost(locationhref, message, param) {
 		$('fastpostreturn').className = '';
 	} else {
 		if(!message) {
-			message = '本版回帖需要審核，您的帖子將在通過審核後顯示';
+			message = 'Replies need to review edition，Your post will be approved after the show';
 		}
 		$('post_new').style.display = $('fastpostmessage').value = $('fastpostreturn').className = '';
 		$('fastpostreturn').innerHTML = message;
@@ -368,16 +368,16 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	if($(tarId).className == 'rate') {
 		$(tarId).className = 'rate rate_collapse';
 		setcookie('ratecollapse', 1, 2592000);
-		ctrlObj.innerHTML = '展開';
+		ctrlObj.innerHTML = 'unfold';
 	} else {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
-		ctrlObj.innerHTML = '收起';
+		ctrlObj.innerHTML = 'fold';
 	}
 }
 
 function copyThreadUrl(obj) {
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', '帖子地址已經複製到剪貼板');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'Post address is copied to the clipboard');
 	return false;
 }
 
@@ -387,11 +387,11 @@ function replyNotice() {
 	var status = replynotice.getAttribute("status");
 	if(status == 1) {
 		replynotice.href = newurl + 'receive';
-		replynotice.innerHTML = '接收回復通知';
+		replynotice.innerHTML = 'Receive notification of replies';
 		replynotice.setAttribute("status", 0);
 	} else {
 		replynotice.href = newurl + 'ignore';
-		replynotice.innerHTML = '取消回復通知';
+		replynotice.innerHTML = 'Notice to cancel reply';
 		replynotice.setAttribute("status", 1);
 	}
 }
@@ -404,13 +404,13 @@ function connect_share(connect_share_url, connect_uin) {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('分享服務連接失敗，請稍後再試。', 'notice');
+					showDialog('Service connection sharing fails，Please try again later。', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
 			connect_load(connect_share_url);
 		} else {
-			showDialog($('connect_share_unbind').innerHTML, 'info', '請先綁定QQ賬號');
+			showDialog($('connect_share_unbind').innerHTML, 'info', 'Please binding QQ account');
 		}
 		return false;
 	}
@@ -433,7 +433,7 @@ function connect_show_dialog(title, html, type) {
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
 	if ($('postmessage_' + connect_thread_info.post_id)) {
-		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['本帖最後由 .*? 於 .*? 編輯','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">複製代碼</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['Posts by .*? in .*? Edit','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">Copy code</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
 	}
 	return connect_thread_info;
 }

@@ -60,11 +60,11 @@ function initEditor() {
 		if(buttons[i].id.indexOf(editorid + '_') != -1) {
 			buttons[i].href = 'javascript:;';
 			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
-				buttons[i].innerHTML = !editorisfull ? '全屏' : '返回';
-				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? '恢復編輯器大小' : '全屏方式編輯');};
+				buttons[i].innerHTML = !editorisfull ? 'Full Screen' : 'back';
+				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? 'Recovery editor size' : 'Full screen editing');};
 				buttons[i].onclick = function(e) {editorfull();doane();}
 			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
-				buttons[i].innerHTML = !simplodemode ? '常用' : '高級';
+				buttons[i].innerHTML = !simplodemode ? 'simple' : 'Advanced';
 				buttons[i].onclick = function(e) {editorsimple();doane();}
 			} else {
 				_attachEvent(buttons[i], 'mouseover', function(e) {setEditorTip(BROWSER.ie ? window.event.srcElement.title : e.target.title);});
@@ -94,7 +94,7 @@ function initEditor() {
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
 		$(editorid + '_fullswitcher').onclick = function () {
-			showDialog('你的瀏覽器不支持此功能，請升級瀏覽器版本', 'notice', '友情提示');
+			showDialog('Your browser does not support this feature, please upgrade your browser version', 'notice', 'Tips');
 		};
 		$(editorid + '_fullswitcher').className = 'xg1';
 	}
@@ -108,7 +108,7 @@ function initEditor() {
 
 function savedataTime() {
 	if(!autosave) {
-		$(editorid + '_svdsecond').innerHTML = '<a title="點擊開啟自動保存" href="javascript:;" onclick="setAutosave()">開啟自動保存</a> ';
+		$(editorid + '_svdsecond').innerHTML = '<a title="Click to open automatically saved" href="javascript:;" onClick="setAutosave()">set Auto save</a> ';
 		return;
 	}
 	if(!savedatac) {
@@ -119,15 +119,15 @@ function savedataTime() {
 		var m = d.getMinutes();
 		h = h < 10 ? '0' + h : h;
 		m = m < 10 ? '0' + m : m;
-		setEditorTip('數據已於 ' + h + ':' + m + ' 保存');
+		setEditorTip('Data was ' + h + ':' + m + ' saved');
 	}
-	$(editorid + '_svdsecond').innerHTML = '<a title="點擊關閉自動保存" href="javascript:;" onclick="setAutosave()">' + savedatac + ' 秒後保存</a> ';
+	$(editorid + '_svdsecond').innerHTML = '<a title="Click to close automatically saved" href="javascript:;" onclick="setAutosave()">' + savedatac + ' Seconds saved</a> ';
 	savedatac -= 10;
 }
 
 function setAutosave() {
 	autosave = !autosave;
-	setEditorTip(autosave ? '數據自動保存已開啟' : '數據自動保存已關閉');
+	setEditorTip(autosave ? 'Data automatically save open' : 'data is automatically saved is closed');
 	setcookie('editorautosave_' + editorid, autosave ? 1 : -1, 2592000);
 	savedataTime();
 }
@@ -288,13 +288,13 @@ function editorfull(op) {
 	if(iswysiwyg) {
 		switchEditor(1);
 	}
-	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '返回' : '全屏';
+	$(editorid + '_fullswitcher').innerHTML = editorisfull ? 'back to ' : 'full screen';
 }
 
 function editorsimple() {
 	if($(editorid + '_body').className == 'edt') {
 		v = 'none';
-		$(editorid + '_simple').innerHTML = '高級';
+		$(editorid + '_simple').innerHTML = 'Advanced';
 		$(editorid + '_body').className = 'edt simpleedt';
 		$(editorid + '_adv_s0').className = 'b2r';
 		$(editorid + '_adv_s1').className = 'b2r';
@@ -305,7 +305,7 @@ function editorsimple() {
 		simplodemode = 1;
 	} else {
 		v = '';
-		$(editorid + '_simple').innerHTML = '常用';
+		$(editorid + '_simple').innerHTML = 'simple';
 		$(editorid + '_body').className = 'edt';
 		$(editorid + '_adv_s0').className = 'b1r';
 		$(editorid + '_adv_s1').className = 'b1r';
@@ -408,7 +408,7 @@ function checkFocus() {
 
 function checklength(theform) {
 	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
-	showDialog('當前長度: ' + mb_strlen(message) + ' 字節，' + (postmaxchars != 0 ? '系統限制: ' + postminchars + ' 到 ' + postmaxchars + ' 字節。' : ''), 'notice', '字數檢查');
+	showDialog('Current length: ' + mb_strlen(message) + ' bytes，' + (postmaxchars != 0 ? 'system limits: ' + postminchars + ' to ' + postmaxchars + ' bytes。' : ''), 'notice', 'Volume Check');
 }
 
 function setUnselectable(obj) {
@@ -658,27 +658,6 @@ function discuzcode(cmd, arg) {
 	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
-
-	// bluelovers
-	// 標題字
-	} else if (in_array(cmd, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
-
-		var str = getSel();
-		if(str === false) {
-			return;
-		}
-
-		if (wysiwyg) {
-			opentag		= '<'+cmd+' class="bbcode_headline">';
-			closetag	= '</'+cmd+'>';
-		} else {
-			opentag		= '['+cmd+']';
-			closetag	= '[/'+cmd+']'+"\n";
-		}
-
-		return insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true);
-	// bluelovers
-
 	} else if(cmd.substr(0, 3) == 'cst') {
 		showEditorMenu(cmd.substr(5), cmd.substr(3, 1));
 		return;
@@ -733,7 +712,7 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('輸入一個列表項目.\n留空或者點擊取消完成此列表.', '')) {
+			while(listvalue = prompt('Enter a list item.\r\n left blank, or click Cancel to complete this list.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -749,6 +728,7 @@ function discuzcode(cmd, arg) {
 		sel = stripComplex('url', sel);
 		insertText(sel);
 	} else if(cmd == 'floatleft' || cmd == 'floatright') {
+
 		var arg = cmd == 'floatleft' ? 'left' : 'right';
 		if(wysiwyg) {
 			if(txt = getSel()) {
@@ -767,18 +747,18 @@ function discuzcode(cmd, arg) {
 		}
 	} else if(cmd == 'rst') {
 		loadData();
-		setEditorTip('數據已恢復');
+		setEditorTip('data has been restored');
 	} else if(cmd == 'svd') {
 		saveData();
-		setEditorTip('數據已保存');
+		setEditorTip('data has been saved');
 	} else if(cmd == 'chck') {
 		checklength(editorform);
 	} else if(cmd == 'tpr') {
-		if(confirm('您確認要清除所有內容嗎？')) {
+		if(confirm('Are you sure you want to clear all contents?')) {
 			clearContent();
 		}
 	} else if(cmd == 'downremoteimg') {
-		showDialog('<div id="remotedowninfo"><p class="mbn">正在下載遠程附件，請稍等……</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
+		showDialog('<div id="remotedowninfo"><p class="mbn">Downloading the remote attachment, please wait ... ...</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
 		var message = wysiwyg ? html2bbcode(getEditorContents()) : (!editorform.parseurloff.checked ? parseurl(editorform.message.value) : editorform.message.value);
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
@@ -844,7 +824,7 @@ function setContext(cmd) {
 	} else if(fs == null) {
 		fs = '';
 	}
-	fs = fs && cmd != 'clear' ? fs : '字體';
+	fs = fs && cmd != 'clear' ? fs : 'FONTS';
 	if(fs != $(editorid + '_font').fontstate) {
 		thingy = fs.indexOf(',') > 0 ? fs.substr(0, fs.indexOf(',')) : fs;
 		$(editorid + '_font').innerHTML = thingy;
@@ -905,7 +885,7 @@ function formatFontsize(csssize) {
 		case '24pt': return 6;
 		case '48px':
 		case '36pt': return 7;
-		default: return '大小';
+		default: return 'SIZE';
 	}
 }
 
@@ -943,23 +923,15 @@ function showEditorMenu(tag, params) {
 				showMenu({'ctrlid':ctrlid,'mtype':'win','evt':'click','pos':menupos,'timeout':250,'duration':3,'drag':ctrlid + '_ctrl'});
 			}
 		} else {
-			showMenu({
-				'ctrlid':ctrlid
-				,'evt':'click'
-				,'pos':menupos
-				,'timeout':250
-				,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3
-				// 如果是 字型選單 則不允許拖曳
-				,'drag': in_array(tag, ['fontname', 'fontsize']) ? 0 : 1
-			});
+			showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':1});
 		}
 
 
 	} else {
 		switch(tag) {
 			case 'url':
-				str = '請輸入鏈接地址:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
-					(selection ? '' : '<br />請輸入鏈接文字:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
+				str = 'Please enter the link address:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
+					(selection ? '' : '<br />Please enter the link text:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
 				break;
 			case 'forecolor':
 				showColorBox(ctrlid, 1);
@@ -982,26 +954,26 @@ function showEditorMenu(tag, params) {
 				if(selection) {
 					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
-				var lang = {'quote' : '請輸入要插入的引用', 'code' : '請輸入要插入的代碼', 'hide' : '請輸入要隱藏的信息內容', 'free' : '如果您設置了帖子售價，請輸入購買前免費可見的信息內容'};
+				var lang = {'quote' : 'Please enter the reference you want to insert', 'code' : 'Please enter the code to insert', 'hide' : 'Please enter the hidden content', 'free' : 'If Post the price you set, enter the information can be seen free of charge before purchasing the content'};
 				str += lang[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>' +
-					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />只有當瀏覽者回復本帖時才顯示</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />只有當瀏覽者積分高於</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> 時才顯示' : '');
+					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />Only when the viewer displays only reply to this post</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />Only when the viewer points higher than the</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> Show only' : '');
 				break;
 			case 'tbl':
-				str = '<p class="pbn">表格行數: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; 表格列數: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">表格寬度: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; 背景顏色: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'小提示\', null, 0)"><img id="tbltips" title="小提示" class="vm" src="' + IMGDIR + '/info_small.gif"> 快速書寫表格提示</p>';
-				str += '<div id="tbltips_msg" style="display: none">「[tr=顏色]」 定義行背景<br />「[td=寬度]」 定義列寬<br />「[td=列跨度,行跨度,寬度]」 定義行列跨度<br /><br />快速書寫表格範例：<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>用「|」分隔每一列，表格中如有「|」用「\\|」代替，換行用「\\n」代替。</div>';
+				str = '<p class="pbn">Table rows: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; Number of table columns: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">Table width: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; Background color: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onClick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onClick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'TIPS\', null, 0)"><img id="tbltips" title="TIPS" class="vm" src="' + IMGDIR + '/info_small.gif"> Quick Writing Tip Form</p>';
+				str += '<div id="tbltips_msg" style="display: none">“[tr=COLOR]” Definition line background<br />“[td=Width]” Define column width<br />“[td=Column span, row span, width]” Definition of the ranks quickly span <br /> <br /> written form example:<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>Use皘”separated each column，table if “|”with“\\|” instead of，change the line with “\\n”instead。</div>';
 				break;
 			case 'aud':
-				str = '<p class="pbn">請輸入音樂文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">支持 wma mp3 ra rm 等音樂格式<br />示例: http://server/audio.wma</p>';
+				str = '<p class="pbn">Please enter the music file address:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">Support wma mp3 ra rm and other music formats<br />Example: http://server/audio.wma</p>';
 				break;
 			case 'vid':
-				str = '<p class="pbn">請輸入視頻地址:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">支持優酷、土豆、56、酷6等視頻站的視頻網址<br />支持 wmv avi rmvb mov swf flv 等視頻格式<br />示例: http://server/movie.wmv</p>';
+				str = '<p class="pbn">Please enter the video address:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">width: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; high: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">Support Youku, potatoes, 56, 6, cool video and other video stations at <br /> support wmv avi rmvb mov swf flv video formats <br /> example: http://server/movie.wmv</p>';
 				break;
 			case 'fls':
-				str = '<p class="pbn">請輸入 Flash 文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">支持 swf flv 等 Flash 網址<br />示例: http://server/flash.swf</p>';
+				str = '<p class="pbn">Please enter the Flash address:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">width: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; high: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">Support swf flv Flash Website <br /> other examples: http://server/flash.swf </ p> ';
 				break;
 			case 'pasteword':
-				stitle = '從 Word 粘貼內容';
-				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">請通過快捷鍵(Ctrl+V)把 Word 文件中的內容粘貼到上方</p>';
+				stitle = 'Paste content from Word';
+				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">Please shortcut (Ctrl + V) to paste the contents of Word documents to the top</p>';
 				menuwidth = 600;
 				menupos = '00';
 				menutype = 'win';
@@ -1014,7 +986,7 @@ function showEditorMenu(tag, params) {
 				var promptlang = custombbcodes[tag]['prompt'].split("\t");
 				for(var i = 1; i <= params; i++) {
 					if(i != params || !haveSel) {
-						str += (promptlang[i - 1] ? promptlang[i - 1] : '請輸入第 ' + i + ' 個參數:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+						str += (promptlang[i - 1] ? promptlang[i - 1] : 'please enter ' + i + ' Parameters:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
 					}
 				}
 				break;
@@ -1028,11 +1000,11 @@ function showEditorMenu(tag, params) {
 		if(menupos == '00') {
 			menu.className = 'fwinmask';
 			s = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
-				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">關閉</a></span></h3><div class="c">' + str + '</div>'
-				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button></p>'
+				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">close</a></span></h3><div class="c">' + str + '</div>'
+				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>submit</strong></button></p>'
 				+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
 		} else {
-			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">關閉</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button></div></div>';
+			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">close</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>submit</strong></button></div></div>';
 		}
 		menu.innerHTML = s;
 		$(editorid + '_editortoolbar').appendChild(menu);
@@ -1303,7 +1275,7 @@ function insertText(text, movestart, moveend, select, sel) {
 				sel = editbox.sel;
 				editbox.sel = null;
 			}
-			sel.text = text.replace(/\r?\n/g, '\n');
+			sel.text = text.replace(/\r?\n/g, '\r\n');
 			if(!isUndefined(movestart)) {
 				sel.moveStart('character', -strlen(text) +movestart);
 				sel.moveEnd('character', -moveend);
