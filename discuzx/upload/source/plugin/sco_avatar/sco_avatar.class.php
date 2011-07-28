@@ -155,6 +155,22 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 	function _my_fix_avatar_url($url) {
 		global $_G;
 
+		// 允許使用的網站
+		$domain_allow = array(
+			'imgur.com',
+
+			'imageshack.us',
+			'photobucket.com',
+
+			'hinet.net',
+
+			'hotimg.com',
+			'jnafo.com',
+
+			// picasa
+			'googleusercontent.com',
+		);
+
 		$domain = $this->_my_parse_url_domain($url);
 
 		if (
@@ -167,8 +183,11 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 
 			// 不允許包含 /./ /../ 之類的網址
 			|| preg_match('/\/\.+\//', $url)
+
 			// 不允許使用跟網站的網域相同的網址
 			|| $this->_my_parse_url_domain($_G['siteurl']) == $domain
+			// 檢查是否在允許使用的網站
+			|| !in_array($domain, $domain_allow)
 		) {
 			$url = '';
 		}
