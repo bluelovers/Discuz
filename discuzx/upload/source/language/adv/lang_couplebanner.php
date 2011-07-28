@@ -9,21 +9,21 @@
 
 $lang = array
 (
-	'couplebanner_name' => '全局 對聯廣告',
-	'couplebanner_desc' => '展現方式: 對聯廣告以長方形圖片的形式顯示於頁面頂部兩側，形似一幅對聯，通常使用寬小高大的長方形圖片或 Flash 的形式。對聯廣告一般只在使用像素約定主表格寬度的情況下使用，如使用超過 90% 以上的百分比約定主表格寬度時，可能會影響訪問者的正常瀏覽。當訪問者瀏覽器寬度小於 800 像素時，自動不顯示此類廣告。當前頁面有多個對聯廣告時，系統會隨機選取其中之一顯示。<br />價值分析: 對聯廣告由於只展現於高分辨率(1024x768 或更高)屏幕的兩側，只佔用頁面的空白區域，因此不會招致訪問者反感，能夠良好的突出推廣內容。但由於對分辨率和主表格寬度的特殊要求，使得廣告的受眾比例無法達到 100%。',
-	'couplebanner_index' => '首頁',
-	'couplebanner_fids' => '投放版塊',
-	'couplebanner_fids_comment' => '設置廣告投放的論壇版塊',
-	'couplebanner_groups' => '投放群組分類',
-	'couplebanner_groups_comment' => '設置廣告投放的群組分類，當廣告投放範圍中包含「群組」時有效',
-	'couplebanner_position' => '對聯位置',
-	'couplebanner_position_comment' => '設置廣告對聯的位置',
-	'couplebanner_position_left' => '左側',
-	'couplebanner_position_right' => '右側',
-	'couplebanner_coupleadid' => '上/下聯廣告',
-	'couplebanner_coupleadid_comment' => '設置和當前廣告配對的上/下聯廣告',
-	'couplebanner_category' => '投放門戶頻道',
-	'couplebanner_category_comment' => '設置廣告投放的頻道分類，當廣告投放範圍中包含「門戶」時有效',
+	'couplebanner_name' => '全局 对联广告',
+	'couplebanner_desc' => '展现方式: 对联广告以长方形图片的形式显示于页面顶部两侧，形似一幅对联，通常使用宽小高大的长方形图片或 Flash 的形式。对联广告一般只在使用像素约定主表格宽度的情况下使用，如使用超过 90% 以上的百分比约定主表格宽度时，可能会影响访问者的正常浏览。当访问者浏览器宽度小于 800 像素时，自动不显示此类广告。当前页面有多个对联广告时，系统会随机选取其中之一显示。<br />价值分析: 对联广告由于只展现于高分辨率(1024x768 或更高)屏幕的两侧，只占用页面的空白区域，因此不会招致访问者反感，能够良好的突出推广内容。但由于对分辨率和主表格宽度的特殊要求，使得广告的受众比例无法达到 100%。',
+	'couplebanner_index' => '首页',
+	'couplebanner_fids' => '投放版块',
+	'couplebanner_fids_comment' => '设置广告投放的论坛版块',
+	'couplebanner_groups' => '投放群组分类',
+	'couplebanner_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
+	'couplebanner_position' => '对联位置',
+	'couplebanner_position_comment' => '设置广告对联的位置',
+	'couplebanner_position_left' => '左侧',
+	'couplebanner_position_right' => '右侧',
+	'couplebanner_coupleadid' => '上/下联广告',
+	'couplebanner_coupleadid_comment' => '设置和当前广告配对的上/下联广告',
+	'couplebanner_category' => '投放门户频道',
+	'couplebanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
 );
 
 ?>

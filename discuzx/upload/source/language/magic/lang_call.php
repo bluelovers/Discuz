@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'call_name' => '點名卡',
-	'call_desc' => '發通知給自己的好友，讓他們來查看自己的日誌',
-	'call_info' => '發通知給自己的好友，讓他們來查看自己的日誌',
+	'call_name' => 'Rollcall card',
+	'call_desc' => 'Issued a notice to your friends，Allow them to view their own blogs',
+	'call_info' => 'Issued a notice to your friends，Allow them to view their own blogs',
 );
 
 ?>

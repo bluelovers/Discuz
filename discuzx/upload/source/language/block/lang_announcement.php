@@ -9,11 +9,11 @@
 
 $lang = array
 (
-	'announcement_type' => '公告類型',
-	'announcement_type_text' => '文字公告',
-	'announcement_type_link' => '網站鏈接',
-	'announcement_titlelength' => '標題長度',
-	'announcement_summarylength' => '內容長度',
-	'announcement_startrow' => '起始位置',
+	'announcement_type'		=> 'Announce type',
+	'announcement_type_text'	=> 'Announce text',
+	'announcement_type_link'	=> 'Link',
+	'announcement_titlelength'	=> 'Title length',
+	'announcement_summarylength'	=> 'Content length',
+	'announcement_startrow'		=> 'Start row',
 );
 ?>

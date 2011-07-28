@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'close_name' => '沉默卡',
-	'close_desc' => '可以將主題關閉，禁止回復',
-	'close_expiration' => '關閉有效期',
-	'close_expiration_comment' => '設置主題可以被關閉多長時間，默認 24 小時',
-	'close_forum' => '允許使用本道具的版塊',
-	'close_info' => '關閉指定的主題 {expiration} 小時，請輸入主題的 ID',
-	'close_info_nonexistence' => '請指定要關閉的主題',
-	'close_succeed' => '你操作的主題已關閉',
-	'close_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'close_info_user_noperm' => '對不起，你不能對此人使用本道具',
+	'close_name' => 'Silent card',
+	'close_desc' => 'Disable replies in a thread',
+	'close_expiration' => 'Close for period',
+	'close_expiration_comment' => 'Set the time when a thread will be closed for reply the default is 24 hours',
+	'close_forum' => 'Allowed forums',
+	'close_info' => 'For close specified thread for {expiration} hours，enter the thread ID',
+	'close_info_nonexistence' => 'Enter the thread ID to close',
+	'close_succeed' => 'Specified thread was closed successfully',
+	'close_info_noperm' => 'Using this magic for this forum is disabled',
+	'close_info_user_noperm' => 'You have no permission to use magic',
 
-	'close_notification' => '你的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'close_notification' => 'Your thread {subject} was {actor} use {magicname}，<a href="forum.php?mod=viewthread&tid={tid}">Go see it！</a>',
 );
 
 ?>

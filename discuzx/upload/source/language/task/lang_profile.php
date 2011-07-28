@@ -9,29 +9,29 @@
 
 $lang = array
 (
-	'profile_name' => '完善用戶資料任務',
-	'profile_desc' => '完善指定的用戶資料獲得相應的獎勵',
+	'profile_name' => 'Improve the task of user information',
+	'profile_desc' => 'Improve access to the specified user data corresponding rewards',
 
 	'profile_fields' => array(
-		'mp.realname' => '姓名',
-		'mp.gender' => '性別',
-		'mp.birthyear' => '生日(年)',
-		'mp.birthmonth' => '生日(月)',
-		'mp.birthday' => '生日(日)',
-		'mp.bloodtype' => '血型',
-		'mp.affectivestatus' => '情感狀態',
-		'mp.birthprovince' => '家鄉(省)',
-		'mp.birthcity' => '家鄉(市)',
-		'mp.resideprovince' => '居住地(省)',
-		'mp.residecity' => '居住地(市)'
+		'mp.realname' => 'Name',
+		'mp.gender' => 'Gender',
+		'mp.birthyear' => 'birthy(year)',
+		'mp.birthmonth' => 'birthy(month)',
+		'mp.birthday' => 'birthy(day)',
+		'mp.bloodtype' => 'Blood type',
+		'mp.affectivestatus' => 'Emotional states',
+		'mp.birthprovince' => 'Home (Province))',
+		'mp.birthcity' => 'Hometown (City)',
+		'mp.resideprovince' => 'Place of residence (province)',
+		'mp.residecity' => 'Place of residence (city)'
 	),
 
-	'profile_view' => '<strong>您還有以下個人資料項需要補充完整：</strong><br>
+	'profile_view' => '<strong>You have the following items need to be supplemented complete profile：</strong><br>
 		<span style="color:red;">{profiles}</span><br><br>
-		<strong>請按照以下的說明來完成本任務：</strong>
+		<strong>Follow the instructions to participate in the task：</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">點擊這裡打開個人資料設置頁面</a></li>
-		<li>在新打開的設置頁面中，將上述個人資料補充完整</li>
+		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">Click here to open the Settings page of personal data</a></li>
+		<li>Set in the newly opened page，add the above personal information complete</li>
 		</ul>',
 );
 

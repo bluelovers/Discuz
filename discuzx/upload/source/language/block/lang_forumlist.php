@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'forumlist_fups' => '上級版塊',
-	'forumlist_fups_comment' => '設置顯示某些分類或版塊下屬的版塊',
-	'forumlist_titlelength' => '名稱長度',
-	'forumlist_titlelength_comment' => '設置版塊名稱顯示的最大長度',
-	'forumlist_summarylength' => '介紹長度',
-	'forumlist_summarylength_comment' => '設置版塊介紹顯示的最大長度',
-	'forumlist_orderby' => '版塊排序方式',
-	'forumlist_orderby_comment' => '設置以哪一字段或方式對版塊進行排序',
-	'forumlist_orderby_displayorder' => '按顯示順序順序排序',
-	'forumlist_orderby_threads' => '按主題數倒序排序',
-	'forumlist_orderby_todayposts' => '按今日發帖數倒序排序',
-	'forumlist_orderby_posts' => '按帖子數倒序排序',
+	'forumlist_fups'		=> 'Parent forum',
+	'forumlist_fups_comment'	=> 'Display some category forum or sub-forum',
+	'forumlist_titlelength'		=> 'Title length',
+	'forumlist_titlelength_comment'	=> 'Set the max length of forum name title',
+	'forumlist_summarylength'	=> 'Summary length',
+	'forumlist_summarylength_comment'	=> 'Set the max length of forum description',
+	'forumlist_orderby'		=> 'Order by',
+	'forumlist_orderby_comment'	=> 'Set the order of forums',
+	'forumlist_orderby_displayorder'	=> 'Display order',
+	'forumlist_orderby_threads'	=> 'Threads',
+	'forumlist_orderby_todayposts'	=> 'Posts today',
+	'forumlist_orderby_posts'	=> 'Posts',
 );
 
 ?>

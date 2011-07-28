@@ -9,16 +9,16 @@
 
 $lang = array
 (
-	'open_name' => '喧囂卡',
-	'open_desc' => '可以將主題開啟，可以回復',
-	'open_forum' => '允許使用本道具的版塊',
-	'open_info' => '開放指定的主題，請輸入主題的 ID',
-	'open_info_nonexistence' => '請指定要開放的主題',
-	'open_succeed' => '你操作的主題已開放回復',
-	'open_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'open_info_user_noperm' => '對不起，你不能對此人使用本道具',
+	'open_name' => 'Noise card',
+	'open_desc' => 'Thread can be enabled, you can restore',
+	'open_forum' => 'The forum allows the use of the magics',
+	'open_info' => 'Open the specified thread enter the thread ID',
+	'open_info_nonexistence' => 'Please specify the thread of open',
+	'open_succeed' => 'The thread is open your back operation',
+	'open_info_noperm' => 'Sorry not allowed to use the thread of the forum in which magics',
+	'open_info_user_noperm' => 'Sorry  you can not use the magics for this one',
 
-	'open_notification' => '你的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'open_notification' => 'Your thread {subject} was {actor} Use{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">Go see it！</a>',
 );
 
 ?>

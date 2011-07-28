@@ -9,19 +9,19 @@
 
 $lang = array
 (
-	'friendlink_content' => '展示樣式',
-	'friendlink_content_both' => 'logo和文字',
-	'friendlink_content_logo' => '僅logo',
-	'friendlink_content_text' => '僅文字',
-	'friendlink_type' => '鏈接分組',
-	'friendlink_type_group1' => '分組1',
-	'friendlink_type_group2' => '分組2',
-	'friendlink_type_group3' => '分組3',
-	'friendlink_type_group4' => '分組4',
-	'friendlink_titlelength' => '站點名稱長度',
-	'friendlink_titlelength_comment' => '設置站點名稱的最大長度',
-	'friendlink_summarylength' => '簡介長度',
-	'friendlink_summarylength_comment' => '設置站點簡介最大長度',
+	'friendlink_content'		=> 'Display style',
+	'friendlink_content_both'	=> 'Logo and text',
+	'friendlink_content_logo'	=> 'Logo only',
+	'friendlink_content_text'	=> 'Text only',
+	'friendlink_type'		=> 'Link Group',
+	'friendlink_type_group1'	=> 'Group 1',
+	'friendlink_type_group2'	=> 'Group 2',
+	'friendlink_type_group3'	=> 'Group 3',
+	'friendlink_type_group4'	=> 'Group 4',
+	'friendlink_titlelength' => 'Site name length',
+	'friendlink_titlelength_comment' => 'Set the maximum length of site name',
+	'friendlink_summarylength' => 'Introduction length',
+	'friendlink_summarylength_comment' => 'Set maximum length of the site Introduction',
 );
 
 ?>

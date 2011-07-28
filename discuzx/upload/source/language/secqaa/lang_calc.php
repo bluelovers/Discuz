@@ -9,8 +9,8 @@
 
 $lang = array
 (
-	'calc_name' => '100 以內加減法',
-	'calc_desc' => '隨機顯示 100 以內加減法的驗證問答',
+	'calc_name' => 'Addition and subtraction within 100',
+	'calc_desc' => 'Randomly display 100 the verification questions and answers within the addition and subtraction',
 );
 
 ?>

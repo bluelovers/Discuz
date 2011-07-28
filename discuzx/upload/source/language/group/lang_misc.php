@@ -9,11 +9,11 @@
 
 $lang = array
 (
-	'group_normal_member' => '設為普通成員',
-	'group_goaway' => '踢出群組',
-	'group_demise_message_title' => "把{$_G[setting][navs][3][navname]}{forum}成功轉讓給你了。",
-	'group_demise_message_body' => "我的{$_G[setting][navs][3][navname]}{forum}成功轉讓給你了，[url={siteurl}forum.php?mod=group&fid={fid}]點這裡查看{$_G[setting][navs][3][navname]}[/url]",
-	'group_join' => '加入{groupname}群組',
+	'group_normal_member' => 'Set as normal member',
+	'group_goaway' => 'Kick out of the group',
+	'group_demise_message_title' => "The {$_G[setting][navs][3][navname]}{forum}successfully transferred to you",
+	'group_demise_message_body' => "The {$_G[setting][navs][3][navname]}{forum}successfully transferred to you，[url={siteurl}forum.php?mod=group&fid={fid}]Click here to view the{$_G[setting][navs][3][navname]}[/url]",
+	'group_join' => 'Join{groupname}group',
 );
 
 ?>

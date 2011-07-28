@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'thunder_name' => '雷鳴之聲',
-	'thunder_desc' => '發佈一條全站動態，通知大家自己上線了',
-	'thunder_info' => '發佈一條全站動態，通知大家自己上線了',
+	'thunder_name' => 'Sound of Thunder',
+	'thunder_desc' => 'Publish a full-stop dynamics to inform you that your on-line',
+	'thunder_info' => 'Publish a full-stop dynamics to inform you that your on-line',
 );
 
 ?>

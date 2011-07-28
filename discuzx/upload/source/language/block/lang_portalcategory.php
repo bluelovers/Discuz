@@ -9,14 +9,14 @@
 
 $lang = array
 (
-	'portalcategory_thecatid' => '指定欄目',
-	'portalcategory_thecatid_comment' => '指定欄目的ID，多個ID之間用半角逗號（,）分割',
-	'portalcategory_catid' => '指定父級欄目',
-	'portalcategory_catid_comment' => '選擇父級欄目',
-	'portalcategory_orderby' => '排序方式',
-	'portalcategory_orderby_comment' => '設置以哪一字段或方式對分類進行排序',
-	'portalcategory_orderby_displayorder' => '按默認順序排序',
-	'portalcategory_orderby_articles' => '按文章數倒序',
+	'portalcategory_thecatid'		=> 'Portal Category',
+	'portalcategory_thecatid_comment'	=> 'Set the designated category ID�o separate multiple ID with a comma ","',
+	'portalcategory_catid'			=> 'Parent category',
+	'portalcategory_catid_comment'		=> 'Select parent category',
+	'portalcategory_orderby'		=> 'Ordered by',
+	'portalcategory_orderby_comment'	=> 'Set the order of categories',
+	'portalcategory_orderby_displayorder'	=> 'Default',
+	'portalcategory_orderby_articles'	=> 'Articles',
 );
 
 ?>

@@ -9,16 +9,16 @@
 
 $lang = array
 (
-	'namepost_name' => '照妖鏡',
-	'namepost_desc' => '可以查看一次匿名用戶的真實身份。',
-	'namepost_forum' => '允許使用本道具的版塊',
-	'namepost_num' => '擁有個數: {magicnum}',
-	'namepost_info' => '指定要顯身的帖子，請輸入帖子的 ID',
-	'namepost_info_nonexistence' => '參數錯誤，不能在此使用本道具。',
-	'namepost_succeed' => '匿名的用戶是 <a title="{username}" href="space.php?uid={uid}" target="_blank"><b>{username}</b></a>',
-	'namepost_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'namepost_info_user_noperm' => '對不起，你不能對此人使用本道具',
-	'magic_namepost_succeed' => '匿名的用戶是',
+	'namepost_name' => 'Magic mirror',
+	'namepost_desc' => 'You can view the true identity of an anonymous user。',
+	'namepost_forum' => 'The forum allows the use of the magics',
+	'namepost_num' => 'Has a number of: {magicnum}',
+	'namepost_info' => 'Specify the apparition of the post please enter the post ID',
+	'namepost_info_nonexistence' => 'Parameter error you can not use the magics in this。',
+	'namepost_succeed' => 'The user is anonymous <a title="{username}" href="space.php?uid={uid}" target="_blank"><b>{username}</b></a>',
+	'namepost_info_noperm' => 'Sorry  not allowed to use the theme of the forum in which magics',
+	'namepost_info_user_noperm' => 'Sorry you can not use the magics for this one',
+	'magic_namepost_succeed' => 'The user is anonymous',
 );
 
 ?>

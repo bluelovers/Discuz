@@ -9,20 +9,20 @@
 
 $lang = array
 (
-	'member_name' => '會員類任務',
-	'member_desc' => '收藏主題、使用道具，此類任務用來鼓勵和引導會員使用論壇的某個功能，活躍論壇的氛圍',
-	'member_complete_var_act' => '動作',
-	'member_complete_var_act_favorite' => '收藏主題',
-	'member_complete_var_act_magic' => '使用道具',
-	'member_complete_var_num' => '執行動作次數下限',
-	'member_complete_var_num_comment' => '會員需要執行相應動作的最少次數',
-	'member_complete_var_time' => '時間限制(小時)',
-	'member_complete_var_time_comment' => '設置會員從申請任務到完成任務的時間限制，會員在此時間內未能完成任務則不能領取獎勵並標記任務失敗，0 或留空為不限制',
+	'member_name' => 'Member task',
+	'member_desc' => 'Favorite Threads、Use magics，Such tasks to encourage and guide its members to use a feature Forum，Active forum atmosphere',
+	'member_complete_var_act' => 'Action',
+	'member_complete_var_act_favorite' => 'Favorite Threads',
+	'member_complete_var_act_magic' => 'Use magics',
+	'member_complete_var_num' => 'Limit the number of executive action',
+	'member_complete_var_num_comment' => 'Members need to perform the minimum number of corresponding action',
+	'member_complete_var_time' => 'Time limit (hours)',
+	'member_complete_var_time_comment' => 'Members of the task set to complete the task from the application time limit，Members failed to complete the task this time is not eligible for award and mark the task failed，0 or blank for no restriction',
 
-	'task_complete_time_start' => '從申請任務開始計時，',
-	'task_complete_time_limit' => '{value} 小時內，',
-	'task_complete_act_favorite' => '收藏 {value} 個主題',
-	'task_complete_act_magic' => '使用 {value} 次道具。<br />您可以在帖子頁面、日誌頁面、圖片頁面等使用道具',
+	'task_complete_time_start' => 'Task start time from the application，',
+	'task_complete_time_limit' => '{value} Time limit，',
+	'task_complete_act_favorite' => 'Favorite {value} threads',
+	'task_complete_act_magic' => 'Use {value} magics。<br />You can post the page、blog page、Picture pages use of props',
 );
 
 ?>

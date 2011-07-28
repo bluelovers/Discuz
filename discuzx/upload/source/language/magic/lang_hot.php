@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'hot_name' => '熱點燈',
-	'hot_desc' => '把自己的日誌熱度增加站點推薦的熱點值',
-	'hot_info' => '把自己的日誌熱度增加 {num} 個熱點值',
+	'hot_name' => 'Hot Lights',
+	'hot_desc' => 'Increase heat to their site﹐ log value of the recommended hotspot',
+	'hot_info' => 'Increase heat to their log {num} Hotspots value',
 );
 
 ?>

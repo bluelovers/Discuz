@@ -9,12 +9,12 @@
 
 $lang = array
 (
-	'avatar_name' => '頭像類任務',
-	'avatar_desc' => '該任務僅限沒有上傳頭像的會員申請，申請後只要上傳頭像即可完成任務，獲得相應的獎勵',
-	'avatar_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'avatar_name' => 'Picture type of task',
+	'avatar_desc' => 'The task is not only upload avatar membership application，an application can be done as long as the upload picture，get the corresponding reward',
+	'avatar_view' => '<strong>Follow the instructions to participate in the task：</strong>
 		<ul>
-		<li>1. <a href="home.php?mod=spacecp&ac=avatar" target="_blank">新窗口打開上傳頭像頁面</a></li>
-		<li>2. 上傳一個自己的頭像照片</li>
+		<li>1. <a href="home.php?mod=spacecp&ac=avatar" target="_blank">Upload picture page opens a new window</a></li>
+		<li>2. Upload a photo your avatar</li>
 		</ul>',
 );
 

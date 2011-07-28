@@ -9,8 +9,8 @@
 
 $lang = array
 (
-	'line_style' => '分割線樣式',
-	'line_style_line' => '實線',
-	'line_style_dash' => '虛線',
+	'line_style'		=> 'Strikethrough Style',
+	'line_style_line'	=> 'Line',
+	'line_style_dash'	=> 'Dash Line',
 );
 ?>

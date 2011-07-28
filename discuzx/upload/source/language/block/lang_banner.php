@@ -9,15 +9,15 @@
 
 $lang = array
 (
-	'banner_pic' => '圖片地址',
-	'banner_width' => '圖片寬度',
-	'banner_height' => '圖片高度',
-	'banner_url' => '圖片鏈接',
-	'banner_text' => '圖片介紹',
-	'banner_atarget' => '鏈接打開方式',
-	'banner_atarget_top' => '本頁面打開(跳出框架)',
-	'banner_atarget_blank' => '新窗口打開',
-	'banner_atarget_self' => '本頁面打開',
+	'banner_pic'		=> 'Image URL',
+	'banner_width'		=> 'Image width',
+	'banner_height'		=> 'Image height',
+	'banner_url'		=> 'Banner URL',
+	'banner_text'		=> 'Image description',
+	'banner_atarget'	=> 'Target to open the link',
+	'banner_atarget_top'	=> 'Open in this window (_top)',
+	'banner_atarget_blank'	=> 'Open in a new window (_blank)',
+	'banner_atarget_self'	=> 'Open in this window (_self)',
 );
 
 ?>

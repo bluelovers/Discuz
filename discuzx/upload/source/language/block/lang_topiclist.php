@@ -9,22 +9,22 @@
 
 $lang = array
 (
-	'topiclist_topicids' => '指定專題',
-	'topiclist_topicids_comment' => '填入指定專題的ID(topicid)，多個專題之間用逗號(,)分隔',
-	'topiclist_uids' => '創建者UID',
-	'topiclist_uids_comment' => '填入指定專題創建者的ID(uid)，多個用戶之間用逗號(,)分隔',
-	'topiclist_startrow' => '起始數據行數',
-	'topiclist_startrow_comment' => '如需設定起始的數據行數，請輸入具體數值，0 為從第一行開始，以此類推',
-	'topiclist_titlelength' => '標題長度',
-	'topiclist_titlelength_comment' => '指定專題標題最大長度',
-	'topiclist_summarylength' => '介紹長度',
-	'topiclist_summarylength_comment' => '指定專題介紹最大長度',
-	'topiclist_picrequired' => '過濾無封面專題',
-	'topiclist_picrequired_comment' => '是否過濾沒有封面圖片的專題',
-	'topiclist_orderby' => '專題排序方式',
-	'topiclist_orderby_comment' => '設置以哪一字段或方式對專題進行排序',
-	'topiclist_orderby_dateline' => '按發佈時間倒序',
-	'topiclist_orderby_viewnum' => '按查看數倒序',
+	'topiclist_topicids' => 'Specify topics',
+	'topiclist_topicids_comment' => 'Fill in the specified topic ID (topicid)，Between the number of topics with a comma (,) to separate',
+	'topiclist_uids' => 'Creator UID',
+	'topiclist_uids_comment' => 'Fill in the specified topic creator ID (uid)，Among multiple users with a comma (,) to separate',
+	'topiclist_startrow' => 'Initial number of rows of data',
+	'topiclist_startrow_comment' => 'For information on setting the initial number of rows，Please enter the specific values，0 from the first line，And so on',
+	'topiclist_titlelength' => 'Title Length',
+	'topiclist_titlelength_comment' => 'Specifies the maximum length of title of the topic',
+	'topiclist_summarylength' => 'Description Length',
+	'topiclist_summarylength_comment' => 'Specifies the maximum length of presentations',
+	'topiclist_picrequired' => 'No special filter cover',
+	'topiclist_picrequired_comment' => 'No cover image is the topic of filtering',
+	'topiclist_orderby' => 'Sort by topic',
+	'topiclist_orderby_comment' => 'Settings to which field to sort or manner of topics',
+	'topiclist_orderby_dateline' => 'Posted by reverse',
+	'topiclist_orderby_viewnum' => 'View by reverse',
 );
 
 ?>

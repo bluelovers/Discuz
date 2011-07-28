@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'money_name' => '金錢卡',
-	'money_desc' => '可以隨機獲得一些金幣',
-	'money_info' => '獲得的錢幣數目規則：大於1且小於購買價格150%的隨機數',
+	'money_name' => 'Money Card',
+	'money_desc' => 'Can randomly get some gold coins',
+	'money_info' => 'The number of available money rules: greater than 1 and less than 150% of the purchase price of the random number',
 );
 
 ?>

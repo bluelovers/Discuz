@@ -9,10 +9,10 @@
 
 $lang = array
 (
-	'attachsize_name' => '附件增容卡',
-	'attachsize_desc' => '增加附件容量上限',
-	'attachsize_info' => '額外增加 {num} M 附件容量上限',
-	'attachsize_addsize' => '增加容量',
+	'attachsize_name' => 'Attachment Capacity Card',
+	'attachsize_desc' => 'Increase the Attachment size limit',
+	'attachsize_info' => 'Additional {num} M Attachment size limit',
+	'attachsize_addsize' => 'Increase capacity',
 );
 
 ?>

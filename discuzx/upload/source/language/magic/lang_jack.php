@@ -9,19 +9,19 @@
 
 $lang = array
 (
-	'jack_name' => '千斤頂',
-	'jack_desc' => '可以將主題頂起一段時間，重複使用可延長帖子被頂起的時間',
-	'jack_expiration' => '時長',
-	'jack_expiration_comment' => '設置主題可以被頂起多長時間，默認 1 小時',
-	'jack_forum' => '允許使用本道具的版塊',
-	'jack_info' => '<p class="mtn xw0 mbn">頂起指定的主題<span class="xi1 xw1 xs2"> {expiration} </span> 小時。</p> <p class="mtn xw0 mbn">你現在有<span class="xi1 xw1 xs2"> {magicnum} </span>個千斤頂可以使用。</p>',
-	'jack_num' => '本次使用數量:',
-	'jack_num_not_enough' => '道具數量不足或沒有填寫使用數量。',
-	'jack_info_nonexistence' => '請指定要頂起的主題',
-	'jack_succeed' => '千斤頂成功將主題頂起',
-	'jack_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
+	'jack_name' => 'Jack',
+	'jack_desc' => 'Thread from the top can be a period of time re-use may be extended from time to post was the top',
+	'jack_expiration' => 'Length',
+	'jack_expiration_comment' => 'Threads can be set from the top of long default 1 hour',
+	'jack_forum' => 'The forum allows the use of the magics',
+	'jack_info' => '<p class="mtn xw0 mbn">Specified topic from the top<span class="xi1 xw1 xs2"> {expiration} </span> Hours。</p> <p class="mtn xw0 mbn">You now have<span class="xi1 xw1 xs2"> {magicnum} </span>You can use a jack。</p>',
+	'jack_num' => 'The use of quantitative:',
+	'jack_num_not_enough' => 'The number of magics to use the number of inadequate or not completed。',
+	'jack_info_nonexistence' => 'Please specify the subject from the top',
+	'jack_succeed' => 'Success of the theme from the top jack',
+	'jack_info_noperm' => 'Sorry not allowed to use the theme of the forum in which magics',
 
-	'jack_notification' => '你的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'jack_notification' => 'Your thread {subject} was {actor} Use {magicname}，<a href="forum.php?mod=viewthread&tid={tid}">Go see it！</a>',
 );
 
 ?>

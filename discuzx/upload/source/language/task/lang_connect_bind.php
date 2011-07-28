@@ -9,12 +9,12 @@
 
 $lang = array
 (
-	'connect_bind_name' => 'QQ 帳號綁定任務',
-	'connect_bind_desc' => '綁定 QQ 帳號即可獲得相應的獎勵',
-	'connect_bind_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'connect_bind_name' => 'QQ account bound tasks',
+	'connect_bind_desc' => 'QQ bound to get the corresponding reward account',
+	'connect_bind_view' => '<strong>Follow the instructions to participate in the task：</strong>
 		<ul>
-		<li>1. <a href="connect.php?mod=config" target="_blank">新窗口打開 QQ 帳號綁定的頁面</a></li>
-		<li>2. 在新打開的頁面中，點擊「QQ帳號綁定」按鈕，填寫您的 QQ 賬號和密碼即可完成綁定</li>
+		<li>1. <a href="connect.php?mod=config" target="_blank">QQ account the new window opens the page binding</a></li>
+		<li>2. Open the page in a new，Click the ＂QQ account bound＂button，Fill in your QQ account number and password to complete binding</li>
 		</ul>',
 );
 

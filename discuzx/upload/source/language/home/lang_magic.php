@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'target_tid' => '目標主題 tid',
-	'target_pid' => '目標帖子 pid',
-	'target_username' => '目標用戶名',
-	'magics_type_1' => '帖子類',
-	'magics_type_2' => '會員類',
-	'magics_type_3' => '其他類',
+	'target_tid'		=> 'Target Thread Id',
+	'target_pid'		=> 'Target Post Id',
+	'target_username'	=> 'Target User name',
+	'magics_type_1'		=> 'Messages',
+	'magics_type_2'		=> 'Members',
+	'magics_type_3'		=> 'Other',
 
-	'CCK_color' => '顏色',
-	'MOK_info' => '獲得的錢幣數目規則：大於 1 且小於購買價格 150% 的隨機數',
-	'CODE_info' => '獲得 Discuz! 測試邀請碼一個',
-	'MVK_target' => '要移動到的版面',
-	'SOFA_message' => '一道閃電劃破湛藍的天空，隨著一聲巨響，沙發被我搶了！哈哈！',
+	'CCK_color'		=> 'Color',
+	'MOK_info'		=> 'Get the number of rules of money: the random number in range from 1 to 150% of the purchase price',
+	'CODE_info'		=> 'Get Discuz! Test invitation code',
+	'MVK_target'		=> 'Move to the page',
+	'SOFA_message'		=> 'A lightning pierced the blue sky﹐ with a loud noise﹐ the sofa was I robbed! Haha!',
 );
 
 ?>

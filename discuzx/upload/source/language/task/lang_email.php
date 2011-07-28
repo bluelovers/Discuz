@@ -9,13 +9,13 @@
 
 $lang = array
 (
-	'email_name' => '驗證郵箱任務',
-	'email_desc' => '驗證郵箱獲得相應的獎勵。',
-	'email_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'email_name' => 'Verify the mailbox task',
+	'email_desc' => 'Verify E-mail to obtain the corresponding bonus。',
+	'email_view' => '<strong>Follow the instructions to participate in the task：</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile&op=password" target="_blank">新窗口打開賬號設置頁面</a></li>
-		<li>在新打開的設置頁面中，將自己的郵箱真實填寫(新填寫的郵箱需要先保存)，並點擊「重新接收驗證郵件」鏈接</li>
-		<li>幾分鐘後，系統會給您發送一封郵件，收到郵件後，請按照郵件的說明，訪問郵件中的驗證鏈接就可以了</li>
+		<li><a href="home.php?mod=spacecp&ac=profile&op=password" target="_blank">Open the Account Settings page new window</a></li>
+		<li>Open the settings in the new page，Will fill your mailbox real(New mail you need to save the completed)，And click on the＂re-verification message received＂link</li>
+		<li>A few minutes later，The system will send you an e-mail，After receiving the message，Please follow the instructions e-mail，Access to the verification link in the message can be a</li>
 		</ul>',
 );
 

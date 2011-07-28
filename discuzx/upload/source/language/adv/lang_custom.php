@@ -9,13 +9,13 @@
 
 $lang = array
 (
-	'custom_name' => '自定義廣告',
-	'custom_desc' => '通過在模版、HTML 文件中添加廣告代碼，可以在站點的任意頁面添加廣告。適用於懂得簡單 HTML 知識的站長。<br /><br />
-		<a href="javascript:;" onclick="prompt(\'請複製(CTRL+C)以下內容並添加到模板中，添加此廣告位\', \'<!--{ad/custom_'.$_G['gp_customid'].'}-->\')" />內部調用</a>&nbsp;
-		<a href="javascript:;" onclick="prompt(\'請複製(CTRL+C)以下內容並添加到 HTML 文件中，添加此廣告位\', \'&lt;script type=\\\'text/javascript\\\' src=\\\''.$_G['siteurl'].'api.php?mod=ad&adid=custom_'.$_G['gp_customid'].'\\\'&gt;&lt;/script&gt;\')" />外部調用</a>',
-	'custom_id_notfound' => '自定義廣告不存在',
-	'custom_codelink' => '內部調用',
-	'custom_text' => '自定義廣告',
+	'custom_name' => '自定义广告',
+	'custom_desc' => '通过在模版、HTML 文件中添加广告代码，可以在站点的任意页面添加广告。适用于懂得简单 HTML 知识的站长。<br /><br />
+		<a href="javascript:;" onclick="prompt(\'请复制(CTRL+C)以下内容并添加到模板中，添加此广告位\', \'<!--{ad/custom_'.$_G['gp_customid'].'}-->\')" />内部调用</a>&nbsp;
+		<a href="javascript:;" onclick="prompt(\'请复制(CTRL+C)以下内容并添加到 HTML 文件中，添加此广告位\', \'&lt;script type=\\\'text/javascript\\\' src=\\\''.$_G['siteurl'].'api.php?mod=ad&adid=custom_'.$_G['gp_customid'].'\\\'&gt;&lt;/script&gt;\')" />外部调用</a>',
+	'custom_id_notfound' => '自定义广告不存在',
+	'custom_codelink' => '内部调用',
+	'custom_text' => '自定义广告',
 );
 
 ?>

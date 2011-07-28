@@ -9,17 +9,17 @@
 
 $lang = array
 (
-	'anonymouspost_name' => '匿名卡',
-	'anonymouspost_desc' => '在指定的地方，讓自己的名字顯示為匿名。',
-	'anonymouspost_num' => '擁有個數: {magicnum}',
-	'anonymouspost_forum' => '允許使用本道具的版塊',
-	'anonymouspost_info' => '將自己的帖子設置為匿名身份，請輸入帖子的 ID',
-	'anonymouspost_info_nonexistence' => '請指定要匿名的帖子',
-	'anonymouspost_succeed' => '成功設置為匿名',
-	'anonymouspost_use_error' => '參數錯誤，不能在此處使用本道具。',
-	'anonymouspost_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'anonymouspost_info_user_noperm' => '對不起，你不能對此人使用本道具',
-	'anonymouspost_once_limit' => '已經是匿名狀態了，不能重複使用本道具。',
+	'anonymouspost_name' => 'Anonymous Card',
+	'anonymouspost_desc' => 'In designated areas，Your name to appear as anonymous。',
+	'anonymouspost_num' => 'Has a number of: {magicnum}',
+	'anonymouspost_forum' => 'The forum allows the use of the magics',
+	'anonymouspost_info' => 'Your posts will be set to anonymous，Please enter a post ID',
+	'anonymouspost_info_nonexistence' => 'Please specify anonymous posts',
+	'anonymouspost_succeed' => 'Success is set to Anonymous',
+	'anonymouspost_use_error' => 'Parameter error，Can not use the magics here。',
+	'anonymouspost_info_noperm' => 'Sorry，Forum where the threads is not allowed to use the magics',
+	'anonymouspost_info_user_noperm' => 'Sorry，You can not use the magics for this one',
+	'anonymouspost_once_limit' => 'Had already anonymous，Can not re-use the magics。',
 );
 
 ?>

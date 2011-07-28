@@ -9,8 +9,8 @@
 
 $lang = array
 (
-	'gift_name' => '紅包類任務',
-	'gift_desc' => '申請此任務即可領取紅包',
+	'gift_name' => 'Red envelope task',
+	'gift_desc' => 'This task can apply to receive a red envelope',
 );
 
 ?>

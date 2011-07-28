@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'gift_name' => '紅包卡',
-	'gift_desc' => '將自己的一部分積分埋在空間，來訪者可以點擊獲取',
-	'gift_info' => '將積分作為紅包（可分成多份）埋在自己空間，<br />每個來訪者最多可以獲取其中一份',
-	'gift_succeed' => '埋設紅包成功 ',
-	'gift_bad_credits_input' => '輸入的積分總數有誤',
-	'gift_bad_percredit_input' => '輸入的每份積分數有誤',
-	'gift_bad_credittype_input' => '指定的積分類型有誤',
-	'gift_credits_out_of_own' => '輸入的積分數超出你擁有的積分數',
-	'gift_gc' => '回收紅包',
-	'gift_use' => '埋個紅包',
+	'gift_name' => 'Red packets card',
+	'gift_desc' => 'ntegral part of themselves buried in the space， visitors can click to get',
+	'gift_info' => 'The integral as a Red packets （can be divided into more than one）buried in their own space，<br />Visitors can get up to each one of which',
+	'gift_succeed' => 'Successfully planted Red packets ',
+	'gift_bad_credits_input' => 'Enter the total number of incorrect credits',
+	'gift_bad_percredit_input' => 'Each entered the wrong number of credits',
+	'gift_bad_credittype_input' => 'Credits specified the wrong type of',
+	'gift_credits_out_of_own' => 'Enter the number of credits beyond the number of credits you have',
+	'gift_gc' => 'Recycled Red packets',
+	'gift_use' => 'Buried in a red envelope',
 
-	'gift_receive_gift' => '領取紅包 {percredit} {credittype}',
+	'gift_receive_gift' => 'Receive Red packets {percredit} {credittype}',
 );
 
 ?>

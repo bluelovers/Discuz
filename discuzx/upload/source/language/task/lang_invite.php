@@ -9,12 +9,12 @@
 
 $lang = array
 (
-	'invite_message' => '<p style="color:red;">哇，厲害！您現在已經邀請了 {count} 個好友，請繼續努力！</p><br>',
-	'invite_guide' => '<strong>請按照以下的說明來完成本任務：</strong>
+	'invite_message' => '<p style="color:red;">Wow，Powerful！You are now invited {count} A friend， please continue to！</p><br>',
+	'invite_guide' => '<strong>Follow the instructions to participate in the task：</strong>
 		<ul class="task">
-		<li>在新窗口中打開<a href="home.php?mod=spacecp&ac=invite" target="_blank">好友邀請頁面</a></li>
-		<li>通過 QQ、MSN 等 IM 工具，或者發送郵件，把邀請鏈接告訴您的好友，邀請他們加入進來吧</li>
-		<li>您需要邀請 10 個好友才算完成</li>
+		<li>Open in a new window<a href="home.php?mod=spacecp&ac=invite" target="_blank">Friend invite page</a></li>
+		<li>Through QQ﹑MSN and other IM tools or send e-mail the invitation link to tell your friends to invite them to join it</li>
+		<li>You need to be complete to invite 10 friends</li>
 		</ul>',
 
 );

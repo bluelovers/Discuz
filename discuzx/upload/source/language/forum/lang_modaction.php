@@ -10,78 +10,79 @@
 $lang = array
 (
 
-	'EDT' => '編輯',
+	'EDT'	=> 'Edit',
 
-	'DEL' => '刪除',
-	'DLP' => '刪除回復',
-	'DCM' => '刪除點評',
-	'PRN' => '批量刪帖',
-	'UDL' => '反刪除',
+	'DEL'	=> 'Delete',
+	'DLP'	=> 'Delete reply',
+	'DCM'	=> 'Delete comment',
+	'PRN'	=> 'Bulk post remove',
+	'UDL'	=> 'Undelete',
 
-	'DIG' => '加入精華',
-	'UDG' => '解除精華',
-	'EDI' => '限時精華',
-	'UED' => '解除限時精華',
+	'DIG'	=> 'Digg',
+	'UDG'	=> 'Bury',
+	'EDI'	=> 'Limit digg',
+	'UED'	=> 'Unlimit digg',
 
-	'CLS' => '關閉',
-	'OPN' => '打開',
-	'ECL' => '限時關閉',
-	'UEC' => '解除限時關閉',
-	'EOP' => '限時打開',
-	'UEO' => '解除限時打開',
+	'CLS'	=> 'Close',
+	'OPN'	=> 'Open',
+	'ECL'	=> 'Limit Close',
+	'UEC'	=> 'Unlimit close',
+	'EOP'	=> 'Limit open',
+	'UEO'	=> 'Unlimit open',
 
-	'STK' => '置頂',
-	'UST' => '解除置頂',
-	'EST' => '限時置頂',
-	'UES' => '解除限時置頂',
+	'STK'	=> 'Stick',
+	'UST'	=> 'Unstick',
+	'EST'	=> 'Stick Time Limited',
+	'UES'	=> 'UnStick Time Limited',
 
-	'SPL' => '分割',
-	'MRG' => '合併',
+	'SPL'	=> 'Split',
+	'MRG'	=> 'Merge',
 
-	'HLT' => '設置高亮',
-	'UHL' => '解除高亮',
-	'EHL' => '限時高亮',
-	'UEH' => '解除限時高亮',
+	'HLT'	=> 'Highlight',
+	'UHL'	=> 'Unhighlight',
+	'EHL'	=> 'Limit Highlight',
+	'UEH'	=> 'Unlimit Highlight',
 
-	'BMP' => '提升',
-	'DWN' => '下沉',
+	'BMP'	=> 'Bump',
+	'DWN'	=> 'Down',
 
-	'MOV' => '移動',
-	'CPY' => '複製',
-	'TYP' => '分類',
+	'MOV'	=> 'Move',
+	'CPY'	=> 'Copy',
+	'TYP'	=> 'Type',
 
-	'RFD' => '強制退款',
+	'RFD'	=> 'Refund',
 
-	'MOD' => '審核通過',
+	'MOD'	=> 'Moderate',
 
-	'ABL' => '加入文集',
-	'RBL' => '移除文集',
+	'ABL'	=> 'Add BLOG',
+	'RBL'	=> 'Remove BLLOG',
 
-	'PTS' => '推送主題',
-	'RFS' => '解除推送',
-	'RMR' => '取消懸賞',
-	'BNP' => '屏蔽帖子',
-	'UBN' => '解除屏蔽',
+	'PTS'	=> 'Push to stack',
+	'RFS'	=> 'Restore from stack',
+	'RMR'	=> 'Remove reward',
+	'BNP'	=> 'Ban post',
+	'UBN'	=> 'Unban post',
 
-	'REC' => '推薦',
-	'URE' => '解除推薦',
+	'REC'	=> 'Recommend',
+	'URE'	=> 'Unrecommend',
 
-	'WRN' => '警告',
-	'UWN' => '解除警告',
+	'WRN'	=> 'Warn',
+	'UWN'	=> 'Unwarn',
 
-	'SPA' => '添加圖章',
-	'SPD' => '撤銷圖章',
 
-	'SLA' => '添加圖標',
-	'SLD' => '撤銷圖標',
+	'SPA' => 'add Stamp',
+	'SPD' => 'move Stamp',
 
-	'REG' => '群組推薦',
+	'SLA' => 'add icon',
+	'SLD' => 'move icon',
 
-	'PTA' => '生成文章',
+	'REG' => 'Group recommended',
 
-	'MAG' => '道具',
+	'PTA' => 'Generate Articlel',
 
-	'REB' => '推送',
+	'MAG'	=> 'Magic',
+
+	'REB' => 'block recommend ',
 
 );
 

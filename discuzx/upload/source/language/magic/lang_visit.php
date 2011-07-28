@@ -9,10 +9,10 @@
 
 $lang = array
 (
-	'visit_name' => '互訪卡',
-	'visit_desc' => '隨機訪問好友空間/向好友打招呼/給好友留言',
-	'visit_num' => '訪問好友數',
-	'visit_info' => '隨機訪問(最多 {num} 個)好友空間/向好友打招呼/給好友留言',
+	'visit_name' => 'Card visits',
+	'visit_desc' => 'Random Access friend space / greeting to friends / message to a friend',
+	'visit_num' => 'Number of visits friends',
+	'visit_info' => 'Random access (up to {num})Friend Space / greeting to friends / message to a friend',
 );
 
 ?>

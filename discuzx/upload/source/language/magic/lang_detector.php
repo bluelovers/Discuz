@@ -9,10 +9,10 @@
 
 $lang = array
 (
-	'detector_name' => '探測器',
-	'detector_desc' => '探測埋了紅包的會員空間',
-	'detector_num' => '最大探測數',
-	'detector_info' => '探測(最多 {num} 個)埋了紅包的會員空間',
+	'detector_name' => 'Detector card',
+	'detector_desc' => 'Buried in a red envelope detection of members of space',
+	'detector_num' => 'The maximum number of detection',
+	'detector_info' => 'Detection (up to {num})Buried in a red envelope Member space',
 );
 
 ?>

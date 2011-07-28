@@ -9,14 +9,14 @@
 
 $lang = array
 (
-	'showip_name' => '窺視卡',
-	'showip_desc' => '可以查看指定用戶的 IP',
-	'showip_targetuser' => '你要查看誰的 IP',
-	'showip_info_nonexistence' => '請輸入用戶名',
-	'showip_ip_message' => '{username} 的 IP 為 {ip}',
-	'showip_info_noperm' => '對不起，你無權查看此人的 IP',
+	'showip_name' => 'Peep Card',
+	'showip_desc' => 'specify the user can view the IP ',
+	'showip_targetuser' => 'You have to see who the IP ',
+	'showip_info_nonexistence' => 'Please enter your user name',
+	'showip_ip_message' => '{username} in the IP for the {ip} ',
+	'showip_info_noperm' => 'Sorry  you have no right to view this persons IP ',
 
-	'showip_notification' => '你被人使用了{magicname}',
+	'showip_notification' => 'You have been used {magicname}',
 );
 
 ?>

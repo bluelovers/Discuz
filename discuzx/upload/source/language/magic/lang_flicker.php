@@ -7,8 +7,8 @@
  */
 $lang = array
 (
-	'flicker_name' => '彩虹炫',
-	'flicker_desc' => '在日誌、相冊評論中使用彩虹炫',
-	'flicker_info' => '在日誌、相冊評論中使用彩虹炫',
-	'flicker_succeed' => '彩虹炫使用成功。',
+	'flicker_name' => 'Rainbow-hyun',
+	'flicker_desc' => 'In the log using the rainbow-hyun album reviews',
+	'flicker_info' => 'In the log using the rainbow-hyun album reviews',
+	'flicker_succeed' => 'Successful use of the Rainbow-hyun。',
 );

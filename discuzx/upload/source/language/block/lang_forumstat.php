@@ -9,37 +9,37 @@
 
 $lang = array
 (
-	'forumstat_name' => '論壇統計',
-	'forumstat_desc' => '論壇統計數據調用',
-	'forumstat_forums_allow' => '顯示版塊數統計',
-	'forumstat_forums_order' => '版塊數統計顯示順序',
-	'forumstat_forums_text' => '版塊數統計提示文字',
-	'forumstat_forums_default' => '版塊數:',
+	'forumstat_name'		=> 'Forum statistics',
+	'forumstat_desc'		=> 'Show forum data statistics',
+	'forumstat_forums_allow'	=> 'Display forum statistics',
+	'forumstat_forums_order'	=> 'Show order number',
+	'forumstat_forums_text'		=> 'Show forum tips',
+	'forumstat_forums_default'	=> 'Forums:',
 
-	'forumstat_threads_allow' => '顯示主題數統計',
-	'forumstat_threads_order' => '主題數統計顯示順序',
-	'forumstat_threads_text' => '主題數統計提示文字',
-	'forumstat_threads_default' => '主題數:',
+	'forumstat_threads_allow'	=> 'Display threads statistics',
+	'forumstat_threads_order'	=> 'Show order number',
+	'forumstat_threads_text'	=> 'Show thread tips',
+	'forumstat_threads_default'	=> 'Threads:',
 
-	'forumstat_posts_allow' => '顯示帖子數統計',
-	'forumstat_posts_order' => '帖子數統計顯示順序',
-	'forumstat_posts_text' => '帖子數統計提示文字',
-	'forumstat_posts_default' => '帖子數:',
+	'forumstat_posts_allow'		=> 'Display posts statistics',
+	'forumstat_posts_order'		=> 'Show posts order',
+	'forumstat_posts_text'		=> 'Show post tips',
+	'forumstat_posts_default'	=> 'Posts:',
 
-	'forumstat_members_allow' => '顯示用戶數統計',
-	'forumstat_members_order' => '用戶數統計顯示順序',
-	'forumstat_members_text' => '用戶數統計提示文字',
-	'forumstat_members_default' => '用戶數:',
+	'forumstat_members_allow'	=> 'Display users statistics',
+	'forumstat_members_order'	=> 'Show user number',
+	'forumstat_members_text'	=> 'Show user tips',
+	'forumstat_members_default'	=> 'Users:',
 
-	'forumstat_online_allow' => '顯示在線人數統計',
-	'forumstat_online_order' => '在線人數統計顯示順序',
-	'forumstat_online_text' => '在線人數統計提示文字',
-	'forumstat_online_default' => '在線人數:',
+	'forumstat_online_allow'	=> 'Display online statistics',
+	'forumstat_online_order'	=> 'Show online order',
+	'forumstat_online_text'		=> 'Show online tips',
+	'forumstat_online_default'	=> 'Online:',
 
-	'forumstat_onlinemember_allow' => '顯示在線會員統計',
-	'forumstat_onlinemember_order' => '在線會員統計顯示順序',
-	'forumstat_onlinemember_text' => '在線會員統計提示文字',
-	'forumstat_onlinemember_default' => '在線會員:',
+	'forumstat_onlinemember_allow'	=> 'Display online members',
+	'forumstat_onlinemember_order'	=> 'Show online member order',
+	'forumstat_onlinemember_text'	=> 'Show online members tips',
+	'forumstat_onlinemember_default'	=> 'Onlime members:',
 );
 
 ?>

@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'sofa_name' => '搶沙發',
-	'sofa_desc' => '可以搶奪指定主題的沙發',
-	'sofa_forum' => '允許使用本道具的版塊',
-	'sofa_info' => '搶奪指定的主題的沙發，請輸入主題的 ID',
-	'sofa_info_nonexistence' => '請指定要搶沙發的主題',
-	'sofa_succeed' => '你已成功搶奪了本主題的沙發位置',
-	'sofa_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'sofa_info_user_noperm' => '對不起，你不能對此人使用本道具',
-	'sofa_info_sofaexistence' => '你來晚了，本主題已經被其他人搶過沙發了',
-	'sofa_text' => 'O(∩_∩)O哈哈~，沙發是我的啦\n[color=gray]{actor} 於 {time} 使用 {magicname} 搶奪本帖沙發[/color]',
+	'sofa_name' => 'Grab sofa',
+	'sofa_desc' => 'you can specify the theme to snatch the sofa',
+	'sofa_forum' => 'Allow use of the magics of the Forum',
+	'sofa_info' => 'snatch sofa specified thread enter the thread ID ',
+	'sofa_info_nonexistence' => 'Please specify the thread of the sofa to grab',
+	'sofa_succeed' => 'You have successfully robbed the location of the thread on the sofa',
+	'sofa_info_noperm' => 'Sorry  not allowed to use the forum where the theme magics',
+	'sofa_info_user_noperm' => 'Sorry  you can not use the magics to this person',
+	'sofa_info_sofaexistence' => 'You are late this thread has grabbed the couch by others',
+	'sofa_text' => 'O (∩ _ ∩) O HaHa ~ the sofa is my friends\n[color=gray]{actor} at {time} using the {magicname} grab the posts sofa [/color] ',
 
-	'sofa_notification' => '你的主題 {subject} 被 {actor} 使用了 {magicname} 搶奪了沙發，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'sofa_notification' => 'Your thread {subject} was {actor} use {magicname} Snatch on the sofa，<a href="forum.php?mod=viewthread&tid={tid}">Go see it！</a>',
 );
 
 ?>

@@ -9,8 +9,8 @@
 
 $lang = array
 (
-	'search_name' => '搜索 右側廣告',
-	'search_desc' => '展現方式: 搜索右側廣告展現於搜索結果頁右側。',
+	'search_name' => '搜索 右侧广告',
+	'search_desc' => '展现方式: 搜索右侧广告展现于搜索结果页右侧。',
 );
 
 ?>

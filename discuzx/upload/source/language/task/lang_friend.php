@@ -9,13 +9,13 @@
 
 $lang = array
 (
-	'friend_name' => '添加好友任務',
-	'friend_desc' => '擁有 5 個好友獲得相應的獎勵',
-	'friend_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'friend_name' => 'Add Friend tasks',
+	'friend_desc' => 'With five friends to obtain the corresponding bonus',
+	'friend_view' => '<strong>Follow the instructions to participate in the task：</strong>
 		<ul>
-		<li>1. <a href="home.php?mod=spacecp&ac=friend&op=find" target="_blank">新窗口打開尋找好友頁面</a></li>
-		<li>2. 在新打開的頁面中，可以將系統自動給您找到的推薦用戶加為好友，也可以自己設置條件尋找並添加為好友</li>
-		<li>3. 接下來，您還需要等待對方批准您的好友申請</li>
+		<li>1. <a href="home.php?mod=spacecp&ac=friend&op=find" target="_blank">New window opens the page to find friends</a></li>
+		<li>2. Open the page in a new，The system can be automatically recommended to you to find users Add as Friend，Conditions can also set up their own search and add as a friend</li>
+		<li>3. Next，You also need to approve your friend to wait for the other applications</li>
 		</ul>',
 );
 

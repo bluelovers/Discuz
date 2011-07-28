@@ -9,15 +9,15 @@
 
 $lang = array
 (
-	'repent_name' => '悔悟卡',
-	'repent_desc' => '可以刪除自己的帖子',
-	'repent_forum' => '允許使用本道具的版塊',
-	'repent_info' => '刪除自己的帖子，請輸入帖子的 ID',
-	'repent_info_nonexistence' => '請指定要刪除的帖子',
-	'repent_succeed' => '你操作的帖子已刪除',
-	'repent_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'repent_info_user_noperm' => '對不起，你只能刪除自己的帖子',
-	'repent_do_not_rushreply' => '不能在搶樓帖中使用此道具',
+	'repent_name' => 'Repentance Card',
+	'repent_desc' => 'can delete your posts',
+	'repent_forum' => 'Allow use of the magics of the Forum',
+	'repent_info' => 'delete your posts please enter the post ID ',
+	'repent_info_nonexistence' => 'Please specify to delete the post',
+	'repent_succeed' => 'Your post has been deleted operation',
+	'repent_info_noperm' => 'Sorry  not allowed to use the forum where the theme magics',
+	'repent_info_user_noperm' => 'Sorry you can only delete your own posts',
+	'repent_do_not_rushreply' => 'posts can not be used in the floor grab the magics',
 );
 
 ?>

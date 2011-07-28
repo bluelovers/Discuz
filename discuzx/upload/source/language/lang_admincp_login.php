@@ -9,30 +9,30 @@
 
 $lang = array
 (
-	'login_title' => '登錄管理中心',
-	'login_username' => '用戶名',
-	'login_password' => '密　碼',
+	'login_title' => '登录管理中心',
+	'login_username' => '用户名',
+	'login_password' => '密　码',
 
 	'submit' => '提交',
-	'forcesecques' => '必填項',
-	'security_question' => '提　問',
+	'forcesecques' => '必填项',
+	'security_question' => '提　问',
 	'security_answer' => '回　答',
-	'security_question_0' => '無安全提問',
-	'security_question_1' => '母親的名字',
-	'security_question_2' => '爺爺的名字',
-	'security_question_3' => '父親出生的城市',
-	'security_question_4' => '你其中一位老師的名字',
-	'security_question_5' => '你個人計算機的型號',
-	'security_question_6' => '你最喜歡的餐館名稱',
-	'security_question_7' => '駕駛執照最後四位數字',
+	'security_question_0' => '无安全提问',
+	'security_question_1' => '母亲的名字',
+	'security_question_2' => '爷爷的名字',
+	'security_question_3' => '父亲出生的城市',
+	'security_question_4' => '你其中一位老师的名字',
+	'security_question_5' => '你个人计算机的型号',
+	'security_question_6' => '你最喜欢的餐馆名称',
+	'security_question_7' => '驾驶执照最后四位数字',
 
-	'login_tips' => 'Discuz! 是 <a href="http://www.tencent.com" target="_blank">騰訊</a> 旗下 <a href="http://www.comsenz.com" target="_blank">Comsenz</a> 公司推出的以社區為基礎的專業建站平台，幫助網站實現一站式服務。',
-	'login_nosecques' => '你還沒有使用安全登錄，請在個人中心設置你的安全提問後，再訪問管理中心。你可以 <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">點擊這裡</a> 進入安全提問的設置。',
+	'login_tips' => 'Discuz! 是 <a href="http://www.tencent.com" target="_blank">腾讯</a> 旗下 <a href="http://www.comsenz.com" target="_blank">Comsenz</a> 公司推出的以社区为基础的专业建站平台，帮助网站实现一站式服务。',
+	'login_nosecques' => '你还没有使用安全登录，请在个人中心设置你的安全提问后，再访问管理中心。你可以 <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">点击这里</a> 进入安全提问的设置。',
 
-	'login_cplock' => '你的管理面板已經鎖定! <br>請在<b> {ltime} </b>秒以後重新訪問管理中心',
-	'login_user_lock' => '由於你的登錄密碼錯誤次數過多,本次登錄請求已經被拒絕. 請 15 分鐘後重新嘗試',
-	'login_cp_noaccess' => '<b>管理中心(或此項操作)尚未對你開放</b><br><br>你的此次操作已經記錄, 請勿非法嘗試',
-	'noaccess' => '後台管理權限(或此項操作)尚未對你開放, 請聯繫站點管理員',
+	'login_cplock' => '你的管理面板已经锁定! <br>请在<b> {ltime} </b>秒以后重新访问管理中心',
+	'login_user_lock' => '由于你的登录密码错误次数过多,本次登录请求已经被拒绝. 请 15 分钟后重新尝试',
+	'login_cp_noaccess' => '<b>管理中心(或此项操作)尚未对你开放</b><br><br>你的此次操作已经记录, 请勿非法尝试',
+	'noaccess' => '后台管理权限(或此项操作)尚未对你开放, 请联系站点管理员',
 
 
 );

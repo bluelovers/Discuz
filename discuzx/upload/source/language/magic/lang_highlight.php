@@ -9,23 +9,23 @@
 
 $lang = array
 (
-	'highlight_name' => '變色卡',
-	'highlight_desc' => '可以將帖子或日誌的標題高亮，變更顏色',
-	'highlight_expiration' => '高亮有效期',
-	'highlight_expiration_comment' => '設置標題可以被高亮多長時間，默認 24 小時。作用於日誌時無有效期。',
-	'highlight_forum' => '允許使用本道具的版塊',
-	'highlight_info_tid' => '高亮主題的標題 {expiration} 小時',
-	'highlight_info_blogid' => '可以將日誌或帖子的標題高亮，變更顏色',
-	'highlight_color' => '顏色',
-	'highlight_info_nonexistence_tid' => '請指定要高亮的帖子',
-	'highlight_info_nonexistence_blogid' => '請指定要高亮的日誌',
-	'highlight_succeed_tid' => '你操作的帖子已高亮',
-	'highlight_succeed_blogid' => '你操作的日誌已高亮',
-	'highlight_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'highlight_info_notype' => '參數錯誤，沒有指定操作類型。',
+	'highlight_name' => 'Highlight card',
+	'highlight_desc' => 'You can highlight the title of posts or logs, change the color',
+	'highlight_expiration' => 'Highlighting validity',
+	'highlight_expiration_comment' => 'Set how long the title can be highlighted the default 24 hours. Not valid when applied to the log',
+	'highlight_forum' => 'The forum allows the use of the magics',
+	'highlight_info_tid' => 'Highlight the title of the thread {expiration} hours',
+	'highlight_info_blogid' => 'You can highlight the log or the post title change the color',
+	'highlight_color' => 'color',
+	'highlight_info_nonexistence_tid' => 'Please specify the post to highlight',
+	'highlight_info_nonexistence_blogid' => 'Please specify the log to highlight',
+	'highlight_succeed_tid' => 'You have been highlighted in the posts',
+	'highlight_succeed_blogid' => 'You have been highlighted in the logs',
+	'highlight_info_noperm' => 'Sorry not allowed to use the theme of the forum in which magics',
+	'highlight_info_notype' => 'Parameter error, do not specify the type of operation.',
 
-	'highlight_notification' => '你的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
-	'highlight_notification_blogid' => '你的日誌 {subject} 被 {actor} 使用了{magicname}，<a href="home.php?mod=space&do=blog&id={blogid}">快去看看吧！</a>',
+	'highlight_notification' => 'Your threads {subject} was {actor} Use {magicname}，<a href="forum.php?mod=viewthread&tid={tid}">Go see it！</a>',
+	'highlight_notification_blogid' => 'Your logs {subject} was {actor} Use {magicname}，<a href="home.php?mod=space&do=blog&id={blogid}">Go see it！</a>',
 );
 
 ?>

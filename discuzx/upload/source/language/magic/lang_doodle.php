@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'doodle_name' => '塗鴉板',
-	'doodle_desc' => '在日誌、帖子中使用塗鴉板',
-	'doodle_info' => '在日誌、帖子中使用塗鴉板',
+	'doodle_name' => 'Doodle board',
+	'doodle_desc' => 'In the blog use the Doodle board posts',
+	'doodle_info' => 'In the blog use the Doodle board posts',
 );
 
 ?>
