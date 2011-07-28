@@ -198,6 +198,19 @@ class _sco_dx_plugin {
 		return false;
 	}
 
+	function _init_pluginvars($pluginid) {
+		$pluginvars = array();
+		$query = DB::query("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='$pluginid' ORDER BY displayorder");
+		while($var = DB::fetch($query)) {
+			if(strexists($var['type'], '_')) {
+				continue;
+			}
+			$pluginvars[$var['variable']] = $var;
+		}
+
+		return $pluginvars;
+	}
+
 	function _template($file) {
 		$args = func_get_args();
 
