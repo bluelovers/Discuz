@@ -86,7 +86,7 @@ function edit_insert(html) {
 	var obj = p.window.frames['HtmlEditor'];
 	var status = p.document.getElementById('uchome-editstatus').value;
 	if(status != 'html') {
-		alert('本操作只在多媒體編輯模式下才有效');
+		alert('This operation only in edit mode to be effective multimedia');
 		return;
 	}
 	obj.focus();
