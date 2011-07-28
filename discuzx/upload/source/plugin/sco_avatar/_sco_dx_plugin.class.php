@@ -180,6 +180,8 @@ class _sco_dx_plugin {
 			$identifier->attr['setting_source'] = &$_G['cache']['plugin'][$identifier->identifier];
 			$identifier->attr['setting'] = $identifier->attr['setting_source'];
 
+			$identifier->_fix_plugin_setting();
+
 			$identifier->_lang_load_plugin();
 
 			// 所有的 plugins jsmenu
@@ -196,6 +198,58 @@ class _sco_dx_plugin {
 		}
 
 		return false;
+	}
+
+	function _get_plugin_db_data() {
+		static $_inited;
+
+		if ($_inited) return $this;
+
+		$identifier = $this->identifier;
+
+		$common_plugin = $common_pluginvar = array();
+
+		if ($common_plugin = DB::query_first("SELECT * FROM ".DB::table('common_plugin')." WHERE identifier='$identifier' LIMIT 1")) {
+			$pluginid = $common_plugin['pluginid'];
+
+			$common_plugin['modules'] = (array)unserialize($common_plugin['modules']);
+
+			if ($query = DB::query("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='$pluginid' ORDER BY displayorder")) {
+				while($var = DB::fetch($query)) {
+					if(strexists($var['type'], '_')) {
+						continue;
+					}
+
+					if (in_array($var['type'], array('forums', 'groups', 'selects'))) {
+						$var['value'] = (array)unserialize($var['value']);
+					}
+
+					$common_pluginvar[$var['variable']] = $var;
+				}
+			}
+		}
+
+		$this->attr['db']['common_plugin'] = $common_plugin;
+		$this->attr['db']['common_pluginvar'] = $common_pluginvar;
+
+		return $this;
+	}
+
+	/**
+	 * 轉換 setting
+	 */
+	function _fix_plugin_setting() {
+		$this->_get_plugin_db_data();
+
+		foreach($this->attr['setting_source'] as $_k => $_v) {
+			$var = $this->attr['db']['common_pluginvar'][$_k];
+
+			if (in_array($var['type'], array('forums', 'groups', 'selects'))) {
+				$_v = (array)unserialize($_v);
+			}
+
+			$this->attr['setting'][$_k] = $_v;
+		}
 	}
 
 	function _init_pluginvars($pluginid) {
