@@ -149,16 +149,26 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		$_1 = array_pop($_p_h);
 		$_0 = array_pop($_p_h);
 
-		return $_0.$_1;
+		return (empty($_0) || empty($_1)) ? '' : $_0.'.'.$_1;
 	}
 
 	function _my_fix_avatar_url($url) {
 		global $_G;
 
+		$domain = $this->_my_parse_url_domain($url);
+
 		if (
 			0
+			// 如果沒有 domain
+			|| empty($domain)
+
+			|| strpos($url, 'http://') !== 0
+			|| strpos($url, 'http://', 1) !== false
+
+			// 不允許包含 /./ /../ 之類的網址
 			|| preg_match('/\/\.+\//', $url)
-			|| $this->_my_parse_url_domain($_G['siteurl']) == $this->_my_parse_url_domain($url)
+			// 不允許使用跟網站的網域相同的網址
+			|| $this->_my_parse_url_domain($_G['siteurl']) == $domain
 		) {
 			$url = '';
 		}
