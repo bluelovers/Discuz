@@ -1,0 +1,10 @@
+
+<Files *.js.gz>
+	AddEncoding gzip .js
+	ForceType application/x-javascript
+</Files>
+
+<Files *.css.gz>
+	AddEncoding gzip .css
+	ForceType text/css
+</Files>
