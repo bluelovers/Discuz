@@ -180,8 +180,6 @@ class _sco_dx_plugin {
 			$identifier->attr['setting_source'] = &$_G['cache']['plugin'][$identifier->identifier];
 			$identifier->attr['setting'] = $identifier->attr['setting_source'];
 
-			$identifier->_fix_plugin_setting();
-
 			$identifier->_lang_load_plugin();
 
 			// 所有的 plugins jsmenu
