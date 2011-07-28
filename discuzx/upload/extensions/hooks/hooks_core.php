@@ -392,6 +392,7 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 Scorpio_Hook::add('Func_output_ajax:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
+Scorpio_Hook::add('Func_mobileoutput:Before_output_replace', '_eFunc_output_Before_rewrite_content_echo');
 
 /**
  * 輸出時將帳號名稱轉為暱稱
@@ -503,6 +504,15 @@ Array
 	}
 
 	return $s;
+}
+
+Scorpio_Hook::add('Func_mobileoutput:Before_rewrite_content_echo', '_eFunc_mobileoutput_Before_rewrite_content_echo');
+
+function _eFunc_mobileoutput_Before_rewrite_content_echo($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+	// 手機模式下取消所有開新視窗
+	$content = preg_replace('/ target=([\'"])([^\'"]+)\\1/', '', $content);
 }
 
 Scorpio_Hook::add('Class_discuz_core::_init_env:After', '_eClass_discuz_core__init_env_After');
