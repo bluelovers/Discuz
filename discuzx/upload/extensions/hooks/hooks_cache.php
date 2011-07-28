@@ -176,6 +176,10 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 
 	//BUG:如果增加移除分行 bbcode.js 會產生錯誤
 
+	// 暫時安全
+	$_s[] = '/([;])\n+/';
+	$_r[] = '$1';
+
 	$jsdata = preg_replace($_s, $_r, $jsdata);
 
 	$switchstop = true;
