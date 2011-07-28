@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Style]]></item>
-	<item id="Version"><![CDATA[X1.5]]></item>
-	<item id="Time"><![CDATA[2010-09-20 19:05]]></item>
-	<item id="From"><![CDATA[Discuz! Board (http://localhost/DZx1.5/)]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-28 10:53]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="name"><![CDATA[PHPWind]]></item>
-		<item id="templateid"><![CDATA[3]]></item>
+		<item id="templateid"><![CDATA[2]]></item>
 		<item id="tplname"><![CDATA[PHPWind]]></item>
 		<item id="directory"><![CDATA[./template/PHPWind]]></item>
-		<item id="copyright"><![CDATA[SKIN BY 兔子很疯狂 QQ：511127494]]></item>
+		<item id="copyright"><![CDATA[SKIN BY ]]></item>
 		<item id="style">
 			<item id="smfont"><![CDATA[Arial]]></item>
-			<item id="threadtitlefontsize"><![CDATA[14px]]></item>
+			<item id="threadtitlefontsize"><![CDATA[12px]]></item>
 			<item id="threadtitlefont"><![CDATA[Arial]]></item>
 			<item id="smfontsize"><![CDATA[0.83em]]></item>
 			<item id="tabletext"><![CDATA[#444]]></item>
@@ -22,7 +22,7 @@
 			<item id="highlightlink"><![CDATA[#1B72AF]]></item>
 			<item id="noticetext"><![CDATA[#F26C4F]]></item>
 			<item id="bgcolor"><![CDATA[#E6F3F9 background.png repeat-x 0 0]]></item>
-			<item id="msgfontsize"><![CDATA[14px]]></item>
+			<item id="msgfontsize"><![CDATA[12px]]></item>
 			<item id="sidebgcolor"><![CDATA[#E7F0F7]]></item>
 			<item id="headerborder"><![CDATA[0]]></item>
 			<item id="headerbgcolor"><![CDATA[]]></item>
@@ -57,6 +57,6 @@
 			<item id="contentseparate"><![CDATA[#C2D5E3]]></item>
 			<item id="inputborder"><![CDATA[#CECECE]]></item>
 		</item>
-		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="version"><![CDATA[X2]]></item>
 	</item>
 </root>
