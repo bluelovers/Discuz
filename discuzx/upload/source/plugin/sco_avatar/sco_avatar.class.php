@@ -177,7 +177,7 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		$this->_my_avatar_types_list();
 
-		$this->_my_avatar_pics(
+		$avatar_pics = $this->_my_avatar_pics(
 			$this->_my_avatar_view_path(getgpc('avatar_view_path'))
 		);
 
