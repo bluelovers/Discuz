@@ -156,6 +156,7 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 		global $_G;
 
 		//TODO:增加可於插件設置內來設定允許的網域
+		//TODO:新增自動修正各個網站的網址處理(防呆 防笨 防貼錯網址)
 
 		// 允許使用的網站
 		$domain_allow = array(
