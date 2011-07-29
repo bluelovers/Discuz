@@ -1929,17 +1929,39 @@ function adshow($parameter) {
 	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 
 	// bluelovers
+	/**
+	 * 控制是否停止執行
+	 */
+	$switchstop = 0;
+
+	$adshow_return = $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
 	// Event: Func_adshow:Before_return
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
 			->run(array(array(
 				// 函數本身參數
 				'parameter' => &$parameter,
+
+				'adfunc' => &$adfunc,
+				'adcontent' => &$adcontent,
+
+				'switchstop' => &$switchstop,
+
+				'adshow_return' => &$adshow_return,
 		)));
 	}
+
+	if (!$switchstop) {
 	// bluelovers
 
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	} else {
+		return $adshow_return;
+	}
+	// bluelovers
 }
 
 /**
