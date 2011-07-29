@@ -257,6 +257,17 @@ function imgtag($attributes) {
 	}
 	@extract($value);
 	if(!preg_match("/^http:\/\//i", $src)) {
+
+		// bluelovers
+		$src = preg_replace(array(
+			'/image\/face\/(30|2[1-9])/',
+			'/image\/face\/(\d+)/',
+		), array(
+			'static/image/smiley/comcom_dx/$1',
+			'static/image/smiley/comcom/$1',
+		), $src);
+		// bluelovers
+
 		$src = absoluteurl($src);
 	}
 	return $src ? ($width && $height ? '[img='.$width.','.$height.']'.$src.'[/img]' : '[img]'.$src.'[/img]') : '';
