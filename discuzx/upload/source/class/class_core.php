@@ -752,8 +752,10 @@ class discuz_core {
 
 	/**
 	 * 預設執行於 function_core.php 的 template
+	 *
+	 * @param bool $donot_define
 	 */
-	function _init_style() {
+	function _init_style($donot_define = 0) {
 		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
 		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
@@ -777,11 +779,19 @@ class discuz_core {
 			}
 		}
 
+		// bluelovers
+		if (!$donot_define) {
+		// bluelovers
+
 		define('IMGDIR', $this->var['style']['imgdir']);
 		define('STYLEID', $this->var['style']['styleid']);
 		define('VERHASH', $this->var['style']['verhash']);
 		define('TPLDIR', $this->var['style']['tpldir']);
 		define('TEMPLATEID', $this->var['style']['templateid']);
+
+		// bluelovers
+		}
+		// bluelovers
 
 		// bluelovers
 		// Event: Class_discuz_core::_init_style:After
