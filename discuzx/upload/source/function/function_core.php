@@ -1927,6 +1927,18 @@ function adshow($parameter) {
 	$_G['setting']['pluginhooks'][$adfunc] = null;
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
+
+	// bluelovers
+	// Event: Func_adshow:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身參數
+				'parameter' => &$parameter,
+		)));
+	}
+	// bluelovers
+
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 }
 
