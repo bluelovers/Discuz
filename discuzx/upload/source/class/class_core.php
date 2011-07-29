@@ -95,6 +95,11 @@ class discuz_core {
 			$this->_init_mobile();
 			$this->_init_cron();
 			$this->_init_misc();
+
+			// bluelovers
+			// 假執行 $this->_init_style 來載入 hook
+			$this->_init_style(1);
+			// bluelovers
 		}
 
 		// bluelovers
@@ -750,9 +755,17 @@ class discuz_core {
 		// bluelovers
 	}
 
-	function _init_style() {
+	/**
+	 * 預設執行於 function_core.php 的 template
+	 *
+	 * @param bool $donot_define
+	 */
+	function _init_style($donot_define = 0) {
+		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
+		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
 		if(intval(!empty($this->var['forum']['styleid']))) {
+			// 版塊獨立設定的風格
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
 		} elseif(intval(!empty($this->var['category']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
@@ -760,6 +773,10 @@ class discuz_core {
 
 		$styleid = intval($styleid);
 
+		/**
+		 * 如果目前的 styleid 不等於 網站預設的 styleid
+		 * 則讀取風格並且覆寫 $this->var['style']
+		 */
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
@@ -767,11 +784,19 @@ class discuz_core {
 			}
 		}
 
-		define('IMGDIR', $this->var['style']['imgdir']);
-		define('STYLEID', $this->var['style']['styleid']);
-		define('VERHASH', $this->var['style']['verhash']);
-		define('TPLDIR', $this->var['style']['tpldir']);
-		define('TEMPLATEID', $this->var['style']['templateid']);
+		// bluelovers
+		if (!$donot_define) {
+		// bluelovers
+
+			define('IMGDIR', $this->var['style']['imgdir']);
+			define('STYLEID', $this->var['style']['styleid']);
+			define('VERHASH', $this->var['style']['verhash']);
+			define('TPLDIR', $this->var['style']['tpldir']);
+			define('TEMPLATEID', $this->var['style']['templateid']);
+
+		// bluelovers
+		}
+		// bluelovers
 
 		// bluelovers
 		// Event: Class_discuz_core::_init_style:After
