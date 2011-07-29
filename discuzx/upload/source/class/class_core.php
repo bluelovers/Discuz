@@ -751,6 +751,7 @@ class discuz_core {
 	}
 
 	function _init_style() {
+		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
 		if(intval(!empty($this->var['forum']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
