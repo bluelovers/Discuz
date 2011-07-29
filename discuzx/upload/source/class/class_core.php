@@ -732,6 +732,16 @@ class discuz_core {
 		define('VERHASH', $this->var['style']['verhash']);
 		define('TPLDIR', $this->var['style']['tpldir']);
 		define('TEMPLATEID', $this->var['style']['templateid']);
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_style:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_memory() {
