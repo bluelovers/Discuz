@@ -419,6 +419,9 @@ Scorpio_Hook::add('Func_output_replace:Before_replace_str', '_eFunc_output_Befor
 
 /**
  * 輸出時將帳號名稱轉為暱稱
+ *
+ * Event:
+ * 		Func_output_replace:Before_replace_str
  **/
 function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return;
