@@ -13,6 +13,16 @@
 	.tl th *, .tl td.icn *, .tl td.o * { vertical-align: middle; }
 /** end **/
 
+/** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
+
+	/* 修正雙重間距 */
+	.pls .avatar img.avatar
+	{
+		margin: 0;
+	}
+
+/** end **/
+
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
 	/* 圖片縮放的背景 */
 	.zoominner { overflow: hidden; }
