@@ -763,6 +763,10 @@ class discuz_core {
 
 		$styleid = intval($styleid);
 
+		/**
+		 * 如果目前的 styleid 不等於 網站預設的 styleid
+		 * 則讀取風格並且覆寫 $this->var['style']
+		 */
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
