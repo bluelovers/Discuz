@@ -162,8 +162,8 @@ function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
 		'\1',
 		"\n",
 		"[float=\\1]\\2[/float]",
-		"[quote]\\1[/quote]",
-		"[quote]\\1[/quote]",
+		"[quote]\\1[/quote]\n",
+		"[quote]\\1[/quote]\n",
 	);
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
