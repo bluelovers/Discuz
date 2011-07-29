@@ -1533,12 +1533,12 @@ function output_replace($content) {
 	if (!$switchstop) {
 	// bluelovers
 
-	if(!empty($_G['setting']['output']['str']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+		if(!empty($_G['setting']['output']['str']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+			}
+			$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 		}
-		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
-	}
 
 	// bluelovers
 	}
