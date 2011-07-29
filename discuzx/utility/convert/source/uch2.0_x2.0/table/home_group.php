@@ -60,7 +60,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
-		$post['message'] = html2bbcode($post['message'], 0, 1);
+		$post['message'] = html2bbcode($post['message'], 0, 0);
 
 		// bluelovers
 		// 再一次轉換編碼
@@ -205,7 +205,7 @@ function getmtag($start) {
 	// 重新處理群組描述
 	global $searcharray, $replacearray;
 
-	$forumfieldarr['description'] = preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 1));
+	$forumfieldarr['description'] = preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 0));
 	$forumfieldarr['description'] = daddslashes(htmlspecialchars_decode($forumfieldarr['description']));
 	// bluelovers
 
