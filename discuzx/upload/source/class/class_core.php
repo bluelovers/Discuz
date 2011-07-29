@@ -738,7 +738,7 @@ class discuz_core {
 		if (discuz_core::$plugin_support['Scorpio_Event']) {
 			Scorpio_Event::instance('Class_'.__METHOD__.':After')
 				->run(array(
-				&$this
+					&$this
 			));
 		}
 		// bluelovers
