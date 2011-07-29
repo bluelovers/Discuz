@@ -50,6 +50,9 @@ class discuz_core {
 	// bluelovers
 
 	// bluelovers
+	/**
+	 * 額外載入的語言
+	 */
 	static $langplus = array();
 	// bluelovers
 
