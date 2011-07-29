@@ -33,7 +33,9 @@ if(empty($_sorts)) {
 		$sortid = 0;
 		// 檢查是否為正確想要搜尋的 TABLE
 		$sortid = str_replace($db_source->config['tablepre'].'optionvalue', '', $row);
-		if ($sortid && $sortid == intval($sortid) && is_numeric($sortid)) {
+		if (!empty($sortid) && $sortid == intval($sortid) && is_numeric($sortid)) {
+			$sortid == intval($sortid);
+
 			// 複製來源 TABLE 結構
 			if ($tabledump = _sqldumptablestruct($db_source->config['tablepre'].'optionvalue'.$sortid, $db_source)) {
 				// 刪除已存在的目標 TABLE
