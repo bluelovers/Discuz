@@ -23,6 +23,10 @@
 		margin: 0;
 	}
 
+	.pls .avatar {
+		overflow: hidden;
+	}
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
