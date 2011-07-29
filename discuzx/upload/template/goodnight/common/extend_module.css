@@ -101,11 +101,11 @@
 
 /** forum::forumdisplay,group **/
 
-	.tl .num a.xi2 {
+	.tl .bm_c .num a.xi2, .tl .bm_c .num {
 		color: #0099FF;
 	}
 
-	.tl .num em {
+	.tl .bm_c .num em {
 		color: #9933CC;
 	}
 
@@ -113,7 +113,7 @@
 		color: #0099FF;
 	}
 
-	.tl .by em {
+	.tl .bm_c .by em {
 		font-size: 9px;
 	}
 
