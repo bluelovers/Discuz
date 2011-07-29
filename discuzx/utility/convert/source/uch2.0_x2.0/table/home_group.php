@@ -205,7 +205,8 @@ function getmtag($start) {
 	// 重新處理群組描述
 	global $searcharray, $replacearray;
 
-	$forumfieldarr['description'] = daddslashes(preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 1)));
+	$forumfieldarr['description'] = preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 1));
+	$forumfieldarr['description'] = daddslashes(htmlspecialchars_decode($forumfieldarr['description']));
 	// bluelovers
 
 //	$db_target->insert('forum_forumfield', $forumfieldarr);
