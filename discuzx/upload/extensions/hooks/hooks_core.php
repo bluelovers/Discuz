@@ -419,6 +419,10 @@ Scorpio_Hook::add('Func_output_replace:Before_replace_str', '_eFunc_output_Befor
  *
  * Event:
  * 		Func_output_replace:Before_replace_str
+ *
+ * 		Func_output:Before_rewrite_content_echo
+ * 		Func_output_ajax:Before_rewrite_content_echo
+ * 		Func_mobileoutput:Before_output_replace
  **/
 function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return;
