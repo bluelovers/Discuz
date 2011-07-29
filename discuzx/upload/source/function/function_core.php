@@ -1542,6 +1542,20 @@ function output_replace($content) {
 
 	// bluelovers
 	}
+
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_preg
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_preg')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
+	}
+
+	if (!$switchstop) {
 	// bluelovers
 
 	if(!empty($_G['setting']['output']['preg']['search'])) {
@@ -1552,6 +1566,10 @@ function output_replace($content) {
 
 		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
 	}
+
+	// bluelovers
+	}
+	// bluelovers
 
 	return $content;
 }
