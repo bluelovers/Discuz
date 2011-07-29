@@ -111,9 +111,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 		// bluelovers
 		// 再一次轉換編碼
-		for ($i=0; $i<2; $i++) {
-			$post['message'] = preg_replace($searcharray, $replacearray, $post['message']);
-		}
+		$post['message'] = preg_replace($searcharray, $replacearray, htmlspecialchars_decode($post['message']));
 		// bluelovers
 
 		// bluelovers
