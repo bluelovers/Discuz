@@ -499,6 +499,7 @@ function loadconfig($file = 'config.inc.php') {
 	 */
 	if(!empty($_config)
 		&& $_config['source']['dbhost'] == $_config['target']['dbhost']
+		&& $_config['source']['pconnect'] == $_config['target']['pconnect']
 	) {
 		$_config['source']['pconnect'] = $_config['target']['pconnect'] = 0;
 	}
