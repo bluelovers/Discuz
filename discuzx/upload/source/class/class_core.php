@@ -584,6 +584,16 @@ class discuz_core {
 				discuz_cron::run();
 			}
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_cron:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_misc() {
