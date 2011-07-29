@@ -9,17 +9,30 @@
 /** forum,group **/
 
 	/* 版塊分區內的版塊標題 */
-	.fl_tb h2 a, .fl_tb .fl_g dl dt a {
+	.fl_tb h2 a, .fl_tb .fl_g dl dt a
+		/* 群組列表 */
+		, .fl_tb .fl_row td strong a
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dt a
+	{
     	letter-spacing: 1px;
     	text-shadow: 2px 2px 4px #AAAAAA;
 	}
 
 	/* 廣場首頁版塊分區內的版塊標題 */
-	.fl_tb h2 a {
+	.fl_tb h2 a
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dt a
+	{
 		color: #FF3399;
 	}
 
-	.fl_tb p {
+	.fl_tb p
+		/* 群組列表 */
+		, .fl_tb .fl_row td p
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dd
+	{
 		margin-top: 1px;
 		margin-bottom: 1px;
 	}
@@ -64,6 +77,24 @@
 		*display: inline;
 
 		vertical-align: middle;
+	}
+
+/** end **/
+
+/** group **/
+
+	/* 群組首頁的推薦群組 */
+
+	#g_commend .xld {
+		margin-bottom: 2px;
+	}
+
+	#g_commend .xld dt {
+		padding-top: 2px;
+	}
+
+	#g_commend .bm_c dl.xld dd, #g_commend .bm_c dl.xld dt {
+		overflow: hidden;
 	}
 
 /** end **/
