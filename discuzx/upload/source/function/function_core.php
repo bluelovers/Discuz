@@ -634,6 +634,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 
 	static $_init_style = false;
 	if($_init_style === false) {
+		// 防止沒有載入風格
 		$discuz = & discuz_core::instance();
 		$discuz->_init_style();
 		$_init_style = true;
