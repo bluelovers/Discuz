@@ -49,7 +49,7 @@ if(!$operation) {
 
 		$smtypes = 0;
 		$dirfilter = array();
-		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder");
+		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder, available DESC, name ASC");
 		while($type = DB::fetch($query)) {
 			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE typeid='$type[typeid]'");
 			$smiliesnum = DB::result($squery, 0);
