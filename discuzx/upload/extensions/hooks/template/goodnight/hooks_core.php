@@ -35,4 +35,20 @@ function _eClass_discuz_core_init_After($_EVENT, $discuz) {
 	$initated = true;
 }
 
+Scorpio_Hook::add('Func_adshow:Before_return', '_goodnight_eFunc_adshow_Before_return');
+
+/**
+ * Event:
+ * 		Func_adshow:Before_return
+ */
+function _goodnight_eFunc_adshow_Before_return($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+	if ($params[0] == 'headerbanner' && $params[1] == 'wp a_h') {
+		$adshow_return = '';
+
+		$switchstop = true;
+	}
+}
+
 ?>
