@@ -755,6 +755,7 @@ class discuz_core {
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
 		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
 		if(intval(!empty($this->var['forum']['styleid']))) {
+			// 版塊獨立設定的風格
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
 		} elseif(intval(!empty($this->var['category']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
