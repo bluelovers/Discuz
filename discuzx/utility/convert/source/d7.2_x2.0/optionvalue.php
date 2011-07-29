@@ -51,14 +51,14 @@ $nextid = -1;
 // 取出陣列中第一個值作為目前要處理的 sortid
 if ($_sortid = $_sorts[0]) {
 
-$query = $db_source->query("SELECT * FROM $table_source$_sortid WHERE tid>'$start' ORDER BY tid LIMIT $limit");
-while ($row = $db_source->fetch_array($query)) {
-	$nextid = $row['tid'];
+	$query = $db_source->query("SELECT * FROM $table_source$_sortid WHERE tid>'$start' ORDER BY tid LIMIT $limit");
+	while ($row = $db_source->fetch_array($query)) {
+		$nextid = $row['tid'];
 
-	$row  = daddslashes($row, 1);
-	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target.$_sortid));
-	$db_target->query("INSERT INTO $table_target$_sortid SET $data");
-}
+		$row  = daddslashes($row, 1);
+		$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target.$_sortid));
+		$db_target->query("INSERT INTO $table_target$_sortid SET $data");
+	}
 
 }
 
