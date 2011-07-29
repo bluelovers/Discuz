@@ -40,7 +40,7 @@ if(empty($_sorts)) {
 			$_sorts[] = $sortid;
 		}
 	}
-	
+
 	unset($sortid, $tabledump, $query );
 } else {
 	// 將接收的 $_sorts 轉換為 Array
@@ -49,7 +49,7 @@ if(empty($_sorts)) {
 
 $nextid = -1;
 // 取出陣列中第一個值作為目前要處理的 sortid
-$_sortid = $_sorts[0];
+if ($_sortid = $_sorts[0]) {
 
 $query = $db_source->query("SELECT * FROM $table_source$_sortid WHERE tid>'$start' ORDER BY tid LIMIT $limit");
 while ($row = $db_source->fetch_array($query)) {
@@ -59,6 +59,9 @@ while ($row = $db_source->fetch_array($query)) {
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target.$_sortid));
 	$db_target->query("INSERT INTO $table_target$_sortid SET $data");
 }
+
+}
+
 // 如果沒有查詢任何資料
 if($nextid < 0) {
 	// 取出陣列的第一個值
