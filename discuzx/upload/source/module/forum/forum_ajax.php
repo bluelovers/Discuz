@@ -264,6 +264,7 @@ if($_G['gp_action'] == 'checkusername') {
 	exit;
 
 } elseif($_G['gp_action'] == 'forumchecknew' && !empty($_G['gp_fid']) && !empty($_G['gp_time'])) {
+	// ajax 顯示板塊是否有新的主題變化
 	$fid = intval($_G['gp_fid']);
 	$time = intval($_G['gp_time']);
 

@@ -8,6 +8,9 @@
 	/*font-style: normal;*/
 }
 
+/* 避免否些狀況下網頁字形失效 */
+html { font: {FONTSIZE} {FONT}; color: {TABLETEXT}; }
+
 /**
  * 使排行列表的文字不會自動斷行到下一段
  **/
@@ -59,3 +62,325 @@ p.emp { color: red; }
 .avatar_small_48 { max-height: 48px; max-width: 48px; }
 .avatar_middle { max-height: 120px; max-width: 120px; }
 .avatar_big { max-height: auto; max-width: auto; }
+
+/* for box style */
+
+.t_msg_plus {
+	margin; 10px 10px;
+}
+
+.t_msg_plus table {
+	border-collapse: collapse;
+}
+
+.t_msg_plus td, .t_msg_plus tr {
+	padding: 0;
+	border: 0px none {BORDERCOLOR};
+}
+
+/*	背景透明 */
+.transparent			{ background-color:transparent }
+
+table.table_fixed { table-layout: fixed; }
+.stable, .stable table td, .stable table td img { padding: 0; border-collapse: collapse; border: 0 none #ffffff; }
+
+.i-l	{ background-repeat: no-repeat; background-position-x: right; background-position-y: medium; background-position: right medium; }
+.i-m	{ background-repeat: repeat-x; background-position-x: right; background-position-y: medium; background-position: right medium; }
+.i-r	{ background-repeat: no-repeat; background-position-x: left; background-position-y: medium; background-position: left medium; }
+
+.i-box { border-collapse: collapse }
+
+.i-tl {
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+.i-tm {
+	background-repeat: repeat-x;
+	background-position: left bottom;
+	background-position-y: bottom;
+}
+.i-tr	{
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+.i-ml	{
+	background-repeat: repeat-y;
+	background-position-x: 100%;
+	background-position: right top;
+	padding: 0 0 0 0;
+}
+.i-mm {  }
+.i-mr	{
+	background-repeat: repeat-y;
+	background-position-x: left;
+}
+
+.i-bl	{
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+.i-bm	{
+	background-repeat: repeat-x;
+	background-position: right top;
+	background-position-y: top;
+}
+.i-br	{
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
+/* 排版用樣式 */
+
+.float_left {
+	float: left;
+	padding: 0px;
+}
+
+.float_center {
+	float: both;
+	padding: 0px;
+}
+
+.float_right {
+	float: right;
+	padding: 0px;
+}
+
+.float_none				{ float: none; }
+.float_both				{ float: both; }
+
+.inline li	{ display: inline; }
+.inline_float_left li	{ display: inline; float: left; }
+.inline_float_right li	{ display: inline; float: right; }
+.inline_float_both li	{ display: inline; float: both; }
+
+.overflow_visible		{ overflow: visible; }
+/*	設定為可見 */
+.overflow_overflow-y	{ overflow-y: auto; }
+/*	自動隱藏捲動軸 */
+.overflow_hidden		{ overflow: hidden; }
+/*	去除捲動軸 */
+.overflow_scroll		{ overflow: scroll; }
+/*	顯示捲動軸 */
+.overflow_overflow-x	{ overflow-x: hidden; }
+/*	去除水平捲動軸 */
+.overflow_overflow-y	{ overflow-y: hidden; }
+/*	去除垂直捲動軸 */
+
+.align-left {
+	text-align: left;
+}
+.align-center {
+	text-align: center;
+}
+.align-right {
+	text-align: right;
+}
+
+.valign-top, .top {
+	vertical-align: top;
+}
+.valign-middle, .middle {
+	vertical-align: middle !important;
+}
+.valign-bottom, .bottom {
+	vertical-align: bottom;
+}
+
+.nowrap					{ word-break: keep-all; white-space: nowrap; }
+.wrap_def				{ word-break: normal }
+
+.wrap, .wrap_word, .wrap_xml {
+	word-break: break-all;
+	white-space: normal;
+}
+.wrap_word				{
+	word-wrap: break-word;
+}
+.wrap_xml				{
+	word-wrap: break-word;
+
+	-moz-binding: url('include/htc/wordwrap.xml#wordwrap');
+	display: block;
+    overflow: auto;
+}
+/*
+	keep-all(保持單字型態)
+	break-all(打散單字型態，每一個字母均為一個字元)
+	normal(依網頁預設)
+	style.word-wrap[break-word] ，但是其相對較麻煩，word-wrap:break-word; 只對所屬Object Width有作用
+*/
+
+/* 字體 */
+.font_normal		{ font-weight: normal; }
+.font_bold, .bold	{ font-weight: bold; }
+.font_bolder		{ font-weight: bolder; }
+.font_lighter		{ font-weight: lighter; }
+
+/* 書寫樣式 */
+.tb-rl					{ writing-mode: tb-rl }
+.tb-rl-2				{ -moz-column-width: 1em; writing-mode: tb-rl; word-break: keep-all }
+.lr-tb					{ writing-mode: lr-tb }
+/*	直式文書 */
+.dir_ltr				{ direction: ltr }
+.dir_rtl				{ direction: rtl }
+.dir_inherit			{ direction: inherit }
+/*
+	ltr :		預設值。文本從左到右流入
+	rtl :		文本從右到左流入
+	inherit :	文本流入方向由繼承獲得
+*/
+
+/*	英文輸入 */
+.en						{ ime-mode: inactive }
+
+/* 滑鼠樣式 */
+
+.cur_auto				{ cursor: auto; }
+/*	自動改變樣式*/
+.cur_def				{ cursor: default; }
+/*	標準選擇*/
+.cur_help				{ cursor: help; }
+/*	選擇說明*/
+.cur_wait				{ cursor: wait; }
+/*	忙碌中*/
+.cur_crosshair			{ cursor: crosshair; }
+/*	選擇精確度 */
+.cur_text				{ cursor: text; }
+/*	選擇文字 */
+.cur_hand, .cur_hand:hover, .cur_hand img {
+	/*cursor: hand;*/
+	cursor: pointer;
+}
+/*	選擇連線 */
+.cur_pointer			{ cursor: pointer; }
+/*	選擇指示 */
+.cur_move				{ cursor: move; }
+/*	移動 */
+.cur_n-resize			{ cursor: n-resize; }
+/*	箭頭朝上方 */
+.cur_s-resize			{ cursor: s-resize; }
+/*	箭頭朝下方 */
+.cur_w-resize			{ cursor: w-resize; }
+/*	箭頭朝左方 */
+.cur_nw-resize			{ cursor: nw-resize; }
+/*	箭頭朝左上方 */
+.cur_sw-resize			{ cursor: sw-resize; }
+/*	箭頭朝左下方 */
+.cur_e-resize			{ cursor: e-resize; }
+/*	箭頭朝右方 */
+.cur_ne-resize			{ cursor: ne-resize; }
+/*	箭頭朝右上方 */
+.cur_se-resize			{ cursor: se-resize; }
+/*	箭頭朝右下方 */
+/*
+.cur_url				{ cursor: url("游標連結位置.cur"); }
+*/
+
+@namespace url(http://www.w3.org/1999/xhtml);
+
+/* 顯示圖片錯誤 */
+@-moz-document url-prefix(http), url-prefix(file) {
+	img:-moz-broken{
+		-moz-force-broken-image-icon:1;
+		min-width:24px;
+		min-height:24px;
+	}
+}
+
+/* 被選取時的顏色與背景 */
+::selection { background-color: #DD0044; color: #FFFFFF; }
+::-moz-selection { background-color: #DD0044; color: #FFFFFF; }
+
+/* Hides from IE-mac \*/
+
+.clearfix {display: inline-block;}
+
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+/* End hide from IE-mac */
+
+/* 強調顯示 hook */
+hook {
+	background: none repeat scroll 0 0 #F9D0FF;
+	border: 1px dashed #CCCCCC;
+	padding: 1px;
+}
+
+/* 表單樣式 */
+
+.input_date {
+	background: url("{STATICURL}image/plus/pw/s_time.png") no-repeat scroll 97% 50% transparent;
+}
+
+fieldset {
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+}
+
+/* notice style */
+
+.notice, .notice_warning, .notice_error {
+	font-size: {MSGFONTSIZE};
+	border: 1px solid #96DB52;
+	/*
+	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.5em;
+	padding: 0.5em 1em 0.3em 3em;
+	*/
+	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.4em;
+	padding: 0.3em 1em 0.3em 3em;
+
+	margin: 0.5em 0.5em 0.5em 0;
+	color: {NOTICETEXT};
+}
+
+/* 橘色 */
+.notice_orange {
+	color: #FF6600;
+}
+
+/* dx 2 default color*/
+.notice_dx2 {
+	color: #F26C4F;
+}
+
+.notice_warning, .notice_error {
+	border-color: #8F126F;
+	background: #FFE0FF url({IMGDIR}/check_error.gif) no-repeat 1em 0.4em;
+	padding: 0.3em 1em 0.3em 3em;
+	color: #EB1DC0;
+}
+
+.notice_green {
+	border-color: #96DB52;
+	/*
+	background: #F0FFF0 url({IMGDIR}/notice.gif) no-repeat 1em 0.4em;
+	padding: 0.3em 1em 0.3em 3em;
+	*/
+	color: #009900;
+}

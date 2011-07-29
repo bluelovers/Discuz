@@ -12,6 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_founder() {
+	//BUG:全新安裝後 必須要更新緩存才能顯示管理中心的連結
 	global $_G;
 
 	$allowadmincp = array();

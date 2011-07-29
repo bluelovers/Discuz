@@ -4,6 +4,10 @@
  * @author bluelovers
  **/
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
@@ -39,9 +43,13 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
+			case 'source/function/cache/cache_bbcodes.php':
+			case 'source/function/cache/cache_bbcodes_display.php':
+				@include_once libfile('cache/bbcodes', 'hooks', 'extensions/');
+			case 'source/class/class_template.php':
+			case 'source/function/cache/cache_styles.php':
 			case 'source/function/function_cache.php':
 			case 'source/function/cache/cache_styles.php':
-			case 'source/class/class_template.php':
 				@include_once libfile('hooks/cache', '', 'extensions/');
 				break;
 			case 'source/function/function_share.php':
@@ -83,8 +91,15 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 	$_varhash = VERHASH;
 
 	if ($hookid == 'global_header_seohead') {
+
+		if (!DISCUZ_DEBUG) {
+			$_add = '.pack';
+		} else {
+			$_add = '';
+		}
+
 		$ss = <<<EOF
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest{$_add}.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOF
 ;
@@ -96,6 +111,91 @@ EOF
 	} elseif ($hookid == 'global_header_javascript') {
 		$ss = <<<EOF
 <script type="text/javascript" src="{$path}extensions/js/common.js?{$_varhash}"></script>
+EOF
+;
+/*
+?><?
+*/
+
+		$hook_data .= $ss;
+	} elseif (
+		(
+			// 帖子底部
+			$hookid == 'viewthread_bottom'
+			// AJAX 時
+			|| ($hookid == 'viewthread_endline' && (!empty($_G['gp_viewpid']) || $_G['inajax']))
+		)
+		&& discuz_core::$plugin_support['SyntaxHighlighter']['brush']
+	) {
+		$ss = '';
+
+		discuz_core::$plugin_support['SyntaxHighlighter']['brush'] = null;
+
+		$path = $_G['siteurl'].'extensions/js/SyntaxHighlighter/';
+
+		$ss = <<<EOF
+<!-- Include required JS files -->
+<script src="{$path}src/shCore.js" type="text/javascript" _reload="1"></script>
+<script src="{$path}src/shAutoloader.js" type="text/javascript" _reload="1"></script>
+
+<script type="text/javascript" reload="1">
+SyntaxHighlighter.autoloader.apply(null, [
+	'applescript			{$path}scripts/shBrushAppleScript.js',
+	'actionscript3 as3		{$path}scripts/shBrushAS3.js',
+	'bash shell				{$path}scripts/shBrushBash.js',
+	'coldfusion cf			{$path}scripts/shBrushColdFusion.js',
+	'cpp c					{$path}scripts/shBrushCpp.js',
+	'c# c-sharp csharp		{$path}scripts/shBrushCSharp.js',
+	'css					{$path}scripts/shBrushCss.js',
+	'delphi pascal			{$path}scripts/shBrushDelphi.js',
+	'diff patch pas			{$path}scripts/shBrushDiff.js',
+	'erl erlang				{$path}scripts/shBrushErlang.js',
+	'groovy					{$path}scripts/shBrushGroovy.js',
+	'java					{$path}scripts/shBrushJava.js',
+	'jfx javafx				{$path}scripts/shBrushJavaFX.js',
+	'js jscript javascript	{$path}scripts/shBrushJScript.js',
+	'perl pl				{$path}scripts/shBrushPerl.js',
+	'php php5 php3 php4		{$path}scripts/shBrushPhp.js',
+	'text plain txt			{$path}scripts/shBrushPlain.js',
+	'py python				{$path}scripts/shBrushPython.js',
+	'ruby rails ror rb		{$path}scripts/shBrushRuby.js',
+	'sass scss				{$path}scripts/shBrushSass.js',
+	'scala					{$path}scripts/shBrushScala.js',
+	'sql mysql				{$path}scripts/shBrushSql.js',
+	'vb vbnet				{$path}scripts/shBrushVb.js',
+	'xml xhtml xslt html	{$path}scripts/shBrushXml.js',
+]);
+
+//SyntaxHighlighter.config.clipboardSwf = '{$path}/scripts/clipboard.swf';
+//SyntaxHighlighter.defaults['gutter'] = false;
+SyntaxHighlighter.defaults['smart-tabs'] = true;
+//SyntaxHighlighter.defaults['collapse'] = true;
+//SyntaxHighlighter.defaults['highlight'] = true;
+SyntaxHighlighter.defaults['toolbar'] = false;
+
+SyntaxHighlighter.all();
+//SyntaxHighlighter.highlight();
+</script>
+
+<!-- Include *at least* the core style and default theme -->
+<!--link href="{$path}styles/shCore.css" rel="stylesheet" type="text/css" /-->
+<link href="{$path}styles/shCoreMidnight.css" rel="stylesheet" type="text/css" />
+<!--link href="{$path}styles/shThemeMidnight.css" rel="stylesheet" type="text/css" /-->
+
+<style>
+/* 使 pre, code 可以斷行 */
+.syntaxhighlighter pre, .syntaxhighlighter code {
+	width:inherit;
+	word-break: break-all;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	*white-space: pre;           /* IE */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+
 EOF
 ;
 /*
@@ -140,7 +240,9 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'plugin';
 
 			// domain 由 setting 控制
-			} elseif ($k == 'domain') {
+			} elseif ($k == 'domain'
+		 		|| $k == 'adminmenu'
+			) {
 				$k2 = 'setting';
 
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
@@ -148,15 +250,30 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = 'split';
 			}
 
+			// 如果執行過 $k2 直接跳過處理
+			if (0 && isset($_loadedcache[$k2])) {
+				continue;
+			}
+
 			$caches[] = $k2;
 			$caches_load[] = $k;
 			$_loadedcache[$k] = true;
+
+			$_loadedcache[$k2] = true;
 		}
 	}
 
+	/**
+	 * 預先載入 $_G['setting']
+	 * 防止 $_G['setting'] 為空
+	 */
+	if (empty($GLOBALS['_G']['setting'])) {
+		$GLOBALS['_G']['setting'] = $data['setting'];
+	}
+
 	// 整理過濾處理過的 Array
-	$caches = array_unique($caches);
-	$caches_load = array_unique($caches_load);
+	$caches = array_unique((array)$caches);
+	$caches_load = array_unique((array)$caches_load);
 
 	if(!empty($caches)) {
 		@include_once libfile('function/cache');
@@ -185,7 +302,7 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 	static $_del_cache = array();
 
-	if($isfilecache && $cachenames) {
+	if(!empty($GLOBALS['_G']['setting']) && $isfilecache && $cachenames) {
 		/*
 		@include_once libfile('function/cache');
 		updatecache($cachenames);
@@ -212,6 +329,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 				'domain',
 
+				'setting',
+
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
 
@@ -219,11 +338,15 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 			$_skips = '/^('.$_skips.')/';
 		}
 
+		// 只刪除指定時間以前的緩存
+		$cache_dateline = 24;
+		$cache_dateline = TIMESTAMP - $cache_dateline * 3600;
+
 		foreach ($cachenames as $k) {
 			if(!isset($_del_cache[$k])
 				&& !preg_match($_skips, $k)
 			) {
-				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' LIMIT 1");
+				DB::query("DELETE FROM ".DB::table('common_syscache')." WHERE cname = '$k' AND dateline < {$cache_dateline} LIMIT 1");
 			}
 
 			$_del_cache[$k] = true;
@@ -378,6 +501,8 @@ function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
 	}
 
 	$_G = &$discuz->var;
+
+	if ($_G['siteroot'] == '/') return Scorpio_Hook::RET_SUCCESS;
 
 	$doc_root = scofile::path($_SERVER["DOCUMENT_ROOT"]);
 	$base = scofile::path(DISCUZ_ROOT);

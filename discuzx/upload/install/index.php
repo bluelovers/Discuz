@@ -460,6 +460,12 @@ if($method == 'show_license') {
 		dir_clear(ROOT_PATH.'./uc_client/data');
 		dir_clear(ROOT_PATH.'./uc_client/data/cache');
 
+		// bluelovers
+		// 清除 diy 緩存
+		dir_clear(ROOT_PATH.'./data/diy', 1, 1);
+		@touch(ROOT_PATH.'./data/diy'.'/index.htm');
+		// bluelovers
+
 		foreach($serialize_sql_setting as $k => $v) {
 			$v = addslashes(serialize($v));
 			$db->query("REPLACE INTO {$tablepre}common_setting VALUES ('$k', '$v')");
@@ -476,7 +482,15 @@ if($method == 'show_license') {
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
+			echo '<script type="text/javascript">'
+				.'function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}'
+				.'</script>'
+				.'<script type="text/javascript">'
+				.'setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);'
+				.'</script>'
+				// 修改為 &op=install 來忽略權限檢查
+				.'<iframe src="../misc.php?mod=initsys&op=install" style="display:none;" onload="setlaststep()"></iframe>'
+				."\r\n";
 			show_footer();
 		}
 
@@ -498,7 +512,18 @@ if($method == 'show_license') {
 		show_header();
 		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
 		echo '<li><a href="../">'.lang('install_succeed').'</a><br>';
+		/*
 		echo '<script>setTimeout(function(){window.location=\'../\'}, 2000);</script>'.lang('auto_redirect').'</li>';
+		*/
+
+		// bluelovers
+		/**
+		 * 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
+		 * 例如管理員沒有顯示管理中心連結
+		 **/
+		echo '<script src="../misc.php?mod=initsys&op=install"></script>';
+		// bluelovers
+
 		echo '</ul></div>';
 		show_footer();
 	}

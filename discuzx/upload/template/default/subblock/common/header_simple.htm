@@ -16,6 +16,8 @@
 	<!--{elseif $_G['basescript'] == 'portal'}-->
 		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
 	<!--{/if}-->
+
+	<!--{hook/global_header_javascript_before_body}-->
 </head>
 
 <body id="nv_{$_G[basescript]}" class="pg_{CURMODULE} site_pg" onkeydown="if(event.keyCode==27) return false;">

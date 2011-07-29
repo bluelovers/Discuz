@@ -105,7 +105,23 @@ function getglobal($key, $group = null) {
 	return null;
 }
 
-function getgpc($k, $type='GP') {
+/**
+ * 獲取URL參數，表單數據和COOKIE值的函數
+ *
+ * @param string $k - index key for request
+ * @param string $type
+ * 		'G'		= $_GET
+ * 		'P'		= $_POST
+ * 		'C'		= $_COOKIE
+ * 		'GP'	= $_GET & $_POST
+ *
+ * @param $default - default value if not isset
+ * @param $empty - use default value if not empty
+ *
+ * @example $_GET['odaboy'] = getgpc('odaboy','G')
+ * @example $_POST['odaboy'] = getgpc('odaboy','P')
+ **/
+function getgpc($k, $type='GP', $default = null, $empty = null) {
 	$type = strtoupper($type);
 	switch($type) {
 		case 'G': $var = &$_GET; break;
@@ -120,7 +136,17 @@ function getgpc($k, $type='GP') {
 			break;
 	}
 
-	return isset($var[$k]) ? $var[$k] : NULL;
+	// 注意這裡沒有設置的時候返回的是NULL
+	return isset($var[$k]) ?
+		(
+		// 增加檢查 empty
+			($empty && empty($var[$k])) ?
+				$default
+				:
+				$var[$k]
+		)
+		:
+		$default;
 
 }
 
@@ -252,6 +278,12 @@ function dhtmlspecialchars($string) {
 function dexit($message = '') {
 	if (is_array($message)) {
 		print_r($message);
+
+	// bluelovers
+	} elseif ($message && !is_string($message)) {
+		var_dump($message);
+	// bluelovers
+
 	} else {
 		echo $message;
 	}
@@ -715,6 +747,10 @@ function modauthkey($id) {
 	return md5($_G['username'].$_G['uid'].$_G['authkey'].substr(TIMESTAMP, 0, -7).$id);
 }
 
+/**
+ * 取得主導覽的 mnid
+ * 如果 $_G['mnid'] 存在則使用此值
+ */
 function getcurrentnav() {
 	global $_G;
 	if(!empty($_G['mnid'])) {
@@ -722,6 +758,35 @@ function getcurrentnav() {
 	}
 	$mnid = '';
 	$_G['basefilename'] = $_G['basefilename'] == $_G['basescript'] ? $_G['basefilename'] : $_G['basescript'].'.php';
+	/*
+	    [navmns] => Array
+        (
+            [misc.php] => Array
+                (
+                    [0] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => faq
+                                )
+
+                            [1] => mn_N0a2c
+                        )
+
+                    [1] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => ranklist
+                                )
+
+                            [1] => mn_N12a7
+                        )
+
+                )
+
+        )
+	*/
 	if(isset($_G['setting']['navmns'][$_G['basefilename']])) {
 		foreach($_G['setting']['navmns'][$_G['basefilename']] as $navmn) {
 			if($navmn[0] == array_intersect_assoc($navmn[0], $_GET)) {
@@ -737,6 +802,16 @@ function getcurrentnav() {
 			}
 		}
 	}
+	/*
+    [navmn] => Array
+        (
+            [portal.php] => mn_portal
+            [forum.php] => mn_forum
+            [group.php] => mn_group
+            [home.php] => mn_home
+            [userapp.php] => mn_userapp
+        )
+	*/
 	if(!$mnid && isset($_G['setting']['navmn'][$_G['basefilename']])) {
 		$mnid = $_G['setting']['navmn'][$_G['basefilename']];
 	}
@@ -1650,6 +1725,16 @@ function debug($var = null, $vardump = false) {
 	exit();
 }
 
+/**
+ * show debug info
+ *
+ * @return $_G['debuginfo']
+ * 		'time'
+ * 		'queries'
+ * 		'memory'
+ * 		'ios'
+ * 		'umem'
+ */
 function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
@@ -1662,6 +1747,12 @@ function debuginfo() {
 		if($db->slaveid) {
 			$_G['debuginfo']['queries'] = 'Total '.$db->querynum.', Slave '.$db->slavequery;
 		}
+
+		// bluelovers
+		$_G['debuginfo']['ios'] = function_exists('get_included_files') ? count(get_included_files()) : 0;
+		$_G['debuginfo']['umem'] = function_exists('memory_get_usage') ? strtolower(sizecount(memory_get_usage(), 1)) : 0;
+		// bluelovers
+
 		return TRUE;
 	} else {
 		return FALSE;
@@ -1793,18 +1884,33 @@ function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 				return TRUE;
 			}
 		}
-		if($allowget || ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_G['gp_formhash']) && $_G['gp_formhash'] == formhash() && empty($_SERVER['HTTP_X_FLASH_VERSION']) && (empty($_SERVER['HTTP_REFERER']) ||
-		preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST'])))) {
+		if($allowget
+			|| (
+				$_SERVER['REQUEST_METHOD'] == 'POST'
+
+				// 如果是 POST 時要求必須要有 formhash
+				&& !empty($_G['gp_formhash'])
+				&& $_G['gp_formhash'] == formhash()
+
+				&& empty($_SERVER['HTTP_X_FLASH_VERSION'])
+				&& (
+					empty($_SERVER['HTTP_REFERER'])
+					|| preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST']))
+			)
+		) {
 			if(checkperm('seccode')) {
+				// 安全問題
 				if($secqaacheck && !check_secqaa($_G['gp_secanswer'], $_G['gp_sechash'])) {
 					showmessage('submit_secqaa_invalid');
 				}
+				// 驗證碼
 				if($seccodecheck && !check_seccode($_G['gp_seccodeverify'], $_G['gp_sechash'])) {
 					showmessage('submit_seccode_invalid');
 				}
 			}
 			return TRUE;
 		} else {
+			// 'submit_invalid' => '抱歉，您的請求來路不正確或表單驗證串不符，無法提交',
 			showmessage('submit_invalid');
 		}
 	}

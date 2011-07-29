@@ -68,12 +68,23 @@ class base {
 
 	}
 
+	/**
+	 * 實例化數據庫類
+	 *
+	 */
 	function init_db() {
 		require_once UC_ROOT.'lib/db.class.php';
 		$this->db = new ucclient_db();
 		$this->db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, '', UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
 	}
 
+	/**
+	 * 加載相應的 Model, 存入 $_ENV 超級全局變量
+	 *
+	 * @param string $model 模塊名稱
+	 * @param 該模塊相對的基類 $base 預設為該基類
+	 * @return 此處不需要返回
+	 */
 	function load($model, $base = NULL) {
 		$base = $base ? $base : $this;
 		if(empty($_ENV[$model])) {
@@ -83,6 +94,13 @@ class base {
 		return $_ENV[$model];
 	}
 
+	/**
+	 * 日期格式化 預設為格式化到分鐘
+	 *
+	 * @param int $time
+	 * @param int $type 	1：只顯示時間 2：只顯示日期 3：日期時間均顯示
+	 * @return string
+	 */
 	function date($time, $type = 3) {
 		if(!$this->settings) {
 			$this->settings = $this->cache('settings');
@@ -92,16 +110,35 @@ class base {
 		return gmdate(implode(' ', $format), $time + $this->settings['timeoffset']);
 	}
 
+	/**
+	 * 對翻頁的起始位置進行判斷和調整
+	 *
+	 * @param int $page 頁碼
+	 * @param int $ppp 每頁大小
+	 * @param int $totalnum 總紀錄數
+	 * @return unknown
+	 */
 	function page_get_start($page, $ppp, $totalnum) {
 		$totalpage = ceil($totalnum / $ppp);
 		$page =  max(1, min($totalpage,intval($page)));
 		return ($page - 1) * $ppp;
 	}
 
+	/**
+	 * 對字符或者數組加逗號連接, 用來
+	 *
+	 * @param string/array $arr 可以傳入數字或者字串
+	 * @return string 這樣的格式: '1','2','3'
+	 */
 	function implode($arr) {
 		return "'".implode("','", (array)$arr)."'";
 	}
 
+	/**
+	 * 加載緩存文件, 如果不存在,則重新生成
+	 *
+	 * @param string $cachefile
+	 */
 	function &cache($cachefile) {
 		static $_CACHE = array();
 		if(!isset($_CACHE[$cachefile])) {
@@ -116,6 +153,13 @@ class base {
 		return $_CACHE[$cachefile];
 	}
 
+	/**
+	 * 得到設置的值
+	 *
+	 * @param string $k 設置的項
+	 * @param string $decode 是否進行反序列化，一般為數組時，需要指定為TRUE
+	 * @return string/array 設置的值
+	 */
 	function get_setting($k = array(), $decode = FALSE) {
 		$return = array();
 		$sqladd = $k ? "WHERE k IN (".$this->implode($k).")" : '';
@@ -129,6 +173,7 @@ class base {
 	}
 
 	function init_cache() {
+		//note 全局設置
 		$this->settings = $this->cache('settings');
 		$this->cache['apps'] = $this->cache('apps');
 
@@ -249,6 +294,102 @@ class base {
 		return $string;
 	}
 
+	// bluelovers
+
+	function array_inarray_key($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (array_key_exists($key, $arr1)) $ret[$key] = $arr1[$key];
+			}
+		}
+
+		return $ret;
+	}
+
+	function array_inarray_value($arr1, $arr2) {
+		$ret = array();
+
+		if ($arr2) {
+			foreach ($arr2 as $key) {
+				if (in_array($key, $arr1)) $ret[$key] = $key;
+			}
+		}
+
+		return $ret;
+	}
+
+	function implodeids($array, $prefix = '') {
+		if(!empty($array)) {
+			return "'{$prefix}".implode("','{$prefix}", is_array($array) ? $array : array($array))."'";
+		} else {
+			return '';
+		}
+	}
+
+	function implode_mode ($pieces, $mode = 'mysql', $ret = '') {
+		$ret = is_array($ret) ? $ret : array();
+		$array = array();
+
+		switch ($mode) {
+			case 'mysql_0':
+				$c = '';
+				$ret[2] = '';
+
+				foreach ($pieces as $key => $value) {
+					$ret[2] .= $c.'`'.$key.'`=\''.$value.'\'';
+					$c = ',';
+				}
+
+				break;
+			case 'mysql_1':
+				$c = '';
+				$ret[0] = $ret[1] = '';
+
+				$ret[0] = '`'.$this->implode_by_key(null, $pieces, '`,`').'`';
+				$ret[1] = $this->implodeids($pieces);
+
+				break;
+			case 'mysql_2':
+				$c = '';
+				$ret[0] = $ret[1] = $ret[2] = '';
+
+				$ret = $this->implode_mode($pieces, 'mysql_1', $ret);
+				$ret = $this->implode_mode($pieces, 'mysql_0', $ret);
+
+				break;
+			case 'mysql':
+			default:
+				foreach ($pieces as $key) {
+					$array[] = $this->implodeids($key);
+				}
+
+				$ret = array('`'.$this->implode_by_key(null, $key, '`,`').'`', '('.implode("),\n(", $array).')');
+
+				break;
+		}
+
+		return $ret;
+	}
+
+	function implode_by_key ($key, $pieces, $glue = ',', $doids = false, $prefix = '') {
+		$array = array();
+
+		if ($key === null) {
+			$array = array_keys($pieces);
+		} else {
+			foreach ($pieces as $value) {
+				$array[] = $value[$key];
+			}
+		}
+
+		$array = is_array($array) ? $array : array($array);
+
+		return $doids ? "'{$prefix}".implode("'{$glue}'{$prefix}", $array)."'" : implode($glue.$prefix, $array);
+	}
+
+	// bluelovers
 }
 
 ?>

@@ -43,12 +43,39 @@ function creditshide($creditsrequire, $message, $pid) {
 	}
 }
 
-function codedisp($code) {
+function codedisp($code, $brush = null) {
 	global $_G;
 	$_G['forum_discuzcode']['pcodecount']++;
+	/*
 	$code = dhtmlspecialchars(str_replace('\\"', '"', preg_replace("/^[\n\r]*(.+?)[\n\r]*$/is", "\\1", $code)));
 	$code = str_replace("\n", "<li>", $code);
 	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = tpl_codedisp($code);
+	*/
+	// bluelovers
+	$code = str_replace(
+		array(
+			"\t",
+			"\n",
+			'\\"',
+			'\\"'
+		), array(
+			'[tab][/tab]',
+			'[br][/br]',
+			'"',
+			'"'
+		)
+		, $code);
+
+	// 增加安全過濾
+	$brush = (empty($brush) || preg_match('/[^a-z0-9_\-\+]/i', $brush)) ? 'plain' : $brush;
+
+	discuz_core::$plugin_support['SyntaxHighlighter']['brush'][$brush] = $brush;
+
+	$code = '<pre name="theCode" class="brush: '.$brush.';">'.dhtmlspecialchars($code).'</pre>';
+
+	$_G['forum_discuzcode']['codehtml'][$_G['forum_discuzcode']['pcodecount']] = $code;
+	// bluelovers
+
 	$_G['forum_discuzcode']['codecount']++;
 	return "[\tDISCUZ_CODE_".$_G['forum_discuzcode']['pcodecount']."\t]";
 }
@@ -64,13 +91,47 @@ function karmaimg($rate, $ratetimes) {
 	return $karmaimg;
 }
 
-function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0) {
+function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allowsmilies = 1, $allowbbcode = 1, $allowimgcode = 1, $allowhtml = 0, $jammer = 0, $parsetype = '0', $authorid = '0', $allowmediacode = '0', $pid = 0, $lazyload = 0) {
 	global $_G;
 
 	static $authorreplyexist;
 
+	// bluelovers
+	// 轉換所有分行為 lf
+	$message = str_replace(array("\r\n"), "\n", $message);
+	// bluelovers
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_code
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_code')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
+	// bluelovers
+
 	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
+		/*
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "codedisp('\\1')", $message);
+		*/
+		$_regexval = '(?:[^\[]|\[(?!\/\\1\])).*';
+		$message = preg_replace("/\s*\[(code)(?:=([\w,]+))?\](".$_regexval.")\[\/\\1\]\s*/iesU", "codedisp('\\3', '\\2')", $message);
 	}
 
 	$msglower = strtolower($message);
@@ -87,6 +148,31 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'discuzcode'), 'discuzcode');
 	}
 
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_smile
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_smile')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
+	// bluelovers
+
 	if(!$smileyoff && $allowsmilies) {
 		$message = parsesmiles($message);
 	}
@@ -102,6 +188,32 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 	}
 
 	if(!$bbcodeoff && $allowbbcode) {
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_link
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_link')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
+
 		if(strpos($msglower, '[/url]') !== FALSE) {
 			$message = preg_replace("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.|mailto:)?([^\r\n\[\"']+?))?\](.+?)\[\/url\]/ies", "parseurl('\\1', '\\5', '\\2')", $message);
 		}
@@ -109,11 +221,61 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			$message = preg_replace("/\[email(=([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+))?\](.+?)\[\/email\]/ies", "parseemail('\\1', '\\4')", $message);
 		}
 
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_table
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_table')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
+
 		$nest = 0;
 		while(strpos($msglower, '[table') !== FALSE && strpos($msglower, '[/table]') !== FALSE){
 			$message = preg_replace("/\[table(?:=(\d{1,4}%?)(?:,([\(\)%,#\w ]+))?)?\]\s*(.+?)\s*\[\/table\]/ies", "parsetable('\\1', '\\2', '\\3')", $message);
 			if(++$nest > 4) break;
 		}
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_bbcodes
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_bbcodes')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
 
 		$message = str_replace(array(
 			'[/color]', '[/backcolor]', '[/size]', '[/font]', '[/align]', '[b]', '[/b]', '[s]', '[/s]', '[hr]', '[/p]',
@@ -124,6 +286,12 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			'</i>', '<u>', '</u>', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
 			'<ul type="A" class="litype_3">', '<li>', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 			), preg_replace(array(
+
+			// bluelovers
+			// 去除多餘空白
+			"/\s*\[\*\]/i", '/\[list=A\]\s*/i', '/\[list\]\s*/i', '/\[list=1\]\s*/i', '/\[list=a\]\s*/i',
+			// bluelovers
+
 			"/\[color=([#\w]+?)\]/i",
 			"/\[color=(rgb\([\d\s,]+?\))\]/i",
 			"/\[backcolor=([#\w]+?)\]/i",
@@ -131,12 +299,25 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 			"/\[size=(\d{1,2}?)\]/i",
 			"/\[size=(\d{1,2}(\.\d{1,2}+)?(px|pt)+?)\]/i",
 			"/\[font=([^\[\<]+?)\]/i",
+			/*
 			"/\[align=(left|center|right)\]/i",
 			"/\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/i",
 			"/\[float=left\]/i",
 			"/\[float=right\]/i"
-
+			*/
+			// bluelovers
+			// 去除多餘空白
+			"/\n?\[align=(left|center|right)\]/i",
+			"/\n?\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/i",
+			"/\n?\[float=left\]/i",
+			"/\n?\[float=right\]/i"
+			// bluelovers
 			), array(
+
+			// bluelovers
+			"<li>", '<ul type="A" class="litype_3">', '<ul>', '<ul type="1" class="litype_1">', '<ul type="a" class="litype_2">',
+			// bluelovers
+
 			"<font color=\"\\1\">",
 			"<font style=\"color:\\1\">",
 			"<font style=\"background-color:\\1\">",
@@ -167,9 +348,68 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		if(strpos($msglower, '[/flash]') !== FALSE) {
 			$message = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", $allowmediacode ? "parseflash('\\2', '\\3', '\\4');" : "bbcodeurl('\\4', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
 		}
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_bbcodes_cach
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_bbcodes_cache')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
+
 		if($parsetype != 1 && $allowbbcode < 0 && isset($_G['cache']['bbcodes'][-$allowbbcode])) {
 			$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], $_G['cache']['bbcodes'][-$allowbbcode]['replacearray'], $message);
 		}
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:Before_hide
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_hide')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
+
+		//BUG:部分文章經過以下處理後 會變為空白
+		/**
+		 * 加入 U 之後 似乎就修正此問題
+		 *
+		 * @link http://discuz.bluelovers.net/thread-22224.html
+		 * @link http://in-here.us/thread/22224/1/1.html
+		 */
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
 			if(strpos($msglower, '[hide]') !== FALSE) {
 				if($authorreplyexist === null) {
@@ -177,16 +417,50 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 					$authorreplyexist = !$_G['forum']['ismoderator'] ? DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND ".($_G['uid'] ? "authorid='$_G[uid]'" : "authorid=0 AND useip='$_G[clientip]'")." LIMIT 1") : TRUE;
 				}
 				if($authorreplyexist) {
+					/*
 					$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
+					*/
+					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/isU", tpl_hide_reply(), $message);
 				} else {
+					/*
 					$message = preg_replace("/\[hide\](.*?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
+					*/
+					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/isU", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
 			if(strpos($msglower, '[hide=') !== FALSE) {
+				/*
 				$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
+				*/
+				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/iesU", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
+
+		// bluelovers
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			// Event: Func_discuzcode:After_hide
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':After_hide')
+				->run(array(array(
+					'message'			=> &$message
+					, 'smileyoff'		=> &$smileyoff
+					, 'bbcodeoff'		=> &$bbcodeoff
+					, 'htmlon'			=> &$htmlon
+					, 'allowsmilies'	=> &$allowsmilies
+					, 'allowbbcode'		=> &$allowbbcode
+					, 'allowimgcode'	=> &$allowimgcode
+					, 'allowhtml'		=> &$allowhtml
+					, 'jammer'			=> &$jammer
+					, 'parsetype'		=> &$parsetype
+					, 'authorid'		=> &$authorid
+					, 'allowmediacode'	=> &$allowmediacode
+					, 'pid'				=> &$pid
+					, 'msglower'		=> &$msglower
+
+					, 'authorreplyexist' => &$authorreplyexist
+			)));
+		}
+		// bluelovers
 	}
 
 	if(!$bbcodeoff) {
@@ -207,28 +481,108 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" />')",
 				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
 			) : array(
-				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
-				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
+				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
+				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
 			), $message);
 		}
 	}
 
-	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
-		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_highlight
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_highlight')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
 	}
+	// bluelovers
 
 	if(!empty($_G['gp_highlight'])) {
 		$highlightarray = explode('+', $_G['gp_highlight']);
+
+		// 判斷是否存在特殊主題的資訊
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
 		if($sppos !== FALSE) {
+			// 取出特殊主題的資訊
 			$specialextra = substr($message, $sppos + 3);
 			$message = substr($message, 0, $sppos);
 		}
 		$message = preg_replace(array("/(^|>)([^<]+)(?=<|$)/sUe", "/<highlight>(.*)<\/highlight>/siU"), array("highlightword('\\2', \$highlightarray, '\\1')", "<strong><font color=\"#FF0000\">\\1</font></strong>"), $message);
 		if($sppos !== FALSE) {
+			// 回存特殊主題的資訊
 			$message = $message.chr(0).chr(0).chr(0).$specialextra;
 		}
 	}
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_code2
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_code2')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
+	// bluelovers
+
+	// 移動代碼使 highlight 在此代碼之前執行
+	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
+		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
+	}
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:Before_jammer
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_jammer')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
+	// bluelovers
 
 	unset($msglower);
 
@@ -236,7 +590,48 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		$message = preg_replace("/\r\n|\n|\r/e", "jammer()", $message);
 	}
 
-	return $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+	$message = $htmlon ? $message : nl2br(str_replace(array("\t", '   ', '  '), array('&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;'), $message));
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_discuzcode:After_nl2br
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After_nl2br')
+			->run(array(array(
+				'message'			=> &$message
+				, 'smileyoff'		=> &$smileyoff
+				, 'bbcodeoff'		=> &$bbcodeoff
+				, 'htmlon'			=> &$htmlon
+				, 'allowsmilies'	=> &$allowsmilies
+				, 'allowbbcode'		=> &$allowbbcode
+				, 'allowimgcode'	=> &$allowimgcode
+				, 'allowhtml'		=> &$allowhtml
+				, 'jammer'			=> &$jammer
+				, 'parsetype'		=> &$parsetype
+				, 'authorid'		=> &$authorid
+				, 'allowmediacode'	=> &$allowmediacode
+				, 'pid'				=> &$pid
+				, 'msglower'		=> &$msglower
+
+				, 'authorreplyexist' => &$authorreplyexist
+		)));
+	}
+	// bluelovers
+
+	// bluelovers
+	// 將 tab, lf 轉換回來
+	$message = str_replace(
+		array(
+			'[tab][/tab]',
+			'[br][/br]',
+		), array(
+			"\t",
+			"\n",
+		)
+		, $message);
+	// bluelovers
+
+	// split code for hack
+	return $message;
 }
 
 function parseurl($url, $text, $scheme) {
@@ -247,14 +642,20 @@ function parseurl($url, $text, $scheme) {
 		if(strlen($url) > $length) {
 			$text = substr($url, 0, intval($length * 0.5)).' ... '.substr($url, - intval($length * 0.3));
 		}
+		/*
 		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank">'.$text.'</a>';
+		*/
+		return '<a href="'.(substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url).'" target="_blank" class="bbocde_link">'.$text.'</a>';
 	} else {
 		$url = substr($url, 1);
 		if(substr(strtolower($url), 0, 4) == 'www.') {
 			$url = 'http://'.$url;
 		}
 		$url = !$scheme ? $_G['siteurl'].$url : $url;
+		/*
 		return '<a href="'.$url.'" target="_blank">'.$text.'</a>';
+		*/
+		return '<a href="'.$url.'" target="_blank" target="_blank" class="bbocde_link">'.$text.'</a>';
 	}
 }
 
@@ -278,9 +679,13 @@ function parseed2k($url) {
 	$name = addslashes($name);
 	if($type == 'file') {
 		$ed2kid = 'ed2k_'.random(3);
+		//TODO:change link style
 		return '<a id="'.$ed2kid.'" href="'.$url.'" target="_blank"></a><script language="javascript">$(\''.$ed2kid.'\').innerHTML=htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\')))+\' ('.sizecount($size).')\';</script>';
 	} else {
+		/*
 		return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+		*/
+		return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_ed2k">'.$url.'</a>';
 	}
 }
 
@@ -294,9 +699,15 @@ function parseemail($email, $text) {
 	$text = str_replace('\"', '"', $text);
 	if(!$email && preg_match("/\s*([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+)\s*/i", $text, $matches)) {
 		$email = trim($matches[0]);
+		/*
 		return '<a href="mailto:'.$email.'">'.$email.'</a>';
+		*/
+		return '<a href="mailto:'.$email.'" class="bbocde_link bbocde_link_email">'.$email.'</a>';
 	} else {
+		/*
 		return '<a href="mailto:'.substr($email, 1).'">'.$text.'</a>';
+		*/
+		return '<a href="mailto:'.substr($email, 1).'" class="bbocde_link bbocde_link_email">'.$text.'</a>';
 	}
 }
 
@@ -325,6 +736,7 @@ function parsetable($width, $bgcolor, $message) {
 			($width == '' ? NULL : 'style="width:'.$width.'"').
 			($bgcolor ? ' bgcolor="'.$bgcolor.'">' : '>').
 			str_replace('\\"', '"', preg_replace(array(
+					//TODO:改良 regex 去除多餘空白
 					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
 					"/\[\/td\]\s*\[td(?:=(\d{1,4}%?))?\]/ie",
 					"/\[tr(?:=([\(\)\s%,#\w]+))?\]\s*\[td(?:=(\d{1,2}),(\d{1,2})(?:,(\d{1,4}%?))?)?\]/ie",
@@ -402,7 +814,10 @@ function parsemedia($params, $url) {
 			case 'mov':
 				return '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="'.$width.'" height="'.$height.'"><param name="autostart" value="false" /><param name="src" value="'.$url.'" /><embed src="'.$url.'" autostart="false" type="video/quicktime" controller="true" width="'.$width.'" height="'.$height.'"></embed></object>';
 			default:
+				/*
 				return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
+				*/
+				return '<a href="'.$url.'" target="_blank" class="bbocde_link bbocde_link_media">'.$url.'</a>';
 		}
 	}
 	return;
@@ -440,6 +855,12 @@ function parseflv($url, $width = 0, $height = 0) {
 	$lowerurl = strtolower($url);
 	$flv = '';
 	$imgurl = '';
+
+	// bluelovers
+	// 提供回傳使用
+	$imagearray = array();
+	// bluelovers
+
 	if($lowerurl != str_replace(array('player.youku.com/player.php/sid/','tudou.com/v/','player.ku6.com/refer/'), '', $lowerurl)) {
 		$flv = $url;
 	} elseif(strpos($lowerurl, 'v.youku.com/v_show/') !== FALSE) {
@@ -488,8 +909,13 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	} elseif(strpos($lowerurl, 'www.youtube.com/watch?') !== FALSE) {
-		if(preg_match("/http:\/\/www.youtube.com\/watch\?v=([^\/&]+)&?/i", $url, $matches)) {
+		// 改良支援 youtu.be 簡短網址
+		if(preg_match("/http:\/\/(?:www.youtube.com\/watch\?v=|youtu\.be\/)([^\/&]+)&?/i", $url, $matches)) {
+			/*
 			$flv = 'http://www.youtube.com/v/'.$matches[1].'&hl=zh_CN&fs=1';
+			*/
+			// 修正 youtube 語言
+			$flv = 'http://www.youtube.com/v/'.$matches[1].'&fs=1';
 			if(!$width && !$height) {
 				$str = file_get_contents($url);
 				if(!empty($str) && preg_match("/'VIDEO_HQ_THUMB':\s'(.+?)'/i", $str, $image)) {
@@ -498,6 +924,11 @@ function parseflv($url, $width = 0, $height = 0) {
 					$imgurl = $url.$filename;
 				}
 			}
+
+			// bluelovers
+			// 提供分析使用
+			$url = 'http://www.youtube.com/watch?v='.$matches[1];
+			// bluelovers
 		}
 	} elseif(strpos($lowerurl, 'tv.mofile.com/') !== FALSE) {
 		if(preg_match("/http:\/\/tv.mofile.com\/([^\/]+)/i", $url, $matches)) {
@@ -565,9 +996,31 @@ function parseflv($url, $width = 0, $height = 0) {
 			}
 		}
 	}
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		// Event: Func_parseflv:After
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After')
+			->run(array(array(
+				'url' => &$url,
+				'imgurl' => &$imgurl,
+				'imagearray' => &$imagearray,
+				'flv' => &$flv,
+				'width' => &$width,
+				'height' => &$height,
+		)));
+	}
+	// bluelovers
+
 	if($flv) {
 		if(!$width && !$height) {
+			/*
 			return array('flv' => $flv, 'imgurl' => $imgurl);
+			*/
+			return array('flv' => $flv, 'imgurl' => $imgurl
+				, 'url' => $url
+				, 'imagearray' => $imagearray
+			);
 		} else {
 			$width = addslashes($width);
 			$height = addslashes($height);

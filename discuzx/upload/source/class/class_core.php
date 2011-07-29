@@ -49,6 +49,15 @@ class discuz_core {
 	static $plugin_support = array();
 	// bluelovers
 
+	// bluelovers
+	static $langplus = array();
+	// bluelovers
+
+	// bluelovers
+	// 緩存正在進行中的 cache
+	static $_cache_data = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
@@ -1162,6 +1171,9 @@ class DB
 		return $res;
 	}
 
+	/**
+	 * @return db_mysql
+	 */
 	function &object($dbclass = 'db_mysql') {
 		static $db;
 		if(empty($db)) $db = new $dbclass();

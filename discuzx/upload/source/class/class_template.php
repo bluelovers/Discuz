@@ -232,6 +232,18 @@ class template {
 				*/
 
 				// bluelovers
+				// 可額外設定需要載入的語言包
+				if (discuz_core::$langplus) {
+					foreach(discuz_core::$langplus as $_v) {
+						if (!empty($_v) && $_v != $path) {
+							if (!is_array($_v)) {
+								$_v = array('template', $_v);
+							}
+							lang_merge($this->language['inner'], $_v);
+						}
+					}
+				}
+
 				lang_merge($this->language['inner'], array('template', $path));
 				// bluelovers
 
@@ -412,17 +424,38 @@ class template {
 		$content = @implode('', file(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_module.css'));
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
 		if($this->csscurmodules) {
-			$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);
 
 			// bluelovers
+			$switchstop = 0;
+
+			// Event: Class_template::loadcsstemplate:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Class_'.__METHOD__.':Before_minify')
+					->run(array(array(
+						'cssdata'		=> &$this->csscurmodules,
+						'entry'			=> $_G['basescript'].'_'.CURMODULE,
+						'switchstop'	=> &$switchstop,
+					)), array(
+						'cssdata'		=> &$this->csscurmodules,
+				));
+			}
+
+			if (!$switchstop) {
+			// bluelovers
+
+				$this->csscurmodules = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $this->csscurmodules);
+
+			// bluelovers
+			}
+
 			// add Event 'Class_template::loadcsstemplate:Before_fwrite'
 			if (discuz_core::$plugin_support['Scorpio_Event']) {
 				Scorpio_Event::instance('Class_'.__METHOD__.':Before_fwrite')
 					->run(array(array(
-						'cssdata'			=> $this->csscurmodules
-						, 'entry'		=> $_G['basescript'].'_'.CURMODULE,
+						'cssdata'		=> &$this->csscurmodules,
+						'entry'			=> $_G['basescript'].'_'.CURMODULE,
 					)), array(
-						'cssdata'			=> &$this->csscurmodules
+						'cssdata'		=> &$this->csscurmodules,
 				));
 			}
 			// bluelovers
