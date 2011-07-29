@@ -21,7 +21,8 @@ if($operation == 'export' && $id) {
 	}
 
 	$smileyarray['smilies'] = array();
-	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
+	// 使導出的表情可以依照排序
+	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder, id ASC");
 	while($smiley = DB::fetch($query)) {
 		$smileyarray['smilies'][] = $smiley;
 	}
