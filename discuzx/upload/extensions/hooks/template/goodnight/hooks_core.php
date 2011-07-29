@@ -18,9 +18,17 @@ Scorpio_Hook::add('Class_discuz_core::_init:After', '_eClass_discuz_core__init_A
  * 		Class_discuz_core::_init:After
  */
 function _eClass_discuz_core__init_After($_EVENT, $discuz) {
+	if(!$discuz->initated) {
 
+		/**
+		 * 如果是訪客 或者 搜尋引擎時
+		 */
+		if (!$discuz->var['uid'] || IS_ROBOT) {
+			// 隱藏 LOGO (因為是 flash 減少流量)
+			discuz_core::$tpl['header_logo_hide'] = true;
+		}
 
-
+	}
 }
 
 ?>
