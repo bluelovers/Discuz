@@ -95,6 +95,11 @@ class discuz_core {
 			$this->_init_mobile();
 			$this->_init_cron();
 			$this->_init_misc();
+
+			// bluelovers
+			// 假執行 $this->_init_style 來載入 hook
+			$this->_init_style(1);
+			// bluelovers
 		}
 
 		// bluelovers
