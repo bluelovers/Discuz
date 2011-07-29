@@ -494,6 +494,20 @@ function loadconfig($file = null) {
 	// bluelovers
 	$_config = array();
 	@include DISCUZ_ROOT.'./data/'.$file;
+
+	// bluelovers
+	/**
+	 * 注意：如果源數據庫與目標數據庫在同一服務器，該項必須設置為0，否則設置為1
+	 *
+	 * 自動處理防止源數據庫與目標數據庫在同一服務造成意外的 BUG
+	 */
+	if(!empty($_config)
+		&& $_config['source']['dbhost'] == $_config['target']['dbhost']
+	) {
+		$_config['source']['pconnect'] = $_config['target']['pconnect'] = 0;
+	}
+	// bluelovers
+
 	return $_config;
 }
 
