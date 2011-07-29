@@ -408,12 +408,9 @@ function _eClass_discuz_core__init_style_After($_EVENT, $discuz) {
 
 }
 
-/*
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 Scorpio_Hook::add('Func_output_ajax:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 Scorpio_Hook::add('Func_mobileoutput:Before_output_replace', '_eFunc_output_Before_rewrite_content_echo');
-*/
-
 // 修正開啟 rewritestatus 後造成無效的 BUG
 Scorpio_Hook::add('Func_output_replace:Before_replace_str', '_eFunc_output_Before_rewrite_content_echo');
 
