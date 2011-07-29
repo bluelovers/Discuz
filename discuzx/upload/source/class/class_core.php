@@ -699,6 +699,15 @@ class discuz_core {
 		$this->var['seokeywords'] = !empty($this->var['setting']['seokeywords'][CURSCRIPT]) ? $this->var['setting']['seokeywords'][CURSCRIPT] : '';
 		$this->var['seodescription'] = !empty($this->var['setting']['seodescription'][CURSCRIPT]) ? $this->var['setting']['seodescription'][CURSCRIPT] : '';
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_misc:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_setting() {
