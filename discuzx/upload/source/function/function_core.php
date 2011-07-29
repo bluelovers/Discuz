@@ -1943,6 +1943,8 @@ function adshow($parameter) {
 				// 函數本身參數
 				'parameter' => &$parameter,
 
+				'params' => &$params,
+
 				'adfunc' => &$adfunc,
 				'adcontent' => &$adcontent,
 
