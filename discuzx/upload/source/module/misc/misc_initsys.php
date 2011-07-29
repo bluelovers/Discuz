@@ -64,6 +64,13 @@ if($_G['config']['output']['tplrefresh']) {
 }
 
 function _______initsys_plugins() {
+	global $_G;
+
+	/**
+	 * bugfix when $data = $GLOBALS['importtxt'];
+	 */
+	global $importtxt;
+
 // bluelovers
 $plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
 
