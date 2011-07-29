@@ -96,6 +96,17 @@ class discuz_core {
 			$this->_init_cron();
 			$this->_init_misc();
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::init:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
+
 		$this->initated = true;
 	}
 
