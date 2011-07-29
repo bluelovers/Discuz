@@ -783,11 +783,11 @@ class discuz_core {
 		if (!$donot_define) {
 		// bluelovers
 
-		define('IMGDIR', $this->var['style']['imgdir']);
-		define('STYLEID', $this->var['style']['styleid']);
-		define('VERHASH', $this->var['style']['verhash']);
-		define('TPLDIR', $this->var['style']['tpldir']);
-		define('TEMPLATEID', $this->var['style']['templateid']);
+			define('IMGDIR', $this->var['style']['imgdir']);
+			define('STYLEID', $this->var['style']['styleid']);
+			define('VERHASH', $this->var['style']['verhash']);
+			define('TPLDIR', $this->var['style']['tpldir']);
+			define('TEMPLATEID', $this->var['style']['templateid']);
 
 		// bluelovers
 		}
