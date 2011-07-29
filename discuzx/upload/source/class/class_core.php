@@ -560,6 +560,16 @@ class discuz_core {
 		setglobal('username', addslashes(getglobal('username', 'member')));
 		setglobal('adminid', getglobal('adminid', 'member'));
 		setglobal('groupid', getglobal('groupid', 'member'));
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_user:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_guest() {
