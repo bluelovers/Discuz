@@ -1569,6 +1569,14 @@ function output_replace($content) {
 
 	// bluelovers
 	}
+
+	// Event: Func_output_replace:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				'content'	=> &$content,
+			)));
+	}
 	// bluelovers
 
 	return $content;
