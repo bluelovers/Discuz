@@ -1516,20 +1516,68 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
-	if(!empty($_G['setting']['output']['str']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
-		}
-		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
+
+	// bluelovers
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_str
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_str')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
 	}
-	if(!empty($_G['setting']['output']['preg']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
-			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['str']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+			}
+			$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 		}
 
-		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+	// bluelovers
 	}
+
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_preg
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_preg')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['preg']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
+				$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+			}
+
+			$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+		}
+
+	// bluelovers
+	}
+
+	// Event: Func_output_replace:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				'content'	=> &$content,
+			)));
+	}
+	// bluelovers
 
 	return $content;
 }
