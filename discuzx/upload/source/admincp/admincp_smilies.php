@@ -21,7 +21,8 @@ if($operation == 'export' && $id) {
 	}
 
 	$smileyarray['smilies'] = array();
-	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
+	// 使導出的表情可以依照排序
+	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder, id ASC");
 	while($smiley = DB::fetch($query)) {
 		$smileyarray['smilies'][] = $smiley;
 	}
@@ -48,7 +49,8 @@ if(!$operation) {
 
 		$smtypes = 0;
 		$dirfilter = array();
-		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder");
+		// 增加排序 , available DESC, name ASC
+		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder, available DESC, name ASC");
 		while($type = DB::fetch($query)) {
 			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE typeid='$type[typeid]'");
 			$smiliesnum = DB::result($squery, 0);
