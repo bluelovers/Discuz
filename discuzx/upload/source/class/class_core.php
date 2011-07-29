@@ -54,7 +54,9 @@ class discuz_core {
 	// bluelovers
 
 	// bluelovers
-	// 緩存正在進行中的 cache
+	/**
+	 * 緩存正在進行中的 cache
+	 */
 	static $_cache_data = array();
 	// bluelovers
 
