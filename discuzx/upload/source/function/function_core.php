@@ -736,6 +736,25 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	}
 
 	if($gettplfile) {
+
+		// bluelovers
+		// Event: Func_template:Before_return_tplfile
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return_tplfile')
+				->run(array(array(
+					// 函數本身的參數
+					'file' => &$file,
+					'templateid' => &$templateid,
+					'tpldir' => &$tpldir,
+					'gettplfile' => &$gettplfile,
+					'primaltpl' => &$primaltpl,
+
+					// 回傳的檔案
+					'tplfile' => &$tplfile,
+			)));
+		}
+		// bluelovers
+
 		return $tplfile;
 	}
 	checktplrefresh($tplfile, $tplfile, @filemtime(DISCUZ_ROOT.$cachefile), $templateid, $cachefile, $tpldir, $file);
