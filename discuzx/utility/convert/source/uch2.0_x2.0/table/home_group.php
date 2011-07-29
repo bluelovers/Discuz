@@ -200,6 +200,14 @@ function getmtag($start) {
 
 			'membernum' => $mtag['membernum']
 		);
+
+	// bluelovers
+	// 重新處理群組描述
+	global $searcharray, $replacearray;
+
+	$forumfieldarr['description'] = daddslashes(preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 1)));
+	// bluelovers
+
 //	$db_target->insert('forum_forumfield', $forumfieldarr);
 	$db_target->insert('forum_forumfield', $forumfieldarr, 0, 1);
 	$db_target->query("UPDATE ".$db_target->table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$fid'");
