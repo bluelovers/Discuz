@@ -17,6 +17,8 @@
 
 	/* 修正雙重間距 */
 	.pls .avatar img.avatar
+	/* 用戶詳細信息 */
+	, .bui a img.avatar
 	{
 		margin: 0;
 	}
