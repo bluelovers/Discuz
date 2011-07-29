@@ -750,6 +750,9 @@ class discuz_core {
 		// bluelovers
 	}
 
+	/**
+	 * 預設執行於 function_core.php 的 template
+	 */
 	function _init_style() {
 		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
