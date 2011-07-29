@@ -857,6 +857,16 @@ class discuz_core {
 		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=yes';
 		unset($query_sting_tmp);
 		ob_start();
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_mobile:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function timezone_set($timeoffset = 0) {
