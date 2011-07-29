@@ -58,6 +58,13 @@ class discuz_core {
 	static $_cache_data = array();
 	// bluelovers
 
+	// bluelovers
+	/**
+	 * 儲存關於模板的額外參數
+	 */
+	static $tpl = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
