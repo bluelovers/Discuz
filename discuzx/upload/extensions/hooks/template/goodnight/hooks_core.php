@@ -18,7 +18,9 @@ Scorpio_Hook::add('Class_discuz_core::_init:After', '_eClass_discuz_core__init_A
  * 		Class_discuz_core::_init:After
  */
 function _eClass_discuz_core__init_After($_EVENT, $discuz) {
-	if(!$discuz->initated) {
+	static $initated = false;
+
+	if(!$initated) {
 
 		/**
 		 * 如果是訪客 或者 搜尋引擎時
@@ -29,6 +31,8 @@ function _eClass_discuz_core__init_After($_EVENT, $discuz) {
 		}
 
 	}
+
+	$initated = true;
 }
 
 ?>
