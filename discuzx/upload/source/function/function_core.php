@@ -634,6 +634,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 
 	static $_init_style = false;
 	if($_init_style === false) {
+		// 防止沒有載入風格
 		$discuz = & discuz_core::instance();
 		$discuz->_init_style();
 		$_init_style = true;
@@ -660,7 +661,8 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或預覽模式下做以下判斷
+				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') {
+					//DIY模式或預覽模式下做以下判斷
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_G['gp_preview'] == 'yes') {
 						$file .= $flag ? $preend : '';
@@ -736,9 +738,47 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	}
 
 	if($gettplfile) {
+
+		// bluelovers
+		// Event: Func_template:Before_return_tplfile
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return_tplfile')
+				->run(array(array(
+					// 函數本身的參數
+					'file' => &$file,
+					'templateid' => &$templateid,
+					'tpldir' => &$tpldir,
+					'gettplfile' => &$gettplfile,
+					'primaltpl' => &$primaltpl,
+
+					// 回傳的檔案
+					'tplfile' => &$tplfile,
+			)));
+		}
+		// bluelovers
+
 		return $tplfile;
 	}
 	checktplrefresh($tplfile, $tplfile, @filemtime(DISCUZ_ROOT.$cachefile), $templateid, $cachefile, $tpldir, $file);
+
+	// bluelovers
+	// Event: Func_template:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身的參數
+				'file' => &$file,
+				'templateid' => &$templateid,
+				'tpldir' => &$tpldir,
+				'gettplfile' => &$gettplfile,
+				'primaltpl' => &$primaltpl,
+
+				// 回傳的檔案
+				'cachefile' => &$cachefile,
+		)));
+	}
+	// bluelovers
+
 	return DISCUZ_ROOT.$cachefile;
 }
 
@@ -1157,8 +1197,12 @@ function libfile($libname, $folder = '', $source = 'source') {
 	}
 
 	// bluelovers
+	// Event: Func_libfile
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Event::instance('Func_'.__FUNCTION__.'')->run(array(&$ret, DISCUZ_ROOT));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.'')
+			->run(array(
+				&$ret, DISCUZ_ROOT
+		));
 	}
 	// bluelovers
 
@@ -1883,7 +1927,43 @@ function adshow($parameter) {
 	$_G['setting']['pluginhooks'][$adfunc] = null;
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
-	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	/**
+	 * 控制是否停止執行
+	 */
+	$switchstop = 0;
+
+	$adshow_return = $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// Event: Func_adshow:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身參數
+				'parameter' => &$parameter,
+
+				'params' => &$params,
+
+				'adfunc' => &$adfunc,
+				'adcontent' => &$adcontent,
+
+				'switchstop' => &$switchstop,
+
+				'adshow_return' => &$adshow_return,
+		)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	} else {
+		return $adshow_return;
+	}
+	// bluelovers
 }
 
 /**
