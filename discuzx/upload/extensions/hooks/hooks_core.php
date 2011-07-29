@@ -398,6 +398,14 @@ Scorpio_Hook::add('Class_discuz_core::_init_style:After', '_eClass_discuz_core__
  */
 function _eClass_discuz_core__init_style_After($_EVENT, $discuz) {
 
+	/**
+	 * 載入風格專用的 hook
+	 *
+	 * @example extensions/hooks/template/default/hooks_core.php
+	 * @example extensions/hooks/template/goodnight/hooks_core.php
+	 */
+	@include_once libfile('hooks_core', 'hooks/'.$discuz->var['style']['tpldir'], 'extensions/');
+
 }
 
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
