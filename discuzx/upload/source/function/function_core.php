@@ -1197,8 +1197,12 @@ function libfile($libname, $folder = '', $source = 'source') {
 	}
 
 	// bluelovers
+	// Event: Func_libfile
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Event::instance('Func_'.__FUNCTION__.'')->run(array(&$ret, DISCUZ_ROOT));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.'')
+			->run(array(
+				&$ret, DISCUZ_ROOT
+		));
 	}
 	// bluelovers
 
