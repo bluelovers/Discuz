@@ -1516,12 +1516,34 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
+
+	// bluelovers
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_str
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_str')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
 	if(!empty($_G['setting']['output']['str']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
 			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
 		}
 		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 	}
+
+	// bluelovers
+	}
+	// bluelovers
+
 	if(!empty($_G['setting']['output']['preg']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
 			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
