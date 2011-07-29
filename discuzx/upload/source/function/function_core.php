@@ -1955,7 +1955,7 @@ function adshow($parameter) {
 	if (!$switchstop) {
 	// bluelovers
 
-	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+		return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 
 	// bluelovers
 	} else {
