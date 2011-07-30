@@ -776,8 +776,28 @@ function parseaudio($url, $width = 400) {
 
 function parsemedia($params, $url) {
 	$params = explode(',', $params);
+	/*
 	$width = intval($params[1]) > 800 ? 800 : intval($params[1]);
 	$height = intval($params[2]) > 600 ? 600 : intval($params[2]);
+	*/
+
+	// bluelovers
+	$width = intval($params[1]);
+	$height = intval($params[2]);
+
+	if ($width <= 0) {
+		$width = 500;
+	} elseif ($width > 800) {
+		$width = 800;
+	}
+
+	if ($height <= 0) {
+		$height = 375;
+	} elseif ($height > 600) {
+		$height = 600;
+	}
+	// bluelovers
+
 	$url = addslashes($url);
 	if($flv = parseflv($url, $width, $height)) {
 		return $flv;
