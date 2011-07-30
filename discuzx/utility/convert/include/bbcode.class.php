@@ -147,41 +147,41 @@ class bbcode {
 	function _bbcode_media($t = 0, $_regex = 0) {
 		if (empty($this->cache_bbcode_media[$t])) {
 
-		$tags = array(
-			'media',
+			$tags = array(
+				'media',
 
-			'youtube',
-			'wmv',
-			'rmvb',
-			'yamflv',
-			'wretch',
-			'gv',
+				'youtube',
+				'wmv',
+				'rmvb',
+				'yamflv',
+				'wretch',
+				'gv',
 
-			'flv',
-		);
+				'flv',
+			);
 
-		$tags_ex = array();
+			$tags_ex = array();
 
-		$tags_ex[0] = array('audio',
-			'wma',
-			'ra',
-			'rm',
-			'mp3',
-			'yammp3',
-		);
+			$tags_ex[0] = array('audio',
+				'wma',
+				'ra',
+				'rm',
+				'mp3',
+				'yammp3',
+			);
 
-		$tags_ex[1] = array(
-			'flash',
-			'swf',
-		);
+			$tags_ex[1] = array(
+				'flash',
+				'swf',
+			);
 
-		if (!$t) {
-			$tags = array_merge($tags, $tags_ex[0], $tags_ex[1]);
-		} elseif ($t == 2) {
-			$tags = $tags_ex[0];
-		} elseif ($t == 3) {
-			$tags = $tags_ex[1];
-		}
+			if (!$t) {
+				$tags = array_merge($tags, $tags_ex[0], $tags_ex[1]);
+			} elseif ($t == 2) {
+				$tags = $tags_ex[0];
+			} elseif ($t == 3) {
+				$tags = $tags_ex[1];
+			}
 
 			$this->cache_bbcode_media[$t] = $tags;
 		} else {
