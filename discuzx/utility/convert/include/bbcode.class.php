@@ -190,6 +190,8 @@ class bbcode {
 	}
 
 	function _bbcode_media_callback($m) {
+		$retempty = 0;
+
 		$_skip = array('youtube', 'audio', 'flash');
 
 		if (
@@ -214,27 +216,31 @@ class bbcode {
 		} elseif (in_array($m['tag'], $this->_bbcode_media(2)) && $this->is_url($m['value'])) {
 			return $this->bbcode_make('audio', $m['value']);
 
-		} elseif (in_array($m['tag'], $this->_bbcode_media(3))) {
+		} elseif (in_array($m['tag'], $this->_bbcode_media(3)) && $this->is_url($m['value'])) {
 
-			if ($this->is_url($m['value'])) {
-				return $this->bbcode_make('flash', $m['value'], $m['extra']);
-			} else {
-				$retempty = 1;
-			}
+			return $this->bbcode_make('flash', $m['value'], $m['extra']);
+
+		} elseif (in_array($m['tag'], $this->_bbcode_media()) && $this->is_url($m['value'])) {
+
+			$retempty = 1;
 
 		} elseif (in_array($m['tag'], $_skip)) {
-			return '';
+
+			$retempty = 1;
+
 		}
 
-		if ($retempty) return '';
+		if ($retempty) {
+			return $m['value'];
+		}
 
 		return $m[0];
 	}
 
 	function bbcode_make($tag, $value = '', $extra = '') {
-		if ($tag == 'media' && empty($extra)) $extra = 'x,500,375';
-
 		$extra = trim($extra);
+
+		if ($tag == 'media' && empty($extra)) $extra = 'x,500,375';
 
 		$r = ($extra !== '') ? '='.$extra : '';
 
