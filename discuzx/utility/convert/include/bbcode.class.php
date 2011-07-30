@@ -155,7 +155,7 @@ class bbcode {
 			$w = 500;
 			$h = 375;
 
-			return "[media=x,{$w},{$h}]http://www.youtube.com/watch?v={$_m[idkey]}[/media]";
+			return $this->bbcode_make('media', "http://www.youtube.com/watch?v={$_m[idkey]}", "x,{$w},{$h}");
 		} elseif (in_array($m['tag'], $_skip)) {
 			return '';
 		}
