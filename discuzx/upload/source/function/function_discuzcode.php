@@ -767,6 +767,14 @@ function parsetrtd($bgcolor, $colspan, $rowspan, $width) {
 }
 
 function parseaudio($url, $width = 400, $allow_parseflv = 0) {
+	// bluelovers
+	if ($allow_parseflv) {
+		if($flv = parseflv($url, 500, 375)) {
+			return $flv;
+		}
+	}
+	// bluelovers
+
 	$ext = strtolower(substr(strrchr($url, '.'), 1, 5));
 	switch($ext) {
 		case 'mp3':
@@ -779,17 +787,6 @@ function parseaudio($url, $width = 400, $allow_parseflv = 0) {
 		case 'ram':
 			$mediaid = 'media_'.random(3);
 			return '<object classid="clsid:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA" width="'.$width.'" height="32"><param name="autostart" value="0" /><param name="src" value="'.$url.'" /><param name="controls" value="controlpanel" /><param name="console" value="'.$mediaid.'_" /><embed src="'.$url.'" autostart="0" type="audio/x-pn-realaudio-plugin" controls="ControlPanel" console="'.$mediaid.'_" width="'.$width.'" height="32"></embed></object>';
-
-		// bluelovers
-			break;
-		default:
-			if ($allow_parseflv) {
-				if($flv = parseflv($url, $width, 0)) {
-					return $flv;
-				}
-			}
-		// bluelovers
-
 	}
 }
 
