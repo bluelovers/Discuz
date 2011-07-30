@@ -123,7 +123,7 @@ class bbcode {
 			), '\\1\\2', $message);
 		}
 
-		$this->bbcode_media($message);
+		$message = $this->bbcode_media($message);
 
 		$message = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $message);
 
@@ -132,9 +132,31 @@ class bbcode {
 
 	function bbcode_media($message) {
 
+		$tag = '(?:youtube|audio|flash)';
 
+		$_skip = array('youtube', 'audio', 'flash');
+
+		$message = preg_replace_callback(array(
+			"/\[(?<tag>{$tag})(?:=(?<arg>[^\[\]]*))?\][\n\r]*(?<value>.+?)[\n\r]*\[\/\\1\]/is",
+		), array($this, '_bbcode_media_callback'), $message);
 
 		return $message;
+	}
+
+	function _bbcode_media_callback($m) {
+		$_skip = array('youtube', 'audio', 'flash');
+
+		if (
+			preg_match("/\.youtube\..+?\/watch\?v=(?<idkey>[0-9A-Za-z-_]{11})/", $m['value'], $_m)
+			// [youtube]b5EFKNmeovM[/youtube]
+			|| preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
+		) {
+			return "[media=x,500,375]http://www.youtube.com/watch?v={$_m[idkey]}[/media]";
+		} elseif (in_array($m['tag'], $_skip)) {
+			return '';
+		}
+
+		return $m[0];
 	}
 	// bluelovers
 }
