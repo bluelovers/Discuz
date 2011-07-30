@@ -123,7 +123,16 @@ class bbcode {
 			), '\\1\\2', $message);
 		}
 
+		$this->bbcode_media($message);
+
 		$message = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $message);
+
+		return $message;
+	}
+
+	function bbcode_media($message) {
+
+
 
 		return $message;
 	}
