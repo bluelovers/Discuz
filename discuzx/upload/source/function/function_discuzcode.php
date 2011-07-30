@@ -340,10 +340,12 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			}
 		}
 		if(strpos($msglower, '[/media]') !== FALSE) {
-			$message = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", $allowmediacode ? "parsemedia('\\1', '\\2')" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+			// 修改為可接受空參數
+			$message = preg_replace("/\[media(?:=([\w,]+))?\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", $allowmediacode ? "parsemedia('\\1', '\\2')" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
 		}
 		if(strpos($msglower, '[/audio]') !== FALSE) {
-			$message = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", $allowmediacode ? "parseaudio('\\2', 400)" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
+			// 增加允許分析 audio 是否為 media
+			$message = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", $allowmediacode ? "parseaudio('\\2', 400, 1)" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
 		}
 		if(strpos($msglower, '[/flash]') !== FALSE) {
 			$message = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", $allowmediacode ? "parseflash('\\2', '\\3', '\\4');" : "bbcodeurl('\\4', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
@@ -664,6 +666,13 @@ function parseflash($w, $h, $url) {
 	$h = !$h ? 400 : $h;
 	preg_match("/((https?){1}:\/\/|www\.)[^\[\"']+/i", $url, $matches);
 	$url = $matches[0];
+
+	// bluelovers
+	if($flv = parseflv($url, $w, $h)) {
+		return $flv;
+	}
+	// bluelovers
+
 	$randomid = 'swf_'.random(3);
 	if(fileext($url) != 'flv') {
 		return '<span id="'.$randomid.'"></span><script type="text/javascript" reload="1">$(\''.$randomid.'\').innerHTML=AC_FL_RunContent(\'width\', \''.$w.'\', \'height\', \''.$h.'\', \'allowNetworking\', \'internal\', \'allowScriptAccess\', \'never\', \'src\', \''.$url.'\', \'quality\', \'high\', \'bgcolor\', \'#ffffff\', \'wmode\', \'transparent\', \'allowfullscreen\', \'true\');</script>';
@@ -757,7 +766,15 @@ function parsetrtd($bgcolor, $colspan, $rowspan, $width) {
 	return ($bgcolor == 'td' ? '</td>' : '<tr'.($bgcolor ? ' style="background-color:'.$bgcolor.'"' : '').'>').'<td'.($colspan > 1 ? ' colspan="'.$colspan.'"' : '').($rowspan > 1 ? ' rowspan="'.$rowspan.'"' : '').($width ? ' width="'.$width.'"' : '').'>';
 }
 
-function parseaudio($url, $width = 400) {
+function parseaudio($url, $width = 400, $allow_parseflv = 0) {
+	// bluelovers
+	if ($allow_parseflv) {
+		if($flv = parseflv($url, 500, 375)) {
+			return $flv;
+		}
+	}
+	// bluelovers
+
 	$ext = strtolower(substr(strrchr($url, '.'), 1, 5));
 	switch($ext) {
 		case 'mp3':
@@ -775,8 +792,32 @@ function parseaudio($url, $width = 400) {
 
 function parsemedia($params, $url) {
 	$params = explode(',', $params);
+	/*
 	$width = intval($params[1]) > 800 ? 800 : intval($params[1]);
 	$height = intval($params[2]) > 600 ? 600 : intval($params[2]);
+	*/
+
+	// bluelovers
+	$width = intval($params[1]);
+	$height = intval($params[2]);
+
+	if ($width <= 0) {
+		$width = 500;
+	} elseif ($width > 800) {
+		$width = 800;
+	}
+
+	if ($height <= 0) {
+		$height = 375;
+	} elseif ($height > 600) {
+		$height = 600;
+	}
+
+	if (empty($params) && !empty($url)) {
+		$params = array('x', $width, $height);
+	}
+	// bluelovers
+
 	$url = addslashes($url);
 	if($flv = parseflv($url, $width, $height)) {
 		return $flv;
