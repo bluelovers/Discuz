@@ -665,6 +665,13 @@ function parseflash($w, $h, $url) {
 	$h = !$h ? 400 : $h;
 	preg_match("/((https?){1}:\/\/|www\.)[^\[\"']+/i", $url, $matches);
 	$url = $matches[0];
+
+	// bluelovers
+	if($flv = parseflv($url, $w, $h)) {
+		return $flv;
+	}
+	// bluelovers
+
 	$randomid = 'swf_'.random(3);
 	if(fileext($url) != 'flv') {
 		return '<span id="'.$randomid.'"></span><script type="text/javascript" reload="1">$(\''.$randomid.'\').innerHTML=AC_FL_RunContent(\'width\', \''.$w.'\', \'height\', \''.$h.'\', \'allowNetworking\', \'internal\', \'allowScriptAccess\', \'never\', \'src\', \''.$url.'\', \'quality\', \'high\', \'bgcolor\', \'#ffffff\', \'wmode\', \'transparent\', \'allowfullscreen\', \'true\');</script>';
