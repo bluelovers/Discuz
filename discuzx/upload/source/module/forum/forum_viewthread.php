@@ -917,6 +917,13 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 			 * 用戶組頭銜
 			 */
 			$post['authortitle'] = $_G['cache']['usergroups'][$post['groupid']]['grouptitle'];
+
+		// bluelovers
+		}
+		// 即使不顯示作者的組頭銜也仍然顯示用戶組星星
+		if (1) {
+		// bluelovers
+
 			/**
 			 * 顯示用戶組的星星數
 			 * 並且可以顯示升級到下一級需要多少
