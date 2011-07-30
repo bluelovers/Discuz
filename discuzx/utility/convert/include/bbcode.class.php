@@ -148,14 +148,21 @@ class bbcode {
 		$_skip = array('youtube', 'audio', 'flash');
 
 		if (
-			preg_match("/(?:\.youtube\..+?\/watch\?v=|youtu\.be\/)(?<idkey>[0-9A-Za-z-_]{11})/", $m['value'], $_m)
+			preg_match("/(?:\.youtube\..+?\/watch\?v=|youtu\.be\/)(?<idkey>[0-9A-Za-z-_]{11})(?:\?(?<e1>t=[\dmh]+s))?/", $m['value'], $_m)
 			// [youtube]b5EFKNmeovM[/youtube]
 			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
 		) {
 			$w = 500;
 			$h = 375;
 
-			return $this->bbcode_make('media', "http://www.youtube.com/watch?v={$_m[idkey]}", "x,{$w},{$h}");
+			$extra = '';
+			if (!empty($_m['e1'])) {
+				$extra = $_m['e1'];
+			}
+
+			if (!empty($extra)) $extra = '&'.trim($extra, '&');
+
+			return $this->bbcode_make('media', 'http://www.youtube.com/watch?v='.$_m['idkey'].$extra, "x,{$w},{$h}");
 		} elseif (in_array($m['tag'], $_skip)) {
 			return '';
 		}
