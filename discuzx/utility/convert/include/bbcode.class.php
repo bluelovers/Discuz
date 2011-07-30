@@ -279,7 +279,7 @@ class bbcode {
 		}
 
 		if ($retempty) {
-			return $m['value'];
+			return $m['tag'].': '.$m['value'];
 		}
 
 		return $m[0];
