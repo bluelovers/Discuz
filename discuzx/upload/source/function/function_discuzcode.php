@@ -796,6 +796,10 @@ function parsemedia($params, $url) {
 	} elseif ($height > 600) {
 		$height = 600;
 	}
+
+	if (empty($params) && !empty($url)) {
+		$params = array('x', $width, $height);
+	}
 	// bluelovers
 
 	$url = addslashes($url);
