@@ -204,7 +204,7 @@ class bbcode {
 		if (
 			preg_match("/(?:\.youtube\..+?\/watch\?v=|youtu\.be\/)(?<idkey>[0-9A-Za-z-_]{11})(?:[\?\&](?<e1>t=[\dmhs]+)\&?)?/", $m['value'], $_m)
 			// [youtube]b5EFKNmeovM[/youtube]
-			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
+			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})(?:[&\?].*)?$/", $m['value'], $_m)
 		) {
 			$c = '&';
 
