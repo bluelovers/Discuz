@@ -132,7 +132,7 @@ class bbcode {
 
 	function bbcode_media($message) {
 
-		$tag = '(?:youtube|audio|flash|wmv)';
+		$tag = '(?:'.$this->_bbcode_media(1).')';
 
 		$_skip = array('youtube', 'audio', 'flash');
 		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
@@ -142,6 +142,25 @@ class bbcode {
 		), array($this, '_bbcode_media_callback'), $message);
 
 		return $message;
+	}
+
+	function _bbcode_media($_regex = 0) {
+		$tags = array(
+			'media',
+
+			'youtube',
+			'audio',
+			'flash',
+
+			'wmv',
+		);
+
+		if ($_regex) {
+			array_walk($tags, 'preg_quote');
+			return implode('|', $tags);
+		} else {
+			return $tags;
+		}
 	}
 
 	function _bbcode_media_callback($m) {
