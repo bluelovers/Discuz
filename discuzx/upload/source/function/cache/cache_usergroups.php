@@ -28,6 +28,15 @@ function build_cache_usergroups() {
 		unset($group['system']);
 		$groupid = $group['groupid'];
 		$group['grouptitle'] = $group['color'] ? '<font color="'.$group['color'].'">'.$group['grouptitle'].'</font>' : $group['grouptitle'];
+		/**
+		 * 顯示作者的組頭銜
+		 *
+		 * userstatusby 只有 1 | 0
+		 *
+		 * 再升級轉換時有可能得到 2
+		 *
+		 * @see source\admincp\admincp_setting.php
+		 */
 		if($_G['setting']['userstatusby'] == 1) {
 			$group['userstatusby'] = 1;
 		} elseif($_G['setting']['userstatusby'] == 2) {
