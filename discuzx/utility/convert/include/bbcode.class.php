@@ -155,9 +155,11 @@ class bbcode {
 			$w = 500;
 			$h = 375;
 
+			$c = '&';
+
 			$extra = '';
 			if (!empty($_m['e1'])) {
-				$extra = $_m['e1'];
+				$extra = $_m['e1'].$c;
 			}
 
 			if (!empty($extra)) $extra = '&'.trim($extra, '&');
