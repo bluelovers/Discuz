@@ -132,7 +132,7 @@ class bbcode {
 
 	function bbcode_media($message) {
 
-		$tag = '(?:youtube|audio|flash)';
+		$tag = '(?:youtube|audio|flash|wmv)';
 
 		$_skip = array('youtube', 'audio', 'flash');
 		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
