@@ -96,6 +96,38 @@ class bbcode {
 		$url = addslashes($url);
 		return "<img src=\"$url\">";
 	}
+
+	// bluelovers
+	function bbcode_fix($message) {
+		for ($i=0; $i<10; $i++) {
+			$text = preg_replace(array(
+				'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
+				, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+			), '\\2', $text);
+
+			$text = preg_replace(array(
+				'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
+				, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
+				, '/(?:\[(italic)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+			), array(
+				'[\\1\\2]\\3\\4\\5[/\\1]'
+				, '[\\1\\2]\\4[/\\1]'
+				, '\\4'
+				, '[i\\2]\\3[/i]'
+			), $text);
+
+			$text = preg_replace(array(
+				'/^(\[[a-z0-9]+(?:=[^\[\]\n]+)?\])\n+|\n+(\[\/[a-z0-9]+\])/isSU'
+			), '\\1\\2', $text);
+		}
+
+		$text = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $text);
+
+		return $text;
+	}
+	// bluelovers
 }
 
 ?>
