@@ -132,7 +132,7 @@ class bbcode {
 
 	function bbcode_media($message) {
 
-		$tag = '(?:'.$this->_bbcode_media(1).')';
+		$tag = '(?:'.$this->_bbcode_media(0, 1).')';
 
 		$_skip = array('youtube', 'audio', 'flash');
 		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
@@ -144,7 +144,7 @@ class bbcode {
 		return $message;
 	}
 
-	function _bbcode_media($_regex = 0) {
+	function _bbcode_media($t = 0, $_regex = 0) {
 		$tags = array(
 			'media',
 
@@ -158,14 +158,21 @@ class bbcode {
 			'yamflv',
 			'wretch',
 			'gv',
+		);
 
-			'audio',
+		$tags_ex = array('audio',
 			'wma',
 			'ra',
 			'rm',
 			'mp3',
 			'yammp3',
 		);
+
+		if (!$t) {
+			$tags = array_merge($tags, $tags_ex);
+		} elseif ($t == 2) {
+			$tags = $tags_ex;
+		}
 
 		if ($_regex) {
 			array_walk($tags, 'preg_quote');
@@ -183,9 +190,6 @@ class bbcode {
 			// [youtube]b5EFKNmeovM[/youtube]
 			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
 		) {
-			$w = 500;
-			$h = 375;
-
 			$c = '&';
 
 			$extra = '';
@@ -195,7 +199,14 @@ class bbcode {
 
 			if (!empty($extra)) $extra = '&'.trim($extra, '&');
 
-			return $this->bbcode_make('media', 'http://www.youtube.com/watch?v='.$_m['idkey'].$extra, "x,{$w},{$h}");
+			return $this->bbcode_make('media', 'http://www.youtube.com/watch?v='.$_m['idkey'].$extra);
+
+		} elseif (in_array($m['tag'], $this->_bbcode_media(1)) && $this->is_url($m['value'])) {
+			return $this->bbcode_make('media', $m['value']);
+
+		} elseif (in_array($m['tag'], $this->_bbcode_media(2)) && $this->is_url($m['value'])) {
+			return $this->bbcode_make('audio', $m['value']);
+
 		} elseif (in_array($m['tag'], $_skip)) {
 			return '';
 		}
@@ -204,6 +215,8 @@ class bbcode {
 	}
 
 	function bbcode_make($tag, $value = '', $extra = '') {
+		if ($tag == 'media' && empty($extra)) $extra = 'x,500,375';
+
 		$r = ($extra !== '' && $extra !== null) ? '='.$extra : '';
 
 		return '['.$tag.$r.']'.$value.'[/'.$tag.']';
