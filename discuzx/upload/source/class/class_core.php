@@ -271,6 +271,36 @@ class discuz_core {
 			system_error('request_tainting');
 		}
 
+		/**
+		 * copy from dx 1.5
+		 */
+		if(!empty($_GET['rewrite'])) {
+			$query_string = '?mod=';
+			/*
+			$param = explode('-', $_GET['rewrite']);
+			$query_string .= $_GET['mod'] = $param[0];
+			array_shift($param);
+			*/
+
+			// bluelovers
+			$param = explode('-', trim($_GET['rewrite'], '-'));
+			if ($_REQUEST['mod'] || $_GET['mod']) {
+				$query_string .= $_GET['mod'];
+			} else {
+				$query_string .= $_GET['mod'] = $param[0];
+				array_shift($param);
+			}
+			// bluelovers
+
+			$paramc = count($param);
+			for($i = 0;$i < $paramc;$i+=2) {
+				$_REQUEST[$param[$i]] = $_GET[$param[$i]] = $param[$i + 1];
+				$query_string .= '&'.$param[$i].'='.$param[$i + 1];
+			}
+			$_SERVER['QUERY_STRING'] = $query_string;
+			unset($param, $paramc, $query_string);
+		}
+
 		if(!MAGIC_QUOTES_GPC) {
 			$_GET = daddslashes($_GET);
 			$_POST = daddslashes($_POST);
