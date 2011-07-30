@@ -154,6 +154,8 @@ class bbcode {
 			'yamflv',
 			'wretch',
 			'gv',
+
+			'flv',
 		);
 
 		$tags_ex = array();
@@ -168,7 +170,7 @@ class bbcode {
 
 		$tags_ex[1] = array(
 			'flash',
-			'flv',
+			'swf',
 		);
 
 		if (!$t) {
@@ -212,9 +214,19 @@ class bbcode {
 		} elseif (in_array($m['tag'], $this->_bbcode_media(2)) && $this->is_url($m['value'])) {
 			return $this->bbcode_make('audio', $m['value']);
 
+		} elseif (in_array($m['tag'], $this->_bbcode_media(3))) {
+
+			if ($this->is_url($m['value'])) {
+				return $this->bbcode_make('flash', $m['value'], $m['extra']);
+			} else {
+				$retempty = 1;
+			}
+
 		} elseif (in_array($m['tag'], $_skip)) {
 			return '';
 		}
+
+		if ($retempty) return '';
 
 		return $m[0];
 	}
@@ -222,7 +234,9 @@ class bbcode {
 	function bbcode_make($tag, $value = '', $extra = '') {
 		if ($tag == 'media' && empty($extra)) $extra = 'x,500,375';
 
-		$r = ($extra !== '' && $extra !== null) ? '='.$extra : '';
+		$extra = trim($extra);
+
+		$r = ($extra !== '') ? '='.$extra : '';
 
 		return '['.$tag.$r.']'.$value.'[/'.$tag.']';
 	}
