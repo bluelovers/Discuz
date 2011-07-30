@@ -71,7 +71,7 @@
 			<!--{if $post[groupicon]}--><p>$post[groupicon]</p><!--{/if}-->
 
 		<!--檢查 $post[authortitle]-->
-		<!--if $post[authortitle]}-->
+		<!--{if $post[authortitle]}-->
 
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
 
@@ -87,7 +87,7 @@
 			<!--{if $post['upgradecredit'] !== false}-->
 				<div id="g_up$post[pid]_menu" class="tip tip_4" style="display: none;">
 					<div class="tip_horn"></div>
-					<div class="tip_c">$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}</div>
+					<div class="tip_c">$post['authortitle'], {lang credits} <em class="xi1">$post['credits']</em>, {lang thread_groupupgrade} <em class="xi1">$post['upgradecredit']</em> {lang credits}</div>
 				</div>
 			<!--{/if}-->
 
