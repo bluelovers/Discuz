@@ -503,14 +503,18 @@ Array
 	}
 
 	// 如果成功查詢到 $_uid
-	if ($_uid) {
+	if ($_uid
+		&& !empty($m['showname'])
+		// 改良只取代帳號名
+		&& $_uid == $_user['username'][$m['showname']]
+	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
 
 		$s = '';
 		$s .= '<a href="'.$m['href'].'"';
 
-		if (!empty($user)) {
+		if (!empty($user) && strpos($m['extra'], ' title=') === false) {
 			// 提示帳號名稱
 			$s .= ' title="'.strip_tags($m['showname']).' ( '.strip_tags($user).' )"';
 		}
