@@ -503,7 +503,11 @@ Array
 	}
 
 	// 如果成功查詢到 $_uid
-	if ($_uid) {
+	if ($_uid
+		&& !empty($m['showname'])
+		// 改良只取代帳號名
+		&& $_uid == $_user['username'][$m['showname']]
+	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
 
