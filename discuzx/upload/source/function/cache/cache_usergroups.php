@@ -33,6 +33,8 @@ function build_cache_usergroups() {
 		 *
 		 * userstatusby 只有 1 | 0
 		 *
+		 * 再升級轉換時有可能得到 2
+		 *
 		 * @see source\admincp\admincp_setting.php
 		 */
 		if($_G['setting']['userstatusby'] == 1) {
