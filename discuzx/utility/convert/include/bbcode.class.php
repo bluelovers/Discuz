@@ -99,7 +99,7 @@ class bbcode {
 
 	// bluelovers
 	function bbcode_fix($message) {
-		for ($i=0; $i<10; $i++) {
+		for ($i=0; $i<3; $i++) {
 			$message = preg_replace(array(
 				'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
 				, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
@@ -135,7 +135,7 @@ class bbcode {
 		$tag = '(?:'.$this->_bbcode_media(0, 1).')';
 
 		$_skip = array('youtube', 'audio', 'flash');
-		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
+		$_regexval = '(?:(?:[^\[]+|\[(?!\/\\1\]))+)';
 
 		$message = preg_replace_callback(array(
 			"/\[(?<tag>{$tag})(?:=(?<extra>[^\[\]]*))?\][\n\r]*(?<value>".$_regexval.")[\n\r]*\[\/\\1\]/is",
@@ -145,6 +145,8 @@ class bbcode {
 	}
 
 	function _bbcode_media($t = 0, $_regex = 0) {
+		if (empty($this->cache_bbcode_media[$t])) {
+
 		$tags = array(
 			'media',
 
@@ -179,6 +181,11 @@ class bbcode {
 			$tags = $tags_ex[0];
 		} elseif ($t == 3) {
 			$tags = $tags_ex[1];
+		}
+
+			$this->cache_bbcode_media[$t] = $tags;
+		} else {
+			$tags = $this->cache_bbcode_media[$t];
 		}
 
 		if ($_regex) {
