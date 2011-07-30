@@ -162,6 +162,12 @@ class bbcode {
 
 		return $m[0];
 	}
+
+	function bbcode_make($tag, $value = '', $extra = '') {
+		$r = ($extra !== '' && $extra !== null) ? '='.$extra : '';
+
+		return '['.$tag.$r.']'.$value.'[/'.$tag.']';
+	}
 	// bluelovers
 }
 
