@@ -100,13 +100,13 @@ class bbcode {
 	// bluelovers
 	function bbcode_fix($message) {
 		for ($i=0; $i<10; $i++) {
-			$text = preg_replace(array(
+			$message = preg_replace(array(
 				'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
 				, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
 				, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-			), '\\2', $text);
+			), '\\2', $message);
 
-			$text = preg_replace(array(
+			$message = preg_replace(array(
 				'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
 				, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
 				, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
@@ -116,16 +116,16 @@ class bbcode {
 				, '[\\1\\2]\\4[/\\1]'
 				, '\\4'
 				, '[i\\2]\\3[/i]'
-			), $text);
+			), $message);
 
-			$text = preg_replace(array(
+			$message = preg_replace(array(
 				'/^(\[[a-z0-9]+(?:=[^\[\]\n]+)?\])\n+|\n+(\[\/[a-z0-9]+\])/isSU'
-			), '\\1\\2', $text);
+			), '\\1\\2', $message);
 		}
 
-		$text = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $text);
+		$message = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $message);
 
-		return $text;
+		return $message;
 	}
 	// bluelovers
 }
