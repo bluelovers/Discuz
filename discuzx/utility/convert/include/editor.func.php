@@ -223,7 +223,7 @@ function bbcode_fix($message) {
 		include_once 'bbcode.class.php';
 	}
 
-	return bbcode::bbcode_fix($message);
+	return bbcode::instance()->bbcode_fix($message);
 }
 // bluelovers
 
