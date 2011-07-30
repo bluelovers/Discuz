@@ -99,18 +99,18 @@ class bbcode {
 
 	// bluelovers
 	function bbcode_fix($message) {
-		for ($i=0; $i<10; $i++) {
+		for ($i=0; $i<3; $i++) {
 			$message = preg_replace(array(
 				'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
-				, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-				, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]+|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]+|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
 			), '\\2', $message);
 
 			$message = preg_replace(array(
-				'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-				, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
-				, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
-				, '/(?:\[(italic)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]+|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
+				, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]+|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
+				, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]+|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
+				, '/(?:\[(italic)(=[^\[\]\n]+)?\])((?:[^\[]+|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
 			), array(
 				'[\\1\\2]\\3\\4\\5[/\\1]'
 				, '[\\1\\2]\\4[/\\1]'
@@ -135,7 +135,7 @@ class bbcode {
 		$tag = '(?:'.$this->_bbcode_media(0, 1).')';
 
 		$_skip = array('youtube', 'audio', 'flash');
-		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
+		$_regexval = '(?:(?:[^\[]+|\[(?!\/\\1\]))+)';
 
 		$message = preg_replace_callback(array(
 			"/\[(?<tag>{$tag})(?:=(?<extra>[^\[\]]*))?\][\n\r]*(?<value>".$_regexval.")[\n\r]*\[\/\\1\]/is",
@@ -145,40 +145,47 @@ class bbcode {
 	}
 
 	function _bbcode_media($t = 0, $_regex = 0) {
-		$tags = array(
-			'media',
+		if (empty($this->cache_bbcode_media[$t])) {
 
-			'youtube',
-			'wmv',
-			'rmvb',
-			'yamflv',
-			'wretch',
-			'gv',
+			$tags = array(
+				'media',
 
-			'flv',
-		);
+				'youtube',
+				'wmv',
+				'rmvb',
+				'yamflv',
+				'wretch',
+				'gv',
 
-		$tags_ex = array();
+				'flv',
+			);
 
-		$tags_ex[0] = array('audio',
-			'wma',
-			'ra',
-			'rm',
-			'mp3',
-			'yammp3',
-		);
+			$tags_ex = array();
 
-		$tags_ex[1] = array(
-			'flash',
-			'swf',
-		);
+			$tags_ex[0] = array('audio',
+				'wma',
+				'ra',
+				'rm',
+				'mp3',
+				'yammp3',
+			);
 
-		if (!$t) {
-			$tags = array_merge($tags, $tags_ex[0], $tags_ex[1]);
-		} elseif ($t == 2) {
-			$tags = $tags_ex[0];
-		} elseif ($t == 3) {
-			$tags = $tags_ex[1];
+			$tags_ex[1] = array(
+				'flash',
+				'swf',
+			);
+
+			if (!$t) {
+				$tags = array_merge($tags, $tags_ex[0], $tags_ex[1]);
+			} elseif ($t == 2) {
+				$tags = $tags_ex[0];
+			} elseif ($t == 3) {
+				$tags = $tags_ex[1];
+			}
+
+			$this->cache_bbcode_media[$t] = $tags;
+		} else {
+			$tags = $this->cache_bbcode_media[$t];
 		}
 
 		if ($_regex) {
@@ -192,12 +199,14 @@ class bbcode {
 	function _bbcode_media_callback($m) {
 		$retempty = 0;
 
+		$m['value'] = preg_replace('/^\s+|\s+$/s', '', $m['value']);
+
 		$_skip = array('youtube', 'audio', 'flash');
 
 		if (
 			preg_match("/(?:\.youtube\..+?\/watch\?v=|youtu\.be\/)(?<idkey>[0-9A-Za-z-_]{11})(?:[\?\&](?<e1>t=[\dmhs]+)\&?)?/", $m['value'], $_m)
 			// [youtube]b5EFKNmeovM[/youtube]
-			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
+			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})(?:[&\?].*)?$/", $m['value'], $_m)
 		) {
 			$c = '&';
 
@@ -256,7 +265,10 @@ class bbcode {
 
 			return $this->bbcode_make('flash', $m['value'], $m['extra']);
 
-		} elseif (in_array($m['tag'], $this->_bbcode_media()) && $this->is_url($m['value'])) {
+		} elseif (in_array($m['tag'], $this->_bbcode_media())
+			&& !$this->is_url($m['value'])
+			&& preg_match('/[^a-z\d\_\-]/i', $m['value'])
+		) {
 
 			$retempty = 1;
 
@@ -267,7 +279,7 @@ class bbcode {
 		}
 
 		if ($retempty) {
-			return $m['value'];
+			return $m['tag'].': '.$m['value'];
 		}
 
 		return $m[0];
