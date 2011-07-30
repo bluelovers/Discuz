@@ -135,9 +135,10 @@ class bbcode {
 		$tag = '(?:youtube|audio|flash)';
 
 		$_skip = array('youtube', 'audio', 'flash');
+		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
 
 		$message = preg_replace_callback(array(
-			"/\[(?<tag>{$tag})(?:=(?<arg>[^\[\]]*))?\][\n\r]*(?<value>.+?)[\n\r]*\[\/\\1\]/is",
+			"/\[(?<tag>{$tag})(?:=(?<arg>[^\[\]]*))?\][\n\r]*(?<value>".$_regexval.")[\n\r]*\[\/\\1\]/is",
 		), array($this, '_bbcode_media_callback'), $message);
 
 		return $message;
@@ -151,7 +152,10 @@ class bbcode {
 			// [youtube]b5EFKNmeovM[/youtube]
 			|| preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
 		) {
-			return "[media=x,500,375]http://www.youtube.com/watch?v={$_m[idkey]}[/media]";
+			$w = 500;
+			$h = 375;
+
+			return "[media=x,{$w},{$h}]http://www.youtube.com/watch?v={$_m[idkey]}[/media]";
 		} elseif (in_array($m['tag'], $_skip)) {
 			return '';
 		}
