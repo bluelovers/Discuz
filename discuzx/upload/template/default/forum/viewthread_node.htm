@@ -69,7 +69,14 @@
 			<!--{/if}-->
 			<!--{hook/viewthread_avatar $postcount}-->
 			<!--{if $post[groupicon]}--><p>$post[groupicon]</p><!--{/if}-->
+
+		<!--檢查 $post[authortitle]-->
+		<!--if $post[authortitle]}-->
+
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
+
+		<!--{/if}-->
+
 			<!--{if $post['customstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
 			</div>
 
