@@ -149,10 +149,6 @@ class bbcode {
 			'media',
 
 			'youtube',
-
-			'flash',
-			'flv',
-
 			'wmv',
 			'rmvb',
 			'yamflv',
@@ -160,7 +156,9 @@ class bbcode {
 			'gv',
 		);
 
-		$tags_ex = array('audio',
+		$tags_ex = array();
+
+		$tags_ex[0] = array('audio',
 			'wma',
 			'ra',
 			'rm',
@@ -168,10 +166,17 @@ class bbcode {
 			'yammp3',
 		);
 
+		$tags_ex[1] = array(
+			'flash',
+			'flv',
+		);
+
 		if (!$t) {
-			$tags = array_merge($tags, $tags_ex);
+			$tags = array_merge($tags, $tags_ex[0], $tags_ex[1]);
 		} elseif ($t == 2) {
-			$tags = $tags_ex;
+			$tags = $tags_ex[0];
+		} elseif ($t == 3) {
+			$tags = $tags_ex[1];
 		}
 
 		if ($_regex) {
