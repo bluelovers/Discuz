@@ -1,0 +1,31 @@
+{subtemplate common/header_common}
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" id="fullwindow">
+	<tr height="100%">
+		<td>
+		<!--{if $theplayer_style == 'gvod'}-->
+			<script src="{PINC}/flash_{$theplayer_style}.js" type="text/javascript" charset="gbk"></script>
+			<script>
+				var player = gvod_player();
+				player.height = screen.availHeight-30;
+				player.width = 100%;
+				player.play("$viewdata[vurl]");
+			</script>
+		<!--{else}-->
+		<script type="text/javascript">
+			var swf_width="100%";
+			var swf_height=screen.availHeight-30;
+			var swf_player="{PINC}/flvplayer.swf";
+			var swf_title="$flv_title";
+			var swf_id = $viewdata[id];
+			var swf_url = "$viewdata[vurl]";
+		</script><script language="javascript" src="{PINC}/flash_{$theplayer_style}.js"></script>
+		<!--{/if}-->
+		</td>
+	</tr>
+</table>
+<!--{eval updatesession();}-->
+<!--{eval userappprompt();}-->
+<!--{eval output();}-->
+</body>
+</html>

@@ -1,0 +1,147 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="bm bml">
+		<p class="tbmu{if !$fid && !$sid} bw0{/if}">
+			<a hideFocus href="{PDIR}&tion=list"{if !$fid && !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==0}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&fid=$datarow[sid]"{if $fid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{if $fid || $sid}-->
+		<p class="tbmu bw0">
+			<a hideFocus href="{PDIR}&tion=list&fid=$fid"{if !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==$fid}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&sid=$datarow[sid]"{if $sid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{/if}-->
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<ul class="tb cl">
+							<li{if $types == '1' || !$types} class="a"{/if}>
+							<a href="{PDIR}&tion=ablist&vid=$vid">最早發布的</a></li>
+							<li{if $types == '2'} class="a"{/if}>
+							<a href="{PDIR}&tion=ablist&vid=$vid&types=2">播放最多的</a></li>
+							<li{if $types == '3'} class="a"{/if}>
+							<a href="{PDIR}&tion=ablist&vid=$vid&types=3">評分最高的</a></li>
+							<li{if $types == '4'} class="a"{/if}>
+							<a href="{PDIR}&tion=ablist&vid=$vid&types=4">評論最多的</a></li>
+						</ul>
+						<div class="z">
+							<table border="0" cellpadding="0" cellspacing="0">
+								<tr><td height="3"></td></tr>
+								<tr><td height="40"><h2 class="xs2">專輯：$abvalue[vsubject] <span class="pipe">共$abvalue[vsum]個視頻</span></h2></td></tr>
+							</table>				
+						</div>
+						<table cellSpacing="0" cellPadding="0" width="100%"><tr><td height="1" class="alt"></td></tr><tr><td height="12"></td></tr>
+						<tr><td>
+						<table cellSpacing="0" cellPadding="0" width="100%">
+								
+							<tr>
+								<td rowspan="7" width="195" height="160" valign="top">
+								<div align="center" style="width: 182px; height: 137px; overflow: hidden; text-overflow:ellipsis; border: 1px solid #B0B0B0;">
+								<table cellspacing="0" cellpadding="0" border="0" width="182" height="137" align="center">
+								<tr><td align="center" valign="middle"><img src="$abvalue[purl]" border="0" align="absmiddle" width="180" height="135"></td></tr></table>
+								</div>
+								</td>
+								<td></td>
+							</tr>
+		
+							<tr>
+								<td height="18"><span class="xg1">創建時間：</span>$abvalue[dateline]</td>
+							</tr>
+		
+							<tr>
+								<td height="18"><span class="xg1">所屬類別：</span>$sort_1_name &raquo; $sort_2_name</td>
+							</tr>
+		
+							<tr>
+								<td height="18"><span class="xg1">專輯主人：</span>$abvalue[username]</td>
+							</tr>
+		
+							<tr>
+								<td height="18"><span class="xg1">播放次數：</span>$abvalue[views]次</td>
+							</tr>
+		
+							<tr>
+								<td height="6"></td>
+							</tr>
+		
+							<tr>
+								<td valign="top" height="70"><span class="xg1">&nbsp; $abvalue[vinfo]</span></td>
+							</tr>
+							<tr>
+								<td colspan="2" height="28" class="alt"><h2>&nbsp;&raquo; 以下是本專輯內的視頻信息：</h2></td>
+							</tr>
+							<tr>
+								<td colspan="2" height="12"></td>
+							</tr>
+							</table>				
+						</td></tr>
+						</table>
+						<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word">
+							{eval $cle=1;}
+								<!--{loop $datalist $i $listloop}-->
+								<!--{if $cle==1}-->
+								<tr>
+								<!--{/if}-->
+								<td valign="top" width="136" align="center">
+								<div align="center" style="width: 122px; height: 92px; overflow: hidden; text-overflow:ellipsis; border: 1px solid #B0B0B0;">
+								<table cellspacing="0" cellpadding="0" border="0" width="122" height="92" align="center">
+								<tr><td align="center" valign="middle">
+								<a href="{PDIR}&tion=view&vid=$listloop[id]" title="$listloop[vsubject]">
+								<img src="$listloop[purl]" border="0" align="absmiddle" width="120" height="90"></a></td></tr></table>
+								</div>
+								<table border="0" width="124" style="table-layout: fixed; word-wrap: break-word" cellspacing="0" cellpadding="0">
+								<tr><td height="2"></td></tr>
+								<tr><td align="left" width="124" title="$listloop[vsubject]" height="20"><a href="{PDIR}&tion=view&vid=$listloop[id]" class="xi2">$listloop[vsubjectc]</a></td></tr>
+								<tr><td height="3"></td></tr>
+								<tr><td height="21" class="alt"><div class="y"><!--{if !$listloop[vprice]}--><span class="xg1">$listloop[timelong]</span><!--{else}--><span class="xi1">$listloop[vprice] {$money_unit}{$money_name}</span><!--{/if}--></div><div class="z">&nbsp;<img src="{MDIR}/views.gif" border="0" align="absmiddle"> <span class="nums">$listloop[views]</span></div></td></tr>
+								<tr><td height="20"></td></tr>
+								</table>
+								
+								</td>
+							<td width="3"></td>
+							<!--{if $cle>5}-->
+							</tr>
+							<!--{/if}-->
+							{eval $cle++;if($cle>5)$cle=1;}
+							<!--{/loop}-->
+						</table>				
+						$multipage
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

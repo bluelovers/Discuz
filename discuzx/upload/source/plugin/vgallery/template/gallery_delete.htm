@@ -1,0 +1,82 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">刪除專輯或視頻！！！</h1>
+		
+						<ul class="tb cl">
+							<li class="a">
+							<a href="{PDIR}&tion=delete&vid=$vid">刪除專輯</a></li>
+							<li>
+							<a href="{PDIR}&tion=mylist&types=1">返回列表</a></li>
+						</ul>
+		
+		
+						<p class="tbmu bw0">友情提示：如果要刪除專輯內含有視頻信息，那麽刪除專輯後這些視頻將自動移出專輯。
+						<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+								<th width="10"></th>
+								<th colspan="2">以下是您要刪除的信息</th>
+							</tr>
+		
+							<tr>
+								<td rowspan="4"></td>
+								<td rowspan="4" width="200"><img src="$datarow[purl1]" border="0" align="absmiddle" width="180"><p style="margin-top: 10px; margin-bottom: 0">
+								 &raquo; <!--{if $datarow[album]}-->專輯內共 <a href="{PDIR}&tion=myablist&vid=$datarow[id]" class="xi2">$datarow[vsum]
+									</a>&nbsp;個視頻<!--{else}-->刪除一個獨立視頻<!--{/if}--></td>
+								<td>$datarow[vsubject]</td>
+							</tr>
+		
+							<tr>
+								<td>所屬類別：$sort_1_name &raquo; $sort_2_name</td>
+							</tr>
+		
+							<tr>
+								<td>創建時間：$datarow[dateline]</td>
+							</tr>
+		
+							<tr>
+								<td height="80"><span class="xg1">&nbsp; $datarow[vinfo]</span></td>
+							</tr>
+							<tr>
+								<td width="10"></td>
+								<td></td>
+								<td>
+								<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>確認刪除</strong></button>
+								<button class="pn pnp" name="returns" type="reset" value="true" onclick="window.location='{PDIR}&tion=mylist&types=1';"><strong>取消</strong></button>
+								</td>
+							</tr>
+		
+							</table>
+						<input type="hidden" name="vid" value="$vid">
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

@@ -1,0 +1,75 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">舉報視頻</h1>
+		
+						<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+								<th width="10"></th>
+								<th colspan="2">以下是您要舉報的視頻</th>
+							</tr>
+		
+							<tr>
+								<td rowspan="3"></td>
+								<td rowspan="3" width="200"><img src="$datarow[purl]" border="0" align="absmiddle" width="180"></td>
+								<td><b>$datarow[vsubject]</b></td>
+							</tr>
+		
+							<tr>
+								<td>舉報理由：
+								<select name="fid" class="ps" onchange="message.value=this.value">
+									<option value=""></option>
+									<option value="視頻地址失效">視頻地址失效</option>
+									<option value="不良/非法內容">不良/非法內容</option>
+									<option value="視頻質量太差">視頻質量太差</option>
+								</select>
+								</td>
+							</tr>
+		
+							<tr>
+								<td height="80">
+								<textarea id="message" name="message" class="pt" rows="3" cols="43"></textarea></td>
+							</tr>
+							<tr>
+								<td width="10"></td>
+								<td></td>
+								<td>
+								<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>現在舉報</strong></button>
+								<button class="pn pnp" name="returns" type="reset" value="true" onclick="window.location='{PDIR}&tion=view&vid=$vid';"><strong>取消</strong></button>
+								</td>
+							</tr>
+		
+							</table>
+						<input type="hidden" name="vid" value="$vid">
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

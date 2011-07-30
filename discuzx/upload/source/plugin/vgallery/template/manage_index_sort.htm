@@ -1,0 +1,70 @@
+{subtemplate common/header}
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+
+		<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<div class="mn">
+			<div class="bm bw0">
+				<h1 class="mt">要在首頁顯示視頻的4個類別</h1>
+				<table cellSpacing="0" cellPadding="0" width="100%">
+				<tr><td height="36">友情提示：視頻首頁會顯示4個類別的最新視頻，請在這裏填入你想顯示的4個類別的sid值（填寫的sid應爲二級類別）</td></tr>
+				<tr><td height="1" class="alt"></td></tr><tr><td height="16"></td></tr></table>
+				<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+					<tr>
+						<th width="60"></th>
+						<th colspan="2">請檢查仔細再提交，一旦提交，以前的類別信息就會被更新</th>
+					</tr>
+					<tr>
+						<td align="center">1</td>
+						<td width="150">第一個類別的SID：</td>
+						<td><input id="new_sort" class="px" value="$isort1" type="text" name="newsort1" style="width:100px;"> 
+						$isortname1</td>
+					</tr>
+					<tr>
+						<td align="center">2</td>
+						<td>第二個類別的SID：</td>
+						<td><input id="new_sort0" class="px" value="$isort2" type="text" name="newsort2" style="width:100px;"> 
+						$isortname2</td>
+					</tr>
+					<tr>
+						<td align="center">3</td>
+						<td>第三個類別的SID：</td>
+						<td><input id="new_sort1" class="px" value="$isort3" type="text" name="newsort3" style="width:100px;"> 
+						$isortname3</td>
+					</tr>
+					<tr>
+						<td align="center">4</td>
+						<td>第四個類別的SID：</td>
+						<td><input id="new_sort2" class="px" value="$isort4" type="text" name="newsort4" style="width:100px;"> 
+						$isortname4</td>
+					</tr>
+					<tr><td><td colspan="2"><button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>提交更新</strong></button></td></tr>
+				</table>
+			</div>
+		</div>
+		</form>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

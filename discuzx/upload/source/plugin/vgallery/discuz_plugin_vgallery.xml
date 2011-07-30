@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-21 05:04]]></item>
+	<item id="From"><![CDATA[靖飒原創插件 (http://www.abccc.com.cn/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[視頻展廳]]></item>
+			<item id="identifier"><![CDATA[vgallery]]></item>
+			<item id="description"><![CDATA[收集各種視頻網站的視頻資源，通過此插件將其發布到論壇上，提供給大家在線欣賞；支持轉載優酷、56、土豆、激動網、6間房、酷6網……等大型視頻站的視頻；也可支持FLV/QVOD/GVOD/RM/RMVB/WMV/AVI/RA/MP4/MP3...格式的視頻]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[vgallery/]]></item>
+			<item id="copyright"><![CDATA[Oytktk(靖飒)]]></item>
+			<item id="version"><![CDATA[3.0721]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[vgallery]]></item>
+					<item id="menu"><![CDATA[視頻展廳]]></item>
+					<item id="url"><![CDATA[plugin.php?id=vgallery:vgallery]]></item>
+					<item id="type"><![CDATA[5]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="license"><![CDATA[[list]
+		[*][b]插件名稱：[/b]視頻展廳 3.0721版 For DX2
+		[*][b]適用版本：[/b]Discuz! X2.0
+		[*][b]語言編碼：[/b]GBK
+		[*][b]插件作者：[/b][url=http://www.abccc.com.cn]Kannol(靖飒)[/url]
+		[*][b]版權所屬&&支持站點：[/b] [url]http://www.abccc.com.cn[/url]
+		[*][b]插件簡介：[/b]收集各種視頻網站的視頻資源，通過此插件將其發布到論壇上，提供給大家在線欣賞；支持轉載優酷、56、土豆、激動網、6間房、酷6網……等大型視頻站的視頻；也可支持FLV/QVOD/GVOD/RM/RMVB/WMV/AVI/RA/MP4/MP3...格式的視頻
+		[/list]
+		]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[視頻展區功能開關]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[isopens]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[是否允許發布收費視頻]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[ispostmoney]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[是否允許對視頻進行評價]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[isevaluate]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[是否允許對視頻進行打分]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[israte]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[不是審核員發布的視頻是否要 ...]]></item>
+				<item id="description"><![CDATA[不是審核員或管理員發布的視頻，是否需要審核才能顯示出來？]]></item>
+				<item id="variable"><![CDATA[isaudit]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[不是審核員發布的評論是否需 ...]]></item>
+				<item id="description"><![CDATA[不是審核員或管理員發布的評論，是否需要審核才能顯示出來？]]></item>
+				<item id="variable"><![CDATA[isauditv]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[是否本地化網絡圖片]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[isgetimg]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[用戶發布視頻使用的自定義積分字段是]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[isusercredits]]></item>
+				<item id="type"><![CDATA[extcredit]]></item>
+				<item id="value"><![CDATA[5]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[10]]></item>
+				<item id="title"><![CDATA[側欄的熱播數據多久更新一次【小時】]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[topcheck]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[13]]></item>
+				<item id="title"><![CDATA[哪些用戶組有權限使用此插件 ...]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[theusergp_1]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[10]]></item>
+					<item id="1"><![CDATA[11]]></item>
+					<item id="2"><![CDATA[12]]></item>
+					<item id="3"><![CDATA[13]]></item>
+					<item id="4"><![CDATA[14]]></item>
+					<item id="5"><![CDATA[15]]></item>
+					<item id="6"><![CDATA[16]]></item>
+					<item id="7"><![CDATA[17]]></item>
+					<item id="8"><![CDATA[18]]></item>
+					<item id="9"><![CDATA[19]]></item>
+					<item id="10"><![CDATA[1]]></item>
+					<item id="11"><![CDATA[2]]></item>
+					<item id="12"><![CDATA[3]]></item>
+					<item id="13"><![CDATA[4]]></item>
+					<item id="14"><![CDATA[7]]></item>
+					<item id="15"><![CDATA[8]]></item>
+				</item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[14]]></item>
+				<item id="title"><![CDATA[哪些用戶組有權限發布視頻]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[theusergp_2]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[10]]></item>
+					<item id="1"><![CDATA[11]]></item>
+					<item id="2"><![CDATA[12]]></item>
+					<item id="3"><![CDATA[13]]></item>
+					<item id="4"><![CDATA[14]]></item>
+					<item id="5"><![CDATA[15]]></item>
+					<item id="6"><![CDATA[16]]></item>
+					<item id="7"><![CDATA[17]]></item>
+					<item id="8"><![CDATA[18]]></item>
+					<item id="9"><![CDATA[19]]></item>
+					<item id="10"><![CDATA[1]]></item>
+					<item id="11"><![CDATA[2]]></item>
+					<item id="12"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[15]]></item>
+				<item id="title"><![CDATA[哪些用戶組可以審核視頻和評論]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[theusergp_3]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[15]]></item>
+					<item id="1"><![CDATA[19]]></item>
+					<item id="2"><![CDATA[1]]></item>
+					<item id="3"><![CDATA[2]]></item>
+				</item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[以前發布的視頻在論壇裏沒有主題的，是否在編輯時自動生成？]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[autholdpush]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="13">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[是否開啓上傳圖片截圖功能]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[isuploadimg]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="14">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[關聯的論壇版塊]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[thefid]]></item>
+				<item id="type"><![CDATA[forum]]></item>
+				<item id="value"><![CDATA[41]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="15">
+				<item id="displayorder"><![CDATA[16]]></item>
+				<item id="title"><![CDATA[使用COOKIE保存最近觀看的幾部視頻？]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[thecooksave]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[8]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="updatefile"><![CDATA[update.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>

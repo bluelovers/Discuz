@@ -1,0 +1,48 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">請選擇你想如何發布視頻？</h1>
+						<table class="dt" cellSpacing="1" width="100%" cellPadding="4">
+							<tr>
+								<td align="right">
+								<a href="{PDIR}&tion=release">
+								<img border="0" src="{MDIR}/fabu_1.gif" width="270" height="143"></a></td>
+								<td align="left">
+								<a href="{PDIR}&tion=autoget" onclick="showWindow('getautourl', this.href);return false;">
+								<img border="0" src="{MDIR}/fabu_2.gif" width="375" height="272"></a></td>
+							</tr>
+						</table>
+						<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+						<input type="hidden" name="vid" value="$vid">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

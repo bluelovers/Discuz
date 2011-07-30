@@ -1,0 +1,64 @@
+{subtemplate common/header}
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+
+		<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<div class="mn">
+			<div class="bm bw0">
+				<h1>管理: {$poststitle}</h1>
+				
+				<table cellSpacing="0" cellPadding="0" width="100%"><tr><td height="10"></td></tr></table>
+				<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+					<tr>
+						<th width="60"></th>
+						<th>部分評論內容</th>
+						<th>評論時間</th>
+						<th>評論者</th>
+						<th colspan="3">操作</th>
+					</tr>
+					<!--{loop $datalist $datarow}-->
+					<tr>
+						<td align="center" title="$datarow[vsubject]{LF}點擊查看此主題的所有評論"><a href="{PDIR}&tion=manage&types=p&vid=$datarow[vid]" class="xi1">$datarow[pid]</a></td>
+						<td>$datarow[audits]<a href="{PDIR}&tion=view&vid=$datarow[vid]" target="_blank" class="xi2" title="評論全部內容(點擊查看此視頻內容)：{LF}$datarow[message]">$datarow[postc]</a></td>
+						<td>$datarow[dateline1]</td>
+						<td>$datarow[username]</td>
+						<td><label><input type="radio" value="0" checked name="ptdata[{$datarow[pid]}]" class="pr">無</label><td><label><input type="radio" value="1" name="ptdata[{$datarow[pid]}]" class="pr">審</label><td><input type="radio" value="2" name="ptdata[{$datarow[pid]}]" class="pr">刪</label></td>
+					</tr>
+					<!--{/loop}-->
+				</table>
+				<div class="pgs cl mtm">
+					<div class="z">
+						<div class="pg">
+							$multipage
+						</div>
+					</div>
+					<div class="y"><button class="pn pnp" name="reportsubmit" type="submit" value="true" onclick="if(!confirm('注意：此處刪除只是把評論恢複到未審核狀態，確定要這麽做嗎？')) return false;"><strong>確認執行</strong></button></div>
+				</div>
+			</div>
+		</div>
+		</form>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

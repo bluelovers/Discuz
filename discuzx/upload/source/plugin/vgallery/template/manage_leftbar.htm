@@ -1,0 +1,33 @@
+<div class="appl">
+	<div class="tbn">
+		<h2 class="mt bbda">{PNAME} 管理</h2>
+		<ul>
+			<li><p style="margin-top: 3px" align="center">歡迎您: $discuz_user</p></li>
+				<li style="height:58px;">
+
+				<table cellSpacing="0" summary="發布視頻" cellPadding="0">
+					<tr>
+						<td rowspan="3" valign="top"><!--{avatar($discuz_uid,small)}--></td>
+						<td style="height:2px;"></td>
+					</tr>
+					<tr>
+						<td style="height:20px;"><p class="pm_smry xw0">{$vcname}:</p></td>
+					</tr>
+					<tr>
+						<td><p class="pm_smry xw0"> $vcsize {$vcunit}</span></td>
+					</tr>
+				</table>
+				</li>
+				<!--{if $adminid == 1}-->
+				<li class="cl{if $types == 'v' || $types=='b' || !$types} a{/if}"><a href="{PDIR}&tion=manage">視頻管理</a></li><!--{/if}-->
+				<!--{if $adminid == 1 || $groupon_3}--><li class="cl{if $types== 'a'} a{/if}"><a href="{PDIR}&tion=manage&types=a">視頻審核</a></li><!--{/if}-->
+				<!--{if $adminid == 1 || $groupon_3}--><li class="cl{if $types== 'p'} a{/if}"><a href="{PDIR}&tion=manage&types=p">評價管理</a></li><!--{/if}-->
+				<!--{if $adminid == 1}--><li class="cl{if $types== 's' || $types=='se'} a{/if}"><a href="{PDIR}&tion=manage&types=s">類別管理</a></li><!--{/if}-->
+				<!--{if $adminid == 1}--><li class="cl{if $types== 'f'} a{/if}"><a href="{PDIR}&tion=manage&types=f">首頁TOP5</a></li><!--{/if}-->
+				<!--{if $adminid == 1}--><li class="cl{if $types== 't'} a{/if}"><a href="{PDIR}&tion=manage&types=t">首頁類別</a></li><!--{/if}-->
+				<li style="height:12px;"></li>
+				<li class="cl"><a href="{PDIR}">退出管理</a></li>
+			</ul>
+		</div>
+	</div>
+</div>

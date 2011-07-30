@@ -1,0 +1,85 @@
+		<div class="sd ptm">
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>個人信息</h2>
+				</div>
+				<div class="bm_c">
+				<table border="0" width="100%" cellspacing="0" cellpadding="0">
+					<!--{if $discuz_uid}-->
+					<tr>
+						<td colspan="2"><p style="margin-top: 3px">歡迎您: <!--{if !$discuz_uid}-->{$grouptitle}，請先：<!--{else}-->$discuz_user<!--{/if}--></p></td>
+					</tr>
+					<tr>
+						<td colspan="2" height="5"></td>
+					</tr>
+					<tr>
+						<td rowspan="2" width="65"><!--{avatar($discuz_uid,small)}--></td>
+						<td><p class="pm_smry xw0">{lang credits}: $credits</p></td>
+					</tr>
+					<tr>
+						<td><p class="pm_smry xw0">{$vcname}: 
+						<a href="{PDIR}&tion=author&uid=$discuz_uid" class="xi1">$vcsize {$vcunit}</span></a></td>
+					</tr>
+					<!--{else}-->
+					<tr><td>
+					<a href="member.php?mod=logging&action=login">登錄</a> | <a href="member.php?mod=register">注冊</a>
+					</td></tr>
+					<!--{/if}-->
+				</table>			
+				</div>
+			</div>
+			<!--{if $discuz_uid}-->
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>{PNAME} 功能</h2>
+				</div>
+				<div class="bm_c">
+					<ul class="buddy_group">
+						<li class="cl{if $tion == 'release'} " style="font-weight: 700{/if}"><a href="{PDIR}&tion=selectstyle" style="color:red"><h2>-> 分享視頻 <-</h2></a></li>
+						<li class="cl{if $tion == 'mylist'} " style="font-weight: 700{/if}"><a href="{PDIR}&tion=mylist">我的視頻</a></li>
+						<li class="cl{if $tion == 'favorites'} " style="font-weight: 700{/if}"><a href="{PDIR}&tion=favorites">我的收藏</a></li>
+						<!--{if $adminid==1 || $groupon_3}--><li class="cl{if $tion == 'report'} a" style="font-weight: 700{/if}"><a href="{PDIR}&tion=manage{if $adminid!=1 && $groupon_3}&types=a{/if}">管理視頻</a></li><!--{/if}-->
+					</ul>
+				</div>
+			</div>
+			<!--{/if}-->
+
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>熱播視頻TOP(10)：</h2>
+				</div>
+				<div class="bm_c">
+				<table class="list" cellSpacing="0" cellPadding="0" width="100%">
+					<!--{loop $toplist $i $topdata}-->
+					<tr height="25">
+						<td width="22" align="left"><img src="{MDIR}/n{$i}.gif" border="0"></td>
+						<td><nobr><a href="{PDIR}&tion=view&vid=$topdata[id]" class="xi2">$topdata[vsubject]</a></nobr></td>
+					</tr>
+					<tr><td class="alt" height="1" colspan="2"></td></tr>
+					<!--{/loop}-->
+				</table>
+				</div>
+			</div>
+
+
+			<div class="bm">
+				<div class="bm_h cl">
+					<h2>最新評論TOP(10)：</h2>
+				</div>
+				<div class="bm_c">
+				<table class="list" cellSpacing="0" cellPadding="0" width="100%">
+					<!--{loop $toppolls $i $topdata}-->
+					<tr height="25">
+						<td width="22" align="left"><img src="{MDIR}/n{$i}.gif" border="0"></td>
+						<td><nobr><a href="{PDIR}&tion=view&vid=$topdata[id]" class="xi2">$topdata[vsubject]</a></nobr></td>
+						<td align="center"><span class="xg1">{$topdata[polls]}</span></td>
+					</tr>
+					<tr><td class="alt" height="1" colspan="3"></td></tr>
+					<!--{/loop}-->
+				</table>
+				</div>
+			</div>
+
+			
+			
+		</div>

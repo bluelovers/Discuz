@@ -1,0 +1,1 @@
+document.write('<embed src="'+swf_player+'" allowfullscreen="true" flashvars="vcastr_file='+swf_url+'&LogoText='+swf_title+'" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="'+swf_width+'" height="'+swf_height+'"></embed>');

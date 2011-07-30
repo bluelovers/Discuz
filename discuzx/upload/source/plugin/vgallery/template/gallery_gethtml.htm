@@ -1,0 +1,156 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">使用自動獲取方式發布視頻</h1>
+		
+						<ul class="tb cl">
+							<li class="a">
+							<a href="{PDIR}&tion=release&types=1">正在發布視頻</a></li>
+							<li>
+							<a href="{PDIR}&tion=release">返回手動發布模式</a></li>
+						</ul>
+		
+						<p class="tbmu mbm"><!--{if !$oraudit}--><span class="xi1">注意：目前您發布的視頻需要經過<b>審核</b>後才有效！</span>另外，<!--{/if}-->您必須正確的填寫所有加*標記的項目才能發布</p>
+						<form enctype="multipart/form-data" id="frm1" name="frm1" method="post" autocomplete="off" action="{PDIR}&tion=release">
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<table class="tfm" cellSpacing="0" summary="發布視頻" cellPadding="0">
+								<tr>
+									<th><strong class="rq" title="必填">*</strong>所屬專輯</th>
+									<td>
+									<select id="ab1" name="ab1" onchange="if(this.value==0){frm1.types.value=1; selestyle.style.display='';}else{frm1.types.value=3; selestyle.style.display='none';}">
+									<option value="" selected>發布單視頻</option>
+									<!--{loop $dataloop2 $datarow}-->
+									<!--{if $datarow[id]==$vid}-->
+									<option value="$datarow[id]" selected>$datarow[vsubject]</option>
+									<!--{else}-->
+									<option value="$datarow[id]">$datarow[vsubject]</option>
+									<!--{/if}-->
+									<!--{/loop}-->
+									</select>&nbsp; --------&gt;<b>新功能</b>：<a href="{PDIR}&tion=albumnewpost&vid=$vid&types=$types" class="xi1">多集連續發布模式</a></td>
+								</tr>
+								<tr id="selestyle"<!--{if $vid}--> style="display: none;"<!--{/if}-->>
+									<th><strong class="rq" title="必填">*</strong>視頻分類</th>
+									<td>
+									<select id="s1" name="s1" onChange="changelocation(document.frm1.s1.options[document.frm1.s1.selectedIndex].value)">
+									<!--{loop $styleloop $datarow}-->
+									<!--{if $datarow[sup]==0}-->
+									<option value="$datarow[sid]">$datarow[sort]</option>
+									<!--{/if}-->
+									<!--{/loop}-->
+									</select> &raquo;
+									<select id="sort_id" name="sort_id">
+									<!--{loop $styleloop $datarow}-->
+									<!--{if $datarow[sup]==$onestyle}-->
+									<option value="$datarow[sid]">$datarow[sort]</option>
+									<!--{/if}-->
+									<!--{/loop}-->
+									</select></td>
+								</tr>
+								<!--{if $ispostmoney}-->
+								<tr>
+									<th>視頻售價</th>
+									<td colspan="2" class="d">
+									<input id="vprice" class="px" value="$datarow[vprice]" type="text" name="vprice" style="width:30px;"> $money_unit{$money_name}，您最多可以賣{$maxprice}{$money_unit}，這個視頻最高收入爲{$maxincperthread}{$money_unit}{$money_name}。</td>
+								</tr>
+								<!--{/if}-->
+								<tr>
+									<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+									<td>
+									<input id="vurl" class="px" value="$arr[flashvar]" type="text" name="vurl" style="width:500px;"> 
+									<p class="d">如果沒有獲取到視頻地址，或者獲取的地址不正確，可以手動更正...</td>
+								</tr>
+								<tr>
+									<th><strong class="rq" title="必填">*</strong>視頻名稱</th>
+									<td>
+									<input id="vname" class="px" value="$arr[subject]" type="text" name="vname" style="width:500px;"> 
+									<p class="d">如果獲取到的視頻標題不正確，可以手動更正...</td>
+								</tr>
+								<tr>
+									<th>視頻時長</th>
+									<td>
+									<input id="timeone" class="px" value="" type="text" name="timeone" style="width:30px;">分鍾 <input id="timetwo" class="px" value="" type="text" name="timetwo" style="width:30px;">秒
+								</tr>
+								<tr>
+									<th rowspan="2">視頻截圖</th>
+									<td><label onclick="file1.style.display='none'; file2.style.display='';openimage.style.display=''"><input id="picstyle" class="pr" value="1" type="radio" name="picstyle" style="cursor: hand;" align="absmiddle" checked>網絡圖片</label><!--{if $isuploadimg}-->&nbsp; <label onclick="file2.style.display='none'; file1.style.display='';openimage.style.display='none';"><input id="picstyle" class="pr" value="2" type="radio" name="picstyle" style="cursor: hand;" align="absmiddle">上傳本地圖片</label><!--{/if}--></td>
+								</tr>
+								<tr>
+									<td><input type="file" class="px" name="file1" style="width:450px; height:24px; display: none" id="file1"><input id="file2" class="px" value="$arr[image]" type="text" name="file2" style="width:390px;"> <button class="pn pnp" name="openimage" id="openimage" type="button" style="margin-bottom:3px;" onclick="window.open(file2.value);"><strong>預覽</strong></button>
+									<p class="d">支持的文件類型: JPG(E)/GIF/PNG，推薦尺寸爲240×180(PX像素)</td>
+								</tr>
+								<tr>
+									<th>視頻簡介</th>
+									<td><textarea onkeydown="ctrlEnter(event, 'profilesubmitbtn');" id="vmessage" class="pt" rows="3" cols="80" name="vmessage" style="width:450px;">$arr[message]</textarea>
+									<p class="d">請用不超過250個漢字對您發布的視頻進行描述...
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td>
+									<button class="pn pnp" name="reportsubmit" type="submit" value="true">
+									<strong>確認發布</strong></button> <button class="pn pnp" name="getagin" type="button" onclick="showWindow('getautourl', '{PDIR}&tion=autoget');"><strong>重新發布視頻</strong></button></td>
+								</tr>
+							</table>
+							<input value="true" type="hidden" name="passwordsubmit">
+							<input type="hidden" name="vid" value="$vid">
+							<input type="hidden" name="types" value="$gettypes">
+							<input type="hidden" name="picstyle" value="1">
+						</form>
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}	
+		
+
+<script language = "JavaScript">
+	var onecount;
+	onecount=0;
+	subcat = new Array();
+    <!--{loop $styleloop $count $datarow}-->
+	subcat[$count] = new Array("$datarow[sort]", $datarow[sup],$datarow[sid]);
+	<!--{/loop}-->
+	onecount=$count+1;
+
+function changelocation(locationid)
+{
+    document.frm1.sort_id.length = 0; 
+
+    var locationid=locationid;
+    var i;
+    for (i=0;i < onecount; i++)
+    {
+        if (subcat[i][1] == locationid)
+        { 
+            document.frm1.sort_id.options[document.frm1.sort_id.length] = new Option(subcat[i][0], subcat[i][2]);
+        }        
+    }
+        
+}    
+</script>

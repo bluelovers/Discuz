@@ -1,0 +1,43 @@
+{subtemplate common/header}
+
+<table border="0" width="950" cellspacing="0" cellpadding="0">
+	<tr>
+		<td colspan="5" height="5"></td>
+	</tr>
+	<tr>
+		<td colspan="5" height="24" align="left" class="xs2"><p style="margin-left: 13px; margin-top: 0; margin-bottom: 0"><span class="xg2">專輯：</span><a href="{PDIR}&tion=ablist&vid=$vid">$thesupname</a><span class="pipe">|</span><span class="xs1">共計 $thesupvsum 個視頻</span></td>
+	</tr>
+	<tr><td height="4"></td></tr>
+	<tr>
+		<td width="26" height="65" align="right" valign="top">$link_p</td><td width="13" height="65"></td>
+		<td width="872">
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<!--{loop $datalist2 $datarow}-->
+				<td width="9"></td>
+				<td align="left" width="90">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td align="center">
+						<div id="div"><img src="$datarow[purl]" border="0" align="absmiddle" width="90" height="68">
+							<div><!--{if $datarow[id] == $seleid}--><img src="{MDIR}/ab_yes.png" border="0"><!--{else}--><a href="{PDIR}&tion=view&vid=$datarow[id]"><img src="{MDIR}/ab_no.gif" border="0"></a><!--{/if}--></div>
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td>$datarow[vsubjectc]</td>
+					</tr>
+				</table>
+				</td>
+				<td width="9"></td>
+				<!--{/loop}-->
+			</tr>
+		</table>
+		</td>
+		<td width="13" height="65"></td>
+		<td width="26" height="65" align="left" valign="top">$link_n</td>
+	</tr>
+	<tr><td height="8" colspan="5"></td></tr>
+</table>
+
+{subtemplate common/footer} </p>

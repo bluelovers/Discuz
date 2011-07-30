@@ -1,0 +1,68 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">將視頻加入到專輯</h1>
+		
+						<ul class="tb cl">
+							<li class="a">
+							<a href="{PDIR}&tion=appvod&vid=$vid">加入專輯</a></li>
+							<li>
+							<a href="{PDIR}&tion=mylist&types=2">返回列表</a></li>
+						</ul>
+		
+		
+						<p class="tbmu bw0">操作視頻：【<a href="{PDIR}&view=$datarow[id]" class="xi2">$datarow[vsubject]</a>】
+						<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+								<th width="10"></th>
+								<th colspan="2">您要將此視頻加入到哪個專輯中？</th>
+							</tr>
+							<!--{loop $datalist $i $value}-->
+							<tr>
+								<td width="10"></td>
+								<td><input id="myabid{$i}" class="pr" value="$value[id]" type="radio" name="appabid" style="cursor: hand;"><label for="myabid{$i}" style="cursor: hand;"> $value[vsubject]</label></td>
+								<td>{$value[vsum]}個視頻</td>
+							</tr>
+							<!--{/loop}-->
+							<tr>
+								<td width="10"></td>
+								<td colspan="2" align="center">
+								<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>確認加入</strong></button>
+								<button class="pn pnp" name="returns" type="reset" value="true" onclick="window.location='{PDIR}&tion=mylist&types=2';"><strong>取消</strong></button>
+								</td>
+							</tr>
+		
+							</table>
+						<input type="hidden" name="vid" value="$vid">
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

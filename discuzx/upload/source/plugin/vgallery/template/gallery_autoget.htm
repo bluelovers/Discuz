@@ -1,0 +1,42 @@
+{subtemplate common/header}
+
+<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off" action="{PDIR}&tion=selectstyle">
+<input type="hidden" name="formhash" value="{FORMHASH}" />
+<table cellSpacing="0" cellPadding="0" border="0">
+	<tr>
+		<td id="fwin_content_sendlove" class="m_c" fwin="sendlove" width="520" height="40">
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="480"><h3 style="CURSOR: move" id="fctrl_sendlove" class="flb">
+				<em>請輸入您要分享的視頻網址</em></h3></td>
+				<td width="40"><a class="flbc" title="關閉" onclick="hideWindow('getautourl');" href="javascript:;">關閉</a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+	<tr><td height="1" class="alt"></td></tr>
+	<tr>
+		<td id="fwin_content_getautourl" class="m_c" orgdisplay fwin="getautourl" width="520" height="210" valign="bottom">
+		
+		<table border="0" width="100%" cellspacing="1" cellpadding="10">
+			<tr>
+				<td class="xs2">直接輸入視頻網站的視頻播放頁網址，系統會自動采集所需要的信息...</td>
+			</tr>
+			<tr>
+				<td><input id="vurl" class="px" value="" type="text" name="vurl" style="width:390px;">
+				<button class="pn pnp" name="reportsubmit" type="submit" value="true" style="margin-bottom:3px;"><strong>確認提交</strong></button></td>
+			</tr>
+			<tr>
+				<td><span class="xs2">目前支持的視頻網站有：</span><a href="http://www.youku.com" class="xi1" target="_blank">youku.com</a><span class="pipe">|</span><a href="http://www.youtube.com" class="xi1" target="_blank">youtube.com</a><span class="pipe">|</span><a href="http://www.ku6.com" class="xi1" target="_blank">ku6.com</a><span class="pipe">|</span><a href="http://tv.sohu.com" class="xi1" target="_blank">sohu.com</a><span class="pipe">|</span><a href="http://v.sina.com.cn" class="xi1" target="_blank">sina.com.cn</a><span class="pipe">|</span><a href="http://www.tudou.com" class="xi1" target="_blank">tudou.com</a>
+					<a href="http://www.qiyi.com" class="xi1" target="_blank">qiyi.com</a><span class="pipe">|</span><a href="http://www.56.com" class="xi1" target="_blank">56.com</a><span class="pipe">|</span><a href="http://www.joy.cn" class="xi1" target="_blank">joy.cn</a><span class="pipe">|</span><a href="http://www.m1905.com" class="xi1" target="_blank">m1905.com</a><span class="pipe">|</span><a href="http://6.cn" class="xi1" target="_blank">6.cn</a><span class="pipe">|</span><a href="http://www.letv.com" class="xi1" target="_blank">letv.com</a><span class="pipe">|</span><a href="http://www.imgo.tv" class="xi1" target="_blank">imgo.tv</a><span class="pipe">|</span><a href="http://v.ifeng.com" class="xi1" target="_blank">ifeng.com</a></span></td>
+			</tr>
+			</table>
+		
+		<p class="o pns">視頻展廳 3.0.0720 By DX2 版權歸 Oytktk(靖飒) 所有</td>
+	</tr>
+</table>
+<input type="hidden" name="vid" value="$vid">
+</form>
+
+{subtemplate common/footer}

@@ -1,0 +1,341 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="bm bml">
+		<p class="tbmu{if !$fid && !$sid} bw0{/if}">
+			<a hideFocus href="{PDIR}&tion=list">全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==0}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&fid=$datarow[sid]"{if $fid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	</div>
+	
+	
+	
+	<table border="0" width="100%" id="table4" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+				<div class="bm bw0">
+					<table cellpadding="0" cellpadding="0" width="100%"><tr><td height="10"></td></tr></table>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+						<tr>
+							<td valign="top" width="50%" rowspan="2" style="border: 1px solid #C0C0C0">
+							<!--{if $indexvod[0][id]}-->
+							<table border="0" width="100%" cellspacing="" cellpadding="0">
+								<tr>
+									<td align="center" height="10" colspan="3"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3">
+									<a href="{PDIR}&tion=view&vid=$indexvod[0][id]"><img src="$indexvod[0][purl]" width="320" height="240" border="0"></a></td>
+								</tr>
+								<tr><td colspan="3" height="10"></td></tr>
+								<tr>
+									<td align="center" height="32"></td>
+									<td align="center" height="32" width="320" class="alt"><h2 class="xs2">$indexvod[0][username]: <a href="{PDIR}&tion=view&vid=$indexvod[0][id]">$indexvod[0][vsubject]</a></h2></td>
+									<td align="center" height="32"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3" height="10"></td>
+								</tr>
+							</table>
+							<!--{/if}-->
+							</td>
+							<td valign="top" width="25%" align="center" style="border: 1px solid #C0C0C0">
+							<!--{if $indexvod[1][id]}-->
+							<table border="0" width="160" cellspacing="0" cellpadding="0">
+								<tr>
+									<td height="6" colspan="3"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3">
+									<a href="{PDIR}&tion=view&vid=$indexvod[1][id]"><img src="$indexvod[1][purl]" width="150" height="113" border="0"></a></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td width="150" height="25" class="alt">
+									<a href="{PDIR}&tion=view&vid=$indexvod[1][id]" class="xi2">$indexvod[1][vsubject]</a></td>
+									<td></td>
+								</tr>
+							</table>
+							<!--{/if}-->
+							</td>
+							<td valign="top" width="25%" align="center" style="border: 1px solid #C0C0C0">
+							<!--{if $indexvod[2][id]}-->
+							<table border="0" width="160" cellspacing="0" cellpadding="0">
+								<tr>
+									<td height="6" colspan="3"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3">
+									<a href="{PDIR}&tion=view&vid=$indexvod[2][id]"><img src="$indexvod[2][purl]" width="150" height="113" border="0"></a></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td width="150" height="25" class="alt">
+									<a href="{PDIR}&tion=view&vid=$indexvod[2][id]" class="xi2">$indexvod[2][vsubject]</a></td>
+									<td></td>
+								</tr>
+							</table>
+							<!--{/if}-->
+							</td>
+						</tr>
+						<tr>
+							<td valign="top" width="25%" align="center" style="border: 1px solid #C0C0C0">
+							<!--{if $indexvod[3][id]}-->
+							<table border="0" width="160" cellspacing="0" cellpadding="0">
+								<tr>
+									<td height="6" colspan="3"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3">
+									<a href="{PDIR}&tion=view&vid=$indexvod[3][id]"><img src="$indexvod[3][purl]" width="150" height="113" border="0"></a></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td width="150" height="25" class="alt">
+									<a href="{PDIR}&tion=view&vid=$indexvod[3][id]" class="xi2">$indexvod[3][vsubject]</a></td>
+									<td></td>
+								</tr>
+							</table>
+							<!--{/if}-->
+							</td>
+							<td valign="top" width="25%" align="center" style="border: 1px solid #C0C0C0">
+							<!--{if $indexvod[4][id]}-->
+							<table border="0" width="160" cellspacing="0" cellpadding="0">
+								<tr>
+									<td height="6" colspan="3"></td>
+								</tr>
+								<tr>
+									<td align="center" colspan="3">
+									<a href="{PDIR}&tion=view&vid=$indexvod[4][id]"><img src="$indexvod[4][purl]" width="150" height="113" border="0"></a></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td width="150" height="25" class="alt">
+									<a href="{PDIR}&tion=view&vid=$indexvod[4][id]" class="xi2">$indexvod[4][vsubject]</a></td>
+									<td></td>
+								</tr>
+							</table>
+							<!--{/if}-->
+							</td>
+						</tr>
+					</table>
+					
+
+					<br>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+					<tr><td class="alt" height="28"><div class="y">
+						<a href="{PDIR}&tion=list&gourl=1" class="xi2">更多...&nbsp; </a></div><div class="z"><span class="xs2"><b>&nbsp;&raquo; 最新視頻</b></span> TOP 4</div></td></tr>
+					<tr><td height="2"></td></tr>
+					<tr><td class="alt">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<!--{loop $index_newtop $datarow}-->
+								<td align="center">
+									<table border="0" width="160" cellspacing="0" cellpadding="0">
+										<tr>
+											<td height="8" colspan="3"></td>
+										</tr>
+										<tr>
+											<td align="center" colspan="3">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" title="$datarow[vsubject]"><img src="$datarow[purl]" width="150" height="113" border="0"></a></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td width="150" height="25" class="alt">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" class="xi2" title="$datarow[vsubject]">$datarow[vsubjectc]</a></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td height="2" colspan="3"></td>
+										</tr>
+									</table>
+								</td>
+								<!--{/loop}-->			
+							</tr>
+						</table>
+					</td></tr>
+					</table>
+
+
+					<!--{if $index_newlist_1 && $indexsidname[index_newlist_1]}-->
+					<br>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+					<tr><td class="alt" height="28"><div class="y">
+						<a href="{PDIR}&tion=list&sid=$indexsidname[index_newlist_1_sort]" class="xi2">更多...&nbsp;
+						</a> </div><div class="z"><span class="xs2"><b>&nbsp;&raquo; $indexsidname[index_newlist_1_name]</b></span> TOP 4</div></td></tr>
+					<tr><td height="2"></td></tr>
+					<tr><td>
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<!--{loop $index_newlist_1 $datarow}-->
+								<td align="center" class="alt">
+									<table border="0" width="160" cellspacing="0" cellpadding="0">
+										<tr>
+											<td height="8" colspan="3"></td>
+										</tr>
+										<tr>
+											<td align="center" colspan="3">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" title="$datarow[vsubject]"><img src="$datarow[purl]" width="150" height="113" border="0"></a></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td width="150" height="25" class="alt">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" class="xi2" title="$datarow[vsubject]">$datarow[vsubjectc]</a></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td height="2" colspan="3"></td>
+										</tr>
+									</table>
+								</td>
+								<!--{/loop}-->			
+							</tr>
+						</table>
+					</td></tr>
+					</table>
+					<!--{/if}-->
+		
+					<!--{if $index_newlist_2 && $indexsidname[index_newlist_2]}-->
+					<br>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+					<tr><td class="alt" height="28"><div class="y">
+						<a href="{PDIR}&tion=list&sid=$indexsidname[index_newlist_2_sort]" class="xi2">更多...&nbsp;
+						</a> </div><div class="z"><span class="xs2"><b>&nbsp;&raquo; $indexsidname[index_newlist_2_name]</b></span> TOP 4</div></td></tr>
+					<tr><td height="2"></td></tr>
+					<tr><td a>
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<!--{loop $index_newlist_2 $datarow}-->
+								<td align="center" class="alt">
+									<table border="0" width="160" cellspacing="0" cellpadding="0">
+										<tr>
+											<td height="8" colspan="3"></td>
+										</tr>
+										<tr>
+											<td align="center" colspan="3">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" title="$datarow[vsubject]"><img src="$datarow[purl]" width="150" height="113" border="0"></a></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td width="150" height="25" class="alt">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" class="xi2" title="$datarow[vsubject]">$datarow[vsubjectc]</a></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td height="2" colspan="3"></td>
+										</tr>
+									</table>
+								</td>
+								<!--{/loop}-->			
+							</tr>
+						</table>
+					</td></tr>
+					</table>
+					<!--{/if}-->
+		
+					<!--{if $index_newlist_3 && $indexsidname[index_newlist_3]}-->
+					<br>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+					<tr><td class="alt" height="28"><div class="y">
+						<a href="{PDIR}&tion=list&sid=$indexsidname[index_newlist_3_sort]" class="xi2">更多...&nbsp;
+						</a> </div><div class="z"><span class="xs2"><b>&nbsp;&raquo; $indexsidname[index_newlist_3_name]</b></span> TOP 4</div></td></tr>
+					<tr><td height="2"></td></tr>
+					<tr><td>
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<!--{loop $index_newlist_3 $datarow}-->
+								<td align="center" class="alt">
+									<table border="0" width="160" cellspacing="0" cellpadding="0">
+										<tr>
+											<td height="8" colspan="3"></td>
+										</tr>
+										<tr>
+											<td align="center" colspan="3">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" title="$datarow[vsubject]"><img src="$datarow[purl]" width="150" height="113" border="0"></a></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td width="150" height="25" class="alt">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" class="xi2" title="$datarow[vsubject]">$datarow[vsubjectc]</a></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td height="2" colspan="3"></td>
+										</tr>
+									</table>
+								</td>
+								<!--{/loop}-->			
+							</tr>
+						</table>
+					</td></tr>
+					</table>
+					<!--{/if}-->
+		
+					<!--{if $index_newlist_4 && $indexsidname[index_newlist_4]}-->
+					<br>
+					<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word" width="100%">
+					<tr><td class="alt" height="28"><div class="y">
+						<a href="{PDIR}&tion=list&sid=$indexsidname[index_newlist_4_sort]" class="xi2">更多...&nbsp; 
+						</a> </div><div class="z"><span class="xs2"><b>&nbsp;&raquo; $indexsidname[index_newlist_4_name]</b></span> TOP 4</div></td></tr>
+					<tr><td height="2"></td></tr>
+					<tr><td>
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<!--{loop $index_newlist_4 $datarow}-->
+								<td align="center" class="alt">
+									<table border="0" width="160" cellspacing="0" cellpadding="0">
+										<tr>
+											<td height="8" colspan="3"></td>
+										</tr>
+										<tr>
+											<td align="center" colspan="3">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" title="$datarow[vsubject]"><img src="$datarow[purl]" width="150" height="113" border="0"></a></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td width="150" height="25">
+											<a href="{PDIR}&tion=view&vid=$datarow[id]" class="xi2" title="$datarow[vsubject]">$datarow[vsubjectc]</a></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td height="2" colspan="3"></td>
+										</tr>
+									</table>
+								</td>
+								<!--{/loop}-->			
+							</tr>
+						</table>
+					</td></tr>
+					</table>
+					<!--{/if}-->		
+				</div>				
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

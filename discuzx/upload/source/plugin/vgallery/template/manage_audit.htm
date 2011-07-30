@@ -1,0 +1,78 @@
+{subtemplate common/header}
+
+
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+
+		<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<div class="mn">
+			<div class="bm bw0">
+				<div class="z">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr><td height="40"><!--{if $fid}--><b>位置</b>：<span class="xi2">$fidsname</span>{if $sid}<span class="xi2"> &raquo; $sidsname</span>{/if}，<!--{/if}-->共計 <b>$countmax</b> 個視頻需要您審核</b></td></tr>
+					</table>				
+				</div>
+				<div class="y">
+					<div class="pg">
+						$multipage
+					</div>
+				</div>
+				
+				<table cellSpacing="0" cellPadding="0" width="100%"><tr><td height="1" class="alt"></td></tr><tr><td height="16"></td></tr></table>
+				<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+					<tr>
+						<th width="60"></th>
+						<th>視頻名稱</th>
+						<th>發布時間</th>
+						<th>發布者</th>
+						<th>編輯</th>
+						<th>操作</th>
+					</tr>
+					<!--{loop $datalist $datarow}-->
+					<tr>
+						<td><img src="$datarow[purl]" border="0" align="absmiddle" width="48" height="36"></td>
+						<td><!--{if $datarow[album]}--><a href="{PDIR}&tion=ablist&vid=$datarow[id]" target="_blank" class="xi1">[<font color="#FF00FF">專輯</font>] <!--{else}--><a href="{PDIR}&tion=view&vid=$datarow[id]" target="_blank" class="xi2"><!--{/if}-->$datarow[vsubject]</a><br><span class="xg1">播放{$datarow[views]}次，評論{$datarow[polls]}條，<!--{if $datarow[timelong]}-->時長{$datarow[timelong]}，<!--{/if}-->得分: $datarow[valuate]</span></td>
+						<td>$datarow[dateline1]<br>$datarow[dateline2]</td>
+						<td><a href="{PDIR}&tion=author&uid=$datarow[uid]" class="xi1" target="_blank" title="瀏覽此用戶發布的所有視頻！">$datarow[username]</a></td>
+						<td><a href="{PDIR}&tion=edit&vid=$datarow[id]" target="_blank" class="xi2">編輯</a><br>
+						<label><input type="radio" value="0" checked name="ptdata[{$datarow[id]}]" class="pr">不執行</label></td>
+						<td><label><input type="radio" value="1" name="ptdata[{$datarow[id]}]" class="pr"> 審核</label><br><label><input type="radio" value="2" name="ptdata[{$datarow[id]}]" class="pr"> 刪除</label></td>
+					</tr>
+					<!--{/loop}-->
+				</table>
+				<div class="pgs cl mtm">
+					<div class="z">
+						<div class="pg">
+							$multipage
+						</div>
+					</div>
+					<div class="y"><button class="pn pnp" name="reportsubmit" type="submit" value="true" onclick="if(!confirm('確定要這麽做嗎？')) return false;"><strong>執行操作</strong></button></div>
+				</div>
+			</div>
+		</div>
+		</form>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

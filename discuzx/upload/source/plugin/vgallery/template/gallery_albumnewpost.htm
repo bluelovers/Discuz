@@ -1,0 +1,206 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+				<div class="bm bw0">
+					<h1 class="mt">爲專輯添加新視頻(多集連發模式)</h1>
+	
+					<ul class="tb cl">
+						<li{if $types == '1' || !$types} class="a"{/if}>
+						<a href="{PDIR}&tion=release&types=1">發布視頻</a></li>
+						<li{if $types == '2'} class="a"{/if}>
+						<a href="{PDIR}&tion=release&types=2">創建專輯</a></li>
+						<li{if $types == '3'} class="a"{/if}>
+						<a href="{PDIR}&tion=release&types=3">發布專輯視頻</a></li>
+					</ul>
+	
+					<p class="tbmu mbm">您必須正確的填寫所有加*標記的項目才能發布</p>
+					<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<table class="tfm" cellSpacing="0" summary="發布視頻" cellPadding="0">
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>所屬專輯</th>
+								<td>
+								<select id="s1" name="s1">
+								<!--{loop $dataloop2 $datarow}-->
+								<!--{if $datarow[id]==$vid}-->
+								<option value="$datarow[id]" selected>$datarow[vsubject]</option>
+								<!--{else}-->
+								<option value="$datarow[id]">$datarow[vsubject]</option>
+								<!--{/if}-->
+								<!--{/loop}-->
+								</select>&nbsp; -----------&gt;<a href="{PDIR}&tion=release&vid=$vid&types=$types" class="xi1">返回單集發布模式</a></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(1)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp;
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"> 
+								<p class="d">支持轉載優酷、56、土豆、激動網、6間房、酷6等大型視頻站的視頻...</td>
+							</tr>
+	
+	
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(2)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"> 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(3)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(4)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(5)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(6)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(7)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(8)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(9)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻名稱<font color="#FF00FF">(10)</font></th>
+								<td>
+								<input class="px" value="" type="text" name="vname[]"> 
+								<input class="px" value="" type="text" name="vprices[]" style="width:30px;"> $money_unit{$money_name}，&nbsp; 
+								<input class="px" value="" type="text" name="timeone[]" style="width:30px;">分鍾 <input class="px" value="" type="text" name="timetwo[]" style="width:30px;">秒 
+								</td>
+							</tr>
+							<tr>
+								<th><strong class="rq" title="必填">*</strong>視頻地址</th>
+								<td>
+								<input class="px" value="" type="text" name="vurl[]" style="width:500px;"></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td>
+								<button class="pn pnp" name="reportsubmit" type="submit" value="true">
+								<strong>確認發布</strong></button></td>
+							</tr>
+						</table>
+						<input value="true" type="hidden" name="passwordsubmit">
+						<input type="hidden" name="vid" value="$vid">
+					</form>
+				</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

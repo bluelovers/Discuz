@@ -1,0 +1,93 @@
+{subtemplate common/header}
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+	
+		<div class="mn">
+			<div class="bm bw0">
+				<h1 class="mt">管理視頻分類</h1>
+				<table border="0" width="100%">
+					<tr><td valign="top" width="340">
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+							<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<tr>
+								<th>一級類別名稱</th>
+								<th>排序</th>
+								<th>本級手刪</th>
+							</tr>
+							<!--{loop $theloop $datarow}-->
+							<tr>
+								<td>
+								<a href="{PDIR}&tion=manage&types=s&sid=$datarow[sid]"{if $sid==$datarow[sid]}class="xi1" style="font-weight: 700"> ->{else} class="xi2">{/if}$datarow[sort]<span class="pipe">(SID=$datarow[sid])</span></a></td>
+								<td><input class="px" value="$datarow[dps]" type="text" name="newdps[{$datarow[sid]}]" style="width:20px;"></td>
+								<td><a href="{PDIR}&tion=manage&types=se&sid=$datarow[sid]" class="xi2">編</a> | <a href="{PDIR}&tion=manage&types=se&sid=$datarow[sid]&deletes=1" class="xi1">刪</a></td>
+							</tr>
+							<!--{/loop}-->
+							<tr><td>
+								<input id="new_sort" class="px" value="" type="text" name="new_sort" style="width:100px;">
+							</td><td><input id="new_sort_dps" class="px" value="0" type="text" name="new_sort_dps" style="width:20px;"></td><td>
+								</td></tr>
+							<tr><td colspan="3">
+							<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>執行操作</strong></button></td></tr>
+							</form>
+						</table>
+					</td><td width="20">
+					</td><td valign="top" width="340">
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+							<form enctype="multipart/form-data" id="secfrm" name="secfrm" method="post" autocomplete="off">
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<tr>
+								<th>二級類別名稱</th>
+								<th>排序</th>
+								<th><input class="pc" id="sellall" onclick="checkall(this.form, 'deletes');" type="checkbox" name="chkall"><label for="sellall"> 全選</label></th>
+							</tr>
+							<!--{loop $secloop $datarow}-->
+							<tr>
+								<td>
+								$datarow[sort]<span class="pipe">(SID=$datarow[sid])</span></td>
+								<td><input class="px" value="$datarow[dps]" type="text" name="newdps[{$datarow[sid]}]" style="width:20px;"></td>
+								<td><a href="{PDIR}&tion=manage&types=se&sid=$datarow[sid]" class="xi2">編</a> | <input type="checkbox" name="deletes[]" value="$datarow[sid]" align="absmiddle" class="pc"></td>
+							</tr>
+							<!--{/loop}-->
+							<!--{if $sid}-->
+							<tr><td>
+								<input id="new_sort" class="px" value="" type="text" name="new_sort" style="width:100px;">
+							</td><td><input id="new_sort_dps" class="px" value="0" type="text" name="new_sort_dps" style="width:20px;"></td><td></td></tr>
+							<input type="hidden" name="newsup" value="$sid">
+							<tr><td colspan="3">
+							<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>執行操作</strong></button></td></tr>
+							<!--{else}-->
+							<tr><td colspan="3">
+								請先選擇左側的一級分類</td></tr>
+							<input type="hidden" name="newsup" value="$sid">
+							<!--{/if}-->
+							</form>
+						</table>
+					</td></tr>					
+				</table>
+			</div>
+		</div>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

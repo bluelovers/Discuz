@@ -1,0 +1,67 @@
+{subtemplate common/header}
+
+
+<!--{if $pollvs}-->
+<div id="postlist">
+	<table border="0" width="100%" cellspacing="0" cellpadding="0" class="pl bm" style="border:0px;">
+	<!--{if $multipage}-->
+	<tr><td>
+	<div class="pgs cl mtm">
+		<div class="pg">
+			$multipage
+		</div>
+	</div>
+	</td></tr>
+	<!--{/if}-->
+	<!--{loop $pollvs $i $datarow}-->
+	<tr><td height="6"></td></tr>
+	<tr>
+		<td>
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="55" rowspan="3" valign="top"><!--{avatar($datarow[authorid],small)}--></td>
+				<td width="560"><div class="y"><!--{if $adminid==1}--><a href="{PDIR}&tion=manage&types=p&vid=$vid" class="xi2" target="_blank">管理評論</a><span class="pipe">|</span><!--{/if}--><a href="{PDIR}&tion=loadpolls&vid=$vid" class="xi2" onclick="ajaxget(this.href, 'poplepolls');doane(event);">刷新評論</a><span class="pipe">|</span><a onclick="get_quote('原貼由 $datarow[username] 評論于 $datarow[dbdateline]', $datarow[pid])" class="xg2" style="cursor: hand;"><img src="{MDIR}/reply.gif" align="absmiddle" border="0"> 回複</a></div><div class="z"><a href="home.php?mod=space&uid=$datarow[authorid]" target="_blank" class="xs2">$datarow[username]</a>， <span class="xg1">$datarow[dateline]</span></div>
+				</td>
+			</tr>
+			<tr>
+				<td width="560" class="xg2" valign="top"><div id="post_{$datarow[pid]}" style="margin:3px 10px;" class="t_f">$datarow[post]</div><input type="hidden" id="vpost_{$datarow[pid]}" value="$datarow[post_quote]"></td>
+			</tr>
+			<tr>
+				<td width="560" height="16"></td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td height="5"></td>
+	</tr>
+	<tr><td class="alt" height="1"></td></tr>
+	<tr>
+		<td height="10"></td>
+	</tr>
+	<!--{/loop}-->
+	<!--{if $multipage}-->
+	<tr><td>
+	<div class="pgs cl mtm">
+		<div class="pg">
+			$multipage
+		</div>
+	</div>
+	</td></tr>
+	<tr><td height="10"></td></tr>
+	<!--{/if}-->
+</table>
+</div>
+<!--{else}-->
+	<div><table border="0" cellspacing="0" cellpadding="0" width="100%">
+		<tr>
+			<td align="center" height="80" class="alt"><span class="xs2">目前還沒有任何評論，快來搶沙發吧！[<a href="{PDIR}&tion=loadpolls&vid=$vid" class="xi2" onclick="ajaxget(this.href, 'poplepolls');doane(event);">刷新看最新評論</a>]</span></td>
+		</tr>
+		<tr>
+			<td align="center" height="12"></td>
+		</tr>
+		</table>
+	</div>
+<!--{/if}-->
+
+{subtemplate common/footer}

@@ -1,0 +1,354 @@
+{subtemplate common/header}
+
+<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_forum_viewthread.css?{VERHASH}>" />
+<style type="text/css"> 
+#div { position: relative; height: 68px; width: 90px;}
+#div div{height: 100%;width: 100%;position: absolute;z-index: 9;left: 0px;top: 0px;border: 0px solid #000000}
+#div img {margin-top: 0px;margin-left: 0px; position: absolute; left: 0; top: 0}
+</style>
+<script src="static/js/forum_viewthread.js" type="text/javascript"></script>
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" name="srchtxt" autocomplete="off"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="bm bml">
+		<p class="tbmu{if !$fid && !$sid} bw0{/if}">
+			<a hideFocus href="{PDIR}&tion=list{$thegopage}"{if !$fid && !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==0}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&fid=$datarow[sid]{$thegopage}"{if $fid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{if $fid || $sid}-->
+		<p class="tbmu bw0">
+			<a hideFocus href="{PDIR}&tion=list&fid=$fid{$thegopage}"{if !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==$fid}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&sid=$datarow[sid]{$thegopage}"{if $sid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{/if}-->
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="100%" valign="top">
+					<table border="0" width="100%" cellspacing="0" cellpadding="0">
+						<tr><td height="28"><div class="y" style="margin-right: 10px; margin-top: 7px; margin-bottom: 0"><a href="{PDIR}&tion=report&vid=$vid" class="xi2" onclick="if(!confirm('確定要轉入到舉報頁面嗎？')) return false;"><img src="{MDIR}/jubao.gif" border="0" align="absmiddle"> 舉報</a> <!--{if $adminid==1}--><span class="pipe">|</span><a href="{PDIR}&tion=edit&vid=$viewdata[id]" class="xi2" target="_blank"><img src="{MDIR}/edit.gif" border="0" align="absmiddle"> 編輯</a><!--{/if}--><!--{if !$buynow}--><span class="pipe">|</span><a href="javascript:;" onclick="vodopen('{PDIR}&tion=view&types=fullscreen&vid=$vid');" class="xi2"><img src="{MDIR}/fullscreen.gif" border="0" align="absmiddle"> 全屏</a><!--{/if}--><span class="pipe">|</span><a href="{PDIR}&tion=addfavorites&vid=$vid" target="_blank" class="xi2"><img src="{MDIR}/favorites.gif" border="0" align="absmiddle"> 收藏</a><span class="pipe">|</span><a href="{PDIR}&tion=view&vid=$vid" onclick="return copyThreadUrl(this)" title="若您覺得這個視頻不錯，可以發給您的朋友，讓他跟你一起觀看" class="xi2"><img src="{MDIR}/fenxiang.gif" border="0" align="absmiddle"> 分享</a></div>
+						<div class="z"><img src="{MDIR}/videoview.gif" border="0" align="absmiddle"> <font face="黑體"><span style="font-size: 14pt;" id="thread_subject">[$sidsname]-$viewdata[vsubject]</span></font></div>
+						</td></tr>
+						<!--{if !$buynow}--><tr><td height="26" id="vod_polls"><script>ajaxget('{PDIR}&tion=pollstar&vid={$vid}', 'vod_polls');</script></td></tr><!--{/if}-->
+						<tr><td height="6"></td></tr>
+						<tr>
+						<td bgcolor="#000000" align="center" id="thevodview">
+							<!--{if $buynow == 1}-->
+							<table border="0" width="100%" cellspacing="0" cellpadding="0">
+								<tr>
+									<td height="60"></td>
+								</tr>
+								<tr>
+									<td align="center">
+									<img border="0" src="{MDIR}/buyinfo.gif" width="48" height="49" align="absmiddle"></td>
+								</tr>
+								<tr>
+									<td align="center" height="50">
+									<span style="font-size: 15pt; font-family: 微軟雅黑; color: #ffffff;">尊敬的用戶：</span></td>
+								</tr>
+								<tr>
+									<td align="center"><span style="font-size: 15pt; font-family: 微軟雅黑; color: #ffffff;">本視頻爲付費視頻，售價爲 $viewdata[vprice] {$money_unit}{$money_name}，如您還未購買，請先</span></td>
+								</tr>
+								<tr>
+									<td height="40"></td>
+								</tr>
+								<tr>
+									<td align="center"><span style="font-size: 15pt; font-family: 微軟雅黑; color: #ffffff;">
+									<span style="background-color: #FF6600">&nbsp; 
+									<a href="javascript:;" style="color:#ffffff;" onclick="showWindow('buynow', '{PDIR}&tion=buynow&vid=$vid');">購買</a> &nbsp;</span>&nbsp;&nbsp; 若您已經購買，請&nbsp; </span>
+									<span style="font-size: 15pt; font-family: 微軟雅黑; background-color: #CCFFFF">
+									<font color="#000080">&nbsp; 
+									<a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);return false;" class="xi2">登錄</a>&nbsp;&nbsp;</font>
+									</span></td>
+								</tr>
+								<tr>
+									<td height="70"></td>
+								</tr>
+								<tr>
+									<td align="center"><span style="font-size: 9pt; font-family: 微軟雅黑; color: #686868;">本視頻收費爲：<span class="xi1">$viewdata[vprice] {$money_unit}{$money_name}</span>，您也可以查看：
+									<a href="javascript:;" onclick="showWindow('buynow', 'forum.php?mod=misc&action=viewpayments&tid=$tid');" class="xi1">購買記錄</a></span></td>
+								</tr>
+								<tr>
+									<td align="center"><span style="font-size: 9pt; font-family: 微軟雅黑; color: #686868;">若您發現虛假付費視頻，請通過右上方的“舉報”按鈕進行舉報！</span></td>
+								</tr>
+								<tr>
+									<td height="60"></td>
+								</tr>
+							</table>
+							<!--{elseif $theplayer_style == 'gvod'}-->
+								<script src="{PINC}/flash_{$theplayer_style}.js" type="text/javascript" charset="gbk"></script>
+								<script>
+									var player = gvod_player();
+									player.height = 520;
+									player.width = 960;
+									player.play("$viewdata[vurl]");
+								</script>
+							<!--{else}-->
+							<script type="text/javascript">
+								var swf_width=960;
+								var swf_height=520;
+								var swf_player='{PINC}/flvplayer.swf';
+								var swf_title='$flv_title';
+								var swf_id = $viewdata[id];
+								var swf_url = '$viewdata[vurl]';
+							</script><script language="javascript" src="{PINC}/flash_{$theplayer_style}.js"></script>
+							<!--{/if}-->
+						</td></tr>
+					</table>				
+				</td>
+			</tr>
+	</table>
+
+	
+
+	<!--{if $thesup}-->
+	<div class="bm bml">
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="alt" height="120" align="center" id="load_thealbum"><script>ajaxget('{PDIR}&tion=loadsup&vid={$viewdata[sup]}&rid=$vid', 'load_thealbum');</script></td>
+		</tr>
+	</table>
+	</div>
+	<!--{/if}-->
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+		<tr><td colspan="3" height="12"></td></tr>
+		<tr>
+			<td width="640" valign="top">
+				<div class="mn" id="this_sort" style="width:640px;">
+					<script>ajaxget('{PDIR}&tion=loadsid&sid={$sid}', 'this_sort');</script>
+				</div>
+				<script type="text/javascript" src="{$_G['setting']['jspath']}seditor.js?{VERHASH}"></script>
+				<table border="0" width="640" cellspacing="0" cellpadding="0" align="center">
+					<tr><td align="left">
+						<form method="post" autocomplete="off" id="fastpostform" action="{PDIR}&tion=reply&replysubmit=yes&infloat=yes&handlekey=fastpost" onSubmit="return hsk_myreply(this)">
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<input type="hidden" name="revid" value="$vid" />
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+							<tr>
+								<td height="40" class="alt"><div class="y"><div class="fpd">
+								<a id="fastpostsml" class="fsml" onclick="showMenu({'ctrlid':this.id,'evt':'click','layer':2});return false;" initialized="true" unselectable="true" outfunc="null" overfunc="null" href="javascript:;">Smilies</a>
+								<SCRIPT type=text/javascript reload="1">smilies_show('fastpostsmiliesdiv', 8, 'fastpost');</SCRIPT>
+								</div>
+								</div><div class="z">
+								<b><span class="xs2">&nbsp; 發表您的評論</span></b><span class="pipe">|</span><span class="xg2">目前共有 $viewdata[polls] 條評論</span></div></td>
+							</tr>
+							<tr>
+								<td>
+								<textarea rows="5" name="message" id="fastpostmessage" class="txtarea" style="width: 640px;" onkeydown="javascript: hsk_myreply_ctlent(event);"<!--{if !$isevaluate}--> disabled<!--{/if}-->><!--{if !$isevaluate}-->管理員已經關閉了視頻評論功能，給您帶來的不便請您諒解！<!--{/if}--></textarea></td>
+							</tr>
+							<tr>
+								<td height="42"><div class="y"><!--{if $discuz_uid}-->評論內容應控制在6-500個字符，相當于3-250個漢字。<!--{else}-->請先點此<a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);return false;" class="xi2">登錄</a>，或<a href="member.php?mod=register" onclick="showWindow('register', this.href)" class="xi2">注冊</a>新用戶之後再進行評價！ <!--{/if}-->
+								<button type="submit" name="replysubmit" id="fastpostsubmit" class="pn pnc" value="replysubmit"<!--{if !$isevaluate}--> disabled<!--{/if}-->><strong>發表回複</strong></button></div>
+								<div class="z"><span id="fastpostreturn">$auditviews</span></div>
+								</td>
+							</tr>
+							<tr><td height="30" id="poplepolls"><script>ajaxget('{PDIR}&tion=loadpolls&vid={$viewdata[id]}', 'poplepolls');</script></td></tr>
+							</td></tr>
+						</table>
+						</form>
+					</td></tr>
+				</table>				
+
+			<td width="20"></td>
+			<td width="300" valign="top">
+				<div style="height:10px;"></div>
+				<!--{if $thecooksave}-->
+				<div class="bm bml">
+					<table border="0" width="100%" cellspacing="0" cellpadding="0" id="table2">
+						<tr><td class="alt" align="left" height="30">
+							<h2 class="xs2" style="margin-left: 10px; margin-top: 0; margin-bottom: 0">我最近觀看的視頻</h2></td>
+						</tr>
+						<tr><td align="right">
+							<table cellspacing="0" cellpadding="0" width="285" style="table-layout: fixed; word-wrap: break-word; width:285px;">
+								<tr><td height="5"></td></tr>
+								<!--{loop $dvlist $dvloop}-->
+								<tr><td align="left" class="xs2">
+									<a href="{PDIR}&tion=view&vid=$dvloop[id]" class="xi2">$dvloop[subject]</a>
+								</td></tr>
+								<!--{/loop}-->
+								<tr><td height="5"></td></tr>
+							</table>
+						</td></tr>
+					</table>
+				</div>
+				<!--{/if}-->
+
+				<div class="bm bml">
+					<table border="0" width="100%" cellspacing="0" cellpadding="0" id="table2">
+						<tr><td colspan="2" class="alt" height="30">
+							<h2 class="xs2" style="margin-left: 10px; margin-top: 0; margin-bottom: 0">播主信息</h2></td>
+						</tr>
+						<tr>
+							<td height="8" colspan="2"></td>
+						</tr>
+						<tr>
+							<td width="66" align="center" rowspan="3"><!--{avatar($viewdata[uid],small)}--></td>
+						</tr>
+						<tr>
+							<td width="234"><span class="xs2"><span class="xg1">視頻播主：</span><a href="home.php?mod=space&uid=$viewdata[uid]" class="xi2" target="_blank">$viewdata[username]</a></span ></td>
+						</tr>
+						<tr>
+							<td><span class="xs2"><span class="xg1">擁有視頻：</span><a href="{PDIR}&tion=author&uid=$viewdata[uid]" class="xi1">$viewdata[$vcuser]{$vcunit}</a></span ></td>
+						</tr>
+						<tr>
+							<td height="8" colspan="2"></td>
+						</tr>
+						<!--{if $viewdata[vinfo]}-->
+						<tr><td colspan="2" class="alt" align="left" height="30">
+							<h2 class="xs2">&nbsp;視頻介紹</h2></td>
+						</tr>
+						<tr><td colspan="2">
+							<p style="line-height: 150%; margin: 8px; text-indent:24px"><span class="xg1">$viewdata[vinfo]</span></td></tr>
+						<!--{/if}-->
+						<tr><td colspan="2" class="alt" height="30">
+							<h2 class="xs2" style="margin-left: 10px; margin-top: 0; margin-bottom: 0">播主最新視頻</h2></td>
+						</tr>
+						<tr><td colspan="2" height="12"></td></tr>
+						<tr>
+							<td colspan="2" align="center">
+							<table cellspacing="0" cellpadding="0" width="285" style="table-layout: fixed; word-wrap: break-word; width:285px;" id="table3">
+							{eval $cle=1;}
+								<!--{loop $datalist $i $listloop}-->
+								<!--{if $cle==1}-->
+								<tr>
+								<!--{/if}-->
+								<td valign="top" width="95" align="center">
+								<div align="center" style="width: 87px; height: 66px; overflow: hidden; text-overflow:ellipsis; border: 1px solid #B0B0B0;">
+								<table cellspacing="0" cellpadding="0" border="0" width="87" height="66" align="center" id="table4">
+								<tr><td align="center" valign="middle">
+								<a href="{PDIR}&tion=view&vid=$listloop[id]" title="$listloop[vsubject]">
+								<img src="$listloop[purl]" border="0" align="absmiddle" width="85" height="64"></a></td></tr></table>
+								</div>
+					
+								<table border="0" width="88" style="table-layout: fixed; word-wrap: break-word" cellspacing="0" cellpadding="0" id="table5">
+								<tr><td height="3"></td></tr>
+								<tr><td align="left" width="84" title="$listloop[vsubject]" class="alt" height="24">&nbsp;<a href="{PDIR}&tion=view&vid=$listloop[id]" class="xi2"><nobr>$listloop[vsubjectc]</nobr></a></td></tr>
+								<tr><td height="12"></td></tr>
+								</table>
+								
+								</td>
+							<!--{if $cle>3}-->
+							</tr>
+							<!--{/if}-->
+							{eval $cle++;if($cle>3)$cle=1;} 
+							<!--{/loop}-->
+							</table>
+							
+							</td>
+						</tr>
+					</table>
+				</div>				
+			</td>
+		</tr>
+		</table>
+{subtemplate common/footer}	
+
+<script language="javascript" type="text/javascript"> 
+
+	function start_move(val) {
+		for(i=1; i<=val; i++){
+			moveid = document.getElementById('star_'+i);
+			moveid.src='source/plugin/vgallery/images/star2.gif';
+		}
+		for(i=10; i>val; i--){
+			moveid = document.getElementById('star_'+i);
+			moveid.src='source/plugin/vgallery/images/star1.gif';
+		}
+	}
+	
+	function getout_star(val){
+		for(i=1; i<=val; i++){
+			moveid = document.getElementById('star_'+i);
+			moveid.src='source/plugin/vgallery/images/star2.gif';
+		}
+		for(i=10; i>val; i--){
+			moveid = document.getElementById('star_'+i);
+			moveid.src='source/plugin/vgallery/images/star1.gif';
+		}
+	}
+
+	function hsk_myreply_ctlent(event) {
+		var e = event ? event : window.event;
+		var submited = $('fastpostsubmit').disabled;
+		if(!submited && ((e.ctrlKey && e.keyCode == 13) || (e.altKey && e.keyCode == 83))) {
+			hsk_myreply($('fastpostform'));
+		}
+	}
+	
+	function hsk_myreply(theform, noajaxpost) {
+		noajaxpost = !noajaxpost ? 0 : noajaxpost;
+		s = '';
+		if(theform.fastpostmessage.value == '') {
+			s = '請您填寫有效的評論內容後再提交！';
+			theform.fastpostmessage.focus();
+		} else if(mb_strlen(theform.fastpostmessage.value) > 500 || mb_strlen(theform.fastpostmessage.value) < 6) {
+			s = '評論字數不在規定的範圍內！';
+			theform.fastpostmessage.focus();
+		}
+		if(s) {
+			$('fastpostreturn').className = 'onerror';
+			$('fastpostreturn').innerHTML = s;
+			$('fastpostsubmit').disabled = false;
+			return false;
+		}
+		$('fastpostsubmit').disabled = true;
+		theform.fastpostmessage.value = parseurl(theform.fastpostmessage.value);
+		if(!noajaxpost) {
+			ajaxpost('fastpostform', 'fastpostreturn', 'fastpostreturn', 'onerror', $('fastpostsubmit'), 'pmsendappend()');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function pmsendappend() {
+		$('fastpostmessage').value = '';
+		$('fastpostmessage').focus();
+		s = '您的評論已經提交，感謝您的參與！';
+		$('fastpostreturn').className = 'onerror';
+		$('fastpostreturn').innerHTML = s;
+		ajaxget('{PDIR}&tion=loadpolls&vid={$viewdata[id]}', 'poplepolls');
+	}
+	
+	function get_quote(str, val) {
+		var get_id = 'vpost_'+val;
+		var myval = $(get_id).value;
+		var get_val = '[quote][size=2][color=#999999]'+str+'[/color][/size]\n'+myval+'[/quote]';
+		$('fastpostmessage').value += get_val;
+		$('fastpostmessage').focus();
+	}
+	
+	function vodopen(theurl) {
+		window.showModelessDialog(theurl,window,"dialogtop:0;scroll:0;status:0;help:0;resizable:0;dialogWidth:"+screen.availWidth+"px;dialogHeight:"+screen.availHeight+"px;Minimize=yes;");
+		
+	}
+	
+</script>

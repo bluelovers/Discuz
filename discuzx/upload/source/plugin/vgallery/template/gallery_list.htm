@@ -1,0 +1,106 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="bm bml">
+		<p class="tbmu{if !$fid && !$sid} bw0{/if}">
+			<a hideFocus href="{PDIR}&tion=list{$thegopage}"{if !$fid && !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==0}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&fid=$datarow[sid]{$thegopage}"{if $fid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{if $fid || $sid}-->
+		<p class="tbmu bw0">
+			<a hideFocus href="{PDIR}&tion=list&fid=$fid{$thegopage}"{if !$sid} class="a"{/if}>全部</a>
+			<!--{loop $styleloop $datarow}-->
+			<!--{if $datarow[sup]==$fid}-->
+			<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&sid=$datarow[sid]{$thegopage}"{if $sid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+			<!--{/if}-->
+			<!--{/loop}-->
+		</p>
+	<!--{/if}-->
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<ul class="tb cl">
+							<li{if $types == '1' || !$types} class="a"{/if}>
+							<a href="{PDIR}&tion={$tion}{$fidsidpage}{$thegopage}">最新發布的</a></li>
+							<li{if $types == '2'} class="a"{/if}>
+							<a href="{PDIR}&tion={$tion}{$fidsidpage}{$thegopage}&types=2">播放最多的</a></li>
+							<li{if $types == '3'} class="a"{/if}>
+							<a href="{PDIR}&tion={$tion}{$fidsidpage}{$thegopage}&types=3">評分最高的</a></li>
+							<li{if $types == '4'} class="a"{/if}>
+							<a href="{PDIR}&tion={$tion}{$fidsidpage}{$thegopage}&types=4">評論最多的</a></li>
+							<li>
+							<p style="margin-left: 15px">查看類型：<select size="1" name="gourl" onchange="window.location='{PDIR}&tion={$tion}{$fidsidpage}&types={$types}&gourl='+this.value;"><option value="0">視頻和專輯</option><option value="1" $thegosele_1>所有視頻</option><option value="2" $thegosele_2>所有專輯</option></select></li>
+						</ul>
+						<div class="z">
+							<table border="0" cellpadding="0" cellspacing="0">
+								<tr><td height="40"><!--{if $fid}--><b>位置</b>：<span class="xi2">$fidsname</span>{if $sid}<span class="xi2"> &raquo; $sidsname</span>{/if}，<!--{/if}--><!--{if $tion=="author" && $uid}-->查看  
+									<b>$theusername</b> 的全部視頻，<!--{/if}--> 共計 <b>$countmax</b> 個視頻信息{if $absum && !$gourl}，其中有 <b>{$absum}</b> 個專輯{/if}</td></tr>
+							</table>				
+						</div>
+						<table cellSpacing="0" cellPadding="0" width="100%"><tr><td height="1" class="alt"></td></tr><tr><td height="16"></td></tr></table>
+						<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word">
+							{eval $cle=1;}
+								<!--{loop $datalist $i $listloop}-->
+								<!--{if $cle==1}-->
+								<tr>
+								<!--{/if}-->
+								<td valign="top" width="174" align="center">
+								<div style="width:164px; height:12px;background-image: url('{MDIR}/header_{$listloop[isalbum]}.gif')"></div>
+								<div align="center" style="width: 162px; height: 122px; overflow: hidden; text-overflow:ellipsis; border: 1px solid #B0B0B0;">
+								<table cellspacing="0" cellpadding="0" border="0" width="162" height="122" align="center">
+								<tr><td align="center" valign="middle">
+								<a href="{PDIR}&tion={$listloop[isalbum]}&vid=$listloop[id]" title="$listloop[vsubject]">
+								<img src="$listloop[purl]" border="0" align="absmiddle" width="160" height="120"></a></td></tr></table>
+								</div>
+					
+								<table border="0" width="164" style="table-layout: fixed; word-wrap: break-word" cellspacing="0" cellpadding="0">
+								<tr><td height="5"></td></tr>
+								<tr><td align="left" width="164" title="$listloop[vsubject]" class="alt" height="24"><a href="{PDIR}&tion={$listloop[isalbum]}&vid=$listloop[id]" class="xi2">$listloop[vsubjectc]</a></td></tr>
+								<tr><td height="22"><div class="y"><!--{if !$listloop[vprice]}--><span class="xg1">$listloop[timelong]</span><!--{else}--><span class="xi1">$listloop[vprice] {$money_unit}{$money_name}</span><!--{/if}--></div><div class="z">播主: <a href="home.php?mod=space&uid=$listloop[uid]" class="xi1">$listloop[username]</a></div></td></tr>
+								<tr><td align="left" class="xg1"><div class="y">{$listloop[valuate]}分</div><div class="z"><img src="{MDIR}/views.gif" border="0" align="absmiddle"><span class="nums">$listloop[views]</span> <img src="{MDIR}/polls.gif" border="0" align="absmiddle"><span class="nums">$listloop[polls]</span></div></td></tr>
+								<tr><td height="20"></td></tr>
+								</table>
+								
+								</td>
+							<td width="3"></td>
+							<!--{if $cle>4}-->
+							</tr>
+							<!--{/if}-->
+							{eval $cle++;if($cle>4)$cle=1;}
+							<!--{/loop}-->
+						</table>				
+						$multipage
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

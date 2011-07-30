@@ -1,0 +1,66 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<table cellpadding="0" cellpadding="0" width="100%"><tr><td height="10"></td></tr></table>
+					<div class="bm bw0">
+						<div class="bm bml">
+							<p class="tbmu{if !$fid && !$sid} bw0{/if}">
+								<a hideFocus href="{PDIR}&tion=list"{if !$fid && !$sid} class="a"{/if}>全部</a>
+								<!--{loop $styleloop $datarow}-->
+								<!--{if $datarow[sup]==0}-->
+								<span class="pipe">|</span><a hideFocus href="{PDIR}&tion=list&fid=$datarow[sid]"{if $fid==$datarow[sid]} class="a"{/if}>$datarow[sort]</a>
+								<!--{/if}-->
+								<!--{/loop}-->
+							</p>
+						</div>
+					<h1 class="mt">我收藏的視頻</h1>
+	
+					<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+						<tr>
+							<th width="60"></th>
+							<th>視頻名稱</th>
+							<th>發布時間</th>
+							<th>發布者</th>
+							<th>播放/評論</th>
+						</tr>
+						<!--{loop $datalist $datarow}-->
+						<tr>
+							<td><img src="$datarow[purl]" border="0" align="absmiddle" width="60" height="45"></td>
+							<td>{if $datarow[vprice]}<span class="xi1">[售價 $datarow[vprice] $money_unit{$money_name}] - </span>{/if}<a href="{PDIR}&tion=view&vid=$datarow[vid]" target="_blank">$datarow[vsubject]</a><br>
+							<span class="xg1"><!--{if $datarow[vinfo]}-->$datarow[vinfo]<!--{else}-->得分: $datarow[valuate]<!--{/if}--></span></td>
+							<td>$datarow[dateline1]<br>$datarow[dateline2]</td>
+							<td>$datarow[username]<br><a href="{PDIR}&tion=delefavorites&vid=$datarow[vid]" onclick="if(!confirm('確定要這麽做嗎？')){return false;}else{showWindow('reportwin', this.href);}" class="xi1"><img src="{MDIR}/deleis.gif" border="0" align="absmiddle" title="從我的收藏夾中移除這個視頻！"> 移除</a></td>
+							<td>播放: $datarow[views]<br>評論: $datarow[polls]</td>
+						</tr>
+						<!--{/loop}-->
+					</table>
+					$multipage
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

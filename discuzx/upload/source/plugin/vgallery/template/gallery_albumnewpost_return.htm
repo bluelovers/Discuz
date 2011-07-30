@@ -1,0 +1,72 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">爲專輯添加新視頻(多集連發模式)</h1>
+		
+						<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<table cellSpacing="0" cellPadding="0" width="100%" border="0">
+								<tr height="32">
+									<th class="alt"><span style="font-weight: 700">所屬專輯</span></th>
+									<td class="alt"><b>$thesubject</b></td>
+								</tr>
+								<!--{loop $datarow $i $value}-->
+								<tr><td height="3" colspan="2"></td></tr>
+								<tr>
+									<th rowspan="2">第 <font color="#FF00FF">{eval 
+									echo $i+1} </font>行</th>
+									<td height="24" class="xi1">$value[vname]</td>
+								</tr>
+								<tr>
+									<td height="24"><!--{if $value[errmsg]}--><img src="{MDIR}/check_error.gif" border="0" align="absmiddle"> $value[errmsg]<!--{else}--><img src="{MDIR}/check_right.gif" border="0" align="absmiddle"> 此條視頻成功發布！<!--{/if}--></td>
+								</tr>
+								<tr><td height="3" colspan="2"></td></tr>
+								<tr>
+									<th colspan="2" class="alt" height="1"></th>
+								</tr>
+								<!--{/loop}-->
+		
+								<tr><td height="6"></td></tr>
+								<tr>
+									<th></th>
+									<td>
+									<button class="pn pnp" name="reportsubmit1" type="button" onclick="window.location='{PDIR}&tion=albumnewpost&vid=$vid&types=3';">
+									<strong>繼續發布</strong></button>&nbsp;
+									<button class="pn pnp" name="reportsubmit2" type="button" onclick="window.location='{PDIR}&tion=myablist&vid=$vid';">
+									<strong>返回列表</strong></button></td>
+								</tr>
+							</table>
+							<input value="true" type="hidden" name="passwordsubmit">
+							<input type="hidden" name="vid" value="$vid">
+						</form>
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

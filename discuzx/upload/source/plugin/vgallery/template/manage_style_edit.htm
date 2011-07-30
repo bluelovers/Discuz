@@ -1,0 +1,67 @@
+{subtemplate common/header}
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+
+		<div class="mn">
+			<div class="bm bw0">
+				<h1 class="mt">管理視頻分類</h1>
+				<table border="0" width="100%">
+					<tr><td valign="top">
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+							<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<tr>
+								<th colspan="2">修改分類名稱和所屬級別</th>
+							</tr>
+							<tr><td width="100">
+								類別名稱：</td><td>
+								<input id="new_sort" class="px" value="$datarow[sort]" type="text" name="new_sort" style="width:100px;"></td></tr>
+							<tr><td>
+								所屬分類：</td><td>
+							<select id="newsup" name="newsup">
+							<option value="0" selected>一級類別</option>
+							<!--{loop $styleloop $datarow2}-->
+							<!--{if $datarow2[sup]==0}-->
+							<!--{if $datarow2[sid]==$datarow[sup]}-->
+							<option value="$datarow2[sid]" selected>$datarow2[sort]</option>
+							<!--{else}-->
+							<option value="$datarow2[sid]">$datarow2[sort]</option>
+							<!--{/if}-->
+							<!--{/if}-->
+							<!--{/loop}-->
+							</select></td></tr>
+							<tr><td>
+								是否刪除：</td><td><label><input class="pc" id="deletes" type="checkbox" value="1" name="deletes"{if $deletes} checked{/if}> ！刪除這個類別</label></td></tr>
+							<tr><td colspan="2">
+							<button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>提交操作</strong></button></td></tr>
+							<input type="hidden" name="sid" value="$sid">
+							</form>
+						</table>
+					</td></tr>					
+				</table>
+			</div>
+		</div>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

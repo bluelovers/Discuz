@@ -1,0 +1,99 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" id="diy_common" href="data/cache/style_{STYLEID}_home_space.css?{VERHASH}" />
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="220" valign="top">{subtemplate vgallery:gallery_leftbar}</td>
+				<td width="20"></td>
+				<td width="720" valign="top">
+					<div class="bm bw0">
+						<h1 class="mt">管理專輯內的視頻</h1>
+		
+						<ul class="tb cl">
+							<li class="a">
+							<a href="{PDIR}&tion=myablist&vid=$vid">專輯內的視頻列表</a></li>
+							<li>
+							<a href="{PDIR}&tion=mylist&types=1">專輯列表</a></li>
+							<li>
+							<a href="{PDIR}&tion=mylist&types=2">視頻列表</a></li>
+							<li class="o">
+							<a href="{PDIR}&tion=release&types=3&vid=$vid" class="xi2">添加視頻</a> 
+							</li>
+						</ul>
+		
+		
+						<table border="0" width="100%" id="table1">
+							<tr>
+								<td colspan="2" style="height: 12px;"></td>
+							</tr>
+							<tr>
+								<td rowspan="4" width="150" align="center"><img src="$datarow[purl]" border="0" align="absmiddle" width="120" height="90"></td>
+								<td>專輯名稱：$datarow[vsubject]</td>
+							</tr>
+							<tr>
+								<td>所屬類別：$sort_1_name &raquo; $sort_2_name</td>
+							</tr>
+							<tr>
+								<td>創建時間：$datarow[dateline]</td>
+							</tr>
+							<tr>
+								<td>
+								<p align="left">含視頻數：共 $datarow[vsum] 個視頻 [<a href="{PDIR}&tion=release&types=3&vid=$vid" class="xi2">添加視頻</a>]</td>
+							</tr>
+							<tr>
+								<td colspan="2" style="height: 12px;"></td>
+							</tr>
+						</table>
+						<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+							<tr>
+								<th width="60"></th>
+								<th>專輯名稱</th>
+								<th>創建時間</th>
+								<th>播放/評論</th>
+								<th>管理選項</th>
+							</tr>
+							<!--{if $novod}-->
+							<tr>
+								<td colspan="5" height="200" align="center">此專輯還沒有收錄任何視頻，現在就爲專輯添加新視頻！<br><br>---> <a href="{PDIR}&tion=release&types=3&vid=$vid" class="xi2">馬上添加</a> <---</td>
+							</tr>
+							<!--{else}-->
+							<!--{loop $datalist $datarow}-->
+							<tr>
+								<td><img src="$datarow[purl]" border="0" align="absmiddle" width="60"></td>
+								<td><!--{if $datarow[tid]}-->[<a href="forum.php?mod=viewthread&tid=$datarow[tid]" target="_blank" class="xi2">貼子</a>] <!--{/if}--><a href="{PDIR}&tion=view&vid=$datarow[id]" target="_blank">$datarow[vsubject]</a><br><!--{if $datarow[vprice]}--><span class="xi1">[售價 $datarow[vprice] {$money_unit}$money_name]</span><!--{/if}--><span class="xg1">&nbsp; $datarow[vinfo]</span></td>
+								<td>$datarow[dateline1]<br><span class="xg1">$datarow[dateline2]</span></td>
+								<td align="center">$datarow[views]<br><span class="xg1">$datarow[polls]</span></td>
+								<td>
+								<a href="{PDIR}&tion=edit&vid=$datarow[id]" class="xi2">修改</a><span class="pipe">|</span><a href="{PDIR}&tion=delete&vid=$datarow[id]" class="xi2">刪除</a><br>
+								<a href="{PDIR}&tion=pushvod&vid=$datarow[id]" class="xi2">移出專輯</a></td>
+							</tr>
+							<!--{/loop}-->
+							<!--{/if}-->
+						</table>
+						$multipage
+		
+					</div>
+				</td>
+			</tr>
+	</table>
+{subtemplate common/footer}

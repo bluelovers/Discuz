@@ -1,0 +1,86 @@
+{subtemplate common/header}
+
+<div id="wp" class="wp">
+	<div id="pt" class="bm cl">
+		<div class="y"><form id="scform" method="post" autocomplete="off" action="{PDIR}&tion=search">
+			<table cellSpacing="0" cellPadding="0" id="table1">
+				<tr height="30">
+					<td width="140">
+						<input onblur="javascript:if(''==this.value)this.value='視頻關鍵字';" id="share_link" class="px vm" onfocus="javascript:if('視頻關鍵字'==this.value)this.value='';" tabIndex="1" value="視頻關鍵字" type="text" name="srchtxt"></td>
+					</td>
+					<td><button id="sharesubmit_btn" class="pn vm" tabIndex="3" name="sharesubmit_btn" type="submit" value="true">
+						<strong>搜索</strong></button>
+					</td>
+				</tr>
+			</table>
+			</form>
+		</div>
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="{PDIR}">{PNAME}</a><em> &rsaquo; </em>$navname
+		</div>
+	</div>
+
+	<div class="ct2_a wp cl">
+
+		<form enctype="multipart/form-data" id="frm{$types}" name="frm{$types}" method="post" autocomplete="off">
+		<input type="hidden" name="formhash" value="{FORMHASH}" />
+		<div class="mn">
+			<div class="bm bw0">
+				<div class="y">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr><td height="40"><input class="pc" id="sellall" onclick="checkall(this.form, 'deletes');" type="checkbox" name="chkall"><label for="sellall"> 全部選中</label></td></tr>
+					</table>				
+				</div>
+				<div class="z"><span style="font-size: 17pt">只有前5個是有效的，可通過排序改變有效的視頻</span>
+				</div>
+				
+				<table cellSpacing="0" cellPadding="0" width="100%"><tr><td height="1" class="alt"></td></tr><tr><td height="16"></td></tr></table>
+				<table class="dt" cellSpacing="0" summary="" cellPadding="0">
+					<tr>
+						<th width="60"></th>
+						<th>視頻名稱</th>
+						<th>發布時間</th>
+						<th>排序</th>
+						<th>刪除</th>
+					</tr>
+					<!--{if $datalist}-->
+					<!--{loop $datalist $datarow}-->
+					<!--{if $datarow[distyle]<=5}-->
+					<tr>
+						<td><img src="$datarow[purl]" border="0" align="absmiddle" width="48" height="36"></td>
+						<td><a href="{PDIR}&tion=view&vid=$datarow[vid]" target="_blank" class="xi2">$datarow[vsubject]</a><br><span class="xg1">播放{$datarow[views]}次，評論{$datarow[polls]}條，<!--{if $datarow[timelong]}-->時長{$datarow[timelong]}，<!--{/if}-->得分: $datarow[valuate]</span></td>
+						<td><a href="{PDIR}&tion=author&uid=$datarow[uid]" class="xi1" target="_blank" title="瀏覽此用戶發布的所有視頻！">$datarow[username]</a><br>$datarow[dateline1]</td>
+						<td>
+						<input id="newdps" class="px" value="$datarow[dps]" type="text" name="newdps[{$datarow[id]}]" style="width:20px;"></td>
+						<td><input type="checkbox" name="deletes[]" value="$datarow[id]" align="absmiddle" class="pc"></td>
+					</tr>
+					<!--{else}-->
+					<tr>
+						<td align="center"><span class="pipe">失效</span></td>
+						<td><a href="{PDIR}&tion=view&vid=$datarow[id]" target="_blank" class="xg2">$datarow[vsubject]</a></td>
+						<td><a href="{PDIR}&tion=author&uid=$datarow[uid]" class="xg2" target="_blank" title="瀏覽此用戶發布的所有視頻！">$datarow[username]</a></td>
+						<td>
+						<input id="newdps" class="px" value="$datarow[dps]" type="text" name="newdps[{$datarow[id]}]" style="width:20px;"></td>
+						<td><input type="checkbox" name="deletes[]" value="$datarow[id]" align="absmiddle" class="pc"></td>
+					</tr>
+					<!--{/if}-->
+					<!--{/loop}-->
+					<!--{else}-->
+					<tr><td colspan="5" height="200" align="center">目前還沒有在首頁5格內顯示的視頻，您可以到視頻管理處點擊“<a class="xi1">推薦</a>”加入進來！</td></tr>
+					<!--{/if}-->
+				</table>
+				<div class="pgs cl mtm">
+					<div class="z">
+						<div class="pg">
+							$multipage
+						</div>
+					</div>
+					<div class="y"><button class="pn pnp" name="reportsubmit" type="submit" value="true"><strong>執行操作</strong></button></div>
+				</div>
+			</div>
+		</div>
+		</form>
+		{subtemplate vgallery:manage_leftbar}
+	</div>
+	
+{subtemplate common/footer}

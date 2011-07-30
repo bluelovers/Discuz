@@ -1,0 +1,62 @@
+{subtemplate common/header}
+
+<table cellSpacing="0" cellPadding="0" border="0">
+	<tr>
+		<td id="fwin_content_buynow" class="m_c" fwin="buynow" width="520" height="40">
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="480"><h3 style="CURSOR: move" id="fctrl_buynow" class="flb"><em id="return_pay" fwin="pay">購買視頻</em></h3></td>
+				<td width="40"><a class="flbc" title="關閉" onclick="hideWindow('buynow');" href="javascript:;">關閉</a></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr><td height="1" class="alt"></td></tr>
+	<tr>
+		<td id="fwin_content_buynow" class="m_c" orgdisplay fwin="buynow" width="520" height="210" valign="bottom" align="center">
+		
+			<table border="0" width="90%" cellspacing="0" cellpadding="0">
+			<form method="post" autocomplete="off" id="fastpostform" action="{PDIR}&tion=buynow&vid=$vid">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="vid" value="$vid" />
+			<tr height="150" valign="top">
+				<td class="xs1">
+					<table border="0" width="100%" cellspacing="1" cellpadding="3">
+						<tr height="32">
+							<td colspan="2" align="left" class="alt"><span class="xs2"><b>&nbsp; 視頻：</b>$datarow[vsubject]</span></td>
+						</tr>
+						<tr><td height="1"></td></tr>
+						<tr>
+							<th align="left">&nbsp; 播主</th>
+							<td align="left">
+							<a target="_blank" href="home.php?mod=space&uid=$datarow[uid]" target="_blank" class="xi2">$datarow[username]</a></td>
+						</tr>
+						<tr>
+							<th vAlign="top" align="left">&nbsp; 售價($money_name)</th>
+							<td align="left">$datarow[vprice] $money_unit</td>
+						</tr>
+						<tr>
+							<th vAlign="top" align="left">&nbsp; 作者所得($money_name)</th>
+							<td align="left">$datarow[netprice] $money_unit</td>
+						</tr>
+						<tr>
+							<th vAlign="top" align="left">&nbsp; 購買後余額($money_name)</th>
+							<td align="left">$mymoney_lave $money_unit</td>
+						</tr>
+						<!--{if $mymoney < $datarow[vprice]}-->
+						<tr><td colspan="2" align="left" class="xi1">&nbsp; 您的{$money_name}不夠，暫時不能購買！</td></tr><!--{/if}-->
+					</table>
+				</td>
+			</tr>
+			<tr height="40">
+				<td valign="top" align="center"><button class="pn pnc" name="reportsubmit" type="submit" value="true"><strong>購買視頻</strong></button> &nbsp; <button class="pn pnp" onclick="hideWindow('buynow');" type="button"><strong>關閉</strong></button>
+				</td>
+			</tr>
+			</form>
+			</table>
+
+		</td>
+	</tr>
+</table>
+
+{subtemplate common/footer}

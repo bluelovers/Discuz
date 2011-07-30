@@ -1,0 +1,48 @@
+{subtemplate common/header}
+
+	<ul class="tb cl">
+		<li{if $types == '1' || !$types} class="a"{/if}>
+		<a href="{PDIR}&tion=loadsid&sid=$sid&types=1" onclick="ajaxget(this.href, 'this_sort');doane(event);">本類熱播視頻</a></li>
+		<li{if $types == '2'} class="a"{/if}>
+		<a href="{PDIR}&tion=loadsid&sid=$sid&types=2" onclick="ajaxget(this.href, 'this_sort');doane(event);">本類最新視頻</a></li>
+		<li class="o"><a href="{PDIR}&tion=selectstyle" target="_blank">我要發布視頻</a></li>
+	</ul>
+
+	<table cellspacing="0" cellpadding="0" style="table-layout: fixed; word-wrap: break-word">
+		<tr><td height="15"></td></tr>
+		<tr><td>
+
+		<table cellspacing="0" cellpadding="0" width="640" style="table-layout: fixed; word-wrap: break-word;">
+		{eval $cle=1;}
+			<!--{loop $divloop $i $listloop}-->
+			<!--{if $cle==1}-->
+			<tr>
+			<!--{/if}-->
+			<td valign="top" width="100" align="left">
+			<div align="center" style="width: 98px; height: 77px; overflow: hidden; text-overflow:ellipsis; border: 1px solid #B0B0B0;">
+			<table cellspacing="0" cellpadding="0" border="0" width="98" height="77" align="center">
+			<tr><td align="center" valign="middle">
+			<a href="{PDIR}&tion=view&vid=$listloop[id]" title="$listloop[vsubject]">
+			<img src="$listloop[purl]" border="0" align="absmiddle" width="96" height="75"></a></td></tr></table>
+			</div>
+
+			<table border="0" width="100" style="table-layout: fixed; word-wrap: break-word" cellspacing="0" cellpadding="0">
+			<tr><td height="3"></td></tr>
+			<tr><td align="left" width="100" title="$listloop[vsubject]" class="alt" height="24">&nbsp;<a href="{PDIR}&tion=view&vid=$listloop[id]" class="xi2">$listloop[vsubjectc]</a></td></tr>
+			<tr><td height="12"></td></tr>
+			</table>
+			
+			</td>
+		<!--{if $cle>7}-->
+		</tr>
+		<!--{/if}-->
+		{eval $cle++;if($cle>7)$cle=1;}
+		<!--{/loop}-->
+		</table>
+	
+		</td></tr>
+		<tr><td height="15"></td></tr>
+	</table>
+
+
+{subtemplate common/footer}
