@@ -340,6 +340,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			}
 		}
 		if(strpos($msglower, '[/media]') !== FALSE) {
+			// 修改為可接受空參數
 			$message = preg_replace("/\[media(?:=([\w,]+))?\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", $allowmediacode ? "parsemedia('\\1', '\\2')" : "bbcodeurl('\\2', '<a href=\"{url}\" target=\"_blank\">{url}</a>')", $message);
 		}
 		if(strpos($msglower, '[/audio]') !== FALSE) {
