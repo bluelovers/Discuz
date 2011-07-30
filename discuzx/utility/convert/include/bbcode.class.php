@@ -210,6 +210,42 @@ class bbcode {
 
 			return $this->bbcode_make('media', 'http://www.youtube.com/watch?v='.$_m['idkey'].$extra);
 
+		} elseif (
+			$m['tag'] == 'gv'
+			&& preg_match("/^(?:http\:\/\/video\.google\.com\/googleplayer\.swf\?docId\=)?(?<idkey>[0-9A-Za-z-_]+)(?:[&\?].*)?$/i", $m['value'], $_m)
+		) {
+			return $this->bbcode_make('flash',
+				'http://video.google.com/googleplayer.swf?docId='.$_m['idkey'],
+				'400,326'
+			);
+
+		} elseif (
+			$m['tag'] == 'yammp3'
+			&& preg_match("/^(?:http\:\/\/mymedia\.yam\.com\/(?:m\/|mp3player2\.swf\?pID\=))?(?<idkey>[0-9A-Za-z-_]+)(?:[&\?].*)?$/i", $m['value'], $_m)
+		) {
+			return $this->bbcode_make('flash',
+				'http://mymedia.yam.com/mp3player2.swf?pID='.$_m['idkey'],
+				'450,120'
+			);
+
+		} elseif (
+			$m['tag'] == 'yamflv'
+			&& preg_match("/^(?:http\:\/\/mymedia\.yam\.com\/(?:m\/|flvplayer\.swf\?pID\=))?(?<idkey>[0-9A-Za-z-_]+)(?:[&\?].*)?$/i", $m['value'], $_m)
+		) {
+			return $this->bbcode_make('flash',
+				'http://mymedia.yam.com/flvplayer.swf?pID='.$_m['idkey'],
+				'450,368'
+			);
+
+		} elseif (
+			$m['tag'] == 'wretch'
+			&& preg_match("/^(?:http\:\/\/embed\.wretch\.cc\/)?(?<idkey>[0-9A-Za-z-_]+)(?:[&\?].*)?$/i", $m['value'], $_m)
+		) {
+			return $this->bbcode_make('flash',
+				'http://embed.wretch.cc/'.$_m['idkey'],
+				'440,330'
+			);
+
 		} elseif (in_array($m['tag'], $this->_bbcode_media(1)) && $this->is_url($m['value'])) {
 			return $this->bbcode_make('media', $m['value']);
 
