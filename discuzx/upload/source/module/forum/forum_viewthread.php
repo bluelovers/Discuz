@@ -906,10 +906,28 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		$_G['forum_onlineauthors'][] = $post['authorid'];
 		$post['usernameenc'] = rawurlencode($post['username']);
 		$post['readaccess'] = $_G['cache']['usergroups'][$post['groupid']]['readaccess'];
+		/**
+		 * 顯示作者的組頭銜
+		 *
+		 * @see source\admincp\admincp_setting.php
+		 * @see source\function\cache\cache_usergroups.php
+		 */
 		if($_G['cache']['usergroups'][$post['groupid']]['userstatusby'] == 1) {
+			/**
+			 * 用戶組頭銜
+			 */
 			$post['authortitle'] = $_G['cache']['usergroups'][$post['groupid']]['grouptitle'];
+			/**
+			 * 顯示用戶組的星星數
+			 * 並且可以顯示升級到下一級需要多少
+			 */
 			$post['stars'] = $_G['cache']['usergroups'][$post['groupid']]['stars'];
 		}
+		/**
+		 * 升級到下一級需要多少
+		 * 只顯示會員用戶組
+		 * 不顯示自定義, 系統用戶組(因為也無法自動升級)
+		 */
 		$post['upgradecredit'] = false;
 		if($_G['cache']['usergroups'][$post['groupid']]['type'] == 'member' && $_G['cache']['usergroups'][$post['groupid']]['creditslower'] != 999999999) {
 			$post['upgradecredit'] = $_G['cache']['usergroups'][$post['groupid']]['creditslower'] - $post['credits'];
