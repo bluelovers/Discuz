@@ -27,6 +27,13 @@
 		overflow: hidden;
 	}
 
+	/* 用戶詳細信息 頭像底下 的並排連結 */
+	.pls .o li * {
+		word-break: keep-all;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
