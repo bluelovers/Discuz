@@ -138,7 +138,7 @@ class bbcode {
 		$_regexval = '(?:(?:[^\[]|\[(?!\/\\1\]))+)';
 
 		$message = preg_replace_callback(array(
-			"/\[(?<tag>{$tag})(?:=(?<arg>[^\[\]]*))?\][\n\r]*(?<value>".$_regexval.")[\n\r]*\[\/\\1\]/is",
+			"/\[(?<tag>{$tag})(?:=(?<extra>[^\[\]]*))?\][\n\r]*(?<value>".$_regexval.")[\n\r]*\[\/\\1\]/is",
 		), array($this, '_bbcode_media_callback'), $message);
 
 		return $message;
@@ -150,7 +150,7 @@ class bbcode {
 		if (
 			preg_match("/\.youtube\..+?\/watch\?v=(?<idkey>[0-9A-Za-z-_]{11})/", $m['value'], $_m)
 			// [youtube]b5EFKNmeovM[/youtube]
-			|| preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
+			|| $m['tag'] == 'youtube' && preg_match("/^(?<idkey>[0-9A-Za-z-_]{11})$/", $m['value'], $_m)
 		) {
 			$w = 500;
 			$h = 375;
