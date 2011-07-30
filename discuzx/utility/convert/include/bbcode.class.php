@@ -199,6 +199,8 @@ class bbcode {
 	function _bbcode_media_callback($m) {
 		$retempty = 0;
 
+		$m['value'] = preg_replace('/^\s+|\s+$/s', '', $m['value']);
+
 		$_skip = array('youtube', 'audio', 'flash');
 
 		if (
@@ -263,7 +265,10 @@ class bbcode {
 
 			return $this->bbcode_make('flash', $m['value'], $m['extra']);
 
-		} elseif (in_array($m['tag'], $this->_bbcode_media()) && $this->is_url($m['value'])) {
+		} elseif (in_array($m['tag'], $this->_bbcode_media())
+			&& !$this->is_url($m['value'])
+			&& preg_match('/[^a-z\d\_\-]/i', $m['value'])
+		) {
 
 			$retempty = 1;
 
