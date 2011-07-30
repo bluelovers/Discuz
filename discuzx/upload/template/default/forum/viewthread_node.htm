@@ -72,6 +72,10 @@
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
 			<!--{if $post['customstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
 			</div>
+
+		<!--如果沒有 $post['stars'] 那麼以下這段代碼也沒意義 -->
+		<!--{if $post['stars']}-->
+
 			<p{if $post['upgradecredit'] !== false} id="g_up$post[pid]" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12!'});"{/if}><!--{eval showstars($post['stars']);}--></p>
 			<!--{if $post['upgradecredit'] !== false}-->
 				<div id="g_up$post[pid]_menu" class="tip tip_4" style="display: none;">
@@ -79,6 +83,9 @@
 					<div class="tip_c">$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}</div>
 				</div>
 			<!--{/if}-->
+
+		<!--{/if}-->
+
 			<!--{hook/viewthread_sidetop $postcount}-->
 			<!--{if $post[custominfo][left]}--><dl class="pil cl">{$post[custominfo][left]}</dl><!--{/if}-->
 			<!--{if $post['medals']}-->
