@@ -510,7 +510,7 @@ Array
 		$s = '';
 		$s .= '<a href="'.$m['href'].'"';
 
-		if (!empty($user)) {
+		if (!empty($user) && !strpos($m['extra'], ' title=') === false) {
 			// 提示帳號名稱
 			$s .= ' title="'.strip_tags($m['showname']).' ( '.strip_tags($user).' )"';
 		}
