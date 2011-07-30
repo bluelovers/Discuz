@@ -197,7 +197,7 @@ class bbcode {
 				$extra = $_m['e1'].$c;
 			}
 
-			if (!empty($extra)) $extra = '&'.trim($extra, '&');
+			if (!empty($extra)) $extra = $c.trim($extra, $c);
 
 			return $this->bbcode_make('media', 'http://www.youtube.com/watch?v='.$_m['idkey'].$extra);
 
