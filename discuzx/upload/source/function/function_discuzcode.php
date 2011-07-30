@@ -765,7 +765,7 @@ function parsetrtd($bgcolor, $colspan, $rowspan, $width) {
 	return ($bgcolor == 'td' ? '</td>' : '<tr'.($bgcolor ? ' style="background-color:'.$bgcolor.'"' : '').'>').'<td'.($colspan > 1 ? ' colspan="'.$colspan.'"' : '').($rowspan > 1 ? ' rowspan="'.$rowspan.'"' : '').($width ? ' width="'.$width.'"' : '').'>';
 }
 
-function parseaudio($url, $width = 400) {
+function parseaudio($url, $width = 400, $allow_parseflv = 0) {
 	$ext = strtolower(substr(strrchr($url, '.'), 1, 5));
 	switch($ext) {
 		case 'mp3':
@@ -782,7 +782,7 @@ function parseaudio($url, $width = 400) {
 		// bluelovers
 			break;
 		default:
-			if($flv = parseflv($url, $width, 0)) {
+			if($allow_parseflv && ($flv = parseflv($url, $width, 0))) {
 				return $flv;
 			}
 		// bluelovers
