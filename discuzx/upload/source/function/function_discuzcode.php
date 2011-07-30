@@ -783,8 +783,10 @@ function parseaudio($url, $width = 400, $allow_parseflv = 0) {
 		// bluelovers
 			break;
 		default:
-			if($allow_parseflv && ($flv = parseflv($url, $width, 0))) {
-				return $flv;
+			if ($allow_parseflv) {
+				if($flv = parseflv($url, $width, 0)) {
+					return $flv;
+				}
 			}
 		// bluelovers
 
