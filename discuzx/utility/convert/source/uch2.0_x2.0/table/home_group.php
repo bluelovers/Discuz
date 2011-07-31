@@ -66,6 +66,8 @@ $searcharray = array
 		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
 		'/&amp;([a-z]{2,6});/',
 		'/&amp;([a-z]{2,6});/',
+
+		'/&nbsp;/',
 	);
 $replacearray = array
 	(
@@ -73,6 +75,8 @@ $replacearray = array
 		"&#\\1;",
 		"&\\1;",
 		"&\\1;",
+
+		' ',
 	);
 // bluelovers
 
@@ -111,7 +115,7 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 		// bluelovers
 		// 再一次轉換編碼
-		$post['message'] = preg_replace($searcharray, $replacearray, htmlspecialchars_decode($post['message']));
+		$post['message'] = htmlspecialchars_decode(preg_replace($searcharray, $replacearray, htmlspecialchars_decode($post['message'])));
 		// bluelovers
 
 		// bluelovers
