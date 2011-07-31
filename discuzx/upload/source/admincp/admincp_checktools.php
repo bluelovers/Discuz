@@ -366,6 +366,13 @@ if($operation == 'filecheck') {
 	// bluelovers
 
 } elseif($operation == 'robots') {
+	/**
+	 * 生成 robots.txt
+	 *
+	 * SEO設置
+	 * 其他
+	 * 搜索引擎優化
+	 */
 
 	if($do == 'output') {
 		$robots = implode('', file(DISCUZ_ROOT.'./source/admincp/robots.txt'));
