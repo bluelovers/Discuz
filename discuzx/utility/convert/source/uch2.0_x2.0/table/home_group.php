@@ -26,11 +26,15 @@ $searcharray = array
 	(
 		"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
 		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+
+		'/&(?:amp;)?nbsp;/',
 	);
 $replacearray = array
 	(
 		"&#\\1;",
 		"&#\\1;",
+
+		' ',
 	);
 // bluelovers
 
