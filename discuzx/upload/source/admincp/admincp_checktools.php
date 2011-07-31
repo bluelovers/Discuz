@@ -307,6 +307,12 @@ if($operation == 'filecheck') {
 	}
 
 } elseif($operation == 'rewrite') {
+	/**
+	 * 查看當前的 Rewrite 規則
+	 *
+	 * SEO設置
+	 * URL 靜態化
+	 */
 
 	$rule = array();
 	$rewritedata = rewritedata();
