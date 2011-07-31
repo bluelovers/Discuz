@@ -1,0 +1,22 @@
+<div class="bm bw0 mdcp">
+	<h1 class="mt">用户勋章管理</h1>
+<form method="post" action="">
+<table>
+<tr>
+	<td width=50><b>颁发</b></td>
+	<td width=50><b>ID</b></td>
+	<td width=150><b>勋章名称</b></td>
+	<td	width=80><b>勋章图片</b></td>
+</tr>
+<!--{loop $_G['cache']['medals'] $key $value}-->			
+		<tr>
+				<td><input class="checkbox" type="checkbox" name="medallist[]" value="$key" /></td>
+				<td>{$key}</td>
+				<td>{$value['name']}</td>
+				<td><img src="./static/image/common/{$value['image']}" /></td>
+		</tr>
+<!--{/loop}-->
+<tr><td colspan=3><input type="submit" value="提交" name="medalupdate" /></td></tr>
+</table>
+</form>
+</div>
