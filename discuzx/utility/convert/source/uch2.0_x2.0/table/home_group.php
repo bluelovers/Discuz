@@ -66,6 +66,8 @@ $searcharray = array
 		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
 		'/&amp;([a-z]{2,6});/',
 		'/&amp;([a-z]{2,6});/',
+
+		'/&nbsp;/',
 	);
 $replacearray = array
 	(
@@ -73,6 +75,8 @@ $replacearray = array
 		"&#\\1;",
 		"&\\1;",
 		"&\\1;",
+
+		' ',
 	);
 // bluelovers
 
