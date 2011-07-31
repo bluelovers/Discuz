@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[source/plugin/kk_hash_dzx/discuz_plugin_kk_hash_dzx.xml]]></item>
+		<item id="1"><![CDATA[source/plugin/kk_hash_dzx/discuz_plugin_kk_hash_dzx_SC_GBK.xml]]></item>
+		<item id="2"><![CDATA[source/plugin/kk_hash_dzx/discuz_plugin_kk_hash_dzx_SC_UTF8.xml]]></item>
+		<item id="3"><![CDATA[source/plugin/kk_hash_dzx/discuz_plugin_kk_hash_dzx_TC_BIG5.xml]]></item>
+		<item id="4"><![CDATA[source/plugin/kk_hash_dzx/discuz_plugin_kk_hash_dzx_TC_UTF8.xml]]></item>
+		<item id="5"><![CDATA[source/plugin/kk_hash_dzx/hash.inc.php]]></item>
+		<item id="6"><![CDATA[source/plugin/kk_hash_dzx/install.php]]></item>
+		<item id="7"><![CDATA[source/plugin/kk_hash_dzx/validator.xml]]></item>
+	</item>
+</root>

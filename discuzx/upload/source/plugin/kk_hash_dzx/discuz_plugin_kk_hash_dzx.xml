@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-22 23:47]]></item>
+	<item id="From"><![CDATA[KK's Laboratory (http://127.0.0.1/x2/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[&#25554;&#20214;&#26657;&#39564;&#30721;&#29983;&#25104;&#22120;]]></item>
+			<item id="identifier"><![CDATA[kk_hash_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[kk_hash_dzx/]]></item>
+			<item id="copyright"><![CDATA[kookxiang]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[hash]]></item>
+					<item id="menu"><![CDATA[&#29983;&#25104;&#26657;&#39564;&#30721;]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="you_are_not_developer"><![CDATA[&#23545;&#19981;&#36215;&#65292;&#26412;&#31243;&#24207;&#20165;&#20379;&#25554;&#20214;&#24320;&#21457;&#32773;&#20351;&#29992;&#65281;]]></item>
+				<item id="generate_hash"><![CDATA[&#29983;&#25104;&#26657;&#39564;&#30721;]]></item>
+				<item id="extra_file"><![CDATA[&#19981;&#22312;&#25554;&#20214;&#30446;&#24405;&#30340;&#25991;&#20214;]]></item>
+				<item id="extra_file_tips"><![CDATA[&#36755;&#20837;&#38656;&#35201;&#39069;&#22806;&#26657;&#39564;&#30340;&#25991;&#20214;&#65292;&#19968;&#34892;&#19968;&#20010;]]></item>
+				<item id="could_not_write_validator_xml"><![CDATA[&#25554;&#20214;&#30446;&#24405;&#30340; Validator.xml &#25991;&#20214;&#26080;&#27861;&#20889;&#20837;&#65292;&#35831;&#26816;&#26597;&#26435;&#38480;&#65281;]]></item>
+				<item id="validator_xml_updated"><![CDATA[Validator.xml &#24050;&#26356;&#26032;&#65292;&#35831;&#37325;&#26032;&#29983;&#25104;&#26657;&#39564;&#20540;&#65281;]]></item>
+				<item id="create_validator_succeed"><![CDATA[&#25104;&#21151;&#29983;&#25104;&#26657;&#39564;&#25991;&#20214;&#65292;&#35831;&#23558;&#25554;&#20214;&#30446;&#24405;&#30340; Validator.xml &#19968;&#24182;&#25171;&#21253;&#21457;&#24067;&#65281;<br>&#25554;&#20214;&#30340;&#26657;&#39564;&#20540;&#20026;&#65306;{hash}]]></item>
+			</item>
+			<item id="installlang">
+				<item id="not_developer"><![CDATA[&#23545;&#19981;&#36215;&#65292;&#26412;&#31243;&#24207;&#20165;&#20379;&#25554;&#20214;&#24320;&#21457;&#32773;&#20351;&#29992;&#65281;]]></item>
+				<item id="header"><![CDATA[KK &#25554;&#20214;&#23433;&#35013;&#21521;&#23548;]]></item>
+				<item id="step1"><![CDATA[&#26657;&#39564;&#31243;&#24207;]]></item>
+				<item id="step1_ok"><![CDATA[&#25554;&#20214;&#25991;&#20214;&#23436;&#25972;&#24615;&#26816;&#26597;&#36890;&#36807;&#65292;&#27491;&#22312;&#23433;&#35013;...]]></item>
+				<item id="step2"><![CDATA[&#23436;&#25104;&#23433;&#35013;]]></item>
+				<item id="validator_new"><![CDATA[<h4 class="infotitle2">&#20320;&#21363;&#23558;&#23433;&#35013;&#30340;&#25554;&#20214;&#26377;&#26032;&#29256;&#26412; {newver} &#21487;&#29992;&#65292;&#26159;&#21542;&#35201;&#32487;&#32493;&#23433;&#35013;&#65311;<br /><br /><a href="{url}" target="_blank">&#28857;&#20987;&#36825;&#37324;&#26597;&#30475;&#25554;&#20214;&#20449;&#24687;</a></h4>]]></item>
+				<item id="validator_error"><![CDATA[<h4 class="infotitle3">&#20320;&#21363;&#23558;&#23433;&#35013;&#30340;&#19981;&#26159;&#21407;&#29256;&#25554;&#20214;&#65292;&#26159;&#21542;&#35201;&#32487;&#32493;&#23433;&#35013;&#65311;<br /><br /><a href="{url}" target="_blank">&#28857;&#20987;&#36825;&#37324;&#26597;&#30475;&#25554;&#20214;&#20449;&#24687;</a></h4>]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+	</item>
+</root>

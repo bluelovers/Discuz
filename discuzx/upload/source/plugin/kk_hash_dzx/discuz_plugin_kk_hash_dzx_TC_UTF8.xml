@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-22 23:47]]></item>
+	<item id="From"><![CDATA[KK's Laboratory (http://127.0.0.1/x2/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[插件校驗碼生成器]]></item>
+			<item id="identifier"><![CDATA[kk_hash_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[kk_hash_dzx/]]></item>
+			<item id="copyright"><![CDATA[kookxiang]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[hash]]></item>
+					<item id="menu"><![CDATA[生成校驗碼]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="you_are_not_developer"><![CDATA[對不起，本程序僅供插件開發者使用！]]></item>
+				<item id="generate_hash"><![CDATA[生成校驗碼]]></item>
+				<item id="extra_file"><![CDATA[不在插件目錄的文件]]></item>
+				<item id="extra_file_tips"><![CDATA[輸入需要額外校驗的文件，一行一個]]></item>
+				<item id="could_not_write_validator_xml"><![CDATA[插件目錄的 Validator.xml 文件無法寫入，請檢查權限！]]></item>
+				<item id="validator_xml_updated"><![CDATA[Validator.xml 已更新，請重新生成校驗值！]]></item>
+				<item id="create_validator_succeed"><![CDATA[成功生成校驗文件，請將插件目錄的 Validator.xml 一併打包發佈！<br>插件的校驗值為：{hash}]]></item>
+			</item>
+			<item id="installlang">
+				<item id="not_developer"><![CDATA[對不起，本程序僅供插件開發者使用！]]></item>
+				<item id="header"><![CDATA[KK 插件安裝嚮導]]></item>
+				<item id="step1"><![CDATA[校驗程序]]></item>
+				<item id="step1_ok"><![CDATA[插件文件完整性檢查通過，正在安裝...]]></item>
+				<item id="step2"><![CDATA[完成安裝]]></item>
+				<item id="validator_new"><![CDATA[<h4 class="infotitle2">你即將安裝的插件有新版本 {newver} 可用，是否要繼續安裝？<br /><br /><a href="{url}" target="_blank">點擊這裡查看插件信息</a></h4>]]></item>
+				<item id="validator_error"><![CDATA[<h4 class="infotitle3">你即將安裝的不是原版插件，是否要繼續安裝？<br /><br /><a href="{url}" target="_blank">點擊這裡查看插件信息</a></h4>]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+	</item>
+</root>
