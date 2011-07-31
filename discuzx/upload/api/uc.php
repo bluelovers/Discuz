@@ -205,7 +205,11 @@ class uc_note {
 			 * 變更 cookies 內的 auth 儲存的值
 			 */
 
-		 	$_agent = empty($get['agent']) ? md5($_SERVER['HTTP_USER_AGENT']) : $get['agent'];
+		 	$_agent = empty($get['agent']) ?
+			 	(empty($post['agent']) ?
+				 	md5($_SERVER['HTTP_USER_AGENT'])
+				 	: $post['agent']
+			 	) : $get['agent'];
 
 			dsetcookie('auth', authcode(implode(array(
 				$member['password'], $member['uid'],
