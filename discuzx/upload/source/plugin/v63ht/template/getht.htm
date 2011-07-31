@@ -1,0 +1,34 @@
+{subtemplate common/header_ajax}
+<style>
+
+</style>
+ <div style=" width:500px; height:300px; background:#F7F7F7;">
+
+<h3 class="flb" id="fctrl_k_share" style="cursor: move;">
+<em id="return_k_share" fwin="k_share" style=" font-weight:normal; color:#333333;font-family:Microsoft YaHei,Arial,Helvetica,sans-serif,Simsun;font-size:18px; ">今日互动话题....</em>
+<span><a title="关闭" class="flbc" onclick="hideWindow('v63ht');{if $setting['qz']!='1'}isttht(){/if}" href="javascript:;">关闭</a></span></h3>
+ <div style=" margin-left:10px">
+ <form action="plugin.php?id=v63ht:ajax&vac=hd" method="post">
+ <table width="480" height="246" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="30" align="center"><a  href="forum.php?mod=viewthread&tid=$setting['htid']" style=" font-size:14px; font-family:Microsoft YaHei,Arial,Helvetica,sans-serif,Simsun; font-weight:bold; color:#666666">$setting['httitle']</a></td>
+  </tr>
+  <tr>
+    <td height="27"><p  style="line-height:22px; color:#888888"><strong>介绍：</strong>$setting['description']</p></td>
+  </tr>
+  <tr>
+    <td height="130" align="center"><label>
+      <textarea name="msg" cols="45" rows="5" wrap="physical" id="textarea" style=" background:url(source/plugin/v63ht/template/images/htbg.jpg) no-repeat; border:none; padding:10px; width:434px; height:91px;overflow-y:hidden;"></textarea>
+    </label></td>
+  </tr>
+  <tr>
+    <td align="right" valign="bottom"><label>
+      <input type="image" name="imageField" id="imageField" src="source/plugin/v63ht/template/images/tj.jpg" />
+    </label>
+      &nbsp;&nbsp;&nbsp;&nbsp; </td>
+  </tr>
+</table>
+</form>
+</div>
+ </div>
+{subtemplate common/footer_ajax}
