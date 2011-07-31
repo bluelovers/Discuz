@@ -335,7 +335,7 @@ if($operation == 'filecheck') {
 	echo str_replace(array_keys($rule), $rule, cplang('rewrite_message'));
 
 	// bluelovers
-	// auto build .htaccess
+	// auto build extensions/htaccess/dist/.htaccess
 	$filename = './extensions/htaccess/dist/.htaccess';
 
 	if ($fp = @fopen(DISCUZ_ROOT.$filename, 'w')) {
