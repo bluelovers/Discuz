@@ -334,6 +334,31 @@ if($operation == 'filecheck') {
 	$rule['{nginx}'] .= "if (!-e \$request_filename) {\n\treturn 404;\n}";
 	echo str_replace(array_keys($rule), $rule, cplang('rewrite_message'));
 
+	// bluelovers
+	// auto build .htaccess
+	$filename = './extensions/htaccess/dist/.htaccess';
+
+	if ($fp = @fopen(DISCUZ_ROOT.$filename, 'w')) {
+		$_lf = "\n";
+		$_s = ''.$_lf;
+
+		foreach (glob(DISCUZ_ROOT.'./extensions/htaccess/*.htaccess') as $_v) {
+			$fpv = fopen($_v, 'r');
+			$context = @fread($fpv, filesize($_v));
+			fclose($fpv);
+
+			$_s .= $_lf.str_replace(array("\r\n", "\n\r"), "\n", $context).$_lf;
+		}
+
+		$_s = preg_replace('/\n\n\n+/', $_lf.$_lf, $_s);
+
+		fwrite($fp, $_s);
+		fclose($fp);
+	} else {
+		exit('Can not write to cache files, please check directory ' . $filename);
+	}
+	// bluelovers
+
 } elseif($operation == 'robots') {
 
 	if($do == 'output') {
