@@ -1,0 +1,9 @@
+
+<tr class=""><th>积分代号</th><th>积分名称</th><th>价格</th></tr> 
+<!--{loop $_G['setting'][extcredits] $i $value}-->
+<tr class="hover">
+	<td>extcredits{$i}</td>
+	<td>$value[title]</td>
+	<td><input type="text" class="px" name="newcredit[{$i}]" value="$creditset[$i]"></td>
+<!--{/loop}-->
+

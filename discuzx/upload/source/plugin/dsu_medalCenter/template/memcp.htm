@@ -1,0 +1,182 @@
+<!--{subtemplate common/header}-->
+<style type="text/css">
+	.mla li, .mlp li { width: 152px; }
+	.mla1 li { width: 146px; }
+	.mgcl li { padding: 0 5px 5px; width: 350px; height: 120px; }
+		.mgcl img { width: 74px; height: 74px; }
+		.mgcl li p { float: right; width: 236px; text-align: left; white-space: normal; }
+		.mgcl li p.xg1 { display: block; height: 36px; }
+	.mdl li { width: 200px; height: 140px; }
+	.mdlow li { height: 70px; }
+		.mdl img { width: auto; height: auto; max-height: 35px; }
+		.ie6 .mdl img { height: expression(this.height > 35 ? 35 : true); }
+	.el {}
+		.el li { padding: 10px 20px; min-height: 20px; border-bottom: 1px dashed #CDCDCD; }
+			.ie6 .el, .ie6 .el li { position: relative; zoom: 1; }
+</style>
+
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em>
+		<a href="home.php?mod=medal">勋章中心</a>
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<h1 class="mt"><img src="{STATICURL}image/feed/medal.gif" alt="勋章中心" class="vm" /> 勋章中心</h1>
+
+			<!--{if empty($_G[gp_action]) || $_G['gp_action'] == 'list'}-->
+				<form method="post" autocomplete="off" action="plugin.php?id=dsu_medalCenter:memcp&action=apply&medalsubmit=yes">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="medalid" value="" />
+
+				<h3 class="tbmu mbw cl" style="font-weight: normal;">
+					<span class="y xg1 xw0">
+						<input type="checkbox" name="hidemymedal" id="hidemymedal" onclick="setcookie('dsu_medalCenter_hidemymedal', this.form.hidemymedal.checked, 86400); location.reload();" <!--{if $_G['cookie']['dsu_medalCenter_hidemymedal']}-->checked<!--{/if}--> /><label for="hidemymedal" style="color:#000">隐藏我已经获得的勋章</label>
+						共 $num 个
+					</span>
+					<a href="plugin.php?id=dsu_medalCenter:memcp" <!--{if $typeid == 0}--> style="font-weight:bold"<!--{/if}-->>全部</a>
+					<!--{loop $typeArr $typeinfo}-->
+					<span class="pipe"> | </span>
+					<a href="plugin.php?id=dsu_medalCenter:memcp&typeid={$typeinfo[typeid]}" <!--{if $typeid == $typeinfo[typeid]}--> style="font-weight:bold"<!--{/if}-->>$typeinfo[name]</a>
+					<!--{/loop}-->
+				</h3>
+
+				<!--{if $medallist}-->
+					<ul class="ml mlm mdl cl">
+						<!--{loop $medallist $key $medal}-->
+						<li class="pns">
+							<img src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" id="medal{$medal[medalid]}" onmouseover="showMenu({'ctrlid':'medal{$medal[medalid]}','pos':'33'});"/>
+							<p class="mtn" onmouseover="showMenu({'ctrlid':'medal{$medal[medalid]}','pos':'33'});"><strong>$medal[name]</strong></p>
+							<span>
+								<!--{if $medal[owned]}-->
+									已经拥有
+								<!--{elseif $medal[type] == 0}-->
+									人工授予
+								<!--{elseif $medal[type] == 1}-->
+									自主申请
+								<!--{elseif $medal[type] == 2}-->
+									人工审核
+								<!--{elseif $medal[type] == 5}-->
+									积分购买
+								<!--{/if}-->
+							</span>
+							<!--{if $medal[type] && $_G['uid'] && !$medal['owned']}-->
+								<button type="button" class="pn" onclick="this.form.medalid.value = '$medal[medalid]';this.form.submit();return false;">
+									<em><!--{if $medal[type] == 5}-->购买<!--{elseif !$medal[permission]}-->申请<!--{else}-->领取<!--{/if}--></em>
+								</button>
+							<!--{/if}-->
+						</li>
+						<div id="medal{$medal[medalid]}_menu" class="p_pop" style="display: none; zoom: 1; max-width: 180px; min-width: 100px;"> 
+							<p class="xg1" title="$medal[description]" style=" height:auto;">$medal[description]</p>
+							<!--{if $medal[expiration]}-->
+								<p><strong>有效期：</strong> $medal[expiration] 天</p>
+							<!--{/if}-->
+							<!--{if $medal[limit]}-->
+								<p><strong>领取要求：</strong></p>
+								$medal[limit]
+							<!--{/if}-->
+					</div>
+						<!--{/loop}-->
+					</ul>
+					<!--{if $multipage}-->$multipage<!--{/if}-->
+				<!--{else}-->
+					<!--{if $medallogs}-->
+						<p class="emp">你已经获得所有勋章了，恭喜你！</p>
+					<!--{else}-->
+						<p class="emp">没有可用的勋章。</p>
+					<!--{/if}-->
+				<!--{/if}-->
+				</form>
+
+				<!--{if $lastmedals}-->
+					<h3 class="tbmu">我的勋章</h3>
+					<ul class="el pbw mbw">
+						<!--{loop $lastmedals $lastmedal}-->
+						<li>
+							<a href="home.php?mod=space&uid=$lastmedal[uid]" class="t"><!--{avatar($lastmedal[uid],small)}--></a>
+							<a href="home.php?mod=space&uid=$lastmedal[uid]" class="xi2">$lastmedal[username]</a> {lang medals_message1} $lastmedal[dateline] {lang medals_message2} <strong>$medallist[$lastmedal['medalid']]['name']</strong> 勋章
+						</li>
+						<!--{/loop}-->
+					</ul>
+				<!--{/if}-->
+			<!--{elseif $_G[gp_action] == 'mymedal'}-->
+				<!--{if $mymedals}-->
+					<form name="name" action="{$thisurl}&op=sethide" method="post">
+					<script type="text/javascript">
+						var medalShowCount = {$medalShowCount};
+						function dsuMedal_hideMyMedal (mymedalid) {
+							var medalp = $('mymedal'+mymedalid);
+							if(medalp){
+								var _do = medalp.style.color == 'gray' ? 2 : 1;
+								if(_do == 1){
+									medalShowCount--;
+									medalp.style.color = 'gray';
+								}else{
+									medalShowCount++;
+									if({$medalShowLimit} && medalShowCount > {$medalShowLimit}){
+										showDialog("您最多只能显示{$medalShowLimit}枚勋章！", 'notice', '', null, 1, null, '', '', '', 3);
+										medalShowCount--;
+										return false;
+									}
+									medalp.style.color = 'black';
+								}
+								
+								$('mymedal_'+mymedalid).value = _do;
+							}
+						}
+					</script>
+					<div class="tbmu mbw cl"><span class="y xg1 xw0">拥有勋章 $num 枚，当前显示{$medalShowCount}枚</span><h3>我的勋章</h3>
+						<p>(点击勋章可以设置在帖子中是否显示相应勋章，勋章名黑色代表显示，灰色代表隐藏)</p>
+						 <!--{if $medalShowLimit}--><p>(您最多可以设置显示{$medalShowLimit}枚勋章，如果设置数量多余{$medalShowLimit}枚系统将自动隐藏部分勋章)</p><!--{/if}--> 
+					</div>
+					<ul class="ml mlm mdl mdlow cl">
+						<!--{loop $mymedals $mymedal}-->
+						<li id="mymedal{$mymedal[medalid]}" <!--{if $mymedal[hide] == 1}-->style="color:gray"<!--{/if}--> onclick="dsuMedal_hideMyMedal({$mymedal[medalid]})">
+							<img src="{STATICURL}image/common/$mymedal[image]" alt="$mymedal[name]" />
+							<p class="mtn"><strong>$mymedal[name]</strong></p>
+							<input type="hidden" id="mymedal_{$mymedal[medalid]}" name="myMedalHide[{$mymedal[medalid]}]" value="$medal[hide]"/>
+						</li>
+						<!--{/loop}-->
+					</ul>
+					<button type="submit" class="pn pnp" /><strong>保存</strong></button>
+					</form>
+				<!--{/if}-->
+
+				<!--{if $medallogs}-->
+					<h3 class="tbmu">勋章记录</h3>
+					<ul class="el pbw mbw">
+						<!--{loop $medallogs $medallog}-->
+						<li style="padding-left:10px;">
+							<!--{if $medallog['type'] == 2 || $medallog['type'] == 3}-->
+								我在 $medallog[dateline]  申请了 <strong>$medallog[name]</strong> 勋章,<!--{if $medallog['type'] == 2}-->等待审核<!--{elseif $medallog['type'] == 3}-->未通过审核<!--{/if}-->！
+							<!--{elseif $medallog['type'] != 2 && $medallog['type'] != 3 && $medallog['type'] != -1}-->
+								我在 $medallog[dateline] 被授予了 <strong>$medallog[name]</strong> 勋章,<!--{if $medallog[expiration]}-->到期时间: $medallog[expiration] <!--{else}-->永久有效<!--{/if}-->！
+							<!--{elseif $medallog['type'] == -1}-->
+								<B>提醒：</B>您的 <strong>$medallog[name]</strong> 勋章, 于 $medallog[dateline] 被系统收回了！
+							<!--{/if}-->
+						</li>
+						<!--{/loop}-->
+					</ul>
+					<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
+				<!--{else}-->
+					<p class="emp">你还没有获得过勋章。</p>
+				<!--{/if}-->
+			<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">勋章中心</h2>
+			<ul>
+				<li{if empty($_G[gp_action]) || $_G[gp_action] == 'list'} class="a"{/if}><a href="plugin.php?id=dsu_medalCenter:memcp">勋章列表</a></li>
+				<li{if $_G[gp_action] == 'mymedal'} class="a"{/if}><a href="plugin.php?id=dsu_medalCenter:memcp&action=mymedal">我的勋章</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--{template common/footer}-->
