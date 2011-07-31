@@ -1,0 +1,76 @@
+<ul class="mbm tb cl">
+        	<li <!--{if $opaction == 'new'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=new">廣告商店</a></li>        	   	
+	        <li <!--{if $opaction == 'secondhand'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=secondhand">二手市場</a></li>
+</ul>
+
+<!--{if $opaction == 'new' && !$do}-->	
+    <div class="notice">積分不夠？請到<a href="home.php?mod=spacecp&ac=credit&op=buy" target="_blank"><u>這裏</u></a>充值</div>
+		<table summary="購買廣告位" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="15%">廣告位名稱</th>
+				<th width="15%">投放範圍</th>
+				<th width="10%">單位售價</th>
+				<th width="10%">狀態</th>
+				<th width="10%">賣家</th>
+				<th width="15%">發布時間</th>
+				<th width="8%"></th>							
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td>$buy[name]</td>
+					<td><!--{if $buy[catagory] == 0}-->$buy[type]<!--{else}-->關聯鏈接<!--{/if}--></td>
+					<td>$buy[price] $_G[setting][extcredits][$buy[sellext]][title]</td>
+					<td>$buy[stat]</td>
+					<td><!--{if $buy[pubuid]}--><a href="home.php?mod=space&uid=$buy[pubuid]" target="_blank">$buy[pubusername]</a><!--{else}-->系統<!--{/if}--></td>
+					<td>$buy[pubdateline]</td>
+					<td>						
+
+					<a href="plugin.php?id=admarket_dzx:admarket&opaction=new&do=buy&aid=$buy[id]"  onclick="showWindow('buy', this.href, 'get', 0);" class="xi2"><!--{if $buy[stats] == 2}-->購買<!--{else}-->競拍<!--{/if}--></a>
+					
+					</td>
+  				</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="7">當前沒有任何廣告出售信息</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->	
+
+<!--{elseif $opaction == 'secondhand' && !$do}-->	
+    <div class="notice">積分不夠？請到<a href="home.php?mod=spacecp&ac=credit&op=buy" target="_blank"><u>這裏</u></a>充值</div>
+		<table summary="購買廣告位" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="15%">廣告位名稱</th>
+				<th width="15%">投放範圍</th>
+				<th width="10%">單位售價</th>
+				<th width="10%">狀態</th>
+				<th width="10%">賣家</th>
+				<th width="15%">發布時間</th>
+				<th width="8%"></th>							
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td>$buy[name]</td>
+					<td><!--{if $buy[catagory] == 0}-->$buy[type]<!--{else}-->關聯鏈接<!--{/if}--></td>
+					<td>$buy[price] $_G[setting][extcredits][$buy[sellext]][title]</td>
+					<td>$buy[stat]</td>
+					<td><!--{if $buy[pubuid]}--><a href="home.php?mod=space&uid=$buy[pubuid]" target="_blank">$buy[pubusername]</a><!--{else}-->系統<!--{/if}--></td>
+					<td>$buy[pubdateline]</td>
+					<td>						
+
+					<a href="plugin.php?id=admarket_dzx:admarket&opaction=secondhand&do=buy&aid=$buy[id]"  onclick="showWindow('buy', this.href, 'get', 0);" class="xi2"><!--{if $buy[stats] == 2}-->購買<!--{else}-->競拍<!--{/if}--></a>
+					
+					</td>
+  				</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="7">當前沒有任何廣告出售信息</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
+
+<!--{/if}-->	
+
+<!--{subtemplate admarket_dzx:do}-->

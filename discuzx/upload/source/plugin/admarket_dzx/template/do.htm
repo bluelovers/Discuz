@@ -1,0 +1,815 @@
+<!--{if $opaction == 'new' && $do == 'buy' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>購買/競拍</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=new&do=buy&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：購買/競拍前請認真閱讀細則，由于不看說明導致的損失本站概不負責</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告位名稱：</td>
+				      	    <td>$shopdata[name]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告位描述：</td>
+				      	    <td>$shopdata[desc]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  		
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告類型：</td>
+				      	    <td><!--{if $shopdata[catagory] == 0}-->$shopdata[type]<!--{else}-->關聯鏈接<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  		      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放類型：</td>
+				      	    <td>$shopdata[showplace]<!--{if $shopdata[catagory] == 0}--> - $shopdata[showway]<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <!--{if $shopdata[stats] == 2}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>售價：</td>
+				      	    <td>$shopdata[price] $_G[setting][extcredits][$shopdata[sellext]][title] <!--{if $shopdata[paypolicy] == 0}-->每次<!--{else}-->每天<!--{/if}--><br>
+				      	    	
+				      	    	最少必須要購買 $shopdata[minbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->，
+				      	    	最多購買不能超過 $shopdata[maxbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->
+				      	    	<br>按次購買的一律給予90天有效期
+				      	    	</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>			
+				      	  <!--{else}--> 		
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>競拍內容：</td>
+				      	    <td>
+				      	    	<!--{if $shopdata[paypolicy] == 0}-->$shopdata[restcount]次<!--{else}-->{eval echo intval(($shopdata[expire] - $pdate - 86400 * $var[recyleday])/86400);}天<!--{/if}-->使用權
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	        	  			     
+				      	  <!--{/if}--> 	  
+
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>點擊說明：</td>
+				      	    <td>同一用戶/IP在 $shopdata[clicktime] 分鍾內點擊廣告只算一次，每天最多只統計 $shopdata[maxpayday] 次有效點擊次數</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>		
+				      	  				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>權限說明：</td>
+				      	    <td> 
+				      	    	<!--{if !$shopdata['allowbuygroup'] || in_array($groupid,$allowbuygroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 購買，
+				      	    	<!--{if !$shopdata['allowrefundgroup'] || in_array($groupid,$allowrefundgroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 退款，
+				      	    	<!--{if !$shopdata['allowsellgroup'] || in_array($groupid,$allowsellgroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 出售，
+				      	    	<!--{if !$shopdata['allowautiongroup'] || in_array($groupid,$allowautiongroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 拍賣</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  		      	 
+			      	  
+				      	  <!--{if $shopdata[stats] == 2}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>購買<!--{if $shopdata[paypolicy] == 0}-->次數<!--{else}-->天數<!--{/if}-->：</td>
+				      	    <td>
+				      	    	<input type="text" name="payday" size="30" value="$shopdata[minbuy]">	
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>
+				      	  <!--{else}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>當前出價：</td>
+				      	    <td><!--{if $shopdata[buyuid]}-->最高由 <a href="home.php?mod=space&uid=$shopdata[buyuid]" target="_blank">$shopdata[buyusername]</a> 于 $shopdata[buydateline] 出價爲 $shopdata[price] $_G[setting][extcredits][$shopdata[sellext]][title]<!--{else}-->暫時無人出價<!--{/if}--><br>
+				      	    	拍賣截止時間爲 $shopdata[edateline]
+				      	    </td>		
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>我要出價：</td>
+				      	    <td>
+				      	    	<input type="text" name="payday" size="15" value="$shopdata[minbuy]"> $_G[setting][extcredits][$shopdata[sellext]][title]<br>此處的出價可以忽略最小和最大購買數量限制，出價時需要暫時扣除您的競拍積分<br>若有人出價比您高，系統自動把積分退還給您<br>若時間截止，您是最高出價人，您將獲得該廣告位的使用權
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  
+				      	  <!--{/if}-->
+		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認購買/競拍</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'secondhand' && $do == 'buy' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>購買/競拍</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=new&do=buy&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：購買/競拍前請認真閱讀細則，由于不看說明導致的損失本站概不負責</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告位名稱：</td>
+				      	    <td>$shopdata[name]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告位描述：</td>
+				      	    <td>$shopdata[desc]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  	
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告類型：</td>
+				      	    <td><!--{if $shopdata[catagory] == 0}-->$shopdata[type]<!--{else}-->關聯鏈接<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  		      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放類型：</td>
+				      	    <td>$shopdata[showplace]<!--{if $shopdata[catagory] == 0}--> - $shopdata[showway]<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <!--{if $shopdata[stats] == 2}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>售價：</td>
+				      	    <td>$shopdata[price] $_G[setting][extcredits][$shopdata[sellext]][title] <!--{if $shopdata[paypolicy] == 0}-->每次<!--{else}-->每天<!--{/if}--><br>
+				      	    	
+				      	    	最少必須要購買 $shopdata[minbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->，
+				      	    	最多購買不能超過 $shopdata[maxbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->
+				      	    	<br>按次購買的一律給予90天有效期
+				      	    	</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>			
+				      	  <!--{else}--> 		
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>競拍內容：</td>
+				      	    <td>
+				      	    	按<!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->使用權
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	        	  			     
+				      	  <!--{/if}--> 	  
+
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>點擊說明：</td>
+				      	    <td>同一用戶/IP在 $shopdata[clicktime] 分鍾內點擊廣告只算一次，每天最多只統計 $shopdata[maxpayday] 次有效點擊次數</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>		
+				      	  				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>權限說明：</td>
+				      	    <td> 
+				      	    	<!--{if !$shopdata['allowbuygroup'] || in_array($groupid,$allowbuygroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 購買，
+				      	    	<!--{if !$shopdata['allowrefundgroup'] || in_array($groupid,$allowrefundgroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 退款，
+				      	    	<!--{if !$shopdata['allowsellgroup'] || in_array($groupid,$allowsellgroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 出售，
+				      	    	<!--{if !$shopdata['allowautiongroup'] || in_array($groupid,$allowautiongroup)}--><b><font color="#008000">允許</font></b><!--{else}--><b><font color="#ff0000">不允許</font></b><!--{/if}--> 拍賣</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  		      	 
+			      	  
+				      	  <!--{if $shopdata[stats] == 2}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>購買<!--{if $shopdata[paypolicy] == 0}-->次數<!--{else}-->天數<!--{/if}-->：</td>
+				      	    <td>
+				      	    	<input type="text" name="payday" size="30" value="$shopdata[minbuy]">	
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>
+				      	  <!--{else}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>當前出價：</td>
+				      	    <td><!--{if $shopdata[buyuid]}-->最高由 <a href="home.php?mod=space&uid=$shopdata[buyuid]" target="_blank">$shopdata[buyusername]</a> 于 $shopdata[buydateline] 出價爲 $shopdata[price] $_G[setting][extcredits][$shopdata[sellext]][title]<!--{else}-->暫時無人出價<!--{/if}--><br>
+				      	    	拍賣截止時間爲 $shopdata[edateline]
+				      	    </td>		
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>我要出價：</td>
+				      	    <td>
+				      	    	<input type="text" name="payday" size="15" value="$shopdata[minbuy]"> $_G[setting][extcredits][$shopdata[sellext]][title]<br>此處的出價可以忽略最小和最大購買數量限制，出價時需要暫時扣除您的競拍積分<br>若有人出價比您高，系統自動把積分退還給您<br>若時間截止，您是最高出價人，您將獲得該廣告位的使用權
+				      	    </td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  
+				      	  <!--{/if}-->
+		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認購買/競拍</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'refund' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>退款</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=refund&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：退款只會把剩余的充值積分歸還，退款將會清理掉所有信息，請慎重操作</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>剩余積分：</td>
+				      	    <td><!--{if $shopdata[clickext]}-->$shopdata[totalfee] $_G[setting][extcredits][$shopdata[clickext]][title]<!--{else}-->無可退還積分<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>		
+				      	  		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認退款</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'fill' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>充值</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=fill&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：充值的積分只能通過退款返還，充值的積分可以用于獎勵給點擊廣告的用戶</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>當前剩余積分：</td>
+				      	    <td>$shopdata[totalfee] $_G[setting][extcredits][$shopdata[clickext]][title] 每次點擊獎勵 $shopdata[clickpay] $_G[setting][extcredits][$shopdata[clickext]][title]<br>賬戶中剩余的{$_G[setting][extcredits][$shopdata[clickext]][title]}爲{$extcredits[$shopdata[clickext]]}</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>追加積分：</td>
+				      	    <td><input type="text" name="fillnum" value="0"> $_G[setting][extcredits][$shopdata[clickext]][title]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					    
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>每次點擊獎勵的積分：</td>
+				      	    <td><input type="text" name="clickone" value="$shopdata[clickpay]"> $_G[setting][extcredits][$shopdata[clickext]][title]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	    	  	
+				      	  		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認充值</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'pay' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>續費</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=pay&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：請及時爲你的廣告位續費，否則會被鎖定</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td><!--{if $shopdata[paypolicy] == 1}-->有效期<!--{else}-->剩余點擊次數<!--{/if}-->：</td>
+				      	    <td><!--{if $shopdata[paypolicy] == 0}-->$shopdata[restcount]次<!--{/if}--> 有效期至 $shopdata[expire]
+				      	    	<br>賬戶中剩余的{$_G[setting][extcredits][$shopdata[sellext]][title]}爲{$extcredits[$shopdata[sellext]]}</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>售價：</td>
+				      	    <td>$shopdata[price] $_G[setting][extcredits][$shopdata[sellext]][title] <!--{if $shopdata[paypolicy] == 0}-->每次<!--{else}-->每天<!--{/if}--><br>
+				      	    	
+				      	    	最少必須要購買 $shopdata[minbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->，
+				      	    	最多購買不能超過 $shopdata[maxbuy] <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}-->
+				      	    	<br>按次購買的一律給予90天有效期
+				      	    	</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>續費數量：</td>
+				      	    <td><input type="text" name="paynum" value="$shopdata[minbuy]"> <!--{if $shopdata[paypolicy] == 0}-->次<!--{else}-->天<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					    				      	  	      	    	  	
+				      	  		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認續費</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'count' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>結算</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=count&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：結算的積分通過兌換點擊次數獲得，各廣告之間的點擊次數不可疊加</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>結算規則：</td>
+				      	    <td>每 $shopdata[paycount] 次點擊次數可以換取 $shopdata[payfee] $_G[setting][extcredits][$shopdata[payext]][title]
+				      	    	<br>可用于結算的剩余點擊次數爲 $shopdata[usecount]
+				      	    	</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>結算次數：</td>
+				      	    <td><input type="text" name="countnum" value="$shopdata[paycount]"> 結算次數必須爲$shopdata[paycount]的整數倍</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	    	  	
+				      	  		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認結算</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'sell' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>賣出</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=sell&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：賣出廣告時會清理所有的信息，賣出的廣告將無法回收，<br>並且 $var[recyleday] 天後若無人購買或無人應拍，該廣告位自動由系統回收</b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>選擇操作：</td>
+				      	    <td><!--{if in_array($groupid, $allowsellgroup) || !$shopdata['allowsellgroup']}--><input type="radio" name="chooseway" value="1"> 一口價 <!--{/if}--><!--{if in_array($groupid, $allowautiongroup) || !$shopdata['allowautiongroup']}--><input type="radio" name="chooseway" value="2"> 拍賣<!--{/if}-->
+				      	    	</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>出售單位價格/起拍價：</td>
+				      	    <td><input type="text" name="newprice" value="$shopdata[price]"> $_G[setting][extcredits][$shopdata[sellext]][title]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	    	  	
+				      	  		  	  	      	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{elseif $opaction == 'myad' && $do == 'edit' && $aid}-->
+<!--{template common/header}-->
+	<div class="floatwin" id="floatwin_buy">
+		<div id="floatlayout_topicadmin" class="float">
+			<div class="floatboxnarrow">
+	      <h3 class="flb">
+		       <em>編輯 - $shopdata[name]</em>
+		       <span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="關閉">關閉</a><!--{/if}--></span>
+	      </h3>
+				<form method="post" action="plugin.php?id=admarket_dzx:admarket&opaction=myad&do=edit&aid=$aid">
+					<input type="hidden" name="formhash" value="{FORMHASH}">
+					<input type="hidden" name="opaction" value="$opaction" />
+					<input type="hidden" name="do" value="$do" />
+					<div class="postbox">
+						<div class="magicmain">
+				        <table cellspacing="0" cellpadding="0" class="tfm">
+				        	<tr>
+				        		<td>&nbsp;&nbsp;</td>
+				        		<td colspan="2"><p align="center"><b>注意：如果你需要審核，那麽你提交的內容需要等管理員審核通過才能顯示<br><font color="#ff0000">警告：HTML代碼類的廣告必須要經過審核</font></b><br></td>
+				      	    <td>&nbsp;&nbsp;</td>
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告位描述：</td>
+				      	    <td>$shopdata[desc]</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>								      	  		      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放類型：</td>
+				      	    <td>$shopdata[sp]<!--{if $shopdata[catagory] == 0}--> - $shopdata[sw]<!--{/if}--></td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  
+
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>點擊說明：</td>
+				      	    <td>同一用戶/IP在 $shopdata[clicktime] 分鍾內點擊廣告只算一次，每天最多只統計 $shopdata[maxpayday] 次有效點擊次數</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	  		      	 
+
+                  <!--{if $shopdata[catagory] == 0}-->
+                      <!--{if $shopdata[showplace] == 1}-->
+				      	      <tr>
+				        	     	<td>&nbsp;&nbsp;</td>
+				      	        <td>投放頻道分類:</td>
+				      	        <td>$channalsel<br>設置廣告投放的頻道分類，不可選表示禁止修改</td>	
+				      	        <td>&nbsp;&nbsp;</td>			      	  	
+				      	      </tr>
+				      	      <!--{/if}-->                  
+                      <!--{if $shopdata[showplace] == 2}-->
+				      	      <tr>
+				        	     	<td>&nbsp;&nbsp;</td>
+				      	        <td>投放版塊:</td>
+				      	        <td>$forumsel<br>設置廣告投放的論壇版塊，不可選表示禁止修改</td>	
+				      	        <td>&nbsp;&nbsp;</td>			      	  	
+				      	      </tr>
+				      	      <!--{/if}-->
+                      <!--{if $shopdata[showplace] == 3}-->
+				      	      <tr>
+				        	     	<td>&nbsp;&nbsp;</td>
+				      	        <td>投放群組分類:</td>
+				      	        <td>$groupssel<br>設置廣告投放的群組分類，不可選表示禁止修改</td>	
+				      	        <td>&nbsp;&nbsp;</td>			      	  	
+				      	      </tr>
+				      	      <!--{/if}-->				      	      
+				      	  <!--{/if}-->				      					      	  
+
+                  <!--{if placeconvert($stype) == 'threadlist'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>顯示模式:</td>
+				      	    <td><input type="radio" name="mode" value="0" <!--{if $advdata[parameters][extra][mode] == 0}-->checked<!--{/if}-->> 自由模式 
+				      	    	<input type="radio" name="mode" value="1" <!--{if $advdata[parameters][extra][mode] == 1}-->checked<!--{/if}-->> 主題模式<br>自由模式，占用主題列表的全部列寬顯示本廣告<br>主題模式，把廣告模擬成一個主題，點擊廣告後跳轉到指定的主題</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr> 
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>主題模式指定主題 tid:</td>
+				      	    <td>
+				      	    <input type="text" name="advnewtid" size="50" value="$advdata[parameters][extra][tid]"></td> 
+					      	  <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr> 
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>主題模式自定義主題 URL: </td>
+				      	    <td><input type="text" name="advnewthreadurl" size="50" value="$advdata[parameters][extra][threadurl]"> 留空表示使用指定主題的 URL</td>
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr> 		      	  				      	  		      	  
+				      	  
+				      	  <!--{elseif placeconvert($stype) == 'couplebanner' || placeconvert($stype) == 'float'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>顯示位置:</td>
+				      	    <td><input type="radio" name="position" value="1" <!--{if $advdata[parameters][extra][position] == 1}-->checked<!--{/if}-->> 左側 
+				      	    	<input type="radio" name="position" value="2" <!--{if $advdata[parameters][extra][position] == 2}-->checked<!--{/if}-->> 右側<br>設置廣告的位置</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>			
+				      	  <!--{elseif placeconvert($stype) == 'thread'}-->
+				      	   <tr>
+				        	     	<td>&nbsp;&nbsp;</td>
+				      	        <td>廣告顯示樓層:</td>
+				      	        <td>$floorsel<br>選項 #1 #2 #3 ... 表示帖子樓層，不可選表示禁止修改</td>	
+				      	        <td>&nbsp;&nbsp;</td>			      	  	
+				      	      </tr>				      	  
+				      	   <tr>
+				         		<td>&nbsp;&nbsp;</td>
+				      	    <td>顯示位置:</td>
+				      	    <td><input type="radio" name="position" value="1" <!--{if $advdata[parameters][extra][position] == 1}-->checked<!--{/if}-->> 帖子下方 
+				      	    	<input type="radio" name="position" value="2" <!--{if $advdata[parameters][extra][position] == 2}-->checked<!--{/if}-->> 帖子上方
+				      	    	<input type="radio" name="position" value="3" <!--{if $advdata[parameters][extra][position] == 3}-->checked<!--{/if}-->> 帖子右側
+				      	    	<br>帖子內容上方和下方的廣告適合使用文字形式，而帖子右側廣告適合使用圖片或 Flash 形式，也可以同時顯示多條文字廣告</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  <!--{elseif placeconvert($stype) == 'footerbanner'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放位置:</td>
+				      	    <td><input type="radio" name="position" value="1" <!--{if $advdata[parameters][extra][position] == 1}-->checked<!--{/if}-->> 上 
+				      	    	<input type="radio" name="position" value="2" <!--{if $advdata[parameters][extra][position] == 2}-->checked<!--{/if}-->> 中
+				      	    	<input type="radio" name="position" value="3" <!--{if $advdata[parameters][extra][position] == 3}-->checked<!--{/if}-->> 下
+				      	    	<br>分爲上中下 3 個位置，當上面的廣告到期或被刪除，下面的廣告會自動上移</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  <!--{elseif placeconvert($stype) == 'articlelist'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放位置:</td>
+				      	    <td><input type="radio" name="position" value="1" <!--{if $advdata[parameters][extra][position] == 1}-->checked<!--{/if}-->> 頂部(上) 
+				      	    	<input type="radio" name="position" value="2" <!--{if $advdata[parameters][extra][position] == 2}-->checked<!--{/if}-->> 頂部(下)
+				      	    	<input type="radio" name="position" value="3" <!--{if $advdata[parameters][extra][position] == 3}-->checked<!--{/if}-->> 底部(上)
+				      	    	<input type="radio" name="position" value="4" <!--{if $advdata[parameters][extra][position] == 4}-->checked<!--{/if}-->> 底部(下)
+				      	    	<br>分爲 4 個位置，上下各有 2 個緊鄰的顯示位置</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>		
+				      	  <!--{elseif placeconvert($stype) == 'article'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>投放位置:</td>
+				      	    <td><input type="radio" name="position" value="1" <!--{if $advdata[parameters][extra][position] == 1}-->checked<!--{/if}-->> 內容區域環繞 
+				      	    	<input type="radio" name="position" value="2" <!--{if $advdata[parameters][extra][position] == 2}-->checked<!--{/if}-->> 相關閱讀上方(上)
+				      	    	<input type="radio" name="position" value="3" <!--{if $advdata[parameters][extra][position] == 3}-->checked<!--{/if}-->> 相關閱讀上方(下)
+				      	    	<br>分爲 3 個位置，其中相關閱讀上方廣告有 2 個緊鄰的顯示位置</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>			
+				      	  <!--{elseif placeconvert($stype) == 'cornerbanner'}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>動畫效果:</td>
+				      	    <td><input type="radio" name="animator" value="1" <!--{if $advdata[parameters][extra][animator] == 1}-->checked<!--{/if}-->> 是 
+				      	    	<input type="radio" name="animator" value="0" <!--{if $advdata[parameters][extra][animator] == 0}-->checked<!--{/if}-->> 否
+				      	    	<br>設置展現時是否顯示動畫效果</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  	      	  				      	  				      	  				      	  	      	  
+				      	  <!--{/if}-->
+
+
+                  <!--{if $shopdata[catagory] == 0}-->
+                  
+                     <!--{if $shopdata[showway] == 1}-->
+                     
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>廣告 HTML 代碼：</td>
+				      	    <td><textarea name="advnew[code][html]" cols="60" rows="8">$advdata[parameters][html]</textarea> <br>請直接輸入需要展現的廣告的 HTML 代碼<br>如果需要統計點擊次數，請用plugin.php?id=admarket_dzx:admarket&clickaid={$shopdata[id]}這樣的鏈接來指向</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>                     
+                     
+                     <!--{elseif $shopdata[showway] == 2}-->
+                     
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>鏈接文字：</td>
+				      	    <td><input type="text" name="advnew[text][title]" size="50" value="$advdata[parameters][title]"> 請輸入文字廣告的顯示內容</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>鏈接地址：</td>
+				      	    <td><input type="text" name="advnew[text][link]" size="50" value="$shopdata[redirectlink]"> 請輸入文字廣告指向的 URL 鏈接地址</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>    
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>文字大小(選填)：</td>
+				      	    <td><input type="text" name="advnew[text][size]" size="50" value="$advdata[parameters][size]"> 請輸入文字廣告的內容顯示字體，可使用 pt、px、em 爲單位碼</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	                   
+                     
+                     <!--{elseif $shopdata[showway] == 3}-->
+                     
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>圖片地址：</td>
+				      	    <td><input type="text" name="advnew[image][url]" size="50" value="$advdata[parameters][url]"> 請輸入圖片廣告的圖片調用地址</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>圖片鏈接：</td>
+				      	    <td><input type="text" name="advnew[image][link]" size="50" value="$shopdata[redirectlink]"> 請輸入圖片廣告指向的 URL 鏈接地址</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>				      	  	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>圖片替換文字(選填)：</td>
+				      	    <td><input type="text" name="advnew[image][alt]" size="50" value="$advdata[parameters][alt]"> 請輸入圖片廣告的鼠標懸停文字信息</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>    
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>圖片寬度(選填)：</td>
+				      	    <td><input type="text" name="advnew[image][width]" size="50" value="$advdata[parameters][width]"> 請輸入圖片廣告的寬度，單位爲像素</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	    
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>圖片高度(選填)：</td>
+				      	    <td><input type="text" name="advnew[image][height]" size="50" value="$advdata[parameters][height]"> 請輸入圖片廣告的高度，單位爲像素</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>					      	                   
+                     
+                     <!--{elseif $shopdata[showway] == 4}-->
+                     
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>Flash 地址：</td>
+				      	    <td><input type="text" name="advnew[flash][url]" size="50" value="$advdata[parameters][url]"> 請輸入 Flash 廣告的調用地址</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>Flash 寬度(選填)：</td>
+				      	    <td><input type="text" name="advnew[flash][width]" size="50" value="$advdata[parameters][width]"> 請輸入 Flash 廣告的寬度，單位爲像素</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	    
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>Flash 高度(選填)：</td>
+				      	    <td><input type="text" name="advnew[flash][height]" size="50" value="$advdata[parameters][height]"> 請輸入 Flash 廣告的高度，單位爲像素</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>			                     
+                     
+                     <!--{/if}-->
+                  
+                  <!--{else}-->
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>鏈接文字：</td>
+				      	    <td><input type="text" name="name" size="50" value="$linkdata[name]"> 不支持HTML代碼</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>	
+				      	  
+				      	  <tr>
+				        		<td>&nbsp;&nbsp;</td>
+				      	    <td>鏈接地址：</td>
+				      	    <td><input type="text" name="link" size="50" value="$shopdata[redirectlink]"> 請填寫絕對地址</td>	
+				      	    <td>&nbsp;&nbsp;</td>			      	  	
+				      	  </tr>		
+				      	  <!--{/if}-->			      	  
+		  	  	      	  			   	  			      	  				      	  
+			        	</table>
+						</div>						
+						
+						<div class="o pns" id="hbtn_$_G[gp_handlekey]">
+							<button class="pn pnc" type="submit" name="submit" id="submit" value="true"><span>確認</span></button></p>
+            </div>
+            							
+  				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!--{template common/footer}-->
+
+<!--{/if}-->

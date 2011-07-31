@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-26 21:43]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://localhost/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[自助廣告商城]]></item>
+			<item id="identifier"><![CDATA[admarket_dzx]]></item>
+			<item id="description"><![CDATA[允許買賣廣告位，點擊廣告收益等]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[admarket_dzx/]]></item>
+			<item id="copyright"><![CDATA[sw08]]></item>
+			<item id="version"><![CDATA[1.1]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[admarket]]></item>
+					<item id="menu"><![CDATA[自助廣告商城]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[5]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[1]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[adadmin]]></item>
+					<item id="menu"><![CDATA[廣告設置]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[開啓廣告商城]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[open]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[商城公告]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[anno]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[歡迎來到廣告商城]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[回收間隔時長(天)]]></item>
+				<item id="description"><![CDATA[對于已到期的廣告，系統將于鎖定，超過該時間後，若用戶不再續費，自動由系統回收；對于用戶出售或者拍賣的廣告，如果無人購買或者無人出價，系統也將自動回收。該項目不宜設置爲“0”]]></item>
+				<item id="variable"><![CDATA[recyleday]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[7]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[商城管理員]]></item>
+				<item id="description"><![CDATA[填寫用戶uid,多個管理員UID請用半角,分隔開]]></item>
+				<item id="variable"><![CDATA[admin]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[1,2]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[免審核用戶組]]></item>
+				<item id="description"><![CDATA[被選中的用戶組，購買、編輯、出售、拍賣可無需審核即可執行操作]]></item>
+				<item id="variable"><![CDATA[noverify]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[廣告頭連接]]></item>
+				<item id="description"><![CDATA[設置自動生成連接的頭部，例如如果需要生成
+http://www.xxx.com/bbs/plugin.php?id=admarket_dzx:admarket&amp;clickaid=1的重定向鏈接，那麽這裏就應該填寫爲http://www.xxx.com/bbs/]]></item>
+				<item id="variable"><![CDATA[headlink]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[http://localhost/]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
+	</item>
+</root>

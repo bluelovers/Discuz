@@ -1,0 +1,101 @@
+<!--{if in_array($opaction, explode(",",'mybuylog,myautionlog,myclicklog,mypaylog'))}-->
+<ul class="mbm tb cl">
+        	<li <!--{if $opaction == 'mybuylog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=mybuylog">廣告買賣記錄</a></li>        	   	
+	        <li <!--{if $opaction == 'myautionlog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=myautionlog">拍賣記錄</a></li>
+        	<li <!--{if $opaction == 'myclicklog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=myclicklog">點擊記錄</a></li>        	   	
+	        <li <!--{if $opaction == 'mypaylog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=mypaylog">結算記錄</a></li>
+</ul>
+<!--{else}-->
+<ul class="mbm tb cl">
+        	<li <!--{if $opaction == 'allbuylog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=allbuylog">廣告買賣記錄</a></li>        	   	
+	        <li <!--{if $opaction == 'allautionlog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=allautionlog">拍賣記錄</a></li>
+        	<li <!--{if $opaction == 'allclicklog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=allclicklog">點擊記錄</a></li>        	   	
+	        <li <!--{if $opaction == 'allpaylog'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=allpaylog">結算記錄</a></li>
+</ul>
+<!--{/if}-->
+
+<!--{if $opaction == 'mybuylog' || $opaction == 'allbuylog'}-->	
+		<table summary="我的記錄" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="10%">操作用戶</th>
+				<th width="10%">時間</th>
+				<th width="20%">動作</th>					
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td><a href="home.php?mod=space&uid=$buy[uid]" target="_blank">$buy[username]</a></td>
+					<td>$buy[dateline]</td>
+					<td>$buy[action]</td>
+  			</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="3">當前沒有任何記錄</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->	
+		
+<!--{elseif $opaction == 'myautionlog' || $opaction == 'allautionlog'}-->	
+		<table summary="我的記錄" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="10%">操作用戶</th>
+				<th width="10%">時間</th>
+				<th width="20%">動作</th>					
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td><a href="home.php?mod=space&uid=$buy[uid]" target="_blank">$buy[username]</a></td>
+					<td>$buy[dateline]</td>
+					<td>$buy[action]</td>
+  			</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="3">當前沒有任何記錄</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->			
+
+<!--{elseif $opaction == 'myclicklog' || $opaction == 'allclicklog'}-->	
+		<table summary="我的記錄" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="10%">操作用戶</th>
+				<th width="10%">時間</th>
+				<th width="20%">動作</th>					
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td><a href="home.php?mod=space&uid=$buy[uid]" target="_blank">$buy[username]</a></td>
+					<td>$buy[dateline]</td>
+					<td>$buy[action]</td>
+  			</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="3">當前沒有任何記錄</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->		
+		
+<!--{elseif $opaction == 'mypaylog' || $opaction == 'allpaylog'}-->	
+		<table summary="我的記錄" cellspacing="0" cellpadding="0" class="dt">
+			<tr>
+				<th width="10%">操作用戶</th>
+				<th width="10%">時間</th>
+				<th width="20%">動作</th>					
+			</tr>
+	<!--{if $buylist}-->		
+			<!--{loop $buylist $buy}-->
+				<tr>
+					<td><a href="home.php?mod=space&uid=$buy[uid]" target="_blank">$buy[username]</a></td>
+					<td>$buy[dateline]</td>
+					<td>$buy[action]</td>
+  			</tr>
+			<!--{/loop}-->
+	<!--{else}-->
+		<tr><td colspan="3">當前沒有任何記錄</td></tr>
+	<!--{/if}-->
+		</table>
+		<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->				
+		
+<!--{/if}-->

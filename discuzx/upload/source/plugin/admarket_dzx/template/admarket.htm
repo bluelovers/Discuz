@@ -1,0 +1,40 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=admarket_dzx:admarket">自助廣告商城</a> <em>&rsaquo;</em> $location
+	</div>
+</div>
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<!--{if !$var['open'] && $isadmin}-->
+				<div class="notice">自助廣告商城目前處于關閉狀態，僅管理員可以訪問，您也可以通過系統設置打開商城</div>
+			<!--{/if}-->
+
+			<!--{if !$opaction || $opaction == 'index'}-->
+				<!--{subtemplate admarket_dzx:admarket_index}-->
+			<!--{elseif in_array($opaction, explode(",",'new,secondhand'))}-->
+				<!--{subtemplate admarket_dzx:admarket_buy}-->
+      <!--{elseif in_array($opaction, explode(",",'myad'))}-->
+				<!--{subtemplate admarket_dzx:admarket_myad}-->				
+      <!--{elseif in_array($opaction, explode(",",'mybuylog,myautionlog,myclicklog,mypaylog,allbuylog,allautionlog,allclicklog,allpaylog'))}-->
+				<!--{subtemplate admarket_dzx:admarket_log}-->					
+			<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">自助廣告商城</h2>
+			<ul>
+				 <li <!--{if !$opaction || $opaction == 'index'}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket">首頁</a></li>
+				 <li <!--{if in_array($opaction, explode(",",'new,secondhand'))}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=new">購買廣告</a></li>
+				 <li <!--{if in_array($opaction, explode(",",'myad'))}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=myad">我的廣告</a></li>
+				 <li <!--{if in_array($opaction, explode(",",'mybuylog,myautionlog,myclicklog,mypaylog'))}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=mybuylog">我的記錄</a></li>
+			   <!--{if $isadmin}--><li <!--{if in_array($opaction, explode(",",'allbuylog,allautionlog,allclicklog,allpaylog'))}-->class="a"<!--{/if}-->><a href="plugin.php?id=admarket_dzx:admarket&opaction=allbuylog">所有記錄</a></li><!--{/if}-->
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{subtemplate common/footer}-->
