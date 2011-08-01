@@ -28,8 +28,15 @@ function build_cache_diytemplatename() {
 	}
 
 	save_syscache('diytemplatename', $data);
+	/*
 	foreach($scriptarr as $curscript => $value) {
 		save_syscache('diytemplatename'.$curscript, $value);
+	}
+	*/
+	// force save_syscach
+	foreach($apps as $curscript) {
+		$value = $curscript[$curscript];
+		save_syscache('diytemplatename'.$curscript, (array)$value);
 	}
 }
 
