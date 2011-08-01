@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 if($operation == 'onlinelist') {
+	// 在線列表圖標
 
 	if(!submitcheck('onlinesubmit')) {
 
