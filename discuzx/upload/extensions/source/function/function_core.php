@@ -25,7 +25,7 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	$ret .= 'lang_'.$file.'.php';
 
 	// 忽略找不到檔案時的錯誤
-	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1);
+	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1, 1);
 
 	return $_lang;
 }
