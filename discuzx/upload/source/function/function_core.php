@@ -972,11 +972,23 @@ function cachedata($cachenames) {
 	$lostcaches = array();
 	// bluelvoers
 
+	// bluelovers
+	static $_libs_cache_;
+	// bluelovers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
 		if($isfilecache) {
+
+			// bluelovers
+			if (!isset($_libs_cache_)) {
+				$_libs_cache_ = true;
+				include_once libfile('function/cache');
+			}
+			// bluelovers
+
 			// 將從 common_syscache 中找到的緩存寫入 ./data/cache
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 
