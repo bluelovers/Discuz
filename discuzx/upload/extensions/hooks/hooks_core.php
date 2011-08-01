@@ -314,7 +314,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
 }
 
-Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
+0 && Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
 
 /**
  * 如果在 ./data/cache 中沒有緩存的項目，則自動更新 SQL 快取
