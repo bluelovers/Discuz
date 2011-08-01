@@ -972,11 +972,23 @@ function cachedata($cachenames) {
 	$lostcaches = array();
 	// bluelvoers
 
+	// bluelovers
+	static $_libs_cache_;
+	// bluelovers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
 		if($isfilecache) {
+
+			// bluelovers
+			if (!isset($_libs_cache_)) {
+				$_libs_cache_ = true;
+				include_once libfile('function/cache');
+			}
+			// bluelovers
+
 			// 將從 common_syscache 中找到的緩存寫入 ./data/cache
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 
@@ -1117,9 +1129,22 @@ function save_syscache($cachename, $data) {
 	if(!isset($isfilecache)) {
 		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
+
+		// bluelovers
+		include_once libfile('function/cache');
+		// bluelovers
 	}
 
+	// bluelovers
+	$_data = null;
+	// bluelovers
+
 	if(is_array($data)) {
+
+		// bluelovers
+		$_data = $data;
+		// bluelovers
+
 		$ctype = 1;
 		$data = addslashes(serialize($data));
 	} else {
@@ -1130,6 +1155,26 @@ function save_syscache($cachename, $data) {
 
 	$allowmem && memory('rm', $cachename);
 	$isfilecache && @unlink(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php');
+
+	// bluelovers
+	/**
+	 * 修改為 save_syscache 時同時直接寫入緩存檔
+	 */
+	if ($isfilecache && $_data !== null) {
+		// 將從 common_syscache 中找到的緩存寫入 ./data/cache
+		$cachedata = '$data[\''.$cachename.'\'] = '.var_export($_data, true).";\n\n";
+
+		// 判斷如果已經載入 libfile('function/cache') 則使用 writetocache 來寫入 cache
+		if (function_exists('writetocache')) {
+			writetocache($cachename, $cachedata);
+		} else {
+			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php', 'wb')) {
+				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($cachename.$cachedata.$GLOBALS['_G']['config']['security']['authkey'])."\n\n$cachedata?>");
+				fclose($fp);
+			}
+		}
+	}
+	// bluelovers
 }
 
 function block_get($parameter) {

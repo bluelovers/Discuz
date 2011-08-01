@@ -225,11 +225,26 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		if(!isset($_loadedcache[$k])) {
 			$k2 = $k;
 
+			$_do_skip = 0;
+
 			// 防止造成無法取得緩存
 			if (preg_match('/^(usergroup|threadsort|admingroup|style)_/', $k, $m)) {
 				$k2 = $m[1].'s';
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
+
+			} elseif (
+				in_array($k, array(
+					// cronnextrun 由 discuz_cron 控制
+					'cronnextrun',
+
+					// source\include\cron\cron_todaypost_daily.php
+					'historyposts',
+
+					'groupindex',
+				))
+			) {
+				$_do_skip = 1;
 
 			// modreasons, userreasons 皆由 modreasons 控制
 			} elseif ($k == 'modreasons' || $k == 'userreasons') {
@@ -248,6 +263,12 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
 			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
 				$k2 = 'split';
+			}
+
+			if ($_do_skip) {
+				$k && $_loadedcache[$k] = true;
+				$k2 && $_loadedcache[$k2] = true;
+				continue;
 			}
 
 			// 如果執行過 $k2 直接跳過處理
@@ -271,6 +292,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		$GLOBALS['_G']['setting'] = $data['setting'];
 	}
 
+	//TODO:需要改良修正解決緩存的意外錯誤
+
 	// 整理過濾處理過的 Array
 	$caches = array_unique((array)$caches);
 	$caches_load = array_unique((array)$caches_load);
@@ -291,7 +314,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
 }
 
-Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
+0 && Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
 
 /**
  * 如果在 ./data/cache 中沒有緩存的項目，則自動更新 SQL 快取
@@ -330,6 +353,14 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 				'domain',
 
 				'setting',
+
+				// cronnextrun 由 discuz_cron 控制
+				'cronnextrun',
+
+				// source\include\cron\cron_todaypost_daily.php
+				'historyposts',
+
+				'groupindex',
 
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);

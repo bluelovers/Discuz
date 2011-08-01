@@ -28,8 +28,21 @@ function build_cache_diytemplatename() {
 	}
 
 	save_syscache('diytemplatename', $data);
+	/*
 	foreach($scriptarr as $curscript => $value) {
 		save_syscache('diytemplatename'.$curscript, $value);
+	}
+	*/
+	/**
+	 * diytemplatename 強制寫入 save_syscache
+	 * 來解決 loadcache 自動補充 cachedata 時
+	 * 因為部分的 diytemplatename 沒有寫入緩存的問題而造成每次都更新緩存
+	 *
+	 * 降低多餘重複的 SQL 查詢
+	 */
+	foreach($apps as $curscript) {
+		$value = $curscript[$curscript];
+		save_syscache('diytemplatename'.$curscript, (array)$value);
 	}
 }
 
