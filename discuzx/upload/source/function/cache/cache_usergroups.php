@@ -96,7 +96,9 @@ function build_cache_usergroups_single() {
 		 *
 		 * 造成每次都會重新產生 usergroup 緩存
 		 */
-		writetocache('usergroup_'.$data['groupid'], getcachevars(array('usergroup_'.$data['groupid'] => $data)));
+	 	$cname = 'usergroup_'.$data['groupid'];
+		$cachedata = '$data[\''.$cname.'\'] = '.var_export($data, true).";\n\n";
+		writetocache($cname, $cachedata);
 		// bluelovers
 	}
 }
