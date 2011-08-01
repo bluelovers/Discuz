@@ -288,6 +288,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		$GLOBALS['_G']['setting'] = $data['setting'];
 	}
 
+	//TODO:需要改良修正解決緩存的意外錯誤
+
 	// 整理過濾處理過的 Array
 	$caches = array_unique((array)$caches);
 	$caches_load = array_unique((array)$caches_load);
