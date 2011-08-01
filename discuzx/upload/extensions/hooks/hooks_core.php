@@ -233,6 +233,10 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
 
+			// cronnextrun 由 discuz_cron 控制
+			} elseif ($k == 'cronnextrun') {
+				$_do_skip = 1;
+
 			// modreasons, userreasons 皆由 modreasons 控制
 			} elseif ($k == 'modreasons' || $k == 'userreasons') {
 				$k2 = 'modreasons';
@@ -253,7 +257,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			}
 
 			if ($_do_skip) {
-				$_loadedcache[$k2] = true;
+				$k && $_loadedcache[$k] = true;
+				$k2 && $_loadedcache[$k2] = true;
 				continue;
 			}
 
@@ -337,6 +342,9 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 				'domain',
 
 				'setting',
+
+				// cronnextrun 由 discuz_cron 控制
+				'cronnextrun',
 
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
