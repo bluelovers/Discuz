@@ -234,13 +234,15 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 				$k2 = $m[1];
 
 			} elseif (
-				// cronnextrun 由 discuz_cron 控制
-				$k == 'cronnextrun'
+				in_array($k, array(
+					// cronnextrun 由 discuz_cron 控制
+					'cronnextrun',
 
-				// source\include\cron\cron_todaypost_daily.php
-				|| $k == 'historyposts'
+					// source\include\cron\cron_todaypost_daily.php
+					'historyposts',
 
-				|| $k == 'groupindex'
+					'groupindex',
+				))
 			) {
 				$_do_skip = 1;
 
