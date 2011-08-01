@@ -239,6 +239,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 
 				// source\include\cron\cron_todaypost_daily.php
 				|| $k == 'historyposts'
+
+				|| $k == 'groupindex'
 			) {
 				$_do_skip = 1;
 
@@ -355,6 +357,8 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 				// source\include\cron\cron_todaypost_daily.php
 				'historyposts',
+
+				'groupindex',
 
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
