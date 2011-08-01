@@ -97,6 +97,13 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
  **/
 function include_file() {
 	if (is_file(func_get_arg(0))) {
+
+		// for discuz use
+		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+			// 防止模板檔中使用到 $_G 而造成錯誤
+			global $_G;
+		}
+
 		include func_get_arg(0);
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
 			return get_runtime_defined_vars(get_defined_vars());
