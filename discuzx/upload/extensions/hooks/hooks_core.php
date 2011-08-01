@@ -225,6 +225,8 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		if(!isset($_loadedcache[$k])) {
 			$k2 = $k;
 
+			$_do_skip = 0;
+
 			// 防止造成無法取得緩存
 			if (preg_match('/^(usergroup|threadsort|admingroup|style)_/', $k, $m)) {
 				$k2 = $m[1].'s';
@@ -248,6 +250,11 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
 			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
 				$k2 = 'split';
+			}
+
+			if ($_do_skip) {
+				$_loadedcache[$k2] = true;
+				continue;
 			}
 
 			// 如果執行過 $k2 直接跳過處理
