@@ -233,8 +233,13 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
 
-			// cronnextrun 由 discuz_cron 控制
-			} elseif ($k == 'cronnextrun') {
+			} elseif (
+				// cronnextrun 由 discuz_cron 控制
+				$k == 'cronnextrun'
+
+				// source\include\cron\cron_todaypost_daily.php
+				|| $k == 'historyposts'
+			) {
 				$_do_skip = 1;
 
 			// modreasons, userreasons 皆由 modreasons 控制
@@ -345,6 +350,9 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 
 				// cronnextrun 由 discuz_cron 控制
 				'cronnextrun',
+
+				// source\include\cron\cron_todaypost_daily.php
+				'historyposts',
 
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
