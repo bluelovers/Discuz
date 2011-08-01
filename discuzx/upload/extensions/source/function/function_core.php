@@ -28,6 +28,9 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	if ($path) $ret .= $path.'/';
 	$ret .= 'lang_'.$file.'.php';
 
+	// 防止模板檔中使用到 $_G 而造成錯誤
+	global $_G;
+
 	// 忽略找不到檔案時的錯誤
 	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1);
 
