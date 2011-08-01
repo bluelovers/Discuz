@@ -88,5 +88,15 @@ function build_cache_usergroups_single() {
 		$data['plugin'] = $pluginvalue[$data['groupid']];
 		unset($data['type'], $data['system'], $data['creditshigher'], $data['creditslower'], $data['groupavatar'], $data['admingid']);
 		save_syscache('usergroup_'.$data['groupid'], $data);
+
+		// bluelovers
+		/**
+		 * 不知名原因 bluelovers.net 伺服器上
+		 * 只會產生一個 groupid 檔案緩存
+		 *
+		 * 造成每次都會重新產生 usergroup 緩存
+		 */
+		writetocache('usergroup_'.$data['groupid'], getcachevars(array('usergroup_'.$data['groupid'] => $data)));
+		// bluelovers
 	}
 }
