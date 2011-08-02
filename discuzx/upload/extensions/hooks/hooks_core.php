@@ -388,6 +388,9 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 			$discuz->var['varhash_gzip_js'] = $discuz->var['varhash_gzip'];
 		}
 	}
+
+	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
+	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
 }
 
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
