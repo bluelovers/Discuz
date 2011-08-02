@@ -1,2 +1,2 @@
 
-RewriteRule images/avatars/(.+) source/plugin/sco_avatar/image/avatar/avatar/$1 [NC,G,L]
+RewriteRule images/avatars/(.+\.(jpg|png|gif|bmp)) source/plugin/sco_avatar/image/avatar/avatar/$1 [L]
