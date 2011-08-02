@@ -287,6 +287,13 @@ function dhtmlspecialchars($string, $quote_style = null) {
 		$replace[0] = array(
 			'&amp;', '&quot;', '&lt;', '&gt;'
 		);
+
+		// $quote_style
+		if ($quote_style & ENT_QUOTES) {
+			$search[0][] = '\'';
+			$replace[0][] = '&#039;';
+		}
+
 		$string = str_replace($search[0], $replace[0], $string);
 		// bluelvoers
 
