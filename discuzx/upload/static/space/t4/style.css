@@ -8,8 +8,8 @@ body {
 	color: #999999;
 }
 
-a, a:hover, a:active{ color:#000; }
-	a:visited{ color:#333;}
+a, a:hover, a:active{ color: #5778A1; }
+	a:visited{ color: #5778A1; }
 #hd {
 	/*
 	border-bottom: 4px solid #101A22;
@@ -30,12 +30,23 @@ a, a:hover, a:active{ color:#000; }
 }
 
 .block .title, .bbda, .el li { border-bottom-color: #4E6778; }
-.tl .th { background: none; }
-.bm, .bm_h { border: none; background: none; }
 
-.el a{ color:#000;}
-	.el .d{ color:#333;}
-.xg1, .xg1 a, .xg1 a:hover, .xg1 a:visited{ color:#333 !important;}
+/*各模塊的標題顏色*/
+.block .title
+/*個人空間非首頁的標題*/
+, .mn .bm, .mn .bm_h
+{
+	color: #5778A1;
+	background: url("images/title.png") no-repeat scroll 0 0 transparent;
+}
+
+.tl .th { background: none; }
+.bm, .bm_h { border: none; /*background: none;*/ }
+
+/*留言內的連結(例如:留言者)*/
+.el a{ color: #5778A1; }
+	.el .d{ color:#5778A1;}
+.xg1, .xg1 a, .xg1 a:hover, .xg1 a:visited{ color:#999999 !important;}
 .tl th a:visited{ color:#333; }
 .tl td em, .tl td em a{ color:#ccc;}
 .tl .th{ border-bottom:1px solid #333;}
@@ -44,4 +55,9 @@ a, a:hover, a:active{ color:#000; }
 .tbmu a{ color:#000; }
 .pipe{ color:#333;}
 
-#ft{ border-top:1px solid #333;}
+#ft, #ft a {
+	/*
+	border-top:1px solid #333;
+	*/
+	color:#333333;
+}
