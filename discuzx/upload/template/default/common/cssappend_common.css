@@ -384,3 +384,8 @@ fieldset {
 	*/
 	color: #009900;
 }
+
+/*修改為動畫版*/
+#myprompt.new {
+	background-image: url({STATICURL}image/plus/common/notice.gif);
+}
