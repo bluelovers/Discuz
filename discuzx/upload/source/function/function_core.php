@@ -272,7 +272,7 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $quote_style);
 		}
 	} else {
 		/*
