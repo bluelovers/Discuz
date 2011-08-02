@@ -107,7 +107,9 @@ function include_file() {
 
 		include func_get_arg(0);
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
-			return get_runtime_defined_vars(get_defined_vars());
+			return get_runtime_defined_vars(get_defined_vars(), array(
+				'_G',
+			));
 		}
 	// 追加忽略找不到檔案時的錯誤訊息開關
 	} elseif (!func_get_arg(2)) {
