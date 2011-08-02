@@ -39,6 +39,8 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	// 緩存是否執行過(每個檔案只執行一次)
 	static $list;
 
+	static $include_once;
+
 	if ($force || !isset($list[$file])) {
 		if (!$force) $list[$file] = $ret;
 
@@ -423,6 +425,13 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 			$discuz->var['varhash_gzip_js'] = $discuz->var['varhash_gzip'];
 		}
 	}
+
+	debug(array(
+		$discuz->config['output']['gzip'],
+		getaccept_encoding_gzip(),
+		$discuz->var['varhash_gzip'],
+		$discuz->var['varhash_gzip_js'],
+	), 1);
 
 	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
 	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
