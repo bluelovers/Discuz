@@ -261,13 +261,50 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
-function dhtmlspecialchars($string) {
+/**
+ * Convert special characters to HTML entities
+ *
+ * @param string $string
+ * @param ENT_QUOTES|null $quote_style
+ *
+ * @return string
+ *
+ * @example '&' (ampersand) becomes '&amp;'
+ * @example '"' (double quote) becomes '&quot;'
+ * @example "'" (single quote) becomes '&#039;' only when ENT_QUOTES is set.
+ * @example '<' (less than) becomes '&lt;'
+ * @example '>' (greater than) becomes '&gt;'
+ *
+ * @link http://www.php.net/manual/en/function.htmlspecialchars.php
+ */
+function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $quote_style);
 		}
 	} else {
+		/*
 		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		*/
+		// bluelovers
+		$search = $replace = array();
+
+		$search[0] = array(
+			'&', '"', '<', '>'
+		);
+		$replace[0] = array(
+			'&amp;', '&quot;', '&lt;', '&gt;'
+		);
+
+		// $quote_style
+		if ($quote_style & ENT_QUOTES) {
+			array_push($search[0], '\'');
+			array_push($replace[0], '&#039;');
+		}
+
+		$string = str_replace($search[0], $replace[0], $string);
+		// bluelvoers
+
 		if(strpos($string, '&amp;#') !== false) {
 			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
 		}
