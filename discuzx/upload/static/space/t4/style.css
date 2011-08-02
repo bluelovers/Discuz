@@ -3,7 +3,10 @@
 Powered by Discuz! X
 */
 
-body { background: #6A8FA1 url(images/bg.png) repeat-x 0 25px; color:#000; }
+body {
+	background: #6A8FA1 url(images/bg.png) repeat-x 0 25px;
+	color:#000;
+}
 
 a, a:hover, a:active{ color:#000; }
 	a:visited{ color:#333;}
