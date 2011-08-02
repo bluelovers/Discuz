@@ -275,7 +275,21 @@ function dhtmlspecialchars($string, $quote_style = null) {
 			$string[$key] = dhtmlspecialchars($val);
 		}
 	} else {
+		/*
 		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		*/
+		// bluelovers
+		$search = $replace = array();
+
+		$search[0] = array(
+			'&', '"', '<', '>'
+		);
+		$replace[0] = array(
+			'&amp;', '&quot;', '&lt;', '&gt;'
+		);
+		$string = str_replace($search[0], $replace[0], $string);
+		// bluelvoers
+
 		if(strpos($string, '&amp;#') !== false) {
 			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
 		}
