@@ -107,7 +107,9 @@ function include_file() {
 
 		include func_get_arg(0);
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
-			return get_runtime_defined_vars(get_defined_vars());
+			return get_runtime_defined_vars(get_defined_vars(), array(
+				'_G',
+			));
 		}
 	// 追加忽略找不到檔案時的錯誤訊息開關
 	} elseif (!func_get_arg(2)) {
@@ -115,6 +117,43 @@ function include_file() {
 	}
 
 	return array();
+}
+
+/**
+ * 推薦搭配用於載入 function library
+ */
+function include_file_once() {
+	static $_cahce_include;
+
+	if (isset($_cahce_include[func_get_arg(0)])) return $_cahce_include[func_get_arg(0)];
+
+	if (is_file(func_get_arg(0))) {
+
+		// for discuz use
+		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+			// 防止模板檔中使用到 $_G 而造成錯誤
+			global $_G;
+		}
+
+		$_cahce_include[func_get_arg(0)] = include_once(func_get_arg(0));
+
+		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
+			return get_runtime_defined_vars(get_defined_vars(), array(
+				'_G',
+				'_cahce_include',
+			));
+		}
+
+		return $_cahce_include[func_get_arg(0)];
+
+	// 追加忽略找不到檔案時的錯誤訊息開關
+	} elseif (!func_get_arg(2)) {
+		throw new Exception('PHP Warning: include_file(): Filename cannot be empty or not exists!!');
+	}
+
+	$_cahce_include[func_get_arg(0)] = false;
+
+	return false;
 }
 
 /**

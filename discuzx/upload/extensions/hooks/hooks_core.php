@@ -39,41 +39,51 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	// 緩存是否執行過(每個檔案只執行一次)
 	static $list;
 
+	static $include_once;
+
+	if (
+		!isset($include_once['extensions/source/function/function_core.php'])
+	) {
+		$include_once['extensions/source/function/function_core.php'] = true;
+
+		include_once libfile('function/core', 'source', 'extensions/');
+	}
+
 	if ($force || !isset($list[$file])) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
 			case 'source/function/cache/cache_bbcodes.php':
 			case 'source/function/cache/cache_bbcodes_display.php':
-				@include_once libfile('cache/bbcodes', 'hooks', 'extensions/');
+				include_file_once(libfile('cache/bbcodes', 'hooks', 'extensions/'), 0, 1);
 			case 'source/class/class_template.php':
 			case 'source/function/cache/cache_styles.php':
 			case 'source/function/function_cache.php':
 			case 'source/function/cache/cache_styles.php':
-				@include_once libfile('hooks/cache', '', 'extensions/');
+				include_file_once(libfile('hooks/cache', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_share.php':
 			case 'source/include/spacecp/spacecp_share.php':
 
 			case 'source/function/function_feed.php':
-				@include_once libfile('hooks/share', '', 'extensions/');
+				include_file_once(libfile('hooks/share', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_discuzcode.php':
-				@include_once libfile('hooks/discuzcode', '', 'extensions/');
+				include_file_once(libfile('hooks/discuzcode', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_home.php':
-				@include_once libfile('hooks/home', '', 'extensions/');
+				include_file_once(libfile('hooks/home', '', 'extensions/'), 0, 1);
 				break;
 			case 'forum.php':
 			case 'source/module/forum/forum_viewthread.php':
-				@include_once libfile('hooks/forum', '', 'extensions/');
+				include_file_once(libfile('hooks/forum', '', 'extensions/'), 0, 1);
 				break;
 			case 'group.php':
 			case 'source/module/group/group_index.php':
-				@include_once libfile('hooks/group', '', 'extensions/');
+				include_file_once(libfile('hooks/group', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_core.php':
-				@include_once libfile('function/core', 'source', 'extensions/');
+				include_file_once(libfile('function/core', 'source', 'extensions/'), 0, 1);
 				break;
 			default:
 //				dexit($file);
@@ -303,7 +313,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	$caches_load = array_unique((array)$caches_load);
 
 	if(!empty($caches)) {
-		@include_once libfile('function/cache');
+		include_file_once(libfile('function/cache'), 0, 1);
 
 		updatecache($caches);
 		loadcache($caches_load, true);
