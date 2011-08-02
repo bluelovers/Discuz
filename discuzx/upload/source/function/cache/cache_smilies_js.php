@@ -59,6 +59,17 @@ function build_cache_smilies_js() {
 
 	// bluelvoers
 	$jsdata = 'common_smilies_var.js';
+
+	// Event: Func_build_cache_smilies_js:Before_fwrite
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
+			->run(array(array(
+				'jsdata'		=> &$jsdata,
+
+				'filename'		=> 'common_smilies_var.js',
+				'filepath'		=> 'data/cache/',
+		)));
+	}
 	// bluelovers
 
 	if(@$fp = fopen($cachedir.'common_smilies_var.js', 'w')) {
