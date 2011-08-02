@@ -527,6 +527,7 @@ if(!($operation)) {
 	cpmsg('tasks_del', 'action=tasks', 'succeed');
 
 } elseif($operation == 'type') {
+	// 任務類型
 
 	shownav('extended', 'nav_tasks');
 	showsubmenu('nav_tasks', array(
