@@ -268,6 +268,14 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
  * @param ENT_QUOTES|null $quote_style
  *
  * @return string
+ *
+ * @example '&' (ampersand) becomes '&amp;'
+ * @example '"' (double quote) becomes '&quot;'
+ * @example "'" (single quote) becomes '&#039;' only when ENT_QUOTES is set.
+ * @example '<' (less than) becomes '&lt;'
+ * @example '>' (greater than) becomes '&gt;'
+ *
+ * @link http://www.php.net/manual/en/function.htmlspecialchars.php
  */
 function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
@@ -290,8 +298,8 @@ function dhtmlspecialchars($string, $quote_style = null) {
 
 		// $quote_style
 		if ($quote_style & ENT_QUOTES) {
-			$search[0][] = '\'';
-			$replace[0][] = '&#039;';
+			array_push($search[0], '\'');
+			array_push($replace[0], '&#039;');
 		}
 
 		$string = str_replace($search[0], $replace[0], $string);
