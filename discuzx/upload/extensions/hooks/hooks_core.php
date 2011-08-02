@@ -41,6 +41,11 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 
 	static $include_once;
 
+	if (!isset($include_once['extensions/source/function/function_core.php'])) {
+		$include_once['extensions/source/function/function_core.php'] = true;
+		@include_once libfile('function/core', 'source', 'extensions/');
+	}
+
 	if ($force || !isset($list[$file])) {
 		if (!$force) $list[$file] = $ret;
 
