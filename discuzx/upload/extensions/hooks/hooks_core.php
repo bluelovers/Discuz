@@ -434,13 +434,6 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 		}
 	}
 
-	debug(array(
-		$discuz->config['output']['gzip'],
-		getaccept_encoding_gzip(),
-		$discuz->var['varhash_gzip'],
-		$discuz->var['varhash_gzip_js'],
-	), 1);
-
 	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
 	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
 }
