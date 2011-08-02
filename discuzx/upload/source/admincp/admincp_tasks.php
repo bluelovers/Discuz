@@ -13,6 +13,8 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 cpheader();
 
+//BUG:與舊版 discuz 7 論壇任務無法相容並自動更新
+
 $id = intval($_G['gp_id']);
 $membervars = array('act', 'num', 'time');
 $postvars = array('act', 'forumid', 'num', 'time', 'threadid', 'authorid');
@@ -312,6 +314,14 @@ if(!($operation)) {
 						'variable' => $taskvarkey,
 						'value' => is_array($_G['gp_'.$taskvarkey]) ? addslashes(serialize($_G['gp_'.$taskvarkey])) : $_G['gp_'.$taskvarkey],
 						'type' => $taskvars['type'],
+
+						// bluelvoers
+						// 儲存 lang_template
+						'lang_template' => addslashes(serialize(array(
+							'name' => array('task/'.$_G['gp_script'], $taskvars['title']),
+							'description' => array('task/'.$_G['gp_script'], $taskvars['title'].'_comment')
+						))),
+						// bluelovers
 					);
 					DB::insert('common_taskvar', $data);
 				}
@@ -323,6 +333,8 @@ if(!($operation)) {
 	}
 
 } elseif($operation == 'edit' && $id) {
+
+	//TODO:增加可自動更新任務參數
 
 	$task = DB::fetch_first("SELECT * FROM ".DB::table('common_task')." WHERE taskid='$id'");
 
@@ -430,6 +442,8 @@ if(!($operation)) {
 		$taskclass = 'task_'.$task['scriptname'];
 		$taskcv = new $taskclass;
 
+		//TODO:增加自動更新任務選項
+
 		if($taskvars['complete']) {
 			foreach($taskvars['complete'] as $taskvar) {
 				$taskcvar = $taskcv->conditions[$taskvar['variable']];
@@ -438,6 +452,12 @@ if(!($operation)) {
 						$taskcvar['value'][$k][1] = lang('task/'.$task['scriptname'], $taskcvar['value'][$k][1]);
 					}
 				}
+
+				// bluelovers
+				// 將參數類型以 tash 內的為基準
+				!empty($taskcvar['type']) && $taskvar['type'] = $taskcvar['type'];
+				// bluelovers
+
 				$varname = in_array($taskvar['type'], array('mradio', 'mcheckbox', 'select', 'mselect')) ?
 					($taskvar['type'] == 'mselect' ? array($taskvar['variable'].'[]', $taskcvar['value']) : array($taskvar['variable'], $taskcvar['value']))
 					: $taskvar['variable'];
@@ -527,6 +547,7 @@ if(!($operation)) {
 	cpmsg('tasks_del', 'action=tasks', 'succeed');
 
 } elseif($operation == 'type') {
+	// 任務類型
 
 	shownav('extended', 'nav_tasks');
 	showsubmenu('nav_tasks', array(
@@ -703,6 +724,34 @@ function gettasks() {
 	$dir = DISCUZ_ROOT.'./source/class/task';
 	$taskdir = dir($dir);
 	$tasks = array();
+
+	//BUG:安裝升級後 可能造成部分任務類型無法安裝也無法使用
+	// bluelovers
+	global $custom_scripts
+		, $custom_types
+	;
+
+	/**
+	 * 取得目前使用中的任務類型
+	 */
+	$_tash_in_used = array();
+
+	$query = DB::query("
+		SELECT COUNT( * ) AS `this_count` , `scriptname`
+		FROM ".DB::table('common_task')."
+		GROUP BY `scriptname`
+		ORDER BY `scriptname`
+	");
+	while($entry = DB::fetch($query)) {
+		array_push($_tash_in_used, $entry['scriptname']);
+	}
+
+	/**
+	 * 用來標記是否有變化
+	 */
+	$_change = 0;
+	// bluelvoers
+
 	while($entry = $taskdir->read()) {
 		if(!in_array($entry, array('.', '..')) && preg_match("/^task\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
 			@include_once $dir.'/'.$entry;
@@ -717,9 +766,36 @@ function gettasks() {
 					'copyright' => lang('task/'.$_G['gp_script'], $task->copyright),
 					'filemtime' => @filemtime($dir.'/'.$entry)
 				);
+
+				// bluelovers
+				if (
+					// 檢查是否在目前的任務類型中
+					!in_array($tasks[$entry]['class'], $custom_scripts)
+					// 檢查是否在目前正在使用的任務類型中
+					&& in_array($tasks[$entry]['class'], $_tash_in_used)
+				) {
+					$custom_types[$tasks[$entry]['class']] = array(
+						'name' => $tasks[$entry]['name'],
+						'version' => $task->version
+					);
+
+					array_push($custom_scripts);
+
+					// 通知已經有變化
+					$_change = 1;
+				}
+				// bluelovers
 			}
 		}
 	}
+
+	// bluelovers
+	// 檢測到變化時重新更新任務設定
+	if ($_change) {
+		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('tasktypes', '".addslashes(serialize($custom_types))."')");
+	}
+	// bluelovers
+
 	uasort($tasks, 'filemtimesort');
 	return $tasks;
 }
