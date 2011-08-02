@@ -314,6 +314,14 @@ if(!($operation)) {
 						'variable' => $taskvarkey,
 						'value' => is_array($_G['gp_'.$taskvarkey]) ? addslashes(serialize($_G['gp_'.$taskvarkey])) : $_G['gp_'.$taskvarkey],
 						'type' => $taskvars['type'],
+
+						// bluelvoers
+						// 儲存 lang_template
+						'lang_template' => addslashes(serialize(array(
+							'name' => array('task/'.$_G['gp_script'], $taskvars['title']),
+							'description' => array('task/'.$_G['gp_script'], $taskvars['title'].'_comment')
+						))),
+						// bluelovers
 					);
 					DB::insert('common_taskvar', $data);
 				}
