@@ -704,6 +704,34 @@ function gettasks() {
 	$dir = DISCUZ_ROOT.'./source/class/task';
 	$taskdir = dir($dir);
 	$tasks = array();
+
+	//BUG:安裝升級後 可能造成部分任務類型無法安裝也無法使用
+	// bluelovers
+	global $custom_scripts
+		, $custom_types
+	;
+
+	/**
+	 * 取得目前使用中的任務類型
+	 */
+	$_tash_in_used = array();
+
+	$query = DB::query("
+		SELECT COUNT( * ) AS `this_count` , `scriptname`
+		FROM ".DB::table('common_task')."
+		GROUP BY `scriptname`
+		ORDER BY `scriptname`
+	");
+	while($entry = DB::fetch($query)) {
+		array_push($_tash_in_used, $entry['scriptname']);
+	}
+
+	/**
+	 * 用來標記是否有變化
+	 */
+	$_change = 0;
+	// bluelvoers
+
 	while($entry = $taskdir->read()) {
 		if(!in_array($entry, array('.', '..')) && preg_match("/^task\_[\w\.]+$/", $entry) && substr($entry, -4) == '.php' && strlen($entry) < 30 && is_file($dir.'/'.$entry)) {
 			@include_once $dir.'/'.$entry;
@@ -718,9 +746,36 @@ function gettasks() {
 					'copyright' => lang('task/'.$_G['gp_script'], $task->copyright),
 					'filemtime' => @filemtime($dir.'/'.$entry)
 				);
+
+				// bluelovers
+				if (
+					// 檢查是否在目前的任務類型中
+					!in_array($tasks[$entry]['class'], $custom_scripts)
+					// 檢查是否在目前正在使用的任務類型中
+					&& in_array($tasks[$entry]['class'], $_tash_in_used)
+				) {
+					$custom_types[$tasks[$entry]['class']] = array(
+						'name' => $tasks[$entry]['name'],
+						'version' => $task->version
+					);
+
+					array_push($custom_scripts);
+
+					// 通知已經有變化
+					$_change = 1;
+				}
+				// bluelovers
 			}
 		}
 	}
+
+	// bluelovers
+	// 檢測到變化時重新更新任務設定
+	if ($_change) {
+		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('tasktypes', '".addslashes(serialize($custom_types))."')");
+	}
+	// bluelovers
+
 	uasort($tasks, 'filemtimesort');
 	return $tasks;
 }
