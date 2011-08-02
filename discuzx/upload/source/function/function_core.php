@@ -265,9 +265,11 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
  * Convert special characters to HTML entities
  *
  * @param string $string
+ * @param ENT_QUOTES|null $quote_style
+ *
  * @return string
  */
-function dhtmlspecialchars($string) {
+function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
 			$string[$key] = dhtmlspecialchars($val);
