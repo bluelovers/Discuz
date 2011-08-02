@@ -13,6 +13,13 @@ a, a:hover, a:active{ color:#000; }
 	#nv li a, #nv li a:visited { color: #B9DEF2; }
 	#nv li a:hover { background-image: none !important; }
 #ct, .n, .w { background: transparent none !important; }
+
+/*主區域背景及邊框*/
+#ct {
+	background:none repeat scroll 0 0 #FFFFFF !important;
+	border:3px solid #9DB7C1;
+}
+
 .block .title, .bbda, .el li { border-bottom-color: #4E6778; }
 .tl .th { background: none; }
 .bm, .bm_h { border: none; background: none; }
