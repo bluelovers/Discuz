@@ -117,6 +117,10 @@ EOF
 ?><?
 */
 
+		$ss .= '<script type="text/javascript">';
+		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
+		$ss .= '</script>';
+
 		$hook_data .= $ss;
 	} elseif (
 		(
@@ -419,6 +423,9 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 			$discuz->var['varhash_gzip_js'] = $discuz->var['varhash_gzip'];
 		}
 	}
+
+	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
+	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
 }
 
 Scorpio_Hook::add('Class_discuz_core::_init_style:After', '_eClass_discuz_core__init_style_After');
