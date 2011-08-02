@@ -261,6 +261,12 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
+/**
+ * Convert special characters to HTML entities
+ *
+ * @param string $string
+ * @return string
+ */
 function dhtmlspecialchars($string) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
