@@ -13,9 +13,6 @@ if(!defined('IN_DISCUZ')) {
 
 class task_post {
 
-	//TODO:領取獎勵時間限制(小時) time_reward
-	// 設置會員從申請任務到完成任務領取獎勵的時間限制，會員在此時間內即使完成任務也不能領取獎勵，0 或留空為不限制
-
 	var $version = '1.0';
 	var $name = 'post_name';
 	var $description = 'post_desc';
@@ -65,6 +62,23 @@ class task_post {
 			'value' => '',
 			'sort' => 'complete',
 		)
+
+		// bluelovers
+		,
+		/**
+		 * 領取獎勵時間限制(小時)
+		 *
+		 * 設置會員從申請任務到完成任務領取獎勵的時間限制，
+		 * 會員在此時間內即使完成任務也不能領取獎勵，
+		 * 0 或留空為不限制
+		 */
+		'time_reward' => array(
+			'title' => 'post_complete_var_time_reward',
+			'type' => 'number',
+			'value' => '',
+			'sort' => 'complete',
+		)
+		// bluelovers
 	);
 
 	function task_post() {
