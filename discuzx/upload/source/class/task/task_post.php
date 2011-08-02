@@ -112,7 +112,17 @@ class task_post {
 		 * 	= 0 : 從接取任務之後開始算
 		 * 	> 0 : 接取任務之後幾小時內
 		 */
+
+	 	// bluelovers
+	 	$taskvars['time'] = floatval($taskvars['time']);
+	 	if ($taskvars['time'] >= 0) {
+ 		// bluelovers
+
 		$sqladd .= ($taskvars['time'] = floatval($taskvars['time'])) ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
+
+		// bluelovers
+		}
+		// bluelovers
 
 		$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable())." p $tbladd WHERE p.authorid='{$_G['uid']}' $sqladd");
 
