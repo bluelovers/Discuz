@@ -17,10 +17,11 @@ a { color: #069; }
 	/*各模塊的標題顏色*/
 	.block .title
 	/*個人空間非首頁的標題*/
-	, .mn .bm, .mn .bm_h
+	, .mn .bm_h
 	{
 		color: #5778A1;
-		background: url("images/c_title2.png") no-repeat scroll 0 0 transparent;
+		border-bottom: 1px solid #DDD;
+		background: #EAF1F2 url(images/title.png) repeat-x 0 0;
 	}
 .tl .th { background: none; }
 #ft { border-top: 1px solid #CCC; _margin-top: 10px; }
