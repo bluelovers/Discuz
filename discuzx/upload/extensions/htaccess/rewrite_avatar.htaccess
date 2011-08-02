@@ -1,0 +1,2 @@
+
+RewriteRule images/avatars/(.+) source/plugin/sco_avatar/image/avatar/avatar/$1 [NC,G,L]
