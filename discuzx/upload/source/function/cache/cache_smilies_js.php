@@ -58,7 +58,7 @@ function build_cache_smilies_js() {
 	$cachedir = DISCUZ_ROOT.'./data/cache/';
 
 	// bluelvoers
-	$jsdata = 'common_smilies_var.js';
+	$jsdata = 'var smthumb = \''.$_G['setting']['smthumb'].'\';'.$return_type.$return_array.'var smilies_fast=['.$return_fast.'];';
 
 	// Event: Func_build_cache_smilies_js:Before_fwrite
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
