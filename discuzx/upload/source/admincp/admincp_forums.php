@@ -26,6 +26,11 @@ if($operation == 'admin') {
 		require_once libfile('function/forumlist');
 		$forums = str_replace("'", "\'", forumselect(false, 0, 0, 1));
 
+		// bluelovers
+		//BUG:unterminated string literal
+		$forums = preg_replace("/ title=\"[^\"]*\"/is", '', $forums);
+		// bluelovers
+
 ?>
 <script type="text/JavaScript">
 var forumselect = '<?php echo $forums;?>';
