@@ -118,7 +118,7 @@ class task_post {
 	 	if ($taskvars['time'] >= 0) {
  		// bluelovers
 
-		$sqladd .= $taskvars['time'] ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
+			$sqladd .= $taskvars['time'] ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
 
 		// bluelovers
 		}
