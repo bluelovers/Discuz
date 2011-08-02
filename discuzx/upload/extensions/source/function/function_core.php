@@ -119,6 +119,9 @@ function include_file() {
 	return array();
 }
 
+/**
+ * 推薦搭配用於載入 function library
+ */
 function include_file_once() {
 	static $_cahce_include;
 
