@@ -52,13 +52,13 @@ class task_post {
 		),
 		'num' => array(
 			'title' => 'post_complete_var_num',
-			'type' => 'text',
+			'type' => 'number',
 			'value' => '',
 			'sort' => 'complete',
 		),
 		'time' => array(
 			'title' => 'post_complete_var_time',
-			'type' => 'text',
+			'type' => 'number',
 			'value' => '',
 			'sort' => 'complete',
 		)
