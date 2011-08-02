@@ -326,6 +326,8 @@ if(!($operation)) {
 
 } elseif($operation == 'edit' && $id) {
 
+	//TODO:增加可自動更新任務參數
+
 	$task = DB::fetch_first("SELECT * FROM ".DB::table('common_task')." WHERE taskid='$id'");
 
 	if(!submitcheck('editsubmit')) {
