@@ -450,6 +450,12 @@ if(!($operation)) {
 						$taskcvar['value'][$k][1] = lang('task/'.$task['scriptname'], $taskcvar['value'][$k][1]);
 					}
 				}
+
+				// bluelovers
+				// 將參數類型以 tash 內的為基準
+				!empty($taskcvar['type']) && $taskvar['type'] = $taskcvar['type'];
+				// bluelovers
+
 				$varname = in_array($taskvar['type'], array('mradio', 'mcheckbox', 'select', 'mselect')) ?
 					($taskvar['type'] == 'mselect' ? array($taskvar['variable'].'[]', $taskcvar['value']) : array($taskvar['variable'], $taskcvar['value']))
 					: $taskvar['variable'];
