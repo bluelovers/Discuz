@@ -111,8 +111,8 @@ class task_post {
 		 * $taskvars['time']
 		 * 	= 0 : 從接取任務之後開始算
 		 * 	> 0 : 接取任務之後幾小時內
+		 * 	< 0 : 不限制時間(就算在接任務之前已經完成了也可以)
 		 */
-
 	 	// bluelovers
 	 	$taskvars['time'] = floatval($taskvars['time']);
 	 	if ($taskvars['time'] >= 0) {
