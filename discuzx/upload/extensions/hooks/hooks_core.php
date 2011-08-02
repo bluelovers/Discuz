@@ -117,6 +117,10 @@ EOF
 ?><?
 */
 
+		$ss .= '<script type="text/javascript">';
+		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
+		$ss .= '</script>';
+
 		$hook_data .= $ss;
 	} elseif (
 		(
