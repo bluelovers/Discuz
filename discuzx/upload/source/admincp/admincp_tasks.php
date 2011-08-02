@@ -13,6 +13,8 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 cpheader();
 
+//BUG:與舊版 discuz 7 論壇任務無法相容並自動更新
+
 $id = intval($_G['gp_id']);
 $membervars = array('act', 'num', 'time');
 $postvars = array('act', 'forumid', 'num', 'time', 'threadid', 'authorid');
