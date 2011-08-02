@@ -442,6 +442,8 @@ if(!($operation)) {
 		$taskclass = 'task_'.$task['scriptname'];
 		$taskcv = new $taskclass;
 
+		//TODO:增加自動更新任務選項
+
 		if($taskvars['complete']) {
 			foreach($taskvars['complete'] as $taskvar) {
 				$taskcvar = $taskcv->conditions[$taskvar['variable']];
