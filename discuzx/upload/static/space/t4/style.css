@@ -8,7 +8,9 @@ body { background: #6A8FA1 url(images/bg.png) repeat-x 0 25px; color:#000; }
 a, a:hover, a:active{ color:#000; }
 	a:visited{ color:#333;}
 #hd {
+	/*
 	border-bottom: 4px solid #101A22;
+	*/
 	background: url(images/header.png) no-repeat 100px 10px;
 	color: #FFF;
 }
