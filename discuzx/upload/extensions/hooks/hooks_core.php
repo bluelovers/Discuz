@@ -313,7 +313,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	$caches_load = array_unique((array)$caches_load);
 
 	if(!empty($caches)) {
-		@include_once libfile('function/cache');
+		include_file_once(libfile('function/cache'), 0, 1);
 
 		updatecache($caches);
 		loadcache($caches_load, true);
