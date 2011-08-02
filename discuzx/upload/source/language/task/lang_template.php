@@ -1,5 +1,7 @@
 <?php
 
+//TODO:增加與任務的語言包合併與自動載入
+
 $lang = array
 (
 	'task_reward_condition' => '領取此任務獎賞所需條件',
