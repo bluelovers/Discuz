@@ -108,6 +108,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 			'subject' => $thread['subject'],
 			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
 		));
+	}
 
 		// bluelovers
 		if ($thread['lastpost'] < $_G['timestamp']) {
@@ -124,7 +125,6 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		}
 		// bluelovers
 
-	}
 	if($_G['setting']['heatthread']['type'] == 2) {
 		update_threadpartake($post['tid']);
 	}
