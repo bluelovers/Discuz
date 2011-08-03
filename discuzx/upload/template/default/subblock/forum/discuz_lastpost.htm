@@ -1,0 +1,18 @@
+<!--forum/discuz-->
+<!--只適用於 forum/discuz-->
+	<!--允許顯示無權限瀏覽的版塊的最後發表資訊-->
+	<!--{if 0 && $forum['permission'] == 1}-->
+		{lang private_forum}
+	<!--{else}-->
+		<!--{if $forum['redirect']}-->
+			<a href="$forumurl" class="xi2">{lang url_link}</a>
+		<!--{elseif is_array($forum['lastpost'])}-->
+			<!--{if !$cat['forumcolumns'] || $cat['forumcolumns'] < 3}-->
+				<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="{if $forum[todayposts] && !$forum['redirect']}xi1{else}xi2{/if}"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
+			<!--{else}-->
+				<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" {if $forum[todayposts] && !$forum['redirect']} class="xi1"{/if}>{lang forum_lastpost}: $forum[lastpost][dateline]</a>
+			<!--{/if}-->
+		<!--{else}-->
+			{lang never}
+		<!--{/if}-->
+	<!--{/if}-->
