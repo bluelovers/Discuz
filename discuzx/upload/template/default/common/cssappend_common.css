@@ -389,3 +389,28 @@ fieldset {
 #myprompt.new {
 	background-image: url({STATICURL}image/plus/common/notice.gif);
 }
+
+/*a link del*/
+.adel,.aedit,.g_photosbox .updel{
+	background:url("{STATICURL}image/plus/pw/del.png") 9999px 9999px no-repeat;
+	width:12px;
+	height:13px;
+	text-indent:-2000em;
+	display:block;
+	overflow:hidden;
+	float:right;
+	padding:0;
+	-webkit-transition: all 0.2s ease-out;
+}
+.adel,.g_photosbox .updel{
+	background-position:0 -15px;
+}
+.adel:hover,.g_photosbox .updel:hover{
+	background-position:-34px -15px;
+}
+.aedit{
+	background-position:0 0;
+}
+.aedit:hover{
+	background-position:-34px 0;
+}
