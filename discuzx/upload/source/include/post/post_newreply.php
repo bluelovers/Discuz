@@ -159,8 +159,6 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 				'comment' => $totalv
 			));
 		}
-
-		//TODO:增加點評時可以更新主題與版塊的最後發表者
 	}
 	DB::update('forum_postcomment', array('dateline' => TIMESTAMP + 1), "id='$pcid'");
 	showmessage('comment_add_succeed', "forum.php?mod=viewthread&tid=$post[tid]&pid=$post[pid]&page=$_G[gp_page]&extra=$extra#pid$post[pid]", array('tid' => $post['tid'], 'pid' => $post['pid']));
