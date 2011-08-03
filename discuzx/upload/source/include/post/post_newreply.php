@@ -108,6 +108,14 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 			'subject' => $thread['subject'],
 			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
 		));
+
+		// bluelovers
+		if ($thread['lastpost'] < $_G['timestamp']) {
+			// 更新主題最後發表者與時間
+			DB::query("UPDATE ".DB::table('forum_thread')." SET lastposter='$_G[username]', lastpost='$_G[timestamp]' WHERE tid='{$post[tid]}'", 'UNBUFFERED');
+		}
+		// bluelovers
+
 	}
 	if($_G['setting']['heatthread']['type'] == 2) {
 		update_threadpartake($post['tid']);
