@@ -34,6 +34,10 @@
 		overflow: hidden;
 	}
 
+	.t_f {
+		line-height: 1.6em;
+	}
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
