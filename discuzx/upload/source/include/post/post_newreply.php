@@ -113,6 +113,14 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		if ($thread['lastpost'] < $_G['timestamp']) {
 			// 更新主題最後發表者與時間
 			DB::query("UPDATE ".DB::table('forum_thread')." SET lastposter='$_G[username]', lastpost='$_G[timestamp]' WHERE tid='{$post[tid]}'", 'UNBUFFERED');
+
+			// 更新版塊最後發表者與時間
+			$lastpost = "$post[tid]\t".addslashes($thread['subject'])."\t$_G[timestamp]\t$_G[username]";
+			DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost', todayposts=todayposts+1 WHERE fid='$_G[fid]'", 'UNBUFFERED');
+
+			if($_G['forum']['type'] == 'sub') {
+				DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='".$_G['forum']['fup']."'", 'UNBUFFERED');
+			}
 		}
 		// bluelovers
 
