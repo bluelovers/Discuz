@@ -61,24 +61,6 @@
 		font-family: Helvetica,Arial,sans-serif,'細明體';
 	}
 
-	.fl_tb h2 em.xi1, .tl .new .xi1 {
-		background: url({STATICURL}image/plus/common/new.gif) no-repeat scroll 5px 50% transparent;
-		padding-left: 20px;
-		line-height: 1.6em;
-		height: 11px;
-
-		font-size: 8px;
-		font-family: Verdana;
-
-		/* 跨瀏覽器的 inline-block */
-		display: -moz-inline-stack;
-		display: inline-block;
-		zoom: 1;
-		*display: inline;
-
-		vertical-align: middle;
-	}
-
 /** end **/
 
 /** group **/
