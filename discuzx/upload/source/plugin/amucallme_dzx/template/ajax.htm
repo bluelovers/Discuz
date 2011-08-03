@@ -1,0 +1,14 @@
+{subtemplate common/header}
+<div style="float:left; width:100%;"><B>{lang amucallme_dzx:jgshow}</B></div>
+<!--{if !$lists}--><span style="display:block;width:48%;float:left;">{lang amucallme_dzx:noshow}</span><!--{/if}-->
+<!--{if $adds == 'fastpostmessage'}-->
+{loop $lists $i $value}
+<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$value[/@]');hideWindow('amucallme_dzx_add');">$value</A></span>
+{/loop}
+<!--{else}-->
+{loop $lists $i $value}
+<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$value[/@]', 34, 0);hideWindow('amucallme_dzx_add');">$value</A></span>
+{/loop}
+<!--{/if}-->
+{subtemplate common/footer}
+

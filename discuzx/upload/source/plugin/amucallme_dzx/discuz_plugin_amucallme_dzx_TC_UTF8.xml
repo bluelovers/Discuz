@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-10 00:13]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/dx/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[呼我【參賽版】]]></item>
+			<item id="identifier"><![CDATA[amucallme_dzx]]></item>
+			<item id="description"><![CDATA[該版本僅用於參賽]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[amucallme_dzx/]]></item>
+			<item id="copyright"><![CDATA[阿牧 @ DSU Team]]></item>
+			<item id="version"><![CDATA[1.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[callme]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[admin]]></item>
+					<item id="menu"><![CDATA[積分設置]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[啟用版塊]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[fids]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[2]]></item>
+				</item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[允許使用用戶組功能的用戶組]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[gids]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[允許被@的用戶組]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[callgids]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="callme"><![CDATA[呼我]]></item>
+				<item id="sendmsg"><![CDATA[您好！{username}邀請您參與話題討論（在帖子中提到了您），具體內容(<A HREF="{url}" target="_blank" class="lit">查看更多內容...</A>)：<blockquote>{message}</blockquote>您也可以直接回復他：<A HREF="{reply}" onclick="showWindow('reply', this.href)" class="lit">馬上回復</A>。]]></item>
+				<item id="admin2_h1"><![CDATA[@功\能消費設定]]></item>
+				<item id="admin2_t2"><![CDATA[積分類型]]></item>
+				<item id="admin2_t3"><![CDATA[積分數量]]></item>
+				<item id="admin2_t4"><![CDATA[有效用戶組]]></item>
+				<item id="admin2_p1"><![CDATA[<li>這裡您可以對各個用戶組會員使用@功\能，設置各自的費用：</li><li>比如您設置，新手上路 1金幣 ，表示新手上路會員@一個用戶時需要消耗1金幣，@ N個會員時，需要N個金幣。</li>]]></item>
+				<item id="admin2_s1"><![CDATA[添加]]></item>
+				<item id="admin2_s2"><![CDATA[提交]]></item>
+				<item id="admin2_i"><![CDATA[提交完成!]]></item>
+				<item id="sf"><![CDATA[<span class="xi1">&nbsp;&nbsp;收費標準：{cost}/人*次</span>]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="cm"><![CDATA[呼我吧]]></item>
+				<item id="sb"><![CDATA[搜索]]></item>
+				<item id="ss"><![CDATA[搜索看看]]></item>
+				<item id="lz"><![CDATA[(樓主)]]></item>
+				<item id="u"><![CDATA[這是我們給您推薦的]]></item>
+				<item id="f"><![CDATA[這是隨機推薦的好友]]></item>
+				<item id="g"><![CDATA[您可以試試@用戶組]]></item>
+				<item id="jgshow"><![CDATA[搜索結果顯示區：]]></item>
+				<item id="noshow"><![CDATA[沒有您搜索到相關會員]]></item>
+			</item>
+			<item id="installlang">
+				<item id="english"><![CDATA[chinese]]></item>
+			</item>
+		</item>
+	</item>
+</root>
