@@ -124,3 +124,13 @@
 		vertical-align: middle;
 	}
 /** end **/
+
+/** home::space **/
+	.space_doing .sctpl_reply
+	, .space_feed_li .sctpl_reply
+	, #share_ul .sctpl_reply
+	{
+		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
+	    padding:5px 10px 5px 25px;
+    }
+/** end **/
