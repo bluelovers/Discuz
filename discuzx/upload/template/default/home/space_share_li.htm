@@ -9,7 +9,7 @@
 		<!--{if $value[sid]}--><a href="home.php?mod=space&uid=$value[uid]&do=share&id=$value[sid]" target="_blank">{lang comment}</a><!--{/if}-->
 		<!--{if $value[uid]==$_G[uid]}-->
 			<span class="pipe">|</span>
-			<a href="home.php?mod=spacecp&ac=share&op=delete&sid=$value[sid]&handlekey=dellshk_{$value[sid]}" id="s_$value[sid]_delete" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+			<a href="home.php?mod=spacecp&ac=share&op=delete&sid=$value[sid]&handlekey=dellshk_{$value[sid]}" id="s_$value[sid]_delete" onclick="showWindow(this.id, this.href, 'get', 0);" class="sctpl_delete adel" title="{lang:html delete,ENT_QUOTES}">{lang delete}</a>
 		<!--{/if}-->
 		</div>
 		<a href="home.php?mod=space&uid=$value[uid]" c="1" target="_blank">$value[username]</a>
