@@ -105,4 +105,22 @@
 	.pcb h3.bbcode_headline, h3.bbcode_headline { color:#006699; font-size: 1.32em; }
 	.pcb h4.bbcode_headline, h4.bbcode_headline { letter-spacing:1px; }
 	.pcb h5.bbcode_headline, h5.bbcode_headline, .pcb h6.bbcode_headline, h6.bbcode_headline { }
+
+	.fl_tb h2 em.xi1, .tl .new a.xi1 {
+		background: url({STATICURL}image/plus/common/new.gif) no-repeat scroll 5px 50% transparent;
+		padding-left: 20px;
+		line-height: 1.6em;
+		height: 11px;
+
+		font-size: 8px;
+		font-family: Verdana;
+
+		/* 跨瀏覽器的 inline-block */
+		display: -moz-inline-stack;
+		display: inline-block;
+		zoom: 1;
+		*display: inline;
+
+		vertical-align: middle;
+	}
 /** end **/
