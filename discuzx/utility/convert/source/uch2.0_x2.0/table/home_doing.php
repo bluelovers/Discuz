@@ -28,7 +28,15 @@ while ($doing = $db_source->fetch_array($query)) {
 
 	// bluelovers
 	$doing['message'] = s_trim($doing['message']);
-	$doing['message'] = preg_replace('/image\/face\/(30|2[1-9])/', 'static/image/smiley/comcom_dx/$1', $doing['message']);
+
+	$doing['message'] = preg_replace(array(
+		'/image\/face\/(30|2[1-9])/',
+		'/image\/face\/(\d+)/',
+	), array(
+		'static/image/smiley/comcom_dx/$1',
+		'static/image/smiley/comcom/$1',
+	), $doing['message']);
+
 	// bluelovers
 
 	$doing  = daddslashes($doing, 1);

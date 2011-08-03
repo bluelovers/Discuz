@@ -75,7 +75,7 @@
 				<tr class="tbmu">
 					<th>{lang stat_date_range}:</th>
 					<td>
-						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+						<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 						<input type="text" name="primarybegin" class="px" value="$primarybegin" onclick="showcalendar(event, this, false)"/> - <input type="text" name="primaryend" class="px" value="$primaryend" onclick="showcalendar(event, this, false)" />
 						<label><input type="checkbox" name="merge" value="1" class="pc" {if !empty($merge)} checked="checked"{/if} />{lang stat_merge_statistic}</label>
 						<button type="submit" class="pn pnc"><strong>{lang show}</strong></button>

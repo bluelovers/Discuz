@@ -419,7 +419,8 @@ class template {
 
 	function loadcsstemplate() {
 		global $_G;
-		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css?{VERHASH}" />';
+		// 增加 {$_G[varhash_gzip]}
+		$scriptcss = '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_common.css{$_G[varhash_gzip]}?{VERHASH}" />';
 		$content = $this->csscurmodules = '';
 		$content = @implode('', file(DISCUZ_ROOT.'./data/cache/style_'.STYLEID.'_module.css'));
 		$content = preg_replace("/\[(.+?)\](.*?)\[end\]/ies", "\$this->cssvtags('\\1','\\2')", $content);
@@ -454,6 +455,9 @@ class template {
 					->run(array(array(
 						'cssdata'		=> &$this->csscurmodules,
 						'entry'			=> $_G['basescript'].'_'.CURMODULE,
+
+						'filename'		=> 'style_'.STYLEID.'_'.$_G['basescript'].'_'.CURMODULE.'.css',
+						'filepath'		=> 'data/cache/',
 					)), array(
 						'cssdata'		=> &$this->csscurmodules,
 				));
@@ -466,7 +470,8 @@ class template {
 			} else {
 				exit('Can not write to cache files, please check directory ./data/ and ./data/cache/ .');
 			}
-			$scriptcss .= '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_'.$_G['basescript'].'_'.CURMODULE.'.css?{VERHASH}" />';
+			// 增加 {$_G[varhash_gzip]}
+			$scriptcss .= '<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_'.$_G['basescript'].'_'.CURMODULE.'.css{$_G[varhash_gzip]}?{VERHASH}" />';
 		}
 		$scriptcss .= '{if $_G[uid] && isset($_G[cookie][extstyle]) && strpos($_G[cookie][extstyle], TPLDIR) !== false}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[cookie][extstyle]/style.css" />{elseif $_G[style][defaultextstyle]}<link rel="stylesheet" id="css_extstyle" type="text/css" href="$_G[style][defaultextstyle]/style.css" />{/if}';
 		return $scriptcss;

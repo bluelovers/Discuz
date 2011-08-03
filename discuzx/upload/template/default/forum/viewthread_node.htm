@@ -69,16 +69,30 @@
 			<!--{/if}-->
 			<!--{hook/viewthread_avatar $postcount}-->
 			<!--{if $post[groupicon]}--><p>$post[groupicon]</p><!--{/if}-->
+
+		<!--檢查 $post[authortitle]-->
+		<!--{if $post[authortitle]}-->
+
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
+
+		<!--{/if}-->
+
 			<!--{if $post['customstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
 			</div>
+
+		<!--如果沒有 $post['stars'] 那麼以下這段代碼也沒意義 -->
+		<!--{if $post['stars']}-->
+
 			<p{if $post['upgradecredit'] !== false} id="g_up$post[pid]" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12!'});"{/if}><!--{eval showstars($post['stars']);}--></p>
 			<!--{if $post['upgradecredit'] !== false}-->
 				<div id="g_up$post[pid]_menu" class="tip tip_4" style="display: none;">
 					<div class="tip_horn"></div>
-					<div class="tip_c">$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}</div>
+					<div class="tip_c">$post['authortitle'], {lang credits} <em class="xi1">$post['credits']</em>, {lang thread_groupupgrade} <em class="xi1">$post['upgradecredit']</em> {lang credits}</div>
 				</div>
 			<!--{/if}-->
+
+		<!--{/if}-->
+
 			<!--{hook/viewthread_sidetop $postcount}-->
 			<!--{if $post[custominfo][left]}--><dl class="pil cl">{$post[custominfo][left]}</dl><!--{/if}-->
 			<!--{if $post['medals']}-->

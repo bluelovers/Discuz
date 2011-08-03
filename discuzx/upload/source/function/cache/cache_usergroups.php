@@ -28,6 +28,15 @@ function build_cache_usergroups() {
 		unset($group['system']);
 		$groupid = $group['groupid'];
 		$group['grouptitle'] = $group['color'] ? '<font color="'.$group['color'].'">'.$group['grouptitle'].'</font>' : $group['grouptitle'];
+		/**
+		 * 顯示作者的組頭銜
+		 *
+		 * userstatusby 只有 1 | 0
+		 *
+		 * 再升級轉換時有可能得到 2
+		 *
+		 * @see source\admincp\admincp_setting.php
+		 */
 		if($_G['setting']['userstatusby'] == 1) {
 			$group['userstatusby'] = 1;
 		} elseif($_G['setting']['userstatusby'] == 2) {
@@ -79,5 +88,19 @@ function build_cache_usergroups_single() {
 		$data['plugin'] = $pluginvalue[$data['groupid']];
 		unset($data['type'], $data['system'], $data['creditshigher'], $data['creditslower'], $data['groupavatar'], $data['admingid']);
 		save_syscache('usergroup_'.$data['groupid'], $data);
+
+		// bluelovers
+		/**
+		 * 不知名原因 bluelovers.net 伺服器上
+		 * 只會產生一個 groupid 檔案緩存
+		 *
+		 * 造成每次都會重新產生 usergroup 緩存
+		 */
+	 	/*
+	 	$cname = 'usergroup_'.$data['groupid'];
+		$cachedata = '$data[\''.$cname.'\'] = '.var_export($data, true).";\n\n";
+		writetocache($cname, $cachedata);
+		*/
+		// bluelovers
 	}
 }

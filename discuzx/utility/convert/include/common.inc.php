@@ -2,7 +2,10 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
-set_time_limit(0);
+/**
+ * Warning: set_time_limit() [function.set-time-limit]: Cannot set time limit in safe mode in convert/include/common.inc.php on line 5
+ */
+@set_time_limit(0);
 
 if(phpversion() < '5.3.0') {
 	set_magic_quotes_runtime(0);

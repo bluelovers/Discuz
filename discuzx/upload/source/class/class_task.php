@@ -21,6 +21,11 @@ class task {
 		static $object;
 		if(empty($object)) {
 			$object = new task();
+
+			// bluelovers
+			// 載入額外新增的 source/language/task/lang_template.php
+			!in_array('task', discuz_core::$langplus) && array_push(discuz_core::$langplus, 'task');
+			// bluelvoers
 		}
 		return $object;
 	}

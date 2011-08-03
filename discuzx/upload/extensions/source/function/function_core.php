@@ -29,7 +29,7 @@ function loadlang($file = 'template', $path = '', $source = 'source/language') {
 	$ret .= 'lang_'.$file.'.php';
 
 	// 忽略找不到檔案時的錯誤
-	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1);
+	$_lang = include_file(DISCUZ_ROOT.'./'.$ret, true, 1, 1);
 
 	return $_lang;
 }
@@ -98,9 +98,18 @@ function get_runtime_defined_vars(array $varList, $excludeList = array()) {
  **/
 function include_file() {
 	if (is_file(func_get_arg(0))) {
+
+		// for discuz use
+		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+			// 防止模板檔中使用到 $_G 而造成錯誤
+			global $_G;
+		}
+
 		include func_get_arg(0);
 		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
-			return get_runtime_defined_vars(get_defined_vars());
+			return get_runtime_defined_vars(get_defined_vars(), array(
+				'_G',
+			));
 		}
 	// 追加忽略找不到檔案時的錯誤訊息開關
 	} elseif (!func_get_arg(2)) {
@@ -108,6 +117,63 @@ function include_file() {
 	}
 
 	return array();
+}
+
+/**
+ * 推薦搭配用於載入 function library
+ */
+function include_file_once() {
+	static $_cahce_include;
+
+	if (isset($_cahce_include[func_get_arg(0)])) return $_cahce_include[func_get_arg(0)];
+
+	if (is_file(func_get_arg(0))) {
+
+		// for discuz use
+		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+			// 防止模板檔中使用到 $_G 而造成錯誤
+			global $_G;
+		}
+
+		$_cahce_include[func_get_arg(0)] = include_once(func_get_arg(0));
+
+		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
+			return get_runtime_defined_vars(get_defined_vars(), array(
+				'_G',
+				'_cahce_include',
+			));
+		}
+
+		return $_cahce_include[func_get_arg(0)];
+
+	// 追加忽略找不到檔案時的錯誤訊息開關
+	} elseif (!func_get_arg(2)) {
+		throw new Exception('PHP Warning: include_file(): Filename cannot be empty or not exists!!');
+	}
+
+	$_cahce_include[func_get_arg(0)] = false;
+
+	return false;
+}
+
+/**
+ * check user agent accept encoding gzip
+ */
+function getaccept_encoding_gzip() {
+	if (!defined('HTTP_USER_AGENT_GZIP')) {
+		$gzip_compress = false;
+		if (strstr($_SERVER['HTTP_USER_AGENT'], 'compatible')) {
+			if (extension_loaded('zlib')) {
+				$gzip_compress = true;
+			}
+		} elseif (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+			if (extension_loaded('zlib')) {
+				$gzip_compress = true;
+			}
+		}
+		define('HTTP_USER_AGENT_GZIP', $gzip_compress);
+	}
+	return HTTP_USER_AGENT_GZIP;
 }
 
 ?>

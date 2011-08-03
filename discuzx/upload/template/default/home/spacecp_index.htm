@@ -333,7 +333,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 										<textarea name="content" id="contentmessage" style="width: 100%;"cols="40" rows="3" class="pt" onkeydown="ctrlEnter(event, 'blocksubmitbtn');">$para[content]</textarea>
 									</div>
 								</div>
-								<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
+								<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 								<script type="text/javascript">var forumallowhtml = 0,allowhtml = parseInt('{$_G[group][allowspacediyhtml]}'),allowsmilies = 0,allowbbcode = parseInt('{$_G[group][allowspacediybbcode]}'),allowimgcode = parseInt('{$_G[group][allowspacediyimgcode]}');var DISCUZCODE = [];DISCUZCODE['num'] = '-1';DISCUZCODE['html'] = [];
 								</script>
 							</td>

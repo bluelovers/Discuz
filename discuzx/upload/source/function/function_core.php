@@ -261,13 +261,50 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
-function dhtmlspecialchars($string) {
+/**
+ * Convert special characters to HTML entities
+ *
+ * @param string $string
+ * @param ENT_QUOTES|null $quote_style
+ *
+ * @return string
+ *
+ * @example '&' (ampersand) becomes '&amp;'
+ * @example '"' (double quote) becomes '&quot;'
+ * @example "'" (single quote) becomes '&#039;' only when ENT_QUOTES is set.
+ * @example '<' (less than) becomes '&lt;'
+ * @example '>' (greater than) becomes '&gt;'
+ *
+ * @link http://www.php.net/manual/en/function.htmlspecialchars.php
+ */
+function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $quote_style);
 		}
 	} else {
+		/*
 		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		*/
+		// bluelovers
+		$search = $replace = array();
+
+		$search[0] = array(
+			'&', '"', '<', '>'
+		);
+		$replace[0] = array(
+			'&amp;', '&quot;', '&lt;', '&gt;'
+		);
+
+		// $quote_style
+		if ($quote_style & ENT_QUOTES) {
+			array_push($search[0], '\'');
+			array_push($replace[0], '&#039;');
+		}
+
+		$string = str_replace($search[0], $replace[0], $string);
+		// bluelvoers
+
 		if(strpos($string, '&amp;#') !== false) {
 			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
 		}
@@ -634,6 +671,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 
 	static $_init_style = false;
 	if($_init_style === false) {
+		// 防止沒有載入風格
 		$discuz = & discuz_core::instance();
 		$discuz->_init_style();
 		$_init_style = true;
@@ -660,7 +698,8 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或預覽模式下做以下判斷
+				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') {
+					//DIY模式或預覽模式下做以下判斷
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_G['gp_preview'] == 'yes') {
 						$file .= $flag ? $preend : '';
@@ -736,9 +775,47 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	}
 
 	if($gettplfile) {
+
+		// bluelovers
+		// Event: Func_template:Before_return_tplfile
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return_tplfile')
+				->run(array(array(
+					// 函數本身的參數
+					'file' => &$file,
+					'templateid' => &$templateid,
+					'tpldir' => &$tpldir,
+					'gettplfile' => &$gettplfile,
+					'primaltpl' => &$primaltpl,
+
+					// 回傳的檔案
+					'tplfile' => &$tplfile,
+			)));
+		}
+		// bluelovers
+
 		return $tplfile;
 	}
 	checktplrefresh($tplfile, $tplfile, @filemtime(DISCUZ_ROOT.$cachefile), $templateid, $cachefile, $tpldir, $file);
+
+	// bluelovers
+	// Event: Func_template:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身的參數
+				'file' => &$file,
+				'templateid' => &$templateid,
+				'tpldir' => &$tpldir,
+				'gettplfile' => &$gettplfile,
+				'primaltpl' => &$primaltpl,
+
+				// 回傳的檔案
+				'cachefile' => &$cachefile,
+		)));
+	}
+	// bluelovers
+
 	return DISCUZ_ROOT.$cachefile;
 }
 
@@ -932,11 +1009,23 @@ function cachedata($cachenames) {
 	$lostcaches = array();
 	// bluelvoers
 
+	// bluelovers
+	static $_libs_cache_;
+	// bluelovers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
 		if($isfilecache) {
+
+			// bluelovers
+			if (!isset($_libs_cache_)) {
+				$_libs_cache_ = true;
+				include_once libfile('function/cache');
+			}
+			// bluelovers
+
 			// 將從 common_syscache 中找到的緩存寫入 ./data/cache
 			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
 
@@ -1077,9 +1166,22 @@ function save_syscache($cachename, $data) {
 	if(!isset($isfilecache)) {
 		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
+
+		// bluelovers
+		include_once libfile('function/cache');
+		// bluelovers
 	}
 
+	// bluelovers
+	$_data = null;
+	// bluelovers
+
 	if(is_array($data)) {
+
+		// bluelovers
+		$_data = $data;
+		// bluelovers
+
 		$ctype = 1;
 		$data = addslashes(serialize($data));
 	} else {
@@ -1090,6 +1192,26 @@ function save_syscache($cachename, $data) {
 
 	$allowmem && memory('rm', $cachename);
 	$isfilecache && @unlink(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php');
+
+	// bluelovers
+	/**
+	 * 修改為 save_syscache 時同時直接寫入緩存檔
+	 */
+	if ($isfilecache && $_data !== null) {
+		// 將從 common_syscache 中找到的緩存寫入 ./data/cache
+		$cachedata = '$data[\''.$cachename.'\'] = '.var_export($_data, true).";\n\n";
+
+		// 判斷如果已經載入 libfile('function/cache') 則使用 writetocache 來寫入 cache
+		if (function_exists('writetocache')) {
+			writetocache($cachename, $cachedata);
+		} else {
+			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php', 'wb')) {
+				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($cachename.$cachedata.$GLOBALS['_G']['config']['security']['authkey'])."\n\n$cachedata?>");
+				fclose($fp);
+			}
+		}
+	}
+	// bluelovers
 }
 
 function block_get($parameter) {
@@ -1157,8 +1279,12 @@ function libfile($libname, $folder = '', $source = 'source') {
 	}
 
 	// bluelovers
+	// Event: Func_libfile
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
-		Scorpio_Event::instance('Func_'.__FUNCTION__.'')->run(array(&$ret, DISCUZ_ROOT));
+		Scorpio_Event::instance('Func_'.__FUNCTION__.'')
+			->run(array(
+				&$ret, DISCUZ_ROOT
+		));
 	}
 	// bluelovers
 
@@ -1349,7 +1475,35 @@ function mobileoutput() {
 	if(!defined('TPL_DEFAULT')) {
 		$content = ob_get_contents();
 		ob_end_clean();
-		$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+
+		// bluelovers
+		$switchstop = 0;
+
+		// Event: Func_mobileoutput:Before_output_replace
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_output_replace')
+				->run(array(array(
+					'content'		=> &$content,
+					'switchstop'	=> &$switchstop,
+				)));
+		}
+
+		if (!$switchstop) {
+		// bluelovers
+
+			$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+
+		// bluelovers
+		}
+
+		// Event: Func_mobileoutput:Before_rewrite_content_echo
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+				->run(array(array(
+					'content'	=> &$content,
+				)));
+		}
+		// bluelovers
 
 		ob_start();
 		$content = '<?xml version="1.0" encoding="utf-8"?>'.$content;
@@ -1444,20 +1598,68 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
-	if(!empty($_G['setting']['output']['str']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
-		}
-		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
+
+	// bluelovers
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_str
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_str')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
 	}
-	if(!empty($_G['setting']['output']['preg']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
-			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['str']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+			}
+			$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 		}
 
-		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+	// bluelovers
 	}
+
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_preg
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_preg')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['preg']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
+				$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+			}
+
+			$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+		}
+
+	// bluelovers
+	}
+
+	// Event: Func_output_replace:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				'content'	=> &$content,
+			)));
+	}
+	// bluelovers
 
 	return $content;
 }
@@ -1855,7 +2057,43 @@ function adshow($parameter) {
 	$_G['setting']['pluginhooks'][$adfunc] = null;
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
-	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	/**
+	 * 控制是否停止執行
+	 */
+	$switchstop = 0;
+
+	$adshow_return = $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// Event: Func_adshow:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身參數
+				'parameter' => &$parameter,
+
+				'params' => &$params,
+
+				'adfunc' => &$adfunc,
+				'adcontent' => &$adcontent,
+
+				'switchstop' => &$switchstop,
+
+				'adshow_return' => &$adshow_return,
+		)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	} else {
+		return $adshow_return;
+	}
+	// bluelovers
 }
 
 /**

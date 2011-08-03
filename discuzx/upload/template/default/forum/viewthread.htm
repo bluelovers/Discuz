@@ -2,10 +2,10 @@
 
 <script type="text/javascript">var fid = parseInt('$_G[fid]'), tid = parseInt('$_G[tid]');</script>
 <!--{if $modmenu['thread'] || $modmenu['post']}-->
-	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <!--{/if}-->
 
-<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']);var imagemaxwidth = '{$_G['setting']['imagemaxwidth']}';var aimgcount = new Array();</script>
 
 <style id="diy_style" type="text/css"></style>
@@ -174,6 +174,7 @@
 					</div>
 				<!--{/if}-->
 				<h1 class="ts">
+					<!-- thread subject -->
 					<!--{if $_G['forum_thread']['typeid'] && $_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}-->
 						<!--{if !IS_ROBOT && ($_G['forum']['threadtypes']['listable'] || $_G['forum']['status'] == 3)}-->
 							<a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$_G[forum_thread][typeid]">[{$_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}]</a>

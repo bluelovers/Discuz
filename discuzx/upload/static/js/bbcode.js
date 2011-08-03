@@ -96,10 +96,20 @@ function bbcode2html(str) {
 			'\\\[\\\/color\\\]', '\\\[\\\/backcolor\\\]', '\\\[\\\/size\\\]', '\\\[\\\/font\\\]', '\\\[\\\/align\\\]', '\\\[\\\/p\\\]', '\\\[b\\\]', '\\\[\\\/b\\\]',
 			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\\[hr\\\]', '\\\[list\\\]', '\\\[list=1\\\]', '\\\[list=a\\\]',
 			'\\\[list=A\\\]', '\\s?\\\[\\\*\\\]', '\\\[\\\/list\\\]', '\\\[indent\\\]', '\\\[\\\/indent\\\]', '\\\[\\\/float\\\]'
+
+			// bluelovers
+			, '\\n?\\\[h([1-6])\\\]', '\\s*\\\[\\\/h([1-6])\\\]\\n?',
+			// bluelovers
+
 			], [
 			'</font>', '</font>', '</font>', '</font>', '</p>', '</p>', '<b>', '</b>', '<i>',
 			'</i>', '<u>', '</u>', '<strike>', '</strike>', '<hr class="l" />', '<ul>', '<ul type=1 class="litype_1">', '<ul type=a class="litype_2">',
 			'<ul type=A class="litype_3">', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
+
+			// bluelovers
+			, '<h$1 class="bbcode_headline">', '</h$1>',
+			// bluelovers
+
 			], str, 'g');
 	}
 
@@ -356,7 +366,15 @@ function html2bbcode(str) {
 			'[/b]'
 		], str);
 
+		// bluelovers
+//		<h3 class="bbcode_headline">
+		str = str.replace(/\n{0,2}<h([1-6])(?:\s+class="bbcode_headline"|[^>]*)+>((?:[^<]*|<(?!\/h\1>))+)<\/h\1>\n{0,2}/ig, "\n\n[h$1]$2[/h$1]\n\n");
+		// bluelovers
+
+		/*
 		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\\1>/ig, "[size=$1]$2[/size]\n\n");
+		*/
+		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\1>/ig, "[size=$1]$2[/size]\n\n");
 		str = str.replace(/<hr[^>]*>/ig, "[hr]");
 		str = str.replace(/<img[^>]+smilieid=(["']?)(\d+)(\1)[^>]*>/ig, function($1, $2, $3) {return smileycode($3);});
 		str = str.replace(/<img([^>]*src[^>]*)>/ig, function($1, $2) {return imgtag($2);});

@@ -1,0 +1,19 @@
+<!-- header #hd .hdc h2 -->
+					<!--{eval $mnid = getcurrentnav();}-->
+					<h2>
+
+					<!--{if discuz_core::$tpl['header_logo_hide']}-->
+
+						<a href="./" title="$_G['setting']['bbname']" style="display: none;">{$_G['setting']['bbname']}</a>
+
+					<!--{else}-->
+
+						<!--{if !isset($_G['setting']['navlogos'][$mnid])}-->
+							<a href="./" title="$_G['setting']['bbname']">{$_G['style']['boardlogo']}</a>
+						<!--{else}-->
+							$_G['setting']['navlogos'][$mnid]
+						<!--{/if}-->
+
+					<!--{/if}-->
+
+					</h2>

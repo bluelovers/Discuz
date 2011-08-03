@@ -13,6 +13,29 @@
 	.tl th *, .tl td.icn *, .tl td.o * { vertical-align: middle; }
 /** end **/
 
+/** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
+
+	/* 修正雙重間距 */
+	.pls .avatar img.avatar
+	/* 用戶詳細信息 */
+	, .bui a img.avatar
+	{
+		margin: 0;
+	}
+
+	.pls .avatar {
+		overflow: hidden;
+	}
+
+	/* 用戶詳細信息 頭像底下 的並排連結 */
+	.pls .o li, .pls .o li * {
+		word-break: keep-all;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+/** end **/
+
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
 	/* 圖片縮放的背景 */
 	.zoominner { overflow: hidden; }
@@ -46,4 +69,40 @@
 			zoom: 1;
 			*display: inline;
 		}
+/** end **/
+
+/** forum,group **/
+
+	/* 編輯器內的彈出選單 editor_menu */
+	.editortoolbar .p_pop {
+		min-width: 80px;
+		max-height: 300px;
+
+		overflow-y: auto;
+		overflow-x: visible;
+	}
+
+	h1.ts #thread_subject, #share_ul h1.ph, .vw .ph, .pcb h1, .pcb h2 {
+		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
+		text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
+		font-weight: 800;
+	}
+
+	h1.ts #thread_subject, #share_ul h1.ph, .vw .ph {
+		font-size:32px;
+	}
+
+	/* 主題內標題字的樣式 */
+	h1.bbcode_headline, h2.bbcode_headline, h3.bbcode_headline, h4.bbcode_headline, h5.bbcode_headline, h6.bbcode_headline {
+		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
+		text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
+		font-weight: bold;
+		margin:8px 0;
+		border-bottom: 1px dashed #C7D5E7;
+	}
+	.pcb h1.bbcode_headline, .plc h1.ts #thread_subject, h1.bbcode_headline { font-size:32px; color: #FF6600; }
+	.pcb h2.bbcode_headline, .pcb h3.bbcode_headline, h2.bbcode_headline, h3.bbcode_headline, h2.post_subject { color: #009900; font-size: 1.5em; letter-spacing: 1px; }
+	.pcb h3.bbcode_headline, h3.bbcode_headline { color:#006699; font-size: 1.32em; }
+	.pcb h4.bbcode_headline, h4.bbcode_headline { letter-spacing:1px; }
+	.pcb h5.bbcode_headline, h5.bbcode_headline, .pcb h6.bbcode_headline, h6.bbcode_headline { }
 /** end **/

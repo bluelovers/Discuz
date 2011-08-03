@@ -142,6 +142,9 @@ function _fix_link($value, $key) {
 
 		if ($replace[$_k]) {
 			foreach ($replace[$_k] as $_s_ => $_r_) {
+				// 修正多出來的 " 造成錯誤
+				$value = trim($value, '"');
+
 				$value = str_replace('<a href="'.$_s_, '<a href="'.$_r_, $value);
 
 				if (in_array($key, $fix_array[1])) {
