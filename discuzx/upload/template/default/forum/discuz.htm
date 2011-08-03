@@ -109,7 +109,7 @@
 									<dt><a href="$forumurl"{if $forum[redirect]} target="_blank"{/if}{if $forum[extra][namecolor]} style="color: {$forum[extra][namecolor]};"{/if}>$forum[name]</a><!--{if $forum[todayposts] && !$forum['redirect']}--><em class="xw0 xi1" title="{lang forum_todayposts}"> ($forum[todayposts])</em><!--{/if}--></dt>
 									<!--{if empty($forum[redirect])}--><dd><em>{lang forum_threads}: $forum[threads]</em>, <em>{lang forum_posts}: $forum[posts]</em></dd><!--{/if}-->
 									<dd>
-									<!--{if 0 && $forum['permission'] == 1}-->
+									<!--{if $forum['permission'] == 1}-->
 										{lang private_forum}
 									<!--{else}-->
 										<!--{if $forum['redirect']}-->
