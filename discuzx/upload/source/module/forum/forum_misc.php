@@ -201,6 +201,13 @@ if($_G['gp_action'] == 'paysucceed') {
 	include template('forum/upload');
 
 } elseif($_G['gp_action'] == 'comment') {
+	/**
+	 * 帖子點評
+	 * $_G['gp_action'] == 'comment'
+	 *
+	 * @link forum.php?mod=misc&action=comment&tid=32748&pid=134197&extra=&page=1
+	 * @link forum.php?mod=post&action=reply&comment=yes&tid=32748&pid=134197&extra=&page=1&commentsubmit=yes&infloat=yes
+	 */
 
 	if(!$_G['setting']['commentnumber']) {
 		showmessage('postcomment_closed');
