@@ -129,6 +129,12 @@
 	}
 /** end **/
 
+/** forum::index **/
+	.oll img {
+		vertical-align: text-bottom;
+	}
+/** end **/
+
 /** home::space **/
 	.space_doing .sctpl_reply
 	, .space_feed_li .sctpl_reply
@@ -141,6 +147,6 @@
     .space_doing .sctpl_message img
 	, .space_doing_li .sctpl_message img
 	{
-    	vertical-align: bottom;
+    	vertical-align: text-bottom;
 	}
 /** end **/
