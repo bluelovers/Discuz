@@ -52,6 +52,13 @@ if(empty($thread)) {
 
 checklowerlimit('reply', 0, 1, $_G['forum']['fid']);
 
+/**
+ * 帖子點評
+ * comment=yes
+ *
+ * @link forum.php?mod=misc&action=comment&tid=32748&pid=134197&extra=&page=1
+ * @link forum.php?mod=post&action=reply&comment=yes&tid=32748&pid=134197&extra=&page=1&commentsubmit=yes&infloat=yes
+ */
 if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	$posttable = getposttablebytid($_G['tid']);
 	if(!submitcheck('commentsubmit', 0, $seccodecheck, $secqaacheck)) {
