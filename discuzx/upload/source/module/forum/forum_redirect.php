@@ -104,7 +104,7 @@ if(empty($_G['thread'])) {
 if($_G['gp_goto'] == 'lastpost') {
 
 	$pageadd = '';
-	if(!getstatus($_G['thread'], 4)) {
+	if(!getstatus($_G['thread']['status'], 4)) {
 		$page = ceil(($_G['thread']['special'] ? $_G['thread']['replies'] : $_G['thread']['replies'] + 1) / $_G['ppp']);
 		$pageadd = $page > 1 ? '&page='.$page : '';
 	}
