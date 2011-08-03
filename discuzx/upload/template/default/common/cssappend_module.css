@@ -133,4 +133,10 @@
 		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
 	    padding:5px 10px 5px 25px;
     }
+
+    .space_doing .sctpl_message img
+	, .space_doing_li .sctpl_message img
+	{
+    	vertical-align: middle;
+	}
 /** end **/
