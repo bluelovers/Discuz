@@ -564,7 +564,7 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
 		$ext = $ext2 . ' ' . $ext;
 
-		$file = (!preg_match('/^http:\/\//i', IMGDIR) ? $GLOBALS['boardurl'] : '').IMGDIR.'/syspm.gif';
+		$file = (!preg_match('/^http:\/\//i', IMGDIR) ? $GLOBALS['boardurl'] : '').IMGDIR.'/systempm.png';
 		return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
 	}
 }
