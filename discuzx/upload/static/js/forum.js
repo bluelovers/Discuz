@@ -165,7 +165,24 @@ function announcement() {
 }
 
 function removeindexheats() {
+	/*
 	return confirm('您確認要把此主題從熱點主題中移除麼？');
+	*/
+	doane(null, 1, 1);
+
+	if (confirm('您確認要把此主題從熱點主題中移除麼？')) {
+		var e = getEvent();
+		var who = e.target;
+
+		ajaxget(who.href, null, null, null, null, function(){
+			if (who.parentNode.tagName != 'LI') {
+				who.parentNode.parentNode.parentNode.removeChild(who.parentNode.parentNode);
+			} else {
+				who.parentNode.parentNode.removeChild(who.parentNode);
+			}
+		});
+	}
+	return false;
 }
 
 function showTypes(id, mod) {
