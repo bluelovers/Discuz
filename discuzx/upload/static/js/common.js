@@ -1769,6 +1769,10 @@ function parseurl(str, mode, parsecode) {
 }
 
 function codetag(text, brush) {
+	// bluelovers
+	brush = trim(brush);
+	// bluelovers
+
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code' + (brush ? '=' + brush : '') + ']' + text + '[/code]';
