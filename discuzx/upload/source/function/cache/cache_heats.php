@@ -47,6 +47,10 @@ function build_cache_heats() {
 				AND t.displayorder>='0'
 				$addsql
 			ORDER BY t.heats DESC
+
+			/* 增加以發表時間做第二排序 */
+			, t.dateline DESC
+
 			LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
 
 		$messageitems = 2;
