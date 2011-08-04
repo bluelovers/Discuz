@@ -526,24 +526,23 @@ function $F(func, args, script) {
 	script = script || 'common_extra';
 	/*
 	src = JSPATH + script + '.js?' + VERHASH;
+	if(!JSLOADED[src]) {
+		appendscript(src);
+	}
 	*/
 	// bluelovers
 	// for support VERHASH_GZIP_JS
 	src = JSPATH + script + '.js' + VERHASH_GZIP_JS + '?' + VERHASH;
 
 	var src_key = JSPATH + script + '.js';
-	// bluelovers
-	/*
-	if(!JSLOADED[src]) {
-		appendscript(src);
-	}
-	*/
+
 	if(!JSLOADED[src_key]) {
 		appendscript({
 			'src' : src,
 			'src_key' : src_key
 		});
 	}
+	// bluelovers
 	checkrun();
 }
 
