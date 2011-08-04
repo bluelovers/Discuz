@@ -21,6 +21,12 @@ if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCH
 }
 
 $newthreads = round((TIMESTAMP - $_G['member']['lastvisit'] + 600) / 1000) * 1000;
+
+// bluelovers
+// 至少要查詢 12 小時內的資訊
+$newthreads = max($newthreads, 3600 * 12);
+// bluelovers
+
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].'" href="'.$_G['siteurl'].'forum.php?mod=rss&auth='.$_G['rssauth']."\" />\n") : '';
 
 $catlist = $forumlist = $sublist = $forumname = $collapseimg = $collapse = array();
