@@ -35,7 +35,10 @@ function bbcode2html(str) {
 	}
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
+		/*
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
+		*/
+		str = str.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return parsecode($2, $3);});
 	}
 
 	if(fetchCheckbox('allowimgurl')) {
