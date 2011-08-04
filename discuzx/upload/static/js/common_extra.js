@@ -844,6 +844,7 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 	if(ctrlid) {
 		msg = '<div id="' + ctrlid + '_prompt"><div class="tip_horn"></div><div class="tip_c">' + msg + '</div>';
 	} else {
+		// 如果沒有 ctrlid 代表是 credit
 		msg = '<table cellspacing="0" cellpadding="0" class="popupcredit"><tr><td class="pc_l">&nbsp;</td><td class="pc_c"><div class="pc_inner">' + msg +
 			'</td><td class="pc_r">&nbsp;</td></tr></table>';
 	}
@@ -863,11 +864,12 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 					$(ctrlid).onmouseover = prompting;
 				}
 			}
-			showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+			showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt'],'fade':1});
 			$(ctrlid).unselectable = false;
 		}
 	} else {
-		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+		// 如果沒有 ctrlid 代表是 credit
+		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt'],'fade':1});
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
 	}
 }
@@ -901,7 +903,13 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	for(i = 1; i <= 8; i++) {
 		v = parseInt(Math.abs(parseInt(notice[i])) / 5) + 1;
 		if(notice[i] !== '0' && creditinfo[i]) {
+			/*
 			s += '<span>' + creditinfo[i][0] + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
+			*/
+			/**
+			 * 補回 DX 1.0 的積分變動提示效果
+			 */
+			s += '<span>' + creditinfo[i][0] + '<u>' + basev[i] + '</u>' + (notice[i] != 0 ? (notice[i] > 0 ? ' <em>+' : ' <em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
 		}
 		if(notice[i] > 0) {
 			notice[i] = parseInt(notice[i]) - v;
@@ -932,7 +940,18 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	} else {
 		$('creditpromptdiv').innerHTML = s;
 	}
-	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+
+	// bluelovers
+	// 動態顯示積分變化
+	if(!bk) {
+		bk = check ? 0 : 1;
+		setTimeout(function () { creditShow(creditinfo, notice, basev, bk, 0, creditrule); }, first ? 2500 : 100);
+	} else {
+	// bluelovers
+		setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+	// bluelovers
+	}
+	// bluelovers
 }
 
 function _showColorBox(ctrlid, layer, k, bgcolor) {
