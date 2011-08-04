@@ -534,7 +534,7 @@ function $F(func, args, script) {
 	// for support VERHASH_GZIP_JS
 	var src_key = JSPATH + script + '.js';
 
-	src = JSPATH + script + '.js' + VERHASH_GZIP_JS + '?' + VERHASH;
+	src = src_key + VERHASH_GZIP_JS + '?' + VERHASH;
 
 	if(!JSLOADED[src_key]) {
 		appendscript({
