@@ -1768,10 +1768,14 @@ function parseurl(str, mode, parsecode) {
 	return str;
 }
 
-function codetag(text) {
+function codetag(text, brush) {
+	// bluelovers
+	brush = trim(brush);
+	// bluelovers
+
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
-	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
+	DISCUZCODE['html'][DISCUZCODE['num']] = '[code' + (brush ? '=' + brush : '') + ']' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
 

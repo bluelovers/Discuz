@@ -35,7 +35,10 @@ function bbcode2html(str) {
 	}
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
+		/*
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
+		*/
+		str = str.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return parsecode($2, $3);});
 	}
 
 	if(fetchCheckbox('allowimgurl')) {
@@ -309,7 +312,10 @@ function html2bbcode(str) {
 		return str;
 	}
 
+	/*
 	str = str.replace(/<div\sclass=["']?blockcode["']?>[\s\S]*?<blockquote>([\s\S]+?)<\/blockquote>[\s\S]*?<\/div>/ig, function($1, $2) {return codetag($2);});
+	*/
+	str = str.replace(/<div\sclass=["']?blockcode["']?(?:\sdata\-brush=["']([a-z0-9\_\+\-,\s]+)['"]\s*)?>[\s\S]*?<blockquote>([\s\S]+?)<\/blockquote>[\s\S]*?<\/div>/ig, function($1, $3, $2) {return codetag($2, $3);});
 
 	str = preg_replace(['<style.*?>[\\\s\\\S]*?<\/style>', '<script.*?>[\\\s\\\S]*?<\/script>', '<noscript.*?>[\\\s\\\S]*?<\/noscript>', '<select.*?>[\s\S]*?<\/select>', '<object.*?>[\s\S]*?<\/object>', '<!--[\\\s\\\S]*?-->', ' on[a-zA-Z]{3,16}\\\s?=\\\s?"[\\\s\\\S]*?"'], '', str);
 
@@ -489,9 +495,13 @@ function litag(listoptions, text) {
 	return '[*]' + text.replace(/(\s+)$/g, '') + '\n';
 }
 
-function parsecode(text) {
+function parsecode(text, brush) {
+	// bluelovers
+	brush = trim(brush);
+	// bluelovers
+
 	DISCUZCODE['num']++;
-	DISCUZCODE['html'][DISCUZCODE['num']] = '<div class="blockcode"><blockquote>' + htmlspecialchars(text) + '</blockquote></div>';
+	DISCUZCODE['html'][DISCUZCODE['num']] = '<div class="blockcode"' + (brush ? ' data-brush="' + brush + '"' : '') + '><blockquote>' + htmlspecialchars(text) + '</blockquote></div>';
 	return "[\tDISCUZ_CODE_" + DISCUZCODE['num'] + "\t]";
 }
 
