@@ -530,6 +530,8 @@ function $F(func, args, script) {
 	// bluelovers
 	// for support VERHASH_GZIP_JS
 	src = JSPATH + script + '.js' + VERHASH_GZIP_JS + '?' + VERHASH;
+
+	var src_key = JSPATH + script + '.js';
 	// bluelovers
 	if(!JSLOADED[src]) {
 		appendscript(src);
