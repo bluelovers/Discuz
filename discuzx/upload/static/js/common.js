@@ -517,7 +517,8 @@ function $F(func, args, script) {
 		}
 	};
 	var checkrun = function () {
-		if(JSLOADED[src]) {
+		// fix use src_key
+		if(JSLOADED[src_key]) {
 			run();
 		} else {
 			setTimeout(function () { checkrun(); }, 50);
