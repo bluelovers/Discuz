@@ -368,7 +368,15 @@ if($_G['gp_action'] == 'paysucceed') {
 	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]'");
 	require_once libfile('function/cache');
 	updatecache('heats');
+
+	// bluelovers
+	// 當 inajax 時減少多餘的回傳
+	if (!$_G['inajax']) {
+	// bluelovers
 	dheader('Location: '.dreferer());
+	// bluelovers
+	}
+	// bluelovers
 
 } else {
 
