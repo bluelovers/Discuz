@@ -348,8 +348,10 @@ function html2bbcode(str) {
 			'<\/t[dh]>',
 			'<\/tr>',
 			'<\/table>',
+			/*
 			'<h\\\d[^>]*>',
 			'<\/h\\\d>'
+			*/
 		], [
 			function($1, $2, $3) {return '[float=' + $2 + ']' + $3 + '[/float]';},
 			function($1, $2) {return tabletag($2);},
@@ -362,8 +364,10 @@ function html2bbcode(str) {
 			'[/td]',
 			'[/tr]\n',
 			'[/table]',
+			/*
 			'[b]',
 			'[/b]'
+			*/
 		], str);
 
 		// bluelovers
