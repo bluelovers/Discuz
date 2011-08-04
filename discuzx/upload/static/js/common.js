@@ -571,7 +571,7 @@ function appendscript(src, text, reload, charset) {
 	scriptNode.charset = charset ? charset : (BROWSER.firefox ? document.characterSet : document.charset);
 	try {
 		if(src) {
-			scriptNode.src = src;
+			scriptNode.src = src_file;
 			scriptNode.onloadDone = false;
 			scriptNode.onload = function () {
 				scriptNode.onloadDone = true;
