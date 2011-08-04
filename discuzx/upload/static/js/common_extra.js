@@ -946,7 +946,7 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 		bk = check ? 0 : 1;
 	} else {
 	// bluelovers
-	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+		setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
 	// bluelovers
 	}
 	// bluelovers
