@@ -496,6 +496,10 @@ function litag(listoptions, text) {
 }
 
 function parsecode(text, brush) {
+	// bluelovers
+	brush = trim(brush);
+	// bluelovers
+
 	DISCUZCODE['num']++;
 	DISCUZCODE['html'][DISCUZCODE['num']] = '<div class="blockcode" data-brush="' + brush + '"><blockquote>' + htmlspecialchars(text) + '</blockquote></div>';
 	return "[\tDISCUZ_CODE_" + DISCUZCODE['num'] + "\t]";
