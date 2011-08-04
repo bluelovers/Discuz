@@ -373,7 +373,7 @@ if($_G['gp_action'] == 'paysucceed') {
 	// 當 inajax 時減少多餘的回傳
 	if (!$_G['inajax']) {
 	// bluelovers
-	dheader('Location: '.dreferer());
+		dheader('Location: '.dreferer());
 	// bluelovers
 	}
 	// bluelovers
