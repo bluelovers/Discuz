@@ -550,9 +550,9 @@ function appendscript(src, text, reload, charset) {
 
 	// bluelovers
 	var src_file = '';
-	if (typeof src != 'string' && src.src_key) {
-		src = src.src_key;
+	if (src && (typeof src != 'string') && src.src_key) {
 		src_file = src.src;
+		src = src.src_key;
 	} else {
 		src_file = src;
 	}
