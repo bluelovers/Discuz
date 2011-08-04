@@ -939,7 +939,17 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	} else {
 		$('creditpromptdiv').innerHTML = s;
 	}
+
+	// bluelovers
+	// 動態顯示積分變化
+	if(!bk) {
+		bk = check ? 0 : 1;
+	} else {
+	// bluelovers
 	setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
+	// bluelovers
+	}
+	// bluelovers
 }
 
 function _showColorBox(ctrlid, layer, k, bgcolor) {
