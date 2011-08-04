@@ -873,6 +873,8 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 }
 
 function _showCreditPrompt() {
+	//BUG:$("append_parent") is null
+
 	var notice = getcookie('creditnotice').split('D');
 	var basev = getcookie('creditbase').split('D');
 	var creditrule = decodeURI(getcookie('creditrule', 1)).replace(String.fromCharCode(9), ' ');
