@@ -355,6 +355,12 @@ if($_G['gp_action'] == 'paysucceed') {
 	showmessage('replynotice_error', 'forum.php?mod=viewthread&tid='.$tid);
 
 } elseif($_G['gp_action'] == 'removeindexheats') {
+	/**
+	 * 把主題從熱點主題中移除
+	 *
+	 * 其實只是將 heats 重設為 0
+	 * 只有管理員可以進行此操作
+	 */
 
 	if($_G['adminid'] != 1) {
 		showmessage('no_privilege_indexheats');
