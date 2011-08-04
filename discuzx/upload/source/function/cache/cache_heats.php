@@ -34,6 +34,9 @@ function build_cache_heats() {
 			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
 			$addsql = " AND f.status IN ('0', '1') ";
 		}
+		/**
+		 * DX 預設只顯示大於 t.heats>'0' 的項目
+		 */
 		$query = DB::query("SELECT t.tid,t.posttableid,t.views,t.dateline,t.replies,t.author,t.authorid,t.subject,t.price
 			FROM ".DB::table('forum_thread')." t $addtablesql
 			WHERE t.dateline>'$heatdateline'
