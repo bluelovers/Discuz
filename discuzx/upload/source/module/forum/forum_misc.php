@@ -365,7 +365,7 @@ if($_G['gp_action'] == 'paysucceed') {
 	if($_G['adminid'] != 1) {
 		showmessage('no_privilege_indexheats');
 	}
-	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]'");
+	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]' AND heats != 0");
 	require_once libfile('function/cache');
 	updatecache('heats');
 
