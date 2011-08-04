@@ -164,6 +164,9 @@ function announcement() {
 	ann.announcementScroll();
 }
 
+/**
+ * @link forum.php?mod=misc&action=removeindexheats&tid=32993
+ */
 function removeindexheats() {
 	/*
 	return confirm('您確認要把此主題從熱點主題中移除麼？');
