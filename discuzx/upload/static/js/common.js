@@ -547,6 +547,17 @@ function $F(func, args, script) {
 }
 
 function appendscript(src, text, reload, charset) {
+
+	// bluelovers
+	var src_file = '';
+	if (typeof src != 'string' && src.src_key) {
+		src = src.src_key;
+		src_file = src.src;
+	} else {
+		src_file = src;
+	}
+	// bluelovers
+
 	var id = hash(src + text);
 	if(!reload && in_array(id, evalscripts)) return;
 	if(reload && $(id)) {
