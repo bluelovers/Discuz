@@ -533,8 +533,16 @@ function $F(func, args, script) {
 
 	var src_key = JSPATH + script + '.js';
 	// bluelovers
+	/*
 	if(!JSLOADED[src]) {
 		appendscript(src);
+	}
+	*/
+	if(!JSLOADED[src_key]) {
+		appendscript({
+			'src' : src,
+			'src_key' : src_key
+		});
 	}
 	checkrun();
 }
