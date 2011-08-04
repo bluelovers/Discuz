@@ -1,0 +1,18 @@
+/*
+wysiwyg CSS file for Discuz! X
+(C) Comsenz Inc.
+http://www.comsenz.com
+*/
+
+	h1.bbcode_headline, h2.bbcode_headline, h3.bbcode_headline, h4.bbcode_headline, h5.bbcode_headline, h6.bbcode_headline {
+		font-family: Microsoft YaHei,arial,tahoma,sans-serif,verdana,Georgia,Arial,Helvetica,sans-serif;
+		text-shadow: 0 1px 0 #FFFFFF, 0 -1px 3px #BEBEBE;
+		font-weight: bold;
+		margin:8px 0;
+		border-bottom: 1px dashed #C7D5E7;
+	}
+	.pcb h1.bbcode_headline, .plc h1.ts #thread_subject, h1.bbcode_headline { font-size:32px; color: #FF6600; }
+	.pcb h2.bbcode_headline, .pcb h3.bbcode_headline, h2.bbcode_headline, h3.bbcode_headline, h2.post_subject { color: #009900; font-size: 1.5em; letter-spacing: 1px; }
+	.pcb h3.bbcode_headline, h3.bbcode_headline { color:#006699; font-size: 1.32em; }
+	.pcb h4.bbcode_headline, h4.bbcode_headline { letter-spacing:1px; }
+	.pcb h5.bbcode_headline, h5.bbcode_headline, .pcb h6.bbcode_headline, h6.bbcode_headline { }

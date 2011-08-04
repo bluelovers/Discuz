@@ -26,13 +26,13 @@
 </script>
 
 <!--{if $_G[gp_action] == 'edit'}--><!--{eval $editor[value] = $postinfo[message];}--><!--{else}--><!--{eval $editor[value] = $message;}--><!--{/if}-->
-<script type="text/javascript" src="{$_G['setting']['jspath']}forum_post.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_post.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 
 <!--{if $isfirstpost && $sortid}-->
 	<script type="text/javascript">
 		var forum_optionlist = <!--{if $forum_optionlist}-->'$forum_optionlist'<!--{else}-->''<!--{/if}-->;
 	</script>
-	<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <!--{/if}-->
 
 <!--{block actiontitle}-->
@@ -256,7 +256,7 @@
 </div>
 
 <!--{if $special || ($_G[gp_action] == 'newthread' && $_G['group']['allowpostrushreply'] && $special != 2) || ($_G[gp_action] == 'edit' && getstatus($thread['status'], 3))}-->
-	<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <!--{/if}-->
 <script type="text/javascript">
 	var editorsubmit = $('postsubmit');

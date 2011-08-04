@@ -1,0 +1,10 @@
+
+Options All -Indexes
+
+<FilesMatch "\.(ttf|otf|fon|ttc)$">
+	<IfModule mod_headers.c>
+		Header set Access-Control-Allow-Origin "*"
+	</IfModule>
+</FilesMatch>
+
+RewriteEngine Off

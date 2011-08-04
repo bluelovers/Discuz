@@ -1,0 +1,25 @@
+
+/* 使 .edt .bar 可自動調整高度(需要搭配 cl 或 clearfix 才能正確顯示背景) */
+.edt .bar {
+	height: auto;
+	min-height: 44px;
+}
+
+/* .edt .bar 的右側 */
+.edt .bar > .y {
+	margin-right: -100px;
+	position: relative;
+	right: 100px;
+}
+
+.edt .btn {
+	/* 此處的 90px 以 .edt .bar > .y 的寬度來決定 */
+	margin-right: 90px;
+}
+
+/* 有下拉選單的編輯器按鈕 */
+.edt .b2r a.dp {
+	/* 修正選單內文字的垂直對齊 */
+	line-height: 20px;
+	vertical-align: middle;
+}

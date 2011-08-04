@@ -17,7 +17,7 @@
 				<h1 class="ph">$share[title_template]</h1>
 				<span class="y">
 					<!--{if $_G[uid] == $share[uid] || checkperm('manageshare')}-->
-					<a href="home.php?mod=spacecp&ac=share&sid=$share[sid]&op=delete&type=view&handlekey=delsharehk_{$share[sid]}" id="share_delete_$share[sid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>&nbsp;&nbsp;&nbsp;
+					<a href="home.php?mod=spacecp&ac=share&sid=$share[sid]&op=delete&type=view&handlekey=delsharehk_{$share[sid]}" id="share_delete_$share[sid]" onclick="showWindow(this.id, this.href, 'get', 0);" class="sctpl_delete adel" title="{lang:html delete,ENT_QUOTES}">{lang delete}</a>&nbsp;&nbsp;&nbsp;
 					<!--{/if}-->
 					<!--{if checkperm('manageshare')}-->
 					<a href="home.php?mod=spacecp&ac=share&sid=$share[sid]&op=edithot&handlekey=hotsharehk_{$share[sid]}" id="a_hot_$share[sid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang hot}</a>

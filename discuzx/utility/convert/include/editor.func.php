@@ -162,8 +162,8 @@ function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
 		'\1',
 		"\n",
 		"[float=\\1]\\2[/float]",
-		"[quote]\\1[/quote]",
-		"[quote]\\1[/quote]",
+		"[quote]\\1[/quote]\n",
+		"[quote]\\1[/quote]\n",
 	);
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
@@ -216,34 +216,14 @@ function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
 }
 
 // bluelovers
-function bbcode_fix($text) {
-	for ($i=0; $i<10; $i++) {
-		$text = preg_replace(array(
-			'/(?:\[([a-z0-9]+)(?:=(?:[^\[\]\n]+))?\])(\s+)?(?:\[\/\\1\])/isSU'
-			, '/(?:\[(size)(?:=3|2)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-			, '/(?:\[(color)(?:=black|#0+|\(?0+,0+,0+\)?)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-		), '\\2', $text);
-
-		$text = preg_replace(array(
-			'/(?:\[(color|size|align|indent|i|s|u|italic|font)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])(\s*)(?:\[\\1\\2\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-			, '/(?:\[(quote|sell|free|code|php|html|js|xml|sql|mysql|css|style|c|prel)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])/isSU'
-			, '/^\n*(?:\[(font|size|italic|s|u)(=[^\[\]\n]+)?\])(\n*)((?:[^\[]|\[(?!\/\\1\])).+)(\s+)?(?:\[\/\\1\])\s*$/isSU'
-			, '/(?:\[(italic)(=[^\[\]\n]+)?\])((?:[^\[]|\[(?!\/\\1\])).+)(?:\[\/\\1\])/isSU'
-		), array(
-			'[\\1\\2]\\3\\4\\5[/\\1]'
-			, '[\\1\\2]\\4[/\\1]'
-			, '\\4'
-			, '[i\\2]\\3[/i]'
-		), $text);
-
-		$text = preg_replace(array(
-			'/^(\[[a-z0-9]+(?:=[^\[\]\n]+)?\])\n+|\n+(\[\/[a-z0-9]+\])/isSU'
-		), '\\1\\2', $text);
+function bbcode_fix($message) {
+	static $_include;
+	if (!$_include) {
+		$_include = true;
+		include_once 'bbcode.class.php';
 	}
 
-	$text = preg_replace('/[　 \t]+(\n|$)/iSuU', '\\1', $text);
-
-	return $text;
+	return bbcode::instance()->bbcode_fix($message);
 }
 // bluelovers
 
@@ -257,6 +237,17 @@ function imgtag($attributes) {
 	}
 	@extract($value);
 	if(!preg_match("/^http:\/\//i", $src)) {
+
+		// bluelovers
+		$src = preg_replace(array(
+			'/image\/face\/(30|2[1-9])/',
+			'/image\/face\/(\d+)/',
+		), array(
+			'static/image/smiley/comcom_dx/$1',
+			'static/image/smiley/comcom/$1',
+		), $src);
+		// bluelovers
+
 		$src = absoluteurl($src);
 	}
 	return $src ? ($width && $height ? '[img='.$width.','.$height.']'.$src.'[/img]' : '[img]'.$src.'[/img]') : '';

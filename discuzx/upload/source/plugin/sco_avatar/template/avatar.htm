@@ -29,20 +29,37 @@
 		<button type="submit" name="reset_{$plugin_self->identifier}" value="true" class="pn"><span>重設頭像</span></button>
 
 		<br /><br />
-	<!--{loop $avatar_pics $_k_ $_v_}-->
-		<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
-			<label>
-				<div style="display: block;height: 120px; width: 120px;text-align: center;" class="vm">
-					<img src="{$_v_}" class="vm avatar avatar_middle"/>
-				</div>
-				<center style="background-color: #8CBCB2;">
-					<p class="vm">
-						<input type="radio" name="a_file" value="{$_k_}" />
-						{$_k_}
-					</p>
-				</center>
-			</label>
-		</div>
-	<!--{/loop}-->
+
+		<table cellspacing="0" cellpadding="0" class="tfm">
+			<!--{if $user_avatar_allowurl}-->
+				<tr>
+					<td>
+						<label>設定網路頭像:
+							<input type="text" name="a_file_url" value="" class="pt" autocomplete="off" />
+						</label>
+						<br /><br />
+					</td>
+				</tr>
+			<!--{/if}-->
+			<tr>
+				<td>
+					<!--{loop $avatar_pics $_k_ $_v_}-->
+						<div style="height: 140px; width: 125px;display: inline-block;padding: 1px;" class="vm">
+							<label>
+								<div style="display: block;height: 120px; width: 120px;text-align: center;" class="vm">
+									<img src="{$_v_}" class="vm avatar avatar_middle"/>
+								</div>
+								<center style="background-color: #8CBCB2;">
+									<p class="vm">
+										<input type="radio" name="a_file" value="{$_k_}" />
+										{$_k_}
+									</p>
+								</center>
+							</label>
+						</div>
+					<!--{/loop}-->
+				</td>
+			</tr>
+		</table>
 	</form>
 <!--{/if}-->

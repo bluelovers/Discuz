@@ -81,7 +81,7 @@
 				}
 			</script>
 
-			<script src="{$_G[setting][jspath]}home_uploadpic.js?{VERHASH}" type="text/javascript"></script>
+			<script src="{$_G[setting][jspath]}home_uploadpic.js{$_G[varhash_gzip_js]}?{VERHASH}" type="text/javascript"></script>
 			<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
 
 			<form method="post" autocomplete="off" id="albumform" action="home.php?mod=spacecp&ac=upload" target="uploadframe" onsubmit="return validate(this);">

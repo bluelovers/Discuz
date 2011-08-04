@@ -14,6 +14,8 @@ if(!defined('IN_DISCUZ')) {
 // bluelovers
 // 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
 if ($_G['gp_op'] == 'install') {
+	require_once libfile('function/cache');
+
 	updatecache('founder');
 
 	_______initsys_cache();
@@ -62,6 +64,13 @@ if($_G['config']['output']['tplrefresh']) {
 }
 
 function _______initsys_plugins() {
+	global $_G;
+
+	/**
+	 * bugfix when $data = $GLOBALS['importtxt'];
+	 */
+	global $importtxt;
+
 // bluelovers
 $plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
 

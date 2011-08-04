@@ -222,9 +222,30 @@ padding-left:180px;
 	overflow: hidden;
 }
 
-.site_pg #hd .wp .hdc #um {
+.site_pg #hd .wp .hdc #um
+/* 快速登入表單 */
+, .site_pg #hd .fastlg
+{
 	margin-top: -100px;
     position: relative;
+
+    z-index: 50;
+}
+
+.site_pg #hd .fastlg, .site_pg #hd .fastlg a {
+	color: {HEADERTEXT};
+}
+
+.site_pg #hd .fastlg .ftid a {
+	color: {HEADERTEXT} !important;
+}
+
+.site_pg #hd .fastlg a:hover {
+	color: #97F2FF !important;
+}
+
+.site_pg #hd .fastlg label:hover {
+	color: #97F2FF;
 }
 
 /*

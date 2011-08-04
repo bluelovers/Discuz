@@ -91,6 +91,14 @@ function formatforumdata($forum, &$pluginvalue) {
 			case 'orderby': $data[$key] = $orders[$forum['orderby']]; break;
 			case 'plugin': $data[$key] = $pluginvalue[$forum['fid']]; break;
 			case 'allowpostspecial': $data[$key] = sprintf('%06b', $forum['allowpostspecial']); break;
+
+			// bluelovers
+			// try fix amincp forum js forumselect - unterminated string literal
+			case 'description':
+				$data[$key] = preg_replace('/(\r\n|\r|\n\r)/s', "\n", $forum[$key]);
+				break;
+			// bluelovers
+
 			default: $data[$key] = $forum[$key];
 		}
 	}

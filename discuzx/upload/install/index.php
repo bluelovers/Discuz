@@ -15,6 +15,13 @@ define('IN_DISCUZ', TRUE);
 define('IN_COMSENZ', TRUE);
 define('ROOT_PATH', dirname(__FILE__).'/../');
 
+// bluelovers
+/**
+ * for install use hook
+ */
+require ROOT_PATH.'./install/extensions/install_hooks.php';
+// bluelovers
+
 require ROOT_PATH.'./source/discuz_version.php';
 require ROOT_PATH.'./install/include/install_var.php';
 require ROOT_PATH.'./install/include/install_mysql.php';

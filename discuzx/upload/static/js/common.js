@@ -517,21 +517,48 @@ function $F(func, args, script) {
 		}
 	};
 	var checkrun = function () {
-		if(JSLOADED[src]) {
+		// fix use src_key
+		if(JSLOADED[src_key]) {
 			run();
 		} else {
 			setTimeout(function () { checkrun(); }, 50);
 		}
 	};
 	script = script || 'common_extra';
+	/*
 	src = JSPATH + script + '.js?' + VERHASH;
 	if(!JSLOADED[src]) {
 		appendscript(src);
 	}
+	*/
+	// bluelovers
+	// for support VERHASH_GZIP_JS
+	var src_key = JSPATH + script + '.js';
+
+	src = src_key + VERHASH_GZIP_JS + '?' + VERHASH;
+
+	if(!JSLOADED[src_key]) {
+		appendscript({
+			'src' : src,
+			'src_key' : src_key
+		});
+	}
+	// bluelovers
 	checkrun();
 }
 
 function appendscript(src, text, reload, charset) {
+
+	// bluelovers
+	var src_file = '';
+	if (src && (typeof src != 'string') && src.src_key) {
+		src_file = src.src;
+		src = src.src_key;
+	} else {
+		src_file = src;
+	}
+	// bluelovers
+
 	var id = hash(src + text);
 	if(!reload && in_array(id, evalscripts)) return;
 	if(reload && $(id)) {
@@ -545,7 +572,7 @@ function appendscript(src, text, reload, charset) {
 	scriptNode.charset = charset ? charset : (BROWSER.firefox ? document.characterSet : document.charset);
 	try {
 		if(src) {
-			scriptNode.src = src;
+			scriptNode.src = src_file;
 			scriptNode.onloadDone = false;
 			scriptNode.onload = function () {
 				scriptNode.onloadDone = true;

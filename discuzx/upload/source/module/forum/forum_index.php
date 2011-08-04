@@ -67,18 +67,23 @@ if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails)) 
 if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 	$announcements = get_index_announcements();
 
+	// 論壇首頁增加 , f.name 排序
 	$sql = !empty($_G['member']['accessmasks']) ?
 		"SELECT f.fid, f.fup, f.type, f.name, f.threads, f.posts, f.todayposts, f.lastpost, f.inheritedmod, f.domain,
 			f.forumcolumns, f.simple, ff.description, ff.moderators, ff.icon, ff.viewperm, ff.redirect, ff.extra, a.allowview
 			FROM ".DB::table('forum_forum')." f
 			LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid
 			LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
-			WHERE f.status='1' ORDER BY f.type, f.displayorder"
+			WHERE f.status='1' ORDER BY f.type, f.displayorder
+			, f.name
+			"
 		: "SELECT f.fid, f.fup, f.type, f.name, f.threads, f.posts, f.todayposts, f.lastpost, f.inheritedmod, f.domain,
 			f.forumcolumns, f.simple, ff.description, ff.moderators, ff.icon, ff.viewperm, ff.redirect, ff.extra
 			FROM ".DB::table('forum_forum')." f
 			LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
-			WHERE f.status='1' ORDER BY f.type, f.displayorder";
+			WHERE f.status='1' ORDER BY f.type, f.displayorder
+			, f.name
+			";
 
 	$query = DB::query($sql);
 

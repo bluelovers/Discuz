@@ -4,6 +4,10 @@
  * @author bluelovers
  **/
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Func_libfile', '_eFunc_libfile');
@@ -35,37 +39,51 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 	// 緩存是否執行過(每個檔案只執行一次)
 	static $list;
 
+	static $include_once;
+
+	if (
+		!isset($include_once['extensions/source/function/function_core.php'])
+	) {
+		$include_once['extensions/source/function/function_core.php'] = true;
+
+		include_once libfile('function/core', 'source', 'extensions/');
+	}
+
 	if ($force || !isset($list[$file])) {
 		if (!$force) $list[$file] = $ret;
 
 		switch($file) {
+			case 'source/function/cache/cache_bbcodes.php':
+			case 'source/function/cache/cache_bbcodes_display.php':
+				include_file_once(libfile('cache/bbcodes', 'hooks', 'extensions/'), 0, 1);
+			case 'source/class/class_template.php':
+			case 'source/function/cache/cache_styles.php':
 			case 'source/function/function_cache.php':
 			case 'source/function/cache/cache_styles.php':
-			case 'source/class/class_template.php':
-				@include_once libfile('hooks/cache', '', 'extensions/');
+				include_file_once(libfile('hooks/cache', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_share.php':
 			case 'source/include/spacecp/spacecp_share.php':
 
 			case 'source/function/function_feed.php':
-				@include_once libfile('hooks/share', '', 'extensions/');
+				include_file_once(libfile('hooks/share', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_discuzcode.php':
-				@include_once libfile('hooks/discuzcode', '', 'extensions/');
+				include_file_once(libfile('hooks/discuzcode', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_home.php':
-				@include_once libfile('hooks/home', '', 'extensions/');
+				include_file_once(libfile('hooks/home', '', 'extensions/'), 0, 1);
 				break;
 			case 'forum.php':
 			case 'source/module/forum/forum_viewthread.php':
-				@include_once libfile('hooks/forum', '', 'extensions/');
+				include_file_once(libfile('hooks/forum', '', 'extensions/'), 0, 1);
 				break;
 			case 'group.php':
 			case 'source/module/group/group_index.php':
-				@include_once libfile('hooks/group', '', 'extensions/');
+				include_file_once(libfile('hooks/group', '', 'extensions/'), 0, 1);
 				break;
 			case 'source/function/function_core.php':
-				@include_once libfile('function/core', 'source', 'extensions/');
+				include_file_once(libfile('function/core', 'source', 'extensions/'), 0, 1);
 				break;
 			default:
 //				dexit($file);
@@ -83,8 +101,15 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 	$_varhash = VERHASH;
 
 	if ($hookid == 'global_header_seohead') {
+
+		if (!DISCUZ_DEBUG) {
+			$_add = '.pack';
+		} else {
+			$_add = '';
+		}
+
 		$ss = <<<EOF
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest{$_add}.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOF
 ;
@@ -101,6 +126,10 @@ EOF
 /*
 ?><?
 */
+
+		$ss .= '<script type="text/javascript">';
+		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
+		$ss .= '</script>';
 
 		$hook_data .= $ss;
 	} elseif (
@@ -210,11 +239,26 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		if(!isset($_loadedcache[$k])) {
 			$k2 = $k;
 
+			$_do_skip = 0;
+
 			// 防止造成無法取得緩存
 			if (preg_match('/^(usergroup|threadsort|admingroup|style)_/', $k, $m)) {
 				$k2 = $m[1].'s';
 			} elseif (preg_match('/^(diytemplatename)/', $k, $m)) {
 				$k2 = $m[1];
+
+			} elseif (
+				in_array($k, array(
+					// cronnextrun 由 discuz_cron 控制
+					'cronnextrun',
+
+					// source\include\cron\cron_todaypost_daily.php
+					'historyposts',
+
+					'groupindex',
+				))
+			) {
+				$_do_skip = 1;
 
 			// modreasons, userreasons 皆由 modreasons 控制
 			} elseif ($k == 'modreasons' || $k == 'userreasons') {
@@ -233,6 +277,12 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 			// array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids') 由 split 控制
 			} elseif (in_array($k, array('threadtableids', 'threadtable_info', 'posttable_info', 'posttableids'))) {
 				$k2 = 'split';
+			}
+
+			if ($_do_skip) {
+				$k && $_loadedcache[$k] = true;
+				$k2 && $_loadedcache[$k2] = true;
+				continue;
 			}
 
 			// 如果執行過 $k2 直接跳過處理
@@ -256,12 +306,14 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 		$GLOBALS['_G']['setting'] = $data['setting'];
 	}
 
+	//TODO:需要改良修正解決緩存的意外錯誤
+
 	// 整理過濾處理過的 Array
-	$caches = array_unique($caches);
-	$caches_load = array_unique($caches_load);
+	$caches = array_unique((array)$caches);
+	$caches_load = array_unique((array)$caches_load);
 
 	if(!empty($caches)) {
-		@include_once libfile('function/cache');
+		include_file_once(libfile('function/cache'), 0, 1);
 
 		updatecache($caches);
 		loadcache($caches_load, true);
@@ -276,7 +328,7 @@ function _eFunc_cachedata_After($_EVENT, $conf) {
 	Scorpio_Event::instance('Func_cachedata:Before_get_syscache')->play();
 }
 
-Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
+0 && Scorpio_Hook::add('Func_cachedata:Before_get_syscache', '_eFunc_cachedata_Before_get_syscache');
 
 /**
  * 如果在 ./data/cache 中沒有緩存的項目，則自動更新 SQL 快取
@@ -315,6 +367,14 @@ function _eFunc_cachedata_Before_get_syscache($_EVENT, $conf) {
 				'domain',
 
 				'setting',
+
+				// cronnextrun 由 discuz_cron 控制
+				'cronnextrun',
+
+				// source\include\cron\cron_todaypost_daily.php
+				'historyposts',
+
+				'groupindex',
 
 				'split', 'threadtableids', 'threadtable_info', 'posttable_info', 'posttableids',
 			);
@@ -357,11 +417,60 @@ function _eClass_discuz_core__init_input_After($_EVENT, $discuz) {
 	}
 }
 
+Scorpio_Hook::add('Class_discuz_core::_init_setting:After', '_eClass_discuz_core__init_setting_After');
+
+function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
+	$discuz->var['varhash_gzip'] = $discuz->var['varhash_gzip_js'] = '';
+
+	// 檢測使用者的瀏覽器是否支援 gzip 如果支援則 js, css 改為使用 js.gz, css.gz
+	if ($discuz->config['output']['gzip']
+		&& function_exists('getaccept_encoding_gzip')
+		&& getaccept_encoding_gzip()
+	) {
+		$discuz->var['varhash_gzip'] = '.gz';
+
+		if ($discuz->var['setting']['jspath'] == 'data/cache/') {
+			$discuz->var['varhash_gzip_js'] = $discuz->var['varhash_gzip'];
+		}
+	}
+
+	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
+	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
+}
+
+Scorpio_Hook::add('Class_discuz_core::_init_style:After', '_eClass_discuz_core__init_style_After');
+
+/**
+ * Event:
+ * 		Class_discuz_core::_init_style:After
+ */
+function _eClass_discuz_core__init_style_After($_EVENT, $discuz) {
+
+	/**
+	 * 載入風格專用的 hook
+	 *
+	 * @example extensions/hooks/template/default/hooks_core.php
+	 * @example extensions/hooks/template/goodnight/hooks_core.php
+	 */
+	@include_once libfile('hooks_core', 'hooks/'.$discuz->var['style']['tpldir'], 'extensions/');
+
+}
+
 Scorpio_Hook::add('Func_output:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
 Scorpio_Hook::add('Func_output_ajax:Before_rewrite_content_echo', '_eFunc_output_Before_rewrite_content_echo');
+Scorpio_Hook::add('Func_mobileoutput:Before_output_replace', '_eFunc_output_Before_rewrite_content_echo');
+// 修正開啟 rewritestatus 後造成無效的 BUG
+Scorpio_Hook::add('Func_output_replace:Before_replace_str', '_eFunc_output_Before_rewrite_content_echo');
 
 /**
  * 輸出時將帳號名稱轉為暱稱
+ *
+ * Event:
+ * 		Func_output_replace:Before_replace_str
+ *
+ * 		Func_output:Before_rewrite_content_echo
+ * 		Func_output_ajax:Before_rewrite_content_echo
+ * 		Func_mobileoutput:Before_output_replace
  **/
 function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return;
@@ -442,14 +551,18 @@ Array
 	}
 
 	// 如果成功查詢到 $_uid
-	if ($_uid) {
+	if ($_uid
+		&& !empty($m['showname'])
+		// 改良只取代帳號名
+		&& $_uid == $_user['username'][$m['showname']]
+	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
 
 		$s = '';
 		$s .= '<a href="'.$m['href'].'"';
 
-		if (!empty($user)) {
+		if (!empty($user) && strpos($m['extra'], ' title=') === false) {
 			// 提示帳號名稱
 			$s .= ' title="'.strip_tags($m['showname']).' ( '.strip_tags($user).' )"';
 		}
@@ -472,6 +585,15 @@ Array
 	return $s;
 }
 
+Scorpio_Hook::add('Func_mobileoutput:Before_rewrite_content_echo', '_eFunc_mobileoutput_Before_rewrite_content_echo');
+
+function _eFunc_mobileoutput_Before_rewrite_content_echo($_EVENT, $_conf) {
+	extract($_conf, EXTR_REFS);
+
+	// 手機模式下取消所有開新視窗
+	$content = preg_replace('/ target=([\'"])([^\'"]+)\\1/', '', $content);
+}
+
 Scorpio_Hook::add('Class_discuz_core::_init_env:After', '_eClass_discuz_core__init_env_After');
 
 function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
@@ -486,6 +608,8 @@ function _eClass_discuz_core__init_env_After($_EVENT, $discuz) {
 	}
 
 	$_G = &$discuz->var;
+
+	if ($_G['siteroot'] == '/') return Scorpio_Hook::RET_SUCCESS;
 
 	$doc_root = scofile::path($_SERVER["DOCUMENT_ROOT"]);
 	$base = scofile::path(DISCUZ_ROOT);

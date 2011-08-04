@@ -1,0 +1,4 @@
+
+#目錄防盜過濾
+RewriteRule (\.svn|\.git)[\/\\].* templates/index.htm [NC,G,L]
+#RewriteRule (templates|forumdata|attachments|include|uc_client)[\/\\].*\.(?:phps?|xml|html?|dwt)$ templates/index.htm [NC,PT,G,L]

@@ -4,6 +4,10 @@
  * @author bluelovers
  **/
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Dz_module_group_index:Before_template', '_eDz_module_group_index_Before_template');

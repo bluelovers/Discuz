@@ -4,6 +4,10 @@
  * @author bluelovers
  **/
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 if (!discuz_core::$plugin_support['Scorpio_Event']) return false;
 
 Scorpio_Hook::add('Class_template::parse_template:Before_addon_tpl', '_eClass_template_parse_template_Before_addon_tpl');
@@ -90,6 +94,139 @@ function _eClass_template_parse_template_Before_addon_tpl($_EVENT, $ret) {
 	$replace[] = "template::_tpl_func('\\5', '\\1', '\\6', '\\7')";
 
 	return Scorpio_Hook::RET_SUCCESS;
+}
+
+Scorpio_Hook::add('Func_writetocsscache:Before_minify', '_eFunc_writetocsscache_Before_minify');
+Scorpio_Hook::add('Class_template::loadcsstemplate:Before_minify', '_eFunc_writetocsscache_Before_minify');
+
+function _eFunc_writetocsscache_Before_minify($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	if($entry != 'module.css') {
+		// 清除 css 註解
+		$cssdata = preg_replace('/\/\*((?:[^\*]*|\*(?!\/)).*)\*\//sU', "\n", $cssdata);
+	}
+
+	// 轉換分行
+	$cssdata = str_replace("\r\n", "\n", $cssdata);
+
+	// 壓縮 css
+	$cssdata = preg_replace(array(
+		// 清除多餘空白
+		'/[ \t]*([,;:\{\}]+|\n)[ \t]*/s',
+		'/\t+/',
+
+		// 清除多餘分行
+		'/(\n| ){2,}/s',
+
+		// 清除 BOM
+		'/^(\xef\xbb\xbf)?\s+|\s+$/sU',
+		'/(?!^)\xef\xbb\xbf/U',
+	), array(
+		'\\1',
+		' ',
+		'\\1',
+		'\\1',
+		'',
+	), $cssdata);
+
+	if (defined('DISCUZ_DEBUG') && !DISCUZ_DEBUG) {
+		// 如果不是 debug 模式時則清除分行
+		$cssdata = str_replace("\n", '', $cssdata);
+	}
+
+	// 清理
+	$cssdata = trim($cssdata);
+
+	// 跳過原有的處理
+	$switchstop = true;
+}
+
+Scorpio_Hook::add('Func_writetojscache:Before_minify', '_eFunc_writetojscache_Before_minify');
+
+function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	$remove = array(
+		/*
+		'/(^|\r|\n)\/\*.+?\*\/(\r|\n)/is',
+		*/
+		'/\/\/note.+?(\r|\n)/i',
+		'/\/\/debug.+?(\r|\n)/i',
+		/*
+		'/(^|\r|\n)(\s|\t)+/',
+		'/(\r|\n)/',
+		*/
+	);
+
+	$jsdata = preg_replace($remove, '', $jsdata);
+
+	// 暫時沒有發現錯誤訊息
+	$_s = array(
+		// 清除單行註解
+		'/(?:(\s|;\s*|\n)\/\/)(?:[^\/\n]+)(\n)/',
+		// 清除分行之間的空白
+		'/(^|\n)\s*/',
+		// 清除結尾空白
+		'/\s$/',
+		// 清除部分多餘空白
+		'/[ \t]*([,{}])(\n)/',
+		// 清除包含 * 的多行註解
+		'/\/\*(?:[^\*]+|\*(?!\/))*\*\//',
+		// 清除部分多餘空白
+		'/(\n(?:}|{|}|try|for|foreach))[ \t]+/',
+	);
+	$_r = array(
+		'$1$2',
+		'$1',
+		'',
+		'$1$2',
+		'',
+		'$1',
+	);
+
+	//BUG:如果增加移除分行 bbcode.js 會產生錯誤
+
+	// 多執行幾次(確保代碼能清除乾淨)
+	for ($_i = 0; $_i < 3; $_i++) {
+		$jsdata = preg_replace($_s, $_r, $jsdata);
+	}
+
+	// 暫時安全
+	$_s = $_r = array();
+
+	$_s[] = '/\n+/';
+	$_r[] = '';
+
+	$jsdata = preg_replace($_s, $_r, $jsdata);
+
+	$switchstop = true;
+}
+
+Scorpio_Hook::add('Func_writetocsscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Class_template::loadcsstemplate:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Func_writetojscache:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+Scorpio_Hook::add('Func_build_cache_smilies_js:Before_fwrite', '_eFunc_writetocsscache_Before_fwrite');
+
+function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
+	extract($conf, EXTR_REFS);
+
+	if (!discuz_core::$plugin_support['scofile']) return Scorpio_Hook::RET_SUCCESS;
+
+ 	$ext = fileext($filename);
+ 	$_newfilename = preg_replace('/\.'.preg_quote($ext).'$/', '.'.$ext.'.gz', $filename);
+
+ 	if (!empty($_newfilename)
+	 	&& $_newfilename != $filename
+	 	&& $filepath == 'data/cache/'
+	 ) {
+
+	 	// 修正 writetocsscache 與 writetojscache 共用 hook 時的處理
+		$_write_data = isset($conf['cssdata']) ? $cssdata : $jsdata;
+
+ 		// 寫入檔案的 gz 壓縮
+ 		scofile::write(DISCUZ_ROOT.'./'.$filepath.$_newfilename, $_write_data, 1);
+ 	}
 }
 
 ?>

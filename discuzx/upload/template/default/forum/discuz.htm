@@ -41,7 +41,7 @@
 		<div id="chart" class="bm bw0 cl">
 			<p class="chart z">{lang index_today}: <em>$todayposts</em><span class="pipe">|</span>{lang index_yesterday}: <em>$postdata[0]</em><span class="pipe">|</span>{lang index_posts}: <em>$posts</em><span class="pipe">|</span>{lang index_members}: <em>$_G['cache']['userstats']['totalmembers']</em><!--{if $_G['setting']['lastmember']}--><span class="pipe">|</span>{lang welcome_new_members}: <em><a href="home.php?mod=space&username={echo rawurlencode($_G['setting']['lastmember'])}" target="_blank" class="xi2">$_G['setting']['lastmember']</a></em><!--{/if}--></p>
 			<div class="y">
-				<!--{if $_G['uid']}--><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><!--{/if}--><!--{if !empty($_G['setting']['search']['forum']['status'])}--><!--{if $_G['uid']}--><span class="pipe">|</span><!--{/if}--><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2">{lang show_newthreads}</a><!--{/if}-->
+				<!--{if $_G['uid']}--><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><!--{/if}--><!--{if !empty($_G['setting']['search']['forum']['status'])}--><!--{if $_G['uid']}--><span class="pipe">|</span><!--{/if}--><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2" target="_blank">{lang show_newthreads}</a><!--{/if}-->
 			</div>
 		</div>
 	<!--{/if}-->
@@ -109,21 +109,7 @@
 									<dt><a href="$forumurl"{if $forum[redirect]} target="_blank"{/if}{if $forum[extra][namecolor]} style="color: {$forum[extra][namecolor]};"{/if}>$forum[name]</a><!--{if $forum[todayposts] && !$forum['redirect']}--><em class="xw0 xi1" title="{lang forum_todayposts}"> ($forum[todayposts])</em><!--{/if}--></dt>
 									<!--{if empty($forum[redirect])}--><dd><em>{lang forum_threads}: $forum[threads]</em>, <em>{lang forum_posts}: $forum[posts]</em></dd><!--{/if}-->
 									<dd>
-									<!--{if $forum['permission'] == 1}-->
-										{lang private_forum}
-									<!--{else}-->
-										<!--{if $forum['redirect']}-->
-											<a href="$forumurl" class="xi2">{lang url_link}</a>
-										<!--{elseif is_array($forum['lastpost'])}-->
-											<!--{if $cat['forumcolumns'] < 3}-->
-												<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
-											<!--{else}-->
-												<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost">{lang forum_lastpost}: $forum[lastpost][dateline]</a>
-											<!--{/if}-->
-										<!--{else}-->
-											{lang never}
-										<!--{/if}-->
-									<!--{/if}-->
+									<!--{subtpl subblock/forum/discuz_lastpost}-->
 									</dd>
 								</dl>
 							</td>
@@ -146,17 +132,7 @@
 							</td>
 							<td class="fl_by">
 								<div>
-								<!--{if $forum['permission'] == 1}-->
-									{lang private_forum}
-								<!--{else}-->
-									<!--{if $forum['redirect']}-->
-										<a href="$forumurl" class="xi2">{lang url_link}</a>
-									<!--{elseif is_array($forum['lastpost'])}-->
-										<a href="forum.php?mod=redirect&tid=$forum[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($forum[lastpost][subject], 30)}--></a> <cite>$forum[lastpost][dateline] <!--{if $forum['lastpost']['author']}-->$forum['lastpost']['author']<!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
-									<!--{else}-->
-										{lang never}
-									<!--{/if}-->
-								<!--{/if}-->
+								<!--{subtpl subblock/forum/discuz_lastpost}-->
 								</div>
 							</td>
 						</tr>

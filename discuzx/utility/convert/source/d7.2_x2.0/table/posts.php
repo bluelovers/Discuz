@@ -13,6 +13,10 @@ $table_source = $db_source->tablepre . 'posts';
 $table_target = $db_target->tablepre . 'forum_post';
 
 $limit = $setting['limit']['posts'] ? $setting['limit']['posts'] : 5000;
+
+// 無奈降低每次執行的數量
+$limit = 250;
+
 $start = getgpc('start');
 $start = intval($start);
 $nextid = 0;
@@ -34,6 +38,9 @@ while($row = $db_source->fetch_array($query)) {
 //	if (($text != $row['message']) && ($nextid > $start + 500)) showmessage($s.'<textarea style="width: 100%; height: 300px">'.$text.'</textarea>');
 
 	$row['message'] = $text;
+
+	// 回收記憶體
+	unset($text);
 	// bluelovers
 
 	$row = daddslashes($row, 1);

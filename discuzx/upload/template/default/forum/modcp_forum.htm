@@ -32,7 +32,7 @@
 				var allowhtml = forumallowhtml = allowsmilies = 0;
 			</script>
 			<div class="exfm">
-				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 				<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
 					<input type="hidden" name="formhash" value="{FORMHASH}">
 					<input type="hidden" name="fid" value="$_G[fid]">
@@ -106,7 +106,7 @@
 			</div>
 
 		<!--{elseif $op == 'recommend'}-->
-			<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 			<!--{if $threadlist}-->
 				<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&show=$show">
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -161,4 +161,4 @@
 		simulateSelect('fid');
 	}
 </script>
-<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
