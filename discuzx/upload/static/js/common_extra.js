@@ -844,6 +844,7 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 	if(ctrlid) {
 		msg = '<div id="' + ctrlid + '_prompt"><div class="tip_horn"></div><div class="tip_c">' + msg + '</div>';
 	} else {
+		// 如果沒有 ctrlid 代表是 credit
 		msg = '<table cellspacing="0" cellpadding="0" class="popupcredit"><tr><td class="pc_l">&nbsp;</td><td class="pc_c"><div class="pc_inner">' + msg +
 			'</td><td class="pc_r">&nbsp;</td></tr></table>';
 	}
