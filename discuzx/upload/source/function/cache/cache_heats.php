@@ -11,6 +11,9 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 論壇熱點
+ */
 function build_cache_heats() {
 	global $_G;
 	$addsql = '';
