@@ -868,6 +868,7 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 			$(ctrlid).unselectable = false;
 		}
 	} else {
+		// 如果沒有 ctrlid 代表是 credit
 		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
 	}
