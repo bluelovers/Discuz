@@ -338,6 +338,13 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	$attentionon = empty($_G['gp_attention_add']) ? 0 : 1;
 	$attentionoff = empty($attention_remove) ? 0 : 1;
 
+	/**
+	 * $_G['setting']['heatthread']['type']
+	 * 		1 => 按熱度公式
+	 * 		2 => 按參與人次
+	 *
+	 * 當最後發表者不等於現在的登入者時才會更新熱度
+	 */
 	if($thread['lastposter'] != $_G['member']['username'] && $_G['uid']) {
 		if($_G['setting']['heatthread']['type'] == 1 && $_G['setting']['heatthread']['reply']) {
 			$posttable = getposttablebytid($_G['tid']);

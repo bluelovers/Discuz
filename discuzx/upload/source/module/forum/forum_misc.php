@@ -355,14 +355,28 @@ if($_G['gp_action'] == 'paysucceed') {
 	showmessage('replynotice_error', 'forum.php?mod=viewthread&tid='.$tid);
 
 } elseif($_G['gp_action'] == 'removeindexheats') {
+	/**
+	 * 把主題從熱點主題中移除
+	 *
+	 * 其實只是將 heats 重設為 0
+	 * 只有管理員可以進行此操作
+	 */
 
 	if($_G['adminid'] != 1) {
 		showmessage('no_privilege_indexheats');
 	}
-	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]'");
+	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]' AND heats != 0");
 	require_once libfile('function/cache');
 	updatecache('heats');
-	dheader('Location: '.dreferer());
+
+	// bluelovers
+	// 當 inajax 時減少多餘的回傳
+	if (!$_G['inajax']) {
+	// bluelovers
+		dheader('Location: '.dreferer());
+	// bluelovers
+	}
+	// bluelovers
 
 } else {
 
