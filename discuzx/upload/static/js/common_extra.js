@@ -864,7 +864,7 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 					$(ctrlid).onmouseover = prompting;
 				}
 			}
-			showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+			showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt'],'fade':1});
 			$(ctrlid).unselectable = false;
 		}
 	} else {
