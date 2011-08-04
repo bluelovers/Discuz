@@ -30,6 +30,9 @@ function build_cache_heats() {
 		);
 
 		$heatdateline = TIMESTAMP - 86400 * $_G['setting']['indexhot']['days'];
+		/**
+		 * 如果有開啟群組功能 則會包括群組的主題
+		 */
 		if(!$_G['setting']['groupstatus']) {
 			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
 			$addsql = " AND f.status IN ('0', '1') ";
