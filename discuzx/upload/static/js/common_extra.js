@@ -944,6 +944,7 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 	// 動態顯示積分變化
 	if(!bk) {
 		bk = check ? 0 : 1;
+		setTimeout(function () { creditShow(creditinfo, notice, basev, bk, 0, creditrule); }, first ? 2500 : 100);
 	} else {
 	// bluelovers
 		setTimeout(function () {hideMenu(1, 'prompt');$('append_parent').removeChild($('ntcwin'));}, 1500);
