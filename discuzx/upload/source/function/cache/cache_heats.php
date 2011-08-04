@@ -20,6 +20,8 @@ function build_cache_heats() {
 	$data = array();
 	if($_G['setting']['indexhot']['status']) {
 
+		//TODO:增加過濾沒有瀏覽權限的版塊及群組
+
 		require_once libfile('function/post');
 		$_G['setting']['indexhot'] = array(
 			'status' => 1,
