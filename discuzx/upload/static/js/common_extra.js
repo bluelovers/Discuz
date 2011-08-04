@@ -874,6 +874,9 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 
 function _showCreditPrompt() {
 	//BUG:$("append_parent") is null
+	// bluelovers
+	if (!$('append_parent')) return;
+	// bluelovers
 
 	var notice = getcookie('creditnotice').split('D');
 	var basev = getcookie('creditbase').split('D');
