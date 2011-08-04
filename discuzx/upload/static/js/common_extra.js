@@ -909,7 +909,7 @@ function creditShow(creditinfo, notice, basev, bk, first, creditrule) {
 			/**
 			 * 補回 DX 1.0 的積分變動提示效果
 			 */
-			s += '<span>' + creditinfo[i][0] + '<u>' + basev[i] + '</u>' + (notice[i] != 0 ? (notice[i] > 0 ? '<em>+' : '<em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
+			s += '<span>' + creditinfo[i][0] + '<u>' + basev[i] + '</u>' + (notice[i] != 0 ? (notice[i] > 0 ? ' <em>+' : ' <em class="desc">') + notice[i] + '</em>' : '') + creditinfo[i][1] + '</span>';
 		}
 		if(notice[i] > 0) {
 			notice[i] = parseInt(notice[i]) - v;
