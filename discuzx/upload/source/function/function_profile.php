@@ -477,6 +477,7 @@ function countprofileprogress($uid = 0) {
 }
 
 function get_constellation($birthmonth,$birthday) {
+	//TODO:增加自動處理
 	$birthmonth = intval($birthmonth);
 	$birthday = intval($birthday);
 	$idx = $birthmonth;
@@ -491,6 +492,7 @@ function get_constellation($birthmonth,$birthday) {
 }
 
 function get_zodiac($birthyear) {
+	//TODO:增加自動處理
 	$birthyear = intval($birthyear);
 	$idx = (($birthyear - 1900) % 12) + 1;
 	return $idx > 0 && $idx <= 12 ? lang('space', 'zodiac_'. $idx) : '';
