@@ -68,6 +68,7 @@ function validate(theform) {
 		html2bbcode(getEditorContents())
 		: (
 			!theform.parseurloff.checked ?
+				// 增加允許判斷 img url
 				parseurl(theform.message.value, null, 1, theform.allowimgurl.checked)
 				: theform.message.value
 	);
