@@ -255,6 +255,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 
 	include_once libfile('function/home');
 	if(in_array($fieldid, array('birthday', 'birthmonth', 'birthyear', 'gender'))) {
+		//TODO:增加驗證處理生日資訊是否為合法
 		$value = intval($value);
 		return true;
 	} elseif(in_array($fieldid, array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity', 'resideprovince', 'residecity', 'residedist', 'residecommunity'))) {
