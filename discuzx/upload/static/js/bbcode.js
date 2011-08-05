@@ -49,7 +49,7 @@ function bbcode2html(str) {
 		str = str.replace(/</g, '&lt;');
 		str = str.replace(/>/g, '&gt;');
 		if(!fetchCheckbox('parseurloff')) {
-			str = parseurl(str, 'html', false);
+			str = parseurl(str, 'html', false, false);
 		}
 	}
 
