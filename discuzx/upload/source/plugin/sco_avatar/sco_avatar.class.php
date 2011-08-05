@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 //TODO:增加可出售用戶的創意頭像
 //TODO:增加可評分頭像
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
