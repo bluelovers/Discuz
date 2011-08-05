@@ -63,8 +63,27 @@ if(!tradepost) {
 	var tradepost = 0;
 }
 
+/**
+ * 用於編輯器
+ */
 function validate(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ?
+		html2bbcode(getEditorContents())
+		: (
+			!theform.parseurloff.checked ?
+				// 增加允許判斷 img url
+				parseurl(theform.message.value, null, 1, theform.allowimgurl.checked)
+				: theform.message.value
+	);
+
+	// bluelovers
+	// 整理 message , subject 的多餘空白
+	if (theform.subject) theform.subject.value = trim(theform.subject.value);
+	theform.message.value = theform.message.value
+		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/, '$1');
+	// bluelovers
+
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showError('抱歉，您尚未輸入標題或內容');
 		return false;
