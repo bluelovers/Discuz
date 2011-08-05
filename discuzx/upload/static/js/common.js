@@ -1765,6 +1765,8 @@ function parseurl(str, mode, parsecode, allowimgurl) {
 	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
 
 	// bluelovers
+	if(isUndefined(allowimgurl)) allowimgurl = true;
+
 	// 使用 parseurl 時 如果 allowimgurl 為真 則自動解析圖片連結為 img
 	if(allowimgurl) {
 		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig
