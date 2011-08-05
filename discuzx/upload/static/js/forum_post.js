@@ -68,7 +68,7 @@ function validate(theform) {
 		html2bbcode(getEditorContents())
 		: (
 			!theform.parseurloff.checked ?
-				parseurl(theform.message.value)
+				parseurl(theform.message.value, null, 1, theform.allowimgurl.checked)
 				: theform.message.value
 	);
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
