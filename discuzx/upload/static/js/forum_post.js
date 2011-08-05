@@ -63,6 +63,9 @@ if(!tradepost) {
 	var tradepost = 0;
 }
 
+/**
+ * 用於編輯器
+ */
 function validate(theform) {
 	var message = wysiwyg ?
 		html2bbcode(getEditorContents())
