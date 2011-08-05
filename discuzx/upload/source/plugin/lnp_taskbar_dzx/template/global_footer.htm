@@ -40,8 +40,8 @@ $return = <<<EOT
 #lnp_middlebar{float:left;padding: 0 10px;}
 #lnp_mcontent{padding: 0 10px;}
 #lnp_olfriends{width:150px;right:0px;}
-#lnp_olfriends .lnp_olicon{float:right;margin:4px;}
-.lnp_newmsg{position:absolute;bottom:18px;background-image:url(static/image/common/new_pm_2.png);background-repeat: no-repeat;
+#lnp_olfriends .lnp_olicon{float:right;margin:4px;cursor:pointer;}
+.lnp_newmsg{position:absolute;bottom:18px;background-image:url({$staticurl}/image/common/new_pm_2.png);background-repeat: no-repeat;
 background-position:center bottom;width: 16px;height: 14px;right: 2px;z-index: 3;}
 </style>
 <div id="lnp_taskbar" >
@@ -121,7 +121,7 @@ EOT;
 }
 } else {
 	$return .= <<<EOT
-	<div class="lnp_rightitem"><a href="member.php?mod=logging&amp;action=login&amp;referer=http%3A%2F%2F127.0.0.1%2Fxx%2Fdiscuz%2Fdx%2Fforum.php" onclick="showWindow('login', this.href);return false;" class="xi2">登录</a></div>
+	<div class="lnp_rightitem"><a href="member.php?mod=logging&amp;action=login" onclick="showWindow('login', this.href);return false;" class="xi2">登录</a></div>
 EOT;
 }
 	$return .= <<<EOT
