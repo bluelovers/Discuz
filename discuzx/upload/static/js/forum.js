@@ -261,6 +261,7 @@ function fastpostvalidate(theform, noajaxpost) {
 		return false;
 	}
 	$('fastpostsubmit').disabled = true;
+	// 增加允許判斷 img url
 	theform.message.value = parseurl(theform.message.value, null, true, true);
 	if(!noajaxpost) {
 		ajaxpost('fastpostform', 'fastpostreturn', 'fastpostreturn', 'onerror', $('fastpostsubmit'));
