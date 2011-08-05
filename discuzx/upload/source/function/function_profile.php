@@ -371,6 +371,7 @@ function profile_show($fieldid, $space=array()) {
 
 
 function showdistrict($values, $elems=array(), $container='districtbox', $showlevel=null) {
+	//TODO:增加以區域ID作為儲存 方便日後修正名稱時同步更新
 	$showlevel = !empty($showlevel) ? intval($showlevel) : count($values);
 	$showlevel = $showlevel <= 4 ? $showlevel : 4;
 	$upids = array(0);
