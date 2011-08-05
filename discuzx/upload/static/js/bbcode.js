@@ -328,7 +328,7 @@ function html2bbcode(str) {
 	}
 
 	if(!fetchCheckbox('parseurloff')) {
-		str = parseurl(str, 'bbcode', false);
+		str = parseurl(str, 'bbcode', false, false);
 	}
 
 	for(i in EXTRAFUNC['html2bbcode']) {
