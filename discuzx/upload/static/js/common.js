@@ -19,6 +19,12 @@ if(BROWSER.ie) {
 	HTMLNODE.className = 'ie_all ie' + BROWSER.iemode;
 }
 
+// bluelovers
+// VERHASH_GZIP_JS is not defined
+var VERHASH_GZIP = isUndefined(VERHASH_GZIP) ? '' : VERHASH_GZIP;
+var VERHASH_GZIP_JS = isUndefined(VERHASH_GZIP_JS) ? '' : VERHASH_GZIP_JS;
+// bluelovers
+
 var CSSLOADED = [];
 var JSLOADED = [];
 var JSMENU = [];
