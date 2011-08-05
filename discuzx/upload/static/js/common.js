@@ -1762,7 +1762,10 @@ function ctrlEnter(event, btnId, onlyEnter) {
 
 function parseurl(str, mode, parsecode, allowimgurl) {
 	if(isUndefined(parsecode)) parsecode = true;
-	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
+	//if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
+	if (parsecode) {
+		str = str.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
+	}
 
 	// bluelovers
 	// 使用 parseurl 時 如果 allowimgurl 為真 則自動解析圖片連結為 img
