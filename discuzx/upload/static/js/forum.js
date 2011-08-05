@@ -261,7 +261,7 @@ function fastpostvalidate(theform, noajaxpost) {
 		return false;
 	}
 	$('fastpostsubmit').disabled = true;
-	theform.message.value = parseurl(theform.message.value);
+	theform.message.value = parseurl(theform.message.value, null, true, true);
 	if(!noajaxpost) {
 		ajaxpost('fastpostform', 'fastpostreturn', 'fastpostreturn', 'onerror', $('fastpostsubmit'));
 		return false;
