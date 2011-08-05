@@ -221,6 +221,9 @@ function showTypes(id, mod) {
 }
 
 var postpt = 0;
+/**
+ * 用於快速發帖
+ */
 function fastpostvalidate(theform, noajaxpost) {
 	if(postpt) {
 		return false;
