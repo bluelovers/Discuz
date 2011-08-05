@@ -235,6 +235,15 @@ function fastpostvalidate(theform, noajaxpost) {
 			return false;
 		}
 	}
+
+	// bluelovers
+	// 整理 message , subject 的多餘空白
+	theform.subject.value = trim(theform.subject.value);
+	theform.message.value = theform.message.value
+		.replace(/\r\n/, "\n")
+		.replace(/[　\t ]+(\n|$)/, '$1');
+	// bluelovers
+
 	if(theform.message.value == '' && theform.subject.value == '') {
 		s = '抱歉，您尚未輸入標題或內容';
 		theform.message.focus();
