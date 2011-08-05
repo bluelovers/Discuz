@@ -64,7 +64,13 @@ if(!tradepost) {
 }
 
 function validate(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ?
+		html2bbcode(getEditorContents())
+		: (
+			!theform.parseurloff.checked ?
+				parseurl(theform.message.value)
+				: theform.message.value
+	);
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showError('抱歉，您尚未輸入標題或內容');
 		return false;
