@@ -736,6 +736,17 @@ function selectAllSaveImg(state) {
 }
 
 function showExtra(id) {
+
+	// bluelovers
+	var _toggle = function(obj, display) {
+		if (jQuery) {
+			display == 'none' ? jQuery(obj).slideDown('slow') : jQuery(obj).slideUp('slow');
+		} else {
+			obj.style.display = display == 'none' ? 'none' : 'block';
+		}
+	}
+	// bluelovers
+
 	if ($(id+'_c').style.display == 'block') {
 		$(id+'_b').className = 'pn z';
 		$(id+'_c').style.display = 'none';
