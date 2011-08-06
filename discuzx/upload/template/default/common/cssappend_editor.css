@@ -23,3 +23,18 @@
 	line-height: 20px;
 	vertical-align: middle;
 }
+
+/* phpwind bbcode style */
+#e_hide
+, #e_removeformat
+{
+	background: url({STATICURL}image/plus/pw/editor/B_ico.png) no-repeat scroll 999em 999em transparent;
+}
+
+#e_removeformat {
+	background-position: -177px -56px;
+}
+
+#e_hide {
+	background-position: -237px -56px;
+}
