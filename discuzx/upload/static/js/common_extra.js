@@ -979,7 +979,18 @@ function _showColorBox(ctrlid, layer, k, bgcolor) {
 function _toggle_collapse(objname, noimg, complex, lang) {
 	var obj = $(objname);
 	if(obj) {
+		// bluelovers
+		if (jQuery) {
+			jQuery(obj).slideToggle('slow');
+		} else {
+		// bluelovers
+
 		obj.style.display = obj.style.display == '' ? 'none' : '';
+
+		// bluelovers
+		}
+		// bluelovers
+
 		var collapsed = getcookie('collapse');
 		collapsed = updatestring(collapsed, objname, !obj.style.display);
 		setcookie('collapse', collapsed, (collapsed ? 2592000 : -2592000));
