@@ -24,7 +24,11 @@ $attachment = $attachcount ? (DB::result_first("SELECT COUNT(*) FROM ".DB::table
 
 $firstpost  = DB::fetch_first("SELECT pid, subject, rate FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND invisible='0' ORDER BY dateline LIMIT 1");
 $firstpost['subject'] = addslashes(cutstr($firstpost['subject'], 79));
+/*
 @$firstpost['rate'] = $firstpost['rate'] / abs($firstpost['rate']);
+*/
+// 修改為主題列表可顯示評分分數
+$firstpost['rate'] = intval($firstpost['rate']);
 
 $lastpost  = DB::fetch_first("SELECT author, dateline FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND invisible='0' ORDER BY dateline DESC LIMIT 1");
 
