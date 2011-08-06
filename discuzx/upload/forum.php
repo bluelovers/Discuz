@@ -67,6 +67,6 @@ if (discuz_core::$plugin_support['Scorpio_Event']) {
 }
 // bluelovers
 
-require libfile('forum/'.$mod, 'source/module');
+require libfile('forum/'.$mod, 'module');
 
 ?>
