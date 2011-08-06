@@ -1062,6 +1062,15 @@ function showMenu(v) {
 	if(fade) {
 		var O = 0;
 		var fadeIn = function(O) {
+
+			// bluelovers
+			if (jQuery) {
+				jQuery(menuObj).fadeIn('slow');
+
+				return;
+			}
+			// bluelovers
+
 			if(O > 100) {
 				clearTimeout(fadeInTimer);
 				return;
