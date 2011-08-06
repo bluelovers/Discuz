@@ -759,7 +759,10 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	$(formid).target = ajaxframeid;
 	var action = $(formid).getAttribute('action');
 	action = hostconvert(action);
+	/*
 	$(formid).action = action.replace(/\&inajax\=1/g, '')+'&inajax=1';
+	*/
+	$(formid).action = Ajax().fixurl(action.replace(/\&inajax\=1/g, ''));
 	$(formid).submit();
 	if(submitbtn) {
 		submitbtn.disabled = true;
