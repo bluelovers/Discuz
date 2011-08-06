@@ -28,7 +28,7 @@ function debugmessage() {
 	 * [在這個錯誤中斷] src = JSPATH + script + '.js?' + VERHASH;
 	 * common.js（527 行）
 	 **/
-	$debug .= "<script type=\"text/javascript\">var STYLEID = '{STYLEID}', STATICURL = '{STATICURL}', IMGDIR = '{IMGDIR}', VERHASH = '{VERHASH}', charset = '{CHARSET}', discuz_uid = '$_G[uid]', cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}', showusercard = '{$_G[setting][showusercard]}', attackevasive = '{$_G[config][security][attackevasive]}', disallowfloat = '{$_G[setting][disallowfloat]}', creditnotice = '";
+	$debug .= "<script type=\"text/javascript\">var STYLEID = '".STYLEID."', STATICURL = '".STATICURL."', IMGDIR = '".IMGDIR."', VERHASH = '".VERHASH."', charset = '".CHARSET."', discuz_uid = '$_G[uid]', cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}', showusercard = '{$_G[setting][showusercard]}', attackevasive = '{$_G[config][security][attackevasive]}', disallowfloat = '{$_G[setting][disallowfloat]}', creditnotice = '";
 	if (0 && $_G['setting']['creditnotice']) {
 		$debug .= $_G['setting']['creditnames'];
 	}
