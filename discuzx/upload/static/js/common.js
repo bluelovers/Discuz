@@ -1466,7 +1466,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		};
 		$('fwin_dialog_close').onclick = $('fwin_dialog_cancel').onclick;
 	}
-	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover,'fade':1});
+	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover});
 	try {
 		if($('fwin_dialog_submit')) $('fwin_dialog_submit').focus();
 	} catch(e) {}
