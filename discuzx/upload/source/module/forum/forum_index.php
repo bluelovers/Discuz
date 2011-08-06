@@ -16,6 +16,20 @@ require_once libfile('function/forumlist');
 $gid = intval(getgpc('gid'));
 $showoldetails = get_index_online_details();
 
+// bluelovers
+// 使 forum.php?showoldetails=yes 支援 ajax
+if ($showoldetails && $_G['inajax']) {
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_index:After_showoldetails_ajax
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':After_showoldetails_ajax')
+			->run(array(array(
+				'showoldetails'	=> &$showoldetails,
+		)));
+	}
+	dexit();
+}
+// bluelovers
+
 if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
 	get_index_page_guest_cache();
 }
