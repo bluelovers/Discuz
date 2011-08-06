@@ -1524,7 +1524,12 @@ function showWindow(k, url, mode, cache, menuv) {
 
 		// bluelovers
 		var _focus = function () {
-			if (menuObj.style.zIndex != JSMENU['zIndex']['win']) {
+			if (menuObj.style.zIndex != JSMENU['zIndex']['win']
+				&& (
+					!JSMENU['drag'][4]
+					|| JSMENU['drag'][4].id == menuObj.id
+				)
+			) {
 				JSMENU['zIndex']['win'] += 1;
 				menuObj.style.zIndex = JSMENU['zIndex']['win'];
 			}
