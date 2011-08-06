@@ -16,7 +16,7 @@
 <!--{if $_G[gp_action] == 'rate'}-->
 <div class="tm_c" id="floatlayout_topicadmin">
 	<h3 class="flb">
-		<em id="return_rate">{lang rate}</em>
+		<em id="return_rate">{lang rate} (PID: {$_G[gp_pid]})</em>
 		<span>
 			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('rate')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
@@ -95,7 +95,7 @@
 <form id="rateform" method="post" autocomplete="off" action="forum.php?mod=misc&action=removerate&ratesubmit=yes&infloat=yes" onsubmit="ajaxpost('rateform', 'return_rate', 'return_rate', 'onerror');return false;">
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_rate">{lang thread_removerate}</em>
+			<em id="return_rate">{lang thread_removerate} (PID: {$_G[gp_pid]})</em>
 			<span>
 				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('rate')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
@@ -121,7 +121,7 @@
 					<td><input type="checkbox" name="logidarray[]" value="$ratelog[uid] $ratelog[extcredits] $ratelog[dbdateline]" /></td>
 					<td><a href="home.php?mod=space&uid=$ratelog[uid]">$ratelog[username]</a></td>
 					<td>$ratelog[dateline]</td>
-					<td>{$_G['setting']['extcredits'][$ratelog[extcredits]][title]} <span class="xw1">$ratelog[scoreview]</span> {$_G['setting']['extcredits'][$ratelog[extcredits]][unit]}</td>
+					<td>{$_G['setting']['extcredits'][$ratelog[extcredits]][title]} <span class="xw1{if $ratelog[scoreview] > 0} rate_credit_add{else} rate_credit_reduce{/if}">$ratelog[scoreview]</span> {$_G['setting']['extcredits'][$ratelog[extcredits]][unit]}</td>
 					<td>$ratelog[reason]</td>
 				</tr>
 			<!--{/loop}-->

@@ -150,6 +150,14 @@ table.table_fixed { table-layout: fixed; }
 .float_none				{ float: none; }
 .float_both				{ float: both; }
 
+.inline_block {
+	/* 跨瀏覽器的 inline-block */
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
 .inline li	{ display: inline; }
 .inline_float_left li	{ display: inline; float: left; }
 .inline_float_right li	{ display: inline; float: right; }

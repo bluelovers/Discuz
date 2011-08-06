@@ -34,6 +34,28 @@
 		overflow: hidden;
 	}
 
+	.rate dd ul li a {
+		word-break: keep-all;
+		white-space: nowrap;
+	}
+
+	/*評分連結*/
+	.misc_rate, .misc_removerate {
+	 	background-image: url({IMGDIR}/agree.gif);
+	    background-position: 0 50%;
+	    background-repeat: no-repeat;
+	    display: inline-block;
+	    /*
+	    height: 20px;
+	    line-height: 20px;
+	    */
+	    padding-left: 22px;
+   }
+
+   .misc_removerate {
+		background-image: url({IMGDIR}/disagree.gif);
+   }
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/

@@ -359,11 +359,11 @@
 						<!--{/if}-->
 
 						<!--{if !$post['first'] && $_G['group']['raterange'] && $post['authorid']}-->
-							<a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;">{lang rate}</a>
+							<a href="javascript:;" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" class="misc_rate">{lang rate}</a>
 						<!--{/if}-->
 
 						<!--{if $post['rate'] && $_G['forum']['ismoderator']}-->
-							<a href="forum.php?mod=misc&action=removerate&tid=$_G[tid]&pid=$post[pid]&page=$page" onclick="showWindow('rate', this.href, 'get', -1)">{lang removerate}</a>
+							<a href="forum.php?mod=misc&action=removerate&tid=$_G[tid]&pid=$post[pid]&page=$page" onclick="showWindow('rate', this.href, 'get', -1)" class="misc_removerate">{lang removerate}</a>
 						<!--{/if}-->
 						<!--{if $post['authorid'] != $_G['uid']}-->
 							<a href="javascript:;" onclick="showWindow('miscreport$post[pid]', 'misc.php?mod=report&rtype=post&rid=$post[pid]&tid=$_G[tid]&fid=$_G[fid]', 'get', -1);return false;">{lang report}</a>
