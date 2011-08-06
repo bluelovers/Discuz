@@ -34,7 +34,7 @@ function debugmessage() {
 	}
 	$debug .= "', defaultstyle = '{$_G[style][defaultextstyle]}', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '{$_G[setting][jspath]}';</script>";
 
-	$debug .= "<script src='static/js/common.js'></script>";
+	$debug .= "<script src='static/js/common.js?".VERHASH."'></script>";
 
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
