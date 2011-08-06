@@ -41,6 +41,13 @@
 	</div>
 </div>
 <div class="o pns">
+
+	<!--show removerate link-->
+	<!--{if $_G['forum']['ismoderator']}-->
+		<a href="forum.php?mod=misc&action=removerate&tid=$_G[tid]&pid=$post[pid]" onclick="{if !empty($_G['gp_infloat'])}hideWindow('$_G['gp_handlekey']');{/if}showWindow('rate', this.href, 'get', -1)">{lang removerate}</a>
+		&nbsp;
+	<!--{/if}-->
+
 	{lang total}:
 	<!--{loop $logcount $id $count}-->
 	&nbsp;{$_G['setting']['extcredits'][$id][title]} <!--{if $count>0}-->+<!--{/if}-->$count {$_G['setting']['extcredits'][$id][unit]} &nbsp;
