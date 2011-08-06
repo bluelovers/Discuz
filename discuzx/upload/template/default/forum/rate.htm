@@ -121,7 +121,7 @@
 					<td><input type="checkbox" name="logidarray[]" value="$ratelog[uid] $ratelog[extcredits] $ratelog[dbdateline]" /></td>
 					<td><a href="home.php?mod=space&uid=$ratelog[uid]">$ratelog[username]</a></td>
 					<td>$ratelog[dateline]</td>
-					<td>{$_G['setting']['extcredits'][$ratelog[extcredits]][title]} <span class="xw1">$ratelog[scoreview]</span> {$_G['setting']['extcredits'][$ratelog[extcredits]][unit]}</td>
+					<td>{$_G['setting']['extcredits'][$ratelog[extcredits]][title]} <span class="xw1{if $ratelog[scoreview] > 0} rate_credit_add{else} rate_credit_reduce{/if}">$ratelog[scoreview]</span> {$_G['setting']['extcredits'][$ratelog[extcredits]][unit]}</td>
 					<td>$ratelog[reason]</td>
 				</tr>
 			<!--{/loop}-->
