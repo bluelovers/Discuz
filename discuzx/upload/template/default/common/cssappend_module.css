@@ -39,6 +39,19 @@
 		white-space: nowrap;
 	}
 
+	/*評分連結*/
+	.misc_rate {
+	 	background-image: url({IMGDIR}/agree.gif);
+	    background-position: 0 50%;
+	    background-repeat: no-repeat;
+	    display: inline-block;
+	    /*
+	    height: 20px;
+	    line-height: 20px;
+	    */
+	    padding-left: 22px;
+   }
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
