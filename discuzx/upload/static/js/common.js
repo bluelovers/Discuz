@@ -1516,6 +1516,16 @@ function showWindow(k, url, mode, cache, menuv) {
 				fctrlidinit = true;
 			}
 		}
+
+		// bluelovers
+		var _focus = function () {
+			if (menuObj.style.zIndex != JSMENU['zIndex']['win']) {
+				JSMENU['zIndex']['win'] += 1;
+				menuObj.style.zIndex = JSMENU['zIndex']['win'];
+			}
+		}
+		_attachEvent(menuObj, 'mouseover', _focus);
+		// bluelovers
 	};
 	var show = function() {
 		hideMenu('fwin_dialog', 'dialog');
