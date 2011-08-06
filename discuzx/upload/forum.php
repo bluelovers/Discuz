@@ -57,6 +57,6 @@ runhooks();
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
 
-require DISCUZ_ROOT.'./source/module/forum/forum_'.$mod.'.php';
+require libfile('forum/'.$mod, 'source/module');
 
 ?>
