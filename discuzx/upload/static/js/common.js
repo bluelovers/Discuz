@@ -288,6 +288,26 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
+	// bluelovers
+	// aj.fixurl 用來修正 url
+	aj.fixurl = function (url, data){
+		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3, $4) {
+			$3 += ($3 ? '&' : '?')
+				+ 'inajax=1'
+			;
+
+			if (data) {
+				for (var k in data) {
+					$3 += '&' + k + '=' + data[k];
+				}
+			}
+
+			return $2 + $3 + $4;
+		});
+		return url;
+	};
+	// bluelovers
+
 	aj.loading = '請稍候...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
@@ -638,7 +658,12 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		x.autogoto = 1;
 	}
 
+	/*
 	var url = url + '&inajax=1&ajaxtarget=' + showid;
+	*/
+	// fix like forum.php?showoldetails=no#online&inajax=1&ajaxtarget=undefined
+	var url = x.fixurl(url, {ajaxtarget:showid});
+
 	x.get(url, function(s, x) {
 		var evaled = false;
 		if(s.indexOf('ajaxerror') != -1) {
@@ -734,7 +759,10 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	$(formid).target = ajaxframeid;
 	var action = $(formid).getAttribute('action');
 	action = hostconvert(action);
+	/*
 	$(formid).action = action.replace(/\&inajax\=1/g, '')+'&inajax=1';
+	*/
+	$(formid).action = Ajax().fixurl(action.replace(/\&inajax\=1/g, ''));
 	$(formid).submit();
 	if(submitbtn) {
 		submitbtn.disabled = true;
