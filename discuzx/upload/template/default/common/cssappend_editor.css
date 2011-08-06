@@ -27,8 +27,13 @@
 /* phpwind bbcode style */
 #e_hide
 , #e_removeformat
+, #e_backcolor
 {
 	background: url({STATICURL}image/plus/pw/editor/B_ico.png) no-repeat scroll 999em 999em transparent;
+}
+
+#e_backcolor {
+	background-position: -146px 3px;
 }
 
 #e_removeformat {
