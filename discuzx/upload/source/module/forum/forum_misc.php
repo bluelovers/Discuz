@@ -634,6 +634,9 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		if(!empty($sub_self_credit)) {
 			updatemembercount($_G['uid'], $sub_self_credit, 1, 'RSC', $_G['gp_pid']);
 		}
+
+		//TODO:修改為主題列表可顯示評分分數
+
 		DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes+$ratetimes WHERE pid='$_G[gp_pid]'");
 		if($post['first']) {
 			$threadrate = intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
