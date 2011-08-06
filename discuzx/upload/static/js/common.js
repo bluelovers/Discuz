@@ -293,8 +293,13 @@ function Ajax(recvType, waitId) {
 	aj.fixurl = function (url, data){
 		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3, $4) {
 			$3 += ($3 ? '&' : '?')
-				+ 'inajax=1&ajaxtarget=' + data.ajaxtarget
+				+ 'inajax=1'
 			;
+
+			for (var k in data) {
+				$3 += '&' + k + '=' + data[k];
+			}
+
 			return $2 + $3 + $4;
 		});
 		return url;
