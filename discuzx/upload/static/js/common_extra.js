@@ -985,7 +985,7 @@ function _toggle_collapse(objname, noimg, complex, lang) {
 		} else {
 		// bluelovers
 
-		obj.style.display = obj.style.display == '' ? 'none' : '';
+			obj.style.display = obj.style.display == '' ? 'none' : '';
 
 		// bluelovers
 		}
