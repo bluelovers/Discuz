@@ -57,6 +57,16 @@ runhooks();
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['forum']);
 
+// bluelovers
+if (discuz_core::$plugin_support['Scorpio_Event']) {
+	//Event: Script_forum:Before_require_mod
+	Scorpio_Event::instance('Script_' . CURSCRIPT . ':Before_require_mod')
+		->run(array(array(
+			'mod'	=> &$mod,
+	)));
+}
+// bluelovers
+
 require libfile('forum/'.$mod, 'source/module');
 
 ?>
