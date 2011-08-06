@@ -1524,6 +1524,11 @@ function showWindow(k, url, mode, cache, menuv) {
 			v[k] = menuv[k];
 		}
 		showMenu(v);
+
+		// bluelovers
+		// 使最新出現的 window 在最前方
+		JSMENU['zIndex']['win'] += 1;
+		// bluelovers
 	};
 
 	if(!menuObj) {
