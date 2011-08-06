@@ -31,7 +31,7 @@
 			</thead>
 			<!--{loop $loglist $log}-->
 			<tr>
-				<td>{$_G['setting']['extcredits'][$log[extcredits]][title]} $log[score] {$_G['setting']['extcredits'][$log[extcredits]][unit]}</td>
+				<td>{$_G['setting']['extcredits'][$log[extcredits]][title]} <span class="{if $log[score] > 0}rate_credit_add{else}rate_credit_reduce{/if}">$log[score]</span> {$_G['setting']['extcredits'][$log[extcredits]][unit]}</td>
 				<td><a href="home.php?mod=space&uid=$log[uid]">$log[username]</a></td>
 				<td>$log[dateline]</td>
 				<td>$log[reason]</td>
