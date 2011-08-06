@@ -288,6 +288,19 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
+	// bluelovers
+	// aj.fixurl 用來修正 url
+	aj.fixurl = function (url, data){
+		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3) {
+			$2 += ($2 ? '&' : '?')
+				+ '&inajax=1&ajaxtarget=' + data.ajaxtarget
+			;
+			return $1 + $2 + $3;
+		});
+		return url;
+	}
+	// bluelovers
+
 	aj.loading = '請稍候...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
