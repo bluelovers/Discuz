@@ -67,7 +67,7 @@ $_G['gp_handlekey'] = 'mods';
 $topicadminfile_exists = preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'));
 // bluelovers
 
-if(preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'))) {
+if($topicadminfile_exists) {
 	require_once $topicadminfile;
 } else {
 	showmessage('undefined_action', NULL);
