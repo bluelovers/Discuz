@@ -175,6 +175,9 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 		'/\/\*(?:[^\*]+|\*(?!\/))*\*\//',
 		// 清除部分多餘空白
 		'/(\n(?:}|{|}|try|for|foreach))[ \t]+/',
+
+		// 清除單行註解 v2
+		'/(\n|^)\/\/[^\n]+(\n|$)/',
 	);
 	$_r = array(
 		'$1$2',
@@ -183,6 +186,8 @@ function _eFunc_writetojscache_Before_minify($_EVENT, $conf) {
 		'$1$2',
 		'',
 		'$1',
+
+		'$1$2',
 	);
 
 	//BUG:如果增加移除分行 bbcode.js 會產生錯誤
