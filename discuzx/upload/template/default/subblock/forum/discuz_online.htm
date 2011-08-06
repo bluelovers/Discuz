@@ -1,1 +1,50 @@
 <!--for forum/discuz-->
+		<!--{if empty($gid) && $_G['setting']['whosonlinestatus']}-->
+			<!--TODO:增加支援使 href 自動變化 yes|no-->
+			<div id="online" class="bm oll">
+				<div class="bm_h">
+				<!--{if $detailstatus}-->
+					<span class="o"><a href="forum.php?showoldetails=no#online" title="{lang spread}" onclick="doane();toggle_collapse('onlinelist');ajaxget(this.href);"><img src="{IMGDIR}/collapsed_no.gif" alt="{lang spread}" id="onlinelist_img" /></a></span>
+					<h3>
+						<strong><a href="home.php?mod=space&do=friend&view=online&type=member">{lang onlinemember}</a></strong>
+						<span class="xs1">- <strong>$onlinenum</strong> {lang onlines}
+						- <strong>$membercount</strong> {lang index_members}(<strong>$invisiblecount</strong> {lang index_invisibles}),
+						<strong>$guestcount</strong> {lang index_guests}
+						- {lang index_mostonlines} <strong>$onlineinfo[0]</strong> {lang on} <strong>$onlineinfo[1]</strong>.</span>
+					</h3>
+				<!--{else}-->
+					<span class="o"><a href="forum.php?showoldetails=yes#online" title="{lang spread}" onclick="doane();toggle_collapse('onlinelist');ajaxget(this.href);"><img src="{IMGDIR}/collapsed_yes.gif" alt="{lang spread}" id="onlinelist_img" /></a></span>
+					<h3>
+						<strong><a href="home.php?mod=space&do=friend&view=online&type=member">{lang onlinemember}</a></strong>
+						<span class="xs1">- {lang total} <strong>$onlinenum</strong> {lang onlines}
+						- {lang index_mostonlines} <strong>$onlineinfo[0]</strong> {lang on} <strong>$onlineinfo[1]</strong>.</span>
+					</h3>
+				<!--{/if}-->
+				</div>
+				<dl id="onlinelist" class="bm_c">
+			<!--{if $_G['setting']['whosonlinestatus'] && $detailstatus}-->
+					<dt class="ptm pbm bbda">$_G[cache][onlinelist][legend]</dt>
+					<!--{if $detailstatus}-->
+						<dd class="ptm pbm">
+						<ul class="cl">
+						<!--{if $whosonline}-->
+							<!--{loop $whosonline $key $online}-->
+								<li title="{lang time}: $online[lastactivity]">
+								<img src="{STATICURL}image/common/$online[icon]" alt="icon" />
+								<!--{if $online['uid']}-->
+									<a href="home.php?mod=space&uid=$online[uid]">$online[username]</a>
+								<!--{else}-->
+									$online[username]
+								<!--{/if}-->
+								</li>
+							<!--{/loop}-->
+						<!--{else}-->
+							<li style="width: auto">{lang online_only_guests}</li>
+						<!--{/if}-->
+						</ul>
+					</dd>
+					<!--{/if}-->
+			<!--{/if}-->
+				</dl>
+			</div>
+		<!--{/if}-->
