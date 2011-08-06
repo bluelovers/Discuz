@@ -1065,7 +1065,7 @@ function showMenu(v) {
 
 			// bluelovers
 			if (jQuery) {
-				jQuery(menuObj).fadeIn('slow');
+				jQuery(menuObj).fadeIn();
 
 				return;
 			}
@@ -1315,6 +1315,15 @@ function hideMenu(attr, mtype) {
 		if(menuObj.fade) {
 			var O = 100;
 			var fadeOut = function(O) {
+
+				// bluelovers
+				if (jQuery) {
+					jQuery(menuObj).fadeOut();
+
+					return;
+				}
+				// bluelovers
+
 				if(O == 0) {
 					clearTimeout(fadeOutTimer);
 					hide();
