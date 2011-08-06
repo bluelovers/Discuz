@@ -654,6 +654,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	/*
 	var url = url + '&inajax=1&ajaxtarget=' + showid;
 	*/
+	// fix like forum.php?showoldetails=no#online&inajax=1&ajaxtarget=undefined
 	var url = x.fixurl(url, {ajaxtarget:showid});
 
 	x.get(url, function(s, x) {
