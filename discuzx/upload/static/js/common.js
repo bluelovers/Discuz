@@ -1457,7 +1457,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		};
 		$('fwin_dialog_close').onclick = $('fwin_dialog_cancel').onclick;
 	}
-	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover});
+	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover,'fade':1});
 	try {
 		if($('fwin_dialog_submit')) $('fwin_dialog_submit').focus();
 	} catch(e) {}
@@ -1510,7 +1510,7 @@ function showWindow(k, url, mode, cache, menuv) {
 	};
 	var show = function() {
 		hideMenu('fwin_dialog', 'dialog');
-		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache};
+		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache,'fade':1};
 		for(k in menuv) {
 			v[k] = menuv[k];
 		}
