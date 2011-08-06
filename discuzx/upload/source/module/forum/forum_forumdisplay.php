@@ -29,24 +29,10 @@ $_G['gp_digest'] = isset($_G['gp_digest']) ? 1 : '';
 $_G['gp_archiveid'] = isset($_G['gp_archiveid']) ? intval($_G['gp_archiveid']) : 0;
 
 $showoldetails = isset($_G['gp_showoldetails']) ? $_G['gp_showoldetails'] : '';
-
-// bluelovers
-if (!empty($showoldetails)) {
-// bluelovers
-
 switch($showoldetails) {
 	case 'no': dsetcookie('onlineforum', ''); break;
 	case 'yes': dsetcookie('onlineforum', 1, 31536000); break;
 }
-
-// bluelovers
-
-	// 增加 ajax 時的處理
-	if ($_G['inajax']) {
-		dexit($showoldetails == 'yes' ? 1 : 0);
-	}
-}
-// bluelovers
 
 $_G['forum']['name'] = strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name'];
 $_G['forum']['extra'] = unserialize($_G['forum']['extra']);
