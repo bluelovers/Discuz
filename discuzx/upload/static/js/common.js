@@ -298,7 +298,7 @@ function Ajax(recvType, waitId) {
 			return $1 + $2 + $3;
 		});
 		return url;
-	}
+	};
 	// bluelovers
 
 	aj.loading = '請稍候...';
