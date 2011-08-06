@@ -651,7 +651,11 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		x.autogoto = 1;
 	}
 
+	/*
 	var url = url + '&inajax=1&ajaxtarget=' + showid;
+	*/
+	var url = x.fixurl(url, {ajaxtarget:showid});
+
 	x.get(url, function(s, x) {
 		var evaled = false;
 		if(s.indexOf('ajaxerror') != -1) {
