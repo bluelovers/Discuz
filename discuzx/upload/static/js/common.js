@@ -291,11 +291,11 @@ function Ajax(recvType, waitId) {
 	// bluelovers
 	// aj.fixurl 用來修正 url
 	aj.fixurl = function (url, data){
-		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3) {
-			$2 += ($2 ? '&' : '?')
-				+ '&inajax=1&ajaxtarget=' + data.ajaxtarget
+		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3, $4) {
+			$3 += ($3 ? '&' : '?')
+				+ 'inajax=1&ajaxtarget=' + data.ajaxtarget
 			;
-			return $1 + $2 + $3;
+			return $2 + $3 + $4;
 		});
 		return url;
 	};
