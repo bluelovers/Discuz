@@ -16,7 +16,7 @@
 <!--{if $_G[gp_action] == 'rate'}-->
 <div class="tm_c" id="floatlayout_topicadmin">
 	<h3 class="flb">
-		<em id="return_rate">{lang rate}</em>
+		<em id="return_rate">{lang rate} (PID: {$_G[gp_pid]})</em>
 		<span>
 			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('rate')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
@@ -95,7 +95,7 @@
 <form id="rateform" method="post" autocomplete="off" action="forum.php?mod=misc&action=removerate&ratesubmit=yes&infloat=yes" onsubmit="ajaxpost('rateform', 'return_rate', 'return_rate', 'onerror');return false;">
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_rate">{lang thread_removerate}</em>
+			<em id="return_rate">{lang thread_removerate} (PID: {$_G[gp_pid]})</em>
 			<span>
 				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('rate')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
