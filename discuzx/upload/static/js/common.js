@@ -296,8 +296,10 @@ function Ajax(recvType, waitId) {
 				+ 'inajax=1'
 			;
 
-			for (var k in data) {
-				$3 += '&' + k + '=' + data[k];
+			if (data) {
+				for (var k in data) {
+					$3 += '&' + k + '=' + data[k];
+				}
 			}
 
 			return $2 + $3 + $4;
