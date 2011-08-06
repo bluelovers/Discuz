@@ -34,6 +34,11 @@
 		overflow: hidden;
 	}
 
+	.rate dd ul li a {
+		word-break: keep-all;
+		white-space: nowrap;
+	}
+
 /** end **/
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
