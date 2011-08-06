@@ -1062,6 +1062,15 @@ function showMenu(v) {
 	if(fade) {
 		var O = 0;
 		var fadeIn = function(O) {
+
+			// bluelovers
+			if (jQuery) {
+				jQuery(menuObj).fadeIn();
+
+				return;
+			}
+			// bluelovers
+
 			if(O > 100) {
 				clearTimeout(fadeInTimer);
 				return;
@@ -1144,6 +1153,11 @@ function dragMenu(menuObj, e, op) {
 		document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
 		doane(e);
 	}else if(op == 2 && JSMENU['drag'][0]) {
+
+		// bluelovers
+		JSMENU['drag'][4] = menuObj;
+		// bluelovers
+
 		var menudragnow = [e.clientX, e.clientY];
 		menuObj.style.left = (JSMENU['drag'][2] + menudragnow[0] - JSMENU['drag'][0]) + 'px';
 		menuObj.style.top = (JSMENU['drag'][3] + menudragnow[1] - JSMENU['drag'][1]) + 'px';
@@ -1306,6 +1320,15 @@ function hideMenu(attr, mtype) {
 		if(menuObj.fade) {
 			var O = 100;
 			var fadeOut = function(O) {
+
+				// bluelovers
+				if (jQuery) {
+					jQuery(menuObj).fadeOut();
+
+					return;
+				}
+				// bluelovers
+
 				if(O == 0) {
 					clearTimeout(fadeOutTimer);
 					hide();
@@ -1498,14 +1521,34 @@ function showWindow(k, url, mode, cache, menuv) {
 				fctrlidinit = true;
 			}
 		}
+
+		// bluelovers
+		var _focus = function () {
+			if (menuObj.style.zIndex != JSMENU['zIndex']['win']
+				&& (
+					!JSMENU['drag'][4]
+					|| JSMENU['drag'][4].id == menuObj.id
+				)
+			) {
+				JSMENU['zIndex']['win'] += 1;
+				menuObj.style.zIndex = JSMENU['zIndex']['win'];
+			}
+		}
+		_attachEvent(menuObj, 'mouseover', _focus);
+		// bluelovers
 	};
 	var show = function() {
 		hideMenu('fwin_dialog', 'dialog');
-		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache};
+		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache,'fade':1};
 		for(k in menuv) {
 			v[k] = menuv[k];
 		}
 		showMenu(v);
+
+		// bluelovers
+		// 使最新出現的 window 在最前方
+		JSMENU['zIndex']['win'] += 1;
+		// bluelovers
 	};
 
 	if(!menuObj) {

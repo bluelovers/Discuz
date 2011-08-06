@@ -736,9 +736,23 @@ function selectAllSaveImg(state) {
 }
 
 function showExtra(id) {
+
+	// bluelovers
+	var _toggle = function(obj, display) {
+		if (jQuery) {
+			display == 'none' ? jQuery(obj).hide() : jQuery(obj).fadeIn();
+		} else {
+			obj.style.display = display == 'none' ? 'none' : 'block';
+		}
+	}
+	// bluelovers
+
 	if ($(id+'_c').style.display == 'block') {
 		$(id+'_b').className = 'pn z';
+		/*
 		$(id+'_c').style.display = 'none';
+		*/
+		_toggle($(id+'_c'), 'none');
 	} else {
 		var extraButton = $('post_extra_tb').getElementsByTagName('label');
 		var extraForm = $('post_extra_c').getElementsByTagName('div');
@@ -749,17 +763,26 @@ function showExtra(id) {
 
 		for (i=0;i<extraForm.length;i++) {
 			if(hasClass(extraForm[i],'exfm')) {
+				/*
 				extraForm[i].style.display = 'none';
+				*/
+				_toggle(extraForm[i], 'none');
 			}
 		}
 
 		for (i=0;i<extraForm.length;i++) {
 			if(hasClass(extraForm[i],'exfm')) {
+				/*
 				extraForm[i].style.display = 'none';
+				*/
+				_toggle(extraForm[i], 'none');
 			}
 		}
 		$(id+'_b').className = 'a';
+		/*
 		$(id+'_c').style.display = 'block';
+		*/
+		_toggle($(id+'_c'), 'block');
 	}
 }
 
