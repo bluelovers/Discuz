@@ -1153,6 +1153,11 @@ function dragMenu(menuObj, e, op) {
 		document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
 		doane(e);
 	}else if(op == 2 && JSMENU['drag'][0]) {
+
+		// bluelovers
+		JSMENU['drag'][4] = menuObj;
+		// bluelovers
+
 		var menudragnow = [e.clientX, e.clientY];
 		menuObj.style.left = (JSMENU['drag'][2] + menudragnow[0] - JSMENU['drag'][0]) + 'px';
 		menuObj.style.top = (JSMENU['drag'][3] + menudragnow[1] - JSMENU['drag'][1]) + 'px';
