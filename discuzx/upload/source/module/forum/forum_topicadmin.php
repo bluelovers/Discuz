@@ -63,6 +63,9 @@ if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_
 
 $_G['gp_handlekey'] = 'mods';
 
+// bluelovers
+$topicadminfile_exists = preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'));
+// bluelovers
 
 if(preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'))) {
 	require_once $topicadminfile;
