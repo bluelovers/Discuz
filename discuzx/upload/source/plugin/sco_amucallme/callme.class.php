@@ -18,7 +18,7 @@ class plugin_sco_amucallme extends _sco_dx_plugin {
 		$this->_lang_load_plugin('script');
 		$this->_lang_load_plugin('template');
 
-		$this->attr['lang']['template'] = array_merge($this->attr['lang']['script'], $this->attr['lang']['template']);
+		$this->attr['lang']['template'] = array_merge((array)$this->attr['lang']['script'], (array)$this->attr['lang']['template']);
 	}
 
 	function searchmembers($condition, $limit=100, $start=0) {
