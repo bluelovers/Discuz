@@ -179,6 +179,8 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 	if(!IS_ROBOT && ($_G['setting']['whosonlinestatus'] == 1 || $_G['setting']['whosonlinestatus'] == 3)) {
 		$_G['setting']['whosonlinestatus'] = 1;
 
+		//BUG:升級轉換後無法保存 onlinerecord 會被強制性覆寫
+
 		$onlineinfo = explode("\t", $_G['cache']['onlinerecord']);
 		if(empty($_G['cookie']['onlineusernum'])) {
 			$onlinenum = DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
