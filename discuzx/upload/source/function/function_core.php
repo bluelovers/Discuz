@@ -3126,22 +3126,26 @@ function strreplace_strip_split($searchs, $replaces, $str) {
 	$searchspace = array(
 		/*
 		'((\s*\-\s*)+)',
-		*/
-		'/(?:(\s)*([\-\,\|\_ ])(\s)*)+/',
 		'((\s*\,\s*)+)',
 		'((\s*\|\s*)+)',
+		*/
+		'/(?:(\s)*([\-\,\|\_ ])(\s)*)+/',
 		'((\s*\t\s*)+)',
+		/*
 		'((\s*_\s*)+)',
+		*/
 	);
 	$replacespace = array(
 		/*
 		'-',
-		*/
-		'\\1\\2\\3',
 		',',
 		'|',
+		*/
+		'\\1\\2\\3',
 		' ',
+		/*
 		'_',
+		*/
 	);
 	return trim(preg_replace($searchspace, $replacespace, str_replace($searchs, $replaces, $str)), ' ,-|_');
 }
