@@ -27,13 +27,13 @@ function unlock(){
 setInterval("unlock()", 1000);
 </script>
 
-<form id="sform" action="plugin.php?id=amucallme_dzx:js&sreach=1&callmesubmit=true&ajax=1&inajax=1{if !empty($_G['gp_adds'])}&adds={$_G[gp_adds]}{/if}" autocomplete="off" method="post" onsubmit="ajaxpost('sform', 'gets');">
+<form id="sform" action="plugin.php?id=sco_amucallme:js&sreach=1&callmesubmit=true&ajax=1&inajax=1{if !empty($_G['gp_adds'])}&adds={$_G[gp_adds]}{/if}" autocomplete="off" method="post" onsubmit="ajaxpost('sform', 'gets');">
 <input type="hidden" name="referer" value="$_G[referer]">
 <input type="hidden" name="formhash" value="{FORMHASH}" />
 <!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_$_G['gp_handlekey']">{lang amucallme_dzx:cm}</em>
+			<em id="return_$_G['gp_handlekey']">{lang sco_amucallme:cm}</em>
 			<span>
 				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
@@ -43,58 +43,58 @@ setInterval("unlock()", 1000);
 			<div class="p_opt mpx pns cl">
 
 				<!--{if $u}-->
-				<div style="float:left; width:100%;"><B>{lang amucallme_dzx:u}</B></div>
+				<div style="float:left; width:100%;"><B>{lang sco_amucallme:u}</B></div>
 				<!--{/if}-->
 
 				<!--{if $adds == 'fastpostmessage'}-->
 				{loop $lists $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$value[/@]');hideWindow('amucallme_dzx_add');">$value</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$value[/@]');hideWindow('sco_amucallme_add');">$value</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{else}-->
 				{loop $lists $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$value[/@] ', 34, 0);hideWindow('amucallme_dzx_add');">$value</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$value[/@] ', 34, 0);hideWindow('sco_amucallme_add');">$value</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{/if}-->
 				<!--{if $authorlz}-->
 					<!--{if $adds == 'fastpostmessage'}-->					
-					<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$authorlz[/@]');hideWindow('amucallme_dzx_add');">$authorlz{lang amucallme_dzx:lz}</A></span>					
+					<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$authorlz[/@]');hideWindow('sco_amucallme_add');">$authorlz{lang sco_amucallme:lz}</A></span>					
 					<!--{else}-->
-					<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$authorlz[/@] ', 34, 0);hideWindow('amucallme_dzx_add');">$authorlz{lang amucallme_dzx:lz}</A></span>
+					<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$authorlz[/@] ', 34, 0);hideWindow('sco_amucallme_add');">$authorlz{lang sco_amucallme:lz}</A></span>
 					<!--{/if}-->
 				<!--{/if}-->
 
 
-				<!--{if $friends}--><div style="float: left; width: 100%;"><B>{lang amucallme_dzx:f}</B></div><!--{/if}-->
+				<!--{if $friends}--><div style="float: left; width: 100%;"><B>{lang sco_amucallme:f}</B></div><!--{/if}-->
 				<!--{if $adds == 'fastpostmessage'}-->
 				{loop $friends $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$value[/@]');hideWindow('amucallme_dzx_add');">$value</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@]$value[/@]');hideWindow('sco_amucallme_add');">$value</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{else}-->
 				{loop $friends $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$value[/@] ', 34, 0);hideWindow('amucallme_dzx_add');">$value</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@]$value[/@] ', 34, 0);hideWindow('sco_amucallme_add');">$value</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{/if}-->
 
 
-				<!--{if $groups}--><div style="float: left; width: 100%;"><B>{lang amucallme_dzx:g}</B></div><!--{/if}-->
+				<!--{if $groups}--><div style="float: left; width: 100%;"><B>{lang sco_amucallme:g}</B></div><!--{/if}-->
 				<!--{if $adds == 'fastpostmessage'}-->
 				{loop $groups $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@=group]$value[groupid][/@]');hideWindow('amucallme_dzx_add');">$value[grouptitle]</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="seditor_insertunit('fastpost', '[@=group]$value[groupid][/@]');hideWindow('sco_amucallme_add');">$value[grouptitle]</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{else}-->
 				{loop $groups $i $value}
 				<!--{if $value}-->
-				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@=group]$value[groupid][/@] ', 34, 0);hideWindow('amucallme_dzx_add');">$value[grouptitle]</A></span>
+				<span style="display:block;width:48%;float:left;"><A href="javascript:;" style="color:#3300FF1;" onclick="insertText('[@=group]$value[groupid][/@] ', 34, 0);hideWindow('sco_amucallme_add');">$value[grouptitle]</A></span>
 				<!--{/if}-->
 				{/loop}
 				<!--{/if}-->
@@ -103,8 +103,8 @@ setInterval("unlock()", 1000);
 		</div>
 	</div>
 	<div class="o pns cl{if empty($_G['gp_infloat'])} mtm{/if}">
-		<span class="z"> <strong>{lang amucallme_dzx:ss} : </strong><input type="text" name="keywords" id="keywords" style="width: 100px" value="" class="px" onKeyUp ="cmtest();"> </span>
-		<button type="submit" id="callmesubmit" class="pn pnc y" value="true" name="callmesubmit" ><span>{lang amucallme_dzx:sb}</span></button>
+		<span class="z"> <strong>{lang sco_amucallme:ss} : </strong><input type="text" name="keywords" id="keywords" style="width: 100px" value="" class="px" onKeyUp ="cmtest();"> </span>
+		<button type="submit" id="callmesubmit" class="pn pnc y" value="true" name="callmesubmit" ><span>{lang sco_amucallme:sb}</span></button>
 	</div>
 </form>
 

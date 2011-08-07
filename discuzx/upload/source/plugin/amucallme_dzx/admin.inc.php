@@ -1,22 +1,22 @@
 <?php
 /*
-	amucallme_dzx admin BY 阿牧
+	sco_amucallme admin BY 阿牧
 */
 !defined('IN_DISCUZ') && exit('Access Denied');
 !defined('IN_ADMINCP') && exit('Access Denied');
 DEFINE('OFFSET_DELIMETER', "\t");
 //公共部分
-$file = './data/plugindata/amucallme_dzx.data.php';
+$file = './data/plugindata/sco_amucallme.data.php';
 if(!$_G['gp_submit']){
 	$exsel = extc2seled(0,$_G['setting']['extcredits']);
 	loadcache('usergroups');
 	$usergroups = $_G['cache']['usergroups'];
-	showformheader('plugins&operation=config&identifier=amucallme_dzx&pmod=admin');
-	showtips(lang("plugin/amucallme_dzx","admin2_p1"));
-	showtableheader(lang("plugin/amucallme_dzx","admin2_h1"));
-	showsubtitle(array(lang("plugin/amucallme_dzx","admin2_t4"),lang("plugin/amucallme_dzx","admin2_t2"), lang("plugin/amucallme_dzx","admin2_t3")));
+	showformheader('plugins&operation=config&identifier=sco_amucallme&pmod=admin');
+	showtips(lang("plugin/sco_amucallme","admin2_p1"));
+	showtableheader(lang("plugin/sco_amucallme","admin2_h1"));
+	showsubtitle(array(lang("plugin/sco_amucallme","admin2_t4"),lang("plugin/sco_amucallme","admin2_t2"), lang("plugin/sco_amucallme","admin2_t3")));
 	if(file_exists($file)){
-		require_once DISCUZ_ROOT.'./data/plugindata/amucallme_dzx.data.php';
+		require_once DISCUZ_ROOT.'./data/plugindata/sco_amucallme.data.php';
 		$data_f2a = dstripslashes($data_f2a);
 	}
 	foreach ($usergroups as $id => $result){
@@ -28,7 +28,7 @@ if(!$_G['gp_submit']){
 			'<input type="text" class="txt" name="cost[]" value="'.$exinp['cost'].'" size="7" />',
 		));
 	}
-	showsubmit('submit', lang("plugin/amucallme_dzx","admin2_s2"));
+	showsubmit('submit', lang("plugin/sco_amucallme","admin2_s2"));
 	
 	showtablefooter();
 	showformfooter();
@@ -45,7 +45,7 @@ if(!$_G['gp_submit']){
 		}
 	}
 	array2php($mrcs,$file,'data_f2a');
-	cpmsg('amucallme_dzx:admin2_i', 'action=plugins&operation=config&identifier=amucallme_dzx&pmod=admin','succeed');
+	cpmsg('sco_amucallme:admin2_i', 'action=plugins&operation=config&identifier=sco_amucallme&pmod=admin','succeed');
 }
 
 

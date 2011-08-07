@@ -33,6 +33,6 @@ if(!$ywzx) {
 	}
 }
 discuz_process::unlock($processname);
-include template('amucallme_dzx:ajax');
+include template('sco_amucallme:ajax');
 
 ?>
