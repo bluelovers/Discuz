@@ -11,9 +11,10 @@ class plugin_sco_amucallme extends _sco_dx_plugin {
 	function plugin_sco_amucallme(){
 		$this->_init($this->_get_identifier(__METHOD__));
 
-		$this->mvars = $this->attr['setting'];
-		$this->fids=(array)unserialize($this->mvars['fids']);
-		$this->gids = (array)unserialize($this->mvars['gids']);
+		$this->_fix_plugin_setting();
+
+		$this->fids = $this->attr['setting']['fids'];
+		$this->gids = $this->attr['setting']['gids'];
 
 		$this->_lang_load_plugin('script');
 		$this->_lang_load_plugin('template');
