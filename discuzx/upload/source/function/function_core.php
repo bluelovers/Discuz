@@ -3087,6 +3087,9 @@ function getattachnewaid($uid = 0) {
 	return DB::insert('forum_attachment', array('tid' => 0, 'pid' => 0, 'uid' => $uid, 'tableid' => 127), true);
 }
 
+/**
+ * SEO設置
+ */
 function get_seosetting($page, $data = array(), $defset = array()) {
 	global $_G;
 	$searchs = array('{bbname}');
