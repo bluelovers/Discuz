@@ -4,7 +4,7 @@ if(!defined('IN_DISCUZ')) {
 }
 $tp = $_G['gp_tp'];
 $adds=strip_tags($_G['gp_adds']);
-//ÍÆ¼öµÄºÃÓÑ
+//æ¨èçš„å¥½å‹
 $lists = array();
 $authors = (array)unserialize(base64_decode(getcookie('sco_amucallme_'.$tp)));
 $authorsd = (array)unserialize(base64_decode(getcookie('sco_amucallme_ed')));

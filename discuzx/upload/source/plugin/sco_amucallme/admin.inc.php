@@ -1,11 +1,11 @@
 <?php
 /*
-	sco_amucallme admin BY °¢ÄÁ
+	sco_amucallme admin BY é˜¿ç‰§
 */
 !defined('IN_DISCUZ') && exit('Access Denied');
 !defined('IN_ADMINCP') && exit('Access Denied');
 DEFINE('OFFSET_DELIMETER', "\t");
-//¹«¹²²¿·Ö
+//å…¬å…±éƒ¨åˆ†
 $file = './data/plugindata/sco_amucallme.data.php';
 if(!$_G['gp_submit']){
 	$exsel = extc2seled(0,$_G['setting']['extcredits']);
@@ -49,7 +49,7 @@ if(!$_G['gp_submit']){
 }
 
 
-//×Ô¶¨Òåº¯Êý
+//è‡ªå®šä¹‰å‡½æ•°
 
 function extc2seled($id,$array){
 	$extc_sel = '<select name="extcredits[]">';
