@@ -31,12 +31,15 @@ class plugin_wb_share_dzx {
         } else {
             $addStyle = 'vertical-align:-5px;';
         }
+        if($_G['cache']['plugin']['wb_share_dzx']['showtype']){
         return <<<EOF
 			<span class="pipe">|</span>
 			<a href='home.php?mod=spacecp&ac=plugin&id=wb_share_dzx:actionscp'><img style="{$addStyle}" src="source/plugin/wb_share_dzx/style/img/wbk_btn.png" /></a>
 			&nbsp;
 EOF;
-        //     return "<a href='home.php?mod=spacecp&ac=plugin&id=wb_share_dzx:actionscp'>&nbsp;".lang("plugin/wb_share_dzx","sharesetting")."</a>";
+		}else{
+         return "<a href='home.php?mod=spacecp&ac=plugin&id=wb_share_dzx:actionscp'>&nbsp;".lang("plugin/wb_share_dzx","sharesetting")."</a>";
+	    }
     }
 
     /**
@@ -94,6 +97,11 @@ class plugin_wb_share_dzx_forum extends plugin_wb_share_dzx {
         global $_G;
         $param = &$this->param['param'];
         if ($param[0] == "post_newthread_succeed") {
+            //私密板块不发布微博
+            $secretforums=unserialize($_G['cache']['plugin']['wb_share_dzx']['secretforums']);
+            if(in_array($param[2]['fid'],$secretforums)){
+                return ;
+            }
             require_once 'class/Share.class.php';
             //获得文章地址
             $url = ROOT_URL . "/" . $param[1];

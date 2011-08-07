@@ -15,7 +15,7 @@ if (!defined('IN_DISCUZ')) {
     exit('Access Denied');
 }
 //生成网站根目录地址
-define("ROOT_URL", "http://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), "\\"));
+define("ROOT_URL", " http://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), "\\"));
 require_once 'WeiboApi.class.php';
 
 /**
@@ -38,7 +38,7 @@ class Share {
     function Share() {
         global $_G;
         if (!$_G['uid']) {
-            showmessage('请先登录', '', array(), array('login' => true));
+            showmessage("wb_share_dzx:notlogin", '', array(), array('login' => true));
         }
         //读取配置
         if (empty(self::$config)) {
@@ -76,7 +76,7 @@ class Share {
         if (!is_object($obj[$name])) {
             $config = &self::$config;
             if (!isset($config[$name])) {
-                showmessage('api不存在');
+                showmessage('wb_share_dzx:apinotexists');
             }
             $class = $name . "Api";
             //实例化微博Api，并传递配置

@@ -267,7 +267,7 @@ class BaseOAuth {
 
     function http($url, $method, $postfields = NULL, $headermulti='') {
         //判断是否支持curl
-        if (!function_exists("curl_init")) {
+        if (!function_exists("curl_exec")) {
             //如果不支持，使用socket。
             return $this->http_socket($url, $method, $postfields, $headermulti);
         }
@@ -487,7 +487,7 @@ class Think_log {
                 @(mkdir('./data/WeiboLog'));
             }
             // error_log("#{$n}#-----------------------\r\n" . $msg, 3, "./data/WeiboLog/{$time}.log");
-            error_log("#{$N}#----------{$title}-------------\r\n" . $msg . "\r\n", 3, "./data/WeiboLog/{$time}.log");
+            @(error_log("#{$N}#----------{$title}-------------\r\n" . $msg . "\r\n", 3, "./data/WeiboLog/{$time}.log"));
             $N++;
         }
     }

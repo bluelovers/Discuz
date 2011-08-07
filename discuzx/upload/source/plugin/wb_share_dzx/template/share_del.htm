@@ -1,0 +1,17 @@
+<!--{template common/header}-->
+<h3 class="flb">
+			<em id="return_$_G[gp_handlekey]">{lang wb_share_dzx:del_wb}</em>
+			<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		</h3>
+		<div>
+			<form  name="pmignoreform_{$plid}" method="post" autocomplete="off" action="plugin.php?id=wb_share_dzx:cp&action=del&apiname={$apiname}"  >
+				
+				<input type="hidden" name="referer" value="{echo dreferer()}" />
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<div class="c">{lang wb_share_dzx:ifok}</div>
+				<p class="o pns">
+					<button type="submit" name="share_del" value="true" class="pn pnc"><strong>{lang wb_share_dzx:ok}</strong></button>
+				</p>
+			</form>
+		</div>
+<!--{template common/footer}-->

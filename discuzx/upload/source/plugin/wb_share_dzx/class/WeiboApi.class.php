@@ -14,6 +14,7 @@ require_once 'ThinkOAuth.php';
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+//date_default_timezone_set('Asia/Chongqing');
 /**
  * 微博Api接口基类。
  * 负责连接微博前对参数的处理

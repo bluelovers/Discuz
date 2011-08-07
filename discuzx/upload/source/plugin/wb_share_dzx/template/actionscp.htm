@@ -17,10 +17,10 @@ document.getElementById("maxweibo").innerHTML=maxnum;
       <div class="wb_tr"></div>
       <div class="wb_bl"></div>
       <div class="wb_br"></div>
-      <textarea name="msg" id="msg" onkeydown="weibocheck()" cols="45" rows="5"></textarea>
+      <textarea name="msg" id="msg" onkeydown="weibocheck()" cols="45" rows="5"></textarea><input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
     </div>
     <!--/weibo_input-->
-    <input class="weibo_button" name="button3" type="submit" id="button3" value=" " />
+    <input class="weibo_button" name="sendmsg" type="submit" id="button3" value=" " />
 <div class="weibo_cl"></div>
     <div class="weibo_upload">
       <div class="weibo_uploadc"> <span class="weibo_sy">{lang wb_share_dzx:uploadmsg}
@@ -46,7 +46,7 @@ document.getElementById("maxweibo").innerHTML=maxnum;
       <div class="weibo_icon wb_sina"></div>
       <div class="weibo_bindt">{lang wb_share_dzx:sina}</div>
       <!--{if in_array('Sina',$apis)}--> 
-      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sina" class="weibo_bindbtn wb_delbtn"></a> 
+      <a id="sina_del" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sina" class="weibo_bindbtn wb_delbtn"></a> 
       <!--{else}--> 
       <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=sina" class="weibo_bindbtn"></a> 
       <!--{/if}--> 
@@ -55,7 +55,7 @@ document.getElementById("maxweibo").innerHTML=maxnum;
       <div class="weibo_icon wb_qq"></div>
       <div class="weibo_bindt">{lang wb_share_dzx:qq}</div>
       <!--{if in_array('Qq',$apis)}--> 
-      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=qq" class="weibo_bindbtn wb_delbtn"></a> 
+      <a id="qq_del" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=qq" class="weibo_bindbtn wb_delbtn"></a> 
       <!--{else}--> 
       <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=qq" class="weibo_bindbtn"></a> 
       <!--{/if}--> 
@@ -64,7 +64,7 @@ document.getElementById("maxweibo").innerHTML=maxnum;
       <div class="weibo_icon wb_t163"></div>
       <div class="weibo_bindt">{lang wb_share_dzx:t163}</div>
       <!--{if in_array('T163',$apis)}--> 
-      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=t163" class="weibo_bindbtn wb_delbtn"></a> 
+      <a id="t163_del" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);"  href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=t163" class="weibo_bindbtn wb_delbtn"></a> 
       <!--{else}--> 
       <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=t163" class="weibo_bindbtn"></a> 
       <!--{/if}--> 
@@ -74,7 +74,7 @@ document.getElementById("maxweibo").innerHTML=maxnum;
       <div class="weibo_icon wb_sohu"></div>
       <div class="weibo_bindt">{lang wb_share_dzx:sohu}</div>
       <!--{if in_array('Sohu',$apis)}--> 
-      <a href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sohu" class="weibo_bindbtn wb_delbtn"></a> 
+      <a id="sohu_del" onclick="showWindow(this.id, this.href, 'get', 0);doane(event);" href="plugin.php?id=wb_share_dzx:cp&action=del&apiname=sohu" class="weibo_bindbtn wb_delbtn"></a> 
       <!--{else}--> 
       <a href="plugin.php?id=wb_share_dzx:cp&action=create&apiname=sohu" class="weibo_bindbtn"></a> 
       <!--{/if}--> 
@@ -86,7 +86,6 @@ document.getElementById("maxweibo").innerHTML=maxnum;
   <div class="weibo_sm"> {lang wb_share_dzx:sm2} </div>
 </div>
 <!--/weibo_box-->
-
 <div class="weibo_box" style="border:none;">
   <div class="weibo_title">{lang wb_share_dzx:t3}</div>
   <form method="post" class="weibo_setting"  action="plugin.php?id=wb_share_dzx:cp&action=actionsave">

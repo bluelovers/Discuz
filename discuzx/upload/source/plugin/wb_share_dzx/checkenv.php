@@ -1,11 +1,11 @@
 <?php
-
+date_default_timezone_set('Asia/Chongqing');
 /**
  * 环境测试
  * 此页在iframe中显示，所以没有IN_DISCUZ的判断。
  */
 //判断是否支持curl
-if (function_exists("curl_init")) {
+if (function_exists("curl_exec")) {
     $c = true;
     $c_res = "支持";
 } else {
@@ -30,7 +30,7 @@ if (function_exists("openssl_open")) {
 }
 //定论
 if($c){
-    $result="能正常使用,程序将使用curl与微博腾讯";
+    $result="能正常使用,程序将使用curl与微博通讯";
 }elseif(!$s){
     $result="<font color='#f8505c'>不能正常使用，建议开启curl或者socket </font><a href=\"http://www.3g4k.com/weibokong.html\" target=\"_blank\">【查看配置教程】</a>";
 }elseif($s and $o){
@@ -38,7 +38,9 @@ if($c){
 }else{
     $result="<font color='#f8505c'>腾讯微博不能正常使用，建议开启curl或者openssl</font>   <a href=\"http://www.3g4k.com/weibokong.html\" target=\"_blank\">【查看配置教程】</a>";
 }
+if(isset($_GET['installtype'])){
 $installtype=$_GET['installtype'];
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -103,6 +105,18 @@ a{ color:#f8505c; text-decoration:none;}
 		}else{
 		echo "不存在";	
 			}?></td>
+  </tr>
+    <tr>
+    <td align="right"><strong>是否可写网站日志：</strong></td>
+    <td><?php if(function_exists('error_log')){
+		echo "可写";
+		}else{
+		echo "不可写";	
+			}?></td>
+  </tr>
+  <tr>
+    <td align="right"><strong>服务器时间：</strong></td>
+    <td><?php echo date("Y-m-d H:i:s");?>   (如果服务器时间不准确会导致一些微博不能绑定)</td>
   </tr>
     <tr>
     <td align="right"><strong>检测结果：</strong></td>

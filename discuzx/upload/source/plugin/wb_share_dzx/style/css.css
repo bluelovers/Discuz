@@ -4,12 +4,12 @@
 .weibo_cl {clear: both;display: block;overflow: hidden;visibility: hidden;width: 0px;height: 0px;}
 /*圆角*/
 .wb_tr,.wb_tl,.wb_bl,.wb_br,.wb_bl2,.wb_br2{ background:url(img/icon.gif) no-repeat; width:6px; height:6px; overflow:hidden; position:absolute;}
-.wb_tl{ background-position:-68px -115px; top:-1px; left:-1px;}
-.wb_tr{ background-position:-74px -115px; top:-1px; right:-1px;}
-.wb_bl{ background-position:-68px -121px; bottom:-1px; left:-1px;}
-.wb_br{ background-position:-74px -121px; bottom:-1px; right:-1px;}
-.wb_bl2{ background-position:-68px -133px; bottom:-1px; left:-1px;}
-.wb_br2{ background-position:-74px -133px; bottom:-1px; right:-1px;}
+.wb_tl{ background-position:-68px -31px; top:-1px; left:-1px;}
+.wb_tr{ background-position:-74px -31px; top:-1px; right:-1px;}
+.wb_bl{ background-position:-68px -37px; bottom:-1px; left:-1px;}
+.wb_br{ background-position:-74px -37px; bottom:-1px; right:-1px;}
+.wb_bl2{ background-position:-68px -49px; bottom:-1px; left:-1px;}
+.wb_br2{ background-position:-74px -49px; bottom:-1px; right:-1px;}
 /*标题*/
 .weibo_title{ font-size:14px; font-weight:700; color:#121212; padding-bottom:20px;}
 /*输入框*/
@@ -17,9 +17,9 @@
 .weibo_input{ float:left; background:#d7ebfc; position:relative; border:1px solid #aad1f3;}
 .weibo_input textarea{ width:380px; height:70px; margin:10px;}
 /*按钮*/
-.weibo_button{ background:url(img/icon.gif) no-repeat; width:86px; height:84px; border:none; cursor:pointer; float:left; margin:8px 0 0 10px; display:inline}
+.weibo_button{ background:url(img/send_btn.png) no-repeat; width:86px; height:84px; border:none; cursor:pointer; float:left; margin:8px 0 0 10px; display:inline}
 /*上传*/
-.weibo_upload{ width:380px; position:relative; margin-left:10px;  text-align:center; border: 1px solid #bbb; border-top:none; height:30px; background:url(img/icon.gif) 0 -84px repeat-x;}
+.weibo_upload{ width:380px; position:relative; margin-left:10px;  text-align:center; border: 1px solid #bbb; border-top:none; height:30px; background:url(img/icon.gif)  repeat-x;}
 .weibo_uploadc{ position:relative; top:4px;}
 .weibo_sy{ color:#144d7f; font-size:14px; font-weight:700;}
 /*说明*/
@@ -28,13 +28,13 @@
 .weibo_bind{ }
 .weibo_bindfl{ width:90px; float:left;}
 .weibo_icon{ width:50px; height:50px; overflow:hidden; background:url(img/icon.gif); margin:0 auto;}
-.wb_sina{ background-position:0 -115px;}
-.wb_qq{ background-position:0 -268px;}
-.wb_t163{ background-position:0 -217px;}
-.wb_sohu{ background-position:0 -166px;}
+.wb_sina{ background-position:0 -31px;}
+.wb_qq{ background-position:0 -184px;}
+.wb_t163{ background-position:0 -133px;}
+.wb_sohu{ background-position:0 -82px;}
 .weibo_bindt{ text-align:center; padding:5px 0;}
-.weibo_bindbtn{ background:url(img/icon.gif) 0 -319px; display:block; width:62px; height:22px; margin:0 auto;}
-.wb_delbtn{ background-position:0 -340px;}
+.weibo_bindbtn{ background:url(img/icon.gif) 0 -235px; display:block; width:62px; height:22px; margin:0 auto;}
+.wb_delbtn{ background-position:0 -256px;}
 /*分享设置*/
 .weibo_setting{ padding-left:15px;}
 .weibo_doing{ padding:10px 0 0 15px;}
