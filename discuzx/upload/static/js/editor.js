@@ -658,6 +658,27 @@ function discuzcode(cmd, arg) {
 	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
+
+	// bluelovers
+	// 標題字
+	} else if (in_array(cmd, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) {
+
+		var str = getSel();
+		if(str === false) {
+			return;
+		}
+
+		if (wysiwyg) {
+			opentag		= '<'+cmd+' class="bbcode_headline">';
+			closetag	= '</'+cmd+'>';
+		} else {
+			opentag		= '['+cmd+']';
+			closetag	= '[/'+cmd+']'+"\n";
+		}
+
+		return insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true);
+	// bluelovers
+
 	} else if(cmd.substr(0, 3) == 'cst') {
 		showEditorMenu(cmd.substr(5), cmd.substr(3, 1));
 		return;
@@ -712,7 +733,7 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('輸入一個列表項目.\r\n留空或者點擊取消完成此列表.', '')) {
+			while(listvalue = prompt('輸入一個列表項目.\n留空或者點擊取消完成此列表.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -922,7 +943,15 @@ function showEditorMenu(tag, params) {
 				showMenu({'ctrlid':ctrlid,'mtype':'win','evt':'click','pos':menupos,'timeout':250,'duration':3,'drag':ctrlid + '_ctrl'});
 			}
 		} else {
-			showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':1});
+			showMenu({
+				'ctrlid':ctrlid
+				,'evt':'click'
+				,'pos':menupos
+				,'timeout':250
+				,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3
+				// 如果是 字型選單 則不允許拖曳
+				,'drag': in_array(tag, ['fontname', 'fontsize']) ? 0 : 1
+			});
 		}
 
 
@@ -1274,7 +1303,7 @@ function insertText(text, movestart, moveend, select, sel) {
 				sel = editbox.sel;
 				editbox.sel = null;
 			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
+			sel.text = text.replace(/\r?\n/g, '\n');
 			if(!isUndefined(movestart)) {
 				sel.moveStart('character', -strlen(text) +movestart);
 				sel.moveEnd('character', -moveend);

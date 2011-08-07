@@ -100,12 +100,28 @@ function getoptionvalue($option, $text) {
 	return isset($matches[3]) ? trim($matches[3]) : '';
 }
 
-function html2bbcode($text) {
+function html2bbcode($text, $strip = FALSE, $htmlspecialchars_decode = false) {
+
+	// bluelovers
+	$strip && $text = stripslashes($text);
+//	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+	if ($htmlspecialchars_decode) {
+		$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;', '&#039;');
+		$strreplace = array(' ', '<', '>', '&', '\'');
+		$text = str_replace($strfind, $strreplace, $text);
+
+		while(strpos($text, '&amp;amp;amp;') !== false) {
+			$text = str_replace('&amp;amp;amp;', '&amp;amp;', $text);
+		}
+	}
+	$text = preg_replace(array('/\r+(\n)/', '/(\n)\r+/', '/[　 \t]+(\n)/iSu'), '\\1', $text);
+	// bluelovers
+
 	$text = strip_tags($text, '<table><tr><td><b><strong><i><em><u><a><div><span><p><strike><blockquote><ol><ul><li><font><img><br><br/><h1><h2><h3><h4><h5><h6><script>');
 
-	if(ismozilla()) {
-		$text = preg_replace("/(?<!<br>|<br \/>|\r)(\r\n|\n|\r)/", ' ', $text);
-	}
+//	if(ismozilla()) {
+//		$text = preg_replace("/(?<!<br>|<br \/>|\r)(\r\n|\n|\r)/", ' ', $text);
+//	}
 
 	$pregfind = array(
 		"/<script.*>.*<\/script>/siU",
@@ -146,8 +162,8 @@ function html2bbcode($text) {
 		'\1',
 		"\n",
 		"[float=\\1]\\2[/float]",
-		"[quote]\\1[/quote]",
-		"[quote]\\1[/quote]",
+		"[quote]\\1[/quote]\n",
+		"[quote]\\1[/quote]\n",
 	);
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
@@ -165,16 +181,51 @@ function html2bbcode($text) {
 	$text = recursion('span', $text, 'spantag');
 	$text = recursion('p', $text, 'ptag');
 
+	// bluelovers
+	$text = recursion('s', $text, 'simpletag', 's');
+	// bluelvoers
+
 	$pregfind = array("/(?<!\r|\n|^)\[(\/list|list|\*)\]/", "/<li>(.*)((?=<li>)|<\/li>)/iU", "/<p.*>/iU", "/<p><\/p>/i", "/(<a>|<\/a>|<\/li>)/is", "/<\/?(A|LI|FONT|DIV|SPAN)>/siU", "/\[url[^\]]*\]\[\/url\]/i", "/\[url=javascript:[^\]]*\](.+?)\[\/url\]/is");
 	$pregreplace = array("\n[\\1]", "\\1\n", "\n", '', '', '', '', "\\1");
 	$text = preg_replace($pregfind, $pregreplace, $text);
 
-	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
-	$strreplace = array(' ', '<', '>', '&');
-	$text = str_replace($strfind, $strreplace, $text);
+//	$strfind = array('&nbsp;', '&lt;', '&gt;', '&amp;');
+//	$strreplace = array(' ', '<', '>', '&');
+//	$text = str_replace($strfind, $strreplace, $text);
 
-	return htmlspecialchars(trim($text));
+//	return htmlspecialchars(trim($text));
+
+	// bluelovers
+	$text = s_trim($text);
+
+	if ($htmlspecialchars_decode) {
+		$strfind = array('&nbsp;', '&lt;', '&gt;', '&#039;', '&amp;amp;', '&amp;');
+		$strreplace = array(' ', '<', '>', '\'', '&amp;', '&');
+		$text = str_replace($strfind, $strreplace, $text);
+	}
+
+	$text = bbcode_fix($text);
+
+//	$htmlspecialchars_decode && $text = htmlspecialchars_decode($text, ENT_QUOTES);
+
+//	$text = dhtmlspecialchars(trim($text));
+	$text = dhtmlspecialchars(trim($text), null, $htmlspecialchars_decode, ENT_QUOTES);
+	$strip && $text = addslashes($text);
+	return $text;
+	// bluelovers
 }
+
+// bluelovers
+function bbcode_fix($message) {
+	static $_include;
+	if (!$_include) {
+		$_include = true;
+		include_once 'bbcode.class.php';
+	}
+
+	return bbcode::instance()->bbcode_fix($message);
+}
+// bluelovers
 
 function imgtag($attributes) {
 	$value = array('src' => '', 'width' => '', 'height' => '');
@@ -186,6 +237,17 @@ function imgtag($attributes) {
 	}
 	@extract($value);
 	if(!preg_match("/^http:\/\//i", $src)) {
+
+		// bluelovers
+		$src = preg_replace(array(
+			'/image\/face\/(30|2[1-9])/',
+			'/image\/face\/(\d+)/',
+		), array(
+			'static/image/smiley/comcom_dx/$1',
+			'static/image/smiley/comcom/$1',
+		), $src);
+		// bluelovers
+
 		$src = absoluteurl($src);
 	}
 	return $src ? ($width && $height ? '[img='.$width.','.$height.']'.$src.'[/img]' : '[img]'.$src.'[/img]') : '';

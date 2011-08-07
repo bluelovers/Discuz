@@ -105,7 +105,23 @@ function getglobal($key, $group = null) {
 	return null;
 }
 
-function getgpc($k, $type='GP') {
+/**
+ * 獲取URL參數，表單數據和COOKIE值的函數
+ *
+ * @param string $k - index key for request
+ * @param string $type
+ * 		'G'		= $_GET
+ * 		'P'		= $_POST
+ * 		'C'		= $_COOKIE
+ * 		'GP'	= $_GET & $_POST
+ *
+ * @param $default - default value if not isset
+ * @param $empty - use default value if not empty
+ *
+ * @example $_GET['odaboy'] = getgpc('odaboy','G')
+ * @example $_POST['odaboy'] = getgpc('odaboy','P')
+ **/
+function getgpc($k, $type='GP', $default = null, $empty = null) {
 	$type = strtoupper($type);
 	switch($type) {
 		case 'G': $var = &$_GET; break;
@@ -120,7 +136,17 @@ function getgpc($k, $type='GP') {
 			break;
 	}
 
-	return isset($var[$k]) ? $var[$k] : NULL;
+	// 注意這裡沒有設置的時候返回的是NULL
+	return isset($var[$k]) ?
+		(
+		// 增加檢查 empty
+			($empty && empty($var[$k])) ?
+				$default
+				:
+				$var[$k]
+		)
+		:
+		$default;
 
 }
 
@@ -235,13 +261,50 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
 }
 
-function dhtmlspecialchars($string) {
+/**
+ * Convert special characters to HTML entities
+ *
+ * @param string $string
+ * @param ENT_QUOTES|null $quote_style
+ *
+ * @return string
+ *
+ * @example '&' (ampersand) becomes '&amp;'
+ * @example '"' (double quote) becomes '&quot;'
+ * @example "'" (single quote) becomes '&#039;' only when ENT_QUOTES is set.
+ * @example '<' (less than) becomes '&lt;'
+ * @example '>' (greater than) becomes '&gt;'
+ *
+ * @link http://www.php.net/manual/en/function.htmlspecialchars.php
+ */
+function dhtmlspecialchars($string, $quote_style = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $quote_style);
 		}
 	} else {
+		/*
 		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		*/
+		// bluelovers
+		$search = $replace = array();
+
+		$search[0] = array(
+			'&', '"', '<', '>'
+		);
+		$replace[0] = array(
+			'&amp;', '&quot;', '&lt;', '&gt;'
+		);
+
+		// $quote_style
+		if ($quote_style & ENT_QUOTES) {
+			array_push($search[0], '\'');
+			array_push($replace[0], '&#039;');
+		}
+
+		$string = str_replace($search[0], $replace[0], $string);
+		// bluelvoers
+
 		if(strpos($string, '&amp;#') !== false) {
 			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
 		}
@@ -250,7 +313,17 @@ function dhtmlspecialchars($string) {
 }
 
 function dexit($message = '') {
-	echo $message;
+	if (is_array($message)) {
+		print_r($message);
+
+	// bluelovers
+	} elseif ($message && !is_string($message)) {
+		var_dump($message);
+	// bluelovers
+
+	} else {
+		echo $message;
+	}
 	output();
 	exit();
 }
@@ -351,7 +424,25 @@ function checkmobile() {
 		return true;
 	}
 	$brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
-	if(dstrpos($useragent, $brower)) return false;
+//	if(dstrpos($useragent, $brower)) return false;
+
+	/*
+	 * 當 手機版訪問設置 > 開啟電腦訪問手機版預覽功能時 允許在電腦上直接瀏覽手機頁面
+	 * $GLOBALS['setting']['mobile']['allowmobile'] = 1
+	 * $GLOBALS['setting']['mobile']['mobilepreview'] = 1
+	 */
+	if(($v = dstrpos($useragent, $brower, true))) {
+		if (
+			$GLOBALS['_G']['setting']['mobile']['allowmobile']
+			&& $GLOBALS['_G']['setting']['mobile']['mobilepreview']
+			&& $_GET['mobile'] === 'yes'
+		) {
+			$_G['mobile'] = $v;
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	$_G['mobile'] = 'unknown';
 	if($_GET['mobile'] === 'yes') {
@@ -402,38 +493,118 @@ function avatar($uid, $size = 'middle', $returnsrc = FALSE, $real = FALSE, $stat
 		$staticavatar = $_G['setting']['avatarmethod'];
 	}
 
+	$ext = '';
+	$random = '';
+
+	if (is_array($size)) {
+		$class = isset($size['class']) ? $size['class'] : $size[0];
+		$style = isset($size['style']) ? $size['style'] : $size[1];
+
+		if (isset($size['class'])) {
+			unset($size['class']);
+		} else {
+			unset($size[0]);
+		}
+		if (isset($size['style'])) {
+			unset($size['style']);
+		} else {
+			unset($size[1]);
+		}
+		if (isset($size['random'])) {
+			$random = getglobal('timestamp');
+			unset($size['random']);
+		} elseif (isset($size[2])) {
+			$random = getglobal('timestamp');
+			unset($size[2]);
+		}
+
+		if (is_array($size) && count($size)) {
+			foreach ($size as $k => $v) {
+				$ext .= ' '.$k.'="'.$v.'"';
+			}
+		}
+
+		$size = $class;
+	} else {
+		$class = $size;
+	}
+	$size = explode('_', $size);
+	$size = $size[0];
+
 	$ucenterurl = empty($ucenterurl) ? $_G['setting']['ucenterurl'] : $ucenterurl;
 	$size = in_array($size, array('big', 'middle', 'small')) ? $size : 'middle';
 	$uid = abs(intval($uid));
-	if(!$staticavatar && !$static) {
-		return $returnsrc ? $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size : '<img src="'.$ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').'" />';
+
+	$class = empty($class) ? $size : $class;
+
+	$url_ext = $ext2 = '';
+
+	if ($random) $url_ext .= '&random='.$random;
+
+	if($uid > 0) {
+		$ext2 .= ' onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'"';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+//		$ext2 .= ' lowsrc="'.$ucenterurl.'/images/noavatar_'.$size.'.gif"';
+		$ext = $ext2 . ' ' . $ext;
+
+		if(!$staticavatar && !$static) {
+			$file = $ucenterurl.'/avatar.php?uid='.$uid.'&size='.$size.($real ? '&type=real' : '').$url_ext;
+			return $returnsrc ? $file : '<img src="'.$file.'"'.$ext.' />';
+		} else {
+			$uid = sprintf("%09d", $uid);
+			$dir1 = substr($uid, 0, 3);
+			$dir2 = substr($uid, 3, 2);
+			$dir3 = substr($uid, 5, 2);
+			$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
+
+			if ($url_ext) $file .= '?'.$url_ext;
+			return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
+		}
 	} else {
-		$uid = sprintf("%09d", $uid);
-		$dir1 = substr($uid, 0, 3);
-		$dir2 = substr($uid, 3, 2);
-		$dir3 = substr($uid, 5, 2);
-		$file = $ucenterurl.'/data/avatar/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2).($real ? '_real' : '').'_avatar_'.$size.'.jpg';
-		return $returnsrc ? $file : '<img src="'.$file.'" onerror="this.onerror=null;this.src=\''.$ucenterurl.'/images/noavatar_'.$size.'.gif\'" />';
+		$ext2 .= ' class="avatar avatar_'.$class.'" style="'.$style.'"';
+		$ext = $ext2 . ' ' . $ext;
+
+		$file = (!preg_match('/^http:\/\//i', IMGDIR) ? $GLOBALS['boardurl'] : '').IMGDIR.'/systempm.png';
+		return $returnsrc ? $file : '<img src="'.$file.'" '.$ext.' />';
 	}
 }
 
 function lang($file, $langvar = null, $vars = array(), $default = null) {
 	global $_G;
+	/*
 	list($path, $file) = explode('/', $file);
 	if(!$file) {
 		$file = $path;
 		$path = '';
 	}
+	*/
+	// bluelovers
+	$path = explode('/', $file);
+	$file = array_pop($path);
+	$path = implode('/', $path);
+	// bluelovers
 
 	if($path != 'plugin') {
 		$key = $path == '' ? $file : $path.'_'.$file;
 		if(!isset($_G['lang'][$key])) {
+			/*
 			include DISCUZ_ROOT.'./source/language/'.($path == '' ? '' : $path.'/').'lang_'.$file.'.php';
 			$_G['lang'][$key] = $lang;
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array($file, $path));
+			// bluelovers
 		}
 		if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
+			/*
 			include DISCUZ_ROOT.'./source/language/mobile/lang_template.php';
 			$_G['lang'][$key] = array_merge($_G['lang'][$key], $lang);
+			*/
+
+			// bluelovers
+			lang_merge($_G['lang'][$key], array('template', 'mobile'));
+			// bluelovers
 		}
 		$returnvalue = &$_G['lang'];
 	} else {
@@ -478,7 +649,7 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 
 	if(empty($timecompare) || $tplrefresh == 1 || ($tplrefresh > 1 && !($timestamp % $tplrefresh))) {
 		if(empty($timecompare) || @filemtime(DISCUZ_ROOT.$subtpl) > $timecompare) {
-			require_once DISCUZ_ROOT.'/source/class/class_template.php';
+			include_once libfile('class/template');
 			$template = new template();
 			$template->parse_template($maintpl, $templateid, $tpldir, $file, $cachefile);
 			if($targettplname === null) {
@@ -500,6 +671,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 
 	static $_init_style = false;
 	if($_init_style === false) {
+		// 防止沒有載入風格
 		$discuz = & discuz_core::instance();
 		$discuz->_init_style();
 		$_init_style = true;
@@ -526,7 +698,8 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或預覽模式下做以下判斷
+				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') {
+					//DIY模式或預覽模式下做以下判斷
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_G['gp_preview'] == 'yes') {
 						$file .= $flag ? $preend : '';
@@ -602,9 +775,47 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 	}
 
 	if($gettplfile) {
+
+		// bluelovers
+		// Event: Func_template:Before_return_tplfile
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return_tplfile')
+				->run(array(array(
+					// 函數本身的參數
+					'file' => &$file,
+					'templateid' => &$templateid,
+					'tpldir' => &$tpldir,
+					'gettplfile' => &$gettplfile,
+					'primaltpl' => &$primaltpl,
+
+					// 回傳的檔案
+					'tplfile' => &$tplfile,
+			)));
+		}
+		// bluelovers
+
 		return $tplfile;
 	}
 	checktplrefresh($tplfile, $tplfile, @filemtime(DISCUZ_ROOT.$cachefile), $templateid, $cachefile, $tpldir, $file);
+
+	// bluelovers
+	// Event: Func_template:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身的參數
+				'file' => &$file,
+				'templateid' => &$templateid,
+				'tpldir' => &$tpldir,
+				'gettplfile' => &$gettplfile,
+				'primaltpl' => &$primaltpl,
+
+				// 回傳的檔案
+				'cachefile' => &$cachefile,
+		)));
+	}
+	// bluelovers
+
 	return DISCUZ_ROOT.$cachefile;
 }
 
@@ -613,6 +824,10 @@ function modauthkey($id) {
 	return md5($_G['username'].$_G['uid'].$_G['authkey'].substr(TIMESTAMP, 0, -7).$id);
 }
 
+/**
+ * 取得主導覽的 mnid
+ * 如果 $_G['mnid'] 存在則使用此值
+ */
 function getcurrentnav() {
 	global $_G;
 	if(!empty($_G['mnid'])) {
@@ -620,6 +835,35 @@ function getcurrentnav() {
 	}
 	$mnid = '';
 	$_G['basefilename'] = $_G['basefilename'] == $_G['basescript'] ? $_G['basefilename'] : $_G['basescript'].'.php';
+	/*
+	    [navmns] => Array
+        (
+            [misc.php] => Array
+                (
+                    [0] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => faq
+                                )
+
+                            [1] => mn_N0a2c
+                        )
+
+                    [1] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [mod] => ranklist
+                                )
+
+                            [1] => mn_N12a7
+                        )
+
+                )
+
+        )
+	*/
 	if(isset($_G['setting']['navmns'][$_G['basefilename']])) {
 		foreach($_G['setting']['navmns'][$_G['basefilename']] as $navmn) {
 			if($navmn[0] == array_intersect_assoc($navmn[0], $_GET)) {
@@ -635,6 +879,16 @@ function getcurrentnav() {
 			}
 		}
 	}
+	/*
+    [navmn] => Array
+        (
+            [portal.php] => mn_portal
+            [forum.php] => mn_forum
+            [group.php] => mn_group
+            [home.php] => mn_home
+            [userapp.php] => mn_userapp
+        )
+	*/
 	if(!$mnid && isset($_G['setting']['navmn'][$_G['basefilename']])) {
 		$mnid = $_G['setting']['navmn'][$_G['basefilename']];
 	}
@@ -650,6 +904,23 @@ function loadcache($cachenames, $force = false) {
 	global $_G;
 	static $loadedcache = array();
 	$cachenames = is_array($cachenames) ? $cachenames : array($cachenames);
+
+	// bluelovers
+	/**
+	 * 將 setting 推送到最前面
+	 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+	 **/
+	if (in_array('setting', $cachenames) && count($cachenames) > 1) {
+		// 分割 $cachenames 先執行 loadcache('setting')
+		$_tmp = array('setting');
+		loadcache($_tmp, $force);
+
+		// 之後再執行剩下的 $cachenames
+		$cachenames = array_diff($cachenames, $_tmp);
+		return loadcache($cachenames, $force);
+	}
+	// bluelovers
+
 	$caches = array();
 	foreach ($cachenames as $k) {
 		if(!isset($loadedcache[$k]) || $force) {
@@ -678,6 +949,8 @@ function loadcache($cachenames, $force = false) {
 }
 
 function cachedata($cachenames) {
+	//BUG: 當清空快取目錄 與 SQL 快取時 就會變成除非進入後台更新緩存 否則將無法產生緩存
+	// 已經可利用 hook 處理此問題
 	global $_G;
 	static $isfilecache, $allowmem;
 
@@ -707,6 +980,7 @@ function cachedata($cachenames) {
 	if($isfilecache) {
 		$lostcaches = array();
 		foreach($cachenames as $cachename) {
+			// 找出在 ./data/cache 中沒有緩存的項目
 			if(!@include_once(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php')) {
 				$lostcaches[] = $cachename;
 			}
@@ -717,18 +991,81 @@ function cachedata($cachenames) {
 		$cachenames = $lostcaches;
 		unset($lostcaches);
 	}
+
+	// bluelovers
+
+	// Event: Func_cachedata:Before_get_syscache
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':Before_get_syscache')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
+
+	// 初始化 $lostcaches
+	$lostcaches = array();
+	// bluelvoers
+
+	// bluelovers
+	static $_libs_cache_;
+	// bluelovers
+
 	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
 		if($isfilecache) {
-			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
-			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
-				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
-				fclose($fp);
+
+			// bluelovers
+			if (!isset($_libs_cache_)) {
+				$_libs_cache_ = true;
+				include_once libfile('function/cache');
 			}
+			// bluelovers
+
+			// 將從 common_syscache 中找到的緩存寫入 ./data/cache
+			$cachedata = '$data[\''.$syscache['cname'].'\'] = '.var_export($data[$syscache['cname']], true).";\n\n";
+
+			// bluelovers
+			// 判斷如果已經載入 libfile('function/cache') 則使用 writetocache 來寫入 cache
+			if (function_exists('writetocache')) {
+				writetocache($syscache['cname'], $cachedata);
+			} else {
+			// bluelovers
+				if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$syscache['cname'].'.php', 'wb')) {
+					fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($syscache['cname'].$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
+					fclose($fp);
+				}
+			// bluelovers
+			}
+			// bluelovers
 		}
+
+		// bluelovers
+		// 緩存從 common_syscache 取得的 cache 清單
+		$lostcaches[] = $syscache['cname'];
+		// bluelovers
 	}
+
+	// bluelovers
+	// 比對 $cachenames 與 $lostcaches 的差異，找出在 common_syscache 中缺少的 cache
+	$lostcaches = array_diff($cachenames, $lostcaches);
+
+	// Event: Func_cachedata:After
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_' . __FUNCTION__ . ':After')
+			->run(array(array(
+				'cachenames'	=> &$cachenames,
+				'lostcaches'	=> &$lostcaches,
+				'isfilecache'	=> &$isfilecache,
+				'allowmem'		=> &$allowmem,
+				'data'			=> &$data,
+		)));
+	}
+	// bluelovers
 
 	foreach($cachenames as $name) {
 		if($data[$name] === null) {
@@ -740,23 +1077,51 @@ function cachedata($cachenames) {
 	return $data;
 }
 
+/**
+ * 格式化时间
+ *
+ * @param $timestamp - 时间戳
+ * @param $format - dt=日期时间 d=日期 t=时间 u=个性化 其他=自定义
+ * @param $timeoffset - 时区
+ * @return string
+ **/
 function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = '') {
 	global $_G;
 	$format == 'u' && !$_G['setting']['dateconvert'] && $format = 'dt';
 	static $dformat, $tformat, $dtformat, $offset, $lang;
+	// bluelovers
+	static $offset_site;
+	// 緩存預設的 $uformat
+	static $uformat_default;
+	// bluelovers
+
 	if($dformat === null) {
 		$dformat = getglobal('setting/dateformat');
 		$tformat = getglobal('setting/timeformat');
 		$dtformat = $dformat.' '.$tformat;
 		$offset = getglobal('member/timeoffset');
 		$lang = lang('core', 'date');
+		// bluelovers
+		// 追加讀取網站預設時區
+		$offset_site = getglobal('setting/timeoffset');
+
+		// 當使用者的 $offset == 9999 時，使用網站預設時區，修正部分情形下造成時間錯誤
+		if ($offset > 12 || $offset < -12) {
+			$offset = $offset_site;
+		}
+
+		// 預先處理預設的 $uformat
+		$uformat_default = strpos($dtformat, ':s') === false ? str_replace(":i", ":i:s", $dtformat) : $dtformat;
+		// bluelovers
 	}
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
 	if($format == 'u') {
+		//TODO:搭配 js 動態顯示時間
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
-		$s = gmdate(!$uformat ? str_replace(":i", ":i:s", $dtformat) : $uformat, $timestamp);
+		//FIX:搭配 timeformat 增加顯示秒數後 此處會產生多餘的 :s 的 BUG
+		$s = gmdate(!$uformat ? $uformat_default : $uformat, $timestamp);
 		$time = TIMESTAMP + $timeoffset * 3600 - $timestamp;
 		if($timestamp >= $todaytimestamp) {
 			if($time > 3600) {
@@ -801,9 +1166,22 @@ function save_syscache($cachename, $data) {
 	if(!isset($isfilecache)) {
 		$isfilecache = getglobal('config/cache/type') == 'file';
 		$allowmem = memory('check');
+
+		// bluelovers
+		include_once libfile('function/cache');
+		// bluelovers
 	}
 
+	// bluelovers
+	$_data = null;
+	// bluelovers
+
 	if(is_array($data)) {
+
+		// bluelovers
+		$_data = $data;
+		// bluelovers
+
 		$ctype = 1;
 		$data = addslashes(serialize($data));
 	} else {
@@ -814,6 +1192,26 @@ function save_syscache($cachename, $data) {
 
 	$allowmem && memory('rm', $cachename);
 	$isfilecache && @unlink(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php');
+
+	// bluelovers
+	/**
+	 * 修改為 save_syscache 時同時直接寫入緩存檔
+	 */
+	if ($isfilecache && $_data !== null) {
+		// 將從 common_syscache 中找到的緩存寫入 ./data/cache
+		$cachedata = '$data[\''.$cachename.'\'] = '.var_export($_data, true).";\n\n";
+
+		// 判斷如果已經載入 libfile('function/cache') 則使用 writetocache 來寫入 cache
+		if (function_exists('writetocache')) {
+			writetocache($cachename, $cachedata);
+		} else {
+			if($fp = @fopen(DISCUZ_ROOT.'./data/cache/cache_'.$cachename.'.php', 'wb')) {
+				fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($cachename.$cachedata.$GLOBALS['_G']['config']['security']['authkey'])."\n\n$cachedata?>");
+				fclose($fp);
+			}
+		}
+	}
+	// bluelovers
 }
 
 function block_get($parameter) {
@@ -871,14 +1269,26 @@ function dimplode($array) {
 	}
 }
 
-function libfile($libname, $folder = '') {
-	$libpath = DISCUZ_ROOT.'/source/'.$folder;
+function libfile($libname, $folder = '', $source = 'source') {
+	$libpath = DISCUZ_ROOT.'/'.(is_array($source) ? implode('/', $source) : $source).'/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
-		return realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
+		$ret = "{$libpath}/{$pre}/{$pre}_{$name}.php";
 	} else {
-		return realpath("{$libpath}/{$libname}.php");
+		$ret = "{$libpath}/{$libname}.php";
 	}
+
+	// bluelovers
+	// Event: Func_libfile
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.'')
+			->run(array(
+				&$ret, DISCUZ_ROOT
+		));
+	}
+	// bluelovers
+
+	return realpath($ret);
 }
 
 function dstrlen($str) {
@@ -1065,7 +1475,35 @@ function mobileoutput() {
 	if(!defined('TPL_DEFAULT')) {
 		$content = ob_get_contents();
 		ob_end_clean();
-		$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+
+		// bluelovers
+		$switchstop = 0;
+
+		// Event: Func_mobileoutput:Before_output_replace
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_output_replace')
+				->run(array(array(
+					'content'		=> &$content,
+					'switchstop'	=> &$switchstop,
+				)));
+		}
+
+		if (!$switchstop) {
+		// bluelovers
+
+			$content = preg_replace("/href=\"(\w+\.php)(.*?)\"/e", "mobilereplace('\\1', '\\2')", $content);
+
+		// bluelovers
+		}
+
+		// Event: Func_mobileoutput:Before_rewrite_content_echo
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+				->run(array(array(
+					'content'	=> &$content,
+				)));
+		}
+		// bluelovers
 
 		ob_start();
 		$content = '<?xml version="1.0" encoding="utf-8"?>'.$content;
@@ -1112,9 +1550,27 @@ function output() {
 		$content = ob_get_contents();
 		$content = output_replace($content);
 
+	// bluelovers
+	// 即使沒有開啟 rewritestatus 一樣可以執行 Event
+	} else {
+		$content = ob_get_contents();
+	}
+
+	if (1) {
+	// bluelovers
 
 		ob_end_clean();
 		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
+
+		// bluelovers
+		// event: 'Func_output:Before_rewrite_content_echo'
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+				->run(array(array(
+					'content'	=> &$content,
+				)));
+		}
+		// bluelovers
 
 		echo $content;
 	}
@@ -1142,20 +1598,68 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
-	if(!empty($_G['setting']['output']['str']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
-		}
-		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
+
+	// bluelovers
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_str
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_str')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
 	}
-	if(!empty($_G['setting']['output']['preg']['search'])) {
-		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
-			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['str']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
+			}
+			$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 		}
 
-		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+	// bluelovers
 	}
+
+	$switchstop = 0;
+
+	// Event: Func_output_replace:Before_replace_preg
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_preg')
+			->run(array(array(
+				'content'	=> &$content,
+
+				'switchstop' => &$switchstop,
+			)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		if(!empty($_G['setting']['output']['preg']['search'])) {
+			if(empty($_G['setting']['domain']['app']['default'])) {
+				$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
+				$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
+			}
+
+			$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+		}
+
+	// bluelovers
+	}
+
+	// Event: Func_output_replace:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				'content'	=> &$content,
+			)));
+	}
+	// bluelovers
 
 	return $content;
 }
@@ -1173,6 +1677,17 @@ function output_ajax() {
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
         $s = output_replace($s);
 	}
+
+	// bluelovers
+	// event: 'Func_output_ajax:Before_rewrite_content_echo'
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_rewrite_content_echo')
+			->run(array(array(
+				'content'	=> &$s,
+			)));
+	}
+	// bluelovers
+
 	return $s;
 }
 
@@ -1292,6 +1807,20 @@ function pluginmodule($pluginid, $type) {
 	}
 	return DISCUZ_ROOT.$modfile;
 }
+
+/**
+ * 依照 action 执行积分规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uid: 操作用户
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param String $needle: 防重字符串
+ * @param Integer $coef: 积分放大倍数
+ * @param Integer $update: 是否执行更新操作
+ * @param Integer $fid: 版块ID
+ *
+ * @return 返回积分策略
+ **/
 function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = '', $coef = 1, $update = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
@@ -1302,11 +1831,28 @@ function updatecreditbyaction($action, $uid = 0, $extrasql = array(), $needle = 
 	return $credit->execrule($action, $uid, $needle, $coef, $update, $fid);
 }
 
+/**
+ * 检查积分下限
+ *
+ * @param string $action: 策略动作Action或者需要检测的操作积分值使如extcredits1积分进行减1操作检测array('extcredits1' => -1)
+ * @param Integer $uid: 用户UID
+ * @param Integer $coef: 积分放大倍数/负数为减分操作
+ * @param Integer $returnonly: 只要返回结果，不用中断程序运行
+ **/
 function checklowerlimit($action, $uid = 0, $coef = 1, $fid = 0, $returnonly = 0) {
 	require_once libfile('function/credit');
 	return _checklowerlimit($action, $uid, $coef, $fid, $returnonly);
 }
 
+/**
+ * 批量执行某一条策略规则
+ *
+ * @param String $action:  规则action名称
+ * @param Integer $uids: 操作用户可以为单个uid或uid数组
+ * @param array $extrasql: common_member_count的额外操作字段数组格式为 array('extcredits1' => '1')
+ * @param Integer $coef: 积分放大倍数，当为负数时为反转操作
+ * @param Integer $fid: 版块ID
+ **/
 function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $fid = 0) {
 
 	include_once libfile('class/credit');
@@ -1317,7 +1863,16 @@ function batchupdatecredit($action, $uids = 0, $extrasql = array(), $coef = 1, $
 	return $credit->updatecreditbyrule($action, $uids, $coef, $fid);
 }
 
-
+/**
+ * 添加积分
+ *
+ * @param Integer $uids: 用户uid或者uid数组
+ * @param String $dataarr: member count相关操作数组，例: array('threads' => 1, 'doings' => -1)
+ * @param Boolean $checkgroup: 是否检查用户组 true or false
+ * @param String $operation: 操作类型
+ * @param Integer $relatedid:
+ * @param String $ruletxt: 积分规则文本
+ **/
 function updatemembercount($uids, $dataarr = array(), $checkgroup = true, $operation = '', $relatedid = 0, $ruletxt = '') {
 	if(!empty($uids) && (is_array($dataarr) && $dataarr)) {
 		require_once libfile('function/credit');
@@ -1372,6 +1927,16 @@ function debug($var = null, $vardump = false) {
 	exit();
 }
 
+/**
+ * show debug info
+ *
+ * @return $_G['debuginfo']
+ * 		'time'
+ * 		'queries'
+ * 		'memory'
+ * 		'ios'
+ * 		'umem'
+ */
 function debuginfo() {
 	global $_G;
 	if(getglobal('setting/debug')) {
@@ -1384,6 +1949,12 @@ function debuginfo() {
 		if($db->slaveid) {
 			$_G['debuginfo']['queries'] = 'Total '.$db->querynum.', Slave '.$db->slavequery;
 		}
+
+		// bluelovers
+		$_G['debuginfo']['ios'] = function_exists('get_included_files') ? count(get_included_files()) : 0;
+		$_G['debuginfo']['umem'] = function_exists('memory_get_usage') ? strtolower(sizecount(memory_get_usage(), 1)) : 0;
+		// bluelovers
+
 		return TRUE;
 	} else {
 		return FALSE;
@@ -1486,9 +2057,54 @@ function adshow($parameter) {
 	$_G['setting']['pluginhooks'][$adfunc] = null;
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
 	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
-	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	/**
+	 * 控制是否停止執行
+	 */
+	$switchstop = 0;
+
+	$adshow_return = $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// Event: Func_adshow:Before_return
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_return')
+			->run(array(array(
+				// 函數本身參數
+				'parameter' => &$parameter,
+
+				'params' => &$params,
+
+				'adfunc' => &$adfunc,
+				'adcontent' => &$adcontent,
+
+				'switchstop' => &$switchstop,
+
+				'adshow_return' => &$adshow_return,
+		)));
+	}
+
+	if (!$switchstop) {
+	// bluelovers
+
+		return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
+
+	// bluelovers
+	} else {
+		return $adshow_return;
+	}
+	// bluelovers
 }
 
+/**
+ * 顯示提示信息
+ *
+ * @param $message - 提示信息，可中文也可以是 lang_message.php 中的數組 key 值
+ * @param $url_forward - 提示後跳轉的 url
+ * @param $values - 提示信息中可替換的變量值 array(key => value ...) 形式
+ * @param $extraparam - 擴展參數 array(key => value ...) 形式
+ * @param $custom - 0 | 1
+ **/
 function showmessage($message, $url_forward = '', $values = array(), $extraparam = array(), $custom = 0) {
 	require_once libfile('function/message');
 	return dshowmessage($message, $url_forward, $values, $extraparam, $custom);
@@ -1506,18 +2122,33 @@ function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
 				return TRUE;
 			}
 		}
-		if($allowget || ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_G['gp_formhash']) && $_G['gp_formhash'] == formhash() && empty($_SERVER['HTTP_X_FLASH_VERSION']) && (empty($_SERVER['HTTP_REFERER']) ||
-		preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST'])))) {
+		if($allowget
+			|| (
+				$_SERVER['REQUEST_METHOD'] == 'POST'
+
+				// 如果是 POST 時要求必須要有 formhash
+				&& !empty($_G['gp_formhash'])
+				&& $_G['gp_formhash'] == formhash()
+
+				&& empty($_SERVER['HTTP_X_FLASH_VERSION'])
+				&& (
+					empty($_SERVER['HTTP_REFERER'])
+					|| preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $_SERVER['HTTP_REFERER']) == preg_replace("/([^\:]+).*/", "\\1", $_SERVER['HTTP_HOST']))
+			)
+		) {
 			if(checkperm('seccode')) {
+				// 安全問題
 				if($secqaacheck && !check_secqaa($_G['gp_secanswer'], $_G['gp_sechash'])) {
 					showmessage('submit_secqaa_invalid');
 				}
+				// 驗證碼
 				if($seccodecheck && !check_seccode($_G['gp_seccodeverify'], $_G['gp_sechash'])) {
 					showmessage('submit_seccode_invalid');
 				}
 			}
 			return TRUE;
 		} else {
+			// 'submit_invalid' => '抱歉，您的請求來路不正確或表單驗證串不符，無法提交',
 			showmessage('submit_invalid');
 		}
 	}
@@ -2108,7 +2739,7 @@ function memory($cmd, $key='', $value='', $ttl = 0) {
 }
 
 function ipaccess($ip, $accesslist) {
-	return preg_match("/^(".str_replace(array("\r\n", ' '), array('|', ''), preg_quote($accesslist, '/')).")/", $ip);
+	return preg_match("/^(".str_replace(array("\r\n", ' ', "\n"), array('|', '', '|'), preg_quote($accesslist, '/')).")/", $ip);
 }
 
 function ipbanned($onlineip) {
@@ -2193,10 +2824,10 @@ function periodscheck($periods, $showmessage = 1) {
 
 	if(!$_G['group']['disableperiodctrl'] && $_G['setting'][$periods]) {
 		$now = dgmdate(TIMESTAMP, 'G.i');
-		foreach(explode("\r\n", str_replace(':', '.', $_G['setting'][$periods])) as $period) {
+		foreach(explode("\n", str_replace(array("\r\n", ':'), array("\n", '.'), $_G['setting'][$periods])) as $period) {
 			list($periodbegin, $periodend) = explode('-', $period);
 			if(($periodbegin > $periodend && ($now >= $periodbegin || $now < $periodend)) || ($periodbegin < $periodend && $now >= $periodbegin && $now < $periodend)) {
-				$banperiods = str_replace("\r\n", ', ', $_G['setting'][$periods]);
+				$banperiods = str_replace(array("\r\n", "\n"), ', ', $_G['setting'][$periods]);
 				if($showmessage) {
 					showmessage('period_nopermission', NULL, array('banperiods' => $banperiods), array('login' => 1));
 				} else {
@@ -2456,6 +3087,9 @@ function getattachnewaid($uid = 0) {
 	return DB::insert('forum_attachment', array('tid' => 0, 'pid' => 0, 'uid' => $uid, 'tableid' => 127), true);
 }
 
+/**
+ * SEO設置
+ */
 function get_seosetting($page, $data = array(), $defset = array()) {
 	global $_G;
 	$searchs = array('{bbname}');
@@ -2487,13 +3121,40 @@ function get_seosetting($page, $data = array(), $defset = array()) {
 	return array($seotitle, $seodescription, $seokeywords);
 }
 
-
+/**
+ * 用來清理多餘重複字
+ */
 function strreplace_strip_split($searchs, $replaces, $str) {
-	$searchspace = array('((\s*\-\s*)+)', '((\s*\,\s*)+)', '((\s*\|\s*)+)', '((\s*\t\s*)+)', '((\s*_\s*)+)');
-	$replacespace = array('-', ',', '|', ' ', '_');
+	$searchspace = array(
+		/*
+		'((\s*\-\s*)+)',
+		'((\s*\,\s*)+)',
+		'((\s*\|\s*)+)',
+		*/
+		'/(?:(\s)*([\-\,\|\_ ])(\s)*)+/',
+		'((\s*\t\s*)+)',
+		/*
+		'((\s*_\s*)+)',
+		*/
+	);
+	$replacespace = array(
+		/*
+		'-',
+		',',
+		'|',
+		*/
+		'\\1\\2\\3',
+		' ',
+		/*
+		'_',
+		*/
+	);
 	return trim(preg_replace($searchspace, $replacespace, str_replace($searchs, $replaces, $str)), ' ,-|_');
 }
 
+/**
+ * 主題標題 - 第2頁
+ */
 function get_title_page($navtitle, $page){
 	if($page > 1) {
 		$navtitle .= ' - '.lang('core', 'page', array('page' => $page));

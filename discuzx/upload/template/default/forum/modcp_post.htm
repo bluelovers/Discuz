@@ -6,7 +6,7 @@
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebin{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebin}</a></li>
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
-	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
 		<input type="hidden" name="do" value="search">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
@@ -18,9 +18,14 @@
 						<span class="ftid">
 							<select name="fid" id="fid" class="ps" width="168">
 								<option value="">{lang modcp_select_forum}</option>
-								<!--{loop $modforums[list] $id $name}-->
-								<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
-								<!--{/loop}-->
+								<!--{rem 美化板塊選擇樣式}-->
+								<!--{if $modforumselect}-->
+									$modforumselect
+								<!--{else}-->
+									<!--{loop $modforums[list] $id $name}-->
+									<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
+									<!--{/loop}-->
+								<!--{/if}-->
 							</select>
 						</span>
 					</td>

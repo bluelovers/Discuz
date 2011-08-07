@@ -64,6 +64,8 @@ if($operation == 'setting') {
 				}
 			}
 		}
+		/*
+		// 移除自動補充推薦群組
 		if(count($group_recommend) < $recommend_num) {
 			$query = DB::query("SELECT f.fid, f.name, ff.description, ff.icon FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status='3' AND f.type='sub'
 			ORDER BY f.commoncredits desc LIMIT $recommend_num");
@@ -76,6 +78,7 @@ if($operation == 'setting') {
 				}
 			}
 		}
+		*/
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('group_recommend', '".daddslashes(serialize($group_recommend))."')");
 		require_once libfile('function/discuzcode');
 		$skey_array = array('groupstatus','group_imgsizelimit','group_allowfeed');
@@ -407,8 +410,8 @@ var rowtypedata = [
 		if($groupbanner) {
 			$groupbanner = '<input type="checkbox" class="checkbox" name="deletebanner" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupbanner.'?'.random(6).'" />';
 		}
-		showsetting('groups_editgroup_icon', 'iconnew', '', 'file', '', 0, $groupicon);
-		showsetting('groups_editgroup_banner', 'bannernew', '', 'file', '', 0, $groupbanner);
+		showsetting('groups_editgroup_icon', 'iconnew', $group['icon'], 'filetext', '', 0, $groupicon);
+		showsetting('groups_editgroup_banner', 'bannernew', $group['banner'], 'filetext', '', 0, $groupbanner);
 		showsubmit('editsubmit');
 		showtablefooter();
 		showformfooter();
@@ -420,8 +423,55 @@ var rowtypedata = [
 		$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
 		$_G['gp_namenew'] = dhtmlspecialchars(censor(trim($_G['gp_namenew'])));
 		$icondata = array();
-		$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
-		$bannernew = upload_icon_banner($group, $_FILES['bannernew'], 'banner');
+
+		// bluelovers
+		if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
+		// bluelovers
+			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+		// bluelovers
+		} else {
+			$iconnew = $_G['gp_iconnew'];
+
+			if($iconnew) {
+				$_icon = $iconnew;
+
+				$_valueparse = parse_url($_icon);
+				if(!isset($_valueparse['host'])) {
+					$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+				}
+				$_info = array();
+				$_info = @getimagesize($_icon);
+				if($_info[0] <= 0 || $_info[1] <= 0) {
+					$iconnew = '';
+				}
+			}
+		}
+		// bluelovers
+
+		// bluelovers
+		if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
+		// bluelovers
+			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+		// bluelovers
+		} else {
+			$bannernew = $_G['gp_bannernew'];
+
+			if($bannernew) {
+				$_icon = $bannernew;
+
+				$_valueparse = parse_url($_icon);
+				if(!isset($_valueparse['host'])) {
+					$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+				}
+				$_info = array();
+				$_info = @getimagesize($_icon);
+				if($_info[0] <= 0 || $_info[1] <= 0) {
+					$bannernew = '';
+				}
+			}
+		}
+		// bluelovers
+
 		if($iconnew) {
 			$icondata['icon'] = $iconnew;
 		}

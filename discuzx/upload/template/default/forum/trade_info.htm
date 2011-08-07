@@ -1,7 +1,7 @@
 <!--{template common/header}-->
 <!--{if !$_G[inajax]}-->
 
-<script type="text/javascript" src="{$_G[setting][jspath]}forum_viewthread.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}forum_viewthread.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 
 <div id="pt" class="bm cl">
 	<!--{subtemplate common/simplesearchform}-->
@@ -10,9 +10,11 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <!--{if $_G['forum']['ismoderator']}-->
 	<script type="text/javascript">var fid = parseInt('$_G[fid]'), tid = parseInt('$_G[tid]');</script>
-	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}forum_moderate.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<form method="post" autocomplete="off" name="modactions" id="modactions">
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<input type="hidden" name="optgroup" />
@@ -144,7 +146,7 @@
 			<!--{/if}-->
 			<!--{hook/viewthread_tradeinfo_extra}-->
 		</dl>
-		
+
 		<!--{if $post['authorid'] != $_G['uid'] && empty($thread['closed']) && $trade[expiration] > -1}-->
 			<p class="pns mbm">
 			<!--{if $trade[amount]}-->
@@ -190,7 +192,7 @@
 	attachimggroup($post['pid']);
 	<!--{if empty($_G['setting']['lazyload'])}-->
 		attachimgshow($post[pid]);
-	<!--{/if}-->	
+	<!--{/if}-->
 </script>
 <!--{/if}-->
 <!--{if !$_G[inajax] && $post[comment]}-->
@@ -217,7 +219,7 @@
 				<div class="bm_h">
 					<h2>{lang trade_other_goods}</h2>
 				</div>
-				<div class="bm_c">		
+				<div class="bm_c">
 					<div class="xld cl">
 						<!--{loop $usertrades $usertrade}-->
 						<dl class="cl">

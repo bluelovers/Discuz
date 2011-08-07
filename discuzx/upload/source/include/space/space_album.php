@@ -11,6 +11,17 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+// bluelovers
+// 如果在 界面 > 導航設置 > 家園導航 內設置為隱藏時則拒絕使用
+if (isset($_G['setting']['spacenavs']['album'])
+	&& $_G['adminid'] != 1
+	&& $_G['setting']['spacenavs']['album']['available'] == 0
+	&& $_G['setting']['spacenavs']['album']['level'] == 0
+) {
+	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
+}
+// bluelovers
+
 $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $picid = empty($_GET['picid'])?0:intval($_GET['picid']);
@@ -298,7 +309,18 @@ if($id) {
 	$picmode = 0;
 
 	if(empty($_GET['view'])) {
-		$_GET['view'] = 'we';
+		// bluelovers
+		// 取得 common_member_count
+		space_merge($space, 'count');
+		// 如果有好友則預設顯示 we 不然則顯示 all
+		if ($space['friends'] > 0) {
+		// bluelovers
+			$_GET['view'] = $_G['gp_view'] = 'we';
+		// bluelovers
+		} else {
+			$_GET['view'] = $_G['gp_view'] = 'all';
+		}
+		// bluelovers
 	}
 
 	$gets = array(

@@ -550,6 +550,12 @@ if($_G['forum']['status'] != 3) {
 list($navtitle, $metadescription, $metakeywords) = get_seosetting($seotype, $seodata);
 if(!$navtitle) {
 	$navtitle = get_title_page($_G['forum_thread']['subject'], $_G['page']).' - '.strip_tags($_G['forum']['name']);
+
+	// bluelovers
+	$navtitle .= ' - '.strip_tags($_G['cache']['forums'][$fup]['name']);
+	$navtitle = strreplace_strip_split(array(), array(), $navtitle);
+	// bluelovers
+
 	$nobbname = false;
 } else {
 	$nobbname = true;
@@ -845,6 +851,17 @@ function viewthread_updateviews($threadtable) {
 		} elseif($adminid == 1) {
 			showmessage('view_log_invalid', '', array('logfile' => $_G['forum_logfile']));
 		}
+
+	// bluelovers
+	} elseif (
+		// 如果主題發表者 = 目前的使用者
+		$_G['forum_thread']['authorid'] == $_G['uid']
+		// 如果主題最後回覆者 = 目前的使用者
+		|| $_G['forum_thread']['lastposter'] == $_G['username']
+	) {
+		// 不更新 views
+	// bluelovers
+
 	} else {
 
 		DB::query("UPDATE LOW_PRIORITY ".DB::table($threadtable)." SET views=views+1 WHERE tid='$_G[tid]'", 'UNBUFFERED');
@@ -895,10 +912,35 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		$_G['forum_onlineauthors'][] = $post['authorid'];
 		$post['usernameenc'] = rawurlencode($post['username']);
 		$post['readaccess'] = $_G['cache']['usergroups'][$post['groupid']]['readaccess'];
+		/**
+		 * 顯示作者的組頭銜
+		 *
+		 * @see source\admincp\admincp_setting.php
+		 * @see source\function\cache\cache_usergroups.php
+		 */
 		if($_G['cache']['usergroups'][$post['groupid']]['userstatusby'] == 1) {
+			/**
+			 * 用戶組頭銜
+			 */
 			$post['authortitle'] = $_G['cache']['usergroups'][$post['groupid']]['grouptitle'];
+
+		// bluelovers
+		}
+		// 即使不顯示作者的組頭銜也仍然顯示用戶組星星
+		if (1) {
+		// bluelovers
+
+			/**
+			 * 顯示用戶組的星星數
+			 * 並且可以顯示升級到下一級需要多少
+			 */
 			$post['stars'] = $_G['cache']['usergroups'][$post['groupid']]['stars'];
 		}
+		/**
+		 * 升級到下一級需要多少
+		 * 只顯示會員用戶組
+		 * 不顯示自定義, 系統用戶組(因為也無法自動升級)
+		 */
 		$post['upgradecredit'] = false;
 		if($_G['cache']['usergroups'][$post['groupid']]['type'] == 'member' && $_G['cache']['usergroups'][$post['groupid']]['creditslower'] != 999999999) {
 			$post['upgradecredit'] = $_G['cache']['usergroups'][$post['groupid']]['creditslower'] - $post['credits'];
@@ -957,7 +999,28 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		($post['first'] && $_G['setting']['commentfirstpost'] && in_array($_G['group']['allowcommentpost'], array(1, 3)) ||
 		(!$post['first'] && in_array($_G['group']['allowcommentpost'], array(2, 3))));
 	$_G['forum']['allowbbcode'] = $_G['forum']['allowbbcode'] ? -$post['groupid'] : 0;
-	$post['signature'] = $post['usesig'] ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
+
+	// bluelovers
+	// 緩存簽名
+	static $signatures;
+
+	// 檢查緩存中是否處理過此用戶的簽名
+	if (!isset($signatures[$post['authorid']])) {
+	// bluelovers
+
+		// 忽略帖子的 usesig 啟用簽名設定
+		$post['signature'] = (1 || $post['usesig']) ? ($_G['setting']['sigviewcond'] ? (strlen($post['message']) > $_G['setting']['sigviewcond'] ? $post['signature'] : '') : $post['signature']) : '';
+
+	// bluelovers
+		// 以 discuzcode 處理 $post['signature']
+		$post['signature'] = discuzcode($post['signature']);
+
+		$signatures[$post['authorid']] = $post['signature'];
+	} else {
+		$post['signature'] = '';
+	}
+	// bluelovers
+
 	if(!defined('IN_ARCHIVER')) {
 		$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], ($_G['forum']['allowimgcode'] && $_G['setting']['showimages'] ? 1 : 0), $_G['forum']['allowhtml'], ($_G['forum']['jammer'] && $post['authorid'] != $_G['uid'] ? 1 : 0), 0, $post['authorid'], $_G['cache']['usergroups'][$post['groupid']]['allowmediacode'] && $_G['forum']['allowmediacode'], $post['pid'], $_G['setting']['lazyload']);
 		if($post['first']) {

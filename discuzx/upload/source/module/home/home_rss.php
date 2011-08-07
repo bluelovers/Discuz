@@ -51,7 +51,7 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"    <generator>Discuz! Board by Comsenz Inc.</generator>\n".
 	"    <lastBuildDate>".gmdate('r', TIMESTAMP)."</lastBuildDate>\n".
 	"    <image>\n".
-	"      <url>{$_G[siteurl]}static/image/common/logo_88_31.gif</url>\n".
+	"      <url>{$_G[siteurl]}static/image/logo/logo_88_31.gif</url>\n".
 	"      <title>{$_G[setting][bbname]}</title>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";

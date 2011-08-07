@@ -556,7 +556,7 @@ function showFace(showid, target, dropstr) {
 		faceDiv.style.position = 'absolute';
 		faceDiv.style.zIndex = 1001;
 		var faceul = document.createElement("ul");
-		for(i=1; i<31; i++) {
+		for(i=1; i<21; i++) {
 			var faceli = document.createElement("li");
 			faceli.innerHTML = '<img src="' + STATICURL + 'image/smiley/comcom/'+i+'.gif" onclick="insertFace(\''+showid+'\','+i+', \''+ target +'\', \''+dropstr+'\')" style="cursor:pointer; position:relative;" />';
 			faceul.appendChild(faceli);

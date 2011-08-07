@@ -15,6 +15,13 @@ define('IN_DISCUZ', TRUE);
 define('IN_COMSENZ', TRUE);
 define('ROOT_PATH', dirname(__FILE__).'/../');
 
+// bluelovers
+/**
+ * for install use hook
+ */
+require ROOT_PATH.'./install/extensions/install_hooks.php';
+// bluelovers
+
 require ROOT_PATH.'./source/discuz_version.php';
 require ROOT_PATH.'./install/include/install_var.php';
 require ROOT_PATH.'./install/include/install_mysql.php';
@@ -339,6 +346,20 @@ if($method == 'show_license') {
 			show_install();
 		}
 
+		// bluelovers
+		// DROP TABLES ALL
+		if ($step == 4 && $forceinstall) {
+			showjsmessage('DROP TABLES ... ');
+
+			$query = $db->query("SHOW TABLES");
+			while($_table = $db->fetch_row($query)) {
+				$db->query("DROP TABLES $_table[0]");
+			}
+
+			showjsmessage('DROP TABLES ... '.lang('succeed'));
+		}
+		// bluelovers
+
 		if(DZUCFULL) {
 			install_uc_server();
 		}
@@ -352,6 +373,38 @@ if($method == 'show_license') {
 		$sql = file_get_contents(ROOT_PATH.'./install/data/install_data.sql');
 		$sql = str_replace("\r\n", "\n", $sql);
 		runquery($sql);
+
+		// bluelovers
+		function _loop_glob($path, $mask = '*', $array = array()) {
+			$path = rtrim(str_replace('/./', '/', $path), '/').'/';
+
+			if ($mask != '*') {
+				foreach (glob($path.'*', GLOB_ONLYDIR) as $f) {
+					$f = str_replace('/./', '/', $f);
+					_loop_glob($f, $mask, &$array);
+				}
+			}
+
+			foreach (glob($path.$mask) as $f) {
+				$f = str_replace('/./', '/', $f);
+				if (is_dir($f)) {
+					_loop_glob($f, $mask, &$array);
+				} else {
+					$array[$f] = $f;
+				}
+			}
+			return $array;
+		}
+
+		// 增加額外安裝 SQL
+		$data_sco = _loop_glob('./data_sco', '*.sql');
+		foreach ($data_sco as $_f) {
+			showjsmessage('Load'.' '.$_f.' ... '.lang('succeed'));
+			$sql = file_get_contents(ROOT_PATH.'./install/'.$_f);
+			$sql = str_replace("\r\n", "\n", $sql);
+			runquery($sql);
+		}
+		// bluelovers
 
 		$onlineip = $_SERVER['REMOTE_ADDR'];
 		$timestamp = time();
@@ -414,6 +467,12 @@ if($method == 'show_license') {
 		dir_clear(ROOT_PATH.'./uc_client/data');
 		dir_clear(ROOT_PATH.'./uc_client/data/cache');
 
+		// bluelovers
+		// 清除 diy 緩存
+		dir_clear(ROOT_PATH.'./data/diy', 1, 1);
+		@touch(ROOT_PATH.'./data/diy'.'/index.htm');
+		// bluelovers
+
 		foreach($serialize_sql_setting as $k => $v) {
 			$v = addslashes(serialize($v));
 			$db->query("REPLACE INTO {$tablepre}common_setting VALUES ('$k', '$v')");
@@ -430,7 +489,15 @@ if($method == 'show_license') {
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
+			echo '<script type="text/javascript">'
+				.'function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}'
+				.'</script>'
+				.'<script type="text/javascript">'
+				.'setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);'
+				.'</script>'
+				// 修改為 &op=install 來忽略權限檢查
+				.'<iframe src="../misc.php?mod=initsys&op=install" style="display:none;" onload="setlaststep()"></iframe>'
+				."\r\n";
 			show_footer();
 		}
 
@@ -452,7 +519,18 @@ if($method == 'show_license') {
 		show_header();
 		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
 		echo '<li><a href="../">'.lang('install_succeed').'</a><br>';
+		/*
 		echo '<script>setTimeout(function(){window.location=\'../\'}, 2000);</script>'.lang('auto_redirect').'</li>';
+		*/
+
+		// bluelovers
+		/**
+		 * 用於處理安裝後初始化 cache 來解決安裝後某些緩存沒有執行過的問題
+		 * 例如管理員沒有顯示管理中心連結
+		 **/
+		echo '<script src="../misc.php?mod=initsys&op=install"></script>';
+		// bluelovers
+
 		echo '</ul></div>';
 		show_footer();
 	}

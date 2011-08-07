@@ -5,10 +5,10 @@
 			<p class="tbmu bw0">
 				<a{if $_G[gp_suboperation] != 'creditrulelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log" hidefocus="true">{lang credit_log}</a><span class="pipe">|</span>
 				<a{if $_G[gp_suboperation] == 'creditrulelog'} class="a"{/if} href="home.php?mod=spacecp&ac=credit&op=log&suboperation=creditrulelog" hidefocus="true">{lang credit_log_sys}</a>
-                
+
 			</p>
 			<!--{if $_G[gp_suboperation] != 'creditrulelog'}-->
-			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 			<form method="post" action="home.php?mod=spacecp&ac=credit&op=log">
 				<div class="exfm" style="margin-top: 0;">
 					<table cellspacing="0" cellpadding="0">

@@ -1,12 +1,14 @@
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp"><!--{if $_G['setting']['portalstatus'] }-->{lang portal_manage}<!--{else}-->{lang portal_block_manage}<!--{/if}--></a> <em>&rsaquo;</em>
 		{lang blockdata_verify}
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
@@ -45,9 +47,9 @@
 							<!--{/loop}-->
 							<tr>
 								<td colspan="6">
-									<label for="chkall" onclick="checkall(this.form, 'ids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label> 
-									<label for="op_delete"><input id="op_delete" class="pr" value="delete" name="optype" type="radio">{lang delete}</label> 
-									<label for="op_pass"><input id="op_pass" class="pr" value="pass" name="optype" type="radio">{lang passed}</label> 
+									<label for="chkall" onclick="checkall(this.form, 'ids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label>
+									<label for="op_delete"><input id="op_delete" class="pr" value="delete" name="optype" type="radio">{lang delete}</label>
+									<label for="op_pass"><input id="op_pass" class="pr" value="pass" name="optype" type="radio">{lang passed}</label>
 									<input type="hidden" name="batchsubmit" value="1" />
 									<input type="hidden" name="formhash" value="{FORMHASH}" />
 									<input type="hidden" name="referer" value="{echo dreferer()}" />
@@ -63,7 +65,7 @@
 				<!--{/if}-->
 			</div>
 		</div>
-	</div>	
+	</div>
 
 	<div class="appl">
 		<!--{subtemplate portal/portalcp_nav}-->

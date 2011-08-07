@@ -13,10 +13,12 @@ if(!defined('IN_DISCUZ')) {
 require_once libfile('function/cache');
 updatecache('forumrecommend');
 
+// 更新廣告過期
 DB::query("UPDATE ".DB::table('common_advertisement')." SET available='0' WHERE endtime>'0' AND endtime<='$_G[timestamp]'", 'UNBUFFERED');
 if(DB::affected_rows()) {
 	updatecache(array('setting', 'advs'));
 }
+// 清除搜尋
 DB::query("TRUNCATE ".DB::table('common_searchindex'));
 DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid>0 AND dateline<'$_G[timestamp]'-31536000", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
@@ -29,6 +31,7 @@ if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']
 
 DB::query("UPDATE ".DB::table('common_member_count')." SET todayattachs='0',todayattachsize='0'");
 
+// 處理交易紀錄
 DB::query("UPDATE ".DB::table('forum_trade')." SET closed='1' WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_tradelog')." WHERE buyerid>0 AND status=0 AND lastupdate<'$_G[timestamp]'-432000", 'UNBUFFERED');
 DB::query("UPDATE ".DB::table('forum_tradelog')." SET status='7' WHERE buyerid>'0' AND status='5' AND lastupdate<'$_G[timestamp]'-604800 AND transport='3' AND offline='1'");
@@ -41,6 +44,7 @@ removedir($_G['setting']['attachdir'].'image', TRUE);
 @touch($_G['setting']['attachdir'].'image/index.htm');
 
 require_once libfile('function/forum');
+// 處理未使用的附件
 $delaids = array();
 $query = DB::query("SELECT aid, attachment, thumb FROM ".DB::table('forum_attachment_unused')." WHERE dateline<'$_G[timestamp]'-86400");
 while($attach = DB::fetch($query)) {
@@ -53,6 +57,11 @@ if($delaids) {
 }
 
 $uids = $members = array();
+/**
+ * groupid 4 = 禁止發言
+ * groupid 5 = 禁止訪問
+ */
+// 處理用戶組過期(禁止發言, 禁止訪問)
 $query = DB::query("SELECT uid, groupid, credits FROM ".DB::table('common_member')." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$_G[timestamp]'");
 while($row = DB::fetch($query)) {
 	$uids[] = $row['uid'];
@@ -108,7 +117,7 @@ if(!empty($_G['setting']['advexpiration']['allow'])) {
 	}
 }
 
-
+// 處理充值卡
 $count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card')." WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");
 if($count) {
 	DB::query("UPDATE ".DB::table('common_card')." SET status = 9 WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");

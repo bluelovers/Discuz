@@ -193,6 +193,15 @@ function showheader($key, $url) {
 	echo '<li><em><a href="'.ADMINSCRIPT.'?action='.$url.'" id="header_'.$key.'" hidefocus="true" onmouseover="previewheader(\''.$key.'\')" onmouseout="previewheader()" onclick="toggleMenu(\''.$key.'\', \''.$url.'\');doane(event);">'.cplang('header_'.$key).'</a></em></li>';
 }
 
+/**
+ * 面包屑導航欄顯示及二級導航欄標題
+ *
+ * @param $header - 導航起點
+ * @param $menu - 子導航標題
+ * @param $nav - 面包屑導航第三層
+ *
+ * @example shownav('extended', 'nav_ec', 'nav_ec_config');
+ **/
 function shownav($header = '', $menu = '', $nav = '') {
 	global $action, $operation;
 
@@ -260,6 +269,16 @@ function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
 	return cpmsg($message, $url, 'error', array(), $extra, $halt);
 }
 
+/**
+ * 提示消息
+ *
+ * @param $message - lang_admincp_msg.php 語言包中需要輸出的key
+ * @param $url - 提示信息後跳轉的頁面，留空則返回上一頁
+ * @param $type - 特殊提示信息時指定頁面的提示樣式，可選參數：succeed、error、download、loadingform
+ * @param $values - 為語言包中的變量關鍵詞指定值，以數組形式輸入
+ * @param $extra - 消息文字擴展
+ * @param $halt - 是否輸出「Discuz! 提示」標題
+ **/
 function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
 	global $_G;
 	$vars = explode(':', $message);
@@ -299,8 +318,27 @@ function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', 
 			if($type == 'button') {
 				$message = "<br />$message<br /><p class=\"margintop\"><input type=\"submit\" class=\"btn\" name=\"submit\" value=\"".cplang('start')."\" onclick=\"location.href='$url'\" />";
 			} else {
-				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
-				$timeout = $type != 'loading' ? 10000 : 0;
+				// bluelovers
+				// DX 預設為 10 秒
+				$refreshsecond = 5;
+				// bluelovers
+
+				// 移動代碼
+				$timeout = $type != 'loading' ? $refreshsecond * 1000 : 0;
+
+				// bluelovers
+				$_msg_add = '';
+				if ($timeout) {
+					$refreshsecond = $timeout / 1000;
+
+					//TODO:將此處改為語言包
+					$_msg_add = "即將於 {$refreshsecond} 秒後自動跳轉<br>";
+				} else {
+					$_msg_add = "請稍後...正在執行中...<br>";
+				}
+				// bluelovers
+
+				$message .= '<p class="marginbot"><a href="'.$url.'" class="lightlink">'.$_msg_add.cplang($type == 'download' ? 'message_download' : 'message_redirect').'</a></p>';
 				$message .= "<script type=\"text/JavaScript\">setTimeout(\"redirect('$url');\", $timeout);</script>";
 			}
 		} elseif($type != 'succeed') {
@@ -363,6 +401,12 @@ EOT;
 	}
 }
 
+/**
+ * 二級導航欄顯示
+ *
+ * @param $title - 二級導航的當前欄標題
+ * @param $menus <array> - 多個子導航
+ **/
 function showsubmenu($title, $menus = array(), $right = '', $replace = array()) {
 	if(empty($menus)) {
 		$s = '<div class="itemtitle">'.$right.'<h3>'.cplang($title, $replace).'</h3></div>';
@@ -467,6 +511,14 @@ function showtips($tips, $id = 'tips', $display = TRUE, $title = '') {
 	showtablefooter();
 }
 
+/**
+ * 創建表單頭
+ *
+ * @param $action - 表單action的一部分，程序會自動添加 admincp.php?action= 這些內容
+ * @param $extra - 表單附加屬性，可以是樣式等
+ * @param $name - 表單的name和id
+ * @param $method - 表單提交方式
+ **/
 function showformheader($action, $extra = '', $name = 'cpform', $method = 'post') {
 	global $_G;
 	$anchor = isset($_G['gp_anchor']) ? htmlspecialchars($_G['gp_anchor']) : '';
@@ -476,6 +528,11 @@ function showformheader($action, $extra = '', $name = 'cpform', $method = 'post'
 		'<input type="hidden" name="anchor" value="'.$anchor.'" />';
 }
 
+/**
+ * 創建隱藏表單域
+ *
+ * @param $hiddenfields <array> 以數組形式傳入，循環輸出隱藏表單域
+ **/
 function showhiddenfields($hiddenfields = array()) {
 	if(is_array($hiddenfields)) {
 		foreach($hiddenfields as $key => $val) {
@@ -485,6 +542,16 @@ function showhiddenfields($hiddenfields = array()) {
 	}
 }
 
+/**
+ * 創建表格頭
+ *
+ * @param $title - 如果輸入title則顯示標題，class為header，否則僅顯示一個table頭
+ * @param $classname - 定義此輸出表格的CSS樣式
+ * @param $extra - 表格擴展屬性
+ * @param $titlespan - 表格列數
+ *
+ * @example showtableheader('forums_edit_posts', 'nobottom');
+ **/
 function showtableheader($title = '', $classname = '', $extra = '', $titlespan = 15) {
 	global $_G;
 	$classname = str_replace(array('nobottom', 'notop'), array('nobdb', 'nobdt'), $classname);
@@ -546,6 +613,16 @@ function showsubtitle($title = array(), $rowclass='header') {
 	}
 }
 
+/**
+ * 創建列表式頁面的行
+ *
+ * 此函數多用於循環中，用來逐行創建一個有規律的數據列表如：論壇版塊列表等
+ *
+ * @param $trstyle - 此行 tr 標籤的格式定義，如 class="partition"
+ * @param $tdstyle <array> - TD 標籤的格式定義，如 class，colspan 等
+ * @param $tdtext <array> - TD內顯示的內容
+ * @param $return 是否返回值
+ **/
 function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $return = FALSE) {
 	$rowswapclass = '';
 	if(!preg_match('/class\s*=\s*[\'"]([^\'"<>]+)[\'"]/i', $trstyle, $matches)) {
@@ -573,6 +650,41 @@ function showtablerow($trstyle = '', $tdstyle = array(), $tdtext = array(), $ret
 	echo $cells;
 }
 
+/**
+ * 表单显示
+ *
+ * @param $setname - 指定輸出標題，如:setting_basic_bbname, 自動匹配描述文字
+ * 為：setting_basic_bbname_comment，comment 形式文字
+ * 可以在./source/language/lang_admincp.php語言包中添加
+ *
+ * @param $varname - 指定表單的name值，如settingnew[bbname]
+ * @param $value - 指定表單默認值\變量
+ * @param $type - 表單樣式
+ *
+ * 		radio單選
+ * 		text文本、password密碼、number數字
+ * 		file上傳文件
+ * 		filetext 上傳文件或在線文件切換型表單
+ * 		textarea 多行文本
+ * 		select 選擇框
+ * 		mradio 高級單選模式
+ * 		mcheckbox 高級多選模式
+ * 		binmcheckbox 二進制數值多選模式
+ * 		mselect 高級選擇框模式
+ * 		color 顏色選擇
+ * 		calendar 日期選擇
+ * 		multiply 多表單型
+ * 		daterange時間範圍
+ *
+ * 		其他未在上述樣式中出現的$type均獨立輸出
+ * @param $disabled - 是否不可修改
+ * @param $hidden - 是否隱藏
+ * @param $comment - 強制描述文字
+ * @param $extra - 表單擴展屬性
+ * @param $setid - 用於拼接表單外層Div的id
+ *
+ * @see http://dev.discuz.org/wiki/index.php?title=%E5%B8%B8%E7%94%A8%E5%90%8E%E5%8F%B0%E5%87%BD%E6%95%B0#showsetting.28.29.E8.A1.A8.E5.8D.95.E6.98.BE.E7.A4.BA
+ **/
 function showsetting($setname, $varname, $value, $type = 'radio', $disabled = '', $hidden = 0, $comment = '', $extra = '', $setid = '') {
 
 	global $_G;
@@ -618,8 +730,9 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			'<a id="'.$id.'_0a" style="'.(!$defaulttype ? 'font-weight:bold' : '').'" href="javascript:;" onclick="$(\''.$id.'_1a\').style.fontWeight = \'\';this.style.fontWeight = \'bold\';$(\''.$id.'_1\').name = \'TMP'.$varname.'\';$(\''.$id.'_0\').name = \''.$varname.'\';$(\''.$id.'_0\').style.display = \'\';$(\''.$id.'_1\').style.display = \'none\'">'.cplang('switch_upload').'</a>&nbsp;'.
 			'<a id="'.$id.'_1a" style="'.($defaulttype ? 'font-weight:bold' : '').'" href="javascript:;" onclick="$(\''.$id.'_0a\').style.fontWeight = \'\';this.style.fontWeight = \'bold\';$(\''.$id.'_0\').name = \'TMP'.$varname.'\';$(\''.$id.'_1\').name = \''.$varname.'\';$(\''.$id.'_1\').style.display = \'\';$(\''.$id.'_0\').style.display = \'none\'">'.cplang('switch_url').'</a>';
 	} elseif($type == 'textarea') {
+		// textarea 增加當取得焦點時，執行 onkeyup(); 調整高度
 		$readonly = $disabled ? 'readonly' : '';
-		$s .= "<textarea $readonly rows=\"6\" ".(!isset($_G['showsetting_multi']) ? "ondblclick=\"textareasize(this, 1)\"" : '')." onkeyup=\"textareasize(this, 0)\" name=\"$varname\" id=\"$varname\" cols=\"50\" class=\"tarea\" '.$extra.'>".dhtmlspecialchars($value)."</textarea>";
+		$s .= "<textarea $readonly rows=\"6\" ".(!isset($_G['showsetting_multi']) ? "ondblclick=\"textareasize(this, 1)\"" : '')." onkeyup=\"textareasize(this, 0)\" onfocus=\"this.onkeyup();\" name=\"$varname\" id=\"$varname\" cols=\"50\" class=\"tarea\" '.$extra.'>".dhtmlspecialchars($value)."</textarea>";
 	} elseif($type == 'select') {
 		$s .= '<select name="'.$varname[0].'" '.$extra.'>';
 		foreach($varname[1] as $option) {
@@ -647,7 +760,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 						}
 					}
 					$onclick && $onclick = ' onclick="'.$onclick.'"';
-					$s .= '<li'.($radiocheck[$varary[0]] ? ' class="checked"' : '').$addstyle.'><input class="radio" type="radio"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'" value="'.$varary[0].'"'.$radiocheck[$varary[0]].$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+
+					// bluelovers
+					// 顯示語言包的 index 名稱
+					$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+					// bluelovers
+
+					$s .= '<li'.($radiocheck[$varary[0]] ? ' class="checked"' : '').$addstyle.'><input class="radio" type="radio"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'" value="'.$varary[0].'"'.$radiocheck[$varary[0]].$check['disabled'].$onclick.'>&nbsp;'.$varary[1].$_s_add.'</li>';
 				}
 			}
 			$s .= '</ul>';
@@ -661,7 +780,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			if(is_array($varary) && !empty($varary)) {
 				$onclick = !isset($_G['showsetting_multi']) && !empty($varary[2]) ? ' onclick="$(\''.$varary[2].'\').style.display = $(\''.$varary[2].'\').style.display == \'none\' ? \'\' : \'none\';"' : '';
 				$checked = is_array($value) && in_array($varary[0], $value) ? ' checked' : '';
-				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].'</li>';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
+				$s .= '<li'.($checked ? ' class="checked"' : '').$addstyle.'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($varary[0]).'_'.$varnameid.'"' : '').' name="'.$varname[0].'[]" value="'.$varary[0].'"'.$checked.$check['disabled'].$onclick.'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -670,7 +795,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$value = sprintf('%0'.$checkboxs.'b', $value);$i = 1;
 		$s .= '<ul class="nofloat" onmouseover="altStyle(this'.$check['disabledaltstyle'].');">';
 		foreach($varname[1] as $key => $var) {
-			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.'</li>';
+
+			// bluelovers
+			// 顯示語言包的 index 名稱
+			$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( {$varname[0]}[{$i}] )</span>";
+			// bluelovers
+
+			$s .= '<li'.($value{$checkboxs - $i} ? ' class="checked"' : '').'><input class="checkbox" type="checkbox"'.($varnameid ? ' id="_v'.md5($i).'_'.$varnameid.'"' : '').' name="'.$varname[0].'['.$i.']" value="1"'.($value{$checkboxs - $i} ? ' checked' : '').' '.(!empty($varname[2][$key]) ? $varname[2][$key] : '').'>&nbsp;'.$var.$_s_add.'</li>';
 			$i++;
 		}
 		$s .= '</ul>';
@@ -682,7 +813,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		foreach($varname[1] as $varary) {
 			if(is_array($varary) && !empty($varary)) {
 				$checked = is_array($value) && $value[$varary[0]] ? ' checked' : '';
-				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].'</li>';
+
+				// bluelovers
+				// 顯示語言包的 index 名稱
+				$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname[0]) ? " title=\"$varname[0]\"" : "")."> ( $varary[0] )</span>";
+				// bluelovers
+
+				$s .= '<li'.($checked ? ' class="checked"' : '').' '.$addstyle.'><input class="checkbox" type="checkbox" name="'.$varname[0].'['.$varary[0].']" value="'.$varary[2].'"'.$checked.$check['disabled'].'>&nbsp;'.$varary[1].$_s_add.'</li>';
 			}
 		}
 		$s .= '</ul>';
@@ -697,6 +834,22 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 			}
 		}
 		$s .= '</select>';
+
+	// bluelovers
+	} elseif($type == 'forum' || $type == 'forums') {
+		/**
+		 * @example showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'forums');
+		 **/
+		if ($type == 'forums') {
+			$s .= '<select name="'.$varname.'[]" multiple="multiple" size="10" '.$extra.'>';
+		} else {
+			$s .= '<select name="'.$varname.'" '.$extra.'>';
+		}
+		$s .= "<option value=\"\">".cplang('none')."</option>";
+		$s .= forumselect(FALSE, 0, $value, TRUE);
+		$s .= '</select>';
+	// bluelovers
+
 	} elseif($type == 'color') {
 		global $stylestuff;
 		$preview_varname = str_replace('[', '_', str_replace(']', '', $varname));
@@ -749,7 +902,13 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!isset($_G['showsetting_multi'])) {
 		$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
-		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
+
+		// bluelovers
+		// 顯示語言包的 index 名稱
+		$_s_add = "<span class=\"lightfont\"".($varname && !is_array($varname) ? " title=\"$varname\"" : "")."> ( $setname )</span>";
+		// bluelovers
+
+		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.$_s_add.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
 			$_G['setting_JS'] .= 'var ss = new Array();';
@@ -820,6 +979,16 @@ function mcheckbox($name, $items = array(), $checked = array()) {
 	return $list;
 }
 
+/**
+ * 創建提交按鈕
+ *
+ * @param $name - 定義提交按鈕的name值
+ * @param $value - 定義按鈕的文字值
+ * @param $before - 根據此按鈕之前的屬性來輸出樣式
+ * @param $after - 根據此按鈕之後的屬性來輸出樣式
+ * @param $floatright - 是否有浮動
+ * @param $entersubmit - 是否使用回車定義按鈕提交動作
+ **/
 function showsubmit($name = '', $value = 'submit', $before = '', $after = '', $floatright = '', $entersubmit = true) {
 	global $_G;
 	if(!empty($_G['showsetting_multi'])) {

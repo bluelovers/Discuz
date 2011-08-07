@@ -152,6 +152,7 @@ class logging_ctl {
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
 
 				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
+				// 同步登入其他 uc client
 				$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
 				if($invite['id']) {
@@ -316,7 +317,7 @@ class register_ctl {
 					$whitearea = preg_quote(trim($this->setting['areaverifywhite']), '/');
 					$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
 					$whitearea = '.*'.$whitearea.'.*';
-					$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+					$whitearea = '/^('.str_replace(array("\r\n", ' ', "\n"), array('.*|.*', '', '.*|.*'), $whitearea).')$/i';
 					if(@preg_match($whitearea, $location)) {
 						$this->setting['regverify'] = 0;
 					}
@@ -342,7 +343,7 @@ class register_ctl {
 					$whitearea = preg_quote(trim($this->setting['inviteconfig']['inviteareawhite']), '/');
 					$whitearea = str_replace(array("\\*"), array('.*'), $whitearea);
 					$whitearea = '.*'.$whitearea.'.*';
-					$whitearea = '/^('.str_replace(array("\r\n", ' '), array('.*|.*', ''), $whitearea).')$/i';
+					$whitearea = '/^('.str_replace(array("\r\n", ' ', "\r\n"), array('.*|.*', '', '.*|.*'), $whitearea).')$/i';
 					if(@preg_match($whitearea, $location)) {
 						$invitestatus = true;
 					}
@@ -476,7 +477,7 @@ class register_ctl {
 				}
 			}
 
-			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
+			$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' ', "\n"), array('.*', '|', '', '|'), preg_quote(($this->setting['censoruser'] = trim($this->setting['censoruser'])), '/')).')$/i';
 
 			if($this->setting['censoruser'] && @preg_match($censorexp, $username)) {
 				showmessage('profile_username_protect');

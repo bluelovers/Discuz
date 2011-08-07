@@ -39,10 +39,15 @@ $op = getgpc('op');
 if($modforums === null) {
 	$modforums = array('fids' => '', 'list' => array(), 'recyclebins' => array());
 	$comma = '';
+
+	// bluelovers
+	$_sql_add = ' ORDER BY f.type, f.displayorder, f.name ';
+	// bluelovers
+
 	if($_G['adminid'] == 3) {
 		$query = DB::query("SELECT m.fid, f.name, f.recyclebin
 			FROM ".DB::table('forum_moderator')." m, ".DB::table('forum_forum')." f
-			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group'");
+			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group' $_sql_add");
 		while($tforum = DB::fetch($query)) {
 			$modforums['fids'] .= $comma.$tforum['fid']; $comma = ',';
 			$modforums['recyclebins'][$tforum['fid']] = $tforum['recyclebin'];
@@ -57,6 +62,11 @@ if($modforums === null) {
 			: "SELECT f.fid, f.name, f.threads, f.recyclebin, ff.viewperm, ff.redirect FROM ".DB::table('forum_forum')." f
 				LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
 				WHERE f.status='1' AND f.type<>'group' AND ff.redirect=''";
+
+		// bluelovers
+		$sql .= $_sql_add;
+		// bluelovers
+
 		$query = DB::query($sql);
 		while ($tforum = DB::fetch($query)) {
 			$tforum['allowview'] = !isset($tforum['allowview']) ? '' : $tforum['allowview'];
@@ -71,6 +81,14 @@ if($modforums === null) {
 	$modsession->set('modforums', $modforums, true);
 }
 
+// bluelvoers
+require_once libfile('function/forumlist');
+
+$_tmp = $_G['gp_action'] == 'recyclebin' ? $modforums['recyclebins'] : $modforums['list'];
+$modforumselect = forumselect(($_tmp ? array(0, $_tmp) : 0), 0, $_G['fid']);
+unset($_tmp);
+// bluelovers
+
 if($_G['fid'] && $_G['forum']['ismoderator']) {
 	dsetcookie('modcpfid', $_G['fid']);
 	$forcefid = "&amp;fid=$_G[fid]";
@@ -79,6 +97,29 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 } else {
 	$forcefid = '';
 }
+
+// bluelovers
+if ($_G['forum']['fid']) {
+	// 在論壇 › 論壇管理的導航顯示目前的版塊名稱
+	$forum_up = $_G['cache']['forums'][$_G[forum][fup]];
+	if($_G['forum']['type'] == 'forum') {
+		$fgroupid = $_G['forum']['fup'];
+		if(empty($_G['gp_archiveid'])) {
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?gid='.$forum_up['fid'].'">'.$forum_up['name'].'</a><em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'].'">'.$_G['forum']['name'].'</a>';
+		} else {
+			$navigation = '<em>&rsaquo;</em> '.'<a href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'">'.$_G['forum']['name'].'</a> <em>&rsaquo;</em> '.$forumarchive[$_G['gp_archiveid']]['displayname'];
+		}
+	} else {
+		$fgroupid = $forum_up['fup'];
+		if(empty($_G['gp_archiveid'])) {
+			$forum_top =  $_G['cache']['forums'][$forum_up[fup]];
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?gid='.$forum_top['fid'].'">'.$forum_top['name'].'</a><em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$forum_up['fid'].'">'.$forum_up['name'].'</a><em>&rsaquo;</em> '.$_G['forum']['name'];
+		} else {
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$_G['forum']['fup'].'">'.$forum_up['name'].'</a> <em>&rsaquo;</em> '.'<a href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'">'.$_G['forum']['name'].'</a> <em>&rsaquo;</em> '.$forumarchive[$_G['gp_archiveid']]['displayname'];
+		}
+	}
+}
+// bluelovers
 
 $script = $modtpl = '';
 switch ($_G['gp_action']) {

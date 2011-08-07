@@ -63,6 +63,8 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -148,7 +150,7 @@
 									</tr>
 								<!--{/if}-->
 							</tbody>
-					
+
 						<tr>
 							<td colspan="2">
 								<p class="mtm">{lang invitation_code_spend}{$extcredits[title]} <strong class="xi1">$creditnum</strong> $extcredits[unit] ( {lang you_have}$extcredits[title] <strong id="haveallcredit">{$space[$creditkey]}</strong> $extcredits[unit] )<!--{if $space[$creditkey] < $creditnum}--><span><a href="home.php?mod=spacecp&ac=credit" target="_blank" class="xi2">{lang credit_recharge}</a></span><!--{/if}--></p>

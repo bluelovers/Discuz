@@ -25,7 +25,8 @@ ckstart($start, $perpage);
 
 
 
-$_G['home_today'] = strtotime('today');
+//$_G['home_today'] = strtotime('today');
+$_G['home_today'] = $_G['timenow']['todayzero'];
 
 if(empty($_G['gp_view'])) $_G['gp_view'] = 'top';
 space_merge($space, 'field_home');

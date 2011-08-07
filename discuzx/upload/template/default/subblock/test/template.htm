@@ -1,0 +1,16 @@
+<!--{template common/header}-->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+
+<script>jQuery.noConflict();</script>
+
+<div>
+	<p>
+load subtpl subblock/form/func;
+<!--{subtpl subblock/form/func}-->
+<p>
+tpl_showsetting($k, 'iconnew', 'http://', 'filetext')
+<!--{echo tpl_showsetting($k, 'iconnew', 'http://', 'filetext')}-->
+<p>
+tpl_showsetting($k, 'iconnew', 'http://', 'text')
+<!--{echo tpl_showsetting($k, 'iconnew', 'http://', 'text')}-->

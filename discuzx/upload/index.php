@@ -13,16 +13,62 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 } else {
 
 	$url = '';
+	/**
+	 * 取得 data/cache/cache_domain.php 的緩存資料
+	 *
+	 * @example <pre>
+ 	$domain = array (
+		'defaultindex' => 'forum.php',
+		'holddomain' => 'www|*blog*|*space*|x',
+		'list' =>
+			array (
+		),
+		'app' =>
+			array (
+				'portal' => '',
+				'forum' => 'user-bluelovers.test',
+				'group' => '',
+				'home' => '',
+				'mobile' => '',
+				'default' => '',
+		),
+		'root' =>
+			array (
+				'home' => '',
+				'group' => '',
+				'forum' => '',
+				'topic' => '',
+				'channel' => '',
+		),
+	);
+	</pre>
+	 */
 	$domain = $_ENV = array();
+	/**
+	 * 用來偵測是否使用 header 跳轉
+	 */
 	$jump = false;
-	@include_once './data/cache/cache_domain.php';
+	// include_once => include - 防止意外的 bug
+	@include './data/cache/cache_domain.php';
+
 	$_ENV['domain'] = $domain;
 	if(empty($_ENV['domain'])) {
+		// 如果沒有 $_ENV['domain'] 預設使用 forum
 		$_ENV['curapp'] = 'forum';
 	} else {
+		/**
+		 * 預設的應用對映表
+		 *
+		 * @name $_ENV['defaultapp']
+		 */
 		$_ENV['defaultapp'] = array('portal.php' => 'portal', 'forum.php' => 'forum', 'group.php' => 'group', 'home.php' => 'home');
 		$_ENV['hostarr'] = explode('.', $_SERVER['HTTP_HOST']);
 		$_ENV['domainroot'] = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
+		/**
+		 * $_ENV['domain']['app'] = 域名設置 > 應用域名
+		 *
+		 * 如果符合 $_ENV['domain']['app'] 則網址不會產生變化(不會有 header 跳轉)
+		 */
 		if(!empty($_ENV['domain']['app']) && is_array($_ENV['domain']['app']) && in_array($_SERVER['HTTP_HOST'], $_ENV['domain']['app'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
 			if($_ENV['curapp'] == 'mobile') {
@@ -34,6 +80,10 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			if($_ENV['curapp'] == 'default' || !isset($_ENV['defaultapp'][$_ENV['curapp'].'.php'])) {
 				$_ENV['curapp'] = '';
 			}
+
+		/**
+		 * $_ENV['domain']['root'] = 域名設置 > 根域名
+		 */
 		} elseif(!empty($_ENV['domain']['root']) && is_array($_ENV['domain']['root']) && in_array($_ENV['domainroot'], $_ENV['domain']['root'])) {
 
 			$_G['setting']['holddomain'] = $_ENV['domain']['holddomain'] ? $_ENV['domain']['holddomain'] : array('www');
@@ -42,15 +92,18 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				$domain = $list[$_SERVER['HTTP_HOST']];
 				$id = intval($domain['id']);
 				switch($domain['idtype']) {
+					// 版區
 					case 'subarea':
 						$_ENV['curapp'] = 'forum';
 						$_GET['gid'] = $id;
 						break;
+					// 論壇
 					case 'forum':
 						$_ENV['curapp'] = 'forum';
 						$_GET['mod'] = 'forumdisplay';
 						$_GET['fid'] = $id;
 						break;
+					// 專題
 					case 'topic':
 						$_ENV['curapp'] = 'portal';
 						$_GET['mod'] = 'topic';
@@ -95,11 +148,28 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 						break;
 				}
 			}
+
+		// bluelovers
+		} elseif (
+			// 當沒有設定預設應用域名時
+			empty($_ENV['domain']['app']['default'])
+			// 存在 $_ENV['domain']['defaultindex'] 時
+			&& !empty($_ENV['domain']['defaultindex'])
+			// 符合 預設的應用對映表 時
+			&& !empty($_ENV['defaultapp'][$_ENV['domain']['defaultindex']])
+		) {
+			// 則不使用 header 跳轉
+			$_ENV['curapp'] = $_ENV['defaultapp'][$_ENV['domain']['defaultindex']];
+		// bluelovers
+
 		} else {
+			// $jump = true 時 以網址變動為優先
 			$jump = true;
 		}
 		if(empty($url) && empty($_ENV['curapp'])) {
+			// 存在 $_ENV['domain']['defaultindex'] 時 並且沒有 $jump 時
 			if(!empty($_ENV['domain']['defaultindex']) && !$jump) {
+				// 符合 預設的應用對映表 時
 				if($_ENV['defaultapp'][$_ENV['domain']['defaultindex']]) {
 					$_ENV['curapp'] = $_ENV['defaultapp'][$_ENV['domain']['defaultindex']];
 				} else {
@@ -122,7 +192,10 @@ if(!empty($url)) {
 	} elseif($_GET['fromuser']) {
 		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
 	}
+	// 取消 301 之後可以防止更改網站設定後 瀏覽器卻使用已經快取的 301 的問題
+	/*
 	header("HTTP/1.1 301 Moved Permanently");
+	*/
 	header("location: $url");
 } else {
 	require './'.$_ENV['curapp'].'.php';

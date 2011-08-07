@@ -184,6 +184,19 @@ function getblockhtml($blockname,$parameters = array()) {
 			break;
 		case 'statistic':
 			space_merge($space, 'count');
+
+			// bluelovers
+			// 如果在 界面 > 導航設置 > 家園導航 內設置為隱藏時則一併封鎖在個人空間內隱藏連結
+			foreach($_G['setting']['spacenavs'] as $_k => $_v) {
+				if (!empty($_v)
+					&& $_v['available'] == 0
+					&& $_v['level'] == 0
+				) {
+					$parameters['ban'.$_k.'s'] = 1;
+				}
+			}
+			// bluelovers
+
 			$html .= '<p class="mbm xw1">';
 			if(empty($parameters['banviews'])) $html .= lang('space', 'space_views', array('views' => $space['views'] ? $space['views'] : '--'));
 			$html .= '</p><ul class="xl xl2 cl">';
@@ -697,6 +710,17 @@ function check_ban_block($blockname, $space) {
 	} elseif($blockname == 'myapp' && (empty($_G['setting']['my_app_status']) || empty($_G['cache']['usergroup_'.$space['groupid']]['allowmyop']))) {
 		$return = false;
 	}
+
+	// bluelovers
+	// 如果在 界面 > 導航設置 > 家園導航 內設置為隱藏時則一併封鎖在個人空間內顯示該模塊
+	if (isset($_G['setting']['spacenavs'][$blockname])
+		&& $_G['setting']['spacenavs'][$blockname]['available'] == 0
+		&& $_G['setting']['spacenavs'][$blockname]['level'] == 0
+	) {
+		$return = false;
+	}
+	// bluelovers
+
 	return $return;
 }
 ?>

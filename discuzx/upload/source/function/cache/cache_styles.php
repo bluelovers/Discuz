@@ -62,6 +62,14 @@ function build_cache_styles() {
 			}
 		}
 		$data['verhash'] = random(3);
+
+		// bluelvoers
+		// 修正 DX 設計上的BUG 造成 available 永遠為空值
+		if ($data['styleid'] == $defaultstyleid) {
+			$data['available'] = 1;
+		}
+		// bluelovers
+
 		$styledata[] = $data;
 	}
 	foreach($styledata as $data) {
@@ -108,6 +116,15 @@ function writetocsscache($data) {
 			$cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/'.$entry;
 			!file_exists($cssfile) && $cssfile = $dir.$entry;
 			$cssdata = @implode('', file($cssfile));
+
+			// bluelovers
+			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			} elseif($data['tpldir'] != 'default' && file_exists($cssfile = DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.$entry)) {
+				$cssdata .= @implode('', file($cssfile));
+			}
+			// bluelovers
+
 			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/extend_'.$entry)) {
 				$cssdata .= @implode('', file($cssfile));
 			}
@@ -118,15 +135,74 @@ function writetocsscache($data) {
 					}
 				}
 			}
-			$cssdata = preg_replace("/\{([A-Z0-9]+)\}/e", '\$data[strtolower(\'\1\')]', $cssdata);
-			$cssdata = preg_replace("/<\?.+?\?>\s*/", '', $cssdata);
-			$cssdata = !preg_match('/^http:\/\//i', $data['styleimgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['styleimgdir'], '/')."/i", "url(\\1../../$data[styleimgdir]", $cssdata) : $cssdata;
-			$cssdata = !preg_match('/^http:\/\//i', $data['imgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['imgdir'], '/')."/i", "url(\\1../../$data[imgdir]", $cssdata) : $cssdata;
-			$cssdata = !preg_match('/^http:\/\//i', $data['staticurl']) ? preg_replace("/url\(([\"'])?".preg_quote($data['staticurl'], '/')."/i", "url(\\1../../$data[staticurl]", $cssdata) : $cssdata;
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetocsscache:Before_replace_var
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_replace_var')
+					->run(array(array(
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
+						'switchstop'	=> &$switchstop,
+						'data'			=> &$data,
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
+				$cssdata = preg_replace("/\{([A-Z0-9]+)\}/e", '\$data[strtolower(\'\1\')]', $cssdata);
+				$cssdata = preg_replace("/<\?.+?\?>\s*/", '', $cssdata);
+				$cssdata = !preg_match('/^http:\/\//i', $data['styleimgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['styleimgdir'], '/')."/i", "url(\\1../../$data[styleimgdir]", $cssdata) : $cssdata;
+				$cssdata = !preg_match('/^http:\/\//i', $data['imgdir']) ? preg_replace("/url\(([\"'])?".preg_quote($data['imgdir'], '/')."/i", "url(\\1../../$data[imgdir]", $cssdata) : $cssdata;
+				$cssdata = !preg_match('/^http:\/\//i', $data['staticurl']) ? preg_replace("/url\(([\"'])?".preg_quote($data['staticurl'], '/')."/i", "url(\\1../../$data[staticurl]", $cssdata) : $cssdata;
+
+			// bluelovers
+			}
+			// bluelovers
+
 			if($entry == 'module.css') {
 				$cssdata = preg_replace('/\/\*\*\s*(.+?)\s*\*\*\//', '[\\1]', $cssdata);
 			}
-			$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetocsscache:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_minify')
+					->run(array(array(
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
+						'switchstop'	=> &$switchstop,
+						'data'			=> &$data,
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
+				$cssdata = preg_replace(array('/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'), array('\\1', '',''), $cssdata);
+
+			// bluelovers
+			}
+
+			// Event: Func_writetocsscache:Before_fwrite
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
+					->run(array(array(
+						'cssdata'		=> &$cssdata,
+						'entry'			=> &$entry,
+						'data'			=> &$data,
+
+						'filename'		=> 'style_'.$data['styleid'].'_'.$entry,
+						'filepath'		=> 'data/cache/',
+				)));
+			}
+			// bluelvoers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/style_'.$data['styleid'].'_'.$entry, 'w')) {
 				fwrite($fp, $cssdata);
 				fclose($fp);

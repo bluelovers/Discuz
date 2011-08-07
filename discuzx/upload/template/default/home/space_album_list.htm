@@ -6,7 +6,7 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> 
+		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=album">{lang album}</a>
 		<!--{if $_GET['view']=='me'}-->
 		 <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=album&view=me">{$space[username]}{lang somebody_album}</a>
@@ -18,6 +18,8 @@
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
@@ -34,7 +36,7 @@
 				<li class="o"><a href="home.php?mod=spacecp&ac=upload">{lang upload_pic}</a></li>
 			</ul>
 		<!--{else}-->
-			<!--{eval 
+			<!--{eval
 				$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=album&view=me\">{lang they_album}</a>";
 			}-->
 			<!--{template home/space_menu}-->
@@ -77,6 +79,9 @@
 
 <!--{else}-->
 <!--{template home/space_header}-->
+
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="ct2 wp cl">
 		<div class="mn">
 			<div class="bm">
@@ -187,7 +192,7 @@ function fuidgoto(fuid) {
 <div class="wp mtn">
 	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
 </div>
-	
+
 <!--{else}-->
 			</div>
 		</div>

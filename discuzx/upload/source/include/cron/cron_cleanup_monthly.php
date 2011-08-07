@@ -13,6 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 $myrecordtimes = TIMESTAMP - $_G['setting']['myrecorddays'] * 86400;
 
+// 處理任務
 DB::query("DELETE FROM ".DB::table('common_mytask')." WHERE status='-1' AND dateline<'$_G[timestamp]'-2592000", 'UNBUFFERED');
 
 ?>

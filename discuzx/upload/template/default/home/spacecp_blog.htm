@@ -82,11 +82,13 @@
 	</div>
 </div>
 
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0 cl">
 			<script type="text/javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
-			<script type="text/javascript" src="{$_G[setting][jspath]}home_blog.js?{VERHASH}"></script>
+			<script type="text/javascript" src="{$_G[setting][jspath]}home_blog.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 			<form id="ttHtmlEditor" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]{if $_G[gp_modblogkey]}&modblogkey=$_G[gp_modblogkey]{/if}" enctype="multipart/form-data">
 				<h1 class="mt cl">
 					<span class="y xs1 xw0 mtn"><a href="javascript:history.go(-1);">{lang previous_page}</a></span>
@@ -106,7 +108,7 @@
 				</table>
 				<!--{hook/spacecp_blog_middle}-->
 				<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
-				
+
 					<!--{if $_G['setting']['blogcategorystat'] && $categoryselect}-->
 					<tr>
 						<th>{lang site_categories}</th>
@@ -116,7 +118,7 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-					
+
 					<tr>
 						<th>{lang personal_category}</th>
 						<td>
@@ -236,7 +238,7 @@
 							}
 						}
 					}
-					
+
 					if($('seccode')) {
 						var code = $('seccode').value;
 						var x = new Ajax();
@@ -302,7 +304,7 @@
 										<!--{/loop}-->
 										<option value="addoption" style="color:red;">+{lang create_new_album}</option>
 									</select>
-									<script type="text/javascript" src="{$_G[setting][jspath]}home_uploadpic.js?{VERHASH}"></script>
+									<script type="text/javascript" src="{$_G[setting][jspath]}home_uploadpic.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 									<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
 								</td>
 							</tr>

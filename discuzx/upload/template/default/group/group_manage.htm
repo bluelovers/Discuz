@@ -11,6 +11,13 @@
 </p>
 
 <!--{if $_G['gp_op'] == 'group'}-->
+
+	<!-- 載入 jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+	<script>jQuery.noConflict();</script>
+	<!--{subtpl subblock/form/func}-->
+	<!-- 載入 jQuery - End -->
+
 	<div class="bm bw0">
 		<form enctype="multipart/form-data" action="forum.php?mod=group&action=manage&op=group&fid=$_G[fid]" name="manage" method="post" autocomplete="off">
 			<input type="hidden" value="{FORMHASH}" name="formhash" />
@@ -76,7 +83,9 @@
 					<tr>
 						<th>{lang group_image}</th>
 						<td>
-							<input type="file" name="bannernew" id="bannernew" class="pf" size="25" />
+							<!--input type="file" name="bannernew" id="bannernew" class="pf" size="25" /-->
+							<!--{echo tpl_showsetting('', 'bannernew', $_G['forum']['banner'], $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
+
 				<!--{if $_G['forum']['banner']}-->
 							<label><input type="checkbox" name="deletebanner" class="pc" value="1" />{lang group_no_image}</label>
 							<p class="d">{lang group_no_image_comment}</p>
@@ -97,9 +106,15 @@
 					<tr>
 						<th>{lang group_icon}</th>
 						<td>
-							<input type="file" id="iconnew" class="pf vm" size="25" name="iconnew" />
+							<!--input type="file" id="iconnew" class="pf vm" size="25" name="iconnew" /-->
+							<!--{echo tpl_showsetting('', 'iconnew', $_G['forum']['icon'], $_G['adminid'] == 1 ? 'filetext' : 'text', '', 0, '', 'size="25"')}-->
+
+							<!--{if $_G['forum']['icon']}-->
+							<label><input type="checkbox" name="deleteicon" class="pc" value="1" />{lang group_no_image}</label>
+							<!--{/if}-->
+
 							<p class="d">
-								{lang group_icon_resize} &nbsp; 
+								{lang group_icon_resize} &nbsp;
 								<!--{if $_G[setting][group_imgsizelimit]}-->
 									{lang group_image_filesize_limit}
 								<!--{/if}--></p>

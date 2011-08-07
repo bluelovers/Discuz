@@ -51,6 +51,8 @@ if($gid) {
 }
 
 if(empty($curtype)) {
+	/*
+	// 取消自動跳轉到我的群組
 	if($_G['uid'] && empty($_G['mod'])) {
 		$usergroups = getuserprofile('groups');
 		if(!empty($usergroups)) {
@@ -58,6 +60,7 @@ if(empty($curtype)) {
 			exit;
 		}
 	}
+	*/
 	$curtype = array();
 
 } else {
@@ -140,6 +143,19 @@ if(!$metakeywords) {
 if(!$metadescription) {
 	$metadescription = $_G['setting']['navs'][3]['navname'];
 }
+
+// bluelovers
+// 檢查是否支援 Scorpio_Event
+if (discuz_core::$plugin_support['Scorpio_Event']) {
+	// 初始化 Dz_module_group_index:Before_template 事件
+	Scorpio_Event::instance('Dz_module_'.basename(__FILE__, '.php').':Before_template')
+		// 執行事件並傳遞參數
+		->run(array(array(
+			'curtype' => &$curtype,
+	)));
+}
+// bluelovers
+
 if(empty($curtype)) {
 	include template('diy:group/index');
 } else {

@@ -68,7 +68,19 @@ if($id) {
 		$f_index = '';
 		$need_count = true;
 
-		if(empty($_GET['view'])) $_GET['view'] = 'we';
+		if(empty($_GET['view'])) {
+			/*
+			$_GET['view'] = 'we';
+			*/
+			// 更改當 view 為空時的預設判定
+			space_merge($space, 'count');
+
+			if($space['friends'] > 0) {
+				$_GET['view'] = $_G['gp_view'] = 'we';
+			} else {
+				$_GET['view'] = $_G['gp_view'] = 'all';
+			}
+		}
 
 		if($_GET['view'] == 'all') {
 			$wheresql = "1";

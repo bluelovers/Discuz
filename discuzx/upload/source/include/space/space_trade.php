@@ -17,7 +17,19 @@ if($page<1) $page=1;
 $id = empty($_G['gp_id'])?0:intval($_G['gp_id']);
 $opactives['trade'] = 'class="a"';
 
-if(empty($_GET['view'])) $_GET['view'] = 'we';
+if(empty($_GET['view'])) {
+	/*
+	$_GET['view'] = 'we';
+	*/
+	// 更改當 view 為空時的預設判定
+	space_merge($space, 'count');
+
+	if($space['friends'] > 0) {
+		$_GET['view'] = $_G['gp_view'] = 'we';
+	} else {
+		$_GET['view'] = $_G['gp_view'] = 'all';
+	}
+}
 
 $perpage = 20;
 $perpage = mob_perpage($perpage);

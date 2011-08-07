@@ -11,6 +11,10 @@ $curprg = basename(__FILE__);
 $table_source = $db_source->tablepre.'rewardlog';
 $table_target = $db_target->tablepre.'common_credit_log';
 
+// bluelovers
+$table_target2 = $db_target->tablepre.'forum_thread_rewardlog';
+// bluelovers
+
 $limit = 1000;
 $nextid = 0;
 
@@ -21,6 +25,15 @@ if(empty($start) && !$process['truncate_credit_log']) {
 	save_process('main', $process);
 	$db_target->query("TRUNCATE $table_target");
 }
+
+// bluelovers
+if(!$start && !$process['truncate_forum_thread_rewardlog']) {
+	$start = 0;
+	$process['truncate_forum_thread_rewardlog'] = 1;
+	save_process('main', $process);
+	$db_target->query("TRUNCATE $table_target2");
+}
+// bluelovers
 
 $query = $db_source->query("SELECT * FROM ".$db_source->tablepre."settings WHERE variable IN ('creditstax', 'creditstrans')");
 while($setting = $db_source->fetch_array($query)) {
@@ -42,6 +55,14 @@ while ($row = $db_source->fetch_array($query)) {
 	$nextid = 1;
 
 	if($row['answererid'] > 0) {
+		// bluelovers
+		$rownew = array();
+
+		$rownew  = daddslashes($row, 1);
+		$data = implode_field_value($rownew, ',', db_table_fields($db_target, $table_target2));
+		$db_target->query("INSERT INTO $table_target2 SET $data");
+		// bluelovers
+
 		$rownew = array();
 		$rownew['uid'] = $row['answererid'];
 		$rownew['operation'] = 'RAC';

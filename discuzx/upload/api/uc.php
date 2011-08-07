@@ -200,7 +200,21 @@ class uc_note {
 		$uid = intval($get['uid']);
 		$query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid'");
 		if($member = DB::fetch($query)) {
-			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+			/*
+			 * 變更 uc 同步登入 synclogin 相關代碼(同步登入時會傳送瀏覽器訊息)
+			 * 變更 cookies 內的 auth 儲存的值
+			 */
+
+		 	$_agent = empty($get['agent']) ?
+			 	(empty($post['agent']) ?
+				 	md5($_SERVER['HTTP_USER_AGENT'])
+				 	: $post['agent']
+			 	) : $get['agent'];
+
+			dsetcookie('auth', authcode(implode(array(
+				$member['password'], $member['uid'],
+				$_G['clientip'], TIMESTAMP, $_agent,
+			), "\t"), 'ENCODE'), $cookietime);
 		}
 	}
 
@@ -246,8 +260,8 @@ class uc_note {
 		}
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/badwords.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -263,8 +277,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/hosts.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -286,8 +300,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/apps.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -314,8 +328,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/settings.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 
@@ -407,8 +421,8 @@ class uc_note {
 
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/creditsettings.php';
 		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'creditsettings\'] = '.var_export($outextcredits, TRUE).";\r\n";
+		$s = "<?php\n";
+		$s .= '$_CACHE[\'creditsettings\'] = '.var_export($outextcredits, TRUE).";\n";
 		fwrite($fp, $s);
 		fclose($fp);
 

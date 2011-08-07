@@ -17,7 +17,19 @@ if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $opactives['thread'] = 'class="a"';
 
-if(empty($_G['gp_view'])) $_G['gp_view'] = 'me';
+if(empty($_GET['view'])) {
+	/*
+	$_GET['view'] = 'we';
+	*/
+	// 更改當 view 為空時的預設判定
+	space_merge($space, 'count');
+
+	if($space['friends'] > 0) {
+		$_GET['view'] = $_G['gp_view'] = 'we';
+	} else {
+		$_GET['view'] = $_G['gp_view'] = 'all';
+	}
+}
 $_G['gp_order'] = empty($_G['gp_order']) ? 'dateline' : $_G['gp_order'];
 
 $allowviewuserthread = $_G['setting']['allowviewuserthread'];

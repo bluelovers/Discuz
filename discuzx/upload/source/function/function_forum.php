@@ -729,6 +729,13 @@ function loadarchiver($path) {
 	return DISCUZ_ROOT . "./source/archiver/$filename";
 }
 
+/**
+ * 用於熱度計算方式 $_G['setting']['heatthread']['type'] == 2 時使用
+ *
+ * $_G['setting']['heatthread']['type']
+ * 		1 => 按熱度公式
+ * 		2 => 按參與人次
+ */
 function update_threadpartake($tid) {
 	global $_G;
 	if($_G['uid'] && $tid) {

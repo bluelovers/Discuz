@@ -48,6 +48,13 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		}
 	}
 
+	// bluelovers
+	// 支援已經處理過變為 Array 的 $field['choices']
+	if (isset($field['choices'])) {
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	}
+	// bluelovers
+
 	$html = '';
 	$field['unchangeable'] = !$ignoreunchangable && $field['unchangeable'] ? 1 : 0;
 	if($fieldid == 'birthday') {
@@ -149,34 +156,34 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		if($field['formtype']=='textarea') {
 			$html = "<textarea name=\"$fieldid\" id=\"$fieldid\" class=\"pt\" rows=\"3\" cols=\"40\" tabindex=\"1\">$space[$fieldid]</textarea>";
 		} elseif($field['formtype']=='select') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"$fieldid\" class=\"ps\" tabindex=\"1\">";
-			foreach($field['choices'] as $op) {
-				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op</option>";
+			foreach($field['choices'] as $op => $op_value) {
+				$html .= "<option value=\"$op\"".($op==$space[$fieldid] ? 'selected="selected"' : '').">$op_value</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='list') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$html = "<select name=\"{$fieldid}[]\" class=\"ps\" multiple=\"multiplue\" tabindex=\"1\">";
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
-				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op</option>";
+			foreach($field['choices'] as $op => $op_value) {
+				$html .= "<option value=\"$op\"".(in_array($op, $space[$fieldid]) ? 'selected="selected"' : '').">$op_value</option>";
 			}
 			$html .= '</select>';
 		} elseif($field['formtype']=='checkbox') {
-			$field['choices'] = explode("\n", $field['choices']);
+//			$field['choices'] = explode("\n", $field['choices']);
 			$space[$fieldid] = explode("\n", $space[$fieldid]);
-			foreach($field['choices'] as $op) {
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 					."<label class=\"lb\"><input type=\"checkbox\" name=\"{$fieldid}[]\" class=\"pc\" value=\"$op\" tabindex=\"1\"".(in_array($op, $space[$fieldid]) ? ' checked="checked"' : '')." />"
-					."$op</label>";
+					."$op_value</label>";
 			}
 		} elseif($field['formtype']=='radio') {
-			$field['choices'] = explode("\n", $field['choices']);
-			foreach($field['choices'] as $op) {
+//			$field['choices'] = explode("\n", $field['choices']);
+			foreach($field['choices'] as $op => $op_value) {
 				$html .= ''
 						."<label class=\"lb\"><input type=\"radio\" name=\"{$fieldid}\" class=\"pr\" value=\"$op\" tabindex=\"1\"".($op == $space[$fieldid] ? ' checked="checked"' : '')." />"
-						."$op</label>";
+						."$op_value</label>";
 			}
 		} elseif($field['formtype']=='file') {
 			$html = "<input type=\"file\" value=\"\" name=\"$fieldid\" tabindex=\"1\" class=\"pf\" style=\"height:26px;\" /><input type=\"hidden\" name=\"$fieldid\" value=\"$space[$fieldid]\" />";
@@ -256,7 +263,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 	}
 
 	if($field['choices']) {
-		$field['choices'] = explode("\n", $field['choices']);
+		// 支援已經處理過變為 Array 的 $field['choices']
+		$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
 	}
 	if($field['formtype'] == 'text' || $field['formtype'] == 'textarea') {
 		$value = getstr($value, '', 1, 1);
@@ -271,7 +279,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {
-			if(in_array(stripslashes($op), $field['choices'])) {
+			// 以 array_key_exists 取代 in_array
+			if(array_key_exists(stripslashes($op), $field['choices'])) {
 				$arr[] = $op;
 			}
 		}
@@ -280,7 +289,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 			return false;
 		}
 	} elseif($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
-		if(!in_array(stripslashes($value), $field['choices'])){
+		// 以 array_key_exists 取代 in_array
+		if(!array_key_exists(stripslashes($value), $field['choices'])){
 			return false;
 		}
 	}
@@ -297,6 +307,12 @@ function profile_show($fieldid, $space=array()) {
 	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince'))) {
 		return false;
 	}
+
+	// bluelovers
+	$field['choices'] = is_array($field['choices']) ? $field['choices'] : explode("\n", $field['choices']);
+	// 目前的值
+	$value = $space[$fieldid];
+	// bluelovers
 
 	if($fieldid=='gender') {
 		return lang('space', 'gender_'.intval($space['gender']));
@@ -318,7 +334,36 @@ function profile_show($fieldid, $space=array()) {
 				.(!empty($space['residecommunity']) ? '&nbsp;'.$space['residecommunity'] : '');
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
+
+		// bluelovers
+		// 追加安全過濾網址
+		$url = trim($url);
+		if(preg_match("/^((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\"']+/i", $url, $matches)) {
+			$url = $matches[0];
+			$url = (substr(strtolower($url), 0, 4) == 'www.' ? 'http://'.$url : $url);
+		} else {
+			$url = 'http://'.$url;
+		}
+		// bluelovers
+
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
+
+	// bluelovers
+	// 追加欄位顯示判定
+	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
+		$arr = array();
+		foreach ($value as $op) {
+			if(array_key_exists($op, $field['choices'])) {
+				$arr[] = $field['choices'][$op];
+			}
+		}
+		$value = implode("\n", $arr);
+
+		return nl2br(trim($value, "\n"));
+	} elseif ($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
+		return isset($field['choices'][$value]) ? $field['choices'][$value] : false;
+	// bluelovers
+
 	} else {
 		return nl2br($space[$fieldid]);
 	}

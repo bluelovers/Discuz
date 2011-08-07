@@ -307,6 +307,12 @@ if($operation == 'filecheck') {
 	}
 
 } elseif($operation == 'rewrite') {
+	/**
+	 * 查看當前的 Rewrite 規則
+	 *
+	 * SEO設置
+	 * URL 靜態化
+	 */
 
 	$rule = array();
 	$rewritedata = rewritedata();
@@ -334,7 +340,39 @@ if($operation == 'filecheck') {
 	$rule['{nginx}'] .= "if (!-e \$request_filename) {\n\treturn 404;\n}";
 	echo str_replace(array_keys($rule), $rule, cplang('rewrite_message'));
 
+	// bluelovers
+	// auto build extensions/htaccess/dist/.htaccess
+	$filename = './extensions/htaccess/dist/.htaccess';
+
+	if ($fp = @fopen(DISCUZ_ROOT.$filename, 'w')) {
+		$_lf = "\n";
+		$_s = ''.$_lf;
+
+		foreach (glob(DISCUZ_ROOT.'./extensions/htaccess/*.htaccess') as $_v) {
+			$fpv = fopen($_v, 'r');
+			$context = @fread($fpv, filesize($_v));
+			fclose($fpv);
+
+			$_s .= $_lf.str_replace(array("\r\n", "\n\r"), "\n", $context).$_lf;
+		}
+
+		$_s = preg_replace('/\n\n\n+/', $_lf.$_lf, $_s);
+
+		fwrite($fp, $_s);
+		fclose($fp);
+	} else {
+		exit('Can not write to cache files, please check directory ' . $filename);
+	}
+	// bluelovers
+
 } elseif($operation == 'robots') {
+	/**
+	 * 生成 robots.txt
+	 *
+	 * SEO設置
+	 * 其他
+	 * 搜索引擎優化
+	 */
 
 	if($do == 'output') {
 		$robots = implode('', file(DISCUZ_ROOT.'./source/admincp/robots.txt'));

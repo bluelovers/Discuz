@@ -74,8 +74,8 @@ function groupuserlist($fid, $orderby = '', $num = 0, $start = 0, $addwhere = ''
 		}
 	}
 
-	$orderbyarray = array('level_join' => 'level ASC, joindateline ASC', 'joindateline' => 'joindateline DESC', 'lastupdate' => 'lastupdate DESC', 'threads' => 'threads DESC', 'replies' => 'replies DESC');
-	$orderby = !empty($orderbyarray[$orderby]) ? "ORDER BY $orderbyarray[$orderby]" : '';
+	$orderbyarray = array('level_join' => 'level ASC, joindateline ASC, lastupdate DESC, threads DESC, replies DESC', 'joindateline' => 'joindateline DESC, level ASC, threads DESC, replies DESC', 'lastupdate' => 'lastupdate DESC, threads DESC, replies DESC', 'threads' => 'threads DESC, lastupdate DESC, replies DESC', 'replies' => 'replies DESC, lastupdate DESC, threads DESC');
+	$orderby = !empty($orderbyarray[$orderby]) ? "ORDER BY $orderbyarray[$orderby], level ASC, username ASC" : '';
 	$limitsql = $num ? "LIMIT ".($start ? intval($start) : 0).", $num" : '';
 
 	$groupuserlist = array();
@@ -177,7 +177,12 @@ function mygrouplist($uid, $orderby = '', $fieldarray = array(), $num = 0, $star
 
 function get_groupimg($imgname, $imgtype = '') {
 	global $_G;
-	$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
+	// 群組圖片修正為可判斷是否為 url 圖片
+	if (!preg_match('/^https?:\/\//i', $imgname)) {
+		$imgpath = $_G['setting']['attachurl'].'group/'.$imgname;
+	} else {
+		$imgpath = $imgname;
+	}
 	if($imgname) {
 		return $imgpath;
 	} else {

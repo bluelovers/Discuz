@@ -11,12 +11,19 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
+function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username=''
+// bluelovers
+, $dateline = 0
+// bluelovers
+) {
 	global $_G;
 
+	// for lang_template
+	/*
 	$title_template = $title_template?lang('feed', $title_template):'';
 	$body_template = $body_template?lang('feed', $body_template):'';
 	$body_general = $body_general?lang('feed', $body_general):'';
+	*/
 	if(empty($uid) || empty($username)) {
 		$uid = $username = '';
 	}
@@ -26,7 +33,8 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 		'icon' => $icon,
 		'uid' => $uid ? intval($uid) : $_G['uid'],
 		'username' => $username ? $username : $_G['username'],
-		'dateline' => $_G['timestamp'],
+		// 新增允許自訂 dateline
+		'dateline' => $dateline > 0 ? $dateline : $_G['timestamp'],
 		'title_template' => $title_template,
 		'body_template' => $body_template,
 		'body_general' => $body_general,
@@ -48,6 +56,17 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	$feedarr['title_data'] = serialize(dstripslashes($title_data));
 	$feedarr['body_data'] = serialize(dstripslashes($body_data));
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
+
+	// bluelovers
+	// Event: Func_feed_add:Before_feedarr_addslashes
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_feedarr_addslashes')
+			->run(array(array(
+			'feedarr' => &$feedarr,
+		)));
+	}
+	// bluelovers
+
 	$feedarr = daddslashes($feedarr);
 
 	if(is_numeric($icon)) {
@@ -71,6 +90,9 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 	}
 }
 
+/**
+ * 整理feed
+ **/
 function mkfeed($feed, $actors=array()) {
 	global $_G;
 
@@ -79,6 +101,20 @@ function mkfeed($feed, $actors=array()) {
 	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@unserialize($feed['body_data']));
 	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
+	// bluelovers
+	// Event: Func_mkfeed:Before
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before')
+			->run(array(&$feed));
+	}
+	// bluelovers
+
+	// bluelovers
+	// 整理名單避免出現重複名稱
+	$actors && $actors = array_unique($actors);
+	// bluelovers
+
+	// title
 	$searchs = $replaces = array();
 	if($feed['title_data']) {
 		foreach (array_keys($feed['title_data']) as $key) {
@@ -88,10 +124,21 @@ function mkfeed($feed, $actors=array()) {
 	}
 
 	$searchs[] = '{actor}';
-	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+	// 減少多餘的新視窗 target=\"_blank\"
+	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
+
+	// bluelovers
+	// Event: Func_mkfeed:Before_title_template
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_title_template')
+			->run(array(&$feed, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$feed['title_template'] = str_replace($searchs, $replaces, $feed['title_template']);
 	$feed['title_template'] = feed_mktarget($feed['title_template']);
 
+	// body
 	$searchs = $replaces = array();
 	$searchs[] = '{actor}';
 	$replaces[] = empty($actors)?"<a href=\"home.php?mod=space&uid=$feed[uid]\" target=\"_blank\">$feed[username]</a>":implode(lang('core', 'dot'), $actors);
@@ -107,11 +154,20 @@ function mkfeed($feed, $actors=array()) {
 		$feed['magic_class'] = 'magicthunder';
 	}
 
+	// bluelovers
+	// Event: Func_mkfeed:Before_body_template
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_body_template')
+			->run(array(&$feed, &$searchs, &$replaces));
+	}
+	// bluelovers
+
 	$feed['body_template'] = str_replace($searchs, $replaces, $feed['body_template']);
 	$feed['body_template'] = feed_mktarget($feed['body_template']);
 
 	$feed['body_general'] = feed_mktarget($feed['body_general']);
 
+	// icon
 	if(is_numeric($feed['icon'])) {
 		$feed['icon_image'] = "http://appicon.manyou.com/icons/{$feed['icon']}";
 	} else {
@@ -136,7 +192,9 @@ function feed_mktarget($html) {
 	return $html;
 }
 
-
+/**
+ * 產生動態
+ **/
 function feed_publish($id, $idtype, $add=0) {
 	global $_G;
 
@@ -241,13 +299,32 @@ function feed_publish($id, $idtype, $add=0) {
 	}
 
 	if($setarr['icon']) {
+		/*
 		$setarr['title_template'] = $setarr['title_template']?lang('feed', $setarr['title_template']):'';
 		$setarr['body_template'] = $setarr['body_template']?lang('feed', $setarr['body_template']):'';
 		$setarr['body_general'] = $setarr['body_general']?lang('feed', $setarr['body_general']):'';
+		*/
 
 		$setarr['title_data']['hash_data'] = "{$idtype}{$id}";
+
+		// bluelovers
+		// fix hash_data
+		$setarr['hash_data'] = empty($setarr['title_data']['hash_data']) ? '' : $setarr['title_data']['hash_data'];
+		// bluelovers
+
 		$setarr['title_data'] = serialize($setarr['title_data']);
 		$setarr['body_data'] = serialize($setarr['body_data']);
+
+		// bluelovers
+		// Event: Func_feed_publish:Before_feedarr_addslashes
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_feedarr_addslashes')
+				->run(array(array(
+				'feedarr' => &$setarr,
+			)));
+		}
+		// bluelovers
+
 		$setarr = daddslashes($setarr);
 
 		$feedid = 0;
@@ -257,8 +334,22 @@ function feed_publish($id, $idtype, $add=0) {
 		}
 		if($status == 0) {
 			if($feedid) {
+
+				// bluelovers
+				// Event: Func_feed_publish:Before_update
+				if (discuz_core::$plugin_support['Scorpio_Event']) {
+					Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_update')
+						->run(array(array(
+						'feedarr' => &$setarr,
+
+						'feedid' => &$feedid,
+					)));
+				}
+				// bluelovers
+
 				DB::update('home_feed', $setarr, array('feedid'=>$feedid));
 			} else {
+				//TODO:change to use feed_add
 				DB::insert('home_feed', $setarr);
 			}
 		}

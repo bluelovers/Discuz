@@ -52,16 +52,33 @@ class task_post {
 		),
 		'num' => array(
 			'title' => 'post_complete_var_num',
-			'type' => 'text',
+			'type' => 'number',
 			'value' => '',
 			'sort' => 'complete',
 		),
 		'time' => array(
 			'title' => 'post_complete_var_time',
-			'type' => 'text',
+			'type' => 'number',
 			'value' => '',
 			'sort' => 'complete',
 		)
+
+		// bluelovers
+		,
+		/**
+		 * 領取獎勵時間限制(小時)
+		 *
+		 * 設置會員從申請任務到完成任務領取獎勵的時間限制，
+		 * 會員在此時間內即使完成任務也不能領取獎勵，
+		 * 0 或留空為不限制
+		 */
+		'time_reward' => array(
+			'title' => 'post_complete_var_time_reward',
+			'type' => 'number',
+			'value' => '',
+			'sort' => 'complete',
+		)
+		// bluelovers
 	);
 
 	function task_post() {
@@ -107,7 +124,22 @@ class task_post {
 			}
 		}
 
-		$sqladd .= ($taskvars['time'] = floatval($taskvars['time'])) ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
+		/**
+		 * $taskvars['time']
+		 * 	= 0 : 從接取任務之後開始算
+		 * 	> 0 : 接取任務之後幾小時內
+		 * 	< 0 : 不限制時間(就算在接任務之前已經完成了也可以)
+		 */
+	 	// bluelovers
+	 	$taskvars['time'] = floatval($taskvars['time']);
+	 	if ($taskvars['time'] >= 0) {
+ 		// bluelovers
+
+			$sqladd .= $taskvars['time'] ? " AND p.dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND p.dateline>$task[applytime]";
+
+		// bluelovers
+		}
+		// bluelovers
 
 		$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable())." p $tbladd WHERE p.authorid='{$_G['uid']}' $sqladd");
 

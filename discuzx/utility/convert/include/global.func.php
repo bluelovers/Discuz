@@ -14,13 +14,15 @@ function remaintime($time) {
 	return array((int)$days, (int)$hours, (int)$minutes, (int)$seconds);
 }
 
-function daddslashes($string, $trim = '0') {
+function daddslashes($string, $trim = '0', $strip = FALSE) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
 			$string[$key] = daddslashes($val);
 		}
 	} else {
-		$string = $trim ? trim(addslashes($string)) : addslashes($string);
+//		$string = $trim ? trim(addslashes($string)) : addslashes($string);
+		$string = addslashes($strip ? stripslashes($string) : $string);
+		$string = $trim ? trim($string) : $string;
 	}
 	return $string;
 }
@@ -485,9 +487,28 @@ function loadsetting($folder) {
 	return $ret;
 }
 
-function loadconfig($file = 'config.inc.php') {
+function loadconfig($file = null) {
+	// bluelovers
+	// 更改為可依照不同的升級來讀取設定
+	!$file && $file = 'config.inc.php'.'.'.$GLOBALS['source'].'.php';
+	// bluelovers
 	$_config = array();
 	@include DISCUZ_ROOT.'./data/'.$file;
+
+	// bluelovers
+	/**
+	 * 注意：如果源數據庫與目標數據庫在同一服務器，該項必須設置為0，否則設置為1
+	 *
+	 * 自動處理防止源數據庫與目標數據庫在同一服務造成意外的 BUG
+	 */
+	if(!empty($_config)
+		&& $_config['source']['dbhost'] == $_config['target']['dbhost']
+		&& $_config['source']['pconnect'] == $_config['target']['pconnect']
+	) {
+		$_config['source']['pconnect'] = $_config['target']['pconnect'] = 0;
+	}
+	// bluelovers
+
 	return $_config;
 }
 
@@ -575,7 +596,8 @@ function getvars($data, $type = 'VAR') {
 			continue;
 		}
 		if(is_array($val)) {
-			$evaluate .= buildarray($val, 0, "\${$key}")."\r\n";
+//			$evaluate .= buildarray($val, 0, "\${$key}")."\r\n";
+			$evaluate .= buildarray($val, 0, "\${$key}")."\n";
 		} else {
 			$val = addcslashes($val, '\'\\');
 			$evaluate .= $type == 'VAR' ? "\$$key = '$val';\n" : "define('".strtoupper($key)."', '$val');\n";
@@ -595,7 +617,8 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 50, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\r\n";
+//			$return .= "\r\n// $newline //\r\n";
+			$return .= "\n// $newline //\n";
 		}
 
 		$ks[$level] = $ks[$level - 1]."['$key']";
@@ -604,7 +627,8 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 			$return .= buildarray($val, $level + 1, $pre);
 		} else {
 			$val = !is_array($val) && (!preg_match("/^\-?[1-9]\d*$/", $val) || strlen($val) > 12) ? '\''.addcslashes($val, '\'\\').'\'' : $val;
-			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+//			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
+			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\n";
 		}
 	}
 	return $return;
@@ -622,7 +646,10 @@ function save_config_file($filename, $config, $default) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
+	/*
 	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
+	*/
+	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	file_put_contents($filename, $content);
 }
 
@@ -768,3 +795,203 @@ if(!function_exists('file_put_contents')) {
 		return $return;
 	}
 }
+
+// bluelovers
+function s_trim($string, $charlist = null, $ltrim = 0, $strip = false) {
+	$ret = $strip ? stripslashes($string) : $string;
+
+//	$charlist .= '';
+
+	$ret = str_replace("\r\n", "\n", $ret);
+//	$ret = preg_replace(array("/[ \t]+\r?\n/iU", "/　+\n/iU"), "\n", $ret);
+//	$ret = preg_replace(array("/(　|\t| )+$|(　|\t| )+\n/U", "/^\n+|\n$/"), array("\n", ''), $ret);
+	$ret = preg_replace(array(
+		"/(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+$|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+\n/sU",
+		"/^\n+|\s*$/s",
+		'/[\t ]+(\n)/iSUu',
+	), array(
+		"\n", '', '\\1'
+	), $ret);
+
+	$ret = rtrim($ret, $charlist);
+
+	if ($ltrim) $ret = ltrim($ret);
+
+	return $strip ? addslashes($ret) : $ret;
+}
+
+function s_stripslashes($str) {
+	return preg_replace(array('/\x5C(?!\x5C)/u', '/\x5C\x5C/u'), array('','\\'), $str);
+}
+
+function s_trim_nickname($string, $multiline = false) {
+	if (empty($string)) return '';
+
+	$string = htmlspecialchars_decode($string, ENT_QUOTES);
+
+	$string = s_stripslashes($string);
+//	$string = preg_replace('/\\\\[\'"]|^\\\\?[\*\'"\?]|\\\\?[\*\'"\?]$/i', '', $string);
+//	$string = preg_match('/\\\\?[\'"\?\*]/', $string) ? stripslashes($string) : $string;
+
+//	exit($string);
+
+//	$string = s_trim($string, '\'"*');
+//	$string = preg_replace('/[\'"\\\*\?]+[\'"\\\*\?]+|[\'"\\\?\﹛]+$|\*{2,}$|^[\'"\\\*\?]+|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+$|^(\xa1\xa1|\xa1\x40|\xe3\x80\x80|\t| )+/', '', $string);
+
+	$string = str_replace(array("\r\n", '&#20;064;'), array("\n", '@'), $string);
+	$string = str_replace(array(
+		'&#19;', '請填寫本項目，不允許留空、請勿',
+		'&#10;', '&#9;', '&#12;', '&#14;',
+		'ji3g42y2u/ 2u',
+	), '', $string);
+
+//	$string = preg_replace('/[\'"\\\*\?]+[\'"\\\*\?]+|[\'"\\\?\._\s]+$|\*{2,}$|^[\'"\\\*\?\s\.]+|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|&amp;?|&|\t| |﹛|\/\*|\s+[\'"\\\*\?\.\^!@\$\/\(]+|\/|[\s\,]+\<)+$|^(\xa1\xa1|\xa1\x40|\xe3\x80\x80|&amp;?\**|\t| |\/|[\+\$=]+)+\s*|^[0-9\s\.\-\+]+$|\.+[\\\/]+|[\\\/]+\.+/', '', $string);
+	$string = preg_replace('/[\'"\\\*\?]+[\'"\\\*\?]+|[\'"\\\?\._\s]+$|\*{2,}$|^[\'"\\\*\?\s\.\|\]\,]+|(\xa1\xa1|\xa1\x40|\xe3\x80\x80|&amp;?|&|\t| |﹛|\/\*|\s+[\'"\\\*\?\.\,\^!@\$\/\(]+|\/|[\s\,]+\<|♬)+$|^(\xa1\xa1|\xa1\x40|\xe3\x80\x80|&amp;?\**|\t| |\/|[\+\$=]+|♬)+\s*|^([0-9\s\.\-\+=\,]+)$|\.+[\\\\\/]+|([\\\\\/]+)\.+|&(amp;?)?#[0-9];?\s*$|^[0-9!@\\?\|#~\$%\^&amp;\*\.+\-=\s\)\(\[\]]+$/', '', $string);
+
+//	$string = str_replace("\r\n", "\n", $string);
+//	!$multiline && str_replace("\n", '', $string);
+
+	if (s_valid_url($string) || s_valid_email($string) || empty($string)) return '';
+
+	$string = dhtmlspecialchars($string, ENT_QUOTES);
+//	$string = htmlspecialchars($string, ENT_QUOTES, 'utf-8');
+
+//	$string = mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string));
+//	$string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+
+	return $string;
+}
+
+/**
+ * Validate a URL.
+ *
+ * @param   string   URL
+ * @return  boolean
+ */
+function s_valid_url($url)
+{
+	// Based on http://www.apps.ietf.org/rfc/rfc1738.html#sec-5
+	if ( ! preg_match(
+		'~^
+
+		# scheme
+		[-a-z0-9+.]++://
+
+		# username:password (optional)
+		(?:
+			    [-a-z0-9$_.+!*\'(),;?&=%]++   # username
+			(?::[-a-z0-9$_.+!*\'(),;?&=%]++)? # password (optional)
+			@
+		)?
+
+		(?:
+			# ip address
+			\d{1,3}+(?:\.\d{1,3}+){3}+
+
+			| # or
+
+			# hostname (captured)
+			(
+				     (?!-)[-a-z0-9]{1,63}+(?<!-)
+				(?:\.(?!-)[-a-z0-9]{1,63}+(?<!-)){0,126}+
+			)
+		)
+
+		# port (optional)
+		(?::\d{1,5}+)?
+
+		# path (optional)
+		(?:/.*)?
+
+		$~iDx', $url, $matches))
+		return FALSE;
+
+	// We matched an IP address
+	if ( ! isset($matches[1]))
+		return TRUE;
+
+	// Check maximum length of the whole hostname
+	// http://en.wikipedia.org/wiki/Domain_name#cite_note-0
+	if (strlen($matches[1]) > 253)
+		return FALSE;
+
+	// An extra check for the top level domain
+	// It must start with a letter
+	$tld = ltrim(substr($matches[1], (int) strrpos($matches[1], '.')), '.');
+	return ctype_alpha($tld[0]);
+}
+
+/**
+ * Check an email address for correct format.
+ *
+ * @link  http://www.iamcal.com/publish/articles/php/parsing_email/
+ * @link  http://www.w3.org/Protocols/rfc822/
+ *
+ * @param   string   email address
+ * @param   boolean  strict RFC compatibility
+ * @return  boolean
+ */
+function s_valid_email($email, $strict = FALSE)
+{
+	if ($strict === TRUE)
+	{
+		$qtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
+		$dtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
+		$atom  = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
+		$pair  = '\\x5c[\\x00-\\x7f]';
+
+		$domain_literal = "\\x5b($dtext|$pair)*\\x5d";
+		$quoted_string  = "\\x22($qtext|$pair)*\\x22";
+		$sub_domain     = "($atom|$domain_literal)";
+		$word           = "($atom|$quoted_string)";
+		$domain         = "$sub_domain(\\x2e$sub_domain)*";
+		$local_part     = "$word(\\x2e$word)*";
+
+		$expression     = "/^$local_part\\x40$domain$/D";
+	}
+	else
+	{
+		$expression = '/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})(?::\d++)?$/iD';
+	}
+
+	return (bool) preg_match($expression, (string) $email);
+}
+
+function dhtmlspecialchars($string, $quote_style = null, $htmlspecialchars_decode = false, $htmlspecialchars_decode_quote_style = null) {
+	if(is_array($string)) {
+		foreach($string as $key => $val) {
+			$string[$key] = dhtmlspecialchars($val, $quote_style, $htmlspecialchars_decode, $htmlspecialchars_decode_quote_style);
+		}
+	} else {
+//		$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1',
+//		str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string));
+
+		$searcharray1 = array('&', '"', '<', '>');
+		$replacearray1 = array('&amp;', '&quot;', '&lt;', '&gt;');
+
+		if ($quote_style & ENT_QUOTES) {
+			$searcharray1[] = "'";
+			$replacearray1[] = '&#039;';
+		}
+
+		$searcharray = array
+			(
+				"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+				"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+			);
+		$replacearray = array
+			(
+				"&#\\1;",
+				"&#\\1;",
+			);
+
+		$string = preg_replace($searcharray, $replacearray, str_replace($searcharray1, $replacearray1, $string));
+
+		// bluelovers
+		$htmlspecialchars_decode && $string = htmlspecialchars_decode($string, $htmlspecialchars_decode_quote_style);
+		// bluelovers
+	}
+	return $string;
+}
+// bluelovers
+?>

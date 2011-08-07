@@ -1889,7 +1889,7 @@ EOF;
 		$member['lastvisit'] = dgmdate($member['lastvisit'], 'Y-n-j h:i A');
 
 		$member['bio'] = html2bbcode($member['bio']);
-		$member['signature'] = html2bbcode($member['sightml']);
+		$member['signature'] = $member['sightml'];
 
 		shownav('user', 'members_edit');
 		showsubmenu("$lang[members_edit] - $member[username]", array(
@@ -1980,7 +1980,7 @@ EOF;
 
 		$signaturenew = censor($_G['gp_signaturenew']);
 		$sigstatusnew = $signaturenew ? 1 : 0;
-		$sightmlnew = addslashes(discuzcode(dstripslashes($signaturenew), 1, 0, 0, 0, ($member['allowsigbbcode'] ? ($member['allowcusbbcode'] ? 2 : 1) : 0), $member['allowsigimgcode'], 0));
+		$sightmlnew = $signaturenew;
 
 		$oltimenew = round($_G['gp_totalnew'] / 60);
 
@@ -2203,7 +2203,8 @@ EOF;
 
 			showformheader('members&operation=profile&fieldid='.$fieldid);
 			showtableheader();
-			if($field['customable']) {
+			// 強制可編輯用戶欄目名稱與介紹
+			if(1 || $field['customable']) {
 				showsetting('members_profile_edit_name', 'title', $field['title'], 'text');
 				showsetting('members_profile_edit_desc', 'description', $field['description'], 'text');
 			} else {
@@ -2258,7 +2259,12 @@ EOF;
 						} else {
 							$class = $checked = '';
 						}
-						$groupstr .= "<li $class style=\"float: left; width: 10%;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]</li>";
+
+						// bluelovers
+						$_s_add = "<span class=\"lightfont\" title=\"$key\"> ( $key )</span>";
+						// bluelovers
+
+						$groupstr .= "<li $class style=\"float: left; width: auto;\"><input type=\"checkbox\" value=\"$key\" name=\"profilegroup[$key]\" class=\"checkbox\" $checked>&nbsp;$value[title]{$_s_add}</li>";
 					}
 				}
 				if(!empty($groupstr)) {
@@ -2396,6 +2402,11 @@ EOF;
 			showtableheader('members_profile', 'nobottom', 'id="porfiletable"');
 			showsubtitle(array('members_profile_edit_name', 'members_profile_edit_display_order', 'members_profile_edit_available', 'members_profile_edit_profile_view', 'members_profile_edit_card_view', 'members_profile_edit_reg_view', ''));
 			foreach($list as $fieldid => $value) {
+
+				// bluelovers
+				$value['title'] .= "<span class=\"lightfont\" title=\"$fieldid\"> ( $fieldid )</span>";
+				// bluelovers
+
 				$value['available'] = '<input type="checkbox" class="checkbox" name="available['.$fieldid.']" '.($value['available'] ? 'checked="checked" ' : '').'value="1">';
 				$value['invisible'] = '<input type="checkbox" class="checkbox" name="invisible['.$fieldid.']" '.(!$value['invisible'] ? 'checked="checked" ' : '').'value="1">';
 				$value['showincard'] = '<input type="checkbox" class="checkbox" name="showincard['.$fieldid.']" '.($value['showincard'] ? 'checked="checked" ' : '').'value="1">';
@@ -2748,10 +2759,11 @@ function showsearchform($operation = '') {
 			showsetting($value['title'], '', '', '<select class="txt" name="zodiac">'.$select.'</select>');
 		} elseif($value['formtype'] == 'select' || $value['formtype'] == 'list') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
-			$value['choices'] = explode("\n",$value['choices']);
-			foreach($value['choices'] as $option) {
+			// 支援已經處理過變為 Array 的 $value['choices']
+			$value['choices'] = is_array($value['choices']) ? $value['choices'] : explode("\n", $value['choices']);
+			foreach($value['choices'] as $option => $option_value) {
 				$option = trim($option);
-				$select .= "<option value=\"$option\">$option</option>\n";
+				$select .= "<option value=\"$option\">$option_value</option>\n";
 			}
 			showsetting($value['title'], '', '', '<select class="txt" name="'.$fieldid.'">'.$select.'</select>');
 		} else {

@@ -716,10 +716,10 @@ if(!submitcheck('settingsubmit')) {
 			'viewthread_group' => 'bbname,forum,first,second,gdes,subject,summary,tags,page',
 		);
 		foreach($codetypes as $key => $val) {
-			$jscodetypes .= "codetypes['{$key}'] = '{$val}';\r\n";
+			$jscodetypes .= "codetypes['{$key}'] = '{$val}';\n";
 			foreach(explode(',', $val) as $code) {
 				$cname = $code == 'bbname' ? cplang('setting_seo_code_bbname') : cplang('setting_seo_code_'.$key.'_'.$code);
-				$jscodenames .= "codenames['{$key}_{$code}'] = '{$cname}';\r\n";
+				$jscodenames .= "codenames['{$key}_{$code}'] = '{$cname}';\n";
 			}
 		}
 		print <<<EOF
@@ -908,6 +908,7 @@ EOF;
 		showsetting('setting_functions_archiver', 'settingnew[archiver]', $setting['archiver'], 'radio', 0, 1);
 		showsetting('setting_functions_archiverredirect', 'settingnew[archiverredirect]', $setting['archiverredirect'], 'radio');
 		showtagfooter('tbody');
+		// 管理記錄保留時間(月)
 		showsetting('setting_functions_mod_maxmodworksmonths', 'settingnew[maxmodworksmonths]', $setting['maxmodworksmonths'], 'text');
 		showsetting('setting_functions_mod_losslessdel', 'settingnew[losslessdel]', $setting['losslessdel'], 'text');
 		showsetting('setting_functions_mod_reasons', 'settingnew[modreasons]', $setting['modreasons'], 'textarea');
@@ -1080,7 +1081,7 @@ EOF;
 		$extcreditsbtn = '';
 		for($i = 1; $i <= 8; $i++) {
 			$extcredittitle = $_G['setting']['extcredits'][$i]['title'] ? $_G['setting']['extcredits'][$i]['title'] : cplang('setting_credits_formula_extcredits').$i;
-			$resultstr .= 'result = result.replace(/extcredits'.$i.'/g, \'<u>'.str_replace("'", "\'", $extcredittitle).'</u>\');'."\r\n";
+			$resultstr .= 'result = result.replace(/extcredits'.$i.'/g, \'<u>'.str_replace("'", "\'", $extcredittitle).'</u>\');'."\n";
 			$extcreditsbtn .= '<a href="###" onclick="insertunit(\'extcredits'.$i.'\')">'.$extcredittitle.'</a> &nbsp;';
 		}
 		$formulareplace .= '\'<u>'.cplang('setting_credits_formula_digestposts').'</u>\',\'<u>'.cplang('setting_credits_formula_posts').'</u>\'';
@@ -1133,7 +1134,7 @@ EOF;
 			if(textend != '') {
 				text = text + sel.text + textend;
 			}
-			sel.text = text.replace(/\r?\n/g, '\r\n');
+			sel.text = text.replace(/\r?\n/g, '\n');
 			sel.moveStart('character', -strlen(text));
 		} else {
 			$('creditsformula').value += text;
@@ -1479,7 +1480,8 @@ EOT;
 
 	} elseif($operation == 'datetime') {
 
-		$checktimeformat = array($setting['timeformat'] == 'H:i' ? 24 : 12 => 'checked');
+		// 判斷是否為 24H 制
+		$checktimeformat = array(($setting['timeformat'] == 'H:i' || $setting['timeformat'] == 'H:i:s') ? 24 : 12 => 'checked');
 
 		$setting['userdateformat'] = dateformat($setting['userdateformat']);
 		$setting['dateformat'] = dateformat($setting['dateformat']);
@@ -2101,15 +2103,15 @@ EOT;
 	}
 
 	if(isset($settingnew['censoruser'])) {
-		$settingnew['censoruser'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['censoruser']));
+		$settingnew['censoruser'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\n", $settingnew['censoruser']));
 	}
 
 	if(isset($settingnew['ipregctrl'])) {
-		$settingnew['ipregctrl'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\r\n", $settingnew['ipregctrl']));
+		$settingnew['ipregctrl'] = trim(preg_replace("/\s*(\r\n|\n\r|\n|\r)\s*/", "\n", $settingnew['ipregctrl']));
 	}
 
 	if(isset($settingnew['ipaccess'])) {
-		if($settingnew['ipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['ipaccess']))) {
+		if($settingnew['ipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['ipaccess']))) {
 			if(!ipaccess($_G['clientip'], $settingnew['ipaccess'])) {
 				cpmsg('setting_ipaccess_invalid', '', 'error');
 			}
@@ -2126,7 +2128,7 @@ EOT;
 	}
 
 	if(isset($settingnew['adminipaccess'])) {
-		if($settingnew['adminipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['adminipaccess']))) {
+		if($settingnew['adminipaccess'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['adminipaccess']))) {
 			if(!ipaccess($_G['clientip'], $settingnew['adminipaccess'])) {
 				cpmsg('setting_adminipaccess_invalid', '', 'error');
 			}
@@ -2430,7 +2432,7 @@ EOT;
 					$periodarray[] = $period;
 				}
 			}
-			$settingnew[$periods] = implode("\r\n", $periodarray);
+			$settingnew[$periods] = implode("\n", $periodarray);
 		}
 	}
 
@@ -2451,7 +2453,8 @@ EOT;
 	}
 
 	if(isset($settingnew['timeformat'])) {
-		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i' : 'h:i A';
+		// 增加顯示秒數
+		$settingnew['timeformat'] = $settingnew['timeformat'] == '24' ? 'H:i:s' : 'h:i:s A';
 	}
 
 	if(isset($settingnew['dateformat'])) {
@@ -2507,7 +2510,7 @@ EOT;
 	}
 
 	if(isset($settingnew['jsrefdomains'])) {
-		$settingnew['jsrefdomains'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['jsrefdomains']));
+		$settingnew['jsrefdomains'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['jsrefdomains']));
 	}
 
 	if(isset($settingnew['jsdateformat'])) {
@@ -2740,7 +2743,7 @@ EOT;
 	}
 
 	if(isset($settingnew['domainwhitelist'])) {
-		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\r\n", $settingnew['domainwhitelist']));
+		$settingnew['domainwhitelist'] = trim(preg_replace("/(\s*(\r\n|\n\r|\n|\r)\s*)/", "\n", $settingnew['domainwhitelist']));
 	}
 
 	if(isset($settingnew['shownewuser']) && !$settingnew['shownewuser']) {
@@ -2841,7 +2844,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		$s .= "\r\n".$replace;
+		$s .= "\n".$replace;
 	}
 	return $s;
 }

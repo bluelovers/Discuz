@@ -17,6 +17,9 @@
 		<!--{/if}-->
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="wp cl">
 	<h1 class="mt"><img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $tagname</h1>
 	<!--{if empty($showtype) || $showtype == 'thread'}-->
@@ -58,16 +61,20 @@
 									<!--{/if}-->
 								</td>
 								<th>
+									<!-- 搭配 css 垂直對齊 -->
+									<span>
+									<!-- 搭配 css 垂直對齊 -->
+
 									<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" $thread[highlight]>$thread['subject']</a>
-									<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
+									<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
 									<!--{if $thread['price'] > 0}-->
 										<!--{if $thread['special'] == '3'}-->
 										- <span style="color: #C60">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 										<!--{else}-->
-										- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
+										- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
 										<!--{/if}-->
 									<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
-										- [{lang reward_solved}]
+										- <span>[{lang reward_solved}]</span>
 									<!--{/if}-->
 									<!--{if $thread['attachment'] == 2}-->
 										<img src="{STATICURL}image/filetype/image_s.gif" alt="attach_img" title="{lang attach_img}" align="absmiddle" />
@@ -77,6 +84,10 @@
 									<!--{if $thread['digest'] > 0 && $filter != 'digest'}-->
 										<img src="{IMGDIR}/digest_$thread[digest].gif" align="absmiddle" alt="digest" title="{lang thread_digest} $thread[digest]" />
 									<!--{/if}-->
+
+									<!-- 搭配 css 垂直對齊 -->
+									</span>
+									<!-- 搭配 css 垂直對齊 -->
 								</th>
 								<td class="by"><a href="forum.php?mod=forumdisplay&fid=$thread[fid]">$thread['forumname']</a></td>
 								<td class="by">
@@ -161,6 +172,9 @@
 		</div>
 	<!--{/if}-->
 <!--{else}-->
+
+	<!--{subtpl subblock/common/body_ct_header}-->
+
 	<div id="ct" class="wp cl">
 		<h1 class="mt"><img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $searchtagname</h1>
 		<div class="bm">

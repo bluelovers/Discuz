@@ -270,6 +270,20 @@ if(!$operation) {
 							$pluginarray = getimportdata('Discuz! Plugin', 1, 1);
 							if(!empty($pluginarray['plugin']['name'])) {
 								$entrytitle = dhtmlspecialchars($pluginarray['plugin']['name']);
+
+								// bluelovers
+								/**
+								 * 嘗試判定插件名稱編碼使其正確顯示名稱
+								 * @author bluelovers
+								 * @example 积分竞拍 (EUC-CN)
+								 **/
+								if (@extension_loaded('mbstring')) {
+									$_detect = mb_detect_encoding($entrytitle, 'EUC-CN, BIG-5, UTF-8');
+									if ($_detect != strtoupper(CHARSET)) $entrytitle = mb_convert_encoding($pluginarray['plugin']['name'], strtoupper(CHARSET), $_detect);
+									$entrytitle .= ' ('.$_detect.')';
+								}
+								// bluelovers
+
 								$entryversion = dhtmlspecialchars($pluginarray['plugin']['version']);
 								$entrycopyright = dhtmlspecialchars($pluginarray['plugin']['copyright']);
 							}
@@ -301,19 +315,50 @@ if(!$operation) {
 			$xmls = '';$count = 0;
 			$referer = dreferer();
 			while($f = $d->read()) {
+				/**
+				 * 改良插件xml編碼名稱的相容性。
+				 *
+				 * SC_GBK = GBK
+				 * TC_BIG5 = BIG5
+				 *
+				 * @example admin.php?action=plugins&operation=import&dir=auction&validator=yes
+				 **/
 				if(preg_match('/^discuz\_plugin_'.$_G['gp_dir'].'(\_\w+)?\.xml$/', $f, $a)) {
+
+					// bluelovers
+					$_importtxt = $_detect = $_entryadd = '';
+					// bluelovers
+
 					$extratxt = $extra = substr($a[1], 1);
-					if(preg_match('/^SC\_GBK$/i', $extra)) {
+					if(preg_match('/^(?:SC\_)?GBK$/i', $extra)) {
 						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
 					} elseif(preg_match('/^SC\_UTF8$/i', $extra)) {
 						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
-					} elseif(preg_match('/^TC\_BIG5$/i', $extra)) {
+					} elseif(preg_match('/^(?:TC\_)?BIG5$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#29256;';
 					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
 					}
+
+					// bluelovers
+					/**
+					 * 追加嘗試判斷各xml的編碼類型
+					 *
+					 * 嘗試後發現
+					 *
+					 * EUC-CN 比 GBK 好 - GBK 會錯誤的把其他編碼也認為是GBK
+					 * EUC-TW 則無法正確判斷所以使用 BIG-5 比較好
+					 **/
+					if (@extension_loaded('mbstring')) {
+						$_importtxt = @implode('', file($pdir.'/discuz_plugin_'.$_G['gp_dir'].$a[1].'.xml'));
+						$_detect = mb_detect_encoding($_importtxt, 'EUC-CN, BIG-5, UTF-8');
+						$_detect = $_detect ? $_detect : mb_detect_encoding($_importtxt);
+						$_entryadd = ' ('.$_detect.')';
+					}
+					// bluelovers
+
 					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.rawurlencode($extra).(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
-					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).'">&nbsp;';
+					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).$_entryadd.'">&nbsp;';
 					$count++;
 				}
 			}
@@ -851,8 +896,10 @@ if(!$operation) {
 		showtableheader();
 		showsetting('plugins_edit_name', 'namenew', $plugin['name'], 'text');
 		showsetting('plugins_edit_version', 'versionnew', $plugin['version'], 'text');
-		if(!$plugin['copyright']) {
-			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'text');
+		// 增加允許修改版權訊息
+		if($isplugindeveloper || !$plugin['copyright']) {
+			// 修改 copyright 為 textarea 方便輸入
+			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'textarea');
 		}
 		showsetting('plugins_edit_identifier', 'identifiernew', $plugin['identifier'], 'text');
 		showsetting('plugins_edit_directory', 'directorynew', $plugin['directory'], 'text');

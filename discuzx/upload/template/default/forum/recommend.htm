@@ -17,7 +17,7 @@
 			slideImgTexts[<!--{echo $k+1}-->] = '$imginfo[subject]';
 		<!--{/loop}-->
 		</script>
-		<script language="javascript" type="text/javascript" src="{$_G[setting][jspath]}forum_slide.js?{VERHASH}"></script>
+		<script language="javascript" type="text/javascript" src="{$_G[setting][jspath]}forum_slide.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	</div>
 <!--{/if}-->
 <div class="cl"{if $_G['forum']['recommendlist']['images'] && $_G['forum']['modrecommend']['imagenum']} style="margin-left: {$_G[forum][modrecommend][imagewidth]}px; padding-left: 20px;"{/if}>

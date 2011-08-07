@@ -3,23 +3,70 @@
 Powered by Discuz! X
 */
 
-body { background: #6A8FA1 url(images/bg.png) repeat-x 0 25px; color:#000; }
+body {
+	background: #6A8FA1 url(images/bg.png) repeat-x 0 25px;
+	color: #999999;
+}
 
-a, a:hover, a:active{ color:#000; }
-	a:visited{ color:#333;}
-#hd { border-bottom: 4px solid #101A22; background: url(images/header.png) no-repeat 100px 10px; color: #FFF; }
+#toptb {
+	background:none repeat scroll 0 0 #0B1A21;
+	border-bottom:1px solid #0B1A21;
+}
 
-#nv li { background-color: #101A22; opacity: 1; filter: alpha(opacity=100); }
-	#nv li a, #nv li a:visited { color: #B9DEF2; }
-	#nv li a:hover { background-image: none !important; }
+#toptb a:hover {
+	color: #B9DEF2;
+}
+
+a, a:hover, a:active{ color: #5778A1; }
+	a:visited{ color: #5778A1; }
+#hd {
+	/*
+	border-bottom: 4px solid #101A22;
+	*/
+	background: url(images/header.png) no-repeat 100px 10px;
+	color: #FFF;
+}
+
+#nv li {
+	background-color: #101A22;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}
+	#nv li a, #nv li a:visited { color: #5778A1; }
+	#nv li a:hover {
+		color: #B9DEF2;
+		background-image: none !important;
+	}
+	#nv li:hover {
+		opacity: 1;
+		filter: alpha(opacity=100);
+	}
 #ct, .n, .w { background: transparent none !important; }
-.block .title, .bbda, .el li { border-bottom-color: #4E6778; }
-.tl .th { background: none; }
-.bm, .bm_h { border: none; background: none; }
 
-.el a{ color:#000;}
-	.el .d{ color:#333;}
-.xg1, .xg1 a, .xg1 a:hover, .xg1 a:visited{ color:#333 !important;}
+/*主區域背景及邊框*/
+#ct {
+	background:none repeat scroll 0 0 #FFFFFF !important;
+	border:3px solid #9DB7C1;
+}
+
+.block .title, .bbda, .el li { border-bottom-color: #4E6778; }
+
+/*各模塊的標題顏色*/
+.block .title
+/*個人空間非首頁的標題*/
+, .mn .bm, .mn .bm_h
+{
+	color: #5778A1;
+	background: url("images/title.png") no-repeat scroll 0 0 transparent;
+}
+
+.tl .th { background: none; }
+.bm, .bm_h { border: none; /*background: none;*/ }
+
+/*留言內的連結(例如:留言者)*/
+.el a{ color: #5778A1; }
+	.el .d{ color:#5778A1;}
+.xg1, .xg1 a, .xg1 a:hover, .xg1 a:visited{ color:#999999 !important;}
 .tl th a:visited{ color:#333; }
 .tl td em, .tl td em a{ color:#ccc;}
 .tl .th{ border-bottom:1px solid #333;}
@@ -28,4 +75,9 @@ a, a:hover, a:active{ color:#000; }
 .tbmu a{ color:#000; }
 .pipe{ color:#333;}
 
-#ft{ border-top:1px solid #333;}
+#ft, #ft a {
+	/*
+	border-top:1px solid #333;
+	*/
+	color:#333333;
+}

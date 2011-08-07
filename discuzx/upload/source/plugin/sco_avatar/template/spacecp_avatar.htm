@@ -1,0 +1,60 @@
+<!--{subtemplate common/header}-->
+	<!--{subtemplate home/spacecp_header}-->
+			<!--{hook/spacecp_avatar_top}-->
+			<script type="text/javascript">
+				function updateavatar() {
+					window.location.reload();
+				}
+			</script>
+			<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=avatar&ref">
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<caption>
+						<h2 class="xs2">{lang current_my_space}</h2>
+						<p>{lang setting_avatar_message}</p>
+					</caption>
+					<tr>
+						<td>
+							<!--{avatar($_G[uid],array('big','',1))}-->
+							&nbsp;
+							<!--{avatar($_G[uid],array('middle','',1))}-->
+							&nbsp;
+							<!--{avatar($_G[uid],array('small','',1))}-->
+						</td>
+					</tr>
+					<!--{if $plugin_self}-->
+					<tr>
+						<td>
+							<label>Avatar:
+								<input type="text" value="{echo $plugin_self->_my_avatar_user_get($_G[uid], 1)}" class="pt" readonly="true"/>
+							</label>
+						</td>
+					</tr>
+					<!--{/if}-->
+				</table>
+
+				<!--{if $uc_avatarflash}-->
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<caption>
+						<h2 class="xs2">{lang setting_my_new_avatar}</h2>
+						<p>{lang setting_my_new_avatar_message}</p>
+					</caption>
+					<tr>
+						<td>
+							<script type="text/javascript">document.write(AC_FL_RunContent('<!--{echo implode("','", $uc_avatarflash);}-->'));</script>
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<!--{/if}-->
+			</form>
+
+			{template sco_avatar:avatar}
+
+			<!--{hook/spacecp_avatar_bottom}-->
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate home/spacecp_footer}-->
+	</div>
+</div>
+<!--{subtemplate common/footer}-->

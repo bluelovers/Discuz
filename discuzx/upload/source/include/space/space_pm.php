@@ -171,7 +171,8 @@ if($_GET['subop'] == 'view') {
 }
 
 if(!empty($list)) {
-	$today = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+//	$today = $_G['timestamp'] - ($_G['timestamp'] + $_G['setting']['timeoffset'] * 3600) % 86400;
+	$today = $_G['timenow']['todayzero'];
 	foreach ($list as $key => $value) {
 		$value['lastsummary'] = str_replace('&amp;', '&', $value['lastsummary']);
 		$value['lastsummary'] = preg_replace("/&[a-z]+\;/i", '', $value['lastsummary']);

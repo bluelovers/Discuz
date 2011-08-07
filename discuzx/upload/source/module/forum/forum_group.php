@@ -31,6 +31,7 @@ $second = &$_G['cache']['grouptype']['second'];
 $rssauth = $_G['rssauth'];
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].' - '.$navtitle.'" href="'.$_G['siteurl'].'forum.php?mod=rss&fid='.$_G['fid'].'&amp;auth='.$rssauth."\" />\n") : '';
 if($_G['fid']) {
+	//TODO:將介面改為可同時顯示群組圖標與看板圖
 	if($_G['forum']['status'] != 3) {
 		showmessage('forum_not_group', 'group.php');
 	} elseif($_G['forum']['jointype'] < 0 && !$_G['forum']['ismoderator']) {
@@ -65,6 +66,14 @@ if($_G['fid']) {
 	}
 	$_G['seokeywords'] = $_G['setting']['seokeywords']['group'];
 	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
+
+	// bluelovers
+	// 以 bbcode 解析 群組描述
+	if ($action != 'manage') {
+		require_once libfile('function/discuzcode');
+		$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	}
+	// bluelovers
 }
 
 if(in_array($action, array('out', 'viewmember', 'manage', 'index', 'memberlist'))) {
@@ -102,6 +111,7 @@ if(in_array($action, array('index')) && $status != 2) {
 }
 
 $showpoll = $showtrade = $showreward = $showactivity = $showdebate = 0;
+// 取得是否允許發表特殊主題
 if($_G['forum']['allowpostspecial']) {
 	$showpoll = $_G['forum']['allowpostspecial'] & 1;
 	$showtrade = $_G['forum']['allowpostspecial'] & 2;
@@ -110,6 +120,7 @@ if($_G['forum']['allowpostspecial']) {
 	$showdebate = $_G['forum']['allowpostspecial'] & 16;
 }
 
+// 取得用戶主是否允許發表目前群組所允許發表的特殊主題
 if($_G['group']['allowpost']) {
 	$_G['group']['allowpostpoll'] = $_G['group']['allowpostpoll'] && $showpoll;
 	$_G['group']['allowposttrade'] = $_G['group']['allowposttrade'] && $showtrade;
@@ -119,6 +130,7 @@ if($_G['group']['allowpost']) {
 }
 
 if($action == 'index') {
+	//TODO:將首頁的主題列表改為跟討論區的主題列表一樣可顯示主題分類
 
 	$newthreadlist = array();
 	if($status != 2) {
@@ -293,7 +305,7 @@ if($action == 'index') {
 		if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE status='3' AND name='$name'"), 0)) {
 			showmessage('group_name_exist');
 		}
-		$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+		$descriptionnew = censor(trim($_G['gp_descriptionnew']));
 		$censormod = censormod($descriptionnew);
 		if($censormod) {
 			showmessage('group_description_failed');
@@ -336,6 +348,10 @@ if($action == 'index') {
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
+		//TODO:增加可設定發表/回文權限...
+		/**
+		 * 群組 > 管理群組
+		 **/
 		$domainlength = checkperm('domainlength');
 		if(submitcheck('groupmanage')) {
 			$forumarr = array();
@@ -399,9 +415,63 @@ if($action == 'index') {
 
 			$iconsql = '';
 			$deletebanner = $_G['gp_deletebanner'];
-			$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
-			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
-			if($iconnew) {
+
+			// 增加 deleteicon 來做為刪除 icon 的開關
+			$deleteicon = $_G['gp_deleteicon'];
+
+			// bluelovers
+			// 設定只有管理員才能上傳圖片
+			if ($_FILES['iconnew'] && $_G['adminid'] == 1) {
+			// bluelovers
+				$iconnew = upload_icon_banner($_G['forum'], $_FILES['iconnew'], 'icon');
+			// bluelovers
+			} else {
+				$iconnew = $_G['gp_iconnew'];
+
+				// 簡易確認是否為圖片，如果不是則清除
+				if($iconnew) {
+					$_icon = $iconnew;
+
+					$_valueparse = parse_url($_icon);
+					if(!isset($_valueparse['host'])) {
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+					}
+					$_info = array();
+					$_info = @getimagesize($_icon);
+					if($_info[0] <= 0 || $_info[1] <= 0) {
+						$iconnew = '';
+					}
+				}
+			}
+			// bluelovers
+
+			// bluelovers
+			if ($_FILES['bannernew'] && $_G['adminid'] == 1) {
+			// bluelovers
+				$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
+			// bluelovers
+			} else {
+				$bannernew = $_G['gp_bannernew'];
+
+				// 簡易確認是否為圖片，如果不是則清除
+				if($bannernew) {
+					$_icon = $bannernew;
+
+					$_valueparse = parse_url($_icon);
+					if(!isset($_valueparse['host'])) {
+						$_icon = $_G['setting']['attachurl'].'group/'.$_icon;
+					}
+					$_info = array();
+					$_info = @getimagesize($_icon);
+					if($_info[0] <= 0 || $_info[1] <= 0) {
+						$bannernew = '';
+					}
+				}
+			}
+			// bluelovers
+
+			// 增加 deleteicon
+			if($iconnew && empty($deleteicon)) {
 				$iconsql .= ", icon='$iconnew'";
 				$group_recommend = unserialize($_G['setting']['group_recommend']);
 				if($group_recommend[$_G['fid']]) {
@@ -410,14 +480,27 @@ if($action == 'index') {
 					include libfile('function/cache');
 					updatecache('setting');
 				}
+			} elseif($deleteicon && discuz_core::$plugin_support['scofile']) {
+				$iconsql .= ", icon=''";
+				// 安全的刪除
+				$_path = scofile::file($_G['forum']['icon']);
+				$_root = scofile::path($_G['setting']['attachurl'].'group/');
+				if (strpos($_path, $_root) === 0) {
+					@scofile::unlink($_path);
+				}
 			}
 			if($bannernew && empty($deletebanner)) {
 				$iconsql .= ", banner='$bannernew'";
-			} elseif($deletebanner) {
+			} elseif($deletebanner && discuz_core::$plugin_support['scofile']) {
 				$iconsql .= ", banner=''";
-				@unlink($_G['forum']['banner']);
+				// 安全的刪除
+				$_path = scofile::file($_G['forum']['banner']);
+				$_root = scofile::path($_G['setting']['attachurl'].'group/');
+				if (strpos($_path, $_root) === 0) {
+					@scofile::unlink($_path);
+				}
 			}
-			$_G['gp_descriptionnew'] = nl2br(dhtmlspecialchars(censor(trim($_G['gp_descriptionnew']))));
+			$_G['gp_descriptionnew'] = censor(trim($_G['gp_descriptionnew']));
 			$censormod = censormod($_G['gp_descriptionnew']);
 			if($censormod) {
 				showmessage('group_description_failed');
@@ -433,7 +516,7 @@ if($action == 'index') {
 			$firstgid = $_G['cache']['grouptype']['second'][$_G['forum']['fup']]['fup'];
 			$groupselect = get_groupselect($firstgid, $_G['forum']['fup']);
 			$gviewpermselect = $jointypeselect = array('','','');
-			$_G['forum']['descriptionnew'] = str_replace("<br />", '', $_G['forum']['description']);
+			$_G['forum']['descriptionnew'] = dhtmlspecialchars($_G['forum']['description']);
 			$jointypeselect[$_G['forum']['jointype']] = 'checked="checked"';
 			$gviewpermselect[$_G['forum']['gviewperm']] = 'checked="checked"';
 			if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {
@@ -531,6 +614,7 @@ if($action == 'index') {
 			}
 		}
 	} elseif($_G['gp_op'] == 'threadtype') {
+		//TODO:將此處的主題分類設定補充回可設定圖標與管理者專用
 		if(empty($specialswitch['allowthreadtype'])) {
 			showmessage('group_level_cannot_do');
 		}
@@ -585,6 +669,7 @@ if($action == 'index') {
 				$newname = array();
 			}
 			if($threadtypesnew['status']) {
+				//TODO:類別前綴選項補回只顯示圖標
 				if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 
 					if(!empty($threadtypesnew['options']['enable'])) {
@@ -665,15 +750,29 @@ if($action == 'index') {
 	} else {
 		showmessage('undefined_action');
 	}
+
+	// bluelovers
+	// 以 bbcode 解析 群組描述
+	require_once libfile('function/discuzcode');
+	$_G['forum']['description'] = discuzcode($_G['forum']['description']);
+	// bluelovers
+
 	include template('diy:group/group:'.$_G['fid']);
 
 } elseif($action == 'recommend') {
+	// 推薦到板塊
+
 	if(!$_G['forum']['ismoderator'] || !in_array($_G['adminid'], array(1,2))) {
 		showmessage('group_admin_noallowed');
 	}
 	if(submitcheck('grouprecommend')) {
 		if($_G['gp_recommend'] != $_G['forum']['recommend']) {
-			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".intval($_G['gp_recommend'])."' WHERE fid='$_G[fid]'");
+
+			// bluelovers
+			$_G['gp_recommend'] = is_array($_G['gp_recommend']) ? implode(',', array_unique(array_map('intval', $_G['gp_recommend']))) : intval($_G['gp_recommend']);
+			// bluelovers
+
+			DB::query("UPDATE ".DB::table('forum_forum')." SET recommend='".$_G['gp_recommend']."' WHERE fid='$_G[fid]'");
 			require_once libfile('function/cache');
 			updatecache('forumrecommend');
 		}

@@ -11,6 +11,15 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 顯示提示信息
+ *
+ * @param $message - 提示信息，可中文也可以是 lang_message.php 中的數組 key 值
+ * @param $url_forward - 提示後跳轉的 url
+ * @param $values - 提示信息中可替換的變量值 array(key => value ...) 形式
+ * @param $extraparam - 擴展參數 array(key => value ...) 形式
+ * @param $custom - 0 | 1
+ **/
 function dshowmessage($message, $url_forward = '', $values = array(), $extraparam = array(), $custom = 0) {
 	global $_G, $show_message;
 	$_G['messageparam'] = func_get_args();
@@ -27,24 +36,95 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	$_G['inshowmessage'] = true;
 
 	$param = array(
+		/**
+		 * 跳轉控制
+		 **/
 		'header'	=> false,
+		/**
+		 * header跳轉
+		 **/
 		'timeout'	=> null,
+		/**
+		 * 定時跳轉
+		 * 自定義跳轉時間
+		 **/
 		'refreshtime'	=> null,
+		/**
+		 * 自定義關閉時間，限於 msgtype = 2
+		 **/
 		'closetime'	=> null,
+		/**
+		 * 自定義跳轉時間，限於 msgtype = 2
+		 **/
 		'locationtime'	=> null,
+		/**
+		 * 內容控制
+		 * alert 圖標樣式 right/info/error
+		 **/
 		'alert'		=> null,
+		/**
+		 * 顯示請返回
+		 **/
 		'return'	=> false,
+		/**
+		 * 下載時用的提示信息，當跳轉時顯示的信息樣式
+		 *
+		 * 0:如果您的瀏覽器沒有自動跳轉，請點擊此鏈接
+		 * 1:如果 n 秒後下載仍未開始，請點擊此鏈接
+		 **/
 		'redirectmsg'	=> 0,
+		/**
+		 * 信息樣式
+		 *
+		 * 1:非 Ajax
+		 * 2:Ajax 彈出框
+		 * 3:Ajax 只顯示信息文本
+		 **/
 		'msgtype'	=> 1,
+		/**
+		 * 顯示信息文本
+		 **/
 		'showmsg'	=> true,
+		/**
+		 * 關閉原彈出框顯示 showDialog 信息，限於 msgtype = 2
+		 **/
 		'showdialog'	=> false,
+		/**
+		 * 未登錄時顯示登錄鏈接
+		 **/
 		'login'		=> false,
+		/**
+		 * Ajax 控制
+		 * 執行 js 回調函數
+		 **/
 		'handle'	=> false,
+		/**
+		 * 額外顯示的 JS
+		 **/
 		'extrajs'	=> '',
+		/**
+		 * 去除 html 標籤，適用於顯示 JS 時
+		 **/
 		'striptags'	=> true,
 	);
 
 	$navtitle = lang('core', 'title_board_message');
+
+	// bluelovers
+	// Event: Func_dshowmessage:Before_custom
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_custom')
+			->run(array(array(
+				'message' => &$message,
+				'url_forward' => &$url_forward,
+				'values' => &$values,
+				'extraparam' => &$extraparam,
+				'custom' => &$custom,
+				'param' => &$param,
+				'navtitle' => &$navtitle,
+		)));
+	}
+	// bluelovers
 
 	if($custom) {
 		$alerttype = 'alert_info';
@@ -85,6 +165,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	if(!empty($_G['inajax'])) {
 		$param['msgtype'] = empty($_G['gp_ajaxmenu']) && (empty($_POST) || !empty($_G['gp_nopost'])) ? 2 : 3;
 	}
+	// 如果有 $url_forward 則啟用 $param['timeout']
 	if($url_forward) {
 		$param['timeout'] = true;
 		if($param['handle'] && !empty($_G['inajax'])) {
@@ -92,10 +173,13 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		}
 	}
 
+	// 將 $extraparam 與 $param 合併
 	foreach($extraparam as $k => $v) {
 		$param[$k] = $v;
 	}
+	// 如果存在 $extraparam['set'] 則將 $setdata[$extraparam['set']] 與 $param 合併
 	if(array_key_exists('set', $extraparam)) {
+		// 定義 $setdata
 		$setdata = array('1' => array('msgtype' => 3));
 		if($setdata[$extraparam['set']]) {
 			foreach($setdata[$extraparam['set']] as $k => $v) {
@@ -104,24 +188,51 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		}
 	}
 
+	// 取得提示信息停留時間(秒)
 	$timedefault = intval($param['refreshtime'] === null ? $_G['setting']['msgforward']['refreshtime'] : $param['refreshtime']);
 	if($param['timeout'] !== null) {
+		// $refreshsecond 只出現在模板語言 attach_forward
 		$refreshsecond = !empty($timedefault) ? $timedefault : 3;
+		// 將 $refreshsecond 轉為毫秒
 		$refreshtime = $refreshsecond * 1000;
 	} else {
 		$refreshtime = $refreshsecond = 0;
 	}
 
+	// 如果 $param['login'] 但是使用者已經登入或者有 $url_forward 則不顯示登入表單
 	if($param['login'] && $_G['uid'] || $url_forward) {
 		$param['login'] = false;
 	}
 
+	// 決定是否使用 header 轉向
 	$param['header'] = $url_forward && $param['header'] ? true : false;
 
 	if($param['header']) {
+		/**
+		 * 301:
+		 * 永久轉移(Permanently Moved)
+		 *
+		 * 要求的網頁已經永久改變網址。
+		 * 此狀態要求用戶端未來在連結此網址時應該導向至指定的 URI
+		 *
+		 * @example header('HTTP/1.1 301 Moved Permanently');
+		 * @example header('Location: '.$url_forward);
+		 *
+		 * 302:
+		 * 暫時轉移(Temporarily Moved)
+		 *
+		 * 物件已移動，並告知移動過去的網址。
+		 * 針對表單架構驗證，這通常表示為「物件已移動」。
+		 * 要求的資源暫時存於不同的 URI 底下。
+		 * 由於重新導向可能偶而改變，用戶端應繼續使用要求 URI 來執行未來的要求。
+		 * 除非以 Cache-Control 或 Expires 標頭欄位表示，此回應才能夠快取
+		 *
+		 * @example header('Location: '.$url_forward);
+		 **/
 		header("HTTP/1.1 301 Moved Permanently");
 		dheader("location: ".str_replace('&amp;', '&', $url_forward));
 	}
+	// 如果有 $param['location'] 並且在 $_G['inajax'] 時則直接轉向
 	if($param['location'] && !empty($_G['inajax'])) {
 		include template('common/header_ajax');
 		echo '<script type="text/javascript" reload="1">window.location.href=\''.str_replace("'", "\'", $url_forward).'\';</script>';
@@ -129,8 +240,10 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		dexit();
 	}
 
+	// 儲存原始 $message, $values 提供 hook 使用
 	$_G['hookscriptmessage'] = $message;
 	$_G['hookscriptvalues'] = $values;
+	// 如果有 : 則代表為 plugin 訊息
 	$vars = explode(':', $message);
 	if(count($vars) == 2) {
 		$show_message = lang('plugin/'.$vars[0], $vars[1], $values);
@@ -141,6 +254,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		dheader('location: member.php?mod=logging&action=login&handlekey='.$handlekey.'&infloat=yes&inajax=yes&guestmessage=yes');
 	}
 
+	// 處理提供給 JS 顯示的 $show_message 如果有 $param['striptags'] 則去除 HTML 標籤
 	$show_jsmessage = str_replace("'", "\\'", $param['striptags'] ? strip_tags($show_message) : $show_message);
 
 	if((!$param['showmsg'] || $param['showid']) && !defined('IN_MOBILE') ) {
@@ -154,6 +268,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		$alerttype = 'alert_'.$param['alert'];
 	}
 
+	// 額外顯示的 JS $extra 與 $param['extrajs'] 不衝突
 	$extra = '';
 	if($param['showid']) {
 		$extra .= 'if($(\''.$param['showid'].'\')) {$(\''.$param['showid'].'\').innerHTML = \''.$show_jsmessage.'\';}';

@@ -45,6 +45,31 @@ class discuz_core {
 		'_FILES' => 1,
 	);
 
+	// bluelovers
+	static $plugin_support = array();
+	// bluelovers
+
+	// bluelovers
+	/**
+	 * 額外載入的語言
+	 */
+	static $langplus = array();
+	// bluelovers
+
+	// bluelovers
+	/**
+	 * 緩存正在進行中的 cache
+	 */
+	static $_cache_data = array();
+	// bluelovers
+
+	// bluelovers
+	/**
+	 * 儲存關於模板的額外參數
+	 */
+	static $tpl = array();
+	// bluelovers
+
 	function &instance() {
 		static $object;
 		if(empty($object)) {
@@ -70,9 +95,77 @@ class discuz_core {
 			$this->_init_mobile();
 			$this->_init_cron();
 			$this->_init_misc();
+
+			// bluelovers
+			// 假執行 $this->_init_style 來載入 hook
+			$this->_init_style(1);
+			// bluelovers
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::init:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
+
 		$this->initated = true;
 	}
+
+	// bluelovers
+	/**
+	 * 提供掛載各種 lib , plugin...
+	 **/
+	function _int_extensions() {
+		$this->plugin_support = &discuz_core::$plugin_support;
+
+		$_func = create_function('$array, $_func', '
+			if(is_array($array)) {
+				foreach($array as $k => $v) {
+					$array[$k] = $_func($v, $_func);
+				}
+			} else {
+				$array = str_replace("\r\n", "\n", $array);
+			}
+			return $array;
+		');
+
+		$_GET = $_func($_GET, $_func);
+		$_POST = $_func($_POST, $_func);
+
+		include_once libfile('Constants', 'Scorpio/inc/', 'extensions/libs/scophp/');
+
+		include_once libfile('Hook', 'Scorpio/libs/', 'extensions/libs/scophp/');
+		include_once libfile('Event', 'Scorpio/libs/', 'extensions/libs/scophp/');
+
+		if (!class_exists('Scorpio_Hook')) eval("class Scorpio_Hook extends Scorpio_Hook_Core_ {}");
+		if (!class_exists('Scorpio_Event')) eval("class Scorpio_Event extends Scorpio_Event_Core_ {}");
+
+		include_once libfile('file', 'Scorpio/libs/helper/', 'extensions/libs/scophp/');
+		if (!class_exists('scofile')) eval("class scofile extends Scorpio_helper_file_Core {}");
+
+		$this->plugin_support['Scorpio_Hook'] = true;
+		$this->plugin_support['Scorpio_Event'] = true;
+
+		$this->plugin_support['scofile'] = true;
+
+		// 檢查是否啟用 Scorpio_Event
+		if ($this->plugin_support['Scorpio_Event'] || $this->plugin_support['Scorpio_Hook']) {
+			// 掛載 extensions/hooks/hooks_core.php
+			@include_once libfile('hooks/core', '', 'extensions');
+			// 檢查是否存在 libfile 的 hook
+			if (Scorpio_Hook::exists('Func_'.'libfile'.'')) {
+				// 初始化執行 libfile 的相關 hook
+				foreach (get_included_files() as $fn) {
+					Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
+				}
+			}
+		}
+	}
+	// bluelovers
 
 	function _init_env() {
 
@@ -93,6 +186,10 @@ class discuz_core {
 		if(!defined('DISCUZ_CORE_FUNCTION') && !@include(DISCUZ_ROOT.'./source/function/function_core.php')) {
 			exit('function_core.php is missing');
 		}
+
+		// bluelovers
+		$this->_int_extensions();
+		// bluelovers
 
 		if(function_exists('ini_get')) {
 			$memorylimit = @ini_get('memory_limit');
@@ -186,11 +283,50 @@ class discuz_core {
 
 		$this->var = & $_G;
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_env:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_input() {
 		if (isset($_GET['GLOBALS']) ||isset($_POST['GLOBALS']) ||  isset($_COOKIE['GLOBALS']) || isset($_FILES['GLOBALS'])) {
 			system_error('request_tainting');
+		}
+
+		/**
+		 * copy from dx 1.5
+		 */
+		if(!empty($_GET['rewrite'])) {
+			$query_string = '?mod=';
+			/*
+			$param = explode('-', $_GET['rewrite']);
+			$query_string .= $_GET['mod'] = $param[0];
+			array_shift($param);
+			*/
+
+			// bluelovers
+			$param = explode('-', trim($_GET['rewrite'], '-'));
+			if ($_REQUEST['mod'] || $_GET['mod']) {
+				$query_string .= $_GET['mod'];
+			} else {
+				$query_string .= $_GET['mod'] = $param[0];
+				array_shift($param);
+			}
+			// bluelovers
+
+			$paramc = count($param);
+			for($i = 0;$i < $paramc;$i+=2) {
+				$_REQUEST[$param[$i]] = $_GET[$param[$i]] = $param[$i + 1];
+				$query_string .= '&'.$param[$i].'='.$param[$i + 1];
+			}
+			$_SERVER['QUERY_STRING'] = $query_string;
+			unset($param, $paramc, $query_string);
 		}
 
 		if(!MAGIC_QUOTES_GPC) {
@@ -223,8 +359,18 @@ class discuz_core {
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
-		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+		// 將 isset 改為 !empty 避免多餘的 htmlspecialchars
+		$this->var['sid'] = $this->var['cookie']['sid'] = !empty($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_input:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_config() {
@@ -267,6 +413,15 @@ class discuz_core {
 		$this->var['config']['cookie']['cookiepre'] = $this->var['config']['cookie']['cookiepre'].substr(md5($this->var['config']['cookie']['cookiepath'].'|'.$this->var['config']['cookie']['cookiedomain']), 0, 4).'_';
 		$this->var['authkey'] = md5($_config['security']['authkey'].$_SERVER['HTTP_USER_AGENT']);
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_config:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_output() {
@@ -292,6 +447,16 @@ class discuz_core {
 		if($this->config['output']['forceheader']) {
 			@header('Content-Type: text/html; charset='.CHARSET);
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_output:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 
 	}
 
@@ -375,6 +540,27 @@ class discuz_core {
 			}
 			list($discuz_pw, $discuz_uid) = empty($auth) || count($auth) < 2 ? array('', '') : $auth;
 
+			// bluelovers
+			if ($discuz_uid) {
+				/**
+				 * 參考對應 function_member.php ; setloginstatus
+				 * 修改為要求瀏覽器訊息 必須要符合 否則視同無效
+				 *
+				 * $auth
+				 * 		0 => discuz_pw
+				 * 		1 => discuz_uid
+				 * 		2 => clientip
+				 * 		3 => TIMESTAMP
+				 * 		4 => md5(agent)
+				 *
+				 **/
+				if ($auth[4] != md5($_SERVER['HTTP_USER_AGENT'])) {
+					unset($discuz_pw, $discuz_uid);
+				}
+			}
+//			dexit(array($discuz_pw, $discuz_uid, $auth));
+			// bluelovers
+
 			if($discuz_uid) {
 				$user = getuserbyuid($discuz_uid);
 			}
@@ -409,6 +595,16 @@ class discuz_core {
 		setglobal('username', addslashes(getglobal('username', 'member')));
 		setglobal('adminid', getglobal('adminid', 'member'));
 		setglobal('groupid', getglobal('groupid', 'member'));
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_user:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_guest() {
@@ -423,6 +619,16 @@ class discuz_core {
 				discuz_cron::run();
 			}
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_cron:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_misc() {
@@ -440,6 +646,15 @@ class discuz_core {
 		$timeoffset = $this->init_setting ? $this->var['member']['timeoffset'] : $this->var['setting']['timeoffset'];
 		$this->var['timenow'] = array(
 			'time' => dgmdate(TIMESTAMP),
+
+			// bluelovers
+			'year' => date('Y', TIMESTAMP + 3600 * $timeoffset),
+			'month' => date('n', TIMESTAMP + 3600 * $timeoffset),
+			'date' => date('j', TIMESTAMP + 3600 * $timeoffset),
+
+			'todayzero' => dmktime(date('Y-n-j', TIMESTAMP + 3600 * $timeoffset)) - 3600 * $timeoffset,
+			// bluelovers
+
 			'offset' => $timeoffset >= 0 ? ($timeoffset == 0 ? '' : '+'.$timeoffset) : $timeoffset
 		);
 		$this->timezone_set($timeoffset);
@@ -519,12 +734,25 @@ class discuz_core {
 		$this->var['seokeywords'] = !empty($this->var['setting']['seokeywords'][CURSCRIPT]) ? $this->var['setting']['seokeywords'][CURSCRIPT] : '';
 		$this->var['seodescription'] = !empty($this->var['setting']['seodescription'][CURSCRIPT]) ? $this->var['setting']['seodescription'][CURSCRIPT] : '';
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_misc:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_setting() {
 		if($this->init_setting) {
 			if(empty($this->var['setting'])) {
-				$this->cachelist[] = 'setting';
+				/**
+				 * 將 setting 推送到最前面
+				 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
+				 **/
+				array_unshift($this->cachelist, 'setting');
 			}
 
 			if(empty($this->var['style'])) {
@@ -545,11 +773,29 @@ class discuz_core {
 		if($this->var['member'] && $this->var['group']['radminid'] == 0 && $this->var['member']['adminid'] > 0 && $this->var['member']['groupid'] != $this->var['member']['adminid'] && !empty($this->var['cache']['admingroup_'.$this->var['member']['adminid']])) {
 			$this->var['group'] = array_merge($this->var['group'], $this->var['cache']['admingroup_'.$this->var['member']['adminid']]);
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_setting:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
-	function _init_style() {
+	/**
+	 * 預設執行於 function_core.php 的 template
+	 *
+	 * @param bool $donot_define
+	 */
+	function _init_style($donot_define = 0) {
+		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
+		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
 		if(intval(!empty($this->var['forum']['styleid']))) {
+			// 版塊獨立設定的風格
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
 		} elseif(intval(!empty($this->var['category']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
@@ -557,6 +803,10 @@ class discuz_core {
 
 		$styleid = intval($styleid);
 
+		/**
+		 * 如果目前的 styleid 不等於 網站預設的 styleid
+		 * 則讀取風格並且覆寫 $this->var['style']
+		 */
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
@@ -564,11 +814,29 @@ class discuz_core {
 			}
 		}
 
-		define('IMGDIR', $this->var['style']['imgdir']);
-		define('STYLEID', $this->var['style']['styleid']);
-		define('VERHASH', $this->var['style']['verhash']);
-		define('TPLDIR', $this->var['style']['tpldir']);
-		define('TEMPLATEID', $this->var['style']['templateid']);
+		// bluelovers
+		if (!$donot_define) {
+		// bluelovers
+
+			define('IMGDIR', $this->var['style']['imgdir']);
+			define('STYLEID', $this->var['style']['styleid']);
+			define('VERHASH', $this->var['style']['verhash']);
+			define('TPLDIR', $this->var['style']['tpldir']);
+			define('TEMPLATEID', $this->var['style']['templateid']);
+
+		// bluelovers
+		}
+		// bluelovers
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_style:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_memory() {
@@ -673,6 +941,16 @@ class discuz_core {
 		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=yes';
 		unset($query_sting_tmp);
 		ob_start();
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_mobile:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function timezone_set($timeoffset = 0) {
@@ -920,11 +1198,49 @@ class DB
 		return $res;
 	}
 
-	function implode_field_value($array, $glue = ',') {
+	// bluelovers
+	function table_fields($table) {
+		static $tables = array();
+//		$table = str_replace($db->tablepre, '', $table);
+		if(!isset($tables[$table])) {
+			$tables[$table] = array();
+			if(DB::_execute('version') > '4.1') {
+				$query = DB::query("SHOW FULL COLUMNS FROM ".DB::table($table), 'SILENT');
+			} else {
+				$query = DB::query("SHOW COLUMNS FROM ".DB::table($table), 'SILENT');
+			}
+			while($field = DB::fetch($query)) {
+				$tables[$table][$field['Field']] = $field;
+			}
+		}
+		return $tables[$table];
+	}
+
+	function table_field_value($table, $array) {
+		$fields = DB::table_fields($table);
+		$ret = array();
+		foreach ($array as $k => $v) {
+			if(empty($fields) || isset($fields[$k])) {
+				$ret[$k] = $v;
+			}
+		}
+		return $ret;
+	}
+	// bluelovers
+
+	function implode_field_value($array, $glue = ',', $fields = array()) {
 		$sql = $comma = '';
 		foreach ($array as $k => $v) {
-			$sql .= $comma."`$k`='$v'";
-			$comma = $glue;
+			// copy from convert
+			if(empty($fields) || isset($fields[$k])) {
+			// copy from convert
+
+				$sql .= $comma."`$k`='$v'";
+				$comma = $glue;
+
+			// copy from convert
+			}
+			// copy from convert
 		}
 		return $sql;
 	}
@@ -941,6 +1257,15 @@ class DB
 		DB::checkquery($sql);
 		return DB::_execute('fetch_first', $sql);
 	}
+
+	// bluelovers
+	/**
+	 * same as fetch_first
+	 **/
+	function query_first($sql) {
+		return DB::fetch_first($sql);
+	}
+	// bluelovers
 
 	function result($resourceid, $row = 0) {
 		return DB::_execute('result', $resourceid, $row);
@@ -983,6 +1308,9 @@ class DB
 		return $res;
 	}
 
+	/**
+	 * @return db_mysql
+	 */
 	function &object($dbclass = 'db_mysql') {
 		static $db;
 		if(empty($db)) $db = new $dbclass();
@@ -1096,6 +1424,11 @@ class DB
 
 }
 
+/**
+ * @example
+ * $discuz = & discuz_core::instance();
+ * $discuz->session;
+ **/
 class discuz_session {
 
 	var $sid = null;
@@ -1103,7 +1436,16 @@ class discuz_session {
 	var $isnew = false;
 	var $newguest = array('sid' => 0, 'ip1' => 0, 'ip2' => 0, 'ip3' => 0, 'ip4' => 0,
 	'uid' => 0, 'username' => '', 'groupid' => 7, 'invisible' => 0, 'action' => 0,
-	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0);
+	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0,
+
+	// bluelovers
+	// 性別
+	'gender' => 0,
+	// 語言
+	'session_lang' => '',
+	// bluelovers
+
+	);
 
 	var $old =  array('sid' =>  '', 'ip' =>  '', 'uid' =>  0);
 
@@ -1162,10 +1504,19 @@ class discuz_session {
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
+		// bluelovers
+		// 建立時取得使用者的性別
+		if ($uid > 0) {
+			$profile = getuserprofile('gender');
+			$this->set('gender', $profile);
+		}
+		// bluelvoers
+
 		return $this->var;
 	}
 
 	function delete() {
+		//BUG:無法解決產生與自己相同 IP 的訪客 BUG
 
 		global $_G;
 		$onlinehold = $_G['setting']['onlinehold'];
@@ -1197,6 +1548,14 @@ class discuz_session {
 		}
 	}
 
+	/**
+	 * 取得線上人數
+	 *
+	 * @param $type = 0 | 1 | 2
+	 * @param $type = 0 - 所有線上人數
+	 * @param $type = 1 - 所有線上使用者人數
+	 * @param $type = 2 - 所有線上隱身人數
+	 **/
 	function onlinecount($type = 0) {
 		$condition = $type == 1 ? ' WHERE uid>0 ' : ($type == 2 ? ' WHERE invisible=1 ' : '');
 		return DB::result_first("SELECT count(*) FROM ".DB::table('common_session').$condition);
@@ -1293,6 +1652,7 @@ class discuz_memory
 	var $enable = false;
 
 	function discuz_memory() {
+		// 只有 eaccelerator 版本 eaccelerator-0.9.5.3 有 eaccelerator_get
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
 		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');

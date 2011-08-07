@@ -54,7 +54,11 @@ $conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] 
 
 if(submitcheck('profilesubmit')) {
 
+	/*
+	 * 既然不對 sightml 做處理
+	 * 也沒有其他欄位用到 discuzcode 所以註解掉
 	require_once libfile('function/discuzcode');
+	*/
 
 	$forum = $setarr = $verifyarr = $errorarr = array();
 	$forumfield = array('customstatus', 'sightml');
@@ -103,6 +107,7 @@ if(submitcheck('profilesubmit')) {
 		}
 		if(in_array($key, $forumfield)) {
 			if($key == 'sightml') {
+				/*
 				loadcache(array('smilies', 'smileytypes'));
 				$value = cutstr($value, $_G['group']['maxsigsize'], '');
 				foreach($_G['cache']['smilies']['replacearray'] AS $skey => $smiley) {
@@ -110,6 +115,8 @@ if(submitcheck('profilesubmit')) {
 				}
 				$value = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], trim($value));
 				$forum[$key] = addslashes(discuzcode(stripslashes($value), 1, 0, 0, 0, $_G['group']['allowsigbbcode'], $_G['group']['allowsigimgcode'], 0, 0, 1));
+				*/
+				$forum[$key] = dhtmlspecialchars(trim($value));
 			} elseif($key=='customstatus' && $allowcstatus) {
 				$forum[$key] = dhtmlspecialchars(trim($value));
 			}
@@ -361,8 +368,12 @@ if($operation == 'password') {
 	space_merge($space, 'field_home');
 	space_merge($space, 'field_forum');
 
+	/*
+	 * 既然不對 sightml 做處理
+	 * 也沒有其他欄位用到 html2bbcode 所以註解掉
 	require_once libfile('function/editor');
 	$space['sightml'] = html2bbcode($space['sightml']);
+	*/
 
 	$vid = $_G['gp_vid'] ? intval($_G['gp_vid']) : 0;
 

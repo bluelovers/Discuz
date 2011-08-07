@@ -1,7 +1,7 @@
 <!--{subtemplate common/header}-->
 <!--[name]{lang portalcategory_viewtplname}[/name]-->
 
-<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 <script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']), imagemaxwidth = '{$_G['setting']['imagemaxwidth']}', aimgcount = new Array();</script>
 <div id="pt" class="bm cl">
 	<div class="z">
@@ -20,6 +20,9 @@
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2 wp cl">
 	<div class="mn">
 		<div class="bm vw">
@@ -56,7 +59,7 @@
 
 				<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 
-				<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}home.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 				<div id="click_div">
 					<!--{template home/space_click}-->
 				</div>

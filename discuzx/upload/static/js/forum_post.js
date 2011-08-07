@@ -63,8 +63,27 @@ if(!tradepost) {
 	var tradepost = 0;
 }
 
+/**
+ * 用於編輯器
+ */
 function validate(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ?
+		html2bbcode(getEditorContents())
+		: (
+			!theform.parseurloff.checked ?
+				// 增加允許判斷 img url
+				parseurl(theform.message.value, null, 1, theform.allowimgurl.checked)
+				: theform.message.value
+	);
+
+	// bluelovers
+	// 整理 message , subject 的多餘空白
+	if (theform.subject) theform.subject.value = trim(theform.subject.value);
+	theform.message.value = theform.message.value
+		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/, '$1');
+	// bluelovers
+
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showError('抱歉，您尚未輸入標題或內容');
 		return false;
@@ -694,7 +713,7 @@ function insertAllAttachTag() {
 					} else {
 						insertAttachTag(ids[1]);
 					}
-					var txt = wysiwyg ? '\r\n<br/><br/>\r\n' : '\r\n\r\n';
+					var txt = wysiwyg ? '\n<br/><br/>\n' : '\n\n';
 					insertText(txt, strlen(txt), 0);
 				}
 			}
@@ -717,9 +736,23 @@ function selectAllSaveImg(state) {
 }
 
 function showExtra(id) {
+
+	// bluelovers
+	var _toggle = function(obj, display) {
+		if (jQuery) {
+			display == 'none' ? jQuery(obj).hide() : jQuery(obj).fadeIn();
+		} else {
+			obj.style.display = display == 'none' ? 'none' : 'block';
+		}
+	}
+	// bluelovers
+
 	if ($(id+'_c').style.display == 'block') {
 		$(id+'_b').className = 'pn z';
+		/*
 		$(id+'_c').style.display = 'none';
+		*/
+		_toggle($(id+'_c'), 'none');
 	} else {
 		var extraButton = $('post_extra_tb').getElementsByTagName('label');
 		var extraForm = $('post_extra_c').getElementsByTagName('div');
@@ -730,17 +763,26 @@ function showExtra(id) {
 
 		for (i=0;i<extraForm.length;i++) {
 			if(hasClass(extraForm[i],'exfm')) {
+				/*
 				extraForm[i].style.display = 'none';
+				*/
+				_toggle(extraForm[i], 'none');
 			}
 		}
 
 		for (i=0;i<extraForm.length;i++) {
 			if(hasClass(extraForm[i],'exfm')) {
+				/*
 				extraForm[i].style.display = 'none';
+				*/
+				_toggle(extraForm[i], 'none');
 			}
 		}
 		$(id+'_b').className = 'a';
+		/*
 		$(id+'_c').style.display = 'block';
+		*/
+		_toggle($(id+'_c'), 'block');
 	}
 }
 

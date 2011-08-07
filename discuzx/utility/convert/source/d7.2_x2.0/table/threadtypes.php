@@ -24,6 +24,13 @@ while ($threadtype = $db_source->fetch_array($query)) {
 
 	$nextid = $threadtype['typeid'];
 
+	$name = str_replace(array('&nbsp;', '&nbsp'), ' ', $threadtype['name']);
+	if (!$name = s_trim($name, null, 1)) {
+		continue;
+	} else {
+		$threadtype['name'] = $name;
+	}
+
 	$threadtype  = daddslashes($threadtype, 1);
 
 	$data = implode_field_value($threadtype, ',', db_table_fields($db_target, $table_target));

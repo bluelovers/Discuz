@@ -5,6 +5,9 @@
 	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> {lang say_hi}</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -60,7 +63,7 @@
 <!--{elseif $op == 'view'}-->
 			<!--{loop $list $key $subvalue}-->
 			<p class="pbm mbm bbda">
-				<!--{if $subvalue[fromuid]==$space[uid]}-->{lang me}<!--{else}--><a href="home.php?mod=space&uid=$subvalue[fromuid]" class="xi2">{$value[fromusername]}</a><!--{/if}-->: 
+				<!--{if $subvalue[fromuid]==$space[uid]}-->{lang me}<!--{else}--><a href="home.php?mod=space&uid=$subvalue[fromuid]" class="xi2">{$value[fromusername]}</a><!--{/if}-->:
 				<span class="xw0">
 					<!--{if $subvalue[iconid]}-->{$icons[$subvalue[iconid]]}<!--{else}-->{lang say_hi}<!--{/if}-->
 					<!--{if $subvalue[note]}-->, {lang say}: $subvalue[note]<!--{/if}-->
@@ -144,7 +147,7 @@
 					if($('poke_ul')) {
 						$('poke_ul').innerHTML = '<p class="emp">{lang ignore_all_poke}</p>';
 					}
-				}				
+				}
 			</script>
 <!--{/if}-->
 <!--{if !$_G[inajax]}-->

@@ -461,7 +461,7 @@ function dir_writeable($dir) {
 	return $writeable;
 }
 
-function dir_clear($dir) {
+function dir_clear($dir, $noindex = 0, $includesubdir = 0) {
 	global $lang;
 	showjsmessage($lang['clear_dir'].' '.str_replace(ROOT_PATH, '', $dir));
 	if($directory = @dir($dir)) {
@@ -469,10 +469,27 @@ function dir_clear($dir) {
 			$filename = $dir.'/'.$entry;
 			if(is_file($filename)) {
 				@unlink($filename);
+
+			// bluelovers
+			// 允許處理子目錄
+			} elseif ($includesubdir
+				&& !($entry == '.' || $entry == '..')
+				&& is_dir($filename)
+			) {
+				dir_clear($filename, $noindex, $includesubdir);
+			// bluelovers
+
 			}
 		}
 		$directory->close();
-		@touch($dir.'/index.htm');
+
+		// bluelovers
+		if (!$noindex) {
+		// bluelovers
+			@touch($dir.'/index.htm');
+		// bluelovers
+		}
+		// bluelovers
 	}
 }
 
@@ -591,9 +608,6 @@ function save_config_file($filename, $config, $default) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
-	/*
-	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
-	*/
 	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	file_put_contents($filename, $content);
 }
@@ -696,6 +710,13 @@ function runquery($sql) {
 
 	if(!isset($sql) || empty($sql)) return;
 
+	// bluelovers
+	$sql = str_replace("\r\n", "\n", $sql);
+
+	// 必須確認 sql 中的所有 serialize 中不包含 \r\n 才可使用此代碼
+	$sql = str_replace('\r\n', '\n', $sql);
+	// bluelovers
+
 	$sql = str_replace("\r", "\n", str_replace(' '.ORIG_TABLEPRE, ' '.$tablepre, $sql));
 	$sql = str_replace("\r", "\n", str_replace(' `'.ORIG_TABLEPRE, ' `'.$tablepre, $sql));
 	$ret = array();
@@ -715,9 +736,19 @@ function runquery($sql) {
 		if($query) {
 
 			if(substr($query, 0, 12) == 'CREATE TABLE') {
-				$name = preg_replace("/CREATE TABLE ([a-z0-9_]+) .*/is", "\\1", $query);
+				$name = preg_replace("/CREATE TABLE (`?)([a-z0-9_]+)\\1 .*/is", "\\2", $query);
 				showjsmessage(lang('create_table').' '.$name.' ... '.lang('succeed'));
 				$db->query(createtable($query));
+
+			// bluelovers
+			// show msg DROP TABLE
+			} elseif (substr($query, 0, 10) == 'DROP TABLE') {
+
+				showjsmessage($query);
+				$db->query($query);
+
+			// bluelovers
+
 			} else {
 				$db->query($query);
 			}
@@ -731,6 +762,10 @@ function runucquery($sql, $tablepre) {
 	global $lang, $db;
 
 	if(!isset($sql) || empty($sql)) return;
+
+	// bluelovers
+	$sql = str_replace('\r\n', '\n', $sql);
+	// bluelovers
 
 	$sql = str_replace("\r", "\n", str_replace(' uc_', ' '.$tablepre, $sql));
 	$ret = array();
@@ -1133,7 +1168,7 @@ function uc_write_config($config, $file, $password) {
 	$ucmykey = _generate_key();
 	$salt = substr(_generate_key(), 0, 6);
 	$pw = md5(md5($password).$salt);
-	$config = "<?php \r\ndefine('UC_DBHOST', '$ucdbhost');\n";
+	$config = "<?php \ndefine('UC_DBHOST', '$ucdbhost');\n";
 	$config .= "define('UC_DBUSER', '$ucdbuser');\n";
 	$config .= "define('UC_DBPW', '$ucdbpw');\n";
 	$config .= "define('UC_DBNAME', '$ucdbname');\n";
@@ -1277,7 +1312,7 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	foreach ($array as $key => $val) {
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\n";
+			$return .= "\n// $newline //\n";
 			if($key == 'admincp') {
 				$newline = str_pad(' Founders: $_config[\'admincp\'][\'founder\'] = \'1,2,3\'; ', 70, '-', STR_PAD_BOTH);
 				$return .= "// $newline //\n";
@@ -1497,6 +1532,18 @@ function block_import($data) {
 			$block['param'] = dstripslashes($block['param']);
 			$block['param'] = addslashes(serialize($block['param']));
 		}
+
+		// bluelovers
+		/**
+		 * [bugfix] INSERT INTO pre_common_block - Error:Duplicate entry '0' for key 'PRIMARY'
+		 *
+		 * 	SQL:INSERT INTO pre_common_block SET `bid`='',`blockclass`='group_thread',`blocktype`='0',`name`='',`title`='',`classname`='',`summary`='',`uid`='1',`username`='admin',`styleid`='24',`blockstyle`='',`picwidth`='0',`picheight`='0',`target`='blank',`dateformat`='Y-m-d',`dateuformat`='0',`script`='groupthreadspecial',`param`='a:6:{s:5:\"gtids\";a:1:{i:0;s:1:\"0\";}s:12:\"rewardstatus\";s:1:\"0\";s:11:\"picrequired\";s:1:\"0\";s:11:\"titlelength\";s:2:\"40\";s:13:\"summarylength\";s:2:\"80\";s:5:\"items\";s:2:\"10\";}',`shownum`='10',`cachetime`='3600',`punctualupdate`='0',`hidedisplay`='0',`dateline`='0',`notinherited`='0',`isblank`='0'
+			Error:Duplicate entry '0' for key 'PRIMARY'
+			Errno:1062
+		 **/
+		if (empty($block['bid'])) unset($block['bid']);
+		// bluelovers
+
 		$sql = implode_field_value($block);
 		$_G['db']->query('INSERT INTO '.$_G['tablepre'].'common_block SET '.$sql);
 		$newid = $_G['db']->insert_id();

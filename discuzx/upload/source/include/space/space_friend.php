@@ -11,6 +11,11 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+//TODO:當在個人空間內點選好友時，顯示的風格因該改為空間風格
+/**
+ * @see home.php?mod=space&uid=1&do=friend&view=me&from=space
+ **/
+
 $perpage = 24;
 $perpage = mob_perpage($perpage);
 

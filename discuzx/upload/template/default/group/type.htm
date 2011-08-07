@@ -10,11 +10,15 @@
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2 wp cl">
 	<div class="mn">
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
 		<div class="bm fl cl">
 			<div class="bm_h">
+				<span class="y xw1"><a href="group.php?mod=my">{lang my_group} &rsaquo;</a></span>
 				<h1 class="xs2">$curtype[name]</h1>
 			</div>
 			<!--{if $typelist}-->
@@ -26,6 +30,15 @@
 			<!--{/if}-->
 			<!--{hook/index_top}-->
 			<!--{if $list}-->
+
+				<!--{if $list}-->
+					<!--在群組列表上方增加回到群組首頁以及頁次連結-->
+					<div class="pgs cl tbmu">
+						$multipage
+						<span class="pgb y"><a href="group.php">{lang return_index}</a></span>
+					</div>
+				<!--{/if}-->
+
 				<div class="tbmu cl bw0">
 					<span class="y">
 					<select title="{lang orderby}" onchange="location.href=this.value" class="ps">

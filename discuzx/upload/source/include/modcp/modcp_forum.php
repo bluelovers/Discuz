@@ -32,18 +32,25 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 
 		$alloweditrules = $_G['adminid'] == 1 || $_G['forum']['alloweditrules'] ? true : false;
 
-		if(!submitcheck('editsubmit')) {
-			$_G['forum']['rules'] = html2bbcode($_G['forum']['rules']);
-		} else {
+		// 以原始格式儲存 forum description, rules
 
-			require_once libfile('function/discuzcode');
-			$forumupdate = true;
-			$rulesnew = $alloweditrules ? addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(stripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1))) : addslashes($_G['forum']['rules']);
-			DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
+		$_G['forum']['description'] = dhtmlspecialchars($_G['forum']['description']);
+		$_G['forum']['rules'] = dhtmlspecialchars($_G['forum']['rules']);
 
-			$_G['forum']['description'] = html2bbcode(dstripslashes($descnew));
-			$_G['forum']['rules'] = html2bbcode(dstripslashes($rulesnew));
+		if($alloweditrules && submitcheck('editsubmit')) {
+			if ($descnew = trim($_G['gp_descnew'])) {
+				$forumupdate = true;
 
+				DB::query("UPDATE ".DB::table('forum_forumfield')." SET description='$descnew' WHERE fid='$_G[fid]'");
+				$_G['forum']['description'] = dhtmlspecialchars(dstripslashes($descnew));
+			}
+
+			if ($rulesnew = trim($_G['gp_rulesnew'])) {
+				$forumupdate = true;
+
+				DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
+				$_G['forum']['rules'] = dhtmlspecialchars(dstripslashes($rulesnew));
+			}
 		}
 
 	} elseif($op == 'recommend') {

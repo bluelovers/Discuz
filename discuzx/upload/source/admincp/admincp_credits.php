@@ -154,7 +154,7 @@ EOF;
 		showtablefooter();
 		showformfooter();
 	} else {
-		$rid = $_G['gp_rid'];
+		//$rid = $_G['gp_rid'];
 		$rule = $_G['gp_rule'];
 		if($rid) {
 			if(!$rule['cycletype']) {
@@ -167,9 +167,20 @@ EOF;
 					$rule['extcredits'.$i] = 0;
 				}
 			}
-			foreach($rule as $key => $val) {
-				$rule[$key] = intval($val);
+
+			// bluelovers
+			// 當有 fid 時跳過此段處理
+			if(!$fid) {
+			// bluelovers
+
+				foreach($rule as $key => $val) {
+					$rule[$key] = intval($val);
+				}
+
+			// bluelovers
 			}
+			// bluelovers
+
 			if($fid) {
 				$fids = $globalrule['fids'] ? explode(',', $globalrule['fids']) : array();
 				if($havecredit) {
@@ -177,6 +188,17 @@ EOF;
 					$rule['fid'] = $fid;
 					$rule['rulename'] = $ruleinfo['rulename'];
 					$rule['action'] = $ruleinfo['action'];
+
+					// bluelovers
+					for($i = 1; $i <= 8; $i++) {
+						if (isset($rule['extcredits'.$i]) && is_numeric($rule['extcredits'.$i])) {
+							$rule['extcredits'.$i] = intval($rule['extcredits'.$i]);
+						} else {
+							unset($rule['extcredits'.$i]);
+						}
+					}
+					// bluelovers
+
 					$policy[$ruleinfo['action']] = $rule;
 					if(!in_array($fid, $fids)) {
 						$fids[] = $fid;
@@ -213,6 +235,7 @@ EOF;
 			DB::insert('common_setting', $setting, 0, true);
 			updatecache(array('setting', 'creditrule'));
 		}
+
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}
 }

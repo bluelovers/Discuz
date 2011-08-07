@@ -26,6 +26,11 @@ if($operation == 'admin') {
 		require_once libfile('function/forumlist');
 		$forums = str_replace("'", "\'", forumselect(false, 0, 0, 1));
 
+		// bluelovers
+		//BUG:unterminated string literal
+		$forums = preg_replace("/ title=\"[^\"]*\"/is", '', $forums);
+		// bluelovers
+
 ?>
 <script type="text/JavaScript">
 var forumselect = '<?php echo $forums;?>';
@@ -45,7 +50,7 @@ var rowtypedata = [
 
 		$query = DB::query("SELECT f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.inheritedmod, ff.moderators, ff.password, ff.redirect
 			FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status<>'3'
-			ORDER BY f.type<>'group', f.displayorder");
+			ORDER BY f.type<>'group', f.displayorder, f.name");
 
 		$groups = $forums = $subs = $fids = $showed = array();
 		while($forum = DB::fetch($query)) {
@@ -699,6 +704,7 @@ var rowtypedata = [
 						$forum['threadsorts'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
 					}
 
+					//TODO:增加啟用但是隱藏的主題分類
 					$typeselect = $sortselect = '';
 
 					$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
@@ -790,8 +796,9 @@ var rowtypedata = [
 				}
 				showsetting('forums_edit_basic_redirect', 'redirectnew', $forum['redirect'], 'text');
 				showmultititle();
-				showsetting('forums_edit_basic_description', 'descriptionnew', str_replace('&amp;', '&', html2bbcode($forum['description'])), 'textarea');
-				showsetting('forums_edit_basic_rules', 'rulesnew', str_replace('&amp;', '&', html2bbcode($forum['rules'])), 'textarea');
+				// 以原始格式儲存 forum description, rules
+				showsetting('forums_edit_basic_description', 'descriptionnew', $forum['description'], 'textarea');
+				showsetting('forums_edit_basic_rules', 'rulesnew', $forum['rules'], 'textarea');
 				showsetting('forums_edit_basic_keys', 'keysnew', $forumkeys[$fid], 'text');
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					$iname = $multiset ? "multinew[{$_G[showsetting_multi]}][domainnew]" : 'domainnew';
@@ -848,7 +855,8 @@ var rowtypedata = [
 					array(1, cplang('forums_edit_extend_order_asc'))
 				)), $forum['defaultorder'], 'mradio');
 				showsetting('forums_edit_extend_threadcache', 'threadcachesnew', $forum['threadcaches'], 'text');
-				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'text');
+				// 將 relatedgroupnew 由 text 改為 textarea
+				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'textarea');
 				showsetting('forums_edit_extend_edit_rules', 'alloweditrulesnew', $forum['alloweditrules'], 'radio');
 				showmultititle();
 				showsetting('forums_edit_extend_recommend', 'modrecommendnew[open]', $forum['modrecommend']['open'], 'radio', '', 1);
@@ -928,6 +936,7 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				if(!$multiset) {
+					// 擴展積分增減策略
 					showtagheader('div', 'credits', $anchor == 'credits');
 					showtableheader('forums_edit_credits_policy', 'fixpadding');
 					echo '<tr class="header"><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th><th class="td25">'.cplang('custom').'</th>';
@@ -974,7 +983,8 @@ var rowtypedata = [
 							for(key in inputsObj) {
 								var obj = inputsObj[key];
 								if(typeof obj == 'object' && obj.type != 'checkbox') {
-									obj.value = '';
+									// 取消清空 value
+									//obj.value = '';
 									obj.readOnly = custom.checked ? false : true;
 									obj.style.display = obj.readOnly ? 'none' : '';
 								}
@@ -1144,7 +1154,7 @@ EOT;
 				if(textend != '') {
 					text = text + sel.text + textend;
 				}
-				sel.text = text.replace(/\r?\n/g, '\r\n');
+				sel.text = text.replace(/\r?\n/g, '\n');
 				sel.moveStart('character', -strlen(text));
 			} else {
 				$('formulapermnew').value += text;
@@ -1463,11 +1473,23 @@ EOT;
 				$creditspolicy = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
 				foreach($_G['gp_creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
+					// 如果 $usedefault = false 代表使用板塊內自訂的積分
 					$usedefault = $_G['gp_usecustom'][$rid] ? false : true;
 
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
+							// 處理積分策略的值
+							/*
 							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
+							*/
+							// bluelovers
+							// 當設定的積分策略為空時 不自動設定為 0
+							if (is_numeric($v)) {
+								$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = intval($v);
+							} else {
+								unset($creditspolicynew[$rules[$rid]['action']]['extcredits'.$i]);
+							}
+							// bluelovers
 						}
 					}
 
@@ -1488,6 +1510,7 @@ EOT;
 						$rules[$rid]['fids'] = implode(',', $cpfidsnew);
 						unset($creditspolicynew[$rules[$rid]['action']]);
 					}
+					// 紀錄使用到自訂積分策略的板塊
 					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids']), array('rid' => $rid));
 				}
 				$forumfielddata = array();
@@ -1552,7 +1575,8 @@ EOT;
 						$threadtypesnew = '';
 					}
 					if($threadtypesnew && $typeids) {
-						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder");
+						// threadclass 主題分類排序依照 displayorder, name
+						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder, name");
 						while($type = DB::fetch($query)) {
 							if($threadtypesnew['options']['enable'][$type['typeid']]) {
 								$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
@@ -1626,8 +1650,13 @@ EOT;
 			$modrecommendnew['imagewidth'] = $modrecommendnew['imagewidth'] ? intval($modrecommendnew['imagewidth']) : 300;
 			$modrecommendnew['imageheight'] = $modrecommendnew['imageheight'] ? intval($modrecommendnew['imageheight']): 250;
 			$modrecommendnew = $modrecommendnew && is_array($modrecommendnew) ? addslashes(serialize($modrecommendnew)) : '';
+			/*
 			$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descriptionnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
 			$rulesnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+			*/
+			// 以原始格式儲存 description, rules
+			$descriptionnew = $_G['gp_descriptionnew'];
+			$rulesnew = $_G['gp_rulesnew'];
 			$extranew = is_array($_G['gp_extranew']) ? $_G['gp_extranew'] : array();
 			$forum['extra'] = unserialize($forum['extra']);
 			$forum['extra']['namecolor'] = $extranew['namecolor'];
@@ -1699,6 +1728,21 @@ EOT;
 				'widthauto' => $_G['gp_widthautonew'],
 			));
 			if(!$multiset) {
+
+				// bluelovers
+				/**
+				 * 過濾 relatedgroup 並且可接收將分行轉為 ,
+				 * 將 relatedgroup 改為可接收陣列或文字，然後統一處理為文字陣列
+				 **/
+				$_relatedgroupnew = $_G['gp_relatedgroupnew'];
+				if (!is_array($_relatedgroupnew)) {
+					$_relatedgroupnew = explode(',', str_replace(array("\r\n", "\n"), ',', $_relatedgroupnew));
+				}
+				$_relatedgroupnew = array_unique(array_filter(array_map('intval', $_relatedgroupnew)));
+
+				$_relatedgroupnew = implode(',', $_relatedgroupnew);
+				// bluelovers
+
 				$forumfielddata = array_merge($forumfielddata, array(
 					'viewperm' => $_G['gp_viewpermnew'],
 					'postperm' => $_G['gp_postpermnew'],
@@ -1706,7 +1750,7 @@ EOT;
 					'getattachperm' => $_G['gp_getattachpermnew'],
 					'postattachperm' => $_G['gp_postattachpermnew'],
 					'postimageperm' => $_G['gp_postimagepermnew'],
-					'relatedgroup' => $_G['gp_relatedgroupnew'],
+					'relatedgroup' => $_relatedgroupnew,
 					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
 				));
 			}
@@ -2024,17 +2068,24 @@ function fetch_table_struct($tablename, $result = 'FIELD') {
 	return $datas;
 }
 
+/**
+ * 取得主題分類的設定表單
+ **/
 function getthreadclasses_html($fid) {
+	// 取得已啟用的 threadtypes
 	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
 	$threadtypes = unserialize($threadtypes);
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder");
+	// threadclass 主題分類排序依照 displayorder, name
+	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder, name");
 	while($type = DB::fetch($query)) {
 		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
+		// 檢查是否已啟用目前的 threadclass = threadtypes
 		if(isset($threadtypes['types'][$type['typeid']])) {
 			$enablechecked = ' checked="checked"';
 		}
+		// 檢查是否為管理者專用
 		if($type['moderators']) {
 			$moderatorschecked = ' checked="checked"';
 		}
@@ -2069,6 +2120,9 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+/**
+ * 取得所有的子版
+ **/
 function get_subfids($fid) {
 	global $subfids, $_G;
 	$subfids[] = $fid;
@@ -2079,6 +2133,9 @@ function get_subfids($fid) {
 	}
 }
 
+/**
+ * 複製主題分類
+ **/
 function copy_threadclasses($threadtypes, $fid) {
 	global $_G;
 	if($threadtypes) {

@@ -19,6 +19,12 @@ if(BROWSER.ie) {
 	HTMLNODE.className = 'ie_all ie' + BROWSER.iemode;
 }
 
+// bluelovers
+// VERHASH_GZIP_JS is not defined
+var VERHASH_GZIP = isUndefined(VERHASH_GZIP) ? '' : VERHASH_GZIP;
+var VERHASH_GZIP_JS = isUndefined(VERHASH_GZIP_JS) ? '' : VERHASH_GZIP_JS;
+// bluelovers
+
 var CSSLOADED = [];
 var JSLOADED = [];
 var JSMENU = [];
@@ -282,6 +288,26 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
+	// bluelovers
+	// aj.fixurl 用來修正 url
+	aj.fixurl = function (url, data){
+		url = url.replace(/^([^\?\#]+)(\?[^\#]*)?(\#.*)?$/, function ($1, $2, $3, $4) {
+			$3 += ($3 ? '&' : '?')
+				+ 'inajax=1'
+			;
+
+			if (data) {
+				for (var k in data) {
+					$3 += '&' + k + '=' + data[k];
+				}
+			}
+
+			return $2 + $3 + $4;
+		});
+		return url;
+	};
+	// bluelovers
+
 	aj.loading = '請稍候...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
@@ -517,21 +543,48 @@ function $F(func, args, script) {
 		}
 	};
 	var checkrun = function () {
-		if(JSLOADED[src]) {
+		// fix use src_key
+		if(JSLOADED[src_key]) {
 			run();
 		} else {
 			setTimeout(function () { checkrun(); }, 50);
 		}
 	};
 	script = script || 'common_extra';
+	/*
 	src = JSPATH + script + '.js?' + VERHASH;
 	if(!JSLOADED[src]) {
 		appendscript(src);
 	}
+	*/
+	// bluelovers
+	// for support VERHASH_GZIP_JS
+	var src_key = JSPATH + script + '.js';
+
+	src = src_key + VERHASH_GZIP_JS + '?' + VERHASH;
+
+	if(!JSLOADED[src_key]) {
+		appendscript({
+			'src' : src,
+			'src_key' : src_key
+		});
+	}
+	// bluelovers
 	checkrun();
 }
 
 function appendscript(src, text, reload, charset) {
+
+	// bluelovers
+	var src_file = '';
+	if (src && (typeof src != 'string') && src.src_key) {
+		src_file = src.src;
+		src = src.src_key;
+	} else {
+		src_file = src;
+	}
+	// bluelovers
+
 	var id = hash(src + text);
 	if(!reload && in_array(id, evalscripts)) return;
 	if(reload && $(id)) {
@@ -545,7 +598,7 @@ function appendscript(src, text, reload, charset) {
 	scriptNode.charset = charset ? charset : (BROWSER.firefox ? document.characterSet : document.charset);
 	try {
 		if(src) {
-			scriptNode.src = src;
+			scriptNode.src = src_file;
 			scriptNode.onloadDone = false;
 			scriptNode.onload = function () {
 				scriptNode.onloadDone = true;
@@ -605,7 +658,12 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		x.autogoto = 1;
 	}
 
+	/*
 	var url = url + '&inajax=1&ajaxtarget=' + showid;
+	*/
+	// fix like forum.php?showoldetails=no#online&inajax=1&ajaxtarget=undefined
+	var url = x.fixurl(url, {ajaxtarget:showid});
+
 	x.get(url, function(s, x) {
 		var evaled = false;
 		if(s.indexOf('ajaxerror') != -1) {
@@ -701,7 +759,10 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	$(formid).target = ajaxframeid;
 	var action = $(formid).getAttribute('action');
 	action = hostconvert(action);
+	/*
 	$(formid).action = action.replace(/\&inajax\=1/g, '')+'&inajax=1';
+	*/
+	$(formid).action = Ajax().fixurl(action.replace(/\&inajax\=1/g, ''));
 	$(formid).submit();
 	if(submitbtn) {
 		submitbtn.disabled = true;
@@ -789,7 +850,10 @@ function stringxor(s1, s2) {
 function showPreview(val, id) {
 	var showObj = $(id);
 	if(showObj) {
+		/*
 		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
+		*/
+		showObj.innerHTML = val.replace(/\n/ig, "<br />");
 	}
 }
 
@@ -998,6 +1062,15 @@ function showMenu(v) {
 	if(fade) {
 		var O = 0;
 		var fadeIn = function(O) {
+
+			// bluelovers
+			if (jQuery) {
+				jQuery(menuObj).fadeIn();
+
+				return;
+			}
+			// bluelovers
+
 			if(O > 100) {
 				clearTimeout(fadeInTimer);
 				return;
@@ -1080,6 +1153,11 @@ function dragMenu(menuObj, e, op) {
 		document.onmouseup = function(e) {try{dragMenu(menuObj, e, 3);}catch(err){}};
 		doane(e);
 	}else if(op == 2 && JSMENU['drag'][0]) {
+
+		// bluelovers
+		JSMENU['drag'][4] = menuObj;
+		// bluelovers
+
 		var menudragnow = [e.clientX, e.clientY];
 		menuObj.style.left = (JSMENU['drag'][2] + menudragnow[0] - JSMENU['drag'][0]) + 'px';
 		menuObj.style.top = (JSMENU['drag'][3] + menudragnow[1] - JSMENU['drag'][1]) + 'px';
@@ -1242,6 +1320,15 @@ function hideMenu(attr, mtype) {
 		if(menuObj.fade) {
 			var O = 100;
 			var fadeOut = function(O) {
+
+				// bluelovers
+				if (jQuery) {
+					jQuery(menuObj).fadeOut();
+
+					return;
+				}
+				// bluelovers
+
 				if(O == 0) {
 					clearTimeout(fadeOutTimer);
 					hide();
@@ -1434,14 +1521,34 @@ function showWindow(k, url, mode, cache, menuv) {
 				fctrlidinit = true;
 			}
 		}
+
+		// bluelovers
+		var _focus = function () {
+			if (menuObj.style.zIndex != JSMENU['zIndex']['win']
+				&& (
+					!JSMENU['drag'][4]
+					|| JSMENU['drag'][4].id == menuObj.id
+				)
+			) {
+				JSMENU['zIndex']['win'] += 1;
+				menuObj.style.zIndex = JSMENU['zIndex']['win'];
+			}
+		};
+		_attachEvent(menuObj, 'mouseover', _focus);
+		// bluelovers
 	};
 	var show = function() {
 		hideMenu('fwin_dialog', 'dialog');
-		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache};
+		v = {'mtype':'win','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['win'],'drag':typeof drag == null ? '' : drag,'cache':cache,'fade':1};
 		for(k in menuv) {
 			v[k] = menuv[k];
 		}
 		showMenu(v);
+
+		// bluelovers
+		// 使最新出現的 window 在最前方
+		JSMENU['zIndex']['win'] += 1;
+		// bluelovers
 	};
 
 	if(!menuObj) {
@@ -1724,9 +1831,24 @@ function ctrlEnter(event, btnId, onlyEnter) {
 	return true;
 }
 
-function parseurl(str, mode, parsecode) {
+function parseurl(str, mode, parsecode, allowimgurl) {
 	if(isUndefined(parsecode)) parsecode = true;
-	if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
+	//if(parsecode) str= str.replace(/\s*\[code\]([\s\S]+?)\[\/code\]\s*/ig, function($1, $2) {return codetag($2);});
+	if (parsecode) {
+		str = str.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
+	}
+
+	// bluelovers
+	if(isUndefined(allowimgurl)) allowimgurl = true;
+
+	// 使用 parseurl 時 如果 allowimgurl 為真 則自動解析圖片連結為 img
+	if(allowimgurl) {
+		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig
+			, mode == 'html' ? '$1<img src="$2">' : '$1[img]$2[/img]'
+		);
+	}
+	// bluelovers
+
 	str = str.replace(/([^>=\]"'\/@]|^)((((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|qqdl|synacast):\/\/))([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
 	str = str.replace(/([^\w>=\]"'\/@]|^)((www\.)([\w\-]+\.)*[:\.@\-\w\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&;~`@':+!#]*)*)/ig, mode == 'html' ? '$1<a href="$2" target="_blank">$2</a>' : '$1[url]$2[/url]');
 	str = str.replace(/([^\w->=\]:"'\.\/]|^)(([\-\.\w]+@[\.\-\w]+(\.\w+)+))/ig, mode == 'html' ? '$1<a href="mailto:$2">$2</a>' : '$1[email]$2[/email]');
@@ -1738,10 +1860,14 @@ function parseurl(str, mode, parsecode) {
 	return str;
 }
 
-function codetag(text) {
+function codetag(text, brush) {
+	// bluelovers
+	brush = trim(brush);
+	// bluelovers
+
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
-	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
+	DISCUZCODE['html'][DISCUZCODE['num']] = '[code' + (brush ? '=' + brush : '') + ']' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
 

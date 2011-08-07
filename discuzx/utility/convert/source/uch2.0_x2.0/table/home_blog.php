@@ -24,6 +24,10 @@ while ($blog = $db_source->fetch_array($query)) {
 
 	$nextid = intval($blog['blogid']);
 
+	// bluelovers
+	$blog[subject] = s_trim($blog[subject]);
+	// bluelovers
+
 	$blog  = daddslashes($blog, 1);
 
 	$data = implode_field_value($blog, ',', db_table_fields($db_target, $table_target));

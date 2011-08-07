@@ -9,6 +9,9 @@
 		<a href="home.php?mod=space&do=pm">{lang news}</a>
 	</div>
 </div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
@@ -266,7 +269,7 @@
 					</div>
 				</form>
 				<script type="text/javascript">var forumallowhtml = 0,allowhtml = 0,allowsmilies = true,allowbbcode = parseInt('{$_G[group][allowsigbbcode]}'),allowimgcode = parseInt('{$_G[group][allowsigimgcode]}');var DISCUZCODE = [];DISCUZCODE['num'] = '-1';DISCUZCODE['html'] = [];</script>
-				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 				<script type="text/javascript">
 					var msgListObj = $('msglist');
 					msgListObj.scrollTop = msgListObj.scrollHeight;
@@ -332,7 +335,7 @@
 					<input type="hidden" name="handlekey" value="$_G[gp_handlekey]" />
 				<!--{/if}-->
 				<div class="c">
-					<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js?{VERHASH}"></script>
+					<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 					<script type="text/javascript">
 						var fs;
 						var clearlist = 0;
@@ -454,7 +457,7 @@
 				<input type="hidden" name="type" value="1" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<div class="c">
-					<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js?{VERHASH}"></script>
+					<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 					<script type="text/javascript">
 						var fs;
 						var clearlist = 0;
