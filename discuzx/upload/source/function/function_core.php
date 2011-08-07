@@ -3087,6 +3087,9 @@ function getattachnewaid($uid = 0) {
 	return DB::insert('forum_attachment', array('tid' => 0, 'pid' => 0, 'uid' => $uid, 'tableid' => 127), true);
 }
 
+/**
+ * SEO設置
+ */
 function get_seosetting($page, $data = array(), $defset = array()) {
 	global $_G;
 	$searchs = array('{bbname}');
@@ -3118,13 +3121,40 @@ function get_seosetting($page, $data = array(), $defset = array()) {
 	return array($seotitle, $seodescription, $seokeywords);
 }
 
-
+/**
+ * 用來清理多餘重複字
+ */
 function strreplace_strip_split($searchs, $replaces, $str) {
-	$searchspace = array('((\s*\-\s*)+)', '((\s*\,\s*)+)', '((\s*\|\s*)+)', '((\s*\t\s*)+)', '((\s*_\s*)+)');
-	$replacespace = array('-', ',', '|', ' ', '_');
+	$searchspace = array(
+		/*
+		'((\s*\-\s*)+)',
+		'((\s*\,\s*)+)',
+		'((\s*\|\s*)+)',
+		*/
+		'/(?:(\s)*([\-\,\|\_ ])(\s)*)+/',
+		'((\s*\t\s*)+)',
+		/*
+		'((\s*_\s*)+)',
+		*/
+	);
+	$replacespace = array(
+		/*
+		'-',
+		',',
+		'|',
+		*/
+		'\\1\\2\\3',
+		' ',
+		/*
+		'_',
+		*/
+	);
 	return trim(preg_replace($searchspace, $replacespace, str_replace($searchs, $replaces, $str)), ' ,-|_');
 }
 
+/**
+ * 主題標題 - 第2頁
+ */
 function get_title_page($navtitle, $page){
 	if($page > 1) {
 		$navtitle .= ' - '.lang('core', 'page', array('page' => $page));

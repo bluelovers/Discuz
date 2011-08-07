@@ -98,6 +98,29 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 	$forcefid = '';
 }
 
+// bluelovers
+if ($_G['forum']['fid']) {
+	// 在論壇 › 論壇管理的導航顯示目前的版塊名稱
+	$forum_up = $_G['cache']['forums'][$_G[forum][fup]];
+	if($_G['forum']['type'] == 'forum') {
+		$fgroupid = $_G['forum']['fup'];
+		if(empty($_G['gp_archiveid'])) {
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?gid='.$forum_up['fid'].'">'.$forum_up['name'].'</a><em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'].'">'.$_G['forum']['name'].'</a>';
+		} else {
+			$navigation = '<em>&rsaquo;</em> '.'<a href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'">'.$_G['forum']['name'].'</a> <em>&rsaquo;</em> '.$forumarchive[$_G['gp_archiveid']]['displayname'];
+		}
+	} else {
+		$fgroupid = $forum_up['fup'];
+		if(empty($_G['gp_archiveid'])) {
+			$forum_top =  $_G['cache']['forums'][$forum_up[fup]];
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?gid='.$forum_top['fid'].'">'.$forum_top['name'].'</a><em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$forum_up['fid'].'">'.$forum_up['name'].'</a><em>&rsaquo;</em> '.$_G['forum']['name'];
+		} else {
+			$navigation = '<em>&rsaquo;</em> <a href="forum.php?mod=forumdisplay&fid='.$_G['forum']['fup'].'">'.$forum_up['name'].'</a> <em>&rsaquo;</em> '.'<a href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'">'.$_G['forum']['name'].'</a> <em>&rsaquo;</em> '.$forumarchive[$_G['gp_archiveid']]['displayname'];
+		}
+	}
+}
+// bluelovers
+
 $script = $modtpl = '';
 switch ($_G['gp_action']) {
 
