@@ -10,6 +10,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 /**
+ * 用來解決升級轉換後無法保存舊有的 onlinerecord 紀錄問題
+ *
  * 最高記錄是 $onlineinfo[0] 於 $onlineinfo[1]
  */
 function build_cache_onlinerecord() {
