@@ -142,7 +142,7 @@ list($navtitle, $metadescription, $metakeywords) = get_seosetting($seotype, $seo
 
 if(!$navtitle) {
 	// 主題標題 - 第2頁
-	$navtitle = get_title_page($_G['forum']['name'], $_G['page']);
+	$navtitle = get_title_page($_G['forum']['name'].' - '.$forum_up['name'].' - '.$forum_top['name'], $_G['page']);
 	$nobbname = false;
 } else {
 	$nobbname = true;
