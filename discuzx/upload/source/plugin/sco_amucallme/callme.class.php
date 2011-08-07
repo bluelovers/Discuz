@@ -72,12 +72,15 @@ class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 		global $_G;
 		$str = $css = '';
 		if($_G['uid']){
+			/*
 			$str = '<script language="javascript">';
 			$str .= '$("e_adv_s1").innerHTML += \'<div class="b1r" id="sco_amucallme_tag"><a href="plugin.php?id=sco_amucallme:callme&adds=e_iframe" onclick="showWindow(\\\'sco_amucallme_add\\\', this.href);" title="'.lang('plugin/sco_amucallme','callme').'">'.lang('plugin/sco_amucallme','callme').'</a></div>\';';
 			$str .= '</script>';
 			$css = '<style>#sco_amucallme_tag {border:1px solid #F5F5F5;float:left;overflow:hidden;}';
 			$css .= '#sco_amucallme_tag a {background:url("source/plugin/sco_amucallme/images/a1.png") no-repeat scroll 0 0 transparent;background-position:center  1px;border:1px solid #F5F5F5;float:left;overflow:hidden;}';
 			$css .= '#sco_amucallme_tag a:hover {background-color:#FFFFFF;border-color:#0099CC;text-decoration:none;}</style>';
+			*/
+			return $this->_fetch_template($this->_template('forum_post_middle_output'));
 		}
 		return $str.$css;
 	}
