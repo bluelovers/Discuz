@@ -276,6 +276,20 @@ class _sco_dx_plugin {
 	}
 
 	/**
+	 * fetch template content
+	 *
+	 * @param string $file
+	 */
+	function _fetch_template() {
+		ob_start();
+		include func_get_arg(0);
+		$_content = ob_get_contents();
+		ob_end_clean();
+
+		return $_content;
+	}
+
+	/**
 	 *
 	 * @example
 		$data_sco = _loop_glob('./data_sco', '*.sql');
