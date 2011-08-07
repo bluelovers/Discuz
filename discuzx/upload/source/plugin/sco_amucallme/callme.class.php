@@ -68,7 +68,7 @@ class plugin_sco_amucallme extends _sco_dx_plugin {
 
 class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 
-	function post_middle_output($a) {
+	function post_middle_output() {
 		global $_G;
 		if($_G['uid']){
 			/*
