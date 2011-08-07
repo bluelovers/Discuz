@@ -70,7 +70,6 @@ class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 
 	function post_middle_output($a) {
 		global $_G;
-		$str = $css = '';
 		if($_G['uid']){
 			/*
 			$str = '<script language="javascript">';
@@ -82,7 +81,7 @@ class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 			*/
 			return $this->_fetch_template($this->_template('forum_post_middle_output'));
 		}
-		return $str.$css;
+		return '';
 	}
 
 	function viewthread_postfooter_output(){
