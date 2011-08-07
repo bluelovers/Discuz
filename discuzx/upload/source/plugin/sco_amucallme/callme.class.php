@@ -13,9 +13,6 @@ class plugin_sco_amucallme extends _sco_dx_plugin {
 
 		$this->_fix_plugin_setting();
 
-		$this->fids = $this->attr['setting']['fids'];
-		$this->gids = $this->attr['setting']['gids'];
-
 		$this->_lang_load_plugin('script');
 		$this->_lang_load_plugin('template');
 
@@ -30,7 +27,7 @@ class plugin_sco_amucallme extends _sco_dx_plugin {
 
 	function sco_amucallme_output($a){
 		global $_G;
-		if($_G['uid'] && in_array($_G['fid'],$this->fids)){
+		if($_G['uid'] && in_array($_G['fid'],$this->attr['setting']['fids'])){
 			$turl = "forum.php?mod=redirect&goto=findpost&ptid={$a['values']['tid']}&pid={$a['values']['pid']}";
 			$url = $_G["siteurl"].$turl;$msg = $this->message;
 			$reply = $_G["siteurl"]."forum.php?mod=post&action=reply&tid={$a['values']['tid']}&repquote={$a['values']['pid']}";
@@ -129,7 +126,7 @@ class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 
 	function post_amucallme(){
 		global $_G;
-		if($_G['uid'] && in_array($_G['fid'],$this->fids)){
+		if($_G['uid'] && in_array($_G['fid'],$this->attr['setting']['fids'])){
 			$amupma= '/\[@\]([^ ,\[\n]{3,20})\[\/@\]/';
 			preg_match_all($amupma,$_G['gp_message'],$amu_pp,PREG_SET_ORDER);
 			loaducenter();
@@ -150,7 +147,7 @@ class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 				$this->usernames = $this->searchmembers($pp);
 			}
 		}
-		if($_G['uid'] && in_array($_G['fid'],$this->fids) && in_array($_G['groupid'],$this->gids)){
+		if($_G['uid'] && in_array($_G['fid'],$this->attr['setting']['fids']) && in_array($_G['groupid'],$this->attr['setting']['gids'])){
 			$amupma= '/\[@=group\]([0-9]+)\[\/@\]/';
 			preg_match_all($amupma,$_G['gp_message'],$amu_pp,PREG_SET_ORDER);
 			$callgids = (array)unserialize($_G['cache']['plugin']['sco_amucallme']['callgids']);
