@@ -3124,14 +3124,18 @@ function get_seosetting($page, $data = array(), $defset = array()) {
 
 function strreplace_strip_split($searchs, $replaces, $str) {
 	$searchspace = array(
+		/*
 		'((\s*\-\s*)+)',
+		*/
 		'((\s*\,\s*)+)',
 		'((\s*\|\s*)+)',
 		'((\s*\t\s*)+)',
 		'((\s*_\s*)+)',
 	);
 	$replacespace = array(
+		/*
 		'-',
+		*/
 		',',
 		'|',
 		' ',
