@@ -1,10 +1,12 @@
 <?php
+
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
-class plugin_amucallme_dzx{
+class plugin_amucallme_dzx extends _sco_dx_plugin {
 
 	function plugin_amucallme_dzx(){
 		global $_G;
@@ -81,7 +83,7 @@ class plugin_amucallme_dzx_forum extends plugin_amucallme_dzx {
 		return $str.$css;
 	}
 
-	function viewthread_postfooter_output(){		
+	function viewthread_postfooter_output(){
 		global $_G,$postlist;
 		$shows = array();
 		if($_G['uid']){
