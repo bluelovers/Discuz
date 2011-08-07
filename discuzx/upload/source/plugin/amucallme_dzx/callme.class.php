@@ -9,8 +9,7 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 class plugin_sco_amucallme extends _sco_dx_plugin {
 
 	function plugin_sco_amucallme_dzx(){
-		global $_G;
-		$this->mvars = $_G['cache']['plugin']['amucallme_dzx'];
+		$this->mvars = $this->attr['setting'];
 		$this->fids=(array)unserialize($this->mvars['fids']);
 		$this->gids = (array)unserialize($this->mvars['gids']);
 	}
