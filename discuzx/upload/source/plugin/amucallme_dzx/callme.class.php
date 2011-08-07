@@ -6,9 +6,9 @@ if(!defined('IN_DISCUZ')) {
 
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
-class plugin_amucallme_dzx extends _sco_dx_plugin {
+class plugin_sco_amucallme extends _sco_dx_plugin {
 
-	function plugin_amucallme_dzx(){
+	function plugin_sco_amucallme_dzx(){
 		global $_G;
 		$this->mvars = $_G['cache']['plugin']['amucallme_dzx'];
 		$this->fids=(array)unserialize($this->mvars['fids']);
@@ -67,7 +67,7 @@ class plugin_amucallme_dzx extends _sco_dx_plugin {
 
 }
 
-class plugin_amucallme_dzx_forum extends plugin_amucallme_dzx {
+class plugin_sco_amucallme_forum extends plugin_sco_amucallme {
 
 	function post_middle_output($a) {
 		global $_G;
