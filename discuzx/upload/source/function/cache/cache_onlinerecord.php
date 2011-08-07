@@ -15,13 +15,22 @@ if(!defined('IN_DISCUZ')) {
  * 最高記錄是 $onlineinfo[0] 於 $onlineinfo[1]
  */
 function build_cache_onlinerecord() {
+	global $_G;
+	$onlineinfo_old = explode("\t", $_G['cache']['onlinerecord']);
+
 	$onlinenum = DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
 
-	$onlinerecord = DB::fetch_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='onlinerecord'");
+	$onlinerecord = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='onlinerecord'");
 	$onlineinfo = explode("\t", $onlinerecord);
 
-	if($onlinenum > $onlineinfo[0]) {
-		$onlinerecord = "$onlinenum\t".TIMESTAMP;
+	if($onlinenum > $onlineinfo[0] || $onlineinfo[0] > $onlineinfo_old[0]) {
+
+		if ($onlinenum > $onlineinfo[0]) {
+			$onlinerecord = $onlinenum."\t".TIMESTAMP;
+		} elseif ($onlineinfo[0] > $onlineinfo_old[0]) {
+			$onlinerecord = $onlineinfo[0]."\t".$onlineinfo[1];
+		}
+
 		DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$onlinerecord' WHERE skey='onlinerecord'");
 		save_syscache('onlinerecord', $onlinerecord);
 		$onlineinfo = array($onlinenum, TIMESTAMP);
