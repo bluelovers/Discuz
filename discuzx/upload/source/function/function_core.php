@@ -3121,7 +3121,9 @@ function get_seosetting($page, $data = array(), $defset = array()) {
 	return array($seotitle, $seodescription, $seokeywords);
 }
 
-
+/**
+ * 用來清理多餘重複字
+ */
 function strreplace_strip_split($searchs, $replaces, $str) {
 	$searchspace = array(
 		/*
