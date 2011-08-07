@@ -550,6 +550,12 @@ if($_G['forum']['status'] != 3) {
 list($navtitle, $metadescription, $metakeywords) = get_seosetting($seotype, $seodata);
 if(!$navtitle) {
 	$navtitle = get_title_page($_G['forum_thread']['subject'], $_G['page']).' - '.strip_tags($_G['forum']['name']);
+
+	// bluelovers
+	$navtitle .= ' - '.strip_tags($_G['cache']['forums'][$fup]['name']);
+	$navtitle = strreplace_strip_split(array(), array(), $navtitle);
+	// bluelovers
+
 	$nobbname = false;
 } else {
 	$nobbname = true;
