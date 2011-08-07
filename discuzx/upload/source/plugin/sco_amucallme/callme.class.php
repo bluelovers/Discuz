@@ -8,10 +8,17 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_amucallme extends _sco_dx_plugin {
 
-	function plugin_sco_sco_amucallme(){
+	function plugin_sco_amucallme(){
+		$this->_init($this->_get_identifier(__METHOD__));
+
 		$this->mvars = $this->attr['setting'];
 		$this->fids=(array)unserialize($this->mvars['fids']);
 		$this->gids = (array)unserialize($this->mvars['gids']);
+
+		$this->_lang_load_plugin('script');
+		$this->_lang_load_plugin('template');
+
+		$this->attr['lang']['template'] = array_merge($this->attr['lang']['script'], $this->attr['lang']['template']);
 	}
 
 	function searchmembers($condition, $limit=100, $start=0) {
