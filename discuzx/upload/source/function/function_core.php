@@ -3127,7 +3127,7 @@ function strreplace_strip_split($searchs, $replaces, $str) {
 		/*
 		'((\s*\-\s*)+)',
 		*/
-		'/(?:(\s)*)\-(\s)*)+/',
+		'/(?:(\s)*\-(\s)*)+/',
 		'((\s*\,\s*)+)',
 		'((\s*\|\s*)+)',
 		'((\s*\t\s*)+)',
