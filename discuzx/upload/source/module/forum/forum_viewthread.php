@@ -86,6 +86,7 @@ if($_G['gp_from'] == 'portal') {
 
 
 } elseif($_G['forum']['status'] == 3) {
+	// 群組
 	$_G['action']['action'] = 3;
 	require_once libfile('function/group');
 	$status = groupperm($_G['forum'], $_G['uid']);
