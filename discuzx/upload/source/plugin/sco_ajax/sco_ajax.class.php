@@ -17,4 +17,8 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 	}
 }
 
+class plugin_sco_ajax_forum extends plugin_sco_ajax {
+
+}
+
 ?>
