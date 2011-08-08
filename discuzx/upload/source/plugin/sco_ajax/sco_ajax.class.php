@@ -183,6 +183,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'showdialog' => false,
 		);
 
+		if (!in_array($_G['groupid'], array(1, 2))) {
+			showmessage('forum_access_view_disallow', null, null, $extraparam);
+		}
+
 		// 群組權限
 
 		if ($_G['forum']['status'] == 3) {
@@ -190,13 +194,13 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			$status = groupperm($_G['forum'], $_G['uid']);
 			if($status == 1) {
 				// 'forum_group_status_off' => '該{_G/setting/navs/3/navname}已關閉',
-				showmessage('forum_group_status_off');
+				showmessage('forum_group_status_off', null, null, $extraparam);
 			} elseif($status == 2) {
 				// 'forum_group_noallowed' => '抱歉，您沒有權限訪問該{_G/setting/navs/3/navname}',
-				showmessage('forum_group_noallowed');
+				showmessage('forum_group_noallowed', null, null, $extraparam);
 			} elseif($status == 3) {
 				// 'forum_group_moderated' => '請等待群主審核',
-				showmessage('forum_group_moderated');
+				showmessage('forum_group_moderated', null, null, $extraparam);
 			}
 		}
 
@@ -205,7 +209,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		if(empty($_G['forum']['allowview'])) {
 
 			if(!$_G['forum']['viewperm'] && !$_G['group']['readaccess']) {
-				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 0));
+				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), $extraparam);
 			} elseif($_G['forum']['viewperm'] && !forumperm($_G['forum']['viewperm'])) {
 				showmessagenoperm('viewperm', $_G['fid'], null, $extraparam);
 			}
@@ -224,13 +228,13 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		if($_G['forum']['password'] && $_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
 			// 'forum_passwd_incorrect' => '抱歉，您輸入的密碼不正確，不能訪問這個版塊',
-			showmessage('forum_passwd_incorrect', NULL);
+			showmessage('forum_passwd_incorrect', NULL, null, $extraparam);
 		}
 
 		// 閱讀權限
 
 		if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
-			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 0));
+			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), $extraparam);
 		}
 
 		// 付費主題
@@ -255,7 +259,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		}
 
 		if ($_G['forum_threadpay'] == TRUE) {
-			showmessage('thread_pay_error', NULL);
+			showmessage('thread_pay_error', NULL, null, $extraparam);
 		}
 	}
 
