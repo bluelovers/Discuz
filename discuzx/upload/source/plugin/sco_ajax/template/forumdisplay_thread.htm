@@ -33,13 +33,13 @@ function _ajax_viewthread(who) {
 
 					_this.attr('src', _this.attr('src').replace('_show.gif', '_hide.gif'));
 
-					jQuery(_ct).hide().slideDown('slow')
+					jQuery(_ct).hide().slideDown()
 				}
 			);
 		} else {
 			_this.attr('src', _this.attr('src').replace('_show.gif', '_hide.gif'));
 			jQuery('#' + _this.attr('data-id') + '_ajax').show();
-			jQuery(_ct).slideDown('slow');
+			jQuery(_ct).slideDown();
 
 		}
 	} else {
