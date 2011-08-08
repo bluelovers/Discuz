@@ -330,8 +330,14 @@ function buildbitsql($fieldname, $position, $value) {
 	return $t.' ';
 }
 
-function showmessagenoperm($type, $fid, $formula = '') {
+function showmessagenoperm($type, $fid, $formula = '', $extraparam = array()) {
 	global $_G;
+
+	// bluelovers
+	// 額外設定 showmessage $extraparam 參數
+	$extraparam = array_merge(array('login' => 1), (array)$extraparam);
+	// bluelovers
+
 	loadcache('usergroups');
 	if($formula) {
 		$formula = unserialize($formula);
