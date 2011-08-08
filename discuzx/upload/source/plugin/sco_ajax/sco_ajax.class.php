@@ -16,6 +16,9 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 		$this->_init($this->_get_identifier(__METHOD__));
 	}
 
+	/**
+	 * 檢查是否有權限使用此插件
+	 */
 	function _my_plugin_access_ban($ret = true) {
 		global $_G;
 
