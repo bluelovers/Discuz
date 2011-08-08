@@ -19,7 +19,14 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 
 class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function ajax_viewthread() {
+		$this->_hook('Script_forum_ajax:After_action_else', array(
+				&$this,
+				'_my_ajax_viewthread'
+		));
+	}
 
+	function _my_ajax_viewthread() {
+		dexit();
 	}
 }
 
