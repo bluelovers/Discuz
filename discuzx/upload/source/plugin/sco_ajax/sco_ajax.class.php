@@ -80,6 +80,29 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
 			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 1));
 		}
+
+		$threadtable = $_G['forum_thread']['threadtable'];
+
+		$_G['forum_threadpay'] = FALSE;
+		if($_G['forum_thread']['price'] > 0 && $_G['forum_thread']['special'] == 0) {
+			if($_G['setting']['maxchargespan'] && TIMESTAMP - $_G['forum_thread']['dateline'] >= $_G['setting']['maxchargespan'] * 3600) {
+				DB::query("UPDATE ".DB::table($threadtable)." SET price='0' WHERE tid='$_G[tid]'");
+				$_G['forum_thread']['price'] = 0;
+			} else {
+				$exemptvalue = $_G['forum']['ismoderator'] ? 128 : 16;
+				if(!($_G['group']['exempt'] & $exemptvalue) && $_G['forum_thread']['authorid'] != $_G['uid']) {
+					$query = DB::query("SELECT relatedid FROM ".DB::table('common_credit_log')." WHERE relatedid='$_G[tid]' AND uid='$_G[uid]' AND operation='BTC'");
+					if(!DB::num_rows($query)) {
+						include_once libfile('thread/pay', 'include');
+						$_G['forum_threadpay'] = TRUE;
+					}
+				}
+			}
+		}
+
+		if ($_G['forum_threadpay'] == TRUE) {
+			showmessage('thread_pay_error', NULL);
+		}
 	}
 
 	function _my_ajax_viewthread() {
