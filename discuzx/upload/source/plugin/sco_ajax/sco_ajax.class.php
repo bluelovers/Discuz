@@ -30,8 +30,6 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		$this->_my_ajax_viewthread();
 
-		$query = $this->_my_postlist_sql();
-
 		extract($this->attr['global']);
 		$plugin_self = &$this;
 
@@ -42,6 +40,12 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 	function _my_ajax_viewthread() {
 		$this->_my_check_allowview();
+
+		$sql = $this->_my_postlist_sql();
+		$query = DB::query($sql);
+		while($post = DB::fetch($query)) {
+
+		}
 	}
 
 	function _my_postlist_sql() {
