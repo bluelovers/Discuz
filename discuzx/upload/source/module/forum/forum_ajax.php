@@ -443,7 +443,13 @@ EOF;
 // bluelovers
 } else {
 
-
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_ajax:After_action_else
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':After_action_else')
+			->run(array(array(
+				'action'	=> &$_G['gp_action'],
+		)));
+	}
 
 // bluelovers
 }
