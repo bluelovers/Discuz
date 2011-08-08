@@ -76,6 +76,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			// 'forum_passwd_incorrect' => '抱歉，您輸入的密碼不正確，不能訪問這個版塊',
 			showmessage('forum_passwd_incorrect', NULL);
 		}
+
+		if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
+			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 1));
+		}
 	}
 
 	function _my_ajax_viewthread() {
