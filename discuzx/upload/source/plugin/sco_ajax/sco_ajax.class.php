@@ -15,10 +15,35 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 	function plugin_sco_ajax() {
 		$this->_init($this->_get_identifier(__METHOD__));
 	}
+
+	function _my_plugin_access_ban($ret = true) {
+		$access_ban = false;
+
+		$extraparam = array(
+			'login' => 0,
+
+			// Ajax 只顯示信息文本
+			'msgtype' => 3,
+			'showdialog' => false,
+		);
+
+		if (!in_array($_G['groupid'], array(1, 2, 3))) {
+			$access_ban = true;
+		}
+
+		if (!$ret && $access_ban) {
+			showmessage('forum_access_view_disallow', null, null, $extraparam);
+		}
+
+		return $access_ban;
+	}
 }
 
 class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function ajax_viewthread() {
+
+		$this->_my_plugin_access_ban(false);
+
 		$this->_hook('Script_forum_ajax:After_action_else', array(
 				&$this,
 				'_hook_ajax_viewthread'
@@ -183,10 +208,6 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'showdialog' => false,
 		);
 
-		if (!in_array($_G['groupid'], array(1, 2, 3))) {
-			showmessage('forum_access_view_disallow', null, null, $extraparam);
-		}
-
 		// 群組權限
 
 		if ($_G['forum']['status'] == 3) {
@@ -276,7 +297,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		global $_G;
 
 		// 不顯示給訪客使用
-		if (!$_G['uid']) return;
+		if (!$_G['uid'] || $this->_my_plugin_access_ban()) return;
 
 		$this->_hook(
 			'Tpl_Func_hooktags:Before',
