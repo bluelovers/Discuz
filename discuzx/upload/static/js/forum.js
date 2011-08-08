@@ -446,6 +446,9 @@ function checkForumnew_btn(fid) {
 	lasttime = parseInt(Date.parse(new Date()) / 1000);
 }
 
+/**
+ * @example addtbodyrow(table, ['tbody', 'newthread'], ['normalthread_', 'normalthread_'], 'separatorline', newthread[i]);
+ */
 function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	if(isUndefined(table) || isUndefined(insertID[0])) {
 		return;
@@ -463,33 +466,58 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	if(!isUndefined(insertID[1])) {
 		insertobj.className = insertID[1];
 	}
-	if($(separatorid)) {
-		table.insertBefore(insertobj, $(separatorid).nextSibling);
-	} else {
-		table.insertBefore(insertobj, table.firstChild);
+
+	// bluelovers
+	// add style
+	if (!isUndefined(insertID[3])) {
+		insertobj.style.cssText = insertID[3];
 	}
+	// bluelovers
+
 	var newTH = insertobj.insertRow(-1);
 	for(var value in thread) {
 		if(value != 0) {
 			var cell = newTH.insertCell(-1);
+
+			if(!isUndefined(thread[value]['colspan'])) {
+				cell.colSpan = thread[value]['colspan'];
+			}
+			if(!isUndefined(thread[value]['className'])) {
+				cell.className = thread[value]['className'];
+			}
+
+			// bluelovers
+			if(!isUndefined(thread[value]['style'])) {
+				cell.style.cssText = thread[value]['style'];
+			}
+
+			if(!isUndefined(thread[value]['id'])) {
+				cell.id = thread[value]['id'];
+			}
+			// bluelovers
+
 			if(isUndefined(thread[value]['val'])) {
 				cell.innerHTML = thread[value];
 			} else {
 				cell.innerHTML = thread[value]['val'];
 			}
-			if(!isUndefined(thread[value]['className'])) {
-				cell.className = thread[value]['className'];
-			}
-			if(!isUndefined(thread[value]['colspan'])) {
-				cell.colSpan = thread[value]['colspan'];
-			}
 		}
+	}
+
+	if($(separatorid)) {
+		table.insertBefore(insertobj, $(separatorid).nextSibling);
+	} else {
+		table.insertBefore(insertobj, table.firstChild);
 	}
 
 	if(!isUndefined(insertID[2])) {
 		_attachEvent(insertobj, insertID[2], function() {insertobj.className = '';});
 	}
 }
+
+/**
+ * @example removetbodyrow(table, 'forumnewshow');
+ */
 function removetbodyrow(from, objid) {
 	if(!isUndefined(from) && $(objid)) {
 		from.removeChild($(objid));

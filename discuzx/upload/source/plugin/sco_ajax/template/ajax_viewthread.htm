@@ -1,0 +1,39 @@
+<!--{if $_G['inajax']}-->
+	<!--{template common/header_ajax}-->
+<!--{/if}-->
+
+<div id="thread_{$_G[gp_tid]}_ajax_ct" style="padding-left: 1em;">
+
+	<span class="notice y">BETA</span>
+
+	<ul>
+	<!--{loop $postlist $post}-->
+		<li>
+			<dl class="cl">
+				<dt class="avt float_left">
+					<!--{avatar($post[authorid],array('small'))}-->
+				</dt>
+				<dd style="
+line-height: 1.6em;
+max-height: 58px;
+overflow: hidden;
+padding: 3px;
+">
+					<a href="home.php?mod=space&uid={$post[authorid]}" target="_blank">$post[author]</a>
+					&nbsp; <em>$post[dateline]</em>
+					&nbsp;
+					<a href="forum.php?mod=redirect&goto=findpost&ptid={$post[tid]}&pid={$post[pid]}" target="_blank">
+						#{$post[number]} &nbsp; {$post[subject]}
+					</a>
+					<br />
+					$post[message]
+				</dd>
+			</dl>
+		</li>
+	<!--{/loop}-->
+	</ul>
+
+</div>
+<!--{if $_G['inajax']}-->
+	<!--{template common/footer_ajax}-->
+<!--{/if}-->

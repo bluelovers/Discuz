@@ -33,8 +33,13 @@ function dunlink($attach) {
 	}
 }
 
-function formulaperm($formula) {
+function formulaperm($formula, $extraparam = array()) {
 	global $_G;
+
+	// bluelovers
+	// 額外設定 showmessage $extraparam 參數
+	$extraparam = array_merge(array('login' => 1), (array)$extraparam);
+	// bluelovers
 
 	$formula = unserialize($formula);
 	$medalperm = $formula['medal'];
@@ -65,7 +70,7 @@ function formulaperm($formula) {
 					$_G['forum_formulamessage'] .= '<img src="'.STATICURL.'image/common/'.$_G['cache']['medals'][$medal]['image'].'" style="vertical-align:middle;" />&nbsp;'.$_G['cache']['medals'][$medal]['name'].'&nbsp; ';
 				}
 			}
-			showmessage('forum_permforum_nomedal', NULL, array('forum_permforum_nomedal' => $_G['forum_formulamessage']), array('login' => 1));
+			showmessage('forum_permforum_nomedal', NULL, array('forum_permforum_nomedal' => $_G['forum_formulamessage']), $extraparam);
 		}
 	}
 	$formulatext = $formula[0];
@@ -77,7 +82,7 @@ function formulaperm($formula) {
 		$permusers = str_replace(array("\r\n", "\r"), array("\n", "\n"), $permusers);
 		$permusers = explode("\n", trim($permusers));
 		if(!in_array($_G['member']['username'], $permusers)) {
-			showmessage('forum_permforum_disallow', NULL, array(), array('login' => 1));
+			showmessage('forum_permforum_disallow', NULL, array(), $extraparam);
 		}
 	}
 	if(!$formula) {
@@ -160,9 +165,9 @@ function formulaperm($formula) {
 		}
 
 		if(!$permmessage) {
-			showmessage('forum_permforum_nopermission', NULL, array('formulamessage' => $_G['forum_formulamessage'], 'usermsg' => $_G['forum_usermsg']), array('login' => 1));
+			showmessage('forum_permforum_nopermission', NULL, array('formulamessage' => $_G['forum_formulamessage'], 'usermsg' => $_G['forum_usermsg']), $extraparam);
 		} else {
-			showmessage('forum_permforum_nopermission_custommsg', NULL, array('formulamessage' => $_G['forum_formulamessage']), array('login' => 1));
+			showmessage('forum_permforum_nopermission_custommsg', NULL, array('formulamessage' => $_G['forum_formulamessage']), $extraparam);
 		}
 	}
 	return TRUE;
@@ -325,8 +330,14 @@ function buildbitsql($fieldname, $position, $value) {
 	return $t.' ';
 }
 
-function showmessagenoperm($type, $fid, $formula = '') {
+function showmessagenoperm($type, $fid, $formula = '', $extraparam = array()) {
 	global $_G;
+
+	// bluelovers
+	// 額外設定 showmessage $extraparam 參數
+	$extraparam = array_merge(array('login' => 1), (array)$extraparam);
+	// bluelovers
+
 	loadcache('usergroups');
 	if($formula) {
 		$formula = unserialize($formula);
@@ -393,7 +404,7 @@ function showmessagenoperm($type, $fid, $formula = '') {
 		}
 	}
 
-	showmessage($message, NULL, array('fid' => $fid, 'permgroups' => $permgroups, 'grouptitle' => $_G['group']['grouptitle']), array('login' => 1), $custom);
+	showmessage($message, NULL, array('fid' => $fid, 'permgroups' => $permgroups, 'grouptitle' => $_G['group']['grouptitle']), $extraparam, $custom);
 }
 
 function loadforum() {

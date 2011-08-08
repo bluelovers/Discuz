@@ -86,14 +86,18 @@ if($_G['gp_from'] == 'portal') {
 
 
 } elseif($_G['forum']['status'] == 3) {
+	// 群組
 	$_G['action']['action'] = 3;
 	require_once libfile('function/group');
 	$status = groupperm($_G['forum'], $_G['uid']);
 	if($status == 1) {
+		// 'forum_group_status_off' => '該{_G/setting/navs/3/navname}已關閉',
 		showmessage('forum_group_status_off');
 	} elseif($status == 2) {
+		// 'forum_group_noallowed' => '抱歉，您沒有權限訪問該{_G/setting/navs/3/navname}',
 		showmessage('forum_group_noallowed', 'forum.php?mod=group&fid='.$_G['fid']);
 	} elseif($status == 3) {
+		// 'forum_group_moderated' => '請等待群主審核',
 		showmessage('forum_group_moderated', 'forum.php?mod=group&fid='.$_G['fid']);
 	}
 	$nav = get_groupnav($_G['forum']);
@@ -149,6 +153,8 @@ if($threadsort) {
 	$threadsortshow = threadsortshow($thread['sortid'], $_G['tid']);
 }
 
+// 版塊權限
+
 if(empty($_G['forum']['allowview'])) {
 
 	if(!$_G['forum']['viewperm'] && !$_G['group']['readaccess']) {
@@ -161,13 +167,19 @@ if(empty($_G['forum']['allowview'])) {
 	showmessage('forum_access_view_disallow');
 }
 
+// 版塊權限
+
 if($_G['forum']['formulaperm']) {
 	formulaperm($_G['forum']['formulaperm']);
 }
 
+// 版塊密碼
+
 if($_G['forum']['password'] && $_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
 	dheader("Location: $_G[siteurl]forum.php?mod=forumdisplay&fid=$_G[fid]");
 }
+
+// 閱讀權限
 
 if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
 	showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 1));
@@ -182,6 +194,8 @@ $hiddenreplies = getstatus($_G['forum_thread']['status'], 2);
 $rushreply = getstatus($_G['forum_thread']['status'], 3);
 
 $savepostposition = getstatus($_G['forum_thread']['status'], 1);
+
+// 付費主題
 
 $_G['forum_threadpay'] = FALSE;
 if($_G['forum_thread']['price'] > 0 && $_G['forum_thread']['special'] == 0) {
