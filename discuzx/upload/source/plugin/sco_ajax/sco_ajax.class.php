@@ -49,6 +49,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'showdialog' => false,
 		);
 
+		// 群組權限
+
 		if ($_G['forum']['status'] == 3) {
 			include_once libfile('function/group');
 			$status = groupperm($_G['forum'], $_G['uid']);
@@ -64,6 +66,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			}
 		}
 
+		// 版塊權限
+
 		if(empty($_G['forum']['allowview'])) {
 
 			if(!$_G['forum']['viewperm'] && !$_G['group']['readaccess']) {
@@ -76,18 +80,26 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			showmessage('forum_access_view_disallow');
 		}
 
+		// 版塊權限
+
 		if($_G['forum']['formulaperm']) {
 			formulaperm($_G['forum']['formulaperm'], $extraparam);
 		}
+
+		// 版塊密碼
 
 		if($_G['forum']['password'] && $_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
 			// 'forum_passwd_incorrect' => '抱歉，您輸入的密碼不正確，不能訪問這個版塊',
 			showmessage('forum_passwd_incorrect', NULL);
 		}
 
+		// 閱讀權限
+
 		if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
 			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 0));
 		}
+
+		// 付費主題
 
 		$threadtable = $_G['forum_thread']['threadtable'];
 
