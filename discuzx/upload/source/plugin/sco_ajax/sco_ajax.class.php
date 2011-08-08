@@ -297,7 +297,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		global $_G;
 
 		// 不顯示給訪客使用
-		if (!$_G['uid'] || $this->_my_plugin_access_ban()) return;
+		if (!$_G['uid'] || $this->_my_plugin_access_ban(true)) return;
 
 		$this->_hook(
 			'Tpl_Func_hooktags:Before',
