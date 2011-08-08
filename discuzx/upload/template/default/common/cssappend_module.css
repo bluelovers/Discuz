@@ -10,6 +10,8 @@
 		font-family:Verdana;
 	}
 
+	.tl .th { line-height: 2em; }
+
 	.tl th *, .tl td.icn *, .tl td.o * { vertical-align: middle; }
 /** end **/
 
