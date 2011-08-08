@@ -21,11 +21,11 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function ajax_viewthread() {
 		$this->_hook('Script_forum_ajax:After_action_else', array(
 				&$this,
-				'_my_ajax_viewthread'
+				'_hook_ajax_viewthread'
 		));
 	}
 
-	function _my_ajax_viewthread() {
+	function _hook_ajax_viewthread() {
 
 		extract($this->attr['global']);
 		$plugin_self = &$this;
@@ -49,11 +49,11 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'Tpl_Func_hooktags:Before',
 			array(
 				&$this,
-				'_forumdisplay_thread_output'
+				'_hook_forumdisplay_thread_output'
 		));
 	}
 
-	function _forumdisplay_thread_output($_EVENT, $hook_ret, $hook_id, $hook_key) {
+	function _hook_forumdisplay_thread_output($_EVENT, $hook_ret, $hook_id, $hook_key) {
 		if ($hook_id != 'forumdisplay_thread') return;
 
 		global $_G;
