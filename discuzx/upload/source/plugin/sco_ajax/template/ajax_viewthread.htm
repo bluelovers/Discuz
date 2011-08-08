@@ -16,10 +16,12 @@
 line-height: 1.6em;
 max-height: 58px;
 overflow: hidden;
-padding-left: 0.7em;
+padding: 3px;
 ">
 					<a href="home.php?mod=space&uid={$post[authorid]}" target="_blank">$post[author]</a>
 					&nbsp; <em>$post[dateline]</em>
+
+					&nbsp; #{$post[number]} &nbsp; {$post[subject]}
 					<br />
 					$post[message]
 				</dd>

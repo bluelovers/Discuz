@@ -62,6 +62,20 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _my_viewthread_procpost($post) {
 		global $_G;
 
+		if($_G['forum_pagebydesc']) {
+			if($ordertype != 1) {
+				$post['number'] = $_G['forum_numpost'] + $_G['forum_ppp2']--;
+			} else {
+				$post['number'] = $post['first'] == 1 ? 1 : $_G['forum_numpost'] - $_G['forum_ppp2']--;
+			}
+		} else {
+			if($ordertype != 1) {
+				$post['number'] = ++$_G['forum_numpost'];
+			} else {
+				$post['number'] = $post['first'] == 1 ? 1 : --$_G['forum_numpost'];
+			}
+		}
+
 		$_G['forum_postcount']++;
 
 		$post['dbdateline'] = $post['dateline'];
