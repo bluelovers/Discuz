@@ -17,6 +17,8 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 	}
 
 	function _my_plugin_access_ban($ret = true) {
+		global $_G;
+
 		$access_ban = false;
 
 		$extraparam = array(
