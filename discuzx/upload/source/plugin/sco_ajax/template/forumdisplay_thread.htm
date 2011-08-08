@@ -38,13 +38,13 @@ function _ajax_viewthread(who) {
 			);
 		} else {
 			_this.attr('src', _this.attr('src').replace('_show.gif', '_hide.gif'));
-			jQuery('#' + _this.attr('data-id') + '_ajax').show();
+			jQuery('#normalthread_' + _this.attr('data-tid') + '_ajax').show();
 			jQuery(_ct).slideDown();
 
 		}
 	} else {
 		_this.attr('src', _this.attr('src').replace('_hide.gif', '_show.gif'));
-		jQuery('#' + _this.attr('data-id') + '_ajax').hide();
+		jQuery('#normalthread_' + _this.attr('data-tid') + '_ajax').hide();
 		jQuery(_ct).hide();
 	}
 
