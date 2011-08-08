@@ -26,6 +26,12 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _my_ajax_viewthread() {
+
+		extract($this->attr['global']);
+		$plugin_self = &$this;
+
+		include $this->_template('ajax_viewthead');
+
 		dexit();
 	}
 }
