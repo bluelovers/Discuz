@@ -469,8 +469,8 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 
 	// bluelovers
 	// add style
-	if (!isUndefined(insertID[2])) {
-		insertobj.style.cssText = insertID[2];
+	if (!isUndefined(insertID[3])) {
+		insertobj.style.cssText = insertID[3];
 	}
 	// bluelovers
 
