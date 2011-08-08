@@ -483,17 +483,20 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	for(var value in thread) {
 		if(value != 0) {
 			var cell = newTH.insertCell(-1);
+
+			if(!isUndefined(thread[value]['colspan'])) {
+				cell.colSpan = thread[value]['colspan'];
+			}
+			if(!isUndefined(thread[value]['className'])) {
+				cell.className = thread[value]['className'];
+			}
+
 			if(isUndefined(thread[value]['val'])) {
 				cell.innerHTML = thread[value];
 			} else {
 				cell.innerHTML = thread[value]['val'];
 			}
-			if(!isUndefined(thread[value]['className'])) {
-				cell.className = thread[value]['className'];
-			}
-			if(!isUndefined(thread[value]['colspan'])) {
-				cell.colSpan = thread[value]['colspan'];
-			}
+
 		}
 	}
 
