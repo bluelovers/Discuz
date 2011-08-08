@@ -474,11 +474,6 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	}
 	// bluelovers
 
-	if($(separatorid)) {
-		table.insertBefore(insertobj, $(separatorid).nextSibling);
-	} else {
-		table.insertBefore(insertobj, table.firstChild);
-	}
 	var newTH = insertobj.insertRow(-1);
 	for(var value in thread) {
 		if(value != 0) {
@@ -503,6 +498,12 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 				cell.innerHTML = thread[value]['val'];
 			}
 		}
+	}
+
+	if($(separatorid)) {
+		table.insertBefore(insertobj, $(separatorid).nextSibling);
+	} else {
+		table.insertBefore(insertobj, table.firstChild);
 	}
 
 	if(!isUndefined(insertID[2])) {
