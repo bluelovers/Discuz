@@ -51,12 +51,19 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 				$_G['forum_firstpid'] = $post['pid'];
 				if(IS_ROBOT || $_G['adminid'] == 1) $summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
 			}
-			$postlist[$post['pid']] = $post;
+			$postlist[$post['pid']] = $this->_my_viewthread_procpost($post);
 		}
 
 		$this
 			->_setglobal('postlist', &$postlist)
 		;
+	}
+
+	function _my_viewthread_procpost($post) {
+
+		$_G['forum_postcount']++;
+
+		return $post;
 	}
 
 	function _my_postlist_sql() {
