@@ -21,7 +21,7 @@ function _ajax_viewthread(who) {
 			var x = new Ajax();
 			x.get(x.fixurl(
 				'forum.php?mod=ajax&action=viewthread&tid=' + _this.attr('data-tid') + '&theadid=' + _this.attr('data-id')
-				, {ajaxtarget : 'normalthread_' + _this.attr('data-tid') + '_ajax'}
+				, {ajaxtarget : 'thread_' + _this.attr('data-tid') + '_ajax_body'}
 				)
 				, function(s, x) {
 					addtbodyrow(table, ['tbody', 'ajax_viewthread'], ['normalthread_', 'normalthread_'], _this.attr('data-id'), {
@@ -29,7 +29,8 @@ function _ajax_viewthread(who) {
 						thread : {
 							'icn' : {
 								val : s,
-								colspan : colspan
+								colspan : colspan,
+								id : 'thread_' + _this.attr('data-tid') + '_ajax_body'
 							}
 						}
 					});
@@ -38,7 +39,7 @@ function _ajax_viewthread(who) {
 
 					jQuery(_ct).hide().slideDown();
 
-					ajaxupdateevents($('normalthread_' + _this.attr('data-tid') + '_ajax'));
+					ajaxupdateevents($('thread_' + _this.attr('data-tid') + '_ajax_body'));
 				}
 			);
 		} else {
