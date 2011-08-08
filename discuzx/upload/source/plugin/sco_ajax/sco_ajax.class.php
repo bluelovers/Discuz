@@ -60,8 +60,18 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _my_viewthread_procpost($post) {
+		global $_G;
 
 		$_G['forum_postcount']++;
+
+		$post['dbdateline'] = $post['dateline'];
+		if($_G['setting']['dateconvert']) {
+			$post['dateline'] = dgmdate($post['dateline'], 'u');
+		} else {
+			$dformat = getglobal('setting/dateformat');
+			$tformat = getglobal('setting/timeformat');
+			$post['dateline'] = dgmdate($post['dateline'], $dformat.' '.str_replace(":i", ":i:s", $tformat));
+		}
 
 		return $post;
 	}
@@ -85,6 +95,9 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		$savepostposition = getstatus($_G['forum_thread']['status'], 1);
 
 		$_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
+
+		$_G['ppp'] = 5;
+
 		$totalpage = ceil(($_G['forum_thread']['replies'] + 1) / $_G['ppp']);
 		$page > $totalpage && $page = $totalpage;
 
