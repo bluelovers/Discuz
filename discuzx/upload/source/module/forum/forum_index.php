@@ -193,6 +193,8 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 			}
 			*/
 			// bluelovers
+			include_once libfile('function/cache');
+
 			updatecache('onlinerecord');
 			$onlinenum = discuz_core::$_cache_data['onlinerecord']['onlinenum'];
 			// bluelovers
