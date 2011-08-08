@@ -36,6 +36,11 @@ function dunlink($attach) {
 function formulaperm($formula, $extraparam = array()) {
 	global $_G;
 
+	// bluelovers
+	// 額外設定 showmessage $extraparam 參數
+	$extraparam = array_merge(array('login' => 1), (array)$extraparam);
+	// bluelovers
+
 	$formula = unserialize($formula);
 	$medalperm = $formula['medal'];
 	$permusers = $formula['users'];
