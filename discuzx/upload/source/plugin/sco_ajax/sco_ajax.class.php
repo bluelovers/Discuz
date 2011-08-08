@@ -30,6 +30,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		$this->_my_ajax_viewthread();
 
+		$query = $this->_my_postlist_sql();
+
 		extract($this->attr['global']);
 		$plugin_self = &$this;
 
@@ -40,6 +42,77 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 	function _my_ajax_viewthread() {
 		$this->_my_check_allowview();
+	}
+
+	function _my_postlist_sql() {
+		global $_G;
+
+		$posttableid = $_G['forum_thread']['posttableid'];
+		$posttable = $_G['forum_thread']['posttable'];
+
+		$page = $_G['page'];
+
+		$usemagic = array('user' => array(), 'thread' => array());
+
+		$replynotice = getstatus($_G['forum_thread']['status'], 6);
+
+		$hiddenreplies = getstatus($_G['forum_thread']['status'], 2);
+
+		$rushreply = getstatus($_G['forum_thread']['status'], 3);
+
+		$savepostposition = getstatus($_G['forum_thread']['status'], 1);
+
+		$_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
+		$totalpage = ceil(($_G['forum_thread']['replies'] + 1) / $_G['ppp']);
+		$page > $totalpage && $page = $totalpage;
+
+
+		$start_limit = $_G['forum_numpost'] = max(0, ($page - 1) * $_G['ppp']);
+		if($start_limit > $_G['forum_thread']['replies']) {
+			$start_limit = $_G['forum_numpost'] = 0;
+			$page = 1;
+		}
+
+		$pageadd = "ORDER BY p.dateline LIMIT $start_limit, $_G[ppp]";
+
+		$query = "SELECT p.* $postfieldsadd FROM ".DB::table($posttable)." p $specialadd1 ";
+
+		$isdel_post = $cachepids = $positionlist = $postusers = $skipaids = array();
+		if($savepostposition && empty($onlyauthoradd) && empty($specialadd2) && empty($_G['gp_viewpid']) && $ordertype != 1) {
+			$start = ($page - 1) * $_G['ppp'] + 1;
+			$end = $start + $_G['ppp'];
+			$q2 = DB::query("SELECT pid, position FROM ".DB::table('forum_postposition')." WHERE tid='$_G[tid]' AND position>='$start' AND position<'$end' ORDER BY position");
+			$realpost = $lastposition = 0;
+			while ($post = DB::fetch($q2)) {
+				$cachepids[$post[position]] = $post['pid'];
+				$positionlist[$post['pid']] = $post['position'];
+				$lastposition = $post['position'];
+			}
+			$realpost = count($positionlist);
+			if($realpost != $_G['ppp']) {
+				$k = 0;
+				for($i = $start; $i < $end; $i ++) {
+					if(!empty($cachepids[$i])) {
+						$k = $cachepids[$i];
+						$isdel_post[$k] = array('message' => lang('forum/misc', 'post_deleted'), 'number' => $i);
+					} elseif($i < $maxposition || ($lastposition && $i < $lastposition)) {
+						$isdel_post[$k] = array('message' => lang('forum/misc', 'post_deleted'), 'number' => $i);
+					}
+					$k ++;
+				}
+			}
+			$cachepids = dimplode($cachepids);
+			$pagebydesc = false;
+		}
+
+		$query .= $savepostposition && $cachepids ? "WHERE p.pid IN ($cachepids)" : ("WHERE p.tid='$_G[gp_tid]'".($_G['forum_auditstatuson'] || in_array($_G['forum_thread']['displayorder'], array(-2, -3, -4)) && $_G['forum_thread']['authorid'] == $_G['uid'] ? '' : " AND p.invisible='0'")." $specialadd2 $onlyauthoradd $pageadd");
+
+		$this
+			->_setglobal('page', &$page)
+			->_setglobal('totalpage', &$totalpage)
+		;
+
+		return $query;
 	}
 
 	function _my_check_allowview() {
