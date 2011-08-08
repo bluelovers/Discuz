@@ -169,6 +169,7 @@ if($_G['forum']['password']) {
 			showmessage('forum_passwd_incorrect', NULL);
 		} else {
 			dsetcookie('fidpw'.$_G['fid'], $_G['gp_pw']);
+			// 'forum_passwd_correct' => '密碼驗證成功 ',
 			showmessage('forum_passwd_correct', "forum.php?mod=forumdisplay&fid=$_G[fid]");
 		}
 	} elseif($_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
