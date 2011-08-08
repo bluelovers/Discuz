@@ -194,9 +194,17 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		$query .= $savepostposition && $cachepids ? "WHERE p.pid IN ($cachepids)" : ("WHERE p.tid='$_G[gp_tid]'".($_G['forum_auditstatuson'] || in_array($_G['forum_thread']['displayorder'], array(-2, -3, -4)) && $_G['forum_thread']['authorid'] == $_G['uid'] ? '' : " AND p.invisible='0'")." $specialadd2 $onlyauthoradd $pageadd");
 
+		$multipage = multi(
+			$_G['forum_thread']['replies'] + 1,
+			$_G['ppp'],
+			$page,
+			'forum.php?mod=ajax&action=viewthread&tid='.$_G['tid']
+		);
+
 		$this
 			->_setglobal('page', &$page)
 			->_setglobal('totalpage', &$totalpage)
+			->_setglobal('multipage', &$multipage)
 		;
 
 		return $query;
