@@ -38,6 +38,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		dexit();
 	}
 
+	function _my_ajax_viewthread() {
+		$this->_my_check_allowview();
+	}
+
 	function _my_check_allowview() {
 		global $_G;
 
@@ -123,10 +127,6 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		if ($_G['forum_threadpay'] == TRUE) {
 			showmessage('thread_pay_error', NULL);
 		}
-	}
-
-	function _my_ajax_viewthread() {
-		$this->_my_check_allowview();
 	}
 
 	/**
