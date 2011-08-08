@@ -282,6 +282,11 @@ class _sco_dx_plugin {
 	 */
 	function _fetch_template() {
 		ob_start();
+
+		if (func_num_args() > 1 && is_array(func_get_arg(1))) {
+			extract(func_get_arg(1), EXTR_REFS);
+		}
+
 		include func_get_arg(0);
 		$_content = ob_get_contents();
 		ob_end_clean();
