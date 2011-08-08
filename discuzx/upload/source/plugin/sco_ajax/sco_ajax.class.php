@@ -121,6 +121,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		$totalpage = ceil(($_G['forum_thread']['replies'] + 1) / $_G['ppp']);
 		$page > $totalpage && $page = $totalpage;
 
+		$page = $totalpage;
+
 
 		$start_limit = $_G['forum_numpost'] = max(0, ($page - 1) * $_G['ppp']);
 		if($start_limit > $_G['forum_thread']['replies']) {

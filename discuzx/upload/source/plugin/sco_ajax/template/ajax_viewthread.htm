@@ -20,8 +20,10 @@ padding: 3px;
 ">
 					<a href="home.php?mod=space&uid={$post[authorid]}" target="_blank">$post[author]</a>
 					&nbsp; <em>$post[dateline]</em>
-
-					&nbsp; #{$post[number]} &nbsp; {$post[subject]}
+					&nbsp;
+					<a href="forum.php?mod=redirect&goto=findpost&ptid={$post[tid]}&pid={$post[pid]}" target="_blank">
+						#{$post[number]} &nbsp; {$post[subject]}
+					</a>
 					<br />
 					$post[message]
 				</dd>
