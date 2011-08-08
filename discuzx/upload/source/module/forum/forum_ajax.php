@@ -439,6 +439,13 @@ if($_G['gp_action'] == 'checkusername') {
 		</script>
 EOF;
 	dexit();
+
+// bluelovers
+} else {
+
+
+
+// bluelovers
 }
 
 showmessage('succeed', '', array(), array('handle' => false));
