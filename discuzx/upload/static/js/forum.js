@@ -466,6 +466,14 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	if(!isUndefined(insertID[1])) {
 		insertobj.className = insertID[1];
 	}
+
+	// bluelovers
+	// add style
+	if (!isUndefined(insertID[2])) {
+		insertobj.style = insertID[2];
+	}
+	// bluelovers
+
 	if($(separatorid)) {
 		table.insertBefore(insertobj, $(separatorid).nextSibling);
 	} else {
