@@ -34,6 +34,32 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		dexit();
 	}
+
+	/**
+	 * @param array $key
+	 *
+	 * $key = array(
+	 * 	'template' => 'forumdisplay',
+	 * 	'message' => null,
+	 *	'values' => null,
+	 * )
+	 */
+	function forumdisplay_thread_output($key) {
+		$this->_hook(
+			'Tpl_Func_hooktags:Before',
+			array(
+				&$this,
+				'_forumdisplay_thread_output'
+		));
+	}
+
+	function _forumdisplay_thread_output($_EVENT, $hook_ret, $hook_id, $hook_key) {
+		global $_G;
+
+		$thead = &$_G['forum_threadlist'][$hook_key];
+
+		$hook_ret .= '<span class="y">'.$thead['tid'].'</span>';
+	}
 }
 
 ?>
