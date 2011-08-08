@@ -470,7 +470,7 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	// bluelovers
 	// add style
 	if (!isUndefined(insertID[2])) {
-		insertobj.style = insertID[2];
+		insertobj.style.cssText = insertID[2];
 	}
 	// bluelovers
 
