@@ -87,7 +87,13 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			$post['dateline'] = dgmdate($post['dateline'], $dformat.' '.str_replace(":i", ":i:s", $tformat));
 		}
 
+		$post['message'] = $this->_my_viewthread_procpost_message($post['message']);
+
 		return $post;
+	}
+
+	function _my_viewthread_procpost_message($message) {
+		return $message;
 	}
 
 	function _my_postlist_sql() {
