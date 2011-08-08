@@ -58,9 +58,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		global $_G;
 
-		$thread = &$_G['forum_threadlist'][$hook_key];
 		$hook_ret = $this->_fetch_template($this->_template('forumdisplay_thread'), array(
-			'thread' => &$thread,
+			'thread' => &$_G['forum_threadlist'][$hook_key],
 		)).$hook_ret;
 	}
 }
