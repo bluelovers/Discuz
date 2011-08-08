@@ -54,11 +54,12 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _forumdisplay_thread_output($_EVENT, $hook_ret, $hook_id, $hook_key) {
+		if ($hook_id != 'forumdisplay_thread') return;
+
 		global $_G;
 
 		$thead = &$_G['forum_threadlist'][$hook_key];
-
-		$hook_ret .= '<span class="y">'.$thead['tid'].'</span>';
+		$hook_ret = $this->_fetch_template($this->_template('forumdisplay_thread')).$hook_ret;
 	}
 }
 
