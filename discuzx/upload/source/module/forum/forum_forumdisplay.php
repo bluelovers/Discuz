@@ -165,6 +165,7 @@ if($_G['forum']['viewperm'] && !forumperm($_G['forum']['viewperm']) && !$_G['for
 if($_G['forum']['password']) {
 	if($_G['gp_action'] == 'pwverify') {
 		if($_G['gp_pw'] != $_G['forum']['password']) {
+			// 'forum_passwd_incorrect' => '抱歉，您輸入的密碼不正確，不能訪問這個版塊',
 			showmessage('forum_passwd_incorrect', NULL);
 		} else {
 			dsetcookie('fidpw'.$_G['fid'], $_G['gp_pw']);
