@@ -1,12 +1,11 @@
 <!--{if $_G['inajax']}-->
 	<!--{template common/header_ajax}-->
 <!--{/if}-->
+<div id="thread_{$_G[gp_tid]}_ajax_ct" style="padding-left: 1em;">
 
 <!--{if $multipage}-->
 	<div class="float_none cl" style="display: block;">$multipage</div>
 <!--{/if}-->
-
-<div id="thread_{$_G[gp_tid]}_ajax_ct" style="padding-left: 1em;">
 
 	<span class="notice y">BETA</span>
 
@@ -37,11 +36,11 @@ padding: 3px;
 	<!--{/loop}-->
 	</ul>
 
-</div>
-
 <!--{if $multipage}-->
 	<div class="float_none cl" style="display: block;">$multipage</div>
 <!--{/if}-->
+
+</div>
 
 <!--{if $_G['inajax']}-->
 	<!--{template common/footer_ajax}-->
