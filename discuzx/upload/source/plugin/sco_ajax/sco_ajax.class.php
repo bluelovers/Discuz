@@ -127,6 +127,11 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	 * )
 	 */
 	function forumdisplay_thread_output($key) {
+		global $_G;
+
+		// 不顯示給訪客使用
+		if (!$_G['uid']) return;
+
 		$this->_hook(
 			'Tpl_Func_hooktags:Before',
 			array(
