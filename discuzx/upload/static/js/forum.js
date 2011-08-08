@@ -413,6 +413,9 @@ function checkForumnew_btn(fid) {
 	lasttime = parseInt(Date.parse(new Date()) / 1000);
 }
 
+/**
+ * @example addtbodyrow(table, ['tbody', 'newthread'], ['normalthread_', 'normalthread_'], 'separatorline', newthread[i]);
+ */
 function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 	if(isUndefined(table) || isUndefined(insertID[0])) {
 		return;
@@ -457,6 +460,10 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 		_attachEvent(insertobj, insertID[2], function() {insertobj.className = '';});
 	}
 }
+
+/**
+ * @example removetbodyrow(table, 'forumnewshow');
+ */
 function removetbodyrow(from, objid) {
 	if(!isUndefined(from) && $(objid)) {
 		from.removeChild($(objid));
