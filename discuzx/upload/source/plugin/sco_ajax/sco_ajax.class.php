@@ -12,7 +12,9 @@ if (!defined('IN_DISCUZ')) {
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_ajax extends _sco_dx_plugin {
-
+	function plugin_sco_ajax() {
+		$this->_init($this->_get_identifier(__METHOD__));
+	}
 }
 
 ?>
