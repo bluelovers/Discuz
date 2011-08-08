@@ -490,6 +490,10 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 			if(!isUndefined(thread[value]['style'])) {
 				cell.style.cssText = thread[value]['style'];
 			}
+
+			if(!isUndefined(thread[value]['id'])) {
+				cell.id = thread[value]['id'];
+			}
 			// bluelovers
 
 			if(isUndefined(thread[value]['val'])) {
