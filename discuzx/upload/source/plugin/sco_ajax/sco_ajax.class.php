@@ -41,7 +41,13 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _my_check_forum() {
 		global $_G;
 
-		$extraparam = array('login' => 0);
+		$extraparam = array(
+			'login' => 0,
+
+			// Ajax 只顯示信息文本
+			'msgtype' => 3,
+			'showdialog' => false,
+		);
 
 		if ($_G['forum']['status'] == 3) {
 			include_once libfile('function/group');
