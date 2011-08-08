@@ -21,7 +21,8 @@ if($operation == 'export' && $id) {
 	}
 
 	$smileyarray['smilies'] = array();
-	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
+	// 使導出的表情可以依照排序
+	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder, id ASC");
 	while($smiley = DB::fetch($query)) {
 		$smileyarray['smilies'][] = $smiley;
 	}
@@ -48,7 +49,8 @@ if(!$operation) {
 
 		$smtypes = 0;
 		$dirfilter = array();
-		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder");
+		// 增加排序 , available DESC, name ASC
+		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder, available DESC, name ASC");
 		while($type = DB::fetch($query)) {
 			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE typeid='$type[typeid]'");
 			$smiliesnum = DB::result($squery, 0);
@@ -175,7 +177,8 @@ if(!$operation) {
 
 			$smileynum = 1;
 			$smilies = '';
-			$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder LIMIT $start_limit, $smiliesperpage");
+			// 增加第二排序條件 id
+			$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder, id LIMIT $start_limit, $smiliesperpage");
 			while($smiley =	DB::fetch($query)) {
 				$smilies .= showtablerow('', array('class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td23"', 'class="td23"', 'class="td24"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$smiley[id]\">",
@@ -199,7 +202,8 @@ if(!$operation) {
 				var prefix = trim($(pre + 'prefix').value);
 				var suffix = trim($(pre + 'suffix').value);
 				var page = parseInt('$page');
-				var middle = $(pre + 'middle').value == 1 ? $(pre + 'url_' + i).value.substr(0,$(pre + 'url_' + i).value.lastIndexOf('.')) : ($(pre + 'middle').value == 2 ? i + page * 10 : $(pre + 'code_'+ i).attributes['smileyid'].nodeValue);
+				// 修正依照自然順序時的起始數字以 10 為基準的錯誤
+				var middle = $(pre + 'middle').value == 1 ? $(pre + 'url_' + i).value.substr(0,$(pre + 'url_' + i).value.lastIndexOf('.')) : ($(pre + 'middle').value == 2 ? i + (page > 0 ? page - 1 : 0) * 10 : $(pre + 'code_'+ i).attributes['smileyid'].nodeValue);
 				if(!prefix || prefix == '$lang[smilies_prefix]' || !suffix || suffix == '$lang[smilies_suffix]') {
 					alert('$lang[smilies_prefix_tips]');
 					return;
@@ -299,9 +303,25 @@ EOT;
 				while($img = DB::fetch($query)) {
 					$imgfilter[] = $img[url];
 				}
+
+				// bluelovers
+				$_pic_files = array();
+				// bluelovers
+
 				$smiliesdir = dir($smdir);
 				while($entry = $smiliesdir->read()) {
 					if(in_array(strtolower(fileext($entry)), $imgextarray) && !in_array($entry, $imgfilter) && preg_match("/^[\w\-\.\[\]\(\)\<\> &]+$/", substr($entry, 0, strrpos($entry, '.'))) && strlen($entry) < 30 && is_file($smdir.'/'.$entry)) {
+				// bluelvoers
+						array_push($_pic_files, $entry);
+					}
+				}
+
+				// 搜索出的表情依照數字排序
+				sort($_pic_files, SORT_NUMERIC);
+
+				foreach ($_pic_files as $entry) {
+					if (1) {
+				// bluelovers
 						$newimages .= showtablerow('', array('class="td25"', 'class="td28 td24"', 'class="td23"'), array(
 							"<input class=\"checkbox\" type=\"checkbox\" name=\"smilies[$newid][available]\" value=\"1\" checked=\"checked\">",
 							"<input type=\"text\" class=\"txt\" size=\"2\" name=\"smilies[$newid][displayorder]\" value=\"0\">",

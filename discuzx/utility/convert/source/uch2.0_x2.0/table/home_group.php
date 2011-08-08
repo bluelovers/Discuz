@@ -21,6 +21,65 @@ $sid = intval(getgpc('sid'));
 $limit = $setting['limit']['mtag'] ? $setting['limit']['mtag'] : 100;
 $nextid = 0;
 
+// bluelovers
+$home = load_process('home');
+$domain = (array)$home['domain'];
+
+foreach ($domain as $_k => $_v) {
+	$_v = preg_split('/ *(\r\n|\n) */', $_v);
+
+	foreach ($_v as $__k => $__v) {
+		$__v = trim($__v, '\\/');
+
+		$_b[$__k] = $__v;
+	}
+
+	$domain[$_k] = $_v;
+}
+
+$fix_array = $replace = array();
+$replace['home'] = array(
+	'space.php?do=doing&doid=' => 'home.php?mod=space&do=doing&doid=',
+	'space.php?uid=' => 'home.php?mod=space&uid=',
+);
+$replace['forum'] = array(
+	'viewthread.php?tid=' => 'forum.php?mod=viewthread&tid=',
+);
+
+$fix_array[0] = array('subject', 'message',
+	'image_1_link', 'image_2_link', 'image_3_link', 'image_4_link',
+	'image_1', 'image_2', 'image_3', 'image_4',
+	'blog', 'title',
+
+	'author', 'inuser', 'touser', 'actor', 'fromusername', 'author',
+);
+$fix_array[1] = array(
+	'image_1_link', 'image_2_link', 'image_3_link', 'image_4_link',
+	'image_1', 'image_2', 'image_3', 'image_4',
+
+	'message',
+);
+
+$searcharray = array
+	(
+		"/&amp;#(\d{3,6}|x[a-fA-F0-9]{4});/",
+		"/&amp;#([a-zA-Z][a-z0-9]{2,6});/",
+		'/&amp;([a-z]{2,6});/',
+		'/&amp;([a-z]{2,6});/',
+
+		'/&nbsp;/',
+	);
+$replacearray = array
+	(
+		"&#\\1;",
+		"&#\\1;",
+		"&\\1;",
+		"&\\1;",
+
+		' ',
+	);
+// bluelovers
+
 $threadquery = $db_source->query("SELECT * FROM ".$db_source->table('thread')." WHERE tid > '$start' AND tagid='$tagid' ORDER BY tid LIMIT $limit");
 while($value = $db_source->fetch_array($threadquery)) {
 
@@ -47,7 +106,17 @@ while($value = $db_source->fetch_array($threadquery)) {
 
 	$query = $db_source->query("SELECT * FROM ".$db_source->table('post')." WHERE tid='$value[tid]' ORDER BY dateline");
 	while($post = $db_source->fetch_array($query)) {
-		$post['message'] = html2bbcode($post['message'], 0, 1);
+
+		// bluelovers
+		$post['message'] = _fix_link($post['message'], 'message');
+		// bluelovers
+
+		$post['message'] = html2bbcode($post['message'], 0, 0);
+
+		// bluelovers
+		// 再一次轉換編碼
+		$post['message'] = htmlspecialchars_decode(preg_replace($searcharray, $replacearray, htmlspecialchars_decode($post['message'])));
+		// bluelovers
 
 		// bluelovers
 		if ($post['isthread']) {
@@ -182,6 +251,15 @@ function getmtag($start) {
 
 			'membernum' => $mtag['membernum']
 		);
+
+	// bluelovers
+	// 重新處理群組描述
+	global $searcharray, $replacearray;
+
+	$forumfieldarr['description'] = preg_replace($searcharray, $replacearray, html2bbcode($mtag['announcement'], 0, 0));
+	$forumfieldarr['description'] = daddslashes(htmlspecialchars_decode($forumfieldarr['description']));
+	// bluelovers
+
 //	$db_target->insert('forum_forumfield', $forumfieldarr);
 	$db_target->insert('forum_forumfield', $forumfieldarr, 0, 1);
 	$db_target->query("UPDATE ".$db_target->table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$fid'");
@@ -256,4 +334,41 @@ function getprofield($start) {
 
 	return true;
 }
+
+// bluelovers
+function _fix_link($value, $key) {
+	global $domain;
+	global $replace;
+	global $fix_array;
+
+	foreach (array('home', 'forum') as $_k) {
+		if ($domain[$_k]) {
+			foreach ($domain[$_k] as $_row) {
+				$value = str_replace('<a href="http://'.$_row.'/', '<a href="', $value);
+				$value = str_replace('<a href="http://www.'.$_row.'/', '<a href="', $value);
+
+				if (in_array($key, $fix_array[1])) {
+					$value = str_replace(array(
+						'http://'.$_row,
+						'http://www.'.$_row,
+					), '', $value);
+				}
+			}
+		}
+
+		if ($replace[$_k]) {
+			foreach ($replace[$_k] as $_s_ => $_r_) {
+				$value = str_replace('<a href="'.$_s_, '<a href="'.$_r_, $value);
+
+				if (in_array($key, $fix_array[1])) {
+					$value = str_replace($_s_, $_r_, $value);
+				}
+			}
+		}
+	}
+
+	return $value;
+}
+// bluelovers
+
 ?>

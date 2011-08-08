@@ -204,9 +204,16 @@ class uc_note {
 			 * 變更 uc 同步登入 synclogin 相關代碼(同步登入時會傳送瀏覽器訊息)
 			 * 變更 cookies 內的 auth 儲存的值
 			 */
+
+		 	$_agent = empty($get['agent']) ?
+			 	(empty($post['agent']) ?
+				 	md5($_SERVER['HTTP_USER_AGENT'])
+				 	: $post['agent']
+			 	) : $get['agent'];
+
 			dsetcookie('auth', authcode(implode(array(
 				$member['password'], $member['uid'],
-				$_G['clientip'], TIMESTAMP, $get['agent'],
+				$_G['clientip'], TIMESTAMP, $_agent,
 			), "\t"), 'ENCODE'), $cookietime);
 		}
 	}

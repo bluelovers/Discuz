@@ -164,8 +164,28 @@ function announcement() {
 	ann.announcementScroll();
 }
 
+/**
+ * @link forum.php?mod=misc&action=removeindexheats&tid=32993
+ */
 function removeindexheats() {
+	/*
 	return confirm('您確認要把此主題從熱點主題中移除麼？');
+	*/
+	doane(null, 1, 1);
+
+	if (confirm('您確認要把此主題從熱點主題中移除麼？')) {
+		var e = getEvent();
+		var who = e.target;
+
+		ajaxget(who.href, null, null, null, null, function(){
+			if (who.parentNode.tagName != 'LI') {
+				who.parentNode.parentNode.parentNode.removeChild(who.parentNode.parentNode);
+			} else {
+				who.parentNode.parentNode.removeChild(who.parentNode);
+			}
+		});
+	}
+	return false;
 }
 
 function showTypes(id, mod) {
@@ -201,6 +221,9 @@ function showTypes(id, mod) {
 }
 
 var postpt = 0;
+/**
+ * 用於快速發帖
+ */
 function fastpostvalidate(theform, noajaxpost) {
 	if(postpt) {
 		return false;
@@ -215,6 +238,15 @@ function fastpostvalidate(theform, noajaxpost) {
 			return false;
 		}
 	}
+
+	// bluelovers
+	// 整理 message , subject 的多餘空白
+	if (theform.subject) theform.subject.value = trim(theform.subject.value);
+	theform.message.value = theform.message.value
+		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/, '$1');
+	// bluelovers
+
 	if(theform.message.value == '' && theform.subject.value == '') {
 		s = '抱歉，您尚未輸入標題或內容';
 		theform.message.focus();
@@ -232,7 +264,8 @@ function fastpostvalidate(theform, noajaxpost) {
 		return false;
 	}
 	$('fastpostsubmit').disabled = true;
-	theform.message.value = parseurl(theform.message.value);
+	// 增加允許判斷 img url
+	theform.message.value = parseurl(theform.message.value, null, true, true);
 	if(!noajaxpost) {
 		ajaxpost('fastpostform', 'fastpostreturn', 'fastpostreturn', 'onerror', $('fastpostsubmit'));
 		return false;

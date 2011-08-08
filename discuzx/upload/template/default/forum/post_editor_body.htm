@@ -1,6 +1,7 @@
 <div id="{$editorid}_body_loading"><img src="{IMGDIR}/loading.gif" width="16" height="16" class="vm" /> {lang e_editor_loading}</div>
 <div class="edt" id="{$editorid}_body" style="display: none">
-	<div id="{$editorid}_controls" class="bar">
+	<!--使 .edt .bar 可自動調整高度(需要搭配 cl 或 clearfix 才能正確顯示背景) -->
+	<div id="{$editorid}_controls" class="bar cl">
 		<div class="y">
 			<div class="b2r nbl nbr" id="{$editorid}_adv_5">
 				<p>
@@ -88,15 +89,7 @@
 			</div>
 			<!--{if $_G['cache']['bbcodes_display'][$_G['groupid']]}-->
 			<div class="b2r nbl">
-				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-					<!--{if $bbcode['i'] % 2 != 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
-				<!--{/loop}-->
-				<!--{hook/post_editorctrl_top}-->
-				<br id="{$editorid}_adv_7" />
-				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-					<!--{if $bbcode['i'] % 2 == 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
-				<!--{/loop}-->
-				<!--{hook/post_editorctrl_bottom}-->
+				<!--{subtpl subblock/forum/post_editor_body_editorctrl}-->
 			</div>
 			<!--{/if}-->
 			<div class="b2r" id="{$editorid}_adv_9">

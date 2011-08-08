@@ -21,6 +21,15 @@
 							<!--{avatar($_G[uid],array('small','',1))}-->
 						</td>
 					</tr>
+					<!--{if $plugin_self}-->
+					<tr>
+						<td>
+							<label>Avatar:
+								<input type="text" value="{echo $plugin_self->_my_avatar_user_get($_G[uid], 1)}" class="pt" readonly="true"/>
+							</label>
+						</td>
+					</tr>
+					<!--{/if}-->
 				</table>
 
 				<!--{if $uc_avatarflash}-->

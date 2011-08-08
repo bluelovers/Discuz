@@ -176,6 +176,11 @@ function build_cache_setting() {
 	include_once DISCUZ_ROOT.'./source/discuz_version.php';
 	$_G['setting']['version'] = $data['version'] = DISCUZ_VERSION;
 
+	// bluelovers
+	// cache version release
+	$_G['setting']['release'] = $data['release'] = DISCUZ_RELEASE;
+	// bluelovers
+
 	$data['sitemessage']['time'] = !empty($data['sitemessage']['time']) ? $data['sitemessage']['time'] * 1000 : 0;
 	foreach (array('register', 'login', 'newthread', 'reply') as $type) {
 		$data['sitemessage'][$type] = !empty($data['sitemessage'][$type]) ? explode("\n", $data['sitemessage'][$type]) : array();
@@ -359,11 +364,16 @@ function build_cache_setting() {
 	$data['homeshow'] = $data['uchomeurl'] && $data['uchome']['homeshow'] ? $data['uchome']['homeshow'] : '0';
 
 	unset($data['allowthreadplugin']);
+	// 如果 jspath = 'data/cache/' 則寫入 js cache
 	if($data['jspath'] == 'data/cache/') {
 		writetojscache();
 	} elseif(!$data['jspath']) {
 		$data['jspath'] = 'static/js/';
 	}
+	// bluelovers
+	// 強制執行 writetojscache
+	if ($data['jspath'] != 'data/cache/') writetojscache();
+	// bluelovers
 
 	if($data['cacheindexlife']) {
 		$cachedir = DISCUZ_ROOT.'./'.$data['cachethreaddir'];
@@ -1014,6 +1024,9 @@ function get_cachedata_topnav() {
 	return $data['topnavs'];
 }
 
+/**
+ * write js cache
+ */
 function writetojscache() {
 	$dir = DISCUZ_ROOT.'static/js/';
 	$dh = opendir($dir);
@@ -1030,7 +1043,44 @@ function writetojscache() {
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
-			$jsdata = preg_replace($remove, '', $jsdata);
+
+			// bluelovers
+			$switchstop = 0;
+
+			// Event: Func_writetojscache:Before_minify
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_minify')
+					->run(array(array(
+						'jsdata'		=> &$jsdata,
+						'entry'			=> &$entry,
+
+						'remove'		=> &$remove,
+
+						'switchstop'	=> &$switchstop,
+				)));
+			}
+
+			if (!$switchstop) {
+			// bluelvoers
+
+				$jsdata = preg_replace($remove, '', $jsdata);
+
+			// bluelovers
+			}
+
+			// Event: Func_writetojscache:Before_fwrite
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_fwrite')
+					->run(array(array(
+						'jsdata'		=> &$jsdata,
+						'entry'			=> &$entry,
+
+						'filename'		=> $entry,
+						'filepath'		=> 'data/cache/',
+				)));
+			}
+			// bluelvoers
+
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/'.$entry, 'w')) {
 				fwrite($fp, $jsdata);
 				fclose($fp);

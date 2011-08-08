@@ -201,6 +201,13 @@ if($_G['gp_action'] == 'paysucceed') {
 	include template('forum/upload');
 
 } elseif($_G['gp_action'] == 'comment') {
+	/**
+	 * 帖子點評
+	 * $_G['gp_action'] == 'comment'
+	 *
+	 * @link forum.php?mod=misc&action=comment&tid=32748&pid=134197&extra=&page=1
+	 * @link forum.php?mod=post&action=reply&comment=yes&tid=32748&pid=134197&extra=&page=1&commentsubmit=yes&infloat=yes
+	 */
 
 	if(!$_G['setting']['commentnumber']) {
 		showmessage('postcomment_closed');
@@ -348,14 +355,28 @@ if($_G['gp_action'] == 'paysucceed') {
 	showmessage('replynotice_error', 'forum.php?mod=viewthread&tid='.$tid);
 
 } elseif($_G['gp_action'] == 'removeindexheats') {
+	/**
+	 * 把主題從熱點主題中移除
+	 *
+	 * 其實只是將 heats 重設為 0
+	 * 只有管理員可以進行此操作
+	 */
 
 	if($_G['adminid'] != 1) {
 		showmessage('no_privilege_indexheats');
 	}
-	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]'");
+	DB::query("UPDATE ".DB::table('forum_thread')." SET heats=0 WHERE tid='$_G[tid]' AND heats != 0");
 	require_once libfile('function/cache');
 	updatecache('heats');
-	dheader('Location: '.dreferer());
+
+	// bluelovers
+	// 當 inajax 時減少多餘的回傳
+	if (!$_G['inajax']) {
+	// bluelovers
+		dheader('Location: '.dreferer());
+	// bluelovers
+	}
+	// bluelovers
 
 } else {
 
@@ -613,9 +634,15 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		if(!empty($sub_self_credit)) {
 			updatemembercount($_G['uid'], $sub_self_credit, 1, 'RSC', $_G['gp_pid']);
 		}
+
+		//TODO:修改為主題列表可顯示評分分數
+
 		DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes+$ratetimes WHERE pid='$_G[gp_pid]'");
 		if($post['first']) {
+			/*
 			$threadrate = intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
+			*/
+			$threadrate = intval($post['rate'] + $rate);
 			DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
 
 		}
@@ -739,7 +766,11 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 			}
 			DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes-$ratetimes WHERE pid='$_G[gp_pid]'");
 			if($post['first']) {
+				/*
 				$threadrate = @intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
+				*/
+				// 修改為主題列表可顯示評分分數
+				$threadrate = intval($post['rate'] + $rate);
 				DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
 			}
 

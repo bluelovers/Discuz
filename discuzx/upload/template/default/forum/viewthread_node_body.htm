@@ -1,6 +1,6 @@
 <div class="pcb">
 	<!--{if !$post['first'] && !empty($post[subject])}-->
-		<h2>$post[subject]</h2>
+		<h2 class="post_subject">$post[subject]</h2>
 	<!--{/if}-->
 
 <!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || $post['memberstatus'])}-->

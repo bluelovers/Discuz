@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Smilies]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-29 23:31]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
+	<item id="Data">
+		<item id="name"><![CDATA[大頭表情]]></item>
+		<item id="directory"><![CDATA[big]]></item>
+		<item id="smilies">
+			<item id="0">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:266:sm:]]></item>
+				<item id="url"><![CDATA[sad.gif]]></item>
+			</item>
+			<item id="1">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:267:sm:]]></item>
+				<item id="url"><![CDATA[razz.gif]]></item>
+			</item>
+			<item id="2">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:268:sm:]]></item>
+				<item id="url"><![CDATA[sweat.gif]]></item>
+			</item>
+			<item id="3">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:269:sm:]]></item>
+				<item id="url"><![CDATA[bomb.gif]]></item>
+			</item>
+			<item id="4">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:270:sm:]]></item>
+				<item id="url"><![CDATA[music.gif]]></item>
+			</item>
+			<item id="5">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:271:sm:]]></item>
+				<item id="url"><![CDATA[confused.gif]]></item>
+			</item>
+			<item id="6">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:272:sm:]]></item>
+				<item id="url"><![CDATA[lovely.gif]]></item>
+			</item>
+			<item id="7">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:273:sm:]]></item>
+				<item id="url"><![CDATA[angry.gif]]></item>
+			</item>
+			<item id="8">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:274:sm:]]></item>
+				<item id="url"><![CDATA[sleep.gif]]></item>
+			</item>
+			<item id="9">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:275:sm:]]></item>
+				<item id="url"><![CDATA[cool.gif]]></item>
+			</item>
+			<item id="10">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:276:sm:]]></item>
+				<item id="url"><![CDATA[fd.gif]]></item>
+			</item>
+			<item id="11">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:277:sm:]]></item>
+				<item id="url"><![CDATA[shame.gif]]></item>
+			</item>
+			<item id="12">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:278:sm:]]></item>
+				<item id="url"><![CDATA[lol.gif]]></item>
+			</item>
+			<item id="13">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:279:sm:]]></item>
+				<item id="url"><![CDATA[ghost.gif]]></item>
+			</item>
+			<item id="14">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:280:sm:]]></item>
+				<item id="url"><![CDATA[xizao.gif]]></item>
+			</item>
+			<item id="15">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:281:sm:]]></item>
+				<item id="url"><![CDATA[eek.gif]]></item>
+			</item>
+			<item id="16">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:282:sm:]]></item>
+				<item id="url"><![CDATA[ft.gif]]></item>
+			</item>
+			<item id="17">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:283:sm:]]></item>
+				<item id="url"><![CDATA[question.gif]]></item>
+			</item>
+			<item id="18">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:284:sm:]]></item>
+				<item id="url"><![CDATA[cry.gif]]></item>
+			</item>
+			<item id="19">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:285:sm:]]></item>
+				<item id="url"><![CDATA[abuse.gif]]></item>
+			</item>
+			<item id="20">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:286:sm:]]></item>
+				<item id="url"><![CDATA[heart.gif]]></item>
+			</item>
+			<item id="21">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:287:sm:]]></item>
+				<item id="url"><![CDATA[cattle.gif]]></item>
+			</item>
+			<item id="22">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:288:sm:]]></item>
+				<item id="url"><![CDATA[belial.gif]]></item>
+			</item>
+			<item id="23">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:289:sm:]]></item>
+				<item id="url"><![CDATA[smile.gif]]></item>
+			</item>
+			<item id="24">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:290:sm:]]></item>
+				<item id="url"><![CDATA[tong.gif]]></item>
+			</item>
+			<item id="25">
+				<item id="typeid"><![CDATA[5]]></item>
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="code"><![CDATA[:sm:291:sm:]]></item>
+				<item id="url"><![CDATA[mummy.gif]]></item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>

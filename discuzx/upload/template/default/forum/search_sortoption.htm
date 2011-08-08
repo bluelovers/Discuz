@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	var forum_optionlist = <!--{if $forum_optionlist}-->'$forum_optionlist'<!--{else}-->''<!--{/if}-->;
 </script>
-<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G['setting']['jspath']}threadsort.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 
 <!--{loop $quicksearchlist $optionid $option}-->
 		<!--{eval $formsearch = '';}-->
@@ -44,7 +44,7 @@
                     </span>
                 <!--{else}-->
                     <!--{if $option['type'] == 'calendar'}-->
-                        <script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+                        <script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
                         <input type="text" name="searchoption[$optionid][value]" size="15" class="px vm" value="{if is_array($_G[gp_searchoption][$optionid])}$_G[gp_searchoption][$optionid][value]{/if}" onclick="showcalendar(event, this, false)" />
                     <!--{else}-->
                         <input type="text" name="searchoption[$optionid][value]" size="15" class="px vm" value="{if is_array($_G[gp_searchoption][$optionid])}$_G[gp_searchoption][$optionid][value]{/if}" />

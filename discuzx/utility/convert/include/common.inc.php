@@ -2,7 +2,10 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT ^ E_DEPRECATED);
-set_time_limit(0);
+/**
+ * Warning: set_time_limit() [function.set-time-limit]: Cannot set time limit in safe mode in convert/include/common.inc.php on line 5
+ */
+@set_time_limit(0);
 
 if(phpversion() < '5.3.0') {
 	set_magic_quotes_runtime(0);
@@ -39,12 +42,18 @@ $_REQUEST = array_merge($_POST, $_GET);
 $_REQUEST['method'] = strtolower($_SERVER['REQUEST_METHOD']);
 $_REQUEST['script'] = basename($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);
 
+// bluelovers
+// 修正 CONFIG_EMPTY 的問題
+$source = getgpc('source') ? getgpc('source') : getgpc('s');
+$_configfile = '.'.$source.'.php';
+// bluelovers
+
 $_config = array();
-if(!file_exists(DISCUZ_ROOT.'./data/config.inc.php')) {
+if(!file_exists(DISCUZ_ROOT.'./data/config.inc.php'.$_configfile)) {
 	define('CONFIG_EMPTY', true);
 	include DISCUZ_ROOT.'./data/config.default.php';
 } else {
-	include DISCUZ_ROOT.'./data/config.inc.php';
+	include DISCUZ_ROOT.'./data/config.inc.php'.$_configfile;
 }
 
 if(!defined('CONFIG_EMPTY')) {

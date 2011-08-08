@@ -7,6 +7,11 @@
  *      $Id: misc_stat.php 20792 2011-03-04 02:20:22Z monkey $
  */
 
+/**
+ * 趨勢統計
+ *
+ * @link misc.php?mod=stat&op=trend
+ */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
@@ -14,6 +19,8 @@ if(!defined('IN_DISCUZ')) {
 if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
+
+//BUG:沒有顯示任何趨勢統計內容(只有在網址上增加 &xml=1 時才能輸出統計)
 
 $siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
 $stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));

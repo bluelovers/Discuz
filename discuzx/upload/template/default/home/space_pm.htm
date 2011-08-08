@@ -121,7 +121,7 @@
 							var autorefresh = {$refreshtime};
 							</script>
 							<script type="text/javascript">var forumallowhtml = 0,allowhtml = 0,allowsmilies = true,allowbbcode = parseInt('{$_G[group][allowsigbbcode]}'),allowimgcode = parseInt('{$_G[group][allowsigimgcode]}');var DISCUZCODE = [];DISCUZCODE['num'] = '-1';DISCUZCODE['html'] = [];</script>
-							<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 							<script type="text/javascript">
 								var msgListObj = $('msglist');
 								msgListObj.scrollTop = msgListObj.scrollHeight;
@@ -175,7 +175,7 @@
 				<!--{elseif $chatpmmemberlist}-->
 					<!--{if $authorid == $_G['uid']}-->
 						<div class="tbmu mtn tfm pmform cl">
-							<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js?{VERHASH}"></script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}home_friendselector.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 							<script type="text/javascript">
 								var fs;
 								var clearlist = 0;

@@ -63,8 +63,21 @@ if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_
 
 $_G['gp_handlekey'] = 'mods';
 
+// bluelovers
+$topicadminfile_exists = preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'));
 
-if(preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'))) {
+if (discuz_core::$plugin_support['Scorpio_Event']) {
+	//Event: Script_forum_topicadmin:Before_topicadminfile
+	Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_topicadminfile')
+		->run(array(array(
+			'topicadminfile_exists'	=> &$topicadminfile_exists,
+			'topicadminfile'		=> &$topicadminfile,
+	)));
+}
+
+// bluelovers
+
+if($topicadminfile_exists) {
 	require_once $topicadminfile;
 } else {
 	showmessage('undefined_action', NULL);

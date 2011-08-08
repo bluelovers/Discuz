@@ -11,11 +11,16 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/**
+ * 論壇熱點
+ */
 function build_cache_heats() {
 	global $_G;
 	$addsql = '';
 	$data = array();
 	if($_G['setting']['indexhot']['status']) {
+
+		//TODO:增加過濾沒有瀏覽權限的版塊及群組
 
 		require_once libfile('function/post');
 		$_G['setting']['indexhot'] = array(
@@ -27,13 +32,28 @@ function build_cache_heats() {
 		);
 
 		$heatdateline = TIMESTAMP - 86400 * $_G['setting']['indexhot']['days'];
+		/**
+		 * 如果有開啟群組功能 則會包括群組的主題
+		 */
 		if(!$_G['setting']['groupstatus']) {
 			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
 			$addsql = " AND f.status IN ('0', '1') ";
 		}
+		/**
+		 * DX 預設只顯示大於 t.heats>'0' 的項目
+		 */
 		$query = DB::query("SELECT t.tid,t.posttableid,t.views,t.dateline,t.replies,t.author,t.authorid,t.subject,t.price
 			FROM ".DB::table('forum_thread')." t $addtablesql
-			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' $addsql ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
+			WHERE t.dateline>'$heatdateline'
+				AND t.heats>='0'
+				AND t.displayorder>='0'
+				$addsql
+			ORDER BY t.heats DESC
+
+			/* 增加以發表時間做第二排序 */
+			, t.dateline DESC
+
+			LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
 
 		$messageitems = 2;
 		$limit = $_G['setting']['indexhot']['limit'];

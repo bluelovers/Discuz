@@ -43,12 +43,9 @@ function _{$type}_{$id}(varname, id, id2){
 	&nbsp;<a onclick="_{$type}_{$id}('{$varname}', '{$varname}_0', '{$varname}_1')" href="javascript:;" style="font-weight:bold" id="{$varname}_1a">輸入 URL</a>
 </span>
 
-<!--{/block}--><!--{eval
-	} else {
-		$s .= $type;
-	}
-}-->
-<!--{eval return $s.$return;}-->
-<!--{eval
-}
-}-->
+<!--{/block}-->
+	<!--{else}-->
+		<!--{eval $s .= $type;}-->
+	<!--{/if}-->
+	<!--{eval return $s.$return;}-->
+<!--{eval } }-->

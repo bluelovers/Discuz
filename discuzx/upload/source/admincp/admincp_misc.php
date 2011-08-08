@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 if($operation == 'onlinelist') {
+	// 在線列表圖標
 
 	if(!submitcheck('onlinesubmit')) {
 
@@ -254,6 +255,7 @@ var rowtypedata = [
 	}
 
 } elseif($operation == 'bbcode') {
+	// bbcode
 
 	$edit = $_G['gp_edit'];
 	if(!submitcheck('bbcodessubmit') && !$edit) {
@@ -268,7 +270,8 @@ var rowtypedata = [
 		showformheader('misc&operation=bbcode');
 		showtableheader('', 'fixpadding');
 		showsubtitle(array('', 'misc_bbcode_tag', 'available', 'display', 'display_order', 'misc_bbcode_icon', 'misc_bbcode_icon_file', ''));
-		$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." ORDER BY displayorder");
+		// 修改排序條件 , available DESC, tag
+		$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." ORDER BY displayorder, available DESC, tag");
 		while($bbcode = DB::fetch($query)) {
 			showtablerow('', array('class="td25"', 'class="td21"', 'class="td25"', 'class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td21"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$bbcode[id]\">",
@@ -276,8 +279,24 @@ var rowtypedata = [
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$bbcode[id]]\" value=\"1\" ".($bbcode['available'] ? 'checked="checked"' : NULL).">",
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"displaynew[$bbcode[id]]\" value=\"1\" ".($bbcode['available'] == '2' ? 'checked="checked"' : NULL).">",
 				"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$bbcode[id]]\" value=\"$bbcode[displayorder]\">",
-				$bbcode['icon'] ? "<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>" : ' ',
-				"<input type=\"text\" class=\"txt\" size=\"25\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">",
+				$bbcode['icon']
+				// 用來避免 icon 不是圖片時
+				&& (strpos($bbcode['icon'], '<') === false)
+				?
+					"<em class=\"editor\"><a class=\"customedit\"><img src=\"static/image/common/$bbcode[icon]\" border=\"0\"></a></em>"
+					: ' '
+				,
+				// bluelovers
+				// 處理 icon 不是圖片時
+				(strpos($bbcode['icon'], '<') !== false)
+				&& ($bbcode['icon'] = dhtmlspecialchars($bbcode['icon']))
+				?
+				"<input type=\"hidden\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">"
+				.'NOT IMAGE'
+				:
+				// bluelovers
+				"<input type=\"text\" class=\"txt\" size=\"25\" name=\"iconnew[$bbcode[id]]\" value=\"$bbcode[icon]\">"
+				,
 				"<a href=\"".ADMINSCRIPT."?action=misc&operation=bbcode&edit=$bbcode[id]\" class=\"act\">$lang[detail]</a>"
 			));
 		}
@@ -373,12 +392,72 @@ var rowtypedata = [
 			showformheader("misc&operation=bbcode&edit=$edit");
 			showtableheader();
 			showsetting('misc_bbcode_edit_tag', 'tagnew', $bbcode['tag'], 'text');
+
+			// bluelovers
+			// 可用
+			showsetting('available', 'availablenew', $bbcode['available'], 'radio');
+
+			// 顯示
+			showsetting('display', 'displaynew', $bbcode['available'] == 2, 'radio');
+
+			// 顯示順序
+			showsetting('display_order', 'displayordernew', $bbcode['displayorder'], 'number');
+
+			// icon
+			showsetting('misc_bbcode_icon', 'iconnew', $bbcode['icon'], 'textarea');
+			// bluelvoers
+
 			showsetting('misc_bbcode_edit_replacement', 'replacementnew', $bbcode['replacement'], 'textarea');
 			showsetting('misc_bbcode_edit_example', 'examplenew', $bbcode['example'], 'text');
 			showsetting('misc_bbcode_edit_explanation', 'explanationnew', $bbcode['explanation'], 'text');
-			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'text');
+			/*
+			showsetting('misc_bbcode_edit_params', 'paramsnew', $bbcode['params'], 'number');
+			*/
+			// bluelovers
+			// params 的值只有 1 ~ 3
+			showsetting('misc_bbcode_edit_params', array('paramsnew', array(
+				array(1, '[tag]{1}[/tag]'),
+				array(2, '[tag={1}]{2}[/tag]'),
+				array(3, '[tag={1},{2}]{3}[/tag]'),
+			)), $bbcode['params'], 'select');
+			// bluelovers
+
+			// bluelovers
+			// 設定參數類型
+			if (!is_array($bbcode['pattern'])) $bbcode['pattern'] = $bbcode['pattern'] ? split("\t", $bbcode['pattern']) : array(0, 0, 0);
+
+			$regexp_ex = array(
+				// dz 預設
+				0 => '([^\"\[]+?)',
+				// 英文+數字
+				1 => '(\w+)',
+				// 數字
+				2 => '(\d+)',
+				// 英文
+				3 => '([a-zA-Z]+)',
+				// 任何字
+				4 => '(.+?)',
+				// 任何字(非空)
+				5 => '(.+)',
+			);
+
+			$_pattern = array();
+			foreach ($regexp_ex as $k => $v) {
+				array_push($_pattern, array($k, $v));
+			}
+
+			for ($i=0; $i < 3; $i++) {
+				$j = $i + 1;
+
+				showsetting('{'.$j.'}', array('patternnew['.$i.']',
+					$_pattern,
+					1
+				), $bbcode['pattern'][$i], 'mradio');
+			}
+			// bluelovers
+
 			showsetting('misc_bbcode_edit_prompt', 'promptnew', $bbcode['prompt'], 'textarea');
-			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'text');
+			showsetting('misc_bbcode_edit_nest', 'nestnew', $bbcode['nest'], 'number');
 			showsetting('misc_bbcode_edit_usergroup', '', '', $select);
 			showsubmit('editsubmit');
 			showtablefooter();
@@ -402,7 +481,45 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
+			// bluelovers
+			$patternnew = $bbcode['pattern'];
+			if (!empty($_G['gp_patternnew']) && is_array($_G['gp_patternnew'])) {
+				$patternnew = $_G['gp_patternnew'];
+
+				$patternnew = implode("\t", $patternnew);
+			}
+			$patternnew = daddslashes($patternnew);
+			// bluelovers
+
+			/*
 			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
+			*/
+			DB::update('forum_bbcode', array(
+				'tag' => $tagnew,
+				'replacement' => $replacementnew,
+				'example' => $examplenew,
+				'explanation' => $explanationnew,
+				'params' => $paramsnew,
+				'prompt' => $promptnew,
+				'nest' => $nestnew,
+				'perm' => $permnew,
+
+				// 可用(當 display 時 available = 2)
+				'available' => (empty($_G['gp_availablenew']) ? 0 : (
+					// 當 display 時 available = 2
+					empty($_G['gp_displaynew']) ? 1 : 2
+				)),
+
+				// 顯示順序
+				'displayorder' => intval($_G['gp_displayordernew']),
+
+				// icon
+				'icon' => $_G['gp_iconnew'],
+
+				// pattern
+				'pattern' => $patternnew,
+
+			), array('id' => $edit));
 
 			updatecache(array('bbcodes', 'bbcodes_display'));
 			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode', 'succeed');

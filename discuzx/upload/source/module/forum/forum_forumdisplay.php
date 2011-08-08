@@ -141,7 +141,8 @@ $_G['forum']['banner'] = get_forumimg($_G['forum']['banner']);
 list($navtitle, $metadescription, $metakeywords) = get_seosetting($seotype, $seodata, $forumseoset);
 
 if(!$navtitle) {
-	$navtitle = get_title_page($_G['forum']['name'], $_G['page']);
+	// 主題標題 - 第2頁
+	$navtitle = get_title_page($_G['forum']['name'].' - '.$forum_up['name'].' - '.$forum_top['name'], $_G['page']);
 	$nobbname = false;
 } else {
 	$nobbname = true;

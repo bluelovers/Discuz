@@ -1,7 +1,102 @@
 
 /** search **/
-/* �j�M */
+/* 搜尋 */
 
 #tpsch{}
+
+/** end **/
+
+/** forum,group **/
+
+	/* 版塊分區內的版塊標題 */
+	.fl_tb h2 a, .fl_tb .fl_g dl dt a
+		/* 群組列表 */
+		, .fl_tb .fl_row td strong a
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dt a
+	{
+    	letter-spacing: 1px;
+    	text-shadow: 2px 2px 4px #AAAAAA;
+	}
+
+	/* 廣場首頁版塊分區內的版塊標題 */
+	.fl_tb h2 a
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dt a
+	{
+		color: #FF3399;
+	}
+
+	.fl_tb p
+		/* 群組列表 */
+		, .fl_tb .fl_row td p
+		/* 群組首頁的推薦群組 */
+		, #g_commend .bm_c dl.xld dd
+	{
+		margin-top: 1px;
+		margin-bottom: 1px;
+	}
+
+	.fl_tb .fl_i .xi2 {
+		color: #9933CC;
+	}
+
+	.fl_tb .fl_i .xg1 {
+		color: #0099FF !important;
+	}
+
+	/* 最後發表者 */
+	.fl_tb .fl_by div cite {
+		font-size: 8px;
+		text-transform: uppercase;
+		font-family: '04b08',Arial,Tahoma,'細明體';
+
+		font-weight: lighter;
+	}
+
+	.fl_tb .fl_by div cite a {
+		color: #FF3399;
+		font-size: 10px;
+		text-transform: uppercase;
+		font-family: Helvetica,Arial,sans-serif,'細明體';
+	}
+
+/** end **/
+
+/** group **/
+
+	/* 群組首頁的推薦群組 */
+
+	#g_commend .xld {
+		margin-bottom: 2px;
+	}
+
+	#g_commend .xld dt {
+		padding-top: 2px;
+	}
+
+	#g_commend .bm_c dl.xld dd, #g_commend .bm_c dl.xld dt {
+		overflow: hidden;
+	}
+
+/** end **/
+
+/** forum::forumdisplay,group **/
+
+	.tl .bm_c .num a.xi2, .tl .bm_c .num {
+		color: #0099FF;
+	}
+
+	.tl .bm_c .num em {
+		color: #9933CC;
+	}
+
+	.tl th a:hover {
+		color: #0099FF;
+	}
+
+	.tl .bm_c .by em {
+		font-size: 9px;
+	}
 
 /** end **/

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Style]]></item>
-	<item id="Version"><![CDATA[X1 [SC]]]></item>
-	<item id="Time"><![CDATA[2011-07-19 04:27]]></item>
-	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.local/bbs/discuz_x1/)]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-07-29 06:16]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="name"><![CDATA[goodnight]]></item>
-		<item id="templateid"><![CDATA[11]]></item>
+		<item id="templateid"><![CDATA[3]]></item>
 		<item id="tplname"><![CDATA[goodnight]]></item>
 		<item id="directory"><![CDATA[./template/goodnight]]></item>
 		<item id="copyright"><![CDATA[]]></item>
@@ -32,7 +32,7 @@
 			<item id="boardimg"><![CDATA[mnsv.swf,898,116]]></item>
 			<item id="imgdir"><![CDATA[]]></item>
 			<item id="styleimgdir"><![CDATA[template/goodnight/images]]></item>
-			<item id="headertext"><![CDATA[#97F2FF]]></item>
+			<item id="headertext"><![CDATA[#54B5E1]]></item>
 			<item id="footertext"><![CDATA[#8691A2]]></item>
 			<item id="available"><![CDATA[]]></item>
 			<item id="menuborder"><![CDATA[#B0E4EF]]></item>
@@ -55,7 +55,10 @@
 			<item id="specialborder"><![CDATA[#E0E7ED]]></item>
 			<item id="commonborder"><![CDATA[#E6E7E1]]></item>
 			<item id="commonbg"><![CDATA[#F5F5F5]]></item>
+			<item id="titlebgcolor"><![CDATA[]]></item>
+			<item id="threadtitlefont"><![CDATA[]]></item>
+			<item id="threadtitlefontsize"><![CDATA[]]></item>
 		</item>
-		<item id="version"><![CDATA[X1 [SC]]]></item>
+		<item id="version"><![CDATA[X2]]></item>
 	</item>
 </root>

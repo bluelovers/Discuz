@@ -1,8 +1,12 @@
 <?php
 
+if (!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 //TODO:增加可出售用戶的創意頭像
 //TODO:增加可評分頭像
-include_once '_sco_dx_plugin.class.php';
+include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_avatar extends _sco_dx_plugin {
 	function plugin_sco_avatar() {
@@ -45,10 +49,10 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 	 *
 	 * @example $member_uc2 = $plugin_self->_my_avatar_user_get($_G['uid']);
 	 */
-	function _my_avatar_user_get($uid) {
+	function _my_avatar_user_get($uid, $return = 0) {
 		if ($uid <= 0) return false;
 
-		return $member_uc = $this
+		$member_uc = $this
 			->_uc_init()
 			->_uc_call('sc', 'get_user_fields', array(
 				'uid' => $uid,
@@ -56,6 +60,10 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 					'avatar',
 				),
 		));
+
+		if ($return) return $member_uc[$uid]['avatar'];
+
+		return $member_uc;
 	}
 
 	/**
@@ -137,6 +145,66 @@ class plugin_sco_avatar extends _sco_dx_plugin {
 			->_getglobal('avatar_pics')
 		;
 	}
+
+	function _my_parse_url_domain($url) {
+		$_p = parse_url($url);
+		$_p_h = explode('.', $_p['host']);
+
+		$_1 = array_pop($_p_h);
+		$_0 = array_pop($_p_h);
+
+		return (empty($_0) || empty($_1)) ? '' : $_0.'.'.$_1;
+	}
+
+	function _my_fix_avatar_url($url) {
+		global $_G;
+
+		//TODO:增加可於插件設置內來設定允許的網域
+		//TODO:新增自動修正各個網站的網址處理(防呆 防笨 防貼錯網址)
+
+		// 允許使用的網站
+		$domain_allow = array(
+			'imgur.com',
+
+			'imageshack.us',
+			'photobucket.com',
+
+			'hinet.net',
+
+			// 沒用過的空間
+			'hotimg.com',
+			'jnafo.com',
+
+			// picasa
+			'googleusercontent.com',
+
+			// 從糟糕圖中找到的網站
+			'megapix.com',
+		);
+
+		$domain = $this->_my_parse_url_domain($url);
+
+		if (
+			0
+			// 如果沒有 domain
+			|| empty($domain)
+
+			|| strpos($url, 'http://') !== 0
+			|| strpos($url, 'http://', 1) !== false
+
+			// 不允許包含 /./ /../ 之類的網址
+			|| preg_match('/\/\.+\//', $url)
+
+			// 不允許使用跟網站的網域相同的網址
+			|| $this->_my_parse_url_domain($_G['siteurl']) == $domain
+			// 檢查是否在允許使用的網站
+			|| !in_array($domain, (array)$domain_allow)
+		) {
+			$url = '';
+		}
+
+		return $url;
+	}
 }
 
 class plugin_sco_avatar_home extends plugin_sco_avatar {
@@ -156,6 +224,9 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 
 		$_v = $this->_parse_method(__METHOD__);
 
+		// 修正 setting 的內容
+		$this->_fix_plugin_setting();
+
 		$this->_setglobal('mod', $_v[2]);
 		$this->_setglobal('ac', $_v[3]);
 
@@ -171,9 +242,18 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 			showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
 		}
 
+		// 判定是否允許使用網路頭像
+		$this->_setglobal('user_avatar_allowurl', (
+			$_G['adminid'] == 1
+			|| (
+				$this->attr['setting']['allowurl']
+				&& !in_array($_G['groupid'], (array)$this->attr['setting']['allowurl_not_usergroup'])
+			)
+		) ? 1 : 0);
+
 		$this->_my_avatar_types_list();
 
-		$this->_my_avatar_pics(
+		$avatar_pics = $this->_my_avatar_pics(
 			$this->_my_avatar_view_path(getgpc('avatar_view_path'))
 		);
 
@@ -204,13 +284,41 @@ class plugin_sco_avatar_home extends plugin_sco_avatar {
 					$a_file = $avatar_pics[$a_file];
 				}
 
+				// 設定網路頭像
+				if (empty($a_file) && $this->_getglobal('user_avatar_allowurl')) {
+					unset($a_file);
+
+					$a_file_url = trim(getgpc('a_file_url'));
+
+					if (empty($a_file_url)
+						|| strpos($a_file_url, 'http://') !== 0
+					) {
+						unset($a_file_url);
+					} elseif ($a_file_url = $this->_my_fix_avatar_url($a_file_url)) {
+						// 成功修正的 $a_file_url
+					} else {
+						unset($a_file_url);
+					}
+				}
+
 				if (!empty($a_file)) {
+					$this->_uc_init();
+
 					// 先進行一次刪除頭像
 					uc_user_deleteavatar($_G['uid']);
 
 					$member_uc = $this->_my_avatar_user_save($_G['uid'], $_G['siteurl'].$a_file);
 
 					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
+
+				} elseif (!empty($a_file_url)) {
+					$this->_uc_init();
+					uc_user_deleteavatar($_G['uid']);
+
+					$member_uc = $this->_my_avatar_user_save($_G['uid'], $a_file_url);
+
+					showmessage('do_success', $this->_make_url(null, $_G['basescript']));
+
 				} else {
 					showmessage('沒有選擇頭像或者錯誤的頭像請求', null, null, array(
 						'return' => 1,

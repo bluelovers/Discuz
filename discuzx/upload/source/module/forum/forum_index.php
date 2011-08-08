@@ -16,11 +16,31 @@ require_once libfile('function/forumlist');
 $gid = intval(getgpc('gid'));
 $showoldetails = get_index_online_details();
 
+// bluelovers
+// 使 forum.php?showoldetails=yes 支援 ajax
+if ($showoldetails && $_G['inajax']) {
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_index:After_showoldetails_ajax
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':After_showoldetails_ajax')
+			->run(array(array(
+				'showoldetails'	=> &$showoldetails,
+		)));
+	}
+	dexit();
+}
+// bluelovers
+
 if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
 	get_index_page_guest_cache();
 }
 
 $newthreads = round((TIMESTAMP - $_G['member']['lastvisit'] + 600) / 1000) * 1000;
+
+// bluelovers
+// 至少要查詢 12 小時內的資訊
+$newthreads = max($newthreads, 3600 * 12);
+// bluelovers
+
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].'" href="'.$_G['siteurl'].'forum.php?mod=rss&auth='.$_G['rssauth']."\" />\n") : '';
 
 $catlist = $forumlist = $sublist = $forumname = $collapseimg = $collapse = array();
@@ -67,18 +87,23 @@ if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails)) 
 if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 	$announcements = get_index_announcements();
 
+	// 論壇首頁增加 , f.name 排序
 	$sql = !empty($_G['member']['accessmasks']) ?
 		"SELECT f.fid, f.fup, f.type, f.name, f.threads, f.posts, f.todayposts, f.lastpost, f.inheritedmod, f.domain,
 			f.forumcolumns, f.simple, ff.description, ff.moderators, ff.icon, ff.viewperm, ff.redirect, ff.extra, a.allowview
 			FROM ".DB::table('forum_forum')." f
 			LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid
 			LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
-			WHERE f.status='1' ORDER BY f.type, f.displayorder"
+			WHERE f.status='1' ORDER BY f.type, f.displayorder
+			, f.name
+			"
 		: "SELECT f.fid, f.fup, f.type, f.name, f.threads, f.posts, f.todayposts, f.lastpost, f.inheritedmod, f.domain,
 			f.forumcolumns, f.simple, ff.description, ff.moderators, ff.icon, ff.viewperm, ff.redirect, ff.extra
 			FROM ".DB::table('forum_forum')." f
 			LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
-			WHERE f.status='1' ORDER BY f.type, f.displayorder";
+			WHERE f.status='1' ORDER BY f.type, f.displayorder
+			, f.name
+			";
 
 	$query = DB::query($sql);
 
@@ -154,8 +179,11 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 	if(!IS_ROBOT && ($_G['setting']['whosonlinestatus'] == 1 || $_G['setting']['whosonlinestatus'] == 3)) {
 		$_G['setting']['whosonlinestatus'] = 1;
 
+		//BUG:升級轉換後無法保存 onlinerecord 會被強制性覆寫
+
 		$onlineinfo = explode("\t", $_G['cache']['onlinerecord']);
 		if(empty($_G['cookie']['onlineusernum'])) {
+			/*
 			$onlinenum = DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
 			if($onlinenum > $onlineinfo[0]) {
 				$onlinerecord = "$onlinenum\t".TIMESTAMP;
@@ -163,6 +191,12 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 				save_syscache('onlinerecord', $onlinerecord);
 				$onlineinfo = array($onlinenum, TIMESTAMP);
 			}
+			*/
+			// bluelovers
+			updatecache('onlinerecord');
+			$onlinenum = discuz_core::$_cache_data['onlinerecord']['onlinenum'];
+			// bluelovers
+
 			dsetcookie('onlineusernum', intval($onlinenum), 300);
 		} else {
 			$onlinenum = intval($_G['cookie']['onlineusernum']);

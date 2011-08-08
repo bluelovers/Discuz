@@ -476,7 +476,7 @@
 	<!--{subtemplate portal/portalcp_block_setting}-->
 
 <!--{elseif $op == 'item'}-->
-	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang block_edit}</em>
 		<span>
@@ -588,7 +588,7 @@
 	<tr><td colspan="2">{lang verify_message}</td></tr>
 	<!--{/if}-->
 <!--{elseif $op == 'verifydata'}-->
-	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang moderate_data}</em>
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a></span><!--{/if}-->
@@ -622,7 +622,7 @@
 	</script>
 <!--{elseif $op == 'managedata'}-->
 
-	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
+	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js{$_G[varhash_gzip_js]}?{VERHASH}"></script>
 	<h3 class="flb">
 		<em id="return_$_G[gp_handlekey]">{lang edit_data}</em>
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a></span><!--{/if}-->

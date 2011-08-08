@@ -50,12 +50,24 @@ class discuz_core {
 	// bluelovers
 
 	// bluelovers
+	/**
+	 * 額外載入的語言
+	 */
 	static $langplus = array();
 	// bluelovers
 
 	// bluelovers
-	// 緩存正在進行中的 cache
+	/**
+	 * 緩存正在進行中的 cache
+	 */
 	static $_cache_data = array();
+	// bluelovers
+
+	// bluelovers
+	/**
+	 * 儲存關於模板的額外參數
+	 */
+	static $tpl = array();
 	// bluelovers
 
 	function &instance() {
@@ -83,7 +95,23 @@ class discuz_core {
 			$this->_init_mobile();
 			$this->_init_cron();
 			$this->_init_misc();
+
+			// bluelovers
+			// 假執行 $this->_init_style 來載入 hook
+			$this->_init_style(1);
+			// bluelovers
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::init:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
+
 		$this->initated = true;
 	}
 
@@ -269,6 +297,36 @@ class discuz_core {
 	function _init_input() {
 		if (isset($_GET['GLOBALS']) ||isset($_POST['GLOBALS']) ||  isset($_COOKIE['GLOBALS']) || isset($_FILES['GLOBALS'])) {
 			system_error('request_tainting');
+		}
+
+		/**
+		 * copy from dx 1.5
+		 */
+		if(!empty($_GET['rewrite'])) {
+			$query_string = '?mod=';
+			/*
+			$param = explode('-', $_GET['rewrite']);
+			$query_string .= $_GET['mod'] = $param[0];
+			array_shift($param);
+			*/
+
+			// bluelovers
+			$param = explode('-', trim($_GET['rewrite'], '-'));
+			if ($_REQUEST['mod'] || $_GET['mod']) {
+				$query_string .= $_GET['mod'];
+			} else {
+				$query_string .= $_GET['mod'] = $param[0];
+				array_shift($param);
+			}
+			// bluelovers
+
+			$paramc = count($param);
+			for($i = 0;$i < $paramc;$i+=2) {
+				$_REQUEST[$param[$i]] = $_GET[$param[$i]] = $param[$i + 1];
+				$query_string .= '&'.$param[$i].'='.$param[$i + 1];
+			}
+			$_SERVER['QUERY_STRING'] = $query_string;
+			unset($param, $paramc, $query_string);
 		}
 
 		if(!MAGIC_QUOTES_GPC) {
@@ -537,6 +595,16 @@ class discuz_core {
 		setglobal('username', addslashes(getglobal('username', 'member')));
 		setglobal('adminid', getglobal('adminid', 'member'));
 		setglobal('groupid', getglobal('groupid', 'member'));
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_user:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_guest() {
@@ -551,6 +619,16 @@ class discuz_core {
 				discuz_cron::run();
 			}
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_cron:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_misc() {
@@ -656,6 +734,15 @@ class discuz_core {
 		$this->var['seokeywords'] = !empty($this->var['setting']['seokeywords'][CURSCRIPT]) ? $this->var['setting']['seokeywords'][CURSCRIPT] : '';
 		$this->var['seodescription'] = !empty($this->var['setting']['seodescription'][CURSCRIPT]) ? $this->var['setting']['seodescription'][CURSCRIPT] : '';
 
+		// bluelovers
+		// Event: Class_discuz_core::_init_misc:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_setting() {
@@ -686,11 +773,29 @@ class discuz_core {
 		if($this->var['member'] && $this->var['group']['radminid'] == 0 && $this->var['member']['adminid'] > 0 && $this->var['member']['groupid'] != $this->var['member']['adminid'] && !empty($this->var['cache']['admingroup_'.$this->var['member']['adminid']])) {
 			$this->var['group'] = array_merge($this->var['group'], $this->var['cache']['admingroup_'.$this->var['member']['adminid']]);
 		}
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_setting:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+				&$this
+			));
+		}
+		// bluelovers
 	}
 
-	function _init_style() {
+	/**
+	 * 預設執行於 function_core.php 的 template
+	 *
+	 * @param bool $donot_define
+	 */
+	function _init_style($donot_define = 0) {
+		// 檢查 cookies 內是否有 styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
+		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
 		if(intval(!empty($this->var['forum']['styleid']))) {
+			// 版塊獨立設定的風格
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
 		} elseif(intval(!empty($this->var['category']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
@@ -698,6 +803,10 @@ class discuz_core {
 
 		$styleid = intval($styleid);
 
+		/**
+		 * 如果目前的 styleid 不等於 網站預設的 styleid
+		 * 則讀取風格並且覆寫 $this->var['style']
+		 */
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
 			if($this->var['cache']['style_'.$styleid]) {
@@ -705,11 +814,29 @@ class discuz_core {
 			}
 		}
 
-		define('IMGDIR', $this->var['style']['imgdir']);
-		define('STYLEID', $this->var['style']['styleid']);
-		define('VERHASH', $this->var['style']['verhash']);
-		define('TPLDIR', $this->var['style']['tpldir']);
-		define('TEMPLATEID', $this->var['style']['templateid']);
+		// bluelovers
+		if (!$donot_define) {
+		// bluelovers
+
+			define('IMGDIR', $this->var['style']['imgdir']);
+			define('STYLEID', $this->var['style']['styleid']);
+			define('VERHASH', $this->var['style']['verhash']);
+			define('TPLDIR', $this->var['style']['tpldir']);
+			define('TEMPLATEID', $this->var['style']['templateid']);
+
+		// bluelovers
+		}
+		// bluelovers
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_style:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function _init_memory() {
@@ -814,6 +941,16 @@ class discuz_core {
 		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=yes';
 		unset($query_sting_tmp);
 		ob_start();
+
+		// bluelovers
+		// Event: Class_discuz_core::_init_mobile:After
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Class_'.__METHOD__.':After')
+				->run(array(
+					&$this
+			));
+		}
+		// bluelovers
 	}
 
 	function timezone_set($timeoffset = 0) {

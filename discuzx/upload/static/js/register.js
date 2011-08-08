@@ -62,6 +62,7 @@ function addFormEvent(formid, focus){
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
+	/*
 	formNode[stmp[3]].onclick = function (event) {
 		emailMenu(event, formNode[stmp[3]].id);
 	};
@@ -77,6 +78,7 @@ function addFormEvent(formid, focus){
 		}
 		emailMenuOp(3, null, formNode[stmp[3]].id);
 	};
+	*/
 	stmp['email'] = formNode[stmp[3]].id;
 	try {
 		if(focus) {
