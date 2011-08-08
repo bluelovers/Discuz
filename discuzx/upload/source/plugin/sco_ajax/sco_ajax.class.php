@@ -28,12 +28,58 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _hook_ajax_viewthread() {
 		global $_G;
 
+		$this->_my_ajax_viewthread();
+
 		extract($this->attr['global']);
 		$plugin_self = &$this;
 
 		include $this->_template('ajax_viewthread');
 
 		dexit();
+	}
+
+	function _my_check_forum() {
+		global $_G;
+
+		if ($_G['forum']['status'] == 3) {
+			include_once libfile('function/group');
+			$status = groupperm($_G['forum'], $_G['uid']);
+			if($status == 1) {
+				// 'forum_group_status_off' => '該{_G/setting/navs/3/navname}已關閉',
+				showmessage('forum_group_status_off');
+			} elseif($status == 2) {
+				// 'forum_group_noallowed' => '抱歉，您沒有權限訪問該{_G/setting/navs/3/navname}',
+				showmessage('forum_group_noallowed');
+			} elseif($status == 3) {
+				// 'forum_group_moderated' => '請等待群主審核',
+				showmessage('forum_group_moderated');
+			}
+		}
+
+		if(empty($_G['forum']['allowview'])) {
+
+			if(!$_G['forum']['viewperm'] && !$_G['group']['readaccess']) {
+				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
+			} elseif($_G['forum']['viewperm'] && !forumperm($_G['forum']['viewperm'])) {
+				showmessagenoperm('viewperm', $_G['fid']);
+			}
+
+		} elseif($_G['forum']['allowview'] == -1) {
+			showmessage('forum_access_view_disallow');
+		}
+
+		if($_G['forum']['formulaperm']) {
+			formulaperm($_G['forum']['formulaperm']);
+		}
+
+		if($_G['forum']['password'] && $_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
+			// 'forum_passwd_incorrect' => '抱歉，您輸入的密碼不正確，不能訪問這個版塊',
+			showmessage('forum_passwd_incorrect', NULL);
+		}
+	}
+
+	function _my_ajax_viewthread() {
+
 	}
 
 	/**
