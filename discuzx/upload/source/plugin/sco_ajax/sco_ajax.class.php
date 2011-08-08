@@ -41,6 +41,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _my_check_forum() {
 		global $_G;
 
+		$extraparam = array('login' => 0);
+
 		if ($_G['forum']['status'] == 3) {
 			include_once libfile('function/group');
 			$status = groupperm($_G['forum'], $_G['uid']);
@@ -59,9 +61,9 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		if(empty($_G['forum']['allowview'])) {
 
 			if(!$_G['forum']['viewperm'] && !$_G['group']['readaccess']) {
-				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
+				showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 0));
 			} elseif($_G['forum']['viewperm'] && !forumperm($_G['forum']['viewperm'])) {
-				showmessagenoperm('viewperm', $_G['fid']);
+				showmessagenoperm('viewperm', $_G['fid'], null, $extraparam);
 			}
 
 		} elseif($_G['forum']['allowview'] == -1) {
@@ -69,7 +71,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		}
 
 		if($_G['forum']['formulaperm']) {
-			formulaperm($_G['forum']['formulaperm']);
+			formulaperm($_G['forum']['formulaperm'], $extraparam);
 		}
 
 		if($_G['forum']['password'] && $_G['forum']['password'] != $_G['cookie']['fidpw'.$_G['fid']]) {
@@ -78,7 +80,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		}
 
 		if($_G['forum_thread']['readperm'] && $_G['forum_thread']['readperm'] > $_G['group']['readaccess'] && !$_G['forum']['ismoderator'] && $_G['forum_thread']['authorid'] != $_G['uid']) {
-			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 1));
+			showmessage('thread_nopermission', NULL, array('readperm' => $_G['forum_thread']['readperm']), array('login' => 0));
 		}
 
 		$threadtable = $_G['forum_thread']['threadtable'];
