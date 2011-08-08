@@ -491,12 +491,17 @@ function addtbodyrow (table, insertID, changename, separatorid, jsonval) {
 				cell.className = thread[value]['className'];
 			}
 
+			// bluelovers
+			if(!isUndefined(thread[value]['style'])) {
+				cell.style.cssText = thread[value]['style'];
+			}
+			// bluelovers
+
 			if(isUndefined(thread[value]['val'])) {
 				cell.innerHTML = thread[value];
 			} else {
 				cell.innerHTML = thread[value]['val'];
 			}
-
 		}
 	}
 
