@@ -404,7 +404,7 @@ function showmessagenoperm($type, $fid, $formula = '', $extraparam = array()) {
 		}
 	}
 
-	showmessage($message, NULL, array('fid' => $fid, 'permgroups' => $permgroups, 'grouptitle' => $_G['group']['grouptitle']), array('login' => 1), $custom);
+	showmessage($message, NULL, array('fid' => $fid, 'permgroups' => $permgroups, 'grouptitle' => $_G['group']['grouptitle']), $extraparam, $custom);
 }
 
 function loadforum() {
