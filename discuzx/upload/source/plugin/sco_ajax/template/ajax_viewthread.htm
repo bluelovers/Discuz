@@ -1,8 +1,11 @@
 <!--{if $_G['inajax']}-->
 	<!--{template common/header_ajax}-->
 <!--{/if}-->
-
 <div id="thread_{$_G[gp_tid]}_ajax_ct" style="padding-left: 1em;">
+
+<!--{if $multipage}-->
+	<div class="float_none cl" style="display: block;">$multipage</div>
+<!--{/if}-->
 
 	<span class="notice y">BETA</span>
 
@@ -23,7 +26,7 @@ padding: 3px;
 					&nbsp; <em>$post[dateline]</em>
 					&nbsp;
 					<a href="forum.php?mod=redirect&goto=findpost&ptid={$post[tid]}&pid={$post[pid]}" target="_blank">
-						#{$post[number]} &nbsp; {$post[subject]}
+						<sup>#{$post[number]}</sup> &nbsp; {$post[subject]}
 					</a>
 					<br />
 					$post[message]
@@ -33,7 +36,12 @@ padding: 3px;
 	<!--{/loop}-->
 	</ul>
 
+<!--{if $multipage}-->
+	<div class="float_none cl" style="display: block;">$multipage</div>
+<!--{/if}-->
+
 </div>
+
 <!--{if $_G['inajax']}-->
 	<!--{template common/footer_ajax}-->
 <!--{/if}-->

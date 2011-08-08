@@ -19,21 +19,27 @@ function _ajax_viewthread(who) {
 			var colspan = table.getElementsByTagName('tbody')[0].rows[0].children.length;
 
 			var x = new Ajax();
-			x.get(x.fixurl('forum.php?mod=ajax&action=viewthread&tid=' + _this.attr('data-tid') + '&theadid=' + _this.attr('data-id'))
-				, function(s) {
+			x.get(x.fixurl(
+				'forum.php?mod=ajax&action=viewthread&tid=' + _this.attr('data-tid') + '&theadid=' + _this.attr('data-id')
+				, {ajaxtarget : 'thread_' + _this.attr('data-tid') + '_ajax_body'}
+				)
+				, function(s, x) {
 					addtbodyrow(table, ['tbody', 'ajax_viewthread'], ['normalthread_', 'normalthread_'], _this.attr('data-id'), {
 						tid: _this.attr('data-tid') + '_ajax',
 						thread : {
 							'icn' : {
 								val : s,
-								colspan : colspan
+								colspan : colspan,
+								id : 'thread_' + _this.attr('data-tid') + '_ajax_body'
 							}
 						}
 					});
 
 					_this.attr('src', _this.attr('src').replace('_show.gif', '_hide.gif'));
 
-					jQuery(_ct).hide().slideDown()
+					jQuery(_ct).hide().slideDown();
+
+					ajaxupdateevents($('thread_' + _this.attr('data-tid') + '_ajax_body'));
 				}
 			);
 		} else {

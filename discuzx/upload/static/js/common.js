@@ -681,7 +681,8 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 
 		ajaxerror = null;
 		if(recall && typeof recall == 'function') {
-			recall();
+			// recall(); => recall(s, x);
+			recall(s, x);
 		} else if(recall) {
 			eval(recall);
 		}
