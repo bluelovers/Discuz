@@ -33,7 +33,7 @@ function dunlink($attach) {
 	}
 }
 
-function formulaperm($formula) {
+function formulaperm($formula, $extraparam = array()) {
 	global $_G;
 
 	$formula = unserialize($formula);
