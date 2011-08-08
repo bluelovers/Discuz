@@ -41,11 +41,22 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _my_ajax_viewthread() {
 		$this->_my_check_allowview();
 
+		$postlist = array();
+
 		$sql = $this->_my_postlist_sql();
 		$query = DB::query($sql);
 		while($post = DB::fetch($query)) {
-
+			$postusers[$post['authorid']] = array();
+			if($post['first']) {
+				$_G['forum_firstpid'] = $post['pid'];
+				if(IS_ROBOT || $_G['adminid'] == 1) $summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
+			}
+			$postlist[$post['pid']] = $post;
 		}
+
+		$this
+			->_setglobal('postlist', &$postlist)
+		;
 	}
 
 	function _my_postlist_sql() {

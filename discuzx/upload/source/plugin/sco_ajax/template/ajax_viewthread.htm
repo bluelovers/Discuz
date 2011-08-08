@@ -3,7 +3,18 @@
 <!--{/if}-->
 <div id="thread_{$_G[gp_tid]}_ajax_ct">
 
-$sql
+	<span>$sql</span>
+
+	<ul>
+	<!--{loop $postlist $post}-->
+		<li>
+			<dl>
+				<dt>$post[author] $post[dateline]</dt>
+				<dd>$post[message]</dd>
+			</dl>
+		</li>
+	<!--{/loop}-->
+	</ul>
 
 </div>
 <!--{if $_G['inajax']}-->
