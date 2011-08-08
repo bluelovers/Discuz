@@ -359,7 +359,7 @@ class _sco_dx_plugin {
 	 * same as Scorpio_Hook::add
 	 */
 	function _hook() {
-		return call_user_func_array(array('Scorpio_Hook:', 'add'), func_get_args());
+		return call_user_func_array(array('Scorpio_Hook', 'add'), func_get_args());
 	}
 }
 
