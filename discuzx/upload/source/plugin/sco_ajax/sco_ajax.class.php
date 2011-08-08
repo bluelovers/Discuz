@@ -149,7 +149,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		$_G['ppp'] = 5;
 
 		$totalpage = ceil(($_G['forum_thread']['replies'] + 1) / $_G['ppp']);
-		if ($page > $totalpage) {
+		if (($page > $totalpage) || empty($_GET['page'])) {
 			$page = $totalpage;
 		}
 
