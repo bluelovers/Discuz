@@ -90,10 +90,13 @@ if($_G['gp_from'] == 'portal') {
 	require_once libfile('function/group');
 	$status = groupperm($_G['forum'], $_G['uid']);
 	if($status == 1) {
+		// 'forum_group_status_off' => '該{_G/setting/navs/3/navname}已關閉',
 		showmessage('forum_group_status_off');
 	} elseif($status == 2) {
+		// 'forum_group_noallowed' => '抱歉，您沒有權限訪問該{_G/setting/navs/3/navname}',
 		showmessage('forum_group_noallowed', 'forum.php?mod=group&fid='.$_G['fid']);
 	} elseif($status == 3) {
+		// 'forum_group_moderated' => '請等待群主審核',
 		showmessage('forum_group_moderated', 'forum.php?mod=group&fid='.$_G['fid']);
 	}
 	$nav = get_groupnav($_G['forum']);
