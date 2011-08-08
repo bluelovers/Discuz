@@ -1,5 +1,12 @@
 <!-- hook: forumdisplay_thread -->
-	<img src="{STATICURL}image/plus/common/thread_show.gif" class="y cur_pointer" data-tid="$thread[tid]" data-id="$thread[id]" data-show="1" onclick="_ajax_viewthread(this);" />
+
+<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
+	<!--{eval $tid=$thread[closed];}-->
+<!--{else}-->
+	<!--{eval $tid=$thread[tid];}-->
+<!--{/if}-->
+
+	<img src="{STATICURL}image/plus/common/thread_show.gif" class="y cur_pointer" data-tid="{$tid}" data-id="$thread[id]" data-show="1" onclick="_ajax_viewthread(this);" />
 
 <!--{if $hook_key == count($_G['forum_threadlist']) - 1}-->
 <script type="text/javascript">

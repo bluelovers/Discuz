@@ -258,7 +258,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			}
 
 		} elseif($_G['forum']['allowview'] == -1) {
-			showmessage('forum_access_view_disallow');
+			showmessage('forum_access_view_disallow', null, null, $extraparam);
 		}
 
 		// 版塊權限
