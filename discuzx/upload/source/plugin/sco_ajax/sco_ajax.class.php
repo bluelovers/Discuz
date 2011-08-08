@@ -183,7 +183,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'showdialog' => false,
 		);
 
-		if (!in_array($_G['groupid'], array(1, 2))) {
+		if (!in_array($_G['groupid'], array(1, 2, 3))) {
 			showmessage('forum_access_view_disallow', null, null, $extraparam);
 		}
 
