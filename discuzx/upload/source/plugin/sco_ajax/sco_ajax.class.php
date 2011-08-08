@@ -71,6 +71,11 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function _my_ajax_viewthread() {
 		$this->_my_check_allowview();
 
+		static $_include;
+		if (!isset($_include)) {
+			$_include = include_once(libfile('function/post'));
+		}
+
 		$postlist = array();
 
 		$sql = $this->_my_postlist_sql();
@@ -123,6 +128,8 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _my_viewthread_procpost_message($message) {
+		$message = messagecutstr($message, 200);
+
 		return $message;
 	}
 
