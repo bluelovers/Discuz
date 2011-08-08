@@ -106,7 +106,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _my_ajax_viewthread() {
-
+		$this->_my_check_forum();
 	}
 
 	/**
