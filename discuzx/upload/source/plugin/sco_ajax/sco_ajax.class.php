@@ -38,7 +38,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		dexit();
 	}
 
-	function _my_check_forum() {
+	function _my_check_allowview() {
 		global $_G;
 
 		$extraparam = array(
@@ -126,7 +126,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function _my_ajax_viewthread() {
-		$this->_my_check_forum();
+		$this->_my_check_allowview();
 	}
 
 	/**
