@@ -202,6 +202,9 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		return $query;
 	}
 
+	/**
+	 * 檢查是否有權限瀏覽此版塊或主題
+	 */
 	function _my_check_allowview() {
 		global $_G;
 
