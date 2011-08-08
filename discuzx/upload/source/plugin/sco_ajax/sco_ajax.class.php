@@ -30,7 +30,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		extract($this->attr['global']);
 		$plugin_self = &$this;
 
-		include $this->_template('ajax_viewthead');
+		include $this->_template('ajax_viewthread');
 
 		dexit();
 	}
@@ -58,8 +58,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 
 		global $_G;
 
-		$thead = &$_G['forum_threadlist'][$hook_key];
-		$hook_ret = $this->_fetch_template($this->_template('forumdisplay_thread')).$hook_ret;
+		$thread = &$_G['forum_threadlist'][$hook_key];
+		$hook_ret = $this->_fetch_template($this->_template('forumdisplay_thread'), array(
+			'thread' => &$thread,
+		)).$hook_ret;
 	}
 }
 
