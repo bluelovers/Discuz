@@ -7,8 +7,32 @@
 function _ajax_viewthread(who) {
 	var _this = jQuery(who);
 
-	if (_this.attr('data-show') != 0) {
+	if (_this.attr('data-show') == 1) {
+
+		if (_this.attr('data-opened') != 1) {
+			_this.attr('data-opened', 1);
+
+			var table = $(_this.attr('data-id')).parentNode;
+
+			addtbodyrow(table, ['tbody', 'ajax_viewthread'], ['normalthread_', 'normalthread_'], _this.attr('data-id'), {
+				tid: _this.attr('data-tid') + '_ajax',
+				thead : {
+
+				}
+			});
+
+			ajaxget('forum.php?mod=ajax&action=viewthread&tid=' + _this.attr('data-tid') + '&theadid=' + _this.attr('data-id')
+				, _this.attr('data-id') + '_ajax'
+				, null
+				, null
+				, function() {
+					alert(123);
+				}
+			);
+		}
+
 		_this.attr('src', _this.attr('src').replace('_show.gif', '_hide.gif'));
+
 	} else {
 		_this.attr('src', _this.attr('src').replace('_hide.gif', '_show.gif'));
 	}
