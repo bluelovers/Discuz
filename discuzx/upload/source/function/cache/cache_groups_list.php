@@ -35,12 +35,12 @@ function build_cache_groups_list() {
 	$data = array();
 
 	$orderby = 'displayorder';
-	$orderbyarray = array('displayorder' => 'f.displayorder DESC', 'dateline' => 'ff.dateline DESC', 'lastupdate' => 'ff.lastupdate DESC', 'membernum' => 'ff.membernum DESC', 'thread' => 'f.threads DESC', 'activity' => 'f.commoncredits DESC');
+	$orderbyarray = array('displayorder' => 'f.fup, f.displayorder DESC, f.name ASC', 'dateline' => 'ff.dateline DESC', 'lastupdate' => 'ff.lastupdate DESC', 'membernum' => 'ff.membernum DESC', 'thread' => 'f.threads DESC', 'activity' => 'f.commoncredits DESC');
 	$useindex = $orderby == 'displayorder' ? 'USE INDEX(fup_type)' : '';
 	$orderby = !empty($orderby) && $orderbyarray[$orderby] ? "ORDER BY ".$orderbyarray[$orderby] : '';
 
 	$fieldadd = ' ,ff.*';
-	$fieldsql = 'f.fid, f.fup, f.recommend, f.name '.$fieldadd;
+	$fieldsql = 'f.fid, f.fup, f.recommend, f.displayorder, f.name '.$fieldadd;
 
 	$orderid = 0;
 
