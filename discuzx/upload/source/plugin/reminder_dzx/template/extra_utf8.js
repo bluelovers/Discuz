@@ -20,7 +20,7 @@ function getnew(query_string, settime) {
 				// 變更 timeout 累加計算方式
 				timeout = getnewtimeout * (6 + getnewcount * 1);
 
-				console.log([getnewtimeout, timeout, getnewcount]);
+				//console.log([getnewtimeout, timeout, getnewcount]);
 
 				getnew_handle = setTimeout(function () {getnew(query_string);}, timeout);
 			}
