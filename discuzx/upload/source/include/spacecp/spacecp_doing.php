@@ -52,6 +52,10 @@ if(submitcheck('addsubmit')) {
 		'message' => $message,
 		'ip' => $_G['clientip'],
 		'status' => $doing_status,
+
+		// bluelovers
+		'lastpost' => $_G['timestamp'],
+		// bluelovers
 	);
 	$newdoid = DB::insert('home_doing', $setarr, 1);
 
@@ -160,7 +164,13 @@ if(submitcheck('addsubmit')) {
 	if(empty($updo) && $doid) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='$doid'");
 		$updo = DB::fetch($query);
+
+		// bluelover
+		// 最頂層的 doing
+		$top_updo = $updo;
+		// bluelovers
 	}
+
 	if(empty($updo)) {
 		showmessage('docomment_error');
 	} else {
