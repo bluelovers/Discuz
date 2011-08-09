@@ -171,6 +171,14 @@ if(submitcheck('addsubmit')) {
 		// bluelovers
 	}
 
+	// bluelovers
+	// 最頂層的 doing
+	if (empty($top_updo)) {
+		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='{$updo[doid]}'");
+		$top_updo = DB::fetch($query);
+	}
+	// bluelovers
+
 	if(empty($updo)) {
 		showmessage('docomment_error');
 	} else {
