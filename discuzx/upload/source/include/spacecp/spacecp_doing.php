@@ -197,7 +197,9 @@ if(submitcheck('addsubmit')) {
 	$newid = DB::insert('home_docomment', $setarr, 1);
 
 	// 更新回複數
-	DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum+1 WHERE doid='$updo[doid]'");
+	DB::query("UPDATE ".DB::table('home_doing')."
+		SET replynum=replynum+1
+		WHERE doid='$updo[doid]'");
 
 	if($updo['uid'] != $_G['uid']) {
 		notification_add($updo['uid'], 'doing', 'doing_reply', array(
