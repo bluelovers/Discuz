@@ -5,6 +5,13 @@
 	$Id: common.js 22634 2011-05-16 05:52:08Z monkey $
 */
 
+// bluelovers
+if(typeof IN_ADMINCP != 'undefined') {
+	// fix jQuery is not defined
+	var jQuery = isUndefined(jQuery) ? null : jQuery;
+}
+// bluelovers
+
 var BROWSER = {};
 var USERAGENT = navigator.userAgent.toLowerCase();
 browserVersion({'ie':'msie','firefox':'','chrome':'','opera':'','safari':'','mozilla':'','webkit':'','maxthon':'','qq':'qqbrowser'});
