@@ -107,11 +107,19 @@ if(!defined('IN_DISCUZ')) {
  */
 function build_cache_grouptype() {
 	$data = array();
-	$query = DB::query("SELECT f.fid, f.fup, f.name, f.forumcolumns, ff.membernum, ff.groupnum FROM ".DB::table('forum_forum')." f
-		LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.type IN('group', 'forum') AND f.status='3' ORDER BY f.type, f.displayorder");
+	$query = DB::query("SELECT f.fid, f.fup, f.name, f.forumcolumns, ff.membernum, ff.groupnum, f.type FROM ".DB::table('forum_forum')." f
+		LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.type IN('group', 'forum', 'sub') AND f.status='3' ORDER BY f.type, f.displayorder");
 
 	$data['second'] = $data['first'] = array();
 	while($group = DB::fetch($query)) {
+
+		if ($group['type'] == 'sub') {
+			$data['sub'][$group['fup']][] = $group['fid'];
+			continue;
+		} else {
+			unset($group['type']);
+		}
+
 		if($group['fup']) {
 			// 第二層
 			$data['second'][$group['fid']] = $group;
@@ -123,7 +131,16 @@ function build_cache_grouptype() {
 	foreach($data['second'] as $fid => $secondgroup) {
 		$data['first'][$secondgroup['fup']]['groupnum'] += $secondgroup['groupnum'];
 		$data['first'][$secondgroup['fup']]['secondlist'][] = $secondgroup['fid'];
+
+		// bluelovers
+		// 儲存子群組列表
+		$data['second'][$fid]['subs'] = (array)$data['sub'][$fid];
+		// bluelovers
 	}
+
+	// bluelovers
+	unset($data['sub']);
+	// bluelovers
 
 	save_syscache('grouptype', $data);
 }
