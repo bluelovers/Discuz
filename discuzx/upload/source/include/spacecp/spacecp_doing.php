@@ -199,6 +199,7 @@ if(submitcheck('addsubmit')) {
 	// 更新回複數
 	DB::query("UPDATE ".DB::table('home_doing')."
 		SET replynum=replynum+1
+		, lastpost='{$_G[timestamp]}'
 		WHERE doid='$updo[doid]'");
 
 	if($updo['uid'] != $_G['uid']) {
