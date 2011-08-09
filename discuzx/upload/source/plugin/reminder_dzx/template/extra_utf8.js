@@ -16,13 +16,12 @@ function getnew(query_string, settime) {
 				clearTimeout(getnew_handle);
 			}
 		} else {
-			if(getnewcount < 101) {
-				if(getnewcount > 0) {
-					var multiple =  Math.ceil(100 / getnewcount);
-					if(multiple < 10) {
-						timeout = getnewtimeout * (10 - multiple + 1);
-					}
-				}
+			if(getnewcount < 10) {
+				// 變更 timeout 累加計算方式
+				timeout = getnewtimeout * (6 + getnewcount * 2);
+
+				console.log([getnewtimeout, timeout]);
+
 				getnew_handle = setTimeout(function () {getnew(query_string);}, timeout);
 			}
 		}
