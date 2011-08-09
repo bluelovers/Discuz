@@ -182,6 +182,12 @@ if(submitcheck('addsubmit')) {
 		'message' => $message,
 		'ip' => $_G['clientip'],
 		'grade' => $updo['grade']+1
+
+		// bluelovers
+		,
+		// 最後被回覆的時間
+		'lastpost' => $_G['timestamp'],
+		// bluelovers
 	);
 
 	if($updo['grade'] >= 3) {
