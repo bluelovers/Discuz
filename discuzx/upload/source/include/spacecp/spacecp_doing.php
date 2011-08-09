@@ -235,6 +235,16 @@ if(submitcheck('addsubmit')) {
 		updatecreditbyaction('comment', 0, array(), 'doing'.$updo['doid']);
 	}
 
+	// bluelovers
+	// 改良當回覆紀錄時可以同時提醒該紀錄最原始的發表者
+	if($top_updo['uid'] != $updo['uid'] && $top_updo['uid'] != $_G['uid']) {
+		notification_add($top_updo['uid'], 'doing', 'doing_reply', array(
+			'url'=>"home.php?mod=space&uid=$top_updo[uid]&do=doing&doid=$top_updo[doid]&highlight=$newid",
+			'from_id'=>$top_updo['doid'],
+			'from_idtype'=>'doid'));
+	}
+	// bluelovers
+
 	include_once libfile('function/stat');
 	updatestat('docomment');
 	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
