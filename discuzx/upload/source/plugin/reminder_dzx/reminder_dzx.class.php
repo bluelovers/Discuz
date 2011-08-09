@@ -56,7 +56,7 @@ class plugin_reminder_dzx {
 					}
 
 					if($_G['member']['newprompt'] || $_G['member']['newpm']) {
-						$timeout = '100';
+						$timeout = '10000';
 					} else {
 						$first = strpos($query_string, '&fid=') ? 'first = 0;fid='.$_G['fid'] : '';
 						$timeout = 'getnewtimeout';

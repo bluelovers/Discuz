@@ -1,4 +1,4 @@
-var getnewcount = 0, getnewtimeout = 5000, getnew_handle, first = 1, querystring, fid, newreminder;
+var getnewcount = 0, getnewtimeout = 15000, getnew_handle, first = 1, querystring, fid, newreminder;
 function getnew(query_string, settime) {
 	var timeout = isUndefined(settime) ? getnewtimeout : settime;
 	var x = new Ajax();
@@ -18,9 +18,9 @@ function getnew(query_string, settime) {
 		} else {
 			if(getnewcount < 10) {
 				// 變更 timeout 累加計算方式
-				timeout = getnewtimeout * (6 + getnewcount * 2);
+				timeout = getnewtimeout * (6 + getnewcount * 1);
 
-				console.log([getnewtimeout, timeout]);
+				console.log([getnewtimeout, timeout, getnewcount]);
 
 				getnew_handle = setTimeout(function () {getnew(query_string);}, timeout);
 			}
