@@ -176,8 +176,8 @@ function dziconv($str, $in_charset = 'GBK', $out_charset = 'UTF-8') {
 
 
 /*
-** ĞŞ¸ÄÒÑ¶Á×´Ì¬µÄid
-** $new£ºÊı×é ¼üÃûÎªÀàĞÍ newprompt¡¢newpm¡¢newthread ¼üÖµÎªidÊı×é
+** ä¿®æ”¹å·²è¯»çŠ¶æ€çš„id
+** $newï¼šæ•°ç»„ é”®åä¸ºç±»å‹ newpromptã€newpmã€newthread é”®å€¼ä¸ºidæ•°ç»„
 */
 function clearnew($new = array()) {
 	global $_G;
