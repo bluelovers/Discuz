@@ -277,6 +277,7 @@ if($action == 'index') {
 	showmessage($showmessage, "forum.php?mod=forumdisplay&fid=$_G[fid]");
 
 } elseif($action == 'create') {
+	// 創建新群組
 
 	if(!$_G['group']['allowbuildgroup']) {
 		showmessage('group_create_usergroup_failed', "group.php");
