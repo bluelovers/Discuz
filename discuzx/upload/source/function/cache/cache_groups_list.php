@@ -40,7 +40,7 @@ function build_cache_groups_list() {
 	$orderby = !empty($orderby) && $orderbyarray[$orderby] ? "ORDER BY ".$orderbyarray[$orderby] : '';
 
 	$fieldadd = ' ,ff.*';
-	$fieldsql = 'f.fid, f.fup, f.recommend, f.displayorder, f.name '.$fieldadd;
+	$fieldsql = 'f.fid, f.fup, f.recommend, f.displayorder, f.type, f.name '.$fieldadd;
 
 	$orderid = 0;
 
@@ -69,18 +69,27 @@ function build_cache_groups_list() {
 
 	$grouplist = array();
 
-	$query = DB::query("SELECT $fieldsql FROM ".DB::table('forum_forum')." f $useindex LEFT JOIN ".DB::table("forum_forumfield")." ff ON ff.fid=f.fid WHERE f.type='sub' AND f.status=3 $orderby");
+	$query = DB::query("SELECT $fieldsql FROM ".DB::table('forum_forum')." f $useindex LEFT JOIN ".DB::table("forum_forumfield")." ff ON ff.fid=f.fid WHERE f.type IN ('sub', 'forum') AND f.status=3 $orderby");
 	while($group = DB::fetch($query)) {
-		$group['iconstatus'] = $group['icon'] ? 1 : 0;
-		isset($group['icon']) && $group['icon'] = get_groupimg($group['icon'], 'icon');
-		isset($group['banner']) && $group['banner'] = get_groupimg($group['banner']);
+		if ($group['type'] == 'sub') {
+			$group['iconstatus'] = $group['icon'] ? 1 : 0;
+			isset($group['icon']) && $group['icon'] = get_groupimg($group['icon'], 'icon');
+			isset($group['banner']) && $group['banner'] = get_groupimg($group['banner']);
 
-		isset($group['dateline']) && $group['dateline'] = $group['dateline'] ? dgmdate($group['dateline'], 'd') : '';
-		isset($group['lastupdate']) && $group['lastupdate'] = $group['lastupdate'] ? dgmdate($group['lastupdate'], 'd') : '';
+			isset($group['dateline']) && $group['dateline'] = $group['dateline'] ? dgmdate($group['dateline'], 'd') : '';
+			isset($group['lastupdate']) && $group['lastupdate'] = $group['lastupdate'] ? dgmdate($group['lastupdate'], 'd') : '';
 
-		$grouplist[$group['fid']] = array_intersect_key($group, $group_cache_field);
+			$group['recommend'] = explode(',', $group['recommend']);
+			$group['recommend'] = array_unique(array_filter(array_map('intval', $group['recommend'])));
 
-		$data['group_fup'][$group['fup']]['subs'][] = $group['fid'];
+			$grouplist[$group['fid']] = array_intersect_key($group, $group_cache_field);
+
+			$data['group_fup'][$group['fup']]['subs'][] = $group['fid'];
+		} else {
+			$data['group_fup'][$group['fid']]['fid'] = $group['fid'];
+			$data['group_fup'][$group['fid']]['fup'] = $group['fup'];
+			$data['group_fup'][$group['fid']]['name'] = $group['name'];
+		}
 	}
 
 	$data['grouplist'] = $grouplist;
