@@ -220,6 +220,12 @@ if(submitcheck('addsubmit')) {
 		, lastpost='{$_G[timestamp]}'
 		WHERE doid='$updo[doid]'");
 
+	// bluelovers
+	if ($updo['id']) {
+		DB::query("UPDATE ".DB::table('home_docomment')." SET lastpost='{$_G[timestamp]}' WHERE id='$updo[id]'");
+	}
+	// bluelovers
+
 	if($updo['uid'] != $_G['uid']) {
 		notification_add($updo['uid'], 'doing', 'doing_reply', array(
 			'url'=>"home.php?mod=space&uid=$updo[uid]&do=doing&doid=$updo[doid]&highlight=$newid",
