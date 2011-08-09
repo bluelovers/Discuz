@@ -161,4 +161,10 @@
 	{
     	vertical-align: bottom;
 	}
+
+	/* 小頭像的大小(紀錄列表內) */
+	.xlda dd img.avatar_small_19 {
+		height: 19px;
+		width: 19px;
+	}
 /** end **/
