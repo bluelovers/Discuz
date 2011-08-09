@@ -166,5 +166,7 @@
 	.xlda dd img.avatar_small_19 {
 		height: 19px;
 		width: 19px;
+
+		vertical-align: middle;
 	}
 /** end **/
