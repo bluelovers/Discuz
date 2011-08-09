@@ -170,4 +170,8 @@
 		vertical-align: middle;
 		display: inline;
 	}
+
+	.space_doing_li li:hover .avt img.avatar {
+		border-color: {LINK};
+	}
 /** end **/
