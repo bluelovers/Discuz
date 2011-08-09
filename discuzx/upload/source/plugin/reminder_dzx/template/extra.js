@@ -8,7 +8,7 @@ function getnew(query_string, settime) {
 			var list = [];
 			var jsndata = (new Function("return " + s))();
 			newreminder = makeuplist(jsndata, list);
-			insertobjnode($('rtip'), 'div', 'rr_close', 'addclose', jsndata.lasttime);
+			insertobjnode(jsndata.lasttime, timeout);
 			$('contents').innerHTML = list.join('');
 
 			startremind();
@@ -83,7 +83,7 @@ function makeuplist(jsndata, list) {
 				newreminder = 'newpm';
 				for(var two in jsndata[one]) {
 					newreminder = newreminder+'_'+two
-					list.push('<li><a href="home.php?mod=space&uid='+jsndata[one][two].lastauthorid+'" target="_blank">'+jsndata[one][two].lastauthor+'</a> 说 :<span id="p_gpmid_'+jsndata[one][two].pmid+'">'+jsndata[one][two].lastsummary+'</span> &nbsp; <a href="home.php?mod=space&do=pm&subop=view&touid='+jsndata[one][two].lastauthorid+'#last" id="pmlist_'+jsndata[one][two].pmid+'_a" target="_blank">回复</a></li>');
+					list.push('<li><a href="home.php?mod=space&uid='+jsndata[one][two].lastauthorid+'" target="_blank">'+jsndata[one][two].lastauthor+'</a> 说 :<span id="p_gpmid_'+jsndata[one][two].pmid+'">'+jsndata[one][two].lastsummary+'</span> &nbsp; <a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_'+jsndata[one][two].lastauthorid+'&amp;touid='+jsndata[one][two].lastauthorid+'&amp;pmid=0&amp;daterange=2" id="a_sendpm_'+jsndata[one][two].lastauthorid+'" onclick="showWindow(\'showMsgBox\', this.href, \'get\', 0)">发送消息</a></li>');
 				}
 				break;
 			case 'newthread':
@@ -98,7 +98,7 @@ function makeuplist(jsndata, list) {
 	return newreminder;
 }
 
-function insertobjnode(obj, insertobj, id, nextid, lasttime) {
+function insertobjnode(lasttime, timeout) {
 	var type = getcookie('reminder').split('D');
 	var poptype = type[2].split('_');
 	var remindertype = newreminder.split('_');
@@ -109,6 +109,7 @@ function insertobjnode(obj, insertobj, id, nextid, lasttime) {
 	} else if(remindertype[0] == 'newthread') {
 		rtype = 2;
 	}
+	getnewtimeout = timeout;
 	querystring = '&type=' + type['2'] + '&time=' + lasttime + (!isUndefined(fid) ? '&fid=' + fid : '');
 	$('r_close').onclick = function(){startremind();poptype[rtype] == 3 && clearnew(newreminder);return false;};
 }

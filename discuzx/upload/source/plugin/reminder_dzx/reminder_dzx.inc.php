@@ -12,7 +12,7 @@ if(!$r_perm || !$_G['uid']) {
 }
 
 $cookie_reminder = explode('D', getcookie('reminder'));
-$_G['gp_type'] = $cookie_reminder['2'];
+$cookie_reminder['0'] == $_G['uid'] && $_G['gp_type'] = $cookie_reminder['2'];
 $rtype = array_combine(array('newprompt', 'newpm', 'newthread'), explode('_', $_G['gp_type']));
 
 if($_G['gp_action'] == 'checknew') {
@@ -98,7 +98,7 @@ if($_G['gp_action'] == 'checknew') {
 		}
 
 		$returnlist['lasttime'] = TIMESTAMP;
-		$return = json_encode($_G['config']['db']['1']['dbcharset'] == 'gbk' ? dziconv($returnlist) : $returnlist);
+		$return = json_encode(strtolower($_G['config']['db']['1']['dbcharset']) != 'utf8' ? dziconv($returnlist, $_G['config']['db']['1']['dbcharset'], 'UTF-8') : $returnlist);
 	}
 
 	include template('common/header_ajax');
@@ -162,15 +162,15 @@ if($_G['gp_action'] == 'checknew') {
 	}
 }
 
-function dziconv($str) {
+function dziconv($str, $in_charset = 'GBK', $out_charset = 'UTF-8') {
 	$c = array();
 	if(is_array($str)) {
 		foreach($str as $key => $val) {
-			$c[$key] = dziconv($val);
+			$c[$key] = dziconv($val, $in_charset, $out_charset);
 		}
 		return $c;
 	} else {
-		return iconv('GBK', 'UTF-8', $str);
+		return iconv($in_charset, $out_charset, $str);
 	}
 }
 

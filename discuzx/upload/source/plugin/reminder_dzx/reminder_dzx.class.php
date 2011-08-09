@@ -29,14 +29,15 @@ class plugin_reminder_dzx {
 
 		$output = '';
 		if($this->reminder['perm']) {
-			if(empty($_G['cookie']['reminder'])) {
+			$r_cookie = explode('D', $_G['cookie']['reminder']);
+			if(empty($_G['cookie']['reminder']) || $r_cookie['0'] != $_G['uid']) {
 				$setting = DB::fetch_first("SELECT * FROM ".DB::table('common_plugin_reminder')." WHERE uid='{$_G['uid']}' LIMIT 1");
 				if(empty($setting)) {
 					$this->reminder['ispop'] = intval($this->reminder['ispop']);
 					$setting = array(
 						'uid' => $_G['uid'],
 						'remind' => $this->reminder['ispop'] ? '1' : 0,
-						'readtype' => $this->reminder['ispop'].'_'.$this->reminder['ispop'].'_'.$this->reminder['ispop'],
+						'readtype' => $this->reminder['ispop'].'_'.$this->reminder['ispop'].'_'.($this->reminder['ispop'] ? 1 : 0),
 					);
 					DB::insert('common_plugin_reminder', $setting);
 				}
@@ -81,7 +82,7 @@ class plugin_reminder_dzx {
 	</div>
 </div>
 <script type="text/javascript" src="source/plugin/reminder_dzx/template/extra'.$this->charset.'.js"></script>';
-					$output .= '<script type="text/javascript">getnew_handle = setTimeout(function () {getnew(\''.$query_string.'\''.($this->reminder['active'] ? '' : ', 86400').');}, '.$timeout.');'.$first.'</script>';
+					$output .= '<script type="text/javascript">getnew_handle = setTimeout(function () {getnew(\''.$query_string.'\''.($this->reminder['active'] ? '' : ', 86400000').');}, '.$timeout.');'.$first.'</script>';
 				}
 			}
 		}
