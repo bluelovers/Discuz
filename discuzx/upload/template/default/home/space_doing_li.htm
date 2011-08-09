@@ -7,6 +7,7 @@
 	<!--{eval $value[message] = nl2br($value[message]);}-->
 
 	<li class="ptn pbn{$value['class']}" style="$value[style]">
+		<a href="home.php?mod=space&uid=$value[uid]" c="1" class="avt"><!--{avatar($value[uid],small_19)}--></a>
 		<a href="home.php?mod=space&uid=$value[uid]" class="lit">$value[username]</a>: <span class="sctpl_message">$value[message]</span> <span class="xg1">(<!--{date($value['dateline'], 'n-j H:i')}-->)</span>
 		<!--{if $_G[uid]}-->
 		<a href="javascript:;" onclick="docomment_form($value[doid], $value[id], '$_G[gp_key]');" class="sctpl_reply">{lang reply}</a>

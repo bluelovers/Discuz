@@ -52,6 +52,10 @@ if(submitcheck('addsubmit')) {
 		'message' => $message,
 		'ip' => $_G['clientip'],
 		'status' => $doing_status,
+
+		// bluelovers
+		'lastpost' => $_G['timestamp'],
+		// bluelovers
 	);
 	$newdoid = DB::insert('home_doing', $setarr, 1);
 
@@ -160,7 +164,21 @@ if(submitcheck('addsubmit')) {
 	if(empty($updo) && $doid) {
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='$doid'");
 		$updo = DB::fetch($query);
+
+		// bluelover
+		// 最頂層的 doing
+		$top_updo = $updo;
+		// bluelovers
 	}
+
+	// bluelovers
+	// 最頂層的 doing
+	if (empty($top_updo)) {
+		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='{$updo[doid]}'");
+		$top_updo = DB::fetch($query);
+	}
+	// bluelovers
+
 	if(empty($updo)) {
 		showmessage('docomment_error');
 	} else {
@@ -182,6 +200,12 @@ if(submitcheck('addsubmit')) {
 		'message' => $message,
 		'ip' => $_G['clientip'],
 		'grade' => $updo['grade']+1
+
+		// bluelovers
+		,
+		// 最後被回覆的時間
+		'lastpost' => $_G['timestamp'],
+		// bluelovers
 	);
 
 	if($updo['grade'] >= 3) {
@@ -191,7 +215,16 @@ if(submitcheck('addsubmit')) {
 	$newid = DB::insert('home_docomment', $setarr, 1);
 
 	// 更新回複數
-	DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum+1 WHERE doid='$updo[doid]'");
+	DB::query("UPDATE ".DB::table('home_doing')."
+		SET replynum=replynum+1
+		, lastpost='{$_G[timestamp]}'
+		WHERE doid='$updo[doid]'");
+
+	// bluelovers
+	if ($updo['id']) {
+		DB::query("UPDATE ".DB::table('home_docomment')." SET lastpost='{$_G[timestamp]}' WHERE id='$updo[id]'");
+	}
+	// bluelovers
 
 	if($updo['uid'] != $_G['uid']) {
 		notification_add($updo['uid'], 'doing', 'doing_reply', array(
@@ -201,6 +234,16 @@ if(submitcheck('addsubmit')) {
 		// 獎勵積分
 		updatecreditbyaction('comment', 0, array(), 'doing'.$updo['doid']);
 	}
+
+	// bluelovers
+	// 改良當回覆紀錄時可以同時提醒該紀錄最原始的發表者
+	if($top_updo['uid'] != $updo['uid'] && $top_updo['uid'] != $_G['uid']) {
+		notification_add($top_updo['uid'], 'doing', 'doing_reply', array(
+			'url'=>"home.php?mod=space&uid=$top_updo[uid]&do=doing&doid=$top_updo[doid]&highlight=$newid",
+			'from_id'=>$top_updo['doid'],
+			'from_idtype'=>'doid'));
+	}
+	// bluelovers
 
 	include_once libfile('function/stat');
 	updatestat('docomment');
