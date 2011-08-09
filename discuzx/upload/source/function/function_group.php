@@ -89,6 +89,9 @@ function groupuserlist($fid, $orderby = '', $num = 0, $start = 0, $addwhere = ''
 
 }
 
+/**
+ * 取得群組列表
+ */
 function grouplist($orderby = 'displayorder', $fieldarray = array(), $num = 1, $fids = array(), $sort = 0, $getcount = 0, $grouplevel = array()) {
 
 	if($fieldarray && is_array($fieldarray)) {
