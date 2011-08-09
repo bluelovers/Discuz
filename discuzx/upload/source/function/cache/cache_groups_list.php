@@ -79,9 +79,11 @@ function build_cache_groups_list() {
 		isset($group['lastupdate']) && $group['lastupdate'] = $group['lastupdate'] ? dgmdate($group['lastupdate'], 'd') : '';
 
 		$grouplist[$group['fid']] = array_intersect_key($group, $group_cache_field);
+
+		$data['group_fup'][$group['fup']]['subs'][] = $group['fid'];
 	}
 
-	$data = $grouplist;
+	$data['grouplist'] = $grouplist;
 
 	save_syscache('groups_list', $data);
 }
