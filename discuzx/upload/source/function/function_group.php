@@ -194,6 +194,9 @@ function get_groupimg($imgname, $imgtype = '') {
 	}
 }
 
+/**
+ * 取得群組分類選擇項目
+ */
 function get_groupselect($fup = 0, $groupid = 0, $ajax = 1) {
 	global $_G;
 	loadcache('grouptype');
