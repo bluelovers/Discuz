@@ -113,8 +113,10 @@ function build_cache_grouptype() {
 	$data['second'] = $data['first'] = array();
 	while($group = DB::fetch($query)) {
 		if($group['fup']) {
+			// 第二層
 			$data['second'][$group['fid']] = $group;
 		} else {
+			// 最頂層
 			$data['first'][$group['fid']] = $group;
 		}
 	}
