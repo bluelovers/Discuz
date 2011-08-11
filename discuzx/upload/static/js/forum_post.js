@@ -744,7 +744,7 @@ function showExtra(id) {
 		} else {
 			obj.style.display = display == 'none' ? 'none' : 'block';
 		}
-	}
+	};
 	// bluelovers
 
 	if ($(id+'_c').style.display == 'block') {
