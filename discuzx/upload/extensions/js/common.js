@@ -194,8 +194,15 @@
 		var bbcode_imgs = jQuery('body').filter('body.pg_viewthread').find('.t_f img.bbcode_img');
 		if (bbcode_imgs.length > 0) {
 
+			CB_ScriptDir = 'extensions/js/clearbox';
+
 			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
 				.appendTo(jQuery(document).find('head'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/config/default.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
 
 			jQuery('<script>').attr({
 				'src' : CB_ScriptDir+'/js/clearbox_source.js',
