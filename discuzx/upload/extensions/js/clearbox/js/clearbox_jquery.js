@@ -37,6 +37,9 @@ var CB_Show = 1;
  			defaults : {
 				dir : '',
  			},
+ 			options : {
+
+ 			},
 			init : function(options) {
 				_this.setup(options);
 
@@ -46,7 +49,7 @@ var CB_Show = 1;
 				CB_Init();
 			},
 			setup : function (options) {
-				var options = $.extend(true, {}, _this.defaults, options);
+				_this.options = $.extend(true, {}, _this.defaults, options);
 
 				CB_AnimTimeout = parseInt(CB_AnimTimeout);
 				if (CB_AnimTimeout < 5) {
