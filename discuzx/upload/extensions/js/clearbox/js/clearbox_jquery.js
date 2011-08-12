@@ -64,6 +64,8 @@ var CB_Show = 1;
 				CB_ImgNum : 'be',
 				CB_ImgNumBracket : '[]',
 
+				CB_SlShowTime : 3,
+
 				dir : '',
  			},
  			options : {
@@ -161,11 +163,11 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_ImgNum != 'be' && _clearbox.options.CB_ImgNum != 'ki') {
 					_clearbox.options.CB_ImgNum = 'be'
 				}
-				CB_SlShowTime = parseInt(CB_SlShowTime);
-				if (CB_SlShowTime < 1) {
-					CB_SlShowTime = 5
+				_clearbox.options.CB_SlShowTime = parseInt(_clearbox.options.CB_SlShowTime);
+				if (_clearbox.options.CB_SlShowTime < 1) {
+					_clearbox.options.CB_SlShowTime = 5
 				}
-				CB_SlShowTime *= 1000;
+				_clearbox.options.CB_SlShowTime *= 1000;
 				if (CB_CheckDuplicates != 'be' && CB_CheckDuplicates != 'ki') {
 					CB_CheckDuplicates = 'ki'
 				}
@@ -944,7 +946,7 @@ var CB_Show = 1;
 				if (CB_Rel[1] > 0) {
 					CB_SlShowTimer = parseInt(CB_Rel[1]) * 1000
 				} else {
-					CB_SlShowTimer = CB_SlShowTime
+					CB_SlShowTimer = _clearbox.options.CB_SlShowTime
 				}
 				if (CB_Rel[2] == 'start') {
 					CB_SS = 'pause'
