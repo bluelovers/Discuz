@@ -70,6 +70,7 @@ var CB_Show = 1;
 
 				CB_TextH : 40,
 				CB_Font : 'arial',
+				CB_FontSize : 12,
 
 				dir : '',
  			},
@@ -161,9 +162,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_TextH < 25) {
 					_clearbox.options.CB_TextH = 40
 				}
-				CB_FontSize = parseInt(CB_FontSize);
-				if (CB_FontSize < 6) {
-					CB_FontSize = 13
+				_clearbox.options.CB_FontSize = parseInt(_clearbox.options.CB_FontSize);
+				if (_clearbox.options.CB_FontSize < 6) {
+					_clearbox.options.CB_FontSize = 13
 				}
 				if (_clearbox.options.CB_ImgNum != 'be' && _clearbox.options.CB_ImgNum != 'ki') {
 					_clearbox.options.CB_ImgNum = 'be'
@@ -1063,7 +1064,7 @@ var CB_Show = 1;
 			CB_Txt.style.height = (_clearbox.options.CB_TextH - _clearbox.options.CB_PadT) + 'px';
 			CB_Txt.style.marginTop = _clearbox.options.CB_PadT + 'px';
 			CB_Txt.style.fontFamily = _clearbox.options.CB_Font;
-			CB_Txt.style.fontSize = CB_FontSize + 'px';
+			CB_Txt.style.fontSize = _clearbox.options.CB_FontSize + 'px';
 			CB_Txt.style.fontWeight = CB_FontWeigth;
 			CB_Txt.style.color = CB_FontColor;
 			CB_Header = document.getElementById('CB_Header').style;
