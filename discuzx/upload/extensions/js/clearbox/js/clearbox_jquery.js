@@ -24,13 +24,13 @@ var CB_Show = 1;
 
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
-	CB_PicDir += '/';
+	_clearbox.options.CB_PicDir += '/';
 
 	var CB_PrePictures = new Array();
 	CB_PrePictures[0] = new Image();
-	CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
+	CB_PrePictures[0].src = _clearbox.options.CB_PicDir + 'noprv.gif';
 	CB_PrePictures[1] = new Image();
-	CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
+	CB_PrePictures[1].src = _clearbox.options.CB_PicDir + 'loading.gif';
 
  	$.extend({
  		log : function(a){
@@ -78,7 +78,7 @@ var CB_Show = 1;
 
 				CB_LoadingText : 'Loading...',
 
-				dir : '',
+				CB_PicDir : 'clearbox/pic',
  			},
  			options : {
 
@@ -974,7 +974,7 @@ var CB_Show = 1;
 					} else {
 						for (i = 0; i < CB_Links.length; i++) {
 							if (jQuery(CB_Links[i]).attr('rel').substring(9, jQuery(CB_Links[i]).attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
-								CB_ActThumbSrc = CB_PicDir + 'noprv.gif';
+								CB_ActThumbSrc = _clearbox.options.CB_PicDir + 'noprv.gif';
 								if (jQuery(CB_Links[i]).attr('tnhref') == null || jQuery(CB_Links[i]).attr('tnhref') == 'null') {
 									for (j = 0; j < CB_Links[i].childNodes.length; j++) {
 										if (CB_Links[i].childNodes[j].src != undefined) {
@@ -1019,7 +1019,7 @@ var CB_Show = 1;
 			document.body.style.position = "static";
 			var a = '<div class="CB_RoundPixBugFix" style="width: ' + _clearbox.options.CB_RoundPix + 'px; height: ' + _clearbox.options.CB_RoundPix + 'px;"></div>';
 			if (jQuery.browser.msie) {
-				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + CB_PicDir + 'blank.gif" />'
+				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" />'
 			} else {
 				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
 			}
@@ -1027,7 +1027,7 @@ var CB_Show = 1;
 			$("<div>")
 				.attr('id', 'CB_All')
 				.appendTo($("body"))
-				.html('<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>')
+				.html('<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + _clearbox.options.CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + _clearbox.options.CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + _clearbox.options.CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + _clearbox.options.CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + _clearbox.options.CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + _clearbox.options.CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>')
 			;
 
 			if (navigator.userAgent.indexOf("MSIE 6") != -1 && _clearbox.options.CB_RoundPix == 0) {
