@@ -228,7 +228,7 @@ function CB_ClickIMG(a) {
 	CB_HideDocument()
 }
 function CB_SetAllPositions() {
-	getBrowserSize();
+	jQuery.clearbox.getBrowserSize();
 	jQuery.clearbox.getDocumentSize();
 	jQuery.clearbox.getScrollPosition();
 	if (BrSizeY > DocSizeY) {
@@ -800,31 +800,7 @@ function CB_ShowDocument() {
 	}
 }
 
-function getBrowserSize() {
-	this.BrSizeX = 0;
-	this.BrSizeY = 0;
-	if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
-		BrSizeX = document.documentElement.clientWidth;
-		BrSizeY = document.documentElement.clientHeight
-	} else if (typeof(window.innerWidth) == 'number') {
-		BrSizeX = window.innerWidth;
-		BrSizeY = window.innerHeight
-	} else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
-		BrSizeX = document.body.clientWidth;
-		BrSizeY = document.body.clientHeight;
-		return
-	}
-	if (jQuery.browser.opera) {
-		BrSizeX = document.documentElement.clientWidth;
-		BrSizeY = document.body.clientHeight
-	}
-	if (document.compatMode != undefined) {
-		if (document.compatMode.match('Back') && jQuery.browser.firefox) {
-			BrSizeY = document.body.clientHeight
-		}
-	}
-	return
-}
+
 
 function CB_fix_center(w) {
 	var _w = CB_ImgCont.offsetWidth || CB_ImgCont.width;
@@ -1137,6 +1113,37 @@ function CB_fix_center(w) {
 
 				jQuery.clearbox.log(['DocSizeX', DocSizeX, jQuery(document).width(), jQuery(document).outerWidth()]);
 				jQuery.clearbox.log(['DocSizeY', DocSizeY, jQuery(document).height(), jQuery(document).outerHeight()]);
+
+				return
+			},
+			getBrowserSize : function () {
+				this.BrSizeX = 0;
+				this.BrSizeY = 0;
+				/*
+				if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+					BrSizeX = document.documentElement.clientWidth;
+					BrSizeY = document.documentElement.clientHeight
+				} else if (typeof(window.innerWidth) == 'number') {
+					BrSizeX = window.innerWidth;
+					BrSizeY = window.innerHeight
+				} else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
+					BrSizeX = document.body.clientWidth;
+					BrSizeY = document.body.clientHeight;
+					return
+				}
+				if (jQuery.browser.opera) {
+					BrSizeX = document.documentElement.clientWidth;
+					BrSizeY = document.body.clientHeight
+				}
+				if (document.compatMode != undefined) {
+					if (document.compatMode.match('Back') && jQuery.browser.firefox) {
+						BrSizeY = document.body.clientHeight
+					}
+				}
+				*/
+
+				jQuery.clearbox.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
+				jQuery.clearbox.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
 
 				return
 			},
