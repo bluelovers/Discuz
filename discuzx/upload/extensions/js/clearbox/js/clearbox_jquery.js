@@ -37,6 +37,8 @@ var CB_Show = 1;
  			defaults : {
  				CB_HideColor : '#000',
  				CB_HideOpacity : 75,
+ 				CB_OpacityStep : 25,
+
 				dir : '',
  			},
  			options : {
@@ -77,9 +79,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_HideOpacity < 0 || _clearbox.options.CB_HideOpacity > 100) {
 					_clearbox.options.CB_HideOpacity = 70
 				}
-				CB_OpacityStep = parseInt(CB_OpacityStep);
-				if (CB_OpacityStep < 1 || CB_OpacityStep > _clearbox.options.CB_HideOpacity) {
-					CB_OpacityStep = 10
+				_clearbox.options.CB_OpacityStep = parseInt(_clearbox.options.CB_OpacityStep);
+				if (_clearbox.options.CB_OpacityStep < 1 || _clearbox.options.CB_OpacityStep > _clearbox.options.CB_HideOpacity) {
+					_clearbox.options.CB_OpacityStep = 10
 				}
 				CB_WinBaseW = parseInt(CB_WinBaseW);
 				if (CB_WinBaseW < 25 || CB_WinBaseW > 1000) {
@@ -1130,7 +1132,7 @@ var CB_Show = 1;
 		if (CB_Hide > 0) {
 			jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
 
-			CB_Hide -= CB_OpacityStep;
+			CB_Hide -= _clearbox.options.CB_OpacityStep;
 			CB_Blur = setTimeout(CB_ShowDocument, 5)
 		} else {
 			CB_HideContent.style.visibility = 'hidden';
@@ -1147,7 +1149,7 @@ var CB_Show = 1;
 	function CB_HideDocument(a) {
 		var b = a;
 		if (CB_ii < _clearbox.options.CB_HideOpacity) {
-			CB_ii += CB_OpacityStep;
+			CB_ii += _clearbox.options.CB_OpacityStep;
 
 			jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
 
