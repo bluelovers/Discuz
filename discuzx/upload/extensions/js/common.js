@@ -142,6 +142,11 @@
 })(jQuery);
 
 (function($, undefined){
+
+	jQuery.ajaxSetup({
+		cache : true,
+	});
+
 	$(window).load(function(){
 		if (jQuery('#controlpanel').size() > 0) {
 			function _body_css() {
@@ -195,10 +200,6 @@
 		if (bbcode_imgs.length > 0) {
 
 			CB_ScriptDir = 'extensions/js/clearbox';
-
-			jQuery.ajaxSetup({
-				cache : true,
-			});
 
 			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
 				.appendTo(jQuery(document).find('head'));
