@@ -1109,7 +1109,7 @@ function CB_fix_center(w) {
 				}
 				CB_jj = 0;
 				CB_SlideBW = 0;
-				CB_SlideB.style.display = 'none';
+				jQuery(CB_SlideB).hide();
 			},
 			CB_SSStart : function () {
 				jQuery(CB_SlideS).hide();
