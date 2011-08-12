@@ -299,8 +299,8 @@ var CB_Show = 1;
 					DocScrX = document.documentElement.scrollLeft
 				}
 				*/
-				DocScrX = jQuery(document).scrollLeft();
-				DocScrY = jQuery(document).scrollTop();
+				DocScrX = $(document).scrollLeft();
+				DocScrY = $(document).scrollTop();
 
 				this.log(['getScrollPosition', DocScrX, DocScrY]);
 
@@ -347,18 +347,18 @@ var CB_Show = 1;
 				}
 				CB_jj = 0;
 				CB_SlideBW = 0;
-				jQuery(CB_SlideB).hide();
+				$(CB_SlideB).hide();
 			},
 			CB_SSStart : function () {
-				jQuery(CB_SlideS).hide();
-				jQuery(CB_SlideP).show();
+				$(CB_SlideS).hide();
+				$(CB_SlideP).show();
 				CB_SS = 'pause';
-				jQuery(CB_SlideB).show();
+				$(CB_SlideB).show();
 				_clearbox.CB_SlideShow();
 			},
 			CB_SSPause : function () {
-				jQuery(CB_SlideP).hide();
-				jQuery(CB_SlideS).show();
+				$(CB_SlideP).hide();
+				$(CB_SlideS).show();
 				_clearbox.CB_SlideShowStop();
 			},
 			getDocumentSize : function () {
@@ -385,11 +385,11 @@ var CB_Show = 1;
 				}
 				*/
 
-				DocSizeX = jQuery(document).width();
-				DocSizeY = jQuery(document).height();
+				DocSizeX = $(document).width();
+				DocSizeY = $(document).height();
 
-				_clearbox.log(['DocSizeX', DocSizeX, jQuery(document).width(), jQuery(document).outerWidth()]);
-				_clearbox.log(['DocSizeY', DocSizeY, jQuery(document).height(), jQuery(document).outerHeight()]);
+				_clearbox.log(['DocSizeX', DocSizeX, $(document).width(), $(document).outerWidth()]);
+				_clearbox.log(['DocSizeY', DocSizeY, $(document).height(), $(document).outerHeight()]);
 
 				return
 			},
@@ -419,11 +419,11 @@ var CB_Show = 1;
 				}
 				*/
 
-				BrSizeX = jQuery(window).width();
-				BrSizeY = jQuery(window).height();
+				BrSizeX = $(window).width();
+				BrSizeY = $(window).height();
 
-				_clearbox.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
-				_clearbox.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
+				_clearbox.log(['BrSizeX', BrSizeX, $(window).width()]);
+				_clearbox.log(['BrSizeY', BrSizeY, $(window).height()]);
 
 				return
 			},
@@ -706,8 +706,8 @@ var CB_Show = 1;
 				}
 				if (CB_Gallery.length > 2) {
 					if (CB_SS == 'pause') {
-						jQuery(CB_SlideP).show();
-						jQuery(CB_SlideB).show();
+						$(CB_SlideP).show();
+						$(CB_SlideB).show();
 						_clearbox.CB_SlideShow();
 					} else {
 						CB_SlideS.style.display = 'block';
@@ -922,15 +922,15 @@ var CB_Show = 1;
 				CB_jj = 0;
 				$(CB_HideContent).unbind('click.clearbox');
 				if (CB_Gallery.length < 3) {
-					jQuery(CB_SlideS).hide();
-					jQuery(CB_SlideP).hide();
+					$(CB_SlideS).hide();
+					$(CB_SlideP).hide();
 				} else {
 					if (CB_SS == 'start') {
-						jQuery(CB_SlideS).show();
-						jQuery(CB_SlideP).hide();
+						$(CB_SlideS).show();
+						$(CB_SlideP).hide();
 					} else {
-						jQuery(CB_SlideP).show();
-						jQuery(CB_SlideS).hide();
+						$(CB_SlideP).show();
+						$(CB_SlideS).hide();
 					}
 				}
 				CB_Prv.style.display = 'none';
@@ -981,8 +981,8 @@ var CB_Show = 1;
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
 				CB_Win.style.visibility = 'visible';
-				jQuery(CB_SlideS).hide();
-				jQuery(CB_SlideP).hide();
+				$(CB_SlideS).hide();
+				$(CB_SlideP).hide();
 				CB_HideDocument('x');
 			},
 			CB_ClickIMG : function (a) {
@@ -1012,23 +1012,23 @@ var CB_Show = 1;
 						CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]));
 					} else {
 						for (i = 0; i < CB_Links.length; i++) {
-							if (jQuery(CB_Links[i]).attr('rel').substring(9, jQuery(CB_Links[i]).attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
+							if ($(CB_Links[i]).attr('rel').substring(9, $(CB_Links[i]).attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
 								CB_ActThumbSrc = _clearbox.options.CB_PicDir + 'noprv.gif';
-								if (jQuery(CB_Links[i]).attr('tnhref') == null || jQuery(CB_Links[i]).attr('tnhref') == 'null') {
+								if ($(CB_Links[i]).attr('tnhref') == null || $(CB_Links[i]).attr('tnhref') == 'null') {
 									for (j = 0; j < CB_Links[i].childNodes.length; j++) {
 										if (CB_Links[i].childNodes[j].src != undefined) {
 											CB_ActThumbSrc = CB_Links[i].childNodes[j].getAttribute('src');
 										}
 									}
 								} else {
-									CB_ActThumbSrc = jQuery(CB_Links[i]).attr('tnhref');
+									CB_ActThumbSrc = $(CB_Links[i]).attr('tnhref');
 								}
 
 								// bluelovers
-								CB_ActThumbSrc = CB_ActThumbSrc || jQuery(CB_Links[i]).attr('href');
+								CB_ActThumbSrc = CB_ActThumbSrc || $(CB_Links[i]).attr('href');
 								// bluelovers
 
-								CB_Gallery.push(new Array(jQuery(CB_Links[i]).attr('href'), CB_Links[i].getAttribute('title'), CB_ActThumbSrc))
+								CB_Gallery.push(new Array($(CB_Links[i]).attr('href'), CB_Links[i].getAttribute('title'), CB_ActThumbSrc))
 							}
 						}
 					}
@@ -1104,7 +1104,7 @@ var CB_Show = 1;
 			CB_SlideP = document.getElementById('CB_SlideShowP');
 			CB_SlideB = document.getElementById('CB_SlideShowBar');
 
-			jQuery(CB_SlideB).css('opacity', 0.5);
+			$(CB_SlideB).css('opacity', 0.5);
 
 			CB_Prv = document.getElementById('CB_Prev');
 			CB_Nxt = document.getElementById('CB_Next');
@@ -1156,18 +1156,18 @@ var CB_Show = 1;
 				CB_BodyMarginY = 0
 			}
 		}
-		jQuery('#CB_Thumbs').mousemove(_clearbox.getMouseXY);
+		$('#CB_Thumbs').mousemove(_clearbox.getMouseXY);
 		var d = 0;
 		var e = 0;
 
 		CB_Links = [];
-		jQuery('a[rel^="clearbox"]').each(function(index, elem){
+		$('a[rel^="clearbox"]').each(function(index, elem){
 			CB_Links[index] = elem;
 		});
 
 		for (i = 0; i < CB_Links.length; i++) {
-			CB_Rel = jQuery(CB_Links[i]).attr('rel');
-			CB_URL = jQuery(CB_Links[i]).attr('href');
+			CB_Rel = $(CB_Links[i]).attr('rel');
+			CB_URL = $(CB_Links[i]).attr('href');
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
 					CB_Links[i].onclick = function() {
@@ -1214,7 +1214,7 @@ var CB_Show = 1;
 
 	function CB_ShowDocument() {
 		if (CB_Hide > 0) {
-			jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
+			$(CB_HideContent).css('opacity', (CB_Hide / 100));
 
 			CB_Hide -= _clearbox.options.CB_OpacityStep;
 			CB_Blur = setTimeout(CB_ShowDocument, 5)
@@ -1238,7 +1238,7 @@ var CB_Show = 1;
 		if (CB_ii < _clearbox.options.CB_HideOpacity) {
 			CB_ii += _clearbox.options.CB_OpacityStep;
 
-			jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
+			$(CB_HideContent).css('opacity', (CB_ii / 100));
 
 			CB_Hide = CB_ii;
 			CB_Blur = setTimeout(function(){CB_HideDocument(b);}, 5);
