@@ -224,35 +224,10 @@ function CB_ClickIMG(a) {
 	}
 	CB_ImgWidthOld = CB_WinBaseW;
 	CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
-	CB_SetAllPositions();
+	jQuery.clearbox.CB_SetAllPositions();
 	CB_HideDocument()
 }
-function CB_SetAllPositions() {
-	jQuery.clearbox.getBrowserSize();
-	jQuery.clearbox.getDocumentSize();
-	jQuery.clearbox.getScrollPosition();
-	if (BrSizeY > DocSizeY) {
-		DocSizeY = BrSizeY
-	}
-	if ((navigator.userAgent.indexOf("Netscape") != -1 || jQuery.browser.firefox) && BrSizeX != DocSizeX) {
-		FF_ScrollbarBug = window.scrollMaxY + window.innerHeight - DocSizeY
-	} else {
-		FF_ScrollbarBug = 0
-	}
-	CB_SetMargins();
-	if (CB_BodyMarginX == 0) {
-		if (DocSizeX > BrSizeX) {
-			CB_HideContent.style.width = DocSizeX + 'px'
-		} else {
-			CB_HideContent.style.width = BrSizeX + 'px'
-		}
-	} else {
-		CB_HideContent.style.width = DocSizeX + CB_BodyMarginX + 'px'
-	}
-	CB_HideContent.style.height = BrSizeY + DocScrY + 'px';
-	CB_HideContent.style.visibility = 'visible';
-	return
-}
+
 function CB_ClickURL(a) {
 	if (CB_Show == 0) {
 		return false
@@ -262,7 +237,7 @@ function CB_ClickURL(a) {
 	CB_PrvNxt.display = 'none';
 	CB_Cls.style.display = 'none';
 	CB_Rel = CB_Clicked[0].split(',');
-	CB_SetAllPositions();
+	jQuery.clearbox.CB_SetAllPositions();
 	CB_ImgWidth = parseInt(CB_Rel[0]);
 	CB_ImgHeight = parseInt(CB_Rel[1]);
 	CB_ImgWidthOld = CB_WinBaseW;
@@ -1145,6 +1120,32 @@ function CB_fix_center(w) {
 				jQuery.clearbox.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
 				jQuery.clearbox.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
 
+				return
+			},
+			CB_SetAllPositions : function () {
+				jQuery.clearbox.getBrowserSize();
+				jQuery.clearbox.getDocumentSize();
+				jQuery.clearbox.getScrollPosition();
+				if (BrSizeY > DocSizeY) {
+					DocSizeY = BrSizeY
+				}
+				if ((navigator.userAgent.indexOf("Netscape") != -1 || jQuery.browser.firefox) && BrSizeX != DocSizeX) {
+					FF_ScrollbarBug = window.scrollMaxY + window.innerHeight - DocSizeY
+				} else {
+					FF_ScrollbarBug = 0
+				}
+				CB_SetMargins();
+				if (CB_BodyMarginX == 0) {
+					if (DocSizeX > BrSizeX) {
+						CB_HideContent.style.width = DocSizeX + 'px'
+					} else {
+						CB_HideContent.style.width = BrSizeX + 'px'
+					}
+				} else {
+					CB_HideContent.style.width = DocSizeX + CB_BodyMarginX + 'px'
+				}
+				CB_HideContent.style.height = BrSizeY + DocScrY + 'px';
+				CB_HideContent.style.visibility = 'visible';
 				return
 			},
  		},
