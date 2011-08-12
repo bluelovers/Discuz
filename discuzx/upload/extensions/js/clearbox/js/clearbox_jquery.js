@@ -17,98 +17,7 @@ function CB_SSPause() {
 	CB_SlideS.style.display = 'block';
 	CB_SlideShowStop()
 }
-CB_AnimTimeout = parseInt(CB_AnimTimeout);
-if (CB_AnimTimeout < 5) {
-	CB_AnimTimeout = 5
-}
-CB_BodyMarginLeft = parseInt(CB_BodyMarginLeft);
-if (CB_BodyMarginLeft < 0) {
-	CB_BodyMarginLeft = 0
-}
-CB_BodyMarginRight = parseInt(CB_BodyMarginRight);
-if (CB_BodyMarginRight < 0) {
-	CB_BodyMarginRight = 0
-}
-CB_BodyMarginTop = parseInt(CB_BodyMarginTop);
-if (CB_BodyMarginTop < 0) {
-	CB_BodyMarginTop = 0
-}
-CB_BodyMarginBottom = parseInt(CB_BodyMarginBottom);
-if (CB_BodyMarginBottom < 0) {
-	CB_BodyMarginBottom = 0
-}
-CB_HideOpacity = parseInt(CB_HideOpacity);
-if (CB_HideOpacity < 0 || CB_HideOpacity > 100) {
-	CB_HideOpacity = 70
-}
-CB_OpacityStep = parseInt(CB_OpacityStep);
-if (CB_OpacityStep < 1 || CB_OpacityStep > CB_HideOpacity) {
-	CB_OpacityStep = 10
-}
-CB_WinBaseW = parseInt(CB_WinBaseW);
-if (CB_WinBaseW < 25 || CB_WinBaseW > 1000) {
-	CB_WinBaseW = 120
-}
-CB_WinBaseH = parseInt(CB_WinBaseH);
-if (CB_WinBaseH < 50 || CB_WinBaseH > 1000) {
-	CB_WinBaseH = 110
-}
-CB_WinPadd = parseInt(CB_WinPadd);
-if (CB_WinPadd < 0) {
-	CB_WinPadd = 5
-}
-if (CB_Animation != 'ki' && CB_Animation != 'normal' && CB_Animation != 'double' && CB_Animation != 'warp') {
-	CB_Animation = 'double'
-}
-CB_Jump_X = parseInt(CB_Jump_X);
-if (CB_Jump_X < 1 || CB_Jump_X > 99) {
-	CB_Jump_X = 50
-}
-CB_Jump_Y = parseInt(CB_Jump_Y);
-if (CB_Jump_Y < 1 || CB_Jump_Y > 99) {
-	CB_Jump_Y = 50
-}
-CB_ImgBorder = parseInt(CB_ImgBorder);
-if (CB_ImgBorder < 0) {
-	CB_ImgBorder = 1
-}
-CB_Padd = parseInt(CB_Padd);
-if (CB_Padd < 0) {
-	CB_Padd = 2
-}
-if (CB_ShowImgURL != 'be' && CB_ShowImgURL != 'ki') {
-	CB_ShowImgURL = 'ki'
-}
-CB_PadT = parseInt(CB_PadT);
-if (CB_PadT < 0) {
-	CB_PadT = 10
-}
-CB_RoundPix = parseInt(CB_RoundPix);
-if (CB_RoundPix < 0) {
-	CB_RoundPix = 12
-}
-CB_TextH = parseInt(CB_TextH);
-if (CB_TextH < 25) {
-	CB_TextH = 40
-}
-CB_FontSize = parseInt(CB_FontSize);
-if (CB_FontSize < 6) {
-	CB_FontSize = 13
-}
-if (CB_ImgNum != 'be' && CB_ImgNum != 'ki') {
-	CB_ImgNum = 'be'
-}
-CB_SlShowTime = parseInt(CB_SlShowTime);
-if (CB_SlShowTime < 1) {
-	CB_SlShowTime = 5
-}
-CB_SlShowTime *= 1000;
-if (CB_CheckDuplicates != 'be' && CB_CheckDuplicates != 'ki') {
-	CB_CheckDuplicates = 'ki'
-}
-if (CB_Preload != 'be' && CB_Preload != 'ki') {
-	CB_Preload = 'be'
-}
+
 var CB_ActThumbSrc, CB_IEShowBug = '',
 CB_pngie = 0,
 CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
@@ -1080,6 +989,99 @@ function CB_fix_center(w) {
 			},
 			setup : function (options) {
 				var options = $.extend(true, {}, _this.defaults, options);
+
+				CB_AnimTimeout = parseInt(CB_AnimTimeout);
+				if (CB_AnimTimeout < 5) {
+					CB_AnimTimeout = 5
+				}
+				CB_BodyMarginLeft = parseInt(CB_BodyMarginLeft);
+				if (CB_BodyMarginLeft < 0) {
+					CB_BodyMarginLeft = 0
+				}
+				CB_BodyMarginRight = parseInt(CB_BodyMarginRight);
+				if (CB_BodyMarginRight < 0) {
+					CB_BodyMarginRight = 0
+				}
+				CB_BodyMarginTop = parseInt(CB_BodyMarginTop);
+				if (CB_BodyMarginTop < 0) {
+					CB_BodyMarginTop = 0
+				}
+				CB_BodyMarginBottom = parseInt(CB_BodyMarginBottom);
+				if (CB_BodyMarginBottom < 0) {
+					CB_BodyMarginBottom = 0
+				}
+				CB_HideOpacity = parseInt(CB_HideOpacity);
+				if (CB_HideOpacity < 0 || CB_HideOpacity > 100) {
+					CB_HideOpacity = 70
+				}
+				CB_OpacityStep = parseInt(CB_OpacityStep);
+				if (CB_OpacityStep < 1 || CB_OpacityStep > CB_HideOpacity) {
+					CB_OpacityStep = 10
+				}
+				CB_WinBaseW = parseInt(CB_WinBaseW);
+				if (CB_WinBaseW < 25 || CB_WinBaseW > 1000) {
+					CB_WinBaseW = 120
+				}
+				CB_WinBaseH = parseInt(CB_WinBaseH);
+				if (CB_WinBaseH < 50 || CB_WinBaseH > 1000) {
+					CB_WinBaseH = 110
+				}
+				CB_WinPadd = parseInt(CB_WinPadd);
+				if (CB_WinPadd < 0) {
+					CB_WinPadd = 5
+				}
+				if (CB_Animation != 'ki' && CB_Animation != 'normal' && CB_Animation != 'double' && CB_Animation != 'warp') {
+					CB_Animation = 'double'
+				}
+				CB_Jump_X = parseInt(CB_Jump_X);
+				if (CB_Jump_X < 1 || CB_Jump_X > 99) {
+					CB_Jump_X = 50
+				}
+				CB_Jump_Y = parseInt(CB_Jump_Y);
+				if (CB_Jump_Y < 1 || CB_Jump_Y > 99) {
+					CB_Jump_Y = 50
+				}
+				CB_ImgBorder = parseInt(CB_ImgBorder);
+				if (CB_ImgBorder < 0) {
+					CB_ImgBorder = 1
+				}
+				CB_Padd = parseInt(CB_Padd);
+				if (CB_Padd < 0) {
+					CB_Padd = 2
+				}
+				if (CB_ShowImgURL != 'be' && CB_ShowImgURL != 'ki') {
+					CB_ShowImgURL = 'ki'
+				}
+				CB_PadT = parseInt(CB_PadT);
+				if (CB_PadT < 0) {
+					CB_PadT = 10
+				}
+				CB_RoundPix = parseInt(CB_RoundPix);
+				if (CB_RoundPix < 0) {
+					CB_RoundPix = 12
+				}
+				CB_TextH = parseInt(CB_TextH);
+				if (CB_TextH < 25) {
+					CB_TextH = 40
+				}
+				CB_FontSize = parseInt(CB_FontSize);
+				if (CB_FontSize < 6) {
+					CB_FontSize = 13
+				}
+				if (CB_ImgNum != 'be' && CB_ImgNum != 'ki') {
+					CB_ImgNum = 'be'
+				}
+				CB_SlShowTime = parseInt(CB_SlShowTime);
+				if (CB_SlShowTime < 1) {
+					CB_SlShowTime = 5
+				}
+				CB_SlShowTime *= 1000;
+				if (CB_CheckDuplicates != 'be' && CB_CheckDuplicates != 'ki') {
+					CB_CheckDuplicates = 'ki'
+				}
+				if (CB_Preload != 'be' && CB_Preload != 'ki') {
+					CB_Preload = 'be'
+				}
 			},
 			keyeven : function(event){
 				var b;
