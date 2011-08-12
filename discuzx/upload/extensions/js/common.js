@@ -189,6 +189,48 @@
 				};
 			}
 		}
+
+		// 因不明原因的 BUG 只好採用如此複雜的 selector
+		var bbcode_imgs = jQuery('body').filter('body.pg_viewthread').find('.t_f img.bbcode_img');
+		if (bbcode_imgs.length > 0) {
+			bbcode_imgs.each(function(index, elem){
+				// elem = this
+				var _this = jQuery(this);
+
+				var _src = (_this.attr('file') || _this.attr('src'));
+				var _a_init = 0;
+
+				if (_this.parent('a').length) {
+					var _a = _this.parent('a');
+
+					if (_a.attr('href') == _src) {
+						_a_init = 1;
+					}
+				} else {
+					var _a = jQuery('<a>');
+
+					_a.insertBefore(_this);
+					_this.appendTo(_a);
+
+					_a_init = 1;
+				}
+
+				if (_a_init) {
+					_a
+						.attr({
+							'rel' : 'clearbox[gallery=bbcode_img]',
+							'href' : _src,
+							'target' : '_blank',
+							'class' : 'bbcode_img_link',
+						})
+					;
+				}
+			});
+		}
 	});
 
 })(jQuery);
+
+function _hack_zoom(obj, zimg, nocover, pn) {
+
+}
