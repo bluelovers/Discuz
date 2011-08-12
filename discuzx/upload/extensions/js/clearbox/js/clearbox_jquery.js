@@ -44,6 +44,7 @@ var CB_Show = 1;
 
  				CB_WinBaseW : 120,
  				CB_WinBaseH : 110,
+ 				CB_WinPadd : 1,
 
 				dir : '',
  			},
@@ -97,9 +98,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_WinBaseH < 50 || _clearbox.options.CB_WinBaseH > 1000) {
 					_clearbox.options.CB_WinBaseH = 110
 				}
-				CB_WinPadd = parseInt(CB_WinPadd);
-				if (CB_WinPadd < 0) {
-					CB_WinPadd = 5
+				_clearbox.options.CB_WinPadd = parseInt(_clearbox.options.CB_WinPadd);
+				if (_clearbox.options.CB_WinPadd < 0) {
+					_clearbox.options.CB_WinPadd = 5
 				}
 				if (CB_Animation != 'ki' && CB_Animation != 'normal' && CB_Animation != 'double' && CB_Animation != 'warp') {
 					CB_Animation = 'double'
@@ -416,12 +417,12 @@ var CB_Show = 1;
 				*/
 			},
 			CB_FitToBrowser : function () {
-				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd));
+				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
 					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH;
+				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
 					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
 				}
 				return
@@ -898,11 +899,11 @@ var CB_Show = 1;
 				CB_ImgHeight = parseInt(CB_Rel[1]);
 				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = _clearbox.options.CB_WinBaseH - CB_TextH;
-				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))
+				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH
+				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
 				}
 				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - CB_TextH) + 'px';
