@@ -1120,6 +1120,8 @@ function CB_fix_center(w) {
 }
 
 (function($, undefined){
+	var _this;
+
  	$.extend({
  		log : function(a){
 			console.log(a);
@@ -1129,18 +1131,16 @@ function CB_fix_center(w) {
 				dir : '',
  			},
 			init : function(options) {
-				var _this = this;
-
 				_this.setup(options);
 
-				$(document).keypress(_this.keypress);
+				$(document).keypress(_this.keyeven);
 
 				CB_Init();
 			},
 			setup : function (options) {
 				var options = $.extend(true, {}, $.clearbox.defaults, options);
 			},
-			keypress : function(event){
+			keyeven : function(event){
 				var b;
 
 				if (event.keyCode) b = event.keyCode;
@@ -1153,7 +1153,7 @@ function CB_fix_center(w) {
 				var stop = 0;
 
 				if (CB_ClearBox == 'be') {
-					if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52)) {
+					if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52 || b == 38)) {
 						if (CB_SSTimer) {
 							CB_SlideShowJump()
 						}
@@ -1161,7 +1161,7 @@ function CB_fix_center(w) {
 
 						stop = true;
 					}
-					if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54)) {
+					if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54 || b == 40)) {
 						if (CB_SSTimer) {
 							CB_SlideShowJump()
 						}
@@ -1194,10 +1194,16 @@ function CB_fix_center(w) {
 					}
 				}
 
+				if (b == 38 || b == 40) {
+					stop = true;
+				}
+
 				if (stop) {
 					event.preventDefault();
 				}
 			},
  		},
  	});
+
+ 	_this = $.clearbox;
 })(jQuery);
