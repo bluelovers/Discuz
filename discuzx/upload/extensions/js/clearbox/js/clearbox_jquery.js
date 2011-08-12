@@ -11,7 +11,7 @@ var CB_Show = 1;
 	var CB_ActThumbSrc, CB_IEShowBug = '',
 	CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
 	CB_ie6RPBug = '',
-	CB_ClearBox, CB_AnimX, CB_AnimY, CB_BodyMarginX = _clearbox.options.CB_BodyMarginLeft + CB_BodyMarginRight,
+	CB_ClearBox, CB_AnimX, CB_AnimY, CB_BodyMarginX = _clearbox.options.CB_BodyMarginLeft + _clearbox.options.CB_BodyMarginRight,
 	CB_BodyMarginY = CB_BodyMarginTop + CB_BodyMarginBottom,
 	FF_ScrollbarBug, CB_Links, CB_SlideBW = 0,
 	CB_SSTimer, CB_SS = 'start',
@@ -75,6 +75,7 @@ var CB_Show = 1;
 				CB_PicDir : 'clearbox/pic',
 
 				CB_BodyMarginLeft : 0,
+				CB_BodyMarginRight : 0,
  			},
  			options : {
 
@@ -104,9 +105,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_BodyMarginLeft < 0) {
 					_clearbox.options.CB_BodyMarginLeft = 0
 				}
-				CB_BodyMarginRight = parseInt(CB_BodyMarginRight);
-				if (CB_BodyMarginRight < 0) {
-					CB_BodyMarginRight = 0
+				_clearbox.options.CB_BodyMarginRight = parseInt(_clearbox.options.CB_BodyMarginRight);
+				if (_clearbox.options.CB_BodyMarginRight < 0) {
+					_clearbox.options.CB_BodyMarginRight = 0
 				}
 				CB_BodyMarginTop = parseInt(CB_BodyMarginTop);
 				if (CB_BodyMarginTop < 0) {
