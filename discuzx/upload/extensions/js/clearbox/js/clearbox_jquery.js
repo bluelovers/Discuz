@@ -4,52 +4,7 @@
 
 var CB_version = '2.0';
 var CB_Show = 1;
-function CB_KeyPress(a) {
-	var b;
-	if (!a) var a = window.event;
-	if (a.keyCode) b = a.keyCode;
-	else if (a.which) b = a.which;
-	var c = String.fromCharCode(b);
-	if (CB_ClearBox == 'be') {
-		if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52)) {
-			if (CB_SSTimer) {
-				CB_SlideShowJump()
-			}
-			CB_LoadImage(CB_ActImgId - 1);
-			return false
-		}
-		if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54)) {
-			if (CB_SSTimer) {
-				CB_SlideShowJump()
-			}
-			CB_LoadImage(CB_ActImgId + 1);
-			return false
-		}
-		if ((c == " " || b == 32) && CB_IsAnimating == 0) {
-			if (CB_Gallery.length < 3) {
-				return false
-			}
-			if (CB_SS == 'start') {
-				CB_SSStart();
-				return false
-			} else {
-				CB_SSPause();
-				return false
-			}
-		}
-		if (c == "" || b == 27) {
-			CB_Close();
-			return false
-		}
-		if (b == 13) {
-			return false
-		}
-	} else {
-		if (CB_IsAnimating == 1 && (c == " " || b == 32 || b == 13)) {
-			return false
-		}
-	}
-}
+
 function CB_SSStart() {
 	CB_SlideS.style.display = 'none';
 	CB_SlideP.style.display = 'block';
