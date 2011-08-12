@@ -5,19 +5,6 @@
 var CB_version = '2.0';
 var CB_Show = 1;
 
-function CB_SSStart() {
-	jQuery(CB_SlideS).hide();
-	jQuery(CB_SlideP).show();
-	CB_SS = 'pause';
-	jQuery(CB_SlideB).show();
-	jQuery.clearbox.CB_SlideShow();
-}
-function CB_SSPause() {
-	jQuery(CB_SlideP).hide();
-	jQuery(CB_SlideS).show();
-	jQuery.clearbox.CB_SlideShowStop();
-}
-
 var CB_ActThumbSrc, CB_IEShowBug = '',
 CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
 CB_ie6RPBug = '',
@@ -591,11 +578,11 @@ function CB_ShowImage() {
 		CB_Close()
 	};
 	CB_SlideS.onclick = function() {
-		CB_SSStart();
+		jQuery.clearbox.CB_SSStart();
 		return false
 	};
 	CB_SlideP.onclick = function() {
-		CB_SSPause();
+		jQuery.clearbox.CB_SSPause();
 		return false
 	};
 	CB_PrvNxt.display = 'block';
@@ -1030,10 +1017,10 @@ function CB_fix_center(w) {
 							stop = true;
 						}
 						if (CB_SS == 'start') {
-							CB_SSStart();
+							jQuery.clearbox.CB_SSStart();
 							stop = true;
 						} else {
-							CB_SSPause();
+							jQuery.clearbox.CB_SSPause();
 							stop = true;
 						}
 					}
@@ -1123,6 +1110,18 @@ function CB_fix_center(w) {
 				CB_jj = 0;
 				CB_SlideBW = 0;
 				CB_SlideB.style.display = 'none';
+			},
+			CB_SSStart : function () {
+				jQuery(CB_SlideS).hide();
+				jQuery(CB_SlideP).show();
+				CB_SS = 'pause';
+				jQuery(CB_SlideB).show();
+				jQuery.clearbox.CB_SlideShow();
+			},
+			CB_SSPause : function () {
+				jQuery(CB_SlideP).hide();
+				jQuery(CB_SlideS).show();
+				jQuery.clearbox.CB_SlideShowStop();
 			},
  		},
  	});
