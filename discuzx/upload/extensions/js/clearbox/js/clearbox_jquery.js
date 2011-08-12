@@ -108,7 +108,10 @@ var CB_Show = 1;
 				CB_Init();
 			},
 			setup : function (options) {
-				_clearbox.options = $.extend(true, {}, _clearbox.defaults, options);
+				_clearbox.options = $.extend(true, {}
+					, _clearbox.defaults
+					, options == undefined ? _clearbox.options : options
+				);
 
 				_clearbox.options.CB_PicDir += '/';
 				CB_PrePictures[0] = new Image();
