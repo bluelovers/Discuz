@@ -42,15 +42,15 @@ var CB_Show = 1;
 
  			},
 			init : function(options) {
-				_this.setup(options);
+				_clearbox.setup(options);
 
 				if (!jQuery.browser.msie) document.captureEvents(Event.MOUSEMOVE);
-				$(document).keypress(_this.keyeven);
+				$(document).keypress(_clearbox.keyeven);
 
 				CB_Init();
 			},
 			setup : function (options) {
-				_this.options = $.extend(true, {}, _this.defaults, options);
+				_clearbox.options = $.extend(true, {}, _clearbox.defaults, options);
 
 				CB_AnimTimeout = parseInt(CB_AnimTimeout);
 				if (CB_AnimTimeout < 5) {
@@ -163,17 +163,17 @@ var CB_Show = 1;
 				if (CB_ClearBox == 'be') {
 					if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52 || b == 38 || b == 33)) {
 						if (CB_SSTimer) {
-							_this.CB_SlideShowJump()
+							_clearbox.CB_SlideShowJump()
 						}
-						_this.CB_LoadImage(CB_ActImgId - 1);
+						_clearbox.CB_LoadImage(CB_ActImgId - 1);
 
 						stop = true;
 					}
 					if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54 || b == 40 || b == 34)) {
 						if (CB_SSTimer) {
-							_this.CB_SlideShowJump()
+							_clearbox.CB_SlideShowJump()
 						}
-						_this.CB_LoadImage(CB_ActImgId + 1);
+						_clearbox.CB_LoadImage(CB_ActImgId + 1);
 
 						stop = true;
 					}
@@ -182,15 +182,15 @@ var CB_Show = 1;
 							stop = true;
 						}
 						if (CB_SS == 'start') {
-							_this.CB_SSStart();
+							_clearbox.CB_SSStart();
 							stop = true;
 						} else {
-							_this.CB_SSPause();
+							_clearbox.CB_SSPause();
 							stop = true;
 						}
 					}
 					if (c == "" || b == 27) {
-						_this.CB_Close();
+						_clearbox.CB_Close();
 						stop = true;
 					}
 					if (b == 13) {
@@ -248,7 +248,7 @@ var CB_Show = 1;
 			},
 			CB_SlideShow : function() {
 				if (CB_SlShowTimer > CB_jj) {
-					CB_SSTimer = setTimeout("_this.CB_SlideShow()", 25);
+					CB_SSTimer = setTimeout("_clearbox.CB_SlideShow()", 25);
 					CB_jj += 25;
 					CB_SlideBW += (CB_ImgWidth - 44) / (CB_SlShowTimer / 25);
 					CB_SlideB.style.width = CB_SlideBW + 'px'
@@ -257,16 +257,16 @@ var CB_Show = 1;
 					CB_SlideBW = 0;
 					CB_SlideB.style.width = CB_SlideBW + 'px';
 					if (CB_ActImgId == CB_Gallery.length - 1) {
-						_this.CB_LoadImage(1)
+						_clearbox.CB_LoadImage(1)
 					} else {
-						_this.CB_LoadImage(CB_ActImgId + 1)
+						_clearbox.CB_LoadImage(CB_ActImgId + 1)
 					}
 					return
 				}
 			},
 			CB_SlideShowStop : function () {
 				CB_SS = 'start';
-				_this.CB_SlideShowJump();
+				_clearbox.CB_SlideShowJump();
 			},
 			CB_SlideShowJump : function () {
 				if (CB_SSTimer) {
@@ -281,12 +281,12 @@ var CB_Show = 1;
 				jQuery(CB_SlideP).show();
 				CB_SS = 'pause';
 				jQuery(CB_SlideB).show();
-				_this.CB_SlideShow();
+				_clearbox.CB_SlideShow();
 			},
 			CB_SSPause : function () {
 				jQuery(CB_SlideP).hide();
 				jQuery(CB_SlideS).show();
-				_this.CB_SlideShowStop();
+				_clearbox.CB_SlideShowStop();
 			},
 			getDocumentSize : function () {
 				this.DocSizeX = 0;
@@ -315,8 +315,8 @@ var CB_Show = 1;
 				DocSizeX = jQuery(document).width();
 				DocSizeY = jQuery(document).height();
 
-				_this.log(['DocSizeX', DocSizeX, jQuery(document).width(), jQuery(document).outerWidth()]);
-				_this.log(['DocSizeY', DocSizeY, jQuery(document).height(), jQuery(document).outerHeight()]);
+				_clearbox.log(['DocSizeX', DocSizeX, jQuery(document).width(), jQuery(document).outerWidth()]);
+				_clearbox.log(['DocSizeY', DocSizeY, jQuery(document).height(), jQuery(document).outerHeight()]);
 
 				return
 			},
@@ -349,15 +349,15 @@ var CB_Show = 1;
 				BrSizeX = jQuery(window).width();
 				BrSizeY = jQuery(window).height();
 
-				_this.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
-				_this.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
+				_clearbox.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
+				_clearbox.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
 
 				return
 			},
 			CB_SetAllPositions : function () {
-				_this.getBrowserSize();
-				_this.getDocumentSize();
-				_this.getScrollPosition();
+				_clearbox.getBrowserSize();
+				_clearbox.getDocumentSize();
+				_clearbox.getScrollPosition();
 				if (BrSizeY > DocSizeY) {
 					DocSizeY = BrSizeY
 				}
@@ -366,7 +366,7 @@ var CB_Show = 1;
 				} else {
 					FF_ScrollbarBug = 0
 				}
-				_this.CB_SetMargins();
+				_clearbox.CB_SetMargins();
 				if (CB_BodyMarginX == 0) {
 					if (DocSizeX > BrSizeX) {
 						CB_HideContent.style.width = DocSizeX + 'px'
@@ -421,7 +421,7 @@ var CB_Show = 1;
 					}
 					if (CB_Animation == 'normal') {
 						CB_AnimX = 'true';
-						_this.CB_WindowResizeY()
+						_clearbox.CB_WindowResizeY()
 					} else {
 						CB_AnimX = 'true'
 					}
@@ -465,7 +465,7 @@ var CB_Show = 1;
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
-					CB_TimerX = setTimeout("_this.CB_WindowResizeX()", CB_AnimTimeout);
+					CB_TimerX = setTimeout("_clearbox.CB_WindowResizeX()", CB_AnimTimeout);
 				}
 			},
 			CB_WindowResizeY : function () {
@@ -515,7 +515,7 @@ var CB_Show = 1;
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
-					CB_TimerY = setTimeout("_this.CB_WindowResizeY()", CB_AnimTimeout);
+					CB_TimerY = setTimeout("_clearbox.CB_WindowResizeY()", CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
@@ -533,14 +533,14 @@ var CB_Show = 1;
 					}
 					if (CB_TextNav == 'be') {
 						var a = CB_Txt.innerHTML;
-						CB_Txt.innerHTML = '<a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_this.CB_SlideShowJump();}_this.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
+						CB_Txt.innerHTML = '<a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
 					}
 					CB_Prv.style.display = 'block';
 					CB_Prv.onclick = function() {
 						if (CB_SSTimer) {
-							_this.CB_SlideShowJump();
+							_clearbox.CB_SlideShowJump();
 						}
-						_this.CB_LoadImage(CB_ActImgId - 1);
+						_clearbox.CB_LoadImage(CB_ActImgId - 1);
 						return false
 					}
 				}
@@ -550,14 +550,14 @@ var CB_Show = 1;
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
 					}
 					if (CB_TextNav == 'be') {
-						CB_Txt.innerHTML += ' <a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_this.CB_SlideShowJump();}_this.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
+						CB_Txt.innerHTML += ' <a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
 					}
 					CB_Nxt.style.display = 'block';
 					CB_Nxt.onclick = function() {
 						if (CB_SSTimer) {
-							_this.CB_SlideShowJump();
+							_clearbox.CB_SlideShowJump();
 						}
-						_this.CB_LoadImage(CB_ActImgId + 1);
+						_clearbox.CB_LoadImage(CB_ActImgId + 1);
 						return false;
 					}
 				}
@@ -568,7 +568,7 @@ var CB_Show = 1;
 					jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
 
 					CB_Hide -= CB_OpacityStep;
-					CB_Blur = setTimeout("_this.CB_ShowDocument()", 5)
+					CB_Blur = setTimeout("_clearbox.CB_ShowDocument()", 5)
 				} else {
 					CB_HideContent.style.visibility = 'hidden';
 					CB_HideContent.style.width = '0px';
@@ -586,7 +586,7 @@ var CB_Show = 1;
 				CB_ImgHd.style.visibility = 'hidden';
 				CB_ShTh.style.visibility = 'hidden';
 				CB_ShEt.style.visibility = 'hidden';
-				_this.CB_SlideShowStop();
+				_clearbox.CB_SlideShowStop();
 				CB_Txt.innerHTML = "";
 				CB_Img.src = "";
 				CB_ImgWidth = CB_WinBaseW;
@@ -600,19 +600,19 @@ var CB_Show = 1;
 				CB_iFr.style.left = '0px';
 				CB_iFr.style.width = '0px';
 				CB_iFr.style.height = '0px';
-				_this.CB_ShowDocument();
+				_clearbox.CB_ShowDocument();
 				return;
 			},
 			CB_ShowImage : function () {
 				CB_Cls.onclick = function() {
-					_this.CB_Close()
+					_clearbox.CB_Close()
 				};
 				CB_SlideS.onclick = function() {
-					_this.CB_SSStart();
+					_clearbox.CB_SSStart();
 					return false;
 				};
 				CB_SlideP.onclick = function() {
-					_this.CB_SSPause();
+					_clearbox.CB_SSPause();
 					return false;
 				};
 				CB_PrvNxt.display = 'block';
@@ -624,7 +624,7 @@ var CB_Show = 1;
 				}
 				CB_Cls.style.display = 'block';
 				CB_HideContent.onclick = function() {
-					_this.CB_Close();
+					_clearbox.CB_Close();
 					return false;
 				};
 				CB_Prv.style.height = CB_ImgHeight + 'px';
@@ -639,7 +639,7 @@ var CB_Show = 1;
 				if (CB_ImgNum == 'be' && CB_Gallery.length > 2) {
 					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + CB_ImgNumBracket.substring(1, 2);
 				}
-				_this.CB_PrevNext();
+				_clearbox.CB_PrevNext();
 				CB_Txt.style.visibility = 'visible';
 				if (CB_Gallery.length > 0) {
 					CB_ImgWidthOld = CB_ImgWidth;
@@ -649,7 +649,7 @@ var CB_Show = 1;
 					if (CB_SS == 'pause') {
 						jQuery(CB_SlideP).show();
 						jQuery(CB_SlideB).show();
-						_this.CB_SlideShow();
+						_clearbox.CB_SlideShow();
 					} else {
 						CB_SlideS.style.display = 'block';
 					}
@@ -685,7 +685,7 @@ var CB_Show = 1;
 					for (i = 1; i < CB_Gallery.length; i++) {
 						CB_preThumbs = new Image();
 						CB_preThumbs.src = CB_Gallery[i][2];
-						a += '<a href="javascript:void(0)" onclick="if(CB_SSTimer){_this.CB_SlideShowJump();}_this.CB_LoadImage(' + i + ')"><img style="border: 0; left: ' + d + 'px;" " src="' + CB_Gallery[i][2] + '" height="50" class="CB_ThumbsImg" /></a>';
+						a += '<a href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + i + ')"><img style="border: 0; left: ' + d + 'px;" " src="' + CB_Gallery[i][2] + '" height="50" class="CB_ThumbsImg" /></a>';
 						d += Math.round(CB_preThumbs.width / CB_preThumbs.height * 50) + b
 					}
 					CB_Thm2.style.width = CB_AllThumbsWidth + 'px';
@@ -694,7 +694,7 @@ var CB_Show = 1;
 				}
 
 				// bluelovers
-				_this.CB_fix_center(CB_Img.style.width);
+				_clearbox.CB_fix_center(CB_Img.style.width);
 				// bluelovers
 
 				return true;
@@ -706,29 +706,29 @@ var CB_Show = 1;
 				CB_AnimY = 'false';
 				CB_IsAnimating = 1;
 				if (CB_Animation == 'double') {
-					_this.CB_WindowResizeX();
-					_this.CB_WindowResizeY();
+					_clearbox.CB_WindowResizeX();
+					_clearbox.CB_WindowResizeY();
 				} else if (CB_Animation == 'warp') {
 					if (!a) {
 						CB_LoadingImg.style.visibility = 'hidden';
 						CB_Img.style.visibility = 'visible'
 					}
-					_this.CB_WindowResizeX();
-					_this.CB_WindowResizeY();
+					_clearbox.CB_WindowResizeX();
+					_clearbox.CB_WindowResizeY();
 				} else if (CB_Animation == 'ki') {
-					_this.CB_SetMargins();
+					_clearbox.CB_SetMargins();
 					CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
 					CB_Img.style.width = CB_ImgWidth + 'px';
 					CB_Img.style.height = CB_ImgHeight + 'px';
 					CB_AnimX = 'true';
 					CB_AnimY = 'true'
 				} else if (CB_Animation == 'normal') {
-					_this.CB_WindowResizeX();
+					_clearbox.CB_WindowResizeX();
 				}
 				if (a) {
-					_this.CB_CheckResize2();
+					_clearbox.CB_CheckResize2();
 				} else {
-					_this.CB_CheckResize();
+					_clearbox.CB_CheckResize();
 				}
 				return
 			},
@@ -737,10 +737,10 @@ var CB_Show = 1;
 					if (CB_ResizeTimer) {
 						clearTimeout(CB_ResizeTimer);
 					}
-					_this.CB_ShowImage();
+					_clearbox.CB_ShowImage();
 					return
 				} else {
-					CB_ResizeTimer = setTimeout("_this.CB_CheckResize()", 5);
+					CB_ResizeTimer = setTimeout("_clearbox.CB_CheckResize()", 5);
 				}
 			},
 			CB_CheckResize2 : function () {
@@ -772,16 +772,16 @@ var CB_Show = 1;
 					} else {
 						CB_Txt.innerHTML = CB_Clicked[1]
 					}
-					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + '<a class="CB_TextNav" href="javascript:void(0)" onclick="_this.CB_Close();">' + CB_NavTextCls + '</a>' + CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + '<a class="CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + CB_ImgNumBracket.substring(1, 2);
 					CB_HideContent.onclick = function() {
-						_this.CB_Close();
+						_clearbox.CB_Close();
 						return false
 					};
 					CB_ClearBox = 'be';
 					CB_IsAnimating = 0;
 					return
 				} else {
-					CB_ResizeTimer = setTimeout("_this.CB_CheckResize2()", 5)
+					CB_ResizeTimer = setTimeout("_clearbox.CB_CheckResize2()", 5)
 				}
 			},
 			CB_NewWindow : function () {
@@ -790,7 +790,7 @@ var CB_Show = 1;
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
 				CB_Win.style.visibility = 'visible';
-				_this.CB_LoadImage();
+				_clearbox.CB_LoadImage();
 			},
 			CB_ShowEtc : function () {
 				CB_ImgHd.style.visibility = 'visible';
@@ -823,22 +823,22 @@ var CB_Show = 1;
 				CB_ImgWidthOrig = CB_ImgWidth;
 				CB_ImgHeightOrig = CB_ImgHeight;
 				CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
-				_this.CB_FitToBrowser();
+				_clearbox.CB_FitToBrowser();
 				CB_Img.src = CB_Gallery[CB_ActImgId][0];
-				_this.CB_AnimatePlease();
+				_clearbox.CB_AnimatePlease();
 				return
 			},
 			CB_CheckLoaded : function () {
 				if (CB_Count == 1) {
 					CB_Loaded = true;
 					clearTimeout(CB_ImgLoadTimer);
-					_this.CB_GetImageSize();
+					_clearbox.CB_GetImageSize();
 					return
 				}
 				if (CB_Loaded == false && CB_preImages.complete) {
 					CB_Count++
 				}
-				CB_ImgLoadTimer = setTimeout("_this.CB_CheckLoaded()", 5);
+				CB_ImgLoadTimer = setTimeout("_clearbox.CB_CheckLoaded()", 5);
 				return
 			},
 			CB_LoadImage : function (a) {
@@ -883,11 +883,11 @@ var CB_Show = 1;
 				CB_preImages.src = CB_Gallery[CB_ActImgId][0];
 				CB_Loaded = false;
 				CB_preImages.onerror = function() {
-					_this.CB_ShowImage();
+					_clearbox.CB_ShowImage();
 					alert('ClearBox HIBA:\n\nA kepet nem lehet betolteni: ' + CB_Gallery[CB_ActImgId][0]);
 					return
 				};
-				_this.CB_CheckLoaded();
+				_clearbox.CB_CheckLoaded();
 			},
 			CB_HideDocument : function (a) {
 				var b = a;
@@ -897,7 +897,7 @@ var CB_Show = 1;
 					jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
 
 					CB_Hide = CB_ii;
-					CB_Blur = setTimeout("_this.CB_HideDocument('" + b + "')", 5);
+					CB_Blur = setTimeout("_clearbox.CB_HideDocument('" + b + "')", 5);
 				} else {
 					CB_ii = 0;
 					CB_HideContent.style.height = DocSizeY + CB_BodyMarginY + 'px';
@@ -906,9 +906,9 @@ var CB_Show = 1;
 					}
 					if (b == 'x') {
 						CB_LoadingImg.style.visibility = 'visible';
-						_this.CB_AnimatePlease('x');
+						_clearbox.CB_AnimatePlease('x');
 					} else {
-						_this.CB_NewWindow();
+						_clearbox.CB_NewWindow();
 					}
 					return;
 				}
@@ -922,7 +922,7 @@ var CB_Show = 1;
 				CB_PrvNxt.display = 'none';
 				CB_Cls.style.display = 'none';
 				CB_Rel = CB_Clicked[0].split(',');
-				_this.CB_SetAllPositions();
+				_clearbox.CB_SetAllPositions();
 				CB_ImgWidth = parseInt(CB_Rel[0]);
 				CB_ImgHeight = parseInt(CB_Rel[1]);
 				CB_ImgWidthOld = CB_WinBaseW;
@@ -940,7 +940,7 @@ var CB_Show = 1;
 				CB_Win.style.visibility = 'visible';
 				jQuery(CB_SlideS).hide();
 				jQuery(CB_SlideP).hide();
-				_this.CB_HideDocument('x');
+				_clearbox.CB_HideDocument('x');
 			},
 			CB_ClickIMG : function (a) {
 				if (CB_Show == 0) {
@@ -996,8 +996,8 @@ var CB_Show = 1;
 				}
 				CB_ImgWidthOld = CB_WinBaseW;
 				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
-				_this.CB_SetAllPositions();
-				_this.CB_HideDocument();
+				_clearbox.CB_SetAllPositions();
+				_clearbox.CB_HideDocument();
 			},
 			CB_FullSize : function () {
 				CB_Img.style.width = CB_ImgWidthOrig + 'px';
@@ -1040,7 +1040,7 @@ var CB_Show = 1;
 			CB_Thm2 = document.getElementById('CB_Thumbs2');
 			CB_Et = document.getElementById('CB_Etc');
 			CB_HideContent = document.getElementById('CB_ContentHide');
-			CB_HideContent.style.backgroundColor = _this.options.CB_HideColor;
+			CB_HideContent.style.backgroundColor = _clearbox.options.CB_HideColor;
 
 			jQuery(CB_HideContent).css('opacity', 0);
 
@@ -1075,26 +1075,26 @@ var CB_Show = 1;
 			CB_iFr = document.getElementById('CB_iFrame');
 			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
 			CB_ShTh.onmouseover = function() {
-				_this.CB_ShowThumbs();
+				_clearbox.CB_ShowThumbs();
 				return
 			};
 			CB_ShEt.onmouseover = function() {
-				_this.CB_ShowEtc();
+				_clearbox.CB_ShowEtc();
 				return
 			};
 			CB_ImgHd.onmouseover = function() {
-				_this.CB_HideThumbs();
-				_this.CB_HideEtc();
+				_clearbox.CB_HideThumbs();
+				_clearbox.CB_HideEtc();
 				return
 			};
 			CB_Txt.onmouseover = function() {
-				_this.CB_HideThumbs();
-				_this.CB_HideEtc();
+				_clearbox.CB_HideThumbs();
+				_clearbox.CB_HideEtc();
 				return
 			};
 			CB_HideContent.onmouseover = function() {
-				_this.CB_HideThumbs();
-				_this.CB_HideEtc();
+				_clearbox.CB_HideThumbs();
+				_clearbox.CB_HideEtc();
 				return
 			};
 			if (jQuery.browser.opera) {
@@ -1105,7 +1105,7 @@ var CB_Show = 1;
 				CB_BodyMarginY = 0
 			}
 		}
-		jQuery('#CB_Thumbs').mousemove(_this.getMouseXY);
+		jQuery('#CB_Thumbs').mousemove(_clearbox.getMouseXY);
 		var d = 0;
 		var e = 0;
 
@@ -1120,14 +1120,14 @@ var CB_Show = 1;
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
 					CB_Links[i].onclick = function() {
-						_this.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+						_clearbox.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 						return false
 					}
 				} else {
 					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
 							CB_Links[i].onclick = function() {
-								_this.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								_clearbox.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 								return false
 							}
 						} else {
@@ -1136,12 +1136,12 @@ var CB_Show = 1;
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
 							CB_Links[i].onclick = function() {
-								_this.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 								return false
 							}
 						} else {
 							CB_Links[i].onmouseover = function() {
-								_this.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 								return false
 							}
 						}
