@@ -241,7 +241,7 @@ function CB_SetAllPositions() {
 	if (BrSizeY > DocSizeY) {
 		DocSizeY = BrSizeY
 	}
-	if ((navigator.userAgent.indexOf("Netscape") != -1 || navigator.userAgent.indexOf("Firefox") != -1) && BrSizeX != DocSizeX) {
+	if ((navigator.userAgent.indexOf("Netscape") != -1 || jQuery.browser.firefox) && BrSizeX != DocSizeX) {
 		FF_ScrollbarBug = window.scrollMaxY + window.innerHeight - DocSizeY
 	} else {
 		FF_ScrollbarBug = 0
@@ -851,7 +851,7 @@ function getDocumentSize() {
 		DocSizeX = document.body.scrollWidth;
 		DocSizeY = document.body.scrollHeight
 	}
-	if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Netscape") != -1) {
+	if (jQuery.browser.firefox || navigator.userAgent.indexOf("Netscape") != -1) {
 		DocSizeX = BrSizeX + window.scrollMaxX;
 		DocSizeY = BrSizeY + window.scrollMaxY
 	}
@@ -876,7 +876,7 @@ function getBrowserSize() {
 		BrSizeY = document.body.clientHeight
 	}
 	if (document.compatMode != undefined) {
-		if (document.compatMode.match('Back') && navigator.userAgent.indexOf("Firefox") != -1) {
+		if (document.compatMode.match('Back') && jQuery.browser.firefox) {
 			BrSizeY = document.body.clientHeight
 		}
 	}
