@@ -46,6 +46,8 @@ var CB_Show = 1;
  				CB_WinBaseH : 110,
  				CB_WinPadd : 1,
 
+ 				CB_RoundPix : 12,
+
 				dir : '',
  			},
  			options : {
@@ -128,9 +130,9 @@ var CB_Show = 1;
 				if (CB_PadT < 0) {
 					CB_PadT = 10
 				}
-				CB_RoundPix = parseInt(CB_RoundPix);
-				if (CB_RoundPix < 0) {
-					CB_RoundPix = 12
+				_clearbox.options.CB_RoundPix = parseInt(_clearbox.options.CB_RoundPix);
+				if (_clearbox.options.CB_RoundPix < 0) {
+					_clearbox.options.CB_RoundPix = 12
 				}
 				CB_TextH = parseInt(CB_TextH);
 				if (CB_TextH < 25) {
@@ -417,12 +419,12 @@ var CB_Show = 1;
 				*/
 			},
 			CB_FitToBrowser : function () {
-				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
 					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
 					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
 				}
 				return
@@ -476,7 +478,7 @@ var CB_Show = 1;
 						CB_ImgWidthOld += CB_JumpX
 					}
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
-					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, CB_AnimTimeout);
 				}
@@ -526,14 +528,14 @@ var CB_Show = 1;
 					}
 					CB_Img.style.height = CB_ImgHeightOld + 'px';
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
-					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
-				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 				CB_Win.style.marginLeft = CB_MarginL + 'px';
 				CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 				return;
@@ -899,11 +901,11 @@ var CB_Show = 1;
 				CB_ImgHeight = parseInt(CB_Rel[1]);
 				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = _clearbox.options.CB_WinBaseH - CB_TextH;
-				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
 				}
 				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - CB_TextH) + 'px';
@@ -985,7 +987,7 @@ var CB_Show = 1;
  	function CB_Init() {
 		if (!document.getElementById('CB_All') && CB_Show != 0) {
 			document.body.style.position = "static";
-			var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
+			var a = '<div class="CB_RoundPixBugFix" style="width: ' + _clearbox.options.CB_RoundPix + 'px; height: ' + _clearbox.options.CB_RoundPix + 'px;"></div>';
 			if (jQuery.browser.msie) {
 				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + CB_PicDir + 'blank.gif" />'
 			} else {
@@ -998,10 +1000,10 @@ var CB_Show = 1;
 				.html('<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>')
 			;
 
-			if (navigator.userAgent.indexOf("MSIE 6") != -1 && CB_RoundPix == 0) {
+			if (navigator.userAgent.indexOf("MSIE 6") != -1 && _clearbox.options.CB_RoundPix == 0) {
 				CB_ie6RPBug = 1
 			}
-			if (jQuery.browser.msie && CB_RoundPix < 2) {
+			if (jQuery.browser.msie && _clearbox.options.CB_RoundPix < 2) {
 				CB_ieRPBug = 6
 			}
 			document.getElementById('CB_Padding').style.padding = CB_Padd + 'px';
@@ -1042,13 +1044,13 @@ var CB_Show = 1;
 			CB_Txt.style.fontWeight = CB_FontWeigth;
 			CB_Txt.style.color = CB_FontColor;
 			CB_Header = document.getElementById('CB_Header').style;
-			CB_Header.height = CB_RoundPix + 'px';
+			CB_Header.height = _clearbox.options.CB_RoundPix + 'px';
 			CB_Footer = document.getElementById('CB_Footer').style;
-			CB_Footer.height = CB_RoundPix + 'px';
+			CB_Footer.height = _clearbox.options.CB_RoundPix + 'px';
 			CB_Left = document.getElementById('CB_Left').style;
-			CB_Left.width = CB_RoundPix + CB_ie6RPBug + 'px';
+			CB_Left.width = _clearbox.options.CB_RoundPix + CB_ie6RPBug + 'px';
 			CB_Right = document.getElementById('CB_Right').style;
-			CB_Right.width = CB_RoundPix + 'px';
+			CB_Right.width = _clearbox.options.CB_RoundPix + 'px';
 			CB_iFr = document.getElementById('CB_iFrame');
 			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
 			CB_ShTh.onmouseover = function() {
