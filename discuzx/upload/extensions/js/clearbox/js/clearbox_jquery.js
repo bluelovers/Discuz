@@ -17,7 +17,7 @@ var CB_Show = 1;
 	CB_SSTimer, CB_SS = 'start',
 	CB_ii = 0,
 	CB_jj = 0,
-	CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, CB_ImgWidth = CB_WinBaseW,
+	CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, CB_ImgWidth = _clearbox.options.CB_WinBaseW,
 	CB_ImgHeight = CB_WinBaseH - CB_TextH,
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
@@ -38,6 +38,8 @@ var CB_Show = 1;
  				CB_HideColor : '#000',
  				CB_HideOpacity : 75,
  				CB_OpacityStep : 25,
+
+ 				CB_WinBaseW : 120,
 
 				dir : '',
  			},
@@ -83,9 +85,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_OpacityStep < 1 || _clearbox.options.CB_OpacityStep > _clearbox.options.CB_HideOpacity) {
 					_clearbox.options.CB_OpacityStep = 10
 				}
-				CB_WinBaseW = parseInt(CB_WinBaseW);
-				if (CB_WinBaseW < 25 || CB_WinBaseW > 1000) {
-					CB_WinBaseW = 120
+				_clearbox.options.CB_WinBaseW = parseInt(_clearbox.options.CB_WinBaseW);
+				if (_clearbox.options.CB_WinBaseW < 25 || _clearbox.options.CB_WinBaseW > 1000) {
+					_clearbox.options.CB_WinBaseW = 120
 				}
 				CB_WinBaseH = parseInt(CB_WinBaseH);
 				if (CB_WinBaseH < 50 || CB_WinBaseH > 1000) {
@@ -575,7 +577,7 @@ var CB_Show = 1;
 				_clearbox.CB_SlideShowStop();
 				CB_Txt.innerHTML = "";
 				CB_Img.src = "";
-				CB_ImgWidth = CB_WinBaseW;
+				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = CB_WinBaseH - CB_TextH;
 				CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
 				CB_Img.style.display = 'none';
@@ -771,7 +773,7 @@ var CB_Show = 1;
 				}
 			},
 			CB_NewWindow : function () {
-				CB_Img.style.width = CB_WinBaseW + 'px';
+				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
@@ -887,7 +889,7 @@ var CB_Show = 1;
 				_clearbox.CB_SetAllPositions();
 				CB_ImgWidth = parseInt(CB_Rel[0]);
 				CB_ImgHeight = parseInt(CB_Rel[1]);
-				CB_ImgWidthOld = CB_WinBaseW;
+				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
 				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
 					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))
@@ -895,7 +897,7 @@ var CB_Show = 1;
 				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
 					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH
 				}
-				CB_Img.style.width = CB_WinBaseW + 'px';
+				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
@@ -956,7 +958,7 @@ var CB_Show = 1;
 				while (CB_Gallery[CB_ActImgId][0] != CB_Clicked[1]) {
 					CB_ActImgId++
 				}
-				CB_ImgWidthOld = CB_WinBaseW;
+				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
 				_clearbox.CB_SetAllPositions();
 				CB_HideDocument();
