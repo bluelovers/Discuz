@@ -383,7 +383,7 @@ function CB_AnimatePlease(a) {
 		jQuery.clearbox.CB_WindowResizeX();
 		jQuery.clearbox.CB_WindowResizeY();
 	} else if (CB_Animation == 'ki') {
-		CB_SetMargins();
+		jQuery.clearbox.CB_SetMargins();
 		CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
 		CB_Img.style.width = CB_ImgWidth + 'px';
 		CB_Img.style.height = CB_ImgHeight + 'px';
@@ -576,14 +576,6 @@ function CB_FullSize() {
 	CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
 }
 
-
-function CB_SetMargins() {
-	CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-	CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-	CB_Win.style.marginLeft = CB_MarginL + 'px';
-	CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
-	return
-}
 function CB_PrevNext() {
 	if (CB_ActImgId > 1) {
 		if (CB_Preload == 'be') {
@@ -1000,7 +992,7 @@ function CB_ShowDocument() {
 				} else {
 					FF_ScrollbarBug = 0
 				}
-				CB_SetMargins();
+				jQuery.clearbox.CB_SetMargins();
 				if (CB_BodyMarginX == 0) {
 					if (DocSizeX > BrSizeX) {
 						CB_HideContent.style.width = DocSizeX + 'px'
@@ -1151,6 +1143,13 @@ function CB_ShowDocument() {
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 					CB_TimerY = setTimeout("jQuery.clearbox.CB_WindowResizeY()", CB_AnimTimeout);
 				}
+			},
+			CB_SetMargins : function () {
+				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+				CB_Win.style.marginLeft = CB_MarginL + 'px';
+				CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
+				return
 			},
  		},
  	});
