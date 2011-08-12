@@ -1153,7 +1153,7 @@ var CB_Show = 1;
 		}
 	}
 
- 	_this = $.clearbox;
+ 	_clearbox = $.clearbox;
 
  	function intval(n) {
  		return parseInt(n);
