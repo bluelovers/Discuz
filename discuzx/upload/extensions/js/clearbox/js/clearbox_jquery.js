@@ -80,6 +80,7 @@ var CB_Show = 1;
 				CB_BodyMarginBottom : 0,
 
 				CB_Preload : 'be',
+				CB_TextNav : 'be',
  			},
  			options : {
 
@@ -583,9 +584,9 @@ var CB_Show = 1;
 						PreloadPrv = new Image();
 						PreloadPrv.src = CB_Gallery[CB_ActImgId - 1][0]
 					}
-					if (CB_TextNav == 'be') {
+					if (_clearbox.options.CB_TextNav == 'be') {
 						var a = CB_Txt.innerHTML;
-						CB_Txt.innerHTML = '<a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
+						CB_Txt.innerHTML = '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
 					}
 					CB_Prv.style.display = 'block';
 					CB_Prv.onclick = function() {
@@ -601,8 +602,8 @@ var CB_Show = 1;
 						PreloadNxt = new Image();
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
 					}
-					if (CB_TextNav == 'be') {
-						CB_Txt.innerHTML += ' <a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
+					if (_clearbox.options.CB_TextNav == 'be') {
+						CB_Txt.innerHTML += ' <a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
 					}
 					CB_Nxt.style.display = 'block';
 					CB_Nxt.onclick = function() {
@@ -807,7 +808,7 @@ var CB_Show = 1;
 					} else {
 						CB_Txt.innerHTML = CB_Clicked[1]
 					}
-					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
 					CB_HideContent.onclick = function() {
 						_clearbox.CB_Close();
 						return false
