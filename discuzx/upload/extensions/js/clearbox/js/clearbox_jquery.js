@@ -634,9 +634,12 @@ var CB_Show = 1;
 				return;
 			},
 			CB_Close : function () {
-				CB_ImgHd.style.width = '0px';
-				CB_ImgHd.style.height = '0px';
-				CB_ImgHd.style.visibility = 'hidden';
+				$(CB_ImgHd).css({
+					width : 0,
+					height : 0,
+					visibility : 'hidden',
+				});
+
 				CB_ShTh.style.visibility = 'hidden';
 				CB_ShEt.style.visibility = 'hidden';
 				_clearbox.CB_SlideShowStop();
@@ -711,8 +714,12 @@ var CB_Show = 1;
 				}
 				CB_ClearBox = 'be';
 				CB_IsAnimating = 0;
-				CB_ImgHd.style.width = CB_ImgWidth + 2 + 'px';
-				CB_ImgHd.style.height = CB_ImgHeight + 2 + 'px';
+
+				$(CB_ImgHd).css({
+					width : CB_ImgWidth + 2,
+					height : CB_ImgHeight + 2
+				});
+
 				if (CB_ImgWidth < CB_preImages.width || CB_ImgHeight < CB_preImages.height) {
 					CB_ShEt.style.visibility = 'visible';
 					CB_Et.style.width = CB_ImgWidth + 2 + 'px';
@@ -846,23 +853,23 @@ var CB_Show = 1;
 				_clearbox.CB_LoadImage();
 			},
 			CB_ShowEtc : function () {
-				CB_ImgHd.style.visibility = 'visible';
-				CB_Et.style.display = 'block';
+				$(CB_ImgHd).css('visibility', 'visible');
+				$(CB_Et).show();
 				return;
 			},
 			CB_HideEtc : function () {
-				CB_ImgHd.style.visibility = 'hidden';
-				CB_Et.style.display = 'none';
+				$(CB_ImgHd).css('visibility', 'hidden');
+				$(CB_Et).hide();
 				return;
 			},
 			CB_ShowThumbs : function () {
-				CB_ImgHd.style.visibility = 'visible';
-				CB_Thm.style.display = 'block';
+				$(CB_ImgHd).css('visibility', 'visible');
+				$(CB_Thm).show();
 				return;
 			},
 			CB_HideThumbs : function () {
-				CB_ImgHd.style.visibility = 'hidden';
-				CB_Thm.style.display = 'none';
+				$(CB_ImgHd).css('visibility', 'hidden');
+				$(CB_Thm).hide();
 				return;
 			},
 			CB_GetImageSize : function () {
@@ -901,9 +908,13 @@ var CB_Show = 1;
 				CB_Thm.style.width = 0 + 'px';
 				CB_Et.style.display = 'none';
 				CB_Et.style.width = 0 + 'px';
-				CB_ImgHd.style.width = 0 + 'px';
-				CB_ImgHd.style.height = 0 + 'px';
-				CB_ImgHd.style.visibility = 'hidden';
+
+				$(CB_ImgHd).css({
+					width : 0,
+					height : 0,
+					visibility : 'hidden'
+				});
+
 				CB_ClearBox = 'ki';
 				CB_jj = 0;
 				$(CB_HideContent).unbind('click.clearbox');
@@ -1064,10 +1075,12 @@ var CB_Show = 1;
 			document.getElementById('CB_Padding').style.padding = _clearbox.options.CB_Padd + 'px';
 			CB_ShTh = document.getElementById('CB_ShowTh');
 			CB_ShEt = document.getElementById('CB_ShowEtc');
-			CB_ImgHd = document.getElementById('CB_ImgHide');
-			CB_ImgHd.style.backgroundColor = '#fff';
 
-			jQuery(CB_ImgHd).css('opacity', 0.75);
+			CB_ImgHd = '#CB_ImgHide';
+			jQuery(CB_ImgHd).css({
+				'backgroundColor' : '#fff',
+				'opacity', 0.75
+			});
 
 			CB_Win = document.getElementById('CB_Window');
 			CB_Thm = document.getElementById('CB_Thumbs');
@@ -1118,11 +1131,11 @@ var CB_Show = 1;
 				_clearbox.CB_ShowEtc();
 				return
 			};
-			CB_ImgHd.onmouseover = function() {
+			$(CB_ImgHd).mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
 				return
-			};
+			});
 			CB_Txt.onmouseover = function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
