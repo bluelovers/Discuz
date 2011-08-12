@@ -374,14 +374,14 @@ function CB_AnimatePlease(a) {
 	CB_IsAnimating = 1;
 	if (CB_Animation == 'double') {
 		jQuery.clearbox.CB_WindowResizeX();
-		CB_WindowResizeY();
+		jQuery.clearbox.CB_WindowResizeY();
 	} else if (CB_Animation == 'warp') {
 		if (!a) {
 			CB_LoadingImg.style.visibility = 'hidden';
 			CB_Img.style.visibility = 'visible'
 		}
 		jQuery.clearbox.CB_WindowResizeX();
-		CB_WindowResizeY();
+		jQuery.clearbox.CB_WindowResizeY();
 	} else if (CB_Animation == 'ki') {
 		CB_SetMargins();
 		CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
@@ -400,56 +400,7 @@ function CB_AnimatePlease(a) {
 	return
 }
 
-function CB_WindowResizeY() {
-	if (CB_ImgHeight == CB_ImgHeightOld) {
-		if (CB_TimerY) {
-			clearTimeout(CB_TimerY)
-		}
-		CB_AnimY = 'true';
-		return
-	} else {
-		if (CB_ImgHeight < CB_ImgHeightOld) {
-			if (CB_ImgHeightOld < CB_ImgHeight + 100 && CB_Jump_Y > 20) {
-				CB_JumpY = 20
-			}
-			if (CB_ImgHeightOld < CB_ImgHeight + 60 && CB_Jump_Y > 10) {
-				CB_JumpY = 10
-			}
-			if (CB_ImgHeightOld < CB_ImgHeight + 30 && CB_Jump_Y > 5) {
-				CB_JumpY = 5
-			}
-			if (CB_ImgHeightOld < CB_ImgHeight + 15 && CB_Jump_Y > 2) {
-				CB_JumpY = 2
-			}
-			if (CB_ImgHeightOld < CB_ImgHeight + 4) {
-				CB_JumpY = 1
-			}
-			CB_ImgHeightOld -= CB_JumpY
-		} else {
-			if (CB_ImgHeightOld > CB_ImgHeight - 100 && CB_Jump_Y > 20) {
-				CB_JumpY = 20
-			}
-			if (CB_ImgHeightOld > CB_ImgHeight - 60 && CB_Jump_Y > 10) {
-				CB_JumpY = 10
-			}
-			if (CB_ImgHeightOld > CB_ImgHeight - 30 && CB_Jump_Y > 5) {
-				CB_JumpY = 5
-			}
-			if (CB_ImgHeightOld > CB_ImgHeight - 15 && CB_Jump_Y > 2) {
-				CB_JumpY = 2
-			}
-			if (CB_ImgHeightOld > CB_ImgHeight - 4) {
-				CB_JumpY = 1
-			}
-			CB_ImgHeightOld += CB_JumpY
-		}
-		CB_Img.style.height = CB_ImgHeightOld + 'px';
-		CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
-		CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-		CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
-		CB_TimerY = setTimeout("CB_WindowResizeY()", CB_AnimTimeout);
-	}
-}
+
 function CB_CheckResize() {
 	if (CB_AnimX == 'true' && CB_AnimY == 'true') {
 		if (CB_ResizeTimer) {
@@ -1104,7 +1055,7 @@ function CB_ShowDocument() {
 					}
 					if (CB_Animation == 'normal') {
 						CB_AnimX = 'true';
-						CB_WindowResizeY()
+						jQuery.clearbox.CB_WindowResizeY()
 					} else {
 						CB_AnimX = 'true'
 					}
@@ -1150,7 +1101,57 @@ function CB_ShowDocument() {
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
 					CB_TimerX = setTimeout("jQuery.clearbox.CB_WindowResizeX()", CB_AnimTimeout);
 				}
-			}
+			},
+			CB_WindowResizeY : function () {
+				if (CB_ImgHeight == CB_ImgHeightOld) {
+					if (CB_TimerY) {
+						clearTimeout(CB_TimerY)
+					}
+					CB_AnimY = 'true';
+					return
+				} else {
+					if (CB_ImgHeight < CB_ImgHeightOld) {
+						if (CB_ImgHeightOld < CB_ImgHeight + 100 && CB_Jump_Y > 20) {
+							CB_JumpY = 20
+						}
+						if (CB_ImgHeightOld < CB_ImgHeight + 60 && CB_Jump_Y > 10) {
+							CB_JumpY = 10
+						}
+						if (CB_ImgHeightOld < CB_ImgHeight + 30 && CB_Jump_Y > 5) {
+							CB_JumpY = 5
+						}
+						if (CB_ImgHeightOld < CB_ImgHeight + 15 && CB_Jump_Y > 2) {
+							CB_JumpY = 2
+						}
+						if (CB_ImgHeightOld < CB_ImgHeight + 4) {
+							CB_JumpY = 1
+						}
+						CB_ImgHeightOld -= CB_JumpY
+					} else {
+						if (CB_ImgHeightOld > CB_ImgHeight - 100 && CB_Jump_Y > 20) {
+							CB_JumpY = 20
+						}
+						if (CB_ImgHeightOld > CB_ImgHeight - 60 && CB_Jump_Y > 10) {
+							CB_JumpY = 10
+						}
+						if (CB_ImgHeightOld > CB_ImgHeight - 30 && CB_Jump_Y > 5) {
+							CB_JumpY = 5
+						}
+						if (CB_ImgHeightOld > CB_ImgHeight - 15 && CB_Jump_Y > 2) {
+							CB_JumpY = 2
+						}
+						if (CB_ImgHeightOld > CB_ImgHeight - 4) {
+							CB_JumpY = 1
+						}
+						CB_ImgHeightOld += CB_JumpY
+					}
+					CB_Img.style.height = CB_ImgHeightOld + 'px';
+					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
+					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
+					CB_TimerY = setTimeout("jQuery.clearbox.CB_WindowResizeY()", CB_AnimTimeout);
+				}
+			},
  		},
  	});
 
