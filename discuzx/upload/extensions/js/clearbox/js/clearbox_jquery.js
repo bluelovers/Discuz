@@ -19,39 +19,16 @@ CB_ImgHeight = CB_WinBaseH - CB_TextH,
 CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 CB_PicDir += '/';
 
-var CB_PrePictures = new Array();
-CB_PrePictures[0] = new Image();
-CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
-CB_PrePictures[1] = new Image();
-CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 (function($, undefined){
 	var _this;
+
+	var CB_PrePictures = new Array();
+	CB_PrePictures[0] = new Image();
+	CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
+	CB_PrePictures[1] = new Image();
+	CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
 
  	$.extend({
  		log : function(a){
