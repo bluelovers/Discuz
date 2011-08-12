@@ -24,13 +24,7 @@ var CB_Show = 1;
 
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
-	_clearbox.options.CB_PicDir += '/';
-
 	var CB_PrePictures = new Array();
-	CB_PrePictures[0] = new Image();
-	CB_PrePictures[0].src = _clearbox.options.CB_PicDir + 'noprv.gif';
-	CB_PrePictures[1] = new Image();
-	CB_PrePictures[1].src = _clearbox.options.CB_PicDir + 'loading.gif';
 
  	$.extend({
  		log : function(a){
@@ -93,6 +87,12 @@ var CB_Show = 1;
 			},
 			setup : function (options) {
 				_clearbox.options = $.extend(true, {}, _clearbox.defaults, options);
+
+				_clearbox.options.CB_PicDir += '/';
+				CB_PrePictures[0] = new Image();
+				CB_PrePictures[0].src = _clearbox.options.CB_PicDir + 'noprv.gif';
+				CB_PrePictures[1] = new Image();
+				CB_PrePictures[1].src = _clearbox.options.CB_PicDir + 'loading.gif';
 
 				_clearbox.options.CB_AnimTimeout = parseInt(_clearbox.options.CB_AnimTimeout);
 				if (_clearbox.options.CB_AnimTimeout < 5) {
