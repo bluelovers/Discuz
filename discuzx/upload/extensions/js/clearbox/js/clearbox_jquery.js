@@ -84,6 +84,7 @@ var CB_Show = 1;
 
 				CB_NavTextPrv : 'PREV',
 				CB_NavTextNxt : 'NEXT',
+				CB_NavTextCls : 'CLOSE',
  			},
  			options : {
 
@@ -811,7 +812,7 @@ var CB_Show = 1;
 					} else {
 						CB_Txt.innerHTML = CB_Clicked[1]
 					}
-					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + _clearbox.options.CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
 					CB_HideContent.onclick = function() {
 						_clearbox.CB_Close();
 						return false
