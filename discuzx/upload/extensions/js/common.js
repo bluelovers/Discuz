@@ -233,6 +233,7 @@
 						.attr({
 							'rel' : 'clearbox[gallery=bbcode_img]',
 							'href' : _src,
+							'tnhref' : _src,
 							'target' : '_blank',
 							'class' : 'clearbox',
 						})
