@@ -221,11 +221,43 @@
 							'rel' : 'clearbox[gallery=bbcode_img]',
 							'href' : _src,
 							'target' : '_blank',
-							'class' : 'bbcode_img_link',
+							'class' : 'clearbox',
 						})
 					;
 				}
 			});
+
+			window.CB_Language = CB_Language = 'en';
+			window.CB_Config = CB_Config = 'bbcode';
+			window.CB_ScriptDir = CB_ScriptDir = 'extensions/js/clearbox';
+
+			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
+				.appendTo(jQuery(document).find('head'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/js/clearbox_source.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
+
+			/*
+			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/config/'+CB_Config+'/cb_style.css' + '" type="text/css" rel="stylesheet" />')
+				.appendTo(jQuery(document).find('head'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/config/'+CB_Config+'/cb_config.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/language/'+CB_Language+'/cb_language.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/core/cb_core.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
+			*/
 		}
 	});
 

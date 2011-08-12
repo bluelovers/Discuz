@@ -9,7 +9,7 @@ var
 	CB_WindowColor='#fff',				// color of the CB window (note: you have to change the rounded-corner PNGs too!), transparent is also working
 	CB_MinWidth=200,				// minimum (only at images) or initial width of CB window
 	CB_MinHeight=200,				// initial heigth of CB window
-	CB_WinPadd=15,					// padding of the CB window from sides of the browser 
+	CB_WinPadd=15,					// padding of the CB window from sides of the browser
 	CB_RoundPix=12,					// change this setting only if you are generating new PNGs for rounded corners
 	CB_ImgBorder=0,					// border size around the picture in CB window
 	CB_ImgBorderColor='#ddd',			// border color around the picture in CB window
@@ -20,7 +20,7 @@ var
 	CB_BodyMarginTop=0,				// please change these settings!
 	CB_BodyMarginBottom=0,				//
 
-	CB_ShowThumbnails='auto',			// it tells CB how to show the thumbnails ('auto', 'always' or 'off') thumbnails are only in picture-mode!
+	CB_ShowThumbnails='off',			// it tells CB how to show the thumbnails ('auto', 'always' or 'off') thumbnails are only in picture-mode!
 	CB_ThumbsBGColor='#000',			// color of the thumbnail layer
 	CB_ThumbsBGOpacity=.35,				// opacity of the thumbnail layer
 	CB_ActThumbOpacity=.65,				// thumbnail opacity of the current viewed image
@@ -44,7 +44,7 @@ var
 
 	CB_FontT='helvetica, arial, sans-serif',				//
 	CB_FontSizeT=13,				// these variables are referring to the title or caption line
-	CB_FontColorT='#777',				// 
+	CB_FontColorT='#777',				//
 	CB_FontWeightT='normal',			//
 
 	CB_FontC='helvetica, arial, sans-serif',				//
@@ -61,7 +61,7 @@ var
 
 	CB_PadT=10,					// space in pixels between the content and the title or caption line
 
-	CB_OuterNavigation='off',			// turns outer navigation panel on
+	CB_OuterNavigation='on',			// turns outer navigation panel on
 
 	CB_ShowURL='off',				// it shows the url of the content if no title or caption is given
 	CB_ItemNum='on',				// it shows the ordinal number of the content in galleries
@@ -85,7 +85,7 @@ var
 
 // CB animation settings:
 
-	CB_Animation='double',				// 'double', 'normal', 'off', 'grow', 'growinout' or 'warp' (high cpu usage)
+	CB_Animation='grow',				// 'double', 'normal', 'off', 'grow', 'growinout' or 'warp' (high cpu usage)
 	CB_ImgOpacitySpeed=300,				// speed of content fading (in ms)
 	CB_TextOpacitySpeed=300,			// speed of text fading under the picture (in ms)
 	CB_AnimSpeed=300,				// speed of the resizing animation of CB window (in ms)
@@ -94,7 +94,7 @@ var
 	CB_SelectsHide='on',				// it hides select boxes on the page before CB starts
 	CB_SlShowTime=5,				// default speed of the slideshow (in sec)
 	CB_Preload='on',				// preload neighbour pictures in galleries
-	CB_ShowLoading='off',				// NOT WORKING IN THIS VERSION (3.5beta)
+	CB_ShowLoading='on',				// NOT WORKING IN THIS VERSION (3.5beta)
 
 // Images using by CB settings:
 

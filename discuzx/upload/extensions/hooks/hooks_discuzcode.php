@@ -27,23 +27,4 @@ function _eFunc_discuzcode_Before_bbcodes($_EVENT, $conf) {
 	}
 }
 
-Scorpio_Hook::add('Tpl_Func_hooktags:Before', '_discuzcode_eTpl_Func_hooktags_Before');
-
-function _discuzcode_eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
-	global $_G;
-
-	$_varhash = VERHASH;
-
-	if (
-		(
-			// 帖子底部
-			$hookid == 'viewthread_bottom'
-			// AJAX 時
-			|| ($hookid == 'viewthread_endline' && (!empty($_G['gp_viewpid']) || $_G['inajax']))
-		)
-	) {
-		$hook_data .= '<script src="extensions/js/clearbox/clearbox.js?dir=extensions/js/clearbox/clearbox" type="text/javascript"></script>';
-	}
-}
-
 ?>
