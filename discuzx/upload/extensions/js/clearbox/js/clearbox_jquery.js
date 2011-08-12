@@ -11,8 +11,11 @@ var CB_Show = 1;
 	var CB_ActThumbSrc, CB_IEShowBug = '',
 	CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
 	CB_ie6RPBug = '',
-	CB_ClearBox, CB_AnimX, CB_AnimY, CB_BodyMarginX = _clearbox.options.CB_BodyMarginLeft + _clearbox.options.CB_BodyMarginRight,
-	CB_BodyMarginY = _clearbox.options.CB_BodyMarginTop + _clearbox.options.CB_BodyMarginBottom,
+	CB_ClearBox, CB_AnimX, CB_AnimY,
+
+	CB_BodyMarginX,
+	CB_BodyMarginY,
+
 	FF_ScrollbarBug, CB_Links, CB_SlideBW = 0,
 	CB_SSTimer, CB_SS = 'start',
 	CB_ii = 0,
@@ -204,7 +207,10 @@ var CB_Show = 1;
 					_clearbox.options.CB_Preload = 'be'
 				}
 
-				CB_ImgWidth = _clearbox.options.CB_WinBaseW,
+				CB_BodyMarginX = _clearbox.options.CB_BodyMarginLeft + _clearbox.options.CB_BodyMarginRight;
+				CB_BodyMarginY = _clearbox.options.CB_BodyMarginTop + _clearbox.options.CB_BodyMarginBottom;
+
+				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 			},
 			log : function (s) {
