@@ -50,16 +50,18 @@ function CB_Init() {
 		CB_ShEt = document.getElementById('CB_ShowEtc');
 		CB_ImgHd = document.getElementById('CB_ImgHide');
 		CB_ImgHd.style.backgroundColor = '#fff';
-		CB_ImgHd.style.opacity = 0.75;
-		CB_ImgHd.style.filter = 'alpha(opacity=75)';
+
+		jQuery(CB_ImgHd).css('opacity', 0.75);
+
 		CB_Win = document.getElementById('CB_Window');
 		CB_Thm = document.getElementById('CB_Thumbs');
 		CB_Thm2 = document.getElementById('CB_Thumbs2');
 		CB_Et = document.getElementById('CB_Etc');
 		CB_HideContent = document.getElementById('CB_ContentHide');
 		CB_HideContent.style.backgroundColor = CB_HideColor;
-		CB_HideContent.style.opacity = 0;
-		CB_HideContent.style.filter = 'alpha(opacity=0)';
+
+		jQuery(CB_HideContent).css('opacity', 0);
+
 		CB_Img = document.getElementById('CB_Image');
 		CB_LoadingImg = document.getElementById('CB_LoadingImage');
 		CB_ImgCont = document.getElementById('CB_ImgContainer');
@@ -68,8 +70,9 @@ function CB_Init() {
 		CB_SlideS = document.getElementById('CB_SlideShowS');
 		CB_SlideP = document.getElementById('CB_SlideShowP');
 		CB_SlideB = document.getElementById('CB_SlideShowBar');
-		CB_SlideB.style.opacity = 0.5;
-		CB_SlideB.style.filter = 'alpha(opacity=50)';
+
+		jQuery(CB_SlideB).css('opacity', 0.5);
+
 		CB_Prv = document.getElementById('CB_Prev');
 		CB_Nxt = document.getElementById('CB_Next');
 		CB_Txt = document.getElementById('CB_Text');
@@ -280,8 +283,9 @@ function CB_HideDocument(a) {
 	var b = a;
 	if (CB_ii < CB_HideOpacity) {
 		CB_ii += CB_OpacityStep;
-		CB_HideContent.style.opacity = (CB_ii / 100);
-		CB_HideContent.style.filter = "alpha(opacity=" + CB_ii + ")";
+
+		jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
+
 		CB_Hide = CB_ii;
 		CB_Blur = setTimeout("CB_HideDocument('" + b + "')", 5)
 	} else {
@@ -777,8 +781,8 @@ function CB_Close() {
 }
 function CB_ShowDocument() {
 	if (CB_Hide > 0) {
-		CB_HideContent.style.opacity = (CB_Hide / 100);
-		CB_HideContent.style.filter = "alpha(opacity=" + CB_Hide + ")";
+		jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
+
 		CB_Hide -= CB_OpacityStep;
 		CB_Blur = setTimeout("CB_ShowDocument()", 5)
 	} else {
