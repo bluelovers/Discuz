@@ -133,7 +133,7 @@ function CB_Init() {
 			CB_BodyMarginY = 0
 		}
 	}
-	document.getElementById('CB_Thumbs').onmousemove = getMouseXY;
+	jQuery('#CB_Thumbs').mousemove(jQuery.clearbox.getMouseXY);
 	var d = 0;
 	var e = 0;
 	CB_Links = document.getElementsByTagName('a');
@@ -697,19 +697,7 @@ function CB_HideThumbs() {
 	CB_Thm.style.display = 'none';
 	return
 }
-function getMouseXY(e) {
-	if (CB_AllThumbsWidth > CB_ImgWidth) {
-		if (jQuery.browser.msie) {
-			tempX = event.clientX
-		} else {
-			tempX = e.pageX
-		}
-		if (tempX < 0) {
-			tempX = 0
-		}
-		CB_Thm2.style.marginLeft = ((BrSizeX - CB_ImgWidth) / 2 - tempX) / (CB_ImgWidth / (CB_AllThumbsWidth - CB_ImgWidth)) + 'px'
-	}
-}
+
 function CB_FullSize() {
 	CB_Img.style.width = CB_ImgWidthOrig + 'px';
 	CB_Img.style.height = CB_ImgHeightOrig + 'px';
@@ -1116,6 +1104,19 @@ function CB_fix_center(w) {
 				this.log(['getScrollPosition', DocScrX, DocScrY]);
 
 				return
+			},
+			getMouseXY : function (e) {
+				if (CB_AllThumbsWidth > CB_ImgWidth) {
+					if (jQuery.browser.msie) {
+						tempX = event.clientX
+					} else {
+						tempX = e.pageX
+					}
+					if (tempX < 0) {
+						tempX = 0
+					}
+					CB_Thm2.style.marginLeft = ((BrSizeX - CB_ImgWidth) / 2 - tempX) / (CB_ImgWidth / (CB_AllThumbsWidth - CB_ImgWidth)) + 'px'
+				}
 			},
  		},
  	});
