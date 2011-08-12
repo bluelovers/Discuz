@@ -143,7 +143,7 @@ function CB_Init() {
 				}
 			} else {
 				if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
-					if (jQuery(CB_Links[i]).attr('rel').substring(9, jQuery(CB_Links[i]).attr('rel').length - 1).split(',')[0] != 'clearbox') {
+					if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
 						CB_Links[i].onclick = function() {
 							CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 							return false
@@ -164,7 +164,7 @@ function CB_Init() {
 						}
 					}
 				} else {
-					alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + jQuery(CB_Links[i]).attr('rel') + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+					alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
 				}
 			}
 		}
