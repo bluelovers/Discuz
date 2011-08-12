@@ -597,26 +597,10 @@ function CB_Close() {
 	CB_iFr.style.left = '0px';
 	CB_iFr.style.width = '0px';
 	CB_iFr.style.height = '0px';
-	CB_ShowDocument();
+	jQuery.clearbox.CB_ShowDocument();
 	return
 }
-function CB_ShowDocument() {
-	if (CB_Hide > 0) {
-		jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
 
-		CB_Hide -= CB_OpacityStep;
-		CB_Blur = setTimeout("CB_ShowDocument()", 5)
-	} else {
-		CB_HideContent.style.visibility = 'hidden';
-		CB_HideContent.style.width = '0px';
-		CB_HideContent.style.height = '0px';
-		if (CB_HideOpacity != 0) {
-			clearTimeout(CB_Blur)
-		}
-		CB_ClearBox = 'ki';
-		return
-	}
-}
 
 
 
@@ -1151,6 +1135,23 @@ function CB_ShowDocument() {
 					}
 				}
 				return
+			},
+			CB_ShowDocument : function () {
+				if (CB_Hide > 0) {
+					jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
+
+					CB_Hide -= CB_OpacityStep;
+					CB_Blur = setTimeout("jQuery.clearbox.CB_ShowDocument()", 5)
+				} else {
+					CB_HideContent.style.visibility = 'hidden';
+					CB_HideContent.style.width = '0px';
+					CB_HideContent.style.height = '0px';
+					if (CB_HideOpacity != 0) {
+						clearTimeout(CB_Blur)
+					}
+					CB_ClearBox = 'ki';
+					return
+				}
 			},
  		},
  	});
