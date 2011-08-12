@@ -62,6 +62,7 @@ var CB_Show = 1;
 
 				CB_ShowImgURL : 'be',
 				CB_ImgNum : 'be',
+				CB_ImgNumBracket : '[]',
 
 				dir : '',
  			},
@@ -650,7 +651,7 @@ var CB_Show = 1;
 					}
 				}
 				if (_clearbox.options.CB_ImgNum == 'be' && CB_Gallery.length > 2) {
-					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
 				}
 				_clearbox.CB_PrevNext();
 				CB_Txt.style.visibility = 'visible';
@@ -785,7 +786,7 @@ var CB_Show = 1;
 					} else {
 						CB_Txt.innerHTML = CB_Clicked[1]
 					}
-					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + '<a class="CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
 					CB_HideContent.onclick = function() {
 						_clearbox.CB_Close();
 						return false
