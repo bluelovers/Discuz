@@ -53,6 +53,8 @@ var CB_Show = 1;
  				CB_Jump_X : 60,
 				CB_Jump_Y : 60,
 
+				CB_AnimTimeout : 5,
+
 				dir : '',
  			},
  			options : {
@@ -69,9 +71,9 @@ var CB_Show = 1;
 			setup : function (options) {
 				_clearbox.options = $.extend(true, {}, _clearbox.defaults, options);
 
-				CB_AnimTimeout = parseInt(CB_AnimTimeout);
-				if (CB_AnimTimeout < 5) {
-					CB_AnimTimeout = 5
+				_clearbox.options.CB_AnimTimeout = parseInt(_clearbox.options.CB_AnimTimeout);
+				if (_clearbox.options.CB_AnimTimeout < 5) {
+					_clearbox.options.CB_AnimTimeout = 5
 				}
 				CB_BodyMarginLeft = parseInt(CB_BodyMarginLeft);
 				if (CB_BodyMarginLeft < 0) {
@@ -485,7 +487,7 @@ var CB_Show = 1;
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
-					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, CB_AnimTimeout);
+					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
 				}
 			},
 			CB_WindowResizeY : function () {
@@ -535,7 +537,7 @@ var CB_Show = 1;
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
-					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, CB_AnimTimeout);
+					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
