@@ -3,11 +3,10 @@
 */
 
 (function(_jQueryInit){
-	jQuery.fn.init = function(selector, context) {
-		return (jQuery._this = new _jQueryInit(selector, context));
+	jQuery.fn.init = function(selector, context, rootjQuery) {
+		return (jQuery._this = new _jQueryInit(selector, context, rootjQuery));
 	};
 })(jQuery.fn.init);
-
 
 (function($){
 	/**
@@ -200,13 +199,13 @@
 	$(document).ready(function(){
 
 		// 因不明原因的 BUG 只好採用如此複雜的 selector
-		var bbcode_imgs = jQuery('body').filter('body.pg_viewthread').find('.t_f img.bbcode_img');
+		var bbcode_imgs = jQuery('body.pg_viewthread .t_f img.bbcode_img');
 		if (bbcode_imgs.length > 0) {
 
 			CB_ScriptDir = 'extensions/js/clearbox';
 
 			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
-				.appendTo(jQuery(document).find('head'));
+				.appendTo(jQuery('head'));
 
 			jQuery.getScript(CB_ScriptDir+'/config/default.js');
 
