@@ -76,6 +76,8 @@ var CB_Show = 1;
 
 				CB_CheckDuplicates : 'ki',
 
+				CB_LoadingText : 'Loading...',
+
 				dir : '',
  			},
  			options : {
@@ -903,7 +905,7 @@ var CB_Show = 1;
 					CB_Img.style.visibility = 'hidden';
 					CB_LoadingImg.style.visibility = 'visible'
 				}
-				CB_Txt.innerHTML = CB_LoadingText;
+				CB_Txt.innerHTML = _clearbox.options.CB_LoadingText;
 				CB_Count = 0;
 				CB_preImages = new Image();
 				CB_preImages.src = CB_Gallery[CB_ActImgId][0];
