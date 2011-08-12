@@ -17,8 +17,11 @@ var CB_Show = 1;
 	CB_SSTimer, CB_SS = 'start',
 	CB_ii = 0,
 	CB_jj = 0,
-	CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, CB_ImgWidth = _clearbox.options.CB_WinBaseW,
-	CB_ImgHeight = _clearbox.options.CB_WinBaseH - CB_TextH,
+	CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content,
+
+	CB_ImgWidth,
+	CB_ImgHeight,
+
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
 	CB_PicDir += '/';
@@ -150,6 +153,9 @@ var CB_Show = 1;
 				if (CB_Preload != 'be' && CB_Preload != 'ki') {
 					CB_Preload = 'be'
 				}
+
+				CB_ImgWidth = _clearbox.options.CB_WinBaseW,
+				CB_ImgHeight = _clearbox.options.CB_WinBaseH - CB_TextH;
 			},
 			log : function (s) {
 				$.log(s);
