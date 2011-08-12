@@ -42,7 +42,7 @@ function CB_Init() {
 	if (!document.getElementById('CB_All') && CB_Show != 0) {
 		document.body.style.position = "static";
 		var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
-		if (navigator.userAgent.indexOf("MSIE") != -1) {
+		if (jQuery.browser.msie) {
 			CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + CB_PicDir + 'blank.gif" />'
 		} else {
 			CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
@@ -55,7 +55,7 @@ function CB_Init() {
 		if (navigator.userAgent.indexOf("MSIE 6") != -1 && CB_RoundPix == 0) {
 			CB_ie6RPBug = 1
 		}
-		if (navigator.userAgent.indexOf("MSIE") != -1 && CB_RoundPix < 2) {
+		if (jQuery.browser.msie && CB_RoundPix < 2) {
 			CB_ieRPBug = 6
 		}
 		document.getElementById('CB_Padding').style.padding = CB_Padd + 'px';
@@ -847,7 +847,7 @@ function getDocumentSize() {
 		DocSizeX = document.body.offsetWidth;
 		DocSizeY = document.body.offsetHeight
 	}
-	if (navigator.userAgent.indexOf("MSIE") != -1 || navigator.userAgent.indexOf("Opera") != -1) {
+	if (jQuery.browser.msie || navigator.userAgent.indexOf("Opera") != -1) {
 		DocSizeX = document.body.scrollWidth;
 		DocSizeY = document.body.scrollHeight
 	}
