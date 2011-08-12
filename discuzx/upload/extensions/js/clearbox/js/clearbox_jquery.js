@@ -847,7 +847,7 @@ function getDocumentSize() {
 		DocSizeX = document.body.offsetWidth;
 		DocSizeY = document.body.offsetHeight
 	}
-	if (jQuery.browser.msie || navigator.userAgent.indexOf("Opera") != -1) {
+	if (jQuery.browser.msie || jQuery.browser.opera) {
 		DocSizeX = document.body.scrollWidth;
 		DocSizeY = document.body.scrollHeight
 	}
@@ -871,7 +871,7 @@ function getBrowserSize() {
 		BrSizeY = document.body.clientHeight;
 		return
 	}
-	if (navigator.userAgent.indexOf("Opera") != -1) {
+	if (jQuery.browser.opera) {
 		BrSizeX = document.documentElement.clientWidth;
 		BrSizeY = document.body.clientHeight
 	}
