@@ -175,6 +175,7 @@ CB_PrePictures[0] = new Image();
 CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
 CB_PrePictures[1] = new Image();
 CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
+/*
 function OnLoad(a, b) {
 	if (typeof window.addEventListener != 'undefined') {
 		window.addEventListener(a, b, false)
@@ -185,8 +186,11 @@ function OnLoad(a, b) {
 	}
 }
 OnLoad('load', CB_Init);
+*/
 function CB_Init() {
+	/*
 	document.onkeypress = CB_KeyPress;
+	*/
 	if (!document.getElementById('CB_All') && CB_Show != 0) {
 		document.body.style.position = "static";
 		var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
@@ -1114,3 +1118,86 @@ function CB_fix_center(w) {
 	);
 	*/
 }
+
+(function($, undefined){
+ 	$.extend({
+ 		log : function(a){
+			console.log(a);
+		},
+ 		clearbox : {
+ 			defaults : {
+				dir : '',
+ 			},
+			init : function(options) {
+				var _this = this;
+
+				_this.setup(options);
+
+				$(document).keypress(_this.keypress);
+
+				CB_Init();
+			},
+			setup : function (options) {
+				var options = $.extend(true, {}, $.clearbox.defaults, options);
+			},
+			keypress : function(event){
+				var b;
+
+				if (event.keyCode) b = event.keyCode;
+				else if (event.which) b = event.which;
+
+				var c = String.fromCharCode(b);
+
+				$.log([b, c, event]);
+
+				var stop = 0;
+
+				if (CB_ClearBox == 'be') {
+					if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52)) {
+						if (CB_SSTimer) {
+							CB_SlideShowJump()
+						}
+						CB_LoadImage(CB_ActImgId - 1);
+
+						stop = true;
+					}
+					if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54)) {
+						if (CB_SSTimer) {
+							CB_SlideShowJump()
+						}
+						CB_LoadImage(CB_ActImgId + 1);
+
+						stop = true;
+					}
+					if ((c == " " || b == 32) && CB_IsAnimating == 0) {
+						if (CB_Gallery.length < 3) {
+							stop = true;
+						}
+						if (CB_SS == 'start') {
+							CB_SSStart();
+							stop = true;
+						} else {
+							CB_SSPause();
+							stop = true;
+						}
+					}
+					if (c == "" || b == 27) {
+						CB_Close();
+						stop = true;
+					}
+					if (b == 13) {
+						stop = true;
+					}
+				} else {
+					if (CB_IsAnimating == 1 && (c == " " || b == 32 || b == 13)) {
+						stop = true;
+					}
+				}
+
+				if (stop) {
+					event.preventDefault();
+				}
+			},
+ 		},
+ 	});
+})(jQuery);
