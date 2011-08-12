@@ -36,6 +36,7 @@ var CB_Show = 1;
  		clearbox : {
  			defaults : {
  				CB_HideColor : '#000',
+ 				CB_HideOpacity : 75,
 				dir : '',
  			},
  			options : {
@@ -1148,7 +1149,7 @@ var CB_Show = 1;
 			jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
 
 			CB_Hide = CB_ii;
-			CB_Blur = setTimeout('CB_HideDocument("' + b + '")', 5);
+			CB_Blur = setTimeout(function(){CB_HideDocument(b);}, 5);
 		} else {
 			CB_ii = 0;
 			CB_HideContent.style.height = DocSizeY + CB_BodyMarginY + 'px';
