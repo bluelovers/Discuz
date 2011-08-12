@@ -10,7 +10,7 @@
 		var CB_Jump_X=	60;
 		var CB_Jump_Y=	60;
 		var CB_AnimTimeout=5;
-		var CB_ImgBorder=1;
+		var CB_ImgBorder=0;
 		var CB_ImgBorderColor='#ccc';
 		var CB_Padd=2;
 		var CB_ShowImgURL='be';
