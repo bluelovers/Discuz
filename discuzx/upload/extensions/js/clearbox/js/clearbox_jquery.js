@@ -58,6 +58,8 @@ var CB_Show = 1;
 				CB_ImgBorder : 0,
 				CB_ImgBorderColor : '#ccc',
 
+				CB_Padd : 2,
+
 				dir : '',
  			},
  			options : {
@@ -129,9 +131,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_ImgBorder < 0) {
 					_clearbox.options.CB_ImgBorder = 1
 				}
-				CB_Padd = parseInt(CB_Padd);
-				if (CB_Padd < 0) {
-					CB_Padd = 2
+				_clearbox.options.CB_Padd = parseInt(_clearbox.options.CB_Padd);
+				if (_clearbox.options.CB_Padd < 0) {
+					_clearbox.options.CB_Padd = 2
 				}
 				if (CB_ShowImgURL != 'be' && CB_ShowImgURL != 'ki') {
 					CB_ShowImgURL = 'ki'
@@ -429,12 +431,12 @@ var CB_Show = 1;
 				*/
 			},
 			CB_FitToBrowser : function () {
-				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd));
 					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
 					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
 				}
 				return
@@ -488,7 +490,7 @@ var CB_Show = 1;
 						CB_ImgWidthOld += CB_JumpX
 					}
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
-					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
+					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
 				}
@@ -538,14 +540,14 @@ var CB_Show = 1;
 					}
 					CB_Img.style.height = CB_ImgHeightOld + 'px';
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder) + 'px';
-					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
+					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
-				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
-				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
+				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 				CB_Win.style.marginLeft = CB_MarginL + 'px';
 				CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 				return;
@@ -911,11 +913,11 @@ var CB_Show = 1;
 				CB_ImgHeight = parseInt(CB_Rel[1]);
 				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = _clearbox.options.CB_WinBaseH - CB_TextH;
-				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
 				}
 				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - CB_TextH) + 'px';
@@ -1016,7 +1018,7 @@ var CB_Show = 1;
 			if (jQuery.browser.msie && _clearbox.options.CB_RoundPix < 2) {
 				CB_ieRPBug = 6
 			}
-			document.getElementById('CB_Padding').style.padding = CB_Padd + 'px';
+			document.getElementById('CB_Padding').style.padding = _clearbox.options.CB_Padd + 'px';
 			CB_ShTh = document.getElementById('CB_ShowTh');
 			CB_ShEt = document.getElementById('CB_ShowEtc');
 			CB_ImgHd = document.getElementById('CB_ImgHide');
