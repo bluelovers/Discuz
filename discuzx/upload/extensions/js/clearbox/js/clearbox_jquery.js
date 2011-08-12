@@ -1148,4 +1148,8 @@ function CB_fix_center(w) {
  	});
 
  	_this = $.clearbox;
+
+ 	function intval(n) {
+ 		return parseInt(n);
+ 	}
 })(jQuery);
