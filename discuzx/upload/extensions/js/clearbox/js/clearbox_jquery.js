@@ -699,7 +699,7 @@ function CB_HideThumbs() {
 }
 function getMouseXY(e) {
 	if (CB_AllThumbsWidth > CB_ImgWidth) {
-		if (IE) {
+		if (jQuery.browser.msie) {
 			tempX = event.clientX
 		} else {
 			tempX = e.pageX
