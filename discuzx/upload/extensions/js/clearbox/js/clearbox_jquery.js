@@ -93,26 +93,26 @@ function CB_Init() {
 		CB_iFr = document.getElementById('CB_iFrame');
 		CB_PrvNxt = document.getElementById('CB_PrevNext').style;
 		CB_ShTh.onmouseover = function() {
-			CB_ShowThumbs();
+			jQuery.clearbox.CB_ShowThumbs();
 			return
 		};
 		CB_ShEt.onmouseover = function() {
-			CB_ShowEtc();
+			jQuery.clearbox.CB_ShowEtc();
 			return
 		};
 		CB_ImgHd.onmouseover = function() {
-			CB_HideThumbs();
-			CB_HideEtc();
+			jQuery.clearbox.CB_HideThumbs();
+			jQuery.clearbox.CB_HideEtc();
 			return
 		};
 		CB_Txt.onmouseover = function() {
-			CB_HideThumbs();
-			CB_HideEtc();
+			jQuery.clearbox.CB_HideThumbs();
+			jQuery.clearbox.CB_HideEtc();
 			return
 		};
 		CB_HideContent.onmouseover = function() {
-			CB_HideThumbs();
-			CB_HideEtc();
+			jQuery.clearbox.CB_HideThumbs();
+			jQuery.clearbox.CB_HideEtc();
 			return
 		};
 		if (jQuery.browser.opera) {
@@ -435,27 +435,6 @@ function CB_CheckResize2() {
 	} else {
 		CB_ResizeTimer = setTimeout("CB_CheckResize2()", 5)
 	}
-}
-
-function CB_ShowEtc() {
-	CB_ImgHd.style.visibility = 'visible';
-	CB_Et.style.display = 'block';
-	return
-}
-function CB_HideEtc() {
-	CB_ImgHd.style.visibility = 'hidden';
-	CB_Et.style.display = 'none';
-	return
-}
-function CB_ShowThumbs() {
-	CB_ImgHd.style.visibility = 'visible';
-	CB_Thm.style.display = 'block';
-	return
-}
-function CB_HideThumbs() {
-	CB_ImgHd.style.visibility = 'hidden';
-	CB_Thm.style.display = 'none';
-	return
 }
 
 function CB_FullSize() {
@@ -1159,6 +1138,26 @@ function CB_FullSize() {
 				CB_Img.style.visibility = 'hidden';
 				CB_Win.style.visibility = 'visible';
 				CB_LoadImage();
+			},
+			CB_ShowEtc : function () {
+				CB_ImgHd.style.visibility = 'visible';
+				CB_Et.style.display = 'block';
+				return;
+			},
+			CB_HideEtc : function () {
+				CB_ImgHd.style.visibility = 'hidden';
+				CB_Et.style.display = 'none';
+				return;
+			},
+			CB_ShowThumbs : function () {
+				CB_ImgHd.style.visibility = 'visible';
+				CB_Thm.style.display = 'block';
+				return;
+			},
+			CB_HideThumbs : function () {
+				CB_ImgHd.style.visibility = 'hidden';
+				CB_Thm.style.display = 'none';
+				return;
 			},
  		},
  	});
