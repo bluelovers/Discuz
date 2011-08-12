@@ -123,29 +123,14 @@ CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, 
 CB_ImgHeight = CB_WinBaseH - CB_TextH,
 CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 CB_PicDir += '/';
-var IE = document.all ? true: false;
-if (!IE) document.captureEvents(Event.MOUSEMOVE);
+
 var CB_PrePictures = new Array();
 CB_PrePictures[0] = new Image();
 CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
 CB_PrePictures[1] = new Image();
 CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
-/*
-function OnLoad(a, b) {
-	if (typeof window.addEventListener != 'undefined') {
-		window.addEventListener(a, b, false)
-	} else if (typeof document.addEventListener != 'undefined') {
-		document.addEventListener(a, b, false)
-	} else if (typeof window.attachEvent != 'undefined') {
-		window.attachEvent("on" + a, b)
-	}
-}
-OnLoad('load', CB_Init);
-*/
+
 function CB_Init() {
-	/*
-	document.onkeypress = CB_KeyPress;
-	*/
 	if (!document.getElementById('CB_All') && CB_Show != 0) {
 		document.body.style.position = "static";
 		var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
@@ -1088,6 +1073,7 @@ function CB_fix_center(w) {
 			init : function(options) {
 				_this.setup(options);
 
+				if (!jQuery.browser.msie) document.captureEvents(Event.MOUSEMOVE);
 				$(document).keypress(_this.keyeven);
 
 				CB_Init();
