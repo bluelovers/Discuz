@@ -795,6 +795,9 @@ function CB_FullSize() {
 				}
 				*/
 
+				BrSizeX = jQuery(window).width();
+				BrSizeY = jQuery(window).height();
+
 				jQuery.clearbox.log(['BrSizeX', BrSizeX, jQuery(window).width()]);
 				jQuery.clearbox.log(['BrSizeY', BrSizeY, jQuery(window).height()]);
 
