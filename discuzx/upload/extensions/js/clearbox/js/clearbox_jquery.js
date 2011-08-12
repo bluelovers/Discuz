@@ -74,6 +74,8 @@ var CB_Show = 1;
 				CB_FontColor : '#656565',
 				CB_FontWeigth : 'normal',
 
+				CB_CheckDuplicates : 'ki',
+
 				dir : '',
  			},
  			options : {
@@ -176,8 +178,8 @@ var CB_Show = 1;
 					_clearbox.options.CB_SlShowTime = 5
 				}
 				_clearbox.options.CB_SlShowTime *= 1000;
-				if (CB_CheckDuplicates != 'be' && CB_CheckDuplicates != 'ki') {
-					CB_CheckDuplicates = 'ki'
+				if (_clearbox.options.CB_CheckDuplicates != 'be' && _clearbox.options.CB_CheckDuplicates != 'ki') {
+					_clearbox.options.CB_CheckDuplicates = 'ki'
 				}
 				if (CB_Preload != 'be' && CB_Preload != 'ki') {
 					CB_Preload = 'be'
