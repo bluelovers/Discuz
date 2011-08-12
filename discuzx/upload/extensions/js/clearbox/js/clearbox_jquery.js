@@ -69,6 +69,7 @@ var CB_Show = 1;
 				CB_PadT : 10,
 
 				CB_TextH : 40,
+				CB_Font : 'arial',
 
 				dir : '',
  			},
@@ -1061,7 +1062,7 @@ var CB_Show = 1;
 			CB_Txt = document.getElementById('CB_Text');
 			CB_Txt.style.height = (_clearbox.options.CB_TextH - _clearbox.options.CB_PadT) + 'px';
 			CB_Txt.style.marginTop = _clearbox.options.CB_PadT + 'px';
-			CB_Txt.style.fontFamily = CB_Font;
+			CB_Txt.style.fontFamily = _clearbox.options.CB_Font;
 			CB_Txt.style.fontSize = CB_FontSize + 'px';
 			CB_Txt.style.fontWeight = CB_FontWeigth;
 			CB_Txt.style.color = CB_FontColor;
