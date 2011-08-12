@@ -207,7 +207,9 @@
 			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
 				.appendTo(jQuery('head'));
 
+			/*
 			jQuery.getScript(CB_ScriptDir+'/config/default.js');
+			*/
 
 			bbcode_imgs.each(function(index, elem){
 				// elem = this
