@@ -184,11 +184,7 @@ function CB_Init() {
 
 
 
-function CB_FullSize() {
-	CB_Img.style.width = CB_ImgWidthOrig + 'px';
-	CB_Img.style.height = CB_ImgHeightOrig + 'px';
-	CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
-}
+
 
 
 
@@ -1166,6 +1162,11 @@ function CB_FullSize() {
 				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
 				jQuery.clearbox.CB_SetAllPositions();
 				jQuery.clearbox.CB_HideDocument();
+			},
+			CB_FullSize : function () {
+				CB_Img.style.width = CB_ImgWidthOrig + 'px';
+				CB_Img.style.height = CB_ImgHeightOrig + 'px';
+				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
 			},
  		},
  	});
