@@ -395,23 +395,13 @@ function CB_AnimatePlease(a) {
 	if (a) {
 		CB_CheckResize2();
 	} else {
-		CB_CheckResize();
+		jQuery.clearbox.CB_CheckResize();
 	}
 	return
 }
 
 
-function CB_CheckResize() {
-	if (CB_AnimX == 'true' && CB_AnimY == 'true') {
-		if (CB_ResizeTimer) {
-			clearTimeout(CB_ResizeTimer)
-		}
-		jQuery.clearbox.CB_ShowImage();
-		return
-	} else {
-		CB_ResizeTimer = setTimeout("CB_CheckResize()", 5)
-	}
-}
+
 function CB_CheckResize2() {
 	if (CB_AnimX == 'true' && CB_AnimY == 'true') {
 		if (CB_ResizeTimer) {
@@ -1154,6 +1144,17 @@ function CB_FullSize() {
 				// bluelovers
 
 				return true
+			},
+			CB_CheckResize : function () {
+				if (CB_AnimX == 'true' && CB_AnimY == 'true') {
+					if (CB_ResizeTimer) {
+						clearTimeout(CB_ResizeTimer)
+					}
+					jQuery.clearbox.CB_ShowImage();
+					return
+				} else {
+					CB_ResizeTimer = setTimeout("jQuery.clearbox.CB_CheckResize()", 5)
+				}
 			},
  		},
  	});
