@@ -81,6 +81,8 @@ var CB_Show = 1;
 
 				CB_Preload : 'be',
 				CB_TextNav : 'be',
+
+				CB_NavTextPrv : 'PREV',
  			},
  			options : {
 
@@ -586,7 +588,7 @@ var CB_Show = 1;
 					}
 					if (_clearbox.options.CB_TextNav == 'be') {
 						var a = CB_Txt.innerHTML;
-						CB_Txt.innerHTML = '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
+						CB_Txt.innerHTML = '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + _clearbox.options.CB_NavTextPrv + '</a> ' + a
 					}
 					CB_Prv.style.display = 'block';
 					CB_Prv.onclick = function() {
