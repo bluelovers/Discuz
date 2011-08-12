@@ -190,6 +190,9 @@ function CB_ClickIMG(a) {
 	if (CB_Gallery && CB_Rel[0] == CB_Gallery[0][0] && CB_Gallery[0][0] != 'clearbox') {} else {
 		CB_Gallery = new Array;
 		CB_Gallery.push(new Array(CB_Rel[0], CB_Rel[1], CB_Rel[2]));
+
+		jQuery.log(['CB_Gallery.push', CB_Rel[0], CB_Rel[1], CB_Rel[2]]);
+
 		if (CB_Clicked[0] == 'clearbox') {
 			CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]));
 		} else {
@@ -226,7 +229,7 @@ function CB_ClickIMG(a) {
 }
 function CB_SetAllPositions() {
 	getBrowserSize();
-	getDocumentSize();
+	jQuery.clearbox.getDocumentSize();
 	jQuery.clearbox.getScrollPosition();
 	if (BrSizeY > DocSizeY) {
 		DocSizeY = BrSizeY
@@ -796,29 +799,7 @@ function CB_ShowDocument() {
 		return
 	}
 }
-function getDocumentSize() {
-	this.DocSizeX = 0;
-	this.DocSizeY = 0;
-	if (window.innerWidth && window.scrollMaxX) {
-		DocSizeX = window.innerWidth + window.scrollMaxX;
-		DocSizeY = window.innerHeight + window.scrollMaxY
-	} else if (document.body.scrollWidth > document.body.offsetWidth) {
-		DocSizeX = document.body.scrollWidth;
-		DocSizeY = document.body.scrollHeight
-	} else {
-		DocSizeX = document.body.offsetWidth;
-		DocSizeY = document.body.offsetHeight
-	}
-	if (jQuery.browser.msie || jQuery.browser.opera) {
-		DocSizeX = document.body.scrollWidth;
-		DocSizeY = document.body.scrollHeight
-	}
-	if (jQuery.browser.firefox || navigator.userAgent.indexOf("Netscape") != -1) {
-		DocSizeX = BrSizeX + window.scrollMaxX;
-		DocSizeY = BrSizeY + window.scrollMaxY
-	}
-	return
-}
+
 function getBrowserSize() {
 	this.BrSizeX = 0;
 	this.BrSizeY = 0;
@@ -1126,6 +1107,38 @@ function CB_fix_center(w) {
 				jQuery(CB_SlideP).hide();
 				jQuery(CB_SlideS).show();
 				jQuery.clearbox.CB_SlideShowStop();
+			},
+			getDocumentSize : function () {
+				this.DocSizeX = 0;
+				this.DocSizeY = 0;
+				/*
+				if (window.innerWidth && window.scrollMaxX) {
+					DocSizeX = window.innerWidth + window.scrollMaxX;
+					DocSizeY = window.innerHeight + window.scrollMaxY
+				} else if (document.body.scrollWidth > document.body.offsetWidth) {
+					DocSizeX = document.body.scrollWidth;
+					DocSizeY = document.body.scrollHeight
+				} else {
+					DocSizeX = document.body.offsetWidth;
+					DocSizeY = document.body.offsetHeight
+				}
+				if (jQuery.browser.msie || jQuery.browser.opera) {
+					DocSizeX = document.body.scrollWidth;
+					DocSizeY = document.body.scrollHeight
+				}
+				if (jQuery.browser.firefox || navigator.userAgent.indexOf("Netscape") != -1) {
+					DocSizeX = BrSizeX + window.scrollMaxX;
+					DocSizeY = BrSizeY + window.scrollMaxY
+				}
+				*/
+
+				DocSizeX = jQuery(document).width();
+				DocSizeY = jQuery(document).height();
+
+				jQuery.clearbox.log(['DocSizeX', DocSizeX, jQuery(document).width(), jQuery(document).outerWidth()]);
+				jQuery.clearbox.log(['DocSizeY', DocSizeY, jQuery(document).height(), jQuery(document).outerHeight()]);
+
+				return
 			},
  		},
  	});
