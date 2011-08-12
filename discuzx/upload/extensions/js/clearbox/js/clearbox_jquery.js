@@ -83,6 +83,7 @@ var CB_Show = 1;
 				CB_TextNav : 'be',
 
 				CB_NavTextPrv : 'PREV',
+				CB_NavTextNxt : 'NEXT',
  			},
  			options : {
 
@@ -605,7 +606,7 @@ var CB_Show = 1;
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
 					}
 					if (_clearbox.options.CB_TextNav == 'be') {
-						CB_Txt.innerHTML += ' <a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
+						CB_Txt.innerHTML += ' <a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + _clearbox.options.CB_NavTextNxt + '</a>'
 					}
 					CB_Nxt.style.display = 'block';
 					CB_Nxt.onclick = function() {
