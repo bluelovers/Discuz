@@ -61,6 +61,7 @@ var CB_Show = 1;
 				CB_Padd : 2,
 
 				CB_ShowImgURL : 'be',
+				CB_ImgNum : 'be',
 
 				dir : '',
  			},
@@ -156,8 +157,8 @@ var CB_Show = 1;
 				if (CB_FontSize < 6) {
 					CB_FontSize = 13
 				}
-				if (CB_ImgNum != 'be' && CB_ImgNum != 'ki') {
-					CB_ImgNum = 'be'
+				if (_clearbox.options.CB_ImgNum != 'be' && _clearbox.options.CB_ImgNum != 'ki') {
+					_clearbox.options.CB_ImgNum = 'be'
 				}
 				CB_SlShowTime = parseInt(CB_SlShowTime);
 				if (CB_SlShowTime < 1) {
@@ -648,7 +649,7 @@ var CB_Show = 1;
 						CB_Txt.innerHTML = (CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1];
 					}
 				}
-				if (CB_ImgNum == 'be' && CB_Gallery.length > 2) {
+				if (_clearbox.options.CB_ImgNum == 'be' && CB_Gallery.length > 2) {
 					CB_Txt.innerHTML += ' ' + CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + CB_ImgNumBracket.substring(1, 2);
 				}
 				_clearbox.CB_PrevNext();
