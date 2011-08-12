@@ -334,7 +334,7 @@ function CB_CheckLoaded() {
 	if (CB_Count == 1) {
 		CB_Loaded = true;
 		clearTimeout(CB_ImgLoadTimer);
-		CB_GetImageSize();
+		jQuery.clearbox.CB_GetImageSize();
 		return
 	}
 	if (CB_Loaded == false && CB_preImages.complete) {
@@ -343,22 +343,7 @@ function CB_CheckLoaded() {
 	CB_ImgLoadTimer = setTimeout("CB_CheckLoaded()", 5);
 	return
 }
-function CB_GetImageSize() {
 
-	// bluelovers
-	CB_Img.style.marginLeft = 0;
-	// bluelovers
-
-	CB_ImgWidth = CB_preImages.width;
-	CB_ImgHeight = CB_preImages.height;
-	CB_ImgWidthOrig = CB_ImgWidth;
-	CB_ImgHeightOrig = CB_ImgHeight;
-	CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
-	jQuery.clearbox.CB_FitToBrowser();
-	CB_Img.src = CB_Gallery[CB_ActImgId][0];
-	jQuery.clearbox.CB_AnimatePlease();
-	return
-}
 
 
 
@@ -1160,6 +1145,22 @@ function CB_FullSize() {
 				CB_ImgHd.style.visibility = 'hidden';
 				CB_Thm.style.display = 'none';
 				return;
+			},
+			CB_GetImageSize : function () {
+
+				// bluelovers
+				CB_Img.style.marginLeft = 0;
+				// bluelovers
+
+				CB_ImgWidth = CB_preImages.width;
+				CB_ImgHeight = CB_preImages.height;
+				CB_ImgWidthOrig = CB_ImgWidth;
+				CB_ImgHeightOrig = CB_ImgHeight;
+				CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
+				jQuery.clearbox.CB_FitToBrowser();
+				CB_Img.src = CB_Gallery[CB_ActImgId][0];
+				jQuery.clearbox.CB_AnimatePlease();
+				return
 			},
  		},
  	});
