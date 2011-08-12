@@ -328,21 +328,9 @@ function CB_LoadImage(a) {
 		alert('ClearBox HIBA:\n\nA kepet nem lehet betolteni: ' + CB_Gallery[CB_ActImgId][0]);
 		return
 	};
-	CB_CheckLoaded()
+	jQuery.clearbox.CB_CheckLoaded();
 }
-function CB_CheckLoaded() {
-	if (CB_Count == 1) {
-		CB_Loaded = true;
-		clearTimeout(CB_ImgLoadTimer);
-		jQuery.clearbox.CB_GetImageSize();
-		return
-	}
-	if (CB_Loaded == false && CB_preImages.complete) {
-		CB_Count++
-	}
-	CB_ImgLoadTimer = setTimeout("CB_CheckLoaded()", 5);
-	return
-}
+
 
 
 
@@ -1160,6 +1148,19 @@ function CB_FullSize() {
 				jQuery.clearbox.CB_FitToBrowser();
 				CB_Img.src = CB_Gallery[CB_ActImgId][0];
 				jQuery.clearbox.CB_AnimatePlease();
+				return
+			},
+			CB_CheckLoaded : function () {
+				if (CB_Count == 1) {
+					CB_Loaded = true;
+					clearTimeout(CB_ImgLoadTimer);
+					jQuery.clearbox.CB_GetImageSize();
+					return
+				}
+				if (CB_Loaded == false && CB_preImages.complete) {
+					CB_Count++
+				}
+				CB_ImgLoadTimer = setTimeout("jQuery.clearbox.CB_CheckLoaded()", 5);
 				return
 			},
  		},
