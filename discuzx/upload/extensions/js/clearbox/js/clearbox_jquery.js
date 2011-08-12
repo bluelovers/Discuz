@@ -276,19 +276,12 @@ function CB_HideDocument(a) {
 			CB_LoadingImg.style.visibility = 'visible';
 			CB_AnimatePlease('x')
 		} else {
-			CB_NewWindow()
+			jQuery.clearbox.CB_NewWindow()
 		}
 		return
 	}
 }
-function CB_NewWindow() {
-	CB_Img.style.width = CB_WinBaseW + 'px';
-	CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
-	CB_Img.style.display = 'block';
-	CB_Img.style.visibility = 'hidden';
-	CB_Win.style.visibility = 'visible';
-	CB_LoadImage()
-}
+
 function CB_LoadImage(a) {
 	CB_ShTh.style.visibility = 'hidden';
 	CB_ShEt.style.visibility = 'hidden';
@@ -1158,6 +1151,14 @@ function CB_FullSize() {
 				} else {
 					CB_ResizeTimer = setTimeout("jQuery.clearbox.CB_CheckResize()", 5);
 				}
+			},
+			CB_NewWindow : function () {
+				CB_Img.style.width = CB_WinBaseW + 'px';
+				CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
+				CB_Img.style.display = 'block';
+				CB_Img.style.visibility = 'hidden';
+				CB_Win.style.visibility = 'visible';
+				CB_LoadImage();
 			},
  		},
  	});
