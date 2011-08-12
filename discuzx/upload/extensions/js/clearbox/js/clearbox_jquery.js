@@ -125,11 +125,11 @@ function CB_Init() {
 			CB_HideEtc();
 			return
 		};
-		if (navigator.userAgent.indexOf("Opera") != -1) {
+		if (jQuery.browser.opera) {
 			CB_BodyMarginX = 0;
 			CB_BodyMarginY = 0
 		}
-		if (navigator.userAgent.indexOf("Firefox") != -1) {
+		if (jQuery.browser.firefox) {
 			CB_BodyMarginY = 0
 		}
 	}
