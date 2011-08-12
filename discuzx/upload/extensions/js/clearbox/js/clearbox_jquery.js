@@ -134,7 +134,7 @@ function CB_Init() {
 
 	for (i = 0; i < CB_Links.length; i++) {
 		CB_Rel = jQuery(CB_Links[i]).attr('rel');
-		CB_URL = CB_Links[i].getAttribute('href');
+		CB_URL = jQuery(CB_Links[i]).attr('href');
 		if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 			if (CB_Rel == 'clearbox') {
 				CB_Links[i].onclick = function() {
@@ -207,10 +207,10 @@ function CB_ClickIMG(a) {
 					}
 
 					// bluelovers
-					CB_ActThumbSrc = CB_ActThumbSrc || CB_Links[i].getAttribute('href');
+					CB_ActThumbSrc = CB_ActThumbSrc || jQuery(CB_Links[i]).attr('href');
 					// bluelovers
 
-					CB_Gallery.push(new Array(CB_Links[i].getAttribute('href'), CB_Links[i].getAttribute('title'), CB_ActThumbSrc))
+					CB_Gallery.push(new Array(jQuery(CB_Links[i]).attr('href'), CB_Links[i].getAttribute('title'), CB_ActThumbSrc))
 				}
 			}
 		}
