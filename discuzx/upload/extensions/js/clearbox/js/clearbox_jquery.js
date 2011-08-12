@@ -50,6 +50,9 @@ var CB_Show = 1;
 
  				CB_Animation : 'double',
 
+ 				CB_Jump_X : 60,
+				CB_Jump_Y : 60,
+
 				dir : '',
  			},
  			options : {
@@ -109,13 +112,13 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_Animation != 'ki' && _clearbox.options.CB_Animation != 'normal' && _clearbox.options.CB_Animation != 'double' && _clearbox.options.CB_Animation != 'warp') {
 					_clearbox.options.CB_Animation = 'double'
 				}
-				CB_Jump_X = parseInt(CB_Jump_X);
-				if (CB_Jump_X < 1 || CB_Jump_X > 99) {
-					CB_Jump_X = 50
+				_clearbox.options.CB_Jump_X = parseInt(_clearbox.options.CB_Jump_X);
+				if (_clearbox.options.CB_Jump_X < 1 || _clearbox.options.CB_Jump_X > 99) {
+					_clearbox.options.CB_Jump_X = 50
 				}
-				CB_Jump_Y = parseInt(CB_Jump_Y);
-				if (CB_Jump_Y < 1 || CB_Jump_Y > 99) {
-					CB_Jump_Y = 50
+				_clearbox.options.CB_Jump_Y = parseInt(_clearbox.options.CB_Jump_Y);
+				if (_clearbox.options.CB_Jump_Y < 1 || _clearbox.options.CB_Jump_Y > 99) {
+					_clearbox.options.CB_Jump_Y = 50
 				}
 				CB_ImgBorder = parseInt(CB_ImgBorder);
 				if (CB_ImgBorder < 0) {
@@ -445,16 +448,16 @@ var CB_Show = 1;
 					return
 				} else {
 					if (CB_ImgWidth < CB_ImgWidthOld) {
-						if (CB_ImgWidthOld < CB_ImgWidth + 100 && CB_Jump_X > 20) {
+						if (CB_ImgWidthOld < CB_ImgWidth + 100 && _clearbox.options.CB_Jump_X > 20) {
 							CB_JumpX = 20
 						}
-						if (CB_ImgWidthOld < CB_ImgWidth + 60 && CB_Jump_X > 10) {
+						if (CB_ImgWidthOld < CB_ImgWidth + 60 && _clearbox.options.CB_Jump_X > 10) {
 							CB_JumpX = 10
 						}
-						if (CB_ImgWidthOld < CB_ImgWidth + 30 && CB_Jump_X > 5) {
+						if (CB_ImgWidthOld < CB_ImgWidth + 30 && _clearbox.options.CB_Jump_X > 5) {
 							CB_JumpX = 5
 						}
-						if (CB_ImgWidthOld < CB_ImgWidth + 15 && CB_Jump_X > 2) {
+						if (CB_ImgWidthOld < CB_ImgWidth + 15 && _clearbox.options.CB_Jump_X > 2) {
 							CB_JumpX = 2
 						}
 						if (CB_ImgWidthOld < CB_ImgWidth + 4) {
@@ -462,16 +465,16 @@ var CB_Show = 1;
 						}
 						CB_ImgWidthOld -= CB_JumpX
 					} else {
-						if (CB_ImgWidthOld > CB_ImgWidth - 100 && CB_Jump_X > 20) {
+						if (CB_ImgWidthOld > CB_ImgWidth - 100 && _clearbox.options.CB_Jump_X > 20) {
 							CB_JumpX = 20
 						}
-						if (CB_ImgWidthOld > CB_ImgWidth - 60 && CB_Jump_X > 10) {
+						if (CB_ImgWidthOld > CB_ImgWidth - 60 && _clearbox.options.CB_Jump_X > 10) {
 							CB_JumpX = 10
 						}
-						if (CB_ImgWidthOld > CB_ImgWidth - 30 && CB_Jump_X > 50) {
+						if (CB_ImgWidthOld > CB_ImgWidth - 30 && _clearbox.options.CB_Jump_X > 50) {
 							CB_JumpX = 5
 						}
-						if (CB_ImgWidthOld > CB_ImgWidth - 15 && CB_Jump_X > 2) {
+						if (CB_ImgWidthOld > CB_ImgWidth - 15 && _clearbox.options.CB_Jump_X > 2) {
 							CB_JumpX = 2
 						}
 						if (CB_ImgWidthOld > CB_ImgWidth - 4) {
@@ -494,16 +497,16 @@ var CB_Show = 1;
 					return
 				} else {
 					if (CB_ImgHeight < CB_ImgHeightOld) {
-						if (CB_ImgHeightOld < CB_ImgHeight + 100 && CB_Jump_Y > 20) {
+						if (CB_ImgHeightOld < CB_ImgHeight + 100 && _clearbox.options.CB_Jump_Y > 20) {
 							CB_JumpY = 20
 						}
-						if (CB_ImgHeightOld < CB_ImgHeight + 60 && CB_Jump_Y > 10) {
+						if (CB_ImgHeightOld < CB_ImgHeight + 60 && _clearbox.options.CB_Jump_Y > 10) {
 							CB_JumpY = 10
 						}
-						if (CB_ImgHeightOld < CB_ImgHeight + 30 && CB_Jump_Y > 5) {
+						if (CB_ImgHeightOld < CB_ImgHeight + 30 && _clearbox.options.CB_Jump_Y > 5) {
 							CB_JumpY = 5
 						}
-						if (CB_ImgHeightOld < CB_ImgHeight + 15 && CB_Jump_Y > 2) {
+						if (CB_ImgHeightOld < CB_ImgHeight + 15 && _clearbox.options.CB_Jump_Y > 2) {
 							CB_JumpY = 2
 						}
 						if (CB_ImgHeightOld < CB_ImgHeight + 4) {
@@ -511,16 +514,16 @@ var CB_Show = 1;
 						}
 						CB_ImgHeightOld -= CB_JumpY
 					} else {
-						if (CB_ImgHeightOld > CB_ImgHeight - 100 && CB_Jump_Y > 20) {
+						if (CB_ImgHeightOld > CB_ImgHeight - 100 && _clearbox.options.CB_Jump_Y > 20) {
 							CB_JumpY = 20
 						}
-						if (CB_ImgHeightOld > CB_ImgHeight - 60 && CB_Jump_Y > 10) {
+						if (CB_ImgHeightOld > CB_ImgHeight - 60 && _clearbox.options.CB_Jump_Y > 10) {
 							CB_JumpY = 10
 						}
-						if (CB_ImgHeightOld > CB_ImgHeight - 30 && CB_Jump_Y > 5) {
+						if (CB_ImgHeightOld > CB_ImgHeight - 30 && _clearbox.options.CB_Jump_Y > 5) {
 							CB_JumpY = 5
 						}
-						if (CB_ImgHeightOld > CB_ImgHeight - 15 && CB_Jump_Y > 2) {
+						if (CB_ImgHeightOld > CB_ImgHeight - 15 && _clearbox.options.CB_Jump_Y > 2) {
 							CB_JumpY = 2
 						}
 						if (CB_ImgHeightOld > CB_ImgHeight - 4) {
@@ -700,8 +703,8 @@ var CB_Show = 1;
 				return true;
 			},
 			CB_AnimatePlease : function (a) {
-				CB_JumpX = CB_Jump_X;
-				CB_JumpY = CB_Jump_Y;
+				CB_JumpX = _clearbox.options.CB_Jump_X;
+				CB_JumpY = _clearbox.options.CB_Jump_Y;
 				CB_AnimX = 'false';
 				CB_AnimY = 'false';
 				CB_IsAnimating = 1;
@@ -871,8 +874,8 @@ var CB_Show = 1;
 				if (a) {
 					CB_ActImgId = parseInt(a)
 				}
-				CB_JumpX = CB_Jump_X;
-				CB_JumpY = CB_Jump_Y;
+				CB_JumpX = _clearbox.options.CB_Jump_X;
+				CB_JumpY = _clearbox.options.CB_Jump_Y;
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Img.style.visibility = 'hidden';
 					CB_LoadingImg.style.visibility = 'visible'
