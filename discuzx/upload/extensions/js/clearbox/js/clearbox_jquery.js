@@ -25,151 +25,7 @@ CB_PrePictures[0].src = CB_PicDir + 'noprv.gif';
 CB_PrePictures[1] = new Image();
 CB_PrePictures[1].src = CB_PicDir + 'loading.gif';
 
-function CB_Init() {
-	if (!document.getElementById('CB_All') && CB_Show != 0) {
-		document.body.style.position = "static";
-		var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
-		if (jQuery.browser.msie) {
-			CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + CB_PicDir + 'blank.gif" />'
-		} else {
-			CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
-		}
-		var b = document.getElementsByTagName("body").item(0);
-		var c = document.createElement("div");
-		c.setAttribute('id', 'CB_All');
-		b.appendChild(c);
-		document.getElementById('CB_All').innerHTML = '<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>';
-		if (navigator.userAgent.indexOf("MSIE 6") != -1 && CB_RoundPix == 0) {
-			CB_ie6RPBug = 1
-		}
-		if (jQuery.browser.msie && CB_RoundPix < 2) {
-			CB_ieRPBug = 6
-		}
-		document.getElementById('CB_Padding').style.padding = CB_Padd + 'px';
-		CB_ShTh = document.getElementById('CB_ShowTh');
-		CB_ShEt = document.getElementById('CB_ShowEtc');
-		CB_ImgHd = document.getElementById('CB_ImgHide');
-		CB_ImgHd.style.backgroundColor = '#fff';
 
-		jQuery(CB_ImgHd).css('opacity', 0.75);
-
-		CB_Win = document.getElementById('CB_Window');
-		CB_Thm = document.getElementById('CB_Thumbs');
-		CB_Thm2 = document.getElementById('CB_Thumbs2');
-		CB_Et = document.getElementById('CB_Etc');
-		CB_HideContent = document.getElementById('CB_ContentHide');
-		CB_HideContent.style.backgroundColor = CB_HideColor;
-
-		jQuery(CB_HideContent).css('opacity', 0);
-
-		CB_Img = document.getElementById('CB_Image');
-		CB_LoadingImg = document.getElementById('CB_LoadingImage');
-		CB_ImgCont = document.getElementById('CB_ImgContainer');
-		CB_Img.style.border = CB_ImgBorder + 'px solid ' + CB_ImgBorderColor;
-		CB_Cls = document.getElementById('CB_CloseWindow');
-		CB_SlideS = document.getElementById('CB_SlideShowS');
-		CB_SlideP = document.getElementById('CB_SlideShowP');
-		CB_SlideB = document.getElementById('CB_SlideShowBar');
-
-		jQuery(CB_SlideB).css('opacity', 0.5);
-
-		CB_Prv = document.getElementById('CB_Prev');
-		CB_Nxt = document.getElementById('CB_Next');
-		CB_Txt = document.getElementById('CB_Text');
-		CB_Txt.style.height = (CB_TextH - CB_PadT) + 'px';
-		CB_Txt.style.marginTop = CB_PadT + 'px';
-		CB_Txt.style.fontFamily = CB_Font;
-		CB_Txt.style.fontSize = CB_FontSize + 'px';
-		CB_Txt.style.fontWeight = CB_FontWeigth;
-		CB_Txt.style.color = CB_FontColor;
-		CB_Header = document.getElementById('CB_Header').style;
-		CB_Header.height = CB_RoundPix + 'px';
-		CB_Footer = document.getElementById('CB_Footer').style;
-		CB_Footer.height = CB_RoundPix + 'px';
-		CB_Left = document.getElementById('CB_Left').style;
-		CB_Left.width = CB_RoundPix + CB_ie6RPBug + 'px';
-		CB_Right = document.getElementById('CB_Right').style;
-		CB_Right.width = CB_RoundPix + 'px';
-		CB_iFr = document.getElementById('CB_iFrame');
-		CB_PrvNxt = document.getElementById('CB_PrevNext').style;
-		CB_ShTh.onmouseover = function() {
-			jQuery.clearbox.CB_ShowThumbs();
-			return
-		};
-		CB_ShEt.onmouseover = function() {
-			jQuery.clearbox.CB_ShowEtc();
-			return
-		};
-		CB_ImgHd.onmouseover = function() {
-			jQuery.clearbox.CB_HideThumbs();
-			jQuery.clearbox.CB_HideEtc();
-			return
-		};
-		CB_Txt.onmouseover = function() {
-			jQuery.clearbox.CB_HideThumbs();
-			jQuery.clearbox.CB_HideEtc();
-			return
-		};
-		CB_HideContent.onmouseover = function() {
-			jQuery.clearbox.CB_HideThumbs();
-			jQuery.clearbox.CB_HideEtc();
-			return
-		};
-		if (jQuery.browser.opera) {
-			CB_BodyMarginX = 0;
-			CB_BodyMarginY = 0
-		}
-		if (jQuery.browser.firefox) {
-			CB_BodyMarginY = 0
-		}
-	}
-	jQuery('#CB_Thumbs').mousemove(jQuery.clearbox.getMouseXY);
-	var d = 0;
-	var e = 0;
-
-	CB_Links = [];
-	jQuery('a[rel^="clearbox"]').each(function(index, elem){
-		CB_Links[index] = elem;
-	});
-
-	for (i = 0; i < CB_Links.length; i++) {
-		CB_Rel = jQuery(CB_Links[i]).attr('rel');
-		CB_URL = jQuery(CB_Links[i]).attr('href');
-		if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
-			if (CB_Rel == 'clearbox') {
-				CB_Links[i].onclick = function() {
-					jQuery.clearbox.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-					return false
-				}
-			} else {
-				if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
-					if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
-						CB_Links[i].onclick = function() {
-							jQuery.clearbox.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-							return false
-						}
-					} else {
-						alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
-					}
-				} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
-					if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
-						CB_Links[i].onclick = function() {
-							jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-							return false
-						}
-					} else {
-						CB_Links[i].onmouseover = function() {
-							jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-							return false
-						}
-					}
-				} else {
-					alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
-				}
-			}
-		}
-	}
-}
 
 
 
@@ -1170,6 +1026,152 @@ function CB_Init() {
 			},
  		},
  	});
+
+ 	function CB_Init() {
+		if (!document.getElementById('CB_All') && CB_Show != 0) {
+			document.body.style.position = "static";
+			var a = '<div class="CB_RoundPixBugFix" style="width: ' + CB_RoundPix + 'px; height: ' + CB_RoundPix + 'px;"></div>';
+			if (jQuery.browser.msie) {
+				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + CB_PicDir + 'blank.gif" />'
+			} else {
+				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
+			}
+			var b = document.getElementsByTagName("body").item(0);
+			var c = document.createElement("div");
+			c.setAttribute('id', 'CB_All');
+			b.appendChild(c);
+			document.getElementById('CB_All').innerHTML = '<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>';
+			if (navigator.userAgent.indexOf("MSIE 6") != -1 && CB_RoundPix == 0) {
+				CB_ie6RPBug = 1
+			}
+			if (jQuery.browser.msie && CB_RoundPix < 2) {
+				CB_ieRPBug = 6
+			}
+			document.getElementById('CB_Padding').style.padding = CB_Padd + 'px';
+			CB_ShTh = document.getElementById('CB_ShowTh');
+			CB_ShEt = document.getElementById('CB_ShowEtc');
+			CB_ImgHd = document.getElementById('CB_ImgHide');
+			CB_ImgHd.style.backgroundColor = '#fff';
+
+			jQuery(CB_ImgHd).css('opacity', 0.75);
+
+			CB_Win = document.getElementById('CB_Window');
+			CB_Thm = document.getElementById('CB_Thumbs');
+			CB_Thm2 = document.getElementById('CB_Thumbs2');
+			CB_Et = document.getElementById('CB_Etc');
+			CB_HideContent = document.getElementById('CB_ContentHide');
+			CB_HideContent.style.backgroundColor = CB_HideColor;
+
+			jQuery(CB_HideContent).css('opacity', 0);
+
+			CB_Img = document.getElementById('CB_Image');
+			CB_LoadingImg = document.getElementById('CB_LoadingImage');
+			CB_ImgCont = document.getElementById('CB_ImgContainer');
+			CB_Img.style.border = CB_ImgBorder + 'px solid ' + CB_ImgBorderColor;
+			CB_Cls = document.getElementById('CB_CloseWindow');
+			CB_SlideS = document.getElementById('CB_SlideShowS');
+			CB_SlideP = document.getElementById('CB_SlideShowP');
+			CB_SlideB = document.getElementById('CB_SlideShowBar');
+
+			jQuery(CB_SlideB).css('opacity', 0.5);
+
+			CB_Prv = document.getElementById('CB_Prev');
+			CB_Nxt = document.getElementById('CB_Next');
+			CB_Txt = document.getElementById('CB_Text');
+			CB_Txt.style.height = (CB_TextH - CB_PadT) + 'px';
+			CB_Txt.style.marginTop = CB_PadT + 'px';
+			CB_Txt.style.fontFamily = CB_Font;
+			CB_Txt.style.fontSize = CB_FontSize + 'px';
+			CB_Txt.style.fontWeight = CB_FontWeigth;
+			CB_Txt.style.color = CB_FontColor;
+			CB_Header = document.getElementById('CB_Header').style;
+			CB_Header.height = CB_RoundPix + 'px';
+			CB_Footer = document.getElementById('CB_Footer').style;
+			CB_Footer.height = CB_RoundPix + 'px';
+			CB_Left = document.getElementById('CB_Left').style;
+			CB_Left.width = CB_RoundPix + CB_ie6RPBug + 'px';
+			CB_Right = document.getElementById('CB_Right').style;
+			CB_Right.width = CB_RoundPix + 'px';
+			CB_iFr = document.getElementById('CB_iFrame');
+			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
+			CB_ShTh.onmouseover = function() {
+				jQuery.clearbox.CB_ShowThumbs();
+				return
+			};
+			CB_ShEt.onmouseover = function() {
+				jQuery.clearbox.CB_ShowEtc();
+				return
+			};
+			CB_ImgHd.onmouseover = function() {
+				jQuery.clearbox.CB_HideThumbs();
+				jQuery.clearbox.CB_HideEtc();
+				return
+			};
+			CB_Txt.onmouseover = function() {
+				jQuery.clearbox.CB_HideThumbs();
+				jQuery.clearbox.CB_HideEtc();
+				return
+			};
+			CB_HideContent.onmouseover = function() {
+				jQuery.clearbox.CB_HideThumbs();
+				jQuery.clearbox.CB_HideEtc();
+				return
+			};
+			if (jQuery.browser.opera) {
+				CB_BodyMarginX = 0;
+				CB_BodyMarginY = 0
+			}
+			if (jQuery.browser.firefox) {
+				CB_BodyMarginY = 0
+			}
+		}
+		jQuery('#CB_Thumbs').mousemove(jQuery.clearbox.getMouseXY);
+		var d = 0;
+		var e = 0;
+
+		CB_Links = [];
+		jQuery('a[rel^="clearbox"]').each(function(index, elem){
+			CB_Links[index] = elem;
+		});
+
+		for (i = 0; i < CB_Links.length; i++) {
+			CB_Rel = jQuery(CB_Links[i]).attr('rel');
+			CB_URL = jQuery(CB_Links[i]).attr('href');
+			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
+				if (CB_Rel == 'clearbox') {
+					CB_Links[i].onclick = function() {
+						jQuery.clearbox.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+						return false
+					}
+				} else {
+					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
+						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
+							CB_Links[i].onclick = function() {
+								jQuery.clearbox.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								return false
+							}
+						} else {
+							alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+						}
+					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
+						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
+							CB_Links[i].onclick = function() {
+								jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								return false
+							}
+						} else {
+							CB_Links[i].onmouseover = function() {
+								jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								return false
+							}
+						}
+					} else {
+						alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+					}
+				}
+			}
+		}
+	}
 
  	_this = $.clearbox;
 
