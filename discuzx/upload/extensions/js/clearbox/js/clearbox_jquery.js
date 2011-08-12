@@ -282,54 +282,7 @@ function CB_HideDocument(a) {
 	}
 }
 
-function CB_LoadImage(a) {
-	CB_ShTh.style.visibility = 'hidden';
-	CB_ShEt.style.visibility = 'hidden';
-	CB_Thm.style.display = 'none';
-	CB_Thm.style.width = 0 + 'px';
-	CB_Et.style.display = 'none';
-	CB_Et.style.width = 0 + 'px';
-	CB_ImgHd.style.width = 0 + 'px';
-	CB_ImgHd.style.height = 0 + 'px';
-	CB_ImgHd.style.visibility = 'hidden';
-	CB_ClearBox = 'ki';
-	CB_jj = 0;
-	CB_HideContent.onclick = '';
-	if (CB_Gallery.length < 3) {
-		jQuery(CB_SlideS).hide();
-		jQuery(CB_SlideP).hide();
-	} else {
-		if (CB_SS == 'start') {
-			jQuery(CB_SlideS).show();
-			jQuery(CB_SlideP).hide();
-		} else {
-			jQuery(CB_SlideP).show();
-			jQuery(CB_SlideS).hide();
-		}
-	}
-	CB_Prv.style.display = 'none';
-	CB_Nxt.style.display = 'none';
-	if (a) {
-		CB_ActImgId = parseInt(a)
-	}
-	CB_JumpX = CB_Jump_X;
-	CB_JumpY = CB_Jump_Y;
-	if (CB_Animation != 'warp') {
-		CB_Img.style.visibility = 'hidden';
-		CB_LoadingImg.style.visibility = 'visible'
-	}
-	CB_Txt.innerHTML = CB_LoadingText;
-	CB_Count = 0;
-	CB_preImages = new Image();
-	CB_preImages.src = CB_Gallery[CB_ActImgId][0];
-	CB_Loaded = false;
-	CB_preImages.onerror = function() {
-		jQuery.clearbox.CB_ShowImage();
-		alert('ClearBox HIBA:\n\nA kepet nem lehet betolteni: ' + CB_Gallery[CB_ActImgId][0]);
-		return
-	};
-	jQuery.clearbox.CB_CheckLoaded();
-}
+
 
 
 
@@ -1112,7 +1065,7 @@ function CB_FullSize() {
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
 				CB_Win.style.visibility = 'visible';
-				CB_LoadImage();
+				jQuery.clearbox.CB_LoadImage();
 			},
 			CB_ShowEtc : function () {
 				CB_ImgHd.style.visibility = 'visible';
@@ -1162,6 +1115,54 @@ function CB_FullSize() {
 				}
 				CB_ImgLoadTimer = setTimeout("jQuery.clearbox.CB_CheckLoaded()", 5);
 				return
+			},
+			CB_LoadImage : function (a) {
+				CB_ShTh.style.visibility = 'hidden';
+				CB_ShEt.style.visibility = 'hidden';
+				CB_Thm.style.display = 'none';
+				CB_Thm.style.width = 0 + 'px';
+				CB_Et.style.display = 'none';
+				CB_Et.style.width = 0 + 'px';
+				CB_ImgHd.style.width = 0 + 'px';
+				CB_ImgHd.style.height = 0 + 'px';
+				CB_ImgHd.style.visibility = 'hidden';
+				CB_ClearBox = 'ki';
+				CB_jj = 0;
+				CB_HideContent.onclick = '';
+				if (CB_Gallery.length < 3) {
+					jQuery(CB_SlideS).hide();
+					jQuery(CB_SlideP).hide();
+				} else {
+					if (CB_SS == 'start') {
+						jQuery(CB_SlideS).show();
+						jQuery(CB_SlideP).hide();
+					} else {
+						jQuery(CB_SlideP).show();
+						jQuery(CB_SlideS).hide();
+					}
+				}
+				CB_Prv.style.display = 'none';
+				CB_Nxt.style.display = 'none';
+				if (a) {
+					CB_ActImgId = parseInt(a)
+				}
+				CB_JumpX = CB_Jump_X;
+				CB_JumpY = CB_Jump_Y;
+				if (CB_Animation != 'warp') {
+					CB_Img.style.visibility = 'hidden';
+					CB_LoadingImg.style.visibility = 'visible'
+				}
+				CB_Txt.innerHTML = CB_LoadingText;
+				CB_Count = 0;
+				CB_preImages = new Image();
+				CB_preImages.src = CB_Gallery[CB_ActImgId][0];
+				CB_Loaded = false;
+				CB_preImages.onerror = function() {
+					jQuery.clearbox.CB_ShowImage();
+					alert('ClearBox HIBA:\n\nA kepet nem lehet betolteni: ' + CB_Gallery[CB_ActImgId][0]);
+					return
+				};
+				jQuery.clearbox.CB_CheckLoaded();
 			},
  		},
  	});
