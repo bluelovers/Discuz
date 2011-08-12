@@ -356,42 +356,10 @@ function CB_GetImageSize() {
 	CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
 	jQuery.clearbox.CB_FitToBrowser();
 	CB_Img.src = CB_Gallery[CB_ActImgId][0];
-	CB_AnimatePlease();
+	jQuery.clearbox.CB_AnimatePlease();
 	return
 }
-function CB_AnimatePlease(a) {
-	CB_JumpX = CB_Jump_X;
-	CB_JumpY = CB_Jump_Y;
-	CB_AnimX = 'false';
-	CB_AnimY = 'false';
-	CB_IsAnimating = 1;
-	if (CB_Animation == 'double') {
-		jQuery.clearbox.CB_WindowResizeX();
-		jQuery.clearbox.CB_WindowResizeY();
-	} else if (CB_Animation == 'warp') {
-		if (!a) {
-			CB_LoadingImg.style.visibility = 'hidden';
-			CB_Img.style.visibility = 'visible'
-		}
-		jQuery.clearbox.CB_WindowResizeX();
-		jQuery.clearbox.CB_WindowResizeY();
-	} else if (CB_Animation == 'ki') {
-		jQuery.clearbox.CB_SetMargins();
-		CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
-		CB_Img.style.width = CB_ImgWidth + 'px';
-		CB_Img.style.height = CB_ImgHeight + 'px';
-		CB_AnimX = 'true';
-		CB_AnimY = 'true'
-	} else if (CB_Animation == 'normal') {
-		jQuery.clearbox.CB_WindowResizeX();
-	}
-	if (a) {
-		jQuery.clearbox.CB_CheckResize2();
-	} else {
-		jQuery.clearbox.CB_CheckResize();
-	}
-	return
-}
+
 
 
 
@@ -1079,6 +1047,39 @@ function CB_FullSize() {
 				// bluelovers
 
 				return true;
+			},
+			CB_AnimatePlease : function (a) {
+				CB_JumpX = CB_Jump_X;
+				CB_JumpY = CB_Jump_Y;
+				CB_AnimX = 'false';
+				CB_AnimY = 'false';
+				CB_IsAnimating = 1;
+				if (CB_Animation == 'double') {
+					jQuery.clearbox.CB_WindowResizeX();
+					jQuery.clearbox.CB_WindowResizeY();
+				} else if (CB_Animation == 'warp') {
+					if (!a) {
+						CB_LoadingImg.style.visibility = 'hidden';
+						CB_Img.style.visibility = 'visible'
+					}
+					jQuery.clearbox.CB_WindowResizeX();
+					jQuery.clearbox.CB_WindowResizeY();
+				} else if (CB_Animation == 'ki') {
+					jQuery.clearbox.CB_SetMargins();
+					CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
+					CB_Img.style.width = CB_ImgWidth + 'px';
+					CB_Img.style.height = CB_ImgHeight + 'px';
+					CB_AnimX = 'true';
+					CB_AnimY = 'true'
+				} else if (CB_Animation == 'normal') {
+					jQuery.clearbox.CB_WindowResizeX();
+				}
+				if (a) {
+					jQuery.clearbox.CB_CheckResize2();
+				} else {
+					jQuery.clearbox.CB_CheckResize();
+				}
+				return
 			},
 			CB_CheckResize : function () {
 				if (CB_AnimX == 'true' && CB_AnimY == 'true') {
