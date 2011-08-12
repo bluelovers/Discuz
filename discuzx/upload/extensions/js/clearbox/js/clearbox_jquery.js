@@ -5,24 +5,23 @@
 var CB_version = '2.0';
 var CB_Show = 1;
 
-var CB_ActThumbSrc, CB_IEShowBug = '',
-CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
-CB_ie6RPBug = '',
-CB_ClearBox, CB_AnimX, CB_AnimY, CB_BodyMarginX = CB_BodyMarginLeft + CB_BodyMarginRight,
-CB_BodyMarginY = CB_BodyMarginTop + CB_BodyMarginBottom,
-FF_ScrollbarBug, CB_Links, CB_SlideBW = 0,
-CB_SSTimer, CB_SS = 'start',
-CB_ii = 0,
-CB_jj = 0,
-CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, CB_ImgWidth = CB_WinBaseW,
-CB_ImgHeight = CB_WinBaseH - CB_TextH,
-CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
-CB_PicDir += '/';
-
-
-
 (function($, undefined){
 	var _this;
+
+	var CB_ActThumbSrc, CB_IEShowBug = '',
+	CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
+	CB_ie6RPBug = '',
+	CB_ClearBox, CB_AnimX, CB_AnimY, CB_BodyMarginX = CB_BodyMarginLeft + CB_BodyMarginRight,
+	CB_BodyMarginY = CB_BodyMarginTop + CB_BodyMarginBottom,
+	FF_ScrollbarBug, CB_Links, CB_SlideBW = 0,
+	CB_SSTimer, CB_SS = 'start',
+	CB_ii = 0,
+	CB_jj = 0,
+	CB_Hide, CB_LoadingImg, CB_JumpX, CB_JumpY, CB_MarginL, CB_MarginT, CB_Content, CB_ImgWidth = CB_WinBaseW,
+	CB_ImgHeight = CB_WinBaseH - CB_TextH,
+	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
+
+	CB_PicDir += '/';
 
 	var CB_PrePictures = new Array();
 	CB_PrePictures[0] = new Image();
