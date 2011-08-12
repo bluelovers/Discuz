@@ -232,7 +232,7 @@ function CB_ClickIMG(a) {
 function CB_SetAllPositions() {
 	getBrowserSize();
 	getDocumentSize();
-	getScrollPosition();
+	jQuery.clearbox.getScrollPosition();
 	if (BrSizeY > DocSizeY) {
 		DocSizeY = BrSizeY
 	}
@@ -889,21 +889,6 @@ function getBrowserSize() {
 	}
 	return
 }
-function getScrollPosition() {
-	this.DocScrX = 0;
-	this.DocScrY = 0;
-	if (typeof(window.pageYOffset) == 'number') {
-		DocScrY = window.pageYOffset;
-		DocScrX = window.pageXOffset
-	} else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
-		DocScrY = document.body.scrollTop;
-		DocScrX = document.body.scrollLeft
-	} else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
-		DocScrY = document.documentElement.scrollTop;
-		DocScrX = document.documentElement.scrollLeft
-	}
-	return
-}
 
 function CB_fix_center(w) {
 	var _w = CB_ImgCont.offsetWidth || CB_ImgCont.width;
@@ -1044,6 +1029,9 @@ function CB_fix_center(w) {
 					CB_Preload = 'be'
 				}
 			},
+			log : function (s) {
+				$.log(s);
+			},
 			keyeven : function(event){
 				var b;
 
@@ -1106,6 +1094,28 @@ function CB_fix_center(w) {
 					event.preventDefault();
 					if (stop > 1) event.stopPropagation();
 				}
+			},
+			getScrollPosition : function getScrollPosition() {
+				this.DocScrX = 0;
+				this.DocScrY = 0;
+				/*
+				if (typeof(window.pageYOffset) == 'number') {
+					DocScrY = window.pageYOffset;
+					DocScrX = window.pageXOffset
+				} else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
+					DocScrY = document.body.scrollTop;
+					DocScrX = document.body.scrollLeft
+				} else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+					DocScrY = document.documentElement.scrollTop;
+					DocScrX = document.documentElement.scrollLeft
+				}
+				*/
+				DocScrX = jQuery(document).scrollLeft();
+				DocScrY = jQuery(document).scrollTop();
+
+				this.log(['getScrollPosition', DocScrX, DocScrY]);
+
+				return
 			},
  		},
  	});
