@@ -55,6 +55,8 @@ var CB_Show = 1;
 
 				CB_AnimTimeout : 5,
 
+				CB_ImgBorder : 0,
+
 				dir : '',
  			},
  			options : {
@@ -122,9 +124,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_Jump_Y < 1 || _clearbox.options.CB_Jump_Y > 99) {
 					_clearbox.options.CB_Jump_Y = 50
 				}
-				CB_ImgBorder = parseInt(CB_ImgBorder);
-				if (CB_ImgBorder < 0) {
-					CB_ImgBorder = 1
+				_clearbox.options.CB_ImgBorder = parseInt(_clearbox.options.CB_ImgBorder);
+				if (_clearbox.options.CB_ImgBorder < 0) {
+					_clearbox.options.CB_ImgBorder = 1
 				}
 				CB_Padd = parseInt(CB_Padd);
 				if (CB_Padd < 0) {
@@ -426,12 +428,12 @@ var CB_Show = 1;
 				*/
 			},
 			CB_FitToBrowser : function () {
-				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd));
 					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH;
 					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
 				}
 				return
@@ -485,7 +487,7 @@ var CB_Show = 1;
 						CB_ImgWidthOld += CB_JumpX
 					}
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
-					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
 				}
@@ -534,15 +536,15 @@ var CB_Show = 1;
 						CB_ImgHeightOld += CB_JumpY;
 					}
 					CB_Img.style.height = CB_ImgHeightOld + 'px';
-					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
-					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder) + 'px';
+					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
-				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
+				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd))) / 2);
 				CB_Win.style.marginLeft = CB_MarginL + 'px';
 				CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
 				return;
@@ -596,7 +598,7 @@ var CB_Show = 1;
 				CB_Img.src = "";
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - CB_TextH;
-				CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
+				CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
 				CB_Img.style.display = 'none';
 				CB_Win.style.visibility = 'hidden';
 				CB_HideContent.onclick = "";
@@ -722,7 +724,7 @@ var CB_Show = 1;
 					_clearbox.CB_WindowResizeY();
 				} else if (_clearbox.options.CB_Animation == 'ki') {
 					_clearbox.CB_SetMargins();
-					CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
+					CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
 					CB_Img.style.width = CB_ImgWidth + 'px';
 					CB_Img.style.height = CB_ImgHeight + 'px';
 					CB_AnimX = 'true';
@@ -768,8 +770,8 @@ var CB_Show = 1;
 
 					CB_Img.style.visibility = 'visible';
 					CB_LoadingImg.style.visibility = 'hidden';
-					CB_iFr.style.top = CB_ImgBorder + 'px';
-					CB_iFr.style.left = CB_ImgBorder + 'px';
+					CB_iFr.style.top = _clearbox.options.CB_ImgBorder + 'px';
+					CB_iFr.style.left = _clearbox.options.CB_ImgBorder + 'px';
 					CB_iFr.style.width = CB_ImgWidth + 'px';
 					CB_iFr.style.height = CB_ImgHeight + 'px';
 					if (CB_Clicked[2] && CB_Clicked[2] != 'null' && CB_Clicked[2] != null) {
@@ -908,11 +910,11 @@ var CB_Show = 1;
 				CB_ImgHeight = parseInt(CB_Rel[1]);
 				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = _clearbox.options.CB_WinBaseH - CB_TextH;
-				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
+				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd))
 				}
-				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
+				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + CB_Padd + _clearbox.options.CB_WinPadd)) - CB_TextH
 				}
 				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - CB_TextH) + 'px';
@@ -983,7 +985,7 @@ var CB_Show = 1;
 			CB_FullSize : function () {
 				CB_Img.style.width = CB_ImgWidthOrig + 'px';
 				CB_Img.style.height = CB_ImgHeightOrig + 'px';
-				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
+				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * _clearbox.options.CB_ImgBorder) + 'px'
 			},
 			alert : function (msg) {
 				alert(msg);
@@ -1033,7 +1035,7 @@ var CB_Show = 1;
 			CB_Img = document.getElementById('CB_Image');
 			CB_LoadingImg = document.getElementById('CB_LoadingImage');
 			CB_ImgCont = document.getElementById('CB_ImgContainer');
-			CB_Img.style.border = CB_ImgBorder + 'px solid ' + CB_ImgBorderColor;
+			CB_Img.style.border = _clearbox.options.CB_ImgBorder + 'px solid ' + CB_ImgBorderColor;
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
 			CB_SlideP = document.getElementById('CB_SlideShowP');
