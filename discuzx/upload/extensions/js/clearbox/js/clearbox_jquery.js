@@ -248,7 +248,7 @@ var CB_Show = 1;
 			},
 			CB_SlideShow : function() {
 				if (CB_SlShowTimer > CB_jj) {
-					CB_SSTimer = setTimeout("_clearbox.CB_SlideShow()", 25);
+					CB_SSTimer = setTimeout(_clearbox.CB_SlideShow, 25);
 					CB_jj += 25;
 					CB_SlideBW += (CB_ImgWidth - 44) / (CB_SlShowTimer / 25);
 					CB_SlideB.style.width = CB_SlideBW + 'px'
@@ -465,7 +465,7 @@ var CB_Show = 1;
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginLeft = CB_MarginL + 'px';
-					CB_TimerX = setTimeout("_clearbox.CB_WindowResizeX()", CB_AnimTimeout);
+					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, CB_AnimTimeout);
 				}
 			},
 			CB_WindowResizeY : function () {
@@ -515,7 +515,7 @@ var CB_Show = 1;
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * CB_ImgBorder) + 'px';
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
-					CB_TimerY = setTimeout("_clearbox.CB_WindowResizeY()", CB_AnimTimeout);
+					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
@@ -563,23 +563,6 @@ var CB_Show = 1;
 				}
 				return;
 			},
-			CB_ShowDocument : function () {
-				if (CB_Hide > 0) {
-					jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
-
-					CB_Hide -= CB_OpacityStep;
-					CB_Blur = setTimeout("_clearbox.CB_ShowDocument()", 5)
-				} else {
-					CB_HideContent.style.visibility = 'hidden';
-					CB_HideContent.style.width = '0px';
-					CB_HideContent.style.height = '0px';
-					if (_clearbox.options.CB_HideOpacity != 0) {
-						clearTimeout(CB_Blur);
-					}
-					CB_ClearBox = 'ki';
-					return;
-				}
-			},
 			CB_Close : function () {
 				CB_ImgHd.style.width = '0px';
 				CB_ImgHd.style.height = '0px';
@@ -600,7 +583,7 @@ var CB_Show = 1;
 				CB_iFr.style.left = '0px';
 				CB_iFr.style.width = '0px';
 				CB_iFr.style.height = '0px';
-				_clearbox.CB_ShowDocument();
+				CB_ShowDocument();
 				return;
 			},
 			CB_ShowImage : function () {
@@ -740,7 +723,7 @@ var CB_Show = 1;
 					_clearbox.CB_ShowImage();
 					return
 				} else {
-					CB_ResizeTimer = setTimeout("_clearbox.CB_CheckResize()", 5);
+					CB_ResizeTimer = setTimeout(_clearbox.CB_CheckResize, 5);
 				}
 			},
 			CB_CheckResize2 : function () {
@@ -781,7 +764,7 @@ var CB_Show = 1;
 					CB_IsAnimating = 0;
 					return
 				} else {
-					CB_ResizeTimer = setTimeout("_clearbox.CB_CheckResize2()", 5)
+					CB_ResizeTimer = setTimeout(_clearbox.CB_CheckResize2, 5)
 				}
 			},
 			CB_NewWindow : function () {
@@ -838,7 +821,7 @@ var CB_Show = 1;
 				if (CB_Loaded == false && CB_preImages.complete) {
 					CB_Count++
 				}
-				CB_ImgLoadTimer = setTimeout("_clearbox.CB_CheckLoaded()", 5);
+				CB_ImgLoadTimer = setTimeout(_clearbox.CB_CheckLoaded, 5);
 				return
 			},
 			CB_LoadImage : function (a) {
@@ -889,30 +872,6 @@ var CB_Show = 1;
 				};
 				_clearbox.CB_CheckLoaded();
 			},
-			CB_HideDocument : function (a) {
-				var b = a;
-				if (CB_ii < _clearbox.options.CB_HideOpacity) {
-					CB_ii += CB_OpacityStep;
-
-					jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
-
-					CB_Hide = CB_ii;
-					CB_Blur = setTimeout("_clearbox.CB_HideDocument('" + b + "')", 5);
-				} else {
-					CB_ii = 0;
-					CB_HideContent.style.height = DocSizeY + CB_BodyMarginY + 'px';
-					if (_clearbox.options.CB_HideOpacity != 0) {
-						clearTimeout(CB_Blur);
-					}
-					if (b == 'x') {
-						CB_LoadingImg.style.visibility = 'visible';
-						_clearbox.CB_AnimatePlease('x');
-					} else {
-						_clearbox.CB_NewWindow();
-					}
-					return;
-				}
-			},
 			CB_ClickURL : function (a) {
 				if (CB_Show == 0) {
 					return false
@@ -940,7 +899,7 @@ var CB_Show = 1;
 				CB_Win.style.visibility = 'visible';
 				jQuery(CB_SlideS).hide();
 				jQuery(CB_SlideP).hide();
-				_clearbox.CB_HideDocument('x');
+				CB_HideDocument('x');
 			},
 			CB_ClickIMG : function (a) {
 				if (CB_Show == 0) {
@@ -997,7 +956,7 @@ var CB_Show = 1;
 				CB_ImgWidthOld = CB_WinBaseW;
 				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
 				_clearbox.CB_SetAllPositions();
-				_clearbox.CB_HideDocument();
+				CB_HideDocument();
 			},
 			CB_FullSize : function () {
 				CB_Img.style.width = CB_ImgWidthOrig + 'px';
@@ -1016,11 +975,13 @@ var CB_Show = 1;
 			} else {
 				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
 			}
-			var b = document.getElementsByTagName("body").item(0);
-			var c = document.createElement("div");
-			c.setAttribute('id', 'CB_All');
-			b.appendChild(c);
-			document.getElementById('CB_All').innerHTML = '<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>';
+
+			$("<div>")
+				.attr('id', 'CB_All')
+				.appendTo($("body"))
+				.html('<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + CB_PicDir + CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + CB_PicDir + CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + CB_PicDir + CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + CB_PicDir + CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>')
+			;
+
 			if (navigator.userAgent.indexOf("MSIE 6") != -1 && CB_RoundPix == 0) {
 				CB_ie6RPBug = 1
 			}
@@ -1158,4 +1119,49 @@ var CB_Show = 1;
  	function intval(n) {
  		return parseInt(n);
  	}
+
+ 	var CB_Blur;
+
+	function CB_ShowDocument() {
+		if (CB_Hide > 0) {
+			jQuery(CB_HideContent).css('opacity', (CB_Hide / 100));
+
+			CB_Hide -= CB_OpacityStep;
+			CB_Blur = setTimeout(CB_ShowDocument, 5)
+		} else {
+			CB_HideContent.style.visibility = 'hidden';
+			CB_HideContent.style.width = '0px';
+			CB_HideContent.style.height = '0px';
+			if (_clearbox.options.CB_HideOpacity != 0) {
+				clearTimeout(CB_Blur);
+			}
+			CB_ClearBox = 'ki';
+			return;
+		}
+	}
+
+	function CB_HideDocument(a) {
+		var b = a;
+		if (CB_ii < _clearbox.options.CB_HideOpacity) {
+			CB_ii += CB_OpacityStep;
+
+			jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
+
+			CB_Hide = CB_ii;
+			CB_Blur = setTimeout('CB_HideDocument("' + b + '")', 5);
+		} else {
+			CB_ii = 0;
+			CB_HideContent.style.height = DocSizeY + CB_BodyMarginY + 'px';
+			if (_clearbox.options.CB_HideOpacity != 0) {
+				clearTimeout(CB_Blur);
+			}
+			if (b == 'x') {
+				CB_LoadingImg.style.visibility = 'visible';
+				_clearbox.CB_AnimatePlease('x');
+			} else {
+				_clearbox.CB_NewWindow();
+			}
+			return;
+		}
+	}
 })(jQuery);
