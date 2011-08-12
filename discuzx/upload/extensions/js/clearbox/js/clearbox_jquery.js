@@ -154,12 +154,12 @@ function CB_Init() {
 				} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 					if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
 						CB_Links[i].onclick = function() {
-							CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+							jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 							return false
 						}
 					} else {
 						CB_Links[i].onmouseover = function() {
-							CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+							jQuery.clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
 							return false
 						}
 					}
@@ -228,35 +228,7 @@ function CB_ClickIMG(a) {
 	jQuery.clearbox.CB_HideDocument();
 }
 
-function CB_ClickURL(a) {
-	if (CB_Show == 0) {
-		return false
-	}
-	CB_ClearBox = 'ki';
-	CB_Clicked = a.split('+\\+');
-	CB_PrvNxt.display = 'none';
-	CB_Cls.style.display = 'none';
-	CB_Rel = CB_Clicked[0].split(',');
-	jQuery.clearbox.CB_SetAllPositions();
-	CB_ImgWidth = parseInt(CB_Rel[0]);
-	CB_ImgHeight = parseInt(CB_Rel[1]);
-	CB_ImgWidthOld = CB_WinBaseW;
-	CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
-	if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
-		CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))
-	}
-	if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
-		CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH
-	}
-	CB_Img.style.width = CB_WinBaseW + 'px';
-	CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
-	CB_Img.style.display = 'block';
-	CB_Img.style.visibility = 'hidden';
-	CB_Win.style.visibility = 'visible';
-	jQuery(CB_SlideS).hide();
-	jQuery(CB_SlideP).hide();
-	jQuery.clearbox.CB_HideDocument('x')
-}
+
 
 
 
@@ -1164,6 +1136,35 @@ function CB_FullSize() {
 					}
 					return;
 				}
+			},
+			CB_ClickURL : function (a) {
+				if (CB_Show == 0) {
+					return false
+				}
+				CB_ClearBox = 'ki';
+				CB_Clicked = a.split('+\\+');
+				CB_PrvNxt.display = 'none';
+				CB_Cls.style.display = 'none';
+				CB_Rel = CB_Clicked[0].split(',');
+				jQuery.clearbox.CB_SetAllPositions();
+				CB_ImgWidth = parseInt(CB_Rel[0]);
+				CB_ImgHeight = parseInt(CB_Rel[1]);
+				CB_ImgWidthOld = CB_WinBaseW;
+				CB_ImgHeightOld = CB_WinBaseH - CB_TextH;
+				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))
+				}
+				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH
+				}
+				CB_Img.style.width = CB_WinBaseW + 'px';
+				CB_Img.style.height = (CB_WinBaseH - CB_TextH) + 'px';
+				CB_Img.style.display = 'block';
+				CB_Img.style.visibility = 'hidden';
+				CB_Win.style.visibility = 'visible';
+				jQuery(CB_SlideS).hide();
+				jQuery(CB_SlideP).hide();
+				jQuery.clearbox.CB_HideDocument('x');
 			},
  		},
  	});
