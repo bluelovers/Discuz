@@ -373,14 +373,14 @@ function CB_AnimatePlease(a) {
 	CB_AnimY = 'false';
 	CB_IsAnimating = 1;
 	if (CB_Animation == 'double') {
-		CB_WindowResizeX();
+		jQuery.clearbox.CB_WindowResizeX();
 		CB_WindowResizeY();
 	} else if (CB_Animation == 'warp') {
 		if (!a) {
 			CB_LoadingImg.style.visibility = 'hidden';
 			CB_Img.style.visibility = 'visible'
 		}
-		CB_WindowResizeX();
+		jQuery.clearbox.CB_WindowResizeX();
 		CB_WindowResizeY();
 	} else if (CB_Animation == 'ki') {
 		CB_SetMargins();
@@ -390,7 +390,7 @@ function CB_AnimatePlease(a) {
 		CB_AnimX = 'true';
 		CB_AnimY = 'true'
 	} else if (CB_Animation == 'normal') {
-		CB_WindowResizeX();
+		jQuery.clearbox.CB_WindowResizeX();
 	}
 	if (a) {
 		CB_CheckResize2();
@@ -399,60 +399,7 @@ function CB_AnimatePlease(a) {
 	}
 	return
 }
-function CB_WindowResizeX() {
-	if (CB_ImgWidth == CB_ImgWidthOld) {
-		if (CB_TimerX) {
-			clearTimeout(CB_TimerX)
-		}
-		if (CB_Animation == 'normal') {
-			CB_AnimX = 'true';
-			CB_WindowResizeY()
-		} else {
-			CB_AnimX = 'true'
-		}
-		return
-	} else {
-		if (CB_ImgWidth < CB_ImgWidthOld) {
-			if (CB_ImgWidthOld < CB_ImgWidth + 100 && CB_Jump_X > 20) {
-				CB_JumpX = 20
-			}
-			if (CB_ImgWidthOld < CB_ImgWidth + 60 && CB_Jump_X > 10) {
-				CB_JumpX = 10
-			}
-			if (CB_ImgWidthOld < CB_ImgWidth + 30 && CB_Jump_X > 5) {
-				CB_JumpX = 5
-			}
-			if (CB_ImgWidthOld < CB_ImgWidth + 15 && CB_Jump_X > 2) {
-				CB_JumpX = 2
-			}
-			if (CB_ImgWidthOld < CB_ImgWidth + 4) {
-				CB_JumpX = 1
-			}
-			CB_ImgWidthOld -= CB_JumpX
-		} else {
-			if (CB_ImgWidthOld > CB_ImgWidth - 100 && CB_Jump_X > 20) {
-				CB_JumpX = 20
-			}
-			if (CB_ImgWidthOld > CB_ImgWidth - 60 && CB_Jump_X > 10) {
-				CB_JumpX = 10
-			}
-			if (CB_ImgWidthOld > CB_ImgWidth - 30 && CB_Jump_X > 50) {
-				CB_JumpX = 5
-			}
-			if (CB_ImgWidthOld > CB_ImgWidth - 15 && CB_Jump_X > 2) {
-				CB_JumpX = 2
-			}
-			if (CB_ImgWidthOld > CB_ImgWidth - 4) {
-				CB_JumpX = 1
-			}
-			CB_ImgWidthOld += CB_JumpX
-		}
-		CB_Img.style.width = CB_ImgWidthOld + 'px';
-		CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
-		CB_Win.style.marginLeft = CB_MarginL + 'px';
-		CB_TimerX = setTimeout("CB_WindowResizeX()", CB_AnimTimeout);
-	}
-}
+
 function CB_WindowResizeY() {
 	if (CB_ImgHeight == CB_ImgHeightOld) {
 		if (CB_TimerY) {
@@ -1150,6 +1097,60 @@ function CB_ShowDocument() {
 				}
 				return
 			},
+			CB_WindowResizeX : function () {
+				if (CB_ImgWidth == CB_ImgWidthOld) {
+					if (CB_TimerX) {
+						clearTimeout(CB_TimerX)
+					}
+					if (CB_Animation == 'normal') {
+						CB_AnimX = 'true';
+						CB_WindowResizeY()
+					} else {
+						CB_AnimX = 'true'
+					}
+					return
+				} else {
+					if (CB_ImgWidth < CB_ImgWidthOld) {
+						if (CB_ImgWidthOld < CB_ImgWidth + 100 && CB_Jump_X > 20) {
+							CB_JumpX = 20
+						}
+						if (CB_ImgWidthOld < CB_ImgWidth + 60 && CB_Jump_X > 10) {
+							CB_JumpX = 10
+						}
+						if (CB_ImgWidthOld < CB_ImgWidth + 30 && CB_Jump_X > 5) {
+							CB_JumpX = 5
+						}
+						if (CB_ImgWidthOld < CB_ImgWidth + 15 && CB_Jump_X > 2) {
+							CB_JumpX = 2
+						}
+						if (CB_ImgWidthOld < CB_ImgWidth + 4) {
+							CB_JumpX = 1
+						}
+						CB_ImgWidthOld -= CB_JumpX
+					} else {
+						if (CB_ImgWidthOld > CB_ImgWidth - 100 && CB_Jump_X > 20) {
+							CB_JumpX = 20
+						}
+						if (CB_ImgWidthOld > CB_ImgWidth - 60 && CB_Jump_X > 10) {
+							CB_JumpX = 10
+						}
+						if (CB_ImgWidthOld > CB_ImgWidth - 30 && CB_Jump_X > 50) {
+							CB_JumpX = 5
+						}
+						if (CB_ImgWidthOld > CB_ImgWidth - 15 && CB_Jump_X > 2) {
+							CB_JumpX = 2
+						}
+						if (CB_ImgWidthOld > CB_ImgWidth - 4) {
+							CB_JumpX = 1
+						}
+						CB_ImgWidthOld += CB_JumpX
+					}
+					CB_Img.style.width = CB_ImgWidthOld + 'px';
+					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
+					CB_Win.style.marginLeft = CB_MarginL + 'px';
+					CB_TimerX = setTimeout("jQuery.clearbox.CB_WindowResizeX()", CB_AnimTimeout);
+				}
+			}
  		},
  	});
 
