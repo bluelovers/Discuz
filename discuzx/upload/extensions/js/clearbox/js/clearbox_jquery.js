@@ -71,6 +71,7 @@ var CB_Show = 1;
 				CB_TextH : 40,
 				CB_Font : 'arial',
 				CB_FontSize : 12,
+				CB_FontColor : '#656565',
 
 				dir : '',
  			},
@@ -1066,7 +1067,7 @@ var CB_Show = 1;
 			CB_Txt.style.fontFamily = _clearbox.options.CB_Font;
 			CB_Txt.style.fontSize = _clearbox.options.CB_FontSize + 'px';
 			CB_Txt.style.fontWeight = CB_FontWeigth;
-			CB_Txt.style.color = CB_FontColor;
+			CB_Txt.style.color = _clearbox.options.CB_FontColor;
 			CB_Header = document.getElementById('CB_Header').style;
 			CB_Header.height = _clearbox.options.CB_RoundPix + 'px';
 			CB_Footer = document.getElementById('CB_Footer').style;
