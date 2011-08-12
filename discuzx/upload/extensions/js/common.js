@@ -244,8 +244,13 @@
 				}
 			});
 
-			jQuery.getScript(CB_ScriptDir+'/js/clearbox_source.js', function(){
-				CB_Init();
+			jQuery.getScript(CB_ScriptDir+'/js/clearbox_jquery.js', function(data, textStatus){
+
+				jQuery.log(textStatus);
+
+				$.clearbox.init({
+					CB_PicDir : 'extensions/js/clearbox/pic'
+				});
 
 				jQuery('<a>SHOW BBCODE IMG</a>')
 					.attr({
