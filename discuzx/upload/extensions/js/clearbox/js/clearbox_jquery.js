@@ -66,6 +66,8 @@ var CB_Show = 1;
 
 				CB_SlShowTime : 3,
 
+				CB_PadT : 10,
+
 				dir : '',
  			},
  			options : {
@@ -144,9 +146,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_ShowImgURL != 'be' && _clearbox.options.CB_ShowImgURL != 'ki') {
 					_clearbox.options.CB_ShowImgURL = 'ki'
 				}
-				CB_PadT = parseInt(CB_PadT);
-				if (CB_PadT < 0) {
-					CB_PadT = 10
+				_clearbox.options.CB_PadT = parseInt(_clearbox.options.CB_PadT);
+				if (_clearbox.options.CB_PadT < 0) {
+					_clearbox.options.CB_PadT = 10
 				}
 				_clearbox.options.CB_RoundPix = parseInt(_clearbox.options.CB_RoundPix);
 				if (_clearbox.options.CB_RoundPix < 0) {
@@ -1055,8 +1057,8 @@ var CB_Show = 1;
 			CB_Prv = document.getElementById('CB_Prev');
 			CB_Nxt = document.getElementById('CB_Next');
 			CB_Txt = document.getElementById('CB_Text');
-			CB_Txt.style.height = (CB_TextH - CB_PadT) + 'px';
-			CB_Txt.style.marginTop = CB_PadT + 'px';
+			CB_Txt.style.height = (CB_TextH - _clearbox.options.CB_PadT) + 'px';
+			CB_Txt.style.marginTop = _clearbox.options.CB_PadT + 'px';
 			CB_Txt.style.fontFamily = CB_Font;
 			CB_Txt.style.fontSize = CB_FontSize + 'px';
 			CB_Txt.style.fontWeight = CB_FontWeigth;
