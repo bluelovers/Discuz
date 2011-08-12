@@ -326,14 +326,14 @@ function CB_LoadImage(a) {
 	CB_HideContent.onclick = '';
 	if (CB_Gallery.length < 3) {
 		jQuery(CB_SlideS).hide();
-		CB_SlideP.style.display = 'none'
+		jQuery(CB_SlideP).hide();
 	} else {
 		if (CB_SS == 'start') {
 			jQuery(CB_SlideS).show();
-			CB_SlideP.style.display = 'none'
+			jQuery(CB_SlideP).hide();
 		} else {
 			jQuery(CB_SlideP).show();
-			CB_SlideS.style.display = 'none'
+			jQuery(CB_SlideS).hide();
 		}
 	}
 	CB_Prv.style.display = 'none';
