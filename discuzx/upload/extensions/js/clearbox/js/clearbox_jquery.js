@@ -6,7 +6,7 @@ var CB_version = '2.0';
 var CB_Show = 1;
 
 (function($, undefined){
-	var _this;
+	var _clearbox;
 
 	var CB_ActThumbSrc, CB_IEShowBug = '',
 	CB_AllThumbsWidth, CB_ResizeTimer, CB_IsAnimating, CB_ImgWidthOrig, CB_ImgHeightOrig, CB_ieRPBug = 0,
@@ -72,12 +72,12 @@ var CB_Show = 1;
 				if (CB_BodyMarginBottom < 0) {
 					CB_BodyMarginBottom = 0
 				}
-				CB_HideOpacity = parseInt(CB_HideOpacity);
-				if (CB_HideOpacity < 0 || CB_HideOpacity > 100) {
-					CB_HideOpacity = 70
+				_clearbox.options.CB_HideOpacity = parseInt(_clearbox.options.CB_HideOpacity);
+				if (_clearbox.options.CB_HideOpacity < 0 || _clearbox.options.CB_HideOpacity > 100) {
+					_clearbox.options.CB_HideOpacity = 70
 				}
 				CB_OpacityStep = parseInt(CB_OpacityStep);
-				if (CB_OpacityStep < 1 || CB_OpacityStep > CB_HideOpacity) {
+				if (CB_OpacityStep < 1 || CB_OpacityStep > _clearbox.options.CB_HideOpacity) {
 					CB_OpacityStep = 10
 				}
 				CB_WinBaseW = parseInt(CB_WinBaseW);
@@ -573,7 +573,7 @@ var CB_Show = 1;
 					CB_HideContent.style.visibility = 'hidden';
 					CB_HideContent.style.width = '0px';
 					CB_HideContent.style.height = '0px';
-					if (CB_HideOpacity != 0) {
+					if (_clearbox.options.CB_HideOpacity != 0) {
 						clearTimeout(CB_Blur);
 					}
 					CB_ClearBox = 'ki';
@@ -891,7 +891,7 @@ var CB_Show = 1;
 			},
 			CB_HideDocument : function (a) {
 				var b = a;
-				if (CB_ii < CB_HideOpacity) {
+				if (CB_ii < _clearbox.options.CB_HideOpacity) {
 					CB_ii += CB_OpacityStep;
 
 					jQuery(CB_HideContent).css('opacity', (CB_ii / 100));
@@ -901,7 +901,7 @@ var CB_Show = 1;
 				} else {
 					CB_ii = 0;
 					CB_HideContent.style.height = DocSizeY + CB_BodyMarginY + 'px';
-					if (CB_HideOpacity != 0) {
+					if (_clearbox.options.CB_HideOpacity != 0) {
 						clearTimeout(CB_Blur);
 					}
 					if (b == 'x') {
