@@ -48,6 +48,8 @@ var CB_Show = 1;
 
  				CB_RoundPix : 12,
 
+ 				CB_Animation : 'double',
+
 				dir : '',
  			},
  			options : {
@@ -104,8 +106,8 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_WinPadd < 0) {
 					_clearbox.options.CB_WinPadd = 5
 				}
-				if (CB_Animation != 'ki' && CB_Animation != 'normal' && CB_Animation != 'double' && CB_Animation != 'warp') {
-					CB_Animation = 'double'
+				if (_clearbox.options.CB_Animation != 'ki' && _clearbox.options.CB_Animation != 'normal' && _clearbox.options.CB_Animation != 'double' && _clearbox.options.CB_Animation != 'warp') {
+					_clearbox.options.CB_Animation = 'double'
 				}
 				CB_Jump_X = parseInt(CB_Jump_X);
 				if (CB_Jump_X < 1 || CB_Jump_X > 99) {
@@ -434,7 +436,7 @@ var CB_Show = 1;
 					if (CB_TimerX) {
 						clearTimeout(CB_TimerX)
 					}
-					if (CB_Animation == 'normal') {
+					if (_clearbox.options.CB_Animation == 'normal') {
 						CB_AnimX = 'true';
 						_clearbox.CB_WindowResizeY()
 					} else {
@@ -614,7 +616,7 @@ var CB_Show = 1;
 					return false;
 				};
 				CB_PrvNxt.display = 'block';
-				if (CB_Animation != 'warp') {
+				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Txt.innerHTML = '';
 					CB_LoadingImg.style.visibility = 'hidden';
 					CB_Img.src = CB_Gallery[CB_ActImgId][0];
@@ -703,24 +705,24 @@ var CB_Show = 1;
 				CB_AnimX = 'false';
 				CB_AnimY = 'false';
 				CB_IsAnimating = 1;
-				if (CB_Animation == 'double') {
+				if (_clearbox.options.CB_Animation == 'double') {
 					_clearbox.CB_WindowResizeX();
 					_clearbox.CB_WindowResizeY();
-				} else if (CB_Animation == 'warp') {
+				} else if (_clearbox.options.CB_Animation == 'warp') {
 					if (!a) {
 						CB_LoadingImg.style.visibility = 'hidden';
 						CB_Img.style.visibility = 'visible'
 					}
 					_clearbox.CB_WindowResizeX();
 					_clearbox.CB_WindowResizeY();
-				} else if (CB_Animation == 'ki') {
+				} else if (_clearbox.options.CB_Animation == 'ki') {
 					_clearbox.CB_SetMargins();
 					CB_ImgCont.style.height = CB_ImgHeight + (2 * CB_ImgBorder) + 'px';
 					CB_Img.style.width = CB_ImgWidth + 'px';
 					CB_Img.style.height = CB_ImgHeight + 'px';
 					CB_AnimX = 'true';
 					CB_AnimY = 'true'
-				} else if (CB_Animation == 'normal') {
+				} else if (_clearbox.options.CB_Animation == 'normal') {
 					_clearbox.CB_WindowResizeX();
 				}
 				if (a) {
@@ -871,7 +873,7 @@ var CB_Show = 1;
 				}
 				CB_JumpX = CB_Jump_X;
 				CB_JumpY = CB_Jump_Y;
-				if (CB_Animation != 'warp') {
+				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Img.style.visibility = 'hidden';
 					CB_LoadingImg.style.visibility = 'visible'
 				}
