@@ -35,6 +35,7 @@ var CB_Show = 1;
 		},
  		clearbox : {
  			defaults : {
+ 				CB_HideColor : '#000',
 				dir : '',
  			},
  			options : {
@@ -1039,7 +1040,7 @@ var CB_Show = 1;
 			CB_Thm2 = document.getElementById('CB_Thumbs2');
 			CB_Et = document.getElementById('CB_Etc');
 			CB_HideContent = document.getElementById('CB_ContentHide');
-			CB_HideContent.style.backgroundColor = CB_HideColor;
+			CB_HideContent.style.backgroundColor = _this.options.CB_HideColor;
 
 			jQuery(CB_HideContent).css('opacity', 0);
 
