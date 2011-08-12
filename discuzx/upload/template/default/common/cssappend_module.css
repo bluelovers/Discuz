@@ -61,7 +61,7 @@
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
 	/* 圖片縮放的背景 */
 	.zoominner { overflow: hidden; }
-	.zoominner #imgzoom_img { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
+	.zoominner #imgzoom_img, #CB_ImgContainer { background-image: url({STATICURL}image/plus/bg/alpha.gif); }
 	.zoominner div.ptn.pbn { background: {WRAPBG}; }
 
 	/* spvimg,spi 為活動、商品公用部分 */
