@@ -196,18 +196,14 @@
 
 			CB_ScriptDir = 'extensions/js/clearbox';
 
+			jQuery.ajaxSetup({
+				cache : true,
+			});
+
 			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
 				.appendTo(jQuery(document).find('head'));
 
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/config/default.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
-
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/js/clearbox_source.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
+			jQuery.getScript(CB_ScriptDir+'/config/default.js');
 
 			bbcode_imgs.each(function(index, elem){
 				// elem = this
@@ -243,7 +239,9 @@
 				}
 			});
 
-			CB_Init();
+			jQuery.getScript(CB_ScriptDir+'/js/clearbox_source.js', function(){
+				CB_Init();
+			});
 		}
 	});
 
