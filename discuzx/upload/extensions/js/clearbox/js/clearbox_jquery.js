@@ -329,7 +329,7 @@ function CB_Init() {
 						if (CB_SSTimer) {
 							jQuery.clearbox.CB_SlideShowJump()
 						}
-						CB_LoadImage(CB_ActImgId - 1);
+						jQuery.clearbox.CB_LoadImage(CB_ActImgId - 1);
 
 						stop = true;
 					}
@@ -337,7 +337,7 @@ function CB_Init() {
 						if (CB_SSTimer) {
 							jQuery.clearbox.CB_SlideShowJump()
 						}
-						CB_LoadImage(CB_ActImgId + 1);
+						jQuery.clearbox.CB_LoadImage(CB_ActImgId + 1);
 
 						stop = true;
 					}
@@ -421,9 +421,9 @@ function CB_Init() {
 					CB_SlideBW = 0;
 					CB_SlideB.style.width = CB_SlideBW + 'px';
 					if (CB_ActImgId == CB_Gallery.length - 1) {
-						CB_LoadImage(1)
+						jQuery.clearbox.CB_LoadImage(1)
 					} else {
-						CB_LoadImage(CB_ActImgId + 1)
+						jQuery.clearbox.CB_LoadImage(CB_ActImgId + 1)
 					}
 					return
 				}
@@ -697,14 +697,14 @@ function CB_Init() {
 					}
 					if (CB_TextNav == 'be') {
 						var a = CB_Txt.innerHTML;
-						CB_Txt.innerHTML = '<a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
+						CB_Txt.innerHTML = '<a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}jQuery.clearbox.CB_LoadImage(' + (CB_ActImgId - 1) + ')" alt="&lt;">' + CB_NavTextPrv + '</a> ' + a
 					}
 					CB_Prv.style.display = 'block';
 					CB_Prv.onclick = function() {
 						if (CB_SSTimer) {
 							jQuery.clearbox.CB_SlideShowJump();
 						}
-						CB_LoadImage(CB_ActImgId - 1);
+						jQuery.clearbox.CB_LoadImage(CB_ActImgId - 1);
 						return false
 					}
 				}
@@ -714,14 +714,14 @@ function CB_Init() {
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
 					}
 					if (CB_TextNav == 'be') {
-						CB_Txt.innerHTML += ' <a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
+						CB_Txt.innerHTML += ' <a class="CB_TextNav" href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}jQuery.clearbox.CB_LoadImage(' + (CB_ActImgId + 1) + ')" alt="&gt;">' + CB_NavTextNxt + '</a>'
 					}
 					CB_Nxt.style.display = 'block';
 					CB_Nxt.onclick = function() {
 						if (CB_SSTimer) {
 							jQuery.clearbox.CB_SlideShowJump();
 						}
-						CB_LoadImage(CB_ActImgId + 1);
+						jQuery.clearbox.CB_LoadImage(CB_ActImgId + 1);
 						return false;
 					}
 				}
@@ -849,7 +849,7 @@ function CB_Init() {
 					for (i = 1; i < CB_Gallery.length; i++) {
 						CB_preThumbs = new Image();
 						CB_preThumbs.src = CB_Gallery[i][2];
-						a += '<a href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}CB_LoadImage(' + i + ')"><img style="border: 0; left: ' + d + 'px;" " src="' + CB_Gallery[i][2] + '" height="50" class="CB_ThumbsImg" /></a>';
+						a += '<a href="javascript:void(0)" onclick="if(CB_SSTimer){jQuery.clearbox.CB_SlideShowJump();}jQuery.clearbox.CB_LoadImage(' + i + ')"><img style="border: 0; left: ' + d + 'px;" " src="' + CB_Gallery[i][2] + '" height="50" class="CB_ThumbsImg" /></a>';
 						d += Math.round(CB_preThumbs.width / CB_preThumbs.height * 50) + b
 					}
 					CB_Thm2.style.width = CB_AllThumbsWidth + 'px';
