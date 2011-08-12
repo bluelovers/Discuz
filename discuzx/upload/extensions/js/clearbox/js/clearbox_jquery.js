@@ -136,7 +136,12 @@ function CB_Init() {
 	jQuery('#CB_Thumbs').mousemove(jQuery.clearbox.getMouseXY);
 	var d = 0;
 	var e = 0;
-	CB_Links = document.getElementsByTagName('a');
+
+	CB_Links = [];
+	jQuery('a[rel^="clearbox"]').each(function(index, elem){
+		CB_Links[index] = elem;
+	});
+
 	for (i = 0; i < CB_Links.length; i++) {
 		CB_Rel = CB_Links[i].rel;
 		CB_URL = CB_Links[i].getAttribute('href');
