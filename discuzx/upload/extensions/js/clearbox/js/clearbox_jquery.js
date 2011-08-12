@@ -964,6 +964,9 @@ var CB_Show = 1;
 				CB_Img.style.height = CB_ImgHeightOrig + 'px';
 				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
 			},
+			alert : function (msg) {
+				alert(msg);
+			},
  		},
  	});
 
@@ -1108,7 +1111,7 @@ var CB_Show = 1;
 							}
 						}
 					} else {
-						alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+						_clearbox.alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
 					}
 				}
 			}
