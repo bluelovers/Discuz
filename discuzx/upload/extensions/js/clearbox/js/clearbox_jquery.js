@@ -1049,7 +1049,7 @@ function CB_FullSize() {
 				jQuery.clearbox.CB_ShowDocument();
 				return;
 			},
-			jQuery.clearbox.CB_ShowImage() : function () {
+			CB_ShowImage : function () {
 				CB_Cls.onclick = function() {
 					jQuery.clearbox.CB_Close()
 				};
