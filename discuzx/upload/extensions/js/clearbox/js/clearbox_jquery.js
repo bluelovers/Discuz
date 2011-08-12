@@ -191,19 +191,19 @@ function CB_ClickIMG(a) {
 		CB_Gallery = new Array;
 		CB_Gallery.push(new Array(CB_Rel[0], CB_Rel[1], CB_Rel[2]));
 		if (CB_Clicked[0] == 'clearbox') {
-			CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]))
+			CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]));
 		} else {
 			for (i = 0; i < CB_Links.length; i++) {
 				if (jQuery(CB_Links[i]).attr('rel').substring(9, jQuery(CB_Links[i]).attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
 					CB_ActThumbSrc = CB_PicDir + 'noprv.gif';
-					if (CB_Links[i].getAttribute('tnhref') == null || CB_Links[i].getAttribute('tnhref') == 'null') {
+					if (jQuery(CB_Links[i]).attr('tnhref') == null || jQuery(CB_Links[i]).attr('tnhref') == 'null') {
 						for (j = 0; j < CB_Links[i].childNodes.length; j++) {
 							if (CB_Links[i].childNodes[j].src != undefined) {
 								CB_ActThumbSrc = CB_Links[i].childNodes[j].getAttribute('src');
 							}
 						}
 					} else {
-						CB_ActThumbSrc = CB_Links[i].getAttribute('tnhref')
+						CB_ActThumbSrc = jQuery(CB_Links[i]).attr('tnhref');
 					}
 
 					// bluelovers
