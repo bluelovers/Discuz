@@ -60,6 +60,8 @@ var CB_Show = 1;
 
 				CB_Padd : 2,
 
+				CB_ShowImgURL : 'be',
+
 				dir : '',
  			},
  			options : {
@@ -135,8 +137,8 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_Padd < 0) {
 					_clearbox.options.CB_Padd = 2
 				}
-				if (CB_ShowImgURL != 'be' && CB_ShowImgURL != 'ki') {
-					CB_ShowImgURL = 'ki'
+				if (_clearbox.options.CB_ShowImgURL != 'be' && _clearbox.options.CB_ShowImgURL != 'ki') {
+					_clearbox.options.CB_ShowImgURL = 'ki'
 				}
 				CB_PadT = parseInt(CB_PadT);
 				if (CB_PadT < 0) {
@@ -642,7 +644,7 @@ var CB_Show = 1;
 				if (CB_Gallery[CB_ActImgId][1] && CB_Gallery[CB_ActImgId][1] != 'null' && CB_Gallery[CB_ActImgId][1] != null) {
 					CB_Txt.innerHTML = CB_Gallery[CB_ActImgId][1];
 				} else {
-					if (CB_ShowImgURL == 'be') {
+					if (_clearbox.options.CB_ShowImgURL == 'be') {
 						CB_Txt.innerHTML = (CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1];
 					}
 				}
