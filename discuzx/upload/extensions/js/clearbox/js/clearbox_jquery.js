@@ -646,7 +646,7 @@ function CB_ShowImage() {
 	}
 
 	// bluelovers
-	CB_fix_center(CB_Img.style.width);
+	jQuery.clearbox.CB_fix_center(CB_Img.style.width);
 	// bluelovers
 
 	return true
@@ -777,29 +777,7 @@ function CB_ShowDocument() {
 
 
 
-function CB_fix_center(w) {
-	var _w = CB_ImgCont.offsetWidth || CB_ImgCont.width;
 
-	w = parseInt(w);
-
-	if (_w > w) {
-		CB_Img.style.marginLeft = Math.floor((_w - w) / 2) + 'px';
-	} else {
-		CB_Img.style.marginLeft = 0;
-	}
-
-	/*
-	console.log(
-		[
-			CB_Img.style.marginLeft,
-			CB_ImgCont.width,
-			CB_ImgCont.offsetWidth,
-			_w,
-			w,
-		]
-	);
-	*/
-}
 
 (function($, undefined){
 	var _this;
@@ -1147,6 +1125,29 @@ function CB_fix_center(w) {
 				CB_HideContent.style.height = BrSizeY + DocScrY + 'px';
 				CB_HideContent.style.visibility = 'visible';
 				return
+			},
+			CB_fix_center : function (w) {
+				var _w = CB_ImgCont.offsetWidth || CB_ImgCont.width;
+
+				w = parseInt(w);
+
+				if (_w > w) {
+					CB_Img.style.marginLeft = Math.floor((_w - w) / 2) + 'px';
+				} else {
+					CB_Img.style.marginLeft = 0;
+				}
+
+				/*
+				console.log(
+					[
+						CB_Img.style.marginLeft,
+						CB_ImgCont.width,
+						CB_ImgCont.offsetWidth,
+						_w,
+						w,
+					]
+				);
+				*/
 			},
  		},
  	});
