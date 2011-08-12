@@ -56,6 +56,7 @@ var CB_Show = 1;
 				CB_AnimTimeout : 5,
 
 				CB_ImgBorder : 0,
+				CB_ImgBorderColor : '#ccc',
 
 				dir : '',
  			},
@@ -1035,7 +1036,7 @@ var CB_Show = 1;
 			CB_Img = document.getElementById('CB_Image');
 			CB_LoadingImg = document.getElementById('CB_LoadingImage');
 			CB_ImgCont = document.getElementById('CB_ImgContainer');
-			CB_Img.style.border = _clearbox.options.CB_ImgBorder + 'px solid ' + CB_ImgBorderColor;
+			CB_Img.style.border = _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor;
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
 			CB_SlideP = document.getElementById('CB_SlideShowP');
