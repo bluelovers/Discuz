@@ -193,6 +193,15 @@
 		// 因不明原因的 BUG 只好採用如此複雜的 selector
 		var bbcode_imgs = jQuery('body').filter('body.pg_viewthread').find('.t_f img.bbcode_img');
 		if (bbcode_imgs.length > 0) {
+
+			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
+				.appendTo(jQuery(document).find('head'));
+
+			jQuery('<script>').attr({
+				'src' : CB_ScriptDir+'/js/clearbox_source.js',
+				'type' : 'text/javascript',
+			}).appendTo(jQuery('body'));
+
 			bbcode_imgs.each(function(index, elem){
 				// elem = this
 				var _this = jQuery(this);
@@ -227,37 +236,7 @@
 				}
 			});
 
-			window.CB_Language = CB_Language = 'en';
-			window.CB_Config = CB_Config = 'bbcode';
-			window.CB_ScriptDir = CB_ScriptDir = 'extensions/js/clearbox';
-
-			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
-				.appendTo(jQuery(document).find('head'));
-
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/js/clearbox_source.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
-
-			/*
-			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/config/'+CB_Config+'/cb_style.css' + '" type="text/css" rel="stylesheet" />')
-				.appendTo(jQuery(document).find('head'));
-
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/config/'+CB_Config+'/cb_config.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
-
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/language/'+CB_Language+'/cb_language.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
-
-			jQuery('<script>').attr({
-				'src' : CB_ScriptDir+'/core/cb_core.js',
-				'type' : 'text/javascript',
-			}).appendTo(jQuery('body'));
-			*/
+			CB_Init();
 		}
 	});
 
