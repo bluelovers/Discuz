@@ -1138,7 +1138,7 @@ function CB_fix_center(w) {
 				CB_Init();
 			},
 			setup : function (options) {
-				var options = $.extend(true, {}, $.clearbox.defaults, options);
+				var options = $.extend(true, {}, _this.defaults, options);
 			},
 			keyeven : function(event){
 				var b;
