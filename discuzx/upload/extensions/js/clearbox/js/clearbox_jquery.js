@@ -361,7 +361,7 @@ function CB_GetImageSize() {
 	CB_ImgWidthOrig = CB_ImgWidth;
 	CB_ImgHeightOrig = CB_ImgHeight;
 	CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
-	CB_FitToBrowser();
+	jQuery.clearbox.CB_FitToBrowser();
 	CB_Img.src = CB_Gallery[CB_ActImgId][0];
 	CB_AnimatePlease();
 	return
@@ -678,17 +678,7 @@ function CB_FullSize() {
 	CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * CB_ImgBorder) + 'px'
 }
 
-function CB_FitToBrowser() {
-	if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
-		CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd));
-		CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
-	}
-	if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
-		CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH;
-		CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
-	}
-	return
-}
+
 function CB_SetMargins() {
 	CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
 	CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + CB_TextH + (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd))) / 2);
@@ -1148,6 +1138,17 @@ function CB_ShowDocument() {
 					]
 				);
 				*/
+			},
+			CB_FitToBrowser : function () {
+				if (CB_ImgWidth > BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd))) {
+					CB_ImgWidth = BrSizeX - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd));
+					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
+				}
+				if (CB_ImgHeight > BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH) {
+					CB_ImgHeight = BrSizeY - (2 * (CB_RoundPix + CB_ImgBorder + CB_Padd + CB_WinPadd)) - CB_TextH;
+					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
+				}
+				return
 			},
  		},
  	});
