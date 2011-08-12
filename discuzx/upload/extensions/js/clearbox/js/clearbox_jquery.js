@@ -78,6 +78,8 @@ var CB_Show = 1;
 				CB_BodyMarginRight : 0,
 				CB_BodyMarginTop : 0,
 				CB_BodyMarginBottom : 0,
+
+				CB_Preload : 'be',
  			},
  			options : {
 
@@ -188,8 +190,8 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_CheckDuplicates != 'be' && _clearbox.options.CB_CheckDuplicates != 'ki') {
 					_clearbox.options.CB_CheckDuplicates = 'ki'
 				}
-				if (CB_Preload != 'be' && CB_Preload != 'ki') {
-					CB_Preload = 'be'
+				if (_clearbox.options.CB_Preload != 'be' && _clearbox.options.CB_Preload != 'ki') {
+					_clearbox.options.CB_Preload = 'be'
 				}
 
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW,
@@ -577,7 +579,7 @@ var CB_Show = 1;
 			},
 			CB_PrevNext : function () {
 				if (CB_ActImgId > 1) {
-					if (CB_Preload == 'be') {
+					if (_clearbox.options.CB_Preload == 'be') {
 						PreloadPrv = new Image();
 						PreloadPrv.src = CB_Gallery[CB_ActImgId - 1][0]
 					}
@@ -595,7 +597,7 @@ var CB_Show = 1;
 					}
 				}
 				if (CB_ActImgId < CB_Gallery.length - 1) {
-					if (CB_Preload == 'be') {
+					if (_clearbox.options.CB_Preload == 'be') {
 						PreloadNxt = new Image();
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
 					}
