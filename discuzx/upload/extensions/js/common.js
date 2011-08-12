@@ -243,6 +243,18 @@
 
 			jQuery.getScript(CB_ScriptDir+'/js/clearbox_source.js', function(){
 				CB_Init();
+
+				jQuery('<a>SHOW BBCODE IMG</a>')
+					.attr({
+						'href' : 'javascript:void(0);',
+					})
+					.click(function(){
+						bbcode_imgs.first().click();
+					})
+					.appendTo(jQuery('<p/>'))
+					.parent()
+					.insertBefore(bbcode_imgs.first().parent());
+				;
 			});
 		}
 	});

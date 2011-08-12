@@ -1102,6 +1102,7 @@ function CB_fix_center(w) {
 		CB_Img.style.marginLeft = 0;
 	}
 
+	/*
 	console.log(
 		[
 			CB_Img.style.marginLeft,
@@ -1111,4 +1112,5 @@ function CB_fix_center(w) {
 			w,
 		]
 	);
+	*/
 }
