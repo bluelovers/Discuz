@@ -1072,7 +1072,11 @@ var CB_Show = 1;
 					return false
 				}
 				CB_ClearBox = 'ki';
+
+				/*
 				CB_Clicked = a.split('+\\+');
+				*/
+				CB_Clicked = arguments;
 
 				_clearbox.log(['CB_ClickURL', CB_Clicked]);
 
@@ -1111,7 +1115,10 @@ var CB_Show = 1;
 				CB_SlideS.unbind('click.clearbox');
 				CB_SlideP.unbind('click.clearbox');
 
+				/*
 				CB_Clicked = a.split('+\\+');
+				*/
+				CB_Clicked = arguments;
 
 				_clearbox.log(['CB_ClickIMG', CB_Clicked]);
 
@@ -1186,7 +1193,7 @@ var CB_Show = 1;
  	});
 
  	function CB_Init() {
-		if (!document.getElementById('CB_All') && CB_Show != 0) {
+		if (!$('#CB_All').size() && CB_Show != 0) {
 			$('body').css('position', 'static');
 
 			var a = '<div class="CB_RoundPixBugFix" style="width: ' + _clearbox.options.CB_RoundPix + 'px; height: ' + _clearbox.options.CB_RoundPix + 'px;"></div>';
@@ -1323,35 +1330,29 @@ var CB_Show = 1;
 
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
-					_link.bind('click.clearbox', function() {
-						var _link = $(this);
-						_clearbox.CB_ClickIMG(_link.attr('rel') + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
-						return false;
-					});
+
+					_link.prop('data-rel-key', CB_Rel)
+						.prop('data-rel-func', 1)
+						.bind('click.clearbox', _link_rel_func);
 				} else {
+					_link.prop('data-rel-key', _link.attr('rel').substring(9, _link.attr('rel').length - 1));
+
 					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
-							_link.bind('click.clearbox', function() {
-								var _link = $(this);
-								_clearbox.CB_ClickIMG(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
-								return false;
-							});
+							_link
+								.prop('data-rel-func', 1)
+								.bind('click.clearbox', _link_rel_func);
 						} else {
 							_clearbox.alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)');
 						}
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
+
+						_link.prop('data-rel-func', 0);
+
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
-							_link.bind('click.clearbox', function() {
-								var _link = $(this);
-								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
-								return false;
-							});
+							_link.bind('click.clearbox', _link_rel_func);
 						} else {
-							_link.bind('mouseover.clearbox', function() {
-								var _link = $(this);
-								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
-								return false;
-							});
+							_link.bind('mouseover.clearbox', _link_rel_func);
 						}
 					} else {
 						_clearbox.alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)');
@@ -1365,6 +1366,18 @@ var CB_Show = 1;
 
  	function intval(n) {
  		return parseInt(n);
+ 	}
+
+ 	function _link_rel_func() {
+ 		var _link = $(this).blur();
+
+ 		if (_link.prop('data-rel-func') > 0) {
+ 			_clearbox.CB_ClickIMG(_link.prop('data-rel-key'), _link.attr('href'), _link.attr('title'));
+		} else {
+			_clearbox.CB_ClickURL(_link.prop('data-rel-key'), _link.attr('href'), _link.attr('title'));
+		}
+
+		return false;
  	}
 
  	var CB_Blur;
