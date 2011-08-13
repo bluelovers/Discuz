@@ -1305,32 +1305,32 @@ var CB_Show = 1;
 				if (CB_Rel == 'clearbox') {
 					$(CB_Links[i]).bind('click.clearbox', function() {
 						_clearbox.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-						return false
+						return false;
 					});
 				} else {
 					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
 							$(CB_Links[i]).bind('click.clearbox', function() {
 								_clearbox.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-								return false
+								return false;
 							});
 						} else {
-							_clearbox.alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+							_clearbox.alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)');
 						}
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
 							$(CB_Links[i]).bind('click.clearbox', function() {
 								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-								return false
+								return false;
 							});
 						} else {
 							$(CB_Links[i]).bind('mouseover.clearbox', function() {
 								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
-								return false
+								return false;
 							});
 						}
 					} else {
-						_clearbox.alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+						_clearbox.alert('ClearBox HIBA:\n\nHibasan megadott clearbox REL azonosito: "' + CB_Rel + '"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)');
 					}
 				}
 			}
