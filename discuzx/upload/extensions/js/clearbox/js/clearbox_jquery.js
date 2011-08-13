@@ -1369,7 +1369,7 @@ var CB_Show = 1;
  	}
 
  	function _link_rel_func() {
- 		var _link = $(this).blur();
+ 		var _link = $(this);
 
  		if (_link.prop('data-rel-func') > 0) {
  			_clearbox.CB_ClickIMG(_link.prop('data-rel-key'), _link.attr('href'), _link.attr('title'));
