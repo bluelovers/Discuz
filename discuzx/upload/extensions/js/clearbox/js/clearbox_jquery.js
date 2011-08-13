@@ -353,7 +353,7 @@ var CB_Show = 1;
 				CB_SlideB.hide();
 			},
 			CB_SSStart : function () {
-				$(CB_SlideS).hide();
+				CB_SlideS.hide();
 				CB_SlideP.show();
 				CB_SS = 'pause';
 				CB_SlideB.show();
@@ -361,7 +361,7 @@ var CB_Show = 1;
 			},
 			CB_SSPause : function () {
 				CB_SlideP.hide();
-				$(CB_SlideS).show();
+				CB_SlideS.show();
 				_clearbox.CB_SlideShowStop();
 			},
 			getDocumentSize : function () {
@@ -730,10 +730,12 @@ var CB_Show = 1;
 				CB_Cls.onclick = function() {
 					_clearbox.CB_Close()
 				};
-				CB_SlideS.onclick = function() {
-					_clearbox.CB_SSStart();
-					return false;
-				};
+				CB_SlideS
+					.unbind('click.clearbox')
+					.bind('click.clearbox', function() {
+						_clearbox.CB_SSStart();
+						return false;
+				});
 				CB_SlideP
 					.unbind('click.clearbox')
 					.bind('click.clearbox', function() {
@@ -1029,15 +1031,15 @@ var CB_Show = 1;
 				CB_jj = 0;
 				CB_HideContent.unbind('click.clearbox');
 				if (CB_Gallery.length < 3) {
-					$(CB_SlideS).hide();
+					CB_SlideS.hide();
 					CB_SlideP.hide();
 				} else {
 					if (CB_SS == 'start') {
-						$(CB_SlideS).show();
+						CB_SlideS.show();
 						CB_SlideP.hide();
 					} else {
 						CB_SlideP.show();
-						$(CB_SlideS).hide();
+						CB_SlideS.hide();
 					}
 				}
 				CB_Prv.hide();
@@ -1092,7 +1094,7 @@ var CB_Show = 1;
 				;
 
 				CB_Win.css('visibility', 'visible');
-				$(CB_SlideS).hide();
+				CB_SlideS.hide();
 				CB_SlideP.hide();
 				CB_HideDocument('x');
 			},
@@ -1101,7 +1103,7 @@ var CB_Show = 1;
 					return false
 				}
 				CB_Cls.onclick = '';
-				CB_SlideS.onclick = '';
+				CB_SlideS.unbind('click.clearbox');
 				CB_SlideP.unbind('click.clearbox');
 
 				CB_Clicked = a.split('+\\+');
@@ -1215,7 +1217,7 @@ var CB_Show = 1;
 			CB_ImgCont = $('#CB_ImgContainer');
 
 			CB_Cls = document.getElementById('CB_CloseWindow');
-			CB_SlideS = document.getElementById('CB_SlideShowS');
+			CB_SlideS = $('#CB_SlideShowS');
 			CB_SlideP = $('#CB_SlideShowP');
 			CB_SlideB = $('#CB_SlideShowBar')
 				.css('opacity', 0.5);
