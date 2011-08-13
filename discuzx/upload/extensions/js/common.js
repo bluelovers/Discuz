@@ -263,7 +263,7 @@
 					})
 					.appendTo(jQuery('<p/>'))
 					.parent()
-					.insertBefore(bbcode_imgs.first().parent());
+					.prependTo(bbcode_imgs.parents('td[id].t_f').first());
 				;
 			});
 		}
