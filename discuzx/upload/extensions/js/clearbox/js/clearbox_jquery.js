@@ -1144,9 +1144,10 @@ var CB_Show = 1;
 			CB_ShTh = document.getElementById('CB_ShowTh');
 			CB_ShEt = document.getElementById('CB_ShowEtc');
 
-			CB_ImgHd = $('#CB_ImgHide').css({
-				'backgroundColor' : '#fff',
-				'opacity' : 0.75
+			CB_ImgHd = $('#CB_ImgHide')
+				.css({
+					'backgroundColor' : '#fff',
+					'opacity' : 0.75
 			});
 
 			CB_Win = document.getElementById('CB_Window');
