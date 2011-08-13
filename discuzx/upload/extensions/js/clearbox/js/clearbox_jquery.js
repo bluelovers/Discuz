@@ -690,11 +690,17 @@ var CB_Show = 1;
 
 				CB_Win.css('visibility', 'hidden');
 				CB_HideContent.unbind('click.clearbox');
-				CB_iFr.src = '';
-				CB_iFr.style.top = '0px';
-				CB_iFr.style.left = '0px';
-				CB_iFr.style.width = '0px';
-				CB_iFr.style.height = '0px';
+
+				CB_iFr
+					.attr('src', '')
+					.css({
+						top : 0,
+						left : 0,
+					})
+					.width(0)
+					.height(0)
+				;
+
 				CB_ShowDocument();
 				return;
 			},
@@ -887,16 +893,21 @@ var CB_Show = 1;
 						if (CB_Clicked[1].search(/\?/)>0) CB_Clicked[1] += '&'; else CB_Clicked[1] += '?';
 						CB_Clicked[1] += 'inclearbox=true';
 					}
-
-					CB_iFr.src = CB_Clicked[1];
 					// bluelovers
 
 					CB_Img.css('visibility', 'visible');
 					CB_LoadingImg.style.visibility = 'hidden';
-					CB_iFr.style.top = _clearbox.options.CB_ImgBorder + 'px';
-					CB_iFr.style.left = _clearbox.options.CB_ImgBorder + 'px';
-					CB_iFr.style.width = CB_ImgWidth + 'px';
-					CB_iFr.style.height = CB_ImgHeight + 'px';
+
+					CB_iFr
+						.attr('src', CB_Clicked[1])
+						.css({
+							top : _clearbox.options.CB_ImgBorder,
+							left : _clearbox.options.CB_ImgBorder,
+						})
+						.width(CB_ImgWidth)
+						.height(CB_ImgHeight)
+					;
+
 					if (CB_Clicked[2] && CB_Clicked[2] != 'null' && CB_Clicked[2] != null) {
 						CB_Txt.html(CB_Clicked[2]);
 					} else {
@@ -1213,7 +1224,7 @@ var CB_Show = 1;
 			$('#CB_Left').width(_clearbox.options.CB_RoundPix + CB_ie6RPBug);
 			$('#CB_Right').width(_clearbox.options.CB_RoundPix);
 
-			CB_iFr = document.getElementById('CB_iFrame');
+			CB_iFr = $('#CB_iFrame');
 			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
 			CB_ShTh.mouseover(function() {
 				_clearbox.CB_ShowThumbs();
