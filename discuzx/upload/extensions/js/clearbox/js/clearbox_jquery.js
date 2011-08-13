@@ -229,7 +229,7 @@ var CB_Show = 1;
 
 				var c = String.fromCharCode(b);
 
-				$.log([b, c, event]);
+				_clearbox.log([b, c, event]);
 
 				var stop = 0;
 
@@ -302,7 +302,7 @@ var CB_Show = 1;
 				DocScrX = $(document).scrollLeft();
 				DocScrY = $(document).scrollTop();
 
-				this.log(['getScrollPosition', DocScrX, DocScrY]);
+				_clearbox.log(['getScrollPosition', DocScrX, DocScrY]);
 
 				return
 			},
@@ -1071,7 +1071,7 @@ var CB_Show = 1;
 					CB_Gallery = new Array;
 					CB_Gallery.push(new Array(CB_Rel[0], CB_Rel[1], CB_Rel[2]));
 
-					jQuery.log(['CB_Gallery.push', CB_Rel[0], CB_Rel[1], CB_Rel[2]]);
+					_clearbox.log(['CB_Gallery.push', CB_Rel[0], CB_Rel[1], CB_Rel[2]]);
 
 					if (CB_Clicked[0] == 'clearbox') {
 						CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]));
