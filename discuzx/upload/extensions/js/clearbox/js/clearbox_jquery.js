@@ -1315,7 +1315,7 @@ var CB_Show = 1;
 								return false
 							});
 						} else {
-							alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
+							_clearbox.alert('ClearBox HIBA:\n\nClearBox galeria neve NEM lehet "clearbox[clearbox]"!\n(Helye: dokumentum, a ' + i + '. <a> tag-en belul.)')
 						}
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
