@@ -1196,6 +1196,7 @@ var CB_Show = 1;
 				.height(_clearbox.options.CB_TextH - _clearbox.options.CB_PadT)
 			;
 
+			/*
 			CB_Header = document.getElementById('CB_Header').style;
 			CB_Header.height = _clearbox.options.CB_RoundPix + 'px';
 			CB_Footer = document.getElementById('CB_Footer').style;
@@ -1204,6 +1205,14 @@ var CB_Show = 1;
 			CB_Left.width = _clearbox.options.CB_RoundPix + CB_ie6RPBug + 'px';
 			CB_Right = document.getElementById('CB_Right').style;
 			CB_Right.width = _clearbox.options.CB_RoundPix + 'px';
+			*/
+
+			$('#CB_Header').height(_clearbox.options.CB_RoundPix);
+			$('#CB_Footer').height(_clearbox.options.CB_RoundPix);
+
+			$('#CB_Left').width(_clearbox.options.CB_RoundPix + CB_ie6RPBug);
+			$('#CB_Right').width(_clearbox.options.CB_RoundPix);
+
 			CB_iFr = document.getElementById('CB_iFrame');
 			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
 			CB_ShTh.mouseover(function() {
