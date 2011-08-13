@@ -625,7 +625,7 @@ var CB_Show = 1;
 								}
 								_clearbox.CB_LoadImage(CB_ActImgId - 1);
 							})
-							.prependTo($(CB_Txt))
+							.prependTo(CB_Txt)
 						;
 					}
 					CB_Prv.style.display = 'block';
@@ -658,7 +658,7 @@ var CB_Show = 1;
 								}
 								_clearbox.CB_LoadImage(CB_ActImgId + 1);
 							})
-							.appendTo($(CB_Txt))
+							.appendTo(CB_Txt)
 						;
 					}
 					CB_Nxt.style.display = 'block';
@@ -682,7 +682,7 @@ var CB_Show = 1;
 				CB_ShTh.style.visibility = 'hidden';
 				CB_ShEt.style.visibility = 'hidden';
 				_clearbox.CB_SlideShowStop();
-				CB_Txt.innerHTML = "";
+				CB_Txt.html('');
 				CB_Img.src = "";
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
@@ -712,7 +712,7 @@ var CB_Show = 1;
 				};
 				CB_PrvNxt.display = 'block';
 				if (_clearbox.options.CB_Animation != 'warp') {
-					CB_Txt.innerHTML = '';
+					CB_Txt.html('');
 					CB_LoadingImg.style.visibility = 'hidden';
 					CB_Img.src = CB_Gallery[CB_ActImgId][0];
 					CB_Img.style.visibility = 'visible';
@@ -725,17 +725,17 @@ var CB_Show = 1;
 				CB_Prv.style.height = CB_ImgHeight + 'px';
 				CB_Nxt.style.height = CB_ImgHeight + 'px';
 				if (CB_Gallery[CB_ActImgId][1] && CB_Gallery[CB_ActImgId][1] != 'null' && CB_Gallery[CB_ActImgId][1] != null) {
-					CB_Txt.innerHTML = CB_Gallery[CB_ActImgId][1];
+					CB_Txt.html(CB_Gallery[CB_ActImgId][1]);
 				} else {
 					if (_clearbox.options.CB_ShowImgURL == 'be') {
-						CB_Txt.innerHTML = (CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1];
+						CB_Txt.html((CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1]);
 					}
 				}
 				if (_clearbox.options.CB_ImgNum == 'be' && CB_Gallery.length > 2) {
-					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.html(CB_Txt.html() + ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + CB_ActImgId + '/' + (CB_Gallery.length - 1) + _clearbox.options.CB_ImgNumBracket.substring(1, 2));
 				}
 				_clearbox.CB_PrevNext();
-				CB_Txt.style.visibility = 'visible';
+				CB_Txt.css('visibility', 'visible');
 				if (CB_Gallery.length > 0) {
 					CB_ImgWidthOld = CB_ImgWidth;
 					CB_ImgHeightOld = CB_ImgHeight;
@@ -896,11 +896,11 @@ var CB_Show = 1;
 					CB_iFr.style.width = CB_ImgWidth + 'px';
 					CB_iFr.style.height = CB_ImgHeight + 'px';
 					if (CB_Clicked[2] && CB_Clicked[2] != 'null' && CB_Clicked[2] != null) {
-						CB_Txt.innerHTML = CB_Clicked[2]
+						CB_Txt.html(CB_Clicked[2]);
 					} else {
-						CB_Txt.innerHTML = CB_Clicked[1]
+						CB_Txt.html(CB_Clicked[1]);
 					}
-					CB_Txt.innerHTML += ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + _clearbox.options.CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2);
+					CB_Txt.html(CB_Txt.html() + ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + _clearbox.options.CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2));
 					CB_HideContent.bind('click.clearbox', function() {
 						_clearbox.CB_Close();
 						return false;
@@ -1009,7 +1009,7 @@ var CB_Show = 1;
 					CB_Img.style.visibility = 'hidden';
 					CB_LoadingImg.style.visibility = 'visible'
 				}
-				CB_Txt.innerHTML = _clearbox.options.CB_LoadingText;
+				CB_Txt.html(_clearbox.options.CB_LoadingText);
 				CB_Count = 0;
 				CB_preImages = new Image();
 				CB_preImages.src = CB_Gallery[CB_ActImgId][0];
@@ -1173,13 +1173,17 @@ var CB_Show = 1;
 
 			CB_Prv = document.getElementById('CB_Prev');
 			CB_Nxt = document.getElementById('CB_Next');
-			CB_Txt = document.getElementById('CB_Text');
-			CB_Txt.style.height = (_clearbox.options.CB_TextH - _clearbox.options.CB_PadT) + 'px';
-			CB_Txt.style.marginTop = _clearbox.options.CB_PadT + 'px';
-			CB_Txt.style.fontFamily = _clearbox.options.CB_Font;
-			CB_Txt.style.fontSize = _clearbox.options.CB_FontSize + 'px';
-			CB_Txt.style.fontWeight = _clearbox.options.CB_FontWeigth;
-			CB_Txt.style.color = _clearbox.options.CB_FontColor;
+			CB_Txt = $('#CB_Text')
+				.css({
+					marginTop  : _clearbox.options.CB_PadT,
+					fontFamily : _clearbox.options.CB_Font,
+					fontSize : _clearbox.options.CB_FontSize,
+					fontWeight : _clearbox.options.CB_FontWeigth,
+					color : _clearbox.options.CB_FontColor,
+				})
+				.height(_clearbox.options.CB_TextH - _clearbox.options.CB_PadT)
+			;
+
 			CB_Header = document.getElementById('CB_Header').style;
 			CB_Header.height = _clearbox.options.CB_RoundPix + 'px';
 			CB_Footer = document.getElementById('CB_Footer').style;
@@ -1203,11 +1207,11 @@ var CB_Show = 1;
 				_clearbox.CB_HideEtc();
 				return
 			});
-			CB_Txt.onmouseover = function() {
+			CB_Txt.mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
 				return
-			};
+			});
 			CB_HideContent.mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
