@@ -462,11 +462,7 @@ var CB_Show = 1;
 
 				w = parseInt(w);
 
-				if (_w > w) {
-					CB_Img.style.marginLeft = Math.floor((_w - w) / 2) + 'px';
-				} else {
-					CB_Img.style.marginLeft = 0;
-				}
+				CB_Img.css('marginLeft', (_w > w) ? Math.floor((_w - w) / 2) : 0);
 
 				/*
 				console.log(
@@ -539,7 +535,7 @@ var CB_Show = 1;
 						}
 						CB_ImgWidthOld += CB_JumpX
 					}
-					CB_Img.style.width = CB_ImgWidthOld + 'px';
+					CB_Img.width(CB_ImgWidthOld);
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.css('marginLeft', CB_MarginL);
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
@@ -588,7 +584,7 @@ var CB_Show = 1;
 						}
 						CB_ImgHeightOld += CB_JumpY;
 					}
-					CB_Img.style.height = CB_ImgHeightOld + 'px';
+					CB_Img.height(CB_ImgHeightOld);
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder) + 'px';
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.css('marginTop', (CB_MarginT - (FF_ScrollbarBug / 2)));
@@ -687,11 +683,11 @@ var CB_Show = 1;
 				CB_ShEt.css('visibility', 'hidden');
 				_clearbox.CB_SlideShowStop();
 				CB_Txt.html('');
-				CB_Img.src = "";
+				CB_Img.attr('src', '');
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 				CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
-				CB_Img.style.display = 'none';
+				CB_Img.hide();
 				CB_Win.css('visibility', 'hidden');
 				CB_HideContent.unbind('click.clearbox');
 				CB_iFr.src = '';
@@ -718,8 +714,9 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Txt.html('');
 					CB_LoadingImg.style.visibility = 'hidden';
-					CB_Img.src = CB_Gallery[CB_ActImgId][0];
-					CB_Img.style.visibility = 'visible';
+					CB_Img
+						.attr('src', CB_Gallery[CB_ActImgId][0])
+						.css('visibility', 'visible');
 				}
 				CB_Cls.style.display = 'block';
 				CB_HideContent.bind('click.clearbox', function() {
@@ -826,7 +823,7 @@ var CB_Show = 1;
 				}
 
 				// bluelovers
-				_clearbox.CB_fix_center(CB_Img.style.width);
+				_clearbox.CB_fix_center(CB_Img.width());
 				// bluelovers
 
 				return true;
@@ -843,15 +840,16 @@ var CB_Show = 1;
 				} else if (_clearbox.options.CB_Animation == 'warp') {
 					if (!a) {
 						CB_LoadingImg.style.visibility = 'hidden';
-						CB_Img.style.visibility = 'visible'
+						CB_Img.css('visibility', 'visible');
 					}
 					_clearbox.CB_WindowResizeX();
 					_clearbox.CB_WindowResizeY();
 				} else if (_clearbox.options.CB_Animation == 'ki') {
 					_clearbox.CB_SetMargins();
 					CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
-					CB_Img.style.width = CB_ImgWidth + 'px';
-					CB_Img.style.height = CB_ImgHeight + 'px';
+
+					CB_Img.width(CB_ImgWidth).height(CB_ImgHeight);
+
 					CB_AnimX = 'true';
 					CB_AnimY = 'true'
 				} else if (_clearbox.options.CB_Animation == 'normal') {
@@ -893,7 +891,7 @@ var CB_Show = 1;
 					CB_iFr.src = CB_Clicked[1];
 					// bluelovers
 
-					CB_Img.style.visibility = 'visible';
+					CB_Img.css('visibility', 'visible');
 					CB_LoadingImg.style.visibility = 'hidden';
 					CB_iFr.style.top = _clearbox.options.CB_ImgBorder + 'px';
 					CB_iFr.style.left = _clearbox.options.CB_ImgBorder + 'px';
@@ -917,10 +915,12 @@ var CB_Show = 1;
 				}
 			},
 			CB_NewWindow : function () {
-				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
-				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH) + 'px';
-				CB_Img.style.display = 'block';
-				CB_Img.style.visibility = 'hidden';
+				CB_Img
+					.width(_clearbox.options.CB_WinBaseW)
+					.height(_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH)
+					.show()
+					.css('visibility', 'hidden')
+				;
 
 				CB_Win.css('visibility', 'visible');
 
@@ -949,7 +949,7 @@ var CB_Show = 1;
 			CB_GetImageSize : function () {
 
 				// bluelovers
-				CB_Img.style.marginLeft = 0;
+				CB_Img.css('marginLeft', 0);
 				// bluelovers
 
 				CB_ImgWidth = CB_preImages.width;
@@ -958,7 +958,7 @@ var CB_Show = 1;
 				CB_ImgHeightOrig = CB_ImgHeight;
 				CB_ImgRate = CB_ImgWidth / CB_ImgHeight;
 				_clearbox.CB_FitToBrowser();
-				CB_Img.src = CB_Gallery[CB_ActImgId][0];
+				CB_Img.attr('src', CB_Gallery[CB_ActImgId][0]);
 				_clearbox.CB_AnimatePlease();
 				return
 			},
@@ -1012,7 +1012,7 @@ var CB_Show = 1;
 				CB_JumpX = _clearbox.options.CB_Jump_X;
 				CB_JumpY = _clearbox.options.CB_Jump_Y;
 				if (_clearbox.options.CB_Animation != 'warp') {
-					CB_Img.style.visibility = 'hidden';
+					CB_Img.css('visibility', 'hidden');
 					CB_LoadingImg.style.visibility = 'visible'
 				}
 				CB_Txt.html(_clearbox.options.CB_LoadingText);
@@ -1047,10 +1047,14 @@ var CB_Show = 1;
 				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH) {
 					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH
 				}
-				CB_Img.style.width = _clearbox.options.CB_WinBaseW + 'px';
-				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH) + 'px';
-				CB_Img.style.display = 'block';
-				CB_Img.style.visibility = 'hidden';
+
+				CB_Img
+					.width(_clearbox.options.CB_WinBaseW)
+					.height(_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH)
+					.show()
+					.css('visibility', 'hidden')
+				;
+
 				CB_Win.css('visibility', 'visible');
 				$(CB_SlideS).hide();
 				$(CB_SlideP).hide();
@@ -1114,8 +1118,8 @@ var CB_Show = 1;
 				CB_HideDocument();
 			},
 			CB_FullSize : function () {
-				CB_Img.style.width = CB_ImgWidthOrig + 'px';
-				CB_Img.style.height = CB_ImgHeightOrig + 'px';
+				CB_Img.width(CB_ImgWidthOrig).height(CB_ImgHeightOrig);
+
 				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * _clearbox.options.CB_ImgBorder) + 'px'
 			},
 			alert : function (msg) {
@@ -1167,10 +1171,10 @@ var CB_Show = 1;
 					'opacity' : 0,
 			});
 
-			CB_Img = document.getElementById('CB_Image');
+			CB_Img = $('#CB_Image');
 			CB_LoadingImg = document.getElementById('CB_LoadingImage');
 			CB_ImgCont = document.getElementById('CB_ImgContainer');
-			CB_Img.style.border = _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor;
+			CB_Img.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
 			CB_SlideP = document.getElementById('CB_SlideShowP');
