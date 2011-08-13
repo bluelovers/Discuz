@@ -633,7 +633,9 @@ var CB_Show = 1;
 								'class' : 'CB_TextNav',
 								'href' : 'javascript:void(0)',
 								'alt' : '&lt;',
-							}).click(function(){
+							})
+							.unbind('click.clearbox')
+							.bind('click.clearbox', function(){
 								if (CB_SSTimer) {
 									_clearbox.CB_SlideShowJump();
 								}
@@ -644,7 +646,8 @@ var CB_Show = 1;
 					}
 					CB_Prv
 						.show()
-						.click(function() {
+						.unbind('click.clearbox')
+						.bind('click.clearbox', function() {
 							if (CB_SSTimer) {
 								_clearbox.CB_SlideShowJump();
 							}
@@ -667,7 +670,9 @@ var CB_Show = 1;
 								'class' : 'CB_TextNav',
 								'href' : 'javascript:void(0)',
 								'alt' : '&gt;',
-							}).click(function(){
+							})
+							.unbind('click.clearbox')
+							.bind('click.clearbox', function(){
 								if (CB_SSTimer) {
 									_clearbox.CB_SlideShowJump();
 								}
@@ -678,7 +683,8 @@ var CB_Show = 1;
 					}
 					CB_Nxt
 						.show()
-						.click(function() {
+						.unbind('click.clearbox')
+						.bind('click.clearbox', function() {
 							if (CB_SSTimer) {
 								_clearbox.CB_SlideShowJump();
 							}
@@ -826,7 +832,8 @@ var CB_Show = 1;
 							.parent()
 							.attr('href', 'javascript:void(0)')
 							.prop('data-idx', i)
-							.click(function(){
+							.unbind('click.clearbox')
+							.bind('click.clearbox', function(){
 								if (CB_SSTimer) {
 									_clearbox.CB_SlideShowJump();
 								}
