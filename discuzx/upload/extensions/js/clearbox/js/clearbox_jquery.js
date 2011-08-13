@@ -1073,6 +1073,9 @@ var CB_Show = 1;
 				}
 				CB_ClearBox = 'ki';
 				CB_Clicked = a.split('+\\+');
+
+				_clearbox.log(['CB_ClickURL', CB_Clicked]);
+
 				CB_PrvNxt.hide();
 				CB_Cls.hide();
 				CB_Rel = CB_Clicked[0].split(',');
@@ -1109,6 +1112,9 @@ var CB_Show = 1;
 				CB_SlideP.unbind('click.clearbox');
 
 				CB_Clicked = a.split('+\\+');
+
+				_clearbox.log(['CB_ClickIMG', CB_Clicked]);
+
 				CB_Rel = CB_Clicked[0].split(',');
 				if (CB_Rel[1] > 0) {
 					CB_SlShowTimer = parseInt(CB_Rel[1]) * 1000;
