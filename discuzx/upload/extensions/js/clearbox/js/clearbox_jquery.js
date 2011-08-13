@@ -458,11 +458,25 @@ var CB_Show = 1;
 				return
 			},
 			CB_fix_center : function (w) {
+				/*
 				var _w = CB_ImgCont.offsetWidth || CB_ImgCont.width;
+				*/
+				var _w = CB_ImgCont.width();
 
 				w = parseInt(w);
 
 				CB_Img.css('marginLeft', (_w > w) ? Math.floor((_w - w) / 2) : 0);
+
+				/*
+				_clearbox.log([
+					'CB_fix_center',
+					CB_ImgCont.offsetWidth,
+					CB_ImgCont.width,
+					CB_ImgCont.outerWidth(),
+					CB_ImgCont.outerWidth(true),
+					CB_ImgCont.width(),
+				]);
+				*/
 
 				/*
 				console.log(
@@ -585,7 +599,7 @@ var CB_Show = 1;
 						CB_ImgHeightOld += CB_JumpY;
 					}
 					CB_Img.height(CB_ImgHeightOld);
-					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder) + 'px';
+					CB_ImgCont.height(CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder));
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.css('marginTop', (CB_MarginT - (FF_ScrollbarBug / 2)));
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
@@ -688,7 +702,7 @@ var CB_Show = 1;
 				CB_Img.attr('src', '').hide();
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
-				CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
+				CB_ImgCont.height(CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder));
 
 				CB_Win.css('visibility', 'hidden');
 				CB_HideContent.unbind('click.clearbox');
@@ -854,7 +868,7 @@ var CB_Show = 1;
 					_clearbox.CB_WindowResizeY();
 				} else if (_clearbox.options.CB_Animation == 'ki') {
 					_clearbox.CB_SetMargins();
-					CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
+					CB_ImgCont.height(CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder));
 
 					CB_Img.width(CB_ImgWidth).height(CB_ImgHeight);
 
@@ -1133,7 +1147,7 @@ var CB_Show = 1;
 			CB_FullSize : function () {
 				CB_Img.width(CB_ImgWidthOrig).height(CB_ImgHeightOrig);
 
-				CB_ImgCont.style.height = CB_ImgHeightOrig + (2 * _clearbox.options.CB_ImgBorder) + 'px'
+				CB_ImgCont.height(CB_ImgHeightOrig + (2 * _clearbox.options.CB_ImgBorder));
 			},
 			alert : function (msg) {
 				alert(msg);
@@ -1188,7 +1202,7 @@ var CB_Show = 1;
 				.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
 
 			CB_LoadingImg = document.getElementById('CB_LoadingImage');
-			CB_ImgCont = document.getElementById('CB_ImgContainer');
+			CB_ImgCont = $('#CB_ImgContainer');
 
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
