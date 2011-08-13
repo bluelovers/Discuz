@@ -727,9 +727,11 @@ var CB_Show = 1;
 				return;
 			},
 			CB_ShowImage : function () {
-				CB_Cls.onclick = function() {
-					_clearbox.CB_Close()
-				};
+				CB_Cls
+					.unbind('click.clearbox')
+					.bind('click.clearbox', function() {
+						_clearbox.CB_Close()
+				});
 				CB_SlideS
 					.unbind('click.clearbox')
 					.bind('click.clearbox', function() {
@@ -750,7 +752,7 @@ var CB_Show = 1;
 						.attr('src', CB_Gallery[CB_ActImgId][0])
 						.css('visibility', 'visible');
 				}
-				CB_Cls.style.display = 'block';
+				CB_Cls.show();
 				CB_HideContent.bind('click.clearbox', function() {
 					_clearbox.CB_Close();
 					return false;
@@ -1072,7 +1074,7 @@ var CB_Show = 1;
 				CB_ClearBox = 'ki';
 				CB_Clicked = a.split('+\\+');
 				CB_PrvNxt.display = 'none';
-				CB_Cls.style.display = 'none';
+				CB_Cls.hide();
 				CB_Rel = CB_Clicked[0].split(',');
 				_clearbox.CB_SetAllPositions();
 				CB_ImgWidth = parseInt(CB_Rel[0]);
@@ -1102,7 +1104,7 @@ var CB_Show = 1;
 				if (CB_Show == 0) {
 					return false
 				}
-				CB_Cls.onclick = '';
+				CB_Cls.unbind('click.clearbox');
 				CB_SlideS.unbind('click.clearbox');
 				CB_SlideP.unbind('click.clearbox');
 
@@ -1216,7 +1218,7 @@ var CB_Show = 1;
 			CB_LoadingImg = $('#CB_LoadingImage');
 			CB_ImgCont = $('#CB_ImgContainer');
 
-			CB_Cls = document.getElementById('CB_CloseWindow');
+			CB_Cls = $('#CB_CloseWindow');
 			CB_SlideS = $('#CB_SlideShowS');
 			CB_SlideP = $('#CB_SlideShowP');
 			CB_SlideB = $('#CB_SlideShowBar')
