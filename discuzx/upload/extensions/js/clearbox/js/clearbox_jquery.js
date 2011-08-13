@@ -641,12 +641,14 @@ var CB_Show = 1;
 				}
 			},
 			CB_SetMargins : function (a) {
+				/*
 				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
+				*/
 				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 
-				if (a) {
-					CB_MarginL = parseInt(DocScrX - (CB_Win.width() + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
+				CB_MarginL = parseInt(DocScrX - (CB_Win.width() + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 
+				if (a) {
 					CB_Win.animate({
 						marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
 						marginLeft : CB_MarginL,
