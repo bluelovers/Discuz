@@ -1111,12 +1111,12 @@ var CB_Show = 1;
 				CB_Clicked = a.split('+\\+');
 				CB_Rel = CB_Clicked[0].split(',');
 				if (CB_Rel[1] > 0) {
-					CB_SlShowTimer = parseInt(CB_Rel[1]) * 1000
+					CB_SlShowTimer = parseInt(CB_Rel[1]) * 1000;
 				} else {
-					CB_SlShowTimer = _clearbox.options.CB_SlShowTime
+					CB_SlShowTimer = _clearbox.options.CB_SlShowTime;
 				}
 				if (CB_Rel[2] == 'start') {
-					CB_SS = 'pause'
+					CB_SS = 'pause';
 				}
 				if (CB_Gallery && CB_Rel[0] == CB_Gallery[0][0] && CB_Gallery[0][0] != 'clearbox') {} else {
 					CB_Gallery = new Array;
@@ -1128,23 +1128,33 @@ var CB_Show = 1;
 						CB_Gallery.push(new Array(CB_Clicked[1], CB_Clicked[2]));
 					} else {
 						for (i = 0; i < CB_Links.length; i++) {
-							if ($(CB_Links[i]).attr('rel').substring(9, $(CB_Links[i]).attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
+
+							var _link = $(CB_Links[i]);
+
+							if (_link.attr('rel').substring(9, _link.attr('rel').length - 1).split(',')[0] == CB_Gallery[0][0]) {
 								CB_ActThumbSrc = _clearbox.options.CB_PicDir + 'noprv.gif';
-								if ($(CB_Links[i]).attr('tnhref') == null || $(CB_Links[i]).attr('tnhref') == 'null') {
+								if (_link.attr('tnhref') == null || _link.attr('tnhref') == 'null') {
+									/*
 									for (j = 0; j < CB_Links[i].childNodes.length; j++) {
 										if (CB_Links[i].childNodes[j].src != undefined) {
 											CB_ActThumbSrc = CB_Links[i].childNodes[j].getAttribute('src');
 										}
 									}
+									*/
+									_link.children('*[src]').each(function(idx, elem){
+										if ($(elem).attr('src')) {
+											CB_ActThumbSrc = $(elem).attr('src');
+										}
+									});
 								} else {
-									CB_ActThumbSrc = $(CB_Links[i]).attr('tnhref');
+									CB_ActThumbSrc = _link.attr('tnhref');
 								}
 
 								// bluelovers
-								CB_ActThumbSrc = CB_ActThumbSrc || $(CB_Links[i]).attr('href');
+								CB_ActThumbSrc = CB_ActThumbSrc || _link.attr('href');
 								// bluelovers
 
-								CB_Gallery.push(new Array($(CB_Links[i]).attr('href'), CB_Links[i].getAttribute('title'), CB_ActThumbSrc))
+								CB_Gallery.push(new Array(_link.attr('href'), _link.attr('title'), CB_ActThumbSrc))
 							}
 						}
 					}
