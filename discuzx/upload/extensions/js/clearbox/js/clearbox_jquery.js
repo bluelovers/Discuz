@@ -308,15 +308,18 @@ var CB_Show = 1;
 			},
 			getMouseXY : function (e) {
 				if (CB_AllThumbsWidth > CB_ImgWidth) {
-					if (jQuery.browser.msie) {
-						tempX = event.clientX
-					} else {
-						tempX = e.pageX
-					}
+					tempX = e.pageX;
+
 					if (tempX < 0) {
 						tempX = 0
 					}
-					CB_Thm2.style.marginLeft = ((BrSizeX - CB_ImgWidth) / 2 - tempX) / (CB_ImgWidth / (CB_AllThumbsWidth - CB_ImgWidth)) + 'px'
+
+					$(CB_Thm2).css('marginLeft',
+						((BrSizeX - CB_ImgWidth) / 2 - tempX)
+						/ (CB_ImgWidth / (CB_AllThumbsWidth - CB_ImgWidth))
+					);
+
+					_clearbox.log(['getMouseXY', tempX, e.pageX, $(CB_Thm2).css('marginLeft')]);
 				}
 			},
 			CB_SlideShow : function() {
@@ -422,8 +425,9 @@ var CB_Show = 1;
 				BrSizeX = $(window).width();
 				BrSizeY = $(window).height();
 
+				_clearbox.log('getBrowserSize');
 				_clearbox.log(['BrSizeX', BrSizeX, $(window).width()]);
-				_clearbox.log(['BrSizeY', BrSizeY, $(window).height()]);
+				_clearbox.log(['BrSizeY', BrSizeY, $(window).height(), window.innerHeight, document.body.clientHeight]);
 
 				return
 			},
@@ -441,7 +445,7 @@ var CB_Show = 1;
 				}
 				_clearbox.CB_SetMargins();
 				if (CB_BodyMarginX == 0) {
-					$(CB_HideContent).width(DocSizeX > BrSizeX ? DocSizeX : BrSizeX);
+					$(CB_HideContent).width(DocSizeX < BrSizeX ? DocSizeX : BrSizeX);
 				} else {
 					$(CB_HideContent).width(DocSizeX + CB_BodyMarginX);
 				}
