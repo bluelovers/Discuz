@@ -781,7 +781,7 @@ var CB_Show = 1;
 						CB_SlideB.show();
 						_clearbox.CB_SlideShow();
 					} else {
-						CB_SlideS.style.display = 'block';
+						CB_SlideS.show();
 					}
 				} else {
 					CB_SS = 'start';
