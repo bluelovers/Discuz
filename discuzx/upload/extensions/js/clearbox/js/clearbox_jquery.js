@@ -327,11 +327,11 @@ var CB_Show = 1;
 					CB_SSTimer = setTimeout(_clearbox.CB_SlideShow, 25);
 					CB_jj += 25;
 					CB_SlideBW += (CB_ImgWidth - 44) / (CB_SlShowTimer / 25);
-					CB_SlideB.style.width = CB_SlideBW + 'px'
+					CB_SlideB.width(CB_SlideBW);
 				} else {
 					clearTimeout(CB_SSTimer);
 					CB_SlideBW = 0;
-					CB_SlideB.style.width = CB_SlideBW + 'px';
+					CB_SlideB.width(CB_SlideBW);
 					if (CB_ActImgId == CB_Gallery.length - 1) {
 						_clearbox.CB_LoadImage(1)
 					} else {
@@ -350,13 +350,13 @@ var CB_Show = 1;
 				}
 				CB_jj = 0;
 				CB_SlideBW = 0;
-				$(CB_SlideB).hide();
+				CB_SlideB.hide();
 			},
 			CB_SSStart : function () {
 				$(CB_SlideS).hide();
 				$(CB_SlideP).show();
 				CB_SS = 'pause';
-				$(CB_SlideB).show();
+				CB_SlideB.show();
 				_clearbox.CB_SlideShow();
 			},
 			CB_SSPause : function () {
@@ -743,7 +743,7 @@ var CB_Show = 1;
 				if (CB_Gallery.length > 2) {
 					if (CB_SS == 'pause') {
 						$(CB_SlideP).show();
-						$(CB_SlideB).show();
+						CB_SlideB.show();
 						_clearbox.CB_SlideShow();
 					} else {
 						CB_SlideS.style.display = 'block';
@@ -1168,9 +1168,8 @@ var CB_Show = 1;
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
 			CB_SlideP = document.getElementById('CB_SlideShowP');
-			CB_SlideB = document.getElementById('CB_SlideShowBar');
-
-			$(CB_SlideB).css('opacity', 0.5);
+			CB_SlideB = $('#CB_SlideShowBar')
+				.css('opacity', 0.5);
 
 			CB_Prv = document.getElementById('CB_Prev');
 			CB_Nxt = document.getElementById('CB_Next');
