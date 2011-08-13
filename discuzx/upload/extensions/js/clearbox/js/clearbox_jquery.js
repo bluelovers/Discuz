@@ -1315,11 +1315,15 @@ var CB_Show = 1;
 		});
 
 		for (i = 0; i < CB_Links.length; i++) {
-			CB_Rel = $(CB_Links[i]).attr('rel');
-			CB_URL = $(CB_Links[i]).attr('href');
+
+			var _link = $(CB_Links[i]);
+
+			CB_Rel = _link.attr('rel');
+			CB_URL = _link.attr('href');
+
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
-					$(CB_Links[i]).bind('click.clearbox', function() {
+					_link.bind('click.clearbox', function() {
 						var _link = $(this);
 						_clearbox.CB_ClickIMG(_link.attr('rel') + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 						return false;
@@ -1327,7 +1331,7 @@ var CB_Show = 1;
 				} else {
 					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
-							$(CB_Links[i]).bind('click.clearbox', function() {
+							_link.bind('click.clearbox', function() {
 								var _link = $(this);
 								_clearbox.CB_ClickIMG(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
@@ -1337,13 +1341,13 @@ var CB_Show = 1;
 						}
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
-							$(CB_Links[i]).bind('click.clearbox', function() {
+							_link.bind('click.clearbox', function() {
 								var _link = $(this);
 								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
 							});
 						} else {
-							$(CB_Links[i]).bind('mouseover.clearbox', function() {
+							_link.bind('mouseover.clearbox', function() {
 								var _link = $(this);
 								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
