@@ -735,7 +735,7 @@ var CB_Show = 1;
 				CB_PrvNxt.display = 'block';
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Txt.html('');
-					CB_LoadingImg.style.visibility = 'hidden';
+					CB_LoadingImg.css('visibility', 'hidden');
 					CB_Img
 						.attr('src', CB_Gallery[CB_ActImgId][0])
 						.css('visibility', 'visible');
@@ -861,7 +861,7 @@ var CB_Show = 1;
 					_clearbox.CB_WindowResizeY();
 				} else if (_clearbox.options.CB_Animation == 'warp') {
 					if (!a) {
-						CB_LoadingImg.style.visibility = 'hidden';
+						CB_LoadingImg.css('visibility', 'hidden');
 						CB_Img.css('visibility', 'visible');
 					}
 					_clearbox.CB_WindowResizeX();
@@ -912,7 +912,7 @@ var CB_Show = 1;
 					// bluelovers
 
 					CB_Img.css('visibility', 'visible');
-					CB_LoadingImg.style.visibility = 'hidden';
+					CB_LoadingImg.css('visibility', 'hidden');
 
 					CB_iFr
 						.attr('src', CB_Clicked[1])
@@ -1040,7 +1040,7 @@ var CB_Show = 1;
 				CB_JumpY = _clearbox.options.CB_Jump_Y;
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Img.css('visibility', 'hidden');
-					CB_LoadingImg.style.visibility = 'visible'
+					CB_LoadingImg.css('visibility', 'visible');
 				}
 				CB_Txt.html(_clearbox.options.CB_LoadingText);
 				CB_Count = 0;
@@ -1201,7 +1201,7 @@ var CB_Show = 1;
 			CB_Img = $('#CB_Image')
 				.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
 
-			CB_LoadingImg = document.getElementById('CB_LoadingImage');
+			CB_LoadingImg = $('#CB_LoadingImage');
 			CB_ImgCont = $('#CB_ImgContainer');
 
 			CB_Cls = document.getElementById('CB_CloseWindow');
@@ -1366,7 +1366,7 @@ var CB_Show = 1;
 				clearTimeout(CB_Blur);
 			}
 			if (b == 'x') {
-				CB_LoadingImg.style.visibility = 'visible';
+				CB_LoadingImg.css('visibility', 'visible');
 				_clearbox.CB_AnimatePlease('x');
 			} else {
 				_clearbox.CB_NewWindow();
