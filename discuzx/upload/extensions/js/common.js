@@ -251,19 +251,38 @@
 				jQuery.log(textStatus);
 
 				$.clearbox.init({
+					path : {
+						base : 'extensions/js/clearbox',
+						js : 'extensions/js/clearbox/js',
+					},
 					CB_PicDir : 'extensions/js/clearbox/pic'
 				});
 
-				jQuery('<a>SHOW BBCODE IMG</a>')
+				jQuery('<a>SHOW BBCODE IMG - PICS: ' + bbcode_imgs.size() + '</a>')
 					.attr({
 						'href' : 'javascript:void(0);',
+						'class' : 'notice_green',
+					})
+					.css({
+						'text-decoration' : 'none',
 					})
 					.click(function(){
 						bbcode_imgs.first().click();
 					})
-					.appendTo(jQuery('<p/>'))
+					.appendTo(jQuery('<div/>'))
 					.parent()
-					.prependTo(bbcode_imgs.parents('td[id].t_f').first());
+					.css({
+
+					})
+					.attr({
+						'class' : 'notice notice_green',
+					})
+					.appendTo(jQuery('<div/>'))
+					.parent()
+					.prependTo(bbcode_imgs.parents('td[id].t_f').first())
+					.css({
+						padding : 5,
+					})
 				;
 			});
 		}
