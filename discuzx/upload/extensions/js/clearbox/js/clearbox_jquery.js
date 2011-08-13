@@ -354,13 +354,13 @@ var CB_Show = 1;
 			},
 			CB_SSStart : function () {
 				$(CB_SlideS).hide();
-				$(CB_SlideP).show();
+				CB_SlideP.show();
 				CB_SS = 'pause';
 				CB_SlideB.show();
 				_clearbox.CB_SlideShow();
 			},
 			CB_SSPause : function () {
-				$(CB_SlideP).hide();
+				CB_SlideP.hide();
 				$(CB_SlideS).show();
 				_clearbox.CB_SlideShowStop();
 			},
@@ -734,10 +734,12 @@ var CB_Show = 1;
 					_clearbox.CB_SSStart();
 					return false;
 				};
-				CB_SlideP.onclick = function() {
-					_clearbox.CB_SSPause();
-					return false;
-				};
+				CB_SlideP
+					.unbind('click.clearbox')
+					.bind('click.clearbox', function() {
+						_clearbox.CB_SSPause();
+						return false;
+				});
 				CB_PrvNxt.display = 'block';
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Txt.html('');
@@ -771,7 +773,7 @@ var CB_Show = 1;
 				}
 				if (CB_Gallery.length > 2) {
 					if (CB_SS == 'pause') {
-						$(CB_SlideP).show();
+						CB_SlideP.show();
 						CB_SlideB.show();
 						_clearbox.CB_SlideShow();
 					} else {
@@ -1028,13 +1030,13 @@ var CB_Show = 1;
 				CB_HideContent.unbind('click.clearbox');
 				if (CB_Gallery.length < 3) {
 					$(CB_SlideS).hide();
-					$(CB_SlideP).hide();
+					CB_SlideP.hide();
 				} else {
 					if (CB_SS == 'start') {
 						$(CB_SlideS).show();
-						$(CB_SlideP).hide();
+						CB_SlideP.hide();
 					} else {
-						$(CB_SlideP).show();
+						CB_SlideP.show();
 						$(CB_SlideS).hide();
 					}
 				}
@@ -1091,7 +1093,7 @@ var CB_Show = 1;
 
 				CB_Win.css('visibility', 'visible');
 				$(CB_SlideS).hide();
-				$(CB_SlideP).hide();
+				CB_SlideP.hide();
 				CB_HideDocument('x');
 			},
 			CB_ClickIMG : function (a) {
@@ -1100,7 +1102,8 @@ var CB_Show = 1;
 				}
 				CB_Cls.onclick = '';
 				CB_SlideS.onclick = '';
-				CB_SlideP.onclick = '';
+				CB_SlideP.unbind('click.clearbox');
+
 				CB_Clicked = a.split('+\\+');
 				CB_Rel = CB_Clicked[0].split(',');
 				if (CB_Rel[1] > 0) {
@@ -1213,7 +1216,7 @@ var CB_Show = 1;
 
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
-			CB_SlideP = document.getElementById('CB_SlideShowP');
+			CB_SlideP = $('#CB_SlideShowP');
 			CB_SlideB = $('#CB_SlideShowBar')
 				.css('opacity', 0.5);
 
