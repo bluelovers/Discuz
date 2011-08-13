@@ -27,6 +27,9 @@ var CB_Show = 1;
 
 	CB_HideContent,
 
+	CB_resize_ing,
+	CB_scroll_ing,
+
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
 	var CB_PrePictures = new Array();
@@ -431,7 +434,7 @@ var CB_Show = 1;
 
 				return
 			},
-			CB_SetAllPositions : function () {
+			CB_SetAllPositions : function (a) {
 				_clearbox.getBrowserSize();
 				_clearbox.getDocumentSize();
 				_clearbox.getScrollPosition();
@@ -443,7 +446,7 @@ var CB_Show = 1;
 				} else {
 					FF_ScrollbarBug = 0
 				}
-				_clearbox.CB_SetMargins();
+				_clearbox.CB_SetMargins(a);
 				if (CB_BodyMarginX == 0) {
 					CB_HideContent.width(DocSizeX < BrSizeX ? DocSizeX : BrSizeX);
 				} else {
@@ -451,9 +454,11 @@ var CB_Show = 1;
 				}
 
 				CB_HideContent.css({
+					/*
 					height : BrSizeY + DocScrY,
+					*/
 					visibility : 'visible'
-				});
+				}).height(DocSizeY + CB_BodyMarginY);
 
 				return
 			},
@@ -635,14 +640,25 @@ var CB_Show = 1;
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
 				}
 			},
-			CB_SetMargins : function () {
+			CB_SetMargins : function (a) {
 				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 
-				CB_Win.css({
-					marginLeft : CB_MarginL,
-					marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
-				});
+				if (a) {
+					CB_MarginL = parseInt(DocScrX - (CB_Win.width() + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
+
+					CB_Win.animate({
+						marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
+						marginLeft : CB_MarginL,
+					}, {
+						duration : 100
+					});
+				} else {
+					CB_Win.css({
+						marginLeft : CB_MarginL,
+						marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
+					});
+				}
 
 				_clearbox.log(['CB_SetMargins', CB_MarginL, (CB_MarginT - (FF_ScrollbarBug / 2))]);
 
@@ -727,6 +743,10 @@ var CB_Show = 1;
 				return;
 			},
 			CB_Close : function () {
+
+				$(window).unbind('resize.clearbox');
+				$(document).unbind('scroll.clearbox');
+
 				CB_ImgHd.css({
 					width : 0,
 					height : 0,
@@ -758,11 +778,48 @@ var CB_Show = 1;
 				CB_ShowDocument();
 				return;
 			},
+			resize : function() {
+				if (CB_resize_ing) {
+					CB_resize_ing = 0;
+
+					setTimeout(_clearbox.resize, 5);
+				} else {
+					_clearbox.CB_LoadImage();
+				}
+			},
+			scroll : function() {
+				if (CB_scroll_ing) {
+					CB_scroll_ing = 0;
+
+					setTimeout(_clearbox.scroll, 3);
+				} else {
+					_clearbox.CB_SetAllPositions(1);
+				}
+			},
 			CB_ShowImage : function () {
+
+				// bluelovers
+				$(window)
+					.unbind('resize.clearbox')
+					.bind('resize.clearbox', function() {
+
+						CB_resize_ing = 1;
+
+						setTimeout(_clearbox.resize, 5);
+
+				});
+				$(document)
+					.unbind('scroll.clearbox')
+					.bind('scroll.clearbox', function(){
+						CB_scroll_ing = 1;
+						setTimeout(_clearbox.scroll, 5);
+				});
+				// bluelovers
+
 				CB_Cls
 					.unbind('click.clearbox')
 					.bind('click.clearbox', function() {
-						_clearbox.CB_Close()
+						_clearbox.CB_Close();
 				});
 				CB_SlideS
 					.unbind('click.clearbox')
