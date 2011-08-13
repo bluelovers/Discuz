@@ -761,7 +761,7 @@ var CB_Show = 1;
 
 				if (CB_ImgWidth < CB_preImages.width || CB_ImgHeight < CB_preImages.height) {
 					CB_ShEt.css('visibility', 'visible');
-					CB_Et.style.width = CB_ImgWidth + 2 + 'px';
+					CB_Et.width(CB_ImgWidth + 2);
 				}
 				if (CB_Gallery.length > 2) {
 					CB_ShTh.css('visibility', 'visible');
@@ -922,12 +922,12 @@ var CB_Show = 1;
 			},
 			CB_ShowEtc : function () {
 				CB_ImgHd.css('visibility', 'visible');
-				$(CB_Et).show();
+				CB_Et.show();
 				return;
 			},
 			CB_HideEtc : function () {
 				CB_ImgHd.css('visibility', 'hidden');
-				$(CB_Et).hide();
+				CB_Et.hide();
 				return;
 			},
 			CB_ShowThumbs : function () {
@@ -974,8 +974,8 @@ var CB_Show = 1;
 				CB_ShEt.css('visibility', 'hidden');
 				CB_Thm.style.display = 'none';
 				CB_Thm.style.width = 0 + 'px';
-				CB_Et.style.display = 'none';
-				CB_Et.style.width = 0 + 'px';
+				CB_Et.hide()
+					.width(0);
 
 				CB_ImgHd.css({
 					width : 0,
@@ -1153,7 +1153,7 @@ var CB_Show = 1;
 			CB_Win = document.getElementById('CB_Window');
 			CB_Thm = document.getElementById('CB_Thumbs');
 			CB_Thm2 = $('#CB_Thumbs2');
-			CB_Et = document.getElementById('CB_Etc');
+			CB_Et = $('#CB_Etc');
 
 			CB_HideContent = $('#CB_ContentHide')
 				.css({
