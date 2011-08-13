@@ -1177,7 +1177,7 @@ var CB_Show = 1;
 			if (jQuery.browser.msie && _clearbox.options.CB_RoundPix < 2) {
 				CB_ieRPBug = 6
 			}
-			document.getElementById('CB_Padding').style.padding = _clearbox.options.CB_Padd + 'px';
+			$('#CB_Padding').css('padding', _clearbox.options.CB_Padd);
 			CB_ShTh = $('#CB_ShowTh');
 			CB_ShEt = $('#CB_ShowEtc');
 
