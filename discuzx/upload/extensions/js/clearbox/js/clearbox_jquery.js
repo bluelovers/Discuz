@@ -683,11 +683,11 @@ var CB_Show = 1;
 				CB_ShEt.css('visibility', 'hidden');
 				_clearbox.CB_SlideShowStop();
 				CB_Txt.html('');
-				CB_Img.attr('src', '');
+				CB_Img.attr('src', '').hide();
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 				CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
-				CB_Img.hide();
+
 				CB_Win.css('visibility', 'hidden');
 				CB_HideContent.unbind('click.clearbox');
 				CB_iFr.src = '';
@@ -1171,10 +1171,12 @@ var CB_Show = 1;
 					'opacity' : 0,
 			});
 
-			CB_Img = $('#CB_Image');
+			CB_Img = $('#CB_Image')
+				.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
+
 			CB_LoadingImg = document.getElementById('CB_LoadingImage');
 			CB_ImgCont = document.getElementById('CB_ImgContainer');
-			CB_Img.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
+
 			CB_Cls = document.getElementById('CB_CloseWindow');
 			CB_SlideS = document.getElementById('CB_SlideShowS');
 			CB_SlideP = document.getElementById('CB_SlideShowP');
