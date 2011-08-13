@@ -679,7 +679,7 @@ var CB_Show = 1;
 					visibility : 'hidden',
 				});
 
-				CB_ShTh.style.visibility = 'hidden';
+				CB_ShTh.css('visibility', 'hidden');
 				CB_ShEt.style.visibility = 'hidden';
 				_clearbox.CB_SlideShowStop();
 				CB_Txt.html('');
@@ -764,7 +764,7 @@ var CB_Show = 1;
 					CB_Et.style.width = CB_ImgWidth + 2 + 'px';
 				}
 				if (CB_Gallery.length > 2) {
-					CB_ShTh.style.visibility = 'visible';
+					CB_ShTh.css('visibility', 'visible');
 					CB_Thm.style.width = CB_ImgWidth + 2 + 'px';
 					var a = '';
 					var b = 5;
@@ -970,7 +970,7 @@ var CB_Show = 1;
 				return
 			},
 			CB_LoadImage : function (a) {
-				CB_ShTh.style.visibility = 'hidden';
+				CB_ShTh.css('visibility', 'hidden');
 				CB_ShEt.style.visibility = 'hidden';
 				CB_Thm.style.display = 'none';
 				CB_Thm.style.width = 0 + 'px';
@@ -1141,7 +1141,7 @@ var CB_Show = 1;
 				CB_ieRPBug = 6
 			}
 			document.getElementById('CB_Padding').style.padding = _clearbox.options.CB_Padd + 'px';
-			CB_ShTh = document.getElementById('CB_ShowTh');
+			CB_ShTh = $('#CB_ShowTh');
 			CB_ShEt = document.getElementById('CB_ShowEtc');
 
 			CB_ImgHd = $('#CB_ImgHide')
@@ -1194,10 +1194,10 @@ var CB_Show = 1;
 			CB_Right.width = _clearbox.options.CB_RoundPix + 'px';
 			CB_iFr = document.getElementById('CB_iFrame');
 			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
-			CB_ShTh.onmouseover = function() {
+			CB_ShTh.mouseover(function() {
 				_clearbox.CB_ShowThumbs();
 				return
-			};
+			});
 			CB_ShEt.onmouseover = function() {
 				_clearbox.CB_ShowEtc();
 				return
