@@ -1320,14 +1320,16 @@ var CB_Show = 1;
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
 					$(CB_Links[i]).bind('click.clearbox', function() {
-						_clearbox.CB_ClickIMG(this.rel + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+						var _link = $(this);
+						_clearbox.CB_ClickIMG(_link.attr('rel') + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 						return false;
 					});
 				} else {
 					if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '[' && CB_Rel.charAt(CB_Rel.length - 1) == ']') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[0] != 'clearbox') {
 							$(CB_Links[i]).bind('click.clearbox', function() {
-								_clearbox.CB_ClickIMG(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								var _link = $(this);
+								_clearbox.CB_ClickIMG(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
 							});
 						} else {
@@ -1336,12 +1338,14 @@ var CB_Show = 1;
 					} else if (CB_Rel.substring(0, 8) == 'clearbox' && CB_Rel.charAt(8) == '(' && CB_Rel.charAt(CB_Rel.length - 1) == ')') {
 						if (CB_Rel.substring(9, CB_Rel.length - 1).split(',')[2] == 'click') {
 							$(CB_Links[i]).bind('click.clearbox', function() {
-								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								var _link = $(this);
+								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
 							});
 						} else {
 							$(CB_Links[i]).bind('mouseover.clearbox', function() {
-								_clearbox.CB_ClickURL(this.rel.substring(9, this.rel.length - 1) + '+\\+' + this.getAttribute('href') + '+\\+' + this.getAttribute('title'));
+								var _link = $(this);
+								_clearbox.CB_ClickURL(_link.attr('rel').substring(9, _link.attr('rel').length - 1) + '+\\+' + _link.attr('href') + '+\\+' + _link.attr('title'));
 								return false;
 							});
 						}
