@@ -744,7 +744,7 @@ var CB_Show = 1;
 						_clearbox.CB_SSPause();
 						return false;
 				});
-				CB_PrvNxt.display = 'block';
+				CB_PrvNxt.show();
 				if (_clearbox.options.CB_Animation != 'warp') {
 					CB_Txt.html('');
 					CB_LoadingImg.css('visibility', 'hidden');
@@ -1073,7 +1073,7 @@ var CB_Show = 1;
 				}
 				CB_ClearBox = 'ki';
 				CB_Clicked = a.split('+\\+');
-				CB_PrvNxt.display = 'none';
+				CB_PrvNxt.hide();
 				CB_Cls.hide();
 				CB_Rel = CB_Clicked[0].split(',');
 				_clearbox.CB_SetAllPositions();
@@ -1256,7 +1256,8 @@ var CB_Show = 1;
 			$('#CB_Right').width(_clearbox.options.CB_RoundPix);
 
 			CB_iFr = $('#CB_iFrame');
-			CB_PrvNxt = document.getElementById('CB_PrevNext').style;
+			CB_PrvNxt = $('#CB_PrevNext');
+
 			CB_ShTh.mouseover(function() {
 				_clearbox.CB_ShowThumbs();
 				return
