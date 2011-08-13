@@ -98,6 +98,8 @@ var CB_Show = 1;
 				CB_PicturePause : 'pause.png',
 				CB_PictureClose : 'close.png',
 				CB_PictureLoading : 'loading.gif',
+
+				debug : 0,
  			},
  			options : {
 
@@ -222,6 +224,7 @@ var CB_Show = 1;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 			},
 			log : function (s) {
+				if (!_clearbox.options.debug) return;
 				$.log(s);
 			},
 			keyeven : function(event){
@@ -1333,7 +1336,27 @@ var CB_Show = 1;
 			CB_Win = $('#CB_Window');
 			CB_Thm = $('#CB_Thumbs');
 			CB_Thm2 = $('#CB_Thumbs2');
-			CB_Et = $('#CB_Etc');
+
+			var _img = $('<a/>').css({
+				'background': 'url("' + _clearbox.options.CB_PicDir + 'imgzoom_tb.gif") no-repeat scroll 0 0 transparent',
+				'height': 17,
+				'overflow': 'hidden',
+				'width': 17,
+				'position' : 'relative',
+				'display' : 'block',
+				'left' : '50%',
+				'top' : '30%',
+				'background-position' : '0 -39px',
+			}).html('&nbsp;');
+
+			CB_Et = $('#CB_Etc')
+				.click(function(){
+					window.open(CB_Gallery[CB_ActImgId][0], '_blank');
+				})
+				.css('cursor', 'pointer')
+				.html(_img)
+				.attr('title', 'Open New Window')
+			;
 
 			CB_HideContent = $('#CB_ContentHide')
 				.css({
