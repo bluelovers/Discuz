@@ -541,7 +541,7 @@ var CB_Show = 1;
 					}
 					CB_Img.style.width = CB_ImgWidthOld + 'px';
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
-					CB_Win.style.marginLeft = CB_MarginL + 'px';
+					CB_Win.css('marginLeft', CB_MarginL);
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
 				}
 			},
@@ -591,15 +591,19 @@ var CB_Show = 1;
 					CB_Img.style.height = CB_ImgHeightOld + 'px';
 					CB_ImgCont.style.height = CB_ImgHeightOld + (2 * _clearbox.options.CB_ImgBorder) + 'px';
 					CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeightOld + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
-					CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
+					CB_Win.css('marginTop', (CB_MarginT - (FF_ScrollbarBug / 2)));
 					CB_TimerY = setTimeout(_clearbox.CB_WindowResizeY, _clearbox.options.CB_AnimTimeout);
 				}
 			},
 			CB_SetMargins : function () {
 				CB_MarginL = parseInt(DocScrX - (CB_ImgWidth + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 				CB_MarginT = parseInt(DocScrY - (CB_ieRPBug + CB_ImgHeight + _clearbox.options.CB_TextH + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
-				CB_Win.style.marginLeft = CB_MarginL + 'px';
-				CB_Win.style.marginTop = (CB_MarginT - (FF_ScrollbarBug / 2)) + 'px';
+
+				CB_Win.css({
+					marginLeft : CB_MarginL,
+					marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
+				});
+
 				return;
 			},
 			CB_PrevNext : function () {
@@ -688,7 +692,7 @@ var CB_Show = 1;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 				CB_ImgCont.style.height = CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder) + 'px';
 				CB_Img.style.display = 'none';
-				CB_Win.style.visibility = 'hidden';
+				CB_Win.css('visibility', 'hidden');
 				CB_HideContent.unbind('click.clearbox');
 				CB_iFr.src = '';
 				CB_iFr.style.top = '0px';
@@ -917,7 +921,9 @@ var CB_Show = 1;
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH) + 'px';
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
-				CB_Win.style.visibility = 'visible';
+
+				CB_Win.css('visibility', 'visible');
+
 				_clearbox.CB_LoadImage();
 			},
 			CB_ShowEtc : function () {
@@ -1045,7 +1051,7 @@ var CB_Show = 1;
 				CB_Img.style.height = (_clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH) + 'px';
 				CB_Img.style.display = 'block';
 				CB_Img.style.visibility = 'hidden';
-				CB_Win.style.visibility = 'visible';
+				CB_Win.css('visibility', 'visible');
 				$(CB_SlideS).hide();
 				$(CB_SlideP).hide();
 				CB_HideDocument('x');
@@ -1150,7 +1156,7 @@ var CB_Show = 1;
 					'opacity' : 0.75
 			});
 
-			CB_Win = document.getElementById('CB_Window');
+			CB_Win = $('#CB_Window');
 			CB_Thm = document.getElementById('CB_Thumbs');
 			CB_Thm2 = $('#CB_Thumbs2');
 			CB_Et = $('#CB_Etc');
