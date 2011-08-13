@@ -281,7 +281,8 @@
 					.parent()
 					.prependTo(bbcode_imgs.parents('td[id].t_f').first())
 					.css({
-						padding : 5,
+						'padding-top' : 5,
+						'padding-bottom' : 5,
 					})
 				;
 			});
