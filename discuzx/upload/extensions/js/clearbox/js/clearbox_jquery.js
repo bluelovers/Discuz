@@ -467,6 +467,10 @@ var CB_Show = 1;
 
 				CB_Img.css('marginLeft', (_w > w) ? Math.floor((_w - w) / 2) : 0);
 
+				CB_MarginL = parseInt(DocScrX - (CB_Win.width() + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
+
+				CB_Win.css('marginLeft', CB_MarginL);
+
 				/*
 				_clearbox.log([
 					'CB_fix_center',
@@ -499,20 +503,29 @@ var CB_Show = 1;
 					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH;
 					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
 				}
+
+				_clearbox.log(['CB_FitToBrowser',
+					CB_ImgWidth, CB_ImgHeight,
+					BrSizeX, BrSizeY,
+					BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)),
+					BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH,
+				]);
+
 				return
 			},
 			CB_WindowResizeX : function () {
 				if (CB_ImgWidth == CB_ImgWidthOld) {
 					if (CB_TimerX) {
-						clearTimeout(CB_TimerX)
+						clearTimeout(CB_TimerX);
 					}
 					if (_clearbox.options.CB_Animation == 'normal') {
 						CB_AnimX = 'true';
-						_clearbox.CB_WindowResizeY()
+						_clearbox.CB_WindowResizeY();
 					} else {
-						CB_AnimX = 'true'
+						CB_AnimX = 'true';
 					}
-					return
+
+					return;
 				} else {
 					if (CB_ImgWidth < CB_ImgWidthOld) {
 						if (CB_ImgWidthOld < CB_ImgWidth + 100 && _clearbox.options.CB_Jump_X > 20) {
@@ -552,7 +565,24 @@ var CB_Show = 1;
 					CB_Img.width(CB_ImgWidthOld);
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
 					CB_Win.css('marginLeft', CB_MarginL);
+
+					_clearbox.CB_fix_center(CB_Img.width());
+
 					CB_TimerX = setTimeout(_clearbox.CB_WindowResizeX, _clearbox.options.CB_AnimTimeout);
+
+					_clearbox.log([
+						'CB_WindowResizeX',
+
+						CB_MarginL,
+						CB_ImgWidth,
+						DocScrX,
+
+						DocSizeX,
+						BrSizeX,
+
+						CB_Win.width(),
+
+					]);
 				}
 			},
 			CB_WindowResizeY : function () {
@@ -613,6 +643,8 @@ var CB_Show = 1;
 					marginLeft : CB_MarginL,
 					marginTop : (CB_MarginT - (FF_ScrollbarBug / 2)),
 				});
+
+				_clearbox.log(['CB_SetMargins', CB_MarginL, (CB_MarginT - (FF_ScrollbarBug / 2))]);
 
 				return;
 			},
@@ -987,7 +1019,6 @@ var CB_Show = 1;
 				return;
 			},
 			CB_GetImageSize : function () {
-
 				// bluelovers
 				CB_Img.css('marginLeft', 0);
 				// bluelovers
@@ -1000,6 +1031,17 @@ var CB_Show = 1;
 				_clearbox.CB_FitToBrowser();
 				CB_Img.attr('src', CB_Gallery[CB_ActImgId][0]);
 				_clearbox.CB_AnimatePlease();
+
+				_clearbox.log([
+					'CB_GetImageSize',
+					CB_ActImgId,
+
+					CB_ImgWidth,
+					CB_Img.width(),
+
+					CB_preImages.width,
+				]);
+
 				return
 			},
 			CB_CheckLoaded : function () {
@@ -1016,6 +1058,10 @@ var CB_Show = 1;
 				return
 			},
 			CB_LoadImage : function (a) {
+
+				// 增加 _clearbox.CB_SetAllPositions() 後可於每次切換圖片時同時更新尺寸
+				_clearbox.CB_SetAllPositions();
+
 				CB_ShTh.css('visibility', 'hidden');
 				CB_ShEt.css('visibility', 'hidden');
 				CB_Thm.hide()
