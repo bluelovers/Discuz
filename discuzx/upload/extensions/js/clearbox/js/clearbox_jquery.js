@@ -1171,7 +1171,8 @@ var CB_Show = 1;
 
  	function CB_Init() {
 		if (!document.getElementById('CB_All') && CB_Show != 0) {
-			document.body.style.position = "static";
+			$('body').css('position', 'static');
+
 			var a = '<div class="CB_RoundPixBugFix" style="width: ' + _clearbox.options.CB_RoundPix + 'px; height: ' + _clearbox.options.CB_RoundPix + 'px;"></div>';
 			if (jQuery.browser.msie) {
 				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" />'
