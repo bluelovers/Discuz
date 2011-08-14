@@ -488,5 +488,6 @@ function lazyload(className) {
 
 	// bluelovers
 	_attachEvent(window, 'resize', function(){obj.showImage();});
+	_attachEvent(document, 'resize', function(){obj.showImage();});
 	// bluelovers
 }

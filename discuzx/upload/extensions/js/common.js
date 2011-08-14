@@ -430,9 +430,15 @@
 							'max-width' : 120,
 							'max-height' : 120,
 							'overflow' : 'hidden',
+							'border' : '1px solid #ccc',
 						})
 						.attr({
 							'class' : 'cl',
+						})
+						.hover(function(){
+							$(this).css('border-color', '#96DB52');
+						}, function(){
+							$(this).css('border-color', '#ccc');
 						})
 					;
 
