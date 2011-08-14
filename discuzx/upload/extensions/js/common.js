@@ -398,6 +398,12 @@
 							'lazyloaded' : true,
 						})
 					;
+				} else {
+					_this
+						.attr({
+							'lazyloaded' : true,
+						})
+					;
 				}
 
 			}
