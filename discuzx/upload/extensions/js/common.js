@@ -233,6 +233,8 @@
 					_a_init = 1;
 				}
 
+				_this.unbind('click');
+
 				if (_a_init) {
 					_a
 						.attr({
