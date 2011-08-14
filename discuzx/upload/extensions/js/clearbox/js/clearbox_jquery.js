@@ -126,95 +126,95 @@ var CB_Show = 1;
 
 				_clearbox.options.CB_AnimTimeout = parseInt(_clearbox.options.CB_AnimTimeout);
 				if (_clearbox.options.CB_AnimTimeout < 5) {
-					_clearbox.options.CB_AnimTimeout = 5
+					_clearbox.options.CB_AnimTimeout = 5;
 				}
 				_clearbox.options.CB_BodyMarginLeft = parseInt(_clearbox.options.CB_BodyMarginLeft);
 				if (_clearbox.options.CB_BodyMarginLeft < 0) {
-					_clearbox.options.CB_BodyMarginLeft = 0
+					_clearbox.options.CB_BodyMarginLeft = 0;
 				}
 				_clearbox.options.CB_BodyMarginRight = parseInt(_clearbox.options.CB_BodyMarginRight);
 				if (_clearbox.options.CB_BodyMarginRight < 0) {
-					_clearbox.options.CB_BodyMarginRight = 0
+					_clearbox.options.CB_BodyMarginRight = 0;
 				}
 				_clearbox.options.CB_BodyMarginTop = parseInt(_clearbox.options.CB_BodyMarginTop);
 				if (_clearbox.options.CB_BodyMarginTop < 0) {
-					_clearbox.options.CB_BodyMarginTop = 0
+					_clearbox.options.CB_BodyMarginTop = 0;
 				}
 				_clearbox.options.CB_BodyMarginBottom = parseInt(_clearbox.options.CB_BodyMarginBottom);
 				if (_clearbox.options.CB_BodyMarginBottom < 0) {
-					_clearbox.options.CB_BodyMarginBottom = 0
+					_clearbox.options.CB_BodyMarginBottom = 0;
 				}
 				_clearbox.options.CB_HideOpacity = parseInt(_clearbox.options.CB_HideOpacity);
 				if (_clearbox.options.CB_HideOpacity < 0 || _clearbox.options.CB_HideOpacity > 100) {
-					_clearbox.options.CB_HideOpacity = 70
+					_clearbox.options.CB_HideOpacity = 70;
 				}
 				_clearbox.options.CB_OpacityStep = parseInt(_clearbox.options.CB_OpacityStep);
 				if (_clearbox.options.CB_OpacityStep < 1 || _clearbox.options.CB_OpacityStep > _clearbox.options.CB_HideOpacity) {
-					_clearbox.options.CB_OpacityStep = 10
+					_clearbox.options.CB_OpacityStep = 10;
 				}
 				_clearbox.options.CB_WinBaseW = parseInt(_clearbox.options.CB_WinBaseW);
 				if (_clearbox.options.CB_WinBaseW < 25 || _clearbox.options.CB_WinBaseW > 1000) {
-					_clearbox.options.CB_WinBaseW = 120
+					_clearbox.options.CB_WinBaseW = 120;
 				}
 				_clearbox.options.CB_WinBaseH = parseInt(_clearbox.options.CB_WinBaseH);
 				if (_clearbox.options.CB_WinBaseH < 50 || _clearbox.options.CB_WinBaseH > 1000) {
-					_clearbox.options.CB_WinBaseH = 110
+					_clearbox.options.CB_WinBaseH = 110;
 				}
 				_clearbox.options.CB_WinPadd = parseInt(_clearbox.options.CB_WinPadd);
 				if (_clearbox.options.CB_WinPadd < 0) {
-					_clearbox.options.CB_WinPadd = 5
+					_clearbox.options.CB_WinPadd = 5;
 				}
 				if (_clearbox.options.CB_Animation != 'ki' && _clearbox.options.CB_Animation != 'normal' && _clearbox.options.CB_Animation != 'double' && _clearbox.options.CB_Animation != 'warp') {
 					_clearbox.options.CB_Animation = 'double'
 				}
 				_clearbox.options.CB_Jump_X = parseInt(_clearbox.options.CB_Jump_X);
 				if (_clearbox.options.CB_Jump_X < 1 || _clearbox.options.CB_Jump_X > 99) {
-					_clearbox.options.CB_Jump_X = 50
+					_clearbox.options.CB_Jump_X = 50;
 				}
 				_clearbox.options.CB_Jump_Y = parseInt(_clearbox.options.CB_Jump_Y);
 				if (_clearbox.options.CB_Jump_Y < 1 || _clearbox.options.CB_Jump_Y > 99) {
-					_clearbox.options.CB_Jump_Y = 50
+					_clearbox.options.CB_Jump_Y = 50;
 				}
 				_clearbox.options.CB_ImgBorder = parseInt(_clearbox.options.CB_ImgBorder);
 				if (_clearbox.options.CB_ImgBorder < 0) {
-					_clearbox.options.CB_ImgBorder = 1
+					_clearbox.options.CB_ImgBorder = 1;
 				}
 				_clearbox.options.CB_Padd = parseInt(_clearbox.options.CB_Padd);
 				if (_clearbox.options.CB_Padd < 0) {
-					_clearbox.options.CB_Padd = 2
+					_clearbox.options.CB_Padd = 2;
 				}
 				if (_clearbox.options.CB_ShowImgURL != 'be' && _clearbox.options.CB_ShowImgURL != 'ki') {
-					_clearbox.options.CB_ShowImgURL = 'ki'
+					_clearbox.options.CB_ShowImgURL = 'ki';
 				}
 				_clearbox.options.CB_PadT = parseInt(_clearbox.options.CB_PadT);
 				if (_clearbox.options.CB_PadT < 0) {
-					_clearbox.options.CB_PadT = 10
+					_clearbox.options.CB_PadT = 10;
 				}
 				_clearbox.options.CB_RoundPix = parseInt(_clearbox.options.CB_RoundPix);
 				if (_clearbox.options.CB_RoundPix < 0) {
-					_clearbox.options.CB_RoundPix = 12
+					_clearbox.options.CB_RoundPix = 12;
 				}
 				_clearbox.options.CB_TextH = parseInt(_clearbox.options.CB_TextH);
 				if (_clearbox.options.CB_TextH < 25) {
-					_clearbox.options.CB_TextH = 40
+					_clearbox.options.CB_TextH = 40;
 				}
 				_clearbox.options.CB_FontSize = parseInt(_clearbox.options.CB_FontSize);
 				if (_clearbox.options.CB_FontSize < 6) {
-					_clearbox.options.CB_FontSize = 13
+					_clearbox.options.CB_FontSize = 13;
 				}
 				if (_clearbox.options.CB_ImgNum != 'be' && _clearbox.options.CB_ImgNum != 'ki') {
-					_clearbox.options.CB_ImgNum = 'be'
+					_clearbox.options.CB_ImgNum = 'be';
 				}
 				_clearbox.options.CB_SlShowTime = parseInt(_clearbox.options.CB_SlShowTime);
 				if (_clearbox.options.CB_SlShowTime < 1) {
-					_clearbox.options.CB_SlShowTime = 5
+					_clearbox.options.CB_SlShowTime = 5;
 				}
 				_clearbox.options.CB_SlShowTime *= 1000;
 				if (_clearbox.options.CB_CheckDuplicates != 'be' && _clearbox.options.CB_CheckDuplicates != 'ki') {
-					_clearbox.options.CB_CheckDuplicates = 'ki'
+					_clearbox.options.CB_CheckDuplicates = 'ki';
 				}
 				if (_clearbox.options.CB_Preload != 'be' && _clearbox.options.CB_Preload != 'ki') {
-					_clearbox.options.CB_Preload = 'be'
+					_clearbox.options.CB_Preload = 'be';
 				}
 
 				CB_BodyMarginX = _clearbox.options.CB_BodyMarginLeft + _clearbox.options.CB_BodyMarginRight;
@@ -242,7 +242,7 @@ var CB_Show = 1;
 				if (CB_ClearBox == 'be') {
 					if (CB_ActImgId > 1 && (c == "%" || b == 37 || b == 52 || b == 38 || b == 33)) {
 						if (CB_SSTimer) {
-							_clearbox.CB_SlideShowJump()
+							_clearbox.CB_SlideShowJump();
 						}
 						_clearbox.CB_LoadImage(CB_ActImgId - 1);
 
@@ -250,7 +250,7 @@ var CB_Show = 1;
 					}
 					if (CB_ActImgId < CB_Gallery.length - 1 && (c == "'" || b == 39 || b == 54 || b == 40 || b == 34)) {
 						if (CB_SSTimer) {
-							_clearbox.CB_SlideShowJump()
+							_clearbox.CB_SlideShowJump();
 						}
 						_clearbox.CB_LoadImage(CB_ActImgId + 1);
 
@@ -290,7 +290,7 @@ var CB_Show = 1;
 					if (stop > 1) event.stopPropagation();
 				}
 			},
-			getScrollPosition : function getScrollPosition() {
+			getScrollPosition : function () {
 				this.DocScrX = 0;
 				this.DocScrY = 0;
 				/*
@@ -339,11 +339,11 @@ var CB_Show = 1;
 					CB_SlideBW = 0;
 					CB_SlideB.width(CB_SlideBW);
 					if (CB_ActImgId == CB_Gallery.length - 1) {
-						_clearbox.CB_LoadImage(1)
+						_clearbox.CB_LoadImage(1);
 					} else {
-						_clearbox.CB_LoadImage(CB_ActImgId + 1)
+						_clearbox.CB_LoadImage(CB_ActImgId + 1);
 					}
-					return
+					return;
 				}
 			},
 			CB_SlideShowStop : function () {
@@ -400,7 +400,7 @@ var CB_Show = 1;
 				_clearbox.log(['DocSizeX', DocSizeX, $(document).width(), $(document).outerWidth()]);
 				_clearbox.log(['DocSizeY', DocSizeY, $(document).height(), $(document).outerHeight()]);
 
-				return
+				return;
 			},
 			getBrowserSize : function () {
 				this.BrSizeX = 0;
@@ -435,19 +435,19 @@ var CB_Show = 1;
 				_clearbox.log(['BrSizeX', BrSizeX, $(window).width()]);
 				_clearbox.log(['BrSizeY', BrSizeY, $(window).height(), window.innerHeight, document.body.clientHeight]);
 
-				return
+				return;
 			},
 			CB_SetAllPositions : function (a) {
 				_clearbox.getBrowserSize();
 				_clearbox.getDocumentSize();
 				_clearbox.getScrollPosition();
 				if (BrSizeY > DocSizeY) {
-					DocSizeY = BrSizeY
+					DocSizeY = BrSizeY;
 				}
 				if ((navigator.userAgent.indexOf("Netscape") != -1 || jQuery.browser.firefox) && BrSizeX != DocSizeX) {
-					FF_ScrollbarBug = window.scrollMaxY + window.innerHeight - DocSizeY
+					FF_ScrollbarBug = window.scrollMaxY + window.innerHeight - DocSizeY;
 				} else {
-					FF_ScrollbarBug = 0
+					FF_ScrollbarBug = 0;
 				}
 				_clearbox.CB_SetMargins(a);
 				if (CB_BodyMarginX == 0) {
@@ -463,7 +463,7 @@ var CB_Show = 1;
 					visibility : 'visible'
 				}).height(DocSizeY + CB_BodyMarginY);
 
-				return
+				return;
 			},
 			CB_fix_center : function (w) {
 				/*
@@ -505,11 +505,11 @@ var CB_Show = 1;
 			CB_FitToBrowser : function () {
 				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))) {
 					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd));
-					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate)
+					CB_ImgHeight = Math.round(CB_ImgWidth / CB_ImgRate);
 				}
 				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH) {
 					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH;
-					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight)
+					CB_ImgWidth = Math.round(CB_ImgRate * CB_ImgHeight);
 				}
 
 				_clearbox.log(['CB_FitToBrowser',
@@ -537,38 +537,38 @@ var CB_Show = 1;
 				} else {
 					if (CB_ImgWidth < CB_ImgWidthOld) {
 						if (CB_ImgWidthOld < CB_ImgWidth + 100 && _clearbox.options.CB_Jump_X > 20) {
-							CB_JumpX = 20
+							CB_JumpX = 20;
 						}
 						if (CB_ImgWidthOld < CB_ImgWidth + 60 && _clearbox.options.CB_Jump_X > 10) {
-							CB_JumpX = 10
+							CB_JumpX = 10;
 						}
 						if (CB_ImgWidthOld < CB_ImgWidth + 30 && _clearbox.options.CB_Jump_X > 5) {
-							CB_JumpX = 5
+							CB_JumpX = 5;
 						}
 						if (CB_ImgWidthOld < CB_ImgWidth + 15 && _clearbox.options.CB_Jump_X > 2) {
-							CB_JumpX = 2
+							CB_JumpX = 2;
 						}
 						if (CB_ImgWidthOld < CB_ImgWidth + 4) {
-							CB_JumpX = 1
+							CB_JumpX = 1;
 						}
-						CB_ImgWidthOld -= CB_JumpX
+						CB_ImgWidthOld -= CB_JumpX;
 					} else {
 						if (CB_ImgWidthOld > CB_ImgWidth - 100 && _clearbox.options.CB_Jump_X > 20) {
-							CB_JumpX = 20
+							CB_JumpX = 20;
 						}
 						if (CB_ImgWidthOld > CB_ImgWidth - 60 && _clearbox.options.CB_Jump_X > 10) {
-							CB_JumpX = 10
+							CB_JumpX = 10;
 						}
 						if (CB_ImgWidthOld > CB_ImgWidth - 30 && _clearbox.options.CB_Jump_X > 50) {
-							CB_JumpX = 5
+							CB_JumpX = 5;
 						}
 						if (CB_ImgWidthOld > CB_ImgWidth - 15 && _clearbox.options.CB_Jump_X > 2) {
-							CB_JumpX = 2
+							CB_JumpX = 2;
 						}
 						if (CB_ImgWidthOld > CB_ImgWidth - 4) {
-							CB_JumpX = 1
+							CB_JumpX = 1;
 						}
-						CB_ImgWidthOld += CB_JumpX
+						CB_ImgWidthOld += CB_JumpX;
 					}
 					CB_Img.width(CB_ImgWidthOld);
 					CB_MarginL = parseInt(DocScrX - (CB_ImgWidthOld + (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd))) / 2);
@@ -596,43 +596,43 @@ var CB_Show = 1;
 			CB_WindowResizeY : function () {
 				if (CB_ImgHeight == CB_ImgHeightOld) {
 					if (CB_TimerY) {
-						clearTimeout(CB_TimerY)
+						clearTimeout(CB_TimerY);
 					}
 					CB_AnimY = 'true';
 					return
 				} else {
 					if (CB_ImgHeight < CB_ImgHeightOld) {
 						if (CB_ImgHeightOld < CB_ImgHeight + 100 && _clearbox.options.CB_Jump_Y > 20) {
-							CB_JumpY = 20
+							CB_JumpY = 20;
 						}
 						if (CB_ImgHeightOld < CB_ImgHeight + 60 && _clearbox.options.CB_Jump_Y > 10) {
-							CB_JumpY = 10
+							CB_JumpY = 10;
 						}
 						if (CB_ImgHeightOld < CB_ImgHeight + 30 && _clearbox.options.CB_Jump_Y > 5) {
-							CB_JumpY = 5
+							CB_JumpY = 5;
 						}
 						if (CB_ImgHeightOld < CB_ImgHeight + 15 && _clearbox.options.CB_Jump_Y > 2) {
-							CB_JumpY = 2
+							CB_JumpY = 2;
 						}
 						if (CB_ImgHeightOld < CB_ImgHeight + 4) {
-							CB_JumpY = 1
+							CB_JumpY = 1;
 						}
-						CB_ImgHeightOld -= CB_JumpY
+						CB_ImgHeightOld -= CB_JumpY;
 					} else {
 						if (CB_ImgHeightOld > CB_ImgHeight - 100 && _clearbox.options.CB_Jump_Y > 20) {
-							CB_JumpY = 20
+							CB_JumpY = 20;
 						}
 						if (CB_ImgHeightOld > CB_ImgHeight - 60 && _clearbox.options.CB_Jump_Y > 10) {
-							CB_JumpY = 10
+							CB_JumpY = 10;
 						}
 						if (CB_ImgHeightOld > CB_ImgHeight - 30 && _clearbox.options.CB_Jump_Y > 5) {
-							CB_JumpY = 5
+							CB_JumpY = 5;
 						}
 						if (CB_ImgHeightOld > CB_ImgHeight - 15 && _clearbox.options.CB_Jump_Y > 2) {
-							CB_JumpY = 2
+							CB_JumpY = 2;
 						}
 						if (CB_ImgHeightOld > CB_ImgHeight - 4) {
-							CB_JumpY = 1
+							CB_JumpY = 1;
 						}
 						CB_ImgHeightOld += CB_JumpY;
 					}
@@ -673,7 +673,7 @@ var CB_Show = 1;
 				if (CB_ActImgId > 1) {
 					if (_clearbox.options.CB_Preload == 'be') {
 						PreloadPrv = new Image();
-						PreloadPrv.src = CB_Gallery[CB_ActImgId - 1][0]
+						PreloadPrv.src = CB_Gallery[CB_ActImgId - 1][0];
 					}
 					if (_clearbox.options.CB_TextNav == 'be') {
 						/*
@@ -705,13 +705,13 @@ var CB_Show = 1;
 								_clearbox.CB_SlideShowJump();
 							}
 							_clearbox.CB_LoadImage(CB_ActImgId - 1);
-							return false
+							return false;
 					});
 				}
 				if (CB_ActImgId < CB_Gallery.length - 1) {
 					if (_clearbox.options.CB_Preload == 'be') {
 						PreloadNxt = new Image();
-						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0]
+						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0];
 					}
 					if (_clearbox.options.CB_TextNav == 'be') {
 						/*
@@ -904,9 +904,9 @@ var CB_Show = 1;
 						CB_preThumbs.src = CB_Gallery[i][2];
 						c = Math.round(CB_preThumbs.width / CB_preThumbs.height * 50);
 						if (c > 0) {} else {
-							c = 50
+							c = 50;
 						}
-						CB_AllThumbsWidth += c
+						CB_AllThumbsWidth += c;
 					}
 					CB_AllThumbsWidth += (CB_Gallery.length - 2) * b;
 					var d = 0;
@@ -989,7 +989,7 @@ var CB_Show = 1;
 				} else {
 					_clearbox.CB_CheckResize();
 				}
-				return
+				return;
 			},
 			CB_CheckResize : function () {
 				if (CB_AnimX == 'true' && CB_AnimY == 'true') {
@@ -997,7 +997,7 @@ var CB_Show = 1;
 						clearTimeout(CB_ResizeTimer);
 					}
 					_clearbox.CB_ShowImage();
-					return
+					return;
 				} else {
 					CB_ResizeTimer = setTimeout(_clearbox.CB_CheckResize, 5);
 				}
@@ -1005,7 +1005,7 @@ var CB_Show = 1;
 			CB_CheckResize2 : function () {
 				if (CB_AnimX == 'true' && CB_AnimY == 'true') {
 					if (CB_ResizeTimer) {
-						clearTimeout(CB_ResizeTimer)
+						clearTimeout(CB_ResizeTimer);
 					}
 					CB_Gallery = '';
 			//		CB_iFr.src = CB_Clicked[1];
@@ -1043,9 +1043,9 @@ var CB_Show = 1;
 					});
 					CB_ClearBox = 'be';
 					CB_IsAnimating = 0;
-					return
+					return;
 				} else {
-					CB_ResizeTimer = setTimeout(_clearbox.CB_CheckResize2, 5)
+					CB_ResizeTimer = setTimeout(_clearbox.CB_CheckResize2, 5);
 				}
 			},
 			CB_NewWindow : function () {
@@ -1104,20 +1104,20 @@ var CB_Show = 1;
 					CB_preImages.width,
 				]);
 
-				return
+				return;
 			},
 			CB_CheckLoaded : function () {
 				if (CB_Count == 1) {
 					CB_Loaded = true;
 					clearTimeout(CB_ImgLoadTimer);
 					_clearbox.CB_GetImageSize();
-					return
+					return;
 				}
 				if (CB_Loaded == false && CB_preImages.complete) {
-					CB_Count++
+					CB_Count++;
 				}
 				CB_ImgLoadTimer = setTimeout(_clearbox.CB_CheckLoaded, 5);
-				return
+				return;
 			},
 			CB_LoadImage : function (a) {
 
@@ -1155,7 +1155,7 @@ var CB_Show = 1;
 				CB_Prv.hide();
 				CB_Nxt.hide();
 				if (a) {
-					CB_ActImgId = parseInt(a)
+					CB_ActImgId = parseInt(a);
 				}
 				CB_JumpX = _clearbox.options.CB_Jump_X;
 				CB_JumpY = _clearbox.options.CB_Jump_Y;
@@ -1171,13 +1171,13 @@ var CB_Show = 1;
 				CB_preImages.onerror = function() {
 					_clearbox.CB_ShowImage();
 					alert('ClearBox HIBA:\n\nA kepet nem lehet betolteni: ' + CB_Gallery[CB_ActImgId][0]);
-					return
+					return;
 				};
 				_clearbox.CB_CheckLoaded();
 			},
 			CB_ClickURL : function (a) {
 				if (CB_Show == 0) {
-					return false
+					return false;
 				}
 				CB_ClearBox = 'ki';
 
@@ -1197,10 +1197,10 @@ var CB_Show = 1;
 				CB_ImgWidthOld = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeightOld = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 				if (CB_ImgWidth > BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))) {
-					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd))
+					CB_ImgWidth = BrSizeX - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd));
 				}
 				if (CB_ImgHeight > BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH) {
-					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH
+					CB_ImgHeight = BrSizeY - (2 * (_clearbox.options.CB_RoundPix + _clearbox.options.CB_ImgBorder + _clearbox.options.CB_Padd + _clearbox.options.CB_WinPadd)) - _clearbox.options.CB_TextH;
 				}
 
 				CB_Img
@@ -1217,7 +1217,7 @@ var CB_Show = 1;
 			},
 			CB_ClickIMG : function (a) {
 				if (CB_Show == 0) {
-					return false
+					return false;
 				}
 				CB_Cls.unbind('click.clearbox');
 				CB_SlideS.unbind('click.clearbox');
@@ -1306,9 +1306,9 @@ var CB_Show = 1;
 
 			var a = '<div class="CB_RoundPixBugFix" style="width: ' + _clearbox.options.CB_RoundPix + 'px; height: ' + _clearbox.options.CB_RoundPix + 'px;"></div>';
 			if (jQuery.browser.msie) {
-				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" />'
+				CB_IEShowBug = '<img id="CB_ShowEtc" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><img id="CB_ShowTh" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" />';
 			} else {
-				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>'
+				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>';
 			}
 
 			$("<div>")
@@ -1318,10 +1318,10 @@ var CB_Show = 1;
 			;
 
 			if (navigator.userAgent.indexOf("MSIE 6") != -1 && _clearbox.options.CB_RoundPix == 0) {
-				CB_ie6RPBug = 1
+				CB_ie6RPBug = 1;
 			}
 			if (jQuery.browser.msie && _clearbox.options.CB_RoundPix < 2) {
-				CB_ieRPBug = 6
+				CB_ieRPBug = 6;
 			}
 			$('#CB_Padding').css('padding', _clearbox.options.CB_Padd);
 			CB_ShTh = $('#CB_ShowTh');
@@ -1411,33 +1411,33 @@ var CB_Show = 1;
 
 			CB_ShTh.mouseover(function() {
 				_clearbox.CB_ShowThumbs();
-				return
+				return;
 			});
 			CB_ShEt.mouseover(function() {
 				_clearbox.CB_ShowEtc();
-				return
+				return;
 			});
 			CB_ImgHd.mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
-				return
+				return;
 			});
 			CB_Txt.mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
-				return
+				return;
 			});
 			CB_HideContent.mouseover(function() {
 				_clearbox.CB_HideThumbs();
 				_clearbox.CB_HideEtc();
-				return
+				return;
 			});
 			if (jQuery.browser.opera) {
 				CB_BodyMarginX = 0;
-				CB_BodyMarginY = 0
+				CB_BodyMarginY = 0;
 			}
 			if (jQuery.browser.firefox) {
-				CB_BodyMarginY = 0
+				CB_BodyMarginY = 0;
 			}
 		}
 		$('#CB_Thumbs').mousemove(_clearbox.getMouseXY);
