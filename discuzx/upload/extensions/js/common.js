@@ -381,6 +381,31 @@
 
 	});
 
+	var _lazyload = function () {
+		$('img[file]:visible').each(function(){
+			var _this = $(this);
+
+			if (
+				!_this.attr('lazyloaded')
+				&& $(window).scrollTop() < _this.offset().top
+				&& ($(window).scrollTop() + $(window).height()) > _this.offset().top
+			) {
+
+				if (_this.attr('file') != _this.attr('src')) {
+					_this
+						.attr({
+							'src' : _this.attr('file'),
+							'lazyloaded' : true,
+						})
+					;
+				}
+
+			}
+		});
+	};
+
+	$(window).resize(_lazyload);
+
 	$(document).ready(function(){
 
 		// 因不明原因的 BUG 只好採用如此複雜的 selector
@@ -425,12 +450,13 @@
 
 				if (_a_init) {
 
-					var _div = $('<div/>')
+					var _div = $('<span/>')
 						.css({
 							'max-width' : 120,
 							'max-height' : 120,
 							'overflow' : 'hidden',
-							'border' : '1px solid #ccc',
+							'border' : '1px solid #F0F0F0',
+							'display' : 'inline-block',
 						})
 						.attr({
 							'class' : 'cl',
@@ -438,7 +464,7 @@
 						.hover(function(){
 							$(this).css('border-color', '#96DB52');
 						}, function(){
-							$(this).css('border-color', '#ccc');
+							$(this).css('border-color', '#F0F0F0');
 						})
 					;
 
@@ -449,6 +475,9 @@
 							'tnhref' : _src,
 							'target' : '_blank',
 							'class' : 'clearbox',
+						})
+						.css({
+							'text-decoration' : 'none',
 						})
 						.append(_div)
 					;
@@ -470,6 +499,8 @@
 									'margin-top' : (120 - $(this).height()) / 2,
 								})
 							;
+
+							_lazyload();
 						})
 					;
 				}
