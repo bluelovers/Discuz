@@ -233,7 +233,7 @@
 					_a_init = 1;
 				}
 
-				_this.unbind('click');
+				_this.attr('onclick', 'void(0)');
 
 				if (_a_init) {
 					_a
