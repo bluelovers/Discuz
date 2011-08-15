@@ -427,6 +427,37 @@
 			jQuery.getScript(CB_ScriptDir+'/config/default.js');
 			*/
 
+			var _bbcode_imgs_length = bbcode_imgs.size();
+
+			var _div_base = $('<span/>')
+				.css({
+					'border' : '1px solid #F0F0F0',
+					'display' : 'inline-block',
+				})
+				.attr({
+					'class' : 'cl',
+				})
+				.hover(function(){
+					$(this).css('border-color', '#96DB52');
+				}, function(){
+					$(this).css('border-color', '#F0F0F0');
+				})
+			;
+
+			if (_bbcode_imgs_length > 10) {
+				_div_base
+					.css({
+						'max-width' : 120,
+						'max-height' : 120,
+						'overflow' : 'hidden',
+					})
+				;
+
+				var _bbcode_imgs_do = 1;
+			} else {
+				var _bbcode_imgs_do = 0;
+			}
+
 			bbcode_imgs.each(function(index, elem){
 				// elem = this
 				var _this = jQuery(this);
@@ -456,23 +487,7 @@
 
 				if (_a_init) {
 
-					var _div = $('<span/>')
-						.css({
-							'max-width' : 120,
-							'max-height' : 120,
-							'overflow' : 'hidden',
-							'border' : '1px solid #F0F0F0',
-							'display' : 'inline-block',
-						})
-						.attr({
-							'class' : 'cl',
-						})
-						.hover(function(){
-							$(this).css('border-color', '#96DB52');
-						}, function(){
-							$(this).css('border-color', '#F0F0F0');
-						})
-					;
+					var _div = _div_base.clone();
 
 					_a
 						.attr({
@@ -495,22 +510,29 @@
 								.attr({
 									lazyloaded : true
 								})
-								.scoScale({
-									width : 120,
-									height : 120,
-									mode : 'fill2',
-								})
-								.css({
-									'margin-left' : (120 - $(this).width()) / 2,
-									'margin-top' : (120 - $(this).height()) / 2,
-								})
 							;
+
+							if (_bbcode_imgs_do) {
+								$(this)
+									.scoScale({
+										width : 120,
+										height : 120,
+										mode : 'fill2',
+									})
+									.css({
+										'margin-left' : (120 - $(this).width()) / 2,
+										'margin-top' : (120 - $(this).height()) / 2,
+									})
+								;
+							}
 
 							_lazyload();
 						})
 					;
 				}
 			});
+
+			delete _div_base;
 
 			jQuery.getScript(CB_ScriptDir+'/js/clearbox_jquery.js', function(data, textStatus){
 
