@@ -1462,6 +1462,11 @@ var CB_Show = 1;
 			CB_Rel = _link.attr('rel');
 			CB_URL = _link.attr('href');
 
+			_link
+				.unbind('click.clearbox')
+				.unbind('mouseover.clearbox')
+			;
+
 			if (CB_Rel.match('clearbox') != null && CB_Show != 0) {
 				if (CB_Rel == 'clearbox') {
 
