@@ -76,7 +76,7 @@ var CB_Show = 1;
 				CB_FontColor : '#656565',
 				CB_FontWeigth : 'normal',
 
-				CB_CheckDuplicates : 'ki',
+				CB_CheckDuplicates : false,
 
 				CB_LoadingText : 'Loading...',
 
@@ -164,7 +164,7 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_WinPadd < 0) {
 					_clearbox.options.CB_WinPadd = 5;
 				}
-				if (_clearbox.options.CB_Animation != 'ki' && _clearbox.options.CB_Animation != 'normal' && _clearbox.options.CB_Animation != 'double' && _clearbox.options.CB_Animation != 'warp') {
+				if (_clearbox.options.CB_Animation != false && _clearbox.options.CB_Animation != 'normal' && _clearbox.options.CB_Animation != 'double' && _clearbox.options.CB_Animation != 'warp') {
 					_clearbox.options.CB_Animation = 'double'
 				}
 				_clearbox.options.CB_Jump_X = parseInt(_clearbox.options.CB_Jump_X);
@@ -183,8 +183,8 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_Padd < 0) {
 					_clearbox.options.CB_Padd = 2;
 				}
-				if (_clearbox.options.CB_ShowImgURL != true && _clearbox.options.CB_ShowImgURL != 'ki') {
-					_clearbox.options.CB_ShowImgURL = 'ki';
+				if (_clearbox.options.CB_ShowImgURL != true && _clearbox.options.CB_ShowImgURL != false) {
+					_clearbox.options.CB_ShowImgURL = false;
 				}
 				_clearbox.options.CB_PadT = parseInt(_clearbox.options.CB_PadT);
 				if (_clearbox.options.CB_PadT < 0) {
@@ -202,7 +202,7 @@ var CB_Show = 1;
 				if (_clearbox.options.CB_FontSize < 6) {
 					_clearbox.options.CB_FontSize = 13;
 				}
-				if (_clearbox.options.CB_ImgNum != true && _clearbox.options.CB_ImgNum != 'ki') {
+				if (_clearbox.options.CB_ImgNum != true && _clearbox.options.CB_ImgNum != false) {
 					_clearbox.options.CB_ImgNum = true;
 				}
 				_clearbox.options.CB_SlShowTime = parseInt(_clearbox.options.CB_SlShowTime);
@@ -210,10 +210,10 @@ var CB_Show = 1;
 					_clearbox.options.CB_SlShowTime = 5;
 				}
 				_clearbox.options.CB_SlShowTime *= 1000;
-				if (_clearbox.options.CB_CheckDuplicates != true && _clearbox.options.CB_CheckDuplicates != 'ki') {
-					_clearbox.options.CB_CheckDuplicates = 'ki';
+				if (_clearbox.options.CB_CheckDuplicates != true && _clearbox.options.CB_CheckDuplicates != false) {
+					_clearbox.options.CB_CheckDuplicates = false;
 				}
-				if (_clearbox.options.CB_Preload != true && _clearbox.options.CB_Preload != 'ki') {
+				if (_clearbox.options.CB_Preload != true && _clearbox.options.CB_Preload != false) {
 					_clearbox.options.CB_Preload = true;
 				}
 
@@ -973,7 +973,7 @@ var CB_Show = 1;
 					}
 					_clearbox.CB_WindowResizeX();
 					_clearbox.CB_WindowResizeY();
-				} else if (_clearbox.options.CB_Animation == 'ki') {
+				} else if (_clearbox.options.CB_Animation == false) {
 					_clearbox.CB_SetMargins();
 					CB_ImgCont.height(CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder));
 
@@ -1137,7 +1137,7 @@ var CB_Show = 1;
 					visibility : 'hidden'
 				});
 
-				CB_ClearBox = 'ki';
+				CB_ClearBox = false;
 				CB_jj = 0;
 				CB_HideContent.unbind('click.clearbox');
 				if (CB_Gallery.length < 3) {
@@ -1179,7 +1179,7 @@ var CB_Show = 1;
 				if (CB_Show == 0) {
 					return false;
 				}
-				CB_ClearBox = 'ki';
+				CB_ClearBox = false;
 
 				/*
 				CB_Clicked = a.split('+\\+');
@@ -1526,7 +1526,7 @@ var CB_Show = 1;
 			if (_clearbox.options.CB_HideOpacity != 0) {
 				clearTimeout(CB_Blur);
 			}
-			CB_ClearBox = 'ki';
+			CB_ClearBox = false;
 			return;
 		}
 	}
