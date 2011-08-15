@@ -1378,8 +1378,12 @@ var CB_Show = 1;
 			CB_SlideB = $('#CB_SlideShowBar')
 				.css('opacity', 0.5);
 
-			CB_Prv = $('#CB_Prev');
-			CB_Nxt = $('#CB_Next');
+			CB_Prv = $('#CB_Prev')
+				.css('cursor', 'url("' + _clearbox.options.CB_PicDir + 'bg11.cur"), auto')
+			;
+			CB_Nxt = $('#CB_Next')
+				.css('cursor', 'url("' + _clearbox.options.CB_PicDir + 'bg12.cur"), auto')
+			;
 			CB_Txt = $('#CB_Text')
 				.css({
 					marginTop  : _clearbox.options.CB_PadT,
