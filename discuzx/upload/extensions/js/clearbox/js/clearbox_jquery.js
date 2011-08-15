@@ -222,6 +222,8 @@ var CB_Show = 1;
 
 				CB_ImgWidth = _clearbox.options.CB_WinBaseW;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
+
+				_clearbox.log(_clearbox.options);
 			},
 			log : function (s) {
 				if (!_clearbox.options.debug) return;
