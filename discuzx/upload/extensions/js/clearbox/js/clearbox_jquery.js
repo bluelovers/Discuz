@@ -34,10 +34,15 @@ var CB_Show = 1;
 
 	var CB_PrePictures = new Array();
 
+	if (typeof $.log == 'undefined') {
+		$.extend({
+	 		log : function(a){
+				console.log(a);
+			},
+		});
+	}
+
  	$.extend({
- 		log : function(a){
-			console.log(a);
-		},
  		clearbox : {
  			defaults : {
  				CB_HideColor : '#000',

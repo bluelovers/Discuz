@@ -102,7 +102,9 @@
 	top: 50%;
 	margin-left: -12px;
 	margin-top: -12px;
+	/*
 	visibility: hidden;
+	*/
 }
 
 #CB_Text {

@@ -327,6 +327,12 @@
 
 (function($, undefined){
 
+	$.extend({
+ 		log : function(a){
+			console.log(a);
+		},
+	});
+
 	jQuery.ajaxSetup({
 		cache : true,
 	});
@@ -540,7 +546,7 @@
 				+ (JSPATH == 'data/cache/' ? VERHASH_GZIP_JS : '')
 				, function(data, textStatus){
 
-				jQuery.log(textStatus);
+				jQuery.log('clearbox_jquery.js ' + textStatus);
 
 				$.clearbox.init({
 					path : {
