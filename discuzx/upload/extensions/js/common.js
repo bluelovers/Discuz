@@ -450,6 +450,8 @@
 				})
 			;
 
+			var fixw = typeof imagemaxwidth == 'undefined' ? 600 : imagemaxwidth;
+
 			if (_bbcode_imgs_length > 10) {
 				_div_base
 					.css({
@@ -462,6 +464,13 @@
 				var _bbcode_imgs_do = 1;
 			} else {
 				var _bbcode_imgs_do = 0;
+
+				_div_base
+					.css({
+						'max-width' : fixw,
+						'overflow' : 'hidden',
+					})
+				;
 			}
 
 			bbcode_imgs.each(function(index, elem){
@@ -528,6 +537,12 @@
 									.css({
 										'margin-left' : (120 - $(this).width()) / 2,
 										'margin-top' : (120 - $(this).height()) / 2,
+									})
+								;
+							} else {
+								$(this)
+									.scoScale({
+										width : fixw,
 									})
 								;
 							}
