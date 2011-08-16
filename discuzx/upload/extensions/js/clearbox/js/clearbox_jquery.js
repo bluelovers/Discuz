@@ -856,10 +856,10 @@ var CB_Show = 1;
 				CB_Prv.height(CB_ImgHeight);
 				CB_Nxt.height(CB_ImgHeight);
 				if (CB_Gallery[CB_ActImgId][1] && CB_Gallery[CB_ActImgId][1] != 'null' && CB_Gallery[CB_ActImgId][1] != null) {
-					CB_Txt.html(CB_Gallery[CB_ActImgId][1]);
+					CB_Txt.text(CB_Gallery[CB_ActImgId][1]);
 				} else {
 					if (_clearbox.options.CB_ShowImgURL == true) {
-						CB_Txt.html((CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1]);
+						CB_Txt.text((CB_Gallery[CB_ActImgId][0].split('/'))[(CB_Gallery[CB_ActImgId][0].split('/').length) - 1]);
 					}
 				}
 				if (_clearbox.options.CB_ImgNum == true && CB_Gallery.length > 2) {
