@@ -119,10 +119,14 @@ var CB_Show = 1;
 				);
 
 				_clearbox.options.CB_PicDir += '/';
+				/*
 				CB_PrePictures[0] = new Image();
 				CB_PrePictures[0].src = _clearbox.options.CB_PicDir + 'noprv.gif';
 				CB_PrePictures[1] = new Image();
 				CB_PrePictures[1].src = _clearbox.options.CB_PicDir + 'loading.gif';
+				*/
+				CB_PrePictures[0] = _image(_clearbox.options.CB_PicDir + 'noprv.gif');
+				CB_PrePictures[1] = _image(_clearbox.options.CB_PicDir + 'loading.gif');
 
 				_clearbox.options.CB_AnimTimeout = parseInt(_clearbox.options.CB_AnimTimeout);
 				if (_clearbox.options.CB_AnimTimeout < 5) {
@@ -674,8 +678,11 @@ var CB_Show = 1;
 			CB_PrevNext : function () {
 				if (CB_ActImgId > 1) {
 					if (_clearbox.options.CB_Preload == true) {
+						/*
 						PreloadPrv = new Image();
 						PreloadPrv.src = CB_Gallery[CB_ActImgId - 1][0];
+						*/
+						PreloadPrv = _image(CB_Gallery[CB_ActImgId - 1][0]);
 					}
 					if (_clearbox.options.CB_TextNav == true) {
 						/*
@@ -712,8 +719,11 @@ var CB_Show = 1;
 				}
 				if (CB_ActImgId < CB_Gallery.length - 1) {
 					if (_clearbox.options.CB_Preload == true) {
+						/*
 						PreloadNxt = new Image();
 						PreloadNxt.src = CB_Gallery[CB_ActImgId + 1][0];
+						*/
+						PreloadNxt = _image(CB_Gallery[CB_ActImgId + 1][0]);
 					}
 					if (_clearbox.options.CB_TextNav == true) {
 						/*
@@ -908,8 +918,12 @@ var CB_Show = 1;
 					var c = 0;
 					CB_AllThumbsWidth = 0;
 					for (i = 1; i < CB_Gallery.length; i++) {
+						/*
 						CB_preThumbs = new Image();
 						CB_preThumbs.src = CB_Gallery[i][2];
+						*/
+						CB_preThumbs = _image(CB_Gallery[i][2]);
+
 						c = Math.round(CB_preThumbs.width / CB_preThumbs.height * 50);
 						if (c > 0) {} else {
 							c = 50;
@@ -919,8 +933,11 @@ var CB_Show = 1;
 					CB_AllThumbsWidth += (CB_Gallery.length - 2) * b;
 					var d = 0;
 					for (i = 1; i < CB_Gallery.length; i++) {
+						/*
 						CB_preThumbs = new Image();
 						CB_preThumbs.src = CB_Gallery[i][2];
+						*/
+						CB_preThumbs = _image(CB_Gallery[i][2]);
 						/*
 						a += '<a href="javascript:void(0)" onclick="if(CB_SSTimer){_clearbox.CB_SlideShowJump();}_clearbox.CB_LoadImage(' + i + ')"><img style="border: 0; left: ' + d + 'px;" " src="' + CB_Gallery[i][2] + '" height="50" class="CB_ThumbsImg" /></a>';
 						*/
@@ -1044,7 +1061,7 @@ var CB_Show = 1;
 					} else {
 						CB_Txt.html(CB_Clicked[1]);
 					}
-					CB_Txt.html(CB_Txt.html() + ' ' + _clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + _clearbox.options.CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2));
+					CB_Txt.append(_clearbox.options.CB_ImgNumBracket.substring(0, 1) + '<a class="_clearbox.options.CB_TextNav" href="javascript:void(0)" onclick="_clearbox.CB_Close();">' + _clearbox.options.CB_NavTextCls + '</a>' + _clearbox.options.CB_ImgNumBracket.substring(1, 2));
 					CB_HideContent.bind('click.clearbox', function() {
 						_clearbox.CB_Close();
 						return false;
@@ -1173,8 +1190,12 @@ var CB_Show = 1;
 				}
 				CB_Txt.html(_clearbox.options.CB_LoadingText);
 				CB_Count = 0;
+				/*
 				CB_preImages = new Image();
 				CB_preImages.src = CB_Gallery[CB_ActImgId][0];
+				*/
+				CB_preImages = _image(CB_Gallery[CB_ActImgId][0]);
+
 				CB_Loaded = false;
 				CB_preImages.onerror = function() {
 					_clearbox.CB_ShowImage();
@@ -1523,6 +1544,12 @@ var CB_Show = 1;
 		}
 
 		return false;
+ 	}
+
+ 	function _image(src) {
+ 		var img = new Image();
+ 		if (src) img.src = src;
+ 		return img;
  	}
 
  	var CB_Blur;
