@@ -1,0 +1,248 @@
+	/* clearbox.css a ClearBox scripthez :: http://www.kreatura.hu/pyro/clearbox */
+
+#CB_ShowTh, #CB_Thumbs2, #CB_Thumbs, .CB_RoundPixBugFix, #CB_Padding, #CB_ImgContainer, #CB_PrevNext, #CB_ContentHide, #CB_LoadingImage, #CB_Text, #CB_Window, #CB_Image, #CB_TopLeft, #CB_Top, #CB_TopRight, #CB_Left, #CB_Content, #CB_Right, #CB_BtmLeft, #CB_Btm, #CB_BtmRight, #CB_Prev, #CB_Next, #CB_Prev:hover, #CB_Next:hover, #CB_CloseWindow, #CB_SlideShowS, #CB_SlideShowP, #CB_SlideShowBar, #CB_Email {
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	border: 0px;
+}
+
+#CB_ImgHide {
+	position: absolute;
+	visibility: hidden;
+	z-index: 1098;
+	left: 0px;
+}
+
+#CB_ShowTh {
+	width: 100%;
+	height: 15%;
+	visibility: hidden;
+	position: absolute;
+	z-index: 1097;
+	bottom: 0px;
+	left: 0px;
+}
+
+#CB_ShowEtc {
+	width: 100%;
+	height: 15%;
+	visibility: hidden;
+	position: absolute;
+	z-index: 1097;
+	top: 15px;
+	left: 0px;
+}
+
+#CB_Etc {
+	text-align: center;
+	display: none;
+	height: 60px;
+	padding-top: 10px;
+	background-color: #fff;
+	position: absolute;
+	z-index: 1100;
+	overflow: hidden;
+	top: 20px;
+	left: 0px;
+}
+
+#CB_Thumbs {
+	display: none;
+	height: 60px;
+	padding-top: 10px;
+	background-color: #fff;
+	position: absolute;
+	z-index: 1100;
+	overflow: hidden;
+	bottom: 10px;
+	left: 0px;
+}
+
+#CB_Thumbs2 {
+	height: 50px;
+	position: absolute;
+}
+
+.CB_ThumbsImg {
+	position: absolute;
+}
+
+.CB_RoundPixBugFix {
+	display: block;
+	visibility: hidden;
+	font-family: arial;
+	font-size: 1pt;
+}
+
+#CB_ImgContainer {
+	position: relative;
+	width: 100%;
+}
+
+#CB_PrevNext {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: 1002;
+}
+
+#CB_ContentHide {
+	position: absolute;
+	z-index: 1000;
+	top: 0px;
+	left: 0px;
+}
+
+#CB_LoadingImage {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -12px;
+	margin-top: -12px;
+	/*
+	visibility: hidden;
+	*/
+}
+
+#CB_Text {
+	text-align: center;
+}
+
+#CB_Window {
+	left:50%;
+	position:absolute;
+	top:50%;
+	/*
+	visibility:hidden;
+	*/
+	z-index: 1100;
+}
+
+#CB_Image {
+	position: relative;
+}
+
+#CB_iFrame {
+	position: absolute;
+	width: 0px;
+	height: 0px;
+	z-index: 1003;
+}
+
+#CB_TopLeft {
+	background-image:url(../pic/s_topleft.png);
+	background-position:right bottom;
+}
+
+#CB_Top {
+	background-image:url(../pic/s_top.png);
+	background-position:left bottom;
+}
+
+#CB_TopRight {
+	background-image:url(../pic/s_topright.png);
+	background-position:left bottom;
+}
+
+#CB_Left {
+	background-image:url(../pic/s_left.png);
+	background-position:right top;
+}
+
+#CB_Content {
+	background-color:#FFFFFF;
+}
+
+#CB_Right {
+	background-image:url(../pic/s_right.png);
+	background-position:left top;
+}
+
+#CB_BtmLeft {
+	background-image:url(../pic/s_btmleft.png);
+	background-position:right top;
+}
+
+#CB_Btm {
+	background-image:url(../pic/s_btm.png);
+	background-position:left top;
+}
+
+#CB_BtmRight {
+	background-image:url(../pic/s_btmright.png);
+	background-position:left top;
+}
+
+#CB_Prev, #CB_Next {
+	background: transparent url(../pic/blank.gif) no-repeat scroll 0%;
+	display: block;
+	width: 49%;
+	cursor: pointer;
+	outline-style:none;
+	z-index: 1102;
+}
+
+.CB_TextNav {
+	margin-left: 10px;
+	margin-right: 10px;
+	text-decoration: underline;
+	color: #aaa;
+}
+
+.CB_TextNav:hover {
+	margin-left: 10px;
+	margin-right: 10px;
+	text-decoration: none;
+	color: #ff7700;
+}
+
+#CB_Prev {
+	float: left;
+	left: 0px;
+}
+
+#CB_Next {
+	float: right;
+	left: 0px;
+}
+
+#CB_Prev:hover {
+background:transparent url(../pic/prev.gif) no-repeat scroll left 50%;
+}
+
+#CB_Next:hover {
+background:transparent url(../pic/next.gif) no-repeat scroll right 50%;
+}
+
+#CB_CloseWindow {
+	position: absolute;
+	top: 0px;
+	right: -1px;
+	z-index: 1104;
+	cursor: pointer;
+}
+
+#CB_SlideShowS, #CB_SlideShowP {
+	position: absolute;
+	top: 0px;
+	left: -1px;
+	z-index: 1104;
+	cursor: pointer;
+}
+
+#CB_SlideShowBar {
+	width: 0px;
+	position: absolute;
+	top: 5px;
+	left: 22px;
+	height: 5px;
+	display: none;
+}
+
+#CB_Email {
+	position: absolute;
+	right: 15px;
+}

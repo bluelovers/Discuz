@@ -436,6 +436,16 @@ function build_cache_setting() {
 	}
 	$data['output'] = $output;
 
+	// bluelovers
+	// Event: Func_build_cache_setting:Before_save_syscache
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_save_syscache')
+			->run(array(array(
+				'data'		=> &$data
+		)));
+	}
+	// bluelovers
+
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
 }
@@ -1037,9 +1047,28 @@ function writetojscache() {
 		'/(^|\r|\n)(\s|\t)+/',
 		'/(\r|\n)/',
 	);
+	// bluelovers
+	$dir_files = array();
+	// bluelovers
 	while(($entry = readdir($dh)) !== false) {
 		if(fileext($entry) == 'js') {
 			$jsfile = $dir.$entry;
+	// bluelovers
+			$dir_files[$entry] = $jsfile;
+		}
+	}
+
+	// Event: Func_writetojscache:After_readdir
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After_readdir')
+			->run(array(array(
+				'dir_files' => &$dir_files,
+		)));
+	}
+
+	foreach ($dir_files as $entry => $jsfile) {
+		if (file_exists($jsfile)) {
+	// bluelovers
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
@@ -1057,6 +1086,7 @@ function writetojscache() {
 						'remove'		=> &$remove,
 
 						'switchstop'	=> &$switchstop,
+						'jsfile'		=> $jsfile,
 				)));
 			}
 
@@ -1077,6 +1107,7 @@ function writetojscache() {
 
 						'filename'		=> $entry,
 						'filepath'		=> 'data/cache/',
+						'jsfile'		=> $jsfile,
 				)));
 			}
 			// bluelvoers
