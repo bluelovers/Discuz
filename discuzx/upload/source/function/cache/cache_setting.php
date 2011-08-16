@@ -1058,6 +1058,14 @@ function writetojscache() {
 		}
 	}
 
+	// Event: Func_writetojscache:After_readdir
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After_readdir')
+			->run(array(array(
+				'dir_files' => &$dir_files,
+		)));
+	}
+
 	foreach ($dir_files as $entry => $jsfile) {
 		if ($jsfile) {
 	// bluelovers
