@@ -779,7 +779,7 @@ var CB_Show = 1;
 				CB_ImgHeight = _clearbox.options.CB_WinBaseH - _clearbox.options.CB_TextH;
 				CB_ImgCont.height(CB_ImgHeight + (2 * _clearbox.options.CB_ImgBorder));
 
-				CB_Win.css('visibility', 'hidden');
+				CB_Win.hide();
 				CB_HideContent.unbind('click.clearbox');
 
 				CB_iFr
@@ -1081,7 +1081,7 @@ var CB_Show = 1;
 					.css('visibility', 'hidden')
 				;
 
-				CB_Win.css('visibility', 'visible');
+				CB_Win.show();
 
 				_clearbox.CB_LoadImage();
 			},
@@ -1239,7 +1239,7 @@ var CB_Show = 1;
 					.css('visibility', 'hidden')
 				;
 
-				CB_Win.css('visibility', 'visible');
+				CB_Win.show();
 				CB_SlideS.hide();
 				CB_SlideP.hide();
 				CB_HideDocument('x');
@@ -1361,7 +1361,7 @@ var CB_Show = 1;
 					'opacity' : 0.75
 			});
 
-			CB_Win = $('#CB_Window', CB_All);
+			CB_Win = $('#CB_Window', CB_All).hide();
 			CB_Thm = $('#CB_Thumbs', CB_All);
 			CB_Thm2 = $('#CB_Thumbs2', CB_All);
 
