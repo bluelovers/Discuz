@@ -1396,7 +1396,7 @@ var CB_Show = 1;
 			CB_Img = $('#CB_Image', CB_All)
 				.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
 
-			CB_LoadingImg = $('#CB_LoadingImage', CB_All);
+			CB_LoadingImg = $('#CB_LoadingImage', CB_All).hide();
 			CB_ImgCont = $('#CB_ImgContainer', CB_All);
 
 			CB_Cls = $('#CB_CloseWindow', CB_All);
