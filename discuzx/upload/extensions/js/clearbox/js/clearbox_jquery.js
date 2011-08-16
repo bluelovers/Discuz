@@ -1387,6 +1387,7 @@ var CB_Show = 1;
 			;
 
 			CB_HideContent = $('#CB_ContentHide', CB_All)
+				.hide()
 				.css({
 					'backgroundColor' : _clearbox.options.CB_HideColor,
 					'opacity' : 0,
