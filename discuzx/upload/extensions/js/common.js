@@ -534,7 +534,11 @@
 
 			delete _div_base;
 
-			jQuery.getScript(CB_ScriptDir+'/js/clearbox_jquery.js', function(data, textStatus){
+			jQuery.getScript(
+				(JSPATH == 'data/cache/' ? JSPATH : CB_ScriptDir+'/js/')
+				+ 'clearbox_jquery.js'
+				+ (JSPATH == 'data/cache/' ? VERHASH_GZIP_JS : '')
+				, function(data, textStatus){
 
 				jQuery.log(textStatus);
 
