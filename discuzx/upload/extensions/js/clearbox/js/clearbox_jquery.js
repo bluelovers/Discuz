@@ -1573,26 +1573,16 @@ var CB_Show = 1;
  	var CB_Blur;
 
 	function CB_ShowDocument() {
-		if (CB_Hide > 0) {
-			CB_HideContent.css('opacity', (CB_Hide / 100));
-
-			CB_Hide -= _clearbox.options.CB_OpacityStep;
-			CB_Blur = setTimeout(CB_ShowDocument, 5)
-		} else {
-			CB_HideContent.hide().css({
-				/*
-				visibility : 'hidden',
-				*/
-				width : 0,
-				height : 0,
-			});
-
-			if (_clearbox.options.CB_HideOpacity != 0) {
-				clearTimeout(CB_Blur);
-			}
-			CB_ClearBox = false;
-			return;
-		}
+		CB_HideContent
+			.fadeTo('slow', 0, function(){
+				$(this)
+					.hide()
+					.width(0)
+					.hieght(0)
+				;
+				CB_ClearBox = false;
+			})
+		;
 	}
 
 	function CB_HideDocument(a) {
