@@ -1340,9 +1340,8 @@ var CB_Show = 1;
 				CB_IEShowBug = '<div id="CB_ShowTh"></div><div id="CB_ShowEtc"></div>';
 			}
 
-			$("<div>")
+			var CB_All = $("<div>")
 				.attr('id', 'CB_All')
-				.appendTo($("body"))
 				.html('<table cellspacing="0" cellpadding="0" id="CB_Window"><tr id="CB_Header"><td id="CB_TopLeft">' + a + '</td><td id="CB_Top"></td><td id="CB_TopRight">' + a + '</td></tr><tr id="CB_Body"><td id="CB_Left"></td><td id="CB_Content" valign="top" align="left"><div id="CB_Padding"><div id="CB_ImgContainer"><iframe frameborder="0" id="CB_iFrame" src=""></iframe>' + CB_IEShowBug + '<div id="CB_Etc"><img src="' + _clearbox.options.CB_PicDir + 'max.gif" alt="maximize" /></div><div id="CB_Thumbs"><div id="CB_Thumbs2"></div></div><img id="CB_LoadingImage" alt="loading" src="' + _clearbox.options.CB_PicDir + _clearbox.options.CB_PictureLoading + '" /><img id="CB_Image" alt="" src="' + _clearbox.options.CB_PicDir + 'blank.gif" /><div id="CB_PrevNext"><div id="CB_ImgHide"></div><img id="CB_CloseWindow" alt="x" src="' + _clearbox.options.CB_PicDir + _clearbox.options.CB_PictureClose + '" /><img id="CB_SlideShowBar" src="' + _clearbox.options.CB_PicDir + 'white.gif" /><img id="CB_SlideShowP" alt="Pause SlideShow" src="' + _clearbox.options.CB_PicDir + _clearbox.options.CB_PicturePause + '" /><img id="CB_SlideShowS" alt="Start SlideShow" src="' + _clearbox.options.CB_PicDir + _clearbox.options.CB_PictureStart + '" /><a id="CB_Prev" href="javascript:void(0)"></a><a id="CB_Next" href="javascript:void(0)"></a></div></div><div id="CB_Text"></div></div></td><td id="CB_Right"></td></tr><tr id="CB_Footer"><td id="CB_BtmLeft">' + a + '</td><td id="CB_Btm"></td><td id="CB_BtmRight">' + a + '</td></tr></table><div id="CB_ContentHide"></div>')
 			;
 
@@ -1352,19 +1351,19 @@ var CB_Show = 1;
 			if (jQuery.browser.msie && _clearbox.options.CB_RoundPix < 2) {
 				CB_ieRPBug = 6;
 			}
-			$('#CB_Padding').css('padding', _clearbox.options.CB_Padd);
-			CB_ShTh = $('#CB_ShowTh');
-			CB_ShEt = $('#CB_ShowEtc');
+			$('#CB_Padding', CB_All).css('padding', _clearbox.options.CB_Padd);
+			CB_ShTh = $('#CB_ShowTh', CB_All);
+			CB_ShEt = $('#CB_ShowEtc', CB_All);
 
-			CB_ImgHd = $('#CB_ImgHide')
+			CB_ImgHd = $('#CB_ImgHide', CB_All)
 				.css({
 					'backgroundColor' : '#fff',
 					'opacity' : 0.75
 			});
 
-			CB_Win = $('#CB_Window');
-			CB_Thm = $('#CB_Thumbs');
-			CB_Thm2 = $('#CB_Thumbs2');
+			CB_Win = $('#CB_Window', CB_All);
+			CB_Thm = $('#CB_Thumbs', CB_All);
+			CB_Thm2 = $('#CB_Thumbs2', CB_All);
 
 			var _img = $('<a/>').css({
 				'background': 'url("' + _clearbox.options.CB_PicDir + 'imgzoom_tb.gif") no-repeat scroll 0 0 transparent',
@@ -1378,7 +1377,7 @@ var CB_Show = 1;
 				'background-position' : '0 -39px',
 			}).html('&nbsp;');
 
-			CB_Et = $('#CB_Etc')
+			CB_Et = $('#CB_Etc', CB_All)
 				.click(function(){
 					window.open(CB_Gallery[CB_ActImgId][0], '_blank');
 				})
@@ -1387,31 +1386,31 @@ var CB_Show = 1;
 				.attr('title', 'Open New Window')
 			;
 
-			CB_HideContent = $('#CB_ContentHide')
+			CB_HideContent = $('#CB_ContentHide', CB_All)
 				.css({
 					'backgroundColor' : _clearbox.options.CB_HideColor,
 					'opacity' : 0,
 			});
 
-			CB_Img = $('#CB_Image')
+			CB_Img = $('#CB_Image', CB_All)
 				.css('border', _clearbox.options.CB_ImgBorder + 'px solid ' + _clearbox.options.CB_ImgBorderColor);
 
-			CB_LoadingImg = $('#CB_LoadingImage');
-			CB_ImgCont = $('#CB_ImgContainer');
+			CB_LoadingImg = $('#CB_LoadingImage', CB_All);
+			CB_ImgCont = $('#CB_ImgContainer', CB_All);
 
-			CB_Cls = $('#CB_CloseWindow');
-			CB_SlideS = $('#CB_SlideShowS');
-			CB_SlideP = $('#CB_SlideShowP');
-			CB_SlideB = $('#CB_SlideShowBar')
+			CB_Cls = $('#CB_CloseWindow', CB_All);
+			CB_SlideS = $('#CB_SlideShowS', CB_All);
+			CB_SlideP = $('#CB_SlideShowP', CB_All);
+			CB_SlideB = $('#CB_SlideShowBar', CB_All)
 				.css('opacity', 0.5);
 
-			CB_Prv = $('#CB_Prev')
+			CB_Prv = $('#CB_Prev', CB_All)
 				.css('cursor', 'url("' + _clearbox.options.CB_PicDir + 'bg11.cur"), pointer')
 			;
-			CB_Nxt = $('#CB_Next')
+			CB_Nxt = $('#CB_Next', CB_All)
 				.css('cursor', 'url("' + _clearbox.options.CB_PicDir + 'bg12.cur"), pointer')
 			;
-			CB_Txt = $('#CB_Text')
+			CB_Txt = $('#CB_Text', CB_All)
 				.css({
 					marginTop  : _clearbox.options.CB_PadT,
 					fontFamily : _clearbox.options.CB_Font,
@@ -1433,14 +1432,14 @@ var CB_Show = 1;
 			CB_Right.width = _clearbox.options.CB_RoundPix + 'px';
 			*/
 
-			$('#CB_Header').height(_clearbox.options.CB_RoundPix);
-			$('#CB_Footer').height(_clearbox.options.CB_RoundPix);
+			$('#CB_Header', CB_All).height(_clearbox.options.CB_RoundPix);
+			$('#CB_Footer', CB_All).height(_clearbox.options.CB_RoundPix);
 
-			$('#CB_Left').width(_clearbox.options.CB_RoundPix + CB_ie6RPBug);
-			$('#CB_Right').width(_clearbox.options.CB_RoundPix);
+			$('#CB_Left', CB_All).width(_clearbox.options.CB_RoundPix + CB_ie6RPBug);
+			$('#CB_Right', CB_All).width(_clearbox.options.CB_RoundPix);
 
-			CB_iFr = $('#CB_iFrame');
-			CB_PrvNxt = $('#CB_PrevNext');
+			CB_iFr = $('#CB_iFrame', CB_All);
+			CB_PrvNxt = $('#CB_PrevNext', CB_All);
 
 			CB_ShTh.mouseover(function() {
 				_clearbox.CB_ShowThumbs();
@@ -1472,6 +1471,8 @@ var CB_Show = 1;
 			if (jQuery.browser.firefox) {
 				CB_BodyMarginY = 0;
 			}
+
+			CB_All.appendTo($("body"));
 		}
 		$('#CB_Thumbs').mousemove(_clearbox.getMouseXY);
 		var d = 0;
