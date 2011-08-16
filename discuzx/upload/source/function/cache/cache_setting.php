@@ -1047,9 +1047,20 @@ function writetojscache() {
 		'/(^|\r|\n)(\s|\t)+/',
 		'/(\r|\n)/',
 	);
+	// bluelovers
+	$dir_files = array();
+	// bluelovers
 	while(($entry = readdir($dh)) !== false) {
 		if(fileext($entry) == 'js') {
 			$jsfile = $dir.$entry;
+	// bluelovers
+			$dir_files[$entry] = $jsfile;
+		}
+	}
+
+	foreach ($dir_files as $entry => $jsfile) {
+		if ($jsfile) {
+	// bluelovers
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
