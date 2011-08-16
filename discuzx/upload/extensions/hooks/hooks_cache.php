@@ -234,4 +234,10 @@ function _eFunc_writetocsscache_Before_fwrite($_EVENT, $conf) {
  	}
 }
 
+Scorpio_Hook::add('Func_writetojscache:After_readdir', '_eFunc_writetojscache_After_readdir');
+
+function _eFunc_writetojscache_After_readdir($_EVENT, $conf) {
+
+}
+
 ?>
