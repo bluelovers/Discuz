@@ -957,6 +957,7 @@ var CB_Show = 1;
 							.parent()
 							.attr('href', 'javascript:void(0)')
 							.prop('data-idx', i)
+							.attr('title', i)
 							.unbind('click.clearbox')
 							.bind('click.clearbox', function(){
 								if (CB_SSTimer) {
