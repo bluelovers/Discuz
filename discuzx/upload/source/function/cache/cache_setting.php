@@ -1067,7 +1067,7 @@ function writetojscache() {
 	}
 
 	foreach ($dir_files as $entry => $jsfile) {
-		if ($jsfile) {
+		if (file_exists($jsfile)) {
 	// bluelovers
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
