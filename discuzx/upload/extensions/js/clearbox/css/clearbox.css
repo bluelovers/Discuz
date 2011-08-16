@@ -113,7 +113,9 @@
 	left:50%;
 	position:absolute;
 	top:50%;
+	/*
 	visibility:hidden;
+	*/
 	z-index: 1100;
 }
 
@@ -174,7 +176,7 @@
 
 #CB_Prev, #CB_Next {
 	background: transparent url(../pic/blank.gif) no-repeat scroll 0%;
-	display: block;	
+	display: block;
 	width: 49%;
 	cursor: pointer;
 	outline-style:none;
@@ -242,4 +244,3 @@ background:transparent url(../pic/next.gif) no-repeat scroll right 50%;
 	position: absolute;
 	right: 15px;
 }
-                              
