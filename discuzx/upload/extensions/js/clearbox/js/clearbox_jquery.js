@@ -856,7 +856,9 @@ var CB_Show = 1;
 					CB_LoadingImg.hide();
 					CB_Img
 						.attr('src', CB_Gallery[CB_ActImgId][0])
-						.css('visibility', 'visible');
+						.css('visibility', 'visible')
+						.fadeTo('fast' , 1)
+					;
 				}
 				CB_Cls.show();
 				CB_HideContent.bind('click.clearbox', function() {
@@ -1044,7 +1046,10 @@ var CB_Show = 1;
 					}
 					// bluelovers
 
+					/*
 					CB_Img.css('visibility', 'visible');
+					*/
+					CB_Img.css('visibility', 'visible').fadeTo('fast', 1);
 					CB_LoadingImg.hide();
 
 					CB_iFr
@@ -1186,7 +1191,10 @@ var CB_Show = 1;
 				CB_JumpX = _clearbox.options.CB_Jump_X;
 				CB_JumpY = _clearbox.options.CB_Jump_Y;
 				if (_clearbox.options.CB_Animation != 'warp') {
+					/*
 					CB_Img.css('visibility', 'hidden');
+					*/
+					CB_Img.fadeTo('fast', 0.25);
 					CB_LoadingImg.show();
 				}
 				CB_Txt.html(_clearbox.options.CB_LoadingText);
