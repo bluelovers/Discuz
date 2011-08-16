@@ -436,6 +436,16 @@ function build_cache_setting() {
 	}
 	$data['output'] = $output;
 
+	// bluelovers
+	// Event: Func_build_cache_setting:Before_save_syscache
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_save_syscache')
+			->run(array(array(
+				'data'		=> &$data
+		)));
+	}
+	// bluelovers
+
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
 }
