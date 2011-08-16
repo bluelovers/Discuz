@@ -1587,26 +1587,22 @@ var CB_Show = 1;
 
 	function CB_HideDocument(a) {
 		var b = a;
-		if (CB_ii < _clearbox.options.CB_HideOpacity) {
-			CB_ii += _clearbox.options.CB_OpacityStep;
 
-			CB_HideContent.css('opacity', (CB_ii / 100));
-
-			CB_Hide = CB_ii;
-			CB_Blur = setTimeout(function(){CB_HideDocument(b);}, 5);
-		} else {
-			CB_ii = 0;
-			CB_HideContent.height(DocSizeY + CB_BodyMarginY);
-			if (_clearbox.options.CB_HideOpacity != 0) {
+		CB_HideContent
+			.stop()
+			.height(DocSizeY + CB_BodyMarginY)
+			.show()
+			.fadeTo('slow', _clearbox.options.CB_HideOpacity / 100, function(){
 				clearTimeout(CB_Blur);
-			}
-			if (b == 'x') {
-				CB_LoadingImg.show();
-				_clearbox.CB_AnimatePlease('x');
-			} else {
-				_clearbox.CB_NewWindow();
-			}
-			return;
-		}
+				CB_Hide = _clearbox.options.CB_HideOpacity;
+
+				if (b == 'x') {
+					CB_LoadingImg.show();
+					_clearbox.CB_AnimatePlease('x');
+				} else {
+					_clearbox.CB_NewWindow();
+				}
+			})
+		;
 	}
 })(jQuery);
