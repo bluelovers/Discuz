@@ -1086,6 +1086,7 @@ function writetojscache() {
 						'remove'		=> &$remove,
 
 						'switchstop'	=> &$switchstop,
+						'jsfile'		=> $jsfile,
 				)));
 			}
 
@@ -1106,6 +1107,7 @@ function writetojscache() {
 
 						'filename'		=> $entry,
 						'filepath'		=> 'data/cache/',
+						'jsfile'		=> $jsfile,
 				)));
 			}
 			// bluelvoers
