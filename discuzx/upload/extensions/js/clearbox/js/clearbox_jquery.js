@@ -465,9 +465,9 @@ var CB_Show = 1;
 				CB_HideContent.css({
 					/*
 					height : BrSizeY + DocScrY,
-					*/
 					visibility : 'visible'
-				}).height(DocSizeY + CB_BodyMarginY);
+					*/
+				}).height(DocSizeY + CB_BodyMarginY).show();
 
 				return;
 			},
@@ -1562,8 +1562,10 @@ var CB_Show = 1;
 			CB_Hide -= _clearbox.options.CB_OpacityStep;
 			CB_Blur = setTimeout(CB_ShowDocument, 5)
 		} else {
-			CB_HideContent.css({
+			CB_HideContent.hide().css({
+				/*
 				visibility : 'hidden',
+				*/
 				width : 0,
 				height : 0,
 			});
