@@ -1575,11 +1575,11 @@ var CB_Show = 1;
 	function CB_ShowDocument() {
 		CB_HideContent
 			.fadeTo('slow', 0, function(){
+				clearTimeout(CB_Blur);
 				$(this)
 					.hide()
-					.width(0)
-					.hieght(0)
 				;
+				CB_Hide = 0;
 				CB_ClearBox = false;
 			})
 		;
