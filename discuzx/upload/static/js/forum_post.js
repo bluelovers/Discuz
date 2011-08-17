@@ -80,7 +80,7 @@ function validate(theform) {
 	// 整理 message , subject 的多餘空白
 	if (theform.subject) theform.subject.value = trim(theform.subject.value);
 	message =
-	theform.message.value = theform.message.value
+		message
 		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
 		.replace(/[\　\r\t ]+(\n|$)/, '$1')
 		.replace(/^\n+/, '')
