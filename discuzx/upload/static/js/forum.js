@@ -225,9 +225,9 @@ function _validate_message(message, theform) {
 
 	message =
 		message
-		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1')
-		.replace(/^\n+/, '')
+		.replace(/(?:\r+)\n|\n(?:\r+)/g, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/g, '$1')
+		.replace(/^\n+/g, '')
 	;
 
 	for(i in EXTRAFUNC['hooks']['_validate_message']) {
