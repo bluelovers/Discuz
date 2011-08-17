@@ -230,6 +230,13 @@ function _validate_message(message, theform) {
 		.replace(/^\n+/, '')
 	;
 
+	for(i in EXTRAFUNC['hooks']['_validate_message']) {
+		try {
+			var _func = EXTRAFUNC['hooks']['_validate_message'][i];
+			message = _func(message, theform);
+		} catch(e) {}
+	}
+
 	return message;
 }
 // bluelovers
