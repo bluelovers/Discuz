@@ -708,7 +708,3 @@
 		return message;
 	});
 })();
-
-function _hack_zoom(obj, zimg, nocover, pn) {
-
-}
