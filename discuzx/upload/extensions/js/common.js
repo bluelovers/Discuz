@@ -696,6 +696,19 @@
 
 })(jQuery);
 
+(function(){
+	if (!EXTRAFUNC['hooks']) EXTRAFUNC['hooks'] = new Array();
+	if (!EXTRAFUNC['hooks']['_validate_message']) EXTRAFUNC['hooks']['_validate_message'] = new Array();
+
+	EXTRAFUNC['hooks']['_validate_message'].push(function(message, theform) {
+		message = message
+			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/, '$1$2')
+		;
+
+		return message;
+	});
+})();
+
 function _hack_zoom(obj, zimg, nocover, pn) {
 
 }
