@@ -245,6 +245,7 @@ function fastpostvalidate(theform, noajaxpost) {
 	theform.message.value = theform.message.value
 		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
 		.replace(/[\　\r\t ]+(\n|$)/, '$1')
+		.replace(/^\n+/, '')
 	;
 	// bluelovers
 
