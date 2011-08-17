@@ -580,7 +580,11 @@
 						'text-decoration' : 'none',
 					})
 					.click(function(){
-						bbcode_imgs.first().click();
+						$(this)
+							.parents('td[id].t_f').first()
+							.find('a[rel^="clearbox"]').first()
+							.click()
+						;
 					})
 					.appendTo(jQuery('<div/>'))
 					.parent()
