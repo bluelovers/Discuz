@@ -256,11 +256,7 @@ function fastpostvalidate(theform, noajaxpost) {
 	// bluelovers
 	// 整理 message , subject 的多餘空白
 	if (theform.subject) theform.subject.value = trim(theform.subject.value, {nospaceleft : 1});
-	theform.message.value = theform.message.value
-		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1')
-		.replace(/^\n+/, '')
-	;
+	theform.message.value = _validate_message(theform.message.value);
 	// bluelovers
 
 	if(theform.message.value == '' && theform.subject.value == '') {
