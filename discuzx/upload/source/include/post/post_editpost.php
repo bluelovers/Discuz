@@ -627,6 +627,19 @@ if(!submitcheck('editsubmit')) {
 				showmessage('post_sm_isnull');
 			}
 
+			// bluelovers
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				//Event: Script_forum_post_editpost:After_submitcheck_true_defaultcheck
+				Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_editpost:After_submitcheck_true_defaultcheck')
+					->run(array(array(
+						'subject'	=> &$subject,
+						'message'	=> &$message,
+
+						'special'	=> &$thread['special'],
+				)));
+			}
+			// bluelovers
+
 		}
 
 		$htmlon = $_G['group']['allowhtml'] && !empty($_G['gp_htmlon']) ? 1 : 0;
