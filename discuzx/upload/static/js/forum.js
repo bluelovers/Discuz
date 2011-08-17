@@ -244,7 +244,8 @@ function fastpostvalidate(theform, noajaxpost) {
 	if (theform.subject) theform.subject.value = trim(theform.subject.value);
 	theform.message.value = theform.message.value
 		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1');
+		.replace(/[\　\r\t ]+(\n|$)/, '$1')
+	;
 	// bluelovers
 
 	if(theform.message.value == '' && theform.subject.value == '') {
