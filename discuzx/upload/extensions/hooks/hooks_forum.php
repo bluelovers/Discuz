@@ -15,6 +15,14 @@ Scorpio_Hook::add('Script_forum_post:Before_action_include', '_eScript_forum_pos
 
 function _eScript_forum_post_Before_action_include($_EVENT, $_conf) {
 	extract($_conf, EXTR_REFS);
+
+	$subject = preg_replace(array(
+			'/\n|\s{2,}/s',
+			'/^(?:[\s\]\)]+)|(?:[\s\　\[]+)$/is',
+		), array(
+			' ',
+			'',
+		), $subject);
 }
 
 ?>
