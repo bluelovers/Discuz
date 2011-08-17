@@ -580,7 +580,11 @@
 						'text-decoration' : 'none',
 					})
 					.click(function(){
-						bbcode_imgs.first().click();
+						$(this)
+							.parents('td[id].t_f').first()
+							.find('a[rel^="clearbox"]').first()
+							.click()
+						;
 					})
 					.appendTo(jQuery('<div/>'))
 					.parent()
@@ -592,7 +596,10 @@
 					})
 					.appendTo(jQuery('<div/>'))
 					.parent()
-					.prependTo(bbcode_imgs.parents('td[id].t_f').first())
+					.prependTo(
+						bbcode_imgs.parents('a[rel^="clearbox"]')
+							.parents('td[id].t_f')
+					)
 					.css({
 						'padding-top' : 5,
 						'padding-bottom' : 5,
