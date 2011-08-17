@@ -622,7 +622,7 @@ if(!submitcheck('editsubmit')) {
 
 		} else {
 
-			if($subject == '' && $message == '' && $thread['special'] != 2) {
+			if($message == '' && $thread['special'] != 2) {
 				showmessage('post_sm_isnull');
 			}
 
