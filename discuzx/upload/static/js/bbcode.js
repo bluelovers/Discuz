@@ -416,6 +416,14 @@ function html2bbcode(str) {
 		str = recursion('div', str, 'dstag');
 		str = recursion('p', str, 'ptag');
 		str = recursion('span', str, 'fonttag');
+
+		// bluelovers
+		// 修正多層的標籤造成部分標籤沒有轉換為 BBCODE
+		for (var i = 0; i < 2 ; i++) {
+			str = recursion('span', str, 'fonttag');
+			str = recursion('font', str, 'fonttag');
+		}
+		// bluelovers
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');
