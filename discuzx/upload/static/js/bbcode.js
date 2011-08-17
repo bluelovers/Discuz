@@ -42,7 +42,7 @@ function bbcode2html(str) {
 	}
 
 	if(fetchCheckbox('allowimgurl')) {
-		str = str.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
+		str = str.replace(/([^>=\]"'\/]|^|(?:msgbox|code|\t|float|\*|td|quote|free|hide|hr|align|\/(?:attachimg|attach|flash|audio|media|backcolor|color|b|s|u|i|italic|sub|sup))(?:\=[^\]]+)?\])((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
 	}
 
 	if(!allowhtml || !fetchCheckbox('htmlon')) {
