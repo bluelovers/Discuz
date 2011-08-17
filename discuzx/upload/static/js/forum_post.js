@@ -79,12 +79,7 @@ function validate(theform) {
 	// bluelovers
 	// 整理 message , subject 的多餘空白
 	if (theform.subject) theform.subject.value = trim(theform.subject.value, {nospaceleft : 1});
-	message =
-		message
-		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1')
-		.replace(/^\n+/, '')
-	;
+	message = _validate_message(message, theform);
 	// bluelovers
 
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
