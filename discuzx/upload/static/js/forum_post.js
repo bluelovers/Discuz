@@ -81,7 +81,9 @@ function validate(theform) {
 	if (theform.subject) theform.subject.value = trim(theform.subject.value);
 	theform.message.value = theform.message.value
 		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1');
+		.replace(/[\　\r\t ]+(\n|$)/, '$1')
+		.replace(/^\n+/, '')
+	;
 	// bluelovers
 
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
