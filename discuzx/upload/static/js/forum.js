@@ -221,7 +221,7 @@ function showTypes(id, mod) {
 }
 
 // bluelovers
-function _validate_message(message) {
+function _validate_message(message, theform) {
 
 	message =
 		message
