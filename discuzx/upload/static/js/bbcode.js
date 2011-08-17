@@ -173,6 +173,16 @@ function clearcode(str) {
 	str= str.replace(/\[u\]\[\/u]/ig, '', str);
 	str= str.replace(/\[i\]\[\/i]/ig, '', str);
 	str= str.replace(/\[s\]\[\/s]/ig, '', str);
+
+	// bluelovers
+	for(i in EXTRAFUNC['hooks']['clearcode']) {
+		try {
+			var _func = EXTRAFUNC['hooks']['clearcode'][i];
+			str = _func(str);
+		} catch(e) {}
+	}
+	// bluelovers
+
 	return str;
 }
 
