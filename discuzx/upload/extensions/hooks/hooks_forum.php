@@ -19,7 +19,7 @@ function _eScript_forum_post_Before_action_include($_EVENT, $_conf) {
 	if (!empty($subject)) {
 		$subject = preg_replace(array(
 				'/\n|\s{2,}/s',
-				'/^(?:[\s\]\)]+)|(?:[\s\　\[]+)$/is',
+				'/^(?:[\s\]\)]+)|(?:[\s\　\[]+|\s*\[\s*\d+\s*P\s*\]\s*)+$/is',
 			), array(
 				' ',
 				'',
