@@ -190,7 +190,7 @@ function in_array(needle, haystack) {
 	return false;
 }
 
-function trim(str) {
+function trim(str, _conf) {
 	return (str + '').replace(/(\s+)$/g, '').replace(/^\s+/g, '');
 }
 
