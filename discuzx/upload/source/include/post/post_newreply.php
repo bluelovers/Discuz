@@ -300,6 +300,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
+	// 修改為回覆時不允許內容空白
 	if(trim($message) == '' && $thread['special'] != 2) {
 		showmessage('post_sm_isnull');
 	} elseif($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
