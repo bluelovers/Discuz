@@ -596,7 +596,10 @@
 					})
 					.appendTo(jQuery('<div/>'))
 					.parent()
-					.prependTo(bbcode_imgs.parents('td[id].t_f'))
+					.prependTo(
+						bbcode_imgs.parents('a[rel^="clearbox"]')
+							.parents('td[id].t_f')
+					)
 					.css({
 						'padding-top' : 5,
 						'padding-bottom' : 5,
