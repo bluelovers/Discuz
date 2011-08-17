@@ -208,7 +208,10 @@
 				_this.hide();
 			}
 
-			_this.height(_e.height).width(_e.width).css(agv.img.css).attr(agv.img.attr);
+			_this.css(agv.img.css).attr(agv.img.attr);
+			if (_e.height && _e.width) {
+				_this.height(_e.height).width(_e.width);
+			}
 		});
 
 		return this;
