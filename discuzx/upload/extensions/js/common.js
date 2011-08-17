@@ -423,6 +423,67 @@
 
 	$(document).ready(function(){
 
+		var fixw = typeof imagemaxwidth == 'undefined' ? 600 : imagemaxwidth;
+
+		$('div[id^="post_"] .sign img.bbcode_img').each(function(){
+			var _this = $(this);
+
+			var _src = (_this.attr('file') || _this.attr('src'));
+			var _a_init = 0;
+
+			if (_this.parent('a').length) {
+				var _a = _this.parent('a');
+
+				if (_a.attr('href') == _src) {
+					_a_init = 1;
+				}
+			} else {
+				var _a = jQuery('<a>');
+
+				_a.insertBefore(_this);
+				_this.appendTo(_a);
+
+				_a_init = 1;
+			}
+
+			_this.attr({
+				'onclick' : 'void(0)',
+				'onload' : 'void(0)',
+			});
+
+			if (_a_init) {
+
+				_a
+					.attr({
+						'rel' : 'clearbox[gallery=bbcode_img_sign]',
+						'href' : _src,
+						'tnhref' : _src,
+						'target' : '_blank',
+						'class' : 'clearbox',
+					})
+					.css({
+						'text-decoration' : 'none',
+					})
+				;
+
+				_this
+					.appendTo(_a)
+					.load(function(){
+						$(this)
+							.attr({
+								lazyloaded : true
+							})
+							.scoScale({
+								width : fixw,
+							})
+						;
+
+						_lazyload();
+					})
+				;
+			}
+		});
+
 		// 因不明原因的 BUG 只好採用如此複雜的 selector
 		var bbcode_imgs = jQuery('body.pg_viewthread .t_f img.bbcode_img');
 		if (bbcode_imgs.length > 0) {
@@ -452,8 +513,6 @@
 					$(this).css('border-color', '#F0F0F0');
 				})
 			;
-
-			var fixw = typeof imagemaxwidth == 'undefined' ? 600 : imagemaxwidth;
 
 			if (_bbcode_imgs_length > 10) {
 				_div_base
@@ -608,6 +667,29 @@
 						'padding-bottom' : 5,
 					})
 				;
+			});
+		} else if ($('div[id^="post_"] .sign img.bbcode_img').size()) {
+
+			CB_ScriptDir = 'extensions/js/clearbox';
+
+			jQuery('<link rel="stylesheet" href="' + CB_ScriptDir+'/css/clearbox.css' + '" type="text/css" rel="stylesheet" />')
+				.appendTo(jQuery('head'));
+
+			jQuery.getScript(
+				(JSPATH == 'data/cache/' ? JSPATH : CB_ScriptDir+'/js/')
+				+ 'clearbox_jquery.js'
+				+ (JSPATH == 'data/cache/' ? VERHASH_GZIP_JS : '')
+				, function(data, textStatus){
+
+				jQuery.log('clearbox_jquery.js ' + textStatus);
+
+				$.clearbox.init({
+					path : {
+						base : 'extensions/js/clearbox',
+						js : 'extensions/js/clearbox/js',
+					},
+					CB_PicDir : 'extensions/js/clearbox/pic'
+				});
 			});
 		}
 	});
