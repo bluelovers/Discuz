@@ -220,6 +220,12 @@ function showTypes(id, mod) {
 	}
 }
 
+// bluelovers
+function _validate_message(message) {
+	return message;
+}
+// bluelovers
+
 var postpt = 0;
 /**
  * 用於快速發帖
