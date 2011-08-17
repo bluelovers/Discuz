@@ -78,7 +78,7 @@ function validate(theform) {
 
 	// bluelovers
 	// 整理 message , subject 的多餘空白
-	if (theform.subject) theform.subject.value = trim(theform.subject.value);
+	if (theform.subject) theform.subject.value = trim(theform.subject.value, {nospaceleft : 1});
 	theform.message.value = theform.message.value
 		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
 		.replace(/[\　\r\t ]+(\n|$)/, '$1')
