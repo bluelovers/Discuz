@@ -222,6 +222,14 @@ function showTypes(id, mod) {
 
 // bluelovers
 function _validate_message(message) {
+
+	message =
+		message
+		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/, '$1')
+		.replace(/^\n+/, '')
+	;
+
 	return message;
 }
 // bluelovers
