@@ -708,4 +708,8 @@
 
 		return message;
 	});
+
+	EXTRAFUNC['hooks']['clearcode'].push(function(str) {
+		return str;
+	});
 })();
