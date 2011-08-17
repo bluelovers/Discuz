@@ -275,6 +275,19 @@ if(!submitcheck('editsubmit')) {
 				showmessage('post_sm_isnull');
 			}
 
+			// bluelovers
+			if (discuz_core::$plugin_support['Scorpio_Event']) {
+				//Event: Script_forum_post_editpost:After_submitcheck_true_defaultcheck
+				Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_editpost:After_submitcheck_true_defaultcheck')
+					->run(array(array(
+						'subject'	=> &$subject,
+						'message'	=> &$message,
+
+						'special'	=> &$thread['special'],
+				)));
+			}
+			// bluelovers
+
 			$typeid = isset($_G['forum']['threadtypes']['types'][$typeid]) ? $typeid : 0;
 			if(!$_G['forum']['ismoderator'] && !empty($_G['forum']['threadtypes']['moderators'][$thread['typeid']])) {
 				$typeid = $thread['typeid'];
