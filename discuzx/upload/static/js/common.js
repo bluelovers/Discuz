@@ -191,6 +191,15 @@ function in_array(needle, haystack) {
 }
 
 function trim(str, _conf) {
+
+	// bluelovers
+	if (_conf) {
+		if (_conf.nospaceleft) {
+			return (str + '').replace(/(\s+)$/g, '').replace(/^[\t\r\n\ ]+/g, '');
+		}
+	}
+	// bluelovers
+
 	return (str + '').replace(/(\s+)$/g, '').replace(/^\s+/g, '');
 }
 
