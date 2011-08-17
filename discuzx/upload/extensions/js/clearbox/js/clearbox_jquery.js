@@ -30,6 +30,8 @@ var CB_Show = 1;
 	CB_resize_ing,
 	CB_scroll_ing,
 
+	_old_document_event,
+
 	CB_ImgRate, CB_Win, CB_Txt, CB_Img, CB_Prv, CB_Nxt, CB_ImgWidthOld, CB_ImgHeightOld, CB_ActImgId, CB_Gallery, CB_Count, CB_preImages, CB_Loaded, CB_Header, CB_Footer, CB_Left, CB_Right;
 
 	var CB_PrePictures = new Array();
@@ -112,8 +114,46 @@ var CB_Show = 1;
 			init : function(options) {
 				_clearbox.setup(options);
 
+				if (!_old_document_event) {
+					_old_document_event = {
+						onkeyup : document.onkeyup,
+						onkeydown : document.onkeydown,
+						onkeypress : document.onkeypress,
+					};
+
+					document.onkeyup =
+					document.onkeydown =
+					document.onkeypress = null;
+				}
+
+				var _keyeven = function(event) {
+					if (CB_ClearBox || CB_IsAnimating) {
+						event.preventDefault();
+						event.stopPropagation();
+
+						return false;
+					} else {
+						return true;
+					}
+				};
+
 				if (!jQuery.browser.msie) document.captureEvents(Event.MOUSEMOVE);
-				$(document).keypress(_clearbox.keyeven);
+				$(document)
+					.unbind('keypress.clearbox')
+					.bind('keypress.clearbox', _clearbox.keyeven)
+					.unbind('keyup.clearbox')
+					.bind('keyup.clearbox', function (event){
+						if (_keyeven(event) && _old_document_event.onkeyup) {
+							_old_document_event.onkeyup(event);
+						}
+					})
+					.unbind('keydown.clearbox')
+					.bind('keydown.clearbox', function (event){
+						if (_keyeven(event) && _old_document_event.onkeydown) {
+							_old_document_event.onkeydown(event);
+						}
+					})
+				;
 
 				CB_Init();
 			},
