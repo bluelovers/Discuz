@@ -622,6 +622,7 @@ if(!submitcheck('editsubmit')) {
 
 		} else {
 
+			// 修改為回覆時不允許內容空白
 			if($message == '' && $thread['special'] != 2) {
 				showmessage('post_sm_isnull');
 			}
