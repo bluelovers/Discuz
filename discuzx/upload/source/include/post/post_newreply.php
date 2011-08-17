@@ -300,7 +300,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	if(trim($subject) == '' && trim($message) == '' && $thread['special'] != 2) {
+	if(trim($message) == '' && $thread['special'] != 2) {
 		showmessage('post_sm_isnull');
 	} elseif($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
 		showmessage('post_thread_closed');
