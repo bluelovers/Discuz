@@ -702,7 +702,8 @@
 
 	EXTRAFUNC['hooks']['_validate_message'].push(function(message, theform) {
 		message = message
-			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/, '$1$2')
+			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/g, '$1$2')
+			.replace(/\[([a-z]+)(?:\=[^\]]*)?\]([\s\n\r\t]*)\[\/\1\]/ig, '$2')
 		;
 
 		return message;
