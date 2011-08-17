@@ -299,6 +299,25 @@ function fonttag(fontoptions, text) {
 	return pend['prepend'] + recursion('font', text, 'fonttag') + pend['append'];
 }
 
+// bluelovers
+function colortag(fontoptions, text) {
+	var prepend = '';
+	var append = '';
+	var tags = new Array();
+	tags = {'color' : 'color='};
+	for(bbcode in tags) {
+		optionvalue = fetchoptionvalue(tags[bbcode], fontoptions);
+		if(optionvalue) {
+			prepend += '[' + bbcode + '=' + optionvalue + ']';
+			append = '[/' + bbcode + ']' + append;
+		}
+	}
+
+	var pend = parsestyle(fontoptions, prepend, append);
+	return pend['prepend'] + recursion('font', text, 'colortag') + pend['append'];
+}
+// bluelovers
+
 function getoptionvalue(option, text) {
 	re = new RegExp(option + "(\s+?)?\=(\s+?)?[\"']?(.+?)([\"']|$|>)", "ig");
 	var matches = re.exec(text);
@@ -420,8 +439,8 @@ function html2bbcode(str) {
 		// bluelovers
 		// 修正多層的標籤造成部分標籤沒有轉換為 BBCODE
 		for (var i = 0; i < 2 ; i++) {
-			str = recursion('span', str, 'fonttag');
-			str = recursion('font', str, 'fonttag');
+			str = recursion('span', str, 'colortag');
+			str = recursion('font', str, 'colortag');
 		}
 		// bluelovers
 	}
