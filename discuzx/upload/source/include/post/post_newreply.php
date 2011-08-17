@@ -336,6 +336,19 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	}
 
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newreply:After_submitcheck_true_defaultcheck
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_submitcheck_true_defaultcheck')
+			->run(array(array(
+				'subject'	=> &$subject,
+				'message'	=> &$message,
+
+				'special'	=> &$special,
+		)));
+	}
+	// bluelovers
+
 	$attentionon = empty($_G['gp_attention_add']) ? 0 : 1;
 	$attentionoff = empty($attention_remove) ? 0 : 1;
 
