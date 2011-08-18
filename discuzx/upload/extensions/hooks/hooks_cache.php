@@ -239,6 +239,17 @@ Scorpio_Hook::add('Func_writetojscache:After_readdir', '_eFunc_writetojscache_Af
 function _eFunc_writetojscache_After_readdir($_EVENT, $_conf) {
 	// clearbox
 	$_conf['dir_files']['clearbox_jquery.js'] = DISCUZ_ROOT.'extensions/js/clearbox/js/clearbox_jquery.js';
+
+	foreach(discuz_core::$plugin_support['jscache'] as $_k => $_v) {
+		if (empty($_v['name'])) $_v['name'] = $_k;
+		if (empty($_v['file'])) $_v['file'] = $_v['name'];
+		if (empty($_v['path'])) $_v['path'] = '';
+		if (empty($_v['base'])) $_v['base'] = 'static/js/';
+
+		$_file = $_v['base'].$_v['path'].$_v['file'];
+
+		$_conf['dir_files'][$_v['name']] = DISCUZ_ROOT.$_file;
+	}
 }
 
 ?>
