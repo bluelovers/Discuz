@@ -92,7 +92,7 @@
 					<!--{/if}-->
 					<span class="pipe">|</span>
 				<!--{/if}-->
-				<!--{if $article[status]==0 && ($_G['group']['allowdiy'] || $admincp4 || $admincp5)}-->
+				<!--{if $article[status]==0 && ($_G['group']['allowdiy']  || getstatus($_G['member']['allowadmincp'], 4) || getstatus($_G['member']['allowadmincp'], 5) || getstatus($_G['member']['allowadmincp'], 6))}-->
 				<a href="portal.php?mod=portalcp&ac=portalblock&op=recommend&idtype=aid&id=$article[aid]" onclick="showWindow('recommend', this.href, 'get', 0)">{lang blockdata_recommend}</a><span class="pipe">|</span>
 				<!--{/if}-->
 			</div>
