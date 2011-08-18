@@ -247,7 +247,10 @@ function _eFunc_writetojscache_After_readdir($_EVENT, $_conf) {
 		if (empty($_v['path'])) $_v['path'] = '';
 		if (empty($_v['base'])) $_v['base'] = 'static/js/';
 
-		$_file = $_v['base'].$_v['path'].$_v['file'];
+		$_file = $_v['base']
+			.$_v['path']
+			.(DISCUZ_DEBUG ? $_v['file_develop'] : $_v['file'])
+		;
 
 		$_conf['dir_files'][$_v['name']] = DISCUZ_ROOT.$_file;
 	}
