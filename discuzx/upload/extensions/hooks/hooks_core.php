@@ -446,6 +446,8 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 		*/
 		'path' => 'jquery.lazy/',
 		'base' => 'extensions/js/',
+
+		'file_develop' => 'jquery.lazy.source.js',
 	);
 }
 
