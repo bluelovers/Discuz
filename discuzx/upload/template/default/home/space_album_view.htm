@@ -68,9 +68,9 @@
 		<div class="bm_c">
 			<div id="pnv" class="bn pns cl">
 				<!--{if $albumlist}-->	
-				<!--{loop $albumlist $key $ablums}-->
-				<ul id="albumbox_$key" class="ptm ml z" {if !isset($ablums[$id]) && !($key==0 && $id<0)} style="display: none;"{else}{eval $nowalbum=$key;}{/if}>
-					<!--{loop $ablums $akey $value}-->
+				<!--{loop $albumlist $key $albums}-->
+				<ul id="albumbox_$key" class="ptm ml z" {if !isset($albums[$id]) && !($key==0 && $id<0)} style="display: none;"{else}{eval $nowalbum=$key;}{/if}>
+					<!--{loop $albums $akey $value}-->
 					<!--{eval $pwdkey = 'view_pwd_album_'.$value['albumid'];}-->
 					<li style="width: 136px;">
 						<div class="c">
