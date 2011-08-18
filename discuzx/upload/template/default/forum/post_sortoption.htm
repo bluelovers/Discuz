@@ -94,16 +94,27 @@
 								<script type="text/javascript">
 									changeselectthreadsort('$selectedkey', $optionid);
 								</script>
+							<!--{else}-->
+								<select tabindex="1" onchange="changeselectthreadsort(this.value, '$optionid');checkoption('$option[identifier]', '$option[required]', '$option[type]')" $option[unchangeable] class="ps">
+									<option value="0">{lang please_select}</option>
+									<!--{loop $option['choices'] $id $value}-->
+										<!--{if !$value[foptionid]}-->
+										<option value="$id">$value[content] <!--{if $value['level'] != 1}-->&raquo;<!--{/if}--></option>
+										<!--{/if}-->
+									<!--{/loop}-->
+								</select>
 							<!--{/if}-->
 						<!--{/loop}-->
-						<select tabindex="1" onchange="changeselectthreadsort(this.value, '$optionid');checkoption('$option[identifier]', '$option[required]', '$option[type]')" $option[unchangeable] class="ps">
-							<option value="0">{lang please_select}</option>
-							<!--{loop $option['choices'] $id $value}-->
-								<!--{if !$value[foptionid]}-->
-								<option value="$id">$value[content] <!--{if $value['level'] != 1}-->&raquo;<!--{/if}--></option>
-								<!--{/if}-->
-							<!--{/loop}-->
-						</select>
+						<!--{if !is_array($option['value'])}-->
+							<select tabindex="1" onchange="changeselectthreadsort(this.value, '$optionid');checkoption('$option[identifier]', '$option[required]', '$option[type]')" $option[unchangeable] class="ps">
+								<option value="0">{lang please_select}</option>
+								<!--{loop $option['choices'] $id $value}-->
+									<!--{if !$value[foptionid]}-->
+									<option value="$id">$value[content] <!--{if $value['level'] != 1}-->&raquo;<!--{/if}--></option>
+									<!--{/if}-->
+								<!--{/loop}-->
+							</select>
+						<!--{/if}-->
 					<!--{elseif $option['type'] == 'radio'}-->
 						<ul class="xl2">
 						<!--{loop $option['choices'] $id $value}-->
