@@ -1,7 +1,7 @@
 <!--{template search/header}-->
 <div id="ct" class="cl w">
 	<div class="mw">
-		<form class="searchform" method="post" autocomplete="off" action="search.php?mod=forum">
+		<form class="searchform" method="post" autocomplete="off" action="search.php?mod=forum" onsubmit="if($('scform_srchtxt')) searchFocus($('scform_srchtxt'));">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 
 			<!--{subtemplate search/pubsearch}-->
@@ -17,7 +17,7 @@
 		<div class="bm bw0">
 			<div class="sttl mbn"><h2>{lang search_thread_higher}</h2></div>
 			<div class="bm_c">
-				<form method="post" autocomplete="off" action="search.php?mod=forum">
+				<form method="post" autocomplete="off" action="search.php?mod=forum" onsubmit="if($('srchtxt_1')) searchFocus($('srchtxt_1'));">
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
 
 					<table summary="{lang search}" cellspacing="0" cellpadding="0" class="tfm">
