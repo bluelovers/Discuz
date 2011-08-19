@@ -535,6 +535,7 @@ function litag(listoptions, text) {
 function parsecode(text, brush) {
 	// bluelovers
 	brush = trim(brush);
+	text = text.replace(/^\n+|[\s\n\r]+$/g, '');
 	// bluelovers
 
 	DISCUZCODE['num']++;
