@@ -2377,6 +2377,7 @@ function update_template_block($targettplname, $blocks) {
 		}
 		$newaddbids = array_diff($blocks, $oldbids);
 		DB::delete('common_template_block', array('targettplname'=>$targettplname));
+		// FIX 一個模塊在一個頁面中多次使用時的sql錯誤
 		$blocks = array_unique($blocks);
 		$values = array();
 		foreach ($blocks as $bid) {
