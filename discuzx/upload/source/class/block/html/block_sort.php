@@ -231,8 +231,16 @@ class block_sort extends commonblock_html {
 						$choicedata .= '<span>'.$sortoption[$optionid]['choices'][$choiceid].'</span>';
 					}
 					$optionvaluelist[] = $choicedata;
-				} elseif(in_array($sortoption[$optionid]['type'], array('radio', 'select'))) {
+				} elseif($sortoption[$optionid]['type'] == 'radio') {
 					$optionvaluelist[] = $sortoption[$optionid]['choices'][$optiondata[$optionid]];
+				} elseif($sortoption[$optionid]['type'] == 'select') {
+					$tmpchoiceid = $tmpidentifiervalue = array();
+					foreach(explode('.', $optiondata[$optionid]) as $choiceid) {
+						$tmpchoiceid[] = $choiceid;
+						$tmpidentifiervalue[] = $option['choices'][implode('.', $tmpchoiceid)];
+					}
+					$optionvaluelist[] = implode(' &raquo; ', $tmpidentifiervalue);
+					unset($tmpchoiceid, $tmpidentifiervalue);
 				} elseif($sortoption[$optionid]['type'] == 'image') {
 					if($optiondata[$optionid]) {
 						$imgvalue = unserialize($optiondata[$optionid]);

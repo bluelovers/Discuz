@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 22900 2011-05-30 11:04:15Z yexinhao $
+ *	  $Id: lang_admincp_cloud.php 23933 2011-08-17 03:21:14Z yexinhao $
  */
 
 $extend_lang = array
@@ -149,13 +149,13 @@ $extend_lang = array
 	'cloud_search_tips' => '<li>開啟漫遊搜索功能後，用戶可以使用基於漫遊的搜索功能。</li>',
 
 	'cloud_stats' => '騰訊分析',
-	'cloud_stats_tips' => '<li>騰訊分析—最專業的社區分析，為您的社區發展提供數據支持。</li><li>開通騰訊分析後，次日可以查看到前一日的數據。</li><li><a href="http://stats.discuz.qq.com/" target="_blank"><span color="blue">查看詳細數據</span></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cp.discuz.qq.com/faq?fcId=106&ADTAG=CP.CLOUD.FAQ.FCID" target="_blank"><span color="blue">瞭解騰訊分析</span></a></li>',
+	'cloud_stats_tips' => '<li>選擇的樣式會顯示在論壇底部的右下方。</li>',
 	'cloud_stats_status' => '啟用騰訊分析',
 	'cloud_stats_icon_set' => '選擇樣式（圖標或文字將顯示在論壇右下角）',
 	'cloud_stats_icon_none' => '不顯示圖標和文字',
 	'cloud_stats_icon_word9' => '騰訊分析',
 	'cloud_stats_icon_word10' => '網站統計',
-	'cloud_stats_setting' => '設置',
+	'cloud_stats_setting' => '設置圖標',
 	'cloud_stats_summary' => '網站概況',
 
 	'cloud_smilies' => 'SOSO表情',

@@ -74,6 +74,13 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		$this->common_base();
 	}
 
+	function discuzcode($param) {
+		global $_G;
+		if($param['caller'] == 'discuzcode') {
+			$_G['discuzcodemessage'] = preg_replace('/\[wb=(.+?)\](.+?)\[\/wb\]/', '<a href="http://t.qq.com/\\1" target="_blank"><img src="\\2" /></a>', $_G['discuzcodemessage']);
+		}
+	}
+
 	function global_login_extra() {
 		if(!$this->allow) {
 			return;
@@ -444,6 +451,51 @@ class plugin_qqconnect_group extends plugin_qqconnect {
 		return $this->_viewthread_nonexistence_message($param);
 	}
 
+}
+
+class plugin_qqconnect_home extends plugin_qqconnect {
+
+	function spacecp_profile_bottom() {
+		global $_G;
+
+		if(submitcheck('profilesubmit')) {
+			$_G['group']['maxsigsize'] = $_G['group']['maxsigsize'] < 200 ? 200 : $_G['group']['maxsigsize'];
+			return;
+		}
+		if($_G['uid'] && $_G['setting']['connect']['allow']) {
+
+			require_once libfile('function/connect');
+			connect_merge_member();
+
+			if($_G['member']['conuin'] && $_G['member']['conuinsecret']) {
+
+				$arr = array();
+				$arr['oauth_consumer_key'] = $_G['setting']['connectappid'];
+				$arr['oauth_nonce'] = mt_rand();
+				$arr['oauth_timestamp'] = TIMESTAMP;
+				$arr['oauth_signature_method'] = 'HMAC_SHA1';
+				$arr['oauth_token'] = $_G['member']['conuin'];
+				ksort($arr);
+				$arr['oauth_signature'] = connect_get_oauth_signature('http://cp.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
+				$result = connect_output_php('http://cp.discuz.qq.com/connect/getSignature?' . http_build_query($arr, '', '&'));
+				if($result['status'] == 0) {
+					$js = 'a.onclick = function () { seditor_insertunit(\'sightml\', \'[wb='.$result['result']['username'].']'.$result['result']['signature_url'].'[/wb]\'); };';
+				} else {
+					$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_account').'\'); };';
+				}
+			} else {
+				$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_bind').'\'); };';
+			}
+			return '<script type="text/javascript">if($(\'sightmlsml\')) {'.
+				'var a = document.createElement(\'a\');a.href = \'javascript:;\';a.style.background = \'url(\' + STATICURL + \'image/common/weibo.png) no-repeat 0 2px\';'.
+				'a.onmouseover = function () { showTip(this); };a.setAttribute(\'tip\', \''.lang('plugin/qqconnect', 'connect_wbsign_tip').'\');'.
+				$js.
+				'$(\'sightmlsml\').parentNode.appendChild(a);'.
+				'}</script>';
+
+		}
+
+	}
 }
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 22985 2011-06-13 02:33:53Z zhangguosheng $
+ *      $Id: function_post.php 23694 2011-08-04 05:47:27Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -206,6 +206,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 				}
 				if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 					$image->Watermark($_G['setting']['attachdir'].'/forum/'.$newattachfile[$aid], '', 'forum');
+					$update['filesize'] = $image->imginfo['size'];
 				}
 			}
 			if(!empty($_G['gp_albumaid']) && isset($albumattach[$aid])) {
@@ -276,10 +277,11 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			$update['dateline'] = TIMESTAMP;
 			$update['remote'] = 0;
 			unset($update['aid']);
-			DB::update(getattachtablebytid($tid), $update, "aid='".$attachupdate[$attach['aid']]."'$uidadd");
 			if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 				$image->Watermark($_G['setting']['attachdir'].'/forum/'.$attach['attachment'], '', 'forum');
+				$update['filesize'] = $image->imginfo['size'];
 			}
+			DB::update(getattachtablebytid($tid), $update, "aid='".$attachupdate[$attach['aid']]."'");
 			ftpupload(array($attachupdate[$attach['aid']]), $uid);
 		}
 	}

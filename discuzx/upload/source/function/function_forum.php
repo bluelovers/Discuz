@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 23119 2011-06-20 08:06:15Z monkey $
+ *      $Id: function_forum.php 23826 2011-08-11 04:28:25Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -411,6 +411,9 @@ function loadforum() {
 	global $_G;
 	$tid = intval(getgpc('tid'));
 	$fid = getgpc('fid');
+	if(!$fid && getgpc('gid')) {
+		$fid = intval(getgpc('gid'));
+	}
 	if(!empty($_G['gp_archiver'])) {//X1.5的Archiver兼容
 		if($fid) {
 			dheader('location: archiver/?fid-'.$fid.'.html');
@@ -664,7 +667,11 @@ function set_rssauth() {
 
 function my_thread_log($opt, $data) {
 	global $_G;
-	if(!$_G['setting']['my_search_status']) return;
+    $my_search_data = $_G['setting']['my_search_data'];
+    if ($my_search_data && !in_array($my_search_data)) {
+        $my_search_data = unserialize($my_search_data);
+    }
+	if(!$_G['setting']['my_search_data']['status']) return;
 	$data['action'] = $opt;
 	$data['dateline'] = time();
 	DB::insert('forum_threadlog', $data, false, true);
@@ -672,7 +679,11 @@ function my_thread_log($opt, $data) {
 
 function my_post_log($opt, $data) {
 	global $_G;
-	if(!$_G['setting']['my_search_status']) return;
+    $my_search_data = $_G['setting']['my_search_data'];
+    if ($my_search_data && !in_array($my_search_data)) {
+        $my_search_data = unserialize($my_search_data);
+    }
+	if(!$_G['setting']['my_search_data']['status']) return;
 	$data['action'] = $opt;
 	$data['dateline'] = time();
 	DB::insert('forum_postlog', $data, false, true);

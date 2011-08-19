@@ -17,10 +17,10 @@ if(!$_G['setting']['portalstatus']) {
 $op = $_GET['op'] == 'push' ? 'push' : 'list';
 $allowpostarticle = checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $admincp2 || $admincp3;
 if($op == 'list') {
-	if(checkperm('allowdiy') || $admincp4) {
+	if(checkperm('allowdiy')) {
 	} elseif(!checkperm('allowmanagearticle') && checkperm('allowpostarticle') && !$admincp2 || (!$admincp2 && $admincp3)) {
 		dheader('location:portal.php?mod=portalcp&ac=category');
-	} elseif($_G['member']['allowadmincp'] == 8) {
+	} elseif($_G['member']['allowadmincp'] == 8 || $_G['member']['allowadmincp'] == 32) {
 		dheader('location:portal.php?mod=portalcp&ac=portalblock');
 	}
 } elseif($op == 'push' && !$allowpostarticle) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: notify_credit.php 22319 2011-04-29 09:40:43Z monkey $
+ *      $Id: notify_credit.php 23735 2011-08-08 08:24:08Z zhengqingpeng $
  */
 
 define('IN_API', true);
@@ -27,7 +27,7 @@ if($notifydata['validator']) {
 	$orderid = $notifydata['order_no'];
 	$postprice = $notifydata['price'];
 	$order = DB::fetch_first("SELECT o.*, m.username FROM ".DB::table('forum_order')." o LEFT JOIN ".DB::table('common_member')." m USING (uid) WHERE o.orderid='$orderid'");
-	if($order && floatval($postprice) == floatval($order['price']) && ($apitype == 'tenpay' || $_G['setting']['ec_account'] == $_REQUEST['seller_email'])) {
+	if($order && floatval($postprice) == floatval($order['price']) && ($apitype == 'tenpay' || strtolower($_G['setting']['ec_account']) == strtolower($_REQUEST['seller_email']))) {
 
 		if($order['status'] == 1) {
 			DB::query("UPDATE ".DB::table('forum_order')." SET status='2', buyer='$notifydata[trade_no]\t$apitype', confirmdate='$_G[timestamp]' WHERE orderid='$orderid'");

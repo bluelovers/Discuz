@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 22913 2011-05-31 03:22:12Z monkey $
+ *      $Id: class_core.php 23641 2011-07-29 08:21:13Z monkey $
  */
 
 define('IN_DISCUZ', true);
@@ -51,21 +51,21 @@ class discuz_core {
 
 	// bluelovers
 	/**
-	 * é¡å¤–è¼‰å…¥çš„èªžè¨€
+	 * ÃB¥~¸ü¤Jªº»y¨¥
 	 */
 	static $langplus = array();
 	// bluelovers
 
 	// bluelovers
 	/**
-	 * ç·©å­˜æ­£åœ¨é€²è¡Œä¸­çš„ cache
+	 * ½w¦s¥¿¦b¶i¦æ¤¤ªº cache
 	 */
 	static $_cache_data = array();
 	// bluelovers
 
 	// bluelovers
 	/**
-	 * å„²å­˜é—œæ–¼æ¨¡æ¿çš„é¡å¤–åƒæ•¸
+	 * Àx¦sÃö©ó¼ÒªOªºÃB¥~°Ñ¼Æ
 	 */
 	static $tpl = array();
 	// bluelovers
@@ -97,7 +97,7 @@ class discuz_core {
 			$this->_init_misc();
 
 			// bluelovers
-			// å‡åŸ·è¡Œ $this->_init_style ä¾†è¼‰å…¥ hook
+			// °²°õ¦æ $this->_init_style ¨Ó¸ü¤J hook
 			$this->_init_style(1);
 			// bluelovers
 		}
@@ -117,7 +117,7 @@ class discuz_core {
 
 	// bluelovers
 	/**
-	 * æä¾›æŽ›è¼‰å„ç¨® lib , plugin...
+	 * ´£¨Ñ±¾¸ü¦UºØ lib , plugin...
 	 **/
 	function _int_extensions() {
 		$this->plugin_support = &discuz_core::$plugin_support;
@@ -152,13 +152,13 @@ class discuz_core {
 
 		$this->plugin_support['scofile'] = true;
 
-		// æª¢æŸ¥æ˜¯å¦å•Ÿç”¨ Scorpio_Event
+		// ÀË¬d¬O§_±Ò¥Î Scorpio_Event
 		if ($this->plugin_support['Scorpio_Event'] || $this->plugin_support['Scorpio_Hook']) {
-			// æŽ›è¼‰ extensions/hooks/hooks_core.php
+			// ±¾¸ü extensions/hooks/hooks_core.php
 			@include_once libfile('hooks/core', '', 'extensions');
-			// æª¢æŸ¥æ˜¯å¦å­˜åœ¨ libfile çš„ hook
+			// ÀË¬d¬O§_¦s¦b libfile ªº hook
 			if (Scorpio_Hook::exists('Func_'.'libfile'.'')) {
-				// åˆå§‹åŒ–åŸ·è¡Œ libfile çš„ç›¸é—œ hook
+				// ªì©l¤Æ°õ¦æ libfile ªº¬ÛÃö hook
 				foreach (get_included_files() as $fn) {
 					Scorpio_Hook::execute('Func_'.'libfile'.'', array(&$fn, DISCUZ_ROOT, 1), 1);
 				}
@@ -261,7 +261,7 @@ class discuz_core {
 			'mobile' => '',
 
 		);
-		$_G['PHP_SELF'] = htmlspecialchars($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['PHP_SELF']);
+		$_G['PHP_SELF'] = htmlspecialchars($this->_get_script_url());
 		$_G['basescript'] = CURSCRIPT;
 		$_G['basefilename'] = basename($_G['PHP_SELF']);
 		$sitepath = substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'));
@@ -292,6 +292,26 @@ class discuz_core {
 			));
 		}
 		// bluelovers
+	}
+
+	function _get_script_url() {
+		if($this->var['PHP_SELF'] === null){
+			$scriptName = basename($_SERVER['SCRIPT_FILENAME']);
+			if(basename($_SERVER['SCRIPT_NAME']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
+			} else if(basename($_SERVER['PHP_SELF']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['PHP_SELF'];
+			} else if(isset($_SERVER['ORIG_SCRIPT_NAME']) && basename($_SERVER['ORIG_SCRIPT_NAME']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['ORIG_SCRIPT_NAME'];
+			} else if(($pos = strpos($_SERVER['PHP_SELF'],'/'.$scriptName)) !== false) {
+				$this->var['PHP_SELF'] = substr($_SERVER['SCRIPT_NAME'],0,$pos).'/'.$scriptName;
+			} else if(isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['SCRIPT_FILENAME'],$_SERVER['DOCUMENT_ROOT']) === 0) {
+				$this->var['PHP_SELF'] = str_replace('\\','/',str_replace($_SERVER['DOCUMENT_ROOT'],'',$_SERVER['SCRIPT_FILENAME']));
+			} else {
+				system_error('request_tainting');
+			}
+		}
+		return $this->var['PHP_SELF'];
 	}
 
 	function _init_input() {
@@ -359,8 +379,9 @@ class discuz_core {
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
-		// å°‡ isset æ”¹ç‚º !empty é¿å…å¤šé¤˜çš„ htmlspecialchars
+		// ±N isset §ï¬° !empty Á×§K¦h¾lªº htmlspecialchars
 		$this->var['sid'] = $this->var['cookie']['sid'] = !empty($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+		$this->var['gp_handlekey'] = !empty($this->var['gp_handlekey']) && preg_match('/^\w+$/', $this->var['gp_handlekey']) ? $this->var['gp_handlekey'] : '';
 
 		// bluelovers
 		// Event: Class_discuz_core::_init_input:After
@@ -543,8 +564,8 @@ class discuz_core {
 			// bluelovers
 			if ($discuz_uid) {
 				/**
-				 * åƒè€ƒå°æ‡‰ function_member.php ; setloginstatus
-				 * ä¿®æ”¹ç‚ºè¦æ±‚ç€è¦½å™¨è¨Šæ¯ å¿…é ˆè¦ç¬¦åˆ å¦å‰‡è¦–åŒç„¡æ•ˆ
+				 * °Ñ¦Ò¹ïÀ³ function_member.php ; setloginstatus
+				 * ­×§ï¬°­n¨DÂsÄý¾¹°T®§ ¥²¶·­n²Å¦X §_«hµø¦PµL®Ä
 				 *
 				 * $auth
 				 * 		0 => discuz_pw
@@ -749,8 +770,8 @@ class discuz_core {
 		if($this->init_setting) {
 			if(empty($this->var['setting'])) {
 				/**
-				 * å°‡ setting æŽ¨é€åˆ°æœ€å‰é¢
-				 * é¿å…åŒæ™‚æ›´æ–°ç·©å­˜æ™‚ï¼Œå˜—è©¦è®€å– setting å»å°šæœªè¼‰å…¥çš„å•é¡Œ
+				 * ±N setting ±À°e¨ì³Ì«e­±
+				 * Á×§K¦P®É§ó·s½w¦s®É¡A¹Á¸ÕÅª¨ú setting «o©|¥¼¸ü¤Jªº°ÝÃD
 				 **/
 				array_unshift($this->cachelist, 'setting');
 			}
@@ -786,16 +807,16 @@ class discuz_core {
 	}
 
 	/**
-	 * é è¨­åŸ·è¡Œæ–¼ function_core.php çš„ template
+	 * ¹w³]°õ¦æ©ó function_core.php ªº template
 	 *
 	 * @param bool $donot_define
 	 */
 	function _init_style($donot_define = 0) {
-		// æª¢æŸ¥ cookies å…§æ˜¯å¦æœ‰ styleid
+		// ÀË¬d cookies ¤º¬O§_¦³ styleid
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
-		//BUG:æ­¤è™•å› è©²æ˜¯ BUG å› ç‚º intval æ˜¯å¤šé¤˜ç„¡æ„ç¾©
+		//BUG:¦¹³B¦]¸Ó¬O BUG ¦]¬° intval ¬O¦h¾lµL·N¸q
 		if(intval(!empty($this->var['forum']['styleid']))) {
-			// ç‰ˆå¡Šç¨ç«‹è¨­å®šçš„é¢¨æ ¼
+			// ª©¶ô¿W¥ß³]©wªº­·®æ
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['forum']['styleid'];
 		} elseif(intval(!empty($this->var['category']['styleid']))) {
 			$this->var['cache']['style_default']['styleid'] = $styleid = $this->var['category']['styleid'];
@@ -804,8 +825,8 @@ class discuz_core {
 		$styleid = intval($styleid);
 
 		/**
-		 * å¦‚æžœç›®å‰çš„ styleid ä¸ç­‰æ–¼ ç¶²ç«™é è¨­çš„ styleid
-		 * å‰‡è®€å–é¢¨æ ¼ä¸¦ä¸”è¦†å¯« $this->var['style']
+		 * ¦pªG¥Ø«eªº styleid ¤£µ¥©ó ºô¯¸¹w³]ªº styleid
+		 * «hÅª¨ú­·®æ¨Ã¥BÂÐ¼g $this->var['style']
 		 */
 		if($styleid && $styleid != $this->var['setting']['styleid']) {
 			loadcache('style_'.$styleid);
@@ -1439,9 +1460,9 @@ class discuz_session {
 	'lastactivity' => 0, 'fid' => 0, 'tid' => 0, 'lastolupdate' => 0,
 
 	// bluelovers
-	// æ€§åˆ¥
+	// ©Ê§O
 	'gender' => 0,
-	// èªžè¨€
+	// »y¨¥
 	'session_lang' => '',
 	// bluelovers
 
@@ -1505,7 +1526,7 @@ class discuz_session {
 		$this->sid = $this->var['sid'];
 
 		// bluelovers
-		// å»ºç«‹æ™‚å–å¾—ä½¿ç”¨è€…çš„æ€§åˆ¥
+		// «Ø¥ß®É¨ú±o¨Ï¥ÎªÌªº©Ê§O
 		if ($uid > 0) {
 			$profile = getuserprofile('gender');
 			$this->set('gender', $profile);
@@ -1516,7 +1537,7 @@ class discuz_session {
 	}
 
 	function delete() {
-		//BUG:ç„¡æ³•è§£æ±ºç”¢ç”Ÿèˆ‡è‡ªå·±ç›¸åŒ IP çš„è¨ªå®¢ BUG
+		//BUG:µLªk¸Ñ¨M²£¥Í»P¦Û¤v¬Û¦P IP ªº³X«È BUG
 
 		global $_G;
 		$onlinehold = $_G['setting']['onlinehold'];
@@ -1549,12 +1570,12 @@ class discuz_session {
 	}
 
 	/**
-	 * å–å¾—ç·šä¸Šäººæ•¸
+	 * ¨ú±o½u¤W¤H¼Æ
 	 *
 	 * @param $type = 0 | 1 | 2
-	 * @param $type = 0 - æ‰€æœ‰ç·šä¸Šäººæ•¸
-	 * @param $type = 1 - æ‰€æœ‰ç·šä¸Šä½¿ç”¨è€…äººæ•¸
-	 * @param $type = 2 - æ‰€æœ‰ç·šä¸Šéš±èº«äººæ•¸
+	 * @param $type = 0 - ©Ò¦³½u¤W¤H¼Æ
+	 * @param $type = 1 - ©Ò¦³½u¤W¨Ï¥ÎªÌ¤H¼Æ
+	 * @param $type = 2 - ©Ò¦³½u¤WÁô¨­¤H¼Æ
 	 **/
 	function onlinecount($type = 0) {
 		$condition = $type == 1 ? ' WHERE uid>0 ' : ($type == 2 ? ' WHERE invisible=1 ' : '');
@@ -1652,7 +1673,7 @@ class discuz_memory
 	var $enable = false;
 
 	function discuz_memory() {
-		// åªæœ‰ eaccelerator ç‰ˆæœ¬ eaccelerator-0.9.5.3 æœ‰ eaccelerator_get
+		// ¥u¦³ eaccelerator ª©¥» eaccelerator-0.9.5.3 ¦³ eaccelerator_get
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
 		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 22940 2011-06-03 07:08:55Z fengning $
+ *      $Id: connect_login.php 23492 2011-07-20 07:02:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,10 +19,6 @@ if(!in_array($op, array('init', 'callback', 'change'))) {
 }
 
 $referer = dreferer();
-preg_match('/^(http|https|ftp|javascript):/i', $referer, $matches);
-if($matches) {
-	$referer = 'forum.php';
-}
 
 if($op == 'init') {
 

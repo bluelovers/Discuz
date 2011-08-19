@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_blockpermission.php 18625 2010-11-30 05:37:26Z zhangguosheng $
+ *      $Id: class_blockpermission.php 23372 2011-07-12 01:50:34Z zhangguosheng $
  */
 
 class block_permission {
@@ -37,14 +37,25 @@ class block_permission {
 	function _update_member_allowadmincp($uids) {
 		if(!empty($uids)) {
 			$userperms = array();
-			$query = DB::query('SELECT uid, sum(allowmanage) as mn, sum(allowrecommend) as rc FROM '.DB::table('common_block_permission')." WHERE uid IN (".dimplode($uids).") GROUP BY uid");
+			$query = DB::query('SELECT uid, sum(allowmanage) as mn, sum(allowrecommend) as rc, sum(needverify) as nv FROM '.DB::table('common_block_permission')." WHERE uid IN (".dimplode($uids).") GROUP BY uid");
 			while($v = DB::fetch($query)) {
-				$userperms[$v['uid']] = array('allowmanage'=>$v['mn'], 'allowrecommend'=>$v['rc']);
+				$userperms[$v['uid']] = array('allowmanage'=>$v['mn'], 'allowrecommend'=>$v['rc'], 'needverify'=>$v['nv']);
 			}
 			$query = DB::query('SELECT uid,allowadmincp FROM '.DB::table('common_member')." WHERE uid IN (".dimplode($uids).")");
 			while($v = DB::fetch($query)) {
 				$v['allowadmincp'] = setstatus(4, empty($userperms[$v['uid']]['allowmanage']) ? 0 : 1, $v['allowadmincp']);
-				$v['allowadmincp'] = setstatus(5, empty($userperms[$v['uid']]['allowrecommend']) ? 0 : 1, $v['allowadmincp']);
+				if($userperms[$v['uid']]['allowrecommend'] > 0 ) {
+					if($userperms[$v['uid']]['allowrecommend'] == $userperms[$v['uid']]['needverify']) {
+						$v['allowadmincp'] = setstatus(5, 1, $v['allowadmincp']);
+						$v['allowadmincp'] = setstatus(6, 0, $v['allowadmincp']);
+					} else {
+						$v['allowadmincp'] = setstatus(5, 0, $v['allowadmincp']);
+						$v['allowadmincp'] = setstatus(6, 1, $v['allowadmincp']);
+					}
+				} else {
+					$v['allowadmincp'] = setstatus(5, 0, $v['allowadmincp']);
+					$v['allowadmincp'] = setstatus(6, 0, $v['allowadmincp']);
+				}
 				DB::update('common_member', array('allowadmincp'=>$v['allowadmincp']), "uid='$v[uid]'");
 			}
 		}

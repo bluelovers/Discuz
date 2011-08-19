@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloudstat.class.php 22909 2011-05-31 02:49:52Z monkey $
+ *      $Id: cloudstat.class.php 23929 2011-08-17 02:33:35Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,12 +24,17 @@ class plugin_cloudstat {
 		return $this->_makejs();
 	}
 
+	function global_cpnav_extra1() {
+		$js = '<script type="text/javascript">var _speedMark = new Date();</script>';
+		return $js;
+	}
+
 	function _makejs() {
 		global $_G;
 		$dzjs = $this->_makedzjs();
 		$return = '';
 		if(!$_G['inajax']) {
-			$return = '&nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" src="http://tcss.qq.com/ping.js?'.VERHASH.'" charset="utf-8"></script>';
+			$return = '&nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" src="http://tcss.qq.com/ping.js?v=1'.VERHASH.'" charset="utf-8"></script>';
 		}
 		$return .= '<script type="text/javascript" reload="1">pgvMain('.$dzjs.');</script>';
 		return $return;
@@ -42,7 +47,7 @@ class plugin_cloudstat {
 
 		$this->discuzParams['ui'] = $_G['uid'] ? $_G['uid'] : 0;
 
-		if($_G['uid'] && ($_G['timestamp'] - $_G['member']['regdate'] > 86400)) {
+		if($_G['uid'] && ($_G['member']['regdate'] < ($_G['timestamp'] - $_G['timestamp'] % 86400))) {
 			$this->discuzParams['ty'] = 2;
 		}
 
@@ -100,7 +105,7 @@ class plugin_cloudstat {
 			$this->discuzParams['pi'] = $cloudstatpost[4];
 		}
 
-		$cloudstaticon = intval($_G['setting']['cloud_staticon']);
+		$cloudstaticon = isset($_G['setting']['cloud_staticon']) ? intval($_G['setting']['cloud_staticon']) : 9;
 		if ($cloudstaticon && !$_G['inajax']) {
 			$this->discuzParams['logo'] = $cloudstaticon;
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_index.php 23193 2011-06-24 01:46:47Z liulanbo $
+ *      $Id: admincp_index.php 23425 2011-07-14 06:38:11Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -86,7 +86,7 @@ if(isset($_G['gp_attachsize'])) {
 $membersmod = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
 $threadsdel= DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE displayorder='-1'");
 
-$query = DB::query("SELECT idtype, COUNT(*) AS count FROM ".DB::table('common_moderate')." GROUP BY idtype");
+$query = DB::query("SELECT idtype, COUNT(*) AS count FROM ".DB::table('common_moderate')." WHERE status='0' GROUP BY idtype");
 $modcount = array();
 while($value = DB::fetch($query)) {
 	$modcount[$value['idtype']] = $value['count'];

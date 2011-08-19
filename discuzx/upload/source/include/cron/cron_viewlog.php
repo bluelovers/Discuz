@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_viewlog.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: cron_viewlog.php 23738 2011-08-08 08:42:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ if($maxnum) {
 if($logs['uid']) {
 	$nums = renum($logs['uid']);
 	foreach ($nums[0] as $num) {
-		DB::query("UPDATE ".DB::table('common_member')." SET viewnum=viewnum+$num WHERE uid IN (".dimplode($nums[1][$num]).")");
+		DB::query("UPDATE ".DB::table('common_member_count')." SET views=views+$num WHERE uid IN (".dimplode($nums[1][$num]).")");
 	}
 }
 

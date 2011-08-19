@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 22946 2011-06-08 01:21:08Z monkey $
+ *      $Id: update.php 23795 2011-08-10 05:45:06Z cnteacher $
  */
 
 include_once('../source/class/class_core.php');
@@ -656,6 +656,10 @@ if($_GET['step'] == 'start') {
 				$seccodecheck = setstatus(5, 1, $seccodecheck);
 				DB::query("UPDATE ".DB::table('common_setting')." SET svalue = '$seccodecheck' WHERE skey = 'seccodestatus'");
 			}
+		}
+
+		if(!isset($settings['lazyload'])) {
+			DB::query("INSERT INTO ".DB::table('common_setting')." VALUES ('lazyload', '0')");
 		}
 
 		if(!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_addon')." WHERE `key` = '25z5wh0o00' AND siteurl = 'http://addons.discuz.com' LIMIT 1")) {

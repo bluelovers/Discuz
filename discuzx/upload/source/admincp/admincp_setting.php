@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 22853 2011-05-26 06:29:11Z svn_project_zhangjie $
+ *      $Id: admincp_setting.php 23419 2011-07-14 03:49:57Z liulanbo $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -1005,7 +1005,7 @@ EOF;
 		showtableheader('', 'nobottom', 'id="activity"'.($_G['gp_anchor'] != 'activity' ? ' style="display: none"' : ''));
 		showsetting('setting_functions_activity_type', 'settingnew[activitytype]', $setting['activitytype'], 'textarea');
 		$varname = array('settingnew[activityfield]', array(), 'isfloat');
-		$query = DB::query("SELECT fieldid, title FROM ".DB::table('common_member_profile_setting')." WHERE available='1'");
+		$query = DB::query("SELECT fieldid, title FROM ".DB::table('common_member_profile_setting')." WHERE available='1' AND formtype<>'file'");
 		$ignorearray = array('birthyear', 'birthmonth', 'resideprovince', 'birthprovince', 'residedist', 'residecommunity', 'constellation', 'zodiac');
 		while($row = DB::fetch($query)) {
 			if(in_array($row['fieldid'], $ignorearray)) continue;
