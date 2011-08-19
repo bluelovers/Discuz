@@ -121,14 +121,6 @@ EOF
 
 		$hook_data .= $ss;
 	} elseif ($hookid == 'global_header_javascript') {
-		$ss = <<<EOF
-<script type="text/javascript" src="{$path}extensions/js/common.js?{$_varhash}"></script>
-EOF
-;
-/*
-?><?
-*/
-
 		$ss .= _html_fileplus('common_extensions.js', 0, 1);
 
 		$ss .= '<script type="text/javascript">';
