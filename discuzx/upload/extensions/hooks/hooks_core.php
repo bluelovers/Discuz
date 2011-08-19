@@ -452,7 +452,7 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 		'file_develop' => 'jquery.lazy.source.js',
 	);
 
-	discuz_core::$plugin_support['jscache']['clearbox.js'] = array(
+	discuz_core::$plugin_support['jscache']['clearbox_jquery.js'] = array(
 		'file' => 'clearbox_jquery.js',
 		'path' => 'clearbox/js/',
 		'base' => 'extensions/js/',
