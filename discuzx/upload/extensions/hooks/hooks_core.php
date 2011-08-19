@@ -451,6 +451,12 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 
 		'file_develop' => 'jquery.lazy.source.js',
 	);
+
+	discuz_core::$plugin_support['jscache']['clearbox.js'] = array(
+		'file' => 'clearbox_jquery.js',
+		'path' => 'clearbox/js/',
+		'base' => 'extensions/js/',
+	);
 }
 
 Scorpio_Hook::add('Class_discuz_core::_init_style:After', '_eClass_discuz_core__init_style_After');
