@@ -245,7 +245,7 @@
 		_o = $.extend(_o, _oo[0]);
 
 		return _o;
-	}
+	};
 
 	function _pos(_e, agv, options) {
 		var _p = {
