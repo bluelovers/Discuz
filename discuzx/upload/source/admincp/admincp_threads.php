@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 22922 2011-06-01 02:38:58Z monkey $
+ *      $Id: admincp_threads.php 23581 2011-07-26 08:18:27Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -38,7 +38,7 @@ if((!$operation && !$optype) || ($operation == 'group' && empty($optype))) {
 	}
 	require_once libfile('function/forumlist');
 	$forumselect = '<b>'.$lang['threads_search_forum'].':</b><br><br><select name="inforum" onchange="ajaxget(\'forum.php?mod=ajax&action=getthreadtypes&selectname=intype&fid=\' + this.value, \'forumthreadtype\')"><option value="all">&nbsp;&nbsp;> '.$lang['all'].'</option><option value="">&nbsp;</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
-	$typeselect = $lang['threads_move_type'].' <span id="forumthreadtype"><select name="intype">'.$intypes.'<option value="0"></option></select></span>';
+	$typeselect = $lang['threads_move_type'].' <span id="forumthreadtype"><select name="intype"><option value=""></option>'.$intypes.'</select></span>';
 	if(isset($_G['gp_inforum'])) {
 		$forumselect = preg_replace("/(\<option value=\"$_G[gp_inforum]\")(\>)/", "\\1 selected=\"selected\" \\2", $forumselect);
 	}
