@@ -117,6 +117,8 @@ EOF
 ?><?
 */
 
+		$ss .= _html_fileplus('jquery.lazy.js', 0, 1);
+
 		$hook_data .= $ss;
 	} elseif ($hookid == 'global_header_javascript') {
 		$ss = <<<EOF
@@ -436,6 +438,25 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 
 	define('VERHASH_GZIP', $discuz->var['varhash_gzip']);
 	define('VERHASH_GZIP_JS', $discuz->var['varhash_gzip_js']);
+
+	// js setting
+
+	discuz_core::$plugin_support['jscache']['jquery.lazy.js'] = array(
+		/*
+		'name' => 'jquery.lazy.js',
+		'file' => 'jquery.lazy.js',
+		*/
+		'path' => 'jquery.lazy/',
+		'base' => 'extensions/js/',
+
+		'file_develop' => 'jquery.lazy.source.js',
+	);
+
+	discuz_core::$plugin_support['jscache']['clearbox.js'] = array(
+		'file' => 'clearbox_jquery.js',
+		'path' => 'clearbox/js/',
+		'base' => 'extensions/js/',
+	);
 }
 
 Scorpio_Hook::add('Class_discuz_core::_init_style:After', '_eClass_discuz_core__init_style_After');

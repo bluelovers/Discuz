@@ -176,4 +176,51 @@ function getaccept_encoding_gzip() {
 	return HTTP_USER_AGENT_GZIP;
 }
 
+function _html_fileplus($key = '', $iscss = 0, $rethtml = 0) {
+	global $_G;
+
+	static $_init;
+	if (empty($_init) || empty($key)) {
+		$_init = true;
+
+		foreach(discuz_core::$plugin_support['jscache'] as $_k => $_v) {
+			if (empty($_v['name'])) $_v['name'] = $_k;
+			if (empty($_v['file'])) $_v['file'] = $_v['name'];
+			if (empty($_v['file_develop'])) $_v['file_develop'] = $_v['file'];
+			if (empty($_v['path'])) $_v['path'] = '';
+			if (empty($_v['base'])) $_v['base'] = 'static/js/';
+
+			if ($_G['setting']['jspath'] == 'data/cache/') {
+				$_v['file_return'] = $_G['setting']['jspath'].$_v['name'].VERHASH_GZIP_JS;
+			} else {
+				$_v['file_return'] = $_v['base']
+					.$_v['path']
+					.(DISCUZ_DEBUG ? $_v['file_develop'] : $_v['file'])
+				;
+			}
+
+			$_v['file_return'] .= '?'.VERHASH;
+
+			$_v['file_source'] = $_v['base']
+				.$_v['path']
+				.(DISCUZ_DEBUG ? $_v['file_develop'] : $_v['file'])
+			;
+
+			discuz_core::$plugin_support['jscache'][$_k] = $_v;
+		}
+	}
+
+	if (empty($key)) {
+		return discuz_core::$plugin_support['jscache'];
+	} else {
+		if (empty(discuz_core::$plugin_support['jscache'][$key])) {
+
+		} else {
+			$ret = discuz_core::$plugin_support['jscache'][$key]['file_return'];
+			if ($rethtml) $ret = '<script type="text/javascript" src="' . $ret . '"></script>';
+			return $ret;
+		}
+	}
+}
+
 ?>
