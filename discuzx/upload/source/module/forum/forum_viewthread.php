@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 23020 2011-06-14 07:13:32Z zhangguosheng $
+ *      $Id: forum_viewthread.php 23584 2011-07-26 10:02:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -355,7 +355,7 @@ if(empty($_G['gp_viewpid'])) {
 	$ordertype = empty($_G['gp_ordertype']) && getstatus($_G['forum_thread']['status'], 4) ? 1 : $_G['gp_ordertype'];
 
 	$sticklist = array();
-	if($_G['forum_thread']['stickreply'] && $page == 1 && !$_G['gp_authorid'] && !$ordertype) {
+	if($_G['forum_thread']['stickreply'] && $page == 1 && !$_G['gp_authorid'] && $ordertype != 1) {
 		$query = DB::query("SELECT p.*, ps.position FROM ".DB::table('forum_poststick')." ps
 			LEFT JOIN ".DB::table($posttable)." p USING(pid)
 			WHERE ps.tid='$_G[tid]' ORDER BY ps.dateline DESC");
@@ -755,7 +755,7 @@ if(!empty($_G['setting']['recommendthread']['status']) && $_G['forum_thread']['r
 	}
 }
 
-$allowblockrecommend = $_G['group']['allowdiy'] || getstatus($_G['member']['allowadmincp'], 4) || getstatus($_G['member']['allowadmincp'], 5);
+$allowblockrecommend = $_G['group']['allowdiy'] || getstatus($_G['member']['allowadmincp'], 4) || getstatus($_G['member']['allowadmincp'], 5) || getstatus($_G['member']['allowadmincp'], 6);
 if($_G['setting']['portalstatus']) {
 	$allowpostarticle = $_G['group']['allowmanagearticle'] || $_G['group']['allowpostarticle'] || getstatus($_G['member']['allowadmincp'], 2) || getstatus($_G['member']['allowadmincp'], 3);
 	$allowpusharticle = empty($_G['forum_thread']['special']) && empty($_G['forum_thread']['sortid']) && !$_G['forum_thread']['pushedaid'];
@@ -834,7 +834,7 @@ if(empty($_G['gp_viewpid'])) {
 function viewthread_updateviews($threadtable) {
 	global $_G;
 	if($_G['setting']['delayviewcount'] == 1 || $_G['setting']['delayviewcount'] == 3) {
-		$_G['forum_logfile'] = './data/cache/forum_threadviews_'.intval(getgpc('config/server/id')).'.log';
+		$_G['forum_logfile'] = './data/cache/forum_threadviews_'.intval(getglobal('config/server/id')).'.log';
 		if(substr(TIMESTAMP, -2) == '00') {
 			require_once libfile('function/misc');
 			updateviews($threadtable, 'tid', 'views', $_G['forum_logfile']);
@@ -842,7 +842,7 @@ function viewthread_updateviews($threadtable) {
 		if(@$fp = fopen(DISCUZ_ROOT.$_G['forum_logfile'], 'a')) {
 			fwrite($fp, "$_G[tid]\n");
 			fclose($fp);
-		} elseif($adminid == 1) {
+		} elseif($_G['adminid'] == 1) {
 			showmessage('view_log_invalid', '', array('logfile' => $_G['forum_logfile']));
 		}
 	} else {
@@ -1172,7 +1172,7 @@ function rushreply_rule () {
 			foreach($rewardfloorarr as $var) {
 				$var = trim($var);
 				if(strlen($var) > 1) {
-					$var = str_replace('*', '[^,]?[\d]+', $var);
+					$var = str_replace('*', '[^,]?[\d]*', $var);
 				} else {
 					$var = str_replace('*', '\d+', $var);
 				}
