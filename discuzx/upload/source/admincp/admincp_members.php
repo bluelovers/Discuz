@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 23129 2011-06-21 02:15:05Z zhangguosheng $
+ *      $Id: admincp_members.php 23577 2011-07-26 07:16:24Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -2342,16 +2342,15 @@ EOF;
 			} elseif($_GET['fieldid'] == 'idcard') {
 				DB::update('common_member_profile_setting', $setarr, array('fieldid'=>'idcardtype'));
 			}
-			if(!empty($_G['gp_profilegroup']) && is_array($_G['gp_profilegroup'])) {
-				foreach($profilegroup as $type => $pgroup) {
-					if(in_array($type, $_G['gp_profilegroup'])) {
-						$profilegroup[$type]['field'][$fieldid] = $fieldid;
-					} else {
-						unset($profilegroup[$type]['field'][$fieldid]);
-					}
+
+			foreach($profilegroup as $type => $pgroup) {
+				if(is_array($_G['gp_profilegroup']) && in_array($type, $_G['gp_profilegroup'])) {
+					$profilegroup[$type]['field'][$fieldid] = $fieldid;
+				} else {
+					unset($profilegroup[$type]['field'][$fieldid]);
 				}
-				DB::insert('common_setting', array('skey'=>'profilegroup', 'svalue'=> addslashes(serialize($profilegroup))), false, true);
 			}
+			DB::insert('common_setting', array('skey'=>'profilegroup', 'svalue'=> addslashes(serialize($profilegroup))), false, true);
 			require_once libfile('function/cache');
 			if(!isset($_G['setting']['privacy']['profile']) || $_G['setting']['privacy']['profile'][$fieldid] != $_POST['privacy']) {
 				$_G['setting']['privacy']['profile'][$fieldid] = $_POST['privacy'];
@@ -3028,7 +3027,7 @@ function notifymembers($operation, $variable) {
 				'authorid' => $_G['uid'],
 				'author' => !$_G['gp_system'] ? $_G['member']['username'] : '',
 				'dateline' => TIMESTAMP,
-				'message' => ($subject ? '<b>'.$subject.'</b><br /> &nbsp; ' : '').$message.$addmsg,
+				'message' => ($subject ? '<b>'.$subject.'</b><br /> &nbsp; ' : '').addslashes($message).$addmsg,
 				'numbers' => $membernum
 			), true) : $_G['gp_gpmid'];
 			$urladd .= '&gpmid='.$gpmid;
