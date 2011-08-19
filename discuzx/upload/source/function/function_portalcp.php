@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 22482 2011-05-10 03:07:05Z maruitao $
+ *      $Id: function_portalcp.php 23372 2011-07-12 01:50:34Z zhangguosheng $
  */
 
 function get_uploadcontent($attach, $type='portal', $dotype='') {
@@ -815,7 +815,7 @@ function getblockperm($bid) {
 	$allperm = array('allowmanage'=>'1','allowrecommend'=>'1','needverify'=>'0');
 	if(checkperm('allowdiy')) {
 		return $allperm;
-	} elseif (!getstatus($_G['member']['allowadmincp'], 4) && !getstatus($_G['member']['allowadmincp'], 5) && !checkperm('allowmanagetopic') && !checkperm('allowaddtopic')) {
+	} elseif (!getstatus($_G['member']['allowadmincp'], 4) && !getstatus($_G['member']['allowadmincp'], 5) && !getstatus($_G['member']['allowadmincp'], 6) && !checkperm('allowmanagetopic') && !checkperm('allowaddtopic')) {
 		return $perm;
 	}
 	require_once libfile('class/blockpermission');

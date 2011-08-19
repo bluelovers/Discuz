@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_creditrule.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_creditrule.php 23645 2011-08-01 09:54:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,6 +18,8 @@ function build_cache_creditrule() {
 	while($rule = DB::fetch($query)) {
 		if(strtoupper(CHARSET) != 'UTF-8') {
 			$rule['rulenameuni'] = urlencode(diconv($rule['rulename'], CHARSET, 'UTF-8', true));
+		} else {
+			$rule['rulenameuni'] = $rule['rulename'];
 		}
 		$data[$rule['action']] = $rule;
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 22982 2011-06-13 01:52:33Z zhangguosheng $
+ *      $Id: function_core.php 23920 2011-08-16 09:11:43Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1013,7 +1013,7 @@ function cachedata($cachenames) {
 	static $_libs_cache_;
 	// bluelovers
 
-	$query = DB::query("SELECT /*!40001 SQL_CACHE */ * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
+	$query = DB::query("SELECT * FROM ".DB::table('common_syscache')." WHERE cname IN ('".implode("','", $cachenames)."')");
 	while($syscache = DB::fetch($query)) {
 		$data[$syscache['cname']] = $syscache['ctype'] ? unserialize($syscache['data']) : $syscache['data'];
 		$allowmem && (memory('set', $syscache['cname'], $data[$syscache['cname']]));
@@ -2388,6 +2388,18 @@ function dreferer($default = '') {
 	}
 	$_G['referer'] = htmlspecialchars($_G['referer']);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
+	// FIX 校驗dreferer的域名，防止XSS注入
+	$reurl = parse_url($_G['referer']);
+	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
+		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
+			$domainroot = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
+			if(is_array($_G['setting']['domain']['root']) && !in_array($domainroot, $_G['setting']['domain']['root'])) {
+				$_G['referer'] = $_G['setting']['domain']['defaultindex'] ? $_G['setting']['domain']['defaultindex'] : 'index.php';
+			}
+		}
+	} elseif(empty($reurl['host'])) {
+		$_G['referer'] = $_G['siteurl'].'./'.$_G['referer'];
+	}
 	return strip_tags($_G['referer']);
 }
 
@@ -2945,7 +2957,7 @@ function return_bytes($val) {
 function get_url_list($message) {
 	$return = array();
 
-	(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\].+?\[\/img\]|\[flash[^\]]*\].+?\[\/flash\]/is", '', $message);
+	(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[flash[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/is", '', $message);
 	if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", $message, $urllist)) {
 		foreach($urllist[0] as $key => $val) {
 			$val = trim($val);
@@ -2996,6 +3008,8 @@ function update_template_block($targettplname, $blocks) {
 		}
 		$newaddbids = array_diff($blocks, $oldbids);
 		DB::delete('common_template_block', array('targettplname'=>$targettplname));
+		// FIX 一個模塊在一個頁面中多次使用時的sql錯誤
+		$blocks = array_unique($blocks);
 		$values = array();
 		foreach ($blocks as $bid) {
 			$values[] = "('$targettplname','$bid')";

@@ -4,19 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_manyou.php 21939 2011-04-18 06:32:30Z yexinhao $
+ *      $Id: cloud_manyou.php 23441 2011-07-15 02:23:37Z zhengqingpeng $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
 cpheader();
-
-$setting = array();
-$query = DB::query("SELECT * FROM ".DB::table('common_setting')." WHERE skey IN ('my_app_status', 'my_closecheckupdate', 'my_ip')");
-while($row = DB::fetch($query)) {
-	$setting[$row['skey']] = $row['svalue'];
-}
 
 if(!submitcheck('settingsubmit')) {
 	shownav('navcloud', 'setting_manyou');
@@ -26,7 +20,7 @@ if(!submitcheck('settingsubmit')) {
 
 	$manyounav = array();
 
-	if($setting['my_app_status']) {
+	if($_G['setting']['my_app_status']) {
 		$manyounav[0] = array('setting_manyou_manage', 'cloud&operation=manyou&anchor=manage', $current['manage']);
 	}
 	$manyounav[1] = array('setting_manyou_base', 'cloud&operation=manyou&anchor=base', $current['base']);
@@ -42,8 +36,8 @@ if(!submitcheck('settingsubmit')) {
 
 		showtableheader('', 'nobottom', 'id="base"');
 		$actives = $checkarr = array();
-		$actives[$setting['my_app_status']] = ' class="checked"';
-		$checkarr[$setting['my_app_status']] = ' checked';
+		$actives[$_G['setting']['my_app_status']] = ' class="checked"';
+		$checkarr[$_G['setting']['my_app_status']] = ' checked';
 
 		$str = <<<EOF
 		<ul onmouseover="altStyle(this);">
@@ -51,12 +45,12 @@ if(!submitcheck('settingsubmit')) {
 			<li$actives[0]><input type="radio" onclick="hiddenShareInfo(0, 0);$('hidden_setting_manyou_base_status').style.display = 'none';" $checkarr[0] value="0" name="settingnew[my_app_status]" class="radio">&nbsp;$lang[no]</li>
 		</ul>
 EOF;
-		showsetting('setting_manyou_base_status', 'settingnew[my_app_status]', $setting['my_app_status'], $str, '', 1);
-		showsetting('setting_manyou_base_close_prompt', 'settingnew[my_closecheckupdate]', $setting['my_closecheckupdate'], 'radio');
-		showsetting('setting_manyou_base_open_app_prompt', 'settingnew[my_openappprompt]', $setting['my_openappprompt'], 'radio');
+		showsetting('setting_manyou_base_status', 'settingnew[my_app_status]', $_G['setting']['my_app_status'], $str, '', 1);
+		showsetting('setting_manyou_base_close_prompt', 'settingnew[my_closecheckupdate]', $_G['setting']['my_closecheckupdate'], 'radio');
+		showsetting('setting_manyou_base_open_app_prompt', 'settingnew[my_openappprompt]', $_G['setting']['my_openappprompt'], 'radio');
 		showtagfooter('tbody');
 
-		$appstate = !empty($setting['my_app_status']) ? 1 : 0;
+		$appstate = !empty($_G['setting']['my_app_status']) ? 1 : 0;
 		$actives = $checkarr = array();
 
 		echo <<<EOF
@@ -71,8 +65,8 @@ EOF;
 		</script>
 EOF;
 
-		showtagheader('tbody', 'shareinfo', $setting['my_app_status']);
-		showsetting('setting_manyou_base_ip', 'settingnew[my_ip]', $setting['my_ip'], 'text');
+		showtagheader('tbody', 'shareinfo', $_G['setting']['my_app_status']);
+		showsetting('setting_manyou_base_ip', 'settingnew[my_ip]', $_G['setting']['my_ip'], 'text');
 		showtagfooter('tbody');
 		showtablefooter();
 
@@ -140,12 +134,10 @@ EOF;
 
 	$settingnew = $_G['gp_settingnew'];
 
-	$updatecache = FALSE;
 	$settings = array();
 	foreach($settingnew as $key => $val) {
-		if($setting[$key] != $val) {
+		if($_G['setting'][$key] != $val) {
 			$$key = $val;
-			$updatecache = TRUE;
 
 			$settings[] = "('$key', '$val')";
 		}
@@ -153,6 +145,7 @@ EOF;
 
 	if($settings) {
 		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
+		updatecache('setting');
 	}
 
 	$appName = 'manyou';

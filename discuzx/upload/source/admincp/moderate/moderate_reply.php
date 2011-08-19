@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 22851 2011-05-26 03:02:59Z monkey $
+ *      $Id: moderate_reply.php 23425 2011-07-14 06:38:11Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -62,7 +62,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	showtablefooter();
 	showtableheader();
-
+	$fidadd = array();
 	$sqlwhere = '';
 	if(!empty($_G['gp_username'])) {
 		$sqlwhere .= " AND p.author='{$_G['gp_username']}'";
@@ -81,6 +81,9 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
 			LEFT JOIN ".DB::table(getposttable($posttable))." p on p.pid=m.id
 			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=p.tid WHERE m.idtype='pid' AND m.status='$moderatestatus' AND p.first='0' $fidadd[and]$fidadd[fids]".($modfid == -1 ? " AND t.isgroup='1'" : '')." $sqlwhere");
+	if(empty($modcount) && $sqlwhere == '' && empty($fidadd) && empty($modfid)) {
+		DB::delete('common_moderate', "status='$moderatestatus' AND idtype='pid'");
+	}
 	$start_limit = ($page - 1) * $ppp;
 	$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, p.pid, p.fid, p.tid, p.author, p.authorid, p.subject, p.dateline, p.message, p.useip, p.attachment, p.htmlon, p.smileyoff, p.bbcodeoff, t.subject AS tsubject
 			FROM ".DB::table('common_moderate')." m

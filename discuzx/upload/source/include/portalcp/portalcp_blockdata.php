@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 $op = in_array($_GET['op'], array('verify')) ? $_GET['op'] : 'verify';
 
 $allowdiy = checkperm('allowdiy');
-if(!$allowdiy && !$admincp4) {
+if(!$allowdiy && !$admincp4 && !$admincp6) {
 	showmessage('portal_nopermission', dreferer());
 }
 
@@ -35,6 +35,10 @@ if(!$allowdiy) {
 	while(($value=DB::fetch($query))) {
 		$bids[$value['bid']] = intval($value['bid']);
 	}
+}
+
+if(!$allowdiy && empty($bids)) {
+	showmessage('portal_nopermission', dreferer());
 }
 
 if(submitcheck('batchsubmit')) {

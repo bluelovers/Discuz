@@ -15,7 +15,7 @@ $op = in_array($_GET['op'], array('recommend', 'getblocklist', 'updateblock')) ?
 $_GET['idtype'] = htmlspecialchars($_GET['idtype']);
 $_GET['id'] = intval($_GET['id']);
 
-if(!checkperm('allowdiy') && !$admincp4 && !$admincp5) {
+if(!checkperm('allowdiy') && !$admincp4 && !$admincp5 && !$admincp6) {
 	showmessage('portal_nopermission', dreferer());
 }
 $bids = array();

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_forum.php 22541 2011-05-12 03:10:15Z svn_project_zhangjie $
+ *      $Id: search_forum.php 23830 2011-08-11 05:34:27Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,6 +66,9 @@ if(!empty($srchfid) && !is_numeric($srchfid)) {
 $my_search_data = unserialize($_G['setting']['my_search_data']);
 require_once libfile('function/cloud');
 if($my_search_data['status'] && getcloudappstatus('search') && !$srchfrom && !$searchid) {
+	if (!$_G['setting']['my_siteid']) {
+		dheader('Location: index.php');
+	}
 	$source = '';
 	if(!empty($_G['gp_srhlocality'])) {
 		$sourcetype = explode('::', $_G['gp_srhlocality']);
@@ -83,7 +86,70 @@ if($my_search_data['status'] && getcloudappstatus('search') && !$srchfrom && !$s
 	} elseif($_G['gp_source'] == 'hotsearch') {
 		$source = 'hotsearch';
 	}
-	dheader("Location: search.php?mod=my&q=".urlencode($keyword).(intval($srhfid) ? "&fId=$srhfid" : '')."&module=forum".($_G['gp_adv'] ? "&isAdv=1" : '').(!empty($source) ? "&source=$source" : ''));
+
+	require_once libfile('function/search');
+	$forum_hash = search_get_forum_hash();
+
+	$my_extgroupids = array();
+	$_extgroupids = explode("\t", $_G['member']['extgroupids']);
+	foreach($_extgroupids as $v) {
+		if ($v) {
+			$my_extgroupids[] = $v;
+		}
+	}
+	$my_extgroupids_str = implode(',', $my_extgroupids);
+
+	$groupIds = explode(',', $_G['groupid']);
+	if ($_G['adminid']) {
+		$groupIds[] = $_G['adminid'];
+	}
+	if ($my_extgroupids) {
+		$groupIds = array_merge($groupIds, $my_extgroupids);
+	}
+	$groupIds = array_unique($groupIds);
+	$userGroups = search_get_usergroups($groupIds);
+
+	$params = array(
+					'cuName' => $_G['username'],
+					'gId' => $_G['groupid'],
+					'agId' => $_G['adminid'],
+					'egIds' => $my_extgroupids_str,
+					'fmSign' => substr($forum_hash, -4),
+				   );
+
+	foreach($groupIds as $k => $v) {
+		$value =  substr($userGroups[$v]['sign'], -4);
+		if ($value) {
+			$params['ugSign' . $v] = $value;
+		}
+	}
+	$params['charset'] = $_G['charset'];
+
+	$params['q'] = $keyword;
+	$params['module'] = 'forum';
+	if($srhfid) {
+		$params['fId'] = $srhfid;
+	}
+	if($_G['gp_adv']) {
+		$params['isAdv'] = 1;
+	}
+	if(!empty($source)) {
+		$params['source']=$source;
+	}
+	if(!empty($_G['gp_author'])) {
+		$params['author']=$_G['gp_author'];
+	}
+	if(!empty($_G['gp_scope'])) {
+		$params['scope']=$_G['gp_scope'];
+	}
+	$mySearchData = unserialize($_G['setting']['my_search_data']);
+	if ($mySearchData['domain']) {
+		$domain = $mySearchData['domain'];
+	} else {
+		$domain = 'search.discuz.qq.com';
+	}
+	$url = 'http://' . $domain . '/f/discuz?' . generateSiteSignUrl($params, true, true);
+	dheader('Location: ' . $url);
 	die;
 }
 

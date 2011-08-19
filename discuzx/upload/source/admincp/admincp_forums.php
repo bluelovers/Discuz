@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 22792 2011-05-23 00:46:23Z monkey $
+ *      $Id: admincp_forums.php 23399 2011-07-13 10:12:39Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1007,7 +1007,7 @@ EOF;
 				[1,'<input type="text" name="newname[]" />'],
 				[1,'<input type="text" name="newicon[]" />'],
 				[1,'<input type="checkbox" class="checkbox" name="newenable[]" checked="checked" />'],
-				[1,'<input type="checkbox" class="checkbox" name="newmoderators[]" />'],
+				[1,'<input type="checkbox" class="checkbox" name="newmoderators[]" value="1" />'],
 				[1,'']
 			],
 		];
@@ -1531,12 +1531,13 @@ EOT;
 									if(!$newtypeid) {
 										$threadtypes_newdisplayorder = intval($_G['gp_newdisplayorder'][$key]);
 										$threadtypes_newicon = trim($_G['gp_newicon'][$key]);
-										$newtypeid = DB::insert('forum_threadclass', array('fid' => $fid, 'name' => $val, 'displayorder' => $threadtypes_newdisplayorder, 'icon' => $threadtypes_newicon), 1);
+										$newtypeid = DB::insert('forum_threadclass', array('fid' => $fid, 'name' => $val, 'displayorder' => $threadtypes_newdisplayorder, 'icon' => $threadtypes_newicon, 'moderators' => intval($_G['gp_newmoderators'][$key])), 1);
 									}
 									$threadtypesnew['options']['name'][$newtypeid] = $val;
 									$threadtypesnew['options']['icon'][$newtypeid] = $threadtypes_newicon;
 									$threadtypesnew['options']['displayorder'][$newtypeid] = $threadtypes_newdisplayorder;
 									$threadtypesnew['options']['enable'][$newtypeid] = 1;
+									$threadtypesnew['options']['moderators'][$newtypeid] = $_G['gp_newmoderators'][$key];
 								}
 							}
 						}

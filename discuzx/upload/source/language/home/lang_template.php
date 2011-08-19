@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22427 2011-05-06 10:56:41Z monkey $
+ *      $Id: lang_template.php 23324 2011-07-06 03:17:57Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
@@ -1144,7 +1144,7 @@ $lang = array (
   'text_color' => '文字顏色',
   'title_bar' => '標題欄',
   'track_name' => '曲目名',
-  'update_ablum_list' => '更新當前音樂列表',
+  'update_album_list' => '更新當前音樂列表',
   'upload_new_pic' => '上傳新圖片',
   'upload_start' => '開始上傳',
   'vertical_repeat' => '縱向平舖',

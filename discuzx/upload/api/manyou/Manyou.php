@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 23076 2011-06-16 13:00:28Z zhouguoqiang $
+ *      $Id: Manyou.php 23642 2011-08-01 01:20:25Z yexinhao $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -1385,8 +1385,8 @@ class Discuz_Cloud_Client {
 		$this->UCenterUrl = !empty($_G['setting']['ucenterurl']) ? $_G['setting']['ucenterurl'] : '';
 		$this->language = $_G['config']['output']['language'] ? $_G['config']['output']['language'] : 'zh_CN';
 		$this->productType = 'DISCUZX';
-		$this->productVersion = !defined(DISCUZ_VERSION) ? DISCUZ_VERSION : '';
-		$this->productRelease = !defined(DISCUZ_RELEASE) ? DISCUZ_RELEASE : '';
+		$this->productVersion = defined('DISCUZ_VERSION') ? DISCUZ_VERSION : '';
+		$this->productRelease = defined('DISCUZ_RELEASE') ? DISCUZ_RELEASE : '';
 		$this->timestamp = TIMESTAMP;
 
 		require_once libfile('function/cloud');

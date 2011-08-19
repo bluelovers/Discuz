@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_login.php 20659 2011-03-01 07:23:01Z monkey $
+ *      $Id: admincp_login.php 23799 2011-08-10 05:53:01Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -107,6 +107,7 @@ function html_login_form() {
 	$lang = lang('admincp_login');
 	$loginuser = $isguest ? '<input name="admin_username" tabindex="1" type="text" class="txt" autocomplete="off" />' : getglobal('member/username');
 	$sid = getglobal('sid');
+	$_SERVER['QUERY_STRING'] = str_replace('&amp;', '&', htmlspecialchars($_SERVER['QUERY_STRING']));
 	$extra = ADMINSCRIPT.'?'.(getgpc('action') && getgpc('frames') ? 'frames=yes&' : '').$_SERVER['QUERY_STRING'];
 	$forcesecques = '<option value="0">'.($_G['config']['admincp']['forcesecques'] ? $lang['forcesecques'] : $lang['security_question_0']).'</option>';
 	echo <<<EOT

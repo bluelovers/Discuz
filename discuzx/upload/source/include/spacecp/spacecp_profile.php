@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 23127 2011-06-21 01:23:03Z monkey $
+ *      $Id: spacecp_profile.php 23747 2011-08-09 03:10:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -190,7 +190,7 @@ if(submitcheck('profilesubmit')) {
 					@unlink($attach['target']);
 					continue;
 				}
-
+				$setarr[$key] = '';
 				$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
 				if($vid && $verifyconfig['available'] && isset($verifyconfig['field'][$key])) {
 					if(isset($verifyinfo['field'][$key])) {
@@ -406,12 +406,15 @@ if($operation == 'password') {
 		foreach($verify as $key => $flag) {
 			if(in_array($key, array('verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'verify6', 'verify7')) && $flag == 1) {
 				$verifyid = intval(substr($key, -1, 1));
-				foreach($_G['setting']['verify'][$verifyid]['field'] as $field) {
-					$_G['cache']['profilesetting'][$field]['unchangeable'] = 1;
+				if($_G['setting']['verify'][$verifyid]['available']) {
+					foreach($_G['setting']['verify'][$verifyid]['field'] as $field) {
+						$_G['cache']['profilesetting'][$field]['unchangeable'] = 1;
+					}
 				}
 			}
 		}
 	}
+
 
 	if($vid) {
 		$query = DB::query('SELECT field FROM '.DB::table('common_member_verify_info')." WHERE uid='$_G[uid]' AND verifytype='$vid'");

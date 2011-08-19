@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_attachment.php 20980 2011-03-09 09:38:05Z monkey $
+ *      $Id: function_attachment.php 23304 2011-07-04 10:04:10Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -162,7 +162,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 
 function attachwidth($width) {
 	global $_G;
-	if($_G['setting']['imagemaxwidth']) {
+	if($_G['setting']['imagemaxwidth'] && $width) {
 		return 'class="zoom" onclick="zoom(this, this.src)" width="'.($width > $_G['setting']['imagemaxwidth'] ? $_G['setting']['imagemaxwidth'] : $width).'"';
 	} else {
 		return 'thumbImg="1"';

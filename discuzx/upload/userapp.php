@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp.php 20083 2011-02-14 02:48:58Z monkey $
+ *      $Id: userapp.php 23754 2011-08-09 06:29:33Z zhengqingpeng $
  */
 
 define('APPTYPEID', 5);
@@ -40,7 +40,7 @@ if(empty($_G['setting']['my_app_status'])) {
 	showmessage('no_privilege_my_app_status', '', array(), array('return' => true));
 }
 
-if(!checkperm('allowmyop')) {
+if($mod == 'app' && !checkperm('allowmyop')) {
 	showmessage('no_privilege_myop', '', array(), array('return' => true));
 }
 $space = $_G['uid']? getspace($_G['uid']) : array();
