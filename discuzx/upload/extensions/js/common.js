@@ -739,6 +739,125 @@
 
 		return str;
 	});
+
+	if (!EXTRAFUNC['hooks']['getEditorContents']) EXTRAFUNC['hooks']['getEditorContents'] = new Array();
+	EXTRAFUNC['hooks']['getEditorContents'].push(function(editdoc) {
+		if (wysiwyg) {
+			var _body = jQuery('body', editdoc)
+				.removeAttr('style')
+			;
+
+			var _remove = function (css_key) {
+				var _body_css = _body.css(css_key);
+				var _body_css_array = new Array();
+				var _is_int = 0;
+
+				switch(css_key) {
+					case 'font-size':
+						_body_css_array = [11, 12, 13];
+						_is_int = 1;
+						break;
+					case 'color':
+						_body_css_array = ['rgb(0, 0, 0)'];
+						break;
+					case 'font-family':
+						_body_css_array = ['arial,helvetica,sans-serif'];
+						break;
+				}
+
+				if (_is_int) {
+					_body_css = parseInt(_body_css);
+				}
+
+				_body_css_array.push(_body_css);
+
+				_body.find('[style*="' + css_key + '"]').each(function(index, elem){
+					var _this = jQuery(this);
+					var _this_css = _this.css(css_key);
+
+					var _this_reset = 0;
+
+					if (_is_int) {
+						_this_css = parseInt(_this_css);
+					}
+
+					if (_this.parent().is(_body)) {
+						if (in_array(_this_css, _body_css_array)) {
+							_this_reset = 1;
+						}
+					} else {
+						var _parents = _this.parents('[style*="' + css_key + '"]');
+
+						if (_parents.size()) {
+							var _parents_css = _parents.css(css_key);
+
+							if (_is_int) {
+								_parents_css = parseInt(_parents_css);
+							}
+
+							if (_parents_css == _this_css) {
+								_this_reset = 1;
+							}
+						} else {
+							if (in_array(_this_css, _body_css_array)) {
+								_this_reset = 1;
+							}
+						}
+					}
+
+					if (_this_reset) {
+						_this.css(css_key, '');
+					}
+
+					if (_this.attr('style') == '') {
+						_this.removeAttr('style');
+					}
+
+					jQuery.log([
+						css_key,
+						_this_reset,
+						_body_css,
+						_this_css,
+						_parents_css,
+						this
+					]);
+				});
+			};
+
+			var css_key_array = ['font-size', 'color', 'font-family'];
+			for (var i in css_key_array) {
+				_remove(css_key_array[i]);
+			}
+
+			var _remove2 = function (who) {
+				who.find('b, i, u, strong').each(function(){
+					var _this = jQuery(this);
+					var _tag = this.tagName;
+
+					if (_tag == 'b') _tag += ', strong';
+					if (_tag == 'strong') _tag += ', b';
+
+					if (_this.parents(_tag).size()) {
+						var _span = jQuery('<span/>');
+						_span.html(_this.html());
+						_this.after(_span).remove();
+
+						_span.children('b, i, u').each(function(){
+							_remove2(jQuery(this));
+						});
+					} else {
+						_this.children('b, i, u').each(function(){
+							_remove2(jQuery(this));
+						});
+					}
+				});
+			};
+
+			for (var i=0; i<2; i++) {
+				_remove2(_body);
+			}
+		}
+	});
 })();
 
 function count (mixed_var, mode) {
