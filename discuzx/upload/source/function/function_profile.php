@@ -359,7 +359,7 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 	for($i=0; $i<4;$i++) {
 		$elems[$i] = !empty($elems[$i]) && in_array($elems[$i], $allowstr) ? $elems[$i] : ($containertype == 'birth' ? 'birth' : 'reside').$names[$i];
 	}
-	$html = '';
+
 	for($i=0;$i<$showlevel;$i++) {
 		$level = $i+1;
 		if(!empty($options[$level])) {
