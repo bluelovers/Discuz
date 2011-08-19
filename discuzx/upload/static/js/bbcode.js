@@ -544,6 +544,14 @@ function parsecode(text, brush) {
 }
 
 function parsestyle(tagoptions, prepend, append) {
+
+	// bluelovers
+	var toHexString = function (v) {
+		v = ( v || 0 ).toString( 16 );
+		return v.length == 1 ? "0" + v : v;
+	}
+	// bluelovers
+
 	var searchlist = [
 		['align', true, 'text-align:\\s*(left|center|right);?', 1],
 		['float', true, 'float:\\s*(left|right);?', 1],
