@@ -300,7 +300,8 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	if(trim($subject) == '' && trim($message) == '' && $thread['special'] != 2) {
+	// 修改為回覆時不允許內容空白
+	if(trim($message) == '' && $thread['special'] != 2) {
 		showmessage('post_sm_isnull');
 	} elseif($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
 		showmessage('post_thread_closed');
@@ -334,6 +335,19 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 
 	}
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newreply:After_submitcheck_true_defaultcheck
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_submitcheck_true_defaultcheck')
+			->run(array(array(
+				'subject'	=> &$subject,
+				'message'	=> &$message,
+
+				'special'	=> &$special,
+		)));
+	}
+	// bluelovers
 
 	$attentionon = empty($_G['gp_attention_add']) ? 0 : 1;
 	$attentionoff = empty($attention_remove) ? 0 : 1;

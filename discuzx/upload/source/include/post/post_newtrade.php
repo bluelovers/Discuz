@@ -47,6 +47,19 @@ if($time_left = checkflood()) {
 		showmessage('post_flood_ctrl_posts_per_hour', '', array('posts_per_hour' => $_G['group']['maxpostsperhour']));
 	}
 
+// bluelovers
+if (discuz_core::$plugin_support['Scorpio_Event']) {
+	//Event: Script_forum_post_newtrade:After_submitcheck_true_defaultcheck
+	Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newtrade:After_submitcheck_true_defaultcheck')
+		->run(array(array(
+			'subject'	=> &$subject,
+			'message'	=> &$message,
+
+			'special'	=> &$special,
+	)));
+}
+// bluelovers
+
 $item_price = floatval($_G['gp_item_price']);
 $item_credit = intval($_G['gp_item_credit']);
 $_G['gp_item_name'] = censor($_G['gp_item_name']);

@@ -141,6 +141,20 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	} elseif(checkmaxpostsperhour()) {
 		showmessage('post_flood_ctrl_posts_per_hour', '', array('posts_per_hour' => $_G['group']['maxpostsperhour']));
 	}
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newthread:After_submitcheck_true_defaultcheck
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newthread:After_submitcheck_true_defaultcheck')
+			->run(array(array(
+				'subject'	=> &$subject,
+				'message'	=> &$message,
+
+				'special'	=> &$special,
+		)));
+	}
+	// bluelovers
+
 	$_G['gp_save'] = $_G['uid'] ? $_G['gp_save'] : 0;
 
 	$typeid = isset($typeid) && isset($_G['forum']['threadtypes']['types'][$typeid]) && (empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']) ? $typeid : 0;

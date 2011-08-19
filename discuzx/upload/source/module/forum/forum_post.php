@@ -349,6 +349,22 @@ if($special == 4) {
 
 $navtitle = lang('core', 'title_'.$_G['gp_action'].'_post');
 
+// bluelovers
+if (discuz_core::$plugin_support['Scorpio_Event']) {
+	//Event: Script_forum_post:Before_action_include
+	Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_action_include')
+		->run(array(array(
+			'action'	=> &$_G['gp_action'],
+
+			'subject'	=> &$subject,
+			'message'	=> &$message,
+
+			'special'	=> &$special,
+			'readperm'	=> &$readperm,
+	)));
+}
+// bluelovers
+
 if($_G['gp_action'] == 'newthread') {
 	loadcache('groupreadaccess');
 	$navtitle .= ' - '.$_G['forum']['name'];

@@ -696,6 +696,260 @@
 
 })(jQuery);
 
-function _hack_zoom(obj, zimg, nocover, pn) {
+(function(){
+	if (!EXTRAFUNC['hooks']) EXTRAFUNC['hooks'] = new Array();
+	if (!EXTRAFUNC['hooks']['_validate_message']) EXTRAFUNC['hooks']['_validate_message'] = new Array();
 
+	EXTRAFUNC['hooks']['_validate_message'].push(function(message, theform) {
+
+		var i = DISCUZCODE['num'];
+
+		message = message.replace(/\[code(?:\=([^\]]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
+
+		message = message
+			/*
+			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/g, '$1$2')
+			*/
+			.replace(/\[([a-z]+)(?:\=[^\]]*)?\]([\s\n\r\t]*)\[\/\1\]/ig, '$2')
+			.replace(/\[(b|i|u|s|size|color|font)(\=[^\]]*)?\]([\s\n\r\t]*)(\S.*)?([\s\n\r\t]*)\[\/\1\]/ig, '$3[$1$2]$4[/$1]$5')
+			.replace(/\[(b|i|u|s|size|color|font)(\=[^\]]*)?\]([\s\n\r\t]*)(\S.*)?([\s\n\r\t]*)\[\/\1\]/ig, '$3[$1$2]$4[/$1]$5')
+		;
+
+		message = message
+			.replace(/(\[(?:hr)\])(\n+|\b)/, "$1\n")
+
+			.replace(/([^\n])(\[(?:(?:p|float|list|media|flash|table)(?:\=[^\]]*)?)\])/, "$1\n$2")
+			.replace(/(\[(?:(?:p)(?:\=[^\]]*)?)\])([\r\n]+)/, "$2$1")
+			.replace(/(\[(?:(?:\/p|\/float|\/?list|\/media|\/flash|\/table)(?:\=[^\]]*)?)\])([^\n])/, "$1\n$2")
+		;
+
+		for(i; i <= DISCUZCODE['num']; i++) {
+			message = message.replace("[\tDISCUZ_CODE_" + i + "\t]", DISCUZCODE['html'][i]);
+		}
+
+		return message;
+	});
+
+	if (!EXTRAFUNC['hooks']['clearcode']) EXTRAFUNC['hooks']['clearcode'] = new Array();
+	EXTRAFUNC['hooks']['clearcode'].push(function(str) {
+
+		var m1 = str.match(/\[font=([^\]]*)?\]/g);
+		var m2 = array_unique(m1);
+
+		if (count(m2) == 1) {
+			if (m2[0] == '[font=arial,helvetica,sans-serif]') {
+				str = str
+					.replace(/\[font=arial,helvetica,sans-serif\]/ig, '')
+					.replace(/\[\/font\]/, '')
+				;
+			}
+		}
+
+		str = _validate_message(str);
+
+		return str;
+	});
+
+	if (!EXTRAFUNC['hooks']['getEditorContents']) EXTRAFUNC['hooks']['getEditorContents'] = new Array();
+	EXTRAFUNC['hooks']['getEditorContents'].push(function(editdoc) {
+		if (wysiwyg) {
+			var _body = jQuery('body', editdoc)
+				.removeAttr('style')
+			;
+
+			var _remove = function (css_key) {
+				var _body_css = _body.css(css_key);
+				var _body_css_array = new Array();
+				var _is_int = 0;
+
+				switch(css_key) {
+					case 'font-size':
+						_body_css_array = [11, 12, 13];
+						_is_int = 1;
+						break;
+					case 'color':
+						_body_css_array = ['rgb(0, 0, 0)'];
+						break;
+					case 'font-family':
+						_body_css_array = ['arial,helvetica,sans-serif'];
+						break;
+				}
+
+				if (_is_int) {
+					_body_css = parseInt(_body_css);
+				}
+
+				_body_css_array.push(_body_css);
+
+				_body.find('[style*="' + css_key + '"]').each(function(index, elem){
+					var _this = jQuery(this);
+					var _this_css = _this.css(css_key);
+
+					var _this_reset = 0;
+
+					if (_is_int) {
+						_this_css = parseInt(_this_css);
+					}
+
+					if (_this.parent().is(_body)) {
+						if (in_array(_this_css, _body_css_array)) {
+							_this_reset = 1;
+						}
+					} else {
+						var _parents = _this.parents('[style*="' + css_key + '"]');
+
+						if (_parents.size()) {
+							var _parents_css = _parents.css(css_key);
+
+							if (_is_int) {
+								_parents_css = parseInt(_parents_css);
+							}
+
+							if (_parents_css == _this_css) {
+								_this_reset = 1;
+							}
+						} else {
+							if (in_array(_this_css, _body_css_array)) {
+								_this_reset = 1;
+							}
+						}
+					}
+
+					if (_this_reset) {
+						_this.css(css_key, '');
+					}
+
+					if (_this.attr('style') == '') {
+						_this.removeAttr('style');
+					}
+
+					jQuery.log([
+						css_key,
+						_this_reset,
+						_body_css,
+						_this_css,
+						_parents_css,
+						this
+					]);
+				});
+			};
+
+			var css_key_array = ['font-size', 'color', 'font-family'];
+			for (var i in css_key_array) {
+				_remove(css_key_array[i]);
+			}
+
+			var _remove2 = function (who) {
+				who.find('b, i, u, strong').each(function(){
+					var _this = jQuery(this);
+					var _tag = this.tagName;
+
+					if (_tag == 'b') _tag += ', strong';
+					if (_tag == 'strong') _tag += ', b';
+
+					if (_this.parents(_tag).size()) {
+						var _span = jQuery('<span/>');
+						_span.html(_this.html());
+						_this.after(_span).remove();
+
+						_span.children('b, i, u').each(function(){
+							_remove2(jQuery(this));
+						});
+					} else {
+						_this.children('b, i, u').each(function(){
+							_remove2(jQuery(this));
+						});
+					}
+				});
+			};
+
+			for (var i=0; i<2; i++) {
+				_remove2(_body);
+			}
+		}
+	});
+})();
+
+function count (mixed_var, mode) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +      input by: Waldo Malqui Silva
+    // +   bugfixed by: Soren Hansen
+    // +      input by: merabi
+    // +   improved by: Brett Zamir (http://brett-zamir.me)
+    // +   bugfixed by: Olivier Louvignes (http://mg-crea.com/)
+    // *     example 1: count([[0,0],[0,-4]], 'COUNT_RECURSIVE');
+    // *     returns 1: 6
+    // *     example 2: count({'one' : [1,2,3,4,5]}, 'COUNT_RECURSIVE');
+    // *     returns 2: 6
+    var key, cnt = 0;
+
+    if (mixed_var === null || typeof mixed_var === 'undefined') {
+        return 0;
+    } else if (mixed_var.constructor !== Array && mixed_var.constructor !== Object) {
+        return 1;
+    }
+
+    if (mode === 'COUNT_RECURSIVE') {
+        mode = 1;
+    }
+    if (mode != 1) {
+        mode = 0;
+    }
+
+    for (key in mixed_var) {
+        if (mixed_var.hasOwnProperty(key)) {
+            cnt++;
+            if (mode == 1 && mixed_var[key] && (mixed_var[key].constructor === Array || mixed_var[key].constructor === Object)) {
+                cnt += this.count(mixed_var[key], 1);
+            }
+        }
+    }
+
+    return cnt;
+}
+
+
+function array_unique (inputArr) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)
+    // +      input by: duncan
+    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   bugfixed by: Nate
+    // +      input by: Brett Zamir (http://brett-zamir.me)
+    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: Michael Grier
+    // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+    // %          note 1: The second argument, sort_flags is not implemented;
+    // %          note 1: also should be sorted (asort?) first according to docs
+    // *     example 1: array_unique(['Kevin','Kevin','van','Zonneveld','Kevin']);
+    // *     returns 1: {0: 'Kevin', 2: 'van', 3: 'Zonneveld'}
+    // *     example 2: array_unique({'a': 'green', 0: 'red', 'b': 'green', 1: 'blue', 2: 'red'});
+    // *     returns 2: {a: 'green', 0: 'red', 1: 'blue'}
+    var key = '',
+        tmp_arr2 = {},
+        val = '';
+
+    var __array_search = function (needle, haystack) {
+        var fkey = '';
+        for (fkey in haystack) {
+            if (haystack.hasOwnProperty(fkey)) {
+                if ((haystack[fkey] + '') === (needle + '')) {
+                    return fkey;
+                }
+            }
+        }
+        return false;
+    };
+
+    for (key in inputArr) {
+        if (inputArr.hasOwnProperty(key)) {
+            val = inputArr[key];
+            if (false === __array_search(val, tmp_arr2)) {
+                tmp_arr2[key] = val;
+            }
+        }
+    }
+
+    return tmp_arr2;
 }

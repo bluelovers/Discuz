@@ -173,6 +173,16 @@ function clearcode(str) {
 	str= str.replace(/\[u\]\[\/u]/ig, '', str);
 	str= str.replace(/\[i\]\[\/i]/ig, '', str);
 	str= str.replace(/\[s\]\[\/s]/ig, '', str);
+
+	// bluelovers
+	for(i in EXTRAFUNC['hooks']['clearcode']) {
+		try {
+			var _func = EXTRAFUNC['hooks']['clearcode'][i];
+			str = _func(str);
+		} catch(e) {}
+	}
+	// bluelovers
+
 	return str;
 }
 
@@ -288,6 +298,25 @@ function fonttag(fontoptions, text) {
 	var pend = parsestyle(fontoptions, prepend, append);
 	return pend['prepend'] + recursion('font', text, 'fonttag') + pend['append'];
 }
+
+// bluelovers
+function colortag(fontoptions, text) {
+	var prepend = '';
+	var append = '';
+	var tags = new Array();
+	tags = {'color' : 'color='};
+	for(bbcode in tags) {
+		optionvalue = fetchoptionvalue(tags[bbcode], fontoptions);
+		if(optionvalue) {
+			prepend += '[' + bbcode + '=' + optionvalue + ']';
+			append = '[/' + bbcode + ']' + append;
+		}
+	}
+
+	var pend = parsestyle(fontoptions, prepend, append);
+	return pend['prepend'] + recursion('font', text, 'colortag') + pend['append'];
+}
+// bluelovers
 
 function getoptionvalue(option, text) {
 	re = new RegExp(option + "(\s+?)?\=(\s+?)?[\"']?(.+?)([\"']|$|>)", "ig");
@@ -406,6 +435,14 @@ function html2bbcode(str) {
 		str = recursion('div', str, 'dstag');
 		str = recursion('p', str, 'ptag');
 		str = recursion('span', str, 'fonttag');
+
+		// bluelovers
+		// 修正多層的標籤造成部分標籤沒有轉換為 BBCODE
+		for (var i = 0; i < 2 ; i++) {
+			str = recursion('span', str, 'colortag');
+			str = recursion('font', str, 'colortag');
+		}
+		// bluelovers
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');
@@ -498,6 +535,7 @@ function litag(listoptions, text) {
 function parsecode(text, brush) {
 	// bluelovers
 	brush = trim(brush);
+	text = text.replace(/^\n+|[\s\n\r]+$/g, '');
 	// bluelovers
 
 	DISCUZCODE['num']++;
@@ -506,6 +544,14 @@ function parsecode(text, brush) {
 }
 
 function parsestyle(tagoptions, prepend, append) {
+
+	// bluelovers
+	var toHexString = function (v) {
+		v = ( v || 0 ).toString( 16 );
+		return v.length == 1 ? "0" + v : v;
+	};
+	// bluelovers
+
 	var searchlist = [
 		['align', true, 'text-align:\\s*(left|center|right);?', 1],
 		['float', true, 'float:\\s*(left|right);?', 1],
@@ -522,7 +568,7 @@ function parsestyle(tagoptions, prepend, append) {
 	var sizealias = {'x-small':1,'small':2,'medium':3,'large':4,'x-large':5,'xx-large':6,'-webkit-xxx-large':7};
 	var style = getoptionvalue('style', tagoptions);
 	re = /^(?:\s|)color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)(;?)/i;
-	style = style.replace(re, function($1, $2, $3, $4, $5) {return("color:#" + parseInt($2).toString(16) + parseInt($3).toString(16) + parseInt($4).toString(16) + $5);});
+	style = style.replace(re, function($1, $2, $3, $4, $5) {return("color:#" + toHexString(parseInt($2)) + toHexString(parseInt($3)) + toHexString(parseInt($4)) + $5);});
 	var len = searchlist.length;
 	for(var i = 0; i < len; i++) {
 		searchlist[i][4] = !searchlist[i][4] ? '' : searchlist[i][4];
