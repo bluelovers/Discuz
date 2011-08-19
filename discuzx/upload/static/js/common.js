@@ -1884,6 +1884,11 @@ function codetag(text, brush) {
 
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
+
+	// bluelovers
+	text = text.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/g, '$1$2');
+	// bluelovers
+
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code' + (brush ? '=' + brush : '') + ']' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
