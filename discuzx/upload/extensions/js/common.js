@@ -701,12 +701,21 @@
 	if (!EXTRAFUNC['hooks']['_validate_message']) EXTRAFUNC['hooks']['_validate_message'] = new Array();
 
 	EXTRAFUNC['hooks']['_validate_message'].push(function(message, theform) {
+
+		var i = DISCUZCODE['num'];
+
+		message = message.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
+
 		message = message
 			/*
 			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/g, '$1$2')
 			*/
 			.replace(/\[([a-z]+)(?:\=[^\]]*)?\]([\s\n\r\t]*)\[\/\1\]/ig, '$2')
 		;
+
+		for(i; i <= DISCUZCODE['num']; i++) {
+			message = message.replace("[\tDISCUZ_CODE_" + i + "\t]", DISCUZCODE['html'][i]);
+		}
 
 		return message;
 	});
