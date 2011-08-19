@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_task.php 21745 2011-04-11 07:48:23Z monkey $
+ *      $Id: class_task.php 23482 2011-07-19 09:47:58Z zhengqingpeng $
  */
 
 class task {
@@ -466,9 +466,8 @@ class task {
 
 	function delete($id) {
 		global $_G;
-
-		if(!($this->task = DB::fetch_first("SELECT * FROM ".DB::table('common_task')." WHERE taskid='$id' AND available='2'")) ||
-			!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_mytask')." WHERE uid='$_G[uid]' AND taskid='$id'")) {
+		$mytask = DB::fetch_first("SELECT * FROM ".DB::table('common_mytask')." WHERE uid='$_G[uid]' AND taskid='$id'");
+		if(!($this->task = DB::fetch_first("SELECT * FROM ".DB::table('common_task')." WHERE taskid='$id' AND available='2'")) || empty($mytask) || $mytask['status'] == 1) {
 			showmessage('task_nonexistence');
 		}
 
