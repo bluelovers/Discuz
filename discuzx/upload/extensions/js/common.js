@@ -711,6 +711,16 @@
 			.replace(/(\[code(?:\=[^\]]*)?\])\n+|[\s\n\r]+(\[\/code\])/g, '$1$2')
 			*/
 			.replace(/\[([a-z]+)(?:\=[^\]]*)?\]([\s\n\r\t]*)\[\/\1\]/ig, '$2')
+			.replace(/\[(b|i|u|s|size|color|font)(\=[^\]]*)?\]([\s\n\r\t]*)(\S.*)?([\s\n\r\t]*)\[\/\1\]/ig, '$3[$1$2]$4[/$1]$5')
+			.replace(/\[(b|i|u|s|size|color|font)(\=[^\]]*)?\]([\s\n\r\t]*)(\S.*)?([\s\n\r\t]*)\[\/\1\]/ig, '$3[$1$2]$4[/$1]$5')
+		;
+
+		message = message
+			.replace(/(\[(?:hr)\])(\n+|\b)/, "$1\n")
+
+			.replace(/([^\n])(\[(?:(?:p|float|list|media|flash|table)(?:\=[^\]]*)?)\])/, "$1\n$2")
+			.replace(/(\[(?:(?:p)(?:\=[^\]]*)?)\])([\r\n]+)/, "$2$1")
+			.replace(/(\[(?:(?:\/p|\/float|\/?list|\/media|\/flash|\/table)(?:\=[^\]]*)?)\])([^\n])/, "$1\n$2")
 		;
 
 		for(i; i <= DISCUZCODE['num']; i++) {
