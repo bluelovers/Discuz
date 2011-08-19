@@ -132,11 +132,11 @@
 
 	$.fx.step[var_name_x] = function (fx) {
 	    $.cssHooks[var_name_x].set(fx.elem, fx.now + fx.unit);
-	}
+	};
 
 	$.fx.step[var_name_y] = function (fx) {
 	    $.cssHooks[var_name_y].set(fx.elem, fx.now + fx.unit);
-	}
+	};
 
 })(jQuery);
 
