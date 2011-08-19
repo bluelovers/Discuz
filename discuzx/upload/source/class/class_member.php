@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 22630 2011-05-16 05:23:07Z monkey $
+ *      $Id: class_member.php 23944 2011-08-17 05:59:50Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -85,6 +85,9 @@ class logging_ctl {
 			}
 			$_G['uid'] = $_G['member']['uid'] = 0;
 			$_G['username'] = $_G['member']['username'] = $_G['member']['password'] = '';
+			if(!$_G['gp_password'] || $_G['gp_password'] != addslashes($_G['gp_password'])) {
+				showmessage('profile_passwd_illegal');
+			}
 			$result = userlogin($_G['gp_username'], $_G['gp_password'], $_G['gp_questionid'], $_G['gp_answer'], $this->setting['autoidselect'] ? 'auto' : $_G['gp_loginfield']);
 			$uid = $result['ucresult']['uid'];
 
@@ -258,8 +261,8 @@ class register_ctl {
 
 	function register_ctl() {
 		global $_G;
-		if($this->setting['bbclosed']) {
-			if(($_G['gp_action'] != 'activation' && !$_G['gp_activationauth']) || !$this->setting['closedallowactivation'] ) {
+		if($_G['setting']['bbclosed']) {
+			if(($_G['gp_action'] != 'activation' && !$_G['gp_activationauth']) || !$_G['setting']['closedallowactivation'] ) {
 				showmessage('register_disable', NULL, array(), array('login' => 1));
 			}
 		}
@@ -469,6 +472,8 @@ class register_ctl {
 						showmessage('profile_passwd_illegal');
 					}
 					$password = $_G['gp_password'];
+				} else {
+					$password = md5(random(10));
 				}
 			}
 
@@ -687,7 +692,7 @@ class register_ctl {
 			manyoulog('user', $uid, 'add');
 
 			$totalmembers = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member'));
-			$userstats = array('totalmembers' => $totalmembers, 'newsetuser' => $username);
+			$userstats = array('totalmembers' => $totalmembers, 'newsetuser' => stripslashes($username));
 
 			save_syscache('userstats', $userstats);
 
@@ -770,7 +775,7 @@ class register_ctl {
 			dsetcookie('invite_auth', '');
 
 			loadcache('setting', true);
-			$_G['setting']['lastmember'] = $username;
+			$_G['setting']['lastmember'] = stripslashes($username);
 			$settingnew = $_G['setting'];
 			$settingnew['pluginhooks'] = array();
 			save_syscache('setting', $settingnew);
@@ -795,7 +800,7 @@ class register_ctl {
 				case 2:
 					$message = 'register_manual_verify';
 					$locationmessage = 'register_manual_verify_location';
-					$url_forward = 'home.php?mod=space&do=home';
+					$url_forward = $_G['setting']['homestatus'] ? 'home.php?mod=space&do=home' : 'home.php?mod=spacecp';
 					break;
 				default:
 					$message = 'register_succeed';
