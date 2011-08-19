@@ -214,7 +214,9 @@ function _html_fileplus($key = '', $iscss = 0, $rethtml = 0) {
 		if (empty(discuz_core::$plugin_support['jscache'][$key])) {
 
 		} else {
-			return discuz_core::$plugin_support['jscache'][$key]['file_return'];
+			$ret = discuz_core::$plugin_support['jscache'][$key]['file_return'];
+			if ($rethtml) $ret = '<script type="text/javascript" src="' . $ret . '"></script>';
+			return $ret;
 		}
 	}
 }
