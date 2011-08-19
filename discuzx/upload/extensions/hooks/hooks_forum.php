@@ -28,7 +28,7 @@ function _eScript_forum_post_Before_action_include($_EVENT, $_conf) {
 
 	if (!empty($subject)) {
 		$message = preg_replace(array(
-				'/(?:[\ \　\t]+)(\n|$)/',
+				'/(?:[\ \t]+)(\n|$)/s',
 				'/^\n+|\s+$/s',
 			), array(
 				'\\1',
