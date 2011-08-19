@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 22913 2011-05-31 03:22:12Z monkey $
+ *      $Id: class_core.php 23641 2011-07-29 08:21:13Z monkey $
  */
 
 define('IN_DISCUZ', true);
@@ -164,7 +164,7 @@ class discuz_core {
 			'mobile' => '',
 
 		);
-		$_G['PHP_SELF'] = htmlspecialchars($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['PHP_SELF']);
+		$_G['PHP_SELF'] = htmlspecialchars($this->_get_script_url());
 		$_G['basescript'] = CURSCRIPT;
 		$_G['basefilename'] = basename($_G['PHP_SELF']);
 		$sitepath = substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'));
@@ -186,6 +186,26 @@ class discuz_core {
 
 		$this->var = & $_G;
 
+	}
+
+	function _get_script_url() {
+		if($this->var['PHP_SELF'] === null){
+			$scriptName = basename($_SERVER['SCRIPT_FILENAME']);
+			if(basename($_SERVER['SCRIPT_NAME']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
+			} else if(basename($_SERVER['PHP_SELF']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['PHP_SELF'];
+			} else if(isset($_SERVER['ORIG_SCRIPT_NAME']) && basename($_SERVER['ORIG_SCRIPT_NAME']) === $scriptName) {
+				$this->var['PHP_SELF'] = $_SERVER['ORIG_SCRIPT_NAME'];
+			} else if(($pos = strpos($_SERVER['PHP_SELF'],'/'.$scriptName)) !== false) {
+				$this->var['PHP_SELF'] = substr($_SERVER['SCRIPT_NAME'],0,$pos).'/'.$scriptName;
+			} else if(isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['SCRIPT_FILENAME'],$_SERVER['DOCUMENT_ROOT']) === 0) {
+				$this->var['PHP_SELF'] = str_replace('\\','/',str_replace($_SERVER['DOCUMENT_ROOT'],'',$_SERVER['SCRIPT_FILENAME']));
+			} else {
+				system_error('request_tainting');
+			}
+		}
+		return $this->var['PHP_SELF'];
 	}
 
 	function _init_input() {
@@ -224,6 +244,7 @@ class discuz_core {
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
+		$this->var['gp_handlekey'] = !empty($this->var['gp_handlekey']) && preg_match('/^\w+$/', $this->var['gp_handlekey']) ? $this->var['gp_handlekey'] : '';
 
 	}
 
