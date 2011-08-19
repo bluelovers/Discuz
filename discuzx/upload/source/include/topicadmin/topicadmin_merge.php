@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_merge.php 20934 2011-03-09 01:18:52Z monkey $
+ *      $Id: topicadmin_merge.php 23560 2011-07-26 02:45:31Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -59,7 +59,7 @@ if(!submitcheck('modsubmit')) {
 	DB::query("DELETE FROM ".DB::table('forum_thread')." WHERE tid='$othertid'");
 	DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid='$othertid'");
 
-	DB::query("UPDATE ".DB::table($posttable)." SET first=(pid='$firstpost[pid]'), fid='$firstpost[fid]' WHERE tid='$_G[tid]'");
+	DB::query("UPDATE ".DB::table($posttable)." SET first=(pid='$firstpost[pid]'), fid='".$_G['forum']['fid']."' WHERE tid='$_G[tid]'");
 	DB::query("UPDATE ".DB::table('forum_thread')." SET authorid='$firstpost[authorid]', author='".addslashes($firstpost['author'])."', subject='".addslashes($firstpost['subject'])."', dateline='$firstpost[dateline]', views=views+$other[views], replies=replies+$other[replies], moderated='1' WHERE tid='$_G[tid]'");
 
 	my_thread_log('merge', array('tid' => $othertid, 'otherid' => $_G['tid'], 'fid' => $thread['fid']));
