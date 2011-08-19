@@ -1757,6 +1757,7 @@ function dreferer($default = '') {
 	}
 	$_G['referer'] = htmlspecialchars($_G['referer']);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
+	// FIX 校驗dreferer的域名，防止XSS注入
 	$reurl = parse_url($_G['referer']);
 	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
 		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
