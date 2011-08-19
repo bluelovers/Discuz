@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 22773 2011-05-20 04:34:44Z monkey $
+ *      $Id: forum_misc.php 23918 2011-08-16 08:25:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -275,7 +275,7 @@ if($_G['gp_action'] == 'paysucceed') {
 	}
 	if(submitcheck('postappendsubmit')) {
 		$message = censor($_G['gp_postappendmessage']);
-		$message = $post['message'] . "\n\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
+		$message = addslashes($post['message'])."\n\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
 		require_once libfile('function/post');
 		$bbcodeoff = checkbbcodes($message, 0);
 		DB::update($posttable, array(
@@ -587,7 +587,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				if($rating['isself'] && (intval($_G['member']['extcredits'.$id]) - $score < 0)) {
 					showmessage('thread_rate_range_self_invalid', '', array('extcreditstitle' => $_G['setting']['extcredits'][$id]['title']));
 				}
-				if($score <= $maxratetoday[$id]) {
+				if(abs($score) <= $maxratetoday[$id]) {
 					if($score > $rating['max'] || $score < $rating['min']) {
 						showmessage('thread_rate_range_invalid');
 					} else {
