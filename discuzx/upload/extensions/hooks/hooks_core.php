@@ -129,6 +129,8 @@ EOF
 ?><?
 */
 
+		$ss .= _html_fileplus('common_extensions.js', 0, 1);
+
 		$ss .= '<script type="text/javascript">';
 		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
 		$ss .= '</script>';
