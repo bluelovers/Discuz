@@ -823,6 +823,7 @@
 						_this.removeAttr('style');
 					}
 
+					/*
 					jQuery.log([
 						css_key,
 						_this_reset,
@@ -831,6 +832,7 @@
 						_parents_css,
 						this
 					]);
+					*/
 				});
 			};
 
