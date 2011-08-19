@@ -549,7 +549,7 @@ function parsestyle(tagoptions, prepend, append) {
 	var toHexString = function (v) {
 		v = ( v || 0 ).toString( 16 );
 		return v.length == 1 ? "0" + v : v;
-	}
+	};
 	// bluelovers
 
 	var searchlist = [
@@ -568,7 +568,7 @@ function parsestyle(tagoptions, prepend, append) {
 	var sizealias = {'x-small':1,'small':2,'medium':3,'large':4,'x-large':5,'xx-large':6,'-webkit-xxx-large':7};
 	var style = getoptionvalue('style', tagoptions);
 	re = /^(?:\s|)color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)(;?)/i;
-	style = style.replace(re, function($1, $2, $3, $4, $5) {return("color:#" + parseInt($2).toString(16) + parseInt($3).toString(16) + parseInt($4).toString(16) + $5);});
+	style = style.replace(re, function($1, $2, $3, $4, $5) {return("color:#" + toHexString(parseInt($2)) + toHexString(parseInt($3)) + toHexString(parseInt($4)) + $5);});
 	var len = searchlist.length;
 	for(var i = 0; i < len; i++) {
 		searchlist[i][4] = !searchlist[i][4] ? '' : searchlist[i][4];
