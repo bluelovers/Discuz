@@ -326,6 +326,10 @@ function profile_show($fieldid, $space=array()) {
 
 
 function showdistrict($values, $elems=array(), $container='districtbox', $showlevel=null) {
+	$html = '';
+	if(!preg_match("/^[A-Za-z0-9]+$/", $container)) {
+		return $html;
+	}
 	$showlevel = !empty($showlevel) ? intval($showlevel) : count($values);
 	$showlevel = $showlevel <= 4 ? $showlevel : 4;
 	$upids = array(0);
