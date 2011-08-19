@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 22852 2011-05-26 04:15:24Z monkey $
+ *      $Id: post_editpost.php 23558 2011-07-26 02:40:48Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -591,9 +591,9 @@ if(!submitcheck('editsubmit')) {
 					showmessage('post_rushreply_timewrong');
 				}
 				$maxposition = DB::result_first("SELECT position FROM ".DB::table('forum_postposition')." WHERE tid = '{$_G['tid']}' ORDER BY position DESC LIMIT 1");
-				if($thread['closed'] == 1 && ((!$_G['gp_rushreplyfrom'] && !$_G['gp_rushreplyto']) || ($_G['gp_rushreplyfrom'] < $_G['timestamp'] && $_G['gp_rushreplyto'] > $_G['timestamp']) || (!$_G['gp_rushreplyfrom'] && $_G['gp_rushreplyto'] > $_G['timestamp']) || ($_G['gp_stopfloor'] > $maxposition) )) {
+				if($thread['closed'] == 1 && ((!$_G['gp_rushreplyfrom'] && !$_G['gp_rushreplyto']) || ($_G['gp_rushreplyfrom'] < $_G['timestamp'] && $_G['gp_rushreplyto'] > $_G['timestamp']) || (!$_G['gp_rushreplyfrom'] && $_G['gp_rushreplyto'] > $_G['timestamp']) || ($_G['gp_stopfloor'] && $_G['gp_stopfloor'] > $maxposition) )) {
 					$closedadd = " , closed = '0'";
-				} elseif($thread['closed'] == 0 && (($_G['gp_rushreplyfrom'] > $_G['timestamp']) || ($_G['gp_rushreplyto'] && $_G['gp_rushreplyto'] < $_G['timestamp']) || ($_G['gp_stopfloor'] <= $maxposition) )) {
+				} elseif($thread['closed'] == 0 && (($_G['gp_rushreplyfrom'] && $_G['gp_rushreplyfrom'] > $_G['timestamp']) || ($_G['gp_rushreplyto'] && $_G['gp_rushreplyto'] && $_G['gp_rushreplyto'] < $_G['timestamp']) || ($_G['gp_stopfloor'] && $_G['gp_stopfloor'] <= $maxposition) )) {
 					$closedadd = " , closed = '1'";
 				}
 				if(!empty($_G['gp_rewardfloor']) && !empty($_G['gp_stopfloor'])) {
