@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 22559 2011-05-12 07:04:17Z liulanbo $
+ *      $Id: admincp_counter.php 23920 2011-08-16 09:11:43Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -250,7 +250,7 @@ if(submitcheck('forumsubmit', 1)) {
 		$opids = array_keys($optionids[$sortid]);
 		$tables = array();
 
-		$query = DB::query("SHOW /*!40002 FULL */COLUMNS FROM $tablename", 'SILENT');
+		$query = DB::query("SHOW FULL COLUMNS FROM $tablename", 'SILENT');
 		while($field = @DB::fetch($query)) {
 			$tables[$field['Field']] = 1;
 		}
