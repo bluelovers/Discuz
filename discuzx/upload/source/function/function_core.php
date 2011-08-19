@@ -2377,6 +2377,7 @@ function update_template_block($targettplname, $blocks) {
 		}
 		$newaddbids = array_diff($blocks, $oldbids);
 		DB::delete('common_template_block', array('targettplname'=>$targettplname));
+		$blocks = array_unique($blocks);
 		$values = array();
 		foreach ($blocks as $bid) {
 			$values[] = "('$targettplname','$bid')";
