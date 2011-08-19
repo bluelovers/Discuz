@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_redirect.php 22917 2011-05-31 05:04:49Z monkey $
+ *      $Id: forum_redirect.php 23301 2011-07-04 06:26:23Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,7 +80,7 @@ if($_G['gp_goto'] == 'findpost') {
 	if($ordertype != 1) {
 		$page = ceil($curpostnum / $_G['ppp']);
 	} elseif($curpostnum > 1) {
-		$page = ceil(($post['replies'] - $curpostnum + 3) / $_G['ppp']);
+		$page = ceil(($thread['replies'] - $curpostnum + 3) / $_G['ppp']);
 	} else {
 		$page = 1;
 	}
