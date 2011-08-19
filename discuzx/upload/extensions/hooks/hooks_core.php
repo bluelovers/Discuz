@@ -99,6 +99,7 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 	global $_G;
 
 	$_varhash = VERHASH;
+	$ss = '';
 
 	if ($hookid == 'global_header_seohead') {
 
