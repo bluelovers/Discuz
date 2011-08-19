@@ -200,6 +200,11 @@ function _html_fileplus($key = '', $iscss = 0, $rethtml = 0) {
 			}
 
 			$_v['file_return'] .= '?'.VERHASH;
+
+			$_v['file_source'] = $_v['base']
+				.$_v['path']
+				.(DISCUZ_DEBUG ? $_v['file_develop'] : $_v['file'])
+			;
 		}
 	}
 
