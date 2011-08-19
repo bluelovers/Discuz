@@ -1757,6 +1757,17 @@ function dreferer($default = '') {
 	}
 	$_G['referer'] = htmlspecialchars($_G['referer']);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
+	$reurl = parse_url($_G['referer']);
+	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
+		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
+			$domainroot = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
+			if(is_array($_G['setting']['domain']['root']) && !in_array($domainroot, $_G['setting']['domain']['root'])) {
+				$_G['referer'] = $_G['setting']['domain']['defaultindex'] ? $_G['setting']['domain']['defaultindex'] : 'index.php';
+			}
+		}
+	} elseif(empty($reurl['host'])) {
+		$_G['referer'] = $_G['siteurl'].'./'.$_G['referer'];
+	}
 	return strip_tags($_G['referer']);
 }
 
