@@ -704,7 +704,7 @@
 
 		var i = DISCUZCODE['num'];
 
-		message = message.replace(/\[code(?:\=([a-z0-9\_\+\-, ]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
+		message = message.replace(/\[code(?:\=([^\]]+))?\]([\s\S]+?)\[\/code\]/ig, function($1, $3, $2) {return codetag($2, $3);});
 
 		message = message
 			/*
