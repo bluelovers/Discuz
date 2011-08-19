@@ -132,11 +132,11 @@
 
 	$.fx.step[var_name_x] = function (fx) {
 	    $.cssHooks[var_name_x].set(fx.elem, fx.now + fx.unit);
-	}
+	};
 
 	$.fx.step[var_name_y] = function (fx) {
 	    $.cssHooks[var_name_y].set(fx.elem, fx.now + fx.unit);
-	}
+	};
 
 })(jQuery);
 
@@ -245,7 +245,7 @@
 		_o = $.extend(_o, _oo[0]);
 
 		return _o;
-	}
+	};
 
 	function _pos(_e, agv, options) {
 		var _p = {
@@ -823,6 +823,7 @@
 						_this.removeAttr('style');
 					}
 
+					/*
 					jQuery.log([
 						css_key,
 						_this_reset,
@@ -831,6 +832,7 @@
 						_parents_css,
 						this
 					]);
+					*/
 				});
 			};
 

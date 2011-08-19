@@ -99,6 +99,7 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 	global $_G;
 
 	$_varhash = VERHASH;
+	$ss = '';
 
 	if ($hookid == 'global_header_seohead') {
 
@@ -121,13 +122,7 @@ EOF
 
 		$hook_data .= $ss;
 	} elseif ($hookid == 'global_header_javascript') {
-		$ss = <<<EOF
-<script type="text/javascript" src="{$path}extensions/js/common.js?{$_varhash}"></script>
-EOF
-;
-/*
-?><?
-*/
+		$ss .= _html_fileplus('common_extensions.js', 0, 1);
 
 		$ss .= '<script type="text/javascript">';
 		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
@@ -455,6 +450,10 @@ function _eClass_discuz_core__init_setting_After($_EVENT, $discuz) {
 	discuz_core::$plugin_support['jscache']['clearbox_jquery.js'] = array(
 		'file' => 'clearbox_jquery.js',
 		'path' => 'clearbox/js/',
+		'base' => 'extensions/js/',
+	);
+
+	discuz_core::$plugin_support['jscache']['common_extensions.js'] = array(
 		'base' => 'extensions/js/',
 	);
 }
