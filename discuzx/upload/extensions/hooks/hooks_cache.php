@@ -243,18 +243,7 @@ function _eFunc_writetojscache_After_readdir($_EVENT, $_conf) {
 	_html_fileplus();
 
 	foreach(discuz_core::$plugin_support['jscache'] as $_k => $_v) {
-		if (empty($_v['name'])) $_v['name'] = $_k;
-		if (empty($_v['file'])) $_v['file'] = $_v['name'];
-		if (empty($_v['file_develop'])) $_v['file_develop'] = $_v['file'];
-		if (empty($_v['path'])) $_v['path'] = '';
-		if (empty($_v['base'])) $_v['base'] = 'static/js/';
-
-		$_file = $_v['base']
-			.$_v['path']
-			.(DISCUZ_DEBUG ? $_v['file_develop'] : $_v['file'])
-		;
-
-		$_conf['dir_files'][$_v['name']] = DISCUZ_ROOT.$_file;
+		$_conf['dir_files'][$_v['name']] = DISCUZ_ROOT.$_v['file_source'];
 	}
 }
 
