@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 20860 2011-03-07 03:24:08Z zhangguosheng $
+ *      $Id: cron_cleanup_daily.php 23607 2011-07-27 08:09:08Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,8 +31,6 @@ DB::query("UPDATE ".DB::table('common_member_count')." SET todayattachs='0',toda
 
 DB::query("UPDATE ".DB::table('forum_trade')." SET closed='1' WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
 DB::query("DELETE FROM ".DB::table('forum_tradelog')." WHERE buyerid>0 AND status=0 AND lastupdate<'$_G[timestamp]'-432000", 'UNBUFFERED');
-DB::query("UPDATE ".DB::table('forum_tradelog')." SET status='7' WHERE buyerid>'0' AND status='5' AND lastupdate<'$_G[timestamp]'-604800 AND transport='3' AND offline='1'");
-DB::query("UPDATE ".DB::table('forum_tradelog')." SET status='7' WHERE buyerid>'0' AND status='5' AND lastupdate<'$_G[timestamp]'-2592000 AND transport<>'3' AND offline='1'");
 
 if($_G['setting']['cachethreadon']) {
 	removedir($_G['setting']['cachethreaddir'], TRUE);
