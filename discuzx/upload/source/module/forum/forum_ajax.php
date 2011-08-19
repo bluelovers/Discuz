@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 22997 2011-06-13 05:22:39Z zhangguosheng $
+ *      $Id: forum_ajax.php 23694 2011-08-04 05:47:27Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -401,6 +401,7 @@ if($_G['gp_action'] == 'checkusername') {
 						if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 							$image = new image();
 							$image->Watermark($attach['target'], '', 'forum');
+							$upload->attach['size'] = $image->imginfo['size'];
 						}
 					}
 					$aids[] = $aid = getattachnewaid();
