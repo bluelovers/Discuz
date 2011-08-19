@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 22849 2011-05-26 01:57:02Z monkey $
+ *      $Id: lang_admincp.php 23576 2011-07-26 06:57:50Z zhangguosheng $
  */
 
 
@@ -4819,11 +4819,11 @@ $lang = array
 	'ec_alipay_checklink_goods' => '實物商品訂單測試',
 	'ec_contract' => '支付寶簽約用戶設置',
 	'ec_alipay_contract' => '使用支付寶簽約接口',
-	'ec_alipay_contract_comment' => '如果你的支付寶賬號是簽約用戶，可以選擇「是」讓論壇使用你自己的商家服務平台。如果你還未簽約，<a href="https://www.alipay.com/himalayas/practicality_customer.htm?customer_external_id=C4335344590036426018&market_type=from_agent_contract&pro_codes=21790F5A8C48B687F7F62F29651356BB" target="_blank">請點擊這裡簽約</a>',
+	'ec_alipay_contract_comment' => '如果你的支付寶賬號是簽約用戶，可以選擇「是」讓論壇使用你自己的商家服務平台。如果你還未簽約，<a href="http://act.life.alipay.com/systembiz/discuz/" target="_blank">請點擊這裡簽約</a>',
 	'ec_alipay_securitycode' => '交易安全校驗碼 (key)',
 	'ec_alipay_securitycode_comment' => '支付寶簽約用戶可以在此處填寫支付寶分配給你的交易安全校驗碼，此校驗碼你可以到支付寶官方的商家服務功能處查看',
 	'ec_alipay_partner' => '合作者身份 (partnerID)',
-	'ec_alipay_partner_comment' => '支付寶簽約用戶請在此處填寫支付寶分配給你的合作者身份，簽約用戶的手續費按照你與支付寶官方的簽約協議為準。如果你還未簽約，<a href="https://www.alipay.com/himalayas/practicality_customer.htm?customer_external_id=C4335344590036426018&market_type=from_agent_contract&pro_codes=21790F5A8C48B687F7F62F29651356BB" target="_blank">請點擊這裡簽約</a>；如果在簽約時出現合同模板衝突，請咨詢0571-88158090',
+	'ec_alipay_partner_comment' => '支付寶簽約用戶請在此處填寫支付寶分配給你的合作者身份，簽約用戶的手續費按照你與支付寶官方的簽約協議為準。如果你還未簽約，<a href="http://act.life.alipay.com/systembiz/discuz/" target="_blank">請點擊這裡簽約</a>；如果在簽約時出現合同模板衝突，請咨詢0571-88158090',
 	'ec_alipay_creditdirectpay' => '使用純即時到帳接口',
 	'ec_alipay_creditdirectpay_comment' => '如果你的簽約協議中包含純即時到帳接口（不是標準雙接口）可以選擇此項，讓積分充值只能使用即時到賬方式付款',
 
@@ -5731,7 +5731,7 @@ $lang = array
 	'portalcategory_foldername_rename_error' => '目錄重命名失敗，目錄名只能包含字母、數字和下劃線(_)，請確認目錄名的合法性',
 	'portalcategory_foldername_invalid' => '目錄名只能包含字母、數字和下劃線(_)，請確認目錄名的合法性',
 	'portalcategory_foldername' => '目錄名稱',
-	'portalcategory_foldername_comment' => '此頻道要生成的文件夾名稱，直接在網站根目錄下生成，要求網站根目錄有寫的權限<br />設置為空將刪除所建立的目錄',
+	'portalcategory_foldername_comment' => '當您要為此頻道綁定目錄或頂級頻道綁定域名時請輸入此頻道要生成的文件夾名稱(只能使用字母、數字、下劃線_)<br/>要求網站根目錄有寫的權限，會在網站根目錄下生成相應文件夾<br />設置為空將刪除所建立的目錄',
 	'portalcategory_summary' => 'description',
 	'portalcategory_summary_comment' => 'description內容用於搜索引擎優化，放在 meta 的 description 標籤中',
 	'portalcategory_keyword' => 'keywords',
