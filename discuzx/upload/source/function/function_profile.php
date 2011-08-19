@@ -355,6 +355,7 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 		}
 	}
 	$names = array('province', 'city', 'district', 'community');
+	$allowstr = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity', 'resideprovince', 'residecity', 'residedist', 'residecommunity');
 	for($i=0; $i<4;$i++) {
 		$elems[$i] = !empty($elems[$i]) ? $elems[$i] : $names[$i];
 	}
