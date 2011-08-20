@@ -4,20 +4,20 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_siteinfo.php 23162 2011-06-22 03:04:22Z yexinhao $
+ *      $Id: cloud_siteinfo.php 23271 2011-06-29 04:33:39Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
-}
-
-if($cloudstatus != 'cloud') {
-	cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 }
 
 require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
 $cloudClient = new Discuz_Cloud_Client();
 
 if(submitcheck('syncsubmit')) {
+
+	if($cloudstatus != 'cloud') {
+		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
+	}
 
 	if ($_G['setting']['my_app_status']) {
 		manyouSync();
@@ -31,6 +31,11 @@ if(submitcheck('syncsubmit')) {
 		cpmsg('cloud_sync_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
 	}
 } elseif(submitcheck('resetsubmit')) {
+
+	if($cloudstatus != 'cloud') {
+		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
+	}
+
 	$res = $cloudClient->resetKey();
 
 	if(!$res) {

@@ -118,12 +118,16 @@
 				<!--{if !empty($activity['ufield']['userfield'])}-->
 					<!--{loop $activity['ufield']['userfield'] $fieldid}-->
 					<!--{if $settings[$fieldid][available]}-->
+						<!--{if $settings[$fieldid][formtype] != 'file'}-->
 						<tr>
 							<th id="th_$fieldid"><strong class="rq y">*</strong>$settings[$fieldid][title]</th>
 							<td id="td_$fieldid">
 								$htmls[$fieldid]
 							</td>
 						</tr>
+						<!--{else}-->
+						 <input type="hidden" name="$fieldid" value="1">
+						<!--{/if}-->
 					<!--{/if}-->
 					<!--{/loop}-->
 				<!--{/if}-->

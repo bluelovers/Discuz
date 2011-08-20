@@ -422,3 +422,8 @@ fieldset {
 .aedit:hover{
 	background-position:-34px 0;
 }
+
+.tip {
+	width : auto;
+	max-width: 260px;
+}

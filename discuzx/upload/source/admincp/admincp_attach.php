@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_attach.php 22509 2011-05-10 09:13:04Z monkey $
+ *      $Id: admincp_attach.php 23765 2011-08-09 07:41:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -80,11 +80,17 @@ if(!submitcheck('deletesubmit')) {
 		$sql .= $_G['gp_sizemore'] ? " AND a.filesize>'$_G[gp_sizemore]' " : '';
 		$sql .= $_G['gp_dlcountless'] ? " AND ai.downloads<'$_G[gp_dlcountless]'" : '';
 		$sql .= $_G['gp_dlcountmore'] ? " AND ai.downloads>'$_G[gp_dlcountmore]'" : '';
+		$sql .= $_G['gp_daysold'] ? " AND a.dateline<'".(TIMESTAMP - intval($_G['gp_daysold']) * 86400)."'" : '';
 
 		$attachments = '';
 		$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
 		$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-		$attachmentcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_attachment_'.$_G['gp_attachtableid'])." a, ".DB::table('forum_thread')." t, ".DB::table('forum_forum')." f
+		$attachmentcount = DB::result_first("SELECT COUNT(*)
+			FROM ". DB::table('forum_attachment_'.$_G['gp_attachtableid'])." a
+			INNER JOIN ".DB::table('forum_attachment')." ai USING(aid)
+			INNER JOIN ".DB::table('common_member')." m ON m.uid=a.uid
+			INNER JOIN ".DB::table('forum_thread')." t
+			INNER JOIN ".DB::table('forum_forum')." f
 			WHERE t.tid=a.tid AND f.fid=t.fid AND t.displayorder>='0' AND $sql");
 		$query = DB::query("SELECT a.*, ai.downloads, m.username, t.fid, t.tid, t.subject, f.name AS fname
 			FROM ". DB::table('forum_attachment_'.$_G['gp_attachtableid'])." a

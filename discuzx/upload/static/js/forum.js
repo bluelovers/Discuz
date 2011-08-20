@@ -220,6 +220,27 @@ function showTypes(id, mod) {
 	}
 }
 
+// bluelovers
+function _validate_message(message, theform) {
+
+	message =
+		message
+		.replace(/(?:\r+)\n|\n(?:\r+)/g, "\n")
+		.replace(/[\　\r\t ]+(\n|$)/g, '$1')
+		.replace(/^\n+/g, '')
+	;
+
+	for(i in EXTRAFUNC['hooks']['_validate_message']) {
+		try {
+			var _func = EXTRAFUNC['hooks']['_validate_message'][i];
+			message = _func(message, theform);
+		} catch(e) {}
+	}
+
+	return message;
+}
+// bluelovers
+
 var postpt = 0;
 /**
  * 用於快速發帖
@@ -241,12 +262,8 @@ function fastpostvalidate(theform, noajaxpost) {
 
 	// bluelovers
 	// 整理 message , subject 的多餘空白
-	if (theform.subject) theform.subject.value = trim(theform.subject.value);
-	theform.message.value = theform.message.value
-		.replace(/(?:\r+)\n|\n(?:\r+)/, "\n")
-		.replace(/[\　\r\t ]+(\n|$)/, '$1')
-		.replace(/^\n+/, '')
-	;
+	if (theform.subject) theform.subject.value = trim(theform.subject.value, {nospaceleft : 1});
+	theform.message.value = _validate_message(theform.message.value, theform);
 	// bluelovers
 
 	if(theform.message.value == '' && theform.subject.value == '') {

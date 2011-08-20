@@ -47,7 +47,7 @@ if($catid) {
 	}
 }
 
-if($_GET['type'] == 'me' || !$admincp2) {
+if($_GET['type'] == 'me' || (!$admincp2 && !$allowmanage)) {
 	$wherearr[] = " uid='$_G[uid]'";
 }
 if($catids) {
@@ -64,6 +64,7 @@ if($_GET['type'] == 'recommended') {
 	$wherearr[] = "bid = ''";
 }
 $wheresql = implode(' AND ', $wherearr);
+$wheresql = $wheresql ? " WHERE $wheresql" : '';
 
 $page = max(1,intval($_GET['page']));
 $start = ($page-1)*$perpage;
@@ -72,10 +73,10 @@ if($start<0) $start = 0;
 $list = array();
 $multi = '';
 $article_tags = article_tagnames();
-$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')." WHERE $wheresql"), 0);
+$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')."$wheresql"), 0);
 if($count) {
 
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE $wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
+	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')."$wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
 	while ($value = DB::fetch($query)) {
 		if($value['pic']) $value['pic'] = pic_get($value['pic'], 'portal', $value['thumb'], $value['remote']);
 		$value['dateline'] = dgmdate($value['dateline']);

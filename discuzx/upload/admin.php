@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admin.php 22307 2011-04-29 03:28:32Z monkey $
+ *      $Id: admin.php 23290 2011-07-04 01:29:24Z cnteacher $
  */
 
 define('IN_ADMINCP', TRUE);
@@ -39,10 +39,11 @@ $admincp_actions_normal = array('index', 'setting', 'members', 'profilefields', 
 	'doing', 'group', 'blog', 'feed', 'album', 'pic', 'comment', 'share', 'click', 'specialuser', 'postsplit', 'threadsplit', 'report',
 	'district', 'diytemplate', 'verify', 'nav', 'domain', 'postcomment', 'tag', 'connect', 'card');
 
-$action = getgpc('action');
-$operation = getgpc('operation');
-$do = getgpc('do');
-$frames = getgpc('frames');
+$action = htmlspecialchars(getgpc('action'));
+$operation = htmlspecialchars(getgpc('operation'));
+$do = htmlspecialchars(getgpc('do'));
+$frames = htmlspecialchars(getgpc('frames'));
+
 lang('admincp');
 $lang = & $_G['lang']['admincp'];
 $page = max(1, intval(getgpc('page')));

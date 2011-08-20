@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 23076 2011-06-16 13:00:28Z zhouguoqiang $
+ *      $Id: my.php 23925 2011-08-16 12:03:49Z yexinhao $
  */
 
 define('IN_API', true);

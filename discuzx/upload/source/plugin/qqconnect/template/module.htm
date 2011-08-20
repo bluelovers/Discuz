@@ -449,7 +449,7 @@ $connect_email = str_replace("'", "\'", $_G['qc']['connect_email']);
 		<!--{if $_G['setting']['regconnect']}-->
 			$('reginfo_a').parentNode.className = '';
 			$('{$_G['setting']['reginput']['password']}').parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
-			$('{$_G['setting']['reginput']['password']}').outerHTML += '$js1';
+			$('{$_G['setting']['reginput']['username']}').outerHTML += '$js1';
 			$('{$_G['setting']['reginput']['password']}').required = 0;
 			$('{$_G['setting']['reginput']['password2']}').parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';
 			$('{$_G['setting']['reginput']['password2']}').required = 0;

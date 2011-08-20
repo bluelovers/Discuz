@@ -190,7 +190,16 @@ function in_array(needle, haystack) {
 	return false;
 }
 
-function trim(str) {
+function trim(str, _conf) {
+
+	// bluelovers
+	if (_conf) {
+		if (_conf.nospaceleft) {
+			return (str + '').replace(/(\s+)$/g, '').replace(/^[\t\r\n\ ]+/g, '');
+		}
+	}
+	// bluelovers
+
 	return (str + '').replace(/(\s+)$/g, '').replace(/^\s+/g, '');
 }
 
@@ -1875,6 +1884,11 @@ function codetag(text, brush) {
 
 	DISCUZCODE['num']++;
 	if(typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n').replace(/<(\/|)[A-Za-z].*?>/ig, '');
+
+	// bluelovers
+	text = text.replace(/^\n+|[\s\n\r]+$/g, '');
+	// bluelovers
+
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code' + (brush ? '=' + brush : '') + ']' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }

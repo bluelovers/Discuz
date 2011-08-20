@@ -4,28 +4,29 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_stats.php 22943 2011-06-07 01:54:53Z svn_project_zhangjie $
+ *      $Id: cloud_stats.php 23929 2011-08-17 02:33:35Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'summary')) ? $_G['gp_anchor'] : 'base';
+$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'summary')) ? $_G['gp_anchor'] : 'summary';
 $current = array($_G['gp_anchor'] => 1);
 
 $statsnav = array();
-$statsnav[0] = array('cloud_stats_setting', 'cloud&operation=stats', $current['base']);
-$statsnav[1] = array('cloud_stats_summary', 'cloud&operation=stats&anchor=summary', $current['summary']);
+$statsnav[0] = array('cloud_stats_summary', 'cloud&operation=stats&anchor=summary', $current['summary']);
+$statsnav[1] = array('cloud_stats_setting', 'cloud&operation=stats&anchor=base', $current['base']);
 
 if(!$_G['inajax']) {
 	cpheader();
-	shownav('navcloud', 'cloud_stats');
-	showsubmenu('cloud_stats', $statsnav);
 }
 
 if($_G['gp_anchor'] == 'base') {
 
 	if(!submitcheck('settingsubmit')) {
+
+		shownav('navcloud', 'cloud_stats');
+		showsubmenu('cloud_stats', $statsnav);
 
 		showtips('cloud_stats_tips');
 		showformheader('cloud&edit=yes');
@@ -33,6 +34,9 @@ if($_G['gp_anchor'] == 'base') {
 		showtableheader();
 
 		$myicon = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey = 'cloud_staticon'");
+		if ($myicon === false) {
+			$myicon = 9;
+		}
 
 		$checkicon[$myicon] = ' checked';
 		$icons = '<table style="margin-bottom: 3px; margin-top:3px;"><tr><td>';
@@ -68,8 +72,11 @@ if($_G['gp_anchor'] == 'base') {
 
 } elseif($_G['gp_anchor'] == 'summary') {
 
+	shownav('navcloud', 'cloud_stats');
+	showsubmenu('cloud_stats', $statsnav);
+
 	$statsDomain = 'http://stats.discuz.qq.com';
-	$signUrl = generateSiteSignUrl();
+	$signUrl = generateSiteSignUrl(array('v' => 2));
 
 	headerLocation($statsDomain.'/statsSummary/?'.$signUrl);
 }

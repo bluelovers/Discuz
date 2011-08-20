@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_connect.php 22914 2011-05-31 03:35:49Z zhouguoqiang $
+ *      $Id: function_connect.php 23925 2011-08-16 12:03:49Z yexinhao $
  */
 
 require_once libfile('function/cloud');

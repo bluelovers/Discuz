@@ -475,6 +475,16 @@ function safariSel(e) {
 }
 
 function getEditorContents() {
+
+	// bluelovers
+	for(i in EXTRAFUNC['hooks']['getEditorContents']) {
+		try {
+			var _func = EXTRAFUNC['hooks']['getEditorContents'][i];
+			_func(editdoc);
+		} catch(e) {}
+	}
+	// bluelovers
+
 	return wysiwyg ? editdoc.body.innerHTML : editdoc.value;
 }
 

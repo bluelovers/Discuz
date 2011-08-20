@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 23269 2011-06-29 04:25:55Z cnteacher $
+ *      $Id: config_global_default.php 23921 2011-08-16 09:18:28Z cnteacher $
  */
 
 $_config = array();
@@ -135,10 +135,10 @@ $_config['security']['attackevasive']		= 0;		// CC 攻擊防禦 1|2|4|8
 
 $_config['security']['querysafe']['status']	= 1;		// 是否開啟SQL安全檢測，可自動預防SQL注入攻擊
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
-$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall');
+$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
-$_config['security']['querysafe']['afullnote']	= 1;
+$_config['security']['querysafe']['afullnote']	= 0;
 
 $_config['admincp']['founder']			= '1';		// 站點創始人：擁有站點管理後台的最高權限，每個站點可以設置 1名或多名創始人
 								// 可以使用uid，也可以使用用戶名；多個創始人之間請使用逗號「,」分開;
