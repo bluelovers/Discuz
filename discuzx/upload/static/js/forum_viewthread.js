@@ -519,8 +519,8 @@ function lazyload(className) {
 		};
 
 		jQuery(window)
-			.unbind('scroll.lazyload')
-			.bind('scroll.lazyload', this.showImage)
+			.unbind('scroll.lazyload resize.lazyload')
+			.bind('scroll.lazyload resize.lazyload', this.showImage)
 		;
 		jQuery([window, document])
 			.unbind('load.lazyload')
