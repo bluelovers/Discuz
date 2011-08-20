@@ -443,7 +443,70 @@ function lazyload(className) {
 	lazyload.className = className;
 
 	// bluelovers
+	if (typeof jQuery != 'undefined') {
+		this.showImage = function() {
+			jQuery('img[file][lazyloaded!="true"]:visible').each(function(index, elem){
+				var _this = jQuery(this);
 
+					/*
+					jQuery.log([
+							'lazyload',
+							index,
+							_this.offset(),
+							_this.height(),
+							_this.position(),
+							jQuery(window).scrollTop() + jQuery(window).height(),
+							jQuery(window).scrollTop(),
+							jQuery(window).height(),
+							this,
+							_this.attr('file'),
+						]);
+					*/
+
+				if (
+					!_this.attr('lazyloaded')
+					&& jQuery(window).scrollTop() < _this.offset().top + _this.height()
+					&& (jQuery(window).scrollTop() + jQuery(window).height()) > _this.offset().top
+				) {
+
+					_this
+						.attr({
+							'lazyloaded' : true,
+						})
+					;
+
+					if (_this.attr('file') != _this.attr('src')) {
+
+						/*
+						jQuery.log([
+							'lazyload',
+							index,
+							true,
+						]);
+						*/
+
+						_this
+							.attr({
+								'src' : _this.attr('file'),
+							})
+						;
+					}
+
+				}
+			});
+		};
+
+		jQuery(window)
+			.unbind('scroll.lazyload')
+			.bind('scroll.lazyload', this.showImage)
+		;
+		jQuery([window, document])
+			.unbind('load.lazyload')
+			.bind('load.lazyload', this.showImage)
+		;
+
+		return this;
+	}
 	// bluelovers
 
 	this.getOffset = function (el, isLeft) {
