@@ -475,6 +475,8 @@ function lazyload(className) {
 					&& _w_h > _i_t
 				) {
 
+					if (_this.parents('ignore_js_op').size()) _i_t = _this.parents('ignore_js_op').offset().top;
+
 					if (_i_t < _o_t2) _o_t2 = _i_t;
 
 					_this
