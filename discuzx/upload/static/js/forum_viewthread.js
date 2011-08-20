@@ -441,6 +441,96 @@ function connect_get_thread() {
 function lazyload(className) {
 	var obj = this;
 	lazyload.className = className;
+
+	// bluelovers
+	if (typeof jQuery != 'undefined') {
+		this.showImage = function() {
+			var _o_t = jQuery(window).scrollTop();
+			var _o_t2 = _o_t;
+			var _w_h = _o_t + jQuery(window).height();
+
+			jQuery('img[file][lazyloaded!="true"]:visible').each(function(index, elem){
+				var _this = jQuery(this);
+
+					/*
+					jQuery.log([
+							'lazyload',
+							index,
+							_this.offset(),
+							_this.height(),
+							_this.position(),
+							jQuery(window).scrollTop() + jQuery(window).height(),
+							jQuery(window).scrollTop(),
+							jQuery(window).height(),
+							this,
+							_this.attr('file'),
+						]);
+					*/
+
+				var _i_t = _this.offset().top;
+
+				if (
+					!_this.attr('lazyloaded')
+					&& _o_t < _i_t + _this.height()
+					&& _w_h > _i_t
+				) {
+
+					if (_this.parents('ignore_js_op').size()) _i_t = _this.parents('ignore_js_op').offset().top;
+
+					if (_i_t < _o_t2) _o_t2 = _i_t;
+
+					_this
+						.attr({
+							'lazyloaded' : true,
+						})
+					;
+
+					if (_this.attr('file') != _this.attr('src')) {
+
+						/*
+						jQuery.log([
+							'lazyload',
+							index,
+							true,
+						]);
+						*/
+
+						_this
+							.attr({
+								'src' : _this.attr('file'),
+							})
+						;
+					}
+
+				}
+			});
+
+			/*
+			jQuery.log([
+				_o_t,
+				_o_t2,
+				jQuery(window).scrollTop()
+			]);
+			*/
+
+			if (_o_t2 < _o_t) {
+				jQuery(window).scrollTop(_o_t2);
+			}
+		};
+
+		jQuery(window)
+			.unbind('scroll.lazyload resize.lazyload')
+			.bind('scroll.lazyload resize.lazyload', this.showImage)
+		;
+		jQuery([window, document])
+			.unbind('load.lazyload')
+			.bind('load.lazyload', this.showImage)
+		;
+
+		return this;
+	}
+	// bluelovers
+
 	this.getOffset = function (el, isLeft) {
 		var  retValue  = 0 ;
 		while  (el != null ) {

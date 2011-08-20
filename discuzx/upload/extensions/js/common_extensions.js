@@ -419,7 +419,9 @@
 		});
 	};
 
+	/*
 	$(window).resize(_lazyload);
+	*/
 
 	$(document).ready(function(){
 
@@ -484,7 +486,6 @@
 			}
 		});
 
-		// 因不明原因的 BUG 只好採用如此複雜的 selector
 		var bbcode_imgs = jQuery('body.pg_viewthread .t_f img.bbcode_img');
 		if (bbcode_imgs.length > 0) {
 
