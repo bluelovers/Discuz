@@ -419,7 +419,9 @@
 		});
 	};
 
+	/*
 	$(window).resize(_lazyload);
+	*/
 
 	$(document).ready(function(){
 
