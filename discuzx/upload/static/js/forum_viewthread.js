@@ -445,6 +445,10 @@ function lazyload(className) {
 	// bluelovers
 	if (typeof jQuery != 'undefined') {
 		this.showImage = function() {
+			var _o_t = jQuery(window).scrollTop();
+			var _o_t2 = _o_t;
+			var _w_h = _o_t + jQuery(window).height();
+
 			jQuery('img[file][lazyloaded!="true"]:visible').each(function(index, elem){
 				var _this = jQuery(this);
 
@@ -463,11 +467,15 @@ function lazyload(className) {
 						]);
 					*/
 
+				var _i_t = _this.offset().top;
+
 				if (
 					!_this.attr('lazyloaded')
-					&& jQuery(window).scrollTop() < _this.offset().top + _this.height()
-					&& (jQuery(window).scrollTop() + jQuery(window).height()) > _this.offset().top
+					&& _o_t < _i_t + _this.height()
+					&& _w_h > _i_t
 				) {
+
+					if (_i_t < _o_t2) _o_t2 = _i_t;
 
 					_this
 						.attr({
@@ -494,6 +502,18 @@ function lazyload(className) {
 
 				}
 			});
+
+			/*
+			jQuery.log([
+				_o_t,
+				_o_t2,
+				jQuery(window).scrollTop()
+			]);
+			*/
+
+			if (_o_t2 < _o_t) {
+				jQuery(window).scrollTop(_o_t2);
+			}
 		};
 
 		jQuery(window)
