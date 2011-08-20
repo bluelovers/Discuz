@@ -441,6 +441,11 @@ function connect_get_thread() {
 function lazyload(className) {
 	var obj = this;
 	lazyload.className = className;
+
+	// bluelovers
+
+	// bluelovers
+
 	this.getOffset = function (el, isLeft) {
 		var  retValue  = 0 ;
 		while  (el != null ) {
