@@ -70,10 +70,10 @@ while($thread = DB::fetch($query)) {
 		reset($postlist);
 		$post = current($postlist);
 
-		$data_author = array(
+		$data_author = daddslashes(array(
 			'username' => $query_author['username'],
 			'uid' => $query_author['uid'],
-		);
+		));
 
 		DB::update('forum_thread', array(
 			'dateline' => $lastpost,
