@@ -414,3 +414,12 @@ fieldset {
 .aedit:hover{
 	background-position:-34px 0;
 }
+
+/* 修正高度使高度符合登入後的 textarea 高度 */
+#fastposteditor .tedt .pt {
+	min-height: 120px;
+}
+#fastposteditor .tedt div.pt {
+	line-height: 120px;
+}
+
