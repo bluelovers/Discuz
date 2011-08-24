@@ -53,6 +53,8 @@ function debugmessage($ajax = 0) {
 		$m = 'Memory usage <s>'.$m.'</s> bytes'.($mt ? ', peak <s>'.$mt.'</s> bytes' : '').' / ';
 	}
 	global $_G;
+	$debugfile = $_G['adminid'] == 1 ? '_debugadmin.php' : '_debug.php';
+	$akey = md5(random(10));
 	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || !empty($_G['inajax'])) {
 		return;
 	}
