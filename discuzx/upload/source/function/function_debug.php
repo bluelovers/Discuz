@@ -101,6 +101,14 @@ function debugmessage($ajax = 0) {
 		}
 		$sqldebug .= '</table>';
 	}
+	$ajaxhtml = 'data/'.$debugfile.'_ajax.php';
+	if($ajax) {
+		$idk = substr(md5($_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING']), 0, 4);
+		$sqldebug = '<b style="cursor:pointer" onclick="document.getElementById(\''.$idk.'\').style.display=document.getElementById(\''.$idk.'\').style.display == \'\' ? \'none\' : \'\'">Queries: </b> '.$queries.' ('.$_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'].')<ol id="'.$idk.'" style="display:none">'.$sqldebug.'</ol><br>';
+		file_put_contents(DISCUZ_ROOT.'./'.$ajaxhtml, $sqldebug, FILE_APPEND);
+		return;
+	}
+	file_put_contents(DISCUZ_ROOT.'./'.$ajaxhtml, '<?php if(empty($_GET[\'k\']) || $_GET[\'k\'] != \''.$akey.'\') { exit; } ?><style>body,table { font-size:12px; }table { width:90%;border:1px solid gray; }</style><a href="javascript:;" onclick="location.href=location.href">Refresh</a><br />');
 
 	require_once libfile('function/cache');
 
