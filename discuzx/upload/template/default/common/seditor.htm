@@ -21,7 +21,11 @@
 	<!--{if in_array('smilies', $seditor[1])}-->
 		<a href="javascript:;" class="fsml" id="{$seditor[0]}sml"{if empty($seditor[2])} onclick="showMenu({'ctrlid':this.id,'evt':'click','layer':2});return false;"{/if}>Smilies</a>
 		<!--{if empty($seditor[2])}-->
-			<script type="text/javascript" reload="1">smilies_show('{$seditor[0]}smiliesdiv', $_G['setting']['smcols'], '$seditor[0]');</script>
+			<script type="text/javascript" reload="1">
+			jQuery('#{$seditor[0]}form').hover(function(){
+				smilies_show('{$seditor[0]}smiliesdiv', $_G['setting']['smcols'], '$seditor[0]');
+			});
+			</script>
 		<!--{/if}-->
 	<!--{/if}-->
 	$seditor[3]
