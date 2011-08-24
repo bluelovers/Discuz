@@ -283,9 +283,16 @@ EOF;
 
 		$debug .= '<li>'.$fn.'</li>';
 	}
-	$debug .= '</ol></div><div id="__debug_c_4" style="display:none">'.
+	$debug .= '<ol></div><div id="__debug_c_5" style="display:none"><ol>';
+	foreach($_COOKIE as $k => $v) {
+		if(strexists($k, $_G['config']['cookie']['cookiepre'])) {
+			$k = '<font color=blue>'.$k.'</font>';
+		}
+		$debug .= "<li><br />['$k'] => ".htmlspecialchars($v)."</li>";
+	}
+	$debug .= '</ol></div><div id="__debug_c_6" style="display:none">'.
 		'<div id="__debug_c_4_nav"><a href="#S_config">Nav:<br />
-			<a href="#top">#top</a></a><br />
+			<a href="#top">#top</a><br />
 			<a href="#S_config">$_G[\'config\']</a><br />
 			<a href="#S_setting">$_G[\'setting\']</a><br />
 			<a href="#S_member">$_G[\'member\']</a><br />
@@ -294,7 +301,7 @@ EOF;
 			<a href="#S_style">$_G[\'style\']</a><br />
 			<a href="#S_cache">$_G[\'cache\']</a><br />
 			</div>'.
-		'<ol><a name="top"></a>'.$_GS.$_GA.'</ol></div></body></html><? @unlink(\'_debug.php\'); ?>';
+		'<ol><a name="top"></a>'.$_GS.$_GA.'</ol></div></body></html>';
 	$fn = 'data/_debug.php';
 	file_put_contents(DISCUZ_ROOT.'./'.$fn, $debug);
 	echo '<iframe src="'.$_G[siteurl].$fn.'" name="_debug_iframe" id="_debug_iframe" style="border-top:1px solid gray;overflow-x:hidden;overflow-y:auto" width="100%" height="40" frameborder="0"></iframe><div id="_debug_div"></div><iframe name="_debug_initframe" style="display:none" onload="if(this.contentWindow.document.body.innerHTML) location.href=location.href"></iframe></script>';
