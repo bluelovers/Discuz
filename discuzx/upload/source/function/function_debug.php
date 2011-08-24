@@ -213,6 +213,13 @@ EOF;
 		}
 	}
 	$modid = $_G['basescript'].(!defined('IN_ADMINCP') ? '::'.CURMODULE : '');
+	$svn = '';
+	if(file_exists(DISCUZ_ROOT.'./.svn/entries')) {
+		$svn = @file(DISCUZ_ROOT.'./.svn/entries');
+		$time = $svn[9];
+		preg_match('/([\d\-]+)T([\d:]+)/', $time, $a);
+		$svn = ' / SVN '.$svn[10].' by '.$svn[11].' on '.dgmdate(strtotime($a[1].' '.$a[2]) + $_G['setting']['timeoffset'] * 3600);
+	}
 	$db = & DB::object();
 	$queries = count($db->sqldebug);
 	$debug .= '
