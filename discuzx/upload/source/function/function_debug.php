@@ -186,14 +186,17 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 
 	$debug .= "<script>
 	function switchTab(prefix, current, total, activeclass) {
-	activeclass = !activeclass ? 'a' : activeclass;
-	for(var i = 1; i <= total;i++) {
-		var classname = ' '+$(prefix + '_' + i).className+' ';
-		$(prefix + '_' + i).className = classname.replace(' '+activeclass+' ','').substr(1);
-		$(prefix + '_c_' + i).style.display = 'none';
-	}
-	$(prefix + '_' + current).className = $(prefix + '_' + current).className + ' '+activeclass;
-	$(prefix + '_c_' + current).style.display = '';
+		activeclass = !activeclass ? 'a' : activeclass;
+		jQuery('[id^=\"' + prefix + '_\"]')
+			.removeClass(activeclass)
+			.filter('#' + prefix + '_' + current)
+			.addClass(activeclass)
+		;
+		jQuery('[id^=\"' + prefix + '_c_\"]')
+			.hide()
+			.filter('#' + prefix + '_c_' + current)
+			.show()
+		;
 	}
 	</script>";
 
