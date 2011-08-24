@@ -199,14 +199,16 @@ top.$('_debug_div').innerHTML = s;
 EOF;
 
 	$_GS = $_GA = '';
-	if(1 || $_G['adminid'] == 1) {
+	if($_G['adminid'] == 1) {
 		foreach($_G as $k => $v) {
-			if(is_array($v) && $k != 'lang') {
-				$_GA .= "<li><a name=\"S_$k\"></a><br />['$k'] => ".nl2br(str_replace(' ','&nbsp;', htmlspecialchars(print_r($v, true)))).'</li>';
+			if(is_array($v)) {
+				if($k != 'lang') {
+					$_GA .= "<li><a name=\"S_$k\"></a><br />['$k'] => ".nl2br(str_replace(' ','&nbsp;', htmlspecialchars(print_r($v, true)))).'</li>';
+				}
 			} elseif(is_object($v)) {
-				$_GA .= "<li>['$k'] => <i>object of ".get_class($v)."</i></li>";
+				$_GA .= "<li><br />['$k'] => <i>object of ".get_class($v)."</i></li>";
 			} else {
-				$_GS .= "<li>['$k'] => ".(is_array($v) ? nl2br(str_replace(' ','&nbsp;', htmlspecialchars(arrayeval($v)))) : htmlspecialchars($v))."</li>";
+				$_GS .= "<li><br />['$k'] => ".htmlspecialchars($v)."</li>";
 			}
 		}
 	}
