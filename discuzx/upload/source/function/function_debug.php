@@ -177,7 +177,7 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 
 	$debug .= "<script src='static/js/common.js?".VERHASH."'></script>";
 
-	$debug .= "<script src='../static/js/common.js?".VERHASH."'></script><script>
+	$debug .= "<script>
 	function switchTab(prefix, current, total, activeclass) {
 	activeclass = !activeclass ? 'a' : activeclass;
 	for(var i = 1; i <= total;i++) {
