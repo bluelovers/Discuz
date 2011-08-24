@@ -58,6 +58,11 @@ function debugmessage($ajax = 0) {
 	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || defined('IN_ARCHIVER') || defined('IN_MOBILE')) {
 		return;
 	}
+	$phpinfok = 'I';
+	$viewcachek = 'C';
+	$mysqlplek = 'P';
+	$includes = get_included_files();
+	require_once DISCUZ_ROOT.'./source/discuz_version.php';
 
 	require_once libfile('function/cache');
 
