@@ -184,7 +184,7 @@ class discuz_cron
 		// bluelovers
 		// 當 $minutenew = -1 時，代表隨機指定某分鐘
 		if (count($nextminutes) == 1 && $nextminutes[0] == -1) {
-			return min(59, rand(1, 59));
+			$nextminutes[0] = min(59, rand(1, 59));
 		}
 		// bluelovers
 
