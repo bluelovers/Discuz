@@ -123,10 +123,12 @@ while($thread = DB::fetch($query)) {
 				fid IN ($fups)
 		");
 
+		/*
 		dexit(array(
 			'tid' => $thread['tid'],
 			'pid' => $post['pid'],
 		));
+		*/
 	}
 }
 
