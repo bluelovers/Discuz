@@ -21,7 +21,7 @@ function _smilies_show(id, smcols, seditorkey) {
 		var scriptNode = document.createElement("script");
 		scriptNode.type = "text/javascript";
 		scriptNode.charset = charset ? charset : (BROWSER.firefox ? document.characterSet : document.charset);
-		scriptNode.src = 'data/cache/common_smilies_var.js?' + VERHASH;
+		scriptNode.src = 'data/cache/common_smilies_var.js' + VERHASH_GZIP_JS + '?' + VERHASH;
 		$('append_parent').appendChild(scriptNode);
 		if(BROWSER.ie) {
 			scriptNode.onreadystatechange = function() {
