@@ -1305,6 +1305,13 @@ var rowtypedata = [
 					}
 					$minutenew = array_slice(array_unique($minutenew), 0, 12);
 					$minutenew = implode("\t", $minutenew);
+
+				// bluelovers
+				} elseif ($_G['gp_minutenew'] == -1) {
+					// 當 $minutenew = -1 時，代表隨機指定某分鐘
+					$minutenew = -1;
+				// bluelovers
+
 				} else {
 					$minutenew = intval($_G['gp_minutenew']);
 					$minutenew = $minutenew >= 0 && $minutenew < 60 ? $minutenew : '';
