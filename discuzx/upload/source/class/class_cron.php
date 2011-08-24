@@ -122,6 +122,19 @@ class discuz_cron
 		$minute = $minute == -2 ? gmdate('i', TIMESTAMP + $_G['setting']['timeoffset'] * 3600) : $minute;
 
 		$nexttime = array();
+
+		// bluelovers
+		// 當 $minutenew = -1 時，代表隨機指定某分鐘
+		if ($cron['minute'] == -1) {
+			if ($cron['hour'] == -1) {
+				$_h = gmdate('H', TIMESTAMP + $_G['setting']['timeoffset'] * 3600);
+				$cron['hour'] = $_h + max(0, (23 - $_h) * rand(1));
+			}
+
+			$cron['minute'] = min(59, 59 * rand(1));
+		}
+		// bluelovers
+
 		if($cron['hour'] == -1 && !$cron['minute']) {
 			$nexttime['hour'] = $hour;
 			$nexttime['minute'] = $minute + 1;
