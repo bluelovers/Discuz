@@ -9,8 +9,6 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-include_once libfile('function/post');
-
 /*
 SELECT *
 FROM `pre_forum_thread`
@@ -103,7 +101,13 @@ while($thread = DB::fetch($query)) {
 			'pid' => $post['pid'],
 		));
 
-		updateforumcount($thread['fid']);
+		DB::query("UPDATE ".DB::table('forum_forum')."
+			SET
+				lastpost='$thread[tid]\t$thread[subject]\t{$lastpost}\t{$data_author[username]}'
+				, todayposts = todayposts+1
+			WHERE
+				fid='$thread[fid]'
+		");
 
 		dexit(array(
 			'tid' => $thread['tid'],
