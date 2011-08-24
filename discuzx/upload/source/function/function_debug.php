@@ -55,7 +55,7 @@ function debugmessage($ajax = 0) {
 	global $_G;
 	$debugfile = $_G['adminid'] == 1 ? '_debugadmin.php' : '_debug.php';
 	$akey = md5(random(10));
-	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || !empty($_G['inajax'])) {
+	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || defined('IN_ARCHIVER') || defined('IN_MOBILE')) {
 		return;
 	}
 
