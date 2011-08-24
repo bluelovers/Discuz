@@ -194,10 +194,16 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 		;
 		jQuery('[id^=\"' + prefix + '_c_\"]')
 			.hide()
-			.filter('#' + prefix + '_c_' + current)
+			.filter('[id^=\"' + prefix + '_c_' + current +'\"]')
 			.show()
 		;
 	}
+
+	jQuery(function(){
+		jQuery('a[id^=\"__debug_\"], #__debug_c_6_nav a').click(function(e){
+			e.preventDefault();
+		});
+	});
 	</script>";
 
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
@@ -243,18 +249,18 @@ EOF;
 		#__debugbar_s a { color:blue; }
 		#__debugbar_s a.a { border-bottom: 1px dotted gray; }
 		#__debug_c_1 ol { margin-left: 20px; padding: 0px; }
-		#__debug_c_4_nav { background:#FFF; border:1px solid black; border-top:none; padding:5px; position: fixed; top:0px; right:0px }
+		#__debug_c_6_nav { background:#FFF; border:1px solid black; border-top:none; padding:5px; position: fixed; top:0px; right:0px }
 		</style></head><body>'.
 		'<div id="__debugbarwrap__">'.
 		'<div id="__debugbar_s">Discuz! '.DISCUZ_VERSION.' '.DISCUZ_RELEASE.''.$svn.' / php:'.PHP_VERSION.' <span id="__debug_b"></span><br />'.
 		$m.'Queries <s>'.$queries.$sqlw.($_G['debuginfo']['time'] ? ' in '.$_G['debuginfo']['time'].'s' : '').'</s> / Include files <s>'.(count($includes) - 1).'</s> / ModID <s>'.$modid.'</s>'.
 		'<br /><a name="debugbar" href="javascript:;" onclick="parent.scrollTo(0,0)" style="float:right">[TOP]&nbsp;&nbsp;&nbsp;</a>'.
-		'<img src="static/image/common/arw_r.gif" /><a id="__debug_1" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 1, '.$max.')">Queries</a>'.
-		'<img src="static/image/common/arw_r.gif" /><a id="__debug_4" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 4, '.$max.');sqldebug_ajax.location.href = sqldebug_ajax.location.href;">Ajax Queries</a>'.
-		'<img src="static/image/common/arw_r.gif" /><a id="__debug_2" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 2, '.$max.')">Envionment</a>'.
-		'<img src="static/image/common/arw_r.gif" /><a id="__debug_3" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 3, '.$max.')">Include Files</a>'.
-		'<img src="static/image/common/arw_r.gif" /><a id="__debug_5" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 5, '.$max.')">$_COOKIE</a>'.
-		($_G['adminid'] == 1 ? '<img src="../static/image/common/arw_r.gif" /><a id="__debug_6" href="#debugbar" onclick="doane(event);parent.$(\'_debug_iframe\').height=\'1000px\';switchTab(\'__debug\', 6, 6)">$_G</a>' : '').
+		'<img src="static/image/common/arw_r.gif" /><a id="__debug_1" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 1, '.$max.')">Queries</a>'.
+		'<img src="static/image/common/arw_r.gif" /><a id="__debug_4" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 4, '.$max.');sqldebug_ajax.location.href = sqldebug_ajax.location.href;">Ajax Queries</a>'.
+		'<img src="static/image/common/arw_r.gif" /><a id="__debug_2" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 2, '.$max.')">Envionment</a>'.
+		'<img src="static/image/common/arw_r.gif" /><a id="__debug_3" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 3, '.$max.')">Include Files</a>'.
+		'<img src="static/image/common/arw_r.gif" /><a id="__debug_5" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 5, '.$max.')">$_COOKIE</a>'.
+		($_G['adminid'] == 1 ? '<img src="../static/image/common/arw_r.gif" /><a id="__debug_6" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'1000px\';switchTab(\'__debug\', 6, 6)">$_G</a>' : '').
 		($_G['adminid'] == 1 ?
 			'<img src="../static/image/common/arw_r.gif" /><a href="data/'.$debugfile.'?k='.$akey.'&'.$phpinfok.'" target="_blank">phpinfo()</a>'.
 			'<img src="../static/image/common/arw_r.gif" /><a href="data/'.$debugfile.'?k='.$akey.'&'.$mysqlplek.'" target="_blank">MySQL Processlist</a>'.
@@ -301,7 +307,7 @@ EOF;
 		$debug .= "<li><br />['$k'] => ".htmlspecialchars($v)."</li>";
 	}
 	$debug .= '</ol></div><div id="__debug_c_6" style="display:none">'.
-		'<div id="__debug_c_4_nav"><a href="#S_config">Nav:<br />
+		'<div id="__debug_c_6_nav"><a href="#S_config">Nav:<br />
 			<a href="#top">#top</a><br />
 			<a href="#S_config">$_G[\'config\']</a><br />
 			<a href="#S_setting">$_G[\'setting\']</a><br />
