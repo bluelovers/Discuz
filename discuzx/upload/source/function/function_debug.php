@@ -64,6 +64,44 @@ function debugmessage($ajax = 0) {
 	$includes = get_included_files();
 	require_once DISCUZ_ROOT.'./source/discuz_version.php';
 
+	$sqldebug = '';
+	$sqlw = array();
+	$db = & DB::object();
+	$queries = count($db->sqldebug);
+	foreach ($db->sqldebug as $string) {
+		$sqldebug .= '<li><br />'.$string[1].'s &bull; '.nl2br(htmlspecialchars($string[0])).'<br /></li>';
+		if(preg_match('/^SELECT /', $string[0])) {
+			$query = DB::query("EXPLAIN ".$string[0]);
+			$i = 0;
+			$sqldebug .= '<table style="border-bottom:none">';
+			while($row = DB::fetch($query)) {
+				if(!$i) {
+					$sqldebug .= '<tr style="border-bottom:1px dotted gray"><td>&nbsp;'.implode('&nbsp;</td><td>&nbsp;', array_keys($row)).'&nbsp;</td></tr>';
+					$i++;
+				}
+				if(strexists($row['Extra'], 'Using filesort')) {
+					$sqlw['Using filesort']++;
+					$row['Extra'] = str_replace('Using filesort', '<font color=red>Using filesort</font>', $row['Extra']);
+				}
+				if(strexists($row['Extra'], 'Using temporary')) {
+					$sqlw['Using temporary']++;
+					$row['Extra'] = str_replace('Using temporary', '<font color=red>Using temporary</font>', $row['Extra']);
+				}
+				$sqldebug .= '<tr><td>&nbsp;'.implode('&nbsp;</td><td>&nbsp;', $row).'&nbsp;</td></tr>';
+			}
+			$sqldebug .= '</table>';
+		}
+		$sqldebug .= '<table><tr style="border-bottom:1px dotted gray"><td width="270">File</td><td width="80">Line</td><td>Function</td></tr>';
+		foreach($string[2] as $error) {
+			$error['file'] = str_replace(DISCUZ_ROOT, '', $error['file']);
+			$error['class'] = isset($error['class']) ? $error['class'] : '';
+			$error['type'] = isset($error['type']) ? $error['type'] : '';
+			$error['function'] = isset($error['function']) ? $error['function'] : '';
+			$sqldebug .= "<tr><td>$error[file]</td><td>$error[line]</td><td>$error[class]$error[type]$error[function]()</td></tr>";
+		}
+		$sqldebug .= '</table>';
+	}
+
 	require_once libfile('function/cache');
 
 	$debug = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>';
