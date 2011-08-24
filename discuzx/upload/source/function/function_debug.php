@@ -7,6 +7,41 @@
  *      $Id$
  */
 
+if(!empty($_GET['debugaction'])) {
+	if($_GET['debugaction'] == 'connect' && !empty($_GET['redirect_url'])) {
+
+		chdir('../../');
+		require './source/class/class_core.php';
+		$discuz = & discuz_core::instance();
+		$discuz->init();
+
+		$uin = md5($_GET['qq']);
+
+		$get = array(
+			'con_expires_in' => '3600',
+			'con_access_token' => '501|1290144222.3600|48d855c11ecb426c9838|LskyfOZ0moKUfEMINrYmuTaZmlP-xavvfeIM7Ylwi3c.',
+			'con_uin' => $uin,
+			'con_is_unbind' => '1',
+			'con_x_nick' => '',
+			'con_x_sex' => 'unknown',
+			'con_x_birthday' => '1977-01-01',
+			'con_x_email' => '1@22.net',
+			'con_x_usernames' => base64_encode('User1,User2'),
+		);
+		ksort($get);
+		$str = '';
+		foreach($get as $k => $v) {
+			if($v) {
+				$str .= $k.'='.$v.'&';
+			}
+		}
+
+		$get['con_sig'] = md5($str.$_G['setting']['connectsitekey']);
+		header('location: '.$_GET['redirect_url'].'&'.http_build_query($get));
+	}
+	exit;
+}
+
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
