@@ -225,50 +225,42 @@ EOF;
 		<style>#__debugbarwrap__ { line-height:10px; text-align:left;font:12px Monaco,Consolas,"Lucida Console","Courier New",serif;}
 		body { font-size:12px; }
 		a, a:hover { color: black;text-decoration:none; }
-		#__debugbar__ { padding: 10px; }
+		s { text-decoration:none;color: red; }
+		img { vertical-align:middle; }
+		#__debugbar__ { padding: 80px 1px 0 1px;  }
 		#__debugbar__ table { width:90%;border:1px solid gray; }
-		#__debugbar_s { position: fixed; top:0px; left:0px; }
+		#__debugbar_s { border-bottom:1px dotted #EFEFEF;background:#FFF;width:100%;font-size:11px;position: fixed; top:0px; left:5px; }
+		#__debugbar_s a { color:blue; }
 		#__debugbar_s a.a { border-bottom: 1px dotted gray; }
 		#__debug_c_1 ol { margin-left: 20px; padding: 0px; }
 		#__debug_c_4_nav { background:#FFF; border:1px solid black; border-top:none; padding:5px; position: fixed; top:0px; right:0px }
 		</style></head><body>'.
 		'<div id="__debugbarwrap__">'.
-		'<div id="__debugbar_s">DEBUG MESSAGE ::&nbsp;&nbsp;'.
-		'<a id="__debug_1" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 1, 4)">[<b>QUERY:</b> '.$queries.']</a>&nbsp;'.
-		'<a id="__debug_2" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 2, 4)">[<b>EVENT:</b> php:'.PHP_VERSION.' <span id="__debug_b"></span>]</a>&nbsp;'.
-		'<a id="__debug_3" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 3, 4)">[<b>INCLUDE:</b> '.$modid.']</a>&nbsp;'.
-		'<a id="__debug_4" href="javascript:;" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 4, 4)">[<b>$_G</b>]</a>&nbsp;'.
-		($_G['adminid'] == 1 ? '&nbsp;&nbsp;<a href="misc.php?mod=initsys" target="_debug_initframe">[<b>Update Cache</b>]</a>' : '').
+		'<div id="__debugbar_s">Discuz! '.DISCUZ_VERSION.' '.DISCUZ_RELEASE.''.$svn.' / php:'.PHP_VERSION.' <span id="__debug_b"></span><br />'.
+		$m.'Queries <s>'.$queries.$sqlw.($_G['debuginfo']['time'] ? ' in '.$_G['debuginfo']['time'].'s' : '').'</s> / Include files <s>'.(count($includes) - 1).'</s> / ModID <s>'.$modid.'</s>'.
+		'<br /><a name="debugbar" href="javascript:;" onclick="parent.scrollTo(0,0)" style="float:right">[TOP]&nbsp;&nbsp;&nbsp;</a>'.
+		'<img src="../static/image/common/arw_r.gif" /><a id="__debug_1" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 1, '.$max.')">Queries</a>'.
+		'<img src="../static/image/common/arw_r.gif" /><a id="__debug_4" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'800px\';switchTab(\'__debug\', 4, '.$max.');sqldebug_ajax.location.href = sqldebug_ajax.location.href;">Ajax Queries</a>'.
+		'<img src="../static/image/common/arw_r.gif" /><a id="__debug_2" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 2, '.$max.')">Envionment</a>'.
+		'<img src="../static/image/common/arw_r.gif" /><a id="__debug_3" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'500px\';switchTab(\'__debug\', 3, '.$max.')">Include Files</a>'.
+		'<img src="../static/image/common/arw_r.gif" /><a id="__debug_5" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'300px\';switchTab(\'__debug\', 5, '.$max.')">$_COOKIE</a>'.
+		($_G['adminid'] == 1 ? '<img src="../static/image/common/arw_r.gif" /><a id="__debug_6" href="#debugbar" onclick="parent.$(\'_debug_iframe\').height=\'1000px\';switchTab(\'__debug\', 6, 6)">$_G</a>' : '').
+		($_G['adminid'] == 1 ?
+			'<img src="../static/image/common/arw_r.gif" /><a href="'.$debugfile.'?k='.$akey.'&'.$phpinfok.'" target="_blank">phpinfo()</a>'.
+			'<img src="../static/image/common/arw_r.gif" /><a href="'.$debugfile.'?k='.$akey.'&'.$mysqlplek.'" target="_blank">MySQL Processlist</a>'.
+			'<img src="../static/image/common/arw_r.gif" /><a href="'.$debugfile.'?k='.$akey.'&'.$viewcachek.'" target="_blank">View Cache</a>'.
+			'<img src="../static/image/common/arw_r.gif" /><a href="../misc.php?mod=initsys" target="_debug_initframe" onclick="parent.$(\'_debug_initframe\').onload = function () {parent.location.href=parent.location.href;}">Update Cache</a>' : '').
+		'&nbsp;&nbsp;|&nbsp;&nbsp;'.
+		'<img src="../static/image/common/arw_r.gif" /><a href="../install/update.php" target="_blank">update.php</a>'.
+		($_G['setting']['connect']['allow'] ? '<img src="../static/image/common/arw_r.gif" /><a onclick="var _q_ = prompt(\'QQ Number\');if(_q_) {window.open(this.href + \'&qq=\' + _q_);}return false;" href="../../source/function/function_debug.php?debugaction=connect&redirect_url='.rawurlencode($_G['connect']['redirect_url']).'" target="_top">QQ Login</a>' : '').
 		'</div>'.
 		'<div id="__debugbar__" style="clear:both">'.
-		'<div id="__debug_c_1" style="display:none">'.$queries.' queries'.'<ol>';
-	foreach ($db->sqldebug as $string) {
-		$debug .= '<li><br />'.$string[1].'s &bull; '.htmlspecialchars($string[0]).'<br /></li>';
-		if(preg_match('/^SELECT /', $string[0])) {
-			$query = DB::query("EXPLAIN ".$string[0]);
-			$i = 0;
-			$debug .= '<table style="border-bottom:none">';
-			while($row = DB::fetch($query)) {
-				if(!$i) {
-					$debug .= '<tr style="border-bottom:1px dotted gray"><th>&nbsp;'.implode('&nbsp;</th><th>&nbsp;', array_keys($row)).'&nbsp;</th></tr>';
-					$i++;
-				}
-				$debug .= '<tr><th>&nbsp;'.implode('&nbsp;</th><th>&nbsp;', $row).'&nbsp;</th></tr>';
-			}
-			$debug .= '</table>';
-		}
-		$debug .= '<table><tr style="border-bottom:1px dotted gray"><td width="270">File</td><td width="80">Line</td><td>Function</td></tr>';
-		foreach($string[2] as $error) {
-			$error['file'] = str_replace(DISCUZ_ROOT, '', $error['file']);
-			$error['class'] = isset($error['class']) ? $error['class'] : '';
-			$error['type'] = isset($error['type']) ? $error['type'] : '';
-			$error['function'] = isset($error['function']) ? $error['function'] : '';
-			$debug .= "<tr><td>$error[file]</td><td>$error[line]</td><td>$error[class]$error[type]$error[function]()</td></tr>";
-		}
-		$debug .= '</table>';
-	}
-	$debug .= '</ol></div><div id="__debug_c_2" style="display:none">'.PHP_OS.' &bull; PHP '.PHP_VERSION.'<br />'.$_G['clientip'].' &bull; '.$_SERVER['HTTP_USER_AGENT'].'<br /><script>for(BROWSERi in BROWSER) {var __s=BROWSERi+\':\'+BROWSER[BROWSERi]+\' \';$(\'__debug_b\').innerHTML+=BROWSER[BROWSERi]!==0?__s:\'\';document.write(__s);}</script></div>'.
-		'<div id="__debug_c_3" style="display:none">ModID: <b>'.$modid.'</b><ol>';
+		'<div id="__debug_c_1" style="display:none"><b>Queries: </b> '.$queries.'<ol>';
+	$debug .= $sqldebug.'';
+	$debug .= '</ol></div>'.
+		'<div id="__debug_c_4" style="display:none"><iframe id="sqldebug_ajax" name="sqldebug_ajax" src="../'.$ajaxhtml.'?k='.$akey.'" frameborder="0" width="100%" height="800"></iframe></div>'.
+		'<div id="__debug_c_2" style="display:none"><b>SERVER: </b>'.PHP_OS.', '.$_SERVER['SERVER_SOFTWARE'].', '.php_sapi_name().'<br /><b>PHP: </b>'.PHP_VERSION.'<br /><b>MySQL: </b>'.DB::result_first("SELECT VERSION()").'<br /><b>IP: </b>'.$_G['clientip'].'<br /><b>UA: </b>'.$_SERVER['HTTP_USER_AGENT'].'<br /><b>BROWSER.x: </b><script>for(BROWSERi in BROWSER) {var __s=BROWSERi+\':\'+BROWSER[BROWSERi]+\' \';$(\'__debug_b\').innerHTML+=BROWSER[BROWSERi]!==0?__s:\'\';document.write(__s);}</script></div>'.
+		'<div id="__debug_c_3" style="display:none"><ol>';
 
 	$__func = create_function('$fn, $base', '
 		$base = str_replace(array(\'\\\\\', \'//\'), \'/\', $base);
