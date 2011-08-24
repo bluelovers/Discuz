@@ -50,7 +50,23 @@ while($thread = DB::fetch($query)) {
 		$postlist[$post['pid']] = $post;
 	}
 
+	if (count($postlist) == 1) {
+		$lastpost = TIMESTAMP;
 
+		DB::update('forum_thread', array(
+			'dateline' => $lastpost,
+			'lastpost' => $lastpost,
+		), array(
+			'tid' => $thread['tid'],
+		));
+
+		DB::update('forum_post', array(
+			'dateline' => $lastpost,
+		), array(
+			'tid' => $thread['tid'],
+			'first' => 1,
+		));
+	}
 }
 
 ?>
