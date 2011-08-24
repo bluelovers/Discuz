@@ -220,8 +220,7 @@ EOF;
 		preg_match('/([\d\-]+)T([\d:]+)/', $time, $a);
 		$svn = ' / SVN '.$svn[10].' by '.$svn[11].' on '.dgmdate(strtotime($a[1].' '.$a[2]) + $_G['setting']['timeoffset'] * 3600);
 	}
-	$db = & DB::object();
-	$queries = count($db->sqldebug);
+	$max = $_G['adminid'] == 1 ? 6 : 5;
 	$debug .= '
 		<style>#__debugbarwrap__ { line-height:10px; text-align:left;font:12px Monaco,Consolas,"Lucida Console","Courier New",serif;}
 		body { font-size:12px; }
