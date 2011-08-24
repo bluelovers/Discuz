@@ -9,6 +9,22 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+/*
+SELECT *
+FROM `pre_forum_thread`
+WHERE `dateline` =0
+ORDER BY RAND( )
+LIMIT 1
+*/
+$query = DB::query("SELECT *
+	FROM ".DB::table('forum_thread')."
+	WHERE
+		dateline='0'
+	ORDER BY RAND()
+	LIMIT 1
+");
+while($thread = DB::fetch($query)) {
 
+}
 
 ?>
