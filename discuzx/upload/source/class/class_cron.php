@@ -132,7 +132,11 @@ class discuz_cron
 			}
 
 			$cron['minute'] = min(59, 59 * rand(1));
+
+			debug($cron);
 		}
+
+		debug($cron);
 		// bluelovers
 
 		if($cron['hour'] == -1 && !$cron['minute']) {
@@ -170,6 +174,14 @@ class discuz_cron
 	}
 
 	function nextminute($nextminutes, $minutenow) {
+
+		// bluelovers
+		// 當 $minutenew = -1 時，代表隨機指定某分鐘
+		if (count($nextminutes) == 1 && $nextminutes[0] == -1) {
+			return min(59, 59 * rand(1));
+		}
+		// bluelovers
+
 		foreach($nextminutes as $nextminute) {
 			if($nextminute > $minutenow) {
 				return $nextminute;
