@@ -9,6 +9,12 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+global $_G;
+
+if(!isset($_G['cache']['forums'])) {
+	loadcache('forums');
+}
+
 /*
 SELECT *
 FROM `pre_forum_thread`
@@ -101,12 +107,20 @@ while($thread = DB::fetch($query)) {
 			'pid' => $post['pid'],
 		));
 
+		$fid = $thread['fid'];
+		$fups = array($fid);
+		while($_G['cache']['forums'][$fid]['fup']) {
+			array_push($fups, $_G['cache']['forums'][$fid]['fup']);
+			$fid = $_G['cache']['forums'][$fid]['fup'];
+		}
+		$fups = dimplode($fups);
+
 		DB::query("UPDATE ".DB::table('forum_forum')."
 			SET
 				lastpost='$thread[tid]\t$thread[subject]\t{$lastpost}\t{$data_author[username]}'
 				, todayposts = todayposts+1
 			WHERE
-				fid='$thread[fid]'
+				fid IN ($fups)
 		");
 
 		dexit(array(
