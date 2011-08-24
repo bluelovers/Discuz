@@ -29,8 +29,10 @@ while($thread = DB::fetch($query)) {
 	$lastpost_min = 0;
 	$lastpost_max = max(0, $thread['dateline'], $thread['lastpost']);
 
+	$posttable = getposttablebytid($thread['tid']);
+
 	$query_post = DB::query("SELECT *
-		FROM ".DB::table('forum_post')."
+		FROM ".DB::table($posttable)."
 		WHERE
 			tid = '{$thread[tid]}'
 		ORDER BY
@@ -85,7 +87,7 @@ while($thread = DB::fetch($query)) {
 			'tid' => $thread['tid'],
 		));
 
-		DB::update('forum_post', array(
+		DB::update($posttable, array(
 			'dateline' => $lastpost,
 
 			'authorid' => $data_author['uid'],
