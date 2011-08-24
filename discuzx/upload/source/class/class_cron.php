@@ -138,7 +138,10 @@ class discuz_cron
 				$_h = gmdate('H', TIMESTAMP + $_G['setting']['timeoffset'] * 3600);
 				*/
 				$_h = 0;
-				$cron['hour'] = $_h + max(0, rand(0, (23 - $_h)));
+
+				mt_srand($minute * $hour + $minute + TIMESTAMP + $hour * rand(1, 100));
+
+				$cron['hour'] = $_h + max(0, mt_rand(0, (23 - $_h)));
 			}
 
 			$nexttime['nextday'] = 1;
@@ -184,7 +187,8 @@ class discuz_cron
 		// bluelovers
 		// 當 $minutenew = -1 時，代表隨機指定某分鐘
 		if (count($nextminutes) == 1 && $nextminutes[0] == -1) {
-			$nextminutes[0] = min(59, rand(1, 59));
+			mt_srand($minutenow * mt_rand(1, 1000) + TIMESTAMP);
+			$nextminutes[0] = min(59, mt_rand(1, 59));
 		}
 		// bluelovers
 
