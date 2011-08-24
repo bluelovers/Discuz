@@ -50,21 +50,51 @@ while($thread = DB::fetch($query)) {
 		$postlist[$post['pid']] = $post;
 	}
 
+	$groupid = 18;
+
+	$query_author = DB::fetch_first("
+		SELECT *
+		FROM ".DB::table('common_member')."
+		WHERE
+			`groupid` = '{$groupid}'
+		ORDER BY
+			RAND()
+		LIMIT 1
+	");
+
 	if (count($postlist) == 1) {
 		$lastpost = TIMESTAMP;
+
+		reset($postlist);
+		$post = current($postlist);
+
+		$data_author = array(
+			'username' => $query_author['username'],
+			'uid' => $query_author['uid'],
+		);
 
 		DB::update('forum_thread', array(
 			'dateline' => $lastpost,
 			'lastpost' => $lastpost,
+
+			'authorid' => $data_author['uid'],
+			'author' => $data_author['username'],
+
+			'lastposter' => $data_author['username'],
 		), array(
 			'tid' => $thread['tid'],
 		));
 
 		DB::update('forum_post', array(
 			'dateline' => $lastpost,
+
+			'authorid' => $data_author['uid'],
+			'author' => $data_author['username'],
 		), array(
 			'tid' => $thread['tid'],
 			'first' => 1,
+
+			'pid' => $post['pid']
 		));
 	}
 }
