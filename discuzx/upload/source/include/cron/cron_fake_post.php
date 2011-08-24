@@ -25,6 +25,8 @@ $query = DB::query("SELECT *
 	LIMIT 1
 ");
 while($thread = DB::fetch($query)) {
+	$lastpost_max = max(0, $thread['dateline'], $thread['lastpost']);
+
 	$query_post = DB::query("SELECT *
 		FROM ".DB::table('forum_post')."
 		WHERE
@@ -35,7 +37,7 @@ while($thread = DB::fetch($query)) {
 			, pid ASC
 	");
 	while($post = DB::fetch($query_post)) {
-
+		if ($post['dateline'] > $lastpost_max) $lastpost_max = $post['dateline'];
 	}
 }
 
