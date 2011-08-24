@@ -9,6 +9,8 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+include_once libfile('function/post');
+
 /*
 SELECT *
 FROM `pre_forum_thread`
