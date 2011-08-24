@@ -206,7 +206,10 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 			var _id = _this.attr('href').replace('#', '');
 			_id = jQuery('#' + _id + ', [name=\"' + _id + '\"]').first();
 			if (_id.size()) {
-				jQuery(window).scrollTop(_id.offset().top);
+				jQuery(window).scrollTop(
+					_id.offset().top
+					- parseInt(jQuery('#__debugbar__').css('padding-top'))
+				);
 			}
 		});
 	});
