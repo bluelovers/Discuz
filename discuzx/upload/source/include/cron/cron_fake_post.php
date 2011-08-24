@@ -25,6 +25,7 @@ $query = DB::query("SELECT *
 	LIMIT 1
 ");
 while($thread = DB::fetch($query)) {
+	$lastpost_min = 0;
 	$lastpost_max = max(0, $thread['dateline'], $thread['lastpost']);
 
 	$query_post = DB::query("SELECT *
@@ -37,10 +38,18 @@ while($thread = DB::fetch($query)) {
 			, pid ASC
 	");
 	while($post = DB::fetch($query_post)) {
+		if (
+			($lastpost_min == 0 && $post['dateline'] > 0)
+			|| ($post['dateline'] < $lastpost_min)
+		) {
+			$lastpost_min = $post['dateline'];
+		}
 		if ($post['dateline'] > $lastpost_max) $lastpost_max = $post['dateline'];
 
 		$postlist[$post['pid']] = $post;
 	}
+
+
 }
 
 ?>
