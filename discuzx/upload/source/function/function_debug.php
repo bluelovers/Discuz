@@ -109,6 +109,10 @@ function debugmessage($ajax = 0) {
 		return;
 	}
 	file_put_contents(DISCUZ_ROOT.'./'.$ajaxhtml, '<?php if(empty($_GET[\'k\']) || $_GET[\'k\'] != \''.$akey.'\') { exit; } ?><style>body,table { font-size:12px; }table { width:90%;border:1px solid gray; }</style><a href="javascript:;" onclick="location.href=location.href">Refresh</a><br />');
+	foreach($sqlw as $k => $v) {
+		$sqlw[$k] = $k.': '.$v;
+	}
+	$sqlw = $sqlw ? '<s>('.implode(', ', $sqlw).')</s>' : '';
 
 	require_once libfile('function/cache');
 
