@@ -38,6 +38,8 @@ while($thread = DB::fetch($query)) {
 	");
 	while($post = DB::fetch($query_post)) {
 		if ($post['dateline'] > $lastpost_max) $lastpost_max = $post['dateline'];
+
+		$postlist[$post['pid']] = $post;
 	}
 }
 
