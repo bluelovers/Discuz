@@ -107,6 +107,13 @@ class discuz_cron
 			$cron['minute'] = $nexttime['minute'];
 		}
 
+		// bluelovers
+		// 強制下次執行時間為明天
+		if ($nexttime['nextday']) {
+			$cron['day'] = $secondday == $daynow ? $daynow + 1 : $secondday;
+		}
+		// bluelovers
+
 		$nextrun = @gmmktime($cron['hour'], $cron['minute'] > 0 ? $cron['minute'] : 0, 0, $monthnow, $cron['day'], $yearnow) - $_G['setting']['timeoffset'] * 3600;
 
 		$availableadd = $nextrun > TIMESTAMP ? '' : ', available=\'0\'';
@@ -125,18 +132,17 @@ class discuz_cron
 
 		// bluelovers
 		// 當 $minutenew = -1 時，代表隨機指定某分鐘
-		if ($cron['minute'] == -1) {
+		if (count($cron['minute']) == 1 && $cron['minute'][0] == -1) {
 			if ($cron['hour'] == -1) {
+				/*
 				$_h = gmdate('H', TIMESTAMP + $_G['setting']['timeoffset'] * 3600);
-				$cron['hour'] = $_h + max(0, (23 - $_h) * rand(1));
+				*/
+				$_h = 0;
+				$cron['hour'] = $_h + max(0, rand(0, (23 - $_h)));
 			}
 
-			$cron['minute'] = min(59, 59 * rand(1));
-
-			debug($cron);
+			$nexttime['nextday'] = 1;
 		}
-
-		debug($cron);
 		// bluelovers
 
 		if($cron['hour'] == -1 && !$cron['minute']) {
@@ -178,7 +184,7 @@ class discuz_cron
 		// bluelovers
 		// 當 $minutenew = -1 時，代表隨機指定某分鐘
 		if (count($nextminutes) == 1 && $nextminutes[0] == -1) {
-			return min(59, 59 * rand(1));
+			return min(59, rand(1, 59));
 		}
 		// bluelovers
 
