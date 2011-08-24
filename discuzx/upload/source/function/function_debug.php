@@ -46,7 +46,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function debugmessage() {
+function debugmessage($ajax = 0) {
 	global $_G;
 	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || !empty($_G['inajax'])) {
 		return;
