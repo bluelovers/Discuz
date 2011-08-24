@@ -94,7 +94,12 @@ while($thread = DB::fetch($query)) {
 			'tid' => $thread['tid'],
 			'first' => 1,
 
-			'pid' => $post['pid']
+			'pid' => $post['pid'],
+		));
+
+		dexit(array(
+			'tid' => $thread['tid'],
+			'pid' => $post['pid'],
 		));
 	}
 }
