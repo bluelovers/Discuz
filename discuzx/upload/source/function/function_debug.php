@@ -177,6 +177,19 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 
 	$debug .= "<script src='static/js/common.js?".VERHASH."'></script>";
 
+	$debug .= "<script src='../static/js/common.js?".VERHASH."'></script><script>
+	function switchTab(prefix, current, total, activeclass) {
+	activeclass = !activeclass ? 'a' : activeclass;
+	for(var i = 1; i <= total;i++) {
+		var classname = ' '+$(prefix + '_' + i).className+' ';
+		$(prefix + '_' + i).className = classname.replace(' '+activeclass+' ','').substr(1);
+		$(prefix + '_c_' + i).style.display = 'none';
+	}
+	$(prefix + '_' + current).className = $(prefix + '_' + current).className + ' '+activeclass;
+	$(prefix + '_c_' + current).style.display = '';
+	}
+	</script>";
+
 	if(!defined('IN_ADMINCP') && file_exists(DISCUZ_ROOT.'./static/image/common/temp-grid.png')) $debug .= <<<EOF
 <script type="text/javascript">
 var s = '<button style="position: fixed; width: 40px; right: 0; top: 30px; border: none; border:1px solid orange;background: yellow; color: red; cursor: pointer;" onclick="var pageHight = top.document.body.clientHeight;$(\'tempgrid\').style.height = pageHight + \'px\';$(\'tempgrid\').style.visibility = top.$(\'tempgrid\').style.visibility == \'hidden\'?\'\':\'hidden\';o.innerHTML = o.innerHTML == \'網格\'?\'關閉\':\'網格\';">網格</button>';
