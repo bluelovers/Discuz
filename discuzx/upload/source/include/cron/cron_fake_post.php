@@ -73,6 +73,8 @@ while($thread = DB::fetch($query)) {
 		$data_author = daddslashes(array(
 			'username' => $query_author['username'],
 			'uid' => $query_author['uid'],
+
+			'subject' => $thread['subject'],
 		));
 
 		DB::update('forum_thread', array(
@@ -98,6 +100,8 @@ while($thread = DB::fetch($query)) {
 
 			'pid' => $post['pid'],
 		));
+
+		updateforumcount($thread['fid']);
 
 		dexit(array(
 			'tid' => $thread['tid'],
