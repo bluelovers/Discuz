@@ -202,6 +202,12 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 	jQuery(function(){
 		jQuery('a[id^=\"__debug_\"], #__debug_c_6_nav a').click(function(e){
 			e.preventDefault();
+			var _this = jQuery(this);
+			var _id = _this.attr('href').replace('#', '');
+			_id = jQuery('#' + _id + ', [name=\"' + _id + '\"]').first();
+			if (_id.size()) {
+				jQuery(window).scrollTop(_id.offset().top);
+			}
 		});
 	});
 	</script>";
