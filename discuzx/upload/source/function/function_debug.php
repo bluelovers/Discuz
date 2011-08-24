@@ -47,6 +47,11 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function debugmessage($ajax = 0) {
+	$m = function_exists('memory_get_usage') ? number_format(memory_get_usage()) : '';
+	$mt = function_exists('memory_get_peak_usage') ? number_format(memory_get_peak_usage()) : '';
+	if($m) {
+		$m = 'Memory usage <s>'.$m.'</s> bytes'.($mt ? ', peak <s>'.$mt.'</s> bytes' : '').' / ';
+	}
 	global $_G;
 	if(!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG || !empty($_G['inajax'])) {
 		return;
