@@ -302,9 +302,9 @@ EOF;
 			<a href="#S_cache">$_G[\'cache\']</a><br />
 			</div>'.
 		'<ol><a name="top"></a>'.$_GS.$_GA.'</ol></div></body></html>';
-	$fn = 'data/_debug.php';
+	$fn = 'data/'.$debugfile;
 	file_put_contents(DISCUZ_ROOT.'./'.$fn, $debug);
-	echo '<iframe src="'.$_G[siteurl].$fn.'" name="_debug_iframe" id="_debug_iframe" style="border-top:1px solid gray;overflow-x:hidden;overflow-y:auto" width="100%" height="40" frameborder="0"></iframe><div id="_debug_div"></div><iframe name="_debug_initframe" style="display:none" onload="if(this.contentWindow.document.body.innerHTML) location.href=location.href"></iframe></script>';
+	echo '<iframe src="'.$fn.'?k='.$akey.'" name="_debug_iframe" id="_debug_iframe" style="border-top:1px solid gray;overflow-x:hidden;overflow-y:auto" width="100%" height="70" frameborder="0"></iframe><div id="_debug_div"></div><iframe name="_debug_initframe" id="_debug_initframe" style="display:none"></iframe>';
 }
 
 ?>
