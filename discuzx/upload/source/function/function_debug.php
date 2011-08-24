@@ -114,7 +114,51 @@ function debugmessage($ajax = 0) {
 	}
 	$sqlw = $sqlw ? '<s>('.implode(', ', $sqlw).')</s>' : '';
 
-	require_once libfile('function/cache');
+	$debug = '<?php if(empty($_GET[\'k\']) || $_GET[\'k\'] != \''.$akey.'\') { exit; } ?>';
+	if($_G['adminid'] == 1 && !$ajax) {
+		$debug .= '<?php
+if(isset($_GET[\''.$phpinfok.'\'])) { phpinfo(); exit; }
+elseif(isset($_GET[\''.$viewcachek.'\'])) {
+	chdir(\'../\');
+	require \'./source/class/class_core.php\';
+	$discuz = & discuz_core::instance();
+	$discuz->init();
+	echo \'<style>body { font-size:12px; }</style>\';
+	if(!isset($_GET[\'c\'])) {
+		$query = DB::query("SELECT cname FROM ".DB::table("common_syscache"));
+		while($names = DB::fetch($query)) {
+			echo \'<a href="'.$debugfile.'?k='.$akey.'&'.$viewcachek.'&c=\'.$names[\'cname\'].\'" target="_blank" style="float:left;width:200px">\'.$names[\'cname\'].\'</a>\';
+		}
+	} else {
+		loadcache($_GET[\'c\']);
+		echo \'$_G[\\\'cache\\\'][\'.$_GET[\'c\'].\']<br>\';
+		debug($_G[\'cache\'][$_GET[\'c\']]);
+	}
+	exit;
+}
+elseif(isset($_GET[\''.$mysqlplek.'\'])) {
+	chdir(\'../\');
+	require \'./source/class/class_core.php\';
+	$discuz = & discuz_core::instance();
+	$discuz->_init_db();
+	if(!empty($_GET[\'Id\'])) {
+		$query = DB::query("KILL ".floatval($_GET[\'Id\']), \'SILENT\');
+	}
+	$query = DB::query("SHOW FULL PROCESSLIST");
+	echo \'<style>table { font-size:12px; }</style>\';
+	echo \'<table style="border-bottom:none">\';
+	while($row = DB::fetch($query)) {
+		if(!$i) {
+			echo \'<tr style="border-bottom:1px dotted gray"><td>&nbsp;</td><td>&nbsp;\'.implode(\'&nbsp;</td><td>&nbsp;\', array_keys($row)).\'&nbsp;</td></tr>\';
+			$i++;
+		}
+		echo \'<tr><td><a href="'.$debugfile.'?k='.$akey.'&P&Id=\'.$row[\'Id\'].\'">[Kill]</a></td><td>&nbsp;\'.implode(\'&nbsp;</td><td>&nbsp;\', $row).\'&nbsp;</td></tr>\';
+	}
+	echo \'</table>\';
+	exit;
+}
+		?>';
+	}
 
 	$debug = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>';
 	$debug .= "<base href=\"$_G[siteurl]\" />";
