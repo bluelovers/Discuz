@@ -25,6 +25,7 @@ $query = DB::query("SELECT *
 	LIMIT 1
 ");
 while($thread = DB::fetch($query)) {
+	$postlist = array();
 	$lastpost_min = 0;
 	$lastpost_max = max(0, $thread['dateline'], $thread['lastpost']);
 
