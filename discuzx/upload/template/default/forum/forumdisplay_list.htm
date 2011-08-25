@@ -165,6 +165,7 @@
 										<!--{if $thread[icon] >= 0}-->
 											<img src="{STATICURL}image/stamp/{$_G[cache][stamps][$thread[icon]][url]}" alt="{$_G[cache][stamps][$thread[icon]][text]}" align="absmiddle" />
 										<!--{/if}-->
+										<!--{REM [bugfix] 修正主題列表的分類信息在沒有指定瀏覽特定 sortid 時，分類信息模板無法顯示的問題 }-->
 										<!--{if $stemplate && $thread[sortid]}-->$stemplate[$thread[sortid]][$thread[tid]]<!--{/if}-->
 										<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
 										<!--{if $thread['price'] > 0}-->
