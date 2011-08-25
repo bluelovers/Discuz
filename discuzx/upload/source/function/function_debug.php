@@ -205,6 +205,7 @@ elseif(isset($_GET[\''.$mysqlplek.'\'])) {
 			var _this = jQuery(this);
 			var _id = _this.attr('href').replace('#', '');
 			_id = jQuery('#' + _id + ', [name=\"' + _id + '\"]').first();
+			jQuery(window).scrollTop(0);
 			if (_id.size()) {
 				jQuery(window).scrollTop(
 					_id.offset().top
