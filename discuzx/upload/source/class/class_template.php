@@ -63,6 +63,10 @@ class template {
 			}
 		}
 
+		// bluelovers
+		$template = preg_replace("/\r\n/s", "\n", $template);
+		// bluelovers
+
 		$template = preg_replace("/([\n\r]+)\t+/s", "\\1", $template);
 		$template = preg_replace("/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $template);
 		$template = preg_replace("/\{lang\s+(.+?)\}/ies", "\$this->languagevar('\\1')", $template);
@@ -398,6 +402,9 @@ class template {
 	function loadsubtemplate($file) {
 		$tplfile = template($file, 0, '', 1);
 		if($content = @implode('', file(DISCUZ_ROOT.$tplfile))) {
+			// bluelovers
+			$content = str_replace("\r\n", "\n", $content);
+			// bluelovers
 			$this->subtemplates[] = $tplfile;
 			return $content;
 		} else {
@@ -409,6 +416,9 @@ class template {
 	function loadsubtemplate2($file) {
 		$tplfile = template($file, 0, '', 1);
 		if($content = @implode('', file(DISCUZ_ROOT.$tplfile))) {
+			// bluelovers
+			$content = str_replace("\r\n", "\n", $content);
+			// bluelovers
 			$this->subtemplates2[] = $tplfile;
 			return "\n{rem $file; - Start}\n".$content."\n{eval \$GLOBAL['_subtpl_']['$file'] = 1;}\n{rem $file; - End}\n";
 		} else {
