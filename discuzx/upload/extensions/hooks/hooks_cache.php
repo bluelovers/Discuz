@@ -252,6 +252,9 @@ function _eClass_template_parse_template_Before_fwrite($_EVENT, $_conf) {
 		// 如果不是 DEBUG 模式時則清除註解
 		$r[] = '/\<\!--(?:(?:[^\-]+|\-(?!-\>))*)--\>/is';
 		$s[] = '';
+
+		$r[] = '/(\n){2,}/s';
+		$s[] = '\\1';
 	}
 
 	$r[] = '/\s+(\<\!DOCTYPE\s)/';
