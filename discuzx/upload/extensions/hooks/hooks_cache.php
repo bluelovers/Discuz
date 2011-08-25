@@ -244,4 +244,28 @@ function _eFunc_writetojscache_After_readdir($_EVENT, $_conf) {
 	}
 }
 
+Scorpio_Hook::add('Class_template::parse_template:Before_fwrite', '_eClass_template_parse_template_Before_fwrite');
+
+function _eClass_template_parse_template_Before_fwrite($_EVENT, $_conf) {
+	$r = $s = array();
+	if (!defined('DISCUZ_DEBUG') || !DISCUZ_DEBUG) {
+		// 如果不是 DEBUG 模式時則清除註解
+		$r[] = '/\<\!--(?:(?:[^\-]+|\-(?!-\>))*)--\>/is';
+		$s[] = '';
+
+		$r[] = '/(\n){2,}/s';
+		$s[] = '\\1';
+	}
+
+	$r[] = '/\s+(\<\!DOCTYPE\s)/';
+	$s[] = '\\1';
+
+	$r[] = '/^\n+|\n+$/s';
+	$s[] = '';
+
+	if (!empty($r)) {
+		$_EVENT['event.data']['template'] = preg_replace($r, $s, $_EVENT['event.data']['template']);
+	}
+}
+
 ?>
