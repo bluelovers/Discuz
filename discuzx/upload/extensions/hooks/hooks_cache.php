@@ -254,6 +254,9 @@ function _eClass_template_parse_template_Before_fwrite($_EVENT, $_conf) {
 		$s[] = '';
 	}
 
+	$r[] = '/\s+(\<\!DOCTYPE\s)/';
+	$s[] = '\\1';
+
 	$r[] = '/^\n+|\n+$/s';
 	$s[] = '';
 
