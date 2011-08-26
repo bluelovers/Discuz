@@ -44,6 +44,13 @@ class Manyou {
 			$response = $this->_processServerRequest();
 		}
 		@ob_end_clean();
+		/**
+		 * 由於 內容編碼錯誤
+		 * 您嘗試檢視的頁面無法顯示，因為其中使用了無效或不支援的壓縮類型。
+		 *
+		 * 加上了 ob_gzhandler 後則可正常顯示內容
+		 * 原因不明
+		 */
 		@ob_start('ob_gzhandler');
 		echo serialize($this->_formatLocalResponse($response));
 		exit;
