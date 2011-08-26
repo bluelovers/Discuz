@@ -44,7 +44,7 @@ class Manyou {
 			$response = $this->_processServerRequest();
 		}
 		@ob_end_clean();
-		@ob_start();
+		@ob_start('ob_gzhandler');
 		echo serialize($this->_formatLocalResponse($response));
 		exit;
 	}
