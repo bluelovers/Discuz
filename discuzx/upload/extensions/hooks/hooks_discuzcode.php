@@ -25,6 +25,12 @@ function _eFunc_discuzcode_Before_bbcodes($_EVENT, $conf) {
 	if ($find && $replace) {
 		$conf['message'] = preg_replace($find, $replace, $conf['message']);
 	}
+
+	$find = $replace = array();
+
+	if ($find && $replace) {
+		$conf['message'] = str_replace($find, $replace, $conf['message']);
+	}
 }
 
 ?>
