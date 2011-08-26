@@ -13,7 +13,7 @@ class _bbcode_ {
 
 Scorpio_Hook::add('Func_discuzcode:Before_bbcodes', '_eFunc_discuzcode_Before_bbcodes');
 
-function _eFunc_discuzcode_Before_bbcodes($_EVENT, $conf) {
+function _eFunc_discuzcode_Before_bbcodes($_EVENT, $_conf) {
 	$find = $replace = array();
 
 	$find[]		= '/\s*\[h([1-6])\]((?:[^\[]|\[(?!\/h\1\]))*)\[\/h\1\]\n*/is';
@@ -23,7 +23,22 @@ function _eFunc_discuzcode_Before_bbcodes($_EVENT, $conf) {
 	$replace[]	= '';
 
 	if ($find && $replace) {
-		$conf['message'] = preg_replace($find, $replace, $conf['message']);
+		$_conf['message'] = preg_replace($find, $replace, $_conf['message']);
+	}
+
+	$find = $replace = array();
+
+	$find[]		= '[italic=s]';
+	$replace[]	= '<i class="pstatus">';
+
+	$find[]		= '[italic]';
+	$replace[]	= '<i>';
+
+	$find[]		= '[/italic]';
+	$replace[]	= '</i>';
+
+	if ($find && $replace) {
+		$_conf['message'] = str_replace($find, $replace, $_conf['message']);
 	}
 }
 
