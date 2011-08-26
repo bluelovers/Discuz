@@ -2453,7 +2453,10 @@ class My extends Manyou {
 $siteId = $_G['setting']['my_siteid'];
 $siteKey = $_G['setting']['my_sitekey'];
 $timezone = $_G['setting']['timeoffset'];
+/*
 $language = $_SC['language'] ? $_SC['language'] : 'zh_CN';
+*/
+$language = $_G['config']['output']['language'] ? $_G['config']['output']['language'] : 'zh_CN';
 $version = $_G['setting']['version'];
 $myAppStatus = $_G['setting']['my_app_status'];
 $mySearchStatus = $_G['setting']['my_search_status'];
