@@ -501,7 +501,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 	$regex_showname = '[^<\>\'"]+';
 
-	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<showname>'.$regex_showname.')<\/a/', $_func, $content);
+	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
 }
 
 function _eFunc_output_Before_rewrite_content_echo_callback($m) {
@@ -589,12 +589,16 @@ Array
 
 		$s .= ''.$m['extra'].'>';
 
+		$s .= $m['tag1'];
+
 		if (!empty($user)) {
 			$s .= $user;
 			//if ($_user['counter'][$user] > 1) $s .= '@'.$m['showname'];
 		} else {
 			$s .= $m['showname'];
 		}
+
+		$s .= $m['tag2'];
 
 		$s .= '</a';
 	} else {
