@@ -28,6 +28,15 @@ function _eFunc_discuzcode_Before_bbcodes($_EVENT, $_conf) {
 
 	$find = $replace = array();
 
+	$find[]		= '[italic=s]';
+	$replace[]	= '<i class="pstatus">';
+
+	$find[]		= '[italic]';
+	$replace[]	= '<i>';
+
+	$find[]		= '[/italic]';
+	$replace[]	= '</i>';
+
 	if ($find && $replace) {
 		$_conf['message'] = str_replace($find, $replace, $_conf['message']);
 	}
