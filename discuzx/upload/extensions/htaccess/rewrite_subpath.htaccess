@@ -77,17 +77,17 @@ RewriteRule ^archiver/(fid|tid)/([0-9]+)\.html?$ archiver/index.php?action=$1&va
 #RewriteCond %{QUERY_STRING} ^(.*)$
 #RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/(.+)/?(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/(.+)/?(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/(.+)/?$ $1.php?rewrite=$2&%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/(.+)/?$ $1.php?rewrite=$2&%1 [L,QSA]
