@@ -9,7 +9,7 @@ RewriteRule ^forum-(\w+)(?:-([0-9]+))(?:\.html?)$ forum.php?mod=forumdisplay&fid
 RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^thread-([0-9]+)(?:-([0-9]+))?(?:-([0-9]+))?(?:\.html?)$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&%1 [L,QSA]
 RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^group-([0-9]+)(?:-([0-9]+))(?:\.html?)$ forum.php?mod=group&fid=$1&page=$2&%1 [L,QSA]
+RewriteRule ^group-([0-9]+)(?:-([0-9]+))?(?:\.html?)$ forum.php?mod=group&fid=$1&page=$2&%1 [L,QSA]
 RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^(?:space|profile)-(username|uid)-(.+)(?:\.html?)$ home.php?mod=space&$1=$2&%1 [L,QSA]
 
