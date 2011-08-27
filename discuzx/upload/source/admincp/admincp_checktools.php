@@ -357,7 +357,7 @@ if($operation == 'filecheck') {
 		}
 
 		for ($i = 0; $i<3;$i++) {
-		$_s = preg_replace('/(^|\n)#[^#\n]*(\n|$)/s', '\\1\\2', $_s);
+			$_s = preg_replace('/(^|\n)#[^#\n]*(\n|$)/s', '\\1\\2', $_s);
 		}
 
 		$_s = preg_replace('/\n\n\n+/', $_lf.$_lf, $_s);
