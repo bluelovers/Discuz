@@ -35,7 +35,7 @@ while($row = $db_target->fetch_array($query)) {
 		LIMIT 1
 	");
 	if ($row_old = $db_source->fetch_array($query)) {
-		if ($row_old['pid'] != $row['pid']) continue;
+		if ($row_old['pid'] != $row['pid'] || empty($row_old['message'])) continue;
 
 		$row_old['message'] = str_replace("\r\n", "\n", $row_old['message']);
 
