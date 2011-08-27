@@ -103,13 +103,15 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 
 	if ($hookid == 'global_header_seohead') {
 
+		$ss .= "<base href=\"{$_G[siteurl]}\" />";
+
 		if (!DISCUZ_DEBUG) {
 			$_add = '.pack';
 		} else {
 			$_add = '';
 		}
 
-		$ss = <<<EOF
+		$ss .= <<<EOF
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest{$_add}.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOF

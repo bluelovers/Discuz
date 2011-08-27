@@ -47,47 +47,47 @@
 #RewriteCond %{QUERY_STRING} ^(.*)$
 #RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
 
-RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteCond %{QUERY_STRING} ^(.*)$
 
-RewriteRule ^topic/(.+)/?$ portal.php?mod=topic&topic=$1&%1 [QSA]
-RewriteRule ^topic/(.+)/?(?:\.html?)$ portal.php?mod=topic&topic=$1&%1 [QSA]
+RewriteRule ^topic/(.+)/?$ portal.php?mod=topic&topic=$1&%1 [L,QSA]
+RewriteRule ^topic/(.+)/?(?:\.html?)$ portal.php?mod=topic&topic=$1&%1 [L,QSA]
 
-RewriteRule ^article/([0-9]+)(?:/([0-9]+))/?(?:\.html?)$ portal.php?mod=view&aid=$1&page=$2&%1 [QSA]
-RewriteRule ^article/([0-9]+)(?:/([0-9]+))/?$ portal.php?mod=view&aid=$1&page=$2&%1 [QSA]
+RewriteRule ^article/([0-9]+)(?:/([0-9]+))/?(?:\.html?)$ portal.php?mod=view&aid=$1&page=$2&%1 [L,QSA]
+RewriteRule ^article/([0-9]+)(?:/([0-9]+))/?$ portal.php?mod=view&aid=$1&page=$2&%1 [L,QSA]
 
-RewriteRule ^forum/(\w+)(?:/([0-9]+))?/?(?:\.html?)$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1 [QSA]
-RewriteRule ^forum/(\w+)(?:/([0-9]+))?/?$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1 [QSA]
+RewriteRule ^forum/(\w+)(?:/([0-9]+))?/?(?:\.html?)$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1 [L,QSA]
+RewriteRule ^forum/(\w+)(?:/([0-9]+))?/?$ forum.php?mod=forumdisplay&fid=$1&page=$2&%1 [L,QSA]
 
-RewriteRule ^thread/([0-9]+)(?:/([0-9]+)(?:/([0-9]+))?)?(?:/?(.+))?/?$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&rewrite=$4&%1 [QSA]
-RewriteRule ^thread/([0-9]+)(?:/([0-9]+)(?:/([0-9]+))?)?(?:/?(.+))?/?(?:\.html?)$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&rewrite=$4&%1 [QSA]
+RewriteRule ^thread/([0-9]+)(?:/([0-9]+)(?:/([0-9]+))?)?(?:/?(.+))?/?$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&rewrite=$4&%1 [L,QSA]
+RewriteRule ^thread/([0-9]+)(?:/([0-9]+)(?:/([0-9]+))?)?(?:/?(.+))?/?(?:\.html?)$ forum.php?mod=viewthread&tid=$1&extra=page\%3D$3&page=$2&rewrite=$4&%1 [L,QSA]
 
-RewriteRule ^group/([0-9]+)(?:/([0-9]+))?/?$ forum.php?mod=group&fid=$1&page=$2&%1 [QSA]
-RewriteRule ^group/([0-9]+)(?:/([0-9]+))?/?(?:\.html?)$ forum.php?mod=group&fid=$1&page=$2&%1 [QSA]
+RewriteRule ^group/([0-9]+)(?:/([0-9]+))?/?$ forum.php?mod=group&fid=$1&page=$2&%1 [L,QSA]
+RewriteRule ^group/([0-9]+)(?:/([0-9]+))?/?(?:\.html?)$ forum.php?mod=group&fid=$1&page=$2&%1 [L,QSA]
 
-RewriteRule ^(?:space|profile)/(username|uid)/(.+)/?(?:\.html?)$ home.php?mod=space&$1=$2&%1 [QSA]
+RewriteRule ^(?:space|profile)/(username|uid)/(.+)/?(?:\.html?)$ home.php?mod=space&$1=$2&%1 [L,QSA]
 RewriteRule ^(?:space|profile)/(username|uid)/(.+)/?$ home.php?mod=space&$1=$2&%1 [L,QSA]
 
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^blog/([0-9]+)/([0-9]+)\.html?$ home.php?mod=space&uid=$1&do=blog&id=$2&%1
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^archiver/(fid|tid)/([0-9]+)\.html?$ archiver/index.php?action=$1&value=$2&%1
+#RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^blog/([0-9]+)/([0-9]+)\.html?$ home.php?mod=space&uid=$1&do=blog&id=$2&%1 [L,QSA]
+#RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^archiver/(fid|tid)/([0-9]+)\.html?$ archiver/index.php?action=$1&value=$2&%1 [L,QSA]
 
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteCond %{QUERY_STRING} ^(.*)$
 #RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/?(?:\.html?)?$ $1.php?%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/(.+)/?(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/(.+)/?(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)/(.+)/?$ $1.php?rewrite=$2&%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)/(.+)/?$ $1.php?rewrite=$2&%1 [L,QSA]
