@@ -35,6 +35,9 @@ while($row = $db_target->fetch_array($query)) {
 		LIMIT 1
 	");
 	if ($row_old = $db_source->fetch_array($query)) {
+		if ($row_old['pid'] != $row['pid']) continue;
+
+		$row_old['message'] = str_replace("\r\n", "\n", $row_old['message']);
 
 		$data = implode_field_value(daddslashes(array(
 			'message' => $row_old['message'],
