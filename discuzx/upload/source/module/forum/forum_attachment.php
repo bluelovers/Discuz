@@ -257,6 +257,10 @@ if(!empty($xsendfile)) {
 		case 1: $cmd = 'X-Accel-Redirect'; $url = $xsendfile['dir'].$attach['attachment']; break;
 		case 2: $cmd = $_SERVER['SERVER_SOFTWARE'] <'lighttpd/1.5' ? 'X-LIGHTTPD-send-file' : 'X-Sendfile'; $url = $filename; break;
 		case 3: $cmd = 'X-Sendfile'; $url = $filename; break;
+		// bluelovere
+		default:
+ 			break;
+		// bluelovere
 	}
 	if($cmd) {
 		dheader("$cmd: $url");
