@@ -18,6 +18,6 @@ RewriteRule ^blog-([0-9]+)-([0-9]+)\.html$ home.php?mod=space&uid=$1&do=blog&id=
 RewriteCond %{QUERY_STRING} ^(.*)$
 RewriteRule ^archiver/(fid|tid)-([0-9]+)\.html$ archiver/index.php?action=$1&value=$2&%1
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{QUERY_STRING} ^(.*)$
-RewriteRule ^([a-z]+)-(.+)(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^([a-z]+)-(.+)(?:\.html?)$ $1.php?rewrite=$2&%1 [L,QSA]
