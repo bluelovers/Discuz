@@ -27,14 +27,14 @@ $query = $db_target->query("SELECT *
 while($row = $db_target->fetch_array($query)) {
 	$nextid = $row['pid'];
 
-	$query = $db_source->query("SELECT *
+	$query2 = $db_source->query("SELECT *
 		FROM
 			$table_source
 		WHERE
 			pid = '$nextid'
 		LIMIT 1
 	");
-	if ($row_old = $db_source->fetch_array($query)) {
+	if ($row_old = $db_source->fetch_array($query2)) {
 		if ($row_old['pid'] != $row['pid'] || empty($row_old['message'])) continue;
 
 		$row_old['message'] = str_replace("\r\n", "\n", $row_old['message']);
