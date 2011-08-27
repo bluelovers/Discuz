@@ -361,6 +361,7 @@ if($operation == 'filecheck') {
 		}
 
 		$_s = preg_replace('/\n\n\n+/', $_lf.$_lf, $_s);
+		$_s = preg_replace('/^\n+|[\n\s]+$/', $_lf, $_s);
 
 		fwrite($fp, $_s);
 		fclose($fp);
