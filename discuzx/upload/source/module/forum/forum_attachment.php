@@ -245,6 +245,15 @@ if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
 	$_header_inline = true;
 }
 
+//Event: Script_forum_attachment:Before_header_disposition
+Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_header_disposition')
+	->run(array(array(
+		'attach'			=> &$attach,
+
+		'isimage'			=> &$isimage,
+		'_header_inline'	=> &$_header_inline,
+)));
+
 if ($_header_inline) {
 // bluelovers
 	dheader('Content-Disposition: inline; filename='.$attach['filename']);
