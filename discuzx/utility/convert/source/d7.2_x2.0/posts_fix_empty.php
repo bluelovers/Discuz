@@ -36,9 +36,9 @@ while($row = $db_target->fetch_array($query)) {
 	");
 	if ($row_old = $db_source->fetch_array($query)) {
 
-		$data = implode_field_value(array(
-			'message' => daddslashes($row_old['message'], 1),
-		), ',', db_table_fields($db_target, $table_target));
+		$data = implode_field_value(daddslashes(array(
+			'message' => $row_old['message'],
+		), 1), ',', db_table_fields($db_target, $table_target));
 		$db_target->query("UPDATE $table_target SET $data WHERE pid = '$nextid'");
 	}
 }
