@@ -236,6 +236,10 @@ dheader('Date: '.gmdate('D, d M Y H:i:s', $attach['dateline']).' GMT');
 dheader('Last-Modified: '.gmdate('D, d M Y H:i:s', $attach['dateline']).' GMT');
 dheader('Content-Encoding: none');
 
+// bluelovers
+$_header_inline = false;
+// bluelovers
+
 if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
 	dheader('Content-Disposition: inline; filename='.$attach['filename']);
 } else {
