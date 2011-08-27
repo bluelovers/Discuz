@@ -356,7 +356,12 @@ if($operation == 'filecheck') {
 			$_s .= $_lf.str_replace(array("\r\n", "\n\r"), "\n", $context).$_lf;
 		}
 
+		for ($i = 0; $i<3;$i++) {
+			$_s = preg_replace('/(^|\n)#[^#\n]*(\n|$)/s', '\\1\\2', $_s);
+		}
+
 		$_s = preg_replace('/\n\n\n+/', $_lf.$_lf, $_s);
+		$_s = preg_replace('/^\n+|[\n\s]+$/', $_lf, $_s);
 
 		fwrite($fp, $_s);
 		fclose($fp);
