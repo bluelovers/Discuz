@@ -103,6 +103,8 @@ function _eTpl_Func_hooktags_Before($_EVENT, &$hook_data, $hookid, $key) {
 
 	if ($hookid == 'global_header_seohead') {
 
+		$ss .= "<base href=\"{$_G[siteurl]}\" />";
+
 		if (!DISCUZ_DEBUG) {
 			$_add = '.pack';
 		} else {
