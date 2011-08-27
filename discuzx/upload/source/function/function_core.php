@@ -344,6 +344,21 @@ function dheader($string, $replace = true, $http_response_code = 0) {
 		}
 	}
 	$string = str_replace(array("\r", "\n"), array('', ''), $string);
+
+	// bluelovers
+	// Event: Func_dheader:Before_header_send
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_header_send')
+			->run(array(array(
+				'string'					=> &$string,
+				'replace'					=> &$replace,
+				'http_response_code'		=> &$http_response_code,
+
+				'islocation'				=> &$islocation,
+			)));
+	}
+	// bluelovers
+
 	if(empty($http_response_code) || PHP_VERSION < '4.3' ) {
 		@header($string, $replace);
 	} else {
