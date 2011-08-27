@@ -14,7 +14,7 @@ $limit = 50;
 $start = intval(getgpc('start'));
 $nextid = 0;
 
-$query = $db_source->query("SELECT *
+$query = $db_target->query("SELECT *
 	FROM
 		$table_target
 	WHERE
