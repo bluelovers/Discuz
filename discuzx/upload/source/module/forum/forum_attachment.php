@@ -241,6 +241,12 @@ $_header_inline = false;
 // bluelovers
 
 if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
+// bluelovers
+	$_header_inline = true;
+}
+
+if ($_header_inline) {
+// bluelovers
 	dheader('Content-Disposition: inline; filename='.$attach['filename']);
 } else {
 	dheader('Content-Disposition: attachment; filename='.$attach['filename']);
