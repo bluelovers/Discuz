@@ -331,6 +331,21 @@ function dexit($message = '') {
 function dheader($string, $replace = true, $http_response_code = 0) {
 	$islocation = substr(strtolower(trim($string)), 0, 8) == 'location';
 	if(defined('IN_MOBILE') && strpos($string, 'mobile') === false && $islocation) {
+
+		// bluelovers
+		// Event: Func_dheader:Before_mobile_replace
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_mobile_replace')
+				->run(array(array(
+					'string'					=> &$string,
+					'replace'					=> &$replace,
+					'http_response_code'		=> &$http_response_code,
+
+					'islocation'				=> &$islocation,
+				)));
+		}
+		// bluelovers
+
 		if (strpos($string, '?') === false) {
 			$string = $string.'?mobile=yes';
 		} else {
@@ -344,11 +359,41 @@ function dheader($string, $replace = true, $http_response_code = 0) {
 		}
 	}
 	$string = str_replace(array("\r", "\n"), array('', ''), $string);
+
+	// bluelovers
+	// Event: Func_dheader:Before_header_send
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':Before_header_send')
+			->run(array(array(
+				'string'					=> &$string,
+				'replace'					=> &$replace,
+				'http_response_code'		=> &$http_response_code,
+
+				'islocation'				=> &$islocation,
+			)));
+	}
+	// bluelovers
+
 	if(empty($http_response_code) || PHP_VERSION < '4.3' ) {
 		@header($string, $replace);
 	} else {
 		@header($string, $replace, $http_response_code);
 	}
+
+	// bluelovers
+	// Event: Func_dheader:After_header_send
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		Scorpio_Event::instance('Func_'.__FUNCTION__.':After_header_send')
+			->run(array(array(
+				'string'					=> &$string,
+				'replace'					=> &$replace,
+				'http_response_code'		=> &$http_response_code,
+
+				'islocation'				=> &$islocation,
+			)));
+	}
+	// bluelovers
+
 	if($islocation) {
 		exit();
 	}

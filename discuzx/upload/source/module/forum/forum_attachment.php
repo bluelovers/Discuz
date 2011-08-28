@@ -229,6 +229,16 @@ if($attach['remote'] && !$_G['setting']['ftp']['hideurl'] && $isimage) {
 	dheader('location:'.$_G['setting']['ftp']['attachurl'].'forum/'.$attach['attachment']);
 }
 
+// bluelovers
+//Event: Script_forum_attachment:Before_filename_urlencode
+Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_filename_urlencode')
+	->run(array(array(
+		'attach'			=> &$attach,
+
+		'isimage'			=> &$isimage,
+)));
+// bluelovers
+
 $filesize = !$attach['remote'] ? filesize($filename) : $attach['filesize'];
 $attach['filename'] = '"'.(strtolower(CHARSET) == 'utf-8' && strexists($_SERVER['HTTP_USER_AGENT'], 'MSIE') ? urlencode($attach['filename']) : $attach['filename']).'"';
 
@@ -236,7 +246,26 @@ dheader('Date: '.gmdate('D, d M Y H:i:s', $attach['dateline']).' GMT');
 dheader('Last-Modified: '.gmdate('D, d M Y H:i:s', $attach['dateline']).' GMT');
 dheader('Content-Encoding: none');
 
+// bluelovers
+$_header_inline = false;
+// bluelovers
+
 if($isimage && !empty($_G['gp_noupdate']) || !empty($_G['gp_request'])) {
+// bluelovers
+	$_header_inline = true;
+}
+
+//Event: Script_forum_attachment:Before_header_disposition
+Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_header_disposition')
+	->run(array(array(
+		'attach'			=> &$attach,
+
+		'isimage'			=> &$isimage,
+		'_header_inline'	=> &$_header_inline,
+)));
+
+if ($_header_inline) {
+// bluelovers
 	dheader('Content-Disposition: inline; filename='.$attach['filename']);
 } else {
 	dheader('Content-Disposition: attachment; filename='.$attach['filename']);
@@ -257,6 +286,10 @@ if(!empty($xsendfile)) {
 		case 1: $cmd = 'X-Accel-Redirect'; $url = $xsendfile['dir'].$attach['attachment']; break;
 		case 2: $cmd = $_SERVER['SERVER_SOFTWARE'] <'lighttpd/1.5' ? 'X-LIGHTTPD-send-file' : 'X-Sendfile'; $url = $filename; break;
 		case 3: $cmd = 'X-Sendfile'; $url = $filename; break;
+		// bluelovere
+		default:
+ 			break;
+		// bluelovere
 	}
 	if($cmd) {
 		dheader("$cmd: $url");
