@@ -29,13 +29,12 @@
 						_subject.val('');
 
 						_form.find('#viewthread_fastpost_subjecthide').show();
+					} else {
+						_input.parent().show();
 					}
 				})
 				.change(function(){
 					_input.triggerHandler("blur");
-					if (_input.val() != '') {
-						_input.parent().show();
-					}
 				})
 			;
 
@@ -48,8 +47,7 @@
 					var ret = _old_func(locationhref, message, param);
 
 					_subject.val('');
-					_input.val('').parent().hide();
-					_form.find('#viewthread_fastpost_subjecthide').show();
+					_input.val('').triggerHandler("blur");
 
 					return ret;
 				};
