@@ -1,6 +1,17 @@
-<!--{template common/header}-->
+<!--{if !$_G['inajax']}-->
+	<!--{template subblock/common/header_simple}-->
 
-<script type="text/javascript" src="{$this->setting[jspath]}register.js?{VERHASH}"></script>
+	<!--修正 ct_header 錯位問題}-->
+	<style>
+		#wp { margin-top: 60px; }
+		.nfl { padding-top: 60px; }
+		.nfl .f_c { margin-top: 0; }
+	</style>
+<!--{else}-->
+	<!--{template common/header}-->
+<!--{/if}-->
+
+<script type="text/javascript" src="{$this->setting[jspath]}register.js{VERHASH_GZIP_JS}?{VERHASH}"></script>
 
 <!--{subtpl subblock/common/body_ct_header}-->
 
@@ -195,7 +206,7 @@
 								<!--{if $_G[gp_action] != 'activation'}--><em>&nbsp;</em><!--{/if}-->
 									<button class="pn pnc" id="registerformsubmit" type="submit" name="regsubmit" value="true" tabindex="1"><strong><!--{if $_G[gp_action] == 'activation'}-->{lang activation}<!--{else}-->{lang submit}<!--{/if}--></strong></button>
 								<!--{if $bbrules}-->
-									<input type="checkbox" class="pc" name="agreebbrule" value="$bbrulehash" id="agreebbrule" checked="checked" /> <label for="agreebbrule">{lang agree}<a href="javascript:;" onclick="showBBRule()">{lang rulemessage}</a></label>
+									<input type="checkbox" class="pc" name="agreebbrule" value="$bbrulehash" id="agreebbrule" _checked="checked" /> <label for="agreebbrule">{lang agree}<a href="javascript:;" onclick="showBBRule()">{lang rulemessage}</a></label>
 								<!--{/if}-->
 							</span>
 						</td>
@@ -230,7 +241,7 @@
 <div class="c" style="width:700px;height:350px;overflow:auto">$bbrulestxt</div>
 <p class="fsb pns cl hm">
 	<button class="pn pnc" onclick="$('agreebbrule').checked = true;hideMenu('fwin_dialog', 'dialog');{if $this->setting['sitemessage'][register] && ($bbrules && $bbrulesforce)}showRegprompt();{/if}"><span>{lang agree}</span></button>
-	<button class="pn" onclick="location.href='$_G[siteurl]'"><span>{lang disagree}</span></button>
+	<button class="pn" _onclick="location.href='$_G[siteurl]'" onclick="$('agreebbrule').checked = false;hideMenu('fwin_dialog', 'dialog');"><span>{lang disagree}</span></button>
 </p>
 </div>
 
