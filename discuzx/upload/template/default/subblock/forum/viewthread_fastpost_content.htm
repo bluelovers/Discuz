@@ -1,0 +1,70 @@
+<!-- for viewthread_fastpost -->
+	<div class="pbt cl">
+		<span id="viewthread_fastpost_subjecthide" class="z">RE: $thread[subject] [<a href="javascript:;">{lang modify}</a>]</span>
+		<span id="viewthread_fastpost_subjectbox" style="display:none"><input class="px" value="" style="width: 25em" /></span>
+	</div>
+	<script>
+		jQuery(function(){
+			var _form = jQuery('#fastpostform');
+			var _input = _form.find('#viewthread_fastpost_subjectbox input');
+			var _subject = _form.find('input[name="subject"]');
+
+			_form.find('#viewthread_fastpost_subjecthide a')
+				.click(function(){
+					var _this = jQuery(this);
+
+					_this.parent().hide();
+					_form.find('#viewthread_fastpost_subjectbox input')
+						.val('')
+						.parent()
+						.show()
+					;
+				})
+			;
+
+			_input
+				.blur(function(){
+					if (_input.val() == '') {
+						_input.parent().hide();
+						_subject.val('');
+
+						_form.find('#viewthread_fastpost_subjecthide').show();
+					} else {
+						_input.parent().show();
+					}
+				})
+				.change(function(){
+					_input.triggerHandler("blur");
+				})
+				.width(_form.find('[name="message"]').width())
+			;
+
+			_form.find('[name="message"]').focus(function(){
+				_input.triggerHandler("blur");
+			});
+
+			(function(_old_func) {
+				succeedhandle_fastpost = function(locationhref, message, param){
+					var ret = _old_func(locationhref, message, param);
+
+					_subject.val('');
+					_input.val('').triggerHandler("blur");
+
+					return ret;
+				};
+			})(succeedhandle_fastpost);
+
+			(function(_old_func) {
+				fastpostvalidate = function(theform, noajaxpost){
+					var _f = jQuery(theform);
+
+					if (_f.attr('id') == _form.attr('id')) {
+						_subject.val(_input.val());
+					}
+
+					var ret = _old_func(theform, noajaxpost);
+					return ret;
+				};
+			})(fastpostvalidate);
+		});
+	</script>
