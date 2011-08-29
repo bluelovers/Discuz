@@ -777,7 +777,7 @@ class discuz_core {
 					// 修正當 $this->cachelist empty 時 無法推入新值
 					$this->cachelist[] = 'setting';
 				} else {
-				array_unshift($this->cachelist, 'setting');
+					array_unshift($this->cachelist, 'setting');
 				}
 			}
 
