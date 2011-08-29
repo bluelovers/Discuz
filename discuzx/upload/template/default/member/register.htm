@@ -241,7 +241,7 @@
 <div class="c" style="width:700px;height:350px;overflow:auto">$bbrulestxt</div>
 <p class="fsb pns cl hm">
 	<button class="pn pnc" onclick="$('agreebbrule').checked = true;hideMenu('fwin_dialog', 'dialog');{if $this->setting['sitemessage'][register] && ($bbrules && $bbrulesforce)}showRegprompt();{/if}"><span>{lang agree}</span></button>
-	<button class="pn" _onclick="location.href='$_G[siteurl]'" onclick="hideMenu('fwin_dialog', 'dialog');"><span>{lang disagree}</span></button>
+	<button class="pn" _onclick="location.href='$_G[siteurl]'" onclick="$('agreebbrule').checked = false;hideMenu('fwin_dialog', 'dialog');"><span>{lang disagree}</span></button>
 </p>
 </div>
 
