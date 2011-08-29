@@ -773,7 +773,12 @@ class discuz_core {
 				 * 將 setting 推送到最前面
 				 * 避免同時更新緩存時，嘗試讀取 setting 卻尚未載入的問題
 				 **/
+				if (empty($this->cachelist)) {
+					// 修正當 $this->cachelist empty 時 無法推入新值
+					$this->cachelist[] = 'setting';
+				} else {
 				array_unshift($this->cachelist, 'setting');
+				}
 			}
 
 			if(empty($this->var['style'])) {
