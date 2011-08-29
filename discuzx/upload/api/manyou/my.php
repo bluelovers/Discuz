@@ -2459,6 +2459,12 @@ $myAppStatus = $_G['setting']['my_app_status'];
 $mySearchStatus = $_G['setting']['my_search_status'];
 
 $my = new My($siteId, $siteKey, $timezone, $version, CHARSET, $language, $myAppStatus, $mySearchStatus);
+/**
+ * if run api/manyou/my.php
+ * should show
+ *
+ * a:7:{s:10:"my_version";s:3:"0.4";s:8:"timezone";s:1:"8";s:7:"version";s:2:"X2";s:7:"charset";s:5:"utf-8";s:8:"language";s:5:"zh_CN";s:7:"errCode";s:1:"1";s:10:"errMessage";s:16:"Invalid Method: ";}
+ */
 $my->run();
 
 ?>
