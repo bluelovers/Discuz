@@ -20,6 +20,7 @@ if(submitcheck('lostpwsubmit')) {
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
 	if($_G['gp_email'] != $tmp['email']
 		// bluelovers
+		// 防止未知的漏洞
 		|| empty($tmp['email'])
 		|| empty($tmp['uid'])
 		// bluelovers
