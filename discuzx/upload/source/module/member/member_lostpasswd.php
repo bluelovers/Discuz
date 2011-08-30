@@ -18,7 +18,8 @@ $discuz_action = 141;
 if(submitcheck('lostpwsubmit')) {
 	loaducenter();
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
-	if($_G['gp_email'] != $tmp['email']) {
+	if($_G['gp_email'] != $tmp['email']
+	) {
 		showmessage('getpasswd_account_notmatch');
 	}
 	$member = DB::fetch_first("SELECT uid, username, adminid, email FROM ".DB::table('common_member')." WHERE uid='$tmp[uid]'");
