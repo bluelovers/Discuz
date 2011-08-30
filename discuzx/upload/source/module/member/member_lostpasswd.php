@@ -22,6 +22,11 @@ if(submitcheck('lostpwsubmit')) {
 	// 初始化 $tmp
 	$tmp = array();
 	$tmp_stop = 0;
+
+	if (empty($_G['gp_username'])) {
+		// 如果沒有 username 則直接判定 $tmp_stop = 1
+		$tmp_stop = 1;
+	} else {
 	// bluelovers
 
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
@@ -34,6 +39,8 @@ if(submitcheck('lostpwsubmit')) {
 	) {
 		// bluelovers
 		$tmp_stop = 1;
+	}
+
 	}
 
 	if ($tmp_stop
