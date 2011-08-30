@@ -3,6 +3,16 @@
 <!--{eval $loginhash = 'L'.random(4);}-->
 <!--{if empty($_G['gp_infloat'])}-->
 
+<!--{if !$_G['inajax']}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a>
+		<em>&raquo;</em>
+		{lang login}
+	</div>
+</div>
+<!--{/if}-->
+
 <!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="ptm wp w cl">
