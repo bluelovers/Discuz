@@ -32,6 +32,12 @@ if(submitcheck('lostpwsubmit')) {
 		|| empty($tmp['uid'])
 		// bluelovers
 	) {
+		// bluelovers
+		$tmp_stop = 1;
+	}
+
+	if ($tmp_stop) {
+		// bluelovers
 		showmessage('getpasswd_account_notmatch');
 	}
 	$member = DB::fetch_first("SELECT uid, username, adminid, email FROM ".DB::table('common_member')." WHERE uid='$tmp[uid]'");
