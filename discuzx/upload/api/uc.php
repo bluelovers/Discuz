@@ -145,9 +145,9 @@ class uc_note {
 		// bluelovers
 		if (self::$_debug_log) {
 			self::_log('['.__FUNCTION__.'] '
-				.'uid:'.$get[uid]
-				.',oldusername:'.$get[oldusername]
-				.',newusername:'.$get[newusername]
+				.'uid:'.$get['uid']
+				.',oldusername:'.$get['oldusername']
+				.',newusername:'.$get['newusername']
 			);
 		}
 		// bluelovers
