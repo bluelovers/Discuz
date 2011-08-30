@@ -34,13 +34,7 @@ class usermodel {
 	}
 
 	function get_user_by_email($email, $_getlist) {
-		/*
 		$arr = $this->db->fetch_first("SELECT * FROM ".UC_DBTABLEPRE."members WHERE email='$email'");
-		*/
-		// bluelovers
-		$query = $this->db->query("SELECT * FROM ".UC_DBTABLEPRE."members WHERE email='$email'");
-		$arr = $this->db->fetch_array($query);
-		// bluelovers
 		return $arr;
 	}
 
