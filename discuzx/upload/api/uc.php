@@ -86,12 +86,29 @@ class uc_note {
 	var $tablepre = '';
 	var $appdir = '';
 
+	// bluelovers
+	/**
+	 * log option
+	 */
+	static $_debug_log = true;
+	// bluelovers
+
 	function _serialize($arr, $htmlon = 0) {
 		if(!function_exists('xml_serialize')) {
 			include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
 		}
 		return xml_serialize($arr, $htmlon);
 	}
+
+	// bluelovers
+	/**
+	 * write log in DISCUZ_ROOT.'./data/log/'.date("Ym").'_api_uc.php'
+	 */
+	function _log($message) {
+		$file =  DISCUZ_ROOT.'./data/log/'.date("Ym").'_api_uc.php';
+		error_log('<'.'?PHP exit;?'.'>'.$message."\n", 3, $file);
+	}
+	// bluelovers
 
 	function uc_note() {
 
@@ -125,7 +142,15 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-
+		// bluelovers
+		if (self::$_debug_log) {
+			self::_log('['.__FUNCTION__.'] '
+				.'uid:'.$get['uid']
+				.',oldusername:'.$get['oldusername']
+				.',newusername:'.$get['newusername']
+			);
+		}
+		// bluelovers
 
 		$tables = array(
 			'common_block' => array('id' => 'uid', 'name' => 'username'),
