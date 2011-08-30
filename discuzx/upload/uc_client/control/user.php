@@ -167,6 +167,13 @@ class usercontrol extends base {
 		$username = $this->input('username');
 		if(!$this->input('isuid')) {
 			$status = $_ENV['user']->get_user_by_username($username);
+		// bluelovers
+		} elseif($this->input('isuid') == 2
+			|| $this->input('isuid') == -1
+		) {
+			// 使 get_user 可以以 email 來查詢使用者帳號
+			$status = $_ENV['user']->get_user_by_email($username);
+		// bluelovers
 		} else {
 			$status = $_ENV['user']->get_user_by_uid($username);
 		}
