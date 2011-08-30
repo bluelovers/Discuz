@@ -86,6 +86,13 @@ class uc_note {
 	var $tablepre = '';
 	var $appdir = '';
 
+	// bluelovers
+	/**
+	 * log option
+	 */
+	static $_debug_log = true;
+	// bluelovers
+
 	function _serialize($arr, $htmlon = 0) {
 		if(!function_exists('xml_serialize')) {
 			include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
