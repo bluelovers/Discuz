@@ -21,6 +21,7 @@ if(submitcheck('lostpwsubmit')) {
 	// bluelovers
 	// 初始化 $tmp
 	$tmp = array();
+	$tmp_stop = 0;
 	// bluelovers
 
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
