@@ -142,7 +142,15 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-
+		// bluelovers
+		if (self::$_debug_log) {
+			self::_log('['.__FUNCTION__.'] '
+				.'uid:'.$get[uid]
+				.',oldusername:'.$get[oldusername]
+				.',newusername:'.$get[newusername]
+			);
+		}
+		// bluelovers
 
 		$tables = array(
 			'common_block' => array('id' => 'uid', 'name' => 'username'),
