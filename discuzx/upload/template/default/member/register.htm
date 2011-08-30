@@ -11,6 +11,16 @@
 	<!--{template common/header}-->
 <!--{/if}-->
 
+<!--{if !$_G['inajax']}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a>
+		<em>&raquo;</em>
+		<!--{if $_G[gp_action] != 'activation'}-->$this->setting['reglinkname']<!--{else}-->{lang index_activation}<!--{/if}-->
+	</div>
+</div>
+<!--{/if}-->
+
 <script type="text/javascript" src="{$this->setting[jspath]}register.js{VERHASH_GZIP_JS}?{VERHASH}"></script>
 
 <!--{subtpl subblock/common/body_ct_header}-->

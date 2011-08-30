@@ -17,8 +17,57 @@ $discuz_action = 141;
 
 if(submitcheck('lostpwsubmit')) {
 	loaducenter();
-	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
-	if($_G['gp_email'] != $tmp['email']) {
+
+	// bluelovers
+	// 初始化 $tmp
+	$tmp = array();
+	$tmp_stop = 0;
+
+	if (empty($_G['gp_username'])) {
+		// 如果沒有 username 則直接判定 $tmp_stop = 1
+		$tmp_stop = 1;
+	} else {
+	// bluelovers
+
+		list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
+		if($_G['gp_email'] != $tmp['email']
+			// bluelovers
+			// 防止未知的漏洞
+			|| empty($tmp['email'])
+			|| empty($tmp['uid'])
+			// bluelovers
+		) {
+			// bluelovers
+			$tmp_stop = 1;
+		}
+
+	}
+
+	if ($tmp_stop
+		&& (
+			!empty($tmp['uid'])
+			|| !empty($_G['gp_email'])
+		)
+	) {
+		if ($tmp['uid']) {
+			// 允許只依靠 username 來查詢
+			$tmp_stop = 0;
+		} elseif (!empty($_G['gp_email'])) {
+			$tmp = array();
+			list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_email'], 2);
+
+			if ($tmp['uid']
+				&& !empty($tmp['email'])
+				&& $_G['gp_email'] == $tmp['email']
+			) {
+				// 允許只依靠 email 來查詢
+				$tmp_stop = 0;
+			}
+		}
+	}
+
+	if ($tmp_stop) {
+		// bluelovers
 		showmessage('getpasswd_account_notmatch');
 	}
 	$member = DB::fetch_first("SELECT uid, username, adminid, email FROM ".DB::table('common_member')." WHERE uid='$tmp[uid]'");
