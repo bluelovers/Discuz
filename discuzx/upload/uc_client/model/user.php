@@ -33,7 +33,7 @@ class usermodel {
 		return $arr;
 	}
 
-	function get_user_by_email($email, $_getlist) {
+	function get_user_by_email($email) {
 		$arr = $this->db->fetch_first("SELECT * FROM ".UC_DBTABLEPRE."members WHERE email='$email'");
 		return $arr;
 	}
