@@ -191,6 +191,9 @@
 							<th></th>
 							<td>
 								<button class="pn pnc" type="submit" name="lostpwsubmit" value="true" tabindex="100"><span>{lang submit}</span></button>
+								<!-- 允許取消查詢密碼 - Start -->
+								<button class="pn" type="reset" tabindex="100" onclick="display('layer_login_$loginhash');display('layer_lostpw_$loginhash');"><span>{lang close}</span></button>
+								<!-- 允許取消查詢密碼 - End -->
 							</td>
 						</tr>
 					</table>
