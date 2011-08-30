@@ -93,6 +93,16 @@ class uc_note {
 		return xml_serialize($arr, $htmlon);
 	}
 
+	// bluelovers
+	/**
+	 * write log in DISCUZ_ROOT.'./data/log/'.date("Ym").'_api_uc.php'
+	 */
+	function _log($message) {
+		$file =  DISCUZ_ROOT.'./data/log/'.date("Ym").'_api_uc.php';
+		error_log('<'.'?PHP exit;?'.'>'.$message."\n", 3, $file);
+	}
+	// bluelovers
+
 	function uc_note() {
 
 	}
