@@ -21,6 +21,7 @@ if(submitcheck('lostpwsubmit')) {
 	if($_G['gp_email'] != $tmp['email']
 		// bluelovers
 		|| empty($tmp['email'])
+		|| empty($tmp['uid'])
 		// bluelovers
 	) {
 		showmessage('getpasswd_account_notmatch');
