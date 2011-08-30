@@ -36,6 +36,18 @@ if(submitcheck('lostpwsubmit')) {
 		$tmp_stop = 1;
 	}
 
+	if ($tmp_stop
+		&& (
+			!empty($tmp['uid'])
+			|| !empty($_G['gp_email'])
+		)
+	) {
+		if ($tmp['uid']) {
+			// 允許只依靠 username 來查詢
+			$tmp_stop = 0;
+		}
+	}
+
 	if ($tmp_stop) {
 		// bluelovers
 		showmessage('getpasswd_account_notmatch');
