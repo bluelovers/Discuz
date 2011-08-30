@@ -19,6 +19,9 @@ if(submitcheck('lostpwsubmit')) {
 	loaducenter();
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
 	if($_G['gp_email'] != $tmp['email']
+		// bluelovers
+		|| empty($tmp['email'])
+		// bluelovers
 	) {
 		showmessage('getpasswd_account_notmatch');
 	}
