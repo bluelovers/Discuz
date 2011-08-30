@@ -17,6 +17,12 @@ $discuz_action = 141;
 
 if(submitcheck('lostpwsubmit')) {
 	loaducenter();
+
+	// bluelovers
+	// 初始化 $tmp
+	$tmp = array();
+	// bluelovers
+
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
 	if($_G['gp_email'] != $tmp['email']
 		// bluelovers
