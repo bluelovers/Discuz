@@ -45,6 +45,17 @@ if(submitcheck('lostpwsubmit')) {
 		if ($tmp['uid']) {
 			// 允許只依靠 username 來查詢
 			$tmp_stop = 0;
+		} elseif (!empty($_G['gp_email'])) {
+			$tmp = array();
+			list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_email'], 2);
+
+			if ($tmp['uid']
+				&& !empty($tmp['email'])
+				&& $_G['gp_email'] == $tmp['email']
+			) {
+				// 允許只依靠 email 來查詢
+				$tmp_stop = 0;
+			}
 		}
 	}
 
