@@ -258,13 +258,13 @@ var rowtypedata = [
 			}
 
 			showformheader($url);
-			showtableheader('threadtype_infotypes');
+			showtableheader($this->cplang('threadtype_infotypes').' - '.$class['title']);
 			showsubtitle(array('', '', 'display_order', 'name', ''));
 
 			echo $threadtypes;
 			echo '<tr><td class="td25"></td><td colspan="5"><div></div></td>';
 
-			showsubmit('typesubmit', 'move');
+			showsubmit('typesubmit', 'postsplit_move_to');
 			showtablefooter();
 			showformfooter();
 		}
