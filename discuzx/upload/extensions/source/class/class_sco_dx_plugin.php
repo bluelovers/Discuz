@@ -22,6 +22,8 @@ class _sco_dx_plugin {
 		$this->attr['directory'] = 'source/plugin/'.$this->identifier.'/';
 
 		$this->_init_setting($this);
+
+		return $this;
 	}
 
 	/**
