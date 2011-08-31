@@ -88,6 +88,9 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		*/
 	}
 
+	/**
+	 * 新增或刪除管理分類信息類別
+	 */
 	function on_op_list_fups() {
 		/*
 		global $lang;
