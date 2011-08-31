@@ -51,12 +51,30 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	function on_op_default() {
 		global $lang;
 
+		$tablename = 'forum_typeoption';
+
 		if ($this->submitcheck('typesubmit')) {
 			global $_G;
 
+			if(is_array($_G['gp_delete'])) {
+				foreach($_G['gp_delete'] as $optionid) {
+					if (empty($optionid)) continue;
+
+					$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='$optionid'");
+					if (DB::num_rows($query)) {
+						cpmsg('無法刪除含有項目的分類類別', '', 'error');
+					} else {
+						DB::delete($tablename, array(
+							'optionid' => $optionid,
+							'classid' => 0,
+						), 1);
+					}
+				}
+			}
+
 			if(is_array($_G['gp_namenew']) && $_G['gp_namenew']) {
 				foreach($_G['gp_namenew'] as $optionid => $val) {
-					DB::update('forum_typeoption', array(
+					DB::update($tablename, array(
 						'title' => trim($_G['gp_namenew'][$optionid]),
 						'displayorder' => intval($_G['gp_displayordernew'][$optionid]),
 					), array(
@@ -72,7 +90,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			if(is_array($_G['gp_newname'])) {
 				foreach($_G['gp_newname'] as $key => $value) {
 					if($newname1 = trim(strip_tags($value))) {
-						$query = DB::query("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0' AND title='$newname1'");
+						$query = DB::query("SELECT optionid FROM ".DB::table($tablename)." WHERE classid='0' AND title='$newname1'");
 						if(DB::num_rows($query)) {
 							cpmsg('forums_threadtypes_duplicate', '', 'error');
 						}
@@ -81,13 +99,14 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 							'displayorder' => $_G['gp_newdisplayorder'][$key],
 							'classid' => 0,
 						);
-						DB::insert('forum_typeoption', $data);
+						DB::insert($tablename, $data);
 					}
 				}
 			}
 
 			if ($this->_getglobal('debug')) {
 				var_dump(array(
+					'gp_delete' => $_G['gp_delete'],
 					'gp_namenew' => $_G['gp_namenew'],
 					'gp_newname' => $_G['gp_newname'],
 				));
@@ -103,7 +122,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 			$threadtypes = '';
 
-			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder");
+			$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' ORDER BY displayorder");
 			while($option = DB::fetch($query)) {
 				$threadtypes .= showtablerow('',
 					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"'),
