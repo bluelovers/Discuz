@@ -147,6 +147,8 @@ class template {
 
 		// 移除 utf8 的 bom 防止出現不該有的空白或造成頁面錯誤
 		$template = $this->remove_bom($template);
+
+		$headeradd .= ";\n\$GLOBAL['_intpl_']['$file'] = 1;";
 		// bluelovers
 
 		$template = "<? if(!defined('IN_DISCUZ')) exit('Access Denied'); {$headeradd}?>\n$template";
@@ -192,6 +194,8 @@ class template {
 					, 'cachefile'		=> &$cachefile
 			));
 		}
+
+		$template .= "<"."?php\n\$GLOBAL['_intpl_']['$file'] = 0;?".">";
 		// bluelovers
 
 		flock($fp, 2);
@@ -406,6 +410,11 @@ class template {
 			$content = str_replace("\r\n", "\n", $content);
 			// bluelovers
 			$this->subtemplates[] = $tplfile;
+
+			// bluelovers
+			$content = "{eval \$GLOBAL['_intpl_']['$file'] = 1;}".$content."{eval \$GLOBAL['_intpl_']['$file'] = 0;}";
+			// bluelovers
+
 			return $content;
 		} else {
 			return '<!-- '.$file.' -->';

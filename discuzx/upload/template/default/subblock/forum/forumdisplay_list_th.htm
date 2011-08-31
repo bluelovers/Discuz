@@ -1,0 +1,110 @@
+<!--{rem 用於統一管理主題列表的顯示}-->
+<!--{rem forumdisplay_list}-->
+
+<!--{rem space_thread}-->
+<!--{rem space_debate}-->
+
+<!--{rem modcp_recyclebin}-->
+<!--{rem modcp_thread}-->
+
+<!--{rem group_index}-->
+<!--{rem group_list}-->
+<!--{rem group_my}-->
+
+<!--{rem tagitem}-->
+
+<span>
+<!--{if $GLOBAL['_intpl_']['home/space_thread']}-->
+	<!--{rem space_thread}-->
+		<!--{if $viewtype == 'reply' || $viewtype == 'postcomment'}-->
+			<a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$thread[pid]" target="_blank">$thread[subject]</a>
+		<!--{else}-->
+			<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" {if $thread['displayorder'] == -1}class="recy"{/if}>$thread[subject]</a>
+		<!--{/if}-->
+
+		<!--{if $thread['digest'] > 0}-->
+			<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" align="absmiddle" />
+		<!--{/if}-->
+		<!--{if $thread['attachment'] == 2}-->
+			<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" align="absmiddle" />
+		<!--{elseif $thread['attachment'] == 1}-->
+			<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" align="absmiddle" />
+		<!--{/if}-->
+
+		<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
+		<!--{if !$_G['gp_filter']}-->
+			<!--{if $thread[$statusfield] == -1}--><span class="xg1">[{$filter[recyclebin]}]</span>
+			<!--{elseif $thread[$statusfield] == -2}--><span class="xg1">[{$filter[aduit]}]</span>
+			<!--{elseif $thread[$statusfield] == -3 && $thread[displayorder] != -4}--><span class="xg1">[{$filter[ignored]}]</span>
+			<!--{elseif $thread[displayorder] == -4}--><span class="xg1">[{$filter[save]}]</span>
+			<!--{elseif $thread['closed'] == 1}--><span class="xg1">[{$filter[close]}]</span>
+			<!--{/if}-->
+		<!--{/if}-->
+<!--{else}-->
+	<!--{rem forumdisplay_list}-->
+		<!--{hook/forumdisplay_thread $key}-->
+		<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
+				<!--{eval $thread[tid]=$thread[closed];}-->
+		<!--{/if}-->
+		$thread[typehtml] $thread[sorthtml]
+		<!--{if $thread['moved']}-->
+			<span>{lang thread_moved}:</span><!--{eval $thread[tid]=$thread[closed];}-->
+		<!--{/if}-->
+		<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} class="xst" >$thread[subject]</a>
+		<!--{if $thread[icon] >= 0}-->
+			<img src="{STATICURL}image/stamp/{$_G[cache][stamps][$thread[icon]][url]}" alt="{$_G[cache][stamps][$thread[icon]][text]}" align="absmiddle" />
+		<!--{/if}-->
+		<!--{REM [bugfix] 修正主題列表的分類信息在沒有指定瀏覽特定 sortid 時，分類信息模板無法顯示的問題 }-->
+		<!--{if $stemplate && $thread[sortid]}-->$stemplate[$thread[sortid]][$thread[tid]]<!--{/if}-->
+		<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
+		<!--{if $thread['price'] > 0}-->
+			<!--{if $thread['special'] == '3'}-->
+			- <span class="xi1">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
+			<!--{else}-->
+			- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
+			<!--{/if}-->
+		<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
+			- <span>[{lang reward_solved}]</span>
+		<!--{/if}-->
+		<!--{if $thread['attachment'] == 2}-->
+			<img src="{STATICURL}image/filetype/image_s.gif" alt="attach_img" title="{lang attach_img}" align="absmiddle" />
+		<!--{elseif $thread['attachment'] == 1}-->
+			<img src="{STATICURL}image/filetype/common.gif" alt="attachment" title="{lang attachment}" align="absmiddle" />
+		<!--{/if}-->
+		<!--{if $thread['digest'] > 0 && $filter != 'digest'}-->
+			<img src="{IMGDIR}/digest_$thread[digest].gif" align="absmiddle" alt="digest" title="{lang thread_digest} $thread[digest]" />
+		<!--{/if}-->
+		<!--{if $thread['displayorder'] == 0}-->
+			<!--{if $thread[recommendicon] && $filter != 'recommend'}-->
+				<img src="{IMGDIR}/recommend_$thread[recommendicon].gif" align="absmiddle" alt="recommend" title="{lang thread_recommend} $thread[recommends]" />
+			<!--{/if}-->
+			<!--{if $thread[heatlevel]}-->
+				<img src="{IMGDIR}/hot_$thread[heatlevel].gif" align="absmiddle" alt="heatlevel" title="$thread[heatlevel] {lang heats}" />
+			<!--{/if}-->
+			<!--{if $thread['rate'] > 0}-->
+				<img src="{IMGDIR}/agree.gif" align="absmiddle" alt="agree" title="{lang rate_credit_add}" />
+			<!--{if $thread['rate'] > 1}--> <span>[<span class="rate_credit_add">+{$thread[rate]}</span>]</span><!--{/if}-->
+			<!--{elseif $thread['rate'] < 0}-->
+				<img src="{IMGDIR}/disagree.gif" align="absmiddle" alt="disagree" title="{lang posts_deducted}" />
+			<!--{if $thread['rate'] < -1}--> <span>[<strong class="rate_credit_reduce">{$thread[rate]}</strong>]</span><!--{/if}-->
+			<!--{/if}-->
+		<!--{/if}-->
+		<!--{if $thread['replycredit'] > 0}-->
+			- <span class="xi1">[{lang replycredit} <strong> $thread['replycredit']</strong> ]</span>
+		<!--{/if}-->
+		<!--{if $thread[multipage]}-->
+			<span class="tps">$thread[multipage]</span>
+		<!--{/if}-->
+		<!--{if $thread['weeknew']}-->
+			<a href="forum.php?mod=redirect&tid=$thread[tid]&goto=lastpost#lastpost" class="xi1">New</a>
+		<!--{/if}-->
+		<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
+			<!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
+				<!--{eval $thread[tid]=$thread[closed];}-->
+			<!--{/if}-->
+			<!--{if $groupnames[$thread[tid]]}-->
+				<span class="fromg xg1"> [{lang from}: <a href="forum.php?mod=forumdisplay&fid={$groupnames[$thread[tid]][fid]}" target="_blank" class="xg1">{$groupnames[$thread[tid]][name]}</a>]</span>
+			<!--{/if}-->
+		<!--{/if}-->
+<!--{/if}-->
+</span>
