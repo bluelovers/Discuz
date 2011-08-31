@@ -26,7 +26,13 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function set($attr) {
+		/*
 		$this->attr['global'] = $attr;
+		*/
+		foreach ($attr as $_k => $_v) {
+			$this->attr['global'][$_k] = $_v;
+		}
+
 		return $this;
 	}
 
@@ -59,9 +65,9 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			'list_fups' => $lang['threadtype_infotypes'],
 		);
 
-		echo '<div class="itemtitle"><ul class="tab1">';
+		echo '<div class="extcredits" style="margin: 0px;"><ul class="rowform">';
 		foreach ($op_list as $key => $name) {
-			echo '<li'.($this->attr['global']['op'] == $key ? ' class="current"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&op='.$key.'"><span>'.$name.'</span></a></li>';
+			echo '<li'.($this->attr['global']['op'] == $key ? ' class="current" style="font-weight: bold;"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&op='.$key.'"><span>'.$name.'</span></a></li>';
 		}
 		echo '</ul></div>';
 	}
