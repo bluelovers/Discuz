@@ -55,14 +55,16 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function cpheader() {
+		/*
 		global $lang;
+		*/
 
 		parent::cpheader();
 
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 
 		$op_list = array(
-			'list_fups' => $lang['threadtype_infotypes'],
+			'list_fups' => $this->cplang('threadtype_infotypes'),
 		);
 
 		echo '<div class="extcredits" style="margin: 0px;"><ul class="rowform">';
@@ -79,7 +81,9 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function on_op_list_fups() {
+		/*
 		global $lang;
+		*/
 
 		$tablename = 'forum_typeoption';
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
@@ -172,7 +176,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 					'('.$option['optionid'].')',
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$option[optionid]]\" value=\"$option[displayorder]\">",
 					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$option[optionid]]\" value=\"".dhtmlspecialchars($option['title'])."\">",
-					"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=typeoption&classid=$option[optionid]\" class=\"act nowrap\">$lang[detail]</a>"
+					"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=typeoption&classid=$option[optionid]\" class=\"act nowrap\">".$this->cplang('detail')."</a>"
 				), TRUE);
 			}
 
@@ -195,7 +199,7 @@ var rowtypedata = [
 			showsubtitle(array('', '', 'display_order', 'name', ''));
 
 			echo $threadtypes;
-			echo '<tr><td class="td25"></td><td colspan="5"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['threadtype_infotypes_add'].'</a></div></td>';
+			echo '<tr><td class="td25"></td><td colspan="5"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$this->cplang('threadtype_infotypes_add').'</a></div></td>';
 
 			showsubmit('typesubmit', 'submit', 'del');
 			showtablefooter();
