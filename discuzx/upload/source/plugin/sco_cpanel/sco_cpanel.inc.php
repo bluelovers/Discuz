@@ -82,6 +82,9 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		return $this;
 	}
 
+	/**
+	 * 預設行為
+	 */
 	function on_op_default() {
 		/*
 		$this->on_op_list_fups();
