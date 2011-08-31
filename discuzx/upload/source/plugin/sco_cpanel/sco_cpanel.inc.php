@@ -223,8 +223,9 @@ var rowtypedata = [
 		$class = DB::fetch_first("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' AND optionid='$classid' LIMIT 1");
 		if (empty($class)) {
    			$this->cpmsg('查詢的分類信息類別不存在', '', 'error');
+		} else {
+			$classid = $class['optionid'];
 		}
-
 
 		$url = 'plugins&';
 		$url .= http_build_query(array(
