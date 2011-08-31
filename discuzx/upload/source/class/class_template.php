@@ -406,6 +406,11 @@ class template {
 			$content = str_replace("\r\n", "\n", $content);
 			// bluelovers
 			$this->subtemplates[] = $tplfile;
+
+			// bluelovers
+			$content = "\n{rem $file; - Start}\n".$content."\n{rem $file; - End}\n";
+			// bluelovers
+
 			return $content;
 		} else {
 			return '<!-- '.$file.' -->';
