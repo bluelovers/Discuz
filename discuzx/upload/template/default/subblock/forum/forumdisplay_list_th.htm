@@ -14,13 +14,14 @@
 <!--{rem tagitem}-->
 
 <span>
-<!--{if $GLOBAL['_intpl_']['space_thread']}-->
+<!--{if $GLOBAL['_intpl_']['home/space_thread']}-->
 	<!--{rem space_thread}-->
 		<!--{if $viewtype == 'reply' || $viewtype == 'postcomment'}-->
 			<a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$thread[pid]" target="_blank">$thread[subject]</a>
 		<!--{else}-->
 			<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" {if $thread['displayorder'] == -1}class="recy"{/if}>$thread[subject]</a>
 		<!--{/if}-->
+
 		<!--{if $thread['digest'] > 0}-->
 			<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" align="absmiddle" />
 		<!--{/if}-->
@@ -29,13 +30,14 @@
 		<!--{elseif $thread['attachment'] == 1}-->
 			<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" align="absmiddle" />
 		<!--{/if}-->
+
 		<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
 		<!--{if !$_G['gp_filter']}-->
-			<!--{if $thread[$statusfield] == -1}--><span class="xg1">$filter[recyclebin]</span>
-			<!--{elseif $thread[$statusfield] == -2}--><span class="xg1">$filter[aduit]</span>
-			<!--{elseif $thread[$statusfield] == -3 && $thread[displayorder] != -4}--><span class="xg1">$filter[ignored]</span>
-			<!--{elseif $thread[displayorder] == -4}--><span class="xg1">$filter[save]</span>
-			<!--{elseif $thread['closed'] == 1}--><span class="xg1">$filter[close]</span>
+			<!--{if $thread[$statusfield] == -1}--><span class="xg1">[{$filter[recyclebin]}]</span>
+			<!--{elseif $thread[$statusfield] == -2}--><span class="xg1">[{$filter[aduit]}]</span>
+			<!--{elseif $thread[$statusfield] == -3 && $thread[displayorder] != -4}--><span class="xg1">[{$filter[ignored]}]</span>
+			<!--{elseif $thread[displayorder] == -4}--><span class="xg1">[{$filter[save]}]</span>
+			<!--{elseif $thread['closed'] == 1}--><span class="xg1">[{$filter[close]}]</span>
 			<!--{/if}-->
 		<!--{/if}-->
 <!--{else}-->
