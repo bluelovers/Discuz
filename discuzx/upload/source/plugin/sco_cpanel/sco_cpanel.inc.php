@@ -37,7 +37,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		$method = 'on_op_'.$operation;
 
-		cpheader();
+		$this->cpheader();
 
 		$this->$method();
 
@@ -45,7 +45,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			var_dump($this);
 		}
 
-		cpfooter();
+		$this->cpfooter();
 	}
 
 	function on_op_default() {
@@ -57,6 +57,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		$tablename = 'forum_typeoption';
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
+		$url .= '&op=list_fups';
 
 		if ($this->submitcheck('typesubmit')) {
 			global $_G;

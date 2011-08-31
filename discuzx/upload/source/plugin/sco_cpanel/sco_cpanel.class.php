@@ -17,6 +17,14 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
 	}
 
+	function cpheader() {
+		cpheader();
+	}
+
+	function cpfooter() {
+		cpfooter();
+	}
+
 }
 
 ?>
