@@ -38,6 +38,10 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		$this->$method();
 
+		if ($this->_getglobal('debug')) {
+			var_dump($this);
+		}
+
 		cpfooter();
 	}
 
@@ -71,6 +75,7 @@ $_cpanel = new plugin_sco_cpanel_threadsorts();
 $_cpanel
 	->set(array(
 		'op' => $_G['gp_op'],
+		'debug' => 1,
 	))
 	->run()
 ;
