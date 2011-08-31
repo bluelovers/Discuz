@@ -250,7 +250,31 @@ var rowtypedata = [
 		));
 
 		if ($this->submitcheck('typesubmit')) {
-			global $_G;
+
+			$moveto = intval($_G['gp_moveto_classid']);
+
+			if (
+				empty($moveto)
+				|| empty($class_fups[$moveto])
+			) {
+				$this->cpmsg('移動的目標分類信息類別不存在', '', 'error');
+			}
+
+			$ids = dimplode($_G['gp_ids']);
+
+			DB::update($tablename, array(
+				'classid' => $moveto,
+			), "
+				classid = '$classid'
+				AND optionid IN ($ids)
+			");
+
+			cpmsg(
+				'forums_threadtypes_succeed'
+				, 'action='.$url
+				, 'succeed'
+			);
+
 		} else {
 			$threadtypes = '';
 
@@ -259,7 +283,7 @@ var rowtypedata = [
 				$threadtypes .= showtablerow('',
 					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"'),
 					array(
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"ids[]\" value=\"$option[optionid]\">",
 					'('.$option['optionid'].')',
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$option[optionid]]\" value=\"$option[displayorder]\">",
 					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$option[optionid]]\" value=\"".dhtmlspecialchars($option['title'])."\">",
@@ -281,7 +305,7 @@ var rowtypedata = [
 			echo $threadtypes;
 			echo '<tr><td class="td25">'.$this->cplang('postsplit_move_to').'</td><td colspan="5"><div>'.$_select.'</div></td>';
 
-			showsubmit('typesubmit', 'postsplit_move_to');
+			showsubmit('typesubmit', 'postsplit_move_to', '&nbsp; &nbsp; &nbsp; ');
 			showtablefooter();
 			showformfooter();
 		}
