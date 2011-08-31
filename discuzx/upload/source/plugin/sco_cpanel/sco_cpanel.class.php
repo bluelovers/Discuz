@@ -19,6 +19,8 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 
 	function cpheader() {
 		cpheader();
+
+		return $this;
 	}
 
 	function cpfooter() {
@@ -26,6 +28,8 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 		cpfooter();
 		dexit();
 		*/
+
+		return $this;
 	}
 
 	function cplang($name, $replace = array(), $output = false) {
