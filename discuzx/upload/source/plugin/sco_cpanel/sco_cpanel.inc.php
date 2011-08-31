@@ -48,8 +48,28 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		$this->cpfooter();
 	}
 
+	function cpheader() {
+		global $lang;
+
+		parent::cpheader();
+
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
+
+		$op_list = array(
+			'list_fups' => $lang['threadtype_infotypes'],
+		);
+
+		echo '<div class="itemtitle"><ul class="tab1">';
+		foreach ($op_list as $key => $name) {
+			echo '<li'.($this->attr['global']['op'] == $key ? ' class="current"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&op='.$key.'"><span>'.$name.'</span></a></li>';
+		}
+		echo '</ul></div>';
+	}
+
 	function on_op_default() {
+		/*
 		$this->on_op_list_fups();
+		*/
 	}
 
 	function on_op_list_fups() {
