@@ -41,7 +41,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		$this->$method();
 
-		if ($this->_getglobal('debug')) {
+		if ($this->_getglobal('debug', 'setting')) {
 			var_dump($this);
 		}
 
@@ -139,7 +139,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 				}
 			}
 
-			if ($this->_getglobal('debug')) {
+			if ($this->_getglobal('debug', 'setting')) {
 				var_dump(array(
 					'gp_delete' => $_G['gp_delete'],
 					'gp_namenew' => $_G['gp_namenew'],
@@ -204,7 +204,6 @@ $_cpanel = new plugin_sco_cpanel_threadsorts();
 $_cpanel
 	->set(array(
 		'op' => $_G['gp_op'],
-		'debug' => 1,
 		'module' => &$module,
 	))
 	->run()

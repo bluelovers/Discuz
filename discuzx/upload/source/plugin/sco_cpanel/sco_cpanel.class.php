@@ -22,7 +22,10 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 	}
 
 	function cpfooter() {
+		/*
 		cpfooter();
+		dexit();
+		*/
 	}
 
 }
