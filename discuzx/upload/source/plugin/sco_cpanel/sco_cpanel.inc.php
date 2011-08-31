@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 //error_reporting(E_ALL ^E_NOTICE ^E_STRICT);
 
-include_once dirname(__FILE__).'/./sco_cpanel.class.php';
+require_once dirname(__FILE__).'/./sco_cpanel.class.php';
 
 class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
@@ -108,7 +108,11 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 			$deleted = $modified = array();
 
-			if(is_array($_G['gp_delete'])) {
+			if (
+				$this->_getglobal('allow_delete', 'setting')
+				&& !empty($_G['gp_delete'])
+				&& is_array($_G['gp_delete'])
+			) {
 
 				$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid > 0 AND classid IN (".dimplode($_G['gp_delete']).")");
 				if (DB::num_rows($query)) {
