@@ -217,6 +217,9 @@ var rowtypedata = [
 		}
 	}
 
+	/**
+	 * 移動分類信息到指定的分類信息類別下
+	 */
 	function on_op_list_items() {
 		global $_G;
 
