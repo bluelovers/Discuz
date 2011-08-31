@@ -43,9 +43,13 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		$method = 'on_op_'.$operation;
 
-		$this->cpheader();
-
+		ob_start();
 		$this->$method();
+		$_content = ob_get_contents();
+		ob_end_clean();
+
+		$this->cpheader();
+		echo $_content;
 
 		if ($this->_getglobal('debug', 'setting')) {
 			var_dump($this);
