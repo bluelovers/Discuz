@@ -2,11 +2,11 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-09-01 04:36]]></item>
+	<item id="Time"><![CDATA[2011-09-01 07:45]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
-			<item id="available"><![CDATA[0]]></item>
+			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
 			<item id="name"><![CDATA[Scorpio! cPanel]]></item>
 			<item id="identifier"><![CDATA[sco_cpanel]]></item>
@@ -37,6 +37,15 @@
 				<item id="title"><![CDATA[Debug]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[debug]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[允許刪除分類信息字串]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[allow_delete]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[0]]></item>
 				<item id="extra"><![CDATA[]]></item>
