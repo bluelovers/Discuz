@@ -147,6 +147,8 @@ class template {
 
 		// 移除 utf8 的 bom 防止出現不該有的空白或造成頁面錯誤
 		$template = $this->remove_bom($template);
+
+		$headeradd .= ";\n\$GLOBAL['_intpl_']['$file'] = 1;";
 		// bluelovers
 
 		$template = "<? if(!defined('IN_DISCUZ')) exit('Access Denied'); {$headeradd}?>\n$template";
