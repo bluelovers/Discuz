@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 //error_reporting(E_ALL ^E_NOTICE ^E_STRICT);
 
-require_once dirname(__FILE__).'/./sco_cpanel.class.php';
+include_once dirname(__FILE__).'/./sco_cpanel.class.php';
 
 class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
