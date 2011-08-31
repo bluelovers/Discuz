@@ -15,7 +15,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 $classoptionmenu = array();
-$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder");
+$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder, title");
 $curclassname = '';
 while($option = DB::fetch($query)) {
 	if($_G['gp_classid'] == $option['optionid']) {
