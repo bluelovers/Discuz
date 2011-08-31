@@ -94,7 +94,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 				$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid > 0 AND classid IN (".dimplode($_G['gp_delete']).")");
 				if (DB::num_rows($query)) {
-					cpmsg('無法刪除含有項目的分類類別', '', 'error');
+					$this->cpmsg('無法刪除含有項目的分類類別', '', 'error');
 				}
 
 				foreach($_G['gp_delete'] as $optionid) {
@@ -102,7 +102,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 					$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='$optionid'");
 					if (DB::num_rows($query)) {
-						cpmsg('無法刪除含有項目的分類類別, 目前已經刪除 '.dimplode($deleted), '', 'error');
+						$this->cpmsg('無法刪除含有項目的分類類別, 目前已經刪除 '.dimplode($deleted), '', 'error');
 					} else {
 						$deleted[] = $optionid;
 						DB::delete($tablename, array(
@@ -133,7 +133,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 					if($newname1 = trim(strip_tags($value))) {
 						$query = DB::query("SELECT optionid FROM ".DB::table($tablename)." WHERE classid='0' AND title='$newname1'");
 						if(DB::num_rows($query)) {
-							cpmsg('forums_threadtypes_duplicate', '', 'error');
+							$this->cpmsg('forums_threadtypes_duplicate', '', 'error');
 						}
 						$data = array(
 							'title' => $newname1,
