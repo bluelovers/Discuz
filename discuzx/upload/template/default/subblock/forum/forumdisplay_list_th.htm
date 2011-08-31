@@ -1,7 +1,5 @@
 <!--{rem 用於統一管理主題列表的顯示}-->
-<!--{rem forumdisplay_list}-->
 
-<!--{rem space_thread}-->
 <!--{rem space_debate}-->
 
 <!--{rem modcp_recyclebin}-->
@@ -10,8 +8,6 @@
 <!--{rem group_index}-->
 <!--{rem group_list}-->
 <!--{rem group_my}-->
-
-<!--{rem tagitem}-->
 
 <span>
 <!--{if $GLOBAL['_intpl_']['home/space_thread']}-->
@@ -39,6 +35,28 @@
 			<!--{elseif $thread[displayorder] == -4}--><span class="xg1">[{$filter[save]}]</span>
 			<!--{elseif $thread['closed'] == 1}--><span class="xg1">[{$filter[close]}]</span>
 			<!--{/if}-->
+		<!--{/if}-->
+
+<!--{elseif $GLOBAL['_intpl_']['tag/tagitem']}-->
+	<!--{rem tagitem}-->
+		<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" $thread[highlight]>$thread['subject']</a>
+		<!--{if $thread['readperm']}--> - <span>[{lang readperm} <span class="xw1">$thread[readperm]</span>]</span><!--{/if}-->
+		<!--{if $thread['price'] > 0}-->
+			<!--{if $thread['special'] == '3'}-->
+			- <span style="color: #C60">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
+			<!--{else}-->
+			- <span>[{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]</span>
+			<!--{/if}-->
+		<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
+			- <span>[{lang reward_solved}]</span>
+		<!--{/if}-->
+		<!--{if $thread['attachment'] == 2}-->
+			<img src="{STATICURL}image/filetype/image_s.gif" alt="attach_img" title="{lang attach_img}" align="absmiddle" />
+		<!--{elseif $thread['attachment'] == 1}-->
+			<img src="{STATICURL}image/filetype/common.gif" alt="attachment" title="{lang attachment}" align="absmiddle" />
+		<!--{/if}-->
+		<!--{if $thread['digest'] > 0 && $filter != 'digest'}-->
+			<img src="{IMGDIR}/digest_$thread[digest].gif" align="absmiddle" alt="digest" title="{lang thread_digest} $thread[digest]" />
 		<!--{/if}-->
 <!--{else}-->
 	<!--{rem forumdisplay_list}-->
