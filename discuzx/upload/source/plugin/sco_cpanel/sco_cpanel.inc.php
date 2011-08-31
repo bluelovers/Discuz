@@ -52,8 +52,32 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		global $lang;
 
 		if ($this->submitcheck('typesubmit')) {
+			global $_G;
 
+			if(is_array($_G['gp_namenew']) && $_G['gp_namenew']) {
+				foreach($_G['gp_namenew'] as $optionid => $val) {
+					DB::update('forum_typeoption', array(
+						'title' => trim($_G['gp_namenew'][$optionid]),
+						'displayorder' => intval($_G['gp_displayordernew'][$optionid]),
+					), array(
+						'optionid' => $optionid,
+						'classid' => 0,
+					));
+					if(DB::affected_rows()) {
+						$modified[] = $optionid;
+					}
+				}
+			}
 
+			if ($this->_getglobal('debug')) {
+				var_dump($_G['gp_namenew']);
+			}
+
+			cpmsg(
+				'forums_threadtypes_succeed'
+				, "action=plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&"
+				, 'succeed'
+			);
 
 		} else {
 
@@ -69,10 +93,26 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 				), TRUE);
 			}
 
+			?>
+<script type="text/JavaScript">
+var rowtypedata = [
+	[
+		[1, '', 'td25'],
+		[1, '<input type="text" class="txt" name="newdisplayorder[]" size="2" value="">', 'td28'],
+		[1, '<input type="text" class="txt" name="newname[]" size="15">'],
+		[1, '']
+	],
+];
+</script>
+<?php
+
 			showformheader("plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&");
 			showtableheader('threadtype_infotypes');
 			showsubtitle(array('', 'display_order', 'name', ''));
+
 			echo $threadtypes;
+			echo '<tr><td class="td25"></td><td colspan="5"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['threadtype_infotypes_add'].'</a></div></td>';
+
 			showsubmit('typesubmit', 'submit', 'del');
 			showtablefooter();
 			showformfooter();
