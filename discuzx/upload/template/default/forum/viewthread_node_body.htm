@@ -13,6 +13,11 @@
 	<!--{template forum/viewthread_pay}-->
 <!--{else}-->
 	<!--{hook/viewthread_posttop $postcount}-->
+
+	<!--{rem 掛載顯示帖子類型 start }-->
+	<!--{subtpl subblock/forum/viewthread_node_body_msg_top}-->
+	<!--{rem 掛載顯示帖子類型 end }-->
+
 	<!--{if $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5))}-->
 		<div class="locked">{lang admin_message_banned}</div>
 	<!--{elseif $post['status'] & 1}-->
