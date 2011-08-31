@@ -291,7 +291,7 @@ var rowtypedata = [
 					'('.$option['optionid'].')',
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$option[optionid]]\" value=\"$option[displayorder]\">",
 					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$option[optionid]]\" value=\"".dhtmlspecialchars($option['title'])."\">",
-					'',
+					"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=optiondetail&optionid=$option[optionid]\" class=\"act nowrap\">".$this->cplang('detail')."</a>",
 				), TRUE);
 			}
 
