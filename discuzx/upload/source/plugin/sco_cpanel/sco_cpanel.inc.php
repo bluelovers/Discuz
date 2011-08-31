@@ -174,13 +174,14 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' ORDER BY displayorder, title");
 			while($option = DB::fetch($query)) {
 				$threadtypes .= showtablerow('',
-					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"'),
+					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"', 'class="td29"'),
 					array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
 					'('.$option['optionid'].')',
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$option[optionid]]\" value=\"$option[displayorder]\">",
 					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$option[optionid]]\" value=\"".dhtmlspecialchars($option['title'])."\">",
-					"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=typeoption&classid=$option[optionid]\" class=\"act nowrap\">".$this->cplang('detail')."</a>"
+					"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=typeoption&classid=$option[optionid]\" class=\"act nowrap\">".$this->cplang('detail')."</a>",
+					"<a href=\"".ADMINSCRIPT."?action={$url}&op=list_items&classid=$option[optionid]\" class=\"act nowrap\">".$this->cplang('operation')."</a>",
 				), TRUE);
 			}
 
@@ -192,7 +193,7 @@ var rowtypedata = [
 		[1, ''],
 		[1, '<input type="text" class="txt" name="newdisplayorder[]" size="2" value="">', 'td28'],
 		[1, '<input type="text" class="txt" name="newname[]" size="15">'],
-		[1, '']
+		[2, '']
 	],
 ];
 </script>
@@ -200,7 +201,7 @@ var rowtypedata = [
 
 			showformheader($url);
 			showtableheader('threadtype_infotypes');
-			showsubtitle(array('', '', 'display_order', 'name', ''));
+			showsubtitle(array('', '', 'display_order', 'name', '', ''));
 
 			echo $threadtypes;
 			echo '<tr><td class="td25"></td><td colspan="5"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$this->cplang('threadtype_infotypes_add').'</a></div></td>';
@@ -209,6 +210,56 @@ var rowtypedata = [
 			showtablefooter();
 			showformfooter();
 
+		}
+	}
+
+	function on_op_list_items() {
+		global $_G;
+
+		$tablename = 'forum_typeoption';
+
+		$classid = $_G['gp_classid'];
+
+		$url = 'plugins&';
+		$url .= http_build_query(array(
+			'operation' => 'config',
+			'do' => $this->attr['profile']['pluginid'],
+			'identifier' => $this->identifier,
+
+			'pmod' => $this->attr['global']['module']['name'],
+
+			'op' => 'list_items',
+			'classid' => $classid,
+		));
+
+		if ($this->submitcheck('typesubmit')) {
+			global $_G;
+		} else {
+			$threadtypes = '';
+
+			$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='$classid' ORDER BY displayorder, title");
+			while($option = DB::fetch($query)) {
+				$threadtypes .= showtablerow('',
+					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"'),
+					array(
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
+					'('.$option['optionid'].')',
+					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$option[optionid]]\" value=\"$option[displayorder]\">",
+					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$option[optionid]]\" value=\"".dhtmlspecialchars($option['title'])."\">",
+					'',
+				), TRUE);
+			}
+
+			showformheader($url);
+			showtableheader('threadtype_infotypes');
+			showsubtitle(array('', '', 'display_order', 'name', ''));
+
+			echo $threadtypes;
+			echo '<tr><td class="td25"></td><td colspan="5"><div></div></td>';
+
+			showsubmit('typesubmit', 'move');
+			showtablefooter();
+			showformfooter();
 		}
 	}
 }
