@@ -56,14 +56,23 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		if ($this->submitcheck('typesubmit')) {
 			global $_G;
 
+			$deleted = $modified = array();
+
 			if(is_array($_G['gp_delete'])) {
+
+				$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid > 0 AND classid IN (".dimplode($_G['gp_delete']).")");
+				if (DB::num_rows($query)) {
+					cpmsg('無法刪除含有項目的分類類別', '', 'error');
+				}
+
 				foreach($_G['gp_delete'] as $optionid) {
 					if (empty($optionid)) continue;
 
 					$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='$optionid'");
 					if (DB::num_rows($query)) {
-						cpmsg('無法刪除含有項目的分類類別', '', 'error');
+						cpmsg('無法刪除含有項目的分類類別, 目前已經刪除 '.dimplode($deleted), '', 'error');
 					} else {
+						$deleted[] = $optionid;
 						DB::delete($tablename, array(
 							'optionid' => $optionid,
 							'classid' => 0,
