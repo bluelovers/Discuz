@@ -14,18 +14,21 @@ if (!defined('IN_DISCUZ')) {
 include_once 'sco_cpanel.class.php';
 
 class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
-	var $attr = array();
 
 	function plugin_sco_cpanel_threadsorts() {
+		global $plugin, $module;
+		$this->_init($plugin['identifier']);
+
+		$this->_this(&$this);
 	}
 
 	function set($attr) {
-		$this->attr = $attr;
+		$this->attr['global'] = $attr;
 		return $this;
 	}
 
 	function run() {
-		$operation = $this->attr['op'];
+		$operation = $this->attr['global']['op'];
 
 		$operation = $operation ? $operation : 'default';
 
@@ -39,7 +42,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function on_op_default() {
-		global $lang;
+		global $lang, $plugin, $module;
 
 		$threadtypes = '';
 
@@ -53,7 +56,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			), TRUE);
 		}
 
-		showformheader("plugins&operation=config&do=11&identifier=sco_cpanel&pmod=sco_cpanel&");
+		showformheader("plugins&operation=config&do=".$plugin['pluginid']."&identifier=".$plugin['identifier']."&pmod=".$module['name']."&");
 		showtableheader('threadtype_infotypes');
 		showsubtitle(array('', 'display_order', 'name', ''));
 		echo $threadtypes;
