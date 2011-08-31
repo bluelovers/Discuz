@@ -195,7 +195,7 @@ class template {
 			));
 		}
 
-		$template .= "<\?php\n\$GLOBAL['_intpl_']['$file'] = 0;\?>";
+		$template .= "<"."?php\n\$GLOBAL['_intpl_']['$file'] = 0;?".">";
 		// bluelovers
 
 		flock($fp, 2);
