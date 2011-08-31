@@ -20,6 +20,9 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		$this->_init($plugin['identifier']);
 
 		$this->_this(&$this);
+
+		$this->_fix_plugin_setting();
+		$this->attr['profile'] = $this->attr['db']['common_plugin'];
 	}
 
 	function set($attr) {
@@ -76,6 +79,7 @@ $_cpanel
 	->set(array(
 		'op' => $_G['gp_op'],
 		'debug' => 1,
+		'module' => &$module,
 	))
 	->run()
 ;
