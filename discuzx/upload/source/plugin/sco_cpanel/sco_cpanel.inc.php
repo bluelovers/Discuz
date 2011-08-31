@@ -52,6 +52,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		global $lang;
 
 		$tablename = 'forum_typeoption';
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 
 		if ($this->submitcheck('typesubmit')) {
 			global $_G;
@@ -123,7 +124,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 			cpmsg(
 				'forums_threadtypes_succeed'
-				, "action=plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&"
+				, 'action='.$url
 				, 'succeed'
 			);
 
@@ -158,7 +159,7 @@ var rowtypedata = [
 </script>
 <?php
 
-			showformheader("plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&");
+			showformheader($url);
 			showtableheader('threadtype_infotypes');
 			showsubtitle(array('', '', 'display_order', 'name', ''));
 
