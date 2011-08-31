@@ -220,7 +220,17 @@ var rowtypedata = [
 
 		$classid = $_G['gp_classid'];
 
-		$class = DB::fetch_first("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' AND optionid='$classid' LIMIT 1");
+		$class = $class_fups = array();
+
+		$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' ORDER BY displayorder, title");
+		while($option = DB::fetch($query)) {
+			$class_fups[$option['optionid']] = $option;
+
+			if ($classid && $option['optionid'] == $classid) {
+				$class = $option;
+			}
+		}
+
 		if (empty($class)) {
    			$this->cpmsg('查詢的分類信息類別不存在', '', 'error');
 		} else {
@@ -257,12 +267,19 @@ var rowtypedata = [
 				), TRUE);
 			}
 
+			$_select = '<select name="moveto_classid">';
+			$_select .= "<option value=\"\">".$this->cplang('none')."</option>";
+			foreach ($class_fups as $_k => $_v) {
+				$_select .= "<option value=\"$_k\">$_v[title]</option>";
+			}
+			$_select .= '</select>';
+
 			showformheader($url);
 			showtableheader($this->cplang('threadtype_infotypes').' - '.$class['title']);
 			showsubtitle(array('', '', 'display_order', 'name', ''));
 
 			echo $threadtypes;
-			echo '<tr><td class="td25"></td><td colspan="5"><div></div></td>';
+			echo '<tr><td class="td25">'.$this->cplang('postsplit_move_to').'</td><td colspan="5"><div>'.$_select.'</div></td>';
 
 			showsubmit('typesubmit', 'postsplit_move_to');
 			showtablefooter();
