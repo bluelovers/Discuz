@@ -1,1 +1,6 @@
 <!-- for viewthread_node_body -->
+	<!--{if $thread['displayorder'] == -4}-->
+		<div class="locked">{lang thead} {lang on} {lang draftbox}</div>
+	<!--{elseif $post['invisible'] == -3}-->
+		<div class="locked">{lang post} {lang on} {lang draftbox}</div>
+	<!--{/if}-->
