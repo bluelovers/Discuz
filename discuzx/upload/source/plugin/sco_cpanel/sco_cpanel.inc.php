@@ -49,6 +49,10 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function on_op_default() {
+		$this->on_op_list_fups();
+	}
+
+	function on_op_list_fups() {
 		global $lang;
 
 		$tablename = 'forum_typeoption';
