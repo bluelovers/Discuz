@@ -131,7 +131,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 			$threadtypes = '';
 
-			$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' ORDER BY displayorder");
+			$query = DB::query("SELECT * FROM ".DB::table($tablename)." WHERE classid='0' ORDER BY displayorder, title");
 			while($option = DB::fetch($query)) {
 				$threadtypes .= showtablerow('',
 					array('class="td25"', 'class="td25 td27 lightfont"', 'class="td25"', 'class="td29"'),
