@@ -49,7 +49,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function on_op_default() {
-		global $lang, $plugin, $module;
+		global $lang;
 
 		$threadtypes = '';
 
@@ -63,7 +63,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			), TRUE);
 		}
 
-		showformheader("plugins&operation=config&do=".$plugin['pluginid']."&identifier=".$plugin['identifier']."&pmod=".$module['name']."&");
+		showformheader("plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&");
 		showtableheader('threadtype_infotypes');
 		showsubtitle(array('', 'display_order', 'name', ''));
 		echo $threadtypes;
