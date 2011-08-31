@@ -408,7 +408,7 @@ class template {
 			$this->subtemplates[] = $tplfile;
 
 			// bluelovers
-			$content = "\n{rem $file; - Start}\n".$content."\n{rem $file; - End}\n";
+			$content = "\n{rem $file; - Start}\n"."{eval \$GLOBAL['_intpl_']['$file'] = 1;}".$content."{eval \$GLOBAL['_intpl_']['$file'] = 0;}"."\n{rem $file; - End}\n";
 			// bluelovers
 
 			return $content;
