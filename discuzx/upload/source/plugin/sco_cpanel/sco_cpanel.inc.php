@@ -30,7 +30,12 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		$operation = $operation ? $operation : 'default';
 
 		$method = 'on_op_'.$operation;
+
+		cpheader();
+
 		$this->$method();
+
+		cpfooter();
 	}
 
 	function on_op_default() {
@@ -57,8 +62,6 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		showformfooter();
 	}
 }
-
-cpheader();
 
 $_cpanel = new plugin_sco_cpanel_threadsorts();
 
