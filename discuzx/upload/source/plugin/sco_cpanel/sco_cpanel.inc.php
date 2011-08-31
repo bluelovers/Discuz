@@ -28,7 +28,11 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	}
 
 	function run() {
-		$method = 'op_'.$this->attr['operation'];
+		$operation = $this->attr['operation'];
+
+		$operation = $operation ? $operation : 'default';
+
+		$method = 'on_op_'.$operation;
 		$this->$method();
 	}
 }
