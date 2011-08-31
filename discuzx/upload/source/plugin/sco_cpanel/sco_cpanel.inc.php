@@ -52,6 +52,8 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		}
 
 		$this->cpfooter();
+
+		return $this;
 	}
 
 	function cpheader() {
@@ -72,6 +74,8 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 			echo '<li'.($this->attr['global']['op'] == $key ? ' class="current" style="font-weight: bold;"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&op='.$key.'"><span>'.$name.'</span></a></li>';
 		}
 		echo '</ul></div>';
+
+		return $this;
 	}
 
 	function on_op_default() {
