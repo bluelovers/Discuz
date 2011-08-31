@@ -69,8 +69,28 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 				}
 			}
 
+			if(is_array($_G['gp_newname'])) {
+				foreach($_G['gp_newname'] as $key => $value) {
+					if($newname1 = trim(strip_tags($value))) {
+						$query = DB::query("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0' AND title='$newname1'");
+						if(DB::num_rows($query)) {
+							cpmsg('forums_threadtypes_duplicate', '', 'error');
+						}
+						$data = array(
+							'title' => $newname1,
+							'displayorder' => $_G['gp_newdisplayorder'][$key],
+							'classid' => 0,
+						);
+						DB::insert('forum_typeoption', $data);
+					}
+				}
+			}
+
 			if ($this->_getglobal('debug')) {
-				var_dump($_G['gp_namenew']);
+				var_dump(array(
+					'gp_namenew' => $_G['gp_namenew'],
+					'gp_newname' => $_G['gp_newname'],
+				));
 			}
 
 			cpmsg(
