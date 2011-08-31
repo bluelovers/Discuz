@@ -51,6 +51,12 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	function on_op_default() {
 		global $lang;
 
+		if ($this->submitcheck('typesubmit')) {
+
+
+
+		} else {
+
 		$threadtypes = '';
 
 		$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder");
@@ -70,6 +76,8 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		showsubmit('typesubmit', 'submit', 'del');
 		showtablefooter();
 		showformfooter();
+
+		}
 	}
 }
 
