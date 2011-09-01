@@ -13,6 +13,8 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_cpanel extends _sco_dx_plugin {
 
+	const identifier = 'sco_cpanel';
+
 	function init($identifier) {
 		$this->_init($identifier);
 
@@ -62,7 +64,7 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 	}
 
 	function &mod($mod, $identifier = '') {
-		if (empty($identifier)) $identifier = 'sco_cpanel';
+		if (empty($identifier)) $identifier = self::identifier;
 
 		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
 
