@@ -51,6 +51,8 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 	}
 
 	function &mod($mod) {
+		include_once libfile('mod/'.$mod, 'source/plugin/sco_cpanel');
+
 		$class = 'plugin_sco_cpanel_'.$mod;
 		$self = new $class();
 		return $self;
