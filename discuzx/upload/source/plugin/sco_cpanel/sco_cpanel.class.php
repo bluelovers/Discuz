@@ -50,6 +50,12 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 		return cpmsg($message, $url, $type, $values, $extra, $halt);
 	}
 
+	function &mod($mod) {
+		$class = 'plugin_sco_cpanel_'.$mod;
+		$self = new $class();
+		return $self;
+	}
+
 }
 
 ?>

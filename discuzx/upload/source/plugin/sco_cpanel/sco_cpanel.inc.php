@@ -329,7 +329,7 @@ var rowtypedata = [
 	}
 }
 
-$_cpanel = new plugin_sco_cpanel_threadsorts();
+$_cpanel = plugin_sco_cpanel::mod('threadsorts');
 
 $_cpanel
 	->set(array(
