@@ -12,13 +12,8 @@ if (!defined('IN_DISCUZ')) {
 class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 	function plugin_sco_cpanel_threadsorts() {
-		global $plugin, $module;
-		$this->_init($plugin['identifier']);
-
-		$this->_this(&$this);
-
-		$this->_fix_plugin_setting();
-		$this->attr['profile'] = $this->attr['db']['common_plugin'];
+		global $plugin;
+		$this->init($plugin['identifier']);
 	}
 
 	function cpheader() {
