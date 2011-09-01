@@ -51,11 +51,51 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 	}
 
 	function &mod($mod) {
-		include_once libfile('mod/'.$mod, 'source/plugin/sco_cpanel');
+		include_once libfile('mod/'.$mod, 'plugin/sco_cpanel');
 
 		$class = 'plugin_sco_cpanel_'.$mod;
 		$self = new $class();
+
+		$self->set(array(
+			'mod' => $mod,
+		));
+
 		return $self;
+	}
+
+	function set($attr) {
+		/*
+		$this->attr['global'] = $attr;
+		*/
+		foreach ($attr as $_k => $_v) {
+			$this->attr['global'][$_k] = $_v;
+		}
+
+		return $this;
+	}
+
+	function run() {
+		$operation = $this->attr['global']['op'];
+
+		$operation = $operation ? $operation : 'default';
+
+		$method = 'on_op_'.$operation;
+
+		ob_start();
+		$this->$method();
+		$_content = ob_get_contents();
+		ob_end_clean();
+
+		$this->cpheader();
+		echo $_content;
+
+		if ($this->_getglobal('debug', 'setting')) {
+			var_dump($this);
+		}
+
+		$this->cpfooter();
+
+		return $this;
 	}
 
 }

@@ -21,41 +21,6 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		$this->attr['profile'] = $this->attr['db']['common_plugin'];
 	}
 
-	function set($attr) {
-		/*
-		$this->attr['global'] = $attr;
-		*/
-		foreach ($attr as $_k => $_v) {
-			$this->attr['global'][$_k] = $_v;
-		}
-
-		return $this;
-	}
-
-	function run() {
-		$operation = $this->attr['global']['op'];
-
-		$operation = $operation ? $operation : 'default';
-
-		$method = 'on_op_'.$operation;
-
-		ob_start();
-		$this->$method();
-		$_content = ob_get_contents();
-		ob_end_clean();
-
-		$this->cpheader();
-		echo $_content;
-
-		if ($this->_getglobal('debug', 'setting')) {
-			var_dump($this);
-		}
-
-		$this->cpfooter();
-
-		return $this;
-	}
-
 	function cpheader() {
 		/*
 		global $lang;
