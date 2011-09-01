@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ')) {
 
 include_once dirname(__FILE__).'/./sco_cpanel.class.php';
 
-$_cpanel = plugin_sco_cpanel::mod('threadsorts');
+$_cpanel = plugin_sco_cpanel::mod('threadsorts', $plugin['identifier']);
 
 $_cpanel
 	->set(array(

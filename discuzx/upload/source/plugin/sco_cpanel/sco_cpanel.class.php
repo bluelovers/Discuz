@@ -61,15 +61,20 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 		return cpmsg($message, $url, $type, $values, $extra, $halt);
 	}
 
-	function &mod($mod) {
-		include_once libfile('mod/'.$mod, 'plugin/sco_cpanel');
+	function &mod($mod, $identifier = '') {
+		if (empty($identifier)) $identifier = 'sco_cpanel';
 
-		$class = 'plugin_sco_cpanel_'.$mod;
+		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
+
+		$class = 'plugin_'.$identifier.'_'.$mod;
 		$self = new $class();
 
-		$self->set(array(
-			'mod' => $mod,
-		));
+		$self
+			->init($identifier)
+			->set(array(
+				'mod' => $mod,
+			))
+		;
 
 		return $self;
 	}
