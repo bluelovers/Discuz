@@ -20,6 +20,8 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 
 		$this->_fix_plugin_setting();
 		$this->attr['profile'] = $this->attr['db']['common_plugin'];
+
+		return $this;
 	}
 
 	function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
@@ -114,6 +116,8 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 		/*
 		$this->on_op_list_fups();
 		*/
+
+		return $this;
 	}
 
 }

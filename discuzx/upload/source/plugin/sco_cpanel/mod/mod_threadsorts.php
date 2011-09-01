@@ -14,6 +14,8 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 	function plugin_sco_cpanel_threadsorts() {
 		global $plugin;
 		$this->init($plugin['identifier']);
+
+		return $this;
 	}
 
 	function cpheader() {
