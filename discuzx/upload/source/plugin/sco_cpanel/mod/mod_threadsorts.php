@@ -27,7 +27,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 
 		parent::cpheader();
 
-		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&cpmod=".$this->attr['global']['mod']."&";
 
 		$op_list = array(
 			'list_fups' => $this->cplang('threadtype_infotypes'),
@@ -53,6 +53,7 @@ class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
 		$tablename = 'forum_typeoption';
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 		$url .= '&op=list_fups';
+		$url .= "&cpmod=".$this->attr['global']['mod'];
 
 		if ($this->submitcheck('typesubmit')) {
 			global $_G;
@@ -212,6 +213,7 @@ var rowtypedata = [
 			'identifier' => $this->identifier,
 
 			'pmod' => $this->attr['global']['module']['name'],
+			'cpmod' => $this->attr['global']['mod'],
 
 			'op' => 'list_items',
 			'classid' => $classid,
