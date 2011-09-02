@@ -221,7 +221,9 @@ class block_blog {
 
 		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql
 			ORDER BY
+				$_orderby_before
 				b.$orderby DESC
+				$_orderby_after
 		";
 		$query = DB::query($sql." LIMIT $startrow,$items;");
 		while($data = DB::fetch($query)) {
