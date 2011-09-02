@@ -122,11 +122,6 @@ if($op == 'block') {
 			'hidedisplay' => $_POST['hidedisplay'] ? '1' : '0',
 			'dateline' => TIMESTAMP,
 			'isblank' => $_POST['isblank']
-
-			// bluelovers
-			,
-			'orderby_rand' => (bool)$_POST['orderby_rand'],
-			// bluelovers
 		);
 
 		$picdata = array();
