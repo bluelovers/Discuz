@@ -320,6 +320,17 @@ class block_member {
 		}
 		$wheres[] = '(m.groupid < 4 OR m.groupid > 8)';
 
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+		// bluelovers
+
 		$tables = array_unique($tables);
 		$wheres = array_unique($wheres);
 		$tablesql = implode(',',$tables);
