@@ -1005,6 +1005,22 @@ function showEditorMenu(tag, params) {
 				break;
 			case 'vid':
 				str = '<p class="pbn">請輸入視頻地址:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">支持優酷、土豆、56、酷6等視頻站的視頻網址<br />支持 wmv avi rmvb mov swf flv 等視頻格式<br />示例: http://server/movie.wmv</p>';
+
+				// bluelovers
+				// CC视频通是结合论坛、博客、cms、sns等程序使用的发布视频工具
+
+				var _cc_tyle = '_6';
+
+				str += '<p class="pbn align-right">';
+				str += "<object width='72' height='24'>";
+				str += "<param name='wmode' value='transparent' />";
+				str += "<param name='allowScriptAccess' value='always' />";
+				str += "<param name='movie' value='http://union.bokecc.com/flash/plugin/plugin" + _cc_tyle + ".swf?userID=53636&type=Discuz' />";
+				str += "<embed src='http://union.bokecc.com/flash/plugin/plugin" + _cc_tyle + ".swf?userID=53636&type=Discuz' type='application/x-shockwave-flash' width='72' height='24' allowScriptAccess='always' wmode='transparent'></embed>";
+				str += '</object>';
+				str += '</p>';
+				// bluelovers
+
 				break;
 			case 'fls':
 				str = '<p class="pbn">請輸入 Flash 文件地址:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">寬: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; 高: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">支持 swf flv 等 Flash 網址<br />示例: http://server/flash.swf</p>';
