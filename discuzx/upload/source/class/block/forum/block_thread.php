@@ -334,6 +334,13 @@ class block_thread {
 			$sqlfrom .= " $joinmethod JOIN `".DB::table('common_tagitem')."` tim ON tim.itemid=t.tid AND tim.idtype='tid'";
 		}
 
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+		// bluelovers
+
 		$query = DB::query("SELECT DISTINCT t.*$sqlfield
 			$sqlfrom WHERE t.readperm='0'
 			$sql
