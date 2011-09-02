@@ -331,6 +331,7 @@ class block_member {
 		}
 
 		if (!empty($sqlorderby)
+			&& ($_orderby_before || $_orderby_after)
 			&& preg_match('/^(?:\s*ORDER\s*BY\s*)(.+)$/i', $sqlorderby, $_m)
 		) {
 			$sqlorderby = ' ORDER BY ';
