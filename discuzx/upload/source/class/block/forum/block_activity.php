@@ -282,6 +282,18 @@ class block_activity {
 			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
 		}
 		$sqlfield = $highlight ? ', t.highlight' : '';
+
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+		// bluelovers
+
 		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author$sqlfield
 			FROM ".DB::table('forum_activity')." a $sqlfrom $where
 			ORDER BY $orderby
