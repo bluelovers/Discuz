@@ -207,7 +207,10 @@ class block_blog {
 		$wheres[] = "b.friend = '0'";
 		$wheres[] = "b.status='0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql ORDER BY b.$orderby DESC";
+		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql
+			ORDER BY
+				b.$orderby DESC
+		";
 		$query = DB::query($sql." LIMIT $startrow,$items;");
 		while($data = DB::fetch($query)) {
 			if(empty($data['pic'])) {
