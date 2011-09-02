@@ -169,8 +169,8 @@ class block_group {
 
 		$orderbysql =
 			$_orderby_before
-			+ $orderbysql
-			+ $_orderby_after
+			. $orderbysql
+			. $_orderby_after
 		;
 		// bluelovers
 
