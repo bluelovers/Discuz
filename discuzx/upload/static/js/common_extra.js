@@ -487,6 +487,14 @@ function _initTab(frameId, type) {
 		var onclick = type == 'click' ? ' onclick="return false;"' : '';
 		li.innerHTML = '<a href="' + href + '"' + onclick + ' onfocus="this.blur();" ' + style + '>' + imgs + li.innerHTML + '</a>';
 		_attachEvent(li, type, switchTabUl);
+
+		// bluelovers
+		if (type == 'click') {
+			// 如果 type 為 click 則額外支援滑鼠事件
+			_attachEvent(li, 'mouseover', switchTabUl);
+		}
+		// bluelovers
+
 		tab.appendChild(li);
 		$(frameId+'_title').removeChild(arrTab[i]);
 		counter++;
