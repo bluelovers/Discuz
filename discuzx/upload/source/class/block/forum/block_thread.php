@@ -339,6 +339,10 @@ class block_thread {
 			= $_orderby_after
 			= ''
 		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
 		// bluelovers
 
 		$query = DB::query("SELECT DISTINCT t.*$sqlfield
