@@ -336,11 +336,18 @@ class block_member {
 		) {
 			$sqlorderby = ' ORDER BY ';
 
-			$sqlorderby +=
+			$sqlorderby .=
 				$_orderby_before
-				+ $m[1]
-				+ $_orderby_after
+				. $_m[1]
+				. $_orderby_after
 			;
+
+			/*
+			debug(array(
+				$sqlorderby,
+				$_m
+			));
+			*/
 		}
 		// bluelovers
 
