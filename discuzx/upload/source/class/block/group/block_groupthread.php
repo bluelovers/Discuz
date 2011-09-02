@@ -319,7 +319,8 @@ class block_groupthread {
 			$sqlfrom WHERE t.readperm='0'
 			$sql
 			AND t.displayorder>='0'
-			ORDER BY t.$orderby DESC
+			ORDER BY
+				t.$orderby DESC
 			LIMIT $startrow,$items;"
 			);
 
