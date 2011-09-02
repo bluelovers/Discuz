@@ -330,7 +330,9 @@ class block_member {
 			$_orderby_before .= ' RAND(),';
 		}
 
-		if (!empty($sqlorderby) && preg_match('/^(?:\s*ORDER\s*BY\s*)(.+)$/i', $sqlorderby, $_m)) {
+		if (!empty($sqlorderby)
+			&& preg_match('/^(?:\s*ORDER\s*BY\s*)(.+)$/i', $sqlorderby, $_m)
+		) {
 			$sqlorderby = ' ORDER BY ';
 
 			$sqlorderby +=
