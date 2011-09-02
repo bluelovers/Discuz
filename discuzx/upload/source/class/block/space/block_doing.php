@@ -96,6 +96,24 @@ class block_doing {
 		}
 		$wheres[] = " status = '0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
+
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+
+		$orderby =
+			$_orderby_before
+			. $orderby
+			. $_orderby_after
+		;
+		// bluelovers
+
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql ORDER BY $orderby DESC LIMIT $startrow,$items");
 		while($data = DB::fetch($query)) {
 			$datalist = array(
