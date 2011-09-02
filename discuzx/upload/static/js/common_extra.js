@@ -485,6 +485,7 @@ function _initTab(frameId, type) {
 
 		// bluelovers
 		if (!imgs && !li.innerHTML) {
+			// 如果沒有圖片也沒有標題時則顯示 undefined
 			li.innerHTML = 'undefined';
 		}
 		// bluelovers
