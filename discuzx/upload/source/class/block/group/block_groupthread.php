@@ -320,7 +320,9 @@ class block_groupthread {
 			$sql
 			AND t.displayorder>='0'
 			ORDER BY
+				$_orderby_before
 				t.$orderby DESC
+				$_orderby_after
 			LIMIT $startrow,$items;"
 			);
 
