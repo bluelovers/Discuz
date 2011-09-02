@@ -295,8 +295,8 @@ class block_activity {
 
 		$orderby =
 			$_orderby_before
-			+ $orderby
-			+ $_orderby_after
+			. $orderby
+			. $_orderby_after
 		;
 		// bluelovers
 
