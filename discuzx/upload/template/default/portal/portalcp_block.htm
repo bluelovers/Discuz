@@ -127,6 +127,16 @@
 							<!--{/if}-->
 						</td>
 					</tr>
+					<!--block_orderby_rand - start-->
+					<!-- DIY模塊增加隨機排序功能 -->
+					<tr>
+						<th width="80">{lang block_orderby_rand}</th>
+						<td>
+							<label class="lb"><input type="radio" value="1" class="pr" name="parameter[orderby_rand]" {if !empty($block[param][orderby_rand])} checked{/if} >{lang yes}</label>
+							<label class="lb"><input type="radio" value="0" class="pr" name="parameter[orderby_rand]" {if empty($block[param][orderby_rand])} checked{/if} >{lang no}</label>
+						</td>
+					</tr>
+					<!--block_orderby_rand - end-->
 					<tr class="l">
 						<th></th>
 						<td>

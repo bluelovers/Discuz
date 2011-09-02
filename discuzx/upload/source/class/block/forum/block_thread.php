@@ -334,11 +334,25 @@ class block_thread {
 			$sqlfrom .= " $joinmethod JOIN `".DB::table('common_tagitem')."` tim ON tim.itemid=t.tid AND tim.idtype='tid'";
 		}
 
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+		// bluelovers
+
 		$query = DB::query("SELECT DISTINCT t.*$sqlfield
 			$sqlfrom WHERE t.readperm='0'
 			$sql
 			AND t.displayorder>='0'
-			ORDER BY t.$orderby DESC
+			ORDER BY
+				$_orderby_before
+				t.$orderby DESC
+				$_orderby_after
 			LIMIT $startrow,$items;"
 			);
 		$threadsorts = $threadtypes = null;

@@ -156,6 +156,24 @@ class block_group {
 		} else {
 			$orderbysql = "f.displayorder ASC";
 		}
+
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+
+		$orderbysql =
+			$_orderby_before
+			. $orderbysql
+			. $_orderby_after
+		;
+		// bluelovers
+
 		$list = array();
 		$query = DB::query('SELECT f.*, ff.* FROM '.DB::table('forum_forum').' f LEFT JOIN '.DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE $wheresql ORDER BY $orderbysql LIMIT $items");
 		while($data = DB::fetch($query)) {

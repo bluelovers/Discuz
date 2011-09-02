@@ -320,6 +320,37 @@ class block_member {
 		}
 		$wheres[] = '(m.groupid < 4 OR m.groupid > 8)';
 
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+
+		if (!empty($sqlorderby)
+			&& ($_orderby_before || $_orderby_after)
+			&& preg_match('/^(?:\s*ORDER\s*BY\s*)(.+)$/i', $sqlorderby, $_m)
+		) {
+			$sqlorderby = ' ORDER BY ';
+
+			$sqlorderby .=
+				$_orderby_before
+				. $_m[1]
+				. $_orderby_after
+			;
+
+			/*
+			debug(array(
+				$sqlorderby,
+				$_m
+			));
+			*/
+		}
+		// bluelovers
+
 		$tables = array_unique($tables);
 		$wheres = array_unique($wheres);
 		$tablesql = implode(',',$tables);

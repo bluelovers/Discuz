@@ -304,11 +304,25 @@ class block_groupthread {
 			$sqlfrom .= ' LEFT JOIN '.DB::table('forum_forum').' f ON t.fid=f.fid LEFT JOIN '.DB::table('forum_forumfield').' ff ON f.fid = ff.fid';
 		}
 
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+		// bluelovers
+
 		$query = DB::query("SELECT t.* $sqlfield
 			$sqlfrom WHERE t.readperm='0'
 			$sql
 			AND t.displayorder>='0'
-			ORDER BY t.$orderby DESC
+			ORDER BY
+				$_orderby_before
+				t.$orderby DESC
+				$_orderby_after
 			LIMIT $startrow,$items;"
 			);
 

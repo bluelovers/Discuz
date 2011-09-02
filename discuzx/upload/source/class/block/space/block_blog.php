@@ -207,7 +207,24 @@ class block_blog {
 		$wheres[] = "b.friend = '0'";
 		$wheres[] = "b.status='0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql ORDER BY b.$orderby DESC";
+
+		// bluelovers
+		$_orderby_before
+			= $_orderby_after
+			= ''
+		;
+
+		if ((bool)$parameter['orderby_rand']) {
+			$_orderby_before .= ' RAND(),';
+		}
+		// bluelovers
+
+		$sql = "SELECT b.* $fieldsql FROM ".DB::table('home_blog')." b $tablesql WHERE $wheresql
+			ORDER BY
+				$_orderby_before
+				b.$orderby DESC
+				$_orderby_after
+		";
 		$query = DB::query($sql." LIMIT $startrow,$items;");
 		while($data = DB::fetch($query)) {
 			if(empty($data['pic'])) {
