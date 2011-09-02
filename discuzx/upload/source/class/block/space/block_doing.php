@@ -114,7 +114,10 @@ class block_doing {
 		;
 		// bluelovers
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql ORDER BY $orderby DESC LIMIT $startrow,$items");
+		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql
+			ORDER BY
+				$orderby DESC
+			LIMIT $startrow,$items");
 		while($data = DB::fetch($query)) {
 			$datalist = array(
 				'id' => $data['doid'],
