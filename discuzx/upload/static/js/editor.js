@@ -1008,12 +1008,15 @@ function showEditorMenu(tag, params) {
 
 				// bluelovers
 				// CC视频通是结合论坛、博客、cms、sns等程序使用的发布视频工具
+
+				var _cc_tyle = '';
+
 				str += '<p class="pbn align-right">';
 				str += "<object width='72' height='24'>";
 				str += "<param name='wmode' value='transparent' />";
 				str += "<param name='allowScriptAccess' value='always' />";
-				str += "<param name='movie' value='http://union.bokecc.com/flash/plugin/plugin.swf?userID=53636&type=Discuz' />";
-				str += "<embed src='http://union.bokecc.com/flash/plugin/plugin.swf?userID=53636&type=Discuz' type='application/x-shockwave-flash' width='72' height='24' allowScriptAccess='always' wmode='transparent'></embed>";
+				str += "<param name='movie' value='http://union.bokecc.com/flash/plugin/plugin" + _cc_tyle + ".swf?userID=53636&type=Discuz' />";
+				str += "<embed src='http://union.bokecc.com/flash/plugin/plugin" + _cc_tyle + ".swf?userID=53636&type=Discuz' type='application/x-shockwave-flash' width='72' height='24' allowScriptAccess='always' wmode='transparent'></embed>";
 				str += '</object>';
 				str += '</p>';
 				// bluelovers
