@@ -1009,7 +1009,7 @@ function showEditorMenu(tag, params) {
 				// bluelovers
 				// CC视频通是结合论坛、博客、cms、sns等程序使用的发布视频工具
 
-				var _cc_tyle = '';
+				var _cc_tyle = '_6';
 
 				str += '<p class="pbn align-right">';
 				str += "<object width='72' height='24'>";
