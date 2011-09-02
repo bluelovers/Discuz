@@ -292,6 +292,12 @@ class block_activity {
 		if ((bool)$parameter['orderby_rand']) {
 			$_orderby_before .= ' RAND(),';
 		}
+
+		$orderby =
+			$_orderby_before
+			+ $orderby
+			+ $_orderby_after
+		;
 		// bluelovers
 
 		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author$sqlfield
