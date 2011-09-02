@@ -482,6 +482,13 @@ function _initTab(frameId, type) {
 			imgs += matchs[1];
 		}
 		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
+
+		// bluelovers
+		if (!imgs && !li.innerHTML) {
+			li.innerHTML = 'undefined';
+		}
+		// bluelovers
+
 		var a = arrTab[i].getElementsByTagName('a');
 		var href = a && a[0] ? a[0].href : 'javascript:;';
 		var onclick = type == 'click' ? ' onclick="return false;"' : '';
