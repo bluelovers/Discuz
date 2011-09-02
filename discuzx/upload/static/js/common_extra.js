@@ -482,11 +482,27 @@ function _initTab(frameId, type) {
 			imgs += matchs[1];
 		}
 		li.innerHTML = arrTab[i]['innerText'] ? arrTab[i]['innerText'] : arrTab[i]['textContent'];
+
+		// bluelovers
+		if (!imgs && !li.innerHTML) {
+			// 如果沒有圖片也沒有標題時則顯示 undefined
+			li.innerHTML = 'undefined';
+		}
+		// bluelovers
+
 		var a = arrTab[i].getElementsByTagName('a');
 		var href = a && a[0] ? a[0].href : 'javascript:;';
 		var onclick = type == 'click' ? ' onclick="return false;"' : '';
 		li.innerHTML = '<a href="' + href + '"' + onclick + ' onfocus="this.blur();" ' + style + '>' + imgs + li.innerHTML + '</a>';
 		_attachEvent(li, type, switchTabUl);
+
+		// bluelovers
+		if (type == 'click') {
+			// 如果 type 為 click 則額外支援滑鼠事件
+			_attachEvent(li, 'mouseover', switchTabUl);
+		}
+		// bluelovers
+
 		tab.appendChild(li);
 		$(frameId+'_title').removeChild(arrTab[i]);
 		counter++;
