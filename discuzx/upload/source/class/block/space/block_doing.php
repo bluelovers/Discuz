@@ -106,17 +106,13 @@ class block_doing {
 		if ((bool)$parameter['orderby_rand']) {
 			$_orderby_before .= ' RAND(),';
 		}
-
-		$orderby =
-			$_orderby_before
-			. $orderby
-			. $_orderby_after
-		;
 		// bluelovers
 
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql
 			ORDER BY
+				$_orderby_before
 				$orderby DESC
+				$_orderby_after
 			LIMIT $startrow,$items");
 		while($data = DB::fetch($query)) {
 			$datalist = array(
