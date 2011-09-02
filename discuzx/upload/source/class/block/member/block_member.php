@@ -329,6 +329,16 @@ class block_member {
 		if ((bool)$parameter['orderby_rand']) {
 			$_orderby_before .= ' RAND(),';
 		}
+
+		if (!empty($sqlorderby) && preg_match('/^(?:\s*ORDER\s*BY\s*)(.+)$/i', $sqlorderby, $_m)) {
+			$sqlorderby = ' ORDER BY ';
+
+			$sqlorderby +=
+				$_orderby_before
+				+ $m[1]
+				+ $_orderby_after
+			;
+		}
 		// bluelovers
 
 		$tables = array_unique($tables);
