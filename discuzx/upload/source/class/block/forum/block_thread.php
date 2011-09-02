@@ -346,7 +346,9 @@ class block_thread {
 			$sql
 			AND t.displayorder>='0'
 			ORDER BY
+				$_orderby_before
 				t.$orderby DESC
+				$_orderby_after
 			LIMIT $startrow,$items;"
 			);
 		$threadsorts = $threadtypes = null;
