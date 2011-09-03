@@ -318,6 +318,13 @@ class block_thread {
 		if($orderby == 'heats') {
 			$sql .= " AND t.heats>'0'";
 		}
+
+		// bluelvoers
+		if($orderby == 'lastpost') {
+			$sql .= " AND t.replies>'0'";
+		}
+		// bluelovers
+
 		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
 
 		$sqlfield = '';
