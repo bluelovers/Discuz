@@ -318,6 +318,14 @@ class block_thread {
 		if($orderby == 'heats') {
 			$sql .= " AND t.heats>'0'";
 		}
+
+		// bluelvoers
+		if($orderby == 'lastpost') {
+			// 修正當以最後回覆時間來排序時限制只查詢回覆數大於 0 的主題
+			$sql .= " AND t.replies>'0'";
+		}
+		// bluelovers
+
 		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
 
 		$sqlfield = '';
