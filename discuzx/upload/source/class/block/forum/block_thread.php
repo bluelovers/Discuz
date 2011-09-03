@@ -321,6 +321,7 @@ class block_thread {
 
 		// bluelvoers
 		if($orderby == 'lastpost') {
+			// 修正當以最後回覆時間來排序時限制只查詢回覆數大於 0 的主題
 			$sql .= " AND t.replies>'0'";
 		}
 		// bluelovers
