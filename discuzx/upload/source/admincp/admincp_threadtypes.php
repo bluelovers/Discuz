@@ -222,6 +222,18 @@ var rowtypedata = [
 					, title
 			");
 			while($option = DB::fetch($query)) {
+
+				// bluelovers
+				$_id_tmp = split('_', $option['identifier']);
+				if (count($_id_tmp) > 1) {
+					$_id_now = array_unshift($_id_tmp);
+				} else {
+					unset($_id_now);
+				}
+
+				unset($_id_tmp);
+				// bluelovers
+
 				$option['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
 				$typeoptions .= showtablerow('', array('class="td25"', 'class="td28"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
