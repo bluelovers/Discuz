@@ -1094,38 +1094,6 @@ EOT;
 
 		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" />".dhtmlspecialchars($option['title'])."</label>&nbsp;&nbsp;";
 	}
-
-	// bluelovers
-	$optionlist .= <<<EOM
-<script type="text/javascript" reload="1">
-jQuery(function(){
-
-	var _func = function(){
-		var _this = jQuery(this);
-		var _parent = _this.parent('label');
-		if (_parent.size()) {
-			if (_this.prop('checked')) {
-				_parent.addClass('checked');
-			} else {
-				_parent.removeClass('checked');
-			}
-		}
-	};
-
-	jQuery('.container')
-		.undelegate('admincp_checked')
-		.delegate('label > :checkbox', {
-			'click.admincp_checked' : _func,
-			'change.admincp_checked' : _func,
-		})
-		.find('label > :checkbox').each(_func)
-	;
-
-});
-</script>
-EOM;
-	// bluelovers
-
 	include template('common/header');
 	echo $optionlist;
 	include template('common/footer');
