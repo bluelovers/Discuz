@@ -393,6 +393,11 @@ jQuery(function(){
 			_parent = jQuery('label[for="' + _this.attr('id') + '"]');
 		}
 
+		if (!_parent.size()) {
+			// 可能會產生非預期的 BUG
+			_parent = _this.parent('li');
+		}
+
 		if (_parent.size()) {
 			if (_this.prop('checked')) {
 				_parent.addClass('checked');
