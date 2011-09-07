@@ -403,7 +403,6 @@ jQuery(function(){
 			'click.admincp_checked' : _func,
 			'change.admincp_checked' : _func,
 		})
-		.find(':checkbox, :radio').each(_func)
 	;
 
 	(function(old_evalscript) {
@@ -413,6 +412,14 @@ jQuery(function(){
 		};
 	})(evalscript);
 
+	jQuery(window)
+		.bind('js_ajaxget.admincp', function() {
+			jQuery('.container')
+				.find(':checkbox, :radio').each(_func)
+			;
+		})
+		.triggerHandler('js_ajaxget')
+	;
 });
 </script>
 EOM;
