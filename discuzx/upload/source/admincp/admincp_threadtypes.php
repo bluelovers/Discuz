@@ -1065,7 +1065,10 @@ EOT;
 } elseif($operation == 'optionlist') {
 	$classid = $_G['gp_classid'];
 	if(!$classid) {
-		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder LIMIT 1");
+		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0'
+			ORDER BY
+				displayorder
+			LIMIT 1");
 	}
 	$query = DB::query("SELECT optionid FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_typeid']}'");
 	$option = $options = array();
