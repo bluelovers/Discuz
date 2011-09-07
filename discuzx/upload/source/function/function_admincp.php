@@ -380,6 +380,36 @@ function cpheader() {
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOM;
+
+	$_cpheader_head_add .= <<<EOM
+<script type="text/javascript" reload="1">
+jQuery(function(){
+
+	var _func = function(){
+		var _this = jQuery(this);
+		var _parent = _this.parent('label');
+		if (_parent.size()) {
+			if (_this.prop('checked')) {
+				_parent.addClass('checked');
+			} else {
+				_parent.removeClass('checked');
+			}
+		}
+	};
+
+	jQuery('.container')
+		.undelegate('admincp_checked')
+		.delegate('label > :checkbox', {
+			'click.admincp_checked' : _func,
+			'change.admincp_checked' : _func,
+		})
+		.find('label > :checkbox').each(_func)
+	;
+
+});
+</script>
+EOM;
+
 	// bluelovers
 
 	echo <<<EOT
