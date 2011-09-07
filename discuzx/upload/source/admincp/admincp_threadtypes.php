@@ -215,8 +215,38 @@ var rowtypedata = [
 			}
 
 			$typeoptions = '';
-			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='{$_G['gp_classid']}' ORDER BY displayorder");
+			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='{$_G['gp_classid']}'
+				ORDER BY
+					identifier LIKE '%\_%' ASC,
+					SUBSTRING_INDEX(identifier, '_', 1),
+					displayorder
+					, identifier
+					, title
+			");
 			while($option = DB::fetch($query)) {
+
+				// bluelovers
+				// 對分類信息字段依照 identifier 內的 _ 前的字串作為分組
+				$_id_tmp = split('_', $option['identifier']);
+				if (count($_id_tmp) > 1) {
+					$_id_now = array_shift($_id_tmp);
+
+					if ($_id_now != $_id_last) {
+						$typeoptions .= showtablerow('', array('', '', 'class="td27 lightfont"'), array(
+							'',
+							'',
+							$_id_now,
+							'', '', ''
+						), TRUE);
+					}
+
+					$_id_last = $_id_now;
+				}
+
+				unset($_id_now);
+				unset($_id_tmp);
+				// bluelovers
+
 				$option['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
 				$typeoptions .= showtablerow('', array('class="td25"', 'class="td28"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
@@ -1018,7 +1048,11 @@ EOT;
 	$classoptions = '';
 	$classidarray = array();
 	$classid = $_G['gp_classid'] ? $_G['gp_classid'] : 0;
-	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
+	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid'
+		ORDER BY
+			displayorder
+			, title
+	");
 	while($option = DB::fetch($query)) {
 		$classidarray[] = $option['optionid'];
 		$classoptions .= "<a href=\"#ol\" onclick=\"ajaxget('".ADMINSCRIPT."?action=threadtypes&operation=optionlist&typeid={$_G['gp_typeid']}&classid=$option[optionid]', 'optionlist', 'optionlist', 'Loading...', '', checkedbox)\">$option[title]</a> &nbsp; ";
@@ -1032,7 +1066,11 @@ EOT;
 } elseif($operation == 'optionlist') {
 	$classid = $_G['gp_classid'];
 	if(!$classid) {
-		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder LIMIT 1");
+		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0'
+			ORDER BY
+				displayorder
+				, title
+			LIMIT 1");
 	}
 	$query = DB::query("SELECT optionid FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_typeid']}'");
 	$option = $options = array();
@@ -1041,9 +1079,21 @@ EOT;
 	}
 
 	$optionlist = '';
-	$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
+	$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='$classid'
+		ORDER BY
+			identifier LIKE '%\_%' ASC,
+			SUBSTRING_INDEX(identifier, '_', 1),
+			displayorder
+			, identifier
+			, title
+	");
 	while($option = DB::fetch($query)) {
-		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" /><label for=\"typeselect_$option[optionid]\">".dhtmlspecialchars($option['title'])."</label>&nbsp;&nbsp;";
+
+		// bluelovers
+		$optionlist .= "<label for=\"typeselect_$option[optionid]\">";
+		// bluelovers
+
+		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" />".dhtmlspecialchars($option['title']).' <span class="lightfont">( '.$option['identifier'].' )</span>'."</label>&nbsp;&nbsp;";
 	}
 	include template('common/header');
 	echo $optionlist;

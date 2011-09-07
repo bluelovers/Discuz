@@ -372,6 +372,70 @@ function cpheader() {
 	$frame = getgpc('frame') != 'no' ? 1 : 0;
 	$charset = CHARSET;
 	$basescript = ADMINSCRIPT;
+
+	// bluelovers
+	$_varhash = VERHASH;
+
+	$_cpheader_head_add = <<<EOM
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+EOM;
+
+	$_cpheader_head_add .= <<<EOM
+<script type="text/javascript" reload="1">
+jQuery(function(){
+
+	var _func = function(){
+		var _this = jQuery(this);
+		var _parent = _this.parent('label');
+
+		if (!_parent.size() && _this.attr('id')) {
+			_parent = jQuery('label[for="' + _this.attr('id') + '"]');
+		}
+
+		if (!_parent.size()) {
+			// 可能會產生非預期的 BUG
+			_parent = _this.parent('li');
+		}
+
+		if (_parent.size()) {
+			if (_this.prop('checked')) {
+				_parent.addClass('checked');
+			} else {
+				_parent.removeClass('checked');
+			}
+		}
+	};
+
+	jQuery('.container')
+		.undelegate('admincp_checked')
+		.delegate(':checkbox, :radio', {
+			'click.admincp_checked' : _func,
+			'change.admincp_checked' : _func,
+		})
+	;
+
+	(function(old_evalscript) {
+		evalscript = function(s) {
+			old_evalscript(s);
+			jQuery(window).triggerHandler('js_ajaxget');
+		};
+	})(evalscript);
+
+	jQuery(window)
+		.bind('js_ajaxget.admincp', function() {
+			jQuery('.container')
+				.find(':checkbox, :radio').each(_func)
+			;
+		})
+		.triggerHandler('js_ajaxget')
+	;
+});
+</script>
+EOM;
+
+	// bluelovers
+
 	echo <<<EOT
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -379,6 +443,7 @@ function cpheader() {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=$charset">
 <meta http-equiv="x-ua-compatible" content="ie=7" />
+{$_cpheader_head_add}
 <link href="static/image/admincp/admincp.css?{$_G[style][verhash]}" rel="stylesheet" type="text/css" />
 </head>
 <body>
