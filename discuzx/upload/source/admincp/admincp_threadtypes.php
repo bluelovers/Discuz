@@ -218,6 +218,7 @@ var rowtypedata = [
 			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='{$_G['gp_classid']}'
 				ORDER BY
 					identifier LIKE '%\_%' ASC,
+					SUBSTRING_INDEX(identifier, '_', 1),
 					displayorder
 					, identifier
 					, title
