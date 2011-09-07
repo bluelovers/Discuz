@@ -372,6 +372,16 @@ function cpheader() {
 	$frame = getgpc('frame') != 'no' ? 1 : 0;
 	$charset = CHARSET;
 	$basescript = ADMINSCRIPT;
+
+	// bluelovers
+	$_varhash = VERHASH;
+
+	$cpheader_head_add = <<<EOM
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+EOM;
+	// bluelovers
+
 	echo <<<EOT
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
