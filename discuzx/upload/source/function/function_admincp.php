@@ -406,6 +406,13 @@ jQuery(function(){
 		.find(':checkbox, :radio').each(_func)
 	;
 
+	(function(old_evalscript) {
+		evalscript = function(s) {
+			old_evalscript(s);
+			jQuery(window).triggerHandler('js_ajaxget');
+		};
+	})(evalscript);
+
 });
 </script>
 EOM;
