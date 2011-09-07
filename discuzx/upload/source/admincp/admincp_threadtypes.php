@@ -226,7 +226,17 @@ var rowtypedata = [
 				// bluelovers
 				$_id_tmp = split('_', $option['identifier']);
 				if (count($_id_tmp) > 1) {
-					$_id_now = array_unshift($_id_tmp);
+					$_id_now = array_shift($_id_tmp);
+
+					if ($_id_now != $_id_last) {
+						$typeoptions .= showtablerow('', array('', '', 'class="td27 lightfont"'), array(
+							'',
+							'',
+							$_id_now
+						), TRUE);
+					}
+
+					$_id_last = $_id_now;
 				} else {
 					unset($_id_now);
 				}
