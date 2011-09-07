@@ -1077,7 +1077,10 @@ EOT;
 	}
 
 	$optionlist = '';
-	$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
+	$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='$classid'
+		ORDER BY
+			displayorder
+	");
 	while($option = DB::fetch($query)) {
 		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" /><label for=\"typeselect_$option[optionid]\">".dhtmlspecialchars($option['title'])."</label>&nbsp;&nbsp;";
 	}
