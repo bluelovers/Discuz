@@ -1047,7 +1047,10 @@ EOT;
 	$classoptions = '';
 	$classidarray = array();
 	$classid = $_G['gp_classid'] ? $_G['gp_classid'] : 0;
-	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
+	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid'
+		ORDER BY
+			displayorder
+	");
 	while($option = DB::fetch($query)) {
 		$classidarray[] = $option['optionid'];
 		$classoptions .= "<a href=\"#ol\" onclick=\"ajaxget('".ADMINSCRIPT."?action=threadtypes&operation=optionlist&typeid={$_G['gp_typeid']}&classid=$option[optionid]', 'optionlist', 'optionlist', 'Loading...', '', checkedbox)\">$option[title]</a> &nbsp; ";
