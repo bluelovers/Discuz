@@ -225,6 +225,7 @@ var rowtypedata = [
 			while($option = DB::fetch($query)) {
 
 				// bluelovers
+				// 對分類信息字段依照 identifier 內的 _ 前的字串作為分組
 				$_id_tmp = split('_', $option['identifier']);
 				if (count($_id_tmp) > 1) {
 					$_id_now = array_shift($_id_tmp);
