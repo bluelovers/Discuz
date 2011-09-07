@@ -1050,6 +1050,7 @@ EOT;
 	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid'
 		ORDER BY
 			displayorder
+			, title
 	");
 	while($option = DB::fetch($query)) {
 		$classidarray[] = $option['optionid'];
