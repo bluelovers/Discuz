@@ -376,7 +376,7 @@ function cpheader() {
 	// bluelovers
 	$_varhash = VERHASH;
 
-	$cpheader_head_add = <<<EOM
+	$_cpheader_head_add = <<<EOM
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js?{$_varhash}"></script>
 <script type="text/javascript">jQuery.noConflict();</script>
 EOM;
@@ -389,6 +389,7 @@ EOM;
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=$charset">
 <meta http-equiv="x-ua-compatible" content="ie=7" />
+{$_cpheader_head_add}
 <link href="static/image/admincp/admincp.css?{$_G[style][verhash]}" rel="stylesheet" type="text/css" />
 </head>
 <body>
