@@ -361,11 +361,11 @@ jQuery(function(){
 
 	jQuery('.container')
 		.undelegate('admincp_checked')
-		.delegate('label > :checkbox', {
+		.delegate(':checkbox, :radio', {
 			'click.admincp_checked' : _func,
 			'change.admincp_checked' : _func,
 		})
-		.find('label > :checkbox').each(_func)
+		.find(':checkbox, :radio').each(_func)
 	;
 
 });
