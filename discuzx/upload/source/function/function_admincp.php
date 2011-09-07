@@ -388,6 +388,11 @@ jQuery(function(){
 	var _func = function(){
 		var _this = jQuery(this);
 		var _parent = _this.parent('label');
+
+		if (!_parent.size() && _this.attr('id')) {
+			_parent = jQuery('label[for="' + _this.attr('id') + '"]');
+		}
+
 		if (_parent.size()) {
 			if (_this.prop('checked')) {
 				_parent.addClass('checked');
