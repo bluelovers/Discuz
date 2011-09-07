@@ -1068,6 +1068,7 @@ EOT;
 		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0'
 			ORDER BY
 				displayorder
+				, title
 			LIMIT 1");
 	}
 	$query = DB::query("SELECT optionid FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_typeid']}'");
