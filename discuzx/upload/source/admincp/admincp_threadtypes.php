@@ -239,10 +239,9 @@ var rowtypedata = [
 					}
 
 					$_id_last = $_id_now;
-				} else {
-					unset($_id_now);
 				}
 
+				unset($_id_now);
 				unset($_id_tmp);
 				// bluelovers
 
