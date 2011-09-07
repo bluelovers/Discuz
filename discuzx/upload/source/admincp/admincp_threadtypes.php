@@ -235,7 +235,8 @@ var rowtypedata = [
 						$typeoptions .= showtablerow('', array('', '', 'class="td27 lightfont"'), array(
 							'',
 							'',
-							$_id_now
+							$_id_now,
+							'', '', ''
 						), TRUE);
 					}
 
