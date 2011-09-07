@@ -218,6 +218,8 @@ var rowtypedata = [
 			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='{$_G['gp_classid']}'
 				ORDER BY
 					displayorder
+					, identifier
+					, title
 			");
 			while($option = DB::fetch($query)) {
 				$option['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
