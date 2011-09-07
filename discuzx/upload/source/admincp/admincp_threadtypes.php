@@ -1087,6 +1087,11 @@ EOT;
 			, title
 	");
 	while($option = DB::fetch($query)) {
+
+		// bluelovers
+		$optionlist .= "<label for=\"typeselect_$option[optionid]\">";
+		// bluelovers
+
 		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" />".dhtmlspecialchars($option['title'])."</label>&nbsp;&nbsp;";
 	}
 	include template('common/header');
