@@ -497,9 +497,19 @@ if($operation == 'export') {
 	$checkperm = checkpermission('runquery', 0);
 
 	$runquerys = array();
-	include_once(DISCUZ_ROOT.'source/admincp/admincp_quickquery.php');
+	include_once libfile('admincp/quickquery');
 
 	if(!submitcheck('sqlsubmit')) {
+
+		// bluelovers
+		// Event: Script_admin_db:Before_simplequeries_foreach
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Script_'.CURSCRIPT.'_db'.':Before_simplequeries_foreach')
+				->run(array(array(
+					'simplequeries'				=> &$simplequeries,
+				)));
+		}
+		// bluelovers
 
 		$runqueryselect = '';
 		foreach($simplequeries as $key => $query) {
