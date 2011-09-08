@@ -91,7 +91,22 @@ if(!submitcheck('searchsubmit', 1)) {
 						// bluelovers
 						$_fid = $threadlist[$post['tid']]['fid'];
 						if ($_group = $_G['cache']['groups_list']['grouplist'][$_fid]) {
+							// [bugfix] 搜尋時對於群組主題防止限制瀏覽權限時仍然暴露主題內容
+							if (!$_group['gviewperm']) {
+								$threadlist[$post['tid']]['message'] =
+									lang('search/template', 'thread_list_message1', array(
+										'extramsg' =>
+											'<br>'
+											. lang('group/template', 'group_perm_visit')
+											. ': '
+											. '<strong class="rq">'
+											. lang('group/template', 'group_perm_member_only')
+											. '</strong>'
+									))
+								;
 
+								continue;
+							}
 						}
 						// bluelvoers
 
