@@ -79,6 +79,11 @@ if(!submitcheck('searchsubmit', 1)) {
 				$posttables[$thread['posttableid']][] = $thread['tid'];
 			}
 			if($threadlist) {
+
+				// bluelovers
+				loadcache('groups_list');
+				// bluelovers
+
 				foreach($posttables as $tableid => $tids) {
 					$query = DB::query("SELECT tid, message FROM ".DB::table(getposttable($tableid))." WHERE tid IN (".dimplode($tids).") AND first='1'");
 					while($post = DB::fetch($query)) {
