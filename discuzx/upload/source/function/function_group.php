@@ -89,6 +89,9 @@ function groupuserlist($fid, $orderby = '', $num = 0, $start = 0, $addwhere = ''
 
 }
 
+/**
+ * 取得群組列表
+ */
 function grouplist($orderby = 'displayorder', $fieldarray = array(), $num = 1, $fids = array(), $sort = 0, $getcount = 0, $grouplevel = array()) {
 
 	if($fieldarray && is_array($fieldarray)) {
@@ -194,6 +197,9 @@ function get_groupimg($imgname, $imgtype = '') {
 	}
 }
 
+/**
+ * 取得群組分類選擇項目
+ */
 function get_groupselect($fup = 0, $groupid = 0, $ajax = 1) {
 	global $_G;
 	loadcache('grouptype');
