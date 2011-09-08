@@ -87,6 +87,14 @@ if(!submitcheck('searchsubmit', 1)) {
 				foreach($posttables as $tableid => $tids) {
 					$query = DB::query("SELECT tid, message FROM ".DB::table(getposttable($tableid))." WHERE tid IN (".dimplode($tids).") AND first='1'");
 					while($post = DB::fetch($query)) {
+
+						// bluelovers
+						$_fid = $threadlist[$post['tid']]['fid'];
+						if ($_group = $_G['cache']['groups_list']['grouplist'][$_fid]) {
+
+						}
+						// bluelvoers
+
 						$threadlist[$post['tid']]['message'] = bat_highlight(messagecutstr($post['message'], 200), $keyword);
 					}
 				}
