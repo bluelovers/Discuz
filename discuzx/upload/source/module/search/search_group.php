@@ -79,9 +79,37 @@ if(!submitcheck('searchsubmit', 1)) {
 				$posttables[$thread['posttableid']][] = $thread['tid'];
 			}
 			if($threadlist) {
+
+				// bluelovers
+				loadcache('groups_list');
+				// bluelovers
+
 				foreach($posttables as $tableid => $tids) {
 					$query = DB::query("SELECT tid, message FROM ".DB::table(getposttable($tableid))." WHERE tid IN (".dimplode($tids).") AND first='1'");
 					while($post = DB::fetch($query)) {
+
+						// bluelovers
+						$_fid = $threadlist[$post['tid']]['fid'];
+						if ($_group = $_G['cache']['groups_list']['grouplist'][$_fid]) {
+							// [bugfix] 搜尋時對於群組主題防止限制瀏覽權限時仍然暴露主題內容
+							if (!$_group['gviewperm']) {
+								$threadlist[$post['tid']]['message'] =
+									lang('search/template', 'thread_list_message1', array(
+										'extramsg' =>
+											'<br>'
+											. lang('group/template', 'group_perm_visit')
+											. ': '
+											. '<strong class="rq">'
+											. lang('group/template', 'group_perm_member_only')
+											. '</strong>'
+									))
+								;
+
+								continue;
+							}
+						}
+						// bluelvoers
+
 						$threadlist[$post['tid']]['message'] = bat_highlight(messagecutstr($post['message'], 200), $keyword);
 					}
 				}

@@ -45,6 +45,7 @@ function highlight($text, $words, $prepend) {
 }
 
 function bat_highlight($message, $words, $color = '#ff0000') {
+	//TODO:將此處取代後的 HTML 元素改換為使用 css 樣式
 	if(!empty($words)) {
 		$highlightarray = explode(' ', $words);
 		$sppos = strrpos($message, chr(0).chr(0).chr(0));
