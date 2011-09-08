@@ -501,6 +501,16 @@ if($operation == 'export') {
 
 	if(!submitcheck('sqlsubmit')) {
 
+		// bluelovers
+		// Event: Script_admin_db:Before_simplequeries_foreach
+		if (discuz_core::$plugin_support['Scorpio_Event']) {
+			Scorpio_Event::instance('Script_'.CURSCRIPT.'_db'.':Before_simplequeries_foreach')
+				->run(array(array(
+					'simplequeries'				=> &$simplequeries,
+				)));
+		}
+		// bluelovers
+
 		$runqueryselect = '';
 		foreach($simplequeries as $key => $query) {
 			if(empty($query['sql'])) {
