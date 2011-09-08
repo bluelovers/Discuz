@@ -108,7 +108,9 @@
 				<ul class="xl xl2 o cl">
 					<li class="callon"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" title="{lang viewthread_left_tospace}" class="xi2">{lang viewthread_left_tospace}</a></li>
 					<li class="buddy"><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$post[authorid]&handlekey=addfriendhk_{$post[authorid]}" id="a_friend_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="{lang viewthread_left_addfriend}" class="xi2">{lang viewthread_left_addfriend}</a></li>
+					<!--{if checkperm('allowpoke')}-->
 					<li class="poke2"><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$post[authorid]" id="a_poke_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang viewthread_left_poke}" class="xi2">{lang viewthread_left_poke}</a></li>
+					<!--{/if}-->
 					<li class="pm2"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&pid=$post[pid]&tid=$post[tid]" onclick="showWindow('sendpm', this.href);" title="{lang viewthread_left_sendpm}" class="xi2">{lang viewthread_left_sendpm}</a></li>
 				</ul>
 			<!--{/if}-->
