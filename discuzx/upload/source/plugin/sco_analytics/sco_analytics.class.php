@@ -22,6 +22,11 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	}
 
 	function global_footer_mobile_output() {
+
+		$this
+			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
+		;
+
 		$googleAnalyticsImageUrl = $this->googleAnalyticsGetImageUrl();
 		return '<img src="' . $googleAnalyticsImageUrl . '" />';
 	}
