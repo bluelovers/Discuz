@@ -15,4 +15,8 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 }
 
+class mobileplugin_sco_analytics extends plugin_sco_analytics {
+
+}
+
 ?>
