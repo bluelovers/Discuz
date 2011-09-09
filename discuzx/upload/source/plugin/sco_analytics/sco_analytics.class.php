@@ -93,12 +93,13 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	function _my_ga_mobile_html() {
 		$ret = '';
 
-		$this
-			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
-			->_setglobal('GA_ACCOUNT', $this->_getglobal('ga_mobile_id', 'setting'))
-		;
+		if ($this->_getglobal('ga_mobile_id', 'setting')) {
 
-		if ($this->_getglobal('GA_ACCOUNT')) {
+			$this
+				->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
+				->_setglobal('GA_ACCOUNT', $this->_getglobal('ga_mobile_id', 'setting'))
+			;
+
 			$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
 			$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
 		}
