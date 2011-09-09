@@ -28,8 +28,9 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 			->_setglobal('GA_ACCOUNT', 'MO-741906-1')
 		;
 
-		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
-		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
+		$ret = '';
+
+		$ret .= $this->_my_googleAnalyticsGetImageUrl_html();
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
@@ -74,6 +75,13 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		}
 		$url .= "&guid=ON";
 		return str_replace("&", "&amp;", $url);
+	}
+
+	function _my_googleAnalyticsGetImageUrl_html() {
+		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
+		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
+
+		return $ret;
 	}
 
 }
