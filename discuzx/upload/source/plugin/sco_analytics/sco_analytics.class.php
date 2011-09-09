@@ -39,7 +39,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $k;
 	}
 
-	function global_header_javascript_before_body() {
+	function global_header_javascript() {
 		$ret = '';
 
 		$this->_fix_plugin_setting();
