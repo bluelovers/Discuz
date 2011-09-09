@@ -18,7 +18,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 	public function __construct() {
-		$this->_init($this->_get_identifier(__METHOD__));
+		$this->_init($this->_get_identifier(__CLASS__));
 
 		// set instance = $this
 		$this->_this(&$this);
