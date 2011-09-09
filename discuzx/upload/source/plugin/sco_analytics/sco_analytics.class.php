@@ -18,7 +18,8 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 	function global_footer_mobile_output() {
-
+		$googleAnalyticsImageUrl = $this->googleAnalyticsGetImageUrl();
+		return '<img src="' . $googleAnalyticsImageUrl . '" />';
 	}
 
 	function googleAnalyticsGetImageUrl() {
