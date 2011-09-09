@@ -53,7 +53,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 		$ret = '';
 
-		$ret .= $this->_my_googleAnalyticsGetImageUrl_html();
+		$ret .= $this->_my_ga_mobile_html();
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
@@ -95,7 +95,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	 *
 	 * @copyright Copyright 2009 Google Inc. All Rights Reserved.
 	 */
-	function _my_googleAnalyticsGetImageUrl_html() {
+	function _my_ga_mobile_html() {
 		$ret = '';
 
 		if ($this->_getglobal('GA_ACCOUNT')) {
