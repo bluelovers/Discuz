@@ -456,13 +456,20 @@ function checkrobot($useragent = '') {
 function checkmobile() {
 	global $_G;
 	$mobile = array();
-	static $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+	static $mobilebrowser_list =array(
+				'iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
 				'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
 				'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
 				'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
 				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
 				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
-				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+				'benq', 'haier', '^lct', '320x320', '240x320', '176x220'
+
+				// bluelovers
+				// Firefox Mobile 的識別為 Fennec
+				, 'fennec',
+				// bluelovers
+	);
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
 		$_G['mobile'] = $v;

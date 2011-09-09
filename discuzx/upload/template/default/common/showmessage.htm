@@ -1,4 +1,6 @@
-<!--{if !$_G['inajax']}-->
+<!--{if defined('IN_MOBILE')}-->
+	<!--{template common/header}-->
+<!--{elseif !$_G['inajax']}-->
 	<!--{template subblock/common/header_simple}-->
 
 	<!--修正 ct_header 錯位問題}-->
@@ -84,7 +86,9 @@
 			<!--{/if}-->
 		</p>
 <!--{else}-->$show_message<!--{/if}-->
-<!--{if !$_G['inajax']}-->
+<!--{if defined('IN_MOBILE')}-->
+	<!--{template common/footer}-->
+<!--{elseif !$_G['inajax']}-->
 		</div>
 	</div>
 	<!--{template subblock/common/footer_simple}-->
