@@ -21,7 +21,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$this->_init($this->_get_identifier(__METHOD__));
 	}
 
-	function global_footer_mobile_output() {
+	function global_footer_mobile() {
 
 		$this
 			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
