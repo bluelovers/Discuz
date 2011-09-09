@@ -28,7 +28,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 			->_setglobal('GA_ACCOUNT', 'MO-741906-1')
 		;
 
-		$googleAnalyticsImageUrl = $this->googleAnalyticsGetImageUrl();
+		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
 		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
 
 		return $ret;
@@ -51,7 +51,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		return $k;
 	}
 
-	function googleAnalyticsGetImageUrl() {
+	function _my_googleAnalyticsGetImageUrl() {
 
 		$GA_ACCOUNT = $this->_getglobal('GA_ACCOUNT');
 		$GA_PIXEL = $this->_getglobal('GA_PIXEL');
