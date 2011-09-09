@@ -39,6 +39,23 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $k;
 	}
 
+	function global_header_javascript_before_body() {
+		$ret = '';
+
+		$this->_fix_plugin_setting();
+
+		if ($this->_getglobal('ga_web_id', 'setting')) {
+
+			$this
+				->_setglobal('ga_web_id', $this->_getglobal('ga_web_id', 'setting'))
+			;
+
+			$ret .= $this->_fetch_template($this->_template('ga_web'), $this->attr['global']);
+		}
+
+		return $ret;
+	}
+
 }
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
