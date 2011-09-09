@@ -19,6 +19,9 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 	public function __construct() {
 		$this->_init($this->_get_identifier(__METHOD__));
+
+		// set instance = $this
+		$this->_this(&$this);
 	}
 
 	function global_footer_mobile() {
