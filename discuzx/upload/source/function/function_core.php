@@ -464,6 +464,11 @@ function checkmobile() {
 				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
 				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
 				'benq', 'haier', '^lct', '320x320', '240x320', '176x220'
+
+				// bluelovers
+				// Firefox Mobile 的識別為 Fennec
+				, 'fennec',
+				// bluelovers
 	);
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
