@@ -13,16 +13,33 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_analytics extends _sco_dx_plugin {
 
-}
-
-class mobileplugin_sco_analytics extends plugin_sco_analytics {
-
 	public function __construct() {
 		$this->_init($this->_get_identifier(__CLASS__));
 
 		// set instance = $this
 		$this->_this(&$this);
 	}
+
+	/**
+	 * get identifier from __CLASS__
+	 **/
+	function _get_identifier($method) {
+		$a = explode('::', $method);
+		$k = array_pop($a);
+
+		// remove plugin_ from identifier
+		if (strpos($k, 'plugin_') === 0) {
+			$k = substr($k, strlen('plugin_'));
+		} elseif (strpos($k, 'mobileplugin_') === 0) {
+			$k = substr($k, strlen('mobileplugin_'));
+		}
+
+		return $k;
+	}
+
+}
+
+class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 	function global_footer_mobile() {
 
@@ -41,23 +58,6 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
 		return $ret;
-	}
-
-	/**
-	 * get identifier from __CLASS__
-	 **/
-	function _get_identifier($method) {
-		$a = explode('::', $method);
-		$k = array_pop($a);
-
-		// remove plugin_ from identifier
-		if (strpos($k, 'plugin_') === 0) {
-			$k = substr($k, strlen('plugin_'));
-		} elseif (strpos($k, 'mobileplugin_') === 0) {
-			$k = substr($k, strlen('mobileplugin_'));
-		}
-
-		return $k;
 	}
 
 	/**
