@@ -29,7 +29,9 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		;
 
 		$googleAnalyticsImageUrl = $this->googleAnalyticsGetImageUrl();
-		return '<img src="' . $googleAnalyticsImageUrl . '" />';
+		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
+
+		return $ret;
 	}
 
 	/**
