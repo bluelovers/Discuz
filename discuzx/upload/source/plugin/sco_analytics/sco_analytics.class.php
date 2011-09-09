@@ -17,6 +17,10 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
+	function global_footer_mobile_output() {
+
+	}
+
 	function googleAnalyticsGetImageUrl() {
 		global $GA_ACCOUNT, $GA_PIXEL;
 		$url = "";
