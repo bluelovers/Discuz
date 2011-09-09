@@ -46,11 +46,6 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		// 修正 setting 的內容
 		$this->_fix_plugin_setting();
 
-		$this
-			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
-			->_setglobal('GA_ACCOUNT', $this->_getglobal('ga_mobile_id', 'setting'))
-		;
-
 		$ret = '';
 
 		$ret .= $this->_my_ga_mobile_html();
@@ -97,6 +92,11 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	 */
 	function _my_ga_mobile_html() {
 		$ret = '';
+
+		$this
+			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
+			->_setglobal('GA_ACCOUNT', $this->_getglobal('ga_mobile_id', 'setting'))
+		;
 
 		if ($this->_getglobal('GA_ACCOUNT')) {
 			$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
