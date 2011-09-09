@@ -22,6 +22,23 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		return '<img src="' . $googleAnalyticsImageUrl . '" />';
 	}
 
+	/**
+	 * get identifier from __CLASS__
+	 **/
+	function _get_identifier($method) {
+		$a = explode('::', $method);
+		$k = array_pop($a);
+
+		// remove plugin_ from identifier
+		if (strpos($k, 'plugin_') === 0) {
+			$k = substr($k, strlen('plugin_'));
+		} elseif (strpos($k, 'mobileplugin_') === 0) {
+			$k = substr($k, strlen('mobileplugin_'));
+		}
+
+		return $k;
+	}
+
 	function googleAnalyticsGetImageUrl() {
 		global $GA_ACCOUNT, $GA_PIXEL;
 		$url = "";
