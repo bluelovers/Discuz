@@ -31,7 +31,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 		$this
 			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
-			->_setglobal('GA_ACCOUNT', 'MO-741906-1')
+			->_setglobal('GA_ACCOUNT', $this->_getglobal('ga_mobile_id', 'setting'))
 		;
 
 		$ret = '';
