@@ -49,7 +49,10 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	}
 
 	function googleAnalyticsGetImageUrl() {
-		global $GA_ACCOUNT, $GA_PIXEL;
+		global $GA_ACCOUNT;
+
+		$GA_PIXEL = $this->_getglobal('GA_PIXEL');
+
 		$url = "";
 		$url .= $GA_PIXEL . "?";
 		$url .= "utmac=" . $GA_ACCOUNT;
