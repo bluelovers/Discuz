@@ -55,6 +55,9 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	}
 
 	/**
+	 * 手機追蹤程式碼
+	 * 專為行動電話而設的網站
+	 *
 	 * @copyright Copyright 2009 Google Inc. All Rights Reserved.
 	 */
 	function _my_googleAnalyticsGetImageUrl() {
@@ -80,6 +83,12 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		return str_replace("&", "&amp;", $url);
 	}
 
+	/**
+	 * 手機追蹤程式碼
+	 * 專為行動電話而設的網站
+	 *
+	 * @copyright Copyright 2009 Google Inc. All Rights Reserved.
+	 */
 	function _my_googleAnalyticsGetImageUrl_html() {
 		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
 		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
