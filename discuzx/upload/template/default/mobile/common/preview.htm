@@ -13,10 +13,11 @@
 				<p class="mbw xg2">{lang login_mobile_join}</p>
 				<p class="hm mbw" style="font-size: 18px; color: #F60;">
 					<!--{if $_G['setting']['domain']['app']['mobile']}-->
-						http://{$_G['setting']['domain']['app']['mobile']}
+						<a href="http://{$_G['setting']['domain']['app']['mobile']}" style="color: #F60;">http://{$_G['setting']['domain']['app']['mobile']}
 					<!--{else}-->
-						{$_G['siteurl']}forum.php?mobile=yes
+						<a href="{$_G['siteurl']}forum.php?mobile=yes" style="color: #F60;">{$_G['siteurl']}forum.php?mobile=yes
 					<!--{/if}-->
+					</a>
 				</p>
 			</div>
 		</div>
