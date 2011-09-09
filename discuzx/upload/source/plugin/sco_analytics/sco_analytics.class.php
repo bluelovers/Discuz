@@ -44,6 +44,14 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 		$this->_fix_plugin_setting();
 
+		$ret .= $this->_my_ga_web_html();
+
+		return $ret;
+	}
+
+	function _my_ga_web_html() {
+		$ret = '';
+
 		// google-analytics 網頁追蹤碼
 		if ($this->_getglobal('ga_web_id', 'setting')) {
 
