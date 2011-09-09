@@ -2,18 +2,18 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-09-09 18:31]]></item>
+	<item id="Time"><![CDATA[2011-09-09 19:01]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
-			<item id="adminid"><![CDATA[0]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
 			<item id="name"><![CDATA[Scorpio! Analytics]]></item>
 			<item id="identifier"><![CDATA[sco_analytics]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[sco_analytics/]]></item>
-			<item id="copyright"><![CDATA[]]></item>
+			<item id="copyright"><![CDATA[bluelovers]]></item>
 			<item id="version"><![CDATA[]]></item>
 			<item id="__modules">
 				<item id="0">
