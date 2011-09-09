@@ -26,6 +26,9 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
 	function global_footer_mobile() {
 
+		// 修正 setting 的內容
+		$this->_fix_plugin_setting();
+
 		$this
 			->_setglobal('GA_PIXEL', 'source/plugin/sco_analytics/bin/ga.php')
 			->_setglobal('GA_ACCOUNT', 'MO-741906-1')
