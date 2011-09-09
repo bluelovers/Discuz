@@ -31,6 +31,8 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
 		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
 
+		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
+
 		return $ret;
 	}
 
