@@ -22,6 +22,8 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 	/**
 	 * get identifier from __CLASS__
+	 *
+	 * @todo 將此 method 更新到 _sco_dx_plugin
 	 **/
 	function _get_identifier($method) {
 		$a = explode('::', $method);
