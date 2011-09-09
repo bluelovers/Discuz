@@ -96,8 +96,12 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	 * @copyright Copyright 2009 Google Inc. All Rights Reserved.
 	 */
 	function _my_googleAnalyticsGetImageUrl_html() {
-		$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
-		$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
+		$ret = '';
+
+		if ($this->_getglobal('GA_ACCOUNT')) {
+			$googleAnalyticsImageUrl = $this->_my_googleAnalyticsGetImageUrl();
+			$ret = '<img src="' . $googleAnalyticsImageUrl . '" />';
+		}
 
 		return $ret;
 	}
