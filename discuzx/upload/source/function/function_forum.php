@@ -839,7 +839,7 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 					$_G['adminid'] == 1
 					|| $_G['adminid'] == 2
 				)
-				|| $_strlen > 3
+				|| $_strlen > 2
 			)
 		) ? true : false;
 		// bluelovers
