@@ -828,6 +828,11 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	$tagcount = 0;
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
+
+		// bluelovers
+		$_strlen = preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $tagname, $dummy);
+		// bluelovers
+
 		if(preg_match(
 			// bluelovers
 			// 如果是管理員 或者 超級版主 則允許使用只有一個字的標籤
