@@ -68,12 +68,24 @@ class _sco_dx_tag {
 				$ret = false;
 			}
 		}
+
+		/*
+		debug(array(
+			$tagname,
+			$_strlen,
+			$ret,
+			self::utf8_strlen($tagname),
+		));
+		*/
+
 		// bluelovers
 
 		return $ret;
 	}
 
 	function strlen($str) {
+		if(strtolower(CHARSET) == 'utf-8') return self::utf8_strlen($str);
+
 		return dstrlen($str);
 	}
 
