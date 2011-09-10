@@ -882,7 +882,12 @@ function modthreadtag($tags, $itemid) {
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
 		if(
+			/*
 			preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)
+			*/
+			// bluelovers
+			_sco_dx_tag::check($tagname)
+			// bluelovers
 		) {
 			$threadtagarraynew[] = $tagname;
 			if(!in_array($tagname, $threadtagarray)) {
