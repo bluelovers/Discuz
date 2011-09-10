@@ -798,6 +798,12 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	}
 
 	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
+
+	// bluelovers
+	// GBK, BIG5, UTF8 的全形"　"
+	$tags = str_replace(array(chr(0xa1).chr(0xa1), chr(0xa1).chr(0x40), chr(0xe3).chr(0x80).chr(0x80)), ' ', $tags);
+	// bluelovers
+
 	if(strexists($tags, ',')) {
 		$tagarray = array_unique(explode(',', $tags));
 	} else {
