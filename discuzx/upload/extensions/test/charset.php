@@ -236,12 +236,52 @@ foreach (array(
 
 }
 
+$title = <<<EOM
+　
+EOM;
+
+function mb_str_split( $string ) {
+    # Split at all position not after the start: ^
+    # and not before the end: $
+    return preg_split('/(?<!^)(?!$)/u', $string );
+}
+
+$m = mb_str_split($title);
+
+foreach ($m as $_k => $_v) {
+	echo $_k . ' = '
+		. '<b style="color: red;">'
+		. $_v
+		. '</b>'
+		. ' = '
+		. ord($_v[0])
+		. ','
+		. ord($_v[1])
+		. ','
+		. ord($_v[2])
+		. ' ; '
+		. dechex(ord($_v[0]))
+		. ' '
+		. dechex(ord($_v[1]))
+		. ' '
+		. dechex(ord($_v[2]))
+		. '<br>'
+	;
+}
+
+echo $title;
+
+exit();
+
 // utf8 平假名
 $r = '/(\xe3(?:\x81[\x81-\xbf]|\x82[\x80-\x96\x99-\x9f]))/';
 // 片假名
 $r = '/(\xe3(?:\x82[\xa0-\xbf]|\x83[\x80-\xbf]))/';
 // 注音
 $r = '/(\xe3(?:\x84[\x85-\xa9]))/';
+
+// e3 80 80 全形空白
+// ee 93 86 不知道怎出現的全形空白(當作BUG)
 
 //for($j=hexdec('81'); $j<=(hexdec('81')+85); $j++) {
 	unset($m);
