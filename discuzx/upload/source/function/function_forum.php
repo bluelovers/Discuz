@@ -797,27 +797,7 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		return;
 	}
 
-	// 分別為 GBK, BIG5, UTF8 的全形"，"
 	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
-
-	// bluelovers
-	// GBK, BIG5, UTF8 的全形"　"
-	$tags = str_replace(array(chr(0xa1).chr(0xa1), chr(0xa1).chr(0x40), chr(0xe3).chr(0x80).chr(0x80)), ' ', $tags);
-
-	//全形英數字及符號
-	$f = array ('　', '０', '１', '２', '３', '４', '５', '６', '７', '８', '９', 'Ａ', 'Ｂ', 'Ｃ', 'Ｄ', 'Ｅ', 'Ｆ', 'Ｇ', 'Ｈ', 'Ｉ', 'Ｊ', 'Ｋ', 'Ｌ', 'Ｍ', 'Ｎ', 'Ｏ', 'Ｐ', 'Ｑ', 'Ｒ', 'Ｓ', 'Ｔ', 'Ｕ', 'Ｖ', 'Ｗ', 'Ｘ', 'Ｙ', 'Ｚ', 'ａ', 'ｂ', 'ｃ', 'ｄ', 'ｅ', 'ｆ', 'ｇ', 'ｈ', 'ｉ', 'ｊ', 'ｋ', 'ｌ', 'ｍ', 'ｎ', 'ｏ', 'ｐ', 'ｑ', 'ｒ', 'ｓ', 'ｔ', 'ｕ', 'ｖ', 'ｗ', 'ｘ', 'ｙ', 'ｚ', '～', '！', '＠', '＃', '＄', '％', '^', '＆', '＊', ' （', '）', '＿', '＋', '｜', '‘', '－', '＝', '＼', '｛', '｝', '〔', '〕', '：', '”', '；', '’', ' ＜', '＞', '？', '，', '．', '／', '︿',);
-	//半形英數字及符號
-	$h = array (' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '~', '!', '@', '#', '$', '%', '^', '&', '*', ' (', ')', '_', '+', '|', '`', '-', '=', '\\', '{', '}', '[', ']', ':', '"', ';', '\'', '<', '>', '?', ',', '.', '/', '^',);
-
-	$tags = str_replace($f, $h, $tags);
-
-	$tags = str_replace(array(
-		"\r\n", "\n", '、', '：', ':', '。'
-	), ',', $tags);
-
-	$tags = preg_replace('/[\s\t\r\n]+/', ' ', $tags);
-	// bluelovers
-
 	if(strexists($tags, ',')) {
 		$tagarray = array_unique(explode(',', $tags));
 	} else {
@@ -828,35 +808,7 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	$tagcount = 0;
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
-
-		// bluelovers
-		$_strlen = preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $tagname, $dummy);
-
-		$_strlen_ok = (
-			$_strlen < 20
-			&& (
-				(
-					$_G['adminid'] == 1
-					|| $_G['adminid'] == 2
-				)
-				|| $_strlen > 2
-			)
-		) ? true : false;
-		// bluelovers
-
-		if (
-			// bluelovers
-			$_strlen_ok &&
-			// bluelovers
-			preg_match(
-				/*
-				'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
-				*/
-				// bluelovers
-				'/^([\x7f-\xff_-]|\w|\s)+$/'
-				// bluelovers
-			, $tagname)
-		) {
+		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
 			if($result['tagid']) {
 				if(!$result['status']) {
