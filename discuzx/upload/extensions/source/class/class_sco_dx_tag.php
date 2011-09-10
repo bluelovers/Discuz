@@ -48,6 +48,8 @@ class _sco_dx_tag {
 		*/
 		// bluelovers
 		$ret = preg_match('/^([\x7f-\xff_-]|\w|\s)+$/', $tagname);
+
+		$_strlen = self::strlen($tagname);
 		// bluelovers
 
 		return $ret;
