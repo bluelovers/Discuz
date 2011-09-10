@@ -810,6 +810,7 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		$tagname = trim($tagname);
 		if(preg_match(
 			// bluelovers
+			// 如果是管理員 或者 超級版主 則允許使用只有一個字的標籤
 			($_G['adminid'] == 1 || $_G['adminid'] == 2) ?
 			'/^([\x7f-\xff_-]|\w|\s){1,20}$/' :
 			// bluelovers
