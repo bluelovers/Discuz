@@ -831,6 +831,17 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 
 		// bluelovers
 		$_strlen = preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $tagname, $dummy);
+
+		$_strlen_ok = (
+			$_strlen < 20
+			&& (
+				(
+					$_G['adminid'] == 1
+					|| $_G['adminid'] == 2
+				)
+				|| $_strlen > 3
+			)
+		) ? true : false;
 		// bluelovers
 
 		if(preg_match(
