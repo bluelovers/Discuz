@@ -874,7 +874,9 @@ function modthreadtag($tags, $itemid) {
 	$tagcount = 0;
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
+		if(
+			preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)
+		) {
 			$threadtagarraynew[] = $tagname;
 			if(!in_array($tagname, $threadtagarray)) {
 				$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
