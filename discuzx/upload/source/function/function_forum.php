@@ -845,8 +845,8 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		// bluelovers
 
 		if(preg_match(
-			'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
-		, $tagname)
+				'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
+			, $tagname)
 		) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
 			if($result['tagid']) {
