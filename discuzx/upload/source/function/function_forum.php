@@ -809,6 +809,10 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
 		if(preg_match(
+			// bluelovers
+			($_G['adminid'] == 1 || $_G['adminid'] == 2) ?
+			'/^([\x7f-\xff_-]|\w|\s){1,20}$/' :
+			// bluelovers
 			'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
 		, $tagname)) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
