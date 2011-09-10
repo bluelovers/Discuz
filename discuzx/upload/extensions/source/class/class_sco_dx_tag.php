@@ -51,6 +51,19 @@ class _sco_dx_tag {
 
 		if ($ret) {
 			$_strlen = self::strlen($tagname);
+
+			global $_G;
+
+			if (
+				$_strlen > 20
+				|| (
+					$_strlen < 3
+					&& $_G['adminid'] != 1
+					&& $_G['adminid'] != 2
+				)
+			) {
+				$ret = false;
+			}
 		}
 		// bluelovers
 
