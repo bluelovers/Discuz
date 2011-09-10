@@ -817,7 +817,12 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
 		if(
+			/*
 			preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)
+			*/
+			// bluelovers
+			_sco_dx_tag::check($tagname)
+			// bluelovers
 		) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
 			if($result['tagid']) {
