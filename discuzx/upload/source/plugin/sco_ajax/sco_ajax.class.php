@@ -37,7 +37,9 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 		}
 
 		if (!$ret && $access_ban) {
-			showmessage('forum_access_view_disallow', null, null, $extraparam);
+			showmessage('forum_access_view_disallow', null, array(
+				'extramsg' => ' ( AJAX VIEWTHREAD )',
+			), $extraparam);
 		}
 
 		return $access_ban;
@@ -46,6 +48,7 @@ class plugin_sco_ajax extends _sco_dx_plugin {
 
 class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function ajax_viewthread() {
+		if ($GLOBALS['_G']['gp_action'] != 'viewthread') return;
 
 		$this->_my_plugin_access_ban(false);
 
@@ -258,7 +261,9 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			}
 
 		} elseif($_G['forum']['allowview'] == -1) {
-			showmessage('forum_access_view_disallow', null, null, $extraparam);
+			showmessage('forum_access_view_disallow', null, array(
+				'extramsg' => ' ( AJAX VIEWTHREAD )',
+			), $extraparam);
 		}
 
 		// 版塊權限
