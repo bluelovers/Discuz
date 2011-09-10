@@ -8,7 +8,7 @@
 class _sco_dx_tag {
 
 	function tagarray($tags) {
-		$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
+		$tags = self::_fix_tags($tags);
 		if(strexists($tags, ',')) {
 			$tagarray = array_unique(explode(',', $tags));
 		} else {
