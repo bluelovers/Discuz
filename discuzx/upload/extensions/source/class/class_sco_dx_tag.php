@@ -21,6 +21,7 @@ class _sco_dx_tag {
 	}
 
 	function _fix_tags($tags) {
+		// 分別為 GBK, BIG5, UTF8 的全形"，"
 		$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
 
 		// bluelovers
