@@ -845,6 +845,9 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		// bluelovers
 
 		if (
+			// bluelovers
+			$_strlen_ok &&
+			// bluelovers
 			preg_match(
 				'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
 			, $tagname)
