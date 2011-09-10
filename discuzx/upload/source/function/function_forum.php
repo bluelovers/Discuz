@@ -803,6 +803,9 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	// bluelovers
 	// GBK, BIG5, UTF8 的全形"　"
 	$tags = str_replace(array(chr(0xa1).chr(0xa1), chr(0xa1).chr(0x40), chr(0xe3).chr(0x80).chr(0x80)), ' ', $tags);
+
+
+	$tags = preg_replace('/[\s\t\r\n]+/', ' ', $tags);
 	// bluelovers
 
 	if(strexists($tags, ',')) {
