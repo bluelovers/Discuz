@@ -797,7 +797,15 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		return;
 	}
 
+	/*
 	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
+	*/
+	// bluelovers
+	include_once libfile('class/sco_dx_tag', 'source', 'extensions/');
+
+	$tags = _sco_dx_tag::_fix_tags($tags);
+	// bluelovers
+
 	if(strexists($tags, ',')) {
 		$tagarray = array_unique(explode(',', $tags));
 	} else {
