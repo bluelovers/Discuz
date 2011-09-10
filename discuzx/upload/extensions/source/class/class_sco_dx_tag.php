@@ -12,7 +12,10 @@ class _sco_dx_tag {
 		if(strexists($tags, ',')) {
 			$tagarray = array_unique(explode(',', $tags));
 		} else {
+			static $langcore;
+			if (!isset($langcore)) {
 			$langcore = lang('core');
+			}
 			$tags = str_replace($langcore['fullblankspace'], ' ', $tags);
 			$tagarray = array_unique(explode(' ', $tags));
 		}
