@@ -43,7 +43,7 @@ class _sco_dx_tag {
 	}
 
 	function check($tagname) {
-
+		$ret = false;
 		$tagname = trim($tagname);
 
 		/*
