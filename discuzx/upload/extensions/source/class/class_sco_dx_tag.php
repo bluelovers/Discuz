@@ -40,6 +40,10 @@ class _sco_dx_tag {
 		return $tags;
 	}
 
+	function check($tagname) {
+
+	}
+
 	function strlen($str) {
 		return dstrlen($str);
 	}
