@@ -40,6 +40,10 @@ class _sco_dx_tag {
 		return $tags;
 	}
 
+	function strlen($str) {
+		return dstrlen($str);
+	}
+
 	function utf8_strlen($str) {
 		return preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $str, $dummy);
 	}
