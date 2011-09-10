@@ -29,6 +29,12 @@ class _sco_dx_tag {
 		$tags = str_replace(array(chr(0xa1).chr(0xa1), chr(0xa1).chr(0x40), chr(0xe3).chr(0x80).chr(0x80)), ' ', $tags);
 
 		$tags = self::str_f2h($tags);
+
+		$tags = str_replace(array(
+			"\r\n", "\n", '、', '：', ':', '。'
+		), ',', $tags);
+
+		$tags = preg_replace('/[\s\t\r\n]+/', ' ', $tags);
 		// bluelovers
 
 		return $tags;
