@@ -797,7 +797,15 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 		return;
 	}
 
+	/*
 	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
+	*/
+	// bluelovers
+	include_once libfile('class/sco_dx_tag', 'source', 'extensions/');
+
+	$tags = _sco_dx_tag::_fix_tags($tags);
+	// bluelovers
+
 	if(strexists($tags, ',')) {
 		$tagarray = array_unique(explode(',', $tags));
 	} else {
@@ -808,7 +816,14 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 	$tagcount = 0;
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
+		if(
+			/*
+			preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)
+			*/
+			// bluelovers
+			_sco_dx_tag::check($tagname)
+			// bluelovers
+		) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
 			if($result['tagid']) {
 				if(!$result['status']) {
@@ -846,7 +861,15 @@ function modthreadtag($tags, $itemid) {
 		$threadtagidarray[] = $result['tagid'];
 	}
 
+	/*
 	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
+	*/
+	// bluelovers
+	include_once libfile('class/sco_dx_tag', 'source', 'extensions/');
+
+	$tags = _sco_dx_tag::_fix_tags($tags);
+	// bluelovers
+
 	if(strexists($tags, ',')) {
 		$tagarray = array_unique(explode(',', $tags));
 	} else {
@@ -858,7 +881,14 @@ function modthreadtag($tags, $itemid) {
 	$tagcount = 0;
 	foreach($tagarray as $tagname) {
 		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
+		if(
+			/*
+			preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)
+			*/
+			// bluelovers
+			_sco_dx_tag::check($tagname)
+			// bluelovers
+		) {
 			$threadtagarraynew[] = $tagname;
 			if(!in_array($tagname, $threadtagarray)) {
 				$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
