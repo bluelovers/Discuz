@@ -128,7 +128,11 @@ class discuz_core {
 					$array[$k] = $_func($v, $_func);
 				}
 			} else {
-				$array = str_replace("\r\n", "\n", $array);
+				$array = str_replace(array(
+					"\r\n",
+				), array(
+					"\n",
+				), $array);
 			}
 			return $array;
 		');
