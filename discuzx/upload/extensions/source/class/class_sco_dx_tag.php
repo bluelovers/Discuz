@@ -35,6 +35,8 @@ class _sco_dx_tag {
 		), ',', $tags);
 
 		$tags = preg_replace('/[\s\t\r\n]+/', ' ', $tags);
+
+		$tags = trim($tags);
 		// bluelovers
 
 		return $tags;
