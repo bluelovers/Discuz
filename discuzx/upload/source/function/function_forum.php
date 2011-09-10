@@ -846,7 +846,8 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 
 		if(preg_match(
 			'/^([\x7f-\xff_-]|\w|\s){3,20}$/'
-		, $tagname)) {
+		, $tagname)
+		) {
 			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
 			if($result['tagid']) {
 				if(!$result['status']) {
