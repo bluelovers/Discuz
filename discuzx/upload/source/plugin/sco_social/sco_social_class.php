@@ -18,4 +18,8 @@ class plugin_sco_social extends _sco_dx_plugin {
 
 }
 
+class plugin_sco_social_forum extends plugin_sco_social {
+
+}
+
 ?>
