@@ -250,6 +250,10 @@ class _sco_dx_plugin {
 
 			$this->attr['setting'][$_k] = $_v;
 		}
+
+		$this->attr['profile'] = &$this->attr['setting'];
+
+		return $this;
 	}
 
 	function _init_pluginvars($pluginid) {
