@@ -123,6 +123,8 @@ class _sco_dx_plugin {
 		// remove plugin_ from identifier
 		if (strpos($k, 'plugin_') === 0) {
 			$k = substr($k, strlen('plugin_'));
+		} elseif (strpos($k, 'mobileplugin_') === 0) {
+			$k = substr($k, strlen('mobileplugin_'));
 		}
 
 		return $k;
@@ -250,6 +252,10 @@ class _sco_dx_plugin {
 
 			$this->attr['setting'][$_k] = $_v;
 		}
+
+		$this->attr['profile'] = &$this->attr['setting'];
+
+		return $this;
 	}
 
 	function _init_pluginvars($pluginid) {
@@ -353,7 +359,7 @@ class _sco_dx_plugin {
 	 * @example $_v = $this->_parse_method(__METHOD__);
 	 */
 	function _parse_method($method) {
-		if (preg_match('/^plugin_'
+		if (preg_match('/^(?:mobile)?plugin_'
 			.'(?:'.(preg_quote($this->identifier, '/')).')'
 			.'(?:_(.+)\:\:([^\_]+)_(.*))?$'
 			.'/', $method, $m)) {
