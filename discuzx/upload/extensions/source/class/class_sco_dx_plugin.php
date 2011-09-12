@@ -252,6 +252,8 @@ class _sco_dx_plugin {
 
 			$this->attr['setting'][$_k] = $_v;
 		}
+
+		return $this;
 	}
 
 	function _init_pluginvars($pluginid) {
