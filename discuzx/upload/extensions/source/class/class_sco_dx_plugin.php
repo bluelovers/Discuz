@@ -123,6 +123,8 @@ class _sco_dx_plugin {
 		// remove plugin_ from identifier
 		if (strpos($k, 'plugin_') === 0) {
 			$k = substr($k, strlen('plugin_'));
+		} elseif (strpos($k, 'mobileplugin_') === 0) {
+			$k = substr($k, strlen('mobileplugin_'));
 		}
 
 		return $k;
