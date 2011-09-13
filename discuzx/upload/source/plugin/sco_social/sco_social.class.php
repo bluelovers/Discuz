@@ -39,7 +39,10 @@ class plugin_sco_social_forum extends plugin_sco_social {
 		$ret = array();
 		$_i = 0;
 
+		/*
 		$this->_setglobal('fb_appid', 159786194105526);
+		*/
+		$this->_setglobal('fb_appid', 240641246674);
 
 		foreach ($postlist as $pid => $post) {
 			$ret[$_i] = $this->_fetch_template($this->_template('fb_like'), array(
