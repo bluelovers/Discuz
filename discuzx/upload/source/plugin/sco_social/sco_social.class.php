@@ -73,7 +73,16 @@ class plugin_sco_social_forum extends plugin_sco_social {
 
 		extract($_conf, EXTR_REFS);
 
-		$content = preg_replace('/(\<html\s*)([^\<\>]*)(\>\s*\<head\>)/i', '\\1\\2 xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"\\3', $content);
+$_head = <<<EOM
+<meta property="og:title" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://discuz.bluelovers.net/" />
+<meta property="og:image" content="" />
+<meta property="og:site_name" content="Bluelovers．風" />
+<meta property="fb:admins" content="1349835897" />
+EOM;
+
+		$content = preg_replace('/(\<html\s*)([^\<\>]*)(\>\s*\<head\>)/i', '\\1\\2 xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"\\3'.$_head, $content);
 	}
 
 }

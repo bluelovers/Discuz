@@ -1,3 +1,34 @@
+
+<!--{if 0 && $post[first]}-->
+<script>
+window.fbAsyncInit = function() {
+	jQuery(function(){
+		var firstpost =
+			jQuery('#postmessage_{$pid}')
+			.hide()
+		;
+
+		var _div =
+			jQuery('<div/>')
+			.attr({
+				'class' : 'notice notice_error',
+			})
+			.text('請先按讚，才可以看到"秘密"內容唷')
+			.appendTo(jQuery('#pid{$pid} .t_fsz'))
+		;
+
+		FB.init({appId: '{$fb_appid}', status: true, cookie: true, xfbml: true});
+
+		FB.Event.subscribe('edge.create', function(response) {
+			_div.hide();
+			firstpost.show();
+		});
+	});
+};
+
+</script>
+<!--{/if}-->
+
 <div id="fb-root"></div>
 <script>(function(d){
   var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
@@ -10,8 +41,11 @@
 	data-send="true"
 	data-layout="standard"
 	data-width="450"
-	data-show-faces="true"
-	data-font="verdana"></div>
+	data-show-faces="false"
+	data-font="verdana"
+
+	style="height: 29px; margin: 2px;"
+></div>
 <!--
 <div id="fb-root"></div>
 <script>(function(d){
@@ -28,17 +62,3 @@
 	src="http://www.facebook.com/plugins/like.php?href={$_href:rawurlencode()}&layout=standard&show_faces=false&width=450&action=like&font=verdana&colorscheme=light&height=35"
 	scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
 -->
-<!--{if $post[first]}-->
-<script>
-jQuery(function(){
-	var firstpost = jQuery('#postmessage_{$pid}');
-	firstpost.hide();
-
-	FB.init({appId: '{$fb_appid}', status: true, cookie: true, xfbml: true});
-
-	FB.Event.subscribe('edge.create', function(response) {
-		firstpost.show();
-	});
-});
-</script>
-<!--{/if}-->
