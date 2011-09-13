@@ -39,10 +39,8 @@ class plugin_sco_social_forum extends plugin_sco_social {
 		$ret = array();
 		$_i = 0;
 
-		/*
 		$this->_setglobal('fb_appid', 159786194105526);
-		*/
-		$this->_setglobal('fb_appid', 240641246674);
+		//$this->_setglobal('fb_appid', 240641246674);
 
 		foreach ($postlist as $pid => $post) {
 			$ret[$_i] = $this->_fetch_template($this->_template('fb_like'), array(
@@ -76,6 +74,7 @@ class plugin_sco_social_forum extends plugin_sco_social {
 
 		extract($_conf, EXTR_REFS);
 
+/*
 $_head = <<<EOM
 <meta property="og:title" content="" />
 <meta property="og:type" content="website" />
@@ -84,6 +83,7 @@ $_head = <<<EOM
 <meta property="og:site_name" content="Bluelovers．風" />
 <meta property="fb:admins" content="1349835897" />
 EOM;
+*/
 
 		$content = preg_replace('/(\<html\s*)([^\<\>]*)(\>\s*\<head\>)/i', '\\1\\2 xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"\\3'.$_head, $content);
 	}
