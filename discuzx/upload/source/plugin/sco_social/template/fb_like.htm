@@ -2,7 +2,43 @@
 <script>(function(d){
   var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
   js = d.createElement('script'); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=159786194105526&xfbml=1";
+  js.src = "//connect.facebook.net/zh_TW/all.js#appId={$fb_appid}&xfbml=1";
   d.getElementsByTagName('head')[0].appendChild(js);
 }(document));</script>
-<div class="fb-like" data-href="{$siteurl}forum.php?mod=redirect&goto=findpost&ptid={$post[tid]}&pid={$post[pid]}&fromuid=1" data-send="true" data-width="450" data-show-faces="true" data-font="verdana"></div>
+<div class="fb-like"
+	data-href="{$_href}"
+	data-send="true"
+	data-layout="standard"
+	data-width="450"
+	data-show-faces="true"
+	data-font="verdana"></div>
+<!--
+<div id="fb-root"></div>
+<script>(function(d){
+  var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+  js = d.createElement('script'); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId={$fb_appid}&xfbml=1";
+  d.getElementsByTagName('head')[0].appendChild(js);
+}(document));</script>
+<fb:like href="{$_href}" send="true" width="450" show_faces="true" font="verdana"></fb:like>
+
+<fb:like href="{$_href}" send="true" show_faces="false"></fb:like>
+
+<iframe
+	src="http://www.facebook.com/plugins/like.php?href={$_href:rawurlencode()}&layout=standard&show_faces=false&width=450&action=like&font=verdana&colorscheme=light&height=35"
+	scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
+-->
+<!--{if $post[first]}-->
+<script>
+jQuery(function(){
+	var firstpost = jQuery('#postmessage_{$pid}');
+	firstpost.hide();
+
+	FB.init({appId: '{$fb_appid}', status: true, cookie: true, xfbml: true});
+
+	FB.Event.subscribe('edge.create', function(response) {
+		firstpost.show();
+	});
+});
+</script>
+<!--{/if}-->
