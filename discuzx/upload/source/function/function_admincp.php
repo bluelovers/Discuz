@@ -466,10 +466,10 @@ jQuery(function(){
 						;
 					}
 
-					_this
+					var _parent = _this
 						.parents('li')
 						.first()
-						.addClass('checked')
+						.toggleClass('checked', input.prop('checked'))
 					;
 				});
 
