@@ -431,6 +431,13 @@ jQuery(function(){
 					var _this = jQuery(this);
 					if (/altstyle\s*\(/i.test(_this.attr('onmouseover'))) {
 						_this.removeAttr('onmouseover');
+
+						var _empty_func = function(){};
+
+						_this.find('li').each(function(){
+							this.onclick = _empty_func;
+							this.onmouseup = _empty_func;
+						});
 					}
 				})
 			;
