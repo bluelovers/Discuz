@@ -399,11 +399,7 @@ jQuery(function(){
 		}
 
 		if (_parent.size()) {
-			if (_this.prop('checked')) {
-				_parent.addClass('checked');
-			} else {
-				_parent.removeClass('checked');
-			}
+			_parent.toggleClass('checked', _this.prop('checked'));
 		}
 	};
 
