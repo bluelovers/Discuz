@@ -405,18 +405,13 @@ jQuery(function(){
 				_parent.removeClass('checked');
 			}
 		}
-
-		console.log([
-			_this,
-			_this.prop('checked')
-		]);
 	};
 
 	var cc = 0;
 
 	var _func_li = function(e){
 		var o = e.target.nodeName;
-		var altKey = e.which == 18 ? true : false;
+		var altKey = (e.altKey || e.which == 18) ? true : false;
 
 		if(cc) {
 			return;
@@ -452,18 +447,8 @@ jQuery(function(){
 				.trigger('click')
 			;
 
-			console.log([
-				altKey,
-				input.attr('name')
-			]);
-
 			if (altKey && input.attr('name').match(/^multinew\[\d+\]/)) {
 				var miid = input.attr('id').split('|');
-				mi = 0;
-
-				console.log(miid);
-
-				console.log(jQuery('input[id^="' + miid[0] + '|"]'));
 
 				jQuery('input[id^="' + miid[0] + '|"]').each(function(){
 					var _this = jQuery(this);
@@ -489,6 +474,8 @@ jQuery(function(){
 				});
 
 			}
+
+			jQuery(e.target).blur();
 		}
 
 		cc = 0;
