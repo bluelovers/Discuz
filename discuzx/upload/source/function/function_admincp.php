@@ -407,11 +407,48 @@ jQuery(function(){
 		}
 	};
 
-	var _func_parent = function(e){
+	var cc = 0;
+
+	var _func_li = function(e){
 		var o = e.target.nodeName;
 		var altKey = e.which == 18 ? true : false;
 
-		var input = jQuery('input:first', this);
+		if(cc) {
+			return;
+		}
+
+		cc = 1;
+
+		var _li = jQuery(this);
+
+		var input = jQuery('input:first', _li);
+
+		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio'])) {
+			if (input.attr('type') == 'radio') {
+				_li
+					.parent()
+						.find('li')
+							.removeClass('checked')
+				;
+			}
+
+			input
+				/*
+				.prop('checked', function(){
+					var _this = jQuery(this);
+
+					if (_this.attr('type') == 'radio') {
+						return true;
+					}
+
+					return !_this.prop('checked');
+				})
+				*/
+				.trigger('click')
+			;
+		}
+
+		cc = 0;
 	};
 
 	jQuery('.container')
@@ -437,14 +474,19 @@ jQuery(function(){
 				.parents('ul, ol, dl').each(function(){
 					var _this = jQuery(this);
 					if (/altstyle\s*\(/i.test(_this.attr('onmouseover'))) {
-						_this.removeAttr('onmouseover');
-
 						var _empty_func = function(){};
 
 						_this.find('li').each(function(){
 							this.onclick = _empty_func;
 							this.onmouseup = _empty_func;
 						});
+
+						_this
+							.removeAttr('onmouseover')
+							.delegate('li', {
+								'click.admincp_checked_li' : _func_li,
+							})
+						;
 					}
 				})
 			;
