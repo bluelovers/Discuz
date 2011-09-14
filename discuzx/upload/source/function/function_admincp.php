@@ -428,20 +428,26 @@ jQuery(function(){
 				;
 			}
 
-			input
-				/*
-				.prop('checked', function(){
-					var _this = jQuery(this);
+			if (o != 'INPUT') {
+				input
+					/*
+					.prop('checked', function(){
+						var _this = jQuery(this);
 
-					if (_this.attr('type') == 'radio') {
-						return true;
-					}
+						if (_this.attr('type') == 'radio') {
+							return true;
+						}
 
-					return !_this.prop('checked');
-				})
-				*/
-				.trigger('click')
-			;
+						return !_this.prop('checked');
+					})
+					*/
+					.trigger('click')
+				;
+			} else {
+				input
+					.triggerHandler('click')
+				;
+			}
 
 			if (altKey && input.attr('name').match(/^multinew\[\d+\]/)) {
 				var miid = input.attr('id').split('|');
