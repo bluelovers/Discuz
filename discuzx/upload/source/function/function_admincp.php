@@ -423,7 +423,7 @@ jQuery(function(){
 
 		var input = jQuery('input:first', _li);
 
-		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio'])) {
+		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio']) != -1) {
 			if (input.attr('type') == 'radio') {
 				_li
 					.parent()
