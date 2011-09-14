@@ -405,6 +405,11 @@ jQuery(function(){
 				_parent.removeClass('checked');
 			}
 		}
+
+		console.log([
+			_this,
+			_this.prop('checked')
+		]);
 	};
 
 	var cc = 0;
@@ -446,6 +451,44 @@ jQuery(function(){
 				*/
 				.trigger('click')
 			;
+
+			console.log([
+				altKey,
+				input.attr('name')
+			]);
+
+			if (altKey && input.attr('name').match(/^multinew\[\d+\]/)) {
+				var miid = input.attr('id').split('|');
+				mi = 0;
+
+				console.log(miid);
+
+				console.log(jQuery('input[id^="' + miid[0] + '|"]'));
+
+				jQuery('input[id^="' + miid[0] + '|"]').each(function(){
+					var _this = jQuery(this);
+
+					_this
+						.prop('checked', input.prop('checked'))
+					;
+
+					if (input.attr('type') == 'radio') {
+						_this
+							.parents('ul, ol, dl')
+							.first()
+								.find('li')
+									.removeClass('checked')
+						;
+					}
+
+					_this
+						.parents('li')
+						.first()
+						.addClass('checked')
+					;
+				});
+
+			}
 		}
 
 		cc = 0;
