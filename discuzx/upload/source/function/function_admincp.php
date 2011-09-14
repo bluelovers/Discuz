@@ -515,6 +515,7 @@ jQuery(function(){
 
 						_this
 							.removeAttr('onmouseover')
+							.undelegate('admincp_checked_li')
 							.delegate('li', {
 								'click.admincp_checked_li' : _func_li,
 							})
