@@ -426,6 +426,13 @@ jQuery(function(){
 		.bind('js_ajaxget.admincp', function() {
 			jQuery('.container')
 				.find(':checkbox, :radio').each(_func)
+
+				.parents('ul, ol, dl').each(function(){
+					var _this = jQuery(this);
+					if (/altstyle\s*\(/i.test(_this.attr('onmouseover'))) {
+						_this.removeAttr('onmouseover');
+					}
+				})
 			;
 		})
 		.triggerHandler('js_ajaxget')
