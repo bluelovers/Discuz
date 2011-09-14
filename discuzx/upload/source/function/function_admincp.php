@@ -407,6 +407,13 @@ jQuery(function(){
 		}
 	};
 
+	var _func_parent = function(e){
+		var o = e.target.nodeName;
+		var altKey = e.which == 18 ? true : false;
+
+		var input = jQuery('input:first', this);
+	};
+
 	jQuery('.container')
 		.undelegate('admincp_checked')
 		.delegate(':checkbox, :radio', {
