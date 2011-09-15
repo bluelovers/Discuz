@@ -1,4 +1,20 @@
 <!-- for viewthread_node_body -->
+
+<style>
+.rate { margin-top:50px;}
+.cr_ratl { border:#C3D5E3 1px solid; background:#fff; position:relative; padding-top:40px;}
+.rate .cr_extitle { width:100%; top:-20px; position: absolute; margin-left:5px; height:auto; overflow:hidden; margin-bottom:15px;}
+.rate .cr_extitle li { height:50px; width:auto; overflow:hidden; padding-left:8px; float:left; margin-right:10px; background:url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat 0 0;}
+.cr_extitle li span { height:50px; width:auto; display:block; _float:left; overflow:hidden;  padding-right:8px; background:url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat right 0; color:#999;}
+.cr_extitle li strong,.cr_extitle li strong a { display:block; text-align:center; font-weight:bold; color:#FC6D02; font:22px/25px "Arial"; margin-top:5px}
+.ratl { margin-bottom:-1px;}
+.ratl th { width:110px; border:0; padding-left:10px}
+.ratl th img { border:#ddd 1px solid; padding:1px;}
+.ratl td { border:0}
+.ratl td.xi1 { width:120px;background:url({IMGDIR}/agree.gif) no-repeat 0 11px; padding-left:18px;}
+p.ratc {height:22px; line-height:22px; padding:0; text-align:right; border:0; padding-right:10px;}
+</style>
+
 	<!--{if !empty($post['ratelog'])}-->
 		<dl id="ratelog_$post[pid]" class="rate{if !empty($_G['cookie']['ratecollapse'])} rate_collapse{/if}">
 			<!--{if $_G['setting']['ratelogon']}-->
@@ -14,6 +30,17 @@
 			<!--{/if}-->
 				<div id="post_rate_$post[pid]"></div>
 				<!--{if $_G['setting']['ratelogon']}-->
+
+					<!-- 美化樣式 -->
+					<div class="cr_ratl">
+						<ul class="cr_extitle">
+							<li><span><strong><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}"><!--{echo count($postlist[$post[pid]][totalrate]);}--></a></strong>{lang number_participants}</span></li>
+							<!--{loop $post['ratelogextcredits'] $id $score}-->
+							<li><span><strong>$score</strong>{$_G['setting']['extcredits'][$id][title]}</span></li>
+							<!--{/loop}-->
+						</ul>
+					<!-- 美化樣式 - end -->
+
 					<table class="ratl">
 						<tr>
 							<th class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></th>
@@ -28,14 +55,14 @@
 						<tbody class="ratl_l">
 							<!--{loop $post['ratelog'] $uid $ratelog}-->
 							<tr id="rate_{$post[pid]}_{$uid}">
-								<td>
+								<th>
 									<a href="home.php?mod=space&uid=$uid" target="_blank"><!--{echo avatar($uid, 'small');}--></a> <a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a>
-								</td>
+								</th>
 								<!--{loop $post['ratelogextcredits'] $id $score}-->
 									<!--{if $ratelog['score'][$id] > 0}-->
-										<td class="xi1"> + $ratelog[score][$id]</td>
+										<td class="xi1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end --> + $ratelog[score][$id]</td>
 									<!--{else}-->
-										<td class="xg1">$ratelog[score][$id]</td>
+										<td class="xg1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end -->$ratelog[score][$id]</td>
 									<!--{/if}-->
 								<!--{/loop}-->
 								<td class="xg1">$ratelog[reason]</td>
@@ -44,6 +71,7 @@
 						</tbody>
 					</table>
 					<p class="ratc">
+						<!--{if 0}-->
 						{lang rate_total}:&nbsp;
 						<!--{loop $post['ratelogextcredits'] $id $score}-->
 							<!--{if $score > 0}-->
@@ -52,8 +80,14 @@
 								<span class="xg1">{$_G['setting']['extcredits'][$id][title]} $score</span>&nbsp;
 							<!--{/if}-->
 						<!--{/loop}-->
+						<!--{/if}-->
 						&nbsp;<a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}" class="xi2">{lang rate_view}</a>
 					</p>
+
+					<!-- 美化樣式 -->
+					</div>
+					<!-- 美化樣式 - end -->
+
 				<!--{else}-->
 					<ul class="cl">
 						<!--{loop $post['ratelog'] $uid $ratelog}-->
