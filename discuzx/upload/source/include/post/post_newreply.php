@@ -113,6 +113,16 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	}
 
 	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newreply:After_postcomment_0_notification_add
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_postcomment_0_notification_add')
+			->run(array(array(
+
+			)));
+	}
+	// bluelovers
+
+	// bluelovers
 	if ($thread['lastpost'] < $_G['timestamp']) {
 		// 更新主題最後發表者與時間
 		DB::query("UPDATE ".DB::table('forum_thread')." SET lastposter='$_G[username]', lastpost='$_G[timestamp]' WHERE tid='{$post[tid]}'", 'UNBUFFERED');
