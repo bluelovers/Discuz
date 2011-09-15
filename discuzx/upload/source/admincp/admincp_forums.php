@@ -462,6 +462,10 @@ var rowtypedata = [
 			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid
 				ORDER BY
 					mo.displayorder
+
+					, m.adminid ASC
+					, m.groupid ASC
+					, m.username ASC
 			");
 			while($mod = DB::fetch($query)) {
 				$moderators .= $tab.addslashes($mod['username']);
