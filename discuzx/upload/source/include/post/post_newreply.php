@@ -151,6 +151,32 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 				));
 			}
 		}
+
+		if(!isset($_G['gp_addfeed'])) {
+			$space = array();
+			space_merge($space, 'field_home');
+			$_G['gp_addfeed'] = $space['privacy']['feed']['newreply'];
+		}
+		if(!empty($_G['gp_addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
+			$feed = array();
+
+			$post_url = "forum.php?mod=redirect&goto=findpost&pid=$post[pid]&ptid=$_G[tid]";
+
+			$feed['icon'] = 'post';
+			$feed['title_template'] = (0 && !empty($thread['author'])) ? 'feed_reply_comment_add_title' : 'feed_reply_comment_add_title_anonymous';
+			$feed['title_data'] = array(
+				'subject' => "<a href=\"$post_url\">$thread[subject]</a>",
+				'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>"
+			);
+
+			$feed['title_data']['hash_data'] = "tid{$_G[tid]}";
+			$feed['id'] = $pid;
+			$feed['idtype'] = 'pid';
+			if($feed['icon']) {
+				postfeed($feed);
+			}
+		}
+
 	}
 	// bluelovers
 
