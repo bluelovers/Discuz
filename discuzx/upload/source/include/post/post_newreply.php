@@ -122,7 +122,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		) {
 			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
 				'tid' => $_G['tid'],
-				'pid' => $_G['gp_pid'],
+				'pid' => $post['pid'],
 				'subject' => $thread['subject'],
 				'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
 			));
