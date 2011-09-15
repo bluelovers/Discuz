@@ -129,7 +129,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 				'tid' => $_G['tid'],
 				'pid' => $post['pid'],
 				'subject' => $thread['subject'],
-				'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
+				'commentmsg' => $_commentmsg
 			));
 		}
 
