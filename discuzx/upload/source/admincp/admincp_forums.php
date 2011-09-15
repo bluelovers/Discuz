@@ -247,7 +247,9 @@ var rowtypedata = [
 				$groupselect .= '<option value="'.$modgroup['admingid'].'">'.$modgroup['grouptitle']
 
 				// bluelovers
-				.' ('
+				.' ( '
+				.$modgroup['admingid']
+				.', '.$modgroup['radminid']
 				.' )'
 				// bluelovers
 
