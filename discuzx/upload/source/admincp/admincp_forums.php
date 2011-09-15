@@ -250,7 +250,11 @@ var rowtypedata = [
 		}
 		$groupselect .= '</select>';
 
-		$query = DB::query("SELECT m.username, m.groupid, mo.* FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND m.uid=mo.uid ORDER BY mo.inherited, mo.displayorder");
+		$query = DB::query("SELECT m.username, m.groupid, mo.* FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND m.uid=mo.uid
+			ORDER BY
+				mo.inherited
+				, mo.displayorder
+		");
 		while($mod = DB::fetch($query)) {
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$mod[uid].'"'.($mod['inherited'] ? ' disabled' : '').' />',
