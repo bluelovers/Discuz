@@ -203,7 +203,15 @@ var rowtypedata = [
 					$query = DB::query("SELECT uid, inherited FROM ".DB::table('forum_moderator')." WHERE fid='$fup'");
 					while($mod = DB::fetch($query)) {
 						if($mod['inherited'] || $fupforum['inheritedmod']) {
-							DB::insert('forum_moderator', array('uid' => $mod['uid'], 'fid' => $fid, 'inherited' => 1), 0, 1);
+							DB::insert('forum_moderator', array(
+								'uid' => $mod['uid'],
+								'fid' => $fid,
+								'inherited' => 1,
+
+								// bluelovers
+								'dateline' => TIMESTAMP,
+								// bluelovers
+							), 0, 1);
 						}
 					}
 				}
@@ -236,19 +244,52 @@ var rowtypedata = [
 		$groupselect = '<select name="newgroup">';
 		while($modgroup = DB::fetch($query)) {
 			if($modgroup['radminid'] == 3) {
-				$groupselect .= '<option value="'.$modgroup['admingid'].'">'.$modgroup['grouptitle'].'</option>';
+				$groupselect .= '<option value="'.$modgroup['admingid'].'">'.$modgroup['grouptitle']
+
+				// bluelovers
+				.' ( '
+				.$modgroup['admingid']
+				.', '.$modgroup['radminid']
+				.' )'
+				// bluelovers
+
+				.'</option>';
 			}
 			$modgroups[$modgroup['admingid']] = $modgroup['grouptitle'];
 		}
 		$groupselect .= '</select>';
 
-		$query = DB::query("SELECT m.username, m.groupid, mo.* FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND m.uid=mo.uid ORDER BY mo.inherited, mo.displayorder");
+		$query = DB::query("SELECT m.username, m.groupid, mo.* FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND m.uid=mo.uid
+			ORDER BY
+				mo.inherited
+				, mo.displayorder
+
+				, m.adminid ASC
+				, m.groupid ASC
+				, m.username ASC
+		");
 		while($mod = DB::fetch($query)) {
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$mod[uid].'"'.($mod['inherited'] ? ' disabled' : '').' />',
 				'<input type="text" class="txt" name="displayordernew['.$mod[uid].']" value="'.$mod[displayorder].'" size="2" />',
-				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>",
-				$modgroups[$mod['groupid']],
+				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>"
+
+				// bluelovers
+				." <span class=\"lightfont\">("
+					." UID:$mod[uid]"
+					.($mod['dateline'] ? ", DATE:".dgmdate($mod['dateline']) : '')
+					.($mod['by_uid'] ? ", BY UID:$mod[by_uid]" : '')
+				." )</span>"
+				// bluelovers
+
+				,
+				$modgroups[$mod['groupid']]
+				// bluelovers
+				." <span class=\"lightfont\">("
+					." groupid:$mod[groupid]"
+				." )</span>"
+				// bluelovers
+				,
 				cplang($mod['inherited'] ? 'yes' : 'no'),
 			));
 		}
@@ -358,6 +399,11 @@ var rowtypedata = [
 						'fid' => $fid,
 						'displayorder' => $_G['gp_newdisplayorder'],
 						'inherited' => '0',
+
+						// bluelvoers
+						'dateline' => TIMESTAMP,
+						'by_uid' => $_G['uid'],
+						// bluelovers
 					), false, true);
 				}
 			}
@@ -375,12 +421,33 @@ var rowtypedata = [
 				}
 			}
 
+			// bluelovers
+			$_cache_mod = array();
+
+			$query = DB::query("SELECT * FROM ".DB::table('forum_moderator')." WHERE fid='$fid'");
+			while($mod = DB::fetch($query)) {
+				$_cache_mod[$mod['uid']] = $mod;
+			}
+			// bluelovers
+
 			foreach($newmodarray as $uid) {
+
+				// bluelovers
+				if ($mod = $_cache_mod[$uid]) {
+					$mod['dateline'] = $mod['dateline'] ? $mod['dateline'] : TIMESTAMP;
+				}
+				// bluelvoers
+
 				DB::insert('forum_moderator', array(
 					'uid' => $uid,
 					'fid' => $fid,
 					'displayorder' => $_G['gp_newdisplayorder'],
 					'inherited' => '0',
+
+					// bluelvoers
+					'dateline' => $mod['dateline'],
+					'by_uid' => $mod['by_uid'],
+					// bluelovers
 				), false, true);
 
 				if($inheritedmodnew) {
@@ -388,7 +455,17 @@ var rowtypedata = [
 						DB::insert('forum_moderator', array(
 							'uid' => $uid,
 							'fid' => $ifid,
+
+							// bluelovers
+							'displayorder' => $_G['gp_newdisplayorder'],
+							// bluelovers
+
 							'inherited' => '1',
+
+							// bluelvoers
+							'dateline' => $mod['dateline'],
+							'by_uid' => $mod['by_uid'],
+							// bluelovers
 						), false, true);
 					}
 				}
@@ -415,7 +492,14 @@ var rowtypedata = [
 		$fidarray[] = $fid;
 		foreach($fidarray as $fid) {
 			$moderators = $tab = '';
-			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
+			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid
+				ORDER BY
+					mo.displayorder
+
+					, m.adminid ASC
+					, m.groupid ASC
+					, m.username ASC
+			");
 			while($mod = DB::fetch($query)) {
 				$moderators .= $tab.addslashes($mod['username']);
 				$tab = "\t";
