@@ -459,7 +459,10 @@ var rowtypedata = [
 		$fidarray[] = $fid;
 		foreach($fidarray as $fid) {
 			$moderators = $tab = '';
-			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
+			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid
+				ORDER BY
+					mo.displayorder
+			");
 			while($mod = DB::fetch($query)) {
 				$moderators .= $tab.addslashes($mod['username']);
 				$tab = "\t";
