@@ -68,6 +68,12 @@ $lang = array
 	'feed_reply_title_anonymous' =>		'{actor} 回復了話題 {subject}',
 	'feed_reply_message' =>			'',
 
+	// bluelovers
+	'feed_reply_comment_add_title' =>				'{actor} 點評了 {author} 參與的話題 {subject}',
+	'feed_reply_comment_add_title_anonymous' =>		'{actor} 點評了話題 {subject}',
+	'feed_reply_comment_add_message' =>				'',
+	// bluelovers
+
 	'feed_thread_poll_title' =>		'{actor} 發起了新投票',
 	'feed_thread_poll_message' =>		'<b>{subject}</b><br />{message}',
 
