@@ -203,7 +203,11 @@ var rowtypedata = [
 					$query = DB::query("SELECT uid, inherited FROM ".DB::table('forum_moderator')." WHERE fid='$fup'");
 					while($mod = DB::fetch($query)) {
 						if($mod['inherited'] || $fupforum['inheritedmod']) {
-							DB::insert('forum_moderator', array('uid' => $mod['uid'], 'fid' => $fid, 'inherited' => 1), 0, 1);
+							DB::insert('forum_moderator', array(
+								'uid' => $mod['uid'],
+								'fid' => $fid,
+								'inherited' => 1,
+							), 0, 1);
 						}
 					}
 				}
