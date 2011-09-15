@@ -263,7 +263,8 @@ var rowtypedata = [
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$mod[uid].'"'.($mod['inherited'] ? ' disabled' : '').' />',
 				'<input type="text" class="txt" name="displayordernew['.$mod[uid].']" value="'.$mod[displayorder].'" size="2" />',
-				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>",
+				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>"
+				,
 				$modgroups[$mod['groupid']],
 				cplang($mod['inherited'] ? 'yes' : 'no'),
 			));
