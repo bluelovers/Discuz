@@ -207,6 +207,10 @@ var rowtypedata = [
 								'uid' => $mod['uid'],
 								'fid' => $fid,
 								'inherited' => 1,
+
+								// bluelovers
+								'dateline' => TIMESTAMP,
+								// bluelovers
 							), 0, 1);
 						}
 					}
