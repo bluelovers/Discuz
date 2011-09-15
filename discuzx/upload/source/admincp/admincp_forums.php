@@ -266,7 +266,9 @@ var rowtypedata = [
 				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>"
 
 				// bluelovers
-				." <span class=\"lightfont\">( UID:$mod[uid] )</span>"
+				." <span class=\"lightfont\">("
+					." UID:$mod[uid]"
+				." )</span>"
 				// bluelovers
 
 				,
