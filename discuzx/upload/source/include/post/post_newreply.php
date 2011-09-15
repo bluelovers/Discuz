@@ -113,6 +113,24 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	}
 
 	// bluelovers
+	if (!empty($_G['uid'])) {
+
+		// 評論時可同時提醒該主題的發表者
+		if (
+			$_G['uid'] != $thead['authorid']
+			&& $thread['authorid'] != $post['authorid']
+		) {
+			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
+				'tid' => $_G['tid'],
+				'pid' => $_G['gp_pid'],
+				'subject' => $thread['subject'],
+				'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
+			));
+		}
+	}
+	// bluelovers
+
+	// bluelovers
 	if (discuz_core::$plugin_support['Scorpio_Event']) {
 		//Event: Script_forum_post_newreply:After_postcomment_0_notification_add
 		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_postcomment_0_notification_add')
