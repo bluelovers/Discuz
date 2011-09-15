@@ -500,23 +500,37 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 		// bluelovers
 		if (!empty($_G['uid'])) {
-			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$pid'");
+			$_user_list = array();
+
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$_G[gp_reppid]'");
 			while($_row = DB::fetch($query)) {
 				if (!in_array($_row['authorid'], array(
-					$thread['authorid'],
-					$post['authorid'],
 					$_G['uid'],
 					$nauthorid,
+					0,
 				))) {
-					notification_add($_row['authorid'], 'post', 'reppost_noticeauthor', array(
-						'tid' => $thread['tid'],
-						'subject' => $thread['subject'],
-						'fid' => $_G['fid'],
-						'pid' => $pid,
-						'from_id' => $thread['tid'],
-						'from_idtype' => 'post',
-					));
+					$_user_list[] = $_row['authorid'];
 				}
+			}
+
+			if (in_array($thread['authorid'], array(
+				$_G['uid'],
+				$nauthorid,
+			))) {
+				$_user_list[] = $thread['authorid'];
+			}
+
+			$_user_list = array_unique($_user_list);
+
+			foreach($_user_list as $_uid) {
+				notification_add($_uid, 'post', 'reppost_noticeauthor', array(
+					'tid' => $thread['tid'],
+					'subject' => $thread['subject'],
+					'fid' => $_G['fid'],
+					'pid' => $pid,
+					'from_id' => $thread['tid'],
+					'from_idtype' => 'post',
+				));
 			}
 		}
 		// bluelovers
