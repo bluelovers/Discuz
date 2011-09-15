@@ -398,6 +398,13 @@ var rowtypedata = [
 			// bluelovers
 
 			foreach($newmodarray as $uid) {
+
+				// bluelovers
+				if ($mod = $_cache_mod[$uid]) {
+					$mod['dateline'] = $mod['dateline'] ? $mod['dateline'] : TIMESTAMP;
+				}
+				// bluelvoers
+
 				DB::insert('forum_moderator', array(
 					'uid' => $uid,
 					'fid' => $fid,
