@@ -505,7 +505,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			$rpid = intval($_G['gp_reppid']);
 
 			// 回覆時可同時提醒點評過目前回覆的帖子的人
-			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$_G[gp_reppid]'");
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$rpid'");
 			while($_row = DB::fetch($query)) {
 				if (!in_array($_row['authorid'], array(
 					$_G['uid'],
