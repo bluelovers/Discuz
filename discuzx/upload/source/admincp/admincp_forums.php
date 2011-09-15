@@ -369,6 +369,7 @@ var rowtypedata = [
 
 						// bluelvoers
 						'dateline' => TIMESTAMP,
+						'by_uid' => $_G['uid'],
 						// bluelovers
 					), false, true);
 				}
