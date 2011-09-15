@@ -117,7 +117,10 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		//Event: Script_forum_post_newreply:After_postcomment_0_notification_add
 		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_postcomment_0_notification_add')
 			->run(array(array(
+				'post' => &$post,
+				'thread' => &$thread,
 
+				'comment' => &$comment,
 			)));
 	}
 	// bluelovers
