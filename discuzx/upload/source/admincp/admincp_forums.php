@@ -388,6 +388,15 @@ var rowtypedata = [
 				}
 			}
 
+			// bluelovers
+			$_cache_mod = array();
+
+			$query = DB::query("SELECT * FROM ".DB::table('forum_moderator')." WHERE fid='$fid'");
+			while($mod = DB::fetch($query)) {
+				$_cache_mod[$mod['uid']] = $mod;
+			}
+			// bluelovers
+
 			foreach($newmodarray as $uid) {
 				DB::insert('forum_moderator', array(
 					'uid' => $uid,
