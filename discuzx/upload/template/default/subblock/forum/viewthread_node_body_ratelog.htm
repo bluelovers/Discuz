@@ -59,11 +59,13 @@ p.ratc {height:22px; line-height:22px; padding:0; text-align:right; border:0; pa
 									<a href="home.php?mod=space&uid=$uid" target="_blank"><!--{echo avatar($uid, 'small');}--></a> <a href="home.php?mod=space&uid=$uid" target="_blank">$ratelog[username]</a>
 								</th>
 								<!--{loop $post['ratelogextcredits'] $id $score}-->
+									<td class="{if $ratelog['score'][$id] > 0}xi1{else}xg1{/if}">
 									<!--{if $ratelog['score'][$id] > 0}-->
 										<td class="xi1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end --> + $ratelog[score][$id]</td>
 									<!--{else}-->
 										<td class="xg1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end -->$ratelog[score][$id]</td>
 									<!--{/if}-->
+									</td>
 								<!--{/loop}-->
 								<td class="xg1">$ratelog[reason]</td>
 							</tr>
