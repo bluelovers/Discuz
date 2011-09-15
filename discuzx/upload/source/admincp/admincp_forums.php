@@ -275,6 +275,11 @@ var rowtypedata = [
 
 				,
 				$modgroups[$mod['groupid']]
+				// bluelovers
+				." <span class=\"lightfont\">("
+					." groupid:$mod[groupid]"
+				." )</span>"
+				// bluelovers
 				,
 				cplang($mod['inherited'] ? 'yes' : 'no'),
 			));
