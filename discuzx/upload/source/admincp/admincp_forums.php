@@ -274,7 +274,8 @@ var rowtypedata = [
 				// bluelovers
 
 				,
-				$modgroups[$mod['groupid']],
+				$modgroups[$mod['groupid']]
+				,
 				cplang($mod['inherited'] ? 'yes' : 'no'),
 			));
 		}
