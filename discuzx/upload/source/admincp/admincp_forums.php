@@ -245,6 +245,12 @@ var rowtypedata = [
 		while($modgroup = DB::fetch($query)) {
 			if($modgroup['radminid'] == 3) {
 				$groupselect .= '<option value="'.$modgroup['admingid'].'">'.$modgroup['grouptitle']
+
+				// bluelovers
+				.' ('
+				.' )'
+				// bluelovers
+
 				.'</option>';
 			}
 			$modgroups[$modgroup['admingid']] = $modgroup['grouptitle'];
