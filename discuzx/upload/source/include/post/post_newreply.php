@@ -101,6 +101,11 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
 	!empty($_G['uid']) && updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
+
+	// bluelovers
+	$_commentmsg = cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200);
+	// bluelovers
+
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
 			'tid' => $_G['tid'],
