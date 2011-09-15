@@ -254,6 +254,10 @@ var rowtypedata = [
 			ORDER BY
 				mo.inherited
 				, mo.displayorder
+
+				, m.adminid ASC
+				, m.groupid ASC
+				, m.username ASC
 		");
 		while($mod = DB::fetch($query)) {
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
