@@ -366,6 +366,10 @@ var rowtypedata = [
 						'fid' => $fid,
 						'displayorder' => $_G['gp_newdisplayorder'],
 						'inherited' => '0',
+
+						// bluelvoers
+						'dateline' => TIMESTAMP,
+						// bluelovers
 					), false, true);
 				}
 			}
