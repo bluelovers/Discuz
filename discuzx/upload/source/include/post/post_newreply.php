@@ -101,16 +101,71 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
 	!empty($_G['uid']) && updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
+
+	// bluelovers
+	$_commentmsg = cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200);
+	// bluelovers
+
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
 			'tid' => $_G['tid'],
 			'pid' => $_G['gp_pid'],
 			'subject' => $thread['subject'],
-			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
+			'commentmsg' => $_commentmsg
 		));
 
 		//TODO:增加可提醒其他點評此帖的用戶
 	}
+
+	// bluelovers
+	if (!empty($_G['uid'])) {
+
+		// 評論時可同時提醒該主題的發表者
+		if (
+			!in_array($_G['uid'], array(
+				$thread['authorid'],
+				$post['authorid'],
+			))
+		) {
+			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
+				'tid' => $_G['tid'],
+				'pid' => $post['pid'],
+				'subject' => $thread['subject'],
+				'commentmsg' => $_commentmsg
+			));
+		}
+
+		// 評論時可同時提醒參與過該帖子的點評者
+		$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$post[pid]'");
+		while($_row = DB::fetch($query)) {
+			if (!in_array($_row['authorid'], array(
+				$thread['authorid'],
+				$post['authorid'],
+				$_G['uid'],
+			))) {
+				notification_add($_row['authorid'], 'pcomment', 'comment_add', array(
+					'tid' => $_G['tid'],
+					'pid' => $post['pid'],
+					'subject' => $thread['subject'],
+					'commentmsg' => $_commentmsg
+				));
+			}
+		}
+	}
+	// bluelovers
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newreply:After_postcomment_0_notification_add
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_postcomment_0_notification_add')
+			->run(array(array(
+				'post' => &$post,
+				'thread' => &$thread,
+
+				'comment' => &$comment,
+			)));
+	}
+	// bluelovers
 
 	// bluelovers
 	if ($thread['lastpost'] < $_G['timestamp']) {
@@ -442,6 +497,47 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 				));
 			}
 		}
+
+		// bluelovers
+		if (!empty($_G['uid'])) {
+			$_user_list = array();
+
+			$rpid = intval($_G['gp_reppid']);
+
+			// 回覆時可同時提醒點評過目前回覆的帖子的人
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$rpid'");
+			while($_row = DB::fetch($query)) {
+				if (!in_array($_row['authorid'], array(
+					$_G['uid'],
+					$nauthorid,
+					0,
+				))) {
+					$_user_list[] = $_row['authorid'];
+				}
+			}
+
+			// 同時提醒主題發表者
+			if (in_array($thread['authorid'], array(
+				$_G['uid'],
+				$nauthorid,
+			))) {
+				$_user_list[] = $thread['authorid'];
+			}
+
+			$_user_list = array_unique($_user_list);
+
+			foreach($_user_list as $_uid) {
+				notification_add($_uid, 'post', 'reppost_noticeauthor', array(
+					'tid' => $thread['tid'],
+					'subject' => $thread['subject'],
+					'fid' => $_G['fid'],
+					'pid' => $pid,
+					'from_id' => $thread['tid'],
+					'from_idtype' => 'post',
+				));
+			}
+		}
+		// bluelovers
 
 		if($postcomment) {
 			$rpid = intval($_G['gp_reppid']);
