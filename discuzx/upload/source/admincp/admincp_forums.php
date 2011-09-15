@@ -410,6 +410,11 @@ var rowtypedata = [
 					'fid' => $fid,
 					'displayorder' => $_G['gp_newdisplayorder'],
 					'inherited' => '0',
+
+					// bluelvoers
+					'dateline' => $mod['dateline'],
+					'by_uid' => $mod['uid'],
+					// bluelovers
 				), false, true);
 
 				if($inheritedmodnew) {
@@ -418,6 +423,11 @@ var rowtypedata = [
 							'uid' => $uid,
 							'fid' => $ifid,
 							'inherited' => '1',
+
+							// bluelvoers
+							'dateline' => $mod['dateline'],
+							'by_uid' => $mod['uid'],
+							// bluelovers
 						), false, true);
 					}
 				}
