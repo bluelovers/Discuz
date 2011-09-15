@@ -122,8 +122,10 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 		// 評論時可同時提醒該主題的發表者
 		if (
-			$_G['uid'] != $thead['authorid']
-			&& $thread['authorid'] != $post['authorid']
+			!in_array($_G['uid'], array(
+				$thread['authorid'],
+				$post['authorid'],
+			))
 		) {
 			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
 				'tid' => $_G['tid'],
