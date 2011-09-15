@@ -413,7 +413,7 @@ var rowtypedata = [
 
 					// bluelvoers
 					'dateline' => $mod['dateline'],
-					'by_uid' => $mod['uid'],
+					'by_uid' => $mod['by_uid'],
 					// bluelovers
 				), false, true);
 
@@ -426,7 +426,7 @@ var rowtypedata = [
 
 							// bluelvoers
 							'dateline' => $mod['dateline'],
-							'by_uid' => $mod['uid'],
+							'by_uid' => $mod['by_uid'],
 							// bluelovers
 						), false, true);
 					}
