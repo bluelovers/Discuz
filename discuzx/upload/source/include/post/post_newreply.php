@@ -498,6 +498,29 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 		}
 
+		// bluelovers
+		if (!empty($_G['uid'])) {
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$pid'");
+			while($_row = DB::fetch($query)) {
+				if (!in_array($_row['authorid'], array(
+					$thread['authorid'],
+					$post['authorid'],
+					$_G['uid'],
+					$nauthorid,
+				))) {
+					notification_add($_row['authorid'], 'post', 'reppost_noticeauthor', array(
+						'tid' => $thread['tid'],
+						'subject' => $thread['subject'],
+						'fid' => $_G['fid'],
+						'pid' => $pid,
+						'from_id' => $thread['tid'],
+						'from_idtype' => 'post',
+					));
+				}
+			}
+		}
+		// bluelovers
+
 		if($postcomment) {
 			$rpid = intval($_G['gp_reppid']);
 			if(!$posttable) {
