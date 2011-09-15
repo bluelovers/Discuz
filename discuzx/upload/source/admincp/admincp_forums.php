@@ -422,6 +422,11 @@ var rowtypedata = [
 						DB::insert('forum_moderator', array(
 							'uid' => $uid,
 							'fid' => $ifid,
+
+							// bluelovers
+							'displayorder' => $_G['gp_newdisplayorder'],
+							// bluelovers
+
 							'inherited' => '1',
 
 							// bluelvoers
