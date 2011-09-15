@@ -200,7 +200,7 @@ var rowtypedata = [
 
 					DB::insert('forum_forumfield', $data);
 
-					$query = DB::query("SELECT uid, inherited FROM ".DB::table('forum_moderator')." WHERE fid='$fup'");
+					$query = DB::query("SELECT * FROM ".DB::table('forum_moderator')." WHERE fid='$fup'");
 					while($mod = DB::fetch($query)) {
 						if($mod['inherited'] || $fupforum['inheritedmod']) {
 							DB::insert('forum_moderator', array(
