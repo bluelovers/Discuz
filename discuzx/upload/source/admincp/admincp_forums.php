@@ -268,6 +268,7 @@ var rowtypedata = [
 				// bluelovers
 				." <span class=\"lightfont\">("
 					." UID:$mod[uid]"
+					.($mod['dateline'] ? ", DATE:".dgmdate($mod['dateline']) : '')
 				." )</span>"
 				// bluelovers
 
