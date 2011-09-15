@@ -291,4 +291,7 @@ padding-left:1em ;
 	line-height: 28px;
 }
 
+/*  前台版塊管理 左側選單 目前執行的動作明顯化 */
+.tbn li.a { background-color: #F2F7FB; }
+
 /* ---------------------- */
