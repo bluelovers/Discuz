@@ -152,6 +152,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 			}
 		}
 
+		// 使點評 可以產生動態
 		if(!isset($_G['gp_addfeed'])) {
 			$space = array();
 			space_merge($space, 'field_home');
