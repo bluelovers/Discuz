@@ -148,8 +148,8 @@ p.ratc {
 							<!--{/loop}-->
 						</tbody>
 					</table>
+					<!--{if 0}-->
 					<p class="ratc">
-						<!--{if 0}-->
 						{lang rate_total}:&nbsp;
 						<!--{loop $post['ratelogextcredits'] $id $score}-->
 							<!--{if $score > 0}-->
@@ -158,9 +158,9 @@ p.ratc {
 								<span class="xg1">{$_G['setting']['extcredits'][$id][title]} $score</span>&nbsp;
 							<!--{/if}-->
 						<!--{/loop}-->
-						<!--{/if}-->
 						&nbsp;<a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}" class="xi2">{lang rate_view}</a>
 					</p>
+					<!--{/if}-->
 
 					<!-- 美化樣式 -->
 					</div>
