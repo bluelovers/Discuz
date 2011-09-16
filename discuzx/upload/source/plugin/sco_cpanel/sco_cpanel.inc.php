@@ -22,15 +22,15 @@ if (empty($_G['gp_op'])) {
 
 } else {
 
-$_cpanel = plugin_sco_cpanel::mod('threadsorts', $plugin['identifier']);
+	$_cpanel = plugin_sco_cpanel::mod('threadsorts', $plugin['identifier']);
 
-$_cpanel
-	->set(array(
-		'op' => $_G['gp_op'],
-		'module' => &$module,
-	))
-	->run()
-;
+	$_cpanel
+		->set(array(
+			'op' => $_G['gp_op'],
+			'module' => &$module,
+		))
+		->run()
+	;
 
 }
 
