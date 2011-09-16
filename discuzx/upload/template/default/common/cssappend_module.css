@@ -159,8 +159,8 @@
 	    margin-bottom: 15px;
 	}
 	.cr_ratl {
-	    border: #C3D5E3 1px solid;
-	    background: #fff;
+	    border: {SPECIALBORDER} 1px solid;
+	    background: {WRAPBG};
 	    position: relative;
 	    padding-top: 40px;
 
@@ -233,7 +233,7 @@
 
 	.rate .cr_extitle li.avt {
 		height: 25px;
-	    min-height: 25px !important;
+	    min-height: 25px;
     }
 
 	.cr_extitle li strong,
