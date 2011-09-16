@@ -251,7 +251,7 @@ class _sco_dx_plugin {
 			$this->attr['setting'][$_k] = $_v;
 		}
 
-		$this->attr['profile'] = &$this->attr['setting'];
+		$this->attr['profile'] = $this->attr['db']['common_plugin'];
 
 		return $this;
 	}
