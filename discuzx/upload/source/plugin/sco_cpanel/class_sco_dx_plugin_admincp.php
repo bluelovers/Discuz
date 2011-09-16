@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
-class plugin_sco_cpanel extends _sco_dx_plugin {
+class _sco_dx_plugin_admincp extends _sco_dx_plugin {
 
 	const identifier = 'sco_cpanel';
 
