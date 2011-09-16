@@ -43,7 +43,7 @@
 }
 */
 
-.cr_extitle li, .rate .cr_extitle li {
+.rate .cr_extitle li {
 	border: 1px solid #D3E8F2;
 
 	-moz-border-radius-topleft: 6px;
@@ -73,11 +73,15 @@
 	text-align: center;
 }
 
-.cr_extitle li.y, .rate .cr_extitle li.y {
+.rate .cr_extitle li.y {
 	float: right;
 	height: 30px;
 	line-height: 30px;
 	margin-right: 30px;
+}
+
+.rate .cr_extitle li.y span {
+	margin-left: 5px;
 }
 
 .cr_extitle li strong,
@@ -105,10 +109,9 @@
     padding: 1px;
 }
 */
-.ratl td { border:0; }
+.ratl td { border: 0; }
 /*
 .ratl td.xi1 { width:120px;background:url({IMGDIR}/agree.gif) no-repeat 0 11px; padding-left:18px;}
-*/
 p.ratc {
     height: 22px;
     line-height: 22px;
@@ -117,6 +120,7 @@ p.ratc {
     border: 0;
     padding-right: 10px;
 }
+*/
 
 .cr_ratl {
 	-moz-border-radius-topleft: 6px;
@@ -166,12 +170,14 @@ p.ratc {
 
 					<table class="ratl">
 						<tr>
-							<td class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></td>
+							<th class="xw1" width="120"><a href="forum.php?mod=misc&action=viewratings&tid=$_G[tid]&pid=$post[pid]" onclick="showWindow('viewratings', this.href)" title="{lang rate_view}">{lang have} <span class="xi1"><!--{echo count($postlist[$post[pid]][totalrate]);}--></span> {lang people_score}</a></th>
 							<!--{loop $post['ratelogextcredits'] $id $score}-->
 							<th width="50"><i>{$_G['setting']['extcredits'][$id][title]}</i></th>
 							<!--{/loop}-->
 							<th>
+								<!--{if 0}-->
 								<a href="javascript:;" onclick="toggleRatelogCollapse('ratelog_$post[pid]', this);" class="y xi2 op"><!--{if !empty($_G['cookie']['ratecollapse'])}-->{lang open}<!--{else}-->{lang pack}<!--{/if}--></a>
+								<!--{/if}-->
 								<i>{lang reason}</i>
 							</th>
 						</tr>
