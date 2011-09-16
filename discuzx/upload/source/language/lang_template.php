@@ -354,10 +354,6 @@ $lang = array (
   'top_orderby_credits' => '按積分總數',
   'top_orderby_posts' => '按發帖總數',
   'top_orderby_uid' => '按註冊時間',
-
-  // bluelovers
-  'number_participants' => '參與人數',
-  // bluelovers
 );
 
 ?>
