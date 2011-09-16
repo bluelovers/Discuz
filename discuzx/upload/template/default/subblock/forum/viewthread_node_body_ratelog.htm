@@ -23,6 +23,14 @@
 							<li><span><strong>$score</strong>{$_G['setting']['extcredits'][$id][title]}</span></li>
 							<!--{/loop}-->
 
+							<!--{loop $post['ratelog'] $uid $ratelog}-->
+								<li class="avt">
+										<a href="home.php?mod=space&uid=$uid" target="_blank">
+											<!--{echo avatar($uid, 'small_19');}-->
+										</a>
+								</li>
+							<!--{/loop}-->
+
 							<li class="y">
 								<span>
 									<a href="javascript:;" onclick="toggleRatelogCollapse('ratelog_$post[pid]', this);" class="xi2 op"><!--{if !empty($_G['cookie']['ratecollapse'])}-->{lang open}<!--{else}-->{lang pack}<!--{/if}--></a>
