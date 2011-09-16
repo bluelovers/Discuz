@@ -23,13 +23,15 @@
 							<li><span><strong>$score</strong>{$_G['setting']['extcredits'][$id][title]}</span></li>
 							<!--{/loop}-->
 
+							<!--{if 0}-->
 							<!--{loop $post['ratelog'] $uid $ratelog}-->
 								<li class="avt">
-										<a href="home.php?mod=space&uid=$uid" target="_blank">
+										<a href="home.php?mod=space&uid=$uid" target="_blank" title="UID: $uid">
 											<!--{echo avatar($uid, 'small_19');}-->
 										</a>
 								</li>
 							<!--{/loop}-->
+							<!--{/if}-->
 
 							<li class="y">
 								<span>
