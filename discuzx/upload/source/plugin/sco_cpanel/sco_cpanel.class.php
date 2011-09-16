@@ -29,10 +29,20 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 		);
 
 		echo '<div class="extcredits" style="margin: 0px;"><ul class="rowform">';
-		foreach ($op_list as $key => $name) {
-			echo '<li><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$name.'</span></a></li>';
+
+		$dir = dirname(__FILE__).'/mod/';
+		$dh = opendir($dir);
+
+		while(($entry = readdir($dh)) !== false) {
+			if (!is_file($dir.$entry) || !preg_match('/^mod_(.+)\.php$/', $entry, $m)) continue;
+
+			$key = $m[1];
+
+			echo '<li><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$key.'</span></a></li>';
 		}
 		echo '</ul></div>';
+
+		echo '<hr>';
 
 		return $this;
 	}
