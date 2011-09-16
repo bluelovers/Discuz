@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ')) {
 
 include_once dirname(__FILE__).'/./sco_cpanel.class.php';
 
-if (empty($_G['gp_op'])) {
+if (empty($_G['gp_cpmod'])) {
 
 	$_cpanel = new plugin_sco_cpanel();
 	$_cpanel
