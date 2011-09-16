@@ -240,7 +240,7 @@
 	.cr_extitle li strong a {
 	    display: block;
 	    font-weight: bold;
-	    color: #FC6D02;
+	    color: {NOTICETEXT};
 	    font: 22px/25px "Arial";
 	}
 
