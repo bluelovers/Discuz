@@ -10,9 +10,18 @@
 .ratl { margin-bottom:-1px;}
 .ratl th { width:110px; border:0; padding-left:10px}
 .ratl th img { border:#ddd 1px solid; padding:1px;}
+/*
 .ratl td { border:0}
 .ratl td.xi1 { width:120px;background:url({IMGDIR}/agree.gif) no-repeat 0 11px; padding-left:18px;}
+*/
 p.ratc {height:22px; line-height:22px; padding:0; text-align:right; border:0; padding-right:10px;}
+
+.cr_ratl {
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
 </style>
 
 	<!--{if !empty($post['ratelog'])}-->
@@ -60,10 +69,13 @@ p.ratc {height:22px; line-height:22px; padding:0; text-align:right; border:0; pa
 								</th>
 								<!--{loop $post['ratelogextcredits'] $id $score}-->
 									<td class="{if $ratelog['score'][$id] > 0}xi1{else}xg1{/if}">
+
+									{$_G['setting']['extcredits'][$id][title]}
+
 									<!--{if $ratelog['score'][$id] > 0}-->
-										<td class="xi1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end --> + $ratelog[score][$id]</td>
+										+ $ratelog[score][$id]
 									<!--{else}-->
-										<td class="xg1"><!-- 美化樣式 -->{$_G['setting']['extcredits'][$id][title]}<!-- 美化樣式 - end -->$ratelog[score][$id]</td>
+										$ratelog[score][$id]
 									<!--{/if}-->
 									</td>
 								<!--{/loop}-->
