@@ -17,6 +17,7 @@ if (empty($_G['gp_op'])) {
 
 	$_cpanel = new plugin_sco_cpanel();
 	$_cpanel
+		->init($plugin['identifier'])
 		->run()
 	;
 
