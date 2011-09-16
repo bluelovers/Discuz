@@ -21,7 +21,6 @@ class _sco_dx_plugin_admincp extends _sco_dx_plugin {
 		$this->_this(&$this);
 
 		$this->_fix_plugin_setting();
-		$this->attr['profile'] = $this->attr['db']['common_plugin'];
 
 		return $this;
 	}
