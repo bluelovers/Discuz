@@ -37,14 +37,6 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 		return $this;
 	}
 
-	function on_op_default() {
-		/*
-		$this->on_op_list_fups();
-		*/
-
-		return $this;
-	}
-
 }
 
 ?>
