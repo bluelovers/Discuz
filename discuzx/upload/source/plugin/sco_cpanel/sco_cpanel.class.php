@@ -20,15 +20,17 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 
 		parent::cpheader();
 
-		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&cpmod=".$this->attr['global']['mod']."&";
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 
 		$op_list = array(
-			'list_fups' => $this->cplang('threadtype_infotypes'),
+			'threadsorts' => $this->cplang('threadtype_infotypes'),
+
+			'setting_subject' => 'setting_subject',
 		);
 
 		echo '<div class="extcredits" style="margin: 0px;"><ul class="rowform">';
 		foreach ($op_list as $key => $name) {
-			echo '<li'.($this->attr['global']['op'] == $key ? ' class="current" style="font-weight: bold;"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&op='.$key.'"><span>'.$name.'</span></a></li>';
+			echo '<li><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$name.'</span></a></li>';
 		}
 		echo '</ul></div>';
 
