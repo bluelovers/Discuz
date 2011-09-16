@@ -23,7 +23,7 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 
 		$op_list = array(
-			'threadsorts' => $this->cplang('threadtype_infotypes'),
+			'threadsorts' => 'threadsorts',
 
 			'setting_subject' => 'setting_subject',
 		);
