@@ -38,7 +38,7 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 
 			$key = $m[1];
 
-			echo '<li><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$key.'</span></a></li>';
+			echo '<li'.($this->attr['global']['mod'] == $key ? ' class="current" style="font-weight: bold;"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$key.'</span></a></li>';
 		}
 		echo '</ul></div>';
 
