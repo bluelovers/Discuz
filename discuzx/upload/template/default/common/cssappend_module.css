@@ -146,6 +146,144 @@
 
 		vertical-align: middle;
 	}
+
+	/* 評分列表樣式 */
+
+	.rate { margin-top: 50px; }
+	.rate .cr_extitle {
+	    width: 100%;
+	    top: -20px;
+	    position: absolute;
+	    height: auto;
+	    overflow: hidden;
+	    margin-bottom: 15px;
+	}
+	.cr_ratl {
+	    border: {SPECIALBORDER} 1px solid;
+	    background: {WRAPBG};
+	    position: relative;
+	    padding-top: 40px;
+
+	    padding-left: 10px;
+	    padding-right: 10px;
+	}
+
+	/*
+	.rate .cr_extitle li {
+	    height: 50px;
+	    width: auto;
+	    overflow: hidden;
+	    padding-left: 8px;
+	    float: left;
+	    margin-right: 10px;
+	    background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat 0 0;
+	}
+	.cr_extitle li span {
+	    height: 50px;
+	    width: auto;
+	    display: block;
+	    _float: left;
+	    overflow: hidden;
+	    padding-right: 8px;
+	    background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat right 0;
+	    color: #999;
+	}
+	*/
+
+	.rate .cr_extitle li {
+		border: 1px solid {CONTENTSEPARATE};
+
+		-moz-border-radius-topleft: 6px;
+		-moz-border-radius-topright: 6px;
+		-moz-border-radius-bottomright: 6px;
+		-moz-border-radius-bottomleft: 6px;
+
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+
+		background-color: {WRAPBG};
+
+		height: auto;
+		max-height: 50px;
+		min-height:  30px;
+
+		width: auto;
+		overflow: hidden;
+
+		margin-right: 10px;
+
+		padding: 5px 8px;
+
+		color: {LIGHTTEXT};
+
+		text-align: center;
+	}
+
+	.rate .cr_extitle li.y {
+		float: right;
+		height: 30px;
+		line-height: 30px;
+		margin-right: 30px;
+	}
+
+	.rate .cr_extitle li.y span {
+		margin-left: 5px;
+	}
+
+	.rate .cr_extitle li.avt {
+		height: 25px;
+	    min-height: 25px;
+    }
+
+	.cr_extitle li strong,
+	.cr_extitle li strong a {
+	    display: block;
+	    font-weight: bold;
+	    color: {NOTICETEXT};
+	    font: 22px/25px "Arial";
+	}
+
+	.ratl {
+		margin-bottom: 5px;
+		padding-left: 10px;
+	}
+	/*
+	.ratl th {
+	    width: 110px;
+	    border: 0;
+	    padding-left: 10px;
+	}
+	*/
+	/*
+	.ratl th img {
+	    border: #ddd 1px solid;
+	    padding: 1px;
+	}
+	*/
+	.ratl td { border: 0; }
+	/*
+	.ratl td.xi1 { width:120px;background:url({IMGDIR}/agree.gif) no-repeat 0 11px; padding-left:18px;}
+	p.ratc {
+	    height: 22px;
+	    line-height: 22px;
+	    padding: 0;
+	    text-align: right;
+	    border: 0;
+	    padding-right: 10px;
+	}
+	*/
+
+	.cr_ratl {
+		-moz-border-radius-topleft: 6px;
+		-moz-border-radius-topright: 6px;
+		-moz-border-radius-bottomright: 6px;
+		-moz-border-radius-bottomleft: 6px;
+
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+	}
 /** end **/
 
 /** home::space **/

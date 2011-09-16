@@ -34,7 +34,7 @@
 						<strong><a href="$_G['setting']['siteurl']" target="_blank">$_G['setting']['sitename']</a></strong>
 				<!--{if $_G['setting']['icp']}-->( <a href="http://www.miitbeian.gov.cn/" target="_blank">$_G['setting']['icp']</a> )<!--{/if}-->
 				<!--{hook/global_footerlink}-->
-				<!--{if $_G['setting']['statcode']}-->$_G['setting']['statcode']<!--{/if}-->
+				<!--{subtpl subblock/common/footer_statcode}-->
 			</p>
 			<p class="xs0">
 				{lang time_now}
