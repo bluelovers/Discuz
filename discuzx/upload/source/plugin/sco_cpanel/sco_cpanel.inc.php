@@ -27,7 +27,7 @@ if (empty($_G['gp_cpmod'])) {
 
 } else {
 
-	$_cpanel = plugin_sco_cpanel::mod('threadsorts', $plugin['identifier']);
+	$_cpanel = plugin_sco_cpanel::mod($_G['gp_cpmod'], $plugin['identifier']);
 
 	$_cpanel
 		->set(array(
