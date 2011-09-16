@@ -430,6 +430,7 @@ fieldset {
 .tip {
 	width : auto;
 	max-width: 260px;
+	min-width: 100px;
 }
 
 /* 修正高度使高度符合登入後的 textarea 高度 */
