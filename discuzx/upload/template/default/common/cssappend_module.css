@@ -231,6 +231,11 @@
 		margin-left: 5px;
 	}
 
+	.rate .cr_extitle li.avt {
+		height: 25px;
+	    min-height: 25px !important;
+    }
+
 	.cr_extitle li strong,
 	.cr_extitle li strong a {
 	    display: block;
