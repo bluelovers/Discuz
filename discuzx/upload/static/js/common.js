@@ -2082,7 +2082,9 @@ function strLenCalc(obj, checklen, maxlen) {
 			curlen -= charset == 'utf-8' ? 2 : 1;
 		}
 	}
-	if(curlen >= len) {
+	if(
+		curlen >= len
+	) {
 		$(checklen).innerHTML = curlen - len;
 	} else {
 		obj.value = mb_cutstr(v, maxlen, true);
