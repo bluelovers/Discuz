@@ -25,7 +25,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 	 * 預設行為
 	 */
 	function on_op_default() {
-
+		global $_G;
 
 		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
 		$url .= '&op=';
@@ -109,7 +109,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			$settingnew['post_subject_maxsize'] = max(80, intval($settingnew['post_subject_maxsize']));
 
 			if ($settingnew['post_subject_maxsize'] != $setting['post_subject_maxsize']) {
-			$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$settingnew[post_subject_maxsize]}'");
+				$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$settingnew[post_subject_maxsize]}'");
+
+
 			}
 
 			cpmsg(
