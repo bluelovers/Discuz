@@ -1200,6 +1200,24 @@ class db_mysql
 		$this->query("UNLOCK TABLES");
 	}
 
+	/**
+	 * Field 	Type 	Collation 	Null 	Key 	Default 	Extra 	Privileges 	Comment
+	 * pmlife  	int(10) unsigned  	NULL  	NO  	   	0  	   	select,insert,update,references  	PMå­?´»???
+	 */
+	function loadtable($table, $force = 0) {
+		if(!isset($tables[$table]) || $force) {
+			if($this->version() > '4.1') {
+				$query = $this->query("SHOW FULL COLUMNS FROM {$this->tablepre}$table", 'SILENT');
+			} else {
+				$query = $this->query("SHOW COLUMNS FROM {$this->tablepre}$table", 'SILENT');
+			}
+			while($field = @$this->fetch_array($query)) {
+				$this->tables[$field['Field']] = $field;
+			}
+		}
+		return $this->tables;
+	}
+
 	// bluelovers
 
 }
