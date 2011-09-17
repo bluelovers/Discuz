@@ -22,6 +22,10 @@ function blog_post($POST, $olds=array()) {
 		$_G['username'] = addslashes($olds['username']);
 	}
 
+	// bluelovers
+	$_G['setting']['post_subject_maxsize_blog'] = max(80, intval($_G['setting']['post_subject_maxsize_blog']));
+	// bluelovers
+
 	$POST['subject'] = getstr(trim($POST['subject']), 80, 1, 1);
 	$POST['subject'] = censor($POST['subject']);
 	if(strlen($POST['subject'])<1) $POST['subject'] = dgmdate($_G['timestamp'], 'Y-m-d');
