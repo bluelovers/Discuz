@@ -74,7 +74,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 		foreach(array(
 			'post_subject_maxsize',
-			'post_subject_maxsize_blog'
+			'post_subject_maxsize_blog',
 		) as $_k) {
 			$setting[$_k] = $_G['setting'][$_k];
 			$setting[$_k] = max(80, $setting[$_k]);
@@ -86,7 +86,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			foreach(array(
 				'subject_sql_size',
+
 				'post_subject_maxsize',
+				'post_subject_maxsize_blog',
 			) as $_k) {
 				$settingnew[$_k] = intval($_G['gp_settingnew'][$_k]);
 			}
