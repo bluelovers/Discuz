@@ -1009,6 +1009,15 @@ class db_mysql
 	var $sqldebug = array();
 	var $map = array();
 
+	// bluelovers
+
+	/**
+	 * cache some temp data
+	 */
+	var $_cache = array();
+
+	// bluelovers
+
 	function db_mysql($config = array()) {
 		if(!empty($config)) {
 			$this->set_config($config);
