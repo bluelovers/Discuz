@@ -1214,6 +1214,15 @@ class db_mysql
 	 * pmlife  	int(10) unsigned  	NULL  	NO  	   	0  	   	select,insert,update,references  	PMå­?´»???
 	 */
 	function loadtable($table, $force = 0) {
+
+		if (is_array($table)) {
+			foreach ($table as $_k) {
+				$this->loadtable($_k, $force);
+			}
+
+			return $this->_cache['tables'];
+		}
+
 		if(!isset($tables[$table]) || $force) {
 			if($this->version() > '4.1') {
 				$query = $this->query("SHOW FULL COLUMNS FROM {$this->tablepre}$table", 'SILENT');
