@@ -72,11 +72,13 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			}
 		}
 
-		$setting['post_subject_maxsize'] = $_G['setting']['post_subject_maxsize'];
-		$setting['post_subject_maxsize'] = max(80, $setting['post_subject_maxsize']);
-
-		$setting['post_subject_maxsize_blog'] = $_G['setting']['post_subject_maxsize_blog'];
-		$setting['post_subject_maxsize_blog'] = max(80, $setting['post_subject_maxsize_blog']);
+		foreach(array(
+			'post_subject_maxsize',
+			'post_subject_maxsize_blog'
+		) as $_k) {
+			$setting[$_k] = $_G['setting'][$_k];
+			$setting[$_k] = max(80, $setting[$_k]);
+		}
 
 		if ($this->submitcheck('typesubmit')) {
 
