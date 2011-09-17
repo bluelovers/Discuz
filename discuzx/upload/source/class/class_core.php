@@ -1223,7 +1223,7 @@ class db_mysql
 			return $this->_cache['tables'];
 		}
 
-		if(!isset($tables[$table]) || $force) {
+		if(!isset($this->_cache['tables'][$table]) || $force) {
 			if($this->version() > '4.1') {
 				$query = $this->query("SHOW FULL COLUMNS FROM {$this->tablepre}$table", 'SILENT');
 			} else {
