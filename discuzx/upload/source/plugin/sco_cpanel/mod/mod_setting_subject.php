@@ -78,7 +78,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			$_G['gp_settingnew']['post_subject_maxsize'] = max(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
 
-			var_dump($_G['gp_settingnew']);
+			if ($this->_getglobal('debug', 'setting')) {
+				var_dump($_G['gp_settingnew']);
+			}
 
 			foreach ($_table_field as $_t => $_v) {
 				foreach ($_v as $_k => $_f) {
@@ -91,10 +93,12 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 					$ret = $this->_db()->upgradetable($_fa);
 
-					var_dump(array(
-						$_fa,
-						$ret,
-					));
+					if ($this->_getglobal('debug', 'setting')) {
+						var_dump(array(
+							$_fa,
+							$ret,
+						));
+					}
 				}
 			}
 
@@ -148,7 +152,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 		}
 
-		var_dump($_table_field);
+		if ($this->_getglobal('debug', 'setting')) {
+			var_dump($_table_field);
+		}
 
 		return $this;
 	}
