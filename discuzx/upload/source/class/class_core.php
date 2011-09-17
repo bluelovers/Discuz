@@ -1193,6 +1193,13 @@ class db_mysql
 		$this->query("LOCK TABLES $sql");
 	}
 
+	/**
+	 * UNLOCK TABLES
+	 */
+	function tables_unlock() {
+		$this->query("UNLOCK TABLES");
+	}
+
 	// bluelovers
 
 }
