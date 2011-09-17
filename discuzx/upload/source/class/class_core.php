@@ -1382,6 +1382,10 @@ class DB
 
 	// bluelovers
 	function table_fields($table) {
+		$tables = DB::_execute('loadtable', $table, 1);
+		return $tables[$table];
+
+		/*
 		static $tables = array();
 //		$table = str_replace($db->tablepre, '', $table);
 		if(!isset($tables[$table])) {
@@ -1396,6 +1400,7 @@ class DB
 			}
 		}
 		return $tables[$table];
+		*/
 	}
 
 	function table_field_value($table, $array) {
