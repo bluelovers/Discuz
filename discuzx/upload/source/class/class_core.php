@@ -1172,6 +1172,10 @@ class db_mysql
 		discuz_error::db_error($message, $sql);
 	}
 
+	// bluelovers
+
+	// bluelovers
+
 }
 
 class DB
