@@ -66,7 +66,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 					$_table_field[$_t][$_k]['TypeDefault'] = $_c.'(80)';
 
 					if ($_t == 'forum_thread') {
-						$setting['post_subject_maxsize'] = preg_replace('/^(?:var)?char\((\d+)\)$/i', '\\1', $_table_field[$_t][$_k]['Type']);
+						$setting['subject_sql_size'] = preg_replace('/^(?:var)?char\((\d+)\)$/i', '\\1', $_table_field[$_t][$_k]['Type']);
 					}
 				}
 			}
@@ -76,7 +76,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			global $_G;
 
-			$_G['gp_settingnew']['post_subject_maxsize'] = max(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
+			$_G['gp_settingnew']['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
 
 			if ($this->_getglobal('debug', 'setting')) {
 				var_dump($_G['gp_settingnew']);
@@ -85,7 +85,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			foreach ($_table_field as $_t => $_v) {
 				foreach ($_v as $_k => $_f) {
 
-					$_f['TypeNew'] = preg_replace('/\((\d+)\)/', '('.$_G['gp_settingnew']['post_subject_maxsize'].')', $_f['Type']);
+					$_f['TypeNew'] = preg_replace('/\((\d+)\)/', '('.$_G['gp_settingnew']['subject_sql_size'].')', $_f['Type']);
 
 					$_fa = array(
 						$_t, 'MODIFY', $_k, $_f['TypeNew']
@@ -131,7 +131,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			showformheader($url);
 
 			showtableheader('nav_setting_viewthread', 'nobottom');
-			showsetting('post_subject_maxsize', 'settingnew[post_subject_maxsize]', $setting['post_subject_maxsize'], 'number');
+			showsetting('subject_sql_size', 'settingnew[subject_sql_size]', $setting['subject_sql_size'], 'number');
 			showtagfooter('tbody');
 
 			showtableheader('tables');
