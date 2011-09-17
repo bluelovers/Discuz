@@ -2090,7 +2090,11 @@ function strLenCalc(obj, checklen, maxlen) {
 	}
 	*/
 	// bluelovers
-	curlen = mb_strlen(v);
+	var is_subject = (
+		obj.name == 'subject'
+	) ? true : false;
+
+	curlen = mb_strlen(v, is_subject);
 	// bluelovers
 	if(
 		/*
@@ -2101,7 +2105,7 @@ function strLenCalc(obj, checklen, maxlen) {
 		// bluelovers
 
 		// bluelovers
-		|| obj.name == 'subject'
+		|| is_subject
 		// bluelovers
 	) {
 		/*
