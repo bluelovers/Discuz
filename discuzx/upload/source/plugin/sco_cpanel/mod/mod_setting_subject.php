@@ -54,9 +54,46 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 				foreach ($_ts as $_t) {
 					$_table_field[$_t][$_k] = $_tableinfo[$_t][$_k];
+
+					$_table_field[$_t][$_k]['TypeDefault'] = $_c.'(80)';
 				}
 			}
 		}
+
+		showformheader($url);
+		showtableheader('tables');
+		showsubtitle(array(
+			'tablename',
+			'field',
+			'type',
+			'type(default)',
+			'value(default)',
+			'charset',
+			'comment',
+		));
+
+		foreach ($_table_field as $_t => $_v) {
+			foreach ($_v as $_k => $_f) {
+				$_class = '';
+				if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
+
+				showtablerow('',
+					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"', 'class="td25"'),
+					array(
+					$_t,
+					$_k,
+					$_f['Type'],
+					$_f['TypeDefault'],
+					$_f['Default'],
+					$_f['Collation'],
+					$_f['Comment'],
+				));
+			}
+		}
+
+		showsubmit('typesubmit', 'submit', 'del');
+		showtablefooter();
+		showformfooter();
 
 		var_dump($_table_field);
 
