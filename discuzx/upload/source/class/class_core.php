@@ -1253,18 +1253,18 @@ class db_mysql
 
 			if(empty($field) && !empty($sql)) {
 
-				$query = "ALTER TABLE {$this->tablepre}{$table} ";
+				$query = "ALTER TABLE ".$this->table_name($table)." ";
 				if($action == 'INDEX') {
 					$successed = $this->query("$query $sql", "SILENT");
 				} elseif ($action == 'UPDATE') {
-					$successed = $this->query("UPDATE {$this->tablepre}{$table} SET $sql", 'SILENT');
+					$successed = $this->query("UPDATE ".$this->table_name($table)." SET $sql", 'SILENT');
 				}
 
 			} elseif($tableinfo = $this->loadtable($table)) {
 
 				$fieldexist = isset($tableinfo[$field]) ? 1 : 0;
 
-				$query = "ALTER TABLE {$this->tablepre}{$table} ";
+				$query = "ALTER TABLE ".$this->table_name($table)." ";
 
 				if($action == 'MODIFY') {
 
@@ -1279,10 +1279,10 @@ class db_mysql
 					if($fieldexist && ($field == $field2 || !$field2exist)) {
 						$query .= "CHANGE $field $sql";
 					} elseif($fieldexist && $field2exist) {
-						$this->query("ALTER TABLE {$this->tablepre}{$table} DROP $field2", 'SILENT');
+						$this->query("ALTER TABLE ".$this->table_name($table)." DROP $field2", 'SILENT');
 						$query .= "CHANGE $field $sql";
 					} elseif(!$fieldexist && $fieldexist2) {
-						$this->query("ALTER TABLE {$this->tablepre}{$table} DROP $field2", 'SILENT');
+						$this->query("ALTER TABLE ".$this->table_name($table)." DROP $field2", 'SILENT');
 						$query .= "ADD $sql";
 					} elseif(!$fieldexist && !$field2exist) {
 						$query .= "ADD $sql";
