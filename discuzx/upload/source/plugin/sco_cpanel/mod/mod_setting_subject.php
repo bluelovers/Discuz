@@ -76,6 +76,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 		if ($this->submitcheck('typesubmit')) {
 
+			$settingnew = array();
+
 			global $_G;
 
 			$settingnew['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
