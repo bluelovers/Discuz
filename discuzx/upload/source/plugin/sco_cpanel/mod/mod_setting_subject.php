@@ -146,6 +146,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 		} else {
 
+			/**
+			 * 檢查變數是否初始化
+			 */
 			if (1) {
 				$_change = false;
 
