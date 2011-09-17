@@ -134,6 +134,9 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			showformheader($url);
 
 			showtableheader('nav_setting_viewthread', 'nobottom');
+
+			showsetting('post_subject_maxsize', 'settingnew[post_subject_maxsize]', $setting['post_subject_maxsize'], 'number');
+
 			showsetting('subject_sql_size', 'settingnew[subject_sql_size]', $setting['subject_sql_size'], 'number');
 			showtagfooter('tbody');
 
