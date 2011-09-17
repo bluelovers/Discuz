@@ -111,6 +111,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			if ($settingnew['post_subject_maxsize'] != $setting['post_subject_maxsize']) {
 				$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$settingnew[post_subject_maxsize]}'");
+
+				updatecache('setting');
 			}
 
 			cpmsg(
