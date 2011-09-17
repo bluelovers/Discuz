@@ -147,24 +147,24 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 		} else {
 
 			if (1) {
-			$_change = false;
+				$_change = false;
 
-			foreach(array(
-				'post_subject_maxsize',
-				'post_subject_maxsize_blog',
-			) as $_k) {
-				if (
-					$setting[$_k] != $_G['setting'][$_k]
-				) {
-					$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='{$_k}', svalue='{$setting[$_k]}'");
+				foreach(array(
+					'post_subject_maxsize',
+					'post_subject_maxsize_blog',
+				) as $_k) {
+					if (
+						$setting[$_k] != $_G['setting'][$_k]
+					) {
+						$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='{$_k}', svalue='{$setting[$_k]}'");
 
-					$_change = true;
+						$_change = true;
+					}
 				}
-			}
 
-			if ($_change) {
-				updatecache('setting');
-			}
+				if ($_change) {
+					updatecache('setting');
+				}
 			}
 
 			foreach ($_table_field as $_t => $_v) {
