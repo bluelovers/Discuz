@@ -79,8 +79,6 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			$settingnew = array();
 
-			global $_G;
-
 			$settingnew['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
 
 			if ($this->_getglobal('debug', 'setting')) {
@@ -114,6 +112,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 				updatecache('setting');
 			}
+
+			debug($settingnew);
 
 			cpmsg(
 				'succeed'
