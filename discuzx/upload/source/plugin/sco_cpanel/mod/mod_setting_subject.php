@@ -56,11 +56,39 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 					$_table_field[$_t][$_k] = $_tableinfo[$_t][$_k];
 
 					$_table_field[$_t][$_k]['TypeDefault'] = $_c.'(80)';
+
+					if ($_t == 'forum_thread') {
+						$setting['post_subject_maxsize'] = preg_replace('/^(?:var)?char\((\d+)\)$/i', '\\1', $_table_field[$_t][$_k]['Type']);
+					}
 				}
 			}
 		}
 
+		foreach ($_table_field as $_t => $_v) {
+			foreach ($_v as $_k => $_f) {
+				$_class = '';
+				if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
+
+				$_html .= showtablerow('',
+					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"', 'class="td25"'),
+					array(
+					$_t,
+					$_k,
+					$_f['Type'],
+					$_f['TypeDefault'],
+					$_f['Default'],
+					$_f['Collation'],
+					$_f['Comment'],
+				), true);
+			}
+		}
+
 		showformheader($url);
+
+		showtableheader('nav_setting_viewthread', 'nobottom');
+		showsetting('post_subject_maxsize', 'settingnew[post_subject_maxsize]', $setting['post_subject_maxsize'], 'number');
+		showtagfooter('tbody');
+
 		showtableheader('tables');
 		showsubtitle(array(
 			'tablename',
@@ -72,24 +100,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			'comment',
 		));
 
-		foreach ($_table_field as $_t => $_v) {
-			foreach ($_v as $_k => $_f) {
-				$_class = '';
-				if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
-
-				showtablerow('',
-					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"', 'class="td25"'),
-					array(
-					$_t,
-					$_k,
-					$_f['Type'],
-					$_f['TypeDefault'],
-					$_f['Default'],
-					$_f['Collation'],
-					$_f['Comment'],
-				));
-			}
-		}
+		echo $_html;
 
 		showsubmit('typesubmit', 'submit', 'del');
 		showtablefooter();
