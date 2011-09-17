@@ -91,10 +91,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 				'post_subject_maxsize_blog',
 			) as $_k) {
 				$settingnew[$_k] = $_G['gp_settingnew'][$_k];
-				$settingnew[$_k] = max(80, intval($_G['gp_settingnew'][$_k]));
+				$settingnew[$_k] = max(80, intval($settingnew[$_k]));
 			}
-
-			$settingnew['subject_sql_size'] = max(80, intval($settingnew['subject_sql_size']));
 
 			if ($this->_getglobal('debug', 'setting')) {
 				var_dump($settingnew);
@@ -119,8 +117,6 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 					}
 				}
 			}
-
-			$settingnew['post_subject_maxsize'] = max(80, intval($settingnew['post_subject_maxsize']));
 
 			if ($settingnew['post_subject_maxsize'] != $setting['post_subject_maxsize']) {
 				$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$settingnew[post_subject_maxsize]}'");
