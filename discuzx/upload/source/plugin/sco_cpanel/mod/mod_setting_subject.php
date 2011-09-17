@@ -25,9 +25,40 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 	 * 預設行為
 	 */
 	function on_op_default() {
-		/*
-		$this->on_op_list_fups();
-		*/
+		$_tables_map = array(
+			'polloption' => array(
+				'varchar' => array(
+					'forum_polloption',
+				),
+			),
+
+			'subject' => array(
+				'char' => array(
+					'forum_forumrecommend',
+					'forum_rsscache',
+					'forum_thread',
+					'home_blog',
+					'portal_rsscache',
+				),
+				'varchar' => array(
+					'forum_post',
+				),
+			),
+		);
+
+		$_table_field = array();
+
+		foreach ($_tables_map as $_k => $_v) {
+			foreach ($_v as $_c => $_ts) {
+				$_tableinfo = $this->_db()->loadtable($_ts);
+
+				foreach ($_ts as $_t) {
+					$_table_field[$_t][$_k] = $_tableinfo[$_t][$_k];
+				}
+			}
+		}
+
+		var_dump($_table_field);
 
 		return $this;
 	}
