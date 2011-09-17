@@ -2102,9 +2102,6 @@ function strLenCalc(obj, checklen, maxlen) {
 		*/
 		// bluelovers
 		maxlen >= curlen
-		// bluelovers
-
-		// bluelovers
 		|| is_subject
 		// bluelovers
 	) {
