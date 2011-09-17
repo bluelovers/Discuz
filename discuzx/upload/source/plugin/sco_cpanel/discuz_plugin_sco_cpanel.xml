@@ -2,7 +2,7 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-09-16 21:51]]></item>
+	<item id="Time"><![CDATA[2011-09-01 07:45]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
@@ -48,15 +48,6 @@
 				<item id="variable"><![CDATA[allow_delete]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[0]]></item>
-				<item id="extra"><![CDATA[]]></item>
-			</item>
-			<item id="2">
-				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[標題最大長度(SQL)]]></item>
-				<item id="description"><![CDATA[此設定會更動到數據庫結構 請小心使用]]></item>
-				<item id="variable"><![CDATA[post_subject_maxsize]]></item>
-				<item id="type"><![CDATA[number]]></item>
-				<item id="value"><![CDATA[80]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 		</item>
