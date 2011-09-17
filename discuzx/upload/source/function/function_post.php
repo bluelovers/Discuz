@@ -331,6 +331,11 @@ function checkmaxpostsperhour() {
 
 function checkpost($subject, $message, $special = 0) {
 	global $_G;
+
+	// bluelovers
+	$_G['setting']['post_subject_maxsize'] = max(80, intval($_G['setting']['post_subject_maxsize']));
+	// bluelovers
+
 	if(dstrlen($subject) > 80) {
 		return 'post_subject_toolong';
 	}
