@@ -1227,6 +1227,96 @@ class db_mysql
 		return $this->_cache['tables'];
 	}
 
+	/**
+	 *
+	 * @example
+	 *
+		array('forums', 'ADD', 'allowtag', "TINYINT(1) NOT NULL DEFAULT '1'"),
+		array('forums', 'DROP', 'allowpaytoauthor', ""),
+		array('medals', 'INDEX', '', "ADD INDEX displayorder (displayorder)"),
+		array('memberfields', 'CHANGE', 'medals', "medals TEXT NOT NULL"),
+		array('threads', 'MODIFY', 'subject', "char(100)"),
+		array('posts', 'MODIFY', 'subject', "char(100)"),
+		array('forumrecommend', 'MODIFY', 'subject', "char(100)"),
+		array('rsscaches', 'MODIFY', 'subject', "char(100)"),
+		array('tradelog', 'MODIFY', 'subject', "char(100)"),
+		array('trades', 'MODIFY', 'subject', "char(100)"),
+
+		subjectarray('threads', 'posts', 'forumrecommend', 'rsscaches', 'tradelog', 'trades', 'announcements')
+	 */
+	function upgradetable($updatesql) {
+		$successed = TRUE;
+
+		if(is_array($updatesql) && !empty($updatesql[0])) {
+
+			list($table, $action, $field, $sql) = $updatesql;
+
+			if(empty($field) && !empty($sql)) {
+
+				$query = "ALTER TABLE {$this->tablepre}{$table} ";
+				if($action == 'INDEX') {
+					$successed = $this->query("$query $sql", "SILENT");
+				} elseif ($action == 'UPDATE') {
+					$successed = $this->query("UPDATE {$this->tablepre}{$table} SET $sql", 'SILENT');
+				}
+
+			} elseif($tableinfo = $this->loadtable($table)) {
+
+				$fieldexist = isset($tableinfo[$field]) ? 1 : 0;
+
+				$query = "ALTER TABLE {$this->tablepre}{$table} ";
+
+				if($action == 'MODIFY') {
+
+					$query .= $fieldexist ? "MODIFY $field $sql" : "ADD $field $sql";
+					$successed = $this->query($query, 'SILENT');
+
+				} elseif($action == 'CHANGE') {
+
+					$field2 = trim(substr($sql, 0, strpos($sql, ' ')));
+					$field2exist = isset($tableinfo[$field2]);
+
+					if($fieldexist && ($field == $field2 || !$field2exist)) {
+						$query .= "CHANGE $field $sql";
+					} elseif($fieldexist && $field2exist) {
+						$this->query("ALTER TABLE {$this->tablepre}{$table} DROP $field2", 'SILENT');
+						$query .= "CHANGE $field $sql";
+					} elseif(!$fieldexist && $fieldexist2) {
+						$this->query("ALTER TABLE {$this->tablepre}{$table} DROP $field2", 'SILENT');
+						$query .= "ADD $sql";
+					} elseif(!$fieldexist && !$field2exist) {
+						$query .= "ADD $sql";
+					}
+					$successed = $this->query($query);
+
+				} elseif($action == 'COMMENT') {
+
+					if($fieldexist && $tableinfo['Comment'] != $sql) {
+						$query .= "CHANGE `$field` `$field` {$tableinfo['Type']} ".($tableinfo['Collation'] ? " CHARACTER SET {$this->dbcharset} COLLATE {$tableinfo['Collation']} " : "").($tableinfo['Null'] ? ' NOT ' : '')." NULL {$tableinfo['Extra']} ".($tableinfo['Default'] != null ? " DEFAULT '{$tableinfo['Default']}' " : "")." COMMENT '$sql' ";
+
+						$successed = $this->query($query);
+					}
+
+				} elseif($action == 'ADD') {
+
+					$query .= $fieldexist ? "CHANGE $field $field $sql" :  "ADD $field $sql";
+					$successed = $this->query($query);
+				} elseif($action == 'DROP') {
+					if($fieldexist) {
+						$successed = $this->query("$query DROP $field", "SILENT");
+					}
+					$successed = TRUE;
+				}
+
+			} else {
+
+				$successed = 'TABLE NOT EXISTS';
+
+			}
+		}
+		return $successed;
+	}
+
 	// bluelovers
 
 }
