@@ -11,13 +11,13 @@ if (!defined('IN_DISCUZ')) {
 
 class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
-	function strlen($str) {
-		if(strtolower(CHARSET) == 'utf-8') return self::utf8_strlen($str);
+	function _my_strlen($str) {
+		if(strtolower(CHARSET) == 'utf-8') return self::_my_utf8_strlen($str);
 
 		return dstrlen($str);
 	}
 
-	function utf8_strlen($str) {
+	function _my_utf8_strlen($str) {
 		return preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $str, $dummy);
 	}
 }
