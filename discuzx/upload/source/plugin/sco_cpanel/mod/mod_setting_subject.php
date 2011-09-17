@@ -20,6 +20,17 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 	function _my_utf8_strlen($str) {
 		return preg_match_all('/[\x00-\x7F\xC0-\xFD]/', $str, $dummy);
 	}
+
+	/**
+	 * 預設行為
+	 */
+	function on_op_default() {
+		/*
+		$this->on_op_list_fups();
+		*/
+
+		return $this;
+	}
 }
 
 ?>
