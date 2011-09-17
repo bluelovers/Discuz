@@ -1274,7 +1274,7 @@ class db_mysql
 					$successed = $this->query("UPDATE ".$this->table_name($table)." SET $sql", 'SILENT');
 				}
 
-			} elseif($tableinfo = $this->loadtable($table)) {
+			} elseif($tableinfo = $this->table_fields($table)) {
 
 				$fieldexist = isset($tableinfo[$field]) ? 1 : 0;
 
