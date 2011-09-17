@@ -72,6 +72,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			}
 		}
 
+		$setting['post_subject_maxsize'] = max(80, $setting['post_subject_maxsize']);
+
 		if ($this->submitcheck('typesubmit')) {
 
 			global $_G;
