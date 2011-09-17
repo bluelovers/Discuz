@@ -212,7 +212,7 @@ function strlen(str) {
 	return (BROWSER.ie && str.indexOf('\n') != -1) ? str.replace(/\r?\n/g, '_').length : str.length;
 }
 
-function mb_strlen(str) {
+function mb_strlen(str, is_subject) {
 	var len = 0;
 	for(var i = 0; i < str.length; i++) {
 		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
