@@ -1382,7 +1382,7 @@ class DB
 
 	// bluelovers
 	function table_fields($table) {
-		$tables = DB::_execute('loadtable', $table, 1);
+		$tables = DB::_execute('loadtable', $table);
 		return $tables[$table];
 
 		/*
