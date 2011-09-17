@@ -1174,6 +1174,25 @@ class db_mysql
 
 	// bluelovers
 
+	/**
+	 * LOCK TABLES $sql
+	 */
+	function tables_lock($tablesarray = '', $usetablepre = 1) {
+
+		$sql = $t = $c = '';
+
+		if ($usetablepre) $t = $this->tablepre;
+
+		foreach (array_unique($tablesarray) as $key => $value) {
+
+			$sql .= $c.$t."{$value} WRITE";
+
+			$c = ', ';
+		}
+
+		$this->query("LOCK TABLES $sql");
+	}
+
 	// bluelovers
 
 }
