@@ -120,8 +120,6 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 				updatecache('setting');
 			}
 
-			debug($settingnew);
-
 			cpmsg(
 				'succeed'
 				, 'action='.$url
