@@ -1221,10 +1221,10 @@ class db_mysql
 				$query = $this->query("SHOW COLUMNS FROM {$this->tablepre}$table", 'SILENT');
 			}
 			while($field = @$this->fetch_array($query)) {
-				$this->tables[$field['Field']] = $field;
+				$this->_cache['tables'][$field['Field']] = $field;
 			}
 		}
-		return $this->tables;
+		return $this->_cache['tables'];
 	}
 
 	// bluelovers
