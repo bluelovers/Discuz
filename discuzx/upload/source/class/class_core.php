@@ -1209,6 +1209,11 @@ class db_mysql
 		$this->query("UNLOCK TABLES");
 	}
 
+	function table_fields($table) {
+		$tables = $this->loadtable($table);
+		return $tables[$table];
+	}
+
 	/**
 	 * Field 	Type 	Collation 	Null 	Key 	Default 	Extra 	Privileges 	Comment
 	 * pmlife  	int(10) unsigned  	NULL  	NO  	   	0  	   	select,insert,update,references  	PMå­?´»???
