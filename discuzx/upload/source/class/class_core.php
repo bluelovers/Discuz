@@ -1230,7 +1230,7 @@ class db_mysql
 				$query = $this->query("SHOW COLUMNS FROM ".$this->table_name($table), 'SILENT');
 			}
 			while($field = @$this->fetch_array($query)) {
-				$this->_cache['tables'][$field['Field']] = $field;
+				$this->_cache['tables'][$table][$field['Field']] = $field;
 			}
 		}
 		return $this->_cache['tables'];
