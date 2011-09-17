@@ -78,16 +78,16 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			global $_G;
 
-			$_G['gp_settingnew']['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
+			$settingnew['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
 
 			if ($this->_getglobal('debug', 'setting')) {
-				var_dump($_G['gp_settingnew']);
+				var_dump($settingnew);
 			}
 
 			foreach ($_table_field as $_t => $_v) {
 				foreach ($_v as $_k => $_f) {
 
-					$_f['TypeNew'] = preg_replace('/\((\d+)\)/', '('.$_G['gp_settingnew']['subject_sql_size'].')', $_f['Type']);
+					$_f['TypeNew'] = preg_replace('/\((\d+)\)/', '('.$settingnew['subject_sql_size'].')', $_f['Type']);
 
 					$_fa = array(
 						$_t, 'MODIFY', $_k, $_f['TypeNew']
@@ -104,8 +104,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 				}
 			}
 
-			$_G['gp_settingnew']['post_subject_maxsize'] = max(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
-			$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$_G[gp_settingnew][post_subject_maxsize]}'");
+			$settingnew['post_subject_maxsize'] = max(80, intval($settingnew['post_subject_maxsize']));
+			$ret = $this->_db()->query("REPLACE INTO ".$this->_db()->table_name('common_setting')." SET skey='post_subject_maxsize', svalue='{$settingnew[post_subject_maxsize]}'");
 
 			cpmsg(
 				'succeed'
