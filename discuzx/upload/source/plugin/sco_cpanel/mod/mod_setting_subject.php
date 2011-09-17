@@ -210,7 +210,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			echo $_html;
 
-			showsubmit('typesubmit', 'submit', 'del');
+			showsubmit('typesubmit', 'submit');
 			showtablefooter();
 			showformfooter();
 
