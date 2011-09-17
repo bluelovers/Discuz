@@ -76,7 +76,7 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			global $_G;
 
-			$_G['gp_settingnew']['post_subject_maxsize'] = min(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
+			$_G['gp_settingnew']['post_subject_maxsize'] = max(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
 
 			var_dump($_G['gp_settingnew']);
 
