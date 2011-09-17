@@ -25,6 +25,14 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 	 * 預設行為
 	 */
 	function on_op_default() {
+
+
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
+		$url .= '&op=';
+		$url .= "&cpmod=".$this->attr['global']['mod'];
+
+		$setting = array();
+
 		$_tables_map = array(
 			'polloption' => array(
 				'varchar' => array(
@@ -64,19 +72,46 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 			}
 		}
 
+		if ($this->submitcheck('typesubmit')) {
+
+			global $_G;
+
+			$_G['gp_settingnew']['post_subject_maxsize'] = min(80, intval($_G['gp_settingnew']['post_subject_maxsize']));
+
+			var_dump($_G['gp_settingnew']);
+
+			foreach ($_table_field as $_t => $_v) {
+				foreach ($_v as $_k => $_f) {
+
+					$_f['TypeNew'] = preg_replace('/\((\d+)\)/', '('.$_G['gp_settingnew']['post_subject_maxsize'].')', $_f['Type']);
+
+					$_fa = array(
+						$_t, 'MODIFY', $_k, $_f['TypeNew']
+					);
+
+					$ret = $this->_db()->upgradetable($_fa);
+
+					var_dump(array(
+						$_fa,
+						$ret,
+					));
+				}
+			}
+
+		} else {
+
 		foreach ($_table_field as $_t => $_v) {
 			foreach ($_v as $_k => $_f) {
 				$_class = '';
 				if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
 
 				$_html .= showtablerow('',
-					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"', 'class="td25"'),
+					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"'),
 					array(
 					$_t,
 					$_k,
 					$_f['Type'],
 					$_f['TypeDefault'],
-					$_f['Default'],
 					$_f['Collation'],
 					$_f['Comment'],
 				), true);
@@ -105,6 +140,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 		showsubmit('typesubmit', 'submit', 'del');
 		showtablefooter();
 		showformfooter();
+
+		}
 
 		var_dump($_table_field);
 
