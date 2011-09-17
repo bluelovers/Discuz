@@ -1225,9 +1225,9 @@ class db_mysql
 
 		if(!isset($this->_cache['tables'][$table]) || $force) {
 			if($this->version() > '4.1') {
-				$query = $this->query("SHOW FULL COLUMNS FROM {$this->tablepre}$table", 'SILENT');
+				$query = $this->query("SHOW FULL COLUMNS FROM ".$this->table_name($table), 'SILENT');
 			} else {
-				$query = $this->query("SHOW COLUMNS FROM {$this->tablepre}$table", 'SILENT');
+				$query = $this->query("SHOW COLUMNS FROM ".$this->table_name($table), 'SILENT');
 			}
 			while($field = @$this->fetch_array($query)) {
 				$this->_cache['tables'][$field['Field']] = $field;
