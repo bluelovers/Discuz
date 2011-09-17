@@ -47,6 +47,16 @@ class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 		return $this;
 	}
 
+	/**
+	 *
+	 * @return db_mysql
+	 */
+	function &_db() {
+		static $db;
+		if (!isset($db)) $db = DB::object();
+		return $db;
+	}
+
 }
 
 ?>
