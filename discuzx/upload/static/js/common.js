@@ -2108,7 +2108,9 @@ function strLenCalc(obj, checklen, maxlen) {
 		/*
 		$(checklen).innerHTML = curlen - len;
 		*/
+		// bluelovers
 		$(checklen).innerHTML = maxlen - curlen;
+		// bluelovers
 	} else {
 		obj.value = mb_cutstr(v, maxlen, true);
 	}
