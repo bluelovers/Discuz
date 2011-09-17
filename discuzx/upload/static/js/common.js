@@ -2077,15 +2077,32 @@ function navShow(id) {
 
 function strLenCalc(obj, checklen, maxlen) {
 	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = maxlen, len = strlen(v);
+	/*
 	for(var i = 0; i < v.length; i++) {
 		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
 			curlen -= charset == 'utf-8' ? 2 : 1;
 		}
 	}
+	*/
+	// bluelovers
+	curlen = mb_strlen(v);
+	// bluelovers
 	if(
+		/*
 		curlen >= len
+		*/
+		// bluelovers
+		maxlen >= curlen
+		// bluelovers
+
+		// bluelovers
+		|| obj.name == 'subject'
+		// bluelovers
 	) {
+		/*
 		$(checklen).innerHTML = curlen - len;
+		*/
+		$(checklen).innerHTML = maxlen - curlen;
 	} else {
 		obj.value = mb_cutstr(v, maxlen, true);
 	}
