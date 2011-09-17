@@ -128,6 +128,9 @@ EOF
 
 		$ss .= '<script type="text/javascript">';
 		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
+
+		$ss .= "var post_subject_maxsize = '".$_G['setting']['post_subject_maxsize']."', post_subject_maxsize_blog = '".$_G['setting']['post_subject_maxsize']."';";
+
 		$ss .= '</script>';
 
 		$hook_data .= $ss;
