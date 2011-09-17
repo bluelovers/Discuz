@@ -85,7 +85,7 @@ function validate(theform) {
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showError('抱歉，您尚未輸入標題或內容');
 		return false;
-	} else if(mb_strlen(theform.subject.value) > 80) {
+	} else if(mb_strlen(theform.subject.value) > post_subject_maxsize) {
 		showError('您的標題超過 ' + post_subject_maxsize + ' 個字符的限制');
 		return false;
 	}
