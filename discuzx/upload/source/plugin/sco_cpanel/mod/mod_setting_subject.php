@@ -79,7 +79,14 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 
 			$settingnew = array();
 
-			$settingnew['subject_sql_size'] = max(80, intval($_G['gp_settingnew']['subject_sql_size']));
+			foreach(array(
+				'subject_sql_size',
+				'post_subject_maxsize',
+			) as $_k) {
+				$settingnew[$_k] = intval($_G['gp_settingnew'][$_k]);
+			}
+
+			$settingnew['subject_sql_size'] = max(80, intval($settingnew['subject_sql_size']));
 
 			if ($this->_getglobal('debug', 'setting')) {
 				var_dump($settingnew);
