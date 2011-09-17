@@ -26,7 +26,7 @@
 				<span><input type="text" name="subject" id="subject" class="px" value="$postinfo[subject]" {if $_G[gp_action] == 'newthread'}onblur="if($('tags')){relatekw('-1','-1'{if $_G['group']['allowposttag']},function(){extraCheck(4)}{/if});doane();}"{/if} onkeyup="strLenCalc(this, 'checklen', {$_G[setting][post_subject_maxsize]});" style="width: 25em" tabindex="1" /></span>
 			<!--{else}-->
 				<span id="subjecthide" class="z">RE: $thread[subject] [<a href="javascript:;" onclick="display('subjecthide');display('subjectbox');display('subjectchk');strLenCalc($('subject'), 'checklen', {$_G[setting][post_subject_maxsize]});return false;">{lang modify}</a>]</span>
-				<span id="subjectbox" style="display:none"><input type="text" name="subject" id="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', {$_G[setting][post_subject_maxsize]});" style="width: 25em" /></span>
+				<span id="subjectbox" style="display:none"><input type="text" name="subject" id="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', {$_G[setting][post_subject_maxsize]});" onchange="this.onkeyup()" style="width: 25em" /></span>
 			<!--{/if}-->
 			<span id="subjectchk"{if $_G[gp_action] == 'reply'} style="display:none"{/if}>{lang comment_message1} <strong id="checklen">{$_G[setting][post_subject_maxsize]}</strong> {lang comment_message2}</span>
 		<!--{/if}-->
