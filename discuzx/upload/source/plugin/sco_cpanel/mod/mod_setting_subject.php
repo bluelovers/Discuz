@@ -90,7 +90,8 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 				'post_subject_maxsize',
 				'post_subject_maxsize_blog',
 			) as $_k) {
-				$settingnew[$_k] = intval($_G['gp_settingnew'][$_k]);
+				$settingnew[$_k] = $_G['gp_settingnew'][$_k];
+				$settingnew[$_k] = max(80, intval($_G['gp_settingnew'][$_k]));
 			}
 
 			$settingnew['subject_sql_size'] = max(80, intval($settingnew['subject_sql_size']));
