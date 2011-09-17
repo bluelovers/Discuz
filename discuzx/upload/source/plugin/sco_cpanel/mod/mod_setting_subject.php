@@ -98,48 +98,53 @@ class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
 				}
 			}
 
+			cpmsg(
+				'succeed'
+				, 'action='.$url
+				, 'succeed'
+			);
+
 		} else {
 
-		foreach ($_table_field as $_t => $_v) {
-			foreach ($_v as $_k => $_f) {
-				$_class = '';
-				if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
+			foreach ($_table_field as $_t => $_v) {
+				foreach ($_v as $_k => $_f) {
+					$_class = '';
+					if ($_f['Type'] == $_f['TypeDefault']) $_class .= ' lightfont';
 
-				$_html .= showtablerow('',
-					array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"'),
-					array(
-					$_t,
-					$_k,
-					$_f['Type'],
-					$_f['TypeDefault'],
-					$_f['Collation'],
-					$_f['Comment'],
-				), true);
+					$_html .= showtablerow('',
+						array('class="td25"', "class=\"td25 td27 {$_class}\"", "class=\"td25 {$_class}\"", "class=\"td25 lightfont\"", 'class="td25"'),
+						array(
+						$_t,
+						$_k,
+						$_f['Type'],
+						$_f['TypeDefault'],
+						$_f['Collation'],
+						$_f['Comment'],
+					), true);
+				}
 			}
-		}
 
-		showformheader($url);
+			showformheader($url);
 
-		showtableheader('nav_setting_viewthread', 'nobottom');
-		showsetting('post_subject_maxsize', 'settingnew[post_subject_maxsize]', $setting['post_subject_maxsize'], 'number');
-		showtagfooter('tbody');
+			showtableheader('nav_setting_viewthread', 'nobottom');
+			showsetting('post_subject_maxsize', 'settingnew[post_subject_maxsize]', $setting['post_subject_maxsize'], 'number');
+			showtagfooter('tbody');
 
-		showtableheader('tables');
-		showsubtitle(array(
-			'tablename',
-			'field',
-			'type',
-			'type(default)',
-			'value(default)',
-			'charset',
-			'comment',
-		));
+			showtableheader('tables');
+			showsubtitle(array(
+				'tablename',
+				'field',
+				'type',
+				'type(default)',
+				'charset',
+				'comment',
+			));
 
-		echo $_html;
+			echo $_html;
 
-		showsubmit('typesubmit', 'submit', 'del');
-		showtablefooter();
-		showformfooter();
+			showsubmit('typesubmit', 'submit', 'del');
+			showtablefooter();
+			showformfooter();
 
 		}
 
