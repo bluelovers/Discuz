@@ -1209,8 +1209,8 @@ class db_mysql
 		$this->query("UNLOCK TABLES");
 	}
 
-	function table_fields($table) {
-		$tables = $this->loadtable($table);
+	function table_fields($table, $force = 0) {
+		$tables = $this->loadtable($table, $force);
 		return $tables[$table];
 	}
 
