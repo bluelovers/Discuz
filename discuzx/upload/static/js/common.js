@@ -61,6 +61,11 @@ var USERCARDST = null;
 var CLIPBOARDSWFDATA = '';
 var NOTICETITLE = [];
 
+// bluelovers
+var post_subject_maxsize = isUndefined(post_subject_maxsize) ? 80 : post_subject_maxsize;
+var post_subject_maxsize_blog = isUndefined(post_subject_maxsize_blog) ? 80 : post_subject_maxsize_blog;
+// bluelovers
+
 if(BROWSER.firefox && window.HTMLElement) {
 	HTMLElement.prototype.__defineSetter__('outerHTML', function(sHTML) {
 			var r = this.ownerDocument.createRange();

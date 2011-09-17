@@ -9,122 +9,52 @@ if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
+include_once dirname(__FILE__).'/./class_sco_dx_plugin_admincp.php';
 
-class plugin_sco_cpanel extends _sco_dx_plugin {
-
-	const identifier = 'sco_cpanel';
-
-	function init($identifier) {
-		$this->_init($identifier);
-
-		$this->_this(&$this);
-
-		$this->_fix_plugin_setting();
-		$this->attr['profile'] = $this->attr['db']['common_plugin'];
-
-		return $this;
-	}
-
-	function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
-		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
-	}
+class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
 
 	function cpheader() {
-		cpheader();
-
-		return $this;
-	}
-
-	function cpfooter() {
 		/*
-		cpfooter();
-		dexit();
+		global $lang;
 		*/
 
-		return $this;
-	}
+		parent::cpheader();
 
-	function cplang($name, $replace = array(), $output = false) {
-		return cplang($name, $replace, $output);
+		$url = "plugins&operation=config&do=".$this->attr['profile']['pluginid']."&identifier=".$this->identifier."&pmod=".$this->attr['global']['module']['name']."&";
+
+		$op_list = array(
+			'threadsorts' => 'threadsorts',
+
+			'setting_subject' => 'setting_subject',
+		);
+
+		echo '<div class="extcredits" style="margin: 0px;"><ul class="rowform">';
+
+		$dir = dirname(__FILE__).'/mod/';
+		$dh = opendir($dir);
+
+		while(($entry = readdir($dh)) !== false) {
+			if (!is_file($dir.$entry) || !preg_match('/^mod_(.+)\.php$/', $entry, $m)) continue;
+
+			$key = $m[1];
+
+			echo '<li'.($this->attr['global']['mod'] == $key ? ' class="current" style="font-weight: bold;"' : '').'><a href="'.ADMINSCRIPT."?action=".$url.'&cpmod='.$key.'"><span>'.$key.'</span></a></li>';
+		}
+		echo '</ul></div>';
+
+		echo '<hr>';
+
+		return $this;
 	}
 
 	/**
-	 * 提示消息
 	 *
-	 * @param $message - lang_admincp_msg.php 語言包中需要輸出的key
-	 * @param $url - 提示信息後跳轉的頁面，留空則返回上一頁
-	 * @param $type - 特殊提示信息時指定頁面的提示樣式，可選參數：succeed、error、download、loadingform
-	 * @param $values - 為語言包中的變量關鍵詞指定值，以數組形式輸入
-	 * @param $extra - 消息文字擴展
-	 * @param $halt - 是否輸出「Discuz! 提示」標題
+	 * @return db_mysql
 	 */
-	function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
-		return cpmsg($message, $url, $type, $values, $extra, $halt);
-	}
-
-	function &mod($mod, $identifier = '') {
-		if (empty($identifier)) $identifier = self::identifier;
-
-		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
-
-		$class = 'plugin_'.$identifier.'_'.$mod;
-		$self = new $class();
-
-		$self
-			->init($identifier)
-			->set(array(
-				'mod' => $mod,
-			))
-		;
-
-		return $self;
-	}
-
-	function set($attr) {
-		/*
-		$this->attr['global'] = $attr;
-		*/
-		foreach ($attr as $_k => $_v) {
-			$this->attr['global'][$_k] = $_v;
-		}
-
-		return $this;
-	}
-
-	function run() {
-		$operation = $this->attr['global']['op'];
-
-		$operation = $operation ? $operation : 'default';
-
-		$method = 'on_op_'.$operation;
-
-		ob_start();
-		$this->$method();
-		$_content = ob_get_contents();
-		ob_end_clean();
-
-		$this->cpheader();
-		echo $_content;
-
-		if ($this->_getglobal('debug', 'setting')) {
-			var_dump($this);
-		}
-
-		$this->cpfooter();
-
-		return $this;
-	}
-
-	/**
-	 * 預設行為
-	 */
-	function on_op_default() {
-		/*
-		$this->on_op_list_fups();
-		*/
-
-		return $this;
+	function &_db() {
+		static $db;
+		if (!isset($db)) $db = DB::object();
+		return $db;
 	}
 
 }

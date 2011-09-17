@@ -900,7 +900,7 @@ $lang = array (
   'comment_comment_noexist' => '抱歉，要評論的文章不存在',
   'comment_comment_notallowed' => '該文章不允許評論',
 
-  'post_subject_toolong' => '抱歉，您的標題超過 80 個字符修改標題長度',
+  'post_subject_toolong' => '抱歉，您的標題超過 {_G/setting/post_subject_maxsize} 個字符修改標題長度',
   'post_message_toolong' => '抱歉，您的帖子超過 {maxpostsize} 個字符的限制',
   'post_message_tooshort' => '抱歉，您的帖子小於 {minpostsize} 個字符的限制',
 

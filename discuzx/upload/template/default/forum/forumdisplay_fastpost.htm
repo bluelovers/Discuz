@@ -28,8 +28,8 @@ var fid = parseInt('$_G[fid]');
 					</div>
 					<script type="text/javascript" reload="1">simulateSelect('typeid_fast');</script>
 				<!--{/if}-->
-				<input type="text" id="subject" name="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', 80);" tabindex="11" style="width: 25em" />
-				<span>{lang comment_message1} <strong id="checklen">80</strong> {lang comment_message2}</span>
+				<input type="text" id="subject" name="subject" class="px" value="" onkeyup="strLenCalc(this, 'checklen', {$_G[setting][post_subject_maxsize]});" tabindex="11" style="width: 25em" />
+				<span>{lang comment_message1} <strong id="checklen">{$_G[setting][post_subject_maxsize]}</strong> {lang comment_message2}</span>
 			</div>
 
 			<div class="cl">

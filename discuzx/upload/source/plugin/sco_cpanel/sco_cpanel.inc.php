@@ -13,14 +13,30 @@ if (!defined('IN_DISCUZ')) {
 
 include_once dirname(__FILE__).'/./sco_cpanel.class.php';
 
-$_cpanel = plugin_sco_cpanel::mod('threadsorts', $plugin['identifier']);
+if (empty($_G['gp_cpmod'])) {
 
-$_cpanel
-	->set(array(
-		'op' => $_G['gp_op'],
-		'module' => &$module,
-	))
-	->run()
-;
+	$_cpanel = new plugin_sco_cpanel();
+	$_cpanel
+		->init($plugin['identifier'])
+		->set(array(
+			'cpmod' => $_G['gp_cpmod'],
+			'module' => &$module,
+		))
+		->run()
+	;
+
+} else {
+
+	$_cpanel = plugin_sco_cpanel::mod($_G['gp_cpmod'], $plugin['identifier']);
+
+	$_cpanel
+		->set(array(
+			'op' => $_G['gp_op'],
+			'module' => &$module,
+		))
+		->run()
+	;
+
+}
 
 ?>
