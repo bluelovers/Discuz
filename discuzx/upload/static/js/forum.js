@@ -269,7 +269,7 @@ function fastpostvalidate(theform, noajaxpost) {
 	if(theform.message.value == '' && theform.subject.value == '') {
 		s = '抱歉，您尚未輸入標題或內容';
 		theform.message.focus();
-	} else if(mb_strlen(theform.subject.value) > post_subject_maxsize) {
+	} else if(mb_strlen(theform.subject.value, 1) > post_subject_maxsize) {
 		s = '您的標題超過 ' + post_subject_maxsize + ' 個字符的限制';
 		theform.subject.focus();
 	}
