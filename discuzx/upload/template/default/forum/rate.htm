@@ -84,7 +84,7 @@
 			<!--{/if}-->
 		</div>
 		<p class="o pns">
-			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
+			<!--{subtpl subblock/form/sendreasonpm}-->
 			<button name="ratesubmit" type="submit" value="true" class="pn pnc"><span>{lang confirms}</span></button>
 		</p>
 	</form>
