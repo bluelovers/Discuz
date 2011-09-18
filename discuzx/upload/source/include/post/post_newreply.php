@@ -622,6 +622,9 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		));
 
 		// bluelovers
+
+		$_user_list2 = array();
+
 		// 同時提醒最後發表者 以及 一天內的回應者
 		if ($thread['lastposter'] != $_G['username']) {
 			$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
@@ -631,14 +634,14 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 					$thread['tid'],
 					0,
 				))) {
-					$_user_list[] = $_row['authorid'];
+					$_user_list2[] = $_row['authorid'];
 				}
 			}
 		}
 
-		$_user_list = array_unique($_user_list);
+		$_user_list2 = array_unique($_user_list2);
 
-		foreach($_user_list as $_uid) {
+		foreach($_user_list2 as $_uid) {
 			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
 				'tid' => $thread['tid'],
 				'subject' => $thread['subject'],
