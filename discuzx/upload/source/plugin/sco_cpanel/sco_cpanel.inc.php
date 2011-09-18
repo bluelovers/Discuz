@@ -11,11 +11,11 @@ if (!defined('IN_DISCUZ')) {
 
 //error_reporting(E_ALL ^E_NOTICE ^E_STRICT);
 
-include_once dirname(__FILE__).'/./sco_cpanel.class.php';
+include_once dirname(__FILE__).'/./sco_cpanel_admincp.class.php';
 
 if (empty($_G['gp_cpmod'])) {
 
-	$_cpanel = new plugin_sco_cpanel();
+	$_cpanel = new plugin_sco_cpanel_admincp();
 	$_cpanel
 		->init($plugin['identifier'])
 		->set(array(
@@ -27,7 +27,7 @@ if (empty($_G['gp_cpmod'])) {
 
 } else {
 
-	$_cpanel = plugin_sco_cpanel::mod($_G['gp_cpmod'], $plugin['identifier']);
+	$_cpanel = plugin_sco_cpanel_admincp::mod($_G['gp_cpmod'], $plugin['identifier']);
 
 	$_cpanel
 		->set(array(
