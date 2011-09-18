@@ -13,6 +13,9 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_cpanel extends _sco_dx_plugin {
 
+	/**
+	 * 解決刪除主題時父版塊的最後發表沒有更新
+	 */
 	function deletethread($_args = array()) {
 /*
 Array
