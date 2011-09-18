@@ -34,6 +34,38 @@ Array
 */
 
 		list($tids, $membercount, $credit, $ponly) = $_args['param'];
+
+		if ($ids = dimplode($tids)) {
+			$query = DB::query("SELECT distinct fid FROM ".DB::table('forum_thread')."
+				WHERE
+					tid IN ($ids)
+				ORDER BY
+					(type == 'sub') DESC
+			");
+			while($_row = DB::fetch($query)) {
+				$fid = $_row['fid'];
+				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE fid = '{$fid}'");
+
+				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
+				if (in_array($_forum['lastpost']['tid'], $tids)) {
+
+					$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter, closed FROM ".DB::table('forum_thread')."
+						WHERE fid='$fid' AND displayorder='0' ORDER BY lastpost DESC LIMIT 1");
+
+					$thread['subject'] = addslashes($thread['subject']);
+					$thread['lastposter'] = $thread['author'] ? addslashes($thread['lastposter']) : lang('forum/misc', 'anonymous');
+					$tid = $thread['closed'] > 1 ? $thread['closed'] : $thread['tid'];
+
+					DB::query("UPDATE ".DB::table('forum_forum')."
+						SET
+							lastpost='$tid\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]'
+						WHERE
+							fid='$fid'
+					", 'UNBUFFERED');
+
+				}
+			}
+		}
 	}
 
 }
