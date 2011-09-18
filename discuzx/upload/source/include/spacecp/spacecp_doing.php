@@ -236,6 +236,62 @@ if(submitcheck('addsubmit')) {
 	}
 
 	// bluelovers
+	$top_updo = daddslashes($top_updo);
+
+	if(ckprivacy('doing', 'feed')) {
+
+		$feed_hash_data = 'doid'.$top_updo['doid'];
+
+		$feedarr = array(
+			'appid' => '',
+			'icon' => 'doing',
+			'uid' => $_G['uid'],
+			'username' => $_G['username'],
+			'dateline' => $_G['timestamp'],
+			'title_template' => array('feed', 'feed_reply_doing_title'),
+			'title_data' => array(
+				'touser' => "<a href=\"home.php?mod=space&uid=$top_updo[uid]\">$top_updo[username]</a>",
+				'message' => $top_updo['message'],
+
+				'url' => "home.php?mod=space&uid=$top_updo[uid]&do=doing&doid=$top_updo[doid]",
+
+				'hash_data' => $feed_hash_data,
+			),
+			'body_template' => array('feed', 'feed_reply_doing_title_message'),
+			'body_data' => array(
+				'touser' => "<a href=\"home.php?mod=space&uid=$top_updo[uid]\">$top_updo[username]</a>",
+				'message' => $top_updo['message'],
+			),
+			'id' => $updo['doid'],
+			'idtype' => 'doid'
+		);
+		require_once libfile('function/feed');
+
+		feed_add(
+			$feedarr['icon'],
+
+			$feedarr['title_template'],
+			$feedarr['title_data'],
+
+			$feedarr['body_template'],
+			$feedarr['body_data'],
+
+			'', '', '',
+
+			'', '',
+
+			$feedarr['appid'],
+			0,
+
+			$feedarr['id'],
+			$feedarr['idtype'],
+			$feedarr['uid'],
+			$feedarr['username']
+		);
+	}
+	// bluelovers
+
+	// bluelovers
 	// 改良當回覆紀錄時可以同時提醒該紀錄最原始的發表者
 	if($top_updo['uid'] != $updo['uid'] && $top_updo['uid'] != $_G['uid']) {
 		notification_add($top_updo['uid'], 'doing', 'doing_reply', array(
