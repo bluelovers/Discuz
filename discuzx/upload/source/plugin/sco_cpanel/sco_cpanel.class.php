@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 include_once dirname(__FILE__).'/./class_sco_dx_plugin_admincp.php';
 
-class plugin_sco_cpanel extends _sco_dx_plugin_admincp {
+class plugin_sco_cpanel_admincp extends _sco_dx_plugin_admincp {
 
 	function cpheader() {
 		/*
