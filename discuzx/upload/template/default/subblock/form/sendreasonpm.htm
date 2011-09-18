@@ -1,7 +1,8 @@
 <!-- for rate --><!-- for topicadmin --><!-- for topicadmin_action -->
 			<label for="sendreasonpm">
 				<input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"
-					{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if}
+					checked="checked"
+					{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} disabled="disabled"{/if}
 				/>
 				{lang admin_pm}
 			</label>
