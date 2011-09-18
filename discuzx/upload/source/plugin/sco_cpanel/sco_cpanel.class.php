@@ -54,8 +54,10 @@ Array
 
 				$_fids[] = $fid;
 
-				if ($_G['cache']['forums'][$fid]['fup']) {
-					$_fids[] = $_G['cache']['forums'][$fid]['fup'];
+				while($fup = $_G['cache']['forums'][$fid]['fup']) {
+					$_fids[] = $fup;
+
+					$fid = $fup;
 				}
 			}
 
@@ -67,8 +69,13 @@ Array
 				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
 
 				if (in_array($_forum['lastpost'][0], $tids)) {
+					$sqladd = '';
 
-					$sqladd = !in_array($_forum['type'], array('sub', 'group')) ? " OR fup = '$fid'" : '';
+					if (!empty($_G['cache']['forums'][$fid]['subs'])) {
+						if ($ids = dimplode($_G['cache']['forums'][$fid]['subs'])) {
+							$sqladd = "OR fid IN ($ids)";
+						}
+					}
 
 					$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter, closed FROM ".DB::table('forum_thread')."
 						WHERE
@@ -95,8 +102,6 @@ Array
 
 				}
 			}
-
-			debug($tids);
 		}
 	}
 
