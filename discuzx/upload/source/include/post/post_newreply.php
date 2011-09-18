@@ -551,6 +551,20 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 				$_user_list[] = $thread['authorid'];
 			}
 
+			// 同時提醒最後發表者 以及 一天內的回應者
+			if ($thread['lastposter'] != $_G['username']) {
+				$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= ".($thread['lastpost'] - 3600 * 24)." OR dateline >= '$thread[lastpost]')");
+				while($_row = DB::fetch($query)) {
+					if (!in_array($_row['authorid'], array(
+						$_G['uid'],
+						$nauthorid,
+						0,
+					))) {
+						$_user_list[] = $_row['authorid'];
+					}
+				}
+			}
+
 			$_user_list = array_unique($_user_list);
 
 			foreach($_user_list as $_uid) {
