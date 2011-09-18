@@ -58,6 +58,7 @@ function build_cache_forums() {
 		}
 
 		// bluelovers
+		// 緩存版塊的所有子版清單
 		if ($fup = $forum['fup']) {
 			$forumlist[$fup]['subs'][] = $forum['fid'];
 		}
@@ -111,6 +112,10 @@ function formatforumdata($forum, &$pluginvalue) {
 			// try fix amincp forum js forumselect - unterminated string literal
 			case 'description':
 				$data[$key] = preg_replace('/(\r\n|\r|\n\r)/s', "\n", $forum[$key]);
+				break;
+
+			case 'subs':
+				$data[$key] = (array)$forum[$key];
 				break;
 			// bluelovers
 
