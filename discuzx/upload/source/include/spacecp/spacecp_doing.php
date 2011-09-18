@@ -249,6 +249,8 @@ if(submitcheck('addsubmit')) {
 			'title_data' => array(
 				'touser' => "<a href=\"home.php?mod=space&uid=$top_updo[uid]\">$top_updo[username]</a>",
 				'message' => $top_updo['message'],
+
+				'url' => "home.php?mod=space&uid=$top_updo[uid]&do=doing&doid=$top_updo[doid]",
 			),
 			'body_template' => array('feed', 'feed_reply_doing_title_message'),
 			'body_data' => array(
