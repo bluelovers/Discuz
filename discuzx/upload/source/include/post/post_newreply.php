@@ -502,6 +502,10 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 	useractionlog($_G['uid'], 'pid');
 
+	// bluelovers
+	$_user_list = array();
+	// bluelovers
+
 	$nauthorid = 0;
 	if(!empty($_G['gp_noticeauthor']) && !$isanonymous && !$modnewreplies) {
 		list($ac, $nauthorid) = explode('|', authcode($_G['gp_noticeauthor'], 'DECODE'));
@@ -602,6 +606,36 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			'from_id' => $thread['tid'],
 			'from_idtype' => 'post',
 		));
+
+		// bluelovers
+		$_user_list2 = array();
+		$_user_list[] = $thapost['authorid'];
+		$_user_list[] = 0;
+		$_user_list[] = $_G['uid'];
+
+		// 同時提醒最後發表者 以及 一天內的回應者
+		if ($thread['lastposter'] != $_G['username']) {
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
+			while($_row = DB::fetch($query)) {
+				if (!in_array($_row['authorid'], $_user_list)) {
+					$_user_list2[] = $_row['authorid'];
+				}
+			}
+		}
+
+		$_user_list2 = array_unique($_user_list2);
+
+		foreach($_user_list2 as $_uid) {
+			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
+				'tid' => $thread['tid'],
+				'subject' => $thread['subject'],
+				'fid' => $_G['fid'],
+				'pid' => $pid,
+				'from_id' => $thread['tid'],
+				'from_idtype' => 'post',
+			));
+		}
+		// bluelovers
 	}
 
 	if($thread['replycredit'] > 0 && $thread['authorid'] != $_G['uid'] && $_G['uid']) {
