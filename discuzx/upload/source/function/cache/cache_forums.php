@@ -56,6 +56,12 @@ function build_cache_forums() {
 			}
 			$forumlist[$forum['fid']]['users'] .= "$forum[uid]\t";
 		}
+
+		// bluelovers
+		if ($forum['fup']) {
+			$forumlist[$forum['fup']]['subs'][] = $forum['fid'];
+		}
+		// bluelovers
 	}
 
 	$data = array();
