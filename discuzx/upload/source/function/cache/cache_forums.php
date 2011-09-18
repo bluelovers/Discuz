@@ -58,8 +58,12 @@ function build_cache_forums() {
 		}
 
 		// bluelovers
-		if ($forum['fup']) {
-			$forumlist[$forum['fup']]['subs'][] = $forum['fid'];
+		if ($fup = $forum['fup']) {
+			$forumlist[$fup]['subs'][] = $forum['fid'];
+		}
+
+		if ($fup2 = $forumlist[$fup]['fup']) {
+			$forumlist[$fup2]['subs'][] = $forum['fid'];
 		}
 		// bluelovers
 	}
