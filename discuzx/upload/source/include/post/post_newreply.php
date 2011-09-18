@@ -612,6 +612,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		$_user_list[] = $thapost['authorid'];
 		$_user_list[] = 0;
 		$_user_list[] = $_G['uid'];
+		$_user_list[] = $nauthorid;
 
 		// 同時提醒最後發表者 以及 一天內的回應者
 		if ($thread['lastposter'] != $_G['username']) {
