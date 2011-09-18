@@ -615,7 +615,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 		// 同時提醒最後發表者 以及 一天內的回應者
 		if ($thread['lastposter'] != $_G['username']) {
-			$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
 			while($_row = DB::fetch($query)) {
 				if (!in_array($_row['authorid'], $_user_list)) {
 					$_user_list2[] = $_row['authorid'];
