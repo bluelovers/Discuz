@@ -39,12 +39,10 @@ Array
 			$query = DB::query("SELECT distinct fid FROM ".DB::table('forum_thread')."
 				WHERE
 					tid IN ($ids)
-				ORDER BY
-					(type == 'sub') DESC
 			");
 			while($_row = DB::fetch($query)) {
 				$fid = $_row['fid'];
-				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE fid = '{$fid}'");
+				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid = '{$fid}'");
 
 				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
 				if (in_array($_forum['lastpost']['tid'], $tids)) {
@@ -72,7 +70,7 @@ Array
 							lastpost='$tid\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]'
 						WHERE
 							fid='$fid'
-					", 'UNBUFFERED');
+					");
 
 				}
 			}
