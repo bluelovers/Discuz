@@ -15,4 +15,8 @@ class plugin_sco_cpanel_delete extends _sco_dx_plugin {
 
 }
 
+class mobileplugin_sco_cpanel_delete extends plugin_sco_cpanel_delete {
+
+}
+
 ?>
