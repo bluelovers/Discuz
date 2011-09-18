@@ -239,6 +239,9 @@ if(submitcheck('addsubmit')) {
 	$top_updo = daddslashes($top_updo);
 
 	if(ckprivacy('doing', 'feed')) {
+
+		$feed_hash_data = 'doid'.$top_updo['doid'];
+
 		$feedarr = array(
 			'appid' => '',
 			'icon' => 'doing',
@@ -251,6 +254,8 @@ if(submitcheck('addsubmit')) {
 				'message' => $top_updo['message'],
 
 				'url' => "home.php?mod=space&uid=$top_updo[uid]&do=doing&doid=$top_updo[doid]",
+
+				'hash_data' => $feed_hash_data,
 			),
 			'body_template' => array('feed', 'feed_reply_doing_title_message'),
 			'body_data' => array(
