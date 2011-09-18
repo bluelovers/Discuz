@@ -553,7 +553,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 			// 同時提醒最後發表者 以及 一天內的回應者
 			if ($thread['lastposter'] != $_G['username']) {
-				$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= ".($thread['lastpost'] - 3600 * 24)." OR dateline >= '$thread[lastpost]')");
+				$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
 				while($_row = DB::fetch($query)) {
 					if (!in_array($_row['authorid'], array(
 						$_G['uid'],
@@ -616,6 +616,35 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			'from_id' => $thread['tid'],
 			'from_idtype' => 'post',
 		));
+
+		// bluelovers
+		// 同時提醒最後發表者 以及 一天內的回應者
+		if ($thread['lastposter'] != $_G['username']) {
+			$query = DB::query("SELECT authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
+			while($_row = DB::fetch($query)) {
+				if (!in_array($_row['authorid'], array(
+					$_G['uid'],
+					$thread['tid'],
+					0,
+				))) {
+					$_user_list[] = $_row['authorid'];
+				}
+			}
+		}
+
+		$_user_list = array_unique($_user_list);
+
+		foreach($_user_list as $_uid) {
+			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
+				'tid' => $thread['tid'],
+				'subject' => $thread['subject'],
+				'fid' => $_G['fid'],
+				'pid' => $pid,
+				'from_id' => $thread['tid'],
+				'from_idtype' => 'post',
+			));
+		}
+		// bluelovers
 	}
 
 	if($thread['replycredit'] > 0 && $thread['authorid'] != $_G['uid'] && $_G['uid']) {
