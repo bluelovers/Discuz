@@ -35,7 +35,7 @@ $lang = array
 	'feed_friend_title' => '{actor} 和 {touser} 成為了好友',
 
 	// bluelovers
-	'feed_reply_doing_title' =>					'{actor} 回應了 {touser} 發佈的新鮮事',
+	'feed_reply_doing_title' =>					'{actor} 回應了 {touser} 發佈的<a href="{url}" target="_blank">新鮮事</a>',
 	'feed_reply_doing_title_message' =>			'{touser}：{message}',
 	// bluelovers
 
