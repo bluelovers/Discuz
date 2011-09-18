@@ -11,15 +11,15 @@ if (!defined('IN_DISCUZ')) {
 
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
-class plugin_sco_cpanel_delete extends _sco_dx_plugin {
+class plugin_sco_cpanel extends _sco_dx_plugin {
 
 	function deletethread($_args = array()) {
-
+		debug($_args);
 	}
 
 }
 
-class mobileplugin_sco_cpanel_delete extends plugin_sco_cpanel_delete {
+class mobileplugin_sco_cpanel extends plugin_sco_cpanel {
 
 }
 
