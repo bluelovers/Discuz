@@ -252,6 +252,7 @@ if(submitcheck('addsubmit')) {
 			),
 			'body_template' => array('feed', 'feed_reply_doing_title_message'),
 			'body_data' => array(
+				'touser' => "<a href=\"home.php?mod=space&uid=$top_updo[uid]\">$top_updo[username]</a>",
 				'message' => $top_updo['message'],
 			),
 			'id' => $updo['doid'],
