@@ -40,12 +40,23 @@ Array
 				WHERE
 					tid IN ($ids)
 			");
+
+			$_fids = array();
+
 			while($_row = DB::fetch($query)) {
 				$fid = $_row['fid'];
+
+				$_fids[] = $fid;
+			}
+
+			foreach ($_fids as $fid) {
 				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid = '{$fid}'");
 
 				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
-				if (in_array($_forum['lastpost']['tid'], $tids)) {
+
+				var_dump($_forum['lastpost']);
+
+				if (in_array($_forum['lastpost'][0], $tids)) {
 
 					$sqladd = !in_array($_forum['type'], array('sub', 'group')) ? " OR fup = '$fid'" : '';
 
@@ -74,6 +85,8 @@ Array
 
 				}
 			}
+
+			debug($tids);
 		}
 	}
 
