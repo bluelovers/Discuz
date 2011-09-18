@@ -76,6 +76,13 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 		if($feedarr['hash_data']) {
 			$query = DB::query("SELECT feedid FROM ".DB::table('home_feed')." WHERE uid='$feedarr[uid]' AND hash_data='$feedarr[hash_data]' LIMIT 0,1");
 			if($oldfeed = DB::fetch($query)) {
+				// bluelovers
+				DB::update($feed_table, array(
+					'dateline' => $feedarr['dateline'],
+				), array(
+					'feedid' => $oldfeed['feedid'],
+				));
+				// bluelovers
 				return 0;
 			}
 		}
