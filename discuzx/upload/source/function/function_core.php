@@ -1169,6 +1169,9 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 
 	// bluelovers
 	if (is_array($format)) {
+		/**
+		 * 是否使用動態日期
+		 */
 		$_u = true;
 		if ($format[0] == 'u') {
 			$_i = 1;
