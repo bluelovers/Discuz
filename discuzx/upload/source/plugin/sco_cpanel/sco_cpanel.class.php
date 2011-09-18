@@ -49,8 +49,10 @@ Array
 				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
 				if (in_array($_forum['lastpost']['tid'], $tids)) {
 
+					$sqladd = !in_array($_forum['type'], array('sub', 'group')) ? " OR fup = '$fid'" : '';
+
 					$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter, closed FROM ".DB::table('forum_thread')."
-						WHERE fid='$fid' AND displayorder='0' ORDER BY lastpost DESC LIMIT 1");
+						WHERE (fid='$fid' $sqladd) AND displayorder='0' ORDER BY lastpost DESC LIMIT 1");
 
 					$thread['subject'] = addslashes($thread['subject']);
 					$thread['lastposter'] = $thread['author'] ? addslashes($thread['lastposter']) : lang('forum/misc', 'anonymous');
