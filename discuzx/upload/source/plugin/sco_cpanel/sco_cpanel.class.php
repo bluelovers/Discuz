@@ -19,8 +19,4 @@ class plugin_sco_cpanel extends _sco_dx_plugin {
 
 }
 
-class mobileplugin_sco_cpanel extends plugin_sco_cpanel {
-
-}
-
 ?>
