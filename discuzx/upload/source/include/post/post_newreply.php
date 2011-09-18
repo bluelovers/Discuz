@@ -502,6 +502,10 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 	useractionlog($_G['uid'], 'pid');
 
+	// bluelovers
+	$_user_list = array();
+	// bluelovers
+
 	$nauthorid = 0;
 	if(!empty($_G['gp_noticeauthor']) && !$isanonymous && !$modnewreplies) {
 		list($ac, $nauthorid) = explode('|', authcode($_G['gp_noticeauthor'], 'DECODE'));
