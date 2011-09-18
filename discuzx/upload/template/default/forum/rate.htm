@@ -130,7 +130,7 @@
 	</div>
 	<div class="o pns">
 		<label class="z" onclick="checkall(this.form, 'logid')"><input class="pc" type="checkbox" name="chkall" />{lang checkall}</label>
-		<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
+		<!--{subtpl subblock/form/sendreasonpm}-->
 		{lang admin_operation_explain}: <input name="reason" class="px vm" />
 		<button class="pn pnc vm" type="submit" value="true" name="ratesubmit"><span>{lang submit}</span></button>
 	</div>
