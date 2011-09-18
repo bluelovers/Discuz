@@ -41,6 +41,12 @@ Array
 					tid IN ($ids)
 			");
 
+			global $_G;
+
+			if (!isset($_G['cache']['forums'])) {
+				loadcache('forums');
+			}
+
 			$_fids = array();
 
 			while($_row = DB::fetch($query)) {
@@ -53,8 +59,6 @@ Array
 				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid = '{$fid}'");
 
 				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
-
-				var_dump($_forum['lastpost']);
 
 				if (in_array($_forum['lastpost'][0], $tids)) {
 
