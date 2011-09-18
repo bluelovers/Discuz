@@ -1186,7 +1186,7 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
-	if($format == 'u') {
+	if($format == 'u' || $_u) {
 		//TODO:搭配 js 動態顯示時間
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
 		//FIX:搭配 timeformat 增加顯示秒數後 此處會產生多餘的 :s 的 BUG
