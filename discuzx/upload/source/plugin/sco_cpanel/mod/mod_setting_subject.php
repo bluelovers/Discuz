@@ -9,7 +9,7 @@ if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel {
+class plugin_sco_cpanel_setting_subject extends plugin_sco_cpanel_admincp {
 
 	function _my_strlen($str) {
 		if(strtolower(CHARSET) == 'utf-8') return self::_my_utf8_strlen($str);

@@ -56,6 +56,17 @@ function build_cache_forums() {
 			}
 			$forumlist[$forum['fid']]['users'] .= "$forum[uid]\t";
 		}
+
+		// bluelovers
+		// 緩存版塊的所有子版清單
+		if ($fup = $forum['fup']) {
+			$forumlist[$fup]['subs'][] = $forum['fid'];
+		}
+
+		if ($fup2 = $forumlist[$fup]['fup']) {
+			$forumlist[$fup2]['subs'][] = $forum['fid'];
+		}
+		// bluelovers
 	}
 
 	$data = array();
@@ -82,7 +93,12 @@ function build_cache_forums() {
 
 function formatforumdata($forum, &$pluginvalue) {
 	static $keys = array('fid', 'type', 'name', 'fup', 'viewperm', 'postperm', 'orderby', 'ascdesc', 'users', 'status',
-		'extra', 'plugin', 'allowpostspecial', 'commentitem', 'description');
+		'extra', 'plugin', 'allowpostspecial', 'commentitem', 'description'
+
+		// bluelovers
+		, 'subs'
+		// bluelovers
+	);
 	static $orders = array('lastpost', 'dateline', 'replies', 'views');
 
 	$data = array();
@@ -96,6 +112,10 @@ function formatforumdata($forum, &$pluginvalue) {
 			// try fix amincp forum js forumselect - unterminated string literal
 			case 'description':
 				$data[$key] = preg_replace('/(\r\n|\r|\n\r)/s', "\n", $forum[$key]);
+				break;
+
+			case 'subs':
+				$data[$key] = (array)$forum[$key];
 				break;
 			// bluelovers
 

@@ -9,7 +9,7 @@ if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel {
+class plugin_sco_cpanel_threadsorts extends plugin_sco_cpanel_admincp {
 
 	/*
 	function plugin_sco_cpanel_threadsorts() {
