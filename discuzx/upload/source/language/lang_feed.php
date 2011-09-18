@@ -34,7 +34,10 @@ $lang = array
 	'feed_doing_title' => '{actor}：{message}',
 	'feed_friend_title' => '{actor} 和 {touser} 成為了好友',
 
-
+	// bluelovers
+	'feed_reply_doing_title' =>					'{actor} 評論了 {touser} 發佈的新鮮事',
+	'feed_reply_doing_title_message' =>			'{touser}：{message}',
+	// bluelovers
 
 	'feed_click_blog' => '{actor} 送了一個「{click}」給 {touser} 的日誌 {subject}',
 	'feed_click_thread' => '{actor} 送了一個「{click}」給 {touser} 的話題 {subject}',
