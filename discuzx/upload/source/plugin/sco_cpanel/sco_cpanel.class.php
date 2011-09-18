@@ -53,7 +53,13 @@ Array
 				$fid = $_row['fid'];
 
 				$_fids[] = $fid;
+
+				if ($_G['cache']['forums'][$fid]['fup']) {
+					$_fids[] = $_G['cache']['forums'][$fid]['fup'];
+				}
 			}
+
+			$_fids = array_unique($_fids);
 
 			foreach ($_fids as $fid) {
 				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid = '{$fid}'");
