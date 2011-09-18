@@ -1166,6 +1166,23 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		$uformat_default = strpos($dtformat, ':s') === false ? str_replace(":i", ":i:s", $dtformat) : $dtformat;
 		// bluelovers
 	}
+
+	// bluelovers
+	if (is_array($format)) {
+		$_u = true;
+		if ($format[0] == 'u') {
+			$_i = 1;
+		} elseif ($format[1] == 'u') {
+			$_i = 0;
+		} else {
+			$_u = false;
+			$_i = 0;
+		}
+
+		$format = $format[$_i];
+	}
+	// bluelovers
+
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
