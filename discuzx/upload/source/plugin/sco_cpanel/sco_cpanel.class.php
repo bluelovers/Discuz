@@ -36,6 +36,8 @@ Array
 )
 */
 
+		if ($_args['step'] != 'check') return;
+
 		list($tids, $membercount, $credit, $ponly) = $_args['param'];
 
 		if ($ids = dimplode($tids)) {
