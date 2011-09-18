@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 //error_reporting(E_ALL ^E_NOTICE ^E_STRICT);
 
-include_once dirname(__FILE__).'/./sco_cpanel_admincp.class.php';
+include_once dirname(__FILE__).'/./class_sco_cpanel_admincp.php';
 
 if (empty($_G['gp_cpmod'])) {
 
