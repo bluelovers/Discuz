@@ -1183,6 +1183,7 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		}
 
 		$format = $format[$_i];
+		if (empty($uformat)) $uformat = $format;
 	}
 	// bluelovers
 
