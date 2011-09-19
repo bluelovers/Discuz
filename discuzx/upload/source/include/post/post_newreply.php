@@ -641,9 +641,9 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 		}
 
-		$_user_list2 = array_unique($_user_list2);
+		$_user_list = array_unique($_user_list);
 
-		foreach($_user_list2 as $_uid) {
+		foreach($_user_list as $_uid) {
 
 			if (
 				empty($_uid)
