@@ -626,7 +626,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 					tid='$thread[tid]'
 					AND (
 						dateline >= '".(TIMESTAMP - 3600 * 24 * 2)."'
-						OR dateline >= '".($thread["lastpost"] - 3600)."'
+						OR dateline >= '".($thread["lastpost"] - 3600 * 12)."'
 					)
 			");
 			while($_row = DB::fetch($query)) {
