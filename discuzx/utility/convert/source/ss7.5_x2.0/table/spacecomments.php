@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: spacecomments.php 15777 2010-08-26 04:00:58Z zhengqingpeng $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -43,7 +44,7 @@ while ($rs = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." cid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." cid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

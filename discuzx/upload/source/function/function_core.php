@@ -512,7 +512,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		$file = empty($clonefile) || STYLEID != $_G['cache']['style_default']['styleid'] ? $file : $file.'_'.$clonefile;
 		if($templateid == 'diy' && STYLEID == $_G['cache']['style_default']['styleid']) {
 			$_G['style']['prefile'] = '';
-			$diypath = DISCUZ_ROOT.'./data/diy/'; //DIY模板文件目錄
+			$diypath = DISCUZ_ROOT.'./data/diy/'; //DIY模板文件目录
 			$preend = '_diy_preview';
 			$_G['gp_preview'] = !empty($_G['gp_preview']) ? $_G['gp_preview'] : '';
 			$curtplname = $oldfile;
@@ -526,7 +526,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或預覽模式下做以下判斷
+				if($_G['gp_diy'] == 'yes' || $_G['gp_preview'] == 'yes') { //DIY模式或预览模式下做以下判断
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_G['gp_preview'] == 'yes') {
 						$file .= $flag ? $preend : '';
@@ -1757,7 +1757,6 @@ function dreferer($default = '') {
 	}
 	$_G['referer'] = htmlspecialchars($_G['referer']);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
-	// FIX 校驗dreferer的域名，防止XSS注入
 	$reurl = parse_url($_G['referer']);
 	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
 		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
@@ -2377,7 +2376,6 @@ function update_template_block($targettplname, $blocks) {
 		}
 		$newaddbids = array_diff($blocks, $oldbids);
 		DB::delete('common_template_block', array('targettplname'=>$targettplname));
-		// FIX 一個模塊在一個頁面中多次使用時的sql錯誤
 		$blocks = array_unique($blocks);
 		$values = array();
 		foreach ($blocks as $bid) {

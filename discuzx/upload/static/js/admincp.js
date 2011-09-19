@@ -3,6 +3,7 @@
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: admincp.js 22381 2011-05-05 03:05:16Z monkey $
+	Translate By : Discuzindo
 */
 
 function redirect(url) {

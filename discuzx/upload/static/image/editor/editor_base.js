@@ -1,4 +1,4 @@
-var gSetColorType = "";
+﻿var gSetColorType = "";
 var gIsIE = document.all;
 var gIEVer = fGetIEVer();
 var gLoaded = false;
@@ -40,10 +40,10 @@ function renewContent() {
 		}
 	};
 
-	if(window.confirm('您確定要恢復上次保存?')) {
+	if(window.confirm('Are you sure you want to restore to last saved?')) {
 		var data = loadUserdata('home');
 		if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-			parent.showDialog('沒有可以恢復的數據！');
+			parent.showDialog('No data can be recovered!');
 			return;
 		}
 		var data = data.split(/\x09\x09/);
@@ -206,13 +206,13 @@ function format(type, para){
 	if(!gIsIE){
 		switch(type){
 			case "Cut":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行剪切操作,請使用鍵盤快捷鍵(Ctrl+X)來完成";
+				sAlert = "Your browser security settings does not permit the editor to automatically execute the Cutting operation. Use the keyboard shortcut (Ctrl X) to complete this operation.";
 				break;
 			case "Copy":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行拷貝操作,請使用鍵盤快捷鍵(Ctrl+C)來完成";
+				sAlert = "Your browser security settings does not permit the editor to automatically execute the Copy operation. Use the keyboard shortcut (Ctrl C) to complete this operation.";
 				break;
 			case "Paste":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行粘貼操作,請使用鍵盤快捷鍵(Ctrl+V)來完成";
+				sAlert = "Your browser security settings does not permit the editor to automatically execute the Paste operation. Use the keyboard shortcut (Ctrl V) to complete this operation.";
 				break;
 		}
 	}
@@ -296,7 +296,7 @@ function doodleBox(event, id) {
 	if(parent.$('uchome-ttHtmlEditor') != null) {
 		parent.showWindow(id, 'home.php?mod=magic&mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor');
 	} else {
-		alert("找不到塗鴉板初始化數據");
+		alert("Can not find the Graffiti initialization data");
 	}
 }
 function backColor(e){
@@ -458,7 +458,7 @@ function fSetBorderMouseDown(obj) {
 }
 function fDisplayElement(element,displayValue) {
 	if(gIEVer<=5.01 && gIsIE){
-		alert('只支持IE 5.01以上版本');
+		alert('Supported only in IE 5.01 or later');
 		return;
 	}
 	fHideMenu();
@@ -494,7 +494,7 @@ function fSetModeTip(obj){
 		dv.style.padding = "2px";
 		dv.style.border = "1px #000000 solid";
 		dv.style.backgroundColor = "#FFFFCC";
-		dv.innerHTML = "編輯源碼";
+		dv.innerHTML = "Edit Raw Text";
 		document.body.appendChild(dv);
 	}else{
 		dvModeTip.style.display = "";
@@ -612,7 +612,7 @@ function changeEditType(flag, ev){
 			}
 			ev = ev || event;
 			if(ev){
-				if(window.confirm("轉換為純文本時將會遺失某些格式。\n您確定要繼續嗎？")){
+				if(window.confirm("Your browser does not support this feature, please upgrade your browser version")){
 					$('uchome-editstatus').value = 'text';
 					sub1();
 				}else{

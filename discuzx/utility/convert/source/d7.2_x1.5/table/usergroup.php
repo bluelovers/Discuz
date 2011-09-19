@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: usergroup.php 21738 2011-04-11 07:06:36Z svn_project_zhangjie $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -62,7 +63,7 @@ while ($data = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." groupid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." groupid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

@@ -3,6 +3,7 @@
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: home_drag.js 17522 2010-10-20 13:57:03Z monkey $
+	Translate by : Discuzindo
 */
 
 var Drags       = [];

@@ -1,37 +1,36 @@
-====================================
-Discuz! 7.2 升級至 Discuz! X2.0 說明
-====================================
+---=============================================
+upgrade Discuz! 7.2  to Discuz! X2.0 Description
+================================================
 
-I 升級前的準備
----------------
-1. 建立程序備份目錄，例如 old/
-2. 將原論壇所有程序移動到 old/ 目錄中
-3. 上傳 Discuz! X 產品的 upload/ 目錄中的程序到論壇目錄
-4. 執行安裝程序 /install
-   安裝的時候請指定原 Discuz! 7.2 掛接的UCenter Server地址（如果 UCenter版本低於1.6.0，需先升級 UCenter ）
+I Preparing for upgrade
+-----------------------
+1. Establish procedures for the backup directory, such as old/
+2. Move all the original forum program to the old/ directory
+3. Upload the Discuz! X upload/ directory to the forum directory
+4. The installation program install/
+   Please specify where the original installation of Discuz! 7.2 attached the UCenter Server is placed. (if your version of UCenter is less than 1.6.0, you must upgrade UCenter first!)
 
-II 升級論壇數據
----------------
-1. 安裝完畢，測試論壇可以正常運行以後，上傳 Discuz! X Convert 程序到論壇更目錄
-2. 執行 /convert
-3. 選擇相應的程序版本，開始轉換
-4. 轉換過程中不可擅自中斷，直到程序自動執行完畢。
-5. 轉換過程可能需要較長時間，且消耗較多服務器資源，您應當選擇服務器空閒的時候執行
+II Upgrade the Forum Data
+-------------------------
+1. Upload the Discuz! X Convert  program to the forum directory
+2. Execute the /convert/
+3. Select the appropriate version of your program to be converted
+4. The conversion process must not be interrupted, until the program automatically executed.
+5. Conversion process may take a long time and consume alot of server resources, so you should choose a time when the server is not laded greately
 
-III 升級完畢, 還要做的幾件事
---------------------------
-1. 編輯新論壇的config/config_global.php 文件，設定好創始人。
-   在config/config_global.php文件中，設定 $_config['admincp']['founder'] = '1';  數字為創始人的UID
-2. 直接訪問新論壇的後台，訪問地址：http://您的域名/admin.php
-3. 使用創始人帳號登錄，進入後台更新緩存
-4. 新系統增加了很多設置項目，包括用戶權限、組權限、論壇板塊等等，您需要仔細的重新設置一次
-5. 轉移舊附件目錄（在轉移之前，您的帖子將會無法找到任何附件）
-   a)進入 old/attachments/ 目錄
-   b)將所有文件移動到 新論壇目錄/data/attachment/forum/ 目錄中
-6. 轉移用戶頭像（獨立安裝 UCenter 的用戶不需要這個步驟）
-   a)進入 old/uc_server/data/avatar/ 目錄
-   b)將所有文件移動到 新論壇目錄 uc_server/data/avatar/
-7. 刪除 convert 程序，以免給您的論壇安裝帶來隱患
-8. 待測試新論壇的所有功能均正常後，可以刪除舊的程序備份和數據備份
-9. 如果使用過分類信息，需要重新整理一次分類信息（後台->更新統計->分類信息整理）。
-10. 使用創始人賬號， 進入 Ucenter 後台， 修改應用，將論壇類型改為 DiscuzX。 
+III When the upgrade is completed, we need to do a few things
+-------------------------------------------------------------
+1. Set the founder in config/config_global.php file
+   In the file config/config_global.php set the founder ID: $_config['admincp']['founder'] = '1';
+2. For direct access to the new forum background, visit the address: http://your_domain/admin.php
+3. Using the founder account login, update the cache in the background
+4. The new system adds a lot of projects settings, including user permissions, group permissions, the forum section and so on, so you need to carefully check and re-set this
+5. Move the old attachments directory (without moving, your posts will not be able to find any attachments)
+   a) Go to old/attachments/ directory
+   b) Move all files to the new forum directory /data/attachment/forum/
+6. Move user avatars (at this step users does not need separate installation UCenter)
+   a) Go to old/uc_server/data/avatar/ directory
+   b) Move all files to the new forum catalog uc_server/data/avatar/
+7. Delete the convert program because of security reason
+8. After new forum tested for all the functions works normal, you can delete the old backup data and program files
+9. If you have used classified information, you need to refresh it once (Background -> Update Statistics -> Classified information collation).

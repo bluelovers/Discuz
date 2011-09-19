@@ -3,6 +3,7 @@
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: forum_slide.js 4479 2010-02-27 10:40:20Z liyulong $
+	Translate by : Discuzindo
 */
 
 

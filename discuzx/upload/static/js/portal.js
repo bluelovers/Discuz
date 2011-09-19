@@ -1,8 +1,9 @@
-/*
+﻿/*
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: portal.js 21566 2011-03-31 09:00:16Z zhangguosheng $
+	Translate by : Discuzindo
 */
 
 function block_get_setting(classname, script, bid) {
@@ -68,7 +69,7 @@ function block_pushitem(bid, itemid) {
 }
 
 function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
-	var msg = itemtype==1 ? '您確定要刪除該數據嗎？' : '您確定要屏蔽該數據嗎？';
+	var msg = itemtype==1 ? 'Are you sure you want to delete the data? ':' Are you sure you want to mask the data？';
 	if(confirm(msg)) {
 		var url = 'portal.php?mod=portalcp&ac=block&op=remove&bid='+bid+'&itemid='+itemid;
 		if(itemfrom=='ajax') {
@@ -142,7 +143,7 @@ function recommenditem_check() {
 		document.forms['recommendform'].action = document.forms['recommendform'].action+'&bid='+sel.value;
 		return true;
 	} else {
-		alert("請選擇一個模塊！");
+		alert("Please select a module！");
 		return false;
 	}
 }
@@ -154,7 +155,7 @@ function recommenditem_byblock(bid, id, idtype) {
 		ajaxinnerhtml(olditemeditarea, editarea.innerHTML);
 		if(!$('recommendback')) {
 			var back = document.createElement('div');
-			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;返回</em>';
+			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;Return</em>';
 			var return_mods = $('return_mods') || $('return_');
 			if(return_mods) {
 				return_mods.parentNode.appendChild(back.childNodes[0]);
@@ -210,10 +211,10 @@ function blockSetCacheTime(timer) {
 function toggleSettingShow() {
 	if(!$('tbody_setting').style.display) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = '展開設置項';
+		$('a_setting_show').innerHTML = 'Expand the setting item';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = '收起設置項';
+		$('a_setting_show').innerHTML = 'Setting items away';
 	}
 	doane();
 }
@@ -221,16 +222,16 @@ function switchSetting() {
 	var checked = $('isblank').checked;
 	if(checked) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = '展開設置項';
+		$('a_setting_show').innerHTML = 'Expand the setting item';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = '收起設置項';
+		$('a_setting_show').innerHTML = 'Setting items away';
 	}
 }
 
 function checkblockname(form) {
 	if(!(trim(form.name.value) > '')) {
-		showDialog('模塊標識不能為空', 'error', null, function(){form.name.focus();});
+		showDialog('Module ID can not be empty', 'error', null, function(){form.name.focus();});
 		return false;
 	}
 	if(form.summary && form.summary.value) {
@@ -238,7 +239,7 @@ function checkblockname(form) {
 		if(tag) {
 			showBlockSummary();
 			form.summary.focus();
-			showDialog('自定義內容錯誤，HTML代碼：'+tag+' 標籤不匹配', 'error', null, function(){form.summary.select();});
+			showDialog('Custom content errors，HTMLCode：'+tag+' Tags do not match', 'error', null, function(){form.summary.select();});
 			return false;
 		}
 	}
@@ -274,7 +275,7 @@ function blockCheckTag(summary, returnValue) {
 				if(returnValue) {
 					return tag;
 				} else {
-					showDialog('HTML代碼：'+tag+' 標籤不匹配', 'error', null, fn, true, fn);
+					showDialog('HTMLCode：'+tag+' Tags do not match', 'error', null, fn, true, fn);
 					return false;
 				}
 			}
@@ -299,7 +300,7 @@ function hideBlockSummary() {
 
 function blockconver(ele,bid) {
 	if(ele && bid) {
-		if(confirm('你確定要轉換模塊的類型從 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
+		if(confirm('Are you sure you want to convert the module type from '+ele.options[0].innerHTML+' To '+ele.options[ele.selectedIndex].innerHTML)) {
 			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
 		} else {
 			ele.selectedIndex = 0;

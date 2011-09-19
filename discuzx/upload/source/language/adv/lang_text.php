@@ -4,20 +4,21 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_text.php 13730 2010-07-30 03:03:10Z zhangguosheng $
+ *      $Id: lang_text.php
+ *
+ *      Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'text_name' => '門戶/論壇/群組/空間 格子廣告',
-	'text_desc' => '展現方式: 頁內文字廣告以表格的形式，顯示於論壇、群組頁面的中上方，通常使用文字的形式，也可使用小圖片和 Flash。當前頁面有多個文字廣告時，系統會以表格的形式按照設定的顯示順序全部展現，同時能夠對表格列數在 3～5 的範圍內動態排布，以自動實現最佳的廣告排列效果。<br />價值分析: 由於此類廣告通常以文字形式展現，但其所在的較靠上的頁面位置，使得此類廣告成為了訪問者必讀的內容之一。同一頁面可以呈現多達十幾條文字廣告的特性，也決定了它是一種平民化但性價比較高的推廣方式，同時還可用於論壇自身的宣傳和公告之用。',
-	'text_index' => '首頁',
-	'text_fids' => '投放版塊',
-	'text_fids_comment' => '設置廣告投放的論壇版塊，當廣告投放範圍中包含「論壇」時有效',
-	'text_groups' => '投放群組分類',
-	'text_groups_comment' => '設置廣告投放的群組分類，當廣告投放範圍中包含「群組」時有效',
-	'text_category' => '投放頻道分類',
-	'text_category_comment' => '設置廣告投放的頻道分類',
+	'text_name'				=> 'Forum/Group List Adv',//'论坛/群组 格子广告',
+	'text_desc'				=> 'Description: Display the Adv at page of forum or group with table style. In general, it is a text, also you can use small iamge and Flash.',//'展现方式: 页内文字广告以表格的形式，显示于论坛、群组页面的中上方，通常使用文字的形式，也可使用小图片和 Flash。当前页面有多个文字广告时，系统会以表格的形式按照设定的显示顺序全部展现，同时能够对表格列数在 3～5 的范围内动态排布，以自动实现最佳的广告排列效果。<br />价值分析: 由于此类广告通常以文字形式展现，但其所在的较靠上的页面位置，使得此类广告成为了访问者必读的内容之一。同一页面可以呈现多达十几条文字广告的特性，也决定了它是一种平民化但性价比较高的推广方式，同时还可用于论坛自身的宣传和公告之用。',
+	'text_index'			=> 'Home',//'首页',
+	'text_fids'				=> 'Target Forums',//'投放版块',
+	'text_fids_comment'		=> 'Set forums to diplay the Adv',//'设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
+	'text_groups'			=> 'Target Groups',//'投放群组分类',
+	'text_groups_comment'	=> 'Set the groups to show advertising. Take effect only when ads included in the scope of &quot;group&quot;.',//'设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
+	'text_category'			=> 'Target Category',//'投放频道分类',
+	'text_category_comment'	=> 'Set the category to show the Adv',//'设置广告投放的频道分类',
 );
 
-?>

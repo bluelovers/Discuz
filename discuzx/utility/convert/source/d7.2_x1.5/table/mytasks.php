@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: mytasks.php 15475 2010-08-24 07:34:47Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -35,6 +36,6 @@ while($row = $db_source->fetch_array($query)) {
 }
 $nextstep = $step + 1;
 if($continue) {
-	showmessage("繼續轉換數據表 ".$table_source."，已轉換 $total 條記錄。", "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
+	showmessage(lang('continue_convert_table').$table_source.lang('was_converted').$total.lang('records'), "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
 }
 ?>

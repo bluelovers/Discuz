@@ -4,34 +4,34 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_profile.php 22302 2011-04-29 02:20:12Z maruitao $
+ *      $Id: lang_profile.php by Valery Votintsev at sources.ru
  */
 
 $lang = array
 (
-	'profile_name' => '完善用戶資料任務',
-	'profile_desc' => '完善指定的用戶資料獲得相應的獎勵',
+	'profile_name'		=> 'Update the personal info',//'完善用户资料任务',
+	'profile_desc'		=> 'Fill in specified user info and receive award.',//'完善指定的用户资料获得相应的奖励。',
 
-	'profile_fields' => array(
-		'mp.realname' => '姓名',
-		'mp.gender' => '性別',
-		'mp.birthyear' => '生日(年)',
-		'mp.birthmonth' => '生日(月)',
-		'mp.birthday' => '生日(日)',
-		'mp.bloodtype' => '血型',
-		'mp.affectivestatus' => '情感狀態',
-		'mp.birthprovince' => '家鄉(省)',
-		'mp.birthcity' => '家鄉(市)',
-		'mp.resideprovince' => '居住地(省)',
-		'mp.residecity' => '居住地(市)'
+	'profile_fields'		=> array(
+		'mp.realname'		=> 'Real Name',//'姓名',
+		'mp.gender'			=> 'Gender',//'性别',
+		'mp.birthyear'		=> 'Birth year',//'生日(年)',
+		'mp.birthmonth'		=> 'Birth month',//'生日(月)',
+		'mp.birthday'		=> 'Birth Day',//'生日(日)',
+		'mp.bloodtype'		=> 'Blood type',//'血型',
+		'mp.affectivestatus'	=> 'Emotional category',//'情感状态',
+		'mp.birthprovince'	=> 'Birth region',//'家乡(省)',
+		'mp.birthcity'		=> 'Birth city',//'家乡(市)',
+		'mp.resideprovince'	=> 'Reside region',//'居住地(省)',
+		'mp.residecity'		=> 'Reside city',//'居住地(市)'
 	),
 
-	'profile_view' => '<strong>您還有以下個人資料項需要補充完整：</strong><br>
+	'profile_view'	=> '<strong>You have to fill the following items in your personal information:</strong><br>
 		<span style="color:red;">{profiles}</span><br><br>
-		<strong>請按照以下的說明來完成本任務：</strong>
+		<strong>Follow this instructions to complete the task:</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">點擊這裡打開個人資料設置頁面</a></li>
-		<li>在新打開的設置頁面中，將上述個人資料補充完整</li>
+		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank">Open in a new window your personal information page</a>;</li>
+		<li>Add the listed above your personal information.</li>
 		</ul>',
 );
 

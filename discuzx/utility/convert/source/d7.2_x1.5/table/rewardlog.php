@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: rewardlog.php 15815 2010-08-27 02:56:14Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -71,7 +72,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 if($nextid) {
 	$next = $start + $limit;
-	showmessage("繼續轉換數據表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=$next");
+	showmessage(lang('continue_convert_table').$table_source.lang('from'). $start .lang('to'). ($start+$limit). lang('lines'), "index.php?a=$action&source=$source&prg=$curprg&start=$next");
 }
 
 ?>

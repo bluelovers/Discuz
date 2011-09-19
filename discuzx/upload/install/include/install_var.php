@@ -1,10 +1,12 @@
-<?php
+﻿<?php
 
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: install_var.php 23087 2011-06-17 02:55:20Z zhangguosheng $
+ *		English by Valery Votintsev at sources.ru
+ *              Modified by discuzindo.net
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -13,7 +15,8 @@ if(!defined('IN_COMSENZ')) {
 
 define('SOFT_NAME', 'Discuz!');
 
-define('INSTALL_LANG', 'TC_UTF8');
+define('DEFAULT_LANG', 'en'); //vot Default Installation Language
+define('INSTALL_LANG', 'EN_UTF8'); //vot: 'SC_UTF8', 'TC_UTF8'
 
 define('CONFIG', './config/config_global.php');
 define('CONFIG_UC', './config/config_ucenter.php');
@@ -140,6 +143,7 @@ $form_db_init_items = array
 		'portalstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
 		'homestatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
 		'groupstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
+/*vot*/		'regiondata' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
 	)
 );
 
@@ -149,7 +153,7 @@ $serialize_sql_setting = array (
     1 =>
     array (
       'img' => '',
-      'title' => '威望',
+      'title'	=> 'Rating',//'威望',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -160,7 +164,7 @@ $serialize_sql_setting = array (
     2 =>
     array (
       'img' => '',
-      'title' => '金錢',
+      'title'	=> 'Points',//'金钱',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -171,7 +175,7 @@ $serialize_sql_setting = array (
     3 =>
     array (
       'img' => '',
-      'title' => '貢獻',
+      'title'	=> 'Contribution',//'贡献',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -237,51 +241,51 @@ $serialize_sql_setting = array (
   ),
   'postnocustom' =>
   array (
-    0 => '樓主',
-    1 => '沙發',
-    2 => '板凳',
-    3 => '地板',
+    0 => 'TS',//'楼主',
+    1 => 'Sofa',//'沙发',
+    2 => 'Bench',//'板凳',
+    3 => 'Floor',//'地板',
   ),
   'recommendthread' =>
   array (
     'status' => '0',
-    'addtext' => '支持',
-    'subtracttext' => '反對',
+    'addtext'		=> 'Like',//'支持',
+    'subtracttext'	=> 'Dislike',//'反对',
     'defaultshow' => '1',
     'daycount' => '0',
     'ownthread' => '0',
     'iconlevels' => '50,100,200',
   ),
-  'seotitle' =>
+'seotitle' =>
   array (
-    'portal' => '門戶',
-    'forum' => '論壇',
-    'group' => '群組',
-    'home' => '家園',
-    'userapp' => '應用',
+    'portal'	=> 'Portal',
+    'forum'		=> 'Forum',
+    'group'		=> 'Groups',
+    'home'		=> 'Home',
+    'userapp'	=> 'Apps',
   ),
   'activityfield' =>
   array (
-    'realname' => '真實姓名',
-    'mobile' => '手機',
-    'qq' => 'QQ號',
+    'realname'	=> 'Real Name',
+    'mobile'	=> 'Mobile Phone',
+    'qq'		=> 'QQ number',
   ),
   'article_tags' =>
   array (
-    1 => '原創',
-    2 => '熱點',
-    3 => '組圖',
-    4 => '爆料',
-    5 => '頭條',
-    6 => '幻燈',
-    7 => '滾動',
-    8 => '推薦',
+    1 => 'Original',//'原创',
+    2 => 'Hot',//'热点',
+    3 => 'Photos',//'组图',
+    4 => 'Broken News',//'爆料',
+    5 => 'Headline',//'头条',
+    6 => 'Slideshow',//'幻灯',
+    7 => 'Scroll',//'滚动',
+    8 => 'Recommended',//'推荐',
   ),
   'verify' =>
   array (
     6 =>
     array (
-      'title' => '實名認證',
+      'title' => 'Real-name Verification',
       'available' => '0',
       'showicon' => '0',
       'viewrealname' => '0',
@@ -314,7 +318,7 @@ $serialize_sql_setting = array (
     ),
     7 =>
     array (
-      'title' => '視頻認證',
+      'title' => 'Video Certification',
       'available' => '0',
       'showicon' => '0',
       'viewvideophoto' => '0',
@@ -323,7 +327,7 @@ $serialize_sql_setting = array (
   ),
   'focus' =>
   array (
-    'title' => '站長推薦',
+    'title' => 'Webmaster Recommended',
     'data' =>
     array (
     ),
@@ -335,7 +339,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 0,
-      'title' => '基本資料',
+      'title' => 'Basic Info',
       'field' =>
       array (
         'realname' => 'realname',
@@ -359,7 +363,7 @@ $serialize_sql_setting = array (
     ),
     'contact' =>
     array (
-      'title' => '聯繫方式',
+      'title' => 'Contact Info',
       'available' => '1',
       'displayorder' => '1',
       'field' =>
@@ -377,7 +381,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 2,
-      'title' => '教育情況',
+      'title' => 'Education Info',
       'field' =>
       array (
         'graduateschool' => 'graduateschool',
@@ -388,7 +392,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 3,
-      'title' => '工作情況',
+      'title' => 'Work Info',
       'field' =>
       array (
         'occupation' => 'occupation',
@@ -399,7 +403,7 @@ $serialize_sql_setting = array (
     ),
     'info' =>
     array (
-      'title' => '個人信息',
+      'title' => 'Personal Info',
       'available' => '1',
       'displayorder' => '4',
       'field' =>

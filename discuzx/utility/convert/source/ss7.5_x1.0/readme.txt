@@ -1,46 +1,48 @@
-====================================
-SupeSite 7.5 升級至 Discuz! X1 說明
-====================================
+==============================================
+SupeSite 7.5 upgrade to Discuz! X1 description
+==============================================
 
-特別警示!!!
-Discuz! X1.0中並未具備SupeSite 7.5中的全部功能，
-此轉換程序，僅轉換SupeSite 7.5中的資訊分類、資訊文章數據到 Discuz! X產品的文章系統中。
-其他數據將不進行轉換。
-因此，數據轉換後，Discuz! X產品存在原有SupeSite功能丟失和數據丟失問題，請自行權衡決定是否轉換升級。
+Special Alert!!!
+Discuz! X1.0 not have the SupeSite 7.5 in all of the features,
+This conversion process, only the information in the conversion SupeSite 7.5 classification of news articles data to Discuz! X products, the article system.
+Other data will not be converted.
+Therefore, data conversion, Discuz! X products that are lost and the original data loss SupeSite feature, please weigh the decision whether to convert to upgrade themselves.
 
 
-I 升級前的準備
----------------
-1. 建立程序備份目錄，例如 old
-2. 將原SupeSite所有程序移動到 old 目錄中
-3. 上傳 Discuz! X 產品的upload目錄中的程序到SupeSite目錄
-4. 執行安裝程序 /install
-   安裝的時候請指定原SupeSite掛接的UCenter Server地址
+I Preparing for upgrade
+-----------------------
+1. Establish procedures for the backup directory, such as old
+2. SupeSite all of the original program to move to the old directory
+3. By Discuz! X product upload directory directory program to SupeSite
+4. Run the installer / install
+   Please specify the original installation when mounted UCenter Server address SupeSite
 
-II 升級SupeSite數據
----------------
-1. 安裝完畢，測試Discuz! X可以正常運行以後，上傳convert 程序到Discuz! X根目錄
-2. 執行 /convert
-3. 選擇相應的程序版本，開始轉換
-4. 轉換過程中不可擅自中斷，直到程序自動執行完畢。
-5. 轉換過程可能需要較長時間，且消耗較多服務器資源，您應當選擇服務器空閒的時候執行
+II upgrade SupeSite Data
+------------------------
+1. Installation, testing, Discuz! X to normal operation after the upload process to convert Discuz! X root directory
+2. Executive /convert
+3. Select the appropriate version of the program, start the conversion
+4. The conversion process is not without interruption, until the program automatically executed.
+5. Conversion process may take longer, and consume more server resources, you should select the server implementation of free time
 
-III 升級完畢, 還要做的幾件事
---------------------------
-1. 編輯新Discuz! X的 config/config_global.php 文件，設定好創始人
-2. 直接訪問新Discuz! X的 admin.php
-3. 使用創始人帳號登錄，進入後台更新緩存
-4. 新系統增加了很多設置項目，包括用戶權限、組權限、論壇板塊等等，您需要仔細的重新設置一次。
-5. 轉移舊附件目錄到新產品根目錄（在轉移之前，您的資訊內容中的圖片無法正常顯示）
-   a)將 old/attachments 目錄和目錄下的文件 全部移動到 新Discuz! X產品的/data/attachment/portal/目錄中
-   b) 在原 SS7 源碼下找到圖標 images/base/attachment.gif，放在 Disucuz！ X1 的目錄 static/image/filetype/ 下；
-   c) 找到 source/module/portal/portal_view.php 文件，在代碼「$content['content'] = blog_bbcode($content['content']);」後換行添加以下代碼：
+III upgrade is completed, we need to do a few things
+----------------------------------------------------
+1. Edit the new Discuz! X's config/config_global.php file, setting the founder of
+2. Direct access to the new Discuz! X's admin.php
+3. Use the founder account login, update the cache into the background
+4. The new system adds a lot of set up the project, including user permissions, group permissions, forum sections, etc., you need to carefully re-set once.
+5. Transfer the old attachments directory to the root directory of new products (before the transfer, the contents of your information in the image does not display)
+   a) the old/attachments directory and the directory of all the documents move to the new Discuz! X products /data/attachment/portal/ directory
+   b) to find the original source SS7 icon images/base/attachment.gif, on Disucuz! X1 directory static/image/filetype/ under;
+   c) find the source/module/portal/portal_view.php file in the code 
+   "$content['content'] = blog_bbcode($content['content']);" 
+   add the following code after the line:
 
-	$ss_url = 'http://your_ss_site_url/'; // 請將此鏈接地址改為您的 SS 站點地址！！！
+	$ss_url = 'http://your_ss_site_url/'; // if this link address to your SS site address!!!
 	$findarr = array(
-		$ss_url.'batch.download.php?aid=', // 附件下載地址
-		$ss_url.'attachments/',  // 附件圖片目錄
-		$ss_url.'images/base/attachment.gif'  // 附件下載圖標
+		$ss_url.'batch.download.php?aid=', // attachment Download
+		$ss_url.'attachments/',  // attached images directory
+		$ss_url.'images/base/attachment.gif'  // download the attachment icon
 	);
 	$replacearr = array(
 		'porta.php?mod=attachment&id=',
@@ -49,6 +51,6 @@ III 升級完畢, 還要做的幾件事
 	);
 	$content['content'] = str_replace($findarr, $replacearr, $content['content']);
 
-6. 轉移舊圖片目錄到新產品根目錄（在轉移之前，您的資訊內容中的表情無法正常顯示）
-   a)將 old/images 目錄和目錄下的文件 移動到 新Discuz! X產品的根目錄中
-7. 刪除 convert 程序，以免給您的Discuz! X安裝帶來隱患。
+6. Transfer the old image directory to the root directory of new products (before the transfer, the information content in your face does not display)
+   a) the old/images directory and the directory file to a new Discuz! X products, root
+7. Remove convert program, so as not to give your Discuz! X installation and security.

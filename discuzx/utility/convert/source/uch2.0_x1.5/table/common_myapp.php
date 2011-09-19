@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: common_myapp.php 18808 2010-12-06 08:18:37Z zhengqingpeng $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -32,7 +33,7 @@ while ($app = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." appid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." appid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");//vot
 } else {
 	$db_target->query("TRUNCATE ".$db_target->table('common_myapp_count'));
 	$db_target->query('INSERT INTO '.$db_target->table('common_myapp_count').' (appid) SELECT appid FROM '.$db_target->table('common_myapp'));

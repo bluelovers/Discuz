@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: home_space.php 17393 2010-10-18 02:18:12Z zhengqingpeng $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -89,7 +90,7 @@ while ($space = $db_source->fetch_array($query)) {
 	}
 
 	if(empty($home['extcredits']['credit']) || empty($home['extcredits']['experience'])) {
-		showmessage("發生錯誤，請配置積分對應關係信息");
+		showmessage(lang('space_home_error'));//vot
 	}
 
 	$setarr[$home['extcredits']['credit']] = $space['credit'] + intval($newspace[$home['extcredits']['credit']]);
@@ -210,7 +211,7 @@ while ($space = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table')." {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");//vot
 }
 
 function getupdatesql($setarr) {

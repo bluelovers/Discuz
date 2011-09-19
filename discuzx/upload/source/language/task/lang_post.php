@@ -4,33 +4,33 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_post.php 20567 2011-02-28 02:30:15Z congyushuai $
+ *      $Id: lang_post.php by Valery Votintsev at sources.ru
  */
 
 $lang = array
 (
-	'post_name' => '論壇帖子類任務',
-	'post_desc' => '通過發帖回帖完成任務，活躍論壇的氛圍',
-	'post_complete_var_act' => '動作',
-	'post_complete_var_act_newthread' => '發新主題',
-	'post_complete_var_act_newreply' => '發新回復',
-	'post_complete_var_act_newpost' => '發新主題/回復',
-	'post_complate_var_forumid' => '版塊限制',
-	'post_complate_var_forumid_comment' => '設置會員只能在某個版塊完成任務',
-	'post_complate_var_threadid' => '回復指定主題',
-	'post_complate_var_threadid_comment' => '設置會員只有回復該主題才能完成任務，請填寫主題的 TID',
-	'post_complate_var_author' => '回復指定作者',
-	'post_complate_var_author_comment' => '設置會員只有回復該作者發表的主題才能完成任務，請填寫作者的用戶名',
-	'post_complete_var_num' => '執行動作次數下限',
-	'post_complete_var_num_comment' => '會員需要執行相應動作的最少次數',
-	'post_complete_var_time' => '時間限制(小時)',
-	'post_complete_var_time_comment' => '設置會員從申請任務到完成任務的時間限制，會員在此時間內未能完成任務則不能領取獎勵並標記任務失敗，0 或留空為不限制',
+	'post_name'				=> 'Forum post task',//'论坛帖子类任务',
+	'post_desc'				=> 'Make a Posting to complete the task, activate the forum atmosphere.',//'通过发帖回帖完成任务，活跃论坛的氛围。',
+	'post_complete_var_act'			=> 'Action',//'动作',
+	'post_complete_var_act_newthread'	=> 'Create New Thread',//'发新主题',
+	'post_complete_var_act_newreply'	=> 'Post new reply',//'发新回复',
+	'post_complete_var_act_newpost'		=> 'Post new thread/reply',//'发新主题/回复',
+	'post_complate_var_forumid'		=> 'Target Forums',//'版块限制',
+	'post_complate_var_forumid_comment'	=> 'Set the Forums where members can do this for complete the task',//'设置会员只能在某个版块完成任务',
+	'post_complate_var_threadid'		=> 'Target threads',//'回复指定主题',
+	'post_complate_var_threadid_comment'	=> 'Enter the threads ID  where members can do this for complete the task',//'设置会员只有回复该主题才能完成任务，请填写主题的 TID',
+	'post_complate_var_author'		=> 'Target Author',//'回复指定作者',
+	'post_complate_var_author_comment'	=> 'Set the author names, replying for whose threads only to complete the task.',//'设置会员只有回复该作者发表的主题才能完成任务，请填写作者的用户名',
+	'post_complete_var_num'			=> 'Minimum number of times to perform action',//'执行动作次数下限',
+	'post_complete_var_num_comment'		=> 'Members need to perform the appropriate action at least this number of times',//'会员需要执行相应动作的最少次数',
+	'post_complete_var_time'		=> 'Time limit (hours)',//'时间限制(小时)',
+	'post_complete_var_time_comment'	=> 'Set the time restrictions to comlete the task. If a member can not complete the task in this time range, the task marked as failed and no award given. Set to 0 or leave blank for no limits.',//'设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制',
 
-	'task_complete_forumid' => '在版塊 {value} ',
-	'task_complete_act_newthread' => '發新主題 {num} 次',
-	'task_complete_act_newpost' => '發新主題/回復 {num} 次',
-	'task_complete_act_newreply_thread' => '在「{value}」回復主題 {num} 次',
-	'task_complete_act_newreply_author' => '回復作者「{value}」的主題 {num} 次',
+	'task_complete_forumid'			=> 'at Forum {value} ',//'在版块 {value} ',
+	'task_complete_act_newthread'		=> 'Created {num} new threads.',//'发新主题 {num} 次。',
+	'task_complete_act_newpost'		=> 'Posted new thread/reply {num} times.',//'发新主题/回复 {num} 次。',
+	'task_complete_act_newreply_thread'	=> 'Replied the thread "{value}" {num} times.',//'回复主题“{value}” {num} 次。',
+	'task_complete_act_newreply_author'	=> 'Replied the thread of "{value}" {num} times.',//'回复作者“{value}”的主题 {num} 次。',
 );
 
 ?>

@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: threadtype.php 18152 2010-11-15 09:52:23Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -55,7 +56,7 @@ if($typetids) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換主題分類數據表，fid=$nextid", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
+	showmessage(lang('convert_thread_type').", fid=$nextid", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
 }
 
 ?>

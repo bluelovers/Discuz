@@ -3,23 +3,25 @@
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
- *
+ *	
  *      $Id: lang_anonymouspost.php 18824 2010-12-07 02:39:28Z liulanbo $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'anonymouspost_name' => '匿名卡',
-	'anonymouspost_desc' => '在指定的地方，讓自己的名字顯示為匿名。',
-	'anonymouspost_num' => '擁有個數: {magicnum}',
-	'anonymouspost_forum' => '允許使用本道具的版塊',
-	'anonymouspost_info' => '將自己的帖子設置為匿名身份，請輸入帖子的 ID',
-	'anonymouspost_info_nonexistence' => '請指定要匿名的帖子',
-	'anonymouspost_succeed' => '成功設置為匿名',
-	'anonymouspost_use_error' => '參數錯誤，不能在此處使用本道具。',
-	'anonymouspost_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'anonymouspost_info_user_noperm' => '對不起，你不能對此人使用本道具',
-	'anonymouspost_once_limit' => '已經是匿名狀態了，不能重複使用本道具。',
+	'anonymouspost_name' => 'Annonymous Card',
+	'anonymouspost_desc' => 'Publish posts as anonymous',
+	'anonymouspost_num' => 'Total: {magicnum}',
+	'anonymouspost_forum' => 'Allowed Forums',
+	'anonymouspost_info' => 'Set you posts as from anonymous, please input Thread ID',
+	'anonymouspost_info_nonexistence' => 'Enter Thread ID',
+	'anonymouspost_succeed' => 'Operate Successfully',
+	'anonymouspost_use_error' => 'System Error, you can not use magic.',
+	'anonymouspost_info_noperm' => 'Sorry, you cannot use this magic in this forum',
+	'anonymouspost_info_user_noperm' => 'You have no permission to use Magic',
+	'anonymouspost_once_limit' => 'Already Anonymous, and can not re-use ',
 );
 
 ?>

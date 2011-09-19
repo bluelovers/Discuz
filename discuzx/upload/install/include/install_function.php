@@ -514,7 +514,8 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.
+                <b>|</b> <i>English Version by</i> <a href="http://www.discuzindo.net/">DiscuzIndo Team!</a></div>
 	</div>
 </div>
 </body>
@@ -534,7 +535,7 @@ function loginit($logfile) {
 
 function showjsmessage($message) {
 	if(VIEW_OFF) return;
-	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\n";
+	echo '<script type="text/javascript">showmessage(\''.addslashes($message).' \');</script>'."\r\n";
 	flush();
 	ob_flush();
 }
@@ -591,10 +592,7 @@ function save_config_file($filename, $config, $default) {
 
 EOT;
 	$content .= getvars(array('_config' => $config));
-	/*
 	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
-	*/
-	$content .= "\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\n\n?>";
 	file_put_contents($filename, $content);
 }
 
@@ -776,7 +774,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		$s .= "\n".$replace;
+		$s .= "\r\n".$replace;
 	}
 	return $s;
 }
@@ -1133,23 +1131,23 @@ function uc_write_config($config, $file, $password) {
 	$ucmykey = _generate_key();
 	$salt = substr(_generate_key(), 0, 6);
 	$pw = md5(md5($password).$salt);
-	$config = "<?php \r\ndefine('UC_DBHOST', '$ucdbhost');\n";
-	$config .= "define('UC_DBUSER', '$ucdbuser');\n";
-	$config .= "define('UC_DBPW', '$ucdbpw');\n";
-	$config .= "define('UC_DBNAME', '$ucdbname');\n";
-	$config .= "define('UC_DBCHARSET', '$ucdbcharset');\n";
-	$config .= "define('UC_DBTABLEPRE', '$uctablepre');\n";
-	$config .= "define('UC_COOKIEPATH', '/');\n";
-	$config .= "define('UC_COOKIEDOMAIN', '');\n";
-	$config .= "define('UC_DBCONNECT', 0);\n";
-	$config .= "define('UC_CHARSET', '".$uccharset."');\n";
-	$config .= "define('UC_FOUNDERPW', '$pw');\n";
-	$config .= "define('UC_FOUNDERSALT', '$salt');\n";
-	$config .= "define('UC_KEY', '$ucauthkey');\n";
-	$config .= "define('UC_SITEID', '$ucsiteid');\n";
-	$config .= "define('UC_MYKEY', '$ucmykey');\n";
-	$config .= "define('UC_DEBUG', false);\n";
-	$config .= "define('UC_PPP', 20);\n";
+	$config = "<?php \r\ndefine('UC_DBHOST', '$ucdbhost');\r\n";
+	$config .= "define('UC_DBUSER', '$ucdbuser');\r\n";
+	$config .= "define('UC_DBPW', '$ucdbpw');\r\n";
+	$config .= "define('UC_DBNAME', '$ucdbname');\r\n";
+	$config .= "define('UC_DBCHARSET', '$ucdbcharset');\r\n";
+	$config .= "define('UC_DBTABLEPRE', '$uctablepre');\r\n";
+	$config .= "define('UC_COOKIEPATH', '/');\r\n";
+	$config .= "define('UC_COOKIEDOMAIN', '');\r\n";
+	$config .= "define('UC_DBCONNECT', 0);\r\n";
+	$config .= "define('UC_CHARSET', '".$uccharset."');\r\n";
+	$config .= "define('UC_FOUNDERPW', '$pw');\r\n";
+	$config .= "define('UC_FOUNDERSALT', '$salt');\r\n";
+	$config .= "define('UC_KEY', '$ucauthkey');\r\n";
+	$config .= "define('UC_SITEID', '$ucsiteid');\r\n";
+	$config .= "define('UC_MYKEY', '$ucmykey');\r\n";
+	$config .= "define('UC_DEBUG', false);\r\n";
+	$config .= "define('UC_PPP', 20);\r\n";
 	$fp = fopen($file, 'w');
 	fwrite($fp, $config);
 	fclose($fp);
@@ -1258,7 +1256,7 @@ function getvars($data, $type = 'VAR') {
 			continue;
 		}
 		if(is_array($val)) {
-			$evaluate .= buildarray($val, 0, "\${$key}")."\n";
+			$evaluate .= buildarray($val, 0, "\${$key}")."\r\n";
 		} else {
 			$val = addcslashes($val, '\'\\');
 			$evaluate .= $type == 'VAR' ? "\$$key = '$val';\n" : "define('".strtoupper($key)."', '$val');\n";
@@ -1277,10 +1275,10 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	foreach ($array as $key => $val) {
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
-			$return .= "\r\n// $newline //\n";
+			$return .= "\r\n// $newline //\r\n";
 			if($key == 'admincp') {
 				$newline = str_pad(' Founders: $_config[\'admincp\'][\'founder\'] = \'1,2,3\'; ', 70, '-', STR_PAD_BOTH);
-				$return .= "// $newline //\n";
+				$return .= "// $newline //\r\n";
 			}
 		}
 
@@ -1290,7 +1288,7 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 			$return .= buildarray($val, $level + 1, $pre);
 		} else {
 			$val =  is_string($val) || strlen($val) > 12 || !preg_match("/^\-?[1-9]\d*$/", $val) ? '\''.addcslashes($val, '\'\\').'\'' : $val;
-			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\n";
+			$return .= $pre.$ks[$level - 1]."['$key']"." = $val;\r\n";
 		}
 	}
 	return $return;

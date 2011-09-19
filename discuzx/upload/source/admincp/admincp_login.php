@@ -89,6 +89,7 @@ function html_login_footer($halt = true) {
 		<div class="copyright">
 			<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> $version </p>
 			<p>&copy; 2001-2011, <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</p>
+                        <br><p><i>Translated by </i> <a href="http://www.discuzindo.net/" target="_blank">DiscuzIndo Team!</a></p>
 		</div>
 	</td>
 </tr>

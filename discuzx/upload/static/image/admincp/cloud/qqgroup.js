@@ -1,4 +1,4 @@
-var j = jQuery.noConflict();
+﻿var j = jQuery.noConflict();
 
 if (typeof disallowfloat == 'undefined' || disallowfloat === null) {
 	var disallowfloat = '';
@@ -19,7 +19,7 @@ function previewFormSubmit() {
 	saveAllThread();
 
 		if (!selectedTopicId || selectedNormalIds.length < 1) {
-		alert('請至少推送一條頭條主題和一條列表主題');
+		alert('Select at least one topic to Push');
 			return false;
 		}
 
@@ -61,13 +61,13 @@ function ajaxChangeSearch() {
 }
 
 function ajaxGetSearchResultThreads() {
-	j('#search_result').html('<tr><td colspan="3">加載中...</td></tr>');
+	j('#search_result').html('<tr><td colspan="3">Loading...</td></tr>');
 	ajaxpost('search_form', 'search_result', null, null, null, function() {initSelect(); return false});
 	return false;
 }
 
 function ajaxGetPageResultThreads(page, mpurl) {
-	j('#search_result').html('<tr><td colspan="3">加載中...</td></tr>');
+	j('#search_result').html('<tr><td colspan="3">加载中...</td></tr>');
 	if (typeof page == 'undefined' || page === null) {
 		page = 1;
 	}
@@ -160,7 +160,7 @@ function addMiniportalList(tid) {
 		return false;
 	}
 	if (selectedNormalIds.length >= 5) {
-		alert('推送帖子已達到5條，請在右側取消一些再重試。');
+		alert('Push Post number has reached five, in the right to cancel a number and try again.');
 		return false;
 	}
 	if (tid == selectedTopicId) {
@@ -295,14 +295,14 @@ function removeNormalThreadRecall(displayorder, inNormalEditor) {
 		if (inNormalEditor) {
 			saveAllThread();
 		}
-		firstThreadLi.html('<div class="tips">點擊左側 <img src="static/image/admincp/cloud/qun_op_list.png" align="absmiddle" /> 將信息推送到列表</div>');
+		firstThreadLi.html('<div class="tips">Click on the left <img src="static/image/admincp/cloud/qun_op_list.png" align="absmiddle" /> Will push the information to the list</div>');
 		firstThreadLi.show();
 	}
 }
 
 function ajaxUploadQQGroupImage() {
 	j('#uploadImageResult').parent().show();
-	j('#uploadImageResult').text('圖片上傳中，請稍後...');
+	j('#uploadImageResult').text('Upload image, please wait...');
 	ajaxpost('uploadImage', 'uploadImageResult', null, null, null, 'uploadRecall()');
 }
 

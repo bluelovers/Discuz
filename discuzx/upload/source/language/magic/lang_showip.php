@@ -3,20 +3,22 @@
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
- *
+ *      
  *      $Id: lang_showip.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'showip_name' => '窺視卡',
-	'showip_desc' => '可以查看指定用戶的 IP',
-	'showip_targetuser' => '你要查看誰的 IP',
-	'showip_info_nonexistence' => '請輸入用戶名',
-	'showip_ip_message' => '{username} 的 IP 為 {ip}',
-	'showip_info_noperm' => '對不起，你無權查看此人的 IP',
+	'showip_name' => 'IP Card',
+	'showip_desc' => 'You can view specific user\'s IP',
+	'showip_targetuser' => 'Target User',
+	'showip_info_nonexistence' => 'Please Enter Username',
+	'showip_ip_message' => '{username}\'s IP is {ip}',
+	'showip_info_noperm' => 'You have no permissions to see this user\'s IP',
 
-	'showip_notification' => '你被人使用了{magicname}',
+	'showip_notification' => 'You were used {magicname}',
 );
 
 ?>

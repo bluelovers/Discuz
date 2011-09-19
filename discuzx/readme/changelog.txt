@@ -1,128 +1,620 @@
++======================================================+
+   Discuz! X2 English, UTF-8, Release 20110817
+
+   by Valery Votintsev from sources.ru
+
+
 +======================================+
    Discuz! X2 Release 20110817
 +======================================+
-ADD QQ互聯 - 微博簽名檔
-ADD 騰訊分析技巧提示文字更新
-ADD 騰訊分析後台圖標設置頁面調整，騰訊分析前台JS增加新統計參數
-FIX 分類信息select框，在編輯帖子狀態下，會多出一個select 問題
-FIX 更新插件以及版本號
-FIX 統一後台menu的獲取雲服務列表方法
-FIX 修改搜索變量進行htmlspecialchars
-FIX 將版塊列表、用戶組權限等信息緩存起來
-FIX 修復搜索狀態字段判斷沒有更新的問題
-FIX 圖片延時加載設置
-FIX 移除搜索參數里傳遞的openid
-FIX 附件管理程序錯誤
-FIX 遊客允許訪問漫遊首頁，但無權操作
-FIX 帖子高級搜索搜不到的BUG
-FIX 關閉認證時允許修改相關的資料項
-FIX 空間查看數字段不正確
-FIX 修正由於用戶在後台填寫大寫的郵箱，校驗失敗的問題
-FIX 限定當選擇框中的字符串不為字母時，返回空值
-FIX 24小時評分限制的BUG
-FIX 水印後圖片大小錯誤
-FIX 修覆文章管理中模塊的推送權限問題
-FIX 修正上傳圖片需要審核時直接寫入數據庫的BUG
-FIX 修正UTF-8下面提示的信息沒有策略名稱
-FIX 修正雲平台API常量判斷錯誤BUG
-FIX 一個模塊在一個頁面中多次使用時的sql錯誤
-FIX 去除自動交易結束的代碼
-FIX 修復搶樓規則*號不個位數樓層的問題（如*2）
-FIX 修復 歡迎新會員會員名轉義
-FIX 翻頁時主題分類的問題
-FIX [img]和[flash]中url被自動解析問題修改
-FIX 全並主題後無法編輯的問題
-FIX 搶樓帖編輯時會鎖上的問題
-FIX 修正允許完全踢除欄目分類
-FIX 創始人進入後台的標誌位
-FIX SCRIPT_NAME 的獲取方法
-FIX 修正放棄任務的BUG造成可以放棄已完成的任務達到重複領獎
-FIX DIY模塊調用分類信息數據時出現Array
-FIX 家園被關閉時跳轉地址錯誤
-FIX 修正遷移雲平台程序移值的BUG， 及優化代碼
-FIX 可選名稱顯示位置錯誤
-FIX 驗證碼顯示問題
-FIX 清除common_modrate表中無效的回帖記錄
-FIX 提示審核數量不包含已忽略記錄
-FIX 活動不支持file類型的用戶欄目字段
-FIX 後台附件管理搜索天數
-FIX 版塊添加主題分類
-FIX 校驗dreferer的域名，防止XSS注入
-FIX 修復模塊權限：可推送數據且不需要審核的權限既有管理數據的功能，但沒有管理屬性的功能
-FIX 修復管理員在前台管理中只能查看自己的文章
-FIX 修改支付寶簽約地址
-FIX 因插件的模板導致分區自定義風格失效
-FIX 管理人員字段標記為不正確的問題
-FIX 在圖片寬度為0的時候，使用縮略方式，使用圖片的默認寬度，不強制指定圖片的寬度
-FIX 修正跳樓和回帖置頂  與倒序看帖之間的問題
-FIX 修正站點關閉狀態下，用戶可以註冊的問題
-FIX 更新設置IP的方法不判斷是否開啟雲平台
-FIX 修正部分隱藏的安全問題
-FIX 修改默認安全設置, 禁止 msyql 當中使用註釋
+ADD: QQ Internet - microblogging Signature
+ADD: Tencent Analysis Tips Text updates
+ADD: Tencent Analysis Settings page to adjust the background icon,
+     Tencent analysis of statistical parameters to add new front JS
+FIX: Classified information select box, edit the post in the state,
+     will be more of a select problem
+FIX: Updated plug-ins, and version number
+FIX: Uniform background menu list of ways to access cloud services
+FIX: Modify the search variables to htmlspecialchars
+FIX: The Forum list, the user group permissions and other information cached
+FIX: Fixed search did not update the status field to determine the problem
+FIX: Set Delay load picture
+FIX: Remove search parameter in the delivery of openid
+FIX: Attachment management procedures error
+FIX: Allow access to roaming tourists home, but not to operate
+FIX: Posts Advanced Search can not search the BUG
+FIX: Close authentication allows you to modify the relevant data item
+FIX: Incorrect segment space to view digital
+FIX: Fix caps filling in the background as the user's mailbox, check to fail
+FIX: String limit when the box is not selected letters, return null
+FIX: 24 hours score limit BUG
+FIX: Watermark image size error
+FIX: Fix the article rights management module, push the problem
+FIX: Fix upload pictures directly into the database need to review the BUG
+FIX: The following UTF-8 prompt correction of the information is not the policy name
+FIX: Fix a constant cloud platform API to determine the error BUG
+FIX: A module in a page when using the sql error number
+FIX: Remove the automatic closing of the transaction code
+FIX: Fix rules * numbers do not grab the floor, floor-digit problems
+     (such as * 2)
+FIX: Fixed welcome new members escaped Member name
+FIX: When the subject classification of the problem page
+FIX: [img] and [flash] is automatically resolve the problem in the url change
+FIX: After all, and subject the problem can not be edited
+FIX: When editing post grab the floor, the question will be locked
+FIX: Fix to allow full play in addition to part classification
+FIX: Founder of the flag into the background
+FIX: SCRIPT_NAME access method
+FIX: Fix BUG cause to abandon the task can give up the task to repeat
+     the completed award
+FIX: DIY module called classified information data when Array
+FIX: When the home was closed to jump address error
+FIX: Fix migration of cloud application platform shift value of the BUG,
+     and optimized code
+FIX: Optional name appears in the wrong place
+FIX: Verification code display problem
+FIX: Clear common_modrate table invalid record Replies
+FIX: Prompt review does not include the number of records have been ignored
+FIX: Activity does not support the file type field in the user part
+FIX: Search the number of days back attachment management
+FIX: Add Forum Topic categories
+FIX: Check dreferer domain name to prevent XSS injection
+FIX: Fix module access: You can push the data and do not need permission to
+     review the existing data management capabilities,
+     but there is no property management functionality
+FIX: Fixed foreground management administrators can view their articles
+FIX: Change address Alipay signed
+FIX: The templates for plug-in custom styles failure leading to partition
+FIX: Management field is marked as not correct the problem
+FIX: The width of the image to 0 when using the abbreviated way,
+     to use the default image width, does not specify the width of the image
+     force
+FIX: Correct jumping and replies between the Top and the problem DESC
+FIX: Fix when the site is off, users can register problem
+FIX: Updated the method does not set the IP on the cloud platform
+     to determine whether
+FIX: Fixed some security implications
+FIX: Modify the default security settings prohibit the use of annotations
+     which mysql
 
-+======================================+
++======================================================+
+07.07.2011:
+
+1. Discuz! version updated to 20110629
+
+
++======================================================+
    Discuz! X2 Release 20110629
++======================================================+
+FIX: Flash tag code attributes
+FIX: Internet access to fix sync Feed QQ state bit error problem
+FIX: bbcode tag nesting error caused
+FIX: When a post is closed, allowing the display
+FIX: Modify the data by ucenter backup forum bug
+FIX: fixed background csv file export user information asymmetry
+FIX: Order Details
+FIX: settlement procedure does not remove the reference causing the 500 error membermerage
+FIX: BUG array of combined operations
+FIX: File write permission to check the lead content can overflow, only the rights specified directory, subdirectories cancel search
+FIX: Group built on modules into module groups posts
+FIX: update Manyou interface, the interface version number updated to 0.4
+FIX: Disable the application page Top in this page rendering problems caused by Flash
+FIX: Modify the navigation display when visitor, to solve the problem of dislocation
+FIX: fix quote in the floor to grab all floors * number match
+FIX: archiver domain name contains a prefix to prevent repeat
+FIX: Fat theme download remote images still prompted at least send a picture
+FIX: background search link to user management issues statistics
+FIX: Member Posts hour limit function
+FIX: rejected invalid user address foreground review
+FIX: some of the style of personal information to optimize the head
+FIX: User name change bug fixes Posts
+FIX: fix known security issues
+
+
++======================================================+
+Discuz! X2 Release 20110521
++======================================================+
+
+Discuz! X2 is an inheritance and improvement of Discuz! X1.5 "classic"
+on the basis of objective.
+There are up to 300 functional improvements for "operational development",
+"Load Performance," "User experience" and "Management experience".
+
+Highlights:
+A) performance optimization built a complete solution, continue to enhance the load capacity
+B) increased over the session short message mode, and supports batch search management background
+C) new compact model DIY portal, fully open, third-party products to access API mode
+D) The new mobile version
+E) custom rules prepaid card system
+F) SEO system to optimize product
+G) group merge
+H) built-in comment feature
+I) increase the interactive portal of the comment features special features, the advantages of the station can produce multi-resource evaluation
+J) post in the network a key to download pictures to the local
+K) subject classification increased access control
+L) more intelligent grab attached
+M) refer to the integration of improved recovery and Comments
+N) Built Discuz! Cloud platform
+O) access control labels, thermal post recommended a more convenient
+P) Login/Register improved
+Q) maps forum support picture display mode
+R) new post buried envelopes Replies mode automatically send reward post
+S) increase in multi-level classified information fields chosen to support the linkage
+T) "forum view" mode supports the display other pages, group Posts functions
+U) reminded to experience the full transformation
+V) words filter support groups, and a large amount of data to support replacement
+W) invitation code online purchase
+X) Webmaster admin experience substantial optimization
+
+For more details see: http://dev.discuz.org/doing.php
+
++======================================================+
+02.01.2011:
+
+1. Corrected translation in lang_js.js for "top/bottom" words
+2. Discuz! version updated to 20101228
+
+
+
++======================================================+
+15.12.2010:
+
+1. Translated to English all the Chinese strings
+   encoded with HTML code like &#NNNN;
+
+
++======================================================+
+06.12.2010:
+
+1. All the language files translated to English
+2. Added a javascript language file (English)
+3. All the javascript files modified for Multi Language usage
+4. All the images translated to English
+   (You can find the Photoshop images in /PSD/ directory)
+5. All other files translated to English (.xml, .css, etc.)
+6. Database structure modified for european languages (most of fields expanded)
+7. Some styles modified for more wider fields
+8. UCenter upgraded to v.1.5.2
+9. Upgrade/Convert utilities translated to English
+10. All Discuz!X "readme/" files translated to English
+11. UCenter API Development Guide translated to English
+
+
+
+
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+   ORIGINAL DISCUZ! X1.5 CHANGELOG
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
++======================================+
+   Discuz! X1.5 Release 20101228
 +======================================+
 
-FIX Flash標籤代碼屬性
-FIX 修正QQ互聯在獲取同步Feed狀態位出錯問題
-FIX bbcode 標籤嵌套引起的錯誤
-FIX 當帖子被關閉時，允許顯示
-FIX 修改通過ucenter備份論壇數據bug
-FIX 修復後台導出用戶csv文件信息不對稱
-FIX 勳章細節
-FIX 解決程序中沒有移除membermerage引用造成的500錯誤
-FIX 數組合併運算的BUG
-FIX 文件可寫權限檢查導致內容溢出，只權限指定目錄，取消子目錄的查檢
-FIX 群組內置的附件模塊轉換為群組帖子模塊
-FIX 更新Manyou接口, 接口版本號更新至0.4
-FIX 禁用在應用頁面使用返回頂部，在這個頁面會造成Flash渲染問題
-FIX 修改遊客時顯示左側導航，解決錯位問題
-FIX 修正搶樓帖中*號匹配所有樓層
-FIX archiver 域名前綴防止重複收錄
-FIX 發主題時下載遠程圖片仍然提示至少要發一張圖
-FIX 後台搜索用戶管理統計信息的鏈接問題
-FIX 會員每小時發帖數限制功能
-FIX 解決前台審核用戶否決無效
-FIX 頭部個人信息部分樣式優化
-FIX 帖子用戶名修改bug修改
-FIX 修正已知的安全問題
-+======================================+
-   Discuz! X2 Release 20110521
-+======================================+
-Discuz! X2 在繼承和完善 Discuz! X1.5 「經典」宗旨的基礎上，
-針對「運營拓展」、「負載性能」、「用戶體驗」和「管理體驗」幾大方
-面，全面優化和打造, 功能改進多達300餘項。
-重點功能:
-A 性能優化內置完善的解決方案，繼續提升產品負載能力
-B 短消息增加多人會話模式，並支持後台批量搜索管理
-C 門戶DIY新增簡潔模式，全面開放，支持第三方產品以API模式接入
-D 全新的手機版
-E 支持自定義規則的充值卡系統
-F 優化產品SEO體系
-G 群組支持合併
-H 專題內置評論功能
-I 讓門戶的專題功能增加互動評論功能，可以使站內的優勢資源產生多層評價
-J 帖子中的網絡圖片一鍵下載到本地
-K 主題分類增加權限控制
-L 搶樓貼更加智能
-M 引用回復與點評的融合改進
-N 內置Discuz! 雲平台
-O 權限可控制的標籤功能，熱帖推薦更加方便
-P 用戶登錄／註冊體驗改進
-Q 貼圖版塊支持以圖片模式展示
-R 全新的帖子埋紅包，回帖自動送獎勵帖子模式
-S 分類信息字段增加多級聯動選擇支持
-T「版塊視圖」模式支持顯示其他版塊，群組帖子功能
-U 提醒體驗全面改造
-V 詞語過濾支持分組，並支持大數據量替換
-W 邀請註冊支持在線購買邀請碼
-X 站長後台管理體驗大幅優化
+FIX DIY Administrative Templates path problem
+FIX Application API call problem fix
+FIX repair permissions determine the channel part
+FIX diy call and ranking member of the module where PPC PPC inconsistent
+FIX IE6 compatibility part of the page
 
-改進詳情請見： http://dev.discuz.org/doing.php
+FIX personal space Home space available to the domain name wrong BUG
+FIX background classification of bulk mobile album
+FIX export csv file, if not to convert the GBK gbk encoding X1.5
+FIX remove the "group membership" Statistics
+FIX Replies judge allowed View topic permissions
+
+FIX only one top group
+FIX after the roaming user is locked to the search can search BUG
+FIX draft time limits are not edited
+FIX Access to the promotion parameters
+FIX GP variable filname single quotes in a filter
+
+FIX is a reply to show two fields related to the processing: status and invisible
+FIX the problem quickly flash Replies
+FIX dress space music box can not be removed
+FIX repair review classified information is not displayed
+FIX groupicon cache
+ 
+FIX toll free and hide in the annex to the question combinations
+FIX repair problems with DIY when it is capitalized into script execution
+FIX zodiac and the constellations of the user part of the problem automatically calculated
+FIX {parity} tag parsing
+FIX administrators edit the member has successfully posted the log page, you can not return to the previous changes BUG
+ 
+FIX Member stealth circumstances, personal information and business card page also displays online changes BUG
+FIX problem with group name with quotes can not be edited
+FIX link inner tube "@" symbol and the link with parameters related to the regular URL-site matching
+FIX multiple operations shield, warning PID duplication
+FIX a succession of new forum to deal with subject classification
+
+FIX Question quote edit is moved, the synchronization shift reservation of title (including the group recommended to the forum posts)
+FIX Expiration time issue activity posts
+FIX Contact the problem after the upgrade
+FIX allows administrators to modify the ban to modify the user data item
+FIX module does not update property set no function never updated x.15
+
+FIX error when determine the task period (week, month)
+FIX increase restrictions stand remove invalid data
+FIX application when roaming the version number changes, the re-obtain the application icon
+FIX Alipay return notification interface updates
+FIX viewthread the extra parameters page
+
+
++======================================+
+   Discuz! X1.5 Release 20101125
++======================================+
+
+FIX clean up the monthly online schedule task
+FIX implementation of individual sub-Ajax update did not bother BUG
+FIX Advanced Search link to the previous page
+FIX BUG in the  medal up time
+FIX Fixed the second page of the special theme plug-ins
+
+FIX call log and photo album system classification problems
+FIX enrollment activities
+FIX removed transcoding to UCS-2LE
+FIX task duplication Medal Award
+FIX the bug when you change the deleted theme
+
+FIX modify the statistics, review by scrolling statistics are counted
+FIX Tips added to the list of forums
+FIX remove redundant code
+FIX BUG modify the integration points as clear strategy to restore the default time
+FIX Re-Login
+
+FIX Remove the cover picture
+FIX improve the user name associated with Ajax error
+FIX when the root is not found when the secondary domain name, let jump
+FIX html2bbcode the <p>xx</p> converted to xx<br />
+FIX closed user part can not complete the task
+
+FIX separate set points Rule Forum
+FIX The modified forum hot cache
+FIX fixed channel name in the navigation ban
+FIX language pack, and classification of display problems
+FIX charts reveal hidden
+
+FIX reconstruction does not include the number of reviews posted
+FIX bug visitors can send the draft
+FIX forum merger combined plus an array of lead
+FIX Tenpay upgrade, can not test
+FIX Member lastip conversion error
+
+FIX expression changes are caused by the problem resolution
+FIX Fixed HTML is not allowed when the hair removed strict action on all
+    things HTML
+FIX off site in case of verification code BUG
+FIX for the specified post topics cancel the Recycle Bin,
+    and other types of restrictions pending
+FIX Posted by js error group
+
+FIX member_count table does not exist when uid field is empty the return value
+FIX group permissions and view pending logic
+FIX data backup back up a few more tables
+FIX DIY problem called post attachments
+FIX group has no rules of the
+
+FIX Reviews of pop recovery mode
+FIX Fixed commodity display valid
+FIX can reset the tourists visit the page misc
+FIX Color Editor popup when dragging the scroll bar problem
+FIX sub domain names with non-set visit, under the domain name directly to
+    the default location
+
+FIX forum upload banner background without interception,
+    suggesting that the two width
+FIX privacy of personal information project and determine the revised conflict
+FIX some of the new module initialization options are not displayed
+FIX statistical trends do not appear after the closure of navigation
+FIX classified information may be options to determine the error
+
+FIX users to update the cache list
+FIX unified forum for the use of a global integration strategy blank
+
++======================================+
+   Discuz! X1.5 Release 20101020
++======================================+
+FIX posts and groups can post attachments pushed to the post module
+    and the module
+FIX Repair Job Order
+FIX Fixed topic list filtering
+FIX to the home page at the beginning of personal space,
+    no penalty to resolve the issue ranked
+FIX Firefox Up to jump referer modified 
+FIX download download the attachment tool support
+FIX Repair DIY classified information items displayed in the
+    template image problem.
+FIX plus fine, sticky and other topics set period of time,
+    over a period of roaming the log after the log
+FIX fix the problem anonymous Replies
+FIX does not move Fid
+FIX forum can not exist when the custom diy style
+FIX fixed tab problem within the framework of the module title style
+FIX Add Copy themes copy of the classified information
+FIX Anonymous posts fix the problem in the article mode
+FIX repair Manage group of editors to allow a search by 6 binary bits
+    wrong with BUG,
+FIX cleanup scheduled task to modify the test
+FIX repair Plaza - a module into the top of the list of posts,
+    "the essence and recommended" the theme switching loss and solve the
+    problem of paging
+FIX combined untreated subject classification Forum
+FIX fixed on the main navigation channel is not displayed,
+    the secondary navigation channel as with the Home
+FIX each natural months, the same evaluation between buyers and sellers
+    maximum points
+FIX modify the application data is hidden extra BUG
+FIX Under the post into the album IE6 compatibility
+FIX Fixed card records
+FIX Global integration strategies and sector strategies conflict points
+FIX the same IP in 24 hours can only be up for revision XX
+FIX fix multi-forum search
+FIX repair Gateway Management Module Management Module does not display
+    non-DIY
+FIX Audit issued a notice to fix the background
+FIX Forum Moderators can manage cross-"activities posts" within the list
+    of participants BUG.
+FIX each natural months, the same evaluation between buyers and sellers
+    maximum points
+FIX BUG Fixed Star Member
+FIX Fixed the administrator to delete posts will be deducted visitors
+FIX modify multiple attachments is complete,
+    return to the list of attachments not sorted the problem
+FIX delete a post after the transfer back to the message list page,
+    not the original pages of the
+FIX article big picture will be under center when the chaos out in IE8
+FIX fix duplicate error to determine the directory name
+FIX IIS6 rewrite rules for repair, compatible? After the parameters
+FIX BUG fixed membership search
+FIX fix the comments page link in the problem of comment
+FIX user search user lock background, video authentication, picture
+FIX audit users by sharing the feed error
+FIX users export data, gender data processing
+FIX handling of array parameter
+FIX uninitialized variables result in the removal of the data is not updated
+FIX interface version will be changed to 0.2 Roaming
+FIX classified information and the language pack bug check parameters
+    of digital transmission
+FIX IE6 browser under the floating window caused the problem of
+    illegal operations
+FIX modify the UC passed over the delete user link errors BUG
+FIX certification icon change does not accumulate when the prefix is empty
+FIX user multi column selection list box data problem can not be saved
+FIX personal space in a custom dress,
+    head of the color of the text invalid problem set
+
++======================================+
+   Discuz! X1.5 Release 20101001
++======================================+
+FIX some problems can not be installed server environment
+FIX forum access control permissions to upload an image problem
+FIX the background theme of recycling operations do not accurately
+FIX ie browsers diy vote can not be displayed after clicking on the
+    virtual memory or tips php
+FIX upload flash ads void, the front desk but the address is empty
+    advertising spaces
+FIX recover password page, account, mailbox not an error when the system
+FIX when setting forum signature [b] labeling
+FIX the background - the user - the user did not change after editor of order
+FIX up the same number of IP issues 24-hour limit
+FIX misplaced records changes in the background integral
+FIX conversion from 7.2 to X1.5, collection of data loss problem
+FIX No Photo DIY goods in the call, the picture is not the correct path
+    resolution
+FIX Top keyword searches Problems
+FIX IE8 click Add under the Application of no response, blank page
+FIX classified information fields for multiple selection (checkbox)
+    is not normally involved in the search
+FIX the dynamic setting invalid mask friends
+FIX Generation post article [align =] does not resolve the problem
+    also exists in the group post
+FIX the part of the upgrade to 1.5 after the Web site of the feed
+    can not resolve the {subject}, etc.
+FIX change forum rules will clear the front profile Forum
+FIX PHP v4.3.9 version can not DIY
+FIX residence option four is empty, the event will set the election
+    to be wrong paste
+FIX cancel the style editor to set the width in the reading area
+FIX forum contains the name of 8 characters <symbols can not display the full
+FIX the task can not complete the picture
+FIX registration records can not be deleted invite
+FIX up a new installation or upgrade of site optimization settings
+    in the Square, a problem description
+FIX Online Member time display always shows 8:00 when stealth
+FIX Delay update issues Post Views
+FIX header points can be hidden
+FIX repair permissions determine user module
+FIX prompt box to modify an invitation code
+FIX constant IMGDIR replace $ _G ['style'] ['imgdir']
+FIX editor WYSIWYG mode, the default font size with the value of
+    go {MSGFONTSIZE}
+FIX ad -> ad content centered lattice
+FIX the search field box display problem classification information
+FIX the other adjustment is not to list more details ...
+
++======================================+
+   Discuz! X1.5 Release 20100920
++======================================+
+
+[Style template]
+Reconstruction style templates and CSS, to create a more simple style
+
+Reduce the output page data to improve page rendering speed
+
+Show details of each function to adjust and increase the degree
+of friendship message
+
+Download attachments to improve the user experience of charges
+
+Improving trend in statistical functions to improve the user experience
+
+Forum display prompts the system to improve
+
+Optimization of the entire station's JS color picker
+
+[Program features]
+Enhance the mission system, lottery task is completed automatically receive awards
+
+Enhanced bulk upload pictures, choose category albums
+
+Enhanced License invited to functions, integration of forums and mechanisms
+for space invitation
+
+Enhance the gateway to publish articles and associated articles,
+the cover image
+
+Enhance the DIY module extension mechanism, adding more types of data calls
+
+Enhanced Portal Patterns Patterns forum posts provide links to posts
+
+Enhanced expression of records can be embedded in publishing,
+links and pictures
+
+Enhanced [sharing features] share the number of records,
+sharing the same de-emphasis
+
+Increase the "hot week, click on the article" module
+
+Enhance the increase in multi-label paper for easy aggregation
+
+Enhanced module data quickly adjust the display order
+
+Enhance the up-mail message content validation,
+change the email message content, the activation link
+
+Enhance the increase in the portal category sorting articles
+
+Enhanced Forum editor, providing simple, high-level view
+
+Added to the article inside the post to push, push flag display
+
+Add section on post statistics, monthly reports to support
+
+Add custom Discuz! Support user group access control code
+
+New forum card functions in head, the user can display the user name
+at the business card and common operations
+
+Archiver restore function of the Forum
+
+Forum statistics function recovery
+
+Recovery time statistics feature online forum
+
+Add [Forum post list] title support html (or you can insert ads)
+
+Add the user authentication in the card inside the video display
+
+New platform for real-name certification audit
+
+New posts are not approved for posting are visible
+
+Add front post [Rating] display score range,
+today the number of the remaining scores
+
+Add [my center] I added the theme of "My Comments"
+
+Added
+
+Enhance the activity issued a notice posted on the participants in bulk
+
+Enhanced participation activities post system needs to built-in data can be
+associated with the project: Contact, qq, telephone
+
+Enhancement activities for participants to pay a certain integral posts
+before they can participate in activities
+
+Enhancement activities to participate in activities fixed format post
+
+Post audit activities are not enhanced by the process improvement
+
+Enhance the activities of the participants post messages visible only to
+the initiator
+
+Enhance the group's association with the Forum Improvement Forum
+
+Enhance the non-group members in the group posting tips
+
+Enhance the group home, my group revision, adjustment of the group search page
+
+
+[Management]
+
+Add the global navigation bar design,
+and implement the main function name synchronization
+
+Add a group theme background batch management
+
+Add edit user, they can see whether the user has activated the mailbox,
+and can be set
+
+Add background paper reviews the batch management
+
+Add up audit] local IP up through the field IP needs to be reviewed
+
+Add module-volume set permissions, permission inheritance classified article
+
+New owner to exclude others speech, short message to notify me
+
+Volume set features new management team
+
+Add the user to export the report data
+
+Useful Links Add background management, and custom management links
+
+Enhance the Forum icon, the icon size is set to improve
+
+Enhanced [post audit] audit function to improve the background
+
+Enhanced [report] on the Administrator reminded the function of the number
+of reports
+
+Enhance the independent style forum, independent domain settings
+
+Enhanced links, sub-portals, forums in two parts, and support groups
+
+Enhance the quantity, when the background forum, the default folding display
+
+Open the score could only enhance the upper limit of 999
+
+Enhance the portal / forum / group / space - global grid Advertising
+
+Enhanced background search users, you can view various types of users
+to publish statistical information, and can clean up the data
+
+Enhanced [post review] single processing mode, keyword highlighting,
+IP address directly displayed as
+
+Webmaster View the user can directly improve access to
+personal information page
+
+Replies to improve bulk delete, default number of time constraints,
+to prevent server hang
+
+Improvement [User Management] the efficiency of user searches
+
+[Optimization]
+Hits delay to update and optimize the memory mechanism
+
+Planning X system error log, increasing weight,
+and program tracking information to
+
+Add Community System Unknown vulnerability defense system
+
+Optimize the installation process, reduced memory usage
+
+Optimization module to improve the template syntax
+
+The title of each page seo optimization optimization and reconstruction,
+portal, forums, groups, homes, support for custom title, keywords, description
+
+E-mail delivery system optimization community,
+support for multiple smtp server to poll
+
+... More details see our development to improve the log
+ http://www.discuz.net/dev.php
 
 +--------------------------------------+
-往日版本( Old Vision )
+Past versions (Old Vision)
 +--------------------------------------+
 Discuz! X1 Beta Release 20100501
 Discuz! X1 Release 20100518
@@ -130,4 +622,3 @@ Discuz! X1 Release 20100601
 Discuz! X1 Release 20100613
 Discuz! X1 Release 20100723
 Discuz! X1.5RC Release 20100901
-Discuz! X1.5

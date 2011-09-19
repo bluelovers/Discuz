@@ -4,13 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blog.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_blog.php
+ *      
+ *      Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'blog_name' => '空間 日誌廣告',
-	'blog_desc' => '展現方式: 日誌廣告顯示於日誌右方。',
+	'blog_name'	=> 'Space Adv',// '空间 日志广告',
+	'blog_desc'	=> 'Description: Ads displayed on the blog right side.',// '展现方式: 日志广告显示于日志右方。',
 );
 
-?>

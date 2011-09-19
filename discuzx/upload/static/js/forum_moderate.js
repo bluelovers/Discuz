@@ -1,8 +1,9 @@
-/*
+﻿/*
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: forum_moderate.js 21562 2011-03-31 08:40:33Z monkey $
+	Translate by : Discuzindo
 */
 
 function modaction(action, pid, extra, mod) {
@@ -24,7 +25,7 @@ function modaction(action, pid, extra, mod) {
 		var checked = 1;
 	}
 	if(!checked) {
-		alert('請選擇需要操作的帖子');
+		alert('Choose Thread to Moderate');
 	} else {
 		$('modactions').action = mod + '&action='+ action +'&fid=' + fid + '&tid=' + tid + '&handlekey=mods&infloat=yes&nopost=yes' + (!pid ? '' : '&topiclist[]=' + pid) + extra + '&r' + Math.random();
 		showWindow('mods', 'modactions', 'post');
@@ -120,7 +121,7 @@ function tmodthreads(optgroup, operation) {
 		}
 	}
 	if(!checked) {
-		alert('請選擇需要操作的帖子');
+		alert('Choose Thread to Moderate');
 	} else {
 		$('moderate').optgroup.value = optgroup;
 		$('moderate').operation.value = operation;

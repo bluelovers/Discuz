@@ -4,17 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_interthread.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_interthread.php
+ *
+ *      Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'interthread_name' => '論壇/群組 帖間通欄廣告',
-	'interthread_desc' => '展現方式: 帖間通欄廣告顯示於主題帖和第一個回帖之間，可使用 468x60 或其他尺寸圖片和 Flash 的形式。<br />當前頁面有多個帖間通欄廣告時，系統會隨機選取其中之一顯示。價值分析: 由於能夠將主題與回帖分開，廣告尺寸大而且不影響帖子內容，因此不會招致帖子作者及訪問者反感，適合在帖內進行商業宣傳或品牌推廣。',
-	'interthread_fids' => '投放版塊',
-	'interthread_fids_comment' => '設置廣告投放的論壇版塊，當廣告投放範圍中包含「論壇」時有效',
-	'interthread_groups' => '投放群組分類',
-	'interthread_groups_comment' => '設置廣告投放的群組分類，當廣告投放範圍中包含「群組」時有效',
+	'interthread_name'			=> 'Forum/Group Interthread Adv',//'论坛/群组 帖间通栏广告',
+	'interthread_desc'			=> 'Description: Display the Adv between first and second posts of a thread. In general, it is 468x60 or other size images and Flash.',//'展现方式: 帖间通栏广告显示于主题帖和第一个回帖之间，可使用 468x60 或其他尺寸图片和 Flash 的形式。<br />当前页面有多个帖间通栏广告时，系统会随机选取其中之一显示。价值分析: 由于能够将主题与回帖分开，广告尺寸大而且不影响帖子内容，因此不会招致帖子作者及访问者反感，适合在帖内进行商业宣传或品牌推广。',
+	'interthread_fids'			=> 'Target Forums',//'投放版块',
+	'interthread_fids_comment'	=> 'Set forums to diplay the Adv',//'设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
+	'interthread_groups'		=> 'Target Groups',//'投放群组分类',
+	'interthread_groups_comment'	=> 'Set groups to show advertising. Take effect only when ads included in the scope of &quot;group&quot;.',//'设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
 );
 
-?>

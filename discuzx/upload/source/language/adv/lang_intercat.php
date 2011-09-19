@@ -4,18 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_intercat.php 18860 2010-12-07 09:19:42Z maruitao $
+ *      $Id: lang_intercat.php
+ *
+ *      Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'intercat_name' => '論壇 分類間廣告',
-	'intercat_desc' => '展現方式: 論壇分類間廣告顯示於版塊列表相鄰的兩個版塊分類之間，可使用 960x60 或其他尺寸圖片和 Flash 的形式。當前頁面有多個分類間廣告時，系統會從中抽取與版塊分類數相等的條目進行隨機顯示。<br />價值分析:由於出現在版塊列表頁比較明顯的位置，廣告展示效果較好，但是過多過大的廣告可能會招致訪問者反感。 ',
-	'intercat_fids' => '投放分區',
-	'intercat_fids_comment' => '設置廣告投放的版塊分區',
-	'intercat_position' => '投放位置',
-	'intercat_position_comment' => '設置廣告在哪個分區的下方顯示',
-	'intercat_position_random' => '所有位置隨機',
+	'intercat_name'				=> 'Forum Category Adv',//'论坛 分类间广告',
+	'intercat_desc'				=> 'Description: Display Adv between two forums in a category. In general, it is 468x60 images or Flash. If there are multipe category advs, they will be displayed in random.',//'展现方式: 论坛分类间广告显示于版块列表相邻的两个版块分类之间，可使用 468x60 或其他尺寸图片和 Flash 的形式。当前页面有多个分类间广告时，系统会从中抽取与版块分类数相等的条目进行随机显示。<br />价值分析:由于出现在版块列表页比较明显的位置，广告展示效果较好，但是过多过大的广告可能会招致访问者反感。 ',
+	'intercat_fids'				=> 'Target Forum',//'投放分区',
+	'intercat_fids_comment'		=> 'Set target forum categories where to show the Adv',//'设置广告投放的版块分区',
+	'intercat_position'			=> 'Position',//'投放位置',
+	'intercat_position_comment'	=> 'Set adv positon below which area',//'设置广告在哪个分区的下方显示',
+	'intercat_position_random'	=> 'Random Position',//'所有位置随机',
 );
 
-?>

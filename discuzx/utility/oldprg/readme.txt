@@ -1,14 +1,18 @@
 ===============
-程 序 說 明
+Procedure Description
 ===============
-本目錄中的程序主要作用是確保搜索引擎對您的網站的收錄，以及避免一些舊帖當中
-一些鏈接失效。
+Major role in the program directory is to ensure that the search engine
+to your site included, and which avoid some Jiutie Some link failure.
 
-這些程序不是必須要安裝的，對於一個新站點來講，您不需要這些程序。如果搜索引擎
-對您的站點收錄比較少，或者您不在乎這些收錄失效，那麼您也不必上傳這些程序。
+These procedures are not required to be installed, for a new site is concerned,
+you do not need these programs. If the search engine
+Included on your site is relatively small, or you do not care included failure,
+then you do not have to upload these procedures.
 
-安裝方法：
-   選擇您以前站點的程序目錄，例如，您以前使用的是 Discuz! 論壇，則選擇 discuz
-目錄，上傳目錄中的程序到安裝好的 Discuz! X 的根目錄即可。
-   如果您曾經同時安裝了 UCHome 等程序，您需要進入 uchome，將裡面的文件也上傳
-到 Discuz! X 的目錄。
+Installation:
+   Choose your site before the program directory,
+   for example, you previously used the Discuz! Forum, select discuz Directory,
+   upload the program directory to the installed Discuz! X in the root directory.
+
+   If you have to install a UCHome other program, you need to enter uchome,
+   the files are uploaded inside To Discuz! X directory.

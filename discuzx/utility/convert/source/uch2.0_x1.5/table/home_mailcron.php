@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: home_mailcron.php 15720 2010-08-25 23:56:08Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -52,7 +53,7 @@ if (!empty($mcids)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." mcid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." mcid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");//vot
 }
 
 ?>

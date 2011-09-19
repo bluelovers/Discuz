@@ -1,4 +1,4 @@
-function uploadEdit(obj) {
+﻿function uploadEdit(obj) {
 	mainForm = obj.form;
 	forms = $('attachbody').getElementsByTagName("FORM");
 	albumid = $('uploadalbum').value;
@@ -86,7 +86,7 @@ function edit_insert(html) {
 	var obj = p.window.frames['HtmlEditor'];
 	var status = p.document.getElementById('uchome-editstatus').value;
 	if(status != 'html') {
-		alert('本操作只在多媒體編輯模式下才有效');
+		alert('This operation is effective only for WYSIWYG mode');
 		return;
 	}
 	obj.focus();

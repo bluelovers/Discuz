@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
@@ -6,45 +6,46 @@
  *
  *      $Id: lang_template.php 21925 2011-04-18 02:58:25Z monkey $
  *
+ *	Translated by discuzindo.net
  *      This file is automatically generate
  */
 
 $lang = array (
-  'no_maxthon2_message' => '本頁面暫時不支持遨遊2瀏覽器, 請你使用IE或Firefox, 我們對由此給你帶來的不便深表歉意',
-  'page_loading' => '頁面加載中...',
-  'add_app' => '添加新$_G[setting][navs][5][navname]',
-  'app_index' => '應用首頁',
-  'boy_like' => '男孩喜歡',
-  'girl_like' => '女孩喜歡',
-  'just_look_dynamic' => '只看此類動態',
-  'latest_release' => '最新發佈',
-  'no_feed' => '還沒有相關動態',
-  'own' => '我在玩的',
-  'popular_app' => '最流行$_G[setting][navs][5][navname]',
-  'today_active_app' => '今日活躍$_G[setting][navs][5][navname]',
-  'what_everybody_playing' => '大家在玩什麼',
-  'what_friend_playing' => '好友在玩什麼',
-  'all' => '全部',
-  'app_add' => '添加$_G[setting][navs][5][navname]',
-  'app_management' => '管理$_G[setting][navs][5][navname]',
-  'close' => '關閉',
-  'default_app' => '默認$_G[setting][navs][5][navname]',
-  'determine' => '確定',
-  'edit_settings' => '編輯設置',
-  'introduction' => '介紹',
-  'left_menu_view_num' => '左側菜單顯示個性$_G[setting][navs][5][navname]的數量',
-  'my' => '我的',
-  'remove' => '移除',
-  'remove_app' => '移除$_G[setting][navs][5][navname]',
-  'remove_app_message' => '移除後，你的個人主頁、開始菜單、管理我的應用<br/>將不會顯示此應用，你以後需要重新添加才能使用。<br>確定繼續嗎？',
-  'save_settings' => '保存設置',
-  'use_assistant' => '使用助手',
-  'user_assistant_message' => '<ol><li>你可以自由拖拽 <img src="{IMGDIR}/drag.gif" /> 排列應用順序；</li>
-								<li>排列越上面的應用在菜單中顯示的越靠前；</li>
-								<li>你可以管理你已經添加的應用，可以設置某個應用的權限、移除某個應用；</li>
-								<li>如果你要管理你的空間、日誌、相冊等隱私，請到你的空間隱私設置；</li>
-								<li>默認應用只能進行相關設置與移除，但移除後仍然會顯示在你的右側菜單中。</li></ol>',
-  'open' => '展開',
+  'no_maxthon2_message' => 'This page is temporarily travel 2 browsers do not support, please use IE or Firefox, which you we apologize for the inconvenience caused',
+  'page_loading' => 'Page Loading ...',
+  'add_app' => 'Add new $_G[setting][navs][5][navname]',
+  'app_index' => 'Application Home',
+  'boy_like' => 'Boys Like',
+  'girl_like' => 'Girls Like',
+  'just_look_dynamic' => 'Only such a dynamic',
+  'latest_release' => 'Latest Release',
+  'no_feed' => 'No feed',
+  'own' => 'I Play',
+  'popular_app' => 'Most Popular $_G[setting][navs][5][navname]',
+  'today_active_app' => 'Active Today $_G[setting][navs][5][navname]',
+  'what_everybody_playing' => 'What we play',
+  'what_friend_playing' => 'What friends are playing',
+  'all' => 'Whole',
+  'app_add' => 'Add$_G[setting][navs][5][navname]',
+  'app_management' => 'Management$_G[setting][navs][5][navname]',
+  'close' => 'Close',
+  'default_app' => 'Default$_G[setting][navs][5][navname]',
+  'determine' => 'Determine',
+  'edit_settings' => 'Edit Settings',
+  'introduction' => 'Introduction',
+  'left_menu_view_num' => 'Menu on the left show individual$_G[setting][navs][5][navname]的数量',
+  'my' => 'My',
+  'remove' => 'Remove',
+  'remove_app' => 'Remove$_G[setting][navs][5][navname]',
+  'remove_app_message' => 'Removed, your personal home page, start menu, application management <br/> I will not be displayed this application, you need to add in order to use later. <br> sure to continue?',
+  'save_settings' => 'Save Settings',
+  'use_assistant' => 'Use Assistant',
+  'user_assistant_message' => '<ol><li>You can freely drag <img src="{IMGDIR}/drag.gif" /> arrangement applied in the order; </ li>
+<li> arranged more applications in the menu above to display the more forward; </ li>
+<li> you can manage your application has been added, you can set permissions for an application to remove an application; </ li>
+<li> If you want to manage your space, logs, photo albums and other privacy, please go to your space, privacy settings; </ li>
+<li> default application settings can only be associated with the removal, but even after removing the right side will show you the menu. </ li> </ ol>',
+  'open' => 'Open',
 );
 
 ?>

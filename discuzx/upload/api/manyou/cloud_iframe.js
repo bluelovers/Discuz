@@ -43,7 +43,7 @@ function changPageStatus(identifier) {
 						title = title.substr(0, title.indexOf(' - '));
 					}
 					discuzIframe.document.title = title + ' - ' + cloudText + ' - ' + text;
-					discuzIframe.document.getElementById('admincpnav').innerHTML= cloudText + '&nbsp;&raquo;&nbsp;' + text + '&nbsp;&nbsp;<a target="main" title="&#28155;&#21152;&#21040;&#24120;&#29992;&#25805;&#20316;" href="' + link + '">[+]</a>';
+					discuzIframe.document.getElementById('admincpnav').innerHTML= cloudText + '&nbsp;&raquo;&nbsp;' + text + '&nbsp;&nbsp;<a target="main" title="Add to Common Operations" href="' + link + '">[+]</a>';
 				}
 			}
 		} else {

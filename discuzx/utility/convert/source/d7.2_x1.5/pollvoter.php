@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: pollvoter.php 19528 2011-01-05 09:12:03Z liulanbo $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -41,6 +42,6 @@ while($row = $db_source->fetch_array($query)) {
 
 $nextpstep = $pstep + 1;
 if($continue) {
-	showmessage("繼續轉換數據表 ".$table_source."，已轉換 $total 條記錄。", "index.php?a=$action&source=$source&prg=$curprg&pstep=$nextpstep&total=$total");
+	showmessage(lang('continue_convert_table').$table_source.lang('was_converted').$total.lang('records'), "index.php?a=$action&source=$source&prg=$curprg&pstep=$nextpstep&total=$total");
 }
 ?>

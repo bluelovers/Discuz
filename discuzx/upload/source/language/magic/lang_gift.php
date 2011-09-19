@@ -3,24 +3,26 @@
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
- *
+ *      
  *      $Id: lang_gift.php 7828 2010-04-14 02:11:48Z monkey $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'gift_name' => '紅包卡',
-	'gift_desc' => '將自己的一部分積分埋在空間，來訪者可以點擊獲取',
-	'gift_info' => '將積分作為紅包（可分成多份）埋在自己空間，<br />每個來訪者最多可以獲取其中一份',
-	'gift_succeed' => '埋設紅包成功 ',
-	'gift_bad_credits_input' => '輸入的積分總數有誤',
-	'gift_bad_percredit_input' => '輸入的每份積分數有誤',
-	'gift_bad_credittype_input' => '指定的積分類型有誤',
-	'gift_credits_out_of_own' => '輸入的積分數超出你擁有的積分數',
-	'gift_gc' => '回收紅包',
-	'gift_use' => '埋個紅包',
+	'gift_name' => 'Red Envelope Card',
+	'gift_desc' => 'Present some point for your space visitors, visitor can click to get',
+	'gift_info' => 'You can set a total summ of points in a Red Envelope. <br/> Total sum can be divided into small chunks, each chunk can be burried by each you space visitors',
+	'gift_succeed' => 'Hide Gift Successfully',
+	'gift_bad_credits_input' => 'Invalid Points Number',
+	'gift_bad_percredit_input' => 'Invalid Points Number',
+	'gift_bad_credittype_input' => 'Specific Points Type Error',
+	'gift_credits_out_of_own' => 'You do not own enough points',
+	'gift_gc' => 'Return Red Envelope',
+	'gift_use' => 'Use Red Envelope',
 
-	'gift_receive_gift' => '領取紅包 {percredit} {credittype}',
+	'gift_receive_gift' => 'Get {percredit} red envelope of {credittype}',
 );
 
 ?>

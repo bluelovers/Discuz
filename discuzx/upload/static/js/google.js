@@ -1,8 +1,9 @@
-/*
+﻿/*
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: google.js 17172 2010-09-25 08:17:48Z zhangguosheng $
+	Translate by : Discuzindo
 */
 
 document.writeln('<script type="text/javascript">');
@@ -27,8 +28,8 @@ document.writeln('<input type="hidden" name="channel" value="search" />');
 document.write('<div onclick="javascript:submitFormWithChannel(\'logo\')" style="cursor:pointer;float: left;width:70px;height:23px;background: url(' + STATICURL + 'image/common/Google_small.png) !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + STATICURL+ 'image/common/Google_small.png\', sizingMethod=\'scale\')"><img src="' + STATICURL + 'image/common/none.gif" border="0" alt="Google" /></div>');
 document.writeln('&nbsp;&nbsp;<input type="text" class="txt" size="20" name="q" id="q" maxlength="255" value=""></input>');
 document.writeln('<select name="site">');
-document.writeln('<option value="0"' + google_default_0 + '>網頁搜索</option>');
-document.writeln('<option value="1"' + google_default_1 + '>站內搜索</option>');
+document.writeln('<option value="0"' + google_default_0 + '>Copy the code Web Search</option>');
+document.writeln('<option value="1"' + google_default_1 + '>Search</option>');
 document.writeln('</select>');
-document.writeln('&nbsp;<button type="submit" name="sa" value="true">搜索</button>');
+document.writeln('&nbsp;<button type="submit" name="sa" value="true">Search</button>');
 document.writeln('</form>');

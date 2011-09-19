@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: categories.php 21049 2011-03-11 03:34:37Z zhangguosheng $
+ *	English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -54,7 +55,7 @@ foreach ($arr as $rs) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

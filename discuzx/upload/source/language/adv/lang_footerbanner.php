@@ -4,25 +4,25 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_footerbanner.php 19237 2010-12-23 04:27:46Z monkey $
+ *      $Id: lang_float.php
+ *
+ *      Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'footerbanner_name' => '全局 頁尾通欄廣告',
-	'footerbanner_desc' => '展現方式: 頁尾通欄廣告顯示於頁面下方，通常使用 960x60 或其他尺寸圖片、Flash 的形式。當前頁面有多個頁尾通欄廣告時，系統會隨機選取其中之一顯示。<br />價值分析: 與頁面頭部和中部相比，頁面尾部的展現機率相對較低，通常不會引起訪問者的反感，同時又基本能夠覆蓋所有對廣告內容感興趣的受眾，因此適合中性而溫和的推廣。',
-	'footerbanner_index' => '首頁',
-	'footerbanner_fids' => '投放版塊',
-	'footerbanner_fids_comment' => '設置廣告投放的論壇版塊，當廣告投放範圍中包含「論壇」時有效',
-	'footerbanner_groups' => '投放群組分類',
-	'footerbanner_groups_comment' => '設置廣告投放的群組分類，當廣告投放範圍中包含「群組」時有效',
-	'footerbanner_position' => '投放位置',
-	'footerbanner_position_comment' => '分為上中下 3 個位置，當上面的廣告到期或被刪除，下面的廣告會自動上移',
-	'footerbanner_position_up' => '上',
-	'footerbanner_position_middle' => '中',
-	'footerbanner_position_down' => '下',
-	'footerbanner_category' => '投放門戶頻道',
-	'footerbanner_category_comment' => '設置廣告投放的頻道分類，當廣告投放範圍中包含「門戶」時有效',
+	'float_name'				=> 'Global Float Adv',//'全局 漂浮广告',
+	'float_desc'				=> 'Description: The Adv will float at lower left corner of a page. If there are multiple float advs, they will be displayed in random.<br />Please do not use images or Flashs which are too big.',//'展现方式: 漂浮广告展现于页面左下角，当页面滚动时广告会自行移动以保持原来的位置，通常使用小图片或 Flash 的形式。当前页面有多个漂浮广告时，系统会随机选取其中之一显示。<br />价值分析: 漂浮广告是进行强力商业推广的有效手段，其在页面中的浮动性，使其与固定的图片和文字相比，更容易被关注，正因为如此，这种强制性的关注也可能招致对此广告内容不感兴趣的访问者的反感。请注意不要将过大的图片或 Flash 以漂浮广告的形式显示，以免影响页面阅读。',
+	'float_index'				=> 'Home',//'首页',
+	'float_fids'				=> 'Target Forums',//'投放版块',
+	'float_fids_comment'		=> 'Set forums to diplay the Adv',//'设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
+	'float_groups'				=> 'Target Groups',//'投放群组分类',
+	'float_groups_comment'		=> 'Set the groups to show advertising. Take effect only when ads included in the scope of &quot;group&quot;.',//'设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
+	'float_position'			=> 'Position',//'漂浮位置',
+	'float_position_comment'	=> 'Set the postion of floating adv',//'设置广告漂浮的位置',
+	'float_position_left'		=> 'Left',//'左侧',
+	'float_position_right'		=> 'Right',//'右侧',
+	'float_category'			=> 'Target Category Category',
+	'float_category_comment'	=> 'Set a portal category for show the Float Banner. This take effect only when Ads is assigned to the Portal',
 );
 
-?>

@@ -1,44 +1,46 @@
-<?php
+﻿<?php
 
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: lang_blank.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'stat_option' => '統計選項',
-	'stat_option_posts' => '發帖總數',
-	'stat_option_groups' => '群組總數',
-	'stat_option_members' => '會員總數',
-	'stat_option_groupnewposts' => '群組今日發帖',
-	'stat_option_bbsnewposts' => '論壇今日發帖數',
-	'stat_option_bbslastposts' => '論壇昨日發帖數',
-	'stat_option_onlinemembers' => '當前在線會員數',
-	'stat_option_maxmembers' => '歷史最高在線會員數',
-	'stat_option_doings' => '動態數',
-	'stat_option_blogs' => '日誌數',
-	'stat_option_albums' => '相冊數',
-	'stat_option_pics' => '圖片數',
-	'stat_option_shares' => '分享數',
+	'stat_option' => 'Stats Options',
+	'stat_option_posts' => 'Posts',
+	'stat_option_groups' => 'Groups',
+	'stat_option_members' => 'Members',
+	'stat_option_groupnewposts' => 'Group Members',
+	'stat_option_bbsnewposts' => 'Forum Posts (Today)',
+	'stat_option_bbslastposts' => 'Forum Posts (Today)',
+	'stat_option_onlinemembers' => 'Online Members',
+	'stat_option_maxmembers' => 'Max Online Members',
+	'stat_option_doings' => 'Doings',
+	'stat_option_blogs' => 'Blogs',
+	'stat_option_albums' => 'Albums',
+	'stat_option_pics' => 'Images',
+	'stat_option_shares' => 'Shares',
 
-	'stat_edit_showtitle' => '顯示名稱',
-	'stat_edit_showtitle_detail' => '你可以編輯以下對應項來自定義各統計項的顯示名稱',
+	'stat_edit_showtitle' => 'Display Title',
+	'stat_edit_showtitle_detail' => 'You can edit title of customize statistics',
 
-	'stat_posts' => '帖子',
-	'stat_groups' => '群組',
-	'stat_members' => '會員',
-	'stat_groupnewposts' => '群組今日發帖',
-	'stat_bbsnewposts' => '論壇今日發帖',
-	'stat_bbslastposts' => '論壇昨日發帖',
-	'stat_onlinemembers' => '當前在線會員',
-	'stat_maxmembers' => '歷史最高在線',
-	'stat_doings' => '動態',
-	'stat_blogs' => '日誌',
-	'stat_albums' => '相冊',
-	'stat_pics' => '圖片',
-	'stat_shares' => '分享',
+	'stat_posts' => 'Posts',
+	'stat_groups' => 'Groups',
+	'stat_members' => 'Member',
+	'stat_groupnewposts' => 'Group Posts (Today)',
+	'stat_bbsnewposts' => 'Posts (Today)',
+	'stat_bbslastposts' => 'Posts (Yesterday)',
+	'stat_onlinemembers' => 'Online Members',
+	'stat_maxmembers' => 'Max Online Members',
+	'stat_doings' => 'Doings',
+	'stat_blogs' => 'Blogs',
+	'stat_albums' => 'Albums',
+	'stat_pics' => 'Images',
+	'stat_shares' => 'Shares',
 );
 ?>

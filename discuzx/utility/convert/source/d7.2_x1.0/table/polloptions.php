@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: polloptions.php 9659 2010-05-04 01:30:17Z wangjinbo $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -42,6 +43,6 @@ while($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." polloptionid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage(lang('continue_convert_table').$table_source." polloptionid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 ?>

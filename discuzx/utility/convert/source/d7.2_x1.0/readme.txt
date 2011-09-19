@@ -1,36 +1,36 @@
 ====================================
-Discuz! 7.2 升級至 Discuz! X1 說明
+upgrade Discuz! 7.2 to Discuz! X1 description
 ====================================
 
-I 升級前的準備
+I Preparing for upgrade
 ---------------
-1. 建立程序備份目錄，例如 old/
-2. 將原論壇所有程序移動到 old/ 目錄中
-3. 上傳 Discuz! X 產品的 upload/ 目錄中的程序到論壇目錄
-4. 執行安裝程序 /install
-   如果您的論壇版本是完整版（含 uc_server/ 目錄），則安裝的時候選擇全新安裝
-   如果您的論壇版本是獨立版本（自行安裝的 uc_server/ 目錄），則安裝的時候請指定 UCenter 地址
+1. Establish procedures for the backup directory, such as old /
+2. The original forum for all programs to move to the old / directory
+3. By Discuz! X product upload / directory of the program to the forum directory
+4. Run the installer / install
+   If your group version is the full version (including uc_server / directory), then select the new installation when installed
+   If your version is a standalone version of the forum (self-installed uc_server / directory), the time of installation, specify the address UCenter
 
-II 升級論壇數據
+II Data upgrade Forum
 ---------------
-1. 安裝完畢，測試論壇可以正常運行以後，上傳 Discuz! X Convert 程序到論壇更目錄
-2. 執行 /convert
-3. 選擇相應的程序版本，開始轉換
-4. 轉換過程中不可擅自中斷，直到程序自動執行完畢。
-5. 轉換過程可能需要較長時間，且消耗較多服務器資源，您應當選擇服務器空閒的時候執行
+1. Installation is complete, the test can be normal operation after the forum, upload Discuz! X Convert program to the forum more directory
+2. Executive / convert
+3. Select the appropriate version of the program, start the conversion
+4. The conversion process is not without interruption, until the program automatically executed.
+5. Conversion process may take longer, and consume more server resources, you should select the server implementation of free time
 
-III 升級完畢, 還要做的幾件事
+III upgrade is completed, we need to do a few things
 --------------------------
-1. 編輯新論壇的 config/config_global.php 文件，設定好創始人
-2. 直接訪問新論壇的 admin.php
-3. 使用創始人帳號登錄，進入後台更新緩存
-4. 新系統增加了很多設置項目，包括用戶權限、組權限、論壇板塊等等，您需要仔細的重新設置一次
-5. 轉移舊附件目錄（在轉移之前，您的帖子將會無法找到任何附件）
-   a)進入 old/attachments/ 目錄
-   b)將所有文件移動到 新論壇目錄/data/attachment/forum/ 目錄中
-6. 轉移用戶頭像（獨立安裝 UCenter 的用戶不需要這個步驟）
-   a)進入 old/uc_server/data/avatar/ 目錄
-   b)將所有文件移動到 新論壇目錄 uc_server/data/avatar/
-7. 刪除 convert 程序，以免給您的論壇安裝帶來隱患
-8. 待測試新論壇的所有功能均正常後，可以刪除舊的程序備份和數據備份
-9. 如果使用過分類信息，需要重新整理一次分類信息（後台->更新統計->分類信息整理）。
+1. Edit the new forum config / config_global.php file, setting the founder of
+2. Direct access to the new forum admin.php
+3. Use the founder account login, update the cache into the background
+4. The new system adds a lot of set up the project, including user permissions, group permissions, forum sections, etc., you need to carefully re-set once
+5. Transfer the old attachments directory (before the transfer, your post will not be able to find any accessories)
+   a) into the old / attachments / directory
+   b) Move all the files to the new forum directory / data / attachment / forum / directory
+6. Metastasis User avatar (the user does not require separate installation UCenter this step)
+   a) into the old / uc_server / data / avatar / directory
+   b) Move all the files to the new forum directory uc_server / data / avatar /
+7. Remove convert program, so as not to bring your group to install hidden
+8. To be tested all the features of the new forums are normal, you can delete the old backup and data backup procedures
+9. If you use the classified information, need to refresh a classified information (background -> Update Statistics -> classified information order.)

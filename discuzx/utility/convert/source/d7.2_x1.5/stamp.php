@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: stamp.php 15786 2010-08-27 00:27:21Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -14,7 +15,7 @@ $table_target = $db_target->tablepre . 'forum_thread';
 $stampnew = $db_target->result_first("SELECT COUNT(*) FROM $table_target WHERE stamp>'0'");
 if(!$stampnew) {
 	$query = $db_source->query("SELECT t.tid, tm.stamp FROM $table_source t
-		INNER JOIN $tablemod_source tm ON t.tid=tm.tid AND tm.action='SPA'
+		INNER JOIN $tablemod_source tm ON (t.tid=tm.tid AND tm.action='SPA')
 		WHERE t.status|16=t.status");
 	$total = $db_source->num_rows($total);
 	while($row = $db_source->fetch_array($query)) {

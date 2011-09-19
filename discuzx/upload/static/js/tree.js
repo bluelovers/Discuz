@@ -3,6 +3,7 @@
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: tree.js 15149 2010-08-19 08:02:46Z monkey $
+	Translate by : Discuzindo
 */
 
 var icon = new Object();

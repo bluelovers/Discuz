@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: home_magic.php 15720 2010-08-25 23:56:08Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -80,7 +81,7 @@ if($op=='magic') {
 	}
 
 	$table_source = $db_source->tablepre.'magic';
-	showmessage("繼續轉換數據表 ".$table_source." 用戶道具", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");
+	showmessage(lang('continue_convert_table').$table_source. lang('user_magic'), "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");//vot
 
 } elseif($op == 'usermagic') {
 
@@ -120,9 +121,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'usermagic';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 用戶道具-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");
+		showmessage(lang('continue_convert_table').$table_source. lang('user_magic')."-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");//vot
 	} else {
-		showmessage("繼續轉換數據表 ".$table_source." 道具收入記錄->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");
+		showmessage(lang('continue_convert_table').$table_source. lang('magic_records')."->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");//vot
 	}
 
 } elseif($op == 'magicinlog') {
@@ -151,9 +152,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicinlog';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 道具收入記錄-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");
+		showmessage(lang('continue_convert_table').$table_source. lang('magic_records')."-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");//vot
 	} else {
-		showmessage("繼續轉換數據表 ".$table_source." 道具使用記錄->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");
+		showmessage(lang('continue_convert_table').$table_source. lang('magic_use_records')."->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");//vot
 	}
 
 } elseif($op == 'magicuselog') {
@@ -178,7 +179,7 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicuselog';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 道具使用記錄-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");
+		showmessage(lang('continue_convert_table').$table_source. lang('magic_use_records')."-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");//vot
 	}
 }
 

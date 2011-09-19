@@ -1,8 +1,9 @@
-/*
+﻿/*
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: portal_upload.js 18682 2010-12-01 03:35:10Z zhangguosheng $
+	Translate by : Discuzindo
 */
 
 var nowid = 0;
@@ -44,11 +45,11 @@ function insertAttach(id) {
 	var ext = path.lastIndexOf('.') == -1 ? '' : path.substr(path.lastIndexOf('.') + 1, path.length).toLowerCase();
 	var re = new RegExp("(^|\\s|,)" + ext + "($|\\s|,)", "ig");
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('對不起，不支持上傳此類文件');
+		alert('Sorry, such file does not support the upload');
 		return;
 	}
 	var localfile = $('attach_' + id).value.substr($('attach_' + id).value.replace(/\\/g, '/').lastIndexOf('/') + 1);
-	$('localfile_' + id).innerHTML = localfile + ' 上傳中...';
+	$('localfile_' + id).innerHTML = localfile + ' Uploading...';
 	$('attach_' + id).style.display = 'none';
 	$('upload_' + id).action += '&attach_target_id=' + id;
 	$('upload_' + id).submit();

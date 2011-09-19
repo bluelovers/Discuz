@@ -1,27 +1,29 @@
-<?php
+﻿<?php
 
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: lang_jack.php 7906 2010-11-30 01:45:11Z liulanbo $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'jack_name' => '千斤頂',
-	'jack_desc' => '可以將主題頂起一段時間，重複使用可延長帖子被頂起的時間',
-	'jack_expiration' => '時長',
-	'jack_expiration_comment' => '設置主題可以被頂起多長時間，默認 1 小時',
-	'jack_forum' => '允許使用本道具的版塊',
-	'jack_info' => '<p class="mtn xw0 mbn">頂起指定的主題<span class="xi1 xw1 xs2"> {expiration} </span> 小時。</p> <p class="mtn xw0 mbn">你現在有<span class="xi1 xw1 xs2"> {magicnum} </span>個千斤頂可以使用。</p>',
-	'jack_num' => '本次使用數量:',
-	'jack_num_not_enough' => '道具數量不足或沒有填寫使用數量。',
-	'jack_info_nonexistence' => '請指定要頂起的主題',
-	'jack_succeed' => '千斤頂成功將主題頂起',
-	'jack_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
+	'jack_name' => 'Jack Card',
+	'jack_desc' => 'You can top up the thread for some time, re-use to extend the time from the top post was',
+	'jack_expiration' => 'Length',
+	'jack_expiration_comment' => 'Set a theme from the top can be long, default 1 hour',
+	'jack_forum' => 'Allowed Forum',
+	'jack_info' => '<p class="mtn xw0 mbn">Specific Thread <span class="xi1 xw1 xs2"> {expiration} </span> Hours.</p> <p class="mtn xw0 mbn">You now have<span class="xi1 xw1 xs2"> {magicnum} </span>A jack can be used.</p>',
+	'jack_num' => 'Total:',
+	'jack_num_not_enough' => 'Insufficient number of magic or not filled with the number.',
+	'jack_info_nonexistence' => 'Please Specific Thread',
+	'jack_succeed' => 'Jack Card Successfully',
+	'jack_info_noperm' => 'You have no permissions to use this magic in this forum',
 
-	'jack_notification' => '你的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'jack_notification' => 'Your thread <em>{subject}</em> was used {magicname} by {actor}, <a href="forum.php?mod=viewthread&tid={tid}">View</a>',
 );
 
 ?>

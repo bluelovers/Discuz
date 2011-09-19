@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: typeoptionvars.php 15719 2010-08-25 23:51:36Z monkey $
+ * English by Valery Votintsev at sources.ru
  */
 
 $curprg = basename(__FILE__);
@@ -32,7 +33,7 @@ while ($data = $db_source->fetch_array($query)) {
 }
 
 if($next) {
-	showmessage("繼續轉換數據表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=".($start + $limit));
+	showmessage(lang('continue_convert_table').$table_source.lang('from'). $start .lang('to'). ($start+$limit). lang('lines'), "index.php?a=$action&source=$source&prg=$curprg&start=".($start + $limit));
 }
 
 ?>

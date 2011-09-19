@@ -4,17 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blog.php 20567 2011-02-28 02:30:15Z congyushuai $
+ *      $Id: lang_blog.php by Valery Votintsev at sources.ru
  */
 
 $lang = array
 (
-	'blog_name' => '發表日誌任務',
-	'blog_desc' => '發表日誌即可完成任務，獲得相應的獎勵',
-	'blog_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'blog_name'	=> 'Post Blog Task',//'发表日志任务',
+	'blog_desc'	=> 'To complete the task, post a blog and get award.',//'发表日志即可完成任务，获得相应的奖励。',
+	'blog_view'	=> '<strong>Follow the next steps below to complete the task:</strong>
 		<ul>
-		<li>1. <a href="home.php?mod=spacecp&ac=blog" target="_blank">新窗口打開發表日誌頁面</a></li>
-		<li>2. 在新打開的頁面中，書寫自己的第一篇日誌，並進行發佈</li>
+		<li>1. <a href="home.php?mod=spacecp&ac=blog" target="_blank">Click here to open new window to post blog</a>;</li>
+		<li>2. Write you first blog and publish it.</li>
 		</ul>',
 );
 

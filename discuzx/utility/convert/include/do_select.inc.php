@@ -4,6 +4,7 @@
  * DiscuzX Convert
  *
  * $Id: do_select.inc.php 20664 2011-03-01 08:30:19Z shanzongjun $
+ * English by Valery Votintsev at sources.ru
  */
 
 $config = loadconfig();
@@ -42,17 +43,17 @@ if(submitcheck('submit')) {
 			}
 		}
 		save_process('main', $process);
-		showmessage("您選擇了 （".count($prgs)."） 個轉換程序，下面開始轉換", "index.php?a=convert&s=$source");
+		showmessage(lang('you_selected')." (".count($prgs).") ".lang('process_number'), "index.php?a=convert&s=$source");//vot
 	}
 }
 
-showtips("<li>通常情況下，您需要執行下面所有數據表的轉換，除非您在執行過程中出現了意外的中斷或者有特殊需求，才進行必要的選擇</li>");
+showtips("<li>".lang('process_intro')."</li>");//vot
 show_form_header();
 show_table_header();
-show_table_row(array('<span style="float: left">配置轉換過程</span><label style="float: right"><input type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'prgs\')" id="chkall" name="chkall" checked> 全選</label>'), 'title');
+show_table_row(array('<span style="float: left">'.lang('process_configure').'</span><label style="float: right"><input type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'prgs\')" id="chkall" name="chkall" checked> '.lang('select_all').'</label>'), 'title');//vot
 
 if($setting['start']) {
-	show_table_row(array('轉換之前運行的程序'), 'bg1');
+	show_table_row(array(lang('run_before_convert')), 'bg1');//vot
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($setting['start'] as $key => $value) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"c_prg_$key.php\" checked>&nbsp;$key($value)</label></li>";
@@ -79,7 +80,7 @@ $cdir->close();
 
 if($tablelist) {
 	sort($tablelist);
-	show_table_row(array('<span style="float: left">數據表轉換程序</span>'), 'bg1');
+	show_table_row(array('<span style="float: left">'.lang('table_convert').'</span>'), 'bg1');//vot
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($tablelist as $entry) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"$entry\" checked>&nbsp;".basename($entry, '.php')."</label></li>";
@@ -88,7 +89,7 @@ if($tablelist) {
 }
 
 if($setting['steps']) {
-	show_table_row(array('其他輔助轉換程序'), 'bg1');
+	show_table_row(array(lang('other_convert')), 'bg1');//vot
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($setting['steps'] as $key => $value) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"s_prg_$key.php\" checked>&nbsp;$key($value)</label></li>";
@@ -96,7 +97,7 @@ if($setting['steps']) {
 	echo "</ul>\n</td></tr>";
 }
 show_table_footer();
-show_form_footer('submit', '開始轉換');
+show_form_footer('submit', lang('start_conversion'));//vot
 showfooter();
 
 exit();

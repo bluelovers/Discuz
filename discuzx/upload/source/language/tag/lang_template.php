@@ -5,24 +5,26 @@
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: langmerge.php 19832 2011-01-19 07:56:14Z monkey $
- *
+ *	
+ *	Translated by discuzindo.net
  *      This file is automatically generate
  */
 
 $lang = array (
-  'no_tag' => '還沒有任何標籤',
-  'tag' => '標籤',
-  'blog_read' => '次閱讀',
-  'blog_replay' => '個評論',
-  'empty_tags' => '沒有此標籤，您可以繼續搜索或者<a href="misc.php?mod=tag" title="返回標籤首頁">返回標籤首頁</a>',
-  'forum' => '版塊',
-  'hot' => '熱度',
-  'lastpost' => '最後發表',
-  'no_content' => '沒有相關內容',
-  'personal_category' => '個人分類',
-  'related_blog' => '相關日誌',
-  'related_thread' => '相關帖子',
-  'replies' => '回復/查看',
+  'no_tag' => 'No Tags yet',
+  'tag' => 'Tags',
+  'blog_read' => 'Second Reading',
+  'blog_replay' => 'Reviews',
+  'empty_tags' => 'Without this label, you can continue to search for tags or <a href="misc.php?mod=tag" title="Back to tag page">go back!</a>',
+  'forum' => 'Forum',
+  'hot' => 'Heat',
+  'lastpost' => 'Last Post',
+  'no_content' => 'No Related Content',
+  'personal_category' => 'Personal Categories',
+  'related_blog' => 'Related Blogs',
+  'related_thread' => 'Related Posts',
+  'replies' => 'Replies/Views',
+  
 );
 
 ?>

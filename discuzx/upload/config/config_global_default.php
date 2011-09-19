@@ -5,38 +5,39 @@
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: config_global_default.php 23921 2011-08-16 09:18:28Z cnteacher $
+ *      English by Valery Votintsev at sources.ru
  */
 
 $_config = array();
 
 // ----------------------------  CONFIG DB  ----------------------------- //
-// ----------------------------  數據庫相關設置---------------------------- //
+// Database server settings
 
 /**
- * 數據庫主服務器設置, 支持多組服務器設置, 當設置多組服務器時, 則會根據分佈式策略使用某個服務器
+ * Set the primary database server to support multiple sets of server settings, when set to multiple servers, distributed strategy is to use a server based on
  * @example
- * $_config['db']['1']['dbhost'] = 'localhost'; // 服務器地址
- * $_config['db']['1']['dbuser'] = 'root'; // 用戶
- * $_config['db']['1']['dbpw'] = 'root';// 密碼
- * $_config['db']['1']['dbcharset'] = 'gbk';// 字符集
- * $_config['db']['1']['pconnect'] = '0';// 是否持續連接
- * $_config['db']['1']['dbname'] = 'x1';// 數據庫
- * $_config['db']['1']['tablepre'] = 'pre_';// 表名前綴
+ * $_config['db']['1']['dbhost'] = 'localhost'; // Server Address
+ * $_config['db']['1']['dbuser'] = 'root'; // User
+ * $_config['db']['1']['dbpw'] = 'root';// Password
+ * $_config['db']['1']['dbcharset'] = 'gbk';// Character Set
+ * $_config['db']['1']['pconnect'] = '0';// persistent connection
+ * $_config['db']['1']['dbname'] = 'x1';// Database name
+ * $_config['db']['1']['tablepre'] = 'pre_';// Table prefix
  *
  * $_config['db']['2']['dbhost'] = 'localhost';
  * ...
  *
  */
-$_config['db'][1]['dbhost']  		= 'localhost';		
-$_config['db'][1]['dbuser']  		= 'root';		
-$_config['db'][1]['dbpw'] 	 	= 'root';		
-$_config['db'][1]['dbcharset'] 		= 'utf8';		
-$_config['db'][1]['pconnect'] 		= 0;			
-$_config['db'][1]['dbname']  		= 'ultrax';		
-$_config['db'][1]['tablepre'] 		= 'pre_';		
+$_config['db'][1]['dbhost']  	= 'localhost';	// DB Server address
+$_config['db'][1]['dbuser']  	= 'root';		// DB User Name
+$_config['db'][1]['dbpw'] 	 	= 'root';		// DB User Password
+$_config['db'][1]['dbcharset'] 	= 'utf8';		// DB Charset
+$_config['db'][1]['pconnect'] 	= 0;			// Enable DB persistent connection
+$_config['db'][1]['dbname']  	= 'ultrax';		// DB Name
+$_config['db'][1]['tablepre'] 	= 'pre_';		// DB Table Prefix
 
 /**
- * 數據庫從服務器設置( slave, 只讀 ), 支持多組服務器設置, 當設置多組服務器時, 系統每次隨機使用
+ * Database from the server settings (slave, read-only), support for multiple sets of server settings, when set to multiple servers, the system using each random
  * @example
  * $_config['db']['slave']['1']['dbhost'] = 'localhost';
  * $_config['db']['slave']['1']['dbuser'] = 'root';
@@ -53,115 +54,115 @@ $_config['db'][1]['tablepre'] 		= 'pre_';
 $_config['db']['slave'] = array();
 
 /**
- * 數據庫 分佈部署策略設置
+ * Distributed database deployment policy setting
  *
- * @example 將 common_member 部署到第二服務器, common_session 部署在第三服務器, 則設置為
+ * @example Will common_member Deployed to the second server, common_session Deployed in the third server, Is set to
  * $_config['db']['map']['common_member'] = 2;
  * $_config['db']['map']['common_session'] = 3;
  *
- * 對於沒有明確聲明服務器的表, 則一律默認部署在第一服務器上
+ * Server for the table is not explicitly stated, it will be deployed in the first server, the default
  *
  */
 $_config['db']['map'] = array();
 
 /**
- * 數據庫 公共設置, 此類設置通常對針對每個部署的服務器
+ * Database of public settings, such settings are usually deployed on the server for each
  */
 $_config['db']['common'] = array();
 
 /**
- *  禁用從數據庫的數據表, 表名字之間使用逗號分割
+ *  Disable the data from the database tables, table names separated by commas between
  *
- * @example common_session, common_member 這兩個表僅從主服務器讀寫, 不使用從服務器
+ * @example common_session, common_member These two tables to read and write only from the master server, do not use from the server
  * $_config['db']['common']['slave_except_table'] = 'common_session, common_member';
  *
  */
 $_config['db']['common']['slave_except_table'] = '';
 
 /**
- * 內存服務器優化設置
- * 以下設置需要PHP擴展組件支持，其中 memcache 優先於其他設置，
- * 當 memcache 無法啟用時，會自動開啟另外的兩種優化模式
- */
+* memory server optimization settings
+ * The following settings need to be PHP extension support component, which memcache priority over other settings,
+ * can not be enabled when the memcache automatically when you open the other two optimization models* when the memcache automatically when you open the other two optimized mode)
+*/
 
-//內存變量前綴, 可更改,避免同服務器中的程序引用錯亂
+//Memory variable prefix, change, to avoid reference to the same server process disorder
 $_config['memory']['prefix'] = 'discuz_';
 
-$_config['memory']['eaccelerator'] = 1;					// 啟動對 eaccelerator 的支持
-$_config['memory']['apc'] = 1;							// 啟動對 apc 的支持
-$_config['memory']['xcache'] = 1;						// 啟動對 xcache 的支持
-$_config['memory']['memcache']['server'] = '';			// memcache 服務器地址
-$_config['memory']['memcache']['port'] = 11211;			// memcache 服務器端口
-$_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否長久連接
-$_config['memory']['memcache']['timeout'] = 1;			// memcache 服務器連接超時
+$_config['memory']['eaccelerator'] = 1;				// Start the support for eaccelerator
+$_config['memory']['apc'] = 1;							// Start support for apc
+$_config['memory']['xcache'] = 1;					// Start the support for xcache
+$_config['memory']['memcache']['server'] = '';		// memcache server address
+$_config['memory']['memcache']['port'] = 11211;		// memcache server port
+$_config['memory']['memcache']['pconnect'] = 1;		// memcache persistent connection
+$_config['memory']['memcache']['timeout'] = 1;		// memcache server connection timeout
 
-// 服務器相關設置
-$_config['server']['id']		= 1;			// 服務器編號，多webserver的時候，用於標識當前服務器的ID
+// Server-related settings
+$_config['server']['id']		= 1;	// Server ID, when  more webservers used this ID to identify the current server
 
-// 附件下載相關
-// 
-// 本地文件讀取模式; 模式2為最節省內存方式，但不支持多線程下載
-// 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
-$_config['download']['readmod'] = 2;				
+// Download attachments
+//
+// local file reading mode; Mode 2 means the most to save memory, but does not support multi-threaded download
+// 1=fread, 2=readfile, 3=fpassthru, 4=fpassthru+multiple
+$_config['download']['readmod'] = 2;
 
-// 是否啟用 X-Sendfile 功能（需要服務器支持）0=close 1=nginx 2=lighttpd 3=apache
+// Enable X-Sendfile feature(required server support) 0=disable, 1=nginx, 2=lighttpd, 3=apache
 $_config['download']['xsendfile']['type'] = 0;
 
-// 啟用 nginx X-sendfile 時，論壇附件目錄的虛擬映射路徑，請使用 / 結尾
-$_config['download']['xsendfile']['dir'] = '/down/';		
+// Enable nginx X-sendfile, the forum attachment directory path to the virtual map, use the "/" at the end
+$_config['download']['xsendfile']['dir'] = '/down/';
 
 //  CONFIG CACHE
-$_config['cache']['type'] 			= 'sql';	// 緩存類型 file=文件緩存, sql=數據庫緩存
+$_config['cache']['type'] 			= 'sql';	// Cache type: file = file cache, sql = database cache
 
-// 頁面輸出設置
-$_config['output']['charset'] 			= 'utf-8';	// 頁面字符集
-$_config['output']['forceheader']		= 1;		// 強制輸出頁面字符集，用於避免某些環境亂碼
-$_config['output']['gzip'] 			= 0;		// 是否採用 Gzip 壓縮輸出
-$_config['output']['tplrefresh'] 		= 1;		// 模板自動刷新開關 0=關閉, 1=打開
-$_config['output']['language'] 			= 'zh_tw';	// 頁面語言 zh_cn/zh_tw
-$_config['output']['staticurl'] 		= 'static/';	// 站點靜態文件路徑，「/」結尾
-$_config['output']['ajaxvalidate']		= 0;		// 是否嚴格驗證 Ajax 頁面的真實性 0=關閉，1=打開
-$_config['output']['iecompatible']		= 0;		// 頁面 IE 兼容模式
+// Page output settings
+$_config['output']['charset'] 		= 'utf-8';	// Page character set
+$_config['output']['forceheader']	= 1;		// Force the output in defined character set, used to avoid page content garbled
+$_config['output']['gzip'] 			= 0;		// Use Gzip compression for output
+$_config['output']['tplrefresh'] 	= 1;		// Automatically refresh templates: 0 = off, 1 = On
+$_config['output']['language'] 		= 'en';		// Page language en/zh_cn/zh_tw
+$_config['output']['staticurl'] 	= 'static/';	// Path to the site static files, use "/" at the end
+$_config['output']['ajaxvalidate']	= 0;		// Strictly verify the authenticity for Ajax pages: 0 = off, 1 = On
+$_config['output']['iecompatible']	= 0;		// IE compatibility mode
 
-// COOKIE 設置
-$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIE前綴
-$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE作用域
-$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE作用路徑
+// COOKIE settings
+$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIE prefix
+$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE domain
+$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE path
 
-// 站點安全設置
-$_config['security']['authkey']			= 'asdfasfas';	// 站點加密密鑰
-$_config['security']['urlxssdefend']		= true;		// 自身 URL XSS 防禦
-$_config['security']['attackevasive']		= 0;		// CC 攻擊防禦 1|2|4|8
+// Site Security Settings
+$_config['security']['authkey']			= 'asdfasfas';	// Site encryption key
+$_config['security']['urlxssdefend']	= true;		// Use own URL XSS defense
+$_config['security']['attackevasive']	= 0;		// CC Attack Defense 1 | 2 | 4
 
-$_config['security']['querysafe']['status']	= 1;		// 是否開啟SQL安全檢測，可自動預防SQL注入攻擊
+$_config['security']['querysafe']['status']	= 1;		// Enable the SQL security detection, prevent the SQL injection attacks automatically
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
-$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
+$_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 0;
 
-$_config['admincp']['founder']			= '1';		// 站點創始人：擁有站點管理後台的最高權限，每個站點可以設置 1名或多名創始人
-								// 可以使用uid，也可以使用用戶名；多個創始人之間請使用逗號「,」分開;
-$_config['admincp']['forcesecques']		= 0;		// 管理人員必須設置安全提問才能進入系統設置 0=否, 1=是[安全]
-$_config['admincp']['checkip']			= 1;		// 後台管理操作是否驗證管理員的 IP, 1=是[安全], 0=否。僅在管理員無法登陸後台時設置 0。
-$_config['admincp']['runquery']			= 1;		// 是否允許後台運行 SQL 語句 1=是 0=否[安全]
-$_config['admincp']['dbimport']			= 1;		// 是否允許後台恢復論壇數據  1=是 0=否[安全]
+$_config['admincp']['founder']		= '1';	// Site Founder: site management background with the highest authority, each site can be set to one or more founders
+											// You can use the user uid ore user name. Separate multiple users with a comma;
+$_config['admincp']['forcesecques']	= 0;	// Force managers to set the security question for access to the system settings: 0 = no, 1 = yes [secure]
+$_config['admincp']['checkip']		= 1;	// Back office operations are verified administrator IP, 1 = yes [secure], 0 = no. Only the administrator can not log in from time to set 0.
+$_config['admincp']['runquery']		= 1;	// Allow to run SQL statements in the background: 1 = yes, 0 = no [secure]
+$_config['admincp']['dbimport']		= 1;	// Allow the data recovery in the background: 1 = yes, 0 = no [secure]
 
 /**
- * 系統遠程調用功能模塊
+ * Remote call function module system
  */
 
-// 遠程調用: 總開關 0=關  1=開
+// Remote call: master switch 0 = off, 1 = On
 $_config['remote']['on'] = 0;
 
-// 遠程調用: 程序目錄名. 出於安全考慮,您可以更改這個目錄名, 修改完畢, 請手工修改程序的實際目錄
+// remote call: the program directory name. For security reasons, you can change the directory name, change is completed, the actual directory manually modify the program
 $_config['remote']['dir'] = 'remote';
 
-// 遠程調用: 通信密鑰. 用於客戶端和本服務端的通信加密. 長度不少於 32 位
-//          默認值是 $_config['security']['authkey']	的 md5, 您也可以手工指定
+// remote call: Communication key. for the client and the server communication encryption. length of not less than 32
+//          default value is $ _config ['security'] ['authkey'] of md5, you can also manually specify the$_config['remote']['appkey'] = md5($_config['security']['authkey']);
 $_config['remote']['appkey'] = md5($_config['security']['authkey']);
 
-// 遠程調用: 開啟外部 cron 任務. 系統內部不再執行cron, cron任務由外部程序激活
+// Remote call: Open external cron task. within the system no longer running cron, cron task activated by an external program
 $_config['remote']['cron'] = 0;
 
 ?>

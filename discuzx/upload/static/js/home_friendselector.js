@@ -1,8 +1,9 @@
-/*
+﻿/*
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: home_friendselector.js 22000 2011-04-19 14:35:46Z svn_project_zhangjie $
+	Translate by : Discuzindo
 */
 
 (function() {
@@ -169,11 +170,11 @@
 						this.selectUser[userName] = userName;
 					}
 					this.selectNumber++;
-					spanObj.innerHTML= '<a href="javascript:;" class="x" onclick="'+this.handleKey+'.delSelUser(\''+(spanObj.id)+'\');">刪除</a><em class="z" title="' + userName + '">' + userName + '</em><input type="hidden" name="users[]" value="'+userName+'" uid="uid'+uid+'" />';
+					spanObj.innerHTML= '<a href="javascript:;" class="x" onclick="'+this.handleKey+'.delSelUser(\''+(spanObj.id)+'\');">Delete</a><em class="z" title="' + userName + '">' + userName + '</em><input type="hidden" name="users[]" value="'+userName+'" uid="uid'+uid+'" />';
 					this.handleObj.parentNode.insertBefore(spanObj, this.handleObj);
 					this.showObj.style.display = 'none';
 				} else {
-					alert('已經存在'+userName);
+					alert('已经存在'+userName);
 				}
 			}
 		},
@@ -282,7 +283,7 @@
 				var select = false;
 				if(typeof this.selectUser[uid] == 'undefined') {
 					if(this.maxSelectNumber && this.selectNumber >= this.maxSelectNumber) {
-			            alert('最多只允許選擇'+this.maxSelectNumber+'個用戶');
+			            alert('Allows you to select a maximum of'+this.maxSelectNumber+'Users');
 			            return false;
 			        }
 					this.selectUser[uid] = this.dataSource[uid];

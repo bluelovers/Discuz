@@ -1,45 +1,47 @@
-<?php
+﻿<?php
 
 /**
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
  *      $Id: lang_forumstat.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *
+ *	Translated by discuzindo.net
  */
 
 $lang = array
 (
-	'forumstat_name' => '論壇統計',
-	'forumstat_desc' => '論壇統計數據調用',
-	'forumstat_forums_allow' => '顯示版塊數統計',
-	'forumstat_forums_order' => '版塊數統計顯示順序',
-	'forumstat_forums_text' => '版塊數統計提示文字',
-	'forumstat_forums_default' => '版塊數:',
+	'forumstat_name' => 'Forum Stats',
+	'forumstat_desc' => 'Call forum statistic data',
+	'forumstat_forums_allow' => 'Display Forum Stats',
+	'forumstat_forums_order' => 'Ordered by',
+	'forumstat_forums_text' => 'Forum Stats Tip Text',
+	'forumstat_forums_default' => 'Forum:',
 
-	'forumstat_threads_allow' => '顯示主題數統計',
-	'forumstat_threads_order' => '主題數統計顯示順序',
-	'forumstat_threads_text' => '主題數統計提示文字',
-	'forumstat_threads_default' => '主題數:',
+	'forumstat_threads_allow' => 'Display Thread Stats',
+	'forumstat_threads_order' => 'Ordered by',
+	'forumstat_threads_text' => 'Thread Stats Tip Text',
+	'forumstat_threads_default' => 'Threads:',
 
-	'forumstat_posts_allow' => '顯示帖子數統計',
-	'forumstat_posts_order' => '帖子數統計顯示順序',
-	'forumstat_posts_text' => '帖子數統計提示文字',
-	'forumstat_posts_default' => '帖子數:',
+	'forumstat_posts_allow' => 'Display Posts Stats',
+	'forumstat_posts_order' => 'Ordered by',
+	'forumstat_posts_text' => 'Post Stats Tip Text',
+	'forumstat_posts_default' => 'Posts:',
 
-	'forumstat_members_allow' => '顯示用戶數統計',
-	'forumstat_members_order' => '用戶數統計顯示順序',
-	'forumstat_members_text' => '用戶數統計提示文字',
-	'forumstat_members_default' => '用戶數:',
+	'forumstat_members_allow' => 'Display Users Stats',
+	'forumstat_members_order' => 'Ordered by',
+	'forumstat_members_text' => 'User Stats Tip Text',
+	'forumstat_members_default' => 'Users:',
 
-	'forumstat_online_allow' => '顯示在線人數統計',
-	'forumstat_online_order' => '在線人數統計顯示順序',
-	'forumstat_online_text' => '在線人數統計提示文字',
-	'forumstat_online_default' => '在線人數:',
+	'forumstat_online_allow' => 'Display Online Stats',
+	'forumstat_online_order' => 'Ordered by',
+	'forumstat_online_text' => 'Online Stats Tip Text',
+	'forumstat_online_default' => 'Online:',
 
-	'forumstat_onlinemember_allow' => '顯示在線會員統計',
-	'forumstat_onlinemember_order' => '在線會員統計顯示順序',
-	'forumstat_onlinemember_text' => '在線會員統計提示文字',
-	'forumstat_onlinemember_default' => '在線會員:',
+	'forumstat_onlinemember_allow' => 'Display Online User Stats',
+	'forumstat_onlinemember_order' => 'Ordered by',
+	'forumstat_onlinemember_text' => 'Online User Stats Tip Text',
+	'forumstat_onlinemember_default' => 'Online User:',
 );
 
 ?>
