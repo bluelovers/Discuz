@@ -635,8 +635,8 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		if ($thread['lastposter'] != $_G['username']) {
 			$query = DB::query("SELECT distinct authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
 			while($_row = DB::fetch($query)) {
-				if (!in_array($_row['authorid'], $_user_list) && $_row['authorid'] != $_G['uid']) {
-					$_user_list2[] = $_row['authorid'];
+				if ($_row['authorid'] != $_G['uid']) {
+					$_user_list[] = $_row['authorid'];
 				}
 			}
 		}
