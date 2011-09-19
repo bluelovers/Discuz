@@ -9,11 +9,11 @@
 		<!--{if $totalcomment[$post[pid]]}--><div class="pstl">$totalcomment[$post[pid]]</div><!--{/if}-->
 
 	<!--{if !empty($comments_clist[{$post[pid]}])}-->
-		<!--{eval $comments[$post[pid]] = $comments_clist[{$post[pid]}]}-->
+		<!--{eval $comments[$post[pid]] = $comments_clist[$post[pid]];}-->
 	<!--{/if}-->
 
 		<!--{loop $comments[$post[pid]] $comment}-->
-			<div class="pstl xs1">
+			<div class="pstl xs1 $comment[class]" style="$comment[style]">
 				<div class="psta"><a href="home.php?mod=space&uid=$comment[authorid]" c="1">$comment[avatar]</a></div>
 				<div class="psti">
 					<!--{if $comment['authorid']}-->
