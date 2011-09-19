@@ -558,43 +558,19 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 		// bluelovers
 		if (!empty($_G['uid'])) {
-			$_user_list = array();
-
 			$rpid = intval($_G['gp_reppid']);
 
 			// 回覆時可同時提醒點評過目前回覆的帖子的人
 			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$rpid'");
 			while($_row = DB::fetch($query)) {
-				if (!in_array($_row['authorid'], array(
-					$_G['uid'],
-					$nauthorid,
-					0,
-				))) {
+				if ($_row['authorid'] != $_G['uid']) {
 					$_user_list[] = $_row['authorid'];
 				}
 			}
 
 			// 同時提醒主題發表者
-			if (in_array($thread['authorid'], array(
-				$_G['uid'],
-				$nauthorid,
-			))) {
+			if ($thread['authorid'] != $_G['uid']) {
 				$_user_list[] = $thread['authorid'];
-			}
-
-			$_user_list = array_unique($_user_list);
-
-			foreach($_user_list as $_uid) {
-				if ($_uid == $_G['uid']) continue;
-
-				notification_add($_uid, 'post', 'reppost_noticeauthor', array(
-					'tid' => $thread['tid'],
-					'subject' => $thread['subject'],
-					'fid' => $_G['fid'],
-					'pid' => $pid,
-					'from_id' => $thread['tid'],
-					'from_idtype' => 'post',
-				));
 			}
 		}
 		// bluelovers
@@ -637,27 +613,29 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		));
 
 		// bluelovers
-		$_user_list2 = array();
-		$_user_list[] = $thapost['authorid'];
-		$_user_list[] = 0;
-		$_user_list[] = $_G['uid'];
-		$_user_list[] = $nauthorid;
+	}
 
+	if (1) {
 		// 同時提醒最後發表者 以及 一天內的回應者
 		if ($thread['lastposter'] != $_G['username']) {
 			$query = DB::query("SELECT distinct authorid FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND (dateline >= '".($thread['lastpost'] - 3600 * 24)."' OR dateline >= '".($thread["lastpost"] - 3600)."')");
 			while($_row = DB::fetch($query)) {
-				if (!in_array($_row['authorid'], $_user_list) && $_row['authorid'] != $_G['uid']) {
-					$_user_list2[] = $_row['authorid'];
+				if ($_row['authorid'] != $_G['uid']) {
+					$_user_list[] = $_row['authorid'];
 				}
 			}
 		}
 
-		$_user_list2 = array_unique($_user_list2);
+		$_user_list = array_unique($_user_list);
 
-		foreach($_user_list2 as $_uid) {
+		foreach($_user_list as $_uid) {
 
-			if ($_uid == $_G['uid']) continue;
+			if (
+				empty($_uid)
+				|| $_uid == $_G['uid']
+				|| $_uid == $nauthorid
+				|| $_uid == $thapost['authorid']
+			) continue;
 
 			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
 				'tid' => $thread['tid'],
