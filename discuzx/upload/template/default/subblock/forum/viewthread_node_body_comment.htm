@@ -18,12 +18,14 @@
 					<!--{if $comment[rpid]}-->
 						<a href="forum.php?mod=redirect&goto=findpost&pid=$comment[rpid]&ptid=$_G[tid]" class="xi2">{lang detail}</a>
 						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2 sctpl_reply" onclick="showWindow('reply', this.href)">{lang reply}</a>
+					<!--{else}-->
+						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2 sctpl_reply" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{/if}-->
-					</span>
 					<span class="xg1 nowrap">
 						{lang poston} $comment[dateline]
 						<!--{if $comment['useip'] && $_G['group']['allowviewip']}-->&nbsp;IP:$comment[useip]<!--{/if}-->
 						<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])" class="adel" title="{lang delete}">{lang delete}</a><!--{/if}-->
+					</span>
 					</span>
 				</div>
 			</div>
