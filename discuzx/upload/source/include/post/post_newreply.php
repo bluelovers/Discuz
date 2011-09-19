@@ -107,6 +107,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 		// bluelovers
 		'upid'		=> $_upid['id'],
+		'grade'		=> ($_upid['grade'] + 1),
 		// bluelovers
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
