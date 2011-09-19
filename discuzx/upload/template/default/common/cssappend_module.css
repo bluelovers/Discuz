@@ -290,6 +290,8 @@
 		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
 		padding:5px 10px 5px 25px;
 	}
+
+	.cm .dtls { background:url({IMGDIR}/treeline_short.gif) no-repeat 0 2px; }
 /** end **/
 
 /** home::space **/
