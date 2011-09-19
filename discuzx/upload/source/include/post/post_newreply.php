@@ -98,6 +98,10 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		'comment' => $comment,
 		'score' => $commentscore ? 1 : 0,
 		'useip' => $_G['clientip'],
+
+		// bluelovers
+		'upid'		=> max(0, intval($_G['gp_upid'])),
+		// bluelovers
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
 	!empty($_G['uid']) && updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
