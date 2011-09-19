@@ -116,53 +116,68 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 	// bluelovers
 	$_commentmsg = cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200);
+
+	$_user_list = array();
 	// bluelovers
 
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
+
+		// bluelovers
+		$_user_list[] = $post['authorid'];
+	}
+
+	if (!empty($_G['uid'])) {
+
+		// 提醒主題作者
+		if ($_G['uid'] != $thread['authorid']) {
+			$_user_list[] = $thread['authorid'];
+		}
+
+		// 評論時可同時提醒參與過該帖子的點評者
+		// 評論時可同時提醒參與過該帖子的回覆者
+		$query = DB::query("SELECT
+			distinct authorid
+			FROM
+				".DB::table('forum_postcomment')."
+			WHERE
+				tid='$_G[tid]'
+				AND
+					(
+					pid = '$post[pid]'
+					OR rpid = '$post[pid]'
+					)
+		");
+		while($_row = DB::fetch($query)) {
+			if ($_row['authorid'] != $_G['uid']) {
+				$_user_list[] = $_row['authorid'];
+			}
+		}
+
+	}
+
+	$_user_list = array_unique($_user_list);
+
+	foreach ($_user_list as $_uid) {
+		if (empty($_uid) || $_uid == $_G['uid']) continue;
+
+		// bluelovers
+
+		/*
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
+		*/
+		// bluelovers
+		notification_add($_uid, 'pcomment', 'comment_add', array(
+		// bluelovers
+
 			'tid' => $_G['tid'],
 			'pid' => $_G['gp_pid'],
 			'subject' => $thread['subject'],
 			'commentmsg' => $_commentmsg
 		));
-
-		//TODO:增加可提醒其他點評此帖的用戶
 	}
 
 	// bluelovers
 	if (!empty($_G['uid'])) {
-
-		// 評論時可同時提醒該主題的發表者
-		if (
-			!in_array($_G['uid'], array(
-				$thread['authorid'],
-				$post['authorid'],
-			))
-		) {
-			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
-				'tid' => $_G['tid'],
-				'pid' => $post['pid'],
-				'subject' => $thread['subject'],
-				'commentmsg' => $_commentmsg
-			));
-		}
-
-		// 評論時可同時提醒參與過該帖子的點評者
-		$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$post[pid]'");
-		while($_row = DB::fetch($query)) {
-			if (!in_array($_row['authorid'], array(
-				$thread['authorid'],
-				$post['authorid'],
-				$_G['uid'],
-			))) {
-				notification_add($_row['authorid'], 'pcomment', 'comment_add', array(
-					'tid' => $_G['tid'],
-					'pid' => $post['pid'],
-					'subject' => $thread['subject'],
-					'commentmsg' => $_commentmsg
-				));
-			}
-		}
 
 		// 使點評 可以產生動態
 		if(!isset($_G['gp_addfeed'])) {
