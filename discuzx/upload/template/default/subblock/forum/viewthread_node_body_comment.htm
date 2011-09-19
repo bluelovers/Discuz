@@ -30,6 +30,7 @@
 						$allowpostreply
 						&& ($post['allowcomment'] && (!$thread['closed'] || $_G['forum']['ismoderator']))
 						)
+						|| $_G['gp_action'] == 'commentmore'
 					}-->
 						<a href="forum.php?mod=misc&action=comment&tid=$post[tid]&pid=$post[pid]&extra=$_G[gp_extra]&page=$page{if $_G['forum_thread']['special'] == 127}&special=$specialextra{/if}&upid={$comment[id]}" class="xi2 sctpl_reply" onclick="showWindow('comment', this.href, 'get', 0)">{lang reply}</a>
 					<!--{/if}-->
