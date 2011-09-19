@@ -254,6 +254,7 @@ if($_G['gp_action'] == 'paysucceed') {
 	if(!$_G['setting']['commentnumber'] || !$_G['inajax']) {
 		showmessage('postcomment_closed');
 	}
+
 	require_once libfile('function/discuzcode');
 	$commentlimit = intval($_G['setting']['commentnumber']);
 	$page = max(1, $_G['page']);

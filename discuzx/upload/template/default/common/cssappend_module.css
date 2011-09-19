@@ -43,14 +43,14 @@
 	/*評分連結*/
 	.misc_rate, .misc_removerate {
 	 	background-image: url({IMGDIR}/agree.gif);
-	    background-position: 0 50%;
-	    background-repeat: no-repeat;
-	    display: inline-block;
-	    /*
-	    height: 20px;
-	    line-height: 20px;
-	    */
-	    padding-left: 22px;
+		background-position: 0 50%;
+		background-repeat: no-repeat;
+		display: inline-block;
+		/*
+		height: 20px;
+		line-height: 20px;
+		*/
+		padding-left: 22px;
    }
 
    .misc_removerate {
@@ -151,42 +151,42 @@
 
 	.rate { margin-top: 50px; }
 	.rate .cr_extitle {
-	    width: 100%;
-	    top: -20px;
-	    position: absolute;
-	    height: auto;
-	    overflow: hidden;
-	    margin-bottom: 15px;
+		width: 100%;
+		top: -20px;
+		position: absolute;
+		height: auto;
+		overflow: hidden;
+		margin-bottom: 15px;
 	}
 	.cr_ratl {
-	    border: {SPECIALBORDER} 1px solid;
-	    background: {WRAPBG};
-	    position: relative;
-	    padding-top: 40px;
+		border: {SPECIALBORDER} 1px solid;
+		background: {WRAPBG};
+		position: relative;
+		padding-top: 40px;
 
-	    padding-left: 10px;
-	    padding-right: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 
 	/*
 	.rate .cr_extitle li {
-	    height: 50px;
-	    width: auto;
-	    overflow: hidden;
-	    padding-left: 8px;
-	    float: left;
-	    margin-right: 10px;
-	    background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat 0 0;
+		height: 50px;
+		width: auto;
+		overflow: hidden;
+		padding-left: 8px;
+		float: left;
+		margin-right: 10px;
+		background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat 0 0;
 	}
 	.cr_extitle li span {
-	    height: 50px;
-	    width: auto;
-	    display: block;
-	    _float: left;
-	    overflow: hidden;
-	    padding-right: 8px;
-	    background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat right 0;
-	    color: #999;
+		height: 50px;
+		width: auto;
+		display: block;
+		_float: left;
+		overflow: hidden;
+		padding-right: 8px;
+		background: url({STATICURL}image/plus/common/cr_extitle.gif) no-repeat right 0;
+		color: #999;
 	}
 	*/
 
@@ -233,15 +233,15 @@
 
 	.rate .cr_extitle li.avt {
 		height: 25px;
-	    min-height: 25px;
-    }
+		min-height: 25px;
+	}
 
 	.cr_extitle li strong,
 	.cr_extitle li strong a {
-	    display: block;
-	    font-weight: bold;
-	    color: {NOTICETEXT};
-	    font: 22px/25px "Arial";
+		display: block;
+		font-weight: bold;
+		color: {NOTICETEXT};
+		font: 22px/25px "Arial";
 	}
 
 	.ratl {
@@ -250,27 +250,27 @@
 	}
 	/*
 	.ratl th {
-	    width: 110px;
-	    border: 0;
-	    padding-left: 10px;
+		width: 110px;
+		border: 0;
+		padding-left: 10px;
 	}
 	*/
 	/*
 	.ratl th img {
-	    border: #ddd 1px solid;
-	    padding: 1px;
+		border: #ddd 1px solid;
+		padding: 1px;
 	}
 	*/
 	.ratl td { border: 0; }
 	/*
 	.ratl td.xi1 { width:120px;background:url({IMGDIR}/agree.gif) no-repeat 0 11px; padding-left:18px;}
 	p.ratc {
-	    height: 22px;
-	    line-height: 22px;
-	    padding: 0;
-	    text-align: right;
-	    border: 0;
-	    padding-right: 10px;
+		height: 22px;
+		line-height: 22px;
+		padding: 0;
+		text-align: right;
+		border: 0;
+		padding-right: 10px;
 	}
 	*/
 
@@ -284,6 +284,22 @@
 		-moz-border-radius: 6px;
 		border-radius: 6px;
 	}
+
+	.cm .pstl .sctpl_reply
+	{
+		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
+		padding:5px 10px 5px 25px;
+	}
+
+	.cm .dtls {
+		background:url({IMGDIR}/treeline_short.gif) no-repeat 5px 2px;
+		min-height: 24px;
+	}
+
+	.cm .dtll {
+		background:url({IMGDIR}/treeline_long.gif) no-repeat 2.5em 2px;
+		min-height: 24px;
+	}
 /** end **/
 
 /** home::space **/
@@ -292,13 +308,13 @@
 	, #share_ul .sctpl_reply
 	{
 		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
-	    padding:5px 10px 5px 25px;
-    }
+		padding:5px 10px 5px 25px;
+	}
 
-    .space_doing .sctpl_message img
+	.space_doing .sctpl_message img
 	, .space_doing_li .sctpl_message img
 	{
-    	vertical-align: bottom;
+		vertical-align: bottom;
 	}
 
 	/* 小頭像的大小(紀錄列表內) */

@@ -89,6 +89,13 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	if(!$comment) {
 		showmessage('post_sm_isnull');
 	}
+
+	// bluelovers
+	$_G['gp_upid'] = max(0, intval($_G['gp_upid']));
+	$_upid = DB::fetch_first("SELECT * FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND id = '{$_G[gp_upid]}' LIMIT 1");
+	$_G['gp_upid'] = intval($_upid['id']);
+	// bluelovers
+
 	DB::insert('forum_postcomment', array(
 		'tid' => $post['tid'],
 		'pid' => $post['pid'],
@@ -98,6 +105,11 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		'comment' => $comment,
 		'score' => $commentscore ? 1 : 0,
 		'useip' => $_G['clientip'],
+
+		// bluelovers
+		'upid'		=> $_upid['id'],
+		'grade'		=> ($_upid['grade'] + 1),
+		// bluelovers
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
 	!empty($_G['uid']) && updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
