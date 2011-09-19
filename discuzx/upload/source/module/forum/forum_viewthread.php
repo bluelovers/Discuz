@@ -739,9 +739,10 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 			// bluelovers
 			$value = $comment;
 
-			$_newdoids[$value['id']] = $value['pid'];
 			if(empty($value['upid'])) {
 				$value['upid'] = "pid$value[pid]";
+
+				$_newdoids[$value['pid']] = $value['pid'];
 			}
 			$tree->setNode($value['id'], $value['upid'], $value);
 			// bluelovers
@@ -755,7 +756,7 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 	$comments_clist = array();
 
 	// bluelovers
-	foreach ($_newdoids as $_id => $_pid) {
+	foreach ($_newdoids as $_pid) {
 		$values = $tree->getChilds("pid$_pid");
 
 		$show = false;
@@ -779,7 +780,7 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 
 			$_pid = $one['pid'];
 
-			$comments_clist[$_pid][$_id][] = $one;
+			$comments_clist[$_pid][] = $one;
 		}
 	}
 	// bluelovers
