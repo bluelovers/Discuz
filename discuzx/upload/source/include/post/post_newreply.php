@@ -124,10 +124,11 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 		// bluelovers
 		$_user_list[] = $post['authorid'];
-
 	}
 
 	foreach ($_user_list as $_uid) {
+		if ($_uid == $_G['uid']) continue;
+
 		// bluelovers
 
 		/*
