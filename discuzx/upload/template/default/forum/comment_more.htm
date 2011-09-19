@@ -1,7 +1,8 @@
 <!--{template common/header}-->
 
 <!--{if 1}-->
-	<!--{eval $comments[$_G[gp_pid]] = $comments;}-->
+	<!--{eval $post[pid] = $_G[gp_pid];}-->
+	<!--{eval $comments[$post[pid]] = $comments;}-->
 
 	<!--{subtpl subblock/forum/viewthread_node_body_comment}-->
 
