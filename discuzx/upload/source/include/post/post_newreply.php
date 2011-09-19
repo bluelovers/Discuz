@@ -167,38 +167,6 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	// bluelovers
 	if (!empty($_G['uid'])) {
 
-		// 評論時可同時提醒該主題的發表者
-		if (
-			!in_array($_G['uid'], array(
-				$thread['authorid'],
-				$post['authorid'],
-			))
-		) {
-			notification_add($thread['authorid'], 'pcomment', 'comment_add', array(
-				'tid' => $_G['tid'],
-				'pid' => $post['pid'],
-				'subject' => $thread['subject'],
-				'commentmsg' => $_commentmsg
-			));
-		}
-
-		// 評論時可同時提醒參與過該帖子的點評者
-		$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$post[pid]'");
-		while($_row = DB::fetch($query)) {
-			if (!in_array($_row['authorid'], array(
-				$thread['authorid'],
-				$post['authorid'],
-				$_G['uid'],
-			))) {
-				notification_add($_row['authorid'], 'pcomment', 'comment_add', array(
-					'tid' => $_G['tid'],
-					'pid' => $post['pid'],
-					'subject' => $thread['subject'],
-					'commentmsg' => $_commentmsg
-				));
-			}
-		}
-
 		// 使點評 可以產生動態
 		if(!isset($_G['gp_addfeed'])) {
 			$space = array();
