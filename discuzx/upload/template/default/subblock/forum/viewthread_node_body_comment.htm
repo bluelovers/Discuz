@@ -20,6 +20,7 @@
 						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2 sctpl_reply" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{elseif
 						$allowpostreply
+						&& ($post['allowcomment'] && (!$thread['closed'] || $_G['forum']['ismoderator']))
 					}-->
 						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2 sctpl_reply" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{/if}-->
