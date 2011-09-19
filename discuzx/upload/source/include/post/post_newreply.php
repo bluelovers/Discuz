@@ -569,10 +569,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 
 			// 同時提醒主題發表者
-			if (in_array($thread['authorid'], array(
-				$_G['uid'],
-				$nauthorid,
-			))) {
+			if ($thread['authorid'] != $_G['uid']) {
 				$_user_list[] = $thread['authorid'];
 			}
 
