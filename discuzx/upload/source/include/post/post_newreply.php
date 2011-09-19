@@ -572,21 +572,6 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			if ($thread['authorid'] != $_G['uid']) {
 				$_user_list[] = $thread['authorid'];
 			}
-
-			$_user_list = array_unique($_user_list);
-
-			foreach($_user_list as $_uid) {
-				if ($_uid == $_G['uid']) continue;
-
-				notification_add($_uid, 'post', 'reppost_noticeauthor', array(
-					'tid' => $thread['tid'],
-					'subject' => $thread['subject'],
-					'fid' => $_G['fid'],
-					'pid' => $pid,
-					'from_id' => $thread['tid'],
-					'from_idtype' => 'post',
-				));
-			}
 		}
 		// bluelovers
 
