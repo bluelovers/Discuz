@@ -126,6 +126,15 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		$_user_list[] = $post['authorid'];
 	}
 
+	if (!empty($_G['uid'])) {
+
+		// 提醒主題作者
+		if ($_G['uid'] != $thread['authorid']) {
+			$_user_list[] = $thread['authorid'];
+		}
+
+	}
+
 	foreach ($_user_list as $_uid) {
 		if ($_uid == $_G['uid']) continue;
 
