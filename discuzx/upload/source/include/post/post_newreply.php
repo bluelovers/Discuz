@@ -141,7 +141,10 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 			WHERE
 				tid='$_G[tid]'
 				AND
+					(
 					pid = '$post[pid]'
+					OR rpid = '$post[pid]'
+					)
 		");
 		while($_row = DB::fetch($query)) {
 			if ($_row['authorid'] != $_G['uid']) {
