@@ -721,6 +721,8 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 	// bluelovers
 	require_once libfile('class/tree');
 	$tree = new tree();
+
+	$_newdoids = array();
 	// bluelovers
 
 	$query = DB::query("SELECT * FROM ".DB::table('forum_postcomment')." WHERE pid IN (".$_G['forum_commonpid'].') ORDER BY dateline DESC');
@@ -733,12 +735,54 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 			$comment['dateline'] = dgmdate($comment['dateline'], 'u');
 			$comment['comment'] = str_replace(array('[b]', '[/b]', '[/color]'), array('<b>', '</b>', '</font>'), preg_replace("/\[color=([#\w]+?)\]/i", "<font color=\"\\1\">", $comment['comment']));
 			$comments[$comment['pid']][] = $comment;
+
+			// bluelovers
+			$value = $comment;
+
+			$_newdoids[$value['id']] = $value['pid'];
+			if(empty($value['upid'])) {
+				$value['upid'] = "pid$value[pid]";
+			}
+			$tree->setNode($value['id'], $value['upid'], $value);
+			// bluelovers
 		}
 		if($comment['authorid'] == '-1') {
 			$cic = 0;
 			$totalcomment[$comment['pid']] = preg_replace('/<i>([\.\d]+)<\/i>/e', "'<i class=\"cmstarv\" style=\"background-position:20px -'.(intval(\\1) * 16).'px\">'.sprintf('%1.1f', \\1).'</i>'.(\$cic++ % 2 ? '<br />' : '');", $comment['comment']);
 		}
 	}
+
+	// bluelovers
+	foreach ($_newdoids as $_id => $_pid) {
+		$values = $tree->getChilds("pid$_pid");
+
+		$show = false;
+		foreach ($values as $key => $id) {
+			$one = $tree->getValue($id);
+			$one['layer'] = $tree->getLayer($id) * 2 - 2;
+			$one['style'] = "padding-left:{$one['layer']}em;";
+			if($_GET['highlight'] && $one['id'] == $_GET['highlight']) {
+				$one['style'] .= 'color:#F60;';
+			}
+			if($one['layer'] > 0){
+				if($one['layer']%3 == 2) {
+					$one['class'] = ' dtls';
+				} else {
+					$one['class'] = ' dtll';
+				}
+			}
+			if(!$show && $one['uid']) {
+				$show = true;
+			}
+
+			$_pid = $one['pid'];
+
+			$clist[$_pid][$_id][] = $one;
+		}
+	}
+
+	debug($clist);
+	// bluelovers
 }
 
 if($_G['forum_attachpids'] != '-1' && !defined('IN_ARCHIVER')) {
