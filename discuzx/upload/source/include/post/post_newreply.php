@@ -134,6 +134,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		}
 
 		// 評論時可同時提醒參與過該帖子的點評者
+		// 評論時可同時提醒參與過該帖子的回覆者
 		$query = DB::query("SELECT
 			distinct authorid
 			FROM
