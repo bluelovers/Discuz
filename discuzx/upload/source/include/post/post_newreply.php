@@ -130,7 +130,13 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	foreach ($_user_list as $_uid) {
 		// bluelovers
 
+		/*
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
+		*/
+		// bluelovers
+		notification_add($_uid, 'pcomment', 'comment_add', array(
+		// bluelovers
+
 			'tid' => $_G['tid'],
 			'pid' => $_G['gp_pid'],
 			'subject' => $thread['subject'],
