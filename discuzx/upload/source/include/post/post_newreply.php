@@ -121,6 +121,15 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	// bluelovers
 
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
+
+		// bluelovers
+		$_user_list[] = $post['authorid'];
+
+	}
+
+	foreach ($_user_list as $_uid) {
+		// bluelovers
+
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
 			'tid' => $_G['tid'],
 			'pid' => $_G['gp_pid'],
