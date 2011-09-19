@@ -89,6 +89,12 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	if(!$comment) {
 		showmessage('post_sm_isnull');
 	}
+
+	// bluelovers
+	$_G['gp_upid'] = max(0, intval($_G['gp_upid']));
+	$_upid = DB::fetch_first("SELECT * FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND id = '{$_G[gp_upid]}' LIMIT 1");
+	// bluelovers
+
 	DB::insert('forum_postcomment', array(
 		'tid' => $post['tid'],
 		'pid' => $post['pid'],
