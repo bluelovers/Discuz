@@ -2092,6 +2092,7 @@ function strLenCalc(obj, checklen, maxlen) {
 	// bluelovers
 	var is_subject = (
 		obj.name == 'subject'
+		|| obj.name == 'message'
 	) ? true : false;
 
 	curlen = mb_strlen(v, is_subject);
