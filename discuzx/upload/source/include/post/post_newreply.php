@@ -563,11 +563,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			// 回覆時可同時提醒點評過目前回覆的帖子的人
 			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$rpid'");
 			while($_row = DB::fetch($query)) {
-				if (!in_array($_row['authorid'], array(
-					$_G['uid'],
-					$nauthorid,
-					0,
-				))) {
+				if ($_row['authorid'] != $_G['uid']) {
 					$_user_list[] = $_row['authorid'];
 				}
 			}
