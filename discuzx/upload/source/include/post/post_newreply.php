@@ -174,8 +174,6 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 			'subject' => $thread['subject'],
 			'commentmsg' => $_commentmsg
 		));
-
-		//TODO:增加可提醒其他點評此帖的用戶
 	}
 
 	// bluelovers
