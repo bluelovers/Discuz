@@ -255,17 +255,6 @@ if($_G['gp_action'] == 'paysucceed') {
 		showmessage('postcomment_closed');
 	}
 
-	// bluelovers
-	$posttable = getposttablebytid($_G['tid']);
-	$pidappend = intval($_G['gp_pid']);
-	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE pid='$pidappend'");
-
-	require_once libfile('class/tree');
-	$tree = new tree();
-
-	$_newdoids = array();
-	// bluelovers
-
 	require_once libfile('function/discuzcode');
 	$commentlimit = intval($_G['setting']['commentnumber']);
 	$page = max(1, $_G['page']);
@@ -277,55 +266,11 @@ if($_G['gp_action'] == 'paysucceed') {
 		$comment['dateline'] = dgmdate($comment['dateline'], 'u');
 		$comment['comment'] = str_replace(array('[b]', '[/b]', '[/color]'), array('<b>', '</b>', '</font>'), preg_replace("/\[color=([#\w]+?)\]/i", "<font color=\"\\1\">", $comment['comment']));
 		$comments[] = $comment;
-
-		// bluelovers
-		$value = $comment;
-
-		if(empty($value['upid'])) {
-			$value['upid'] = "pid$value[pid]";
-
-			$_newdoids[$value['pid']] = $value['pid'];
-		}
-		$tree->setNode($value['id'], $value['upid'], $value);
-		// bluelovers
 	}
 	$totalcomment = DB::result_first('SELECT comment FROM '.DB::table('forum_postcomment')." WHERE pid='$_G[gp_pid]' AND authorid='-1'");
 	$totalcomment = preg_replace('/<i>([\.\d]+)<\/i>/e', "'<i class=\"cmstarv\" style=\"background-position:20px -'.(intval(\\1) * 16).'px\">'.sprintf('%1.1f', \\1).'</i>'.(\$cic++ % 2 ? '<br />' : '');", $totalcomment);
 	$count = DB::result_first('SELECT count(*) FROM '.DB::table('forum_postcomment')." WHERE pid='$_G[gp_pid]' AND authorid>'-1'");
 	$multi = multi($count, $commentlimit, $page, "forum.php?mod=misc&action=commentmore&tid=$_G[tid]&pid=$_G[gp_pid]");
-
-	// bluelovers
-	$comments_clist = array();
-
-	foreach ($_newdoids as $_pid) {
-		$values = $tree->getChilds("pid$_pid");
-
-		$show = false;
-		foreach ($values as $key => $id) {
-			$one = $tree->getValue($id);
-			$one['layer'] = $tree->getLayer($id) * 2 - 2;
-			$one['style'] = "padding-left:{$one['layer']}em;";
-			if($_GET['highlight'] && $one['id'] == $_GET['highlight']) {
-				$one['style'] .= 'color:#F60;';
-			}
-			if($one['layer'] > 0){
-				if($one['layer']%3 == 2) {
-					$one['class'] = ' dtls';
-				} else {
-					$one['class'] = ' dtll';
-				}
-			}
-			if(!$show && $one['uid']) {
-				$show = true;
-			}
-
-			$_pid = $one['pid'];
-
-			$comments_clist[$_pid][] = $one;
-		}
-	}
-	// bluelovers
-
 	include template('forum/comment_more');
 
 } elseif($_G['gp_action'] == 'postappend') {
