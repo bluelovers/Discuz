@@ -558,8 +558,6 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 		// bluelovers
 		if (!empty($_G['uid'])) {
-			$_user_list = array();
-
 			$rpid = intval($_G['gp_reppid']);
 
 			// 回覆時可同時提醒點評過目前回覆的帖子的人
