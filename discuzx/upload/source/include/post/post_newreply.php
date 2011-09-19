@@ -134,7 +134,14 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		}
 
 		// 評論時可同時提醒參與過該帖子的點評者
-		$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND pid = '$post[pid]'");
+		$query = DB::query("SELECT
+			distinct authorid
+			FROM
+				".DB::table('forum_postcomment')."
+			WHERE
+				tid='$_G[tid]'
+				AND pid = '$post[pid]'
+		");
 		while($_row = DB::fetch($query)) {
 			if ($_row['authorid'] != $_G['uid']) {
 				$_user_list[] = $_row['authorid'];
