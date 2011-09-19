@@ -140,7 +140,8 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 				".DB::table('forum_postcomment')."
 			WHERE
 				tid='$_G[tid]'
-				AND pid = '$post[pid]'
+				AND
+					pid = '$post[pid]'
 		");
 		while($_row = DB::fetch($query)) {
 			if ($_row['authorid'] != $_G['uid']) {
