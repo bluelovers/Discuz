@@ -1,5 +1,9 @@
 <!-- for viewthread_node_body -->
+
+<!--{if $_G['gp_action'] != 'commentmore'}-->
 	<div id="comment_$post[pid]" class="cm">
+<!--{/if}-->
+
 	<!--{if $_G['setting']['commentnumber'] && !empty($comments[$post[pid]])}-->
 		<h3 class="psth xs1">{lang comments}</h3>
 		<!--{if $totalcomment[$post[pid]]}--><div class="pstl">$totalcomment[$post[pid]]</div><!--{/if}-->
@@ -74,4 +78,7 @@
 
 		<!--{if $commentcount[$post[pid]] > $_G['setting']['commentnumber']}--><div class="pgs mbm cl"><div class="pg"><a href="javascript:;" class="nxt" onclick="ajaxget('forum.php?mod=misc&action=commentmore&tid=$post[tid]&pid=$post[pid]&page=2', 'comment_$post[pid]')">{lang next_page}</a></div></div><!--{/if}-->
 	<!--{/if}-->
+
+<!--{if $_G['gp_action'] != 'commentmore'}-->
 	</div>
+<!--{/if}-->
