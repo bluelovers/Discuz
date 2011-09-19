@@ -558,6 +558,8 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			$_user_list = array_unique($_user_list);
 
 			foreach($_user_list as $_uid) {
+				if ($_uid == $_G['uid']) continue;
+
 				notification_add($_uid, 'post', 'reppost_noticeauthor', array(
 					'tid' => $thread['tid'],
 					'subject' => $thread['subject'],
@@ -627,6 +629,9 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		$_user_list2 = array_unique($_user_list2);
 
 		foreach($_user_list2 as $_uid) {
+
+			if ($_uid == $_G['uid']) continue;
+
 			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
 				'tid' => $thread['tid'],
 				'subject' => $thread['subject'],
