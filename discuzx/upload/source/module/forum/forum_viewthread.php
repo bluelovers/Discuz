@@ -717,6 +717,12 @@ if($_G['forum_ratelogpid']) {
 
 $comments = $commentcount = $totalcomment = array();
 if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
+
+	// bluelovers
+	require_once libfile('class/tree');
+	$tree = new tree();
+	// bluelovers
+
 	$query = DB::query("SELECT * FROM ".DB::table('forum_postcomment')." WHERE pid IN (".$_G['forum_commonpid'].') ORDER BY dateline DESC');
 	while($comment = DB::fetch($query)) {
 		if($comment['authorid'] > '-1') {
