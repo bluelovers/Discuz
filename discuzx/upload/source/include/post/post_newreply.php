@@ -116,6 +116,8 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 	// bluelovers
 	$_commentmsg = cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200);
+
+	$_user_list = array();
 	// bluelovers
 
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
