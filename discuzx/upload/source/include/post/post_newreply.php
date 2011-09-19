@@ -106,7 +106,7 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		'useip' => $_G['clientip'],
 
 		// bluelovers
-		'upid'		=> max(0, intval($_G['gp_upid'])),
+		'upid'		=> $_upid['id'],
 		// bluelovers
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
