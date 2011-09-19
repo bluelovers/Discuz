@@ -1,0 +1,74 @@
+﻿/*
+[name]玫瑰珠光[/name]
+[iconbgcolor]#A65F8B[/iconbgcolor]
+Powered by CGMVSKIN 
+URL: http://skin.cgmv.com.cn:88
+*/
+
+/* 页面背景 */
+body{ background:#5B2547 url(bg.png) repeat-x left top;}
+
+/* 顶部文字导航链接 */
+#toptb a { color:#fce9f8; float: left; padding: 0 4px; height: 30px; }
+#toptb a:hover { text-decoration:none; color:#e4c6e6; float: left; padding: 0 4px; height: 30px; }
+
+/* 页头背景 */
+#hd { background-color: transparent; background-image:url(hd_bg.png) repeat-x 0 0; border-bottom: {HEADERBORDER} solid {SPECIALBORDER};}
+.tophdbg_t{ padding:10px 0 0 0; height:100%; overflow:hidden; background: url(tophdbg_t.png) repeat-x 0 0;}
+.tophdbg_b{ padding:0 0 20px 0; height:100%; overflow:hidden; background: url(tophdbg_b.png) repeat-x 0 bottom;}
+
+/* 页尾背景 */
+.ftbox{ background-color: transparent; padding: 0 0 0 0; height:96px;}
+
+.ftwp{ overflow:hidden; height:54px; background: url(ft_yjbox_bg.png) repeat-x 0 -108px;}
+.ft_yjbox_l{ float:left; width:10px; height:54px; overflow:hidden; _margin:0 -3px 0 0; background: url(ft_yjbox_bg.png) no-repeat left top;}
+.ft_yjbox_r{ float:right; width:10px; height:54px; overflow:hidden; _margin:0 0 0 -3px; background: url(ft_yjbox_bg.png) no-repeat right -54px;}
+
+/* 导航栏 */
+#nv { background-color: #690039; background-image: url(nv.png); }
+#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
+#nv li.a { background-color: #f8f8f8; }
+#qmenu { background-image: url(qmenu.png); }
+
+/* 页尾文字颜色 */
+#ft, #ft .pipe{ color:#99446D;}
+#ft a{ color:#99446D;}
+#ft a:hover{ color:#690039;}
+
+/* 站点信息图标 */
+.chart { padding-left: 22px; background: url(chart.png) no-repeat 0 50%; color: {LIGHTTEXT}; }
+
+/* 阴影框架 */
+.shadow_lft{ overflow:hidden; width:auto; height:100%; background:none;}
+.shadow_rgt{ overflow:hidden; width:auto; height:100%; background:none;}
+
+/* 版块头 */
+.fl .bm_h { border-width: 0; background: url(ftbg.png) no-repeat left top; border-color: {SPECIALBORDER};}
+.fl .bm_h .o { float: right; width: 30px; height:31px; background: url(ftbg.png) no-repeat right top;}
+.fl .bm_h h2 a{ color:#690039;}
+
+
+.bm_h { padding:0 0 0 20px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid #dedede; background: #FBE9FC url(titlebg.png) repeat-x 0 0; line-height: 31px; white-space: nowrap; overflow: hidden; }
+.fl .bm_h h2{ margin:0;}
+
+/* 区块 */
+.fl .bm_c, #online .bm_c, .lk .bm_c {  background: url(bm_c_bg.png) repeat-x 0 0; padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; }
+
+
+
+/* 返回顶部按钮 */
+#scrolltop { visibility: hidden; position: fixed; bottom: 100px; display: block; margin: -30px 0 0; width: 26px; height: 50px; background: url(scrolltop.png) no-repeat 50% 0; line-height: 999px; overflow: hidden; cursor: pointer; }
+
+/* 侧边背景 */
+.ct2_a, .ct3_a { background-image: url(vlineb.png); }
+#nv_group .ct2_a{ background-image:none;}
+#nv_portal.pg_portalcp .ct2_a_r, #nv_forum.pg_post .ct2_a_r { background-image: none; }
+
+/* 搜索框 */
+#scbar { height: 44px; border: solid {SPECIALBG}; border-width:0; background: url(search.png) repeat-x 0 0; line-height: 44px; overflow: hidden; }
+.scbar_icon_td { width: 50px; background: url(search.png) no-repeat 0 -74px; }
+.scbar_txt_td, .scbar_type_td { background: url(search.png) repeat-x 0 -222px; }
+.scbar_btn_td { width: 67px; background: url(search.png) no-repeat 0 -296px; text-align: center; }
+.scbar_type_td { background: url(search.png) no-repeat 0 -370px; }
+
+.nvhm { width: 16px; background: url(search.png) no-repeat -8px -119px; line-height: 200px; overflow: hidden; }

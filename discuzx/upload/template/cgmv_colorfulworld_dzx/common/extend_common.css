@@ -1,0 +1,88 @@
+.wp { margin: 0 auto; }
+#wp .wp { width: auto; }
+#wp{ margin:0 auto 10px auto;}
+
+#nv li { float: left; padding-right: 1px; height: 33px; line-height: 33px; background: url({IMGDIR}/nv_a.png) no-repeat 100% 0; font-weight: normal; font-size: 12px; }
+#nv li a:hover { color:#f8f8f8; text-decoration:none; background: url({IMGDIR}/nv_a.png) no-repeat 50% -66px; }
+#nv li.a a:hover { background: url({IMGDIR}/nv_a.png) no-repeat 50% -99px; color:{LINK}; }
+
+
+#toptb { line-height: 30px;}
+#toptb a { float: left; padding: 0 4px; height: 30px; }
+.toptba a{ color:#e6e6e6;}
+.toptba a:hover{ color:#ccc; text-decoration:none;}
+
+#hd .wp { padding:0; }
+
+#scbar { height: 44px; border: solid {SPECIALBG}; border-width:0; background: url({IMGDIR}/search.png) repeat-x 0 0; line-height: 44px; overflow: hidden; }
+
+#qmenu { float: right; text-shadow: none; font-weight: normal; display: inline; margin: 3px 4px 0; padding: 0 12px 0 0; width: 83px; height: 26px; background: url({IMGDIR}/qmenu.png) no-repeat 0 0; line-height: 26px; text-align: center; color: {HIGHLIGHTLINK}; overflow: hidden; }
+
+/* 菜单横排 */
+#mu ul { padding:10px 0; overflow:hidden; background: url({IMGDIR}/mu_bg.png) no-repeat 0 100%; line-height: 22px; z-index: 2; font-size: 12px; }
+#mu li { float: left; height: 28px; overflow:hidden; }
+
+/* 二级导航广告 */ 
+.a_mu_box{ margin:10px 0 5px 0;}
+.a_mu { border: solid {COMMONBORDER}; border-width:1px; background: {COMMONBG}; }
+
+/* 格子广告 */ .a_t { overflow:hidden; margin-bottom: 10px; }
+/* 页头广告 */ .a_h { margin:0 auto 10px auto;}
+
+/* 版块头样式 */
+.fl .bm_h { border-width: 0; background: url({IMGDIR}/ftbg.png) no-repeat left top; border-color: {SPECIALBORDER};}
+.fl .bm_h h2{ margin:0 0 0 10px;}
+.fl .bm_h .o { float: right; width: 30px; height:31px; background: url({IMGDIR}/ftbg.png) no-repeat right top;}
+.bm_h .o img { float: right; margin:11px 20px 0 0;cursor: pointer; }
+.bm_h { padding: 0 0 0 10px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid {CONTENTSEPARATE}; background: {COMMONBG}; line-height: 31px; white-space: nowrap; overflow: hidden; }
+
+.bm_h .y{ margin:0 10px 0 0;}
+/* 区块 */
+.fl { border: 0px solid {COMMONBORDER}; border-top: none; background: {WRAPBG}; }
+
+#online .bm_c, .lk .bm_c {  background: url({IMGDIR}/bm_c_bg.png) repeat-x 0 0; padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; }
+
+/* 发表回复 */
+.pnc, a.pnc { border-color: #525252; background-color: #e5ab84; background-position: 0 -48px; color: #FFF !important; }
+
+/*外部框架*/
+.wp2{ width:980px; overflow:hidden; margin:0 auto; }
+.wp3{ margin:0 10px;}
+.wp4{ width:100%; background:#fff; }
+.wp5{ width:980px; overflow:hidden; margin:0 auto; }
+.wp6{ overflow:hidden; margin:0 10px; }
+.wp7{ margin:0;}
+.wp8{ margin:0;}
+
+/* 颜色切换 */
+#sslct_menu { padding:0 0 0 30px;}
+.sslct_showbox{ overflow:hidden; height:24px; background:#fff; }
+.sslct_btn { float: left; margin: 4px 5px 0 0; width: 12px; height: 12px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
+.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
+
+/* 阴影框架 */
+.shadowbox{ width:1000px; height:100%; margin:0 auto; }
+.shadow_lft{ overflow:hidden; width:auto; height:100%; background:url({IMGDIR}/shadow.png) right repeat-y;}
+.shadow_rgt{ overflow:hidden; width:auto; height:100%; background:url({IMGDIR}/shadow.png) left repeat-y;}
+
+.ie6 .shadow_lft{ overflow:hidden; width:auto; height:100%; background:none;}
+.ie6 .shadow_rgt{ overflow:hidden; width:auto; height:100%; background:none;}
+
+.mainbox{ width:980px; margin:0 auto; overflow:hidden; background:#fff; }
+
+.yjtopbox{ height:10px; line-height:10px; overflow:hidden;}
+.yjtop_l{ height:10px; overflow:hidden; background: url({IMGDIR}/yjtop.png) no-repeat left top;}
+.yjtop_r{ float:right; width:10px; height:10px; _margin:0 0 0 -3px; overflow:hidden; background: url({IMGDIR}/yjtop.png) no-repeat right -20px;}
+
+/* 新增样式 */
+.tophdbg{ height:100%; overflow:hidden;}
+.tophdbg_t{ padding:10px 0 0 0; height:100%; overflow:hidden; background: url({IMGDIR}/tophdbg_t.png) repeat-x 0 0;}
+.tophdbg_b{ padding:0 0 20px 0; height:100%; overflow:hidden; background:#fff url({IMGDIR}/tophdbg_b.png) repeat-x 0 bottom;}
+
+/* 底部 */
+.ftbox{ padding: 0 0 0 0; height:96px; background:{HEADERBGCOLOR};}
+.ftwp{ overflow:hidden; height:54px; background: url({IMGDIR}/ft_yjbox_bg.png) repeat-x 0 -108px;}
+#ft{ width:auto; overflow:hidden; padding:5px 0 0 0; border-top: 0px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT};}
+.ft_yjbox{ width:980px; height:54px; overflow:hidden; margin:0 auto; }
+.ft_yjbox_l{ float:left; width:10px; height:54px; overflow:hidden; _margin:0 -3px 0 0; background: url({IMGDIR}/ft_yjbox_bg.png) no-repeat left top;}
+.ft_yjbox_r{ float:right; width:10px; height:54px; overflow:hidden; _margin:0 0 0 -3px; background: url({IMGDIR}/ft_yjbox_bg.png) no-repeat right -54px;}

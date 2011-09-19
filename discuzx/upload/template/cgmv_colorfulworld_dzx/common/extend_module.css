@@ -1,0 +1,4 @@
+#toptb { padding: 0 15px; border-bottom: 1px solid #EFEFEF; }
+#toptb a { color:#666; float: left; padding: 0 4px; height: 24px; }
+#toptb a.showmenu { padding-right: 15px; }
+#toptb a.hover { color:#333; background-color: #FFF; }

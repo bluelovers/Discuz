@@ -1,0 +1,37 @@
+﻿/*
+[name]橙色风暴[/name]
+[iconbgcolor]#ff9900[/iconbgcolor]
+Powered by CGMVSKIN 
+URL: http://skin.cgmv.com.cn:88
+*/
+
+/* 页面背景 */
+body{ background:#777;}
+
+/* 顶部文字导航链接 */
+#toptb a { color:#ddd; float: left; padding: 0 4px; height: 30px; }
+#toptb a:hover { text-decoration:none; color:#f8f8f8; float: left; padding: 0 4px; height: 30px; }
+
+/* 页头背景 */
+#hd { background-color:transparent; border-bottom: {HEADERBORDER} solid {SPECIALBORDER};}
+
+/* 页尾背景 */
+.ftbox{ background-color:transparent; padding: 0 0 0 0; height:96px;}
+
+.ftwp{ overflow:hidden; height:54px; background: url(ft_yjbox_bg.png) repeat-x 0 -108px;}
+.ft_yjbox_l{ float:left; width:10px; height:54px; overflow:hidden; _margin:0 -3px 0 0; background: url(ft_yjbox_bg.png) no-repeat left top;}
+.ft_yjbox_r{ float:right; width:10px; height:54px; overflow:hidden; _margin:0 0 0 -3px; background: url(ft_yjbox_bg.png) no-repeat right -54px;}
+
+/* 导航栏 */
+#nv { background-color: #F47700; background-image: url(nv.png); }
+#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
+#nv li.a { background-color: #f4f4f4; }
+#qmenu { background-image: url(qmenu.png); }
+
+/* 页尾文字颜色 */
+#ft, #ft .pipe{ color:#888;}
+#ft a{ color:#888;}
+#ft a:hover{ color:#b3b3b3;}
+
+/* 站点信息图标 */
+.chart { padding-left: 22px; background: url(chart.png) no-repeat 0 50%; color: {LIGHTTEXT}; }
