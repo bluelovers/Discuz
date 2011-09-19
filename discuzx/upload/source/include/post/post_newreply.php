@@ -143,6 +143,8 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 
 	}
 
+	$_user_list = array_unique($_user_list);
+
 	foreach ($_user_list as $_uid) {
 		if ($_uid == $_G['uid']) continue;
 
