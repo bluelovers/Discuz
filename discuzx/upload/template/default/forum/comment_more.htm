@@ -1,4 +1,12 @@
 <!--{template common/header}-->
+
+<!--{if 1}-->
+	<!--{eval $comments[$_G[gp_pid]] = $comments;}-->
+
+	<!--{subtpl subblock/forum/viewthread_node_body_comment}-->
+
+<!--{else}-->
+
 <!--{if $comments}-->
 	<h3 class="psth cm">{lang comments}</h3>
 	<!--{if $totalcomment}--><div class="pstl">$totalcomment</div><!--{/if}-->
@@ -25,4 +33,7 @@
 	<!--{/loop}-->
 <!--{/if}-->
 <div class="pgs mbm cl">$multi</div>
+
+<!--{/if}-->
+
 <!--{template common/footer}-->
