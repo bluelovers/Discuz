@@ -753,9 +753,9 @@ if($_G['forum_commonpid'] && $_G['setting']['commentnumber']) {
 		}
 	}
 
+	// bluelovers
 	$comments_clist = array();
 
-	// bluelovers
 	foreach ($_newdoids as $_pid) {
 		$values = $tree->getChilds("pid$_pid");
 
