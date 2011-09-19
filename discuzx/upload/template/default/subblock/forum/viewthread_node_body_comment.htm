@@ -12,6 +12,7 @@
 					<!--{else}-->
 					{lang guest}
 					<!--{/if}-->
+					<!-- 使評論支援分行顯示 -->
 					&nbsp;<!--{$comment[comment]:nl2br()}-->&nbsp;
 					<!--{if $comment[rpid]}-->
 						<a href="forum.php?mod=redirect&goto=findpost&pid=$comment[rpid]&ptid=$_G[tid]" class="xi2">{lang detail}</a>
