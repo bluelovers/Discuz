@@ -284,6 +284,12 @@
 		-moz-border-radius: 6px;
 		border-radius: 6px;
 	}
+
+	.cm .pstl .sctpl_reply
+	{
+		background:url({IMGDIR}/cmmnt.gif) no-repeat scroll 0 50% transparent;
+	    padding:5px 10px 5px 25px;
+    }
 /** end **/
 
 /** home::space **/
