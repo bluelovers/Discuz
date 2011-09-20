@@ -254,7 +254,9 @@ if(!IS_ROBOT) {
 
 			while ($value = DB::fetch($query)) {
 				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+					/*
 					$value = mkfeed($value);
+					*/
 					if(ckicon_uid($value)) {
 
 						if($value['dateline']>=$_G['home_today']) {
@@ -300,6 +302,11 @@ if(!IS_ROBOT) {
 
 
 					} else {
+
+						// bluelovers
+						$value = mkfeed($value);
+						// bluelovers
+
 						$filtercount++;
 						$filter_list[] = $value;
 					}
