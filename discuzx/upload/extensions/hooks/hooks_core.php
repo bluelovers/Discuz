@@ -512,8 +512,8 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
 
 	if (empty(discuz_core::$_cache_data['output']['users'])) {
-
-		include $_file;
+		$data = array();
+		@include $_file;
 
 		discuz_core::$_cache_data['output']['users'] = array_merge(
 			(array)discuz_core::$_cache_data['output']['users']
