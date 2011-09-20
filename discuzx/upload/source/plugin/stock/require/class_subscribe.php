@@ -32,7 +32,7 @@ class Subscribe
 				$this->showBuyForm($user, $sid);
 		}
 		else
-			showmessage('ÔİÊ±Í£Ö¹½»Ò×£¬ÇëÄúÉÔºóÔÙÀ´');
+			showmessage('æš‚æ—¶åœæ­¢äº¤æ˜“ï¼Œè¯·æ‚¨ç¨åå†æ¥');
 	}
 	private function showBuyForm( $user, $stock_id=0 )
 	{
@@ -60,7 +60,7 @@ class Subscribe
 		}
 		else
 		{
-			showmessage('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÔİÊ±ÎŞ·¨½»Ò×');
+			showmessage('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæš‚æ—¶æ— æ³•äº¤æ˜“');
 		}
 	}
 	private function checkStock($user, $stock_id=0)
@@ -69,16 +69,16 @@ class Subscribe
 		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_apply')." WHERE sid='$stock_id'");
 		if ( !$rs )
 		{
-			showmessage('Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÆ±£¬¿ÉÄÜ¸ÃÉÏÊĞ¹«Ë¾ÒÑ¾­µ¹±Õ');
+			showmessage('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡ç¥¨ï¼Œå¯èƒ½è¯¥ä¸Šå¸‚å…¬å¸å·²ç»å€’é—­');
 		}
 		else
 		{
-			$rs['state'] <> 1 && showmessage('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÔİÊ±ÎŞ·¨½»Ò×');
+			$rs['state'] <> 1 && showmessage('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæš‚æ—¶æ— æ³•äº¤æ˜“');
 			$buytime = DB::result_first("SELECT MAX(buytime) FROM ".DB::table('kfsm_customer')." WHERE uid='$user[id]' AND sid='$stock_id'");
 			if ( $_G['timestamp'] - $buytime < $db_tradedelay * 60 )
 			{
 				$timedelay = ceil( $db_tradedelay - ($_G['timestamp']-$buytime)/60 );
-				showmessage("¹ÉÊĞÏŞÖÆ£ºÀëÔÊĞíÔÙ´ÎÂòÈë¸Ã¹ÉÆ±»¹²î $timedelay ·ÖÖÓ£¡");
+				showmessage("è‚¡å¸‚é™åˆ¶ï¼šç¦»å…è®¸å†æ¬¡ä¹°å…¥è¯¥è‚¡ç¥¨è¿˜å·® $timedelay åˆ†é’Ÿï¼");
 			}
 			if ( is_numeric($db_iplimit) && $db_iplimit > 0 && $user['ip'] )
 			{
@@ -91,7 +91,7 @@ class Subscribe
 				if ( $sameIp )
 				{
 					$timedelay = ceil( $db_iplimit - ($_G['timestamp']-$rsip['buytime'])/60 );
-					Showmsg("¹ÉÊĞÏŞÖÆ£ºÍ¬Ò»IPÓÃ»§ÂòÈëÍ¬Ò»¹ÉÆ±Ğë¼ä¸ô $timedelay ·ÖÖÓ£¡");
+					Showmsg("è‚¡å¸‚é™åˆ¶ï¼šåŒä¸€IPç”¨æˆ·ä¹°å…¥åŒä¸€è‚¡ç¥¨é¡»é—´éš” $timedelay åˆ†é’Ÿï¼");
 				}
 			}
 		}
@@ -103,21 +103,21 @@ class Subscribe
 		if ( $rs = $this->checkStock($user, $stock_id) )
 		{
 			if ( !is_numeric($num_buy) || $num_buy < $db_tradenummin )
-				showmessage('ÇëÕıÈ·ÊäÈëÂòÈëÊıÁ¿£¡');
+				showmessage('è¯·æ­£ç¡®è¾“å…¥ä¹°å…¥æ•°é‡ï¼');
 			else
 			{
 				$rs = DB::fetch_first("SELECT userid, stocknum, surplusnum FROM ".DB::table('kfsm_apply')." WHERE sid='$stock_id'");
 				if ( $num_buy > $rs['surplusnum'] )
 				{
-					showmessage('¶Ô²»Æğ£¬¹ÉÆ±ÊıÁ¿²»×ã£¡');
+					showmessage('å¯¹ä¸èµ·ï¼Œè‚¡ç¥¨æ•°é‡ä¸è¶³ï¼');
 				}
 				else
 				{
 					if ( $db_tradenummin > 0 && $num_buy < $db_tradenummin )
-						showmessage("±¾¹ÉÊĞ¹æ¶¨£ºÃ¿±Ê×îÉÙ½»Ò×Á¿Îª $db_tradenummin ¹É£¡");
+						showmessage("æœ¬è‚¡å¸‚è§„å®šï¼šæ¯ç¬”æœ€å°‘äº¤æ˜“é‡ä¸º $db_tradenummin è‚¡ï¼");
 					$needMoney	= $price_buy * $num_buy;
 					if ( $user['fund_ava'] < $needMoney )
-						showmessage('ÄúµÄÕÊ»§ÖĞÃ»ÓĞ×ã¹»µÄ×Ê½ğÓÃÀ´¹ºÂò¹ÉÆ±');
+						showmessage('æ‚¨çš„å¸æˆ·ä¸­æ²¡æœ‰è¶³å¤Ÿçš„èµ„é‡‘ç”¨æ¥è´­ä¹°è‚¡ç¥¨');
 					else
 					{
 						$worth		= $price_buy * $num_buy;
@@ -133,7 +133,7 @@ class Subscribe
 							if ( $num_buy + $rsc['stocknum_ava'] + $rsc['stocknum_war'] > $numLtd )
 							{
 								$haveNum = $rsc['stocknum_ava'] + $rsc['stocknum_war'];
-								showmessage("±¾¹ÉÊĞ¹æ¶¨£º¹ÉÆ±Éê¹ºÊıÁ¿²»ÄÜ´óÓÚ $numLtd ¹É¡£ÄúÒÑ¾­ÓµÓĞ¸Ã¹ÉÆ± $haveNum ¹É¡£");
+								showmessage("æœ¬è‚¡å¸‚è§„å®šï¼šè‚¡ç¥¨ç”³è´­æ•°é‡ä¸èƒ½å¤§äº $numLtd è‚¡ã€‚æ‚¨å·²ç»æ‹¥æœ‰è¯¥è‚¡ç¥¨ $haveNum è‚¡ã€‚");
 							}
 							$avgprice = round( ( $price_buy * $num_buy + $rsc['averageprice'] * $rsc['stocknum_ava'] ) / ( $num_buy + $rsc['stocknum_ava'] ), 2 );
 							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$num_buy}, buyprice='{$price_buy}', averageprice='{$avgprice}', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$rsc['cid']}'");
@@ -142,14 +142,14 @@ class Subscribe
 						$kfsclass->calculatefund($user['id'], $stock_id);
 						DB::query("UPDATE ".DB::table('kfsm_apply')." SET surplusnum=surplusnum-{$num_buy}, capitalisation=capitalisation+{$worth} WHERE sid='$stock_id'");
 						DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy=todaybuy+{$num_buy}, todaytotal=todaytotal+{$worth}");
-						showmessage('¹ÉÆ±Éê¹º³É¹¦£¡', "$baseScript&mod=member&act=stocksmng");
+						showmessage('è‚¡ç¥¨ç”³è´­æˆåŠŸï¼', "$baseScript&mod=member&act=stocksmng");
 					}
 				}
 			}
 		}
 		else
 		{
-			showmessage($baseScript, '½»Ò×ÏµÍ³´íÎó');
+			showmessage($baseScript, 'äº¤æ˜“ç³»ç»Ÿé”™è¯¯');
 		}
 	}
 }

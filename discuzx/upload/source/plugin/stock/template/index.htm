@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> ÓªÒµ´óÌü
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> è¥ä¸šå¤§åŽ…
 	</div>
 </div>
 <div class="ct3_a wp cl bn">
@@ -10,43 +10,43 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li class="a"><a href="$baseScript">ÓªÒµ´óÌü</a></li>
-				<li><a href="$baseScript&mod=stock&act=quote">ÐÐÇéÖÐÐÄ</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">ÐÂÎÅÖÐÐÄ</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">×Ê²úÅÅÐÐ</a></li>
-				<li><a href="$baseScript&mod=system&act=help">¹ÉÊÐÖúÊÖ</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">×Ê½ð¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">¹ÉÆ±¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">½»Ò×²éÑ¯</a></li>
-				<li><a href="$baseScript&mod=member&act=apply">¹«Ë¾ÉÏÊÐ</a></li>
+				<li class="a"><a href="$baseScript">è¥ä¸šå¤§åŽ…</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">è¡Œæƒ…ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">æ–°é—»ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">èµ„äº§æŽ’è¡Œ</a></li>
+				<li><a href="$baseScript&mod=system&act=help">è‚¡å¸‚åŠ©æ‰‹</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">èµ„é‡‘ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">è‚¡ç¥¨ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">äº¤æ˜“æŸ¥è¯¢</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">å…¬å¸ä¸Šå¸‚</a></li>
 			</ul>
 		</div>
 	</div>
 	<div class="sd">
 		<div class="bm bw0 mtm">
 			<caption>
-				<h2 class="mbm xs2">¹ÉÊÐÐÅÏ¢</h2>
+				<h2 class="mbm xs2">è‚¡å¸‚ä¿¡æ¯</h2>
 			</caption>
 			<ul class="tbn">
 				<li class="ptm" id="foxsmtime"><script language="JavaScript" src="{$hkimg}stockins.js"></script><script language="JavaScript">foxTime();</script></li>
-				<li class="ptm"><em>×ÛºÏÖ¸Êý£º</em>{$sminfo[foxain]}</li>
-				<li class="ptm"><em>³É½»×ÜÁ¿£º</em>{$sminfo[bargainnum]} ¹É</li>
-				<li class="ptm"><em>³É½»½ð¶î£º</em>{$sminfo[bargainmoney]} Ôª</li>
+				<li class="ptm"><em>ç»¼åˆæŒ‡æ•°ï¼š</em>{$sminfo[foxain]}</li>
+				<li class="ptm"><em>æˆäº¤æ€»é‡ï¼š</em>{$sminfo[bargainnum]} è‚¡</li>
+				<li class="ptm"><em>æˆäº¤é‡‘é¢ï¼š</em>{$sminfo[bargainmoney]} å…ƒ</li>
 <!--{if $_G['adminid'] == 1}-->
-				<li class="ptm"><em>Ó¡»¨ÊÕÈë£º</em>{$sminfo[stampduty]} Ôª</li>
+				<li class="ptm"><em>å°èŠ±æ”¶å…¥ï¼š</em>{$sminfo[stampduty]} å…ƒ</li>
 <!--{/if}-->
 			</ul>
 		</div>
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">ÕÇ·ùÇ°Îå</h2>
+					<h2 class="mbm xs2">æ¶¨å¹…å‰äº”</h2>
 				</caption>
 				<tr>
-					<th>´úÂë</th>
-					<th>Ãû³Æ</th>
-					<th>×îÐÂ¼Û</td>
-					<th>ÕÇ·ù</th>
+					<th>ä»£ç </th>
+					<th>åç§°</th>
+					<th>æœ€æ–°ä»·</td>
+					<th>æ¶¨å¹…</th>
 				</tr>
 <!--{loop $rtdb $v}-->
 				<tr>
@@ -61,13 +61,13 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">µø·ùÇ°Îå</h2>
+					<h2 class="mbm xs2">è·Œå¹…å‰äº”</h2>
 				</caption>
 				<tr>
-					<th>´úÂë</th>
-					<th>Ãû³Æ</th>
-					<th>×îÐÂ¼Û</th>
-					<th>µø·ù</th>
+					<th>ä»£ç </th>
+					<th>åç§°</th>
+					<th>æœ€æ–°ä»·</th>
+					<th>è·Œå¹…</th>
 				</tr>
 <!--{loop $ftdb $v}-->
 				<tr>
@@ -84,10 +84,10 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">×îÐÂÏûÏ¢</h2>
+					<h2 class="mbm xs2">æœ€æ–°æ¶ˆæ¯</h2>
 				</caption>
 				<tr>
-					<th colspan="2">ÐÂ¹ÉÉÏÊÐ£º$nsinfo</th>
+					<th colspan="2">æ–°è‚¡ä¸Šå¸‚ï¼š$nsinfo</th>
 				</tr>
 <!--{loop $newsList $v}-->
 				<tr>
@@ -100,16 +100,16 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">ÐÂ¹ÉÉê¹º</h2>
+					<h2 class="mbm xs2">æ–°è‚¡ç”³è´­</h2>
 				</caption>
 				<tr>
-					<th>¹ÉÆ±´úÂë</th>
-					<th>¹ÉÆ±Ãû³Æ</th>
-					<th>·¢ÐÐÈÕÆÚ</th>
-					<th>ÉÏÊÐÈÕÆÚ</th>
-					<th>·¢ÐÐÊýÁ¿</th>
-					<th>·¢ÐÐ¼Û¸ñ</th>
-					<th>Ê£ÓàÊýÁ¿</th>
+					<th>è‚¡ç¥¨ä»£ç </th>
+					<th>è‚¡ç¥¨åç§°</th>
+					<th>å‘è¡Œæ—¥æœŸ</th>
+					<th>ä¸Šå¸‚æ—¥æœŸ</th>
+					<th>å‘è¡Œæ•°é‡</th>
+					<th>å‘è¡Œä»·æ ¼</th>
+					<th>å‰©ä½™æ•°é‡</th>
 				</tr>
 <!--{loop $nsdb $v}-->
 				<tr>

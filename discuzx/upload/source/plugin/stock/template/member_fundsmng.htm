@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> ×Ê½ğ¹ÜÀí
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> èµ„é‡‘ç®¡ç†
 	</div>
 </div>
 <div class="ct3_a wp cl bn">
@@ -10,28 +10,28 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li><a href="$baseScript">ÓªÒµ´óÌü</a></li>
-				<li><a href="$baseScript&mod=stock&act=quote">ĞĞÇéÖĞĞÄ</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">ĞÂÎÅÖĞĞÄ</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">×Ê²úÅÅĞĞ</a></li>
-				<li><a href="$baseScript&mod=system&act=help">¹ÉÊĞÖúÊÖ</a>
-				<li class="a"><a href="$baseScript&mod=member&act=fundsmng">×Ê½ğ¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">¹ÉÆ±¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">½»Ò×²éÑ¯</a></li>
-				<li><a href="$baseScript&mod=member&act=apply">¹«Ë¾ÉÏÊĞ</a></li>
+				<li><a href="$baseScript">è¥ä¸šå¤§å…</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">è¡Œæƒ…ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">æ–°é—»ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">èµ„äº§æ’è¡Œ</a></li>
+				<li><a href="$baseScript&mod=system&act=help">è‚¡å¸‚åŠ©æ‰‹</a>
+				<li class="a"><a href="$baseScript&mod=member&act=fundsmng">èµ„é‡‘ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">è‚¡ç¥¨ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">äº¤æ˜“æŸ¥è¯¢</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">å…¬å¸ä¸Šå¸‚</a></li>
 			</ul>
 		</div>
 	</div>
 	<div class="sd ptm">
 		<div class="bm bw0">
 			<caption>
-				<h2 class="mbm xs2">¹ÉÃñÕÊ»§</h2>
+				<h2 class="mbm xs2">è‚¡æ°‘å¸æˆ·</h2>
 			</caption>
 			<ul class="tbn">
-				<li class="ptm">ÕÊ»§Ãû³Æ£º$user[username]</li>
-				<li class="ptm">ÂÛÌ³{$user['moneyType']}£º{$user['moneyNum']} {$user['moneyUnit']}</li>
-				<li class="ptm">¿ÉÓÃ×Ê½ğ£º$user[fund_ava] Ôª</li>
-				<li class="ptm">ÕÊ»§×´Ì¬£º$user[state]</li>
+				<li class="ptm">å¸æˆ·åç§°ï¼š$user[username]</li>
+				<li class="ptm">è®ºå›{$user['moneyType']}ï¼š{$user['moneyNum']} {$user['moneyUnit']}</li>
+				<li class="ptm">å¯ç”¨èµ„é‡‘ï¼š$user[fund_ava] å…ƒ</li>
+				<li class="ptm">å¸æˆ·çŠ¶æ€ï¼š$user[state]</li>
 			</ul>
 		</div>
 	</div>
@@ -39,23 +39,23 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="tfm mtn">
 				<caption>
-					<h2 class="mbm xs2">×Ê½ğ×ªÈë</h2>
+					<h2 class="mbm xs2">èµ„é‡‘è½¬å…¥</h2>
 				</caption>
 <!--{if $db_allowdeposit == 1}-->
 				<tr>
-					<td>ËµÃ÷</td>
+					<td>è¯´æ˜</td>
 					<td>
 						<ul>
-							<li>½«ÂÛÌ³{$user['moneyType']}¶Ò»»³É¹ÉÊĞ×Ê½ğ£¬ÊÖĞø·Ñ´Ó¹ÉÊĞÕÊ»§ÖĞ¿Û³ı</li>
-							<li>´æÈëµÄ{$user['moneyType']}×îĞ¡ÖµÎª <span class="s3">$db_depositmin</span> {$user['moneyUnit']}</li>
-							<li>ÂÛÌ³{$user['moneyType']}Óë¹ÉÊĞ×Ê½ğµÄ¶Ò»»±ÈÀıÎª 1:{$exchange_rate}</li>
-							<li>ÊÖĞø·ÑÎª {$commission_charge}%</li>
+							<li>å°†è®ºå›{$user['moneyType']}å…‘æ¢æˆè‚¡å¸‚èµ„é‡‘ï¼Œæ‰‹ç»­è´¹ä»è‚¡å¸‚å¸æˆ·ä¸­æ‰£é™¤</li>
+							<li>å­˜å…¥çš„{$user['moneyType']}æœ€å°å€¼ä¸º <span class="s3">$db_depositmin</span> {$user['moneyUnit']}</li>
+							<li>è®ºå›{$user['moneyType']}ä¸è‚¡å¸‚èµ„é‡‘çš„å…‘æ¢æ¯”ä¾‹ä¸º 1:{$exchange_rate}</li>
+							<li>æ‰‹ç»­è´¹ä¸º {$commission_charge}%</li>
 						</ul>
 					</td>
 				</tr>
 				<form name="form_d" action="$baseScript&mod=member&act=fundsmng" method="post">
 				<tr>
-					<td>´æÈë{$user['moneyType']}</td>
+					<td>å­˜å…¥{$user['moneyType']}</td>
 					<td><input class="px" type="text" name="moneyi" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> {$user['moneyUnit']}</td>
 				</tr>
 				<tr>
@@ -63,13 +63,13 @@
 					<td>
 						<input type="hidden" name="mtype" value="d"/>
 						<input type="hidden" name="formhash" value="{FORMHASH}"/>
-						<button type="submit" name="submit" value="true" class="pn pnc"><em>´æ¿î</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>å­˜æ¬¾</em></button>
 					</td>
 				</tr>
 				</form>
 <!--{else}-->
 				<tr>
-					<td>´æ¿î¹¦ÄÜÒÑ¹Ø±Õ</td>
+					<td>å­˜æ¬¾åŠŸèƒ½å·²å…³é—­</td>
 				</tr>
 <!--{/if}-->
 			</table>
@@ -77,37 +77,37 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="tfm mtn">
 				<caption>
-					<h2 class="mbm xs2">×Ê½ğ×ª³ö</h2>
+					<h2 class="mbm xs2">èµ„é‡‘è½¬å‡º</h2>
 				</caption>
 <!--{if $db_allowadopt == 1}-->
 				<tr>
-					<td>ËµÃ÷</td>
+					<td>è¯´æ˜</td>
 					<td>
 						<ul>
-							<li>½«¹ÉÊĞ×Ê½ğ¶Ò»»³ÉÂÛÌ³{$user['moneyType']}£¬ÊÖĞø·Ñ´Ó¹ÉÊĞÕÊ»§ÖĞ¿Û³ı</li>
-							<li>È¡¿î×îĞ¡ÖµÎª <span class="s3">$db_adoptmin</span> Ôª</li>
-							<li>ÂÛÌ³{$user['moneyType']}Óë¹ÉÊĞ×Ê½ğµÄ¶Ò»»±ÈÀıÎª 1:{$exchange_rate}</li>
-							<li>ÊÖĞø·ÑÎª {$commission_charge}%</li>
+							<li>å°†è‚¡å¸‚èµ„é‡‘å…‘æ¢æˆè®ºå›{$user['moneyType']}ï¼Œæ‰‹ç»­è´¹ä»è‚¡å¸‚å¸æˆ·ä¸­æ‰£é™¤</li>
+							<li>å–æ¬¾æœ€å°å€¼ä¸º <span class="s3">$db_adoptmin</span> å…ƒ</li>
+							<li>è®ºå›{$user['moneyType']}ä¸è‚¡å¸‚èµ„é‡‘çš„å…‘æ¢æ¯”ä¾‹ä¸º 1:{$exchange_rate}</li>
+							<li>æ‰‹ç»­è´¹ä¸º {$commission_charge}%</li>
 						</ul>
 					</td>
 				</tr>
 				<form name="form_a" action="$baseScript&mod=member&act=fundsmng" method="post">
 				<tr>
-					<td>È¡¿î½ğ¶î</td>
-					<td><input class="px" type="text" name="moneyx" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> Ôª</td>
+					<td>å–æ¬¾é‡‘é¢</td>
+					<td><input class="px" type="text" name="moneyx" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> å…ƒ</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
 						<input type="hidden" name="mtype" value="a"/>
 						<input type="hidden" name="formhash" value="{FORMHASH}"/>
-						<button type="submit" name="submit" value="true" class="pn pnc"><em>È¡¿î</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>å–æ¬¾</em></button>
 					</td>
 				</tr>
 				</form>
 <!--{else}-->
 				<tr>
-					<td>È¡¿î¹¦ÄÜÒÑ¹Ø±Õ</td>
+					<td>å–æ¬¾åŠŸèƒ½å·²å…³é—­</td>
 				</tr>
 <!--{/if}-->
 			</table>
@@ -115,39 +115,39 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="tfm mtn">
 				<caption>
-					<h2 class="mbm xs2">×Ê½ğ×ªÕÊ</h2>
+					<h2 class="mbm xs2">èµ„é‡‘è½¬å¸</h2>
 				</caption>
 <!--{if $db_allowtransfer == 1}-->
 				<tr>
-					<td>ËµÃ÷</td>
+					<td>è¯´æ˜</td>
 					<td>
 						<ul>
-							<li>½«ÄúµÄ×Ê½ğ×ª¸øËûÈË£¬ÊÖĞø·ÑÎª {$commission_charge_trans}%</li>
-							<li>×ªÕÊ×îĞ¡ÖµÎª <span class="s3">$db_transfermin</span> Ôª</li>
+							<li>å°†æ‚¨çš„èµ„é‡‘è½¬ç»™ä»–äººï¼Œæ‰‹ç»­è´¹ä¸º {$commission_charge_trans}%</li>
+							<li>è½¬å¸æœ€å°å€¼ä¸º <span class="s3">$db_transfermin</span> å…ƒ</li>
 						</ul>
 					</td>
 				</tr>
 				<form name="form_t" action="$baseScript&mod=member&act=fundsmng" method="post">
 				<tr>
-					<td>ÊÕ¿îÈË</td>
+					<td>æ”¶æ¬¾äºº</td>
 					<td><input type="text" name="towho" value="" class="px"/></td>
 				</tr>
 				<tr>
-					<td>×ªÕÊ½ğ¶î</td>
-					<td><input type="text" name="moneyt" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> Ôª</td>
+					<td>è½¬å¸é‡‘é¢</td>
+					<td><input type="text" name="moneyt" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> å…ƒ</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
 						<input type="hidden" name="mtype" value="t"/>
 						<input type="hidden" name="formhash" value="{FORMHASH}"/>
-						<button type="submit" name="submit" value="true" class="pn pnc"><em>È·ÈÏ×ªÕÊ</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>ç¡®è®¤è½¬å¸</em></button>
 					</td>
 				</tr>
 				</form>
 <!--{else}-->
 				<tr>
-					<td>×Ê½ğ×ªÕÊ¹¦ÄÜÒÑ¹Ø±Õ</td>
+					<td>èµ„é‡‘è½¬å¸åŠŸèƒ½å·²å…³é—­</td>
 				</tr>
 <!--{/if}-->
 			</table>

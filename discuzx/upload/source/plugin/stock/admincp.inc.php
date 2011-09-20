@@ -23,7 +23,7 @@ try
 }
 catch ( Exception $e )
 {
-	cpmsg('Messages from Kilofox StockIns£º'.$e->getMessage());
+	cpmsg('Messages from Kilofox StockInsï¼š'.$e->getMessage());
 }
 switch ( $mod )
 {

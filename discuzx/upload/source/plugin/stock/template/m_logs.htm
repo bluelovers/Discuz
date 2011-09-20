@@ -2,27 +2,27 @@
 @import url(source/plugin/stock/image/admin_style.css);
 </style>
 <ul class="nav3">
-	<li><a href="?$baseScript&mod=about">¹ØÓÚ</a></li>
-	<li><a href="?$baseScript&mod=stockset">¹ÉÆ±¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=userset">ÓÃ»§¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=trusts">½»Ò×¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=esset">ÉêÇë¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=news">ÐÂÎÅ¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=tools">ÊµÓÃ¹¤¾ß</a></li>
-	<li class="current"><a href="?$baseScript&mod=logs">ÏµÍ³ÈÕÖ¾</a></li>
+	<li><a href="?$baseScript&mod=about">å…³äºŽ</a></li>
+	<li><a href="?$baseScript&mod=stockset">è‚¡ç¥¨ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=userset">ç”¨æˆ·ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=trusts">äº¤æ˜“ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=esset">ç”³è¯·ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=news">æ–°é—»ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=tools">å®žç”¨å·¥å…·</a></li>
+	<li class="current"><a href="?$baseScript&mod=logs">ç³»ç»Ÿæ—¥å¿—</a></li>
 </ul><form name="logs" action="?$baseScript&mod=logs&section=dellogs" method="post">
 
 <table class="tb tb2">
 	<tr>
-		<th colspan="7" class="partition">ÏµÍ³ÈÕÖ¾</th>
+		<th colspan="7" class="partition">ç³»ç»Ÿæ—¥å¿—</th>
 	</tr>
 	<tr class="header">
-		<td>Ñ¡Ôñ</th>
-		<th>ÀàÐÍ</th>
-		<td>¶ÔÏó</th>
-		<th>²Ù×÷Õß</th>
-		<th>²Ù×÷ÄÚÈÝ</th>
-		<th>²Ù×÷Ê±¼ä</th>
+		<td>é€‰æ‹©</th>
+		<th>ç±»åž‹</th>
+		<td>å¯¹è±¡</th>
+		<th>æ“ä½œè€…</th>
+		<th>æ“ä½œå†…å®¹</th>
+		<th>æ“ä½œæ—¶é—´</th>
 		<th>IP</th>
 	</tr>
 <!--{loop $logdb $value}-->
@@ -42,8 +42,8 @@
 	</tr>
 <!--{/if}-->
 	<tr>
-		<td class="td25"><input type="checkbox" name="chkall" id="chkalllog" onclick="checkall(this.form)" class="checkbox"/><label for="chkalllog">È«Ñ¡</lable></td>
-		<td colspan="6"><input type="submit" name="act" onclick="{if(confirm('ÄúÈ·¶¨ÒªÖ´ÐÐÉ¾³ý²Ù×÷Âð£¿')){this.document.logs.submit();return true;}return false;}" value="É¾³ý" class="btn"/></td>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkalllog" onclick="checkall(this.form)" class="checkbox"/><label for="chkalllog">å…¨é€‰</lable></td>
+		<td colspan="6"><input type="submit" name="act" onclick="{if(confirm('æ‚¨ç¡®å®šè¦æ‰§è¡Œåˆ é™¤æ“ä½œå—ï¼Ÿ')){this.document.logs.submit();return true;}return false;}" value="åˆ é™¤" class="btn"/></td>
 	</tr>
 </table>
 </form>

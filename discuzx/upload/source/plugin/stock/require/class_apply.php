@@ -50,15 +50,15 @@ class Apply
 				$rs['stockprice'] = number_format($rs['stockprice'],2);
 				$rs['applytime'] = dgmdate($rs['applytime']);
 				if ( $rs['state'] == 0 )
-					$rs['state'] = '´ıÉóºË';
+					$rs['state'] = 'å¾…å®¡æ ¸';
 				else if ( $rs['state'] == 1 )
-					$rs['state'] = 'ÒÑÅú×¼';
+					$rs['state'] = 'å·²æ‰¹å‡†';
 				else if ( $rs['state'] == 2 )
-					$rs['state'] = 'Î´Í¨¹ı';
+					$rs['state'] = 'æœªé€šè¿‡';
 				else if ( $rs['state'] == 3 )
-					$rs['state'] = 'ÒÑÉÏÊĞ';
+					$rs['state'] = 'å·²ä¸Šå¸‚';
 				else
-					$rs['state'] = 'Òì³£';
+					$rs['state'] = 'å¼‚å¸¸';
 				$applys[] = $rs;
 			}
 		}
@@ -73,7 +73,7 @@ class Apply
 			if ( $user['fund_ava'] < $min_wealth )
 			{
 				$applyAllow = false;
-				$msg = 'ÄúµÄ¹ÉÊĞÕÊ»§¿ÉÓÃ×Ê½ğ²»×ã <span class="xi1">'.number_format($min_wealth,2).'</span> Ôª£¬²»ÄÜÉêÇë¹«Ë¾ÉÏÊĞ';
+				$msg = 'æ‚¨çš„è‚¡å¸‚å¸æˆ·å¯ç”¨èµ„é‡‘ä¸è¶³ <span class="xi1">'.number_format($min_wealth,2).'</span> å…ƒï¼Œä¸èƒ½ç”³è¯·å…¬å¸ä¸Šå¸‚';
 			}
 			else
 			{
@@ -94,7 +94,7 @@ class Apply
 		else
 		{
 			$applyAllow = false;
-			$msg = 'ÔİÊ±Í£Ö¹½ÓÊÜ¹«Ë¾ÉÏÊĞµÄÉêÇë';
+			$msg = 'æš‚æ—¶åœæ­¢æ¥å—å…¬å¸ä¸Šå¸‚çš„ç”³è¯·';
 		}
 		include template('stock:member_apply');
 	}
@@ -110,25 +110,25 @@ class Apply
 			$maxprice	= $_G['gp_maxprice'];
 			$comintro	= trim($_G['gp_comintro']);
 			if ( empty($stname) || strlen($stname) < $db_esnamemin || strlen($stname) > $db_esnamemax )
-				showmessage("¹ÉÆ±Ãû³Æ³¤¶È²»ÄÜĞ¡ÓÚ $db_esnamemin ×Ö½Ú»òÕß´óÓÚ $db_esnamemax ×Ö½Ú");
+				showmessage("è‚¡ç¥¨åç§°é•¿åº¦ä¸èƒ½å°äº $db_esnamemin å­—èŠ‚æˆ–è€…å¤§äº $db_esnamemax å­—èŠ‚");
 			if ( empty($stprice) || !is_numeric($stprice) || $stprice < 2 )
-				showmessage('ÇëÕıÈ·ÊäÈë¹ÉÆ±·¢ĞĞµ¥¼Û£¬¹ÉÆ±·¢ĞĞµ¥¼Û²»ÄÜĞ¡ÓÚ 2 Ôª');
+				showmessage('è¯·æ­£ç¡®è¾“å…¥è‚¡ç¥¨å‘è¡Œå•ä»·ï¼Œè‚¡ç¥¨å‘è¡Œå•ä»·ä¸èƒ½å°äº 2 å…ƒ');
 			$stnum = $stnum * $db_esminnum;
 			if ( empty($stnum) || !is_numeric($stnum) || $stnum < $db_esminnum )
-				showmessage("ÇëÕıÈ·ÊäÈë¹ÉÆ±·¢ĞĞÊıÁ¿£¬¹ÉÆ±·¢ĞĞÊıÁ¿²»ÄÜĞ¡ÓÚ " . intval($db_esminnum) . " ¹É");
+				showmessage("è¯·æ­£ç¡®è¾“å…¥è‚¡ç¥¨å‘è¡Œæ•°é‡ï¼Œè‚¡ç¥¨å‘è¡Œæ•°é‡ä¸èƒ½å°äº " . intval($db_esminnum) . " è‚¡");
 			if ( $user['fund_ava'] < $stprice * $stnum )
-				showmessage('ÄúÃ»ÓĞ×ã¹»µÄ×Ê½ğ£¬ÇëÊÊµ±µ÷Õû¹ÉÆ±·¢ĞĞµ¥¼ÛÓë·¢ĞĞÊıÁ¿');
+				showmessage('æ‚¨æ²¡æœ‰è¶³å¤Ÿçš„èµ„é‡‘ï¼Œè¯·é€‚å½“è°ƒæ•´è‚¡ç¥¨å‘è¡Œå•ä»·ä¸å‘è¡Œæ•°é‡');
 			if ( empty($comintro) || strlen($comintro) < 10 || strlen($comintro) > $db_introducemax )
-				showmessage("¹«Ë¾¼ò½é³¤¶ÈÇë¿ØÖÆÔÚ 10 ×Ö½ÚÓë $db_introducemax ×Ö½ÚÖ®¼ä");
+				showmessage("å…¬å¸ç®€ä»‹é•¿åº¦è¯·æ§åˆ¶åœ¨ 10 å­—èŠ‚ä¸ $db_introducemax å­—èŠ‚ä¹‹é—´");
 			$rsName = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE stockname='$stname'");
-			$rsName && showmessage('ÄúÊäÈëµÄ¹ÉÆ±Ãû³ÆÒÑ¾­´æÔÚ');
+			$rsName && showmessage('æ‚¨è¾“å…¥çš„è‚¡ç¥¨åç§°å·²ç»å­˜åœ¨');
 			$rsaName = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_apply')." WHERE stockname='$stname' AND state<>2");
-			$rsaName && showmessage('ÄúÊäÈëµÄ¹ÉÆ±Ãû³ÆÒÑ¾­´æÔÚ');
+			$rsaName && showmessage('æ‚¨è¾“å…¥çš„è‚¡ç¥¨åç§°å·²ç»å­˜åœ¨');
 			$capitalisation = $stprice * $stnum;
 			DB::query("INSERT INTO ".DB::table('kfsm_apply')." (userid, username, stockname, stockprice, stocknum, surplusnum, capitalisation, comintro, applytime, state) VALUES('$user[id]', '$user[username]', '$stname', $stprice, '$stnum', '$stnum', '$capitalisation', '$comintro', '$_G[timestamp]', '0')");
 			DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava-$capitalisation WHERE uid='$user[id]'");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('ÓÃ»§¹ÜÀí', '$user[username]', '¹«Ë¾ $stname ÉêÇëÉÏÊĞ£¬µ¥¼Û " . number_format($stprice,2) . " Ôª£¬ÊıÁ¿ $stnum ¹É', '$_G[timestamp]', '$_G[clientip]')");
-			showmessage('ÄúµÄ¹«Ë¾ÉÏÊĞÉêÇë×ÊÁÏÒÑ³É¹¦Ìá½»£¡ÇëµÈ´ıÖ¤¼à»áµÄÉóÅú¡£', $baseScript);
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('ç”¨æˆ·ç®¡ç†', '$user[username]', 'å…¬å¸ $stname ç”³è¯·ä¸Šå¸‚ï¼Œå•ä»· " . number_format($stprice,2) . " å…ƒï¼Œæ•°é‡ $stnum è‚¡', '$_G[timestamp]', '$_G[clientip]')");
+			showmessage('æ‚¨çš„å…¬å¸ä¸Šå¸‚ç”³è¯·èµ„æ–™å·²æˆåŠŸæäº¤ï¼è¯·ç­‰å¾…è¯ç›‘ä¼šçš„å®¡æ‰¹ã€‚', $baseScript);
 		}
 	}
 }

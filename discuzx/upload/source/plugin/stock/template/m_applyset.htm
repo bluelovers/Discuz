@@ -2,28 +2,28 @@
 @import url(source/plugin/stock/image/admin_style.css);
 </style>
 <ul class="nav3">
-	<li><a href="?$baseScript&mod=about">¹ØÓÚ</a></li>
-	<li><a href="?$baseScript&mod=stockset">¹ÉÆ±¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=userset">ÓÃ»§¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=trusts">½»Ò×¹ÜÀí</a></li>
-	<li class="current"><a href="?$baseScript&mod=esset">ÉêÇë¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=news">ĞÂÎÅ¹ÜÀí</a></li>
-	<li><a href="?$baseScript&mod=tools">ÊµÓÃ¹¤¾ß</a></li>
-	<li><a href="?$baseScript&mod=logs">ÏµÍ³ÈÕÖ¾</a></li>
+	<li><a href="?$baseScript&mod=about">å…³äº</a></li>
+	<li><a href="?$baseScript&mod=stockset">è‚¡ç¥¨ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=userset">ç”¨æˆ·ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=trusts">äº¤æ˜“ç®¡ç†</a></li>
+	<li class="current"><a href="?$baseScript&mod=esset">ç”³è¯·ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=news">æ–°é—»ç®¡ç†</a></li>
+	<li><a href="?$baseScript&mod=tools">å®ç”¨å·¥å…·</a></li>
+	<li><a href="?$baseScript&mod=logs">ç³»ç»Ÿæ—¥å¿—</a></li>
 </ul>
 <table class="tb tb2">
 	<tr>
-		<th colspan="8" class="partition">¹«Ë¾ÉÏÊĞÉêÇëÒ»ÀÀ±í</th>
+		<th colspan="8" class="partition">å…¬å¸ä¸Šå¸‚ç”³è¯·ä¸€è§ˆè¡¨</th>
 	</tr>
 	<tr class="header">
-		<td>ĞòºÅ</td>
-		<td>¹ÉÆ±Ãû³Æ</td>
-		<td>·¢ĞĞ¼Û¸ñ</td>
-		<td>·¢ĞĞÊıÁ¿</td>
-		<td>ÉêÇëÈË</td>
-		<td>ÉêÇëÊ±¼ä</td>
-		<td>×´Ì¬</td>
-		<td>²Ù×÷</td>
+		<td>åºå·</td>
+		<td>è‚¡ç¥¨åç§°</td>
+		<td>å‘è¡Œä»·æ ¼</td>
+		<td>å‘è¡Œæ•°é‡</td>
+		<td>ç”³è¯·äºº</td>
+		<td>ç”³è¯·æ—¶é—´</td>
+		<td>çŠ¶æ€</td>
+		<td>æ“ä½œ</td>
 	</tr>
 <!--{loop $applyList $v}-->
 	<tr class="hover">
@@ -34,10 +34,10 @@
 		<td><a href="?$baseScript&mod=userset&section=edituser&uid=$v[userid]">$v[username]</a></td>
 		<td>$v[applytime]</td>
 		<td>$v[state]</td>
-		<td>$v[operate] <a href="?$baseScript&mod=usmng&ops=del&aid=$v[aid]" onclick="if(confirm('ÄúÈ·¶¨ÒªÖ´ĞĞÉ¾³ı²Ù×÷Âğ£¿')){return true;}else{return false;}">É¾³ı</a></td>
+		<td>$v[operate] <a href="?$baseScript&mod=usmng&ops=del&aid=$v[aid]" onclick="if(confirm('æ‚¨ç¡®å®šè¦æ‰§è¡Œåˆ é™¤æ“ä½œå—ï¼Ÿ')){return true;}else{return false;}">åˆ é™¤</a></td>
 	</tr>
 	<tr>
-		<td colspan="8">¹«Ë¾¼ò½é£º$v[comintro]</td>
+		<td colspan="8">å…¬å¸ç®€ä»‹ï¼š$v[comintro]</td>
 	</tr>
 <!--{/loop}-->
 </table>

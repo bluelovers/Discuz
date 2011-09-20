@@ -27,28 +27,28 @@ class Apply
 			$i++;
 			if ( $rs['state'] == 0 )
 			{
-				$rs['state'] = '´ıÉóºË';
-				$rs['operate'] = "<a href=\"?$baseScript&mod=usmng&ops=pass&aid=$rs[aid]\">Åú×¼</a> <a href=\"?$baseScript&mod=usmng&ops=deny&aid=$rs[aid]\">¾Ü¾ø</a>";
+				$rs['state'] = 'å¾…å®¡æ ¸';
+				$rs['operate'] = "<a href=\"?$baseScript&mod=usmng&ops=pass&aid=$rs[aid]\">æ‰¹å‡†</a> <a href=\"?$baseScript&mod=usmng&ops=deny&aid=$rs[aid]\">æ‹’ç»</a>";
 			}
 			else if ( $rs['state'] == 1 )
 			{
-				$rs['state'] = 'ÒÑÅú×¼';
-				$rs['operate'] = "<strike>Åú×¼</strike> <strike>¾Ü¾ø</strike>";
+				$rs['state'] = 'å·²æ‰¹å‡†';
+				$rs['operate'] = "<strike>æ‰¹å‡†</strike> <strike>æ‹’ç»</strike>";
 			}
 			else if ( $rs['state'] == 2 )
 			{
-				$rs['state'] = 'ÒÑ¾Ü¾ø';
-				$rs['operate'] = "<strike>Åú×¼</strike> <strike>¾Ü¾ø</strike>";
+				$rs['state'] = 'å·²æ‹’ç»';
+				$rs['operate'] = "<strike>æ‰¹å‡†</strike> <strike>æ‹’ç»</strike>";
 			}
 			else if ( $rs['state'] == 3 )
 			{
-				$rs['state'] = 'ÒÑÉÏÊĞ';
-				$rs['operate'] = "<strike>Åú×¼</strike> <strike>¾Ü¾ø</strike>";
+				$rs['state'] = 'å·²ä¸Šå¸‚';
+				$rs['operate'] = "<strike>æ‰¹å‡†</strike> <strike>æ‹’ç»</strike>";
 			}
 			else
 			{
-				$rs['state'] = 'Òì³£';
-				$rs['operate'] = "<strike>Åú×¼</strike> <strike>¾Ü¾ø</strike>";
+				$rs['state'] = 'å¼‚å¸¸';
+				$rs['operate'] = "<strike>æ‰¹å‡†</strike> <strike>æ‹’ç»</strike>";
 			}
 			$rs['price'] = number_format($rs['price'],2);
 			$rs['applytime'] = dgmdate($rs['applytime']);
@@ -62,16 +62,16 @@ class Apply
 		$ops = $_G['gp_ops'];
 		$aprs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_apply')." WHERE aid='$apply_id'");
 		if ( !$aprs )
-			cpmsg('Î´ÕÒµ½Ö¸¶¨µÄ¹ÉÆ±Êı¾İ', '', 'error');
+			cpmsg('æœªæ‰¾åˆ°æŒ‡å®šçš„è‚¡ç¥¨æ•°æ®', '', 'error');
 		else
 		{
 			$baseScript .= '&mod=esset';
 			if ( $ops == 'pass' )
 			{
 				if ( $aprs['state'] == 1 )
-					cpmsg('¸Ã¹«Ë¾ÒÑ±»Åú×¼ÉÏÊĞ£¬ÇëÎğÖØ¸´Ìá½»', '', 'error');
+					cpmsg('è¯¥å…¬å¸å·²è¢«æ‰¹å‡†ä¸Šå¸‚ï¼Œè¯·å‹¿é‡å¤æäº¤', '', 'error');
 				else if ( $aprs['state'] == 2 )
-					cpmsg('¸Ã¹«Ë¾ÒÑ±»¾Ü¾øÉÏÊĞ£¬ÇëÎğÖØ¸´Ìá½»', '', 'error');
+					cpmsg('è¯¥å…¬å¸å·²è¢«æ‹’ç»ä¸Šå¸‚ï¼Œè¯·å‹¿é‡å¤æäº¤', '', 'error');
 				else if ( $aprs['state'] == 0 )
 				{
 					$photo = rand(0,5).'.jpg';
@@ -96,57 +96,57 @@ class Apply
 					$newsid = DB::insert('kfsm_stock', $stockData, true);
 					$issuer_stock_num	= intval($aprs['stocknum'] / 2);
 					$surplusnum			= $aprs['stocknum'] - $issuer_stock_num;
-					// ÉêÇëÈË»ñµÃ°ëÊı¹ÉÆ±£»ÁíÒ»°ë¹ÉÆ±´ıÕıÊ½ÉÏÊĞºó½áËã
+					// ç”³è¯·äººè·å¾—åŠæ•°è‚¡ç¥¨ï¼›å¦ä¸€åŠè‚¡ç¥¨å¾…æ­£å¼ä¸Šå¸‚åç»“ç®—
 					DB::query("INSERT INTO ".DB::table('kfsm_customer')." (uid, username, sid, stocknum_ava, buyprice, averageprice, buytime) VALUES ('$aprs[userid]', '$aprs[username]', '$newsid', $issuer_stock_num, '$aprs[stockprice]', '$aprs[stockprice]', '$_G[timestamp]')");
 					loadcache('plugin');
 					$db_issuedays = $_G['cache']['plugin']['stock']['issuedays'];
 					$db_issuedays = is_numeric($db_issuedays) && $db_issuedays > 0 ? $db_issuedays : 3;
 					$db_issuedays = $_G['timestamp'] + $db_issuedays * 86400;
 					DB::query("UPDATE ".DB::table('kfsm_apply')." SET sid='$newsid', surplusnum='$surplusnum', issuetime='$db_issuedays', state='1' WHERE aid='{$aprs[aid]}'");
-					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ÉêÇë¹ÜÀí', '$aprs[username]', '{$_G[username]}', '$aprs[username] µÄ¹«Ë¾ $aprs[stockname] ÉÏÊĞÉêÇëÅú×¼²Ù×÷³É¹¦', '$_G[timestamp]', '$_G[clientip]')");
-					cpmsg('¹«Ë¾ÉÏÊĞÉêÇëÅú×¼³É¹¦', $baseScript, 'succeed');
+					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ç”³è¯·ç®¡ç†', '$aprs[username]', '{$_G[username]}', '$aprs[username] çš„å…¬å¸ $aprs[stockname] ä¸Šå¸‚ç”³è¯·æ‰¹å‡†æ“ä½œæˆåŠŸ', '$_G[timestamp]', '$_G[clientip]')");
+					cpmsg('å…¬å¸ä¸Šå¸‚ç”³è¯·æ‰¹å‡†æˆåŠŸ', $baseScript, 'succeed');
 				}
 				else
 				{
-					cpmsg('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÎŞ·¨²Ù×÷', '', 'error');
+					cpmsg('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæ— æ³•æ“ä½œ', '', 'error');
 				}
 			}
 			else if ( $ops == 'deny' )
 			{
 				if ( $aprs['state'] == 1 )
-					cpmsg('¸Ã¹«Ë¾ÒÑ±»Åú×¼ÉÏÊĞ£¬ÇëÎğÖØ¸´Ìá½»', '', 'error');
+					cpmsg('è¯¥å…¬å¸å·²è¢«æ‰¹å‡†ä¸Šå¸‚ï¼Œè¯·å‹¿é‡å¤æäº¤', '', 'error');
 				else if ( $aprs['state'] == 2 )
-					cpmsg('¸Ã¹«Ë¾ÒÑ±»¾Ü¾øÉÏÊĞ£¬ÇëÎğÖØ¸´Ìá½»', '', 'error');
+					cpmsg('è¯¥å…¬å¸å·²è¢«æ‹’ç»ä¸Šå¸‚ï¼Œè¯·å‹¿é‡å¤æäº¤', '', 'error');
 				else if ( $aprs['state'] == 0 )
 				{
 					DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$aprs[stockprice]}*{$aprs[stocknum]} WHERE uid='$aprs[userid]'");
 					DB::query("UPDATE ".DB::table('kfsm_apply')." SET state='2' WHERE aid='$apply_id'");
-					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ÉêÇë¹ÜÀí', '$aprs[username]', '{$_G[username]}', '$aprs[username] µÄ¹«Ë¾ $aprs[stockname] ÉÏÊĞÉêÇë±»¾Ü¾ø', '$_G[timestamp]', '$_G[clientip]')");
-					cpmsg('¹«Ë¾ÉÏÊĞÉêÇë¾Ü¾ø³É¹¦', $baseScript, 'succeed');
+					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ç”³è¯·ç®¡ç†', '$aprs[username]', '{$_G[username]}', '$aprs[username] çš„å…¬å¸ $aprs[stockname] ä¸Šå¸‚ç”³è¯·è¢«æ‹’ç»', '$_G[timestamp]', '$_G[clientip]')");
+					cpmsg('å…¬å¸ä¸Šå¸‚ç”³è¯·æ‹’ç»æˆåŠŸ', $baseScript, 'succeed');
 				}
 				else
 				{
-					cpmsg('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÎŞ·¨²Ù×÷', '', 'error');
+					cpmsg('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæ— æ³•æ“ä½œ', '', 'error');
 				}
 			}
 			else if ( $ops == 'del' )
 			{
 				if ( $aprs['state'] == 0 )
-					cpmsg('¸Ã¹«Ë¾ÕıÔÚµÈ´ıÉóºË£¬²»ÄÜÉ¾³ı', '', 'error');
+					cpmsg('è¯¥å…¬å¸æ­£åœ¨ç­‰å¾…å®¡æ ¸ï¼Œä¸èƒ½åˆ é™¤', '', 'error');
 				else if ( $aprs['state'] == 1 || $aprs['state'] == 2 )
 				{
 					DB::query("DELETE FROM ".DB::table('kfsm_apply')." WHERE aid='$apply_id'");
-					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ÉêÇë¹ÜÀí', '$aprs[username]', '{$_G[username]}', '$aprs[username] µÄ¹«Ë¾ $aprs[stockname] ÉÏÊĞÉêÇë±»É¾³ı', '$_G[timestamp]', '$_G[clientip]')");
-					cpmsg('¹«Ë¾ÉÏÊĞÉêÇëÉ¾³ı³É¹¦', $baseScript, 'succeed');
+					DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ç”³è¯·ç®¡ç†', '$aprs[username]', '{$_G[username]}', '$aprs[username] çš„å…¬å¸ $aprs[stockname] ä¸Šå¸‚ç”³è¯·è¢«åˆ é™¤', '$_G[timestamp]', '$_G[clientip]')");
+					cpmsg('å…¬å¸ä¸Šå¸‚ç”³è¯·åˆ é™¤æˆåŠŸ', $baseScript, 'succeed');
 				}
 				else
 				{
-					cpmsg('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÎŞ·¨²Ù×÷', '', 'error');
+					cpmsg('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæ— æ³•æ“ä½œ', '', 'error');
 				}
 			}
 			else
 			{
-				cpmsg('²Ù×÷Ñ¡Ïî²ÎÊı´íÎó', '', 'error');
+				cpmsg('æ“ä½œé€‰é¡¹å‚æ•°é”™è¯¯', '', 'error');
 			}
 		}
 	}

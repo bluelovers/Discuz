@@ -20,11 +20,11 @@ class Trusts
 			$i++;
 			$rsd['no'] = $i;
 			if ( $rsd['direction'] == 1 )
-				$rsd['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rsd['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rsd['direction'] == 2 )
-				$rsd['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rsd['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rsd['direction'] = '<span style="color:#0000FF">Òì³£</span> <a href="http://www.kilofox.net" target="_blank">ÇóÖú</a>';
+				$rsd['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span> <a href="http://www.kilofox.net" target="_blank">æ±‚åŠ©</a>';
 			if ( $rsd['time_deal'] )
 				$rsd['time_deal'] = dgmdate($rsd['time_deal'],'Y-m-j H:i:s');
 			else
@@ -34,17 +34,17 @@ class Trusts
 			else
 				$rsd['time_tran'] = '-';
 			if ( $rsd['ok'] == 0 )
-				$rsd['ok'] = 'Î´³É½»';
+				$rsd['ok'] = 'æœªæˆäº¤';
 			else if ( $rsd['ok'] == 1 )
-				$rsd['ok'] = '<span style="color:#008000">³É½»</span>';
+				$rsd['ok'] = '<span style="color:#008000">æˆäº¤</span>';
 			else if ( $rsd['ok'] == 2 )
-				$rsd['ok'] = '<span style="color:#FFA500">²¿·Ö³É½»</span>';
+				$rsd['ok'] = '<span style="color:#FFA500">éƒ¨åˆ†æˆäº¤</span>';
 			else if ( $rsd['ok'] == 3 )
-				$rsd['ok'] = '<span style="color:#0000FF">ÓÃ»§³·Ïú</span>';
+				$rsd['ok'] = '<span style="color:#0000FF">ç”¨æˆ·æ’¤é”€</span>';
 			else if ( $rsd['ok'] == 4 )
-				$rsd['ok'] = '<span style="color:#A52A2A">ÏµÍ³³·Ïú</span>';
+				$rsd['ok'] = '<span style="color:#A52A2A">ç³»ç»Ÿæ’¤é”€</span>';
 			else
-				$rsd['ok'] = '<span style="color:#FF0000">Òì³£</span> <a href="http://www.kilofox.net" target="_blank">ÇóÖú</a>';
+				$rsd['ok'] = '<span style="color:#FF0000">å¼‚å¸¸</span> <a href="http://www.kilofox.net" target="_blank">æ±‚åŠ©</a>';
 			$ddb[] = $rsd;
 		}
 		return $ddb;
@@ -59,11 +59,11 @@ class Trusts
 			$i++;
 			$rst['no'] = $i;
 			if ( $rst['direction'] == 1 )
-				$rst['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rst['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rst['direction'] == 2 )
-				$rst['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rst['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rst['direction'] = '<span style="color:#0000FF">Òì³£</span> <a href="http://www.kilofox.net" target="_blank">ÇóÖú</a>';
+				$rst['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span> <a href="http://www.kilofox.net" target="_blank">æ±‚åŠ©</a>';
 			if ( $rst['ttime'] )
 				$rst['ttime'] = dgmdate($rst['ttime'],'Y-m-j H:i:s');
 			else
@@ -87,10 +87,10 @@ class Trusts
 			}
 			$delid && $delid = substr($delid,0,-1);
 			DB::query("DELETE FROM ".DB::table('kfsm_deal')." WHERE did IN ($delid)");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('Î¯ÍĞ¼ÇÂ¼¹ÜÀí', '{$_G[username]}', 'É¾³ıÎ¯ÍĞ¼ÇÂ¼ {$ttlnum} Ìõ', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('å§”æ‰˜è®°å½•ç®¡ç†', '{$_G[username]}', 'åˆ é™¤å§”æ‰˜è®°å½• {$ttlnum} æ¡', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=trusts';
-		cpmsg("ÒÑ³É¹¦É¾³ı {$ttlnum} ÌõÎ¯ÍĞ¼ÇÂ¼£¡", $baseScript, 'succeed');
+		cpmsg("å·²æˆåŠŸåˆ é™¤ {$ttlnum} æ¡å§”æ‰˜è®°å½•ï¼", $baseScript, 'succeed');
 	}
 	public function deleteTrans()
 	{
@@ -107,10 +107,10 @@ class Trusts
 			}
 			$delid && $delid = substr($delid,0,-1);
 			DB::query("DELETE FROM ".DB::table('kfsm_transaction')." WHERE tid IN ($delid)");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('³É½»¼ÇÂ¼¹ÜÀí', '{$_G[username]}', 'É¾³ı³É½»¼ÇÂ¼ {$ttlnum} Ìõ', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('æˆäº¤è®°å½•ç®¡ç†', '{$_G[username]}', 'åˆ é™¤æˆäº¤è®°å½• {$ttlnum} æ¡', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=trusts';
-		cpmsg("ÒÑ³É¹¦É¾³ı {$ttlnum} Ìõ³É½»¼ÇÂ¼£¡", $baseScript, 'succeed');
+		cpmsg("å·²æˆåŠŸåˆ é™¤ {$ttlnum} æ¡æˆäº¤è®°å½•ï¼", $baseScript, 'succeed');
 	}
 }
 ?>

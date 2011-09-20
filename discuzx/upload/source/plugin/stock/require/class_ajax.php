@@ -22,7 +22,7 @@ class Ajax
 		$msg = '';
 		if ( empty($stname) )
 		{
-			$msg .= "ÇëÊäÈë¹ÉÆ±Ãû³Æ";
+			$msg .= "è¯·è¾“å…¥è‚¡ç¥¨åç§°";
 		}
 		else
 		{
@@ -30,32 +30,32 @@ class Ajax
 			$stnameold = mb_convert_encoding($stnameold,'gbk','utf-8');
 			if ( strlen($stname) < $db_esnamemin )
 			{
-				$msg .= "¹ÉÆ±Ãû³Æ³¤¶È²»ÄÜĞ¡ÓÚ {$db_esnamemin} ×Ö½Ú";
+				$msg .= "è‚¡ç¥¨åç§°é•¿åº¦ä¸èƒ½å°äº {$db_esnamemin} å­—èŠ‚";
 			}
 			else if ( strlen($stname) > $db_esnamemax )
 			{
-				$msg .= "¹ÉÆ±Ãû³Æ³¤¶È²»ÄÜ´óÓÚ {$db_esnamemax} ×Ö½Ú";
+				$msg .= "è‚¡ç¥¨åç§°é•¿åº¦ä¸èƒ½å¤§äº {$db_esnamemax} å­—èŠ‚";
 			}
 			else if ( $stname <> $stnameold )
 			{
 				$rs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE stockname='$stname'");
 				if ( $rs )
 				{
-					$msg .= 'ÄúÊäÈëµÄ¹ÉÆ±Ãû³ÆÒÑ¾­´æÔÚ';
+					$msg .= 'æ‚¨è¾“å…¥çš„è‚¡ç¥¨åç§°å·²ç»å­˜åœ¨';
 				}
 				else
 				{
 					$esrs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_apply')." WHERE stockname='$stname' AND state<>2");
 					if ( $esrs )
 					{
-						$msg .= 'ÄúÊäÈëµÄ¹ÉÆ±Ãû³ÆÒÑ¾­´æÔÚ';
+						$msg .= 'æ‚¨è¾“å…¥çš„è‚¡ç¥¨åç§°å·²ç»å­˜åœ¨';
 					}
 				}
 			}
 		}
 		if ( !$msg )
 		{
-			$msg = "¹ÉÆ±Ãû³Æ<span class=\"xi1\">{$stname}</span>ÒÑÍ¨¹ıÑéÖ¤£¬¿ÉÒÔÊ¹ÓÃ";
+			$msg = "è‚¡ç¥¨åç§°<span class=\"xi1\">{$stname}</span>å·²é€šè¿‡éªŒè¯ï¼Œå¯ä»¥ä½¿ç”¨";
 		}
 		echo $msg;
 	}

@@ -30,7 +30,7 @@ class kfsclass
 		{
 			if ( $db_guestview<>'1' && !$_G['uid'] )
 			{
-				showmessage('¶Ô²»Æğ£¬¹ÉÊĞÎ´¶ÔÓÎ¿Í¿ª·Å£¬ÇëÄúÏÈµÇÂ¼ÂÛÌ³£¡');
+				showmessage('å¯¹ä¸èµ·ï¼Œè‚¡å¸‚æœªå¯¹æ¸¸å®¢å¼€æ”¾ï¼Œè¯·æ‚¨å…ˆç™»å½•è®ºå›ï¼');
 			}
 			else
 			{
@@ -38,7 +38,7 @@ class kfsclass
 				{
 					$t_h = dgmdate($_G['timestamp'],'G');
 					if ( ( $t_h < $db_smtimer11 || $t_h >= $db_smtimer12 ) && ( $t_h < $db_smtimer21 || $t_h >= $db_smtimer22 ) && ( $t_h< $db_smtimer31 || $t_h >= $db_smtimer32 ) && ( $t_h < $db_smtimer41 || $t_h >= $db_smtimer42 ) )
-						showmessage("Ç×°®µÄ¹ÉÃñ£¬ÄúºÃ£¡±¾¹ÉÊĞµÄ½»Ò×Ê±¼äÎª£º<br />{$db_smtimer11}:00 - {$db_smtimer12}:00<br />{$db_smtimer21}:00 - {$db_smtimer22}:00<br />{$db_smtimer31}:00 - {$db_smtimer32}:00<br />{$db_smtimer41}:00 - {$db_smtimer42}:00<br />ÇëÓÚÉÏÊöÊ±¶Î¹âÁÙ£¡Ğ»Ğ»ºÏ×÷£¡");
+						showmessage("äº²çˆ±çš„è‚¡æ°‘ï¼Œæ‚¨å¥½ï¼æœ¬è‚¡å¸‚çš„äº¤æ˜“æ—¶é—´ä¸ºï¼š<br />{$db_smtimer11}:00 - {$db_smtimer12}:00<br />{$db_smtimer21}:00 - {$db_smtimer22}:00<br />{$db_smtimer31}:00 - {$db_smtimer32}:00<br />{$db_smtimer41}:00 - {$db_smtimer42}:00<br />è¯·äºä¸Šè¿°æ—¶æ®µå…‰ä¸´ï¼è°¢è°¢åˆä½œï¼");
 					else
 						return true;
 				}
@@ -154,8 +154,8 @@ class kfsclass
 				$issue_price = round($aprs['capitalisation'] / $aprs['stocknum'], 2);
 				DB::query("UPDATE ".DB::table('kfsm_stock')." SET openprice='$issue_price', currprice='$issue_price', lowprice='$issue_price', highprice='$issue_price', issueprice='$issue_price', issuetime='$_G[timestamp]', pricedata='$pricedata', state='0' WHERE sid='{$aprs[sid]}'");
 				DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$aprs[surplusnum]}, buytime='{$_G[timestamp]}' WHERE cid='{$aprs[userid]}' AND sid='{$aprs[sid]}'");
-				$subject = "ĞÂ¹É $aprs[stockname] ½ñÈÕÕıÊ½ÉÏÊĞ";
-				$content = "½ñÌìÊÇ [url=plugin.php?id=stock:index&mod=stock&act=showinfo&sid=$aprs[sid]]{$aprs['stockname']}[/url] ÕıÊ½ÉÏÊĞµÄµÚÒ»Ìì£¬ËùÓĞ¹ÉÃñ¾ù¿É°´ÕÕ¹ÉÊĞ¹æÔò×ÔÓÉ½»Ò×¡£";
+				$subject = "æ–°è‚¡ $aprs[stockname] ä»Šæ—¥æ­£å¼ä¸Šå¸‚";
+				$content = "ä»Šå¤©æ˜¯ [url=plugin.php?id=stock:index&mod=stock&act=showinfo&sid=$aprs[sid]]{$aprs['stockname']}[/url] æ­£å¼ä¸Šå¸‚çš„ç¬¬ä¸€å¤©ï¼Œæ‰€æœ‰è‚¡æ°‘å‡å¯æŒ‰ç…§è‚¡å¸‚è§„åˆ™è‡ªç”±äº¤æ˜“ã€‚";
 				DB::query("INSERT INTO ".DB::table('kfsm_news')." (subject, content, color, author, addtime) VALUES('$subject', '$content', '', 'StockIns', '{$_G[timestamp]}')");
 				DB::query("UPDATE ".DB::table('kfsm_apply')." SET state='3' WHERE aid='$aprs[aid]'");
 				$s = explode('|', $pricedata);

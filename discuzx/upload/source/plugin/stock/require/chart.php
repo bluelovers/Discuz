@@ -19,13 +19,13 @@ $Test->setFixedScale(0,$rs['highprice']+1);
 $Test->setFontProperties('./source/plugin/stock/font/tahoma.ttf',8);
 $Test->setGraphArea(50,30,480,200);
 
-$Test->drawGraphArea(220,220,220);//»­±ß¿ò
-$Test->drawScale($DataSet->GetData(),$DataSet->GetDatacomintrotion(),150,150,150,2);//»­×ø±ê¿Ì¶ÈÏß
-$Test->drawGrid(4,230,230,230);//»­Íø¸ñ
+$Test->drawGraphArea(220,220,220);//ç”»è¾¹æ¡†
+$Test->drawScale($DataSet->GetData(),$DataSet->GetDatacomintrotion(),150,150,150,2);//ç”»åæ ‡åˆ»åº¦çº¿
+$Test->drawGrid(4,230,230,230);//ç”»ç½‘æ ¼
 
-$Test->drawCubicCurve($DataSet->GetData(),$DataSet->GetDatacomintrotion(),$db_klcolor);//»­ÇúÏß£¬µÚÈý¸ö²ÎÊýÎªÇúÏßÑÕÉ«·½°¸
+$Test->drawCubicCurve($DataSet->GetData(),$DataSet->GetDatacomintrotion(),$db_klcolor);//ç”»æ›²çº¿ï¼Œç¬¬ä¸‰ä¸ªå‚æ•°ä¸ºæ›²çº¿é¢œè‰²æ–¹æ¡ˆ
 
-$Test->setFontProperties('./source/plugin/stock/font/tahoma.ttf',8);//Èç¹û²»ÉèÖÃ£¬ÔòÒª²éÑ¯£¬ËÙ¶È»á±äÂý
+$Test->setFontProperties('./source/plugin/stock/font/tahoma.ttf',8);//å¦‚æžœä¸è®¾ç½®ï¼Œåˆ™è¦æŸ¥è¯¢ï¼Œé€Ÿåº¦ä¼šå˜æ…¢
 $Test->drawTitle(50,22,"Stock Price of Recent Hours",50,50,50,500);
 $Test->Render("./source/plugin/stock/data/k_{$stock_id}.png");
 ?>

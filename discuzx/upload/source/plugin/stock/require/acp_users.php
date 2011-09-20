@@ -21,7 +21,7 @@ class Users
 		{
 			if ( $username == '' )
 			{
-				cpmsg('ÇëÊäÈëÄúÒª²éÕÒµÄ¹ÉÃñÃû×Ö', '', 'error');
+				cpmsg('è¯·è¾“å…¥æ‚¨è¦æŸ¥æ‰¾çš„è‚¡æ°‘åå­—', '', 'error');
 			}
 			else
 			{
@@ -57,9 +57,9 @@ class Users
 			while ( $rs = DB::fetch($query) )
 			{
 				if ( $rs['locked'] == 0 )
-					$rs['locked']	= '<font color="#008000">Õı³£</font>';
+					$rs['locked']	= '<font color="#008000">æ­£å¸¸</font>';
 				else
-					$rs['locked']	= '<font color="#FF0000">¶³½á</font>';
+					$rs['locked']	= '<font color="#FF0000">å†»ç»“</font>';
 				$rs['fund_ava']	= number_format($rs['fund_ava'],2);
 				$rs['asset']	= number_format($rs['asset'],2);
 				$userdb[] = $rs;
@@ -74,7 +74,7 @@ class Users
 		if ( !$rs )
 		{
 			$baseScript .= '&mod=userset';
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÃñ', $baseScript, 'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡æ°‘', $baseScript, 'error');
 		}
 		$rs['fund_ava']		= number_format($rs['fund_ava'],2);
 		$rs['fund_war']		= number_format($rs['fund_war'],2);
@@ -109,29 +109,29 @@ class Users
 		$asset		= str_replace(',','',$asset);
 		$rs = DB::fetch_first("SELECT username FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÃñ', '', 'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡æ°‘', '', 'error');
 		if ( $fund_ava == '' || !is_numeric($fund_ava) )
-			cpmsg('ÕÊ»§¿ÉÓÃ×Ê½ğ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('å¸æˆ·å¯ç”¨èµ„é‡‘å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $fund_war == '' || !is_numeric($fund_war) )
-			cpmsg('ÕÊ»§ÏŞÖÆ×Ê½ğ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('å¸æˆ·é™åˆ¶èµ„é‡‘å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $asset == '' || !is_numeric($asset) )
-			cpmsg('×Ü×Ê²ú±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('æ€»èµ„äº§å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $stocksort == '' || !is_numeric($stocksort) || $stocksort < 0 )
-			cpmsg('³Ö¹ÉÖÖÀà±ØĞëÊÇÒ»¸ö·Ç¸ºÊı', '', 'error');
+			cpmsg('æŒè‚¡ç§ç±»å¿…é¡»æ˜¯ä¸€ä¸ªéè´Ÿæ•°', '', 'error');
 		if ( $todaybuy == '' || !is_numeric($todaybuy) || $todaybuy < 0 )
-			cpmsg('½ñÈÕÂòÈë±ØĞëÊÇÒ»¸ö·Ç¸ºÊı', '', 'error');
+			cpmsg('ä»Šæ—¥ä¹°å…¥å¿…é¡»æ˜¯ä¸€ä¸ªéè´Ÿæ•°', '', 'error');
 		if ( $todaysell == '' || !is_numeric($todaysell) || $todaysell < 0 )
-			cpmsg('½ñÈÕÂô³ö±ØĞëÊÇÒ»¸ö·Ç¸ºÊı', '', 'error');
+			cpmsg('ä»Šæ—¥å–å‡ºå¿…é¡»æ˜¯ä¸€ä¸ªéè´Ÿæ•°', '', 'error');
 		DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava='$fund_ava', fund_war='$fund_war', asset='$asset', stocksort='$stocksort', todaybuy='$todaybuy', todaysell='$todaysell', locked='$userstate' WHERE uid='$uid'");
-		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ÓÃ»§¹ÜÀí', '$username', '{$_G[username]}', '±à¼­¹ÉÃñ {$rs['username']} ĞÅÏ¢', '$_G[timestamp]', '$_G[clientip]')");
+		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ç”¨æˆ·ç®¡ç†', '$username', '{$_G[username]}', 'ç¼–è¾‘è‚¡æ°‘ {$rs['username']} ä¿¡æ¯', '$_G[timestamp]', '$_G[clientip]')");
 		$baseScript .= "&mod=userset&section=edituser&uid=$uid";
-		cpmsg('¹ÉÃñĞÅÏ¢ĞŞ¸ÄÍê±Ï', $baseScript, 'succeed');
+		cpmsg('è‚¡æ°‘ä¿¡æ¯ä¿®æ”¹å®Œæ¯•', $baseScript, 'succeed');
 	}
 	public function deleteUser($uid)
 	{
 		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄÓÃ»§', '', 'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„ç”¨æˆ·', '', 'error');
 		else
 			return $rs;
 	}
@@ -144,17 +144,17 @@ class Users
 		$rs = DB::fetch_first("SELECT username FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 		if ( !$rs )
 		{
-			cpmsg('Î´ÕÒµ½ÄúÒªÉ¾³ıµÄÓÃ»§', $baseScript, 'error');
+			cpmsg('æœªæ‰¾åˆ°æ‚¨è¦åˆ é™¤çš„ç”¨æˆ·', $baseScript, 'error');
 		}
 		else
 		{
 			if ( empty($reason) || strlen($reason) > 250 )
-				cpmsg('²Ù×÷ÀíÓÉ²»ÄÜÎª¿Õ£¬ÇÒ³¤¶È²»ÄÜ´óÓÚ 250 ×Ö½Ú', '', 'error');
+				cpmsg('æ“ä½œç†ç”±ä¸èƒ½ä¸ºç©ºï¼Œä¸”é•¿åº¦ä¸èƒ½å¤§äº 250 å­—èŠ‚', '', 'error');
 			DB::query("DELETE FROM ".DB::table('kfsm_user')." WHERE uid='$uid'");
 			DB::query("DELETE FROM ".DB::table('kfsm_customer')." WHERE uid='$uid'");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ÓÃ»§¹ÜÀí', '$rs[username]', '{$_G[username]}', '$reason', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username1, username2, descrip, timestamp, ip) VALUES('ç”¨æˆ·ç®¡ç†', '$rs[username]', '{$_G[username]}', '$reason', '$_G[timestamp]', '$_G[clientip]')");
 			$baseScript .= '&act=userset';
-			cpmsg('É¾³ıÓÃ»§³É¹¦', $baseScript, 'succeed');
+			cpmsg('åˆ é™¤ç”¨æˆ·æˆåŠŸ', $baseScript, 'succeed');
 		}
 	}
 }

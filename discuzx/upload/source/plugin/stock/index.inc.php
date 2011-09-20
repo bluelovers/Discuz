@@ -68,7 +68,7 @@ $kfsclass->auto_run();
 $hkimg = 'source/plugin/stock/image/';
 $mod = empty($_G['gp_mod']) ? 'index' : $_G['gp_mod'];
 $modArray = array('index', 'stock', 'member', 'notice', 'news', 'ajax', 'system');
-!in_array($mod, $modArray) && showmessage('Messages from Kilofox StockIns: ·Ç·¨²Ù×÷');
+!in_array($mod, $modArray) && showmessage('Messages from Kilofox StockIns: éæ³•æ“ä½œ');
 switch ( $mod )
 {
 	case 'index':

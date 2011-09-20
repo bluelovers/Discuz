@@ -62,7 +62,7 @@ class Register
 		}
 		else
 		{
-			showmessage('ÄúÔÚ¹ÉÊĞÀïÒÑ¾­¿ª»§£¬ÇëÎğÖØ¸´×¢²á£¡');
+			showmessage('æ‚¨åœ¨è‚¡å¸‚é‡Œå·²ç»å¼€æˆ·ï¼Œè¯·å‹¿é‡å¤æ³¨å†Œï¼');
 		}
    	}
 	public function create_account()
@@ -70,20 +70,20 @@ class Register
 		global $baseScript, $_G, $db_allowregister, $db_minmoney, $db_mincredit, $db_minpost, $db_smname, $db_credittype, $db_initialmoney;
 	   	if ( !is_numeric($_G['uid']) || $_G['uid'] <= 0 )
 	   	{
-			showmessage('ÓÎ¿ÍÎŞ·¨ÔÚ¹ÉÊĞ¿ª»§£¬ÇëµÇÂ¼ÂÛÌ³', "$baseScript");
+			showmessage('æ¸¸å®¢æ— æ³•åœ¨è‚¡å¸‚å¼€æˆ·ï¼Œè¯·ç™»å½•è®ºå›', "$baseScript");
 		}
 		else
 		{
 			if ( $db_allowregister <> '1' )
 			{
-				showmessage('¹ÉÊĞÒÑÔİÍ£¿ª»§');
+				showmessage('è‚¡å¸‚å·²æš‚åœå¼€æˆ·');
 			}
 			else
 			{
 				$userId = DB::result_first("SELECT uid FROM ".DB::table('kfsm_user')." WHERE forumuid='$_G[uid]'");
 				if ( $userId )
 				{
-					showmessage('ÄúÔÚ¹ÉÊĞÀïÒÑ¾­¿ª»§£¬ÇëÎğÖØ¸´×¢²á£¡');
+					showmessage('æ‚¨åœ¨è‚¡å¸‚é‡Œå·²ç»å¼€æˆ·ï¼Œè¯·å‹¿é‡å¤æ³¨å†Œï¼');
 				}
 				else
 				{
@@ -97,18 +97,18 @@ class Register
 					$this->foxinfo['money']['num']	= getuserprofile('extcredits'.$creditid) ? getuserprofile('extcredits'.$creditid) : 0;
 					if ( $this->foxinfo['money']['num'] < $db_minmoney )
 					{
-						showmessage("±¾¹ÉÊĞÒÑÏŞÖÆÁË¿ª»§×îÉÙ{$this->foxinfo['money']['type']}Îª $db_minmoney {$this->foxinfo['money']['unit']}£¬ÄúÏÖÔÚ²»·ûºÏÒªÇó£¬ÔİÊ±²»ÄÜ¿ª»§");
+						showmessage("æœ¬è‚¡å¸‚å·²é™åˆ¶äº†å¼€æˆ·æœ€å°‘{$this->foxinfo['money']['type']}ä¸º $db_minmoney {$this->foxinfo['money']['unit']}ï¼Œæ‚¨ç°åœ¨ä¸ç¬¦åˆè¦æ±‚ï¼Œæš‚æ—¶ä¸èƒ½å¼€æˆ·");
 					}
 					if ( $_G['member']['credits'] < $db_mincredit )
 					{
-						showmessage("±¾¹ÉÊĞÒÑÏŞÖÆÁË¿ª»§×îÉÙ»ı·ÖÎª $db_mincredit £¬ÄúÏÖÔÚ²»·ûºÏÒªÇó£¬ÔİÊ±²»ÄÜ¿ª»§");
+						showmessage("æœ¬è‚¡å¸‚å·²é™åˆ¶äº†å¼€æˆ·æœ€å°‘ç§¯åˆ†ä¸º $db_mincredit ï¼Œæ‚¨ç°åœ¨ä¸ç¬¦åˆè¦æ±‚ï¼Œæš‚æ—¶ä¸èƒ½å¼€æˆ·");
 					}
 					if ( getuserprofile('posts') < $db_minpost )
 					{
-						showmessage("±¾¹ÉÊĞÒÑÏŞÖÆÁË¿ª»§×îÉÙ·¢ÌûÊıÎª $db_minpost £¬Äú²»·ûºÏÒªÇó£¬ÔİÊ±²»ÄÜ¿ª»§");
+						showmessage("æœ¬è‚¡å¸‚å·²é™åˆ¶äº†å¼€æˆ·æœ€å°‘å‘å¸–æ•°ä¸º $db_minpost ï¼Œæ‚¨ä¸ç¬¦åˆè¦æ±‚ï¼Œæš‚æ—¶ä¸èƒ½å¼€æˆ·");
 					}
 					DB::query("INSERT INTO ".DB::table('kfsm_user')." (forumuid, username, fund_ava, fund_war, asset, regtime, lasttradetime, locked) VALUES('$_G[uid]', '$_G[username]', '$db_initialmoney', '0', '$db_initialmoney', '$_G[timestamp]', '$_G[timestamp]', '0')");
-					showmessage("¹ÉÊĞ¿ª»§³É¹¦£¡<br /> ".$db_smname." »¶Ó­ÄúµÄµ½À´£¬ÌØÔùËÍ¸øÄú ".$db_initialmoney." Ôª¹ÉÊĞ×Ê½ğ£¡", "$baseScript");
+					showmessage("è‚¡å¸‚å¼€æˆ·æˆåŠŸï¼<br /> ".$db_smname." æ¬¢è¿æ‚¨çš„åˆ°æ¥ï¼Œç‰¹èµ é€ç»™æ‚¨ ".$db_initialmoney." å…ƒè‚¡å¸‚èµ„é‡‘ï¼", "$baseScript");
 				}
 			}
 		}

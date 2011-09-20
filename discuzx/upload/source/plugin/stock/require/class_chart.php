@@ -44,7 +44,7 @@ class pChart
 	private $LineWidth      = 1;
 	private $LineDotSize    = 0;
 	private $Layers			= NULL;
-	private $AntialiasQuality = 20;	//ÉèÖÃÏßÌõÖÊÁ¿ : 0 ×î´ó, 100 ×îÐ¡
+	private $AntialiasQuality = 20;	//è®¾ç½®çº¿æ¡è´¨é‡ : 0 æœ€å¤§, 100 æœ€å°
 	public function __construct($XSize,$YSize)
 	{
 		$this->XSize	= $XSize;
@@ -93,7 +93,7 @@ class pChart
 				$this->VMin = 2147483647;
 				$this->VMax = -2147483647;
 			}
-			$this->VMin = 0;//ÕâÀïÇ¿ÖÆ×îÐ¡Öµ´Ó0¿ªÊ¼£¬¹É¼Û²»¿ÉÄÜÎª¸ºÊý
+			$this->VMin = 0;//è¿™é‡Œå¼ºåˆ¶æœ€å°å€¼ä»Ž0å¼€å§‹ï¼Œè‚¡ä»·ä¸å¯èƒ½ä¸ºè´Ÿæ•°
 			foreach( $Data as $Key => $Values )
 			{
 				foreach( $Datacomintrotion['Values'] as $Key2 => $ColName )
@@ -327,7 +327,7 @@ class pChart
 			$un = 0;
 			$Yt[$Index] = ($un - $qn * $U[$Index-1]) / ($qn * $Yt[$Index-1] + 1);
 			for ( $k=$Index-1; $k>=1; $k-- )
-				$Yt[$k] = $Yt[$k] * $Yt[$k+1] + $U[$k];// ÉÏÃæÁ½¸ö for Ñ­»·ÓÃÀ´Ô²»¬ÏßÌõ
+				$Yt[$k] = $Yt[$k] * $Yt[$k+1] + $U[$k];// ä¸Šé¢ä¸¤ä¸ª for å¾ªçŽ¯ç”¨æ¥åœ†æ»‘çº¿æ¡
 			$XPos = $this->GArea_X1 + $this->GAreaXOffset;
 			for ( $X=1; $X<=$Index; $X=$X+$Accuracy )
 			{

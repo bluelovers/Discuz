@@ -22,7 +22,7 @@ class Stocks
 			if ( $stname == '' )
 			{
 				$baseScript .= '&mod=stockset';
-				cpmsg('ÇëÊäÈëÄúÒª²éÕÒµÄ¹ÉÆ±Ãû³Æ', $baseScript, 'error');
+				cpmsg('è¯·è¾“å…¥æ‚¨è¦æŸ¥æ‰¾çš„è‚¡ç¥¨åç§°', $baseScript, 'error');
 			}
 			else
 			{
@@ -66,15 +66,15 @@ class Stocks
 				$rs['openprice']	= number_format($rs['openprice'],2);
 				$rs['currprice']	= number_format($rs['currprice'],2);
 				if ( $rs['state'] == 0 )
-					$rs['state'] = 'Õı³£';
+					$rs['state'] = 'æ­£å¸¸';
 				else if ( $rs['state'] == 1 )
-					$rs['state'] = '<font color="#808080">Í£ÅÆ</font>';
+					$rs['state'] = '<font color="#808080">åœç‰Œ</font>';
 				else if ( $rs['state'] == 2 )
-					$rs['state'] = '<font color="#FF0000">ÕÇÍ£</font>';
+					$rs['state'] = '<font color="#FF0000">æ¶¨åœ</font>';
 				else if ( $rs['state'] == 3 )
-					$rs['state'] = '<font color="#008000">µøÍ£</font>';
+					$rs['state'] = '<font color="#008000">è·Œåœ</font>';
 				else if ( $rs['state'] == 4 )
-					$rs['state'] = '<font color="#0000FF">ĞÂ¹É</font>';
+					$rs['state'] = '<font color="#0000FF">æ–°è‚¡</font>';
 				$stockdb[] = $rs;
 			}
 		}
@@ -86,7 +86,7 @@ class Stocks
 		$rs = DB::fetch_first("SELECT * FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
 		{
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄÉÏÊĞ¹«Ë¾', '', 'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„ä¸Šå¸‚å…¬å¸', '', 'error');
 		}
 		else
 		{
@@ -137,60 +137,60 @@ class Stocks
 		$locked			= $_G['gp_locked'];
 		$baseScript .= "&mod=stockset&section=editstock&sid=$sid";
 		if ( $openprice == '' || !is_numeric($openprice) )
-			cpmsg('ÊÕÅÌ¼Û¸ñ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('æ”¶ç›˜ä»·æ ¼å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $currprice == '' || !is_numeric($currprice) )
-			cpmsg('µ±Ç°¼Û¸ñ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('å½“å‰ä»·æ ¼å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $lowprice == '' || !is_numeric($lowprice) )
-			cpmsg('×îµÍ¼Û¸ñ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('æœ€ä½ä»·æ ¼å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $highprice == '' || !is_numeric($highprice) )
-			cpmsg('×î¸ß¼Û¸ñ±ØĞëÊäÈëÊı×Ö', '', 'error');
+			cpmsg('æœ€é«˜ä»·æ ¼å¿…é¡»è¾“å…¥æ•°å­—', '', 'error');
 		if ( $issuenum == '' || !is_numeric($issuenum) )
-			cpmsg('·¢ĞĞÊıÁ¿±ØĞëÊäÈëÊıÖµ', '', 'error');
+			cpmsg('å‘è¡Œæ•°é‡å¿…é¡»è¾“å…¥æ•°å€¼', '', 'error');
 		if ( $todaybuynum == '' || !is_numeric($todaybuynum) )
-			cpmsg('½ñÈÕÂòÈë±ØĞëÊäÈëÊıÖµ', '', 'error');
+			cpmsg('ä»Šæ—¥ä¹°å…¥å¿…é¡»è¾“å…¥æ•°å€¼', '', 'error');
 		if ( $todaysellnum == '' || !is_numeric($todaysellnum) )
-			cpmsg('½ñÈÕÂô³ö±ØĞëÊäÈëÊıÖµ', '', 'error');
+			cpmsg('ä»Šæ—¥å–å‡ºå¿…é¡»è¾“å…¥æ•°å€¼', '', 'error');
 		if ( $todaytradenum == '' || !is_numeric($todaytradenum) )
-			cpmsg('½ñÈÕ³É½»±ØĞëÊäÈëÊıÖµ', '', 'error');
+			cpmsg('ä»Šæ—¥æˆäº¤å¿…é¡»è¾“å…¥æ•°å€¼', '', 'error');
 		loadcache('plugin');
 		$db_esnamemin		= $_G['cache']['plugin']['stock']['esnamemin'];
 		$db_esnamemax		= $_G['cache']['plugin']['stock']['esnamemax'];
 		$db_introducemax 	= $_G['cache']['plugin']['stock']['introducemax'];
 		$rs = DB::result_first("SELECT * FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄÉÏÊĞ¹«Ë¾', '', 'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„ä¸Šå¸‚å…¬å¸', '', 'error');
 		if ( $stname == '' || strlen($stname) < $db_esnamemin || strlen($stname) > $db_esnamemax )
-			cpmsg("¹ÉÆ±Ãû³Æ³¤¶È²»ÄÜĞ¡ÓÚ {$db_esnamemin} ×Ö½Ú»òÕß´óÓÚ {$db_esnamemax} ×Ö½Ú", '', 'error');
+			cpmsg("è‚¡ç¥¨åç§°é•¿åº¦ä¸èƒ½å°äº {$db_esnamemin} å­—èŠ‚æˆ–è€…å¤§äº {$db_esnamemax} å­—èŠ‚", '', 'error');
 		if ( $comphoto == '' )
-			cpmsg('¹«Ë¾ÕÕÆ¬²»ÄÜÎª¿Õ', '', 'error');
+			cpmsg('å…¬å¸ç…§ç‰‡ä¸èƒ½ä¸ºç©º', '', 'error');
 		if ( $comintro == '' || strlen($comintro) > $db_introducemax )
-			cpmsg("¹«Ë¾¼ò½é²»ÄÜÎª¿Õ»ò³¬¹ı $db_introducemax ×Ö½Ú", '', 'error');
+			cpmsg("å…¬å¸ç®€ä»‹ä¸èƒ½ä¸ºç©ºæˆ–è¶…è¿‡ $db_introducemax å­—èŠ‚", '', 'error');
 		if ( $locked <> '0' && $locked <> '1' )
-			cpmsg('¹ÉÆ±×´Ì¬´íÎó', '', 'error');
+			cpmsg('è‚¡ç¥¨çŠ¶æ€é”™è¯¯', '', 'error');
 		if ( $stname<>$stnameold )
 		{
 			$baseScript .= "&mod=stockset&section=editstock&sid=$sid";
 			$rs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_stock')." WHERE stockname='$stname'");
-			$rs && cpmsg('¹ÉÆ±Ãû³ÆÒÑ±»ÆäËü¹ÉÆ±Ê¹ÓÃ', $baseScript, 'error');
+			$rs && cpmsg('è‚¡ç¥¨åç§°å·²è¢«å…¶å®ƒè‚¡ç¥¨ä½¿ç”¨', $baseScript, 'error');
 			$rs = DB::result_first("SELECT stockname FROM ".DB::table('kfsm_apply')." WHERE stockname='$stname' AND state<>2");
-			$rs && cpmsg('¹ÉÆ±Ãû³ÆÒÑ±»ÆäËü¹ÉÆ±Ê¹ÓÃ', $baseScript, 'error');
+			$rs && cpmsg('è‚¡ç¥¨åç§°å·²è¢«å…¶å®ƒè‚¡ç¥¨ä½¿ç”¨', $baseScript, 'error');
 		}
 		$openprice	= str_replace(',', '', $openprice);
 		$currprice	= str_replace(',', '', $currprice);
 		DB::query("UPDATE ".DB::table('kfsm_stock')." SET stockname='$stname', issuenum='$issuenum', openprice='$openprice', currprice='$currprice', lowprice='$lowprice', highprice='$highprice', todaybuynum='$todaybuynum', todaysellnum='$todaysellnum', todaytradenum='$todaytradenum', comphoto='$comphoto', comintro='$comintro', state='$locked' WHERE sid='$sid'");
-		$logContent = "±à¼­¹ÉÆ±£¨{$stnameold}£©ĞÅÏ¢";
+		$logContent = "ç¼–è¾‘è‚¡ç¥¨ï¼ˆ{$stnameold}ï¼‰ä¿¡æ¯";
 		if ( $stname <> $stnameold )
 		{
-			$logContent .= "£¬Ãû³ÆĞŞ¸ÄÎª $stname";
+			$logContent .= "ï¼Œåç§°ä¿®æ”¹ä¸º $stname";
 		}
-		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('¹ÉÆ±¹ÜÀí', '{$_G[username]}', '$logContent', '$_G[timestamp]', '$_G[clientip]')");
-		cpmsg('¹ÉÆ±ĞÅÏ¢ĞŞ¸ÄÍê±Ï', $baseScript, 'succeed');
+		DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('è‚¡ç¥¨ç®¡ç†', '{$_G[username]}', '$logContent', '$_G[timestamp]', '$_G[clientip]')");
+		cpmsg('è‚¡ç¥¨ä¿¡æ¯ä¿®æ”¹å®Œæ¯•', $baseScript, 'succeed');
 	}
 	public function deleteStock($sid)
 	{
 		$rs = DB::fetch_first("SELECT sid,stockname FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 		if ( !$rs )
-			cpmsg('Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÆ±¼ÇÂ¼', '' ,'error');
+			cpmsg('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡ç¥¨è®°å½•', '' ,'error');
 		else
 			return $rs;
 	}
@@ -206,24 +206,24 @@ class Stocks
 		$baseScript .= "&mod=stockset&section=delstock&sid=$sid";
 		if ( empty($stockName) )
 		{
-			cpmsg('Î´ÕÒµ½ÄúÒªÉ¾³ıµÄ¹ÉÆ±', '', 'error');
+			cpmsg('æœªæ‰¾åˆ°æ‚¨è¦åˆ é™¤çš„è‚¡ç¥¨', '', 'error');
 		}
 		else
 		{
 			if ( empty($logtxt) || strlen($logtxt) > 250 )
 			{
-				cpmsg('²Ù×÷ÀíÓÉ²»ÄÜÎª¿Õ£¬ÇÒ³¤¶È²»ÄÜ³¬¹ı 250 ×Ö½Ú£¡', $baseScript, 'error');
+				cpmsg('æ“ä½œç†ç”±ä¸èƒ½ä¸ºç©ºï¼Œä¸”é•¿åº¦ä¸èƒ½è¶…è¿‡ 250 å­—èŠ‚ï¼', $baseScript, 'error');
 			}
 			else
 			{
 				if ( $capital == 1 )
-					$delstock = '£¨Å×³ö¹ÉÆ±£©';
+					$delstock = 'ï¼ˆæŠ›å‡ºè‚¡ç¥¨ï¼‰';
 				else
-					$delstock = '£¨×¢Ïú¹ÉÆ±£©';
-				$logtxt = "É¾³ı¹ÉÆ± {$stockName}£¬" . $logtxt.$delstock;
+					$delstock = 'ï¼ˆæ³¨é”€è‚¡ç¥¨ï¼‰';
+				$logtxt = "åˆ é™¤è‚¡ç¥¨ {$stockName}ï¼Œ" . $logtxt.$delstock;
 			}
 			if ( $use == '1' && ( empty($newstxt) || strlen($newstxt) > 250 ) )
-				cpmsg('ÄúÑ¡ÔñÁËÊ¹ÓÃĞÅÏ¢·¢²¼¹¦ÄÜ£¬ÇëÌîĞ´ĞÅÏ¢ÄÚÈİ£¬Æä³¤¶È¿ØÖÆÔÚ 250 ×Ö½ÚÒÔÄÚ', $baseScript, 'error');
+				cpmsg('æ‚¨é€‰æ‹©äº†ä½¿ç”¨ä¿¡æ¯å‘å¸ƒåŠŸèƒ½ï¼Œè¯·å¡«å†™ä¿¡æ¯å†…å®¹ï¼Œå…¶é•¿åº¦æ§åˆ¶åœ¨ 250 å­—èŠ‚ä»¥å†…', $baseScript, 'error');
 			if ( $capital == '1' )
 			{
 				$query = DB::query("SELECT cid, stocknum_ava FROM ".DB::table('kfsm_customer')." WHERE sid='$sid'");
@@ -249,11 +249,11 @@ class Stocks
 			DB::query("DELETE FROM ".DB::table('kfsm_stock')." WHERE sid='$sid'");
 			if ( $use == '1' )
 				DB::query("INSERT INTO ".DB::table('kfsm_news')." (content,color,addtime) VALUES('$newstxt','#FF0000','$_G[timestamp]')");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('¹ÉÆ±¹ÜÀí','{$_G[username]}','$logtxt','$_G[timestamp]','$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('è‚¡ç¥¨ç®¡ç†','{$_G[username]}','$logtxt','$_G[timestamp]','$_G[clientip]')");
 			$kfsclass = new kfsclass;
 			$kfsclass->resetcid();
 			$baseScript .= '&mod=stockset';
-			cpmsg('¹ÉÆ±É¾³ı³É¹¦', $baseScript, 'succeed');
+			cpmsg('è‚¡ç¥¨åˆ é™¤æˆåŠŸ', $baseScript, 'succeed');
 		}
 	}
 	public function resetcid()

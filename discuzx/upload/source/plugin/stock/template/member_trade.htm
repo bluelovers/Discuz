@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> ¹ÉÆ±½»Ò×
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> è‚¡ç¥¨äº¤æ˜“
 	</div>
 </div>
 <div class="ct3_a wp cl bn">
@@ -10,15 +10,15 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li class="a"><a href="$baseScript">ÓªÒµ´óÌü</a></li>
-				<li><a href="$baseScript&mod=stock&act=quote">ĞĞÇéÖĞĞÄ</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">ĞÂÎÅÖĞĞÄ</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">×Ê²úÅÅĞĞ</a></li>
-				<li><a href="$baseScript&mod=system&act=help">¹ÉÊĞÖúÊÖ</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">×Ê½ğ¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">¹ÉÆ±¹ÜÀí</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">½»Ò×²éÑ¯</a></li>
-				<li><a href="$baseScript&mod=member&act=apply">¹«Ë¾ÉÏÊĞ</a></li>
+				<li class="a"><a href="$baseScript">è¥ä¸šå¤§å…</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">è¡Œæƒ…ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">æ–°é—»ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">èµ„äº§æ’è¡Œ</a></li>
+				<li><a href="$baseScript&mod=system&act=help">è‚¡å¸‚åŠ©æ‰‹</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">èµ„é‡‘ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">è‚¡ç¥¨ç®¡ç†</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">äº¤æ˜“æŸ¥è¯¢</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">å…¬å¸ä¸Šå¸‚</a></li>
 			</ul>
 		</div>
 	</div>
@@ -26,12 +26,12 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">ÎåµµÅÌ¿Ú</h2>
+					<h2 class="mbm xs2">äº”æ¡£ç›˜å£</h2>
 				</caption>
 				<tr>
-					<th>ÅÌ¿Ú</th>
-					<th>Î¯ÍĞ¼Û</th>
-					<th>ÊıÁ¿</th>
+					<th>ç›˜å£</th>
+					<th>å§”æ‰˜ä»·</th>
+					<th>æ•°é‡</th>
 				</tr>
 <!--{loop $dsdb $v}-->
 				<tr>
@@ -41,7 +41,7 @@
 				</tr>
 <!--{/loop}-->
 				<tr>
-					<td>µ±Ç°¼Û</td>
+					<td>å½“å‰ä»·</td>
 					<td style="color:#{$v[color]}">$currprice</td>
 					<td></td>
 				</tr>
@@ -56,18 +56,18 @@
 		</div>
 		<div class="bm bw0 ptm">
 			<caption>
-				<h2 class="mbm xs2">¹ÉÃñÕÊ»§</h2>
+				<h2 class="mbm xs2">è‚¡æ°‘å¸æˆ·</h2>
 			</caption>
 			<ul class="tbn">
-				<li class="ptm">ÕÊ»§Ãû³Æ£º$user[username]</li>
-				<li class="ptm">½ñÈÕÂòÈë£º$user[todaybuy] ¹É</li>
-				<li class="ptm">½ñÈÕÂô³ö£º$user[todaysell] ¹É</li>
-				<li class="ptm">³Ö¹É×ÜÁ¿£º$user[stocknum] ¹É</li>
-				<li class="ptm">³Ö¹ÉÊĞÖµ£º$user[stockvalue] Ôª</li>
-				<li class="ptm">¹ÉÆ±³É±¾£º$user[stockcost] Ôª</li>
-				<li class="ptm">Ó¯¿÷Çé¿ö£º$user[profit] Ôª</li>
-				<li class="ptm">¿ÉÓÃ×Ê½ğ£º$user[fund_ava] Ôª</li>
-				<li class="ptm">×Ê²úºÏ¼Æ£º$user[asset] Ôª</li>
+				<li class="ptm">å¸æˆ·åç§°ï¼š$user[username]</li>
+				<li class="ptm">ä»Šæ—¥ä¹°å…¥ï¼š$user[todaybuy] è‚¡</li>
+				<li class="ptm">ä»Šæ—¥å–å‡ºï¼š$user[todaysell] è‚¡</li>
+				<li class="ptm">æŒè‚¡æ€»é‡ï¼š$user[stocknum] è‚¡</li>
+				<li class="ptm">æŒè‚¡å¸‚å€¼ï¼š$user[stockvalue] å…ƒ</li>
+				<li class="ptm">è‚¡ç¥¨æˆæœ¬ï¼š$user[stockcost] å…ƒ</li>
+				<li class="ptm">ç›ˆäºæƒ…å†µï¼š$user[profit] å…ƒ</li>
+				<li class="ptm">å¯ç”¨èµ„é‡‘ï¼š$user[fund_ava] å…ƒ</li>
+				<li class="ptm">èµ„äº§åˆè®¡ï¼š$user[asset] å…ƒ</li>
 			</ul>
 		</div>
 	</div>
@@ -75,7 +75,7 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="tfm mtm">
 				<caption>
-					<h2 class="mbm xs2">×î½ü 24 Ğ¡Ê±¼Û¸ñ×ßÊÆ</h2>
+					<h2 class="mbm xs2">æœ€è¿‘ 24 å°æ—¶ä»·æ ¼èµ°åŠ¿</h2>
 				</caption>
 				<tr>
 					<td valign="bottom" height="100%" width="100%">
@@ -88,39 +88,39 @@
 			<script language="JavaScript" src="{$hkimg}stockins.js"></script>
 			<table cellspacing="0" cellpadding="0" class="tfm mtm">
 				<caption>
-					<h2 class="mbm xs2">Î¯ÍĞÂòÈë</h2>
+					<h2 class="mbm xs2">å§”æ‰˜ä¹°å…¥</h2>
 				</caption>
 				<tr>
-					<td>¹ÉÆ±´úÂë£º</td>
+					<td>è‚¡ç¥¨ä»£ç ï¼š</td>
 					<td>$rs[sid]</td>
 				</tr>
 				<tr>
-					<td>¹ÉÆ±Ãû³Æ£º</td>
+					<td>è‚¡ç¥¨åç§°ï¼š</td>
 					<td>$rs[stockname]</td>
 				</tr>
 				<form name="formbuy" method="post" action="$baseScript&mod=member&act=trustsmng" enctype="multipart/form-data" onsubmit="javascript:return tradeFormCheck(document.formbuy, {$priceLow}, {$priceHigh}, {$buyMin}, {$buyMax}, 'b');">
 				<tr>
-					<td>ÂòÈë¼Û¸ñ£º</td>
-					<td><input type="text" id="price_buy" name="price_buy" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};"/> Ôª
-						<br/><span class="xi1">$priceLow</span> Ôª - <span class="xi1">$priceHigh</span> Ôª
+					<td>ä¹°å…¥ä»·æ ¼ï¼š</td>
+					<td><input type="text" id="price_buy" name="price_buy" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};"/> å…ƒ
+						<br/><span class="xi1">$priceLow</span> å…ƒ - <span class="xi1">$priceHigh</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
-					<td>ÂòÈëÊıÁ¿£º</td>
-					<td><input type="text" id="num_buy" name="num_buy" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesBuy({$dutyRate}, {$dutyMin}, {$user[fund_ava]}, {$buyMax});"/> ¹É
-						<br/><span class="xi1">$buyMin</span> ¹É - <span class="xi1">$buyMax</span> ¹É
+					<td>ä¹°å…¥æ•°é‡ï¼š</td>
+					<td><input type="text" id="num_buy" name="num_buy" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesBuy({$dutyRate}, {$dutyMin}, {$user[fund_ava]}, {$buyMax});"/> è‚¡
+						<br/><span class="xi1">$buyMin</span> è‚¡ - <span class="xi1">$buyMax</span> è‚¡
 					</td>
 				</tr>
 				<tr>
-					<td>Ó¡»¨Ë°Ë°ÂÊ£º</td>
+					<td>å°èŠ±ç¨ç¨ç‡ï¼š</td>
 					<td>$dutyRate %
-						<br/>Ó¡»¨Ë°×îµÍ <span class="xi2">$dutyMin</span> Ôª
+						<br/>å°èŠ±ç¨æœ€ä½ <span class="xi2">$dutyMin</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
-					<td>ËùĞè·ÑÓÃ£º</td>
-					<td id="feesNeedBuy">¹ÉÆ±½ğ¶î <span class="xi2">0.00</span> Ôª
-						<br/>Ó¡»¨Ë°½ğ <span class="xi2">0.00</span> Ôª<br/>ÂòºóÕÊ»§½áÓà <span class="xi2">{$user['fund_ava']}</span> Ôª
+					<td>æ‰€éœ€è´¹ç”¨ï¼š</td>
+					<td id="feesNeedBuy">è‚¡ç¥¨é‡‘é¢ <span class="xi2">0.00</span> å…ƒ
+						<br/>å°èŠ±ç¨é‡‘ <span class="xi2">0.00</span> å…ƒ<br/>ä¹°åå¸æˆ·ç»“ä½™ <span class="xi2">{$user['fund_ava']}</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
@@ -129,8 +129,8 @@
 						<input type="hidden" name="tradetype" value="b"/>
 						<input type="hidden" name="sid" value="{$rs[sid]}"/>
 						<input type="hidden" name="formhash" value="{FORMHASH}"/>
-						<button type="reset" name="reset" value="true" class="pn pnc"><em>ÖØÖÃ</em></button>
-						<button type="submit" name="submit" value="true" class="pn pnc" $btn_buy><em>ÂòÈë</em></button>
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>é‡ç½®</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc" $btn_buy><em>ä¹°å…¥</em></button>
 					</td>
 				</tr>
 				</form>
@@ -139,41 +139,41 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="tfm mtm">
 				<caption>
-					<h2 class="mbm xs2">Î¯ÍĞÂô³ö</h2>
+					<h2 class="mbm xs2">å§”æ‰˜å–å‡º</h2>
 				</caption>
 				<tr>
-					<td>¹ÉÆ±´úÂë£º</td>
+					<td>è‚¡ç¥¨ä»£ç ï¼š</td>
 					<td>$rs[sid]</td>
 				</tr>
 				<tr>
-					<td>¹ÉÆ±Ãû³Æ£º</td>
+					<td>è‚¡ç¥¨åç§°ï¼š</td>
 					<td>$rs[stockname]</td>
 				</tr>
 				<form name="formsell" method="post" action="$baseScript&mod=member&act=trustsmng" enctype="multipart/form-data" onsubmit="javascript:return tradeFormCheck(document.formsell, {$priceLow}, {$priceHigh}, {$sellMin}, {$sellMax}, 's');">
 				<tr>
-					<td>Âô³ö¼Û¸ñ£º</td>
+					<td>å–å‡ºä»·æ ¼ï¼š</td>
 					<td>
-						<input type="text" id="price_sell" name="price_sell" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};"/> Ôª
-						<br/><span class="xi1">$priceLow</span> Ôª - <span class="xi1">$priceHigh</span> Ôª
+						<input type="text" id="price_sell" name="price_sell" value="$currprice" class="px" onkeyup="if(isNaN(this.value)){this.value=''};"/> å…ƒ
+						<br/><span class="xi1">$priceLow</span> å…ƒ - <span class="xi1">$priceHigh</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
-					<td>Âô³öÊıÁ¿£º</td>
+					<td>å–å‡ºæ•°é‡ï¼š</td>
 					<td>
-						<input type="text" id="num_sell" name="num_sell" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesSell({$dutyRate}, {$dutyMin}, {$user[fund_ava]}, {$sellMax});"/> ¹É
-						<br/><span class="xi1">$sellMin</span> ¹É - <span class="xi1">$sellMax</span> ¹É
+						<input type="text" id="num_sell" name="num_sell" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesSell({$dutyRate}, {$dutyMin}, {$user[fund_ava]}, {$sellMax});"/> è‚¡
+						<br/><span class="xi1">$sellMin</span> è‚¡ - <span class="xi1">$sellMax</span> è‚¡
 					</td>
 				</tr>
 				<tr>
-					<td>Ó¡»¨Ë°Ë°ÂÊ£º</td>
+					<td>å°èŠ±ç¨ç¨ç‡ï¼š</td>
 					<td>$dutyRate %
-						<br/>Ó¡»¨Ë°×îµÍ <span class="xi2">$dutyMin</span> Ôª
+						<br/>å°èŠ±ç¨æœ€ä½ <span class="xi2">$dutyMin</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
-					<td>ËùĞè·ÑÓÃ£º</td>
-					<td id="feesNeedSell">Ó¡»¨Ë°½ğ <span class="xi2">0.00</span> Ôª
-						<br/>ÂôºóÕÊ»§½áÓà <span class="xi2">$user[fund_ava]</span> Ôª
+					<td>æ‰€éœ€è´¹ç”¨ï¼š</td>
+					<td id="feesNeedSell">å°èŠ±ç¨é‡‘ <span class="xi2">0.00</span> å…ƒ
+						<br/>å–åå¸æˆ·ç»“ä½™ <span class="xi2">$user[fund_ava]</span> å…ƒ
 					</td>
 				</tr>
 				<tr>
@@ -182,8 +182,8 @@
 						<input type="hidden" name="tradetype" value="s"/>
 						<input type="hidden" name="sid" value="{$rs[sid]}"/>
 						<input type="hidden" name="formhash" value="{FORMHASH}"/>
-						<button type="reset" name="reset" value="true" class="pn pnc"><em>ÖØÖÃ</em></button>
-						<button type="submit" name="btnSell" value="true" class="pn pnc" $btn_sell><em>Âô³ö</em></button>
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>é‡ç½®</em></button>
+						<button type="submit" name="btnSell" value="true" class="pn pnc" $btn_sell><em>å–å‡º</em></button>
 					</td>
 				</tr>
 				</form>

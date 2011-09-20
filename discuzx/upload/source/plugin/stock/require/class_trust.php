@@ -41,7 +41,7 @@ class Trust
 				$this->showTradeForm($user, $_G['gp_sid']);
 		}
 		else
-			showmessage('ÔİÊ±Í£Ö¹½»Ò×£¬ÇëÄúÉÔºóÔÙÀ´');
+			showmessage('æš‚æ—¶åœæ­¢äº¤æ˜“ï¼Œè¯·æ‚¨ç¨åå†æ¥');
 	}
 	private function showTradeForm( $user, $stock_id=0 )
 	{
@@ -101,7 +101,7 @@ class Trust
 		}
 		else
 		{
-			showmessage('¸Ã¹ÉÆ±×´Ì¬Òì³££¬ÔİÊ±ÎŞ·¨½»Ò×£¡');
+			showmessage('è¯¥è‚¡ç¥¨çŠ¶æ€å¼‚å¸¸ï¼Œæš‚æ—¶æ— æ³•äº¤æ˜“ï¼');
 		}
 	}
 	private function getDealSell($sid, $openprice)
@@ -111,15 +111,15 @@ class Trust
 		while ( $rsds = DB::fetch($qds) )
 		{
 			if ( $i == 1 )
-				$rsds['i'] = 'ÂôÒ»';
+				$rsds['i'] = 'å–ä¸€';
 			else if ( $i == 2 )
-				$rsds['i'] = 'Âô¶ş';
+				$rsds['i'] = 'å–äºŒ';
 			else if ( $i == 3 )
-				$rsds['i'] = 'ÂôÈı';
+				$rsds['i'] = 'å–ä¸‰';
 			else if ( $i == 4 )
-				$rsds['i'] = 'ÂôËÄ';
+				$rsds['i'] = 'å–å››';
 			else if ( $i == 5 )
-				$rsds['i'] = 'ÂôÎå';
+				$rsds['i'] = 'å–äº”';
 			if ( $rsds['price_deal'] > $openprice )
 				$rsds['color'] = 'ff0000';
 			else if ( $rsds['price_deal'] < $openprice )
@@ -145,15 +145,15 @@ class Trust
 		while ( $rsdb = DB::fetch($qdb) )
 		{
 			if ( $i == 1 )
-				$rsdb['i'] = 'ÂòÒ»';
+				$rsdb['i'] = 'ä¹°ä¸€';
 			else if ( $i == 2 )
-				$rsdb['i'] = 'Âò¶ş';
+				$rsdb['i'] = 'ä¹°äºŒ';
 			else if ( $i == 3 )
-				$rsdb['i'] = 'ÂòÈı';
+				$rsdb['i'] = 'ä¹°ä¸‰';
 			else if ( $i == 4 )
-				$rsdb['i'] = 'ÂòËÄ';
+				$rsdb['i'] = 'ä¹°å››';
 			else if ( $i == 5 )
-				$rsdb['i'] = 'ÂòÎå';
+				$rsdb['i'] = 'ä¹°äº”';
 			if ( $rsds['price_deal'] > $openprice )
 				$rsds['color'] = 'ff0000';
 			else if ( $rsds['price_deal'] < $openprice )
@@ -170,11 +170,11 @@ class Trust
 		$rs = DB::fetch_first("SELECT sid, stockname, openprice, currprice, issueprice, issuenum, issuer_id, issuetime, state FROM ".DB::table('kfsm_stock')." WHERE sid='$stock_id'");
 		if ( !$rs )
 		{
-			showmessage('Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÆ±£¬¿ÉÄÜ¸ÃÉÏÊĞ¹«Ë¾ÒÑ¾­µ¹±Õ');
+			showmessage('æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡ç¥¨ï¼Œå¯èƒ½è¯¥ä¸Šå¸‚å…¬å¸å·²ç»å€’é—­');
 		}
 		else
 		{
-			$rs['state'] <> 0 && showmessage('¸Ã¹ÉÆ±Òì³££¬ÎŞ·¨½»Ò×');
+			$rs['state'] <> 0 && showmessage('è¯¥è‚¡ç¥¨å¼‚å¸¸ï¼Œæ— æ³•äº¤æ˜“');
 		}
 		return $rs;
 	}
@@ -187,7 +187,7 @@ class Trust
 			if ( is_numeric($db_tradedelay) && $db_tradedelay > 0 && $_G['timestamp'] - $buytime < $db_tradedelay * 60 )
 			{
 				$timedelay = ceil( $db_tradedelay - ($_G['timestamp']-$buytime)/60 );
-				showmessage("¹ÉÊĞÏŞÖÆ£ºÀëÔÊĞíÔÙ´ÎÂòÈë¸Ã¹ÉÆ±»¹²î $timedelay ·ÖÖÓ£¡");
+				showmessage("è‚¡å¸‚é™åˆ¶ï¼šç¦»å…è®¸å†æ¬¡ä¹°å…¥è¯¥è‚¡ç¥¨è¿˜å·® $timedelay åˆ†é’Ÿï¼");
 			}
 			if ( is_numeric($db_iplimit) && $db_iplimit > 0 && $user['ip'] )
 			{
@@ -200,19 +200,19 @@ class Trust
 				if ( $sameIp )
 				{
 					$timedelay = ceil( $db_iplimit - ($_G['timestamp']-$rsip['buytime'])/60 );
-					Showmsg("¹ÉÊĞÏŞÖÆ£ºÍ¬Ò»IPÓÃ»§ÂòÈëÍ¬Ò»¹ÉÆ±Ğë¼ä¸ô $timedelay ·ÖÖÓ£¡");
+					Showmsg("è‚¡å¸‚é™åˆ¶ï¼šåŒä¸€IPç”¨æˆ·ä¹°å…¥åŒä¸€è‚¡ç¥¨é¡»é—´éš” $timedelay åˆ†é’Ÿï¼");
 				}
 			}
-			if ( !is_numeric($buyPrice) || $buyPrice < 1 ) showmessage('ÇëÕıÈ·ÊäÈëÂòÈë¼Û¸ñ');
-			if ( !is_numeric($buyNum) || $buyNum < 1 ) showmessage('ÇëÕıÈ·ÊäÈëÂòÈëÊıÁ¿');
+			if ( !is_numeric($buyPrice) || $buyPrice < 1 ) showmessage('è¯·æ­£ç¡®è¾“å…¥ä¹°å…¥ä»·æ ¼');
+			if ( !is_numeric($buyNum) || $buyNum < 1 ) showmessage('è¯·æ­£ç¡®è¾“å…¥ä¹°å…¥æ•°é‡');
 			$buyNum = (int)$buyNum;
 			if ( is_numeric($db_tradenummin) && $db_tradenummin > 0 && $buyNum < $db_tradenummin )
-				showmessage("±¾¹ÉÊĞ¹æ¶¨£ºÃ¿±Ê×îÉÙ½»Ò×Á¿Îª $db_tradenummin ¹É£¡");
+				showmessage("æœ¬è‚¡å¸‚è§„å®šï¼šæ¯ç¬”æœ€å°‘äº¤æ˜“é‡ä¸º $db_tradenummin è‚¡ï¼");
 			$needMoney	= $buyPrice * $buyNum;
 			$needFees	= $needMoney * $db_dutyrate / 100;
 			$needFees	= $needFees >= $db_dutymin ? $needFees : $db_dutymin;
 			if ( $user['fund_ava'] < $needMoney + $needFees )
-				showmessage('ÄúµÄÕÊ»§ÖĞÃ»ÓĞ×ã¹»µÄ×Ê½ğÓÃÀ´¹ºÂò¹ÉÆ±');
+				showmessage('æ‚¨çš„å¸æˆ·ä¸­æ²¡æœ‰è¶³å¤Ÿçš„èµ„é‡‘ç”¨æ¥è´­ä¹°è‚¡ç¥¨');
 			else
 			{
 				DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava-$needMoney-$needFees, fund_war=fund_war+$needMoney+$needFees WHERE uid='{$user['id']}'");
@@ -238,7 +238,7 @@ class Trust
 							$worth		= $dsrs['price_deal'] * $buyNum;
 							$stampduty	= $worth * $db_dutyrate / 100;
 							$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
-							// Âò·½¹ÉÆ±ÊıÁ¿Ôö¼Ó
+							// ä¹°æ–¹è‚¡ç¥¨æ•°é‡å¢åŠ 
 							$rsc = DB::fetch_first("SELECT cid, stocknum_ava, averageprice FROM ".DB::table('kfsm_customer')." WHERE uid='{$user['id']}' AND sid='$stock_id'");
 							if ( !$rsc )
 							{
@@ -264,35 +264,35 @@ class Trust
 								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$buyNum}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user['ip']}' WHERE cid='{$rsc['cid']}'");
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_war=fund_war-{$worth}-{$stampduty}, todaybuy=todaybuy+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user['id']}'");
 							}
-							// Âô·½×Ê½ğ¡¢½ñÈÕÂô³ö¸üĞÂ
+							// å–æ–¹èµ„é‡‘ã€ä»Šæ—¥å–å‡ºæ›´æ–°
 							DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$worth}, todaysell=todaysell+{$buyNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
-							// Âô·½¹ÉÆ±ÊıÁ¿¼õÉÙ
+							// å–æ–¹è‚¡ç¥¨æ•°é‡å‡å°‘
 							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_war=stocknum_war-$buyNum, selltime='{$_G[timestamp]}' WHERE uid='{$dsrs[uid]}' AND sid='$stock_id'");
 							$kfsclass->calculatefund($user['id'], $stock_id);
 							$kfsclass->calculatefund($dsrs['uid'], $stock_id);
-							// Âô·½²¿·Ö³É½»£¬ÓĞ¿ÉÄÜÍêÈ«³É½»
+							// å–æ–¹éƒ¨åˆ†æˆäº¤ï¼Œæœ‰å¯èƒ½å®Œå…¨æˆäº¤
 							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$buyNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dsrs[did]'");
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
 							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='{$dsrs['did']}'");
 							if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='{$dsrs['did']}'");
-							// Âò·½ÍêÈ«³É½»
+							// ä¹°æ–¹å®Œå…¨æˆäº¤
 							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user['id']}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '{$buyNum}', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
-							// ¸üĞÂ¹ÉÆ±¡°³É½»¼Û¡±
+							// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤ä»·â€
 							$this->computeNewPrice( $stock_id, $dsrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
-							// ¸üĞÂ¹ÉÆ±¡°³É½»Á¿¡±
+							// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤é‡â€
 							DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$buyNum} WHERE sid='$stock_id'");
-							// ¸üĞÂ¹ÉÊĞĞÅÏ¢
+							// æ›´æ–°è‚¡å¸‚ä¿¡æ¯
 							DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy=todaybuy+{$buyNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
-							showmessage('¹ÉÆ±ÂòÈë³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+							showmessage('è‚¡ç¥¨ä¹°å…¥æˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 						}
 						else
 						{
 							$worth		= $dsrs['price_deal'] * $quant;
 							$stampduty	= $worth * $db_dutyrate / 100;
 							$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
-							// Âò·½¹ÉÆ±ÊıÁ¿Ôö¼Ó
+							// ä¹°æ–¹è‚¡ç¥¨æ•°é‡å¢åŠ 
 							$rsc = DB::fetch_first("SELECT cid, stocknum_ava, averageprice FROM ".DB::table('kfsm_customer')." WHERE uid='{$user['id']}' AND sid='$stock_id'");
 							if ( !$rsc )
 							{
@@ -318,33 +318,33 @@ class Trust
 								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$quant}, buyprice='{$dsrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$rsc['cid']}'");
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_war=fund_war-{$worth}-{$stampduty}, todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user['id']}'");
 							}
-							// Âô·½×Ê½ğ¡¢½ñÈÕÂô³ö¸üĞÂ
+							// å–æ–¹èµ„é‡‘ã€ä»Šæ—¥å–å‡ºæ›´æ–°
 							DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$worth}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dsrs[uid]'");
-							// Âô·½¹ÉÆ±ÊıÁ¿¼õÉÙ
+							// å–æ–¹è‚¡ç¥¨æ•°é‡å‡å°‘
 							DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_war=stocknum_war-$quant, selltime='{$_G[timestamp]}' WHERE uid='{$dsrs[uid]}' AND sid='$stock_id'");
 							$kfsclass->calculatefund($user['id'],$stock_id);
 							$kfsclass->calculatefund($dsrs['uid'],$stock_id);
-							// Âô·½ÍêÈ«³É½»
+							// å–æ–¹å®Œå…¨æˆäº¤
 							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dsrs[did]'");
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 2, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
-							// Âò·½²¿·Ö³É½»£¬ÓĞ¿ÉÄÜÍêÈ«³É½»
+							// ä¹°æ–¹éƒ¨åˆ†æˆäº¤ï¼Œæœ‰å¯èƒ½å®Œå…¨æˆäº¤
 							DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dsrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
 							$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
 							if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
 							DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dsrs[uid]}', '{$dsrs[sid]}', '{$rs[stockname]}', 1, '$quant', '{$dsrs['price_deal']}', '$worth', '{$dsrs['did']}', '{$_G[timestamp]}')");
-							// ¸üĞÂ¹ÉÆ±¡°³É½»¼Û¡±
+							// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤ä»·â€
 							$this->computeNewPrice( $stock_id, $dsrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
-							// ¸üĞÂ¹ÉÆ±¡°³É½»Á¿¡±
+							// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤é‡â€
 							DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
-							// ¸üĞÂ¹ÉÊĞĞÅÏ¢
+							// æ›´æ–°è‚¡å¸‚ä¿¡æ¯
 							DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaybuy=todaybuy+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 							$buyNum -= $quant;
 							continue;
 						}
 					}
 				}
-				showmessage('Î¯ÍĞÂòÈë¹ÉÆ±ÒÑ³É¹¦¹Òµ¥£¡', "$baseScript&mod=member&act=trustsmng");
+				showmessage('å§”æ‰˜ä¹°å…¥è‚¡ç¥¨å·²æˆåŠŸæŒ‚å•ï¼', "$baseScript&mod=member&act=trustsmng");
 			}
 		}
 	}
@@ -355,14 +355,14 @@ class Trust
 		{
 			$rss = DB::fetch_first("SELECT cid, stocknum_ava FROM ".DB::table('kfsm_customer')." WHERE uid='{$user['id']}' AND sid='$stock_id'");
 			if ( !$rss )
-				showmessage('ÄúÃ»ÓĞÕâÖ»¹ÉÆ±£¬ÎŞ·¨½øĞĞÂô³ö²Ù×÷');
+				showmessage('æ‚¨æ²¡æœ‰è¿™åªè‚¡ç¥¨ï¼Œæ— æ³•è¿›è¡Œå–å‡ºæ“ä½œ');
 			else
 			{
 				$selltime = DB::result_first("SELECT MAX(time_deal) FROM ".DB::table('kfsm_deal')." WHERE uid='{$user['id']}' AND sid='$stock_id' AND direction='2'");
 				if ( is_numeric($db_tradedelay) && $db_tradedelay > 0 && $_G['timestamp'] - $selltime < $db_tradedelay * 60 )
 				{
 					$timedelay = ceil( $db_tradedelay - ($_G['timestamp']-$selltime)/60 );
-					showmessage("¹ÉÊĞÏŞÖÆ£ºÀëÔÊĞíÔÙ´ÎÂô³ö¸Ã¹ÉÆ±»¹²î $timedelay ·ÖÖÓ£¡");
+					showmessage("è‚¡å¸‚é™åˆ¶ï¼šç¦»å…è®¸å†æ¬¡å–å‡ºè¯¥è‚¡ç¥¨è¿˜å·® $timedelay åˆ†é’Ÿï¼");
 				}
 				if ( is_numeric($db_iplimit) && $db_iplimit > 0 && $user['ip'] )
 				{
@@ -375,32 +375,32 @@ class Trust
 					if ( $sameIp )
 					{
 						$timedelay = ceil( $db_iplimit - ($_G['timestamp']-$rsip['selltime'])/60 );
-						Showmsg("¹ÉÊĞÏŞÖÆ£ºÍ¬Ò»IPÓÃ»§Âô³öÍ¬Ò»¹ÉÆ±Ğë¼ä¸ô $timedelay ·ÖÖÓ£¡");
+						Showmsg("è‚¡å¸‚é™åˆ¶ï¼šåŒä¸€IPç”¨æˆ·å–å‡ºåŒä¸€è‚¡ç¥¨é¡»é—´éš” $timedelay åˆ†é’Ÿï¼");
 					}
 				}
-				if ( !is_numeric($sellPrice) || $sellPrice < 1 ) showmessage('ÇëÕıÈ·ÊäÈëÂô³ö¼Û¸ñ');
-				if ( !is_numeric($sellNum) || $sellNum < 1 ) showmessage('ÇëÕıÈ·ÊäÈëÂô³öÊıÁ¿');
+				if ( !is_numeric($sellPrice) || $sellPrice < 1 ) showmessage('è¯·æ­£ç¡®è¾“å…¥å–å‡ºä»·æ ¼');
+				if ( !is_numeric($sellNum) || $sellNum < 1 ) showmessage('è¯·æ­£ç¡®è¾“å…¥å–å‡ºæ•°é‡');
 				$sellNum = (int)$sellNum;
 				$leftNum = $rss['stocknum_ava'] - $sellNum;
 				if ( $leftNum < 0 )
 				{
-					showmessage('ÄúÃ»ÓĞ×ã¹»µÄ¹ÉÆ±Âô³ö');
+					showmessage('æ‚¨æ²¡æœ‰è¶³å¤Ÿçš„è‚¡ç¥¨å–å‡º');
 				}
 				else
 				{
 					if ( $user['id'] == $rs['issuer_id'] && ( $leftNum < $rs['issuenum']/2 ) && ( $_G['timestamp'] - $rs['issuetime'] - 2592000 <= 0 ) )
 					{
-						showmessage('ÄúÊÇ¸Ã¹«Ë¾¹ÉÆ±·¢ĞĞÈË£¬Ò»¸öÔÂÖ®ÄÚ²»ÄÜÅ×ÊÛ¹ÉÆ±');
+						showmessage('æ‚¨æ˜¯è¯¥å…¬å¸è‚¡ç¥¨å‘è¡Œäººï¼Œä¸€ä¸ªæœˆä¹‹å†…ä¸èƒ½æŠ›å”®è‚¡ç¥¨');
 					}
 					if ( $rss['stocknum_ava'] < 10 )
 					{
 						if ( $leftNum > 0 )
-							showmessage('ÄúµÄ¹ÉÆ±ÊıÁ¿²»×ã 10 ¹É£¬±ØĞëÈ«²¿Âô³ö');
+							showmessage('æ‚¨çš„è‚¡ç¥¨æ•°é‡ä¸è¶³ 10 è‚¡ï¼Œå¿…é¡»å…¨éƒ¨å–å‡º');
 					}
 					else
 					{
 						if ( is_numeric($db_tradenummin) && $db_tradenummin > 0 && $sellNum < $db_tradenummin )
-							showmessage("±¾¹ÉÊĞ¹æ¶¨£ºÃ¿±Ê×îÉÙ½»Ò×Á¿Îª $db_tradenummin ¹É£¡");
+							showmessage("æœ¬è‚¡å¸‚è§„å®šï¼šæ¯ç¬”æœ€å°‘äº¤æ˜“é‡ä¸º $db_tradenummin è‚¡ï¼");
 					}
 					$dealData = array(
 						'uid'		=> $user['id'],
@@ -425,11 +425,11 @@ class Trust
 								$worth		= $dbrs['price_deal'] * $sellNum;
 								$stampduty	= $worth * $db_dutyrate / 100;
 								$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
-								// Âô·½×Ê½ğ¡¢½ñÈÕÂô³ö¸üĞÂ
+								// å–æ–¹èµ„é‡‘ã€ä»Šæ—¥å–å‡ºæ›´æ–°
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user['id']}'");
-								// Âô·½¹ÉÆ±ÊıÁ¿¼õÉÙ
+								// å–æ–¹è‚¡ç¥¨æ•°é‡å‡å°‘
 								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_war=stocknum_war-$sellNum, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$rss['cid']}'");
-								// Âò·½¹ÉÆ±ÊıÁ¿Ôö¼Ó
+								// ä¹°æ–¹è‚¡ç¥¨æ•°é‡å¢åŠ 
 								$rsc = DB::fetch_first("SELECT cid, stocknum_ava, averageprice FROM ".DB::table('kfsm_customer')." WHERE uid='{$dbrs[uid]}' AND sid='$stock_id'");
 								if ( !$rsc )
 								{
@@ -452,37 +452,37 @@ class Trust
 									$avgprice = round( ( $dbrs['price_deal'] * $sellNum + $rsc['averageprice'] * $haveNum ) / ( $sellNum + $haveNum ), 2 );
 									DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$sellNum}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='{$rsc['cid']}'");
 								}
-								// Âò·½½ñÈÕÂòÈë¸üĞÂ
+								// ä¹°æ–¹ä»Šæ—¥ä¹°å…¥æ›´æ–°
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET todaybuy=todaybuy+{$sellNum}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
 								$kfsclass->calculatefund($user['id'], $stock_id);
 								$kfsclass->calculatefund($dbrs['uid'], $stock_id);
-								// Âò·½²¿·Ö³É½»£¬ÓĞ¿ÉÄÜÍêÈ«³É½»
+								// ä¹°æ–¹éƒ¨åˆ†æˆäº¤ï¼Œæœ‰å¯èƒ½å®Œå…¨æˆäº¤
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$sellNum}, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='2' WHERE did='$dbrs[did]'");
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
 								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='{$dbrs['did']}'");
 								if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='{$dbrs['did']}'");
-								// Âô·½ÍêÈ«³É½»
+								// å–æ–¹å®Œå…¨æˆäº¤
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='1' WHERE did='$newdid'");
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user['id']}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '$sellNum', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
-								// ¸üĞÂ¹ÉÆ±¡°³É½»¼Û¡±
+								// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤ä»·â€
 								$this->computeNewPrice( $stock_id,  $dbrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
-								// ¸üĞÂ¹ÉÆ±¡°³É½»Á¿¡±
+								// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤é‡â€
 								DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$sellNum} WHERE sid='$stock_id'");
-								// ¸üĞÂ¹ÉÊĞĞÅÏ¢
+								// æ›´æ–°è‚¡å¸‚ä¿¡æ¯
 								DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaysell=todaysell+{$sellNum}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
-								showmessage('¹ÉÆ±Âô³ö³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+								showmessage('è‚¡ç¥¨å–å‡ºæˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 							}
 							else
 							{
 								$worth		=  $dbrs['price_deal'] * $quant;
 								$stampduty	= $worth * $db_dutyrate / 100;
 								$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
-								// Âô·½×Ê½ğ¡¢½ñÈÕÂô³ö¸üĞÂ
+								// å–æ–¹èµ„é‡‘ã€ä»Šæ—¥å–å‡ºæ›´æ–°
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$worth}-{$stampduty}, todaysell=todaysell+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='{$user['id']}'");
-								// Âô·½¹ÉÆ±ÊıÁ¿¼õÉÙ
+								// å–æ–¹è‚¡ç¥¨æ•°é‡å‡å°‘
 								DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_war=stocknum_war-$quant, selltime='{$_G[timestamp]}', ip='{$user[ip]}' WHERE cid='{$rss['cid']}'");
-								// Âò·½¹ÉÆ±ÊıÁ¿Ôö¼Ó
+								// ä¹°æ–¹è‚¡ç¥¨æ•°é‡å¢åŠ 
 								$rsc = DB::fetch_first("SELECT cid, stocknum_ava, averageprice FROM ".DB::table('kfsm_customer')." WHERE uid='$dbrs[uid]' AND sid='$stock_id'");
 								if ( !$rsc )
 								{
@@ -505,31 +505,31 @@ class Trust
 									$avgprice = round( ( $dbrs['price_deal'] * $quant + $rsc['averageprice'] * $haveNum ) / ( $quant + $haveNum ), 2 );
 									DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$quant}, buyprice='{$dbrs['price_deal']}', averageprice='$avgprice', buytime='{$_G[timestamp]}' WHERE cid='{$rsc['cid']}'");
 								}
-								// Âò·½½ñÈÕÂòÈë¸üĞÂ
+								// ä¹°æ–¹ä»Šæ—¥ä¹°å…¥æ›´æ–°
 								DB::query("UPDATE ".DB::table('kfsm_user')." SET todaybuy=todaybuy+{$quant}, lasttradetime='{$_G[timestamp]}' WHERE uid='$dbrs[uid]'");
 								$kfsclass->calculatefund($user['id'], $stock_id);
 								$kfsclass->calculatefund($dbrs['uid'], $stock_id);
-								// Âò·½ÍêÈ«³É½»
+								// ä¹°æ–¹å®Œå…¨æˆäº¤
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_deal, price_tran=price_deal, time_tran='{$_G[timestamp]}', ok='1' WHERE did='$dbrs[did]'");
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$dbrs[uid]}', '{$dbrs[sid]}', '{$rs[stockname]}', '1', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
-								// Âô·½²¿·Ö³É½»£¬ÓĞ¿ÉÄÜÍêÈ«³É½»
+								// å–æ–¹éƒ¨åˆ†æˆäº¤ï¼Œæœ‰å¯èƒ½å®Œå…¨æˆäº¤
 								DB::query("UPDATE ".DB::table('kfsm_deal')." SET quant_tran=quant_tran+{$quant}, price_tran='{$dbrs['price_deal']}', time_tran='{$_G[timestamp]}', ok='2' WHERE did='$newdid'");
 								$tranState = DB::fetch_first("SELECT quant_deal, quant_tran FROM ".DB::table('kfsm_deal')." WHERE did='$newdid'");
 								if ( $tranState['quant_deal'] == $tranState['quant_tran'] )
 									DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='1' WHERE did='$newdid'");
 								DB::query("INSERT INTO ".DB::table('kfsm_transaction')."(uid, sid, stockname, direction, quant, price, amount, did, ttime) VALUES('{$user['id']}', '{$dbrs[sid]}', '{$rs[stockname]}', '2', '{$quant}', '{$dbrs['price_deal']}', '$worth', '{$dbrs['did']}', '{$_G[timestamp]}')");
-								// ¸üĞÂ¹ÉÆ±¡°³É½»¼Û¡±
+								// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤ä»·â€
 								$this->computeNewPrice( $stock_id, $dbrs['price_deal'], $rs['openprice'], $rs['issuetime'] );
-								// ¸üĞÂ¹ÉÆ±¡°³É½»Á¿¡±
+								// æ›´æ–°è‚¡ç¥¨â€œæˆäº¤é‡â€
 								DB::query("UPDATE ".DB::table('kfsm_stock')." SET todaytradenum=todaytradenum+{$quant} WHERE sid='$stock_id'");
-								// ¸üĞÂ¹ÉÊĞĞÅÏ¢
+								// æ›´æ–°è‚¡å¸‚ä¿¡æ¯
 								DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET todaysell=todaysell+{$quant}, todaytotal=todaytotal+{$worth}, stampduty=stampduty+{$stampduty}");
 								$sellNum -= $quant;
 								continue;
 							}
 						}
 					}
-					showmessage('Î¯ÍĞÂô³ö¹ÉÆ±ÒÑ³É¹¦¹Òµ¥£¡', "$baseScript&mod=member&act=trustsmng");
+					showmessage('å§”æ‰˜å–å‡ºè‚¡ç¥¨å·²æˆåŠŸæŒ‚å•ï¼', "$baseScript&mod=member&act=trustsmng");
 				}
 			}
 		}
@@ -639,44 +639,44 @@ class Trust
 		while ( $rsd = DB::fetch($qd) )
 		{
 			if ( $rsd['direction'] == 1 )
-				$rsd['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rsd['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rsd['direction'] == 2 )
-				$rsd['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rsd['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rsd['direction'] = '<span style="color:#0000FF">Òì³£</span>';
+				$rsd['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span>';
 			if ( $rsd['time_deal'] )
 				$rsd['time_deal']	= dgmdate($rsd['time_deal'],'Y-m-d H:i:s');
 			else
 				$rsd['time_deal']	= '-';
 			if ( $rsd['ok'] == 0 )
 			{
-				$rsd['ok'] = 'Î´³É½»';
-				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>³·µ¥</em></button></form>";
+				$rsd['ok'] = 'æœªæˆäº¤';
+				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>æ’¤å•</em></button></form>";
 			}
 			else if ( $rsd['ok'] == 1 )
 			{
-				$rsd['ok'] = '<span style="color:#008000">³É½»</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#008000">æˆäº¤</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else if ( $rsd['ok'] == 2 )
 			{
-				$rsd['ok'] = '<span style="color:#FFA500">²¿·Ö³É½»</span>';
-				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>³·µ¥</em></button></form>";
+				$rsd['ok'] = '<span style="color:#FFA500">éƒ¨åˆ†æˆäº¤</span>';
+				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>æ’¤å•</em></button></form>";
 			}
 			else if ( $rsd['ok'] == 3 )
 			{
-				$rsd['ok'] = '<span style="color:#0000FF">ÓÃ»§³·Ïú</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#0000FF">ç”¨æˆ·æ’¤é”€</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else if ( $rsd['ok'] == 4 )
 			{
-				$rsd['ok'] = '<span style="color:#A52A2A">ÏµÍ³³·Ïú</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#A52A2A">ç³»ç»Ÿæ’¤é”€</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else
 			{
-				$rsd['ok'] = '<span style="color:#FF0000">Òì³£</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#FF0000">å¼‚å¸¸</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			$ddb[] = $rsd;
 		}
@@ -689,11 +689,11 @@ class Trust
 		while ( $rst = DB::fetch($qt) )
 		{
 			if ( $rst['direction'] == 1 )
-				$rst['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rst['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rst['direction'] == 2 )
-				$rst['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rst['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rst['direction'] = '<span style="color:#0000FF">Òì³£</span>';
+				$rst['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span>';
 			if ( $rst['ttime'] )
 				$rst['ttime']	= dgmdate($rst['ttime'],'Y-m-d H:i:s');
 			else
@@ -721,7 +721,7 @@ class Trust
 				}
 				else
 				{
-					showmessage('¸ÃÎ¯ÍĞµ¥½»Ò××´Ì¬Òì³££¬ÎŞ·¨³·Ïú£¡');
+					showmessage('è¯¥å§”æ‰˜å•äº¤æ˜“çŠ¶æ€å¼‚å¸¸ï¼Œæ— æ³•æ’¤é”€ï¼');
 				}
 				$stampduty	= $worth * $db_dutyrate / 100;
 				$stampduty	= $stampduty >= $db_dutymin ? $stampduty : $db_dutymin;
@@ -730,28 +730,28 @@ class Trust
 					DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$worth}+{$stampduty}, fund_war=fund_war-{$worth}-{$stampduty} WHERE uid='{$user['id']}'");
 					DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='3' WHERE did='{$qd['did']}'");
 					$kfsclass->calculatefund($user['id']);
-					showmessage('Î¯ÍĞÂòÈë¹ÉÆ±³·Ïú³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+					showmessage('å§”æ‰˜ä¹°å…¥è‚¡ç¥¨æ’¤é”€æˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 				}
 				else if ( $qd['direction'] == 2 )
 				{
 					DB::query("UPDATE ".DB::table('kfsm_customer')." SET stocknum_ava=stocknum_ava+{$quantLeft}, stocknum_war=stocknum_war-{$quantLeft} WHERE uid='{$user['id']}' AND sid='{$qd['sid']}'");
 					DB::query("UPDATE ".DB::table('kfsm_deal')." SET ok='3' WHERE did='{$qd['did']}'");
 					$kfsclass->calculatefund($user['id']);
-					showmessage('Î¯ÍĞÂô³ö¹ÉÆ±³·Ïú³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+					showmessage('å§”æ‰˜å–å‡ºè‚¡ç¥¨æ’¤é”€æˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 				}
 				else
 				{
-					showmessage('¸ÃÎ¯ÍĞµ¥ÂòÂô·½ÏòÒì³££¬ÎŞ·¨³·Ïú£¡');
+					showmessage('è¯¥å§”æ‰˜å•ä¹°å–æ–¹å‘å¼‚å¸¸ï¼Œæ— æ³•æ’¤é”€ï¼');
 				}
 			}
 			else
 			{
-				showmessage('¸ÃÎ¯ÍĞµ¥ÒÑÈ«²¿³É½»£¬»òÒÑ¹ıÆÚ£¬ÎŞ·¨³·Ïú£¡');
+				showmessage('è¯¥å§”æ‰˜å•å·²å…¨éƒ¨æˆäº¤ï¼Œæˆ–å·²è¿‡æœŸï¼Œæ— æ³•æ’¤é”€ï¼');
 			}
 		}
 		else
 		{
-			showmessage('ÎŞĞ§µÄÎ¯ÍĞµ¥£¡');
+			showmessage('æ— æ•ˆçš„å§”æ‰˜å•ï¼');
 		}
 	}
 }

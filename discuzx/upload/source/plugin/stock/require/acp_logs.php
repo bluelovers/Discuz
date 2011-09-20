@@ -56,10 +56,10 @@ class Logs
 			}
 			$delid && $delid = substr($delid,0,-1);
 			DB::query("DELETE FROM ".DB::table('kfsm_smlog')." WHERE id IN ($delid)");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('ÈÕÖ¾¹ÜÀí', '{$_G[username]}', 'É¾³ýÏµÍ³ÈÕÖ¾ {$ttlnum} Ìõ', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('æ—¥å¿—ç®¡ç†', '{$_G[username]}', 'åˆ é™¤ç³»ç»Ÿæ—¥å¿— {$ttlnum} æ¡', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=logs';
-		cpmsg("ÒÑ³É¹¦É¾³ý {$ttlnum} ÌõÏµÍ³ÈÕÖ¾£¡", $baseScript, 'succeed');
+		cpmsg("å·²æˆåŠŸåˆ é™¤ {$ttlnum} æ¡ç³»ç»Ÿæ—¥å¿—ï¼", $baseScript, 'succeed');
 	}
 }
 ?>

@@ -81,7 +81,7 @@ CREATE TABLE pre_kfsm_news (
   PRIMARY KEY (nid)
 ) ENGINE=MyISAM;
 
-INSERT INTO pre_kfsm_news (subject, content, color, author, addtime) VALUES ('»¶Ó­Ê¹ÓÃ Kilofox StockIns V{$version} for Discuz! X2', '»¶Ó­Ê¹ÓÃÇ§ºü StockIns ĞéÄâ¹ÉÊĞÏµÍ³£¡\nStockIns ÊÇÒ»¿îÔËÓÃÃæÏò¶ÔÏóË¼Ïë±àĞ´µÄ PHP Èí¼ş£¬ÊÇ×¨Îª¹úÄÚÖ÷Á÷ PHP ÂÛÌ³¶ø¿ª·¢µÄ²å¼ş²úÆ·¡£¸Ã°æ±¾Îª Discuz! ²å¼ş°æ¡£\n»ñµÃ¸ü¶à×ÊÑ¶£¬ÇëÄú¹Ø×¢¹Ù·½ÍøÕ¾¡ª¡ª[url=http://www.kilofox.net]Kilofox.Net[/url]', '', 'Kilofox.Net', '{$_G[timestamp]}');
+INSERT INTO pre_kfsm_news (subject, content, color, author, addtime) VALUES ('æ¬¢è¿ä½¿ç”¨ Kilofox StockIns V{$version} for Discuz! X2', 'æ¬¢è¿ä½¿ç”¨åƒç‹ StockIns è™šæ‹Ÿè‚¡å¸‚ç³»ç»Ÿï¼\nStockIns æ˜¯ä¸€æ¬¾è¿ç”¨é¢å‘å¯¹è±¡æ€æƒ³ç¼–å†™çš„ PHP è½¯ä»¶ï¼Œæ˜¯ä¸“ä¸ºå›½å†…ä¸»æµ PHP è®ºå›è€Œå¼€å‘çš„æ’ä»¶äº§å“ã€‚è¯¥ç‰ˆæœ¬ä¸º Discuz! æ’ä»¶ç‰ˆã€‚\nè·å¾—æ›´å¤šèµ„è®¯ï¼Œè¯·æ‚¨å…³æ³¨å®˜æ–¹ç½‘ç«™â€”â€”[url=http://www.kilofox.net]Kilofox.Net[/url]', '', 'Kilofox.Net', '{$_G[timestamp]}');
 
 
 DROP TABLE IF EXISTS pre_kfsm_sminfo;

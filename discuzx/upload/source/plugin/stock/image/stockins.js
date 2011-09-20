@@ -24,7 +24,7 @@ function foxajax()
 	}
 	return r;
 }
-// ¼ì²é¹ÉÆ±Ãû³Æ
+// æ£€æŸ¥è‚¡ç¥¨åç§°
 function checkdata(old)
 {
 	if ( old == 1 )
@@ -52,7 +52,7 @@ function showresult()
 		document.getElementById('dispmsg').innerHTML = dataReturn;
 	}
 }
-// ·Öºì
+// åˆ†çº¢
 function selectCutType(id)
 {
 	if ( id == 1 )
@@ -70,18 +70,18 @@ function cutCheck1( stockNum, myFunds )
 {
 	cutNum = document.formcam.cutnum1.value;
 	var needFunds = cutNum * parseInt(stockNum/100);
-	var msgs = '±¾´Î·Öºì½«ÅÉËÍ×Ê½ğ <span class="xi1">' + needFunds + '</span> Ôª';
+	var msgs = 'æœ¬æ¬¡åˆ†çº¢å°†æ´¾é€èµ„é‡‘ <span class="xi1">' + needFunds + '</span> å…ƒ';
 	if ( needFunds > myFunds )
-		msgs += '£¬ÄúÖ»ÓĞ <span class="s1">' + myFunds + '</span> Ôª£¬²»×ãÒÔ·Öºì';
+		msgs += 'ï¼Œæ‚¨åªæœ‰ <span class="s1">' + myFunds + '</span> å…ƒï¼Œä¸è¶³ä»¥åˆ†çº¢';
 	document.getElementById('show_msgs').innerHTML = msgs;
 }
 function cutCheck2( totalNum, myStockNum )
 {
 	cutNum = document.formcam.cutnum2.value;
 	var needNum = cutNum * parseInt(totalNum/100);
-	var msgs = '±¾´Î·Öºì½«ÅÉËÍ¹ÉÆ± <span class="xi1">' + needNum + '</span> ¹É';
+	var msgs = 'æœ¬æ¬¡åˆ†çº¢å°†æ´¾é€è‚¡ç¥¨ <span class="xi1">' + needNum + '</span> è‚¡';
 	if ( needNum > myStockNum )
-		msgs += '£¬ÄúÖ»ÓĞ <span class="s1">' + myStockNum + '</span> ¹É£¬²»×ãÒÔ·Öºì';
+		msgs += 'ï¼Œæ‚¨åªæœ‰ <span class="s1">' + myStockNum + '</span> è‚¡ï¼Œä¸è¶³ä»¥åˆ†çº¢';
 	document.getElementById('show_msgs').innerHTML = msgs;
 }
 function melonFormCheck( totalNum, myStockNum, myFunds )
@@ -94,7 +94,7 @@ function melonFormCheck( totalNum, myStockNum, myFunds )
 	}
 	if ( j == 0 )
 	{
-		msgs = 'ÇëÑ¡Ôñ·Öºì·½Ê½£¡';
+		msgs = 'è¯·é€‰æ‹©åˆ†çº¢æ–¹å¼ï¼';
 		alert(msgs);
 		return false;
 	}
@@ -103,14 +103,14 @@ function melonFormCheck( totalNum, myStockNum, myFunds )
 		var cutNum = document.formcam.cutnum1.value;
 		if ( isNaN(cutNum) || cutNum < 1 )
 		{
-			msgs = 'ÇëÕıÈ·ÌîĞ´ÅÉËÍ×Ê½ğ£¡';
+			msgs = 'è¯·æ­£ç¡®å¡«å†™æ´¾é€èµ„é‡‘ï¼';
 			alert(msgs);
 			return false;
 		}
 		var needFunds = cutNum * parseInt(totalNum/100);
 		if ( needFunds > myFunds )
 		{
-			msgs = 'ÄúÖ»ÓĞ ' + myFunds + ' Ôª£¬²»×ãÒÔ·Öºì';
+			msgs = 'æ‚¨åªæœ‰ ' + myFunds + ' å…ƒï¼Œä¸è¶³ä»¥åˆ†çº¢';
 			alert(msgs);
 			return false;
 		}
@@ -120,14 +120,14 @@ function melonFormCheck( totalNum, myStockNum, myFunds )
 		var cutNum = document.formcam.cutnum2.value;
 		if ( isNaN(cutNum) || cutNum < 1 )
 		{
-			msgs = 'ÇëÕıÈ·ÌîĞ´ËÍ¹ÉÊıÁ¿£¡';
+			msgs = 'è¯·æ­£ç¡®å¡«å†™é€è‚¡æ•°é‡ï¼';
 			alert(msgs);
 			return false;
 		}
 		var needNum = cutNum * parseInt(totalNum/100);
 		if ( needNum > myStockNum )
 		{
-			msgs = 'ÄúÖ»ÓĞ ' + myStockNum + ' ¹É£¬²»×ãÒÔ·Öºì';
+			msgs = 'æ‚¨åªæœ‰ ' + myStockNum + ' è‚¡ï¼Œä¸è¶³ä»¥åˆ†çº¢';
 			alert(msgs);
 			return false;
 		}
@@ -139,7 +139,7 @@ function changeTwoDecimal(x)
 	var f_x = parseFloat(x);
 	if ( isNaN(f_x) )
 	{
-		alert('´íÎó£º·ÇÊı×Ö¼ÆËã');
+		alert('é”™è¯¯ï¼šéæ•°å­—è®¡ç®—');
 		return false;
 	}
 	var f_x = Math.round(x*100)/100;
@@ -156,7 +156,7 @@ function changeTwoDecimal(x)
 	}
 	return s_x;
 }
-// Ê×Ò³Ê±¼äÏÔÊ¾
+// é¦–é¡µæ—¶é—´æ˜¾ç¤º
 function foxTime()
 {
 	foxdate = new Date();
@@ -174,7 +174,7 @@ function foxTime()
 	{
 		second = "0" + second;
 	}
-	document.getElementById('foxsmtime').innerHTML = year + 'Äê' + month + 'ÔÂ' + day + 'ÈÕ ' + hour + ':' + minute + ':' + second;
+	document.getElementById('foxsmtime').innerHTML = year + 'å¹´' + month + 'æœˆ' + day + 'æ—¥ ' + hour + ':' + minute + ':' + second;
 	setTimeout('foxTime()',1000)
 }
 function isIntNum(str)
@@ -184,21 +184,21 @@ function isIntNum(str)
 	else
 		return false;
 }
-// ¹ºÂò¹ÉÆ±¼ÆËã·ÑÓÃ
+// è´­ä¹°è‚¡ç¥¨è®¡ç®—è´¹ç”¨
 function calFeesBuy(tradecharge, stampduty, usercash, numMax)
 {
 	var price	= document.getElementById('price_buy').value;
 	var num		= document.getElementById('num_buy').value;
 	var showMsg	= '';
 	if ( !price || isNaN(price) || price <= 0 )
-		showMsg = '¹ÉÆ±¼Û¸ñÊäÈë´íÎó£¡';
+		showMsg = 'è‚¡ç¥¨ä»·æ ¼è¾“å…¥é”™è¯¯ï¼';
 	else if ( !num || isNaN(num) || num <= 0 )
-		showMsg = '¹ÉÆ±ÊıÁ¿ÊäÈë´íÎó£¡';
+		showMsg = 'è‚¡ç¥¨æ•°é‡è¾“å…¥é”™è¯¯ï¼';
 	else
 	{
 		if ( num > numMax )
 		{
-			showMsg = 'ÂòÈëÊıÁ¿²»ÄÜ´óÓÚ ' + numMax + ' ¹É';
+			showMsg = 'ä¹°å…¥æ•°é‡ä¸èƒ½å¤§äº ' + numMax + ' è‚¡';
 		}
 		else
 		{
@@ -207,28 +207,28 @@ function calFeesBuy(tradecharge, stampduty, usercash, numMax)
 			needFees	= changeTwoDecimal(needFees >= stampduty ? needFees : stampduty);
 			moneyLeft	= changeTwoDecimal(usercash - worth - needFees);
 			if ( moneyLeft < 0 )
-				showMsg = 'ÄúµÄÕÊ»§ÖĞÃ»ÓĞ×ã¹»µÄ×Ê½ğÓÃÀ´¹ºÂò¹ÉÆ±£¡';
+				showMsg = 'æ‚¨çš„å¸æˆ·ä¸­æ²¡æœ‰è¶³å¤Ÿçš„èµ„é‡‘ç”¨æ¥è´­ä¹°è‚¡ç¥¨ï¼';
 			else
-				showMsg = '¹ÉÆ±½ğ¶î <span class="xi1">' + worth + '</span> Ôª<br/>Ó¡»¨Ë°½ğ <span class="xi1">' + needFees + '</span> Ôª<br/>ÂòºóÕÊ»§½áÓà <span class="xi1">' + moneyLeft + '</span> Ôª';
+				showMsg = 'è‚¡ç¥¨é‡‘é¢ <span class="xi1">' + worth + '</span> å…ƒ<br/>å°èŠ±ç¨é‡‘ <span class="xi1">' + needFees + '</span> å…ƒ<br/>ä¹°åå¸æˆ·ç»“ä½™ <span class="xi1">' + moneyLeft + '</span> å…ƒ';
 		}
 	}
 	document.getElementById('feesNeedBuy').innerHTML = showMsg;
 }
-// Âô³ö¹ÉÆ±¼ÆËã·ÑÓÃ
+// å–å‡ºè‚¡ç¥¨è®¡ç®—è´¹ç”¨
 function calFeesSell(tradecharge, stampduty, usercash, numMax)
 {
 	var price	= document.getElementById('price_sell').value;
 	var num		= document.getElementById('num_sell').value;
 	var showMsg = '';
 	if ( price == '' || isNaN(price) || price <= 0 )
-		showMsg = 'Âô³ö¼Û¸ñÊäÈë´íÎó£¡';
+		showMsg = 'å–å‡ºä»·æ ¼è¾“å…¥é”™è¯¯ï¼';
 	else if ( !num || isNaN(num) || num <= 0 )
-		showMsg = 'Âô³öÊıÁ¿ÊäÈë´íÎó£¡';
+		showMsg = 'å–å‡ºæ•°é‡è¾“å…¥é”™è¯¯ï¼';
 	else
 	{
 		if ( num > numMax )
 		{
-			showMsg = 'Âô³öÊıÁ¿²»ÄÜ´óÓÚ ' + numMax + ' ¹É';
+			showMsg = 'å–å‡ºæ•°é‡ä¸èƒ½å¤§äº ' + numMax + ' è‚¡';
 		}
 		else
 		{
@@ -236,12 +236,12 @@ function calFeesSell(tradecharge, stampduty, usercash, numMax)
 			needFees	= worth * tradecharge / 100;
 			needFees	= changeTwoDecimal(needFees >= stampduty ? needFees : stampduty);
 			moneyLeft	= changeTwoDecimal(usercash - needFees);
-			showMsg = 'Ó¡»¨Ë°½ğ <span class="xi1">' + needFees + '</span> Ôª<br/>ÂôºóÕÊ»§½áÓà <span class="xi1">' + moneyLeft + '</span> Ôª';
+			showMsg = 'å°èŠ±ç¨é‡‘ <span class="xi1">' + needFees + '</span> å…ƒ<br/>å–åå¸æˆ·ç»“ä½™ <span class="xi1">' + moneyLeft + '</span> å…ƒ';
 		}
 	}
 	document.getElementById('feesNeedSell').innerHTML = showMsg;
 }
-// ¹«Ë¾ÉÏÊĞÉêÇë¸ù¾İ¡°×éÊı¡±¼ÆËã¹ÉÆ±·¢ĞĞÊıÁ¿
+// å…¬å¸ä¸Šå¸‚ç”³è¯·æ ¹æ®â€œç»„æ•°â€è®¡ç®—è‚¡ç¥¨å‘è¡Œæ•°é‡
 function showTotalNum(n,base)
 {
 	if ( isNaN(n) || isNaN(base) )
@@ -250,36 +250,36 @@ function showTotalNum(n,base)
 		result = n * base;
 	document.getElementById('totalnum').innerHTML = result;
 }
-// ¹«Ë¾ÉÏÊĞÉêÇë¼ì²é±íµ¥ÊäÈë
+// å…¬å¸ä¸Šå¸‚ç”³è¯·æ£€æŸ¥è¡¨å•è¾“å…¥
 function applyFormCheck(obj, nameLenMin, nameLenMax, numMin, introLenMax)
 {
 	if ( obj.stname.value.length < nameLenMin || obj.stname.value.length > nameLenMax )
 	{
-		alert('¹ÉÆ±Ãû³Æ³¤¶È²»ÄÜĞ¡ÓÚ ' + nameLenMin + ' ×Ö½Ú»òÕß´óÓÚ ' + nameLenMax + ' ×Ö½Ú');
+		alert('è‚¡ç¥¨åç§°é•¿åº¦ä¸èƒ½å°äº ' + nameLenMin + ' å­—èŠ‚æˆ–è€…å¤§äº ' + nameLenMax + ' å­—èŠ‚');
 		obj.stname.focus();
 		return false;
 	}
 	if ( isNaN(obj.stprice.value) || obj.stprice.value < 2 || obj.stprice.value > 99 )
 	{
-		alert('¹ÉÆ±·¢ĞĞµ¥¼Û²»ÄÜĞ¡ÓÚ 2 Ôª»òÕß´óÓÚ 99 Ôª');
+		alert('è‚¡ç¥¨å‘è¡Œå•ä»·ä¸èƒ½å°äº 2 å…ƒæˆ–è€…å¤§äº 99 å…ƒ');
 		obj.stprice.focus();
 		return false;
 	}
 	if ( isNaN(obj.stnum.value) || obj.stnum.value < 1 )
 	{
-		alert('¹ÉÆ±·¢ĞĞÊıÁ¿²»ÄÜĞ¡ÓÚ ' + numMin + ' ¹É');
+		alert('è‚¡ç¥¨å‘è¡Œæ•°é‡ä¸èƒ½å°äº ' + numMin + ' è‚¡');
 		obj.stnum.focus();
 		return false;
 	}
 	if ( obj.comintro.value.length < 10 || obj.comintro.value.length > introLenMax )
 	{
-		alert('¹«Ë¾¼ò½é³¤¶ÈÇë¿ØÖÆÔÚ 10 ¸ö×ÖÓë ' + Math.floor(introLenMax/2) + ' ¸ö×ÖÖ®¼ä');
+		alert('å…¬å¸ç®€ä»‹é•¿åº¦è¯·æ§åˆ¶åœ¨ 10 ä¸ªå­—ä¸ ' + Math.floor(introLenMax/2) + ' ä¸ªå­—ä¹‹é—´');
 		obj.comintro.focus();
 		return false;
 	}
 	return true;
 }
-// ¹ÉÆ±½»Ò×¼ì²é±íµ¥ÊäÈë
+// è‚¡ç¥¨äº¤æ˜“æ£€æŸ¥è¡¨å•è¾“å…¥
 function tradeFormCheck(obj, priceMin, priceMax, numMin, numMax, trade_type)
 {
 	var price_buy	= document.getElementById('price_buy').value;
@@ -290,13 +290,13 @@ function tradeFormCheck(obj, priceMin, priceMax, numMin, numMax, trade_type)
 	{
 		if ( isNaN(price_buy) || price_buy < priceMin || price_buy > priceMax )
 		{
-			alert('ÂòÈë¼Û¸ñ²»ÄÜĞ¡ÓÚ ' + priceMin + ' Ôª»òÕß´óÓÚ ' + priceMax + ' Ôª');
+			alert('ä¹°å…¥ä»·æ ¼ä¸èƒ½å°äº ' + priceMin + ' å…ƒæˆ–è€…å¤§äº ' + priceMax + ' å…ƒ');
 			obj.price_buy.focus();
 			return false;
 		}
 		if ( isNaN(num_buy) || num_buy < numMin || num_buy > numMax )
 		{
-			alert('ÂòÈëÊıÁ¿²»ÄÜĞ¡ÓÚ ' + numMin + ' ¹É»òÕß´óÓÚ ' + numMax + ' ¹É');
+			alert('ä¹°å…¥æ•°é‡ä¸èƒ½å°äº ' + numMin + ' è‚¡æˆ–è€…å¤§äº ' + numMax + ' è‚¡');
 			obj.num_buy.focus();
 			return false;
 		}
@@ -305,20 +305,20 @@ function tradeFormCheck(obj, priceMin, priceMax, numMin, numMax, trade_type)
 	{
 		if ( isNaN(price_sell) || price_sell < priceMin || price_sell > priceMax )
 		{
-			alert('Âô³ö¼Û¸ñ²»ÄÜĞ¡ÓÚ ' + priceMin + ' Ôª»òÕß´óÓÚ ' + priceMax + ' Ôª');
+			alert('å–å‡ºä»·æ ¼ä¸èƒ½å°äº ' + priceMin + ' å…ƒæˆ–è€…å¤§äº ' + priceMax + ' å…ƒ');
 			obj.price_sell.focus();
 			return false;
 		}
 		if ( isNaN(num_sell) || num_sell < numMin || num_sell > numMax )
 		{
-			alert('Âô³öÊıÁ¿²»ÄÜĞ¡ÓÚ ' + numMin + ' ¹É»òÕß´óÓÚ ' + numMax + ' ¹É');
+			alert('å–å‡ºæ•°é‡ä¸èƒ½å°äº ' + numMin + ' è‚¡æˆ–è€…å¤§äº ' + numMax + ' è‚¡');
 			obj.num_sell.focus();
 			return false;
 		}
 	}
 	else
 	{
-		alert('½»Ò×ÀàĞÍ´íÎó');
+		alert('äº¤æ˜“ç±»å‹é”™è¯¯');
 		return false;
 	}
 	return true;

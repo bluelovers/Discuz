@@ -28,7 +28,7 @@ class Tools
 		$kfsclass = new kfsclass;
 		$kfsclass->kfsm_reset();
 		$baseScript .= '&mod=tools';
-		cpmsg('¹ÉÊĞÖØĞÂÆô¶¯³É¹¦', $baseScript, 'succeed');
+		cpmsg('è‚¡å¸‚é‡æ–°å¯åŠ¨æˆåŠŸ', $baseScript, 'succeed');
 	}
 	public function divide($num=1)
 	{
@@ -36,13 +36,13 @@ class Tools
 		if ( in_array( $num, array(10,100,1000,10000,100000,1000000) ) )
 		{
 			DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava/{$num} WHERE fund_ava>{$num}");
-			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('×Ê½ğ×ª»»', '{$_G[username]}', 'ËùÓĞ¹ÉÃñ×Ê½ğ°´ {$num}£º1 Õû³ı', '$_G[timestamp]', '$_G[clientip]')");
+			DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('èµ„é‡‘è½¬æ¢', '{$_G[username]}', 'æ‰€æœ‰è‚¡æ°‘èµ„é‡‘æŒ‰ {$num}ï¼š1 æ•´é™¤', '$_G[timestamp]', '$_G[clientip]')");
 			$baseScript .= '&mod=tools';
-			cpmsg('×Ê½ğ×ª»»³É¹¦', $baseScript, 'succeed');
+			cpmsg('èµ„é‡‘è½¬æ¢æˆåŠŸ', $baseScript, 'succeed');
 		}
 		else
 		{
-			cpmsg('×Ê½ğ×ª»»Ê§°Ü£¡ÇëÑ¡ÔñÕıÈ·µÄ±ÈÀı£¡', '', 'error');
+			cpmsg('èµ„é‡‘è½¬æ¢å¤±è´¥ï¼è¯·é€‰æ‹©æ­£ç¡®çš„æ¯”ä¾‹ï¼', '', 'error');
 		}
 	}
 	public function forcesell($stock_id=0,$confirm='')
@@ -61,8 +61,8 @@ class Tools
 				}
 				DB::query("DELETE FROM ".DB::table('kfsm_customer'));
 				DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id='0', holder_name='-'");
-				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('Ç¿ÖÆÂô¹É', '{$_G[username]}', 'Ç¿ÖÆÂô³öËùÓĞ¹ÉÃñÈ«²¿¹ÉÆ±', '$_G[timestamp]', '$_G[clientip]')");
-				cpmsg('ËùÓĞ¹ÉÃñµÄÈ«²¿¹ÉÆ±ÒÑ±»Ç¿ÖÆÂô³ö', $baseScript, 'succeed');
+				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('å¼ºåˆ¶å–è‚¡', '{$_G[username]}', 'å¼ºåˆ¶å–å‡ºæ‰€æœ‰è‚¡æ°‘å…¨éƒ¨è‚¡ç¥¨', '$_G[timestamp]', '$_G[clientip]')");
+				cpmsg('æ‰€æœ‰è‚¡æ°‘çš„å…¨éƒ¨è‚¡ç¥¨å·²è¢«å¼ºåˆ¶å–å‡º', $baseScript, 'succeed');
 			}
 			else
 			{
@@ -76,13 +76,13 @@ class Tools
 					$kfsclass->calculatefund($rs['cid'],$stock_id);
 				}
 				DB::query("UPDATE ".DB::table('kfsm_stock')." SET holder_id=0, holder_name='-' WHERE sid='$stock_id'");
-				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('Ç¿ÖÆÂô¹É', '{$_G[username]}', 'Ç¿ÖÆÂô³ö´úÂëÎª $stock_id µÄ¹ÉÆ±', '$_G[timestamp]', '$_G[clientip]')");
-				cpmsg("´úÂëÎª $stock_id µÄ¹ÉÆ±ÒÑ±»Ç¿ÖÆÂô³ö", $baseScript, 'succeed');
+				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('å¼ºåˆ¶å–è‚¡', '{$_G[username]}', 'å¼ºåˆ¶å–å‡ºä»£ç ä¸º $stock_id çš„è‚¡ç¥¨', '$_G[timestamp]', '$_G[clientip]')");
+				cpmsg("ä»£ç ä¸º $stock_id çš„è‚¡ç¥¨å·²è¢«å¼ºåˆ¶å–å‡º", $baseScript, 'succeed');
 			}
 		}
 		else
 		{
-			cpmsg('ÇëÑ¡ÔñÕıÈ·µÄ¹ÉÆ±¶ÔÏó', '', 'error');
+			cpmsg('è¯·é€‰æ‹©æ­£ç¡®çš„è‚¡ç¥¨å¯¹è±¡', '', 'error');
 		}
 	}
 	public function distribute()
@@ -90,9 +90,9 @@ class Tools
 		global $_G, $baseScript;
 		$sendto	= $_G['sendto'];
 		$perval	= $_G['perval'];
-		!$sendto && cpmsg('ÇëÑ¡Ôñ·¢·Å¶ÔÏó»áÔ±×é', '', 'error');
+		!$sendto && cpmsg('è¯·é€‰æ‹©å‘æ”¾å¯¹è±¡ä¼šå‘˜ç»„', '', 'error');
 		if ( !$perval || !is_numeric($perval) )
-			cpmsg('ÇëÕıÈ·ÌîĞ´·¢·Å½ğ¶î', '', 'error');
+			cpmsg('è¯·æ­£ç¡®å¡«å†™å‘æ”¾é‡‘é¢', '', 'error');
 		is_array($sendto) && $sendto = implode(",",$sendto);
 		$usernum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('kfsm_user')." u LEFT JOIN pw_members m ON u.forumuid=m.uid WHERE m.groupid IN('" . str_replace(",","','",$sendto) . "')");
 		if ( $usernum )
@@ -101,7 +101,7 @@ class Tools
 			$totalval = $perval * $usernum;
 			if ( $totalval > $totalfunds )
 			{
-				cpmsg("Ë°ÊÕ×Ê½ğ²»×ã£¬ÎŞ·¨·¢·Å¡£ÏÖÓĞË°ÊÕ×Ê½ğ {$totalfunds} Ôª£¬·¢·Å¶ÔÏó×ÜÊıÎª {$usernum} ÈË¡£", '', 'error');
+				cpmsg("ç¨æ”¶èµ„é‡‘ä¸è¶³ï¼Œæ— æ³•å‘æ”¾ã€‚ç°æœ‰ç¨æ”¶èµ„é‡‘ {$totalfunds} å…ƒï¼Œå‘æ”¾å¯¹è±¡æ€»æ•°ä¸º {$usernum} äººã€‚", '', 'error');
 			}
 			else
 			{
@@ -113,14 +113,14 @@ class Tools
 				}
 				DB::query("UPDATE ".DB::table('kfsm_user')." SET fund_ava=fund_ava+{$perval} WHERE uid IN(" . pwImplode($touids) . ")");
 				DB::query("UPDATE ".DB::table('kfsm_sminfo')." SET stampduty=stampduty-$totalval");
-				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('Ë°ÊÕ·¢·Å', '{$_G[username]}', '¹²·¢·ÅË°½ğ $totalval Ôª£¬ÊÜÒæ¹ÉÃñ $usernum ÈË£¬Ã¿ÈËÊÕÈë $perval Ôª', '$_G[timestamp]', '$_G[clientip]')");
+				DB::query("INSERT INTO ".DB::table('kfsm_smlog')." (type, username2, descrip, timestamp, ip) VALUES('ç¨æ”¶å‘æ”¾', '{$_G[username]}', 'å…±å‘æ”¾ç¨é‡‘ $totalval å…ƒï¼Œå—ç›Šè‚¡æ°‘ $usernum äººï¼Œæ¯äººæ”¶å…¥ $perval å…ƒ', '$_G[timestamp]', '$_G[clientip]')");
 				$baseScript .= '&mod=tools';
-				cpmsg('Ë°ÊÕ×Ê½ğ·¢·ÅÍê³É', $baseScript, 'succeed');
+				cpmsg('ç¨æ”¶èµ„é‡‘å‘æ”¾å®Œæˆ', $baseScript, 'succeed');
 			}
 		}
 		else
 		{
-			cpmsg('ËùÑ¡»áÔ±×éÃ»ÓĞ¹ÉÃñ', '', 'error');
+			cpmsg('æ‰€é€‰ä¼šå‘˜ç»„æ²¡æœ‰è‚¡æ°‘', '', 'error');
 		}
 	}
 }
