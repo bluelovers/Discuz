@@ -531,6 +531,8 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		include_once libfile('function/cache');
 
+		discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
+
 		$cachename = 'output_user';
 		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
 
