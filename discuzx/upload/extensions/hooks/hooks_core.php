@@ -514,6 +514,10 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	}
 
 	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
+
+	if (discuz_core::$_cache_data['output']['users']['updated']) {
+		unset(discuz_core::$_cache_data['output']['users']['updated']);
+	}
 }
 
 function _eFunc_output_Before_rewrite_content_echo_callback($m) {
@@ -579,6 +583,9 @@ Array
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
 			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+
+			$_user['updated'] = true;
+
 		} else {
 			// 失敗時緩存為 0
 			if ($m['uid']) $_user['uid'][$m['uid']] = '';
