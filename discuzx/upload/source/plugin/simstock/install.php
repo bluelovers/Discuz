@@ -14,8 +14,8 @@ if ( !defined('IN_DISCUZ') )
 }
 $version = '1.0.0';
 $sql = <<<EOF
-DROP TABLE IF EXISTS dz_kfss_customer;
-CREATE TABLE dz_kfss_customer (
+DROP TABLE IF EXISTS pre_kfss_customer;
+CREATE TABLE pre_kfss_customer (
   cid mediumint(8) unsigned zerofill NOT NULL auto_increment,
   uid mediumint(8) unsigned NOT NULL default '0',
   username varchar(20) NOT NULL default '',
