@@ -1,0 +1,69 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<table class="tb tb2">
+	<tr>
+		<th colspan="3" class="partition">系统工具</th>
+	</tr>
+	<tr class="header">
+		<th>工具列表</th>
+		<th>说明</th>
+		<th>执行操作</th>
+	</tr>
+	<tr class="hover">
+		<td>重新启动</td>
+		<td class="vtop">
+			<ul>
+				<li>重新启动股市，股市数据向前推进一日。</li>
+				<li>请慎重使用！</li>
+			</ul>
+		</td>
+		<td class="vtop">
+			<form name="reset" method="post" action="?$baseScript&mod=tools&section=reset">
+				<input type="submit" class="btn" name="t1submit" value="提交"/>
+			</form>
+		</td>
+	</tr>
+	<tr class="hover">
+		<td>强制卖股</td>
+		<form name="forcesell" method="post" action="?$baseScript&mod=tools&section=forcesell">
+		<td class="vtop">强制卖出所有股民的股票（不包括已申购的未正式上市的公司发行的股票）。<br/>该操作不可逆，请慎重使用该功能！<br/>
+			选择股票对象：<select name="stockId">
+				<option value="-1">全部股票</option>
+<!--{loop $stockdb $v}-->
+				<option value="$v[sid]">$v[stockname]</option>
+<!--{/loop}-->
+			</select>
+			&nbsp; <input type="checkbox" name="confirm" value="1"/> 提交确认
+		</td>
+		<td class="vtop"><input type="submit" class="btn" name="t3submit" value="提交"/></td>
+		</form>
+	</tr>
+	<tr class="hover">
+		<td>资金缩水</td>
+		<form name="divide" method="post" action="?$baseScript&mod=tools&section=divide">
+		<td class="vtop">仅当股民的资金大于所选比例时，才按该比例进行转换，否则不转换。<br/>转换的只是股民的资金，不包括股票在内的总资产。<br/>该操作不可逆，请慎重使用该功能！<br/>
+			选择转换比例：<select name="divide_number">
+				<option value="1">1:1</option>
+				<option value="10">10:1</option>
+				<option value="100">100:1</option>
+				<option value="1000">1000:1</option>
+				<option value="10000">10000:1</option>
+				<option value="100000">100000:1</option>
+				<option value="1000000">1000000:1</option>
+			</select>
+		</td>
+		<td class="vtop"><input type="submit" class="btn" name="t4submit" value="提交"/></td>
+		</form>
+	</tr>
+</table>

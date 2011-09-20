@@ -1,0 +1,73 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> 行情中心
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+			<div class="mtm bbda cl">
+				<form method="post" name="myform" action="$baseScript&mod=stock&act=search">
+				<div class="bn">股票查询：<input type="text" name="keyword" value="" maxlength="24" class="px">
+					<input type="hidden" name="formhash" value="{FORMHASH}"/>
+					<button type="submit" name="submit" value="true" class="pn pnc"><em>搜索</em></button> （支持股票代码或者股票名称）
+				</div>
+				</form>
+			</div>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">行情中心</h2>
+				</caption>
+				<tr>
+					<th><a href="$baseScript&mod=stock&act=quote&by=sid$nextby">代码</a></th>
+					<th>名称</th>
+					<th><a href="$baseScript&mod=stock&act=quote&by=currprice$nextby">最新价</a></th>
+					<th><a href="$baseScript&mod=stock&act=quote&by=todaywave$nextby">涨跌幅</a></th>
+					<th><a href="$baseScript&mod=stock&act=quote&by=openprice$nextby">开盘价</a></th>
+					<th><a href="$baseScript&mod=stock&act=quote&by=todaytradenum$nextby">成交量</a></th>
+					<th>控股人</th>
+					<th>状态</th>
+				</tr>
+				<tbody>
+<!--{loop $stockdb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]">$v[sid]</a></td>
+					<td><a href="$baseScript&mod=stock&act=showinfo&sid=$v[sid]" style="color:$v[color]">$v[stockname]</a></td>
+					<td style="color:$v[color]">$v[currprice]</td>
+					<td style="color:$v[color]">$v[todaywave]</td>
+					<td>$v[openprice]</td>
+					<td>$v[todaytradenum]</td>
+					<td>$v[holder_name]</td>
+					<td>$v[state]</td>
+				</tr>
+<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+<!--{if $cnt > $readperpage}-->
+		<div id="pgt" class="bm bw0 pgs cl">$pages</div>
+<!--{/if}-->
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li class="a"><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

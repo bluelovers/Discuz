@@ -1,0 +1,62 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li class="current"><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul><form name="logs" action="?$baseScript&mod=logs&section=dellogs" method="post">
+
+<table class="tb tb2">
+	<tr>
+		<th colspan="7" class="partition">系统日志</th>
+	</tr>
+	<tr class="header">
+		<td>选择</th>
+		<th>类型</th>
+		<td>对象</th>
+		<th>操作者</th>
+		<th>操作内容</th>
+		<th>操作时间</th>
+		<th>IP</th>
+	</tr>
+<!--{loop $logdb $value}-->
+	<tr class="hover">
+		<td><input type="checkbox" name="lid[]" value="$value[id]"/></td>
+		<td>$value[type]</td>
+		<td>$value[username1]</td>
+		<td>$value[username2]</td>
+		<td>$value[descrip]</td>
+		<td>$value[timestamp]</td>
+		<td>$value[ip]</td>
+	</tr>
+<!--{/loop}-->
+<!--{if $cnt > $readperpage}-->
+	<tr>
+		<td colspan="7">$pages</td>
+	</tr>
+<!--{/if}-->
+	<tr>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkalllog" onclick="checkall(this.form)" class="checkbox"/><label for="chkalllog">全选</lable></td>
+		<td colspan="6"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.logs.submit();return true;}return false;}" value="删除" class="btn"/></td>
+	</tr>
+</table>
+</form>
+<script language="javascript">
+function checkall(form)
+{
+	for ( var i=0; i<form.elements.length; i++ )
+	{
+		var e = form.elements[i];
+		if ( e.name != 'chkall' )
+		{
+			e.checked = form.chkall.checked;
+		}
+	}
+}
+</script>

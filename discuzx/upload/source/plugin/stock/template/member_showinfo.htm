@@ -1,0 +1,65 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> 股民信息
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">股民 - $username - 持股一览</h2>
+				</caption>
+				<tr>
+					<th>代码</th>
+					<th>股票名称</th>
+					<th>拥有数量</th>
+					<th>持股价</th>
+					<th>最新价</th>
+					<th>每股盈亏</th>
+					<th>持股成本</th>
+					<th>持股现值</th>
+					<th>总盈亏</th>
+					<th>盈亏率</th>
+					<th>操作</th>
+				</tr>
+				<tbody>
+<!--{loop $usdb $v}-->
+				<tr style="color:$v[color]" class="hover">
+					<td><a href='$baseScript&mod=stock&act=showinfo&sid=$v[sid]'>$v[sid]</a></td>
+					<td><a href='$baseScript&mod=stock&act=showinfo&sid=$v[sid]'>$v[stockname]</a></td>
+					<td>$v[stocknum_ava]</td>
+					<td>$v[averageprice]</td>
+					<td>$v[currprice]</td>
+					<td>$v[profit]</td>
+					<td>$v[stockcost]</td>
+					<td>$v[stockvalue]</td>
+					<td>$v[totalprofit]</td>
+					<td>$v[profit_p] %</td>
+					<td>$v[manage]</td>
+				</tr>
+<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

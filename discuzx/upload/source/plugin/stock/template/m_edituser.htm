@@ -1,0 +1,106 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/stock/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=stockset">股票管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=esset">申请管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">技巧提示</th>
+	</tr>
+	<tr>
+		<td class="tipsblock">
+			<ul>
+				<li>除“帐户状态”以外，其它项目建议不要修改。</li>
+			</ul>
+		</td>
+	</tr>
+</table>
+<form name="form1" action="?$baseScript&mod=userset&section=edituser" method="post">
+<input type="hidden" name="step" value="2"/>
+<input type="hidden" name="uid" value="$v[uid]">
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">编辑股民 {$v['username']} 信息</th>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">名字：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="username" value="$v[username]" readonly style="background-color: #EEEEEE" class="txt"></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">IP：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="userip" value="$v[ip]" readonly="readonly" style="background-color: #EEEEEE" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">可用资金（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="fund_ava" value="$v[fund_ava]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">限制资金（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="fund_war" value="$v[fund_war]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">总资产（元）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="asset" value="$v[asset]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">持股种类（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="stocksort" value="$v[stocksort]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">今日买入（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="todaybuy" value="$v[todaybuy]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">今日卖出（股）：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="todaysell" value="$v[todaysell]" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">帐户状态：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform">
+			<input type="radio" name="userstate" value="0" $userunlock/>正常
+			<input type="radio" name="userstate" value="1" $userlock/>冻结
+		</td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td>
+			<input type="reset" name="reset" value="重填" class="btn"/>
+			<input type="submit" name="submit" value="提交" class="btn"/>
+		</td>
+	</tr>
+</table>
+</form>

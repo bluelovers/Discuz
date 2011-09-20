@@ -1,0 +1,101 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=stock:index">$db_smname</a> <em>&rsaquo;</em> 股票申购
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">营业大厅</a></li>
+				<li><a href="$baseScript&mod=stock&act=quote">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">资产排行</a></li>
+				<li><a href="$baseScript&mod=system&act=help">股市助手</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=stocksmng">股票管理</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=apply">公司上市</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">股民帐户</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">帐户名称：$user[username]</li>
+				<li class="ptm">今日买入：$user[todaybuy] 股</li>
+				<li class="ptm">今日卖出：$user[todaysell] 股</li>
+				<li class="ptm">持股总量：$user[stocknum] 股</li>
+				<li class="ptm">持股市值：$user[stockvalue] 元</li>
+				<li class="ptm">股票成本：$user[stockcost] 元</li>
+				<li class="ptm">盈亏情况：$user[profit] 元</li>
+				<li class="ptm">可用资金：$user[fund_ava] 元</li>
+				<li class="ptm">资产合计：$user[asset] 元</li>
+			</ul>
+		</div>
+	</div>
+	<div class="mn ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">股票申购</h2>
+			</caption>
+			<script language="JavaScript" src="{$hkimg}stockins.js"></script>
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<tr>
+					<td style="width:20%">股票代码</td>
+					<td>$rs[sid]</td>
+				</tr>
+				<tr>
+					<td>股票名称</td>
+					<td>$rs[stockname]</td>
+				</tr>
+				<form name="formbuy" method="post" action="$baseScript&mod=member&act=subscribe" onsubmit="javascript:return tradeFormCheck(document.formbuy, {$currprice}, {$currprice}, {$buyMin}, {$buyMax}, 'b');">
+				<tr>
+					<td>股票价格</td>
+					<td>
+						<input type="text" id="price_buy" name="price_buy" value="$currprice" class="px" readonly="readonly"/> 元
+						<br/><input type="hidden" id="price_sell" value="0"/><input type="hidden" id="num_sell" value="0"/>
+					</td>
+				</tr>
+				<tr>
+					<td>申购数量</td>
+					<td>
+						<input type="text" id="num_buy" name="num_buy" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');calFeesBuy({$dutyRate}, {$dutyMin}, {$user[fund_ava]}, {$buyMax});"/> 股
+						<br/><span class="s1">$buyMin</span> 股 - <span class="s1">$buyMax</span> 股之间
+					</td>
+				</tr>
+				<tr>
+					<td>印花税税率</td>
+					<td>$dutyRate % （印花税金额不足 <span class="xi1">$dutyMin</span> 元时，以 <span class="xi1">$dutyMin</span> 元计算）
+					</td>
+				</tr>
+				<tr>
+					<td>计算费用</td>
+					<td id="feesNeedBuy">股票金额 <span class="xi1">0.00</span> 元<br/>印花税金 <span class="xi1">0.00</span> 元<br/>买后帐户结余 <span class="xi1">{$user['fund_ava']}</span> 元</td>
+				</tr>
+				<tr>
+					<td>注意事项</td>
+					<td><ol><li>只有未正式上市的公司的股票才可以申购。</li><li>申购成功后的股票不可以立即卖出，待发行该股票的公司正式上市后，方可卖出。</li></ol></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="hm">
+						<input type="hidden" name="section" value="trade"/>
+						<input type="hidden" name="tradetype" value="b"/>
+						<input type="hidden" name="sidp" value="{$rs[sid]}"/>
+						<input type="hidden" name="formhash" value="{FORMHASH}"/>
+						<button type="reset" name="reset" value="true" class="pn pnc"><em>重置</em></button>
+						<button type="submit" name="submit" value="true" class="pn pnc" $btn_buy><em>买入</em></button>
+					</td>
+				</tr>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->
