@@ -50,7 +50,7 @@ class _sco_dx_tag {
 		$ret = preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname);
 		*/
 		// bluelovers
-		$ret = preg_match('/^([\x7f-\xff_-]|\w|\s)+$/', $tagname);
+		$ret = preg_match('/^([\x7f-\xff_-\d\w\s;@\・]+)$/i', $tagname);
 
 		if ($ret) {
 			$_strlen = self::strlen($tagname);
@@ -60,7 +60,7 @@ class _sco_dx_tag {
 			if (
 				$_strlen > 20
 				|| (
-					$_strlen < 3
+					$_strlen < 2
 					&& $_G['adminid'] != 1
 					&& $_G['adminid'] != 2
 				)
