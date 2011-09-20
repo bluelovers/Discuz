@@ -60,7 +60,7 @@ class _sco_dx_tag {
 			if (
 				$_strlen > 20
 				|| (
-					$_strlen < 3
+					$_strlen < 2
 					&& $_G['adminid'] != 1
 					&& $_G['adminid'] != 2
 				)
