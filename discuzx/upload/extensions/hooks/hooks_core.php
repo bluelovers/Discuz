@@ -515,17 +515,21 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		$data = array();
 		@include $_file;
 
-		discuz_core::$_cache_data['output']['users'] = array_merge(
-			(array)discuz_core::$_cache_data['output']['users']
-			, (array)$data['output_user']
-		);
+		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
+
+		if ($data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5) {
+			discuz_core::$_cache_data['output']['users'] = array_merge(
+				(array)discuz_core::$_cache_data['output']['users']
+				, (array)$data['output_user']
+			);
+		}
 	}
 
 	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
 
 	if (
 		discuz_core::$_cache_data['output']['users']['updated']
-		&& (@filemtime($_file) < TIMESTAMP - 3600 * 5)
+		&& (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5)
 	) {
 		unset(discuz_core::$_cache_data['output']['users']['updated']);
 
