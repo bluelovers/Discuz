@@ -254,7 +254,9 @@ if(!IS_ROBOT) {
 
 			while ($value = DB::fetch($query)) {
 				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+					/*
 					$value = mkfeed($value);
+					*/
 					if(ckicon_uid($value)) {
 
 						if($value['dateline']>=$_G['home_today']) {
@@ -295,11 +297,16 @@ if(!IS_ROBOT) {
 							}
 
 						} else {
-							$user_list[$value['hash_data']][] = "<a href=\"home.php?mod=space&uid=$value[uid]\">$value[username]</a>";
+							$user_list[$value['hash_data']][] = "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>";
 						}
 
 
 					} else {
+
+						// bluelovers
+						$value = mkfeed($value);
+						// bluelovers
+
 						$filtercount++;
 						$filter_list[] = $value;
 					}
@@ -307,6 +314,48 @@ if(!IS_ROBOT) {
 				$count++;
 			}
 		}
+
+		// bluelovers
+		if ($feed_users) {
+			/*
+				將
+				-----------
+					test123456  更新了自己的基本資料 2010-6-23 09:52:45
+					其他參與者:妖妾蜘蛛, admin
+				-----------
+				更改為(原UCHOME樣式)
+				-----------
+					test123456、妖妾蜘蛛、admin  更新了自己的基本資料 2010-6-23 09:52:45
+			*/
+			foreach ($feed_users as $day => $users) {
+				foreach ($users as $user) {
+
+					foreach (array(
+						'feed_list',
+						'more_list',
+					) as $_array) {
+						if ($valuelist = ${$_array}[$day][$user['uid']]) {
+							${$_array}[$day][$user['uid']] = array();
+
+							$actors = array();
+							$a_value = array();
+
+							foreach ($valuelist as $value) {
+
+								!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+
+								$value = mkfeed($value, $user_list[$value['hash_data']]);
+								${$_array}[$day][$user['uid']][$value['hash_data']] = $value;
+
+								unset($user_list[$value['hash_data']]);
+							}
+						}
+					}
+
+				}
+			}
+		}
+		// bluelovers
 
 		$multi = simplepage($count, $perpage, $page, $theurl);
 	}
