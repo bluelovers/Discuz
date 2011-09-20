@@ -330,7 +330,7 @@ if(!IS_ROBOT) {
 			foreach ($feed_users as $day => $users) {
 				foreach ($users as $user) {
 					if ($valuelist = $feed_list[$day][$user['uid']]) {
-						$feed_list[$day][$user[uid]] = array();
+						$feed_list[$day][$user['uid']] = array();
 
 						$actors = array();
 						$a_value = array();
@@ -347,7 +347,7 @@ if(!IS_ROBOT) {
 					}
 
 					if ($valuelist = $more_list[$day][$user['uid']]) {
-						$more_list[$day][$user[uid]] = array();
+						$more_list[$day][$user['uid']] = array();
 
 						$actors = array();
 						$a_value = array();
