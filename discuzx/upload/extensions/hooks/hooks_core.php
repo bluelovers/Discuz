@@ -529,13 +529,16 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 	if (
 		discuz_core::$_cache_data['output']['users']['updated']
-		&& (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5)
 	) {
 		unset(discuz_core::$_cache_data['output']['users']['updated']);
 
 		include_once libfile('function/cache');
 
-		discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
+		if (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5) {
+			discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
+		}
+
+		discuz_core::$_cache_data['output']['users']['dateline'] = dgmdate(discuz_core::$_cache_data['output']['users']['timestamp']);
 
 		$cachename = 'output_user';
 		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
