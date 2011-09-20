@@ -315,6 +315,12 @@ if(!IS_ROBOT) {
 			}
 		}
 
+		// bluelovers
+		if ($feed_users) {
+
+		}
+		// bluelovers
+
 		$multi = simplepage($count, $perpage, $page, $theurl);
 	}
 }
