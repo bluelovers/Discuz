@@ -317,7 +317,53 @@ if(!IS_ROBOT) {
 
 		// bluelovers
 		if ($feed_users) {
+			/*
+				將
+				-----------
+					test123456  更新了自己的基本資料 2010-6-23 09:52:45
+					其他參與者:妖妾蜘蛛, admin
+				-----------
+				更改為(原UCHOME樣式)
+				-----------
+					test123456、妖妾蜘蛛、admin  更新了自己的基本資料 2010-6-23 09:52:45
+			*/
+			foreach ($feed_users as $day => $users) {
+				foreach ($users as $user) {
+					if ($valuelist = $feed_list[$day][$user[uid]]) {
+						$feed_list[$day][$user[uid]] = array();
 
+						$actors = array();
+						$a_value = array();
+
+						foreach ($valuelist as $value) {
+
+							$user_list[$value['hash_data']] && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+
+							$value = mkfeed($value, $user_list[$value['hash_data']]);
+							$feed_list[$day][$user[uid]][$value['hash_data']] = $value;
+
+							unset($user_list[$value['hash_data']]);
+						}
+					}
+
+					if ($valuelist = $more_list[$day][$user[uid]]) {
+						$more_list[$day][$user[uid]] = array();
+
+						$actors = array();
+						$a_value = array();
+
+						foreach ($valuelist as $value) {
+
+							$user_list[$value['hash_data']] && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+
+							$value = mkfeed($value, $user_list[$value['hash_data']]);
+							$more_list[$day][$user[uid]][$value['hash_data']] = $value;
+
+							unset($user_list[$value['hash_data']]);
+						}
+					}
+				}
+			}
 		}
 		// bluelovers
 
