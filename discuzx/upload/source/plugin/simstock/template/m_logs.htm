@@ -1,0 +1,62 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/simstock/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li class="current"><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<form name="logs" action="?$baseScript&mod=logs&section=dellogs" method="post">
+<table class="tb tb2">
+	<tr>
+		<th colspan="8" class="partition">系统日志</th>
+	</tr>
+	<tr class="header">
+		<td>选择</th>
+		<th>用户名</th>
+		<th>动作</th>
+		<th>股票代码</th>
+		<th>交易数量</th>
+		<th>交易价格</th>
+		<th>时间</th>
+		<th>IP</th>
+	</tr>
+<!--{loop $logdb $v}-->
+	<tr class="hover">
+		<td><input type="checkbox" name="lid[]" value="$value[lid]"/></td>
+		<td>$v[uname]</td>
+		<td>$v[action]</td>
+		<td>$v[stockcode]</td>
+		<td>$v[amount]</td>
+		<td>$v[price]</td>
+		<td>$v[logtime]</td>
+		<td>$v[ip]</td>
+	</tr>
+<!--{/loop}-->
+<!--{if $cnt > $readperpage}-->
+	<tr>
+		<td colspan="7">$pages</td>
+	</tr>
+<!--{/if}-->
+	<tr>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkalllog" onclick="checkall(this.form)" class="checkbox"/><label for="chkalllog">全选</lable></td>
+		<td colspan="7"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.logs.submit();return true;}return false;}" value="删除" class="btn"/></td>
+	</tr>
+</table>
+</form>
+<script language="javascript">
+function checkall(form)
+{
+	for ( var i=0; i<form.elements.length; i++ )
+	{
+		var e = form.elements[i];
+		if ( e.name != 'chkall' )
+		{
+			e.checked = form.chkall.checked;
+		}
+	}
+}
+</script>

@@ -1,0 +1,156 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 股票交易
+	</div>
+</div>
+<link rel="stylesheet" type="text/css" href="{$hkimg}fore_style.css"/>
+<script type="text/javascript"> 
+var u = {uid:"$user['uid']", uname:"$user['username']"};
+</script> 
+<script type="text/javascript" src="{$hkimg}js/jquery.js"></script>
+<script type="text/javascript" src="{$hkimg}js/plugins.js"></script>
+<script type="text/javascript" src="{$hkimg}js/global.js"></script>
+<script type="text/javascript" charset="gb2312" src="{$hkimg}js/suggestServer.js"></script>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd">
+		<div class="bm bw0">
+			<table id="five" cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">五档盘口</h2>
+				</caption>
+				<tr>
+					<td>卖五（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>卖四（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>卖三（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>卖二（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>卖一（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>当前价（元）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>买一（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>买二（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>买三（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>买四（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>买五（元｜手）</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtm">
+				<caption>
+					<h2 class="mbm xs2">委托卖出</h2>
+				</caption>
+				<tr>
+					<td width="70">股票：</td>
+					<td><select id="stockList"></select></td>
+					<td rowspan="7" width="50%"><h2 class="mbm xs2">买入说明</h2>
+						<p class="mbm">1、该赛区持股期不得超过 5 个交易日；</p>
+						<p class="mbm">2、如果买入股票亏损幅度超过 5% ，可能会被自动卖出；</p>
+						<p class="mbm">3、只允许买入A股市场股票；</p>
+						<p class="mbm">4、委托价格应在基准价上下浮动 10% 的价格区间，ST 股票上下浮动 5% ；</p>
+						<p class="mbm">5、盘中未成交委托，收盘后将自动撤销；</p>
+						<p class="mbm">6、收盘后委托，参与下一交易日撮合。</p>
+					</td>
+				</tr>
+				<tr>
+					<td>股票名称：</td>
+					<td><input id="stockName" type="text" readonly="readonly" class="input"/></td>
+				</tr>
+				<tr>
+					<td>当前价格：</td>
+					<td><input id="priceCurrent" name="" type="text" readonly="readonly" class="input"/></td>
+				</tr>
+				<tr>
+					<td>最多可卖：</td>
+					<td><input id="amountMax" name="" type="text" readonly="readonly" class="input"/></td>
+				</tr>
+				<tr>
+					<td>卖出价格：</td>
+					<td><input id="price" name="" type="text" class="input"/></td>
+				</tr>
+				<tr>
+					<td>卖出数量：</td>
+					<td><input id="amount" name="" type="text" class="input"/></td>
+				</tr>
+				<tr>
+					<td>卖出金额：</td>
+					<td><input id="sum" name="" type="text" readonly="readonly" class="input"/></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><button type="button" tabindex="1000" id="submit" class="pn pnc" value=""><em>下单</em></button></td>
+					<td></td>
+				</tr>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="{$hkimg}js/sell.js"></script>
+<div id="alertWindow" class="alert">
+	<div class="alert_cont">
+		<div class="close"><a onclick="$('#alertWindow').hide();return false;" href="#" title="关闭窗口" ></a></div>
+		<p id="alertContent"></p>
+	</div>
+</div>
+<!--{template common/footer}-->

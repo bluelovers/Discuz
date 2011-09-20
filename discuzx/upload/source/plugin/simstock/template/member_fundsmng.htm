@@ -1,0 +1,154 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 资金管理
+	</div>
+</div>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li class="a"><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd ptm">
+		<div class="bm bw0">
+			<caption>
+				<h2 class="mbm xs2">股民帐户</h2>
+			</caption>
+			<ul class="tbn">
+				<li class="ptm">帐户名称：$user[username]</li>
+				<li class="ptm">论坛{$user['moneyType']}：{$user['moneyNum']} {$user['moneyUnit']}</li>
+				<li class="ptm">可用资金：{$user['fund_ava']} 元</li>
+				<li class="ptm">帐户状态：{$user['state']}</li>
+			</ul>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtn">
+				<caption>
+					<h2 class="mbm xs2">资金转入</h2>
+				</caption>
+<!--{if $db_allowdeposit == 1}-->
+				<tr>
+					<td>说明</td>
+					<td>
+						<ul>
+							<li>将论坛{$user['moneyType']}兑换成股市资金，手续费从股市帐户中扣除</li>
+							<li>存入的{$user['moneyType']}最小值为 <span class="s3">$db_depositmin</span> {$user['moneyUnit']}</li>
+							<li>论坛{$user['moneyType']}与股市资金的兑换比例为 1:{$exchange_rate}</li>
+							<li>手续费为 {$commission_charge}%</li>
+						</ul>
+					</td>
+				</tr>
+				<form name="form_d" action="$baseScript&mod=member&act=fundsmng" method="post">
+				<tr>
+					<td>存入{$user['moneyType']}</td>
+					<td><input class="px" type="text" name="moneyi" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> {$user['moneyUnit']}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="mtype" value="d"/>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>存款</em></button>
+					</td>
+				</tr>
+				</form>
+<!--{else}-->
+				<tr>
+					<td>存款功能已关闭</td>
+				</tr>
+<!--{/if}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtn">
+				<caption>
+					<h2 class="mbm xs2">资金转出</h2>
+				</caption>
+<!--{if $db_allowadopt == 1}-->
+				<tr>
+					<td>说明</td>
+					<td>
+						<ul>
+							<li>将股市资金兑换成论坛{$user['moneyType']}，手续费从股市帐户中扣除</li>
+							<li>取款最小值为 <span class="s3">$db_adoptmin</span> 元</li>
+							<li>论坛{$user['moneyType']}与股市资金的兑换比例为 1:{$exchange_rate}</li>
+							<li>手续费为 {$commission_charge}%</li>
+						</ul>
+					</td>
+				</tr>
+				<form name="form_a" action="$baseScript&mod=member&act=fundsmng" method="post">
+				<tr>
+					<td>取款金额</td>
+					<td><input class="px" type="text" name="moneyx" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> 元</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="mtype" value="a"/>
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>取款</em></button>
+					</td>
+				</tr>
+				</form>
+<!--{else}-->
+				<tr>
+					<td>取款功能已关闭</td>
+				</tr>
+<!--{/if}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="tfm mtn">
+				<caption>
+					<h2 class="mbm xs2">资金转帐</h2>
+				</caption>
+<!--{if $db_allowtransfer == 1}-->
+				<tr>
+					<td>说明</td>
+					<td>
+						<ul>
+							<li>将您的资金转给他人，手续费为 {$commission_charge_trans}%</li>
+							<li>转帐最小值为 <span class="s3">$db_transfermin</span> 元</li>
+						</ul>
+					</td>
+				</tr>
+				<form name="form_t" action="$baseScript&mod=member&act=fundsmng" method="post">
+				<tr>
+					<td>收款人</td>
+					<td><input type="text" name="towho" value="" class="px"/></td>
+				</tr>
+				<tr>
+					<td>转帐金额</td>
+					<td><input type="text" name="moneyt" value="" class="px" onkeyup="this.value=this.value.replace(/\D|^0*/g,'');"/> 元</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="mtype" value="t"/> 
+						<button type="submit" name="submit" value="true" class="pn pnc"><em>确认转帐</em></button>
+					</td>
+				</tr>
+				</form>
+<!--{else}-->
+				<tr>
+					<td>资金转帐功能已关闭</td>
+				</tr>
+<!--{/if}-->
+			</table>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

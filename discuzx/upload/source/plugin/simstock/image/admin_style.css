@@ -1,0 +1,6 @@
+.nav3{}
+	.nav3 ul{}
+	.nav3 li{float:left;margin-right:5px;}
+		.nav3 li a{height:25px;line-height:25px;padding:0 15px; font-weight:700;display:inline-block;background:#dbe8f6;float:left;outline:none;}
+		.nav3 li a:hover{ text-decoration:none;background:#6392c2;color:#fff;}
+		.nav3 .current a{background:#336699;color:#fff;}

@@ -1,0 +1,55 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 新闻中心
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">新闻中心</h2>
+				</caption>
+				<tr>
+					<th>序号</th>
+					<th>新闻主题</th>
+					<th>发布人</th>
+					<th>发布时间</th>
+				</tr>
+				<tbody>
+<!--{loop $newsdb $v}-->
+				<tr class="tr3 f_one" onMouseOver="this.className='tr3 f_two'" onMouseOut="this.className='tr3 f_one'">
+					<td>$v[i]</td>
+					<td><a href="$baseScript&mod=news&act=shownewsinfo&nid=$v[nid]" style="color:#$v[color]">$v[subject]</a></td>
+					<td>$v[author]</td>
+					<td>$v[addtime]</td>
+				</tr>
+<!--{/loop}-->
+				</tbody>
+			</table>
+		</div>
+<!--{if $cnt > $readperpage}-->
+		<div id="pgt" class="bm bw0 pgs cl">$pages</div>
+<!--{/if}-->
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li class="a"><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

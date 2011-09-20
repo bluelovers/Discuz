@@ -1,0 +1,62 @@
+.fgray
+{
+	color: gray;
+}
+.fred
+{
+	color: #ff0000;
+}
+.fgreen
+{
+	color: #008000;
+}
+.alert
+{
+	width: 0;
+	height: 0;
+	position: relative;
+	display: none;
+}
+.alert_cont
+{
+	border: 1px solid #f14f12;
+	height: 150px;
+	width: 290px;
+	background: #ffc941;
+	position: absolute;
+	top: -500px;
+	left: 200px;
+	z-index: 999;
+}
+.alert .close
+{
+	position: relative;
+}
+.alert .close a
+{
+	background: url(stock_main.png) 100% -195px no-repeat;
+	outline: none;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	top: 0;
+	right: 5px;
+	position: absolute;
+	overflow: hidden;
+}
+.alert_cont p
+{
+	margin: 15px;
+	overflow: hidden;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+.input
+{
+	border: 1px solid;
+	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+	background: #FFF url(../../static/image/common/px.png) repeat-x 0 0;
+	padding: 2px 4px;
+	line-height: 17px;
+	height: 17px;
+}

@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>Kilofox SimStock</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+</head>
+<body>
+<div id="o"></div>
+<script type="text/javascript" src="{$hkimg}js/jquery.js"></script>
+<script type="text/javascript" src="http://hq.sinajs.cn/list={$code}"></script>
+<script type="text/javascript">
+var quoStr = eval("hq_str_{$code}");
+var quoArr = quoStr.split(",");
+$.get("plugin.php?id=simstock:index", {mod:'ajax', section:'udd', code:"{$code}", price:quoArr[3]}, function( obj ){if(obj){document.getElementById('o').innerHTML=obj;}});
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 股民信息
+	</div>
+</div>
+<link rel="stylesheet" type="text/css" href="{$hkimg}fore_style.css"/>
+<script type="text/javascript"> 
+var u = {uid:"$m['uid']", uname:"$m['username']"};
+</script> 
+<script type="text/javascript" src="{$hkimg}js/jquery.js"></script>
+<script type="text/javascript" src="{$hkimg}js/plugins.js"></script>
+<script type="text/javascript" src="{$hkimg}js/global.js"></script>
+<script type="text/javascript" charset="gb2312" src="{$hkimg}js/suggestServer.js"></script>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+<!--{if $showAccount}-->
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">{$m['username']} 帐户信息</h2>
+				</caption>
+				<tr>
+					<td>初始资金：<span id="InitFund"></span></td>
+					<td>帐户总值：<span id="TotalFund"></span></td>
+					<td>可用资金：<span id="AvailableFund"></span></td>
+					<td>股票市值：<span id="StockFund"></span></td>
+					<td>帐户盈亏：<span id="StockProfit"></span></td>
+				</tr>
+				<tr>
+					<td>整体收益率：<span id="total_profit_ratio"></span></td>
+					<td>今日收益率：<span id="d1_profit_ratio"></span></td>
+					<td>五日收益率：<span id="d5_profit_ratio"></span></td>
+					<td>交易成功率：<span id="profit_sell_ratio"></span></td>
+					<td>比赛排名：<span id="TotalRank"></span></td>
+				</tr>
+			</table>
+		</div>
+<!--{else}-->
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2"><span id="stockname"></span>用户信息查询失败</h2>
+				</caption>
+				<tr>
+					<td>对不起，您无权查看该用户信息！</td>
+				</tr>
+			</table>
+		</div>
+<!--{/if}-->
+		<div id="holdListHd" class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<tr>
+					<th width="11%">股票代码</th>
+					<th width="11%">股票名称</th>
+					<th width="11%">当前持股</th>
+					<th width="11%">可用股数</th>
+					<th width="11%">持股市值</th>
+					<th width="11%">当前价</th>
+					<th width="11%">成本价</th>
+					<th width="11%">浮动盈亏</th>
+					<th>盈亏比例</th>
+				</tr>
+			</table>
+			<script id="holdTemplate" type="text/x-jquery-tmpl">
+				<tr>
+					<td width="11%" class="stockcode"><a>${StockCode}</a></td>
+					<td width="11%" class="stockname"><a>${StockName}</a></td>
+					<td width="11%" class="stockamount">${StockAmount}</td>
+					<td width="11%" class="availsell">${AvailSell}</td>
+					<td width="11%" class="currentvalue"></td>
+					<td width="11%" class="currentprice"></td>
+					<td width="11%" class="costfund">${cost}</td>
+					<td width="11%" class="fdyk"></td>
+					<td class="ykbl"></td>
+				</tr>
+			</script>
+			<div id="holdListCt">
+				<table id="holdList" cellspacing="0" cellpadding="0" class="dt mtm">
+	                <tbody></tbody>
+				</table>
+			</div>
+		</div>
+<script type="text/javascript" src="{$hkimg}js/main.js"></script>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

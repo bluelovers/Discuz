@@ -1,0 +1,311 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 营业大厅
+	</div>
+</div>
+<link rel="stylesheet" type="text/css" href="{$hkimg}fore_style.css"/>
+<script type="text/javascript" src="{$hkimg}js/jquery.js"></script>
+<script type="text/javascript" src="{$hkimg}js/combine.js"></script>
+<div class="ct3_a wp cl bn">
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li class="a"><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="sd">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm" id="allUpTable">
+				<caption>
+					<h2 class="mbm xs2">涨幅排行</h2>
+				</caption>
+				<thead>
+				<tr>
+					<th>排名</th>
+					<th>名称</th>
+					<th>涨幅</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>1</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm" id="allDownTable">
+				<caption>
+					<h2 class="mbm xs2">跌幅排行</h2>
+				</caption>
+				<thead>
+				<tr>
+					<th>排名</th>
+					<th>名称</th>
+					<th>跌幅</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>1</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="mn">
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">综指行情</h2>
+				</caption>
+				<tbody id="tdata">
+				<tr>
+					<th id="s_sh000001_name"></th>
+					<th id="s_sh000001_idx"></th>
+					<th id="s_sh000001_cg"></th>
+					<th id="s_sh000001_cgp"></th>
+					<th id="s_sz399001_name"></th>
+					<th id="s_sz399001_idx"></th>
+					<th id="s_sz399001_cg"></th>
+					<th id="s_sz399001_cgp"></th>
+				</tr>
+				</tbody>
+				<tr>
+					<td colspan="4"><a href="plugin.php?id=simstock:index&mod=stock&act=showinfo&code=sh000001"><img id="s_sh000001" src=""/></a></td>
+					<td colspan="4"><a href="plugin.php?id=simstock:index&mod=stock&act=showinfo&code=sz399001"><img id="s_sz399001" src=""/></a></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">最新消息</h2>
+				</caption>
+<!--{loop $newsList $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=news&act=shownewsinfo&nid=$v[nid]" style="color:#{$v[color]}">$v[subject]</a></td>
+					<td style="width:100px">$v[addtime]</td>
+				</tr>
+<!--{/loop}-->
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm" id="upTable">
+				<caption>
+					<h2 class="mbm xs2">领涨板块</h2>
+				</caption>
+				<thead>
+				<tr>
+					<th>排名</th>
+					<th>板块名称</th>
+					<th>涨幅</th>
+					<th>领涨股</th>
+					<th>涨幅</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>1</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bm bw0">
+			<table cellspacing="0" cellpadding="0" class="dt mtm" id="downTable">
+				<caption>
+					<h2 class="mbm xs2">领跌板块</h2>
+				</caption>
+				<thead>
+				<tr>
+					<th>排名</th>
+					<th>板块名称</th>
+					<th>涨幅</th>
+					<th>领跌股</th>
+					<th>涨幅</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>1</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="{$hkimg}js/main_index.js"></script>
+<script type="text/javascript" src="http://hq.sinajs.cn/list=s_sh000001,s_sz399001"></script>
+<script type="text/javascript">
+function load_quote_data(id,url)
+{
+	var obj = document.getElementById(id);
+	if ( obj )
+	{
+		obj.parentNode.removeChild(obj);
+	}
+	var newscript	= document.createElement("script");
+	newscript.type	= "text/javascript";
+	newscript.src	= url;
+	newscript.id	= id;
+	document.body.appendChild(newscript);
+}
+var last_s_sh000001=-1,last_s_sz399001=-1;
+function set_hq_data(circle)
+{
+	load_quote_data("hq_data_id", "http://hq.sinajs.cn/list=s_sh000001,s_sz399001");
+	var codeArr = Array("s_sh000001","s_sz399001");
+	var _i = 0;
+	for(var i=0; i<codeArr.length; i++)
+	{
+		var code = codeArr[i];
+		var quoStr = eval("hq_str_"+code);
+		if ( quoStr == "" )
+		{
+			continue;
+		}
+		var quoArr	= quoStr.split(",");
+		var symbol	= code.substr(2, 8);
+		var cg		= quoArr[2] > 0 ? "+" + (quoArr[2]*1).toFixed(2) : (quoArr[2]*1).toFixed(2);
+		var cgp		= quoArr[3] > 0 ? ["+", quoArr[3], "%"].join("") : [quoArr[3], "%"].join("");
+		var rg		= quoArr[2] !=0 ? ( quoArr[2] > 0 ? "#FF0000" : "#008000" ) : "";
+		var img_sh = new Image();
+		img_sh.src	= "http://image.sinajs.cn/newchart/small/n"+symbol+".gif?rn="+Math.random();
+		document.getElementById(code).src = img_sh.src;
+		document.getElementById(code+"_name").innerHTML	= quoArr[0];
+		document.getElementById(code+"_idx").innerHTML	= quoArr[1];
+		document.getElementById(code+"_cg").innerHTML	= cg;
+		document.getElementById(code+"_cgp").innerHTML	= cgp;
+		document.getElementById(code+"_idx").style.color	= rg;
+		document.getElementById(code+"_cg").style.color	= rg;
+		document.getElementById(code+"_cgp").style.color	= rg;
+	}
+	if (circle == true)
+	{
+		setTimeout("set_hq_data(true);", 3000);
+	}
+}
+set_hq_data(true);
+</script>
+<!--{template common/footer}-->

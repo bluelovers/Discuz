@@ -1,0 +1,97 @@
+<!--{template common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]}</a> <em>&rsaquo;</em>
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 交易查询
+	</div>
+</div>
+<div class="ct2_a wp cl bn">
+	<div class="mn">
+		<div class="bm bw0">
+<!--{if empty($_G['gp_section'])}-->
+			<ul class="tb cl">
+				<li class="a"><a href="javascript:return(0);">委托记录</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng&section=tran">成交记录</a></li>
+			</ul>
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">委托记录</h2>
+				</caption>
+				<tr>
+					<th>股票代码</th>
+					<th>股票名称</th>
+					<th>买卖方向</th>
+					<th>委托价格</th>
+					<th>委托数量</th>
+					<th>成交状态</th>
+					<th>委托时间</th>
+					<th>操作</th>
+				</tr>
+				<tbody>
+	<!--{loop $ddb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=stock&act=showinfo&code=$v[code]">{$v['code']}</a></td>
+					<td><a href="$baseScript&mod=stock&act=showinfo&code=$v[code]">{$v['stockname']}</a></td>
+					<td>{$v['direction']}</td>
+					<td>{$v['price_deal']}</td>
+					<td>{$v['quant_deal']}</td>
+					<td>{$v['ok']}</td>
+					<td>{$v['time_deal']}</td>
+					<td>{$v['op']}</td>
+				</tr>
+	<!--{/loop}-->
+				</tbody>
+			</table>
+<!--{elseif $_G['gp_section']=='tran'}-->
+			<ul class="tb cl">
+				<li><a href="$baseScript&mod=member&act=trustsmng">委托记录</a></li>
+				<li class="a"><a href="javascript:return(0);">成交记录</a></li>
+			</ul>
+			<table cellspacing="0" cellpadding="0" class="dt mtm">
+				<caption>
+					<h2 class="mbm xs2">成交记录</h2>
+				</caption>
+				<tr>
+					<th>股票代码</th>
+					<th>股票名称</th>
+					<th>买卖方向</th>
+					<th>成交价格</th>
+					<th>成交数量</th>
+					<th>成交金额</th>
+					<th>成交时间</th>
+				</tr>
+				<tbody>
+	<!--{loop $tdb $v}-->
+				<tr>
+					<td><a href="$baseScript&mod=stock&act=showinfo&code=$v[code]">{$v['code']}</a></td>
+					<td><a href="$baseScript&mod=stock&act=showinfo&code=$v[code]">{$v['stockname']}</a></td>
+					<td>{$v['direction']}</td>
+					<td>{$v['price']}</td>
+					<td>{$v['quant']}</td>
+					<td>{$v['amount']}</td>
+					<td>{$v['ttime']}</td>
+				</tr>
+	<!--{/loop}-->
+				</tbody>
+			</table>
+<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">$db_smname</h2>
+			<ul>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template common/footer}-->

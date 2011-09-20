@@ -1,0 +1,121 @@
+<style type="text/css" media="screen"> 
+@import url(source/plugin/simstock/image/admin_style.css);
+</style>
+<ul class="nav3">
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
+</ul>
+<!--{if empty($section)}-->
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">管理选项</th>
+	</tr>
+	<tr>
+		<td width="70">[<b><a>新闻管理</a></b>]</td>
+		<td>[<a href="?$baseScript&mod=news&section=addnews">发布新闻</a>]</td>
+	</tr>
+</table>
+<form method="post" action="?$baseScript&mod=news">
+<table class="tb tb2">
+	<tr>
+		<th colspan="5" class="partition">新闻管理</th>
+	</tr>
+	<tr class="header">
+		<td>序号</td>
+		<td>发布人</td>
+		<td class="tal">新闻标题</td>
+		<td>发表时间</td>
+		<td>管理</td>
+	</tr>
+	<!--{loop $newsdb $v}-->
+	<tr class="hover">
+		<td>$v[order]</td>
+		<td>$v[author]</td>
+		<td><a href="plugin.php?id=stock:index&mod=news&act=shownewsinfo&nid=$v[nid]" target="_blank">$v[subject]</a></td>
+		<td>$v[addtime]</td>
+		<td>$v[operate] <a href="?$baseScript&mod=news&section=delnews&nid=$v[nid]" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.logs.submit();return true;}return false;}">删除</a></td>
+	</tr>
+	<!--{/loop}-->
+</table>
+</form>
+<!--{elseif $section == 'addnews'}-->
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">管理选项</th>
+	</tr>
+	<tr>
+		<td width="70">[<a href="?$baseScript&mod=news">新闻管理</a>]</td>
+		<td>[<b><a>发布新闻</a></b>]</td>
+	</tr>
+</table>
+<form name="FORM" method="post" action="?$baseScript&mod=news&section=addnews">
+<input type="hidden" name="nid" value="$nid"/>
+<input type="hidden" name="step" value="2"/>
+<input type="hidden" name="action" value="$action"/>
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">发布新闻</th>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">新闻标题：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="newsubject" value="" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">新闻内容：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform">
+			<textarea rows="10" name="newcontent" value="" class="txt"></textarea>
+		</td>
+		<td class="vtop tips2">支持 Discuz! 代码</td>
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" name="submit" value="提交" class="btn"/></td>
+	</tr>
+</table>
+</form>
+<!--{elseif $section == 'editnews'}-->
+<table class="tb tb2">
+	<tr>
+		<th colspan="10" class="partition">管理选项</th>
+	</tr>
+	<tr>
+		<td width="70">[<a href="?$baseScript&mod=news">新闻管理</a>]</td>
+		<td width="70">[<a href="?$baseScript&mod=news&section=addnews">发布新闻</a>]</td>
+		<td>[<b><a>编辑新闻</a></b>]</td>
+	</tr>
+</table>
+<form name="newsform" method="post" action="?$baseScript&mod=news&section=editnews">
+<input type="hidden" name="nid" value="{$v['nid']}"/>
+<input type="hidden" name="step" value="2"/>
+<table class="tb tb2">
+	<tr>
+		<th colspan="2" class="partition">编辑新闻</th>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">新闻标题：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><input type="text" name="subject" value="{$v['subject']}" class="txt"/></td>
+		<td class="vtop tips2"></td>
+	</tr>
+	<tr>
+		<td colspan="2" class="td27">新闻内容：</td>
+	</tr>
+	<tr class="noborder">
+		<td class="vtop rowform"><textarea rows="10" name="content" class="txt">{$v['content']}</textarea></td>
+		<td class="vtop tips2">支持 Discuz! 代码</td>
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" name="addann" value="提交" class="btn"/></td>
+	</tr>
+</table>
+</form>
+<!--{/if}-->
