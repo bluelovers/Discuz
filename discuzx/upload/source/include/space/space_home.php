@@ -337,7 +337,7 @@ if(!IS_ROBOT) {
 
 						foreach ($valuelist as $value) {
 
-							$user_list[$value['hash_data']] && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+							!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
 
 							$value = mkfeed($value, $user_list[$value['hash_data']]);
 							$feed_list[$day][$user['uid']][$value['hash_data']] = $value;
@@ -354,7 +354,7 @@ if(!IS_ROBOT) {
 
 						foreach ($valuelist as $value) {
 
-							$user_list[$value['hash_data']] && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+							!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
 
 							$value = mkfeed($value, $user_list[$value['hash_data']]);
 							$more_list[$day][$user['uid']][$value['hash_data']] = $value;
