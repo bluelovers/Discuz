@@ -329,6 +329,30 @@ if(!IS_ROBOT) {
 			*/
 			foreach ($feed_users as $day => $users) {
 				foreach ($users as $user) {
+
+					foreach (array(
+						'feed_list',
+						'more_list',
+					) as $_array) {
+						if ($valuelist = ${$_array}[$day][$user['uid']]) {
+							${$_array}[$day][$user['uid']] = array();
+
+							$actors = array();
+							$a_value = array();
+
+							foreach ($valuelist as $value) {
+
+								!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
+
+								$value = mkfeed($value, $user_list[$value['hash_data']]);
+								${$_array}[$day][$user['uid']][$value['hash_data']] = $value;
+
+								unset($user_list[$value['hash_data']]);
+							}
+						}
+					}
+
+					/*
 					if ($valuelist = $feed_list[$day][$user['uid']]) {
 						$feed_list[$day][$user['uid']] = array();
 
@@ -362,6 +386,7 @@ if(!IS_ROBOT) {
 							unset($user_list[$value['hash_data']]);
 						}
 					}
+					*/
 				}
 			}
 		}
