@@ -79,7 +79,7 @@ function updatecache($cachename = '') {
 
 }
 
-function writetocache($script, $cachedata, $prefix = 'cache_') {
+function writetocache($script, $cachedata, $prefix = 'cache_', $dir = '') {
 	global $_G;
 
 	$dir = DISCUZ_ROOT.'./data/cache/';
