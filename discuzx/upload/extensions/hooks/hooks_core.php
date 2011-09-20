@@ -509,7 +509,9 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 	$regex_showname = '[^<\>\'"]+';
 
-	if (empty(discuz_core::$_cache_data['output']['users'])) discuz_core::$_cache_data['output']['users'] = array();
+	if (empty(discuz_core::$_cache_data['output']['users'])) {
+		discuz_core::$_cache_data['output']['users'] = array();
+	}
 
 	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
 }
