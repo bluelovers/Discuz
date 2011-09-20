@@ -532,6 +532,10 @@ Array
 	// 緩存資訊
 	static $_user;
 
+	if (!isset($_user)) {
+		$_user = &discuz_core::$_cache_data['output']['users'];
+	}
+
 	// 初始化 $_uid
 	$_uid = 0;
 
