@@ -352,41 +352,6 @@ if(!IS_ROBOT) {
 						}
 					}
 
-					/*
-					if ($valuelist = $feed_list[$day][$user['uid']]) {
-						$feed_list[$day][$user['uid']] = array();
-
-						$actors = array();
-						$a_value = array();
-
-						foreach ($valuelist as $value) {
-
-							!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
-
-							$value = mkfeed($value, $user_list[$value['hash_data']]);
-							$feed_list[$day][$user['uid']][$value['hash_data']] = $value;
-
-							unset($user_list[$value['hash_data']]);
-						}
-					}
-
-					if ($valuelist = $more_list[$day][$user['uid']]) {
-						$more_list[$day][$user['uid']] = array();
-
-						$actors = array();
-						$a_value = array();
-
-						foreach ($valuelist as $value) {
-
-							!empty($user_list[$value['hash_data']]) && array_unshift($user_list[$value['hash_data']], "<a href=\"home.php?mod=space&uid=$value[uid]\" target=\"_blank\">$value[username]</a>");
-
-							$value = mkfeed($value, $user_list[$value['hash_data']]);
-							$more_list[$day][$user['uid']][$value['hash_data']] = $value;
-
-							unset($user_list[$value['hash_data']]);
-						}
-					}
-					*/
 				}
 			}
 		}
