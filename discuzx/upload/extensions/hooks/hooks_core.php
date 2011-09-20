@@ -509,7 +509,43 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 	$regex_showname = '[^<\>\'"]+';
 
+	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
+
+	if (empty(discuz_core::$_cache_data['output']['users'])) {
+		$data = array();
+		@include $_file;
+
+		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
+
+		if ($data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5) {
+			discuz_core::$_cache_data['output']['users'] = array_merge(
+				(array)discuz_core::$_cache_data['output']['users']
+				, (array)$data['output_user']
+			);
+		}
+	}
+
 	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
+
+	if (
+		discuz_core::$_cache_data['output']['users']['updated']
+		&& (TIMESTAMP > discuz_core::$_cache_data['output']['users']['timestamp'] + 60)
+	) {
+		unset(discuz_core::$_cache_data['output']['users']['updated']);
+
+		include_once libfile('function/cache');
+
+		if (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5) {
+			discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
+		}
+
+		discuz_core::$_cache_data['output']['users']['dateline'] = dgmdate(discuz_core::$_cache_data['output']['users']['timestamp']);
+
+		$cachename = 'output_user';
+		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
+
+		writetocache($cachename, $cachedata, 'cache_', 'extensions/');
+	}
 }
 
 function _eFunc_output_Before_rewrite_content_echo_callback($m) {
@@ -529,6 +565,10 @@ Array
 
 	// 緩存資訊
 	static $_user;
+
+	if (!isset($_user)) {
+		$_user = &discuz_core::$_cache_data['output']['users'];
+	}
 
 	// 初始化 $_uid
 	$_uid = 0;
@@ -571,6 +611,9 @@ Array
 			$_user['uid'][$_uid] = $user['showname'];
 			$_user['username'][$user['username']] = $_uid;
 			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+
+			$_user['updated'] = true;
+
 		} else {
 			// 失敗時緩存為 0
 			if ($m['uid']) $_user['uid'][$m['uid']] = '';

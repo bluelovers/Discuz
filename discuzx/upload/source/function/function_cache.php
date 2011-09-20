@@ -79,10 +79,10 @@ function updatecache($cachename = '') {
 
 }
 
-function writetocache($script, $cachedata, $prefix = 'cache_') {
+function writetocache($script, $cachedata, $prefix = 'cache_', $dir = '') {
 	global $_G;
 
-	$dir = DISCUZ_ROOT.'./data/cache/';
+	$dir = DISCUZ_ROOT.'./data/cache/'.$dir;
 	if(!is_dir($dir)) {
 		@mkdir($dir, 0777);
 	}
