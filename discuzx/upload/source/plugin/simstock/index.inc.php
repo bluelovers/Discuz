@@ -44,7 +44,7 @@ $modArray = array('index', 'stock', 'member', 'notice', 'news', 'ajax', 'system'
 try
 {
 	if ( !in_array($mod, $modArray) )
-		throw new Exception ('·Ç·¨²Ù×÷');
+		throw new Exception ('éæ³•æ“ä½œ');
 }
 catch ( Exception $e )
 {

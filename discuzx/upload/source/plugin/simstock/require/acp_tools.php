@@ -16,7 +16,7 @@ class Tools
 		$kfsclass = new kfsclass;
 		$kfsclass::kfsmReset();
 		$baseScript .= '&mod=tools';
-		cpmsg('股市重新启动成功', $baseScript, 'succeed');
+		cpmsg('鑲″競閲嶆柊鍚姩鎴愬姛', $baseScript, 'succeed');
 	}
 	public function udRank()
 	{
@@ -24,7 +24,7 @@ class Tools
 		$kfsclass = new kfsclass;
 		$kfsclass::updateRank();
 		$baseScript .= '&mod=tools';
-		cpmsg('大赛榜单更新成功', $baseScript, 'succeed');
+		cpmsg('澶ц禌姒滃崟鏇存柊鎴愬姛', $baseScript, 'succeed');
 	}
 }
 ?>

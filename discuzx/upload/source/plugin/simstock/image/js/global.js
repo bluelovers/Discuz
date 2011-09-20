@@ -9,16 +9,16 @@
  */
 var translate = {
 	SellBuy	: {
-		0	: "ÂòÈë",	1 : "Âô³ö"
+		0	: "ä¹°å…¥",	1 : "å–å‡º"
 	},
 	Transaction_type	: {
-		1	: "Î¯ÍĞ³É½»",  2 : "Ç¿ÖÆÆ½²Ö", 3 : "×Ô¶¯Åä¹É",  4 : "ÏµÍ³Âô³ö"
+		1	: "å§”æ‰˜æˆäº¤",  2 : "å¼ºåˆ¶å¹³ä»“", 3 : "è‡ªåŠ¨é…è‚¡",  4 : "ç³»ç»Ÿå–å‡º"
 	},
 	statement_type	: {
-		1	: "·Öºì",   2 :  "ÂòÈë" , 3 : "Âô³ö", 4 : "ÏµÍ³Âô³ö", 5 : "ËÍ¹É", 6 : "×Ô¶¯Åä¹É", 7 : "ÅÉÏ¢", 8 : "Ç¿ÖÆÆ½²Ö"
+		1	: "åˆ†çº¢",   2 :  "ä¹°å…¥" , 3 : "å–å‡º", 4 : "ç³»ç»Ÿå–å‡º", 5 : "é€è‚¡", 6 : "è‡ªåŠ¨é…è‚¡", 7 : "æ´¾æ¯", 8 : "å¼ºåˆ¶å¹³ä»“"
 	},
 	IfDealt	: {
-		0	: "Î´³É½»", 1 : "³É½»", 2 : "ÓÃ»§³·Ïú", 3 : "ÏµÍ³³·Ïú"
+		0	: "æœªæˆäº¤", 1 : "æˆäº¤", 2 : "ç”¨æˆ·æ’¤é”€", 3 : "ç³»ç»Ÿæ’¤é”€"
 	}
 };
 var urlInfo = "plugin.php?id=simstock:index";
@@ -56,17 +56,17 @@ function getValidNum( a, b )
 	return ( isNaN( a ) || parseFloat( a ) == 0 ) ? ( parseFloat( b ) || 0) : parseFloat( a );
 }
 $( function(){
-	//ÍË³ö
+	//é€€å‡º
 	var c = new LoginComponent({
 		logout	: ".logoutbtn",
 		onLogoutSuccess	: function(){window.location.href = urlInfo;},
-		onLogoutFailed	: function(){if (msg) msg( "ÍË³öÊ§°Ü" );}
+		onLogoutFailed	: function(){if (msg) msg( "é€€å‡ºå¤±è´¥" );}
 	});
 	LoginManager.init()
 		.add( c )
 		.startMonitor();
 } );
-//--------------------------------  ÈüÇøÑ¡ÔñÆ÷  --------------------------------------------
+//--------------------------------  èµ›åŒºé€‰æ‹©å™¨  --------------------------------------------
 var ContestSelector = function( config ){
 	$.extend( this, config );
 	return this.init();
@@ -75,7 +75,7 @@ ContestSelector.prototype = {
 	el		: "#contests",
 	callback: function(){},
 	init	: function(){
-		//ÇĞ»»ÈüÇø
+		//åˆ‡æ¢èµ›åŒº
 		this.el = $( this.el );
 		var _self = this;
 		this.el.find("a").click( function( e ){
@@ -84,9 +84,9 @@ ContestSelector.prototype = {
 				_self.onClick( $(this).attr("cid") );
 			return false;
 		} );
-		//»ñÈ¡´æ´¢µÄÈüÇøĞÅÏ¢
+		//è·å–å­˜å‚¨çš„èµ›åŒºä¿¡æ¯
 		var cid = Request.QueryString( "cid" ) ||  $.cookie("contests");
-		//Ã»ÓĞ¶ÔÓ¦µÄÈüÇøÊ±£¬¸ÄÓÃµÚÒ»¸öÈüÇø
+		//æ²¡æœ‰å¯¹åº”çš„èµ›åŒºæ—¶ï¼Œæ”¹ç”¨ç¬¬ä¸€ä¸ªèµ›åŒº
 		var elements = $("#contests a[cid='" + cid +"']");
 		if ( elements.length == 0 )
 			cid = $("#contests").find("a:first").attr("cid");
@@ -103,7 +103,7 @@ ContestSelector.prototype = {
 		return {
 			id : id,
 			title : "",
-			percent : id == "5" ? 0.3 : 1			//×ÔÓÉÈüÇø30£¥ÏŞÖÆ
+			percent : id == "5" ? 0.3 : 1			//è‡ªç”±èµ›åŒº30ï¼…é™åˆ¶
 		}
 	}
 };

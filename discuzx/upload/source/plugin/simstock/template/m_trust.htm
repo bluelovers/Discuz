@@ -2,31 +2,31 @@
 @import url(source/plugin/simstock/image/admin_style.css);
 </style>
 <ul class="nav3">
-	<li><a href="?$baseScript&mod=about">����</a></li>
-	<li><a href="?$baseScript&mod=userset">�û�����</a></li>
-	<li class="current"><a href="?$baseScript&mod=trusts">���׹���</a></li>
-	<li><a href="?$baseScript&mod=news">���Ź���</a></li>
-	<li><a href="?$baseScript&mod=tools">ʵ�ù���</a></li>
-	<li><a href="?$baseScript&mod=logs">ϵͳ��־</a></li>
+	<li><a href="?$baseScript&mod=about">关于</a></li>
+	<li><a href="?$baseScript&mod=userset">用户管理</a></li>
+	<li class="current"><a href="?$baseScript&mod=trusts">交易管理</a></li>
+	<li><a href="?$baseScript&mod=news">新闻管理</a></li>
+	<li><a href="?$baseScript&mod=tools">实用工具</a></li>
+	<li><a href="?$baseScript&mod=logs">系统日志</a></li>
 </ul>
 <!--{if empty($section)}-->
 <table class="tb tb2">
 	<tr>
-		<th colspan="3" class="partition">����ѡ��</th>
+		<th colspan="3" class="partition">管理选项</th>
 	</tr>
 	<tr>
-		<td width="70">[<b><a>ί�м�¼</a></b>]</td>
-		<td>[<a href="?$baseScript&mod=trusts&section=tran">�ɽ���¼</a>]</td>
+		<td width="70">[<b><a>委托记录</a></b>]</td>
+		<td>[<a href="?$baseScript&mod=trusts&section=tran">成交记录</a>]</td>
 	</tr>
 </table>
 <table class="tb tb2">
 	<tr>
-		<th colspan="10" class="partition">������ʾ</th>
+		<th colspan="10" class="partition">技巧提示</th>
 	</tr>
 	<tr>
 		<td>
 			<ul>
-				<li>ϵͳ������ 30 ��ĳɽ���¼��</li>
+				<li>系统仅保留 30 天的成交记录。</li>
 			</ul>
 		</td>
 	</tr>
@@ -34,19 +34,19 @@
 <form name="trusts" action="?$baseScript&mod=trusts&section=deldeals" method="post">
 <table class="tb tb2">
 	<tr>
-		<th colspan="10" class="partition">ί�м�¼</th>
+		<th colspan="10" class="partition">委托记录</th>
 	</tr>
 	<tr class="header">
-		<th>ѡ��</th>
-		<th>���</th>
-		<th>��Ʊ����</th>
-		<th>����</th>
-		<th>ί�м�</th>
-		<th>����</th>
-		<th>�ҵ���</th>
-		<th>����ʱ��</th>
-		<th>����ʱ��</th>
-		<th>״̬</th>
+		<th>选择</th>
+		<th>序号</th>
+		<th>股票代码</th>
+		<th>方向</th>
+		<th>委托价</th>
+		<th>数量</th>
+		<th>挂单人</th>
+		<th>买入时间</th>
+		<th>卖出时间</th>
+		<th>状态</th>
 		
 	</tr>
 <!--{loop $ddb $v}-->
@@ -64,29 +64,29 @@
 	</tr>
 <!--{/loop}-->
 	<tr>
-		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)"/><label for="chkall">ȫѡ</label></td>
-		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('��ȷ��Ҫִ��ɾ��������')){this.document.trusts.submit();return true;}return false;}" value="ɾ��" class="btn"/></td>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)"/><label for="chkall">全选</label></td>
+		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.trusts.submit();return true;}return false;}" value="删除" class="btn"/></td>
 	</tr>
 </table>
 </form>
 <!--{elseif $section=='tran'}-->
 <table class="tb tb2">
 	<tr>
-		<th colspan="3" class="partition">����ѡ��</th>
+		<th colspan="3" class="partition">管理选项</th>
 	</tr>
 	<tr>
-		<td width="70">[<a href="?$baseScript&mod=trusts">ί�м�¼</a>]</td>
-		<td>[<b><a>�ɽ���¼</a></b>]</td>
+		<td width="70">[<a href="?$baseScript&mod=trusts">委托记录</a>]</td>
+		<td>[<b><a>成交记录</a></b>]</td>
 	</tr>
 </table>
 <table class="tb tb2">
 	<tr>
-		<th colspan="10" class="partition">������ʾ</th>
+		<th colspan="10" class="partition">技巧提示</th>
 	</tr>
 	<tr>
 		<td>
 			<ul>
-				<li>ϵͳ������ 30 ��ĳɽ���¼��</li>
+				<li>系统仅保留 30 天的成交记录。</li>
 			</ul>
 		</td>
 	</tr>
@@ -94,17 +94,17 @@
 <form name="trusts" action="?$baseScript&mod=trusts&section=deltrans" method="post">
 <table class="tb tb2">
 	<tr>
-		<th colspan="8" class="partition">�ɽ���¼</th>
+		<th colspan="8" class="partition">成交记录</th>
 	</tr>
 	<tr class="header">
-		<th>ѡ��</th>
-		<th>���</th>
-		<th>��Ʊ����</th>
-		<th>����</th>
-		<th>ί�м�</th>
-		<th>����</th>
-		<th>�ҵ���</th>
-		<th>�ɽ�ʱ��</th>
+		<th>选择</th>
+		<th>序号</th>
+		<th>股票代码</th>
+		<th>方向</th>
+		<th>委托价</th>
+		<th>数量</th>
+		<th>挂单人</th>
+		<th>成交时间</th>
 	</tr>
 <!--{loop $tdb $v}-->
 	<tr class="hover">
@@ -119,8 +119,8 @@
 	</tr>
 <!--{/loop}-->
 	<tr>
-		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)"/><label for="chkall">ȫѡ</label></td>
-		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('��ȷ��Ҫִ��ɾ��������')){this.document.trusts.submit();return true;}return false;}" value="ɾ��" class="btn"/></td>
+		<td class="td25"><input type="checkbox" name="chkall" id="chkall" onclick="checkall(this.form)"/><label for="chkall">全选</label></td>
+		<td colspan="9"><input type="submit" name="act" onclick="{if(confirm('您确定要执行删除操作吗？')){this.document.trusts.submit();return true;}return false;}" value="删除" class="btn"/></td>
 	</tr>
 </table>
 </form>

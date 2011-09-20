@@ -22,7 +22,7 @@ class News
 			$rt['order']	= $i;
 			$rt['subject']	= cutstr(strip_tags($rt['subject']), 50);
 			$rt['addtime']	= dgmdate($rt['addtime']);
-			$rt['operate'] = "<a href=\"?$baseScript&mod=news&section=editnews&nid=$rt[nid]\">±à¼­</a>";
+			$rt['operate'] = "<a href=\"?$baseScript&mod=news&section=editnews&nid=$rt[nid]\">ç¼–è¾‘</a>";
 			$newsdb[] = $rt;
 		}
 		return $newsdb;
@@ -34,11 +34,11 @@ class News
 		$newcontent	= trim($_G['gp_newcontent']);
 		if ( empty($newsubject) || empty($newcontent) )
 		{
-			cpmsg('ÐÂÎÅ±êÌâ»òÐÂÎÅÄÚÈÝ²»ÄÜÎª¿Õ', '', 'error');
+			cpmsg('æ–°é—»æ ‡é¢˜æˆ–æ–°é—»å†…å®¹ä¸èƒ½ä¸ºç©º', '', 'error');
 		}
 		DB::query("INSERT INTO ".DB::table('kfss_news')."(subject, content, author, addtime) VALUES ('$newsubject', '$newcontent', '{$_G[username]}', '$_G[timestamp]')");
 		$baseScript .= '&mod=news';
-		cpmsg('ÐÂÎÅÌí¼Ó³É¹¦', $baseScript, 'succeed');
+		cpmsg('æ–°é—»æ·»åŠ æˆåŠŸ', $baseScript, 'succeed');
 	}
 	public function getNewsInfo($nid)
 	{
@@ -52,18 +52,18 @@ class News
 		$content	= trim($_G['gp_content']);
 		if ( empty($subject) || empty($content) )
 		{
-			cpmsg('ÐÂÎÅ±êÌâ»òÐÂÎÅÄÚÈÝ²»ÄÜÎª¿Õ', '', 'error');
+			cpmsg('æ–°é—»æ ‡é¢˜æˆ–æ–°é—»å†…å®¹ä¸èƒ½ä¸ºç©º', '', 'error');
 		}
 		DB::query("UPDATE ".DB::table('kfss_news')." SET subject='$subject', content='$content' WHERE nid='{$_G[gp_nid]}'");
 		$baseScript .= '&mod=news';
-		cpmsg('ÐÂÎÅ¸üÐÂ³É¹¦', $baseScript, 'succeed');
+		cpmsg('æ–°é—»æ›´æ–°æˆåŠŸ', $baseScript, 'succeed');
 	}
 	public function deleteNews($nid)
 	{
 		global $baseScript;
 		DB::query("DELETE FROM ".DB::table('kfss_news')." WHERE nid='$nid'");
 		$baseScript .= '&mod=news';
-		cpmsg('ÐÂÎÅÉ¾³ý³É¹¦', $baseScript, 'succeed');
+		cpmsg('æ–°é—»åˆ é™¤æˆåŠŸ', $baseScript, 'succeed');
 	}
 }
 ?>

@@ -18,10 +18,10 @@ class Index
 		if ( $leftTime > 0 )
 		{
 			$leftTime = intval($leftTime / 3600);
-			$ret = "<a href=\"$baseScript&mod=member&act=subscribe&code=$rs[code]\">¾àÀë <span class=\"xi1\">$rs[stockname]</span> ÕıÊ½ÉÏÊĞ»¹ÓĞ $leftTime ¸öĞ¡Ê±¡£ÏÖÔÚ²»ÇÀ£¬¸ü´ıºÎÊ±£¿</a>";
+			$ret = "<a href=\"$baseScript&mod=member&act=subscribe&code=$rs[code]\">è·ç¦» <span class=\"xi1\">$rs[stockname]</span> æ­£å¼ä¸Šå¸‚è¿˜æœ‰ $leftTime ä¸ªå°æ—¶ã€‚ç°åœ¨ä¸æŠ¢ï¼Œæ›´å¾…ä½•æ—¶ï¼Ÿ</a>";
 		}
 		else
-			$ret = 'ÔİÊ±Ã»ÓĞ¹«Ë¾ÉÏÊĞµÄÏûÏ¢';
+			$ret = 'æš‚æ—¶æ²¡æœ‰å…¬å¸ä¸Šå¸‚çš„æ¶ˆæ¯';
 		return $ret;
 	}
 	public function getNewStocks($num=0)

@@ -8,38 +8,38 @@
  * www.Kilofox.Net
  */
 var main = function(){
-	var contest, 	//ÈüÇø
-		digi = 2,	//Ğ¡ÊıµãÎ»Êı
-		limitPercent = 0.1,	//Î¯ÍĞ¼Û¸ñÏŞÖÆ STÎª0.05
-		me, account, hold,	//ÕË»§ĞÅÏ¢
+	var contest, 	//èµ›åŒº
+		digi = 2,	//å°æ•°ç‚¹ä½æ•°
+		limitPercent = 0.1,	//å§”æ‰˜ä»·æ ¼é™åˆ¶ STä¸º0.05
+		me, account, hold,	//è´¦æˆ·ä¿¡æ¯
 		symbol, loading = false, type = "buy",
 		orders,
-		hq  //µ±Ç°¹ÉÆ±ĞĞÇéÊı¾İ
+		hq  //å½“å‰è‚¡ç¥¨è¡Œæƒ…æ•°æ®
 		;
-	var MSG_PRICE_EMPTY = "ÇëÊäÈëÂòÈë¼Û¸ñ",
-	  MSG_COUNT_EMPTY = "ÂòÈëÊıÁ¿Ğè´óÓÚ0",
-		MSG_PRICE_BUY = "ÄúÊäÈëµÄÂòÈë¼Û¸ñ²»ÔÚ¹æÔòÔÊĞí·¶Î§£¬ÇëÊäÈëÕÇµøÍ£¼Û¸ñÖ®¼äµÄ±¨¼Û",
-		MSG_COUNT_100 = "ÂòÈëÊıÁ¿Ó¦Îª100¼°ÆäÕûÊı±¶",
-		MSG_COUNT_BUY = "ÂòÈëÊıÁ¿±ØĞëÔÚ×î´ó¿ÉÂò·¶Î§ÄÚ",
-		MSG_STOCK_EMPTY = "ÇëÏÈÑ¡Ôñ¹ÉÆ±£¬ÔÙµã»÷ÏÂµ¥";
+	var MSG_PRICE_EMPTY = "è¯·è¾“å…¥ä¹°å…¥ä»·æ ¼",
+	  MSG_COUNT_EMPTY = "ä¹°å…¥æ•°é‡éœ€å¤§äº0",
+		MSG_PRICE_BUY = "æ‚¨è¾“å…¥çš„ä¹°å…¥ä»·æ ¼ä¸åœ¨è§„åˆ™å…è®¸èŒƒå›´ï¼Œè¯·è¾“å…¥æ¶¨è·Œåœä»·æ ¼ä¹‹é—´çš„æŠ¥ä»·",
+		MSG_COUNT_100 = "ä¹°å…¥æ•°é‡åº”ä¸º100åŠå…¶æ•´æ•°å€",
+		MSG_COUNT_BUY = "ä¹°å…¥æ•°é‡å¿…é¡»åœ¨æœ€å¤§å¯ä¹°èŒƒå›´å†…",
+		MSG_STOCK_EMPTY = "è¯·å…ˆé€‰æ‹©è‚¡ç¥¨ï¼Œå†ç‚¹å‡»ä¸‹å•";
 	var selector = new ContestSelector({
 		callback	: function( c ){
 			contest = c;
-			//»ñÈ¡Êı¾İ
+			//è·å–æ•°æ®
 			getAccountInfo();
-			//¸ü¸ÄËµÃ÷
+			//æ›´æ”¹è¯´æ˜
 			$(".detail").hide();
 			$(".detail[cid='" + c.id + "']" ).show();
 			resetForm();
 		}
 	});
-	//ÖØÖÃ±íµ¥
+	//é‡ç½®è¡¨å•
 	function resetForm(){
 		$("#stockForm").find( "input" ).val( "" );
 	}
-	//Ñ¡Ôñ¹ÉÆ±
+	//é€‰æ‹©è‚¡ç¥¨
 	var sg = new SuggestServer();
-	sg.bind({ target : "", "input": "searchStock", "default": "´úÂë/Ãû³Æ/Æ´Òô", "type": "stock", "link": "javascript:void(0)",
+	sg.bind({ target : "", "input": "searchStock", "default": "ä»£ç /åç§°/æ‹¼éŸ³", "type": "stock", "link": "javascript:void(0)",
 				callback : function(){
 					var tr = this._X || $(sg._T).find("tr")[1],
 						stockname = tr.id ? tr.id.split(",")[4] : "";
@@ -57,7 +57,7 @@ var main = function(){
 				}
 			});
 	sg.changeType( "111" );
-	//»ñÈ¡¹ÉÆ±ĞĞÇé
+	//è·å–è‚¡ç¥¨è¡Œæƒ…
 	var dl = new $.HQDataLoader();
 	function loadStock( symbol )
 	{
@@ -74,60 +74,60 @@ var main = function(){
 		var time_arr=(timestr || "0:0:0") .split(":");
 		return time_arr[0]*10000+time_arr[1]*100+time_arr[2]*1;
 	}
-	//ÏÔÊ¾¹ÉÆ±ĞĞÇé
+	//æ˜¾ç¤ºè‚¡ç¥¨è¡Œæƒ…
 	var trs = $("#five").find("tr");
 	var firstFill = false, firstTip = false;
 	function showStock( datas ){
 		var data = datas[ 0 ] , digi = 2;
 		if ( !data )
 			return false;
-		hq = data;	//±£´æÏÂÀ´
-		//ÊÕÅÌºó²»ÔÙÏŞÖÆĞÂ¹É
+		hq = data;	//ä¿å­˜ä¸‹æ¥
+		//æ”¶ç›˜åä¸å†é™åˆ¶æ–°è‚¡
 		var tickettime = timeToInt(data[31]);
 		if ( !firstTip && /^N/i.test( data[0] ) && tickettime <= 150005 ){
 			firstTip = true;
-			msg( "±§Ç¸£¬ĞÂ¹ÉÔİ²»ÄÜ²Ù×÷¡£" );
+			msg( "æŠ±æ­‰ï¼Œæ–°è‚¡æš‚ä¸èƒ½æ“ä½œã€‚" );
 			return false;
 		}
-		//Ìî³äµ±Ç°¼Û
+		//å¡«å……å½“å‰ä»·
 		if (!firstFill)
 		{
 			firstFill = true;
 			$("#price").val( getValidNum( hq[3] , hq[2] ).toFixed(2) || 0.0 );
 			onChangePrice();
 		}
-		//ST¹É
+		//STè‚¡
 		if ( /ST/i.test( data[0] ) )
 		{
 			limitPercent = 0.05;
 		}
-		//ÅĞ¶ÏÍ£ÅÆ
+		//åˆ¤æ–­åœç‰Œ
 		if ( (!data[3] || parseFloat(data[3]) == 0) && (tickettime < 90000 || tickettime > 93000) )
 		{
-			$("#priceCurrent").val("Í£ÅÆ(" + f2(data[2], data[2], 2) + ")").attr( "className", "input " + (getZeroCls(0)) );
+			$("#priceCurrent").val("åœç‰Œ(" + f2(data[2], data[2], 2) + ")").attr( "className", "input " + (getZeroCls(0)) );
 		}
 		else
 		{
 			$("#priceCurrent").val(f2(data[3], data[3], 2)).attr( "className","input " + getZeroCls(data[3] - data[2]) );
 		}
-		//ÎåµµÅÌ¿Ú
-		trs.eq( 5 ).children("td:eq(1)").html( f2( data[ 3 ],data[ 3 ], digi) ) //¼Û¸ñ
+		//äº”æ¡£ç›˜å£
+		trs.eq( 5 ).children("td:eq(1)").html( f2( data[ 3 ],data[ 3 ], digi) ) //ä»·æ ¼
 					.addClass( getZeroCls( data[ 3 ] - data[2] ) );
 		for ( var i=0; i<5; i ++ )
 		{
-			//¸üĞÂÂò
+			//æ›´æ–°ä¹°
 			var tds = trs.eq( 6 + i ).children("td");
-			tds.eq( 2 ).html( f2( data[3]+data[ 10 + i * 2 ] , parseInt( data[ 10 + i * 2 ] ) /100 , 0 ) ); //ÊıÁ¿
+			tds.eq( 2 ).html( f2( data[3]+data[ 10 + i * 2 ] , parseInt( data[ 10 + i * 2 ] ) /100 , 0 ) ); //æ•°é‡
 			tds.eq( 1 ).html( f2( data[3]+data[ 10 + i * 2 + 1 ], data[ 10 + i * 2 + 1 ] , digi) )
-						.addClass( getZeroCls( data[ 10 + i * 2 + 1 ] - data[2] ) ) ;	//¼Û¸ñ
-			//¸üĞÂÂô
+						.addClass( getZeroCls( data[ 10 + i * 2 + 1 ] - data[2] ) ) ;	//ä»·æ ¼
+			//æ›´æ–°å–
 			tds = trs.eq( 4 - i ).children("td");
-			tds.eq( 2 ).html( f2( data[3]+data[ 20 + i * 2 ], parseInt( data[ 20 + i * 2 ] ) /100 , 0 ) ); //ÊıÁ¿
+			tds.eq( 2 ).html( f2( data[3]+data[ 20 + i * 2 ], parseInt( data[ 20 + i * 2 ] ) /100 , 0 ) ); //æ•°é‡
 			tds.eq( 1 ).html( f2( data[3]+data[ 20 + i * 2 + 1 ], data[ 20 + i * 2 + 1 ] , digi ) )
-						.addClass( getZeroCls( data[ 20 + i * 2 + 1 ] - data[2] ) ) ;	//¼Û¸ñ
+						.addClass( getZeroCls( data[ 20 + i * 2 + 1 ] - data[2] ) ) ;	//ä»·æ ¼
 		}
 	}
-	//Î¢µ÷ÂòÈë¼Û¸ñ
+	//å¾®è°ƒä¹°å…¥ä»·æ ¼
 	function adjust( selector, target, range, check, d )
 	{
 		$( selector ).click( function(){
@@ -136,7 +136,7 @@ var main = function(){
 				var n = v + range;
 				n = check( n );
 				$( target ).val( n );
-				//¸ü¸Ä×î´ó¿É¹ºÂòÁ¿
+				//æ›´æ”¹æœ€å¤§å¯è´­ä¹°é‡
 				onChangePrice();
 			}
 		} );
@@ -145,13 +145,13 @@ var main = function(){
 	adjust( "#pricemap area:last", "#price", -0.01, checkPrice, digi );
 	adjust( "#amountmap area:first", "#amount", 100, checkAmount, 0 );
 	adjust( "#amountmap area:last", "#amount", -100, checkAmount, 0 );
-	//µ±¼Û¸ñ¸ü¸ÄÊ±
+	//å½“ä»·æ ¼æ›´æ”¹æ—¶
 	function onChangePrice()
 	{
 		var v = getFloat("#price");
 		if ( v )
 		{
-			//ÕË»§Óà¶î
+			//è´¦æˆ·ä½™é¢
 			var remain = parseFloat( account.AvailableFund ) || 0 ;
 			var spend = 0;
 			var cost = v * 1.001 + ( /sh/i.test( symbol ) ? 0.001 : 0 );
@@ -165,14 +165,14 @@ var main = function(){
 		}
 		onChangeAmount();
 	}
-	//¼ì²éÂòÈë¼Û¸ñ
+	//æ£€æŸ¥ä¹°å…¥ä»·æ ¼
 	function checkPrice( p )
 	{
 		if ( !hq )
 			return p;
-		//ÓĞµ±Ç°¼ÛÊ±È¡µ±Ç°¼Û£¬Ã»ÓĞÊ±È¡×òÊÕ
+		//æœ‰å½“å‰ä»·æ—¶å–å½“å‰ä»·ï¼Œæ²¡æœ‰æ—¶å–æ˜¨æ”¶
 		var c = parseFloat( getValidNum( hq[3] , hq[2] ) );
-		//ÓĞµ±Ç°¼ÛÊ±£¬²»ÄÜ³¬¹ıÏŞÖÆ
+		//æœ‰å½“å‰ä»·æ—¶ï¼Œä¸èƒ½è¶…è¿‡é™åˆ¶
 		if ( c )
 		{
 			var max = c * (1+ limitPercent ) , min = c * (1 - limitPercent);
@@ -181,7 +181,7 @@ var main = function(){
 		}
 		return parseFloat(p).toFixed( digi );
 	}
-	//¼ì²éÂòÈëÊıÁ¿
+	//æ£€æŸ¥ä¹°å…¥æ•°é‡
 	function checkAmount( n )
 	{
 		var c =	getFloat("#amountMax");
@@ -189,7 +189,7 @@ var main = function(){
 			n = c;
 		return n;
 	}
-	//µ±ÊıÁ¿¸ü¸ÄÊ±
+	//å½“æ•°é‡æ›´æ”¹æ—¶
 	function onChangeAmount()
 	{
 		var v = getFloat("#price");
@@ -238,7 +238,7 @@ var main = function(){
 			onChangeAmount();
 		}
 	} );
-	//»ñµÃ¸¡µãĞÍÊı¾İ
+	//è·å¾—æµ®ç‚¹å‹æ•°æ®
 	function getFloat( selector )
 	{
 		var v = $( selector ).val();
@@ -248,7 +248,7 @@ var main = function(){
 		}
 		return null;
 	}
-	//Ç¿ÖÆÊäÈë±ØĞëÎªÊı×ÖÀàĞÍ
+	//å¼ºåˆ¶è¾“å…¥å¿…é¡»ä¸ºæ•°å­—ç±»å‹
 	$(".uinumber").keyup( function(){
 		var v = this.value;
 		var matches = /\d+(\.\d{0,2})?/.exec( v );
@@ -265,7 +265,7 @@ var main = function(){
 		else
 			this.value = "";
 	} );
-	//»ñÈ¡ÕÊºÅĞÅÏ¢
+	//è·å–å¸å·ä¿¡æ¯
 	function getAccountInfo()
 	{
 		me = new kfsAccount();
@@ -285,7 +285,7 @@ var main = function(){
 					}
 					else
 					{
-						msg("»ñÈ¡ÕË»§ĞÅÏ¢Ê§°Ü£¬ÇëË¢ĞÂÒ³ÃæºóÔÙ²Ù×÷");
+						msg("è·å–è´¦æˆ·ä¿¡æ¯å¤±è´¥ï¼Œè¯·åˆ·æ–°é¡µé¢åå†æ“ä½œ");
 					}
 					loading = false;
 					$("#searchStock").removeAttr("disabled");
@@ -335,7 +335,7 @@ var main = function(){
 					eval(obj);
 					if ( ret == '0' )
 					{
-						msg("Ìá½»³É¹¦£¡");
+						msg("æäº¤æˆåŠŸï¼");
 						$("#submit").unbind("click");
 						setTimeout(function(){window.location.href=urlInfo+'&mod=member&act=trustsmng';}, 1000);
 					}
@@ -346,7 +346,7 @@ var main = function(){
 				}
 				else
 				{
-					msg("Ìá½»Ê§°Ü£¬ÇëË¢ĞÂÒ³ÃæÖØĞÂ²Ù×÷£¡");
+					msg("æäº¤å¤±è´¥ï¼Œè¯·åˆ·æ–°é¡µé¢é‡æ–°æ“ä½œï¼");
 				}
 			});
 		}

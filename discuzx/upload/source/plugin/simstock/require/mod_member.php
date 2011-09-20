@@ -26,7 +26,7 @@ class Member
 		}
 		catch ( Exception $e )
 		{
-			showmessage('Messages from Kilofox StockIns £º' . $e->getMessage());
+			showmessage('Messages from Kilofox StockIns ï¼š' . $e->getMessage());
 		}
 		switch ( $action )
 		{
@@ -124,11 +124,11 @@ class Member
 	{
 		global $baseScript, $hkimg, $_G, $db_smname, $db_proportion, $db_charge, $db_allowdeposit, $db_allowadopt, $db_allowtransfer, $db_depositmin, $db_adoptmin, $db_transfermin, $db_transfercharge;
 		if ( $user['locked'] == 0 )
-			$user['state'] = 'Õı³£';
+			$user['state'] = 'æ­£å¸¸';
 		else if ( $user['locked'] == 1 )
-			$user['state'] = '<span style="color:#FF0000">¶³½á</span>';
+			$user['state'] = '<span style="color:#FF0000">å†»ç»“</span>';
 		else
-			$user['state'] = '<span style="color:#0000FF">Òì³£</span>';
+			$user['state'] = '<span style="color:#0000FF">å¼‚å¸¸</span>';
 		$exchange_rate				= $db_proportion > 0 ? $db_proportion : 1;
 		$commission_charge			= $db_charge > 0 ? $db_charge : 0;
 		$commission_charge_trans	= $db_transfercharge > 0 ? $db_transfercharge : 0;
@@ -149,29 +149,29 @@ class Member
 		global $baseScript, $_G, $db_charge, $db_allowdeposit, $db_depositmin, $db_proportion, $db_credittype;
 		if ( $db_allowdeposit <> '1' )
 		{
-			showmessage('¶Ô²»Æğ£¬´æ¿î¹¦ÄÜÒÑ¹Ø±Õ');
+			showmessage('å¯¹ä¸èµ·ï¼Œå­˜æ¬¾åŠŸèƒ½å·²å…³é—­');
 		}
 		else
 		{
 			if ( $user['locked'] <> 0 )
 			{
-				showmessage('¶Ô²»Æğ£¬ÄúµÄÕÊ»§ÒÑ±»¶³½á£¬ÎŞ·¨´æ¿î');
+				showmessage('å¯¹ä¸èµ·ï¼Œæ‚¨çš„å¸æˆ·å·²è¢«å†»ç»“ï¼Œæ— æ³•å­˜æ¬¾');
 			}
 			else
 			{
 				$money_in = $_G['gp_moneyi'];
-				( !is_numeric($money_in) || $money_in <= 0 ) && showmessage('ÇëÊäÈëÕıÈ·µÄ´æ¿î½ğ¶î');
+				( !is_numeric($money_in) || $money_in <= 0 ) && showmessage('è¯·è¾“å…¥æ­£ç¡®çš„å­˜æ¬¾é‡‘é¢');
 				if ( $money_in < $db_depositmin )
 				{
-					showmessage("¶Ô²»Æğ£¬ÄúÒª´æÈëµÄ{$user[moneyType]}ÊıÁ¿²»ÄÜĞ¡ÓÚ $db_depositmin {$user[moneyUnit]}");
+					showmessage("å¯¹ä¸èµ·ï¼Œæ‚¨è¦å­˜å…¥çš„{$user[moneyType]}æ•°é‡ä¸èƒ½å°äº $db_depositmin {$user[moneyUnit]}");
 				}
 				else
 				{
-					$money_sm = $money_in * $db_proportion;	// ÂÛÌ³»õ±Ò¶Ò»»³É¹ÉÊĞ»õ±Ò
-					$comm_charge = $money_sm * $db_charge/100;	// ÂÛÌ³»õ±ÒÓë¹ÉÊĞ×Ê½ğ»¥¶ÒÊÖĞø·ÑÈ«²¿´Ó¹ÉÊĞÖĞ¿Û³ı£»¿ÉÒÔÎª0
+					$money_sm = $money_in * $db_proportion;	// è®ºå›è´§å¸å…‘æ¢æˆè‚¡å¸‚è´§å¸
+					$comm_charge = $money_sm * $db_charge/100;	// è®ºå›è´§å¸ä¸è‚¡å¸‚èµ„é‡‘äº’å…‘æ‰‹ç»­è´¹å…¨éƒ¨ä»è‚¡å¸‚ä¸­æ‰£é™¤ï¼›å¯ä»¥ä¸º0
 					if ( $money_in > $user['moneyNum'] )
 					{
-						showmessage("¶Ô²»Æğ£¬ÄúµÄ{$user['moneyType']}²»×ã¡£<br/>ÄúÒª´æÈë{$user['moneyType']} $money_in {$user['moneyUnit']}£¬ÄúÖ»ÓĞ{$user['moneyType']} <font color=\"#FF0000\">{$user['moneyNum']}</font> {$user['moneyUnit']}¡£");
+						showmessage("å¯¹ä¸èµ·ï¼Œæ‚¨çš„{$user['moneyType']}ä¸è¶³ã€‚<br/>æ‚¨è¦å­˜å…¥{$user['moneyType']} $money_in {$user['moneyUnit']}ï¼Œæ‚¨åªæœ‰{$user['moneyType']} <font color=\"#FF0000\">{$user['moneyNum']}</font> {$user['moneyUnit']}ã€‚");
 					}
 					else
 					{
@@ -183,11 +183,11 @@ class Member
 							else
 								$creditid	= $_G['setting']['creditstrans'];
 							DB::query("UPDATE ".DB::table('common_member_count')." SET extcredits".$creditid."=extcredits".$creditid."-{$money_in} WHERE uid='{$_G['uid']}'");
-							showmessage("ÄúÒÑ¾­°ÑÂÛÌ³{$user[moneyType]} $money_in {$user[moneyUnit]}ÕÛºÏ¹ÉÊĞ×Ê½ğ ".number_format($money_sm,2)." Ôª´æ½øÁËÄúµÄ¹ÉÊĞÕÊ»§£¬¿Û³ıÊÖĞø·Ñ ".number_format($comm_charge,2)." Ôª", "$baseScript&mod=member&act=fundsmng");
+							showmessage("æ‚¨å·²ç»æŠŠè®ºå›{$user[moneyType]} $money_in {$user[moneyUnit]}æŠ˜åˆè‚¡å¸‚èµ„é‡‘ ".number_format($money_sm,2)." å…ƒå­˜è¿›äº†æ‚¨çš„è‚¡å¸‚å¸æˆ·ï¼Œæ‰£é™¤æ‰‹ç»­è´¹ ".number_format($comm_charge,2)." å…ƒ", "$baseScript&mod=member&act=fundsmng");
 						}
 						else
 						{
-							showmessage('ÖÂÃü´íÎó£ºÂÛÌ³»õ±ÒÓë¹ÉÊĞ×Ê½ğ¶Ò»»±ÈÀıÓĞÎó£¬ÎŞ·¨´æ¿î£¡');
+							showmessage('è‡´å‘½é”™è¯¯ï¼šè®ºå›è´§å¸ä¸è‚¡å¸‚èµ„é‡‘å…‘æ¢æ¯”ä¾‹æœ‰è¯¯ï¼Œæ— æ³•å­˜æ¬¾ï¼');
 						}
 					}
 				}
@@ -199,51 +199,51 @@ class Member
 		global $baseScript, $_G, $db_allowadopt, $db_charge, $db_adoptmin, $db_proportion, $db_initialmoney, $db_credittype;
 		if ( $db_allowadopt <> '1' )
 		{
-			showmessage('¶Ô²»Æğ£¬È¡¿î¹¦ÄÜÒÑ¹Ø±Õ');
+			showmessage('å¯¹ä¸èµ·ï¼Œå–æ¬¾åŠŸèƒ½å·²å…³é—­');
 		}
 		else
 		{
 			if ( $user['locked'] <> 0 )
 			{
-				showmessage('¶Ô²»Æğ£¬ÄúµÄÕÊ»§ÒÑ±»¶³½á£¬ÎŞ·¨È¡¿î');
+				showmessage('å¯¹ä¸èµ·ï¼Œæ‚¨çš„å¸æˆ·å·²è¢«å†»ç»“ï¼Œæ— æ³•å–æ¬¾');
 			}
 			else
 			{
 				$money_x = $_G['gp_moneyx'];
-				( !is_numeric($money_x) || $money_x <=0 ) && showmessage('ÇëÊäÈëÕıÈ·µÄÈ¡¿î½ğ¶î');
+				( !is_numeric($money_x) || $money_x <=0 ) && showmessage('è¯·è¾“å…¥æ­£ç¡®çš„å–æ¬¾é‡‘é¢');
 				if ( ( $user['fund_ava'] - $money_x ) < $db_initialmoney )
 				{
-					showmessage('±¾¹ÉÊĞ¹æ¶¨£ºÕÊ»§¿ÉÓÃ×Ê½ğ²»ÄÜµÍÓÚ '.number_format($db_initialmoney,2).' Ôª¡£<br/>ÄúÒªÈ¡¿î '.number_format($money_x,2).' Ôª£¬ÕÊ»§ÖĞÏÖÓĞ¿ÉÓÃ×Ê½ğ <font color="#FF0000">'.number_format($user['fund_ava'],2).'</font> Ôª¡£');
+					showmessage('æœ¬è‚¡å¸‚è§„å®šï¼šå¸æˆ·å¯ç”¨èµ„é‡‘ä¸èƒ½ä½äº '.number_format($db_initialmoney,2).' å…ƒã€‚<br/>æ‚¨è¦å–æ¬¾ '.number_format($money_x,2).' å…ƒï¼Œå¸æˆ·ä¸­ç°æœ‰å¯ç”¨èµ„é‡‘ <font color="#FF0000">'.number_format($user['fund_ava'],2).'</font> å…ƒã€‚');
 				}
 				else
 				{
 					if ( $money_x < $db_adoptmin )
 					{
-						showmessage('¶Ô²»Æğ£¬È¡¿î½ğ¶î²»ÄÜÉÙÓÚ '.number_format($db_adoptmin,2).' Ôª');
+						showmessage('å¯¹ä¸èµ·ï¼Œå–æ¬¾é‡‘é¢ä¸èƒ½å°‘äº '.number_format($db_adoptmin,2).' å…ƒ');
 					}
 					else
 					{
 						if ( $money_x > $user['fund_ava'] )
 						{
-							showmessage('¶Ô²»Æğ£¬ÄúµÄÕÊ»§¿ÉÓÃ×Ê½ğ²»×ã¡£ÄúÒªÈ¡¿î '.number_format($money_x,2).' Ôª£¬ÕÊ»§ÖĞÏÖÓĞ¿ÉÓÃ×Ê½ğ '.number_format($user['fund_ava'],2).' Ôª¡£');
+							showmessage('å¯¹ä¸èµ·ï¼Œæ‚¨çš„å¸æˆ·å¯ç”¨èµ„é‡‘ä¸è¶³ã€‚æ‚¨è¦å–æ¬¾ '.number_format($money_x,2).' å…ƒï¼Œå¸æˆ·ä¸­ç°æœ‰å¯ç”¨èµ„é‡‘ '.number_format($user['fund_ava'],2).' å…ƒã€‚');
 						}
 						else
 						{
 							if ( $db_proportion > 0 && $db_charge >= 0 )
 							{
 								$comm_charge = $money_x * $db_charge/100;
-								$money_f = (int)($money_x / $db_proportion);	// ¹ÉÊĞ»õ±Ò¶Ò»»³ÉÂÛÌ³»õ±Ò
+								$money_f = (int)($money_x / $db_proportion);	// è‚¡å¸‚è´§å¸å…‘æ¢æˆè®ºå›è´§å¸
 								DB::query("UPDATE ".DB::table('kfss_user')." SET fund_ava=fund_ava-($money_x+$comm_charge) WHERE uid='{$user[uid]}'");
 								if ( $db_credittype && $_G['setting']['extcredits'][$db_credittype] )
 									$creditid	= $db_credittype;
 								else
 									$creditid	= $_G['setting']['creditstrans'];
 								DB::query("UPDATE ".DB::table('common_member_count')." SET extcredits".$creditid."=extcredits".$creditid."+{$money_f} WHERE uid='{$_G['uid']}'");
-								showmessage("ÄúÒÑ¾­°Ñ¹ÉÊĞ×Ê½ğ ".number_format($money_x,2)." ÔªÕÛºÏÂÛÌ³{$user[moneyType]} $money_f {$user[moneyUnit]}´æ½øÁËÄúµÄÂÛÌ³ÕÊ»§£¬¿Û³ıÊÖĞø·Ñ ".number_format($comm_charge,2)." Ôª", "$baseScript&mod=member&act=fundsmng");
+								showmessage("æ‚¨å·²ç»æŠŠè‚¡å¸‚èµ„é‡‘ ".number_format($money_x,2)." å…ƒæŠ˜åˆè®ºå›{$user[moneyType]} $money_f {$user[moneyUnit]}å­˜è¿›äº†æ‚¨çš„è®ºå›å¸æˆ·ï¼Œæ‰£é™¤æ‰‹ç»­è´¹ ".number_format($comm_charge,2)." å…ƒ", "$baseScript&mod=member&act=fundsmng");
 							}
 							else
 							{
-								showmessage('ÖÂÃü´íÎó£ºÂÛÌ³»õ±ÒÓë¹ÉÊĞ×Ê½ğ¶Ò»»±ÈÀıÓĞÎó£¬ÎŞ·¨È¡¿î£¡');
+								showmessage('è‡´å‘½é”™è¯¯ï¼šè®ºå›è´§å¸ä¸è‚¡å¸‚èµ„é‡‘å…‘æ¢æ¯”ä¾‹æœ‰è¯¯ï¼Œæ— æ³•å–æ¬¾ï¼');
 							}
 						}
 					}
@@ -256,65 +256,65 @@ class Member
 		global $baseScript, $_G, $db_allowtransfer, $db_transfercharge, $db_transfermin, $db_charge, $db_proportion, $db_initialmoney;
 		if ( $db_allowtransfer <> '1' )
 		{
-			showmessage('×ªÕÊ¹¦ÄÜÒÑ¹Ø±Õ');
+			showmessage('è½¬å¸åŠŸèƒ½å·²å…³é—­');
 		}
 		else
 		{
 			if ( $user['locked'] <> 0 )
 			{
-				showmessage('¶Ô²»Æğ£¬ÄúµÄÕÊ»§ÒÑ±»¶³½á£¬ÎŞ·¨×ªÕÊ');
+				showmessage('å¯¹ä¸èµ·ï¼Œæ‚¨çš„å¸æˆ·å·²è¢«å†»ç»“ï¼Œæ— æ³•è½¬å¸');
 			}
 			else
 			{
 				$money_t = $_G['gp_moneyt'];
 				if ( !is_numeric($money_t) || $money_t <= 0 )
-					showmessage('ÇëÊäÈëÕıÈ·µÄ×ªÕÊ×Ê½ğ');
+					showmessage('è¯·è¾“å…¥æ­£ç¡®çš„è½¬å¸èµ„é‡‘');
 				else
 				{
 					$comm_charge = $money_t * $db_transfercharge / 100;
 					if ( $money_t + $comm_charge > $user['fund_ava'] )
 					{
-						showmessage('¶Ô²»Æğ£¬ÄúµÄÕÊ»§¿ÉÓÃ×Ê½ğ²»×ã¡£ÄúÓû×ªÕÊ '.number_format($money_t,2).'Ôª£¬ÊÖĞø·ÑĞè '.number_format($commission_charge,2).' Ôª£¬ÕÊ»§ÖĞÏÖÓĞ¿ÉÓÃ×Ê½ğ '.number_format($user['fund_ava'],2).' Ôª¡£');
+						showmessage('å¯¹ä¸èµ·ï¼Œæ‚¨çš„å¸æˆ·å¯ç”¨èµ„é‡‘ä¸è¶³ã€‚æ‚¨æ¬²è½¬å¸ '.number_format($money_t,2).'å…ƒï¼Œæ‰‹ç»­è´¹éœ€ '.number_format($commission_charge,2).' å…ƒï¼Œå¸æˆ·ä¸­ç°æœ‰å¯ç”¨èµ„é‡‘ '.number_format($user['fund_ava'],2).' å…ƒã€‚');
 					}
 				}
 				$towho = $_G['gp_towho'];
 				if ( !$towho )
-					showmessage('ÇëÊäÈëÊÕ¿îÈËÃû×Ö');
+					showmessage('è¯·è¾“å…¥æ”¶æ¬¾äººåå­—');
 				else
 				{
 					if ( $towho == $user['username'] )
-						showmessage('Äú²»ÄÜ°Ñ×Ê½ğËÍ¸ø×Ô¼º');
+						showmessage('æ‚¨ä¸èƒ½æŠŠèµ„é‡‘é€ç»™è‡ªå·±');
 					else
 					{
 						$rs = DB::fetch_first("SELECT uid, username, locked FROM ".DB::table('kfss_user')." WHERE username='$towho'");
 						if ( !$rs )
-							showmessage("ÊÕ¿îÈË $towho Î´ÕÒµ½");
+							showmessage("æ”¶æ¬¾äºº $towho æœªæ‰¾åˆ°");
 						else
 						{
 							if ( $rs['locked'] == 1 )
 							{
-								showmessage("$towho µÄÕÊ»§ÒÑ±»¶³½á£¬ÎŞ·¨½ÓÊÜÄúµÄ×ªÕÊ×Ê½ğ");
+								showmessage("$towho çš„å¸æˆ·å·²è¢«å†»ç»“ï¼Œæ— æ³•æ¥å—æ‚¨çš„è½¬å¸èµ„é‡‘");
 							}
 							else
 							{
 								if ( $user['fund_ava'] - $money_t < $db_initialmoney )
 								{
-									showmessage('±¾¹ÉÊĞ¹æ¶¨£ºÕÊ»§¿ÉÓÃ×Ê½ğ²»µÃµÍÓÚ '.number_format($db_initialmoney,2).' Ôª¡£ÄúÓû×ªÕÊ '.number_format($money_t,2).' Ôª£¬ÊÖĞø·ÑĞè '.number_format($comm_charge,2).' Ôª¡£');
+									showmessage('æœ¬è‚¡å¸‚è§„å®šï¼šå¸æˆ·å¯ç”¨èµ„é‡‘ä¸å¾—ä½äº '.number_format($db_initialmoney,2).' å…ƒã€‚æ‚¨æ¬²è½¬å¸ '.number_format($money_t,2).' å…ƒï¼Œæ‰‹ç»­è´¹éœ€ '.number_format($comm_charge,2).' å…ƒã€‚');
 								}
 								else
 								{
 									if ( $money_t < $db_transfermin )
 									{
-										showmessage("¶Ô²»Æğ£¬×ªÕÊ½ğ¶î²»ÄÜÉÙÓÚ ".number_format($db_transfermin,2)." Ôª");
+										showmessage("å¯¹ä¸èµ·ï¼Œè½¬å¸é‡‘é¢ä¸èƒ½å°‘äº ".number_format($db_transfermin,2)." å…ƒ");
 									}
 									else
 									{
 										DB::query("UPDATE ".DB::table('kfss_user')." SET fund_ava=fund_ava-($money_t+$comm_charge) WHERE uid='{$user[uid]}'");
 										DB::query("UPDATE ".DB::table('kfss_user')." SET fund_ava=fund_ava+{$money_t} WHERE uid='{$rs[uid]}'");
-										$subject = "¹ÉÃñ $user[username] ×Ê½ğ¹ı»§³É¹¦£¡";
-										$content = "¹ÉÃñ [url=$baseScript&act=showuser&uid={$user['id']}]{$user['username']}[/url] ½« ".number_format($money_t,2)." ÔªÕÊ»§×Ê½ğ¹ı»§¸ø [url=$baseScript&act=showuser&uid={$rs['uid']}]{$rs['username']}[/url] ¡£Çë {$rs[username]} ×¢Òâ²éÊÕ¡£";
+										$subject = "è‚¡æ°‘ $user[username] èµ„é‡‘è¿‡æˆ·æˆåŠŸï¼";
+										$content = "è‚¡æ°‘ [url=$baseScript&act=showuser&uid={$user['id']}]{$user['username']}[/url] å°† ".number_format($money_t,2)." å…ƒå¸æˆ·èµ„é‡‘è¿‡æˆ·ç»™ [url=$baseScript&act=showuser&uid={$rs['uid']}]{$rs['username']}[/url] ã€‚è¯· {$rs[username]} æ³¨æ„æŸ¥æ”¶ã€‚";
 										DB::query("INSERT INTO ".DB::table('kfss_news')."(subject, content, color, addtime) VALUES ('$subject', '$content', 'StockIns', '$_G[timestamp]')");
-										showmessage("ÄúÒÑ¾­°Ñ¹ÉÊĞ×Ê½ğ ".number_format($money_t,2)." Ôª×ª¸ø {$rs[username]} £¬¿Û³ıÊÖĞø·Ñ ".number_format($comm_charge,2)."Ôª", "$baseScript&mod=member&act=fundsmng");
+										showmessage("æ‚¨å·²ç»æŠŠè‚¡å¸‚èµ„é‡‘ ".number_format($money_t,2)." å…ƒè½¬ç»™ {$rs[username]} ï¼Œæ‰£é™¤æ‰‹ç»­è´¹ ".number_format($comm_charge,2)."å…ƒ", "$baseScript&mod=member&act=fundsmng");
 									}
 								}
 							}

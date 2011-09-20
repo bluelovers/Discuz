@@ -25,7 +25,7 @@ class Stock
 		}
 		catch ( Exception $e )
 		{
-			showmessage('Messages from Kilofox StockIns £º' . $e->getMessage());
+			showmessage('Messages from Kilofox StockIns ï¼š' . $e->getMessage());
 		}
 		switch ( $action )
 		{
@@ -69,10 +69,10 @@ class Stock
 		}
 		else
 		{
-			showmessage('¸Ã¹ÉÆ±²»´æÔÚ');
+			showmessage('è¯¥è‚¡ç¥¨ä¸å­˜åœ¨');
 		}
 	}
-	// ¹«¹²·½·¨£¬·ÖºìÓÃµ½
+	// å…¬å…±æ–¹æ³•ï¼Œåˆ†çº¢ç”¨åˆ°
 	public function getStockholdersList($code, $totalnum, $start, $readperpage)
 	{
 		$shldb = array();
@@ -93,7 +93,7 @@ class Stock
 		$keyword = $_G['gp_keyword'];
 		if ( empty($keyword) )
 		{
-			showmessage('ÇëÊäÈë¹ÉÆ±´úÂë»òÕß¹ÉÆ±Ãû³Æ¹Ø¼ü×Ö');
+			showmessage('è¯·è¾“å…¥è‚¡ç¥¨ä»£ç æˆ–è€…è‚¡ç¥¨åç§°å…³é”®å­—');
 		}
 		else
 		{
@@ -103,7 +103,7 @@ class Stock
 				$sql = "stockname LIKE '%{$keyword}%'";
 			$rs = DB::fetch_first("SELECT code FROM ".DB::table('kfss_stock')." WHERE $sql");
 			if ( !$rs )
-				showmessage("Ã»ÓĞÕÒµ½Ö¸¶¨µÄ¹ÉÆ±£¬¿ÉÄÜ¸ÃÉÏÊĞ¹«Ë¾ÒÑ¾­µ¹±Õ");
+				showmessage("æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„è‚¡ç¥¨ï¼Œå¯èƒ½è¯¥ä¸Šå¸‚å…¬å¸å·²ç»å€’é—­");
 			else
 				header("Location:$baseScript&mod=stock&act=showinfo&code=$rs[code]");
 		}

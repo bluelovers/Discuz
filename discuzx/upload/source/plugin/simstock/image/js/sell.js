@@ -8,37 +8,37 @@
  * www.Kilofox.Net
  */
 var main = function(){
-	var contest, 	//ÈüÇø
-		digi = 2,	//Ğ¡ÊıµãÎ»Êı
-		limitPercent = 0.1,	//Î¯ÍĞ¼Û¸ñÏŞÖÆ STÎª0.05
-		me, account, hold,	//ÕË»§ĞÅÏ¢
+	var contest, 	//èµ›åŒº
+		digi = 2,	//å°æ•°ç‚¹ä½æ•°
+		limitPercent = 0.1,	//å§”æ‰˜ä»·æ ¼é™åˆ¶ STä¸º0.05
+		me, account, hold,	//è´¦æˆ·ä¿¡æ¯
 		symbol, loading = false, type ="sell",
-		hq  //µ±Ç°¹ÉÆ±ĞĞÇéÊı¾İ
+		hq  //å½“å‰è‚¡ç¥¨è¡Œæƒ…æ•°æ®
 		;
-	var MSG_PRICE_EMPTY = "ÇëÊäÈëÂô³ö¼Û¸ñ",
-		MSG_COUNT_EMPTY = "Âô³öÊıÁ¿±ØĞë´óÓÚ0",
-		MSG_PRICE_SELL = "ÄúÊäÈëµÄÂô³ö¼Û¸ñ²»ÔÚ¹æÔòÔÊĞí·¶Î§£¬ÇëÊäÈëÕÇµøÍ£¼Û¸ñÖ®¼äµÄ±¨¼Û",
-		MSG_COUNT_SELL = "Âô³öÊıÁ¿±ØĞëÔÚ¿ÉÂôÊıÁ¿·¶Î§ÄÚ",
-		MSG_STOCK_EMPTY = "ÇëÏÈÑ¡Ôñ¹ÉÆ±£¬ÔÙµã»÷ÏÂµ¥";
+	var MSG_PRICE_EMPTY = "è¯·è¾“å…¥å–å‡ºä»·æ ¼",
+		MSG_COUNT_EMPTY = "å–å‡ºæ•°é‡å¿…é¡»å¤§äº0",
+		MSG_PRICE_SELL = "æ‚¨è¾“å…¥çš„å–å‡ºä»·æ ¼ä¸åœ¨è§„åˆ™å…è®¸èŒƒå›´ï¼Œè¯·è¾“å…¥æ¶¨è·Œåœä»·æ ¼ä¹‹é—´çš„æŠ¥ä»·",
+		MSG_COUNT_SELL = "å–å‡ºæ•°é‡å¿…é¡»åœ¨å¯å–æ•°é‡èŒƒå›´å†…",
+		MSG_STOCK_EMPTY = "è¯·å…ˆé€‰æ‹©è‚¡ç¥¨ï¼Œå†ç‚¹å‡»ä¸‹å•";
 	var selector = new ContestSelector({
 		callback	: function( c ){
 			contest = c;
-			//»ñÈ¡Êı¾İ
+			//è·å–æ•°æ®
 			getAccountInfo();
-			//¸ü¸ÄËµÃ÷
+			//æ›´æ”¹è¯´æ˜
 			$(".detail").hide();
 			$(".detail[cid='" + c.id + "']" ).show();
 			resetForm();
 		}
 	});
-	//ÖØÖÃ±íµ¥
+	//é‡ç½®è¡¨å•
 	function resetForm(){
 		$("#stockForm").find( "input" ).val("");
 	}
-	//Éú³ÉÏÂÀ­²Ëµ¥
+	//ç”Ÿæˆä¸‹æ‹‰èœå•
 	function createSelect(){
-		//Ä¬ÈÏÏÔÊ¾ Ñ¡Ôñ¹ÉÆ±
-		$("#stockList").empty().append("<option value='false' >---Ñ¡Ôñ¹ÉÆ±---</option>");
+		//é»˜è®¤æ˜¾ç¤º é€‰æ‹©è‚¡ç¥¨
+		$("#stockList").empty().append("<option value='false' >---é€‰æ‹©è‚¡ç¥¨---</option>");
 		if ( hold )
 		{
 			for (var i = 0; i < hold.length; i++)
@@ -48,7 +48,7 @@ var main = function(){
 			}
 		}
 	}
-	//Ñ¡Ôñ¹ÉÆ±
+	//é€‰æ‹©è‚¡ç¥¨
 	$("#stockList").change( function(){
 		var v = $("#stockList").val();
 		symbol = v;
@@ -70,7 +70,7 @@ var main = function(){
 		$("#price").val("");
 		$("#amount").val("");
 	} );
-	//»ñÈ¡¹ÉÆ±ĞĞÇé
+	//è·å–è‚¡ç¥¨è¡Œæƒ…
 	var dl = new $.HQDataLoader();
 	function loadStock( symbol ){
 		dl.stop()
@@ -79,7 +79,7 @@ var main = function(){
 		 .on( symbol, showStock )
 		 .start( symbol );
 	}
-	//ÏÔÊ¾¹ÉÆ±ĞĞÇé
+	//æ˜¾ç¤ºè‚¡ç¥¨è¡Œæƒ…
 	var trs = $("#five").find("tr");
 	var firstFill = false;
 	function showStock( datas )
@@ -87,15 +87,15 @@ var main = function(){
 		var data = datas[0] , digi = 2;
 		if ( !data )
 			return false;
-		hq = data;	//±£´æÏÂÀ´
+		hq = data;	//ä¿å­˜ä¸‹æ¥
 		$("#stockName").val( data[0] );
-		//Ìî³äµ±Ç°¼Û
+		//å¡«å……å½“å‰ä»·
 		if ( !firstFill )
 		{
 			firstFill = true;
 			$("#price").val(hq[3] || hq[2] || 0.0);
 		}
-		//ST¹É
+		//STè‚¡
 		if ( /ST/i.test( data[0] ) )
 		{
 			limitPercent = 0.05;
@@ -105,23 +105,23 @@ var main = function(){
 		setFive( data );
 	}
 	function setFive ( data ){
-		//ÎåµµÅÌ¿Ú
-		trs.eq( 5 ).children("td:eq(1)").html( f2( data[ 3 ],data[ 3 ], digi) ) //¼Û¸ñ
+		//äº”æ¡£ç›˜å£
+		trs.eq( 5 ).children("td:eq(1)").html( f2( data[ 3 ],data[ 3 ], digi) ) //ä»·æ ¼
 					.addClass( getZeroCls( data[ 3 ] - data[2] ) );
 		for (var i=0; i<5; i ++ ) {
-			//¸üĞÂÂò
+			//æ›´æ–°ä¹°
 			var tds = trs.eq( 6 + i ).children("td");
-			tds.eq( 2 ).html( f2( data[3]+data[ 10 + i * 2 ] , parseInt( data[ 10 + i * 2 ] ) /100 , 0 ) ); //ÊıÁ¿
+			tds.eq( 2 ).html( f2( data[3]+data[ 10 + i * 2 ] , parseInt( data[ 10 + i * 2 ] ) /100 , 0 ) ); //æ•°é‡
 			tds.eq( 1 ).html( f2( data[3]+data[ 10 + i * 2 + 1 ], data[ 10 + i * 2 + 1 ] , digi) )
-						.addClass( getZeroCls( data[ 10 + i * 2 + 1 ] - data[2] ) ) ;	//¼Û¸ñ
-			//¸üĞÂÂô
+						.addClass( getZeroCls( data[ 10 + i * 2 + 1 ] - data[2] ) ) ;	//ä»·æ ¼
+			//æ›´æ–°å–
 			tds = trs.eq( 4 - i ).children("td");
-			tds.eq( 2 ).html( f2( data[3]+data[ 20 + i * 2 ], parseInt( data[ 20 + i * 2 ] ) /100 , 0 ) ); //ÊıÁ¿
+			tds.eq( 2 ).html( f2( data[3]+data[ 20 + i * 2 ], parseInt( data[ 20 + i * 2 ] ) /100 , 0 ) ); //æ•°é‡
 			tds.eq( 1 ).html( f2( data[3]+data[ 20 + i * 2 + 1 ], data[ 20 + i * 2 + 1 ] , digi ) )
-						.addClass( getZeroCls( data[ 20 + i * 2 + 1 ] - data[2] ) ) ;	//¼Û¸ñ
+						.addClass( getZeroCls( data[ 20 + i * 2 + 1 ] - data[2] ) ) ;	//ä»·æ ¼
 		}
 	}
-	//Î¢µ÷ÂòÈë¼Û¸ñ
+	//å¾®è°ƒä¹°å…¥ä»·æ ¼
 	function adjust( selector, target, range, check, d )
 	{
 		$( selector ).click(function(){
@@ -131,7 +131,7 @@ var main = function(){
 				var n = v + range;
 				n = check( n );
 				$( target ).val( n );
-				//¸ü¸Ä×î´ó¿É¹ºÂòÁ¿
+				//æ›´æ”¹æœ€å¤§å¯è´­ä¹°é‡
 				onChangePrice();
 			}
 		});
@@ -140,19 +140,19 @@ var main = function(){
 	adjust( "#pricemap area:last", "#price", -0.01, checkPrice, digi );
 	adjust( "#amountmap area:first", "#amount", 100, checkAmount, 0 );
 	adjust( "#amountmap area:last", "#amount", -100, checkAmount, 0 );
-	//µ±¼Û¸ñ¸ü¸ÄÊ±
+	//å½“ä»·æ ¼æ›´æ”¹æ—¶
 	function onChangePrice()
 	{
 		var v = getFloat("#price");
 		onChangeAmount();
 	}
-	//¼ì²éÂòÈë¼Û¸ñ
+	//æ£€æŸ¥ä¹°å…¥ä»·æ ¼
 	function checkPrice( p )
 	{
 		if ( !hq )
 			return p;
 		var c = parseFloat( hq[3] || hq[2] );
-		//ÓĞµ±Ç°¼ÛÊ±£¬²»ÄÜ³¬¹ıÏŞÖÆ
+		//æœ‰å½“å‰ä»·æ—¶ï¼Œä¸èƒ½è¶…è¿‡é™åˆ¶
 		if ( c ) {
 			var max = c * (1+ limitPercent ) , min = c * (1 - limitPercent);
 			if ( p > max ) p = max;
@@ -160,13 +160,13 @@ var main = function(){
 		}
 		return parseFloat(p).toFixed( digi );
 	}
-	//¼ì²éÂòÈëÊıÁ¿
+	//æ£€æŸ¥ä¹°å…¥æ•°é‡
 	function checkAmount( n )
 	{
 		var c =	getFloat("#amountMax");
 		if ( n > c )
 			n = c;
-		//È¡ÏûÕûÊıÏŞÖÆ
+		//å–æ¶ˆæ•´æ•°é™åˆ¶
 /*
 		else {
 			var n = parseInt( n / 100 ) * 100;
@@ -178,7 +178,7 @@ var main = function(){
 			n = 0;
 		return n;
 	}
-	//µ±ÊıÁ¿¸ü¸ÄÊ±
+	//å½“æ•°é‡æ›´æ”¹æ—¶
 	function onChangeAmount()
 	{
 		var v = getFloat("#price");
@@ -221,7 +221,7 @@ var main = function(){
 			onChangeAmount();
 		}
 	} );
-	//»ñµÃ¸¡µãĞÍÊı¾İ
+	//è·å¾—æµ®ç‚¹å‹æ•°æ®
 	function getFloat( selector )
 	{
 		var v = $( selector ).val();
@@ -231,7 +231,7 @@ var main = function(){
 		}
 		return null;
 	}
-	//Ç¿ÖÆÊäÈë±ØĞëÎªÊı×ÖÀàĞÍ
+	//å¼ºåˆ¶è¾“å…¥å¿…é¡»ä¸ºæ•°å­—ç±»å‹
 	$(".uinumber").keyup( function(){
 		var v = this.value;
 		var matches = /\d+(\.\d{0,2})?/.exec( v );
@@ -248,14 +248,14 @@ var main = function(){
 		else
 			this.value = "";
 	} );
-	//»ñÈ¡ÕÊºÅĞÅÏ¢
+	//è·å–å¸å·ä¿¡æ¯
 	function getAccountInfo()
 	{
 		me = new kfsAccount();
 		if ( !me )
 			window.location.href = urlInfo;
 		var names = $(".username");
-		names.text( me.nick || "ÓÃ»§" );
+		names.text( me.nick || "ç”¨æˆ·" );
 		loading = true;
 		LoginManager.add( {
 			onLoginSuccess: function(){
@@ -268,7 +268,7 @@ var main = function(){
 					}
 					else
 					{
-						msg("»ñÈ¡ÕË»§ĞÅÏ¢Ê§°Ü£¬ÇëË¢ĞÂÒ³ÃæºóÔÙ²Ù×÷£¡");
+						msg("è·å–è´¦æˆ·ä¿¡æ¯å¤±è´¥ï¼Œè¯·åˆ·æ–°é¡µé¢åå†æ“ä½œï¼");
 					}
 					loading = false;
 					createSelect();
@@ -308,7 +308,7 @@ var main = function(){
 					eval(obj);
 					if ( ret == '0' )
 					{
-						msg("Ìá½»³É¹¦£¡");
+						msg("æäº¤æˆåŠŸï¼");
 						$("#submit").unbind("click");
 						setTimeout( function(){window.location.href = urlInfo+'&mod=member&act=trustsmng';}, 1000 );
 					}
@@ -319,7 +319,7 @@ var main = function(){
 				}
 				else
 				{
-					msg("Ìá½»Ê§°Ü£¬ÇëË¢ĞÂÒ³ÃæÖØĞÂ²Ù×÷£¡");
+					msg("æäº¤å¤±è´¥ï¼Œè¯·åˆ·æ–°é¡µé¢é‡æ–°æ“ä½œï¼");
 				}
 			});
 		}

@@ -17,9 +17,9 @@
 		overCls : false,
 		zebra	: false,
 		zebraCls: "",
-		combine	: false, //ÓÉHQµÃµ½µÄÊÇÒ»¸öÊı×é
-		combineVar : "", //Êı×éÃû
-		combineLen : 0,  //Êı×é³¤¶È
+		combine	: false, //ç”±HQå¾—åˆ°çš„æ˜¯ä¸€ä¸ªæ•°ç»„
+		combineVar : "", //æ•°ç»„å
+		combineLen : 0,  //æ•°ç»„é•¿åº¦
 		init	: function(){
 			this.el = $( this.el );
 			this.items	 = [];
@@ -56,23 +56,23 @@
 		code	: null,
 		link	: false,
 		title	: "",
-		titleIndex	: null, //¹ÉÆ±Ãû³ÆËùÔÚÎ»ÖÃ
-		current	: 3, 	//µ±Ç°¼Û
-		rate	: null, //ÕÇµø·ù
-		compare : null, //×òÊÕ¼Û
-		digi	: 2, 	//Ğ¡ÊıÎ»
+		titleIndex	: null, //è‚¡ç¥¨åç§°æ‰€åœ¨ä½ç½®
+		current	: 3, 	//å½“å‰ä»·
+		rate	: null, //æ¶¨è·Œå¹…
+		compare : null, //æ˜¨æ”¶ä»·
+		digi	: 2, 	//å°æ•°ä½
 		bgCls	: false,
 		priceCls: "blue",
 		colCls	: "cor_blue",
 		upCls	: "fred",
 		downCls : "fgreen",
-		rsymbol : "@code@",   //´ıÌæ»»µÄ±êÊ¶·û
-		rvar	: "code",     //´ıÌæ»»µÄ±äÁ¿Ãû
+		rsymbol : "@code@",   //å¾…æ›¿æ¢çš„æ ‡è¯†ç¬¦
+		rvar	: "code",     //å¾…æ›¿æ¢çš„å˜é‡å
 		target  : "_self",
 		unit	: "%",
-		pre		: "+",		//ÉÏÕÇÊ±Ìí¼Ó
-		index	: 0, 	//Êı×éÖĞµÄÎ»ÖÃ
-		list	: null, //List¶ÔÏó
+		pre		: "+",		//ä¸Šæ¶¨æ—¶æ·»åŠ 
+		index	: 0, 	//æ•°ç»„ä¸­çš„ä½ç½®
+		list	: null, //Listå¯¹è±¡
 		init	: function(){
 			this.data = [];
 			return this;
@@ -144,7 +144,7 @@
 			for (var i=0; i<this.items.length; i++) {
 				codes = codes.concat( this.items[i].combineVar || this.items[i].codes );
 			}
-			//¿ªÊ¼Ñ­»·
+			//å¼€å§‹å¾ªç¯
 			var _self = this;
 			var loop = function(){
 				if (codes.length > 0) {

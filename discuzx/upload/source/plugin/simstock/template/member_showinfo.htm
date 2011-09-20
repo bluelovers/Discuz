@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> ¹ÉÃñÐÅÏ¢
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> è‚¡æ°‘ä¿¡æ¯
 	</div>
 </div>
 <link rel="stylesheet" type="text/css" href="{$hkimg}fore_style.css"/>
@@ -19,21 +19,21 @@ var u = {uid:"$m['uid']", uname:"$m['username']"};
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">{$m['username']} ÕÊ»§ÐÅÏ¢</h2>
+					<h2 class="mbm xs2">{$m['username']} å¸æˆ·ä¿¡æ¯</h2>
 				</caption>
 				<tr>
-					<td>³õÊ¼×Ê½ð£º<span id="InitFund"></span></td>
-					<td>ÕÊ»§×ÜÖµ£º<span id="TotalFund"></span></td>
-					<td>¿ÉÓÃ×Ê½ð£º<span id="AvailableFund"></span></td>
-					<td>¹ÉÆ±ÊÐÖµ£º<span id="StockFund"></span></td>
-					<td>ÕÊ»§Ó¯¿÷£º<span id="StockProfit"></span></td>
+					<td>åˆå§‹èµ„é‡‘ï¼š<span id="InitFund"></span></td>
+					<td>å¸æˆ·æ€»å€¼ï¼š<span id="TotalFund"></span></td>
+					<td>å¯ç”¨èµ„é‡‘ï¼š<span id="AvailableFund"></span></td>
+					<td>è‚¡ç¥¨å¸‚å€¼ï¼š<span id="StockFund"></span></td>
+					<td>å¸æˆ·ç›ˆäºï¼š<span id="StockProfit"></span></td>
 				</tr>
 				<tr>
-					<td>ÕûÌåÊÕÒæÂÊ£º<span id="total_profit_ratio"></span></td>
-					<td>½ñÈÕÊÕÒæÂÊ£º<span id="d1_profit_ratio"></span></td>
-					<td>ÎåÈÕÊÕÒæÂÊ£º<span id="d5_profit_ratio"></span></td>
-					<td>½»Ò×³É¹¦ÂÊ£º<span id="profit_sell_ratio"></span></td>
-					<td>±ÈÈüÅÅÃû£º<span id="TotalRank"></span></td>
+					<td>æ•´ä½“æ”¶ç›ŠçŽ‡ï¼š<span id="total_profit_ratio"></span></td>
+					<td>ä»Šæ—¥æ”¶ç›ŠçŽ‡ï¼š<span id="d1_profit_ratio"></span></td>
+					<td>äº”æ—¥æ”¶ç›ŠçŽ‡ï¼š<span id="d5_profit_ratio"></span></td>
+					<td>äº¤æ˜“æˆåŠŸçŽ‡ï¼š<span id="profit_sell_ratio"></span></td>
+					<td>æ¯”èµ›æŽ’åï¼š<span id="TotalRank"></span></td>
 				</tr>
 			</table>
 		</div>
@@ -41,10 +41,10 @@ var u = {uid:"$m['uid']", uname:"$m['username']"};
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2"><span id="stockname"></span>ÓÃ»§ÐÅÏ¢²éÑ¯Ê§°Ü</h2>
+					<h2 class="mbm xs2"><span id="stockname"></span>ç”¨æˆ·ä¿¡æ¯æŸ¥è¯¢å¤±è´¥</h2>
 				</caption>
 				<tr>
-					<td>¶Ô²»Æð£¬ÄúÎÞÈ¨²é¿´¸ÃÓÃ»§ÐÅÏ¢£¡</td>
+					<td>å¯¹ä¸èµ·ï¼Œæ‚¨æ— æƒæŸ¥çœ‹è¯¥ç”¨æˆ·ä¿¡æ¯ï¼</td>
 				</tr>
 			</table>
 		</div>
@@ -52,15 +52,15 @@ var u = {uid:"$m['uid']", uname:"$m['username']"};
 		<div id="holdListHd" class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<tr>
-					<th width="11%">¹ÉÆ±´úÂë</th>
-					<th width="11%">¹ÉÆ±Ãû³Æ</th>
-					<th width="11%">µ±Ç°³Ö¹É</th>
-					<th width="11%">¿ÉÓÃ¹ÉÊý</th>
-					<th width="11%">³Ö¹ÉÊÐÖµ</th>
-					<th width="11%">µ±Ç°¼Û</th>
-					<th width="11%">³É±¾¼Û</th>
-					<th width="11%">¸¡¶¯Ó¯¿÷</th>
-					<th>Ó¯¿÷±ÈÀý</th>
+					<th width="11%">è‚¡ç¥¨ä»£ç </th>
+					<th width="11%">è‚¡ç¥¨åç§°</th>
+					<th width="11%">å½“å‰æŒè‚¡</th>
+					<th width="11%">å¯ç”¨è‚¡æ•°</th>
+					<th width="11%">æŒè‚¡å¸‚å€¼</th>
+					<th width="11%">å½“å‰ä»·</th>
+					<th width="11%">æˆæœ¬ä»·</th>
+					<th width="11%">æµ®åŠ¨ç›ˆäº</th>
+					<th>ç›ˆäºæ¯”ä¾‹</th>
 				</tr>
 			</table>
 			<script id="holdTemplate" type="text/x-jquery-tmpl">
@@ -88,15 +88,15 @@ var u = {uid:"$m['uid']", uname:"$m['username']"};
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li><a href="$baseScript">ÐÐÇéÖÐÐÄ</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">ÐÂÎÅÖÐÐÄ</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">´óÈü°ñµ¥</a></li>
-				<li><a href="$baseScript&mod=system&act=help">±ÈÈü¹æÔò</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">×Ê½ð¹ÜÀí</a></li>
-				<li class="a"><a href="$baseScript&mod=member&act=stocksmng">ÕÊ»§³Ö²Ö</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">½»Ò×²éÑ¯</a></li>
-				<li><a href="$baseScript&mod=member&act=buy">ÂòÈë¹ÉÆ±</a></li>
-				<li><a href="$baseScript&mod=member&act=sell">Âô³ö¹ÉÆ±</a></li>
+				<li><a href="$baseScript">è¡Œæƒ…ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">æ–°é—»ä¸­å¿ƒ</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">å¤§èµ›æ¦œå•</a></li>
+				<li><a href="$baseScript&mod=system&act=help">æ¯”èµ›è§„åˆ™</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">èµ„é‡‘ç®¡ç†</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=stocksmng">å¸æˆ·æŒä»“</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">äº¤æ˜“æŸ¥è¯¢</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">ä¹°å…¥è‚¡ç¥¨</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">å–å‡ºè‚¡ç¥¨</a></li>
 			</ul>
 		</div>
 	</div>

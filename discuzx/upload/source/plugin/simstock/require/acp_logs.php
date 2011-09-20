@@ -37,15 +37,15 @@ class Logs
 			{
 				if ( $rslog['action'] == 1 )
 				{
-					$rslog['action'] = 'Î¯ÍÐÂòÈë';
+					$rslog['action'] = 'å§”æ‰˜ä¹°å…¥';
 				}
 				else if ( $rslog['action'] == 2 )
 				{
-					$rslog['action'] = 'Î¯ÍÐÂô³ö';
+					$rslog['action'] = 'å§”æ‰˜å–å‡º';
 				}
 				else if ( $rslog['action'] == 9 )
 				{
-					$rslog['action'] = "É¾³ýÈÕÖ¾ {$rslog['amount']} Ìõ";
+					$rslog['action'] = "åˆ é™¤æ—¥å¿— {$rslog['amount']} æ¡";
 					$rslog['stockcode'] = '-';
 					$rslog['amount'] = '-';
 					$rslog['price'] = '-';
@@ -74,7 +74,7 @@ class Logs
 			DB::query("INSERT INTO ".DB::table('kfss_exclog')." (action, uname, amount, logtime, ip) VALUES(9, '{$_G['username']}', '{$ttlnum}', '$_G[timestamp]', '$_G[clientip]')");
 		}
 		$baseScript .= '&mod=logs';
-		cpmsg("ÒÑ³É¹¦É¾³ý {$ttlnum} ÌõÏµÍ³ÈÕÖ¾£¡", $baseScript, 'succeed');
+		cpmsg("å·²æˆåŠŸåˆ é™¤ {$ttlnum} æ¡ç³»ç»Ÿæ—¥å¿—ï¼", $baseScript, 'succeed');
 	}
 }
 ?>

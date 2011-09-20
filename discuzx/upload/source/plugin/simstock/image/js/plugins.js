@@ -616,49 +616,49 @@ jQuery.cookie = function(name, value, options) {
  * @author Tongye
  */
 /*
- * HQDataLoader ÓÃÓÚÑ­»·»ñÈ¡HQÊı¾İ,Í£ÅÌºó²»ÔÙÖØ¸´»ñÈ¡,¿ªÅÌÊ±ÔÙ×Ô¶¯¿ªÆô
+ * HQDataLoader ç”¨äºå¾ªç¯è·å–HQæ•°æ®,åœç›˜åä¸å†é‡å¤è·å–,å¼€ç›˜æ—¶å†è‡ªåŠ¨å¼€å¯
  *
- * ÊôĞÔ£º
- *  inter       : 1000 * 5,     //¿ÉÑ¡¡£Ä¬ÈÏÑ­»·Ê±¼ä
- *  step		: 1000 * 120, 	//¿ÉÑ¡¡£Í£ÅÌÊ±£¬×î¶Ì¸ô¶à³¤Ê±¼äÔÙÈ¥ÄÃÊı¾İ£¬ÒÔmsÎªµ¥Î»
- *	activeWeek	: [1,2,3,4,5],  //¿ÉÑ¡¡£ĞÇÆÚ¼¸¿ªÅÌ 1 -> 7
- *	activeHour	: ["9:15-11:30", "12:60-15:00"], //¿ÉÑ¡¡£Ã¿Ìì¿ªÅÌÊ±¼ä
- * 	extend		: 2, 			//¿ÉÑ¡¡£ÔÊĞí¿íÏŞµÄ½»Ò×Ê±¼ä£¬ÒÔ·ÖÖÓÎªµ¥Î» 9:13-11:32
+ * å±æ€§ï¼š
+ *  inter       : 1000 * 5,     //å¯é€‰ã€‚é»˜è®¤å¾ªç¯æ—¶é—´
+ *  step		: 1000 * 120, 	//å¯é€‰ã€‚åœç›˜æ—¶ï¼Œæœ€çŸ­éš”å¤šé•¿æ—¶é—´å†å»æ‹¿æ•°æ®ï¼Œä»¥msä¸ºå•ä½
+ *	activeWeek	: [1,2,3,4,5],  //å¯é€‰ã€‚æ˜ŸæœŸå‡ å¼€ç›˜ 1 -> 7
+ *	activeHour	: ["9:15-11:30", "12:60-15:00"], //å¯é€‰ã€‚æ¯å¤©å¼€ç›˜æ—¶é—´
+ * 	extend		: 2, 			//å¯é€‰ã€‚å…è®¸å®½é™çš„äº¤æ˜“æ—¶é—´ï¼Œä»¥åˆ†é’Ÿä¸ºå•ä½ 9:13-11:32
  *
- * ·½·¨£º
- *  add( nick, config )	         Ìí¼ÓÊı¾İÔ´
- *  remove( nick )				 É¾³ıÊı¾İÔ´
- *  update( nick, config )       ¸üĞÂÊı¾İÔ´
+ * æ–¹æ³•ï¼š
+ *  add( nick, config )	         æ·»åŠ æ•°æ®æº
+ *  remove( nick )				 åˆ é™¤æ•°æ®æº
+ *  update( nick, config )       æ›´æ–°æ•°æ®æº
  *
- *       string nick   		:	 Ã¿¸öÊı¾İÔ´µÄ±ğÃû
+ *       string nick   		:	 æ¯ä¸ªæ•°æ®æºçš„åˆ«å
  *       object config
- *        	array  codes	:    ±ØÑ¡¡£¹ÉÆ±´úÂëµÄÊı×é ["sh000006", "s_sh600004", ... ]
- *        	number inter	:    ¿ÉÑ¡¡£Ñ­»·Ê±¼ä,Ä¬ÈÏÎªHQDataLoaderµÄÊ±¼ä
- *        	bool   loop		:    ¿ÉÑ¡¡£ÊÇ·ñĞèÒªÑ­»·,Ä¬ÈÏtrue
- *          bool   random   :    ¿ÉÑ¡¡£ÊÇ·ñÔö¼ÓËæ»úÊı Ä¬ÈÏfalse
+ *        	array  codes	:    å¿…é€‰ã€‚è‚¡ç¥¨ä»£ç çš„æ•°ç»„ ["sh000006", "s_sh600004", ... ]
+ *        	number inter	:    å¯é€‰ã€‚å¾ªç¯æ—¶é—´,é»˜è®¤ä¸ºHQDataLoaderçš„æ—¶é—´
+ *        	bool   loop		:    å¯é€‰ã€‚æ˜¯å¦éœ€è¦å¾ªç¯,é»˜è®¤true
+ *          bool   random   :    å¯é€‰ã€‚æ˜¯å¦å¢åŠ éšæœºæ•° é»˜è®¤false
  *
- *  on( nick, function )	     Ôö¼ÓÄ³Êı¾İÔ´µÄ¼àÌıÕß
- *  un( nick, function )         É¾³ıÄ³Êı¾İÔ´µÄ¼àÌıÕß
- *  	»Øµ÷º¯Êı½ÓÊÕµÄµÚÒ»¸ö²ÎÊıÎª½âÎöcodesºóµÄÊı×éÊı¾İ
+ *  on( nick, function )	     å¢åŠ æŸæ•°æ®æºçš„ç›‘å¬è€…
+ *  un( nick, function )         åˆ é™¤æŸæ•°æ®æºçš„ç›‘å¬è€…
+ *  	å›è°ƒå‡½æ•°æ¥æ”¶çš„ç¬¬ä¸€ä¸ªå‚æ•°ä¸ºè§£æcodesåçš„æ•°ç»„æ•°æ®
  *
- *  start( [nick] )              ¿ªÆônickÊı¾İÔ´,µ±²ÎÊıÎª¿ÕÈ«²¿¿ªÆô
- *  stop ( [nick] )              ¹Ø±ÕnickÊı¾İÔ´,µ±²ÎÊıÎª¿ÕÈ«²¿¹Ø±Õ
- *  status( nick )				 »ñÈ¡nickÊı¾İµÄ×´Ì¬, trueÎªÕıÔÚÔËĞĞ, falseÎªÍ£Ö¹, nullÎª²»´æÔÚ
+ *  start( [nick] )              å¼€å¯nickæ•°æ®æº,å½“å‚æ•°ä¸ºç©ºå…¨éƒ¨å¼€å¯
+ *  stop ( [nick] )              å…³é—­nickæ•°æ®æº,å½“å‚æ•°ä¸ºç©ºå…¨éƒ¨å…³é—­
+ *  status( nick )				 è·å–nickæ•°æ®çš„çŠ¶æ€, trueä¸ºæ­£åœ¨è¿è¡Œ, falseä¸ºåœæ­¢, nullä¸ºä¸å­˜åœ¨
  *
- *  setTime( number )            ÉèÖÃµ±Ç°Ê±¼ä£¬ÓÃÓÚÅĞ¶ÏÊÇ·ñÍ£ÅÌ
- * Èç¹ûĞèÒª¸ü¶à¹¦ÄÜ¿ÉÒÔ¼Ì³Ğ DataLoader ½øĞĞ×Ô¶¨Òå
+ *  setTime( number )            è®¾ç½®å½“å‰æ—¶é—´ï¼Œç”¨äºåˆ¤æ–­æ˜¯å¦åœç›˜
+ * å¦‚æœéœ€è¦æ›´å¤šåŠŸèƒ½å¯ä»¥ç»§æ‰¿ DataLoader è¿›è¡Œè‡ªå®šä¹‰
  *
 */
 (function($){
 /*
- * DataLoader Í¨¹ıÑ­»·¼ÓÔØscript·½Ê½»ñµÃÊı¾İ£¬²¢¸ºÔğ·ÖÅä
+ * DataLoader é€šè¿‡å¾ªç¯åŠ è½½scriptæ–¹å¼è·å¾—æ•°æ®ï¼Œå¹¶è´Ÿè´£åˆ†é…
 */
 $.DataLoader = function( config ){
 	this.init( config );
 	return this;
 };
 /*
- * Action ¸ºÔğ¼ÓÔØscript²¢»Øµ÷
+ * Action è´Ÿè´£åŠ è½½scriptå¹¶å›è°ƒ
  */
 $.DataLoader.Action	= function( config ){
 	this.init( config );
@@ -689,18 +689,18 @@ $.DataLoader.Action.prototype = {
 				if ( force ){
 					s.onBeforeLoad( s );
 				}else
-					//´¥·¢ÊÂ¼ş Èç¹û·µ»ØfalseÔò²»¼ÓÔØscript
+					//è§¦å‘äº‹ä»¶ å¦‚æœè¿”å›falseåˆ™ä¸åŠ è½½script
 					if ( s.onBeforeLoad( s ) === false )
 						return;
 					var url = s.random ? s.url.replace(/(\?|&)_=.*?(&|$)/, "$1_=" + (new Date()).getTime() + "$2")  : s.url;
 					$.get( url, s.data, function(){
-						//»Øµ÷
+						//å›è°ƒ
 						s.call( s );
 					}, "script" );
 			}
 			if (this.loop) {
 				this.timer = setInterval(  fn, this.inter );
-				//Á¢¿ÌÖ´ĞĞÒ»´Î
+				//ç«‹åˆ»æ‰§è¡Œä¸€æ¬¡
 				if ( this.immediate )
 					fn();
 			}else
@@ -749,7 +749,7 @@ $.DataLoader.prototype = {
 		nick	: null,
 		immediate	: true,
 		/*
-		 * Ã¿¸ögroupµ÷ÓÃÄÇ¸öÇ°»á´¥·¢¸ÃÊÂ¼ş
+		 * æ¯ä¸ªgroupè°ƒç”¨é‚£ä¸ªå‰ä¼šè§¦å‘è¯¥äº‹ä»¶
 		 */
 		onBeforeLoad: function(){}
 	},
@@ -759,7 +759,7 @@ $.DataLoader.prototype = {
 		$.extend( this, config );
 	},
 	/*
-	 * Ôö¼Ó»Øµ÷·½·¨
+	 * å¢åŠ å›è°ƒæ–¹æ³•
 	*/
 	on			: function( nick, fn, scope ){
 		var g = this.items[nick];
@@ -769,7 +769,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * É¾³ı»Øµ÷·½·¨
+	 * åˆ é™¤å›è°ƒæ–¹æ³•
 	*/
 	un			: function( nick, fn ){
 		var g = this.items[nick];
@@ -779,7 +779,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * Ìí¼ÓÊı¾İÔ´
+	 * æ·»åŠ æ•°æ®æº
 	*/
 	add			: function( nick, config ){
 		if (!this.items[nick]) {
@@ -791,7 +791,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * É¾³ıÊı¾İÔ´ nick = string
+	 * åˆ é™¤æ•°æ®æº nick = string
 	*/
 	remove		: function( nick ){
 		this.stop( nick );
@@ -799,7 +799,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * ¸üĞÂÊı¾İÔ´ nick = string
+	 * æ›´æ–°æ•°æ®æº nick = string
 	*/
 	update		: function( nick, config ){
 		var g = this.items[nick];
@@ -808,7 +808,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * ¿ªÆôÊı¾İÔ´ µ±ÎŞ²ÎÊıÊ±,È«²¿¿ªÆô
+	 * å¼€å¯æ•°æ®æº å½“æ— å‚æ•°æ—¶,å…¨éƒ¨å¼€å¯
 	*/
 	start		: function( nick ){
 		if (nick == undefined) {
@@ -824,7 +824,7 @@ $.DataLoader.prototype = {
 		return this;
 	},
 	/*
-	 * ¹Ø±ÕÊı¾İÔ´ µ±ÎŞ²ÎÊıÊ±,È«²¿¹Ø±Õ
+	 * å…³é—­æ•°æ®æº å½“æ— å‚æ•°æ—¶,å…¨éƒ¨å…³é—­
 	*/
 	stop		: function( nick ){
 		if (nick == undefined) {
@@ -848,7 +848,7 @@ $.DataLoader.prototype = {
 	}
 };
 /*
- * Group ¹ÉÆ±´úÂëµÄ¼¯ºÏ
+ * Group è‚¡ç¥¨ä»£ç çš„é›†åˆ
 */
 $.DataLoader.Group	= function( config ){
 	this.init( config );
@@ -887,21 +887,21 @@ $.extend( $.DataLoader.Group.prototype, $.DataLoader.Action.prototype, {
 	}
 } );
 /*
- * HpDataLoader ¹ÉÆ±´úÂëµÄ¼¯ºÏ
+ * HpDataLoader è‚¡ç¥¨ä»£ç çš„é›†åˆ
 */
 $.HQDataLoader = function( config ){
 	this.init( config );
 	return this;
 };
 $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
-	extend		: 2, //ÒÔ·ÖÖÓÎªµ¥Î»
-	step		: 1000 * 120, //µ±²»ÔÚ½»Ò×Ê±£¬×î¶Ì¸ô¶à³¤Ê±¼äÈ¥ÄÃÊı¾İ ÒÔmsÎªµ¥Î»
-	activeWeek	: [1,2,3,4,5], //ĞÇÆÚ¼¸¿ªÅÌ 1 -> 7
-	activeHour	: ["9:15-11:30", "12:60-15:00"], //Ã¿Ìì¿ªÅÌÊ±¼ä
-	inter		: 1000 * 30,  //1000*5, //5Ãë
+	extend		: 2, //ä»¥åˆ†é’Ÿä¸ºå•ä½
+	step		: 1000 * 120, //å½“ä¸åœ¨äº¤æ˜“æ—¶ï¼Œæœ€çŸ­éš”å¤šé•¿æ—¶é—´å»æ‹¿æ•°æ® ä»¥msä¸ºå•ä½
+	activeWeek	: [1,2,3,4,5], //æ˜ŸæœŸå‡ å¼€ç›˜ 1 -> 7
+	activeHour	: ["9:15-11:30", "12:60-15:00"], //æ¯å¤©å¼€ç›˜æ—¶é—´
+	inter		: 1000 * 30,  //1000*5, //5ç§’
 	defaults	: {
-		mgr		: null,  //³õÊ¼»¯Ê±ÉèÖÃÎªHpDataLoaderÊµÀı
-		loop	: true,  //Ä¬ÈÏÑ­»·
+		mgr		: null,  //åˆå§‹åŒ–æ—¶è®¾ç½®ä¸ºHpDataLoaderå®ä¾‹
+		loop	: true,  //é»˜è®¤å¾ªç¯
 		url		: "http://hq.sinajs.cn/",
 		data	: null,
 		nick	: null,
@@ -911,7 +911,7 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 				return;
 			var d = g.time, diff = 0;
 			var we= d.getDay();
-			if ( we == 0 ) //Èç¹ûÊÇÖÜÌì ÔòÈÃwe = 7£¬±ãÓÚÀí½â
+			if ( we == 0 ) //å¦‚æœæ˜¯å‘¨å¤© åˆ™è®©we = 7ï¼Œä¾¿äºç†è§£
 				we = 7;
 			if ( $.inArray( we, g.activeWeek ) > -1 ){
 				var n = d.getTime(),
@@ -931,7 +931,7 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 				}
 			}else
 				diff = 1 * 3600 * 1000;
-			//Èç¹û²»ÊÇ½»Ò×Ê±¼äÔòÏÈ¹Ø±Õ,µÈ´ıdiffÊ±¼äºóÔÙ¿ªÆô
+			//å¦‚æœä¸æ˜¯äº¤æ˜“æ—¶é—´åˆ™å…ˆå…³é—­,ç­‰å¾…diffæ—¶é—´åå†å¼€å¯
 			if (diff != 0) {
 				s.stop();
 				diff = Math.min( g.step, diff );
@@ -939,7 +939,7 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 					s.start( true )
 				}, diff );
 			}
-			//·µ»ØbooleanÖµ
+			//è¿”å›booleanå€¼
 			return diff == 0;
 		}
 	},
@@ -951,7 +951,7 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 		$.extend( this, config );
 	},
 	/*
-	 * override add ×Ô¶¯Æ´½Óurl configÖĞµÃÓĞcodesÊôĞÔ
+	 * override add è‡ªåŠ¨æ‹¼æ¥url configä¸­å¾—æœ‰codeså±æ€§
 	*/
 	add			: function( nick, config ){
 		if (!this.items[nick]) {
@@ -964,7 +964,7 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 		return this;
 	},
 	/*
-	 * override update ¸üĞÂurl
+	 * override update æ›´æ–°url
 	*/
 	update		: function( nick, config ){
 		var g = this.items[nick];
@@ -975,12 +975,12 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 		return this;
 	},
 	/*
-	 * ½âÎöÊ±¼äÎª [ { from, to }, { from, to }, .. ]
+	 * è§£ææ—¶é—´ä¸º [ { from, to }, { from, to }, .. ]
 	*/
 	setTime		: function( n ){
 		this.time = new Date();
 		this.time.setTime( n );
-		//½âÎö¿ªÅÌÊ±¼ä
+		//è§£æå¼€ç›˜æ—¶é—´
 		var hour = this.activeHour, after = [], extend = this.extend;
 		function cd(){
 			var tmp = new Date();
@@ -1005,33 +1005,33 @@ $.extend( $.HQDataLoader.prototype, $.DataLoader.prototype, {
 /**
  * @author tongye
  *
- * LoginManager µÇÂ¼¹ÜÀíÆ÷£¬µ¥ÀıÄ£Ê½£¬ÎŞĞènew
+ * LoginManager ç™»å½•ç®¡ç†å™¨ï¼Œå•ä¾‹æ¨¡å¼ï¼Œæ— éœ€new
  *
- * ²ÎÊı£º
- * entry,service : Í³Ò»µÇÂ¼ÓÃÀ´×öÍ³¼ÆµÄ Ä¬ÈÏ finance
- * logon		 £ºµ±Ç°ÓÃ»§µÇÂ¼×´Ì¬
- * user			 £ºÓÃ»§ĞÅÏ¢ Î´µÇÂ¼Ê±Îªnull
- * monitor		 : ÊÇ·ñ¿ªÆô¼àÊÓÆ÷
- * inter		 £ºÑ­»·¼ì²éÊ±¼ä¼ä¸ô Ä¬ÈÏÎª1s
+ * å‚æ•°ï¼š
+ * entry,service : ç»Ÿä¸€ç™»å½•ç”¨æ¥åšç»Ÿè®¡çš„ é»˜è®¤ finance
+ * logon		 ï¼šå½“å‰ç”¨æˆ·ç™»å½•çŠ¶æ€
+ * user			 ï¼šç”¨æˆ·ä¿¡æ¯ æœªç™»å½•æ—¶ä¸ºnull
+ * monitor		 : æ˜¯å¦å¼€å¯ç›‘è§†å™¨
+ * inter		 ï¼šå¾ªç¯æ£€æŸ¥æ—¶é—´é—´éš” é»˜è®¤ä¸º1s
  *
- * ·½·¨£º
- * startMonitor  : ¿ªÆô¼àÊÓÆ÷  µÚÒ»¸ö²ÎÊıÑ­»·¼ì²éÊ±¼ä
- * stopMonitor	 £ºÍ£Ö¹¼àÊÓÆ÷
- * checkImmediate£º Á¢¼´¼ì²é
- * add			 £ºÌí¼ÓLoginComponentÄ£¿é ²ÎÊı¿ÉÎªÊµÀıÒ²¿ÉÎªÅäÖÃ²ÎÊı
+ * æ–¹æ³•ï¼š
+ * startMonitor  : å¼€å¯ç›‘è§†å™¨  ç¬¬ä¸€ä¸ªå‚æ•°å¾ªç¯æ£€æŸ¥æ—¶é—´
+ * stopMonitor	 ï¼šåœæ­¢ç›‘è§†å™¨
+ * checkImmediateï¼š ç«‹å³æ£€æŸ¥
+ * add			 ï¼šæ·»åŠ LoginComponentæ¨¡å— å‚æ•°å¯ä¸ºå®ä¾‹ä¹Ÿå¯ä¸ºé…ç½®å‚æ•°
  */
 var LoginManager = function(){
 	return this;
 };
 LoginManager.prototype = {
 	entry 	: 'finance',
-	inter	: 1000,		//Ñ­»·¼ì²éÊ±¼ä¼ä¸ô
+	inter	: 1000,		//å¾ªç¯æ£€æŸ¥æ—¶é—´é—´éš”
 	logon	: false,
 	user	: null,
-	monitor : false,	//ÊÇ·ñ¿ªÆô¼àÊÓÆ÷
+	monitor : false,	//æ˜¯å¦å¼€å¯ç›‘è§†å™¨
 	actionType : true,	//post
 	_timer	: null,
-	_components	: [],		//´æ·Å´ıÌí¼ÓµÄÄ£¿é
+	_components	: [],		//å­˜æ”¾å¾…æ·»åŠ çš„æ¨¡å—
 	init	: function( config ){
 		$.extend( this, config );
 		if ( !window.LoginComponent ){
@@ -1041,29 +1041,29 @@ LoginManager.prototype = {
 		return this;
 	},
 	startMonitor	: function( inter ){
-		if ( this._timer )		//Ö»ÄÜ¿ªÆôÒ»¸ö¼àÊÓÆ÷
+		if ( this._timer )		//åªèƒ½å¼€å¯ä¸€ä¸ªç›‘è§†å™¨
 			return;
 		this.inter = inter || this.inter || 1000;
-		//ÉèÖÃ¼àÊÓÆ÷
+		//è®¾ç½®ç›‘è§†å™¨
 		if ( !isNaN(this.inter) && this.inter > 0) {
 			this.monitor = true;
 			this._setComponents();
 			var t = this;
-			this._timer = setInterval( function(){	//¶¨Ê±Æ÷
+			this._timer = setInterval( function(){	//å®šæ—¶å™¨
 				t._loopCheck();
 			}, this.inter );
 		}
 		return this;
 	},
 	stopMonitor	: function(){
-		//Çå³ı¼àÊÓÆ÷
+		//æ¸…é™¤ç›‘è§†å™¨
 		if ( this._timer ){
 			clearInterval( this._timer );
 			this._timer = null;
 		}
 		this._resumeComponents();
 	},
-	//Ö÷¹¦ÄÜ Ñ­»·¼ì²écookie
+	//ä¸»åŠŸèƒ½ å¾ªç¯æ£€æŸ¥cookie
 	_loopCheck	: function(){
 		var userinfo = u;
 		if ( userinfo == null && this.logon ){
@@ -1076,32 +1076,32 @@ LoginManager.prototype = {
 			this._onLogin( this.user );
 		}
 	},
-	//Á¢¼´¼ì²é
+	//ç«‹å³æ£€æŸ¥
 	checkImmediate 	: function(){
 		this._loopCheck();
 	},
-	//µ±Ò»¸ö×é¼şµÇÂ¼×´Ì¬³É¹¦¸ü¸Äºó£¬Í¬Ê±Í¨ÖªÆäËû×é¼şµÇÂ¼×´Ì¬ÒÑ¾­ĞŞ¸Ä
+	//å½“ä¸€ä¸ªç»„ä»¶ç™»å½•çŠ¶æ€æˆåŠŸæ›´æ”¹åï¼ŒåŒæ—¶é€šçŸ¥å…¶ä»–ç»„ä»¶ç™»å½•çŠ¶æ€å·²ç»ä¿®æ”¹
 	_setComponents	: function(){
 		for (var i=0; i<this._components.length; i++) {
 			this._setComponent( this._components[ i ] );
 		}
 	},
 	_setComponent	: function( c ){
-		//ÉèÖÃ»Øµ÷º¯Êı×÷ÓÃÓò
+		//è®¾ç½®å›è°ƒå‡½æ•°ä½œç”¨åŸŸ
 		var t = this;
 		var callback = function(){
 			t.checkImmediate();
 		}
 		c._onLoginSuccess = c.onLoginSuccess;
 		c._onLogoutSuccess = c.onLogoutSuccess;
-		//ÖØĞÂÉèÖÃ»Øµ÷º¯Êı
+		//é‡æ–°è®¾ç½®å›è°ƒå‡½æ•°
 		c.onLoginSuccess = callback;
 		c.onLogoutSuccess = callback;
 	},
 	_resumeComponents	: function(){
 		for (var i=0; i<this._components.length; i++) {
 			var c = this._components[ i ];
-			//ÖØĞÂÉèÖÃ»Øµ÷º¯Êı
+			//é‡æ–°è®¾ç½®å›è°ƒå‡½æ•°
 			c.onLoginSuccess = c._onLoginSuccess ;
 			c.onLogoutSuccess = c._onLogoutSuccess;
 		}
@@ -1123,10 +1123,10 @@ LoginManager.prototype = {
 	add			: function( component ){
 		if ( !component )
 			return this;
-		//Èç¹ûÒÑ¾­¿ªÆô¼àÊÓÆ÷
+		//å¦‚æœå·²ç»å¼€å¯ç›‘è§†å™¨
 		if (this._timer) {
 			this._setComponent(component);
-			//Èç¹ûÒÑ¾­µÇÂ¼ÁË µ÷ÓÃonLoginSuccess
+			//å¦‚æœå·²ç»ç™»å½•äº† è°ƒç”¨onLoginSuccess
 			if ( this.logon && component._onLoginSuccess )
 				component._onLoginSuccess( this.user );
 		}
@@ -1137,26 +1137,26 @@ LoginManager.prototype = {
 		return this._components[ i ];
 	}
 };
-//µ¥Àı
+//å•ä¾‹
 LoginManager = new LoginManager();
 /**
  * @author tongye
  *
- * LoginComponent µÇÂ¼×é¼ş
+ * LoginComponent ç™»å½•ç»„ä»¶
  *
- * ²ÎÊı£º
- * name	: ÓÃ»§ÃûÊäÈë¿ò
- * paw	: ÃÜÂëÊäÈë¿ò
- * remember : ÊÇ·ñ¼Ç×¡µÇÂ¼×´Ì¬ ¿ÉÎªÊı×ÖÒ²¿ÉÎªDOM
- * login: µÇÂ¼°´Å¥
- * logout : µÇ³ö°´Å¥
- * onSubmit : ¿ÉÖØĞ´¸Ã·½·¨ ½øĞĞ¸ü¶àµÄ¼ìÑé  ·µ»ØfalseÑéÖ¤²»Í¨¹ı / true Í¨¹ı
+ * å‚æ•°ï¼š
+ * name	: ç”¨æˆ·åè¾“å…¥æ¡†
+ * paw	: å¯†ç è¾“å…¥æ¡†
+ * remember : æ˜¯å¦è®°ä½ç™»å½•çŠ¶æ€ å¯ä¸ºæ•°å­—ä¹Ÿå¯ä¸ºDOM
+ * login: ç™»å½•æŒ‰é’®
+ * logout : ç™»å‡ºæŒ‰é’®
+ * onSubmit : å¯é‡å†™è¯¥æ–¹æ³• è¿›è¡Œæ›´å¤šçš„æ£€éªŒ  è¿”å›falseéªŒè¯ä¸é€šè¿‡ / true é€šè¿‡
  *
- * ·½·¨£º
- * onLoginSuccess	: µÇÂ¼³É¹¦»Øµ÷ µÚÒ»¸ö²ÎÊıÓÃ»§ĞÅÏ¢
- * onLoginFailed	: µÇÂ¼Ê§°Ü»Øµ÷ µÚÒ»¸ö²ÎÊıÊ§°ÜÔ­Òò
- * onLogoutSuccess	: µÇ³ö³É¹¦
- * onLogoutFailed	: µÇ³öÊ§°Ü     µÚÒ»¸ö²ÎÊıÊ§°ÜÔ­Òò
+ * æ–¹æ³•ï¼š
+ * onLoginSuccess	: ç™»å½•æˆåŠŸå›è°ƒ ç¬¬ä¸€ä¸ªå‚æ•°ç”¨æˆ·ä¿¡æ¯
+ * onLoginFailed	: ç™»å½•å¤±è´¥å›è°ƒ ç¬¬ä¸€ä¸ªå‚æ•°å¤±è´¥åŸå› 
+ * onLogoutSuccess	: ç™»å‡ºæˆåŠŸ
+ * onLogoutFailed	: ç™»å‡ºå¤±è´¥     ç¬¬ä¸€ä¸ªå‚æ•°å¤±è´¥åŸå› 
  */
 function LoginComponent( config ){
 	$.extend( this, config );
@@ -1167,13 +1167,13 @@ $.extend( LoginComponent.prototype ,{
 	psw		: null,		//dom,id
 	remember: null,		//int, dom, id
 	login	: null,		//dom,id
-	days	: null,		//¼Ç×¡ÌìÊı
-	logout	: null,		//dom,id ¿ÉÑ¡ button
-	onSubmit: function(){ return true; },	//form Ìá½» ¿É¸²¸ÇÖ§³ÖÑéÖ¤Âë
+	days	: null,		//è®°ä½å¤©æ•°
+	logout	: null,		//dom,id å¯é€‰ button
+	onSubmit: function(){ return true; },	//form æäº¤ å¯è¦†ç›–æ”¯æŒéªŒè¯ç 
 	init	: function(  ){
 		this.inited = true;
 		var t = this;
-		//µÇÂ¼
+		//ç™»å½•
 		this.login = $( this.login ).click( function( e ){
 			t._check();
 		} );
@@ -1199,7 +1199,7 @@ $.extend( LoginComponent.prototype ,{
 	getDays	: function(){
 		//int
 		if ( this.remember != null && !isNaN( this.remember) ){
-			//Ê×ÏÈ²ÉÓÃremember£¬Ã»ÓĞÔò²ÉÓÃdays
+			//é¦–å…ˆé‡‡ç”¨rememberï¼Œæ²¡æœ‰åˆ™é‡‡ç”¨days
 			this.days = this.remember;
 		}else if ( this.remember ){
 			//DOM, id

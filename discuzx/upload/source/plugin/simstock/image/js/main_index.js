@@ -17,8 +17,8 @@ Industry.prototype = {
 	count	: 5,
 	init	: function()
 	{
-		this.up = [];   //ÁìÕÇ
-		this.down = [];  //Áìµø
+		this.up = [];   //é¢†æ¶¨
+		this.down = [];  //é¢†è·Œ
 		this.upTable = $(this.upTable);
 		this.downTable = $(this.downTable);
 	},
@@ -37,7 +37,7 @@ Industry.prototype = {
 			eval( "this.down = " + s );
 		}
 	},
-	//ËµÃ÷£º¡°ĞĞÒµÀàĞÍ¡±:¡±ĞĞÒµÀàĞÍ£¬ÖĞÎÄÃû³Æ£¬°üº¬¹ÉÆ±Êı£¬¾ù¼Û£¬ÕÇµø¶î£¬ÕÇµø·ù£¬³É½»Á¿£¨ÊÖ£©£¬³É½»¶î£¨ÍòÔª£©£¬ÁìÕÇ¹É£¬ÁìÕÇ¹ÉÕÇµø·ù£¬ÁìÕÇ¹Éµ±Ç°¼Û£¬ÁìÕÇ¹ÉÕÇµø¶î£¬ÁìÕÇ¹É¼ò³Æ£¬Áìµø¹É£¬Áìµø¹ÉÕÇµø·ù£¬Áìµø¹Éµ±Ç°¼Û£¬Áìµø¹ÉÕÇµø¶î£¬Áìµø¹É¹É¼ò³Æ¡±
+	//è¯´æ˜ï¼šâ€œè¡Œä¸šç±»å‹â€:â€è¡Œä¸šç±»å‹ï¼Œä¸­æ–‡åç§°ï¼ŒåŒ…å«è‚¡ç¥¨æ•°ï¼Œå‡ä»·ï¼Œæ¶¨è·Œé¢ï¼Œæ¶¨è·Œå¹…ï¼Œæˆäº¤é‡ï¼ˆæ‰‹ï¼‰ï¼Œæˆäº¤é¢ï¼ˆä¸‡å…ƒï¼‰ï¼Œé¢†æ¶¨è‚¡ï¼Œé¢†æ¶¨è‚¡æ¶¨è·Œå¹…ï¼Œé¢†æ¶¨è‚¡å½“å‰ä»·ï¼Œé¢†æ¶¨è‚¡æ¶¨è·Œé¢ï¼Œé¢†æ¶¨è‚¡ç®€ç§°ï¼Œé¢†è·Œè‚¡ï¼Œé¢†è·Œè‚¡æ¶¨è·Œå¹…ï¼Œé¢†è·Œè‚¡å½“å‰ä»·ï¼Œé¢†è·Œè‚¡æ¶¨è·Œé¢ï¼Œé¢†è·Œè‚¡è‚¡ç®€ç§°â€
 	showData	: function()
 	{
 		var body = this.createBody( this.up, 8 );
@@ -86,7 +86,7 @@ Industry = new Industry( {  upTable : "#upTable",  downTable : "#downTable"  } )
 Industry.start();
 jQuery( function(){
 	var $ = jQuery;
-	//ËùÓĞ¹ÉÆ±ÅÅĞĞ
+	//æ‰€æœ‰è‚¡ç¥¨æ’è¡Œ
 	var listMgr = new $.HQListMgr();
 	listMgr.push( new $.HQList({ el : "#allUpTable", defaults : {
 					link	: "plugin.php?id=simstock:index&mod=stock&act=showinfo&code=@code@",

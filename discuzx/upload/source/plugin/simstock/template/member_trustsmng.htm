@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]}</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> ���ײ�ѯ
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 交易查询
 	</div>
 </div>
 <div class="ct2_a wp cl bn">
@@ -10,22 +10,22 @@
 		<div class="bm bw0">
 <!--{if empty($_G['gp_section'])}-->
 			<ul class="tb cl">
-				<li class="a"><a href="javascript:return(0);">ί�м�¼</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng&section=tran">�ɽ���¼</a></li>
+				<li class="a"><a href="javascript:return(0);">委托记录</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng&section=tran">成交记录</a></li>
 			</ul>
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">ί�м�¼</h2>
+					<h2 class="mbm xs2">委托记录</h2>
 				</caption>
 				<tr>
-					<th>��Ʊ����</th>
-					<th>��Ʊ����</th>
-					<th>��������</th>
-					<th>ί�м۸�</th>
-					<th>ί������</th>
-					<th>�ɽ�״̬</th>
-					<th>ί��ʱ��</th>
-					<th>����</th>
+					<th>股票代码</th>
+					<th>股票名称</th>
+					<th>买卖方向</th>
+					<th>委托价格</th>
+					<th>委托数量</th>
+					<th>成交状态</th>
+					<th>委托时间</th>
+					<th>操作</th>
 				</tr>
 				<tbody>
 	<!--{loop $ddb $v}-->
@@ -44,21 +44,21 @@
 			</table>
 <!--{elseif $_G['gp_section']=='tran'}-->
 			<ul class="tb cl">
-				<li><a href="$baseScript&mod=member&act=trustsmng">ί�м�¼</a></li>
-				<li class="a"><a href="javascript:return(0);">�ɽ���¼</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">委托记录</a></li>
+				<li class="a"><a href="javascript:return(0);">成交记录</a></li>
 			</ul>
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">�ɽ���¼</h2>
+					<h2 class="mbm xs2">成交记录</h2>
 				</caption>
 				<tr>
-					<th>��Ʊ����</th>
-					<th>��Ʊ����</th>
-					<th>��������</th>
-					<th>�ɽ��۸�</th>
-					<th>�ɽ�����</th>
-					<th>�ɽ����</th>
-					<th>�ɽ�ʱ��</th>
+					<th>股票代码</th>
+					<th>股票名称</th>
+					<th>买卖方向</th>
+					<th>成交价格</th>
+					<th>成交数量</th>
+					<th>成交金额</th>
+					<th>成交时间</th>
 				</tr>
 				<tbody>
 	<!--{loop $tdb $v}-->
@@ -81,15 +81,15 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li><a href="$baseScript">��������</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">��������</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">������</a></li>
-				<li><a href="$baseScript&mod=system&act=help">��������</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">�ʽ����</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">�ʻ��ֲ�</a></li>
-				<li class="a"><a href="$baseScript&mod=member&act=trustsmng">���ײ�ѯ</a></li>
-				<li><a href="$baseScript&mod=member&act=buy">�����Ʊ</a></li>
-				<li><a href="$baseScript&mod=member&act=sell">������Ʊ</a></li>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li class="a"><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
 			</ul>
 		</div>
 	</div>

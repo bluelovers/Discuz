@@ -31,7 +31,7 @@ class Ajax
 			$needMoney = $_G['gp_price'] * $_G['gp_amount'];
 			if ( $user['fund_ava'] < $needMoney )
 			{
-				$retMsgs = 'ÓÃ»§¿ÉÓÃ×Ê½ğ²»×ã';
+				$retMsgs = 'ç”¨æˆ·å¯ç”¨èµ„é‡‘ä¸è¶³';
 			}
 			else
 			{
@@ -48,13 +48,13 @@ class Ajax
 					'ok'		=> '0'
 				);
 				DB::insert('kfss_deal', $dealData);
-				// Òì³£½»Ò×¼à²â
+				// å¼‚å¸¸äº¤æ˜“ç›‘æµ‹
 				if ( $_G['gp_amount'] > 10000 )
 				{
 					$exceptData = array(
 						'uid'		=> $user['uid'],
 						'uname'		=> $user['username'],
-						'action'	=> '1',	// Î¯ÍĞÂòÈë
+						'action'	=> '1',	// å§”æ‰˜ä¹°å…¥
 						'stockcode'	=> $_G['gp_code'],
 						'amount'	=> $_G['gp_amount'],
 						'price'		=> $_G['gp_price'],
@@ -71,7 +71,7 @@ class Ajax
 		}
 		else
 		{
-			$retMsgs = 'ÓÃ»§ ID ²»´æÔÚ';
+			$retMsgs = 'ç”¨æˆ· ID ä¸å­˜åœ¨';
 		}
 		echo "var ret='$retMsgs';";
 	}
@@ -87,13 +87,13 @@ class Ajax
 			{
 				if ( dgmdate($si['buytime'], 'd') == dgmdate($_G['timestamp'], 'd') )
 				{
-					$retMsgs = 'Ö´ĞĞ T+1 ¹æÔò£¬µ±ÈÕÂòÈë¹ÉÆ±£¬×îÔçÏÂÒ»½»Ò×ÈÕ²ÅÄÜÂô³ö';
+					$retMsgs = 'æ‰§è¡Œ T+1 è§„åˆ™ï¼Œå½“æ—¥ä¹°å…¥è‚¡ç¥¨ï¼Œæœ€æ—©ä¸‹ä¸€äº¤æ˜“æ—¥æ‰èƒ½å–å‡º';
 				}
 				else
 				{
 					if ( $si['stocknum_ava'] < $_G['gp_amount'] )
 					{
-						$retMsgs = 'ÄúÃ»ÓĞ×ã¹»µÄ¹ÉÆ±Âô³ö';
+						$retMsgs = 'æ‚¨æ²¡æœ‰è¶³å¤Ÿçš„è‚¡ç¥¨å–å‡º';
 					}
 					else
 					{
@@ -109,13 +109,13 @@ class Ajax
 							'ok'		=> '0'
 						);
 						DB::insert('kfss_deal', $dealData);
-						// Òì³£½»Ò×¼à²â
+						// å¼‚å¸¸äº¤æ˜“ç›‘æµ‹
 						if ( $_G['gp_amount'] > 10000 )
 						{
 							$exceptData = array(
 								'uid'		=> $user['uid'],
 								'uname'		=> $user['username'],
-								'action'	=> '2',	// Î¯ÍĞÂô³ö
+								'action'	=> '2',	// å§”æ‰˜å–å‡º
 								'stockcode'	=> $_G['gp_code'],
 								'amount'	=> $_G['gp_amount'],
 								'price'		=> $_G['gp_price'],
@@ -139,12 +139,12 @@ class Ajax
 			}
 			else
 			{
-				$retMsgs = 'Âô³öÊıÁ¿´íÎó';
+				$retMsgs = 'å–å‡ºæ•°é‡é”™è¯¯';
 			}
 		}
 		else
 		{
-			$retMsgs = 'ÓÃ»§ ID ²»´æÔÚ';
+			$retMsgs = 'ç”¨æˆ· ID ä¸å­˜åœ¨';
 		}
 		echo "var ret='$retMsgs';";
 	}
@@ -196,8 +196,8 @@ class Ajax
 			{
 				$worthDeal		= $drs['price_deal'] * $drs['quant_deal'];
 				$worthLast		= $_G['gp_price'] * $drs['quant_deal'];
-				$commission		= $worthLast * 0.001;	// Ó¶½ğ£¬ÂòÂô¾ùÊÕÈ¡
-				$transferFee	= $worthLast * 0.001;	// ¹ı»§·Ñ£¬ÂòÂô¾ùÊÕÈ¡
+				$commission		= $worthLast * 0.001;	// ä½£é‡‘ï¼Œä¹°å–å‡æ”¶å–
+				$transferFee	= $worthLast * 0.001;	// è¿‡æˆ·è´¹ï¼Œä¹°å–å‡æ”¶å–
 				$rsc = DB::fetch_first("SELECT cid, stocknum_ava, averageprice FROM ".DB::table('kfss_customer')." WHERE uid='{$drs['uid']}' AND code='{$drs['code']}'");
 				if ( $drs['direction'] == 1 && $drs['price_deal'] >= $_G['gp_price'] )
 				{
@@ -230,7 +230,7 @@ class Ajax
 				}
 				else if ( $drs['direction'] == 2 && $drs['price_deal'] <= $_G['gp_price'] )
 				{
-					$stampDuty		= $worthLast * 0.001;	// Ó¡»¨Ë°£¬Âô³öÊÕÈ¡
+					$stampDuty		= $worthLast * 0.001;	// å°èŠ±ç¨ï¼Œå–å‡ºæ”¶å–
 					DB::query("UPDATE ".DB::table('kfss_customer')." SET stocknum_war=stocknum_war-{$drs['quant_deal']}, selltime='{$_G[timestamp]}' WHERE cid='{$rsc['cid']}'");
 					$leftNum = DB::result_first("SELECT stocknum_ava FROM ".DB::table('kfss_customer')." WHERE cid='{$rsc['cid']}'");
 					$trade_ok = $leftNum == 0 ? 1 : 0;

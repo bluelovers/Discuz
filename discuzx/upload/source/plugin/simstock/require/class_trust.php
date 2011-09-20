@@ -41,7 +41,7 @@ class Trust
 				$this->showTradeForm($user, $_G['gp_code']);
 		}
 		else
-			showmessage('ÔİÊ±Í£Ö¹½»Ò×£¬ÇëÄúÉÔºóÔÙÀ´');
+			showmessage('æš‚æ—¶åœæ­¢äº¤æ˜“ï¼Œè¯·æ‚¨ç¨åå†æ¥');
 	}
 	private function showMyDeals( $user )
 	{
@@ -50,44 +50,44 @@ class Trust
 		while ( $rsd = DB::fetch($qd) )
 		{
 			if ( $rsd['direction'] == 1 )
-				$rsd['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rsd['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rsd['direction'] == 2 )
-				$rsd['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rsd['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rsd['direction'] = '<span style="color:#0000FF">Òì³£</span>';
+				$rsd['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span>';
 			if ( $rsd['time_deal'] )
 				$rsd['time_deal']	= dgmdate($rsd['time_deal'],'Y-m-d H:i:s');
 			else
 				$rsd['time_deal']	= '-';
 			if ( $rsd['ok'] == 0 )
 			{
-				$rsd['ok'] = 'Î´³É½»';
-				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>³·µ¥</em></button></form>";
+				$rsd['ok'] = 'æœªæˆäº¤';
+				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>æ’¤å•</em></button></form>";
 			}
 			else if ( $rsd['ok'] == 1 )
 			{
-				$rsd['ok'] = '<span style="color:#008000">³É½»</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#008000">æˆäº¤</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else if ( $rsd['ok'] == 2 )
 			{
-				$rsd['ok'] = '<span style="color:#FFA500">²¿·Ö³É½»</span>';
-				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>³·µ¥</em></button></form>";
+				$rsd['ok'] = '<span style="color:#FFA500">éƒ¨åˆ†æˆäº¤</span>';
+				$rsd['op'] = "<form name=\"form1\" action=\"$baseScript&mod=member&act=trustsmng\" method=\"post\"><input type=\"hidden\" name=\"section\" value=\"canceltt\" /><input type=\"hidden\" name=\"did\" value=\"$rsd[did]\" /><button type=\"submit\" name=\"submit\" value=\"true\" class=\"pn pnc\"><em>æ’¤å•</em></button></form>";
 			}
 			else if ( $rsd['ok'] == 3 )
 			{
-				$rsd['ok'] = '<span style="color:#0000FF">ÓÃ»§³·Ïú</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#0000FF">ç”¨æˆ·æ’¤é”€</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else if ( $rsd['ok'] == 4 )
 			{
-				$rsd['ok'] = '<span style="color:#A52A2A">ÏµÍ³³·Ïú</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#A52A2A">ç³»ç»Ÿæ’¤é”€</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			else
 			{
-				$rsd['ok'] = '<span style="color:#FF0000">Òì³£</span>';
-				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>³·µ¥</em></button>';
+				$rsd['ok'] = '<span style="color:#FF0000">å¼‚å¸¸</span>';
+				$rsd['op'] = '<button type="submit" name="submit" value="true" class="pn pnc" disabled><em>æ’¤å•</em></button>';
 			}
 			$ddb[] = $rsd;
 		}
@@ -100,11 +100,11 @@ class Trust
 		while ( $rst = DB::fetch($qt) )
 		{
 			if ( $rst['direction'] == 1 )
-				$rst['direction'] = '<span style="color:#FF0000">ÂòÈë</span>';
+				$rst['direction'] = '<span style="color:#FF0000">ä¹°å…¥</span>';
 			else if ( $rst['direction'] == 2 )
-				$rst['direction'] = '<span style="color:#008000">Âô³ö</span>';
+				$rst['direction'] = '<span style="color:#008000">å–å‡º</span>';
 			else
-				$rst['direction'] = '<span style="color:#0000FF">Òì³£</span>';
+				$rst['direction'] = '<span style="color:#0000FF">å¼‚å¸¸</span>';
 			if ( $rst['ttime'] )
 				$rst['ttime']	= dgmdate($rst['ttime'],'Y-m-d H:i:s');
 			else
@@ -132,32 +132,32 @@ class Trust
 				}
 				else
 				{
-					showmessage('¸ÃÎ¯ÍĞµ¥½»Ò××´Ì¬Òì³££¬ÎŞ·¨³·Ïú£¡');
+					showmessage('è¯¥å§”æ‰˜å•äº¤æ˜“çŠ¶æ€å¼‚å¸¸ï¼Œæ— æ³•æ’¤é”€ï¼');
 				}
 				if ( $qd['direction'] == 1 )
 				{
 					DB::query("UPDATE ".DB::table('kfss_user')." SET fund_ava=fund_ava+{$worth} WHERE uid='{$user['uid']}'");
 					DB::query("UPDATE ".DB::table('kfss_deal')." SET ok='3' WHERE did='{$qd[did]}'");
-					showmessage('Î¯ÍĞÂòÈë¹ÉÆ±³·Ïú³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+					showmessage('å§”æ‰˜ä¹°å…¥è‚¡ç¥¨æ’¤é”€æˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 				}
 				else if ( $qd['direction'] == 2 )
 				{
 					DB::query("UPDATE ".DB::table('kfss_deal')." SET ok='3' WHERE did='{$qd[did]}'");
-					showmessage('Î¯ÍĞÂô³ö¹ÉÆ±³·Ïú³É¹¦£¡', "$baseScript&mod=member&act=trustsmng");
+					showmessage('å§”æ‰˜å–å‡ºè‚¡ç¥¨æ’¤é”€æˆåŠŸï¼', "$baseScript&mod=member&act=trustsmng");
 				}
 				else
 				{
-					showmessage('¸ÃÎ¯ÍĞµ¥ÂòÂô·½ÏòÒì³££¬ÎŞ·¨³·Ïú£¡');
+					showmessage('è¯¥å§”æ‰˜å•ä¹°å–æ–¹å‘å¼‚å¸¸ï¼Œæ— æ³•æ’¤é”€ï¼');
 				}
 			}
 			else
 			{
-				showmessage('¸ÃÎ¯ÍĞµ¥ÒÑÈ«²¿³É½»£¬»òÒÑ¹ıÆÚ£¬ÎŞ·¨³·Ïú£¡');
+				showmessage('è¯¥å§”æ‰˜å•å·²å…¨éƒ¨æˆäº¤ï¼Œæˆ–å·²è¿‡æœŸï¼Œæ— æ³•æ’¤é”€ï¼');
 			}
 		}
 		else
 		{
-			showmessage('ÎŞĞ§µÄÎ¯ÍĞµ¥£¡');
+			showmessage('æ— æ•ˆçš„å§”æ‰˜å•ï¼');
 		}
 	}
 }

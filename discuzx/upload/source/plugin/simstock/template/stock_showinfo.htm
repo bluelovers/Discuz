@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> ��Ʊ����
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 股票资料
 	</div>
 </div>
 <div class="ct2_a wp cl bn">
@@ -10,27 +10,27 @@
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2"><span id="stockname"></span>��<span id="code"></span>������</h2>
+					<h2 class="mbm xs2"><span id="stockname"></span>（<span id="code"></span>）行情</h2>
 				</caption>
 				<tr>
-					<th>���¼ۣ�<span id="realprice"></span> Ԫ</th>
-					<th>�ǵ��<span id="changeAmt"></span> Ԫ</th>
-					<th>�ǵ�����<span id="changeRate"></span></th>
-					<th colspan="2">����ʱ�䣺<span id="uptime"></span></th>
+					<th>最新价：<span id="realprice"></span> 元</th>
+					<th>涨跌额：<span id="changeAmt"></span> 元</th>
+					<th>涨跌幅：<span id="changeRate"></span></th>
+					<th colspan="2">行情时间：<span id="uptime"></span></th>
 				</tr>
 				<tr>
-					<td>�񡡿���<span id="open"></span> Ԫ</td>
-					<td>��ߣ�<span id="maximum"></span> Ԫ</td>
-					<td>����ۣ�<span id="buy"></span> Ԫ</td>
-					<td>�ɽ�����<span id="volume"></span> ��</td>
-					<td>��ͣ�ۣ�<span id="highlimit"></span> Ԫ</td>
+					<td>今　开：<span id="open"></span> 元</td>
+					<td>最　高：<span id="maximum"></span> 元</td>
+					<td>买入价：<span id="buy"></span> 元</td>
+					<td>成交量：<span id="volume"></span> 股</td>
+					<td>涨停价：<span id="highlimit"></span> 元</td>
 				</tr>
 				<tr>
-					<td>���գ�<span id="yesterday"></span> Ԫ</td>
-					<td>��ͣ�<span id="minimum"></span> Ԫ</td>
-					<td>�����ۣ�<span id="sell"></span> Ԫ</td>
-					<td>�ɽ��<span id="amount"></span> Ԫ</td>
-					<td>��ͣ�ۣ�<span id="downlimit"></span> Ԫ</td>
+					<td>昨　收：<span id="yesterday"></span> 元</td>
+					<td>最　低：<span id="minimum"></span> 元</td>
+					<td>卖出价：<span id="sell"></span> 元</td>
+					<td>成交额：<span id="amount"></span> 元</td>
+					<td>跌停价：<span id="downlimit"></span> 元</td>
 				</tr>
 			</table>
 		</div>
@@ -45,15 +45,15 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li><a href="$baseScript">��������</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">��������</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">������</a></li>
-				<li><a href="$baseScript&mod=system&act=help">��������</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">�ʽ����</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">�ʻ��ֲ�</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">���ײ�ѯ</a></li>
-				<li><a href="$baseScript&mod=member&act=buy">�����Ʊ</a></li>
-				<li><a href="$baseScript&mod=member&act=sell">������Ʊ</a></li>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
 			</ul>
 		</div>
 	</div>
@@ -77,27 +77,27 @@ function set_hl_data()
 	var quoStr	= eval("hq_str_"+code);
 	var data	= quoStr.split(",");
 	var stockname = data[0];
-	var maximum = f2( data[3], data[4], 2 );	// ��߳ɽ���
-	var minimum = f2( data[3], data[5], 2 );	// ��ͳɽ���
+	var maximum = f2( data[3], data[4], 2 );	// 最高成交价
+	var minimum = f2( data[3], data[5], 2 );	// 最低成交价
 	var changeAmt = new Number(0);
-	var ST = /ST/i.test( stockname ); // �Ƿ�ΪST��
+	var ST = /ST/i.test( stockname ); // 是否为ST股
 	comparePrice = data[2];
 	var diff = data[3] - data[2];
-	var changeAmt	= data[3] == 0 ? "--" : diff.toFixed(2);	// �ǵ���
-	var changeRate	= data[3] == 0 ? "--" : (100 * diff / data[2]).toFixed(2) + "%";	// �ǵ���
+	var changeAmt	= data[3] == 0 ? "--" : diff.toFixed(2);	// 涨跌额
+	var changeRate	= data[3] == 0 ? "--" : (100 * diff / data[2]).toFixed(2) + "%";	// 涨跌幅
 	var arrow = "";
 	if ( changeAmt > 0 )
 	{
-		arrow = "��";
+		arrow = "↑";
 	}
 	else if ( changeAmt < 0 )
 	{
-		arrow = "��";
+		arrow = "↓";
 	}
-	// �¹����е���û���ǵ�ͣ����
+	// 新股上市当天没有涨跌停限制
 	var newStock = /^N/.test( data[0] );
-	document.getElementById('highlimit').innerHTML		= ( newStock ? "--" : (data[2] * (ST ? 1.05 : 1.1) ).toFixed(2) );		//��ͣ��
-	document.getElementById('downlimit').innerHTML		= ( newStock ? "--" : (data[2] * (ST ? 0.95 : 0.9) ).toFixed(2) );		//��ͣ��
+	document.getElementById('highlimit').innerHTML		= ( newStock ? "--" : (data[2] * (ST ? 1.05 : 1.1) ).toFixed(2) );		//涨停价
+	document.getElementById('downlimit').innerHTML		= ( newStock ? "--" : (data[2] * (ST ? 0.95 : 0.9) ).toFixed(2) );		//跌停价
 	document.getElementById('code').innerHTML			= code;
 	document.getElementById('stockname').innerHTML		= data[0];
 	document.getElementById('open').innerHTML			= data[1];
@@ -120,11 +120,11 @@ function set_hl_data()
 	document.getElementById('downlimit').style.color	= data[3] == 0 ? "" : getDiffCls( data[2] * 0.9 );
 	document.getElementById('changeAmt').style.color	= data[3] == 0 ? "" : getDiffCls( data[3] );
 	document.getElementById('changeRate').style.color	= data[3] == 0 ? "" : getDiffCls( data[3] );
-	// ����ֹ�
+	// 股民持股
 	var hl_table_arr = new Array();
 	hl_table_arr.push('<table cellspacing="0" cellpadding="0" class="dt mtm">');
-	hl_table_arr.push('<caption><h2 class="mbm xs2">�ɶ��ɱ�</h2></caption>');
-	hl_table_arr.push('<tr><th>�ɶ�</th><th>�ֹ�����</th><th>�ֹɱ���</th><th>�ֹɼ۸�</th><th>��ǰ�۸�</th><th>�ֹɳɱ�</th><th>�ֹ���ֵ</th><th>����ӯ��</th><th>ӯ������</th></tr>');
+	hl_table_arr.push('<caption><h2 class="mbm xs2">股东股本</h2></caption>');
+	hl_table_arr.push('<tr><th>股东</th><th>持股数量</th><th>持股比例</th><th>持股价格</th><th>当前价格</th><th>持股成本</th><th>持股市值</th><th>浮动盈亏</th><th>盈亏比例</th></tr>');
 	var all_hl_arr = Array(
 <!--{loop $rsusdb $k=>$v}-->
 	Array("{$v['uid']}", "{$v['username']}", "{$v['stocknum']}", "{$v['totalnum']}", "{$v['averageprice']}")
@@ -134,13 +134,13 @@ function set_hl_data()
 	for (var i=0; i<all_hl_arr.length; i++)
 	{
 		var hl_arr = all_hl_arr[i];
-		// û�����¼�ʱ��������
+		// 没有最新价时，用昨收
 		var value	= getValidNum(data[3], data[2]);
 		var cgbl	= (hl_arr[2]/hl_arr[3]*100).toFixed(2);
-		var totalcost		= f2(value, hl_arr[2] * hl_arr[4], 2);	// �ֹ��ܳɱ�
-		var currentvalue	= f2(value, value * hl_arr[2], 2);	// �ֹ���ֵ
-		var fdyk	= (currentvalue - totalcost).toFixed(2);	// ����ӯ��
-		var ykbl	= (100 * fdyk / totalcost).toFixed(2);		// ӯ������
+		var totalcost		= f2(value, hl_arr[2] * hl_arr[4], 2);	// 持股总成本
+		var currentvalue	= f2(value, value * hl_arr[2], 2);	// 持股市值
+		var fdyk	= (currentvalue - totalcost).toFixed(2);	// 浮动盈亏
+		var ykbl	= (100 * fdyk / totalcost).toFixed(2);		// 盈亏比例
 		var color	= "";
 		if ( currentvalue > totalcost )
 		{

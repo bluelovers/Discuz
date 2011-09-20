@@ -2,71 +2,71 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> �¹��񿪻�
+		<a href="plugin.php?id=simstock:index">$db_smname</a> <em>&rsaquo;</em> 新股民开户
 	</div>
 </div>
 <div class="ct2_a wp cl bn">
 	<div class="mn">
 		<div class="bm bw0">
 			<caption>
-				<h2 class="mbm xs2">��ʾ��Ϣ</h2>
+				<h2 class="mbm xs2">提示信息</h2>
 			</caption>
 			<div>
 				<ul class="tbn">
-					<li class="ptm">����û�й����ʻ���</li>
-					<li class="ptm">�������ȵ�¼��̳��Ȼ���ڹ����￪����</li>
+					<li class="ptm">您还没有股市帐户！</li>
+					<li class="ptm">您可以先登录论坛，然后在股市里开户！</li>
 				</ul>
 			</div>
 		</div>
 		<div class="bm bw0">
 			<table cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
-					<h2 class="mbm xs2">�¹��񿪻�</h2>
+					<h2 class="mbm xs2">新股民开户</h2>
 				</caption>
 <!--{if $db_allowregister == '0'}-->
 				<tr>
-					<td>������ʱֹͣ������лл���Ĺ��١�</td>
+					<td>股市暂时停止开户，谢谢您的光临。</td>
 				</tr>
 <!--{elseif $db_allowregister == '1'}-->
 				<tr>
-					<th>Ҫ����Ŀ</th>
-					<th>Ҫ������</th>
-					<th>�Ѵ�����</th>
-					<th>�Ƿ�ϸ�</th>
+					<th>要求项目</th>
+					<th>要求数量</th>
+					<th>已达数量</th>
+					<th>是否合格</th>
 				</tr>
 				<tr>
-					<td>����{$this->foxinfo[money][type]}</td>
+					<td>最少{$this->foxinfo[money][type]}</td>
 					<td>$db_minmoney {$this->foxinfo[money][unit]}</td>
 					<td>{$this->foxinfo[money][num]} {$this->foxinfo[money][unit]}</td>
 					<td>
 	<!--{if $this->foxinfo['m']}-->
-						<a title="�ﵽҪ��"><span style="color:#008000">��</span></a>
+						<a title="达到要求"><span style="color:#008000">√</span></a>
 	<!--{else}-->
-						<a title="û�дﵽҪ��"><span style="color:#FF0000">��</span></a>
+						<a title="没有达到要求"><span style="color:#FF0000">×</span></a>
 	<!--{/if}-->
 					</td>
 				</tr>
 				<tr>
-					<td>���ٻ���</td>
+					<td>最少积分</td>
 					<td>$db_mincredit</td>
 					<td>$_G['member']['credits']</td>
 					<td>
 	<!--{if $this->foxinfo['c']}-->
-						<a title="�ﵽҪ��"><span style="color:#008000">��</span></a>
+						<a title="达到要求"><span style="color:#008000">√</span></a>
 	<!--{else}-->
-						<a title="û�дﵽҪ��"><span style="color:#FF0000">��</span></a>
+						<a title="没有达到要求"><span style="color:#FF0000">×</span></a>
 	<!--{/if}-->
 					</td>
 				</tr>
 				<tr>
-					<td>���ٷ���</td>
-					<td>$db_minpost ��</td>
-					<td>{$this->foxinfo[posts][num]} ��</td>
+					<td>最少发帖</td>
+					<td>$db_minpost 帖</td>
+					<td>{$this->foxinfo[posts][num]} 帖</td>
 					<td>
 	<!--{if $this->foxinfo['p']}-->
-						<a title="�ﵽҪ��"><span style="color:#008000">��</span></a>
+						<a title="达到要求"><span style="color:#008000">√</span></a>
 	<!--{else}-->
-						<a title="û�дﵽҪ��"><span style="color:#FF0000">��</span></a>
+						<a title="没有达到要求"><span style="color:#FF0000">×</span></a>
 	<!--{/if}-->
 					</td>
 				</tr>
@@ -75,10 +75,10 @@
 			<div class="hm ptm">
 <!--{if $this->passed}-->
 				<form name="form" method="post" action="$baseScript&mod=system&act=register">
-					<button type="submit" name="submit" value="true" class="pn pnc"><em>����</em></button>
+					<button type="submit" name="submit" value="true" class="pn pnc"><em>开户</em></button>
 				</form>
 <!--{else}-->
-				<button type="button" name="button" value="true" class="pn pnc" disabled="disabled"><em>����</em></button>
+				<button type="button" name="button" value="true" class="pn pnc" disabled="disabled"><em>开户</em></button>
 <!--{/if}-->
 			</div>
 		</div>
@@ -87,15 +87,15 @@
 		<div class="tbn">
 			<h2 class="mt bbda">$db_smname</h2>
 			<ul>
-				<li><a href="$baseScript">��������</a></li>
-				<li><a href="$baseScript&mod=news&act=shownewslist">��������</a></li>
-				<li><a href="$baseScript&mod=system&act=topuser">������</a></li>
-				<li><a href="$baseScript&mod=system&act=help">��������</a>
-				<li><a href="$baseScript&mod=member&act=fundsmng">�ʽ����</a></li>
-				<li><a href="$baseScript&mod=member&act=stocksmng">�ʻ��ֲ�</a></li>
-				<li><a href="$baseScript&mod=member&act=trustsmng">���ײ�ѯ</a></li>
-				<li><a href="$baseScript&mod=member&act=buy">�����Ʊ</a></li>
-				<li><a href="$baseScript&mod=member&act=sell">������Ʊ</a></li>
+				<li><a href="$baseScript">行情中心</a></li>
+				<li><a href="$baseScript&mod=news&act=shownewslist">新闻中心</a></li>
+				<li><a href="$baseScript&mod=system&act=topuser">大赛榜单</a></li>
+				<li><a href="$baseScript&mod=system&act=help">比赛规则</a>
+				<li><a href="$baseScript&mod=member&act=fundsmng">资金管理</a></li>
+				<li><a href="$baseScript&mod=member&act=stocksmng">帐户持仓</a></li>
+				<li><a href="$baseScript&mod=member&act=trustsmng">交易查询</a></li>
+				<li><a href="$baseScript&mod=member&act=buy">买入股票</a></li>
+				<li><a href="$baseScript&mod=member&act=sell">卖出股票</a></li>
 			</ul>
 		</div>
 	</div>
