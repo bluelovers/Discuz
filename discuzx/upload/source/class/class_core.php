@@ -144,6 +144,7 @@ class discuz_core {
 
 		include_once libfile('Bootstrap', 'Scorpio/', 'extensions/libs/scophp/');
 
+		/*
 		include_once libfile('Constants', 'Scorpio/inc/', 'extensions/libs/scophp/');
 
 		include_once libfile('Hook', 'Scorpio/libs/', 'extensions/libs/scophp/');
@@ -154,6 +155,7 @@ class discuz_core {
 
 		include_once libfile('file', 'Scorpio/libs/helper/', 'extensions/libs/scophp/');
 		if (!class_exists('scofile')) eval("class scofile extends Scorpio_helper_file_Core {}");
+		*/
 
 		$this->plugin_support['Scorpio_Hook'] = true;
 		$this->plugin_support['Scorpio_Event'] = true;
