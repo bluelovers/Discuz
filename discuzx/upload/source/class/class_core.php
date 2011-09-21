@@ -159,10 +159,20 @@ class discuz_core {
 		if (!class_exists('scofile')) eval("class scofile extends Scorpio_helper_file_Core {}");
 		*/
 
+		/*
 		$this->plugin_support['Scorpio_Hook'] = true;
 		$this->plugin_support['Scorpio_Event'] = true;
 
 		$this->plugin_support['scofile'] = true;
+		*/
+
+		foreach (array(
+			'Scorpio_Hook',
+			'Scorpio_Event',
+			'scofile',
+		) as $_class) {
+			$this->plugin_support[$_class] = class_exists($_class);
+		}
 
 		// ÀË¬d¬O§_±Ò¥Î Scorpio_Event
 		if ($this->plugin_support['Scorpio_Event'] || $this->plugin_support['Scorpio_Hook']) {
