@@ -142,6 +142,8 @@ class discuz_core {
 		$_GET = $_func($_GET, $_func);
 		$_POST = $_func($_POST, $_func);
 
+		define('SCORPIO_SYNTAX', false);
+
 		include_once libfile('Bootstrap', 'Scorpio/', 'extensions/libs/scophp/');
 
 		/*
