@@ -19,11 +19,30 @@ class plugin_sco_plugin extends _sco_dx_plugin {
 class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 
 	function plugin_message() {
-		echo $this->identifier;
+		$query = DB::query("SELECT
+				*
+			FROM
+				".DB::table('common_plugin')."
+			ORDER BY
+				available DESC
+				, pluginid DESC
+		");
 
-		debug($this);
+		$plugin_lists = array();
+
+		while($plugin = DB::fetch($query)) {
+			$plugin_lists[] = $plugin;
+		}
+
+		$this->_setglobal('plugin_lists', $plugin_lists);
+
+		$this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
 	}
 
 }
+
+$_o = new plugin_sco_plugin_plugin();
+
+$_o->plugin_message();
 
 ?>
