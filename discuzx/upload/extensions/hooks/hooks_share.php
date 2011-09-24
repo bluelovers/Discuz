@@ -149,9 +149,11 @@ function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 
 			if (class_exists('scotext')) {
 				discuz_core::$plugin_support['scotext'] = true;
+			/*
 			} elseif (include_once(libfile('text', 'Scorpio/libs/helper/', 'extensions/libs/scophp/'))) {
 				if (!class_exists('scotext')) eval("class scotext extends Scorpio_helper_text_Core {}");
 				discuz_core::$plugin_support['scotext'] = true;
+			*/
 			}
 		}
 

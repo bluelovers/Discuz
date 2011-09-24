@@ -734,8 +734,10 @@ function &htmldom($content) {
 
 function curl($url) {
 	//TODO:Scorpio cURL
+	/*
 	include_once libfile('Curl', 'libs/scophp/Scorpio/libs/Helper/', 'extensions/');
 	if (!class_exists('scocurl')) eval("class scocurl extends Scorpio_Helper_Curl_Core {}");
+	*/
 
 //	scocurl::instance($url)->setopt(CURLOPT_FOLLOWLOCATION, true)->setopt(CURLOPT_HEADER, true)->setopt(CURLOPT_COOKIEJAR, true)->exec();
 //	$c = scocurl::_self()->getExec(true);
