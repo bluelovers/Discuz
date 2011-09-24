@@ -647,6 +647,16 @@ if(!$operation) {
 	if($pluginvars) {
 		$submenuitem[] = array('config', "plugins&operation=config&do=$pluginid", !$_G['gp_pmod']);
 	}
+
+	// bluelovers
+	if ($isplugindeveloper && !$plugin['modules']['system']) {
+		/**
+		 * 如果 $isplugindeveloper = true, 增加 設計插件 的連結
+		 */
+		$submenuitem[] = array('plugins_edit', "plugins&operation=edit&pluginid=$pluginid", 0, 1);
+	}
+	// bluelovers
+
 	if(is_array($plugin['modules'])) {
 		foreach($plugin['modules'] as $module) {
 			if($module['type'] == 3) {
