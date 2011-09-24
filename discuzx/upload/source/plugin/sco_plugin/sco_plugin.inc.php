@@ -27,6 +27,7 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 				available = '1'
 			ORDER BY
 				available DESC
+				, identifier LIKE '%sco\_%' DESC
 				, pluginid DESC
 		");
 
