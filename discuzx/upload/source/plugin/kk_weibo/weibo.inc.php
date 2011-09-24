@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_DISCUZ')) exit('Access Denied');
-if(empty($_G['uid'])) showmessage('±¾Ò³ÃæÐèÒªµÇÂ¼ºó²é¿´');
+if(empty($_G['uid'])) showmessage('æœ¬é¡µé¢éœ€è¦ç™»å½•åŽæŸ¥çœ‹');
 
 $perpage = 24;
 $page = empty($_GET['page'])?0:intval($_GET['page']);
@@ -9,12 +9,12 @@ $start = ($page-1)*$perpage;
 
 $view=$_GET['view']; if(empty($view)) $view='attention';
 $uid_rel=(int)$_GET['rel']; if($uid_rel<=0) $uid_rel=$_G['uid'];
-if(!in_array($view,Array('attention','fans'))) showmessage('²ÎÊýÎÞÐ§');
+if(!in_array($view,Array('attention','fans'))) showmessage('å‚æ•°æ— æ•ˆ');
 
 include libfile('function/home');
 $space = getspace($uid_rel);
 if(empty($space)) showmessage('space_does_not_exist');
-$navtitle = $space['username'].'µÄ¹Ø×¢';
+$navtitle = $space['username'].'çš„å…³æ³¨';
 $list=$uid_list=Array(); $uid_string=''; $count=0;
 $table=DB::table('common_member'); $table_weibo=DB::table('kk_weibo');
 if($view=='attention') {
@@ -24,7 +24,7 @@ if($view=='attention') {
 		$query=DB::query("select * from {$table_weibo} where uid={$uid_rel} limit {$start},{$perpage}");
 		while($fetch=DB::fetch($query)) $uid_list[]=$fetch['uid_rel'];
 	}
-	$description="{$space['username']}¹Ø×¢µÄÓÃ»§,¹²{$count}Ìõ";
+	$description="{$space['username']}å…³æ³¨çš„ç”¨æˆ·,å…±{$count}æ¡";
 } else if($view=='fans') {
 	$theurl="/plugin.php?id=kk_weibo:weibo&view=fans&rel={$uid_rel}";
 	$count=DB::fetch_first("select count(*) as t_count from {$table_weibo} where uid_rel={$uid_rel}"); $count=$count['t_count'];
@@ -32,7 +32,7 @@ if($view=='attention') {
 		$query=DB::query("select * from {$table_weibo} where uid_rel={$uid_rel} limit {$start},{$perpage}");
 		while($fetch=DB::fetch($query)) $uid_list[]=$fetch['uid'];
 	}
-	$description="¹Ø×¢{$space['username']}µÄÓÃ»§,¹²{$count}Ìõ";
+	$description="å…³æ³¨{$space['username']}çš„ç”¨æˆ·,å…±{$count}æ¡";
 }
 $uid_string=implode(',',$uid_list); if(!empty($uid_string)) {
 	$table_group=DB::table('common_usergroup');

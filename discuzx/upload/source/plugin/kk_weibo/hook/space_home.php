@@ -2,7 +2,7 @@
 // row=118, before    } elseif($_GET['view'] == 'me') {
 // require_once DISCUZ_ROOT.'/source/plugin/kk_weibo/hook/space_home.php';	
 // /home.php?mod=space&do=home&view=all&kk_weibo=1
-// Ç¶Èë´úÂë·½Ê½, ºÃ¼æÈİ¹Ù·½²¹¶¡
+// åµŒå…¥ä»£ç æ–¹å¼, å¥½å…¼å®¹å®˜æ–¹è¡¥ä¸
 if(!defined('IN_DISCUZ')) exit('Access Denied');
 
 if($_GET['kk_weibo']!='1') return;

@@ -5,7 +5,7 @@
 		
 		function global_userabout_bottom($param) {
 			//plugin::kk_weibo			
-			$result='<ul><li><a href="/plugin.php?id=kk_weibo:weibo"><img width="16" height="16" src="static/image/feed/file.gif">¹Ø×¢</a></li>';			
+			$result='<ul><li><a href="/plugin.php?id=kk_weibo:weibo"><img width="16" height="16" src="static/image/feed/file.gif">å…³æ³¨</a></li>';			
 			return Array('home::space'=>$result,'plugin::kk_weibo'=>$result);
 		}
         //------------------------------------------------------------------------------------------
@@ -47,9 +47,9 @@
 			foreach($postlist as $post) {
 				$cur_output=Array(); $cur_uid=$post['authorid']; $cur_stat=$tree[$cur_uid]; //var_dump($cur_stat);
 				$cur_output[]="<div class=\"kk_weibo_top\"><ul>";
-				$cur_output[]="<li><div class=\"num\"><a href=\"/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}\" target=\"_blank\">{$cur_stat['count_attention']}</a></div>¹Ø×¢</li>";
-				$cur_output[]="<li class=\"li_fans\"><div class=\"num\"><a href=\"plugin.php?id=kk_weibo:weibo&rel={$cur_uid}&view=fans\" target=\"_blank\">{$cur_stat['count_fans']}</a></div>·ÛË¿</li>";
-				$cur_output[]="<li class=\"li_posts\"><div class=\"num\"><a href=\"/home.php?mod=space&uid={$cur_uid}&do=thread&type=reply\" target=\"_blank\">{$post['posts']}</a></div>Ìû×Ó</li>";
+				$cur_output[]="<li><div class=\"num\"><a href=\"/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}\" target=\"_blank\">{$cur_stat['count_attention']}</a></div>å…³æ³¨</li>";
+				$cur_output[]="<li class=\"li_fans\"><div class=\"num\"><a href=\"plugin.php?id=kk_weibo:weibo&rel={$cur_uid}&view=fans\" target=\"_blank\">{$cur_stat['count_fans']}</a></div>ç²‰ä¸</li>";
+				$cur_output[]="<li class=\"li_posts\"><div class=\"num\"><a href=\"/home.php?mod=space&uid={$cur_uid}&do=thread&type=reply\" target=\"_blank\">{$post['posts']}</a></div>å¸–å­</li>";
 				$cur_output[]="</ul></div><br clear=\"both\"/>";
 				$result[]=implode('',$cur_output);
     		}
@@ -63,9 +63,9 @@
 				else {
 					$cur_output[]="<div class=\"kk_weibo_bottom\">";
 					if($cur_stat['already_attention']) {
-						$cur_output[]="<span class=\"icon2\"><a href=\"javascript:void(0)\">ÒÑ¹Ø×¢</a></span>";
+						$cur_output[]="<span class=\"icon2\"><a href=\"javascript:void(0)\">å·²å…³æ³¨</a></span>";
 					} else {
-						$cur_output[]="<span class=\"icon1\"><a href=\"/plugin.php?id=kk_weibo:service&action=add&rel={$cur_uid}\" onclick=\"showWindow('kk_weibo',this.href);return false;\">¼Ó¹Ø×¢</a></span>";
+						$cur_output[]="<span class=\"icon1\"><a href=\"/plugin.php?id=kk_weibo:service&action=add&rel={$cur_uid}\" onclick=\"showWindow('kk_weibo',this.href);return false;\">åŠ å…³æ³¨</a></span>";
 					}
 					$cur_output[]="</div>";	
 				}				
@@ -97,7 +97,7 @@
 			global $_G; $cache=$_G['cache']['plugin']['kk_weibo'];
             if(!$cache['open_tag']) return '';            
 			$selected=($_GET['kk_weibo']=='1')?' class="a"':'';
-			return "<li{$selected}><a href=\"home.php?mod=space&do=home&view=all&kk_weibo=1\">¹Ø×¢µÄ¶¯Ì¬</a></li>";			
+			return "<li{$selected}><a href=\"home.php?mod=space&do=home&view=all&kk_weibo=1\">å…³æ³¨çš„åŠ¨æ€</a></li>";			
 		}
 	}	
 ?>

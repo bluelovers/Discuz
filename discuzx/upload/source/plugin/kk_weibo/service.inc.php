@@ -1,12 +1,12 @@
 <?php
     if(!defined('IN_DISCUZ')) exit('Access Denied');
-	if(empty($_G['uid'])) showmessage('请登录后操作');
+	if(empty($_G['uid'])) showmessage('璇风櫥褰曞悗鎿嶄綔');
 	//-------------------------------------------------------------------------------------------------
 	function kk_weibo_check() {
 		global $action,$uid,$uid_rel;
-		if(!in_array($action,Array('add','del'))) showMessage('参数无效');
-		if($uid_rel<=0) showMessage('参数无效');		
-		if($uid==$uid_rel) showMessage('参数无效');
+		if(!in_array($action,Array('add','del'))) showMessage('鍙傛暟鏃犳晥');
+		if($uid_rel<=0) showMessage('鍙傛暟鏃犳晥');		
+		if($uid==$uid_rel) showMessage('鍙傛暟鏃犳晥');
 	}
 	function kk_weibo_fetch($rel) {
 		global $uid,$table;
@@ -37,14 +37,14 @@
 			DB::query("insert into {$table}(uid,uid_rel) values({$uid},{$uid_rel})");
 			kk_weibo_update($uid_rel);
 		}
-		$description="添加关注成功";			
+		$description="娣诲姞鍏虫敞鎴愬姛";			
 	} else if($action=='del') {		
 		$row=kk_weibo_fetch($uid_rel);
 		if(!empty($row)) {			
 			DB::query("delete from {$table} where uid={$uid} and uid_rel={$uid_rel}");			
 			kk_weibo_update($uid_rel);
 		}
-		$description="取消关注成功";
+		$description="鍙栨秷鍏虫敞鎴愬姛";
 	}
 	
 	showmessage($description,

@@ -8,7 +8,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[��ע/��˿���]]></item>
+			<item id="name"><![CDATA[关注/粉丝插件]]></item>
 			<item id="identifier"><![CDATA[kk_weibo]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -34,8 +34,8 @@
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[������ע�Ķ�̬]]></item>
-				<item id="description"><![CDATA[��ȷ�ϰ��̳��޸ĺ��ٿ���]]></item>
+				<item id="title"><![CDATA[开启关注的动态]]></item>
+				<item id="description"><![CDATA[先确认按教程修改后再开启]]></item>
 				<item id="variable"><![CDATA[open_tag]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[0]]></item>
