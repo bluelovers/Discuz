@@ -46,6 +46,16 @@ if(!$operation) {
 		$query = DB::query("SELECT * FROM ".DB::table('common_plugin')." ORDER BY available DESC, pluginid DESC");
 		$outputsubmit = false;
 		while($plugin = DB::fetch($query)) {
+
+			// bluelovers
+			$_pv_exists = false;
+			if ($_pv = DB::fetch_first("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='{$plugin[pluginid]}' LIMIT 1")) {
+				if ($_pv['pluginid'] == $plugin['pluginid']) {
+					$_pv_exists = true;
+				}
+			}
+			// bluelovers
+
 			$hookexists = FALSE;
 			$plugin['modules'] = unserialize($plugin['modules']);
 			$submenuitem = array();
