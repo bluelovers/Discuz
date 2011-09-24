@@ -919,6 +919,13 @@ if(!$operation) {
 			array('plugins_config_module', 'modules', $anchor == 'modules'),
 			array('plugins_config_vars', 'vars', $anchor == 'vars'),
 			array('export', 'plugins&operation=export&pluginid='.$plugin['pluginid'], 0, 1),
+
+			// bluelovers
+			/**
+			 * 增加從設計頁面直接連結到設置頁面
+			 */
+			array('config', 'plugins&operation=config&pluginid='.$plugin['pluginid'], 0, 1),
+			// bluelovers
 		));
 		showtips('plugins_edit_tips');
 
