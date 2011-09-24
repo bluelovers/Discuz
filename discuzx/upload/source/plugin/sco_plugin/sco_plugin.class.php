@@ -16,4 +16,14 @@ class sco_plugin extends _sco_dx_plugin {
 
 }
 
+class sco_plugin_plugin extends sco_plugin {
+
+	function common() {
+		if (CURMODULE != '') {
+			return;
+		}
+	}
+
+}
+
 ?>
