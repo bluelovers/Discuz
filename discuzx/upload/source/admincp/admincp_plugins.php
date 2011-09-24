@@ -48,6 +48,11 @@ if(!$operation) {
 		while($plugin = DB::fetch($query)) {
 
 			// bluelovers
+			/**
+			 * @var $_pv_exists
+			 *
+			 * 是否允許在沒有啟用插件的狀態下對插件設置進行設定
+			 */
 			$_pv_exists = false;
 			if ($_pv = DB::fetch_first("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='{$plugin[pluginid]}' LIMIT 1")) {
 				if ($_pv['pluginid'] == $plugin['pluginid']) {
