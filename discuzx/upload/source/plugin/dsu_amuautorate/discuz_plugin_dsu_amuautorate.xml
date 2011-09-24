@@ -8,12 +8,12 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[ÇÀÂ¥½±Àø]]></item>
+			<item id="name"><![CDATA[æŠ¢æ¥¼å¥–åŠ±]]></item>
 			<item id="identifier"><![CDATA[dsu_amuautorate]]></item>
-			<item id="description"><![CDATA[×Ô¶¯¸øÇ°ÈýÂ¥ÆÀ·Ö]]></item>
+			<item id="description"><![CDATA[è‡ªåŠ¨ç»™å‰ä¸‰æ¥¼è¯„åˆ†]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[dsu_amuautorate/]]></item>
-			<item id="copyright"><![CDATA[°¢ÄÁ @ DSU Team ]]></item>
+			<item id="copyright"><![CDATA[é˜¿ç‰§ @ DSU Team ]]></item>
 			<item id="version"><![CDATA[1.00 bete]]></item>
 			<item id="__modules">
 				<item id="0">
@@ -34,7 +34,7 @@
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[²å¼þÊ¹ÓÃ»ý·ÖÀàÐÍ]]></item>
+				<item id="title"><![CDATA[æ’ä»¶ä½¿ç”¨ç§¯åˆ†ç±»åž‹]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[extcredit]]></item>
 				<item id="type"><![CDATA[extcredit]]></item>
@@ -43,11 +43,11 @@
 			</item>
 			<item id="1">
 				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[»ý·Ö½±ÀøÊýÁ¿]]></item>
-				<item id="description"><![CDATA[1Â¥½±ÀøÉèÖÃ»ý·ÖÊýÁ¿µÄ100%
-2Â¥½±ÀøÉèÖÃ»ý·ÖÊýÁ¿µÄ60%
-3Â¥½±ÀøÉèÖÃ»ý·ÖÊýÁ¿µÄ20%
-½¨Òé·ÖÊý²»µÍÓÚ3·Ö]]></item>
+				<item id="title"><![CDATA[ç§¯åˆ†å¥–åŠ±æ•°é‡]]></item>
+				<item id="description"><![CDATA[1æ¥¼å¥–åŠ±è®¾ç½®ç§¯åˆ†æ•°é‡çš„100%
+2æ¥¼å¥–åŠ±è®¾ç½®ç§¯åˆ†æ•°é‡çš„60%
+3æ¥¼å¥–åŠ±è®¾ç½®ç§¯åˆ†æ•°é‡çš„20%
+å»ºè®®åˆ†æ•°ä¸ä½ŽäºŽ3åˆ†]]></item>
 				<item id="variable"><![CDATA[rate]]></item>
 				<item id="type"><![CDATA[number]]></item>
 				<item id="value"><![CDATA[3]]></item>

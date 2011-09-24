@@ -17,7 +17,7 @@ class plugin_dsu_amuautorate_forum extends plugin_dsu_amuautorate {
 			if($thread['replies'] < 4 && $replyrates && $thread['authorid'] <> $_G['uid'] && $_G['uid'] > 1){
 				updatemembercount($_G['uid'], array("extcredits{$this -> vars['extcredit']}" => $replyrates ),  1, 'PRC', $pid);
 				DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($replyrates), ratetimes=ratetimes+1 WHERE pid='$pid'");
-				DB::query("INSERT INTO ".DB::table('forum_ratelog')." (pid, uid, username, extcredits, dateline, score, reason)	VALUES ('{$pid}', '1', 'root', '{$this -> vars['extcredit']}', 'P$_G[timestamp]}', '{$replyrates}', 'ÇÀÂ¥½±Àø')", 'UNBUFFERED');
+				DB::query("INSERT INTO ".DB::table('forum_ratelog')." (pid, uid, username, extcredits, dateline, score, reason)	VALUES ('{$pid}', '1', 'root', '{$this -> vars['extcredit']}', 'P$_G[timestamp]}', '{$replyrates}', 'æŠ¢æ¥¼å¥–åŠ±')", 'UNBUFFERED');
 				
 			}
 		}
