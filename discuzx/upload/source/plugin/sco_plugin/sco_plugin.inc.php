@@ -18,12 +18,10 @@ class plugin_sco_plugin extends _sco_dx_plugin {
 
 class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 
-	function common() {
-		if (CURMODULE != '') {
-			return;
-		}
-
+	function plugin_message() {
 		echo $this->identifier;
+
+		debug($this);
 	}
 
 }
