@@ -43,14 +43,7 @@ if(!$operation) {
 		), '<a href="'.ADMINSCRIPT.'?action=plugins&operation=validator" class="bold" style="float:right;padding-right:40px;">'.$lang['plugins_validator'].'</a>');
 		showformheader('plugins');
 		showtableheader();
-		$query = DB::query("SELECT
-				*
-			FROM
-				".DB::table('common_plugin')."
-			ORDER BY
-				available DESC
-				, pluginid DESC
-		");
+		$query = DB::query("SELECT * FROM ".DB::table('common_plugin')." ORDER BY available DESC, pluginid DESC");
 		$outputsubmit = false;
 		while($plugin = DB::fetch($query)) {
 			$hookexists = FALSE;
