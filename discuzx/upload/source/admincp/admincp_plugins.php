@@ -938,7 +938,7 @@ if(!$operation) {
 			/**
 			 * 增加從設計頁面直接連結到設置頁面
 			 */
-			array('config', 'plugins&operation=config&pluginid='.$plugin['pluginid'], 0, 1),
+			array('config', 'plugins&operation=config&pluginid='.$plugin['pluginid'], 0, $_pv_exists),
 			// bluelovers
 		));
 		showtips('plugins_edit_tips');
