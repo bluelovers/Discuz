@@ -37,13 +37,17 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 			$plugin_lists[] = $plugin;
 		}
 
-		$this->_setglobal('_G', &$GLOBALS['_G']);
+		global $_G;
 		$this->_setglobal('plugin_lists', $plugin_lists);
 
+		/*
 		ob_start();
 		echo $this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
+		*/
 
-		debug($this);
+		extract($this->attr['global']);
+		$plugin_self = &$this;
+		include $this->_template('plugin_index');
 	}
 
 }
