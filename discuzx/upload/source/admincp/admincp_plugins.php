@@ -911,6 +911,20 @@ if(!$operation) {
 
 		$adminidselect = array($plugin['adminid'] => 'selected');
 
+		// bluelovers
+		/**
+		 * @var $_pv_exists
+		 *
+		 * 檢查插件是否存在變量設置
+		 */
+		$_pv_exists = false;
+		if ($_pv = DB::fetch_first("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='{$plugin[pluginid]}' LIMIT 1")) {
+			if ($_pv['pluginid'] == $plugin['pluginid']) {
+				$_pv_exists = true;
+			}
+		}
+		// bluelovers
+
 		shownav('plugin');
 		$anchor = in_array($_G['gp_anchor'], array('config', 'modules', 'vars')) ? $_G['gp_anchor'] : 'config';
 		showsubmenuanchors($lang['plugins_edit'].' - '.$plugin['name'].($plugin['available'] ? cplang('plugins_edit_available') : ''), array(
