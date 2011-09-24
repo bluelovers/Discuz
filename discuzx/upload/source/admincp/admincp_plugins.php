@@ -518,6 +518,9 @@ if(!$operation) {
 			$importtxt = @implode('', file($file));
 			$pluginarray = getimportdata('Discuz! Plugin');
 			$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
+			/**
+			 * 修改為允許升級相同版本編號(>=)
+			 */
 			$upgrade = ($newver >= $plugin['version']) ? true : false;
 		}
 		$entrydir = DISCUZ_ROOT.'./source/plugin/'.$dir;
@@ -542,6 +545,9 @@ if(!$operation) {
 					$importtxt = @implode('', file($entrydir.'/'.$f));
 					$pluginarray = getimportdata('Discuz! Plugin');
 					$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
+					/**
+					 * 修改為允許升級相同版本編號(>=)
+					 */
 					$upgradestr .= ($newverother >= $plugin['version']) ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
 				}
 			}
