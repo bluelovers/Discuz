@@ -79,7 +79,7 @@ if(!$operation) {
 					($isplugindeveloper && !$plugin['modules']['system'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=edit&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_editlink]</a>&nbsp;" : '').
 				'</div>'.
 				($intro ? '<a href="javascript:;" onclick="display(\'pluginmore'.$plugin['pluginid'].'\')" class="act'.(!$plugin['available'] ? ' light' : '').'">'.$lang['plugins_home'].'</a>&nbsp;' : '').
-				(isset($_G['cache']['plugin'][$plugin['identifier']]) ? '<a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$plugin['pluginid'].'" class="act">'.$lang['config'].'</a>&nbsp;' : '').
+				((isset($_G['cache']['plugin'][$plugin['identifier']]) || 1) ? '<a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$plugin['pluginid'].'" class="act">'.$lang['config'].'</a>&nbsp;' : '').
 				implode('&nbsp;', $submenuitem).'&nbsp;&nbsp;'.
 				'</div>'.
 				$intro
