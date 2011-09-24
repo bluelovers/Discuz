@@ -1,0 +1,78 @@
+<!--{subtemplate common/header}-->
+
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php">{$_G[setting][navs][6][navname]}</a>$navigation
+	</div>
+</div>
+
+<!--{subtpl subblock/common/body_ct_header}-->
+
+<style>
+
+.buddy li {
+	background: none repeat scroll 0 0 #F9F9F9;
+	border: 1px solid #F3F3F3;
+	display: inline;
+	float: left;
+	height: 58px;
+	margin: 10px 5px 0;
+	overflow: hidden;
+	padding: 10px 10px 10px 70px;
+	width: 175px;
+	min-width: 175px;
+	max-width: 350px;
+	width: auto;
+
+	text-align: left;
+}
+
+.buddy .avt {
+	margin-left: -60px;
+	position: absolute;
+}
+
+.buddy .maxh {
+	height: 20px;
+	overflow: hidden;
+	line-height: 20px;
+}
+
+#ct .mn, .buddy {
+	text-align: center;
+}
+
+</style>
+
+<div id="ct" class="wp cl">
+	<div class="mn">
+
+	<ul class="buddy cl">
+	<!--{loop $plugin_lists $plugin}-->
+		<li>
+			<div class="avt">
+				<img src="http://addons.discuz.com/logo/{$plugin[identifier]}.png" onerror="this.src='http://addons.discuz.com/images/logo.png';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />
+			</div>
+			<h4>
+				{$plugin['name']:dhtmlspecialchars()} {$plugin['version']:dhtmlspecialchars()}
+			</h4>
+			<div>
+				<!--{if $plugin['copyright']}-->
+				<p class="maxh">
+					&copy; {$plugin['copyright']:dhtmlspecialchars()}
+				</p>
+				<!--{/if}-->
+				<!--{if $plugin['description']}-->
+				<p class="maxh">
+					{$plugin['description']:dhtmlspecialchars()}
+				</p>
+				<!--{/if}-->
+			</div>
+		</li>
+	<!--{/loop}-->
+	</ul>
+
+	</div>
+</div>
+
+<!--{subtemplate common/footer}-->

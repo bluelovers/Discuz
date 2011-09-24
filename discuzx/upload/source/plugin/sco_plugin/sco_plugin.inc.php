@@ -23,6 +23,8 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 				*
 			FROM
 				".DB::table('common_plugin')."
+			WHERE
+				available = '1'
 			ORDER BY
 				available DESC
 				, pluginid DESC
@@ -35,8 +37,10 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 		}
 
 		$this->_setglobal('plugin_lists', $plugin_lists);
+		$this->_setglobal('_G', &$GLOBALS['_G']);
 
-		$this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
+		ob_start();
+		echo $this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
 	}
 
 }
