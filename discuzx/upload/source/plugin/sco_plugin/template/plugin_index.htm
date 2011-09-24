@@ -27,6 +27,10 @@
 	text-align: left;
 }
 
+.buddy li:hover {
+	border: 1px solid #00B2E8;
+}
+
 .buddy .avt {
 	margin-left: -60px;
 	position: absolute;
@@ -49,7 +53,7 @@
 
 		<ul class="buddy cl">
 		<!--{loop $plugin_lists $plugin}-->
-			<li>
+			<li title="{$plugin['description']:dhtmlspecialchars()}">
 				<div class="avt">
 					<img src="http://addons.discuz.com/logo/{$plugin[identifier]}.png" onerror="this.src='http://addons.discuz.com/images/logo.png';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />
 				</div>
