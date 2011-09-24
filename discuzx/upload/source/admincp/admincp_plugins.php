@@ -932,6 +932,7 @@ if(!$operation) {
 			array('config', 'config', $anchor == 'config'),
 			array('plugins_config_module', 'modules', $anchor == 'modules'),
 			array('plugins_config_vars', 'vars', $anchor == 'vars'),
+			//TODO:增加可自動追加版本編號的選項
 			array('export', 'plugins&operation=export&pluginid='.$plugin['pluginid'], 0, 1),
 
 			// bluelovers
