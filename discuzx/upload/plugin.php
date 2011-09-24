@@ -33,7 +33,11 @@ define('CURMODULE', $identifier);
 runhooks();
 
 if(empty($identifier) || !preg_match("/^[a-z0-9_\-]+$/i", $module) || !in_array($identifier, $_G['setting']['plugins']['available'])) {
-	showmessage('plugin_nonexistence');
+	showmessage('plugin_nonexistence', '', array(
+		// bluelovers
+		'identifier' => dhtmlspecialchars($identifier),
+		// bluelovers
+	));
 } elseif($pluginmodule['adminid'] && ($_G['adminid'] < 1 || ($_G['adminid'] > 0 && $pluginmodule['adminid'] < $_G['adminid']))) {
 	showmessage('plugin_nopermission');
 } elseif(@!file_exists(DISCUZ_ROOT.($modfile = './source/plugin/'.$pluginmodule['directory'].$module.'.inc.php'))) {
