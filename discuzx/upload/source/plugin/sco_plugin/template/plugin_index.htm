@@ -19,9 +19,9 @@
 	margin: 10px 5px 0;
 	overflow: hidden;
 	padding: 10px 10px 10px 70px;
-	width: 175px;
-	min-width: 175px;
-	max-width: 310px;
+	width: 170px;
+	min-width: 170px;
+	max-width: 300px;
 	width: auto;
 
 	text-align: left;
@@ -44,34 +44,47 @@
 
 </style>
 
-<div id="ct" class="wp cl">
+<div id="ct" class="wp cl ct2_a">
 	<div class="mn">
 
-	<ul class="buddy cl">
-	<!--{loop $plugin_lists $plugin}-->
-		<li>
-			<div class="avt">
-				<img src="http://addons.discuz.com/logo/{$plugin[identifier]}.png" onerror="this.src='http://addons.discuz.com/images/logo.png';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />
-			</div>
-			<h4>
-				{$plugin['name']:dhtmlspecialchars()} {$plugin['version']:dhtmlspecialchars()}
-			</h4>
-			<div>
-				<!--{if $plugin['copyright']}-->
-				<p class="maxh">
-					&copy; {$plugin['copyright']:dhtmlspecialchars()}
-				</p>
-				<!--{/if}-->
-				<!--{if $plugin['description']}-->
-				<p class="maxh">
-					{$plugin['description']:dhtmlspecialchars()}
-				</p>
-				<!--{/if}-->
-			</div>
-		</li>
-	<!--{/loop}-->
-	</ul>
+		<ul class="buddy cl">
+		<!--{loop $plugin_lists $plugin}-->
+			<li>
+				<div class="avt">
+					<img src="http://addons.discuz.com/logo/{$plugin[identifier]}.png" onerror="this.src='http://addons.discuz.com/images/logo.png';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />
+				</div>
+				<h4>
+					{$plugin['name']:dhtmlspecialchars()} {$plugin['version']:dhtmlspecialchars()}
+				</h4>
+				<div>
+					<!--{if $plugin['copyright']}-->
+					<p class="maxh">
+						&copy; {$plugin['copyright']:dhtmlspecialchars()}
+					</p>
+					<!--{/if}-->
+					<!--{if $plugin['description']}-->
+					<p class="maxh">
+						{$plugin['description']:dhtmlspecialchars()}
+					</p>
+					<!--{/if}-->
+				</div>
+			</li>
+		<!--{/loop}-->
+		</ul>
 
+	</div>
+
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
+			<ul>
+				<!--{loop $jsmenu $_link}-->
+					<li>
+						$_link[url]
+					</li>
+				<!--{/loop}-->
+			</ul>
+		</div>
 	</div>
 </div>
 
