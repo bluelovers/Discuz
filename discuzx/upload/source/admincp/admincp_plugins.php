@@ -937,6 +937,7 @@ if(!$operation) {
 			// bluelovers
 			/**
 			 * 增加從設計頁面直接連結到設置頁面
+			 * (插件必須要存在變量設置)
 			 */
 			array('config', 'plugins&operation=config&pluginid='.$plugin['pluginid'], 0, $_pv_exists),
 			// bluelovers
