@@ -78,10 +78,10 @@
 		<div class="tbn">
 			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
 			<ul>
-				<!--{loop $jsmenu $_link}-->
-					<li>
-						$_link[url]
-					</li>
+				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+					 <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+					 <li>$module[url]</li>
+					 <!--{/if}-->
 				<!--{/loop}-->
 			</ul>
 		</div>

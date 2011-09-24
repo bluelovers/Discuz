@@ -37,9 +37,8 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 			$plugin_lists[] = $plugin;
 		}
 
-		$this->_setglobal('plugin_lists', $plugin_lists);
 		$this->_setglobal('_G', &$GLOBALS['_G']);
-		$this->_setglobal('jsmenu', &$this->attr['plugins']['jsmenu']);
+		$this->_setglobal('plugin_lists', $plugin_lists);
 
 		ob_start();
 		echo $this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
