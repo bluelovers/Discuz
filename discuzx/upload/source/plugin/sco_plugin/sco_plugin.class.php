@@ -7,7 +7,7 @@
 
 include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
-class sco_plugin extends _sco_dx_plugin {
+class plugin_sco_plugin extends _sco_dx_plugin {
 
 	public function __construct() {
 		$this->_init($this->_get_identifier(__CLASS__));
@@ -16,12 +16,14 @@ class sco_plugin extends _sco_dx_plugin {
 
 }
 
-class sco_plugin_plugin extends sco_plugin {
+class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 
 	function common() {
 		if (CURMODULE != '') {
 			return;
 		}
+
+		echo $this->identifier;
 	}
 
 }
