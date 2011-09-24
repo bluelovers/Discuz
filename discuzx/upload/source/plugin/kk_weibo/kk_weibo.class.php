@@ -49,7 +49,7 @@
 				$cur_output[]="<div class=\"kk_weibo_top\"><ul>";
 				$cur_output[]="<li><div class=\"num\"><a href=\"/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}\" target=\"_blank\">{$cur_stat['count_attention']}</a></div>¹Ø×¢</li>";
 				$cur_output[]="<li class=\"li_fans\"><div class=\"num\"><a href=\"plugin.php?id=kk_weibo:weibo&rel={$cur_uid}&view=fans\" target=\"_blank\">{$cur_stat['count_fans']}</a></div>·ÛË¿</li>";
-				$cur_output[]="<li><div class=\"num\"><a href=\"/home.php?mod=space&uid={$cur_uid}&do=thread&type=reply\" target=\"_blank\">{$post['posts']}</a></div>Ìû×Ó</li>";
+				$cur_output[]="<li class=\"li_posts\"><div class=\"num\"><a href=\"/home.php?mod=space&uid={$cur_uid}&do=thread&type=reply\" target=\"_blank\">{$post['posts']}</a></div>Ìû×Ó</li>";
 				$cur_output[]="</ul></div><br clear=\"both\"/>";
 				$result[]=implode('',$cur_output);
     		}
@@ -81,6 +81,7 @@
 			$result[]='.kk_weibo_top li a{color:#336699;}';
 			$result[]='.kk_weibo_top li.li_fans {padding:2px 4px 2px 8px;margin-right:6px;border:1px solid #CCC;border-width:0px 1px;}';
 			$result[]='.kk_weibo_top li div.num {font-size:14px;font-family:Arial;font-weight:bold;}';
+			$result[]='.kk_weibo_top li.li_posts {width:50px;}';
 			$result[]='.kk_weibo_bottom {margin-left:20px;margin-top:-4px;}';
 			$result[]='.kk_weibo_bottom span {padding-top:2px;padding-left:16px;text-indent:16px;}';
 			$result[]='.kk_weibo_bottom span a{color:#336699;}';
