@@ -518,7 +518,7 @@ if(!$operation) {
 			$importtxt = @implode('', file($file));
 			$pluginarray = getimportdata('Discuz! Plugin');
 			$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-			$upgrade = $newver > $plugin['version'] ? true : false;
+			$upgrade = ($newver >= $plugin['version']) ? true : false;
 		}
 		$entrydir = DISCUZ_ROOT.'./source/plugin/'.$dir;
 		$upgradestr = '';
@@ -542,7 +542,7 @@ if(!$operation) {
 					$importtxt = @implode('', file($entrydir.'/'.$f));
 					$pluginarray = getimportdata('Discuz! Plugin');
 					$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-					$upgradestr .= $newverother > $plugin['version'] ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
+					$upgradestr .= ($newverother >= $plugin['version']) ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
 				}
 			}
 		}
