@@ -44,12 +44,12 @@ if(!$operation) {
 		showformheader('plugins');
 		showtableheader();
 		$query = DB::query("SELECT
-				*
+				p.*
 			FROM
-				".DB::table('common_plugin')."
+				".DB::table('common_plugin')." p
 			ORDER BY
-				available DESC
-				, pluginid DESC
+				p.available DESC
+				, p.pluginid DESC
 		");
 		$outputsubmit = false;
 		while($plugin = DB::fetch($query)) {
