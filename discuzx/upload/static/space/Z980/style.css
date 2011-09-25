@@ -1,0 +1,67 @@
+/*
+[name]I'm here[/name]
+Powered by Discuz! X2
+*/
+
+
+/*------------------------------------------------------------------请对以下的参数做相应的修改-----------------------------------------------*/
+
+/********页面文字基本颜色***/
+#ct { color: #f6f2ff; }
+/********带链接的文字的颜色***/
+#ct a { color: #fff99c; }
+/********页面背景颜色，注意：background-image的参数千万不要修改***/
+body { background-color:#c8da9c; background:url(images/tile.gif) center 10px;}
+/********页面顶部大图片***/
+#myspace{ background: url(images/header.jpg) no-repeat center top; }
+/********若存在嵌套的gif动画图片，请在下面设置，否则请删除下面这一行的代码***/
+#dingbu { background: url(images/headeranim.gif) no-repeat center 0;}
+/********顶部大背景的高度***/
+.fytitle{border-bottom:0px; padding-top:168px;}
+/********首页各版块的标题样式、标题颜色、版块的背景颜色和边框颜色***/
+.block .title { padding: 0 10px; border-bottom: none; background:url(images/bg_title.gif) repeat-x; }
+	.block .title, .block .title a { color: #f6f2ff; }
+.block{border:1px solid #114175; background:#114175;}
+/********其他页面版块的边框颜色和背景颜色、标题样式***/
+.bm {border:1px solid #114175; background:#114175;}
+	.bm_h { border: none; background:url(images/bg_title.gif) repeat-x; }
+/********头部标题的颜色***/
+.mingzi{color:#a6abe2;}
+/********头部状态的颜色***/
+.notes2{color:#a6abe2;}
+/********导航栏上面的“复制地址”和“发给好友”样式***/
+.dizhi {background-color:#225081;}
+.dizhi a{color:#9572d6;}
+/********“所有状态”四个字的颜色***/
+.topmood a{color:#7e86cc;}
+/********页面底部分割线的颜色及底部背景图片***/
+.zuixiamian{border-top:1px solid #114175;}
+/********页面底部文字的颜色***/
+.zuixiamian,.zuixiamian *{color:#7e86cc;}
+/********页面底部背景图片***/
+.zuidibu{background:url(images/footer.jpg) no-repeat  bottom;}
+/********以下是顶部导航菜单的样式，请对应修改相应的颜色***/
+.tabs_header { border-bottom:1px solid #799333;}
+.tabs_header li {color:#fff99c}
+.tabs_header li a {border:1px solid #799333; background-color:#799333; color:#fff99c; }
+.tabs_header li a:hover { border-bottom:none; background-color:#799333/***鼠标滑过*/;  }
+.tabs_header li.active a {border:1px solid #799333; border-bottom:1px solid #799333; background:#114175;}
+.tabs_header li.active a:link, .tabs_header li.active a:visited { color:#f6f2ff;}
+.tabs_header li.active a:hover { border-bottom:1px solid #114175; background:#799333;}
+.tabs_header li.null a {background: #799333; border:1px solid #114175; border-left:1px solid #114175; border-top:1px solid #114175; }
+.tabs_header li.null a:link, .tabs_header li.null a:visited { color:#fff99c;}
+.tabs_header li.null a:hover { border:1px solid #799333; background:#799333;}
+
+
+
+/*------------------------------------------------------------------以下是基本样式，请不要修改-----------------------------------------------*/
+
+#nv { bottom: auto; left: auto; top: 45px; right: 0; }
+#nv li { padding: 0px 2px; }
+#nv li a, #nv li a:visited { padding: 0px 10px; color: #333; }
+#nv li a:hover { background-image: none !important; }
+#ct, .n, .w { background: transparent none !important; }
+.bbda, .el li { border-bottom-color: #e3eef8; }
+.vw .ph, .vw .d{ color: #FFF; }
+.tl .th { background: none; }
+#doingform { background: none; }
