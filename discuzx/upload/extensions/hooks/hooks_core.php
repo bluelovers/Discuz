@@ -582,8 +582,8 @@ Array
 		$_uid = $m['uid'];
 
 	// 判斷是否分析過 $m['username']
-	} elseif (!empty($m['username']) && isset($_user['username'][$m['username']])) {
-		$_uid = $_user['username'][$m['username']];
+	} elseif (!empty($m['username']) && isset($_user['username'][(string)$m['username']])) {
+		$_uid = $_user['username'][(string)$m['username']];
 
 	// 如果存在 $m['uid']
 	} elseif ($m['uid'] || !empty($m['username'])) {
@@ -625,7 +625,7 @@ Array
 	if ($_uid
 		&& !empty($m['showname'])
 		// 改良只取代帳號名
-		&& $_uid == $_user['username'][$m['showname']]
+		&& $_uid == $_user['username'][(string)$m['showname']]
 	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
