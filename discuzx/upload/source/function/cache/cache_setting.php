@@ -875,6 +875,10 @@ function get_cachedata_mainnav() {
 			}
 		}
 
+		// bluelovers
+		if ($nav['url'] == '#') $nav['url'] = 'javascript:void(0);';
+		// bluelovers
+
 		$data['navs'][$id]['navid'] = $navid;
 		$data['navs'][$id]['level'] = $nav['level'];
 		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";

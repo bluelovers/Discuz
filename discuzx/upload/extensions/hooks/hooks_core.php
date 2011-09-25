@@ -535,7 +535,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		include_once libfile('function/cache');
 
-		if (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5) {
+		if (discuz_core::$_cache_data['output']['users']['timestamp'] <= TIMESTAMP - 3600 * 5 + 60) {
 			discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
 		}
 
@@ -582,8 +582,8 @@ Array
 		$_uid = $m['uid'];
 
 	// 判斷是否分析過 $m['username']
-	} elseif (!empty($m['username']) && isset($_user['username'][$m['username']])) {
-		$_uid = $_user['username'][$m['username']];
+	} elseif (!empty($m['username']) && isset($_user['username'][(string)$m['username']])) {
+		$_uid = $_user['username'][(string)$m['username']];
 
 	// 如果存在 $m['uid']
 	} elseif ($m['uid'] || !empty($m['username'])) {
@@ -609,8 +609,8 @@ Array
 			*/
 
 			$_user['uid'][$_uid] = $user['showname'];
-			$_user['username'][$user['username']] = $_uid;
-			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+			$_user['username'][(string)$user['username']] = $_uid;
+			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][(string)$m['username']] = $_uid;
 
 			$_user['updated'] = true;
 
@@ -625,7 +625,7 @@ Array
 	if ($_uid
 		&& !empty($m['showname'])
 		// 改良只取代帳號名
-		&& $_uid == $_user['username'][$m['showname']]
+		&& $_uid == $_user['username'][(string)$m['showname']]
 	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
