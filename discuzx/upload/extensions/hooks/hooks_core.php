@@ -535,7 +535,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		include_once libfile('function/cache');
 
-		if (discuz_core::$_cache_data['output']['users']['timestamp'] < TIMESTAMP - 3600 * 5) {
+		if (discuz_core::$_cache_data['output']['users']['timestamp'] <= TIMESTAMP - 3600 * 5) {
 			discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
 		}
 
