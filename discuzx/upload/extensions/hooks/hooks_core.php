@@ -609,8 +609,8 @@ Array
 			*/
 
 			$_user['uid'][$_uid] = $user['showname'];
-			$_user['username'][$user['username']] = $_uid;
-			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+			$_user['username'][(string)$user['username']] = $_uid;
+			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][(string)$m['username']] = $_uid;
 
 			$_user['updated'] = true;
 
