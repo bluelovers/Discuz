@@ -169,7 +169,7 @@ function moddisplay($moderators, $type, $inherit = 0) {
 	if($moderators) {
 		$modlist = $comma = '';
 		foreach(explode("\t", $moderators) as $moderator) {
-			$modlist .= $comma.'<a href="home.php?mod=space&username='.rawurlencode($moderator).'" class="notabs" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
+			$modlist .= $comma.'<a href="home.php?mod=space&username='.rawurlencode($moderator).'" class="notabs" c="1" target="_blank">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
 			$comma = ', ';
 		}
 	} else {
