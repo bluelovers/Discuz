@@ -5,7 +5,7 @@
 		
 		function global_userabout_bottom($param) {
 			//plugin::kk_weibo			
-			$result='<ul><li><a href="/plugin.php?id=kk_weibo:weibo"><img width="16" height="16" src="static/image/feed/file.gif">¹Ø×¢</a></li>';			
+			$result='<ul><li><a href="/plugin.php?id=kk_weibo:weibo"><img width="16" height="16" src="static/image/feed/file.gif">å…³æ³¨</a></li>';			
 			return Array('home::space'=>$result,'plugin::kk_weibo'=>$result);
 		}
         //------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@
 			global $_G; $cache=$_G['cache']['plugin']['kk_weibo'];
             if(!$cache['open_tag']) return '';            
 			$selected=($_GET['kk_weibo']=='1')?' class="a"':'';
-			return "<li{$selected}><a href=\"home.php?mod=space&do=home&view=all&kk_weibo=1\">¹Ø×¢µÄ¶¯Ì¬</a></li>";			
+			return "<li{$selected}><a href=\"home.php?mod=space&do=home&view=all&kk_weibo=1\">å…³æ³¨çš„åŠ¨æ€</a></li>";			
 		}
 	}	
 ?>
