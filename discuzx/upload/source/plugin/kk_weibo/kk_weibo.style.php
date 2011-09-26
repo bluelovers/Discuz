@@ -1,7 +1,7 @@
 <?php
 	return Array(
-		'data_position'	=> 1, // 1=µÈ¼¶ÏÂÃæ 2=µÈ¼¶ÉÏÃæ
-		'btn_position'	=> 1, // 1=ÓÃ»§»¥¶¯ºó 2=Êı¾İÊä³öºó		
+		'data_position'	=> 1, // 1=ç­‰çº§ä¸‹é¢ 2=ç­‰çº§ä¸Šé¢
+		'btn_position'	=> 1, // 1=ç”¨æˆ·äº’åŠ¨å 2=æ•°æ®è¾“å‡ºå		
 		'css_output'	=> <<<EOT
 .kk_weibo_top {margin-left:20px;}
 .kk_weibo_top li {float:left;padding:2px 0px;width:45px;border:1px solid #ccc; background:#FFF;}
@@ -21,24 +21,24 @@
 .kk_weibo_top li span.icon2 {background:url(/static/image/common/group.ico) no-repeat -2px 1px; padding-left:15px;}
 
 EOT
-,		//¹Ø×¢:{count_attention} ·ÛË¿:{count_fans} Ìû×Ó:{posts} Ö÷Ìâ:{threads} ¼ÇÂ¼:{doings} ¹Ø×¢µØÖ·:{url_attention} ·ÛË¿µØÖ·:{url_fans} {uid}
+,		//å…³æ³¨:{count_attention} ç²‰ä¸:{count_fans} å¸–å­:{posts} ä¸»é¢˜:{threads} è®°å½•:{doings} å…³æ³¨åœ°å€:{url_attention} ç²‰ä¸åœ°å€:{url_fans} {uid}
 		'data_tpl'		=> <<<EOT
 <div class="kk_weibo_top"><ul>
-<li class="alt"><div class="num"><a href="{url_attention}" target="_blank">{count_attention}</a></div><span class="icon1">¹Ø×¢</span></li>
+<li class="alt"><div class="num"><a href="{url_attention}" target="_blank">{count_attention}</a></div><span class="icon1">å…³æ³¨</span></li>
 <li class="lr"></li>
-<li class="alt"><div class="num"><a href="{url_fans}" target="_blank">{count_fans}</a></div><span class="icon2">·ÛË¿</span></li>
+<li class="alt"><div class="num"><a href="{url_fans}" target="_blank">{count_fans}</a></div><span class="icon2">ç²‰ä¸</span></li>
 </ul></div><br clear="both">
 EOT
-,		//¼Ó¹Ø×¢µØÖ·:{url_add} ¼Ó¹Ø×¢µã»÷½Å±¾:{click_add} {uid}
+,		//åŠ å…³æ³¨åœ°å€:{url_add} åŠ å…³æ³¨ç‚¹å‡»è„šæœ¬:{click_add} {uid}
 		'btn_add_tpl'		=> <<<EOT
 <div class="kk_weibo_bottom">
-<span class="icon1"><a href="{url_add}" onclick="{click_add}">¼Ó¹Ø×¢</a></span>
+<span class="icon1"><a href="{url_add}" onclick="{click_add}">åŠ å…³æ³¨</a></span>
 </div>
 EOT
-,		//È¡Ïû¹Ø×¢µØÖ·:{url_del} È¡Ïû¹Ø×¢µã»÷½Å±¾:{click_del} {uid}
+,		//å–æ¶ˆå…³æ³¨åœ°å€:{url_del} å–æ¶ˆå…³æ³¨ç‚¹å‡»è„šæœ¬:{click_del} {uid}
 		'btn_del_tpl'		=> <<<EOT
 <div class="kk_weibo_bottom">
-<span class="icon2"><a href="javascript:void(0)">ÒÑ¹Ø×¢</a></span>
+<span class="icon2"><a href="javascript:void(0)">å·²å…³æ³¨</a></span>
 </div>	
 EOT
 ,
