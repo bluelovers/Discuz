@@ -131,9 +131,12 @@ function include_file_once() {
 
 		// for discuz use
 		if (
+			func_num_args() >= 3
+			&& (
 			true === func_get_arg(3)
 			||
 			1 === func_get_arg(3)
+			)
 		) {
 			// 防止模板檔中使用到 $_G 而造成錯誤
 			global $_G;
