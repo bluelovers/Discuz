@@ -1,13 +1,13 @@
 <?php
     if(!defined('IN_DISCUZ')) exit('Access Denied');
-	if(empty($_G['uid'])) showmessage('ÇëµÇÂ¼ºó²Ù×÷');
+	if(empty($_G['uid'])) showmessage('è¯·ç™»å½•åæ“ä½œ');
 	$kk_weibo=$_G['cache']['plugin']['kk_weibo'];
 	//-------------------------------------------------------------------------------------------------
 	function kk_weibo_check() {
 		global $action,$uid,$uid_rel;
-		if(!in_array($action,Array('add','del'))) showMessage('²ÎÊıÎŞĞ§');
-		if($uid_rel<=0) showMessage('²ÎÊıÎŞĞ§');		
-		if($uid==$uid_rel) showMessage('²ÎÊıÎŞĞ§');
+		if(!in_array($action,Array('add','del'))) showMessage('å‚æ•°æ— æ•ˆ');
+		if($uid_rel<=0) showMessage('å‚æ•°æ— æ•ˆ');		
+		if($uid==$uid_rel) showMessage('å‚æ•°æ— æ•ˆ');
 	}
 	function kk_weibo_fetch($rel) {
 		global $uid,$table;
@@ -49,9 +49,9 @@
 					'url_fans'	=> '/plugin.php?id=kk_weibo:weibo&view=fans',
 				));
 			}
-			$description="Ìí¼Ó¹Ø×¢³É¹¦¡£";
+			$description="æ·»åŠ å…³æ³¨æˆåŠŸã€‚";
 		}else {
-			$description="ÄúÖ®Ç°ÒÑ¾­¹Ø×¢¹ı Ëû/Ëı ÁË£¬²»ÄÜÖØ¸²¹Ø×¢¡£";
+			$description="æ‚¨ä¹‹å‰å·²ç»å…³æ³¨è¿‡ ä»–/å¥¹ äº†ï¼Œä¸èƒ½é‡è¦†å…³æ³¨ã€‚";
 		}
 				
 	} else if($action=='del') {		
@@ -59,9 +59,9 @@
 		if(!empty($row)) {			
 			DB::query("delete from {$table} where uid={$uid} and uid_rel={$uid_rel}");			
 			kk_weibo_update($uid_rel);
-			$description="È¡Ïû¹Ø×¢³É¹¦¡£";
+			$description="å–æ¶ˆå…³æ³¨æˆåŠŸã€‚";
 		}else {
-			$description="Äú¶¼»¹Ã»ÓĞ¹Ø×¢ Ëû/Ëı£¬Ì¸ºÎÈ¡ÏûÄØ£¿";
+			$description="æ‚¨éƒ½è¿˜æ²¡æœ‰å…³æ³¨ ä»–/å¥¹ï¼Œè°ˆä½•å–æ¶ˆå‘¢ï¼Ÿ";
 		}
 		
 	}
