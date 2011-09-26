@@ -130,7 +130,11 @@ function include_file_once() {
 	if (is_file(func_get_arg(0))) {
 
 		// for discuz use
-		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+		if (
+			true === func_get_arg(3)
+			||
+			1 === func_get_arg(3)
+		) {
 			// 防止模板檔中使用到 $_G 而造成錯誤
 			global $_G;
 		}
