@@ -150,7 +150,7 @@ function visitedforums() {
 		foreach(explode('D', $_G['cookie']['visitedfid']) as $fid) {
 			if(isset($_G['cache']['forums'][$fid]) && !in_array($fid, $fidarray)) {
 				if($fid != $_G['forum']['fid']) {
-					$visitedforums .= '<li><a href="forum.php?mod=forumdisplay&fid='.$fid.'">'.$_G['cache']['forums'][$fid]['name'].'</a></li>';
+					$visitedforums .= '<li><a href="forum.php?mod=forumdisplay&fid='.$fid.'" target="_blank">'.$_G['cache']['forums'][$fid]['name'].'</a></li>';
 					if(++$count >= $_G['setting']['visitedforums']) {
 						break;
 					}
