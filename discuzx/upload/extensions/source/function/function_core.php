@@ -183,4 +183,8 @@ function getaccept_encoding_gzip() {
 	return HTTP_USER_AGENT_GZIP;
 }
 
+function is_true($var) {
+	return ($var === true || $var === 1) ? true : false;
+}
+
 ?>
