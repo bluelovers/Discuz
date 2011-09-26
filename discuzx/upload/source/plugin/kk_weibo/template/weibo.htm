@@ -5,16 +5,20 @@
 	<div class="z">
 		<a href="./" class="nvhm">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>	
-		<a href="/plugin.php?id=kk_weibo:weibo">关注</a>
+		<a href="/plugin.php?id=kk_weibo:weibo">关注/粉丝</a>
 	</div>
 </div>
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">		
 		<div class="bm bw0">			
-				<h1 class="mt">-=-=-=-=</h1>
 				<ul class="tb cl">
-					<li{$a_actives[attention]}><a href="/plugin.php?id=kk_weibo:weibo&rel={$uid_rel}">我关注的</a></li>
-					<li{$a_actives[fans]}><a href="/plugin.php?id=kk_weibo:weibo&view=fans&rel={$uid_rel}">关注我的</a></li>					
+                	<!--{if $uid_rel!=$_G['uid']}-->	
+					<li{$a_actives[attention]}><a href="/plugin.php?id=kk_weibo:weibo&rel={$uid_rel}">他（她）关注的</a></li>
+					<li{$a_actives[fans]}><a href="/plugin.php?id=kk_weibo:weibo&view=fans&rel={$uid_rel}">关注他（她）的</a></li>		
+                    <!--{else}-->
+                    <li{$a_actives[attention]}><a href="/plugin.php?id=kk_weibo:weibo&rel={$uid_rel}">我关注的</a></li>
+					<li{$a_actives[fans]}><a href="/plugin.php?id=kk_weibo:weibo&view=fans&rel={$uid_rel}">关注我的</a></li>		
+                    <!--{/if}-->			
 				</ul>
 				<div class="tbmu cl">{$description}</div>
 
@@ -45,7 +49,7 @@
 										<a href="/plugin.php?id=kk_weibo:service&action=del&rel={$value[uid]}" id="kk_weibo_del" onclick="if(confirm('你确定要取消关注吗?')) {showWindow(this.id,this.href);};return false; ">取消关注</a>										
 									<!--{else}-->
 										<!--{if empty($value['already_attention']) && $value['uid']!=$_G['uid']}-->
-										<a href="/plugin.php?id=kk_weibo:service&action=add&rel={$value[uid]}" id="kk_weibo_del" onclick="showWindow(this.id,this.href);return false; ">加关注</a>
+										<a href="/plugin.php?id=kk_weibo:service&action=add&rel={$value[uid]}" id="kk_weibo_del" onclick="showWindow(this.id,this.href);return false; ">添加关注</a>
 										<!--{/if}-->
 									<!--{/if}-->
 								</div>								
