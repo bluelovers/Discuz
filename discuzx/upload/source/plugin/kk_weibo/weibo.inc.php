@@ -1,6 +1,6 @@
 <?php
 if(!defined('IN_DISCUZ')) exit('Access Denied');
-if(empty($_G['uid'])) showmessage('本页面需要登录后查看');
+if(empty($_G['uid'])) showmessage('您只有登录过后才能进入本互动页面。');
 
 $perpage = 24;
 $page = empty($_GET['page'])?0:intval($_GET['page']);
