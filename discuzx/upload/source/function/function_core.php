@@ -763,7 +763,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$file = $primaltpl ? $primaltpl : $oldfile;
 			}
 			$tplrefresh = $_G['config']['output']['tplrefresh'];
-			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && filemtime($diypath.$file.'.htm') < filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
+			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && filemtime($diypath.$file.'.htm') < @filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
 				if (!updatediytemplate($file)) {
 					unlink($diypath.$file.'.htm');
 					$tpldir = '';
@@ -1828,7 +1828,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 		$_G['inhookscript'] = true;
 		$funcs = !$func ? $_G['setting'][HOOKTYPE][$hscript][$script][$type] : array($func => $_G['setting'][HOOKTYPE][$hscript][$script][$type][$func]);
 		foreach($funcs as $hookkey => $hookfuncs) {
-			foreach($hookfuncs as $hookfunc) {
+			foreach((array)$hookfuncs as $hookfunc) {
 				if($hooksadminid[$hookfunc[0]]) {
 					$classkey = (HOOKTYPE != 'hookscriptmobile' ? '' : 'mobile').'plugin_'.($hookfunc[0].($hscript != 'global' ? '_'.$hscript : ''));
 					if(!class_exists($classkey)) {
