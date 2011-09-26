@@ -1828,7 +1828,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 		$_G['inhookscript'] = true;
 		$funcs = !$func ? $_G['setting'][HOOKTYPE][$hscript][$script][$type] : array($func => $_G['setting'][HOOKTYPE][$hscript][$script][$type][$func]);
 		foreach($funcs as $hookkey => $hookfuncs) {
-			foreach($hookfuncs as $hookfunc) {
+			foreach((array)$hookfuncs as $hookfunc) {
 				if($hooksadminid[$hookfunc[0]]) {
 					$classkey = (HOOKTYPE != 'hookscriptmobile' ? '' : 'mobile').'plugin_'.($hookfunc[0].($hscript != 'global' ? '_'.$hscript : ''));
 					if(!class_exists($classkey)) {
