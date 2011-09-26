@@ -8,7 +8,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[��ע/��˿���]]></item>
+			<item id="name"><![CDATA[关注/粉丝插件]]></item>
 			<item id="identifier"><![CDATA[kk_weibo]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -34,8 +34,8 @@
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[0]]></item>
-				<item id="title"><![CDATA[������ע�Ķ�̬]]></item>
-				<item id="description"><![CDATA[��ȷ�ϰ��̳��޸ĺ��ٿ���]]></item>
+				<item id="title"><![CDATA[开启关注的动态]]></item>
+				<item id="description"><![CDATA[先确认按教程修改后再开启]]></item>
 				<item id="variable"><![CDATA[open_tag]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[0]]></item>
@@ -43,8 +43,8 @@
 			</item>
 			<item id="1">
 				<item id="displayorder"><![CDATA[1]]></item>
-				<item id="title"><![CDATA[��ע��������]]></item>
-				<item id="description"><![CDATA[�Ƿ�ӹ�ע�ɹ��������ע�û���������]]></item>
+				<item id="title"><![CDATA[关注后发送提醒]]></item>
+				<item id="description"><![CDATA[是否加关注成功后给被关注用户发送提醒]]></item>
 				<item id="variable"><![CDATA[send_notify]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[0]]></item>
@@ -52,16 +52,16 @@
 			</item>
 			<item id="2">
 				<item id="displayorder"><![CDATA[2]]></item>
-				<item id="title"><![CDATA[��ע����ģ��]]></item>
-				<item id="description"><![CDATA[{uid} {username}  ��˿��ַ:{url_fans}]]></item>
+				<item id="title"><![CDATA[关注提醒模板]]></item>
+				<item id="description"><![CDATA[{uid} {username}  粉丝地址:{url_fans}]]></item>
 				<item id="variable"><![CDATA[send_notify_tpl]]></item>
 				<item id="type"><![CDATA[textarea]]></item>
-				<item id="value"><![CDATA[<a href="/home.php?mod=space&uid={uid}" target="_blank">{username}</a>��ע���� <a href="{url_fans}" target="_blank" >�鿴�ҵķ�˿</a>]]></item>
+				<item id="value"><![CDATA[<a href="/home.php?mod=space&uid={uid}" target="_blank">{username}</a>关注了你 <a href="{url_fans}" target="_blank" >查看我的粉丝</a>]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 			<item id="3">
 				<item id="displayorder"><![CDATA[4]]></item>
-				<item id="title"><![CDATA[������ʽ]]></item>
+				<item id="title"><![CDATA[附加样式]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[css_append]]></item>
 				<item id="type"><![CDATA[textarea]]></item>
