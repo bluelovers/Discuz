@@ -1,7 +1,7 @@
 <?php
     if(!defined('IN_DISCUZ')) exit('Access Denied');        
     class plugin_kk_weibo {
-    	protected $context=Array('tree'=>Array());				
+    	protected $context=Array('tree'=>Array());
 		
 		function global_userabout_bottom($param) {
 			//plugin::kk_weibo			
@@ -39,56 +39,80 @@
 			//--------------------------------------------------------------------------------------
 			$this->context['tree']=$result;
 		}
+		function _buildStyle() {
+			global $_G; $cache=$_G['cache']['plugin']['kk_weibo'];
+			$result=include DISCUZ_ROOT.'/source/plugin/kk_weibo/kk_weibo.style.php';
+			//if(!empty($cache['data_tpl'])) $result['data_tpl']=$cache['data_tpl'];
+			//if(!empty($cache['btn_add_tpl'])) $result['btn_add_tpl']=$cache['btn_add_tpl'];
+			//if(!empty($cache['btn_del_tpl'])) $result['btn_del_tpl']=$cache['btn_del_tpl'];
+			if(!empty($cache['css_append'])) $result['css_output'].="\n".$cache['css_append'];
+			$this->context['style']=$result;
+		}		
+		function _replaceTplMacro($tpl,$param) {
+			foreach($param as $key=>$value) $tpl=str_replace('{'.$key.'}',$value,$tpl);
+			return $tpl;
+		}
     }    
-    class plugin_kk_weibo_forum extends plugin_kk_weibo {		
+    class plugin_kk_weibo_forum extends plugin_kk_weibo {
+		function __construct() {$this->_buildStyle();}
+		function _button_output($post) {
+			global $_G; $tree=$this->context['tree']; $style=$this->context['style'];
+			$cur_uid=$post['authorid']; $cur_stat=$tree[$cur_uid];
+			$cur_param=Array(
+				'url_add' 		=> "/plugin.php?id=kk_weibo:service&action=add&rel={$cur_uid}",
+				'click_add' 	=> "showWindow('kk_weibo',this.href);return false;",
+				'url_del' 		=> "/plugin.php?id=kk_weibo:service&action=del&rel={$cur_uid}",
+				'click_del' 	=> "showWindow('kk_weibo',this.href);return false;",
+				'uid' 			=> $cur_uid,
+				);
+			
+			if($_G['uid']==$cur_uid) return '';
+			else if($cur_stat['already_attention']) return $this->_replaceTplMacro($style['btn_del_tpl'],$cur_param);
+			else return $this->_replaceTplMacro($style['btn_add_tpl'],$cur_param);
+		}
+		function _data_output($post) {
+			global $_G; $tree=$this->context['tree']; $style=$this->context['style'];
+			$cur_output=Array(); $cur_uid=$post['authorid']; $cur_stat=$tree[$cur_uid];
+			$cur_param=Array(
+				'count_attention' 	=> $cur_stat['count_attention'],
+				'count_fans' 		=> $cur_stat['count_fans'],
+				'posts' 			=> $post['posts'],
+				'threads' 			=> $post['threads'],
+				'doings' 			=> $post['doings'],
+				'url_attention' 	=> "/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}",
+				'url_fans' 			=> "/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}&view=fans",
+				'uid' 				=> $cur_uid,
+				);
+			
+			$cur_output[]=$this->_replaceTplMacro($style['data_tpl'],$cur_param);
+			if($style['btn_position']==2) $cur_output[]=$this->_button_output($post);
+			return implode("\n",$cur_output);
+		}
+		function viewthread_avatar_output() {
+			global $_G,$postlist; $result=Array(); $style=$this->context['style'];
+			if($style['data_position']==1) return Array();
+			$this->_buildUIDTree();			
+			foreach($postlist as $post) $result[]=$this->_data_output($post);
+    		return $result;
+		}
     	function viewthread_sidetop_output() {
-    		global $postlist; $result=Array();
-			$this->_buildUIDTree(); $tree=$this->context['tree'];
-			foreach($postlist as $post) {
-				$cur_output=Array(); $cur_uid=$post['authorid']; $cur_stat=$tree[$cur_uid]; //var_dump($cur_stat);
-				$cur_output[]="<div class=\"kk_weibo_top\"><ul>";
-				$cur_output[]="<li><div class=\"num\"><a href=\"/plugin.php?id=kk_weibo:weibo&rel={$cur_uid}\" target=\"_blank\">{$cur_stat['count_attention']}</a></div>关注</li>";
-				$cur_output[]="<li class=\"li_fans\"><div class=\"num\"><a href=\"plugin.php?id=kk_weibo:weibo&rel={$cur_uid}&view=fans\" target=\"_blank\">{$cur_stat['count_fans']}</a></div>粉丝</li>";
-				$cur_output[]="<li class=\"li_posts\"><div class=\"num\"><a href=\"/home.php?mod=space&uid={$cur_uid}&do=thread&type=reply\" target=\"_blank\">{$post['posts']}</a></div>帖子</li>";
-				$cur_output[]="</ul></div><br clear=\"both\"/>";
-				$result[]=implode('',$cur_output);
-    		}
+    		global $_G,$postlist; $result=Array();$style=$this->context['style'];
+			if($style['data_position']==2) return Array();
+			$this->_buildUIDTree();			
+			foreach($postlist as $post) $result[]=$this->_data_output($post);
     		return $result;
     	}
     	function viewthread_sidebottom_output() {
-    		global $_G,$postlist; $result=Array(); $tree=$this->context['tree'];
+			global $_G,$postlist; $result=Array(); $style=$this->context['style'];
     		foreach($postlist as $post) {
-				$cur_output=Array(); $cur_uid=$post['authorid']; $cur_stat=$tree[$cur_uid];
-				if($_G['uid']==$post['authorid']) $cur_output[]='';
-				else {
-					$cur_output[]="<div class=\"kk_weibo_bottom\">";
-					if($cur_stat['already_attention']) {
-						$cur_output[]="<span class=\"icon2\"><a href=\"javascript:void(0)\">已关注</a></span>";
-					} else {
-						$cur_output[]="<span class=\"icon1\"><a href=\"/plugin.php?id=kk_weibo:service&action=add&rel={$cur_uid}\" onclick=\"showWindow('kk_weibo',this.href);return false;\">加关注</a></span>";
-					}
-					$cur_output[]="</div>";	
-				}				
-				$result[]=implode('',$cur_output);
+				if($style['btn_position']==1) $result[]=$this->_button_output($post);				
     		}
     		return $result;
     	}
 		function viewthread_top_output() {
-			global $postlist; $result=Array();
-			$result[]='<style>';
-			$result[]='.kk_weibo_top {margin-left:20px;}';
-			$result[]='.kk_weibo_top li {float:left;padding:2px 0px;width:30px;}';
-			$result[]='.kk_weibo_top li a{color:#336699;}';
-			$result[]='.kk_weibo_top li.li_fans {padding:2px 4px 2px 8px;margin-right:6px;border:1px solid #CCC;border-width:0px 1px;}';
-			$result[]='.kk_weibo_top li div.num {font-size:14px;font-family:Arial;font-weight:bold;}';
-			$result[]='.kk_weibo_top li.li_posts {width:50px;}';
-			$result[]='.kk_weibo_bottom {margin-left:20px;margin-top:-4px;}';
-			$result[]='.kk_weibo_bottom span {padding-top:2px;padding-left:16px;text-indent:16px;}';
-			$result[]='.kk_weibo_bottom span a{color:#336699;}';
-			$result[]='.kk_weibo_bottom span.icon1 {background:url(/static/image/common/addbuddy.gif) no-repeat -2px 0px;}';
-			$result[]='.kk_weibo_bottom span.icon2 {background:url(/static/image/common/data_valid.gif) no-repeat 0px 2px;}';
-			$result[]='</style>';			
-			//$result[]='<link rel="stylesheet" type="text/css" href="/source/plugin/kk_weibo/res/viewthread.css" />';			
+			$result=Array('<style>'); $style=$this->context['style'];			
+			$result[]=$style['css_output'];
+			$result[]='</style>';
 			return implode("\n",$result);
 		}    	
     }
