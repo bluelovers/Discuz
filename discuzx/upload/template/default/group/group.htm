@@ -114,8 +114,8 @@
 					<ul id="groupnav">
 						<li {if $action == 'index'}class="a"{/if}><a href="forum.php?mod=group&fid=$_G[fid]#groupnav" title="">{lang home}</a></li>
 						<li {if $action == 'list'}class="a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]#groupnav" title="">{lang group_discuss_area}</a></li>
-						<li {if $action == 'memberlist' || $action == 'invite'}class="a"{/if}><a href="forum.php?mod=group&action=memberlist&fid=$_G[fid]#groupnav" title="">{lang group_member_list}</a></li>
-						<!--{if $_G['forum']['ismoderator']}--><li {if $action == 'manage'}class="a"{/if}><a href="forum.php?mod=group&action=manage&fid=$_G[fid]#groupnav">{lang group_admin}</a></li><!--{/if}-->
+						<li {if $action == 'memberlist' || $action == 'invite'}class="a"{/if}><a href="forum.php?mod=group&action=memberlist&fid=$_G[fid]#groupnav" title="" target="_blank">{lang group_member_list}</a></li>
+						<!--{if $_G['forum']['ismoderator']}--><li {if $action == 'manage'}class="a"{/if}><a href="forum.php?mod=group&action=manage&fid=$_G[fid]#groupnav" target="_blank">{lang group_admin}</a></li><!--{/if}-->
 						<!--{if CURMODULE == 'group'}--><!--{hook/group_nav_extra}--><!--{else}--><!--{hook/forumdisplay_nav_extra}--><!--{/if}-->
 					</ul>
 				</div>
