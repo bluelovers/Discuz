@@ -130,14 +130,17 @@ function include_file_once() {
 	if (is_file(func_get_arg(0))) {
 
 		// for discuz use
-		if (true === func_get_arg(3) || 1 === func_get_arg(3)) {
+		if (
+			func_num_args() > 3
+			&& is_true(func_get_arg(3))
+		) {
 			// 防止模板檔中使用到 $_G 而造成錯誤
 			global $_G;
 		}
 
 		$_cahce_include[func_get_arg(0)] = include_once(func_get_arg(0));
 
-		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
+		if (func_num_args() > 1 && is_true(func_get_arg(1))) {
 			return get_runtime_defined_vars(get_defined_vars(), array(
 				'_G',
 				'_cahce_include',
@@ -221,6 +224,10 @@ function _html_fileplus($key = '', $iscss = 0, $rethtml = 0) {
 			return $ret;
 		}
 	}
+}
+
+function is_true($var) {
+	return ($var === true || $var === 1) ? true : false;
 }
 
 ?>
