@@ -140,7 +140,7 @@ function include_file_once() {
 
 		$_cahce_include[func_get_arg(0)] = include_once(func_get_arg(0));
 
-		if (true === func_get_arg(1) || 1 === func_get_arg(1)) {
+		if (is_true(func_get_arg(1))) {
 			return get_runtime_defined_vars(get_defined_vars(), array(
 				'_G',
 				'_cahce_include',
