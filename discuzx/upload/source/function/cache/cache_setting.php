@@ -76,6 +76,15 @@ function build_cache_setting() {
 	}
 	DB::free_result($query);
 
+	// bluelovers
+	if ($_lastmember = DB::result_first("SELECT * FROM ".DB::table('common_member')." ORDER BY regdate DESC, uid DESC LIMIT 1")) {
+		$_lastmember = daddslashes($_lastmember);
+
+		DB::insert('common_setting', array('skey' => 'lastmember', 'svalue' => $_lastmember['username']), false, true);
+		$data['lastmember'] = $_lastmember['username'];
+	}
+	// bluelovers
+
 	$data['newusergroupid'] = DB::result_first("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE creditshigher<=".intval($data['initcredits'])." AND ".intval($data['initcredits'])."<creditslower LIMIT 1");
 
 	if($data['srchhotkeywords']) {
