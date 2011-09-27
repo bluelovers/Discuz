@@ -1506,6 +1506,10 @@ function getratelist($raterange) {
 	global $_G;
 	$maxratetoday = getratingleft($raterange);
 
+	// bluelovers
+	$_range = array(0, 1, 2, 10, -1, -2, -10);
+	// bluelovers
+
 	$ratelist = array();
 	foreach($raterange as $id => $rating) {
 		if(isset($_G['setting']['extcredits'][$id])) {
