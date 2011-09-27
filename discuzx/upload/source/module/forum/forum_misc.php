@@ -1507,7 +1507,7 @@ function getratelist($raterange) {
 	$maxratetoday = getratingleft($raterange);
 
 	// bluelovers
-	$_range = array(0, 1, 2, 10, -1, -2, -10);
+	$_range = array(1, 2, 10, -1, -2, -10);
 	// bluelovers
 
 	$ratelist = array();
@@ -1531,8 +1531,11 @@ function getratelist($raterange) {
 
 				foreach ($_range as $vote) {
 					if (
-						$vote >= $rating['min']
-						&& $vote <= $rating['max']
+						(
+							$vote >= $rating['min']
+							&& $vote <= $rating['max']
+						)
+						|| $vote == 0
 					) {
 						$_list[] = $vote;
 					}
