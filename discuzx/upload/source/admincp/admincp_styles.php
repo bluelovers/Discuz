@@ -148,7 +148,7 @@ if($operation == 'admin') {
 		foreach($sarray as $id => $style) {
 			$style['name'] = dhtmlspecialchars($style['name']);
 			$isdefault = $id == $defaultid ? 'checked' : '';
-			$available = $style['available'] ? 'checked' : NULL;
+			$available = ($style['available'] || $isdefault) ? 'checked' : NULL;
 			$preview = file_exists($style['directory'].'/preview.jpg') ? $style['directory'].'/preview.jpg' : './static/image/admincp/stylepreview.gif';
 			$previewlarge = file_exists($style['directory'].'/preview_large.jpg') ? $style['directory'].'/preview_large.jpg' : '';
 			$styleicons = isset($styleicons[$id]) ? $styleicons[$id] : '';
