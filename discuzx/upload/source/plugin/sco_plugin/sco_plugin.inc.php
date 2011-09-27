@@ -80,7 +80,7 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 			$style['preview'] = $preview;
 			$style['previewlarge'] = $previewlarge;
 
-			$sarray[$row['styleid']] = $style;
+			$sarray[$style['styleid']] = $style;
 		}
 
 		$this->_setglobal('style_defaultid', $styleid_default);
