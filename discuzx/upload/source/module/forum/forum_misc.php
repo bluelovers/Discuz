@@ -1518,6 +1518,11 @@ function getratelist($raterange) {
 			$rating['min'] = -$rating['min'] < $maxratetoday[$id] ? $rating['min'] : -$maxratetoday[$id];
 			$offset = abs(ceil(($rating['max'] - $rating['min']) / 10));
 			if($rating['max'] > $rating['min']) {
+
+				// bluelvoers
+				$_list = array();
+				// bluelovers
+
 				for($vote = $rating['max']; $vote >= $rating['min']; $vote -= $offset) {
 					$ratelist[$id] .= $vote ? '<li>'.($vote > 0 ? '+'.$vote : $vote).'</li>' : '';
 				}
