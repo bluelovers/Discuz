@@ -37,6 +37,8 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 			$plugin_lists[] = $plugin;
 		}
 
+		$this->_my_get_stylelist();
+
 		global $_G;
 		$this->_setglobal('plugin_lists', $plugin_lists);
 		$this->_setglobal('navigation', '<em>&raquo;</em>'.'Scorpio! Plugin Center');

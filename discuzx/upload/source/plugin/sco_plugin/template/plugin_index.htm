@@ -51,6 +51,21 @@
 <div id="ct" class="wp cl ct2_a">
 	<div class="mn">
 
+		<ul class="cl">
+		<!--{loop $style_lists $style}-->
+			<li>
+				<table>
+					<td>
+						<img src="$style['preview']" />
+					</td>
+					<td>
+						$style['name']
+					</td>
+				</table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+
 		<ul class="buddy cl">
 		<!--{loop $plugin_lists $plugin}-->
 			<li title="{$plugin['description']:dhtmlspecialchars()}">
@@ -72,14 +87,6 @@
 					</p>
 					<!--{/if}-->
 				</div>
-			</li>
-		<!--{/loop}-->
-		</ul>
-
-		<ul class="cl">
-		<!--{loop $style_lists $style}-->
-			<li>
-				<img src="$style['preview']" />
 			</li>
 		<!--{/loop}-->
 		</ul>
