@@ -231,7 +231,7 @@ if($operation == 'admin') {
 
 			foreach($sarray as $id => $old) {
 				$namenew[$id] = trim($_G['gp_namenew'][$id]);
-				$availablenew[$id] = $_G['gp_availablenew'][$id] ? 1 : 0;
+				$availablenew[$id] = ($_G['gp_availablenew'][$id] || $id == $defaultid) ? 1 : 0;
 				if($namenew[$id] != $old['name'] || $availablenew[$id] != $old['available']) {
 					DB::query("UPDATE ".DB::table('common_style')." SET name='$namenew[$id]', available='$availablenew[$id]' WHERE styleid='$id'");
 				}
