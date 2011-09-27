@@ -773,11 +773,19 @@ class register_ctl {
 			dsetcookie('activationauth', '');
 			dsetcookie('invite_auth', '');
 
+			/*
 			loadcache('setting', true);
 			$_G['setting']['lastmember'] = stripslashes($username);
 			$settingnew = $_G['setting'];
 			$settingnew['pluginhooks'] = array();
 			save_syscache('setting', $settingnew);
+			*/
+			// bluelovers
+			/**
+			 * 交由 cache setting 來處理 lastmember
+			 */
+			updatecache('setting');
+			// bluelovers
 
 			switch($this->setting['regverify']) {
 				case 1:
