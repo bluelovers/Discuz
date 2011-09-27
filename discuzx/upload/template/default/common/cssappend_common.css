@@ -441,4 +441,8 @@ fieldset {
 	line-height: 120px;
 }
 
+.xl1 li {
+	line-height: 1.5em;
+}
+
 /* ---------------------- */
