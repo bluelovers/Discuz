@@ -1499,6 +1499,9 @@ function makevaluepic($value) {
 	imagedestroy($im);
 }
 
+/**
+ * 取得評分時的預設範圍選擇清單
+ */
 function getratelist($raterange) {
 	global $_G;
 	$maxratetoday = getratingleft($raterange);
