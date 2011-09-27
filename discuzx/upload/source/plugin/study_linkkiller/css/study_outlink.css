@@ -1,0 +1,76 @@
+*{margin:0;padding:0;}
+img{border:none;vertical-align:middle;}
+body{font-size:12px;font-family:Arial,Simsun,"Arial Unicode MS",simsun,Helvetica;}
+ul,ol{list-style-type:none;}
+th,td{font-size:12px;}
+button{border:none;font-size:12px;cursor:pointer;}
+input{vertical-align:middle;}
+@media all and (min-width: 0){html* input[type]{vertical-align:baseline;}
+}
+.ownermode{display:;}
+.clientmode{}
+.none{display:none !important;}
+.block{ display:block!important;}
+.num{font-family:Verdana,Helvetica;font-size:9px;}
+.c_tx_red{color:#FF0000;}
+a:link,a:visited{text-decoration:none;}
+a:hover,a:active{text-decoration:underline;}
+.unline,.unline:link,.unline:visited{text-decoration:underline !important;}
+.noline,.noline:link,.noline:visited{text-decoration:none !important;}
+.hit,.hit:link,.hit:visited{color:#E07819 !important;}
+.tx_fix{_zoom:1;display:-moz-inline-box;display:inline-block;overflow:hidden;word-break:keep-all;word-wrap:keep-all;white-space:nowrap;table-layout:fixed;-o-text-overflow:ellipsis;text-overflow:ellipsis;}
+.fixlist{margin-top:3px;}
+.fixlist li{clear:both;line-height:1.9em;}
+.img,.hint_no_pvw{text-align:center;display:table-cell;vertical-align:middle;}
+.img img,.hint_no_pvw p{vertical-align:middle;display:inline-block;}
+
+html,body {overflow:hidden;}
+html, body, table {width:100%;height:100%;}
+html {margin:37px 0 0;}
+
+
+/* 外链工具条 开始*/
+.study_link {position:absolute; left:0; top:0; z-index:99999; height:37px; width:100%; background:#FFFFFF;}
+
+.study_link .panel_log {position:absolute; right:200px; top:7px; width:80px; height:30px; text-align:right; z-index:99998;}
+
+.study_link .panel_flex {position:absolute; right:10px; top:4px; width:80px; height:30px; text-align:right; z-index:99998;}
+.study_link .panel_flex img {cursor:pointer;}
+
+/*=S 工具条iframe=*/
+.study_link .toolbar_iframe {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);  -moz-Opacity:0; Opacity:0; width:100%; height:37px; position:absolute; left:0; top:0; z-index:1;}
+/*=E 工具条iframe=*/
+
+.study_link .wrap {height:37px; padding-top:1px; font-family:Arial, Simsun, "Arial Unicode MS", simsun, Helvetica; color:#A4CFDF!important; /*border-bottom:1px #C0C0C0 solid;*/position:relative; z-index:9999; zoom:1; min-width:980px; background-color:#18659B; border-bottom:3px solid #CCCCCC;}
+.study_link .wrap:after {content:""; clear:both; display:block; height:0;}
+
+.study_link .wrap a {color:#A4CFDF!important; text-decoration:none;}
+.study_link .wrap a:hover {text-decoration:underline;}
+
+.study_link .wrap .panel_left {padding-right:228px;position:absolute;left:0; width:750px;}
+.study_link .wrap .panel_right {padding-right:	146px;position:absolute;right:0;}
+
+
+/*==S 用户信息 ==*/
+.study_link .wrap .study_userinfo {float:left; margin-right:3px; margin-left:20px; _margin-left:10px;}
+.study_link .wrap .study_userinfo .logo {vertical-align:-2px; margin-right:6px;}
+.study_link .wrap .study_userinfo a {*zoom:1; _vertical-align:baseline; _line-height:130%;}
+.study_link .wrap .study_userinfo a.user_name {margin-right:3px;}
+.study_link .wrap .study_userinfo .line {font-family:Simsun; font-size:12px;}
+.study_link .wrap .study_userinfo a.quit {_font-family:Simsun;}
+/*.study_link .wrap .study_userinfo a.img_hover {margin-top:2px;}*/
+/*==E 用户信息 ==*/
+
+
+
+.icon_toolbar_logo{width:178px; height:37px;background:url(../images/linklogo.png) no-repeat;}
+/* 登录  开始*/
+.study_login{ float:left; line-height:42px; margin:-1px 0 0 10px; *margin-top:-2px; _margin-top:-1px;  _padding-top:10px;}
+.study_login img.avatar{ width:30px; height:30px; border:1px solid #4380A9;}
+.study_login a:link,.study_login a:visited{ text-decoration:none; margin-right:5px;_display:inline-block;_margin-top:-9px;}
+.study_login a:hover,.study_login a:active{ text-decoration:underline;}
+/* 登录  结束*/
+.btn_close_bar{ width:80px; height:30px; background:none; color:#A4CFDF;background:url(../images/link_bar.png) no-repeat 0 -40px;;}
+.btn_close_bar_hover,.btn_close_bar:hover{ background-position:0 -71px;}
+.btn_close_bar span{ display:none;}
+/* 外链工具条 结束*/

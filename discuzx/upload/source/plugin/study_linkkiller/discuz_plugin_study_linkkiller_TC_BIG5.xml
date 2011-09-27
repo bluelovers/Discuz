@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-05-25 16:30]]></item>
+	<item id="From"><![CDATA[1314¾Ç²ßºô (http://www.1314study.com)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[¥~Ãì±þ¤â]]></item>
+			<item id="identifier"><![CDATA[study_linkkiller]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[study_linkkiller/]]></item>
+			<item id="copyright"><![CDATA[1314¾Ç²ßºô¡]½Ñ¸¯¾å©ú¡^]]></item>
+			<item id="version"><![CDATA[V2.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[linkkiller]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[¬O§_¶}±Ò¯¸¥~Ãì±µ¥»¦a¤Æ]]></item>
+				<item id="description"><![CDATA[¥u¦³¶}±Ò¡u¬O§_¶}±Ò¯¸¥~Ãì±µ´£¥Ü¡v«á¤~¦³®Ä¡C]]></item>
+				<item id="variable"><![CDATA[study_urlloc]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[¬O§_¶}±Ò¯¸¥~Ãì±µ´£¥Ü]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[study_urlpre]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[°ì¦W¥Õ¦W³æ]]></item>
+				<item id="description"><![CDATA[³]¸m­þ¨Ç°ì¦W¤UªºÃì±µ¤£¨ü&quot;Ãì±µ±þ¤â&quot;¼vÅT,³]¸m¤èªk¡G1314study.com ¦h­Ó°ì¦W ´«¦æ ¨Ó¤À¹j]]></item>
+				<item id="variable"><![CDATA[study_wesites]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[1314study.com
+1314study.net]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[¨Ï¥Îªºª©¶ô]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[study_forums]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[Ãì±µ³B²z¤è¦¡]]></item>
+				<item id="description"><![CDATA[·í¿ï¾Ü¡u¥u¹ï»jµï³B²zÃì±µ¡v®É¡A·j¯Á¤ÞÀº±N¤£·|§ì¨ú¯¸¥~Ãì±µ¡C¦Ó¤@¯ë¥Î¤á¬d¬Ý·½¥N½X«o¤£·|µo²{§Aªº¯¸ÂI°µ¤F³o»òµTº¾ªº¨Æ¡C
+·í¿ï¾Ü¡u©Ò¦³¤H³£³B²zÃì±µ¡v®É¡A¥Î¤á¬d¬Ý·½¥N½X´N·|µo²{§Aªº¯¸ÂI°µ¤F³o»òµTº¾ªº¨Æ]]></item>
+				<item id="variable"><![CDATA[study_urlway]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[1 = ¥u¹ï»jµï³B²zÃì±µ
+2 = ©Ò¦³¤H³£³B²zÃì±µ]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[±þ¤â³W«h]]></item>
+				<item id="description"><![CDATA[¥i¥H¨Ï¥Î rel=&quot;external nofollow&quot;  ©Î rel=&quot;nofollow&quot;  
+external nofollow¬O¤ñnofollow§ó±M·~ªº¼gªk¡A§Y©ú½T«ü¥XÃì±µ¬°¥~³¡Ãì±µ¡Aª¦ÂÎ¥i¥H²¤¹L¡C]]></item>
+				<item id="variable"><![CDATA[study_rel]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[rel="external nofollow"]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[¯¸¥~Ãì´£¥Ü»¡©ú]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[study_urlexp]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[&nbsp;&nbsp;&nbsp;¸ÓÃì±µ«D¥»¯¸Ãì±µ¡A¨Ã¤£«OÃÒ¦w¥þ¡A¬O§_³X°Ý¡H&nbsp;&nbsp;&nbsp; ]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[¯¸¥~ÃìÅã¥Üªø«×]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[study_urllen]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[40]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[¥~ÃìÅã¥Ü­¶¼ÐÃD]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[study_title]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[¯¸¥~Ãì±µ]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="license"><![CDATA[  [*]¥»´¡¥óª©ÅvÂkÄÝ´¡¥ó§@ªÌ,¤Î¨ä¤UÄÝSTUDY¹Î¶¤©Ò¦³.
+[*]¥¼¸g´¡¥ó§@ªÌ³\¥i,¥ô¦ó¤H¤£±o¥H¥ô¦ó§Î¦¡¦b¥ô¦ó¦a¤èµo§G/Âàµo­ìª©¥H¤Î¨ä­l¥Íªº­×§ïª©.
+[*][b]´¡¥ó§@ªÌ:[/b]½Ñ¸¯¾å©ú¡][color=Blue][b]QQ¡G643306797[/b][/color]¡^
+[*][b]´¡¥ó¦WºÙ:[/b]¥~Ãì±þ¤âV2.0
+[*][b]§@«~Â²¤¶:[/b]¥~Ãì±þ¤â,©ú½T«ü¥XÃì±µ¬°¥~³¡Ãì±µ¡Aª¦ÂÎ¥i¥H²¤¹L¡C·s¼W¥~Ãì´£¥Ü¤Î¥~Ãì¥»¦a¤ÆÅã¥Ü¡C
+[*][b]µo§G¦a§}:[/b][url]http://www.1314study.com/thread-15904-1-1.html[/url]¡][color=red][b]½Ð¨ì©x¤è¦a§}¤U¸ü¡A¨ä¥L¥ô¦ó¦a§}§¡ÄÝ«IÅv¡A¥»¯¸¤£«OÃÒ¨ä¦w¥þ©Ê¡A¤£´£¨Ñ¥ô¦ó§Þ³N¤ä«ù¡C[/b][/color]¡^
+[*]¦p¦³¥ô¦óÃö©ó¨Ï¥Î¤WªººÃ°Ý,½Ð¦Ü[url]http://www.1314study.com/thread-12377-1-1.html[/url]´£¥X.
+[*]³Ì«á,·PÁÂ±z¨Ï¥Î§Ú­Ìªº´¡¥ó,¤]§Æ±æ±z¯à°÷µ¹§Ú­ÌSTUDY¹Î¶¤´£¨Ñ§ó¦nªº·N¨£([url=http://www.1314study.com/study.php]½ÐÂIÀ»³o¸Ì¶i¤JSTUDY¹Î¶¤©x¤è¯¸ÂI[/url]).]]></item>
+		<item id="intro"><![CDATA[
+			[color=DeepSkyBlue][b]Ãö©ó¥»´¡¥óªº¬ÛÃö«H®§:[/b][/color]
+				¦WºÙ: [b]¥~Ãì±þ¤â[/b]
+				ª©¥»: [b][X2.0]V2.0[/b]
+				§@ªÌ: ½Ñ¸¯¾å©ú¡][color=Blue][b]QQ¡G643306797[/b][/color]¡^
+				[b]µo§G¦a§}:[/b][url]http://www.1314study.com/thread-15904-1-1.html[/url]
+				[color=red][b]1314¾Ç²ßºô¸ê·½¤¤¤ß¡G[/b][/color][url]http://www.1314study.com/study.php[/url]
+				¡][color=red][b]½Ð¨ì©x¤è¦a§}¤U¸ü¡A¨ä¥L¥ô¦ó¦a§}§¡ÄÝ«IÅv¡A¥»¯¸¤£«OÃÒ¨ä¦w¥þ©Ê¡A¤£´£¨Ñ¥ô¦ó§Þ³N¤ä«ù¡C[/b][/color]¡^
+				-------------------------------------------
+				[color=DeepSkyBlue][b]§@«~Â²¤¶:[/b]¥~Ãì±þ¤â,©ú½T«ü¥XÃì±µ¬°¥~³¡Ãì±µ¡Aª¦ÂÎ¥i¥H²¤¹L¡C·s¼W¥~Ãì´£¥Ü¤Î¥~Ãì¥»¦a¤ÆÅã¥Ü¡C[/color]
+				-------------------------------------------
+				[align=center][url=http://qun.qq.com/#jointhegroup/gid/128763162][img]http://www.1314study.com/images/other/joinqqqun.gif[/img][/url][/align]
+				[align=center] [url=http://list.qq.com/cgi-bin/qf_invite?id=aa82f472e942c70b9ddf35bbffdf56b32b1352e51223fd35][img]http://rescdn.list.qq.com/zh_CN/htmledition/images/qunfa/manage/picMode_dark_l.png[/img][/url] [/align]
+				-------------------------------------------	
+				¥»´¡¥ó¶È¨Ñ«D°Ó·~¥Î³~¨Ï¥Î!
+				¸T¤î¥ô¦ó§Î¦¡ªº«Ê¸Ë¦Aµo§G¦æ¬°.
+				¯S¦¹Án©ú.
+
+				2011¦~5¤ë25¤é  V2.0
+		]]></item>
+	</item>
+</root>

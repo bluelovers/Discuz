@@ -1,0 +1,12 @@
+<!--{block return}-->
+<script type="text/javascript">
+function study_disposeurl(obj){
+
+        var turl=obj.href;
+        var title=turl.substr(0,{$study_urllen})+'...';
+        var htmlinner = '<font color=red>{$study_urlexp}</color>' + '<br /><br /><div style="text-align:center"><a href="{$study_urlloc}'+ encodeURI(turl) +'" target="_blank" onclick="hideMenu(\'fwin_dialog\', \'dialog\')")><font color=green>继续访问</font></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="hideMenu(\'fwin_dialog\', \'dialog\')">取消访问</a></div>';
+        showDialog(htmlinner, 'info', title)
+
+}
+</script>
+<!--{/block}-->
