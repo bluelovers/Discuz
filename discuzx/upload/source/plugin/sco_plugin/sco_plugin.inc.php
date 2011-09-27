@@ -51,6 +51,32 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 		include $this->_template('plugin_index');
 	}
 
+	function _my_get_stylelist() {
+		global $_G;
+
+		$sarray = array();
+		$styleid_default = $_G['setting']['styleid'];
+
+		$query = DB::query("SELECT
+				s.styleid, s.available, s.name, t.name AS tplname, t.directory, t.copyright
+			FROM ".DB::table('common_style')." s
+			LEFT JOIN ".DB::table('common_template')." t ON t.templateid=s.templateid
+			WHERE
+				s.available = '1'
+			ORDER BY
+				s.available desc
+				, s.styleid = '$styleid_default' DESC
+				, s.name ASC
+				, s.styleid
+		");
+
+		while($row = DB::fetch($query)) {
+			$sarray[$row['styleid']] = $row;
+		}
+
+		$this->_setglobal('style_lists', $sarray);
+	}
+
 }
 
 $_o = new plugin_sco_plugin_plugin();
