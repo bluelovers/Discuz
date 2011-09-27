@@ -56,32 +56,32 @@
 				<table cellspacing="0" cellpadding="0" class="reason_slct">
 					<!--{eval $selectreason = modreasonselect(0, 'userreasons')}-->
 					<!--{if $selectreason}-->
-					 	<tr>
-					 		<td>
-					 			<ul id="reasonselect" class="reasonselect pt">$selectreason</ul>
-					 			<script type="text/javascript" reload="1">
-					 				var reasonSelectOption = $('reasonselect').getElementsByTagName('li');
-					 				if (reasonSelectOption) {
-					 					for (i=0; i<reasonSelectOption.length; i++) {
-					 						reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
-					 						reasonSelectOption[i].onmouseout = function() { this.className = ''; }
-					 						reasonSelectOption[i].onclick = function() {
-					 							// bluelovers
-					 							if (
+						<tr>
+							<td>
+								<ul id="reasonselect" class="reasonselect pt">$selectreason</ul>
+								<script type="text/javascript" reload="1">
+									var reasonSelectOption = $('reasonselect').getElementsByTagName('li');
+									if (reasonSelectOption) {
+										for (i=0; i<reasonSelectOption.length; i++) {
+											reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
+											reasonSelectOption[i].onmouseout = function() { this.className = ''; }
+											reasonSelectOption[i].onclick = function() {
+												// bluelovers
+												if (
 													$('reason').value.indexOf(this.innerHTML) == -1
 												) {
 													if ($('reason').value != '') $('reason').value += ' ';
-				 								// bluelovers
-					 								$('reason').value += this.innerHTML;
-					 							// bluelovers
+												// bluelovers
+													$('reason').value += this.innerHTML;
+												// bluelovers
 												}
 												// bluelovers
-					 						}
-					 					}
-					 				}
-					 			</script>
-					 		</td>
-					 	</tr>
+											}
+										}
+									}
+								</script>
+							</td>
+						</tr>
 					<!--{/if}-->
 					<tr>
 						<td>
