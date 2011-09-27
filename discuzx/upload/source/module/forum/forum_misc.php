@@ -1542,13 +1542,12 @@ function getratelist($raterange) {
 				}
 
 				$_list = array_unique($_list);
-
-				rsort($_list);
+				rsort($_list, SORT_NUMERIC);
 
 				foreach ($_list as $vote) {
 					// bluelovers
 
-					$ratelist[$id] .= $vote ? '<li>'.($vote > 0 ? '+'.$vote : $vote).'</li>' : '';
+					$ratelist[$id] .= (1 || $vote) ? '<li>'.($vote > 0 ? '+'.$vote : $vote).'</li>' : '';
 				}
 			}
 		}
