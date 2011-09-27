@@ -158,6 +158,16 @@ if($operation == 'admin') {
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\">($style[tplname])</p></td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><label>$lang[default] <input type=\"radio\" class=\"radio\" name=\"defaultnew\" value=\"$id\" $isdefault /></label></p>
+				"
+				// bluelovers
+				// 補回風格的是否可用選項
+				.
+				"
+				<p style=\"margin: 2px 0\"><label>$lang[available] <input type=\"checkbox\" class=\"radio\" name=\"availablenew\" value=\"$id\" $available /></label></p>
+				"
+				.
+				// bluelovers
+				"
 				<p style=\"margin: 2px 0\"><label>$lang[styles_uninstall] ".($isdefault ? '<input class="checkbox" type="checkbox" disabled="disabled" />' : '<input class="checkbox" type="checkbox" name="delete[]" value="'.$id.'" />')."</label></p>
 				<p style=\"margin: 8px 0 2px\"><a href=\"".ADMINSCRIPT."?action=styles&operation=edit&id=$id\">$lang[edit]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=export&id=$id\">$lang[export]</a></p>
