@@ -82,7 +82,7 @@ function build_cache_setting() {
 
 		if ($_lastmember['username'] != $_G['setting']['lastmember']) {
 			DB::insert('common_setting', array('skey' => 'lastmember', 'svalue' => $_lastmember['username']), false, true);
-			$data['lastmember'] = $_lastmember['username'];
+			$data['lastmember'] = stripslashes($_lastmember['username']);
 		}
 	}
 	// bluelovers
