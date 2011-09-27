@@ -1544,6 +1544,19 @@ function getratelist($raterange) {
 				$_list = array_unique($_list);
 				rsort($_list, SORT_NUMERIC);
 
+				$_o = 5;
+
+				$_l = count($_list);
+				$_c = intval($_l / 2);
+				$_min = max(0, $_c - $_o);
+				$_max = min($_l, $_c + $_o + 1);
+
+				$_list2 = array();
+				for ($_i = $_min; $_i < $_max; $_i++) {
+					$_list2[] = $_list[$_i];
+				}
+				$_list = $_list2;
+
 				foreach ($_list as $vote) {
 					// bluelovers
 
