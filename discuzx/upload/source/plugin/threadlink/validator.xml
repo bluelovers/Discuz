@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin Validator]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Data">
+		<item id="0"><![CDATA[./source/plugin/threadlink/discuz_plugin_threadlink.xml]]></item>
+		<item id="1"><![CDATA[./source/plugin/threadlink/discuz_plugin_threadlink_GBK.xml]]></item>
+		<item id="2"><![CDATA[./source/plugin/threadlink/discuz_plugin_threadlink_UTF8.xml]]></item>
+		<item id="3"><![CDATA[./source/plugin/threadlink/image]]></item>
+		<item id="4"><![CDATA[./source/plugin/threadlink/install.php]]></item>
+		<item id="5"><![CDATA[./source/plugin/threadlink/manage.inc.php]]></item>
+		<item id="6"><![CDATA[./source/plugin/threadlink/mod.inc.php]]></item>
+		<item id="7"><![CDATA[./source/plugin/threadlink/template]]></item>
+		<item id="8"><![CDATA[./source/plugin/threadlink/threadlink.class.php]]></item>
+		<item id="9"><![CDATA[./source/plugin/threadlink/uninstall.php]]></item>
+		<item id="10"><![CDATA[./source/plugin/threadlink/image/addbase.png]]></item>
+		<item id="11"><![CDATA[./source/plugin/threadlink/image/addlink.png]]></item>
+		<item id="12"><![CDATA[./source/plugin/threadlink/template/addbase.htm]]></item>
+		<item id="13"><![CDATA[./source/plugin/threadlink/template/addlink.htm]]></item>
+		<item id="14"><![CDATA[./source/plugin/threadlink/template/extend_module.css]]></item>
+		<item id="15"><![CDATA[./source/plugin/threadlink/template/index.html]]></item>
+		<item id="16"><![CDATA[./source/plugin/threadlink/template/tl_pic.htm]]></item>
+	</item>
+</root>

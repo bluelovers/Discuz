@@ -1,0 +1,24 @@
+<!--{block return}-->
+<div class="mtm mbm xld threadlink">
+<!--{loop $links $link}-->
+	<dl>
+		<dt class="xs2">
+			<!--{if in_array($this->member['groupid'], $this->allowgroups)}-->
+				<span class="y xs1 xw0 xi2">
+					<a href="plugin.php?id=threadlink:mod&action=edit&lid={$link[lid]}" onclick="showWindow('threadlink', this.href, 'get', 1);doane(e);">{lang threadlink:edit}</a><span class="pipe">|</span><a href="plugin.php?id=threadlink:mod&action=delete&lid={$link[lid]}" onclick="showWindow('threadlink', this.href, 'get', 1);doane(e);">{lang threadlink:delete}</a>
+				</span>
+			<!--{/if}-->
+			<a href="{$link[url]}" target="_blank">{$link[subject]}</a>
+		</dt>
+		<dd class="cl">
+			<!--{if $link[pic]}-->
+				<div class="threadpic">
+					<a href="{$link[url]}" target="_blank"><img src="{$link[pic]}" alt="" width="{$base[picwidth]}" height="{$base[picheight]}" /></a>
+				</div>
+			<!--{/if}-->
+			{$link[message]}
+		</dd>
+	</dl>
+<!--{/loop}-->
+</div>
+<!--{/block}-->

@@ -1,0 +1,59 @@
+<!--{template common/header}-->
+<form action="plugin.php?id=threadlink:mod&action={$action}&tid={$tid}&infloat=yes&amp;{$action}submit=yes" method="post" onsubmit="ajaxpost(this.id, 'return_mods', 'return_mods', 'onerror');return false;" id="threadlinkform" fwin="mods">
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<div id="main_threadlink">
+		<!--{if $action == 'addbase'}-->
+			<h3 class="flb">
+				<em id="returnmessage">{lang threadlink:addbase}</em>
+				<!--{if $_G['inajax']}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('threadlink')" title="{lang close}">{lang close}</a></span><!--{/if}-->
+			</h3>
+			<div class="c">
+				<table cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>{lang threadlink:template}</th>
+						<td>
+							<select name="tltpl" id="" class="ps">
+								<!--{loop $tltpls $key $tpl}-->
+								<option value="$key">$tpl</option>
+								<!--{/loop}-->
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:maxrows}</th>
+						<td><input type="text" name="maxrow" value="20" class="px p_fre" /></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:summarylength}</th>
+						<td><input type="text" name="summarylength" value="300" class="px p_fre" /> {lang threadlink:summaryunits}</td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:picwidth}</th>
+						<td><input type="text" name="picwidth" value="100" class="px p_fre"></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:picheight}</th>
+						<td><input type="text" name="picheight" value="100" class="px p_fre"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="o pns">
+				<button type="submit" name="addbasesubmit" id="addbasesubmit" class="pn pnc" value="true"><strong>{lang threadlink:confirm}</strong></button>
+			</div>
+		<!--{elseif $action == 'delete'}-->
+			<input type="hidden" name="lid" value="{$lid}" />
+			<h3 class="flb">
+				<em id="returnmessage">{lang threadlink:delete}</em>
+				<!--{if $_G['inajax']}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('threadlink')" title="{lang close}">{lang close}</a></span><!--{/if}-->
+			</h3>
+			<div class="c altw">
+				<div class="alert_info"><p>{lang threadlink:confirm_delete}</p></div>
+			</div>
+			<div class="o pns">
+				<button type="submit" name="deletesubmit" id="deletesubmit" class="pn pnc" value="true"><strong>{lang threadlink:confirm}</strong></button>
+				<button type="button" onclick="hideWindow('threadlink');" id="closebtn" class="pn"><strong>{lang threadlink:cancel}</strong></button>
+			</div>
+		<!--{/if}-->
+	</div>
+</form>
+<!--{template common/footer}-->

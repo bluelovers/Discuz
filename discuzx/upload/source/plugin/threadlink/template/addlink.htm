@@ -1,0 +1,124 @@
+<!--{template common/header}-->
+<form action="plugin.php?id=threadlink:mod&action={$action}&pid={$pid}&lid={$lid}&infloat=yes&amp;{$action}submit=yes" method="post" onsubmit="ajaxpost(this.id, 'return_mods', 'return_mods', 'onerror');return false;" id="threadlinkform" fwin="mods">
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<div id="main_threadlink">
+		<!--{if $action == 'addlink'}-->
+			<h3 class="flb">
+				<em id="returnmessage">{lang threadlink:addlink}</em>
+				<!--{if $_G['inajax']}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('threadlink')" title="{lang close}">{lang close}</a></span><!--{/if}-->
+			</h3>
+			<div class="c">
+				<table id="addlink" cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>{lang threadlink:thread}</th>
+						<td>
+							<select name="tid" id="" class="ps" style="width: 200px;" onchange="$('tid_hand').value=this.value;">
+								<!--{loop $threads $basethread}-->
+								<option value="{$basethread[tid]}">{$basethread[subject]}</option>
+								<!--{/loop}-->
+							</select>
+							{lang threadlink:tid} <input type="text" name="tid_hand" id="tid_hand" class="px p_fre" size="5" value="" />
+						</td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:subject}</th>
+						<td><input type="text" name="subject" value="{$linkthread_src[subject]}" class="px" /></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:url}<a href="<!--{if $linkthread[first]}-->forum.php?mod=viewthread&tid={$linkthread[tid]}<!--{else}-->forum.php?mod=redirect&goto=findpost&ptid={$linkthread[tid]}&pid={$linkthread[pid]}<!--{/if}-->" style="display:none;" id="threadlink_url_src">.</a></th>
+						<td><input type="text" name="url" id="threadlink_url" class="px" value="" /></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:message}</th>
+						<td><textarea id="message" name="message" class="pt" rows="4">{$linkthread[message]}</textarea></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:attach}</th>
+						<td>
+							<input type="text" name="pic" class="px" value="" />
+							<!--{if $attachs}-->
+								<p class="d">{lang threadlink:attachnotice}</p>
+								<div id="tlimg">
+									<!--{eval $tl_i = 0;}-->
+									<!--{loop $attachs $attach}-->
+										<!--{if $tl_i == 0}--><input type="hidden" name="aid" id="tlaid" value="{$attach[aid]}" /><!--{/if}-->
+										<img src="{$attach[attachment]}" width="100" height="100" onclick="selectattach('{$attach[aid]}')" id="tlaid_{$attach[aid]}" class="{if $tl_i == 0}tlimg{else}tlimg_n{/if}"/>
+										<!--{eval $tl_i = 1;}-->
+									<!--{/loop}-->
+								</div>
+							<!--{/if}-->
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="o pns">
+				<button type="submit" name="addlinksubmit" id="addlinksubmit" class="pn pnc" value="true"><strong>{lang threadlink:confirm}</strong></button>
+			</div>
+			<script type="text/javascript" reload="1">
+				$('threadlink_url').value = $('threadlink_url_src').href;
+				function selectattach(id) {
+					var attachs = $('tlimg');
+					var attachss = attachs.getElementsByTagName('IMG');
+					var ss = '';
+					for(var i=0;i<attachss.length;i++) {
+						if(attachss[i].id=='tlaid_'+id) {
+							$('tlaid').value=id;
+							attachss[i].className='tlimg';
+						} else {
+							attachss[i].className='tlimg_n';
+						}
+					}
+				}
+			</script>
+		<!--{elseif $action == 'edit'}-->
+			<h3 class="flb">
+				<em id="returnmessage">{lang threadlink:edit}</em>
+				<!--{if $_G['inajax']}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('threadlink')" title="{lang close}">{lang close}</a></span><!--{/if}-->
+			</h3>
+			<div class="c">
+				<table id="addlink" cellspacing="0" cellpadding="0" class="tfm">
+					<tr>
+						<th>&nbsp;</th>
+						<td>
+							<label><input type="checkbox" class="pc vm" name="change_base" value="1" onclick="$('movetotid').style.display = $('movetotid').style.display == 'none' ? '' : 'none';" />{lang threadlink:change_base}</label>
+						</td>
+					</tr>
+					<tbody id="movetotid" style="display: none;">
+						<tr>
+							<th>{lang threadlink:thread}</th>
+							<td>
+								<select name="tid" id="" class="ps" style="width: 200px;" onchange="$('tid_hand').value=this.value;">
+									<option value="">{lang threadlink:select}</option>
+									<!--{loop $threads $basethread}-->
+									<option value="{$basethread[tid]}">{$basethread[subject]}</option>
+									<!--{/loop}-->
+								</select>
+								{lang threadlink:tid} <input type="text" name="tid_hand" id="tid_hand" class="px p_fre" size="5" value="" />
+							</td>
+						</tr>
+					</tbody>
+					<tr>
+						<th>{lang threadlink:subject}</th>
+						<td><input type="text" name="subject" class="px" value="{$link[subject]}" /></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:url}</th>
+						<td><input type="text" name="url" id="threadlink_url" class="px" value="{$link[url]}" /></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:message}</th>
+						<td><textarea name="message" id="message" class="pt" rows="4">{$link[message]}</textarea></td>
+					</tr>
+					<tr>
+						<th>{lang threadlink:attach}</th>
+						<td><input type="text" name="pic" class="px" value="{$link[pic]}" /></td>
+					</tr>
+				</table>
+			</div>
+			<div class="o pns cl">
+				<button type="submit" name="editsubmit" id="editsubmit" class="pn pnc" value="true"><strong>{lang threadlink:confirm}</strong></button>
+			</div>
+		<!--{/if}-->
+	</div>
+</form>
+<!--{template common/footer}-->

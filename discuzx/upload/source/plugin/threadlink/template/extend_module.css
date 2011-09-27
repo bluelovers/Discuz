@@ -1,0 +1,12 @@
+/** forum::viewthread,group::viewthread **/
+#tlimg { overflow-x: hidden; overflow-y: scroll; width: 340px; height: auto !important; max-height: 150px; height: 150px; }
+	#tlimg img { cursor: pointer; }
+.tlimg { border: 2px solid #0D0; }
+.tlimg_n { padding: 2px; }
+
+.threadlink { border-bottom: 1px dashed {COMMONBORDER}; }
+	.threadlink dl { border-top: 1px dashed {COMMONBORDER}; }
+	.threadlink dd { margin-bottom: 14px; }
+	.threadpic { float: right; margin-left: 20px; }
+		.threadpic img { padding: 2px; border: 1px solid #CCC; background: {WRAPBG}; }
+/** end **/
