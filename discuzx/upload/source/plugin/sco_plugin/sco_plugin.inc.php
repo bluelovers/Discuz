@@ -70,10 +70,18 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin {
 				, s.styleid
 		");
 
-		while($row = DB::fetch($query)) {
-			$sarray[$row['styleid']] = $row;
+		while($style = DB::fetch($query)) {
+
+			$preview = file_exists($style['directory'].'/preview.jpg') ? $style['directory'].'/preview.jpg' : './static/image/admincp/stylepreview.gif';
+			$previewlarge = file_exists($style['directory'].'/preview_large.jpg') ? $style['directory'].'/preview_large.jpg' : '';
+
+			$style['preview'] = $preview;
+			$style['previewlarge'] = $previewlarge;
+
+			$sarray[$row['styleid']] = $style;
 		}
 
+		$this->_setglobal('style_defaultid', $styleid_default);
 		$this->_setglobal('style_lists', $sarray);
 	}
 
