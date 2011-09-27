@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Block]]></item>
+	<item id="Data">
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="name"><![CDATA[»ý·ÖÉÌ³Ç]]></item>
+		<item id="fields">
+			<item id="url">
+				<item id="name"><![CDATA[Á´½ÓµØÖ·]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="title">
+				<item id="name"><![CDATA[±êÌâ]]></item>
+				<item id="formtype"><![CDATA[title]]></item>
+				<item id="datatype"><![CDATA[title]]></item>
+			</item>
+			<item id="pic">
+				<item id="name"><![CDATA[Í¼Æ¬]]></item>
+				<item id="formtype"><![CDATA[pic]]></item>
+				<item id="datatype"><![CDATA[pic]]></item>
+			</item>
+			<item id="author">
+				<item id="name"><![CDATA[×÷Õß]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="authorid">
+				<item id="name"><![CDATA[×÷ÕßID]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[int]]></item>
+			</item>
+			<item id="type">
+				<item id="name"><![CDATA[ÀàÐÍ]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="virtual">
+				<item id="name"><![CDATA[ÐéÄâ]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="hot">
+				<item id="name"><![CDATA[ÈËÆø]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[int]]></item>
+			</item>
+			<item id="price">
+				<item id="name"><![CDATA[µ±Ç°¼Û¸ñ]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="priceunit">
+				<item id="name"><![CDATA[¼Û¸ñµ¥Î»]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="starttimefrom">
+				<item id="name"><![CDATA[¿ªÊ¼Ê±¼ä]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+			<item id="starttimeto">
+				<item id="name"><![CDATA[½áÊøÊ±¼ä]]></item>
+				<item id="formtype"><![CDATA[text]]></item>
+				<item id="datatype"><![CDATA[string]]></item>
+			</item>
+		</item>
+		<item id="getsetting">
+			<item id="tids">
+				<item id="title"><![CDATA[Ö¸¶¨Ö÷Ìâ]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="default"><![CDATA[]]></item>
+			</item>
+			<item id="uids">
+				<item id="title"><![CDATA[ÓÃ»§UID]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="default"><![CDATA[]]></item>
+			</item>
+			<item id="virtual">
+				<item id="title"><![CDATA[ÎïÆ·ÀàÐÍ]]></item>
+				<item id="type"><![CDATA[mcheckbox]]></item>
+				<item id="value">
+					<item id="0">
+						<item id="0"><![CDATA[0]]></item>
+						<item id="1"><![CDATA[ÊµÎï]]></item>
+					</item>
+					<item id="1">
+						<item id="0"><![CDATA[1]]></item>
+						<item id="1"><![CDATA[ÐéÄâ]]></item>
+					</item>
+				</item>
+				<item id="default"><![CDATA[]]></item>
+			</item>
+			<item id="type">
+				<item id="title"><![CDATA[¾ºÅÄÀàÐÍ]]></item>
+				<item id="type"><![CDATA[mcheckbox]]></item>
+				<item id="value">
+					<item id="0">
+						<item id="0"><![CDATA[1]]></item>
+						<item id="1"><![CDATA[¶Ò»»]]></item>
+					</item>
+					<item id="1">
+						<item id="0"><![CDATA[2]]></item>
+						<item id="1"><![CDATA[³é½±]]></item>
+					</item>
+					<item id="2">
+						<item id="0"><![CDATA[3]]></item>
+						<item id="1"><![CDATA[¾ºÅÄ]]></item>
+					</item>
+				</item>
+				<item id="default">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="sold_status">
+				<item id="title"><![CDATA[½»Ò××´Ì¬]]></item>
+				<item id="type"><![CDATA[mcheckbox]]></item>
+				<item id="value">
+					<item id="0">
+						<item id="0"><![CDATA[0]]></item>
+						<item id="1"><![CDATA[ÕýÔÚ½øÐÐÖÐ]]></item>
+					</item>
+					<item id="1">
+						<item id="0"><![CDATA[1]]></item>
+						<item id="1"><![CDATA[¼´½«¿ªÊ¼]]></item>
+					</item>
+					<item id="2">
+						<item id="0"><![CDATA[2]]></item>
+						<item id="1"><![CDATA[ÒÑ¾­½áÊø]]></item>
+					</item>
+				</item>
+				<item id="default">
+					<item id="0"><![CDATA[0]]></item>
+				</item>
+			</item>
+			<item id="order">
+				<item id="title"><![CDATA[ÅÅÐò·½Ê½]]></item>
+				<item id="type"><![CDATA[mradio]]></item>
+				<item id="value">
+					<item id="0">
+						<item id="0"><![CDATA[0]]></item>
+						<item id="1"><![CDATA[°´ÈËÆøµ¹Ðð]]></item>
+					</item>
+					<item id="1">
+						<item id="0"><![CDATA[1]]></item>
+						<item id="1"><![CDATA[°´·¢²¼Ê±¼äµ¹Ðò]]></item>
+					</item>
+				</item>
+				<item id="default"><![CDATA[0]]></item>
+			</item>
+			<item id="start">
+				<item id="title"><![CDATA[ÆðÊ¼Êý¾ÝÐÐÊý]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="default"><![CDATA[0]]></item>
+			</item>
+			<item id="width">
+				<item id="title"><![CDATA[Í¼Æ¬¿í¶È]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="default"><![CDATA[140]]></item>
+			</item>
+			<item id="height">
+				<item id="title"><![CDATA[Í¼Æ¬¸ß¶È]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="default"><![CDATA[140]]></item>
+			</item>
+		</item>
+		<item id="style">
+			<item id="0">
+				<item id="name"><![CDATA[Ä£°åÃû³Æ]]></item>
+				<item id="template"><![CDATA[<style type="text/css">
+.auction{width:170px;float:left;}
+.auction li{list-style-type: none !important;width:150px;padding-left:0 important!;background:none !important;}.auction .auctl{text-align:center;}
+.auction .auctl a{color: #1B7FC6;}
+.auction .aucimg{vertical-align: middle;padding: 2px !important;border: 1px solid #CDCDCD;padding: 2px;height: 140px;width: 140px;}
+.auction .aucdet{text-align: center;}
+.auction .aucprc{ color: #E11114; font-weight: 700;padding:0 5px;}</style>
+<div class="module cl xl xl1">
+[loop]<ul class="auction">
+	<li class="aucimg" style="margin:0 10px;"><a href="{url}" target="_blank"><img src="{pic}"/></a></li>
+	<li class="auctl" style="padding:0 10px;"><a href="{url}" target="_blank">{title}</a></li>
+	<li class="aucdet" style="padding:0 10px;">{type}:<span class="aucprc">{price}</span>{priceunit}</li>
+</ul>
+[/loop]
+</div>]]></item>
+			</item>
+		</item>
+	</item>
+</root>

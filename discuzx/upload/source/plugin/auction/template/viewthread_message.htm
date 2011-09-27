@@ -1,0 +1,34 @@
+<!--{template common/header}-->
+<div id="main_messaqge" style="width:600px;">
+	<h3 class="flb">
+		<em id="returnmessage">{lang auction:view_message}</em>
+		<span>
+			<!--{if $_G['inajax']}--><a href="javascript:;" class="flbc" onclick="hideWindow('auction_message')" title="{lang close}">{lang close}</a><!--{/if}-->
+		</span>
+	</h3>
+	<p style="margin:10px;">
+	<!--{if $operation == 'message'}-->{$apply[message]}
+	<!--{elseif $operation == 'admin_message'}-->
+	<table cellspacing="0" cellpadding="0" class="list_tb" width="90%" style="margin:5%">
+		<tr>
+			<th class="list_lt" style="width:30px">{lang auction:msg_id}</th>
+			<th class="list_lt" style="width:383px">{lang auction:msg_ct}</th>
+			<th class="list_lt" style="width:63px">{lang auction:msg_mb}</th>
+			<th class="list_lt" style="width:63px">{lang auction:msg_st}</th>
+		</tr>
+		<!--{if $messages}-->
+		<!--{loop $messages $message}-->
+		<tr>
+			<td class="list_lt" style="width:30px">{$message[mid]}</td>
+			<td class="list_lt" style="width:383px">{$message[message]}</td>
+			<td class="list_lt" style="width:63px">{$messageusers[$message[uid]]}</td>
+			<td class="list_lt" style="width:63px"><!--{if $message[uid]}-->{lang auction:msg_st_1}<!--{else}-->{lang auction:msg_st_0}<!--{/if}--></td>
+		</tr>
+		<!--{/loop}-->
+		<!--{/if}-->
+	</table>
+	<!--{/if}-->
+	</p>
+	<p class="o pns"><button id="confirmsubmit" name="confirmsubmit" value="true" class="pn pnc" type="submit" onclick="hideWindow('auction_message')"><strong>{lang auction:confirm}</strong></button></p>
+</div>
+<!--{template common/footer}-->
