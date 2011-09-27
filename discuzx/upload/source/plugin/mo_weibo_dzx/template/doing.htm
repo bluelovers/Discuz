@@ -1,0 +1,85 @@
+<!--{template common/header}-->
+<script src="static/js/home.js" type="text/javascript"></script>
+<script type="text/javascript">
+var msgstr = '{lang mo_weibo_dzx:note}';
+function handlePrompt(type) {
+	var msgObj = $('mood_message');
+	if(type) {
+		$('moodfm').className = 'hover';
+		if(msgObj.value == msgstr) {
+			msgObj.value = '';
+			msgObj.className = 'msgfocus xg2';
+		}
+	} else {
+		$('moodfm').className = '';
+		if(msgObj.value == ''){
+			msgObj.value = msgstr;
+			msgObj.className = 'xg1';
+		}
+	}
+}
+
+function reloadMood(showid) {
+var x = new Ajax();
+x.get('home.php?mod=spacecp&ac=doing&op=spacenote&inajax=1', function(s){
+	$('mood_mystatus').innerHTML = '<a href="home.php?mod=space&uid=$_G[uid]&do=doing&view=me">'+s+'&nbsp;&nbsp&raquo;</a>';
+});
+$('mood_message').value = '';
+strLenCalc($('mood_message'), 'maxlimit');
+handlePrompt(0);
+<!--{if $_COOKIE[mo_weibo_dzx]!=1}-->MoSetCookie('mo_weibo_dzx',1,{$pophours});<!--{/if}-->
+setTimeout("hideWindow('mo_weibo_dzx'); <!--{if $isrefresh}-->window.location.reload();<!--{/if}-->",2000);
+}
+</script>
+<h3 class="flb">
+	<em>{lang mo_weibo_dzx:release}</em>
+	<span><a href="javascript:;" class="flbc" onclick="hideWindow('mo_weibo_dzx'); return false;" title="{lang close}">{lang close}</a></span>
+</h3>
+<div class=momoodfm>
+<div id="moodfm">
+<!--{if $_G['cache']['plugin']['mo_weibo_dzx']['mo_weibo_adv']}-->
+	<div style="height:128px; overflow:hidden; margin-bottom:5px;" align="center">{$_G['cache']['plugin']['mo_weibo_dzx']['mo_weibo_adv']}</div>
+<!--{/if}-->
+	<div id="mood_mystatus" class="xi1 xw1"></div>
+	<form method="post" autocomplete="off" id="mood_addform" action="home.php?mod=spacecp&amp;ac=doing&amp;handlekey=doing" onsubmit="if($('mood_message').value != msgstr) {ajaxpost(this.id, 'return_doing');} else {return false;}">
+	<table cellspacing="0" cellpadding="0" width="100%">
+		<tr>
+			<td id="mood_statusinput" class="moodfm_input">
+				<textarea name="message" id="mood_message" class="xg1" onfocus="handlePrompt(1);" onblur="handlePrompt(0);" onkeydown="if(ctrlEnter(event, 'addsubmit_btn')){if(event.keyCode == 13 ){ doane(event);}}" onkeyup="strLenCalc(this, 'maxlimit');">{lang mo_weibo_dzx:note}</textarea>
+			</td>
+			<td class="moodfm_btn">
+				<button type="submit" name="addsubmit_btn" id="addsubmit_btn">{lang mo_weibo_dzx:release}</button>
+			</td>
+		</tr>
+		<tr>
+			<td class="moodfm_f" colspan=2>
+				<span class="y">{lang mo_weibo_dzx:input} <strong id="maxlimit">200</strong> {lang mo_weibo_dzx:num}</span>
+				<span id="sfmenu" onclick="handlePrompt(1);showFace(this.id, 'mood_message');return false;" class="cur1"><img src="static/image/common/facelist.gif" alt="facelist" class="vm"></span> &nbsp;&nbsp;
+				<!--{if $_COOKIE['mo_weibo_dzx']!=1}--><button class="pn" onclick="MoSetCookie('mo_weibo_dzx',1,{$pophours}); hideWindow('mo_weibo_dzx'); return false;"><em>{lang mo_weibo_dzx:nopopup}</em></button>&nbsp;&nbsp;<!--{/if}--><input type="checkbox" name="to_signhtml" id="to_sign" class="pc" value="1" /> <label for="to_sign">{lang mo_weibo_dzx:sign}</label>
+				<div id="return_doing" class="xi1 xw1"></div>
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" name="addsubmit" value="true" />
+	<input type="hidden" name="spacenote" value="true" />
+	<input type="hidden" name="referer" value="home.php" />
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+</form>
+
+<script type="text/javascript">
+function succeedhandle_doing(url, msg, values) {
+	if(values['message']) {
+		showDialog(values['message']);
+		return false;
+	}
+	reloadMood(values['doid']);
+}
+function MoSetCookie(name,value,hours){
+    var exp  = new Date();
+    exp.setTime(exp.getTime() + hours*60*60*1000);
+    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+</script>
+</div>
+</div>
+<!--{template common/footer}-->

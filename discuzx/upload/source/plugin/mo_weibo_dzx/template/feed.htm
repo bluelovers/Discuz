@@ -1,0 +1,27 @@
+<html>
+<head>
+<script type="text/javascript" src="{$_G[siteurl]}source/plugin/mo_weibo_dzx/mo_weibo_dzx.js"></script>
+<script type="text/javascript" src="{$_G[siteurl]}static/js/common.js"></script>
+<style type="text/css">
+a{font-family:"Microsoft YaHei",Tahoma,Helvetica,'SimSun',sans-serif; font-size:12px; color:#3366ab; text-decoration:none;}
+a:Hover{text-decoration:none;}
+.feedm{margin:0;}
+#feedNow{height:{$fheight}px; overflow:hidden; padding:0; margin:0;}
+li{font-family:"Microsoft YaHei",Tahoma,Helvetica,'SimSun',sans-serif; font-size:12px; line-height:24px; margin:2px 0;}
+.xg1{color:#999; font-style:normal;}
+.vm{vertical-align:middle;}
+</style>
+</head>
+<body style="margin:0; padding:0;">
+<div class="feedm">
+	<!--{if $mo_feeds}-->
+	<ul id="feedNow">
+	<!--{loop $mo_feeds $moval}-->
+		<li><img src="static/image/feed/$moval[icon].gif" class="vm"> $moval[title_template] <em><span title="{date($moval[dateline])}" class="xg1">{date($moval[dateline],'u')}</span></em></li>
+	<!--{/loop}-->
+	</ul>
+	<script>mo_Marquee({$fheight}, 30, 0, 'feedNow');</script>
+	<!--{/if}-->
+</div>
+</body>
+</html>

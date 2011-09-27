@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-06-02]]></item>
+	<item id="From"><![CDATA[MoCentr µØ¤H®a¶é (http://www.mocentr.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[0]]></item>
+			<item id="name"><![CDATA[°ÊºA·L³Õ]]></item>
+			<item id="identifier"><![CDATA[mo_weibo_dzx]]></item>
+			<item id="description"><![CDATA[]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[mo_weibo_dzx/]]></item>
+			<item id="copyright"><![CDATA[Ranchuking]]></item>
+			<item id="version"><![CDATA[1.7.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[mo_weibo_dzx]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[±Ò¥Î°ÊºA·L³Õªº­¶­±]]></item>
+				<item id="description"><![CDATA[¿ï¾Ü±Ò¥Î°ÊºA·L³Õªº­¶­±¡A»Pªù¤á½Õ¥ÎµLÃö¡C]]></item>
+				<item id="variable"><![CDATA[mo_weibo_show]]></item>
+				<item id="type"><![CDATA[selects]]></item>
+				<item id="extra"><![CDATA[1=½×¾Â¥D­¶­±
+2=©«¤l¦Cªí­¶­±
+3=©«¤l¬d¬Ý­¶­±
+4=¥þ³¡¤£Åã¥Ü]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[1]]></item>
+					<item id="1"><![CDATA[2]]></item>
+					<item id="2"><![CDATA[3]]></item>
+				</item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[°ÊºA·L³Õ¥[¸ü¼Æ¶q]]></item>
+				<item id="description"><![CDATA[³]¸m°ÊºA·L³Õ»ù­È¼Æ¶q¡AÀq»{¬°30±ø]]></item>
+				<item id="variable"><![CDATA[mo_weibo_count]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[30]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[°ÊºA·L³Õ¥[¸ü¤è¦¡]]></item>
+				<item id="description"><![CDATA[³]¸m°ÊºA·L³Õ¥[¸ü¤º®eªº±Æ¦C¤è¦¡¡AÀq»{¬°«ö³Ì·sµo¥¬·L³Õ±Æ§Ç¡C]]></item>
+				<item id="variable"><![CDATA[mo_weibo_type]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="extra"><![CDATA[1=«ö³Ì·sµo¥¬±Æ§Ç¥[¸ü
+2=«ö¼öªù¤º®e±Æ§Ç¥[¸ü(³Ìªñ24¤p?)
+3=«ö¼öªù¤º®e±Æ§Ç¥[¸ü(³Ìªñ7¤Ñ)
+4=«ö¼öªù¤º®e±Æ§Ç¥[¸ü(³Ìªñ¤@?¤ë)]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[°ÊºA·L³ÕÅã¥Ü¦æ¼Æ]]></item>
+				<item id="description"><![CDATA[³]¸m°ÊºA·L³ÕÅã¥Ü¦æ¼Æ¡AÀq»{¬°1¦æ¡A¦h¦æ¦û¥Î­¶­±ªÅ¶¡§ó¦h¡C]]></item>
+				<item id="variable"><![CDATA[mo_weibo_line]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[°ÊºA·L³Õ¦Û©w¸q¼ÐÃD]]></item>
+				<item id="description"><![CDATA[¦Û©w¸q°ÊºA·L³Õ¼ÐÃD¡AÀq»{¬°¡§°ÊºA·L³Õ¡¨]]></item>
+				<item id="variable"><![CDATA[mo_weibo_title]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[°ÊºA·L³Õ]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[¸T¤îÅã¥Üªº¥Î¤á]]></item>
+				<item id="description"><![CDATA[³]¸m­þ¨Ç¥Î¤áµo¥¬ªº·L³Õ¸T¤îÅã¥Ü¦b°ÊºA·L³Õ¤W¡A¶ñ¼g¥Î¤áID¡A¦h­Ó¥Î¤á¤§¶¡¥Î­^¤å¡§,¡¨¹j¶}¡A³Q¸T¤îªº¥Î?¦P?¤]¸T¤î?¥¬]]></item>
+				<item id="variable"><![CDATA[mo_weibo_buser]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[¸T¤îÅã¥Üªº¥Î¤á²Õ]]></item>
+				<item id="description"><![CDATA[³]¸m­þ¨Ç¥Î¤á²Õµo¥¬ªº·L³Õ¸T¤îÅã¥Ü¦b°ÊºA·L³Õ¤W¡A³Q¸T¤î¥Î??ªº¥Î?¦P?¤]¸T¤î?¥¬]]></item>
+				<item id="variable"><![CDATA[mo_weibo_bgroup]]></item>
+				<item id="type"><![CDATA[groups]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[±j¨î¼uµ¡µo¥¬·L³Õ]]></item>
+				<item id="description"><![CDATA[­Y¥Î¤á·í¤ÑÁÙ¨S¦³µo¥¬·L³Õ¡A«h¦Û°Ê¼u¥Xµ¡¤fÅý¥Î¤áµo¥¬¤@±ø·L³Õ¡A³]¸m¼uµ¡¶¡¹j¡A¥H¡§¤p®É¡¨¬°³æ¦ì¡A³]¸m¬°¡§0¡¨ «h¨ú®ø¸Ó¥\¯à¡C]]></item>
+				<item id="variable"><![CDATA[mo_weibo_popup]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[µo¥¬·L³Õ«á¦Û°Ê¨ê·s­¶­±]]></item>
+				<item id="description"><![CDATA[³]¸mµo¥¬·L³Õ«á¬O§_¦Û°Ê¨ê·s­¶­±]]></item>
+				<item id="variable"><![CDATA[mo_weibo_refresh]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[°ÊºA·L³Õºu°Ê³t«×]]></item>
+				<item id="description"><![CDATA[³]¸m°ÊºA·L³Õ¦V¤Wºu°Êªº®É¶¡¶¡¹j¡A³æ¦ì¬°¡§²@¬í¡¨]]></item>
+				<item id="variable"><![CDATA[mo_weibo_speed]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[5000]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[·L³ÕÄæÅã¥Ü¦C¼Æ]]></item>
+				<item id="description"><![CDATA[³]¸m·L³ÕÄæ¨C¦æÅã¥Üªº·L³Õ¼Æ¶q¡AÀq»{¬°3¡A§Y¤T¦C¡C]]></item>
+				<item id="variable"><![CDATA[col]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="extra"><![CDATA[3=¨C¦æ3¦C
+2=¨C¦æ2¦C
+1=¨C¦æ1¦C]]></item>
+				<item id="value"><![CDATA[3]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[ºÞ²z­ûID]]></item>
+				<item id="description"><![CDATA[³]¸mºÞ²z­ûID¡A¥Î©ó¥Í¦¨­º­¶½Õ¥Î¥N½X]]></item>
+				<item id="variable"><![CDATA[mo_weibo_admin]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[¼uµ¡ÀY³¡¦Û©w¸q]]></item>
+				<item id="description"><![CDATA[³]¸m¼uµ¡µo¥¬¦^Î`µ¡¤fÀY³¡ªº¤º®e¡AÀq»{¬O¤@°Æ¹Ï¤ù¡A¥i¥H¦Û¥Ñ³]¸m¼s§i¡A¬°¤F«OÃÒµ¡¤f¬üÆ[¡A°ª«×­­¨î¬°128px¡A¼e«×¦Û¾AÀ³¡A«ØÄ³¤£­n¶W¹L380px¡C]]></item>
+				<item id="variable"><![CDATA[mo_weibo_adv]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="value"><![CDATA[<img src="source/plugin/mo_weibo_dzx/images/mo_icon.gif" height="128">]]></item>
+			</item>
+			<item id="13">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[ºu°Ê¤è¦¡]]></item>
+				<item id="description"><![CDATA[³]¸m·L³Õ¦V¤Wºu°Êªº¤è¦¡]]></item>
+				<item id="variable"><![CDATA[mo_weibo_scroll]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="extra"><![CDATA[1=¾ãÅé¦¡¤W·Æ
+2=¶¥±è¦¡¤W·Æ]]></item>
+				<item id="value"><![CDATA[1]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="release"><![CDATA[°¨¤Wµo¥¬]]></item>
+				<item id="total"><![CDATA[Á`¦@]]></item>
+				<item id="wb_end"><![CDATA[±ø·L³Õ]]></item>
+				<item id="wb_me"><![CDATA[§Ú¦³]]></item>
+				<item id="mo_weibo"><![CDATA[½Õ¥ÎºÞ²z]]></item>
+				<item id="reply"><![CDATA[¦^Î`]]></item>
+				<item id="reply_c"><![CDATA[¤H¦^Î`]]></item>
+				<item id="cweibo"><![CDATA[·L³Õ?¥Î]]></item>
+				<item id="cfeed"><![CDATA[???¥Î]]></item>
+				<item id="cfeedc"><![CDATA[??¥[??¶q]]></item>
+				<item id="cheight"><![CDATA[???®e°ª«×]]></item>
+				<item id="crow"><![CDATA[Åã¥Ü¦æ¼Æ]]></item>
+				<item id="ccol"><![CDATA[Åã¥Ü¦C¼Æ]]></item>
+				<item id="ccode"><![CDATA[½Õ¥Î¥N½X]]></item>
+				<item id="cgenerate"><![CDATA[¦Û°Ê¥Í¦¨¥N½X]]></item>
+				<item id="ccopy"><![CDATA[½Æ»s½Õ¥Î¥N½X]]></item>
+				<item id="ccopys"><![CDATA[½Õ¥Î¥N½X½Æ»s¦¨¥\]]></item>
+				<item id="cctitle"><![CDATA[¼ÐÃD¤º®e]]></item>
+				<item id="cscroll"><![CDATA[ºu°Ê¤è¦¡]]></item>
+				<item id="cscroll1"><![CDATA[¾ãÅé¦¡¤W·Æ]]></item>
+				<item id="cscroll2"><![CDATA[¶¥±è¦¡¤W·Æ]]></item>
+				<item id="code_alert"><![CDATA[???¶ñ?¦U???¡C]]></item>
+			</item>
+			<item id="templatelang">
+				<item id="note"><![CDATA[§A¥i¥H§ó·s°O¿ý, Åý¦n¤Íª¾¹D§A¦b°µ¤°»ò...]]></item>
+				<item id="input"><![CDATA[ÁÙ¥i¥H¿é¤J]]></item>
+				<item id="num"><![CDATA[­Ó¦r²Å]]></item>
+				<item id="sign"><![CDATA[¦P¨B¨ì­Ó¤HÃ±¦W]]></item>
+				<item id="release"><![CDATA[µo¥¬]]></item>
+				<item id="reply"><![CDATA[¦^Î`]]></item>
+				<item id="reply_success"><![CDATA[±zªº¦^Î`¤w¸g¦¨¥\µo¥¬]]></item>
+				<item id="auto_close"><![CDATA[¸Óµ¡¤f±N¦b2¬íÄÁ«á¦Û°ÊÃö³¬...]]></item>
+				<item id="nopopup"><![CDATA[¤£¦A´£¿ô]]></item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>
