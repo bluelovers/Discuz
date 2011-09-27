@@ -77,7 +77,7 @@ function build_cache_setting() {
 	DB::free_result($query);
 
 	// bluelovers
-	if ($_lastmember = DB::result_first("SELECT * FROM ".DB::table('common_member')." ORDER BY regdate DESC, uid DESC LIMIT 1")) {
+	if ($_lastmember = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." ORDER BY regdate DESC, uid DESC LIMIT 1")) {
 		if ($_lastmember['username'] != $data['lastmember']) {
 			DB::insert('common_setting', array('skey' => 'lastmember', 'svalue' => daddslashes($_lastmember['username'])), false, true);
 			$data['lastmember'] = $_lastmember['username'];
