@@ -10,8 +10,8 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-//¿ÉÒÔÊ¹ÓÃµÄÄ£°æÃû,Ìí¼ÓÄ£°æÇëĞŞ¸Ä´Ë±äÁ¿
-//'{ÎÄ¼şÃû}' => 'ÖĞÎÄÃû³Æ'
+//å¯ä»¥ä½¿ç”¨çš„æ¨¡ç‰ˆå,æ·»åŠ æ¨¡ç‰ˆè¯·ä¿®æ”¹æ­¤å˜é‡
+//'{æ–‡ä»¶å}' => 'ä¸­æ–‡åç§°'
 $tltpls = array(
 	'tl_pic' => pl('default_tpl'),
 );
@@ -28,7 +28,7 @@ $allowaction = array(
 $action = in_array($_G['gp_action'], $allowaction) ? $_G['gp_action'] : '';
 $tid = intval($_G['gp_tid']);
 
-//È¨ÏŞÅĞ¶Ï
+//æƒé™åˆ¤æ–­
 if(!in_array($_G['groupid'], $allowgroups) || empty($action)) {
 	showmessage(pl('no_perm'));
 }
@@ -38,7 +38,7 @@ if(!in_array($_G['groupid'], $allowgroups) || empty($action)) {
 
 include libfile('function/forum');
 
-//ÉèÖÃÎª¾ÛºÏÌù
+//è®¾ç½®ä¸ºèšåˆè´´
 if($action == 'addbase') {
 	if(empty($tid)) {
 		showmessage(pl('no_tid'));
@@ -68,7 +68,7 @@ if($action == 'addbase') {
 		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('threadlink_base')." WHERE tid='$tid'")) {
 			showmessage(pl('is_base'));
 		}
-		//Èë¿â
+		//å…¥åº“
 		DB::query("INSERT INTO ".DB::table('threadlink_base')." (tid,pid,tltpl,maxrow,subject,dateline,summarylength,picwidth,picheight) VALUES ('$tid', '{$thread[pid]}', '$tltpl', '$maxrow', '".daddslashes($thread['subject'])."','{$_G[timestamp]}','{$summarylength}','$picwidth','$picheight')");
 		$msg = pl('addbase_success');
 		$alert_info = pl('tip');
@@ -79,7 +79,7 @@ JS;
 	}
 
 
-//¾ÛºÏµ½Ìû×ÓÄÚ
+//èšåˆåˆ°å¸–å­å†…
 } elseif($action == 'addlink') {
 	if(!submitcheck('addlinksubmit')) {
 		include_once libfile('function/post');
@@ -94,7 +94,7 @@ JS;
 			}
 			$linkthread_src = get_thread_by_tid($linkthread['tid']);
 			$linkthread['message'] = messagecutstr($linkthread['message'], $thread_count['summarylength']);
-			//»ñÈ¡Í¼Æ¬
+			//è·å–å›¾ç‰‡
 			if($linkthread['attachment'] == 2) {
 				$attach = DB::fetch_first("SELECT * FROM ".DB::table('forum_attachment')." WHERE pid='{$linkthread[pid]}'");
 				$attach_query = DB::query("SELECT * FROM ".DB::table('forum_attachment_'.$attach['tableid'])." WHERE pid='{$linkthread[pid]}' LIMIT 10");
@@ -109,7 +109,7 @@ JS;
 		if($thread_count) {
 			$thread_query = DB::query("SELECT * FROM ".DB::table('threadlink_base')." ORDER BY dateline DESC LIMIT 20");
 			while($thread = DB::fetch($thread_query)) {
-				//¿ÉÒÔ¾ÛºÏ½øÈ¥µÄÌû×ÓÁĞ±í
+				//å¯ä»¥èšåˆè¿›å»çš„å¸–å­åˆ—è¡¨
 				$threads[] = $thread;
 			}
 
@@ -182,7 +182,7 @@ JS;
 			if($thread_count) {
 				$thread_query = DB::query("SELECT * FROM ".DB::table('threadlink_base')." ORDER BY dateline DESC LIMIT 20");
 				while($thread = DB::fetch($thread_query)) {
-					//¿ÉÒÔ¾ÛºÏ½øÈ¥µÄÌû×ÓÁĞ±í
+					//å¯ä»¥èšåˆè¿›å»çš„å¸–å­åˆ—è¡¨
 					$threads[] = $thread;
 				}
 
@@ -227,7 +227,7 @@ JS;
 
 
 /**
- * ²å¼şÓïÑÔ°ü
+ * æ’ä»¶è¯­è¨€åŒ…
  */
 function pl($str) {
 	return lang('plugin/threadlink', $str);
