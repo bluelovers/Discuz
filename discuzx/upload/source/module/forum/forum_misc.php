@@ -1529,6 +1529,15 @@ function getratelist($raterange) {
 					$_list[] = $vote;
 				}
 
+				foreach ($_range as $vote) {
+					if (
+						$vote >= $rating['min']
+						&& $vote <= $rating['max']
+					) {
+						$_list[] = $vote;
+					}
+				}
+
 				foreach ($_list as $vote) {
 					// bluelovers
 
