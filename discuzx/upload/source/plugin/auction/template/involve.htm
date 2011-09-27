@@ -14,7 +14,11 @@
 <!--{if $auction['typeid'] == 2}-->
 <p class="auction_price">{$m_type2_tips_p_pre} <input type="text" name="price" id="price" class="px" value="{if $the_last_one}{echo $the_last_one[cur_price] + $auction[delta_price];}{else}{echo $auction[base_price]}{/if}" style="width:50px;" /> <a href="javascript:;" class="modprice" title="{lang auction:add}" onclick="modprice(1);">[+]</a><a href="javascript:;" class="modprice" title="{lang auction:cut}" onclick="modprice(0);">[-]</a>{$m_type2_tips_p_beh}</p>
 <!--{/if}-->
-<!--{if $_G['cache']['plugin']['auction']['auc_mobile'] && !$mobile}--><p class="auction_price" style="padding-top:5px;">{lang auction:mobile_tips}</p><p class="auction_price">{lang auction:contact}: <input type="text" name="mobile" id="mobile" class="px" style="width:100px" value="$mobile" /><span id="mb_check"></span></p><!--{/if}-->
+<!--{if $_G['cache']['plugin']['auction']['auc_mobile'] && !$mobile}--><p class="auction_price" style="padding-top:5px;">{lang auction:mobile_tips}</p><p class="auction_price">{lang auction:contact}{lang auction:maohao} <input type="text" name="mobile" id="mobile" class="px" style="width:100px" value="$mobile" /><span id="mb_check"></span></p><!--{/if}-->
+<!--{if $_G['cache']['plugin']['auction']['auc_reply']}-->
+<p class="auction_price" style="padding-top:5px;">{lang auction:auc_reply_message}
+<textarea name="auc_reply_message" id="" class="pt" rows="3" cols="70" tabindex="">{$reply_message}</textarea></p>
+<!--{/if}-->
 
 <p class="o pns"><span class="z xg1">{lang auction:ext_notice}</span><button id="confirmsubmit" name="confirmsubmit" value="true" class="pn pnc" type="submit"><strong>{lang auction:confirm}</strong></button></p>
 </div>

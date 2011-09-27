@@ -2,8 +2,8 @@
 /*
  *	auction.inc.php 积分竞拍插件
  *	For Discuz!X2
- *	2011-03-17 10:36:18  zhouxingming
- *
+ *	2011-09-02 10:26:29 zhouxingming
+ *	Description:额外的一些处理
  * */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,18 +12,47 @@ if(!defined('IN_DISCUZ')) {
 
 
 class plugin_auction{
+	/**
+	 * 删除帖子的时候调用
+	 */
 	function deletethread($param) {
 
 		if($param['step'] == 'delete') {
-		
-		} elseif($param['step'] == 'check') {
-		
+			$tid = $param['param'][0][0];
+			if($tid) {
+				$thread = get_thread_by_tid($result['tid'], 'tid');
+				if(empty($thread)) {
+					$result = DB::fetch_first("SELECT * FROM ".DB::table('plugin_auction')." WHERE tid='$tid'");
+					include_once libfile('function/delete');
+					if(!$result['status']) {
+						$query = DB::query("SELECT * FROM ".DB::table('plugin_auctionapply')." WHERE tid='{$result[tid]}'");
+						while($apply = DB::fetch($query)) {
+							updatemembercount($apply['uid'], array('extcredits'.($result['extid'] ? $result['extid'] : $_G['cache']['plugin']['auction']['auc_extcredit']) => $apply['cur_price']), false, 'AUC', $result['tid']);
+							notification_add(
+								$apply['uid'],
+								'system',
+								lang('plugin/auction', 'n_auction_clear'),
+									array(
+									'auctionname' => $result['name'],
+									'auctiontid' => $result['tid'],
+									),
+									1
+								);
+						}
+					}
+					DB::query("DELETE FROM ".DB::table('plugin_auctionapply')." WHERE tid='{$reuslt[tid]}'");
+					DB::query("DELETE FROM ".DB::table('plugin_auction')." WHERE tid='{$result[tid]}'");
+				}
+			}
 		}
 	}
 
 }
 
 class plugin_auction_forum extends plugin_auction {
+	/**
+	 * ajax调用竞拍记录
+	 */
 	function viewthread_postbottom_output() {
 		global $_G,$postlist;
 		reset($postlist);
@@ -47,6 +76,9 @@ ttt;
 	}
 }
 class plugin_auction_home extends plugin_auction {
+	/**
+	 * 修改个人积分记录中的显示
+	 */
 	function spacecp_credit_bottom_output(){
 		global $_G;
 		lang('spacecp');

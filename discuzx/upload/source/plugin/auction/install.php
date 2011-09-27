@@ -29,9 +29,7 @@ CREATE TABLE pre_plugin_auction (
   KEY `uid` (`uid`)
 ) ENGINE=MyISAM;
 
-
-
-CREATE TABLE `pre_plugin_auctionapply` (
+CREATE TABLE pre_plugin_auctionapply (
   `applyid` int(10) NOT NULL auto_increment,
   `tid` int(10) unsigned NOT NULL,
   `username` char(15) NOT NULL,
@@ -47,9 +45,22 @@ CREATE TABLE `pre_plugin_auctionapply` (
   KEY `tid` (`tid`)
 ) ENGINE=MyISAM;
 
+ALTER TABLE pre_plugin_auction ADD `virtual` TINYINT(1) NOT NULL AFTER `typeid`;
+CREATE TABLE  pre_plugin_auction_message (
+ `mid` MEDIUMINT( 8 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+ `tid` INT( 10 ) UNSIGNED NOT NULL ,
+ `message` TEXT NULL ,
+ `uid` MEDIUMINT( 8 ) UNSIGNED NOT NULL
+) ENGINE = MYISAM ;
+
+
+CREATE TABLE pre_plugin_auction_xml (
+  `clientid` smallint(8) unsigned NOT NULL auto_increment,
+  `sign` char(32) NOT NULL,
+  PRIMARY KEY  (`clientid`)
+) ENGINE=MyISAM;
 EOT;
 
 runquery($sql);
 $finish = true;
-
 ?>

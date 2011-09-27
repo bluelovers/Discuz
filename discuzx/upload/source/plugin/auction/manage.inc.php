@@ -6,7 +6,7 @@
  *
  * */
 
-if(!defined('IN_DISCUZ')) {
+if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
@@ -59,7 +59,7 @@ if($op == 'view') {
 			while($auction = DB::fetch($query)) {
 				showtablerow('', array('width="5%"', 'width="10%"', 'width="5%"', 'width="25%"', 'width="20%"', 'width="10%"', 'width="10%"', 'width="15%"'), array(
 					'<input type="checkbox" name="deleteids[]" value="'.$auction['tid'].'">',
-					lang('plugin/auction', 'm_type'.$auction['typeid']),
+					lang('plugin/auction', 'auc_type'.($auction['typeid'] == 2 ? '3' : ($auction['extra'] == 1 ? '1' : '2') )),
 					$auction['tid'],
 					'<a href="forum.php?mod=viewthread&tid='.$auction['tid'].'" target="_blank">'.$auction['name'].'</a>',
 					dgmdate($auction['starttimeto']),

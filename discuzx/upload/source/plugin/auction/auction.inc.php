@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 
 $navtitle = lang('plugin/auction', 'auction');
 
-$actionarr = array('index', '1', '2', 'my', 'search', 'mydetail');
+$actionarr = array('index', '1', '2', 'my', 'search', 'mydetail', 'refresh');
 $action = in_array($_G['gp_action'], $actionarr) ? $_G['gp_action'] : 'index';
 $typeid = intval($_G['gp_typeid']);
 $perpage = 15;
@@ -25,45 +25,61 @@ if(empty($tops)) {
 }
 
 if($action == 'index') {
+
 	$typeid = intval($action);
 	$type1 = $type2 = array();
 	$type1 = getauctions('index', 8, false, "starttimeto>'$_G[timestamp]' AND status=0");
-	$type2 = getauctions('index', 4, false, "starttimeto<'$_G[timestamp]'");
+	$type2 = getauctions('index', 4, false, "starttimeto<'$_G[timestamp]' OR status=1");
+
 } elseif(in_array($action, array(1, 2))) {
+
 	$aucs = getauctions($action, $perpage, true, '', 'plugin.php?id=auction&action=search&sctype='.$action);
+
 } elseif($action == 'search') {
+
 	if(!$_G['uid']) {
 		showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
 	}
-//	if(submitcheck('searchsubmit')) {
-		$srchtxt = trim($_G['gp_sctxt']);
-		$sctype = in_array($_G['gp_sctype'], array(1,2)) ? $_G['gp_sctype'] : 0;
-		$sctime = in_array($_G['gp_sctime'], array(1,2,3)) ? $_G['gp_sctime'] : 0;
 
-		$sqladd = '';
-		if($srchtxt) {
-			$sqladd .= " name LIKE '%$srchtxt%' ";
-		}
-		if($sctype) {
-			$sqladd .= ($sqladd ? 'AND' : '')." typeid='$sctype'";
-		}
-		switch($sctime) {
+	$srchtxt = trim($_G['gp_sctxt']);
+	$sctype = in_array($_G['gp_sctype'], array(1,2,3)) ? $_G['gp_sctype'] : 0;
+	$sctime = in_array($_G['gp_sctime'], array(1,2,3)) ? $_G['gp_sctime'] : 0;
+
+	$sqladd = '';
+	if($srchtxt) {
+		$sqladd .= " name LIKE '%$srchtxt%' ";
+	}
+	if($sctype) {
+		switch($sctype) {
 			case '1':
-				$sqladd .= ($sqladd ? 'AND' : '')." starttimeto>'{$_G['timestamp']}' AND starttimefrom<'{$_G['timestamp']}'";
+				$sqladd = ($sqladd ? 'AND' : '')." typeid='1' AND extra='1'";
 				break;
 			case '2':
-				$sqladd .= ($sqladd ? 'AND' : '')." starttimefrom>'{$_G['timestamp']}'";
+				$sqladd = ($sqladd ? 'AND' : '')." typeid='1' AND extra='0'";
 				break;
 			case '3':
-				$sqladd .= ($sqladd ? 'AND' : '')." starttimeto<'{$_G['timestamp']}'";
-				break;
-			case '4':
-				$sqladd .= "";
+				$sqladd = ($sqladd ? 'AND' : '')." typeid='2' AND extra='0'";
 				break;
 		}
-		$aucs = getauctions('search', $perpage, true, $sqladd, 'plugin.php?id=auction&action=search&srchtxt='.$srchtxt.'&sctype='.$sctype.'&sctime='.$sctime);
-//	}
+	}
+	switch($sctime) {
+		case '1':
+			$sqladd .= ($sqladd ? 'AND' : '')." starttimeto>'{$_G['timestamp']}' AND starttimefrom<'{$_G['timestamp']}'";
+			break;
+		case '2':
+			$sqladd .= ($sqladd ? 'AND' : '')." starttimefrom>'{$_G['timestamp']}'";
+			break;
+		case '3':
+			$sqladd .= ($sqladd ? 'AND' : '')." starttimeto<'{$_G['timestamp']}'";
+			break;
+		case '4':
+			$sqladd .= "";
+			break;
+	}
+	$aucs = getauctions('search', $perpage, true, $sqladd, 'plugin.php?id=auction&action=search&srchtxt='.$srchtxt.'&sctype='.$sctype.'&sctime='.$sctime);
+
 } elseif ($action == 'mydetail') {
+
 	$_G['gp_ajaxtarget'] = '';
 	if(!$_G['uid']) {
 		showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
@@ -115,6 +131,13 @@ if($action == 'index') {
 		$aucs[] = $result;
 	}
 		$multi = multi($count, $perpage, $page, $url);
+} elseif($action == 'refresh') {
+	if(in_array($_G['adminid'], array(1))) {
+		updatetop();
+		showmessage(lang('plugin/auction', 'm_refresh_success'), 'plugin.php?id=auction', '', array('alert' => 'right'));
+	} else {
+		showmessage(lang('plugin/auction', 'm_no_perm'));
+	}
 }
 include template('auction:auction');
 

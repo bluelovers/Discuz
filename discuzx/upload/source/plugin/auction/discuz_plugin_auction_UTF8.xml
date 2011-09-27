@@ -2,40 +2,40 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-05-06 10:09]]></item>
-	<item id="From"><![CDATA[Discuz! Board (http://localhost/x2/)]]></item>
+	<item id="Time"><![CDATA[2011-09-19 19:38]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://localhost/x200/)]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[积分竞拍]]></item>
+			<item id="name"><![CDATA[积分商城]]></item>
 			<item id="identifier"><![CDATA[auction]]></item>
 			<item id="description"><![CDATA[本插件提供金币竞拍功能，有一口价和竞拍两种模式]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[auction/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc]]></item>
-			<item id="version"><![CDATA[1.0]]></item>
+			<item id="version"><![CDATA[2.0]]></item>
 			<item id="__modules">
 				<item id="0">
-					<item id="name"><![CDATA[thread]]></item>
-					<item id="menu"><![CDATA[]]></item>
-					<item id="url"><![CDATA[]]></item>
-					<item id="type"><![CDATA[12]]></item>
-					<item id="adminid"><![CDATA[0]]></item>
-					<item id="displayorder"><![CDATA[0]]></item>
-					<item id="navtitle"><![CDATA[]]></item>
-					<item id="navicon"><![CDATA[]]></item>
-					<item id="navsubname"><![CDATA[]]></item>
-					<item id="navsuburl"><![CDATA[]]></item>
-				</item>
-				<item id="1">
 					<item id="name"><![CDATA[auction]]></item>
-					<item id="menu"><![CDATA[竞拍]]></item>
+					<item id="menu"><![CDATA[积分商城]]></item>
 					<item id="url"><![CDATA[plugin.php?id=auction]]></item>
 					<item id="type"><![CDATA[1]]></item>
 					<item id="adminid"><![CDATA[0]]></item>
 					<item id="displayorder"><![CDATA[0]]></item>
 					<item id="navtitle"><![CDATA[Auction]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[thread_hide]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
 					<item id="navicon"><![CDATA[]]></item>
 					<item id="navsubname"><![CDATA[]]></item>
 					<item id="navsuburl"><![CDATA[]]></item>
@@ -53,10 +53,10 @@
 					<item id="navsuburl"><![CDATA[]]></item>
 				</item>
 				<item id="3">
-					<item id="name"><![CDATA[thread_hide]]></item>
+					<item id="name"><![CDATA[thread]]></item>
 					<item id="menu"><![CDATA[]]></item>
 					<item id="url"><![CDATA[]]></item>
-					<item id="type"><![CDATA[11]]></item>
+					<item id="type"><![CDATA[12]]></item>
 					<item id="adminid"><![CDATA[0]]></item>
 					<item id="displayorder"><![CDATA[0]]></item>
 					<item id="navtitle"><![CDATA[]]></item>
@@ -76,173 +76,273 @@
 					<item id="navsubname"><![CDATA[]]></item>
 					<item id="navsuburl"><![CDATA[]]></item>
 				</item>
+				<item id="5">
+					<item id="name"><![CDATA[xml]]></item>
+					<item id="menu"><![CDATA[数据调用]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[2]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
 			</item>
 		</item>
 		<item id="version"><![CDATA[X2]]></item>
 		<item id="var">
 			<item id="0">
-				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[竞拍模式规则]]></item>
+				<item id="description"><![CDATA[规则会显示在竞拍页面上]]></item>
+				<item id="variable"><![CDATA[auc_type2_tips]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[竞拍规则：参与用户数不超过商品数，出价为底价或者高于底价。参与用户数超过商品数，出价须高于其出价前时刻能获得商品的最低价格。相同出价先到先得。<br/>
+出价成功后，系统将自动冻结你最后一次出价的金币，竞拍结束后再扣除或返还。虚拟物品的卡密将会自动发送，成功竞拍的用户可以在竞拍页面查看卡密。]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[抽奖模式规则]]></item>
+				<item id="description"><![CDATA[规则会显示在竞拍的页面上]]></item>
+				<item id="variable"><![CDATA[auc_type1_tips_1]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[抽奖规则：用户按照发布的价格出价，物品件数有几件，最终就在出价用户中随机抽取几位中奖。<br/>
+出价成功后，系统将自动冻结出价的金币，竞拍结束后再扣除或返还。虚拟物品的卡密将会自动发送，中奖用户可以在抽奖页面查看卡密。]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[介绍贴地址]]></item>
+				<item id="description"><![CDATA[介绍贴的链接会显示在交易页面]]></item>
+				<item id="variable"><![CDATA[auc_intro]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[http://www.discuz.net/thread-2153878-1-1.html]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
 				<item id="title"><![CDATA[开启竞拍模式]]></item>
 				<item id="description"><![CDATA[]]></item>
-				<item id="variable"><![CDATA[auc_type2]]></item>
+				<item id="variable"><![CDATA[auc_type3]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[1]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
-			<item id="1">
-				<item id="displayorder"><![CDATA[2]]></item>
-				<item id="title"><![CDATA[开启一口价模式]]></item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[开启兑换模式]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[auc_type1]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[1]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
-			<item id="2">
+			<item id="5">
 				<item id="displayorder"><![CDATA[4]]></item>
-				<item id="title"><![CDATA[竞拍积分]]></item>
-				<item id="description"><![CDATA[竞拍交易适用的积分类型。]]></item>
+				<item id="title"><![CDATA[商城交易积分]]></item>
+				<item id="description"><![CDATA[交易使用的积分类型]]></item>
 				<item id="variable"><![CDATA[auc_extcredit]]></item>
 				<item id="type"><![CDATA[extcredit]]></item>
 				<item id="value"><![CDATA[2]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
-			<item id="3">
-				<item id="displayorder"><![CDATA[9]]></item>
-				<item id="title"><![CDATA[介绍贴地址]]></item>
-				<item id="description"><![CDATA[竞拍介绍贴的链接会显示在竞拍页面。]]></item>
-				<item id="variable"><![CDATA[auc_intro]]></item>
-				<item id="type"><![CDATA[text]]></item>
-				<item id="value"><![CDATA[http://www.discuz.net/]]></item>
-				<item id="extra"><![CDATA[]]></item>
-			</item>
-			<item id="4">
-				<item id="displayorder"><![CDATA[6]]></item>
-				<item id="title"><![CDATA[一口价规则(随机)]]></item>
-				<item id="description"><![CDATA[规则会显示在竞拍的页面上]]></item>
-				<item id="variable"><![CDATA[auc_type1_tips_1]]></item>
-				<item id="type"><![CDATA[textarea]]></item>
-				<item id="value"><![CDATA[一口价规则（随机）：参与用户按照发布的价格出价，物品件数有几件，最终就在出价用户中随机产生几位中拍者。<br/>
-出价成功后，系统将自动冻结出价的金币，竞拍结束后再扣除或返还。]]></item>
-				<item id="extra"><![CDATA[]]></item>
-			</item>
-			<item id="5">
-				<item id="displayorder"><![CDATA[8]]></item>
-				<item id="title"><![CDATA[竞拍模式规则]]></item>
-				<item id="description"><![CDATA[规则会显示在竞拍页面上]]></item>
-				<item id="variable"><![CDATA[auc_type2_tips]]></item>
-				<item id="type"><![CDATA[textarea]]></item>
-				<item id="value"><![CDATA[竞价规则：参与用户数不超过商品数，出价为底价或者高于底价。参与用户数超过商品数，出价须高于其出价前时刻能获得商品的最低价格。相同出价先到先得。<br/>
-出价成功后，系统将自动冻结你最后一次出价的金币，竞拍结束后再扣除或返还。]]></item>
-				<item id="extra"><![CDATA[]]></item>
-			</item>
 			<item id="6">
 				<item id="displayorder"><![CDATA[5]]></item>
 				<item id="title"><![CDATA[是否填写手机号]]></item>
-				<item id="description"><![CDATA[是否要求参与竞拍的用户必须填写手机号]]></item>
+				<item id="description"><![CDATA[是否要求参与的用户必须填写手机号]]></item>
 				<item id="variable"><![CDATA[auc_mobile]]></item>
 				<item id="type"><![CDATA[radio]]></item>
 				<item id="value"><![CDATA[1]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 			<item id="7">
-				<item id="displayorder"><![CDATA[7]]></item>
-				<item id="title"><![CDATA[一口价规则(先到先得)]]></item>
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[兑换模式规则]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[auc_type1_tips_2]]></item>
 				<item id="type"><![CDATA[textarea]]></item>
-				<item id="value"><![CDATA[一口价规则（先到先得）：参与用户按照发布的价格出价，物品件数有几件，最先出价的几位用户将成为中拍者。<br/>
-出价成功后，系统将自动冻结出价的金币，竞拍结束后再扣除或返还。]]></item>
+				<item id="value"><![CDATA[兑换规则：用户按照发布的价格出价兑换，物品件数有几件，最先出价的几位用户即兑换成功。虚拟物品的卡密将会自动发送，成功兑换的用户可以在兑换页面查看卡密]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[开启抽奖模式]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[auc_type2]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[10]]></item>
+				<item id="title"><![CDATA[参与交易自动回复]]></item>
+				<item id="description"><![CDATA[开启后，系统会从自动回复内容中随机抽取一条作为参与者的回帖内容]]></item>
+				<item id="variable"><![CDATA[auc_reply]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[自动回复内容 - 兑换]]></item>
+				<item id="description"><![CDATA[可使用变量:
+{name} =&gt; 商品名称
+{price} =&gt; 交易出价
+{priceunit} =&gt; 交易积分类型]]></item>
+				<item id="variable"><![CDATA[auc_reply_message_1]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[我兑换了{name}, 就用了{price}{priceunit}真爽啊
+只需花费{price}{priceunit}就能兑换{name}，太给力了，有木有！！
+神马，{name}只要花费{price}{priceunit}就能兑换，真的不敢相信自己的眼睛，不管你们信不信，反正我信了！
+曾经有一个{name}只需要{price}{priceunit}就能兑换，我珍惜了，立马掏钱付了账，来晚了就没机会了。
+我去，才花了{price}{priceunit}就兑换了一个{name}，太爽了。真希望能一个人兑换好几个哦，加个这个功能呗~~]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[自动回复内容 - 抽奖]]></item>
+				<item id="description"><![CDATA[可使用变量:
+{name} =&gt; 商品名称
+{price} =&gt; 交易出价
+{priceunit} =&gt; 交易积分类型]]></item>
+				<item id="variable"><![CDATA[auc_reply_message_2]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[春哥保佑,我一定要中啊
+曾哥保佑,我一定要中啊
+我用{price}{priceunit}参与了{name}的抽奖，不知道能不能中奖哦，赶紧揭晓吧~！
+只花{price}{priceunit}就能参与抽取{name}，真是太刺激了，大家也赶紧来碰碰运气吧！
+神马，花{price}{priceunit}就能抽{name}，真的不敢相信自己的眼睛，不管你们信不信，反正我信了！]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[13]]></item>
+				<item id="title"><![CDATA[自动回复内容 - 竞拍]]></item>
+				<item id="description"><![CDATA[可使用变量:
+{name} =&gt; 商品名称]]></item>
+				<item id="variable"><![CDATA[auc_reply_message_3]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[悄悄地我就甩开了后面的兄弟，太爽了，势在必得了！
+嘿嘿，一不小心就排到前面去了，高处不胜寒啊，一览众山小啊，谁敢把我拉下马哈！
+竞价的乐趣就在于你追我赶，反正大家都不差钱哈！！
+哈哈，哥现在已经处在领先位置啦，希望后面没人能再出价啦，诅咒你们一点出价页面就报错~~]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 		</item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="auction"><![CDATA[积分竞拍]]></item>
-				<item id="post_auction"><![CDATA[发布竞拍]]></item>
-				<item id="m_type_invalide"><![CDATA[竞拍类型错误，请返回重新填写]]></item>
-				<item id="m_time_invalide"><![CDATA[竞拍时间错误，请返回重新填写]]></item>
-				<item id="m_name_invalide"><![CDATA[商品名称未填写，请返回]]></item>
-				<item id="m_real_price_invalide"><![CDATA[商品市场价填写错误，请返回]]></item>
-				<item id="m_ext_price_invalide"><![CDATA[商品积分价格填写错误，请返回]]></item>
+				<item id="auction"><![CDATA[积分商城]]></item>
+				<item id="post_auction"><![CDATA[发布交易]]></item>
+				<item id="m_type_invalide"><![CDATA[交易类型错误，请返回重新填写]]></item>
+				<item id="m_time_invalide"><![CDATA[交易时间错误，请返回重新填写]]></item>
+				<item id="m_name_invalide"><![CDATA[物品名称未填写，请返回]]></item>
+				<item id="m_real_price_invalide"><![CDATA[物品市场价填写错误，请返回]]></item>
+				<item id="m_ext_price_invalide"><![CDATA[物品积分价格填写错误，请返回]]></item>
 				<item id="m_base_price_invalide"><![CDATA[竞拍底价填写错误，请返回]]></item>
-				<item id="m_delta_priece_invalide"><![CDATA[竞拍插件填写错误，请返回]]></item>
-				<item id="m_number_invalide"><![CDATA[商品数量填写错误，请返回]]></item>
-				<item id="m_time_too_short"><![CDATA[拍卖间隔时间应该为 1小时-3个月，请重新填写]]></item>
+				<item id="m_delta_priece_invalide"><![CDATA[加价幅度填写错误，请返回]]></item>
+				<item id="m_number_invalide"><![CDATA[物品数量填写错误，请返回]]></item>
+				<item id="m_message_ivalide"><![CDATA[卡密不能为空，请返回]]></item>
+				<item id="m_time_too_short"><![CDATA[交易开始时间与结束时间的间隔范围应该为 1小时-3个月，请重新填写]]></item>
 				<item id="m_aucattach_isnot_image"><![CDATA[封面必须是图片，请重新上传]]></item>
-				<item id="m_none_exist"><![CDATA[该拍卖不存在，或已经到期]]></item>
-				<item id="m_end"><![CDATA[竞拍已经结束，下次早点来哦]]></item>
-				<item id="m_owner"><![CDATA[对不起，你是竞拍的发起者，不能参与]]></item>
-				<item id="m_starttime_error"><![CDATA[竞拍尚未开始，您不能参与]]></item>
-				<item id="m_type1_involved"><![CDATA[您已经参与了此次竞拍]]></item>
-				<item id="m_involved_succeed"><![CDATA[您成功参与了此次竞拍]]></item>
+				<item id="m_none_exist"><![CDATA[该交易不存在，或已经到期]]></item>
+				<item id="m_end"><![CDATA[交易已经结束，下次早点来哦]]></item>
+				<item id="m_owner"><![CDATA[对不起，您是交易的发起者，不能参与]]></item>
+				<item id="m_starttime_error"><![CDATA[交易尚未开始，您不能参与]]></item>
+				<item id="m_type1_involved"><![CDATA[您已经参与了此次交易]]></item>
+				<item id="m_involved_succeed"><![CDATA[您成功参与了此次交易]]></item>
 				<item id="m_insufficient"><![CDATA[本次出价 <font color="#F26C4F">{price}</font> {title}，您只剩 <font color="#F26C4F">{ext}</font> {unit} {title}，不能出价。]]></item>
 				<item id="m_delta_error"><![CDATA[出价必须为底价加上加价幅度的整数倍]]></item>
 				<item id="m_charge"><![CDATA[<a href="home.php?mod=spacecp&ac=credit&op=buy">立即充值</a>]]></item>
 				<item id="m_too_low"><![CDATA[对不起，您的出价过低]]></item>
-				<item id="m_not_owner"><![CDATA[对不起，您不是发起人，不能执行该操作]]></item>
-				<item id="m_not_deadline"><![CDATA[竞拍未到期，无法结束]]></item>
+				<item id="m_not_owner"><![CDATA[对不起，您不是交易发起人，不能执行该操作]]></item>
+				<item id="m_not_deadline"><![CDATA[交易尚未到期，无法结束]]></item>
 				<item id="m_finish_succeed"><![CDATA[结算成功]]></item>
-				<item id="m_finish_error"><![CDATA[没有符合条件的竞拍者，竞拍结束成功]]></item>
-				<item id="n_auction_get"><![CDATA[恭喜，您参与的 <a href="forum.php?mod=viewthread&tid={auctiontid}">{auctionname}</a> 已经中拍，<a href="forum.php?mod=viewthread&tid={auctiontid}">点此查看详情</a>]]></item>
-				<item id="n_auction_get_owner"><![CDATA[您发起的竞拍 <a href="forum.php?mod=viewthread&tid={auctiontid}">{auctionname}</a> 已经结束，共有 {num} 名用户中拍您物品， {auctioncredit} 增加 {price}, <a href="forum.php?mod=viewthread&tid={auctiontid}">点此查看详情</a>]]></item>
+				<item id="m_finish_error"><![CDATA[没有符合条件的参与者，交易结束]]></item>
+				<item id="n_auction_get"><![CDATA[恭喜，您已经获得 <a href="forum.php?mod=viewthread&tid={auctiontid}">{auctionname}</a> ，<a href="forum.php?mod=viewthread&tid={auctiontid}">点此查看详情</a>]]></item>
+				<item id="n_auction_get_owner"><![CDATA[您发起的交易 <a href="forum.php?mod=viewthread&tid={auctiontid}">{auctionname}</a> 已经结束，共有 {num} 名用户获得该物品， 您的 {auctioncredit} 增加 {price}, <a href="forum.php?mod=viewthread&tid={auctiontid}">点此查看详情</a>]]></item>
 				<item id="n_auction_lose"><![CDATA[抱歉，您参与的 <a href="forum.php?mod=viewthread&tid={auctiontid}">{auctionname}</a> 未中拍，相关积分已经返还。<a href="forum.php?mod=viewthread&tid={auctiontid}">点此查看详情</a>]]></item>
-				<item id="n_auction_clear"><![CDATA[抱歉，您参与的竞拍 {auctionname} 被管理员删除，相关积分已经返还。]]></item>
+				<item id="n_auction_clear"><![CDATA[抱歉，您参与的交易 {auctionname} 被管理员删除，相关积分已经返还。]]></item>
 				<item id="undifine_op"><![CDATA[未定义操作]]></item>
 				<item id="m_clear_finish"><![CDATA[删除完成]]></item>
 				<item id="m_clear_redirect"><![CDATA[正在删除下一列表，请不要关闭浏览器]]></item>
-				<item id="clear_tips"><![CDATA[本操作用于处理帖子已经被删除，但是竞拍数据还存在表中的情况。<a href="admin.php?action=plugins&operation=config&identifier=auction&pmod=clear&confirm=1">点此确定删除</a>]]></item>
-				<item id="m_title"><![CDATA[商品名称]]></item>
+				<item id="clear_tips"><![CDATA[本操作用于处理帖子已经被删除，但是交易数据还存在表中的情况。<a href="admin.php?action=plugins&operation=config&identifier=auction&pmod=clear&confirm=1">点此确定删除</a>]]></item>
+				<item id="m_title"><![CDATA[物品名称]]></item>
 				<item id="m_starttimeto"><![CDATA[结束时间]]></item>
+				<item id="m_not_virtual"><![CDATA[该交易的物品类型不是虚拟物品]]></item>
 				<item id="m_finished"><![CDATA[已结束]]></item>
 				<item id="m_finish"><![CDATA[结算]]></item>
 				<item id="m_yes"><![CDATA[是]]></item>
 				<item id="m_no"><![CDATA[否]]></item>
-				<item id="none"><![CDATA[还没有竞拍]]></item>
-				<item id="m_manage_tips"><![CDATA[<li>只有结算之后的竞拍才能删除</li>]]></item>
+				<item id="none"><![CDATA[还没有交易]]></item>
+				<item id="m_manage_tips"><![CDATA[<li>只有结算之后的交易才能删除</li>]]></item>
 				<item id="m_delete_succeed"><![CDATA[删除成功]]></item>
-				<item id="m_delete_end"><![CDATA[个竞拍]]></item>
-				<item id="m_type"><![CDATA[竞拍类型]]></item>
-				<item id="m_type1"><![CDATA[一口价]]></item>
-				<item id="m_type2"><![CDATA[竞拍]]></item>
+				<item id="m_delete_end"><![CDATA[个交易]]></item>
+				<item id="m_type"><![CDATA[交易类型]]></item>
 				<item id="m_username"><![CDATA[发布者]]></item>
 				<item id="m_operation"><![CDATA[操作]]></item>
 				<item id="m_edit"><![CDATA[编辑]]></item>
-				<item id="m_delay_time_error"><![CDATA[本期竞拍延期时间范围为 {mintime} 至 {maxtime}，请重新设置竞拍结束时间]]></item>
+				<item id="m_delay_time_error"><![CDATA[本交易延期时间范围为 {mintime} 至 {maxtime}，请重新设置交易结束时间]]></item>
 				<item id="m_no_pic"><![CDATA[封面必须上传]]></item>
 				<item id="m_type1_tips_p"><![CDATA[您当前还有 <font color="#F26C4F">{ext}</font> {title}，本次出价 <font color="#F26C4F">{price}</font>，确定出价吗？]]></item>
 				<item id="m_mobile_error"><![CDATA[手机号码填写错误]]></item>
 				<item id="m_type2_tips_p_pre"><![CDATA[您当前还有 <font color="#F26C4F">{ext}</font> {title}，本次出价 ]]></item>
 				<item id="m_type2_tips_p_beh"><![CDATA[确定出价吗？]]></item>
-				<item id="m_join_clog"><![CDATA[参与竞拍]]></item>
+				<item id="m_join_clog"><![CDATA[参与交易]]></item>
+				<item id="m_refresh_success"><![CDATA[更新热门交易成功]]></item>
+				<item id="m_no_perm"><![CDATA[对不起，您没有权限进行此操作]]></item>
+				<item id="m_no_message"><![CDATA[没有属于您的卡密]]></item>
+				<item id="auction_xml"><![CDATA[数据调用]]></item>
+				<item id="auction_xml_tips"><![CDATA[<li>添加数据调用的时候会自动分配客户端ID</li><li>添加后，到门户中添加第三方模块后即可使用DIY调用 <a href="{adminscript}?action=blockxml&operation=add" target="_blank">点此前往</a></li><li>第三方地址为: {url}</li><li>客户端ID和通信密钥分别为下面填写的内容</li>]]></item>
+				<item id="xml_clientid"><![CDATA[客户端ID]]></item>
+				<item id="xml_sign"><![CDATA[通信密钥]]></item>
+				<item id="no_xml"><![CDATA[没有数据调用]]></item>
+				<item id="auction_xml_add"><![CDATA[添加数据调用]]></item>
+				<item id="xml_empty_sign"><![CDATA[验证密钥不能为空]]></item>
+				<item id="xml_add_succeed"><![CDATA[数据调用添加成功]]></item>
+				<item id="xml_delete_succeed"><![CDATA[数据调用删除成功]]></item>
+				<item id="auc_type1"><![CDATA[兑&nbsp;&nbsp;&nbsp;换]]></item>
+				<item id="auc_type2"><![CDATA[抽&nbsp;&nbsp;&nbsp;奖]]></item>
+				<item id="auc_type3"><![CDATA[竞&nbsp;&nbsp;&nbsp;拍]]></item>
+				<item id="auc_virtual_0"><![CDATA[实物]]></item>
+				<item id="auc_virtual_1"><![CDATA[虚拟物品]]></item>
 			</item>
 			<item id="templatelang">
-				<item id="auction"><![CDATA[积分竞拍]]></item>
-				<item id="auc_type"><![CDATA[竞拍类型]]></item>
-				<item id="auc_type1"><![CDATA[一口价]]></item>
-				<item id="auc_type2"><![CDATA[竞&nbsp;&nbsp;&nbsp;价]]></item>
+				<item id="msg_id"><![CDATA[编号]]></item>
+				<item id="msg_ct"><![CDATA[卡密]]></item>
+				<item id="msg_mb"><![CDATA[用户]]></item>
+				<item id="msg_st"><![CDATA[状态]]></item>
+				<item id="msg_st_0"><![CDATA[未发送]]></item>
+				<item id="msg_st_1"><![CDATA[已发送]]></item>
+				<item id="view_message"><![CDATA[查看卡密]]></item>
+				<item id="auc_type1_title"><![CDATA[价格]]></item>
+				<item id="auction"><![CDATA[积分商城]]></item>
+				<item id="auc_type"><![CDATA[交易类型]]></item>
+				<item id="auc_type1"><![CDATA[兑&nbsp;&nbsp;&nbsp;换]]></item>
+				<item id="auc_type2"><![CDATA[抽&nbsp;&nbsp;&nbsp;奖]]></item>
+				<item id="auc_type3"><![CDATA[竞&nbsp;&nbsp;&nbsp;拍]]></item>
 				<item id="auc_type2_"><![CDATA[竞价]]></item>
 				<item id="auc_type_all"><![CDATA[请选择类型]]></item>
 				<item id="auc_name"><![CDATA[物品名称]]></item>
-				<item id="auc_time"><![CDATA[竞拍时间]]></item>
+				<item id="auc_time"><![CDATA[交易时间]]></item>
 				<item id="auc_starttimefrom"><![CDATA[开始时间]]></item>
 				<item id="auc_starttimeto"><![CDATA[结束时间]]></item>
-				<item id="auc_ext_price"><![CDATA[竞拍出价]]></item>
+				<item id="auc_ext_price"><![CDATA[交易出价]]></item>
 				<item id="auc_real_price"><![CDATA[市场价]]></item>
 				<item id="auc_yuan"><![CDATA[元]]></item>
-				<item id="auc_cover"><![CDATA[竞拍封面]]></item>
-				<item id="auc_cover_tips"><![CDATA[上传一张图片作为竞拍的封面吧 ]]></item>
-				<item id="auc_cover_update"><![CDATA[点击更新来更换竞拍的封面]]></item>
+				<item id="auc_cover"><![CDATA[物品图片]]></item>
+				<item id="auc_cover_tips"><![CDATA[上传一张图片作为交易的封面吧 ]]></item>
+				<item id="auc_cover_update"><![CDATA[点击更新来更换交易的封面]]></item>
 				<item id="auc_number"><![CDATA[物品数量]]></item>
-				<item id="auc_post_error_type"><![CDATA[请选择竞拍类型]]></item>
-				<item id="auc_post_error_name"><![CDATA[请填写商品名称]]></item>
+				<item id="auc_post_error_type"><![CDATA[请选择交易类型]]></item>
+				<item id="auc_post_error_name"><![CDATA[请填写物品名称]]></item>
 				<item id="auc_post_error_starttimefrom"><![CDATA[开始时间填写无效]]></item>
 				<item id="auc_post_error_starttimeto"><![CDATA[结束时间填写无效]]></item>
 				<item id="auc_post_error_ext_price"><![CDATA[积分价格填写无效]]></item>
 				<item id="auc_post_error_real_price"><![CDATA[市场价格填写无效]]></item>
 				<item id="auc_post_error_base_price"><![CDATA[竞拍底价填写无效]]></item>
 				<item id="auc_post_error_delta_price"><![CDATA[竞拍差价填写无效]]></item>
-				<item id="auc_post_error_number"><![CDATA[商品数量填写无效]]></item>
+				<item id="auc_post_error_number"><![CDATA[物品数量填写无效]]></item>
 				<item id="input_invalid"><![CDATA[填写无效]]></item>
 				<item id="auc_base_price"><![CDATA[竞拍底价]]></item>
 				<item id="auc_delta_price"><![CDATA[加价幅度]]></item>
@@ -255,7 +355,7 @@
 				<item id="unit"><![CDATA[件]]></item>
 				<item id="deadline"><![CDATA[已经结束]]></item>
 				<item id="auc_join1"><![CDATA[出价]]></item>
-				<item id="auc_join1_comment"><![CDATA[您确认要参与此竞拍吗]]></item>
+				<item id="auc_join1_comment"><![CDATA[您确认要参与此交易吗]]></item>
 				<item id="auc_join2"><![CDATA[出价]]></item>
 				<item id="auc_join2_comment"><![CDATA[请填写您的出价]]></item>
 				<item id="auc_type1_hot"><![CDATA[人气]]></item>
@@ -265,7 +365,7 @@
 				<item id="login"><![CDATA[请先登录]]></item>
 				<item id="confirm"><![CDATA[确定]]></item>
 				<item id="price"><![CDATA[出价]]></item>
-				<item id="ext_notice"><![CDATA[竞拍成功将冻结您相应的积分]]></item>
+				<item id="ext_notice"><![CDATA[出价成功后将冻结您相应的积分]]></item>
 				<item id="add"><![CDATA[增加]]></item>
 				<item id="cut"><![CDATA[减少]]></item>
 				<item id="unit_1"><![CDATA[单位]]></item>
@@ -279,55 +379,57 @@
 				<item id="status_2_no"><![CDATA[<font color="#008B00">出局</font>]]></item>
 				<item id="status_2_final"><![CDATA[<font color="#F26C4F">成交</font>]]></item>
 				<item id="unknown"><![CDATA[等待结算]]></item>
-				<item id="none"><![CDATA[暂无出价记录，快去参与竞拍吧]]></item>
+				<item id="none"><![CDATA[暂无出价记录，快去参与交易吧]]></item>
 				<item id="none_1"><![CDATA[还没有人参加]]></item>
-				<item id="finish"><![CDATA[结束竞拍]]></item>
-				<item id="today"><![CDATA[今日竞拍]]></item>
-				<item id="all"><![CDATA[全部竞拍]]></item>
-				<item id="search"><![CDATA[搜索竞拍]]></item>
-				<item id="search_type1"><![CDATA[搜索一口价]]></item>
-				<item id="search_type2"><![CDATA[搜索竞拍]]></item>
-				<item id="about"><![CDATA[了解积分竞拍]]></item>
-				<item id="login_tips"><![CDATA[登录后，立即查看您的竞拍积分]]></item>
+				<item id="finish"><![CDATA[结算]]></item>
+				<item id="today"><![CDATA[今日交易]]></item>
+				<item id="all"><![CDATA[全部交易]]></item>
+				<item id="search"><![CDATA[搜索]]></item>
+				<item id="about"><![CDATA[了解积分交易]]></item>
+				<item id="login_tips"><![CDATA[登录后，立即查看您的交易积分]]></item>
 				<item id="hello"><![CDATA[您好，]]></item>
-				<item id="credits_left"><![CDATA[竞拍余额：]]></item>
-				<item id="hots"><![CDATA[热门竞拍排行]]></item>
+				<item id="hots"><![CDATA[热门交易排行]]></item>
 				<item id="maohao"><![CDATA[：]]></item>
 				<item id="auc_price"><![CDATA[价格]]></item>
 				<item id="contact"><![CDATA[手机]]></item>
-				<item id="auc_title_tips"><![CDATA[您的积分可竞拍各类精美礼品！竞拍成功后，您将会收到系统发送的通知。详情请点击右侧的《快速了解积分竞拍》查看]]></item>
-				<item id="auc_laster"><![CDATA[出价人]]></item>
 				<item id="view_detail"><![CDATA[查看详情&rsaquo;&rsaquo;]]></item>
-				<item id="get_back"><![CDATA[回到竞拍首页]]></item>
+				<item id="get_back"><![CDATA[回到交易首页]]></item>
 				<item id="black"><![CDATA[微软雅黑]]></item>
-				<item id="auc_no_price"><![CDATA[原&nbsp;&nbsp;&nbsp;价]]></item>
-				<item id="auc_type2_price"><![CDATA[竞拍价]]></item>
+				<item id="auc_no_price"><![CDATA[市场价]]></item>
+				<item id="auc_type2_price"><![CDATA[竞&nbsp;&nbsp;&nbsp;拍]]></item>
 				<item id="not_start_yet"><![CDATA[即将开始]]></item>
 				<item id="out"><![CDATA[出局]]></item>
 				<item id="getlist"><![CDATA[获奖记录]]></item>
 				<item id="yes"><![CDATA[成功]]></item>
 				<item id="no"><![CDATA[失败]]></item>
-				<item id="view_tips"><![CDATA[查看竞拍需知]]></item>
+				<item id="view_tips"><![CDATA[查看交易需知]]></item>
 				<item id="auc_type1_"><![CDATA[结算方式]]></item>
 				<item id="auc_type1_0"><![CDATA[随机获得]]></item>
 				<item id="auc_type1_1"><![CDATA[先到先得]]></item>
 				<item id="auc_being"><![CDATA[最近热卖]]></item>
-				<item id="auc_been"><![CDATA[往期竞拍]]></item>
-				<item id="auc_search"><![CDATA[搜索竞拍]]></item>
+				<item id="auc_been"><![CDATA[往期交易]]></item>
+				<item id="auc_search"><![CDATA[搜索]]></item>
 				<item id="sc_time_all"><![CDATA[请选择状态]]></item>
 				<item id="sc_time_being"><![CDATA[正在进行]]></item>
 				<item id="sc_time_will"><![CDATA[即将开始]]></item>
 				<item id="sc_time_been"><![CDATA[已经结束]]></item>
 				<item id="auc_own"><![CDATA[发起人]]></item>
-				<item id="md_start"><![CDATA[发起竞拍]]></item>
-				<item id="md_join"><![CDATA[参与竞拍]]></item>
-				<item id="md_got"><![CDATA[竞拍成功]]></item>
+				<item id="md_start"><![CDATA[发起交易]]></item>
+				<item id="md_join"><![CDATA[参与交易]]></item>
+				<item id="md_got"><![CDATA[交易成功]]></item>
 				<item id="md_left"><![CDATA[可用余额]]></item>
-				<item id="mobile_tips"><![CDATA[请留下您的手机号，竞拍商品领取过程中会用到]]></item>
+				<item id="mobile_tips"><![CDATA[请留下您的手机号，物品领取过程中会用到]]></item>
 				<item id="waitline"><![CDATA[等待结算]]></item>
+				<item id="auc_virtual"><![CDATA[物品类型]]></item>
+				<item id="auc_virtual_0"><![CDATA[实物]]></item>
+				<item id="auc_virtual_1"><![CDATA[虚拟物品]]></item>
+				<item id="auc_message_message"><![CDATA[请填写卡密，一个一行]]></item>
+				<item id="auc_message"><![CDATA[卡密]]></item>
+				<item id="auc_reply_message"><![CDATA[说两句：]]></item>
 			</item>
 		</item>
 		<item id="installfile"><![CDATA[install.php]]></item>
 		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
 	</item>
 </root>

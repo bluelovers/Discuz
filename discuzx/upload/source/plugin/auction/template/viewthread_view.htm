@@ -2,13 +2,31 @@
 	<table class="list_tb" style="margin-top:0;">
 		<!--{if $list}-->
 		<!--{loop $list $list_1}-->
-		<tr>
+		<tr{if $list_1[uid] == $_G[uid]} class="myauclog"{/if}>
 			<td class="list_lt" width="20%"><a href="home.php?mod=space&uid={$list_1[uid]}">$list_1[username]</a></td>
 			<td class="list_lt" width="40%">$list_1[dateline]</td>
 			<td class="list_lt" width="<!--{if $showmobile}-->10%<!--{else}-->20%<!--{/if}-->">$list_1[cur_price]</td>
 			<td class="list_lt" width="<!--{if $showmobile}-->10%<!--{else}-->20%<!--{/if}-->">
-			<!--{if $auc[typeid] == 1}--><!--{if $list_1[status]}--><em style="color:#F26C4F;">{lang auction:yes}</em><!--{else}--><!--{if $auc[status] == 1}-->{lang auction:no}<!--{else}-->{lang auction:unknown}<!--{/if}--><!--{/if}-->
-			<!--{elseif $auc[typeid] == 2}--><!--{if $list_1[status]}--><em style="color:#F26C4F;"><!--{if $auc[status] == 1}-->{lang auction:yes}<!--{else}-->{lang auction:status_2_yes}<!--{/if}--></em><!--{else}-->{lang auction:out}<!--{/if}-->
+			<!--{if $auc[typeid] == 1}-->
+				<!--{if $list_1[status]}-->
+					<em style="color:#F26C4F;">{lang auction:yes}</em><!--{if $_G[uid] == $list_1[uid] && $auc[virtual] == 1}-->&nbsp;<a href="plugin.php?id=auction:involve&operation=message&tid={$auction[tid]}" onclick="showWindow('auction_message', this.href, 'get', 0);return false;">({lang auction:view_message})</a><!--{/if}-->
+				<!--{else}-->
+					<!--{if $auc[status] == 1}-->
+						{lang auction:no}
+					<!--{else}-->
+						{lang auction:unknown}
+					<!--{/if}-->
+				<!--{/if}-->
+			<!--{elseif $auc[typeid] == 2}-->
+				<!--{if $list_1[status]}-->
+					<!--{if $auc[status] == 1}-->
+						<em style="color:#F26C4F;">{lang auction:yes}</em><!--{if $_G[uid] == $list_1[uid] && $auc[virtual] == 1}-->&nbsp;<a href="plugin.php?id=auction:involve&operation=message&tid={$auction[tid]}" onclick="showWindow('auction_message', this.href, 'get', 0);return false;">{lang auction:view_message}</a><!--{/if}-->
+					<!--{else}-->
+						<em style="color:#F26C4F;">{lang auction:status_2_yes}</em>
+					<!--{/if}-->
+				<!--{else}-->
+					{lang auction:out}
+				<!--{/if}-->
 			<!--{/if}-->
 			</td>
 			<!--{if $showmobile}-->
@@ -21,13 +39,5 @@
 		{lang auction:none}</td></tr>
 		<!--{/if}-->
 	</table>
-	<!--{if $multi}--><div id="auc_pg">{$multi}</div>
-	<script language="javascript" type="text/javascript" reload="1">
-	var auc_pgs = $('auc_pg').getElementsByTagName('A');
-	var l = auc_pgs.length;
-	for(var i=0;i<l;i++) {
-		auc_pgs[i].setAttribute('onclick',"ajaxget('"+auc_pgs[i].getAttribute('href')+"', 'list_ajax');");
-		auc_pgs[i].href="javascript:;"
-	}
-	</script><!--{/if}-->
+	<!--{if $multi}--><div id="auc_pg">{$multi}</div><!--{/if}-->
 <!--{template common/footer}-->

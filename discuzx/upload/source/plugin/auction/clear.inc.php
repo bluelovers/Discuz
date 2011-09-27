@@ -2,11 +2,11 @@
 /*
  *	auction.inc.php 积分竞拍插件
  *	For Discuz!X2
- *	2011-03-17 10:36:18  zhouxingming
- *
+ *	2011-09-02 10:31:40 zhouxingming
+ *	Description: 删除冗余数据
  * */
 
-if(!defined('IN_DISCUZ')) {
+if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
@@ -40,7 +40,7 @@ if($start > $count) {
 						lang('plugin/auction', 'n_auction_clear'),
 							array(
 							'auctionname' => $result['name'],
-							'auctiontid' => $auction['tid'],
+							'auctiontid' => $result['tid'],
 							),
 							1
 						);

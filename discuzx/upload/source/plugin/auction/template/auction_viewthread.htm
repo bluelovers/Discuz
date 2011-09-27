@@ -61,6 +61,7 @@
     padding-left: 10px;
     vertical-align: middle;
     width:auto;
+    word-break:break-all;
 }
 
 
@@ -71,6 +72,7 @@
 	.auction_price .auc_title{color:#F26C4F;}
 	.auction_price {margin:10px;}
 	.auction_price a{color:#1B7FC6;}
+	.myauclog td,.myauclog th{background-color:#eee;}
 </style>
 
 
@@ -84,7 +86,17 @@
 	</div>
 	<div class="aucdetail">
 		<dl>
-			<li><span>{lang auction:auc_type}:</span><em class="auc_title"><!--{if $auction[typeid]==1}-->{lang auction:auc_type1}<!--{else}-->{lang auction:auc_type2}<!--{/if}--></em><em style="margin-left:80px;"><img src="source/plugin/auction/images/rules.gif" id="auctips" onmouseover="showMenu(this.id);"/></em></li>
+			<li><span>{lang auction:auc_type}:</span>
+				<em class="auc_title">
+					<!--{if $auction[ctypeid]==1}-->{lang auction:auc_type1}
+					<!--{elseif $auction[ctypeid]==2}-->{lang auction:auc_type2}
+					<!--{elseif $auction[ctypeid]==3}-->{lang auction:auc_type3}<!--{/if}-->
+				</em>
+				<em style="margin-left:80px;">
+					<img src="source/plugin/auction/images/rules.gif" id="auctips" onmouseover="showMenu(this.id);"/>
+				</em>
+			</li>
+			<li><span>{lang auction:auc_virtual}:</span><em class="">{if $auction['virtual']}{lang auction:auc_virtual_1}{else}{lang auction:auc_virtual_0}{/if}</em></li>
 			<li><span>{lang auction:auc_name}:</span><em class="">{$auction['name']}</em></li>
 			<li><span>{lang auction:auc_number}:</span><em class="">{lang auction:total} <font color="#F26C4F">{$auction['number']}</font> {lang auction:unit}</em></li>
 			<li><span>{lang auction:auc_starttimefrom}:</span><em>{$auction['starttimefrom']}</em></li>
@@ -92,9 +104,7 @@
 			<li<!--{if $notstart}--> style="display:none;"<!--{/if}-->><span>{lang auction:auc_timeleft}:</span><em id="timeleft" class="auc_title"></em></li>
 
 			<!--{if $auction['typeid'] == 1}-->
-			<li><span>{lang auction:auc_type1}:</span><em class="auc_title">{$auction['ext_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
-			<li><span>{lang auction:auc_type1_}:</span><em>
-				<!--{if $auction['extra']}-->{lang auction:auc_type1_1}<!--{else}-->{lang auction:auc_type1_0}<!--{/if}--></em></li>
+			<li><span>{lang auction:auc_type1_title}:</span><em class="auc_title">{$auction['ext_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
 			<!--{elseif $auction['typeid'] == 2}-->
 			<li><span>{lang auction:auc_base_price}:</span><em class="auc_title">{$auction['base_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
 			<li><span>{lang auction:auc_delta_price}:</span><em class="auc_title">{$auction['delta_price']}</em><em>{$_G[setting][extcredits][$auction['extid']][title]}</em></li>
@@ -114,6 +124,9 @@
 			<!--{/if}-->
 			<!--{else}-->
 			<button class="pn" value="true" name="ijoin" id="ijoin" onclick="showWindow('confirm', 'member.php?mod=logging&action=login', 'get', 0);doane(event);" onmouseover="$('joinword').innerHTML='{lang auction:login}';" onmouseout="$('joinword').innerHTML='<!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}-->';"><span id="joinword" style="width:80px;float:none;"><!--{if $auction['typeid'] == 1}-->{lang auction:auc_join1}<!--{elseif $auction['typeid'] == 2}-->{lang auction:auc_join2}<!--{/if}--></span></button>
+			<!--{/if}-->
+			<!--{if $auction['virtual'] && ($_G['adminid'] == 1 || $_G[uid] == $auction[uid])}-->
+			<button class="pn" value="true" name="ijoin" id="ijoin" onclick="showWindow('auction_message', 'plugin.php?id=auction:involve&operation=admin_message&tid={$auction[tid]}', 'get', 0);doane(event);"><span id="joinword" style="width:80px;float:none;">{lang auction:view_message}</span></button>
 			<!--{/if}-->
 			<!--{if $_G['cache']['plugin']['auction']['auc_intro']}--><span class="gray" style="width:80px;float:none;"><a href="{$_G[cache][plugin][auction][auc_intro]}" target="_blank" style="color:#1B7FC6;padding-left:20px;vertical-align: middle;">{lang auction:view_tips}</a></span><!--{/if}-->
 			</p></dd>
@@ -144,36 +157,36 @@
 <div id="confirm" style="display:none;"></div>
 
 <script language="javascript" type="text/javascript">
-	var now= Date.parse('{$auction[js_timeto]}');
-	var startTime = Date.parse('{$auction[js_timefrom]}');
-	var future=  {$auction[js_timenow]}*1000;
+	var auctionNow= Date.parse('{$auction[js_timeto]}');
+	var auctionStartTime = Date.parse('{$auction[js_timefrom]}');
+	var auctionFuture=  {$auction[js_timenow]}*1000;
 	
 	function showTimeLimit(){
 
-	future+=1000;
+	auctionFuture+=1000;
 
-	days = (now-future) / 1000 / 60 / 60 / 24;
-	if(startTime-future >0) {
+	days = (auctionNow-auctionFuture) / 1000 / 60 / 60 / 24;
+	if(auctionStartTime-auctionFuture >0) {
 		document.getElementById('ijoin').innerHTML = '<span>{lang auction:not_start_yet}</span>';
 		return;
 	}
         dayNum = Math.floor(days);
-        hours = (now-future) / 1000 / 60 / 60 - (24 * dayNum);
+        hours = (auctionNow-auctionFuture) / 1000 / 60 / 60 - (24 * dayNum);
         houNum = Math.floor(hours);
 	if(houNum < 10 && houNum > 0){
             houNum = "0" + houNum;
         }
-        minutes = (now-future) / 1000 / 60 - (24 * 60 * dayNum) - (60 * houNum);
+        minutes = (auctionNow-auctionFuture) / 1000 / 60 - (24 * 60 * dayNum) - (60 * houNum);
         minNum = Math.floor(minutes);
         if(minNum < 10){
             minNum = "0" + minNum;
         }
-        seconds = (now-future) / 1000 - (24 * 60 * 60 * dayNum) - (60 * 60 * houNum) - (60 * minNum);
+        seconds = (auctionNow-auctionFuture) / 1000 - (24 * 60 * 60 * dayNum) - (60 * 60 * houNum) - (60 * minNum);
         secNum = Math.floor(seconds);
         if(secNum < 10){
             secNum = "0" + secNum;
         }
-        millisec=(now-future)-(24*60*60*1000*dayNum)-(60*60*1000*houNum)-(60*1000*minNum)-(secNum*1000);
+        millisec=(auctionNow-auctionFuture)-(24*60*60*1000*dayNum)-(60*60*1000*houNum)-(60*1000*minNum)-(secNum*1000);
         milli=Math.floor(millisec/10);
         if(milli<10){
             milli="0"+milli;
