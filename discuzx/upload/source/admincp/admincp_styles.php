@@ -163,7 +163,7 @@ if($operation == 'admin') {
 				// 補回風格的是否可用選項
 				.
 				"
-				<p style=\"margin: 2px 0\"><label>$lang[available] <input type=\"checkbox\" class=\"radio\" name=\"availablenew\" value=\"$id\" $available /></label></p>
+				<p style=\"margin: 2px 0\"><label>$lang[available] <input type=\"checkbox\" class=\"radio\" name=\"availablenew[$id]\" value=\"$id\" $available /></label></p>
 				"
 				.
 				// bluelovers
