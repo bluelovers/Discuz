@@ -1538,6 +1538,10 @@ function getratelist($raterange) {
 					}
 				}
 
+				$_list = array_unique($_list);
+
+				rsort($_list);
+
 				foreach ($_list as $vote) {
 					// bluelovers
 
