@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ')) {
 
 include_once dirname(__FILE__).'/./class_sco_plugin_inc.php';
 
-$_G['gp_cpmod'] = 'plugin';
+empty($_G['gp_cpmod']) && $_G['gp_cpmod'] = 'plugin';
 
 if (empty($_G['gp_cpmod'])) {
 
