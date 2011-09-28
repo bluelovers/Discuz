@@ -93,6 +93,16 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $this;
 	}
 
+	/**
+	 *
+	 * @return db_mysql
+	 */
+	function &_db() {
+		static $db;
+		if (!isset($db)) $db = DB::object();
+		return $db;
+	}
+
 }
 
 ?>
