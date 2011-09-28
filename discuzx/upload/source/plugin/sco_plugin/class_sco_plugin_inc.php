@@ -23,6 +23,10 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $this;
 	}
 
+	function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
+		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
+	}
+
 }
 
 ?>
