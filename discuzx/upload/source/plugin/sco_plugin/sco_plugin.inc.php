@@ -17,7 +17,7 @@ if (empty($_G['gp_cpmod'])) {
 
 	$_cpanel = new plugin_sco_plugin_inc();
 	$_cpanel
-		->init($plugin['identifier'])
+		->init(CURMODULE)
 		->set(array(
 			'cpmod' => $_G['gp_cpmod'],
 			'module' => &$module,
@@ -27,7 +27,7 @@ if (empty($_G['gp_cpmod'])) {
 
 } else {
 
-	$_cpanel = plugin_sco_plugin_inc::mod($_G['gp_cpmod'], $plugin['identifier']);
+	$_cpanel = plugin_sco_plugin_inc::mod($_G['gp_cpmod'], CURMODULE);
 
 	$_cpanel
 		->set(array(
