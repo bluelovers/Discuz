@@ -16,7 +16,7 @@ class plugin_sco_plugin_inc extends _sco_dx_plugin_inc {
 	function &run() {
 		$this->_setglobal('mod_lists', $this->_get_mod_list());
 
-		$this->_setglobal('debug', true, 'setting');
+		//$this->_setglobal('debug', true, 'setting');
 
 		$this->_setglobal('plugin_url', $this->_make_url(
 			$this->module
