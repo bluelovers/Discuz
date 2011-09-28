@@ -518,7 +518,9 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
 
-		if ($data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5) {
+		if (
+			$data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5
+		) {
 			discuz_core::$_cache_data['output']['users'] = array_merge(
 				(array)discuz_core::$_cache_data['output']['users']
 				, (array)$data['output_user']
