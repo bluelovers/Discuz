@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ')) {
 
 class plugin_sco_plugin_plugin extends plugin_sco_plugin_inc {
 
-	function plugin_message() {
+	function on_op_default() {
 		$query = DB::query("SELECT
 				*
 			FROM
