@@ -27,6 +27,8 @@ class plugin_sco_plugin_inc extends _sco_dx_plugin_inc {
 			)
 		));
 
+		$this->_setglobal('plugin_self', &$this);
+
 		parent::run();
 
 		return $this;
