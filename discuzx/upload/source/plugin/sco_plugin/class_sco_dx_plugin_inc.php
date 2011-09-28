@@ -93,6 +93,8 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		*/
 		foreach ($attr as $_k => $_v) {
 			$this->attr['global'][$_k] = $_v;
+
+			if ($_k == 'module') $this->module = $_v;
 		}
 
 		return $this;
