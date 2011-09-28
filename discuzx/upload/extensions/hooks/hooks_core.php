@@ -552,6 +552,8 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
 
 		writetocache($cachename, $cachedata, 'cache_', 'extensions/');
+
+		unlink($_file_lock);
 	}
 }
 
