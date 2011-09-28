@@ -32,7 +32,6 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin_inc {
 
 		global $_G;
 		$this->_setglobal('plugin_lists', $plugin_lists);
-		$this->_setglobal('navigation', '<em>&raquo;</em>'.'Scorpio! Plugin Center');
 
 		/*
 		ob_start();
@@ -40,7 +39,6 @@ class plugin_sco_plugin_plugin extends plugin_sco_plugin_inc {
 		*/
 
 		extract($this->attr['global']);
-		$plugin_self = &$this;
 		include $this->_template('plugin_index');
 	}
 

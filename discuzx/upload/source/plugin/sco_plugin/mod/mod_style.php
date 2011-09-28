@@ -14,8 +14,6 @@ class plugin_sco_plugin_style extends plugin_sco_plugin_inc {
 	function on_op_default() {
 		$this->_my_get_stylelist();
 
-		$this->_setglobal('plugin_self', &$this);
-
 		global $_G;
   		extract($this->attr['global']);
 
