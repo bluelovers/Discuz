@@ -108,10 +108,14 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 
 		$method = 'on_op_'.$operation;
 
+		ob_end_clean();
+
 		ob_start();
 		$this->$method();
 		$_content = ob_get_contents();
 		ob_end_clean();
+
+		$GLOBALS['_G']['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
 
 		$this->view_header();
 		echo $_content;
