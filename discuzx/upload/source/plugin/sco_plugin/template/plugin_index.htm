@@ -87,6 +87,16 @@
 
 	<div class="appl">
 		<div class="tbn">
+			<h2 class="mt bbda">Mod</h2>
+			<ul>
+				<!--{loop $mod_lists $_mod}-->
+					 <li>
+					 	<a>$_mod</a>
+					 </li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="tbn">
 			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
 			<ul>
 				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
