@@ -522,7 +522,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		if (
 			$data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5
-			|| file_exists($_file_lock)
+			|| $_file_lock_exists
 		) {
 			discuz_core::$_cache_data['output']['users'] = array_merge(
 				(array)discuz_core::$_cache_data['output']['users']
@@ -536,7 +536,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	if (
 		discuz_core::$_cache_data['output']['users']['updated']
 		&& (TIMESTAMP > discuz_core::$_cache_data['output']['users']['timestamp'] + 60)
-		&& !file_exists($_file_lock)
+		&& !$_file_lock_exists
 	) {
 		touch($_file_lock);
 
