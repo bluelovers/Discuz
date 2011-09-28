@@ -69,6 +69,17 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $this;
 	}
 
+	/**
+	 * 預設行為
+	 */
+	function &on_op_default() {
+		/*
+		$this->on_op_list_fups();
+		*/
+
+		return $this;
+	}
+
 }
 
 ?>
