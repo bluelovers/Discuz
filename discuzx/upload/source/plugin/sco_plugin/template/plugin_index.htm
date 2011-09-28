@@ -91,7 +91,7 @@
 			<ul>
 				<!--{loop $mod_lists $_mod}-->
 					 <li>
-					 	<a>$_mod</a>
+					 	<a href="{echo $plugin_self->_make_url($plugin_self->module, 'plugin', array('mod' => $_mod));}">$_mod</a>
 					 </li>
 				<!--{/loop}-->
 			</ul>
