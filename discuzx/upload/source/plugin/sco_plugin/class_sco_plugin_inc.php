@@ -59,7 +59,7 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 	}
 
 	function &run() {
-		$operation = $this->attr['global']['op'];
+		$operation = $this->_getglobal('op');
 
 		$operation = $operation ? $operation : 'default';
 
