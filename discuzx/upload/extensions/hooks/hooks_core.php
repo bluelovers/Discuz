@@ -520,6 +520,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		if (
 			$data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5
+			|| file_exists($_file_lock)
 		) {
 			discuz_core::$_cache_data['output']['users'] = array_merge(
 				(array)discuz_core::$_cache_data['output']['users']
