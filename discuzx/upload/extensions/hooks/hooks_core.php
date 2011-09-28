@@ -512,6 +512,8 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
 	$_file_lock = $_file.'.lock';
 
+	$_file_lock_exists = file_exists($_file_lock);
+
 	if (empty(discuz_core::$_cache_data['output']['users'])) {
 		$data = array();
 		@include $_file;
