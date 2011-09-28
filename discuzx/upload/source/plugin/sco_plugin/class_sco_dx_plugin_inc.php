@@ -50,6 +50,8 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 	function &mod($mod, $identifier = '') {
 		if (empty($identifier)) $identifier = self::identifier;
 
+		$identifier = self::_get_identifier($identifier);
+
 		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
 
 		$class = 'plugin_'.$identifier.'_'.$mod;
