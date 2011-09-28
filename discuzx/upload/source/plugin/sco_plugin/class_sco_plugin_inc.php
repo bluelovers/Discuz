@@ -13,6 +13,9 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class _sco_dx_plugin_inc extends _sco_dx_plugin {
 
+	/**
+	 * @return _sco_dx_plugin_inc
+	 */
 	function &init($identifier) {
 		$this->_init($identifier);
 
@@ -27,19 +30,23 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
 	}
 
+	/**
+	 * @return _sco_dx_plugin_inc
+	 */
 	function &view_header() {
 		return $this;
 	}
 
+	/**
+	 * @return _sco_dx_plugin_inc
+	 */
 	function &view_footer() {
-		/*
-		cpfooter();
-		dexit();
-		*/
-
 		return $this;
 	}
 
+	/**
+	 * @return _sco_dx_plugin_inc
+	 */
 	function &mod($mod, $identifier = '') {
 		if (empty($identifier)) $identifier = self::identifier;
 
@@ -58,6 +65,9 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $self;
 	}
 
+	/**
+	 * @return _sco_dx_plugin_inc
+	 */
 	function &run() {
 		$operation = $this->_getglobal('op');
 
@@ -84,6 +94,8 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 
 	/**
 	 * 預設行為
+	 *
+	 * @return _sco_dx_plugin_inc
 	 */
 	function &on_op_default() {
 		/*
