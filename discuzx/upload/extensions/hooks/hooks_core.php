@@ -510,6 +510,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	$regex_showname = '[^<\>\'"]+';
 
 	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
+	$_file_lock = $_file.'.lock';
 
 	if (empty(discuz_core::$_cache_data['output']['users'])) {
 		$data = array();
