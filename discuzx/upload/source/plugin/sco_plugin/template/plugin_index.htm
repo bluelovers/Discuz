@@ -1,12 +1,5 @@
-<!--{subtemplate common/header}-->
-
-<div id="pt" class="bm cl">
-	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php">{$_G[setting][navs][6][navname]}</a>$navigation
-	</div>
-</div>
-
-<!--{subtpl subblock/common/body_ct_header}-->
+<!--{eval $tpl_allowside = true;}-->
+<!--{subtpl sco_plugin:header}-->
 
 <style>
 
@@ -48,8 +41,22 @@
 
 </style>
 
-<div id="ct" class="wp cl ct2_a">
 	<div class="mn">
+
+		<ul class="cl">
+		<!--{loop $style_lists $style}-->
+			<li>
+				<table>
+					<td>
+						<img src="$style['preview']" />
+					</td>
+					<td>
+						$style['name']
+					</td>
+				</table>
+			</li>
+		<!--{/loop}-->
+		</ul>
 
 		<ul class="buddy cl">
 		<!--{loop $plugin_lists $plugin}-->
@@ -80,6 +87,16 @@
 
 	<div class="appl">
 		<div class="tbn">
+			<h2 class="mt bbda">Mod</h2>
+			<ul>
+				<!--{loop $mod_lists $_mod}-->
+					 <li>
+					 	<a href="{echo $plugin_self->_make_url($plugin_self->module, 'plugin', array('cpmod' => $_mod));}">$_mod</a>
+					 </li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="tbn">
 			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
 			<ul>
 				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
@@ -90,6 +107,5 @@
 			</ul>
 		</div>
 	</div>
-</div>
 
-<!--{subtemplate common/footer}-->
+<!--{subtpl sco_plugin:footer}-->
