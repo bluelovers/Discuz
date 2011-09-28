@@ -45,6 +45,30 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $self;
 	}
 
+	function &run() {
+		$operation = $this->attr['global']['op'];
+
+		$operation = $operation ? $operation : 'default';
+
+		$method = 'on_op_'.$operation;
+
+		ob_start();
+		$this->$method();
+		$_content = ob_get_contents();
+		ob_end_clean();
+
+		$this->view_header();
+		echo $_content;
+
+		if ($this->_getglobal('debug', 'setting')) {
+			var_dump($this);
+		}
+
+		$this->view_footer();
+
+		return $this;
+	}
+
 }
 
 ?>
