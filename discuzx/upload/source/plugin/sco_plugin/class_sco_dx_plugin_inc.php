@@ -87,6 +87,17 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return $_list;
 	}
 
+	function set($attr) {
+		/*
+		$this->attr['global'] = $attr;
+		*/
+		foreach ($attr as $_k => $_v) {
+			$this->attr['global'][$_k] = $_v;
+		}
+
+		return $this;
+	}
+
 	/**
 	 * @return _sco_dx_plugin_inc
 	 */
