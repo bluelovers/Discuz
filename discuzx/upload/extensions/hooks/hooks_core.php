@@ -510,6 +510,9 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	$regex_showname = '[^<\>\'"]+';
 
 	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
+	$_file_lock = $_file.'.lock';
+
+	$_file_lock_exists = file_exists($_file_lock);
 
 	if (empty(discuz_core::$_cache_data['output']['users'])) {
 		$data = array();
@@ -517,7 +520,10 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
 
-		if ($data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5) {
+		if (
+			$data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5
+			|| $_file_lock_exists
+		) {
 			discuz_core::$_cache_data['output']['users'] = array_merge(
 				(array)discuz_core::$_cache_data['output']['users']
 				, (array)$data['output_user']
@@ -530,7 +536,10 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 	if (
 		discuz_core::$_cache_data['output']['users']['updated']
 		&& (TIMESTAMP > discuz_core::$_cache_data['output']['users']['timestamp'] + 60)
+		&& !$_file_lock_exists
 	) {
+		touch($_file_lock);
+
 		unset(discuz_core::$_cache_data['output']['users']['updated']);
 
 		include_once libfile('function/cache');
@@ -545,6 +554,8 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
 
 		writetocache($cachename, $cachedata, 'cache_', 'extensions/');
+
+		unlink($_file_lock);
 	}
 }
 

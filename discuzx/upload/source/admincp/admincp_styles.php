@@ -148,7 +148,7 @@ if($operation == 'admin') {
 		foreach($sarray as $id => $style) {
 			$style['name'] = dhtmlspecialchars($style['name']);
 			$isdefault = $id == $defaultid ? 'checked' : '';
-			$available = $style['available'] ? 'checked' : NULL;
+			$available = ($style['available'] || $isdefault) ? 'checked' : NULL;
 			$preview = file_exists($style['directory'].'/preview.jpg') ? $style['directory'].'/preview.jpg' : './static/image/admincp/stylepreview.gif';
 			$previewlarge = file_exists($style['directory'].'/preview_large.jpg') ? $style['directory'].'/preview_large.jpg' : '';
 			$styleicons = isset($styleicons[$id]) ? $styleicons[$id] : '';
@@ -158,6 +158,16 @@ if($operation == 'admin') {
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\">($style[tplname])</p></td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><label>$lang[default] <input type=\"radio\" class=\"radio\" name=\"defaultnew\" value=\"$id\" $isdefault /></label></p>
+				"
+				// bluelovers
+				// 補回風格的是否可用選項
+				.
+				"
+				<p style=\"margin: 2px 0\"><label>$lang[available] <input type=\"checkbox\" class=\"radio\" name=\"availablenew[$id]\" value=\"$id\" $available /></label></p>
+				"
+				.
+				// bluelovers
+				"
 				<p style=\"margin: 2px 0\"><label>$lang[styles_uninstall] ".($isdefault ? '<input class="checkbox" type="checkbox" disabled="disabled" />' : '<input class="checkbox" type="checkbox" name="delete[]" value="'.$id.'" />')."</label></p>
 				<p style=\"margin: 8px 0 2px\"><a href=\"".ADMINSCRIPT."?action=styles&operation=edit&id=$id\">$lang[edit]</a></p>
 				<p style=\"margin: 2px 0\"><a href=\"".ADMINSCRIPT."?action=styles&operation=export&id=$id\">$lang[export]</a></p>
@@ -221,7 +231,7 @@ if($operation == 'admin') {
 
 			foreach($sarray as $id => $old) {
 				$namenew[$id] = trim($_G['gp_namenew'][$id]);
-				$availablenew[$id] = $_G['gp_availablenew'][$id] ? 1 : 0;
+				$availablenew[$id] = ($_G['gp_availablenew'][$id] || $id == $defaultid) ? 1 : 0;
 				if($namenew[$id] != $old['name'] || $availablenew[$id] != $old['available']) {
 					DB::query("UPDATE ".DB::table('common_style')." SET name='$namenew[$id]', available='$availablenew[$id]' WHERE styleid='$id'");
 				}

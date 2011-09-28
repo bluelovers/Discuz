@@ -1531,9 +1531,16 @@ function makevaluepic($value) {
 	imagedestroy($im);
 }
 
+/**
+ * 取得評分時的預設範圍選擇清單
+ */
 function getratelist($raterange) {
 	global $_G;
 	$maxratetoday = getratingleft($raterange);
+
+	// bluelovers
+	$_range = array(1, 2, 10, -1, -2, -10);
+	// bluelovers
 
 	$ratelist = array();
 	foreach($raterange as $id => $rating) {
@@ -1543,8 +1550,49 @@ function getratelist($raterange) {
 			$rating['min'] = -$rating['min'] < $maxratetoday[$id] ? $rating['min'] : -$maxratetoday[$id];
 			$offset = abs(ceil(($rating['max'] - $rating['min']) / 10));
 			if($rating['max'] > $rating['min']) {
+
+				// bluelvoers
+				$_list = array();
+				// bluelovers
+
 				for($vote = $rating['max']; $vote >= $rating['min']; $vote -= $offset) {
-					$ratelist[$id] .= $vote ? '<li>'.($vote > 0 ? '+'.$vote : $vote).'</li>' : '';
+
+					// bluelovers
+					$_list[] = $vote;
+				}
+
+				foreach ($_range as $vote) {
+					if (
+						(
+							$vote >= $rating['min']
+							&& $vote <= $rating['max']
+						)
+						|| $vote == 0
+					) {
+						$_list[] = $vote;
+					}
+				}
+
+				$_list = array_unique($_list);
+				rsort($_list, SORT_NUMERIC);
+
+				$_o = 5;
+
+				$_l = count($_list);
+				$_c = intval($_l / 2);
+				$_min = max(0, $_c - $_o);
+				$_max = min($_l, $_c + $_o + 1);
+
+				$_list2 = array();
+				for ($_i = $_min; $_i < $_max; $_i++) {
+					$_list2[] = $_list[$_i];
+				}
+				$_list = $_list2;
+
+				foreach ($_list as $vote) {
+					// bluelovers
+
+					$ratelist[$id] .= (1 || $vote) ? '<li>'.($vote > 0 ? '+'.$vote : $vote).'</li>' : '';
 				}
 			}
 		}

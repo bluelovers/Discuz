@@ -5,56 +5,39 @@
  * @copyright 2011
  */
 
-include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
-
-class plugin_sco_plugin extends _sco_dx_plugin {
-
-	public function __construct() {
-		$this->_init($this->_get_identifier(__CLASS__));
-		$this->_this(&$this);
-	}
-
+if (!defined('IN_DISCUZ')) {
+	exit('Access Denied');
 }
 
-class plugin_sco_plugin_plugin extends plugin_sco_plugin {
+//error_reporting(E_ALL ^E_NOTICE ^E_STRICT);
 
-	function plugin_message() {
-		$query = DB::query("SELECT
-				*
-			FROM
-				".DB::table('common_plugin')."
-			WHERE
-				available = '1'
-			ORDER BY
-				available DESC
-				, identifier LIKE '%sco\_%' DESC
-				, pluginid DESC
-		");
+include_once dirname(__FILE__).'/./class_sco_plugin_inc.php';
 
-		$plugin_lists = array();
+empty($_G['gp_cpmod']) && $_G['gp_cpmod'] = 'plugin';
 
-		while($plugin = DB::fetch($query)) {
-			$plugin_lists[] = $plugin;
-		}
+if (empty($_G['gp_cpmod'])) {
 
-		global $_G;
-		$this->_setglobal('plugin_lists', $plugin_lists);
-		$this->_setglobal('navigation', '<em>&raquo;</em>'.'Scorpio! Plugin Center');
+	$_cpanel = new plugin_sco_plugin_inc();
+	$_cpanel
+		->init(CURMODULE)
+		->set(array(
+			'module' => &$module,
+		))
+		->run()
+	;
 
-		/*
-		ob_start();
-		echo $this->_fetch_template($this->_template('plugin_index'), $this->attr['global']);
-		*/
+} else {
 
-		extract($this->attr['global']);
-		$plugin_self = &$this;
-		include $this->_template('plugin_index');
-	}
+	$_cpanel = plugin_sco_plugin_inc::mod($_G['gp_cpmod'], CURMODULE);
+
+	$_cpanel
+		->set(array(
+			'op' => $_G['gp_op'],
+			'module' => &$module,
+		))
+		->run()
+	;
 
 }
-
-$_o = new plugin_sco_plugin_plugin();
-
-$_o->plugin_message();
 
 ?>
