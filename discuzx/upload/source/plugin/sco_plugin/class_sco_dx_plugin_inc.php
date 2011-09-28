@@ -48,7 +48,7 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 	 * @return _sco_dx_plugin_inc
 	 */
 	function &mod($mod, $identifier = '') {
-		if (empty($identifier)) $identifier = self::identifier;
+		if (empty($identifier)) $identifier = CURMODULE;
 
 		$identifier = self::_get_identifier($identifier);
 
