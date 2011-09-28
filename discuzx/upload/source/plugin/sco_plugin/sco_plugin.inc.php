@@ -19,7 +19,6 @@ if (empty($_G['gp_cpmod'])) {
 	$_cpanel
 		->init(CURMODULE)
 		->set(array(
-			'cpmod' => $_G['gp_cpmod'],
 			'module' => &$module,
 		))
 		->run()
