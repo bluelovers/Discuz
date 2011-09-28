@@ -32,6 +32,7 @@ class plugin_sco_plugin_style extends plugin_sco_plugin_inc {
 			LEFT JOIN ".DB::table('common_template')." t ON t.templateid=s.templateid
 			WHERE
 				s.available = '1'
+				OR s.styleid = '$styleid_default'
 			ORDER BY
 				s.available desc
 				, s.styleid = '$styleid_default' DESC
