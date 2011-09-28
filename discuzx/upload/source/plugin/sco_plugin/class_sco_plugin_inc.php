@@ -27,6 +27,24 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
 	}
 
+	function &mod($mod, $identifier = '') {
+		if (empty($identifier)) $identifier = self::identifier;
+
+		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
+
+		$class = 'plugin_'.$identifier.'_'.$mod;
+		$self = new $class();
+
+		$self
+			->init($identifier)
+			->set(array(
+				'mod' => $mod,
+			))
+		;
+
+		return $self;
+	}
+
 }
 
 ?>
