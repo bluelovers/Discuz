@@ -193,7 +193,7 @@ $lang = array
 	'title_stats_trend' => '趨勢統計',
 
 	'title_memcp_pm' => '發送短消息',
-	'title_memcp_domain' => '我的空間域名',
+	'title_memcp_domain' => '我的窩窩域名',
 	'title_userapp' => '應用',
 	'title_userapp_index_all' => '大家在玩什麼',
 	'title_userapp_index_we' => '好友在玩什麼',
