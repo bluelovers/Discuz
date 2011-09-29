@@ -17,6 +17,9 @@ if(is_numeric($_GET['tid'])) {
 		'tid',
 		'mod',
 		'sid',
+		'topicsubmit',
+		'postsubmit',
+		'formhash',
 	) as $_k) {
 		unset($_GET[$_k]);
 	}
