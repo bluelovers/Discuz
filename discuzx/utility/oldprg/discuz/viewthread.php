@@ -13,8 +13,13 @@ if(is_numeric($_GET['tid'])) {
 	}
 	*/
 	// bluelovers
-	unset($_GET['tid']);
-	unset($_GET['mod']);
+	foreach (array(
+		'tid',
+		'mod',
+		'sid',
+	) as $_k) {
+		unset($_GET[$_k]);
+	}
 
 	/**
 	 * 支援更多舊版網址的參數
