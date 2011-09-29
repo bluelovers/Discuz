@@ -20,7 +20,7 @@ if(empty($_G['gp_goto']) && $ptid) {
 }
 
 // bluelovers
-
+if ($_G['gp_goto'] == 'newpost') $_G['gp_goto'] = 'lastpost';
 // bluelovers
 
 if($_G['gp_goto'] == 'findpost') {
