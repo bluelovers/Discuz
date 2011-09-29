@@ -94,6 +94,17 @@ if($_G['gp_goto'] == 'findpost') {
 	$ordertypeurl = $ordertype ? '&ordertype='.$ordertype : '';
 	header("HTTP/1.1 301 Moved Permanently");
 	dheader("Location: forum.php?mod=viewthread&tid=$tid&page=$page$authoridurl$ordertypeurl".(isset($_G['gp_modthreadkey']) && ($modthreadkey = modauthkey($tid)) ? "&modthreadkey=$modthreadkey": '')."#pid$pid");
+
+// bluelovers
+} elseif ($_G['gp_goto'] == 'lastpost') {
+	/**
+	 * 修正以下類型網址無法找到主題的 BUG
+	 * http://discuz.bluelovers.net/forum.php?mod=redirect&goto=lastpost&ptid=31756
+	 * http://discuz.bluelovers.net/forum.php?mod=redirect&goto=lastpost&ptid=32877&pid=0
+	 * http://discuz.bluelovers.net/redirect.php?tid=31756&goto=lastpost
+	 */
+// bluelovers
+
 }
 
 
