@@ -57,14 +57,14 @@
 					<!--{if !empty($_G['setting']['pluginhooks']['space_home_doing_sync_method'])}-->
 						<span>
 							{lang doing_sync}:
-							<!--{if $_G['group']['maxsigsize']}-->
+							<!--{if 0 && $_G['group']['maxsigsize']}-->
 								<a title="{lang doing_update_personal_signature}" id="syn_signature" class="syn_signature" href="javascript:void(0);" onclick="checkSynSignature()">{lang doing_update_personal_signature}</a>
 								<input type="hidden" name="to_signhtml" id="to_signhtml" value="0" />
 							<!--{/if}-->
 							<!--{hook/space_home_doing_sync_method}-->
 						</span>
 					<!--{else}-->
-						<!--{if $_G['group']['maxsigsize']}-->
+						<!--{if 0 && $_G['group']['maxsigsize']}-->
 							<label for="to_sign"><input type="checkbox" name="to_signhtml" id="to_sign" class="pc" value="1" />{lang doing_update_personal_signature}</label>
 						<!--{/if}-->
 					<!--{/if}-->
