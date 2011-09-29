@@ -843,7 +843,12 @@ class discuz_core {
 		$styleid = !empty($this->var['cookie']['styleid']) ? $this->var['cookie']['styleid'] : 0;
 
 		// bluelovers
-
+		/**
+		 * 允許在網址後加上參數 switch_styleid = $styleid 來切換風格
+		 */
+		if ($_switch = intval($this->var['gp_switch_styleid'])) {
+			$styleid = $_switch;
+		}
 		// bluelovers
 
 		//BUG:此處因該是 BUG 因為 intval 是多餘無意義
