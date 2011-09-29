@@ -63,6 +63,13 @@ if(submitcheck('addsubmit')) {
 
 	DB::update('common_member_field_home', $setarr, "uid='$_G[uid]'");
 
+	// bluelovers
+	/**
+	 * 不使用將記錄取代簽名的功能
+	 */
+	unset($_POST['to_signhtml']);
+	// bluelovers
+
 	if($_POST['to_signhtml'] && $_G['group']['maxsigsize']) {
 		$signhtml = cutstr(strip_tags($message), $_G['group']['maxsigsize']);
 		DB::update('common_member_field_forum', array('sightml'=>$signhtml), "uid='$_G[uid]'");
