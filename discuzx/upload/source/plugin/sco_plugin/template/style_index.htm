@@ -1,0 +1,46 @@
+<!--{eval $tpl_allowside = true;}-->
+<!--{subtpl sco_plugin:header}-->
+
+	<div class="mn">
+
+		<ul class="cl">
+		<!--{loop $style_lists $style}-->
+			<li>
+				<table>
+					<td>
+						<img src="$style['preview']" />
+					</td>
+					<td>
+						$style['name']
+					</td>
+				</table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+
+	</div>
+
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">Mod</h2>
+			<ul>
+				<!--{loop $mod_lists $_mod}-->
+					 <li>
+					 	<a href="{echo $plugin_self->_make_url($plugin_self->module, 'plugin', array('cpmod' => $_mod));}">$_mod</a>
+					 </li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="tbn">
+			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
+			<ul>
+				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+					 <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+					 <li>$module[url]</li>
+					 <!--{/if}-->
+				<!--{/loop}-->
+			</ul>
+		</div>
+	</div>
+
+<!--{subtpl sco_plugin:footer}-->
