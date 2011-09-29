@@ -9,10 +9,5 @@ $goto = isset($_GET['goto']) ? $_GET['goto'] : '';
 
 $url = 'forum.php?mod=redirect&goto='."{$goto}&ptid={$ptid}&pid={$pid}";
 
-var_dump($_GET);
-
-echo $url;
-exit();
-
 header("location: $url");
 ?>
