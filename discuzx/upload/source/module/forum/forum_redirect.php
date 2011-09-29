@@ -103,6 +103,33 @@ if($_G['gp_goto'] == 'findpost') {
 	 * http://discuz.bluelovers.net/forum.php?mod=redirect&goto=lastpost&ptid=32877&pid=0
 	 * http://discuz.bluelovers.net/redirect.php?tid=31756&goto=lastpost
 	 */
+
+	$post = $thread = array();
+
+	if($ptid) {
+		$thread = get_thread_by_tid($ptid);
+	}
+
+	if($pid) {
+		if($thread) {
+			$post = get_post_by_pid($pid, '*', '', $thread['posttable']);
+		} else {
+			$post = get_post_by_pid($pid);
+		}
+
+		if($post && empty($thread)) {
+			$thread = get_thread_by_tid($post['tid']);
+		}
+	}
+
+	if(empty($thread)) {
+		showmessage('thread_nonexistence');
+	} else {
+		$tid = $thread['tid'];
+	}
+
+	$_G['tid'] = $tid;
+	$_G['thread'] = $thread;
 // bluelovers
 
 }
