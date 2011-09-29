@@ -1,0 +1,150 @@
+<!--{eval $tpl_allowside = true;}-->
+<!--{subtpl sco_plugin:header}-->
+
+<style>
+
+.buddy {
+	margin-bottom: 10px;
+}
+
+.buddy li {
+	background: none repeat scroll 0 0 #F9F9F9;
+	border: 1px solid #F3F3F3;
+	display: inline;
+	float: left;
+	height: 126px;
+	margin: 10px 5px 0;
+	overflow: hidden;
+	padding: 10px 10px 10px 130px;
+	width: 170px;
+	/*
+	min-width: 170px;
+	*/
+	max-width: 300px;
+	width: auto;
+
+	text-align: left;
+}
+
+.buddy li:hover {
+	border: 1px solid #00B2E8;
+}
+
+.buddy .avt_preview {
+	width: 110px;
+	height: 120px;
+	overflow: hidden;
+
+	margin-left: -120px;
+	position: absolute;
+
+	padding: 2px;
+	background: {$_G[style][wrapbg]};
+	border: 1px solid;
+	border-color: {$_G[style][commonbg]} {$_G[style][commonborder]} {$_G[style][commonborder]} {$_G[style][commonbg]};
+}
+
+.buddy .avt_preview img {
+	width: auto;
+	height:  auto;
+}
+
+.buddy .maxh {
+	height: 20px;
+	overflow: hidden;
+	line-height: 20px;
+}
+
+#ct .mn, .buddy {
+	text-align: center;
+}
+
+</style>
+
+<script>
+
+jQuery(function(){
+	jQuery('.buddy li .avt_preview img')
+		.scoScale({
+			width : 110,
+			height : 120,
+			mode : 'fill',
+		})
+	;
+	jQuery('.buddy li .avt_preview')
+		.delegate('img', 'click', function(){
+			var _this = jQuery(this);
+
+			if (_this.attr('data-styleid') == '{$style_defaultid}') {
+				setcookie('styleid', '', -1);
+			} else {
+				setcookie('styleid', _this.attr('data-styleid'), 3600 * 7);
+			}
+
+			location.reload();
+		})
+	;
+});
+
+</script>
+
+	<div class="mn">
+
+		<ul class="buddy cl">
+		<!--{loop $style_lists $style}-->
+			<li id="styleid_$style[styleid]">
+				<div class="avt_preview brs cur_pointer">
+						<img
+							src="$style['preview']"
+							data-styleid="$style[styleid]"
+							data-preview="$style[preview]"
+							data-previewlarge="$style[previewlarge]"
+						/>
+				</div>
+				<h4>
+					$style['name']
+				</h4>
+				<div>
+					<!--{if $style['copyright']}-->
+					<p class="maxh">
+						&copy; {$style['copyright']:dhtmlspecialchars()}
+					</p>
+					<!--{/if}-->
+					<!--{if !empty($style['style']['extstyle'])}-->
+					<p>
+						<!--{loop $style['style']['extstyle'] $extstyle}-->
+							<span class="sslct_btn" title="$extstyle[1]"><i style='background:$extstyle[2]'></i></span>
+						<!--{/loop}-->
+					</p>
+					<!--{/if}-->
+				</div>
+			</li>
+		<!--{/loop}-->
+		</ul>
+
+	</div>
+
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">Mod</h2>
+			<ul>
+				<!--{loop $mod_lists $_mod}-->
+					 <li>
+					 	<a href="{echo $plugin_self->_make_url($plugin_self->module, 'plugin', array('cpmod' => $_mod));}">$_mod</a>
+					 </li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="tbn">
+			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
+			<ul>
+				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+					 <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+					 <li>$module[url]</li>
+					 <!--{/if}-->
+				<!--{/loop}-->
+			</ul>
+		</div>
+	</div>
+
+<!--{subtpl sco_plugin:footer}-->
