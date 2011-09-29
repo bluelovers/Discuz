@@ -702,7 +702,9 @@ if($_G['forum_ratelogpid']) {
 			empty($ratelogs[$ratelog['pid']][$ratelog['uid']]['reason']) && $ratelogs[$ratelog['pid']][$ratelog['uid']]['reason'] = dhtmlspecialchars($ratelog['reason']);
 
 			// bluelovers
+			if ($ratelog['dateline'] > $ratelogs[$ratelog['pid']][$ratelog['uid']]['dateline']) {
 			$ratelogs[$ratelog['pid']][$ratelog['uid']]['dateline'] = $ratelog['dateline'];
+			}
 			// bluelovers
 
 			$postlist[$ratelog['pid']]['ratelog'][$ratelog['uid']] = $ratelogs[$ratelog['pid']][$ratelog['uid']];
