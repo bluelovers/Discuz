@@ -128,6 +128,11 @@ if(!IS_ROBOT) {
 
 	} elseif($_GET['view'] == 'app' && $_G['setting']['my_app_status']) {
 
+		// bluelovers
+		// 預設查看所有應用動態
+		if (empty($space['feedfriend'])) $_G['gp_type'] = 'all';
+		// bluelovers
+
 		if ($_G['gp_type'] == 'all') {
 
 			$wheresql = "1";
