@@ -28,7 +28,7 @@ $lang = array
 
 	'mail_to_user' => '有新的通知',
 	'showcredit' => '{actor} 贈送給您 {credit} 個競價積分，幫助提升您在 <a href="misc.php?mod=ranklist&type=member" target="_blank">競價排行榜</a> 中的名次',
-	'share_space' => '{actor} 分享了您的空間',
+	'share_space' => '{actor} 分享了您的窩窩',
 	'share_blog' => '{actor} 分享了您的日誌 <a href="{url}" target="_blank">{subject}</a>',
 	'share_album' => '{actor} 分享了您的相冊 <a href="{url}" target="_blank">{albumname}</a>',
 	'share_pic' => '{actor} 分享了您的相冊 {albumname} 中的 <a href="{url}" target="_blank"> 圖片</a>',

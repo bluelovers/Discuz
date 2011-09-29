@@ -9,7 +9,7 @@
 
 $lang = array
 (
-	'blog_name' => '空間 日誌廣告',
+	'blog_name' => '窩窩 日誌廣告',
 	'blog_desc' => '展現方式: 日誌廣告顯示於日誌右方。',
 );
 

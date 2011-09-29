@@ -65,9 +65,9 @@ $lang = array (
   'magics_filename_nonexistence' => '道具所需文件 {file} 不存在',
   'magics_amount_no_enough' => '抱歉，您沒有足夠的道具可以操作，請修改',
   'magics_username_nonexistence' => '抱歉，您尚未輸入要贈送的用戶名',
-  'space_does_not_exist' => '抱歉，您指定的用戶空間不存在',
+  'space_does_not_exist' => '抱歉，您指定的用戶窩窩不存在',
   'home_status_off' => '抱歉，家園功能尚未開啟',
-  'space_has_been_locked' => '空間已被鎖定無法訪問，如有疑問請聯繫管理員',
+  'space_has_been_locked' => '窩窩已被鎖定無法訪問，如有疑問請聯繫管理員',
   'getpasswd_account_notmatch' => '抱歉，您填寫的賬戶資料不匹配，不能使用取回密碼功能，如有疑問請與管理員聯繫',
   'group_member_maximum' => '抱歉，該{_G/setting/navs/3/navname}等級最多可擁有{membermaximum}名成員，已達到上限',
   'group_choose_friends_max' => '抱歉，您最多可以選擇 20 位好友',
@@ -397,7 +397,7 @@ $lang = array (
   'medal_get_succeed' => '恭喜你獲得{medalname}',
   'medal_apply_succeed' => '勳章{medalname}申請成功,請等待管理員審核。',
 
-  'enter_the_space' => '進入個人空間頁面',
+  'enter_the_space' => '進入個人窩窩頁面',
 
   'login_before_enter_home' => '請先登錄後才能繼續瀏覽',
 
@@ -654,8 +654,8 @@ $lang = array (
   'no_privilege_doing_comment' => '抱歉，您目前沒有權限評論記錄，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'docomment_error' => '抱歉，請正確指定要評論的記錄',
 
-  'no_privilege_spacedomain' => '抱歉，您沒有權限設置空間域名',
-  'domain_succeed' => '空間域名保存成功 ',
+  'no_privilege_spacedomain' => '抱歉，您沒有權限設置窩窩域名',
+  'domain_succeed' => '窩窩域名保存成功 ',
 
   'eccredit_order_notfound' => '抱歉，您指定的訂單不存在或已被刪除',
   'eccredit_rate_repeat' => '抱歉，您不能重複評價',
@@ -692,7 +692,7 @@ $lang = array (
   'no_flicker_yet' => '抱歉，您尚未對此信息使用彩虹炫',
   'haved_red_bag' => '您已領取此次紅包',
   'haved_red_bag_gain' => '您已領到紅包：獲得 {percredit} {credittype}',
-  'space_no_red_bag' => '抱歉，空間主人尚未設置紅包或已被領完',
+  'space_no_red_bag' => '抱歉，窩窩主人尚未設置紅包或已被領完',
   'red_bag_no_credits' => '紅包已被領完',
   'return_red_bag' => '紅包回收成功 {leftcredit} {credittype}',
 
