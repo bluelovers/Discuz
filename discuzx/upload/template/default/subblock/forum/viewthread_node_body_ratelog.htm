@@ -74,6 +74,8 @@
 								<!--{/loop}-->
 								<td class="xg1">
 									$ratelog[reason]
+									<!--{if !empty($ratelog[reason])}-->&nbsp;<!--{/if}-->
+									<!--{date($ratelog[dateline])}-->
 								</td>
 							</tr>
 							<!--{/loop}-->
