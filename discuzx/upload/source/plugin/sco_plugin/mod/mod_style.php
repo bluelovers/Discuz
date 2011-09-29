@@ -41,12 +41,17 @@ class plugin_sco_plugin_style extends plugin_sco_plugin_inc {
 		");
 
 		while($style = DB::fetch($query)) {
+			$styleid = $style['styleid'];
 
 			$preview = file_exists($style['directory'].'/preview.jpg') ? $style['directory'].'/preview.jpg' : './static/image/admincp/stylepreview.gif';
 			$previewlarge = file_exists($style['directory'].'/preview_large.jpg') ? $style['directory'].'/preview_large.jpg' : '';
 
 			$style['preview'] = $preview;
 			$style['previewlarge'] = $previewlarge;
+
+			loadcache('style_'.$styleid);
+
+			$style['style'] = $_G['cache']['style_'.$styleid];
 
 			$sarray[$style['styleid']] = $style;
 		}
