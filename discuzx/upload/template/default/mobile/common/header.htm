@@ -19,7 +19,7 @@ ul li, .xl li { list-style: none; }
 .xg1 .xi2 { color: #999 !important; }
 .xg2 { color: #666; }
 .xi1, .onerror { color: #F60; }
-.xi2, .xi2 a, .xi3 a { color: #369 ; }
+.xi2, .xi2 a, .xi3 a { color: #488BC7 ; }
 .mtn { margin-top: 5px !important; }
 .mbn { margin-bottom: 5px !important; }
 .mtm { margin-top: 10px !important; }
@@ -28,56 +28,58 @@ ul li, .xl li { list-style: none; }
 .pd2 { padding: 2px !important; }
 .pd5 { padding: 5px !important; }
 .nopd { padding: 0px !important;}
-.bt{ border-top: 1px #F2F2F2 solid !important; }
 .bbn{ border-bottom: 1px #efefef solid !important; }
 .ban { border: 1px #F2F2F2 solid !important;}
 .xs0 { font-size : 8pt;}
 
-a, .lkcss{ color: #004299; text-decoration: none;}
+a ,.lkcss{ color: #488BC7; text-decoration: none;}
 a img{ text-decoration: none; border: 0px none;}
 EM { font-style: normal; }
 img{border: 0;}
 
-.odd { background: #FFF; }
-.even { background: #fbfbff;}
+.odd {}
+.even {}
 
-.txt, .txt_s, .px { padding: 5px 0px; border: 1px solid #C3C3C3; background: #FFF url(./static/image/mobile/input_bg.gif) repeat-x 0 0px; width: 100%; }
+.txt, .txt_s, .px { padding: 5px 0px; border: 1px solid #C3C3C3; background: #FFF url(./static/image/mobile/input_bg.gif) repeat-x 0 0px; width: 95%; margin-left:2px; }
 .txt_s { width: 30px; }
 
 
 body {background: #FFF; background-image:none; line-height: 130%; font-size: 10pt; font-style: normal; font-family: Arial,Helvetica,sans-serif; }
 
-.hd { padding: 3px; border-bottom: 3px solid #2B7ACD; }
-	.hd a{ color: #2B7ACD; text-decoration: none; }
-.wp { padding: 2px;}
+.listtype { height:23px; line-height:23px; color:#999; width: auto; padding:0 3px; border-bottom:#ddd 1px solid; margin-bottom:15px; background:url(cr180/images/bg_1.gif) 0 100% repeat-x #fff; overflow:hidden; font-size:12px}
+.listtype a { margin-right:5px;}
+.listtype a.a { font-weight:bold; border-radius:3px 3px 3px 3px; padding:2px; background: #1D8FA7; color:#FFF; }
+.listtype a.y { border-left:#ddd 1px solid; padding-left:5px; color:#000}
+.hd { background:#1D8FA7 url(cr180/images/bg_2.gif); color:#FFF; height:30px; line-height:30px; font-size:12px; font-weight:bold; padding:0 5px;}
+.hd a {color:#fff;}
+
+.wp {}
 
 .f_c { margin-top: 5px; padding: 5px; border: 1px #C2D5E3 solid; }
 .f_c p{ line-height: 24px;}
 /* common border */
-.box { margin-top:3px; background: #fbfbff; padding: 3px 0; line-height:18px;}
+.box { margin-top:3px; padding: 3px 0; line-height:18px;}
 	.box h2 {}
 	.box .on { font-weight: 700; }
 .box_ex { margin-top:0px; border-top: 0px none;}
 	.box_ex2{ margin-top:0px; border-top:0px none; border-left: 0px none; border-right: 0px none; }
 
-.bm .bm_h { padding: 2px; background: #2A6EB4; border-bottom:1px #02254b solid; color: #FFF; line-height: 20px; font-size: 10pt;  }
+.bm .bm_h { padding: 2px; background: #1D8FA7; border-bottom:1px #02254b solid; color: #FFF; line-height: 20px; font-size: 10pt;  }
 .bm .bm_h a, .bm .bm_h .lkcss { color: #FFF; text-decoration: none;}
-.bm .bm_c { padding: 3px 2px; border-bottom:1px solid #F2F2F2;  }
+.bm .bm_c { padding: 3px 2px; border-bottom:#eee 1px solid; font-size:12px  }
 	.bm .bm_c p{ margin-bottom: 5px; }
-.bm .bm_c_bg { background: #f3f3ff; }
 	.bm .bm_c em { color: #999;}
-.bm .bm_inf { background: #FBFBFF; padding: 5px 0;}
+.bm .bm_inf { padding: 5px 0;}
 .bm_c .bm_user {  padding: 1px 0 1px 0px; line-height: 14px;}
 .warning { margin-top: 4px; padding: 3px; border: 1px #CDCDCD solid; color:#666; }
 	.warning a{ color: #F26C4F;}
 
-.pg { padding: 4px 0;}
-	.pg strong{ padding:2px 6px; }
-	.pg a{ padding: 2px 6px; }
-.pipe { margin: 0 1px; font-size:12px; font-weight: 300; color: #c4c4c4; }
+.pg { text-align:right; float: right}
+	.pg .prev,.pg .nxt{ padding: 2px 6px; }
+.pipe { margin: 0 3px; font-size:12px; font-weight: 300; color: #c4c4c4; }
 
 /* footer */
-.ft{ margin:2px 0 2px 2px; padding: 1px; }
+.ft{ margin:20px 0 2px 2px; padding-bottom:5px; text-align:center;}
 
 .fl { margin-top: 5px; }
 .tl { margin-top: 5px;}
@@ -92,7 +94,6 @@ body {background: #FFF; background-image:none; line-height: 130%; font-size: 10p
 	.vt .bm .bm_h a { display: inline; width: auto;}
 	.vt .bm .bm_inf{ color: #444; }
 	.vt .bm .bm_c { padding: 1px; border-top: 1px #e9e9ff solid; border-bottom: 1px #e9e9ff solid; background: #fbfbff; color: #666;  }
-	.vt .pbody { margin-top: 1px; margin-bottom: 4px;}
 		.vt .pbody h2{ font-weight: 300;}
 		.vt .pbody .mes { padding: 1px;}
 	.vt .bm .bm_c .attach_h { margin-top: 4px;}
@@ -112,7 +113,68 @@ body {background: #FFF; background-image:none; line-height: 130%; font-size: 10p
 .profile_table td{ padding:0 3px; border-top: 1px #efefef solid;}
 	.profile_table th { border-top: 2px #efefef solid;}
 .jammer { font-size: 10px; color:#FFF;}
+.pgs { width:100%; height:auto; overflow:hidden}
+
+/*cr180*/
+html { background:#666}
+.cr180_f10 { font-size:10px; line-height:12px}
+body { background:#F6F8F9;}
+.fl {background:#f5f5f5}
+.fl .bm { border:0; overflow:hidden;background:#EDF4FA}
+.bm .bm_h { color:#fff; background:#1D8FA7; padding:5px 2px; border-bottom:#6BB3E6 1px solid;}
+.bm .bm_h a { color:#fff;}
+/*.even ,.cr_vt .bm_c_bg { background:#EBF6F9; border-top:#C3E6F0 1px solid}*/
+.bm_c h1,.bm_c h1 a{ font-size:14px; color:#333;}
+.bm_c h1 span { font-weight:normal}
+.z { float:left}
+.y { float:right}
+.uiddiv { margin:0 0 10px; margin-left:56px; margin-right:5px; height:50px; }
+.uiddiv a { color:#000;}
+.uidhover { position:absolute; right:0; top:23px; width:90px; height:auto; border:#ccc 1px solid; background:#fff; padding:5px;}
+.uidhover p { border-bottom:#ddd 1px solid; font-size:10px}
+.avat {  float:left; margin-left:-51px;}
+.avat img { width:38px; height:38px; background:#889EB6; border-radius:5px 5px 5px 5px; padding:4px}
+.uidxx { float: left; background:#DAE3EC; margin-right:5px; border-radius:5px 5px 5px 5px; padding:5px 0; width:100%; height:36px; line-height:18px;text-shadow:1px 1px 3px #fff;}
+.nulouid,.f_c {background:#DAE3EC; margin:10px 5px; border-radius:5px 5px 5px 5px; padding:3px;text-shadow:1px 1px 3px #fff; text-align:right}
+.f_c { text-align:center}
+.uidxx p { margin: 0 10px;}
+.uidxx a { color:#666}
+.pg { margin-right:5px;}
+.pg * { float:left;padding:3px 0;}
+.postid , .pg .nxt{ margin-left:5px;}
+.postid,.pg .prev, .pg .nxt ,.pgs .pgb a { display:block; color:#FFF; background:#59ADBF; border-radius:3px 3px 3px 3px; padding:3px 5px;}
+.pgs .pgb { padding:0}
+.pg .prev { margin-right:5px;}
+.bm_h2 { width:100%; height:auto; overflow:hidden}
+.hd ,.bm_h ,.postid,.pg .prev, .pg .nxt ,.pgs .pgb a {text-shadow:1px 1px 1px #000;}
+
 </style>
+<!--{if $_G[gp_simpletype]!='yes'}-->
+<script type="text/javascript">
+function toggle_collapse(id,id2){
+	var id = document.getElementById(id);
+	var tesc = document.getElementById(id2);
+	if(id.style.display !='none'){
+		id.style.display ='none';
+		tesc.innerHTML ='{lang cr180_indexlon}';
+	}else{
+		id.style.display ='';
+		tesc.innerHTML ='{lang cr180_indexlno}';
+	}
+}
+function overheight(id,id2){
+	var id = document.getElementById(id);
+	var tesc = document.getElementById(id2);
+	if(id.style.height !='auto'){
+		id.style.height ='auto';
+		tesc.innerHTML ='{lang cr180_indexlno}';
+	}else{
+		id.style.height ='';
+		tesc.innerHTML ='{lang cr180_indexlon}';
+	}
+}
+</script>
+<!--{/if}-->
 </head>
 <body>
 <!--{if $_G['setting']['domain']['app']['mobile']}-->
@@ -120,9 +182,49 @@ body {background: #FFF; background-image:none; line-height: 130%; font-size: 10p
 <!--{else}-->
 	{eval $nav = "forum.php";}
 <!--{/if}-->
-<div class="hd"><a href="$nav" title="<!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}-->{lang waptitle}"><!--{if $_G['setting']['mobile']['mobilesimpletype'] == 1}--><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> {lang waptitle}<!--{else}--><img src="./static/image/mobile/logo.gif" /><!--{/if}--></a></div>
-<div class="wp">
-	<div class="pd2">
-	<!--{if $_G['uid']}--><a href="home.php?mod=space&uid={$_G['uid']}&do=profile">{$_G['member']['username']}</a><span class="pipe">|</span><a href="home.php?mod=space&do=pm" {if $_G[member][newpm]}class="xi1"{/if}>{if $_G[member][newpm]}{lang new_pm}{else}{lang pm_center}{/if}</a><span class="pipe">|</span><a href="home.php?mod=space&uid={$_G[uid]}&do=favorite&view=me&type=forum">{lang favorite}</a><span class="pipe">|</span><a href="home.php?mod=space&uid={$_G[uid]}&do=thread&view=me">{lang my_posts}</a><span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}" title="{lang logout}">{lang logout}</a><!--{else}--><a href="member.php?mod=logging&action=login" title="{lang login}">{lang login}</a><!--{if $_G['setting']['regstatus']}--><span class="pipe">|</span><a href="member.php?mod={$_G[setting][regname]}" title="{$_G['setting']['reglinkname']}">{$_G['setting']['reglinkname']}</a><!--{/if}--><!--{/if}-->
+
+
+<div class="hd">
+<!--{if $_G[fid]}-->
+    <a href="home.php?mod=spacecp&ac=favorite&type=forum&id={$_G[fid]}" title="{lang forum_favorite}" class="y">{lang forum_favorite}</a>
+    <a href="$nav" title="<!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}-->{lang waptitle}" class="logosiz">{lang cr180_index}</a><!--{if $_G['forum']['name']}--> > <a href="forum.php?mod=forumdisplay&fid={$_G['forum']['fid']}">{lang cr180_list}</a><!--{/if}--><!--{if $_G[tid]}--> > {lang cr180_view}<!--{/if}-->
+<!--{else}-->
+<a href="$nav" title="<!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}-->{lang waptitle}" class="logosiz"><strong>$_G['setting']['bbname']</strong></a> 
+<!--{/if}-->
 </div>
+<div class="listtype" id="listtype">
+<!--{if $_G['forum']['threadsorts'] || $_G['forum']['threadtypes']}-->
+<a href="javascript:;" class="y" onclick="overheight('listtype','indexmore');" id="indexmore">{lang cr180_indexlno}</a>
+<a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="<!--{if !in_array($_G['gp_filter'], array('typeid','sortid'))}-->a<!--{/if}-->">{lang forum_viewall}</a>
+            <!--{loop $_G['forum']['threadsorts']['types'] $id $name}-->
+                <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$id$forumdisplayadd[sortid]" class="<!--{if $_G[gp_sortid] == $id}-->a<!--{/if}-->">$name</a>
+            <!--{/loop}-->            
+            <!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
+                 <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]" {if $_G['gp_filter'] == 'typeid' && $_G['gp_typeid'] == $id} class="a"{/if}>$name</a> 
+            <!--{/loop}-->
+<!--{else}-->
+<!--{eval 
+$day = TIMESTAMP -2592000;
+$cr180tids = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE dateline>$day AND views >100 AND replies >10 AND displayorder IN('0','1','2','3') ORDER BY rand() LIMIT 1");
+}-->
+<strong>{lang cr180suiji}</strong><a href="forum.php?mod=viewthread&tid=$cr180tids[tid]&mobile=yes">$cr180tids[subject]</a>
+<!--{/if}-->
+</div>
+<!--{if !$_G[fid]}-->
+<div class="uiddiv">
+    <div class="avat"><a href="home.php?mod=space&uid={$_G['uid']}&do=profile"><!--{avatar($_G[uid],small)}--></a></div>
+    <div class="uidxx">
+	<p><!--{if $_G['uid']}--><a href="home.php?mod=space&uid={$_G['uid']}&do=profile">{$_G['member']['username']}</a><span class="pipe">|</span><a href="home.php?mod=space&do=pm" {if $_G[member][newpm]}class="xi1"{/if}>{if $_G[member][newpm]}{lang new_pm}{else}{lang pm_center}{/if}</a><!--{else}--><a href="member.php?mod=logging&action=login" title="{lang login}">{lang login}</a><!--{if $_G['setting']['regstatus']}--><span class="pipe">|</span><a href="member.php?mod={$_G[setting][regname]}" title="{$_G['setting']['reglinkname']}">{$_G['setting']['reglinkname']}</a><!--{/if}--><!--{/if}-->
+    </p>
+    <p><a href="home.php?mod=space&uid={$_G[uid]}&do=favorite&view=me&type=forum">{lang favorite}</a><span class="pipe">|</span><a href="home.php?mod=space&uid={$_G[uid]}&do=thread&view=me">{lang my_posts}</a><!--{if $_G['uid']}--><span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}" title="{lang logout}">{lang logout}</a><!--{/if}--></p>
+    
+    </div>
+</div>
+<!--{else}-->
+<div class="nulouid">
+<!--{if $_G['uid']}--><a href="home.php?mod=space&uid={$_G['uid']}&do=profile">{$_G['member']['username']}</a><span class="pipe">|</span><a href="home.php?mod=space&do=pm" {if $_G[member][newpm]}class="xi1"{/if}>{if $_G[member][newpm]}{lang new_pm}{else}{lang pm_center}{/if}</a><span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}" title="{lang logout}">{lang logout}</a><!--{else}--><a href="member.php?mod=logging&action=login" title="{lang login}">{lang login}</a><!--{if $_G['setting']['regstatus']}--><span class="pipe">|</span><a href="member.php?mod={$_G[setting][regname]}" title="{$_G['setting']['reglinkname']}">{$_G['setting']['reglinkname']}</a><!--{/if}--><!--{/if}-->
+</div>
+<!--{/if}-->
+<div class="wp">
+	
 <!--{hook/global_header_mobile}-->

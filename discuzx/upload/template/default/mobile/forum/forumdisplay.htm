@@ -1,41 +1,39 @@
 <!--{subtemplate common/header}-->
+<!--{eval
+	require_once './cr180/cr180_function.php'; 
+	$multipages = cr180multi($_G['forum_threadcount'], $_G['tpp'], $page, "forum.php?mod=forumdisplay&fid=$_G[fid]".($multiadd ? '&'.implode('&', $multiadd) : '')."$multipage_archive", $_G['setting']['threadmaxpages']);
+}-->
+<style type="text/css">
+.listtop { width:100%; height:auto; overflow:hidden}
+.listtop p { margin-bottom:10px;}
+.bm_h { text-align:right}
 
-<!--{if $_G['forum']['type'] == 'forum'}-->
-<div class="box"><a href="forum.php" title="$_G['setting']['navs'][2]['navname']">$_G['setting']['navs'][2]['navname']</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid={$_G['forum']['fid']}">{$_G['forum']['name']}</a></div>
-<!--{else}-->
-<div class="box"><a href="forum.php" title="$_G['setting']['navs'][2]['navname']">$_G['setting']['navs'][2]['navname']</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid={$forum_up['fid']}">$forum_up['name']</a> <em> &gt; </em> {$_G['forum']['name']}</div>
-<!--{/if}-->
+.bm .bm_c { padding:10px 5px;}
+.bm .bm_c a { color:#222; font-size:12px;}
+.bm .bm_c .xg1,.bm .bm_c .xg1 a { font-size:10px}
+.bm .bm_c .xg1 a { color:#6A89AA !important}
 
-<div class="box flif">
-	<!--{if !$subforumonly}-->
-    	{lang index_today}$_G[forum][todayposts]<span class="pipe">|</span>{lang index_threads}$_G[forum][threads]</span><!--{/if}--><!--{if $_G[uid]}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=favorite&type=forum&id={$_G[fid]}" title="{lang forum_favorite}" >{lang forum_favorite}</a><!--{/if}-->
-</div>
-
-
-<div class="tz pbn">
-<!--{if !$_G['forum']['allowspecialonly']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" title="{lang send_threads}" >{lang send_threads}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostpoll']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=1">{lang post_newthreadpoll}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostreward']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=3">{lang post_newthreadreward}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostdebate']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=5">{lang post_newthreaddebate}</a><span class="pipe">|</span><!--{/if}-->
-<!--{if $_G['setting']['threadplugins']}-->
-<!--{loop $_G['forum']['threadplugin'] $tpid}-->
-<!--{if array_key_exists($tpid, $_G['setting']['threadplugins']) && @in_array($tpid, $_G['group']['allowthreadplugin'])}-->
-<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&specialextra=$tpid">{$_G[setting][threadplugins][$tpid][name]}</a><span class="pipe">|</span>
-<!--{/if}-->
-<!--{/loop}-->
-<!--{/if}-->
-</div>
+</style>
 
 <!--{hook/forumdisplay_top_mobile}-->
 <!--//forumdisplay_list template start-->
 <!--{if !$subforumonly}-->
-	$multipage
+<div class="bm_h2">
+<div class="z"><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" title="{lang send_threads}" class="postid">{lang send_threads}</a></div>
+$multipages
+</div>
     <div class="tl">
     	<div class="bm">
-        	<div class="bm_h">$_G['forum'][name] <!--{if $_G[gp_orderby] != 'dateline'}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}&filter=author&orderby=dateline">[{lang viewnewthread}]</a><!--{else}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">[{lang list_default_sort}]</a><!--{/if}--></div>
+       		
+        	<div class="bm_h"><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">$_G['forum'][name]</a><span class="z"><!--{if $_G[gp_orderby] != 'dateline'}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}&filter=author&orderby=dateline">[{lang viewnewthread}]</a><!--{else}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">[{lang list_default_sort}]</a><!--{/if}--></span></div>
+            
             <!--{if $_G['forum_threadcount']}-->
+            {eval $i=1;}
 				<!--{loop $_G['forum_threadlist'] $key $thread}-->
                 	<!--{if $thread['displayorder'] > 0 && !$displayorder_thread}-->
                 		{eval $displayorder_thread = 1;}
                     <!--{/if}-->
-                	<div class="bm_c<!--{if $thread['displayorder'] == 0 && $displayorder_thread == 1}--> bt{eval unset($displayorder_thread);}<!--{/if}-->">
+                	<div class="bm_c<!--{if $thread['displayorder'] == 0 && $displayorder_thread == 1}--> bt{eval unset($displayorder_thread);}<!--{/if}--> <!--{if $i%2 == 1}-->add<!--{else}-->even<!--{/if}-->">
                     <!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
                         <!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
                             <!--{eval $thread[tid]=$thread[closed];}-->
@@ -60,7 +58,7 @@
                         <!--{elseif $thread['special'] == 5}-->
                             <img src="{IMGDIR}/debatesmall.gif" alt="{lang thread_debate}" />
                         <!--{elseif in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
-                            <img src="{IMGDIR}/pin_$thread[displayorder].gif" alt="$_G[setting][threadsticky][3-$thread[displayorder]]" style="width:18px;"/>
+                            <!--{if $thread[displayorder]==1}-->{lang cr180_listtop3}<!--{elseif $thread[displayorder]==2}-->{lang cr180_listtop2}<!--{elseif $thread[displayorder]==3}-->{lang cr180_listtop1}<!--{/if}-->
                         <!--{/if}-->
                     <!--{else}-->
                     	<!--{if in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
@@ -105,37 +103,20 @@
                         </span>
                     <!--{/if}-->
                     </div>
+                    {eval $i++;}
                 <!--{/loop}-->
             <!--{else}-->
             <div class="bm_c">{lang forum_nothreads}</div>
             <!--{/if}-->
         </div>
     </div>
-    $multipage
+    <div class="bm_h2" style="margin-top:15px;">
+<div class="z"><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" title="{lang send_threads}" class="postid">{lang send_threads}</a></div>
+$multipages
+</div>
 <!--{/if}-->
 
-<!--{if !$_G[setting][mobile][mobilesimpletype]}-->
-    <!--{if ($_G['forum']['threadtypes'] && $_G['forum']['threadtypes']['listable']) || $_G['forum']['threadsorts']}-->
-        <!--{if $_G['forum']['threadtypes']}-->
-            <div class="box ttp">
-            <span class="xg2">{lang threadtype} </span>
-            <a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="<!--{if $_G['gp_filter'] != 'typeid'}-->xw1<!--{/if}-->">{lang forum_viewall}</a>
-            <!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
-                 <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]" {if $_G['gp_filter'] == 'typeid' && $_G['gp_typeid'] == $id} class="xw1"{/if}>$name</a> 
-            <!--{/loop}-->
-            </div>
-        <!--{/if}-->
-        
-        <!--{if $_G['forum']['threadsorts']}-->
-            <div class="box tst">
-            <span class="xg2">{lang threadsort} </span>
-            <!--{loop $_G['forum']['threadsorts']['types'] $id $name}-->
-                <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$id$forumdisplayadd[sortid]" class="<!--{if $_G[gp_sortid] == $id}-->xw1<!--{/if}-->">$name</a>
-            <!--{/loop}-->
-            </div>
-        <!--{/if}-->
-    <!--{/if}-->
-<!--{/if}-->
+
 <!--//forumdisplay_list template end-->
 <!--{hook/forumdisplay_bottom_mobile}-->
 
@@ -143,11 +124,7 @@
 <div class="fl">
     <div class="bm">
         <div class="bm_h">{lang forum_subforums}</div>
-        <!--{loop $sublist $sub}-->
-        <div class="bm_c arrow_r">
-        	<a href="forum.php?mod=forumdisplay&fid={$sub[fid]}" class="block_a">{$sub['name']}</a>
-        </div>
-        <!--{/loop}-->
+        
     </div>
 </div>
 <!--{/if}-->

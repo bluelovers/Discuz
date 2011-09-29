@@ -1,6 +1,12 @@
 <!--{subtemplate common/header}-->
 {eval $loginhash = 'L'.random(4);}
 <div class="box"><a href="forum.php">{lang return_forum}</a><span class="pipe">|</span><a href="javascript:history.back();" onclick="javascript:history.back();" title="{lang goback}" >{lang goback}</a></div>
+<style type="text/css">
+.bm_h { margin-bottom:10px;}
+.bm .bm_c p { margin-bottom:10px;}
+.bm_c p span { margin-right:5px;}
+.txt, .txt_s, .px { padding:2px}
+</style>
 <div class="bm mtn">
 	<div class="bm_h">{lang login}</div>
 		<form method="post" action="member.php?mod=logging&action=login&loginsubmit=yes&loginhash=$loginhash&mobile=yes" onsubmit="{if $_G['setting']['pwdsafety']}pwmd5('password3_$loginhash');{/if}" >
@@ -8,15 +14,16 @@
 		<input type="hidden" name="referer" id="referer" value="<!--{if dreferer()}-->{echo dreferer()}<!--{else}-->forum.php?mobile=yes<!--{/if}-->" />
 	<div class="bm_c">
 	<p>
-		<select name="fastloginfield" id="fastloginfield_{$loginhash}" >
+		<span><select name="fastloginfield" id="fastloginfield_{$loginhash}" >
 		<option value="username">{lang username}</option>
 		<option value="uid">UID</option>
 		<option value="email">Email</option>
 		</select>
-		<input type="text" name="username" id="username_{$loginhash}" class="txt" />
+        </span>
+		<input type="text" name="username" id="username_{$loginhash}" class="txt" style="width:150px;" />
 	</p>
 	<p>
-		{lang password}:<input type="password" name="password" id="password3_$loginhash" class="txt" value='' />
+		<span style="text-align:right;">{lang password}:</span><input type="password" name="password" id="password3_$loginhash" class="txt" value='' style="width:150px;" />
 	</p>
 	<p>
 		<!--{if $secqaacheck || $seccodecheck}-->
@@ -24,7 +31,7 @@
 		<!--{/if}-->
 	</p>
 	<p>
-		<input type="submit" name="submit" id="submit" value="{lang login}" />
+		<input type="submit" name="submit" id="submit" value="{lang login}" style="margin-left:60px" />
 		<input type="reset" value="{lang reset}" />
 	</p>
 	<p>

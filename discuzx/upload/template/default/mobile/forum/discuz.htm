@@ -1,4 +1,5 @@
 <!--{subtemplate mobile/common/header}-->
+
 <!--{hook/index_top_mobile}-->
 <!--{if $forum_favlist}--> 
 <div class="fl">
@@ -14,29 +15,40 @@
 	</div>
 </div>
 <!--{/if}-->
+<style type="text/css">
+.fl .bm { background:none}
+.fl .bm_h span.y{ font-size:10px; margin-right:5px;}
+.bm .bm_c { padding:10px 5px;}
+.bm_c h1 font { color:#F30; margin-left:5px; font-size:12px; font-weight:normal}
+</style>
 
 <!--{loop $catlist $key $cat}-->
 <div class="fl">
 	<div class="bm">
-    	<div class="bm_h">
+    	<div class="bm_h" onclick="toggle_collapse('category_$cat[fid]','ztais_$cat[fid]');"><span class="y" id="ztais_$cat[fid]">{lang cr180_indexlno}</span>
     	<!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_G[gp_viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}-->
         </div>
+        <div id="category_$cat[fid]" class="cr180_bm">
         <!--{if $_G[setting][mobile][mobileforumview] == 0 || ($cat[fid] == $_G[gp_viewgid])}-->
             {eval $i=1;}
             <!--{loop $cat[forums] $forumid}-->
-                <div class="bm_c <!--{if $i%2 == 1}-->add<!--{else}-->even<!--{/if}-->">
+                <div class="bm_c">
                     <!--{eval $forum=$forumlist[$forumid];}-->
-                    <a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="xi1"{/if}>{$forum[name]}</a> <!--{if $forum[todayposts] > 0}--><font class="xg1">($forum[todayposts])</font><!--{/if}-->
+                    <h1><a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="cg1"{/if}>{$forum[name]}</a><!--{if $forum[todayposts] > 0}--><font>({lang index_today}$forum[todayposts])</font><!--{/if}--></h1>
+                    <!--{if $_G[gp_simpletype]!='yes' && $forum[description]}--><p class="xg2 cr180_f10"><!--{echo cutstr($forum[description], 200)}--></p><!--{/if}-->
                 </div>
+                
                 {eval $i++;}
             <!--{/loop}-->
         <!--{/if}-->
+        </div>
     </div>
 </div>
 <!--{/loop}-->
 <!--{hook/index_middle_mobile}-->
-<div class="box">
+<div class="box" style="text-align:center">
 	{lang index_today}$todayposts<span class="pipe">|</span>{lang index_members}$_G['cache']['userstats']['totalmembers']<!--{if empty($gid) && $_G['setting']['whosonlinestatus'] && $onlinenum}--><span class="pipe">|</span>{lang online}$onlinenum<!--{/if}-->
 </div>
 <!--{hook/index_bottom_mobile}-->
+
 <!--{subtemplate mobile/common/footer}-->
