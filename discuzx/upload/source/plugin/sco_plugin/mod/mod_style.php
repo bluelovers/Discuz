@@ -17,7 +17,7 @@ class plugin_sco_plugin_style extends plugin_sco_plugin_inc {
 		global $_G;
   		extract($this->attr['global']);
 
-		include $this->_template('plugin_index');
+		include $this->_template('style_index');
 	}
 
 	function _my_get_stylelist() {
