@@ -72,7 +72,13 @@
 									<!--{/if}-->
 									</td>
 								<!--{/loop}-->
-								<td class="xg1">$ratelog[reason]</td>
+								<td class="xg1">
+									$ratelog[reason]
+									<!-- 使評分列表可以顯示時間 -->
+									<!--{if !empty($ratelog[reason])}-->&nbsp;<!--{/if}-->
+									{lang on}&nbsp;
+									<!--{date($ratelog[dateline])}-->
+								</td>
 							</tr>
 							<!--{/loop}-->
 						</tbody>
