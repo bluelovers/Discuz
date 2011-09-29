@@ -703,7 +703,7 @@ if($_G['forum_ratelogpid']) {
 
 			// bluelovers
 			if ($ratelog['dateline'] > $ratelogs[$ratelog['pid']][$ratelog['uid']]['dateline']) {
-			$ratelogs[$ratelog['pid']][$ratelog['uid']]['dateline'] = $ratelog['dateline'];
+				$ratelogs[$ratelog['pid']][$ratelog['uid']]['dateline'] = $ratelog['dateline'];
 			}
 			// bluelovers
 
