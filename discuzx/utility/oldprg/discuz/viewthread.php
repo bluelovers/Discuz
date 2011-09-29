@@ -16,6 +16,11 @@ if(is_numeric($_GET['tid'])) {
 	unset($_GET['tid']);
 	unset($_GET['mod']);
 
+	/**
+	 * 支援更多舊版網址的參數
+	 *
+	 * @example http://discuz.bluelovers.net/viewthread.php?action=printable&tid=5229
+	 */
 	$url .= '&'.http_build_query($_GET);
 	// bluelovers
 }
