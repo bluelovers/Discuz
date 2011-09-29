@@ -4,10 +4,10 @@ ob_start();
 header("HTTP/1.1 301 Moved Permanently");
 
 $pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
-$ptid = !empty($_GET['tid']) ? intval($_GET['tid']) : isset($_GET['ptid']) ? intval($_GET['ptid']) : 0;
+$ptid = !empty($_GET['tid']) ? intval($_GET['tid']) : (isset($_GET['ptid']) ? intval($_GET['ptid']) : 0);
 $goto = isset($_GET['goto']) ? $_GET['goto'] : '';
 
-$url = 'forum.php?mod=redirect&goto='."$goto&ptid=$ptid&pid=$pid";
+$url = 'forum.php?mod=redirect&goto='."{$goto}&ptid={$ptid}&pid={$pid}";
 
 header("location: $url");
 ?>
