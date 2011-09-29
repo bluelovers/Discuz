@@ -9,7 +9,7 @@
 
 $lang = array
 (
-	'feed_name' => '空間 動態廣告',
+	'feed_name' => '窩窩 動態廣告',
 	'feed_desc' => '展現方式: 日誌廣告顯示於動態的上方。',
 );
 
