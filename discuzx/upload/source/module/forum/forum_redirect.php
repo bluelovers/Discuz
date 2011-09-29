@@ -19,6 +19,10 @@ if(empty($_G['gp_goto']) && $ptid) {
 	$_G['gp_goto'] = 'findpost';
 }
 
+// bluelovers
+
+// bluelovers
+
 if($_G['gp_goto'] == 'findpost') {
 
 	$post = $thread = array();
