@@ -1,0 +1,23 @@
+/*
+[name]云麓缘[/name]
+Powered by Discuz! X
+*/
+
+body { background: #C5D7B3 url(images/bg.jpg) repeat-y center;color:#638A4E}
+a { color: #638A4E; }
+#hd {  width: 1005px; height: 438px; background: #FAFAFA url(images/top.jpg) no-repeat 100% 0; color: #069; }
+	#hd h2 { padding: 20px 0 0 30px; line-height: 115%; }
+#spaceinfoshow{color:white;margin:230px;}
+#spacename{padding-top:50px;font-size:40px}
+#domainurl{color:green;padding:5px}
+#nv { bottom: 10px; }
+#nv li { background: none; opacity: 1; filter: alpha(opacity=100); font-size: 14px; }
+#nv li a, #nv li a:visited { color: #000000; }
+#nv li a:hover { background-image: none !important; }
+#nv a:hover{ color: #000000; font-weight:bold; background:url(images/yez.png) no-repeat  }
+.block {  background: #FAFAD0;border:1px solid #9CA744 }
+.block .title {  background: #EAF1F2 url(images/title.gif) repeat-x 0 0;height:32px }
+.block .title  a {color:#000000}
+.tl .th { background: none; }
+#ft { _margin-top: 10px; background:url(images/footer.jpg) no-repeat center;width:1000px; }
+
