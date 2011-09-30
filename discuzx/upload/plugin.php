@@ -24,7 +24,18 @@ $discuz->init();
 
 if(!empty($_G['gp_id'])) {
 	list($identifier, $module) = explode(':', $_G['gp_id']);
-	$module = $module !== NULL ? $module : $identifier;
+// bluelovers
+} else {
+	/**
+	 * 相容舊版的 plugin 參數
+	 */
+	$identifier = $_G['gp_identifier'];
+	$module = $_G['gp_module'];
+}
+
+if (1) {
+// bluelovers
+	$module = ($module !== NULL && $module !== '') ? $module : $identifier;
 }
 $mnid = 'plugin_'.$identifier.'_'.$module;
 $pluginmodule = isset($_G['setting']['pluginlinks'][$identifier][$module]) ? $_G['setting']['pluginlinks'][$identifier][$module] : (isset($_G['setting']['plugins']['script'][$identifier][$module]) ? $_G['setting']['plugins']['script'][$identifier][$module] : array('adminid' => 0, 'directory' => preg_match("/^[a-z]+[a-z0-9_]*$/i", $identifier) ? $identifier.'/' : ''));
