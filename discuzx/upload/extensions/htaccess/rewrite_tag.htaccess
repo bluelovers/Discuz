@@ -1,0 +1,3 @@
+
+#tag[-/]travian[/].html
+RewriteRule ^tag[\-\/](.+)/?(?:\.html?)?$ misc.php?mod=tag&name=$1& [PT,L,QSA]
