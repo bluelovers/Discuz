@@ -1,18 +1,19 @@
 /*
-[name]貓貓[/name]
+[name]猫猫[/name]
 Powered by Discuz! X
 */
 
-body { background: #6A8FA1 url(images/bg.png) repeat-x 0 25px; color:#000; }
+body { background: #6A8FA1 url(images/bg.png) repeat-x 0 24px; color:#000; }
 
 a, a:hover, a:active{ color:#000; }
 	a:visited{ color:#333;}
 #hd { border-bottom: 4px solid #101A22; background: url(images/header.png) no-repeat 100px 10px; color: #FFF; }
-
-#nv li { background-color: #101A22; opacity: 1; filter: alpha(opacity=100); }
+#nv li, #nv li a {  background: none !important; }
+#nv li { background-color: #101A22 !important; opacity: 1; filter: alpha(opacity=100); }
 	#nv li a, #nv li a:visited { color: #B9DEF2; }
 	#nv li a:hover { background-image: none !important; }
 #ct, .n, .w { background: transparent none !important; }
+
 .block .title, .bbda, .el li { border-bottom-color: #4E6778; }
 .tl .th { background: none; }
 .bm, .bm_h { border: none; background: none; }
@@ -24,8 +25,11 @@ a, a:hover, a:active{ color:#000; }
 .tl td em, .tl td em a{ color:#ccc;}
 .tl .th{ border-bottom:1px solid #333;}
 .tl td, .tl th{ border-bottom:1px solid #333;}
-
+.block .title, .bm_h { background:#101A22;color:#B9DEF2; }
+.block .title a{color:#B9DEF2;}
 .tbmu a{ color:#000; }
 .pipe{ color:#333;}
 
-#ft{ border-top:1px solid #333;}
+.pn{ background: #E5E5E5 url(images/pn.png) repeat-x 0 0 !important;border: 1px solid #999 !important;box-shadow: 0 0px 0 #E5E5E5;color:#000; }
+.moodfm_btn { background:url(images/mood_input_btn.png) no-repeat 5px 0; }
+#ft{ border-top:1px solid #333;background:none;}

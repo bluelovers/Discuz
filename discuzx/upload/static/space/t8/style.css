@@ -1,5 +1,5 @@
 /*
-[name]聖誕[/name]
+[name]圣诞[/name]
 Powered by Discuz! X
 */
 
@@ -11,9 +11,13 @@ body { background: #FFA6A1 url(images/bg.png); }
 
 #nv li a, #nv li a:visited { color: #333; }
 	#nv li a:hover { background-image: none !important; }
-
+#nv li, #nv li a {  background: none !important; }
+#nv li, #home { margin-right: 1px; padding: 0 6px; border: none; height: 30px; background: rgba(255, 255, 255, 0.7) !important; line-height: 30px; font-size: 12px; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #70FFFFFF, endColorstr = #70FFFFFF) !important; }
 #ct, .n, .w { background: #FFF url(images/ct-top.png) repeat-x 0 0 !important; }
 
 #ft { background: url(images/footer.png) no-repeat 50% 0; }
 .tl .th { background: none; }
 .bm, .bm_h { border: none; background: none; }
+.pn{ background: #E5E5E5 url(images/pn.png) repeat-x 0 -48px !important;border: 1px solid #DA3E61 !important;box-shadow: 0 0px 0 #E5E5E5;color:#000; }
+.moodfm_btn { background:url(images/mood_input_btn.png) no-repeat 5px 0; }
+#pcd .hm img { border:1px solid #FEF8F9; }

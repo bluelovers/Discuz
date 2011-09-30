@@ -7,8 +7,10 @@ body { background: #899A33 url(images/body_bg.png) repeat 0 0; }
 
 #hd { background: url(images/header.png) no-repeat 50% 100%; color: #FFF; }
 
+#nv li, #nv li a {  background: none !important; }
 #nv li a, #nv li a:visited { color: #333; }
 	#nv li a:hover { background-image: none !important; }
+#nv li, #home { margin-right: 1px; padding: 0 6px; border: none; height: 30px; background: rgba(255, 255, 255, 0.7) !important; line-height: 30px; font-size: 12px; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #70FFFFFF, endColorstr = #70FFFFFF) !important; }
 
 #ct, .n, t.w { background: #FFF url(images/ct-top.png) no-repeat 0 0 !important; }
 
@@ -17,4 +19,7 @@ body { background: #899A33 url(images/body_bg.png) repeat 0 0; }
 body#space #ft { background: url(images/ct-bottom.png) no-repeat 0 0; }
 .tl .th { background: none; }
 .bm, .bm_h { border: none; }
-	.bm_h { background: #FFF url("images/title.png") no-repeat scroll 0 0; }
+	.bm_h { background: #FFF url(images/title.png) no-repeat scroll 0 0; }
+
+.pn{ background: #E5E5E5 url(images/pn.png) repeat-x 0 0 !important;border: 1px solid #999 !important;box-shadow: 0 1px 0 #E5E5E5;color:#000; }
+.moodfm_btn { background:url(images/mood_input_btn.png) no-repeat 5px 0; }

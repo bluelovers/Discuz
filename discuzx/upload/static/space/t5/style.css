@@ -13,7 +13,8 @@ body { background: #000 url(images/bg.png) repeat-x 0 25px; }
 #nv li { padding: 0px 2px; }
 	#nv li a, #nv li a:visited { padding: 0px 10px; color: #333; }
 	#nv li a:hover { background-image: none !important; }
-
+#nv li, #nv li a {  background: none !important; }
+#nv li, #home { margin-right: 1px; padding: 0 6px; border: none; height: 30px; background: rgba(255, 255, 255, 0.7) !important; line-height: 30px; font-size: 12px; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #70FFFFFF, endColorstr = #70FFFFFF) !important; }
 #ct, .n, .w { background: transparent none !important; }
 .block .title { padding: 0 10px; border-bottom: none; background: #301E10; }
 	.block .title, .block .title a { color: #FFF; }
@@ -24,3 +25,7 @@ body { background: #000 url(images/bg.png) repeat-x 0 25px; }
 .vw .ph, .vw .d{ color: #FFF; }
 .tl .th { background: none; }
 #doingform { background: none; }
+#pcd .hm img { border:1px solid #DDD; }
+.pn{ background: #E5E5E5 url(images/pn.png) repeat-x 0 0 !important;border: 1px solid #999 !important;box-shadow: 0 0px 0 #E5E5E5;color:#000; }
+.moodfm_btn { background:url(images/mood_input_btn.png) no-repeat 5px 0; }
+#ft{background:none;}

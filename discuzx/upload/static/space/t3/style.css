@@ -3,10 +3,12 @@
 Powered by Discuz! X
 */
 
-body { background: #E6FDFE url(images/body_bg.png) repeat-x 0 25px; }
+body { background: #E6FDFE url(images/body_bg.png) repeat-x 0 24px; }
 
 #hd { background: url(images/header.jpg) no-repeat 50% 100%; }
 
+#nv li, #nv li a {  background: none !important; }
+#nv li, #home { margin-right: 1px; padding: 0 6px; border: none; height: 30px; background: rgba(255, 255, 255, 0.7) !important; line-height: 30px; font-size: 12px; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #70FFFFFF, endColorstr = #70FFFFFF) !important; }
 #nv li a, #nv li a:visited { color: #333; }
 	#nv li a:hover { background-image: none !important; }
 
@@ -17,3 +19,9 @@ body { background: #E6FDFE url(images/body_bg.png) repeat-x 0 25px; }
 #ft { padding-top: 20px; background: url(images/ct-bottom.png) no-repeat 0 0; }
 .tl .th { background: none; }
 .bm, .bm_h { border: none; }
+.bm_h { background:#F2F2F2; }
+
+#pcd .hm img { border:1px solid #DDD; }
+#nv li a { color:#0091F0; }
+.pn{ background: #E5E5E5 url(images/pn.png) repeat-x 0 0 !important;border: 1px solid #999 !important;box-shadow: 0 0px 0 #E5E5E5;color:#000; }
+.moodfm_btn { background:url(images/mood_input_btn.png) no-repeat 5px 0; }
