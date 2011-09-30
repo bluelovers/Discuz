@@ -103,3 +103,7 @@ body { background: #FCFAF0 url(bgimg.jpg) no-repeat 50% 0; }
 .fl_tb h2 a, #g_commend .bm_c dl.xld dt a {
 	color: #BA350F;
 }
+
+.xi2, .xi2 a, .xi3 a {
+	color: #CC8202;
+}
