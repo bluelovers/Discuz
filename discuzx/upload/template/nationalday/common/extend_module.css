@@ -1,0 +1,36 @@
+/*
+Extend CSS file for Discuz! X
+(C) Comsenz Inc.
+http://www.comsenz.com
+Created & Modified by Alice.
+*/
+
+/** forum::forumdisplay **/
+.bdl { float: left; overflow: hidden; border: 1px solid #E2D1B8; background-color: #FDF4D8; }
+	.bdl dt { background: #FEF8F9 url({STYLEIMGDIR}/titlebg_sd.png) repeat-x 100% 0;border: solid #FBE5E4; border-width: 1px 0; }
+	.bdl dd.bdl_a a { background-color:#FDF4D8; }
+/** end **/
+
+/** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
+.post_nosidebg { background:#FFF; }
+.ad .pls { background-color:#FAE195 !important; }
+/** end **/
+
+/* ------------------------------------------------------------------------ */
+/** forum::forumdisplay,forum::viewthread,forum::modcp,group,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat,misc::tag **/
+/* threadtype */
+.ttp a, .ttp strong { background: #F2F2F2; }
+.ttp .a a { border:1px solid #e98b00 !important; border-bottom:0; background: #FDF4D8; color: #e98b00 !important; }
+.ttp a:hover, .ttp .a a:hover { background: #FBFBE2; border:1px solid #e98b00 !important; color: #e98b00 !important; border-bottom:0; }
+
+/** end **/
+
+/** home::space,misc::ranklist **/
+.moodfm_btn { background: url({STYLEIMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
+
+/** end **/
+
+/** forum::viewthread,group::viewthread,home::task,misc::stat,home::space **/
+.pbr { background-color:#FCA507; }
+
+/** end **/
