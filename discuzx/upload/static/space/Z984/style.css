@@ -12,12 +12,7 @@ Powered by Discuz! X2
 #ct a { color: #75451f; }
 /********页面背景颜色，注意：background-image的参数千万不要修改***/
 body { background-color:#d5f3eb; background:url(images/tile.gif);}
-/********页面顶部大图片***/
-#myspace{ background: url(images/header.jpg) no-repeat center top; }
-/********若存在嵌套的gif动画图片，请在下面设置，否则请删除下面这一行的代码***/
-#dingbu { background: url(images/headeranim.gif) no-repeat center 0;}
-/********顶部大背景的高度***/
-.fytitle{border-bottom:0px; padding-top:200px;}
+
 /********首页各版块的标题样式、标题颜色、版块的背景颜色和边框颜色***/
 .block .title { padding: 0 10px; border-bottom: none; background:url(images/bg_title.gif) repeat-x; }
 	.block .title, .block .title a { color: #000000; }
@@ -55,7 +50,7 @@ body { background-color:#d5f3eb; background:url(images/tile.gif);}
 
 
 /*------------------------------------------------------------------以下是基本样式，请不要修改-----------------------------------------------*/
-
+#hd { background: url(images/header.jpg) no-repeat 0 0;color:#000; height:350px;}
 #nv { bottom: auto; left: auto; top: 45px; right: 0; }
 #nv li { padding: 0px 2px; }
 #nv li a, #nv li a:visited { padding: 0px 10px; color: #333; }
