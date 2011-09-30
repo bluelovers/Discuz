@@ -15,6 +15,10 @@ foreach(array('pid', 'ptid', 'authorid', 'ordertype', 'postno') as $k) {
 	$$k = !empty($_GET[$k]) ? intval($_GET[$k]) : 0;
 }
 
+// bluelovers
+
+// bluelovers
+
 if(empty($_G['gp_goto']) && $ptid) {
 	$_G['gp_goto'] = 'findpost';
 }
