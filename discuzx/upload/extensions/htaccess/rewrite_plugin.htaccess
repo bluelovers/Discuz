@@ -1,0 +1,2 @@
+
+RewriteRule ^plugin-([a-zA-Z0-9\_]+)(?:-([a-zA-Z0-9\_]+))?(?:\.html?)$ plugin\.php\?id\=$1\&module\=$2\& [PT,L,QSA]
