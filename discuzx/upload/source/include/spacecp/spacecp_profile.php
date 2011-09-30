@@ -282,6 +282,10 @@ if(submitcheck('profilesubmit')) {
 		}
 	}
 
+	// bluelovers
+	$emailnew = $_G['member']['email'];
+	// bluelovers
+
 	if($_G['gp_questionidnew'] === '') {
 		$_G['gp_questionidnew'] = $_G['gp_answernew'] = '';
 	} else {
