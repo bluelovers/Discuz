@@ -26,6 +26,9 @@ if(!empty($_G['gp_id'])) {
 	list($identifier, $module) = explode(':', $_G['gp_id']);
 // bluelovers
 } else {
+	/**
+	 * 相容舊版的 plugin 參數
+	 */
 	$identifier = $_G['gp_identifier'];
 	$module = $_G['gp_module'];
 }
