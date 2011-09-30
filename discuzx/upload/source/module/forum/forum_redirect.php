@@ -106,7 +106,7 @@ if($_G['gp_goto'] == 'findpost') {
 	dheader("Location: forum.php?mod=viewthread&tid=$tid&page=$page$authoridurl$ordertypeurl".(isset($_G['gp_modthreadkey']) && ($modthreadkey = modauthkey($tid)) ? "&modthreadkey=$modthreadkey": '')."#pid$pid");
 
 // bluelovers
-} elseif ($_G['gp_goto'] == 'lastpost') {
+} elseif ($_G['gp_goto'] == 'lastpost' && empty($_G['thread'])) {
 	/**
 	 * 修正以下類型網址無法找到主題的 BUG
 	 * http://discuz.bluelovers.net/forum.php?mod=redirect&goto=lastpost&ptid=31756
