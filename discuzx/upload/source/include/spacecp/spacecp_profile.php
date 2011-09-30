@@ -284,7 +284,9 @@ if(submitcheck('profilesubmit')) {
 
 	// bluelovers
 	// 強制拒絕修改 email
+	if ($_G['member']['groupid'] != 8) {
 	$emailnew = $_G['member']['email'];
+	}
 	// bluelovers
 
 	if($_G['gp_questionidnew'] === '') {
