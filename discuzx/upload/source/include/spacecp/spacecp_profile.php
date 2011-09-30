@@ -285,6 +285,7 @@ if(submitcheck('profilesubmit')) {
 	// bluelovers
 	/**
 	 * 強制拒絕修改 email
+	 * 當用戶為等待驗證會員時則例外
 	 */
 	if ($_G['member']['groupid'] != 8) {
 		$emailnew = $_G['member']['email'];
