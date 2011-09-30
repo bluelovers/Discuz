@@ -283,6 +283,7 @@ if(submitcheck('profilesubmit')) {
 	}
 
 	// bluelovers
+	// 強制拒絕修改 email
 	$emailnew = $_G['member']['email'];
 	// bluelovers
 
