@@ -99,3 +99,7 @@ body { background: #FCFAF0 url(bgimg.jpg) no-repeat 50% 0; }
 .pbr { background-color:#FCA507; }
 
 /* bluelovers */
+
+.fl_tb h2 a, #g_commend .bm_c dl.xld dt a {
+	color: #BA350F;
+}
