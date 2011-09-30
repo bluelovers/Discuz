@@ -110,7 +110,7 @@ $lang = array(
 	'share_space' => '分享了一個用戶',
 
 	// bluelovers
-
+ 	'share_space_message' => '<b>{username}</b><br>{reside}<br>{spacenote}',
 	// bluelovers
 
 	'share_blog' => '分享了一篇日誌',
