@@ -44,7 +44,7 @@ class _sco_dx_tag {
 
 	function check($tagname) {
 		$ret = false;
-		$tagname = trim($tagname);
+		$tagname = trim($tagname, ',:&#');
 
 		/*
 		$ret = preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname);
