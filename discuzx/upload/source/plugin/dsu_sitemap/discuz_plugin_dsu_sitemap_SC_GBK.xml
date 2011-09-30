@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-09-17 12:51]]></item>
+	<item id="From"><![CDATA[ÉÏº£Í¬³ÇÍø ÉÏº£½»ÓÑÍøÕ¾|ÉÏº£Í¬³Ç½»ÓÑÍøÕ¾ (http://127.0.0.1/521.sh/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[¡¾DSU¡¿Sitemap ×¨¼Ò]]></item>
+			<item id="identifier"><![CDATA[dsu_sitemap]]></item>
+			<item id="description"><![CDATA[Ìá¹©ÊÛºó·þÎñ£¬QQ 527544390¡£]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[dsu_sitemap/]]></item>
+			<item id="copyright"><![CDATA[cwk32 @ DSU]]></item>
+			<item id="version"><![CDATA[1.6]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[tools]]></item>
+					<item id="menu"><![CDATA[ÊµÓÃ¹¤¾ß]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[hook]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[ÔÊÐí²É¼¯ÎÄÕÂ]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[allowtopic]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[14]]></item>
+				<item id="title"><![CDATA[×ÛºÏÀà°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_6]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[13]]></item>
+				<item id="title"><![CDATA[ÏÐÁÄ°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_5]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[10]]></item>
+				<item id="title"><![CDATA[Õ¾ÎñÀà°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_2]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[ÆÕÍ¨Sitemap°üÀ¨Ìû×Ó·¶Î§]]></item>
+				<item id="description"><![CDATA[µ¥Î»£ºÌì]]></item>
+				<item id="variable"><![CDATA[normal_include]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[30]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[°Ù¶ÈÐ­ÒéÉù³Æ¸üÐÂÊ±¼ä]]></item>
+				<item id="description"><![CDATA[µ¥Î»£ºÐ¡Ê±]]></item>
+				<item id="variable"><![CDATA[baidu_peri]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[24]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[·¢²¼×ÊÁÏÀà°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_3]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[ÆÕÍ¨Sitemap¸üÐÂÊ±¼ä]]></item>
+				<item id="description"><![CDATA[µ¥Î»£ºÐ¡Ê±]]></item>
+				<item id="variable"><![CDATA[normal_update]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[24]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Ëæ»ú°²È«´®]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[securityauth]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[DSU Sitmap for me!]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[°Ù¶ÈÐ­Òé¸üÐÂÊ±¼ä]]></item>
+				<item id="description"><![CDATA[µ¥Î»£ºÐ¡Ê±]]></item>
+				<item id="variable"><![CDATA[baidu_update]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[18]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[ÔÊÐí²É¼¯Èº×é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[allowgroupfrom]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[ÔÊÐíÒþ²Ø°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[allowhiddengroupforum]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[×Ô¶¯¼Ì³Ð¸¸°æ¿éÈ¨ÏÞ]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[autopermextends]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="13">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[ÌÖÂÛ°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_4]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+			<item id="14">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[ÎÊ´ðÀà,¼¼Êõ½»Á÷Àà°æ¿é]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[forum_policy_1]]></item>
+				<item id="type"><![CDATA[forums]]></item>
+				<item id="extra"><![CDATA[]]></item>
+				<item id="__value">
+					<item id="0"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="flushsuccessful"><![CDATA[Sitemap Ç¿ÖÆË¢ÐÂÍê³É{extra}]]></item>
+				<item id="submitsuccessful_bing"><![CDATA[³É¹¦Ìá½»µ½±ØÓ¦£¡{extra}]]></item>
+				<item id="operation"><![CDATA[ÇëÑ¡ÔñÄúËùÐèÒªµÄ²Ù×÷]]></item>
+				<item id="flush"><![CDATA[Ç¿ÖÆ¸üÐÂ Sitemap£¨É÷ÓÃ£¡£©]]></item>
+				<item id="submitgoogle"><![CDATA[Ìá½»¹È¸è Sitemap]]></item>
+				<item id="submitbaidu"><![CDATA[Ìá½»°Ù¶È Sitemap]]></item>
+				<item id="submitbing"><![CDATA[Ìá½»±ØÓ¦ Sitemap]]></item>
+				<item id="googleinfo"><![CDATA[1. µÇÂ¼ <a href="http://www.google.com/webmasters">http://www.google.com/webmasters</a>£¬ÈôÃ»ÓÐ Google ÍøÕ¾¹ÜÀíÔ±ÕÊºÅ£¬ÇëÏÈ×¢²á¡£<br/>
+    2. Ìí¼ÓÍøÕ¾£¬²¢ÑéÖ¤ÍøÕ¾ËùÓÐÈ¨£¬ÒÑ¾­ÑéÖ¤µÄÍøÕ¾¿ÉÒÔÌø¹ýÕâÒ»²½¡£<br/>
+    3. ½øÈë ÍøÕ¾ÅäÖÃ::Sitemap£¬Ìí¼Ó {_G/siteurl}sitemap.xml<br/>
+    4. µÈ´ýÒ»¶ÎÊ±¼ä£¬Google ±íÊ¾ Sitemap ÒÑ¾­Ë³ÀûÏÂÔØ¡£]]></item>
+				<item id="baiduinfo"><![CDATA[1. Èô°Ù¶È¿ªÊ¼ÊÕÂ¼ÄúµÄÍøÕ¾£¬Äú¿ÉÒÔÌø¹ý±¾²Ù×÷¡£<br/>
+    2. Ïò <a href="http://www.baidu.com/search/url_submit.html">http://www.baidu.com/search/url_submit.html</a> Ìá½»ÄúµÄÍøÕ¾Ê×Ò³¡£<br/>
+    3. ±à¼­robots.txt£¬ÔÚÄ©Î²Ìí¼ÓÒ»ÐÐ£¨ÒÑÓÐ±¾ÐÐµÄ»°£¬Çë²»ÒªÌí¼Ó£©£ºSitemap: {_G/siteurl}sitemap.xml]]></item>
+			</item>
+		</item>
+	</item>
+</root>
