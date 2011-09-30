@@ -108,6 +108,11 @@ $lang = array(
 	'active_email_subject' => '你的郵箱激活郵件',
 	'active_email_msg' => '請複製下面的激活鏈接到瀏覽器進行訪問，以便激活你的郵箱。<br>郵箱激活鏈接:<br><a href="{url}" target="_blank">{url}</a>',
 	'share_space' => '分享了一個用戶',
+
+	// bluelovers
+ 	'share_space_message' => '<b>{username}</b><br>{reside}<br>{spacenote}',
+	// bluelovers
+
 	'share_blog' => '分享了一篇日誌',
 	'share_album' => '分享了一個相冊',
 	'default_albumname' => '默認相冊',
