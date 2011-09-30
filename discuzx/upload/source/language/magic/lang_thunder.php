@@ -10,8 +10,8 @@
 $lang = array
 (
 	'thunder_name' => '雷鳴之聲',
-	'thunder_desc' => '發佈一條全站動態，通知大家自己上線了',
-	'thunder_info' => '發佈一條全站動態，通知大家自己上線了',
+	'thunder_desc' => '發佈一條全站新鮮事，通知大家自己上線了',
+	'thunder_info' => '發佈一條全站新鮮事，通知大家自己上線了',
 );
 
 ?>
