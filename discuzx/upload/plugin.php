@@ -24,6 +24,14 @@ $discuz->init();
 
 if(!empty($_G['gp_id'])) {
 	list($identifier, $module) = explode(':', $_G['gp_id']);
+// bluelovers
+} else {
+	$identifier = $_G['gp_identifier'];
+	$module = $_G['gp_module'];
+}
+
+if (1) {
+// bluelovers
 	$module = ($module !== NULL && $module !== '') ? $module : $identifier;
 }
 $mnid = 'plugin_'.$identifier.'_'.$module;
