@@ -1,0 +1,15 @@
+/*
+[name]看海[/name]
+Powered by Discuz! X
+*/
+
+body { background: #899A33 url(images/body_bg.png) repeat 0 0; }
+#hd { margin-top: 0px; width: 970px; height: 270px; border: none; background:  url(images/header.png) no-repeat 100% 0; }
+	#hd h2 { padding: 50px 0 0 70px; color: #069; font-size: 20px; line-height: 115%; }
+#nv li a, #nv li a:visited { color: #000000; }
+#nv li a:hover { background-image: none !important; }	
+#ct, .n, t.w { background: #FFF url(images/ct-top.png)  repeat 0 0 !important; }
+
+.block .title { border: none; background: url(images/title.png) repeat-x; 0 0; }
+
+body#space #ft { background: url(images/ct-bottom.png) no-repeat 0 0; }
