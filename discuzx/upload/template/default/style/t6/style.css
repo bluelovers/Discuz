@@ -5,7 +5,7 @@ Powered by Discuz! X
 */
 
 body { background: #FCFAF0 url(bgimg.jpg) no-repeat 50% 0; }
-#toptb { background:#C52802 /*!important*/; border-bottom:1px solid #AD2302; }
+#toptb { background:#C52802 !important; border-bottom:1px solid #AD2302; }
 #toptb a { color:#FFF; }
 #diy-tg { width:46px; background: url(panel-toggle.png) no-repeat 100% 4px; text-indent: -9999px; overflow: hidden; }
 .pipe { color:#FFF; }
