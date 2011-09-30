@@ -24,7 +24,7 @@ $discuz->init();
 
 if(!empty($_G['gp_id'])) {
 	list($identifier, $module) = explode(':', $_G['gp_id']);
-	$module = $module !== NULL ? $module : $identifier;
+	$module = ($module !== NULL && $module !== '') ? $module : $identifier;
 }
 $mnid = 'plugin_'.$identifier.'_'.$module;
 $pluginmodule = isset($_G['setting']['pluginlinks'][$identifier][$module]) ? $_G['setting']['pluginlinks'][$identifier][$module] : (isset($_G['setting']['plugins']['script'][$identifier][$module]) ? $_G['setting']['plugins']['script'][$identifier][$module] : array('adminid' => 0, 'directory' => preg_match("/^[a-z]+[a-z0-9_]*$/i", $identifier) ? $identifier.'/' : ''));
