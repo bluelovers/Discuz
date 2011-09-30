@@ -1,6 +1,6 @@
 
 #plugin-travian-travian.html
-RewriteRule ^plugin-([a-zA-Z0-9\_]+)(?:-([a-zA-Z0-9\_]+))?(?:\.html?)?$ plugin\.php\?id\=$1\:$2\& [PT,L,QSA]
+RewriteRule ^plugin[\-\/]([a-zA-Z0-9\_]+)(?:[\-\:\/]([a-zA-Z0-9\_]+))?/?(?:\.html?)?$ plugin\.php\?id\=$1\:$2\& [PT,L,QSA]
 
 #plugin/travian/travian/.html
 RewriteRule ^plugin/([a-zA-Z0-9\_]+)(?:/([a-zA-Z0-9\_]+))?/?(?:\.html?)?$ plugin\.php\?id\=$1\:$2\& [PT,L,QSA]
