@@ -16,7 +16,9 @@ foreach(array('pid', 'ptid', 'authorid', 'ordertype', 'postno') as $k) {
 }
 
 // bluelovers
-
+if (empty($ptid)) {
+	$ptid = intval($_GET['tid']);
+}
 // bluelovers
 
 if(empty($_G['gp_goto']) && $ptid) {
