@@ -670,8 +670,8 @@ $lang = array (
   'favorite_repeat' => '抱歉，您已收藏，請勿重複收藏',
   'favorite_do_success' => '信息收藏成功 ',
 
-  'feed_no_found' => '抱歉，您指定要查看的動態不存在',
-  'no_privilege_feed_del' => '抱歉，您沒有權限刪除此動態',
+  'feed_no_found' => '抱歉，您指定要查看的新鮮事不存在',
+  'no_privilege_feed_del' => '抱歉，您沒有權限刪除此新鮮事',
 
   'friend_self_error' => '抱歉，您不能加自己為好友',
   'friends_add' => '您已和{username}成為好友',
