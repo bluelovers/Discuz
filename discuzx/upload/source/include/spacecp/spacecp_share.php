@@ -89,7 +89,12 @@ if($_GET['op'] == 'delete') {
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $id;
 			$arr['title_template'] = array('spacecp', 'share_space');
+			/*
 			$arr['body_template'] = '<b>{username}</b><br>{reside}<br>{spacenote}';
+			*/
+			// bluelovers
+			$arr['body_template'] = array('spacecp', 'share_space_message');
+			// bluelovers
 			$arr['body_data'] = array(
 			'username' => "<a href=\"home.php?mod=space&uid=$id\">".$tospace['username']."</a>",
 			'reside' => $tospace['resideprovince'].$tospace['residecity'],
