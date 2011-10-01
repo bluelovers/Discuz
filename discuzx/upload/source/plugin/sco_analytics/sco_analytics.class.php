@@ -105,6 +105,10 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 	public function __construct() {
 		parent::__construct();
 
+		$this
+			->_setglobal('sco_analytics_nojs', true)
+		;
+
 		return $this;
 	}
 
