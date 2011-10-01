@@ -41,6 +41,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 		$ret .= $this->_my_ya_tw();
 		$ret .= $this->_my_histats();
+		$ret .= $this->_my_alexa();
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
@@ -101,6 +102,19 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	/**
+	 * Alexa
+	 *
+	 * @link http://cn.alexa.com/siteinfo/bluelovers.net
+	 */
+	function _my_alexa($nojs = false) {
+		$ret = '';
+
+		$ret .= $this->_fetch_template($this->_template('alexa'), $this->attr['global']);
+
+		return $ret;
+	}
+
 }
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
@@ -125,6 +139,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$ret .= $this->_my_ga_mobile_html();
 		$ret .= $this->_my_ya_tw(true);
 		$ret .= $this->_my_histats(true);
+		$ret .= $this->_my_alexa(true);
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
