@@ -50,6 +50,16 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	function global_footerlink() {
+		$ret = '';
+
+		$this->_fix_plugin_setting();
+
+		$ret .= $this->_my_ya_tw();
+
+		return $ret;
+	}
+
 	function _my_ga_web_html() {
 		$ret = '';
 
