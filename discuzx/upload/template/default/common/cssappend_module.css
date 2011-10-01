@@ -331,7 +331,7 @@
 	}
 /** end **/
 
-/** home::home,home::spacecp **/
+/** home::spacecp **/
 .mi .avatar a { position: relative; }
 			.ie6 .avatar a { float: left; }
 			.mi .avatar a:hover { text-decoration: none; }
