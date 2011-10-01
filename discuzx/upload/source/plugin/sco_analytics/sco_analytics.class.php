@@ -65,6 +65,21 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	function _my_ya_tw($nojs = false) {
+		$_setting_key = 'ya_tw_id';
+		$ret = '';
+
+		if ($this->_getglobal($_setting_key, 'setting')) {
+			$this
+				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
+			;
+
+			$ret .= $this->_fetch_template($this->_template('ya_tw'), $this->attr['global']);
+		}
+
+		return $ret;
+	}
+
 }
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
