@@ -20,31 +20,29 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	/**
-	 * get identifier from __CLASS__
-	 *
-	 * @todo 將此 method 更新到 _sco_dx_plugin
-	 **/
-	function _get_identifier($method) {
-		$a = explode('::', $method);
-		$k = array_pop($a);
-
-		// remove plugin_ from identifier
-		if (strpos($k, 'plugin_') === 0) {
-			$k = substr($k, strlen('plugin_'));
-		} elseif (strpos($k, 'mobileplugin_') === 0) {
-			$k = substr($k, strlen('mobileplugin_'));
-		}
-
-		return $k;
-	}
-
 	function global_header_javascript() {
 		$ret = '';
+
+		if (defined('IN_MOBILE')) return $ret;
 
 		$this->_fix_plugin_setting();
 
 		$ret .= $this->_my_ga_web_html();
+
+		return $ret;
+	}
+
+	function global_footerlink() {
+		$ret = '';
+
+		if (defined('IN_MOBILE')) return $ret;
+
+		$this->_fix_plugin_setting();
+
+		$ret .= $this->_my_ya_tw();
+		$ret .= $this->_my_histats();
+
+		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
 		return $ret;
 	}
@@ -65,9 +63,57 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	/**
+	 * Yahoo 站長工具(台灣)
+	 *
+	 * @link http://tw.webmaster.yahoo.com/stats/code.html?unit_id=191960
+	 */
+	function _my_ya_tw($nojs = false) {
+		$_setting_key = 'ya_tw_id';
+		$ret = '';
+
+		if ($this->_getglobal($_setting_key, 'setting')) {
+			$this
+				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
+				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
+			;
+
+			$ret .= $this->_fetch_template($this->_template('yahoo/ya_tw'), $this->attr['global']);
+		}
+
+		return $ret;
+	}
+
+	function _my_histats($nojs = false) {
+		$_setting_key = 'histats_id';
+		$ret = '';
+
+		if ($this->_getglobal($_setting_key, 'setting')) {
+			$this
+				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
+				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
+				->_setglobal('histats_server', $this->_getglobal('histats_server', 'setting') ? $this->_getglobal('histats_server', 'setting') : 's10')
+			;
+
+			$ret .= $this->_fetch_template($this->_template('histats'), $this->attr['global']);
+		}
+
+		return $ret;
+	}
+
 }
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
+
+	public function __construct() {
+		parent::__construct();
+
+		$this
+			->_setglobal('sco_analytics_nojs', true)
+		;
+
+		return $this;
+	}
 
 	function global_footer_mobile() {
 
@@ -77,6 +123,8 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$ret = '';
 
 		$ret .= $this->_my_ga_mobile_html();
+		$ret .= $this->_my_ya_tw(true);
+		$ret .= $this->_my_histats(true);
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
