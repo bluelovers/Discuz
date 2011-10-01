@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-09-30 23:00]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/dx/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[【DSU】在线图标管理]]></item>
+			<item id="identifier"><![CDATA[dsu_amuolg]]></item>
+			<item id="description"><![CDATA[用于管理在线图标的显示（适用于有多个用户组使用一个图标的在线图标显示），添加虚拟人气！]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[dsu_amuolg/]]></item>
+			<item id="copyright"><![CDATA[阿牧【DSU】]]></item>
+			<item id="version"><![CDATA[X1.32]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[olg]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[合并设置]]></item>
+				<item id="description"><![CDATA[将在线图标名称=显示名称；
+例如：
+online_moderator.gif=特殊会员;(英文分号)
+支持多个合并，一个合并一行；
+用户组图例中请填写图片文件名，并将相应图片文件上传到 static/image/common/ 目录中。
+合并是根据图片来判断的，这里的图片名称不能使用不存在的在线图标名 ...]]></item>
+				<item id="variable"><![CDATA[hbset]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[
+online_admin.gif=VIP会员;
+online_sp.gif=特殊会员;]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[无人提示]]></item>
+				<item id="description"><![CDATA[字数有限，尽量不要修改！]]></item>
+				<item id="variable"><![CDATA[wrts]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[无该组成员在线]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[最低在线人数]]></item>
+				<item id="description"><![CDATA[设置一个最低在线人数；
+建议设置要比下面的最大值要大，这个关系到历史最大在线人数；
+如果真实在线大于本值，将不启用虚拟人气。
+该值一旦设置好后，请不要随意更改。]]></item>
+				<item id="variable"><![CDATA[xnyk]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[100]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[虚拟游客计算公式]]></item>
+				<item id="description"><![CDATA[计算公式举例：
+2*%guestcount+%membercount*3+100
+支持：+，-，*，/。
+%guestcount表示真实的在线游客数
+%membercount表示真实的在线会员数]]></item>
+				<item id="variable"><![CDATA[jsgs]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[2*%guestcount+%membercount*19+43]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="license"><![CDATA[  [*]本插件版权归属插件作者,及其下属Discuz! Student Union团队所有.
+[*]未经插件作者许可,任何人不得以任何形式在任何地方发布/转发原版以及其衍生的修改版.
+[*][b]插件作者:[/b]阿牧
+[*][b]作品简介:[/b]原来在线图标也是需要美化的
+[*][b]发布地址:[/b][url]http://www.dsu.cc[/url]
+[*]如有任何关于使用上的疑问,请至[url]http://www.dsu.cc/forum-44-1.html[/url]提出.
+[*]最后,感谢您使用我们的插件,也希望您能够给我们DSU团队提供更好的意见([url=http://www.dsu.cc/]请点击这里进入DSU团队官方站点[/url]).]]></item>
+		<item id="intro"><![CDATA[
+			[color=DeepSkyBlue][b]关于本插件的相关信息:[/b][/color]
+				名称: [b]在线图标管理[/b]
+				版本: [b][X1]V1.32[/b](内部版本号:[X1]V1.30)
+				作者: 阿牧
+				DSU荣誉出品 http://www.dsu.cc
+				鸣谢：9000,黑客一族
+				-------------------------------------------
+				本插件仅供个人非商业用途使用!
+				禁止任何形式的封装再发布行为.
+				特此声明.
+
+				2011年9月30日
+			]]></item>
+	</item>
+</root>

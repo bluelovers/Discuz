@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-09-30 23:00]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/dx/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[¡iDSU¡j¦b½u¹Ï¼ÐºÞ²z]]></item>
+			<item id="identifier"><![CDATA[dsu_amuolg]]></item>
+			<item id="description"><![CDATA[¥Î©óºÞ²z¦b½u¹Ï¼ÐªºÅã¥Ü¡]¾A¥Î©ó¦³¦h­Ó¥Î¤á²Õ¨Ï¥Î¤@­Ó¹Ï¼Ðªº¦b½u¹Ï¼ÐÅã¥Ü¡^¡A²K¥[µêÀÀ¤H®ð¡I]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[dsu_amuolg/]]></item>
+			<item id="copyright"><![CDATA[ªüªª¡iDSU¡j]]></item>
+			<item id="version"><![CDATA[X1.32]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[olg]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[¦X¨Ö³]¸m]]></item>
+				<item id="description"><![CDATA[±N¦b½u¹Ï¼Ð¦WºÙ=Åã¥Ü¦WºÙ¡F
+¨Ò¦p¡G
+online_moderator.gif=¯S®í·|­û;(­^¤å¤À¸¹)
+¤ä«ù¦h­Ó¦X¨Ö¡A¤@­Ó¦X¨Ö¤@¦æ¡F
+¥Î¤á²Õ¹Ï¨Ò¤¤½Ð¶ñ¼g¹Ï¤ù¤å¥ó¦W¡A¨Ã±N¬ÛÀ³¹Ï¤ù¤å¥ó¤W¶Ç¨ì static/image/common/ ¥Ø¿ý¤¤¡C
+¦X¨Ö¬O®Ú¾Ú¹Ï¤ù¨Ó§PÂ_ªº¡A³o¸Ìªº¹Ï¤ù¦WºÙ¤£¯à¨Ï¥Î¤£¦s¦bªº¦b½u¹Ï¼Ð¦W ...]]></item>
+				<item id="variable"><![CDATA[hbset]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[
+online_admin.gif=VIP·|­û;
+online_sp.gif=¯S®í·|­û;]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[µL¤H´£¥Ü]]></item>
+				<item id="description"><![CDATA[¦r¼Æ¦³­­¡AºÉ¶q¤£­n­×§ï¡I]]></item>
+				<item id="variable"><![CDATA[wrts]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[µL¸Ó²Õ¦¨­û¦b½u]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[³Ì§C¦b½u¤H¼Æ]]></item>
+				<item id="description"><![CDATA[³]¸m¤@­Ó³Ì§C¦b½u¤H¼Æ¡F
+«ØÄ³³]¸m­n¤ñ¤U­±ªº³Ì¤j­È­n¤j¡A³o­ÓÃö«Y¨ì¾ú¥v³Ì¤j¦b½u¤H¼Æ¡F
+¦pªG¯u¹ê¦b½u¤j©ó¥»­È¡A±N¤£±Ò¥ÎµêÀÀ¤H®ð¡C
+¸Ó­È¤@¥¹³]¸m¦n«á¡A½Ð¤£­nÀH·N§ó§ï¡C]]></item>
+				<item id="variable"><![CDATA[xnyk]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[100]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[µêÀÀ¹C«È­pºâ¤½¦¡]]></item>
+				<item id="description"><![CDATA[­pºâ¤½¦¡Á|¨Ò¡G
+2*%guestcount+%membercount*3+100
+¤ä«ù¡G+¡A-¡A*¡A/¡C
+%guestcountªí¥Ü¯u¹êªº¦b½u¹C«È¼Æ
+%membercountªí¥Ü¯u¹êªº¦b½u·|­û¼Æ]]></item>
+				<item id="variable"><![CDATA[jsgs]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[2*%guestcount+%membercount*19+43]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="license"><![CDATA[  [*]¥»´¡¥óª©ÅvÂkÄÝ´¡¥ó§@ªÌ,¤Î¨ä¤UÄÝDiscuz! Student Union¹Î¶¤©Ò¦³.
+[*]¥¼¸g´¡¥ó§@ªÌ³\¥i,¥ô¦ó¤H¤£±o¥H¥ô¦ó§Î¦¡¦b¥ô¦ó¦a¤èµo§G/Âàµo­ìª©¥H¤Î¨ä­l¥Íªº­×§ïª©.
+[*][b]´¡¥ó§@ªÌ:[/b]ªüªª
+[*][b]§@«~Â²¤¶:[/b]­ì¨Ó¦b½u¹Ï¼Ð¤]¬O»Ý­n¬ü¤Æªº
+[*][b]µo§G¦a§}:[/b][url]http://www.dsu.cc[/url]
+[*]¦p¦³¥ô¦óÃö©ó¨Ï¥Î¤WªººÃ°Ý,½Ð¦Ü[url]http://www.dsu.cc/forum-44-1.html[/url]´£¥X.
+[*]³Ì«á,·PÁÂ±z¨Ï¥Î§Ú­Ìªº´¡¥ó,¤]§Æ±æ±z¯à°÷µ¹§Ú­ÌDSU¹Î¶¤´£¨Ñ§ó¦nªº·N¨£([url=http://www.dsu.cc/]½ÐÂIÀ»³o¸Ì¶i¤JDSU¹Î¶¤©x¤è¯¸ÂI[/url]).]]></item>
+		<item id="intro"><![CDATA[
+			[color=DeepSkyBlue][b]Ãö©ó¥»´¡¥óªº¬ÛÃö«H®§:[/b][/color]
+				¦WºÙ: [b]¦b½u¹Ï¼ÐºÞ²z[/b]
+				ª©¥»: [b][X1]V1.32[/b](¤º³¡ª©¥»¸¹:[X1]V1.30)
+				§@ªÌ: ªüªª
+				DSUºaÅA¥X«~ http://www.dsu.cc
+				»ïÁÂ¡G9000,¶Â«È¤@±Ú
+				-------------------------------------------
+				¥»´¡¥ó¶È¨Ñ­Ó¤H«D°Ó·~¥Î³~¨Ï¥Î!
+				¸T¤î¥ô¦ó§Î¦¡ªº«Ê¸Ë¦Aµo§G¦æ¬°.
+				¯S¦¹Án©ú.
+
+				2011¦~9¤ë30¤é
+			]]></item>
+	</item>
+</root>
