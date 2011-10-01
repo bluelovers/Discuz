@@ -222,14 +222,14 @@ class template {
 			*/
 
 			// bluelovers
+			lang_merge($this->language['inner'], array('template'));
+
 			if (CURSCRIPT) {
 				/**
 				 * 自動額外載入 CURSCRIPT 的語言包
 				 */
 				lang_merge($this->language['inner'], array('template', CURSCRIPT));
 			}
-
-			lang_merge($this->language['inner'], array('template'));
 			// bluelovers
 
 			if(!$isplugin) {
