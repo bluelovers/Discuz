@@ -45,7 +45,6 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		$this->_fix_plugin_setting();
 
 		$ret .= $this->_my_ga_web_html();
-		$ret .= $this->_my_ya_tw();
 
 		return $ret;
 	}
