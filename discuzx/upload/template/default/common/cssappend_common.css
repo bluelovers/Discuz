@@ -449,4 +449,16 @@ fieldset {
 	line-height: 1.5em;
 }
 
+.vwmy {
+	word-break: keep-all;
+	white-space: nowrap;
+	overflow: hidden;
+
+	/* 跨瀏覽器的 inline-block */
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
 /* ---------------------- */
