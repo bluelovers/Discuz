@@ -222,6 +222,10 @@ class template {
 			*/
 
 			// bluelovers
+			if (CURSCRIPT) {
+				lang_merge($this->language['inner'], array('template', CURSCRIPT));
+			}
+
 			lang_merge($this->language['inner'], array('template'));
 			// bluelovers
 
