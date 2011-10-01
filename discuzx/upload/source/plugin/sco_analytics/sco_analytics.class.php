@@ -77,6 +77,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		if ($this->_getglobal($_setting_key, 'setting')) {
 			$this
 				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
+				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
 			;
 
 			$ret .= $this->_fetch_template($this->_template('ya_tw'), $this->attr['global']);
