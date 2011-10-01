@@ -1,6 +1,6 @@
 
-RewriteCond %{HTTP_HOST} !^www\.discuz\.bluelovers\.net
+RewriteCond %{HTTP_HOST} ^www\.discuz\.bluelovers\.net
 RewriteRule ^(.*)$ http://discuz.bluelovers.net/$1 [R=permanent,L]
 
-RewriteCond %{HTTP_HOST} !^www\.discuz\.bluelovers\.org
+RewriteCond %{HTTP_HOST} ^www\.discuz\.bluelovers\.org
 RewriteRule ^(.*)$ http://discuz.bluelovers.org/$1 [R=permanent,L]
