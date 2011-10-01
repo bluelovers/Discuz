@@ -65,6 +65,11 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	/**
+	 * Yahoo 站長工具(台灣)
+	 *
+	 * @link http://tw.webmaster.yahoo.com/stats/code.html?unit_id=191960
+	 */
 	function _my_ya_tw($nojs = false) {
 		$_setting_key = 'ya_tw_id';
 		$ret = '';
