@@ -2,7 +2,7 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-10-01 23:14]]></item>
+	<item id="Time"><![CDATA[2011-10-02 00:21]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
@@ -10,11 +10,11 @@
 			<item id="adminid"><![CDATA[1]]></item>
 			<item id="name"><![CDATA[Scorpio! Analytics]]></item>
 			<item id="identifier"><![CDATA[sco_analytics]]></item>
-			<item id="description"><![CDATA[]]></item>
+			<item id="description"><![CDATA[提供各式統計工具及搜尋引擎優化]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[sco_analytics/]]></item>
 			<item id="copyright"><![CDATA[bluelovers]]></item>
-			<item id="version"><![CDATA[0.1.2]]></item>
+			<item id="version"><![CDATA[]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[sco_analytics]]></item>
@@ -67,6 +67,24 @@
 				<item id="title"><![CDATA[Yahoo 站長工具(台灣)]]></item>
 				<item id="description"><![CDATA[]]></item>
 				<item id="variable"><![CDATA[ya_tw_id]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[191960]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Histats]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[histats_id]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[153740]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Histats Server]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[histats_server]]></item>
 				<item id="type"><![CDATA[text]]></item>
 				<item id="value"><![CDATA[]]></item>
 				<item id="extra"><![CDATA[]]></item>
