@@ -102,6 +102,11 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	/**
+	 * Alexa
+	 *
+	 * @link http://cn.alexa.com/siteinfo/bluelovers.net
+	 */
 	function _my_alexa($nojs = false) {
 		$ret = '';
 
