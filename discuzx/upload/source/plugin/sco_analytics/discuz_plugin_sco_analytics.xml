@@ -2,7 +2,7 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-09-10 05:21]]></item>
+	<item id="Time"><![CDATA[2011-10-01 23:14]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
@@ -60,6 +60,15 @@
 				<item id="variable"><![CDATA[ga_web_id]]></item>
 				<item id="type"><![CDATA[text]]></item>
 				<item id="value"><![CDATA[UA-741906-1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Yahoo 站長工具(台灣)]]></item>
+				<item id="description"><![CDATA[]]></item>
+				<item id="variable"><![CDATA[ya_tw_id]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 		</item>
