@@ -20,25 +20,6 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	/**
-	 * get identifier from __CLASS__
-	 *
-	 * @todo 將此 method 更新到 _sco_dx_plugin
-	 **/
-	function _get_identifier($method) {
-		$a = explode('::', $method);
-		$k = array_pop($a);
-
-		// remove plugin_ from identifier
-		if (strpos($k, 'plugin_') === 0) {
-			$k = substr($k, strlen('plugin_'));
-		} elseif (strpos($k, 'mobileplugin_') === 0) {
-			$k = substr($k, strlen('mobileplugin_'));
-		}
-
-		return $k;
-	}
-
 	function global_header_javascript() {
 		$ret = '';
 
