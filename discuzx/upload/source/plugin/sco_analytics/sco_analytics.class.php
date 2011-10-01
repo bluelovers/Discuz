@@ -80,7 +80,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
 			;
 
-			$ret .= $this->_fetch_template($this->_template('ya_tw'), $this->attr['global']);
+			$ret .= $this->_fetch_template($this->_template('yahoo/ya_tw'), $this->attr['global']);
 		}
 
 		return $ret;
