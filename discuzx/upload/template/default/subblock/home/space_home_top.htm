@@ -1,24 +1,7 @@
 <!-- space_home -->
 			<!--{if $space['uid'] && $space[self]}-->
 				<div class="bm bw0">
-					<table cellpadding="0" cellspacing="0" class="mi mbm">
-						<tr>
-							<th>
-								<div class="avatar mbn cl">
-									<a href="home.php?mod=spacecp&ac=avatar" title="{lang memcp_avatar}" id="edit_avt"><span id="edit_avt_tar">{lang memcp_avatar}</span><!--{avatar($_G[uid],middle)}--></a>
-								</div>
-								<p><a href="home.php?mod=space&uid=$space[uid]" target="_blank" class="o xi2">{lang view_my_space}</a></p>
-							</th>
-							<td>
-								<h3 class="xs2">
-									<span class="y xw0 xs1">{lang have} <em class="xi1">$space[views]</em> {lang visit_per_man}</span>
-									<a href="home.php?mod=space&uid=$space[uid]"{eval g_color($space[groupid]);}>{$space[username]}</a>
-									<!--{eval g_icon($space[groupid]);}-->
-								</h3>
-								<!--{template home/space_status}-->
-							</td>
-						</tr>
-					</table>
+					<!--{subtpl subblock/home/space_home_top_avatar}-->
 					<!--[diy=diycontentmiddle]--><div id="diycontentmiddle" class="area"></div><!--[/diy]-->
 					<!--{hook/space_home_top}-->
 
