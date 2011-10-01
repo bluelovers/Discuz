@@ -252,6 +252,11 @@ class template {
 					}
 				}
 
+				if ($path == 'subblock') {
+					list(,$_path) = explode('/', $this->file);
+					lang_merge($this->language['inner'], array('template', $_path));
+				}
+
 				lang_merge($this->language['inner'], array('template', $path));
 				// bluelovers
 
