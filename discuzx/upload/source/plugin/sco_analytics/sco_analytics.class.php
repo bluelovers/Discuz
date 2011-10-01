@@ -99,6 +99,7 @@ class mobileplugin_sco_analytics extends plugin_sco_analytics {
 		$ret = '';
 
 		$ret .= $this->_my_ga_mobile_html();
+		$ret .= $this->_my_ya_tw(true);
 
 		$ret = '<div style="display: none; visibility: hidden;">'.$ret.'</div>';
 
