@@ -52,6 +52,8 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 	function global_footerlink() {
 		$ret = '';
 
+		if (defined('IN_MOBILE')) return $ret;
+
 		$this->_fix_plugin_setting();
 
 		$ret .= $this->_my_ya_tw();
