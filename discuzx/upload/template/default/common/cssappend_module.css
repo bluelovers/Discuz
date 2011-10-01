@@ -338,4 +338,6 @@
 			.mi .avatar a span { display: none; position: absolute; bottom: 3px; padding: 5px 0; width: 100%; text-align: center; background: transparent; background: rgba(255, 255, 255, 0.5); cursor: pointer; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #50FFFFFF, endColorstr = #50FFFFFF); }
 				.mi .avatar a:hover span { display: block; }
 				.mi .avatar img { padding: 3px; border: 1px solid {COMMONBORDER}; }
+
+				.mi a.o { margin-right: 5px; padding-left: 18px; background: url({IMGDIR}/mine_icn.png) no-repeat 0 50%; }
 /** end **/
