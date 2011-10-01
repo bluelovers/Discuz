@@ -40,8 +40,6 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 	}
 
 	function global_header_javascript() {
-		if (defined('IN_MOBILE')) return $ret;
-
 		$ret = '';
 
 		$this->_fix_plugin_setting();
