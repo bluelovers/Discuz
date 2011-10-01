@@ -107,7 +107,7 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 			$this
 				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
 				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
-				->_setglobal('histats_server', $this->_getglobal('histats_server', 'setting'))
+				->_setglobal('histats_server', $this->_getglobal('histats_server', 'setting') ? $this->_getglobal('histats_server', 'setting') : 's10')
 			;
 
 			$ret .= $this->_fetch_template($this->_template('histats'), $this->attr['global']);
