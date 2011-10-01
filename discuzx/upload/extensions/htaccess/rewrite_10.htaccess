@@ -1,0 +1,3 @@
+
+RewriteCond %{HTTP_HOST} !^www\.discuz\.bluelovers\.net
+RewriteRule ^(.*)$ http://discuz.bluelovers.net/$1 [R=permanent,L]
