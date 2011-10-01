@@ -56,6 +56,8 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 		$ret .= $this->_my_ya_tw();
 
+		$ret = '<div style="display: hidden;">'.$ret.'</div>';
+
 		return $ret;
 	}
 
