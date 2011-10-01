@@ -98,6 +98,23 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	function _my_histats($nojs = false) {
+		$_setting_key = 'histats_id';
+		$ret = '';
+
+		if ($this->_getglobal($_setting_key, 'setting')) {
+			$this
+				->_setglobal($_setting_key, $this->_getglobal($_setting_key, 'setting'))
+				->_setglobal($_setting_key.'_nojs', (bool)$nojs)
+				->_setglobal('histats_server', $this->_getglobal('histats_server', 'setting'))
+			;
+
+			$ret .= $this->_fetch_template($this->_template('histats'), $this->attr['global']);
+		}
+
+		return $ret;
+	}
+
 }
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
