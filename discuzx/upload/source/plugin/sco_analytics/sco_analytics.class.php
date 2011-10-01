@@ -102,6 +102,12 @@ class plugin_sco_analytics extends _sco_dx_plugin {
 
 class mobileplugin_sco_analytics extends plugin_sco_analytics {
 
+	public function __construct() {
+		parent::__construct();
+
+		return $this;
+	}
+
 	function global_footer_mobile() {
 
 		// 修正 setting 的內容
