@@ -57,6 +57,17 @@
 					}
 				</script>
 				<!--{/if}-->
+
+				<!--{if CURSCRIPT == 'forum' && CURMODULE == 'attachment'}-->
+					<p class="alert_btnleft">
+					<a href="javascript:history.back()">{lang message_go_back}</a>
+					<!--{eval $_aidencode = $_G[forum_attach_aidencode] ? $_G[forum_attach_aidencode] : $_G[gp_aid];}-->
+					<!--{if $_aidencode}-->
+						&nbsp; | <a href="forum.php?mod=attachment&aid={$_aidencode}&findpost=1" target="_blank">{lang view_thread}</a>
+					<!--{/if}-->
+					</p>
+				<!--{/if}-->
+
 			</div>
 			<!--{if $param[login]}-->
 				<div id="messagelogin"></div>

@@ -20,7 +20,13 @@ if (!$aid && is_numeric($_GET['aid'])) {
 	/**
 	 * 使附件網址支援舊版的 aid=\d+ 格式
 	 */
-	$aid = intval($_GET['aid']);
+	$_G['gp_aid'] = $aid = intval($_GET['aid']);
+
+	$_G['gp_redirectmsg'] = 1;
+}
+
+if ($_G['gp_formhash'] != FORMHASH) {
+	$_G['gp_redirectmsg'] = 1;
 }
 // bluelovers
 
@@ -120,6 +126,11 @@ if(!$attachexists) {
 	}
 }
 
+// bluelovers
+$_G['forum_attach_filename'] = $attach['filename'];
+$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
+// bluelovers
+
 if(!$requestmode) {
 	$forum = DB::fetch_first("SELECT f.fid, f.viewperm, f.getattachperm, a.allowgetattach, a.allowgetimage FROM ".DB::table('forum_forumfield')." f
 		LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
@@ -180,6 +191,11 @@ if(!$attach['remote'] && !is_readable($filename)) {
 }
 
 if(!$requestmode) {
+
+	// bluelovers
+	if (!$_G['gp_redirectmsg']) {
+	// bluelovers
+
 	if(!$ispaid && !$forum['allowgetattach']) {
 		if(!$forum['getattachperm'] && !$allowgetattach) {
 			showmessage('getattachperm_none_nopermission', NULL, array(), array('login' => 1));
@@ -187,6 +203,10 @@ if(!$requestmode) {
 			showmessagenoperm('getattachperm', $forum['fid']);
 		}
 	}
+
+	// bluelovers
+	}
+	// bluelovers
 
 	$exemptvalue = $ismoderator ? 32 : 4;
 	if(!$isimage && !($_G['group']['exempt'] & $exemptvalue)) {
@@ -204,6 +224,12 @@ if(!$requestmode) {
 			}
 		}
 	}
+
+	// bluelovers
+	if ($_G['gp_redirectmsg']) {
+		showmessage('attachment_credit', "forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10));
+	}
+	// bluelovers
 
 	if(empty($_G['gp_noupdate'])) {
 		if($_G['setting']['delayviewcount'] == 2 || $_G['setting']['delayviewcount'] == 3) {
