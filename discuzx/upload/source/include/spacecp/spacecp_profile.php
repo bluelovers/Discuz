@@ -344,7 +344,7 @@ if($operation == 'password') {
 		if ($mailinfo[0] == $_G['uid']) {
 		// bluelovers
 
-		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
+			$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
 
 		// bluelovers
 		}
