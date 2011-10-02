@@ -339,6 +339,7 @@ if($operation == 'password') {
 	$space['newemail'] = !$space['emailstatus'] ? $space['email'] : '';
 	if(!empty($newemail)) {
 		$mailinfo = explode("\t", $newemail);
+		// 修正因為 cookies 的問題造成未驗證的信箱狀態 顯示為 已驗證
 		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : $space['newemail'];
 	}
 
