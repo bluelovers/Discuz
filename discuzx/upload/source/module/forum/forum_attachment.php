@@ -187,6 +187,10 @@ if(!$requestmode) {
 				array(
 				), array(
 					'login' => 1,
+
+					// bluelovers
+					'return' => 1,
+					// bluelovers
 				)
 			);
 		} elseif(($forum['getattachperm'] && !forumperm($forum['getattachperm'])) || ($forum['viewperm'] && !forumperm($forum['viewperm']))) {
