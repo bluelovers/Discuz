@@ -16,7 +16,9 @@ define('NOROBOT', TRUE);
 $aid = intval($_G['gp_aid']);
 
 // bluelovers
-
+if (!$aid && is_numeric($_GET['aid'])) {
+	$aid = intval($_GET['aid']);
+}
 // bluelovers
 
 if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'"))) {
