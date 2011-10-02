@@ -218,6 +218,13 @@ if(!$requestmode) {
 		}
 	}
 
+	// bluelovers
+	if ($_G['gp_redirectmsg']) {
+		$aidencode = aidencode($aid, 0, $attach['tid']);
+		showmessage('attachment_buy', "forum.php?mod=attachment&aid=$aidencode", array('filename' => $attach['filename']), array('redirectmsg' => 1, 'login' => 1));
+	}
+	// bluelovers
+
 	if(empty($_G['gp_noupdate'])) {
 		if($_G['setting']['delayviewcount'] == 2 || $_G['setting']['delayviewcount'] == 3) {
 			$_G['forum_logfile'] = './data/cache/forum_attachviews_'.intval(getglobal('config/server/id')).'.log';
