@@ -190,6 +190,11 @@ if(!$attach['remote'] && !is_readable($filename)) {
 }
 
 if(!$requestmode) {
+
+	// bluelovers
+	if (!$_G['gp_redirectmsg']) {
+	// bluelovers
+
 	if(!$ispaid && !$forum['allowgetattach']) {
 		if(!$forum['getattachperm'] && !$allowgetattach) {
 			showmessage('getattachperm_none_nopermission',
@@ -207,6 +212,10 @@ if(!$requestmode) {
 			showmessagenoperm('getattachperm', $forum['fid']);
 		}
 	}
+
+	// bluelovers
+	}
+	// bluelovers
 
 	$exemptvalue = $ismoderator ? 32 : 4;
 	if(!$isimage && !($_G['group']['exempt'] & $exemptvalue)) {
