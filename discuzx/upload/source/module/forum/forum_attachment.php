@@ -126,6 +126,10 @@ if(!$attachexists) {
 	}
 }
 
+// bluelovers
+$_G['forum_attach_filename'] = $attach['filename'];
+// bluelovers
+
 if(!$requestmode) {
 	$forum = DB::fetch_first("SELECT f.fid, f.viewperm, f.getattachperm, a.allowgetattach, a.allowgetimage FROM ".DB::table('forum_forumfield')." f
 		LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
