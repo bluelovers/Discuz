@@ -14,6 +14,11 @@ define('NOROBOT', TRUE);
 @list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = daddslashes(explode('|', base64_decode($_G['gp_aid'])));
 
 $aid = intval($_G['gp_aid']);
+
+// bluelovers
+
+// bluelovers
+
 if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'"))) {
 	dheader('location: forum.php?mod=redirect&goto=findpost&pid='.$attach['pid'].'&ptid='.$attach['tid']);
 }
