@@ -185,6 +185,9 @@ if(!$requestmode) {
 			showmessage('getattachperm_none_nopermission',
 				NULL,
 				array(
+					// bluelovers
+					'filename' => $attach['filename'],
+					// bluelovers
 				), array(
 					'login' => 1,
 
