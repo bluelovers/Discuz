@@ -24,6 +24,10 @@ if (!$aid && is_numeric($_GET['aid'])) {
 
 	$_G['gp_redirectmsg'] = 1;
 }
+
+if ($_G['gp_formhash'] != FORMHASH) {
+	$_G['gp_redirectmsg'] = 1;
+}
 // bluelovers
 
 if(!empty($_G['gp_findpost']) && ($attach = DB::fetch_first("SELECT pid, tid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'"))) {
