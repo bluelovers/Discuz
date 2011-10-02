@@ -128,6 +128,7 @@ if(!$attachexists) {
 
 // bluelovers
 $_G['forum_attach_filename'] = $attach['filename'];
+$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
 // bluelovers
 
 if(!$requestmode) {
