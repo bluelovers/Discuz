@@ -339,7 +339,16 @@ if($operation == 'password') {
 	$space['newemail'] = !$space['emailstatus'] ? $space['email'] : '';
 	if(!empty($newemail)) {
 		$mailinfo = explode("\t", $newemail);
+
+		// bluelovers
+		if ($mailinfo[0] == $_G['uid']) {
+		// bluelovers
+
 		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
+
+		// bluelovers
+		}
+		// bluelovers
 	}
 
 	if($_G['gp_resend'] && $resend) {
