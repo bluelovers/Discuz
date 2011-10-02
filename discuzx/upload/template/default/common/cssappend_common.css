@@ -449,7 +449,7 @@ fieldset {
 	line-height: 1.5em;
 }
 
-.vwmy {
+.mi .vwmy {
 	word-break: keep-all;
 	white-space: nowrap;
 	overflow: hidden;
