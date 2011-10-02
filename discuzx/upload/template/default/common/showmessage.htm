@@ -59,10 +59,12 @@
 				<!--{/if}-->
 
 				<!--{if CURSCRIPT == 'forum' && CURMODULE == 'attachment'}-->
+					<p class="alert_btnleft">
 					<!--{eval $_aidencode = $_G[forum_attach_aidencode] || $_G[gp_aid];}-->
 					<!--{if $_aidencode}-->
-						<p class="alert_btnleft"><a href="forum.php?mod=attachment&aid={$_aidencode}&findpost=1">{lang view_thread}</a></p>
+						<a href="forum.php?mod=attachment&aid={$_aidencode}&findpost=1">{lang view_thread}</a>
 					<!--{/if}-->
+					</p>
 				<!--{/if}-->
 
 			</div>
