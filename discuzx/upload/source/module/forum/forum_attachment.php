@@ -17,6 +17,9 @@ $aid = intval($_G['gp_aid']);
 
 // bluelovers
 if (!$aid && is_numeric($_GET['aid'])) {
+	/**
+	 * 使附件網址支援舊版的 aid=\d+ 格式
+	 */
 	$aid = intval($_GET['aid']);
 }
 // bluelovers
