@@ -198,13 +198,7 @@ if(!$requestmode) {
 
 	if(!$ispaid && !$forum['allowgetattach']) {
 		if(!$forum['getattachperm'] && !$allowgetattach) {
-			showmessage('getattachperm_none_nopermission',
-				NULL,
-				array(
-				), array(
-					'login' => 1,
-				)
-			);
+			showmessage('getattachperm_none_nopermission', NULL, array(), array('login' => 1));
 		} elseif(($forum['getattachperm'] && !forumperm($forum['getattachperm'])) || ($forum['viewperm'] && !forumperm($forum['viewperm']))) {
 			showmessagenoperm('getattachperm', $forum['fid']);
 		}
