@@ -21,6 +21,8 @@ if (!$aid && is_numeric($_GET['aid'])) {
 	 * 使附件網址支援舊版的 aid=\d+ 格式
 	 */
 	$aid = intval($_GET['aid']);
+
+	$_G['gp_redirectmsg'] = 1;
 }
 // bluelovers
 
@@ -221,7 +223,7 @@ if(!$requestmode) {
 	// bluelovers
 	if ($_G['gp_redirectmsg']) {
 		$aidencode = aidencode($aid, 0, $attach['tid']);
-		showmessage('attachment_buy', "forum.php?mod=attachment&aid=$aidencode", array('filename' => $attach['filename']), array('redirectmsg' => 1, 'login' => 1));
+		showmessage('attachment_credit', "forum.php?mod=attachment&aid=$aidencode&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10));
 	}
 	// bluelovers
 
