@@ -190,7 +190,7 @@ if(!$attach['remote'] && !is_readable($filename)) {
 }
 
 if(!$requestmode) {
-	if(!$ispaid && !$forum['allowgetattach']) {
+	if(!$_G['gp_redirectmsg'] && !$ispaid && !$forum['allowgetattach']) {
 		if(!$forum['getattachperm'] && !$allowgetattach) {
 			showmessage('getattachperm_none_nopermission',
 				NULL,
@@ -228,7 +228,7 @@ if(!$requestmode) {
 	// bluelovers
 	if ($_G['gp_redirectmsg']) {
 		$aidencode = aidencode($aid, 0, $attach['tid']);
-		showmessage('attachment_credit', "forum.php?mod=attachment&aid=$aidencode&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10));
+		showmessage('attachment_credit', "forum.php?mod=attachment&aid=$aidencode&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10, 'return' => 1,));
 	}
 	// bluelovers
 
