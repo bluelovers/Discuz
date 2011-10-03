@@ -22,11 +22,21 @@
 								<!--{/if}-->
 								<div class="c cl">
 									<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" {if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]" class="z">
+										<!--{if 0}-->
+
 										<!--{if $thread['cover']}-->
 											<img src="$thread[coverpath]" alt="$thread[subject]" width="{$_G[setting][forumpicstyle][thumbwidth]}" height="{$_G[setting][forumpicstyle][thumbheight]}" />
 										<!--{else}-->
 											<span class="nopic" style="width:{$_G[setting][forumpicstyle][thumbwidth]}px; height:{$_G[setting][forumpicstyle][thumbheight]}px;"></span>
 										<!--{/if}-->
+
+										<!--{/if}-->
+
+										<span class="cl_cover{if !$thread['cover']}  nopic{/if}" style="width:{$_G[setting][forumpicstyle][thumbwidth]}px; height:{$_G[setting][forumpicstyle][thumbheight]}px;" alt="$thread[subject]">
+											<!--{if $thread['cover']}-->
+												<img src="$thread[coverpath]" alt="$thread[subject]" />
+											<!--{/if}-->
+										</span>
 									</a>
 								</div>
 								<h3 class="ptn" style="width: {$_G[setting][forumpicstyle][thumbwidth]}px;"><a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]"><!--{if in_array($thread['displayorder'], array(1, 2, 3, 4))}-->[{lang thread_stick}] <!--{/if}-->$thread[subject]</a></h3>
