@@ -1,4 +1,12 @@
 <!-- for forumdisplay_list -->
+
+<style>
+.tl .tl_cover {
+	width: {$_G[setting][forumpicstyle][thumbwidth]}px;
+	height: {$_G[setting][forumpicstyle][thumbheight]}px;
+}
+</style>
+
 						<ul class="ml mlt mtw cl">
 							<!--{loop $_G['forum_threadlist'] $key $thread}-->
 							<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
@@ -32,7 +40,7 @@
 
 										<!--{/if}-->
 
-										<span class="cl_cover{if !$thread['cover']}  nopic{/if}" style="width:{$_G[setting][forumpicstyle][thumbwidth]}px; height:{$_G[setting][forumpicstyle][thumbheight]}px;" alt="$thread[subject]">
+										<span class="tl_cover{if !$thread['cover']}  nopic{/if}" alt="$thread[subject]">
 											<!--{if $thread['cover']}-->
 												<img src="$thread[coverpath]" alt="$thread[subject]" />
 											<!--{/if}-->
