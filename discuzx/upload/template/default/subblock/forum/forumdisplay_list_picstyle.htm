@@ -83,13 +83,17 @@ jQuery(function(){
 					'margin-left' : ({$_G[setting][forumpicstyle][thumbwidth]} - _this.width()) / 2,
 					'margin-top' : ({$_G[setting][forumpicstyle][thumbheight]} - _this.height()) / 2,
 				})
-				.show()
 			;
 		})
-		error(function(){
+		.error(function(){
 			var _this = jQuery(this);
 
 			_this.hide();
+		})
+		.each(function(){
+			if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
+				jQuery(this).trigger('load');
+			}
 		})
 	;
 });

@@ -89,10 +89,12 @@ function validate(theform) {
 		showError('您的標題超過 ' + post_subject_maxsize + ' 個字符的限制');
 		return false;
 	}
+	/*
 	if(ispicstyleforum == 1 && ATTACHORIMAGE == 0 && isfirstpost) {
 		showError('帖圖版塊至少應上傳一張圖片作為封面');
 		return false;
 	}
+	*/
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {
 			showError('請選擇主題對應的分類');
