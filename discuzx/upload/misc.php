@@ -15,7 +15,9 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
+/*
 $discuz->reject_robot();
+*/
 $modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist', 'buyinvitecode', 'tag', 'diyhelp', 'mobile');
 
 $modcachelist = array(
