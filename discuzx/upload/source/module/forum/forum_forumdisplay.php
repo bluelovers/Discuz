@@ -589,6 +589,13 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 		}
 		*/
 		$thread['coverpath'] = getthreadcover($thread['tid'], $thread['cover']);
+
+		// bluelovers
+		if (empty($thread['cover'])) {
+			$thread['coverpath'] = 'forum.php?mod=ajax&action=getthreadcover&tid='.$thread['tid'];
+		}
+		// bluelovers
+
 		$thread['cover'] = abs($thread['cover']);
 	}
 	$thread['forumstick'] = in_array($thread['tid'], $forumstickytids);
