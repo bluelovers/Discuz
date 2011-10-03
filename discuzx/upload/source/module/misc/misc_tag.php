@@ -118,6 +118,8 @@ if($id || $name) {
 		}
 	}
 
+	shuffle($tagarray);
+
 	$tagarray_like = array();
 	if (!empty($tagname)) {
 		$query = DB::query("SELECT
@@ -132,6 +134,8 @@ if($id || $name) {
 			$tagarray_like[$result['tagid']] = $result;
 		}
 	}
+
+	shuffle($tagarray_like);
 	// bluelovers
 
 	include_once template('tag/tagitem');
