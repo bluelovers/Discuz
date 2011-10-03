@@ -364,9 +364,23 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	}
 
 	function ajax_getthreadcover() {
+		global $_G;
+
 		$_chk = $this->_get_mod_action(__METHOD__);
 
-		if ($GLOBALS['_G']['gp_action'] != $_chk['action']) return;
+		if ($_G['gp_action'] != $_chk['action']) return;
+
+		if ($_G['tid']) {
+			if ($_G['thread']['cover']) {
+				$_G['thread']['coverpath'] = getthreadcover($_G['tid'], $_G['thread']['cover']);
+			}
+
+			if ($_G['thread']['coverpath']) {
+				dheader('location: '.$_G['thread']['coverpath']);
+			}
+		}
+
+		exit();
 	}
 }
 
