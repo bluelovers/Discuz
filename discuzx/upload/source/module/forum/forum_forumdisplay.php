@@ -583,9 +583,11 @@ $todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
 $verify = $verifyuids = $grouptids = array();
 while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread = DB::fetch($query))) {
 	if($_G['forum']['picstyle'] && empty($_G['cookie']['forumdefstyle'])) {
+		/*
 		if($thread['fid'] != $_G['fid'] && empty($thread['cover'])) {
 			continue;
 		}
+		*/
 		$thread['coverpath'] = getthreadcover($thread['tid'], $thread['cover']);
 		$thread['cover'] = abs($thread['cover']);
 	}
