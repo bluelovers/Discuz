@@ -830,13 +830,35 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 					$tagid = $result['tagid'];
 				}
 			} else {
+				/*
 				DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
 				$tagid = DB::insert_id();
+				*/
+				// bluelovers
+				$tagid = DB::insert('common_tag', array(
+					'tagname' => $tagname,
+					'status' => 0,
+
+					'tag_author' => $_G['username'],
+					'tag_authorid' => $_G['uid'],
+					'tag_dateline' => TIMESTAMP,
+				), true);
+				// bluelovers
 			}
 			if($tagid) {
 				DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', '$typeid')");
 				$tagcount++;
 				$tagstr .= $tagid.','.$tagname.'\t';
+
+				// bluelovers
+				DB::update('common_tag', array(
+					'last_author' => $_G['username'],
+					'last_authorid' => $_G['uid'],
+					'last_dateline' => TIMESTAMP,
+				), array(
+					'tagid' => $tagid,
+				));
+				// bluelovers
 			}
 			if($tagcount > 4) {
 				unset($tagarray);
@@ -897,12 +919,34 @@ function modthreadtag($tags, $itemid) {
 						$tagid = $result['tagid'];
 					}
 				} else {
+					/*
 					DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
 					$tagid = DB::insert_id();
+					*/
+					// bluelovers
+					$tagid = DB::insert('common_tag', array(
+						'tagname' => $tagname,
+						'status' => 0,
+
+						'tag_author' => $_G['username'],
+						'tag_authorid' => $_G['uid'],
+						'tag_dateline' => TIMESTAMP,
+					), true);
+					// bluelovers
 				}
 				if($tagid) {
 					DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', 'tid')");
 					$tagstr = $tagstr.$tagid.','.$tagname.'\t';
+
+					// bluelovers
+					DB::update('common_tag', array(
+						'last_author' => $_G['username'],
+						'last_authorid' => $_G['uid'],
+						'last_dateline' => TIMESTAMP,
+					), array(
+						'tagid' => $tagid,
+					));
+					// bluelovers
 				}
 			}
 		}

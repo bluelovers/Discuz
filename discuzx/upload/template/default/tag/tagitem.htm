@@ -21,7 +21,15 @@
 <!--{subtpl subblock/common/body_ct_header}-->
 
 <div id="ct" class="wp cl">
-	<h1 class="mt"><img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $tagname</h1>
+	<h1 class="mt">
+
+		<form method="post" action="misc.php?mod=tag" class="pns" style="float: right;">
+			<input type="text" name="name" class="px vm" size="30" />&nbsp;
+			<button type="submit" class="pn vm"><em>{lang search}</em></button>
+		</form>
+
+		<img class="vm" src="{IMGDIR}/tag.gif" alt="tag" /> {lang tag}: $tagname
+	</h1>
 	<!--{if empty($showtype) || $showtype == 'thread'}-->
 		<div class="bm tl">
 			<div class="th">
@@ -142,6 +150,36 @@
 				<!--{else}-->
 					<p class="emp">{lang no_content}</p>
 				<!--{/if}-->
+			</div>
+		</div>
+	<!--{/if}-->
+
+	<!--{if $tagarray}-->
+		<div class="bm">
+			<div class="bm_h">
+				<h2>{lang related_tag}</h2>
+			</div>
+			<div class="bm_c">
+				<div class="taglist mtm mbm" style="min-height: 0;">
+					<!--{loop $tagarray $tag}-->
+						<a href="misc.php?mod=tag&id=$tag[tagid]" title="$tag[tagname]" target="_blank" class="xi2">$tag[tagname]</a>
+					<!--{/loop}-->
+				</div>
+			</div>
+		</div>
+	<!--{/if}-->
+
+	<!--{if $tagarray_like}-->
+		<div class="bm">
+			<div class="bm_h">
+				<h2>{lang related_tag_like}</h2>
+			</div>
+			<div class="bm_c">
+				<div class="taglist mtm mbm" style="min-height: 0;">
+					<!--{loop $tagarray_like $tag}-->
+						<a href="misc.php?mod=tag&id=$tag[tagid]" title="$tag[tagname]" target="_blank" class="xi2">$tag[tagname]</a>
+					<!--{/loop}-->
+				</div>
 			</div>
 		</div>
 	<!--{/if}-->
