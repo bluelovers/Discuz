@@ -37,6 +37,8 @@ if (!in_array($mod, array(
 ))) {
 	$discuz->reject_robot();
 }
+
+$discuz->reject_robot();
 // bluelovers
 
 $cachelist = array();
