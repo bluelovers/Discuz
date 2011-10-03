@@ -937,6 +937,16 @@ function modthreadtag($tags, $itemid) {
 				if($tagid) {
 					DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', 'tid')");
 					$tagstr = $tagstr.$tagid.','.$tagname.'\t';
+
+					// bluelovers
+					DB::update('common_tag', array(
+						'last_author' => $_G['username'],
+						'last_authorid' => $_G['uid'],
+						'last_dateline' => TIMESTAMP,
+					), array(
+						'tagid' => $tagid,
+					));
+					// bluelovers
 				}
 			}
 		}
