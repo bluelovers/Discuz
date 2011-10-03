@@ -366,6 +366,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 	function forumdisplay_getthreadcover_output() {
 		global $_G;
 
+		if (!$_G['forum']['picstyle'] || !empty($_G['cookie']['forumdefstyle'])) {
+			return;
+		}
+
 		foreach ($_G['forum_threadlist'] as $_k => $_v) {
 			if (empty($_v['cover'])) {
 				$_v['coverpath'] = 'forum.php?mod=ajax&action=getthreadcover&tid='.$_v['tid'];
