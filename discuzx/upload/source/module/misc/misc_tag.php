@@ -117,6 +117,20 @@ if($id || $name) {
 			$tagarray[$result['tagid']] = $result;
 		}
 	}
+
+	$tagarray_like = array();
+	if (!empty($tagname)) {
+		$query = DB::query("SELECT
+				t.*
+			FROM
+				".DB::table('common_tag')." t
+			WHERE
+				t.tagname LIKE '%".mysql_real_escape_string($tagname)."%'
+		");
+		while($result = DB::fetch($query)) {
+			$tagarray_like[$result['tagid']] = $result;
+		}
+	}
 	// bluelovers
 
 	include_once template('tag/tagitem');
