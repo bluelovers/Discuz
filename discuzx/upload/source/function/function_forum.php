@@ -830,8 +830,16 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 					$tagid = $result['tagid'];
 				}
 			} else {
+				/*
 				DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
 				$tagid = DB::insert_id();
+				*/
+				// bluelovers
+				$tagid = DB::insert('common_tag', array(
+					'tagname' => $tagname,
+					'status' => 0,
+				), true);
+				// bluelovers
 			}
 			if($tagid) {
 				DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', '$typeid')");
