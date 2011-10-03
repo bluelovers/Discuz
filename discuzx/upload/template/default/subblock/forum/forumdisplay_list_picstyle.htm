@@ -70,22 +70,27 @@
 <script>
 jQuery(function(){
 	jQuery('.tl .ml .tl_cover img')
-		.scoScale({
-			width : {$_G[setting][forumpicstyle][thumbwidth]},
-			height : {$_G[setting][forumpicstyle][thumbheight]},
-			mode : 'fill2',
-		})
-		.each(function(){
+		.load(function(){
 			var _this = jQuery(this);
 
 			_this
+				.scoScale({
+					width : {$_G[setting][forumpicstyle][thumbwidth]},
+					height : {$_G[setting][forumpicstyle][thumbheight]},
+					mode : 'fill2',
+				})
 				.css({
 					'margin-left' : ({$_G[setting][forumpicstyle][thumbwidth]} - _this.width()) / 2,
 					'margin-top' : ({$_G[setting][forumpicstyle][thumbheight]} - _this.height()) / 2,
 				})
 			;
 		})
-		;
+		error(function(){
+			var _this = jQuery(this);
+
+			_this.hide();
+		})
+	;
 });
 </script>
 
