@@ -226,6 +226,13 @@ if(!$requestmode) {
 	}
 
 	// bluelovers
+	if ($isimage
+		&& $_G['gp_redirectmsg']
+		&& !empty($_G['gp_noupdate'])
+	) {
+		$_G['gp_redirectmsg'] = 0;
+	}
+
 	if ($_G['gp_redirectmsg']) {
 		showmessage('attachment_credit', "forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10));
 	}
