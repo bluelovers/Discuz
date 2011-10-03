@@ -43,7 +43,7 @@
 
 										<!--{/if}-->
 
-										<span class="tl_cover{if !$thread['cover']}  nopic{/if}" alt="$thread[subject]">
+										<span class="tl_cover{if !$thread['cover'] || 1}  nopic{/if}" alt="$thread[subject]">
 											<!--{if $thread[coverpath]}-->
 												<img src="$thread[coverpath]" alt="$thread[subject]" />
 											<!--{/if}-->
