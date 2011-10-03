@@ -45,3 +45,8 @@
 							</li>
 							<!--{/loop}-->
 						</ul>
+
+						<!--{if !$_G['forum_threadlist'] || $thread['displayorder'] > 0}-->
+							<!-- 檢測不包含置頂主題的情況下主題列表是否為空 -->
+							<p class="emp">{lang forum_nothreads}</p>
+						<!--{/if}-->
