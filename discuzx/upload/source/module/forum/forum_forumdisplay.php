@@ -588,7 +588,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 			continue;
 		}
 		*/
-		$thread['coverpath'] = getthreadcover($thread['tid'], $thread['cover']);
+		$thread['coverpath'] = getthreadcover($thread['tid'], -1);
 		$thread['cover'] = abs($thread['cover']);
 	}
 	$thread['forumstick'] = in_array($thread['tid'], $forumstickytids);
