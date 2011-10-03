@@ -319,6 +319,11 @@ class discuz_core {
 	function reject_robot() {
 		if (
 			IS_ROBOT
+			// bluelovers
+			&& (
+				!defined('NOROBOT')
+			)
+			// bluelovers
 		) {
 			exit(header("HTTP/1.1 403 Forbidden"));
 		}
