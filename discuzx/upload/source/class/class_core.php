@@ -322,9 +322,7 @@ class discuz_core {
 			// bluelovers
 			&& (
 				!defined('NOROBOT')
-				/**
-				 * 允許通過定義 NOROBOT = false 來允許 robots 檢索
-				 */
+				// 允許通過定義 NOROBOT = false 來允許 robots 檢索
 				|| NOROBOT !== false
 			)
 			// bluelovers
