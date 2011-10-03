@@ -16,6 +16,10 @@ $type = trim($_G['gp_type']);
 $name = trim($_G['gp_name']);
 $page = intval($_G['gp_page']);
 
+// bluelovers
+discuz_core::$langplus[] = 'forum';
+// bluelovers
+
 $taglang = lang('tag/template', 'tag');
 if($id || $name) {
 
