@@ -841,12 +841,7 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 
 					'tag_author' => $_G['username'],
 					'tag_authorid' => $_G['uid'],
-					'tag_dateline' => TIMESTAMP,+
-
-					'last_author' => $_G['username'],
-					'last_authorid' => $_G['uid'],
-					'last_dateline' => TIMESTAMP,
-
+					'tag_dateline' => TIMESTAMP,
 				), true);
 				// bluelovers
 			}
