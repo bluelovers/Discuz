@@ -118,6 +118,24 @@ if($id || $name) {
 		}
 	}
 
+	if (!empty($blogidarray)) {
+		$_ids = dimplode($blogidarray);
+		$query = DB::query("SELECT
+				DISTINCT ti.tagid
+				, t.*
+			FROM
+				".DB::table('common_tagitem')." ti
+			LEFT JOIN
+				".DB::table('common_tag')." t On t.tagid = ti.tagid
+			WHERE
+				ti.idtype='blogid'
+				AND ti.itemid IN ($_ids)
+		");
+		while($result = DB::fetch($query)) {
+			$tagarray[$result['tagid']] = $result;
+		}
+	}
+
 	shuffle($tagarray);
 
 	$tagarray_like = array();
