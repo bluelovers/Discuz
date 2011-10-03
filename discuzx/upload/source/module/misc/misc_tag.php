@@ -125,6 +125,7 @@ if($id || $name) {
 			FROM
 				".DB::table('common_tag')." t
 			WHERE
+				t.tagname != '".addslashes($tagname)."' AND
 				t.tagname LIKE '%".mysql_real_escape_string($tagname)."%'
 		");
 		while($result = DB::fetch($query)) {
