@@ -45,7 +45,7 @@
 
 										<span class="tl_cover{if !$thread['cover']}  nopic{/if}" alt="$thread[subject]">
 											<!--{if $thread['cover']}-->
-												<img src="$thread[coverpath]" alt="$thread[subject]" onload="jQuery(this).show();" style="display: none;" />
+												<img src="$thread[coverpath]" alt="$thread[subject]" onerror="jQuery(this).hide();" />
 											<!--{/if}-->
 										</span>
 									</a>
