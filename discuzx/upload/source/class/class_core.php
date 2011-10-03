@@ -504,7 +504,18 @@ class discuz_core {
 	}
 
 	function reject_robot() {
-		if(IS_ROBOT) {
+		if (
+			IS_ROBOT
+			// bluelovers
+			&& (
+				!defined('NOROBOT')
+				/**
+				 * 允許通過定義 NOROBOT = false 來允許 robots 檢索
+				 */
+				|| NOROBOT !== false
+			)
+			// bluelovers
+		) {
 			exit(header("HTTP/1.1 403 Forbidden"));
 		}
 	}
