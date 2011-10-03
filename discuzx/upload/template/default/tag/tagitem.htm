@@ -146,6 +146,21 @@
 		</div>
 	<!--{/if}-->
 
+	<!--{if $tagarray}-->
+		<div class="bm">
+			<div class="bm_h">
+				<h2>{lang related_blog}</h2>
+			</div>
+			<div class="bm_c">
+				<div class="taglist mtm mbm">
+					<!--{loop $tagarray $tag}-->
+						<a href="misc.php?mod=tag&id=$tag[tagid]" title="$tag[tagname]" target="_blank" class="xi2">$tag[tagname]</a>
+					<!--{/loop}-->
+				</div>
+			</div>
+		</div>
+	<!--{/if}-->
+
 <!--修正缺少的 </div> - start -->
 </div>
 <!--修正缺少的 </div> - end -->
