@@ -363,6 +363,18 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		return $r;
 	}
 
+	function forumdisplay_getthreadcover_output() {
+		global $_G;
+
+		foreach ($_G['forum_threadlist'] as $_k => $_v) {
+			if (empty($_v['cover'])) {
+				$_v['coverpath'] = 'forum.php?mod=ajax&action=getthreadcover&tid='.$_v['tid'];
+
+				$_G['forum_threadlist'][$_k] = $_v;
+			}
+		}
+	}
+
 	function ajax_getthreadcover() {
 		global $_G;
 
@@ -396,6 +408,14 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 					if (!empty($m['src'])) {
 						$_G['thread']['coverpath'] = $m['src'];
 					}
+				}
+
+				if (
+					empty($_G['thread']['coverpath'])
+					&& $_G['thread']['attachment']
+					&& $attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." a WHERE a.pid IN ($post[pid]) AND isimage = '1' LIMIT 1")
+				) {
+					$_G['thread']['coverpath'] = 'forum.php?mod=attachment&aid='.aidencode($attach['aid'], 0, $attach['tid']).'&noupdate=yes';
 				}
 			}
 
