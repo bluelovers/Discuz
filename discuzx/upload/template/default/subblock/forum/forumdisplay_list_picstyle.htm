@@ -43,9 +43,9 @@
 
 										<!--{/if}-->
 
-										<span class="tl_cover{if !$thread['cover']}  nopic{/if}" alt="$thread[subject]">
+										<span class="tl_cover{if !$thread['cover'] || 1}  nopic{/if}" alt="$thread[subject]">
 											<!--{if $thread[coverpath]}-->
-												<img src="$thread[coverpath]" alt="$thread[subject]" onerror="jQuery(this).hide();" />
+												<img src="$thread[coverpath]" alt="$thread[subject]" />
 											<!--{/if}-->
 										</span>
 									</a>
@@ -70,22 +70,28 @@
 <script>
 jQuery(function(){
 	jQuery('.tl .ml .tl_cover img')
-		.scoScale({
-			width : {$_G[setting][forumpicstyle][thumbwidth]},
-			height : {$_G[setting][forumpicstyle][thumbheight]},
-			mode : 'fill2',
-		})
-		.each(function(){
+		.load(function(){
 			var _this = jQuery(this);
 
 			_this
+				.scoScale({
+					width : {$_G[setting][forumpicstyle][thumbwidth]},
+					height : {$_G[setting][forumpicstyle][thumbheight]},
+					mode : 'fill2',
+				})
 				.css({
 					'margin-left' : ({$_G[setting][forumpicstyle][thumbwidth]} - _this.width()) / 2,
 					'margin-top' : ({$_G[setting][forumpicstyle][thumbheight]} - _this.height()) / 2,
 				})
+				.show()
 			;
 		})
-		;
+		error(function(){
+			var _this = jQuery(this);
+
+			_this.hide();
+		})
+	;
 });
 </script>
 
