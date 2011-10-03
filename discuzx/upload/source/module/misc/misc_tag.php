@@ -98,6 +98,27 @@ if($id || $name) {
 
 	}
 
+	// bluelovers
+	$taglist = array();
+	if (!empty($tidarray)) {
+		$_ids = dimplode($tidarray);
+		$query = DB::query("SELECT
+				DISTINCT ti.tagid
+				, t.*
+			FROM
+				".DB::table('common_tagitem')." ti
+			LEFT JOIN
+				".DB::table('common_tag')." t On t.tagid = ti.tagid
+			WHERE
+				ti.idtype='tid'
+				AND ti.itemid IN ($_ids)
+		");
+		while($result = DB::fetch($query)) {
+			$taglist[$result['tagid']] = $result;
+		}
+	}
+	// bluelovers
+
 	include_once template('tag/tagitem');
 
 } else {
