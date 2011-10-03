@@ -346,6 +346,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'hook_key' => $hook_key,
 		)).$hook_ret;
 	}
+
+	function ajax_getthreadcover() {
+		if ($GLOBALS['_G']['gp_action'] != 'getthreadcover') return;
+	}
 }
 
 ?>
