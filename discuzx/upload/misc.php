@@ -31,6 +31,14 @@ if(in_array($mod, array('seccode', 'secqaa', 'initsys', 'faq', 'swfupload', 'mob
 	define('ALLOWGUEST', 1);
 }
 
+// bluelovers
+if (!in_array($mod, array(
+	'tag'
+))) {
+	$discuz->reject_robot();
+}
+// bluelovers
+
 $cachelist = array();
 if(isset($modcachelist[$mod])) {
 	$cachelist = $modcachelist[$mod];
