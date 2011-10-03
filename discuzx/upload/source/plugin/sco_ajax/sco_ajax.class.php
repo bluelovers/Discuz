@@ -413,7 +413,12 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 				if (
 					empty($_G['thread']['coverpath'])
 					&& $_G['thread']['attachment']
-					&& $attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." a WHERE a.pid IN ($post[pid]) AND isimage = '1' LIMIT 1")
+					&& $attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." a WHERE
+							a.pid = '$post[pid]'
+							AND a.isimage = '1'
+							AND a.price = '0'
+							AND a.readperm = '0'
+						LIMIT 1")
 				) {
 					$_G['thread']['coverpath'] = 'forum.php?mod=attachment&aid='.aidencode($attach['aid'], 0, $attach['tid']).'&noupdate=yes';
 				}
