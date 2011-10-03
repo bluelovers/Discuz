@@ -152,8 +152,23 @@
 				<h2>{lang related_tag}</h2>
 			</div>
 			<div class="bm_c">
-				<div class="taglist mtm mbm">
+				<div class="taglist mtm mbm" style="min-height: 0;">
 					<!--{loop $tagarray $tag}-->
+						<a href="misc.php?mod=tag&id=$tag[tagid]" title="$tag[tagname]" target="_blank" class="xi2">$tag[tagname]</a>
+					<!--{/loop}-->
+				</div>
+			</div>
+		</div>
+	<!--{/if}-->
+
+	<!--{if $tagarray_like}-->
+		<div class="bm">
+			<div class="bm_h">
+				<h2>{lang related_tag_like}</h2>
+			</div>
+			<div class="bm_c">
+				<div class="taglist mtm mbm" style="min-height: 0;">
+					<!--{loop $tagarray_like $tag}-->
 						<a href="misc.php?mod=tag&id=$tag[tagid]" title="$tag[tagname]" target="_blank" class="xi2">$tag[tagname]</a>
 					<!--{/loop}-->
 				</div>
