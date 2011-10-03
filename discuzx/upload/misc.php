@@ -32,11 +32,13 @@ if(in_array($mod, array('seccode', 'secqaa', 'initsys', 'faq', 'swfupload', 'mob
 }
 
 // bluelovers
-if (!in_array($mod, array(
+if (in_array($mod, array(
 	'tag'
 ))) {
-	$discuz->reject_robot();
+	define('NOROBOT', false);
 }
+
+$discuz->reject_robot();
 // bluelovers
 
 $cachelist = array();
