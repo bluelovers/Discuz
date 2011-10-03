@@ -854,6 +854,16 @@ function addthreadtag($tags, $itemid , $typeid = 'tid') {
 				DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', '$typeid')");
 				$tagcount++;
 				$tagstr .= $tagid.','.$tagname.'\t';
+
+				// bluelovers
+				DB::update('common_tag', array(
+					'last_author' => $_G['username'],
+					'last_authorid' => $_G['uid'],
+					'last_dateline' => TIMESTAMP,
+				), array(
+					'tagid' => $tagid,
+				));
+				// bluelovers
 			}
 			if($tagcount > 4) {
 				unset($tagarray);
