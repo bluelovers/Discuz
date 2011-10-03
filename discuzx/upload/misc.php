@@ -15,7 +15,9 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
+/*
 $discuz->reject_robot();
+*/
 $modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist', 'buyinvitecode', 'tag', 'diyhelp', 'mobile');
 
 $modcachelist = array(
@@ -28,6 +30,14 @@ $mod = (empty($mod) || !in_array($mod, $modarray)) ? 'error' : $mod;
 if(in_array($mod, array('seccode', 'secqaa', 'initsys', 'faq', 'swfupload', 'mobile'))) {
 	define('ALLOWGUEST', 1);
 }
+
+// bluelovers
+if (!in_array($mod, array(
+	'tag'
+))) {
+	$discuz->reject_robot();
+}
+// bluelovers
 
 $cachelist = array();
 if(isset($modcachelist[$mod])) {
