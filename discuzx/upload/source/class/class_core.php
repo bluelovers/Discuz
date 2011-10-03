@@ -322,6 +322,7 @@ class discuz_core {
 			// bluelovers
 			&& (
 				!defined('NOROBOT')
+				|| NOROBOT !== false
 			)
 			// bluelovers
 		) {
