@@ -374,7 +374,7 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			if (empty($_v['cover'])) {
 				$_v['coverpath'] = 'forum.php?mod=ajax&action=getthreadcover&tid='.$_v['tid'];
 
-				$_v['cover'] = 10;
+				//$_v['cover'] = 10;
 
 				$_G['forum_threadlist'][$_k] = $_v;
 			}
