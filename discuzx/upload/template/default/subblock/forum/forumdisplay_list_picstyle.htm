@@ -92,7 +92,7 @@ jQuery(function(){
 		})
 		.each(function(){
 			if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
-				jQuery(this).triggerHandler('load');
+				jQuery(this).trigger('load');
 			}
 		})
 	;
