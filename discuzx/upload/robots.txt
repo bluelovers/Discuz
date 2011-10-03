@@ -26,5 +26,4 @@ Disallow: /*?mod=misc*
 Disallow: /*?mod=attachment*
 Disallow: /*mobile=yes*
 
-# 允許檢索 tag
 allow: /*?mod=tag*
