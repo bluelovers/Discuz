@@ -99,7 +99,7 @@ if($id || $name) {
 	}
 
 	// bluelovers
-	$taglist = array();
+	$tagarray = array();
 	if (!empty($tidarray)) {
 		$_ids = dimplode($tidarray);
 		$query = DB::query("SELECT
@@ -114,7 +114,7 @@ if($id || $name) {
 				AND ti.itemid IN ($_ids)
 		");
 		while($result = DB::fetch($query)) {
-			$taglist[$result['tagid']] = $result;
+			$tagarray[$result['tagid']] = $result;
 		}
 	}
 	// bluelovers
