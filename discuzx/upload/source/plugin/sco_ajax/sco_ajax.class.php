@@ -373,6 +373,30 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 		if ($_G['tid']) {
 			if ($_G['thread']['cover']) {
 				$_G['thread']['coverpath'] = getthreadcover($_G['tid'], $_G['thread']['cover']);
+			} else {
+				$post = DB::fetch_first("SELECT
+						p.*
+					FROM
+						".DB::table($_G['thread']['posttable'])." p
+					WHERE
+						p.first = '1'
+						AND p.tid = '{$_G[tid]}'
+					LIMIT 1
+				");
+
+				$str = $post['message'];
+
+				$str = preg_replace(array(
+					"/\[hide=?\d*\](.*?)\[\/hide\]/is",
+				), array(
+					'',
+				), $str);
+
+				if (preg_match("/\[img(?:\=[^\]]+)?\]\s*(?P<src>[^\[\<\r\n]+?)\s*\[\/img\]/is", $str, $m)) {
+					if (!empty($m['src'])) {
+						$_G['thread']['coverpath'] = $m['src'];
+					}
+				}
 			}
 
 			if ($_G['thread']['coverpath']) {
