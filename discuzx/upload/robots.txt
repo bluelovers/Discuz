@@ -18,7 +18,7 @@ Disallow: /member.php
 Disallow: /api.php
 Disallow: /misc.php
 Disallow: /connect.php
-Disallow: /forum.php?mod=redirect*
+#Disallow: /forum.php?mod=redirect*
 Disallow: /forum.php?mod=post*
 Disallow: /home.php?mod=spacecp*
 Disallow: /userapp.php?mod=app&*
