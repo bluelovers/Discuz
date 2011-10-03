@@ -346,6 +346,97 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 			'hook_key' => $hook_key,
 		)).$hook_ret;
 	}
+
+	function _get_mod_action($method) {
+		$a = explode('::', $method);
+		$k = array_pop($a);
+
+		$a = $a[0];
+
+		$r = array();
+
+		if (preg_match('/^(?P<mod>[^_]+)_(?P<action>[\w_]+)(?P<output>_output)?$/', $k, $m)) {
+   			$r['mod'] = $m['mod'];
+   			$r['action'] = $m['output'] ? $m['action'] : preg_replace('/_output$/', '', $m['action']);
+		}
+
+		return $r;
+	}
+
+	function forumdisplay_getthreadcover_output() {
+		global $_G;
+
+		if (!$_G['forum']['picstyle'] || !empty($_G['cookie']['forumdefstyle'])) {
+			return;
+		}
+
+		foreach ($_G['forum_threadlist'] as $_k => $_v) {
+			if (empty($_v['cover'])) {
+				$_v['coverpath'] = 'forum.php?mod=ajax&action=getthreadcover&tid='.$_v['tid'];
+
+				$_v['cover'] = 10;
+
+				$_G['forum_threadlist'][$_k] = $_v;
+			}
+		}
+	}
+
+	function ajax_getthreadcover() {
+		global $_G;
+
+		$_chk = $this->_get_mod_action(__METHOD__);
+
+		if ($_G['gp_action'] != $_chk['action']) return;
+
+		if ($_G['tid']) {
+			if ($_G['thread']['cover']) {
+				$_G['thread']['coverpath'] = getthreadcover($_G['tid'], $_G['thread']['cover']);
+			} else {
+				$post = DB::fetch_first("SELECT
+						p.*
+					FROM
+						".DB::table($_G['thread']['posttable'])." p
+					WHERE
+						p.first = '1'
+						AND p.tid = '{$_G[tid]}'
+					LIMIT 1
+				");
+
+				$str = $post['message'];
+
+				$str = preg_replace(array(
+					"/\[hide=?\d*\](.*?)\[\/hide\]/is",
+				), array(
+					'',
+				), $str);
+
+				if (preg_match("/\[img(?:\=[^\]]+)?\]\s*(?P<src>[^\[\<\r\n]+?)\s*\[\/img\]/is", $str, $m)) {
+					if (!empty($m['src'])) {
+						$_G['thread']['coverpath'] = $m['src'];
+					}
+				}
+
+				if (
+					empty($_G['thread']['coverpath'])
+					&& $_G['thread']['attachment']
+					&& $attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." a WHERE
+							a.pid = '$post[pid]'
+							AND a.isimage = '1'
+							AND a.price = '0'
+							AND a.readperm = '0'
+						LIMIT 1")
+				) {
+					$_G['thread']['coverpath'] = 'forum.php?mod=attachment&aid='.aidencode($attach['aid'], 0, $attach['tid']).'&noupdate=yes';
+				}
+			}
+
+			if ($_G['thread']['coverpath']) {
+				dheader('location: '.$_G['thread']['coverpath']);
+			}
+		}
+
+		exit();
+	}
 }
 
 ?>

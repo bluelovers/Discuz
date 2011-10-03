@@ -1,0 +1,95 @@
+<!-- for forumdisplay_list -->
+
+<style>
+.tl .tl_cover {
+	overflow: hidden;
+	display: block;
+
+	width: {$_G[setting][forumpicstyle][thumbwidth]}px;
+	height: {$_G[setting][forumpicstyle][thumbheight]}px;
+}
+</style>
+
+						<ul class="ml mlt mtw cl">
+							<!--{loop $_G['forum_threadlist'] $key $thread}-->
+							<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
+								<!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
+									<!--{eval $thread[tid]=$thread[closed];}-->
+								<!--{/if}-->
+							<!--{/if}-->
+							<li style="width:{$_G[setting][forumpicstyle][thumbwidth]}px;">
+								<!--{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}-->
+									<div style="position: absolute;padding:2px;background:#FFF">
+									<!--{if $thread['fid'] == $_G[fid]}-->
+										<!--{if $thread['displayorder'] <= 3 || $_G['adminid'] == 1}-->
+											<input onclick="tmodclick(this)" type="checkbox" name="moderate[]" value="$thread[tid]" />
+										<!--{else}-->
+											<input type="checkbox" disabled="disabled" />
+										<!--{/if}-->
+									<!--{else}-->
+										<input type="checkbox" disabled="disabled" />
+									<!--{/if}-->
+									</div>
+								<!--{/if}-->
+								<div class="c cl">
+									<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" {if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]" class="z">
+										<!--{if 0}-->
+
+										<!--{if $thread['cover']}-->
+											<img src="$thread[coverpath]" alt="$thread[subject]" width="{$_G[setting][forumpicstyle][thumbwidth]}" height="{$_G[setting][forumpicstyle][thumbheight]}" />
+										<!--{else}-->
+											<span class="nopic" style="width:{$_G[setting][forumpicstyle][thumbwidth]}px; height:{$_G[setting][forumpicstyle][thumbheight]}px;"></span>
+										<!--{/if}-->
+
+										<!--{/if}-->
+
+										<span class="tl_cover{if !$thread['cover']}  nopic{/if}" alt="$thread[subject]">
+											<!--{if $thread[coverpath]}-->
+												<img src="$thread[coverpath]" alt="$thread[subject]" onerror="jQuery(this).hide();" />
+											<!--{/if}-->
+										</span>
+									</a>
+								</div>
+								<h3 class="ptn" style="width: {$_G[setting][forumpicstyle][thumbwidth]}px;"><a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]"><!--{if in_array($thread['displayorder'], array(1, 2, 3, 4))}-->[{lang thread_stick}] <!--{/if}-->$thread[subject]</a></h3>
+								<div class="cl">
+									<!--{if $thread['cover']}--><em class="sum y xs0 xi1 xw1" title="$thread[cover] {lang pics}">$thread[cover]</em><!--{/if}-->
+									<!--{if $thread['authorid'] && $thread['author']}-->
+										<a href="home.php?mod=space&uid=$thread[authorid]">$thread[author]</a><!--{if !empty($verify[$thread['authorid']])}--> $verify[$thread[authorid]]<!--{/if}-->
+									<!--{else}-->
+										$_G[setting][anonymoustext]
+									<!--{/if}-->
+								</div>
+								<div class="cl">
+									<em class="y xs0"><a href="forum.php?mod=viewthread&tid=$thread[tid]&extra=$extra" class="xi2" title="$thread[replies] {lang reply}">$thread[replies]</a> / <em title="{if $thread['isgroup'] != 1}$thread[views]{else}{$groupnames[$thread[tid]][views]}{/if} {lang show}"><!--{if $thread['isgroup'] != 1}-->$thread[views]<!--{else}-->{$groupnames[$thread[tid]][views]}<!--{/if}--></em></em>
+									<em class="xs0{if $thread['istoday']} xi1{/if}">$thread[dateline]</em>
+								</div>
+							</li>
+							<!--{/loop}-->
+						</ul>
+
+<script>
+jQuery(function(){
+	jQuery('.tl .ml .tl_cover img')
+		.scoScale({
+			width : {$_G[setting][forumpicstyle][thumbwidth]},
+			height : {$_G[setting][forumpicstyle][thumbheight]},
+			mode : 'fill2',
+		})
+		.each(function(){
+			var _this = jQuery(this);
+
+			_this
+				.css({
+					'margin-left' : ({$_G[setting][forumpicstyle][thumbwidth]} - _this.width()) / 2,
+					'margin-top' : ({$_G[setting][forumpicstyle][thumbheight]} - _this.height()) / 2,
+				})
+			;
+		})
+		;
+});
+</script>
+
+						<!--{if !$_G['forum_threadlist'] || $thread['displayorder'] > 0}-->
+							<!-- 檢測不包含置頂主題的情況下主題列表是否為空 -->
+							<p class="emp">{lang forum_nothreads}</p>
+						<!--{/if}-->
