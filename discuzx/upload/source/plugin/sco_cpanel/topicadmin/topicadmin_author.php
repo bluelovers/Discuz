@@ -13,7 +13,9 @@ if (!$_G['uid'] || $_G['adminid'] != 1) {
 	showmessage('admin_nopermission', NULL);
 }
 
-$authoridnew = $_G['gp_authoridnew'];
+$authoridnew = &$_G['gp_authoridnew'];
+
+$authoridnew = intval($authoridnew);
 
 if (!submitcheck('modsubmit')) {
 
@@ -25,6 +27,12 @@ if (!submitcheck('modsubmit')) {
 	discuz_core::$tpl['forum']['topicadmin_action'][$_G['gp_action']] = $_p->_fetch_template($_p->_template('forum/topicadmin_action_author'));
 
 	include template('forum/topicadmin_action');
+} else {
+
+	if (empty($authoridnew)) {
+		showmessage('admin_author_authoridnew_invalid');
+	}
+
 }
 
 ?>
