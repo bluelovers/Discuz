@@ -112,4 +112,10 @@ Array
 
 }
 
+class plugin_sco_cpanel_forum extends plugin_sco_cpanel {
+
+
+
+}
+
 ?>
