@@ -43,6 +43,39 @@ if (!submitcheck('modsubmit')) {
 		}
 	}
 
+	$_tables = array(
+		'authorid' => array(
+			'forum_thread_rewardlog',
+			'forum_thread',
+			'forum_forumrecommend',
+
+			'forum_post',
+		),
+
+		'author' => array(
+			'forum_thread',
+			'forum_forumrecommend',
+
+			'forum_post',
+		),
+
+		'uid' => array(
+			'forum_attachment',
+			'home_feed',
+		),
+		'username' => array(
+			'home_feed',
+		),
+
+		'sellerid' => array(
+			'forum_trade',
+			'forum_tradelog',
+		),
+		'seller' => array(
+			'forum_trade',
+			'forum_tradelog',
+		),
+	);
 }
 
 ?>
