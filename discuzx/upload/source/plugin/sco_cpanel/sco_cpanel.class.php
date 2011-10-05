@@ -135,10 +135,10 @@ EOM;
 	function _hook_topicadmin_author($_EVENT, $_conf) {
 		global $_G;
 
-		if (!$conf['topicadminfile_exists']
+		if (!$_conf['topicadminfile_exists']
 			&& $_G['gp_action'] == 'author'
 		) {
-			$conf['topicadminfile_exists'] = file_exists($conf['topicadminfile'] = libfile('topicadmin/'.$_G['gp_action'], 'plugin/sco_cpanel'));
+			$_conf['topicadminfile_exists'] = file_exists($_conf['topicadminfile'] = libfile('topicadmin/'.$_G['gp_action'], 'plugin/sco_cpanel'));
 		}
 	}
 
