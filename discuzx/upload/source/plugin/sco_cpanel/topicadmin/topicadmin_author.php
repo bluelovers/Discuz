@@ -29,8 +29,18 @@ if (!submitcheck('modsubmit')) {
 	include template('forum/topicadmin_action');
 } else {
 
+	include_once libfile('function/home');
+
+	$authornew = array();
+
 	if (empty($authoridnew)) {
 		showmessage('admin_author_authoridnew_invalid');
+	} elseif ($authoridnew > 0) {
+		$authornew = getspace($authoridnew);
+
+		if (!$authornew['uid'] || $authornew['uid'] != $authoridnew) {
+			showmessage('admin_author_authoridnew_invalid');
+		}
 	}
 
 }
