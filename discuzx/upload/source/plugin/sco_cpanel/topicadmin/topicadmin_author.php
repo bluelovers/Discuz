@@ -9,7 +9,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if (!$_G['uid'] || 1) {
+if (!$_G['uid'] || $_G['adminid'] != 1) {
 	showmessage('admin_nopermission', NULL);
 }
 
