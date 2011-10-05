@@ -124,6 +124,24 @@ EOM;
 		return $ret;
 	}
 
+	function topicadmin_author() {
+		$this->_hook(
+			'Script_forum_topicadmin:Before_topicadminfile', array(
+				$this,
+				'_hook_topicadmin_author'
+		));
+	}
+
+	function _hook_topicadmin_author($_EVENT, $_conf) {
+		global $_G;
+
+		if (!$conf['topicadminfile_exists']
+			&& $_G['gp_action'] == 'author'
+		) {
+			$conf['topicadminfile_exists'] = file_exists($conf['topicadminfile'] = libfile('topicadmin/'.$_G['gp_action'], 'plugin/sco_cpanel'));
+		}
+	}
+
 }
 
 ?>
