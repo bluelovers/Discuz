@@ -159,6 +159,8 @@
 					<li><label><input type="radio" name="stickreply" class="pr" value="1"{if empty($_G['gp_undo'])} checked="checked"{/if}/>{lang admin_stickreply} </label></li>
 					<li><label><input type="radio" name="stickreply" class="pr" value="0"{if !empty($_G['gp_undo'])} checked="checked"{/if}/>{lang admin_unstickreply} </label></li>
 				</ul>
+			<!--{else}-->
+				<!--{subtpl subblock/forum/topicadmin_action_else}-->
 			<!--{/if}-->
 			</div>
 			<div class="tpclg">
