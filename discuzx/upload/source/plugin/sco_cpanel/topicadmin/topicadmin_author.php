@@ -41,6 +41,24 @@ if (!submitcheck('modsubmit')) {
 		if (!$authornew['uid'] || $authornew['uid'] != $authoridnew) {
 			showmessage('admin_author_authoridnew_invalid');
 		}
+	} else {
+		$_groupid = 18;
+
+		$authornew = DB::fetch_first("
+			SELECT *
+			FROM ".DB::table('common_member')."
+			WHERE
+				`groupid` = '{$_groupid}'
+			ORDER BY
+				RAND()
+			LIMIT 1
+		");
+
+		if (!$authornew['uid']) {
+			showmessage('admin_author_authoridnew_invalid');
+		} else {
+			$authoridnew = $authornew['uid'];
+		}
 	}
 
 	$_tables = array(
