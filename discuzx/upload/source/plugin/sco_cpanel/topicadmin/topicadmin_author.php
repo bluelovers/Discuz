@@ -21,6 +21,8 @@ $authoridnew = &$_G['gp_authoridnew'];
 
 $authoridnew = intval($authoridnew);
 
+$tid = $thread['tid'];
+
 if (!submitcheck('modsubmit')) {
 
 	include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
@@ -65,8 +67,65 @@ if (!submitcheck('modsubmit')) {
 		}
 	}
 
-	$authornew['username'] = daddslashes($authornew['username']);
+	$authornew = daddslashes($authornew);
 
+	$posttable = getposttablebytid($tid);
+
+	$firstpost = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first = '1' LIMIT 1");
+
+	DB::update($posttable, array(
+		'author' => $authornew['username'],
+		'authorid' => $authornew['uid'],
+	), array(
+		'tid' => $tid,
+		'authorid' => $thread['authorid'],
+	));
+
+	foreach(array(
+		'forum_thread',
+		'forum_forumrecommend',
+	) as $_t) {
+		DB::update($_t, array(
+			'author' => $authornew['username'],
+			'authorid' => $authornew['uid'],
+		), array(
+			'tid' => $tid,
+		));
+	}
+
+	foreach(array(
+		'forum_attachment',
+		getattachtablebytid($tid),
+	) as $_t) {
+		DB::update($_t, array(
+			'uid' => $authornew['uid'],
+		), "tid = '$tid'
+			AND (
+				uid = '$thread[authorid]'
+				OR pid = '$firstpost[pid]'
+			)
+		");
+	}
+
+		DB::update('forum_thread_rewardlog', array(
+			'authorid' => $authornew['uid'],
+		), array(
+			'tid' => $tid,
+		));
+
+	foreach(array(
+		'forum_trade',
+		'forum_tradelog',
+	) as $_t) {
+		DB::update($_t, array(
+			'seller' => $authornew['username'],
+			'sellerid' => $authornew['uid'],
+		), array(
+			'tid' => $tid,
+		));
+	}
+
+	/*
 	$_tables = array(
 		'authorid' => array(
 			'forum_thread_rewardlog',
@@ -100,6 +159,7 @@ if (!submitcheck('modsubmit')) {
 			'forum_tradelog',
 		),
 	);
+	*/
 }
 
 ?>
