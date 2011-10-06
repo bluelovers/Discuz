@@ -13,6 +13,10 @@ if (!$_G['uid'] || $_G['adminid'] != 1) {
 	showmessage('admin_nopermission', NULL);
 }
 
+if (!$thread) {
+	showmessage('admin_nopermission', NULL);
+}
+
 $authoridnew = &$_G['gp_authoridnew'];
 
 $authoridnew = intval($authoridnew);
@@ -60,6 +64,8 @@ if (!submitcheck('modsubmit')) {
 			$authoridnew = $authornew['uid'];
 		}
 	}
+
+	$authornew['username'] = daddslashes($authornew['username']);
 
 	$_tables = array(
 		'authorid' => array(
