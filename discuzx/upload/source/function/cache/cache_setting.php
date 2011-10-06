@@ -949,6 +949,16 @@ function get_cachedata_spacenavs() {
 		if(!$nav['type'] && $nav['allowsubnew']) {
 			if($nav['identifier'] == 'share') {
 				$nav['extra'] = ' onclick="showWindow(\'share\', this.href, \'get\', 0);return false;"';
+
+			// bluelovers
+			} elseif($nav['identifier'] == 'doing') {
+				$nav['extra'] = ' onclick="showWindow(\'share\', this.href, \'get\', 0);return false;"';
+
+				if (empty($nav['suburl'])) {
+					$nav['suburl'] = 'home.php?mod=spacecp&ac='.$nav['identifier'];
+				}
+			// bluelovers
+
 			} elseif($nav['identifier'] == 'thread') {
 				$nav['extra'] = ' onclick="showWindow(\'nav\', this.href);return false;"';
 			} elseif($nav['identifier'] == 'thread') {
