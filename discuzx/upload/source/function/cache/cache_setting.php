@@ -952,7 +952,7 @@ function get_cachedata_spacenavs() {
 
 			// bluelovers
 			} elseif($nav['identifier'] == 'doing') {
-				$nav['extra'] = ' onclick="showWindow(\'share\', this.href, \'get\', 0);return false;"';
+				$nav['extra'] = ' onclick="showWindow(\''.$nav['identifier'].'\', this.href, \'get\', 0);return false;"';
 
 				if (empty($nav['suburl'])) {
 					$nav['suburl'] = 'home.php?mod=spacecp&ac='.$nav['identifier'];
