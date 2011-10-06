@@ -120,59 +120,60 @@ if (!submitcheck('modsubmit')) {
 		if (empty($_pids) || count($_pids) != count($topiclist)) {
 			showmessage('admin_author_topiclist_invalid');
 		}
+
 	} else {
 
-	DB::update($posttable, array(
-		'author' => $authornew['username'],
-		'authorid' => $authornew['uid'],
-	), array(
-		'tid' => $tid,
-		'authorid' => $thread['authorid'],
-	));
-
-	foreach(array(
-		'forum_thread',
-		'forum_forumrecommend',
-	) as $_t) {
-		DB::update($_t, array(
+		DB::update($posttable, array(
 			'author' => $authornew['username'],
 			'authorid' => $authornew['uid'],
 		), array(
 			'tid' => $tid,
-		));
-	}
-
-	foreach(array(
-		'forum_attachment',
-		getattachtablebytid($tid),
-	) as $_t) {
-		DB::update($_t, array(
-			'uid' => $authornew['uid'],
-		), "tid = '$tid'
-			AND (
-				uid = '$thread[authorid]'
-				OR pid = '$firstpost[pid]'
-			)
-		");
-	}
-
-		DB::update('forum_thread_rewardlog', array(
-			'authorid' => $authornew['uid'],
-		), array(
-			'tid' => $tid,
+			'authorid' => $thread['authorid'],
 		));
 
-	foreach(array(
-		'forum_trade',
-		'forum_tradelog',
-	) as $_t) {
-		DB::update($_t, array(
-			'seller' => $authornew['username'],
-			'sellerid' => $authornew['uid'],
-		), array(
-			'tid' => $tid,
-		));
-	}
+		foreach(array(
+			'forum_thread',
+			'forum_forumrecommend',
+		) as $_t) {
+			DB::update($_t, array(
+				'author' => $authornew['username'],
+				'authorid' => $authornew['uid'],
+			), array(
+				'tid' => $tid,
+			));
+		}
+
+		foreach(array(
+			'forum_attachment',
+			getattachtablebytid($tid),
+		) as $_t) {
+			DB::update($_t, array(
+				'uid' => $authornew['uid'],
+			), "tid = '$tid'
+				AND (
+					uid = '$thread[authorid]'
+					OR pid = '$firstpost[pid]'
+				)
+			");
+		}
+
+			DB::update('forum_thread_rewardlog', array(
+				'authorid' => $authornew['uid'],
+			), array(
+				'tid' => $tid,
+			));
+
+		foreach(array(
+			'forum_trade',
+			'forum_tradelog',
+		) as $_t) {
+			DB::update($_t, array(
+				'seller' => $authornew['username'],
+				'sellerid' => $authornew['uid'],
+			), array(
+				'tid' => $tid,
+			));
+		}
 
 	}
 
