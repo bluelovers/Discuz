@@ -36,7 +36,9 @@ if (!submitcheck('modsubmit')) {
 	$_p = new _sco_dx_plugin();
 	$_p->identifier = 'sco_cpanel';
 
-	discuz_core::$tpl['forum']['topicadmin_action'][$_G['gp_action']] = $_p->_fetch_template($_p->_template('forum/topicadmin_action_author'));
+	discuz_core::$tpl['forum']['topicadmin_action'][$_G['gp_action']] = $_p->_fetch_template($_p->_template('forum/topicadmin_action_author'), array(
+		'topiclist' => $topiclist,
+	));
 
 	include template('forum/topicadmin_action');
 } else {
