@@ -89,6 +89,10 @@
 								<!--{if $_G['group']['allowstickreply']}--><a href="javascript:;" onclick="modaction('stickreply')">{lang modmenu_stickpost}</a><span class="pipe">|</span><!--{/if}-->
 							<!--{/if}-->
 							<!--{if $_G['forum_thread']['pushedaid'] && $allowpostarticle}--><a href="javascript:;" onclick="modaction('pushplus', '', 'aid=$_G[forum_thread][pushedaid]', 'portal.php?mod=portalcp&ac=article&op=pushplus')">{lang modmenu_pushplus}</a><span class="pipe">|</span><!--{/if}-->
+
+							<!--bluelovers-->
+							<!--{hook/viewthread_modoption_post}-->
+							<!--bluelovers-->
 						</div>
 					</div>
 				</td>
