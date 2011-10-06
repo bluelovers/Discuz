@@ -39,6 +39,10 @@ if ($modpostsnum == 1) {
 		unset($topiclist);
 		$modpostsnum = 0;
 	}
+
+	if ($_post['tid'] != $tid) {
+		showmessage('admin_nopermission', NULL);
+	}
 }
 
 if (!submitcheck('modsubmit')) {
