@@ -23,6 +23,12 @@ $authoridnew = intval($authoridnew);
 
 $tid = $thread['tid'];
 
+$topiclist = (array)$_G['gp_topiclist'];
+if (!empty($topiclist)) {
+	$topiclist = array_map('intval', $topiclist);
+	$topiclist = array_unique($topiclist);
+}
+
 if (!submitcheck('modsubmit')) {
 
 	include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
