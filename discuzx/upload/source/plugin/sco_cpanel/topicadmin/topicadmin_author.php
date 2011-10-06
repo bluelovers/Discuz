@@ -156,6 +156,7 @@ if (!submitcheck('modsubmit')) {
 		}
 
 	} else {
+		// 支援處理單一 thread 以及 所有主題發表者所發表的 post
 
 		DB::update($posttable, array(
 			'author' => $authornew['username'],
