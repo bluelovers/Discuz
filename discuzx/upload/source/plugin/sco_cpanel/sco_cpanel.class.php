@@ -112,4 +112,40 @@ Array
 
 }
 
+class plugin_sco_cpanel_forum extends plugin_sco_cpanel {
+
+	function viewthread_modoption_output() {
+
+		$ret = <<<EOM
+<a onclick="modaction('author');return false;" href="javascript:void(0);">作者</a>
+<span class="pipe">|</span>
+EOM;
+
+		return $ret;
+	}
+
+	function viewthread_modoption_post_output() {
+		return $this->viewthread_modoption_output();
+	}
+
+	function topicadmin_author() {
+		$this->_hook(
+			'Script_forum_topicadmin:Before_topicadminfile', array(
+				$this,
+				'_hook_topicadmin_author'
+		));
+	}
+
+	function _hook_topicadmin_author($_EVENT, $_conf) {
+		global $_G;
+
+		if (!$_conf['topicadminfile_exists']
+			&& $_G['gp_action'] == 'author'
+		) {
+			$_conf['topicadminfile_exists'] = file_exists($_conf['topicadminfile'] = libfile('topicadmin/'.$_G['gp_action'], 'plugin/sco_cpanel'));
+		}
+	}
+
+}
+
 ?>
