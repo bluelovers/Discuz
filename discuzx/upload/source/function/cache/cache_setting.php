@@ -957,6 +957,10 @@ function get_cachedata_spacenavs() {
 				if (empty($nav['suburl'])) {
 					$nav['suburl'] = 'home.php?mod=spacecp&ac='.$nav['identifier'];
 				}
+
+				if (empty($nav['subname'])) {
+					$nav['subname'] = lang('template', 'publish');
+				}
 			// bluelovers
 
 			} elseif($nav['identifier'] == 'thread') {
