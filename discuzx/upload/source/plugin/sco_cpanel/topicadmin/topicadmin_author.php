@@ -103,7 +103,7 @@ if (!submitcheck('modsubmit')) {
 
 	$firstpost = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first = '1' LIMIT 1");
 
-	if ($topiclist) {
+	if (!empty($topiclist)) {
 		$_ids = dimplode($topiclist);
 
 		$query = DB::query("SELECT pid FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids) ORDER BY pid ASC");
