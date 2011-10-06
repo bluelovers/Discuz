@@ -121,6 +121,30 @@ if (!submitcheck('modsubmit')) {
 			showmessage('admin_author_topiclist_invalid');
 		}
 
+		foreach($_pids as $_pid) {
+
+			DB::update($posttable, array(
+				'author' => $authornew['username'],
+				'authorid' => $authornew['uid'],
+			), array(
+				'tid' => $tid,
+				'pid' => $_pid
+			));
+
+			foreach(array(
+				'forum_attachment',
+				getattachtablebytid($tid),
+			) as $_t) {
+				DB::update($_t, array(
+					'uid' => $authornew['uid'],
+				), array(
+					'tid' => $tid,
+					'pid' => $_pid
+				));
+			}
+
+		}
+
 	} else {
 
 		DB::update($posttable, array(
