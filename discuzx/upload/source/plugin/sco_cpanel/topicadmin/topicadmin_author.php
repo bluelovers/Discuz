@@ -29,6 +29,8 @@ if (!empty($topiclist)) {
 	$topiclist = array_unique($topiclist);
 }
 
+$modpostsnum = count($topiclist);
+
 if (!submitcheck('modsubmit')) {
 
 	include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
@@ -36,8 +38,8 @@ if (!submitcheck('modsubmit')) {
 	$_p = new _sco_dx_plugin();
 	$_p->identifier = 'sco_cpanel';
 
-	if (!empty($topiclist)) {
-		discuz_core::$tpl['forum']['return_mods_title'][$_G['gp_action']] = lang('admin_select_piece');
+	if (!empty($topiclist) || 1) {
+		discuz_core::$tpl['forum']['return_mods_title'][$_G['gp_action']] = lang('forum/template', 'admin_select_piece', array('modpostsnum' => $modpostsnum));
 	}
 
 	discuz_core::$tpl['forum']['topicadmin_action'][$_G['gp_action']] = $_p->_fetch_template($_p->_template('forum/topicadmin_action_author'), array(
