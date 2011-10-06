@@ -148,6 +148,10 @@ if (!submitcheck('modsubmit')) {
 
 		}
 
+		if (count($_pids) == 1) {
+			$resultarray['redirect'] .= '#pid'.$_pids[0];
+		}
+
 	} else {
 
 		DB::update($posttable, array(
