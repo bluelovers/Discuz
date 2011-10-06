@@ -103,6 +103,9 @@ if (!submitcheck('modsubmit')) {
 
 	$firstpost = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first = '1' LIMIT 1");
 
+	$resultarray = array();
+	$resultarray['redirect'] = dreferer("forum.php?mod=viewthread&tid=$tid");
+
 	if (!empty($topiclist)) {
 		$_ids = dimplode($topiclist);
 
@@ -200,10 +203,6 @@ if (!submitcheck('modsubmit')) {
 		}
 
 	}
-
-	$resultarray = array();
-
-	$resultarray['redirect'] = dreferer("forum.php?mod=viewthread&tid=$tid");
 
 	showmessage((isset($resultarray['message']) ? $resultarray['message'] : 'admin_succeed'), $resultarray['redirect']);
 
