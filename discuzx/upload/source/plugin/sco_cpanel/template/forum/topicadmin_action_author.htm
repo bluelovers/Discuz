@@ -6,3 +6,7 @@
 						<td><input type="text" name="authoridnew" id="authoridnew" class="px" size="20" /></td>
 					</tr>
 				</table>
+
+				<!--{loop $topiclist $id}-->
+					<input type="hidden" name="topiclist[]" value="{$id}" />
+				<!--{/loop}-->
