@@ -120,7 +120,7 @@ if (!submitcheck('modsubmit')) {
 		if (empty($_pids) || count($_pids) != count($topiclist)) {
 			showmessage('admin_author_topiclist_invalid');
 		}
-	}
+	} else {
 
 	DB::update($posttable, array(
 		'author' => $authornew['username'],
@@ -172,6 +172,8 @@ if (!submitcheck('modsubmit')) {
 		), array(
 			'tid' => $tid,
 		));
+	}
+
 	}
 
 	$resultarray = array();
