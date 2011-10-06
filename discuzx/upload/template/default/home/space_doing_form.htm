@@ -1,19 +1,19 @@
 <script type="text/javascript">
 var msgstr = '$defaultstr';
-function handlePrompt(type) {
-	var msgObj = $('message');
+function handlePrompt$_G[gp_handlekey](type) {
+	var msgObj = $('message$_G[gp_handlekey]');
 	if(type) {
 		if(msgObj.value == msgstr) {
 			msgObj.value = '';
 			msgObj.className = 'xg2';
 		}
-		if($('message_menu')) {
-			if($('message_menu').style.display == 'block') {
-				showFace('message', 'message', msgstr);
+		if($('message$_G[gp_handlekey]_menu')) {
+			if($('message$_G[gp_handlekey]_menu').style.display == 'block') {
+				showFace('message$_G[gp_handlekey]', 'message$_G[gp_handlekey]', msgstr);
 			}
 		}
 		if(BROWSER.firefox || BROWSER.chrome) {
-			showFace('message', 'message', msgstr);
+			showFace('message$_G[gp_handlekey]', 'message$_G[gp_handlekey]', msgstr);
 		}
 	} else {
 		if(msgObj.value == ''){
@@ -24,15 +24,15 @@ function handlePrompt(type) {
 }
 </script>
 
-<div id="moodfm" class="moodfm">
-	<form method="post" autocomplete="off" id="mood_addform" action="home.php?mod=spacecp&ac=doing&view=$_GET[view]" onsubmit="if($('message').value == msgstr){return false;}">
+<div id="moodfm$_G[gp_handlekey]" class="moodfm">
+	<form method="post" autocomplete="off" id="mood_addform$_G[gp_handlekey]" action="home.php?mod=spacecp&ac=doing&view=$_GET[view]" onsubmit="if($('message$_G[gp_handlekey]').value == msgstr){return false;}">
 		<table cellspacing="0" cellpadding="0">
 			<tr>
-				<td id="mood_statusinput" class="moodfm_input">
-					<textarea name="message" id="message" class="xg1" onfocus="handlePrompt(1);" onclick="showFace(this.id, 'message', msgstr);" onblur="handlePrompt(0);" onkeyup="strLenCalc(this, 'maxlimit')" onkeydown="ctrlEnter(event, 'add');" rows="4">$defaultstr</textarea>
+				<td id="mood_statusinput$_G[gp_handlekey]" class="moodfm_input">
+					<textarea name="message" id="message$_G[gp_handlekey]" class="xg1" onfocus="handlePrompt$_G[gp_handlekey](1);" onclick="showFace(this.id, 'message$_G[gp_handlekey]', msgstr);" onblur="handlePrompt$_G[gp_handlekey](0);" onkeyup="strLenCalc(this, 'maxlimit')" onkeydown="ctrlEnter(event, 'add$_G[gp_handlekey]');" rows="4">$defaultstr</textarea>
 				</td>
 				<td class="moodfm_btn">
-					<button type="submit" name="add" id="add">{lang publish}</button>
+					<button type="submit" name="add" id="add$_G[gp_handlekey]">{lang publish}</button>
 				</td>
 			</tr>
 			<tr>
