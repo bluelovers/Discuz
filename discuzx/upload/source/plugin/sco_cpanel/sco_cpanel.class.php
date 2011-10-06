@@ -124,6 +124,10 @@ EOM;
 		return $ret;
 	}
 
+	function viewthread_modoption_post_output() {
+		return $this->viewthread_modoption_output();
+	}
+
 	function topicadmin_author() {
 		$this->_hook(
 			'Script_forum_topicadmin:Before_topicadminfile', array(
