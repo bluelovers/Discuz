@@ -16,7 +16,7 @@
 	<h3 class="flb">
 
 		<!--{if !empty(discuz_core::$tpl['forum']['return_mods_title'][{$_G[gp_action]}])}-->
-			<em id="return_mods">discuz_core::$tpl['forum']['return_mods_title'][{$_G[gp_action]}]</em>
+			<em id="return_mods"><!--{echo discuz_core::$tpl['forum']['return_mods_title'][{$_G[gp_action]}];}--></em>
 		<!--{else}-->
 		<em id="return_mods"><!--{if in_array($_G[gp_action], array('delpost', 'banpost', 'warn', 'stickreply'))}-->{lang admin_select_piece}<!--{elseif $_G['gp_action'] == 'delcomment'}-->{lang topicadmin_select_comment}<!--{else}-->{lang admin_select_one_piece}<!--{/if}--></em>
 		<!--{/if}-->
