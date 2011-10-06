@@ -111,6 +111,10 @@ if (!submitcheck('modsubmit')) {
 		$_pids = array();
 		while($_post = DB::fetch($query)) {
 			$_pids[] = $_post['pid'];
+
+			if ($firstpost['pid'] == $_post['pid']) {
+				showmessage('admin_author_topiclist_invalid');
+			}
 		}
 
 		if (empty($_pids) || count($_pids) != count($topiclist)) {
