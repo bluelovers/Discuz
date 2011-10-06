@@ -461,7 +461,7 @@ fieldset {
 	*display: inline;
 }
 
-.fwinmask .moodfm {
+#content .moodfm {
 	background: url("{STATICURL}image/plus/home/mo_icon.png") no-repeat scroll 50% 0 transparent;
 	padding-top: 135px;
 }
