@@ -62,6 +62,8 @@ if (!submitcheck('modsubmit')) {
 		'topiclist' => $topiclist,
 	));
 
+	discuz_core::$tpl['forum']['succeedhandle_mods'][$_G['gp_action']] = 1;
+
 	include template('forum/topicadmin_action');
 } else {
 
