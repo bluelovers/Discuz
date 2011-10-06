@@ -461,8 +461,8 @@ fieldset {
 	*display: inline;
 }
 
-#moodfm {}
-		#moodfm textarea { min-width: 310px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
+.moodfm {}
+		.moodfm textarea { min-width: 310px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
 		.moodfm_btn { padding-left: 5px; background: url({IMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
 			.moodfm_btn button { width: 58px; height: 58px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
 		.moodfm_f { padding: 5px 0 0 3px; }
@@ -471,12 +471,12 @@ fieldset {
 	.facel { padding: 0 6px 6px 0; width: 260px; }
 		.facel img { margin: 6px 0 0 6px; }
 
-#content #moodfm {
+#content .moodfm {
 	background: url("{STATICURL}image/plus/home/mo_icon.png") no-repeat scroll 50% 0 transparent;
 	padding-top: 135px;
 }
 
-#ct #content #moodfm {
+#ct #content .moodfm {
 	/* 跨瀏覽器的 inline-block */
 	display: -moz-inline-stack;
 	display: inline-block;
@@ -484,7 +484,7 @@ fieldset {
 	*display: inline;
 }
 
-.fwinmask #moodfm textarea {
+.fwinmask .moodfm textarea {
 	width: 310px;
 }
 
