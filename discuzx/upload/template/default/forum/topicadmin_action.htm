@@ -189,7 +189,7 @@ function succeedhandle_mods(locationhref) {
 	<!--{if $_G[gp_action] == 'delcomment'}-->
 		ajaxget('forum.php?mod=misc&action=commentmore&tid=$_G[tid]&pid=$pid', 'comment_$pid');
 		hideWindow('mods');
-	<!--{elseif $_G[gp_action] == 'banpost' || $_G[gp_action] == 'warn'}-->
+	<!--{elseif $_G[gp_action] == 'banpost' || $_G[gp_action] == 'warn' || discuz_core::$tpl['forum']['succeedhandle_mods'][{$_G[gp_action]}]}-->
 		<!--{loop $topiclist $pid}-->
 			ajaxget('forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$pid&modclick=yes', 'post_$pid', 'post_$pid');
 			if($('topiclist_$pid')) {
