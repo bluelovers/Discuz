@@ -125,6 +125,8 @@ if (!submitcheck('modsubmit')) {
 		));
 	}
 
+	showmessage((isset($resultarray['message']) ? $resultarray['message'] : 'admin_succeed'), $resultarray['redirect']);
+
 	/*
 	$_tables = array(
 		'authorid' => array(
