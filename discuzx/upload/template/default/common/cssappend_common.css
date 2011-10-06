@@ -484,4 +484,8 @@ fieldset {
 	*display: inline;
 }
 
+.fwinmask #moodfm textarea {
+	width: 310px;
+}
+
 /* ---------------------- */
