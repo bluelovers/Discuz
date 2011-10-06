@@ -62,6 +62,9 @@ if (!submitcheck('modsubmit')) {
 		'topiclist' => $topiclist,
 	));
 
+	/**
+	 * 支援 ajax 更新頁面
+	 */
 	discuz_core::$tpl['forum']['succeedhandle_mods'][$_G['gp_action']] = 1;
 
 	include template('forum/topicadmin_action');
