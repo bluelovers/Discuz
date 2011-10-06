@@ -474,4 +474,14 @@ fieldset {
 	*display: inline;
 }
 
+#moodfm {}
+		#moodfm textarea { min-width: 310px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
+		.moodfm_btn { padding-left: 5px; background: url({IMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
+			.moodfm_btn button { width: 58px; height: 58px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
+		.moodfm_f { padding: 5px 0 0 3px; }
+
+/* .facel -> face_list 空間部分的表情 by Pony */
+	.facel { padding: 0 6px 6px 0; width: 260px; }
+		.facel img { margin: 6px 0 0 6px; }
+
 /* ---------------------- */
