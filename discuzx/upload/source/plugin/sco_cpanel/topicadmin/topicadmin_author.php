@@ -107,6 +107,15 @@ if (!submitcheck('modsubmit')) {
 		$_ids = dimplode($topiclist);
 
 		$query = DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids) ORDER BY pid ASC");
+
+		$_pids = array();
+		while($_post = DB::fetch($query)) {
+			$_pids[] = $_post['pid'];
+		}
+
+		if (empty($_pids) || count($_pids) != count($topiclist)) {
+			showmessage('admin_author_topiclist_invalid');
+		}
 	}
 
 	DB::update($posttable, array(
