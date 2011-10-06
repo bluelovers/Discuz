@@ -55,6 +55,9 @@ if (!submitcheck('modsubmit')) {
 	$_p->identifier = 'sco_cpanel';
 
 	if (!empty($topiclist)) {
+		/**
+		 * 控制顯示的標題
+		 */
 		discuz_core::$tpl['forum']['return_mods_title'][$_G['gp_action']] = strtr(lang('forum/template', 'admin_select_piece'), array('$modpostsnum' => $modpostsnum));
 	}
 
