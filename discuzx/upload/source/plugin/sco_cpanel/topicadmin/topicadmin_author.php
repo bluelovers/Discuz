@@ -106,7 +106,7 @@ if (!submitcheck('modsubmit')) {
 	if ($topiclist) {
 		$_ids = dimplode($topiclist);
 
-		$query = DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids)");
+		$query = DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids) ORDER BY pid ASC");
 	}
 
 	DB::update($posttable, array(
