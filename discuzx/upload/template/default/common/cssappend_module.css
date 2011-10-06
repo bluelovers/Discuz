@@ -340,4 +340,13 @@
 				.mi .avatar img { padding: 3px; border: 1px solid {COMMONBORDER}; }
 
 				.mi a.o { margin-right: 5px; padding-left: 18px; background: url({IMGDIR}/mine_icn.png) no-repeat 0 50%; }
+
+#moodfm {}
+		#moodfm textarea { width: 600px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
+		.mi .moodfm_input { width: 350px; height: 58px; background: {COMMONBORDER} url({IMGDIR}/mood_input.png) no-repeat 0 0; }
+			.mi .hover .moodfm_input { background-color: {SPECIALBORDER}; }
+			.mi #moodfm textarea { margin: 3px 0 0 6px; padding: 0; width: 341px; height: 51px; outline: none; border: none; }
+		.moodfm_btn { padding-left: 5px; background: url({IMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
+			.moodfm_btn button { width: 58px; height: 58px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
+		.moodfm_f { padding: 5px 0 0 3px; }
 /** end **/
