@@ -125,6 +125,8 @@ if (!submitcheck('modsubmit')) {
 		));
 	}
 
+	$resultarray['redirect'] = dreferer();
+
 	showmessage((isset($resultarray['message']) ? $resultarray['message'] : 'admin_succeed'), $resultarray['redirect']);
 
 	/*
