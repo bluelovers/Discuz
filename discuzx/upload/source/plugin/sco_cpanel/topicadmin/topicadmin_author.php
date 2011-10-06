@@ -27,6 +27,8 @@ $topiclist = (array)$_G['gp_topiclist'];
 if (!empty($topiclist)) {
 	$topiclist = array_map('intval', $topiclist);
 	$topiclist = array_unique($topiclist);
+
+	sort($topiclist);
 }
 
 $modpostsnum = count($topiclist);
@@ -100,6 +102,12 @@ if (!submitcheck('modsubmit')) {
 	$posttable = getposttablebytid($tid);
 
 	$firstpost = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first = '1' LIMIT 1");
+
+	if ($topiclist) {
+		$_ids = dimplode($topiclist);
+
+		$query = DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids)");
+	}
 
 	DB::update($posttable, array(
 		'author' => $authornew['username'],
