@@ -351,7 +351,7 @@
 		.moodfm_f { padding: 5px 0 0 3px; }
 
 /* .facel -> face_list 空間部分的表情 by Pony */
-	.facel { padding: 8px; width: 240px; }
-		.facel img { margin: 5px; }
+	.facel { padding: 0 6px 6px 0; width: 260px; }
+		.facel img { margin: 6px 0 0 6px; }
 
 /** end **/
