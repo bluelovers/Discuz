@@ -31,6 +31,16 @@ if (!empty($topiclist)) {
 
 $modpostsnum = count($topiclist);
 
+$_post = array();
+if ($modpostsnum == 1) {
+	$_post = get_post_by_pid($topiclist[0]);
+
+	if ($_post['first']) {
+		unset($topiclist);
+		$modpostsnum = 0;
+	}
+}
+
 if (!submitcheck('modsubmit')) {
 
 	include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
