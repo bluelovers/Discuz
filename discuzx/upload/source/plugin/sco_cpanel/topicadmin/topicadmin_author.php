@@ -125,7 +125,7 @@ if (!submitcheck('modsubmit')) {
 		));
 	}
 
-	$resultarray['redirect'] = dreferer();
+	$resultarray['redirect'] = dreferer("forum.php?mod=viewthread&tid=$tid");
 
 	showmessage((isset($resultarray['message']) ? $resultarray['message'] : 'admin_succeed'), $resultarray['redirect']);
 
