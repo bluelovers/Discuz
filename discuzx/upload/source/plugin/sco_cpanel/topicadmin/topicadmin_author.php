@@ -58,6 +58,9 @@ if (!submitcheck('modsubmit')) {
 		discuz_core::$tpl['forum']['return_mods_title'][$_G['gp_action']] = strtr(lang('forum/template', 'admin_select_piece'), array('$modpostsnum' => $modpostsnum));
 	}
 
+	/**
+	 * 載入 author 的表單內容
+	 */
 	discuz_core::$tpl['forum']['topicadmin_action'][$_G['gp_action']] = $_p->_fetch_template($_p->_template('forum/topicadmin_action_author'), array(
 		'topiclist' => $topiclist,
 	));
