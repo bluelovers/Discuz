@@ -109,6 +109,7 @@ if (!submitcheck('modsubmit')) {
 	$resultarray['redirect'] = dreferer("forum.php?mod=viewthread&tid=$tid");
 
 	if (!empty($topiclist)) {
+		// 支援處理 thread 內多個 post
 		$_ids = dimplode($topiclist);
 
 		$query = DB::query("SELECT pid FROM ".DB::table($posttable)." WHERE tid = '$tid' AND pid IN ($_ids) ORDER BY pid ASC");
