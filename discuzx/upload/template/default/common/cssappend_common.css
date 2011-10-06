@@ -466,4 +466,12 @@ fieldset {
 	padding-top: 135px;
 }
 
+#ct #content #moodfm {
+	/* 跨瀏覽器的 inline-block */
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
 /* ---------------------- */
