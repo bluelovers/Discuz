@@ -2478,7 +2478,7 @@ function dreferer($default = '') {
 	global $_G;
 
 	$default = empty($default) ? $GLOBALS['_t_curapp'] : '';
-	$_G['referer'] = !empty($_G['gp_referer']) ? $_G['gp_referer'] : $_SERVER['HTTP_REFERER'];
+	$_G['referer'] = !empty($_G['gp_referer']) ? $_G['gp_referer'] : ((isset($_G['gp_refer']) && !empty($_G['gp_refer'])) ? $_G['gp_refer'] : $_SERVER['HTTP_REFERER']);
 	$_G['referer'] = substr($_G['referer'], -1) == '?' ? substr($_G['referer'], 0, -1) : $_G['referer'];
 
 	if(strpos($_G['referer'], 'member.php?mod=logging')) {
