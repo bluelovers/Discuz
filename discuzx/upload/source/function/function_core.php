@@ -2498,6 +2498,11 @@ function dreferer($default = '') {
 	} elseif(empty($reurl['host'])) {
 		$_G['referer'] = $_G['siteurl'].'./'.$_G['referer'];
 	}
+
+	// bluelovers
+	$_G['referer'] = str_replace(array('/./', '//'), array('/', '/'), $_G['referer']);
+	// bluelovers
+
 	return strip_tags($_G['referer']);
 }
 
