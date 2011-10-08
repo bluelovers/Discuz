@@ -139,7 +139,7 @@ if(submitcheck('addsubmit')) {
 	if(!empty($_G['gp_fromcard'])) {
 		showmessage($message.lang('spacecp','card_update_doing'));
 	} else {
-		showmessage('do_success', dreferer(), array('doid' => $newdoid), $_G['gp_spacenote'] ? array('showmsg' => false):array('header' => true));
+		showmessage('do_success', $_G['gp_referer'] == -1 ? null : dreferer(), array('doid' => $newdoid), $_G['gp_spacenote'] ? array('showmsg' => false):array('header' => true));
 	}
 
 } elseif (submitcheck('commentsubmit')) {
