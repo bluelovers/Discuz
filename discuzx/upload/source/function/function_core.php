@@ -2500,7 +2500,7 @@ function dreferer($default = '') {
 	}
 
 	// bluelovers
-	$_G['referer'] = str_replace(array('/./', '//'), array('/', '/'), $_G['referer']);
+	$_G['referer'] = str_replace('/./', '/', $_G['referer']);
 	// bluelovers
 
 	return strip_tags($_G['referer']);
