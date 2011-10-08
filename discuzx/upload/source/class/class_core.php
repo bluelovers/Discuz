@@ -400,6 +400,9 @@ class discuz_core {
 
 		// bluelovers
 		if (!isset($this->var['gp_referer']) && isset($this->var['gp_refer'])) {
+			/**
+			 * [bugfix] 修正 dx 部分表單欄位將 referer 錯誤命名為 refer 的問題
+			 */
 			$this->var['gp_referer'] = $this->var['gp_refer'];
 		}
 		// bluelovers
