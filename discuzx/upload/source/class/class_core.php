@@ -399,7 +399,9 @@ class discuz_core {
 		}
 
 		// bluelovers
-
+		if (!isset($this->var['gp_referer']) && isset($this->var['gp_refer'])) {
+			$this->var['gp_referer'] = $this->var['gp_refer'];
+		}
 		// bluelovers
 
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
