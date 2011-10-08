@@ -383,7 +383,7 @@ if($_GET['op'] == 'delete') {
 
 // bluelovers
 } else {
-
+	$theurl = $_G['gp_referer'] == -1 ? null : dreferer();
 // bluelovers
 
 }
