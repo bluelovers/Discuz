@@ -380,6 +380,12 @@ if($_GET['op'] == 'delete') {
 	}
 } elseif ($_GET['op'] == 'spacenote') {
 	space_merge($space, 'field_home');
+
+// bluelovers
+} else {
+
+// bluelovers
+
 }
 
 include template('home/spacecp_doing');
