@@ -16,6 +16,27 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
+	function global_footer() {
+		global $_G;
+
+		if (
+			1
+			&& $_G['uid']
+			&& $_G['cookie']['popup_doing'] != $_G['uid']
+			&& !(
+				$_G['inajax']
+				|| $_SERVER['REQUEST_METHOD'] == 'POST'
+				|| !empty($_G['gp_formhash'])
+			)
+		) {
+			return $this->_fetch_template($this->_template('hook_global_footer'), array(
+				'_G' => array(
+					'uid' => $_G['uid'],
+				),
+			));
+		}
+	}
+
 }
 
 class plugin_sco_social_forum extends plugin_sco_social {

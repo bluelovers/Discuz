@@ -398,6 +398,15 @@ class discuz_core {
 			$this->var['gp_'.$k] = $v;
 		}
 
+		// bluelovers
+		if (!isset($this->var['gp_referer']) && isset($this->var['gp_refer'])) {
+			/**
+			 * [bugfix] 修正 dx 部分表單欄位將 referer 錯誤命名為 refer 的問題
+			 */
+			$this->var['gp_referer'] = $this->var['gp_refer'];
+		}
+		// bluelovers
+
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
