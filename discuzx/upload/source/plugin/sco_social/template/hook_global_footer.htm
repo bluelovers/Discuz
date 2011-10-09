@@ -1,6 +1,10 @@
 <!-- for hook global_footer -->
+<!--{if $_G['uid']}-->
 <script>
 jQuery(function(){
+	setcookie('popup_doing', $_G['uid'], 3600 * 6);
+
 	showWindow('doing', 'home.php?mod=spacecp&ac=doing&referer=-1', 'get', 0);
 });
 </script>
+<!--{/if}-->
