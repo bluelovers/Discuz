@@ -27,6 +27,8 @@ class plugin_sco_social extends _sco_dx_plugin {
 				$_G['inajax']
 				|| $_SERVER['REQUEST_METHOD'] == 'POST'
 				|| !empty($_G['gp_formhash'])
+				|| $_G['inshowmessage']
+				|| defined('IN_MOBILE')
 			)
 		) {
 			return $this->_fetch_template($this->_template('hook_global_footer'), array(
