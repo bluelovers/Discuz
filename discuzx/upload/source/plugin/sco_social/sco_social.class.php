@@ -16,11 +16,17 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	function global_footer_output() {
+	function global_footer() {
+		global $_G;
+
 		if (
 			1
+			&& $_G['uid']
+			&& $_G['cookie']['popup_doing'] == $_G['uid']
 		) {
 			return $this->_fetch_template($this->_template('hook_global_footer'));
+		} elseif ($_G['uid'] && $_G['cookie']['popup_doing'] != $_G['uid']) {
+			dsetcookie('popup_doing', '', -1);
 		}
 	}
 
