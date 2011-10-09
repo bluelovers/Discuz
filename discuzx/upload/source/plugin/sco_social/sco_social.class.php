@@ -16,6 +16,14 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
+	function global_footer_output() {
+		if (
+			1
+		) {
+			return $this->_fetch_template($this->_template('hook_global_footer'));
+		}
+	}
+
 }
 
 class plugin_sco_social_forum extends plugin_sco_social {
