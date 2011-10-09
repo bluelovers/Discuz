@@ -22,13 +22,11 @@ class plugin_sco_social extends _sco_dx_plugin {
 		if (
 			1
 			&& $_G['uid']
-			&& $_G['cookie']['popup_doing'] == $_G['uid']
+			&& $_G['cookie']['popup_doing'] != $_G['uid']
 		) {
 			dsetcookie('popup_doing', $_G['uid'], 3600 * 6);
 
 			return $this->_fetch_template($this->_template('hook_global_footer'));
-		} elseif ($_G['uid'] && $_G['cookie']['popup_doing'] != $_G['uid']) {
-			dsetcookie('popup_doing', '', -1);
 		}
 	}
 
