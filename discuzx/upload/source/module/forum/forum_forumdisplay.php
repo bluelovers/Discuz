@@ -650,7 +650,16 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 	}
 
 	$thread['moved'] = $thread['heatlevel'] = $thread['new'] = 0;
+	/*
 	$thread['icontid'] = $thread['forumstick'] || !$thread['moved'] && $thread['isgroup'] != 1 ? $thread['tid'] : $thread['closed'];
+	*/
+	// bluelovers
+	$thread['icontid'] = (
+		(!$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid']))
+		|| $thread['moved']
+	) ? $thread['closed'] : $thread['tid'];
+	// bluelovers
+
 	if($_G['forum']['status'] != 3 && ($thread['closed'] || ($_G['forum']['autoclose'] && TIMESTAMP - $thread[$closedby] > $_G['forum']['autoclose']))) {
 		if($thread['isgroup'] == 1) {
 			$thread['folder'] = 'common';
