@@ -1,0 +1,9 @@
+共有四種語言版本：BIG5、GBK、UTF8繁中、UTF8簡中，請選擇適合您的語言版本，直接上傳覆蓋資料夾內所有檔案。
+
+PS：UCenter伺服器路徑說明 (若您的Discuz與UCenter分開安裝，則必須輸入正確的UCenter伺服器路徑，否則請留空。)
+起始路徑為論壇根目錄，設定方式參考下方例子：
+1. 若您的Discuz所在目錄為dz、UCenter所在目錄為uc，則需設定成：../uc
+2. 若您的Discuz所在目錄為伺服器根目錄、UCenter所在目錄為uc，則需設定成：./uc
+以網址來說的話是：
+1. 若您的Discuz網址是http://domain.com/dz/或http://dz.domain.com/、UCenter網址是http://domain.com/uc/或http://uc.domain.com/，則需設定成：../uc
+2. 若您的Discuz網址是http://domain.com/、UCenter網址是http://domain.com/uc/或http://uc.domain.com/，則需設定成：./uc
