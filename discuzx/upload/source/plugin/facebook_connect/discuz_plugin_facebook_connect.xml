@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-05-21 00:00]]></item>
+	<item id="From"><![CDATA[tw-cf.net (http://tw-cf.net)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[Facebook Connect]]></item>
+			<item id="identifier"><![CDATA[facebook_connect]]></item>
+			<item id="description"><![CDATA[Facebook&#30331;&#20837;&#25554;&#20214;]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[facebook_connect/]]></item>
+			<item id="copyright"><![CDATA[derek @ tw-cf.net]]></item>
+			<item id="version"><![CDATA[2.3]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[fblogin]]></item>
+					<item id="menu"><![CDATA[FB&#20491;&#20154;&#35373;&#23450;]]></item>
+					<item id="url"><![CDATA[fblogin.php?act=userset]]></item>
+					<item id="type"><![CDATA[7]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[fblogin_adm]]></item>
+					<item id="menu"><![CDATA[FB&#26371;&#21729;&#31649;&#29702;]]></item>
+					<item id="url"><![CDATA[fblogin.php?act=adm]]></item>
+					<item id="type"><![CDATA[7]]></item>
+					<item id="adminid"><![CDATA[1]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[&#25033;&#29992;&#31243;&#24335; ID]]></item>
+				<item id="description"><![CDATA[Facebook&#25033;&#29992;&#31243;&#24335;ID]]></item>
+				<item id="variable"><![CDATA[appid]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[&#25033;&#29992;&#31243;&#24335;&#23494;&#38000;]]></item>
+				<item id="description"><![CDATA[Facebook&#25033;&#29992;&#31243;&#24335;&#23494;&#38000;]]></item>
+				<item id="variable"><![CDATA[secret]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[UCenter&#20282;&#26381;&#22120;&#36335;&#24465;]]></item>
+				<item id="description"><![CDATA[&#33509;DZ&#33287;UC&#20998;&#38283;&#23433;&#35037;&#65292;&#38656;&#36664;&#20837;UC&#30340;&#20282;&#26381;&#22120;&#36335;&#24465;&#21542;&#21063;&#30041;&#31354;&#65292;&#22914;&#65306;./uc]]></item>
+				<item id="variable"><![CDATA[ucdir]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[&#25512;&#21040;FB&#30340;&#38928;&#35373;&#22294;&#29255;]]></item>
+				<item id="description"><![CDATA[&#30332;&#36865;&#21040;Facebook&#29254;&#19978;&#30340;&#38928;&#35373;&#22294;&#29255;]]></item>
+				<item id="variable"><![CDATA[dfimg]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[http://images.radcity.net/5146/4747499.jpg]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[&#38283;&#21855;Facebook&#30041;&#35328;]]></item>
+				<item id="description"><![CDATA[&#36984;&#25799;&#26159;&#21063;&#22312;&#27599;&#24086;&#19979;&#26041;&#39023;&#31034;Facebook&#30041;&#35328;&#29256;]]></item>
+				<item id="variable"><![CDATA[ofbc]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[&#20801;&#35377;FB&#30041;&#35328;&#30340;&#29256;&#38754;&#32232;&#34399; (fid)]]></item>
+				<item id="description"><![CDATA[&#22810;&#20491;&#29992;&#21322;&#24418;&#36887;&#34399;&#38548;&#38283;&#65292;&#22914;&#65306;1,2,3&#65292;&#20840;&#37096;&#20801;&#35377;&#21063;&#30041;&#31354;]]></item>
+				<item id="variable"><![CDATA[ofbcfid]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="installfile"><![CDATA[install.php]]></item>
+		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
+	</item>
+</root>

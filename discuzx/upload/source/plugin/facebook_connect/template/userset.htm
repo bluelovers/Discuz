@@ -1,0 +1,25 @@
+﻿{subtemplate common/header}
+<style type="text/css">
+.ctdiv { height:auto!important;min-height:inherit!important;padding:10px;border:1px solid #CCCCCC;background:#F9F9F9; }
+.trblock { width:350px;float:left;margin:0 0 0 10px;padding:0; }
+.trline { padding:5px 0;margin:0;border-bottom:1px solid #CCCCCC;line-height:30px; }
+.txtro { background:#DDDDDD; }
+.trmsg { width:220px;float:right;margin:0;padding:0; }
+.trtip { padding:5px 0;margin:0;border-bottom:1px solid #CCCCCC;text-align:right;line-height:30px; }
+</style>
+<div id="pt" class="bm cl"><div class="z">
+<a href="index.php" id="fjump" class="nvhm" title="首頁">{$_G[setting][bbname]}</a> <em>&rsaquo;</em> Facebook Connect 使用者設定
+</div></div>
+{$fuop}
+<div class="trblock">
+	<div class="trline">整合登入：<input type="radio" name="rfblogin" value="1"<!--{if $getfbd[fbid]}--> checked="checked"<!--{/if}--> onclick="$('rsf1').style.display='block';$('rsfm1').style.display='block';$('rsf2').style.display='block';$('rsfm2').style.display='block';"> 是 &nbsp;&nbsp;&nbsp; <input type="radio" name="rfblogin" value="0"<!--{if !$getfbd[fbid]}--> checked="checked"<!--{/if}--> onclick="$('rsf1').style.display='none';$('rsfm1').style.display='none';$('rsf2').style.display='none';$('rsfm2').style.display='none';"> 否</div>
+	<div class="trline" id="rsf1"<!--{if !$getfbd[fbid]}--> style="display:none;"<!--{/if}-->>連結顯示：<input type="radio" name="rshowfblink" value="0"<!--{if $getfbd[showfblink] == 0}--> checked="checked"<!--{/if}-->> 公開 &nbsp;&nbsp;&nbsp; <input type="radio" name="rshowfblink" value="1"<!--{if $getfbd[showfblink] == 1}--> checked="checked"<!--{/if}-->> 好友可見 &nbsp;&nbsp;&nbsp; <input type="radio" name="rshowfblink" value="3"<!--{if $getfbd[showfblink] == 3}--> checked="checked"<!--{/if}-->> 保密</div>
+	<div class="trline" id="rsf2"<!--{if !$getfbd[fbid]}--> style="display:none;"<!--{/if}-->><input type="checkbox" class="pc" name="rsetfbpic" id="rsetfbpic" value="yes" /> 自動設定成Facebook頭像</div>
+	<div class="trline" style="border-bottom:0;text-align:center;"><button class="pn pnc" id="usersetsubmit" type="submit" name="usersetsubmit" value="true" tabindex="8"><span>確定</span></button>&nbsp;</div>
+</div>
+<div class="trmsg">
+	<div class="trtip">是否整合使用Facebook帳戶登入</div>
+	<div class="trtip" id="rsfm1"<!--{if !$getfbd[fbid]}--> style="display:none;"<!--{/if}-->>控制個人資料內的FB相關連結顯示權限</div>
+	<div class="trtip" id="rsfm2"<!--{if !$getfbd[fbid]}--> style="display:none;"<!--{/if}-->>若欲使用FB頭像則請勾選</div>
+{$fuopp}
+{subtemplate common/footer}

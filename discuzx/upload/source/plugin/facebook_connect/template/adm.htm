@@ -1,0 +1,14 @@
+﻿{subtemplate common/header}
+<div id="pt" class="bm cl"><div class="z">
+<a href="index.php" id="fjump" class="nvhm" title="首頁">{$_G[setting][bbname]}</a> <em>&rsaquo;</em> Facebook Connect 會員管理
+</div></div>
+<div style="clear:both;"><div style="margin:0 0 15px 0;display:inline-block;"></div></div>
+<form method="post" autocomplete="off" name="admsearch" id="admsearch" action="fblogin.php?act=adm" style="width:680px;margin:0 auto;">
+搜尋會員：<input type="text" id="suidarr" name="suidarr" autocomplete="off" value="{$_G['gp_suidarr']}" style="width:250px;" />
+<button class="pn pnc" id="admsearchsubmit" type="submit" name="admsearchsubmit" value="true"><span>搜尋</span></button>
+<br>請輸入會員UID編號，未輸入則顯示全部，多個UID請用半形逗號隔開，如：1,2,3
+</form>
+<div style="clear:both;"><div style="margin:0 0 15px 0;display:inline-block;"></div></div>
+{$fuop}
+{$fuopp}
+{subtemplate common/footer}

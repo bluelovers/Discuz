@@ -1,0 +1,52 @@
+﻿{subtemplate common/header}
+<!--{if !$_G[gp_z]}--><script type="text/javascript">showDialog('※若您已在本論壇註冊過帳號，請點擊<b>直接進行登入</b>，登入後請至 [設置>FB個人設定] 進行Facebook登入整合(綁定)，即可使用FB帳戶直接進行登入。<br><br>※若您是第一次來本論壇，請點擊<b>繼續FB註冊</b>。', 'confirm', '已有本論壇帳號？', null, true, "location.replace('member.php?mod=logging&action=login')", null, '繼續FB註冊', '直接進行登入');</script><!--{/if}-->
+<style type="text/css">
+.ctdiv { height:auto!important;min-height:inherit!important;padding:10px;border:1px solid #CCCCCC;background:#F9F9F9; }
+.travat { padding:2px;margin:0;border:1px solid #CCCCCC;width:50px;height:100%;float:left; }
+.trblock { width:222px;float:left;margin:0 0 0 10px;padding:0; }
+.trline { padding:5px 0;margin:0;border-bottom:1px solid #CCCCCC;line-height:30px; }
+.txtc { width:130px; }
+.txtro { background:#DDDDDD; }
+.trmsg { width:140px;float:right;margin:0;padding:0; }
+.trtip { padding:5px 0;margin:0;border-bottom:1px solid #CCCCCC;text-align:right;line-height:30px; }
+</style>
+<div id="pt" class="bm cl"><div class="z">
+<a href="index.php" id="fjump" class="nvhm" title="首頁">{$_G[setting][bbname]}</a> <em>&rsaquo;</em> Facebook Connect 
+</div></div>
+<div id="ctdiv" class="ctdiv"<!--{if $bbrules && $bbrulesforce && !$_G[gp_z]}--> style="display:none;"<!--{/if}-->>
+	<form method="post" autocomplete="off" name="nuser" id="nuser" action="{$NOWURL}&z=nuser" style="width:100%;display:inline-block;">
+		<div style="width:430px;margin:0 auto;">
+			<div class="travat"><img src="{$gmavat}"></div>
+			<div class="trblock">
+				<div class="trline">臉書編號：<input type="text" id="mefbid" name="mefbid" autocomplete="off" size="25" value="$fb_me['id']" tabindex="1" class="txtc txtro" readonly /></div>
+				<div class="trline">真實姓名：<input type="text" id="merealname" name="merealname" autocomplete="off" size="25" value="$fb_me['name']" tabindex="2" class="txtc txtro" readonly /></div>
+				<div class="trline">電子信箱：<input type="text" id="meemail" name="meemail" autocomplete="off" size="25" value="$fb_me['email']" tabindex="3" class="txtc txtro" readonly /></div>
+				<div class="trline">我的性別：<select name="megender" id="megender" tabindex="4" class="txtro"><!--{if $fb_me['gender'] != 'male' && $fb_me['gender'] != 'female'}--><option value="0">保密</option><!--{elseif $fb_me['gender'] == 'male'}--><option value="1">男</option><!--{elseif $fb_me['gender'] == 'female'}--><option value="2">女</option><!--{/if}--></select></div>
+				<div class="trline">自訂帳號：<input type="text" id="mename" name="mename" autocomplete="off" size="25" maxlength="15" value="<!--{if !$_G[gp_mename]}-->{$dfuser}<!--{else}-->{$_G[gp_mename]}<!--{/if}-->" tabindex="5" class="txtc" /></div>
+				<div class="trline">自定密碼：<input type="password" id="mepass" name="mepass" autocomplete="off" size="25" value="$_G[gp_mepass]" tabindex="6" class="txtc" /></div>
+				<div class="trline">確認密碼：<input type="password" id="mepassck" name="mepassck" autocomplete="off" size="25" value="$_G[gp_mepassck]" tabindex="7" class="txtc" /></div>
+				{$fuop}
+				<div class="trtip">&nbsp;</div>
+				<div class="trtip">&nbsp;</div>
+				<div class="trtip">&nbsp;</div>
+				<div class="trtip">&nbsp;<!--{if $fb_me_name_len == 0}-->請輸入帳號<!--{elseif $fb_me_name_len < 3}-->帳號不可小於3個字元<!--{elseif $fb_me_name_len > 15}-->帳號不可大於15個字元<!--{/if}--></div>
+				<div class="trtip">&nbsp;<!--{if $fb_me_pass_len == 0}-->請輸入密碼<!--{elseif $fb_me_pass_len < 6}-->密碼不可小於6個字元<!--{/if}--></div>
+				<div class="trtip">&nbsp;<!--{if $_G['gp_mepass'] != $_G['gp_mepassck']}-->兩次輸入的密碼不同<!--{/if}--></div>
+				<div class="trtip" style="border-bottom:0;"><!--{if $bbrules}--><!--{if $_G[gp_z] && $bbrulehash != $_G[gp_agreebbrule]}-->
+				<input type="checkbox" class="pc" name="agreebbrule" value="$bbrulehash" id="agreebbrule" /> <label for="agreebbrule"><b>同意<a href="javascript:;" onclick="display('ctdiv');display('ctdiv2');" style="color:#336699;">網站服務條款</a></b></label>
+				<!--{else}-->
+				<input type="checkbox" class="pc" name="agreebbrule" value="$bbrulehash" id="agreebbrule"<!--{if $bbrulehash == $_G[gp_agreebbrule]}--> checked="checked"<!--{/if}--> /> <label for="agreebbrule">同意<a href="javascript:;" onclick="display('ctdiv');display('ctdiv2');" style="color:#336699;">網站服務條款</a></label>
+				<!--{/if}--><!--{/if}--></div>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="ctdiv2" class="ctdiv"<!--{if !$bbrules || ($bbrules && !$bbrulesforce) || $_G[gp_z]}--> style="display:none;"<!--{/if}-->>
+	<h3 class="flb"><em>$_G['setting']['bbname'] 網站服務條款</em></h3>
+	<div class="c cl" style="padding:10px;">$bbrulestxt</div>
+	<p class="fsb pns cl{if empty($_G[gp_infloat])} hm{/if}">
+		<button class="pn pnc" onclick="$('agreebbrule').checked = true;display('ctdiv');display('ctdiv2');"><span>同意</span></button>
+		<button class="pn" onclick="location.replace('index.php');"><span>不同意</span></button>
+	</p>
+</div>
+{subtemplate common/footer}
