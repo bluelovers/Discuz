@@ -353,6 +353,10 @@ $lang = array (
   'forum_disablepost' => '本版塊禁止發帖',
   'post_newbie_span' => '抱歉，您在註冊時間起 {newbiespan} 分鐘後才能擁有發帖權限',
   'post_hide_nopermission' => '抱歉，您沒有權限使用 [hide] 代碼',
+  'post_like_nopermission' => '對不起，你沒有權限使用 [like] 代碼，請返回修改。',
+  'post_like_dontinreply' => '對不起，回帖不可使用 [like] 代碼，請返回修改。',
+  'facebook_not_yet_like' => '您還未點讚，請返回。',
+  'facebook_not_yet_comm' => '您還未於本帖的Facebook留言版上留言 (請使用FB帳戶進行留言)，請返回。',
   'forum_access_disallow' => '抱歉，您在本版沒有權限進行此操作',
 
   'post_check' => '抱歉，指定的帖子不存在或已被刪除或正在被審核<br /><a href="forum.php?mod=viewthread&tid={tid}">[ 嘗試點擊這裡轉入主題 ]</a>',

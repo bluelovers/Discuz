@@ -274,6 +274,15 @@
 			<div id="post_$post[pid]">
 				<!--{subtemplate forum/viewthread_node}-->
 			</div>
+			<!--{if $post['first'] && $_G['fbc']}-->
+				<!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}-->
+					<div id="fbcomm_$post[pid]" style="text-align:right;"><fb:comments href="{$_G[siteurl]}thread-{$_G[tid]}-1-1.html" num_posts="10" width="960"></fb:comments>
+					<div style="line-height:5px;background:{$_G[style][specialborder]};">&nbsp;</div></div>
+				<!--{else}-->
+					<div id="fbcomm_$post[pid]" style="text-align:right;"><fb:comments href="{$_G[siteurl]}forum.php?mod=viewthread&tid={$_G[tid]}" num_posts="10" width="960"></fb:comments>
+					<div style="line-height:5px;background:{$_G[style][specialborder]};">&nbsp;</div></div>
+				<!--{/if}-->
+			<!--{/if}-->
 			<!--{eval $postcount++;}-->
 		<!--{/if}-->
 	<!--{/loop}-->

@@ -19,7 +19,7 @@ require_once './source/function/function_home.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('magic','userapp','usergroups', 'diytemplatenamehome');
+$cachelist = array('magic','userapp','usergroups', 'diytemplatenamehome', 'plugin');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 

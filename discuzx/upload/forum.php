@@ -23,17 +23,17 @@ $modarray = array('ajax','announcement','attachment','forumdisplay',
 
 $modcachelist = array(
 	'index'		=> array('announcements', 'onlinelist', 'forumlinks',
-			'heats', 'historyposts', 'onlinerecord', 'userstats', 'diytemplatenameforum'),
+			'heats', 'historyposts', 'onlinerecord', 'userstats', 'diytemplatenameforum', 'plugin'),
 	'forumdisplay'	=> array('smilies', 'announcements_forum', 'globalstick', 'forums',
-			'onlinelist', 'forumstick', 'threadtable_info', 'threadtableids', 'stamps', 'diytemplatenameforum'),
+			'onlinelist', 'forumstick', 'threadtable_info', 'threadtableids', 'stamps', 'diytemplatenameforum', 'plugin'),
 	'viewthread'	=> array('smilies', 'smileytypes', 'forums', 'usergroups',
 			'stamps', 'bbcodes', 'smilies',	'custominfo', 'groupicon', 'stamps',
-			'threadtableids', 'threadtable_info', 'posttable_info', 'diytemplatenameforum'),
-	'redirect'	=> array('threadtableids', 'threadtable_info', 'posttable_info'),
+			'threadtableids', 'threadtable_info', 'posttable_info', 'diytemplatenameforum', 'plugin'),
+	'redirect'	=> array('threadtableids', 'threadtable_info', 'posttable_info', 'plugin'),
 	'post'		=> array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes',
-			'domainwhitelist'),
-	'space'		=> array('fields_required', 'fields_optional', 'custominfo'),
-	'group'		=> array('grouptype', 'diytemplatenamegroup'),
+			'domainwhitelist', 'plugin'),
+	'space'		=> array('fields_required', 'fields_optional', 'custominfo', 'plugin'),
+	'group'		=> array('grouptype', 'diytemplatenamegroup', 'plugin'),
 );
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'index' : $discuz->var['mod'];

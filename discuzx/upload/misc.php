@@ -19,7 +19,7 @@ $discuz->reject_robot();
 $modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist', 'buyinvitecode', 'tag', 'diyhelp', 'mobile');
 
 $modcachelist = array(
-	'ranklist' => array('forums', 'diytemplatename'),
+	'ranklist' => array('forums', 'diytemplatename', 'plugin'),
 );
 
 $mod = getgpc('mod');

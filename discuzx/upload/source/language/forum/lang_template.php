@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22790 2011-05-23 00:35:11Z monkey $
+ *      $Id: lang_template.php 22717 2011-05-18 05:12:59Z monkey $
  *
  *      This file is automatically generate
  */
@@ -171,7 +171,19 @@ $lang = array (
   'post_hide' => '本帖隱藏的內容',
   'post_hide_credits' => '以下內容需要積分高於 $creditsrequire 才可瀏覽',
   'post_hide_credits_hidden' => '，本帖隱藏的內容需要積分高於 $creditsrequire 才可瀏覽，您當前積分為 {$_G[member][credits]}',
-  'post_hide_reply_hidden' => '，如果您要查看本帖隱藏內容請<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]" onclick="showWindow(\'reply\', this.href)">回復</a>',
+  'post_hide_reply_hidden' => '，如果您要查看本帖隱藏內容請 <a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]" onclick="showWindow(\'reply\', this.href)">回覆</a>',
+  'post_hide_reply_like_hidden' => '，如果你要查看本帖隱藏內容請 <a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]" onclick="showWindow(\'reply\', this.href)">回覆</a> 或 <b>點讚</b>：',
+  'post_hide_like_hidden' => '，如果你要查看本帖隱藏內容請<b>點讚</b>：',
+  'first_login' => '請先登入會員：',
+  'facebook_profile' => '查看FB檔案',
+  'add_facebook_friend' => '加入FB好友',
+  'facebook_send' => '傳送',
+  'facebook_invite_friend_add' => '邀請朋友加入',
+  'facebook_invite_friend_addmsg' => '我在 [ {$_G[setting][bbname]} ] 加入會員了！誠摯邀請您一同加入！',
+  'facebook_already_like' => '[ 若您已點過讚，請點此重新檢查 ]',
+  'facebook_already_comm' => '[ 已在FB版留言？請點此重新檢查 ]',
+  'facebook_already_like_t' => '因為您目前並無登入本論壇，所以必須手動檢查您是否已點過讚。',
+  'facebook_already_comm_t' => '因為您目前並無登入本論壇，所以必須手動檢查您是否已在本帖的Facebook留言版上留言 (請使用FB帳戶進行留言)。',
   'set_cover' => '設為封面',
   'upload' => '上傳',
   'e_editor_loading' => '請稍後 ...',
@@ -577,6 +589,7 @@ $lang = array (
   'e_floatright' => '右浮動',
   'e_free' => '添加免費信息',
   'e_hide' => '添加隱藏內容',
+  'e_like' => '添加需點Facebook讚才可看的隱藏內容',
   'missed_data' => '您有上次未提交成功的數據',
   'approve' => '需審核',
   'attach_delete' => '刪除附件',
@@ -624,7 +637,6 @@ $lang = array (
   'post_reward_error_message' => '抱歉，請輸入懸賞價格',
   'post_reward_message' => '天後如果您仍未設置最佳答案，版主有權代為您選擇',
   'post_reward_resolved' => '已解決的懸賞',
-  'reward_cant_fall' => '不能降低懸賞積分',
   'reward_price' => '懸賞價格',
   'reward_price_bound' => '售價超出範圍',
   'reward_price_max' => '不能高於',

@@ -15,7 +15,7 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('grouptype', 'groupindex', 'diytemplatenamegroup');
+$cachelist = array('grouptype', 'groupindex', 'diytemplatenamegroup', 'plugin');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 

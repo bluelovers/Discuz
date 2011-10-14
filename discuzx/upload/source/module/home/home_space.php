@@ -42,6 +42,9 @@ if($uid) {
 	if(empty($space)) {
 		showmessage('space_does_not_exist');
 	}
+	$sfb = DB::fetch_first("SELECT fbid,showfblink FROM ".DB::table('facebook_connect')." WHERE uid='$uid' LIMIT 1");
+	require_once libfile('function/friend');
+	$isfriend = friend_check($uid);
 }
 
 if(empty($space)) {

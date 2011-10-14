@@ -23,6 +23,7 @@
 						<td><input type="text" name="username" id="ls_username" class="px vm xg1" {if $_G['setting']['autoidselect']} value="UID/{lang username}/Email" onfocus="if(this.value == 'UID/{lang username}/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = 'UID/{lang username}/Email';this.className = 'px vm xg1';}"{/if} tabindex="901" /></td>
 					<!--{/if}-->
 					<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />{lang login_permanent}</label></td>
+					<td class="fastlg_l" rowspan="2"><a href="javascript:;" onclick="fblogin();"><img src="static/image/facebook_iconb.png"></a></td>
 					<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">{lang forgotpw}</a></td>
 				</tr>
 				<tr>

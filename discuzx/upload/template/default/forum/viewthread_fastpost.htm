@@ -50,7 +50,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 					<!--{if $allowpostreply}-->
 						<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, {if $_G['gp_ordertype'] != 1}'fastpostvalidate($(\'fastpostform\'))'{else}'$(\'fastpostform\').submit()'{/if});" tabindex="4" class="pt"></textarea>
 					<!--{elseif !$_G['uid']}-->
-						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
+						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> | <a href="javascript:;" onclick="fblogin();"><img src="static/image/facebook_icon3.png" style="margin-bottom:-5px;"></a> <!--{hook/global_login_text}--></div>
 					<!--{/if}-->
 				</div>
 			</div>

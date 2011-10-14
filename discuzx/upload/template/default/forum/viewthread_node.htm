@@ -96,6 +96,10 @@
 					<li class="buddy"><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$post[authorid]&handlekey=addfriendhk_{$post[authorid]}" id="a_friend_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="{lang viewthread_left_addfriend}" class="xi2">{lang viewthread_left_addfriend}</a></li>
 					<li class="poke2"><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$post[authorid]" id="a_poke_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang viewthread_left_poke}" class="xi2">{lang viewthread_left_poke}</a></li>
 					<li class="pm2"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&pid=$post[pid]&tid=$post[tid]" onclick="showWindow('sendpm', this.href);" title="{lang viewthread_left_sendpm}" class="xi2">{lang viewthread_left_sendpm}</a></li>
+					<!--{if ($post[fbid] && $_G['forum']['ismoderator']) || ($post[fbid] && $post[showfblink] == 0) || ($post[fbid] && $post[showfblink] == 1 && $isfriend[$post[authorid]])}-->
+						<li style="background-image:url(static/image/facebook_icon.png);"><a href="http://www.facebook.com/profile.php?id=$post[fbid]" target="_blank">{lang facebook_profile}</a></li>
+						<li style="background-image:url(static/image/facebook_icon.png);"><a href="http://www.facebook.com/addfriend.php?id=$post[fbid]" target="_blank">{lang add_facebook_friend}</a></li>
+					<!--{/if}-->
 				</ul>
 			<!--{/if}-->
 			<!--{hook/viewthread_sidebottom $postcount}-->
@@ -244,6 +248,7 @@
 		<!--{/if}-->
 	</td></tr>
 	<tr><td class="plc plm">
+		<!--{if $post['first']}--><div style="line-height:40px;"><!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}--><fb:like href="$_G[siteurl]thread-{$_G[tid]}-1-1.html" show_faces="false" send="true" width="450"></fb:like><!--{else}--><fb:like href="$_G[siteurl]forum.php?mod=viewthread&tid=$_G[tid]" show_faces="false" send="true" width="450"></fb:like><!--{/if}--></div><!--{/if}-->
 		<!--{if !IS_ROBOT && $post['first'] && !$_G['forum_thread']['archiveid']}-->
 			<!--{if !empty($lastmod['modaction'])}--><div class="modact"><a href="forum.php?mod=misc&action=viewthreadmod&tid=$_G[tid]" title="{lang thread_mod}" onclick="showWindow('viewthreadmod', this.href)"><!--{if $lastmod['modactiontype'] == 'REB'}-->{lang thread_mod_recommend_by}<!--{else}-->{lang thread_mod_by}<!--{/if}--></a></div><!--{/if}-->
 
@@ -269,6 +274,9 @@
 			<!--{if $post['first'] && $_G[uid] && $_G[uid] == $post[authorid]}-->
 				<a href="misc.php?mod=invite&action=thread&id=$_G[tid]" onclick="showWindow('invite', this.href, 'get', 0);"><i><img src="{IMGDIR}/activitysmall.gif" alt="{lang invite}" />{lang invite}</i></a>
 			<!--{/if}-->
+			<a href="javascript:;" onclick="fbshare();"><i><img src="static/image/facebook_icon2.png" style="margin-right:5px;">{lang thread_share}</i></a>
+			<a href="javascript:;" onclick="fbsend();"><i><img src="static/image/facebook_icon2.png" style="margin-right:5px;">{lang facebook_send}</i></a>
+			<a href="javascript:;" onclick="fbinvite();"><i><img src="static/image/facebook_icon2.png" style="margin-right:5px;">{lang invite}</i></a>
 			<!--{hook/viewthread_useraction}-->
 		</div>
 		<!--{/if}-->

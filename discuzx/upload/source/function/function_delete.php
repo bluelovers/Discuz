@@ -67,6 +67,7 @@ function deletemember($uids, $delpost = true) {
 	}
 
 	DB::query("DELETE FROM ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." USING ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." WHERE ".DB::table('common_mailcron').".touid IN ($uids) AND ".DB::table('common_mailcron').".cid=".DB::table('common_mailqueue').".cid", 'UNBUFFERED');
+	DB::query("DELETE FROM ".DB::table('facebook_connect')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
 	foreach(array('home_doing', 'home_share', 'home_album', 'common_credit_rule_log', 'common_credit_rule_log_field',
 		'home_pic', 'home_blog', 'home_blogfield', 'home_class', 'home_clickuser',

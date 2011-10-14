@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 23324 2011-07-06 03:17:57Z zhengqingpeng $
+ *      $Id: lang_template.php 22427 2011-05-06 10:56:41Z monkey $
  *
  *      This file is automatically generate
  */
@@ -252,6 +252,8 @@ $lang = array (
   'popular_blog_review' => '熱門日誌導讀',
   'use_magic_tools' => '使用道具',
   'view_blog' => '查看日誌',
+  'facebook_profile' => '看FB檔案',
+  'add_facebook_friend' => '加FB好友',
   'add_friend' => '加為好友',
   'connect_me' => '給我留言',
   'diy_space' => '裝扮空間',
@@ -1144,7 +1146,7 @@ $lang = array (
   'text_color' => '文字顏色',
   'title_bar' => '標題欄',
   'track_name' => '曲目名',
-  'update_album_list' => '更新當前音樂列表',
+  'update_ablum_list' => '更新當前音樂列表',
   'upload_new_pic' => '上傳新圖片',
   'upload_start' => '開始上傳',
   'vertical_repeat' => '縱向平舖',

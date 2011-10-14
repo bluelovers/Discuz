@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function getblockhtml($blockname,$parameters = array()) {
-	global $_G, $space;
+	global $_G, $space, $sfb, $isfriend;
 
 	$parameters = empty($parameters) ? array() : $parameters;
 	$list = array();
@@ -122,6 +122,10 @@ function getblockhtml($blockname,$parameters = array()) {
 				$html .= "<li class='ul_msg'><a href=\"home.php?mod=space&uid=$space[uid]&do=wall\">".lang('space', 'block_profile_wall_to_me')."</a></li>";
 				$html .= "<li class='ul_poke'><a href=\"home.php?mod=spacecp&ac=poke&op=send&uid=$space[uid]&handlekey=propokehk_{$space[uid]}\" id=\"a_poke_{$space[uid]}\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">".lang('space', 'block_profile_poke')."</a></li>";
 				$html .= "<li class='ul_pm'><a href=\"home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$space[uid]&touid=$space[uid]&pmid=0&daterange=2\" id=\"a_sendpm_$space[uid]\" onclick=\"showWindow('showMsgBox', this.href, 'get', 0)\">".lang('space', 'block_profile_sendmessage')."</a></li>";
+				if(($sfb[fbid] && $_G['adminid'] > 0) || ($sfb[fbid] && $sfb[showfblink] == 0) || ($sfb[fbid] && $sfb[showfblink] == 1 && $isfriend)) {
+					$html .= "<li><a href=\"http://www.facebook.com/profile.php?id=$sfb[fbid]\" target=\"_blank\" style=\"background-image:url(static/image/facebook_icon.png);\">".lang('space', 'facebook_profile')."</a></li>";
+					$html .= "<li><a href=\"http://www.facebook.com/addfriend.php?id=$sfb[fbid]\" target=\"_blank\" style=\"background-image:url(static/image/facebook_icon.png);\">".lang('space', 'add_facebook_friend')."</a></li>";
+				}
 			}
 			$html .= '</ul>';
 

@@ -189,6 +189,8 @@ $lang = array(
 	'click_play' => '點擊播放',
 	'click_view' => '點擊查看',
 	'feed_view_only' => '只看此類動態',
+	'facebook_profile' => '看FB檔案',
+	'add_facebook_friend' => '加FB好友',
 
 	'export_pm' => '導出短消息',
 	'pm_export_header' => 'Discuz! X 短消息記錄(此消息記錄不支持重新導入)',

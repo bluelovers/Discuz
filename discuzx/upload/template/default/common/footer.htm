@@ -101,6 +101,124 @@
 <span id="scrolltop" onclick="window.scrollTo('0','0')">{lang scrolltop}</span>
 <script type="text/javascript">_attachEvent(window, 'scroll', function(){showTopLink();});</script>
 <!--{/if}-->
+
+<div id="fb-root"></div>
+<script type="text/javascript">
+window.fbAsyncInit = function() {
+	FB.init({appId:'$_G['cache']['plugin']['facebook_connect']['appid']', status:true, cookie:true, xfbml:true, channelUrl:'{$_G[siteurl]}channel.html'});
+<!--{if $_G[tid]}-->
+	<!--{if $_G['like'] == 'no'}-->
+	FB.Event.subscribe('edge.create', function() {
+		location.replace('forum.php?mod=viewthread&tid={$_G[tid]}&page={$_G[page]}&todo=like');
+	});
+	<!--{if $_G['fbc'] && $_G['cache']['plugin']['facebook_ltv']['fctv']}-->
+	FB.Event.subscribe('comment.create', function() {
+		location.replace('forum.php?mod=viewthread&tid={$_G[tid]}&page={$_G[page]}&todo=fcomm');
+	});
+	<!--{/if}-->
+	<!--{/if}-->
+	FB.Event.subscribe('edge.remove', function() {
+		fbshare();
+	});
+	<!--{if $_G['like'] && $_G['fbc'] && $_G['cache']['plugin']['facebook_ltv']['fctv']}-->
+	FB.Event.subscribe('comment.remove', function() {
+		location.replace('forum.php?mod=viewthread&tid={$_G[tid]}&page={$_G[page]}&todo=unfcomm');
+	});
+	<!--{/if}-->
+<!--{/if}-->
+};
+(function() {
+	var e = document.createElement('script');
+	e.src = document.location.protocol + '//connect.facebook.net/zh_TW/all.js';
+	e.async = true;
+	document.getElementById('fb-root').appendChild(e);
+}());
+<!--{if $_G[tid]}-->
+function fbshare() {
+	FB.ui({
+		method: 'feed',
+		name: '$_G[forum_thread][subject]',
+		<!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}-->
+		link: '$_G[siteurl]thread-{$_G[tid]}-1-1.html',
+		<!--{else}-->
+		link: '$_G[siteurl]forum.php?mod=viewthread&tid=$_G[tid]',
+		<!--{/if}-->
+		<!--{if $iattrs}-->
+		picture: '$iattrs',
+		<!--{/if}-->
+		caption: '$_G['setting']['bbname']',
+		description: '{if !empty($metadescription)}{echo htmlspecialchars($metadescription)}{/if}',
+		message: ''
+	}, function(response) {
+		<!--{if $_G['like']}-->
+		if (response && response.post_id) {
+			location.replace('forum.php?mod=viewthread&tid={$_G[tid]}&page={$_G[page]}&todo=unlike');
+		} else {
+			location.replace('forum.php?mod=viewthread&tid={$_G[tid]}&page={$_G[page]}&todo=unlike');
+		}
+		<!--{/if}-->
+	});
+}
+function fbsend() {
+	FB.ui({
+		method: 'send',
+		app_id: '$_G['cache']['plugin']['facebook_connect']['appid']',
+		name: '$_G[forum_thread][subject]',
+		<!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}-->
+		link: '$_G[siteurl]thread-{$_G[tid]}-1-1.html',
+		<!--{else}-->
+		link: '$_G[siteurl]forum.php?mod=viewthread&tid=$_G[tid]',
+		<!--{/if}-->
+		<!--{if $iattrs}-->
+		picture: '$iattrs',
+		<!--{/if}-->
+		description: '{if !empty($metadescription)}{echo htmlspecialchars($metadescription)}{/if}'
+	});
+}
+function fbinvite() {
+	FB.ui({
+		method: 'apprequests',
+		message: '{lang facebook_invite_friend_addmsg}',
+		filters: "['app_non_users']",
+		title: '{lang facebook_invite_friend_add} {$_G['setting']['bbname']}'
+	});
+}
+<!--{/if}-->
+function fblogin() {
+	FB.login(function(response) {
+		if (response.session) {
+			if (response.perms) {
+				location.replace('fblogin.php?act=logging&rf='+urlencode(location.href));
+			} else {
+				location.replace('index.php');
+			}
+		} else {
+			location.replace('index.php');
+		}
+	}, {perms:'email,user_likes,publish_stream'});
+}
+function urlencode(str) {
+	var output = '', x = 0, regex = /(^[a-zA-Z0-9_.]*)/;
+	str = str.toString();
+	while (x < str.length) {
+		var match = regex.exec(str.substr(x));
+		if (match != null && match.length > 1 && match[1] != '') {
+			output += match[1];
+			x += match[1].length;
+		} else {
+			if (str[x] == ' ') {
+				output += '+';
+			} else {
+				var charCode = str.charCodeAt(x), hexVal = charCode.toString(16);
+				output += '%' + ( hexVal.length < 2 ? '0' : '' ) + hexVal.toUpperCase();
+			}
+			x++;
+		}
+	}
+	return output;
+}
+</script>
+
 <!--{eval output();}-->
 </body>
 </html>

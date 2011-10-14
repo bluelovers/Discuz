@@ -25,6 +25,10 @@
 					<li class="ul_poke"><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$space[uid]&handlekey=propokehk_{$space[uid]}" id="a_poke_{$space[uid]}" onclick="showWindow(this.id, this.href, 'get', 0);">{lang say_hi}</a></li>
 				<!--{/if}-->
 				<li class="ul_pm"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$space[uid]&touid=$space[uid]&pmid=0&daterange=2" id="a_sendpm_$space[uid]" onclick="showWindow('showMsgBox', this.href, 'get', 0)">{lang send_pm}</a></li>
+				<!--{if ($sfb[fbid] && $_G['adminid'] > 0) || ($sfb[fbid] && $sfb[showfblink] == 0) || ($sfb[fbid] && $sfb[showfblink] == 1 && $isfriend)}-->
+					<li><a href="http://www.facebook.com/profile.php?id=$sfb[fbid]" target="_blank" style="background-image:url(static/image/facebook_icon.png);">{lang facebook_profile}</a></li>
+					<li><a href="http://www.facebook.com/addfriend.php?id=$sfb[fbid]" target="_blank" style="background-image:url(static/image/facebook_icon.png);">{lang add_facebook_friend}</a></li>
+				<!--{/if}-->
 			<!--{/if}-->
 			</ul>
 			<!--{if checkperm('allowbanuser') || checkperm('allowedituser') || $_G[adminid] == 1}-->

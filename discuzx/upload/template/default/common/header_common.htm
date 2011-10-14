@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" xmlns:discuz="http://www.discuz.net/ns#">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
 	<title><!--{if !empty($navtitle)}-->$navtitle - <!--{/if}--><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> Powered by Discuz!</title>
 	$_G['setting']['seohead']
 
@@ -12,6 +13,21 @@
 	<meta name="copyright" content="2001-2011 Comsenz Inc." />
 	<meta name="MSSmartTagsPreventParsing" content="True" />
 	<meta http-equiv="MSThemeCompatible" content="Yes" />
+	<!--{if $_G[tid]}-->
+	<meta property="og:type" content="discuz:thread"/>
+	<meta property="og:site_name" content="$_G['setting']['bbname']"/>
+	<!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}-->
+	<meta property="og:url" content="$_G[siteurl]thread-{$_G[tid]}-1-1.html"/>
+	<!--{else}-->
+	<meta property="og:url" content="$_G[siteurl]forum.php?mod=viewthread&tid=$_G[tid]"/>
+	<!--{/if}-->
+	<meta property="og:title" content="$_G[forum_thread][subject] - $_G['setting']['bbname']"/>
+	<meta property="og:description" content="{if !empty($metadescription)}{echo htmlspecialchars($metadescription)}{/if}"/>
+	<!--{if $iattrs}-->
+	<meta property="og:image" content="$iattrs"/>
+	<!--{/if}-->
+	<meta property="fb:app_id" content="$_G['cache']['plugin']['facebook_connect']['appid']"/>
+	<!--{/if}-->
 	<!--{if $_G['config']['output']['iecompatible']}--><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE{$_G['config']['output']['iecompatible']}" /><!--{/if}-->
 	<base href="{$_G['siteurl']}" />
 	<!--{csstemplate}-->

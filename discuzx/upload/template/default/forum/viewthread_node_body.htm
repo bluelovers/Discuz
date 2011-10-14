@@ -50,6 +50,7 @@
 	<!--{/if}-->
 	<div class="{if !$_G[forum_thread][special]}t_fsz{else}pcbs{/if}">
 		<!--{if $post['first']}-->
+			<div style="line-height:40px;"><!--{if in_array('forum_viewthread', $_G['setting']['rewritestatus'])}--><fb:like href="$_G[siteurl]thread-{$_G[tid]}-1-1.html" show_faces="false" send="true" width="450"></fb:like><!--{else}--><fb:like href="$_G[siteurl]forum.php?mod=viewthread&tid=$_G[tid]" show_faces="false" send="true" width="450"></fb:like><!--{/if}--></div>
 			<!--{if !$_G[forum_thread][special]}-->
 				<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">
 				<!--{if !$_G['inajax']}-->

@@ -134,6 +134,7 @@
 							<td>
 								<button class="pn pnc" type="submit" name="loginsubmit" value="true" tabindex="1"><strong>{lang login}</strong></button>
 							</td>
+							<td><b>Facebook</b> <a href="javascript:;" onclick="fblogin();"><img src="static/image/facebook_icon3.png" style="margin-bottom:-5px;"></a></td>
 							<td>
 								<!--{if $this->setting['sitemessage'][login] && empty($_G['gp_infloat'])}--><a href="javascript:;" id="custominfo_login_$loginhash" class="y">&nbsp;<img src="{IMGDIR}/info_small.gif" alt="{lang faq}" class="vm" /></a><!--{/if}-->
 								<!--{if !$this->setting['bbclosed'] && empty($_G['gp_infloat'])}--><a href="javascript:;" onclick="ajaxget('member.php?mod=clearcookies&formhash={FORMHASH}', 'returnmessage_$loginhash', 'returnmessage_$loginhash');return false;" title="{lang login_clearcookies}" class="y">{lang login_clearcookies}</a><!--{/if}-->
