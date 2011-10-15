@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloud.php 23925 2011-08-16 12:03:49Z yexinhao $
+ *      $Id: function_cloud.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -272,18 +272,27 @@ function setcloudappstatus_stats($appName, $status) {
 }
 
 function setcloudappstatus_search($appName, $status) {
+	global $_G;
+	$searchData = unserialize($_G['setting']['my_search_data']);
+	if (!is_array($searchData)) {
+		$searchData = array();
+	}
+	$searchData['isnew'] = 0;
+	$searchData = addslashes(serialize(dstripslashes($searchData)));
 
 	$available = 0;
 	if($status == 'normal') {
 		$available = 1;
 	}
-	$res = DB::insert('common_setting', array('skey' => 'my_search_status', 'svalue' => $available), false, true);
+	$res = DB::insert('common_setting', array('skey' => 'my_search_data', 'svalue' => $searchData), false, true);
 	if($available) {
 		require_once DISCUZ_ROOT.'./api/manyou/Manyou.php';
 		SearchHelper::allowSearchForum();
 	}
 
-	return $res;
+	updatecloudpluginavailable('cloudsearch', $available);
+
+	return true;
 }
 
 function setcloudappstatus_smilies($appName, $status) {
@@ -381,6 +390,19 @@ function cloud_http_build_query($data, $numeric_prefix='', $arg_separator='', $p
 
 function cloud_get_api_version() {
 	return '0.4';
+}
+
+function cloud_init_uniqueid() {
+	$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+	if(empty($siteuniqueid) || strlen($siteuniqueid) < 16) {
+		$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+		$siteuniqueid = 'DX'.$chars[date('y')%60].$chars[date('n')].$chars[date('j')].$chars[date('G')].$chars[date('i')].$chars[date('s')].substr(md5($_G['clientip'].$_G['username'].TIMESTAMP), 0, 4).random(4);
+		$unique = array(
+			'skey' => 'siteuniqueid',
+			'svalue' => $siteuniqueid
+		);
+		DB::insert('common_setting', $unique, false, true);
+	}
 }
 
 ?>
