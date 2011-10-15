@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_qqgroup.php 23162 2011-06-22 03:04:22Z yexinhao $
+ *      $Id: cloud_qqgroup.php 23998 2011-08-18 10:21:43Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -83,13 +83,13 @@ if($_G['gp_anchor'] == 'list') {
 	} elseif($op == 'uploadImage') {
 		$tid = intval($_G['gp_tid']);
 		if (submitcheck('uploadImageSubmit')) {
-			include template('common/header');
+			ajaxshowheader();
 			if($uploadImage = QQGroupUpload($tid)) {
 				echo '<div id="upload_msg_success">'.cplang('qqgroup_msg_upload_succeed').'</div><div id="upload_msg_imgpath" style="display:none;">'.$uploadImage['thumbTarget'].'</div><div id="upload_msg_imgurl" style="display:none;">'.$_G['setting']['attachurl'].$uploadImage['thumbTarget'].'</div>';
 			} else {
 				echo '<div id="upload_msg_failure">'.cplang('qqgroup_msg_upload_failure').'</div>';
 			}
-			include template('common/footer');
+			ajaxshowfooter();
 		} else {
 			showUploadImageForm($tid);
 		}
@@ -195,10 +195,10 @@ function showSearchResultThreads($where, $order, $mpurl) {
 			</tr>';
 		}
 	}
-	include template('common/header');
+	ajaxshowheader();
 	echo $threadsOutput;
 	showSearchResultPageLinks(count($threads), $mpurl);
-	include template('common/footer');
+	ajaxshowfooter();
 }
 
 function listSearchResultThreads($where, $order) {
@@ -261,9 +261,9 @@ function getTopicThread() {
 	global $_G;
 	$tid = intval($_G['gp_tid']);
 	if(empty($tid)) {
-		include template('common/header');
+		ajaxshowheader();
 		echo showTopicTemplate(0);
-		include template('common/footer');
+		ajaxshowfooter();
 		return false;
 	}
 
@@ -274,9 +274,9 @@ function getTopicThread() {
 	$posttable = $_G['thread']['posttable'];
 
 	if(empty($posttable)) {
-		include template('common/header');
+		ajaxshowheader();
 		echo showTopicTemplate(0);
-		include template('common/footer');
+		ajaxshowfooter();
 		return false;
 	}
 
@@ -302,9 +302,9 @@ function getTopicThread() {
 		}
 	}
 
-	include template('common/header');
+	ajaxshowheader();
 	echo showTopicTemplate($tid, $subject, $message, $imagePath, $imageUrl);
-	include template('common/footer');
+	ajaxshowfooter();
 }
 
 function showTopicTemplate($tid, $subject = '', $message = '', $imagePath = '', $imageUrl = '') {
@@ -356,9 +356,9 @@ function getNormalThread() {
 	$subject = strip_tags($_G['thread']['subject']);
 	$hasImage = $_G['thread']['attachment'] ? true : false;
 
-	include template('common/header');
+	ajaxshowheader();
 	echo showNormalTemplateLi($tid, $subject, $hasImage, true);
-	include template('common/footer');
+	ajaxshowfooter();
 }
 
 function showNormalTemplateLi($tid, $subject = '', $hasImage = false) {
@@ -617,7 +617,7 @@ function sentMiniportalThreadsRemote($topic, $normal, $gIds = array()) {
 }
 
 function showUploadImageForm($tid) {
-	include template('common/header');
+	ajaxshowheader();
 	echo '
 		<ul class="fwin-menu">
 			<li class="a"><a>'.cplang('qqgroup_ctrl_upload_image').'</a></li>
@@ -650,7 +650,7 @@ function showUploadImageForm($tid) {
 	echo '
 		<div class="o pns"><button class="pn pnc" onClick="ajaxUploadQQGroupImage();"><span>'.cplang('qqgroup_ctrl_upload_image').'</span></button></div>
 		';
-	include template('common/footer');
+	ajaxshowfooter();
 }
 
 function QQGroupUpload($tid) {
@@ -711,7 +711,7 @@ function showQQGroupScript() {
 	<script type="text/javascript">
 		var adminscript = '$adminscript';
 	</script>
-	<script type="text/javascript" src="static/image/admincp/cloud/qqgroup.js"></script>
+	<script type="text/javascript" src="static/image/admincp/cloud/qqgroup.js?v=2"></script>
 EOF;
 }
 
