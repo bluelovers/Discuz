@@ -33,7 +33,7 @@
 			<ul class="tb cl">
 				<!--{if $allowmanage || $admincp2}--><li $typearr[all]><a href="portal.php?mod=portalcp&ac=category&catid=$cate[catid]&type=all">{lang all}</a></li><!--{/if}-->
 				<li $typearr[me]><a href="portal.php?mod=portalcp&ac=category&catid=$cate[catid]&type=me">{lang me}</a></li>
-				<!--{if empty($cate['disallowpublish']) && ($allowmanage || $allowpost || !empty($permission[$value['catid']]['allowmanage']) || !empty($permission[$value['catid']]['allowpublish']))}--><li class="o y"><a href="portal.php?mod=portalcp&ac=article&catid=$catid" target="_blank">{lang article_new}</a></li><!--{/if}-->
+				<!--{if empty($cate['disallowpublish'])}--><li class="o y"><a href="portal.php?mod=portalcp&ac=article&catid=$catid" target="_blank">{lang article_new}</a></li><!--{/if}-->
 			</ul>
 			<form name="articlelist" id="articlelist" action="portal.php?mod=portalcp&ac=article&op=batch" method="post" onsubmit="return checkPushSubmit(this);">
 				<input type="hidden" value="true" name="batchsubmit"/>
@@ -64,7 +64,7 @@
 							<!--{if $value[status] == 1}--><b>({lang moderate_need})</b><!--{/if}-->
 							<!--{if $value[status] == 2}--><b>({lang ignored})</b><!--{/if}-->
 						</td>
-						<td>$category[$value[catid]][catname]</td>
+						<td><a href="portal.php?mod=portalcp&ac=category&catid=$value[catid]">$category[$value[catid]][catname]</a></td>
 						<td>
 							<a href="home.php?mod=space&uid=$value[uid]" title="{lang view_space}" target="_blank">$value[username]</a>
 							<br /><span class="xs0 xg1">$value[dateline]</span>

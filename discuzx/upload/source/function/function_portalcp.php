@@ -4,13 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 23372 2011-07-12 01:50:34Z zhangguosheng $
+ *      $Id: function_portalcp.php 24656 2011-09-29 09:25:32Z zhangguosheng $
  */
 
 function get_uploadcontent($attach, $type='portal', $dotype='') {
 
 	$return = '';
 	$dotype = $dotype ? 'checked' : '';
+	$attach['attachid'] = $attach['aid'] ? $attach['aid'] : $attach['attachid'];
 	if($attach['isimage']) {
 		$pic = pic_get($attach['attachment'], $type, $attach['thumb'], $attach['remote'], 0);
 		$small_pic = $attach['thumb'] ? getimgthumbname($pic) : '';
@@ -28,11 +29,12 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$return .= '</table>';
 
 	} else {
+		$attach_url = $type == 'forum' ? 'forum.php?mod=attachment&aid='.aidencode($attach['attachid'], 1) : 'protal.php?mod=attachment&id='.$attach['attachid'];
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
-		$return .= '<td width="50" class="bbs"><a href="portal.php?mod=attachment&id='.$attach['attachid'].'" target="_blank">'.$attach['filename'].'</a></td>';
+		$return .= '<td width="50" class="bbs"><a href="'.$attach_url.'" target="_blank">'.$attach['filename'].'</a></td>';
 		$return .= '<td align="right" class="bbs">';
-		$return .= '<a href="javascript:void(0);" onclick="insertFile(\''.$attach['filename'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'\');return false;">'.lang('portalcp', 'insert_file').'</a><br>';
-		$return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
+		$return .= '<a href="javascript:void(0);" onclick="insertFile(\''.$attach['filename'].'\', \''.$attach_url.'\');return false;">'.lang('portalcp', 'insert_file').'</a><br>';
+		if($type == 'portal') $return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
 		$return .= '</td>';
 		$return .= '</table>';
 	}
@@ -139,7 +141,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 }
 
 function getdiytplname($targettplname) {
-	$diytplname = DB::result("SELECT name FROM ".DB::table('common_diy_data')." WHERE targettplname='$targettplname'");
+	$diytplname = DB::result_first("SELECT name FROM ".DB::table('common_diy_data')." WHERE targettplname='$targettplname'");
 	if(empty($diytplname)) {
 		$sql = '';
 		if (substr($targettplname, 0, 27) == 'portal/portal_topic_content') {
