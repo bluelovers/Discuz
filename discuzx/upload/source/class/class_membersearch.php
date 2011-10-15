@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_membersearch.php 22199 2011-04-26 02:37:59Z monkey $
+ *      $Id: class_membersearch.php 24683 2011-10-08 04:15:03Z svn_project_zhangjie $
  */
 
 class membersearch {
@@ -146,6 +146,17 @@ class membersearch {
 
 	function makehash($condition) {
 		return md5(serialize($condition));
+	}
+
+	function filtercondition($condition) {
+		$fields = membersearch::getfield();
+		foreach($condition as $key => $value) {
+			$rkey = str_replace(array('_low', '_high', '_noempty', '_after', '_before'), '', $key);
+			if(!(isset($fields[$rkey]) || in_array($key, array('verify', 'fid')))) {
+				unset($condition[$key]);
+			}
+		}
+		return $condition;
 	}
 
 	function makesql($condition, $onlyCount=false) {
