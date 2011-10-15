@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 22591 2011-05-13 08:14:41Z monkey $
+ *      $Id: misc_initsys.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ if($_G['config']['output']['tplrefresh']) {
 	$tpl->close();
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');
