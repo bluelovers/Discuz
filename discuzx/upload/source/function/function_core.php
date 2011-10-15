@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 23920 2011-08-16 09:11:43Z cnteacher $
+ *      $Id: function_core.php 24580 2011-09-27 05:38:22Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -289,7 +289,7 @@ function dsetcookie($var, $value = '', $life = 0, $prefix = 1, $httponly = false
 
 	$_G['cookie'][$var] = $value;
 	$var = ($prefix ? $config['cookiepre'] : '').$var;
-	$_COOKIE[$var] = $var;
+	$_COOKIE[$var] = $value;
 
 	if($value == '' || $life < 0) {
 		$value = '';
@@ -1755,14 +1755,14 @@ function dreferer($default = '') {
 	if(strpos($_G['referer'], 'member.php?mod=logging')) {
 		$_G['referer'] = $default;
 	}
-	$_G['referer'] = htmlspecialchars($_G['referer']);
+	$_G['referer'] = htmlspecialchars($_G['referer'], ENT_QUOTES);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
 	// FIX 校驗dreferer的域名，防止XSS注入
 	$reurl = parse_url($_G['referer']);
 	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
 		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
 			$domainroot = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
-			if(is_array($_G['setting']['domain']['root']) && !in_array($domainroot, $_G['setting']['domain']['root'])) {
+			if(empty($_G['setting']['domain']['root']) || (is_array($_G['setting']['domain']['root']) && !in_array($domainroot, $_G['setting']['domain']['root']))) {
 				$_G['referer'] = $_G['setting']['domain']['defaultindex'] ? $_G['setting']['domain']['defaultindex'] : 'index.php';
 			}
 		}
@@ -2554,4 +2554,58 @@ function userappprompt() {
 	}
 }
 
+
+function makeSearchSignUrl() {
+	global $_G;
+
+	$url = '';
+	$params = array();
+	$my_search_data = unserialize($_G['setting']['my_search_data']);
+	$my_siteid = $_G['setting']['my_siteid'];
+	$my_sitekey= $_G['setting']['my_sitekey'];
+	require_once libfile('function/cloud');
+	if($my_search_data['status'] && getcloudappstatus('search') && $my_siteid) {
+		$my_extgroupids = array();
+		$_extgroupids = explode("\t", $_G['member']['extgroupids']);
+		foreach($_extgroupids as $v) {
+			if ($v) {
+				$my_extgroupids[] = $v;
+			}
+		}
+		$my_extgroupids_str = implode(',', $my_extgroupids);
+		$params = array('sId' => $my_siteid,
+							'ts' => time(),
+							'cuId' => $_G['uid'],
+							'cuName' => $_G['username'],
+							'gId' => intval($_G['groupid']),
+							'agId' => intval($_G['adminid']),
+							'egIds' => $my_extgroupids_str,
+							'fmSign' => '',
+						   );
+		$groupIds = array($params['gId']);
+		if ($params['agId']) {
+			$groupIds[] = $params['agId'];
+		}
+		if ($my_extgroupids) {
+			$groupIds = array_merge($groupIds, $my_extgroupids);
+		}
+
+		$groupIds = array_unique($groupIds);
+		foreach($groupIds as $v) {
+			$key = 'ugSign' . $v;
+			$params[$key] = '';
+		}
+		$params['sign'] = md5(implode('|', $params) . '|' . $my_sitekey);
+
+		$params['charset'] = $_G['charset'];
+		$mySearchData = unserialize($_G['setting']['my_search_data']);
+		if ($mySearchData['domain']) {
+			$domain = $mySearchData['domain'];
+		} else {
+			$domain = 'search.discuz.qq.com';
+		}
+		$url = 'http://' . $domain . '/f/discuz';
+	}
+	return !empty($url) ? array($url, $params) : array();
+}
 ?>
