@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Style]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-09-14 00:30]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://localhost/d2/)]]></item>
+	<item id="Data">
+		<item id="name"><![CDATA[巅峰最寂寞]]></item>
+		<item id="templateid"><![CDATA[2]]></item>
+		<item id="tplname"><![CDATA[北北″专业模版系列]]></item>
+		<item id="directory"><![CDATA[./template/DFSJ_Discuz!_Plus]]></item>
+		<item id="copyright"><![CDATA[北北″制作 QQ:9778566]]></item>
+		<item id="style">
+			<item id="smfont"><![CDATA[Arial]]></item>
+			<item id="threadtitlefontsize"><![CDATA[14px]]></item>
+			<item id="threadtitlefont"><![CDATA[Tahoma,'Microsoft Yahei','Simsun']]></item>
+			<item id="smfontsize"><![CDATA[0.83em]]></item>
+			<item id="tabletext"><![CDATA[#bbb]]></item>
+			<item id="midtext"><![CDATA[#666]]></item>
+			<item id="lighttext"><![CDATA[#999]]></item>
+			<item id="link"><![CDATA[#99D0FF]]></item>
+			<item id="highlightlink"><![CDATA[#369]]></item>
+			<item id="noticetext"><![CDATA[#F26C4F]]></item>
+			<item id="bgcolor"><![CDATA[#0f1420 bd_bg.jpg repeat-x 50% 0 fixed]]></item>
+			<item id="msgfontsize"><![CDATA[14px]]></item>
+			<item id="sidebgcolor"><![CDATA[ vlineb.png repeat-y 0 0]]></item>
+			<item id="headerborder"><![CDATA[0]]></item>
+			<item id="headerbgcolor"><![CDATA[]]></item>
+			<item id="inputborderdarkcolor"><![CDATA[#848484]]></item>
+			<item id="stypeid"><![CDATA[1]]></item>
+			<item id="inputbg"><![CDATA[#FFF]]></item>
+			<item id="commonborder"><![CDATA[#1F2936]]></item>
+			<item id="commonbg"><![CDATA[#141922]]></item>
+			<item id="specialborder"><![CDATA[#1F2936]]></item>
+			<item id="specialbg"><![CDATA[#1F2936]]></item>
+			<item id="dropmenuborder"><![CDATA[#DDD]]></item>
+			<item id="floatmaskbgcolor"><![CDATA[#000]]></item>
+			<item id="dropmenubgcolor"><![CDATA[#425265]]></item>
+			<item id="floatbgcolor"><![CDATA[#FFF]]></item>
+			<item id="lightlink"><![CDATA[#FFF]]></item>
+			<item id="menuhoverbgcolor"><![CDATA[ nv_a.png no-repeat 0 0]]></item>
+			<item id="titlebgcolor"><![CDATA[ titlebg.png repeat-x 0 0]]></item>
+			<item id="fontsize"><![CDATA[12px/1.5]]></item>
+			<item id="font"><![CDATA[Tahoma,'Microsoft Yahei','Simsun']]></item>
+			<item id="styleimgdir"><![CDATA[Discuz!_Plus_imgs]]></item>
+			<item id="imgdir"><![CDATA[]]></item>
+			<item id="boardimg"><![CDATA[logo.png]]></item>
+			<item id="available"><![CDATA[]]></item>
+			<item id="headertext"><![CDATA[#bbb]]></item>
+			<item id="footertext"><![CDATA[#aaa]]></item>
+			<item id="menubgcolor"><![CDATA[ nv.png repeat-x 0 0]]></item>
+			<item id="menutext"><![CDATA[#bbb]]></item>
+			<item id="menuhovertext"><![CDATA[#FFF]]></item>
+			<item id="wrapbg"><![CDATA[#06090C]]></item>
+			<item id="wrapbordercolor"><![CDATA[#CCC]]></item>
+			<item id="contentwidth"><![CDATA[630px]]></item>
+			<item id="contentseparate"><![CDATA[#1F2936]]></item>
+			<item id="inputborder"><![CDATA[#E0E0E0]]></item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>
