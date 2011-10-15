@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 23584 2011-07-26 10:02:19Z zhangguosheng $
+ *      $Id: forum_viewthread.php 24706 2011-10-09 01:55:44Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,8 @@ $thread = & $_G['forum_thread'];
 $forum = & $_G['forum'];
 
 if(!$_G['forum_thread'] || !$_G['forum']) {
+	my_thread_log('redelete', array('tid' => $_G['gp_tid']));
+
 	showmessage('thread_nonexistence');
 
 }
@@ -98,6 +100,7 @@ if($_G['gp_from'] == 'portal') {
 	}
 	$nav = get_groupnav($_G['forum']);
 	$navigation = ' <em>&rsaquo;</em> <a href="group.php">'.$_G['setting']['navs'][3]['navname'].'</a> '.$nav['nav'];
+	$upnavlink = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].($_G['gp_extra'] && !IS_ROBOT ? '&'.$_G['gp_extra'] : '');
 	$_G['grouptypeid'] = $_G['forum']['fup'];
 
 } else {
@@ -1048,8 +1051,12 @@ function viewthread_custominfo($post) {
 				$extcredit = $_G['setting']['extcredits'][$i];
 				$v = '<dt>'.($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].'</dt><dd>'.$post['extcredits'.$i].' '.$extcredit['unit'].'</dd>';
 			} elseif(substr($key, 0, 6) == 'field_') {
+				$field = substr($key, 6);
+				if(!empty($post['privacy']['profile'][$field])) {
+					continue;
+				}
 				require_once libfile('function/profile');
-				$v = profile_show(substr($key, 6), $post);
+				$v = profile_show($field, $post);
 				if($v) {
 					$v = '<dt>'.$_G['cache']['custominfo']['profile'][$key][0].'</dt><dd title="'.htmlspecialchars(strip_tags($v)).'">'.$v.'</dd>';
 				}
