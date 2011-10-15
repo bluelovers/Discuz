@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_index.php 20107 2011-02-15 06:08:57Z zhengqingpeng $
+ *      $Id: userapp_index.php 24305 2011-09-06 10:06:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ if ($_G['gp_view'] == 'all') {
 		$f_index = '';
 
 	} else {
-		$wheresql = "uid IN ('0',$space[feedfriend])";
+		$wheresql = "uid IN (0,$space[feedfriend])";
 		$ordersql = "dateline DESC";
 		$theurl = "userapp.php?view=we";
 		$f_index = 'USE INDEX(dateline)';
