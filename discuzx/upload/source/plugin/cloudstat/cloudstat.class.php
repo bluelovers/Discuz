@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloudstat.class.php 23929 2011-08-17 02:33:35Z yexinhao $
+ *      $Id: cloudstat.class.php 24736 2011-10-10 02:46:07Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,6 @@ if(!defined('IN_DISCUZ')) {
 
 class plugin_cloudstat {
 	var $discuzParams = array();
-	var $virtualDomain = '';
 	var $extraParams = array();
 
 	function global_footerlink() {
@@ -71,9 +70,17 @@ class plugin_cloudstat {
 			$this->discuzParams['pn'] = 1;
 		}
 
-		if($_G['member']['conisbind']) {
-			$this->discuzParams['qq'] = $_G['member']['conuin'];
+		$qq = intval(getcookie('stats_qc_reg'));
+		dsetcookie('stats_qc_reg');
+		$qq .= $_G['uid']?'1':'0';
+
+		if($_G['uid'] && $_G['member']['conisbind']) {
+			$qq .= ($qclogin = intval(getcookie('stats_qc_login')))?$qclogin:1;
+			dsetcookie('stats_qc_login');
+		} else {
+			$qq .= '0';
 		}
+		$this->discuzParams['qq'] = $qq;
 
 		$cloudstatpost = getcookie('cloudstatpost');
 		dsetcookie('cloudstatpost');
@@ -105,20 +112,18 @@ class plugin_cloudstat {
 			$this->discuzParams['pi'] = $cloudstatpost[4];
 		}
 
-		$cloudstaticon = isset($_G['setting']['cloud_staticon']) ? intval($_G['setting']['cloud_staticon']) : 9;
+		$cloudstaticon = isset($_G['setting']['cloud_staticon']) ? intval($_G['setting']['cloud_staticon']) : 1;
 		if ($cloudstaticon && !$_G['inajax']) {
+			if ($cloudstaticon > 4 && $cloudstaticon < 9) {
+				$cloudstaticon = 1;
+			} elseif ($cloudstaticon < 5) {
+				$cloudstaticon += 10;
+			}
 			$this->discuzParams['logo'] = $cloudstaticon;
 		}
 
-		$refInfo = parse_url($_G['siteurl']);
-		if('/' == substr($refInfo['path'], -1)) {
-			$refInfo['path'] = substr($refInfo['path'], 0, -1);
-		}
-		$this->virtualDomain = $refInfo['host'] . $refInfo['path'];
-
 		return $this->_response_format(array(
 			'discuzParams' => $this->discuzParams,
-			'virtualDomain' => $this->virtualDomain,
 			'extraParams' => implode(';', $this->extraParams)
 		));
 	}
