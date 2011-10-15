@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 22540 2011-05-12 02:51:25Z zhengqingpeng $
+ *      $Id: space_home.php 24305 2011-09-06 10:06:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -149,7 +149,7 @@ if(!IS_ROBOT) {
 				$f_index = '';
 
 			} else {
-				$wheresql = "uid IN ('0',$space[feedfriend])";
+				$wheresql = "uid IN (0,$space[feedfriend])";
 				$ordersql = "dateline DESC";
 				$f_index = 'USE INDEX(dateline)';
 				$_G['gp_type'] = 'we';
@@ -198,7 +198,7 @@ if(!IS_ROBOT) {
 		if(empty($space['feedfriend'])) {
 			$need_count = false;
 		} else {
-			$wheresql['uid'] = "uid IN ('0',$space[feedfriend])";
+			$wheresql['uid'] = "uid IN (0,$space[feedfriend])";
 			$ordersql = "dateline DESC";
 			$f_index = 'USE INDEX(dateline)';
 		}

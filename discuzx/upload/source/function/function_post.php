@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 23694 2011-08-04 05:47:27Z monkey $
+ *      $Id: function_post.php 24761 2011-10-11 00:16:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,7 +54,7 @@ function getattach($pid, $posttime = 0, $aids = '') {
 			WHERE a.pid='$pid' ORDER BY a.aid DESC");
 		while($attach = DB::fetch($query)) {
 			$attach['filenametitle'] = $attach['filename'];
-			$attach['ext'] = fileext($attach['filename']);
+			$attach['ext'] = fileext(strtolower($attach['filename']));
 			if($allowext && !in_array($attach['ext'], $allowext)) {
 				continue;
 			}
@@ -134,7 +134,7 @@ function ftpupload($aids, $uid = 0) {
 		$query = DB::query("SELECT aid, thumb, attachment, filename, filesize, picid FROM ".DB::table($attachtable)." WHERE aid IN (".dimplode($aids).") AND remote='0'");
 		$aids = array();
 		while($attach = DB::fetch($query)) {
-			$attach['ext'] = fileext($attach['filename']);
+			$attach['ext'] = fileext(strtolower($attach['filename']));
 			if(((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['filesize'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
 				if(ftpcmd('upload', 'forum/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'forum/'.getimgthumbname($attach['attachment'])))) {
 					dunlink($attach);
@@ -255,19 +255,17 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 		}
 	}
 
-	$query = DB::query("SELECT aid, attachment, thumb, remote FROM ".DB::table(getattachtablebytid($tid))." WHERE uid='$uid'");
-	while($attach = DB::fetch($query)) {
-		$aids[] = $attach['aid'];
-		if($attachupdate && array_key_exists($attach['aid'], $attachupdate) && $attachupdate[$attach['aid']]) {
-			dunlink($attach);
-		}
-	}
-
 	if(!$modnewthreads && $newattach && $uid == $_G['uid']) {
 		updatecreditbyaction('postattach', $uid, array(), '', count($newattach), 1, $_G['fid']);
 	}
 
 	if($attachupdate) {
+		$query = DB::query("SELECT pid, aid, attachment, thumb, remote FROM ".DB::table(getattachtablebytid($tid))." WHERE aid IN (".dimplode(array_keys($attachupdate)).")");
+		while($attach = DB::fetch($query)) {
+			if(array_key_exists($attach['aid'], $attachupdate) && $attachupdate[$attach['aid']]) {
+				dunlink($attach);
+			}
+		}
 		$uaids = dimplode($attachupdate);
 		$query = DB::query("SELECT aid, width, filename, filesize, attachment, isimage, thumb, remote FROM ".DB::table('forum_attachment_unused')." WHERE aid IN ($uaids)$uidadd");
 		DB::query("DELETE FROM ".DB::table('forum_attachment_unused')." WHERE aid IN ($uaids)$uidadd");
@@ -277,7 +275,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			$update['dateline'] = TIMESTAMP;
 			$update['remote'] = 0;
 			unset($update['aid']);
-			if($_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
+			if($attach['isimage'] && $_G['setting']['watermarkstatus'] && empty($_G['forum']['disablewatermark'])) {
 				$image->Watermark($_G['setting']['attachdir'].'/forum/'.$attach['attachment'], '', 'forum');
 				$update['filesize'] = $image->imginfo['size'];
 			}

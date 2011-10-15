@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 23918 2011-08-16 08:25:11Z monkey $
+ *      $Id: forum_misc.php 24645 2011-09-29 05:38:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -485,11 +485,9 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$feed['idtype'] = 'tid';
 		postfeed($feed);
 	}
-	$posttable = getposttablebytid($_G['tid']);
-	$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND first='1'");
 
 	if(!empty($_G['inajax'])) {
-		dheader("location: forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$pid&inajax=1");
+		showmessage('thread_poll_succeed', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''), array(), array('location' => true));
 	} else {
 		showmessage('thread_poll_succeed', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''));
 	}
@@ -1239,7 +1237,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$activity['starttimefrom'] = dgmdate($activity['starttimefrom'], 'dt');
 	$activity['starttimeto'] = $activity['starttimeto'] ? dgmdate($activity['starttimeto'], 'dt') : 0;
 	$activity['expiration'] = $activity['expiration'] ? dgmdate($activity['expiration'], 'dt') : 0;
-	$activity['message'] = preg_replace('/\[.+?\]/', '', $activity['message']);
+	$activity['message'] = trim(preg_replace('/\[.+?\]/', '', $activity['message']));
 	$applynumbers = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND verified='1'");
 
 	$applylist = array();

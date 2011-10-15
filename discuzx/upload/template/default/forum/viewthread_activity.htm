@@ -105,45 +105,47 @@
 			<input type="hidden" name="handlekey" value="activityapplies" />
 			<div class="c">
 				<!--{if $_G['setting']['activitycredit'] && $activity['credit'] && !$applied}--><p class="xi1">{lang activity_need_credit} $activity[credit] {$_G['setting']['extcredits'][$_G['setting']['activitycredit']][title]}</p><!--{/if}-->
-				<table summary="{lang activity_join}" cellpadding="0" cellspacing="0" class="actl">
-				<!--{if $activity['cost']}-->
-					<tr>
-						<th>{lang activity_paytype}</th>
-						<td>
-							<p class="mbn"><label for="payment_0"><input class="pr" type="radio" value="0" name="payment" id="payment_0" checked="checked" />{lang activity_pay_myself}</label></p>
-							<p><label for="payment_1"><input type="radio" name="payment" id="payment_1" class="pr" value="1" />{lang activity_would_payment}</label> <input name="payvalue"class="px pxs vm" size="3" onfocus="$('payment_1').checked = true;" /> {lang payment_unit}</p>
-						</td>
-					</tr>
-				<!--{/if}-->
-				<!--{if !empty($activity['ufield']['userfield'])}-->
-					<!--{loop $activity['ufield']['userfield'] $fieldid}-->
-					<!--{if $settings[$fieldid][available]}-->
-						<!--{if $settings[$fieldid][formtype] != 'file'}-->
+				<div class="actfm">
+					<table summary="{lang activity_join}" cellpadding="0" cellspacing="0" class="actl">
+					<!--{if $activity['cost']}-->
 						<tr>
-							<th id="th_$fieldid"><strong class="rq y">*</strong>$settings[$fieldid][title]</th>
-							<td id="td_$fieldid">
-								$htmls[$fieldid]
+							<th>{lang activity_paytype}</th>
+							<td>
+								<p class="mbn"><label for="payment_0"><input class="pr" type="radio" value="0" name="payment" id="payment_0" checked="checked" />{lang activity_pay_myself}</label></p>
+								<p><label for="payment_1"><input type="radio" name="payment" id="payment_1" class="pr" value="1" />{lang activity_would_payment}</label> <input name="payvalue"class="px pxs vm" size="3" onfocus="$('payment_1').checked = true;" /> {lang payment_unit}</p>
 							</td>
 						</tr>
-						<!--{else}-->
-						 <input type="hidden" name="$fieldid" value="1">
-						<!--{/if}-->
 					<!--{/if}-->
-					<!--{/loop}-->
-				<!--{/if}-->
-				<!--{if !empty($activity['ufield']['extfield'])}-->
-					<!--{loop $activity['ufield']['extfield'] $extname}-->
+					<!--{if !empty($activity['ufield']['userfield'])}-->
+						<!--{loop $activity['ufield']['userfield'] $fieldid}-->
+						<!--{if $settings[$fieldid][available]}-->
+							<!--{if $settings[$fieldid][formtype] != 'file'}-->
+							<tr>
+								<th id="th_$fieldid"><strong class="rq y">*</strong>$settings[$fieldid][title]</th>
+								<td id="td_$fieldid">
+									$htmls[$fieldid]
+								</td>
+							</tr>
+							<!--{else}-->
+							 <input type="hidden" name="$fieldid" value="1">
+							<!--{/if}-->
+						<!--{/if}-->
+						<!--{/loop}-->
+					<!--{/if}-->
+					<!--{if !empty($activity['ufield']['extfield'])}-->
+						<!--{loop $activity['ufield']['extfield'] $extname}-->
+							<tr>
+								<th>$extname</th>
+								<td><input type="text" name="$extname" maxlength="200" class="px" value="{if !empty($ufielddata)}$ufielddata[extfield][$extname]{/if}" /></td>
+							</tr>
+						<!--{/loop}-->
+					<!--{/if}-->
 						<tr>
-							<th>$extname</th>
-							<td><input type="text" name="$extname" maxlength="200" class="px" value="{if !empty($ufielddata)}$ufielddata[extfield][$extname]{/if}" /></td>
+							<th>{lang leaveword}</th>
+							<td><textarea name="message" maxlength="200" cols="38" rows="3" class="pt">$applyinfo[message]</textarea></td>
 						</tr>
-					<!--{/loop}-->
-				<!--{/if}-->
-					<tr>
-						<th>{lang leaveword}</th>
-						<td><textarea name="message" maxlength="200" cols="38" class="pt">$applyinfo[message]</textarea></td>
-					</tr>
-				</table>
+					</table>
+				</div>
 			</div>
 			<div class="o pns">
 				<!--{if $_G['setting']['activitycredit'] && $activity['credit'] && checklowerlimit(array('extcredits'.$_G['setting']['activitycredit'] => '-'.$activity['credit']), $_G['uid'], 1, 0, 1) !== true}-->

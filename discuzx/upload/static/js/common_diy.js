@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_diy.js 22487 2011-05-10 03:46:05Z zhangguosheng $
+	$Id: common_diy.js 24718 2011-10-09 09:40:35Z zhangguosheng $
 */
 
 String.prototype.property2js = function(){
@@ -1247,18 +1247,6 @@ var Util = {
 				this.advancedStyleSheet.disabled = false;
 			}
 		},
-		getStyleSheetIndex : function (name) {
-			var index = -1;
-			var all = document.styleSheets;
-			for (var i=0;i<all.length;i++) {
-				var ownerNode = all[i].ownerNode || all[i].owningElement;
-				if (ownerNode.id && ownerNode.id == name) {
-					index = i;
-					break;
-				}
-			}
-			return index;
-		},
 		init : function (sampleMode) {
 			this.initCommon();
 			this.setSampleMode(sampleMode);
@@ -1292,8 +1280,7 @@ var Util = {
 			}
 		},
 		initCommon : function () {
-			var index = this.getStyleSheetIndex('diy_common');
-			this.advancedStyleSheet = index != -1 ? document.styleSheets[index] : null;
+			this.advancedStyleSheet = $('diy_common');
 			this.menu = [];
 		},
 		initSample : function () {
@@ -1301,7 +1288,6 @@ var Util = {
 			this.initPosition();
 			this.sampleBlocks = $C(this.blockClass);
 			this.initSampleBlocks();
-			this.disableAdvancedStyleSheet('diy_common');
 			this.setSampleMenu();
 			this.disableAdvancedStyleSheet();
 			this.hideControlPanel();

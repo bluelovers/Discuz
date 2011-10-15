@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 22591 2011-05-13 08:14:41Z monkey $
+ *      $Id: misc_initsys.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 // bluelovers
-// ç”¨æ–¼è™•ç†å®‰è£å¾Œåˆå§‹åŒ– cache ä¾†è§£æ±ºå®‰è£å¾ŒæŸäº›ç·©å­˜æ²’æœ‰åŸ·è¡Œéçš„å•é¡Œ
+// ¥Î©ó³B²z¦w¸Ë«áªì©l¤Æ cache ¨Ó¸Ñ¨M¦w¸Ë«á¬Y¨Ç½w¦s¨S¦³°õ¦æ¹Lªº°İÃD
 if ($_G['gp_op'] == 'install') {
 	require_once libfile('function/cache');
 
@@ -20,7 +20,7 @@ if ($_G['gp_op'] == 'install') {
 
 	_______initsys_cache();
 
-	// åˆå§‹åŒ–é è¨­å®‰è£çš„æ’ä»¶
+	// ªì©l¤Æ¹w³]¦w¸Ëªº´¡¥ó
 	_______initsys_plugins();
 
 	echo 1;
@@ -72,7 +72,7 @@ function _______initsys_plugins() {
 	global $importtxt;
 
 // bluelovers
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');

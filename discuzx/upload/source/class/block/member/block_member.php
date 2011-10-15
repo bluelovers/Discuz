@@ -46,7 +46,7 @@ class block_member {
 			'birthcity' => array(
 				'title' => 'memberlist_birthcity',
 				'type' => 'district',
-				'value' => array('xbirthprovince', 'xbirthcity'),
+				'value' => array('xbirthprovince', 'xbirthcity', 'xbirthdist', 'xbirthcommunity'),
 			),
 			'residecity' => array(
 				'title' => 'memberlist_residecity',

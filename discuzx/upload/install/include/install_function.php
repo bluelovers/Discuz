@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 22365 2011-05-04 09:19:56Z congyushuai $
+ *      $Id: install_function.php 24681 2011-10-08 02:55:14Z maruitao $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -697,11 +697,10 @@ function initinput() {
 	window.location='index.php?method=ext_info';
 }
 </script>
-	<div class="main">
-		<div class="btnbox"><div id="notice"></div></div>
+		<div id="notice"></div>
 		<div class="btnbox margintop marginbot">
-	<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled style="height: 25" id="laststep" onclick="initinput()">
-	</div>
+			<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled="disabled" id="laststep" onclick="initinput()">
+		</div>
 <?php
 }
 
@@ -1011,7 +1010,7 @@ function show_setting($setname, $varname = '', $value = '', $type = 'text|passwo
 		echo "<input type=\"$type\" name=\"$varname\" value=\"$value\" size=\"35\" class=\"txt\">";
 	} elseif(strpos($type, 'submit') !== FALSE) {
 		if(strpos($type, 'oldbtn') !== FALSE) {
-			echo "<input type=\"submit\" name=\"oldbtn\" value=\"".lang('old_step')."\" class=\"btn\" onclick=\"javascript:back();\">\n";
+			echo "<input type=\"button\" name=\"oldbtn\" value=\"".lang('old_step')."\" class=\"btn\" onclick=\"history.back();\">\n";
 		}
 		$value = empty($value) ? 'next_step' : $value;
 		echo "<input type=\"submit\" name=\"$varname\" value=\"".lang($value)."\" class=\"btn\">\n";

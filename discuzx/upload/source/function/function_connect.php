@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_connect.php 23925 2011-08-16 12:03:49Z yexinhao $
+ *      $Id: function_connect.php 24725 2011-10-09 14:48:51Z yangli $
  */
 
 require_once libfile('function/cloud');
@@ -46,6 +46,95 @@ function connect_user_bind_js($params) {
 	dsetcookie('connect_js_name');
 	dsetcookie('connect_js_params');
 	return connect_output_javascript($jsurl);
+}
+
+function connect_load_qshare_js($appkey) {
+	global $_G;
+
+	$jsurl = $_G['siteurl'] . 'static/js/qshare.js';
+	$sitename = isset($_G['setting']['bbname']) ? $_G['setting']['bbname'] : '';
+	return '<script type="text/javascript" src="' . $jsurl . '"></script><script type="text/javascript">_share_tencent_weibo(null, $C("t_f", null, "td"), "' . $_G['siteurl'] . '", "' . $appkey . '", "' . $sitename . '");</script>';
+}
+
+function connect_check_token_js() {
+	global $_G;
+
+	$request_url = $_G['siteurl'] . 'connect.php?mod=check&op=token';
+	$js = <<<EOF
+<script type="text/javascript">
+function connect_handle_check_token(response, ajax) {
+
+	if (typeof(response) == "string") {
+		response = JSON.parse(response);
+	} else {
+		return false;
+	}
+
+	if (typeof(response.errCode) != "undefined" && response.errCode == '0' && typeof(response.result) != "undefined" && response.result == '2') {
+		if (typeof(_is_token_outofdate) != "undefined") {
+			_is_feed_auth = false;
+			_is_token_outofdate = true;
+			connect_post_init();
+		}
+		if (typeof(_is_token_outofdate_infloat) != "undefined") {
+			_is_feed_auth_infloat = false;
+			_is_token_outofdate_infloat = true;
+			connect_post_init_infloat();
+		}
+		if (typeof(_share_buttons) != "undefined" && typeof(_is_oauth_user) != "undefined") {
+			_is_oauth_user = false;
+			_is_share_token_outofdate = true;
+		}
+	}
+}
+
+function connect_ajax_check_token() {
+	var _check_token_ajax = Ajax("HTML", null);
+	_check_token_ajax.get("{$request_url}", connect_handle_check_token);
+}
+
+_attachEvent(window, 'load', connect_ajax_check_token);
+</script>
+EOF;
+
+	return $js;
+}
+
+function connect_cookie_login_params() {
+	global $_G;
+
+    connect_merge_member();
+	$oauthToken = $_G['member']['conuin'];
+	$api_url = $_G['connect']['api_url'].'/connect/discuz/cookieReport';
+
+	if($oauthToken) {
+		$extra = array (
+		    'oauth_token' => $oauthToken
+		);
+
+		$sig_params = connect_get_oauth_signature_params($extra);
+
+		$oauth_token_secret = $_G['member']['conuinsecret'];
+		$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
+		$params = array (
+			'client_ip' => $_G['clientip'],
+			'u_id' => $_G['uid']
+		);
+
+		$params = array_merge($sig_params, $params);
+		$params['response_type'] = 'php';
+
+		return $params;
+	} else {
+		return false;
+	}
+}
+
+function connect_cookie_login_js() {
+	global $_G;
+
+	$ajaxUrl = 'connect.php?mod=check&op=cookie';
+	return '<script type="text/javascript">var cookieLogin = Ajax("TEXT");cookieLogin.get("' . $ajaxUrl . '", function() {});</script>';
 }
 
 function connect_user_unbind() {
@@ -348,6 +437,16 @@ function connect_js_ouput_message($msg = '', $errMsg = '', $errCode = '') {
 		'errCode' => $errCode
 	);
 	echo sprintf('con_handle_response(%s);', json_encode(connect_urlencode($result)));
+	exit;
+}
+
+function connect_ajax_ouput_message($msg = '', $errMsg = '', $errCode = '') {
+	$result = array (
+		'result' => $msg,
+		'errMessage' => $errMsg,
+		'errCode' => $errCode
+	);
+	echo json_encode(connect_urlencode($result));
 	exit;
 }
 

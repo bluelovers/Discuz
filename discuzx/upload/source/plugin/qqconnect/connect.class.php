@@ -100,23 +100,40 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 	}
 
 	function global_footer() {
-		if(!$this->allow) {
-			return;
-		}
-
 		global $_G;
-		if(!$_G['cookie']['client_token'] || !empty($_G['inshowmessage']) || empty($_G['cookie']['connect_js_name'])) {
+
+		if(!$this->allow || !empty($_G['inshowmessage'])) {
 			return;
 		}
 
-		if($_G['cookie']['connect_js_name'] == 'user_bind') {
-			require_once libfile('function/connect');
-			$params = array('openid' => $_G['cookie']['connect_uin']);
-			return connect_user_bind_js($params);
-		}elseif($_G['cookie']['connect_js_name'] == 'feed_resend') {
-			require_once libfile('function/connect');
-			return connect_feed_resend_js();
+		$footerjs = '';
+
+		require_once libfile('function/connect');
+
+		if(defined('CURSCRIPT') && CURSCRIPT == 'forum' && defined('CURMODULE') && CURMODULE == 'viewthread'
+			&& $_G['setting']['connect']['allow'] && $_G['setting']['connect']['qshare_allow']) {
+
+			$appkey = $_G['setting']['connect']['qshare_appkey'] ? $_G['setting']['connect']['qshare_appkey'] : '';
+			$footerjs .= connect_load_qshare_js($appkey);
 		}
+
+		if(!empty($_G['cookie']['connect_js_name']) && $_G['cookie']['connect_js_name'] == 'user_bind') {
+			$params = array('openid' => $_G['cookie']['connect_uin']);
+			$footerjs .= connect_user_bind_js($params);
+		}elseif($_G['cookie']['connect_js_name'] == 'feed_resend') {
+			$footerjs .= connect_feed_resend_js();
+		}
+
+		connect_merge_member();
+		if(!$_G['cookie']['connect_check_token'] && $_G['member']['conuinsecret']) {
+			$footerjs .= connect_check_token_js();
+		}
+
+		if($_G['member']['conuinsecret'] && ($_G['cookie']['connect_last_report_time'] != date('Y-m-d') || $_G['cookie']['connect_report_times'] <= 4)) {
+			$footerjs .= connect_cookie_login_js();
+		}
+
+		return $footerjs;
 	}
 
 	function _allowconnectfeed() {
@@ -174,10 +191,12 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		global $_G;
 		$allowconnectfeed = $this->_allowconnectfeed();
 		$allowconnectt = $this->_allowconnectt();
-		if($_G['inajax'] && ($allowconnectfeed || $allowconnectt) && $_G['gp_action'] == 'newthread') {
+		if(($allowconnectfeed || $allowconnectt) && $_G['gp_action'] == 'newthread') {
 			require_once libfile('function/connect');
 			connect_merge_member();
-			return tpl_sync_method($allowconnectfeed, $allowconnectt, ' z');
+			if ($_G['member']['is_feed']) {
+				return tpl_infloat_sync_method($allowconnectfeed, $allowconnectt);
+			}
 		}
 	}
 
@@ -229,7 +248,7 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 						}
 					}
 				} else {
-					$feedlogstatus = true;
+					$feedlogstatus = false;
 				}
 			}
 
@@ -247,7 +266,7 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 						}
 					}
 				} else {
-					$tlogstatus = true;
+					$tlogstatus = false;
 				}
 			}
 

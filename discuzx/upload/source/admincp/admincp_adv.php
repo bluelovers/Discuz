@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 21777 2011-04-12 03:12:54Z zhengqingpeng $
+ *      $Id: admincp_adv.php 24030 2011-08-22 06:54:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -463,11 +463,7 @@ if($operation == 'ad') {
 		updatecache('advs');
 		updatecache('setting');
 
-		if($operation == 'edit') {
-			cpmsg('adv_succeed', dreferer(), 'succeed');
-		} else {
-			cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
-		}
+		cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
 
 	}
 

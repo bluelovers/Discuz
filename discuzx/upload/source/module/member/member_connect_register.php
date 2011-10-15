@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: member_connect_register.php 22893 2011-05-30 08:40:09Z fengning $
+ *	  $Id: member_connect_register.php 24736 2011-10-10 02:46:07Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -143,11 +143,12 @@ if(empty($_POST)) {
 	dsetcookie('connect_login', 1, 31536000);
 	dsetcookie('connect_is_bind', '1', 31536000);
 	dsetcookie('connect_uin', $conopenid, 31536000);
+	dsetcookie('stats_qc_reg', 1, 86400);
 	if ($_G['gp_is_feed']) {
 		dsetcookie('connect_synpost_tip', 1, 31536000);
 	}
 
-	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conuin', '1', '$_G[timestamp]')");
+	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conopenid', '1', '$_G[timestamp]')");
 
 	dsetcookie('con_auth_hash');
 
@@ -165,4 +166,5 @@ function connect_filter_username($username) {
 	$username = str_replace(' ', '_', trim($username));
 	return cutstr($username, 15, '');
 }
+
 ?>

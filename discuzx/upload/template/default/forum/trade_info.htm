@@ -52,7 +52,7 @@
 	</dl>
 </div>
 <!--{if $_G[inajax]}--><span class="y"><a href="javascript:;" onclick="$('tradeinfo$trade[pid]').style.display = 'none';display('trade$trade[pid]');" title="{lang pack_up}"><img src="{STATICURL}image/common/collapsed_no.gif" alt="" class="vm" /> {lang pack_up}</a></span><!--{/if}-->
-		<h1 class="ph mtm"><a href="forum.php?mod=viewthread&tid=$_G[tid]&do=tradeinfo&pid=$post[pid]" target="_blank">$trade[subject]</a></h1>
+		<h1 class="ph mtm"><a href="forum.php?mod=viewthread&tid=$_G[tid]&do=tradeinfo&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}" target="_blank">$trade[subject]</a></h1>
 <!--{/if}-->
 
 
@@ -68,7 +68,7 @@
 		<!--{if !$_G['forum_thread']['is_archived']}-->
 			<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] < $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid'])) && !$post['first'] || $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->
 				<p class="ptm pbm">
-					<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}--><span class="y"><a href="javascript:;" onclick="modaction('delpost', $_G[gp_pid])">{lang delete}</a>&nbsp;&nbsp;</span><!--{/if}-->
+					<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}--><span class="y"><a href="javascript:;" onclick="modaction('delpost', $_G[gp_pid])">{lang delete}</a>&nbsp;&nbsp;<!--{/if}--><!--{if $_G['forum']['picstyle'] && ($_G['forum']['ismoderator'] || ($_G['uid'] == $_G['thread']['authorid'] && $_G['forum_thread']['closed'] == 0))}--><a onclick="showWindow('setcover_$trade[aid]',this.href)" href="forum.php?mod=ajax&action=setthreadcover&aid=$trade[aid]&fid=$_G[fid]">{lang set_cover}</a>&nbsp;&nbsp;<!--{/if}--></span>
 					<a class="editp xi1 xw1" style="padding-left: 20px; " href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page">{lang edit_trade}</a>
 				</p>
 			<!--{/if}-->
@@ -78,7 +78,7 @@
 		<div class="spi cl">
 			<!--{if $_G[inajax]}-->
 				<span class="y"><a href="javascript:;" onclick="$('tradeinfo$trade[pid]').style.display = 'none';display('trade$trade[pid]');" title="{lang pack_up}"><img src="{STATICURL}image/common/collapsed_no.gif" alt="" class="vm" /> {lang pack_up}</a></span>
-				<h4 class="wx mbm bbda"><a href="forum.php?mod=viewthread&tid=$_G[tid]&do=tradeinfo&pid=$post[pid]" target="_blank">$trade[subject]</a></h4>
+				<h4 class="wx mbm bbda"><a href="forum.php?mod=viewthread&tid=$_G[tid]&do=tradeinfo&pid=$post[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}" target="_blank">$trade[subject]</a></h4>
 			<!--{/if}-->
 			<dl>
 			<dt>{lang trade_type_viewthread}:</dt>
@@ -224,12 +224,12 @@
 						<!--{loop $usertrades $usertrade}-->
 						<dl class="cl">
 							<dd class="m">
-								<a href="forum.php?mod=viewthread&tid=$usertrade[tid]&do=tradeinfo&pid=$usertrade[pid]" class="tn">
+								<a href="forum.php?mod=viewthread&tid=$usertrade[tid]&do=tradeinfo&pid=$usertrade[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}" class="tn">
 									<!--{if $usertrade['displayorder'] > 0}--><em class="hot">{lang post_trade_sticklist}</em><!--{/if}-->
 									<!--{if $usertrade['aid']}--><img src="{echo getforumimg($usertrade[aid])}" width="60" alt="$usertrade[subject]" /><!--{else}--><img src="{IMGDIR}/nophoto.gif" width="130" alt="$usertrade[subject]" /><!--{/if}-->
 								</a>
 							</dd>
-							<dt><a href="forum.php?mod=viewthread&tid=$usertrade[tid]&do=tradeinfo&pid=$usertrade[pid]">$usertrade[subject]</a></dt>
+							<dt><a href="forum.php?mod=viewthread&tid=$usertrade[tid]&do=tradeinfo&pid=$usertrade[pid]{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}">$usertrade[subject]</a></dt>
 							<dd>
 								<!--{if $usertrade[price] > 0}-->
 								<p class="p">&yen; <em class="xi1">$usertrade[price]</em></p>

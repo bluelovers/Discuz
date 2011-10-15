@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 21309 2011-03-23 02:07:26Z liulanbo $
+ *      $Id: modcp_thread.php 24342 2011-09-13 08:45:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -214,7 +214,7 @@ if($op == 'post') {
 					$repliesarray[$decrease][] = $tid;
 				}
 				foreach($repliesarray as $decrease => $tidarray) {
-					DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-$decrease WHERE tid IN (".implode(',', $tidarray).")");
+					DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-'$decrease' WHERE tid IN (".implode(',', $tidarray).")");
 				}
 			}
 

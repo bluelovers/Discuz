@@ -3,7 +3,7 @@
    [Discuz!] (C)2001-2009 Comsenz Inc.
    This is NOT a freeware, use is subject to license terms
 
-   $Id: connect.php 22700 2011-05-18 01:18:15Z fengning $
+   $Id: connect.php 24707 2011-10-09 02:48:26Z yangli $
 */
 
 define('IN_CONNECT', 1);
@@ -26,7 +26,7 @@ $discuz = & discuz_core::instance();
 $mod = $discuz->var['mod'];
 $discuz->init();
 
-if(!in_array($mod, array('config', 'login', 'feed'))) {
+if(!in_array($mod, array('config', 'login', 'feed', 'check'))) {
 	showmessage('undefined_action');
 }
 

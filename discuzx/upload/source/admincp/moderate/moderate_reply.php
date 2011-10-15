@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 23425 2011-07-14 06:38:11Z liulanbo $
+ *      $Id: moderate_reply.php 24361 2011-09-14 08:40:47Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -186,7 +186,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		}
 		if(!empty($_G['gp_title'])) {
 			$title = str_replace(array('_', '\%'), array('\_', '\%'), $_G['gp_title']);
-			$sqlwhere .= " AND t.title LIKE '%{$title}%'";
+			$sqlwhere .= " AND t.subject LIKE '%{$title}%'";
 		}
 		$query = DB::query("SELECT p.pid FROM ".DB::table(getposttable($posttable))." p LEFT JOIN ".DB::table('forum_thread')." t ON p.tid=t.tid WHERE $sqlwhere");
 		while($post = DB::fetch($query)) {
@@ -301,7 +301,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		echo callback_js($_G['gp_pid']);
 		exit;
 	} else {
-		cpmsg('moderate_replies_succeed', "action=moderate&operation=replies&page=$page&filter=$filter&modfid=$modfid&posttableid=$posttable", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
+		cpmsg('moderate_replies_succeed', "action=moderate&operation=replies&page=$page&filter=$filter&modfid=$modfid&posttableid=$posttable&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&ppp={$_G['gp_ppp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
 	}
 
 }
