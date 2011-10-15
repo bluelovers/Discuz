@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_picture.php 20404 2011-02-23 05:59:28Z maruitao $
+ *      $Id: moderate_picture.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -105,7 +105,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		$pic['censorwords'] = implode(', ', $pic_censor_words);
 		$pic['modpickey'] = modauthkey($pic['picid']);
 		$pic['postip'] = $pic['postip'] . '-' . convertip($pic['postip']);
-		$pic['url'] = pic_get($pic['filepath'], 'album', $pic['thumb'], $picture['remote']);
+		$pic['url'] = pic_get($pic['filepath'], 'album', $pic['thumb'], $pic['remote']);
 
 		if(count($pic_censor_words)) {
 			$pic_censor_text = "<span style=\"color: red;\">({$pic['censorwords']})</span>";
@@ -161,7 +161,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		echo callback_js($_G['gp_picid']);
 		exit;
 	} else {
-		cpmsg('moderate_pictures_succeed', "action=moderate&operation=pictures&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp={$_G['gp_tpp']}", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
+		cpmsg('moderate_pictures_succeed', "action=moderate&operation=pictures&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
 	}
 
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_portalcomment.php 20404 2011-02-23 05:59:28Z maruitao $
+ *      $Id: moderate_portalcomment.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -199,7 +199,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		echo callback_js($_G['gp_cid']);
 		exit;
 	} else {
-		cpmsg('moderate_'.$operation.'_succeed', "action=moderate&operation=$operation&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&catid={$_G['gp_catid']}&tpp={$_G['gp_tpp']}", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
+		cpmsg('moderate_'.$operation.'_succeed', "action=moderate&operation=$operation&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&catid={$_G['gp_catid']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
 	}
 
 }
