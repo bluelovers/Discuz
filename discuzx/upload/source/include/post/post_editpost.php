@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 23558 2011-07-26 02:40:48Z liulanbo $
+ *      $Id: post_editpost.php 24639 2011-09-29 03:51:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -940,11 +940,11 @@ if(!submitcheck('editsubmit')) {
 	}
 
 	if($_G['forum']['threadcaches']) {
-		if($isfirstpost || $_G['gp_page'] == 1 || $thread['replies'] < $_G['cache']['pospperpage'] || !empty($_G['gp_delete'])) {
-			$_G['forum']['threadcaches'] && deletethreadcaches($_G['tid']);
+		if($isfirstpost || $_G['gp_page'] == 1 || $thread['replies'] < $_G['cache']['postperpage'] || !empty($_G['gp_delete'])) {
+			deletethreadcaches($_G['tid']);
 		} else {
 			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND pid<'$pid'") < $_G['setting']['postperpage']) {
-				$_G['forum']['threadcaches'] && deletethreadcaches($_G['tid']);
+				deletethreadcaches($_G['tid']);
 			}
 		}
 	}

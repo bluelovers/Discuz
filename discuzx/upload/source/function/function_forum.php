@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 23826 2011-08-11 04:28:25Z zhouguoqiang $
+ *      $Id: function_forum.php 24723 2011-10-09 12:50:14Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -657,10 +657,10 @@ function set_rssauth() {
 function my_thread_log($opt, $data) {
 	global $_G;
     $my_search_data = $_G['setting']['my_search_data'];
-    if ($my_search_data && !in_array($my_search_data)) {
+    if ($my_search_data && !is_array($my_search_data)) {
         $my_search_data = unserialize($my_search_data);
     }
-	if(!$_G['setting']['my_search_data']['status']) return;
+	if(!$_G['setting']['my_search_data']) return;
 	$data['action'] = $opt;
 	$data['dateline'] = time();
 	DB::insert('forum_threadlog', $data, false, true);
@@ -669,10 +669,10 @@ function my_thread_log($opt, $data) {
 function my_post_log($opt, $data) {
 	global $_G;
     $my_search_data = $_G['setting']['my_search_data'];
-    if ($my_search_data && !in_array($my_search_data)) {
+    if ($my_search_data && !is_array($my_search_data)) {
         $my_search_data = unserialize($my_search_data);
     }
-	if(!$_G['setting']['my_search_data']['status']) return;
+	if(!$_G['setting']['my_search_data']) return;
 	$data['action'] = $opt;
 	$data['dateline'] = time();
 	DB::insert('forum_postlog', $data, false, true);
@@ -903,7 +903,7 @@ function updateattachtid($where, $oldtid, $newtid) {
 		}
 		DB::delete($oldattachtable, $where);
 	}
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid' WHERE $where");
+	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid',tableid='".getattachtableid($newtid)."' WHERE $where");
 }
 
 function updatepost($data, $condition, $unbuffered = false, $posttableid = false) {

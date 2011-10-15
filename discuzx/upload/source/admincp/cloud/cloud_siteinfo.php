@@ -4,14 +4,11 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_siteinfo.php 23271 2011-06-29 04:33:39Z yexinhao $
+ *      $Id: cloud_siteinfo.php 24570 2011-09-26 09:18:58Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
-
-require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
-$cloudClient = new Discuz_Cloud_Client();
 
 if(submitcheck('syncsubmit')) {
 
@@ -19,6 +16,8 @@ if(submitcheck('syncsubmit')) {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
 
+	require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
+	$cloudClient = new Discuz_Cloud_Client();
 	if ($_G['setting']['my_app_status']) {
 		manyouSync();
 	}
@@ -35,6 +34,9 @@ if(submitcheck('syncsubmit')) {
 	if($cloudstatus != 'cloud') {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
+
+	require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
+	$cloudClient = new Discuz_Cloud_Client();
 
 	$res = $cloudClient->resetKey();
 
@@ -66,7 +68,7 @@ if(submitcheck('syncsubmit')) {
 	cpmsg('cloud_ipsetting_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.$locationUrl.'\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.$locationUrl.'\'", 3000);</script>');
 
 } elseif ($_G['gp_anchor'] == 'cloud_ip') {
-	include template('common/header');
+	ajaxshowheader();
 	echo '
 		<h3 class="flb" id="fctrl_showblock" style="cursor: move;">
 			<em id="return_showblock" fwin="showblock">'.$lang['cloud_api_ip_btn'].'</em>
@@ -74,7 +76,7 @@ if(submitcheck('syncsubmit')) {
 		</h3>
 		';
 	echo '<div style="margin: 0 10px; width: 700px;">';
-	showformheader('cloud&edit=yes');
+	showformheader('cloud');
 	showhiddenfields(array('operation' => $operation));
 	if($_G['gp_callback']) {
 		showhiddenfields(array('callback' => $_G['gp_callback']));
@@ -86,13 +88,13 @@ if(submitcheck('syncsubmit')) {
 	showtablefooter();
 	showformfooter();
 	echo '</div>';
-	include template('common/footer');
+	ajaxshowfooter();
 } else {
 	shownav('navcloud', 'menu_cloud_siteinfo');
 	showsubmenu('menu_cloud_siteinfo');
 	showtips('cloud_siteinfo_tips');
 	echo '<script type="text/javascript">var disallowfloat = "";</script>';
-	showformheader('cloud&edit=yes');
+	showformheader('cloud');
 	showhiddenfields(array('operation' => $operation));
 	showtableheader();
 	showtitle('menu_cloud_siteinfo');

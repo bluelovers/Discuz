@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 22680 2011-05-17 07:38:18Z monkey $
+ *      $Id: post_newreply.php 23960 2011-08-17 10:45:16Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -438,22 +438,24 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	if($thread['replycredit'] > 0 && $thread['authorid'] != $_G['uid'] && $_G['uid']) {
 
 		$replycredit_rule = DB::fetch_first("SELECT * FROM ".DB::table('forum_replycredit')." WHERE tid = '$_G[tid]' LIMIT 1");
-		$have_replycredit = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE relatedid = '{$_G[tid]}' AND uid = '{$_G[uid]}' AND operation = 'RCA' LIMIT {$replycredit_rule['times']} ");
-		if($replycredit_rule['membertimes'] - $have_replycredit > 0 && $thread['replycredit'] - $replycredit_rule['extcredits'] >= 0) {
-			$replycredit_rule['extcreditstype'] = $replycredit_rule['extcreditstype'] ? $replycredit_rule['extcreditstype'] : $_G['setting']['creditstransextra'][10];
-			if($replycredit_rule['random'] > 0) {
-				$rand = rand(1, 100);
-				$rand_replycredit = $rand <= $replycredit_rule['random'] ? true : false ;
-			} else {
-				$rand_replycredit = true;
-			}
-			if($rand_replycredit) {
-				if(!$posttable) {
-					$posttable = getposttablebytid($_G['tid']);
+		if(!empty($replycredit_rule['times'])) {
+			$have_replycredit = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE relatedid = '{$_G[tid]}' AND uid = '{$_G[uid]}' AND operation = 'RCA' LIMIT {$replycredit_rule['times']} ");
+			if($replycredit_rule['membertimes'] - $have_replycredit > 0 && $thread['replycredit'] - $replycredit_rule['extcredits'] >= 0) {
+				$replycredit_rule['extcreditstype'] = $replycredit_rule['extcreditstype'] ? $replycredit_rule['extcreditstype'] : $_G['setting']['creditstransextra'][10];
+				if($replycredit_rule['random'] > 0) {
+					$rand = rand(1, 100);
+					$rand_replycredit = $rand <= $replycredit_rule['random'] ? true : false ;
+				} else {
+					$rand_replycredit = true;
 				}
-				updatemembercount($_G['uid'], array($replycredit_rule['extcreditstype'] => $replycredit_rule['extcredits']), 1, 'RCA', $_G[tid]);
-				DB::update($posttable, array('replycredit' => $replycredit_rule['extcredits']), array('pid' => $pid));
-				DB::update("forum_thread", array('replycredit' => $thread['replycredit'] - $replycredit_rule['extcredits']), array('tid' => $_G[tid]));
+				if($rand_replycredit) {
+					if(!$posttable) {
+						$posttable = getposttablebytid($_G['tid']);
+					}
+					updatemembercount($_G['uid'], array($replycredit_rule['extcreditstype'] => $replycredit_rule['extcredits']), 1, 'RCA', $_G[tid]);
+					DB::update($posttable, array('replycredit' => $replycredit_rule['extcredits']), array('pid' => $pid));
+					DB::update("forum_thread", array('replycredit' => $thread['replycredit'] - $replycredit_rule['extcredits']), array('tid' => $_G[tid]));
+				}
 			}
 		}
 	}

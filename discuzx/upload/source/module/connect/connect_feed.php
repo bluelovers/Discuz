@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: connect_feed.php 22869 2011-05-27 09:27:31Z fengning $
+ *	  $Id: connect_feed.php 24072 2011-08-23 11:23:43Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -90,7 +90,7 @@ if ($op == 'new') {
 
 	if ($feedlog) {
 		$feedmember = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$feedlog[uid]'");
-		if (empty($feedmember) || empty($feedmember['conuin']) || empty($feedmember['conuinsecret'])) {
+		if (empty($feedmember) || empty($feedmember['conopenid']) || empty($feedmember['conuinsecret'])) {
 			connect_js_ouput_message('', lang('connect', 'deletethread_sync_failed'), '104');
 		}
 	} else {

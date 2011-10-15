@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 23641 2011-07-29 08:21:13Z monkey $
+ *      $Id: class_core.php 24487 2011-09-21 08:13:57Z monkey $
  */
 
 define('IN_DISCUZ', true);
@@ -246,6 +246,11 @@ class discuz_core {
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 		$this->var['gp_handlekey'] = !empty($this->var['gp_handlekey']) && preg_match('/^\w+$/', $this->var['gp_handlekey']) ? $this->var['gp_handlekey'] : '';
 
+		if(empty($this->var['cookie']['saltkey'])) {
+			$this->var['cookie']['saltkey'] = random(8);
+			dsetcookie('saltkey', $this->var['cookie']['saltkey'], 86400 * 30, 1, 1);
+		}
+		$this->var['authkey'] = md5($this->var['config']['security']['authkey'].$this->var['cookie']['saltkey']);
 	}
 
 	function _init_config() {
@@ -286,7 +291,6 @@ class discuz_core {
 			$this->var['config']['cookie']['cookiepath'] = '/'.$this->var['config']['cookie']['cookiepath'];
 		}
 		$this->var['config']['cookie']['cookiepre'] = $this->var['config']['cookie']['cookiepre'].substr(md5($this->var['config']['cookie']['cookiepath'].'|'.$this->var['config']['cookie']['cookiedomain']), 0, 4).'_';
-		$this->var['authkey'] = md5($_config['security']['authkey'].$_SERVER['HTTP_USER_AGENT']);
 
 	}
 

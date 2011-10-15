@@ -9,11 +9,17 @@
 	<!--{block slist[user]}--><li><a href="javascript:;" rel="user"{if CURSCRIPT == 'home' && !in_array($do, array('blog', 'album', 'thread', 'activity', 'poll', 'reward', 'debate', 'trade'))} class="curtype"{/if}>{lang users}</a></li><!--{/block}-->
 	<!--{if $slist}-->
 	<div id="sc" class="y">
-		<form id="sc_form" method="post" autocomplete="off" onsubmit="searchFocus($('srchtxt'))" action="$_G[siteurl]search.php?searchsubmit=yes" target="_blank">
+		<!--{eval $searchparams = makeSearchSignUrl();}-->
+		<form id="sc_form" method="{if $_G[fid] && !empty($searchparams[0])}get{else}post{/if}" autocomplete="off" onsubmit="searchFocus($('srchtxt'))" action="{if $_G[fid] && !empty($searchparams[0])}$searchparams[0]{else}search.php?searchsubmit=yes{/if}" target="_blank">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="mod" id="sc_mod" value="title" />
 			<input type="hidden" name="srhfid" value="$_G[fid]" />
 			<input type="hidden" name="srhlocality" value="$_G['basescript']::{$_G['gp_do']}" />
+			<!--{if !empty($searchparams[1])}-->
+				<!--{loop $searchparams[1] $key $value}-->
+				<input type="hidden" name="$key" value="$value" />
+				<!--{/loop}-->
+			<!--{/if}-->
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					<td id="sc_txt_td"><input type="text" name="srchtxt" id="sc_txt" class="px z" value="{lang enter_content}" autocomplete="off" /></td>
@@ -27,7 +33,7 @@
 				</ul>
 			</div>
 		</form>
-		<script type="text/javascript">initSearchmenu('sc');</script>
+		<script type="text/javascript">initSearchmenu('scbar', '$searchparams[0]');</script>
 	</div>
 	<!--{/if}-->
 <!--{/if}-->

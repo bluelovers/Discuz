@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 22552 2011-05-12 05:36:15Z zhangguosheng $
+ *      $Id: portalcp_article.php 24254 2011-09-02 02:43:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -504,6 +504,11 @@ if ($op == 'delpage') {
 		if($allowcategory = getallowcategory($_G['uid'])) {
 			foreach($allowcategory as $catid => $category) {
 				$allowcategorycache[$catid] = $_G['cache']['portalcategory'][$catid];
+			}
+		}
+		foreach($allowcategorycache as $_id => $_value) {
+			if($_value['upid'] && !isset($allowcategorycache[$_value['upid']])) {
+				$allowcategorycache[$_id]['level'] = 0;
 			}
 		}
 		$_G['cache']['portalcategory'] = $allowcategorycache;

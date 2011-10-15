@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_delpost.php 22449 2011-05-09 06:15:26Z monkey $
+ *      $Id: topicadmin_delpost.php 24291 2011-09-06 01:30:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,6 +50,7 @@ if(!submitcheck('modsubmit')) {
 		if(!$post['first']) {
 			$pids[] = $post['pid'];
 			$modpostsnum++;
+			$posts[] = $post;
 		}
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 23920 2011-08-16 09:11:43Z cnteacher $
+ *      $Id: admincp_counter.php 24435 2011-09-20 02:48:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -319,7 +319,7 @@ if(submitcheck('forumsubmit', 1)) {
 				$postcount += DB::query("SELECT COUNT(*) FROM ".DB::table(getposttable($key))." WHERE authorid='$mem[uid]' AND invisible='0'");
 			}
 		} else {
-			$postcount += DB::query("SELECT COUNT(*) FROM ".DB::table(getposttable()), "authorid='$mem[uid]' AND invisible='0'");
+			$postcount += DB::query("SELECT COUNT(*) FROM ".DB::table(getposttable()), " WHERE authorid='$mem[uid]' AND invisible='0'");
 		}
 		$postcount += DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_postcomment')." WHERE authorid='$mem[uid]'");
 		$query_threads = DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE authorid='$mem[uid]'");

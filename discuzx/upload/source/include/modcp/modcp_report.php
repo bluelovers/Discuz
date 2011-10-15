@@ -21,10 +21,9 @@ if(!empty($_G['fid'])) {
 					if($uid != $_G['uid']) {
 						$msg = !empty($_G['gp_msg'][$reportid]) ? '<br />'.htmlspecialchars($_G['gp_msg'][$reportid]) : '';
 						if(!empty($_G['gp_creditsvalue'][$reportid])) {
-							$_G['gp_creditsvalue'][$reportid] = abs($_G['gp_creditsvalue'][$reportid]) <= 3 ? $_G['gp_creditsvalue'][$reportid] : 0;
 							$credittag = $_G['gp_creditsvalue'][$reportid] > 0 ? '+' : '';
 							$creditchange = '<br />'.lang('forum/misc', 'report_msg_your').$_G['setting']['extcredits'][$curcredits]['title'].'&nbsp;'.$credittag.$_G['gp_creditsvalue'][$reportid];
-							updatemembercount($uid, array($curcredits => $_G['gp_creditsvalue'][$reportid]), true, 'RPC', $reportid);
+							updatemembercount($uid, array($curcredits => intval($_G['gp_creditsvalue'][$reportid])), true, 'RPC', $reportid);
 						}
 						if($creditchange || $msg) {
 							notification_add($uid, 'report', 'report_change_credits', array('creditchange' => $creditchange, 'msg' => $msg), 1);

@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 23933 2011-08-17 03:21:14Z yexinhao $
+ *	  $Id: lang_admincp_cloud.php 24711 2011-10-09 05:04:31Z zhouguoqiang $
  */
 
 $extend_lang = array
@@ -29,7 +29,7 @@ $extend_lang = array
 	'menu_cloud_security' => '雲安全',
 	'menu_cloud_smilies' => 'SOSO表情',
 	'menu_cloud_qqgroup' => '社區QQ群',
-	'menu_cloud_union' => '廣告聯盟',
+	'menu_cloud_union' => 'Discuz!聯盟',
 
 	'close' => '關閉',
 	'continue' => '繼續',
@@ -68,6 +68,8 @@ $extend_lang = array
 	'cloud_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到雲平台接口，請填寫api.discuz.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://cp.discuz.qq.com/faq?fId=1304068911&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>',
 	'cloud_manyou_ip' => '漫遊接口IP',
 	'cloud_manyou_ip_comment' => '若站點服務器由於DNS解析問題無法連接到漫遊接口，請填寫api.manyou.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://faq.comsenz.com/viewnews-400" target="_blank">查看幫助</a>',
+	'cloud_connect_api_ip' => 'QQ互聯接口IP',
+	'cloud_connect_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到QQ互聯接口，請填寫openapi.qzone.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://cp.discuz.qq.com/faq?fId=1316571929&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>',
 	'cloud_ipsetting_success' => '雲平台接口IP設置成功 ',
 	'cloud_open_first' => '請先開通Discuz!雲平台',
 	'cloud_sync' => '同步站點信息',
@@ -97,6 +99,7 @@ $extend_lang = array
 
 	'cloud_doctor_api_test_other' => '測試雲平台其他接口IP',
 	'cloud_doctor_manyou_test_other' => '測試漫遊其他接口IP',
+	'cloud_doctor_qzone_test_other' => '測試QQ互聯其他接口IP',
 	'cloud_doctor_api_test_success' => '%s 請求接口 %s 成功，耗時 %01.3f 秒 %s',
 	'cloud_doctor_api_test_failure' => '%s 請求接口 %s 失敗，請咨詢空間商 %s',
 	'cloud_doctor_status_0' => '尚未開通雲平台',
@@ -126,6 +129,9 @@ $extend_lang = array
 	'cloud_doctor_dns_manyou' => '漫遊域名解析',
 	'cloud_doctor_dns_manyou_test' => '漫遊主接口測試',
 	'cloud_doctor_other_manyou_test' => '漫遊其他接口測試',
+	'cloud_doctor_dns_qzone' => 'QQ互聯域名解析',
+	'cloud_doctor_dns_qzone_test' => 'QQ互聯主接口測試',
+	'cloud_doctor_other_qzone_test' => 'QQ互聯其他接口測試',
 
 	'cloud_doctor_setting_ip' => '手動設置的IP：',
 
@@ -135,7 +141,7 @@ $extend_lang = array
 	'cloud_doctor_title_plugin' => '系統插件檢測',
 	'cloud_doctor_system_plugin_status' => '系統插件狀態',
 	'cloud_doctor_system_plugin_list' => '<a href="admin.php?action=plugins">查看插件列表和版本</a>',
-	'cloud_doctor_system_plugin_status_false' => ' 系統插件未初始化 (左側菜單不顯示) <a href="misc.php?mod=initsys" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">點擊修復</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
+	'cloud_doctor_system_plugin_status_false' => ' 系統插件未初始化 <a href="misc.php?mod=initsys" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">點擊修復</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
 	'cloud_doctor_plugin_module_error' => 'common_plugin表modules字段值不正確',
 
 	'cloud_doctor_title_connect' => 'QQ互聯檢測',
@@ -151,7 +157,7 @@ $extend_lang = array
 	'cloud_stats' => '騰訊分析',
 	'cloud_stats_tips' => '<li>選擇的樣式會顯示在論壇底部的右下方。</li>',
 	'cloud_stats_status' => '啟用騰訊分析',
-	'cloud_stats_icon_set' => '選擇樣式（圖標或文字將顯示在論壇右下角）',
+	'cloud_stats_icon_set' => '選擇樣式',
 	'cloud_stats_icon_none' => '不顯示圖標和文字',
 	'cloud_stats_icon_word9' => '騰訊分析',
 	'cloud_stats_icon_word10' => '網站統計',
@@ -213,6 +219,10 @@ $extend_lang = array
 	'connect_setting_turl_qq' => '官方微博QQ號碼',
 	'connect_setting_turl_qq_comment' => '設置官方微博的QQ號碼',
 	'connect_setting_turl_qq_failed' => '官方微博QQ號碼設置失敗，請確保該QQ號的有效性',
+	'connect_setting_qshare_allow' => '開啟Q-Share功能',
+	'connect_setting_qshare_allow_comment' => '用戶選中帖子內容中的任何一段文本時，可方便快捷的將選中的文本內容和區域內圖片轉播到騰訊微博',
+	'connect_setting_qshare_appkey' => '騰訊微博開放平台AppKey',
+	'connect_setting_qshare_appkey_comment' => '填寫AppKey將在騰訊微博中顯示設置的來源字段信息，可不填寫。怎樣申請AppKey？請訪問騰訊微博開放平台，<a href="http://open.t.qq.com/apps_welcome.php" target="_blank">創建應用獲取AppKey</a>',
 	'connect_member_info' => '用戶信息',
 	'connect_member_bindlog' => 'QQ綁定日誌',
 	'connect_member_bindlog_type' => '操作',

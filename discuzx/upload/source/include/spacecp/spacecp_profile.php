@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 23747 2011-08-09 03:10:08Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 24010 2011-08-19 07:35:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -173,32 +173,39 @@ if(submitcheck('profilesubmit')) {
 			if(!isset($_G['cache']['profilesetting'][$key])) {
 				continue;
 			}
-			$upload->init($file, 'profile');
-			$attach = $upload->attach;
+			if((!empty($file) && $file['error'] == 0) || (!empty($space[$key]) && empty($_G['gp_deletefile'][$key]))) {
+				$value = '1';
+			} else {
+				$value = '';
+			}
+			if(profile_check($key, $value, $space)) {
+				$upload->init($file, 'profile');
+				$attach = $upload->attach;
 
-			if(!$upload->error()) {
-				$upload->save();
+				if(!$upload->error()) {
+					$upload->save();
 
-				if(!$upload->get_image_info($attach['target'])) {
-					@unlink($attach['target']);
-					continue;
-				}
-				$setarr[$key] = '';
-				$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
-				if($vid && $verifyconfig['available'] && isset($verifyconfig['field'][$key])) {
-					if(isset($verifyinfo['field'][$key])) {
+					if(!$upload->get_image_info($attach['target'])) {
+						@unlink($attach['target']);
+						continue;
+					}
+					$setarr[$key] = '';
+					$attach['attachment'] = dhtmlspecialchars(trim($attach['attachment']));
+					if($vid && $verifyconfig['available'] && isset($verifyconfig['field'][$key])) {
+						if(isset($verifyinfo['field'][$key])) {
+							@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
+							$verifyarr[$key] = $attach['attachment'];
+						}
+						continue;
+					}
+					if(isset($setarr[$key]) && $_G['cache']['profilesetting'][$key]['needverify']) {
 						@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
 						$verifyarr[$key] = $attach['attachment'];
+						continue;
 					}
-					continue;
+					@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
+					$setarr[$key] = $attach['attachment'];
 				}
-				if(isset($setarr[$key]) && $_G['cache']['profilesetting'][$key]['needverify']) {
-					@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
-					$verifyarr[$key] = $attach['attachment'];
-					continue;
-				}
-				@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
-				$setarr[$key] = $attach['attachment'];
 			}
 		}
 	}

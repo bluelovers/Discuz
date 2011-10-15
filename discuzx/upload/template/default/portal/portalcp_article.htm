@@ -197,7 +197,7 @@
 							<dd><input type="text" name="fromurl" class="px p_fre" value="$article[fromurl]" size="30" /></dd>
 							<dt>{lang article_dateline}</dt>
 							<dd><input type="text" name="dateline" class="px p_fre" value="$article[dateline]" size="30" onclick="showcalendar(event, this, true)" /></dd>
-							<!--{if $cate[allowcomment]}-->
+							<!--{if $category[$catid][allowcomment]}-->
 								<dt>{lang article_comment_setup}</dt>
 								<dd><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} />{lang article_forbidcomment_description}</label></dd>
 							<!--{/if}-->
@@ -343,7 +343,7 @@ function raid_delete(aid) {
 	var p;
 	if(p = node.parentNode) {
 		p.removeChild(node);
-	}   
+	}
 }
 function switchhl(obj, v) {
 	if(parseInt($('highlight_style_' + v).value)) {

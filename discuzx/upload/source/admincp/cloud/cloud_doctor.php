@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_doctor.php 23162 2011-06-22 03:04:22Z yexinhao $
+ *      $Id: cloud_doctor.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -52,33 +52,38 @@ if(submitcheck('setidkeysubmit')) {
 } elseif($op == 'apitest') {
 
 	$APIType = intval($_G['gp_api_type']);
-	$APIIndex = intval($_G['gp_api_index']);
-	$APIIP = cloudGetAPIIP($APIType, $APIIndex);
+	$APIIP = trim($_G['gp_api_ip']);
 
 	$startTime = cloudGetMicroTime();
 	$testStatus = cloudAPIConnectTest($APIType, $APIIP);
 	$endTime = cloudGetMicroTime();
 
 	$otherTips = '';
-	if($APIIndex == -1) {
+	if($APIIP) {
+		if ($_G['gp_api_description']) {
+			$otherTips = diconv(trim($_G['gp_api_description']), 'UTF-8');
+		}
+	} else {
 		if($APIType == 1) {
 			$otherTips = '<a href="javascript:;" onClick="display(\'cloud_tbody_api_test\')">'.$lang['cloud_doctor_api_test_other'].'</a>';
 		} elseif($APIType == 2) {
 			$otherTips = '<a href="javascript:;" onClick="display(\'cloud_tbody_manyou_test\')">'.$lang['cloud_doctor_manyou_test_other'].'</a>';
+		} elseif($APIType == 3) {
+			$otherTips = '<a href="javascript:;" onClick="display(\'cloud_tbody_qzone_test\')">'.$lang['cloud_doctor_qzone_test_other'].'</a>';
 		}
 	}
 
-	include template('common/header');
+	ajaxshowheader();
 	if($testStatus) {
 		printf($lang['cloud_doctor_api_test_success'], $lang['cloud_doctor_result_success'], $APIIP, $endTime - $startTime, $otherTips);
 	} else {
 		printf($lang['cloud_doctor_api_test_failure'], $lang['cloud_doctor_result_failure'], $APIIP, $otherTips);
 	}
-	include template('common/footer');
+	ajaxshowfooter();
 
 } elseif($op == 'setidkey') {
 
-	include template('common/header');
+	ajaxshowheader();
 	echo '
 		<h3 class="flb" id="fctrl_showblock" style="cursor: move;">
 			<em id="return_showblock" fwin="showblock">'.$lang['cloud_doctor_setidkey'].'</em>
@@ -87,7 +92,7 @@ if(submitcheck('setidkeysubmit')) {
 		';
 	echo '<div style="margin: 0 10px; width: 700px;">';
 	showtips('cloud_doctor_setidkey_tips');
-	showformheader('cloud&edit=yes');
+	showformheader('cloud');
 	showhiddenfields(array('operation' => $operation));
 	showhiddenfields(array('op' => $op));
 	showtableheader();
@@ -98,7 +103,7 @@ if(submitcheck('setidkeysubmit')) {
 	showtablefooter();
 	showformfooter();
 	echo '</div>';
-	include template('common/footer');
+	ajaxshowfooter();
 
 } else {
 
@@ -154,6 +159,7 @@ if(submitcheck('setidkeysubmit')) {
 		'<strong>'.cplang('cloud_doctor_gethostbyname_function').'</strong>',
 		function_exists('gethostbyname') ? $lang['cloud_doctor_result_success'].' '.$lang['available'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_function_disable']
 	));
+
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_dns_api').'</strong>',
 		cloudDNSCheckResult(1)
@@ -165,13 +171,6 @@ if(submitcheck('setidkeysubmit')) {
 	showtagfooter('tbody');
 
 	showtagheader('tbody', 'cloud_tbody_api_test', false);
-	$cloudAPIIPs = cloudGetAllAPIIPs(1);
-	foreach($cloudAPIIPs as $ipIndex => $ipValue) {
-		showtablerow('style="height:30px;"', array('class="td24"'), array(
-			'<strong>'.cplang('cloud_doctor_other_api_test').'</strong>',
-			cloudGetAPIConnectJS(1, $ipIndex)
-		));
-	}
 	showtagfooter('tbody');
 
 	showtagheader('tbody', '', true);
@@ -186,13 +185,6 @@ if(submitcheck('setidkeysubmit')) {
 	showtagfooter('tbody');
 
 	showtagheader('tbody', 'cloud_tbody_manyou_test', false);
-	$manyouAPIIPs = cloudGetAllAPIIPs(2);
-	foreach($manyouAPIIPs as $ipIndex => $ipValue) {
-		showtablerow('', array('class="td24"'), array(
-			'<strong>'.cplang('cloud_doctor_other_manyou_test').'</strong>',
-			cloudGetAPIConnectJS(2, $ipIndex)
-		));
-	}
 	showtagfooter('tbody');
 
 	showtagheader('tbody', '', true);
@@ -215,19 +207,20 @@ if(submitcheck('setidkeysubmit')) {
 	}
 
 	showtablefooter();
+	showGetCloudAPIIPJS();
 
 }
 
 function cloudShowPlugin() {
 	$plugins = array();
-	$query = DB::query("SELECT pluginid, available, name, identifier, modules, version FROM ".DB::table('common_plugin')." WHERE identifier IN ('qqconnect', 'cloudstat', 'soso_smilies')");
+	$query = DB::query("SELECT pluginid, available, name, identifier, modules, version FROM ".DB::table('common_plugin')." WHERE identifier IN ('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch')");
 	while($plugin = DB::fetch($query)) {
 		$plugins[$plugin['identifier']] = $plugin;
 	}
 
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_system_plugin_status').'</strong>',
-		count($plugins) >= 3 ? cplang('cloud_doctor_result_success').' '.cplang('available').' '.cplang('cloud_doctor_system_plugin_list') : cplang('cloud_doctor_result_failure').cplang('cloud_doctor_system_plugin_status_false')
+		count($plugins) >= 4 ? cplang('cloud_doctor_result_success').' '.cplang('available').' '.cplang('cloud_doctor_system_plugin_list') : cplang('cloud_doctor_result_failure').cplang('cloud_doctor_system_plugin_status_false')
 	));
 	foreach($plugins as $plugin) {
 		$moduleStatus = cplang('cloud_doctor_plugin_module_error');
@@ -253,6 +246,10 @@ function cloudDNSCheckResult($type = 1) {
 		case 2:
 			$setIP = ($_G['setting']['my_ip'] ? cplang('cloud_doctor_setting_ip').$_G['setting']['my_ip'] : '');
 			$host = 'api.manyou.com';
+			break;
+		case 3:
+			$setIP = ($_G['setting']['connect_api_ip'] ? cplang('cloud_doctor_setting_ip').$_G['setting']['connect_api_ip'] : '');
+			$host = 'openapi.qzone.qq.com';
 			break;
 	}
 	$ip = cloudDNSCheck($host);
@@ -292,13 +289,20 @@ function cloudStatusResult() {
 }
 
 function cloudAPIConnectTest($type = 1, $ip = '') {
+	global $_G;
 
 	if($type == 1) {
 		$url = 'http://api.discuz.qq.com/site.php';
-		$result = dfsockopen($url, 0, '', '', false, $ip, 5);
+		$result = dfsockopen($url, 0, '', '', false, $ip ? $ip : $_G['setting']['cloud_api_ip'], 5);
 	} elseif($type == 2) {
 		$url = 'http://api.manyou.com/uchome.php';
-		$result = dfsockopen($url, 0, 'action=siteRefresh', '', false, $ip, 5);
+		$result = dfsockopen($url, 0, 'action=siteRefresh', '', false, $ip ? $ip : $_G['setting']['my_ip'], 5);
+	} elseif($type == 3) {
+		$url = 'http://openapi.qzone.qq.com/oauth/qzoneoauth_request_token';
+		$result = dfsockopen($url, 0, '', '', false, $ip ? $ip : $_G['setting']['connect_api_ip'], 5);
+		if($result) {
+			return true;
+		}
 	}
 
 	$result = trim($result);
@@ -319,37 +323,8 @@ function cloudGetMicroTime() {
 	return (floatval($usec) + floatval($sec));
 }
 
-function cloudGetAPIIP($type = 1, $index = -1) {
-	global $_G;
-	if($index == -1) {
-		if($type == 1 && $_G['setting']['cloud_api_ip']) {
-			return $_G['setting']['cloud_api_ip'];
-		} elseif($type == 2 && $_G['setting']['my_ip']) {
-			return $_G['setting']['my_ip'];
-		} else {
-			return '';
-		}
-	} else {
-		$ips = cloudGetAllAPIIPs($type);
-		if(is_array($ips) && $ips[$index]) {
-			return $ips[$index];
-		} else {
-			return false;
-		}
-	}
-}
-
-function cloudGetAllAPIIPs($type = 1) {
-	switch($type) {
-		case 1:
-			return array('180.153.1.148', '180.153.1.164', '180.153.1.28', '180.153.1.29');
-		case 2:
-			return array('124.238.249.8', '221.194.139.132');
-	}
-}
-
-function cloudGetAPIConnectJS($type = 1, $index = -1) {
-	$html = sprintf('<div id="_doctor_apitest_%1$s_%2$s"></div><script type="text/javascript">ajaxget("%3$s?action=cloud&operation=doctor&op=apitest&api_type=%1$s&api_index=%2$s", "_doctor_apitest_%1$s_%2$s");</script>', $type, $index, ADMINSCRIPT);
+function cloudGetAPIConnectJS($type = 1, $ip = '') {
+	$html = sprintf('<div id="_doctor_apitest_%1$s_%2$s"></div><script type="text/javascript">ajaxget("%3$s?action=cloud&operation=doctor&op=apitest&api_type=%1$s&api_ip=%2$s", "_doctor_apitest_%1$s_%2$s");</script>', $type, $ip, ADMINSCRIPT);
 	return $html;
 }
 
@@ -362,6 +337,15 @@ function cloudSeparatorOutputCheck() {
 		return true;
 	}
 	return false;
+}
+
+function showGetCloudAPIIPJS() {
+
+	echo
+<<<EOT
+<script type="text/javascript" src="static/image/admincp/cloud/cloud.js"></script>
+<script type="text/javascript" src="http://cp.discuz.qq.com/cloud/apiIp" charset="utf-8"></script>
+EOT;
 }
 
 ?>

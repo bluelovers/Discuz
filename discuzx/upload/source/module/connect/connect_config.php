@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 22869 2011-05-27 09:27:31Z fengning $
+ *      $Id: connect_config.php 24072 2011-08-23 11:23:43Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,10 +38,6 @@ if(submitcheck('connectsubmit')) {
 		$connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 		if ($connect_member['conuinsecret']) {
 
-			if(!$_G['cookie']['client_token']) {
-				showmessage('qqconnect:connect_config_unbind_failed', $referer);
-			}
-
 			if($_G['member']['conisregister']) {
 				if($_G['gp_newpassword1'] !== $_G['gp_newpassword2']) {
 					showmessage('profile_passwd_notmatch', $referer);
@@ -58,7 +54,6 @@ if(submitcheck('connectsubmit')) {
 				} else {
 					connect_errlog($response['status'], $response['result']);
 				}
-				showmessage('qqconnect:connect_config_unbind_busy', $referer);
 			}
 
 		} else {
@@ -75,7 +70,7 @@ if(submitcheck('connectsubmit')) {
 
 		DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='', conuinsecret='', conopenid='', conispublishfeed='0', conispublisht='0', conisregister='0', conisqzoneavatar='0', conisfeed='0' WHERE uid='$_G[uid]'");
 		DB::query("UPDATE ".DB::table('common_member')." SET conisbind='0' WHERE uid='$_G[uid]'");
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '{$_G[member][conuin]}', '2', '$_G[timestamp]')");
+		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '{$_G[member][conopenid]}', '2', '$_G[timestamp]')");
 
 		if($_G['member']['conisregister']) {
 			loaducenter();

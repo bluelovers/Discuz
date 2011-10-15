@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[qqconnect/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.02]]></item>
+			<item id="version"><![CDATA[1.03]]></item>
 			<item id="__modules">
 				<item id="1">
 					<item id="name"><![CDATA[connect]]></item>
@@ -147,6 +147,9 @@
 				<item id="connect_post_sync_no"><![CDATA[未]]></item>
 				<item id="connect_post_sync_unauthorized_title"><![CDATA[授權提示]]></item>
 				<item id="connect_post_sync_unauthorized_desc"><![CDATA[馬上完善授權，您將可以發表主題時同步到QQ空間和騰訊微博，第一時間和大家分享您在論壇中的新鮮事兒。]]></item>
+				<item id="connect_access_token_out_of_date_feed"><![CDATA[為了您的賬號安全，請使用QQ帳號重新登錄，將為您升級帳號安全機制<br/><br/>點擊<a href="{$_G[connect][login_url]}"><img src="static/image/common/qq_login.gif" class="vm" alt="QQ登錄" /></a>頁面將發生跳轉，請確保您已保存好帖子數據]]></item>
+				<item id="connect_access_token_out_of_date_share"><![CDATA[為了您的賬號安全，請使用QQ帳號重新登錄，將為您升級帳號安全機制<br/><br/>點擊<a href="{$_G[connect][login_url]}"><img src="static/image/common/qq_login.gif" class="vm" alt="QQ登錄" /></a>頁面將發生跳轉]]></item>
+				<item id="connect_access_token_outofdate_button"><![CDATA[我知道了]]></item>
 				<item id="connect_post_sync_not_bind_desc"><![CDATA[馬上綁定QQ賬號，您將可以發表主題時同步到QQ空間和騰訊微博，第一時間和大家分享您在論壇中的新鮮事兒。]]></item>
 				<item id="connect_viewthread_share_to_qzone"><![CDATA[QQ空間]]></item>
 				<item id="connect_viewthread_share_to_t"><![CDATA[騰訊微博]]></item>

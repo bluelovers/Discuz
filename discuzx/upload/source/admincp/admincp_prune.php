@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_prune.php 20479 2011-02-24 09:06:10Z congyushuai $
+ *      $Id: admincp_prune.php 24433 2011-09-20 01:30:33Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -132,7 +132,7 @@ EOT;
 				$repliesarray[$decrease][] = $tid;
 			}
 			foreach($repliesarray as $decrease => $tidarray) {
-				DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-$decrease WHERE tid IN (".implode(',', $tidarray).")");
+				DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-'$decrease' WHERE tid IN (".implode(',', $tidarray).")");
 			}
 		}
 

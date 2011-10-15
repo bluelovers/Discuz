@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ajax.php 20189 2011-02-17 03:29:17Z zhengqingpeng $
+ *      $Id: misc_ajax.php 24331 2011-09-08 08:29:58Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -188,13 +188,13 @@ if($op == 'comment') {
 	$showlevel = intval($_GET['level']);
 	$showlevel = $showlevel >= 1 && $showlevel <= 4 ? $showlevel : 4;
 	$values = array(intval($_GET['pid']), intval($_GET['cid']), intval($_GET['did']), intval($_GET['coid']));
+	$containertype = in_array($_GET['containertype'], array('birth', 'reside'), true) ? $_GET['containertype'] : 'birth';
 	$level = 1;
 	if($values[0]) {
 		$level++;
 	} else if($_G['uid'] && !empty($_GET['showdefault'])) {
 
 		space_merge($_G['member'], 'profile');
-		$containertype = substr($container, 0, 5);
 		$district = array();
 		if($containertype == 'birth') {
 			if(!empty($_G['member']['birthprovince'])) {
@@ -248,7 +248,7 @@ if($op == 'comment') {
 	}
 
 	include_once libfile('function/profile');
-	$html = showdistrict($values, $elems, $container, $showlevel);
+	$html = showdistrict($values, $elems, $container, $showlevel, $containertype);
 }
 
 include template('home/misc_ajax');

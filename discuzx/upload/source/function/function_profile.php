@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 23728 2011-08-08 06:54:25Z zhengqingpeng $
+ *      $Id: function_profile.php 24331 2011-09-08 08:29:58Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -118,10 +118,10 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		$elems = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
 		if(!empty($space['birthprovince'])) {
 			$html = profile_show('birthcity', $space);
-			$html .= '&nbsp;(<a href="javascript:;" onclick="showdistrict(\'birthdistrictbox\', [\'birthprovince\', \'birthcity\', \'birthdist\', \'birthcommunity\'], 4); return false;">'.lang('spacecp', 'profile_edit').'</a>)';
+			$html .= '&nbsp;(<a href="javascript:;" onclick="showdistrict(\'birthdistrictbox\', [\'birthprovince\', \'birthcity\', \'birthdist\', \'birthcommunity\'], 4, \'\', \'birth\'); return false;">'.lang('spacecp', 'profile_edit').'</a>)';
 			$html .= '<p id="birthdistrictbox"></p>';
 		} else {
-			$html = '<p id="birthdistrictbox">'.showdistrict($values, $elems, 'birthdistrictbox', 1).'</p>';
+			$html = '<p id="birthdistrictbox">'.showdistrict($values, $elems, 'birthdistrictbox', 1, 'birth').'</p>';
 		}
 
 	} elseif($fieldid=='residecity') {
@@ -132,10 +132,10 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		$elems = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
 		if(!empty($space['resideprovince'])) {
 			$html = profile_show('residecity', $space);
-			$html .= '&nbsp;(<a href="javascript:;" onclick="showdistrict(\'residedistrictbox\', [\'resideprovince\', \'residecity\', \'residedist\', \'residecommunity\'], 4); return false;">'.lang('spacecp', 'profile_edit').'</a>)';
+			$html .= '&nbsp;(<a href="javascript:;" onclick="showdistrict(\'residedistrictbox\', [\'resideprovince\', \'residecity\', \'residedist\', \'residecommunity\'], 4, \'\', \'reside\'); return false;">'.lang('spacecp', 'profile_edit').'</a>)';
 			$html .= '<p id="residedistrictbox"></p>';
 		} else {
-			$html = '<p id="residedistrictbox">'.showdistrict($values, $elems, 'residedistrictbox', 1).'</p>';
+			$html = '<p id="residedistrictbox">'.showdistrict($values, $elems, 'residedistrictbox', 1, 'reside').'</p>';
 		}
 	} else {
 		if($field['unchangeable'] && $space[$fieldid]!='') {
@@ -325,9 +325,9 @@ function profile_show($fieldid, $space=array()) {
 }
 
 
-function showdistrict($values, $elems=array(), $container='districtbox', $showlevel=null) {
+function showdistrict($values, $elems=array(), $container='districtbox', $showlevel=null, $containertype = 'birth') {
 	$html = '';
-	if(!preg_match("/^[A-Za-z0-9]+$/", $container)) {
+	if(!preg_match("/^[A-Za-z0-9_]+$/", $container)) {
 		return $html;
 	}
 	$showlevel = !empty($showlevel) ? intval($showlevel) : count($values);
@@ -344,7 +344,6 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 		}
 	}
 	$options = array(1=>array(), 2=>array(), 3=>array(), 4=>array());
-	$containertype = substr($container, 0, 5);
 	if($upids && is_array($upids)) {
 		$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($upids).') ORDER BY displayorder');
 		while($value = DB::fetch($query)) {
@@ -355,15 +354,14 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 		}
 	}
 	$names = array('province', 'city', 'district', 'community');
-	$allowstr = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity', 'resideprovince', 'residecity', 'residedist', 'residecommunity');
 	for($i=0; $i<4;$i++) {
-		$elems[$i] = !empty($elems[$i]) && in_array($elems[$i], $allowstr) ? $elems[$i] : ($containertype == 'birth' ? 'birth' : 'reside').$names[$i];
+		$elems[$i] = !empty($elems[$i]) ? dhtmlspecialchars($elems[$i]) : ($containertype == 'birth' ? 'birth' : 'reside').$names[$i];
 	}
 
 	for($i=0;$i<$showlevel;$i++) {
 		$level = $i+1;
 		if(!empty($options[$level])) {
-			$jscall = "showdistrict('$container', ['$elems[0]', '$elems[1]', '$elems[2]', '$elems[3]'], $showlevel, $level)";
+			$jscall = "showdistrict('$container', ['$elems[0]', '$elems[1]', '$elems[2]', '$elems[3]'], $showlevel, $level, '$containertype')";
 			$html .= '<select name="'.$elems[$i].'" id="'.$elems[$i].'" class="ps" onchange="'.$jscall.'" tabindex="1">';
 			$html .= '<option value="">'.lang('spacecp', 'district_level_'.$level).'</option>';
 			foreach($options[$level] as $option) {
