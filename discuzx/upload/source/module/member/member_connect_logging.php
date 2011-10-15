@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect_logging.php 22665 2011-05-17 04:09:48Z fengning $
+ *      $Id: member_connect_logging.php 24736 2011-10-10 02:46:07Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,7 @@ if(!empty($_POST)) {
 			DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisqzoneavatar, conisfeed) VALUES ('$uid', '$conuin', '$conuinsecret', '$conopenid', '$conispublishfeed', '$conispublisht', '0', '0', '$user_auth_fields')");
 		}
 		DB::query("UPDATE ".DB::table('common_member')." SET conisbind='1' WHERE uid='$uid'");
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conuin', '1', '$_G[timestamp]')");
+		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conopenid', '1', '$_G[timestamp]')");
 
 		if ($_G['gp_is_notify']) {
 			dsetcookie('connect_js_name', 'user_bind', 86400);
@@ -48,6 +48,7 @@ if(!empty($_POST)) {
 		dsetcookie('connect_login', 1, 31536000);
 		dsetcookie('connect_is_bind', '1', 31536000);
 		dsetcookie('connect_uin', $conopenid, 31536000);
+		dsetcookie('stats_qc_reg', 2, 86400);
 		if ($_G['gp_is_feed']) {
 			dsetcookie('connect_synpost_tip', 1, 31536000);
 		}
@@ -56,4 +57,5 @@ if(!empty($_POST)) {
 		showmessage('qqconnect:connect_get_access_token_failed', dreferer());
 	}
 }
+
 ?>
