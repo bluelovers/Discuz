@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 22925 2011-06-01 10:23:08Z liulanbo $
+	$Id: common_extra.js 24331 2011-09-08 08:29:58Z zhangguosheng $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -25,7 +25,7 @@ function _relatedlinks(rlinkmsgid) {
 	});
 	var relatedid = new Array();
 	msg = msg.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
-		for(var j = 0; j > -1; j++) {
+		for(var j = 0; j < relatedlink.length; j++) {
 			if(relatedlink[j] && !relatedid[j]) {
 				var ra = '<a href="'+relatedlink[j]['surl']+'" target="_blank" class="relatedlink">'+relatedlink[j]['sname']+'</a>';
 				var $rtmp = $3;
@@ -33,8 +33,6 @@ function _relatedlinks(rlinkmsgid) {
 				if($3 != $rtmp) {
 					relatedid[j] = 1;
 				}
-			} else {
-				break;
 			}
 		}
 		return $2 + $3;
@@ -136,7 +134,7 @@ function _setDoodle(fid, oid, url, tid, from) {
 	}
 }
 
-function _showdistrict(container, elems, totallevel, changelevel) {
+function _showdistrict(container, elems, totallevel, changelevel, containertype) {
 	var getdid = function(elem) {
 		var op = elem.options[elem.selectedIndex];
 		return op['did'] || op.getAttribute('did') || '0';
@@ -145,9 +143,9 @@ function _showdistrict(container, elems, totallevel, changelevel) {
 	var cid = changelevel >= 2 && elems[1] && $(elems[1]) ? getdid($(elems[1])) : 0;
 	var did = changelevel >= 3 && elems[2] && $(elems[2]) ? getdid($(elems[2])) : 0;
 	var coid = changelevel >= 4 && elems[3] && $(elems[3]) ? getdid($(elems[3])) : 0;
-	var url = "home.php?mod=misc&ac=ajax&op=district&container="+container
+	var url = "home.php?mod=misc&ac=ajax&op=district&container="+container+"&containertype="+containertype
 		+"&province="+elems[0]+"&city="+elems[1]+"&district="+elems[2]+"&community="+elems[3]
-		+"&pid="+pid + "&cid="+cid+"&did="+did+"&coid="+coid+'&level='+totallevel+'&handlekey='+container+'&inajax=1'+(isUndefined(changelevel) ? '&showdefault=1' : '');
+		+"&pid="+pid + "&cid="+cid+"&did="+did+"&coid="+coid+'&level='+totallevel+'&handlekey='+container+'&inajax=1'+(!changelevel ? '&showdefault=1' : '');
 	ajaxget(url, container, '');
 }
 
