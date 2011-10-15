@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 22634 2011-05-16 05:52:08Z monkey $
+	$Id: common.js 24745 2011-10-10 05:58:53Z monkey $
 */
 
 var BROWSER = {};
@@ -1811,7 +1811,7 @@ function copycode(obj) {
 	$F('_copycode', arguments);
 }
 
-function showdistrict(container, elems, totallevel, changelevel) {
+function showdistrict(container, elems, totallevel, changelevel, containertype) {
 	$F('_showdistrict', arguments);
 }
 
@@ -1820,7 +1820,12 @@ function setDoodle(fid, oid, url, tid, from) {
 }
 
 
-function initSearchmenu(searchform) {
+function initSearchmenu(searchform, cloudSearchUrl) {
+	var defaultUrl = 'search.php?searchsubmit=yes';
+	if(typeof cloudSearchUrl == "undefined" || cloudSearchUrl == null || cloudSearchUrl == '') {
+		cloudSearchUrl = defaultUrl;
+	}
+
 	var searchtxt = $(searchform + '_txt');
 	if(!searchtxt) {
 		searchtxt = $(searchform);
@@ -1842,14 +1847,43 @@ function initSearchmenu(searchform) {
 	if(!$(searchform + '_type_menu')) return false;
 	var o = $(searchform + '_type');
 	var a = $(searchform + '_type_menu').getElementsByTagName('a');
+	var formobj = searchtxt.form;
 	for(var i=0; i<a.length; i++){
 		if(a[i].className == 'curtype'){
 			o.innerHTML = a[i].innerHTML;
 			$(searchform + '_mod').value = a[i].rel;
+			formobj.method = 'post';
+			if((a[i].rel == 'forum' || a[i].rel == 'curforum') && defaultUrl != cloudSearchUrl) {
+				formobj.action = cloudSearchUrl;
+				formobj.method = 'get';
+			} else {
+				formobj.action = defaultUrl;
+			}
+
+			if($('cloudsearchforumId')) {
+				$('cloudsearchforumId').value = '0';
+				if (a[i].rel == 'curforum') {
+					$('cloudsearchforumId').value = $('dzsearchforumid').value
+				}
+			}
 		}
 		a[i].onclick = function(){
 			o.innerHTML = this.innerHTML;
 			$(searchform + '_mod').value = this.rel;
+			formobj.method = 'post';
+			if((this.rel == 'forum' || this.rel == 'curforum') && defaultUrl != cloudSearchUrl) {
+				formobj.action = cloudSearchUrl;
+				formobj.method = 'get';
+			} else {
+				formobj.action = defaultUrl;
+			}
+
+			if($('cloudsearchforumId')) {
+				$('cloudsearchforumId').value = '0';
+				if (this.rel == 'curforum') {
+					$('cloudsearchforumId').value = $('dzsearchforumid').value
+				}
+			}
 		};
 	}
 }
@@ -1857,6 +1891,9 @@ function initSearchmenu(searchform) {
 function searchFocus(obj) {
 	if(obj.value == '請輸入搜索內容') {
 		obj.value = '';
+	}
+	if($('cloudsearchquery') != null) {
+		$('cloudsearchquery').value = obj.value;
 	}
 }
 
