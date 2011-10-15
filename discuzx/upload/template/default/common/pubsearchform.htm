@@ -10,12 +10,22 @@
 <!--{/if}-->
 <!--{if $_G['setting']['search'] && $slist}-->
 <div id="scbar" class="cl">
-	<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+	<!--{eval $searchparams = makeSearchSignUrl();}-->
+	<form id="scbar_form" method="{if $_G[fid] && !empty($searchparams[0])}get{else}post{/if}" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="{if $_G[fid] && !empty($searchparams[0])}$searchparams[0]{else}search.php?searchsubmit=yes{/if}" target="_blank">
 		<input type="hidden" name="mod" id="scbar_mod" value="search" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="srchtype" value="title" />
-		<input type="hidden" name="srhfid" value="$_G[fid]" />
+		<input type="hidden" name="srhfid" value="$_G[fid]" id="dzsearchforumid" />
 		<input type="hidden" name="srhlocality" value="$_G['basescript']::{CURMODULE}" />
+		<!--{if !empty($searchparams[1])}-->
+			<!--{loop $searchparams[1] $key $value}-->
+			<!--{eval $srchotquery .= '&' . $key . '=' . $value;}-->
+			<input type="hidden" name="$key" value="$value" />
+			<!--{/loop}-->
+			<input type="hidden" name="source" value="discuz" />
+			<input type="hidden" name="fId" value=""  id="cloudsearchforumId" />
+			<input type="hidden" name="q" id="cloudsearchquery" value="" />
+		<!--{/if}-->
 		<table cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="scbar_icon_td"></td>
@@ -29,7 +39,13 @@
 							<!--{loop $_G['setting']['srchhotkeywords'] $val}-->
 								<!--{if $val=trim($val)}-->
 									<!--{eval $valenc=rawurlencode($val);}-->
-									<!--{block srchhotkeywords[]}--><a href="search.php?mod=forum&srchtxt=$valenc&formhash={FORMHASH}&searchsubmit=true&source=hotsearch" target="_blank" class="xi2">$val</a><!--{/block}-->
+									<!--{block srchhotkeywords[]}-->
+										<!--{if !empty($searchparams[0])}-->
+											<a href="$searchparams[0]?q=$valenc&source=hotsearch{$srchotquery}" target="_blank" class="xi2">$val</a>
+										<!--{else}-->
+											<a href="search.php?mod=forum&srchtxt=$valenc&formhash={FORMHASH}&searchsubmit=true&source=hotsearch" target="_blank" class="xi2">$val</a>
+										<!--{/if}-->
+									<!--{/block}-->
 								<!--{/if}-->
 							<!--{/loop}-->
 							<!--{echo implode('', $srchhotkeywords);}-->
@@ -42,6 +58,6 @@
 </div>
 <ul id="scbar_type_menu" class="p_pop" style="display: none;"><!--{echo implode('', $slist);}--></ul>
 <script type="text/javascript">
-	initSearchmenu('scbar');
+	initSearchmenu('scbar', '$searchparams[0]');
 </script>
 <!--{/if}-->
