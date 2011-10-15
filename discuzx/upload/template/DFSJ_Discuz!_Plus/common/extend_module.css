@@ -1,0 +1,21 @@
+/* ----------------------------------
+
+Main CSS file for Discuz! X
+(C) FansBar.cn.
+http://www.fansbar.cn
+Created & Modified by ±±±±¡å.
+
+---------------------------------- */
+
+/** forum::forumdisplay,forum::viewthread,forum::modcp,group,home::space,home::task,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat,misc::tag **/
+
+.tl .th { background: url({STYLEIMGDIR}/dfsj_bm_h.png) repeat 0 0; }
+.tl tr:hover th, .tl tr:hover td { background-color: transparent; background: url({STYLEIMGDIR}/dfsj_bm_h.png) repeat 0 0; }
+
+/** end **/
+
+/** forum::viewthread,group::viewthread,forum::trade,forum::misc **/
+
+.pls { width: 160px; background: url({STYLEIMGDIR}/dfsj_bm_h.png) repeat 0 0; overflow: hidden; border-right: 1px solid {CONTENTSEPARATE}; }
+
+/** end **/

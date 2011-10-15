@@ -1,0 +1,57 @@
+/* ----------------------------------
+
+Main CSS file for Discuz! X
+(C) 巅峰设计.
+http://www.dfbar.net
+Created & Modified by 北北″.
+
+---------------------------------- */
+
+#hd .wp { width: 1004px; padding: 0; }
+.hdc { background: url({STYLEIMGDIR}/hdc_bg.png) repeat-x 0 0; min-height: 92px; margin-bottom: 20px; }
+.ie6 .hdc { height: 92px; }
+#dfsj_hdcl { background: url({STYLEIMGDIR}/hdc_bg_l.png) no-repeat 0 0; }
+#dfsj_hdcr { background: url({STYLEIMGDIR}/hdc_bg_r.png) no-repeat 100% 0; padding: 0 22px; }
+#dfsj_wp { width: 1004px; margin: 0 auto; }
+#pt { margin: 0 0 2px; }
+.mtn { margin-top: 0 !important; }
+#hd h2 { padding: 10px 20px 8px 0; }
+
+.bm { background: none; }
+#dfsj_wp #wp.wp { background: url({STYLEIMGDIR}/wp_m.png); }
+
+			#nv { padding-left: 0; height: 70px; {MENUBGCODE}; }
+#dfsj_nvl { background: url({STYLEIMGDIR}/dfsj_nvl.png) 0 0 no-repeat; }
+#dfsj_nvr { background: url({STYLEIMGDIR}/dfsj_nvr.png) 100% 0 no-repeat; padding: 0 22px; }
+				#nv li { padding-right: 0; width: 88px; height: 70px; line-height: 70px; background: none; text-align: center; }
+					.ie_all #nv li { line-height: 73px; }
+					.ie6 #nv li { line-height: 70px; }
+					#nv li a { float: none; padding: 0; height: 70px; }
+					#nv li.a { margin-left: 0; }
+						#nv li a:hover { text-decoration:none; display: block; background: url({STYLEIMGDIR}/nv_a.png) no-repeat 0 -70px; }
+						#nv li.hover a:hover, #nv li.hover a { display: block; background: url({STYLEIMGDIR}/nv_a.png) no-repeat 0 -70px; }
+			#mu { position: relative; z-index: 1; }
+				.ie6 #mu, .ie7 #mu { line-height: 0; font-size: 0; }
+				#mu ul { background: url({IMGDIR}/mu_bg.png) no-repeat 0 100%; line-height: 22px; z-index: 2; font-size: 12px; }
+.fl { border-width: 0; }
+.fl .bm_h { border-width: 0; height: 36px; line-height: 36px; }
+.bm_h { border-top: 0; background: url({STYLEIMGDIR}/dfsj_bm_h.png) repeat 0 0; }
+#ft { border-top: 0; }
+#ft a { color: #7BA9D1; }
+
+#qmenu { margin: 23px 4px 0; background: url({STYLEIMGDIR}/qmenu.png) no-repeat 0 0; }
+
+#um { padding-top: 15px; }
+#hd .fastlg { padding-top: 15px; }
+
+
+
+.wp_t_l { background: url({STYLEIMGDIR}/wp_t_l.png) 0 0 no-repeat; }
+.wp_t_r { background: url({STYLEIMGDIR}/wp_t_r.png) 100% 0 no-repeat; padding: 0 22px; }
+.wp_t { background: url({STYLEIMGDIR}/wp_t.png) 0 0 repeat-x; height: 30px; overflow: hidden; }
+.wp_m_l { background: url({STYLEIMGDIR}/wp_m_l.png) 0 0 repeat-y; }
+.wp_m_r { background: url({STYLEIMGDIR}/wp_m_r.png) 100% 0 repeat-y; padding: 0 22px; }
+.wp_m { background: url({STYLEIMGDIR}/wp_m.png); padding-bottom: 10px; }
+.wp_b_l { background: url({STYLEIMGDIR}/wp_b_l.png) 0 0 no-repeat; }
+.wp_b_r { background: url({STYLEIMGDIR}/wp_b_r.png) 100% 0 no-repeat; padding: 0 22px; }
+.wp_b { background: url({STYLEIMGDIR}/wp_b.png) 0 0 repeat-x; height: 15px; overflow: hidden; }
