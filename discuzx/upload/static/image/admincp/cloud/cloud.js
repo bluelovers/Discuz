@@ -5,9 +5,9 @@ function submitForm() {
 		$('siteInfo').innerHTML = '';
 	}
 
-	showWindow(null, dialogHtml, 'html');
+	showWindow('open_cloud', dialogHtml, 'html');
 
-	$('fwin_null').style.top = '80px';
+	$('fwin_open_cloud').style.top = '80px';
 	$('cloud_api_ip').value = cloudApiIp;
 
 	return false;
@@ -56,4 +56,73 @@ function expiration() {
 		$('loadinginner').innerHTML = '<font color="red">' + expirationText + '</font>';
 		clearTimeout(expirationTimeout);
 	}
+}
+
+function apiCallback(apiIps) {
+
+	if (typeof apiIps == 'undefined' || typeof apiIps == 'null' || !apiIps) {
+		return false;
+	}
+
+	if (apiIps.errorCode) {
+		return false;
+	}
+
+	if (!apiIps.result || !apiIps.result.cloud_api_ip || !apiIps.result.manyou_api_ip) {
+		return false;
+	}
+
+	if (!$('cloud_tbody_api_test') || !$('cloud_tbody_manyou_test')) {
+		return false;
+	}
+
+	var cloudAPIIPs = apiIps.result.cloud_api_ip;
+	var manyouAPIIPs = apiIps.result.manyou_api_ip;
+
+	ajaxShowAPIStatus(1, cloudAPIIPs);
+
+	ajaxShowAPIStatus(2, manyouAPIIPs);
+
+}
+
+function ajaxShowAPIStatus(apiType, ips) {
+
+	var apiType = parseInt(apiType);
+
+	for(i in ips) {
+		var apiIp = ips[i].ip;
+		var apiDescription = ips[i].description;
+		var apiTr = document.createElement('tr');
+
+		var apiTdFirst = document.createElement('td');
+		apiTdFirst.className = 'td24';
+		if (!apiType || apiType == 1) {
+			apiTdFirst.innerHTML = '<strong>雲平台其他接口測試</strong>';
+		} else if (apiType == 2) {
+			apiTdFirst.innerHTML = '<strong>漫遊其他接口測試</strong>';
+		} else if (apiType == 3) {
+			apiTdFirst.innerHTML = '<strong>QQ互聯接口測試</strong>';
+		}
+
+		var apiTdSecond = document.createElement('td');
+		apiTdSecond.innerHTML = '<div id="_doctor_apitest_' + apiType + '_' + apiIp + '">&nbsp;</div>';
+
+		apiTr.appendChild(apiTdFirst);
+		apiTr.appendChild(apiTdSecond);
+
+		if (!apiType || apiType == 1) {
+			$('cloud_tbody_api_test').appendChild(apiTr);
+		} else if (apiType == 2) {
+			$('cloud_tbody_manyou_test').appendChild(apiTr);
+		} else if (apiType == 3) {
+			$('cloud_tbody_qzone_test').appendChild(apiTr);
+		}
+	}
+
+	for(i in ips) {
+		var apiIp = ips[i].ip;
+		var apiDescription = ips[i].description;
+		ajaxget('admin.php?action=cloud&operation=doctor&op=apitest&api_type=' + apiType + '&api_ip=' + encodeURI(apiIp) + '&api_description=' + encodeURI(apiDescription), '_doctor_apitest_' + apiType + '_' + apiIp);
+	}
+
 }
