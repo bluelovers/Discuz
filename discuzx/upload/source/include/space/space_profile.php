@@ -113,8 +113,10 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 			 * 如果是管理員則不管是否設定了資料頁面隱藏
 			 * 一律會顯示內容
 			 */
+			|| !$_G['inajax'] && (
 			|| $_G['adminid'] == 1
 			|| $space['self']
+			)
 			// bluelovers
 		)
 	) {
