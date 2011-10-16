@@ -22,21 +22,13 @@ class plugin_mpdcode{
 }
 class plugin_mpdcode_forum extends plugin_mpdcode{
 	function viewthread_posttop_output() {
-		global $postlist;
+		global $_G, $postlist;
 
 		$_post = reset($postlist);
 
 		if (!$_post['first']) return array();
 
-		$url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		$url ='http://'.$url;
-
-		if (strpos($chl, '?') === false) {
-			$url .= '?';
-		} else {
-			$url .= '&';
-		}
-		$url .= 'mobile=yes';
+		$url = $this->_mobile_url($_G['tid']);
 
 		$chl = urlencode($url);
 //		$widhtHeight ='150';
@@ -54,6 +46,16 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 		global $_G;
 
 		$url = '';
+
+		$url .= 'http://';
+
+		if ($_G['setting']['domain']['app']['mobile']) {
+			$url .= $_G['setting']['domain']['app']['mobile'];
+		} else {
+			$url .= $_SERVER['HTTP_HOST'];
+		}
+
+		$url .= '/';
 
 		if (!isset($tid)) $tid = $_G['tid'];
 
