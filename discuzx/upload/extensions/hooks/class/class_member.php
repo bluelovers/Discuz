@@ -45,6 +45,11 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 
 	if($_setarr) {
 		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
+
+		$operation = 'base';
+
+		include_once libfile('function/feed');
+		feed_add('profile', 'feed_profile_update_'.$operation, array('hash_data'=>'profile'));
 	}
 }
 
