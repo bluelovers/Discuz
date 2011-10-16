@@ -120,6 +120,10 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 			// bluelovers
 		)
 	) {
+		// bluelovers
+		$_invisible = !(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']);
+		// bluelovers
+
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
 			if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
