@@ -23,6 +23,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	include_once libfile('function/profile');
 	$_space = &$_member;
 
+	$_setarr = array();
+
 	if ($_space['birthmonth'] && $_space['birthday']) {
 		/**
 		 * 登入時自動更新星座資訊
