@@ -24,6 +24,15 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 	function viewthread_useraction_output() {
 		$url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$url ='http://'.$url;
+
+		if (strpos($chl, '?') === false) {
+			$url .= '?';
+		} else {
+			$url .= '&';
+		}
+
+		$url .= 'mobile=yes';
+
 		$chl = urlencode($url);
 //		$widhtHeight ='150';
 		$EC_level='L';
