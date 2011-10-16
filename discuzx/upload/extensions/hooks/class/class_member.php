@@ -26,6 +26,10 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if ($_space['birthmonth'] && $_space['birthday']) {
 		$_setarr['constellation'] = get_constellation($_space['birthmonth'], $_space['birthday']);
 	}
+
+	if ($_space['birthyear']) {
+		$_setarr['zodiac'] = get_zodiac($_space['birthyear']);
+	}
 }
 
 ?>
