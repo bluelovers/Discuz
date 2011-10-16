@@ -437,7 +437,7 @@ function countprofileprogress($uid = 0) {
 /**
  * 計算星座
  */
-function get_constellation($birthmonth,$birthday) {
+function get_constellation($birthmonth,$birthday, $return_idx = false) {
 	$birthmonth = intval($birthmonth);
 	$birthday = intval($birthday);
 	$idx = $birthmonth;
