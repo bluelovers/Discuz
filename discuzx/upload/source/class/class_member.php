@@ -819,6 +819,7 @@ class register_ctl {
 				$_replace = array(
 					'{email}' => $email,
 					'{password_source}' => '',
+					'{email_verify}' => '',
 				);
 
 				// 對 email 的內容做額外處理
