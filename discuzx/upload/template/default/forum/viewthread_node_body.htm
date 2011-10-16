@@ -51,13 +51,7 @@
 	<div class="{if !$_G[forum_thread][special]}t_fsz{else}pcbs{/if}">
 		<!--{if $post['first']}-->
 			<!--{if !$_G[forum_thread][special]}-->
-				<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">
-				<!--{if !$_G['inajax']}-->
-					<!--{if $ad_a_pr}-->
-						$ad_a_pr
-					<!--{/if}-->
-				<!--{/if}-->
-				$post[message]</td></tr></table>
+				<!--{subtpl subblock/forum/viewthread_node_body_postmessage}-->
 			<!--{elseif $_G[forum_thread][special] == 1}-->
 				<!--{template forum/viewthread_poll}-->
 			<!--{elseif $_G[forum_thread][special] == 2}-->
