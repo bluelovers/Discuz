@@ -820,6 +820,8 @@ class register_ctl {
 					'{email}' => $email,
 					'{password_source}' => '',
 					'{email_verify}' => '',
+
+					'{nickname}' => !empty($profile['nickname']) ? $profile['nickname'] : $_G['member']['username'],
 				);
 
 				// 對 email 的內容做額外處理
