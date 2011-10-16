@@ -150,7 +150,13 @@ class logging_ctl {
 				}
 
 				// bluelovers
-
+				if (discuz_core::$plugin_support['Scorpio_Event']) {
+					//Event: Class_logging_ctl::on_login:Before_setloginstatus
+					Scorpio_Event::instance('Class_' . __METHOD__ . ':Before_setloginstatus')
+						->run(array(array(
+							'_this'	=> &$this,
+					)));
+				}
 				// bluelovers
 
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
