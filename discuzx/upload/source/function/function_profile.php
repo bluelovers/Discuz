@@ -462,6 +462,8 @@ function get_constellation($birthmonth,$birthday) {
 	$_idx = $_idx - 1;
 
 	if ($idx < 1 || $idx > 12) $idx = 0;
+
+	if ($return_idx) return $return_idx;
 	// bluelovers
 
 	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
