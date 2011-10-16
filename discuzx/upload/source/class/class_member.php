@@ -826,6 +826,7 @@ class register_ctl {
 				if ($welcomemsg != 1) {
 					$_replace2 = array_merge($_replace, array(
 						'{password_source}' => $_G['gp_password'],
+						'{email_verify}' => $verifyurl,
 					));
 
 					$welcomemsgtitle_email = addslashes(replacesitevar($welcomemsgtitle, $_replace2));
