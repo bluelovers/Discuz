@@ -1,20 +1,21 @@
-﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-10-10 18:15]]></item>
-	<item id="From"><![CDATA[Discuz! Board (http://192.168.1.101/)]]></item>
+	<item id="Time"><![CDATA[2011-10-16 17:28]]></item>
+	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
-			<item id="adminid"><![CDATA[0]]></item>
-			<item id="name"><![CDATA[地址二维码]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[Mobile QRCode]]></item>
 			<item id="identifier"><![CDATA[mpdcode]]></item>
-			<item id="description"><![CDATA[]]></item>
+			<item id="description"><![CDATA[於主題內展示  QRCode 手機二維碼
+供手機直接讀取來瀏覽網頁]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[mpdcode/]]></item>
 			<item id="copyright"><![CDATA[conroy]]></item>
-			<item id="version"><![CDATA[0.01]]></item>
+			<item id="version"><![CDATA[1.01]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[mpcode]]></item>
