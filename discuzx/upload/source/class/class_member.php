@@ -751,6 +751,7 @@ class register_ctl {
 				}
 			}
 
+			/*
 			if($welcomemsg && !empty($welcomemsgtxt)) {
 				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
 				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
@@ -765,6 +766,7 @@ class register_ctl {
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				}
 			}
+			*/
 
 			if($fromuid) {
 				updatecreditbyaction('promotion_register', $fromuid);
@@ -816,6 +818,47 @@ class register_ctl {
 					$url_forward = dreferer();
 					break;
 			}
+
+			// bluelovers
+			/**
+			 * 移動代碼方便在開啟註冊驗證時對 welcomemsgtxt 做額外的處理
+			 */
+			if($welcomemsg && !empty($welcomemsgtxt)) {
+
+				$_replace = array(
+					'{email}' => $email,
+					'{password_source}' => '',
+					'{email_verify}' => '',
+
+					'{nickname}' => !empty($profile['nickname']) ? $profile['nickname'] : $_G['member']['username'],
+				);
+
+				// 對 email 的內容做額外處理
+				if ($welcomemsg != 1) {
+					$_replace2 = array_merge($_replace, array(
+						'{password_source}' => $_G['gp_password'],
+						'{email_verify}' => $verifyurl,
+					));
+
+					$welcomemsgtitle_email = addslashes(replacesitevar($welcomemsgtitle, $_replace2));
+					$welcomemsgtxt_email = addslashes(replacesitevar($welcomemsgtxt, $_replace2));
+				}
+
+				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle, $_replace));
+				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt, $_replace));
+				if($welcomemsg == 1) {
+					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
+					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+				} elseif($welcomemsg == 2) {
+					sendmail_cron($email, $welcomemsgtitle_email, $welcomemsgtxt_email);
+				} elseif($welcomemsg == 3) {
+					sendmail_cron($email, $welcomemsgtitle_email, $welcomemsgtxt_email);
+					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
+					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+				}
+			}
+			// bluelovers
+
 			$param = array('bbname' => $this->setting['bbname'], 'username' => $_G['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']);
 			if(strpos($url_forward, $this->setting['regname']) !== false || strpos($url_forward, 'buyinvitecode') !== false) {
 				$url_forward = 'forum.php';
