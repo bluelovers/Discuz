@@ -59,7 +59,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 		if (!$nodiv) {
 			$return = '<div class="y">'.$return.'</div>';
 		} else {
-			$return .= '<br/>';
+			$return .= '<br/><br/>';
 		}
 
 		return $return;
