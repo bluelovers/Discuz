@@ -22,6 +22,13 @@ class plugin_mpdcode{
 }
 class plugin_mpdcode_forum extends plugin_mpdcode{
 	function viewthread_posttop_output() {
+
+		$postlist = $GLOBALS['postlist'];
+		reset($GLOBALS['postlist']);
+		$_post = current($postlist);
+
+		if (!$_post['first']) return array();
+
 		$url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$url ='http://'.$url;
 
@@ -30,7 +37,6 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 		} else {
 			$url .= '&';
 		}
-
 		$url .= 'mobile=yes';
 
 		$chl = urlencode($url);
