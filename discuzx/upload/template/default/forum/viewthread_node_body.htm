@@ -52,6 +52,10 @@
 		<!--{if $post['first']}-->
 			<!--{if !$_G[forum_thread][special]}-->
 				<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">
+
+				<!-- 主題內容廣告前 -->
+				<!--{hook/viewthread_post_msg_ad_a_pr $postcount}-->
+
 				<!--{if !$_G['inajax']}-->
 					<!--{if $ad_a_pr}-->
 						$ad_a_pr
