@@ -479,10 +479,14 @@ function countprofileprogress($uid = 0) {
 	}
 }
 
-function get_constellation($birthmonth,$birthday) {
+/**
+ * 計算星座
+ */
+function get_constellation($birthmonth,$birthday, $return_idx = false) {
 	$birthmonth = intval($birthmonth);
 	$birthday = intval($birthday);
 	$idx = $birthmonth;
+	/*
 	if ($birthday <= 22) {
 		if (1 == $birthmonth) {
 			$idx = 12;
@@ -490,6 +494,23 @@ function get_constellation($birthmonth,$birthday) {
 			$idx = $birthmonth - 1;
 		}
 	}
+	*/
+
+	// bluelovers
+ 	if ($birthmonth < 1 || $birthmonth > 12 || $birthday < 1 || $birthday > 31) return '';
+
+	$carray = array(22, 20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 22, 22);
+
+	$_idx = ($birthday >= $carray[$idx]) ? $idx : $idx - 1;
+	if ($_idx < 1) $_idx = 12;
+	$idx = $_idx;
+	$_idx = $_idx - 1;
+
+	if ($idx < 1 || $idx > 12) $idx = 0;
+
+	if ($return_idx) return $return_idx;
+	// bluelovers
+
 	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
 }
 
