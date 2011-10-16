@@ -234,7 +234,7 @@ if(submitcheck('profilesubmit')) {
 		DB::update('common_member_field_forum', $forum, array('uid'=>$_G['uid']));
 	}
 
-	if(isset($_POST['birthmonth']) && ($space['birthmonth'] != $_POST['birthmonth'] || $space['birthday'] != $_POST['birthday'])) {
+	if(isset($_POST['birthmonth']) && ($space['birthmonth'] != $_POST['birthmonth'] || $space['birthday'] != $_POST['birthday'] || empty($space['constellation']))) {
 		$setarr['constellation'] = get_constellation($_POST['birthmonth'], $_POST['birthday']);
 	}
 	if(isset($_POST['birthyear']) && $space['birthyear'] != $_POST['birthyear']) {
