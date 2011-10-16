@@ -74,6 +74,9 @@
 			<!--{/if}-->
 		<!--{else}-->
 			<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">
+
+				<!--{hook/viewthread_post_msg_ad_a_pr $postcount}-->
+
 			<!--{if !$_G['inajax']}-->
 				<!--{if $ad_a_pr}-->
 					$ad_a_pr
