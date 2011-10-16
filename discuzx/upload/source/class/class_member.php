@@ -830,8 +830,8 @@ class register_ctl {
 					$welcomemsgtxt_email = addslashes(replacesitevar($welcomemsgtxt, $_replace2));
 				}
 
-				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
-				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
+				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle, $_replace));
+				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt, $_replace));
 				if($welcomemsg == 1) {
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
