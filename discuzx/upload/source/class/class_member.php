@@ -824,7 +824,7 @@ class register_ctl {
 				// 對 email 的內容做額外處理
 				if ($welcomemsg != 1) {
 					$_replace2 = array_merge($_replace, array(
-
+						'{password_source}' => $_G['gp_password'],
 					));
 
 					$welcomemsgtitle_email = addslashes(replacesitevar($welcomemsgtitle, $_replace2));
