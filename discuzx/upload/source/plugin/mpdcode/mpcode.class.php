@@ -28,13 +28,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 
 		if (!$_post['first']) return array();
 
-		$url = $this->_mobile_url($_G['tid']);
-
-		$chl = urlencode($url);
-
-		$EC_level = 'L';
-		$margin = '0';
-		$return .= '<div class="y">手机二维码访问：<br/><a href="' . dhtmlspecialchars($url) . '" target="_blank"><img src="http://chart.apis.google.com/chart?chs=' . $this->wh . 'x' . $this->wh . '&cht=qr&chld=' . $EC_level . '|' . $margin . '&chl=' . $chl . '" alt="QR code"/></a></div>';
+		$return = $this->_output_html();
 
 		$ret = array();
 		$ret[0] = $return;
