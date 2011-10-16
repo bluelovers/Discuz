@@ -79,6 +79,20 @@
 							<li><em>$value[title]</em>$value[value]</li>
 							<!--{/loop}-->
 						</ul>
+
+						<!-- 增加顯示被隱藏的個人資料 -->
+						<!--{if $profiles_invisible}-->
+						<hr class="da mtn m0"/>
+						<h3 class="mbn">
+							<!--{lang friendname_3}-->
+						</h3>
+						<ul>
+							<!--{loop $profiles_invisible $value}-->
+							<li><em>$value[title]</em>$value[value]</li>
+							<!--{/loop}-->
+						</ul>
+						<!--{/if}-->
+						<!-- 增加顯示被隱藏的個人資料 -End -->
 					</div>
 				<!--{hook/space_profile_baseinfo_bottom}-->
 				<!--{if $space['medals']}-->

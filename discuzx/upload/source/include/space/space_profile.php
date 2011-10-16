@@ -89,6 +89,10 @@ include_once libfile('function/profile');
 $profiles = array();
 $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
 
+// bluelovers
+$profiles_invisible = array();
+// bluelovers
+
 if($_G['setting']['verify']['enabled']) {
 	space_merge($space, 'verify');
 }
@@ -105,15 +109,47 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 				$space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)
 			)
 		) &&
-		(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard'])
+		(
+			!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']
+
+			// bluelovers
+			/**
+			 * 如果是管理員則不管是否設定了資料頁面隱藏
+			 * 一律會顯示內容
+			 */
+			|| !$_G['inajax'] && (
+				$_G['adminid'] == 1
+				|| $space['self']
+			)
+			// bluelovers
+		)
 	) {
+		// bluelovers
+		$_invisible = !(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']);
+		// bluelovers
+
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
 			if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
 				continue;
 			}
 			if($val == '')  $val = '-';
-			$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
+			$profiles[$fieldid] = array(
+				'title'=>$field['title'], 'value'=>$val,
+
+				// bluelovers
+				'field' => $field,
+
+				'invisible' => $_invisible,
+				// bluelovers
+			);
+
+			// bluelovers
+			if ($_invisible) {
+				$profiles_invisible[$fieldid] = $profiles[$fieldid];
+				unset($profiles[$fieldid]);
+			}
+			// bluelovers
 		}
 	}
 }
