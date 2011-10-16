@@ -157,9 +157,11 @@ class logging_ctl {
 							'_this'	=> &$this,
 
 							'uid' => $uid,
-							'result' => $result,
+							'result' => &$result,
 
 							'from_connect' => $from_connect,
+
+							'invite' => &$invite,
 					)));
 				}
 				// bluelovers
