@@ -46,6 +46,9 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if($_setarr) {
 		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
 
+		/**
+		 * 登入時如果個人資料產生變動自動生成動態
+		 */
 		$operation = 'base';
 
 		include_once libfile('function/feed');
