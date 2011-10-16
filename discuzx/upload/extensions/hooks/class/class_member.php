@@ -19,6 +19,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	$_member = $result['member'];
 
 	space_merge($_member, 'profile');
+
+	include_once libfile('function/profile');
 }
 
 ?>
