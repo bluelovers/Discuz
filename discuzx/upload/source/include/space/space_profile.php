@@ -131,6 +131,8 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 
 				// bluelovers
 				'field' => $field,
+
+				'invisible' => (!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']),
 				// bluelovers
 			);
 		}
