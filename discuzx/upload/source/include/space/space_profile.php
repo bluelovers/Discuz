@@ -139,6 +139,13 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 				'invisible' => $_invisible,
 				// bluelovers
 			);
+
+			// bluelovers
+			if ($_invisible) {
+				$profiles_invisible[$fieldid] = $profiles[$fieldid];
+				unset($profiles[$fieldid]);
+			}
+			// bluelovers
 		}
 	}
 }
