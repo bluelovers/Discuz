@@ -149,6 +149,10 @@ class logging_ctl {
 					require_once libfile('member/'.$this->extrafile, 'module');
 				}
 
+				// bluelovers
+
+				// bluelovers
+
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
 
 				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
