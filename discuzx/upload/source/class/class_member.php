@@ -822,9 +822,9 @@ class register_ctl {
 
 				// 對 email 的內容做額外處理
 				if ($welcomemsg != 1) {
-					$_replace2 = array(
+					$_replace2 = array_merge($_replace, array(
 
-					);
+					));
 
 					$welcomemsgtitle_email = addslashes(replacesitevar($welcomemsgtitle, $_replace2));
 					$welcomemsgtxt_email = addslashes(replacesitevar($welcomemsgtxt, $_replace2));
