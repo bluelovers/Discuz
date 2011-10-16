@@ -438,6 +438,7 @@ function get_constellation($birthmonth,$birthday) {
 	$birthmonth = intval($birthmonth);
 	$birthday = intval($birthday);
 	$idx = $birthmonth;
+	/*
 	if ($birthday <= 22) {
 		if (1 == $birthmonth) {
 			$idx = 12;
@@ -445,6 +446,12 @@ function get_constellation($birthmonth,$birthday) {
 			$idx = $birthmonth - 1;
 		}
 	}
+	*/
+
+	// bluelovers
+
+	// bluelovers
+
 	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
 }
 
