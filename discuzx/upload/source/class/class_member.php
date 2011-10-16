@@ -839,9 +839,9 @@ class register_ctl {
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				} elseif($welcomemsg == 2) {
-					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
+					sendmail_cron($email, $welcomemsgtitle_email, $welcomemsgtxt_email);
 				} elseif($welcomemsg == 3) {
-					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
+					sendmail_cron($email, $welcomemsgtitle_email, $welcomemsgtxt_email);
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				}
