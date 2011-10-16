@@ -36,14 +36,14 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 		return $ret;
 	}
 
-	function ad_ad_a_pr($_conf) {
+	function ad_thread($_conf) {
 		/**
 		 * ad_a_pr/thread/a_pr/3/$postcount
 		 */
 		$parameter = implode('/', $_conf['params']);
 
-		if ($parameter == 'ad_a_pr/thread/a_pr/3/1') {
-			$_conf['content'] .= $this->_output_html();
+		if ($parameter == 'thread/a_pr/3/0') {
+			$return = $this->_output_html();
 		}
 
 		return $_conf['content'];
