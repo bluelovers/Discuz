@@ -24,6 +24,9 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	$_space = &$_member;
 
 	if ($_space['birthmonth'] && $_space['birthday']) {
+		/**
+		 * 登入時自動更新星座資訊
+		 */
 		$_setarr['constellation'] = get_constellation($_space['birthmonth'], $_space['birthday']);
 	}
 
