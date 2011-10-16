@@ -155,6 +155,11 @@ class logging_ctl {
 					Scorpio_Event::instance('Class_' . __METHOD__ . ':Before_setloginstatus')
 						->run(array(array(
 							'_this'	=> &$this,
+
+							'uid' => $uid,
+							'result' => $result,
+
+							'from_connect' => $from_connect,
 					)));
 				}
 				// bluelovers
