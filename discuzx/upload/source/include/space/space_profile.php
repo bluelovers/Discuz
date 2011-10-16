@@ -125,6 +125,10 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 			if($val == '')  $val = '-';
 			$profiles[$fieldid] = array(
 				'title'=>$field['title'], 'value'=>$val,
+
+				// bluelovers
+				'field' => $field,
+				// bluelovers
 			);
 		}
 	}
