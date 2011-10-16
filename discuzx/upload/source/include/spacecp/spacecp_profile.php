@@ -237,7 +237,7 @@ if(submitcheck('profilesubmit')) {
 	if(isset($_POST['birthmonth']) && ($space['birthmonth'] != $_POST['birthmonth'] || $space['birthday'] != $_POST['birthday'] || empty($space['constellation']))) {
 		$setarr['constellation'] = get_constellation($_POST['birthmonth'], $_POST['birthday']);
 	}
-	if(isset($_POST['birthyear']) && $space['birthyear'] != $_POST['birthyear']) {
+	if(isset($_POST['birthyear']) && ($space['birthyear'] != $_POST['birthyear'])) {
 		$setarr['zodiac'] = get_zodiac($_POST['birthyear']);
 	}
 
