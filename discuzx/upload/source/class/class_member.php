@@ -750,6 +750,7 @@ class register_ctl {
 				}
 			}
 
+			/*
 			if($welcomemsg && !empty($welcomemsgtxt)) {
 				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
 				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
@@ -764,6 +765,7 @@ class register_ctl {
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				}
 			}
+			*/
 
 			if($fromuid) {
 				updatecreditbyaction('promotion_register', $fromuid);
@@ -807,6 +809,27 @@ class register_ctl {
 					$url_forward = dreferer();
 					break;
 			}
+
+			// bluelovers
+			/**
+			 * 移動代碼方便在開啟註冊驗證時對 welcomemsgtxt 做額外的處理
+			 */
+			if($welcomemsg && !empty($welcomemsgtxt)) {
+				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
+				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
+				if($welcomemsg == 1) {
+					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
+					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+				} elseif($welcomemsg == 2) {
+					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
+				} elseif($welcomemsg == 3) {
+					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
+					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
+					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+				}
+			}
+			// bluelovers
+
 			$param = array('bbname' => $this->setting['bbname'], 'username' => $_G['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']);
 			if(strpos($url_forward, $this->setting['regname']) !== false || strpos($url_forward, 'buyinvitecode') !== false) {
 				$url_forward = 'forum.php';
