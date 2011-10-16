@@ -149,7 +149,41 @@ class logging_ctl {
 					require_once libfile('member/'.$this->extrafile, 'module');
 				}
 
+				// bluelovers
+				if (discuz_core::$plugin_support['Scorpio_Event']) {
+					//Event: Class_logging_ctl::on_login:Before_setloginstatus
+					Scorpio_Event::instance('Class_' . __METHOD__ . ':Before_setloginstatus')
+						->run(array(array(
+							'_this'	=> &$this,
+
+							'uid' => $uid,
+							'result' => &$result,
+
+							'from_connect' => $from_connect,
+
+							'invite' => &$invite,
+					)));
+				}
+				// bluelovers
+
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
+
+				// bluelovers
+				if (discuz_core::$plugin_support['Scorpio_Event']) {
+					//Event: Class_logging_ctl::on_login:After_setloginstatus
+					Scorpio_Event::instance('Class_' . __METHOD__ . ':After_setloginstatus')
+						->run(array(array(
+							'_this'	=> &$this,
+
+							'uid' => $uid,
+							'result' => &$result,
+
+							'from_connect' => $from_connect,
+
+							'invite' => &$invite,
+					)));
+				}
+				// bluelovers
 
 				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
 				// 同步登入其他 uc client
