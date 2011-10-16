@@ -37,6 +37,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		 * 登入時自動更新生肖資訊
 		 */
 		$_setarr['zodiac'] = get_zodiac($_space['birthyear']);
+
+		if ($_setarr['zodiac'] == $_space['zodiac']) unset($_setarr['zodiac']);
 	}
 
 	if($_setarr) {
