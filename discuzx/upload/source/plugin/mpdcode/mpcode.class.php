@@ -49,5 +49,31 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 
 		return $ret;
 }
+
+	function _mobile_url($tid = null) {
+		global $_G;
+
+		$url = '';
+
+		if (!isset($tid)) $tid = $_G['tid'];
+
+		if(@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_viewthread', 1, '', $tid, 1, '', '');
+		} else {
+			$canonical = 'forum.php?mod=viewthread&tid='.$tid;
+		}
+
+		$url .= $canonical;
+
+		if (strpos($url, '?') === false) {
+			$url .= '?';
+		} else {
+			$url .= '&';
+		}
+
+		$url .= 'mobile=yes';
+
+		return $url;
+	}
 }
 ?>
