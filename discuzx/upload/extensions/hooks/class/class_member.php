@@ -30,6 +30,10 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if ($_space['birthyear']) {
 		$_setarr['zodiac'] = get_zodiac($_space['birthyear']);
 	}
+
+	if($_setarr) {
+		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
+	}
 }
 
 ?>
