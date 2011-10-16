@@ -15,6 +15,11 @@ Scorpio_Hook::add('Class_logging_ctl::on_login:After_setloginstatus', '_eClass_l
 
 function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	extract($_conf, EXTR_REFS);
+
+	require_once libfile('function/home');
+	$_member = getspace($uid);
+
+	space_merge($_member, 'profile');
 }
 
 ?>
