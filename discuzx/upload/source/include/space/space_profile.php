@@ -89,6 +89,10 @@ include_once libfile('function/profile');
 $profiles = array();
 $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
 
+// bluelovers
+$profiles_invisible = array();
+// bluelovers
+
 if($_G['setting']['verify']['enabled']) {
 	space_merge($space, 'verify');
 }
