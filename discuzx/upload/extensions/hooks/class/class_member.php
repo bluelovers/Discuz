@@ -28,6 +28,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		 * 登入時自動更新星座資訊
 		 */
 		$_setarr['constellation'] = get_constellation($_space['birthmonth'], $_space['birthday']);
+
+		if ($_setarr['constellation'] == $_space['constellation']) unset($_setarr['constellation']);
 	}
 
 	if ($_space['birthyear']) {
