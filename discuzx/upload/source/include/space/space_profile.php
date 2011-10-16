@@ -107,6 +107,14 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 		) &&
 		(
 			!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']
+
+			// bluelovers
+			/**
+			 * 如果是管理員則不管是否設定了資料頁面隱藏
+			 * 一律會顯示內容
+			 */
+			|| $_G['adminid'] == 1
+			// bluelovers
 		)
 	) {
 		$val = profile_show($fieldid, $space);
