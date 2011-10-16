@@ -817,7 +817,7 @@ class register_ctl {
 			if($welcomemsg && !empty($welcomemsgtxt)) {
 
 				$_replace = array(
-					'email' => $email,
+					'{email}' => $email,
 				);
 
 				// 對 email 的內容做額外處理
