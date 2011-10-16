@@ -43,7 +43,11 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 		$parameter = implode('/', $_conf['params']);
 
 		if ($parameter == 'thread/a_pr/3/0') {
-			$return = $this->_output_html();
+			if (preg_match('/\<div class="a_pr" style="margin-left:10px;width:120px"\>/', $_conf['content'])) {
+				preg_replace('/(\<div class="a_pr" style="margin-left:10px;width:120px"\>)/', '\\1'.$this->_output_html(1), $_conf['content']);
+			} else {
+				$_conf['content'] .= $this->_output_html();
+			}
 		}
 
 		return $_conf['content'];
