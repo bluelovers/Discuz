@@ -123,7 +123,9 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 				continue;
 			}
 			if($val == '')  $val = '-';
-			$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
+			$profiles[$fieldid] = array(
+				'title'=>$field['title'], 'value'=>$val,
+			);
 		}
 	}
 }
