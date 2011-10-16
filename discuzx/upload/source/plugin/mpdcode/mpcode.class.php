@@ -42,7 +42,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 //		$widhtHeight ='150';
 		$EC_level='L';
 		$margin='0';
-		$return.= '<div style="float:right;">手机二维码访问：<br/><a href="'.dhtmlspecialchars($url).'" target="_blank"><img src="http://chart.apis.google.com/chart?chs='.$this->wh.'x'.$this->wh.'&cht=qr&chld='.$EC_level.'|'.$margin.'&chl='.$chl.'" alt="QR code" widhtHeight="'.$size.'" widhtHeight="'.$size.'"/></a></div>';
+		$return.= '<div style="float:right;">手机二维码访问：<br/><a href="'.dhtmlspecialchars($url).'" target="_blank"><img src="http://chart.apis.google.com/chart?chs='.$this->wh.'x'.$this->wh.'&cht=qr&chld='.$EC_level.'|'.$margin.'&chl='.$chl.'" alt="QR code"/></a></div>';
 
 		$ret = array();
 		$ret[0] = $return;
