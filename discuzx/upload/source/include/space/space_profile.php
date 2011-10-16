@@ -105,7 +105,9 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 				$space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)
 			)
 		) &&
-		(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard'])
+		(
+			!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard']
+		)
 	) {
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
