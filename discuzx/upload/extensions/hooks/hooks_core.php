@@ -85,6 +85,10 @@ function _eFunc_libfile($_EVENT, &$ret, $root, $force = 0) {
 			case 'source/function/function_core.php':
 				include_file_once(libfile('function/core', 'source', 'extensions/'), 0, 1);
 				break;
+
+			case 'source/class/class_member.php':
+				include_file_once(libfile('class/member', 'hooks', 'extensions/'), 0, 1);
+
 			default:
 //				dexit($file);
 
