@@ -21,20 +21,6 @@ class plugin_mpdcode {
 	}
 }
 class plugin_mpdcode_forum extends plugin_mpdcode {
-	function viewthread_post_postmessage_top_output() {
-		global $_G, $postlist;
-
-		$_post = reset($postlist);
-
-		if (!$_post['first']) return array();
-
-		$return = $this->_output_html();
-
-		$ret = array();
-		$ret[0] = $return;
-
-		return $ret;
-	}
 
 	function ad_thread($_conf) {
 		/**
