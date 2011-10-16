@@ -22,9 +22,9 @@ class plugin_mpdcode{
 }
 class plugin_mpdcode_forum extends plugin_mpdcode{
 	function viewthread_posttop_output() {
+		global $postlist;
 
-		$postlist = $GLOBALS['postlist'];
-		reset($GLOBALS['postlist']);
+		reset($postlist);
 		$_post = current($postlist);
 
 		if (!$_post['first']) return array();
