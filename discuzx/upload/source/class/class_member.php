@@ -815,6 +815,21 @@ class register_ctl {
 			 * 移動代碼方便在開啟註冊驗證時對 welcomemsgtxt 做額外的處理
 			 */
 			if($welcomemsg && !empty($welcomemsgtxt)) {
+
+				$_replace = array(
+
+				);
+
+				// 對 email 的內容做額外處理
+				if ($welcomemsg != 1) {
+					$_replace2 = array(
+
+					);
+
+					$welcomemsgtitle_email = addslashes(replacesitevar($welcomemsgtitle, $_replace2));
+					$welcomemsgtxt_email = addslashes(replacesitevar($welcomemsgtxt, $_replace2));
+				}
+
 				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
 				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
 				if($welcomemsg == 1) {
