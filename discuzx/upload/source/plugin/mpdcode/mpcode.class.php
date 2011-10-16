@@ -53,7 +53,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 		return $_conf['content'];
 	}
 
-	function _output_html() {
+	function _output_html($nodiv = false) {
 		global $_G, $postlist;
 
 		$_post = reset($postlist);
