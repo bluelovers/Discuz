@@ -21,7 +21,7 @@ class plugin_mpdcode {
 	}
 }
 class plugin_mpdcode_forum extends plugin_mpdcode {
-	function viewthread_post_msg_ad_a_pr_output() {
+	function viewthread_post_postmessage_top_output() {
 		global $_G, $postlist;
 
 		$_post = reset($postlist);
