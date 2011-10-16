@@ -24,8 +24,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode{
 	function viewthread_posttop_output() {
 		global $postlist;
 
-		reset($postlist);
-		$_post = current($postlist);
+		$_post = reset($postlist);
 
 		if (!$_post['first']) return array();
 
