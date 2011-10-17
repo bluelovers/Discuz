@@ -951,9 +951,13 @@ if(!$operation) {
 		showtableheader();
 		showsetting('plugins_edit_name', 'namenew', $plugin['name'], 'text');
 		showsetting('plugins_edit_version', 'versionnew', $plugin['version'], 'text');
-		// 增加允許修改版權訊息
+		/**
+		 * 增加允許修改版權訊息
+		 */
 		if($isplugindeveloper || !$plugin['copyright']) {
-			// 修改 copyright 為 textarea 方便輸入
+			/**
+			 * 修改 copyright 為 textarea 方便輸入
+			 */
 			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'textarea');
 		}
 		showsetting('plugins_edit_identifier', 'identifiernew', $plugin['identifier'], 'text');
@@ -1174,7 +1178,10 @@ if(!$operation) {
 			$directorynew	= dhtmlspecialchars($_G['gp_directorynew']);
 			$identifiernew	= trim($_G['gp_identifiernew']);
 			$descriptionnew	= dhtmlspecialchars($_G['gp_descriptionnew']);
-			$copyrightnew	= $plugin['copyright'] ? addslashes($plugin['copyright']) : dhtmlspecialchars($_G['gp_copyrightnew']);
+			/**
+			 * 增加允許修改版權訊息
+			 */
+			$copyrightnew	= ($isplugindeveloper || $plugin['copyright']) ? addslashes($plugin['copyright']) : dhtmlspecialchars($_G['gp_copyrightnew']);
 			$adminidnew	= ($_G['gp_adminidnew'] > 0 && $_G['gp_adminidnew'] <= 3) ? $_G['gp_adminidnew'] : 1;
 
 			if(!$namenew) {
