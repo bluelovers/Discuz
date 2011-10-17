@@ -1,13 +1,6 @@
 ﻿<?php
 
 /**
- *      借助geegle api生成。
- *     作者QQ：21365421，不接受任何咨询，仅表示版权。
- *
- *
- */
-
-/**
  * QRCode by Google Api
  *
  * @author conroy - QQ：21365421
