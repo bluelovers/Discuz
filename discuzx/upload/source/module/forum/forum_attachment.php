@@ -196,6 +196,7 @@ if(!$requestmode) {
 	}
 
 	if(empty($_G['gp_noupdate'])) {
+		include DISCUZ_ROOT . "source/plugin/attdownbysize/forum_attachment_downbyattachsize.php";
 		if($_G['setting']['delayviewcount'] == 2 || $_G['setting']['delayviewcount'] == 3) {
 			$_G['forum_logfile'] = './data/cache/forum_attachviews_'.intval(getglobal('config/server/id')).'.log';
 			if(substr(TIMESTAMP, -1) == '0') {
