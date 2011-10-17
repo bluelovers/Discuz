@@ -1075,6 +1075,9 @@ if(!$operation) {
 			$directorynew	= dhtmlspecialchars($_G['gp_directorynew']);
 			$identifiernew	= trim($_G['gp_identifiernew']);
 			$descriptionnew	= dhtmlspecialchars($_G['gp_descriptionnew']);
+			/**
+			 * 增加允許修改版權訊息
+			 */
 			$copyrightnew	= ($isplugindeveloper || $plugin['copyright']) ? addslashes($plugin['copyright']) : dhtmlspecialchars($_G['gp_copyrightnew']);
 			$adminidnew	= ($_G['gp_adminidnew'] > 0 && $_G['gp_adminidnew'] <= 3) ? $_G['gp_adminidnew'] : 1;
 
