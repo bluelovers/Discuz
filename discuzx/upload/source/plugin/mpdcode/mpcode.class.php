@@ -8,6 +8,8 @@
  */
 
 /**
+ * QRCode by Google Api
+ *
  * @author conroy - QQ：21365421
  *
  * @author bluelovers
