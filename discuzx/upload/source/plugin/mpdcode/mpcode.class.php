@@ -50,7 +50,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 
 		$_post = reset($postlist);
 
-		if (!$_post['first']) return array();
+		if (!$_post['first']) return $return;
 
 		$url = $this->_mobile_url($_G['tid']);
 
