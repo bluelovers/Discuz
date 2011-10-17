@@ -1081,7 +1081,7 @@ if(!$operation) {
 			/**
 			 * 增加允許修改版權訊息
 			 */
-			$copyrightnew	= ($isplugindeveloper || $plugin['copyright']) ? addslashes($plugin['copyright']) : dhtmlspecialchars($_G['gp_copyrightnew']);
+			$copyrightnew	= (!$isplugindeveloper && $plugin['copyright']) ? addslashes($plugin['copyright']) : dhtmlspecialchars($_G['gp_copyrightnew']);
 			$adminidnew	= ($_G['gp_adminidnew'] > 0 && $_G['gp_adminidnew'] <= 3) ? $_G['gp_adminidnew'] : 1;
 
 			if(!$namenew) {
