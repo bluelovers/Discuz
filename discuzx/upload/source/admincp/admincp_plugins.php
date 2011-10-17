@@ -855,7 +855,7 @@ if(!$operation) {
 		 * 增加允許修改版權訊息
 		 */
 		if($isplugindeveloper || !$plugin['copyright']) {
-			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'text');
+			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'textarea');
 		}
 		showsetting('plugins_edit_identifier', 'identifiernew', $plugin['identifier'], 'text');
 		showsetting('plugins_edit_directory', 'directorynew', $plugin['directory'], 'text');
