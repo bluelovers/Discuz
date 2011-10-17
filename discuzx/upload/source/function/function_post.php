@@ -242,6 +242,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			DB::insert(getattachtablebytid($tid), $update, false, true);
 			DB::update('forum_attachment', array('tid' => $tid, 'pid' => $pid, 'tableid' => getattachtableid($tid)), "aid='$aid'");
 			DB::delete('forum_attachment_unused', "aid='$aid'");
+			include DISCUZ_ROOT . "source/plugin/attdownbysize/function_post_attsizeforauthor.php";
 		}
 		if(!empty($_G['gp_albumaid'])) {
 			$albumdata = array(
