@@ -865,6 +865,8 @@ class register_ctl {
 					'{email_verify}' => '',
 
 					'{nickname}' => !empty($profile['nickname']) ? $profile['nickname'] : $_G['member']['username'],
+
+					'{siteurl}' => $_G['setting']['siteurl'],
 				);
 
 				// 對 email 的內容做額外處理
