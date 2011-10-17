@@ -2,7 +2,7 @@
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
 	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[2011-10-16 17:28]]></item>
+	<item id="Time"><![CDATA[2011-10-17 13:43]]></item>
 	<item id="From"><![CDATA[Bluelovers．風 (http://user-bluelovers.test/)]]></item>
 	<item id="Data">
 		<item id="plugin">
@@ -14,8 +14,8 @@
 供手機直接讀取來瀏覽網頁]]></item>
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[mpdcode/]]></item>
-			<item id="copyright"><![CDATA[conroy]]></item>
-			<item id="version"><![CDATA[1.01]]></item>
+			<item id="copyright"><![CDATA[原作 conroy / 改良 bluelovers]]></item>
+			<item id="version"><![CDATA[1.02]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[mpcode]]></item>
