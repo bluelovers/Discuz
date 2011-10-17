@@ -56,7 +56,7 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 
 		$EC_level = 'L';
 		$margin = '0';
-		$return .= '手机二维码访问：<br/><a href="' . dhtmlspecialchars($url) . '" target="_blank"><img src="http://chart.apis.google.com/chart?chs=' . $this->wh . 'x' . $this->wh . '&cht=qr&chld=' . $EC_level . '|' . $margin . '&chl=' . $chl . '" alt="QR code"/></a>';
+		$return .= 'QRCode：<br/><a href="' . dhtmlspecialchars($url) . '" target="_blank"><img src="http://chart.apis.google.com/chart?chs=' . $this->wh . 'x' . $this->wh . '&cht=qr&chld=' . $EC_level . '|' . $margin . '&chl=' . $chl . '" alt="QR code"/></a>';
 
 		if (!$nodiv) {
 			$return = '<div class="y">'.$return.'</div>';
