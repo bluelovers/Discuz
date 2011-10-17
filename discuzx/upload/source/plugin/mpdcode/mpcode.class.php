@@ -8,7 +8,7 @@
  */
 
 /**
- * @author conroy
+ * @author conroy - QQ：21365421
  *
  * @author bluelovers
  * @copyright 2011
