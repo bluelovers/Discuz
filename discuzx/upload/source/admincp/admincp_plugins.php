@@ -855,7 +855,9 @@ if(!$operation) {
 		 * 增加允許修改版權訊息
 		 */
 		if($isplugindeveloper || !$plugin['copyright']) {
-			// 修改 copyright 為 textarea 方便輸入
+			/**
+			 * 修改 copyright 為 textarea 方便輸入
+			 */
 			showsetting('plugins_edit_copyright', 'copyrightnew', $plugin['copyright'], 'textarea');
 		}
 		showsetting('plugins_edit_identifier', 'identifiernew', $plugin['identifier'], 'text');
