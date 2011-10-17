@@ -1,0 +1,33 @@
+附件流量 v2.0 for Discuz X2.0
+
+
+本插件可以根据附件大小来设置会员上传和下载附件时根据流量KB来设置积分段
+安装好后可以在后台设置各个会员组下载每一附件时需要支付流量占附件大小的百分比及作者分成等
+真正可使会员能者多劳.比较公平
+ 
+ 
+安装方法:直接覆盖原文件,然后在后台导入和启用便可
+测试方法:在本地使用 127.0.0.1 来测试本插件
+预览网站:www.hgcad.com
+ 
+调用 paysize.php 可以获取支付流量,调用语句为:
+include DISCUZ_ROOT . "source/plugin/attdownbysize/paysize.php"; 
+echo "文件名:$filename, 附件大小:$filesize, 支付流量: $paysize, 您的剩余流量 $userhave" ;
+
+//------------------------------------------------------------------------------------------------------------
+//  附件流量:在 \source\function\function_post.php 的约244行后用include插入数据
+//  约244行			DB::delete('forum_attachment_unused', "aid='$aid'");
+//   245行			include DISCUZ_ROOT . "source/plugin/attdownbysize/function_post_attsizeforauthor.php";
+//------------------------------------------------------------------------------------------------------------
+//  附件流量:在 \source\module\forum\forum_attachment.php 的199行后用include插入数据
+//  约198行			if(empty($_G['gp_noupdate'])) {
+//    199行			include DISCUZ_ROOT . "source/plugin/attdownbysize/forum_attachment_downbyattachsize.php";
+//------------------------------------------------------------------------------------------------------------
+
+
+ 
+ 
+QQ 272116623
+邮箱 ws.cn#163.com
+www.hgcad.com 
+

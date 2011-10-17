@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Time"><![CDATA[2011-10-16 21:33]]></item>
+	<item id="From"><![CDATA[Discuz! Board (http://127.0.0.1/dz/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[1]]></item>
+			<item id="name"><![CDATA[¸½¼þÁ÷Á¿]]></item>
+			<item id="identifier"><![CDATA[attdownbysize]]></item>
+			<item id="description"><![CDATA[µ÷ÓÃ paysize.php ¿ÉÒÔ»ñÈ¡Ö§¸¶Á÷Á¿,µ÷ÓÃÓï¾äÎª:
+include DISCUZ_ROOT . &amp;quot;source/plugin/attdownbysize/paysize.php&amp;quot;; 
+echo &amp;quot;ÎÄ¼þÃû:$filename, ¸½¼þ´óÐ¡:$filesize, Ö§¸¶Á÷Á¿: $paysize, ÄúµÄÊ£ÓàÁ÷Á¿ $userhave&amp;quot; ;]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[attdownbysize/]]></item>
+			<item id="copyright"><![CDATA[QQ272116623]]></item>
+			<item id="version"><![CDATA[2.0]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[admincp]]></item>
+					<item id="menu"><![CDATA[Á÷Á¿ÅäÖÃ]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[3]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X2]]></item>
+	</item>
+</root>
