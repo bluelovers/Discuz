@@ -35,8 +35,4 @@ class plugin_onexin_sendmail {
 
 }
 
-class plugin_onexin_sendmail_forum extends plugin_onexin_sendmail {
-
-}
-
 ?>
