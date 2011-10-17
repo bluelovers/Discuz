@@ -46,6 +46,8 @@ class plugin_mpdcode_forum extends plugin_mpdcode {
 	function _output_html($nodiv = false) {
 		global $_G, $postlist;
 
+		$return = '';
+
 		$_post = reset($postlist);
 
 		if (!$_post['first']) return array();
