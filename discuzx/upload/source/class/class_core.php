@@ -977,7 +977,22 @@ class discuz_core {
 
 		$arr = array(strstr($_SERVER['QUERY_STRING'], '&simpletype'), strstr($_SERVER['QUERY_STRING'], 'simpletype'), '&mobile=yes', 'mobile=yes');
 		$query_sting_tmp = str_replace($arr, '', $_SERVER['QUERY_STRING']);
+		/*
 		$this->var['setting']['mobile']['nomobileurl'] = ($this->var['setting']['domain']['app']['forum'] ? 'http://'.$this->var['setting']['domain']['app']['forum'].'/' : $this->var['siteurl']).$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
+		*/
+		// bluelovers
+		$this->var['setting']['mobile']['nomobileurl'] = (
+			$this->var['setting']['domain']['app']['forum'] ?
+				'http://'.$this->var['setting']['domain']['app']['forum'].'/'
+				:
+				($this->var['siteurl'] != 'http://'.$this->var['setting']['domain']['app']['mobile'].'/' ?
+					$this->var['siteurl']
+					:
+					$this->var['setting']['siteurl']
+				)
+			)
+			.$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
+		// bluelovers
 
 		$this->var['setting']['lazyload'] = 0;
 
