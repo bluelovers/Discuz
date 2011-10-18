@@ -612,6 +612,7 @@ class discuz_core {
 
 		// bluelovers
 		if (!isset($_GET['mobile'])
+			&& !empty($this->var['setting']['domain']['app']['mobile'])
 			&& $_SERVER['HTTP_HOST'] == $this->var['setting']['domain']['app']['mobile']
 		) {
 			$_GET['mobile'] = 'yes';
