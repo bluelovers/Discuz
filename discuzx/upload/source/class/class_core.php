@@ -663,7 +663,7 @@ class discuz_core {
 				'http://'.$this->var['setting']['domain']['app']['forum'].'/'
 				:
 				($this->var['siteurl'] != 'http://'.$this->var['setting']['domain']['app']['mobile'].'/' ?
-				$this->var['siteurl']
+					$this->var['siteurl']
 					:
 					$this->var['setting']['siteurl']
 				)
