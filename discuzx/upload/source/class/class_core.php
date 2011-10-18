@@ -670,6 +670,7 @@ class discuz_core {
 			)
 			.$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
 		// bluelovers
+
 		$this->var['setting']['lazyload'] = 0;
 
 		if('utf-8' != CHARSET) {
