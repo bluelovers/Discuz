@@ -610,6 +610,14 @@ class discuz_core {
 			$unallowmobile = true;
 		}
 
+		// bluelovers
+		if (!isset($_GET['mobile'])
+			&& $_SERVER['HTTP_HOST'] == $this->var['setting']['domain']['app']['mobile']
+		) {
+			$_GET['mobile'] = 'yes';
+		}
+		// bluelovers
+
 		if($_GET['mobile'] === 'no') {
 			dsetcookie('mobile', 'no', 3600);
 			$nomobile = true;
