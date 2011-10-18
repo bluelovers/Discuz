@@ -665,7 +665,7 @@ class discuz_core {
 				($this->var['siteurl'] != 'http://'.$this->var['setting']['domain']['app']['mobile'].'/' ?
 					$this->var['siteurl']
 					:
-					$this->var['setting']['siteurl']
+					$this->var['setting']['siteurl'].'/'
 				)
 			)
 			.$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
