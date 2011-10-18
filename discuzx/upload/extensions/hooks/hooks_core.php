@@ -506,6 +506,7 @@ Array
 	return $s;
 }
 
+/*
 Scorpio_Hook::add('Func_mobileoutput:Before_rewrite_content_echo', '_eFunc_mobileoutput_Before_rewrite_content_echo');
 
 function _eFunc_mobileoutput_Before_rewrite_content_echo($_EVENT, $_conf) {
@@ -514,6 +515,7 @@ function _eFunc_mobileoutput_Before_rewrite_content_echo($_EVENT, $_conf) {
 	// 手機模式下取消所有開新視窗
 	$content = preg_replace('/ target=([\'"])([^\'"]+)\\1/', '', $content);
 }
+*/
 
 Scorpio_Hook::add('Class_discuz_core::_init_env:After', '_eClass_discuz_core__init_env_After');
 
