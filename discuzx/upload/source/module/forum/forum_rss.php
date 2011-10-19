@@ -130,6 +130,8 @@ if($fidarray) {
 				$_item['attachsize'] = $attachsize;
 				$_item['filename'] = $filename;
 
+				$_item['lastpost'] = $_item['lastpost'] ? $_item['lastpost'] : $_item['dateline'];
+
 				$itemlist[] = $_item;
 				// bluelovers
 			}
