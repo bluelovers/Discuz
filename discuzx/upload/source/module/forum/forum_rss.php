@@ -75,6 +75,11 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";
 */
+
+// bluelovers
+$itemlist = array();
+// bluelovers
+
 if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
 	if(DB::num_rows($query)) {
