@@ -35,6 +35,13 @@ $forumname = '';
 $_G['gp_format'] = in_array($_G['gp_format'], array(
 	'rss',
 )) ? $_G['gp_format'] : 'rss';
+
+switch ($_G['gp_format']) {
+	case 'rss':
+	default:
+		$num = 20;
+		break;
+}
 // bluelovers
 
 if(empty($rssfid)) {
