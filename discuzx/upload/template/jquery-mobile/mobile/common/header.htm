@@ -18,11 +18,11 @@
 	{eval $nav = "forum.php";}
 <!--{/if}-->
 
-	<div data-role="page">
+	<div data-role="page" data-theme="b">
 
 		<!-- header -->
-		<div data-role="header">
-			<h1>$_G['setting']['sitename']</h1>
+		<div data-role="header" data-position="fixed">
+			<h1><!--{if empty($nobbname)}--> $_G['setting']['bbname'] - <!--{/if}--> {lang waptitle}</h1>
 		</div>
 		<!-- /header -->
 

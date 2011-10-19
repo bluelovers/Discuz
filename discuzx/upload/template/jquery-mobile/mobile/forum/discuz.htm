@@ -15,7 +15,7 @@
 </div>
 <!--{/if}-->
 
-<ul data-role="listview" data-inset="true">
+<ul data-role="listview" data-inset="true" data-divider-theme="b">
 <!--{loop $catlist $key $cat}-->
 	<li data-role="list-divider" class="ui-li-divider"><!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_G[gp_viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}--></li>
 
@@ -24,8 +24,21 @@
 			<!--{loop $cat[forums] $forumid}-->
 				<li>
 					<!--{eval $forum=$forumlist[$forumid];}-->
-					<a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="xi1"{/if}>{$forum[name]}</a>
+					<a href="forum.php?mod=forumdisplay&fid={$forum['fid']}">
+
+					<!--{if $forum[icon]}-->
+						<!--{eval $forum[icon] = preg_replace('/<a[^\>]+\>|\<\/a\>/', '', $forum[icon]);}-->
+						$forum[icon]
+					<!--{else}-->
+						<img src="{IMGDIR}/forum{if $forum[folder]}_new{/if}.gif" alt="$forum[name]" />
+					<!--{/if}-->
+
+					<h3>{$forum[name]}</h3>
+					<p>$forum[description]</p>
+					</a>
 					<!--{if $forum[todayposts] > 0}--><span class="ui-li-count">$forum[todayposts]</span><!--{/if}-->
+
+					<a href="forum.php?mod=forumdisplay&fid={$forum['fid']}">{$forum[name]}</a>
 				</li>
 				{eval $i++;}
 			<!--{/loop}-->
@@ -33,6 +46,13 @@
 
 <!--{/loop}-->
 </ul>
+
+<style>
+.ui-btn-text .ui-link-inherit .ui-li-thumb {
+	width: 80px;
+	height: 80px;
+}
+</style>
 
 <!--{hook/index_middle_mobile}-->
 <div class="box">
