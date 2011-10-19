@@ -1088,7 +1088,7 @@ function parseimg($width, $height, $src, $lazyload) {
 	}
 
 	// bluelovers
-	if (strpos($src, 'imageshack.us')) {
+	if (strpos($src, 'imageshack.us') !== false) {
 		/**
 		 * @example http://img176.imageshack.us/img176/7128/1249950335ee70gk9.jpg
 		 */
