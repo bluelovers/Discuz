@@ -52,6 +52,7 @@ if(empty($rssfid)) {
 
 $charset = $_G['config']['output']['charset'];
 dheader("Content-type: application/xml");
+/*
 echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"<rss version=\"2.0\">\n".
 	"  <channel>\n".
@@ -73,7 +74,7 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"      <title>{$_G[setting][bbname]}</title>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";
-
+*/
 if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
 	if(DB::num_rows($query)) {
