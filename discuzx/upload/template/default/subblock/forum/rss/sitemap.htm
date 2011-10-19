@@ -1,10 +1,10 @@
 <{echo '?'}xml version="1.0" encoding="{$charset}"{echo '?'}>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-	<!--{loop $fidarray $item}-->
+	<!--{loop $fidarray $fid}-->
 	<url>
 
-		<loc>$_G[siteurl]forum.php?mod=forumdisplay&amp;fid=$item[fid]</loc>
+		<loc>$_G[siteurl]forum.php?mod=forumdisplay&amp;fid=$fid</loc>
 		<lastmod><!--{echo gmdate('d', TIMESTAMP)}--></lastmod>
 		<changefreq>always</changefreq>
 		<priority>0.5</priority>
