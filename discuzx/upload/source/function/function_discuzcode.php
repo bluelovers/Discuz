@@ -480,7 +480,10 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
 			), $allowimgcode ? array(
+				/*
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" class=\"bbcode_img\" />')",
+				*/
+				"parseimg('', '', '\\1', ".intval($lazyload).")",
 				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
 			) : array(
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
@@ -1084,6 +1087,12 @@ function parseimg($width, $height, $src, $lazyload) {
 			$extra = '';
 		} else {
 			$extra = ' onclick="zoom(this)" style="cursor:pointer"';
+
+			// bluelovers
+			if (!$width || !$height) {
+				 $extra .= ' onload="thumbImg(this)"';
+			}
+			// bluelovers
 		}
 	}
 
