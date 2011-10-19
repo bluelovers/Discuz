@@ -96,6 +96,7 @@ if($fidarray) {
 						$filename = $_G['siteurl'].$_G['setting']['attachurl'].'forum/'.$attachfile;
 					}
 				}
+				/*
 				echo 	"    <item>\n".
 					"      <title>".$thread['subject']."</title>\n".
 					"      <link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>\n".
@@ -105,6 +106,12 @@ if($fidarray) {
 					($attachfile ? '<enclosure url="'.$filename.'" length="'.$attachsize.'" type="image/jpeg" />' : '').
 					"      <pubDate>".gmdate('r', $thread['dateline'])."</pubDate>\n".
 					"    </item>\n";
+				*/
+				// bluelovers
+				$_item = $thread;
+
+				$itemlist[] = $_item;
+				// bluelovers
 			}
 		}
 	} else {
