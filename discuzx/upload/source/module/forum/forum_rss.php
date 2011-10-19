@@ -31,6 +31,19 @@ $_G['username'] = $_G['member']['password'] = '';
 $rssfid = empty($_GET['fid']) ? 0 : intval($_GET['fid']);
 $forumname = '';
 
+// bluelovers
+$_G['gp_format'] = in_array($_G['gp_format'], array(
+	'rss',
+)) ? $_G['gp_format'] : 'rss';
+
+switch ($_G['gp_format']) {
+	case 'rss':
+	default:
+		$num = 20;
+		break;
+}
+// bluelovers
+
 if(empty($rssfid)) {
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if(rssforumperm($forum)) {
@@ -52,6 +65,7 @@ if(empty($rssfid)) {
 
 $charset = $_G['config']['output']['charset'];
 dheader("Content-type: application/xml");
+/*
 echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"<rss version=\"2.0\">\n".
 	"  <channel>\n".
@@ -73,6 +87,11 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"      <title>{$_G[setting][bbname]}</title>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";
+*/
+
+// bluelovers
+$itemlist = array();
+// bluelovers
 
 if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
@@ -90,6 +109,7 @@ if($fidarray) {
 						$filename = $_G['siteurl'].$_G['setting']['attachurl'].'forum/'.$attachfile;
 					}
 				}
+				/*
 				echo 	"    <item>\n".
 					"      <title>".$thread['subject']."</title>\n".
 					"      <link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>\n".
@@ -99,6 +119,17 @@ if($fidarray) {
 					($attachfile ? '<enclosure url="'.$filename.'" length="'.$attachsize.'" type="image/jpeg" />' : '').
 					"      <pubDate>".gmdate('r', $thread['dateline'])."</pubDate>\n".
 					"    </item>\n";
+				*/
+				// bluelovers
+				$_item = $thread;
+
+				$_item['attachremote'] = $attachremote;
+				$_item['attachfile'] = $attachfile;
+				$_item['attachsize'] = $attachsize;
+				$_item['filename'] = $filename;
+
+				$itemlist[] = $_item;
+				// bluelovers
 			}
 		}
 	} else {
@@ -106,9 +137,13 @@ if($fidarray) {
 	}
 }
 
+/*
 echo 	"  </channel>\n".
 	"</rss>";
-
+*/
+// bluelovers
+include template('subblock/forum/rss/'.$_G['gp_format']);
+// bluelovers
 
 function updatersscache($num) {
 	global $_G;
