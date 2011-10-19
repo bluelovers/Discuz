@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="{$charset}"?>
 <rss version="2.0">
-  <channel>
-    <title>{$_G[setting][bbname]} - $forumname</title>
-    <link>{$_G[siteurl]}forum.php?mod=forumdisplay&amp;fid=$rssfid</link>
-    <description>Latest $num threads of $forumname</description>
-    <copyright>Copyright(C) {$_G[setting][bbname]}</copyright>
-
-    <generator>Discuz! Board by Comsenz Inc.</generator>
-    <lastBuildDate><!--{echo gmdate('r', TIMESTAMP)}--></lastBuildDate>
-    <ttl>$ttl</ttl>
-    <image>
-      <url>{$_G[siteurl]}static/image/common/logo_88_31.gif</url>
-      <title>{$_G[setting][bbname]}</title>
-      <link>{$_G[siteurl]}</link>
-    </image>
-    <!--{loop $itemlist $thread}-->
-    <item>
-      <title>$thread['subject']</title>
-      <link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>
-      <description><![CDATA[<!--{echo dhtmlspecialchars($thread['description'])}-->]]></description>
-      <category><!--{echo dhtmlspecialchars($thread['forum'])}--></category>
-      <author><!--{echo dhtmlspecialchars($thread['author'])}--></author>
-      <pubDate><!--{echo gmdate('r', $thread['dateline'])}--></pubDate>
-    </item>
-    <!--{/loop}-->
-  </channel>
+	<channel>
+		<title>{$_G[setting][bbname]} - $forumname</title>
+		<link>{$_G[siteurl]}forum.php?mod=forumdisplay&amp;fid=$rssfid</link>
+		<description>Latest $num threads of $forumname</description>
+		<copyright>Copyright(C) {$_G[setting][bbname]}</copyright>
+		<generator>Discuz! Board by Comsenz Inc.</generator>
+		<lastBuildDate><!--{echo gmdate('r', TIMESTAMP)}--></lastBuildDate>
+		<ttl>$ttl</ttl>
+		<image>
+			<url>{$_G[siteurl]}static/image/common/logo_88_31.gif</url>
+			<title>{$_G[setting][bbname]}</title>
+			<link>{$_G[siteurl]}</link>
+		</image>
+	<!--{loop $itemlist $thread}-->
+		<item>
+			<title>$thread['subject']</title>
+			<link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>
+			<description><![CDATA[<!--{echo dhtmlspecialchars($thread['description'])}-->]]></description>
+			<category><!--{echo dhtmlspecialchars($thread['forum'])}--></category>
+			<author><!--{echo dhtmlspecialchars($thread['author'])}--></author>
+			<pubDate><!--{echo gmdate('r', $thread['dateline'])}--></pubDate>
+		</item>
+	<!--{/loop}-->
+	</channel>
 </rss>
