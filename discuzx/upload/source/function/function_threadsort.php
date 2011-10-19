@@ -357,6 +357,11 @@ function threadsortshow($sortid, $tid) {
 					if($option['type'] == 'checkbox') {
 						$_G['forum_option'][$option['identifier']]['value'] = '';
 						foreach(explode("\t", $optiondata[$optionid]['value']) as $choiceid) {
+
+							// bluelovers
+							if (!isset($option['choices'][$choiceid])) continue;
+							// bluelovers
+
 							$_G['forum_option'][$option['identifier']]['value'] .= $option['choices'][$choiceid].'&nbsp;';
 						}
 					} elseif($option['type'] == 'radio') {
