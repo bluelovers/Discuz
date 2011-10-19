@@ -110,6 +110,11 @@ if($fidarray) {
 				// bluelovers
 				$_item = $thread;
 
+				$_item['attachremote'] = $attachremote;
+				$_item['attachfile'] = $attachfile;
+				$_item['attachsize'] = $attachsize;
+				$_item['filename'] = $filename;
+
 				$itemlist[] = $_item;
 				// bluelovers
 			}
