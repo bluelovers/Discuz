@@ -26,7 +26,7 @@
 				<li>
 					<!--{eval $forum=$forumlist[$forumid];}-->
 					<a href="forum.php?mod=forumdisplay&fid={$forum['fid']}" {if $forum_favlist[$forumid]}class="xi1"{/if}>{$forum[name]}</a>
-					<!--{if $forum[todayposts] > 0}--><span class="xg1">($forum[todayposts])</span><!--{/if}-->
+					<!--{if $forum[todayposts] > 0}--><span class="ui-li-count">($forum[todayposts])</span><!--{/if}-->
 				</li>
 				{eval $i++;}
 			<!--{/loop}-->
