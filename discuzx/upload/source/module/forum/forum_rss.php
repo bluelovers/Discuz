@@ -128,6 +128,9 @@ if($fidarray) {
 echo 	"  </channel>\n".
 	"</rss>";
 */
+// bluelovers
+include template('subblock/forum/rss/rss');
+// bluelovers
 
 function updatersscache($num) {
 	global $_G;
