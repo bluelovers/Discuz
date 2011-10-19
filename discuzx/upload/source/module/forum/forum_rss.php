@@ -31,6 +31,10 @@ $_G['username'] = $_G['member']['password'] = '';
 $rssfid = empty($_GET['fid']) ? 0 : intval($_GET['fid']);
 $forumname = '';
 
+// bluelovers
+
+// bluelovers
+
 if(empty($rssfid)) {
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if(rssforumperm($forum)) {
