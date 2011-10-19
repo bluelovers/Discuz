@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="{$charset}"?>
 <rss version="2.0">
 	<channel>
+		<!--{if count($fidarray) > 1}-->
 		<title>{$_G[setting][bbname]} - $forumname</title>
 		<link>{$_G[siteurl]}forum.php?mod=forumdisplay&amp;fid=$rssfid</link>
 		<description>Latest $num threads of $forumname</description>
+		<!--{/if}-->
 		<copyright>Copyright(C) {$_G[setting][bbname]}</copyright>
 		<generator>Discuz! Board by Comsenz Inc.</generator>
 		<lastBuildDate><!--{echo gmdate('r', TIMESTAMP)}--></lastBuildDate>
