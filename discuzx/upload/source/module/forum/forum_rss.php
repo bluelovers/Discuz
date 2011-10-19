@@ -137,6 +137,9 @@ if($fidarray) {
 				$_item['attachsize'] = $attachsize;
 				$_item['filename'] = $filename;
 
+				$_item['lastpost'] = $_item['lastpost'] ? $_item['lastpost'] : $_item['dateline'];
+				$_item['dateline'] = $_item['lastpost'] > $_item['dateline'] ? $_item['lastpost'] : $_item['dateline'];
+
 				$itemlist[] = $_item;
 				// bluelovers
 			}
@@ -165,6 +168,9 @@ function updatersscache($num) {
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if($forum['type'] != 'group') {
 			$query = DB::query("SELECT tid, readperm, author, dateline, subject
+
+				, lastpost
+
 				FROM ".DB::table('forum_thread')."
 				WHERE fid='$fid' AND displayorder>='0'
 				ORDER BY tid DESC LIMIT $num");
@@ -179,6 +185,11 @@ function updatersscache($num) {
 					$attach = DB::fetch_first("SELECT remote, attachment, filesize FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE pid='{$post['pid']}' AND isimage='1' ORDER BY dateline LIMIT 1");
 					$attachdata = "\t".$attach['remote']."\t".$attach['attachment']."\t".$attach['filesize'];
 				}
+
+				// bluelovers
+				$thread['dateline'] = $thread['lastpost'];
+				// bluelovers
+
 				$thread['message'] = $post['message'];
 				$thread['status'] = $post['status'];
 				$thread['description'] = $thread['readperm'] > 0 || $thread['price'] > 0 || $thread['status'] & 1 ? '' : addslashes(messagecutstr($thread['message'], 250 - strlen($attachdata)).$attachdata);
