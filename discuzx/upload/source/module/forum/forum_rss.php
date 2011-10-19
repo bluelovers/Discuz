@@ -158,6 +158,9 @@ function updatersscache($num) {
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if($forum['type'] != 'group') {
 			$query = DB::query("SELECT tid, readperm, author, dateline, subject
+
+				, lastpost
+
 				FROM ".DB::table('forum_thread')."
 				WHERE fid='$fid' AND displayorder>='0'
 				ORDER BY tid DESC LIMIT $num");
