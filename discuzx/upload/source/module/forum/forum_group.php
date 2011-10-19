@@ -365,7 +365,7 @@ if($action == 'index') {
 				}
 
 				if(isset($_G['gp_name'])) {
-					$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
+					$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 50, ''))));
 					if(empty($_G['gp_name'])) {
 						showmessage('group_name_empty');
 					}
