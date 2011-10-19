@@ -278,7 +278,7 @@ if($action == 'index') {
 	if(!submitcheck('createsubmit')) {
 		$groupselect = get_groupselect(getgpc('fupid'), getgpc('groupid'));
 	} else {
-		$name = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
+		$name = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 50, ''))));
 		$censormod = censormod($name);
 		if(empty($name)) {
 			showmessage('group_name_empty');
