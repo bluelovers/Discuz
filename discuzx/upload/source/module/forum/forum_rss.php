@@ -32,9 +32,11 @@ $rssfid = empty($_GET['fid']) ? 0 : intval($_GET['fid']);
 $forumname = '';
 
 // bluelovers
-$_G['gp_format'] = in_array($_G['gp_format'], array(
-	'rss',
-)) ? $_G['gp_format'] : 'rss';
+$_allow_format = array();
+
+$_allow_format[] = 'rss';
+
+$_G['gp_format'] = in_array($_G['gp_format'], $_allow_format) ? $_G['gp_format'] : 'rss';
 
 switch ($_G['gp_format']) {
 	case 'rss':
