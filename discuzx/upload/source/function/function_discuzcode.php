@@ -592,6 +592,13 @@ function parseimg($width, $height, $src, $lazyload) {
 			$extra = ' onclick="zoom(this)" style="cursor:pointer"';
 		}
 	}
+
+	// bluelovers
+	if (strpos($src, 'imageshack.us')) {
+		$src = preg_replace('/img\d+\.imageshack\.us/', 'a.imageshack.us', $src);
+	}
+	// bluelovers
+
 	$attrsrc = !IS_ROBOT && $lazyload ? 'file' : 'src';
 	return bbcodeurl($src, '<img'.($width > 0 ? ' width="'.$width.'"' : '').($height > 0 ? ' height="'.$height.'"' : '').' '.$attrsrc.'="'.$src.'"'.$extra.' border="0" alt="" />');
 }
