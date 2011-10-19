@@ -12,12 +12,12 @@
 			<!--{if $_G['setting']['mobile']['mobilesimpletype']}-->
 				<li><a href="{$_G['setting']['mobile']['simpletypeurl'][0]}" title="{lang mobiletype}" data-role="button">{lang no_simplemobiletype}</a></li>
 			<!--{else}-->
-				<li><a data-role="button">{lang no_simplemobiletype}</a></li>
+				<li><a data-role="button" class="ui-btn-active">{lang no_simplemobiletype}</a></li>
 			<!--{/if}-->
 			<!--{if !$_G['setting']['mobile']['mobilesimpletype']}-->
 				<li><a href="{$_G['setting']['mobile']['simpletypeurl'][1]}" title="{lang simplemobiletype}" data-role="button">{lang simplemobiletype}</a></li>
 			<!--{else}-->
-				<li><a data-role="button">{lang simplemobiletype}</a></li>
+				<li><a data-role="button" class="ui-btn-active">{lang simplemobiletype}</a></li>
 			<!--{/if}-->
 			<li><a href="{$_G['setting']['mobile']['nomobileurl']}" title="{lang nomobiletype}" data-role="button">{lang nomobiletype}</a></li>
 
