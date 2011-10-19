@@ -1,7 +1,18 @@
 
 		<!--{hook/global_footer_mobile}-->
 
-			<p><a href="$nav" data-role="button">{lang homepage}</a><span class="pipe">|</span><!--{if $_G['setting']['mobile']['mobilesimpletype']}--><a href="{$_G['setting']['mobile']['simpletypeurl'][0]}" class="xw0" title="{lang mobiletype}" data-role="button">{lang no_simplemobiletype}</a><!--{else}-->{lang no_simplemobiletype}<!--{/if}--><span class="pipe">|</span><!--{if !$_G['setting']['mobile']['mobilesimpletype']}--><a href="{$_G['setting']['mobile']['simpletypeurl'][1]}" class="xw0" title="{lang simplemobiletype}" data-role="button">{lang simplemobiletype}</a><!--{else}-->{lang simplemobiletype}<!--{/if}--><span class="pipe">|</span><a href="{$_G['setting']['mobile']['nomobileurl']}" class="xw0" title="{lang nomobiletype}" data-role="button">{lang nomobiletype}</a></p>
+			<a href="$nav" data-role="button">{lang homepage}</a>
+			<!--{if $_G['setting']['mobile']['mobilesimpletype']}-->
+				<a href="{$_G['setting']['mobile']['simpletypeurl'][0]}" class="xw0" title="{lang mobiletype}" data-role="button">{lang no_simplemobiletype}</a>
+			<!--{else}-->
+				{lang no_simplemobiletype}
+			<!--{/if}-->
+			<!--{if !$_G['setting']['mobile']['mobilesimpletype']}-->
+				<a href="{$_G['setting']['mobile']['simpletypeurl'][1]}" class="xw0" title="{lang simplemobiletype}" data-role="button">{lang simplemobiletype}</a>
+			<!--{else}-->
+				{lang simplemobiletype}
+			<!--{/if}-->
+			<a href="{$_G['setting']['mobile']['nomobileurl']}" class="xw0" title="{lang nomobiletype}" data-role="button">{lang nomobiletype}</a>
 
 		</div><!-- /content -->
 
