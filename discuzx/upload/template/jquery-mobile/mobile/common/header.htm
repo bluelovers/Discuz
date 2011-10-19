@@ -12,6 +12,12 @@
 </head>
 <body>
 
+<!--{if $_G['setting']['domain']['app']['mobile']}-->
+	{eval $nav = 'http://'.$_G['setting']['domain']['app']['mobile'];}
+<!--{else}-->
+	{eval $nav = "forum.php";}
+<!--{/if}-->
+
 	<div data-role="page">
 
 		<!-- header -->
