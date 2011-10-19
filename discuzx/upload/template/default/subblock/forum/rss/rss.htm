@@ -26,6 +26,11 @@
 			<description><![CDATA[<!--{echo dhtmlspecialchars($thread['description'])}-->]]></description>
 			<category><!--{echo dhtmlspecialchars($thread['forum'])}--></category>
 			<author><!--{echo dhtmlspecialchars($thread['author'])}--></author>
+
+			<!--{if $attachfile}-->
+				<enclosure url="{$filename}" length="{$attachsize}" type="image/jpeg" />
+			<!--{/if}-->
+
 			<pubDate><!--{echo gmdate('r', $thread['dateline'])}--></pubDate>
 		</item>
 	<!--{/loop}-->
