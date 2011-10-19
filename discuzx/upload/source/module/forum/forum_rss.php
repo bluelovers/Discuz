@@ -131,6 +131,7 @@ if($fidarray) {
 				$_item['filename'] = $filename;
 
 				$_item['lastpost'] = $_item['lastpost'] ? $_item['lastpost'] : $_item['dateline'];
+				$_item['dateline'] = $_item['lastpost'] > $_item['dateline'] ? $_item['lastpost'] : $_item['dateline'];
 
 				$itemlist[] = $_item;
 				// bluelovers
