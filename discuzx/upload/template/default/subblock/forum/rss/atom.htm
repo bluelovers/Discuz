@@ -1,0 +1,37 @@
+<{echo '?'}xml version="1.0" encoding="{$charset}"{echo '?'}>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh">
+
+		<!--{if count($fidarray) > 1}-->
+			<title>{$_G[setting][bbname]}</title>
+			<id>{$_G[siteurl]}forum.php?mod=rss&amp;format=$_G[gp_format]&amp;auth=$_G[gp_auth]</id>
+
+			<link rel="self" type="application/atom+xml" href="{$_G[siteurl]}forum.php?mod=rss&amp;format=$_G[gp_format]&amp;auth=$_G[gp_auth]"/>
+			<link rel="alternate" type="text/html" href="{$_G[siteurl]}"/>
+		<!--{else}-->
+			<title>{$_G[setting][bbname]} - $forumname</title>
+			<id>{$_G[siteurl]}forum.php?mod=rss&amp;fid=$rssfid&amp;format=$_G[gp_format]&amp;auth=$_G[gp_auth]</id>
+
+			<link rel="self" type="application/atom+xml" href="{$_G[siteurl]}forum.php?mod=rss&amp;fid=$rssfid&amp;format=$_G[gp_format]&amp;auth=$_G[gp_auth]"/>
+			<link rel="alternate" type="text/html" href="{$_G[siteurl]}"/>
+		<!--{/if}-->
+
+		<generator>Discuz! Board by Comsenz Inc.</generator>
+
+	<!--{loop $itemlist $thread}-->
+		<entry>
+			<title>$thread['subject']</title>
+			<id>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</id>
+			<link rel="alternate" type="text/html" href="$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]"/>
+			<updated>{echo gmdate( 'Y-m-d\TH:i:s', $thread[lastpost])}Z</updated>
+			<summary type="html"><![CDATA[<!--{echo dhtmlspecialchars($thread['description'])}-->]]></summary>
+
+			<author>
+				<name><!--{echo dhtmlspecialchars($thread['author'])}--></name>
+			</author>
+
+		</entry>
+	<!--{/loop}-->
+
+</feed>
+<!--{echo output()}-->
+<!--{eval exit;}-->
