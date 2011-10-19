@@ -1,0 +1,28 @@
+<{echo '?'}xml version="1.0" encoding="{$charset}"{echo '?'}>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+	<!--{loop $fidarray $fid}-->
+	<url>
+
+		<loc>$_G[siteurl]forum.php?mod=forumdisplay&amp;fid=$fid</loc>
+		<lastmod><!--{echo dgmdate(TIMESTAMP)}--></lastmod>
+		<changefreq>always</changefreq>
+		<priority>0.5</priority>
+
+	</url>
+	<!--{/loop}-->
+
+	<!--{loop $itemlist $thread}-->
+	<url>
+
+		<loc>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</loc>
+		<lastmod><!--{echo dgmdate($thread['lastpost'])}--></lastmod>
+		<changefreq>always</changefreq>
+		<priority>0.5</priority>
+
+	</url>
+	<!--{/loop}-->
+
+</urlset>
+
+<!--{eval exit;}-->
