@@ -129,7 +129,7 @@ echo 	"  </channel>\n".
 	"</rss>";
 */
 // bluelovers
-include template('subblock/forum/rss/rss');
+include template('subblock/forum/rss/'.$_G['gp_format']);
 // bluelovers
 
 function updatersscache($num) {
