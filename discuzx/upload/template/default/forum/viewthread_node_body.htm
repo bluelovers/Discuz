@@ -34,7 +34,8 @@
 							<caption>$_G[forum][threadsorts][types][$_G[forum_thread][sortid]]</caption>
 							<tbody>
 								<!--{loop $threadsortshow['optionlist'] $option}-->
-									<!--{if $option['type'] != 'info'}-->
+									<!--{if $option['type'] != 'info'
+									}-->
 										<tr>
 											<th>$option[title]:</th>
 											<td><!--{if $option['value']}-->$option[value] $option[unit]<!--{else}-->-<!--{/if}--></td>
