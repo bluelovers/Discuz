@@ -1087,6 +1087,12 @@ function parseimg($width, $height, $src, $lazyload) {
 			$extra = '';
 		} else {
 			$extra = ' onclick="zoom(this)" style="cursor:pointer"';
+
+			// bluelovers
+			if (!$width || !$height) {
+				 $extra .= ' onload="thumbImg(this)"';
+			}
+			// bluelovers
 		}
 	}
 	$attrsrc = !IS_ROBOT && $lazyload ? 'file' : 'src';
