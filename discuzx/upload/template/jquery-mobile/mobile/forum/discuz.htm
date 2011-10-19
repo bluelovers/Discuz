@@ -15,13 +15,12 @@
 </div>
 <!--{/if}-->
 
-<ul data-role="listview">
+<ul data-role="listview" data-inset="true">
 <!--{loop $catlist $key $cat}-->
-	<li data-role="list-divider"><!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_G[gp_viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}--></li>
+	<li data-role="list-divider" class="ui-li-divider"><!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_G[gp_viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}--></li>
 
 		<!--{if $_G[setting][mobile][mobileforumview] == 0 || ($cat[fid] == $_G[gp_viewgid])}-->
 			{eval $i=1;}
-			<ul data-role="listview">
 			<!--{loop $cat[forums] $forumid}-->
 				<li>
 					<!--{eval $forum=$forumlist[$forumid];}-->
@@ -30,7 +29,6 @@
 				</li>
 				{eval $i++;}
 			<!--{/loop}-->
-			</ul>
 		<!--{/if}-->
 
 <!--{/loop}-->
