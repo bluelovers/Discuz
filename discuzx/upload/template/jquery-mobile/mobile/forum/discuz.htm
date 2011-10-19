@@ -21,6 +21,7 @@
 
 		<!--{if $_G[setting][mobile][mobileforumview] == 0 || ($cat[fid] == $_G[gp_viewgid])}-->
 			{eval $i=1;}
+			<ul data-role="listview">
 			<!--{loop $cat[forums] $forumid}-->
 				<li>
 					<!--{eval $forum=$forumlist[$forumid];}-->
@@ -29,7 +30,9 @@
 				</li>
 				{eval $i++;}
 			<!--{/loop}-->
+			</ul>
 		<!--{/if}-->
+
 <!--{/loop}-->
 </ul>
 
