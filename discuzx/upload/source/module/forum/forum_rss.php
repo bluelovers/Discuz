@@ -34,6 +34,8 @@ $forumname = '';
 // bluelovers
 $_allow_format = array();
 
+$_allow_format[] = 'rss';
+
 $_G['gp_format'] = in_array($_G['gp_format'], $_allow_format) ? $_G['gp_format'] : 'rss';
 
 switch ($_G['gp_format']) {
