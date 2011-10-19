@@ -35,6 +35,7 @@
 							<tbody>
 								<!--{loop $threadsortshow['optionlist'] $option}-->
 									<!--{if $option['type'] != 'info'
+										 && ($option[value] !== '' && $option[value] !== null)
 									}-->
 										<tr>
 											<th>$option[title]:</th>
