@@ -1,6 +1,8 @@
 
 		<!--{hook/global_footer_mobile}-->
 
+			<p><a href="$nav">{lang homepage}</a><span class="pipe">|</span><!--{if $_G['setting']['mobile']['mobilesimpletype']}--><a href="{$_G['setting']['mobile']['simpletypeurl'][0]}" class="xw0" title="{lang mobiletype}">{lang no_simplemobiletype}</a><!--{else}-->{lang no_simplemobiletype}<!--{/if}--><span class="pipe">|</span><!--{if !$_G['setting']['mobile']['mobilesimpletype']}--><a href="{$_G['setting']['mobile']['simpletypeurl'][1]}" class="xw0" title="{lang simplemobiletype}">{lang simplemobiletype}</a><!--{else}-->{lang simplemobiletype}<!--{/if}--><span class="pipe">|</span><a href="{$_G['setting']['mobile']['nomobileurl']}" class="xw0" title="{lang nomobiletype}">{lang nomobiletype}</a></p>
+
 		</div><!-- /content -->
 
 		<div data-role="footer">
