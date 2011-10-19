@@ -394,6 +394,13 @@ function threadsortshow($sortid, $tid) {
 
 						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? $optiondata[$optionid]['value'] : $option['defaultvalue'];
 					}
+
+					// bluelovers
+					if ($option['type'] != 'number') {
+						$_G['forum_option'][$option['identifier']]['value'] = trim($_G['forum_option'][$option['identifier']]['value']);
+					}
+					// bluelovers
+
 				} else {
 					$_G['forum_option'][$option['identifier']]['value'] = lang('forum/misc', 'view_noperm');
 				}
