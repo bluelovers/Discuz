@@ -107,9 +107,10 @@ if($fidarray) {
 	}
 }
 
+/*
 echo 	"  </channel>\n".
 	"</rss>";
-
+*/
 
 function updatersscache($num) {
 	global $_G;
