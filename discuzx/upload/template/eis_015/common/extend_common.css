@@ -79,7 +79,20 @@
 	line-height:32px;
 	color:#709eb0;
 	background:url({IMGDIR}/eis_toptb.png) repeat-x;
+
+	margin-bottom: -32px;
+	overflow: hidden;
+	position: relative;
+	right: 0;
+	top: 0;
+	z-index: 100;
 }
 .site_pg #toptb a{ color:#709eb0}
 
 .site_pg #toptb .wp .y { float: left; }
+
+.site_pg #hd .wp .hdc #um {
+	margin-top: -10px;
+	position: relative;
+	z-index: 50;
+}
