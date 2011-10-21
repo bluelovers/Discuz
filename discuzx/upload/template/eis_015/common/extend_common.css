@@ -73,4 +73,8 @@
 
 /* bluelovers */
 
+/*eis_toptb*/
+.site_pg #toptb { height:32px; line-height:32px; color:#709eb0; background:url({IMGDIR}/eis_toptb.png) repeat-x;}
+.site_pg #toptb a{ color:#709eb0}
+
 .site_pg #toptb .wp .y { float: left; }
