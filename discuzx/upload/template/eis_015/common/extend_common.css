@@ -25,7 +25,7 @@
 .eis_topad{ float:right; margin:10px 0; width:700px; overflow:hidden}
 
 #scbar{ border:0px; border-bottom:1px solid #ddd}
- 
+
 /*nv*/
 #eis_nv{ height:64px; background:url({IMGDIR}/eis_nv.png) no-repeat center top}
 #eis_nv #nv { padding-left:0px; height:64px;}
@@ -49,7 +49,7 @@
 #eis_1{  margin-top:15px;border-bottom:5px solid #255585; background:url({IMGDIR}/eis_1.gif) repeat-x 0 0 #fff;}
 .eis_2{ background:url({IMGDIR}/eis_2.gif) no-repeat 0 0;}
 .eis_3{ padding-top:10px; background:url({IMGDIR}/eis_3.gif) no-repeat right 0;}
-	
+
 /*eis_ft*/
 #eis_ft { margin-top:20px; background: url({IMGDIR}/eis_ft.png) no-repeat center top; height:88px;}
 #eis_ft #ft{ border-top:0px; padding:20px 0 0 0; color:#709eb0}
@@ -66,12 +66,11 @@
 #forumlist .bm_h a{ color:#fff}
 #forumlist .bm_c{ border:0px; margin-bottom:10px;}
 .fl_row td { border-top: 1px solid {COMMONBG} !important; }
-	
-	
+
+
 /*thread*/
 .tl .bm_c td{ padding-top:8px; padding-bottom:8px; }
 
+/* bluelovers */
 
-
-
-	
+.site_pg #toptb .wp .y { float: left; }
