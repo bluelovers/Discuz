@@ -78,7 +78,7 @@
 	height:32px;
 	line-height:32px;
 	color:#709eb0;
-	background:url({IMGDIR}/eis_toptb.png) repeat-x;
+	background:url({STYLEIMGDIR}/eis_toptb.png) repeat-x;
 
 	margin-bottom: -32px;
 	overflow: hidden;
@@ -106,7 +106,7 @@
 /*nv*/
 .site_pg #nv{
 	height:64px;
-	background:url({IMGDIR}/eis_nv.png) no-repeat center top;
+	background:url({STYLEIMGDIR}/eis_nv.png) no-repeat center top;
 }
 
 .site_pg .hdc {
