@@ -102,3 +102,13 @@
 	top: 50px;
 	position: absolute;
 }
+
+/*nv*/
+.site_pg #nv{
+	height:64px;
+	background:url({IMGDIR}/eis_nv.png) no-repeat center top;
+}
+
+.site_pg .hdc {
+	min-height: 153px;
+}
