@@ -92,7 +92,13 @@
 .site_pg #toptb .wp .y { float: left; }
 
 .site_pg #hd .wp .hdc #um {
-	margin-top: -10px;
+	margin-top: -16px;
 	position: relative;
-	z-index: 50;
+	z-index: 100;
+}
+
+.site_pg .a_h {
+	left: 350px;
+	top: 50px;
+	position: absolute;
 }
