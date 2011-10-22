@@ -77,13 +77,13 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 
 		if ($dh = opendir($dir)) {
 
-		while(($entry = readdir($dh)) !== false) {
-			if (!is_file($dir.$entry) || !preg_match('/^mod_(.+)\.php$/', $entry, $m)) continue;
+			while(($entry = readdir($dh)) !== false) {
+				if (!is_file($dir.$entry) || !preg_match('/^mod_(.+)\.php$/', $entry, $m)) continue;
 
-			$key = $m[1];
+				$key = $m[1];
 
-			$_list[$key] = $key;
-		}
+				$_list[$key] = $key;
+			}
 
 		}
 
