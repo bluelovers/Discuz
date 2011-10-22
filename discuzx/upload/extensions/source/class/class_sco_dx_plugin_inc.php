@@ -71,10 +71,10 @@ class _sco_dx_plugin_inc extends _sco_dx_plugin {
 	 * @return array
 	 */
 	function _get_mod_list($path = null) {
+		$_list = array();
+
 		$dir = dirname(isset($path) ? $path : __FILE__).'/mod/';
 		$dh = opendir($dir);
-
-		$_list = array();
 
 		while(($entry = readdir($dh)) !== false) {
 			if (!is_file($dir.$entry) || !preg_match('/^mod_(.+)\.php$/', $entry, $m)) continue;
