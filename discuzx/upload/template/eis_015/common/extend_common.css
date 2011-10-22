@@ -87,7 +87,7 @@
 	top: 0;
 	z-index: 100;
 }
-.site_pg #toptb a{ color:{HEADERTEXT}}
+.site_pg #toptb a{ color:{HEADERTEXT}; }
 
 .site_pg #toptb .wp .y { float: left; }
 
@@ -109,6 +109,28 @@
 	background:url({STYLEIMGDIR}/eis_nv.png) no-repeat center top;
 }
 
+.site_pg #nv li {
+	padding-right: 1px;
+	height:64px;
+	line-height:64px;
+	background: url({STYLEIMGDIR}/eis_nv_a.png) no-repeat 100% 0;
+	font-weight:100;
+	font-size: 16px;
+
+	font-family: Microsoft YaHei,Hiragino Sans GB,STHeiti,Tahoma,SimHei,sans-serif;
+}
+.site_pg #nv li a {
+	padding: 0 20px;
+	height:64px;
+	color: {HEADERTEXT};
+	text-decoration: none;
+}
+.site_pg #nv li.a { margin-left:0px; background: url({STYLEIMGDIR}/eis_nv_a.png) no-repeat 100% 0;}
+.site_pg #nv li.a a{ color:#fff;}
+.site_pg #nv li a:hover { background: url({STYLEIMGDIR}/eis_nv_a.png) no-repeat 50% -128px; }
+.site_pg #nv li.hover a:hover, #nv li.hover a { background: url({STYLEIMGDIR}/eis_nv_a.png) no-repeat 50% -192px; }
+
 .site_pg .hdc {
 	min-height: 153px;
 }
+
