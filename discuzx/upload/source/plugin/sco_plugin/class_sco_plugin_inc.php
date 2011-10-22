@@ -14,7 +14,7 @@ include_once libfile('class/sco_dx_plugin_inc', 'source', 'extensions/');
 class plugin_sco_plugin_inc extends _sco_dx_plugin_inc {
 
 	function &run() {
-		$this->_setglobal('mod_lists', $this->_get_mod_list(dirname(__FILE__)));
+		$this->_setglobal('mod_lists', $this->_get_mod_list(__FILE__));
 
 		//$this->_setglobal('debug', true, 'setting');
 
