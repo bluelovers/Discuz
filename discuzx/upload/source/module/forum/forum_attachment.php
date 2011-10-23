@@ -31,6 +31,7 @@ if (!$aid && is_numeric($_GET['aid'])) {
 
 	$_G['gp_redirectmsg'] = 1;
 } else {
+	// [bugfix] 修正 開啟下載附件的積分策略後造成無限支付的 BUG
 	$_G['forum_attach_aidencode'] = $_GET['aid'];
 }
 
