@@ -23,6 +23,8 @@ if (!$aid && is_numeric($_GET['aid'])) {
 	$_G['gp_aid'] = $aid = intval($_GET['aid']);
 
 	$_G['gp_redirectmsg'] = 1;
+} else {
+	$_G['forum_attach_aidencode'] = $_GET['aid'];
 }
 
 if ($_G['gp_formhash'] != FORMHASH) {
