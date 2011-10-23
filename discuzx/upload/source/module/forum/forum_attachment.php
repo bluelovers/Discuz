@@ -249,7 +249,7 @@ if(!$requestmode) {
 		showmessage('attachment_credit',
 			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
 
-			. '&filename=' . rawurlencode($_G['forum_attach_filename'])
+			. '&filename=' . rawurlencode(htmlspecialchars_decode($_G['forum_attach_filename']))
 			. (empty($_G['gp_ck']) ? '' : '&ck='.rawurlencode($_G['gp_ck']))
 
 			,
@@ -284,6 +284,10 @@ if(!$requestmode) {
 		}
 	}
 }
+
+// bluelovers
+$attach['filename'] = htmlspecialchars_decode($attach['filename']);
+// bluelovers
 
 $db = DB::object();
 $db->close();
