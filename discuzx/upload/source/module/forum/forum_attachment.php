@@ -243,7 +243,7 @@ if(!$requestmode) {
 		showmessage('attachment_credit',
 			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
 
-			. '&ck='.$_G['gp_ck']
+			. (empty($_G['gp_ck']) ? '' : '&ck='.$_G['gp_ck'])
 
 			,
 			array(
