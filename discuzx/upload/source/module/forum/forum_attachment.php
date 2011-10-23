@@ -11,11 +11,18 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 define('NOROBOT', TRUE);
+
+// bluelovers
+$_GET['aid'] = $_G['gp_aid'];
+// bluelovers
+
 @list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = daddslashes(explode('|', base64_decode($_G['gp_aid'])));
 
 $aid = intval($_G['gp_aid']);
 
 // bluelovers
+unset($_G['forum_attach_aidencode']);
+
 if (!$aid && is_numeric($_GET['aid'])) {
 	/**
 	 * 使附件網址支援舊版的 aid=\d+ 格式
@@ -23,6 +30,9 @@ if (!$aid && is_numeric($_GET['aid'])) {
 	$_G['gp_aid'] = $aid = intval($_GET['aid']);
 
 	$_G['gp_redirectmsg'] = 1;
+} else {
+	// [bugfix] 修正 開啟下載附件的積分策略後造成無限支付的 BUG
+	$_G['forum_attach_aidencode'] = $_GET['aid'];
 }
 
 if ($_G['gp_formhash'] != FORMHASH) {
@@ -128,7 +138,9 @@ if(!$attachexists) {
 
 // bluelovers
 $_G['forum_attach_filename'] = $attach['filename'];
-$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
+if (empty($_G['forum_attach_aidencode'])) {
+	$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
+}
 // bluelovers
 
 if(!$requestmode) {
@@ -234,7 +246,22 @@ if(!$requestmode) {
 	}
 
 	if ($_G['gp_redirectmsg']) {
-		showmessage('attachment_credit', "forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH, array('filename' => $attach['filename'], 'policymsg' => ''), array('redirectmsg' => 1, 'login' => 1, 'refreshtime' => 10));
+		showmessage('attachment_credit',
+			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
+
+			. '&filename=' . rawurlencode(htmlspecialchars_decode($_G['forum_attach_filename']))
+			. (empty($_G['gp_ck']) ? '' : '&ck='.rawurlencode($_G['gp_ck']))
+
+			,
+			array(
+				'filename' => $attach['filename'],
+				'policymsg' => ''
+			), array(
+				'redirectmsg' => 1,
+				'login' => 1,
+				'refreshtime' => 10
+			)
+		);
 	}
 	// bluelovers
 
@@ -257,6 +284,10 @@ if(!$requestmode) {
 		}
 	}
 }
+
+// bluelovers
+$attach['filename'] = htmlspecialchars_decode($attach['filename']);
+// bluelovers
 
 $db = DB::object();
 $db->close();
