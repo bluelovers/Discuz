@@ -218,6 +218,14 @@ if(!$requestmode) {
 				if(empty($k) || empty($t) || $k != substr(md5($aid.$t.md5($_G['config']['security']['authkey'])), 0, 8) || TIMESTAMP - $t > 3600) {
 					dheader('location: forum.php?mod=misc&action=attachcredit&aid='.$attach['aid'].'&formhash='.FORMHASH);
 					exit();
+
+				// bluelovers
+				} elseif ($_G['gp_redirectmsg']) {
+
+					$_G['gp_redirectmsg'] = 0;
+
+				// bluelovers
+
 				}
 			} else {
 				showmessage('attachment_forum_nopermission', NULL, array(), array('login' => 1));
@@ -237,8 +245,8 @@ if(!$requestmode) {
 		showmessage('attachment_credit',
 			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
 
-			. '&ck='.$_G['gp_ck']
-			. '&t='.$_G['gp_t']
+			. (empty($_G['gp_ck']) ? '' : '&ck='.$_G['gp_ck'])
+			. (empty($_G['gp_t']) ? '' : '&t='.$_G['gp_t'])
 
 			,
 			array(
