@@ -11,6 +11,11 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 define('NOROBOT', TRUE);
+
+// bluelovers
+$_GET['aid'] = $_G['gp_aid'];
+// bluelovers
+
 @list($_G['gp_aid'], $_G['gp_k'], $_G['gp_t'], $_G['gp_uid'], $_G['gp_tableid']) = daddslashes(explode('|', base64_decode($_G['gp_aid'])));
 
 $aid = intval($_G['gp_aid']);
