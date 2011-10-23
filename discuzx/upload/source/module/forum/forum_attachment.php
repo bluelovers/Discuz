@@ -131,7 +131,7 @@ if(!$attachexists) {
 // bluelovers
 $_G['forum_attach_filename'] = $attach['filename'];
 if (empty($_G['forum_attach_aidencode'])) {
-$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
+	$_G['forum_attach_aidencode'] = aidencode($aid, 0, $attach['tid']);
 }
 // bluelovers
 
