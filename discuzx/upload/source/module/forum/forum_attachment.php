@@ -236,6 +236,10 @@ if(!$requestmode) {
 	if ($_G['gp_redirectmsg']) {
 		showmessage('attachment_credit',
 			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
+
+			. '&ck='.$_G['gp_ck']
+			. '&t='.$_G['gp_t']
+
 			,
 			array(
 				'filename' => $attach['filename'],
