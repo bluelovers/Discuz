@@ -700,6 +700,10 @@
 					var _this = jQuery(this);
 
 					if (
+						(
+							_this.attr('src')
+						)
+						&&
 						(this.complete
 							|| (
 								jQuery.browser.msie
