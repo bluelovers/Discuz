@@ -15,6 +15,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 // bluelovers
 @ignore_user_abort();
+@set_time_limit(0);
 // bluelovers
 
 define('IN_DISCUZ', TRUE);
