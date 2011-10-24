@@ -57,6 +57,9 @@ switch ($_G['gp_format']) {
 		break;
 
 	case 'sitemap':
+
+		$_rss_output_data['data_format'] = 'Y-m-d\TH:i:sP';
+
 		$num = 500;
 		break;
 
