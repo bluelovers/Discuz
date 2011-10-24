@@ -94,8 +94,17 @@ if($fidarray) {
 		while($thread = DB::fetch($query)) {
 			if(!$_updatersscache_run && TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
 				updatersscache($_updatersscache_num, $fidarray);
+
+			/*
 				break;
 			} else {
+			*/
+			// bluelovers
+			}
+
+			if ($thread) {
+			// bluelovers
+
 				list($thread['description'], $attachremote, $attachfile, $attachsize) = explode("\t", $thread['description']);
 				if($attachfile) {
 					if($attachremote) {
