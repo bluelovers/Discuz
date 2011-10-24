@@ -1,0 +1,32 @@
+<{echo '?'}xml version="1.0" encoding="{$charset}"{echo '?'}>
+<document xmlns:bbs =" http://www.baidu.com/search/bbs_sitemap.xsd">
+	<webSite>{$_G[siteurl]}</webSite>
+	<webMaster>{$_G[adminemail]}</webMaster>
+	<updatePeri>{$_rss_output_data[ttl]}</updatePeri>
+	<updatetime><!--{echo gmdate($_rss_output_data['data_format'], TIMESTAMP)}--></updatetime>
+	<version>Discuz</version>
+
+	<!--{loop $fidarray $fid}-->
+	<item>
+
+		<link>$_G[siteurl]forum.php?mod=forumdisplay&amp;fid=$fid</link>
+		<title>{$_G['cache']['forums'][$fid]['name']:dhtmlspecialchars(ENT_QUOTES)}</title>
+		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], TIMESTAMP)}--></pubDate>
+
+	</item>
+	<!--{/loop}-->
+
+	<!--{loop $itemlist $thread}-->
+	<item>
+
+		<link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>
+		<title>{$thread['subject']:dhtmlspecialchars(ENT_QUOTES)}</title>
+		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], $thread['dateline'])}--></pubDate>
+
+		<bbs:boardid>$thread['fid']</bbs:boardid>
+
+	</item>
+	<!--{/loop}-->
+
+</document>
+<!--{eval exit;}-->

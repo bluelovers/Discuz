@@ -1,0 +1,3 @@
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^sitemap\.xml$ forum.php?mod=rss&format=sitemap [PT,L]
