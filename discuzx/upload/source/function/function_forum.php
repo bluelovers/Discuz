@@ -682,7 +682,7 @@ function rssforumperm($forum) {
 
 	// bluelovers
 	if ($_G['forum']['status'] == 3) {
-		require_once libfile('function/group');
+		include_once libfile('function/group');
 
 		$status = groupperm($forum, 0);
 
