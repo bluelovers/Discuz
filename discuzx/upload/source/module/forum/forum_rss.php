@@ -163,7 +163,7 @@ if($fidarray) {
 			}
 		}
 	} else {
-		updatersscache($num);
+		updatersscache($num, $fidarray);
 	}
 }
 
