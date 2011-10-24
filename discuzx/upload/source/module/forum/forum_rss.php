@@ -147,6 +147,7 @@ echo 	"  </channel>\n".
 	"</rss>";
 */
 // bluelovers
+dheader("Content-type: application/xml");
 include template('subblock/forum/rss/'.$_G['gp_format']);
 // bluelovers
 
