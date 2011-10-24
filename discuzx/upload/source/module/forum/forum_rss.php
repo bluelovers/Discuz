@@ -45,6 +45,8 @@ $_allow_format[] = 'rss';
 
 $_G['gp_format'] = in_array($_G['gp_format'], $_allow_format) ? $_G['gp_format'] : 'rss';
 
+$_rss_output_data = array();
+
 switch ($_G['gp_format']) {
 
 	case 'baidu':
