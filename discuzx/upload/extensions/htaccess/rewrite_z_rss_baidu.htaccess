@@ -1,0 +1,3 @@
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^sitemap_baidu\.xml$ forum.php?mod=rss&format=baidu [PT,L]
