@@ -50,7 +50,7 @@ $_rss_output_data = array();
 switch ($_G['gp_format']) {
 
 	case 'baidu':
-		$_rss_output_data['ttl'] = 12;
+		$_rss_output_data['ttl'] = 24;
 		$_rss_output_data['data_format'] = 'Y-m-d H:i:s';
 
 		$num = 500;
