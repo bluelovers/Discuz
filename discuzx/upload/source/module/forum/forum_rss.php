@@ -111,7 +111,7 @@ if($fidarray) {
 			}
 		}
 	} else {
-		updatersscache($num, $fidarray);
+		updatersscache($num);
 	}
 }
 
