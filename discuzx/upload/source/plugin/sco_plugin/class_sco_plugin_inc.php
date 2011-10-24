@@ -9,12 +9,12 @@ if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-include_once dirname(__FILE__).'/./class_sco_dx_plugin_inc.php';
+include_once libfile('class/sco_dx_plugin_inc', 'source', 'extensions/');
 
 class plugin_sco_plugin_inc extends _sco_dx_plugin_inc {
 
 	function &run() {
-		$this->_setglobal('mod_lists', $this->_get_mod_list());
+		$this->_setglobal('mod_lists', $this->_get_mod_list(__FILE__));
 
 		//$this->_setglobal('debug', true, 'setting');
 
