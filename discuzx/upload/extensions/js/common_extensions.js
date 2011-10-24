@@ -390,6 +390,32 @@
 
 	});
 
+	var _trigger_load = function(_jq) {
+		_jq
+			.each(function(){
+				var _this = jQuery(this);
+
+				if (
+					(
+						_this.attr('src')
+					)
+					&&
+					(
+						this.complete
+						|| (
+							jQuery.browser.msie
+							&& parseInt(jQuery.browser.version) == 6
+						)
+					)
+				) {
+					_this.trigger('load');
+				}
+			})
+		;
+
+		return _jq;
+	};
+
 	var _lazyload = function () {
 		$('img[file]:visible').each(function(){
 			var _this = $(this);
@@ -694,21 +720,9 @@
 			});
 		}
 
-		$('div[id^="post_"] .sign img.bbcode_img')
-			.each(function(){
-				if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
-					jQuery(this).trigger('load');
-				}
-			})
-		;
+		_trigger_load($('div[id^="post_"] .sign img.bbcode_img'));
+		_trigger_load(bbcode_imgs);
 
-		bbcode_imgs
-			.each(function(){
-				if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
-					jQuery(this).trigger('load');
-				}
-			})
-		;
 	});
 
 })(jQuery);
