@@ -176,7 +176,7 @@ dheader("Content-type: application/xml");
 include template('subblock/forum/rss/'.$_G['gp_format']);
 // bluelovers
 
-function updatersscache($num) {
+function updatersscache($num, $fidarray = array()) {
 	global $_G;
 	$processname = 'forum_rss_cache';
 	if(discuz_process::islocked($processname, 600)) {
