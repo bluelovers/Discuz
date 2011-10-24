@@ -92,7 +92,7 @@ if($fidarray) {
 
 	if(DB::num_rows($query)) {
 		while($thread = DB::fetch($query)) {
-			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
+			if(!$_updatersscache_run && TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
 				updatersscache($_updatersscache_num, $fidarray);
 				break;
 			} else {
