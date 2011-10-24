@@ -10,7 +10,7 @@
 	<item>
 
 		<link>$_G[siteurl]forum.php?mod=forumdisplay&amp;fid=$fid</link>
-		<title>{$_G['cache']['forums'][$fid]['name']:dhtmlspecialchars()}</title>
+		<title>{$_G['cache']['forums'][$fid]['name']:dhtmlspecialchars(ENT_QUOTES)}</title>
 		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], TIMESTAMP)}--></pubDate>
 
 	</item>
@@ -20,7 +20,7 @@
 	<item>
 
 		<link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>
-		<title>{$thread['subject']:dhtmlspecialchars()}</title>
+		<title>{$thread['subject']:dhtmlspecialchars(ENT_QUOTES)}</title>
 		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], $thread['dateline'])}--></pubDate>
 
 		<bbs:boardid>$thread['fid']</bbs:boardid>
