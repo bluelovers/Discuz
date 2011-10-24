@@ -34,6 +34,7 @@ $forumname = '';
 // bluelovers
 $_allow_format = array();
 
+$_allow_format[] = 'baidu';
 $_allow_format[] = 'sitemap';
 $_allow_format[] = 'rss';
 
