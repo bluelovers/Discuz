@@ -84,6 +84,8 @@ if($fidarray) {
 	if (!DB::num_rows($query)) {
 		updatersscache($_updatersscache_num, $fidarray);
 
+		$_updatersscache_run = true;
+
 		$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
 	}
 	// bluelovers
