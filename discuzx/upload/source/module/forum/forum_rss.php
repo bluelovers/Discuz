@@ -198,14 +198,19 @@ function updatersscache($num, $fidarray = array()) {
 
 	$_fids = dimplode($fidarray);
 
-	$_hash = md5(implode(',', $fidarray));
+	$_hash = md5($_fids);
 	$processname .= $_hash;
 	// bluelovers
 
 	if(discuz_process::islocked($processname, 600)) {
 		return false;
 	}
+	/*
 	DB::query("DELETE FROM ".DB::table('forum_rsscache')."");
+	*/
+	// bluelovers
+	DB::query("DELETE FROM ".DB::table('forum_rsscache')." WHERE fid IN (".$_fids.")");
+	// bluelovers
 	require_once libfile('function/post');
 	/*
 	foreach($_G['cache']['forums'] as $fid => $forum) {
