@@ -78,7 +78,7 @@ if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
 
 	// bluelovers
-	$_updatersscache_num = 500;
+	$_updatersscache_num = max(500, $num);
 
 	if (!DB::num_rows($query)) {
 		updatersscache($_updatersscache_num, $fidarray);
