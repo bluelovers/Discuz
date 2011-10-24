@@ -41,6 +41,7 @@ $_G['gp_format'] = in_array($_G['gp_format'], $_allow_format) ? $_G['gp_format']
 
 switch ($_G['gp_format']) {
 
+	case 'baidu':
 	case 'sitemap':
 		$num = 500;
 		break;
