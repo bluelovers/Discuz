@@ -694,6 +694,18 @@
 			});
 		}
 
+		var _trigger_load = function(_this) {
+			_this
+				.each(function(){
+					if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
+						jQuery(this).trigger('load');
+					}
+				})
+			;
+
+			return _this;
+		};
+
 		$('div[id^="post_"] .sign img.bbcode_img')
 			.each(function(){
 				if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
