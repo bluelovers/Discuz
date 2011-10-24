@@ -20,7 +20,7 @@
 	<item>
 
 		<link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>
-		<title>$thread['subject']</title>
+		<title>{$thread['subject']:dhtmlspecialchars()}</title>
 		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], $thread['dateline'])}--></pubDate>
 
 		<bbs:boardid>$thread['fid']</bbs:boardid>
