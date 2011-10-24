@@ -679,7 +679,21 @@ function my_post_log($opt, $data) {
 }
 
 function rssforumperm($forum) {
+
+	// bluelovers
+	if ($_G['forum']['status'] == 3) {
+		require_once libfile('function/group');
+
+		$status = groupperm($forum, 0);
+	} else {
+	// bluelovers
+
 	$is_allowed = $forum['type'] != 'group' && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'], 7)));
+
+	// bluelovers
+	}
+	// bluelovers
+
 	return $is_allowed;
 }
 
