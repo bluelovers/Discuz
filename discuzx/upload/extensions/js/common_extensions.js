@@ -704,7 +704,8 @@
 							_this.attr('src')
 						)
 						&&
-						(this.complete
+						(
+							this.complete
 							|| (
 								jQuery.browser.msie
 								&& parseInt(jQuery.browser.version) == 6
