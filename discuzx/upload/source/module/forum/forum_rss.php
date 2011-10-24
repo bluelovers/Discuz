@@ -130,6 +130,8 @@ function updatersscache($num, $fidarray = array()) {
 	// bluelovers
 	if (!empty($fidarray)) sort($fidarray);
 
+	$_fids = dimplode($fidarray);
+
 	$_hash = md5(implode(',', $fidarray));
 	$processname .= $_hash;
 	// bluelovers
