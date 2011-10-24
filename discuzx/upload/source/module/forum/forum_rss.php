@@ -118,7 +118,16 @@ function updatersscache($num, $fidarray = array()) {
 	}
 	DB::query("DELETE FROM ".DB::table('forum_rsscache')."");
 	require_once libfile('function/post');
+	/*
 	foreach($_G['cache']['forums'] as $fid => $forum) {
+	*/
+	// bluelovers
+	foreach($fidarray as $fid) {
+
+		$forum = $_G['cache']['forums'][$fid];
+
+	// bluelovers
+
 		if($forum['type'] != 'group') {
 			$query = DB::query("SELECT tid, readperm, author, dateline, subject
 				FROM ".DB::table('forum_thread')."
