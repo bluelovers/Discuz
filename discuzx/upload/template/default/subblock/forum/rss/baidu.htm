@@ -23,6 +23,8 @@
 		<title>$thread['subject']</title>
 		<pubDate><!--{echo gmdate($_rss_output_data['data_format'], $thread['dateline'])}--></pubDate>
 
+		<bbs:boardid>$thread['fid']</bbs:boardid>
+
 	</item>
 	<!--{/loop}-->
 
