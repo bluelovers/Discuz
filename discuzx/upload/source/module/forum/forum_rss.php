@@ -122,12 +122,35 @@ $itemlist = array();
 
 if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
+
+	// bluelovers
+	$_updatersscache_num = max(500, $num);
+	$_updatersscache_run = false;
+
+	if (!DB::num_rows($query)) {
+		updatersscache($_updatersscache_num, $fidarray);
+
+		$_updatersscache_run = true;
+
+		$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
+	}
+	// bluelovers
+
 	if(DB::num_rows($query)) {
 		while($thread = DB::fetch($query)) {
-			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
-				updatersscache($num);
+			if(!$_updatersscache_run && TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
+				updatersscache($_updatersscache_num, $fidarray);
+
+			/*
 				break;
 			} else {
+			*/
+			// bluelovers
+			}
+
+			if ($thread) {
+			// bluelovers
+
 				list($thread['description'], $attachremote, $attachfile, $attachsize) = explode("\t", $thread['description']);
 				if($attachfile) {
 					if($attachremote) {
@@ -162,8 +185,12 @@ if($fidarray) {
 				// bluelovers
 			}
 		}
+
+	/*
 	} else {
 		updatersscache($num);
+	*/
+
 	}
 }
 
@@ -176,15 +203,39 @@ dheader("Content-type: application/xml");
 include template('subblock/forum/rss/'.$_G['gp_format']);
 // bluelovers
 
-function updatersscache($num) {
+function updatersscache($num, $fidarray = array()) {
 	global $_G;
 	$processname = 'forum_rss_cache';
+
+	// bluelovers
+	if (!empty($fidarray)) sort($fidarray);
+
+	$_fids = dimplode($fidarray);
+
+	$_hash = md5($_fids);
+	$processname .= $_hash;
+	// bluelovers
+
 	if(discuz_process::islocked($processname, 600)) {
 		return false;
 	}
+	/*
 	DB::query("DELETE FROM ".DB::table('forum_rsscache')."");
+	*/
+	// bluelovers
+	DB::query("DELETE FROM ".DB::table('forum_rsscache')." WHERE fid IN (".$_fids.")");
+	// bluelovers
 	require_once libfile('function/post');
+	/*
 	foreach($_G['cache']['forums'] as $fid => $forum) {
+	*/
+	// bluelovers
+	foreach($fidarray as $fid) {
+
+		$forum = $_G['cache']['forums'][$fid];
+
+	// bluelovers
+
 		if($forum['type'] != 'group') {
 			$query = DB::query("SELECT tid, readperm, author, dateline, subject
 
