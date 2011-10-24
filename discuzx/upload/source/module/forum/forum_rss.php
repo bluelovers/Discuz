@@ -50,6 +50,7 @@ $_rss_output_data = array();
 switch ($_G['gp_format']) {
 
 	case 'baidu':
+		$_rss_output_data['ttl'] = 12;
 	case 'sitemap':
 		$num = 500;
 		break;
