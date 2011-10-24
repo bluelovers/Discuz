@@ -110,8 +110,12 @@ if($fidarray) {
 					"    </item>\n";
 			}
 		}
+
+	/*
 	} else {
 		updatersscache($num);
+	*/
+
 	}
 }
 
