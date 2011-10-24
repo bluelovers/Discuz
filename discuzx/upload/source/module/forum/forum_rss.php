@@ -91,8 +91,8 @@ if(empty($rssfid)) {
 }
 
 $charset = $_G['config']['output']['charset'];
-dheader("Content-type: application/xml");
 /*
+dheader("Content-type: application/xml");
 echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"<rss version=\"2.0\">\n".
 	"  <channel>\n".
@@ -172,6 +172,7 @@ echo 	"  </channel>\n".
 	"</rss>";
 */
 // bluelovers
+dheader("Content-type: application/xml");
 include template('subblock/forum/rss/'.$_G['gp_format']);
 // bluelovers
 
