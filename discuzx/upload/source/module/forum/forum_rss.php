@@ -141,6 +141,8 @@ if($fidarray) {
 			if(!$_updatersscache_run && TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
 				updatersscache($_updatersscache_num, $fidarray);
 
+				$_updatersscache_run = true;
+
 			/*
 				break;
 			} else {
