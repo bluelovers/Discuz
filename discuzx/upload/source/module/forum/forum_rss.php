@@ -122,6 +122,15 @@ $itemlist = array();
 
 if($fidarray) {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
+
+	// bluelovers
+	if (!DB::num_rows($query)) {
+		updatersscache($num, $fidarray);
+
+		$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
+	}
+	// bluelovers
+
 	if(DB::num_rows($query)) {
 		while($thread = DB::fetch($query)) {
 			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
