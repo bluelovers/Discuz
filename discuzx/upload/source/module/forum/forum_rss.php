@@ -13,6 +13,10 @@ if(!defined('IN_DISCUZ')) {
 
 error_reporting(E_ALL ^ E_NOTICE);
 
+// bluelovers
+@ignore_user_abort();
+// bluelovers
+
 define('IN_DISCUZ', TRUE);
 define('DISCUZ_ROOT', '');
 
