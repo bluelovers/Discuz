@@ -127,7 +127,7 @@ if($fidarray) {
 	$_updatersscache_num = 500;
 
 	if (!DB::num_rows($query)) {
-		updatersscache($num, $fidarray);
+		updatersscache($_updatersscache_num, $fidarray);
 
 		$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
 	}
@@ -136,7 +136,7 @@ if($fidarray) {
 	if(DB::num_rows($query)) {
 		while($thread = DB::fetch($query)) {
 			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
-				updatersscache($num, $fidarray);
+				updatersscache($_updatersscache_num, $fidarray);
 				break;
 			} else {
 				list($thread['description'], $attachremote, $attachfile, $attachsize) = explode("\t", $thread['description']);
