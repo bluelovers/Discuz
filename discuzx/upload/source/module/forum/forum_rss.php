@@ -126,6 +126,14 @@ echo 	"  </channel>\n".
 function updatersscache($num, $fidarray = array()) {
 	global $_G;
 	$processname = 'forum_rss_cache';
+
+	// bluelovers
+	if (!empty($fidarray)) sort($fidarray);
+
+	$_hash = md5($fidarray);
+	$processname .= $_hash;
+	// bluelovers
+
 	if(discuz_process::islocked($processname, 600)) {
 		return false;
 	}
