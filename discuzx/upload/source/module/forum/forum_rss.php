@@ -171,8 +171,12 @@ if($fidarray) {
 				// bluelovers
 			}
 		}
+
+	/*
 	} else {
 		updatersscache($num);
+	*/
+
 	}
 }
 
