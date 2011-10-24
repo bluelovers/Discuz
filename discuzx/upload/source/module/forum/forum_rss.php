@@ -13,6 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 error_reporting(E_ALL ^ E_NOTICE);
 
+// bluelovers
+@ignore_user_abort();
+@set_time_limit(0);
+// bluelovers
+
 define('IN_DISCUZ', TRUE);
 define('DISCUZ_ROOT', '');
 
@@ -34,15 +39,28 @@ $forumname = '';
 // bluelovers
 $_allow_format = array();
 
+$_allow_format[] = 'baidu';
 $_allow_format[] = 'sitemap';
 $_allow_format[] = 'rss';
 $_allow_format[] = 'atom';
 
 $_G['gp_format'] = in_array($_G['gp_format'], $_allow_format) ? $_G['gp_format'] : 'rss';
 
+$_rss_output_data = array();
+
 switch ($_G['gp_format']) {
 
+	case 'baidu':
+		$_rss_output_data['ttl'] = 24;
+		$_rss_output_data['data_format'] = 'Y-m-d H:i:s';
+
+		$num = 500;
+		break;
+
 	case 'sitemap':
+
+		$_rss_output_data['data_format'] = 'Y-m-d\TH:i:sP';
+
 		$num = 500;
 		break;
 
