@@ -694,9 +694,11 @@
 			});
 		}
 
-		var _trigger_load = function(_this) {
-			_this
+		var _trigger_load = function(_jq) {
+			_jq
 				.each(function(){
+					var _this = jQuery(this);
+
 					if (
 						(this.complete
 							|| (
@@ -705,12 +707,12 @@
 							)
 						)
 					) {
-						jQuery(this).trigger('load');
+						_this.trigger('load');
 					}
 				})
 			;
 
-			return _this;
+			return _jq;
 		};
 
 		_trigger_load($('div[id^="post_"] .sign img.bbcode_img'));
