@@ -40,7 +40,7 @@ if(empty($rssfid)) {
 } else {
 	$forum = isset($_G['cache']['forums'][$rssfid]) && $_G['cache']['forums'][$rssfid]['type'] != 'group' ? $_G['cache']['forums'][$rssfid] : array();
 	if(!isset($_G['cache']['forums'][$rssfid])) {
-		$forum = $_G['cache']['forums'][$rssfid] = DB::fetch_first("SELECT f.*, ff.viewperm FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.fid='$rssfid' AND f.type='sub' LIMIT 1");
+		$forum = $_G['cache']['forums'][$rssfid] = DB::fetch_first("SELECT f.*, ff.* FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.fid='$rssfid' AND f.type='sub' LIMIT 1");
 	}
 	if($forum && rssforumperm($forum)) {
 		$fidarray = array($rssfid);
