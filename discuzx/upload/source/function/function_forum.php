@@ -685,6 +685,17 @@ function rssforumperm($forum) {
 		require_once libfile('function/group');
 
 		$status = groupperm($forum, 0);
+
+		if (
+			$status == 1
+			|| $status == 2
+			|| $status == 3
+		) {
+			$is_allowed = 0;
+		} else {
+			$is_allowed = 1;
+		}
+
 	} else {
 	// bluelovers
 
