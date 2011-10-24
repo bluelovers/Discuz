@@ -125,7 +125,7 @@ if($fidarray) {
 	if(DB::num_rows($query)) {
 		while($thread = DB::fetch($query)) {
 			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
-				updatersscache($num);
+				updatersscache($num, $fidarray);
 				break;
 			} else {
 				list($thread['description'], $attachremote, $attachfile, $attachsize) = explode("\t", $thread['description']);
