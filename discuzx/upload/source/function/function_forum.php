@@ -681,7 +681,7 @@ function my_post_log($opt, $data) {
 function rssforumperm($forum) {
 
 	// bluelovers
-	if ($_G['forum']['status'] == 3) {
+	if ($forum['status'] == 3) {
 		include_once libfile('function/group');
 
 		$status = groupperm($forum, 0);
