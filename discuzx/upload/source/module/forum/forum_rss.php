@@ -79,6 +79,7 @@ if($fidarray) {
 
 	// bluelovers
 	$_updatersscache_num = max(500, $num);
+	$_updatersscache_run = false;
 
 	if (!DB::num_rows($query)) {
 		updatersscache($_updatersscache_num, $fidarray);
