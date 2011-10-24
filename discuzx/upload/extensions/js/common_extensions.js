@@ -706,21 +706,9 @@
 			return _this;
 		};
 
-		$('div[id^="post_"] .sign img.bbcode_img')
-			.each(function(){
-				if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
-					jQuery(this).trigger('load');
-				}
-			})
-		;
+		_trigger_load($('div[id^="post_"] .sign img.bbcode_img'));
+		_trigger_load(bbcode_imgs);
 
-		bbcode_imgs
-			.each(function(){
-				if (this.complete || (jQuery.browser.msie && parseInt(jQuery.browser.version) == 6)) {
-					jQuery(this).trigger('load');
-				}
-			})
-		;
 	});
 
 })(jQuery);
