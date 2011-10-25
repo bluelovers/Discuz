@@ -1204,26 +1204,26 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 			 * 先執行一次 $script = space_
 			 * 然後在執行一次 $script = space_$do
 			 */
-			static $_call_hook_space_;
+			static $_call_hook_space_ = 0;
 
 			$_do = (!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
 
-			if ($script == 'space' && !isset($_call_hook_space_)) {
+			if ($script == 'space' && !$_call_hook_space_) {
 
-				$_call_hook_space_ = false;
+				$_call_hook_space_ = 1;
 
 				hookscript($script, $hscript, $type, $param, $func);
 
-				$_call_hook_space_ = true;
+				$_call_hook_space_ = 2;
 
 				if (!empty($_do)) {
 					hookscript($script, $hscript, $type, $param, $func);
 				}
 
-				unset($_call_hook_space_);
+				$_call_hook_space_ = 0;
 				return;
 
-			} elseif ($script == 'space' && !$_call_hook_space_) {
+			} elseif ($script == 'space' && $_call_hook_space_ == 1) {
 				$script .= '_';
 			} else {
 				$script .= '_'.$_do;
