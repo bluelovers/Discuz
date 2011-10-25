@@ -1837,26 +1837,10 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 					if(!isset($pluginclasses[$classkey])) {
 						$pluginclasses[$classkey] = new $classkey;
 					}
-
-					// bluelovers
-					discuz_core::$_cache_data['hookscript'][$hookkey][0][] = array(
-						$pluginclasses[$classkey],
-						$hookfunc[1],
-					);
-					// bluelovers
-
 					if(!method_exists($pluginclasses[$classkey], $hookfunc[1])) {
 						continue;
 					}
 					$return = $pluginclasses[$classkey]->$hookfunc[1]($param);
-
-					// bluelovers
-					discuz_core::$_cache_data['hookscript'][$hookkey][1][] = array(
-						$pluginclasses[$classkey],
-						$hookfunc[1],
-						'return' => $return,
-					);
-					// bluelovers
 
 					if(is_array($return)) {
 						if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
