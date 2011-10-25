@@ -1216,7 +1216,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 
 				$_call_hook_space_ = true;
 
-				if ($_do) {
+				if (!empty($_do)) {
 					return hookscript(CURMODULE, $_G['basescript']);
 				} else {
 					return;
