@@ -25,6 +25,7 @@ $_G['mnid'] = 'mn_common';
 
 // bluelovers
 $_GET['ac'] = $_G['gp_ac'] = $ac;
+$_GET['op'] = $_G['gp_op'] = $op;
 // bluelovers
 
 if(in_array($ac, array('privacy'))) {
