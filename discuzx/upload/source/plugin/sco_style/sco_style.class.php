@@ -34,8 +34,6 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 		$theme = $this->_my_theme_get_by_uid($uid);
 
-		debug($theme);
-
 		return '<style id="diy_style_plugin">'.$theme['theme_css'].'</style>';
 	}
 
@@ -104,6 +102,22 @@ class plugin_sco_style_home extends plugin_sco_style {
 		}
 
 		return $ret;
+	}
+
+	function spacecp_index() {
+		global $_G;
+
+		$_v = $this->_parse_method(__METHOD__);
+
+		if (
+			$_G['gp_ac'] == $_v[3]
+			&& $_G['gp_op'] == 'diy'
+		) {
+			/**
+			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
+			 * @link home.php?mod=spacecp&ac=index&op=diy&inajax=1&ajaxtarget=
+			 */
+		}
 	}
 
 }
