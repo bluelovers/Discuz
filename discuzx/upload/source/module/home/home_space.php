@@ -27,6 +27,10 @@ $dos = array('index', 'doing', 'blog', 'album', 'friend', 'wall',
 
 $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
 
+// bluelovers
+$_GET['do'] = $_G['gp_do'] = $do;
+// bluelovers
+
 if(in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
 	if(!$_G['setting']['homestatus']) {
 		showmessage('home_status_off');
