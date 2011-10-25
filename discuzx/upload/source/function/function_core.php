@@ -1194,7 +1194,12 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 	static $pluginclasses;
 	if($hscript == 'home') {
 		if($script != 'spacecp') {
+			/*
 			$script = 'space_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+			*/
+			// bluelovers
+			$script .= '_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+			// bluelovers
 		} else {
 			$script .= !empty($_G['gp_ac']) ? '_'.$_G['gp_ac'] : (!empty($_GET['ac']) ? '_'.$_GET['ac'] : '');
 		}
