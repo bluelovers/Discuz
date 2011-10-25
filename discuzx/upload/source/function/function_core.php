@@ -1206,6 +1206,8 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 			 */
 			static $_call_hook_space_;
 
+			$_do = (!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+
 			if ($script == 'space' && !isset($_call_hook_space_)) {
 
 				$_call_hook_space_ = false;
