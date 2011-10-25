@@ -19,6 +19,29 @@ class plugin_sco_style extends _sco_dx_plugin {
 
 class plugin_sco_style_home extends plugin_sco_style {
 
+	function space_header_output() {
+		if (!$this->_my_check_in_space_style()) {
+			return;
+		}
+	}
+
+	function _my_check_in_space_style() {
+		global $_G;
+
+		$ret = false;
+
+		if (
+			(
+				CURMODULE == 'space'
+				&& $_G['setting']['homestatus']
+			)
+		) {
+			$ret = true;
+		}
+
+		return $ret;
+	}
+
 }
 
 ?>
