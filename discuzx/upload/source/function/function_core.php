@@ -1807,7 +1807,41 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 	static $pluginclasses;
 	if($hscript == 'home') {
 		if($script != 'spacecp') {
+			/*
 			$script = 'space_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+			*/
+			// bluelovers
+			/**
+			 * 如果 $script == 'space'
+			 *
+			 * 先執行一次 $script = space_
+			 * 然後在執行一次 $script = space_$do
+			 */
+			static $_call_hook_space_;
+
+			$_do = (!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+
+			if ($script == 'space' && !isset($_call_hook_space_)) {
+
+				$_call_hook_space_ = false;
+
+				hookscript($script, $hscript, $type, $param, $func);
+
+				$_call_hook_space_ = true;
+
+				if (!empty($_do)) {
+					hookscript($script, $hscript, $type, $param, $func);
+				}
+
+				unset($_call_hook_space_);
+				return;
+
+			} elseif ($script == 'space' && !$_call_hook_space_) {
+				$script .= '_';
+			} else {
+				$script .= '_'.$_do;
+			}
+			// bluelovers
 		} else {
 			$script .= !empty($_G['gp_ac']) ? '_'.$_G['gp_ac'] : (!empty($_GET['ac']) ? '_'.$_GET['ac'] : '');
 		}
