@@ -25,6 +25,14 @@ class plugin_sco_style_home extends plugin_sco_style {
 		}
 	}
 
+	function space_header_diy_style_output() {
+		return '<style id="diy_style_plugin">body { color: red; }</style>';
+	}
+
+	function space_header_diy_style() {
+		return $this->space_header_diy_style_output();
+	}
+
 	function _my_check_in_space_style() {
 		global $_G;
 
