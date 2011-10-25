@@ -1198,7 +1198,22 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 			$script = 'space_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
 			*/
 			// bluelovers
+			static $_call_hook_space_;
+
+			if ($script == 'space' && !isset($_call_hook_space_)) {
+
+				$_call_hook_space_ = false;
+
+				hookscript(CURMODULE, $_G['basescript']);
+
+				$_call_hook_space_ = true;
+
+				return hookscript(CURMODULE, $_G['basescript']);
+			} elseif ($script == 'space' && !$_call_hook_space_) {
+				$script .= '_';
+			} else {
 			$script .= '_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+			}
 			// bluelovers
 		} else {
 			$script .= !empty($_G['gp_ac']) ? '_'.$_G['gp_ac'] : (!empty($_GET['ac']) ? '_'.$_GET['ac'] : '');
