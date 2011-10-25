@@ -110,8 +110,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 		$_v = $this->_parse_method(__METHOD__, 1);
 
 		if (
-			$_G['gp_ac'] == 'index'
-			&& $_G['gp_op'] == 'diy'
+			$_G['gp_ac'] == $_v[3]
+			&& $_G['gp_op'] == $_v[4]
 		) {
 			/**
 			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
