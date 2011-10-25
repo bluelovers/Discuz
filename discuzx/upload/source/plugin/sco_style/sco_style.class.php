@@ -33,9 +33,18 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 	function _my_theme_get_by_uid($uid, $limit = 1) {
 
+		$uid = intval($uid);
+		if ($limit < 0) {
+			$limitsql = '';
+		} else {
+			$limit = max(1, intval($limit));
+
+			$limitsql = "LIMIT {$limit}";
+		}
+
 		$ret = array();
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_theme_diy')." WHERE theme_authorid = '{$uid}' LIMIT {$limit}");
+		$query = DB::query("SELECT * FROM ".DB::table('home_theme_diy')." WHERE theme_authorid = '{$uid}' $limitsql");
 		while ($theme = DB::fetch($query)) {
 			$ret[$theme['theme_id']] = $theme;
 		}
