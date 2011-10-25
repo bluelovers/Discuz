@@ -19,14 +19,6 @@ class plugin_sco_style extends _sco_dx_plugin {
 
 class plugin_sco_style_home extends plugin_sco_style {
 
-	function space_() {
-		if (!$this->_my_check_in_space_style()) {
-			return;
-		}
-
-		$this->_my_hook_return_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
-	}
-
 	function space__output() {
 		if (!$this->_my_check_in_space_style()) {
 			return;
