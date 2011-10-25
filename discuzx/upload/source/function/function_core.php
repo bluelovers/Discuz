@@ -1217,10 +1217,12 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 				$_call_hook_space_ = true;
 
 				if (!empty($_do)) {
-					return hookscript($script, $hscript, $type, $param, $func);
-				} else {
-					return;
+					hookscript($script, $hscript, $type, $param, $func);
 				}
+
+				unset($_call_hook_space_);
+				return;
+
 			} elseif ($script == 'space' && !$_call_hook_space_) {
 				$script .= '_';
 			} else {
