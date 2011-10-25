@@ -1212,7 +1212,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 
 				$_call_hook_space_ = false;
 
-				hookscript(CURMODULE, $_G['basescript']);
+				hookscript($script, $hscript, $type, $param, $func);
 
 				$_call_hook_space_ = true;
 
