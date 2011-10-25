@@ -19,18 +19,38 @@ class plugin_sco_style extends _sco_dx_plugin {
 
 class plugin_sco_style_home extends plugin_sco_style {
 
-	function space_header_output() {
+	function space_() {
 		if (!$this->_my_check_in_space_style()) {
 			return;
 		}
+
+		$this->_my_hook_return_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
 	}
 
-	function space_header_diy_style_output() {
+	function _my_global_header_javascript_before_body() {
 		return '<style id="diy_style_plugin">body { color: red; }</style>';
 	}
 
-	function space_header_diy_style() {
-		return $this->space_header_diy_style_output();
+	function _my_hook_return_add($hookkey, $return) {
+		global $_G;
+
+		if(is_array($return)) {
+			if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
+				foreach($return as $k => $v) {
+					$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
+				}
+			}
+		} else {
+			if(!is_array($_G['setting']['pluginhooks'][$hookkey])) {
+				$_G['setting']['pluginhooks'][$hookkey] .= $return;
+			} else {
+				foreach($_G['setting']['pluginhooks'][$hookkey] as $k => $v) {
+					$_G['setting']['pluginhooks'][$hookkey][$k] .= $return;
+				}
+			}
+		}
+
+		return $this;
 	}
 
 	function _my_check_in_space_style() {
