@@ -31,6 +31,9 @@ class plugin_sco_style_home extends plugin_sco_style {
 		return '<style id="diy_style_plugin">body { color: red; }</style>';
 	}
 
+	/**
+	 * @todo 將此 method 移植到 _sco_dx_plugin
+	 */
 	function _my_hook_return_add($hookkey, $return) {
 		global $_G;
 
