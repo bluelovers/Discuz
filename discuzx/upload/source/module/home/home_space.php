@@ -31,6 +31,15 @@ $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
 /**
  * [bugfix] 修正 x2 只能 hook 命名只能用 space_ 才能掛載在 home_space 內的 BUG
  *
+ * 不過使用時必須在命名後方加上 _output
+ *
+ * @example
+
+class plugin_sco_style_home extends plugin_sco_style {
+
+	function space_index_output()
+
+ *
  * 借用以下說明
  * 吐槽：该死的discuz不知道怎么修改了嵌入点的命名规则，导致出现了这么诡异的函数名。。。p.s.仅适用于X2，此函数命名不得修改
  */
