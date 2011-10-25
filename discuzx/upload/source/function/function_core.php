@@ -1212,7 +1212,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 			} elseif ($script == 'space' && !$_call_hook_space_) {
 				$script .= '_';
 			} else {
-			$script .= '_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
+				$script .= '_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
 			}
 			// bluelovers
 		} else {
