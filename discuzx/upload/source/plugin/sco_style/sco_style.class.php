@@ -17,4 +17,8 @@ class plugin_sco_style extends _sco_dx_plugin {
 
 }
 
+class plugin_sco_style_home extends plugin_sco_style {
+
+}
+
 ?>
