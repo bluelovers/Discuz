@@ -23,6 +23,10 @@ $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac']
 $op = empty($_GET['op'])?'':$_GET['op'];
 $_G['mnid'] = 'mn_common';
 
+// bluelovers
+$_GET['ac'] = $_G['gp_ac'] = $ac;
+// bluelovers
+
 if(in_array($ac, array('privacy'))) {
 	if(!$_G['setting']['homestatus']) {
 		showmessage('home_status_off');
