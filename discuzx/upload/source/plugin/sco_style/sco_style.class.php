@@ -28,7 +28,15 @@ class plugin_sco_style_home extends plugin_sco_style {
 	}
 
 	function _my_global_header_javascript_before_body() {
-		return '<style id="diy_style_plugin">body { color: red; }</style>';
+		global $_G, $space;
+
+		$uid = $space['uid'];
+
+		$theme = $this->_my_theme_get_by_uid($uid);
+
+		debug($theme);
+
+		return '<style id="diy_style_plugin">'.$theme['theme_css'].'</style>';
 	}
 
 	function _my_theme_get_by_uid($uid, $limit = 1) {
@@ -50,7 +58,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 		}
 
 		if ($limit == 1) {
-			return current($array);
+			return current($ret);
 		} else {
 			return $ret;
 		}
