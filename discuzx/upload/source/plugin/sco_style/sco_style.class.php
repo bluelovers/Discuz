@@ -24,7 +24,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 			return;
 		}
 
-		$this->_my_hook_return_add('global_header_javascript_before_body', '<style id="diy_style_plugin">body { color: blue; }</style>');
+		$this->_my_hook_return_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
 	}
 
 	function _my_global_header_javascript_before_body() {
