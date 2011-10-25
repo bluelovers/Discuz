@@ -104,20 +104,44 @@ class plugin_sco_style_home extends plugin_sco_style {
 		return $ret;
 	}
 
-	function spacecp_index() {
+	function spacecp_index_diy() {
 		global $_G;
 
-		$_v = $this->_parse_method(__METHOD__);
+		$_v = $this->_parse_method(__METHOD__, 1);
 
 		if (
-			$_G['gp_ac'] == $_v[3]
+			$_G['gp_ac'] == 'index'
 			&& $_G['gp_op'] == 'diy'
 		) {
 			/**
 			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
 			 * @link home.php?mod=spacecp&ac=index&op=diy&inajax=1&ajaxtarget=
 			 */
+			dexit($_v);
+		} else {
+			dexit(1);
 		}
+	}
+
+	/**
+	 * @example $_v = $this->_parse_method(__METHOD__);
+	 */
+	function _parse_method($method, $mode = 0) {
+		if (preg_match('/^(?:mobile)?plugin_'
+			.'(?:'.(preg_quote($this->identifier, '/')).')'
+			.'(?:_(.+)\:\:([^\_]+)_(.*))?$'
+			.'/', $method, $m)) {
+
+			if ($mode) {
+				if ($_m = explode('_', $m[3])) {
+					foreach ($_m as $_i => $_v) {
+						$m[3 + $_i] = $_v;
+					}
+				}
+			}
+		}
+
+		return $m;
 	}
 
 }
