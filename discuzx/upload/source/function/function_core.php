@@ -1198,6 +1198,12 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 			$script = 'space_'.(!empty($_G['gp_do']) ? $_G['gp_do'] : (!empty($_GET['do']) ? $_GET['do'] : ''));
 			*/
 			// bluelovers
+			/**
+			 * 如果 $script == 'space'
+			 *
+			 * 先執行一次 $script = space_
+			 * 然後在執行一次 $script = space_$do
+			 */
 			static $_call_hook_space_;
 
 			if ($script == 'space' && !isset($_call_hook_space_)) {
