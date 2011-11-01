@@ -25,6 +25,13 @@ class plugin_sco_style_home extends plugin_sco_style {
 		}
 
 		$this->_dx_hook_value_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
+		$this->_dx_hook_value_add('home_space_diy_controlpanel_controlcontent', $this->_my_home_space_diy_controlpanel_controlcontent());
+	}
+
+	function _my_home_space_diy_controlpanel_controlcontent() {
+		discuz_core::$tpl['home']['space']['diy']['diy'] = true;
+
+		return $this->_fetch_template('_my_home_space_diy_controlpanel_controlcontent');
 	}
 
 	function _my_global_header_javascript_before_body() {
