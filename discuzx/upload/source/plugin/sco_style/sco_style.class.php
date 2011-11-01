@@ -24,7 +24,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 			return;
 		}
 
-		$this->_my_hook_return_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
+		$this->_dx_hook_value_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
 	}
 
 	function _my_global_header_javascript_before_body() {
@@ -60,31 +60,6 @@ class plugin_sco_style_home extends plugin_sco_style {
 		} else {
 			return $ret;
 		}
-	}
-
-	/**
-	 * @todo 將此 method 移植到 _sco_dx_plugin
-	 */
-	function _my_hook_return_add($hookkey, $return) {
-		global $_G;
-
-		if(is_array($return)) {
-			if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
-				foreach($return as $k => $v) {
-					$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
-				}
-			}
-		} else {
-			if(!is_array($_G['setting']['pluginhooks'][$hookkey])) {
-				$_G['setting']['pluginhooks'][$hookkey] .= $return;
-			} else {
-				foreach($_G['setting']['pluginhooks'][$hookkey] as $k => $v) {
-					$_G['setting']['pluginhooks'][$hookkey][$k] .= $return;
-				}
-			}
-		}
-
-		return $this;
 	}
 
 	function _my_check_in_space_style() {
