@@ -383,6 +383,28 @@ class _sco_dx_plugin {
 		$args = func_get_args();
 		return call_user_func_array(array('Scorpio_Hook', 'add'), $args);
 	}
+
+	function _dx_hook_value_add($hookkey, $return) {
+		global $_G;
+
+		if(is_array($return)) {
+			if(!isset($_G['setting']['pluginhooks'][$hookkey]) || is_array($_G['setting']['pluginhooks'][$hookkey])) {
+				foreach($return as $k => $v) {
+					$_G['setting']['pluginhooks'][$hookkey][$k] .= $v;
+				}
+			}
+		} else {
+			if(!is_array($_G['setting']['pluginhooks'][$hookkey])) {
+				$_G['setting']['pluginhooks'][$hookkey] .= $return;
+			} else {
+				foreach($_G['setting']['pluginhooks'][$hookkey] as $k => $v) {
+					$_G['setting']['pluginhooks'][$hookkey][$k] .= $return;
+				}
+			}
+		}
+
+		return $this;
+	}
 }
 
 ?>
