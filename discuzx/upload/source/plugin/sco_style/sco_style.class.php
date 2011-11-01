@@ -29,7 +29,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 	}
 
 	function _my_home_space_diy_controlpanel_controlcontent() {
-		discuz_core::$tpl['home']['space']['diy']['diy'] = true;
+		discuz_core::$tpl['home_space_diy_controlpanel_controlnav_diy'] = true;
 
 		return $this->_fetch_template($this->_template('home_space_diy_controlpanel_controlcontent'));
 	}
