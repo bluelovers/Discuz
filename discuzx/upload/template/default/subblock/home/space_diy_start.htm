@@ -4,5 +4,41 @@
 		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('layout');return false;"><img src="{STATICURL}image/diy/layout.png" />{lang diy_layout_1}</a></li>
 		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('style');return false;"><img src="{STATICURL}image/diy/style.png" />{lang diy_style}</a></li>
 		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('block');return false;"><img src="{STATICURL}image/diy/module.png" />{lang diy_add_block}</a></li>
-		  <!--li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang do_it_yourself}</a></li-->
+		  <li><a href="javascript:;" onclick="spaceDiy.getdiy('diy', 'topicid', '$topic[topicid]');return false;"><img src="{STATICURL}image/diy/diy.png" />{lang do_it_yourself}</a></li>
 		</ul>
+
+<script>
+jQuery(function(){
+	(function(_old_spaceDiy_getdiy){
+
+		var call_user_func_array = function(func, args) {
+			var argc = args.length, s = '';
+			for(i = 0;i < argc; i++) {
+				s += ',args[' + i + ']';
+			}
+			eval('var ret = ' + func + '(' + s.substr(1) + ');');
+
+			return ret;
+		};
+
+		spaceDiy.getdiy = function (type) {
+			if (type != 'diy') {
+				return call_user_func_array('_old_spaceDiy_getdiy', arguments);
+			} else {
+				var para = '&op='+type;
+				if (arguments.length > 1) {
+					for (var i = 1; i < arguments.length; i++) {
+						para += '&' + arguments[i] + '=' + arguments[++i];
+					}
+				}
+
+				var ajaxtarget = type == 'image' ? 'diyimages' : '';
+
+				var _diy = window.open('home.php?mod=spacecp&ac=index'+para, '_space_diy');
+
+				doane();
+			}
+		};
+	})(spaceDiy.getdiy);
+});
+</script>
