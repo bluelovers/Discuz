@@ -358,14 +358,22 @@ class _sco_dx_plugin {
 	/**
 	 * @example $_v = $this->_parse_method(__METHOD__);
 	 */
-	function _parse_method($method) {
+	function _parse_method($method, $mode = 0) {
 		if (preg_match('/^(?:mobile)?plugin_'
 			.'(?:'.(preg_quote($this->identifier, '/')).')'
 			.'(?:_(.+)\:\:([^\_]+)_(.*))?$'
 			.'/', $method, $m)) {
 
-			return $m;
+			if ($mode) {
+				if ($_m = explode('_', $m[3])) {
+					foreach ($_m as $_i => $_v) {
+						$m[3 + $_i] = $_v;
+					}
+				}
+			}
 		}
+
+		return $m;
 	}
 
 	/**
