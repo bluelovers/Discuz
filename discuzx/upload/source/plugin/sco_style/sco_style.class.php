@@ -93,8 +93,6 @@ class plugin_sco_style_home extends plugin_sco_style {
 			 * @link home.php?mod=spacecp&ac=index&op=diy&inajax=1&ajaxtarget=
 			 */
 			dexit($_v);
-		} else {
-			dexit(1);
 		}
 	}
 
