@@ -413,6 +413,13 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		 * @link http://in-here.us/thread/22224/1/1.html
 		 */
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
+
+			// bluelovers
+			$_regexval = '(?:[^\[]|\[(?!\/hide\])).*';
+			$_regex_hide_1 = "\[hide\](".$_regexval.")\[\/hide\]";
+			$_regex_hide_2 = "\[hide(?:=([\w\d,]+))?\](".$_regexval.")\[\/hide\]";
+			// bluelovers
+
 			if(strpos($msglower, '[hide]') !== FALSE) {
 				if($authorreplyexist === null) {
 					$posttable = getposttablebytid($_G['tid']);
@@ -422,12 +429,12 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 					/*
 					$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
 					*/
-					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/isU", tpl_hide_reply(), $message);
+					$message = preg_replace("/{$_regex_hide_1}/isU", tpl_hide_reply(), $message);
 				} else {
 					/*
 					$message = preg_replace("/\[hide\](.*?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
 					*/
-					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/isU", tpl_hide_reply_hidden(), $message);
+					$message = preg_replace("/{$_regex_hide_1}/isU", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
@@ -435,7 +442,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				/*
 				$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
 				*/
-				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/iesU", "creditshide(\\1,'\\2', $pid)", $message);
+				$message = preg_replace("/{$_regex_hide_2}/iesU", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
 
