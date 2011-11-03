@@ -181,9 +181,9 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
 
 			// bluelovers
-			$_regexval = '(?:[^\[]|\[(?!\/\\1\])).*';
-			$_regex_hide_1 = "\[(hide)\](".$_regexval.")\[\/\\1\]";
-			$_regex_hide_2 = "\[(hide)(?:=([\w\d,]+))?\](".$_regexval.")\[\/\\1\]";
+			$_regexval = '(?:[^\[]|\[(?!\/hide\])).*';
+			$_regex_hide_1 = "\[hide\](".$_regexval.")\[\/hide\]";
+			$_regex_hide_2 = "\[hide(?:=([\w\d,]+))?\](".$_regexval.")\[\/hide\]";
 			// bluelovers
 
 			if(strpos($msglower, '[hide]') !== FALSE) {
@@ -195,12 +195,12 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 					/*
 					$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
 					*/
-					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/isU", tpl_hide_reply(), $message);
+					$message = preg_replace("/{$_regex_hide_1}/isU", tpl_hide_reply(), $message);
 				} else {
 					/*
 					$message = preg_replace("/\[hide\](.*?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
 					*/
-					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/isU", tpl_hide_reply_hidden(), $message);
+					$message = preg_replace("/{$_regex_hide_1}/isU", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
@@ -208,7 +208,7 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 				/*
 				$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
 				*/
-				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/iesU", "creditshide(\\1,'\\2', $pid)", $message);
+				$message = preg_replace("/{$_regex_hide_2}/iesU", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
 	}
