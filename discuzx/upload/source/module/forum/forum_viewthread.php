@@ -142,9 +142,13 @@ if($_G['gp_from'] == 'portal') {
 $_G['gp_extra'] = $_G['gp_extra'] ? rawurlencode($_G['gp_extra']) : '';
 
 if(@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-	$canonical = rewriteoutput('forum_viewthread', 1, '', $_G['tid'], 1, '', '');
+	$canonical = rewriteoutput('forum_viewthread', 1, '', $_G['tid'], $page, '', '');
 } else {
 	$canonical = 'forum.php?mod=viewthread&tid='.$_G['tid'];
+
+	// bluelovers
+	$canonical .= '&page='.$page;
+	// bluelovers
 }
 $_G['setting']['seohead'] .= '<link href="'.$_G['siteurl'].$canonical.'" rel="canonical" />';
 
