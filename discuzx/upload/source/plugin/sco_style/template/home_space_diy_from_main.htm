@@ -1,0 +1,31 @@
+
+<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_diy.css{$_G[varhash_gzip]}?{VERHASH}" />
+
+<style>
+body {
+	padding-top: 0px;
+}
+
+#controlcontent {
+	height: auto;
+	overflow: visible;
+	overflow-y: visible;
+
+	border-width: 1px;
+	border-radius: 10px 10px 10px 10px;
+
+}
+
+#controlcontent li a, #controlcontent li label {
+	white-space: nowrap;
+	overflow: hidden;
+}
+</style>
+
+<div id="controlcontent" class="cl">
+	<ul class="content" _style="overflow-y: auto; height: 90px;">
+	<!--{loop $themes $value}-->
+		<li title="$value['name']{LF}$value[dir]"><a href="javascript:;" onclick="spaceDiy.changeStyle('$value[dir]');return false;"><img src="{STATICURL}$value['dir']/preview.jpg" />$value['name']</a></li>
+	<!--{/loop}-->
+	</ul>
+</div>

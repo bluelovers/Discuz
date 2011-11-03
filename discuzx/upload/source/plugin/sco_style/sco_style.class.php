@@ -99,6 +99,12 @@ class plugin_sco_style_home extends plugin_sco_style {
 			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
 			 * @link home.php?mod=spacecp&ac=index&op=diy&inajax=1&ajaxtarget=
 			 */
+
+			include_once libfile('function/space');
+			include_once libfile('function/portalcp');
+
+			$themes = gettheme('space');
+
 			include $this->_template('home_space_diy_from');
 			dexit();
 		}
