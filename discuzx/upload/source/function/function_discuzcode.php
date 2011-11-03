@@ -179,6 +179,13 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		 * @link http://in-here.us/thread/22224/1/1.html
 		 */
 		if($parsetype != 1 && strpos($msglower, '[/hide]') !== FALSE && $pid) {
+
+			// bluelovers
+			$_regexval = '(?:[^\[]|\[(?!\/\\1\])).*';
+			$_regex_hide_1 = "\[(hide)\](".$_regexval.")\[\/\\1\]";
+			$_regex_hide_2 = "\[(hide)(?:=([\w\d,]+))?\](".$_regexval.")\[\/\\1\]";
+			// bluelovers
+
 			if(strpos($msglower, '[hide]') !== FALSE) {
 				if($authorreplyexist === null) {
 					$posttable = getposttablebytid($_G['tid']);
