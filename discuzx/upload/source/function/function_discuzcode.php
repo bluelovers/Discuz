@@ -478,7 +478,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		if(strpos($msglower, '[/img]') !== FALSE) {
 
 			// bluelovers
-			if (!IS_ROBOT && !$_G['uid'] && $pid) {
+			if (!IS_ROBOT && !$_G['uid'] && $pid > 0) {
 				$allowimgcode = 0;
 			}
 			// bluelovers
