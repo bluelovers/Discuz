@@ -487,6 +487,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			// bluelovers
 			if (!IS_ROBOT && !$_G['uid'] && $pid > 0) {
 				$allowimgcode = -1;
+			} elseif ($pid > 0 && $_G['uid'] && $_G['member']['groupid'] == 8) {
+				$allowimgcode = -10;
 			} else {
 				$allowimgcode = intval($allowimgcode);
 			}
@@ -1101,7 +1103,12 @@ function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 	 * 圖片: 你需要登錄才可以下載或查看附件。沒有帳號？註冊
 	 */
 	if ($allowimgcode < 0) {
-		$_lang_str = lang('forum/template', 'attach_nopermission_login');
+
+		if ($allowimgcode <= -10) {
+			$_lang_str = lang('message', 'group_nopermission', array('grouptitle' => $_G['group']['grouptitle']));
+		} else {
+			$_lang_str = lang('forum/template', 'attach_nopermission_login');
+		}
 
 		$_lang_str = str_replace(array(
 			'{$_G[',
