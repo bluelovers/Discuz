@@ -479,7 +479,7 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 
 			// bluelovers
 			if (!IS_ROBOT && !$_G['uid'] && $pid) {
-
+				$allowimgcode = 0;
 			}
 			// bluelovers
 
