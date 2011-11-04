@@ -483,6 +483,15 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 		$attrsrc = !IS_ROBOT && $lazyload ? 'file' : 'src';
 		if(strpos($msglower, '[/img]') !== FALSE) {
+
+			// bluelovers
+			if (!IS_ROBOT && !$_G['uid'] && $pid > 0) {
+				$allowimgcode = -1;
+			} else {
+				$allowimgcode = intval($allowimgcode);
+			}
+			// bluelovers
+
 			$message = preg_replace(array(
 				"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
@@ -490,8 +499,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				/*
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" class=\"bbcode_img\" />')",
 				*/
-				"parseimg('', '', '\\1', ".intval($lazyload).")",
-				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
+				"parseimg('', '', '\\1', ".intval($lazyload).", $allowimgcode)",
+				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).", $allowimgcode)"
 			) : array(
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
@@ -1084,8 +1093,34 @@ function parseflv($url, $width = 0, $height = 0) {
 	}
 }
 
-function parseimg($width, $height, $src, $lazyload) {
+function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 	global $_G;
+
+	// bluelovers
+	/**
+	 * 圖片: 你需要登錄才可以下載或查看附件。沒有帳號？註冊
+	 */
+	if ($allowimgcode < 0) {
+		$_lang_str = lang('forum/template', 'attach_nopermission_login');
+
+		$_lang_str = str_replace(array(
+			'{$_G[',
+			'][',
+			']}',
+		), array(
+			'{_G/',
+			'/',
+			'}'
+		), $_lang_str);
+
+		$_lang_str = lang('forum/template', $_lang_str);
+
+		$_lang_str = '<div class="locked">'.lang('template', 'e_image').': <em>'.$_lang_str.'</em></div>';
+
+		return $_lang_str;
+	}
+	// bluelovers
+
 	$extra = '';
 	if($width > $_G['setting']['imagemaxwidth']) {
 		$height = intval($_G['setting']['imagemaxwidth'] * $height / $width);
