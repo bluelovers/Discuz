@@ -1077,7 +1077,7 @@ function parseflv($url, $width = 0, $height = 0) {
 	}
 }
 
-function parseimg($width, $height, $src, $lazyload) {
+function parseimg($width, $height, $src, $lazyload, $pid) {
 	global $_G;
 	$extra = '';
 	if($width > $_G['setting']['imagemaxwidth']) {
