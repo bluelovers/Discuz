@@ -26,12 +26,18 @@ class task_avatar {
 		global $_G;
 
 		// bluelovers
-		if (empty($_G['member']['avatarstatus']) && uc_check_avatar($_G['member']['uid'])) {
+		if (empty($_G['member']['avatarstatus'])) {
+
+			if (uc_check_avatar($_G['member']['uid'])) {
+
 			DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
 
 			updatecreditbyaction('setavatar');
 
 			manyoulog('user', $_G['uid'], 'update');
+
+			}
+
 		}
 		// bluelovers
 
