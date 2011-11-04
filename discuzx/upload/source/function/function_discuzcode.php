@@ -1088,6 +1088,13 @@ function parseflv($url, $width = 0, $height = 0) {
 
 function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 	global $_G;
+
+	// bluelovers
+	if ($allowimgcode < 0) {
+
+	}
+	// bluelovers
+
 	$extra = '';
 	if($width > $_G['setting']['imagemaxwidth']) {
 		$height = intval($_G['setting']['imagemaxwidth'] * $height / $width);
