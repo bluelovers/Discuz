@@ -1091,7 +1091,7 @@ function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 
 	// bluelovers
 	if ($allowimgcode < 0) {
-
+		$_lang_str = lang('forum/template', 'attach_nopermission_login');
 	}
 	// bluelovers
 
