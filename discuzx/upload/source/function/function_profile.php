@@ -249,6 +249,25 @@ function profile_check($fieldid, &$value, $space=array()) {
 	// bluelovers
 	if ($fieldid == 'nickname') {
 
+		$_query = DB::query("SELECT
+			*
+			FROM
+				".DB::table("common_member_profile")." mp
+			LEFT JOIN
+				".DB::table("common_member")." m On m.uid = mp.uid
+			WHERE
+				m.adminid > 0
+				AND
+				(
+					mp.nickname = '$value'
+					OR m.username ='$value'
+				)
+		");
+
+		while($_verify = DB::fetch($_query)) {
+			return false;
+		}
+
 	}
 	// bluelovers
 
