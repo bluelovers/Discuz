@@ -1096,7 +1096,12 @@ function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 	 * 圖片: 你需要登錄才可以下載或查看附件。沒有帳號？註冊
 	 */
 	if ($allowimgcode < 0) {
+
+		if ($allowimgcode <= -10) {
+			$_lang_str = lang('message', 'group_nopermission', array('grouptitle' => $_G['group']['grouptitle']));
+		} else {
 		$_lang_str = lang('forum/template', 'attach_nopermission_login');
+		}
 
 		$_lang_str = str_replace(array(
 			'{$_G[',
