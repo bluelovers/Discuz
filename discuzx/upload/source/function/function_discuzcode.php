@@ -476,6 +476,13 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 		}
 		$attrsrc = !IS_ROBOT && $lazyload ? 'file' : 'src';
 		if(strpos($msglower, '[/img]') !== FALSE) {
+
+			// bluelovers
+			if (!IS_ROBOT && !$_G['uid'] && $pid) {
+
+			}
+			// bluelovers
+
 			$message = preg_replace(array(
 				"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
