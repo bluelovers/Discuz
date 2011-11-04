@@ -38,6 +38,8 @@ class task_avatar {
 
 			manyoulog('user', $_G['uid'], 'update');
 
+			$_G['member']['avatarstatus'] = 1;
+
 			}
 
 		}
