@@ -99,7 +99,7 @@ $lang = array(
 	'block5' => '自定義模塊5',
 	'blockdata' => array('personalinfo' => '個人資料', 'profile' => '頭像', 'doing' => '記錄', 'feed' => '動態',
 				'blog' => '日誌', 'stickblog' => '置頂日誌', 'album' => '相冊', 'friend' => '好友',
-				'visitor' => '最近訪客', 'wall' => '留言板', 'share' => '分享',
+				'visitor' => '誰來我家', 'wall' => '留言板', 'share' => '分享',
 				'thread' => '主題', 'group'=>$_G[setting][navs][3][navname],'music'=>'音樂盒',
 				'statistic' => '統計信息','myapp' => '應用',
 				'block1'=>'自由模塊1', 'block2'=>'自由模塊2', 'block3'=>'自由模塊3',
