@@ -71,7 +71,9 @@ if (!submitcheck('modsubmit')) {
 	/**
 	 * 支援 ajax 更新頁面
 	 */
+	/*
 	discuz_core::$tpl['forum']['succeedhandle_mods'][$_G['gp_action']] = 1;
+	*/
 
 	include template('forum/topicadmin_action');
 } else {
