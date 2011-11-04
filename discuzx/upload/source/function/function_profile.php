@@ -253,6 +253,33 @@ function profile_check($fieldid, &$value, $space=array()) {
 		return false;
 	}
 
+	// bluelovers
+	if ($fieldid == 'nickname') {
+		$_uid = intval($space['uid']);
+
+		$_query = DB::query("SELECT
+			*
+			FROM
+				".DB::table("common_member_profile")." mp
+			LEFT JOIN
+				".DB::table("common_member")." m On m.uid = mp.uid
+			WHERE
+				m.uid <> '$_uid'
+				AND m.adminid > 0
+				AND
+				(
+					mp.nickname = '$value'
+					OR m.username ='$value'
+				)
+		");
+
+		while($_verify = DB::fetch($_query)) {
+			return false;
+		}
+
+	}
+	// bluelovers
+
 	include_once libfile('function/home');
 	if(in_array($fieldid, array('birthday', 'birthmonth', 'birthyear', 'gender'))) {
 		$value = intval($value);
