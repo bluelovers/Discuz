@@ -480,6 +480,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			// bluelovers
 			if (!IS_ROBOT && !$_G['uid'] && $pid > 0) {
 				$allowimgcode = -1;
+			} else {
+				$allowimgcode = intval($allowimgcode);
 			}
 			// bluelovers
 
@@ -490,8 +492,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 				/*
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" class=\"bbcode_img\" />')",
 				*/
-				"parseimg('', '', '\\1', ".intval($lazyload).")",
-				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
+				"parseimg('', '', '\\1', ".intval($lazyload).", $allowimgcode)",
+				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).", $allowimgcode)"
 			) : array(
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\" class=\"bbocde_link bbocde_link_img\">[$viewimg]</a>')"),
