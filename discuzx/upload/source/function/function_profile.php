@@ -246,6 +246,12 @@ function profile_check($fieldid, &$value, $space=array()) {
 		return false;
 	}
 
+	// bluelovers
+	if ($fieldid == 'nickname') {
+
+	}
+	// bluelovers
+
 	include_once libfile('function/home');
 	if(in_array($fieldid, array('birthday', 'birthmonth', 'birthyear', 'gender'))) {
 		$value = intval($value);
