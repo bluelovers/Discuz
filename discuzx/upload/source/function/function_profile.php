@@ -257,7 +257,8 @@ function profile_check($fieldid, &$value, $space=array()) {
 			LEFT JOIN
 				".DB::table("common_member")." m On m.uid = mp.uid
 			WHERE
-				m.adminid > 0
+				m.uid <> '$_uid'
+				AND m.adminid > 0
 				AND
 				(
 					mp.nickname = '$value'
