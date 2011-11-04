@@ -20,7 +20,10 @@ if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCH
 
 
 	// bluelovers
-	if (1) {
+	if (
+		empty($_G['setting']['domain']['app']['mobile'])
+		|| $_G['setting']['domain']['app']['mobile'] != $_SERVER['HTTP_HOST']
+	) {
 	// bluelovers
 
 	get_index_page_guest_cache();
