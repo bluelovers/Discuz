@@ -1105,6 +1105,8 @@ function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 
 		$_lang_str = lang('forum/template', $_lang_str);
 
+		$_lang_str = '<div class="locked">'.lang('template', 'e_image').': <em>'.$_lang_str.'</em></div>';
+
 		return $_lang_str;
 	}
 	// bluelovers
