@@ -25,6 +25,12 @@ class task_avatar {
 	function csc($task = array()) {
 		global $_G;
 
+		// bluelovers
+		if (empty($_G['member']['avatarstatus']) && uc_check_avatar($_G['member']['uid'])) {
+
+		}
+		// bluelovers
+
 		if(!empty($_G['member']['avatarstatus'])) {
 			return true;
 		} else {
