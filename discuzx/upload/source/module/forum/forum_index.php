@@ -18,7 +18,6 @@ $showoldetails = get_index_online_details();
 
 if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
 
-
 	// bluelovers
 	if (
 		empty($_G['setting']['domain']['app']['mobile'])
@@ -31,6 +30,7 @@ if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCH
 	// bluelovers
 	}
 	// bluelovers
+
 }
 
 $newthreads = round((TIMESTAMP - $_G['member']['lastvisit'] + 600) / 1000) * 1000;
