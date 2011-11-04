@@ -16,7 +16,12 @@ class task_avatar {
 	var $version = '1.0';
 	var $name = 'avatar_name';
 	var $description = 'avatar_desc';
+	/*
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
+	*/
+	// bluelovers
+	var $copyright = '<a href="http://bluelovers.net" target="_blank">Bluelovers Net.</a>';
+	// bluelovers
 	var $icon = '';
 	var $period = '';
 	var $periodtype = 0;
