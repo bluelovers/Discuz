@@ -1090,6 +1090,9 @@ function parseimg($width, $height, $src, $lazyload, $allowimgcode) {
 	global $_G;
 
 	// bluelovers
+	/**
+	 * 圖片: 你需要登錄才可以下載或查看附件。沒有帳號？註冊
+	 */
 	if ($allowimgcode < 0) {
 		$_lang_str = lang('forum/template', 'attach_nopermission_login');
 
