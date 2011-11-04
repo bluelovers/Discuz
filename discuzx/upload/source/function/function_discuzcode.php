@@ -480,6 +480,8 @@ function discuzcode($message, $smileyoff = 0, $bbcodeoff = 0, $htmlon = 0, $allo
 			// bluelovers
 			if (!IS_ROBOT && !$_G['uid'] && $pid > 0) {
 				$allowimgcode = -1;
+			} elseif ($pid > 0 && $_G['uid'] && $_G['member']['groupid'] == 8) {
+				$allowimgcode = -10;
 			} else {
 				$allowimgcode = intval($allowimgcode);
 			}
