@@ -28,6 +28,8 @@ class task_avatar {
 		// bluelovers
 		if (empty($_G['member']['avatarstatus'])) {
 
+			loaducenter();
+
 			if (uc_check_avatar($_G['member']['uid'])) {
 
 			DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
