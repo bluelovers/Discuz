@@ -31,7 +31,20 @@ if ($showoldetails && $_G['inajax']) {
 // bluelovers
 
 if(!$_G['uid'] && !$gid && $_G['setting']['cacheindexlife'] && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
+
+	// bluelovers
+	if (
+		empty($_G['setting']['domain']['app']['mobile'])
+		|| $_G['setting']['domain']['app']['mobile'] != $_SERVER['HTTP_HOST']
+	) {
+	// bluelovers
+
 	get_index_page_guest_cache();
+
+	// bluelovers
+	}
+	// bluelovers
+
 }
 
 $newthreads = round((TIMESTAMP - $_G['member']['lastvisit'] + 600) / 1000) * 1000;
