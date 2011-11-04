@@ -32,13 +32,13 @@ class task_avatar {
 
 			if (uc_check_avatar($_G['member']['uid'])) {
 
-			DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
+				DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
 
-			updatecreditbyaction('setavatar');
+				updatecreditbyaction('setavatar');
 
-			manyoulog('user', $_G['uid'], 'update');
+				manyoulog('user', $_G['uid'], 'update');
 
-			$_G['member']['avatarstatus'] = 1;
+				$_G['member']['avatarstatus'] = 1;
 
 			}
 
