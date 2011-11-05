@@ -649,6 +649,11 @@ function loaducenter() {
 
 	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
 	require_once DISCUZ_ROOT.'./uc_client/client.php';
+
+	// bluelovers
+	$_loaducenter = true;
+	// bluelovers
+
 }
 
 function loadcache($cachenames, $force = false) {
