@@ -255,6 +255,11 @@ function profile_check($fieldid, &$value, $space=array()) {
 
 	// bluelovers
 	if ($fieldid == 'nickname') {
+
+		if ($value == $space['username']) {
+			return false;
+		}
+
 		$_uid = intval($space['uid']);
 
 		$_query = DB::query("SELECT
