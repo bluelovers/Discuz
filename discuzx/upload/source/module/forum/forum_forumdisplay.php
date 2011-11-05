@@ -532,6 +532,14 @@ if($_G['forum']['picstyle']) {
 	if(empty($_G['cookie']['forumdefstyle'])) {
 		$stickycount = 0;
 	}
+
+// bluelovers
+} else {
+
+
+
+// bluelovers
+
 }
 
 $filterbool = !empty($filter) && in_array($filter, $filterfield);
