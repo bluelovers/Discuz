@@ -115,6 +115,18 @@ function writetocsscache($data) {
 			} elseif($data['tpldir'] != 'default' && file_exists($cssfile = DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.$entry)) {
 				$cssdata .= @implode('', file($cssfile));
 			}
+
+			foreach (array(
+				DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.basename($entry, '.css'),
+				dirname(DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.$entry).'/cssappend_'.basename($entry, '.css'),
+			) as $_dir_sub) {
+				if (
+					is_dir($_dir_sub)
+					&& $_dh_sub = opendir($_dir_sub)
+				) {
+
+				}
+			}
 			// bluelovers
 
 			if(file_exists($cssfile = DISCUZ_ROOT.'./'.$data['tpldir'].'/common/extend_'.$entry)) {
