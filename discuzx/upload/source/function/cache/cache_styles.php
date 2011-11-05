@@ -124,7 +124,16 @@ function writetocsscache($data) {
 					is_dir($_dir_sub)
 					&& $_dh_sub = opendir($_dir_sub)
 				) {
+					while(($_entry_sub = readdir($_dh_sub)) !== false) {
+						$_cssfile_sub = $_dir_sub.'/'.$_entry_sub;
 
+						if (
+							fileext($_entry_sub) == 'css'
+							&& file_exists($_cssfile_sub)
+						) {
+							$cssdata = @implode('', file($_cssfile_sub));
+						}
+					}
 				}
 			}
 			// bluelovers
