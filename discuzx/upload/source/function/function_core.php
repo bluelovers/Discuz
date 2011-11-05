@@ -645,6 +645,10 @@ function loaducenter() {
 
 	// bluelovers
 	static $_loaducenter;
+
+	if ($_loaducenter) {
+		return;
+	}
 	// bluelovers
 
 	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
