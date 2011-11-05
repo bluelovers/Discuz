@@ -25,7 +25,10 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 
 	$_uid = $_space['uid'];
 
+	$_user_updated = false;
+
 	$_setarr = array();
+	$_setarr_member = array();
 
 	if ($_space['birthmonth'] && $_space['birthday']) {
 		/**
