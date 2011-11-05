@@ -642,6 +642,11 @@ function getcurrentnav() {
 }
 
 function loaducenter() {
+
+	// bluelovers
+	static $_loaducenter;
+	// bluelovers
+
 	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
 	require_once DISCUZ_ROOT.'./uc_client/client.php';
 }
