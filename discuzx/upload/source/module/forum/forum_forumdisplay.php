@@ -539,6 +539,14 @@ if($_G['forum']['picstyle']) {
 	$forumdefstyle = isset($_G['gp_forumdefstyle']) ? $_G['gp_forumdefstyle'] : '';
 	$forumdefstyle = in_array($forumdefstyle, array('yes', 'no', 'picstyle')) ? $forumdefstyle : '';
 
+	if($forumdefstyle == 'picstyle') {
+		$stickycount = 0;
+
+		$_G['cookie']['forumdefstyle'] = '';
+
+		$_G['forum']['picstyle'] = 1;
+	}
+
 // bluelovers
 
 }
