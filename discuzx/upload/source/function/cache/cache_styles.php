@@ -118,7 +118,7 @@ function writetocsscache($data) {
 
 			foreach (array(
 				DISCUZ_ROOT.'./template/'.'default'.'/common/cssappend_'.basename($entry, '.css'),
-				dirname(DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.$entry).'/cssappend_'.basename($entry, '.css'),
+				DISCUZ_ROOT.'./'.$data['tpldir'].'/common/cssappend_'.basename($entry, '.css'),
 			) as $_dir_sub) {
 				if (
 					is_dir($_dir_sub)
