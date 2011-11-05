@@ -48,7 +48,7 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if (empty($_space['avatarstatus'])) {
 		@loaducenter();
 
-		if (uc_check_avatar($_space['uid'], 'middle')) {
+		if (uc_check_avatar($_uid, 'middle')) {
 			$_setarr_member['avatarstatus'] = 1;
 
 			updatecreditbyaction('setavatar');
@@ -56,11 +56,11 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	}
 
 	if ($_setarr_member) {
-		DB::update('common_member', $_setarr_member, array('uid' => $_space['uid']));
+		DB::update('common_member', $_setarr_member, array('uid' => $_uid));
 	}
 
 	if($_setarr) {
-		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
+		DB::update('common_member_profile', $_setarr, array('uid' => $_uid));
 
 		/**
 		 * 登入時如果個人資料產生變動自動生成動態
@@ -72,7 +72,7 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	}
 
 	if ($_user_updated) {
-		manyoulog('user', $_space['uid'], 'update');
+		manyoulog('user', $_uid, 'update');
 	}
 }
 
