@@ -39,9 +39,11 @@ class task_avatar {
 
 				DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
 
+				/*
 				updatecreditbyaction('setavatar');
 
 				manyoulog('user', $_G['uid'], 'update');
+				*/
 
 				$_G['member']['avatarstatus'] = 1;
 
