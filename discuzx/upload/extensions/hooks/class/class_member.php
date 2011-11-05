@@ -51,6 +51,11 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 
 		}
 	}
+
+	if ($_setarr_member) {
+		DB::update('common_member', $_setarr_member, array('uid' => $_space['uid']));
+	}
+
 	// bluelovers
 
 	if($_setarr) {
