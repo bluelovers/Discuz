@@ -43,7 +43,6 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		if ($_setarr['zodiac'] == $_space['zodiac']) unset($_setarr['zodiac']);
 	}
 
-	// bluelovers
 	if (empty($_space['avatarstatus'])) {
 		@loaducenter();
 
@@ -57,8 +56,6 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if ($_setarr_member) {
 		DB::update('common_member', $_setarr_member, array('uid' => $_space['uid']));
 	}
-
-	// bluelovers
 
 	if($_setarr) {
 		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
