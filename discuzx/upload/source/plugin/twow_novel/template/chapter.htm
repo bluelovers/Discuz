@@ -1,0 +1,35 @@
+{subtemplate common/header}
+<!-- position start -->
+<link rel="stylesheet" type="text/css" href="./source/plugin/twow_novel/images/style.css" />
+<div id="pt" class="bm cl">
+  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">{lang twow_novel:novel_channel}</a></div>
+</div>
+<!-- position end -->
+<div id="ct" class="wp cl n1">
+  <div class="mn1">
+    <dl class="list">
+      <hr class="da"/>
+      <dd class="list_list d_tit">
+        <h2>{$novel[subject]}</h2>
+      </dd>
+      <hr class="da"/>
+      <dd class="c_detail no_border" style="margin-top:10px">
+        <div class="noveldes">
+          <div><strong>{lang twow_novel:novelintro}£º</strong><br />
+            {$novel['message']} </div>
+        </div>
+        <a class="c_img" style="margin-left:60px;"><img src="{$novel['novelpic']}" alt="{$novel[subject]}"  onerror="this.src='source/plugin/twow_novel/images/nophoto.jpg'"></a> <br />
+        <hr class="da"/>
+        <div class="c_chapter">
+          <!--{if $chapterlist}-->
+          <!--{loop $chapterlist $k $chapter}-->
+          <a href="plugin.php?id=twow_novel:novel&do=view&tid={$tid}&page={$chapter[page]}">$chapter[subject]</a>
+          <!--{/loop}-->
+          <!--{/if}-->
+        </div>
+      </dd>
+    </dl>
+  </div>
+  <div class="support">{lang twow_novel:novel}v1.0 Support by {lang twow_novel:support} QQ:404618868</div>
+</div>
+{subtemplate common/footer} 

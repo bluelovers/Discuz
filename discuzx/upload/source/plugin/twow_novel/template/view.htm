@@ -1,0 +1,32 @@
+{subtemplate common/header}
+<link rel="stylesheet" type="text/css" href="source/plugin/twow_novel/images/style.css" />
+<!-- position start -->
+<link rel="stylesheet" type="text/css" href="./source/plugin/twow_novel/images/style.css" />
+<div id="pt" class="bm cl">
+  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">{lang twow_novel:novel_channel}</a></div>
+</div>
+<!-- position end -->
+<div id="ct" class="wp cl n1">
+  <div class="mn1">
+    <div align="center" style="margin-top:10px; margin-bottom:10px; font-size:24px;">
+      <h2 class="otp brw">{$novel['subject']} - {$chapter['subject']}</h2>
+    </div>
+    <hr class="da"/>
+    <br />
+    <div class="t_msgfont" id="msgdiv" style="margin:10px;">
+      {$chapter['message']}
+      <div style="clear:both">&nbsp; </div>
+    </div>
+    <hr class="da"/>
+    <div class="no_border chapter_link">
+        <a href="$prepage" class="a01">{lang twow_novel:pre_chapter}</a>
+        <a href="$novelpage" class="a02">{lang twow_novel:backto_novel}</a>
+        <a href="plugin.php?id=twow_novel:novel" class="a02">{lang twow_novel:backto_channel}</a>
+        <a href="$nextpage" class="a03">{lang twow_novel:next_chapter}</a>
+    </div>
+    <hr class="da"/>
+    <div class="pagesplit">$pagesplit</div>
+  </div>
+  <div class="support">{lang twow_novel:novel}v1.0 Support by {lang twow_novel:support} QQ:404618868</div>
+</div>
+{subtemplate common/footer} 

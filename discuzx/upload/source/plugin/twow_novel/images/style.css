@@ -1,0 +1,228 @@
+.n {background-image:url(image/vlineb.png) !important;}
+.n1{background-image:url(../../static/image/common/vlineb.png) !important;background-position:960px 0 !important;}.n1 .mn1{width:960px;}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+
+.tl .th th a {
+	float:left;
+	margin-right:10px;
+	padding-right:17px;
+}
+#fh {
+	width:644px;
+}
+.mw #fh {
+	width:100%;
+}
+#fh .bm {
+	padding-top:5px;
+	padding-bottom:0;
+}
+#nv_group #fh {
+	margin-bottom:1em;
+}
+#fh #gh {
+	padding-top:10px;
+}
+#fh .h {
+	margin-top:10px;
+}
+#fh .h * {
+	float:left;
+}
+#fh h1 {
+	margin-right:10px;
+	font-size:16px;
+}
+#fh .h .y {
+	float:right;
+}
+#fh .o a {
+	float:left;
+	margin-right:10px;
+}
+#fh.m {
+	padding-top:0;
+	background-color:#F5F5F5;
+}
+.ttp{padding:0 0 2px;*padding-bottom:10px;}.ttp a,.ttp strong{float:left;padding:3px 10px;margin:0 4px 8px 0;height:1.5em;border:1px solid #CCC;color:#666;text-decoration:none;white-space:nowrap;line-height:1.5em;}.ttp a:hover{border-color:#F90;}
+
+.ttp .otp{
+	border-color:#FF9900;
+	color:#FFFFFF;
+	background-color:#FF9900;
+}
+
+.tl table{width:100%;table-layout:fixed;}.tl td,.tl th{border-bottom:1px solid #E0E7ED;padding:5px 0;}.tl th{padding-right:1.5em;}.tl .th select{margin-right:4px;}.tl .icn{width:25px;text-align:left;}.tl .new{}.tl .comm{}.tl .frm{width:100px;}.tl .o{width:20px;}.tl .num{width:45px;}.tl .by{width:90px;}.tl cite,.tl .num em{display:block;}.tl th em{margin-right:4px;zoom:1;}.tl th em,.tl th em a{color:#007CD5;}.tl td em{font-size:11px;font-family:Arial,PMingliu,sans-serif;}.tl td em,.tl td em a{color:#999;}.tl .th th,.tl .th td{padding:8px 0;background:#F2F7FB;border-top:1px solid #E0E7ED;}.tl .ts th,.tl .ts td{padding:8px 0;}.tps{white-space:nowrap;}.tps a{padding:2px 4px;color:#444;}.tps a:hover{background-color:#F5F5F5;color:#007CD5;}
+
+.cptool { }
+.cptool li { float:left; display:inline; margin-right:5px;}
+.cptool li img { float:left; margin-top:3px;}
+.cptool .noimg { margin-top:2px; }
+.cptool .bgbar{ height:10px; width:10px; display:block; border:1px solid #7A7A7A; cursor:hand; margin-top:4px; float:left; margin-right:4px; }
+.t_msgfont{
+	font-size:14px;
+	color:#000;
+	line-height:27px;
+}
+/*小说列表*/
+.onenovel { 
+	width: 228px; 
+	height: 134px; 
+	overflow: hidden; 
+	line-height: 18px; 
+	float: left; 
+	margin: 0 0px 28px 0; 
+	display: inline;
+	margin-left:10px;
+}
+.onenovel span { 
+	display: block; 
+	float: left;
+	width: 124px;
+	overflow:hidden;
+}
+.novelpic { 
+	width: 95px; 
+	height: 130px; 
+	padding: 1px; 
+	border: 1px solid #cccccc; 
+	float: left; 
+	margin-right: 5px;
+}
+.novelpic:hover{
+	border:1px solid #FF9900;
+}
+.novelsubject { 
+	font-size: 14px; 
+	font-weight: bold; 
+	padding-top: 4px; 
+
+	white-space: nowrap;
+	height:24px;
+	overflow:hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow:    ellipsis;
+}
+.onenovel a:hover {
+	color:#FF9900;
+}
+
+.pagesplit {
+	padding:10px 30px;
+	text-align:right; 
+	margin-bottom:10px;
+}
+/*上下章链接图片*/
+.chapter_link {
+	list-style-type: none;
+	height: 27px;
+	display:block;
+	margin: 0px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 294px;
+	overflow: hidden;
+}
+.chapter_link a {
+	display:block;
+	height:27px;
+	line-height:27px;
+	background:0 0 no-repeat;
+	color:#000;
+	font-size:12px;
+	font-weight:bold;
+	width:53px;
+	padding:0px;
+	margin-left:10px;
+	float: left;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.chapter_link .a01 { 
+	background-image:url(d_page_03.gif); 
+	padding-left:30px;
+}
+.chapter_link .a02 { 
+	background-image:url(d_page_05.gif);
+	width:81px; 
+	text-align:center;
+}
+.chapter_link .a03 { 
+	background-image:url(d_page_07.gif); 
+	padding-right:30px; 
+	text-align:right;
+}
+
+/*章节*/
+.d_tit { 
+	height:60px;
+}
+.d_tit h2 { 
+	font-size:24px;
+	line-height:60px; 
+	text-align:center;
+}
+.noveldes { 
+	width:710px; 
+	padding:0 20px; 
+	float:right;
+}
+
+.c_img,.c_img img { width:120px; height:150px;}
+.c_img {display:block; padding:2px; border:1px #CCC solid;}
+.c_img:hover { border-color:#666;}
+
+.c_chapter { padding:10px; width:950px; margin-top:10px;}
+.c_chapter a { 
+	display:block; 
+	height:21px;
+	line-height:21px; 
+	padding:0 10px; 
+	border:1px #666666 solid; 
+	background:#F9F9F9;
+	color:#333333; 
+	float:left;
+	margin:4px;
+	white-space:nowrap;
+}
+.c_chapter a:hover { 
+	text-decoration:none;
+	background-color:#DDD; 
+	color:#FF0000; 
+	border-color:#999;
+}
+.c_chapter a:visited { 
+	text-decoration:none;
+	background-color:#F9F9F9; 
+	color:#0000FF; 
+	border-color:#999;
+}
+
+
+
+.c_about ul { padding-right:170px;width:440px; height:88px;}
+.c_about li { float:left; line-height:22px; height:22px; width:220px;}
+.c_about ul a { color:#290;}
+.c_about div { line-height:20px;}
+.c_tit { font-size:12px; height:25px; line-height:25px; background:#F0F0F0; border-top:1px #CCC solid; margin-top:20px;}
+.c_tit div { color:#FFF; background:url(../img/c02.gif) no-repeat;width:22px; height:25px; float:left; margin:0 10px; text-align:center; display:inline;}
+
+.support {
+	font-size: 12px;
+	color: #999999;
+	float: right;
+	font-style: italic;
+}
