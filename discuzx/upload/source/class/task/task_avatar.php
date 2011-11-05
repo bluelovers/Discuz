@@ -31,7 +31,7 @@ class task_avatar {
 		global $_G;
 
 		// bluelovers
-		if (empty($_G['member']['avatarstatus'])) {
+		if ($_G['member']['uid'] && empty($_G['member']['avatarstatus'])) {
 
 			loaducenter();
 
