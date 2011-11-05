@@ -131,7 +131,7 @@ function writetocsscache($data) {
 							fileext($_entry_sub) == 'css'
 							&& file_exists($_cssfile_sub)
 						) {
-							$cssdata = @implode('', file($_cssfile_sub));
+							$cssdata .= @implode('', file($_cssfile_sub));
 						}
 					}
 				}
