@@ -43,6 +43,9 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		if ($_setarr['zodiac'] == $_space['zodiac']) unset($_setarr['zodiac']);
 	}
 
+	// bluelovers
+	// bluelovers
+
 	if($_setarr) {
 		DB::update('common_member_profile', $_setarr, array('uid' => $_space['uid']));
 
