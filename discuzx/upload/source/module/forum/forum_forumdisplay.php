@@ -536,7 +536,8 @@ if($_G['forum']['picstyle']) {
 // bluelovers
 } else {
 
-
+	$forumdefstyle = isset($_G['gp_forumdefstyle']) ? $_G['gp_forumdefstyle'] : '';
+	$forumdefstyle = in_array($forumdefstyle, array('yes', 'no', 'picstyle')) ? $forumdefstyle : '';
 
 // bluelovers
 
