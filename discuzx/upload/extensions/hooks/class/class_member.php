@@ -61,6 +61,10 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	if ($_setarr_member) {
 		DB::update('common_member', $_setarr_member, array('uid' => $_uid));
 
+		foreach ($_setarr_member as $_k => $_v) {
+			$_space[$_k] = $_v;
+		}
+
 		$_user_updated = true;
 	}
 
