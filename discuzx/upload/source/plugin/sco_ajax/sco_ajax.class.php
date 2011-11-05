@@ -430,6 +430,10 @@ class plugin_sco_ajax_forum extends plugin_sco_ajax {
 				}
 			}
 
+			if (empty($_G['thread']['coverpath'])) {
+				$_G['thread']['coverpath'] = avatar($_G['thread']['authorid'], 'big', true);
+			}
+
 			if ($_G['thread']['coverpath']) {
 				dheader('location: '.$_G['thread']['coverpath']);
 			}
