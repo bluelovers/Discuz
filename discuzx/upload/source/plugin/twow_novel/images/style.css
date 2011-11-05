@@ -70,20 +70,159 @@ a:active {
 .cptool li img { float:left; margin-top:3px;}
 .cptool .noimg { margin-top:2px; }
 .cptool .bgbar{ height:10px; width:10px; display:block; border:1px solid #7A7A7A; cursor:hand; margin-top:4px; float:left; margin-right:4px; }
+.h2_subject {
+	height: 45px;
+	width: 100%;
+	text-align: center;
+	font-size: 24px;
+	line-height: 45px;
+	display: block;
+	margin: 0px;
+	padding: 0px;
+}
+
 .t_msgfont{
 	font-size:14px;
 	color:#000;
 	line-height:27px;
+	padding-top: 5px;
+	padding-right: 45px;
+	padding-bottom: 5px;
+	padding-left: 180px;
 }
+.t_msgfont a {
+	color: #0066CC;
+	text-decoration: underline;
+}
+.twow_ucpbar {
+	text-align: right;
+	margin-left: 30px;
+	float: left;
+	background-image: url(a_2.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 20px;
+}
+.twow_ucpbar a {
+	display: block;
+	padding: 0px;
+	height: 21px;
+	width: 69px;
+	line-height: 21px;
+	text-align: center;
+	float: left;
+	margin-top: 3px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 2px;
+}
+.twow_ucpbar a:hover {
+	background-image: url(031.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.novelforumnav {
+	padding: 0px;
+	float: left;
+	height: 24px;
+	width: 120px;
+	overflow: visible;
+	position: relative;
+	margin-top: 2px;
+	margin-right: 10px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+.novelforumnav .cunovelforum {
+	display:block;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+	height: 24px;
+	width: 120px;
+	font-size: 12px;
+	line-height: 24px;
+	text-indent: 8px;
+	white-space: nowrap;
+	background-image: url(fourmnav.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	letter-spacing: 3px;
+}
+.novelforumnav .drop {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	position: absolute;
+	width: 120px;
+	left: 0px;
+	top: 26px;
+	overflow: auto;
+	z-index: 1000;
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+}
+.novelforumnav .drop a {
+	display: block;
+	padding-left: 6px;
+	margin-left: 8px;
+	line-height: 21px;
+	height: 21px;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #CCCCCC;
+}
+.novelforumnav .drop a:hover {
+	background-image: url(a_1.gif);
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.novelforumnav .drop a.active {
+	background-image: url(a_1.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
 /*小说列表*/
-.onenovel { 
-	width: 228px; 
-	height: 134px; 
-	overflow: hidden; 
-	line-height: 18px; 
-	float: left; 
-	margin: 0 0px 28px 0; 
-	display: inline;
+.novelforumlink {
+	background-image: url(bg_repeat_x_001.gif);
+	background-repeat: repeat-x;
+	background-position: center 0px;
+	height: 31px;
+	width: 100%;
+	line-height: 29px;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-right-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+}
+.novelforumlink a {
+	display: block;
+	padding-left: 6px;
+	float: left;
+	margin-left: 8px;
+}
+.novelforumlink a:hover {
+	background-image: url(a_1.gif);
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.novelforumlink a.active {
+	background-image: url(a_1.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+.onenovel {
+	width: 228px;
+	height: 134px;
+	overflow: hidden;
+	line-height: 18px;
+	float: left;
+	margin: 0 0px 28px 0;
 	margin-left:10px;
 }
 .onenovel span { 
@@ -103,16 +242,17 @@ a:active {
 .novelpic:hover{
 	border:1px solid #FF9900;
 }
-.novelsubject { 
-	font-size: 14px; 
-	font-weight: bold; 
-	padding-top: 4px; 
-
+.novelsubject {
+	font-size: 14px;
+	font-weight: bold;
+	padding-top: 4px;
 	white-space: nowrap;
 	height:24px;
 	overflow:hidden;
+
 	-o-text-overflow: ellipsis;
 	text-overflow:    ellipsis;
+	width: 124px;
 }
 .onenovel a:hover {
 	color:#FF9900;
@@ -166,7 +306,7 @@ a:active {
 	text-align:right;
 }
 
-/*章节*/
+/*章节页开始*/
 .d_tit { 
 	height:60px;
 }
@@ -176,27 +316,119 @@ a:active {
 	text-align:center;
 }
 .noveldes { 
-	width:710px; 
+	width:700px; 
 	padding:0 20px; 
 	float:right;
+	font-size:14px;
+}
+.c_img {
+	width:140px;
+	height:165px;
+	background-image: url(coverbg.jpg);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+.c_img img {
+	width:120px;
+	height:150px;
+	display:block;
+	padding:2px;
+	border:1px #CCC solid;
+	background-color: #FFFFFF;
+}
+.c_img img:hover { 
+	border-color:#666;
+}
+.novelleft {
+	float: left;
+	width: 160px;
+	margin-left: 50px;
+	text-align: center;
+	overflow: hidden;
+}
+.novelleft .share {
+	height: 30px;
+	width: 100%;
+	margin-top: 5px;
+	overflow: hidden;
+	margin-right: auto;
+	margin-left: 5px;
+}
+.novelleft .share a {
+	display: block;
+	float: left;
+	height: 24px;
+	width: 65px;
+	margin-left: 5px;
+	text-align: center;
+	line-height: 24px;
+	border: 1px solid #CCCCCC;
+	background-image: url(../../../../static/image/common/mu_bg.png);
+	background-repeat: repeat-x;
+	background-position: center center;
 }
 
-.c_img,.c_img img { width:120px; height:150px;}
-.c_img {display:block; padding:2px; border:1px #CCC solid;}
-.c_img:hover { border-color:#666;}
+.novelleft .share a:hover {
+	background-color: #F0F0F0;	
+}
 
-.c_chapter { padding:10px; width:950px; margin-top:10px;}
-.c_chapter a { 
-	display:block; 
+.novelleft .author {
+	font-size: 14px;
+	line-height: 28px;
+	height: 28px;
+	width: 100%;
+	margin-top: 5px;
+	text-align: center;
+	font-weight: bold;
+}
+.novelleft ul.authoract {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+.novelleft ul.authoract li{
+	list-style-type: none;
+	display: block;
+	margin-top: 3px;
+	padding: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+.novelleft ul.authoract li a {
+	background-image: url(button_1.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	display: block;
+	height: 26px;
+	width: 124px;
+	font-size: 14px;
+	line-height: 26px;
+	letter-spacing: 8px;
+	text-indent: 30px;
+}
+.novelleft ul.authoract li a:hover {
+	background-image: url(button_1_h.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	color: #FF0000;
+}
+.c_chapter { 
+	padding:10px; 
+	width:950px; 
+}
+.c_chapter a {
+	display:block;
 	height:21px;
-	line-height:21px; 
-	padding:0 10px; 
-	border:1px #666666 solid; 
-	background:#F9F9F9;
-	color:#333333; 
-	float:left;
-	margin:4px;
+	line-height:21px;
+	color:#333333;
+	margin:0px;
 	white-space:nowrap;
+	width: 100%;
+	padding: 0;
+	text-indent: 10px;
+	overflow: hidden;
+	font-size: 12px;
 }
 .c_chapter a:hover { 
 	text-decoration:none;
@@ -204,15 +436,119 @@ a:active {
 	color:#FF0000; 
 	border-color:#999;
 }
-.c_chapter a:visited { 
-	text-decoration:none;
-	background-color:#F9F9F9; 
-	color:#0000FF; 
-	border-color:#999;
+span.volumeitem {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333333;
+	display: block;
+	margin: 6px 0;
+}
+span.chapteritem {
+	display: block;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #EEEEEE;
+	width: 100%;
+}
+.feedtitle {
+	height: 28px;
+	width: 100%;
+	background-repeat: repeat-x;
+	background-position: center bottom;
+	padding: 0px;
+	margin-top: 10px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #B1C2DC;
+}
+.feedtitle .title {
+	background-image: url(feedtitle_1.jpg);
+	background-repeat: no-repeat;
+	background-position: center top;
+	display: block;
+	height: 27px;
+	float: left;
+	margin-left: 15px;
+	width: 121px;
+	line-height: 27px;
+	font-weight: bold;
+	text-align: center;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.feedtitle .title:hover {
+	background-image: url(feedtitle_2.jpg);
+}
+.feedtitle .title2 {
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	display: block;
+	height: 28px;
+	float: left;
+	width: 80px;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+.onefeed {
+	margin: 0px;
+	padding: 5px;
+	height: auto;
+	width: 98%;
+	line-height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #CCCCCC;
+}
+.onefeed span {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	height: 28px;
+	line-height: 28px;
+}
+.onefeed .feedmember {
+	background-image: url(../../../../static/image/common/online_member.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 25px;
+}
+.onefeed .feed {
+	background-image: url(../../../../static/image/feed/comment.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	margin: 0px;
+	float: right;
+	padding-left: 20px;
+}
+.editertools {
+	line-height: 28px;
+	margin: 0px;
+	height: 28px;
+	width: 100%;
+	background-image: url(../../../../static/image/common/title.png);
+	background-repeat: repeat-x;
+	background-position: center center;
+	padding: 0px;
+	border: 1px solid #CCCCCC;
+}
+.editertools a {
+	background-image: url(a_1.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+	display: block;
+	padding-left: 12px;
+	float: left;
+	margin-left: 10px;
 }
 
-
-
+/*章节页结束*/
 .c_about ul { padding-right:170px;width:440px; height:88px;}
 .c_about li { float:left; line-height:22px; height:22px; width:220px;}
 .c_about ul a { color:#290;}
@@ -225,4 +561,9 @@ a:active {
 	color: #999999;
 	float: right;
 	font-style: italic;
+	clear: both;
+	line-height: 28px;
+	height: 28px;
+	width: 100%;
+	text-align: right;
 }

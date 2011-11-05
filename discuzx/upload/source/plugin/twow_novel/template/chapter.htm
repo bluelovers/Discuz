@@ -1,35 +1,70 @@
-{subtemplate common/header}
-<!-- position start -->
+<!--{subtemplate common/header}-->
+<link rel="stylesheet" type="text/css" href="../images/style.css" />
 <link rel="stylesheet" type="text/css" href="./source/plugin/twow_novel/images/style.css" />
+<script language="javascript" type="text/javascript">
+//<!--
+function showhidefeed()
+{
+	if ($('feedcon').style.display=='none') {
+		$('feedcon').style.display='block';
+		ajaxget('plugin.php?id=twow_novel:novel&do=ajax_feedbacklist&fid={$fid}&tid={$tid}', 'feedcon');	
+	} else {
+		$('feedcon').style.display='none';
+	}
+	return false;	
+}
+//-->
+</script>
+<!-- position start -->
 <div id="pt" class="bm cl">
-  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">{lang twow_novel:novel_channel}</a></div>
+  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">$cfg['channelname']</a>
+    <!--{if $novelchan['cuformname']}-->
+    <em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel&amp;fid={$fid}">$novelchan['cuformname']</a>
+    <!--{/if}-->
+  </div>
+  <!-- user cp bar start -->
+  <div class="twow_ucpbar"><a href="./forum.php?mod=post&action=newthread&fid={$fid}">发布小说</a> <a href="./home.php?mod=space&do=favorite&type=thread&view=me" target="_blank">我的收藏</a> <a href="./forum.php?mod=viewthread&tid={$tid}">论坛模式</a></div>
+  <!-- user cp bar end -->
 </div>
 <!-- position end -->
 <div id="ct" class="wp cl n1">
   <div class="mn1">
-    <dl class="list">
-      <hr class="da"/>
-      <dd class="list_list d_tit">
-        <h2>{$novel[subject]}</h2>
-      </dd>
-      <hr class="da"/>
-      <dd class="c_detail no_border" style="margin-top:10px">
-        <div class="noveldes">
-          <div><strong>{lang twow_novel:novelintro}：</strong><br />
-            {$novel['message']} </div>
-        </div>
-        <a class="c_img" style="margin-left:60px;"><img src="{$novel['novelpic']}" alt="{$novel[subject]}"  onerror="this.src='source/plugin/twow_novel/images/nophoto.jpg'"></a> <br />
-        <hr class="da"/>
-        <div class="c_chapter">
-          <!--{if $chapterlist}-->
-          <!--{loop $chapterlist $k $chapter}-->
-          <a href="plugin.php?id=twow_novel:novel&do=view&tid={$tid}&page={$chapter[page]}">$chapter[subject]</a>
-          <!--{/loop}-->
+    <h2 class="h2_subject">{$novel[subject]}</h2>
+    <hr class="da" style="clear:both;"/>
+    <div class="c_detail no_border" style="margin-top:10px">
+      <div class="noveldes"> <strong>{lang twow_novel:novelintro}：</strong><br />
+        {$novel['message']}<br />
+        （共 {$chapters['chapternum']} 章 {$chapters['textlen']} 万字） </div>
+      <div class="novelleft">
+        <div class="c_img"><img src="{$novel['novelpic']}" alt="{$novel[subject]}"  onerror="javascript:this.src='source/plugin/twow_novel/images/nophoto.jpg'"></div>
+        <div class="share">
+          <!-- share -->
+          <a href="home.php?mod=spacecp&amp;ac=share&amp;type=thread&amp;id={$tid}" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' 人分享'"><img src="static/image/common/oshr.png" alt="分享" />分享<span id="sharenumber">{$novel['sharetimes']}</span></a>
+          <!-- favorite -->
+          <a href="home.php?mod=spacecp&amp;ac=favorite&amp;type=thread&amp;id={$tid}" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' 人收藏'"><img src="static/image/common/fav.gif" alt="收藏" />收藏<span id="favoritenumber">{$novel['favtimes']}</span></a> </div>
+        <div class="author">发布：<a href="home.php?mod=space&amp;uid={$novel['authorid']}">{$novel['author']}</a></div>
+        <ul class="authoract">
+          <!--{if $_G['uid']==$novel['authorid']}-->
+		  <li><a href="./forum.php?mod=post&amp;action=edit&amp;fid={$fid}&amp;tid={$tid}&amp;pid={$novel['pid']}">编缉简介</a></li>
+          <li><a href="./forum.php?mod=post&amp;action=reply&amp;fid={$fid}&amp;tid={$tid}">发新章节</a></li>
           <!--{/if}-->
-        </div>
-      </dd>
-    </dl>
+          <!--{if $_G['uid']!=$novel['authorid']}-->
+          <li class="callon"><a href="home.php?mod=space&amp;uid={$novel['authorid']}" target="_blank" title="访问空间" class="xi2">访问空间</a></li>
+          <li class="buddy"><a href="home.php?mod=spacecp&amp;ac=friend&amp;op=add&amp;uid={$novel['authorid']}&amp;handlekey=addfriendhk_1" id="a_friend_li_4" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="加为好友" class="xi2">加为好友</a></li>
+          <li class="poke2"><a href="home.php?mod=spacecp&amp;ac=poke&amp;op=send&amp;uid={$novel['authorid']}" id="a_poke_li_4" onclick="showWindow(this.id, this.href, 'get', 0);" title="打个招呼" class="xi2">打个招呼</a></li>
+          <li class="pm2"><a href="home.php?mod=spacecp&amp;ac=pm&amp;op=showmsg&amp;handlekey=showmsg_1&amp;touid={$novel['authorid']}&amp;pmid=0&amp;daterange=2&amp;pid={$novel['pid']}&amp;tid={$tid}" onclick="showWindow('sendpm', this.href);" title="发短消息" class="xi2">发短消息</a></li>
+          <!--{/if}-->
+        </ul>
+      </div>
+    </div>
+    <hr class="da" style="clear:both;"/>
+    <div class="c_chapter"> $html_chaptertable </div>
+    <hr class="da" style="clear:both;"/>
+	<!-- feedback start -->
+    <div class="feedtitle"><a href="javascript:;" class="title" onclick="javascript:showhidefeed();return false;">网友回复</a><span class="title2"><a href="./forum.php?mod=post&amp;action=reply&amp;fid={$fid}&amp;tid={$tid}"><img src="static/image/common/fastreply.gif" />参与回复</a></span><a href="./forum.php?mod=viewthread&amp;tid={$tid}&amp;page={$novel['threadpagenum']}"><img src="static/image/common/fastreply.gif" />更多回复</a></span></div>
+    <div id="feedcon" style="margin:0;padding:0;display:none;"></div>
+	<!-- feedback end -->
   </div>
-  <div class="support">{lang twow_novel:novel}v1.0 Support by {lang twow_novel:support} QQ:404618868</div>
+  <div class="support">{lang twow_novel:support}</div>
 </div>
-{subtemplate common/footer} 
+<!--{subtemplate common/footer}-->

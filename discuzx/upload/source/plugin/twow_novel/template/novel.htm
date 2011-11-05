@@ -1,50 +1,65 @@
-{subtemplate common/header}
+<!--{subtemplate common/header}-->
+<link rel="stylesheet" type="text/css" href="../images/style.css" />
 <link rel="stylesheet" type="text/css" href="./source/plugin/twow_novel/images/style.css" />
 <!-- position start -->
-<link rel="stylesheet" type="text/css" href="./source/plugin/twow_novel/images/style.css" />
 <div id="pt" class="bm cl">
-  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">{lang twow_novel:novel_channel}</a></div>
+  <div class="z"> <a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel">$cfg['channelname']</a>
+    <!--{if $novelchan['cuformname']}-->
+    <em>&rsaquo;</em><a href="plugin.php?id=twow_novel:novel&amp;fid={$fid}">$novelchan['cuformname']</a>
+    <!--{/if}-->
+  </div>
+  <!-- user cp bar start -->
+  <div class="twow_ucpbar"> <a href="./forum.php?mod=post&action=newthread&fid={$fid}">发布小说</a> <a href="./home.php?mod=space&do=favorite&type=thread&view=me" target="_blank">我的收藏</a>
+    <!--{if $typeid != 0}-->
+    <a href="./forum.php?mod=forumdisplay&fid={$fid}&amp;filter=typeid&amp;typeid={$typeid}">论坛模式</a>
+    <!--{else}-->
+    <a href="./forum.php?mod=forumdisplay&fid={$fid}">论坛模式</a>
+    <!--{/if}-->
+  </div>
+  <!-- user cp bar end -->
 </div>
 <!-- position end -->
-
 <div id="ct" class="wp cl n1">
   <div class="mn1">
     <div class="tl" style="margin:10px;">
-      <p class="ttp cl">
-        <!--{if $noveltypes}-->
-        <!--{if $typeid == 0}-->
-        <strong class="brw otp">{lang twow_novel:all}</strong>
-        <!--{else}-->
-        <a href="plugin.php?id=twow_novel:novel" class="brw">{lang twow_novel:all}</a>
-        <!--{/if}-->
-        <!--{loop $noveltypes $id $name}-->
+      <!-- novel forumn nav start -->
+      <!--{if $cfg['is_novelforumlink']}-->
+      <div class="novelforumnav">
+        <a class="cunovelforum" id="cunovelforum" href="javascript:;" onmouseover="showMenu({'ctrlid':this.id, 'menuid':'novelforumdrop', 'pos':'0'})">{$novelchan['cuformname']}</a>
+        <ul id="novelforumdrop" class="drop" style="display:none;">
+          <!--{loop $novelchan['forumnames'] $forumid $forumname}-->
+          <!--{if $fid==$forumid}-->
+          <li><a href="plugin.php?id={$cfg['TWOW_PLUG_ID']}:novel&amp;fid=$forumid" class="active">$forumname</a></li>
+          <!--{else}-->
+          <li><a href="plugin.php?id={$cfg['TWOW_PLUG_ID']}:novel&amp;fid=$forumid">$forumname</a></li>
+          <!--{/if}-->
+          <!--{/loop}-->
+        </ul>
+      </div>
+      <!--{/if}-->
+      <!-- novel forumn nav send -->
+      <div class="ttp cl" style="position:relative;">
+        <!--{loop $novelchan['types'] $id $typename}-->
         <!--{if $typeid != $id}-->
-        <a href="plugin.php?id=twow_novel:novel&amp;typeid=$id" class="brw">$name</a>
+        <a href="plugin.php?id=twow_novel:novel&amp;fid=$fid&amp;typeid=$id" class="brw">$typename</a>
         <!--{else}-->
-        <strong class="brw otp">$name</strong>
+        <strong class="brw otp">$typename</strong>
         <!--{/if}-->
         <!--{/loop}-->
-        <!--{/if}-->
-      </p>
+      </div>
     </div>
-	
-    <hr class="da"/><br />
+    <hr class="da"/>
+    <br />
     <!--{loop $novel_list $novel}-->
-    <div class="onenovel"> 
-		<a href="plugin.php?id=twow_novel:novel&do=chapter&tid={$novel[tid]}" target='_blank'><img src="$novel['novelpic']" class="novelpic" alt="{$novel['subject']}" onerror="this.src='source/plugin/twow_novel/images/nophoto.jpg'"/></a> 
-		<span class="novelsubject"><a href="plugin.php?id=twow_novel:novel&do=chapter&tid={$novel[tid]}" target="_blank">{$novel['subject']}</a></span>
-		<span>{lang twow_novel:novel_type}：<a href="plugin.php?id=twow_novel:novel&amp;typeid={$novel[typeid]}">{$noveltypes[$novel[typeid]]}</a></span>
-		<span>{lang twow_novel:novel_publish}：「<a href="home.php?mod=space&uid=$novel[authorid]" target="_blank">$novel[author]</a>」</span>
-		<span>{lang twow_novel:novel_views}：{$novel[views]}</span>
-		<span>{lang twow_novel:novel_update}：{$novel[uptime]}</span>
-      	<!--{if $novel[lastchapter]}-->
-      	<span><font color="#FF9900">{lang twow_novel:novel_lastchapter}：</font>$novel[lastchapter]</span>
-      	<!--{/if}-->
+    <div class="onenovel"> <a href="plugin.php?id=twow_novel:novel&do=chapter&tid={$novel[tid]}" target='_blank'><img src="$novel['novelpic']" class="novelpic" alt="{$novel['subject']}" onerror="this.src='source/plugin/twow_novel/images/nophoto.jpg'"/></a> <span class="novelsubject"><a href="plugin.php?id=twow_novel:novel&do=chapter&tid={$novel[tid]}" target="_blank" title="{$novel['subject']}">{$novel['subject']}</a></span> <span>{lang twow_novel:novel_type}：<a href="plugin.php?id=twow_novel:novel&amp;fid={$fid}&amp;typeid={$novel[typeid]}">{$novelchan['types'][$novel[typeid]]}</a></span> <span>{lang twow_novel:novel_publish}：「<a href="home.php?mod=space&uid=$novel[authorid]" target="_blank">$novel[author]</a>」</span> <span>{lang twow_novel:novel_views}：{$novel[views]}</span> <span>{lang twow_novel:novel_update}：{$novel[uptime]}</span>
+      <!--{if $novel[lastchapter]}-->
+      <span><font color="#FF9900">{lang twow_novel:novel_lastchapter}：</font>$novel[lastchapter]</span>
+      <!--{/if}-->
     </div>
     <!--{/loop}-->
-    <hr class="da"/>
+    <hr class="da" style="clear:both;"/>
     <div class="pagesplit">$pagesplit</div>
   </div>
-  <div class="support">{lang twow_novel:novel}v1.0 Support by {lang twow_novel:support} QQ:404618868</div>
+  <div class="support">{lang twow_novel:support}</div>
 </div>
-{subtemplate common/footer} 
+<!--{subtemplate common/footer}-->

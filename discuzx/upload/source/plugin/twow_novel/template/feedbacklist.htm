@@ -1,0 +1,19 @@
+{eval 
+ob_end_clean();
+ob_start();
+@header("Expires: -1");
+@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
+@header("Pragma: no-cache");
+@header("Content-type: text/xml; charset=".CHARSET);
+echo '<?xml version="1.0" encoding="'.CHARSET.'"?>'."\r\n";
+}
+<root>
+  <![CDATA[ <!--{if $chapters['feedback_list']}-->
+    <!--{loop $chapters['feedback_list'] $k $feed}-->
+    <div class="onefeed"><span class="feedmember"><a href="home.php?mod=space&uid={$feed['authorid']}">{$feed['author']}</a></span>  <span class="feed"><a class="fastre" href="forum.php?mod=post&amp;action=reply&amp;fid={$fid}&amp;tid={$tid}&amp;repquote={$feed['pid']}" onclick="showWindow('reply', this.href)">回复</a></span><p style="padding:5px;display:block;clear:both;margin:0;">{$feed['message']}</p></div>
+    <!--{/loop}-->
+	<!--{else}-->
+	<div style="height:30px;line-heigth:30px;text-align:center;margin-top:10px;"><a href="forum.php?mod=post&amp;action=reply&amp;fid={$fid}&amp;tid={$tid}" style="font-size:14px;">点击这里抢先回复!</a></div>
+    <!--{/if}--> ]]>
+</root>
+<!--{eval exit;}-->
