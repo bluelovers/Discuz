@@ -44,6 +44,13 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	}
 
 	// bluelovers
+	if (empty($_space['avatarstatus'])) {
+		@loaducenter();
+
+		if (uc_check_avatar($_space['uid'], 'middle')) {
+
+		}
+	}
 	// bluelovers
 
 	if($_setarr) {
