@@ -54,7 +54,7 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		if (uc_check_avatar($_uid, 'middle')) {
 			$_setarr_member['avatarstatus'] = 1;
 
-			updatecreditbyaction('setavatar');
+			updatecreditbyaction('setavatar', $_uid);
 		}
 	}
 
