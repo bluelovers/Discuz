@@ -48,7 +48,7 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		@loaducenter();
 
 		if (uc_check_avatar($_space['uid'], 'middle')) {
-
+			$_setarr_member['avatarstatus'] = 1;
 		}
 	}
 
