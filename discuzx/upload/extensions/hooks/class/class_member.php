@@ -23,6 +23,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 	include_once libfile('function/profile');
 	$_space = &$_member;
 
+	$_uid = $_space['uid'];
+
 	$_setarr = array();
 
 	if ($_space['birthmonth'] && $_space['birthday']) {
