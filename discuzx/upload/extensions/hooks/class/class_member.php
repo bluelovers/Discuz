@@ -60,6 +60,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 
 	if ($_setarr_member) {
 		DB::update('common_member', $_setarr_member, array('uid' => $_uid));
+
+		$_user_updated = true;
 	}
 
 	if($_setarr) {
@@ -72,6 +74,8 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 
 		include_once libfile('function/feed');
 		feed_add('profile', 'feed_profile_update_'.$operation, array('hash_data'=>'profile'));
+
+		$_user_updated = true;
 	}
 
 	if ($_user_updated) {
