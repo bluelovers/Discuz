@@ -31,7 +31,7 @@ class task_avatar {
 		global $_G;
 
 		// bluelovers
-		if (empty($_G['member']['avatarstatus'])) {
+		if ($_G['member']['uid'] && empty($_G['member']['avatarstatus'])) {
 
 			loaducenter();
 
@@ -39,9 +39,11 @@ class task_avatar {
 
 				DB::update('common_member', array('avatarstatus' => '1'), array('uid' => $_G['member']['uid']));
 
+				/*
 				updatecreditbyaction('setavatar');
 
 				manyoulog('user', $_G['uid'], 'update');
+				*/
 
 				$_G['member']['avatarstatus'] = 1;
 
