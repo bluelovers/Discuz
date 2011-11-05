@@ -68,6 +68,10 @@ function _eClass_logging_ctl__on_login_After_setloginstatus($_EVENT, $_conf) {
 		include_once libfile('function/feed');
 		feed_add('profile', 'feed_profile_update_'.$operation, array('hash_data'=>'profile'));
 	}
+
+	if ($_user_updated) {
+		manyoulog('user', $_space['uid'], 'update');
+	}
 }
 
 ?>
