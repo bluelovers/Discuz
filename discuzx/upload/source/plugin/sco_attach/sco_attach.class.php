@@ -13,6 +13,10 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_attach extends _sco_dx_plugin {
 
+	function __construct() {
+		$this->identifier = $this->_get_identifier(__CLASS__);
+	}
+
 }
 
 ?>
