@@ -111,10 +111,10 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($firstpost['message']), 160));
 
 				!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
-			}
 
-			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
-			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$thread['subject'];
+				$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
+				$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$thread['subject'];
+			}
 
 		}
 
