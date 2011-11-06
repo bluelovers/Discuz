@@ -92,7 +92,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		}
 
 		// bluelovers
-		if ($_post = $postlist[$attach['pid']]) {
+		if ($_post = &$postlist[$attach['pid']]) {
 
 			if (
 				$attach['isimage']
@@ -100,6 +100,8 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 			) {
 				continue;
 			}
+
+			$_post['attachment'] = 0;
 
 		}
 		// bluelovers
