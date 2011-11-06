@@ -108,10 +108,6 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		'striptags'	=> true,
 	);
 
-	// bluelovers
-	$navigation = '';
-	// bluelovers
-
 	$navtitle = lang('core', 'title_board_message');
 
 	// bluelovers
@@ -127,7 +123,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 				'param' => &$param,
 				'navtitle' => &$navtitle,
 
-				'navigation' => &$navigation,
+				'_data_dshowmessage_' => &discuz_core::$_cache_data['dshowmessage'],
 		)));
 	}
 	// bluelovers
@@ -325,6 +321,11 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	}
 	$show_message .= $extra ? '<script type="text/javascript" reload="1">'.$extra.$st.'</script>' : '';
 	$show_message .= $param['extrajs'] ? $param['extrajs'] : '';
+
+	// bluelovers
+	extract((array)discuz_core::$_cache_data['dshowmessage']['globalvars'], EXTR_OVERWRITE);
+	// bluelovers
+
 	include template('common/showmessage');
 
 	dexit();
