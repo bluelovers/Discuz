@@ -100,6 +100,9 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
 
 			if ($post['first']) $firstpost = &$post;
+
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$post['subject'];
+			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$post['subject'];
 		}
 
 		if ($tid && $thread = get_thread_by_tid($tid)) {
