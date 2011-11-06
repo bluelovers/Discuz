@@ -63,6 +63,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$metakeywords =
 				',' . dgmdate($attach['dateline'])
 				. ',' . strtolower(fileext($attach['filename']))
+				. ',' . sizecount($attach['filesize'])
 				. ',' . $metakeywords
 			;
 
