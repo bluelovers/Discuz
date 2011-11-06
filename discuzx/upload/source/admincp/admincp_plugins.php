@@ -254,7 +254,16 @@ if(!$operation) {
 		if (count($_ver) <= 3) {
 			$_dateline = TIMESTAMP;
 
-			$_ver[2] = dgmdate($_dateline, 'YmdHis');
+			if (
+				empty($pluginarray['plugin']['version'])
+				|| preg_match('/^\d{4}\.[0-1][0-9][0-3][0-9]\.\d+$/', $pluginarray['plugin']['version'])
+			) {
+				$_ver[0] = dgmdate($_dateline, 'Y');
+				$_ver[1] = dgmdate($_dateline, 'md');
+				$_ver[2] = dgmdate($_dateline, 'His');
+			} else {
+				$_ver[2] = dgmdate($_dateline, 'YmdHis');
+			}
 		}
 
 		for ($_k = 0; $_k < count($_ver); $_k++) {
