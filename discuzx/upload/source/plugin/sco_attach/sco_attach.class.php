@@ -40,7 +40,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 		global $_G;
 
 		if (!empty($_G['forum_attach_filename'])) {
-			$_conf['_data_dshowmessage_']['navtitle'] =
+			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
 				lang('template', 'e_attach')
 				. ': '
 				. $_G['forum_attach_filename']
@@ -48,7 +48,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				. $_conf['navtitle']
 			;
 
-			$_conf['_data_dshowmessage_']['navigation'] =
+			$_conf['_data_dshowmessage_']['globalvars']['navigation'] =
 				'<em>&raquo;</em> '
 				. '<span>' . lang('template', 'e_attach'). '</span> '
 				. '<em>&raquo;</em> '
