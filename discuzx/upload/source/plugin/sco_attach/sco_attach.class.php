@@ -36,6 +36,27 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 		}
 	}
 
+	function _my_hook_attachment_message($_EVENT, $_conf) {
+		global $_G;
+
+		if (!empty($_G['forum_attach_filename'])) {
+			$_conf['navtitle'] =
+				lang('template', 'e_attach')
+				. ': '
+				. $_G['forum_attach_filename']
+				. ' - '
+				. $_conf['navtitle']
+			;
+
+			$_conf['navigation'] =
+				'<em>&raquo;</em> '
+				. '<span>' . lang('template', 'e_attach'). '</span> '
+				. '<em>&raquo;</em> '
+				. '<span>' . $_G['forum_attach_filename']. '</span> '
+			;
+		}
+	}
+
 }
 
 ?>
