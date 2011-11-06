@@ -68,6 +68,8 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
 
 			!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
+
+			if ($post['first']) $firstpost = &$post;
 		}
 
 		if ($tid && $thread = get_thread_by_tid($tid)) {
