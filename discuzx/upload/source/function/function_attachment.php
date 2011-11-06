@@ -94,6 +94,13 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		// bluelovers
 		if ($_post = $postlist[$attach['pid']]) {
 
+			if (
+				$attach['isimage']
+				&& $post['attachment']
+			) {
+				continue;
+			}
+
 		}
 		// bluelovers
 
