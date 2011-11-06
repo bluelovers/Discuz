@@ -60,7 +60,11 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 		if ($attach) {
 			!empty($attach['description']) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $attach['description'];
 
-			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . dgmdate($attach['dateline']);
+			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .=
+				',' . dgmdate($attach['dateline'])
+				. ',' . strtolower(fileext($attach['filename']))
+			;
+
 
 			$tid = $attach['tid'];
 			$pid = $attach['pid'];
