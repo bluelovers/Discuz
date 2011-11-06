@@ -79,7 +79,8 @@
 
 		<!--{if $post['attachment']}-->
 			<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></em></div>
-		<!--{elseif $post['imagelist'] || $post['attachlist']}-->
+		<!--{/if}-->
+		<!--{if $post['imagelist'] || $post['attachlist']}-->
 			<div class="pattl">
 				<!--{if $post['imagelist'] && $_G['setting']['imagelistthumb'] && $post['imagelistcount'] >= $_G['setting']['imagelistthumb']}-->
 					<!--{if !isset($imagelistkey)}-->
