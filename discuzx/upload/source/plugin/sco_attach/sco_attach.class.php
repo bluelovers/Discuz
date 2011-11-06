@@ -61,7 +61,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			!empty($attach['description']) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $attach['description'];
 
 			$metakeywords =
-				',' . dgmdate($attach['dateline'], 'u')
+				',' . strip_tags(dgmdate($attach['dateline'], 'u'))
 				. ',' . strtolower(fileext($attach['filename']))
 				. ',' . sizecount($attach['filesize'])
 				. ',' . $metakeywords
@@ -154,7 +154,13 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			'metadescription',
 			'metakeywords',
 		) as $_k) {
-			$_conf['_data_dshowmessage_']['globalvars'][$_k] = strreplace_strip_split(array(), array(), $_conf['_data_dshowmessage_']['globalvars'][$_k]);
+			$_conf['_data_dshowmessage_']['globalvars'][$_k] = strreplace_strip_split(array(
+				'&amp;nbsp;',
+				'&nbsp;',
+			), array(
+				' ',
+				' ',
+			), $_conf['_data_dshowmessage_']['globalvars'][$_k]);
 		}
 	}
 
