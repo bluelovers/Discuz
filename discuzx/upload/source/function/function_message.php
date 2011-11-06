@@ -108,6 +108,10 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		'striptags'	=> true,
 	);
 
+	// bluelovers
+	$navigation = '';
+	// bluelovers
+
 	$navtitle = lang('core', 'title_board_message');
 
 	// bluelovers
@@ -122,6 +126,8 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 				'custom' => &$custom,
 				'param' => &$param,
 				'navtitle' => &$navtitle,
+
+				'navigation' => &$navigation,
 		)));
 	}
 	// bluelovers
