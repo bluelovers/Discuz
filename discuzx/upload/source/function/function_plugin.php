@@ -148,6 +148,8 @@ function pluginupgrade($pluginarray, $installtype) {
 		'modules' => $pluginarray[plugin]['modules'],
 	);
 
+	$_data['date_update'] = TIMESTAMP;
+
 	DB::update('common_plugin', $_data, "pluginid='$plugin[pluginid]'");
 	// bluelovers
 
