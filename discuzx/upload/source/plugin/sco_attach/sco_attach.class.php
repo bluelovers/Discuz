@@ -64,6 +64,34 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$pid = $attach['pid'];
 		}
 
+		if (!empty($_G['forum_attach_filename'])) {
+			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
+				strreplace_strip_split(array(), array(),
+				lang('template', 'e_attach')
+				. ': '
+				. $_G['forum_attach_filename']
+				. ' - '
+				. $_conf['navtitle']
+				)
+			;
+
+			$_conf['_data_dshowmessage_']['globalvars']['navigation'] =
+				'<em>&raquo;</em> '
+				. '<span>' . lang('template', 'e_attach'). '</span> '
+				. '<em>&raquo;</em> '
+				. '<span>' . $_G['forum_attach_filename']. '</span> '
+			;
+
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .=
+				','.lang('template', 'e_attach')
+				.','.$_G['forum_attach_filename']
+			;
+			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .=
+				','.$_G['forum_attach_filename']
+				.','.lang('template', 'e_attach')
+			;
+		}
+
 		include_once libfile('function/post');
 
 		if ($pid && $post = get_post_by_pid($pid)) {
@@ -87,37 +115,6 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 
 			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
 
-		}
-
-		if (!empty($_G['forum_attach_filename'])) {
-			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
-				strreplace_strip_split(array(), array(),
-				lang('template', 'e_attach')
-				. ': '
-				. $_G['forum_attach_filename']
-				. ' - '
-				. $_conf['navtitle']
-				)
-			;
-
-			$_conf['_data_dshowmessage_']['globalvars']['navigation'] =
-				'<em>&raquo;</em> '
-				. '<span>' . lang('template', 'e_attach'). '</span> '
-				. '<em>&raquo;</em> '
-				. '<span>' . $_G['forum_attach_filename']. '</span> '
-
-				. '<em>&raquo;</em> '
-				. '<span>' . $thread['subject']. '</span> '
-			;
-
-			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .=
-				','.lang('template', 'e_attach')
-				.','.$_G['forum_attach_filename']
-			;
-			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .=
-				','.$_G['forum_attach_filename']
-				.','.lang('template', 'e_attach')
-			;
 		}
 
 		$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$metadescription;
