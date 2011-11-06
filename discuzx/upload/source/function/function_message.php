@@ -44,6 +44,10 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 		'striptags'	=> true,
 	);
 
+	// bluelovers
+	$navigation = '';
+	// bluelovers
+
 	$navtitle = lang('core', 'title_board_message');
 
 	// bluelovers
