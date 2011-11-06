@@ -1340,6 +1340,14 @@ if(!$operation) {
 
 		DB::query("UPDATE ".DB::table('common_pluginvar')." SET title='$titlenew', description='$descriptionnew', type='$_G[gp_typenew]', variable='$variablenew', extra='$extranew' WHERE pluginid='$pluginid' AND pluginvarid='$pluginvarid'");
 
+		// bluelovers
+		$_data = array(
+			'date_update' => TIMESTAMP,
+		);
+
+		DB::update('common_plugin', $_data, "pluginid='$pluginid'");
+		// bluelovers
+
 		updatecache(array('plugin', 'setting', 'styles'));
 		cpmsg('plugins_edit_vars_succeed', "action=plugins&operation=edit&pluginid=$pluginid&anchor=vars", 'succeed');
 	}
