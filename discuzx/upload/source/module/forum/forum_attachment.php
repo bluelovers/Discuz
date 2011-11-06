@@ -245,6 +245,16 @@ if(!$requestmode) {
 		$_G['gp_redirectmsg'] = 0;
 	}
 
+	//Event: Script_forum_attachment:Before_redirectmsg
+	Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . ':Before_redirectmsg')
+		->run(array(array(
+			'attach'			=> &$attach,
+
+			'isimage'			=> $isimage,
+
+			'ismoderator'		=> $ismoderator,
+	)));
+
 	if ($_G['gp_redirectmsg']) {
 		showmessage('attachment_credit',
 			"forum.php?mod=attachment&aid={$_G[forum_attach_aidencode]}&formhash=".FORMHASH
