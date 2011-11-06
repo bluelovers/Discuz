@@ -1,0 +1,10 @@
+
+/** forum::viewthread,group::viewthread,forum::trade,portal::view **/
+/* 帖子附件 */
+
+.tattl .tip, .pattl .tip {
+	min-width: 180px;
+}
+
+/** end **/
+
