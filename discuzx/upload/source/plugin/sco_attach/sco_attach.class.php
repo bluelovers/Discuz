@@ -85,6 +85,8 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
 			}
 
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
+
 		}
 
 		if (!empty($_G['forum_attach_filename'])) {
