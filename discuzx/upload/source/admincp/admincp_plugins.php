@@ -181,7 +181,19 @@ if(!$operation) {
 		}
 	}
 	$available = $operation == 'enable' ? 1 : 0;
+	/*
 	DB::query("UPDATE ".DB::table('common_plugin')." SET available='$available' WHERE pluginid='$_G[gp_pluginid]'");
+	*/
+	// bluelovers
+	$_data = array(
+		'available' => $available,
+	);
+
+	$_data['date_available'] = TIMESTAMP;
+
+	DB::update('common_plugin', $_data, "pluginid='$_G[gp_pluginid]'");
+	// bluelovers
+
 	updatecache(array('plugin', 'setting', 'styles'));
 	updatemenu('plugin');
 	if($operation == 'enable') {
@@ -1311,6 +1323,14 @@ if(!$operation) {
 
 		}
 
+		// bluelovers
+		$_data = array(
+			'date_update' => TIMESTAMP,
+		);
+
+		DB::update('common_plugin', $_data, "pluginid='$pluginid'");
+		// bluelovers
+
 		updatecache(array('plugin', 'setting', 'styles'));
 		updatemenu('plugin');
 		cpmsg('plugins_edit_succeed', "action=plugins&operation=edit&pluginid=$pluginid&anchor=$anchor", 'succeed');
@@ -1428,6 +1448,14 @@ if(!$operation) {
 		}
 
 		DB::query("UPDATE ".DB::table('common_pluginvar')." SET title='$titlenew', description='$descriptionnew', type='$_G[gp_typenew]', variable='$variablenew', extra='$extranew' WHERE pluginid='$pluginid' AND pluginvarid='$pluginvarid'");
+
+		// bluelovers
+		$_data = array(
+			'date_update' => TIMESTAMP,
+		);
+
+		DB::update('common_plugin', $_data, "pluginid='$pluginid'");
+		// bluelovers
 
 		updatecache(array('plugin', 'setting', 'styles'));
 		cpmsg('plugins_edit_vars_succeed', "action=plugins&operation=edit&pluginid=$pluginid&anchor=vars", 'succeed');

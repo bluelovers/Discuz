@@ -43,6 +43,11 @@ function plugininstall($pluginarray, $installtype = '') {
 		$data[$key] = $val;
 	}
 
+	// bluelovers
+	$data['date_install'] = TIMESTAMP;
+	$data['date_update'] = TIMESTAMP;
+	// bluelovers
+
 	$pluginid = DB::insert('common_plugin', $data, 1);
 
 	if(is_array($pluginarray['var'])) {
@@ -134,7 +139,19 @@ function pluginupgrade($pluginarray, $installtype) {
 	}
 	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
 
+	/*
 	DB::query("UPDATE ".DB::table('common_plugin')." SET version='{$pluginarray[plugin][version]}', modules='{$pluginarray[plugin][modules]}' WHERE pluginid='$plugin[pluginid]'");
+	*/
+	// bluelovers
+	$_data = array(
+		'version' => $pluginarray['plugin']['version'],
+		'modules' => $pluginarray[plugin]['modules'],
+	);
+
+	$_data['date_update'] = TIMESTAMP;
+
+	DB::update('common_plugin', $_data, "pluginid='$plugin[pluginid]'");
+	// bluelovers
 
 	updatecache(array('plugin', 'setting', 'styles'));
 	return true;
