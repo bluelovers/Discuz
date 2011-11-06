@@ -247,6 +247,12 @@ if(!$operation) {
 		$pluginarray['checkfile'] = 'check.php';
 	}
 
+	// bluelovers
+	if ($_G['gp_autoveradd'] == true) {
+
+	}
+	// bluelovers
+
 	exportdata('Discuz! Plugin', $plugin['identifier'], $pluginarray);
 
 } elseif($operation == 'import') {
