@@ -19,4 +19,10 @@ class plugin_sco_attach extends _sco_dx_plugin {
 
 }
 
+class plugin_sco_attach_forum extends plugin_sco_attach {
+
+
+
+}
+
 ?>
