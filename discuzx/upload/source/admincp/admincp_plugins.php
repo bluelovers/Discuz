@@ -804,6 +804,15 @@ if(!$operation) {
 						DB::query("UPDATE ".DB::table('common_pluginvar')." SET value='$value' WHERE pluginid='$pluginid' AND variable='$variable'");
 					}
 				}
+
+				// bluelovers
+				$_data = array(
+				);
+
+				$_data['date_update'] = TIMESTAMP;
+
+				DB::update('common_plugin', $_data, "pluginid='$pluginid'");
+				// bluelovers
 			}
 
 			updatecache(array('plugin', 'setting', 'styles'));
