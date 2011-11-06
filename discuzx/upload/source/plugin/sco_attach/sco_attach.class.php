@@ -71,6 +71,15 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				. '<em>&raquo;</em> '
 				. '<span>' . $_G['forum_attach_filename']. '</span> '
 			;
+
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .=
+				','.lang('template', 'e_attach')
+				.','.$_G['forum_attach_filename']
+			;
+			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .=
+				','.$_G['forum_attach_filename']
+				.','.lang('template', 'e_attach')
+			;
 		}
 	}
 
