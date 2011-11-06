@@ -44,7 +44,7 @@ function plugininstall($pluginarray, $installtype = '') {
 	}
 
 	// bluelovers
-
+	$data['date_install'] = TIMESTAMP;
 	// bluelovers
 
 	$pluginid = DB::insert('common_plugin', $data, 1);
