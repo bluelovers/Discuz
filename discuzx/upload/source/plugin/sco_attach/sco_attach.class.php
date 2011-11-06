@@ -21,7 +21,20 @@ class plugin_sco_attach extends _sco_dx_plugin {
 
 class plugin_sco_attach_forum extends plugin_sco_attach {
 
+	function attachment_message() {
+		$_v = $this->_parse_method(__METHOD__, 1);
 
+		if (
+			CURSCRIPT == $_v[1]
+			&& CURMODULE == $_v[2]
+		) {
+			$this->_hook(
+				'Func_dshowmessage:Before_custom', array(
+					$this,
+					'_my_hook_attachment_message'
+			));
+		}
+	}
 
 }
 
