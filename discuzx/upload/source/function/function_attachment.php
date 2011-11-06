@@ -90,6 +90,22 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		if($attach['isimage'] && !$_G['setting']['attachimgpost']) {
 			$attach['isimage'] = 0;
 		}
+
+		// bluelovers
+		if ($_post = &$postlist[$attach['pid']]) {
+
+			if (
+				$attach['isimage']
+				&& $_post['attachment']
+			) {
+				continue;
+			} elseif ($_post['attachment']) {
+				$_post['attachment'] = -1;
+			}
+
+		}
+		// bluelovers
+
 		$attach['attachimg'] = $attach['isimage'] && (!$attach['readperm'] || $_G['group']['readaccess'] >= $attach['readperm']) ? 1 : 0;
 		if($attach['attachimg']) {
 			$GLOBALS['aimgs'][$attach['pid']][] = $attach['aid'];
