@@ -224,7 +224,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	$show_message .= $param['extrajs'] ? $param['extrajs'] : '';
 
 	// bluelovers
-	extract((array)discuz_core::$_cache_data['dshowmessage']['globalvars'], EXTR_SKIP);
+	extract((array)discuz_core::$_cache_data['dshowmessage']['globalvars'], EXTR_OVERWRITE);
 	// bluelovers
 
 	include template('common/showmessage');
