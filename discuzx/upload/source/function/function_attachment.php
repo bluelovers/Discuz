@@ -100,8 +100,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 			) {
 				continue;
 			} elseif ($_post['attachment']) {
-
-			$_post['attachment'] = -1;
+				$_post['attachment'] = -1;
 			}
 
 		}
