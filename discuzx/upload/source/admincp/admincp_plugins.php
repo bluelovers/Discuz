@@ -257,11 +257,15 @@ if(!$operation) {
 			$_ver[2] = dgmdate($_dateline, 'YmdHis');
 		}
 
-		foreach ($_ver as $_k => $_v) {
+		for ($_k = 0; $_k < count($_ver); $_k++) {
+			$_v = $_ver[$_k];
+
 			if (!$_v) {
 				$_ver[$_k] = 0;
 			}
 		}
+
+		ksort($_ver, SORT_NUMERIC);
 
 		$pluginarray['plugin']['version'] = implode('.', $_ver);
 	}
