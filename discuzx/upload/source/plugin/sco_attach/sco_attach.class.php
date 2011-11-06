@@ -95,26 +95,46 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 		if ($pid && $post = get_post_by_pid($pid)) {
 			$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
 
-			!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
 
 			if ($post['first']) $firstpost = &$post;
 
 			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$post['subject'];
 			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$post['subject'];
+
+			$tagarray_all = explode("\t", $post['tags']);
+			if($tagarray_all) {
+				foreach($tagarray_all as $var) {
+					if($var) {
+						$tag = explode(',', $var);
+						$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$tag[1];
+					}
+				}
+			}
 		}
 
 		if ($tid && $thread = get_thread_by_tid($tid)) {
 
 			if (!$firstpost) {
 				$posttable = getposttablebytid($tid);
-				$firstpost = DB::result_first("SELECT * FROM ".DB::table($posttable)." WHERE tid='$tid' AND first = '1' LIMIT 1");
+				$firstpost = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid='$tid' AND first = '1' LIMIT 1");
 
 				$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($firstpost['message']), 160));
 
-				!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
+				$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
 
 				$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
 				$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$thread['subject'];
+
+				$tagarray_all = explode("\t", $firstpost['tags']);
+				if($tagarray_all) {
+					foreach($tagarray_all as $var) {
+						if($var) {
+							$tag = explode(',', $var);
+							$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$tag[1];
+						}
+					}
+				}
 			}
 
 		}
