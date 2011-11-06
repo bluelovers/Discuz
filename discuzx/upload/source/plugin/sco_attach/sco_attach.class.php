@@ -66,13 +66,11 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 
 		if (!empty($_G['forum_attach_filename'])) {
 			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
-				strreplace_strip_split(array(), array(),
 				lang('template', 'e_attach')
 				. ': '
 				. $_G['forum_attach_filename']
 				. ' - '
 				. $_conf['navtitle']
-				)
 			;
 
 			$_conf['_data_dshowmessage_']['globalvars']['navigation'] =
