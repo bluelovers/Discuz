@@ -96,7 +96,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 
 			if (
 				$attach['isimage']
-				&& $post['attachment']
+				&& $_post['attachment']
 			) {
 				continue;
 			}
