@@ -28,6 +28,10 @@ $_filename_enc = rawurlencode($attach[filename]);
 						<p>{lang downloads}: $attach[downloads]</p>
 						<!--{if !$attach['attachimg'] && $_G['getattachcredits']}-->{lang attachcredits}: $_G[getattachcredits]<br /><!--{/if}-->
 					</div>
+					<div class="tip_c">
+						<p class="xi1">$attach[filename]</p>
+						<!--{if $attach['description']}--><p class="xg2">{$attach[description]}</p><!--{/if}-->
+					</div>
 					<div class="tip_horn"></div>
 				</div>
 			</p>
