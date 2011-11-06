@@ -6,6 +6,8 @@ $attach['refcheck'] = (!$attach['remote'] && $_G['setting']['attachrefcheck']) |
 $aidencode = packaids($attach);
 $widthcode = attachwidth($attach['width']);
 $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archiveid=".$_G[forum_thread][archiveid] : '';
+
+$_filename_enc = rawurlencode($attach[filename]);
 }-->
 <!--{block return}-->
 <ignore_js_op>
