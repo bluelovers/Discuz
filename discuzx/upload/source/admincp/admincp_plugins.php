@@ -259,6 +259,39 @@ if(!$operation) {
 		$pluginarray['checkfile'] = 'check.php';
 	}
 
+	// bluelovers
+	if ($_G['gp_autoveradd'] == true) {
+		$_ver = explode('.', $pluginarray['plugin']['version']);
+
+		if (count($_ver) <= 3) {
+			$_dateline = TIMESTAMP;
+
+			if (
+				empty($pluginarray['plugin']['version'])
+				|| preg_match('/^\d{4}\.[0-1][0-9][0-3][0-9](?:\.\d+)?$/', $pluginarray['plugin']['version'])
+			) {
+				$_ver[0] = dgmdate($_dateline, 'Y');
+				$_ver[1] = dgmdate($_dateline, 'md');
+				$_ver[2] = dgmdate($_dateline, 'His');
+			} else {
+				$_ver[2] = dgmdate($_dateline, 'YmdHis');
+			}
+		}
+
+		for ($_k = 0; $_k < count($_ver); $_k++) {
+			$_v = $_ver[$_k];
+
+			if (!$_v) {
+				$_ver[$_k] = 0;
+			}
+		}
+
+		ksort($_ver, SORT_NUMERIC);
+
+		$pluginarray['plugin']['version'] = implode('.', $_ver);
+	}
+	// bluelovers
+
 	exportdata('Discuz! Plugin', $plugin['identifier'], $pluginarray);
 
 } elseif($operation == 'import') {
