@@ -101,7 +101,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 				continue;
 			}
 
-			$_post['attachment'] = 0;
+			$_post['attachment'] = -1;
 
 		}
 		// bluelovers
