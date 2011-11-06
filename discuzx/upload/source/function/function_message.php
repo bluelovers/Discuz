@@ -226,6 +226,11 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	}
 	$show_message .= $extra ? '<script type="text/javascript" reload="1">'.$extra.$st.'</script>' : '';
 	$show_message .= $param['extrajs'] ? $param['extrajs'] : '';
+
+	// bluelovers
+	extract((array)discuz_core::$_cache_data['dshowmessage']['globalvars'], EXTR_SKIP);
+	// bluelovers
+
 	include template('common/showmessage');
 
 	dexit();
