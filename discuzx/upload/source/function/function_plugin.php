@@ -46,6 +46,8 @@ function plugininstall($pluginarray, $installtype = '') {
 	// bluelovers
 	$data['date_install'] = TIMESTAMP;
 	$data['date_update'] = TIMESTAMP;
+
+	$data = DB::table_field_value('common_plugin', $data);
 	// bluelovers
 
 	$pluginid = DB::insert('common_plugin', $data, 1);
@@ -149,6 +151,8 @@ function pluginupgrade($pluginarray, $installtype) {
 	);
 
 	$_data['date_update'] = TIMESTAMP;
+
+	$_data = DB::table_field_value('common_plugin', $_data);
 
 	DB::update('common_plugin', $_data, "pluginid='$plugin[pluginid]'");
 	// bluelovers
