@@ -114,6 +114,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			}
 
 			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$thread['subject'];
+			$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$thread['subject'];
 
 		}
 
