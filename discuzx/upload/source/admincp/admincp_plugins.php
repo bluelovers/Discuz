@@ -252,7 +252,9 @@ if(!$operation) {
 		$_ver = explode('.', $pluginarray['plugin']['version']);
 
 		if (count($_ver) <= 3) {
-			$_ver[2] = dgmdate(TIMESTAMP, 'YmdHis');
+			$_dateline = TIMESTAMP;
+
+			$_ver[2] = dgmdate($_dateline, 'YmdHis');
 		}
 
 		foreach ($_ver as $_k => $_v) {
