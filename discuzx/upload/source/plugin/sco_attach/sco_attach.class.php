@@ -61,12 +61,11 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			!empty($attach['description']) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $attach['description'];
 
 			$metakeywords =
-				',' . dgmdate($attach['dateline'])
+				',' . dgmdate($attach['dateline'], 'u')
 				. ',' . strtolower(fileext($attach['filename']))
 				. ',' . sizecount($attach['filesize'])
 				. ',' . $metakeywords
 			;
-
 
 			$tid = $attach['tid'];
 			$pid = $attach['pid'];
