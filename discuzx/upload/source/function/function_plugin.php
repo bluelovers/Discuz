@@ -139,7 +139,17 @@ function pluginupgrade($pluginarray, $installtype) {
 	}
 	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
 
+	/*
 	DB::query("UPDATE ".DB::table('common_plugin')." SET version='{$pluginarray[plugin][version]}', modules='{$pluginarray[plugin][modules]}' WHERE pluginid='$plugin[pluginid]'");
+	*/
+	// bluelovers
+	$_data = array(
+		'version' => $pluginarray['plugin']['version'],
+		'modules' => $pluginarray[plugin]['modules'],
+	);
+
+	DB::update('common_plugin', $_data, "pluginid='$plugin[pluginid]'");
+	// bluelovers
 
 	updatecache(array('plugin', 'setting', 'styles'));
 	return true;
