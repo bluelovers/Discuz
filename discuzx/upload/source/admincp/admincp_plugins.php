@@ -250,6 +250,18 @@ if(!$operation) {
 	// bluelovers
 	if ($_G['gp_autoveradd'] == true) {
 		$_ver = explode('.', $pluginarray['plugin']['version']);
+
+		if (count($_ver) <= 3) {
+			$_ver[2] = dgmdate(TIMESTAMP, 'YmdHis');
+		}
+
+		foreach ($_ver as $_k => $_v) {
+			if (!$_v) {
+				$_ver[$_k] = 0;
+			}
+		}
+
+		$pluginarray['plugin']['version'] = implode('.', $_ver);
 	}
 	// bluelovers
 
