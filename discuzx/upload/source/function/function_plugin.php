@@ -43,6 +43,10 @@ function plugininstall($pluginarray, $installtype = '') {
 		$data[$key] = $val;
 	}
 
+	// bluelovers
+
+	// bluelovers
+
 	$pluginid = DB::insert('common_plugin', $data, 1);
 
 	if(is_array($pluginarray['var'])) {
