@@ -64,6 +64,12 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$pid = $attach['pid'];
 		}
 
+		if ($pid && $post = get_post_by_pid($pid)) {
+			$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
+
+			!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
+		}
+
 		if (!empty($_G['forum_attach_filename'])) {
 			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
 				strreplace_strip_split(array(), array(),
