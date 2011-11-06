@@ -39,6 +39,7 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 	function _my_hook_attachment_message($_EVENT, $_conf) {
 		global
 			$_G
+			, $attach
 		;
 
 		// copy from forum_index
