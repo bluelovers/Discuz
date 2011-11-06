@@ -58,8 +58,6 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 				'custom' => &$custom,
 				'param' => &$param,
 				'navtitle' => &$navtitle,
-
-				'navigation' => &$navigation,
 		)));
 	}
 	// bluelovers
