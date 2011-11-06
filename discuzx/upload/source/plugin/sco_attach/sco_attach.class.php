@@ -57,6 +57,10 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$metakeywords = $navtitle;
 		}
 
+		if ($attach) {
+			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $attach['description'];
+		}
+
 		if (!empty($_G['forum_attach_filename'])) {
 			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
 				strreplace_strip_split(array(), array(),
