@@ -121,6 +121,14 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 
 		$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ','.$metadescription;
 		$_conf['_data_dshowmessage_']['globalvars']['metakeywords'] .= ','.$metakeywords;
+
+		foreach (array(
+			'navtitle',
+			'metadescription',
+			'metakeywords',
+		) as $_k) {
+			$_conf['_data_dshowmessage_']['globalvars'][$_k] = strreplace_strip_split(array(), array(), $_conf['_data_dshowmessage_']['globalvars'][$_k]);
+		}
 	}
 
 }
