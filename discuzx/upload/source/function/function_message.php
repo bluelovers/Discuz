@@ -58,6 +58,8 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 				'custom' => &$custom,
 				'param' => &$param,
 				'navtitle' => &$navtitle,
+
+				'_data_dshowmessage_' => &discuz_core::$_cache_data['dshowmessage'],
 		)));
 	}
 	// bluelovers
