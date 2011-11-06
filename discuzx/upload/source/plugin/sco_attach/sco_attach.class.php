@@ -37,7 +37,9 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 	}
 
 	function _my_hook_attachment_message($_EVENT, $_conf) {
-		global $_G;
+		global
+			$_G
+		;
 
 		// copy from forum_index
 		list($navtitle, $metadescription, $metakeywords) = get_seosetting('forum');
