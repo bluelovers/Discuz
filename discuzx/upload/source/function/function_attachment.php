@@ -99,9 +99,10 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 				&& $_post['attachment']
 			) {
 				continue;
-			}
+			} elseif ($_post['attachment']) {
 
 			$_post['attachment'] = -1;
+			}
 
 		}
 		// bluelovers
