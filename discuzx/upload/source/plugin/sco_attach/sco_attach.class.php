@@ -77,6 +77,8 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				. ': '
 				. $_G['forum_attach_filename']
 				. ' - '
+				. sizecount($attach['filesize'])
+				. ' - '
 				. $_conf['navtitle']
 			;
 
