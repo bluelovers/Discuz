@@ -176,6 +176,8 @@ if(!$operation) {
 
 	$_data['date_available'] = TIMESTAMP;
 
+	$_data = DB::table_field_value('common_plugin', $_data);
+
 	DB::update('common_plugin', $_data, "pluginid='$_G[gp_pluginid]'");
 	// bluelovers
 
