@@ -70,6 +70,19 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
 		}
 
+		if ($tid && $thread = get_thread_by_tid($tid)) {
+
+			if (!$firstpost) {
+				$posttable = getposttablebytid($tid);
+				$firstpost = DB::result_first("SELECT * FROM ".DB::table($posttable)." WHERE tid='$tid' AND first = '1' LIMIT 1");
+
+				$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($firstpost['message']), 160));
+
+				!empty($summary) && $_conf['_data_dshowmessage_']['globalvars']['metadescription'] .= ',' . $summary;
+			}
+
+		}
+
 		if (!empty($_G['forum_attach_filename'])) {
 			$_conf['_data_dshowmessage_']['globalvars']['navtitle'] =
 				strreplace_strip_split(array(), array(),
