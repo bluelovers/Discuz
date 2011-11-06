@@ -1214,6 +1214,14 @@ if(!$operation) {
 
 		}
 
+		// bluelovers
+		$_data = array(
+			'date_update' => TIMESTAMP,
+		);
+
+		DB::update('common_plugin', $_data, "pluginid='$pluginid'");
+		// bluelovers
+
 		updatecache(array('plugin', 'setting', 'styles'));
 		updatemenu('plugin');
 		cpmsg('plugins_edit_succeed', "action=plugins&operation=edit&pluginid=$pluginid&anchor=$anchor", 'succeed');
