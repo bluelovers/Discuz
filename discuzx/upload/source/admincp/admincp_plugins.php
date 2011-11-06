@@ -166,7 +166,17 @@ if(!$operation) {
 		}
 	}
 	$available = $operation == 'enable' ? 1 : 0;
+	/*
 	DB::query("UPDATE ".DB::table('common_plugin')." SET available='$available' WHERE pluginid='$_G[gp_pluginid]'");
+	*/
+	// bluelovers
+	$_data = array(
+		'available' => $available,
+	);
+
+	DB::update('common_plugin', $_data, "pluginid='$_G[gp_pluginid]'");
+	// bluelovers
+
 	updatecache(array('plugin', 'setting', 'styles'));
 	updatemenu('plugin');
 	if($operation == 'enable') {
