@@ -64,6 +64,8 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 			$pid = $attach['pid'];
 		}
 
+		include_once libfile('function/post');
+
 		if ($pid && $post = get_post_by_pid($pid)) {
 			$summary = str_replace(array("\r", "\n"), '', messagecutstr(strip_tags($post['message']), 160));
 
@@ -101,6 +103,9 @@ class plugin_sco_attach_forum extends plugin_sco_attach {
 				. '<span>' . lang('template', 'e_attach'). '</span> '
 				. '<em>&raquo;</em> '
 				. '<span>' . $_G['forum_attach_filename']. '</span> '
+
+				. '<em>&raquo;</em> '
+				. '<span>' . $thread['subject']. '</span> '
 			;
 
 			$_conf['_data_dshowmessage_']['globalvars']['metadescription'] .=
