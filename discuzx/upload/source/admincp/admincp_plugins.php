@@ -249,7 +249,7 @@ if(!$operation) {
 
 	// bluelovers
 	if ($_G['gp_autoveradd'] == true) {
-
+		$_ver = explode('.', $pluginarray['plugin']['version']);
 	}
 	// bluelovers
 
