@@ -949,6 +949,10 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 			}
 		} else {
 			$post['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $post['message']);
+
+			// bluelovers
+			$_G['forum_attachpids'] .= ",$post[pid]";
+			// bluelovers
 		}
 	}
 
