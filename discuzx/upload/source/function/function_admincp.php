@@ -379,9 +379,10 @@ jQuery(function(){
 
 		var _li = jQuery(this);
 
+		var input_all = jQuery('input', _li);
 		var input = jQuery('input:first', _li);
 
-		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio']) != -1) {
+		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio']) != -1 && input_all.size() == 1) {
 
 			if (
 				input.attr('name') == 'chkall'
