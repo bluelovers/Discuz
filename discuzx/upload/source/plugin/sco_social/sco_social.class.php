@@ -32,7 +32,7 @@ class plugin_sco_social extends _sco_dx_plugin {
 			$html_attr .= ' '.$_k.'="'.(string)$_v.'"';
 		}
 
-		return '<g:plusone></g:plusone>';
+		return '<g:plusone'.$html_attr.'></g:plusone>';
 	}
 
 }
