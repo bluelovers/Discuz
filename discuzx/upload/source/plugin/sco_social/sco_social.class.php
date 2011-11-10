@@ -54,6 +54,23 @@ class plugin_sco_social extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	function global_cpnav_extra3() {
+		if (CURSCRIPT != 'home') return;
+
+		global $space;
+
+		$ret = '';
+
+		$ret .= '<a>';
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => 'home.php?mod=rss&uid='.$space['uid'],
+			'size' => 'small',
+		));
+		$ret .= '</a>';
+
+		return $ret;
+	}
+
 }
 
 class plugin_sco_social_forum extends plugin_sco_social {
@@ -130,20 +147,7 @@ EOM;
 
 class plugin_sco_social_home extends plugin_sco_social {
 
-	function global_cpnav_extra3() {
-		global $space;
 
-		$ret = '';
-
-		$ret .= '<a>';
-		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?mod=rss&uid='.$space['uid'],
-			'size' => 'small',
-		));
-		$ret .= '</a>';
-
-		return $ret;
-	}
 
 }
 
