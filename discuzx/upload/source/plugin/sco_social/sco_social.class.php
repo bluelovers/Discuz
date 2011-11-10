@@ -180,23 +180,46 @@ EOM;
 		foreach ($_G['forum_threadlist'] as $_k => $thread) {
 			$ret = '';
 
+			$ret .= '<span class="y">';
+
 			if (@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 				$canonical = rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '');
 			} else {
 				$canonical = 'forum.php?mod=viewthread&tid='.$thread['tid'];
 			}
 
-			$ret = '';
-
 			$ret .= $this->_my_google_plus_html(array(
 				'href' => $canonical,
-				'size' => 'medium',
+				'size' => 'small',
 			));
+
+			$ret .= '</span>';
 
 			$ret_array[$_k] = $ret;
 		}
 
 		return $ret_array;
+	}
+
+	function forumdisplay_forumaction_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_forumdisplay', 1, '', $_G['forum']['fid']);
+		} else {
+			$canonical = 'forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'];
+		}
+
+		$ret = '';
+
+		$ret .= '<span class="pipe">|</span>';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'small',
+		));
+
+		return $ret;
 	}
 
 }
