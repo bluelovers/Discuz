@@ -168,6 +168,10 @@ EOM;
 		return $ret;
 	}
 
+	function viewthread_useraction_output() {
+		return $this->viewthread_title_extra_output();
+	}
+
 }
 
 class plugin_sco_social_group extends plugin_sco_social_forum {
