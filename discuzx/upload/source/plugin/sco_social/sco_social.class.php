@@ -35,6 +35,18 @@ class plugin_sco_social extends _sco_dx_plugin {
 		return '<g:plusone'.$html_attr.'></g:plusone>';
 	}
 
+	function global_cpnav_extra1_output() {
+		global $_G;
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $_G['siteurl'],
+		));
+
+		return $ret;
+	}
+
 }
 
 class plugin_sco_social_forum extends plugin_sco_social {
