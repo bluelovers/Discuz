@@ -24,6 +24,10 @@ class plugin_sco_social extends _sco_dx_plugin {
 		return $ret;
 	}
 
+	function _my_google_plus_html() {
+		return '<g:plusone></g:plusone>';
+	}
+
 }
 
 class plugin_sco_social_forum extends plugin_sco_social {
