@@ -24,7 +24,14 @@ class plugin_sco_social extends _sco_dx_plugin {
 		return $ret;
 	}
 
-	function _my_google_plus_html() {
+	function _my_google_plus_html($attr = array()) {
+
+		$html_attr = '';
+
+		foreach((array)$attr as $_k => $_v) {
+			$html_attr .= ' '.$_k.'="'.(string)$_v.'"';
+		}
+
 		return '<g:plusone></g:plusone>';
 	}
 
