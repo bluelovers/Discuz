@@ -69,7 +69,7 @@ class plugin_sco_social extends _sco_dx_plugin {
 
 		$ret .= '<a>';
 		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?uid='.$canonical,
+			'href' => $canonical,
 			'size' => 'small',
 		));
 		$ret .= '</a>';
@@ -161,7 +161,7 @@ EOM;
 		$ret = '';
 
 		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?uid='.$canonical,
+			'href' => $canonical,
 			'size' => 'medium',
 		));
 
@@ -170,6 +170,31 @@ EOM;
 
 	function viewthread_useraction_output() {
 		return $this->viewthread_title_extra_output();
+	}
+
+	function forumdisplay_thread_output() {
+		global $_G;
+
+		$ret_array = array();
+
+		foreach ($_G['forum_threadlist'] as $_k => $thread) {
+			$ret = '';
+
+			if (@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+				$canonical = rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '');
+			} else {
+				$canonical = 'forum.php?mod=viewthread&tid='.$thread['tid'];
+			}
+
+			$ret = '';
+
+			$ret .= $this->_my_google_plus_html(array(
+				'href' => $canonical,
+				'size' => 'medium',
+			));
+
+			$ret_array[$_k] = $ret;
+		}
 	}
 
 }
@@ -194,7 +219,7 @@ class plugin_sco_social_home extends plugin_sco_social {
 		$ret = '';
 
 		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?uid='.$canonical,
+			'href' => $canonical,
 			'size' => 'medium',
 		));
 
