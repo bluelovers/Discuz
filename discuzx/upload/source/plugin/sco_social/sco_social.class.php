@@ -29,6 +29,10 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$html_attr = '';
 
 		foreach((array)$attr as $_k => $_v) {
+			if ($_v === '' || $_v === null) {
+				continue;
+			}
+
 			$html_attr .= ' '.$_k.'="'.(string)$_v.'"';
 		}
 
