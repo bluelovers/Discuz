@@ -128,4 +128,23 @@ EOM;
 
 }
 
+class plugin_sco_social_home extends plugin_sco_social {
+
+	function global_cpnav_extra3() {
+		global $space;
+
+		$ret = '';
+
+		$ret .= '<a>';
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => 'home.php?mod=rss&uid='.$space['uid'],
+			'size' => 'small',
+		));
+		$ret .= '</a>';
+
+		return $ret;
+	}
+
+}
+
 ?>
