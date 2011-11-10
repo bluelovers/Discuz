@@ -195,6 +195,8 @@ EOM;
 
 			$ret_array[$_k] = $ret;
 		}
+
+		return $ret_array;
 	}
 
 }
