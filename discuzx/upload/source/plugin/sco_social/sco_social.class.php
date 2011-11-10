@@ -226,6 +226,25 @@ EOM;
 
 class plugin_sco_social_group extends plugin_sco_social_forum {
 
+	function forumdisplay_navlink_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_forumdisplay', 1, '', $_G['forum']['fid']);
+		} else {
+			$canonical = 'forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
+	}
+
 }
 
 class plugin_sco_social_home extends plugin_sco_social {
