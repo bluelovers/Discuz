@@ -16,10 +16,10 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	public function global_header_javascript_output() {
+	public function global_footer_output() {
 		$ret = '';
 
-		$ret .= $this->_fetch_template($this->_template('global_header_javascript'), $this->attr['global']);
+		$ret .= $this->_fetch_template($this->_template('global_footer'), $this->attr['global']);
 
 		return $ret;
 	}
