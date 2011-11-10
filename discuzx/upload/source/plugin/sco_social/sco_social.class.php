@@ -44,12 +44,12 @@ class plugin_sco_social extends _sco_dx_plugin {
 
 		$ret = '';
 
-		$ret .= '<a><span style="padding-top: 4px;">';
+		$ret .= '<a>';
 		$ret .= $this->_my_google_plus_html(array(
 			'href' => $_G['siteurl'],
 			'size' => 'small',
 		));
-		$ret .= '</span></a>';
+		$ret .= '</a>';
 
 		return $ret;
 	}
