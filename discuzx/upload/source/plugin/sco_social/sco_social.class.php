@@ -63,7 +63,7 @@ class plugin_sco_social extends _sco_dx_plugin {
 
 		$ret .= '<a>';
 		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?mod=rss&uid='.$space['uid'],
+			'href' => 'home.php?uid='.$space['uid'],
 			'size' => 'small',
 		));
 		$ret .= '</a>';
