@@ -28,7 +28,7 @@ $lang = array
 
 	'mail_to_user' => '有新的通知',
 	'showcredit' => '{actor} 贈送給您 {credit} 個競價積分，幫助提升您在 <a href="misc.php?mod=ranklist&type=member" target="_blank">競價排行榜</a> 中的名次',
-	'share_space' => '{actor} 分享了您的空間',
+	'share_space' => '{actor} 分享了您的窩窩',
 	'share_blog' => '{actor} 分享了您的日誌 <a href="{url}" target="_blank">{subject}</a>',
 	'share_album' => '{actor} 分享了您的相冊 <a href="{url}" target="_blank">{albumname}</a>',
 	'share_pic' => '{actor} 分享了您的相冊 {albumname} 中的 <a href="{url}" target="_blank"> 圖片</a>',
@@ -142,9 +142,9 @@ $lang = array
 
 	'reward_bestanswer_moderator' => '您在懸賞主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 的回復被選為最佳答案 &nbsp; <a href="forum.php?mod=viewthread&tid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
-	'comment_add' => '{actor} 點評了您曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 發表的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
+	'comment_add' => '{actor} 點評了您曾經在主題 <a href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a> 參與的帖子 &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看 &rsaquo;</a>',
 
-	'reppost_noticeauthor' => '{actor} 回復了您的帖子 <a href="forum.php?mod=redirect&goto=findpost&ptid={tid}&pid={pid}" target="_blank">{subject}</a> &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看</a>',
+	'reppost_noticeauthor' => '{actor} 回復了您參與的帖子 <a href="forum.php?mod=redirect&goto=findpost&ptid={tid}&pid={pid}" target="_blank">{subject}</a> &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="lit">查看</a>',
 
 	'task_reward_credit' => '恭喜您完成任務：<a href="home.php?mod=task&do=view&id={taskid}" target="_blank">{name}</a>，獲得積分 {creditbonus} &nbsp; <a href="home.php?mod=spacecp&ac=credit&op=base" target="_blank" class="lit">查看我的積分 &rsaquo;</a></p>',
 

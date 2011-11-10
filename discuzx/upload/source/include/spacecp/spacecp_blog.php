@@ -47,7 +47,11 @@ if(empty($blog)) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
 	}
 
-	$blog['subject'] = empty($_GET['subject'])?'':getstr($_GET['subject'], 80, 1, 0);
+	// bluelovers
+	$_G['setting']['post_subject_maxsize_blog'] = max(80, intval($_G['setting']['post_subject_maxsize_blog']));
+	// bluelovers
+
+	$blog['subject'] = empty($_GET['subject'])?'':getstr($_GET['subject'], $_G['setting']['post_subject_maxsize_blog'], 1, 0);
 	$blog['message'] = empty($_GET['message'])?'':getstr($_GET['message'], 5000, 1, 0);
 
 } else {

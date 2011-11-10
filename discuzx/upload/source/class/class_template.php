@@ -223,6 +223,13 @@ class template {
 
 			// bluelovers
 			lang_merge($this->language['inner'], array('template'));
+
+			if (CURSCRIPT) {
+				/**
+				 * 自動額外載入 CURSCRIPT 的語言包
+				 */
+				lang_merge($this->language['inner'], array('template', CURSCRIPT));
+			}
 			// bluelovers
 
 			if(!$isplugin) {
@@ -249,6 +256,13 @@ class template {
 							}
 							lang_merge($this->language['inner'], $_v);
 						}
+					}
+				}
+
+				if ($path == 'subblock') {
+					list(,$_path) = explode('/', $this->file);
+					if ($_path) {
+						lang_merge($this->language['inner'], array('template', $_path));
 					}
 				}
 

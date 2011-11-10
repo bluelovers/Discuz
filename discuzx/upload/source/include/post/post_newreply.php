@@ -89,6 +89,13 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 	if(!$comment) {
 		showmessage('post_sm_isnull');
 	}
+
+	// bluelovers
+	$_G['gp_upid'] = max(0, intval($_G['gp_upid']));
+	$_upid = DB::fetch_first("SELECT * FROM ".DB::table('forum_postcomment')." WHERE tid='$_G[tid]' AND id = '{$_G[gp_upid]}' LIMIT 1");
+	$_G['gp_upid'] = intval($_upid['id']);
+	// bluelovers
+
 	DB::insert('forum_postcomment', array(
 		'tid' => $post['tid'],
 		'pid' => $post['pid'],
@@ -98,19 +105,121 @@ if($_G['setting']['commentnumber'] && !empty($_G['gp_comment'])) {
 		'comment' => $comment,
 		'score' => $commentscore ? 1 : 0,
 		'useip' => $_G['clientip'],
+
+		// bluelovers
+		'upid'		=> $_upid['id'],
+		'grade'		=> ($_upid['grade'] + 1),
+		// bluelovers
 	));
 	DB::update($posttable, array('comment' => 1), "pid='$_G[gp_pid]'");
 	!empty($_G['uid']) && updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
+
+	// bluelovers
+	$_commentmsg = cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200);
+
+	$_user_list = array();
+	// bluelovers
+
 	if(!empty($_G['uid']) && $_G['uid'] != $post['authorid']) {
+
+		// bluelovers
+		$_user_list[] = $post['authorid'];
+	}
+
+	if (!empty($_G['uid'])) {
+
+		// 提醒主題作者
+		if ($_G['uid'] != $thread['authorid']) {
+			$_user_list[] = $thread['authorid'];
+		}
+
+		// 評論時可同時提醒參與過該帖子的點評者
+		// 評論時可同時提醒參與過該帖子的回覆者
+		$query = DB::query("SELECT
+			distinct authorid
+			FROM
+				".DB::table('forum_postcomment')."
+			WHERE
+				tid='$_G[tid]'
+				AND
+					(
+					pid = '$post[pid]'
+					OR rpid = '$post[pid]'
+					)
+		");
+		while($_row = DB::fetch($query)) {
+			if ($_row['authorid'] != $_G['uid']) {
+				$_user_list[] = $_row['authorid'];
+			}
+		}
+
+	}
+
+	$_user_list = array_unique($_user_list);
+
+	foreach ($_user_list as $_uid) {
+		if (empty($_uid) || $_uid == $_G['uid']) continue;
+
+		// bluelovers
+
+		/*
 		notification_add($post['authorid'], 'pcomment', 'comment_add', array(
+		*/
+		// bluelovers
+		notification_add($_uid, 'pcomment', 'comment_add', array(
+		// bluelovers
+
 			'tid' => $_G['tid'],
 			'pid' => $_G['gp_pid'],
 			'subject' => $thread['subject'],
-			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", stripslashes($comment))), 200)
+			'commentmsg' => $_commentmsg
 		));
-
-		//TODO:增加可提醒其他點評此帖的用戶
 	}
+
+	// bluelovers
+	if (!empty($_G['uid'])) {
+
+		// 使點評 可以產生動態
+		if(!isset($_G['gp_addfeed'])) {
+			$space = array();
+			space_merge($space, 'field_home');
+			$_G['gp_addfeed'] = $space['privacy']['feed']['newreply'];
+		}
+		if(!empty($_G['gp_addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
+			$feed = array();
+
+			$post_url = "forum.php?mod=redirect&goto=findpost&pid=$post[pid]&ptid=$_G[tid]";
+
+			$feed['icon'] = 'post';
+			$feed['title_template'] = (0 && !empty($thread['author'])) ? 'feed_reply_comment_add_title' : 'feed_reply_comment_add_title_anonymous';
+			$feed['title_data'] = array(
+				'subject' => "<a href=\"$post_url\">$thread[subject]</a>",
+				'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>"
+			);
+
+			$feed['title_data']['hash_data'] = "tid{$_G[tid]}";
+			$feed['id'] = $pid;
+			$feed['idtype'] = 'pid';
+			if($feed['icon']) {
+				postfeed($feed);
+			}
+		}
+
+	}
+	// bluelovers
+
+	// bluelovers
+	if (discuz_core::$plugin_support['Scorpio_Event']) {
+		//Event: Script_forum_post_newreply:After_postcomment_0_notification_add
+		Scorpio_Event::instance('Script_' . CURSCRIPT. '_' . CURMODULE . '_newreply:After_postcomment_0_notification_add')
+			->run(array(array(
+				'post' => &$post,
+				'thread' => &$thread,
+
+				'comment' => &$comment,
+			)));
+	}
+	// bluelovers
 
 	// bluelovers
 	if ($thread['lastpost'] < $_G['timestamp']) {
@@ -420,6 +529,10 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 	useractionlog($_G['uid'], 'pid');
 
+	// bluelovers
+	$_user_list = array();
+	// bluelovers
+
 	$nauthorid = 0;
 	if(!empty($_G['gp_noticeauthor']) && !$isanonymous && !$modnewreplies) {
 		list($ac, $nauthorid) = explode('|', authcode($_G['gp_noticeauthor'], 'DECODE'));
@@ -442,6 +555,25 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 				));
 			}
 		}
+
+		// bluelovers
+		if (!empty($_G['uid'])) {
+			$rpid = intval($_G['gp_reppid']);
+
+			// 回覆時可同時提醒點評過目前回覆的帖子的人
+			$query = DB::query("SELECT distinct authorid FROM ".DB::table('forum_postcomment')." WHERE tid='$thread[tid]' AND pid = '$rpid'");
+			while($_row = DB::fetch($query)) {
+				if ($_row['authorid'] != $_G['uid']) {
+					$_user_list[] = $_row['authorid'];
+				}
+			}
+
+			// 同時提醒主題發表者
+			if ($thread['authorid'] != $_G['uid']) {
+				$_user_list[] = $thread['authorid'];
+			}
+		}
+		// bluelovers
 
 		if($postcomment) {
 			$rpid = intval($_G['gp_reppid']);
@@ -479,6 +611,52 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			'from_id' => $thread['tid'],
 			'from_idtype' => 'post',
 		));
+
+		// bluelovers
+	}
+
+	if (1) {
+		// 同時提醒最後發表者 以及 一天內的回應者
+		if ($thread['lastposter'] != $_G['username']) {
+			$query = DB::query("SELECT
+					distinct authorid
+				FROM
+					".DB::table($posttable)."
+				WHERE
+					tid='$thread[tid]'
+					AND (
+						dateline >= '".(TIMESTAMP - 3600 * 24 * 2)."'
+						OR dateline >= '".($thread["lastpost"] - 3600 * 12)."'
+					)
+			");
+			while($_row = DB::fetch($query)) {
+				if ($_row['authorid'] != $_G['uid']) {
+					$_user_list[] = $_row['authorid'];
+				}
+			}
+		}
+
+		$_user_list = array_unique($_user_list);
+
+		foreach($_user_list as $_uid) {
+
+			if (
+				empty($_uid)
+				|| $_uid == $_G['uid']
+				|| $_uid == $nauthorid
+				|| $_uid == $thapost['authorid']
+			) continue;
+
+			notification_add($_uid, 'post', 'reppost_noticeauthor', array(
+				'tid' => $thread['tid'],
+				'subject' => $thread['subject'],
+				'fid' => $_G['fid'],
+				'pid' => $pid,
+				'from_id' => $thread['tid'],
+				'from_idtype' => 'post',
+			));
+		}
+		// bluelovers
 	}
 
 	if($thread['replycredit'] > 0 && $thread['authorid'] != $_G['uid'] && $_G['uid']) {

@@ -150,7 +150,7 @@ function visitedforums() {
 		foreach(explode('D', $_G['cookie']['visitedfid']) as $fid) {
 			if(isset($_G['cache']['forums'][$fid]) && !in_array($fid, $fidarray)) {
 				if($fid != $_G['forum']['fid']) {
-					$visitedforums .= '<li><a href="forum.php?mod=forumdisplay&fid='.$fid.'">'.$_G['cache']['forums'][$fid]['name'].'</a></li>';
+					$visitedforums .= '<li><a href="forum.php?mod=forumdisplay&fid='.$fid.'" target="_blank">'.$_G['cache']['forums'][$fid]['name'].'</a></li>';
 					if(++$count >= $_G['setting']['visitedforums']) {
 						break;
 					}
@@ -169,7 +169,7 @@ function moddisplay($moderators, $type, $inherit = 0) {
 	if($moderators) {
 		$modlist = $comma = '';
 		foreach(explode("\t", $moderators) as $moderator) {
-			$modlist .= $comma.'<a href="home.php?mod=space&username='.rawurlencode($moderator).'" class="notabs" c="1">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
+			$modlist .= $comma.'<a href="home.php?mod=space&username='.rawurlencode($moderator).'" class="notabs" c="1" target="_blank">'.($inherit ? '<strong>'.$moderator.'</strong>' : $moderator).'</a>';
 			$comma = ', ';
 		}
 	} else {

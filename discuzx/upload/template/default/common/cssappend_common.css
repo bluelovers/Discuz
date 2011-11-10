@@ -349,6 +349,10 @@ fieldset {
 	-moz-border-radius-topright: 6px;
 	-moz-border-radius-bottomright: 6px;
 	-moz-border-radius-bottomleft: 6px;
+
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 
 /* notice style */
@@ -426,6 +430,7 @@ fieldset {
 .tip {
 	width : auto;
 	max-width: 260px;
+	min-width: 100px;
 }
 
 /* 修正高度使高度符合登入後的 textarea 高度 */
@@ -436,3 +441,51 @@ fieldset {
 	line-height: 120px;
 }
 
+.xl1 li, .xl2 li {
+	line-height: 1.5em;
+}
+
+.heatl .xi2 {
+	line-height: 1.5em;
+}
+
+.mi .vwmy {
+	word-break: keep-all;
+	white-space: nowrap;
+	overflow: hidden;
+
+	/* 跨瀏覽器的 inline-block */
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
+.moodfm {}
+		.moodfm textarea { min-width: 310px; height: 56px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; overflow-y: auto; }
+		.moodfm_btn { padding-left: 5px; background: url({IMGDIR}/mood_input_btn.png) no-repeat 5px 0; }
+			.moodfm_btn button { width: 58px; height: 58px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
+		.moodfm_f { padding: 5px 0 0 3px; }
+
+/* .facel -> face_list 空間部分的表情 by Pony */
+	.facel { padding: 0 6px 6px 0; width: 260px; }
+		.facel img { margin: 6px 0 0 6px; }
+
+#content .moodfm {
+	background: url("{STATICURL}image/plus/home/mo_icon.png") no-repeat scroll 50% 0 transparent;
+	padding-top: 135px;
+}
+
+#ct #content .moodfm {
+	/* 跨瀏覽器的 inline-block */
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
+.fwinmask .moodfm textarea {
+	width: 310px;
+}
+
+/* ---------------------- */

@@ -40,7 +40,7 @@ function _eFunc_mkfeed_Before($_EVENT, &$feed) {
 		foreach ($_lang_template as $_k_ => $_v_) {
 			$feed[$_k_] = is_array($_v_) ? call_user_func_array('lang', $_v_) : lang('feed', $_v_);
 
-			if ($feed['icon'] == 'share' && !strexists($feed[$_k_], '{actor}')) {
+			if ($_k_ == 'title_template' && $feed['icon'] == 'share' && !strexists($feed[$_k_], '{actor}')) {
 				$feed[$_k_] = '{actor} '.$feed[$_k_];
 			}
 		}
@@ -149,9 +149,11 @@ function _eDz_module_spacecp_share_Before_feed($_EVENT, $conf) {
 
 			if (class_exists('scotext')) {
 				discuz_core::$plugin_support['scotext'] = true;
+			/*
 			} elseif (include_once(libfile('text', 'Scorpio/libs/helper/', 'extensions/libs/scophp/'))) {
 				if (!class_exists('scotext')) eval("class scotext extends Scorpio_helper_text_Core {}");
 				discuz_core::$plugin_support['scotext'] = true;
+			*/
 			}
 		}
 

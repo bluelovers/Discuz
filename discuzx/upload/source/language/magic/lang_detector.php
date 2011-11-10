@@ -10,9 +10,9 @@
 $lang = array
 (
 	'detector_name' => '探測器',
-	'detector_desc' => '探測埋了紅包的會員空間',
+	'detector_desc' => '探測埋了紅包的會員窩窩',
 	'detector_num' => '最大探測數',
-	'detector_info' => '探測(最多 {num} 個)埋了紅包的會員空間',
+	'detector_info' => '探測(最多 {num} 個)埋了紅包的會員窩窩',
 );
 
 ?>

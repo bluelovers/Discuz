@@ -56,26 +56,40 @@
 				<table cellspacing="0" cellpadding="0" class="reason_slct">
 					<!--{eval $selectreason = modreasonselect(0, 'userreasons')}-->
 					<!--{if $selectreason}-->
-					 	<tr>
-					 		<td>
-					 			<ul id="reasonselect" class="reasonselect pt">$selectreason</ul>
-					 			<script type="text/javascript" reload="1">
-					 				var reasonSelectOption = $('reasonselect').getElementsByTagName('li');
-					 				if (reasonSelectOption) {
-					 					for (i=0; i<reasonSelectOption.length; i++) {
-					 						reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
-					 						reasonSelectOption[i].onmouseout = function() { this.className = ''; }
-					 						reasonSelectOption[i].onclick = function() {
-					 							$('reason').value = this.innerHTML;
-					 						}
-					 					}
-					 				}
-					 			</script>
-					 		</td>
-					 	</tr>
+						<tr>
+							<td>
+								<ul id="reasonselect" class="reasonselect pt">$selectreason</ul>
+								<script type="text/javascript" reload="1">
+									var reasonSelectOption = $('reasonselect').getElementsByTagName('li');
+									if (reasonSelectOption) {
+										for (i=0; i<reasonSelectOption.length; i++) {
+											reasonSelectOption[i].onmouseover = function() { this.className = 'xi2 cur1'; }
+											reasonSelectOption[i].onmouseout = function() { this.className = ''; }
+											reasonSelectOption[i].onclick = function() {
+												// bluelovers
+												if (
+													$('reason').value.indexOf(this.innerHTML) == -1
+												) {
+													if ($('reason').value != '') $('reason').value += ' ';
+												// bluelovers
+													$('reason').value += this.innerHTML;
+												// bluelovers
+												}
+												// bluelovers
+											}
+										}
+									}
+								</script>
+							</td>
+						</tr>
 					<!--{/if}-->
 					<tr>
-				 	 	<td><input type="text" name="reason" id="reason" class="px" onkeyup="seditor_ctlent(event, '$(\'rateform\').ratesubmit.click()')" /></td>
+						<td>
+							<!--
+							<input type="text" name="reason" id="reason" class="px" onkeyup="seditor_ctlent(event, '$(\'rateform\').ratesubmit.click()')" />
+							//-->
+							<textarea name="reason" id="reason" class="pt" rows="2"></textarea>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -84,7 +98,7 @@
 			<!--{/if}-->
 		</div>
 		<p class="o pns">
-			<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
+			<!--{subtpl subblock/form/sendreasonpm}-->
 			<button name="ratesubmit" type="submit" value="true" class="pn pnc"><span>{lang confirms}</span></button>
 		</p>
 	</form>
@@ -130,7 +144,7 @@
 	</div>
 	<div class="o pns">
 		<label class="z" onclick="checkall(this.form, 'logid')"><input class="pc" type="checkbox" name="chkall" />{lang checkall}</label>
-		<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
+		<!--{subtpl subblock/form/sendreasonpm}-->
 		{lang admin_operation_explain}: <input name="reason" class="px vm" />
 		<button class="pn pnc vm" type="submit" value="true" name="ratesubmit"><span>{lang submit}</span></button>
 	</div>

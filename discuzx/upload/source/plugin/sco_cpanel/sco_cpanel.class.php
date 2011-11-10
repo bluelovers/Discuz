@@ -13,118 +13,137 @@ include_once libfile('class/sco_dx_plugin', 'source', 'extensions/');
 
 class plugin_sco_cpanel extends _sco_dx_plugin {
 
-	const identifier = 'sco_cpanel';
-
-	function init($identifier) {
-		$this->_init($identifier);
-
-		$this->_this(&$this);
-
-		$this->_fix_plugin_setting();
-		$this->attr['profile'] = $this->attr['db']['common_plugin'];
-
-		return $this;
-	}
-
-	function submitcheck($var, $allowget = 0, $seccodecheck = 0, $secqaacheck = 0) {
-		return submitcheck($var, $allowget, $seccodecheck, $secqaacheck);
-	}
-
-	function cpheader() {
-		cpheader();
-
-		return $this;
-	}
-
-	function cpfooter() {
-		/*
-		cpfooter();
-		dexit();
-		*/
-
-		return $this;
-	}
-
-	function cplang($name, $replace = array(), $output = false) {
-		return cplang($name, $replace, $output);
-	}
-
 	/**
-	 * 提示消息
-	 *
-	 * @param $message - lang_admincp_msg.php 語言包中需要輸出的key
-	 * @param $url - 提示信息後跳轉的頁面，留空則返回上一頁
-	 * @param $type - 特殊提示信息時指定頁面的提示樣式，可選參數：succeed、error、download、loadingform
-	 * @param $values - 為語言包中的變量關鍵詞指定值，以數組形式輸入
-	 * @param $extra - 消息文字擴展
-	 * @param $halt - 是否輸出「Discuz! 提示」標題
+	 * 解決刪除主題時父版塊的最後發表沒有更新
 	 */
-	function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
-		return cpmsg($message, $url, $type, $values, $extra, $halt);
-	}
+	function deletethread($_args = array()) {
+/*
+Array
+(
+    [param] => Array
+        (
+            [0] => Array
+                (
+                    [0] => 32989
+                )
 
-	function &mod($mod, $identifier = '') {
-		if (empty($identifier)) $identifier = self::identifier;
+            [1] => 1
+            [2] => 1
+            [3] => 1
+        )
 
-		include_once libfile('mod/'.$mod, 'plugin/'.$identifier);
+    [step] => check
+)
+*/
 
-		$class = 'plugin_'.$identifier.'_'.$mod;
-		$self = new $class();
+		if ($_args['step'] != 'check') return;
 
-		$self
-			->init($identifier)
-			->set(array(
-				'mod' => $mod,
-			))
-		;
+		list($tids, $membercount, $credit, $ponly) = $_args['param'];
 
-		return $self;
-	}
+		if ($ids = dimplode($tids)) {
+			$query = DB::query("SELECT distinct fid FROM ".DB::table('forum_thread')."
+				WHERE
+					tid IN ($ids)
+			");
 
-	function set($attr) {
-		/*
-		$this->attr['global'] = $attr;
-		*/
-		foreach ($attr as $_k => $_v) {
-			$this->attr['global'][$_k] = $_v;
+			global $_G;
+
+			if (!isset($_G['cache']['forums'])) {
+				loadcache('forums');
+			}
+
+			$_fids = array();
+
+			while($_row = DB::fetch($query)) {
+				$fid = $_row['fid'];
+
+				$_fids[] = $fid;
+
+				while($fup = $_G['cache']['forums'][$fid]['fup']) {
+					$_fids[] = $fup;
+
+					$fid = $fup;
+				}
+			}
+
+			$_fids = array_unique($_fids);
+
+			foreach ($_fids as $fid) {
+				$_forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid = '{$fid}'");
+
+				$_forum['lastpost'] = explode("\t", $_forum['lastpost']);
+
+				if (in_array($_forum['lastpost'][0], $tids)) {
+					$sqladd = '';
+
+					if (!empty($_G['cache']['forums'][$fid]['subs'])) {
+						if ($ids = dimplode($_G['cache']['forums'][$fid]['subs'])) {
+							$sqladd = "OR fid IN ($ids)";
+						}
+					}
+
+					$thread = DB::fetch_first("SELECT tid, subject, author, lastpost, lastposter, closed FROM ".DB::table('forum_thread')."
+						WHERE
+							(
+								fid='$fid'
+								$sqladd
+							)
+							AND displayorder='0'
+						ORDER BY
+							lastpost DESC
+							LIMIT 1
+					");
+
+					$thread['subject'] = addslashes($thread['subject']);
+					$thread['lastposter'] = $thread['author'] ? addslashes($thread['lastposter']) : lang('forum/misc', 'anonymous');
+					$tid = $thread['closed'] > 1 ? $thread['closed'] : $thread['tid'];
+
+					DB::query("UPDATE ".DB::table('forum_forum')."
+						SET
+							lastpost='$tid\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]'
+						WHERE
+							fid='$fid'
+					");
+
+				}
+			}
 		}
-
-		return $this;
 	}
 
-	function run() {
-		$operation = $this->attr['global']['op'];
+}
 
-		$operation = $operation ? $operation : 'default';
+class plugin_sco_cpanel_forum extends plugin_sco_cpanel {
 
-		$method = 'on_op_'.$operation;
+	function viewthread_modoption_output() {
 
-		ob_start();
-		$this->$method();
-		$_content = ob_get_contents();
-		ob_end_clean();
+		$ret = <<<EOM
+<a onclick="modaction('author');return false;" href="javascript:void(0);">作者</a>
+<span class="pipe">|</span>
+EOM;
 
-		$this->cpheader();
-		echo $_content;
+		return $ret;
+	}
 
-		if ($this->_getglobal('debug', 'setting')) {
-			var_dump($this);
+	function viewthread_modoption_post_output() {
+		return $this->viewthread_modoption_output();
+	}
+
+	function topicadmin_author() {
+		$this->_hook(
+			'Script_forum_topicadmin:Before_topicadminfile', array(
+				$this,
+				'_hook_topicadmin_author'
+		));
+	}
+
+	function _hook_topicadmin_author($_EVENT, $_conf) {
+		global $_G;
+
+		if (!$_conf['topicadminfile_exists']
+			&& $_G['gp_action'] == 'author'
+		) {
+			$_conf['topicadminfile_exists'] = file_exists($_conf['topicadminfile'] = libfile('topicadmin/'.$_G['gp_action'], 'plugin/sco_cpanel'));
 		}
-
-		$this->cpfooter();
-
-		return $this;
-	}
-
-	/**
-	 * 預設行為
-	 */
-	function on_op_default() {
-		/*
-		$this->on_op_list_fups();
-		*/
-
-		return $this;
 	}
 
 }

@@ -24,7 +24,18 @@ $discuz->init();
 
 if(!empty($_G['gp_id'])) {
 	list($identifier, $module) = explode(':', $_G['gp_id']);
-	$module = $module !== NULL ? $module : $identifier;
+// bluelovers
+} else {
+	/**
+	 * 相容舊版的 plugin 參數
+	 */
+	$identifier = $_G['gp_identifier'];
+	$module = $_G['gp_module'];
+}
+
+if (1) {
+// bluelovers
+	$module = ($module !== NULL && $module !== '') ? $module : $identifier;
 }
 $mnid = 'plugin_'.$identifier.'_'.$module;
 $pluginmodule = isset($_G['setting']['pluginlinks'][$identifier][$module]) ? $_G['setting']['pluginlinks'][$identifier][$module] : (isset($_G['setting']['plugins']['script'][$identifier][$module]) ? $_G['setting']['plugins']['script'][$identifier][$module] : array('adminid' => 0, 'directory' => preg_match("/^[a-z]+[a-z0-9_]*$/i", $identifier) ? $identifier.'/' : ''));
@@ -33,7 +44,11 @@ define('CURMODULE', $identifier);
 runhooks();
 
 if(empty($identifier) || !preg_match("/^[a-z0-9_\-]+$/i", $module) || !in_array($identifier, $_G['setting']['plugins']['available'])) {
-	showmessage('plugin_nonexistence');
+	showmessage('plugin_nonexistence', '', array(
+		// bluelovers
+		'identifier' => dhtmlspecialchars($identifier),
+		// bluelovers
+	));
 } elseif($pluginmodule['adminid'] && ($_G['adminid'] < 1 || ($_G['adminid'] > 0 && $pluginmodule['adminid'] < $_G['adminid']))) {
 	showmessage('plugin_nopermission');
 } elseif(@!file_exists(DISCUZ_ROOT.($modfile = './source/plugin/'.$pluginmodule['directory'].$module.'.inc.php'))) {

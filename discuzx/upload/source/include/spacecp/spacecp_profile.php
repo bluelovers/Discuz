@@ -289,6 +289,16 @@ if(submitcheck('profilesubmit')) {
 		}
 	}
 
+	// bluelovers
+	/**
+	 * 強制拒絕修改 email
+	 * 當用戶為等待驗證會員時則例外
+	 */
+	if ($_G['member']['groupid'] != 8) {
+		$emailnew = $_G['member']['email'];
+	}
+	// bluelovers
+
 	if($_G['gp_questionidnew'] === '') {
 		$_G['gp_questionidnew'] = $_G['gp_answernew'] = '';
 	} else {
@@ -346,7 +356,8 @@ if($operation == 'password') {
 	$space['newemail'] = !$space['emailstatus'] ? $space['email'] : '';
 	if(!empty($newemail)) {
 		$mailinfo = explode("\t", $newemail);
-		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : '';
+		// 修正因為 cookies 的問題造成未驗證的信箱狀態 顯示為 已驗證
+		$space['newemail'] = $mailinfo[0] == $_G['uid'] && isemail($mailinfo[1]) && $mailinfo[1] != $space['email'] ? $mailinfo[1] : $space['newemail'];
 	}
 
 	if($_G['gp_resend'] && $resend) {

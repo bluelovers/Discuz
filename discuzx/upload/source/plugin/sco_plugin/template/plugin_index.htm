@@ -1,0 +1,111 @@
+<!--{eval $tpl_allowside = true;}-->
+<!--{subtpl sco_plugin:header}-->
+
+<style>
+
+.buddy li {
+	background: none repeat scroll 0 0 #F9F9F9;
+	border: 1px solid #F3F3F3;
+	display: inline;
+	float: left;
+	height: 58px;
+	margin: 10px 5px 0;
+	overflow: hidden;
+	padding: 10px 10px 10px 70px;
+	width: 170px;
+	min-width: 170px;
+	max-width: 300px;
+	width: auto;
+
+	text-align: left;
+}
+
+.buddy li:hover {
+	border: 1px solid #00B2E8;
+}
+
+.buddy .avt {
+	margin-left: -60px;
+	position: absolute;
+}
+
+.buddy .maxh {
+	height: 20px;
+	overflow: hidden;
+	line-height: 20px;
+}
+
+#ct .mn, .buddy {
+	text-align: center;
+}
+
+</style>
+
+	<div class="mn">
+
+		<ul class="cl">
+		<!--{loop $style_lists $style}-->
+			<li>
+				<table>
+					<td>
+						<img src="$style['preview']" />
+					</td>
+					<td>
+						$style['name']
+					</td>
+				</table>
+			</li>
+		<!--{/loop}-->
+		</ul>
+
+		<ul class="buddy cl">
+		<!--{loop $plugin_lists $plugin}-->
+			<li title="{$plugin['description']:dhtmlspecialchars()}">
+				<div class="avt">
+					<img src="http://addons.discuz.com/logo/{$plugin[identifier]}.png" onerror="this.src='http://addons.discuz.com/images/logo.png';this.onerror=null" width="40" height="40" align="left" style="margin-right:5px" />
+				</div>
+				<h4>
+					{$plugin['name']:dhtmlspecialchars()} {$plugin['version']:dhtmlspecialchars()}
+				</h4>
+				<div>
+					<!--{if $plugin['copyright']}-->
+					<p class="maxh">
+						&copy; {$plugin['copyright']:dhtmlspecialchars()}
+					</p>
+					<!--{/if}-->
+					<!--{if $plugin['description']}-->
+					<p class="maxh">
+						{$plugin['description']:dhtmlspecialchars()}
+					</p>
+					<!--{/if}-->
+				</div>
+			</li>
+		<!--{/loop}-->
+		</ul>
+
+	</div>
+
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">Mod</h2>
+			<ul>
+				<!--{loop $mod_lists $_mod}-->
+					 <li>
+					 	<a href="{echo $plugin_self->_make_url($plugin_self->module, 'plugin', array('cpmod' => $_mod));}">$_mod</a>
+					 </li>
+				<!--{/loop}-->
+			</ul>
+		</div>
+		<div class="tbn">
+			<h2 class="mt bbda">{$_G[setting][navs][6][navname]}</h2>
+			<ul>
+				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+					 <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+					 <li>$module[url]</li>
+					 <!--{/if}-->
+				<!--{/loop}-->
+			</ul>
+		</div>
+	</div>
+
+<!--{subtpl sco_plugin:footer}-->

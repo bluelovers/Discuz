@@ -399,12 +399,88 @@ jQuery(function(){
 		}
 
 		if (_parent.size()) {
-			if (_this.prop('checked')) {
-				_parent.addClass('checked');
-			} else {
-				_parent.removeClass('checked');
-			}
+			_parent.toggleClass('checked', _this.prop('checked'));
 		}
+	};
+
+	var cc = 0;
+
+	var _func_li = function(e){
+		var o = e.target.nodeName;
+		var altKey = (e.altKey || e.which == 18) ? true : false;
+
+		if(cc) {
+			return;
+		}
+
+		cc = 1;
+
+		var _li = jQuery(this);
+
+		var input = jQuery('input:first', _li);
+
+		if (jQuery.inArray(input.attr('type'), ['checkbox', 'radio']) != -1) {
+			if (input.attr('type') == 'radio') {
+				_li
+					.parent()
+						.find('li')
+							.removeClass('checked')
+				;
+			}
+
+			if (o != 'INPUT') {
+				input
+					/*
+					.prop('checked', function(){
+						var _this = jQuery(this);
+
+						if (_this.attr('type') == 'radio') {
+							return true;
+						}
+
+						return !_this.prop('checked');
+					})
+					*/
+					.trigger('click')
+				;
+			} else {
+				input
+					.triggerHandler('click')
+				;
+			}
+
+			if (altKey && input.attr('name').match(/^multinew\[\d+\]/)) {
+				var miid = input.attr('id').split('|');
+
+				jQuery('input[id^="' + miid[0] + '|"]').each(function(){
+					var _this = jQuery(this);
+
+					_this
+						.prop('checked', input.prop('checked'))
+					;
+
+					if (input.attr('type') == 'radio') {
+						_this
+							.parents('ul, ol, dl')
+							.first()
+								.find('li')
+									.removeClass('checked')
+						;
+					}
+
+					var _parent = _this
+						.parents('li')
+						.first()
+						.toggleClass('checked', input.prop('checked'))
+					;
+				});
+
+			}
+
+			jQuery(e.target).blur();
+		}
+
+		cc = 0;
 	};
 
 	jQuery('.container')
@@ -426,6 +502,26 @@ jQuery(function(){
 		.bind('js_ajaxget.admincp', function() {
 			jQuery('.container')
 				.find(':checkbox, :radio').each(_func)
+
+				.parents('ul, ol, dl').each(function(){
+					var _this = jQuery(this);
+					if (/altstyle\s*\(/i.test(_this.attr('onmouseover'))) {
+						var _empty_func = function(){};
+
+						_this.find('li').each(function(){
+							this.onclick = _empty_func;
+							this.onmouseup = _empty_func;
+						});
+
+						_this
+							.removeAttr('onmouseover')
+							.undelegate('admincp_checked_li')
+							.delegate('li', {
+								'click.admincp_checked_li' : _func_li,
+							})
+						;
+					}
+				})
 			;
 		})
 		.triggerHandler('js_ajaxget')

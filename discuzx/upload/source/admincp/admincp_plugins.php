@@ -46,6 +46,21 @@ if(!$operation) {
 		$query = DB::query("SELECT * FROM ".DB::table('common_plugin')." ORDER BY available DESC, pluginid DESC");
 		$outputsubmit = false;
 		while($plugin = DB::fetch($query)) {
+
+			// bluelovers
+			/**
+			 * @var $_pv_exists
+			 *
+			 * 是否允許在沒有啟用插件的狀態下對插件設置進行設定
+			 */
+			$_pv_exists = false;
+			if ($_pv = DB::fetch_first("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='{$plugin[pluginid]}' LIMIT 1")) {
+				if ($_pv['pluginid'] == $plugin['pluginid']) {
+					$_pv_exists = true;
+				}
+			}
+			// bluelovers
+
 			$hookexists = FALSE;
 			$plugin['modules'] = unserialize($plugin['modules']);
 			$submenuitem = array();
@@ -79,7 +94,7 @@ if(!$operation) {
 					($isplugindeveloper && !$plugin['modules']['system'] ? "<a href=\"".ADMINSCRIPT."?action=plugins&operation=edit&pluginid=$plugin[pluginid]\" class=\"act\">$lang[plugins_editlink]</a>&nbsp;" : '').
 				'</div>'.
 				($intro ? '<a href="javascript:;" onclick="display(\'pluginmore'.$plugin['pluginid'].'\')" class="act'.(!$plugin['available'] ? ' light' : '').'">'.$lang['plugins_home'].'</a>&nbsp;' : '').
-				(isset($_G['cache']['plugin'][$plugin['identifier']]) ? '<a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$plugin['pluginid'].'" class="act">'.$lang['config'].'</a>&nbsp;' : '').
+				((isset($_G['cache']['plugin'][$plugin['identifier']]) || $_pv_exists) ? '<a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$plugin['pluginid'].'" class="act">'.$lang['config'].'</a>&nbsp;' : '').
 				implode('&nbsp;', $submenuitem).'&nbsp;&nbsp;'.
 				'</div>'.
 				$intro
@@ -503,7 +518,10 @@ if(!$operation) {
 			$importtxt = @implode('', file($file));
 			$pluginarray = getimportdata('Discuz! Plugin');
 			$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-			$upgrade = $newver > $plugin['version'] ? true : false;
+			/**
+			 * 修改為允許升級相同版本編號(>=)
+			 */
+			$upgrade = ($newver >= $plugin['version']) ? true : false;
 		}
 		$entrydir = DISCUZ_ROOT.'./source/plugin/'.$dir;
 		$upgradestr = '';
@@ -527,7 +545,10 @@ if(!$operation) {
 					$importtxt = @implode('', file($entrydir.'/'.$f));
 					$pluginarray = getimportdata('Discuz! Plugin');
 					$newverother = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-					$upgradestr .= $newverother > $plugin['version'] ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
+					/**
+					 * 修改為允許升級相同版本編號(>=)
+					 */
+					$upgradestr .= ($newverother >= $plugin['version']) ? '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&confirmed=yes&installtype='.rawurlencode($extra).'\'" type="button" value="'.($extra ? $extratxt : $lang['plugins_import_default']).' '.$newverother.'" />&nbsp;&nbsp;&nbsp;' : '';
 				}
 			}
 		}
@@ -626,6 +647,16 @@ if(!$operation) {
 	if($pluginvars) {
 		$submenuitem[] = array('config', "plugins&operation=config&do=$pluginid", !$_G['gp_pmod']);
 	}
+
+	// bluelovers
+	if ($isplugindeveloper && !$plugin['modules']['system']) {
+		/**
+		 * 如果 $isplugindeveloper = true, 增加 設計插件 的連結
+		 */
+		$submenuitem[] = array('plugins_edit', "plugins&operation=edit&pluginid=$pluginid", 0, 1);
+	}
+	// bluelovers
+
 	if(is_array($plugin['modules'])) {
 		foreach($plugin['modules'] as $module) {
 			if($module['type'] == 3) {
@@ -880,6 +911,20 @@ if(!$operation) {
 
 		$adminidselect = array($plugin['adminid'] => 'selected');
 
+		// bluelovers
+		/**
+		 * @var $_pv_exists
+		 *
+		 * 檢查插件是否存在變量設置
+		 */
+		$_pv_exists = false;
+		if ($_pv = DB::fetch_first("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='{$plugin[pluginid]}' LIMIT 1")) {
+			if ($_pv['pluginid'] == $plugin['pluginid']) {
+				$_pv_exists = true;
+			}
+		}
+		// bluelovers
+
 		shownav('plugin');
 		$anchor = in_array($_G['gp_anchor'], array('config', 'modules', 'vars')) ? $_G['gp_anchor'] : 'config';
 		showsubmenuanchors($lang['plugins_edit'].' - '.$plugin['name'].($plugin['available'] ? cplang('plugins_edit_available') : ''), array(
@@ -887,7 +932,17 @@ if(!$operation) {
 			array('config', 'config', $anchor == 'config'),
 			array('plugins_config_module', 'modules', $anchor == 'modules'),
 			array('plugins_config_vars', 'vars', $anchor == 'vars'),
+			//TODO:增加可自動追加版本編號的選項
 			array('export', 'plugins&operation=export&pluginid='.$plugin['pluginid'], 0, 1),
+			array('export_autoveradd', 'plugins&operation=export&pluginid='.$plugin['pluginid'].'&autoveradd=1', 0, 1),
+
+			// bluelovers
+			/**
+			 * 增加從設計頁面直接連結到設置頁面
+			 * (插件必須要存在變量設置)
+			 */
+			array('config', 'plugins&operation=config&pluginid='.$plugin['pluginid'], 0, $_pv_exists),
+			// bluelovers
 		));
 		showtips('plugins_edit_tips');
 

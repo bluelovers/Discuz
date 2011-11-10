@@ -175,7 +175,7 @@ $lang = array(
 	'blockclass_member' => '會員類',
 
 	'blockclass_member_member' => '會員模塊',
-	'blockclass_member_field_url' => '空間鏈接',
+	'blockclass_member_field_url' => '窩窩鏈接',
 	'blockclass_member_field_title' => '用戶名',
 	'blockclass_member_field_avatar' => '用戶頭像',
 	'blockclass_member_field_avatar_middle' => '用戶頭像(中)',
@@ -252,7 +252,7 @@ $lang = array(
 	'blockclass_member_script_memberposts' => '發帖排行',
 	'blockclass_member_script_memberspecified' => '指定用戶',
 	'blockclass_member_script_member' => '高級自定義',
-	'blockclass_space' => '空間類',
+	'blockclass_space' => '窩窩類',
 
 	'blockclass_space_doing' => '記錄模塊',
 	'blockclass_doing_field_url' => '記錄鏈接',

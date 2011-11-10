@@ -763,7 +763,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$file = $primaltpl ? $primaltpl : $oldfile;
 			}
 			$tplrefresh = $_G['config']['output']['tplrefresh'];
-			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && filemtime($diypath.$file.'.htm') < filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
+			if($tpldir == 'data/diy' && ($tplrefresh ==1 || ($tplrefresh > 1 && !($_G['timestamp'] % $tplrefresh))) && filemtime($diypath.$file.'.htm') < @filemtime(DISCUZ_ROOT.TPLDIR.'/'.($primaltpl ? $primaltpl : $oldfile).'.htm')) {
 				if (!updatediytemplate($file)) {
 					unlink($diypath.$file.'.htm');
 					$tpldir = '';
@@ -1166,10 +1166,31 @@ function dgmdate($timestamp, $format = 'dt', $timeoffset = '9999', $uformat = ''
 		$uformat_default = strpos($dtformat, ':s') === false ? str_replace(":i", ":i:s", $dtformat) : $dtformat;
 		// bluelovers
 	}
+
+	// bluelovers
+	if (is_array($format)) {
+		/**
+		 * 是否使用動態日期
+		 */
+		$_u = true;
+		if ($format[0] == 'u') {
+			$_i = 1;
+		} elseif ($format[1] == 'u') {
+			$_i = 0;
+		} else {
+			$_u = false;
+			$_i = 0;
+		}
+
+		$format = $format[$_i];
+		if (empty($uformat)) $uformat = $format;
+	}
+	// bluelovers
+
 	$timeoffset = $timeoffset == 9999 ? $offset : $timeoffset;
 	$timestamp += $timeoffset * 3600;
 	$format = empty($format) || $format == 'dt' ? $dtformat : ($format == 'd' ? $dformat : ($format == 't' ? $tformat : $format));
-	if($format == 'u') {
+	if($format == 'u' || $_u) {
 		//TODO:搭配 js 動態顯示時間
 		$todaytimestamp = TIMESTAMP - (TIMESTAMP + $timeoffset * 3600) % 86400 + $timeoffset * 3600;
 		//FIX:搭配 timeformat 增加顯示秒數後 此處會產生多餘的 :s 的 BUG
@@ -1381,14 +1402,39 @@ function cutstr($string, $length, $dot = ' ...') {
 				$tn = 1; $n++; $noc++;
 			} elseif(194 <= $t && $t <= 223) {
 				$tn = 2; $n += 2; $noc += 2;
+
+				// bluelovers
+				$noc -= 1;
+				// bluelovers
+
 			} elseif(224 <= $t && $t <= 239) {
 				$tn = 3; $n += 3; $noc += 2;
+
+				// bluelovers
+				$noc -= 1;
+				// bluelovers
+
 			} elseif(240 <= $t && $t <= 247) {
 				$tn = 4; $n += 4; $noc += 2;
+
+				// bluelovers
+				$noc -= 1;
+				// bluelovers
+
 			} elseif(248 <= $t && $t <= 251) {
 				$tn = 5; $n += 5; $noc += 2;
+
+				// bluelovers
+				$noc -= 1;
+				// bluelovers
+
 			} elseif($t == 252 || $t == 253) {
 				$tn = 6; $n += 6; $noc += 2;
+
+				// bluelovers
+				$noc -= 1;
+				// bluelovers
+
 			} else {
 				$n++;
 			}
@@ -1782,7 +1828,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 		$_G['inhookscript'] = true;
 		$funcs = !$func ? $_G['setting'][HOOKTYPE][$hscript][$script][$type] : array($func => $_G['setting'][HOOKTYPE][$hscript][$script][$type][$func]);
 		foreach($funcs as $hookkey => $hookfuncs) {
-			foreach($hookfuncs as $hookfunc) {
+			foreach((array)$hookfuncs as $hookfunc) {
 				if($hooksadminid[$hookfunc[0]]) {
 					$classkey = (HOOKTYPE != 'hookscriptmobile' ? '' : 'mobile').'plugin_'.($hookfunc[0].($hscript != 'global' ? '_'.$hscript : ''));
 					if(!class_exists($classkey)) {
@@ -2452,6 +2498,11 @@ function dreferer($default = '') {
 	} elseif(empty($reurl['host'])) {
 		$_G['referer'] = $_G['siteurl'].'./'.$_G['referer'];
 	}
+
+	// bluelovers
+	$_G['referer'] = str_replace('/./', '/', $_G['referer']);
+	// bluelovers
+
 	return strip_tags($_G['referer']);
 }
 

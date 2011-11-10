@@ -16,6 +16,10 @@ $type = trim($_G['gp_type']);
 $name = trim($_G['gp_name']);
 $page = intval($_G['gp_page']);
 
+// bluelovers
+discuz_core::$langplus[] = 'forum';
+// bluelovers
+
 $taglang = lang('tag/template', 'tag');
 if($id || $name) {
 
@@ -93,6 +97,64 @@ if($id || $name) {
 		$bloglist = getblogbyid($blogidarray);
 
 	}
+
+	// bluelovers
+	$tagarray = array();
+	if (!empty($tidarray)) {
+		$_ids = dimplode($tidarray);
+		$query = DB::query("SELECT
+				DISTINCT ti.tagid
+				, t.*
+			FROM
+				".DB::table('common_tagitem')." ti
+			LEFT JOIN
+				".DB::table('common_tag')." t On t.tagid = ti.tagid
+			WHERE
+				ti.idtype='tid'
+				AND ti.itemid IN ($_ids)
+		");
+		while($result = DB::fetch($query)) {
+			$tagarray[$result['tagid']] = $result;
+		}
+	}
+
+	if (!empty($blogidarray)) {
+		$_ids = dimplode($blogidarray);
+		$query = DB::query("SELECT
+				DISTINCT ti.tagid
+				, t.*
+			FROM
+				".DB::table('common_tagitem')." ti
+			LEFT JOIN
+				".DB::table('common_tag')." t On t.tagid = ti.tagid
+			WHERE
+				ti.idtype='blogid'
+				AND ti.itemid IN ($_ids)
+		");
+		while($result = DB::fetch($query)) {
+			$tagarray[$result['tagid']] = $result;
+		}
+	}
+
+	shuffle($tagarray);
+
+	$tagarray_like = array();
+	if (!empty($tagname)) {
+		$query = DB::query("SELECT
+				t.*
+			FROM
+				".DB::table('common_tag')." t
+			WHERE
+				t.tagname != '".addslashes($tagname)."' AND
+				t.tagname LIKE '%".mysql_real_escape_string($tagname)."%'
+		");
+		while($result = DB::fetch($query)) {
+			$tagarray_like[$result['tagid']] = $result;
+		}
+	}
+
+	shuffle($tagarray_like);
+	// bluelovers
 
 	include_once template('tag/tagitem');
 

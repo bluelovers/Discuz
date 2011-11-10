@@ -82,6 +82,15 @@ function build_cache_setting() {
 	}
 	DB::free_result($query);
 
+	// bluelovers
+	if ($_lastmember = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." ORDER BY regdate DESC, uid DESC LIMIT 1")) {
+		if ($_lastmember['username'] != $data['lastmember']) {
+			DB::insert('common_setting', array('skey' => 'lastmember', 'svalue' => daddslashes($_lastmember['username'])), false, true);
+			$data['lastmember'] = $_lastmember['username'];
+		}
+	}
+	// bluelovers
+
 	$data['newusergroupid'] = DB::result_first("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE creditshigher<=".intval($data['initcredits'])." AND ".intval($data['initcredits'])."<creditslower LIMIT 1");
 
 	if($data['srchhotkeywords']) {
@@ -875,6 +884,10 @@ function get_cachedata_mainnav() {
 			}
 		}
 
+		// bluelovers
+		if ($nav['url'] == '#') $nav['url'] = 'javascript:void(0);';
+		// bluelovers
+
 		$data['navs'][$id]['navid'] = $navid;
 		$data['navs'][$id]['level'] = $nav['level'];
 		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";
@@ -936,6 +949,20 @@ function get_cachedata_spacenavs() {
 		if(!$nav['type'] && $nav['allowsubnew']) {
 			if($nav['identifier'] == 'share') {
 				$nav['extra'] = ' onclick="showWindow(\'share\', this.href, \'get\', 0);return false;"';
+
+			// bluelovers
+			} elseif($nav['identifier'] == 'doing') {
+				$nav['extra'] = ' onclick="showWindow(\''.$nav['identifier'].'\', this.href + \'&referer=' . rawurlencode('home.php?mod=space&do=doing') . '\', \'get\', 0);return false;"';
+
+				if (empty($nav['suburl'])) {
+					$nav['suburl'] = 'home.php?mod=spacecp&ac='.$nav['identifier'];
+				}
+
+				if (empty($nav['subname'])) {
+					$nav['subname'] = lang('template', 'publish');
+				}
+			// bluelovers
+
 			} elseif($nav['identifier'] == 'thread') {
 				$nav['extra'] = ' onclick="showWindow(\'nav\', this.href);return false;"';
 			} elseif($nav['identifier'] == 'thread') {

@@ -108,6 +108,11 @@ $lang = array(
 	'active_email_subject' => '你的郵箱激活郵件',
 	'active_email_msg' => '請複製下面的激活鏈接到瀏覽器進行訪問，以便激活你的郵箱。<br>郵箱激活鏈接:<br><a href="{url}" target="_blank">{url}</a>',
 	'share_space' => '分享了一個用戶',
+
+	// bluelovers
+ 	'share_space_message' => '<b>{username}</b><br>{reside}<br>{spacenote}',
+	// bluelovers
+
 	'share_blog' => '分享了一篇日誌',
 	'share_album' => '分享了一個相冊',
 	'default_albumname' => '默認相冊',
@@ -246,9 +251,9 @@ $lang = array(
 	'special_3_credit' => '懸賞主題扣除積分',
 	'special_3_best_answer' => '最佳答案獲取懸賞積分',
 	'magic_credit' => '道具隨機獲取積分',
-	'magic_space_gift' => '在自已空間首頁埋下紅包',
+	'magic_space_gift' => '在自已窩窩首頁埋下紅包',
 	'magic_space_re_gift' => '回收還沒有用完的紅包',
-	'magic_space_get_gift' => '訪問空間領取的紅包',
+	'magic_space_get_gift' => '訪問窩窩領取的紅包',
 	'credit_transfer' => '進行積分轉帳',
 	'credit_transfer_tips' => '的轉賬收入',
 	'credit_exchange_tips_1' => '執行積分對兌換操作,將 ',

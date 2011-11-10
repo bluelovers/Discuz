@@ -128,6 +128,12 @@ EOF
 
 		$ss .= '<script type="text/javascript">';
 		$ss .= "var VERHASH_GZIP = '".VERHASH_GZIP."', VERHASH_GZIP_JS = '".VERHASH_GZIP_JS."';";
+
+		$_G['setting']['post_subject_maxsize'] = max(80, intval($_G['setting']['post_subject_maxsize']));
+		$_G['setting']['post_subject_maxsize_blog'] = max(80, intval($_G['setting']['post_subject_maxsize_blog']));
+
+		$ss .= "var post_subject_maxsize = '".$_G['setting']['post_subject_maxsize']."', post_subject_maxsize_blog = '".$_G['setting']['post_subject_maxsize']."';";
+
 		$ss .= '</script>';
 
 		$hook_data .= $ss;
@@ -503,7 +509,54 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 
 	$regex_showname = '[^<\>\'"]+';
 
+	$_file = libfile('cache_output_user', 'cache/extensions', 'data/');
+	$_file_lock = $_file.'.lock';
+
+	$_file_lock_exists = file_exists($_file_lock);
+
+	if (empty(discuz_core::$_cache_data['output']['users'])) {
+		$data = array();
+		@include $_file;
+
+		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
+
+		if (
+			$data['output_user']['timestamp'] > TIMESTAMP - 3600 * 5
+			|| $_file_lock_exists
+		) {
+			discuz_core::$_cache_data['output']['users'] = array_merge(
+				(array)discuz_core::$_cache_data['output']['users']
+				, (array)$data['output_user']
+			);
+		}
+	}
+
 	$content = preg_replace_callback('/<a href\="(?<href>()home.php\?mod=space&(?:amp;)?(?:uid\=(?<uid>\d+)|username\=(?<username>[^&"]+?)))"(?<extra>[^\>]*)\>(?<tag1>\<(?:strong|b)\>)?(?<showname>'.$regex_showname.')(?<tag2>\<\/(?:strong|b)\>)?<\/a/', $_func, $content);
+
+	if (
+		discuz_core::$_cache_data['output']['users']['updated']
+		&& (TIMESTAMP > discuz_core::$_cache_data['output']['users']['timestamp'] + 60)
+		&& !$_file_lock_exists
+	) {
+		touch($_file_lock);
+
+		unset(discuz_core::$_cache_data['output']['users']['updated']);
+
+		include_once libfile('function/cache');
+
+		if (discuz_core::$_cache_data['output']['users']['timestamp'] <= TIMESTAMP - 3600 * 5 + 60) {
+			discuz_core::$_cache_data['output']['users']['timestamp'] = TIMESTAMP;
+		}
+
+		discuz_core::$_cache_data['output']['users']['dateline'] = dgmdate(discuz_core::$_cache_data['output']['users']['timestamp']);
+
+		$cachename = 'output_user';
+		$cachedata = '$data[\''.$cachename.'\'] = '.var_export(discuz_core::$_cache_data['output']['users'], true).";\n\n";
+
+		writetocache($cachename, $cachedata, 'cache_', 'extensions/');
+
+		unlink($_file_lock);
+	}
 }
 
 function _eFunc_output_Before_rewrite_content_echo_callback($m) {
@@ -524,6 +577,10 @@ Array
 	// 緩存資訊
 	static $_user;
 
+	if (!isset($_user)) {
+		$_user = &discuz_core::$_cache_data['output']['users'];
+	}
+
 	// 初始化 $_uid
 	$_uid = 0;
 
@@ -536,8 +593,8 @@ Array
 		$_uid = $m['uid'];
 
 	// 判斷是否分析過 $m['username']
-	} elseif (!empty($m['username']) && isset($_user['username'][$m['username']])) {
-		$_uid = $_user['username'][$m['username']];
+	} elseif (!empty($m['username']) && isset($_user['username'][(string)$m['username']])) {
+		$_uid = $_user['username'][(string)$m['username']];
 
 	// 如果存在 $m['uid']
 	} elseif ($m['uid'] || !empty($m['username'])) {
@@ -563,8 +620,11 @@ Array
 			*/
 
 			$_user['uid'][$_uid] = $user['showname'];
-			$_user['username'][$user['username']] = $_uid;
-			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][$m['username']] = $_uid;
+			$_user['username'][(string)$user['username']] = $_uid;
+			if (!empty($m['username']) && $user['username'] != $m['username']) $_user['username'][(string)$m['username']] = $_uid;
+
+			$_user['updated'] = true;
+
 		} else {
 			// 失敗時緩存為 0
 			if ($m['uid']) $_user['uid'][$m['uid']] = '';
@@ -576,7 +636,7 @@ Array
 	if ($_uid
 		&& !empty($m['showname'])
 		// 改良只取代帳號名
-		&& $_uid == $_user['username'][$m['showname']]
+		&& $_uid == $_user['username'][(string)$m['showname']]
 	) {
 		// 取得緩存
 		$user = $_user['uid'][$_uid];
@@ -685,8 +745,10 @@ function &htmldom($content) {
 
 function curl($url) {
 	//TODO:Scorpio cURL
+	/*
 	include_once libfile('Curl', 'libs/scophp/Scorpio/libs/Helper/', 'extensions/');
 	if (!class_exists('scocurl')) eval("class scocurl extends Scorpio_Helper_Curl_Core {}");
+	*/
 
 //	scocurl::instance($url)->setopt(CURLOPT_FOLLOWLOCATION, true)->setopt(CURLOPT_HEADER, true)->setopt(CURLOPT_COOKIEJAR, true)->exec();
 //	$c = scocurl::_self()->getExec(true);
