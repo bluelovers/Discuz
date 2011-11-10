@@ -16,8 +16,10 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	function global_footer() {
+	public function global_footer() {
 		global $_G;
+
+		$ret = '';
 
 		if (
 			1
@@ -31,12 +33,69 @@ class plugin_sco_social extends _sco_dx_plugin {
 				|| defined('IN_MOBILE')
 			)
 		) {
-			return $this->_fetch_template($this->_template('hook_global_footer'), array(
+			$ret .= $this->_fetch_template($this->_template('hook_global_footer'), array(
 				'_G' => array(
 					'uid' => $_G['uid'],
 				),
 			));
 		}
+
+		$ret .= $this->_fetch_template($this->_template('global_footer'), $this->attr['global']);
+
+		return $ret;
+	}
+
+	function _my_google_plus_html($attr = array()) {
+
+		$html_attr = '';
+
+		foreach((array)$attr as $_k => $_v) {
+			if ($_v === '' || $_v === null) {
+				continue;
+			}
+
+			$html_attr .= ' '.$_k.'="'.(string)$_v.'"';
+		}
+
+		return '<g:plusone'.$html_attr.'></g:plusone>';
+	}
+
+	function global_cpnav_extra1() {
+		global $_G;
+
+		$ret = '';
+
+		$ret .= '<a>';
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $_G['siteurl'],
+			'size' => 'small',
+		));
+		$ret .= '</a>';
+
+		return $ret;
+	}
+
+	function global_cpnav_extra3() {
+		if (CURSCRIPT != 'home') return;
+
+		global $space, $_G;
+
+		if (@in_array('home_space', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('home_space', 1, '', $space['uid']);
+		} else {
+			$canonical = 'home.php?uid='.$space['uid'];
+		}
+
+		$ret = '';
+
+		$ret .= '<a>';
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'small',
+		));
+		$ret .= '</a>';
+
+		return $ret;
 	}
 
 }
@@ -109,6 +168,127 @@ EOM;
 */
 
 		$content = preg_replace('/(\<html\s*)([^\<\>]*)(\>\s*\<head\>)/i', '\\1\\2 xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"\\3'.$_head, $content);
+	}
+
+	function viewthread_title_extra_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '');
+		} else {
+			$canonical = 'forum.php?mod=viewthread&tid='.$thread['tid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
+	}
+
+	function viewthread_useraction_output() {
+		return $this->viewthread_title_extra_output();
+	}
+
+	function forumdisplay_thread_output() {
+		global $_G;
+
+		$ret_array = array();
+
+		foreach ($_G['forum_threadlist'] as $_k => $thread) {
+			$ret = '';
+
+			$ret .= '<span class="y">';
+
+			if (@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+				$canonical = rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '');
+			} else {
+				$canonical = 'forum.php?mod=viewthread&tid='.$thread['tid'];
+			}
+
+			$ret .= $this->_my_google_plus_html(array(
+				'href' => $canonical,
+				'size' => 'small',
+			));
+
+			$ret .= '</span>';
+
+			$ret_array[$_k] = $ret;
+		}
+
+		return $ret_array;
+	}
+
+	function forumdisplay_forumaction_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_forumdisplay', 1, '', $_G['forum']['fid']);
+		} else {
+			$canonical = 'forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'];
+		}
+
+		$ret = '';
+
+		$ret .= '<span class="pipe">|</span>';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'small',
+		));
+
+		return $ret;
+	}
+
+}
+
+class plugin_sco_social_group extends plugin_sco_social_forum {
+
+	function forumdisplay_navlink_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_forumdisplay', 1, '', $_G['forum']['fid']);
+		} else {
+			$canonical = 'forum.php?mod=forumdisplay&fid='.$_G['forum']['fid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
+	}
+
+}
+
+class plugin_sco_social_home extends plugin_sco_social {
+
+	function space_blog_title_output() {
+		if (CURSCRIPT != 'home') return;
+
+		global $space, $_G, $blog;
+
+		if (@in_array('home_blog', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('home_blog', 1, '', $blog['blogid']);
+		} else {
+			$canonical = 'home.php?mod=space&uid='.$blog['uid'].'&do=blog&id='.$blog['blogid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => $canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
 	}
 
 }
