@@ -57,13 +57,19 @@ class plugin_sco_social extends _sco_dx_plugin {
 	function global_cpnav_extra3() {
 		if (CURSCRIPT != 'home') return;
 
-		global $space;
+		global $space, $_G;
+
+		if (@in_array('home_space', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('home_space', 1, '', $space['uid']);
+		} else {
+			$canonical = 'home.php?uid='.$space['uid'];
+		}
 
 		$ret = '';
 
 		$ret .= '<a>';
 		$ret .= $this->_my_google_plus_html(array(
-			'href' => 'home.php?uid='.$space['uid'],
+			'href' => 'home.php?uid='.$canonical,
 			'size' => 'small',
 		));
 		$ret .= '</a>';
@@ -147,7 +153,26 @@ EOM;
 
 class plugin_sco_social_home extends plugin_sco_social {
 
+	function space_blog_title_output() {
+		if (CURSCRIPT != 'home') return;
 
+		global $space, $_G, $blog;
+
+		if (@in_array('home_blog', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('home_blog', 1, '', $blog['blogid']);
+		} else {
+			$canonical = 'home.php?mod=space&uid='.$blog['uid'].'&do=blog&id='.$blog['blogid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => 'home.php?uid='.$canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
+	}
 
 }
 
