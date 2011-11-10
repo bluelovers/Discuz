@@ -19,6 +19,8 @@ class plugin_sco_social extends _sco_dx_plugin {
 	public function global_footer() {
 		global $_G;
 
+		$ret = '';
+
 		if (
 			1
 			&& $_G['uid']
@@ -31,14 +33,12 @@ class plugin_sco_social extends _sco_dx_plugin {
 				|| defined('IN_MOBILE')
 			)
 		) {
-			return $this->_fetch_template($this->_template('hook_global_footer'), array(
+			$ret .= $this->_fetch_template($this->_template('hook_global_footer'), array(
 				'_G' => array(
 					'uid' => $_G['uid'],
 				),
 			));
 		}
-
-		$ret = '';
 
 		$ret .= $this->_fetch_template($this->_template('global_footer'), $this->attr['global']);
 
