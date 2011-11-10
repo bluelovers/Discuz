@@ -16,7 +16,7 @@ class plugin_sco_social extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
-	public function global_footer_output() {
+	public function global_footer() {
 		$ret = '';
 
 		$ret .= $this->_fetch_template($this->_template('global_footer'), $this->attr['global']);
@@ -35,13 +35,14 @@ class plugin_sco_social extends _sco_dx_plugin {
 		return '<g:plusone'.$html_attr.'></g:plusone>';
 	}
 
-	function global_cpnav_extra1_output() {
+	function global_cpnav_extra1() {
 		global $_G;
 
 		$ret = '';
 
 		$ret .= $this->_my_google_plus_html(array(
 			'href' => $_G['siteurl'],
+			'size' => 'small',
 		));
 
 		return $ret;
