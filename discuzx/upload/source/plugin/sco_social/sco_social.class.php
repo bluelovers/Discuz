@@ -149,6 +149,29 @@ EOM;
 		$content = preg_replace('/(\<html\s*)([^\<\>]*)(\>\s*\<head\>)/i', '\\1\\2 xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"\\3'.$_head, $content);
 	}
 
+	function viewthread_title_extra_output() {
+		global $_G, $thread;
+
+		if (@in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$canonical = rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '');
+		} else {
+			$canonical = 'forum.php?mod=viewthread&tid='.$thread['tid'];
+		}
+
+		$ret = '';
+
+		$ret .= $this->_my_google_plus_html(array(
+			'href' => 'home.php?uid='.$canonical,
+			'size' => 'medium',
+		));
+
+		return $ret;
+	}
+
+}
+
+class plugin_sco_social_group extends plugin_sco_social_forum {
+
 }
 
 class plugin_sco_social_home extends plugin_sco_social {
