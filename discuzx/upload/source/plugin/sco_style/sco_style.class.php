@@ -218,11 +218,22 @@ class plugin_sco_style_home extends plugin_sco_style {
 		return $list;
 	}
 
-	function _my_spacecss($css) {
+	function _my_spacecss($spacecss, $checksecurity = true) {
 
+		$spacecss = dstripslashes($spacecss);
 
+		if (
+			$checksecurity
+			&& preg_match("/(expression|import|javascript)/i", $spacecss)
+		) {
+			showmessage('css_contains_elements_of_insecurity');
+		}
 
-		return $css;
+		$spacecss = preg_replace("/(\<|\>)/is", '', $spacecss);
+
+		$spacecss = daddslashes($spacecss);
+
+		return $spacecss;
 	}
 
 }
