@@ -41,7 +41,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 		$theme = $this->_my_theme_get_by_uid($uid);
 
-		return '<style id="diy_style_plugin">'.$theme['theme_css'].'</style>';
+		return '<style id="diy_style_plugin">'.($theme['theme_disable'] ? '' : $theme['theme_css']).'</style>';
 	}
 
 	function _my_theme_get_by_uid($uid, $limit = 1) {
@@ -57,7 +57,10 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 		$ret = array();
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_theme_diy')." WHERE theme_authorid = '{$uid}' $limitsql");
+		$query = DB::query("SELECT td.*, tu.uid, tu.theme_disable
+			FROM ".DB::table('home_theme_diy')." td
+			LEFT JOIN ".DB::table('home_theme_user')." tu On tu.uid = td.theme_authorid
+			WHERE td.theme_authorid = '{$uid}' $limitsql");
 		while ($theme = DB::fetch($query)) {
 			$ret[$theme['theme_id']] = $theme;
 		}
@@ -124,12 +127,16 @@ class plugin_sco_style_home extends plugin_sco_style {
 				));
 
 				DB::insert('home_theme_user', array(
-					'uid' => $my_theme['theme_id'],
+					'uid' => $uid,
 					'theme_id' => $my_theme['theme_id'],
 					'theme_disable' => $_G['gp_theme_disable'] ? 1 : 0,
-				));
+				), 0, 1);
 
 				$my_theme['theme_css'] = $_G['gp_theme_css'];
+
+				dheader('location: home.php?mod=space');
+
+				exit();
 			}
 
 			$this->_dx_hook_value_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());

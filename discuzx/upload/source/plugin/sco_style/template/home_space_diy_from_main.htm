@@ -35,6 +35,7 @@ body {
 			<input type="hidden" name="mod" value="$_v[2]" />
 			<input type="hidden" name="ac" value="$_v[3]" />
 			<input type="hidden" name="op" value="$_v[4]" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
 
 		<textarea style="width: 99%; height: 20em;" name="theme_css">
 			<!--{$my_theme['theme_css']:dhtmlspecialchars()}-->
@@ -47,7 +48,7 @@ body {
 
 			<button type="submit" id="themesubmit" class="pn pnc" value="true" name="themesubmit"><span>{lang save}</span></button>
 
-			<label><input type="checkbox" name="theme_disable" value="true" /> {lang disable}</label>
+			<label><input type="checkbox" name="theme_disable" value="true" {if $my_theme[theme_disable]} checked="checked"{/if} /> {lang disable}</label>
 		</form>
 	</div>
 </div>
