@@ -59,7 +59,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 		$query = DB::query("SELECT td.*, tu.uid, tu.theme_disable
 			FROM ".DB::table('home_theme_diy')." td
-			LEFT JOIN ".DB::table('home_theme_user')." tu On tu.uid = td.theme_authorid
+			LEFT JOIN ".DB::table('home_theme_user')." tu On (tu.uid = '{$uid}' AND tu.theme_id = td.theme_id)
 			WHERE td.theme_authorid = '{$uid}' $limitsql");
 		while ($theme = DB::fetch($query)) {
 			$ret[$theme['theme_id']] = $theme;
