@@ -23,11 +23,13 @@ body {
 </style>
 
 <div id="controlcontent" class="cl">
+	<!--{if $themes}-->
 	<ul class="content cl" _style="overflow-y: auto; height: 90px;">
 	<!--{loop $themes $value}-->
 		<li title="$value['name']{LF}$value[dir]"><a href="javascript:;" onclick="spaceDiy.changeStyle('$value[dir]');return false;"><img src="{STATICURL}$value['dir']/preview.jpg" />$value['name']</a></li>
 	<!--{/loop}-->
 	</ul>
+	<!--{/if}-->
 
 	<div class="cl" id="theme_edit">
 		<form method="post" action="$_G['PHP_SELF']">
