@@ -139,6 +139,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 			if (submitcheck('themesubmit')) {
 				$my_theme = $this->_my_theme_get_by_uid($uid);
 
+				$_G['gp_theme_css'] = $this->_my_spacecss($_G['gp_theme_css']);
+
 				$my_theme['theme_name'] = $this->_my_getcssname($_G['gp_theme_css']);
 
 				if ($my_theme['theme_id']) {
@@ -214,6 +216,13 @@ class plugin_sco_style_home extends plugin_sco_style {
 			}
 		}
 		return $list;
+	}
+
+	function _my_spacecss($css) {
+
+
+
+		return $css;
 	}
 
 }
