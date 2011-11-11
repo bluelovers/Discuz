@@ -126,7 +126,9 @@ class plugin_sco_style_home extends plugin_sco_style {
 			include_once libfile('function/portalcp');
 			include_once libfile('function/space');
 
+			/*
 			$themes = gettheme('space');
+			*/
 
 			global $space;
 
