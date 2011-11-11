@@ -15,6 +15,20 @@ class plugin_sco_style extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
+	function _my_allow_use() {
+		global $_G;
+
+		$ret = false;
+
+		if (
+			$_G['uid']
+		) {
+			$ret = true;
+		}
+
+		return $ret;
+	}
+
 }
 
 class plugin_sco_style_home extends plugin_sco_style {
@@ -47,6 +61,11 @@ class plugin_sco_style_home extends plugin_sco_style {
 	function _my_theme_get_by_uid($uid, $limit = 1) {
 
 		$uid = intval($uid);
+
+		$ret = array();
+
+		if (empty($uid)) return $ret;
+
 		if ($limit < 0) {
 			$limitsql = '';
 		} else {
@@ -54,8 +73,6 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 			$limitsql = "LIMIT {$limit}";
 		}
-
-		$ret = array();
 
 		$query = DB::query("SELECT td.*, tu.uid, tu.theme_disable
 			FROM ".DB::table('home_theme_diy')." td
@@ -97,6 +114,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 		if (
 			$_G['gp_ac'] == $_v[3]
 			&& $_G['gp_op'] == $_v[4]
+
+			&& $this->_my_allow_use()
 		) {
 			/**
 			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
@@ -107,9 +126,11 @@ class plugin_sco_style_home extends plugin_sco_style {
 			include_once libfile('function/portalcp');
 			include_once libfile('function/space');
 
+			/*
 			$themes = gettheme('space');
+			*/
 
-			global $_G, $space;
+			global $space;
 
 			$uid = $_G['uid'];
 			$space = getspace($uid);
@@ -120,10 +141,16 @@ class plugin_sco_style_home extends plugin_sco_style {
 			if (submitcheck('themesubmit')) {
 				$my_theme = $this->_my_theme_get_by_uid($uid);
 
+				$_G['gp_theme_css'] = $this->_my_spacecss($_G['gp_theme_css']);
+
+				$my_theme['theme_name'] = $this->_my_getcssname($_G['gp_theme_css']);
+
 				if ($my_theme['theme_id']) {
 
 					DB::update('home_theme_diy', array(
 						'theme_css' => $_G['gp_theme_css'],
+
+						'theme_name' => $my_theme['theme_name'],
 					), array(
 						'theme_id' => $my_theme['theme_id'],
 					));
@@ -133,6 +160,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 					$my_theme['theme_id'] = DB::insert('home_theme_diy', array(
 						'theme_css' => $_G['gp_theme_css'],
 						'theme_authorid' => $uid,
+
+						'theme_name' => $my_theme['theme_name'],
 					), 1);
 
 					$my_theme['theme_css'] = $_G['gp_theme_css'];
@@ -166,6 +195,19 @@ class plugin_sco_style_home extends plugin_sco_style {
 		}
 	}
 
+	function _my_getcssname($css) {
+		if ($css) {
+			preg_match("/\[name\](.+?)\[\/name\]/i", trim($css), $mathes);
+			if(!empty($mathes[1])) $name = dhtmlspecialchars($mathes[1]);
+		}
+
+		if (empty($name)) {
+			$name = 'No name';
+		}
+
+		return $name;
+	}
+
 	function _my_formatdata($data, $position, $space) {
 		$list = array();
 		foreach ((array)$data['block']['frame`frame1']['column`frame1_'.$position] as $blockname => $blockdata) {
@@ -176,6 +218,24 @@ class plugin_sco_style_home extends plugin_sco_style {
 			}
 		}
 		return $list;
+	}
+
+	function _my_spacecss($spacecss, $checksecurity = true) {
+
+		$spacecss = dstripslashes($spacecss);
+
+		if (
+			$checksecurity
+			&& preg_match("/(expression|import|javascript)/i", $spacecss)
+		) {
+			showmessage('css_contains_elements_of_insecurity');
+		}
+
+		$spacecss = preg_replace("/(\<|\>)/is", '', $spacecss);
+
+		$spacecss = daddslashes($spacecss);
+
+		return $spacecss;
 	}
 
 }
