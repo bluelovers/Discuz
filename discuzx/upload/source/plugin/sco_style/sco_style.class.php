@@ -15,6 +15,20 @@ class plugin_sco_style extends _sco_dx_plugin {
 		$this->_this(&$this);
 	}
 
+	function _my_allow_use() {
+		global $_G;
+
+		$ret = false;
+
+		if (
+			$_G['uid']
+		) {
+			$ret = true;
+		}
+
+		return $ret;
+	}
+
 }
 
 class plugin_sco_style_home extends plugin_sco_style {
@@ -97,6 +111,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 		if (
 			$_G['gp_ac'] == $_v[3]
 			&& $_G['gp_op'] == $_v[4]
+
+			&& $this->_my_allow_use()
 		) {
 			/**
 			 * @todo 在此 hack 掉 窩窩 DIY 的裝扮
@@ -109,7 +125,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 			$themes = gettheme('space');
 
-			global $_G, $space;
+			global $space;
 
 			$uid = $_G['uid'];
 			$space = getspace($uid);
@@ -126,6 +142,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 					DB::update('home_theme_diy', array(
 						'theme_css' => $_G['gp_theme_css'],
+
+						'theme_name' => $my_theme['theme_name'],
 					), array(
 						'theme_id' => $my_theme['theme_id'],
 					));
@@ -135,6 +153,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 					$my_theme['theme_id'] = DB::insert('home_theme_diy', array(
 						'theme_css' => $_G['gp_theme_css'],
 						'theme_authorid' => $uid,
+
+						'theme_name' => $my_theme['theme_name'],
 					), 1);
 
 					$my_theme['theme_css'] = $_G['gp_theme_css'];
