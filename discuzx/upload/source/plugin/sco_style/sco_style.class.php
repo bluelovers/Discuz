@@ -61,6 +61,9 @@ class plugin_sco_style_home extends plugin_sco_style {
 	function _my_theme_get_by_uid($uid, $limit = 1) {
 
 		$uid = intval($uid);
+
+		$ret = array();
+
 		if ($limit < 0) {
 			$limitsql = '';
 		} else {
@@ -68,8 +71,6 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 			$limitsql = "LIMIT {$limit}";
 		}
-
-		$ret = array();
 
 		$query = DB::query("SELECT td.*, tu.uid, tu.theme_disable
 			FROM ".DB::table('home_theme_diy')." td
