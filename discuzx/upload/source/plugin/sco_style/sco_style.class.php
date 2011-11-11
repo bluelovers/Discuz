@@ -120,11 +120,24 @@ class plugin_sco_style_home extends plugin_sco_style {
 			if (submitcheck('themesubmit')) {
 				$my_theme = $this->_my_theme_get_by_uid($uid);
 
-				DB::update('home_theme_diy', array(
-					'theme_css' => $_G['gp_theme_css'],
-				), array(
-					'theme_id' => $my_theme['theme_id'],
-				));
+				if ($my_theme['theme_id']) {
+
+					DB::update('home_theme_diy', array(
+						'theme_css' => $_G['gp_theme_css'],
+					), array(
+						'theme_id' => $my_theme['theme_id'],
+					));
+
+				} else {
+
+					$my_theme['theme_id'] = DB::insert('home_theme_diy', array(
+						'theme_css' => $_G['gp_theme_css'],
+						'theme_authorid' => $uid,
+					), 1);
+
+					$my_theme['theme_css'] = $_G['gp_theme_css'];
+
+				}
 
 				DB::insert('home_theme_user', array(
 					'uid' => $uid,
