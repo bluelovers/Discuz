@@ -105,6 +105,16 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 			$themes = gettheme('space');
 
+			global $_G, $space;
+
+			$uid = $_G['uid'];
+			$space = getspace($uid);
+			space_merge($space, 'field_home');
+
+			$this->_dx_hook_value_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
+
+			$my_theme = $this->_my_theme_get_by_uid($uid);
+
 			include $this->_template('home_space_diy_from');
 			dexit();
 		}

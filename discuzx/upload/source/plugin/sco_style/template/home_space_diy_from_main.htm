@@ -23,14 +23,14 @@ body {
 </style>
 
 <div id="controlcontent" class="cl">
-	<ul class="content" _style="overflow-y: auto; height: 90px;">
+	<ul class="content cl" _style="overflow-y: auto; height: 90px;">
 	<!--{loop $themes $value}-->
 		<li title="$value['name']{LF}$value[dir]"><a href="javascript:;" onclick="spaceDiy.changeStyle('$value[dir]');return false;"><img src="{STATICURL}$value['dir']/preview.jpg" />$value['name']</a></li>
 	<!--{/loop}-->
 	</ul>
 
-	<div>
-		<textarea>
+	<div class="cl">
+		<textarea style="width: 90%; height: 20em;">
 			<!--{$my_theme['theme_css']:dhtmlspecialchars()}-->
 		</textarea>
 	</div>
