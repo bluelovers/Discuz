@@ -11,7 +11,12 @@
 			<li id="navlayout"><a href="javascript:;" onclick="spaceDiy.getdiy('layout');this.blur();return false;">{lang diy_layout}</a></li>
 			<li id="navstyle"><a href="javascript:;" onclick="spaceDiy.getdiy('style');this.blur();return false;">{lang diy_style}</a></li>
 			<li id="navblock"><a href="javascript:;" onclick="spaceDiy.getdiy('block');this.blur();return false;">{lang diy_block}</a></li>
-			<!--li id="navdiy"><a href="javascript:;" onclick="spaceDiy.getdiy('diy');this.blur();return false;">{lang diy_dress}</a></li-->
+
+			<!--{if discuz_core::$tpl['home_space_diy_controlpanel_controlnav_diy']}-->
+			<li id="navdiy"><a href="javascript:;" onclick="spaceDiy.getdiy('diy');this.blur();return false;">{lang diy_dress}</a></li>
+			<!--{/if}-->
+
+			<!--{hook/home_space_diy_controlpanel_controlnav}-->
 		</ul>
 	</div>
 	<div id="controlcontent" class="cl">
