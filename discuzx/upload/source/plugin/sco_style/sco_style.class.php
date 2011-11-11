@@ -64,6 +64,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 		$ret = array();
 
+		if (empty($uid)) return $ret;
+
 		if ($limit < 0) {
 			$limitsql = '';
 		} else {
