@@ -1,0 +1,96 @@
+
+<link rel="stylesheet" type="text/css" href="{$_G[setting][csspath]}data/cache/style_{STYLEID}_css_diy.css{$_G[varhash_gzip]}?{VERHASH}" />
+
+<style>
+body {
+	padding-top: 0px;
+}
+
+#controlcontent {
+	height: auto;
+	overflow: visible;
+	overflow-y: visible;
+
+	border-width: 1px;
+	border-radius: 10px 10px 10px 10px;
+
+}
+
+#controlcontent li a, #controlcontent li label {
+	white-space: nowrap;
+	overflow: hidden;
+}
+</style>
+
+<div id="controlcontent" class="cl">
+	<ul class="content cl" _style="overflow-y: auto; height: 90px;">
+	<!--{loop $themes $value}-->
+		<li title="$value['name']{LF}$value[dir]"><a href="javascript:;" onclick="spaceDiy.changeStyle('$value[dir]');return false;"><img src="{STATICURL}$value['dir']/preview.jpg" />$value['name']</a></li>
+	<!--{/loop}-->
+	</ul>
+
+	<div class="cl" id="theme_edit">
+		<form method="post" action="$_G['PHP_SELF']">
+
+			<input type="hidden" name="mod" value="$_v[2]" />
+			<input type="hidden" name="ac" value="$_v[3]" />
+			<input type="hidden" name="op" value="$_v[4]" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+
+		<textarea style="width: 99%; height: 20em;" name="theme_css">
+			<!--{$my_theme['theme_css']:dhtmlspecialchars()}-->
+		</textarea>
+
+		<hr />
+			<button type="button" class="pn pnc" value="true" name="preview"><span>{lang preview}</span></button>
+			<button type="button" id="disablesubmit" class="pn" value="true" name="disablesubmit"><span>{lang disable}</span></button>
+		<hr />
+
+			<button type="submit" id="themesubmit" class="pn pnc" value="true" name="themesubmit"><span>{lang save}</span></button>
+
+			<label><input type="checkbox" name="theme_disable" value="true" {if $my_theme[theme_disable]} checked="checked"{/if} /> {lang disable}</label>
+		</form>
+	</div>
+</div>
+
+<script>
+jQuery(function(){
+
+	function diy_style_plugin(s) {
+		var _diy_style_plugin;
+
+		_diy_style_plugin = jQuery('style#diy_style_plugin');
+
+		if (_diy_style_plugin.size() == 0) {
+			_diy_style_plugin = jQuery('<style id="diy_style_plugin" />')
+				.appendTo('head')
+			;
+		}
+
+		if (s) {
+			_diy_style_plugin.html(s);
+		}
+
+		return _diy_style_plugin;
+	}
+
+	jQuery('#controlcontent #disablesubmit').click(function(){
+		var _s = diy_style_plugin();
+
+		_s.html('');
+
+		return doane();
+
+	});
+
+	jQuery('#controlcontent [name="preview"]').click(function(){
+		var _s = diy_style_plugin();
+
+		_s.html(jQuery('#theme_edit textarea').val());
+
+		return doane();
+
+	});
+
+});
+</script>

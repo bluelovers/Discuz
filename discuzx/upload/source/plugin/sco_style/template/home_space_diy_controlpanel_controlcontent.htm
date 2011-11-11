@@ -1,0 +1,42 @@
+
+<script>
+jQuery(function(){
+
+	if (spaceDiy) {
+
+		(function(_old_spaceDiy_getdiy){
+
+			var call_user_func_array = function(func, args) {
+				var argc = args.length, s = '';
+				for(i = 0;i < argc; i++) {
+					s += ',args[' + i + ']';
+				}
+				eval('var ret = ' + func + '(' + s.substr(1) + ');');
+
+				return ret;
+			};
+
+			spaceDiy.getdiy = function (type) {
+				if (type != 'diy') {
+					return call_user_func_array('_old_spaceDiy_getdiy', arguments);
+				} else {
+					var para = '&op='+type;
+					if (arguments.length > 1) {
+						for (var i = 1; i < arguments.length; i++) {
+							para += '&' + arguments[i] + '=' + arguments[++i];
+						}
+					}
+
+					var ajaxtarget = type == 'image' ? 'diyimages' : '';
+
+					var _diy = window.open('home.php?mod=spacecp&ac=index'+para, '_space_diy');
+
+					doane();
+				}
+			};
+		})(spaceDiy.getdiy);
+
+	}
+
+});
+</script>
