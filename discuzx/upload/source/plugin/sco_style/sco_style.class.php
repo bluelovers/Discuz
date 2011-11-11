@@ -120,6 +120,8 @@ class plugin_sco_style_home extends plugin_sco_style {
 			if (submitcheck('themesubmit')) {
 				$my_theme = $this->_my_theme_get_by_uid($uid);
 
+				$my_theme['theme_name'] = $this->_my_getcssname($_G['gp_theme_css']);
+
 				if ($my_theme['theme_id']) {
 
 					DB::update('home_theme_diy', array(
@@ -164,6 +166,19 @@ class plugin_sco_style_home extends plugin_sco_style {
 			include $this->_template('home_space_diy_from');
 			dexit();
 		}
+	}
+
+	function _my_getcssname($css) {
+		if ($css) {
+			preg_match("/\[name\](.+?)\[\/name\]/i", trim($css), $mathes);
+			if(!empty($mathes[1])) $name = dhtmlspecialchars($mathes[1]);
+		}
+
+		if (empty($name)) {
+			$name = 'No name';
+		}
+
+		return $name;
 	}
 
 	function _my_formatdata($data, $position, $space) {
