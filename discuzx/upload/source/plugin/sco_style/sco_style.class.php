@@ -102,6 +102,7 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 			include_once libfile('function/space');
 			include_once libfile('function/portalcp');
+			include_once libfile('function/space');
 
 			$themes = gettheme('space');
 
@@ -111,13 +112,50 @@ class plugin_sco_style_home extends plugin_sco_style {
 			$space = getspace($uid);
 			space_merge($space, 'field_home');
 
+			$userdiy = getuserdiydata($space);
+
+			if (submitcheck('themesubmit')) {
+				$my_theme = $this->_my_theme_get_by_uid($uid);
+
+				DB::update('home_theme_diy', array(
+					'theme_css' => $_G['gp_theme_css'],
+				), array(
+					'theme_id' => $my_theme['theme_id'],
+				));
+
+				DB::insert('home_theme_user', array(
+					'uid' => $my_theme['theme_id'],
+					'theme_id' => $my_theme['theme_id'],
+					'theme_disable' => $_G['gp_theme_disable'] ? 1 : 0,
+				));
+
+				$my_theme['theme_css'] = $_G['gp_theme_css'];
+			}
+
 			$this->_dx_hook_value_add('global_header_javascript_before_body', $this->_my_global_header_javascript_before_body());
 
 			$my_theme = $this->_my_theme_get_by_uid($uid);
 
+			$widths = getlayout($userdiy['currentlayout']);
+			$leftlist = $this->_my_formatdata($userdiy, 'left', $space);
+			$centerlist = $this->_my_formatdata($userdiy, 'center', $space);
+			$rightlist = $this->_my_formatdata($userdiy, 'right', $space);
+
 			include $this->_template('home_space_diy_from');
 			dexit();
 		}
+	}
+
+	function _my_formatdata($data, $position, $space) {
+		$list = array();
+		foreach ((array)$data['block']['frame`frame1']['column`frame1_'.$position] as $blockname => $blockdata) {
+			if (strpos($blockname, 'block`') === false || empty($blockdata) || !isset($blockdata['attr']['name'])) continue;
+			$name = $blockdata['attr']['name'];
+			if(check_ban_block($name, $space)) {
+				$list[$name] = getblockhtml($name, $data['parameters'][$name]);
+			}
+		}
+		return $list;
 	}
 
 }
