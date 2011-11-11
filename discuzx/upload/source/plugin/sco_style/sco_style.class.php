@@ -145,6 +145,13 @@ class plugin_sco_style_home extends plugin_sco_style {
 
 				$my_theme['theme_name'] = $this->_my_getcssname($_G['gp_theme_css']);
 
+				if (
+					empty($_G['gp_theme_css'])
+				) {
+					dheader('location: home.php?mod=space');
+					exit();
+				}
+
 				if ($my_theme['theme_id']) {
 
 					DB::update('home_theme_diy', array(
