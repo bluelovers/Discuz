@@ -1,0 +1,80 @@
+/*
+[name]青[/name]
+[iconbgcolor]#429296[/iconbgcolor]
+Powered by Discuz! X
+*/
+
+body { background: #1F6681 url(eis_bg) repeat-x 0 0; }
+#eis_topbg {background:url(eis_topbg.png) no-repeat center top;}
+#eis_nv { background:url(eis_nvbg.png) no-repeat left top;}
+			/*当前页*/
+			#eis_nv li.a { background:url(eis_nv_a.png) no-repeat 100% center;}
+			#eis_nv li a:hover { background:url(eis_nv_a.png) no-repeat 100% center;}
+#mu ul { background: url(mu_bg.png) no-repeat center bottom; }						
+#qmenu { color:#FFF!important;background-image: url(qmenu.png); }	
+
+#eis_ftbg{ height:200px!important; background:url(eis_ftbg.png) repeat-x center bottom;}
+#eis_ft { height:200px!important; background:url(eis_ft.png) no-repeat center top; }
+#ft{ height:200px!important; padding-top:100px; border:none;}
+.eis_wpbg_top{ background:url(eis_wpbg_top.jpg) no-repeat top center;}
+#eis_thread_types{padding-left:30px; background:url(eis_title_l.png) no-repeat left 0;}
+	#thread_types{ padding:0px; height:35px; line-height:35px; border:1px solid #063;verflow:hidden; background:url(eis_title.png) no-repeat right top;}
+#threadlist .th{ background:url(eis_thbg.png) no-repeat left top;}
+	#threadlist .eis_th{ background:url(eis_thbg_r.png) no-repeat right top;}
+	#threadlist .bm_c{ background:url(eis_th_bm_c.png) repeat-y 0 0;}
+	#threadlist .eis_bm_c{ background:url(eis_bm_cr.png) repeat-y right 0;}
+	#threadlist .bm_c table th,#threadlist .bm_c table td{ background:none; border-bottom:1px solid #EBEBEB;}
+	#threadlist .eis_th_b{ background:url(eis_thbg_b.png) no-repeat left bottom;}
+	#threadlist .eis_th_b .eis_th_br{ background:url(eis_thbg_br.png) no-repeat right bottom;}	
+#modmenu{ height:31px; line-height:31px; padding-left:30px;padding-top:5px; background:url(eis_title.png) no-repeat right 0;}	
+.bm_h, .tl th, .tl td { border-bottom-color: #CDCDCD; }
+.fl .bm_h { border-color: #C5E6DF; background: #EBF5F6 url(titlebg.png) repeat-x 0 0; }
+	#ct #sd_bdl{border:none;background:url(eis_fm_bg.png) no-repeat left top;} 
+	#ct #eis_sd_bdl{background:url(eis_fm_bbg.jpg) no-repeat right bottom;}
+	#forumleftside{ border:none;padding:0px 5px;}
+	#forumleftside .bdl_h{ color:#FFF; padding:0px;}
+	#forumleftside dt{ border:none;}
+	#forumleftside dd.bdl_a a{ background:#F9F9F9; color:#666;}
+	#nv_group #wp { min-height:550px;-min-height:550px;}
+	#nv_home  #wp{ min-height:550px; -min-height:550px;}
+	#nv_misc  #wp{ min-height:550px;-min-height:550px;}
+/* 重定义 {SPECIALBG} */
+.bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #EBF5F6; }
+
+.ct2_a, .ct3_a { background-image: url(vlineb.png); }
+.tbn li.a { background: #FFF; }
+	#nv_portal.pg_portalcp .ct2_a_r, #nv_forum.pg_post .ct2_a_r { background-image: none; }
+
+/* 重定义 {SPECIALBORDER} */
+.bmn, .pg a, .pgb.a, .pg strong, .card, .card .o, div.exfm  { border-color: #3793B6; }
+.pg strong { background-color:#3793B6; color:#FFF; }
+.pn, .tb .o, .tb .o a { background-image: url(pn.png);}
+	.pnc, a.pnc, .tb .o { border-color: #ABD9EA; }
+
+
+.ad td.pls { background-color: #C5E6DF; }
+
+/* 重定义字体 */
+#qmenu, .fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #429296; }
+.pll .s a.go { color: #FFF; }
+.xi2, .xi2 a { color: #000; }
+
+/* 重定义按钮 */
+.pgs #newspecial, .pgs #newspecialtmp { float: left; background: url(pn_post.png) no-repeat 0 0; }
+#post_reply, #post_replytmp { float: left; background: url(pn_reply.png) no-repeat 0 0; }
+	#newspecial img, #newspecialtmp img, #post_reply img, #post_replytmp img { opacity: 0; filter: alpha(opacity=0); }
+.moodfm_btn { background-image: url(mood_input_btn.png) !important; }
+#create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
+	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
+.el .ec .hot { background-image: url(hotspot.gif); }
+.pll .s { background-image:url(polljoins.gif); }
+
+/* 重定义侧边导航 */
+.bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #C2D5E3; background-color: #EBF5F6; }
+	.bdl dt { background-image: url(titlebg_sd.png); }
+.bdl dd.bdl_a a { color: #429296; }
+
+/* 重定义下拉菜单 */
+.p_pop a { border-bottom-color: #EBF5F6; }
+	.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #EBF5F6; color: #429296; }
+	.blk a:hover { background-color: transparent; }
