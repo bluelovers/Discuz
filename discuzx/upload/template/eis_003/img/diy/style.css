@@ -1,0 +1,58 @@
+/* CSS Document */
+
+.frame { border: none; background:none; }
+.block { margin:0; padding:0; background:#fff; }
+.frame-tab { margin-bottom: 0px; border: none; background:none; }
+.tab-title { padding: 0; width: 100% !important; border: none; }
+.tab-title { background:none; } 
+.frame-tab .tab-title .titletext { float: left; margin:0; }
+.frame-tab .tb li { padding:0; margin:0; }
+.frame-tab .tb li a{ padding:0; border:none; }
+.frame-tab .tb-c { padding:0; }
+
+/*框架布局*/
+.eis_f1 { height:450px; overflow:hidden; margin-bottom:10px; }
+.eis_f1 .frame-1-1-l { height:450px; width:700px; overflow:hidden; }
+.eis_f1 .frame-1-1-r { height:450px; width:250px; overflow:hidden; }
+
+.eis_f2 { overflow:hidden; }
+.eis_f2 .frame-1-1-l { width:700px; overflow:hidden; }
+.eis_f2 .frame-1-1-r { width:250px; overflow:hidden; }
+
+.eis_b1 { width:230px; height:68px; overflow:hidden; padding:5px 10px; margin-bottom:10px; }
+.eis_b1 p { height:22px; line-height:22px; text-align:center; }
+
+.eis_b2 { width:250px; height:350px; overflow:hidden; padding:10px 0; margin-bottom:10px; }
+.eis_b2 .blocktitle { height:30px; line-height:30px; padding-left:40px; background:url(titico.png) no-repeat 10px 30%; border-bottom:2px solid #D0C5BB; }
+
+.eis_b3 { margin-bottom:10px; }
+.eis_b3 .blocktitle { height:30px; line-height:30px; padding-left:40px; background:url(titico.png) no-repeat 10px 30%; border-bottom:2px solid #D0C5BB; }
+.eis_b3 .dxb_bc { padding:10px; }
+
+.eis_b4 .blocktitle { height:30px; line-height:30px; padding-left:40px; background:url(titico.png) no-repeat 10px 30%; border-bottom:2px solid #D0C5BB; }
+.eis_b3 .blocktitle { height:30px; line-height:30px; padding-left:40px; background:url(titico.png) no-repeat 10px 30%; border-bottom:2px solid #D0C5BB; }
+.eis_b3 .dxb_bc { padding:10px; }
+
+/*内部样式*/
+
+/*eis_top10o 首图*/
+.eis_top10o{ background:url(eis_top10o.gif) no-repeat left 3px; height:300px; margin:10px;}
+.eis_top10o li.first{ height:46px; border-bottom:1px dotted #ccc; padding-bottom:6px; padding-left:30px;}
+.eis_top10o li.first img{ width:46px; height:46px; float:left; margin-right:6px;}
+.eis_top10o li.first h4{ height:22px; line-height:22px; overflow:hidden; font-size:12px; font-weight:100}
+.eis_top10o li.first p{ line-height:22px; height:20px; overflow:hidden; color: #999}
+.eis_top10o li.normal{ height:26px; line-height:26px; padding-left:30px; overflow:hidden; border-bottom:1px dotted #ccc;}
+.eis_top10o li.normal span{ float:right; font-size:12px; color:#999; width:30px; text-align:center; }
+
+/*eis_piclist图片列表*/
+.eis_piclist1{ }
+.eis_piclist1 li{ float:left;text-align:center; width:170px; height:160px;}
+.eis_piclist1 li div{ overflow:hidden; margin:0 auto; border:1px solid #ccc; padding:2px;}
+.eis_piclist1 li p{ height:30px; line-height:30px; overflow:hidden; padding:0 5px; text-align:center; color:#999}
+.eis_piclist1 li p a{ color:#369}
+
+/*eis_tpl 图文*/
+.eis_tpl1{ float:left; height:200px; overflow:hidden; border-bottom:1px dotted #ddd; margin-bottom:10px; width:300px;}
+.eis_tpl1 img{ border:1px solid #ddd; padding:2px; float:left; margin-right:10px;}
+.eis_tpl1 h3{ height:30px; line-height:30px; font-size:14px; overflow:hidden}
+.eis_tpl1 p{ line-height:20px; color:#999}
