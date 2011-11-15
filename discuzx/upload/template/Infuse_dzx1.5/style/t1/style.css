@@ -1,0 +1,44 @@
+/*
+[name]รูปแบบที่ 2[/name]
+[iconbgcolor]#8F2C36[/iconbgcolor]
+Powered by Discuz! X
+*/
+
+body {background: #19140E;}
+#body_bg {background: #19140E url(backgrounds/bg.jpg) 50% 0 no-repeat;}
+#logo {float: left;margin: 0 25px 0 0;width: 185px;height: 55px;background: url(logo/logo.png) 0 0 no-repeat;}
+.feature-module {color: #F0AC9F;}
+
+#top-right ul li a:hover {color: #F0B400;}
+
+#searchmod-surround {background: url(showcase/search-bg.png) 0 0 no-repeat; width: 272px; height: 28px;}
+#search-btn { float: left; margin: 4px 4px 4px 0px; border:0; outline: none; background: url(showcase/search-tools.png) 0 0 no-repeat; width: 21px; height: 20px; text-transform: uppercase; text-indent: -5000px; cursor:pointer; }
+
+.main-tm, .main-tl, .main-tr, .main-bm, .main-bl, .main-br, .show-tm, .show-tl, .show-tr, .show-bm, .show-bl, .show-br {background-image: url(mainbody/surrounds.png);}
+.main-m {background: #fff;}
+.main-l {background: url(mainbody/main-l.png) 0 0 repeat-y;}
+.main-r {background: url(mainbody/main-r.png) 100% 0 repeat-y;}
+.show-m {background: #4E161B url(showcase/show-m.png) 0 0 repeat-x;}
+.show-l {background: url(showcase/show-l.png) 0 0 repeat-y;}
+.show-r {background: url(showcase/show-r.png) 100% 0 repeat-y;}
+
+#horiz-menu {display: block;background: url(showcase/menu-bg.png) 0 0 repeat-x;height: 68px;}
+#nv_new a { color: #F0AC9F; }
+#nv_new li span { margin-top: -2px; display: block; color: #F0AC9F;font-weight: normal;font-size: 11px; }
+#nv_new li.a { display: block; background: url(showcase/menu-div.png) no-repeat right top;  }
+#nv_new li.a a { display: block; padding:4px 20px 0 20px;margin: 0 2px 0 0; color: #F0B400; text-decoration:none; background: url(showcase/active-menu-bg.png) repeat-x top; }
+#nv_new li a { position:relative;height:46px;line-height:20px;padding:4px 20px 0 20px;text-decoration:none;font-weight: bold;font-size:14px;float:left;z-index:10;text-align:left;background: url(showcase/menu-div.png) no-repeat right top;  }
+
+#footer-bg {padding-top: 70px;position: relative;z-index: 1;background: url(backgrounds/footer-bg.jpg) 50% 0 no-repeat;}
+#footer {position: relative;overflow: hidden;background: #211B0F url(footer/footer-bg.png) 0 0 repeat-x;color: #9D8D75;}
+#footer a {font-weight: bold;outline: none;color: #9D8D75;}
+#footer-bg2 {left: 0;background: transparent;width: 160px;height: 94px;position: absolute;top: -56px;z-index: 2;}
+#footer-bg3 {right: 0;background: transparent;width: 160px;height: 94px;position: absolute;top: -56px;z-index: 2;}
+#ft_ii { padding: 10px 0 10px; border-top: 1px solid #332A17; line-height: 1.8; color: #9D8D75; }
+
+#bottom_logo {background: url(footer/bottom_logo.png) 0 0 no-repeat;width: 198px;height: 20px;display: block;margin: 0 auto;}
+
+#qmenu_menu ul a { color: #F0AC9F; padding-left: 26px; background: url(noicon.gif) no-repeat 6px 50%; }
+#qmenu_menu ul a:hover { background-color: #7C383C; color: #F0B400; text-shadow: none; text-decoration: none; }
+.p_pop_top { padding: 5px 0 20px; background: url(showcase/drop-bg-1.png) no-repeat bottom; }
+.p_pop_top a { position: relative; display: block; border: 1px solid; border-color: #7C383C; padding: 5px 15px; white-space: nowrap; }

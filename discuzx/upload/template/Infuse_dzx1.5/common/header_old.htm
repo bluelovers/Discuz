@@ -1,0 +1,257 @@
+<!--{subtemplate common/header_common}-->
+	<!--{if defined('CURMODULE') && ($_G['basescript'] == 'forum' || $_G['basescript'] == 'group') && (CURMODULE == 'index' || CURMODULE == 'forumdisplay' || CURMODULE == 'group')}-->$rsshead<!--{/if}-->
+	<!--{if $_G['basescript'] == 'forum' || $_G['basescript'] == 'group'}-->
+		<!--{if $_G['basescript'] == 'forum' && !empty($_G['cookie']['widthauto']) && empty($_G['disabledwidthauto'])}-->
+			<link rel="stylesheet" id="css_widthauto" type="text/css" href="data/cache/style_{STYLEID}_widthauto.css?{VERHASH}" />
+			<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>
+		<!--{/if}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
+	<!--{elseif $_G['basescript'] == 'home' || $_G['basescript'] == 'userapp'}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}home.js?{VERHASH}"></script>
+	<!--{elseif $_G['basescript'] == 'portal'}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+	<!--{/if}-->
+	<!--{if $_G['basescript'] != 'portal' && $_GET['diy'] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+	<!--{/if}-->
+	<!--{if $_GET[diy] == 'yes' && ($_G[mod] == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+	<link rel="stylesheet" type="text/css" href="data/cache/style_{STYLEID}_css_diy.css?{VERHASH}" />
+	<!--{/if}-->
+</head>
+
+<body id="nv_{$_G[basescript]}" class="pg_{CURMODULE}" onkeydown="if(event.keyCode==27) return false;">
+	<!--{if ($_G[mod]!='topic' && $_G[group][allowdiy] && !empty($_G['style']['tplfile'])) || (!empty($_G['style']['tplfile']) && $_G[mod]=='topic' && (($_G['group']['allowaddtopic'] && $topic[uid]==$_G[uid]) || $_G[group][allowmanagetopic]))}-->
+	<a id="diy-tg" href="javascript:openDiy();" title="{lang open_diy}"><img src="{STATICURL}image/diy/panel-toggle.png" alt="DIY" /></a>
+	<!--{/if}-->
+	<div id="append_parent"></div><div id="ajaxwaitid"></div>
+	<!--{if $_GET['diy'] == 'yes' && (CURMODULE == 'topic' || $_G[group][allowdiy]) && !empty($_G['style']['tplfile'])}-->
+		<!--{template common/header_diy}-->
+	<!--{/if}-->
+	<!--{if empty($topic) || $topic[useheader]}-->
+	<!--{ad/headerbanner/wp a_h}-->
+
+<div id="body_bg">
+
+		<!-- Begin Header -->
+		
+		<div id="header">
+				<div class="padding">
+				
+					<!-- Begin Logo -->
+					
+					<div class="logo-module">
+						<a href="#" id="logo" name="logo"></a>
+					</div>
+					
+					<!-- End Logo -->
+					
+					<div id="top-right-surround">
+					
+						<!-- Begin Top Blogroll -->
+					
+						<div id="top-right">
+							<div class="moduletable">
+								<ul>
+		<script>
+				function addfav()
+				{
+				var BookmarkURL = "$_G['setting']['siteurl']"
+				var BookmarkTitle = "$_G['setting']['sitename']"
+				if (document.all)
+				{
+				// Add to Favorites (Internet Explorer)
+				window.external.AddFavorite(BookmarkURL, BookmarkTitle)
+				}
+				else
+				{
+				// Add to Bookmarks (Mozilla Firefox)
+				window.sidebar.addPanel(BookmarkTitle, BookmarkURL, '');
+				}
+				}
+
+				function setHomepage()
+				{
+				if (document.all)
+				{
+				document.body.style.behavior = "url(#default#homepage)";
+				document.body.setHomePage("$_G['setting']['siteurl']");
+				}
+				else if (window.sidebar)
+				{
+				if (window.netscape)
+				{
+				try
+				{
+				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+				}
+				catch(e)
+				{
+				alert("this action was aviod by your browser,if you want to enable,please enter about:config in your address line,and change the value of signed.applets.codebase_principal_support to true");
+				}
+				}
+				var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+				prefs.setCharPref("browser.startup.homepage", "$_G['setting']['siteurl']");
+				}
+				}
+		</script>
+								<li><a href="http://www.twitter.com" target="_blank">Twitter</a></li>
+								<li><a href="http://www.facebook.com" target="_blank">Facebook</a></li>
+								<li><a href="javascript:addfav()">Add To Favorites</a></li>
+								<li><a href="javascript:setHomepage()">Set As Homepage</a></li>
+								</ul>
+							</div>
+						</div>
+						
+						<!-- End Top Blogroll -->
+						
+						<!-- Begin Search -->
+						
+						<div id="searchmod">
+							<div class="moduletable">
+								<div id="searchmod-surround">
+									<form method="post" autocomplete="off" action="search.php?searchsubmit=yes" target="_blank">
+										<input type="hidden" name="mod" value="search" />
+										<input type="hidden" name="formhash" value="{FORMHASH}" />
+										<input type="hidden" name="srchtype" value="title" />
+										<input type="text" name="srchtxt" id="search-text" value="{lang enter_content}" autocomplete="off" onfocus="searchFocus(this);" onblur="searchBlur(this);" />
+										<button type="submit" id="search-btn" name="searchsubmit" value="true">{lang search}</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						
+						<!-- End Search -->
+
+						
+					</div>
+
+					
+				</div>
+		</div>
+		
+		<!-- End Header -->
+
+
+		<!-- Begin Wrapper -->
+		
+		<div class="wrapper">
+
+			<!-- Begin Showcase -->
+			
+			<div class="show-tm">
+				<div class="show-tl"></div>
+				<div class="show-tr"></div>
+			</div>
+			<div class="show-m">
+				<div class="show-l">
+					<div class="show-r">
+
+						<!-- Begin Top Menu Widget Position -->
+						
+						<div id="horiz-menu">
+							<div class="wrapper">
+								<div class="padding">
+									<div id="horizmenu-surround">
+
+			<!--{if !IS_ROBOT}-->
+				<div id="qmenu_menu" class="p_pop_top" style="display: none; zoom: 1;">
+						<ul>
+							<!--{loop $_G['setting']['mynavs'] $nav}-->
+								<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}-->
+									<li>$nav[code]</li>
+								<!--{/if}-->
+							<!--{/loop}-->
+						</ul>
+						<!--{if !empty($_G['style']['extstyle'])}-->
+							<div class="sslct cl">
+								<!--{if !$_G[style][defaultextstyle]}--><span class="sslct_btn" onclick="extstyle('')" title="{lang default}"><i>&nbsp;</i></span><!--{/if}-->
+								<!--{loop $_G['style']['extstyle'] $extstyle}-->
+									<span class="sslct_btn" onclick="extstyle('$extstyle[0]')" title="$extstyle[1]"><i style='background:$extstyle[2]'>&nbsp;</i></span>
+								<!--{/loop}-->
+							</div>
+						<!--{/if}-->
+				</div>
+			<!--{/if}-->
+
+			<div id="nv_new">
+				<ul>
+					<!--{eval $mnid = getcurrentnav();}-->
+					<!--{loop $_G['setting']['navs'] $nav}-->
+						<!--{if $nav['available'] && (!$nav['level'] || ($nav['level'] == 1 && $_G['uid']) || ($nav['level'] == 2 && $_G['adminid'] > 0) || ($nav['level'] == 3 && $_G['adminid'] == 1))}--><li {if $mnid == $nav[navid]}class="a" {/if}$nav[nav]></li><!--{/if}-->
+					<!--{/loop}-->
+					<li><a href="home.php" id="qmenu" onmouseover="showMenu(this.id)" hidefocus="true" title="เมนูเพิ่มเติม"  >More Menu<span>เมนูเพิ่มเติม</span></a></li>
+				</ul>
+			</div>
+			<!--{if !empty($_G['setting']['plugins']['jsmenu'])}-->
+				<ul class="p_pop h_pop" id="plugin_menu" style="display: none">
+				<!--{loop $_G['setting']['plugins']['jsmenu'] $module}-->
+					 <!--{if !$module['adminid'] || ($module['adminid'] && $_G['adminid'] > 0 && $module['adminid'] >= $_G['adminid'])}-->
+					 <li>$module[url]</li>
+					 <!--{/if}-->
+				<!--{/loop}-->
+				</ul>
+			<!--{/if}-->
+			$_G[setting][menunavs]
+			<div id="mu" class="cl">
+			<!--{if $_G['setting']['subnavs']}-->
+				<!--{loop $_G[setting][subnavs] $navid $subnav}-->
+					<!--{if $_G['setting']['navsubhover'] || $mnid == $navid}-->
+					<ul class="cl {if $mnid == $navid}current{/if}" id="snav_$navid" style="display:{if $mnid != $navid}none{/if}">
+					$subnav
+					</ul>
+					<!--{/if}-->
+				<!--{/loop}-->
+			<!--{/if}-->
+			</div>
+			
+									</div>
+									<div style="clear: both;"></div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- End Top Menu Widget Position -->
+
+						<!-- Begin Showcase Widget Position -->
+						<!-- 
+						<div class="feature-module">
+						
+							
+
+						</div>
+						-->
+						<!-- End Showcase Widget Position -->
+
+					</div>
+				</div>
+			</div>
+			<div class="show-bm">
+				<div class="show-bl"></div>
+				<div class="show-br"></div>
+			</div>
+			
+			<!-- End Showcase -->
+
+
+			<!-- Begin Main Body -->
+			
+			<div class="main-tm">
+				<div class="main-tl"></div>
+				<div class="main-tr"></div>
+			</div>
+			<div class="main-m">
+				<div class="main-l">
+					<div class="main-r">
+						<div id="main-body">
+
+
+<div class="wrapper_i">
+
+<!--{ad/subnavbanner/a_mu}-->
+
+	<!--{hook/global_header}-->
+	<!--{/if}-->
+
+<!--<div style="width: 100%;height: 20px;background: #000000;"></div>-->
+
+	<div id="wp" class="wp">
