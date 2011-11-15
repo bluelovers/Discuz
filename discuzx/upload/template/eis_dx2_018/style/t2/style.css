@@ -1,0 +1,14 @@
+/*
+[name]бл[/name]
+[iconbgcolor]#3a912a[/iconbgcolor]
+Powered by Discuz! X
+*/
+
+#hd { background:url(eis_header.gif) repeat-x 0 0; }
+#hd .wp1000{ background:url(eis_header_c.gif) no-repeat 0 0;}
+
+#nv{ background: url(eis_nv.gif) repeat-x 0 0;}
+.eis_nv{ background: url(eis_nv.gif) no-repeat right -88px;}
+.eis_nv ul{ background: url(eis_nv.gif) no-repeat left -44px;}
+
+#nv li { background: url(eis_nv_a.gif) no-repeat 100% 0; }

@@ -1,0 +1,104 @@
+/* eis */
+.wp1000{ width:1000px; margin:0 auto;}
+
+#toptb{ line-height: 40px; margin-bottom:0px; height:40px; overflow:hidden;background: url({IMGDIR}/eis_toptb.gif) repeat-x 0 bottom; }
+#toptb a { height:40px; color:#333 }
+#toptb .pipe{ display:block}
+#diy-tg { width:auto; background:none; text-indent: 0px; overflow: hidden; }
+
+.wpn .new{ padding-left: 20px; background-repeat: no-repeat; background-position: 0 50%; color: {HIGHLIGHTLINK}; font-weight: 700; }
+
+.eis_topad{ float:right; width:600px; height:80px; overflow:hidden; margin-top:10px; text-align:right}
+
+
+
+
+#nv_search #toptb,#space #toptb { line-height: 24px; height:24px; }
+#nv_search #toptb a,#space #toptb a { padding: 0 4px; height: 24px; }
+#nv_search #toptb .pipe,#space #toptb .pipe{ display:none}
+
+#hd{ margin-bottom:0px;}
+#hd .wp1000{ padding:0; background:url({IMGDIR}/eis_header_c.gif) no-repeat 0 0;}
+	
+.hdc{ min-height:106px; padding:0 12px; position:relative }
+.ie6 .hdc { height:106px; }
+
+/*logo*/
+#hd h2 { padding:10px 20px 8px 0; }
+
+/*um*/
+#um { padding-top:20px; color:#ccddee }
+#um .pipe { margin: 0 5px 0 0;color:#ccddee; }
+#um a { color:#ccddee; }
+#um .new{ color:#FFF}
+
+#hd .fastlg { padding-top: 20px;}
+#hd .fastlg a,#hd .ftid a,#hd .fastlg { color:{HEADERTEXT} !important}
+.fastlg_l { border-right: 1px solid #4f72bc; }
+/**
+#nv_portal #toptb,#nv_forum #toptb,#nv_group #toptb,#nv_home #toptb,#nv_misc #toptb{ line-height: 50px; margin-bottom:0px; height:50px; overflow:hidden;background: url({IMGDIR}/eis_toptb.gif) repeat-x 0 0; }
+#toptb a { height: 50px; color:{HEADERTEXT} }
+#diy-tg { width:auto; background:none; text-indent: 0px; overflow: hidden; }
+**/
+
+
+#nv { height: 44px; padding:0}
+#nv li { padding-right:0px; height: 44px; line-height: 44px; font-weight: 700; font-size: 14px;background: url({IMGDIR}/eis_nv_a.gif) no-repeat 100% 0; }
+.ie_all #nv li { line-height: 47px; }
+.ie6 #nv li { line-height: 44px; }
+#nv li a { padding: 0 25px; height: 44px; }
+#nv li.a a,#nv li.a a:hover {  color:#fff !important;background: url({IMGDIR}/eis_nv_a.gif) no-repeat right -88px !important;}
+
+#nv li a:hover { color:#fff;background: url({IMGDIR}/eis_nv_a.gif) no-repeat right -132px; }
+#nv li.hover a:hover, #nv li.hover a { background: url({IMGDIR}/eis_nv_a.gif) no-repeat 50% -176px; }
+
+
+.eis_nv{ background: url({IMGDIR}/eis_nv.gif) no-repeat right -88px;}
+.eis_nv ul{ padding:0 20px; height:44px; background: url({IMGDIR}/eis_nv.gif) no-repeat left -44px;}
+
+
+/* space nv */
+#space #nv { height: 33px; font-family:Tahoma,Helvetica,'SimSun',sans-serif}
+#space #nv li { height: 33px; line-height: 33px;}
+#space .ie_all #nv li { line-height: 36px; }
+#space .ie6 #nv li { line-height: 33px; }
+#space #nv a { height: 33px; }
+
+/* qmenu */
+#qmenu { margin: 8px 20px 0;color:#333;}
+
+
+
+#eis_1{ background:url({IMGDIR}/eis_1.gif) repeat-y 0 0 #fff;}
+#eis_2{ background:url({IMGDIR}/eis_2.gif) repeat-y right 0;}
+
+.eis_3{ background:url({IMGDIR}/eis_3.gif) repeat-x;}
+.eis_4{ background:url({IMGDIR}/eis_4.gif) no-repeat 0 0;}
+.eis_5{ height:15px; overflow:hidden;background:url({IMGDIR}/eis_5.gif) no-repeat right 0;}
+
+.eis_6{ background:url({IMGDIR}/eis_6.gif) repeat-x 0 bottom;}
+.eis_7{ background:url({IMGDIR}/eis_7.gif) no-repeat 0 bottom;}
+.eis_8{ padding-bottom:20px; background:url({IMGDIR}/eis_8.gif) no-repeat right bottom;}
+
+#toptb .wpn{ padding-left:10px; padding-right:10px;}
+
+
+/*forumlist*/
+#forumlist{ border:0px;}
+#forumlist .bm_h{ border-width:0px; height: 35px; line-height:32px; padding:0px; overflow:hidden; background:none }
+#forumlist .bm_h span.o{ color:#fff; padding-right:20px; height:35px; background:url({IMGDIR}/eis_bar_r.gif) no-repeat right 0px;}
+#forumlist .bm_h h2{ padding-left:40px;color:#fff; height:41px; background:url({IMGDIR}/eis_bar_l.gif) no-repeat left 0px;}
+#forumlist .bmw{ background:url({IMGDIR}/eis_bar_bg.gif) repeat-x 0 0;}
+#forumlist .bm_h h2 a{ color:#333; font-size:14px}
+#forumlist .bm_c{ border:0px; margin-bottom:10px;}
+.fl_row td { border-top: 1px solid {COMMONBG} !important; }
+
+
+/*moodfm*/
+#moodfm{ font-family:Verdana, Geneva, sans-serif !important;}
+
+/*thread*/
+
+.tl .bm_c td{ padding-top:8px; padding-bottom:8px; }
+
+#scbar {  border-width:1px;}
