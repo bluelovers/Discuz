@@ -1,0 +1,172 @@
+/*
+Main CSS file for Discuz! X
+(C) 魔客吧 Inc.
+http://www.moke8.com
+*/
+
+/* 导航 */
+#toptb {
+    background: url({STYLEIMGDIR}/top_bg.png) repeat-x scroll 0 0 transparent;
+	height:30px;
+}
+#nv {
+    background: url() repeat-x scroll top right transparent;
+    line-height: 40px;
+	height:40px;
+	position:relative;
+	padding-left:0px;
+	*margin-bottom:-20px;
+}
+#nv .nv_q{
+float:right;
+margin-right:0px;
+*margin-left:17px;
+width:83px;
+height:40px;
+*right:20px;
+*background: url({STYLEIMGDIR}/nv.png) repeat-x scroll 0 0 transparent;
+
+}
+#nv ul{
+    background: url({STYLEIMGDIR}/nv.png) repeat-x scroll 0 0 transparent;
+    font-size: 12px;
+    line-height: 40px;
+	height:40px;
+	margin-bottom:8px;
+	margin:auto 20px;
+}
+#nv .nv_r {
+    background: url({STYLEIMGDIR}/nv_r.png) no-repeat scroll 0 0 transparent;
+    height: 40px;
+    position: absolute;
+	right:0px;
+    top: 0;
+    width: 20px;
+}
+#nv .nv_l {
+    *left:0px;
+    background: url({STYLEIMGDIR}/nv_l.png) no-repeat scroll 0 0 transparent;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    width: 20px;
+}
+#nv li {
+    background:url({STYLEIMGDIR}/nv_a.png) no-repeat scroll 100% 0px transparent;
+    height: 40px;
+    line-height: 40px;
+    padding-right: 1px;
+}
+#nv li.a {
+    background: url({STYLEIMGDIR}/nv_a.png) no-repeat scroll 100% 0px transparent;
+    margin-left: 0px;
+}
+#nv li a {
+    color: #666666;
+}
+#nv li a:hover {
+     background: url({STYLEIMGDIR}/nv_a.png) no-repeat scroll 50% -33px transparent;
+	 height: 40px;
+	 color: #618914;
+}
+#nv li.hover a:hover, #nv li.hover a {background: url({STYLEIMGDIR}/nv_a.png) no-repeat scroll 50% -33px transparent; height:40px}
+#nv li.a a {
+    color: #618914;
+	background: url({STYLEIMGDIR}/nv_a.png) no-repeat scroll 50% -33px transparent;
+	height:40px;
+}
+#mu{ margin:auto 15px;}
+#mu ul {
+    background: url({STYLEIMGDIR}/mu_bg.png) repeat-x scroll 0 0 transparent;
+    font-size: 12px;
+    line-height: 22px;
+	height:33px;
+    z-index: 2;
+	margin-bottom:8px;
+	*margin-bottom:0px;
+}
+#mu .mu_l {
+    background: url({STYLEIMGDIR}/mu_bg_l.png) no-repeat scroll 0 0 transparent;
+    height: 33px;
+    margin-left: -15px;
+    position: absolute;
+    top: 0;
+    width: 15px;
+}
+#mu .mu_r {
+    background: url({STYLEIMGDIR}/mu_bg_r.png) no-repeat scroll 0 0 transparent;
+    height: 33px;
+    position: absolute;
+	right:-15px;
+    top: 0;
+    width: 15px;
+}
+
+#qmenu{ margin:12px 4px 0; margin-right:20px;}
+#scbar{ border:1px solid #DADADA}
+/* 主体 */
+.warp {
+    background: url({STYLEIMGDIR}/warp_bg.jpg) no-repeat scroll center top transparent;
+    height: 100%;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#wp {
+    background: url({STYLEIMGDIR}/wp_l.png) repeat-y scroll 0 0 transparent;
+	
+}
+.wp_r {
+    background: url({STYLEIMGDIR}/wp_r.png) repeat-y scroll 100% 0 transparent;
+	padding:8px;
+}
+.wp {
+    margin: 0 auto;
+    width: 980px;
+}
+
+/* 底部 */
+#bottom{position:relative; }
+#bottom .bottom_mid {background: url({STYLEIMGDIR}/bottom_bg.png) repeat-x scroll 0 0 transparent; height:16px; line-height:16px; margin:auto 6px; margin-bottom:8px;}
+#bottom .bottom_r{
+    background: url({STYLEIMGDIR}/bottom_r.png) no-repeat scroll 0 0 transparent;
+    height: 16px;
+    position: absolute;
+	right:0px;
+    top: 0;
+    width: 6px;}
+#bottom .bottom_l{
+    background: url({STYLEIMGDIR}/bottom_l.png) no-repeat scroll 0 0 transparent;
+    height: 16px;
+    position: absolute;
+    top: 0;
+    width: 6px;}
+.footer{
+    background: url({STYLEIMGDIR}/blocktwo_bg.jpg) repeat-x scroll 0 0 transparent;
+}
+#ft{ border-top:0px;}
+#ft a{ color:#65A421}
+/* 版块 */
+.bm_h{
+background: url({STYLEIMGDIR}/title.png) repeat-x scroll 0 0 transparent;
+}
+
+.bmw .bm_h{background: url({STYLEIMGDIR}/title.png) repeat-x scroll 0 0 transparent;}
+.tl .th {
+    background: url({STYLEIMGDIR}/title2.png) repeat-x scroll 0 0 transparent;
+    border-bottom: 1px solid #DADADA;
+    margin-top: 0px;
+    padding: 0 10px;
+}
+
+/* 重定义按钮 */
+.pgs #newspecial, .pgs #newspecialtmp { float: left; background: url({STYLEIMGDIR}/pn_post.png) no-repeat 0 0; }
+#post_reply, #post_replytmp { float: left; background: url({STYLEIMGDIR}/pn_reply.png) no-repeat 0 0; }
+
+/* 重定义侧边导航 */
+
+.bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #DADADA; background-color: #F2F2F2; }
+	.bdl dt { background-image: url({STYLEIMGDIR}/titlebg_sd.png); }
+.bdl dd.bdl_a a { color: #65A421; }
+
+
