@@ -256,7 +256,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 	// bluelovers
 	if ($fieldid == 'nickname') {
 
-		if ($value == $space['username']) {
+		if ($value == $space['username'] || preg_match('/^\d+$/', $value)) {
 			return false;
 		}
 
