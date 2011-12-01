@@ -283,6 +283,9 @@ function profile_check($fieldid, &$value, $space=array()) {
 		}
 
 	}
+	elseif ($fieldid == 'site') {
+		return scovalid::url($value);
+	}
 	// bluelovers
 
 	include_once libfile('function/home');
