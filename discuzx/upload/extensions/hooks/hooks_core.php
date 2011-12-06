@@ -630,7 +630,7 @@ Array
 		} else {
 			// 失敗時緩存為 0
 			if ($m['uid']) $_user['uid'][$m['uid']] = '';
-			if (!empty($m['username'])) $_user['username'][$m['username']] = 0;
+			if (!empty($m['username'])) $_user['username'][(string)$m['username']] = 0;
 		}
 	}
 
