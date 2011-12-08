@@ -640,6 +640,11 @@ function getsortedoptionlist() {
 	$forum_optionlist = $_G['forum_optionlist'];
 	foreach($_G['forum_optionlist'] as $key => $value) {
 		$choicesarr = $value['choices'];
+
+		// bluelovers
+		if (is_array($choicesarr))
+		// bluelovers
+
 		uksort($choicesarr, 'cmpchoicekey');
 		$forum_optionlist[$key]['choices'] = $choicesarr;
 	}
