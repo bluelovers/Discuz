@@ -243,7 +243,7 @@ class _sco_dx_plugin {
 	function _fix_plugin_setting() {
 		$this->_get_plugin_db_data();
 
-		foreach($this->attr['setting_source'] as $_k => $_v) {
+		foreach((array)$this->attr['setting_source'] as $_k => $_v) {
 			$var = $this->attr['db']['common_pluginvar'][$_k];
 
 			if (in_array($var['type'], array('forums', 'groups', 'selects'))) {
