@@ -520,7 +520,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		try {
 			@include $_file;
 		} catch (Exception $_e) {
-			if (!$_file_lock_exists) @unlink($_file);
+			if (!$_file_lock_exists && !file_exists($_file_lock)) @unlink($_file);
 		}
 
 		discuz_core::$_cache_data['output']['users'] = (array)discuz_core::$_cache_data['output']['users'];
