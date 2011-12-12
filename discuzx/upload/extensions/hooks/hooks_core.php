@@ -518,7 +518,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		$data = array();
 
 		try {
-		@include $_file;
+			@include $_file;
 		} catch (Exception $_e) {
 			if (!$_file_lock_exists) @unlink($_file);
 		}
