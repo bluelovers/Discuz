@@ -546,6 +546,7 @@ function _eFunc_output_Before_rewrite_content_echo($_EVENT, $_conf) {
 		discuz_core::$_cache_data['output']['users']['updated']
 		&& (TIMESTAMP > discuz_core::$_cache_data['output']['users']['timestamp'] + 120)
 		&& !$_file_lock_exists
+		&& !file_exists($_file_lock)
 	) {
 		touch($_file_lock);
 
