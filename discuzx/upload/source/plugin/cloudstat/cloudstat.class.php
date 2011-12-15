@@ -12,7 +12,9 @@ if(!defined('IN_DISCUZ')) {
 }
 
 class plugin_cloudstat {
+	//note 论坛基本参数
 	var $discuzParams = array();
+	//note 扩展参数
 	var $extraParams = array();
 
 	function global_footerlink() {
@@ -42,34 +44,43 @@ class plugin_cloudstat {
 	function _makedzjs() {
 		global $_G;
 
+		//note r2
 		$this->discuzParams['r2'] = $_G['setting']['my_siteid'];
 
+		//note ui
 		$this->discuzParams['ui'] = $_G['uid'] ? $_G['uid'] : 0;
 
+		//note ty
 		if($_G['uid'] && ($_G['member']['regdate'] < ($_G['timestamp'] - $_G['timestamp'] % 86400))) {
 			$this->discuzParams['ty'] = 2;
 		}
 
+		//note rt
 		$this->discuzParams['rt'] = $_G['basescript'];
 
+		//note md
 		if($_G['mod']) {
 			$this->discuzParams['md'] = $_G['mod'];
 		}
 
+		//note fi
 		if($_G['fid']) {
 			$this->discuzParams['fi'] = $_G['fid'];
 		}
 
+		//note ti
 		if($_G['tid']) {
 			$this->discuzParams['ti'] = $_G['tid'];
 		}
 
+		//note pn
 		if($_G['page']) {
 			$this->discuzParams['pn'] = $_G['page'];
 		} else {
 			$this->discuzParams['pn'] = 1;
 		}
 
+		//note qq
 		$qq = intval(getcookie('stats_qc_reg'));
 		dsetcookie('stats_qc_reg');
 		$qq .= $_G['uid']?'1':'0';
@@ -85,11 +96,13 @@ class plugin_cloudstat {
 		$cloudstatpost = getcookie('cloudstatpost');
 		dsetcookie('cloudstatpost');
 		$cloudstatpost = explode('D', $cloudstatpost);
+		//note nt 新发主题为1，新回复帖为2
 		if($cloudstatpost[0] == 'thread') {
 			$this->discuzParams['nt'] = 1;
 			$this->discuzParams['ui'] = $cloudstatpost[1];
 			$this->discuzParams['fi'] = $cloudstatpost[2];
 			$this->discuzParams['ti'] = $cloudstatpost[3];
+			//note 如果为新主题，则上报主题名称
 			$subject = $_G['forum_thread']['subject'];
 			$charset = $_G['charset'];
 			if(empty($charset)) {
@@ -112,6 +125,7 @@ class plugin_cloudstat {
 			$this->discuzParams['pi'] = $cloudstatpost[4];
 		}
 
+		//note icon
 		$cloudstaticon = isset($_G['setting']['cloud_staticon']) ? intval($_G['setting']['cloud_staticon']) : 1;
 		if ($cloudstaticon && !$_G['inajax']) {
 			if ($cloudstaticon > 4 && $cloudstaticon < 9) {
@@ -158,6 +172,7 @@ class plugin_cloudstat {
 		if (is_string($value)) {
 			$value = str_replace(array("\n", "\t"), array(), $value);
 			$value = addslashes($value);
+			//note $value = $this->json_encode_string($value);
 			return '"'.$value.'"';
 		}
 		if (is_bool($value)) {
@@ -174,8 +189,10 @@ class plugin_cloudstat {
 		global $_G;
 		$param = $param['param'];
 		if(in_array($param[0], array('post_newthread_succeed', 'post_newthread_mod_succeed'))) {
+			//note 成功发帖
 			dsetcookie('cloudstatpost', 'threadD'.$_G['uid'].'D'.$param[2]['fid'].'D'.$param[2]['tid'], 86400);
 		} elseif(in_array($param[0], array('post_reply_succeed', 'post_reply_mod_succeed'))) {
+			//note 成功回帖
 			dsetcookie('cloudstatpost', 'postD'.$_G['uid'].'D'.$param[2]['fid'].'D'.$param[2]['tid'].'D'.$param[2]['pid'], 86400);
 		}
 	}
@@ -213,6 +230,106 @@ class plugin_cloudstat_group extends plugin_cloudstat {
 		return $this->_viewthread_postbottom_output();
 	}
 
+}
+
+class mobileplugin_cloudstat_forum extends plugin_cloudstat {
+
+	function post_cloudstat_message($param) {
+		return $this->_post_cloudstat_message($param);
+	}
+}
+
+class mobileplugin_cloudstat extends plugin_cloudstat {
+
+	function global_footer_mobile() {
+
+		return $this->_noscript();
+	}
+
+	function _noscript() {
+		global $_G;
+
+		$this->_makedzjs();
+		$uri = $_SERVER['REQUEST_URI'];
+		if ($uri) {
+			$urlInfo = parse_url($uri);
+			$this->discuzParams['url'] = $urlInfo['path'];
+			$this->discuzParams['arg'] = urlencode($urlInfo['query']);
+		} else {
+			$this->discuzParams['url'] = '/';
+			$this->discuzParams['arg'] = '-';
+		}
+
+		$this->discuzParams['tz'] = sprintf('%0d', -($_G['timenow']['offset']));
+		$siteUrl = parse_url($_G['siteurl']);
+		$this->discuzParams['dm'] = $siteUrl['host'];
+
+		// note pv_id
+		$pvi = getcookie('pvi');
+		if (!$pvi) {
+			$pvi = mt_rand(1, 0x7fffffff) % 10000000000;
+			dsetcookie('pvi', $pvi, 2145888000);
+		}
+		$this->discuzParams['pvi'] = $pvi;
+
+		// note session id
+		$si = getcookie('si');
+		if (!$si) {
+			$si = 's' . (mt_rand(1, 0x7fffffff) % 10000000000);
+			dsetcookie('si', $si);
+		}
+		$this->discuzParams['si'] = $si;
+
+		// note post
+		$cloudstatpost = getcookie('cloudstatpost');
+		dsetcookie('cloudstatpost');
+		$cloudstatpost = explode('D', $cloudstatpost);
+		if($cloudstatpost[0] == 'thread') {
+			$this->discuzParams['nt'] = 1;
+			$this->discuzParams['ui'] = $cloudstatpost[1];
+			$this->discuzParams['fi'] = $cloudstatpost[2];
+			$this->discuzParams['ti'] = $cloudstatpost[3];
+			$subject = $_G['forum_thread']['subject'];
+			$charset = $_G['charset'];
+			if(empty($charset)) {
+				foreach ($_G['config']['db'] as $key => $cfg) {
+					if ($cfg['dbcharset']) {
+						$charset = $cfg['dbcharset'];
+						break;
+					}
+				}
+			}
+			if('GBK' != strtoupper($charset) && !empty($charset)) {
+				$subject = diconv($subject, $charset, 'GBK');
+			}
+			$this->extraParams[] = "tn=" . urlencode($subject);
+		} elseif($cloudstatpost[0] == 'post') {
+			$this->discuzParams['nt'] = 2;
+			$this->discuzParams['ui'] = $cloudstatpost[1];
+			$this->discuzParams['fi'] = $cloudstatpost[2];
+			$this->discuzParams['ti'] = $cloudstatpost[3];
+			$this->discuzParams['pi'] = $cloudstatpost[4];
+		}
+
+		$ref = $_SERVER['HTTP_REFERER'];
+		if ($ref) {
+			$refInfo = parse_url($ref);
+			$this->discuzParams['rdm'] =  $refInfo['host'];
+			$this->discuzParams['rarg'] = urlencode($refInfo['query']);
+			$this->discuzParams['rurl'] = $refInfo['path'];
+		}
+
+		$this->extraParams[] = 'mt=0';
+		$this->discuzParams['rnd'] = mt_rand(1, 0x7fffffff);
+		$query = '';
+		foreach ($this->discuzParams as $key => $val) {
+			$query .= "$key=$val&";
+
+		}
+		$pingd = 'http://pingtcss.qq.com/pingd?' . $query . 'ext=' . implode(';', $this->extraParams);
+
+		return '<img src="' . $pingd . '" />';
+	}
 }
 
 ?>
