@@ -4,14 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 24656 2011-09-29 09:25:32Z zhangguosheng $
+ *      $Id: function_portalcp.php 26652 2011-12-19 03:48:27Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function get_uploadcontent($attach, $type='portal', $dotype='') {
 
 	$return = '';
 	$dotype = $dotype ? 'checked' : '';
-	$attach['attachid'] = $attach['aid'] ? $attach['aid'] : $attach['attachid'];
 	if($attach['isimage']) {
 		$pic = pic_get($attach['attachment'], $type, $attach['thumb'], $attach['remote'], 0);
 		$small_pic = $attach['thumb'] ? getimgthumbname($pic) : '';
@@ -29,7 +32,7 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$return .= '</table>';
 
 	} else {
-		$attach_url = $type == 'forum' ? 'forum.php?mod=attachment&aid='.aidencode($attach['attachid'], 1) : 'protal.php?mod=attachment&id='.$attach['attachid'];
+		$attach_url = $type == 'forum' ? 'forum.php?mod=attachment&aid='.aidencode($attach['attachid'], 1) : 'portal.php?mod=attachment&id='.$attach['attachid'];
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
 		$return .= '<td width="50" class="bbs"><a href="'.$attach_url.'" target="_blank">'.$attach['filename'].'</a></td>';
 		$return .= '<td align="right" class="bbs">';
@@ -89,11 +92,24 @@ function getallowdiytemplate($uid){
 	return $permission;
 }
 
+function getdiytpldir($targettplname) {
+	global $_G;
+	$tpldir = $pre = '';
+	if (substr($targettplname, 0, 13) === ($pre = 'forum/discuz_')) {
+	} elseif (substr($targettplname, 0, 19) === ($pre = 'forum/forumdisplay_')) {
+	}
+	if($pre && ($styleid = DB::result_first('SELECT styleid FROM '.DB::table('forum_forum').' WHERE fid='.intval(str_replace($pre, '', $targettplname))))) {
+		loadcache('style_'.$styleid);
+		$tpldir = $_G['cache']['tpldir'];
+	}
+	return $tpldir ? $tpldir : ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default');
+}
+
 function save_diy_data($primaltplname, $targettplname, $data, $database = false, $optype = '') {
 	global $_G;
 	if (empty($data) || !is_array($data)) return false;
 	checksecurity($data['spacecss']);
-	$file = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/'.$primaltplname.'.htm';
+	$file = getdiytpldir($primaltplname).'/'.$primaltplname.'.htm';
 	if (!file_exists($file)) {
 		$file = './template/default/'.$primaltplname.'.htm';
 	}
