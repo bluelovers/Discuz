@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 24710 2011-10-09 04:53:09Z zhouguoqiang $
+ *      $Id: Manyou.php 26590 2011-12-16 03:20:04Z yangli $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -44,7 +44,11 @@ class Manyou {
 			$response = $this->_processServerRequest();
 		}
 		@ob_end_clean();
-		@ob_start();
+		if(function_exists('ob_gzhandler')) {
+			@ob_start('ob_gzhandler');
+		} else {
+			@ob_start();
+		}
 		echo serialize($this->_formatLocalResponse($response));
 		exit;
 	}
@@ -1046,6 +1050,10 @@ class SearchHelper {
 	}
 
 	function getPollInfo($tIds) {
+        if (!is_array($tIds) || count($tIds) <= 0) {
+            return array();
+        }
+
 		$sql = 'SELECT * FROM ' . DB::table('forum_polloption') . ' WHERE tid IN (' . implode(',', $tIds) . ')';
 		$result = array();
 		$query = DB::query($sql);
