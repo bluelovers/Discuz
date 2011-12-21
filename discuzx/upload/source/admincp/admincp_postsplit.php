@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_postsplit.php 21685 2011-04-08 06:04:30Z zhengqingpeng $
+ *      $Id: admincp_postsplit.php 26253 2011-12-07 06:35:01Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -381,33 +381,36 @@ function gettablefields($table) {
 
 function movedate($query) {
 	global $sourcesize, $tableid, $movesize, $targettableid, $hash, $tableindex, $threadtableids, $fieldstr, $fromtableid, $posttable_info;
-
+	$tids = array();
 	while($value = DB::fetch($query)) {
-		$fromtable = getposttable($fromtableid, true);
-		DB::query("INSERT INTO ".DB::table(getposttable($targettableid))." ($fieldstr) SELECT $fieldstr FROM $fromtable WHERE tid='$value[tid]'", 'SILENT');
-		if(DB::errno()) {
-			DB::delete(getposttable($targettableid), array('tid' => $value['tid']));
-		} else {
-			foreach($threadtableids as $threadtableid) {
-				$table = $threadtableid ? "forum_thread_$threadtableid" : 'forum_thread';
-				DB::update($table, array(
-					'posttableid' => $targettableid,
-				), array('tid' => $value['tid']));
-				if(DB::affected_rows()) {
-					break;
-				}
-			}
-			DB::delete(getposttable($fromtableid), array('tid' => $value['tid']));
-
-		}
-		$status = gettablestatus(DB::table(getposttable($targettableid)), false);
-		$targetsize = $sourcesize + $movesize * 1048576;
-		$nowdatasize = $targetsize - $status['Data_length'];
-
-		if($status['Data_length'] >= $targetsize) {
-			cpmsg('postsplit_done', 'action=postsplit&operation=optimize&tableid='.$fromtableid, 'form');
-		}
+		$tids[$value['tid']] = $value['tid'];
 	}
+	$fromtable = getposttable($fromtableid, true);
+	$condition = " tid IN(".dimplode($tids).")";
+	DB::query("INSERT INTO ".DB::table(getposttable($targettableid))." ($fieldstr) SELECT $fieldstr FROM $fromtable WHERE $condition", 'SILENT');
+	if(DB::errno()) {
+		DB::delete(getposttable($targettableid), $condition);
+	} else {
+		foreach($threadtableids as $threadtableid) {
+			$table = $threadtableid ? "forum_thread_$threadtableid" : 'forum_thread';
+			DB::update($table, array(
+				'posttableid' => $targettableid,
+			), $condition);
+			if(DB::affected_rows() == count($tids)) {
+				break;
+			}
+		}
+		DB::delete(getposttable($fromtableid), $condition);
+
+	}
+	$status = gettablestatus(DB::table(getposttable($targettableid)), false);
+	$targetsize = $sourcesize + $movesize * 1048576;
+	$nowdatasize = $targetsize - $status['Data_length'];
+
+	if($status['Data_length'] >= $targetsize) {
+		cpmsg('postsplit_done', 'action=postsplit&operation=optimize&tableid='.$fromtableid, 'form');
+	}
+
 	cpmsg('postsplit_doing', 'action=postsplit&operation=movepost&fromtable='.$tableid.'&movesize='.$movesize.'&targettable='.$targettableid.'&hash='.$hash.'&tindex='.$tableindex, 'loadingform', array('datalength' => sizecount($status['Data_length']), 'nowdatalength' => sizecount($nowdatasize)));
 }
 
