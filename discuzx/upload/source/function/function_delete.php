@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 22847 2011-05-26 00:41:18Z monkey $
+ *      $Id: function_delete.php 26671 2011-12-19 08:32:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,9 +109,9 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 			while($post = DB::fetch($query)) {
 				if($post['invisible'] != -1 && $post['invisible'] != -5) {
 					if($post['first']) {
-						$tuidarray[] = $post['authorid'];
+						$tuidarray[$post['fid']][] = $post['authorid'];
 					} else {
-						$ruidarray[] = $post['authorid'];
+						$ruidarray[$post['fid']][] = $post['authorid'];
 						if($post['authorid'] > 0 && $post['replycredit'] > 0) {
 							$replycredit_list[$post['authorid']][$post['tid']] += $post['replycredit'];
 						}
@@ -125,10 +125,14 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 			require_once libfile('function/post');
 		}
 		if($tuidarray) {
-			updatepostcredits('-', $tuidarray, 'post', $_G['forum']['fid']);
+			foreach($tuidarray as $fid => $tuids) {
+				updatepostcredits('-', $tuids, 'post', $fid);
+			}
 		}
 		if($ruidarray) {
-			updatepostcredits('-', $ruidarray, 'reply', $_G['forum']['fid']);
+			foreach($ruidarray as $fid => $ruids) {
+				updatepostcredits('-', $ruids, 'reply', $fid);
+			}
 		}
 	}
 
@@ -274,9 +278,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 			} else {
 				if($credit) {
 					if($post['first']) {
-						$tuidarray[] = $post['authorid'];
+						$tuidarray[$post['fid']][] = $post['authorid'];
 					} else {
-						$ruidarray[] = $post['authorid'];
+						$ruidarray[$post['fid']][] = $post['authorid'];
 					}
 				}
 			}
@@ -294,10 +298,14 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 				require_once libfile('function/post');
 			}
 			if($tuidarray) {
-				updatepostcredits('-', $tuidarray, 'post', $_G['forum']['fid']);
+				foreach($tuidarray as $fid => $tuids) {
+					updatepostcredits('-', $tuids, 'post', $fid);
+				}
 			}
 			if($ruidarray) {
-				updatepostcredits('-', $ruidarray, 'reply', $_G['forum']['fid']);
+				foreach($ruidarray as $fid => $ruids) {
+					updatepostcredits('-', $ruids, 'reply', $fid);
+				}
 			}
 			$auidarray = $attachtables = array();
 			foreach($atids as $tid) {
@@ -321,6 +329,10 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	if($ponly) {
 		if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
 			hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletethread');
+		}
+		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='-1', digest='0', moderated='1' WHERE tid IN ($tids)");
+		foreach($postids as $posttableid=>$oneposttids) {
+			updatepost(array('invisible' => '-1'), "tid IN ($tids)");
 		}
 		return $count;
 	}
@@ -408,7 +420,7 @@ function deleteattach($ids, $idtype = 'aid') {
 function deletecomments($cids) {
 	global $_G;
 
-	$blognums = $newcids = $dels = $counts = array();
+	$deltypes = $blognums = $newcids = $dels = $counts = array();
 	$allowmanage = checkperm('managecomment');
 
 	$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE cid IN (".dimplode($cids).")");
@@ -416,6 +428,7 @@ function deletecomments($cids) {
 		if($allowmanage || $value['authorid'] == $_G['uid'] || $value['uid'] == $_G['uid']) {
 			$dels[] = $value;
 			$newcids[] = $value['cid'];
+			$deltypes[$value['idtype']] = $value['idtype'].'_cid';
 			if($value['authorid'] != $_G['uid'] && $value['uid'] != $_G['uid']) {
 				$counts[$value['authorid']]['coef'] -= 1;
 			}
@@ -428,7 +441,7 @@ function deletecomments($cids) {
 	if(empty($dels)) return array();
 
 	DB::delete('home_comment', "cid IN (".dimplode($newcids).")");
-	DB::delete('common_moderate', "id IN (".dimplode($newcids).") AND idtype='cid'");
+	DB::delete('common_moderate', "id IN (".dimplode($newcids).") AND idtype IN(".dimplode($deltypes).")");
 
 	if($counts) {
 		foreach ($counts as $uid => $setarr) {
