@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 22848 2011-05-26 01:36:50Z monkey $
+	$Id: editor.js 25628 2011-11-16 08:41:21Z chenmengshu $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
@@ -762,7 +762,7 @@ function discuzcode(cmd, arg) {
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
 		editorform.onsubmit = '';
-		editorform.action = 'forum.php?mod=ajax&action=downremoteimg&wysiwyg='+(wysiwyg ? 1 : 0);
+		editorform.action = 'forum.php?mod=ajax&action=downremoteimg&fid='+fid+'&wysiwyg='+(wysiwyg ? 1 : 0);
 		editorform.target = "ajaxpostframe";
 		editorform.message.value = message;
 		editorform.submit();
@@ -1182,7 +1182,7 @@ function autoTypeset() {
 	var selection = sel ? (wysiwyg ? sel.htmlText.replace(/<\/?p>/ig, '<br />') : sel.text) : getSel();
 	selection = wysiwyg ? selection.replace(/<br[^\>]*>/ig, "\n") : selection.replace(/\r?\n/g, "\n");
 	selection = trim(selection);
-	selection = wysiwyg ? selection.replace(/\n+/g, '</p><p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n/g, '[/p][p=30, 2, left]');
+	selection = wysiwyg ? selection.replace(/\n\n+/g, '</p><p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n/g, '[/p][p=30, 2, left]');
 	opentag = wysiwyg ? '<p style="line-height: 30px; text-indent: 2em;">' : '[p=30, 2, left]';
 	var s = opentag + selection + (wysiwyg ? '</p>' : '[/p]');
 	insertText(s, strlen(opentag), 4, false, sel);
