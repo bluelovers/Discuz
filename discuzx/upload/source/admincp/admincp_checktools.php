@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 22881 2011-05-30 02:09:43Z monkey $
+ *      $Id: admincp_checktools.php 25634 2011-11-16 09:01:23Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -180,6 +180,7 @@ if($operation == 'filecheck') {
 		}
 		if(!$alertmsg) {
 			ftpcmd('delete', $testfile);
+			ftpcmd('delete', 'test/index.htm');
 			$ftp->ftp_rmdir('test');
 			$str = getremotefile($_G['setting']['ftp']['attachurl'].$testfile);
 			if($str === $testcontent) {
@@ -442,6 +443,7 @@ function checkmailerror($type, $error) {
 function getremotefile($file) {
 	global $_G;
 	@set_time_limit(0);
+	$file = $file.'?'.TIMESTAMP.rand(1000, 9999);
 	$str = @implode('', @file($file));
 	if(!$str) {
 		$str = dfsockopen($file);
