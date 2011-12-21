@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 23925 2011-08-16 12:03:49Z yexinhao $
+ *      $Id: my.php 26590 2011-12-16 03:20:04Z yangli $
  */
 
 define('IN_API', true);
@@ -1620,10 +1620,10 @@ class My extends Manyou {
 		$otherActions = array('mergeforum', 'banuser', 'unbanuser', 'deluser', 'delforum');
 		while($thread = DB::fetch($query)) {
 			$tIds[] = $thread['tid'];
-			if ($thread['action'] == 'delete') {
+			if (in_array($thread['action'], array('delete', 'redelete'))) {
 				$ids['thread'][] = $thread['tid'];
 				$deleteThreads[$thread['tid']] = array('tId' => $thread['tid'],
-										 'action' => 'delete',
+										 'action' => $thread['action'],
 										'updated' => dgmdate($thread['dateline'], 'Y-m-d H:i:s', 8),
 										);
 			} elseif (in_array($thread['action'], array('banuser', 'unbanuser', 'deluser'))) {
@@ -1678,10 +1678,12 @@ class My extends Manyou {
 						$gfIds[$threads[$tId]['fId']] = $threads[$tId]['fId'];
 					}
 				}
-				$polls = SearchHelper::getPollInfo($vtIds);
-				foreach($polls as $tId => $poll) {
-					$unDeleteThreads[$tId]['pollInfo'] = $poll;
-				}
+                if ($vtIds) {
+				    $polls = SearchHelper::getPollInfo($vtIds);
+				    foreach($polls as $tId => $poll) {
+					    $unDeleteThreads[$tId]['pollInfo'] = $poll;
+				    }
+                }
 				$guestPerm = SearchHelper::getGuestPerm($gfIds);
 				foreach($unDeleteThreads as $tId => $row) {
 					if (in_array($row['fId'], $guestPerm['allowForumIds'])) {
@@ -1897,10 +1899,12 @@ class My extends Manyou {
 				$vtIds[] = $thread['tid'];
 			}
 		}
-		$polls = SearchHelper::getPollInfo($vtIds);
-		foreach($polls as $tId => $poll) {
-			$result['data'][$tId]['pollInfo'] = $poll;
-		}
+        if ($vtIds) {
+		    $polls = SearchHelper::getPollInfo($vtIds);
+		    foreach($polls as $tId => $poll) {
+			    $result['data'][$tId]['pollInfo'] = $poll;
+		    }
+        }
 		return $result;
 	}
 
