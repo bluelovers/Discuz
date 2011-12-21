@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_connect.php 24725 2011-10-09 14:48:51Z yangli $
+ *      $Id: function_connect.php 25886 2011-11-24 09:31:56Z monkey $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 require_once libfile('function/cloud');
 
@@ -59,18 +63,25 @@ function connect_load_qshare_js($appkey) {
 function connect_check_token_js() {
 	global $_G;
 
-	$request_url = $_G['siteurl'] . 'connect.php?mod=check&op=token';
+	$request_url = $_G['siteurl'] . 'connect.php?mod=check&op=token&_r=' . rand(1, 10000);
 	$js = <<<EOF
 <script type="text/javascript">
 function connect_handle_check_token(response, ajax) {
 
-	if (typeof(response) == "string") {
-		response = JSON.parse(response);
+    if (typeof(response) == "string" && response.indexOf("&") > 0) {
+
+        var errCode = response.substring(0, response.indexOf("&"));
+        errCode = errCode.substring(errCode.indexOf("=") + 1);
+
+        var result = response.substring(response.indexOf("&") + 1);
+        result = result.substring(result.indexOf("=") + 1);
+
+        response = {"errCode" : errCode, "result" : result};
 	} else {
 		return false;
 	}
 
-	if (typeof(response.errCode) != "undefined" && response.errCode == '0' && typeof(response.result) != "undefined" && response.result == '2') {
+	if (response.errCode == '0' && response.result == '2') {
 		if (typeof(_is_token_outofdate) != "undefined") {
 			_is_feed_auth = false;
 			_is_token_outofdate = true;
@@ -440,13 +451,11 @@ function connect_js_ouput_message($msg = '', $errMsg = '', $errCode = '') {
 	exit;
 }
 
-function connect_ajax_ouput_message($msg = '', $errMsg = '', $errCode = '') {
-	$result = array (
-		'result' => $msg,
-		'errMessage' => $errMsg,
-		'errCode' => $errCode
-	);
-	echo json_encode(connect_urlencode($result));
+function connect_ajax_ouput_message($msg = '', $errCode = '') {
+
+    @header("Content-type: text/html; charset=".CHARSET);
+
+    echo "errCode=$errCode&result=$msg";
 	exit;
 }
 
