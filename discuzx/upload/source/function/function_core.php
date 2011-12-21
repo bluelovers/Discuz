@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 24580 2011-09-27 05:38:22Z zhengqingpeng $
+ *      $Id: function_core.php 26648 2011-12-19 03:03:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -230,6 +230,18 @@ function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
 }
 
+function fsocketopen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15) {
+	$fp = '';
+	if(function_exists('fsockopen')) {
+		$fp = @fsockopen($hostname, $port, $errno, $errstr, $timeout);
+	} elseif(function_exists('pfsockopen')) {
+		$fp = @pfsockopen($hostname, $port, $errno, $errstr, $timeout);
+	} elseif(function_exists('stream_socket_client')) {
+		$fp = @stream_socket_client($hostname.':'.$port, $errno, $errstr, $timeout);
+	}
+	return $fp;
+}
+
 function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
 	require_once libfile('function/filesock');
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
@@ -317,7 +329,7 @@ function getcookie($key) {
 }
 
 function fileext($filename) {
-	return addslashes(trim(substr(strrchr($filename, '.'), 1, 10)));
+	return addslashes(strtolower(substr(strrchr($filename, '.'), 1, 10)));
 }
 
 function formhash($specialadd = '') {
@@ -522,7 +534,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$diytemplatename = &$_G['cache']['diytemplatename'];
 			}
 			$tplsavemod = 0;
-			if(isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm') && ($tplsavemod = 1) || ($file = $primaltpl ? $primaltpl : $oldfile) && isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm')) {
+			if(isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm') && ($tplsavemod = 1) || empty($_G['forum']['styleid']) && ($file = $primaltpl ? $primaltpl : $oldfile) && isset($diytemplatename[$file]) && file_exists($diypath.$file.'.htm')) {
 				$tpldir = 'data/diy';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
@@ -1621,7 +1633,7 @@ function censor($message, $modword = NULL, $return = FALSE) {
 	require_once libfile('class/censor');
 	$censor = discuz_censor::instance();
 	$censor->check($message, $modword);
-	if($censor->modbanned()) {
+	if($censor->modbanned() && $_G['group']['ignorecensor']) {
 		$wordbanned = implode(', ', $censor->words_found);
 		if($return) {
 			return array('message' => lang('message', 'word_banned', array('wordbanned' => $wordbanned)));
@@ -1643,9 +1655,9 @@ function censor($message, $modword = NULL, $return = FALSE) {
 					$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
 					$message = preg_replace(
 						array(
-							"@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i",
-							"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i",
-							"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@i",
+							"@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@is",
+							"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@is",
+							"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@is",
 						),
 						array(
 							'\\1',
@@ -1757,11 +1769,10 @@ function dreferer($default = '') {
 	}
 	$_G['referer'] = htmlspecialchars($_G['referer'], ENT_QUOTES);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
-	// FIX 校驗dreferer的域名，防止XSS注入
 	$reurl = parse_url($_G['referer']);
 	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
 		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
-			$domainroot = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
+			$domainroot = substr($reurl['host'], strpos($reurl['host'], '.')+1);
 			if(empty($_G['setting']['domain']['root']) || (is_array($_G['setting']['domain']['root']) && !in_array($domainroot, $_G['setting']['domain']['root']))) {
 				$_G['referer'] = $_G['setting']['domain']['defaultindex'] ? $_G['setting']['domain']['defaultindex'] : 'index.php';
 			}
@@ -2204,7 +2215,7 @@ function periodscheck($periods, $showmessage = 1) {
 	global $_G;
 
 	if(!$_G['group']['disableperiodctrl'] && $_G['setting'][$periods]) {
-		$now = dgmdate(TIMESTAMP, 'G.i');
+		$now = dgmdate(TIMESTAMP, 'G.i', $_G['setting']['timeoffset']);
 		foreach(explode("\r\n", str_replace(':', '.', $_G['setting'][$periods])) as $period) {
 			list($periodbegin, $periodend) = explode('-', $period);
 			if(($periodbegin > $periodend && ($now >= $periodbegin || $now < $periodend)) || ($periodbegin < $periodend && $now >= $periodbegin && $now < $periodend)) {
@@ -2369,27 +2380,30 @@ function iswhitelist($host) {
 }
 
 function update_template_block($targettplname, $blocks) {
-	if(!empty($blocks) && !empty($targettplname)) {
-		$oldbids = array();
-		$query = DB::query('SELECT bid FROM '.DB::table('common_template_block')." WHERE targettplname='$targettplname'");
-		while($value = DB::fetch($query)) {
-			$oldbids[] = $value['bid'];
-		}
-		$newaddbids = array_diff($blocks, $oldbids);
-		DB::delete('common_template_block', array('targettplname'=>$targettplname));
-		// FIX 一個模塊在一個頁面中多次使用時的sql錯誤
-		$blocks = array_unique($blocks);
-		$values = array();
-		foreach ($blocks as $bid) {
-			$values[] = "('$targettplname','$bid')";
-		}
-		if (!empty($values)) {
-			DB::query("INSERT INTO ".DB::table('common_template_block')." (targettplname,bid) VALUES ".implode(',', $values));
-		}
-		if(!empty($newaddbids)) {
-			require_once libfile('class/blockpermission');
-			$tplpermission = & template_permission::instance();
-			$tplpermission->add_blocks($targettplname, $newaddbids);
+	if(!empty($targettplname)) {
+		if(empty($blocks)) {
+			DB::delete('common_template_block', array('targettplname'=>$targettplname));
+		} else {
+			$oldbids = array();
+			$query = DB::query('SELECT bid FROM '.DB::table('common_template_block')." WHERE targettplname='$targettplname'");
+			while($value = DB::fetch($query)) {
+				$oldbids[] = $value['bid'];
+			}
+			$newaddbids = array_diff($blocks, $oldbids);
+			DB::delete('common_template_block', array('targettplname'=>$targettplname));
+			$blocks = array_unique($blocks);
+			$values = array();
+			foreach ($blocks as $bid) {
+				$values[] = "('$targettplname','$bid')";
+			}
+			if (!empty($values)) {
+				DB::query("INSERT INTO ".DB::table('common_template_block')." (targettplname,bid) VALUES ".implode(',', $values));
+			}
+			if(!empty($newaddbids)) {
+				require_once libfile('class/blockpermission');
+				$tplpermission = & template_permission::instance();
+				$tplpermission->add_blocks($targettplname, $newaddbids);
+			}
 		}
 	}
 }
