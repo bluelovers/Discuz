@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 22814 2011-05-24 05:42:54Z zhangguosheng $
+ *      $Id: function_space.php 26514 2011-12-14 07:31:51Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -56,6 +56,10 @@ function getblockhtml($blockname,$parameters = array()) {
 					if($val !== false) {
 						if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
 							continue;
+						}
+						if($field['formtype'] == 'file' && $val) {
+							$imgurl = getglobal('setting/attachurl').'./profile/'.$val;
+							$val = '<span><a href="'.$imgurl.'" target="_blank"><img src="'.$imgurl.'"  style="max-width: 300px;" /></a></span>';
 						}
 						if ($val == '')  $val = '';
 						$html .= '<li><em>'.$field['title'].'</em>'.$val.'</li>';
