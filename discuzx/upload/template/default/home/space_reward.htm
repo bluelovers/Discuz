@@ -106,7 +106,7 @@
 		window.location.href = 'home.php?mod=space&do=reward&view=we<!--{if $_G[gp_flag]}-->&flag=$_G[gp_flag]<!--{/if}-->'+parameter;
 	}
 	function filterFlag(flag) {
-		window.location.href = 'home.php?mod=space&do=$_G[gp_do]&<!--{if $_G[gp_order]}-->order=hot&<!--{/if}-->view=$_G[gp_view]&<!--{if $_G[gp_fuid]}-->fuid=$_G[gp_fuid]&<!--{/if}-->flag='+flag;
+		window.location.href = 'home.php?mod=space&do=reward&<!--{if $_G[gp_order]}-->order=hot&<!--{/if}-->view=$_GET[view]&<!--{if $_GET[fuid]}-->fuid=$_GET[fuid]&<!--{/if}-->flag='+flag;
 	}
 </script>
 <!--{template common/footer}-->
