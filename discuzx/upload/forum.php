@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum.php 22172 2011-04-25 04:25:01Z zhangguosheng $
+ *      $Id: forum.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
  */
 
 define('APPTYPEID', 2);
@@ -31,7 +31,7 @@ $modcachelist = array(
 			'threadtableids', 'threadtable_info', 'posttable_info', 'diytemplatenameforum'),
 	'redirect'	=> array('threadtableids', 'threadtable_info', 'posttable_info'),
 	'post'		=> array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes',
-			'domainwhitelist'),
+			'domainwhitelist', 'albumcategory'),
 	'space'		=> array('fields_required', 'fields_optional', 'custominfo'),
 	'group'		=> array('grouptype', 'diytemplatenamegroup'),
 );

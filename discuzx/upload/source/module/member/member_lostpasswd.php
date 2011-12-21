@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_lostpasswd.php 22109 2011-04-21 10:04:57Z monkey $
+ *      $Id: member_lostpasswd.php 25222 2011-10-31 09:29:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,7 @@ $discuz_action = 141;
 
 if(submitcheck('lostpwsubmit')) {
 	loaducenter();
+	$_G['gp_email'] = strtolower(trim($_G['gp_email']));
 	list($tmp['uid'], , $tmp['email']) = uc_get_user($_G['gp_username']);
 	if($_G['gp_email'] != $tmp['email']) {
 		showmessage('getpasswd_account_notmatch');

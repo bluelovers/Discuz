@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_picture.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_picture.php 25729 2011-11-21 03:52:24Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -141,6 +141,10 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	if($validate_picids = dimplode($moderation['validate'])) {
 		DB::update('home_pic', array('status' => '0'), "picid IN ($validate_picids)");
 		$validates = DB::affected_rows();
+		foreach($moderation['validate'] as $picids) {
+			$albumid = DB::result_first("SELECT albumid FROM ".DB::table('home_pic')." WHERE picid='$picids'");
+			DB::query("UPDATE ".DB::table('home_album')." SET picnum=picnum+1 WHERE albumid='$albumid'", 'UNBUFFERED');
+		}
 		updatemoderate('picid', $moderation['validate'], 2);
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 24683 2011-10-08 04:15:03Z svn_project_zhangjie $
+ *      $Id: admincp_members.php 25615 2011-11-16 07:14:10Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -329,7 +329,7 @@ EOF;
 
 	} else {
 
-		if(!$search_condition) {
+		if(!$search_condition && empty($_G['gp_uidarray'])) {
 			cpmsg('members_no_find_deluser', '', 'error');
 		}
 
@@ -1591,6 +1591,7 @@ EOF;
 					}
 				}
 				$membercount['posts'] = 0;
+				$membercount['threads'] = 0;
 			}
 			if(in_array('blog', $_G['gp_clear'])) {
 				$blogids = array();

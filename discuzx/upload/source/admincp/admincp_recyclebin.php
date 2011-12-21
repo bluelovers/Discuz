@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_recyclebin.php 22112 2011-04-21 10:24:48Z monkey $
+ *      $Id: admincp_recyclebin.php 26389 2011-12-12 07:23:37Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -91,7 +91,7 @@ if(!$operation) {
 			$threadsundel = undeletethreads($threadlist);
 		} elseif(submitcheck('delsubmit')) {
 			require_once libfile('function/delete');
-			$threadsdel = deletethread($threadlist, true, true);
+			$threadsdel = deletethread($threadlist);
 		}
 
 		cpmsg('recyclebin_succeed', 'action=recyclebin', 'succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));

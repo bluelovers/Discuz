@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 22852 2011-05-26 04:15:24Z monkey $
+ *      $Id: forum_post.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -207,9 +207,14 @@ if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && pr
 if(periodscheck('postmodperiods', 0)) {
 	$modnewthreads = $modnewreplies = 1;
 } else {
-	$censormod = censormod($subject."\t".$message);
-	$modnewthreads = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 1) && $_G['forum']['modnewposts'] || $censormod ? 1 : 0;
-	$modnewreplies = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 2) && $_G['forum']['modnewposts'] == 2 || $censormod ? 1 : 0;
+	$censormod = $subject || $message ? censormod($subject."\t".$message) : false;
+	if($_G['forum']['status'] != 3) {
+		$modnewthreads = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 1) && $_G['forum']['modnewposts'] || $censormod ? 1 : 0;
+		$modnewreplies = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 2) && $_G['forum']['modnewposts'] == 2 || $censormod ? 1 : 0;
+	} else {
+		$modnewthreads = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 1 || $censormod ? 1 : 0;
+		$modnewreplies = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 2 || $censormod ? 1 : 0;
+	}
 }
 
 require_once libfile('class/censor');
@@ -226,15 +231,15 @@ if(!empty($_G['gp_attachnew'])) {
 	}
 }
 
-if($_G['forum']['status'] == 3) {
-	$modnewthreads = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 1 || $censormod ? 1 : 0;
-	$modnewreplies = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 2 || $censormod ? 1 : 0;
-}
 $_G['group']['allowposturl'] = $_G['forum']['status'] != 3 ? $_G['group']['allowposturl'] : $_G['group']['allowgroupposturl'];
 if($_G['group']['allowposturl'] == 1 && $message) {
 	if(censormod($message)) {
 		$modnewthreads = $modnewreplies = 1;
 	}
+}
+
+if($special == 3 && !isset($_G['setting']['extcredits'][$_G['setting']['creditstrans']])) {
+	showmessage('reward_credits_closed');
 }
 
 $urloffcheck = $usesigcheck = $smileyoffcheck = $codeoffcheck = $htmloncheck = $emailcheck = '';
@@ -244,7 +249,7 @@ $secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqa
 
 $_G['group']['allowpostpoll'] = $_G['group']['allowpost'] && $_G['group']['allowpostpoll'] && ($_G['forum']['allowpostspecial'] & 1);
 $_G['group']['allowposttrade'] = $_G['group']['allowpost'] && $_G['group']['allowposttrade'] && ($_G['forum']['allowpostspecial'] & 2);
-$_G['group']['allowpostreward'] = $_G['group']['allowpost'] && $_G['group']['allowpostreward'] && ($_G['forum']['allowpostspecial'] & 4) && isset($_G['setting']['extcredits'][$_G['setting']['creditstrans']]);
+$_G['group']['allowpostreward'] = $_G['group']['allowpost'] && $_G['group']['allowpostreward'] && ($_G['forum']['allowpostspecial'] & 4);
 $_G['group']['allowpostactivity'] = $_G['group']['allowpost'] && $_G['group']['allowpostactivity'] && ($_G['forum']['allowpostspecial'] & 8);
 $_G['group']['allowpostdebate'] = $_G['group']['allowpost'] && $_G['group']['allowpostdebate'] && ($_G['forum']['allowpostspecial'] & 16);
 $usesigcheck = $_G['uid'] && $_G['group']['maxsigsize'] ? 'checked="checked"' : '';
@@ -274,7 +279,7 @@ if($_G['gp_action'] == 'newthread' && $_G['forum']['allowspecialonly'] && !$spec
 		$special = 5;
 	} elseif($_G['group']['allowpost'] && $_G['setting']['threadplugins'] && $_G['group']['allowthreadplugin']) {
 		$threadpluginary = array_intersect($_G['forum']['threadplugin'], $_G['group']['allowthreadplugin']);
-		$specialextra = $threadpluginary[0] ? $threadpluginary[0] : '';
+		$specialextra = in_array($specialextra, $threadpluginary) ? $specialextra : '';
 	}
 
 	if(!$special && !$specialextra) {
@@ -346,7 +351,9 @@ if($_G['gp_action'] == 'reply') {
 if($special == 4) {
 	$_G['setting']['activityfield'] = $_G['setting']['activityfield'] ? unserialize($_G['setting']['activityfield']) : array();
 }
-
+if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && !empty($_G['cache']['albumcategory'])) {
+	require_once libfile('function/portalcp');
+}
 $navtitle = lang('core', 'title_'.$_G['gp_action'].'_post');
 
 if($_G['gp_action'] == 'newthread') {

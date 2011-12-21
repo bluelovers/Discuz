@@ -647,8 +647,6 @@ CSS 寫作注意事項：
 					#qmenu.a { position: relative; z-index: 302; background-position: 0 -30px; }
 					.ie8 #qmenu { line-height: 30px; }
 				#qmenu_menu { margin-top: -1px; padding: 20px 5px 10px; width: 180px; border-color: #9A9A9A; }
-					.ie_all #qmenu_menu { margin-left: 1px; }
-						.ie9 #qmenu_menu { margin-left: 0; }
 					#qmenu_menu ul li { float: left; }
 					#qmenu_menu ul a { margin-bottom: 10px; padding: 47px 0 0; width: 60px; border: none; border-radius: 4px; background: url({IMGDIR}/noicon.gif) no-repeat 50% 5px; text-align: center; }
 						#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
@@ -971,11 +969,11 @@ CSS 寫作注意事項：
 /* 彈出菜單、彈出層及彈出窗口 */
 	.p_pop, .p_pof, .sllt { padding: 4px; border: 1px solid; min-width: 60px; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE}; box-shadow: 1px 2px 2px rgba(0,0,0,0.3); }
 		.ie6 .p_pop { width: 100px; }
-		.ie_all .p_pop, .ie_all .p_pof, .ie_all .sllt { filter: progid:DXImageTransform.Microsoft.Shadow(color=#999999,direction=135,strength=1); }
+		.p_pof .p_pop { padding: 0; border: none; box-shadow: none; }
 		.p_pof { width: 500px; }
 		.p_opt { padding: 10px; }
 		.p_pop li { display: inline; }
-		.p_pop a { position: relative; display: block; padding: 3px 5px; border-bottom: 1px solid {SPECIALBG}; white-space: nowrap; }
+		.p_pop a { display: block; padding: 3px 5px; border-bottom: 1px solid {SPECIALBG}; white-space: nowrap; }
 			.p_pop li:last-child a { border: none; }
 			.ie6 .p_pop a { position: relative; }
 			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 22854 2011-05-26 07:10:43Z monkey $
+ *      $Id: spacecp_usergroup.php 26467 2011-12-13 09:00:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,7 +43,7 @@ if(in_array($do, array('buy', 'exit'))) {
 
 	if(!submitcheck('buysubmit')) {
 		$usermoney = $space['extcredits'.$creditstrans];
-		$usermaxdays = $group['dailyprice'] > 0 ? round($usermoney / $group['dailyprice']) : 0;
+		$usermaxdays = $group['dailyprice'] > 0 ? intval($usermoney / $group['dailyprice']) : 0;
 		$group['minamount'] = $group['dailyprice'] * $group['minspan'];
 	} else {
 		$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'"));

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 22616 2011-05-16 02:20:42Z zhengqingpeng $
+ *      $Id: misc_swfupload.php 25228 2011-11-01 06:00:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,11 @@ if(!empty($_POST['uid'])) {
 	if(empty($_G['uid']) || $_POST['hash'] != md5($_G['uid'].UC_KEY)) {
 		exit();
 	}
-	$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$_G[uid]' LIMIT 1");
-	$_G['username'] = addslashes($member['username']);
+	$_G['member'] = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$_G[uid]' LIMIT 1");
+	$_G['username'] = addslashes($_G['member']['username']);
 
-	loadcache('usergroup_'.$member['groupid']);
-	$_G['group'] = $_G['cache']['usergroup_'.$member['groupid']];
+	loadcache('usergroup_'.$_G['member']['groupid']);
+	$_G['group'] = $_G['cache']['usergroup_'.$_G['member']['groupid']];
 
 } elseif (empty($_G['uid'])) {
 	showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));

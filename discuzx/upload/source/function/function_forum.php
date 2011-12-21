@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 24723 2011-10-09 12:50:14Z yangli $
+ *      $Id: function_forum.php 25846 2011-11-24 02:44:59Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -147,7 +147,7 @@ function formulaperm($formula) {
 			foreach($search as $s) {
 				if(in_array($s, array('digestposts', 'posts', 'threads', 'oltime', 'extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8'))) {
 					$_G['forum_usermsg'] .= strexists($formulatext, $s) ? '<br />&nbsp;&nbsp;&nbsp;'.$replace[$i].': '.(@eval('return intval(getuserprofile(\''.$s.'\'));')) : '';
-				} elseif(in_array($s, array('regdate', 'regip'))) {
+				} elseif(in_array($s, array('regdate', 'regip', 'regday'))) {
 					$_G['forum_usermsg'] .= strexists($formulatext, $s) ? '<br />&nbsp;&nbsp;&nbsp;'.$replace[$i].': '.(@eval('return $memberformula[\''.$s.'\'];')) : '';
 				}
 				$i++;

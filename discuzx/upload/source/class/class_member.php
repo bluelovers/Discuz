@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 23944 2011-08-17 05:59:50Z monkey $
+ *      $Id: class_member.php 25292 2011-11-03 10:14:21Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -291,7 +291,7 @@ class register_ctl {
 			}
 			showmessage('login_succeed', $url_forward ? $url_forward : './', array('username' => $_G['member']['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']), array('extrajs' => $ucsynlogin));
 		} elseif(!$this->setting['regclosed'] && (!$this->setting['regstatus'] || !$this->setting['ucactivation'])) {
-			if($_G['gp_action'] == 'activation' || $this->setting['gp_activationauth']) {
+			if($_G['gp_action'] == 'activation' || $_G['gp_activationauth']) {
 				if(!$this->setting['ucactivation'] && !$this->setting['closedallowactivation']) {
 					showmessage('register_disable_activation');
 				}

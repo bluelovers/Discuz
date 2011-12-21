@@ -18,5 +18,5 @@
 		<span class="xg1 xw0"><!--{date($comment[dateline])}--></span>
 	<!--{if $comment[status] == 1}--><b>({lang moderate_need})</b><!--{/if}-->
 	</dt>
-	<dd><!--{if $_G[adminid] == 1 || $comment[uid] == $_G[uid] || $comment[status] == 0}-->$comment[message]<!--{else}--> {lang moderate_not_validate}<!--{/if}--></dd>
+	<dd><!--{if $_G[adminid] == 1 || $comment[uid] == $_G[uid] || $comment[status] != 1}-->$comment[message]<!--{else}--> {lang moderate_not_validate}<!--{/if}--></dd>
 </dl>

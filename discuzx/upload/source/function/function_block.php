@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 24525 2011-09-23 02:34:43Z zhangguosheng $
+ *      $Id: function_block.php 26635 2011-12-19 01:59:13Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function block_script($blockclass, $script) {
 	global $_G;
@@ -749,7 +753,7 @@ function block_getdiyurl($tplname, $diymod = false) {
 						break;
 					case 'viewthread' :
 						$flag = $id ? 0 : 1;
-						$mod .= '&tid='.$id;
+						$mod = 'forumdisplay&fid='.$id;
 						break;
 					case 'list' :
 						$flag = $id ? 0 : 1;

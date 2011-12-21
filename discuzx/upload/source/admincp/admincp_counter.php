@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 24435 2011-09-20 02:48:14Z zhengqingpeng $
+ *      $Id: admincp_counter.php 24982 2011-10-20 06:24:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -262,7 +262,7 @@ if(submitcheck('forumsubmit', 1)) {
 				} elseif(in_array($options[$identifier], array('number', 'range'))) {
 					$fieldtype = 'int(10) UNSIGNED NOT NULL DEFAULT \'0\'';
 				} elseif($options[$identifier] == 'select') {
-					$fieldtype = 'varchar(50) NOT NULL \'0\'';
+					$fieldtype = 'varchar(50) NOT NULL';
 				} else {
 					$fieldtype = 'mediumtext NOT NULL';
 				}

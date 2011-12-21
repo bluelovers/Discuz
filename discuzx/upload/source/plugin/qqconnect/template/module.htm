@@ -56,24 +56,28 @@ global $_G;
 		var _is_feed_auth = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
 		var _is_token_outofdate = {if $_G['member']['conuinsecret']}false{else}true{/if};
 		function connect_post_init() {
-			if (_is_feed_auth && !_is_token_outofdate && _allow_qq && _syn_qq) {
-				$('connectPost_synQQ').className = 'syn_qq_check';
-				$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone1}';
-				$('connect_publish_feed').value = 1;
-			} else {
-				$('connectPost_synQQ').className = 'syn_qq';
-                $('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
-                $('connect_publish_feed').value = 0;
+			if (_allow_qq && _syn_qq) {
+				if (_is_feed_auth && !_is_token_outofdate) {
+					$('connectPost_synQQ').className = 'syn_qq_check';
+					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone1}';
+					$('connect_publish_feed').value = 1;
+				} else {
+					$('connectPost_synQQ').className = 'syn_qq';
+					$('connectPost_synQQ').title = '{lang qqconnect:connect_post_sync_qzone2}';
+					$('connect_publish_feed').value = 0;
+				}
 			}
 			
-			if (_is_feed_auth && !_is_token_outofdate && _allow_t && _syn_t) {
-				$('connectPost_synT').className = 'syn_tqq_check';
-				$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t1}';
-				$('connect_publish_t').value = 1;
-			} else {
-				$('connectPost_synT').className = 'syn_tqq';
-                $('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t2}';
-                $('connect_publish_t').value = 0;
+			if (_allow_t && _syn_t) {
+				if (_is_feed_auth && !_is_token_outofdate) {
+					$('connectPost_synT').className = 'syn_tqq_check';
+					$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t1}';
+					$('connect_publish_t').value = 1;
+				} else {
+					$('connectPost_synT').className = 'syn_tqq';
+					$('connectPost_synT').title = '{lang qqconnect:connect_post_sync_t2}';
+					$('connect_publish_t').value = 0;
+				}
 			}
 			
 			if (_allow_qq) {
@@ -195,24 +199,28 @@ global $_G;
 		var _is_oauth_user_infloat = {if $_G['member']['conisbind']}true{else}false{/if};
 		var _is_feed_auth_infloat = {if $_G['member']['conuinsecret'] && $_G['member']['is_feed']}true{else}false{/if};
 		function connect_post_init_infloat() {
-			if (_is_feed_auth_infloat && !_is_token_outofdate && _allow_qq_infloat && _syn_qq_infloat) {
-				$('connectPost_synQQ_infloat').className = 'syn_qq_check';
-				$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone1}';
-				$('connect_publish_feed_infloat').value = 1;
-			} else {
-				$('connectPost_synQQ_infloat').className = 'syn_qq';
-                $('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
-                $('connect_publish_feed_infloat').value = 0;
+			if (_allow_qq_infloat && _syn_qq_infloat) {
+				if (_is_feed_auth_infloat && !_is_token_outofdate) {
+					$('connectPost_synQQ_infloat').className = 'syn_qq_check';
+					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone1}';
+					$('connect_publish_feed_infloat').value = 1;
+				} else {
+					$('connectPost_synQQ_infloat').className = 'syn_qq';
+					$('connectPost_synQQ_infloat').title = '{lang qqconnect:connect_post_sync_qzone2}';
+					$('connect_publish_feed_infloat').value = 0;
+				}
 			}
-			
-			if (_is_feed_auth_infloat && !_is_token_outofdate && _allow_t_infloat && _syn_t_infloat) {
-				$('connectPost_synT_infloat').className = 'syn_tqq_check';
-				$('connectPost_synT_infloat').title = '{lang qqconnect:connect_post_sync_t1}';
-				$('connect_publish_t_infloat').value = 1;
-			} else {
-				$('connectPost_synT_infloat').className = 'syn_tqq';
-                $('connectPost_synT_infloat').title = '{lang qqconnect:connect_post_sync_t2}';
-                $('connect_publish_t_infloat').value = 0;
+
+			if (_allow_t_infloat && _syn_t_infloat) {
+				if (_is_feed_auth_infloat && !_is_token_outofdate) {
+					$('connectPost_synT_infloat').className = 'syn_tqq_check';
+					$('connectPost_synT_infloat').title = '{lang qqconnect:connect_post_sync_t1}';
+					$('connect_publish_t_infloat').value = 1;
+				} else {
+					$('connectPost_synT_infloat').className = 'syn_tqq';
+					$('connectPost_synT_infloat').title = '{lang qqconnect:connect_post_sync_t2}';
+					$('connect_publish_t_infloat').value = 0;
+				}
 			}
 			
 			if (_allow_qq_infloat) {

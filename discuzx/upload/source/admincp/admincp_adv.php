@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 24030 2011-08-22 06:54:02Z monkey $
+ *      $Id: admincp_adv.php 24783 2011-10-11 07:45:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -150,7 +150,7 @@ if($operation == 'ad') {
 		$endtimecheck = array($endtime => 'selected="selected"');
 		$orderbycheck = array($orderby => 'selected="selected"');
 
-		$targetselect = '<select name="target"><option>'.$lang['adv_targets'].'</option>';
+		$targetselect = '<select name="target"><option value="">'.$lang['adv_targets'].'</option>';
 		foreach($defaulttargets as $v) {
 			$targetselect .= '<option value="'.$v.'"'.($v == $target ? ' selected="selected"' : '').'>'.$lang['adv_edit_targets_'.$v].'</option>';
 		}

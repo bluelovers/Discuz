@@ -94,10 +94,10 @@ if($op == 'updateblock') {
 		$rewhere = array();
 		switch ($_GET['idtype']) {
 			case 'tid' :
-				$rewhere[] = "blockclass='forum_thread'";
+				$rewhere[] = "(blockclass='forum_thread' OR blockclass='forum_activity' OR blockclass='forum_trade')";
 				break;
 			case 'gtid' :
-				$rewhere[] = "blockclass='group_thread'";
+				$rewhere[] = "(blockclass='group_thread' OR blockclass='group_activity' OR blockclass='group_trade')";
 				break;
 			case 'blogid' :
 				$rewhere[] = "blockclass ='space_blog'";

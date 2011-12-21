@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 24331 2011-09-08 08:29:58Z zhangguosheng $
+	$Id: common_extra.js 25470 2011-11-10 08:54:19Z zhangguosheng $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -614,13 +614,13 @@ function slideshow(el) {
 		var showindex = 0,i = 0;
 		if(index == 'down') {
 			showindex = this.index + 1;
-			if(showindex >= this.length) {
+			if(showindex > this.length) {
 				this.runRoll();
 			} else {
 				for (i = 0; i < this.slidestep; i++) {
 					if(showindex >= this.length) showindex = 0;
 					this.index = this.index - this.slidenum + 1;
-					if(this.index < 0) this.index = this.length - Math.abs(this.index);
+					if(this.index < 0) this.index = this.length + this.index;
 					this.active(showindex);
 					showindex++;
 				}
@@ -674,7 +674,11 @@ function slideshow(el) {
 	};
 	this.run = function() {
 		var index = this.index + 1 < this.length ? this.index + 1 : 0;
-		this.active(index);
+		if(!this.slidenum && !this.slidestep) {
+			this.active(index);
+		} else {
+			this.activeByStep('down');
+		}
 		var ss = this;
 		this.timer = setTimeout(function(){
 			ss.run();
@@ -683,9 +687,9 @@ function slideshow(el) {
 
 	this.runRoll = function() {
 		for(var i = 0; i < this.slidenum; i++) {
-			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = "block";
+			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = 'block';
 			for(var j=0,L=this.slideother.length; j<L; j++) {
-				this.slideother[j].childNodes[i].style.display = "block";
+				this.slideother[j].childNodes[i].style.display = 'block';
 			}
 		}
 		this.index = this.slidenum - 1;
@@ -766,11 +770,11 @@ function slidexactive(step) {
 	var xactivei = null, slideboxid = null,currentslideele = null;
 	currentslideele = hasClass(aim, 'slidebarup') || hasClass(aim, 'slidebardown') || hasClass(parent, 'slidebar') ? aim : null;
 	while(parent && parent != document.body) {
-		if(!currentslideele && hasClass(parent.parentNode, 'slidebar')) {
+		if(!currentslideele && hasClass(parent, 'slidebar')) {
 			currentslideele = parent;
 		}
-		if(!currentslideele && (hasClass(parent.parentNode, 'slidebarup') || hasClass(parent.parentNode, 'slidebardown'))) {
-			currentslideele = parent.parentNode;
+		if(!currentslideele && (hasClass(parent, 'slidebarup') || hasClass(parent, 'slidebardown'))) {
+			currentslideele = parent;
 		}
 		if(hasClass(parent, 'slidebox')) {
 			slideboxid = parent.id;
@@ -869,7 +873,6 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
 	}
 }
-
 function _showCreditPrompt() {
 	var notice = getcookie('creditnotice').split('D');
 	var basev = getcookie('creditbase').split('D');

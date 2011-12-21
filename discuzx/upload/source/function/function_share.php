@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_share.php 6741 2010-03-25 07:36:01Z cnteacher $
+ *      $Id: function_share.php 26635 2011-12-19 01:59:13Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function mkshare($share) {
 	$share['body_data'] = unserialize($share['body_data']);

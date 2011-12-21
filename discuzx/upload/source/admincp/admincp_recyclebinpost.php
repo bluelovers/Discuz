@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2007 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp_recyclebinpost.php 19745 2011-01-18 05:39:21Z monkey $
+	$Id: admincp_recyclebinpost.php 25454 2011-11-10 06:10:24Z zhengqingpeng $
 */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -131,7 +131,7 @@ EOT;
 		if(trim($keywords)) {
 			$sqlkeywords = $or = '';
 			foreach(explode(',', str_replace(' ', '', $keywords)) as $keyword) {
-				$sqlkeywords .= " $or p.message LIKE '%$keyword%'";
+				$sqlkeywords .= " $or message LIKE '%$keyword%'";
 				$or = 'OR';
 			}
 			$sql .= " AND ($sqlkeywords)";

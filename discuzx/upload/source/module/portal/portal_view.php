@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 21605 2011-04-02 03:22:50Z zhangguosheng $
+ *      $Id: portal_view.php 26641 2011-12-19 02:32:31Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,7 +44,7 @@ if($article['url']) {
 
 $cat = category_remake($article['catid']);
 
-$article['pic'] = pic_get($article['pic'], 'portal', $article['thumb'], $article['remote']);
+$article['pic'] = pic_get($article['pic'], '', $article['thumb'], $article['remote'], 1, 1);
 
 $page = intval($_GET['page']);
 if($page<1) $page = 1;
@@ -172,7 +172,7 @@ if($article['allowcomment']) {
 				$attachtags = array();
 				$_G['group']['allowgetattach'] = $_G['group']['allowgetimage'] = 1;
 				while ($value = DB::fetch($query)) {
-					if(!($value['status'] & 1) && !$value['first']) {
+					if($value['status'] != 1 && !$value['first']) {
 						$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
 						$value['cid'] = $value['pid'];
 						$commentlist[$value['pid']] = $value;

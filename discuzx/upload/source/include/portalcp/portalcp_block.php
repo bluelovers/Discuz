@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 24302 2011-09-06 07:25:27Z zhangguosheng $
+ *      $Id: portalcp_block.php 26659 2011-12-19 05:44:20Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -538,8 +538,11 @@ if($op == 'block') {
 			} else {
 				$item['picflag'] = intval($_POST['picflag']);
 			}
-			$item['pic'] = $pic;
-			$item['makethumb'] = 0;
+			if($item['pic'] != $pic) {
+				$item['pic'] = $pic;
+				$item['makethumb'] = 0;
+				$item['thumbpath'] = block_thumbpath($block, $item);
+			}
 		}
 		unset($item['oldpic']);
 		$item['showstyle'] = $_POST['showstyle']['title_b'] || $_POST['showstyle']['title_i'] || $_POST['showstyle']['title_u'] || $_POST['showstyle']['title_c'] ? dstripslashes($_POST['showstyle']) : array();

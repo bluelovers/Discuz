@@ -487,9 +487,9 @@ class SphinxClient
 		}
 
 		if ( $this->_timeout<=0 )
-			$fp = fsockopen ( $host, $port, $errno, $errstr );
+			$fp = fsocketopen ( $host, $port, $errno, $errstr );
 		else
-			$fp = fsockopen ( $host, $port, $errno, $errstr, $this->_timeout );
+			$fp = fsocketopen ( $host, $port, $errno, $errstr, $this->_timeout );
 
 		if ( !$fp )
 		{

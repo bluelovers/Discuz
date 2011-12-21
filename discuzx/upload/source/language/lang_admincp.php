@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 23576 2011-07-26 06:57:50Z zhangguosheng $
+ *      $Id: lang_admincp.php 25238 2011-11-02 02:28:34Z zhangguosheng $
  */
 
 
@@ -617,7 +617,7 @@ $lang = array
 	'setting_access_register_welcomemsgtitle' => '歡迎信息標題',
 	'setting_access_register_welcomemsgtitle_comment' => '系統發送的歡迎信息的標題，不支持 HTML，不超過 75 字節。 ',
 	'setting_access_register_welcomemsgtxt' => '歡迎信息內容',
-	'setting_access_register_welcomemsgtxt_comment' => '系統發送的歡迎信息的內容。標題內容均支持變量替換，可以使用如下變量:<br />{username} : 用戶名<br />{time} : 發送時間<br />{sitename} : 站點名稱<br />{bbname} : 站點名稱<br />{adminemail} : 管理員 Email',
+	'setting_access_register_welcomemsgtxt_comment' => '系統發送的歡迎信息的內容。標題內容均支持變量替換，可以使用如下變量:<br />{username} : 用戶名<br />{time} : 發送時間<br />{sitename} : 網站名稱（顯示在頁面底部的聯繫方式處的名稱）<br />{bbname} : 站點名稱（顯示在瀏覽器窗口標題等位置的名稱）<br />{adminemail} : 管理員 Email',
 	'setting_access_register_bbrules' => '顯示網站服務條款',
 	'setting_access_register_bbruleforce' => '是否強制顯示網站服務條款',
 	'setting_access_register_bbruleforce_comment' => '選擇是則在用戶註冊時，首先將看到網站服務條款全文，必須同意才可以繼續註冊',
