@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 23694 2011-08-04 05:47:27Z monkey $
+ *      $Id: forum_ajax.php 25637 2011-11-16 09:14:03Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -183,6 +183,13 @@ if($_G['gp_action'] == 'checkusername') {
 		$threadimage = DB::fetch_first("SELECT tid, pid, attachment, remote FROM ".DB::table(getattachtablebyaid($aid))." WHERE aid='$aid'");
 		if($threadimage['tid'] && $threadimage['pid']) {
 			$firstpost = DB::result_first("SELECT first FROM ".DB::table(getposttablebytid($threadimage['tid']))." WHERE pid='$threadimage[pid]'");
+			if(empty($firstpost)) {
+				$trade_aid = DB::result_first("SELECT aid FROM ".DB::table('forum_trade')." WHERE pid='$threadimage[pid]'");
+				if($trade_aid == $aid ) {
+					$firstpost = 1;
+				}
+			}
+
 		} else {
 			$firstpost = 0;
 		}

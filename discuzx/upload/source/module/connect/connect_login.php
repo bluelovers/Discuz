@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 24736 2011-10-10 02:46:07Z yexinhao $
+ *      $Id: connect_login.php 25825 2011-11-23 06:28:44Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -187,7 +187,7 @@ if($op == 'init') {
 	} else {
 
 		if($connect_member) {
-			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
+			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
 
 			$params['mod'] = 'login';
 			connect_login($connect_member);
@@ -268,13 +268,6 @@ function connect_login($connect_member) {
 	dsetcookie('connect_login', 1, $cookietime);
 	dsetcookie('connect_is_bind', '1', 31536000);
 	dsetcookie('connect_uin', $connect_member['conopenid'], 31536000);
-
-	include_once libfile('function/stat');
-	updatestat('login', 1);
-	updatestat('connectlogin', 1);
-
-	updatecreditbyaction('daylogin', $_G['uid']);
-	checkusergroup($_G['uid']);
 	return true;
 }
 

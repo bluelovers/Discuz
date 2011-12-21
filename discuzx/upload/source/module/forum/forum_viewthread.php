@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 24706 2011-10-09 01:55:44Z yangli $
+ *      $Id: forum_viewthread.php 26645 2011-12-19 02:44:06Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -60,7 +60,7 @@ if(!empty($_G['gp_extra'])) {
 	foreach($extra as $_k => $_v) {
 		if(preg_match('/^\w+$/', $_k)) {
 			if(!is_array($_v)) {
-				$_G['gp_extra'][] = $_k.'='.$_v;
+				$_G['gp_extra'][] = $_k.'='.rawurlencode($_v);
 			} else {
 				$_G['gp_extra'][] = http_build_query(array($_k => $_v));
 			}
@@ -585,6 +585,9 @@ if($postusers) {
 			$verifyadd
 			WHERE m.uid IN (".dimplode(array_keys($postusers)).")");
 	while($postuser = DB::fetch($query)) {
+		if(strtotime($postuser['regdate']) + $postuser['oltime'] * 3600 > TIMESTAMP) {
+			$postuser['oltime'] = 0;
+		}
 		$postuser['privacy'] = unserialize($postuser['privacy']);
 		unset($postuser['privacy']['feed'], $postuser['privacy']['view']);
 		$postusers[$postuser['uid']] = $postuser;

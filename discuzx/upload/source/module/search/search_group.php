@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_group.php 22166 2011-04-25 02:03:44Z liulanbo $
+ *      $Id: search_group.php 26486 2011-12-14 02:20:03Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,6 +75,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			$query = DB::query("SELECT t.*, f.name AS forumname FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE t.tid IN ({$index[ids][thread]}) AND t.displayorder>='0' ORDER BY $orderby $ascdesc LIMIT $start_limit, $_G[tpp]");
 			while($thread = DB::fetch($query)) {
 				$thread['subject'] = bat_highlight($thread['subject'], $keyword);
+				$thread['realtid'] = $thread['tid'];
 				$threadlist[$thread['tid']] = procthread($thread);
 				$posttables[$thread['posttableid']][] = $thread['tid'];
 			}

@@ -16,7 +16,7 @@ require_once libfile('function/cloud');
 
 $op = !empty($_G['gp_op']) ? $_G['gp_op'] : '';
 if (!in_array($op, array('token', 'cookie'))) {
-	connect_ajax_ouput_message('', 'undefined_action', 1);
+	connect_ajax_ouput_message('0', '1');
 }
 
 if ($op == 'token') {
@@ -47,11 +47,11 @@ if ($op == 'token') {
 
 			DB::query('UPDATE '.DB::table('common_member_connect')." SET conuinsecret='' WHERE conopenid='".$_G['member']['conopenid']."'");
 
-			connect_ajax_ouput_message('2', 'token_outofdate', 0);
+			connect_ajax_ouput_message('2', '0');
 		}
 	}
 
-	connect_ajax_ouput_message('', 'token_not_outofdate', 2);
+	connect_ajax_ouput_message('0', '2');
 
 } elseif ($op == 'cookie') {
 
