@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_forumupload.php 19297 2010-12-27 05:55:47Z monkey $
+ *      $Id: class_forumupload.php 25228 2011-11-01 06:00:54Z zhengqingpeng $
  */
 
 class forum_upload {
@@ -28,7 +28,8 @@ class forum_upload {
 			$this->uploadmsg(10);
 		}
 
-		$_G['groupid'] = intval(DB::result_first("SELECT groupid FROM ".DB::table('common_member')." WHERE uid='".$this->uid."'"));
+		$_G['member'] = DB::result_first("SELECT groupid FROM ".DB::table('common_member')." WHERE uid='".$this->uid."'");
+		$_G['groupid'] = $_G['member']['groupid'];
 		loadcache('usergroup_'.$_G['groupid']);
 		$_G['group'] = $_G['cache']['usergroup_'.$_G['groupid']];
 
