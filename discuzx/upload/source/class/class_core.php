@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 24487 2011-09-21 08:13:57Z monkey $
+ *      $Id: class_core.php 26293 2011-12-08 03:10:51Z zhangguosheng $
  */
 
 define('IN_DISCUZ', true);
@@ -238,6 +238,10 @@ class discuz_core {
 
 		foreach($_GET as $k => $v) {
 			$this->var['gp_'.$k] = $v;
+		}
+
+		if(isset($this->var['gp_page'])) {
+			$this->var['gp_page'] = rawurlencode($this->var['gp_page']);
 		}
 
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
@@ -477,7 +481,7 @@ class discuz_core {
 				if($this->var['uid']) {
 					sysmessage('user_banned', null);
 				} elseif((!defined('ALLOWGUEST') || !ALLOWGUEST) && !in_array(CURSCRIPT, array('member', 'api')) && !$this->var['inajax']) {
-					dheader('location: member.php?mod=logging&action=login&referer='.rawurlencode($_SERVER['REQUEST_URI']));
+					dheader('location: member.php?mod=logging&action=login&referer='.rawurlencode($this->var['siteurl'].$this->var['basefilename'].($_SERVER['QUERY_STRING'] ? '?'.$_SERVER['QUERY_STRING'] : '')));
 				}
 			}
 			if($this->var['member']['status'] == -1) {
