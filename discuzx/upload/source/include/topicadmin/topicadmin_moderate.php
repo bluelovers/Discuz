@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 22050 2011-04-20 10:14:57Z monkey $
+ *      $Id: topicadmin_moderate.php 26389 2011-12-12 07:23:37Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -141,18 +141,6 @@ if(!submitcheck('modsubmit')) {
 		$posts = $images = array();
 		foreach($operations as $operation) {
 
-			if(in_array($operation, array('stick', 'highlight', 'digest', 'recommend'))) {
-				if(empty($posts)) {
-					foreach($posttablearr as $posttableid => $ids) {
-						$query = DB::query('SELECT * FROM '.DB::table(getposttable($posttableid)).' WHERE tid IN ('.dimplode($ids).')');
-						while($post = DB::fetch($query)) {
-							$post['message'] = messagecutstr($post['message'], 200);
-							$posts[$post['tid']] = $post;
-						}
-					}
-				}
-			}
-
 			$updatemodlog = TRUE;
 			if($operation == 'stick') {
 				$sticklevel = intval($_G['gp_sticklevel']);
@@ -169,7 +157,7 @@ if(!submitcheck('modsubmit')) {
 				foreach($delkeys as $k) {
 					unset($forumstickthreads[$k]);
 				}
-				$forumstickthreads = serialize($forumstickthreads);
+				$forumstickthreads = addslashes(serialize($forumstickthreads));
 				DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$forumstickthreads' WHERE skey='forumstickthreads'");
 
 				$stickmodify = 0;
@@ -363,9 +351,7 @@ if(!submitcheck('modsubmit')) {
 				$tids = array_keys($threadlist);
 				if($_G['forum']['recyclebin']) {
 
-					DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='-1', digest='0', moderated='1' WHERE tid IN ($moderatetids)");
 					deletethread($tids, true, true, true);
-					updatepost(array('invisible' => '-1'), "tid IN ($moderatetids)");
 					manage_addnotify('verifyrecycle', $modpostsnum);
 				} else {
 
@@ -379,7 +365,7 @@ if(!submitcheck('modsubmit')) {
 				foreach($delkeys as $k) {
 					unset($forumstickthreads[$k]);
 				}
-				$forumstickthreads = serialize($forumstickthreads);
+				$forumstickthreads = addslashes(serialize($forumstickthreads));
 				DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$forumstickthreads' WHERE skey='forumstickthreads'");
 
 				DB::delete('forum_forum_threadtable', "threads='0'");

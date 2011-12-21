@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_category.php 20759 2011-03-03 02:06:45Z liulanbo $
+ *      $Id: misc_category.php 26665 2011-12-19 07:31:16Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -74,11 +74,12 @@ if($catlist) {
 		}
 	}
 }
-$query = DB::query("SELECT fid, fup, name, threads, posts, todayposts FROM ".DB::table('forum_forum')." WHERE status='1' AND fup IN ($fids) AND type='sub' ORDER BY displayorder");
+$query = DB::query("SELECT fid, fup, name, threads, posts, todayposts, domain FROM ".DB::table('forum_forum')." WHERE status='1' AND fup IN ($fids) AND type='sub' ORDER BY displayorder");
 while($forum = DB::fetch($query)) {
 
 	if($_G['setting']['subforumsindex'] && $forumlist[$forum['fup']]['permission'] == 2) {
-		$forumlist[$forum['fup']]['subforums'] .= '<a href="forum.php?mod=forumdisplay&fid='.$forum['fid'].'"><u>'.$forum['name'].'</u></a>&nbsp;&nbsp;';
+		$forumurl = !empty($forum['domain']) && !empty($_G['setting']['domain']['root']['forum']) ? 'http://'.$forum['domain'].'.'.$_G['setting']['domain']['root']['forum'] : 'forum.php?mod=forumdisplay&fid='.$forum['fid'];
+		$forumlist[$forum['fup']]['subforums'] .= '<a href="'.$forumurl.'"><u>'.$forum['name'].'</u></a>&nbsp;&nbsp;';
 	}
 	$forumlist[$forum['fup']]['threads'] 	+= $forum['threads'];
 	$forumlist[$forum['fup']]['posts'] 	+= $forum['posts'];

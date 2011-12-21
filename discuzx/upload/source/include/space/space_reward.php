@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_reward.php 20818 2011-03-04 08:21:11Z monkey $
+ *      $Id: space_reward.php 25327 2011-11-07 07:27:20Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,9 +16,10 @@ $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $_G['gp_flag'] = empty($_G['gp_flag']) ? 0 : intval($_G['gp_flag']);
+$_GET['fuid'] = empty($_GET['fuid']) ? 0 : intval($_GET['fuid']);
 $opactives['reward'] = 'class="a"';
 
-if(empty($_GET['view'])) $_GET['view'] = 'we';
+$_GET['view'] = in_array($_GET['view'], array('we', 'me', 'all')) ? $_GET['view'] : 'we';
 
 $perpage = 20;
 $perpage = mob_perpage($perpage);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 24639 2011-09-29 03:51:58Z monkey $
+ *      $Id: post_editpost.php 25514 2011-11-14 02:37:37Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -630,7 +630,7 @@ if(!submitcheck('editsubmit')) {
 
 		$htmlon = $_G['group']['allowhtml'] && !empty($_G['gp_htmlon']) ? 1 : 0;
 
-		if($_G['setting']['editedby'] && (TIMESTAMP - $orig['dateline']) > 1 && $_G['adminid'] != 1) {
+		if($_G['setting']['editedby'] && (TIMESTAMP - $orig['dateline']) > 60 && $_G['adminid'] != 1) {
 			$editor = $isanonymous && $isorigauthor ? lang('forum/misc', 'anonymous') : $_G['username'];
 			$edittime = dgmdate(TIMESTAMP);
 			$message = lang('forum/misc', $htmlon ? 'post_edithtml' : (!$_G['forum']['allowbbcode'] || $_G['gp_bbcodeoff'] ? 'post_editnobbcode' : 'post_edit'), array('editor' => $editor, 'edittime' => $edittime)) . $message;
@@ -940,13 +940,7 @@ if(!submitcheck('editsubmit')) {
 	}
 
 	if($_G['forum']['threadcaches']) {
-		if($isfirstpost || $_G['gp_page'] == 1 || $thread['replies'] < $_G['cache']['postperpage'] || !empty($_G['gp_delete'])) {
-			deletethreadcaches($_G['tid']);
-		} else {
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND pid<'$pid'") < $_G['setting']['postperpage']) {
-				deletethreadcaches($_G['tid']);
-			}
-		}
+		deletethreadcaches($_G['tid']);
 	}
 
 	$param = array('fid' => $_G['fid'], 'tid' => $_G['tid'], 'pid' => $pid);
