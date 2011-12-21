@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 24761 2011-10-11 00:16:14Z monkey $
+ *      $Id: function_post.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -213,7 +213,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 				$newalbum = 0;
 				if(!$_G['gp_uploadalbum']) {
 					require_once libfile('function/spacecp');
-					$_G['gp_uploadalbum'] = album_creat(array('albumname' => $_G['gp_newalbum']));
+					$_G['gp_uploadalbum'] = album_creat(array('albumname' => $_G['gp_newalbum'], 'catid' => intval($_G['gp_albumcatid'])));
 					$newalbum = 1;
 				}
 				$picdata = array(
@@ -433,7 +433,7 @@ function updatemodlog($tids, $action, $expiration = 0, $iscron = 0, $reason = ''
 	global $_G;
 
 	$uid = empty($iscron) ? $_G['uid'] : 0;
-	$username = empty($iscron) ? $_G['member']['username'] : 0;
+	$username = empty($iscron) ? addslashes($_G['member']['username']) : 0;
 	$expiration = empty($expiration) ? 0 : intval($expiration);
 
 	$data = $comma = '';
